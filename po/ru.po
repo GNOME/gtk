@@ -4,8 +4,8 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 1999-08-23 15:07-0500\n"
+"Project-Id-Version: gtk+ 1.3.0\n"
+"POT-Creation-Date: 1999-08-30 19:05+0200\n"
 "PO-Revision-Date: 1999-01-21 21:51 EST\n"
 "Last-Translator: Sergey Panov <sipan@mit.edu>\n"
 "Language-Team: Russian <ru@li.org>\n"
@@ -45,7 +45,7 @@ msgstr "Плотность:"
 #: gtk/gtkcolorsel.c:1727 gtk/gtkfilesel.c:469 gtk/gtkfontsel.c:3467
 #: gtk/gtkgamma.c:416
 msgid "OK"
-msgstr ""
+msgstr "OK"
 
 #. The Cancel button
 #: gtk/gtkcolorsel.c:1733 gtk/gtkfilesel.c:476 gtk/gtkfilesel.c:856
@@ -289,15 +289,15 @@ msgstr "обратный наклонный"
 
 #: gtk/gtkfontsel.c:1224 gtk/gtkfontsel.c:1954
 msgid "other"
-msgstr ""
+msgstr "другие"
 
 #: gtk/gtkfontsel.c:1231
 msgid "[M]"
-msgstr ""
+msgstr "[M]"
 
 #: gtk/gtkfontsel.c:1232
 msgid "[C]"
-msgstr ""
+msgstr "[C]"
 
 #: gtk/gtkfontsel.c:1782
 msgid "The selected font is not available."
@@ -329,7 +329,7 @@ msgstr "моноширинный"
 
 #: gtk/gtkfontsel.c:1963
 msgid "char cell"
-msgstr ""
+msgstr "char cell"
 
 #: gtk/gtkfontsel.c:2163
 msgid "Font: (Filter Applied)"
@@ -402,11 +402,11 @@ msgstr "Сохранить"
 
 #: gtk/gtkinputdialog.c:500
 msgid "X"
-msgstr ""
+msgstr "X"
 
 #: gtk/gtkinputdialog.c:501
 msgid "Y"
-msgstr ""
+msgstr "Y"
 
 #: gtk/gtkinputdialog.c:502
 msgid "Pressure"
@@ -422,7 +422,7 @@ msgstr "Наклон Y"
 
 #: gtk/gtkinputdialog.c:544
 msgid "none"
-msgstr ""
+msgstr "нет"
 
 #: gtk/gtkinputdialog.c:578 gtk/gtkinputdialog.c:614
 msgid "(disabled)"
@@ -456,3 +456,7 @@ msgstr "Загружаемый модуль не найден в module_path: \"%s\","
 #: gtk/gtktipsquery.c:180
 msgid "--- No Tip ---"
 msgstr "--- Нет подсказки ---"
+
+#, fuzzy
+#~ msgid "light"
+#~ msgstr "Насыщенность:"

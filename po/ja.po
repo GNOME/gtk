@@ -2,11 +2,10 @@
 # Copyright (C) 1998 Free Software Foundation, Inc.
 # Yasuhiro SHIRASAKI <yasuhiro@awa.tohoku.ac.jp>, 1998.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.2.3\n"
-"POT-Creation-Date: 1999-08-23 15:07-0500\n"
+"POT-Creation-Date: 1999-08-30 19:05+0200\n"
 "PO-Revision-Date: 1998-07-15 03:12+0900\n"
 "Last-Translator: Çòºê ÂÙ¹° <yasuhiro@awa.tohoku.ac.jp>\n"
 "Language-Team: Japanese <ja@li.org>\n"

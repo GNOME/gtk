@@ -4,8 +4,8 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: gtk+ 1.1.15\n"
-"POT-Creation-Date: 1999-08-23 15:07-0500\n"
+"Project-Id-Version: gtk+ 1.2\n"
+"POT-Creation-Date: 1999-08-30 19:05+0200\n"
 "PO-Revision-Date: 1998-12-18 12:15+0100\n"
 "Last-Translator: Shooby Ban <bansz@szif.hu>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
@@ -123,9 +123,8 @@ msgid "Rename"
 msgstr "Átnevez"
 
 #: gtk/gtkfilesel.c:1445
-#, fuzzy
 msgid "Selection: "
-msgstr "Kiválasztva: "
+msgstr "Kiválasztott: "
 
 #: gtk/gtkfontsel.c:210
 msgid "Foundry:"

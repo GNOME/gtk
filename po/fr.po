@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ VERSION\n"
-"POT-Creation-Date: 1999-08-23 15:07-0500\n"
+"POT-Creation-Date: 1999-08-30 19:05+0200\n"
 "PO-Revision-Date: 1998-12-18 20:32+0100\n"
 "Last-Translator: Vincent Renardias <vincent@debian.org>\n"
 "Language-Team: Vincent Renardias <vincent@debian.org>\n"
@@ -331,7 +331,7 @@ msgstr "monospace"
 
 #: gtk/gtkfontsel.c:1963
 msgid "char cell"
-msgstr ""
+msgstr "char cell"
 
 #: gtk/gtkfontsel.c:2163
 msgid "Font: (Filter Applied)"
@@ -459,3 +459,36 @@ msgstr "Impossible de localiser le module chargeable dans module_path: \"%s\","
 #: gtk/gtktipsquery.c:180
 msgid "--- No Tip ---"
 msgstr "--- Pas de Conseil du Jour ---"
+
+#~ msgid "*"
+#~ msgstr "*"
+
+#~ msgid "(nil)"
+#~ msgstr "(nil)"
+
+#~ msgid "heavy"
+#~ msgstr "lourd"
+
+#~ msgid "extrabold"
+#~ msgstr "extragras"
+
+#~ msgid "bold"
+#~ msgstr "gras"
+
+#~ msgid "demibold"
+#~ msgstr "demigras"
+
+#~ msgid "medium"
+#~ msgstr "médium"
+
+#~ msgid "normal"
+#~ msgstr "normal"
+
+#~ msgid "light"
+#~ msgstr "léger"
+
+#~ msgid "extralight"
+#~ msgstr "extraléger"
+
+#~ msgid "thin"
+#~ msgstr "fin"

@@ -1,16 +1,16 @@
-# Traduction into the walloon language.
+# Translation into the walloon language.
 #
 # Si vos voloz donner on côp di spale pol ratoûrnaedje di Gnome (ou des
 # ôtes libes programes) sicrijhoz-mu a l' adresse emile
-# <srtxg@chanae.alphanet.ch>; nos avons co bråmint di l' ovraedje a fwaire.
+# <srtxg@chanae.alphanet.ch>; nos avans co bråmint di l' ovraedje a fé.
 #
 # Copyright (C) 1999 Free Software Foundation, Inc.
 # Pablo Saratxaga <srtxg@chanae.alphanet.ch> 1999
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: gtk+ 1.1.16\n"
-"POT-Creation-Date: 1999-08-23 15:07-0500\n"
+"Project-Id-Version: gtk+ 1.3.0\n"
+"POT-Creation-Date: 1999-08-30 19:05+0200\n"
 "PO-Revision-Date: 1999-02-07 17:37+0100\n"
 "Last-Translator: Pablo Saratxaga <srtxg@chanae.alphanet.ch>\n"
 "Language-Team: walon <linux-wa@chanae.alphanet.ch>\n"
@@ -20,7 +20,7 @@ msgstr ""
 
 #: gtk/gtkcolorsel.c:221
 msgid "Hue:"
-msgstr ""
+msgstr "Tinte:"
 
 #: gtk/gtkcolorsel.c:222
 msgid "Saturation:"
@@ -28,7 +28,7 @@ msgstr "Saturaedje:"
 
 #: gtk/gtkcolorsel.c:223
 msgid "Value:"
-msgstr "Valixhance:"
+msgstr "Loumance:"
 
 #: gtk/gtkcolorsel.c:224
 msgid "Red:"
@@ -57,7 +57,7 @@ msgstr "I Va"
 #: gtk/gtkfilesel.c:956 gtk/gtkfilesel.c:1071 gtk/gtkfontsel.c:3480
 #: gtk/gtkgamma.c:424
 msgid "Cancel"
-msgstr "Renoncî"
+msgstr "Rinoncî"
 
 #: gtk/gtkcolorsel.c:1738
 msgid "Help"
@@ -137,7 +137,7 @@ msgstr "Fondeu:"
 
 #: gtk/gtkfontsel.c:211
 msgid "Family:"
-msgstr "Famile"
+msgstr "Famile:"
 
 #: gtk/gtkfontsel.c:212
 msgid "Weight:"
@@ -145,7 +145,7 @@ msgstr "Pwed:"
 
 #: gtk/gtkfontsel.c:213
 msgid "Slant:"
-msgstr ""
+msgstr "Clintchaedje"
 
 #: gtk/gtkfontsel.c:214
 msgid "Set Width:"
@@ -165,11 +165,11 @@ msgstr "Grandeu è Ponts:"
 
 #: gtk/gtkfontsel.c:218
 msgid "Resolution X:"
-msgstr ""
+msgstr "Spexheu x:"
 
 #: gtk/gtkfontsel.c:219
 msgid "Resolution Y:"
-msgstr ""
+msgstr "Spexheu y:"
 
 #: gtk/gtkfontsel.c:220
 msgid "Spacing:"
@@ -177,7 +177,7 @@ msgstr "Espacemint:"
 
 #: gtk/gtkfontsel.c:221
 msgid "Average Width:"
-msgstr ""
+msgstr "Emetrinne lårdjeu"
 
 #: gtk/gtkfontsel.c:222
 msgid "Charset:"
@@ -187,15 +187,15 @@ msgstr "Ecôdaeje:"
 #. of NULL initializers above
 #: gtk/gtkfontsel.c:459
 msgid "Font Property"
-msgstr "Prôpietés del Fonte"
+msgstr "Prôpietés del fonte"
 
 #: gtk/gtkfontsel.c:460
 msgid "Requested Value"
-msgstr "Valixhance Dimandeye"
+msgstr "Valixhance dimandeye"
 
 #: gtk/gtkfontsel.c:461
 msgid "Actual Value"
-msgstr ""
+msgstr "Vraiye valixhance"
 
 #: gtk/gtkfontsel.c:494
 msgid "Font"
@@ -207,7 +207,7 @@ msgstr "Fonte:"
 
 #: gtk/gtkfontsel.c:509
 msgid "Font Style:"
-msgstr "Stîle del Fonte:"
+msgstr "Stîle del fonte:"
 
 #: gtk/gtkfontsel.c:514
 msgid "Size:"
@@ -215,7 +215,7 @@ msgstr "Grandeu:"
 
 #: gtk/gtkfontsel.c:646 gtk/gtkfontsel.c:868
 msgid "Reset Filter"
-msgstr ""
+msgstr "Renonder passete"
 
 #: gtk/gtkfontsel.c:660
 msgid "Metric:"
@@ -240,16 +240,16 @@ msgstr "Informåcion sol Fonte"
 
 #: gtk/gtkfontsel.c:749
 msgid "Requested Font Name:"
-msgstr "No del Fonte Dimandeye:"
+msgstr "No del fonte dimandeye:"
 
 #: gtk/gtkfontsel.c:760
 msgid "Actual Font Name:"
-msgstr ""
+msgstr "Vrai no del fonte:"
 
 #: gtk/gtkfontsel.c:771
 #, c-format
 msgid "%i fonts available with a total of %i styles."
-msgstr ""
+msgstr "%i fontes avou on totå di %i stîles."
 
 #: gtk/gtkfontsel.c:786
 msgid "Filter"
@@ -274,23 +274,23 @@ msgstr "Bitmap al schåle"
 #. Convert '(nil)' weights to 'regular', since it looks nicer.
 #: gtk/gtkfontsel.c:1215
 msgid "regular"
-msgstr "normå"
+msgstr "normåles"
 
 #: gtk/gtkfontsel.c:1220 gtk/gtkfontsel.c:1950
 msgid "italic"
-msgstr "clintcheye"
+msgstr "clintcheyes"
 
 #: gtk/gtkfontsel.c:1221 gtk/gtkfontsel.c:1951
 msgid "oblique"
-msgstr ""
+msgstr "oblikes"
 
 #: gtk/gtkfontsel.c:1222 gtk/gtkfontsel.c:1952
 msgid "reverse italic"
-msgstr ""
+msgstr "clintcheyes å rvier"
 
 #: gtk/gtkfontsel.c:1223 gtk/gtkfontsel.c:1953
 msgid "reverse oblique"
-msgstr ""
+msgstr "oblikes å rvier"
 
 #: gtk/gtkfontsel.c:1224 gtk/gtkfontsel.c:1954
 msgid "other"
@@ -306,15 +306,16 @@ msgstr "[C]"
 
 #: gtk/gtkfontsel.c:1782
 msgid "The selected font is not available."
-msgstr ""
+msgstr "Vos n' avoz nén li fonte ki vos avoz tchwezi"
 
 #: gtk/gtkfontsel.c:1788
 msgid "The selected font is not a valid font."
-msgstr ""
+msgstr "Li fonte ki vos avoz tchwezi n' est nén valåbe"
 
 #: gtk/gtkfontsel.c:1846
 msgid "This is a 2-byte font and may not be displayed correctly."
 msgstr ""
+"Ci fonte est ecôdeye so 2 octets, èt mutwet pout nén esse håyneye comufåt"
 
 #: gtk/gtkfontsel.c:1938 gtk/gtkinputdialog.c:607
 msgid "(unknown)"
@@ -326,23 +327,23 @@ msgstr "romane"
 
 #: gtk/gtkfontsel.c:1961
 msgid "proportional"
-msgstr ""
+msgstr "propôrcionel"
 
 #: gtk/gtkfontsel.c:1962
 msgid "monospaced"
-msgstr ""
+msgstr "d' espåçmint egål"
 
 #: gtk/gtkfontsel.c:1963
 msgid "char cell"
-msgstr ""
+msgstr "caracteres-bloc"
 
 #: gtk/gtkfontsel.c:2163
 msgid "Font: (Filter Applied)"
-msgstr ""
+msgstr "Fonte: (passete eployî)"
 
 #: gtk/gtkfontsel.c:2639
 msgid "MAX_FONTS exceeded. Some fonts may be missing."
-msgstr ""
+msgstr "MAX_FONTS passé. Sacwantès fontes polèt manker"
 
 #: gtk/gtkfontsel.c:3474
 msgid "Apply"
@@ -350,7 +351,7 @@ msgstr "Mete èn oûve"
 
 #: gtk/gtkfontsel.c:3496
 msgid "Font Selection"
-msgstr ""
+msgstr "Tchwezi les fontes"
 
 #: gtk/gtkgamma.c:396
 msgid "Gamma"
@@ -367,15 +368,15 @@ msgstr "Intreye"
 
 #: gtk/gtkinputdialog.c:208
 msgid "No input devices"
-msgstr "Nole usteye d' intreye"
+msgstr "Nole éndjin d' intreye"
 
 #: gtk/gtkinputdialog.c:237
 msgid "Device:"
-msgstr "Usteye:"
+msgstr "Éndjin:"
 
 #: gtk/gtkinputdialog.c:253
 msgid "Disabled"
-msgstr ""
+msgstr "Essocté"
 
 #: gtk/gtkinputdialog.c:261
 msgid "Screen"
@@ -392,7 +393,7 @@ msgstr "Môde: "
 #. The axis listbox
 #: gtk/gtkinputdialog.c:307
 msgid "Axes"
-msgstr ""
+msgstr "Assis"
 
 #. Keys listbox
 #: gtk/gtkinputdialog.c:323
@@ -415,15 +416,15 @@ msgstr "Y"
 
 #: gtk/gtkinputdialog.c:502
 msgid "Pressure"
-msgstr ""
+msgstr "Tchôke"
 
 #: gtk/gtkinputdialog.c:503
 msgid "X Tilt"
-msgstr ""
+msgstr "Limite X"
 
 #: gtk/gtkinputdialog.c:504
 msgid "Y Tilt"
-msgstr ""
+msgstr "Limite Y"
 
 #: gtk/gtkinputdialog.c:544
 msgid "none"
@@ -431,7 +432,7 @@ msgstr "nole"
 
 #: gtk/gtkinputdialog.c:578 gtk/gtkinputdialog.c:614
 msgid "(disabled)"
-msgstr ""
+msgstr "(essocté)"
 
 #. and clear button
 #: gtk/gtkinputdialog.c:692
@@ -462,3 +463,33 @@ msgstr "Dji n' pout nén trover on module tcherdjåve è module_path: \"%s\","
 #: gtk/gtktipsquery.c:180
 msgid "--- No Tip ---"
 msgstr "--- Nole Racsegne ---"
+
+#~ msgid "(nil)"
+#~ msgstr "(nole)"
+
+#~ msgid "heavy"
+#~ msgstr "pezantes"
+
+#~ msgid "extrabold"
+#~ msgstr "foirt cråsses"
+
+#~ msgid "bold"
+#~ msgstr "cråsses"
+
+#~ msgid "demibold"
+#~ msgstr "demi cråsses"
+
+#~ msgid "medium"
+#~ msgstr "moyénnes"
+
+#~ msgid "normal"
+#~ msgstr "miernuwes"
+
+#~ msgid "light"
+#~ msgstr "ledjîres"
+
+#~ msgid "extralight"
+#~ msgstr "foirt ledjîres"
+
+#~ msgid "thin"
+#~ msgstr "tenes"

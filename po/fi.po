@@ -5,9 +5,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.1.9\n"
-"POT-Creation-Date: 1999-08-23 15:07-0500\n"
-"PO-Revision-Date: 1999-03-14 14:15+0100\n"
-"Last-Translator: Mikko Rauhala <mjr@iki.fi>\n"
+"POT-Creation-Date: 1999-08-30 19:05+0200\n"
+"PO-Revision-Date: 1999-08-13 14:15+0100\n"
+"Last-Translator: Mikko Rauhala <lukka@iki.fi>\n"
 "Language-Team: Finnish <fi@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=iso-8859-1\n"
@@ -295,11 +295,11 @@ msgstr "muu"
 
 #: gtk/gtkfontsel.c:1231
 msgid "[M]"
-msgstr ""
+msgstr "[M]"
 
 #: gtk/gtkfontsel.c:1232
 msgid "[C]"
-msgstr ""
+msgstr "[C]"
 
 #: gtk/gtkfontsel.c:1782
 msgid "The selected font is not available."
@@ -462,3 +462,36 @@ msgstr "Ladattavaa moduulia ei löytynyt module_path:sta:\"%s\","
 #: gtk/gtktipsquery.c:180
 msgid "--- No Tip ---"
 msgstr "--- Ei vinkkiä ---"
+
+#~ msgid "thin"
+#~ msgstr "ohut"
+
+#~ msgid "extralight"
+#~ msgstr "erityisvaalea"
+
+#~ msgid "light"
+#~ msgstr "vaalea"
+
+#~ msgid "normal"
+#~ msgstr "normaali"
+
+#~ msgid "medium"
+#~ msgstr "tummahko"
+
+#~ msgid "demibold"
+#~ msgstr "osalihavoitu"
+
+#~ msgid "bold"
+#~ msgstr "lihavoitu"
+
+#~ msgid "extrabold"
+#~ msgstr "erikoislihavoitu"
+
+#~ msgid "heavy"
+#~ msgstr "raskas"
+
+#~ msgid "(nil)"
+#~ msgstr "(nil)"
+
+#~ msgid "*"
+#~ msgstr "*"

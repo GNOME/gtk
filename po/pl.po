@@ -4,11 +4,10 @@
 # Pre-translation has bean done using PePeSza v0.7[C
 # get your own copy of PePeSza from http://www.ids.pl/~pkollegu/pepesza.html
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.2.1\n"
-"POT-Creation-Date: 1999-08-23 15:07-0500\n"
+"POT-Creation-Date: 1999-08-30 19:05+0200\n"
 "PO-Revision-Date: 1998-12-18 02:21+0100\n"
 "Last-Translator: Tomasz K³oczko <kloczek@pld.org.pl>\n"
 "Language-Team: Polish <pl@li.org>\n"

@@ -4,8 +4,8 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: gtk+ 1.1.14\n"
-"POT-Creation-Date: 1999-08-23 15:07-0500\n"
+"Project-Id-Version: gtk+ 1.3.0\n"
+"POT-Creation-Date: 1999-08-30 19:05+0200\n"
 "PO-Revision-Date: 1999-02-07 17:37+0100\n"
 "Last-Translator: Pablo Saratxaga <srtxg@chanae.alphanet.ch>\n"
 "Language-Team: \n"
@@ -47,14 +47,14 @@ msgstr "Opacidad:"
 #: gtk/gtkcolorsel.c:1727 gtk/gtkfilesel.c:469 gtk/gtkfontsel.c:3467
 #: gtk/gtkgamma.c:416
 msgid "OK"
-msgstr "OK"
+msgstr "Aceptar"
 
 #. The Cancel button
 #: gtk/gtkcolorsel.c:1733 gtk/gtkfilesel.c:476 gtk/gtkfilesel.c:856
 #: gtk/gtkfilesel.c:956 gtk/gtkfilesel.c:1071 gtk/gtkfontsel.c:3480
 #: gtk/gtkgamma.c:424
 msgid "Cancel"
-msgstr "Anular"
+msgstr "Cancelar"
 
 #: gtk/gtkcolorsel.c:1738
 msgid "Help"
@@ -320,7 +320,7 @@ msgstr "(desconocido)"
 
 #: gtk/gtkfontsel.c:1949
 msgid "roman"
-msgstr ""
+msgstr "romana"
 
 #: gtk/gtkfontsel.c:1961
 msgid "proportional"
@@ -328,11 +328,11 @@ msgstr "proporcional"
 
 #: gtk/gtkfontsel.c:1962
 msgid "monospaced"
-msgstr ""
+msgstr "espacio fijo"
 
 #: gtk/gtkfontsel.c:1963
 msgid "char cell"
-msgstr ""
+msgstr "tamaño constante"
 
 #: gtk/gtkfontsel.c:2163
 msgid "Font: (Filter Applied)"
@@ -352,7 +352,7 @@ msgstr "Selección de Fuentes"
 
 #: gtk/gtkgamma.c:396
 msgid "Gamma"
-msgstr ""
+msgstr "Gamma"
 
 #: gtk/gtkgamma.c:403
 msgid "Gamma value"
@@ -417,11 +417,11 @@ msgstr "Presión"
 
 #: gtk/gtkinputdialog.c:503
 msgid "X Tilt"
-msgstr ""
+msgstr "Límite de activación X"
 
 #: gtk/gtkinputdialog.c:504
 msgid "Y Tilt"
-msgstr ""
+msgstr "Límite de activación Y"
 
 #: gtk/gtkinputdialog.c:544
 msgid "none"
@@ -460,3 +460,15 @@ msgstr "Imposible de encontrar un módulo cargable en module_path: \"%s\","
 #: gtk/gtktipsquery.c:180
 msgid "--- No Tip ---"
 msgstr "--- Ningún Tip ---"
+
+#~ msgid "*"
+#~ msgstr "*"
+
+#~ msgid "(nil)"
+#~ msgstr "(nulo)"
+
+#~ msgid "bold"
+#~ msgstr "negritas"
+
+#~ msgid "normal"
+#~ msgstr "normal"
