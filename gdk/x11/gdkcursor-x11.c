@@ -558,7 +558,7 @@ gdk_display_supports_cursor_color (GdkDisplay    *display)
 }
 
 guint     
-gdk_display_default_cursor_size (GdkDisplay    *display)
+gdk_display_get_default_cursor_size (GdkDisplay    *display)
 {
   g_return_val_if_fail (GDK_IS_DISPLAY (display), FALSE);
   

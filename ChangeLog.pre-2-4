@@ -1,3 +1,9 @@
+Thu Dec 25 00:26:34 2003  Matthias Clasen  <maclas@gmx.de>
+
+	* gdk/x11/gdkcursor-x11.c (gdk_display_get_default_cursor_size):
+	Add the missing _get_ to the name of the non-Xcursor version of
+	this function.  (noticed by Torsten Schoenfeld)
+
 Tue Dec 23 22:34:50 2003  Manish Singh  <yosh@gimp.org>
 
 	* gtk/gtkicontheme.h: fix GTK_TYPE_ICON_INFO macro, reported by
