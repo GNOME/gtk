@@ -30,7 +30,18 @@
 
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
+
 #include <gdk/gdktypes.h>
+
+#include <gdk/gdkcursor.h>
+#include <gdk/gdkevents.h>
+#include <gdk/gdkfont.h>
+#include <gdk/gdkgc.h>
+#include <gdk/gdkim.h>
+#include <gdk/gdkimage.h>
+#include <gdk/gdkregion.h>
+#include <gdk/gdkvisual.h>
+#include <gdk/gdkwindow.h>
 
 #define gdk_window_lookup(xid)	   ((GdkWindow*) gdk_xid_table_lookup (xid))
 #define gdk_pixmap_lookup(xid)	   ((GdkPixmap*) gdk_xid_table_lookup (xid))
@@ -53,7 +64,6 @@ typedef struct _GdkFontPrivate	       GdkFontPrivate;
 typedef struct _GdkCursorPrivate       GdkCursorPrivate;
 typedef struct _GdkEventFilter	       GdkEventFilter;
 typedef struct _GdkClientFilter	       GdkClientFilter;
-typedef struct _GdkColorContextPrivate GdkColorContextPrivate;
 typedef struct _GdkRegionPrivate       GdkRegionPrivate;
 
 
@@ -208,13 +218,6 @@ struct _GdkICPrivate
 };
 
 #endif /* USE_XIM */
-
-struct _GdkColorContextPrivate
-{
-  GdkColorContext color_context;
-  Display *xdisplay;
-  XStandardColormap std_cmap;
-};
 
 struct _GdkRegionPrivate
 {

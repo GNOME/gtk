@@ -63,13 +63,21 @@
 #include <X11/Xlib.h>
 #include <stdlib.h>
 #include <string.h>
-#include "gdk.h"
-#include "gdkprivate.h"
-#include "gdkx.h"
 
+#include "gdkcc.h"
+#include "gdkcolor.h"
+#include "gdkx.h"
 
 #define MAX_IMAGE_COLORS 256
 
+typedef struct _GdkColorContextPrivate GdkColorContextPrivate;
+
+struct _GdkColorContextPrivate
+{
+  GdkColorContext color_context;
+  Display *xdisplay;
+  XStandardColormap std_cmap;
+};
 
 static guint
 hash_color (gconstpointer key)

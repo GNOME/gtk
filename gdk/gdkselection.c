@@ -27,7 +27,9 @@
 #include <X11/Xlib.h>
 #include <X11/Xatom.h>
 #include <string.h>
-#include "gdk.h"
+
+#include "gdkproperty.h"
+#include "gdkselection.h"
 #include "gdkprivate.h"
 #include "gdkx.h"
 

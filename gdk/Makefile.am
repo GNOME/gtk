@@ -30,15 +30,36 @@ libgdk_la_LDFLAGS = @STRIP_BEGIN@ \
 #
 # setup source file variables
 #
+#
 # GDK header files for public installation (non-generated)
+#
+# Note: files added here may need to be be propagated to gdk_headers in gtk/Makefile.am
+#
 gdk_public_h_sources = @STRIP_BEGIN@ \
 	gdk.h		\
+	gdkcc.h		\
+	gdkcolor.h	\
+	gdkcursor.h     \
 	gdkcursors.h	\
-	gdkrgb.h	\
-	gdki18n.h	\
+	gdkdnd.h	\
+	gdkdrawable.h	\
+	gdkevents.h	\
+	gdkfont.h	\
+	gdkgc.h		\
 	gdkkeysyms.h	\
+	gdki18n.h	\
+	gdkim.h		\
+	gdkimage.h	\
+	gdkinput.h	\
+	gdkpixmap.h	\
 	gdkprivate.h	\
+	gdkproperty.h	\
+	gdkregion.h	\
+	gdkrgb.h	\
+	gdkselection.h	\
 	gdktypes.h	\
+	gdkvisual.h	\
+	gdkwindow.h	\
 	gdkx.h		\
 @STRIP_END@
 gdk_c_sources = @STRIP_BEGIN@ \

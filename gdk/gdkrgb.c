@@ -57,12 +57,12 @@
 
 /* Compiling as a part of Gtk 1.1 or later */
 #include "config.h"
-#include <gdk/gdk.h>
 #include "gdkprivate.h"
 
 #endif
 
-#include <gdk/gdkrgb.h>
+#include "gdk.h"		/* For gdk_flush() */
+#include "gdkrgb.h"
 
 typedef struct _GdkRgbInfo   GdkRgbInfo;
 

@@ -26,7 +26,8 @@
 
 #include <string.h>
 #include <X11/Xlib.h>
-#include "gdk.h"
+
+#include "gdkgc.h"
 #include "gdkprivate.h"
 
 

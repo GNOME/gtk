@@ -26,9 +26,9 @@
 
 #include <X11/Xlib.h>
 #include <X11/Xos.h>
-#include "gdk.h"
-#include "gdkprivate.h"
 
+#include "gdkdrawable.h"
+#include "gdkprivate.h"
 
 void
 gdk_draw_point (GdkDrawable *drawable,

@@ -44,17 +44,11 @@
 #include <X11/Xutil.h>
 #include <X11/Xmu/WinUtil.h>
 #include <X11/cursorfont.h>
+
 #include "gdk.h"
+
 #include "gdkprivate.h"
-#include "gdkinput.h"
-#include "gdkx.h"
-#include "gdki18n.h"
-#include "gdkkeysyms.h"
-
-#ifndef X_GETTIMEOFDAY
-#define X_GETTIMEOFDAY(tv)  gettimeofday (tv, NULL)
-#endif /* X_GETTIMEOFDAY */
-
+#include "gdkinputprivate.h"
 
 typedef struct _GdkPredicate  GdkPredicate;
 typedef struct _GdkErrorTrap  GdkErrorTrap;
@@ -97,23 +91,6 @@ static int gdk_initialized = 0;			    /* 1 if the library is initialized,
 						     * 0 otherwise.
 						     */
 
-static struct timeval start;			    /* The time at which the library was
-						     *	last initialized.
-						     */
-static struct timeval timer;			    /* Timeout interval to use in the call
-						     *	to "select". This is used in
-						     *	conjunction with "timerp" to create
-						     *	a maximum time to wait for an event
-						     *	to arrive.
-						     */
-static struct timeval *timerp;			    /* The actual timer passed to "select"
-						     *	This may be NULL, in which case
-						     *	"select" will block until an event
-						     *	arrives.
-						     */
-static guint32 timer_val;			    /* The timeout length as specified by
-						     *	the user in milliseconds.
-						     */
 static gint autorepeat;
 
 static GSList *gdk_error_traps = NULL;               /* List of error traps */
@@ -180,8 +157,6 @@ gdk_init_check (int	 *argc,
 	argv_orig[i] = g_strdup ((*argv)[i]);
       argv_orig[argc_orig] = NULL;
     }
-  
-  X_GETTIMEOFDAY (&start);
   
   gdk_display_name = NULL;
   
@@ -420,10 +395,6 @@ gdk_init_check (int	 *argc,
   XGetKeyboardControl (gdk_display, &keyboard_state);
   autorepeat = keyboard_state.global_auto_repeat;
   
-  timer.tv_sec = 0;
-  timer.tv_usec = 0;
-  timerp = NULL;
-  
   g_atexit (gdk_exit_func);
   
   gdk_events_init ();
@@ -489,112 +460,6 @@ gint
 gdk_get_use_xshm (void)
 {
   return gdk_use_xshm;
-}
-
-/*
- *--------------------------------------------------------------
- * gdk_time_get
- *
- *   Get the number of milliseconds since the library was
- *   initialized.
- *
- * Arguments:
- *
- * Results:
- *   The time since the library was initialized is returned.
- *   This time value is accurate to milliseconds even though
- *   a more accurate time down to the microsecond could be
- *   returned.
- *
- * Side effects:
- *
- *--------------------------------------------------------------
- */
-
-guint32
-gdk_time_get (void)
-{
-  struct timeval end;
-  struct timeval elapsed;
-  guint32 milliseconds;
-  
-  X_GETTIMEOFDAY (&end);
-  
-  if (start.tv_usec > end.tv_usec)
-    {
-      end.tv_usec += 1000000;
-      end.tv_sec--;
-    }
-  elapsed.tv_sec = end.tv_sec - start.tv_sec;
-  elapsed.tv_usec = end.tv_usec - start.tv_usec;
-  
-  milliseconds = (elapsed.tv_sec * 1000) + (elapsed.tv_usec / 1000);
-  
-  return milliseconds;
-}
-
-/*
- *--------------------------------------------------------------
- * gdk_timer_get
- *
- *   Returns the current timer.
- *
- * Arguments:
- *
- * Results:
- *   Returns the current timer interval. This interval is
- *   in units of milliseconds.
- *
- * Side effects:
- *
- *--------------------------------------------------------------
- */
-
-guint32
-gdk_timer_get (void)
-{
-  return timer_val;
-}
-
-/*
- *--------------------------------------------------------------
- * gdk_timer_set
- *
- *   Sets the timer interval.
- *
- * Arguments:
- *   "milliseconds" is the new value for the timer.
- *
- * Results:
- *
- * Side effects:
- *   Calls to "gdk_event_get" will last for a maximum
- *   of time of "milliseconds". However, a value of 0
- *   milliseconds will cause "gdk_event_get" to block
- *   indefinately until an event is received.
- *
- *--------------------------------------------------------------
- */
-
-void
-gdk_timer_set (guint32 milliseconds)
-{
-  timer_val = milliseconds;
-  timer.tv_sec = milliseconds / 1000;
-  timer.tv_usec = (milliseconds % 1000) * 1000;
-  
-}
-
-void
-gdk_timer_enable (void)
-{
-  timerp = &timer;
-}
-
-void
-gdk_timer_disable (void)
-{
-  timerp = NULL;
 }
 
 /*

@@ -248,8 +248,25 @@ $(static_sources): $(BUILT_SOURCES)
 
 # More headers to use when autogenerating.
 gdk_headers = \
-	../gdk/gdktypes.h \
-	../gdk/gdkrgb.h
+	../gdk/gdkcc.h		\
+	../gdk/gdkcolor.h	\
+	../gdk/gdkcursor.h     	\
+	../gdk/gdkdnd.h		\
+	../gdk/gdkdrawable.h	\
+	../gdk/gdkevents.h	\
+	../gdk/gdkfont.h	\
+	../gdk/gdkgc.h		\
+	../gdk/gdkim.h		\
+	../gdk/gdkimage.h	\
+	../gdk/gdkinput.h	\
+	../gdk/gdkpixmap.h	\
+	../gdk/gdkproperty.h	\
+	../gdk/gdkregion.h	\
+	../gdk/gdkrgb.h		\
+	../gdk/gdkselection.h	\
+	../gdk/gdktypes.h	\
+	../gdk/gdkvisual.h	\
+	../gdk/gdkwindow.h
 
 # generate gtk.defs file from gtk-boxed.defs and *.h
 gtk.defs: @REBUILD@ s-gd

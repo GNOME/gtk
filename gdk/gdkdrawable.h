@@ -1,0 +1,143 @@
+#ifndef __GDK_DRAWABLE_H__
+#define __GDK_DRAWABLE_H__
+
+#include <gdktypes.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif /* __cplusplus */
+
+/* Types of windows.
+ *   Root: There is only 1 root window and it is initialized
+ *	   at startup. Creating a window of type GDK_WINDOW_ROOT
+ *	   is an error.
+ *   Toplevel: Windows which interact with the window manager.
+ *   Child: Windows which are children of some other type of window.
+ *	    (Any other type of window). Most windows are child windows.
+ *   Dialog: A special kind of toplevel window which interacts with
+ *	     the window manager slightly differently than a regular
+ *	     toplevel window. Dialog windows should be used for any
+ *	     transient window.
+ *   Pixmap: Pixmaps are really just another kind of window which
+ *	     doesn't actually appear on the screen. It can't have
+ *	     children, either and is really just a convenience so
+ *	     that the drawing functions can work on both windows
+ *	     and pixmaps transparently. (ie. You shouldn't pass a
+ *	     pixmap to any procedure which accepts a window with the
+ *	     exception of the drawing functions).
+ *   Foreign: A window that actually belongs to another application
+ */
+typedef enum
+{
+  GDK_WINDOW_ROOT,
+  GDK_WINDOW_TOPLEVEL,
+  GDK_WINDOW_CHILD,
+  GDK_WINDOW_DIALOG,
+  GDK_WINDOW_TEMP,
+  GDK_WINDOW_PIXMAP,
+  GDK_WINDOW_FOREIGN
+} GdkWindowType;
+
+struct _GdkWindow
+{
+  gpointer user_data;
+};
+
+/* Drawing
+ */
+void gdk_draw_point	 (GdkDrawable  *drawable,
+			  GdkGC	       *gc,
+			  gint		x,
+			  gint		y);
+void gdk_draw_line	 (GdkDrawable  *drawable,
+			  GdkGC	       *gc,
+			  gint		x1,
+			  gint		y1,
+			  gint		x2,
+			  gint		y2);
+void gdk_draw_rectangle	 (GdkDrawable  *drawable,
+			  GdkGC	       *gc,
+			  gint		filled,
+			  gint		x,
+			  gint		y,
+			  gint		width,
+			  gint		height);
+void gdk_draw_arc	 (GdkDrawable  *drawable,
+			  GdkGC	       *gc,
+			  gint		filled,
+			  gint		x,
+			  gint		y,
+			  gint		width,
+			  gint		height,
+			  gint		angle1,
+			  gint		angle2);
+void gdk_draw_polygon	 (GdkDrawable  *drawable,
+			  GdkGC	       *gc,
+			  gint		filled,
+			  GdkPoint     *points,
+			  gint		npoints);
+void gdk_draw_string	 (GdkDrawable  *drawable,
+			  GdkFont      *font,
+			  GdkGC	       *gc,
+			  gint		x,
+			  gint		y,
+			  const gchar  *string);
+void gdk_draw_text	 (GdkDrawable  *drawable,
+			  GdkFont      *font,
+			  GdkGC	       *gc,
+			  gint		x,
+			  gint		y,
+			  const gchar  *text,
+			  gint		text_length);
+void gdk_draw_text_wc	 (GdkDrawable	 *drawable,
+			  GdkFont	 *font,
+			  GdkGC		 *gc,
+			  gint		  x,
+			  gint		  y,
+			  const GdkWChar *text,
+			  gint		  text_length);
+void gdk_draw_pixmap	 (GdkDrawable  *drawable,
+			  GdkGC	       *gc,
+			  GdkDrawable  *src,
+			  gint		xsrc,
+			  gint		ysrc,
+			  gint		xdest,
+			  gint		ydest,
+			  gint		width,
+			  gint		height);
+void gdk_draw_bitmap	 (GdkDrawable  *drawable,
+			  GdkGC	       *gc,
+			  GdkDrawable  *src,
+			  gint		xsrc,
+			  gint		ysrc,
+			  gint		xdest,
+			  gint		ydest,
+			  gint		width,
+			  gint		height);
+void gdk_draw_image	 (GdkDrawable  *drawable,
+			  GdkGC	       *gc,
+			  GdkImage     *image,
+			  gint		xsrc,
+			  gint		ysrc,
+			  gint		xdest,
+			  gint		ydest,
+			  gint		width,
+			  gint		height);
+void gdk_draw_points	 (GdkDrawable  *drawable,
+			  GdkGC	       *gc,
+			  GdkPoint     *points,
+			  gint		npoints);
+void gdk_draw_segments	 (GdkDrawable  *drawable,
+			  GdkGC	       *gc,
+			  GdkSegment   *segs,
+			  gint		nsegs);
+void gdk_draw_lines      (GdkDrawable  *drawable,
+                          GdkGC        *gc,
+                          GdkPoint     *points,
+                          gint          npoints);
+ 
+#ifdef __cplusplus
+}
+#endif /* __cplusplus */
+
+#endif /* __GDK_DRAWABLE_H__ */

@@ -26,8 +26,6 @@
 
 #include <gdk/gdk.h>
 
-
-
 void
 gdk_rectangle_union (GdkRectangle *src1,
 		     GdkRectangle *src2,

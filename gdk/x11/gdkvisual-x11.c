@@ -26,10 +26,9 @@
 
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
-#include "gdk.h"
-#include "gdkprivate.h"
-#include "gdkx.h"
 
+#include "gdkvisual.h"
+#include "gdkprivate.h"
 
 static void  gdk_visual_add            (GdkVisual *visual);
 static void  gdk_visual_decompose_mask (gulong     mask,

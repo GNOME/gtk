@@ -25,8 +25,9 @@
  */
 
 #include "gdk.h"
-#include "gdkx.h"
 #include "gdkprivate.h"
+#include "gdkx.h"
+
 #include "gdkkeysyms.h"
 
 #if HAVE_CONFIG_H
@@ -36,7 +37,7 @@
 #  endif
 #endif
 
-#include "gdkinput.h"
+#include "gdkinputprivate.h"
 
 typedef struct _GdkIOClosure GdkIOClosure;
 typedef struct _GdkEventPrivate GdkEventPrivate;

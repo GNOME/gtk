@@ -26,7 +26,7 @@
 
 #include <X11/Xlib.h>
 #include <X11/Xos.h>
-#include "gdk.h"
+#include "gdkfont.h"
 #include "gdkprivate.h"
 
 static GHashTable *font_name_hash = NULL;

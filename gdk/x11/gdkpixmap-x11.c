@@ -32,7 +32,7 @@
 #include <unistd.h>
 #include <X11/Xlib.h>
 
-#include "gdk.h"
+#include "gdkpixmap.h"
 #include "gdkprivate.h"
 
 typedef struct

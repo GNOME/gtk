@@ -27,9 +27,12 @@
 #include <X11/Xlib.h>
 #include <X11/Xatom.h>
 #include <string.h>
+
+#include "gdk.h"          /* For gdk_flush() */
+#include "gdkdnd.h"
+#include "gdkproperty.h"
+#include "gdkprivate.h"
 #include "gdkx.h"
-#include "gdk/gdkprivate.h"
-#include "gdk.h"
 
 typedef struct _GdkDragContextPrivate GdkDragContextPrivate;
 

@@ -27,7 +27,8 @@
 #include <X11/Xlib.h>
 #include <X11/Xatom.h>
 #include <string.h>
-#include "gdk.h"
+
+#include "gdkproperty.h"
 #include "gdkprivate.h"
 
 GdkAtom

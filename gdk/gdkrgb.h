@@ -27,6 +27,8 @@
 #ifndef __GDK_RGB_H__
 #define __GDK_RGB_H__
 
+#include <gdk/gdktypes.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */

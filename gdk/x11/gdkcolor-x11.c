@@ -26,9 +26,9 @@
 
 #include <time.h>
 #include <X11/Xlib.h>
-#include "gdk.h"
+
+#include "gdkcolor.h"
 #include "gdkprivate.h"
-#include "gdkx.h"
 
 
 static gint  gdk_colormap_match_color (GdkColormap *cmap,

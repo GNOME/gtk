@@ -28,11 +28,10 @@
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
 #include "config.h"
-#include "gdk.h"
-#include "gdkx.h"
-#include "gdkprivate.h"
-#include "gdkinput.h"
 
+#include "gdkinput.h"
+#include "gdkprivate.h"
+#include "gdkinputprivate.h"
 
 /* Forward declarations */
 

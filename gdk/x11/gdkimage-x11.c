@@ -53,7 +53,8 @@
 #include <X11/extensions/XShm.h>
 #endif /* USE_SHM */
 
-#include "gdk.h"
+#include "gdk.h"		/* For gdk_error_trap_* / gdk_flush_* */
+#include "gdkimage.h"
 #include "gdkprivate.h"
 
 

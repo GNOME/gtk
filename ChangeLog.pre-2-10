@@ -1,3 +1,20 @@
+Fri Oct  1 18:03:36 1999  Owen Taylor  <otaylor@redhat.com>
+
+        * docs/Changes-1.4.txt: Started
+	
+	* gtk/Makefile.am (gdk_headers): Include all the new headers.
+
+        * gdk/*.h gdk/*.c: Split gdk.h into lots of itty-bitty little pieces.
+	
+	* gdk/gdkprivate.h gdk/gdkcc.c: Moved GdkColorContext private
+	into C file.
+	
+	* gdkinput.h gdkinputprivate.h - renamed the internal gdkinput
+	header to gdkinputprivate.h.
+
+	* gdk/gdk.h gdk/gdk.c: Removed gdk_time* functions which have been
+	unused since before 1.2.
+
 1999-09-30  Tor Lillqvist  <tml@iki.fi>
 
 	* gtk/gtkfontsel.c (gtk_font_selection_get_xlfd_field): On Win32,

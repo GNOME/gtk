@@ -30,7 +30,9 @@
 #include <netinet/in.h>
 #include "gdk.h"
 #include "config.h"
-#include "gdkinput.h"
+
+#include "gdkwindow.h"
+#include "gdkinputprivate.h"
 #include "gdkprivate.h"
 #include "MwmUtil.h"
 
