@@ -1,3 +1,7 @@
+Mon Sep 20 01:21:53 1999  Tim Janik  <timj@gtk.org>
+
+	* released Gtk+-1.2.5-pre2, interface age 0, binary age 5.
+
 Sun Sep 19 18:13:31 1999  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkselection.[ch]: Make the data argument
