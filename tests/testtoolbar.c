@@ -235,6 +235,38 @@ homogeneous_toggled(GtkCellRendererToggle *cell, const gchar *path_str,
   gtk_tree_path_free (path);
 }
 
+
+static void
+set_important_func(GtkTreeViewColumn *tree_column, GtkCellRenderer *cell,
+		   GtkTreeModel *model, GtkTreeIter *iter, gpointer data)
+{
+  GtkToolItem *tool_item;
+
+  gtk_tree_model_get (model, iter, 0, &tool_item, -1);
+
+  g_object_set (G_OBJECT (cell), "active", gtk_tool_item_get_is_important (tool_item), NULL);
+  g_object_unref (tool_item);
+}
+
+static void
+important_toggled(GtkCellRendererToggle *cell, const gchar *path_str,
+		  GtkTreeModel *model)
+{
+  GtkTreePath *path;
+  GtkTreeIter iter;
+  GtkToolItem *tool_item;
+
+  path = gtk_tree_path_new_from_string (path_str);
+  gtk_tree_model_get_iter (model, &iter, path);
+
+  gtk_tree_model_get (model, &iter, 0, &tool_item, -1);
+  gtk_tool_item_set_is_important (tool_item, !gtk_tool_item_get_is_important (tool_item));
+  g_object_unref (tool_item);
+
+  gtk_tree_model_row_changed (model, path, &iter);
+  gtk_tree_path_free (path);
+}
+
 static GtkListStore *
 create_items_list (GtkWidget **tree_view_p)
 {
@@ -282,6 +314,14 @@ create_items_list (GtkWidget **tree_view_p)
 					      -1, "Homogeneous",
 					      cell,
 					      set_homogeneous_func, NULL,NULL);
+
+  cell = gtk_cell_renderer_toggle_new ();
+  g_signal_connect (cell, "toggled", G_CALLBACK (important_toggled),
+		    list_store);
+  gtk_tree_view_insert_column_with_data_func (GTK_TREE_VIEW (tree_view),
+					      -1, "Important",
+					      cell,
+					      set_important_func, NULL,NULL);
 
   g_object_unref (list_store);
 

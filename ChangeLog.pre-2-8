@@ -1,3 +1,9 @@
+2003-08-13  Anders Carlsson  <andersca@gnome.org>
+
+	* tests/testtoolbar.c: (set_important_func), (important_toggled),
+	(create_items_list):
+	Add an important column.
+	
 Tue Aug 12 15:00:15 2003  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkwindow.c (gtk_window_real_set_focus): Protect
