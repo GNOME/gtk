@@ -1,5 +1,5 @@
 /*
- * gtkimmoduleime
+ * gtkimcontextime.c
  * Copyright (C) 2003 Takuro Ashie
  * Copyright (C) 2003-2004 Kazuki IWAMOTO
  *
@@ -18,7 +18,6 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
  * Boston, MA 02111-1307, USA.
  *
- * $Id$
  */
 
 /*
@@ -33,6 +32,8 @@
 #include "gdk/win32/gdkwin32.h"
 #include "gdk/gdkkeysyms.h"
 #include "gtk/gtkwidget.h"
+
+#include <pango/pango-utils.h>
 
 /* avoid warning */
 #ifdef STRICT
@@ -104,10 +105,10 @@ static void gtk_im_context_ime_set_use_preedit     (GtkIMContext   *context,
                                                     gboolean        use_preedit);
 
 /* GtkIMContextIME's private functions */
-static void gtk_im_context_ime_set_preedit_font (GtkIMContext    *context,
-                                                 PangoFont       *font);
+static void gtk_im_context_ime_set_preedit_font (GtkIMContext    *context);
+
 static GdkFilterReturn
-            gtk_im_context_ime_message_filter   (GdkXEvent       *xevent,
+gtk_im_context_ime_message_filter               (GdkXEvent       *xevent,
                                                  GdkEvent        *event,
                                                  gpointer         data);
 static void get_window_position                 (GdkWindow       *win,
@@ -268,7 +269,6 @@ gtk_im_context_ime_set_client_window (GtkIMContext *context,
                                       GdkWindow    *client_window)
 {
   GtkIMContextIME *context_ime;
-  HWND hwnd = NULL;
 
   g_return_if_fail (GTK_IS_IM_CONTEXT_IME (context));
   context_ime = GTK_IM_CONTEXT_IME (context);
@@ -276,17 +276,18 @@ gtk_im_context_ime_set_client_window (GtkIMContext *context,
   if (client_window)
     {
       HIMC himc;
+      HWND hwnd;
 
       hwnd = GDK_WINDOW_HWND (client_window);
-
-      /* get default ime context */
       himc = ImmGetContext (hwnd);
-      context_ime->opened = ImmGetOpenStatus (himc);
-      ImmGetConversionStatus (himc,
-                              &context_ime->priv->conversion_mode,
-                              &context_ime->priv->sentence_mode);
-      ImmReleaseContext (hwnd, himc);
-
+      if (himc)
+	{
+	  context_ime->opened = ImmGetOpenStatus (himc);
+	  ImmGetConversionStatus (himc,
+				  &context_ime->priv->conversion_mode,
+				  &context_ime->priv->sentence_mode);
+	  ImmReleaseContext (hwnd, himc);
+	}
     }
   else if (context_ime->focus)
     {
@@ -302,35 +303,33 @@ gtk_im_context_ime_filter_keypress (GtkIMContext *context,
                                     GdkEventKey  *event)
 {
   GtkIMContextIME *context_ime;
-  HWND hwnd;
-  HIMC himc;
   gboolean retval = FALSE;
+  guint32 c;
 
   g_return_val_if_fail (GTK_IS_IM_CONTEXT_IME (context), FALSE);
   g_return_val_if_fail (event, FALSE);
 
   if (event->type == GDK_KEY_RELEASE)
-    return retval;
+    return FALSE;
 
   context_ime = GTK_IM_CONTEXT_IME (context);
+
   if (!context_ime->focus)
     return FALSE;
+
   if (!GDK_IS_WINDOW (context_ime->client_window))
     return FALSE;
 
-  hwnd = GDK_WINDOW_HWND (context_ime->client_window);
-  himc = ImmGetContext (hwnd);
-
-  /* FIXME!! event->string is deprecated */
-  if (event->string && *event->string
-            && !g_unichar_iscntrl (g_utf8_get_char_validated (event->string,
-                                                    strlen (event->string))))
+  c = gdk_keyval_to_unicode (event->keyval);
+  if (c)
     {
-      g_signal_emit_by_name (G_OBJECT (context_ime), "commit", event->string);
+      guchar utf8[10];
+      int len = g_unichar_to_utf8 (c, utf8);
+      utf8[len] = 0;
+
+      g_signal_emit_by_name (G_OBJECT (context_ime), "commit", utf8);
       retval = TRUE;
     }
-
-  ImmReleaseContext (hwnd, himc);
 
   return retval;
 }
@@ -369,100 +368,41 @@ get_utf8_preedit_string (GtkIMContextIME *context_ime, gint *pos_ret)
   if (pos_ret)
     *pos_ret = 0;
 
-  /*
-  g_return_val_if_fail (GTK_IS_IM_CONTEXT_IME (context_ime),
-  g_strdup (""));
-  */
-
   hwnd = GDK_WINDOW_HWND (context_ime->client_window);
   himc = ImmGetContext (hwnd);
-
-  /* shouldn't return NULL */
-  g_return_val_if_fail (himc, g_strdup (""));
+  if (!himc)
+    return g_strdup ("");
 
   if (context_ime->preediting)
     {
-      gpointer buf;
       glong len;
-      GError *error = NULL;
 
-#ifdef UNICODE
-      len = ImmGetCompositionString (himc, GCS_COMPSTR, NULL, 0);
-      buf = g_malloc (len);
-      if (len > 0 && buf)
-        {
-          ImmGetCompositionString (himc, GCS_COMPSTR, buf, len);
-          len /= sizeof (gunichar2);
-          utf8str = g_utf16_to_utf8 (buf, len, NULL, NULL, &error);
-          if (error)
-            {
-              g_warning ("%s", error->message);
-              g_error_free (error);
-            }
+      len = ImmGetCompositionStringW (himc, GCS_COMPSTR, NULL, 0);
+      if (len > 0)
+	{
+	  GError *error = NULL;
+	  gpointer buf = g_alloca (len);
 
-          if (pos_ret)
-            {
-              pos = ImmGetCompositionString (himc, GCS_CURSORPOS, NULL, 0);
-              if (pos < 0 || len < pos)
-                {
-                  g_warning ("ImmGetCompositionString: "
-                             "Invalid cursor position!");
-                  pos = 0;
-                }
-            }
-          g_free (buf);
-        }
-#else /* not UNICODE */
-      len = ImmGetCompositionString (himc, GCS_COMPSTR, NULL, 0);
-      buf = g_malloc (len);
-      if (len > 0 && buf)
-        {
-          ImmGetCompositionString (himc, GCS_COMPSTR, buf, len);
-          utf8str = g_locale_to_utf8 (buf, len, NULL, NULL, &error);
-          if (error)
-            {
-              g_warning ("%s", error->message);
-              g_error_free (error);
-            }
-
-          if (pos_ret)
-            {
-              pos = ImmGetCompositionString (himc, GCS_CURSORPOS, NULL, 0);
-              /* get cursor position by offset */
-              if (pos < len && utf8str)
-                {
-                  gchar *tmpstr;
-
-                  tmpstr = g_locale_to_utf8 (buf, pos, NULL, NULL, &error);
-                  if (error)
-                    {
-                      g_warning ("%s", error->message);
-                      g_error_free (error);
-                    }
-                  if (tmpstr)
-                    {
-                      pos = g_utf8_strlen (tmpstr, -1);
-                    }
-                  else
-                    {
-                      pos = 0;
-                    }
-                  g_free (tmpstr);
-                }
-              else if (pos == len && utf8str)
-                {
-                  pos = g_utf8_strlen (utf8str, -1);
-                }
-              else
-                {
-                  g_warning ("ImmGetCompositionString: "
-                             "Invalid cursor position!");
-                  pos = 0;
-                }
-            }
-          g_free (buf);
-        }
-#endif /* not UNICODE */
+	  ImmGetCompositionStringW (himc, GCS_COMPSTR, buf, len);
+	  len /= 2;
+	  utf8str = g_utf16_to_utf8 (buf, len, NULL, NULL, &error);
+	  if (error)
+	    {
+	      g_warning ("%s", error->message);
+	      g_error_free (error);
+	    }
+	  
+	  if (pos_ret)
+	    {
+	      pos = ImmGetCompositionStringW (himc, GCS_CURSORPOS, NULL, 0);
+	      if (pos < 0 || len < pos)
+		{
+		  g_warning ("ImmGetCompositionString: "
+			     "Invalid cursor position!");
+		  pos = 0;
+		}
+	    }
+	}
     }
 
   if (!utf8str)
@@ -487,12 +427,10 @@ get_pango_attr_list (GtkIMContextIME *context_ime, const gchar *utf8str)
   HWND hwnd;
   HIMC himc;
 
-  /* g_return_val_if_fail (GTK_IS_IM_CONTEXT_IME (context_ime), attr); */
-
   hwnd = GDK_WINDOW_HWND (context_ime->client_window);
   himc = ImmGetContext (hwnd);
-
-  g_return_val_if_fail (himc, attrs);
+  if (!himc)
+    return attrs;
 
   if (context_ime->preediting)
     {
@@ -505,9 +443,9 @@ get_pango_attr_list (GtkIMContextIME *context_ime, const gchar *utf8str)
       /*
        *  get attributes list of IME.
        */
-      len = ImmGetCompositionString (himc, GCS_COMPATTR, NULL, 0);
-      buf = g_malloc (len);
-      ImmGetCompositionString (himc, GCS_COMPATTR, buf, len);
+      len = ImmGetCompositionStringA (himc, GCS_COMPATTR, NULL, 0);
+      buf = g_alloca (len);
+      ImmGetCompositionStringA (himc, GCS_COMPATTR, buf, len);
 
       /*
        *  schr and echr are pointer in utf8str.
@@ -518,30 +456,10 @@ get_pango_attr_list (GtkIMContextIME *context_ime, const gchar *utf8str)
           /*
            *  spos and epos are buf(attributes list of IME) position by
            *  bytes.
-           *  If UNICODE is defined, this value is same with UTF-8 offset.
-           *  If it's not defined, this value is same with bytes position
-           *  of locale encoded preedit string.
-           *
+           *  Using the wide-char API, this value is same with UTF-8 offset.
            */
-#ifdef UNICODE
-          epos = g_utf8_pointer_to_offset (utf8str, echr);
-#else /* not UNICODE */
-          gchar *tmpstr;
-          GError *error = NULL;
+	  epos = g_utf8_pointer_to_offset (utf8str, echr);
 
-          epos = spos;
-          tmpstr = g_locale_from_utf8 (schr, echr - schr, NULL, NULL, &error);
-          if (error)
-            {
-              g_warning ("%s", error->message);
-              g_error_free (error);
-            }
-          if (tmpstr)
-            {
-              epos += strlen (tmpstr);
-              g_free (tmpstr);
-            }
-#endif /* not UNICODE */
           /*
            *  sidx and eidx are positions in utf8str by bytes.
            */
@@ -592,7 +510,6 @@ get_pango_attr_list (GtkIMContextIME *context_ime, const gchar *utf8str)
               sidx = eidx;
             }
         }
-      g_free (buf);
     }
 
   ImmReleaseContext (hwnd, himc);
@@ -645,6 +562,9 @@ gtk_im_context_ime_focus_in (GtkIMContext *context)
   if (!GDK_IS_WINDOW (context_ime->client_window))
     return;
 
+  /* swtich current context */
+  context_ime->focus = TRUE;
+
   hwnd = GDK_WINDOW_HWND (context_ime->client_window);
   himc = ImmGetContext (hwnd);
   if (!himc)
@@ -679,9 +599,6 @@ gtk_im_context_ime_focus_in (GtkIMContext *context)
       /* warning? */
     }
 
-  /* swtich current context */
-  context_ime->focus = TRUE;
-
   /* restore preedit context */
   ImmSetConversionStatus (himc,
                           context_ime->priv->conversion_mode,
@@ -693,10 +610,10 @@ gtk_im_context_ime_focus_in (GtkIMContext *context)
         ImmSetOpenStatus (himc, TRUE);
       if (context_ime->preediting)
         {
-          ImmSetCompositionString (himc,
-                                   SCS_SETSTR,
-                                   context_ime->priv->comp_str,
-                                   context_ime->priv->comp_str_len, NULL, 0);
+          ImmSetCompositionStringW (himc,
+				    SCS_SETSTR,
+				    context_ime->priv->comp_str,
+				    context_ime->priv->comp_str_len, NULL, 0);
           FREE_PREEDIT_BUFFER (context_ime);
         }
     }
@@ -718,6 +635,9 @@ gtk_im_context_ime_focus_out (GtkIMContext *context)
   if (!GDK_IS_WINDOW (context_ime->client_window))
     return;
 
+  /* swtich current context */
+  context_ime->focus = FALSE;
+
   hwnd = GDK_WINDOW_HWND (context_ime->client_window);
   himc = ImmGetContext (hwnd);
   if (!himc)
@@ -737,20 +657,20 @@ gtk_im_context_ime_focus_out (GtkIMContext *context)
           FREE_PREEDIT_BUFFER (context_ime);
 
           context_ime->priv->comp_str_len
-            = ImmGetCompositionString (himc, GCS_COMPSTR, NULL, 0);
+            = ImmGetCompositionStringW (himc, GCS_COMPSTR, NULL, 0);
           context_ime->priv->comp_str
             = g_malloc (context_ime->priv->comp_str_len);
-          ImmGetCompositionString (himc, GCS_COMPSTR,
-                                   context_ime->priv->comp_str,
-                                   context_ime->priv->comp_str_len);
+          ImmGetCompositionStringW (himc, GCS_COMPSTR,
+				    context_ime->priv->comp_str,
+				    context_ime->priv->comp_str_len);
 
           context_ime->priv->read_str_len
-            = ImmGetCompositionString (himc, GCS_COMPREADSTR, NULL, 0);
+            = ImmGetCompositionStringW (himc, GCS_COMPREADSTR, NULL, 0);
           context_ime->priv->read_str
             = g_malloc (context_ime->priv->read_str_len);
-          ImmGetCompositionString (himc, GCS_COMPREADSTR,
-                                   context_ime->priv->read_str,
-                                   context_ime->priv->read_str_len);
+          ImmGetCompositionStringW (himc, GCS_COMPREADSTR,
+				    context_ime->priv->read_str,
+				    context_ime->priv->read_str_len);
         }
 
       ImmSetOpenStatus (himc, FALSE);
@@ -789,9 +709,6 @@ gtk_im_context_ime_focus_out (GtkIMContext *context)
       g_warning ("gtk_im_context_ime_focus_out(): "
                  "cannot find toplevel window.");
     }
-
-  /* swtich current context */
-  context_ime->focus = FALSE;
 
   /* clean */
   ImmReleaseContext (hwnd, himc);
@@ -844,7 +761,6 @@ gtk_im_context_ime_set_use_preedit (GtkIMContext *context,
   context_ime->use_preedit = use_preedit;
   if (context_ime->preediting)
     {
-      /* FIXME */
       HWND hwnd;
       HIMC himc;
 
@@ -852,18 +768,26 @@ gtk_im_context_ime_set_use_preedit (GtkIMContext *context,
       himc = ImmGetContext (hwnd);
       if (!himc)
         return;
+
+      /* FIXME: What to do? */
+
+      ImmReleaseContext (hwnd, himc);
     }
 }
 
 
 static void
-gtk_im_context_ime_set_preedit_font (GtkIMContext *context, PangoFont *font)
+gtk_im_context_ime_set_preedit_font (GtkIMContext *context)
 {
   GtkIMContextIME *context_ime;
   GtkWidget *widget = NULL;
   HWND hwnd;
   HIMC himc;
+  HKL ime = GetKeyboardLayout (0);
+  const gchar *lang;
+  gunichar wc;
   PangoContext *pango_context;
+  PangoFont *font;
   LOGFONT *logfont;
 
   g_return_if_fail (GTK_IS_IM_CONTEXT_IME (context));
@@ -886,14 +810,77 @@ gtk_im_context_ime_set_preedit_font (GtkIMContext *context, PangoFont *font)
   if (!pango_context)
     goto ERROR_OUT;
 
-  if (!font)
+  /* Try to make sure we use a font that actually can show the
+   * language in question.
+   */ 
+
+  switch (PRIMARYLANGID (LOWORD (ime)))
+    {
+    case LANG_JAPANESE:
+      lang = "ja"; break;
+    case LANG_KOREAN:
+      lang = "ko"; break;
+    case LANG_CHINESE:
+      switch (SUBLANGID (LOWORD (ime)))
+	{
+	case SUBLANG_CHINESE_TRADITIONAL:
+	  lang = "zh_TW"; break;
+	case SUBLANG_CHINESE_SIMPLIFIED:
+	  lang = "zh_CN"; break;
+	case SUBLANG_CHINESE_HONGKONG:
+	  lang = "zh_HK"; break;
+	case SUBLANG_CHINESE_SINGAPORE:
+	  lang = "zh_SG"; break;
+	case SUBLANG_CHINESE_MACAU:
+	  lang = "zh_MO"; break;
+	default:
+	  lang = "zh"; break;
+	}
+      break;
+    default:
+      lang = ""; break;
+    }
+  
+  if (lang[0])
+    {
+      /* We know what language it is. Look for a character, any
+       * character, that language needs.
+       */
+      PangoLanguage *pango_lang = pango_language_from_string (lang);
+      PangoFontset *fontset =
+	pango_context_load_fontset (pango_context,
+				    widget->style->font_desc,
+				    pango_lang);
+      gunichar *sample =
+	g_utf8_to_ucs4 (pango_language_get_sample_string (pango_lang),
+			-1, NULL, NULL, NULL);
+      wc = 0x4E00;		/* In all CJK languages? */
+      if (sample != NULL)
+	{
+	  int i;
+
+	  for (i = 0; sample[i]; i++)
+	    if (g_unichar_iswide (sample[i]))
+	      {
+		wc = sample[i];
+		break;
+	      }
+	  g_free (sample);
+	}
+      font = pango_fontset_get_font (fontset, wc);
+      g_object_unref (fontset);
+    }
+  else
     font = pango_context_load_font (pango_context, widget->style->font_desc);
+
   if (!font)
     goto ERROR_OUT;
 
   logfont = pango_win32_font_logfont (font);
   if (logfont)
     ImmSetCompositionFont (himc, logfont);
+
+  g_object_unref (font);
 
 ERROR_OUT:
   /* clean */
@@ -962,21 +949,17 @@ gtk_im_context_ime_message_filter (GdkXEvent *xevent,
         if (msg->lParam & GCS_RESULTSTR)
           {
             gsize len;
-            gpointer buf;
             gchar *utf8str = NULL;
             GError *error = NULL;
 
-            len = ImmGetCompositionString (himc, GCS_RESULTSTR, NULL, 0);
-            buf = g_alloca (len);
-            if (len > 0 && buf)
+	    len = ImmGetCompositionStringW (himc, GCS_RESULTSTR, NULL, 0);
+
+            if (len > 0)
               {
-                ImmGetCompositionString (himc, GCS_RESULTSTR, buf, len);
-#ifdef UNICODE
-                len /= sizeof (gunichar2);
-                utf8str = g_utf16_to_utf8 (buf, len, NULL, NULL, &error);
-#else /* not UNICODE */
-                utf8str = g_locale_to_utf8 (buf, len, NULL, NULL, &error);
-#endif /* not UNICODE */
+		gpointer buf = g_alloca (len);
+		ImmGetCompositionStringW (himc, GCS_RESULTSTR, buf, len);
+		len /= 2;
+		utf8str = g_utf16_to_utf8 (buf, len, NULL, NULL, &error);
                 if (error)
                   {
                     g_warning ("%s", error->message);
@@ -1017,7 +1000,7 @@ gtk_im_context_ime_message_filter (GdkXEvent *xevent,
         {
         case IMN_SETOPENSTATUS:
           context_ime->opened = ImmGetOpenStatus (himc);
-          gtk_im_context_ime_set_preedit_font (context, NULL);
+          gtk_im_context_ime_set_preedit_font (context);
           break;
 
         default:

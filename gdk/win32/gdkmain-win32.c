@@ -53,16 +53,17 @@
 
 static gboolean gdk_synchronize = FALSE;
 
+static gboolean dummy;
+
 GOptionEntry _gdk_windowing_args[] = {
   { "sync", 0, 0, G_OPTION_ARG_NONE, &gdk_synchronize, 
     /* Description of --sync in --help output */              N_("Don't batch GDI requests"), NULL },
   { "no-wintab", 0, 0, G_OPTION_ARG_NONE, &_gdk_input_ignore_wintab, 
-    /* Description of --no-wintab in --help output */         N_("Don't use the Wintab API for tablet support [default]"), NULL },
+    /* Description of --no-wintab in --help output */         N_("Don't use the Wintab API for tablet support"), NULL },
   { "ignore-wintab", 0, 0, G_OPTION_ARG_NONE, &_gdk_input_ignore_wintab, 
     /* Description of --ignore-wintab in --help output */     N_("Same as --no-wintab"), NULL },
-#if 0
-  { "use-wintab", 0, 0, G_OPTION_ARG_NONE, &_gdk_input_ignore_wintab, NULL, NULL },
-#endif
+  { "use-wintab", 0, 0, G_OPTION_ARG_NONE, &dummy,
+    /* Description of --use-wintab in --help output */     N_("Do use the Wintab API [default]"), NULL },
   { "max-colors", 0, 0, G_OPTION_ARG_INT, &_gdk_max_colors, 
     /* Description of --max-colors=COLORS in --help output */ N_("Size of the palette in 8 bit mode"), 
     /* Placeholder in --max-colors=COLORS in --help output */ N_("COLORS") },

@@ -26,11 +26,11 @@
 #include <string.h>
 
 static const GtkIMContextInfo ime_info = {
-  "win32ime",
+  "ime",
   "Windows IME",
   "gtk+",
   "",
-  "*",
+  "ja:ko:zh",
 };
 
 static const GtkIMContextInfo *info_list[] = {

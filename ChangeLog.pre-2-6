@@ -1,3 +1,30 @@
+2004-10-01  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/win32/gdkglobals-win32.c: Set _gdk_input_ignore_wintab to
+	FALSE, thus enabling tablet input by default.
+
+	* gdk/win32/gdkmain-win32.c (_gdk_windowing_args): Accept the
+	--use-wintab option again (but without effect, as this is now the
+	default, see above). (#153788)
+
+	* modules/input/gtkimcontextime.c: Numerous changes.
+
+	Remove the ifdef UNICODE conditionals. Always use the
+	wide-character Imm* API. It is present also in Windows 98 and
+	Me. (Not Windows 95, but I think we don't care about that.) Using
+	the multibyte API wouldn't work anyway on systems where the system
+	codepage doesn't support the language the user uses an IME for, so
+	for instance I wouldn't be able to test this module on my English
+	Windows 2000 although I do have C, J and K IMEs available.
+
+	Guard against IMM not being active, always check ImmGetContext()
+	returning NULL. Work to some extent even without any IME. Fixes
+	#153800 at least partially.
+
+	* modules/input/imime.c (ime_info): Rename to "ime" to match the
+	naming pattern of other input modules. Make it default for
+	ja:ko:zh only.
+
 2004-10-01  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkcombobox.c (gtk_combo_box_set_model): Add a comment regarding
