@@ -704,12 +704,15 @@ gdk_gc_copy (GdkGC *dst_gc,
   if (dst_win32_gc->pen_dashes)
     g_free (dst_win32_gc->pen_dashes);
   
-  *dst_win32_gc = *src_win32_gc;
-  dst_win32_gc->hdc = NULL;
-
+  dst_gc->clip_x_origin = src_gc->clip_x_origin;
+  dst_gc->clip_y_origin = src_gc->clip_y_origin;
+  dst_gc->ts_x_origin = src_gc->ts_x_origin;
+  dst_gc->ts_y_origin = src_gc->ts_y_origin;
+  dst_gc->colormap = src_gc->colormap;
   if (dst_gc->colormap)
     g_object_ref (G_OBJECT (dst_gc->colormap));
 
+  dst_win32_gc->hcliprgn = src_win32_gc->hcliprgn;
   if (dst_win32_gc->hcliprgn)
     {
       /* create a new region, to copy to */
@@ -719,18 +722,38 @@ gdk_gc_copy (GdkGC *dst_gc,
 		  NULL, RGN_COPY);
     }
 
+  dst_win32_gc->values_mask = src_win32_gc->values_mask; 
+  dst_win32_gc->foreground = src_win32_gc->foreground;
+  dst_win32_gc->background = src_win32_gc->background;
+  dst_win32_gc->font = src_win32_gc->font;
   if (dst_win32_gc->font != NULL)
     gdk_font_ref (dst_win32_gc->font);
 
+  dst_win32_gc->rop2 = src_win32_gc->rop2;
+  dst_win32_gc->fill_style = src_win32_gc->fill_style;
+  dst_win32_gc->tile = src_win32_gc->tile;
   if (dst_win32_gc->tile != NULL)
     g_object_ref (dst_win32_gc->tile);
 
+  dst_win32_gc->stipple = src_win32_gc->stipple;
   if (dst_win32_gc->stipple != NULL)
     g_object_ref (dst_win32_gc->stipple);
 
+  dst_win32_gc->subwindow_mode = src_win32_gc->subwindow_mode;
+  dst_win32_gc->graphics_exposures = src_win32_gc->graphics_exposures;
+  dst_win32_gc->pen_width = src_win32_gc->pen_width;
+  dst_win32_gc->pen_style = src_win32_gc->pen_style;
+  dst_win32_gc->pen_dashes = src_win32_gc->pen_dashes;
   if (dst_win32_gc->pen_dashes)
     dst_win32_gc->pen_dashes = g_memdup (src_win32_gc->pen_dashes, 
                                          sizeof (DWORD) * src_win32_gc->pen_num_dashes);
+  dst_win32_gc->pen_num_dashes = src_win32_gc->pen_num_dashes;
+
+
+  dst_win32_gc->hdc = NULL;
+  dst_win32_gc->saved_dc = FALSE;
+  dst_win32_gc->hwnd = NULL;
+  dst_win32_gc->holdpal = NULL;
 }
 
 GdkScreen *  

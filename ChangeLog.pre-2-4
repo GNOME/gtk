@@ -1,3 +1,9 @@
+2004-03-15  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/win32/gdkgc-win32.c (gdk_gc_copy): Don't just copy the whole
+	GdkGCWin32 with a single assignment, that overwrites GObject's
+	private data (for instance ref_count). (#137012, John Ehresman)
+
 2004-03-15  Mark McLoughlin  <mark@skynet.ie>
 
 	* gtk/gtkfilechooserdefault.c: remove the unused "lowest_folder"
