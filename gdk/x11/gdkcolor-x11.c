@@ -256,25 +256,13 @@ gdk_colormap_new (GdkVisual *visual,
   return colormap;
 }
 
-#define MIN_SYNC_TIME 2
-
 static void
-gdk_colormap_sync (GdkColormap *colormap,
-		   gboolean     force)
+gdk_colormap_sync_palette (GdkColormap *colormap)
 {
-  time_t current_time;
   GdkColormapPrivateX11 *private = GDK_COLORMAP_PRIVATE_DATA (colormap);
   XColor *xpalette;
   gint nlookup;
   gint i;
-  
-  g_return_if_fail (GDK_IS_COLORMAP (colormap));
-
-  current_time = time (NULL);
-  if (!force && ((current_time - private->last_sync_time) < MIN_SYNC_TIME))
-    return;
-
-  private->last_sync_time = current_time;
 
   nlookup = 0;
   xpalette = g_new (XColor, colormap->size);
@@ -304,6 +292,61 @@ gdk_colormap_sync (GdkColormap *colormap,
     }
   
   g_free (xpalette);
+}
+
+static void
+gdk_colormap_sync_direct_color (GdkColormap *colormap)
+{
+  GdkColormapPrivateX11 *private = GDK_COLORMAP_PRIVATE_DATA (colormap);
+  GdkVisual *visual = colormap->visual;
+  XColor *xpalette;
+  gint i;
+
+  xpalette = g_new (XColor, colormap->size);
+  
+  for (i = 0; i < colormap->size; i++)
+    {
+      xpalette[i].pixel =
+	(((i << visual->red_shift)   & visual->red_mask)   |
+	 ((i << visual->green_shift) & visual->green_mask) |
+	 ((i << visual->blue_shift)  & visual->blue_mask));
+    }
+
+  XQueryColors (GDK_SCREEN_XDISPLAY (private->screen),
+		private->xcolormap, xpalette, colormap->size);
+  
+  for (i = 0; i < colormap->size; i++)
+    {
+      colormap->colors[i].pixel = xpalette[i].pixel;
+      colormap->colors[i].red = xpalette[i].red;
+      colormap->colors[i].green = xpalette[i].green;
+      colormap->colors[i].blue = xpalette[i].blue;
+    }
+  
+  g_free (xpalette);
+}
+
+#define MIN_SYNC_TIME 2
+
+static void
+gdk_colormap_sync (GdkColormap *colormap,
+		   gboolean     force)
+{
+  time_t current_time;
+  GdkColormapPrivateX11 *private = GDK_COLORMAP_PRIVATE_DATA (colormap);
+  
+  g_return_if_fail (GDK_IS_COLORMAP (colormap));
+
+  current_time = time (NULL);
+  if (!force && ((current_time - private->last_sync_time) < MIN_SYNC_TIME))
+    return;
+
+  private->last_sync_time = current_time;
+
+  if (colormap->visual->type == GDK_VISUAL_DIRECT_COLOR)
+    gdk_colormap_sync_direct_color (colormap);
+  else
+    gdk_colormap_sync_palette (colormap);
 }
 		   
 /**
@@ -353,10 +396,10 @@ gdk_screen_get_system_colormap (GdkScreen *screen)
       /* Fall through */
     case GDK_VISUAL_STATIC_GRAY:
     case GDK_VISUAL_STATIC_COLOR:
+    case GDK_VISUAL_DIRECT_COLOR:
       colormap->colors = g_new (GdkColor, colormap->size);
       gdk_colormap_sync (colormap, TRUE);
       
-    case GDK_VISUAL_DIRECT_COLOR:
     case GDK_VISUAL_TRUE_COLOR:
       break;
     }
