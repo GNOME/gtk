@@ -1685,7 +1685,8 @@ gdk_event_translate (GdkEvent *event,
 
   GdkWindow *window;
   GdkWindowPrivate *window_private;
-  XComposeStatus compose;
+  static XComposeStatus compose;
+  KeySym keysym;
   int charcount;
 #ifdef USE_XIM
   static gchar* buf = NULL;
@@ -1767,16 +1768,16 @@ gdk_event_translate (GdkEvent *event,
 	  buf_len = 128;
 	  buf = g_new (gchar, buf_len);
 	}
+      keysym = GDK_VoidSymbol;
+
       if (xim_using == TRUE && xim_ic)
 	{
 	  Status status;
 	  
 	  /* Clear keyval. Depending on status, may not be set */
-	  event->key.keyval = GDK_VoidSymbol;
 	  charcount = XmbLookupString(xim_ic->xic,
 				      &xevent->xkey, buf, buf_len-1,
-				      (KeySym*) &event->key.keyval,
-				      &status);
+				      &keysym, &status);
 	  if (status == XBufferOverflow)
 	    {                     /* retry */
 	      /* alloc adequate size of buffer */
@@ -1789,8 +1790,7 @@ gdk_event_translate (GdkEvent *event,
 	     
 	      charcount = XmbLookupString (xim_ic->xic,
 					   &xevent->xkey, buf, buf_len-1,
-					   (KeySym*) &event->key.keyval,
-					   &status);
+					   &keysym, &status);
 	    }
 	  if (status == XLookupNone)
 	    {
@@ -1800,13 +1800,13 @@ gdk_event_translate (GdkEvent *event,
 	}
       else
 	charcount = XLookupString (&xevent->xkey, buf, buf_len,
-				   (KeySym*) &event->key.keyval,
-				   &compose);
+				   &keysym, &compose);
 #else
       charcount = XLookupString (&xevent->xkey, buf, 16,
-				 (KeySym*) &event->key.keyval,
-				 &compose);
+				 &keysym, &compose);
 #endif
+      event->key.keyval = keysym;
+
       if (charcount > 0 && buf[charcount-1] == '\0')
 	charcount --;
       else
@@ -1844,9 +1844,10 @@ gdk_event_translate (GdkEvent *event,
     case KeyRelease:
       /* Lookup the string corresponding to the given keysym.
        */
+      keysym = GDK_VoidSymbol;
       charcount = XLookupString (&xevent->xkey, buf, 16,
-				 (KeySym*) &event->key.keyval,
-				 &compose);
+				 &keysym, &compose);
+      event->key.keyval = keysym;      
 
       /* Print debugging info.
        */

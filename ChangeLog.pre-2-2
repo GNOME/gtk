@@ -1,3 +1,81 @@
+Sat May  9 20:11:20 1998  Owen Taylor  <otaylor@gtk.org>
+
+	* configure.in (LIBS): Try to figure out if this
+	is Digital Unix and we need -std1 to get the
+	right prototypes.
+
+Sat May  9 20:08:12 1998  Owen Taylor  <otaylor@gtk.org>
+
+	* glib/gmem.c: Experimentally restore GMemChunk
+	to its primeval state - where mem areas are
+	freed incrementally instead of searching the tree
+	every time a mem area is completely empty. Also,
+	always keep one mem chunk around. (Reduced calls
+	to malloc() a lot, but doesn't really improve 
+	performance significiantly)
+
+Fri May  8 21:31:50 1998  Owen Taylor  <otaylor@gtk.org>
+
+	* gtk/gtkwidget.c (gtk_widget_queue_draw): Free the
+	draw-queue when we are done. 
+
+	(gtk_widget_queue_draw/_queu_resize): Always return
+	FALSE and avoid having two idles at the same time.
+	
+Fri May  8 21:04:00 1998  Owen Taylor  <otaylor@gtk.org>
+
+	* gtk/gtktext.c: Various fixes to make sure cache
+	lines are freed if line_start_cache doesn't point to the
+	beginning of the cache.
+
+Thu May  7 09:44:22 1998  Owen Taylor  <otaylor@gtk.org>
+
+	* style_set improvements for GtkText and GtkEntry
+
+Tue May  5 19:49:27 1998  Owen Taylor  <otaylor@gtk.org>
+
+	* gdk/gdkpixmap.c: Patches from Gordon Matzigkeit
+	to speed things up and remove code duplication.
+
+	Reintegrated buffer overflow patches, and added
+	some extra paranoia.
+	
+Tue May  5 17:04:14 1998  Owen Taylor  <otaylor@gtk.org>
+
+	* gdk/gdk.c (gdk_event_translate): A guint * was
+	being passed where X expected a Keysym *, and
+	keysyms are long's on Alpha Linux. This was causing
+	segfaults in Xlib, apparently because of alignment.
+	(Bug located by Juergen Haas <haas@forwiss.uni-passau.de>)
+	
+Tue May  5 19:11:27 1998  Owen Taylor  <otaylor@gtk.org>
+
+	* gtk/gtkdrawingarea.c (gtk_drawing_area_realize): Always
+	set GDK_EXPOSURE_MASK for DrawingAreas
+
+Tue May  5 14:32:37 1998  Owen Taylor  <otaylor@gtk.org>
+
+	* gtk/gtkwidget.[ch]: removed gtk_widge_propagate_default_style
+	(superceded by RC file reparsing capabilities)
+
+	* gtk/gtkwindow.c: Add handling for _GDK_READ_RFCILES client
+	events. (Shouldn't be sent to the InputOnly leader, which
+	it is now by gdk_event_send_clientmessage_toall
+
+	* gtk/testgtk.c: Added extra button to rcfiles test
+	to send out _GDK_READ_RCFILES events.
+	
+Tue May  5 11:03:00 1998  Owen Taylor  <otaylor@gtk.org>
+
+	* gtk/gtkselection.c (gtk_selection_clear): Fixed
+	reversed conditionals that caused segfault on some
+	platforms.
+
+Tue May  5 00:44:47 1998  Owen Taylor  <otaylor@gtk.org>
+
+	* gtk/gtkcontainer.c (gtk_container_set_focus_[hv]adjustment):
+	cast to GTK_OBJECT for gtk_object_ref.
+
 Sat May  9 16:30:33 BST 1998 Tony Gale  <gale@gtk.org>
 
 	* docs/gtk_tut_it.sgml: update of Italian tutorial

@@ -498,7 +498,6 @@ g_mem_chunk_alloc (GMemChunk *mem_chunk)
               if (rmem_chunk->free_mem_area)
                 {
                   rmem_chunk->num_mem_areas -= 1;
-                  rmem_chunk->num_marked_areas -= 1;
 
                   if (temp_area->next)
                     temp_area->next->prev = temp_area->prev;
@@ -506,13 +505,15 @@ g_mem_chunk_alloc (GMemChunk *mem_chunk)
                     temp_area->prev->next = temp_area->next;
                   if (temp_area == rmem_chunk->mem_areas)
                     rmem_chunk->mem_areas = rmem_chunk->mem_areas->next;
-                  if (temp_area == rmem_chunk->mem_area)
-                    rmem_chunk->mem_area = NULL;
 
+		  if (rmem_chunk->type == G_ALLOC_AND_FREE)
+		    g_tree_remove (rmem_chunk->mem_tree, temp_area);
                   g_free (temp_area);
                 }
               else
                 rmem_chunk->free_mem_area = temp_area;
+	      
+	      rmem_chunk->num_marked_areas -= 1;
 	    }
 	}
       else
@@ -562,23 +563,6 @@ g_mem_chunk_alloc (GMemChunk *mem_chunk)
       rmem_chunk->mem_area->allocated = 0;
       rmem_chunk->mem_area->mark = 0;
     }
-  else if (rmem_chunk->free_mem_area)
-    {
-      rmem_chunk->num_mem_areas -= 1;
-
-      if (rmem_chunk->free_mem_area->next)
-	rmem_chunk->free_mem_area->next->prev = rmem_chunk->free_mem_area->prev;
-      if (rmem_chunk->free_mem_area->prev)
-	rmem_chunk->free_mem_area->prev->next = rmem_chunk->free_mem_area->next;
-      if (rmem_chunk->free_mem_area == rmem_chunk->mem_areas)
-	rmem_chunk->mem_areas = rmem_chunk->mem_areas->next;
-
-      if (rmem_chunk->type == G_ALLOC_AND_FREE)
-	g_tree_remove (rmem_chunk->mem_tree, rmem_chunk->free_mem_area);
-
-      g_free (rmem_chunk->free_mem_area);
-      rmem_chunk->free_mem_area = NULL;
-    }
 
   /* Get the memory and modify the state variables appropriately.
    */
@@ -624,12 +608,11 @@ g_mem_chunk_free (GMemChunk *mem_chunk,
 	{
 	  temp_area->mark = 1;
 	  rmem_chunk->num_marked_areas += 1;
-
-	  g_mem_chunk_clean (mem_chunk);
 	}
     }
 }
 
+/* This doesn't free the free_area if there is one */
 void
 g_mem_chunk_clean (GMemChunk *mem_chunk)
 {

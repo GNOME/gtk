@@ -630,18 +630,20 @@ gtk_selection_clear (GtkWidget *widget,
       tmp_list = tmp_list->next;
     }
     
-  if (selection_info->time > event->time)
-    return FALSE;		/* return FALSE to indicate that
+  if (tmp_list)
+    {
+      if (selection_info->time > event->time)
+	return FALSE;		/* return FALSE to indicate that
 				 * the selection was out of date,
 				 * and this clear should be ignored */
-  else
-    if (tmp_list)
-      {
-	current_selections = g_list_remove_link (current_selections, tmp_list);
-	g_list_free (tmp_list);
-	g_free (selection_info);
-      }
-
+      else
+	{
+	  current_selections = g_list_remove_link (current_selections, tmp_list);
+	  g_list_free (tmp_list);
+	  g_free (selection_info);
+	}
+    }
+  
   return TRUE;
 }
 

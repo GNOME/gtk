@@ -6457,6 +6457,24 @@ reload_rc_file (void)
 }
 
 void
+reload_all_rc_files (void)
+{
+  static GdkAtom atom_rcfiles = GDK_NONE;
+
+  GdkEventClient sev;
+  int i;
+  
+  if (!atom_rcfiles)
+    atom_rcfiles = gdk_atom_intern("_GTK_READ_RCFILES", FALSE);
+
+  for(i = 0; i < 5; i++)
+    sev.data.l[i] = 0;
+  sev.data_format = 32;
+  sev.message_type = atom_rcfiles;
+  gdk_event_send_clientmessage_toall ((GdkEvent *) &sev);
+}
+
+void
 create_rc_file (void)
 {
   static GtkWidget *window = NULL;
@@ -6480,6 +6498,14 @@ create_rc_file (void)
       gtk_box_pack_start (GTK_BOX (GTK_DIALOG (window)->action_area), 
 			  button, TRUE, TRUE, 0);
       gtk_widget_grab_default (button);
+      gtk_widget_show (button);
+
+      button = gtk_button_new_with_label ("Reload All");
+      gtk_signal_connect (GTK_OBJECT (button), "clicked",
+			  GTK_SIGNAL_FUNC(reload_all_rc_files), NULL);
+      GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
+      gtk_box_pack_start (GTK_BOX (GTK_DIALOG (window)->action_area), 
+			  button, TRUE, TRUE, 0);
       gtk_widget_show (button);
 
       button = gtk_button_new_with_label ("Close");

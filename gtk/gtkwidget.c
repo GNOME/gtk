@@ -1558,8 +1558,12 @@ static gint
 gtk_widget_idle_draw (void *data)
 {
   GSList *node;
+  GSList *draw_queue;
 
-  node = gtk_widget_redraw_queue;
+  draw_queue = node = gtk_widget_redraw_queue;
+  /* We set this gtk_widget_redraw_queue to NULL first, in case anybody
+   * calls queue_draw recursively
+   */
   gtk_widget_redraw_queue = NULL;
   while (node)
     {
@@ -1567,7 +1571,9 @@ gtk_widget_idle_draw (void *data)
       node = node->next;
     }
 
-  return gtk_widget_redraw_queue != NULL;
+  g_slist_free (draw_queue);
+  
+  return FALSE;
 }
 
 void
@@ -1628,7 +1634,7 @@ gtk_widget_idle_sizer (void *data)
     }
   g_slist_free (free_slist);
 
-  return gtk_widget_resize_queue != NULL;
+  return FALSE;
 }
 
 void
@@ -2722,32 +2728,6 @@ gtk_widget_pop_style (void)
       gtk_style_unref ((GtkStyle*) tmp->data);
       g_slist_free_1 (tmp);
     }
-}
-
-/* Basically, send a message to all toplevel windows telling them
- * that a new _GTK_STYLE_COLORS property is available on the root
- * window
- */
-void
-gtk_widget_propagate_default_style (void)
-{
-  GdkEventClient sev;
-  int i;
-  
-  /* Set the property on the root window */
-  gdk_property_change(GDK_ROOT_PARENT(),
-		      gdk_atom_intern("_GTK_DEFAULT_COLORS", FALSE),
-		      gdk_atom_intern("STRING", FALSE),
-		      8*sizeof(gushort),
-		      GDK_PROP_MODE_REPLACE,
-		      (guchar *)gtk_widget_get_default_style(),
-		      GTK_STYLE_NUM_STYLECOLORS() * sizeof(GdkColor));
-
-  for(i = 0; i < 5; i++)
-    sev.data.l[i] = 0;
-  sev.data_format = 32;
-  sev.message_type = gdk_atom_intern ("_GTK_STYLE_CHANGED", FALSE);
-  gdk_event_send_clientmessage_toall ((GdkEvent *) &sev);
 }
 
 /*************************************************************

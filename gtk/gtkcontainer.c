@@ -1116,7 +1116,7 @@ gtk_container_set_focus_vadjustment (GtkContainer  *container,
     g_return_if_fail (GTK_IS_ADJUSTMENT (adjustment));
 
   if (adjustment)
-    gtk_object_ref (adjustment);
+    gtk_object_ref (GTK_OBJECT(adjustment));
 
   gtk_object_set_data_by_id_full (GTK_OBJECT (container),
 				  vadjustment_key_id,
@@ -1134,7 +1134,7 @@ gtk_container_set_focus_hadjustment (GtkContainer  *container,
     g_return_if_fail (GTK_IS_ADJUSTMENT (adjustment));
 
   if (adjustment)
-    gtk_object_ref (adjustment);
+    gtk_object_ref (GTK_OBJECT (adjustment));
 
   gtk_object_set_data_by_id_full (GTK_OBJECT (container),
 				  hadjustment_key_id,

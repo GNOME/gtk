@@ -22,6 +22,7 @@
 #include "gdk/gdkkeysyms.h"
 #include "gdk/gdkx.h"
 #include "gtkprivate.h"
+#include "gtkrc.h"
 #include "gtksignal.h"
 #include "gtkwindow.h"
 
@@ -109,6 +110,9 @@ static void gtk_window_set_hints          (GtkWidget         *widget,
 static gint gtk_window_check_accelerator  (GtkWindow         *window,
 					   gint               key,
 					   guint              mods);
+
+static void gtk_window_read_rcfiles       (GtkWidget         *widget,
+					   GdkEventClient    *event);
 
 
 static GtkBinClass *parent_class = NULL;
@@ -942,70 +946,43 @@ gtk_window_focus_out_event (GtkWidget     *widget,
 }
 
 static void
-gtk_window_style_set_event (GtkWidget *widget,
-			    GdkEventClient *event)
+gtk_window_read_rcfiles (GtkWidget *widget,
+			 GdkEventClient *event)
 {
-  GdkAtom atom_default_colors;
-  GtkStyle *style_newdefault;
-  GdkAtom realtype;
-  gint retfmt, retlen;
-  GdkColor *data, *stylecolors;
-  int i = 0;
-  GdkColormap *widget_cmap;
+  GList *toplevels;
   
-  atom_default_colors = gdk_atom_intern("_GTK_DEFAULT_COLORS", FALSE);
-  
-  if(gdk_property_get (GDK_ROOT_PARENT(),
-		       atom_default_colors,
-		       gdk_atom_intern("STRING", FALSE),
-		       0,
-		       sizeof(GdkColor) * GTK_STYLE_NUM_STYLECOLORS(),
-		       FALSE,
-		       &realtype,
-		       &retfmt,
-		       &retlen,
-		       (guchar **)&data) != TRUE) {
-    g_warning("gdk_property_get() failed in _GTK_STYLE_CHANGED handler\n");
-    return;
-  }
-  if(retfmt != sizeof(gushort)*8) {
-    g_warning("retfmt (%d) != sizeof(gushort)*8 (%d)\n", retfmt,
-	sizeof(gushort)*8);
-    return;
-  }
-  /* We have the color data, now let's interpret it */
-  style_newdefault = gtk_widget_get_default_style();
-  gtk_style_ref(style_newdefault);
-  stylecolors = (GdkColor *) style_newdefault;
-
-  widget_cmap = gtk_widget_get_colormap(widget);
-  for(i = 0; i < GTK_STYLE_NUM_STYLECOLORS(); i++) {
-    stylecolors[i] = data[i];
-    gdk_color_alloc(widget_cmap, &stylecolors[i]);
-  }
-
-  gtk_widget_set_default_style(style_newdefault);
-  gtk_style_unref(style_newdefault);
-
-  /* Now we need to redraw everything */
-  gtk_widget_draw(widget, NULL);
-  gtk_widget_draw_children(widget);
+  if (gtk_rc_reparse_all ())
+    {
+      toplevels = gdk_window_get_toplevels();
+      while (toplevels)
+	{
+	  GtkWidget *widget;
+	  gdk_window_get_user_data (toplevels->data, (gpointer *)&widget);
+	  
+	  if (widget)
+	    gtk_widget_reset_rc_styles (widget);
+	  
+	  toplevels = toplevels->next;
+	}
+      g_list_free (toplevels);
+    }
 }
 
 static gint
 gtk_window_client_event (GtkWidget	*widget,
 			 GdkEventClient	*event)
 {
-  GdkAtom atom_styleset;
+  static GdkAtom atom_rcfiles = GDK_NONE;
   g_return_val_if_fail (widget != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_WINDOW (widget), FALSE);
   g_return_val_if_fail (event != NULL, FALSE);
 
-  atom_styleset = gdk_atom_intern("_GTK_STYLE_CHANGED", FALSE);
+  if (!atom_rcfiles)
+    atom_rcfiles = gdk_atom_intern("_GTK_READ_RCFILES", FALSE);
 
-  if(event->message_type == atom_styleset) {
-    gtk_window_style_set_event(widget, event);    
-  }
+  if(event->message_type == atom_rcfiles) 
+    gtk_window_read_rcfiles (widget, event);    
+
   return FALSE;
 }
 

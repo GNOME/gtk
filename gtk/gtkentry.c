@@ -2106,5 +2106,11 @@ gtk_entry_style_set	(GtkWidget      *widget,
       scroll_char = gtk_entry_find_position (entry, entry->scroll_offset);
       gtk_entry_recompute_offsets (GTK_ENTRY (widget));
       entry->scroll_offset = entry->char_offset[scroll_char];
+
+      gdk_window_set_background (widget->window, &widget->style->base[GTK_STATE_NORMAL]);
+      gdk_window_set_background (entry->text_area, &widget->style->base[GTK_STATE_NORMAL]);
     }
+
+  if (GTK_WIDGET_DRAWABLE (widget))
+    gdk_window_clear (widget->window);
 }

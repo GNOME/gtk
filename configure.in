@@ -105,6 +105,25 @@ if test "x$GCC" = "xyes"; then
   fi
 fi
 
+AC_MSG_CHECKING([For extra flags to get ANSI library prototypes])
+gtk_save_LDFLAGS=$LDFLAGS
+LIBS="$LIBS -lm"
+AC_TRY_RUN([#include <math.h>
+             int main (void) { return (log(1) != log(1.)); }],
+     AC_MSG_RESULT(none needed),
+     gtk_save_CFLAGS=$CFLAGS
+     CFLAGS="$CFLAGS -std1"
+     AC_TRY_RUN([#include <math.h>
+	         int main (void) { return (log(1) != log(1.)); }],
+         AC_MSG_RESULT(-std1),
+         AC_MSG_RESULT()
+         CFLAGS=$gtk_save_CFLAGS
+         AC_MSG_WARN(
+                [No ANSI prototypes found in library. (-std1 didn't work.)])
+     )
+)
+LIBS=$gtk_save_LIBS
+
 if test "x$enable_xim" = "xyes"; then
   CFLAGS="$CFLAGS -DUSE_XIM"
 fi
