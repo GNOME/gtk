@@ -1936,7 +1936,7 @@ draw_row (GtkCList     *clist,
 		case GTK_CELL_TEXT:
 		  if (layout)
 		    {
-		      gint row_center_offset = 1.5 + (clist->row_height - logical_rect.height - 1) / 2;
+		      gint row_center_offset = (clist->row_height - logical_rect.height) / 2;
 
 		      gdk_gc_set_clip_rectangle (fg_gc, &clip_rectangle);
 		      gdk_draw_layout (clist->clist_window, fg_gc,

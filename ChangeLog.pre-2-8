@@ -1,3 +1,9 @@
+Fri Nov 23 18:49:53 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/{gtkclist,gtkctree.c} (draw_row): Remove some strange
+	arithmetic that was resulting in rows being drawn too low.
+	(#65001, reported by Damon Chaplin)
+
 Fri Nov 23 18:36:42 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkrange.c (gtk_range_button_press): Offset 
