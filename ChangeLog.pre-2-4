@@ -1,3 +1,15 @@
+Thu Oct  7 11:09:55 1999  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/Makefile.am (install-data-local): Fix
+	a typo where gtkrc.vi_VN.tcvn5712 wasn't getting
+	deleted, causing error messages on install.
+
+Thu Oct  7 11:03:06 1999  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtk[hv]paned.c (gtk_{h,v}paned_draw): Redraw
+	the handle as well, since we now sometimes ignore
+	exposes on the handle while resizing.
+
 Wed Oct  6 18:02:31 1999  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkrc.c (gtk_rc_append_default_pixmap_path): Fix stupid

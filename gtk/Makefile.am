@@ -393,7 +393,7 @@ install-data-local:
 	    ln -s gtkrc.iso-8859-5 gtkrc.$$i ; \
 	  done ; \
 	rm -f gtkrc.lt gtkrc.cy gtkrc.ga gtkrc.et gtkrc.ka \
-	     gtkrc.vi_VN.viscii111 vi_VN.tcvn5712 gtkrc.vi ; \
+	     gtkrc.vi_VN.viscii111 gtkrc.vi_VN.tcvn5712 gtkrc.vi ; \
 	ln -s gtkrc.iso-8859-13 gtkrc.lt ; \
 	ln -s gtkrc.iso-8859-14 gtkrc.cy ; \
 	ln -s gtkrc.iso-8859-14 gtkrc.ga ; \
