@@ -1,3 +1,7 @@
+2004-10-09  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkaccelgroup.h: Declare gtk_accelerator_get_label.
+
 2004-10-08  Matthias Clasen  <mclasen@redhat.com>
 
 	* gdk/x11/gdkx.h: Declare gdk_x11_window_set_user_time here.
