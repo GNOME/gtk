@@ -20,8 +20,8 @@
 #include "glib.h"
 
 
-#define MEM_PROFILE
-#define MEM_CHECK
+/* #define MEM_PROFILE */
+/* #define MEM_CHECK */
 
 
 #define MAX_MEM_AREA  65536L
