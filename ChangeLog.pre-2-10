@@ -1,3 +1,11 @@
+2004-05-11  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkcombobox.c (gtk_combo_box_list_setup): Use
+	GTK_SELECTION_BROWSE.
+
+	* gtk/gtktreeview.c: Make hover selection work for 
+	GTK_SELECTION_BROWSE as well.
+
 Tue May 11 00:38:25 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkcellrenderertoggle.c (gtk_cell_renderer_toggle_class_init): 

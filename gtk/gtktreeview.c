@@ -630,7 +630,9 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
      * 
      * Enables of disables the hover selection mode of @tree_view.
      * Hover selection makes the selected row follow the pointer.
-     * Currently, this works only for the selection mode %GTK_SELECTION_SINGLE.
+     * Currently, this works only for the selection modes 
+     * %GTK_SELECTION_SINGLE and %GTK_SELECTION_BROWSE.
+     *
      * This mode is primarily indended for treeviews in popups, e.g.
      * in #GtkComboBox or #GtkEntryCompletion.
      *
@@ -2723,8 +2725,10 @@ prelight_or_select (GtkTreeView *tree_view,
 		    gint         x,
 		    gint         y)
 {
+  GtkSelectionMode mode = gtk_tree_selection_get_mode (tree_view->priv->selection);
+  
   if (tree_view->priv->hover_selection &&
-      gtk_tree_selection_get_mode (tree_view->priv->selection) == GTK_SELECTION_SINGLE &&
+      (mode == GTK_SELECTION_SINGLE || mode == GTK_SELECTION_BROWSE) &&
       !(tree_view->priv->edited_column &&
 	tree_view->priv->edited_column->editable_widget))
     {
@@ -2744,7 +2748,7 @@ prelight_or_select (GtkTreeView *tree_view,
 	      gtk_tree_path_free (path);
 	    }
 	}
-      else
+      else if (mode == GTK_SELECTION_SINGLE)
 	gtk_tree_selection_unselect_all (tree_view->priv->selection);
     }
   else
@@ -12262,8 +12266,8 @@ gtk_tree_view_stop_editing (GtkTreeView *tree_view,
  *
  * Enables of disables the hover selection mode of @tree_view.
  * Hover selection makes the selected row follow the pointer.
- * Currently, this works only for the selection mode 
- * %GTK_SELECTION_SINGLE.
+ * Currently, this works only for the selection modes 
+ * %GTK_SELECTION_SINGLE and %GTK_SELECTION_BROWSE.
  * 
  * Since: 2.6
  **/

@@ -2241,7 +2241,7 @@ gtk_combo_box_list_setup (GtkComboBox *combo_box)
 
   combo_box->priv->tree_view = gtk_tree_view_new ();
   sel = gtk_tree_view_get_selection (GTK_TREE_VIEW (combo_box->priv->tree_view));
-  gtk_tree_selection_set_mode (sel, GTK_SELECTION_SINGLE);
+  gtk_tree_selection_set_mode (sel, GTK_SELECTION_BROWSE);
   gtk_tree_view_set_headers_visible (GTK_TREE_VIEW (combo_box->priv->tree_view),
                                      FALSE);
   gtk_tree_view_set_hover_selection (GTK_TREE_VIEW (combo_box->priv->tree_view),
