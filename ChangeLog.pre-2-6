@@ -1,5 +1,8 @@
 2002-01-23  Matthias Clasen  <matthiasc@poet.de>
 
+	* gtk/gtkentry.c, gtk/gtkwidget.c: Remove excessive
+	g_return_if_fail() calls. (#57615)
+
 	* gtk/gtkitemfactory.c (gtk_item_factory_delete_entries): Make
 	it work for paths with underline accelerators. (#69247)
 
