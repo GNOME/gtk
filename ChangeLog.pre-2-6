@@ -1,3 +1,8 @@
+2004-11-16  Matthias Clasen  <mclasen@redhat.com>
+
+	* configure.in: Use gmodule-no-export-2.0.pc, require glib 2.5.7
+	(#125627, Owen Taylor)
+
 2004-11-17  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkbutton.c: Don't return a relief when a 

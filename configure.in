@@ -29,7 +29,7 @@ m4_define([gtk_api_version], [2.0])
 m4_define([gtk_binary_version], [2.4.0])
 
 # required versions of other packages
-m4_define([glib_required_version], [2.5.4])
+m4_define([glib_required_version], [2.5.7])
 m4_define([pango_required_version], [1.5.1])
 m4_define([atk_required_version], [1.0.1])
 
@@ -471,13 +471,13 @@ AC_TRY_COMPILE([#include <dirent.h>], [DIR *dir;],
 # Run AM_PATH_GLIB_2_0 to make sure that GLib is installed and working
 # 
 
-GLIB_PACKAGES="gobject-2.0 gmodule-2.0"
+GLIB_PACKAGES="gobject-2.0 gmodule-no-export-2.0"
 
 AM_PATH_GLIB_2_0(glib_required_version, :,
   AC_MSG_ERROR([
 *** GLIB glib_required_version or better is required. The latest version of 
 *** GLIB is always available from ftp://ftp.gtk.org/pub/gtk/.]),
-  gobject gmodule gthread)
+  gobject gmodule-no-export gthread)
 
 dnl
 dnl Check for bind_textdomain_codeset, including -lintl if GLib brings it in.
@@ -680,7 +680,7 @@ else
     AC_MSG_RESULT(yes)
     AC_MSG_CHECKING(whether dynamic modules work)
     ## for loop is to strip newline 
-    tmp=`$PKG_CONFIG --variable=gmodule_supported gmodule-2.0`
+    tmp=`$PKG_CONFIG --variable=gmodule_supported gmodule-no-export-2.0`
     for I in $tmp; do
         dynworks=$I
     done
@@ -967,7 +967,7 @@ fi
 
 AC_SUBST(REBUILD_PNGS)
 
-GDK_PIXBUF_PACKAGES="gmodule-2.0 gobject-2.0"
+GDK_PIXBUF_PACKAGES="gmodule-no-export-2.0 gobject-2.0"
 GDK_PIXBUF_EXTRA_LIBS="$STATIC_LIB_DEPS $MATH_LIB"
 GDK_PIXBUF_EXTRA_CFLAGS= 
 GDK_PIXBUF_DEP_LIBS="`$PKG_CONFIG --libs $GDK_PIXBUF_PACKAGES` $GDK_PIXBUF_EXTRA_LIBS"
@@ -1509,7 +1509,9 @@ AC_SUBST(GTK_XIM_FLAGS)
 #  the effect is undefined; what it causes on Linux is that the
 #  export list from -export-symbols-regex is ignored and everything
 #  is exported
-#	
+#
+# We are using gmodule-no-export now, but I'm leaving the stripping
+# code in place for now, since pango and atk still require gmodule.
 export_dynamic=`(./libtool --config; echo eval echo \\$export_dynamic_flag_spec) | sh`
 if test -n "$export_dynamic"; then
   GDK_PIXBUF_DEP_LIBS=`echo $GDK_PIXBUF_DEP_LIBS | sed -e "s/$export_dynamic//"`
