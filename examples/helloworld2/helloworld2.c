@@ -12,7 +12,7 @@ void callback (GtkWidget *widget, gpointer *data)
 }
      
 /* another callback */
-void delete_event (GtkWidget *widget, gpointer *data)
+void delete_event (GtkWidget *widget, GdkEvent *event, gpointer *data)
 {    
     gtk_main_quit ();
 }

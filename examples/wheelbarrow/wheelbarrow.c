@@ -123,7 +123,7 @@ static char * WheelbarrowFull_xpm[] = {
 
 /* when invoked (via signal delete_event), terminates the application.
  */
-void close_application( GtkWidget *widget, gpointer *data ) {
+void close_application( GtkWidget *widget, GdkEvent *event, gpointer *data ) {
     gtk_main_quit();
 }
 

@@ -12,7 +12,7 @@ void hello (GtkWidget *widget, gpointer data)
 }
      
 
-gint delete_event(GtkWidget *widget, gpointer data)
+gint delete_event(GtkWidget *widget, GdkEvent *event, gpointer data)
 {
     g_print ("delete event occured\n");
     /* if you return FALSE in the "delete_event" signal handler,
