@@ -1091,12 +1091,17 @@ gtk_tree_model_sort_ref_node (GtkTreeModel *tree_model,
 			      GtkTreeIter  *iter)
 {
   GtkTreeModelSort *tree_model_sort = (GtkTreeModelSort *) tree_model;
+  GtkTreeIter child_iter;
   SortLevel *level;
   SortElt *elt;
 
   g_return_if_fail (GTK_IS_TREE_MODEL_SORT (tree_model));
   g_return_if_fail (GTK_TREE_MODEL_SORT (tree_model)->child_model != NULL);
   g_return_if_fail (GTK_TREE_MODEL_SORT (tree_model)->stamp == iter->stamp);
+
+  GET_CHILD_ITER (tree_model, &child_iter, iter);
+
+  gtk_tree_model_ref_node (GTK_TREE_MODEL_SORT (tree_model)->child_model, &child_iter);
 
   level = iter->user_data;
   elt = iter->user_data2;
@@ -1130,12 +1135,17 @@ gtk_tree_model_sort_unref_node (GtkTreeModel *tree_model,
 				GtkTreeIter  *iter)
 {
   GtkTreeModelSort *tree_model_sort = (GtkTreeModelSort *) tree_model;
+  GtkTreeIter child_iter;
   SortLevel *level;
   SortElt *elt;
 
   g_return_if_fail (GTK_IS_TREE_MODEL_SORT (tree_model));
   g_return_if_fail (GTK_TREE_MODEL_SORT (tree_model)->child_model != NULL);
   g_return_if_fail (GTK_TREE_MODEL_SORT (tree_model)->stamp == iter->stamp);
+
+  GET_CHILD_ITER (tree_model, &child_iter, iter);
+
+  gtk_tree_model_unref_node (GTK_TREE_MODEL_SORT (tree_model)->child_model, &child_iter);
 
   level = iter->user_data;
   elt = iter->user_data2;
