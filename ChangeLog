@@ -1,5 +1,26 @@
 2004-03-08  Federico Mena Quintero  <federico@ximian.com>
 
+	Fixes #136105.
+
+	* gtk/gtkfilechooserembed.h (struct _GtkFileChooserEmbedIface):
+	Added an ::initial_focus() method.
+
+	* gtk/gtkfilechooserembed.c
+	(_gtk_file_chooser_embed_delegate_iface_init): Set the
+	initial_focus method.
+	(delegate_initial_focus): Implement.
+	(_gtk_file_chooser_embed_initial_focus): New function.
+
+	* gtk/gtkfilechooserdialog.c
+	(gtk_file_chooser_dialog_constructor): Call
+	_gtk_file_chooser_embed_initial_focus().
+
+	* gtk/gtkfilechooserdefault.c (gtk_file_chooser_default_init):
+	Install the ::initial_focus() handler.
+	(gtk_file_chooser_default_initial_focus): Implement.
+
+2004-03-08  Federico Mena Quintero  <federico@ximian.com>
+
 	* gtk/gtkfilechooserdefault.c (update_from_entry): Return a
 	boolean success code.
 	(location_popup_handler): Refocus the file chooser if appropriate.

@@ -331,6 +331,8 @@ gtk_file_chooser_dialog_constructor (GType                  type,
   else
     priv->widget = g_object_new (GTK_TYPE_FILE_CHOOSER_WIDGET, NULL);
 
+  _gtk_file_chooser_embed_initial_focus (GTK_FILE_CHOOSER_EMBED (priv->widget));
+
   g_signal_connect (priv->widget, "file-activated",
 		    G_CALLBACK (file_chooser_widget_file_activated), object);
   g_signal_connect (priv->widget, "default-size-changed",

@@ -274,6 +274,7 @@ static void           gtk_file_chooser_default_get_resizable_hints    (GtkFileCh
 								       gboolean            *resize_horizontally,
 								       gboolean            *resize_vertically);
 static gboolean       gtk_file_chooser_default_should_respond         (GtkFileChooserEmbed *chooser_embed);
+static void           gtk_file_chooser_default_initial_focus          (GtkFileChooserEmbed *chooser_embed);
 
 static void location_popup_handler (GtkFileChooserDefault *impl);
 static void up_folder_handler      (GtkFileChooserDefault *impl);
@@ -496,6 +497,7 @@ gtk_file_chooser_embed_default_iface_init (GtkFileChooserEmbedIface *iface)
   iface->get_default_size = gtk_file_chooser_default_get_default_size;
   iface->get_resizable_hints = gtk_file_chooser_default_get_resizable_hints;
   iface->should_respond = gtk_file_chooser_default_should_respond;
+  iface->initial_focus = gtk_file_chooser_default_initial_focus;
 }
 static void
 gtk_file_chooser_default_init (GtkFileChooserDefault *impl)
@@ -3559,6 +3561,30 @@ gtk_file_chooser_default_should_respond (GtkFileChooserEmbed *chooser_embed)
 
   g_assert_not_reached ();
   return FALSE;
+}
+
+/* Implementation for GtkFileChooserEmbed::initial_focus() */
+static void
+gtk_file_chooser_default_initial_focus (GtkFileChooserEmbed *chooser_embed)
+{
+  GtkFileChooserDefault *impl;
+  GtkWidget *widget;
+
+  impl = GTK_FILE_CHOOSER_DEFAULT (chooser_embed);
+
+  if (impl->action == GTK_FILE_CHOOSER_ACTION_OPEN
+      || impl->action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER)
+    widget = impl->browse_files_tree_view;
+  else if (impl->action == GTK_FILE_CHOOSER_ACTION_SAVE
+	   || impl->action == GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER)
+    widget = impl->save_file_name_entry;
+  else
+    {
+      g_assert_not_reached ();
+      widget = NULL;
+    }
+
+  gtk_widget_grab_focus (widget);
 }
 
 static void

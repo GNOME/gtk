@@ -48,6 +48,8 @@ struct _GtkFileChooserEmbedIface
 				   gboolean            *resize_vertically);
 
   gboolean (*should_respond)      (GtkFileChooserEmbed *chooser_embed);
+
+  void (*initial_focus)           (GtkFileChooserEmbed *chooser_embed);
   /* Signals
    */
   void (*default_size_changed)    (GtkFileChooserEmbed *chooser_embed);
@@ -63,6 +65,8 @@ void  _gtk_file_chooser_embed_get_resizable_hints (GtkFileChooserEmbed *chooser_
 						   gboolean            *resize_vertically);
 
 gboolean _gtk_file_chooser_embed_should_respond (GtkFileChooserEmbed *chooser_embed);
+
+void _gtk_file_chooser_embed_initial_focus (GtkFileChooserEmbed *chooser_embed);
 
 void _gtk_file_chooser_embed_delegate_iface_init  (GtkFileChooserEmbedIface *iface);
 void _gtk_file_chooser_embed_set_delegate         (GtkFileChooserEmbed *receiver,
