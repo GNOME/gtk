@@ -567,6 +567,7 @@ gdk_fb_manager_callback (GIOChannel *gioc,
 static void
 gdk_fb_manager_connect (GdkFBDisplay *display)
 {
+#ifdef ENABLE_FB_MANAGER
   int fd;
   struct sockaddr_un addr;
   struct msghdr msg = {0};
@@ -581,7 +582,6 @@ gdk_fb_manager_connect (GdkFBDisplay *display)
   display->manager_blocked = FALSE;
   display->manager_fd = -1;
 
-#ifdef ENABLE_FB_MANAGER
   fd = socket (PF_UNIX, SOCK_STREAM, 0);
   
   g_print ("socket: %d\n", fd);

@@ -1,3 +1,19 @@
+2002-01-25  Alex Larsson  <alexl@redhat.com>
+
+	* gdk/linux-fb/gdkdrawable-fb2.c (gdk_drawable_impl_fb_class_init):
+	Implement copy_to_image instead of get_image
+	
+	* gdk/linux-fb/gdkimage-fb.c:
+	Implement _gdk_image_new_for_depth, _gdk_windowing_get_bits_for_depth and
+	_gdk_fb_copy_to_image.
+	Based in part on patch from Mathieu Lacage <mathieu_lacage@realmagic.fr>
+
+	* gdk/linux-fb/gdkmain-fb.c:
+	Make ENABLE_FB_MANAGER region larger.
+
+	* gdk/linux-fb/gdkprivate-fb.h:
+	Change _gdk_fb_get_image to _gdk_fb_copy_to_image.
+
 2002-01-25  Sven Neumann  <sven@gimp.org>
 
 	* gtk/gtkwindow.c (gtk_window_get_size): changed the comment so

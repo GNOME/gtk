@@ -308,11 +308,14 @@ GdkGC *   _gdk_fb_gc_new                      (GdkDrawable     *drawable,
 void      _gdk_fb_gc_calc_state              (GdkGC           *gc,
 					      GdkGCValuesMask  changed);
 
-GdkImage *_gdk_fb_get_image                  (GdkDrawable     *drawable,
-					      gint             x,
-					      gint             y,
-					      gint             width,
-					      gint             height);
+GdkImage *_gdk_fb_copy_to_image              (GdkDrawable    *drawable,
+					      GdkImage       *image,
+					      gint            src_x,
+					      gint            src_y,
+					      gint            dest_x,
+					      gint            dest_y,
+					      gint            width,
+					      gint            height);
 void      gdk_fb_drawable_clear              (GdkDrawable     *drawable);
 void      gdk_fb_draw_drawable               (GdkDrawable     *drawable,
 					      GdkGC           *gc,
