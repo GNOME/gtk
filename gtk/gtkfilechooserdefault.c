@@ -1398,74 +1398,16 @@ set_current_filter (GtkFileChooserImplDefault *impl,
     }
 }
 
-typedef gint (* FileCompareFunc) (const GtkFileInfo *info_a, const GtkFileInfo *info_b);
+#define COMPARE_DIRECTORIES											\
+  GtkFileChooserImplDefault *impl = user_data;									\
+  const GtkFileInfo *info_a = _gtk_file_system_model_get_info (impl->tree_model, a);				\
+  const GtkFileInfo *info_b = _gtk_file_system_model_get_info (impl->tree_model, b);				\
+  gboolean dir_a = gtk_file_info_get_is_folder (info_a);							\
+  gboolean dir_b = gtk_file_info_get_is_folder (info_b);							\
+														\
+  if (dir_a != dir_b)												\
+    return impl->list_sort_ascending ? (dir_a ? -1 : 1) : (dir_a ? 1 : -1) /* Directories *always* go first */
 
-/* Helper function for comparers.  Makes sure that directories always go first,
- * regardless of the sort order of the list.
- */
-static gint
-compare_with_folders_first (GtkFileChooserImplDefault *impl,
-			    GtkTreeIter               *a,
-			    GtkTreeIter               *b,
-			    FileCompareFunc            func)
-{
-  const GtkFileInfo *info_a = _gtk_file_system_model_get_info (impl->tree_model, a);
-  const GtkFileInfo *info_b = _gtk_file_system_model_get_info (impl->tree_model, b);
-  gboolean dir_a = gtk_file_info_get_is_folder (info_a);
-  gboolean dir_b = gtk_file_info_get_is_folder (info_b);
-
-  /* You know why we should *not* be programming in C?
-   *
-   * (set-sort-func sortable NAME_COLUMN
-   *   (make-comparer impl (lambda (a b) (strcmp (get-name a) (get-name b)))))
-   * (set-sort-func sortable SIZE_COLUMN
-   *   (make-comparer impl (lambda (a b) (compare (get-size a) (get-size b)))))
-   * ... etc ...
-   *
-   * (define (make-comparer impl f)
-   *   (lambda (a b)
-   *      (if (eq (is-dir? a) (is-dir? b))
-   *          (f a b)
-   *          (if (sort-ascending? impl)
-   *              (if (is-dir? a) -1 1)
-   *              (if (is-dir? a) 1 -1)))))
-   *
-   * Rather than all this callback mess.
-   */
-
-  if (dir_a == dir_b)
-    return (* func) (info_a, info_b);
-  else
-    return impl->list_sort_ascending ? (dir_a ? -1 : 1) : (dir_a ? 1 : -1); /* Directories *always* go first */
-}
-
-static gint
-compare_names (const GtkFileInfo *info_a,
-	       const GtkFileInfo *info_b)
-{
-  return strcmp (gtk_file_info_get_display_key (info_a), gtk_file_info_get_display_key (info_b));
-}
-
-static gint
-compare_sizes (const GtkFileInfo *info_a,
-	       const GtkFileInfo *info_b)
-{
-  gint64 size_a = gtk_file_info_get_size (info_a);
-  gint64 size_b = gtk_file_info_get_size (info_b);
-
-  return size_a > size_b ? -1 : (size_a == size_b ? 0 : 1);
-}
-
-static gint
-compare_mtime (const GtkFileInfo *info_a,
-	       const GtkFileInfo *info_b)
-{
-  GtkFileTime ta = gtk_file_info_get_modification_time (info_a);
-  GtkFileTime tb = gtk_file_info_get_modification_time (info_b);
-
-  return ta > tb ? -1 : (ta == tb ? 0 : 1);
-}
-	       
 /* Sort callback for the filename column */
 static gint
 name_sort_func (GtkTreeModel *model,
@@ -1473,9 +1415,9 @@ name_sort_func (GtkTreeModel *model,
 		GtkTreeIter  *b,
 		gpointer      user_data)
 {
-  GtkFileChooserImplDefault *impl = user_data;
-
-  return compare_with_folders_first (impl, a, b, compare_names);
+  COMPARE_DIRECTORIES;
+  else
+    return strcmp (gtk_file_info_get_display_key (info_a), gtk_file_info_get_display_key (info_b));
 }
 
 /* Sort callback for the size column */
@@ -1485,9 +1427,14 @@ size_sort_func (GtkTreeModel *model,
 		GtkTreeIter  *b,
 		gpointer      user_data)
 {
-  GtkFileChooserImplDefault *impl = user_data;
+  COMPARE_DIRECTORIES;
+  else
+    {
+      gint64 size_a = gtk_file_info_get_size (info_a);
+      gint64 size_b = gtk_file_info_get_size (info_b);
 
-  return compare_with_folders_first (impl, a, b, compare_sizes);
+      return size_a > size_b ? -1 : (size_a == size_b ? 0 : 1);
+    }
 }
 
 /* Sort callback for the mtime column */
@@ -1497,9 +1444,14 @@ mtime_sort_func (GtkTreeModel *model,
 		 GtkTreeIter  *b,
 		 gpointer      user_data)
 {
-  GtkFileChooserImplDefault *impl = user_data;
+  COMPARE_DIRECTORIES;
+  else
+    {
+      GtkFileTime ta = gtk_file_info_get_modification_time (info_a);
+      GtkFileTime tb = gtk_file_info_get_modification_time (info_b);
 
-  return compare_with_folders_first (impl, a, b, compare_mtime);
+      return ta > tb ? -1 : (ta == tb ? 0 : 1);
+    }
 }
 
 static void
