@@ -1,3 +1,8 @@
+1998-12-18  Sebastian Wilhelmi  <wilhelmi@ira.uka.de>
+
+	* configure.in: do not export the glib flags for thread support to
+	gtk-config.
+
 Fri Dec 18 01:32:59 1998  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkmain.c (gtk_main): added gdk_flush() after g_main_run(), so we

@@ -185,8 +185,9 @@ if test x$with_glib = x ; then
 *** is always available from ftp://ftp.gtk.org.]),
     gmodule gthread)
 
-  glib_cflags=$GLIB_CFLAGS
-  glib_libs=$GLIB_LIBS
+  # we do not want to make all gtk progs to link to thread libraries.
+  glib_cflags=`$GLIB_CONFIG glib gmodule --cflags`
+  glib_libs=`$GLIB_CONFIG glib gmodule --libs`
 else
   # Use uninstalled glib (assume they got the version right)
 
