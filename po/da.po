@@ -28,8 +28,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.3.0\n"
-"POT-Creation-Date: 2002-02-01 17:33+0100\n"
-"PO-Revision-Date: 2002-02-01 18:51+0100\n"
+"POT-Creation-Date: 2002-02-02 16:40+0100\n"
+"PO-Revision-Date: 2002-02-02 16:42+0100\n"
 "Last-Translator: Ole Laursen <olau@hardworking.dk>\n"
 "Language-Team: Danish <dansk@klid.dk>\n"
 "MIME-Version: 1.0\n"
@@ -152,33 +152,37 @@ msgstr "BMP-billede har ugyldige data i filhoved"
 msgid "Not enough memory to load bitmap image"
 msgstr "Ikke tilstrækkelig hukommelse til indlæsning af bitmap-billede"
 
-#: gdk-pixbuf/io-ico.c:204
+#: gdk-pixbuf/io-ico.c:207
 #, c-format
 msgid "Failure reading ICO: %s"
 msgstr "Fejl under læsning af ICO: %s"
 
-#: gdk-pixbuf/io-ico.c:221
+#: gdk-pixbuf/io-ico.c:224
 msgid "ICO file was missing some data (perhaps it was truncated somehow?)"
 msgstr "ICO-fil manglede nogle data (måske er den blev afkortet?)"
 
-#: gdk-pixbuf/io-ico.c:259 gdk-pixbuf/io-ico.c:307 gdk-pixbuf/io-ico.c:370
-#: gdk-pixbuf/io-ico.c:423
+#: gdk-pixbuf/io-ico.c:262 gdk-pixbuf/io-ico.c:310 gdk-pixbuf/io-ico.c:373
+#: gdk-pixbuf/io-ico.c:435
 msgid "Not enough memory to load icon"
 msgstr "Ikke nok hukommelse til indlæsning af ikon"
 
-#: gdk-pixbuf/io-ico.c:329
+#: gdk-pixbuf/io-ico.c:332
 msgid "Icon has zero width"
 msgstr "Ikon har bredden nul"
 
-#: gdk-pixbuf/io-ico.c:339
+#: gdk-pixbuf/io-ico.c:342
 msgid "Icon has zero height"
 msgstr "Ikon har højden nul"
 
-#: gdk-pixbuf/io-ico.c:384
+#: gdk-pixbuf/io-ico.c:387
 msgid "Compressed icons are not supported"
 msgstr "Komprimerede ikoner er ikke understøttet"
 
-#: gdk-pixbuf/io-ico.c:472
+#: gdk-pixbuf/io-ico.c:420
+msgid "Unsupported icon type"
+msgstr "Ikke-understøttet ikontype"
+
+#: gdk-pixbuf/io-ico.c:484
 msgid "Not enough memory to load ICO file"
 msgstr "Ikke tilstrækkelig hukommelse til indlæsning af ICO-fil"
 
@@ -187,7 +191,7 @@ msgstr "Ikke tilstrækkelig hukommelse til indlæsning af ICO-fil"
 msgid "Failure reading GIF: %s"
 msgstr "Fejl under læsning af GIF: %s"
 
-#: gdk-pixbuf/io-gif.c:460 gdk-pixbuf/io-gif.c:1360 gdk-pixbuf/io-gif.c:1519
+#: gdk-pixbuf/io-gif.c:460 gdk-pixbuf/io-gif.c:1371 gdk-pixbuf/io-gif.c:1530
 msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
 msgstr "GIF-fil manglede nogle data (måske er den blev afkortet?)"
 
@@ -208,37 +212,37 @@ msgstr "Ugyldig kode fundet"
 msgid "Circular table entry in GIF file"
 msgstr "Cirkulær tabelindgang i GIF-fil"
 
-#: gdk-pixbuf/io-gif.c:754 gdk-pixbuf/io-gif.c:1348 gdk-pixbuf/io-gif.c:1393
-#: gdk-pixbuf/io-gif.c:1507
+#: gdk-pixbuf/io-gif.c:762 gdk-pixbuf/io-gif.c:1359 gdk-pixbuf/io-gif.c:1404
+#: gdk-pixbuf/io-gif.c:1518
 msgid "Not enough memory to load GIF file"
 msgstr "Ikke nok hukommelse til indlæsning af GIF-fil"
 
-#: gdk-pixbuf/io-gif.c:998
+#: gdk-pixbuf/io-gif.c:1009
 msgid "GIF image is corrupt (incorrect LZW compression)"
 msgstr "GIF-billede er ødelagt (ukorrekt LZW-kompression)"
 
-#: gdk-pixbuf/io-gif.c:1048
+#: gdk-pixbuf/io-gif.c:1059
 msgid "File does not appear to be a GIF file"
 msgstr "Fil synes ikke at være en GIF-fil"
 
-#: gdk-pixbuf/io-gif.c:1060
+#: gdk-pixbuf/io-gif.c:1071
 #, c-format
 msgid "Version %s of the GIF file format is not supported"
 msgstr "Version %s af GIF-filformatet er ikke understøttet"
 
 # 'image' må betyde animation her
-#: gdk-pixbuf/io-gif.c:1135
+#: gdk-pixbuf/io-gif.c:1146
 msgid "GIF image contained a frame appearing outside the image bounds."
 msgstr "GIF-animation indeholdt et billede som var udenfor billedgrænserne."
 
 # 'disposal mode' betegner vist nok hvordan der skiftes fra et billede til et andet 
-#: gdk-pixbuf/io-gif.c:1151
+#: gdk-pixbuf/io-gif.c:1162
 msgid "First frame of GIF image had 'revert to previous' as its disposal mode."
 msgstr ""
 "Første billede af GIF-animation havde 'gå til forrige' som sin "
 "overgangstilstand."
 
-#: gdk-pixbuf/io-gif.c:1186
+#: gdk-pixbuf/io-gif.c:1197
 msgid ""
 "GIF image has no global colormap, and a frame inside it has no local "
 "colormap."
@@ -246,7 +250,7 @@ msgstr ""
 "GIF-animation har ikke globalt farvekort, og et billede i den har ikke "
 "lokalt farvekort."
 
-#: gdk-pixbuf/io-gif.c:1415
+#: gdk-pixbuf/io-gif.c:1426
 msgid "GIF image was truncated or incomplete."
 msgstr "GIF-billedet er afkortet eller ikke komplet."
 
@@ -463,7 +467,8 @@ msgstr "For stor værdi i infolen-feltet i TGA-hoved"
 
 #: gdk-pixbuf/io-tga.c:810
 msgid "Can't allocate memory for TGA cmap temporary buffer"
-msgstr "Kan ikke allokere hukommelse til midlertidigt mellemlager til TGA-farvetabel"
+msgstr ""
+"Kan ikke allokere hukommelse til midlertidigt mellemlager til TGA-farvetabel"
 
 #: gdk-pixbuf/io-tga.c:822
 msgid "Can't allocate memory for TGA colormap struct"
@@ -1707,11 +1712,11 @@ msgid "Whether buttons for creating/manipulating files should be displayed."
 msgstr "Vis knapper til oprettelse/manipulering af filer"
 
 #: gtk/gtkfilesel.c:656
-msgid "Directories"
+msgid "Folders"
 msgstr "Mapper"
 
 #: gtk/gtkfilesel.c:660
-msgid "_Directories"
+msgid "Fol_ders"
 msgstr "_Mapper"
 
 #: gtk/gtkfilesel.c:688
@@ -1724,7 +1729,7 @@ msgstr "_Filer"
 
 #: gtk/gtkfilesel.c:768 gtk/gtkfilesel.c:2105
 #, c-format
-msgid "Directory unreadable: %s"
+msgid "Folder unreadable: %s"
 msgstr "Mappen kan ikke læses: %s"
 
 #: gtk/gtkfilesel.c:892
@@ -1739,8 +1744,8 @@ msgstr ""
 "Er du sikker på at du vil vælge den?"
 
 #: gtk/gtkfilesel.c:1022
-msgid "Crea_te Dir"
-msgstr "O_pret mappe"
+msgid "_New Folder"
+msgstr "_Ny mappe"
 
 #: gtk/gtkfilesel.c:1033
 msgid "De_lete File"
@@ -1753,13 +1758,13 @@ msgstr "_Omdøb fil"
 #: gtk/gtkfilesel.c:1292
 #, c-format
 msgid ""
-"The directory name \"%s\" contains symbols that are not allowed in filenames"
+"The folder name \"%s\" contains symbols that are not allowed in filenames"
 msgstr "Mappenavnet \"%s\" indeholder symboler der ikke er tilladte i filnavne"
 
 #: gtk/gtkfilesel.c:1294
 #, c-format
 msgid ""
-"Error creating directory \"%s\": %s\n"
+"Error creating folder \"%s\": %s\n"
 "%s"
 msgstr ""
 "Fejl ved oprettelse af mappen \"%s\": %s\n"
@@ -1771,15 +1776,15 @@ msgstr "Du har sandsynligvis brug symboler der ikke er tilladate i filnavne."
 
 #: gtk/gtkfilesel.c:1303
 #, c-format
-msgid "Error creating directory \"%s\": %s\n"
+msgid "Error creating folder \"%s\": %s\n"
 msgstr "Fejl ved oprettelse af mappen \"%s\": %s\n"
 
 #: gtk/gtkfilesel.c:1337
-msgid "Create Directory"
-msgstr "Opret mappe"
+msgid "New Folder"
+msgstr "Ny mappe"
 
 #: gtk/gtkfilesel.c:1352
-msgid "_Directory name:"
+msgid "_Folder name:"
 msgstr "_Mappenavn:"
 
 #. buttons
@@ -2062,7 +2067,7 @@ msgid "Mask bitmap to use with GdkImage or GdkPixmap"
 msgstr "Maskebitkort der skal brugess med GdkImage eller GdkPixmap"
 
 #: gtk/gtkimage.c:162
-msgid "Filename to load and siplay."
+msgid "Filename to load and display."
 msgstr "Filnavn der skal indlæses og vises"
 
 #: gtk/gtkimage.c:170
@@ -2328,7 +2333,8 @@ msgstr "Afrivningstitel"
 msgid ""
 "A title that may be displayed by the window manager when this menu is torn-"
 "off."
-msgstr "En titel som vindueshåndteringen kan vise når denne menu bliver revet af"
+msgstr ""
+"En titel som vindueshåndteringen kan vise når denne menu bliver revet af"
 
 #: gtk/gtkmenubar.c:151
 msgid "Style of bevel around the menubar"
@@ -2487,7 +2493,7 @@ msgstr ""
 msgid "Whether tabs should have homogeneous sizes"
 msgstr "Om faner skal have samme størrelser"
 
-#: gtk/gtknotebook.c:2339 gtk/gtknotebook.c:4594
+#: gtk/gtknotebook.c:2340 gtk/gtknotebook.c:4595
 #, c-format
 msgid "Page %u"
 msgstr "Side %u"
@@ -2536,12 +2542,17 @@ msgstr "Håndtagsstørrelse"
 msgid "Width of handle"
 msgstr "Bredden af håndtaget"
 
-#: gtk/gtkrc.c:2773 gtk/gtkrc.c:2776
+#: gtk/gtkrc.c:2250
+#, c-format
+msgid "Unable to find include file: \"%s\""
+msgstr "Kun ikke finde inkluderingsfil: \"%s\""
+
+#: gtk/gtkrc.c:2895 gtk/gtkrc.c:2898
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "Kunne ikke finde billedfil i pixmap_path: \"%s\""
 
-#: gtk/gtkrc.c:3185
+#: gtk/gtkrc.c:3307
 #, c-format
 msgid "Pixmap path element: \"%s\" must be absolute, %s, line %d"
 msgstr "Element i billedsti: \"%s\" skal være absolut, %s, linje %d"
