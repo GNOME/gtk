@@ -90,6 +90,11 @@ shell.
 
 @menushell: the object which received the signal.
 
+<!-- ##### ARG GtkMenuShell:take-focus ##### -->
+<para>
+
+</para>
+
 <!-- ##### FUNCTION gtk_menu_shell_append ##### -->
 <para>
 Adds a new #GtkMenuItem to the end of the menu shell's item list.
@@ -172,6 +177,24 @@ after the menu item is activated.
 </para>
 
 @menu_shell: 
+
+
+<!-- ##### FUNCTION gtk_menu_shell_set_take_focus ##### -->
+<para>
+
+</para>
+
+@menu_shell: 
+@take_focus: 
+
+
+<!-- ##### FUNCTION gtk_menu_shell_get_take_focus ##### -->
+<para>
+
+</para>
+
+@menu_shell: 
+@Returns: 
 
 
 <!-- ##### ENUM GtkMenuDirectionType ##### -->
