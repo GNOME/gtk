@@ -6,8 +6,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Gtk+ 2.x\n"
-"POT-Creation-Date: 2002-08-24 05:09+0200\n"
-"PO-Revision-Date: 2002-09-15 18:33+0700\n"
+"POT-Creation-Date: 2002-09-20 05:04+0200\n"
+"PO-Revision-Date: 2002-09-20 19:54+0700\n"
 "Last-Translator: Trinh Minh Thanh <tmthanh@linuxmail.org>\n"
 "Language-Team: Gnome-Vi Team <Gnomevi-list@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -414,9 +414,8 @@ msgid "RAS image has unknown type"
 msgstr "Không biết loại dạng thức ảnh RAS"
 
 #: gdk-pixbuf/io-ras.c:188
-#, fuzzy
 msgid "unsupported RAS image variation"
-msgstr "Không hỗ trợ kiểu ảnh TGA"
+msgstr "Không hỗ trợ biến đổi ảnh RAS"
 
 #: gdk-pixbuf/io-ras.c:203 gdk-pixbuf/io-ras.c:223
 msgid "Not enough memory to load RAS image"
@@ -844,9 +843,7 @@ msgstr "Nhãn"
 msgid ""
 "Text of the label widget inside the button, if the button contains a label "
 "widget."
-msgstr ""
-"Văn bản của widget nhãn bên trong button, nếu button chứa một widget "
-"nhãn."
+msgstr "Văn bản của widget nhãn bên trong button, nếu button chứa một widget nhãn."
 
 #: gtk/gtkbutton.c:197 gtk/gtklabel.c:301
 msgid "Use underline"
@@ -1691,8 +1688,8 @@ msgid ""
 "Whether to activate the default widget (such as the default button in a "
 "dialog) when Enter is pressed."
 msgstr ""
-"Có kích hoạt widget mặc định hay không (ví dụ như button mặc định "
-"trong dialog) khi nhấn phím Enter."
+"Có kích hoạt widget mặc định hay không (ví dụ như button mặc định trong "
+"dialog) khi nhấn phím Enter."
 
 #: gtk/gtkentry.c:503
 msgid "Width in chars"
@@ -1730,56 +1727,56 @@ msgstr "Chọn tất cả"
 msgid "Input Methods"
 msgstr "Phương thức nhập"
 
-#: gtk/gtkentry.c:3897 gtk/gtktextview.c:6425
+#: gtk/gtkentry.c:3897 gtk/gtktextview.c:6426
 msgid "_Insert Unicode control character"
 msgstr "Chèn ký tự điều khiển unicode"
 
-#: gtk/gtkfilesel.c:536 gtk/gtkimage.c:161
+#: gtk/gtkfilesel.c:513 gtk/gtkimage.c:161
 msgid "Filename"
 msgstr "Tên tập tin"
 
-#: gtk/gtkfilesel.c:537
+#: gtk/gtkfilesel.c:514
 msgid "The currently selected filename."
 msgstr "Tên tập tin được chọn."
 
-#: gtk/gtkfilesel.c:543
+#: gtk/gtkfilesel.c:520
 msgid "Show file operations"
 msgstr "Hiện các thao tác trên tập tin"
 
-#: gtk/gtkfilesel.c:544
+#: gtk/gtkfilesel.c:521
 msgid "Whether buttons for creating/manipulating files should be displayed."
 msgstr "Có hiển thị các button dùng để thao tác trên tập tin hay không."
 
-#: gtk/gtkfilesel.c:551
+#: gtk/gtkfilesel.c:528
 msgid "Select multiple"
 msgstr "Đa chọn"
 
-#: gtk/gtkfilesel.c:552
+#: gtk/gtkfilesel.c:529
 msgid "Whether to allow multiple files to be selected."
 msgstr "Được phép chọn cùng lúc nhiều tập tin"
 
-#: gtk/gtkfilesel.c:707
+#: gtk/gtkfilesel.c:684
 msgid "Folders"
 msgstr "Các thư mục"
 
-#: gtk/gtkfilesel.c:711
+#: gtk/gtkfilesel.c:688
 msgid "Fol_ders"
 msgstr "Các thư mục"
 
-#: gtk/gtkfilesel.c:742
+#: gtk/gtkfilesel.c:719
 msgid "Files"
 msgstr "Các tập tin"
 
-#: gtk/gtkfilesel.c:746
+#: gtk/gtkfilesel.c:723
 msgid "_Files"
 msgstr "Các tập tin"
 
-#: gtk/gtkfilesel.c:822 gtk/gtkfilesel.c:2152
+#: gtk/gtkfilesel.c:799 gtk/gtkfilesel.c:2138
 #, c-format
 msgid "Folder unreadable: %s"
 msgstr "Không thể đọc thư mục: %s"
 
-#: gtk/gtkfilesel.c:953
+#: gtk/gtkfilesel.c:930
 #, c-format
 msgid ""
 "The file \"%s\" resides on another machine (called %s) and may not be "
@@ -1790,24 +1787,24 @@ msgstr ""
 "được.\n"
 "Bạn có chắc muốn chọn tập tin này không?"
 
-#: gtk/gtkfilesel.c:1086
+#: gtk/gtkfilesel.c:1063
 msgid "_New Folder"
 msgstr "Tạo thư mục mới"
 
-#: gtk/gtkfilesel.c:1097
+#: gtk/gtkfilesel.c:1074
 msgid "De_lete File"
 msgstr "Xóa tập tin"
 
-#: gtk/gtkfilesel.c:1108
+#: gtk/gtkfilesel.c:1085
 msgid "_Rename File"
 msgstr "Đổi tên tập tin"
 
-#: gtk/gtkfilesel.c:1386
+#: gtk/gtkfilesel.c:1363
 #, c-format
 msgid "The folder name \"%s\" contains symbols that are not allowed in filenames"
 msgstr "Tên thư mục \"%s\" chứa các ký tự không hợp lệ"
 
-#: gtk/gtkfilesel.c:1388
+#: gtk/gtkfilesel.c:1365
 #, c-format
 msgid ""
 "Error creating folder \"%s\": %s\n"
@@ -1816,33 +1813,33 @@ msgstr ""
 "Lỗi khi tạo thư mục \"%s\": %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1389 gtk/gtkfilesel.c:1625
+#: gtk/gtkfilesel.c:1366 gtk/gtkfilesel.c:1602
 msgid "You probably used symbols not allowed in filenames."
 msgstr "Có lẽ bạn đã dùng các ký tự không hợp lệ trong tên tập tin."
 
-#: gtk/gtkfilesel.c:1397
+#: gtk/gtkfilesel.c:1374
 #, c-format
 msgid "Error creating folder \"%s\": %s\n"
 msgstr "Lỗi khi tạo thư mục \"%s\": %s\n"
 
-#: gtk/gtkfilesel.c:1431
+#: gtk/gtkfilesel.c:1408
 msgid "New Folder"
 msgstr "Tạo thư mục mới"
 
-#: gtk/gtkfilesel.c:1446
+#: gtk/gtkfilesel.c:1423
 msgid "_Folder name:"
 msgstr "Tên thư mục:"
 
-#: gtk/gtkfilesel.c:1472
+#: gtk/gtkfilesel.c:1449
 msgid "Create"
 msgstr "Tạo"
 
-#: gtk/gtkfilesel.c:1513
+#: gtk/gtkfilesel.c:1490
 #, c-format
 msgid "The filename \"%s\" contains symbols that are not allowed in filenames"
 msgstr "Tên tập tin \"%s\" chứa các ký tự không hợp lệ"
 
-#: gtk/gtkfilesel.c:1516
+#: gtk/gtkfilesel.c:1493
 #, c-format
 msgid ""
 "Error deleting file \"%s\": %s\n"
@@ -1851,30 +1848,30 @@ msgstr ""
 "Lỗi khi xóa tập tin \"%s\": %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1518 gtk/gtkfilesel.c:1639
+#: gtk/gtkfilesel.c:1495 gtk/gtkfilesel.c:1616
 msgid "It probably contains symbols not allowed in filenames."
 msgstr "Có lẽ có các ký tự không hợp lệ trong tên tập tin."
 
-#: gtk/gtkfilesel.c:1527
+#: gtk/gtkfilesel.c:1504
 #, c-format
 msgid "Error deleting file \"%s\": %s"
 msgstr "Lỗi khi xóa tập tin \"%s\": %s"
 
-#: gtk/gtkfilesel.c:1570
+#: gtk/gtkfilesel.c:1547
 #, c-format
 msgid "Really delete file \"%s\" ?"
 msgstr "Bạn thật sự muốn xóa tập tin \"%s\" ?"
 
-#: gtk/gtkfilesel.c:1575
+#: gtk/gtkfilesel.c:1552
 msgid "Delete File"
 msgstr "Xóa tập tin"
 
-#: gtk/gtkfilesel.c:1621 gtk/gtkfilesel.c:1635
+#: gtk/gtkfilesel.c:1598 gtk/gtkfilesel.c:1612
 #, c-format
 msgid "The file name \"%s\" contains symbols that are not allowed in filenames"
 msgstr "Tên tập tin \"%s\" chứa các ký tự không hợp lệ"
 
-#: gtk/gtkfilesel.c:1623
+#: gtk/gtkfilesel.c:1600
 #, c-format
 msgid ""
 "Error renaming file to \"%s\": %s\n"
@@ -1883,7 +1880,7 @@ msgstr ""
 "Lỗi khi đổi tên tập tin thành \"%s\": %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1637
+#: gtk/gtkfilesel.c:1614
 #, c-format
 msgid ""
 "Error renaming file \"%s\": %s\n"
@@ -1892,29 +1889,29 @@ msgstr ""
 "Lỗi khi đổi tên tập tin \"%s\": %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1647
+#: gtk/gtkfilesel.c:1624
 #, c-format
 msgid "Error renaming file \"%s\" to \"%s\": %s"
 msgstr "Lỗi khi đổi tên tập tin \"%s\" thành \"%s\": %s"
 
-#: gtk/gtkfilesel.c:1694
+#: gtk/gtkfilesel.c:1671
 msgid "Rename File"
 msgstr "Đổi tên tập tin"
 
-#: gtk/gtkfilesel.c:1709
+#: gtk/gtkfilesel.c:1686
 #, c-format
 msgid "Rename file \"%s\" to:"
 msgstr "Đổi tên tập tin \"%s\" thành:"
 
-#: gtk/gtkfilesel.c:1740
+#: gtk/gtkfilesel.c:1717
 msgid "Rename"
 msgstr "Đổi tên"
 
-#: gtk/gtkfilesel.c:2131
+#: gtk/gtkfilesel.c:2117
 msgid "Selection: "
 msgstr "Chọn:"
 
-#: gtk/gtkfilesel.c:3011
+#: gtk/gtkfilesel.c:2997
 #, c-format
 msgid ""
 "The filename \"%s\" couldn't be converted to UTF-8 (try setting the "
@@ -1923,15 +1920,15 @@ msgstr ""
 "Tên tập tin \"%s\" không thể được chuyển sang dạng thức UTF-8. Hãy thử thiết "
 "lập biến môi trường G_BROKEN_FILENAMES: %s."
 
-#: gtk/gtkfilesel.c:3014
+#: gtk/gtkfilesel.c:3000
 msgid "Invalid Utf-8"
 msgstr "UTF-8 sai"
 
-#: gtk/gtkfilesel.c:3880
+#: gtk/gtkfilesel.c:3866
 msgid "Name too long"
 msgstr "Tên quá dài"
 
-#: gtk/gtkfilesel.c:3882
+#: gtk/gtkfilesel.c:3868
 msgid "Couldn't convert filename"
 msgstr "Không thể chuyển đổi tên tập tin"
 
@@ -2071,9 +2068,7 @@ msgstr "Dính cạnh"
 msgid ""
 "Side of the handlebox that's lined up with the docking point to dock the "
 "handlebox."
-msgstr ""
-"Cạnh của handlebox được xắp hàng với docking point để đưa vào "
-"handlebox."
+msgstr "Cạnh của handlebox được xắp hàng với docking point để đưa vào handlebox."
 
 #. Remove this icon source so we don't keep trying to
 #. * load it.
@@ -2273,9 +2268,9 @@ msgid ""
 "This does NOT affect the alignment of the label within its allocation. See "
 "GtkMisc::xalign for that."
 msgstr ""
-"Sự canh các dòng trong văn bản của nhãn liên quan với từng cái khác. "
-"Việc này không tác động tới sự canh dòng của nhãn bên trong cấp phát của nó. "
-"Hãy xem GtkMisc::xalign về điều này."
+"Sự canh các dòng trong văn bản của nhãn liên quan với từng cái khác. Việc "
+"này không tác động tới sự canh dòng của nhãn bên trong cấp phát của nó. Hãy "
+"xem GtkMisc::xalign về điều này."
 
 #: gtk/gtklabel.c:318
 msgid "Pattern"
@@ -2614,8 +2609,8 @@ msgid ""
 "A number between 0.0 and 1.0 specifying the horizontal alignment of the text "
 "in the progresswidget"
 msgstr ""
-"Một giá trị giữa 0.0 và 1.0 xác định sự canh hàng ngang của văn bản trong widget "
-"tiến trình"
+"Một giá trị giữa 0.0 và 1.0 xác định sự canh hàng ngang của văn bản trong "
+"widget tiến trình"
 
 #: gtk/gtkprogress.c:147
 msgid "Text y alignment"
@@ -3033,6 +3028,8 @@ msgid ""
 "The directions in which the size group effects the requested sizes of its "
 "component widgets."
 msgstr ""
+"Các chiều mà nhóm kích thước tác dụng lên kích thước được yêu cầu của "
+"các component widget của nó."
 
 #: gtk/gtkspinbutton.c:238
 msgid "The adjustment that holds the value of the spinbutton"
@@ -3742,7 +3739,7 @@ msgstr "Con trỏ nhìn thấy được"
 msgid "If the insertion cursor is shown"
 msgstr "Sự lfng con trỏ có được hiển thị hay không"
 
-#: gtk/gtktextview.c:6416
+#: gtk/gtktextview.c:6417
 msgid "Input _Methods"
 msgstr "_Phương thức Nhập"
 
@@ -3885,7 +3882,7 @@ msgstr "Có thể yêu cầu lại"
 
 #: gtk/gtktreeview.c:564
 msgid "View is reorderable"
-msgstr ""
+msgstr "Xem có khả năng yêu cầu lại"
 
 #: gtk/gtktreeview.c:571
 msgid "Rules Hint"
@@ -3893,7 +3890,7 @@ msgstr "Nguyên tắc Gợi ý"
 
 #: gtk/gtktreeview.c:572
 msgid "Set a hint to the theme engine to draw rows in alternating colors"
-msgstr ""
+msgstr "Đặt hint vào theme engine để vẽ các hàng trong các màu luân phiên"
 
 #: gtk/gtktreeview.c:579
 msgid "Enable Search"
@@ -3909,7 +3906,7 @@ msgstr "Tìm kiếm theo cột"
 
 #: gtk/gtktreeview.c:588
 msgid "Model column to search through when searching through code"
-msgstr ""
+msgstr "Cột Model để tìm qua khi tìm kiếm xuyên suốt mã."
 
 #: gtk/gtktreeview.c:601
 msgid "Expander Size"
@@ -4092,8 +4089,8 @@ msgid ""
 "Override for width request of the widget, or -1 if natural request should be "
 "used."
 msgstr ""
-"Override cho yêu cầu bề rộng của widget, hay -1 nếu yêu cầu tự nhiên "
-"nên được dùng."
+"Override cho yêu cầu bề rộng của widget, hay -1 nếu yêu cầu tự nhiên nên "
+"được dùng."
 
 #: gtk/gtkwidget.c:414
 msgid "Height request"
@@ -4104,8 +4101,8 @@ msgid ""
 "Override for height request of the widget, or -1 if natural request should "
 "be used."
 msgstr ""
-"Override cho yêu cầu chiều cao của widget, hay -1 nếu yêu cầu tự nhiên "
-"nên được dùng."
+"Override cho yêu cầu chiều cao của widget, hay -1 nếu yêu cầu tự nhiên nên "
+"được dùng."
 
 #: gtk/gtkwidget.c:424
 msgid "Whether the widget is visible"
