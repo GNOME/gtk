@@ -416,7 +416,10 @@ gdk_init (int    *argc,
 
   gdk_display = XOpenDisplay (gdk_display_name);
   if (!gdk_display)
-    g_error ("cannot open display: %s", XDisplayName (gdk_display_name));
+    {
+      g_warning ("cannot open display: %s", XDisplayName (gdk_display_name));
+      exit(1);
+    }
 
   /* This is really crappy. We have to look into the display structure
    *  to find the base resource id. This is only needed for recording
