@@ -1,3 +1,20 @@
+Sun Dec  8 20:19:22 2002  Owen Taylor  <otaylor@redhat.com>
+
+	Fixes for GdkColormapX11 (#100023, Naofumi Yasufuku)
+
+	* gdk/x11/gdkcolor-x11.c (gdk_x11_colormap_foreign_new): 
+	Fix typo that caused us to always return the system
+	colormap.
+
+	* gdk/x11/gdkcolor-x11.c (gdk_colormap_new): When allocating
+	a private colormap and copying the system palette
+	to prevent flashing, handle colormap->size greater than
+	system_colormap->size.
+
+	* gdk/x11/gdkcolor-x11.c (gdk_x11_colormap_get_xdisplay):
+	Get rid of the last remains of private->xdisplay
+	in favor of using private->screen. 
+
 2002-12-09  Tor Lillqvist  <tml@iki.fi>
 
 	Merge from stable:
