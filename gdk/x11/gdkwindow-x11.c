@@ -525,6 +525,43 @@ create_focus_window (Display *xdisplay,
 }
 
 static void
+ensure_sync_counter (GdkWindow *window)
+{
+#ifdef HAVE_XSYNC
+  if (!GDK_WINDOW_DESTROYED (window))
+    {
+      GdkDisplay *display = GDK_WINDOW_DISPLAY (window);
+      GdkToplevelX11 *toplevel = _gdk_x11_window_get_toplevel (window);
+      GdkWindowObject *private = (GdkWindowObject *)window;
+      GdkWindowImplX11 *impl = GDK_WINDOW_IMPL_X11 (private->impl);
+
+      if (toplevel && impl->use_synchronized_configure &&
+	  toplevel->update_counter == None &&
+	  GDK_DISPLAY_X11 (display)->use_sync)
+	{
+	  Display *xdisplay = GDK_DISPLAY_XDISPLAY (display);
+	  XSyncValue value;
+	  Atom atom;
+
+	  XSyncIntToValue (&value, 0);
+	  
+	  toplevel->update_counter = XSyncCreateCounter (xdisplay, value);
+	  
+	  atom = gdk_x11_get_xatom_by_name_for_display (display,
+							"_NET_WM_SYNC_REQUEST_COUNTER");
+	  
+	  XChangeProperty (xdisplay, GDK_WINDOW_XID (window),
+			   atom, XA_CARDINAL,
+			   32, PropModeReplace,
+			   (guchar *)&toplevel->update_counter, 1);
+	  
+	  XSyncIntToValue (&toplevel->current_counter_value, 0);
+	}
+    }
+#endif
+}
+
+static void
 setup_toplevel_window (GdkWindow *window, 
 		       GdkWindow *parent)
 {
@@ -583,6 +620,8 @@ setup_toplevel_window (GdkWindow *window,
     gdk_x11_window_set_user_time (window, 0);
   else if (GDK_DISPLAY_X11 (screen_x11->display)->user_time != 0)
     gdk_x11_window_set_user_time (window, GDK_DISPLAY_X11 (screen_x11->display)->user_time);
+
+  ensure_sync_counter (window);
 }
 
 /**
@@ -5653,40 +5692,18 @@ gdk_window_begin_move_drag (GdkWindow *window,
 void
 gdk_window_enable_synchronized_configure (GdkWindow *window)
 {
-  g_return_if_fail (GDK_IS_WINDOW (window));
-  
-#ifdef HAVE_XSYNC
-  if (!GDK_WINDOW_DESTROYED (window))
-    {
-      GdkToplevelX11 *toplevel = _gdk_x11_window_get_toplevel (window);
-      GdkDisplay *display = GDK_WINDOW_DISPLAY (window);
+  GdkWindowObject *private = (GdkWindowObject *)window;
+  GdkWindowImplX11 *impl;
 
-      if (toplevel && toplevel->update_counter == None &&
-	  GDK_DISPLAY_X11 (display)->use_sync)
-	{
-	  Display *xdisplay = GDK_DISPLAY_XDISPLAY (display);
-	  XSyncValue value;
-	  Atom atom;
+  g_return_if_fail (GDK_IS_WINDOW (window));
+
+  impl = GDK_WINDOW_IMPL_X11 (private->impl);
 	  
-	  if (toplevel->update_counter != None)
-	    return;
-	  
-	  XSyncIntToValue (&value, 0);
-	  
-	  toplevel->update_counter = XSyncCreateCounter (xdisplay, value);
-	  
-	  atom = gdk_x11_get_xatom_by_name_for_display (display,
-							"_NET_WM_SYNC_REQUEST_COUNTER");
-	  
-	  XChangeProperty (xdisplay, GDK_WINDOW_XID (window),
-			   atom, XA_CARDINAL,
-			   32, PropModeReplace,
-			   (guchar *)&toplevel->update_counter, 1);
-	  
-	  XSyncIntToValue (&toplevel->current_counter_value, 0);
-	}
+  if (!impl->use_synchronized_configure)
+    {
+      impl->use_synchronized_configure = TRUE;
+      ensure_sync_counter (window);
     }
-#endif /* HAVE_XSYNC */
 }
 
 /**
@@ -5708,7 +5725,7 @@ void
 gdk_window_configure_finished (GdkWindow *window)
 {
   g_return_if_fail (GDK_IS_WINDOW (window));
-
+  
 #ifdef HAVE_XSYNC
   if (!GDK_WINDOW_DESTROYED (window))
     {

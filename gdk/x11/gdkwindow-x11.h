@@ -77,6 +77,7 @@ struct _GdkWindowImplX11
   GdkToplevelX11 *toplevel;	/* Toplevel-specific information */
   gint8 toplevel_window_type;
   guint override_redirect : 1;
+  guint use_synchronized_configure : 1;
 };
  
 struct _GdkWindowImplX11Class 

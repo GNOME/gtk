@@ -1,3 +1,9 @@
+Mon Aug  2 21:52:45 2004  Soeren Sandmann  <sandmann@daimi.au.dk>
+
+	* gdk/x11/gdkwindow-x11.c (ensure_sync_counter): New
+	function. Make sure the sync counter is recreated when a window is
+	reparented to become a toplevel. (#148358)
+
 2004-08-02  Matthias Clasen  <mclasen@redhat.com>
 
 	* tests/testcombo.c: Some trees in combo boxes.
