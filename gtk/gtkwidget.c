@@ -1084,6 +1084,7 @@ gtk_widget_get (GtkWidget	*widget,
 		GtkArg		*arg)
 {
   g_return_if_fail (widget != NULL);
+  g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (arg != NULL);
   
   gtk_object_getv (GTK_OBJECT (widget), 1, arg);
@@ -1102,6 +1103,9 @@ gtk_widget_getv (GtkWidget	*widget,
 		 guint           nargs,
 		 GtkArg         *args)
 {
+  g_return_if_fail (widget != NULL);
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+
   gtk_object_getv (GTK_OBJECT (widget), nargs, args);
 }
 
@@ -1172,6 +1176,9 @@ gtk_widget_setv (GtkWidget *widget,
 		 guint	    nargs,
 		 GtkArg	   *args)
 {
+  g_return_if_fail (widget != NULL);
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+
   gtk_object_setv (GTK_OBJECT (widget), nargs, args);
 }
 
@@ -1192,6 +1199,7 @@ gtk_widget_unparent (GtkWidget *widget)
   GtkWidget *old_parent;
   
   g_return_if_fail (widget != NULL);
+  g_return_if_fail (GTK_IS_WIDGET (widget));
   if (widget->parent == NULL)
     return;
   
@@ -1380,6 +1388,7 @@ void
 gtk_widget_show (GtkWidget *widget)
 {
   g_return_if_fail (widget != NULL);
+  g_return_if_fail (GTK_IS_WIDGET (widget));
   
   if (!GTK_WIDGET_VISIBLE (widget))
     gtk_signal_emit (GTK_OBJECT (widget), widget_signals[SHOW]);
@@ -1410,6 +1419,9 @@ gtk_widget_show_now (GtkWidget *widget)
 {
   gint flag = FALSE;
   
+  g_return_if_fail (widget != NULL);
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+
   /* make sure we will get event */
   if (!GTK_WIDGET_MAPPED (widget) &&
       GTK_WIDGET_TOPLEVEL (widget))
@@ -1496,6 +1508,7 @@ void
 gtk_widget_map (GtkWidget *widget)
 {
   g_return_if_fail (widget != NULL);
+  g_return_if_fail (GTK_IS_WIDGET (widget));
   
   if (!GTK_WIDGET_MAPPED (widget))
     {
@@ -1518,6 +1531,7 @@ void
 gtk_widget_unmap (GtkWidget *widget)
 {
   g_return_if_fail (widget != NULL);
+  g_return_if_fail (GTK_IS_WIDGET (widget));
   
   if (GTK_WIDGET_MAPPED (widget))
     gtk_signal_emit (GTK_OBJECT (widget), widget_signals[UNMAP]);
@@ -1539,6 +1553,7 @@ gtk_widget_realize (GtkWidget *widget)
   GtkWidgetShapeInfo *shape_info;
   
   g_return_if_fail (widget != NULL);
+  g_return_if_fail (GTK_IS_WIDGET (widget));
   
   if (!GTK_WIDGET_REALIZED (widget))
     {
@@ -1589,6 +1604,7 @@ void
 gtk_widget_unrealize (GtkWidget *widget)
 {
   g_return_if_fail (widget != NULL);
+  g_return_if_fail (GTK_IS_WIDGET (widget));
   
   if (GTK_WIDGET_REDRAW_PENDING (widget))
     {
@@ -1629,6 +1645,7 @@ gtk_widget_queue_draw (GtkWidget *widget)
   GtkWidget *parent;
   
   g_return_if_fail (widget != NULL);
+  g_return_if_fail (GTK_IS_WIDGET (widget));
   
   if (GTK_WIDGET_DRAWABLE (widget))
     {
@@ -1684,6 +1701,7 @@ gtk_widget_draw (GtkWidget    *widget,
   GdkRectangle temp_area;
 
   g_return_if_fail (widget != NULL);
+  g_return_if_fail (GTK_IS_WIDGET (widget));
 
   if (GTK_WIDGET_REDRAW_PENDING (widget))
     {
@@ -1729,6 +1747,7 @@ void
 gtk_widget_draw_focus (GtkWidget *widget)
 {
   g_return_if_fail (widget != NULL);
+  g_return_if_fail (GTK_IS_WIDGET (widget));
   
   gtk_signal_emit (GTK_OBJECT (widget), widget_signals[DRAW_FOCUS]);
 }
@@ -1745,6 +1764,7 @@ void
 gtk_widget_draw_default (GtkWidget *widget)
 {
   g_return_if_fail (widget != NULL);
+  g_return_if_fail (GTK_IS_WIDGET (widget));
   
   gtk_signal_emit (GTK_OBJECT (widget), widget_signals[DRAW_DEFAULT]);
 }
@@ -1761,6 +1781,7 @@ void
 gtk_widget_draw_children (GtkWidget *widget)
 {
   g_return_if_fail (widget != NULL);
+  g_return_if_fail (GTK_IS_WIDGET (widget));
   
   if (GTK_IS_CONTAINER (widget))
     gtk_container_forall (GTK_CONTAINER (widget),
@@ -1783,6 +1804,7 @@ gtk_widget_size_request (GtkWidget	*widget,
   GtkWidgetAuxInfo *aux_info;
 
   g_return_if_fail (widget != NULL);
+  g_return_if_fail (GTK_IS_WIDGET (widget));
 
   gtk_widget_ref (widget);
   gtk_widget_ensure_style (widget);
@@ -1815,6 +1837,7 @@ gtk_widget_size_allocate (GtkWidget	*widget,
   GtkAllocation real_allocation;
   
   g_return_if_fail (widget != NULL);
+  g_return_if_fail (GTK_IS_WIDGET (widget));
   
   real_allocation = *allocation;
   aux_info = gtk_object_get_data_by_id (GTK_OBJECT (widget), aux_info_key_id);
@@ -2030,6 +2053,7 @@ gtk_widget_event (GtkWidget *widget,
   gint signal_num;
 
   g_return_val_if_fail (widget != NULL, TRUE);
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), TRUE);
 
   gtk_widget_ref (widget);
   return_val = FALSE;
@@ -2171,10 +2195,11 @@ gtk_widget_activate (GtkWidget *widget)
  *****************************************/
 
 static void
-gtk_widget_reparent_container_child(GtkWidget *widget,
-                                   gpointer   client_data)
+gtk_widget_reparent_container_child (GtkWidget *widget,
+				     gpointer   client_data)
 {
   g_return_if_fail (widget != NULL);
+  g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (client_data != NULL);
   
   if (GTK_WIDGET_NO_WINDOW (widget))
@@ -2275,6 +2300,7 @@ gtk_widget_popup (GtkWidget *widget,
 		  gint	     y)
 {
   g_return_if_fail (widget != NULL);
+  g_return_if_fail (GTK_IS_WIDGET (widget));
   
   if (!GTK_WIDGET_VISIBLE (widget))
     {
@@ -2304,6 +2330,7 @@ gtk_widget_intersect (GtkWidget	   *widget,
   gint return_val;
   
   g_return_val_if_fail (widget != NULL, FALSE);
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
   g_return_val_if_fail (area != NULL, FALSE);
   
   if (intersection)
@@ -2331,6 +2358,7 @@ gtk_widget_basic (GtkWidget *widget)
   gint return_val;
   
   g_return_val_if_fail (widget != NULL, FALSE);
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
   
   if (!GTK_WIDGET_BASIC (widget))
     return FALSE;
@@ -2416,6 +2444,7 @@ gtk_widget_grab_default (GtkWidget *widget)
   GtkType window_type;
   
   g_return_if_fail (widget != NULL);
+  g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (GTK_WIDGET_CAN_DEFAULT (widget));
   
   window_type = gtk_window_get_type ();
@@ -2441,6 +2470,7 @@ gtk_widget_set_name (GtkWidget	 *widget,
 		     const gchar *name)
 {
   g_return_if_fail (widget != NULL);
+  g_return_if_fail (GTK_IS_WIDGET (widget));
   
   if (widget->name)
     g_free (widget->name);
@@ -2462,6 +2492,7 @@ gchar*
 gtk_widget_get_name (GtkWidget *widget)
 {
   g_return_val_if_fail (widget != NULL, NULL);
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
   
   if (widget->name)
     return widget->name;
@@ -2792,13 +2823,16 @@ gtk_widget_set_style_recurse (GtkWidget *widget,
 void
 gtk_widget_reset_rc_styles (GtkWidget *widget)
 {
+  g_return_if_fail (widget != NULL);
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+
   gtk_widget_set_style_recurse (widget, NULL);
 }
 
 void
 gtk_widget_set_default_style (GtkStyle *style)
 {
-   if (style != gtk_default_style)
+  if (style != gtk_default_style)
      {
        if (gtk_default_style)
 	 gtk_style_unref (gtk_default_style);
@@ -2870,6 +2904,7 @@ gtk_widget_set_parent_window   (GtkWidget           *widget,
   GdkWindow *old_parent_window;
 
   g_return_if_fail (widget != NULL);
+  g_return_if_fail (GTK_IS_WIDGET (widget));
   
   old_parent_window = gtk_object_get_data_by_id (GTK_OBJECT (widget),
 						 parent_window_key_id);
@@ -2929,6 +2964,7 @@ gtk_widget_set_uposition (GtkWidget *widget,
   GtkWidgetAuxInfo *aux_info;
   
   g_return_if_fail (widget != NULL);
+  g_return_if_fail (GTK_IS_WIDGET (widget));
   
   aux_info = gtk_object_get_data_by_id (GTK_OBJECT (widget), aux_info_key_id);
   if (!aux_info)
@@ -2971,6 +3007,7 @@ gtk_widget_set_usize (GtkWidget *widget,
   GtkWidgetAuxInfo *aux_info;
   
   g_return_if_fail (widget != NULL);
+  g_return_if_fail (GTK_IS_WIDGET (widget));
   
   aux_info = gtk_object_get_data_by_id (GTK_OBJECT (widget), aux_info_key_id);
   if (!aux_info)
@@ -3005,6 +3042,7 @@ gtk_widget_set_events (GtkWidget *widget,
   gint *eventp;
   
   g_return_if_fail (widget != NULL);
+  g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (!GTK_WIDGET_NO_WINDOW (widget));
   g_return_if_fail (!GTK_WIDGET_REALIZED (widget));
   
@@ -3042,6 +3080,7 @@ gtk_widget_add_events (GtkWidget *widget,
   gint *eventp;
   
   g_return_if_fail (widget != NULL);
+  g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (!GTK_WIDGET_NO_WINDOW (widget));
   
   eventp = gtk_object_get_data_by_id (GTK_OBJECT (widget), event_key_id);
@@ -3087,6 +3126,7 @@ gtk_widget_set_extension_events (GtkWidget *widget,
   GdkExtensionMode *modep;
   
   g_return_if_fail (widget != NULL);
+  g_return_if_fail (GTK_IS_WIDGET (widget));
   
   modep = gtk_object_get_data_by_id (GTK_OBJECT (widget), extension_event_key_id);
   
@@ -3111,6 +3151,7 @@ GtkWidget*
 gtk_widget_get_toplevel (GtkWidget *widget)
 {
   g_return_val_if_fail (widget != NULL, NULL);
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
   
   while (widget->parent)
     widget = widget->parent;
@@ -3131,6 +3172,7 @@ gtk_widget_get_ancestor (GtkWidget *widget,
 			 GtkType    widget_type)
 {
   g_return_val_if_fail (widget != NULL, NULL);
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
   
   while (widget && !gtk_type_is_a (GTK_WIDGET_TYPE (widget), widget_type))
     widget = widget->parent;
@@ -3155,6 +3197,7 @@ gtk_widget_get_colormap (GtkWidget *widget)
   GdkColormap *colormap;
   
   g_return_val_if_fail (widget != NULL, NULL);
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
   
   if (widget->window)
     {
@@ -3185,6 +3228,7 @@ gtk_widget_get_visual (GtkWidget *widget)
   GdkVisual *visual;
   
   g_return_val_if_fail (widget != NULL, NULL);
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
   
   if (widget->window)
     {
@@ -3215,6 +3259,7 @@ gtk_widget_get_events (GtkWidget *widget)
   gint *events;
   
   g_return_val_if_fail (widget != NULL, 0);
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), 0);
   
   events = gtk_object_get_data_by_id (GTK_OBJECT (widget), event_key_id);
   if (events)
@@ -3237,6 +3282,7 @@ gtk_widget_get_extension_events (GtkWidget *widget)
   GdkExtensionMode *mode;
   
   g_return_val_if_fail (widget != NULL, 0);
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), 0);
   
   mode = gtk_object_get_data_by_id (GTK_OBJECT (widget), extension_event_key_id);
   if (mode)
@@ -3259,6 +3305,7 @@ gtk_widget_get_pointer (GtkWidget *widget,
 			gint	  *y)
 {
   g_return_if_fail (widget != NULL);
+  g_return_if_fail (GTK_IS_WIDGET (widget));
   
   if (x)
     *x = -1;
@@ -3292,6 +3339,7 @@ gtk_widget_is_ancestor (GtkWidget *widget,
 			GtkWidget *ancestor)
 {
   g_return_val_if_fail (widget != NULL, FALSE);
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
   g_return_val_if_fail (ancestor != NULL, FALSE);
   
   while (widget)
@@ -3317,7 +3365,9 @@ gtk_widget_is_child (GtkWidget *widget,
 		     GtkWidget *child)
 {
   g_return_val_if_fail (widget != NULL, FALSE);
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
   g_return_val_if_fail (child != NULL, FALSE);
+  g_return_val_if_fail (GTK_IS_WIDGET (child), FALSE);
   
   return (child->parent == widget);
 }
@@ -3985,6 +4035,7 @@ gtk_widget_shape_combine_mask (GtkWidget *widget,
   GtkWidgetShapeInfo* shape_info;
   
   g_return_if_fail (widget != NULL);
+  g_return_if_fail (GTK_IS_WIDGET (widget));
   /*  set_shape doesn't work on widgets without gdk window */
   g_return_if_fail (!GTK_WIDGET_NO_WINDOW (widget));
 

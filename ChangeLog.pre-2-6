@@ -1,3 +1,8 @@
+Wed Nov  4 04:30:37 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkwidget.c: added a bunch of checks for widget != NULL and
+	GTK_IS_WIDGET (widget):
+
 Wed Nov  4 02:02:07 1998  Lars Hamann  <lars@gtk.org>
 
 	* gtk/gtkclist.c (real_remove_row) (sync_selection): set correct

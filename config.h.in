@@ -49,8 +49,17 @@
 /* Define as the return type of signal handlers (int or void).  */
 #undef RETSIGTYPE
 
+/* Define if you have the broken_wctype function.  */
+#undef HAVE_BROKEN_WCTYPE
+
 /* Define if you have the getpagesize function.  */
 #undef HAVE_GETPAGESIZE
 
 /* Define if you have the <unistd.h> header file.  */
 #undef HAVE_UNISTD_H
+
+/* Define if you have the <wchar.h> header file.  */
+#undef HAVE_WCHAR_H
+
+/* Define if you have the <wctype.h> header file.  */
+#undef HAVE_WCTYPE_H
