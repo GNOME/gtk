@@ -1,3 +1,8 @@
+Sun Dec  9 19:14:17 2001  Soeren Sandmann  <sandmann@daimi.au.dk>
+
+	* gtk/gtkstyle.c (gtk_default_draw_shadow_gap): Fix drawing the
+	top right corner of frame.
+
 2001-12-10  jacob berkman  <jacob@ximian.com>
 
 	* gdk/x11/gdkinput-xfree.c (_gdk_input_grab_pointer): 
