@@ -1,7 +1,25 @@
+Wed Jan 26 19:01:56 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkfilesel.c (open_ref_dir): Fix several
+	bugs which occured after an attempt to open 
+	invalid home directory left cmpl_state->reference_dir == NULL.
+
+	 - completion on files in home directory didn't work
+	 - completion on an empty string caused  segfault
+
+	 (Bug #3768, reported by Steve Ratcliffe)
+
+	* gtk/gtkscale.c (gtk_scale_get_value_width): Fix
+	cut and paste error that was causing scales to
+	be incorrectly positioned.
+	(Bug #2956,
+	 patch from Steve Ratcliffe <steve@parabola.demon.co.uk>)
+
 2000-01-27  Shirasaki Yasuhiro  <yasuhiro@gnome.gr.jp>
 
-	* acinclude.m4 (AM_GTK_WITH_NLS): check dcgettext
-	with libintl, if it's specified.
+	* acinclude.m4 (AM_GTK_WITH_NLS): Add -lintl to libs
+	when checking for dcgettext, if we've found we needed
+	it for dgettext.
 
 Wed Jan 26 18:06:07 2000  Owen Taylor  <otaylor@redhat.com>
 

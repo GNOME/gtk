@@ -1809,31 +1809,7 @@ open_ref_dir(gchar* text_to_complete,
 
   first_slash = strchr(text_to_complete, '/');
 
-  if (text_to_complete[0] == '/' || !cmpl_state->reference_dir)
-    {
-      gchar *tmp = g_strdup(text_to_complete);
-      gchar *p;
-
-      p = tmp;
-      while (*p && *p != '*' && *p != '?')
-	p++;
-
-      *p = '\0';
-      p = strrchr(tmp, '/');
-      if (p == tmp)
-	p++;
-      
-      *p = '\0';
-
-      new_dir = open_dir(tmp, cmpl_state);
-
-      if(new_dir)
-	*remaining_text = text_to_complete + 
-	  ((p == tmp + 1) ? (p - tmp) : (p + 1 - tmp));
-
-      g_free (tmp);
-    }
-  else if (text_to_complete[0] == '~')
+  if (text_to_complete[0] == '~')
     {
       new_dir = open_user_dir(text_to_complete, cmpl_state);
 
@@ -1848,6 +1824,45 @@ open_ref_dir(gchar* text_to_complete,
 	{
 	  return NULL;
 	}
+    }
+  else if (text_to_complete[0] == '/' || !cmpl_state->reference_dir)
+    {
+      gchar *tmp = g_strdup(text_to_complete);
+      gchar *p;
+
+      p = tmp;
+      while (*p && *p != '*' && *p != '?')
+	p++;
+
+      *p = '\0';
+      p = strrchr(tmp, '/');
+      if (p)
+	{
+	  if (p == tmp)
+	    p++;
+      
+	  *p = '\0';
+
+	  new_dir = open_dir(tmp, cmpl_state);
+
+	  if(new_dir)
+	    *remaining_text = text_to_complete + 
+	      ((p == tmp + 1) ? (p - tmp) : (p + 1 - tmp));
+	}
+      else
+	{
+	  /* If no possible candidates, use the cwd */
+	  gchar *curdir = g_get_current_dir ();
+	  
+	  new_dir = open_dir(curdir, cmpl_state);
+
+	  if (new_dir)
+	    *remaining_text = text_to_complete;
+
+	  g_free (curdir);
+	}
+
+      g_free (tmp);
     }
   else
     {
