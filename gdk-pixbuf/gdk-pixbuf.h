@@ -16,7 +16,8 @@ void       gdk_pixbuf_ref        (GdkPixBuf *pixbuf);
 void       gdk_pixbuf_unref      (GdkPixBuf *pixbuf);
 GdkPixBuf *gdk_pixbuf_duplicate  (GdkPixBuf *pixbuf);
 GdkPixBuf *gdk_pixbuf_scale	 (GdkPixBuf *pixbuf, gint w, gint h);
+GdkPixBuf *gdk_pixbuf_rotate     (GdkPixBuf *pixbuf, gdouble angle);
 
-void	   gdk_pixbuf_free	 (GdkPixBuf *pixbuf);
+void	   gdk_pixbuf_destroy    (GdkPixBuf *pixbuf);
 
 #endif /* _GDK_PIXBUF_H_ */

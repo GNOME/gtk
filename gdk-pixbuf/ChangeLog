@@ -1,3 +1,19 @@
+1999-07-18  Mark Crichton  <crichton@gimp.org>
+
+	* configure.in: removed version.h. 
+
+	* src/gdk-pixbuf-io.c (pixbuf_check_tiff): Minor readability
+	improvements.
+
+1999-07-17  Mark Crichton  <crichton@gimp.org>
+
+	* src/gdk-pixbuf.c: Removed gdk_pixbuf_free, redundant code.
+	(gdk_pixbuf_rotate): Added pixbuf rotation code.
+	(gdk_pixbuf_scale): Changed // comments to /* */
+
+	* src/gdk-pixbuf.h (gdk_pixbuf_destroy): Added gdk_pixbuf_destroy
+	function to header.
+
 1999-07-16  Larry Ewing  <lewing@gimp.org>
 
 	* src/testpixbuf.c (expose_func): reverted the expose everything

@@ -25,8 +25,9 @@
 #include <glib.h>
 #include "gdk-pixbuf.h"
 #include "gdk-pixbuf-io.h"
+#include "io-bmp.h"
 
-/* Loosely based off the BMP loader from The GIMP */
+/* Loosely based off the BMP loader from The GIMP, hence it's complexity */
 
 /* Shared library entry point */
 GdkPixBuf *image_load(FILE * f)

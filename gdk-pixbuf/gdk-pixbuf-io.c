@@ -47,10 +47,16 @@ pixbuf_check_tiff (unsigned char *buffer, int size)
 	if (size < 10)
 		return FALSE;
 
-	if (buffer [0] == 'M' && buffer [1] == 'M' && buffer [2] == 0 && buffer [3] == 0x2a)
+	if (buffer [0] == 'M' && 
+	    buffer [1] == 'M' && 
+	    buffer [2] == 0   && 
+	    buffer [3] == 0x2a)
 		return TRUE;
 
-	if (buffer [0] == 'I' && buffer [1] == 'I' && buffer [2] == 0x2a && buffer [3] == 0)
+	if (buffer [0] == 'I' && 
+	    buffer [1] == 'I' && 
+	    buffer [2] == 0x2a && 
+	    buffer [3] == 0)
 		return TRUE;
 	
 	return FALSE;
@@ -139,11 +145,13 @@ image_file_format (const char *file)
 static void
 image_handler_load (int idx)
 {
-	char *module_name = g_strconcat ("pixbuf-", file_formats [idx].module_name, NULL);
+	char *module_name;
 	char *path;
 	GModule *module;
 	void *load_sym, *save_sym;
-	
+       
+	module_name = g_strconcat ("pixbuf-", 
+				   file_formats [idx].module_name, NULL);
 	path = g_module_build_path (PIXBUF_LIBDIR, module_name);
 	g_free (module_name);
 

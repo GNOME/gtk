@@ -1,6 +1,6 @@
 
-/* GTK - The GIMP Toolkit
- * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
+/* testpixbuf -- test program for gdk-pixbuf code
+ * Copyright (C) 1999 Mark Crichton, Larry Ewing
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -18,18 +18,6 @@
  * Boston, MA 02111-1307, USA.
  */
 
-/*
- * Modified by the GTK+ Team and others 1997-1999.  See the AUTHORS
- * file for a list of people on the GTK+ Team.  See the ChangeLog
- * files for a list of changes.  These files are distributed with
- * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
- */
-
-
-/* Note: these #includes differ slightly from the testrgb.c file included
-   in the GdkRgb release. */
-
-/* For gettimeofday */
 #include <stdlib.h>
 #include <unistd.h>
 #include <string.h>
@@ -161,6 +149,7 @@ main (int argc, char **argv)
   for (i = 1; i < argc; i++)
     {
       pixbuf = gdk_pixbuf_load_image (argv[i]);
+      pixbuf = gdk_pixbuf_rotate(pixbuf, 42.0);
       
       if (pixbuf)
 	{
