@@ -51,7 +51,6 @@
 #include <X11/Xatom.h>
 
 typedef struct _GdkIOClosure GdkIOClosure;
-typedef struct _GdkEventPrivate GdkEventPrivate;
 typedef struct _GdkDisplaySource GdkDisplaySource;
 
 #define DOUBLE_CLICK_TIME      250
@@ -59,26 +58,12 @@ typedef struct _GdkDisplaySource GdkDisplaySource;
 #define DOUBLE_CLICK_DIST      5
 #define TRIPLE_CLICK_DIST      5
 
-typedef enum
-{
-  /* Following flag is set for events on the event queue during
-   * translation and cleared afterwards.
-   */
-  GDK_EVENT_PENDING = 1 << 0
-} GdkEventFlags;
-
 struct _GdkIOClosure
 {
   GdkInputFunction function;
   GdkInputCondition condition;
   GdkDestroyNotify notify;
   gpointer data;
-};
-
-struct _GdkEventPrivate
-{
-  GdkEvent event;
-  guint    flags;
 };
 
 struct _GdkDisplaySource

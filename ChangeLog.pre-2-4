@@ -1,3 +1,13 @@
+2002-08-25  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/gdkevents.c
+	* gdk/gdkinternals.h
+	* gdk/x11/gdkevents-x11.c
+	* gdk/win32/gdkevents-win32.c: Move the GdkEventPrivate and
+	GdkEventFlags definitions from gdkevents.c to
+	gdkinternals.h. Remove the duplicated definitions in
+	gdkevents-x11.c and gdkevents-win32.c. (#89771)
+
 2002-08-24  Tor Lillqvist  <tml@iki.fi>
 
 	* gdk/win32/gdkevents-win32.c (gdk_event_translate): Let the

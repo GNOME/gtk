@@ -143,6 +143,22 @@ struct _GdkArgDesc
 
 /* Event handling */
 
+typedef struct _GdkEventPrivate GdkEventPrivate;
+
+typedef enum
+{
+  /* Following flag is set for events on the event queue during
+   * translation and cleared afterwards.
+   */
+  GDK_EVENT_PENDING = 1 << 0
+} GdkEventFlags;
+
+struct _GdkEventPrivate
+{
+  GdkEvent event;
+  guint    flags;
+};
+
 extern GdkEventFunc   _gdk_event_func;    /* Callback for events */
 extern gpointer       _gdk_event_data;
 extern GDestroyNotify _gdk_event_notify;
