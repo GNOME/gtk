@@ -1,3 +1,8 @@
+Sun Jan 18 01:51:12 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* configure.in: Add the necessary magic to create
+	po-properties/Makefile.
+
 Sat Jan 17 23:05:52 2004  Matthias Clasen  <maclas@gmx.de>
 
 	The second part of the fix for #114351 (see also 

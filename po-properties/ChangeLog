@@ -1,3 +1,7 @@
+Sun Jan 18 01:52:04 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* Makefile.in.in (subdir): Define appropriately.
+
 Sat Jan 17 23:41:58 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* af.po: Added Afrikaans file.
