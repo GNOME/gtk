@@ -1,0 +1,53 @@
+/* -*- mode: C; c-file-style: "gnu" -*- */
+/* xdgmime.h: Private file.  Datastructure for storing the globs.
+ *
+ * More info can be found at http://www.freedesktop.org/standards/
+ * 
+ * Copyright (C) 2003  Red Hat, Inc.
+ * Copyright (C) 2003  Jonathan Blandford <jrb@alum.mit.edu>
+ *
+ * Licensed under the Academic Free License version 1.2
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ *
+ */
+
+#ifndef __XDG_MIME_GLOB_H__
+#define __XDG_MIME_GLOB_H__
+
+
+typedef struct XdgGlobHash XdgGlobHash;
+
+typedef enum
+{
+  XDG_GLOB_LITERAL, /* Makefile */
+  XDG_GLOB_SIMPLE,  /* *.gif */
+  XDG_GLOB_FULL,    /* x*.[ch] */
+} XdgGlobType;
+
+
+void         _xdg_mime_glob_read_from_file   (XdgGlobHash *glob_hash,
+					      const char  *file_name);
+XdgGlobHash *_xdg_glob_hash_new              (void);
+void         _xdg_glob_hash_free             (XdgGlobHash *glob_hash);
+const char  *_xdg_glob_hash_lookup_file_name (XdgGlobHash *glob_hash,
+					      const char  *text);
+void         _xdg_glob_hash_append_glob      (XdgGlobHash *glob_hash,
+					      const char  *glob,
+					      const char  *mime_type);
+XdgGlobType  _xdg_glob_determine_type        (const char  *glob);
+void         _xdg_glob_hash_dump             (XdgGlobHash *glob_hash);
+
+#endif /* __XDG_MIME_GLOB_H__ */

@@ -48,7 +48,7 @@ static void     gtk_file_chooser_widget_get_property (GObject               *obj
 						      GValue                *value,
 						      GParamSpec            *pspec);
 
-GObjectClass *parent_class;
+static GObjectClass *parent_class;
 
 GType
 gtk_file_chooser_widget_get_type (void)
@@ -130,7 +130,7 @@ gtk_file_chooser_widget_constructor (GType                  type,
   gtk_widget_push_composite_child ();
 
   if (!priv->file_system)
-    priv->file_system = _gtk_file_system_unix_new ();
+    priv->file_system = gtk_file_system_unix_new ();
       
   priv->impl = _gtk_file_chooser_impl_default_new (priv->file_system);
   gtk_box_pack_start (GTK_BOX (object), priv->impl, TRUE, TRUE, 0);

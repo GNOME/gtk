@@ -26,14 +26,14 @@
 
 G_BEGIN_DECLS
 
-#define GTK_TYPE_FILE_SYSTEM_UNIX             (_gtk_file_system_unix_get_type ())
+#define GTK_TYPE_FILE_SYSTEM_UNIX             (gtk_file_system_unix_get_type ())
 #define GTK_FILE_SYSTEM_UNIX(obj)             (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_FILE_SYSTEM_UNIX, GtkFileSystemUnix))
 #define GTK_IS_FILE_SYSTEM_UNIX(obj)          (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_FILE_SYSTEM_UNIX))
 
 typedef struct _GtkFileSystemUnix      GtkFileSystemUnix;
 
-GtkFileSystem *_gtk_file_system_unix_new       (void);
-GType          _gtk_file_system_unix_get_type (void);
+GtkFileSystem *gtk_file_system_unix_new       (void);
+GType          gtk_file_system_unix_get_type (void);
      
 G_END_DECLS
 

@@ -21,6 +21,8 @@
 #include "gtkfilesystem.h"
 #include "gtkfilesystemunix.h"
 
+#include "xdgmime/xdgmime.h"
+
 #include <errno.h>
 #include <string.h>
 #include <sys/stat.h>
@@ -66,8 +68,8 @@ struct _GtkFileFolderUnix
   gchar *filename;
 };
 
-GObjectClass *system_parent_class;
-GObjectClass *folder_parent_class;
+static GObjectClass *system_parent_class;
+static GObjectClass *folder_parent_class;
 
 static void gtk_file_system_unix_class_init   (GtkFileSystemUnixClass *class);
 static void gtk_file_system_unix_iface_init   (GtkFileSystemIface     *iface);
@@ -135,7 +137,7 @@ static GtkFileInfo *filename_get_info (const gchar      *filename,
  * GtkFileSystemUnix
  */
 GType
-_gtk_file_system_unix_get_type (void)
+gtk_file_system_unix_get_type (void)
 {
   static GType file_system_unix_type = 0;
 
@@ -173,7 +175,7 @@ _gtk_file_system_unix_get_type (void)
 }
 
 /**
- * _gtk_file_system_unix_new:
+ * gtk_file_system_unix_new:
  * 
  * Creates a new #GtkFileSystemUnix object. #GtkFileSystemUnix
  * implements the #GtkFileSystem interface with direct access to
@@ -182,7 +184,7 @@ _gtk_file_system_unix_get_type (void)
  * Return value: the new #GtkFileSystemUnix object
  **/
 GtkFileSystem *
-_gtk_file_system_unix_new (void)
+gtk_file_system_unix_new (void)
 {
   return g_object_new (GTK_TYPE_FILE_SYSTEM_UNIX, NULL);
 }
@@ -678,6 +680,7 @@ filename_get_info (const gchar     *filename,
 		   GError         **error)
 {
   GtkFileInfo *info;
+  GtkFileIconType icon_type = GTK_FILE_ICON_REGULAR;
   struct stat statbuf;
   
   /* If stat fails, try to fall back to lstat to catch broken links
@@ -735,9 +738,36 @@ filename_get_info (const gchar     *filename,
       gtk_file_info_set_is_folder (info, S_ISDIR (statbuf.st_mode));
    }
 
-  if (types & GTK_FILE_INFO_MIME_TYPE)
+  if (types & GTK_FILE_INFO_ICON)
     {
-      gtk_file_info_set_mime_type (info, "application/octet-stream");
+      if (S_ISBLK (statbuf.st_mode))
+	icon_type = GTK_FILE_ICON_BLOCK_DEVICE;
+      else if (S_ISLNK (statbuf.st_mode))
+	icon_type = GTK_FILE_ICON_BROKEN_SYMBOLIC_LINK;
+      else if (S_ISCHR (statbuf.st_mode))
+	icon_type = GTK_FILE_ICON_CHARACTER_DEVICE;
+      else if (S_ISDIR (statbuf.st_mode))
+	icon_type = GTK_FILE_ICON_DIRECTORY;
+      else if (S_ISFIFO (statbuf.st_mode))
+	icon_type =  GTK_FILE_ICON_FIFO;
+      else if (S_ISSOCK (statbuf.st_mode))
+	icon_type = GTK_FILE_ICON_SOCKET;
+
+      gtk_file_info_set_icon_type (info, icon_type);
+    }
+
+  if ((types & GTK_FILE_INFO_MIME_TYPE) ||
+      ((types & GTK_FILE_INFO_ICON) && icon_type == GTK_FILE_ICON_REGULAR))
+    {
+      const char *mime_type = xdg_mime_get_mime_type_for_file (filename);
+      gtk_file_info_set_mime_type (info, mime_type);
+
+      if ((types & GTK_FILE_INFO_ICON) && icon_type == GTK_FILE_ICON_REGULAR &&
+	  (statbuf.st_mode & (S_IXUSR | S_IXGRP | S_IXOTH)) &&
+	  (strcmp (mime_type, XDG_MIME_TYPE_UNKNOWN) == 0 ||
+	   strcmp (mime_type, "application/x-executable") == 0 ||
+	   strcmp (mime_type, "application/x-shellscript") == 0))
+	gtk_file_info_set_icon_type (info, GTK_FILE_ICON_EXECUTABLE);
     }
 
   if (types & GTK_FILE_INFO_MODIFICATION_TIME)
@@ -750,11 +780,6 @@ filename_get_info (const gchar     *filename,
       gtk_file_info_set_size (info, (gint64)statbuf.st_size);
     }
   
-  if (types & GTK_FILE_INFO_ICON)
-    {
-      /* NOT YET IMPLEMENTED */
-    }
-
   return info;
 }
 

@@ -56,9 +56,9 @@ main (int argc, char **argv)
   gtk_init (&argc, &argv);
 
 #ifdef USE_GNOME_VFS
-  file_system = _gtk_file_system_gnome_vfs_new ();
+  file_system = gtk_file_system_gnome_vfs_new ();
 #else  
-  file_system = _gtk_file_system_unix_new ();
+  file_system = gtk_file_system_unix_new ();
 #endif
   
   dialog = g_object_new (GTK_TYPE_FILE_CHOOSER_DIALOG,

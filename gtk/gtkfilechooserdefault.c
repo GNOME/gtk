@@ -25,10 +25,12 @@
 #include "gtkfilechooser.h"
 #include "gtkfilesystemmodel.h"
 
+#include <gtk/gtkcellrendererpixbuf.h>
 #include <gtk/gtkcellrenderertext.h>
 #include <gtk/gtkentry.h>
 #include <gtk/gtkhbox.h>
 #include <gtk/gtkhpaned.h>
+#include <gtk/gtkicontheme.h>
 #include <gtk/gtklabel.h>
 #include <gtk/gtkscrolledwindow.h>
 #include <gtk/gtktreeview.h>
@@ -119,6 +121,11 @@ static void tree_name_data_func (GtkTreeViewColumn *tree_column,
 				 GtkTreeModel      *tree_model,
 				 GtkTreeIter       *iter,
 				 gpointer           data);
+static void list_icon_data_func (GtkTreeViewColumn *tree_column,
+				 GtkCellRenderer   *cell,
+				 GtkTreeModel      *tree_model,
+				 GtkTreeIter       *iter,
+				 gpointer           data);
 static void list_name_data_func (GtkTreeViewColumn *tree_column,
 				 GtkCellRenderer   *cell,
 				 GtkTreeModel      *tree_model,
@@ -130,7 +137,7 @@ static void list_size_data_func (GtkTreeViewColumn *tree_column,
 				 GtkTreeIter       *iter,
 				 gpointer           data);
 
-GObjectClass *parent_class;
+static GObjectClass *parent_class;
 
 GType
 _gtk_file_chooser_impl_default_get_type (void)
@@ -173,6 +180,8 @@ static void
 gtk_file_chooser_impl_default_class_init (GtkFileChooserImplDefaultClass *class)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (class);
+
+  parent_class = g_type_class_peek_parent (class);
 
   gobject_class->finalize = gtk_file_chooser_impl_default_finalize;
   gobject_class->constructor = gtk_file_chooser_impl_default_constructor;
@@ -350,11 +359,19 @@ gtk_file_chooser_impl_default_constructor (GType                  type,
 
   column = gtk_tree_view_column_new ();
   gtk_tree_view_column_set_title  (column, "File name");
+
+  renderer = gtk_cell_renderer_pixbuf_new ();
+  gtk_tree_view_column_pack_start (column, renderer, TRUE);
+  gtk_tree_view_column_set_cell_data_func (column, renderer,
+					   list_icon_data_func, impl, NULL);
+  gtk_tree_view_column_set_sort_column_id (column, 0);
+  
   renderer = gtk_cell_renderer_text_new ();
   gtk_tree_view_column_pack_start (column, renderer, TRUE);
   gtk_tree_view_column_set_cell_data_func (column, renderer,
 					   list_name_data_func, impl, NULL);
   gtk_tree_view_column_set_sort_column_id (column, 0);
+  
   gtk_tree_view_append_column (GTK_TREE_VIEW (impl->list), column);
   
   column = gtk_tree_view_column_new ();
@@ -822,6 +839,7 @@ tree_selection_changed (GtkTreeSelection          *selection,
   
   impl->list_model = _gtk_file_system_model_new (impl->file_system,
 						 file_path, 0,
+						 GTK_FILE_INFO_ICON |
 						 GTK_FILE_INFO_DISPLAY_NAME |
 						 GTK_FILE_INFO_SIZE); 
   _gtk_file_system_model_set_show_folders (impl->list_model, FALSE);
@@ -915,7 +933,7 @@ entry_activate (GtkEntry                  *entry,
     }
 }
 
-const GtkFileInfo *
+static const GtkFileInfo *
 get_list_file_info (GtkFileChooserImplDefault *impl,
 		    GtkTreeIter               *iter)
 {
@@ -943,6 +961,30 @@ tree_name_data_func (GtkTreeViewColumn *tree_column,
       g_object_set (cell,
 		    "text", gtk_file_info_get_display_name (info),
 		    NULL);
+    }
+}
+
+static void
+list_icon_data_func (GtkTreeViewColumn *tree_column,
+		     GtkCellRenderer   *cell,
+		     GtkTreeModel      *tree_model,
+		     GtkTreeIter       *iter,
+		     gpointer           data)
+{
+  GtkFileChooserImplDefault *impl = data;
+  const GtkFileInfo *info = get_list_file_info (impl, iter);
+
+  if (info)
+    {
+      GtkWidget *widget = GTK_TREE_VIEW_COLUMN (tree_column)->tree_view;
+      GdkPixbuf *pixbuf = gtk_file_info_render_icon (info, widget, 36);
+      
+      g_object_set (cell,
+		    "pixbuf", pixbuf,
+		    NULL);
+
+      if (pixbuf)
+	g_object_unref (pixbuf);
     }
 }
 

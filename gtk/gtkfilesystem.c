@@ -18,6 +18,8 @@
  * Boston, MA 02111-1307, USA.
  */
 
+#include <gtk/gtkicontheme.h>
+
 #include "gtkfilesystem.h"
 
 #include <string.h>
@@ -29,7 +31,7 @@ struct _GtkFileInfo
   gchar *display_name;
   gchar *display_key;
   gchar *mime_type;
-  GdkPixbuf *icon;
+  GtkFileIconType icon_type : 4;
   guint is_folder : 1;
   guint is_hidden : 1;
 };
@@ -84,8 +86,6 @@ gtk_file_info_copy (GtkFileInfo *info)
     new_info->display_name = g_strdup (new_info->display_name);
   if (new_info->mime_type)
     new_info->mime_type = g_strdup (new_info->mime_type);
-  if (new_info->icon)
-    g_object_ref (new_info->icon);
 
   return new_info;
 }
@@ -99,8 +99,6 @@ gtk_file_info_free (GtkFileInfo *info)
     g_free (info->display_name);
   if (info->mime_type)
     g_free (info->mime_type);
-  if (info->icon)
-    g_object_unref (info->icon);
 }
 
 G_CONST_RETURN gchar *
@@ -134,7 +132,6 @@ gtk_file_info_get_display_key (const GtkFileInfo *info)
       ((GtkFileInfo *)info)->display_key = g_utf8_collate_key (info->display_name, -1);
     }
 	
-  
   return info->display_key;
 }
 
@@ -244,31 +241,166 @@ gtk_file_info_set_size (GtkFileInfo *info,
   info->size = size;
 }
 
-GdkPixbuf *
-gtk_file_info_get_icon (const GtkFileInfo *info)
-{
-  g_return_val_if_fail (info != NULL, NULL);
-
-  return info->icon;
-}
-
 void
-gtk_file_info_set_icon (GtkFileInfo *info,
-			GdkPixbuf   *icon)
+gtk_file_info_set_icon_type  (GtkFileInfo      *info,
+			      GtkFileIconType   icon_type)
 {
   g_return_if_fail (info != NULL);
-  g_return_if_fail (icon == NULL || GDK_IS_PIXBUF (icon));
 
-  if (icon != info->icon)
+  info->icon_type = icon_type;
+}
+
+GtkFileIconType
+gtk_file_info_get_icon_type (const GtkFileInfo *info)
+{
+  g_return_val_if_fail (info != NULL, GTK_FILE_ICON_REGULAR);
+
+  return info->icon_type;
+}
+
+typedef struct _IconCacheElement IconCacheElement;
+
+struct _IconCacheElement
+{
+  gint size;
+  GdkPixbuf *pixbuf;
+};
+
+static void
+icon_cache_element_free (IconCacheElement *element)
+{
+  if (element->pixbuf)
+    g_object_unref (element->pixbuf);
+  g_free (element);
+}
+
+static void
+icon_theme_changed (GtkIconTheme *icon_theme)
+{
+  GHashTable *cache;
+  
+  /* Difference from the initial creation is that we don't
+   * reconnect the signal
+   */
+  cache = g_hash_table_new_full (g_str_hash, g_str_equal,
+				 (GDestroyNotify)g_free,
+				 (GDestroyNotify)icon_cache_element_free);
+  g_object_set_data_full (G_OBJECT (icon_theme), "gtk-file-icon-cache",
+			  cache, (GDestroyNotify)g_hash_table_destroy);
+}
+
+static GdkPixbuf *
+get_cached_icon (GtkWidget   *widget,
+		 const gchar *name,
+		 gint         pixel_size)
+{
+  GtkIconTheme *icon_theme = gtk_icon_theme_get_for_screen (gtk_widget_get_screen (widget));
+  GHashTable *cache = g_object_get_data (G_OBJECT (icon_theme), "gtk-file-icon-cache");
+  IconCacheElement *element;
+  
+  if (!cache)
     {
-      if (info->icon)
-	g_object_unref (info->icon);
-
-      info->icon = icon;
+      cache = g_hash_table_new_full (g_str_hash, g_str_equal,
+				     (GDestroyNotify)g_free,
+				     (GDestroyNotify)icon_cache_element_free);
       
-      if (info->icon)
-	g_object_ref (info->icon);
+      g_object_set_data_full (G_OBJECT (icon_theme), "gtk-file-icon-cache",
+			      cache, (GDestroyNotify)g_hash_table_destroy);
+      g_signal_connect (icon_theme, "changed",
+			G_CALLBACK (icon_theme_changed), NULL);
     }
+
+  element = g_hash_table_lookup (cache, name);
+  if (!element)
+    {
+      element = g_new0 (IconCacheElement, 1);
+      g_hash_table_insert (cache, g_strdup (name), element);
+    }
+
+  if (element->size != pixel_size)
+    {
+      if (element->pixbuf)
+	g_object_unref (element->pixbuf);
+      element->size = pixel_size;
+      element->pixbuf = gtk_icon_theme_load_icon (icon_theme, name,
+						  pixel_size, 0, NULL);
+    }
+
+  return element->pixbuf ? g_object_ref (element->pixbuf) : NULL;
+}
+		 
+
+GdkPixbuf *
+gtk_file_info_render_icon (const GtkFileInfo *info,
+			   GtkWidget         *widget,
+			   gint               pixel_size)
+{
+  const gchar *separator;
+  GdkPixbuf *pixbuf;
+  GString *icon_name;
+
+  g_return_val_if_fail (info != NULL, NULL);
+  g_return_val_if_fail (widget != NULL, NULL);
+  g_return_val_if_fail (pixel_size > 0, NULL);
+
+  if (info->icon_type != GTK_FILE_ICON_REGULAR)
+    {
+      const char *name = NULL;	/* Quiet gcc */
+      
+      switch (info->icon_type)
+	{
+	case GTK_FILE_ICON_BLOCK_DEVICE:
+          name ="gnome-fs-blockdev";
+	  break;
+	case GTK_FILE_ICON_BROKEN_SYMBOLIC_LINK:
+	  name = "gnome-fs-symlink";
+	  break;
+	case GTK_FILE_ICON_CHARACTER_DEVICE:
+	  name = "gnome-fs-chardev";
+	  break;
+	case GTK_FILE_ICON_DIRECTORY:
+	  name = "gnome-fs-directory";
+	  break;
+	case GTK_FILE_ICON_EXECUTABLE:
+	  name ="gnome-fs-executable";
+	  break;
+	case GTK_FILE_ICON_FIFO:
+	  name = "gnome-fs-fifo";
+	  break;
+	case GTK_FILE_ICON_SOCKET:
+	  name = "gnome-fs-socket";
+	  break;
+	case GTK_FILE_ICON_REGULAR:
+	  g_assert_not_reached ();
+	}
+
+      return get_cached_icon (widget, name, pixel_size);
+    }
+  
+  if (!info->mime_type)
+    return NULL;
+
+  separator = strchr (info->mime_type, '/');
+  if (!separator)
+    return NULL;
+
+  icon_name = g_string_new ("gnome-mime-");
+  g_string_append_len (icon_name, info->mime_type, separator - info->mime_type);
+  g_string_append_c (icon_name, '-');
+  g_string_append (icon_name, separator + 1);
+  pixbuf = get_cached_icon (widget, icon_name->str, pixel_size);
+  g_string_free (icon_name, TRUE);
+  if (pixbuf)
+    return pixbuf;
+
+  icon_name = g_string_new ("gnome-mime-");
+  g_string_append_len (icon_name, info->mime_type, separator - info->mime_type);
+  pixbuf = get_cached_icon (widget, icon_name->str, pixel_size);
+  g_string_free (icon_name, TRUE);
+  if (pixbuf)
+    return pixbuf;
+
+  return get_cached_icon (widget, "gnome-fs-regular", pixel_size);
 }
 
 /*****************************************

@@ -50,7 +50,7 @@ static void     gtk_file_chooser_dialog_get_property (GObject               *obj
 						      GValue                *value,
 						      GParamSpec            *pspec);
 
-GObjectClass *parent_class;
+static GObjectClass *parent_class;
 
 GType
 gtk_file_chooser_dialog_get_type (void)

@@ -67,8 +67,8 @@ static void     gtk_file_chooser_entry_do_insert_text (GtkEditable      *editabl
 static void clear_completion_callback (GtkFileChooserEntry *chooser_entry,
 				       GParamSpec          *pspec);
 
-GObjectClass *parent_class;
-GtkEditableClass *parent_editable_iface;
+static GObjectClass *parent_class;
+static GtkEditableClass *parent_editable_iface;
 
 GType
 _gtk_file_chooser_entry_get_type (void)
