@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-03-02 17:21-0500\n"
+"POT-Creation-Date: 2004-03-03 03:48+0100\n"
 "PO-Revision-Date: 2003-11-18 11:32+0100\n"
 "Last-Translator: Gnome PL Team <translators@gnome.pl>\n"
 "Language-Team: Polish <translation-team-pl@lists.sourceforge.net>\n"
@@ -949,7 +949,7 @@ msgstr ""
 "Nie można dodać zakładki dla %s:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:638 gtk/gtkfilechooserdefault.c:4010
+#: gtk/gtkfilechooserdefault.c:638 gtk/gtkfilechooserdefault.c:4020
 #, c-format
 msgid ""
 "Could not build file name from '%s' and '%s':\n"
@@ -976,9 +976,8 @@ msgstr ""
 "%s"
 
 #: gtk/gtkfilechooserdefault.c:1331 gtk/gtkfilechooserdefault.c:1854
-#, fuzzy
 msgid "Name"
-msgstr "_Nazwa:"
+msgstr "Nazwa"
 
 #: gtk/gtkfilechooserdefault.c:1422
 #, c-format
@@ -1042,16 +1041,21 @@ msgstr "Zapis w _folderze:"
 msgid "_Browse for other folders"
 msgstr "_Przeglądaj inne foldery"
 
-#: gtk/gtkfilechooserdefault.c:3262
+#: gtk/gtkfilechooserdefault.c:2846
+#, c-format
+msgid "Could not set current folder: %s"
+msgstr "Nie można ustawić bieżącego folderu: %s"
+
+#: gtk/gtkfilechooserdefault.c:3272
 #, c-format
 msgid "shortcut %s does not exist"
 msgstr "skrót %s nie istnieje"
 
-#: gtk/gtkfilechooserdefault.c:3834
+#: gtk/gtkfilechooserdefault.c:3844
 msgid "Type name of new folder"
 msgstr "Podaj nazwę nowego folderu"
 
-#: gtk/gtkfilechooserdefault.c:3863
+#: gtk/gtkfilechooserdefault.c:3873
 #, c-format
 msgid "%d byte"
 msgid_plural "%d bytes"
@@ -1059,53 +1063,53 @@ msgstr[0] "%d bajt"
 msgstr[1] "%d bajty"
 msgstr[2] "%d bajtów"
 
-#: gtk/gtkfilechooserdefault.c:3865
+#: gtk/gtkfilechooserdefault.c:3875
 #, c-format
 msgid "%.1f K"
 msgstr "%.1f K"
 
-#: gtk/gtkfilechooserdefault.c:3867
+#: gtk/gtkfilechooserdefault.c:3877
 #, c-format
 msgid "%.1f M"
 msgstr "%.1f M"
 
-#: gtk/gtkfilechooserdefault.c:3869
+#: gtk/gtkfilechooserdefault.c:3879
 #, c-format
 msgid "%.1f G"
 msgstr "%.1f G"
 
-#: gtk/gtkfilechooserdefault.c:3914
+#: gtk/gtkfilechooserdefault.c:3924
 msgid "Today"
 msgstr "Dzisiaj"
 
-#: gtk/gtkfilechooserdefault.c:3916
+#: gtk/gtkfilechooserdefault.c:3926
 msgid "Yesterday"
 msgstr "Wczoraj"
 
 #. FIXME: Get the right format for the locale
-#: gtk/gtkfilechooserdefault.c:3925
+#: gtk/gtkfilechooserdefault.c:3935
 msgid "%d/%b/%Y"
 msgstr "%d/%b/%Y"
 
-#: gtk/gtkfilechooserdefault.c:3928
+#: gtk/gtkfilechooserdefault.c:3938
 msgid "Unknown"
 msgstr "Nieznany"
 
-#: gtk/gtkfilechooserdefault.c:3973
+#: gtk/gtkfilechooserdefault.c:3983
 msgid "Cannot change to the folder you specified as it is an invalid path."
 msgstr ""
 "Nie można przejść do podanego folderu, ponieważ jest to niepoprawna nazwa "
 "ścieżki."
 
-#: gtk/gtkfilechooserdefault.c:4065
+#: gtk/gtkfilechooserdefault.c:4075
 msgid "Open Location"
 msgstr "Otwarcie położenia"
 
-#: gtk/gtkfilechooserdefault.c:4080
+#: gtk/gtkfilechooserdefault.c:4090
 msgid "_Location:"
 msgstr "Położ_enie:"
 
-#: gtk/gtkfilechooserdefault.c:4114
+#: gtk/gtkfilechooserdefault.c:4124
 #, c-format
 msgid ""
 "Could not go to the parent folder of %s:\n"
@@ -1315,7 +1319,7 @@ msgstr "Ten system plików nie obsługuje montowania"
 msgid "Filesystem"
 msgstr "System plików"
 
-#: gtk/gtkfilesystemunix.c:471 gtk/gtkfilesystemunix.c:1376
+#: gtk/gtkfilesystemunix.c:471 gtk/gtkfilesystemunix.c:1375
 #: gtk/gtkfilesystemwin32.c:1175
 #, c-format
 msgid "error getting information for '%s': %s"
