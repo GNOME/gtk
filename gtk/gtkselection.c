@@ -56,7 +56,6 @@
 #include <string.h>
 #include "gdk.h"
 
-#include "gtkalias.h"
 #include "gtkmain.h"
 #include "gtkselection.h"
 #include "gdk-pixbuf/gdk-pixbuf.h"
@@ -64,6 +63,8 @@
 #ifdef GDK_WINDOWING_X11
 #include "x11/gdkx.h"
 #endif
+
+#include "gtkalias.h"
 
 #undef DEBUG_SELECTION
 
@@ -2532,3 +2533,6 @@ gtk_selection_bytes_per_item (gint format)
     }
   return 0;
 }
+
+#define __GTK_SELECTION_C__
+#include "gtkaliasdef.c"

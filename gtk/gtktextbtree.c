@@ -54,7 +54,6 @@
 
 #define GTK_TEXT_USE_INTERNAL_UNSUPPORTED_API
 #include <config.h>
-#include "gtkalias.h"
 #include "gtktextbtree.h"
 #include <string.h>
 #include <stdlib.h>
@@ -65,6 +64,7 @@
 #include "gtktextiterprivate.h"
 #include "gtkdebug.h"
 #include "gtktextmarkprivate.h"
+#include "gtkalias.h"
 
 /*
  * Types
@@ -7243,4 +7243,5 @@ _gtk_text_btree_spew_segment (GtkTextBTree* tree, GtkTextLineSegment * seg)
     }
 }
 
-
+#define __GTK_TEXT_BTREE_C__
+#include "gtkaliasdef.c"

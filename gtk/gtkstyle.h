@@ -32,9 +32,7 @@
 #include <gtk/gtkenums.h>
 #include <pango/pango.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
+G_BEGIN_DECLS
 
 #define GTK_TYPE_STYLE              (gtk_style_get_type ())
 #define GTK_STYLE(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), GTK_TYPE_STYLE, GtkStyle))
@@ -893,9 +891,6 @@ void   gtk_draw_insertion_cursor (GtkWidget        *widget,
 				  GtkTextDirection  direction,
 				  gboolean          draw_arrow);
 
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
-
+G_END_DECLS
 
 #endif /* __GTK_STYLE_H__ */

@@ -25,8 +25,8 @@
  */
 
 #include <config.h>
-#include "gtkalias.h"
 #include "gtkvbox.h"
+#include "gtkalias.h"
 
 
 static void gtk_vbox_class_init    (GtkVBoxClass   *klass);
@@ -321,3 +321,6 @@ gtk_vbox_size_allocate (GtkWidget     *widget,
 	}
     }
 }
+
+#define __GTK_VBOX_C__
+#include "gtkaliasdef.c"

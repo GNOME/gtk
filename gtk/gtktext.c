@@ -32,16 +32,18 @@
 #include <string.h>
 #include "gdk/gdkkeysyms.h"
 #include "gdk/gdki18n.h"
-#include "gtkalias.h"
 #include "gtkmain.h"
 #include "gtkmarshalers.h"
 #include "gtkselection.h"
 #include "gtksignal.h"
+#include "gtkstyle.h"
+#include "gtkobject.h"
 #define GTK_ENABLE_BROKEN
 #include "gtktext.h"
 #include "line-wrap.xbm"
 #include "line-arrow.xbm"
 #include "gtkintl.h"
+#include "gtkalias.h"
 
 
 #define INITIAL_BUFFER_SIZE      1024
@@ -5540,3 +5542,6 @@ gtk_text_show_props (GtkText *text,
     g_warning ("incorrect property list length in %s:%d -- bad!", msg, line);
 }
 #endif
+
+#define __GTK_TEXT_C__
+#include "gtkaliasdef.c"

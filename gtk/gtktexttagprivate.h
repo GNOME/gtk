@@ -1,5 +1,5 @@
-#ifndef GTK_TEXT_TAG_PRIVATE_H
-#define GTK_TEXT_TAG_PRIVATE_H
+#ifndef __GTK_TEXT_TAG_PRIVATE_H__
+#define __GTK_TEXT_TAG_PRIVATE_H__
 
 #include <gtk/gtktexttag.h>
 

@@ -49,8 +49,8 @@
 
 #define GTK_TEXT_USE_INTERNAL_UNSUPPORTED_API
 #include <config.h>
-#include "gtkalias.h"
 #include "gtktextbtree.h"
+#include "gtkalias.h"
 
 static void gtk_text_mark_init       (GtkTextMark      *mark);
 static void gtk_text_mark_class_init (GtkTextMarkClass *klass);
@@ -393,3 +393,6 @@ mark_segment_check_func (GtkTextLineSegment *seg,
   if (seg->body.mark.line != line)
     g_error ("mark_segment_check_func: seg->body.mark.line bogus");
 }
+
+#define __GTK_TEXT_MARK_C__
+#include "gtkaliasdef.c"

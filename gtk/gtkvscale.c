@@ -28,9 +28,9 @@
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include "gtkalias.h"
 #include "gtkvscale.h"
 #include "gtkintl.h"
+#include "gtkalias.h"
 
 #define VALUE_SPACING 2
 
@@ -259,3 +259,5 @@ gtk_vscale_get_layout_offsets (GtkScale *scale,
   *y += widget->allocation.y;
 }
 
+#define __GTK_VSCALE_C__
+#include "gtkaliasdef.c"

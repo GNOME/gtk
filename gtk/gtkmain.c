@@ -51,7 +51,6 @@
 
 #include <pango/pango-types.h>	/* For pango_language_from_string */
 
-#include "gtkalias.h"
 #include "gtkintl.h"
 
 #include "gtkaccelmap.h"
@@ -68,6 +67,7 @@
 #include "gtkwindow.h"
 #include "gtkprivate.h"
 #include "gtkdebug.h"
+#include "gtkalias.h"
 
 /* Private type definitions
  */
@@ -2287,3 +2287,6 @@ _gtk_boolean_handled_accumulator (GSignalInvocationHint *ihint,
   
   return continue_emission;
 }
+
+#define __GTK_MAIN_C__
+#include "gtkaliasdef.c"

@@ -18,10 +18,10 @@
  */
 
 #include <config.h>
-#include "gtkalias.h"
 #include "gtkentrycompletion.h"
 #include "gtkentryprivate.h"
 #include "gtkcelllayout.h"
+#include "gtkalias.h"
 
 #include "gtkintl.h"
 #include "gtkcellrenderertext.h"
@@ -1607,3 +1607,6 @@ gtk_entry_completion_get_popup_completion (GtkEntryCompletion *completion)
   
   return completion->priv->popup_completion;
 }
+
+#define __GTK_ENTRY_COMPLETION_C__
+#include "gtkaliasdef.c"

@@ -29,7 +29,6 @@
 
 #include	<config.h>
 
-#include 	"gtkalias.h"
 #include	"gtkitemfactory.h"
 #include	"gtk/gtkmenubar.h"
 #include	"gtk/gtkmenu.h"
@@ -54,6 +53,7 @@
 #undef GTK_DISABLE_DEPRECATED
 #include	"gtk/gtkoptionmenu.h"
 #define GTK_DISABLE_DEPRECATED
+#include 	"gtkalias.h"
 
 /* --- defines --- */
 #define		ITEM_FACTORY_STRING	((gchar*) item_factory_string)
@@ -1598,3 +1598,6 @@ gtk_item_factory_set_translate_func (GtkItemFactory      *ifactory,
   ifactory->translate_data = data;
   ifactory->translate_notify = notify;
 }
+
+#define __GTK_ITEM_FACTORY_C__
+#include "gtkaliasdef.c"

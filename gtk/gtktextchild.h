@@ -24,14 +24,12 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
-#ifndef GTK_TEXT_CHILD_H
-#define GTK_TEXT_CHILD_H
+#ifndef __GTK_TEXT_CHILD_H__
+#define __GTK_TEXT_CHILD_H__
 
 #include <glib-object.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
+G_BEGIN_DECLS
 
 /* A GtkTextChildAnchor is a spot in the buffer where child widgets
  * can be "anchored" (inserted inline, as if they were characters).
@@ -74,8 +72,6 @@ GtkTextChildAnchor* gtk_text_child_anchor_new (void);
 GList*   gtk_text_child_anchor_get_widgets (GtkTextChildAnchor *anchor);
 gboolean gtk_text_child_anchor_get_deleted (GtkTextChildAnchor *anchor);
 
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
+G_END_DECLS
 
 #endif

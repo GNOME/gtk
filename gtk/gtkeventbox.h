@@ -32,10 +32,7 @@
 #include <gtk/gtkbin.h>
 
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
-
+G_BEGIN_DECLS
 
 #define GTK_TYPE_EVENT_BOX              (gtk_event_box_get_type ())
 #define GTK_EVENT_BOX(obj)              (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_EVENT_BOX, GtkEventBox))
@@ -66,9 +63,6 @@ gboolean   gtk_event_box_get_above_child    (GtkEventBox *event_box);
 void       gtk_event_box_set_above_child    (GtkEventBox *event_box,
 					     gboolean     above_child);
 
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
-
+G_END_DECLS
 
 #endif /* __GTK_EVENT_BOX_H__ */

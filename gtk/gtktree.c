@@ -27,7 +27,6 @@
 #undef GTK_DISABLE_DEPRECATED
 
 #include <config.h>
-#include "gtkalias.h"
 #include "gtkmain.h"
 #include "gtkmarshalers.h"
 #include "gtksignal.h"
@@ -36,6 +35,7 @@
 #define GTK_ENABLE_BROKEN
 #include "gtktree.h"
 #include "gtktreeitem.h"
+#include "gtkalias.h"
 
 enum {
   SELECTION_CHANGED,
@@ -1129,3 +1129,6 @@ gtk_tree_set_view_lines (GtkTree       *tree,
   
   tree->view_line = flag;
 }
+
+#define __GTK_TREE_C__
+#include "gtkaliasdef.c"

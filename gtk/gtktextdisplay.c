@@ -76,8 +76,8 @@
 
 #define GTK_TEXT_USE_INTERNAL_UNSUPPORTED_API
 #include <config.h>
-#include "gtkalias.h"
 #include "gtktextdisplay.h"
+#include "gtkalias.h"
 /* DO NOT go putting private headers in here. This file should only
  * use the semi-public headers, as with gtktextview.c.
  */
@@ -832,3 +832,6 @@ gtk_text_layout_draw (GtkTextLayout *layout,
 
   g_slist_free (line_list);
 }
+
+#define __GTK_TEXT_DISPLAY_C__
+#include "gtkaliasdef.c"

@@ -27,9 +27,9 @@
 #include <config.h>
 #include <string.h>
 
-#include "gtkalias.h"
 #include "gtkeditable.h"
 #include "gtkmarshalers.h"
+#include "gtkalias.h"
 
 
 static void   gtk_editable_base_init             (gpointer g_class);
@@ -242,3 +242,6 @@ gtk_editable_get_editable (GtkEditable *editable)
 
   return value;
 }
+
+#define __GTK_EDITABLE_C__
+#include "gtkaliasdef.c"

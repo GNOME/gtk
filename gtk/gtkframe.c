@@ -26,10 +26,10 @@
 
 #include <config.h>
 #include <string.h>
-#include "gtkalias.h"
 #include "gtkframe.h"
 #include "gtklabel.h"
 #include "gtkintl.h"
+#include "gtkalias.h"
 
 #define LABEL_PAD 1
 #define LABEL_SIDE_PAD 2
@@ -720,3 +720,6 @@ gtk_frame_real_compute_child_allocation (GtkFrame      *frame,
   child_allocation->x += allocation->x;
   child_allocation->y += allocation->y;
 }
+
+#define __GTK_FRAME_C__
+#include "gtkaliasdef.c"

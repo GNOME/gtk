@@ -32,7 +32,6 @@
 #undef GTK_DISABLE_DEPRECATED
 
 #include <config.h>
-#include "gtkalias.h"
 #include "gtkarrow.h"
 #include "gtktoolbar.h"
 #include "gtkradiotoolbutton.h"
@@ -53,6 +52,7 @@
 #include "gtkvbox.h"
 #include "gtkimage.h"
 #include "gtkseparatormenuitem.h"
+#include "gtkalias.h"
 #include <math.h>
 
 typedef struct _ToolbarContent ToolbarContent;
@@ -4775,3 +4775,6 @@ _gtk_toolbar_rebuild_menu (GtkToolbar *toolbar)
   
   gtk_widget_queue_resize (GTK_WIDGET (toolbar));
 }
+
+#define __GTK_TOOLBAR_C__
+#include "gtkaliasdef.c"

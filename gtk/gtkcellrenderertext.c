@@ -19,13 +19,13 @@
 
 #include <config.h>
 #include <stdlib.h>
-#include "gtkalias.h"
 #include "gtkcellrenderertext.h"
 #include "gtkeditable.h"
 #include "gtkentry.h"
 #include "gtkmarshalers.h"
 #include "gtkintl.h"
 #include "gtktreeprivate.h"
+#include "gtkalias.h"
 
 static void gtk_cell_renderer_text_init       (GtkCellRendererText      *celltext);
 static void gtk_cell_renderer_text_class_init (GtkCellRendererTextClass *class);
@@ -1874,3 +1874,6 @@ gtk_cell_renderer_text_set_fixed_height_from_font (GtkCellRendererText *renderer
       renderer->calc_fixed_height = TRUE;
     }
 }
+
+#define __GTK_CELL_RENDERER_TEXT_C__
+#include "gtkaliasdef.c"

@@ -36,10 +36,7 @@
 #include <gtk/gtkcontainer.h>
 
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
-
+G_BEGIN_DECLS
 
 #define GTK_TYPE_TREE                  (gtk_tree_get_type ())
 #define GTK_TREE(obj)                  (GTK_CHECK_CAST ((obj), GTK_TYPE_TREE, GtkTree))
@@ -128,10 +125,7 @@ void       gtk_tree_remove_item        (GtkTree          *tree,
 				        GtkWidget        *child);
 
 
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
-
+G_END_DECLS
 
 #endif /* __GTK_TREE_H__ */
 

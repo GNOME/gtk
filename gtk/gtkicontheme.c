@@ -28,7 +28,6 @@
 #include <stdlib.h>
 #include <glib.h>
 #include <glib/gstdio.h>
-#include "gtkalias.h"
 
 #ifdef G_OS_WIN32
 #ifndef S_ISDIR
@@ -42,7 +41,7 @@
 #include "gtkintl.h"
 #include "gtksettings.h"
 #include "gtkprivate.h"
-
+#include "gtkalias.h"
 
 
 #define DEFAULT_THEME_NAME "hicolor"
@@ -3025,3 +3024,6 @@ gtk_icon_info_get_filename (GtkIconInfo *icon_info)
 }
 
 #endif
+
+#define __GTK_ICON_THEME_C__
+#include "gtkaliasdef.c"

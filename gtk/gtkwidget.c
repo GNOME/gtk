@@ -28,7 +28,6 @@
 #include <stdarg.h>
 #include <string.h>
 #include <locale.h>
-#include "gtkalias.h"
 #include "gtkcontainer.h"
 #include "gtkaccelmap.h"
 #include "gtkclipboard.h"
@@ -53,6 +52,7 @@
 #include "gtkaccessible.h"
 #include "gtktooltips.h"
 #include "gtkinvisible.h"
+#include "gtkalias.h"
 
 #define WIDGET_CLASS(w)	 GTK_WIDGET_GET_CLASS (w)
 #define	INIT_PATH_SIZE	(512)
@@ -1901,7 +1901,12 @@ gtk_widget_unparent (GtkWidget *widget)
   if (GTK_WIDGET_REALIZED (widget)) 
     {
       if (GTK_WIDGET_IN_REPARENT (widget))
-	gtk_widget_unmap (widget);
+#if 1
+	{
+	  g_print ("unmapping!\n");
+	  gtk_widget_unmap (widget);
+	}
+#endif
       else
 	gtk_widget_unrealize (widget);
     }
@@ -3735,7 +3740,9 @@ gtk_widget_reparent_subwindows (GtkWidget *widget,
 
      parent = gdk_window_get_parent (widget->window);
 
-     if (parent)
+     if (parent == NULL)
+       gdk_window_reparent (widget->window, new_window, 0, 0);
+     else
        {
 	 children = gdk_window_get_children (parent);
 	 
@@ -7602,3 +7609,6 @@ gtk_widget_set_no_show_all (GtkWidget *widget,
   
   g_object_notify (G_OBJECT (widget), "no_show_all");
 }
+
+#define __GTK_WIDGET_C__
+#include "gtkaliasdef.c"

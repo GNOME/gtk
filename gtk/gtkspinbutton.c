@@ -34,13 +34,13 @@
 #include <string.h>
 #include <locale.h>
 #include "gdk/gdkkeysyms.h"
-#include "gtkalias.h"
 #include "gtkbindings.h"
 #include "gtkspinbutton.h"
 #include "gtkmain.h"
 #include "gtkmarshalers.h"
 #include "gtksettings.h"
 #include "gtkintl.h"
+#include "gtkalias.h"
 
 #define MIN_SPIN_BUTTON_WIDTH              30
 #define SPIN_BUTTON_INITIAL_TIMER_DELAY    200
@@ -2251,3 +2251,6 @@ spin_button_redraw (GtkSpinButton *spin_button)
       gdk_window_invalidate_rect (spin_button->panel, NULL, TRUE);
     }
 }        
+
+#define __GTK_SPIN_BUTTON_C__
+#include "gtkaliasdef.c"

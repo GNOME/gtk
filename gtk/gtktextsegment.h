@@ -1,5 +1,5 @@
-#ifndef GTK_TEXT_SEGMENT_H
-#define GTK_TEXT_SEGMENT_H
+#ifndef __GTK_TEXT_SEGMENT_H__
+#define __GTK_TEXT_SEGMENT_H__
 
 #include <gtk/gtktexttag.h>
 #include <gtk/gtktextiter.h>
@@ -7,9 +7,7 @@
 #include <gtk/gtktextchild.h>
 #include <gtk/gtktextchildprivate.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
+G_BEGIN_DECLS
 
 /*
  * Segments: each line is divided into one or more segments, where each
@@ -140,9 +138,7 @@ GtkTextLineSegment *_gtk_toggle_segment_new                (GtkTextTagInfo *info
                                                             gboolean        on);
 
 
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
+G_END_DECLS
 
 #endif
 

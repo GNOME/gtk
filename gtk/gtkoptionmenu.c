@@ -25,7 +25,6 @@
  */
 
 #include <config.h>
-#include "gtkalias.h"
 #include "gtkintl.h"
 #include "gtkmenu.h"
 #include "gtkmenuitem.h"
@@ -35,6 +34,8 @@
 #undef GTK_DISABLE_DEPRECATED
 #include "gtkoptionmenu.h"
 #define GTK_DISABLE_DEPRECATED
+
+#include "gtkalias.h"
 
 #define CHILD_LEFT_SPACING        4
 #define CHILD_RIGHT_SPACING       1
@@ -1060,4 +1061,7 @@ gtk_option_menu_scroll_event (GtkWidget          *widget,
 
   return TRUE;
 }
+
+#define __GTK_OPTION_MENU_C__
+#include "gtkaliasdef.c"
 

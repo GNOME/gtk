@@ -32,9 +32,7 @@
 #include <gtk/gtkwidget.h>
 #include <gtk/gtkselection.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
+G_BEGIN_DECLS
 
 typedef enum {
   GTK_DEST_DEFAULT_MOTION     = 1 << 0, /* respond to "drag_motion" */
@@ -168,9 +166,7 @@ void gtk_drag_set_default_icon (GdkColormap   *colormap,
 			        gint           hot_y);
 #endif /* !GTK_DISABLE_DEPRECATED */
 
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
+G_END_DECLS
 
 #endif /* __GTK_DND_H__ */
 

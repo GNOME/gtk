@@ -26,7 +26,6 @@
 
 #include <config.h>
 #include <string.h>
-#include "gtkalias.h"
 #include "gtkalignment.h"
 #include "gtkbutton.h"
 #include "gtklabel.h"
@@ -37,6 +36,7 @@
 #include "gtkstock.h"
 #include "gtkiconfactory.h"
 #include "gtkintl.h"
+#include "gtkalias.h"
 
 #define CHILD_SPACING     1
 
@@ -1787,4 +1787,5 @@ gtk_button_get_image (GtkButton *button)
   return priv->image;
 }
   
-  
+#define __GTK_BUTTON_C__
+#include "gtkaliasdef.c"  

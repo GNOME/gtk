@@ -25,8 +25,8 @@
  */
 
 #include <config.h>
-#include "gtkalias.h"
 #include "gtkbin.h"
+#include "gtkalias.h"
 
 
 static void gtk_bin_class_init  (GtkBinClass    *klass);
@@ -183,3 +183,6 @@ gtk_bin_get_child (GtkBin *bin)
 
   return bin->child;
 }
+
+#define __GTK_BIN_C__
+#include "gtkaliasdef.c"

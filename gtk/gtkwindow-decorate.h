@@ -21,6 +21,9 @@
  * Authors: Alexander Larsson <alexl@redhat.com>
  */
 
+#ifndef __GTK_WINDOW_DECORATE_H__
+#define __GTK_WINDOW_DECORATE_H__
+
 G_BEGIN_DECLS
 
 void gtk_decorated_window_init                 (GtkWindow   *window);
@@ -34,3 +37,5 @@ void gtk_decorated_window_move_resize_window   (GtkWindow   *window,
 						gint         height);
 
 G_END_DECLS
+
+#endif /* __GTK_WINDOW_DECORATE_H__ */

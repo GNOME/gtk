@@ -32,9 +32,7 @@
 #include <gtk/gtkhbox.h>
 #include <gtk/gtkitem.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
+G_BEGIN_DECLS
 
 #define GTK_TYPE_COMBO              (gtk_combo_get_type ())
 #define GTK_COMBO(obj)              (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_COMBO, GtkCombo))
@@ -113,9 +111,7 @@ void       gtk_combo_set_popdown_strings   (GtkCombo*    combo,
 
 void       gtk_combo_disable_activate      (GtkCombo*    combo);
 
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
+G_END_DECLS
 
 #endif /* __GTK_SMART_COMBO_H__ */
 

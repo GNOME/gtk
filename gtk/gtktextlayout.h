@@ -76,12 +76,8 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
-#ifndef GTK_TEXT_LAYOUT_H
-#define GTK_TEXT_LAYOUT_H
-
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
+#ifndef __GTK_TEXT_LAYOUT_H__
+#define __GTK_TEXT_LAYOUT_H__
 
 /* This is a "semi-private" header; it is intended for
  * use by the text widget, and the text canvas item,
@@ -95,6 +91,8 @@ extern "C" {
 
 #include <gtk/gtktextbuffer.h>
 #include <gtk/gtktextiter.h>
+
+G_BEGIN_DECLS
 
 /* forward declarations that have to be here to avoid including
  * gtktextbtree.h
@@ -414,8 +412,6 @@ void gtk_text_anchored_child_set_layout     (GtkWidget          *child,
 
 void gtk_text_layout_spew (GtkTextLayout *layout);
 
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
+G_END_DECLS
 
-#endif  /* GTK_TEXT_LAYOUT_H */
+#endif  /* __GTK_TEXT_LAYOUT_H__ */

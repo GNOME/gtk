@@ -48,7 +48,6 @@
  */
 
 #include <config.h>
-#include "gtkalias.h"
 #include "gtkmain.h"
 #include "gtktexttag.h"
 #include "gtktexttypes.h"
@@ -56,6 +55,7 @@
 #include "gtkmain.h"
 #include "gtkintl.h"
 #include "gtkmarshalers.h"
+#include "gtkalias.h"
 
 #include <stdlib.h>
 #include <string.h>
@@ -2165,3 +2165,6 @@ _gtk_text_tag_affects_nonsize_appearance (GtkTextTag *tag)
     tag->strikethrough_set ||
     tag->bg_full_height_set;
 }
+
+#define __GTK_TEXT_TAG_C__
+#include "gtkaliasdef.c"

@@ -34,10 +34,7 @@
 #include <gtk/gtkenums.h>
 #include <gtk/gtkwidget.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
-
+G_BEGIN_DECLS
 
 #define GTK_TYPE_WINDOW			(gtk_window_get_type ())
 #define GTK_WINDOW(obj)			(G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_WINDOW, GtkWindow))
@@ -413,9 +410,6 @@ gboolean	_gtk_window_query_nonaccels	(GtkWindow	*window,
 						 guint		 accel_key,
 						 GdkModifierType accel_mods);
 
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
-
+G_END_DECLS
 
 #endif /* __GTK_WINDOW_H__ */

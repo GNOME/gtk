@@ -34,10 +34,7 @@
 #include <gtk/gtkeditable.h>
 #include <gtk/gtkwidget.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
-
+G_BEGIN_DECLS
 
 #define GTK_TYPE_OLD_EDITABLE            (gtk_old_editable_get_type ())
 #define GTK_OLD_EDITABLE(obj)            (GTK_CHECK_CAST ((obj), GTK_TYPE_OLD_EDITABLE, GtkOldEditable))
@@ -124,10 +121,7 @@ void       gtk_old_editable_claim_selection (GtkOldEditable *old_editable,
 					     guint32         time_);
 void       gtk_old_editable_changed         (GtkOldEditable *old_editable);
 
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
-
+G_END_DECLS
 
 #endif /* __GTK_OLD_EDITABLE_H__ */
 

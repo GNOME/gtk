@@ -32,10 +32,7 @@
 #include <gtk/gtktogglebutton.h>
 
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
-
+G_BEGIN_DECLS
 
 #define GTK_TYPE_CHECK_BUTTON                  (gtk_check_button_get_type ())
 #define GTK_CHECK_BUTTON(obj)                  (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_CHECK_BUTTON, GtkCheckButton))
@@ -77,9 +74,6 @@ void _gtk_check_button_get_props (GtkCheckButton *check_button,
 				  gint           *indicator_size,
 				  gint           *indicator_spacing);
 
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
-
+G_END_DECLS
 
 #endif /* __GTK_CHECK_BUTTON_H__ */

@@ -30,7 +30,6 @@
 #include <pango/pango.h>
 
 #include "gdk/gdkkeysyms.h"
-#include "gtkalias.h"
 #include "gtkbindings.h"
 #include "gtkcelleditable.h"
 #include "gtkclipboard.h"
@@ -53,6 +52,7 @@
 #include "gtktreeselection.h"
 #include "gtkentryprivate.h"
 #include "gtkcelllayout.h"
+#include "gtkalias.h"
 
 #define GTK_ENTRY_COMPLETION_KEY "gtk-entry-completion-key"
 
@@ -5390,3 +5390,6 @@ gtk_entry_get_completion (GtkEntry *entry)
 
   return completion;
 }
+
+#define __GTK_ENTRY_C__
+#include "gtkaliasdef.c"

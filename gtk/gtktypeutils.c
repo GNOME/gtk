@@ -29,9 +29,9 @@
 #include <config.h>
 #include <string.h> /* strcmp */
 
-#include "gtkalias.h"
 #include "gtktypeutils.h"
 #include "gtkobject.h"
+#include "gtkalias.h"
 
 
 /* --- functions --- */
@@ -198,3 +198,6 @@ gtk_type_flags_find_value (GtkType      flags_type,
   return value;
 }
 
+
+#define __GTK_TYPE_UTILS_C__
+#include "gtkaliasdef.c"

@@ -21,7 +21,6 @@
  */
 
 #include <config.h>
-#include "gtkalias.h"
 #include "gtktoolbutton.h"
 #include "gtkbutton.h"
 #include "gtkhbox.h"
@@ -34,6 +33,7 @@
 #include "gtkintl.h"
 #include "gtktoolbar.h"
 #include "gtkiconfactory.h"
+#include "gtkalias.h"
 
 #include <string.h>
 
@@ -949,3 +949,5 @@ _gtk_tool_button_get_button (GtkToolButton *button)
   return button->priv->button;
 }
 
+#define __GTK_TOOL_BUTTON_C__
+#include "gtkaliasdef.c"

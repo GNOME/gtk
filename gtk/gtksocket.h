@@ -28,10 +28,7 @@
 
 #include <gtk/gtkcontainer.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
-
+G_BEGIN_DECLS
 
 #define GTK_TYPE_SOCKET            (gtk_socket_get_type ())
 #define GTK_SOCKET(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_SOCKET, GtkSocket))
@@ -95,9 +92,6 @@ void           gtk_socket_steal    (GtkSocket      *socket_,
 				    GdkNativeWindow wid);
 #endif /* GTK_DISABLE_DEPRECATED */
 
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
-
+G_END_DECLS
 
 #endif /* __GTK_SOCKET_H__ */

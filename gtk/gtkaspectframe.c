@@ -30,9 +30,9 @@
  */
 
 #include <config.h>
-#include "gtkalias.h"
 #include "gtkaspectframe.h"
 #include "gtkintl.h"
+#include "gtkalias.h"
 
 enum {
   PROP_0,
@@ -335,3 +335,6 @@ gtk_aspect_frame_compute_child_allocation (GtkFrame      *frame,
   else
     parent_class->compute_child_allocation (frame, child_allocation);
 }
+
+#define __GTK_ASPECT_FRAME_C__
+#include "gtkaliasdef.c"

@@ -24,18 +24,14 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
-#ifndef __GTK_MENU_TEAROFF_ITEM_H__
-#define __GTK_MENU_TEAROFF_ITEM_H__
+#ifndef __GTK_TEAROFF_MENU_ITEM_H__
+#define __GTK_TEAROFF_MENU_ITEM_H__
 
 
 #include <gdk/gdk.h>
 #include <gtk/gtkmenuitem.h>
 
-
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
-
+G_BEGIN_DECLS
 
 #define GTK_TYPE_TEAROFF_MENU_ITEM	      (gtk_tearoff_menu_item_get_type ())
 #define GTK_TEAROFF_MENU_ITEM(obj)	      (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_TEAROFF_MENU_ITEM, GtkTearoffMenuItem))
@@ -70,9 +66,6 @@ struct _GtkTearoffMenuItemClass
 GType	   gtk_tearoff_menu_item_get_type     (void) G_GNUC_CONST;
 GtkWidget* gtk_tearoff_menu_item_new	      (void);
 
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
-
+G_END_DECLS
 
 #endif /* __GTK_TEAROFF_MENU_ITEM_H__ */

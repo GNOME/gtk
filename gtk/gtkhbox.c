@@ -25,8 +25,8 @@
  */
 
 #include <config.h>
-#include "gtkalias.h"
 #include "gtkhbox.h"
+#include "gtkalias.h"
 
 
 static void gtk_hbox_class_init    (GtkHBoxClass   *klass);
@@ -332,3 +332,6 @@ gtk_hbox_size_allocate (GtkWidget     *widget,
 	}
     }
 }
+
+#define __GTK_HBOX_C__
+#include "gtkaliasdef.c"

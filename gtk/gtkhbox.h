@@ -32,10 +32,7 @@
 #include <gtk/gtkbox.h>
 
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
-
+G_BEGIN_DECLS
 
 #define GTK_TYPE_HBOX            (gtk_hbox_get_type ())
 #define GTK_HBOX(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_HBOX, GtkHBox))
@@ -64,9 +61,6 @@ GtkWidget* gtk_hbox_new	     (gboolean homogeneous,
 			      gint spacing);
 
 
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
-
+G_END_DECLS
 
 #endif /* __GTK_HBOX_H__ */

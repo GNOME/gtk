@@ -42,10 +42,7 @@
 #include <gtk/gtkvbox.h>
 
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
-
+G_BEGIN_DECLS
 
 #define GTK_TYPE_GAMMA_CURVE            (gtk_gamma_curve_get_type ())
 #define GTK_GAMMA_CURVE(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_GAMMA_CURVE, GtkGammaCurve))
@@ -87,9 +84,6 @@ GType      gtk_gamma_curve_get_type (void) G_GNUC_CONST;
 GtkWidget* gtk_gamma_curve_new      (void);
 
 
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
-
+G_END_DECLS
 
 #endif /* __GTK_GAMMA_CURVE_H__ */

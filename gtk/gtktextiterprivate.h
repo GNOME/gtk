@@ -1,11 +1,9 @@
-#ifndef GTK_TEXT_ITER_PRIVATE_H
-#define GTK_TEXT_ITER_PRIVATE_H
+#ifndef __GTK_TEXT_ITER_PRIVATE_H__
+#define __GTK_TEXT_ITER_PRIVATE_H__
 
 #include <gtk/gtktextiter.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
+G_BEGIN_DECLS
 
 #include <gtk/gtktextiter.h>
 #include <gtk/gtktextbtree.h>
@@ -23,9 +21,7 @@ gint                _gtk_text_iter_get_segment_char           (const GtkTextIter
 /* debug */
 void _gtk_text_iter_check (const GtkTextIter *iter);
 
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
+G_END_DECLS
 
 #endif
 

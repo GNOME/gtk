@@ -39,7 +39,6 @@
 #include "gdk/gdk.h"
 #include "gdk/gdkkeysyms.h"
 
-#include "gtkalias.h"
 #include "gtkfontsel.h"
 
 #include "gtkbutton.h"
@@ -59,6 +58,7 @@
 #include "gtkscrolledwindow.h"
 #include "gtkintl.h"
 #include "gtkaccessible.h"
+#include "gtkalias.h"
 
 /* We don't enable the font and style entries because they don't add
  * much in terms of visible effect and have a weird effect on keynav.
@@ -1430,3 +1430,6 @@ gtk_font_selection_dialog_set_preview_text (GtkFontSelectionDialog *fsd,
 {
   gtk_font_selection_set_preview_text (GTK_FONT_SELECTION (fsd->fontsel), text);
 }
+
+#define __GTK_FONTSEL_C__
+#include "gtkaliasdef.c"

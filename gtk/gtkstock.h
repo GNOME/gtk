@@ -31,9 +31,7 @@
 #include <gdk/gdk.h>
 #include <gtk/gtkitemfactory.h> /* for GtkTranslateFunc */
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
+G_BEGIN_DECLS
 
 typedef struct _GtkStockItem GtkStockItem;
 
@@ -161,9 +159,6 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
 #define GTK_STOCK_ZOOM_IN          "gtk-zoom-in"
 #define GTK_STOCK_ZOOM_OUT         "gtk-zoom-out"
 
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
-
+G_END_DECLS
 
 #endif /* __GTK_STOCK_H__ */

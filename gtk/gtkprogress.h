@@ -33,9 +33,7 @@
 #include <gtk/gtkadjustment.h>
 
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
+G_BEGIN_DECLS
 
 #if !defined (GTK_DISABLE_DEPRECATED) || defined (GTK_COMPILATION)
 
@@ -118,9 +116,6 @@ gdouble    gtk_progress_get_percentage_from_value (GtkProgress *progress,
 
 #endif /* !GTK_DISABLE_DEPRECATED || GTK_COMPILATION */
 
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
-
+G_END_DECLS
 
 #endif /* __GTK_PROGRESS_H__ */

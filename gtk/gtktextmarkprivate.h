@@ -1,12 +1,10 @@
-#ifndef GTK_TEXT_MARK_PRIVATE_H
-#define GTK_TEXT_MARK_PRIVATE_H
-
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
+#ifndef __GTK_TEXT_MARK_PRIVATE_H__
+#define __GTK_TEXT_MARK_PRIVATE_H__
 
 #include <gtk/gtktexttypes.h>
 #include <gtk/gtktextlayout.h>
+
+G_BEGIN_DECLS
 
 #define GTK_IS_TEXT_MARK_SEGMENT(mark) (((GtkTextLineSegment*)mark)->type == &gtk_text_left_mark_type || \
                                 ((GtkTextLineSegment*)mark)->type == &gtk_text_right_mark_type)
@@ -29,9 +27,7 @@ GtkTextLineSegment *_gtk_mark_segment_new   (GtkTextBTree       *tree,
                                              gboolean            left_gravity,
                                              const gchar        *name);
 
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
+G_END_DECLS
 
 #endif
 

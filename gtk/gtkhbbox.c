@@ -25,8 +25,8 @@
  */
 
 #include <config.h>
-#include "gtkalias.h"
 #include "gtkhbbox.h"
+#include "gtkalias.h"
 
 
 static void gtk_hbutton_box_class_init    (GtkHButtonBoxClass   *klass);
@@ -305,3 +305,5 @@ gtk_hbutton_box_size_allocate (GtkWidget     *widget,
     }
 }
   
+#define __GTK_HBUTTON_BOX_C__
+#include "gtkaliasdef.c"

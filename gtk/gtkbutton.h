@@ -34,9 +34,7 @@
 #include <gtk/gtkimage.h>
 
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
+G_BEGIN_DECLS
 
 #define GTK_TYPE_BUTTON                 (gtk_button_get_type ())
 #define GTK_BUTTON(obj)                 (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_BUTTON, GtkButton))
@@ -134,9 +132,6 @@ void _gtk_button_paint                     (GtkButton     *button,
 					    const gchar   *main_detail,
 					    const gchar   *default_detail);
 
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
-
+G_END_DECLS
 
 #endif /* __GTK_BUTTON_H__ */

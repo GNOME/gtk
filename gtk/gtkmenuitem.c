@@ -29,7 +29,6 @@
 #include <config.h>
 #include <string.h>
 
-#include "gtkalias.h"
 #include "gtkaccellabel.h"
 #include "gtkmain.h"
 #include "gtkmarshalers.h"
@@ -37,6 +36,7 @@
 #include "gtkmenubar.h"
 #include "gtkmenuitem.h"
 #include "gtkseparatormenuitem.h"
+#include "gtkalias.h"
 
 #define MENU_ITEM_CLASS(w)  GTK_MENU_ITEM_CLASS (GTK_OBJECT (w)->klass)
 
@@ -1457,3 +1457,6 @@ _gtk_menu_item_is_selectable (GtkWidget *menu_item)
 
   return TRUE;
 }
+
+#define __GTK_MENU_ITEM_C__
+#include "gtkaliasdef.c"

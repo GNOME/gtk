@@ -32,10 +32,7 @@
 #include <gtk/gtkwindow.h>
 
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
-
+G_BEGIN_DECLS
 
 #define GTK_TYPE_PLUG            (gtk_plug_get_type ())
 #define GTK_PLUG(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_PLUG, GtkPlug))
@@ -96,9 +93,6 @@ void _gtk_plug_add_to_socket      (GtkPlug   *plug,
 void _gtk_plug_remove_from_socket (GtkPlug   *plug,
 				   GtkSocket *socket_);
 
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
-
+G_END_DECLS
 
 #endif /* __GTK_PLUG_H__ */

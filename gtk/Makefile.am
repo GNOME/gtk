@@ -75,10 +75,12 @@ uninstall-ms-lib:
 endif
 
 gtk.def: gtk.symbols
-	(echo -e EXPORTS; $(CPP) -P -DINCLUDE_VARIABLES -DG_OS_WIN32 - <$(srcdir)/gtk.symbols | sed -e '/^$$/d' -e 's/^/	/' -e 's/G_GNUC_[^ ]*//g') > gtk.def
+	(echo -e EXPORTS; $(CPP) -P -DINCLUDE_VARIABLES -DG_OS_WIN32 -DALL_FILES - <$(srcdir)/gtk.symbols | sed -e '/^$$/d' -e 's/^/	/' -e 's/G_GNUC_[^ ]*//g') > gtk.def
 
 gtkalias.h: gtk.symbols
 	  $(PERL) $(srcdir)/makegtkalias.pl < $(srcdir)/gtk.symbols > gtkalias.h
+gtkaliasdef.c: gtk.symbols
+	  $(PERL) $(srcdir)/makegtkalias.pl -def < $(srcdir)/gtk.symbols > gtkaliasdef.c
 
 if OS_LINUX
 TESTS = abicheck.sh
@@ -553,6 +555,7 @@ gtk_built_private_headers =			\
 	gtkmarshalers.h
 
 gtk_built_sources =				\
+	gtkaliasdef.c				\
 	gtktypebuiltins.c			\
 	gtkmarshalers.c				\
 	gtkmarshalers.h				\
@@ -636,7 +639,8 @@ stamp-gtktypebuiltins.h: @REBUILD@ $(gtk_public_h_sources) Makefile
 	&& echo timestamp > $(@F)
 gtktypebuiltins.c: @REBUILD@ $(gtk_public_h_sources) Makefile
 	( cd $(srcdir) && glib-mkenums \
-			--fhead "#undef GTK_DISABLE_DEPRECATED\n#define GTK_ENABLE_BROKEN\n#include \"gtkalias.h\"\n#include \"gtk.h\"\n#include \"gtkprivate.h\"" \
+			--fhead "#undef GTK_DISABLE_DEPRECATED\n#define GTK_ENABLE_BROKEN\n#include \"gtk.h\"\n#include \"gtkprivate.h\"\n#include \"gtkalias.h\"\n" \
+			--ftail "#define __GTK_TYPE_BUILTINS_C__\n#include \"gtkaliasdef.c\"\n" \
 			--fprod "\n/* enumerations from \"@filename@\" */" \
 			--vhead "GType\n@enum_name@_get_type (void)\n{\n  static GType etype = 0;\n  if (etype == 0) {\n    static const G@Type@Value values[] = {" \
 			--vprod "      { @VALUENAME@, \"@VALUENAME@\", \"@valuenick@\" }," \

@@ -30,13 +30,13 @@
 #undef GTK_DISABLE_DEPRECATED
 
 #include	<config.h>
-#include 	"gtkalias.h"
 #include	"gtktipsquery.h"
 #include	"gtksignal.h"
 #include	"gtktooltips.h"
 #include	"gtkmain.h"
 #include        "gtkmarshalers.h"
 #include	"gtkintl.h"
+#include 	"gtkalias.h"
 
 
 
@@ -518,3 +518,6 @@ gtk_tips_query_event (GtkWidget	       *widget,
 
   return event_handled;
 }
+
+#define __GTK_TIPS_QUERY_C__
+#include "gtkaliasdef.c"

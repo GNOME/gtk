@@ -32,10 +32,7 @@
 #include <gtk/gtkwidget.h>
 
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
-
+G_BEGIN_DECLS
 
 #define GTK_TYPE_MISC		       (gtk_misc_get_type ())
 #define GTK_MISC(obj)		       (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_MISC, GtkMisc))
@@ -80,9 +77,6 @@ void    gtk_misc_get_padding   (GtkMisc *misc,
 				gint    *ypad);
 
 
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
-
+G_END_DECLS
 
 #endif /* __GTK_MISC_H__ */

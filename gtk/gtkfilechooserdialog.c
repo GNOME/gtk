@@ -19,13 +19,13 @@
  */
 
 #include <config.h>
-#include "gtkalias.h"
 #include "gtkfilechooserdialog.h"
 #include "gtkfilechooserwidget.h"
 #include "gtkfilechooserutils.h"
 #include "gtkfilechooserembed.h"
 #include "gtkfilesystem.h"
 #include "gtktypebuiltins.h"
+#include "gtkalias.h"
 
 #include <stdarg.h>
 
@@ -667,3 +667,6 @@ gtk_file_chooser_dialog_new_with_backend (const gchar          *title,
 
   return result;
 }
+
+#define __GTK_FILE_CHOOSER_DIALOG_C__
+#include "gtkaliasdef.c"

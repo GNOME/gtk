@@ -33,13 +33,13 @@
 
 #include <config.h>
 #include <stdlib.h>
-#include "gtkalias.h"
 #include "gtkctree.h"
 #include "gtkbindings.h"
 #include "gtkmain.h"
 #include "gtkmarshalers.h"
 #include "gtkdnd.h"
 #include <gdk/gdkkeysyms.h>
+#include "gtkalias.h"
 
 #define PM_SIZE                    8
 #define TAB_SIZE                   (PM_SIZE + 6)
@@ -6119,3 +6119,6 @@ gtk_ctree_node_get_type (void)
 
   return our_type;
 }
+
+#define __GTK_CTREE_C__
+#include "gtkaliasdef.c"

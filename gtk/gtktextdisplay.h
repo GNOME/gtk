@@ -74,14 +74,12 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
-#ifndef GTK_TEXT_DISPLAY_H
-#define GTK_TEXT_DISPLAY_H
+#ifndef __GTK_TEXT_DISPLAY_H__
+#define __GTK_TEXT_DISPLAY_H__
 
 #include <gtk/gtktextlayout.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
+G_BEGIN_DECLS
 
 /* A semi-public header intended for use by code that also
  * uses GtkTextLayout
@@ -109,9 +107,6 @@ void gtk_text_layout_draw (GtkTextLayout        *layout,
                            GList               **widgets);
 
 
+G_END_DECLS
 
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
-
-#endif  /* GTK_TEXT_DISPLAY_H */
+#endif  /* __GTK_TEXT_DISPLAY_H__ */

@@ -35,10 +35,7 @@
 #include <gtk/gtkcontainer.h>
 #include <gtk/gtklistitem.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
-
+G_BEGIN_DECLS
 
 #define GTK_TYPE_LIST                  (gtk_list_get_type ())
 #define GTK_LIST(obj)                  (GTK_CHECK_CAST ((obj), GTK_TYPE_LIST, GtkList))
@@ -138,10 +135,7 @@ void       gtk_list_toggle_row            (GtkList          *list,
 void       gtk_list_undo_selection        (GtkList          *list);
 void       gtk_list_end_drag_selection    (GtkList          *list);
 
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
-
+G_END_DECLS
 
 #endif /* __GTK_LIST_H__ */
 

@@ -19,10 +19,10 @@
  */
 
 #include <config.h>
-#include "gtkalias.h"
 #include "gtkmain.h"
 #include "gtkprivate.h"
 #include "gtkxembed.h"
+#include "gtkalias.h"
 
 typedef struct _GtkXEmbedMessage GtkXEmbedMessage;
 

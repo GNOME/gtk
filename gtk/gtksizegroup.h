@@ -23,9 +23,7 @@
 
 #include <gtk/gtkwidget.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
+G_BEGIN_DECLS
 
 #define GTK_TYPE_SIZE_GROUP            (gtk_size_group_get_type ())
 #define GTK_SIZE_GROUP(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_SIZE_GROUP, GtkSizeGroup))
@@ -98,9 +96,6 @@ void _gtk_size_group_compute_requisition   (GtkWidget      *widget,
 					    GtkRequisition *requisition);
 void _gtk_size_group_queue_resize          (GtkWidget      *widget);
 
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
-
+G_END_DECLS
 
 #endif /* __GTK_SIZE_GROUP_H__ */

@@ -30,10 +30,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <gmodule.h>
-#include "gtkalias.h"
 #include "gtkthemes.h"
 #include "gtkrc.h"
 #include "gtkintl.h"
+#include "gtkalias.h"
 
 typedef struct _GtkThemeEngineClass GtkThemeEngineClass;
 
@@ -191,3 +191,6 @@ gtk_theme_engine_create_rc_style (GtkThemeEngine *engine)
 
   return engine->create_rc_style ();
 }
+
+#define __GTK_THEMES_C__
+#include "gtkaliasdef.c"

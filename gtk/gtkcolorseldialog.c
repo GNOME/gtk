@@ -25,13 +25,13 @@
  */
 #include <config.h>
 #include <glib.h>
-#include "gtkalias.h"
 #include "gtkcolorseldialog.h"
 #include "gtkframe.h"
 #include "gtkhbbox.h"
 #include "gtkbutton.h"
 #include "gtkstock.h"
 #include "gtkintl.h"
+#include "gtkalias.h"
 
 
 static void gtk_color_selection_dialog_class_init (GtkColorSelectionDialogClass *klass);
@@ -138,3 +138,5 @@ gtk_color_selection_dialog_new (const gchar *title)
   return GTK_WIDGET (colorseldiag);
 }
 
+#define __GTK_COLOR_SELECTION_DIALOG_C__
+#include "gtkaliasdef.c"

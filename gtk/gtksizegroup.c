@@ -19,11 +19,11 @@
  */
 
 #include <config.h>
-#include "gtkalias.h"
 #include "gtkcontainer.h"
 #include "gtkintl.h"
 #include "gtkprivate.h"
 #include "gtksizegroup.h"
+#include "gtkalias.h"
 
 enum {
   PROP_0,
@@ -698,3 +698,6 @@ _gtk_size_group_queue_resize (GtkWidget *widget)
 {
   queue_resize_on_widget (widget, TRUE);
 }
+
+#define __GTK_SIZE_GROUP_C__
+#include "gtkaliasdef.c"

@@ -30,13 +30,13 @@
 #include <string.h>
 #include "gdk/gdkkeysyms.h"
 #include "gdk/gdki18n.h"
-#include "gtkalias.h"
 #include "gtkclipboard.h"
 #include "gtkoldeditable.h"
 #include "gtkmain.h"
 #include "gtkmarshalers.h"
 #include "gtkselection.h"
 #include "gtksignal.h"
+#include "gtkalias.h"
 
 #define MIN_EDITABLE_WIDTH  150
 #define DRAW_TIMEOUT     20
@@ -846,3 +846,6 @@ gtk_old_editable_changed (GtkOldEditable *old_editable)
   
   g_signal_emit_by_name (old_editable, "changed");
 }
+
+#define __GTK_OLD_EDITABLE_C__
+#include "gtkaliasdef.c"

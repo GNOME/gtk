@@ -25,10 +25,10 @@
  */
 
 #include <config.h>
-#include "gtkalias.h"
 #include "gtkviewport.h"
 #include "gtkintl.h"
 #include "gtkmarshalers.h"
+#include "gtkalias.h"
 
 enum {
   PROP_0,
@@ -882,3 +882,6 @@ gtk_viewport_style_set (GtkWidget *widget,
 	gtk_style_set_background (widget->style, widget->window, widget->state);
      }
 }
+
+#define __GTK_VIEWPORT_C__
+#include "gtkaliasdef.c"

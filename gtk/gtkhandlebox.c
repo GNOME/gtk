@@ -27,13 +27,13 @@
 
 #include <config.h>
 #include <stdlib.h>
-#include "gtkalias.h"
 #include "gtkhandlebox.h"
 #include "gtkinvisible.h"
 #include "gtkmain.h"
 #include "gtkmarshalers.h"
 #include "gtkwindow.h"
 #include "gtkintl.h"
+#include "gtkalias.h"
 
 typedef struct _GtkHandleBoxPrivate GtkHandleBoxPrivate;
 
@@ -1446,4 +1446,7 @@ gtk_handle_box_end_drag (GtkHandleBox *hb,
   g_signal_handlers_disconnect_by_func (invisible,
 					G_CALLBACK (gtk_handle_box_grab_event),
 					hb);
- }
+}
+
+#define __GTK_HANDLE_BOX_C__
+#include "gtkaliasdef.c"

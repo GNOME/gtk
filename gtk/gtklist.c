@@ -29,13 +29,13 @@
 #include <config.h>
 #include <string.h> /* memset */
 
-#include "gtkalias.h"
 #include "gtklist.h"
 #include "gtklistitem.h"
 #include "gtkmain.h"
 #include "gtksignal.h"
 #include "gtklabel.h"
 #include "gtkmarshalers.h"
+#include "gtkalias.h"
 
 enum {
   SELECTION_CHANGED,
@@ -2618,3 +2618,6 @@ gtk_list_drag_begin (GtkWidget      *widget,
 	}
     }
 }
+
+#define __GTK_LIST_C__
+#include "gtkaliasdef.c"

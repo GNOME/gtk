@@ -36,10 +36,10 @@
 #include <sys/param.h>
 #endif
 #include "gdk/gdkrgb.h"
-#include "gtkalias.h"
 #include "gtkpreview.h"
 #include "gtksignal.h"
 #include "gtkintl.h"
+#include "gtkalias.h"
 
 
 #define PREVIEW_CLASS(w)      GTK_PREVIEW_CLASS (GTK_OBJECT (w)->klass)
@@ -611,3 +611,6 @@ gtk_fill_lookup_array (guchar *array)
       array[i] = val;
     }
 }
+
+#define __GTK_PREVIEW_C__
+#include "gtkaliasdef.c"

@@ -25,8 +25,8 @@
  */
 
 #include <config.h>
-#include "gtkalias.h"
 #include "gtkvseparator.h"
+#include "gtkalias.h"
 
 
 static void gtk_vseparator_class_init (GtkVSeparatorClass *klass);
@@ -101,3 +101,6 @@ gtk_vseparator_expose (GtkWidget      *widget,
 
   return FALSE;
 }
+
+#define __GTK_VSEPARATOR_C__
+#include "gtkaliasdef.c"

@@ -1,11 +1,9 @@
-#ifndef GTK_TEXT_TAG_TABLE_H
-#define GTK_TEXT_TAG_TABLE_H
+#ifndef __GTK_TEXT_TAG_TABLE_H__
+#define __GTK_TEXT_TAG_TABLE_H__
 
 #include <gtk/gtktexttag.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
+G_BEGIN_DECLS
 
 #include <gtk/gtktexttag.h>
 
@@ -69,9 +67,7 @@ void _gtk_text_tag_table_add_buffer    (GtkTextTagTable *table,
 void _gtk_text_tag_table_remove_buffer (GtkTextTagTable *table,
                                         gpointer         buffer);
 
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
+G_END_DECLS
 
 #endif
 

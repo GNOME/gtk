@@ -21,13 +21,13 @@
 #include <config.h>
 #include <string.h>
 
-#include "gtkalias.h"
 #include "gtkfilesystemmodel.h"
 #include "gtkfilesystem.h"
 #include "gtkintl.h"
 #include "gtkmarshalers.h"
 #include "gtktreednd.h"
 #include "gtktreemodel.h"
+#include "gtkalias.h"
 
 typedef struct _GtkFileSystemModelClass GtkFileSystemModelClass;
 typedef struct _FileModelNode           FileModelNode;
@@ -1869,3 +1869,6 @@ root_files_removed_callback (GtkFileFolder      *folder,
 {
   do_files_removed (model, NULL, paths);
 }
+
+#define __GTK_FILE_SYSTEM_MODEL_C__
+#include "gtkaliasdef.c"

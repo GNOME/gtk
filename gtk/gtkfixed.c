@@ -25,9 +25,9 @@
  */
 
 #include <config.h>
-#include "gtkalias.h"
 #include "gtkfixed.h"
 #include "gtkintl.h"
+#include "gtkalias.h"
 
 enum {
   CHILD_PROP_0,
@@ -532,3 +532,6 @@ gtk_fixed_get_has_window (GtkFixed *fixed)
 
   return !GTK_WIDGET_NO_WINDOW (fixed);
 }
+
+#define __GTK_FIXED_C__
+#include "gtkaliasdef.c"

@@ -22,7 +22,6 @@
 #include <string.h>
 #include <gdk/gdkkeysyms.h>
 
-#include "gtkalias.h"
 #include "gtktreeview.h"
 #include "gtkrbtree.h"
 #include "gtktreednd.h"
@@ -42,6 +41,7 @@
 #include "gtkentry.h"
 #include "gtkframe.h"
 #include "gtktreemodelsort.h"
+#include "gtkalias.h"
 
 #define GTK_TREE_VIEW_PRIORITY_VALIDATE (GDK_PRIORITY_REDRAW + 5)
 #define GTK_TREE_VIEW_PRIORITY_SCROLL_SYNC (GTK_TREE_VIEW_PRIORITY_VALIDATE + 2)
@@ -13062,3 +13062,5 @@ gtk_tree_view_grab_notify (GtkWidget *widget,
     tree_view->priv->pressed_button = -1;
 }
 
+#define __GTK_TREE_VIEW_C__
+#include "gtkaliasdef.c"

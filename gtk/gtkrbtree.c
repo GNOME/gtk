@@ -18,9 +18,9 @@
  */
 
 #include <config.h>
-#include "gtkalias.h"
 #include "gtkrbtree.h"
 #include "gtkdebug.h"
+#include "gtkalias.h"
 
 static void        _gtk_rbnode_validate_allocator (GAllocator *allocator);
 static GtkRBNode * _gtk_rbnode_new                (GtkRBTree  *tree,

@@ -32,9 +32,7 @@
 #include <gtk/gtkenums.h>
 #include <gtk/gtkwidget.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
+G_BEGIN_DECLS
 
 typedef struct _GtkTargetList    GtkTargetList;
 typedef struct _GtkTargetEntry   GtkTargetEntry;
@@ -181,10 +179,6 @@ GtkSelectionData *gtk_selection_data_copy     (GtkSelectionData *data);
 void		  gtk_selection_data_free     (GtkSelectionData *data);
 
 
-
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
-
+G_END_DECLS
 
 #endif /* __GTK_SELECTION_H__ */

@@ -25,8 +25,8 @@
  */
 
 #include <config.h>
-#include "gtkalias.h"
 #include "gtkvpaned.h"
+#include "gtkalias.h"
 
 static void     gtk_vpaned_class_init     (GtkVPanedClass *klass);
 static void     gtk_vpaned_init           (GtkVPaned      *vpaned);
@@ -231,3 +231,6 @@ gtk_vpaned_size_allocate (GtkWidget     *widget,
 	gtk_widget_size_allocate (paned->child2, &child_allocation);
     }
 }
+
+#define __GTK_VPANED_C__
+#include "gtkaliasdef.c"

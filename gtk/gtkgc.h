@@ -31,10 +31,7 @@
 #include <gdk/gdk.h>
 
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
-
+G_BEGIN_DECLS
 
 GdkGC* gtk_gc_get     (gint             depth,
 		       GdkColormap     *colormap,
@@ -43,9 +40,6 @@ GdkGC* gtk_gc_get     (gint             depth,
 void   gtk_gc_release (GdkGC           *gc);
 
 
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
-
+G_END_DECLS
 
 #endif /* __GTK_GC_H__ */

@@ -42,10 +42,7 @@
 #include <gtk/gtkdialog.h>
 
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
-
+G_BEGIN_DECLS
 
 #define GTK_TYPE_INPUT_DIALOG              (gtk_input_dialog_get_type ())
 #define GTK_INPUT_DIALOG(obj)              (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_INPUT_DIALOG, GtkInputDialog))
@@ -97,9 +94,6 @@ GType      gtk_input_dialog_get_type     (void) G_GNUC_CONST;
 GtkWidget* gtk_input_dialog_new          (void);
 
 
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
-
+G_END_DECLS
 
 #endif /* __GTK_INPUTDIALOG_H__ */

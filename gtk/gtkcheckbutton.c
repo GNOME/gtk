@@ -25,10 +25,10 @@
  */
 
 #include <config.h>
-#include "gtkalias.h"
 #include "gtkcheckbutton.h"
 #include "gtkintl.h"
 #include "gtklabel.h"
+#include "gtkalias.h"
 
 
 #define INDICATOR_SIZE     13
@@ -451,3 +451,6 @@ gtk_real_check_button_draw_indicator (GtkCheckButton *check_button,
 		       x, y, indicator_size, indicator_size);
     }
 }
+
+#define __GTK_CHECK_BUTTON_C__
+#include "gtkaliasdef.c"

@@ -32,10 +32,7 @@
 #include <gtk/gtkbin.h>
 
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
-
+G_BEGIN_DECLS
 
 #define GTK_TYPE_ITEM                  (gtk_item_get_type ())
 #define GTK_ITEM(obj)                  (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_ITEM, GtkItem))
@@ -74,10 +71,6 @@ void  gtk_item_select   (GtkItem *item);
 void  gtk_item_deselect (GtkItem *item);
 void  gtk_item_toggle   (GtkItem *item);
 
-
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
-
+G_END_DECLS
 
 #endif /* __GTK_ITEM_H__ */

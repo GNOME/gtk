@@ -25,7 +25,6 @@
  */
 
 #include <config.h>
-#include "gtkalias.h"
 #include "gtkimagemenuitem.h"
 #include "gtkaccellabel.h"
 #include "gtkintl.h"
@@ -34,6 +33,7 @@
 #include "gtkimage.h"
 #include "gtkcontainer.h"
 #include "gtkwindow.h"
+#include "gtkalias.h"
 
 static void gtk_image_menu_item_class_init           (GtkImageMenuItemClass *klass);
 static void gtk_image_menu_item_init                 (GtkImageMenuItem      *image_menu_item);
@@ -606,3 +606,5 @@ gtk_image_menu_item_screen_changed (GtkWidget *widget,
   show_image_change_notify (GTK_IMAGE_MENU_ITEM (widget));
 }
 
+#define __GTK_IMAGE_MENU_ITEM_C__
+#include "gtkaliasdef.c"

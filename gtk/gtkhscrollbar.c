@@ -26,10 +26,10 @@
  */
 
 #include <config.h>
-#include "gtkalias.h"
 #include "gtkhscrollbar.h"
 #include "gdk/gdkkeysyms.h"
 #include "gtkintl.h"
+#include "gtkalias.h"
 
 static void     gtk_hscrollbar_class_init       (GtkHScrollbarClass *klass);
 static void     gtk_hscrollbar_init             (GtkHScrollbar      *hscrollbar);
@@ -90,3 +90,5 @@ gtk_hscrollbar_new (GtkAdjustment *adjustment)
   return hscrollbar;
 }
 
+#define __GTK_HSCROLLBAR_C__
+#include "gtkaliasdef.c"

@@ -30,9 +30,7 @@
 
 #include <gtk/gtkdialog.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
+G_BEGIN_DECLS
 
 typedef enum
 {
@@ -110,8 +108,6 @@ void       gtk_message_dialog_format_secondary_markup (GtkMessageDialog *message
                                                        const gchar      *message_format,
                                                        ...) G_GNUC_PRINTF (2, 3);
 
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
+G_END_DECLS
 
 #endif /* __GTK_MESSAGE_DIALOG_H__ */

@@ -21,12 +21,12 @@
 #include <config.h>
 #include <string.h>
 
-#include "gtkalias.h"
 #include "gtkcelllayout.h"
 #include "gtkcellrenderertext.h"
 #include "gtkentry.h"
 #include "gtkfilechooserentry.h"
 #include "gtkmain.h"
+#include "gtkalias.h"
 
 typedef struct _GtkFileChooserEntryClass GtkFileChooserEntryClass;
 
@@ -991,3 +991,6 @@ _gtk_file_chooser_entry_get_action (GtkFileChooserEntry *chooser_entry)
   
   return chooser_entry->action;
 }
+
+#define __GTK_FILE_CHOOSER_ENTRY_C__
+#include "gtkaliasdef.c"

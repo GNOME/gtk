@@ -27,7 +27,6 @@
 #undef GTK_DISABLE_DEPRECATED
 
 #include <config.h>
-#include "gtkalias.h"
 #include "gtklabel.h"
 #include "gtkeventbox.h"
 #include "gtkpixmap.h"
@@ -37,6 +36,7 @@
 #define GTK_ENABLE_BROKEN
 #include "gtktree.h"
 #include "gtktreeitem.h"
+#include "gtkalias.h"
 
 #include "tree_plus.xpm"
 #include "tree_minus.xpm"
@@ -1040,3 +1040,6 @@ gtk_tree_item_forall (GtkContainer *container,
   if (include_internals && tree_item->pixmaps_box)
     (* callback) (tree_item->pixmaps_box, callback_data);
 }
+
+#define __GTK_TREE_ITEM_C__
+#include "gtkaliasdef.c"

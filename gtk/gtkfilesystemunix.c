@@ -20,12 +20,12 @@
 
 #include <config.h>
 
-#include "gtkalias.h"
 #include "gtkfilesystem.h"
 #include "gtkfilesystemunix.h"
 #include "gtkicontheme.h"
 #include "gtkintl.h"
 #include "gtkstock.h"
+#include "gtkalias.h"
 
 #define XDG_PREFIX _gtk_xdg
 #include "xdgmime/xdgmime.h"
@@ -2062,3 +2062,6 @@ filename_is_root (const char *filename)
 
   return (after_root != NULL && *after_root == '\0');
 }
+
+#define __GTK_FILE_SYSTEM_UNIX_C__
+#include "gtkaliasdef.c"

@@ -20,11 +20,11 @@
  */
 
 #include <config.h>
-#include "gtkalias.h"
 #include "gtkfilechooserutils.h"
 #include "gtkfilechooser.h"
 #include "gtkfilesystem.h"
 #include "gtktypebuiltins.h"
+#include "gtkalias.h"
 
 static gboolean       delegate_set_current_folder     (GtkFileChooser    *chooser,
 						       const GtkFilePath *path,
@@ -341,3 +341,6 @@ delegate_file_activated (GtkFileChooser    *chooser,
 {
   g_signal_emit_by_name (data, "file-activated");
 }
+
+#define __GTK_FILE_CHOOSER_UTILS_C__
+#include "gtkaliasdef.c"

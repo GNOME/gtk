@@ -18,8 +18,8 @@
  */
 
 #include <config.h>
-#include "gtkalias.h"
 #include "gtkcelllayout.h"
+#include "gtkalias.h"
 
 GType
 gtk_cell_layout_get_type (void)
@@ -277,3 +277,6 @@ gtk_cell_layout_reorder (GtkCellLayout   *cell_layout,
                                                         cell,
                                                         position);
 }
+
+#define __GTK_CELL_LAYOUT_C__
+#include "gtkaliasdef.c"

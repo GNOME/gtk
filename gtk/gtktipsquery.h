@@ -29,17 +29,14 @@
 
 #ifndef GTK_DISABLE_DEPRECATED
 
-#ifndef __GTKTIPSQUERY_H__
-#define __GTKTIPSQUERY_H__
+#ifndef __GTK_TIPS_QUERY_H__
+#define __GTK_TIPS_QUERY_H__
 
 
 #include <gtk/gtklabel.h>
 
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
-
+G_BEGIN_DECLS
 
 /* --- type macros --- */
 #define	GTK_TYPE_TIPS_QUERY		(gtk_tips_query_get_type ())
@@ -106,13 +103,8 @@ void		gtk_tips_query_set_labels 	(GtkTipsQuery   *tips_query,
 						 const gchar    *label_inactive,
 						 const gchar    *label_no_tip);
      
+G_END_DECLS
 
-
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
-
-
-#endif	/* __GTKTIPSQUERY_H__ */
+#endif	/* __GTK_TIPS_QUERY_H__ */
 
 #endif /* GTK_DISABLE_DEPRECATED */

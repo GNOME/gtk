@@ -28,7 +28,6 @@
 #include <string.h>
 #include <stdlib.h>
 
-#include "gtkalias.h"
 #include "gtkaccelgroup.h"
 #include "gtkaccellabel.h" /* For _gtk_accel_label_class_get_accelerator_label */
 #include "gtkaccelmap.h"
@@ -36,6 +35,7 @@
 #include "gtkmain.h"		/* For _gtk_boolean_handled_accumulator */
 #include "gdk/gdkkeysyms.h"
 #include "gtkmarshalers.h"
+#include "gtkalias.h"
 
 
 /* --- prototypes --- */
@@ -1246,3 +1246,6 @@ gtk_accelerator_get_default_mod_mask (void)
 {
   return default_accel_mod_mask;
 }
+
+#define __GTK_ACCEL_GROUP_C__
+#include "gtkaliasdef.c"

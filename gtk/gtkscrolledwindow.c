@@ -27,11 +27,11 @@
 #include <config.h>
 #include <math.h>
 #include <gdk/gdkkeysyms.h>
-#include "gtkalias.h"
 #include "gtkbindings.h"
 #include "gtkmarshalers.h"
 #include "gtkscrolledwindow.h"
 #include "gtkintl.h"
+#include "gtkalias.h"
 
 
 /* scrolled window policy and size requisition handling:
@@ -1418,3 +1418,6 @@ _gtk_scrolled_window_get_scrollbar_spacing (GtkScrolledWindow *scrolled_window)
       return scrollbar_spacing;
     }
 }
+
+#define __GTK_SCROLLED_WINDOW_C__
+#include "gtkaliasdef.c"

@@ -21,13 +21,13 @@
  */
 
 #include <config.h>
-#include "gtkalias.h"
 #include "gtktoolitem.h"
 #include "gtkmarshalers.h"
 #include "gtktoolbar.h"
 #include "gtkseparatormenuitem.h"
 #include "gtkintl.h"
 #include "gtkmain.h"
+#include "gtkalias.h"
 
 #include <string.h>
 
@@ -1139,3 +1139,5 @@ _gtk_tool_item_toolbar_reconfigured (GtkToolItem *tool_item)
   gtk_widget_queue_resize (GTK_WIDGET (tool_item));
 }
 
+#define __GTK_TOOL_ITEM_C__
+#include "gtkaliasdef.c"

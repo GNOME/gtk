@@ -32,9 +32,9 @@
 
 #include <config.h>
 #include <math.h>
-#include "gtkalias.h"
 #include "gtkcontainer.h"
 #include "gtkpixmap.h"
+#include "gtkalias.h"
 
 
 static void gtk_pixmap_class_init (GtkPixmapClass  *klass);
@@ -306,4 +306,5 @@ build_insensitive_pixmap (GtkPixmap *gtkpixmap)
   g_object_unref (G_OBJECT (stated));
 }
 
-
+#define __GTK_PIXMAP_C__
+#include "gtkaliasdef.c"

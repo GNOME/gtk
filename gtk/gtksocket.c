@@ -29,7 +29,6 @@
 #include <string.h>
 
 #include "gdk/gdkkeysyms.h"
-#include "gtkalias.h"
 #include "gtkmain.h"
 #include "gtkmarshalers.h"
 #include "gtkwindow.h"
@@ -41,6 +40,7 @@
 #include "x11/gdkx.h"
 
 #include "gtkxembed.h"
+#include "gtkalias.h"
 
 typedef struct _GtkSocketPrivate GtkSocketPrivate;
 
@@ -1479,3 +1479,6 @@ gtk_socket_filter_func (GdkXEvent *gdk_xevent, GdkEvent *event, gpointer data)
   
   return return_val;
 }
+
+#define __GTK_SOCKET_C__
+#include "gtkaliasdef.c"

@@ -33,10 +33,7 @@
 
 #include <gtk/gtkwidget.h>
 
-
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
+G_BEGIN_DECLS
 
 typedef gchar * (*GtkTranslateFunc)	   (const gchar		*path,
 					    gpointer             func_data);
@@ -237,10 +234,7 @@ void	gtk_item_factories_path_delete	   (const gchar		*ifactory_path,
 #endif /* !GTK_DISABLE_DEPRECATED || GTK_COMPILATION */
 
 
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
-
+G_END_DECLS
 
 #endif	/* __GTK_ITEM_FACTORY_H__ */
 

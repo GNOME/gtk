@@ -32,10 +32,7 @@
 #include <gtk/gtkscale.h>
 
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
-
+G_BEGIN_DECLS
 
 #define GTK_TYPE_HSCALE            (gtk_hscale_get_type ())
 #define GTK_HSCALE(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_HSCALE, GtkHScale))
@@ -66,9 +63,6 @@ GtkWidget* gtk_hscale_new_with_range (gdouble        min,
                                       gdouble        step);
 
 
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
-
+G_END_DECLS
 
 #endif /* __GTK_HSCALE_H__ */

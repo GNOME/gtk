@@ -233,7 +233,7 @@ icon_name_hash (gconstpointer key)
   return h;
 }
 
-gint
+static gint
 find_image_offset (GtkIconCache *cache,
 		   const gchar  *icon_name,
 		   const gchar  *directory)

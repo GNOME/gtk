@@ -28,7 +28,6 @@
 
 #include <config.h>
 #include "gdk/gdkkeysyms.h"
-#include "gtkalias.h"
 #include "gtkbindings.h"
 #include "gtkmain.h"
 #include "gtkmarshalers.h"
@@ -37,6 +36,7 @@
 #include "gtksettings.h"
 #include "gtkintl.h"
 #include "gtkwindow.h"
+#include "gtkalias.h"
 
 
 #define BORDER_SPACING  0
@@ -955,3 +955,6 @@ void gtk_menu_bar_set_child_pack_direction (GtkMenuBar       *menubar,
       g_object_notify (G_OBJECT (menubar), "child-pack-direction");
     }
 }
+
+#define __GTK_MENU_BAR_C__
+#include "gtkaliasdef.c"

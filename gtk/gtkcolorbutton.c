@@ -30,7 +30,6 @@
 
 #include <config.h>
 
-#include "gtkalias.h"
 #include "gtkcolorbutton.h"
 #include "gdk/gdkkeysyms.h"
 #include "gdk-pixbuf/gdk-pixbuf.h"
@@ -45,6 +44,7 @@
 #include "gtksignal.h"
 #include "gtkmarshalers.h"
 #include "gtkintl.h"
+#include "gtkalias.h"
 
 /* Size of checks and gray levels for alpha compositing checkerboard */
 #define CHECK_SIZE  4
@@ -1009,3 +1009,6 @@ gtk_color_button_get_property (GObject    *object,
       break;
     }
 }
+
+#define __GTK_COLOR_BUTTON_C__
+#include "gtkaliasdef.c"

@@ -31,10 +31,7 @@
 #include <gdk/gdk.h>
 #include <gtk/gtkwidget.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
-
+G_BEGIN_DECLS
 
 #define GTK_TYPE_EDITABLE             (gtk_editable_get_type ())
 #define GTK_EDITABLE(obj)             (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_EDITABLE, GtkEditable))
@@ -111,9 +108,6 @@ void     gtk_editable_set_editable         (GtkEditable *editable,
 					    gboolean     is_editable);
 gboolean gtk_editable_get_editable         (GtkEditable *editable);
 
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
-
+G_END_DECLS
 
 #endif /* __GTK_EDITABLE_H__ */

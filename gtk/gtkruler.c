@@ -25,9 +25,9 @@
  */
 
 #include <config.h>
-#include "gtkalias.h"
 #include "gtkruler.h"
 #include "gtkintl.h"
+#include "gtkalias.h"
 
 enum {
   PROP_0,
@@ -474,3 +474,6 @@ gtk_ruler_make_pixmap (GtkRuler *ruler)
       gdk_gc_set_exposures (ruler->non_gr_exp_gc, FALSE);
     }
 }
+
+#define __GTK_RULER_C__
+#include "gtkaliasdef.c"

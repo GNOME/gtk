@@ -32,10 +32,7 @@
 #include <gtk/gtkprogress.h>
 
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
-
+G_BEGIN_DECLS
 
 #define GTK_TYPE_PROGRESS_BAR            (gtk_progress_bar_get_type ())
 #define GTK_PROGRESS_BAR(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_PROGRESS_BAR, GtkProgressBar))
@@ -166,9 +163,6 @@ void       gtk_progress_bar_update               (GtkProgressBar *pbar,
 
 #endif /* GTK_DISABLE_DEPRECATED */
 
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
-
+G_END_DECLS
 
 #endif /* __GTK_PROGRESS_BAR_H__ */

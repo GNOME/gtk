@@ -1,3 +1,19 @@
+2005-03-20  Matthias Clasen  <mclasen@redhat.com>
+
+	Make PLT-reduction work with gcc4, and don't include
+	everything in gdkalias.h:
+	
+	* gtk/grk.symbols: Group symbols by header and source file.
+	* gtk/makegtkalias.pl: Protect definitions by the same 
+	preprocessor symbols used to guard the headers. Move
+	the alias declarations to a separate file which is 
+	produced when calling makegtkalias.pl -def
+	* gdk/Makefile.am (gtkaliasdef.c): Add a rule to generate 
+	this file.
+	* gtk/*.c: Include gtkalias.h after the other headers, 
+	include gtkaliasdef.c at the bottom.
+	* gtk/*.h: Small cleanups.
+
 Fri Mar 18 23:59:49 2005  Soeren Sandmann  <sandmann@redhat.com>
 
 	* gtk/gtkmenutoolbutton.c (arrow_button_button_press_event_cb):

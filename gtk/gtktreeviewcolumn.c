@@ -19,7 +19,6 @@
 
 #include <config.h>
 #include <string.h>
-#include "gtkalias.h"
 #include "gtktreeviewcolumn.h"
 #include "gtktreeview.h"
 #include "gtktreeprivate.h"
@@ -31,6 +30,7 @@
 #include "gtkmarshalers.h"
 #include "gtkarrow.h"
 #include "gtkintl.h"
+#include "gtkalias.h"
 
 enum
 {
@@ -3660,3 +3660,5 @@ gtk_tree_view_column_cell_get_position (GtkTreeViewColumn *tree_column,
   return found_cell;
 }
 
+#define __GTK_TREE_VIEW_COLUMN_C__
+#include "gtkaliasdef.c"

@@ -32,10 +32,7 @@
 #include <gtk/gtkrange.h>
 
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
-
+G_BEGIN_DECLS
 
 #define GTK_TYPE_SCALE            (gtk_scale_get_type ())
 #define GTK_SCALE(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_SCALE, GtkScale))
@@ -100,9 +97,6 @@ gchar  *_gtk_scale_format_value    (GtkScale        *scale,
                                     gdouble          value);
 
 
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
-
+G_END_DECLS
 
 #endif /* __GTK_SCALE_H__ */

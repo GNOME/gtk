@@ -32,10 +32,7 @@
 #include <gtk/gtkcontainer.h>
 
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
-
+G_BEGIN_DECLS
 
 #define GTK_TYPE_FIXED                  (gtk_fixed_get_type ())
 #define GTK_FIXED(obj)                  (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_FIXED, GtkFixed))
@@ -83,9 +80,6 @@ void       gtk_fixed_set_has_window    (GtkFixed       *fixed,
 					gboolean        has_window);
 gboolean   gtk_fixed_get_has_window    (GtkFixed       *fixed);
 
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
-
+G_END_DECLS
 
 #endif /* __GTK_FIXED_H__ */

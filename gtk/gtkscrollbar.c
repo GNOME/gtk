@@ -26,9 +26,9 @@
  */
 
 #include <config.h>
-#include "gtkalias.h"
 #include "gtkscrollbar.h"
 #include "gtkintl.h"
+#include "gtkalias.h"
 
 static void gtk_scrollbar_class_init (GtkScrollbarClass *klass);
 static void gtk_scrollbar_init       (GtkScrollbar      *scrollbar);
@@ -165,3 +165,6 @@ gtk_scrollbar_style_set  (GtkWidget *widget,
   
   (* GTK_WIDGET_CLASS (parent_class)->style_set) (widget, previous);
 }
+
+#define __GTK_SCROLLBAR_C__
+#include "gtkaliasdef.c"

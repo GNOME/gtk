@@ -19,9 +19,9 @@
  * Boston, MA 02111-1307, USA.
  */
 #include <config.h>
-#include "gtkalias.h"
 #include "gtkdebug.h"
 #include "gtkkeyhash.h"
+#include "gtkalias.h"
 
 typedef struct _GtkKeyHashEntry GtkKeyHashEntry;
 

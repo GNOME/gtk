@@ -30,13 +30,13 @@
 
 #include <config.h>
 
-#include "gtkalias.h"
 #include "gtkintl.h"
 #include "gtktoggleaction.h"
 #include "gtktoggleactionprivate.h"
 #include "gtktoggletoolbutton.h"
 #include "gtktogglebutton.h"
 #include "gtkcheckmenuitem.h"
+#include "gtkalias.h"
 
 enum 
 {
@@ -410,3 +410,6 @@ create_menu_item (GtkAction *action)
 		       "draw_as_radio", toggle_action->private_data->draw_as_radio,
 		       NULL);
 }
+
+#define __GTK_TOGGLE_ACTION_C__
+#include "gtkaliasdef.c"

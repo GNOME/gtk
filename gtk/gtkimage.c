@@ -26,13 +26,13 @@
 
 #include <config.h>
 #include <math.h>
-#include "gtkalias.h"
 #include "gtkcontainer.h"
 #include "gtkimage.h"
 #include "gtkiconfactory.h"
 #include "gtkstock.h"
 #include "gtkicontheme.h"
 #include "gtkintl.h"
+#include "gtkalias.h"
 #include <string.h>
 
 typedef struct _GtkImagePrivate GtkImagePrivate;
@@ -2140,3 +2140,6 @@ gtk_image_set_from_file   (GtkImage    *image,
 }
 
 #endif
+
+#define __GTK_IMAGE_C__
+#include "gtkaliasdef.c"

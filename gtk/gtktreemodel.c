@@ -23,11 +23,11 @@
 #include <glib.h>
 #include <glib/gprintf.h>
 #include <gobject/gvaluecollector.h>
-#include "gtkalias.h"
 #include "gtktreemodel.h"
 #include "gtktreeview.h"
 #include "gtktreeprivate.h"
 #include "gtkmarshalers.h"
+#include "gtkalias.h"
 
 
 #define INITIALIZE_TREE_ITER(Iter) \
@@ -2022,3 +2022,6 @@ gtk_tree_row_reference_reordered (GObject     *proxy,
 
   gtk_tree_row_ref_reordered ((RowRefList *)g_object_get_data (proxy, ROW_REF_DATA_STRING), path, iter, new_order);
 }
+
+#define __GTK_TREE_MODEL_C__
+#include "gtkaliasdef.c"

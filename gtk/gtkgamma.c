@@ -29,7 +29,6 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#include "gtkalias.h"
 #include "gtkgamma.h"
 #include "gtkcurve.h"
 #include "gtkdialog.h"
@@ -45,6 +44,7 @@
 #include "gtkvbox.h"
 #include "gtkwindow.h"
 #include "gtkintl.h"
+#include "gtkalias.h"
 
 static GtkVBoxClass *parent_class = NULL;
 
@@ -486,3 +486,5 @@ gtk_gamma_curve_destroy (GtkObject *object)
     (* GTK_OBJECT_CLASS (parent_class)->destroy) (object);
 }
 
+#define __GTK_GAMMA_CURVE_C__
+#include "gtkaliasdef.c"

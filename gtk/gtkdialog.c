@@ -25,7 +25,6 @@
  */
 
 #include <config.h>
-#include "gtkalias.h"
 #include "gtkbutton.h"
 #include "gtkdialog.h"
 #include "gtkhbbox.h"
@@ -37,6 +36,7 @@
 #include "gtkmain.h"
 #include "gtkintl.h"
 #include "gtkbindings.h"
+#include "gtkalias.h"
 
 #define GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), GTK_TYPE_DIALOG, GtkDialogPrivate))
 
@@ -1237,3 +1237,5 @@ gtk_dialog_set_alternative_button_order_from_array (GtkDialog *dialog,
     }
 }
 
+#define __GTK_DIALOG_C__
+#include "gtkaliasdef.c"

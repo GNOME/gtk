@@ -32,10 +32,7 @@
 #include <gtk/gtkrange.h>
 
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
-
+G_BEGIN_DECLS
 
 #define GTK_TYPE_SCROLLBAR            (gtk_scrollbar_get_type ())
 #define GTK_SCROLLBAR(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_SCROLLBAR, GtkScrollbar))
@@ -68,9 +65,6 @@ struct _GtkScrollbarClass
 GType gtk_scrollbar_get_type (void) G_GNUC_CONST;
 
 
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
-
+G_END_DECLS
 
 #endif /* __GTK_SCROLLBAR_H__ */

@@ -28,9 +28,9 @@
 #include <glib/gprintf.h>
 #include <math.h>
 #include <string.h>
-#include "gtkalias.h"
 #include "gtkprogress.h" 
 #include "gtkintl.h"
+#include "gtkalias.h"
 
 #define EPSILON  1e-5
 #define DEFAULT_FORMAT "%P %%"
@@ -754,3 +754,6 @@ gtk_progress_set_activity_mode (GtkProgress *progress,
       g_object_notify (G_OBJECT (progress), "activity_mode");
     }
 }
+
+#define __GTK_PROGRESS_C__
+#include "gtkaliasdef.c"

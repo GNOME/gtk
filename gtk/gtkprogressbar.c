@@ -34,9 +34,9 @@
 #  include <stdio.h>
 #endif
 
-#include "gtkalias.h"
 #include "gtkprogressbar.h"
 #include "gtkintl.h"
+#include "gtkalias.h"
 
 
 #define MIN_HORIZONTAL_BAR_WIDTH   150
@@ -1271,3 +1271,5 @@ gtk_progress_bar_get_ellipsize (GtkProgressBar *pbar)
   return pbar->ellipsize;
 }
 
+#define __GTK_PROGRESS_BAR_C__
+#include "gtkaliasdef.c"

@@ -28,10 +28,10 @@
 #include <stdarg.h>
 #include <string.h>
 #include <stdio.h>
-#include "gtkalias.h"
 #include "gtkobject.h"
 #include "gtkmarshalers.h"
 #include "gtksignal.h"
+#include "gtkalias.h"
 
 
 enum {
@@ -744,3 +744,6 @@ gtk_object_unref (GtkObject *object)
 
   g_object_unref ((GObject*) object);
 }
+
+#define __GTK_OBJECT_C__
+#include "gtkaliasdef.c"

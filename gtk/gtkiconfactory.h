@@ -30,9 +30,7 @@
 #include <gdk/gdk.h>
 #include <gtk/gtkrc.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
+G_BEGIN_DECLS
 
 typedef struct _GtkIconFactoryClass GtkIconFactoryClass;
 
@@ -182,8 +180,6 @@ void _gtk_icon_set_invalidate_caches (void);
 GSList* _gtk_icon_factory_list_ids (void);
 void _gtk_icon_factory_ensure_default_icons (void);
 
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
+G_END_DECLS
 
 #endif /* __GTK_ICON_FACTORY_H__ */

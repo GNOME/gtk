@@ -32,8 +32,6 @@
 
 #include <gdk/gdkkeysyms.h>
 
-#include "gtkalias.h"
-
 #include "gtkaboutdialog.h"
 #include "gtkbutton.h"
 #include "gtkbbox.h"
@@ -50,6 +48,8 @@
 #include "gtkviewport.h"
 #include "gtkiconfactory.h"
 #include "gtkintl.h"
+
+#include "gtkalias.h"
 
 #include <string.h>
 
@@ -2219,3 +2219,6 @@ gtk_show_about_dialog (GtkWindow   *parent,
   
   gtk_window_present (GTK_WINDOW (dialog));
 }
+
+#define __GTK_ABOUT_DIALOG_C__
+#include "gtkaliasdef.c"

@@ -25,7 +25,6 @@
  */
 
 #include <config.h>
-#include "gtkalias.h"
 #include "gtknotebook.h"
 #include "gtkmain.h"
 #include "gtkmenu.h"
@@ -36,6 +35,7 @@
 #include "gtkintl.h"
 #include "gtkmarshalers.h"
 #include "gtkbindings.h"
+#include "gtkalias.h"
 
 
 #define TAB_OVERLAP    2
@@ -5436,3 +5436,6 @@ gtk_notebook_reorder_child (GtkNotebook *notebook,
 
   gtk_widget_thaw_child_notify (child);
 }
+
+#define __GTK_NOTEBOOK_C__
+#include "gtkaliasdef.c"

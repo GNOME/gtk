@@ -25,8 +25,8 @@
  */
 
 #include <config.h>
-#include "gtkalias.h"
 #include "gtkseparator.h"
+#include "gtkalias.h"
 
 
 static void gtk_separator_class_init (GtkSeparatorClass *klass);
@@ -72,3 +72,6 @@ gtk_separator_init (GtkSeparator *separator)
 {
   GTK_WIDGET_SET_FLAGS (separator, GTK_NO_WINDOW);
 }
+
+#define __GTK_SEPARATOR_C__
+#include "gtkaliasdef.c"

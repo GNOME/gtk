@@ -30,10 +30,7 @@
 
 #include <gtk/gtkhbox.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
-
+G_BEGIN_DECLS
 
 #define GTK_TYPE_STATUSBAR            (gtk_statusbar_get_type ())
 #define GTK_STATUSBAR(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_STATUSBAR, GtkStatusbar))
@@ -106,7 +103,6 @@ void     gtk_statusbar_set_has_resize_grip (GtkStatusbar *statusbar,
 					    gboolean      setting);
 gboolean gtk_statusbar_get_has_resize_grip (GtkStatusbar *statusbar);
 
-#ifdef __cplusplus
-} 
-#endif /* __cplusplus */
+G_END_DECLS
+
 #endif /* __GTK_STATUSBAR_H__ */

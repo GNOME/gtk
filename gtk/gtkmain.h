@@ -35,9 +35,7 @@
 #include <gtk/gtkwindow.h>
 #endif
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
+G_BEGIN_DECLS
 
 /* Priorities for redrawing and resizing
  */
@@ -223,9 +221,6 @@ gboolean _gtk_boolean_handled_accumulator (GSignalInvocationHint *ihint,
 
 gchar *_gtk_get_lc_ctype (void);
 
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
-
+G_END_DECLS
 
 #endif /* __GTK_MAIN_H__ */

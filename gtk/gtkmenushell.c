@@ -28,7 +28,6 @@
 
 #include <config.h>
 #include "gdk/gdkkeysyms.h"
-#include "gtkalias.h"
 #include "gtkbindings.h"
 #include "gtkkeyhash.h"
 #include "gtkmain.h"
@@ -39,6 +38,7 @@
 #include "gtkmnemonichash.h"
 #include "gtktearoffmenuitem.h"
 #include "gtkwindow.h"
+#include "gtkalias.h"
 
 #define MENU_SHELL_TIMEOUT   500
 
@@ -1388,3 +1388,5 @@ _gtk_menu_shell_remove_mnemonic (GtkMenuShell *menu_shell,
   gtk_menu_shell_reset_key_hash (menu_shell);
 }
 
+#define __GTK_MENU_SHELL_C__
+#include "gtkaliasdef.c"

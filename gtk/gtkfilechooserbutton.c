@@ -30,7 +30,6 @@
 
 #include <string.h>
 
-#include "gtkalias.h"
 #include "gtkintl.h"
 #include "gtkbutton.h"
 #include "gtkcelllayout.h"
@@ -55,6 +54,8 @@
 #ifdef G_OS_WIN32
 #include "gtkfilesystemwin32.h"
 #endif
+
+#include "gtkalias.h"
 
 /* **************** *
  *  Private Macros  *
@@ -2339,3 +2340,6 @@ gtk_file_chooser_button_set_width_chars (GtkFileChooserButton *button,
   gtk_label_set_width_chars (GTK_LABEL (button->priv->label), n_chars);
   g_object_notify (G_OBJECT (button), "width-chars");
 }
+
+#define __GTK_FILE_CHOOSER_BUTTON_C__
+#include "gtkaliasdef.c"

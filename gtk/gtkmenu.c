@@ -29,7 +29,6 @@
 #include <config.h>
 #include <string.h> /* memset */
 #include "gdk/gdkkeysyms.h"
-#include "gtkalias.h"
 #include "gtkaccellabel.h"
 #include "gtkaccelmap.h"
 #include "gtkbindings.h"
@@ -44,6 +43,7 @@
 #include "gtkvscrollbar.h"
 #include "gtksettings.h"
 #include "gtkintl.h"
+#include "gtkalias.h"
 
 
 #define MENU_ITEM_CLASS(w)   GTK_MENU_ITEM_GET_CLASS (w)
@@ -4384,3 +4384,5 @@ gtk_menu_get_for_attach_widget (GtkWidget *widget)
   return list;
 }
 
+#define __GTK_MENU_C__
+#include "gtkaliasdef.c"

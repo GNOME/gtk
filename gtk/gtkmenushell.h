@@ -32,10 +32,7 @@
 #include <gtk/gtkcontainer.h>
 
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
-
+G_BEGIN_DECLS
 
 #define	GTK_TYPE_MENU_SHELL		(gtk_menu_shell_get_type ())
 #define GTK_MENU_SHELL(obj)		(G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_MENU_SHELL, GtkMenuShell))
@@ -125,9 +122,6 @@ void _gtk_menu_shell_remove_mnemonic (GtkMenuShell *menu_shell,
 				      guint         keyval,
 				      GtkWidget    *target);
 
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
-
+G_END_DECLS
 
 #endif /* __GTK_MENU_SHELL_H__ */

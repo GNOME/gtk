@@ -32,10 +32,7 @@
 #include <gtk/gtkcontainer.h>
 
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
-
+G_BEGIN_DECLS
 
 #define GTK_TYPE_BIN                  (gtk_bin_get_type ())
 #define GTK_BIN(obj)                  (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_BIN, GtkBin))
@@ -65,9 +62,6 @@ GType      gtk_bin_get_type  (void) G_GNUC_CONST;
 
 GtkWidget *gtk_bin_get_child (GtkBin *bin);
 
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
-
+G_END_DECLS
 
 #endif /* __GTK_BIN_H__ */

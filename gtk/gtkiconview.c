@@ -24,7 +24,6 @@
 
 #include <gdk/gdkkeysyms.h>
 
-#include "gtkalias.h"
 #include "gtkiconview.h"
 #include "gtkmarshalers.h"
 #include "gtkbindings.h"
@@ -35,6 +34,7 @@
 #include "gtkaccessible.h"
 #include "gtkwindow.h"
 #include "gtktextbuffer.h"
+#include "gtkalias.h"
 
 #undef DEBUG_ICON_VIEW
 
@@ -6234,3 +6234,5 @@ gtk_icon_view_get_accessible (GtkWidget *widget)
   return GTK_WIDGET_CLASS (parent_class)->get_accessible (widget);
 }
 
+#define __GTK_ICON_VIEW_C__
+#include "gtkaliasdef.c"
