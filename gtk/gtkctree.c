@@ -5185,6 +5185,9 @@ gtk_ctree_node_set_row_data_full (GtkCTree         *ctree,
   g_return_if_fail (GTK_IS_CTREE (ctree));
   g_return_if_fail (node != NULL);
 
+  if (GTK_CTREE_ROW (node)->row.destroy)
+    GTK_CTREE_ROW (node)->row.destroy (GTK_CTREE_ROW (node)->row.data);
+  
   GTK_CTREE_ROW (node)->row.data = data;
   GTK_CTREE_ROW (node)->row.destroy = destroy;
 }

@@ -1,3 +1,14 @@
+Mon Jan 24 10:44:48 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkcalendar.c (gtk_calendar_main_button): Handle
+	clicks between rows or outside calender area correctly.
+	(Patch from Damon Chaplin)
+
+	* gtk/gtkclist.c (gtk_clist_set_row_data_full): 
+	* gtk/gtkctree.c (gtk_ctree_node_set_row_data_full): 
+	  Call destroy function when overwriting existing data. 
+	  (Pointed out by Damon Chaplin)
+
 Tue Jan 25 09:55:41 2000  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/gdk.c: Remove useless #include of <X11/Xmu/WinUtil.h>,

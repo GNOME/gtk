@@ -507,7 +507,7 @@ column_from_x (GtkCalendar *calendar,
       x_left = left_x_for_column (calendar, c);
       x_right = x_left + GTK_CALENDAR_PRIVATE_DATA (calendar)->day_width;
       
-      if (event_x > x_left && event_x < x_right)
+      if (event_x >= x_left && event_x < x_right)
 	{
 	  column = c;
 	  break;
@@ -544,7 +544,7 @@ row_from_y (GtkCalendar *calendar,
       y_top = top_y_for_row (calendar, r);
       y_bottom = y_top + height;
       
-      if (event_y > y_top && event_y < y_bottom)
+      if (event_y >= y_top && event_y < y_bottom)
 	{
 	  row = r;
 	  break;
@@ -793,6 +793,10 @@ gtk_calendar_main_button (GtkWidget	 *widget,
   
   row = row_from_y (calendar, y);
   col = column_from_x (calendar, x);
+
+  /* If row or column isn't found, just return. */
+  if (row == -1 || col == -1)
+    return;
   
   day_month = calendar->day_month[row][col];
   

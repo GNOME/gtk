@@ -3015,6 +3015,10 @@ gtk_clist_set_row_data_full (GtkCList         *clist,
     return;
 
   clist_row = (g_list_nth (clist->row_list, row))->data;
+
+  if (clist_row->destroy)
+    clist_row->destroy (clist_row->data);
+  
   clist_row->data = data;
   clist_row->destroy = destroy;
 }
