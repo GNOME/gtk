@@ -1,3 +1,8 @@
+Sat Jul 10 23:35:13 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkentry.c (paste_received): Make middle-button pasting
+	work as expected inside the entry.  (#116789, Scott Bronson)
+
 Sat Jul 10 22:13:53 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtktextbuffer.c (gtk_text_buffer_select_range): Update 
