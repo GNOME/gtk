@@ -2465,12 +2465,15 @@ show_menu (GtkToolbar     *toolbar,
 	    }
 	}
     }
-  
+
+  gtk_window_set_screen (GTK_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (priv->menu))),
+			 gtk_widget_get_screen (GTK_WIDGET (toolbar)));
   gtk_widget_show_all (GTK_WIDGET (priv->menu));
-  
-  gtk_menu_popup (GTK_MENU (priv->menu), NULL, NULL,
+
+  gtk_menu_popup (priv->menu, NULL, NULL,
 		  menu_position_func, toolbar,
-		  event? event->button : 0, event? event->time : gtk_get_current_event_time());
+		  event? event->button : 0,
+		  event? event->time : gtk_get_current_event_time());
 }
 
 static void

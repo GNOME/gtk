@@ -1,3 +1,8 @@
+2004-02-04  Morten Welinder  <terra@gnome.org>
+
+	* gtk/gtktoolbar.c (show_menu): Show on the right screen.  (Fixes
+	bug 133411, apart from the leak.)
+
 Tue Feb  3 13:39:27 2004  Manish Singh  <yosh@gimp.org>
 
 	* gtk/gtkadjustment.c (gtk_adjustment_new): pass value in last
