@@ -1116,7 +1116,7 @@ ensure_valid_themes (GtkIconTheme *icon_theme)
   
   if (priv->themes_valid)
     {
-      g_get_current_time(&tv);
+      g_get_current_time (&tv);
 
       if (ABS (tv.tv_sec - priv->last_stat_time) > 5)
 	gtk_icon_theme_rescan_if_needed (icon_theme);
@@ -1163,7 +1163,7 @@ gtk_icon_theme_lookup_icon (GtkIconTheme       *icon_theme,
   g_return_val_if_fail (icon_name != NULL, NULL);
   g_return_val_if_fail ((flags & GTK_ICON_LOOKUP_NO_SVG) == 0 ||
 			(flags & GTK_ICON_LOOKUP_FORCE_SVG) == 0, NULL);
-  
+
   priv = icon_theme->priv;
 
   if (flags & GTK_ICON_LOOKUP_NO_SVG)
@@ -1181,12 +1181,12 @@ gtk_icon_theme_lookup_icon (GtkIconTheme       *icon_theme,
   l = priv->themes;
   while (l != NULL)
     {
-      IconTheme *icon_theme = l->data;
+      IconTheme *theme = l->data;
       
-      if (strcmp (icon_theme->name, DEFAULT_THEME_NAME) == 0)
+      if (strcmp (theme->name, DEFAULT_THEME_NAME) == 0)
 	found_default = TRUE;
       
-      icon_info = theme_lookup_icon (icon_theme, icon_name, size, allow_svg, use_builtin);
+      icon_info = theme_lookup_icon (theme, icon_name, size, allow_svg, use_builtin);
       if (icon_info)
 	goto out;
       
@@ -1789,9 +1789,7 @@ theme_lookup_icon (IconTheme          *theme,
       dir = l->data;
 
       suffix = theme_dir_get_icon_suffix (dir, icon_name, NULL);
-      
-      if (suffix != ICON_SUFFIX_NONE &&
-	  (allow_svg || suffix != ICON_SUFFIX_SVG))
+      if (best_suffix (suffix, allow_svg) != ICON_SUFFIX_NONE)
 	{
 	  difference = theme_dir_size_difference (dir, size, &smaller);
 

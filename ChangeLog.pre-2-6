@@ -1,5 +1,7 @@
 2004-10-20  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkicontheme.c: Small fixes.
+
 	* gtk/gtkrc.c: Include gtkmodules.h.  (#155885, Kazuki IWAMOTO)
 
 	* gtk/gtktoolbar.h: Add _gtk_toolbar_rebuild_menu(). (#155885)
