@@ -3082,6 +3082,9 @@ gtk_toolbar_finalize (GObject *object)
  * can call it both before you add the icons and after they've been
  * added. The size you set will override user preferences for the default
  * icon size.
+ * 
+ * Deprecated: Applications should respect the user preferences for
+ *   the size of icons in toolbars.
  **/
 void
 gtk_toolbar_set_icon_size (GtkToolbar  *toolbar,

@@ -1,5 +1,8 @@
 2004-11-22  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtktoolbar.c (gtk_toolbar_set_icon_size): Add a deprecation
+	note.
+
 	* gdk/gdkevents.c (gdk_event_get_root_coords): Handle scroll
 	events.  (#159098, Felipe Heidrich)
 
