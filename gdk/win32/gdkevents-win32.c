@@ -954,22 +954,41 @@ build_pointer_event_state (MSG *msg)
   gint state;
   
   state = 0;
+
   if (msg->wParam & MK_CONTROL)
     state |= GDK_CONTROL_MASK;
-  if (msg->wParam & MK_LBUTTON)
+
+  if ((msg->message != WM_LBUTTONDOWN &&
+       (msg->wParam & MK_LBUTTON)) ||
+      msg->message == WM_LBUTTONUP)
     state |= GDK_BUTTON1_MASK;
-  if (msg->wParam & MK_MBUTTON)
+
+  if ((msg->message != WM_MBUTTONDOWN &&
+       (msg->wParam & MK_MBUTTON)) ||
+      msg->message == WM_MBUTTONUP)
     state |= GDK_BUTTON2_MASK;
-  if (msg->wParam & MK_RBUTTON)
+
+  if ((msg->message != WM_RBUTTONDOWN &&
+       (msg->wParam & MK_RBUTTON)) ||
+      msg->message == WM_RBUTTONUP)
     state |= GDK_BUTTON3_MASK;
-  if (msg->wParam & MK_XBUTTON1)
+
+  if (((msg->message != WM_XBUTTONDOWN || HIWORD (msg->wParam) != XBUTTON1) &&
+       (msg->wParam & MK_XBUTTON1)) ||
+      (msg->message == WM_XBUTTONUP && HIWORD (msg->wParam) == XBUTTON1))
     state |= GDK_BUTTON4_MASK;
-  if (msg->wParam & MK_XBUTTON2)
+
+  if (((msg->message != WM_XBUTTONDOWN || HIWORD (msg->wParam) != XBUTTON2) &&
+       (msg->wParam & MK_XBUTTON2)) ||
+      (msg->message == WM_XBUTTONUP && HIWORD (msg->wParam) == XBUTTON2))
     state |= GDK_BUTTON5_MASK;
+
   if (msg->wParam & MK_SHIFT)
     state |= GDK_SHIFT_MASK;
+
   if (GetKeyState (VK_MENU) < 0)
     state |= GDK_MOD1_MASK;
+
   if (GetKeyState (VK_CAPITAL) & 0x1)
     state |= GDK_LOCK_MASK;
 
@@ -1955,6 +1974,8 @@ erase_background (GdkWindow *window,
     }
 }
 
+#endif
+
 static GdkRegion *
 _gdk_win32_hrgn_to_region (HRGN hrgn)
 {
@@ -2148,7 +2169,6 @@ gdk_event_translate (GdkDisplay *display,
   MINMAXINFO *mmi;
   HWND hwnd;
   HCURSOR hcursor;
-  CHARSETINFO charset_info;
   BYTE key_state[256];
   HIMC himc;
 
