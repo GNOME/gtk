@@ -117,6 +117,7 @@ enum {
   SHOW_HELP,
   ACCEL_CLOSURES_CHANGED,
   SCREEN_CHANGED,
+  CAN_ACTIVATE_ACCEL,
   LAST_SIGNAL
 };
 
@@ -218,7 +219,9 @@ static void             gtk_widget_invalidate_widget_windows    (GtkWidget      
 								 GdkRegion        *region);
 static GdkScreen *      gtk_widget_get_screen_unchecked         (GtkWidget        *widget);
 static void		gtk_widget_queue_shallow_draw		(GtkWidget        *widget);
-
+static gboolean         gtk_widget_real_can_activate_accel      (GtkWidget *widget,
+                                                                 guint      signal_id);
+     
 static void gtk_widget_set_usize_internal (GtkWidget *widget,
 					   gint       width,
 					   gint       height);
@@ -388,6 +391,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   klass->drag_drop = NULL;
   klass->drag_data_received = NULL;
   klass->screen_changed = NULL;
+  klass->can_activate_accel = gtk_widget_real_can_activate_accel;
 
   klass->show_help = gtk_widget_real_show_help;
   
@@ -1309,7 +1313,15 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		  _gtk_marshal_VOID__OBJECT,
 		  G_TYPE_NONE, 1,
 		  GDK_TYPE_SCREEN);
-  
+  widget_signals[CAN_ACTIVATE_ACCEL] =
+    g_signal_new ("can_activate_accel",
+		  G_TYPE_FROM_CLASS (gobject_class),
+		  G_SIGNAL_RUN_LAST,
+		  G_STRUCT_OFFSET (GtkWidgetClass, can_activate_accel),
+                  _gtk_boolean_handled_accumulator, NULL,
+		  _gtk_marshal_BOOLEAN__UINT,
+                  G_TYPE_BOOLEAN, 1, G_TYPE_UINT);
+
   binding_set = gtk_binding_set_by_class (klass);
   gtk_binding_entry_add_signal (binding_set, GDK_F10, GDK_SHIFT_MASK,
                                 "popup_menu", 0);
@@ -2884,6 +2896,24 @@ gtk_widget_real_size_allocate (GtkWidget     *widget,
      }
 }
 
+static gboolean
+gtk_widget_real_can_activate_accel (GtkWidget *widget,
+                                    guint      signal_id)
+{
+  /* widgets must be onscreen for accels to take effect */
+  return GTK_WIDGET_IS_SENSITIVE (widget) && GTK_WIDGET_DRAWABLE (widget) && gdk_window_is_viewable (widget->window);
+}
+
+gboolean
+gtk_widget_can_activate_accel (GtkWidget *widget,
+                               guint      signal_id)
+{
+  gboolean can_activate = FALSE;
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
+  g_signal_emit (widget, widget_signals[CAN_ACTIVATE_ACCEL], 0, signal_id, &can_activate);
+  return can_activate;
+}
+
 typedef struct {
   GClosure   closure;
   guint      signal_id;
@@ -2898,12 +2928,13 @@ closure_accel_activate (GClosure     *closure,
 			gpointer      marshal_data)
 {
   AccelClosure *aclosure = (AccelClosure*) closure;
+  gboolean can_activate = gtk_widget_can_activate_accel (closure->data, aclosure->signal_id);
 
-  if (GTK_WIDGET_IS_SENSITIVE (closure->data))
+  if (can_activate)
     g_signal_emit (closure->data, aclosure->signal_id, 0);
 
-  /* we handled the accelerator */
-  g_value_set_boolean (return_value, TRUE);
+  /* wether accelerator was handled */
+  g_value_set_boolean (return_value, can_activate);
 }
 
 static void

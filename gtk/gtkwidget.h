@@ -399,12 +399,14 @@ struct _GtkWidgetClass
   
   /* accessibility support 
    */
-  AtkObject*   (* get_accessible)  (GtkWidget          *widget);
+  AtkObject*   (*get_accessible)     (GtkWidget *widget);
 
-  void (* screen_changed) (GtkWidget *widget,
-			   GdkScreen *previous_screen);
+  void         (*screen_changed)     (GtkWidget *widget,
+                                      GdkScreen *previous_screen);
+  gboolean     (*can_activate_accel) (GtkWidget *widget,
+                                      guint      signal_id);
+
   /* Padding for future expansion */
-  void (*_gtk_reserved1) (void);
   void (*_gtk_reserved2) (void);
   void (*_gtk_reserved3) (void);
   void (*_gtk_reserved4) (void);
@@ -503,6 +505,8 @@ void       gtk_widget_set_accel_path      (GtkWidget           *widget,
 const gchar* _gtk_widget_get_accel_path   (GtkWidget           *widget,
 					   gboolean	       *locked);
 GList*     gtk_widget_list_accel_closures (GtkWidget	       *widget);
+gboolean   gtk_widget_can_activate_accel  (GtkWidget           *widget,
+                                           guint                signal_id);
 gboolean   gtk_widget_mnemonic_activate   (GtkWidget           *widget,
 					   gboolean             group_cycling);
 gboolean   gtk_widget_event		  (GtkWidget	       *widget,

@@ -118,6 +118,11 @@ gboolean       gtk_accel_group_disconnect	  (GtkAccelGroup  *accel_group,
 gboolean       gtk_accel_group_disconnect_key	  (GtkAccelGroup  *accel_group,
 						   guint	   accel_key,
 						   GdkModifierType accel_mods);
+gboolean       gtk_accel_group_activate           (GtkAccelGroup   *accel_group,
+                                                   GQuark	   accel_quark,
+                                                   GObject	  *acceleratable,
+                                                   guint	   accel_key,
+                                                   GdkModifierType accel_mods);
 
 
 /* --- GtkActivatable glue --- */

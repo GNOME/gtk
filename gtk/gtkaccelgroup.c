@@ -718,16 +718,17 @@ gtk_accel_group_from_accel_closure (GClosure *closure)
 }
 
 gboolean
-_gtk_accel_group_activate (GtkAccelGroup  *accel_group,
-			   GQuark	   accel_quark,
-			   GObject	  *acceleratable,
-			   guint	   accel_key,
-			   GdkModifierType accel_mods)
+gtk_accel_group_activate (GtkAccelGroup   *accel_group,
+                          GQuark	   accel_quark,
+                          GObject	  *acceleratable,
+                          guint	           accel_key,
+                          GdkModifierType  accel_mods)
 {
   gboolean was_handled;
 
   g_return_val_if_fail (GTK_IS_ACCEL_GROUP (accel_group), FALSE);
-
+  g_return_val_if_fail (G_IS_OBJECT (acceleratable), FALSE);
+  
   was_handled = FALSE;
   g_signal_emit (accel_group, signal_accel_activate, accel_quark,
 		 acceleratable, accel_key, accel_mods, &was_handled);
@@ -767,7 +768,7 @@ gtk_accel_groups_activate (GObject	  *object,
       g_free (accel_name);
       
       for (slist = gtk_accel_groups_from_object (object); slist; slist = slist->next)
-	if (_gtk_accel_group_activate (slist->data, accel_quark, object, accel_key, accel_mods))
+	if (gtk_accel_group_activate (slist->data, accel_quark, object, accel_key, accel_mods))
 	  return TRUE;
     }
   

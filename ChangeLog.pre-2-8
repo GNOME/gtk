@@ -1,3 +1,17 @@
+Thu Nov 27 16:19:03 2003  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkmenu.c: allow accel activation depending on sensitivity
+	and the attach widget.
+
+	* gtk/gtkmenuitem.c: allow accel activation depending on visibility,
+	sensitivity and the parent menu.
+
+	* gtk/gtkwidget.[hc]: introduced ::can-activate-accel signal which
+	checks whether accelerators may activate a widget. the default handler
+	demands the widget be sensitive and visible+viewable.
+
+	* gtk/gtkaccelgroup.[hc]: export gtk_accel_group_activate().
+
 Tue Nov 25 00:10:05 2003  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkuimanager.c (update_node): Don't show accelerators in

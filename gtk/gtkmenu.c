@@ -215,6 +215,8 @@ static void gtk_menu_update_title   (GtkMenu           *menu);
 static void       menu_grab_transfer_window_destroy (GtkMenu *menu);
 static GdkWindow *menu_grab_transfer_window_get     (GtkMenu *menu);
 
+static gboolean gtk_menu_real_can_activate_accel (GtkWidget *widget,
+                                                  guint      signal_id);
 static void _gtk_menu_refresh_accel_paths (GtkMenu *menu,
 					   gboolean group_changed);
 
@@ -318,6 +320,7 @@ gtk_menu_class_init (GtkMenuClass *class)
   widget_class->motion_notify_event = gtk_menu_motion_notify;
   widget_class->style_set = gtk_menu_style_set;
   widget_class->focus = gtk_menu_focus;
+  widget_class->can_activate_accel = gtk_menu_real_can_activate_accel;
 
   container_class->remove = gtk_menu_remove;
   container_class->get_child_property = gtk_menu_get_child_property;
@@ -1414,6 +1417,19 @@ gtk_menu_get_accel_group (GtkMenu *menu)
   g_return_val_if_fail (GTK_IS_MENU (menu), NULL);
 
   return menu->accel_group;
+}
+
+static gboolean
+gtk_menu_real_can_activate_accel (GtkWidget *widget,
+                                  guint      signal_id)
+{
+  /* menu items chain here to figure whether they can activate their accelerators.
+   * despite ordinary widgets, menus allow accel activation even if invisible
+   * since that's the usual case for submenus/popup-menus. however, the state
+   * of the attch widget affects "activeness" of the menu.
+   */
+  GtkWidget *awidget = gtk_menu_get_attach_widget (GTK_MENU (widget));
+  return awidget ? gtk_widget_can_activate_accel (awidget, signal_id) : GTK_WIDGET_IS_SENSITIVE (widget);
 }
 
 /**
