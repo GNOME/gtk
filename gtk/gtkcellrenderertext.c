@@ -164,7 +164,7 @@ gtk_cell_renderer_text_class_init (GtkCellRendererTextClass *class)
                                                         NULL,
                                                         G_PARAM_WRITABLE));
 
-  g_object_class_install_property (gobject_class,
+  g_object_class_install_property (object_class,
 				   PROP_ATTRIBUTES,
 				   g_param_spec_boxed ("attributes",
 						       _("Attributes"),
