@@ -66,11 +66,16 @@ struct _GtkTreeViewColumn
   GtkCellEditable *editable_widget;
   gfloat xalign;
   guint property_changed_signal;
-
   gint spacing;
-  gint fixed_width;
-  gint width;
+
+  /* Sizing fields */
+  /* see gtk+/doc/tree-column-sizing.txt for more information on them */
+  GtkTreeViewColumnSizing column_type;
   gint requested_width;
+  gint button_request;
+  gint resized_width;
+  gint width;
+  gint fixed_width;
   gint min_width;
   gint max_width;
 
@@ -80,7 +85,6 @@ struct _GtkTreeViewColumn
 
   gchar *title;
   GList *cell_list;
-  GtkTreeViewColumnSizing column_type;
 
   /* Sorting */
   guint sort_clicked_signal;
@@ -96,6 +100,7 @@ struct _GtkTreeViewColumn
   guint show_sort_indicator : 1;
   guint maybe_reordered     : 1;
   guint reorderable         : 1;
+  guint use_resized_width   : 1;
 };
 
 struct _GtkTreeViewColumnClass

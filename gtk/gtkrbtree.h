@@ -37,8 +37,16 @@ typedef enum
   GTK_RBNODE_IS_SEMI_COLLAPSED = 1 << 5,
   GTK_RBNODE_IS_SEMI_EXPANDED = 1 << 6,
   GTK_RBNODE_INVALID = 1 << 7,
-  GTK_RBNODE_DESCENDANTS_INVALID = 1 << 8,
-  GTK_RBNODE_NON_COLORS = GTK_RBNODE_IS_PARENT | GTK_RBNODE_IS_SELECTED | GTK_RBNODE_IS_PRELIT | GTK_RBNODE_IS_SEMI_COLLAPSED | GTK_RBNODE_IS_SEMI_EXPANDED | GTK_RBNODE_INVALID | GTK_RBNODE_DESCENDANTS_INVALID
+  GTK_RBNODE_COLUMN_INVALID = 1 << 8,
+  GTK_RBNODE_DESCENDANTS_INVALID = 1 << 9,
+  GTK_RBNODE_NON_COLORS = GTK_RBNODE_IS_PARENT |
+  			  GTK_RBNODE_IS_SELECTED |
+  			  GTK_RBNODE_IS_PRELIT |
+                          GTK_RBNODE_IS_SEMI_COLLAPSED |
+                          GTK_RBNODE_IS_SEMI_EXPANDED |
+                          GTK_RBNODE_INVALID |
+                          GTK_RBNODE_COLUMN_INVALID |
+                          GTK_RBNODE_DESCENDANTS_INVALID
 } GtkRBNodeColor;
 
 typedef struct _GtkRBTree GtkRBTree;
@@ -93,6 +101,7 @@ struct _GtkRBNode
   GtkRBTree *children;
 };
 
+
 #define GTK_RBNODE_GET_COLOR(node)		(node?(((node->flags&GTK_RBNODE_RED)==GTK_RBNODE_RED)?GTK_RBNODE_RED:GTK_RBNODE_BLACK):GTK_RBNODE_BLACK)
 #define GTK_RBNODE_SET_COLOR(node,color) 	if((node->flags&color)!=color)node->flags=node->flags^(GTK_RBNODE_RED|GTK_RBNODE_BLACK)
 #define GTK_RBNODE_GET_HEIGHT(node) 		(node->offset-(node->left->offset+node->right->offset+(node->children?node->children->root->offset:0)))
@@ -109,10 +118,12 @@ void       _gtk_rbtree_remove           (GtkRBTree              *tree);
 void       _gtk_rbtree_destroy          (GtkRBTree              *tree);
 GtkRBNode *_gtk_rbtree_insert_before    (GtkRBTree              *tree,
 					 GtkRBNode              *node,
-					 gint                    height);
+					 gint                    height,
+					 gboolean                valid);
 GtkRBNode *_gtk_rbtree_insert_after     (GtkRBTree              *tree,
 					 GtkRBNode              *node,
-					 gint                    height);
+					 gint                    height,
+					 gboolean                valid);
 void       _gtk_rbtree_remove_node      (GtkRBTree              *tree,
 					 GtkRBNode              *node);
 void       _gtk_rbtree_reorder          (GtkRBTree              *tree,
@@ -127,6 +138,7 @@ void       _gtk_rbtree_node_mark_invalid(GtkRBTree              *tree,
 					 GtkRBNode              *node);
 void       _gtk_rbtree_node_mark_valid  (GtkRBTree              *tree,
 					 GtkRBNode              *node);
+void       _gtk_rbtree_column_invalid   (GtkRBTree              *tree);
 gint       _gtk_rbtree_node_find_offset (GtkRBTree              *tree,
 					 GtkRBNode              *node);
 gint       _gtk_rbtree_node_find_parity (GtkRBTree              *tree,

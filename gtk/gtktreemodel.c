@@ -1093,6 +1093,16 @@ gtk_tree_model_row_has_child_toggled (GtkTreeModel *tree_model,
   g_signal_emit_by_name (tree_model, "row_has_child_toggled", path, iter);
 }
 
+/**
+ * gtk_tree_model_row_deleted:
+ * @tree_model: A #GtkTreeModel
+ * @path: A #GtkTreePath pointing to the previous location of the deleted row.
+ * 
+ * Emits the "row_deleted" signal on @tree_model.  This should be called by
+ * models after a row has been removed.  The location pointed to by @path should
+ * be the location that the row previously was at.  It may not be a valid
+ * location anymore.
+ **/
 void
 gtk_tree_model_row_deleted (GtkTreeModel *tree_model,
 			    GtkTreePath  *path)
