@@ -1,3 +1,22 @@
+Tue Apr  6 12:24:21 1999  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkdnd.c (gtk_drag_dest_leave): Only unhighlight
+	when we've previously highlighted.
+
+	* gtk/gtkdnd.c (gtk_drag_dest_handle_event): Don't
+	emit two "drag_leave" signals for Motif drops.
+
+	* gtk/gtkdnd.c (gtk_drag_source_handle_event): Send
+	back the correct status messages when dropping from
+	Motif onto a proxy window that is rejecting the
+	drop.
+
+	* gdk/gdkdnd.c (gdk_drag_motion): Separate out the
+	dest_xid field into two fields - one for the window
+	to send in messages, one to indicate the last looked
+	up window for caching purposes. This is needed, so
+	that Leave messages get the correct window.
+
 Mon Apr  5 17:11:57 1999  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/gdkpixmap.c (_gdk_pixmap_create_from_xpm): Check 

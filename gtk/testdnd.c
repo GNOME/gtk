@@ -274,12 +274,14 @@ gboolean have_drag;
 
 enum {
   TARGET_STRING,
-  TARGET_ROOTWIN
+  TARGET_ROOTWIN,
+  TARGET_URL
 };
 
 static GtkTargetEntry target_table[] = {
   { "STRING",     0, TARGET_STRING },
   { "text/plain", 0, TARGET_STRING },
+  { "text/uri-list", 0, TARGET_URL },
   { "application/x-rootwin-drop", 0, TARGET_ROOTWIN }
 };
 
@@ -390,6 +392,10 @@ source_drag_data_get  (GtkWidget          *widget,
 {
   if (info == TARGET_ROOTWIN)
     g_print ("I was dropped on the rootwin\n");
+  else if (info == TARGET_URL)
+    gtk_selection_data_set (selection_data,
+			    selection_data->target,
+			    8, "file:///home/otaylor/images/weave.png", 37);
   else
     gtk_selection_data_set (selection_data,
 			    selection_data->target,

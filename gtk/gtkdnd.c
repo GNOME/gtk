@@ -953,7 +953,17 @@ gtk_drag_dest_handle_event (GtkWidget *toplevel,
 	gint tx, ty;
 
 	if (event->type == GDK_DROP_START)
-	  info->dropped = TRUE;
+	  {
+	    info->dropped = TRUE;
+	    /* We send a leave here so that the widget unhighlights
+	     * properly.
+	     */
+	    if (info->widget)
+	      {
+		gtk_drag_dest_leave (info->widget, context, event->dnd.time);
+		info->widget = NULL;
+	      }
+	  }
 
 	gdk_window_get_origin (toplevel->window, &tx, &ty);
 
@@ -969,11 +979,7 @@ gtk_drag_dest_handle_event (GtkWidget *toplevel,
 	
 	gtk_drag_find_widget (toplevel, &data);
 
-	/* We send a leave here so that the widget unhighlights
-	 * properly
-	 */
-	if (info->widget &&
-	    ((event->type == GDK_DROP_START) || (!data.found)))
+	if (info->widget && !data.found)
 	  {
 	    gtk_drag_dest_leave (info->widget, context, event->dnd.time);
 	    info->widget = NULL;
@@ -986,7 +992,7 @@ gtk_drag_dest_handle_event (GtkWidget *toplevel,
 	    if (!data.found)
 	      gdk_drag_status (context, 0, event->dnd.time);
 	  }
-	else if (event->type == GDK_DROP_START)
+	else if (event->type == GDK_DROP_START && !info->proxy_source)
 	  {
 	    gdk_drop_reply (context, data.found, event->dnd.time);
             if ((context->protocol == GDK_DRAG_PROTO_MOTIF) && !data.found)
@@ -1332,7 +1338,7 @@ gtk_drag_dest_leave (GtkWidget      *widget,
     }
   else
     {
-      if (site->flags & GTK_DEST_DEFAULT_HIGHLIGHT)
+      if ((site->flags & GTK_DEST_DEFAULT_HIGHLIGHT) && site->have_drag)
 	gtk_drag_unhighlight (widget);
 
       if (!(site->flags & GTK_DEST_DEFAULT_MOTION) || site->have_drag)
@@ -2032,8 +2038,14 @@ gtk_drag_source_handle_event (GtkWidget *widget,
 	      {
 		if (info->proxy_dest->proxy_drop_wait)
 		  {
+		    gboolean result = context->action != 0;
+		    
 		    /* Aha - we can finally pass the MOTIF DROP on... */
-		    gdk_drag_drop (info->context, info->proxy_dest->proxy_drop_time);
+		    gdk_drop_reply (info->proxy_dest->context, result, info->proxy_dest->proxy_drop_time);
+		    if (result)
+		      gdk_drag_drop (info->context, info->proxy_dest->proxy_drop_time);
+		    else
+		      gtk_drag_finish (info->proxy_dest->context, FALSE, FALSE, info->proxy_dest->proxy_drop_time);
 		  }
 		else
 		  {
