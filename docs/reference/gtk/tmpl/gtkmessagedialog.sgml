@@ -144,3 +144,23 @@ then call gtk_dialog_add_buttons().
 @str: 
 
 
+<!-- ##### FUNCTION gtk_message_dialog_format_secondary_text ##### -->
+<para>
+
+</para>
+
+@message_dialog: 
+@message_format: 
+@Varargs: 
+
+
+<!-- ##### FUNCTION gtk_message_dialog_format_secondary_markup ##### -->
+<para>
+
+</para>
+
+@message_dialog: 
+@message_format: 
+@Varargs: 
+
+

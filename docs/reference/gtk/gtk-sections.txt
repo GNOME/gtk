@@ -2190,6 +2190,8 @@ GtkButtonsType
 gtk_message_dialog_new
 gtk_message_dialog_new_with_markup
 gtk_message_dialog_set_markup
+gtk_message_dialog_format_secondary_text
+gtk_message_dialog_format_secondary_markup
 <SUBSECTION Standard>
 GTK_MESSAGE_DIALOG
 GTK_IS_MESSAGE_DIALOG

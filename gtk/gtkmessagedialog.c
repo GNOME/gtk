@@ -1,3 +1,4 @@
+/* -*- Mode: C; tab-width: 8; indent-tabs-mode: t; c-basic-offset: 2 -*- */
 /* GTK - The GIMP Toolkit
  * Copyright (C) 2000 Red Hat, Inc.
  *
@@ -35,6 +36,17 @@
 #include "gtkintl.h"
 #include <string.h>
 
+#define GTK_MESSAGE_DIALOG_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), GTK_TYPE_MESSAGE_DIALOG, GtkMessageDialogPrivate))
+
+typedef struct _GtkMessageDialogPrivate GtkMessageDialogPrivate;
+
+struct _GtkMessageDialogPrivate
+{
+  GtkWidget *secondary_label;
+  gboolean   has_primary_markup;
+  gboolean   has_secondary_text;
+};
+
 static void gtk_message_dialog_class_init (GtkMessageDialogClass *klass);
 static void gtk_message_dialog_init       (GtkMessageDialog      *dialog);
 static void gtk_message_dialog_style_set  (GtkWidget             *widget,
@@ -51,6 +63,9 @@ static void gtk_message_dialog_get_property (GObject          *object,
 static void gtk_message_dialog_add_buttons  (GtkMessageDialog *message_dialog,
 					     GtkButtonsType    buttons);
 
+static void gtk_message_dialog_font_size_change (GtkWidget *widget,
+						 GtkStyle  *prev_style,
+						 gpointer   data);
 
 enum {
   PROP_0,
@@ -109,7 +124,7 @@ gtk_message_dialog_class_init (GtkMessageDialogClass *class)
                                                              P_("Width of border around the label and image in the message dialog"),
                                                              0,
                                                              G_MAXINT,
-                                                             8,
+                                                             12,
                                                              G_PARAM_READABLE));
   /**
    * GtkMessageDialog::use_separator
@@ -141,29 +156,49 @@ gtk_message_dialog_class_init (GtkMessageDialogClass *class)
 						      GTK_TYPE_BUTTONS_TYPE,
                                                       GTK_BUTTONS_NONE,
                                                       G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY));
-
+  g_type_class_add_private (gobject_class,
+			    sizeof (GtkMessageDialogPrivate));
 }
 
 static void
 gtk_message_dialog_init (GtkMessageDialog *dialog)
 {
-  GtkWidget *hbox;
+  GtkWidget *hbox, *vbox;
+  GtkMessageDialogPrivate *priv;
+
+  priv = GTK_MESSAGE_DIALOG_GET_PRIVATE (dialog);
 
   gtk_window_set_resizable (GTK_WINDOW (dialog), FALSE);
-  
+
+  priv->has_primary_markup = FALSE;
+  priv->has_secondary_text = FALSE;
+  priv->secondary_label = gtk_label_new (NULL);
+
   dialog->label = gtk_label_new (NULL);
   dialog->image = gtk_image_new_from_stock (NULL, GTK_ICON_SIZE_DIALOG);
   gtk_misc_set_alignment (GTK_MISC (dialog->image), 0.5, 0.0);
   
-  gtk_label_set_line_wrap (GTK_LABEL (dialog->label), TRUE);
+  gtk_label_set_line_wrap  (GTK_LABEL (dialog->label), TRUE);
   gtk_label_set_selectable (GTK_LABEL (dialog->label), TRUE);
+  gtk_misc_set_alignment   (GTK_MISC  (dialog->label), 0.0, 0.0);
   
-  hbox = gtk_hbox_new (FALSE, 6);
+  gtk_label_set_line_wrap  (GTK_LABEL (priv->secondary_label), TRUE);
+  gtk_label_set_selectable (GTK_LABEL (priv->secondary_label), TRUE);
+  gtk_misc_set_alignment   (GTK_MISC  (priv->secondary_label), 0.0, 0.0);
+
+  hbox = gtk_hbox_new (FALSE, 12);
+  vbox = gtk_vbox_new (FALSE, 12);
+
+  gtk_box_pack_start (GTK_BOX (vbox), dialog->label,
+                      FALSE, FALSE, 0);
+
+  gtk_box_pack_start (GTK_BOX (vbox), priv->secondary_label,
+                      TRUE, TRUE, 0);
 
   gtk_box_pack_start (GTK_BOX (hbox), dialog->image,
                       FALSE, FALSE, 0);
 
-  gtk_box_pack_start (GTK_BOX (hbox), dialog->label,
+  gtk_box_pack_start (GTK_BOX (hbox), vbox,
                       TRUE, TRUE, 0);
 
   gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->vbox),
@@ -173,6 +208,9 @@ gtk_message_dialog_init (GtkMessageDialog *dialog)
   gtk_widget_show_all (hbox);
 
   _gtk_dialog_set_ignore_separator (GTK_DIALOG (dialog), TRUE);
+
+  g_signal_connect (G_OBJECT (dialog), "style-set",
+		    G_CALLBACK (gtk_message_dialog_font_size_change), NULL);
 }
 
 static GtkMessageType
@@ -205,6 +243,31 @@ gtk_message_dialog_get_message_type (GtkMessageDialog *dialog)
 }
 
 static void
+setup_primary_label_font (GtkMessageDialog *dialog)
+{
+  gint size;
+  PangoFontDescription *font_desc;
+  GtkMessageDialogPrivate *priv;
+
+  priv = GTK_MESSAGE_DIALOG_GET_PRIVATE (dialog);
+
+  if (priv->has_primary_markup)
+    return;
+
+  /* unset the font settings */
+  gtk_widget_modify_font (dialog->label, NULL);
+
+  if (priv->has_secondary_text)
+    {
+      size = pango_font_description_get_size (dialog->label->style->font_desc);
+      font_desc = pango_font_description_new ();
+      pango_font_description_set_weight (font_desc, PANGO_WEIGHT_BOLD);
+      pango_font_description_set_size (font_desc, size * PANGO_SCALE_LARGE);
+      gtk_widget_modify_font (dialog->label, font_desc);
+    }
+}
+
+static void
 setup_type (GtkMessageDialog *dialog,
 	    GtkMessageType    type)
 {
@@ -228,7 +291,7 @@ setup_type (GtkMessageDialog *dialog,
     case GTK_MESSAGE_ERROR:
       stock_id = GTK_STOCK_DIALOG_ERROR;
       break;
-      
+
     default:
       g_warning ("Unknown GtkMessageType %d", type);
       break;
@@ -293,6 +356,14 @@ gtk_message_dialog_get_property (GObject     *object,
     }
 }
 
+static void
+gtk_message_dialog_font_size_change (GtkWidget *widget,
+				     GtkStyle  *prev_style,
+				     gpointer   data)
+{
+  setup_primary_label_font (GTK_MESSAGE_DIALOG (widget));
+}
+
 
 /**
  * gtk_message_dialog_new:
@@ -343,11 +414,10 @@ gtk_message_dialog_new (GtkWindow     *parent,
       va_start (args, message_format);
       msg = g_strdup_vprintf (message_format, args);
       va_end (args);
-      
-      
+
       gtk_label_set_text (GTK_LABEL (GTK_MESSAGE_DIALOG (widget)->label),
                           msg);
-      
+
       g_free (msg);
     }
 
@@ -416,8 +486,8 @@ gtk_message_dialog_new_with_markup (GtkWindow     *parent,
                                     ...)
 {
   GtkWidget *widget;
-  gchar* msg = 0;
   va_list args;
+  gchar *msg = NULL;
 
   g_return_val_if_fail (parent == NULL || GTK_IS_WINDOW (parent), NULL);
 
@@ -450,11 +520,115 @@ gtk_message_dialog_new_with_markup (GtkWindow     *parent,
  **/
 void
 gtk_message_dialog_set_markup (GtkMessageDialog *message_dialog,
-			       const gchar      *str)
+                               const gchar      *str)
 {
+  GtkMessageDialogPrivate *priv;
+
   g_return_if_fail (GTK_IS_MESSAGE_DIALOG (message_dialog));
-  
+
+  priv = GTK_MESSAGE_DIALOG_GET_PRIVATE (message_dialog);
+  priv->has_primary_markup = TRUE;
   gtk_label_set_markup (GTK_LABEL (message_dialog->label), str);
+}
+
+/**
+ * gtk_message_dialog_format_secondary_text:
+ * @message_dialog: a #GtkMessageDialog
+ * @message_format: printf()-style format string, or %NULL
+ * @Varargs: arguments for @message_format
+ * 
+ * Sets the secondary text of the message dialog to be @message_format 
+ * (with printf()-style).
+ *
+ * Note that setting a secondary text makes the primary text become
+ * bold, unless you have provided explicit markup.
+ *
+ * Since: 2.6
+ **/
+void
+gtk_message_dialog_format_secondary_text (GtkMessageDialog *message_dialog,
+                                          const gchar      *message_format,
+                                          ...)
+{
+  va_list args;
+  gchar *msg = NULL;
+  GtkMessageDialogPrivate *priv;
+
+  g_return_if_fail (GTK_IS_MESSAGE_DIALOG (message_dialog));
+
+  priv = GTK_MESSAGE_DIALOG_GET_PRIVATE (message_dialog);
+
+  if (message_format)
+    {
+      priv->has_secondary_text = TRUE;
+
+      va_start (args, message_format);
+      msg = g_strdup_vprintf (message_format, args);
+      va_end (args);
+
+      gtk_widget_show (priv->secondary_label);
+      gtk_label_set_text (GTK_LABEL (priv->secondary_label), msg);
+
+      g_free (msg);
+    }
+  else
+    {
+      priv->has_secondary_text = FALSE;
+      gtk_widget_hide (priv->secondary_label);
+    }
+
+  setup_primary_label_font (message_dialog);
+}
+
+/**
+ * gtk_message_dialog_format_secondary_markup:
+ * @message_dialog: a #GtkMessageDialog
+ * @message_format: printf()-style markup string (see 
+     <link linkend="PangoMarkupFormat">Pango markup format</link>), or %NULL
+ * @Varargs: arguments for @message_format
+ * 
+ * Sets the secondary text of the message dialog to be @message_format (with 
+ * printf()-style), which is marked up with the 
+ * <link linkend="PangoMarkupFormat">Pango text markup language</link>.
+ *
+ * Note that setting a secondary text makes the primary text become
+ * bold, unless you have provided explicit markup.
+ *
+ * Since: 2.6
+ **/
+void
+gtk_message_dialog_format_secondary_markup (GtkMessageDialog *message_dialog,
+                                            const gchar      *message_format,
+                                            ...)
+{
+  va_list args;
+  gchar *msg = NULL;
+  GtkMessageDialogPrivate *priv;
+
+  g_return_if_fail (GTK_IS_MESSAGE_DIALOG (message_dialog));
+
+  priv = GTK_MESSAGE_DIALOG_GET_PRIVATE (message_dialog);
+
+  if (message_format)
+    {
+      priv->has_secondary_text = TRUE;
+
+      va_start (args, message_format);
+      msg = g_strdup_vprintf (message_format, args);
+      va_end (args);
+
+      gtk_widget_show (priv->secondary_label);
+      gtk_label_set_markup (GTK_LABEL (priv->secondary_label), msg);
+
+      g_free (msg);
+    }
+  else
+    {
+      priv->has_secondary_text = FALSE;
+      gtk_widget_hide (priv->secondary_label);
+    }
+
+  setup_primary_label_font (message_dialog);
 }
 
 static void

@@ -1,3 +1,18 @@
+2004-10-25  Carlos Garnacho Parro  <carlosg@gnome.org>
+
+	Fix for #118764, David Bordoley:
+	
+	* gtk/gtkmessagedialog.[ch]
+	(gtk_message_dialog_format_secondary_text),
+	(gtk_message_dialog_format_secondary_format): API additions to
+	create HIG-like dialogs
+
+	* demos/gtk-demo/dialog.c: Use the new API in the example
+
+	* docs/reference/gtk/gtk-sections.txt:
+	* docs/reference/gtk/tmpl/gtkmessagedialog.sgml: documented API
+	additions
+
 2004-10-25  James M. Cape  <jcape@ignore-your.tv>
 
 	Rework of GtkFileChooserButton, some cleanups. Fixes #154388,
@@ -37,6 +52,7 @@
 	* gtk/.cvsignore: Ignore gtk-update-icon-cache.
 	* tests/.cvsignore: Ignore testimage.
 
+>>>>>>> 1.5960
 2004-10-25  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkcellrenderercombo.c (find_text): Don't leak text. (#156325,

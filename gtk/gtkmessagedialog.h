@@ -1,3 +1,4 @@
+/* -*- Mode: C; tab-width: 8; indent-tabs-mode: t; c-basic-offset: 2 -*- */
 /* GTK - The GIMP Toolkit
  * Copyright (C) 2000 Red Hat, Inc.
  *
@@ -58,7 +59,6 @@ typedef enum
 #define GTK_IS_MESSAGE_DIALOG_CLASS(klass)       (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_MESSAGE_DIALOG))
 #define GTK_MESSAGE_DIALOG_GET_CLASS(obj)        (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_MESSAGE_DIALOG, GtkMessageDialogClass))
 
-
 typedef struct _GtkMessageDialog        GtkMessageDialog;
 typedef struct _GtkMessageDialogClass   GtkMessageDialogClass;
 
@@ -99,9 +99,16 @@ GtkWidget* gtk_message_dialog_new_with_markup   (GtkWindow      *parent,
                                                  const gchar    *message_format,
                                                  ...) G_GNUC_PRINTF (5, 6);
 
-
 void       gtk_message_dialog_set_markup  (GtkMessageDialog *message_dialog,
-					   const gchar      *str);
+                                           const gchar      *str);
+
+void       gtk_message_dialog_format_secondary_text (GtkMessageDialog *message_dialog,
+                                                     const gchar      *message_format,
+                                                     ...) G_GNUC_PRINTF (2, 3);
+
+void       gtk_message_dialog_format_secondary_markup (GtkMessageDialog *message_dialog,
+                                                       const gchar      *message_format,
+                                                       ...) G_GNUC_PRINTF (2, 3);
 
 #ifdef __cplusplus
 }
