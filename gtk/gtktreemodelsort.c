@@ -485,12 +485,9 @@ gtk_tree_model_sort_row_changed (GtkTreeModel *s_model,
 
   for (i = 0; i < level->array->len; i++)
     if (elt->offset == g_array_index (level->array, SortElt, i).offset)
-      index = i;
+      old_index = i;
 
   memcpy (&tmp, elt, sizeof (SortElt));
-  g_array_remove_index (level->array, index);
-
-  old_index = index;
 
   if (GTK_TREE_MODEL_SORT_CACHE_CHILD_ITERS (tree_model_sort))
     index = gtk_tree_model_sort_level_find_insert (tree_model_sort,
@@ -503,7 +500,20 @@ gtk_tree_model_sort_row_changed (GtkTreeModel *s_model,
 						   &tmpiter,
 						   TRUE);
 
-  g_array_insert_val (level->array, index, tmp);
+  if (index < old_index)
+    {
+      g_memmove (level->array->data + ((index + 1)*sizeof (SortElt)),
+		 level->array->data + ((index)*sizeof (SortElt)),
+		 (old_index - index)* sizeof(SortElt));
+    }
+  else if (index > old_index)
+    {
+      g_memmove (level->array->data + ((old_index)*sizeof (SortElt)),
+		 level->array->data + ((old_index + 1)*sizeof (SortElt)),
+		 (index - old_index)* sizeof(SortElt));
+    }
+  memcpy (level->array->data + ((index)*sizeof (SortElt)),
+	  &tmp, sizeof (SortElt));
 
   for (i = 0; i < level->array->len; i++)
     if (g_array_index (level->array, SortElt, i).children)
@@ -1663,15 +1673,14 @@ gtk_tree_model_sort_level_find_insert (GtkTreeModelSort *tree_model_sort,
 				       GtkTreeIter      *iter,
 				       gboolean          skip_sort_elt)
 {
-  gint middle;
+  gint start, middle, end;
+  gint skip_index;
   gint cmp;
   SortElt *tmp_elt;
   GtkTreeIter tmp_iter;
 
   GtkTreeIterCompareFunc func;
   gpointer data;
-
-  GtkTreePath *path;
 
   if (tree_model_sort->sort_column_id != GTK_TREE_SORTABLE_DEFAULT_SORT_COLUMN_ID)
     {
@@ -1694,19 +1703,39 @@ gtk_tree_model_sort_level_find_insert (GtkTreeModelSort *tree_model_sort,
     }
 
   g_return_val_if_fail (func != NULL, 0);
-      
-  for (middle = 0; middle < level->array->len; middle++)
+
+  start = 0;
+  end = level->array->len;
+  if (skip_sort_elt)
     {
-      tmp_elt = &(g_array_index (level->array, SortElt, middle));
+      skip_index = SORT_ELT (iter->user_data2) - SORT_ELT (level->array->data);
+      end--;
+    }
+  else
+    skip_index = end;
 
-      if (!skip_sort_elt && SORT_ELT (iter->user_data2) == tmp_elt)
-	continue;
+  if (start == end)
+    return 0;
+  
+  while (start != end)
+    {
+      middle = (start + end) / 2;
 
-      path = gtk_tree_model_sort_elt_get_path (level, tmp_elt);
-      gtk_tree_model_get_iter (tree_model_sort->child_model,
-			       &tmp_iter, path);
-      gtk_tree_path_free (path);
-
+      if (middle < skip_index)
+	tmp_elt = &(g_array_index (level->array, SortElt, middle));
+      else
+	tmp_elt = &(g_array_index (level->array, SortElt, middle + 1));
+  
+      if (!GTK_TREE_MODEL_SORT_CACHE_CHILD_ITERS (tree_model_sort))
+	{
+	  GtkTreePath *path = gtk_tree_model_sort_elt_get_path (level, tmp_elt);
+	  gtk_tree_model_get_iter (tree_model_sort->child_model,
+				   &tmp_iter, path);
+	  gtk_tree_path_free (path);
+	}
+      else
+	tmp_iter = tmp_elt->iter;
+  
       if (tree_model_sort->order == GTK_SORT_ASCENDING)
 	cmp = (* func) (GTK_TREE_MODEL (tree_model_sort->child_model),
 			&tmp_iter, iter, data);
@@ -1714,11 +1743,16 @@ gtk_tree_model_sort_level_find_insert (GtkTreeModelSort *tree_model_sort,
 	cmp = (* func) (GTK_TREE_MODEL (tree_model_sort->child_model),
 			iter, &tmp_iter, data);
 
-      if (cmp > 0)
-	break;
+      if (cmp <= 0)
+	start = middle + 1;
+      else
+	end = middle;
     }
 
-  return middle;
+  if (cmp <= 0)
+    return middle + 1;
+  else
+    return middle;
 }
 
 static gboolean

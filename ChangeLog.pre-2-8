@@ -1,3 +1,10 @@
+Wed Jun  4 19:22:58 2003  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtktreemodelsort.c (gtk_tree_model_sort_level_find_insert):
+	Slightly modified patch from Owen Taylor <otaylor@redhat.com> to
+	improve the speed of inserting rows into an already sorted list,
+	#109292
+
 Wed Jun  4 19:24:28 2003  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/x11/gdkgc-x11.c gdk/x11/gdkprivate-x11.h: Keep
