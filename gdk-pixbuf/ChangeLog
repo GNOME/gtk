@@ -1,3 +1,8 @@
+Tue Sep  4 03:09:52 2001  Tim Janik  <timj@gtk.org>
+
+	* gdk-pixbuf-csource.1: new file, manual page for
+	the publically installed gdk-pixbuf-csource utility.
+
 Thu Aug 30 08:30:03 2001  Matthias Clasen  <matthiasc@poet.de>
 
 	* gdk-pixbuf-loader.c (gdk_pixbuf_loader_close): Propagate

@@ -531,6 +531,8 @@ types related to the text widget and how they work together.
 </para>
 
 @buffer: 
+@clipboard: 
+@override_location: 
 @default_editable: 
 <!-- # Unused Parameters # -->
 @time: 
@@ -543,6 +545,7 @@ types related to the text widget and how they work together.
 </para>
 
 @buffer: 
+@clipboard: 
 
 
 <!-- ##### FUNCTION gtk_text_buffer_cut_clipboard ##### -->
@@ -551,16 +554,7 @@ types related to the text widget and how they work together.
 </para>
 
 @buffer: 
-@default_editable: 
-
-
-<!-- ##### FUNCTION gtk_text_buffer_paste_primary ##### -->
-<para>
-
-</para>
-
-@buffer: 
-@override_location: 
+@clipboard: 
 @default_editable: 
 
 

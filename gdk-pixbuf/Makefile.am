@@ -201,6 +201,12 @@ bin_PROGRAMS = gdk-pixbuf-csource
 gdk_pixbuf_csource_SOURCES = gdk-pixbuf-csource.c
 gdk_pixbuf_csource_LDADD = $(LDADDS)
 
+#
+# manual pages to install
+#
+man_MANS = gdk-pixbuf-csource.1
+EXTRA_DIST += gdk-pixbuf-csource.1
+
 
 #
 # The GdkPixBuf library
