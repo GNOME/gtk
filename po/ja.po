@@ -10,14 +10,14 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ HEAD\n"
-"POT-Creation-Date: 2003-10-24 16:15-0400\n"
-"PO-Revision-Date: 2003-10-05 22:47+0900\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2003-10-28 00:28+0900\n"
+"PO-Revision-Date: 2003-10-28 00:30+0900\n"
 "Last-Translator: KAMAGASAKO Masatoshi <emerald@gnome.gr.jp>\n"
 "Language-Team: Japanese <gnome-translation@gnome.gr.jp>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Report-Msgid-Bugs-To: \n"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:147 gdk-pixbuf/gdk-pixbuf-io.c:712
 #: gdk-pixbuf/gdk-pixbuf-io.c:845
@@ -803,7 +803,7 @@ msgstr "ストック・アイコン"
 msgid "The stock icon displayed in widgets representing this action."
 msgstr "このアクションを表すウィジェットに表示されるストック・アイコンです。"
 
-#: gtk/gtkaction.c:221 gtk/gtktoolitem.c:169
+#: gtk/gtkaction.c:221 gtk/gtktoolitem.c:168
 msgid "Is important"
 msgstr "重要か"
 
@@ -2255,7 +2255,6 @@ msgid "Visible Window"
 msgstr "可視ウィンドウ"
 
 #: gtk/gtkeventbox.c:120
-#, fuzzy
 msgid ""
 "Whether the event box is visible, as opposed to invisible and only used to "
 "trap events."
@@ -2674,7 +2673,7 @@ msgid "_Gamma value"
 msgstr "ガンマ値(_G)"
 
 #: gtk/gtkhandlebox.c:202 gtk/gtkmenubar.c:156 gtk/gtkstatusbar.c:194
-#: gtk/gtktoolbar.c:514 gtk/gtkviewport.c:150
+#: gtk/gtktoolbar.c:506 gtk/gtkviewport.c:150
 msgid "Shadow type"
 msgstr "影の種類"
 
@@ -3123,7 +3122,7 @@ msgstr ""
 msgid "Style of bevel around the menubar"
 msgstr "メニューバーの周囲にあるベベルのスタイル"
 
-#: gtk/gtkmenubar.c:164 gtk/gtktoolbar.c:490
+#: gtk/gtkmenubar.c:164 gtk/gtktoolbar.c:482
 msgid "Internal padding"
 msgstr "内部パディング"
 
@@ -4278,7 +4277,6 @@ msgid "Right attachment"
 msgstr "右アタッチ"
 
 #: gtk/gtktable.c:210
-#, fuzzy
 msgid "The column number to attach the right side of a child widget to"
 msgstr "子ウィジェットの右側にアタッチする列番号"
 
@@ -4288,7 +4286,7 @@ msgstr "上アタッチ"
 
 #: gtk/gtktable.c:217
 msgid "The row number to attach the top of a child widget to"
-msgstr "子ウィジェットの上側にアタッチする列番号"
+msgstr "子ウィジェットの上側にアタッチする行番号"
 
 #: gtk/gtktable.c:223
 msgid "Bottom attachment"
@@ -4820,61 +4818,53 @@ msgid "Whether the item should be the same size as other homogeneous items"
 msgstr "すべての同種のアイテムを同じ大きさにするべきかどうか"
 
 #: gtk/gtktoolbar.c:473
-msgid "Pack End"
-msgstr "末尾を埋める"
-
-#: gtk/gtktoolbar.c:474
-msgid "Whether the item is positioned at the end of the toolbar"
-msgstr "アイテムがツールバーの末尾に位置すべきかどうか"
-
-#: gtk/gtktoolbar.c:481
 msgid "Spacer size"
 msgstr "スペーサのサイズ"
 
-#: gtk/gtktoolbar.c:482
+#: gtk/gtktoolbar.c:474
 msgid "Size of spacers"
 msgstr "スペーサの大きさ"
 
-#: gtk/gtktoolbar.c:491
+#: gtk/gtktoolbar.c:483
 msgid "Amount of border space between the toolbar shadow and the buttons"
 msgstr "ツールバーの影とボタンの間にある境界線の領域の大きさ"
 
-#: gtk/gtktoolbar.c:499
+#: gtk/gtktoolbar.c:491
 msgid "Space style"
 msgstr "スペースのスタイル"
 
-#: gtk/gtktoolbar.c:500
+#: gtk/gtktoolbar.c:492
 msgid "Whether spacers are vertical lines or just blank"
 msgstr "スペーサは垂直線か単なる空白か"
 
-#: gtk/gtktoolbar.c:507
+#: gtk/gtktoolbar.c:499
 msgid "Button relief"
 msgstr "ボタンのレリーフ"
 
-#: gtk/gtktoolbar.c:508
+#: gtk/gtktoolbar.c:500
 msgid "Type of bevel around toolbar buttons"
 msgstr "ツールバーボタンの周りの縁取りの種類"
 
-#: gtk/gtktoolbar.c:515
+#: gtk/gtktoolbar.c:507
 msgid "Style of bevel around the toolbar"
 msgstr "ツールバー周りのに縁取りのスタイル"
 
-#: gtk/gtktoolbar.c:521
+#: gtk/gtktoolbar.c:513
 msgid "Toolbar style"
 msgstr "ツールバーのスタイル"
 
-#: gtk/gtktoolbar.c:522
+#: gtk/gtktoolbar.c:514
 msgid ""
 "Whether default toolbars have text only, text and icons, icons only, etc."
 msgstr ""
 "デフォルトのツールバーはラベルのみか、ラベルとアイコンか、アイコンのみかどう"
 "か"
 
-#: gtk/gtktoolbar.c:528
+#: gtk/gtktoolbar.c:520
 msgid "Toolbar icon size"
 msgstr "ツールバーのアイコン・サイズ"
 
-#: gtk/gtktoolbar.c:529
+#: gtk/gtktoolbar.c:521
 msgid "Size of icons in default toolbars"
 msgstr "デフォルトのツールバーに配置するアイコンの大きさ"
 
@@ -4910,27 +4900,27 @@ msgstr "アイコン・ウィジェット"
 msgid "Icon widget to display in the item"
 msgstr "項目に表示されるアイコン・ウィジェット"
 
-#: gtk/gtktoolitem.c:155
+#: gtk/gtktoolitem.c:154
 msgid "Visible when horizontal"
 msgstr "水平なら表示"
 
-#: gtk/gtktoolitem.c:156
+#: gtk/gtktoolitem.c:155
 msgid ""
 "Whether the toolbar item is visible when the toolbar is in a horizontal "
 "orientation."
 msgstr "ツールバーが水平の場合、項目を表示するかどうか"
 
-#: gtk/gtktoolitem.c:162
+#: gtk/gtktoolitem.c:161
 msgid "Visible when vertical"
 msgstr "垂直なら表示"
 
-#: gtk/gtktoolitem.c:163
+#: gtk/gtktoolitem.c:162
 msgid ""
 "Whether the toolbar item is visible when the toolbar is in a vertical "
 "orientation."
 msgstr "ツールバーが水平の場合、項目を表示するかどうか"
 
-#: gtk/gtktoolitem.c:170
+#: gtk/gtktoolitem.c:169
 msgid ""
 "Whether the toolbar item is considered important. When TRUE, toolbar buttons "
 "show text in GTK_TOOLBAR_BOTH_HORIZ mode"
@@ -5649,6 +5639,12 @@ msgstr "ベトナム語 (VIQR)"
 #: modules/input/imxim.c:27
 msgid "X Input Method"
 msgstr "X 入力メソッド"
+
+#~ msgid "Pack End"
+#~ msgstr "末尾を埋める"
+
+#~ msgid "Whether the item is positioned at the end of the toolbar"
+#~ msgstr "アイテムがツールバーの末尾に位置すべきかどうか"
 
 #~ msgid "Tab moves focus"
 #~ msgstr "タブがフォーカスを移動させる"
