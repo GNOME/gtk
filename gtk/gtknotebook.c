@@ -4264,7 +4264,7 @@ gtk_notebook_prev_page (GtkNotebook *notebook)
  * @show_border: %TRUE if a bevel should be drawn around the notebook.
  * 
  * Sets whether a bevel will be drawn around the notebook pages.
- * This is only has a visual effect when the tabs are not shown.
+ * This only has a visual effect when the tabs are not shown.
  * See gtk_notebook_set_show_tabs().
  **/
 void
