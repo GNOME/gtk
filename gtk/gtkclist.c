@@ -5250,14 +5250,12 @@ scroll_vertical (GtkCList      *clist,
 	    }
 	}
 
-      if (clist->selection_mode == GTK_SELECTION_EXTENDED &&
-	  GTK_CLIST_ADD_MODE (clist))
-	return;
-
       switch (gtk_clist_row_is_visible (clist, clist->focus_row))
 	{
 	case GTK_VISIBILITY_NONE:
-	  if (old_focus_row != clist->focus_row)
+	  if (old_focus_row != clist->focus_row &&
+	      !(clist->selection_mode == GTK_SELECTION_EXTENDED &&
+		GTK_CLIST_ADD_MODE (clist)))
 	    select_row (clist, clist->focus_row, -1, NULL);
 	  switch (scroll_type)
 	    {
@@ -5296,7 +5294,9 @@ scroll_vertical (GtkCList      *clist,
 	    }
 
 	default:
-	  if (old_focus_row != clist->focus_row)
+	  if (old_focus_row != clist->focus_row &&
+	      !(clist->selection_mode == GTK_SELECTION_EXTENDED &&
+		GTK_CLIST_ADD_MODE (clist)))
 	    select_row (clist, clist->focus_row, -1, NULL);
 	  break;
 	}

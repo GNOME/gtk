@@ -3039,6 +3039,77 @@ create_list (void)
  * GtkCList
  */
 
+static char * book_open_xpm[] = {
+"16 16 4 1",
+"       c None s None",
+".      c black",
+"X      c #808080",
+"o      c white",
+"                ",
+"  ..            ",
+" .Xo.    ...    ",
+" .Xoo. ..oo.    ",
+" .Xooo.Xooo...  ",
+" .Xooo.oooo.X.  ",
+" .Xooo.Xooo.X.  ",
+" .Xooo.oooo.X.  ",
+" .Xooo.Xooo.X.  ",
+" .Xooo.oooo.X.  ",
+"  .Xoo.Xoo..X.  ",
+"   .Xo.o..ooX.  ",
+"    .X..XXXXX.  ",
+"    ..X.......  ",
+"     ..         ",
+"                "};
+
+static char * book_closed_xpm[] = {
+"16 16 6 1",
+"       c None s None",
+".      c black",
+"X      c red",
+"o      c yellow",
+"O      c #808080",
+"#      c white",
+"                ",
+"       ..       ",
+"     ..XX.      ",
+"   ..XXXXX.     ",
+" ..XXXXXXXX.    ",
+".ooXXXXXXXXX.   ",
+"..ooXXXXXXXXX.  ",
+".X.ooXXXXXXXXX. ",
+".XX.ooXXXXXX..  ",
+" .XX.ooXXX..#O  ",
+"  .XX.oo..##OO. ",
+"   .XX..##OO..  ",
+"    .X.#OO..    ",
+"     ..O..      ",
+"      ..        ",
+"                "};
+
+static char * mini_page_xpm[] = {
+"16 16 4 1",
+"       c None s None",
+".      c black",
+"X      c white",
+"o      c #808080",
+"                ",
+"   .......      ",
+"   .XXXXX..     ",
+"   .XoooX.X.    ",
+"   .XXXXX....   ",
+"   .XooooXoo.o  ",
+"   .XXXXXXXX.o  ",
+"   .XooooooX.o  ",
+"   .XXXXXXXX.o  ",
+"   .XooooooX.o  ",
+"   .XXXXXXXX.o  ",
+"   .XooooooX.o  ",
+"   .XXXXXXXX.o  ",
+"   ..........o  ",
+"    oooooooooo  ",
+"                "};
+
 #define TESTGTK_CLIST_COLUMNS 20
 static gint clist_rows = 0;
 static GtkWidget *clist_omenu;
@@ -3052,10 +3123,10 @@ add1000_clist (GtkWidget *widget, gpointer data)
   GdkBitmap *mask;
   GdkPixmap *pixmap;
   
-  pixmap = gdk_pixmap_create_from_xpm (GTK_CLIST (data)->clist_window, 
-				       &mask, 
-				       &GTK_WIDGET (data)->style->white,
-				       "3DRings.xpm");
+  pixmap = gdk_pixmap_create_from_xpm_d (GTK_CLIST (data)->clist_window, 
+					 &mask, 
+					 &GTK_WIDGET (data)->style->white,
+					 mini_page_xpm);
 
   for (i = 0; i < TESTGTK_CLIST_COLUMNS; i++)
     {
@@ -3600,77 +3671,6 @@ create_clist (void)
 /*
  * GtkCTree
  */
-
-static char * book_open_xpm[] = {
-"16 16 4 1",
-"       c None s None",
-".      c black",
-"X      c #808080",
-"o      c white",
-"                ",
-"  ..            ",
-" .Xo.    ...    ",
-" .Xoo. ..oo.    ",
-" .Xooo.Xooo...  ",
-" .Xooo.oooo.X.  ",
-" .Xooo.Xooo.X.  ",
-" .Xooo.oooo.X.  ",
-" .Xooo.Xooo.X.  ",
-" .Xooo.oooo.X.  ",
-"  .Xoo.Xoo..X.  ",
-"   .Xo.o..ooX.  ",
-"    .X..XXXXX.  ",
-"    ..X.......  ",
-"     ..         ",
-"                "};
-
-static char * book_closed_xpm[] = {
-"16 16 6 1",
-"       c None s None",
-".      c black",
-"X      c red",
-"o      c yellow",
-"O      c #808080",
-"#      c white",
-"                ",
-"       ..       ",
-"     ..XX.      ",
-"   ..XXXXX.     ",
-" ..XXXXXXXX.    ",
-".ooXXXXXXXXX.   ",
-"..ooXXXXXXXXX.  ",
-".X.ooXXXXXXXXX. ",
-".XX.ooXXXXXX..  ",
-" .XX.ooXXX..#O  ",
-"  .XX.oo..##OO. ",
-"   .XX..##OO..  ",
-"    .X.#OO..    ",
-"     ..O..      ",
-"      ..        ",
-"                "};
-
-static char * mini_page_xpm[] = {
-"16 16 4 1",
-"       c None s None",
-".      c black",
-"X      c white",
-"o      c #808080",
-"                ",
-"   .......      ",
-"   .XXXXX..     ",
-"   .XoooX.X.    ",
-"   .XXXXX....   ",
-"   .XooooXoo.o  ",
-"   .XXXXXXXX.o  ",
-"   .XooooooX.o  ",
-"   .XXXXXXXX.o  ",
-"   .XooooooX.o  ",
-"   .XXXXXXXX.o  ",
-"   .XooooooX.o  ",
-"   .XXXXXXXX.o  ",
-"   ..........o  ",
-"    oooooooooo  ",
-"                "};
 
 GdkPixmap *pixmap1;
 GdkPixmap *pixmap2;

@@ -1,3 +1,9 @@
+Sun Jul 19 23:51:05 1998  Lars Hamann  <lars@gtk.org>
+
+	* gtk/gtkclist.c (scroll_vertical): fix for vertical scrolling in case
+	of GTK_CLIST_ADD_MOD
+	* gtk/testgtk.c (add1000_clist): changed pixmap
+
 Sat Jul 18 22:59:04 1998  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkmain.h: 
