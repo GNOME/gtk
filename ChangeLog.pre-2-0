@@ -1,3 +1,11 @@
+Thu Jan  4 15:46:18 2001  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtkmodelsimple.c: Changed a bunch of boxed types to pointers
+	temporarily until they work again.  Brought up to date with
+	changes in the model.
+	* gtk/gtkmodelsimple.h: Brought up to date with changes in the
+	model.
+
 2001-01-04  Havoc Pennington  <hp@redhat.com>
 
 	* gtk/gtktextlayout.c (line_display_index_to_iter): if index is
