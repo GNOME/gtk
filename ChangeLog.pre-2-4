@@ -1,3 +1,8 @@
+Thu Jun 22 14:02:19 BST 2000  Tony Gale <gale@gtk.org>
+
+	* docs/faq/gtk-faq.sgm: Move file to here.
+	  TODO: Update Makfile.am 
+
 Thu Jun 22 13:41:09 BST 2000  Tony Gale <gale@gtk.org>
 
 	* docs/gtk-faq.sgm: Add Section 2
