@@ -1,3 +1,9 @@
+2004-10-06  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/tmpl/gtkenums.sgml: Clarify documentation for selection
+	modes.  (#154188, Jonathan Blandford, new wording proposed by
+	Owen Taylor)
+
 2004-10-05  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtk-sections.txt: Add gtk_accelerator_get_label().
