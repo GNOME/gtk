@@ -135,28 +135,36 @@ gdk_pixbuf_animation_new_from_file (const char *filename,
 	FILE *f;
 	guchar buffer [128];
 	GdkPixbufModule *image_module;
+        gchar *utf8_filename;
 
 	g_return_val_if_fail (filename != NULL, NULL);
         g_return_val_if_fail (error == NULL || *error == NULL, NULL);
 
 	f = fopen (filename, "rb");
 	if (!f) {
+                utf8_filename = g_filename_to_utf8 (filename, -1,
+                                                    NULL, NULL, NULL);
                 g_set_error (error,
                              G_FILE_ERROR,
                              g_file_error_from_errno (errno),
                              _("Failed to open file '%s': %s"),
-                             filename, g_strerror (errno));
+                             utf8_filename ? utf8_filename : "???",
+                             g_strerror (errno));
+                g_free (utf8_filename);
 		return NULL;
         }
 
 	size = fread (&buffer, 1, sizeof (buffer), f);
 
 	if (size == 0) {
+                utf8_filename = g_filename_to_utf8 (filename, -1,
+                                                    NULL, NULL, NULL);
                 g_set_error (error,
                              GDK_PIXBUF_ERROR,
                              GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
                              _("Image file '%s' contains no data"),
-                             filename);
+                             utf8_filename ? utf8_filename : "???");
+                g_free (utf8_filename);
                 
 		fclose (f);
 		return NULL;
@@ -192,11 +200,14 @@ gdk_pixbuf_animation_new_from_file (const char *filename,
                         
                         g_warning ("Bug! gdk-pixbuf loader '%s' didn't set an error on failure.",
                                    image_module->module_name);
+                        utf8_filename = g_filename_to_utf8 (filename, -1,
+                                                            NULL, NULL, NULL);
                         g_set_error (error,
                                      GDK_PIXBUF_ERROR,
                                      GDK_PIXBUF_ERROR_FAILED,
                                      _("Failed to load image '%s': reason not known, probably a corrupt image file"),
-                                     filename);
+                                     utf8_filename ? utf8_filename : "???");
+                        g_free (utf8_filename);
                 }
                 
 		if (pixbuf == NULL)
@@ -220,11 +231,14 @@ gdk_pixbuf_animation_new_from_file (const char *filename,
                         
                         g_warning ("Bug! gdk-pixbuf loader '%s' didn't set an error on failure.",
                                    image_module->module_name);
+                        utf8_filename = g_filename_to_utf8 (filename, -1,
+                                                            NULL, NULL, NULL);
                         g_set_error (error,
                                      GDK_PIXBUF_ERROR,
                                      GDK_PIXBUF_ERROR_FAILED,
                                      _("Failed to load animation '%s': reason not known, probably a corrupt animation file"),
-                                     filename);
+                                     utf8_filename ? utf8_filename : "???");
+                        g_free (utf8_filename);
                 }
                 
 		fclose (f);

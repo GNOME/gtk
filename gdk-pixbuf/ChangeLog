@@ -1,3 +1,9 @@
+Sat Jun  5 00:59:12 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gdk-pixbuf-animation.c: 
+	* gdk-pixbuf-io.c: Convert filenames to UTF-8 when embedding
+	them in error messages.  (#143654, Sven Neumann)
+
 2004-06-04  Matthias Clasen  <mclasen@redhat.com>
 
 	* === Released 2.4.2 ===
