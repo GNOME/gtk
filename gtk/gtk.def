@@ -2047,7 +2047,7 @@ EXPORTS
 	gtk_widget_ref
 	gtk_widget_region_intersect
 	gtk_widget_remove_accelerator
-        gtk_widget_set_accel_path
+	gtk_widget_set_accel_path
 	gtk_widget_render_icon
 	gtk_widget_reparent
 	gtk_widget_reset_rc_styles

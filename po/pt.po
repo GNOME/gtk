@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.3\n"
-"POT-Creation-Date: 2002-01-28 12:34+0000\n"
+"POT-Creation-Date: 2002-01-29 22:58-0500\n"
 "PO-Revision-Date: 2002-01-04 01:33+0000\n"
 "Last-Translator: Duarte Loreto <happyguy_pt@hotmail.com>\n"
 "Language-Team: Portuguese <none@none.org>\n"
@@ -873,7 +873,7 @@ msgid "Whether the text can be modified by the user"
 msgstr "Se o texto pode ou ser modificado pelo utilizador"
 
 #: gtk/gtkcellrenderertext.c:239 gtk/gtkcellrenderertext.c:247
-#: gtk/gtkfontsel.c:192 gtk/gtktexttag.c:285 gtk/gtktexttag.c:293
+#: gtk/gtkfontsel.c:202 gtk/gtktexttag.c:285 gtk/gtktexttag.c:293
 msgid "Font"
 msgstr "Fonte"
 
@@ -1521,51 +1521,59 @@ msgstr "Cor cursor"
 msgid "Color with which to draw insertion cursor"
 msgstr "Cor com que desenhar o cursor de inserção"
 
-#: gtk/gtkentry.c:3844 gtk/gtklabel.c:3169
+#: gtk/gtkentry.c:3852 gtk/gtklabel.c:3171
 msgid "Select All"
 msgstr "Seleccionar Tudo"
 
-#: gtk/gtkentry.c:3854 gtk/gtklabel.c:3179
+#: gtk/gtkentry.c:3862 gtk/gtklabel.c:3181
 msgid "Input Methods"
 msgstr "Métodos de Entrada"
 
-#: gtk/gtkentry.c:3864 gtk/gtktextview.c:6334
+#: gtk/gtkentry.c:3872 gtk/gtktextview.c:6337
 msgid "_Insert Unicode control character"
 msgstr "_Inserir caracter de controlo Unicode"
 
-#: gtk/gtkfilesel.c:510
+#: gtk/gtkfilesel.c:518
 msgid "Filename"
 msgstr "Nome ficheiro"
 
-#: gtk/gtkfilesel.c:511
+#: gtk/gtkfilesel.c:519
 msgid "The currently selected filename."
 msgstr "O nome do ficheiro actualmente seleccionado."
 
-#: gtk/gtkfilesel.c:517
+#: gtk/gtkfilesel.c:525
 msgid "Show file operations"
 msgstr "Mostrar operações de ficheiros"
 
-#: gtk/gtkfilesel.c:518
+#: gtk/gtkfilesel.c:526
 msgid "Whether buttons for creating/manipulating files should be displayed."
 msgstr ""
 "Se os botões para criar/manipular ficheiros deverão ou não ser mostrados."
 
-#. The directories clist
-#: gtk/gtkfilesel.c:643
+#: gtk/gtkfilesel.c:656
 msgid "Directories"
 msgstr "Directórios"
 
-#. The files clist
-#: gtk/gtkfilesel.c:663
+#: gtk/gtkfilesel.c:660
+#, fuzzy
+msgid "_Directories"
+msgstr "Directórios"
+
+#: gtk/gtkfilesel.c:688
 msgid "Files"
 msgstr "Ficheiros"
 
-#: gtk/gtkfilesel.c:733 gtk/gtkfilesel.c:2063
+#: gtk/gtkfilesel.c:692
+#, fuzzy
+msgid "_Files"
+msgstr "Ficheiros"
+
+#: gtk/gtkfilesel.c:768 gtk/gtkfilesel.c:2105
 #, c-format
 msgid "Directory unreadable: %s"
 msgstr "Directório ilegível: %s"
 
-#: gtk/gtkfilesel.c:857
+#: gtk/gtkfilesel.c:892
 #, c-format
 msgid ""
 "The file \"%s\" resides on another machine (called %s) and may not be "
@@ -1576,19 +1584,22 @@ msgstr ""
 "disponível para esta aplicação.\n"
 "Tem a certeza que o deseja seleccionar?"
 
-#: gtk/gtkfilesel.c:987
-msgid "Create Dir"
+#: gtk/gtkfilesel.c:1022
+#, fuzzy
+msgid "Crea_te Dir"
 msgstr "Criar Directório"
 
-#: gtk/gtkfilesel.c:998 gtk/gtkfilesel.c:1436
-msgid "Delete File"
+#: gtk/gtkfilesel.c:1033
+#, fuzzy
+msgid "De_lete File"
 msgstr "Apagar Ficheiro"
 
-#: gtk/gtkfilesel.c:1009 gtk/gtkfilesel.c:1582
-msgid "Rename File"
+#: gtk/gtkfilesel.c:1044
+#, fuzzy
+msgid "_Rename File"
 msgstr "Renomear Ficheiro"
 
-#: gtk/gtkfilesel.c:1257
+#: gtk/gtkfilesel.c:1292
 #, c-format
 msgid ""
 "The directory name \"%s\" contains symbols that are not allowed in filenames"
@@ -1596,7 +1607,7 @@ msgstr ""
 "O nome de directório \"%s\" contém símbolos que não são permitidos em nomes "
 "de ficheiros"
 
-#: gtk/gtkfilesel.c:1259
+#: gtk/gtkfilesel.c:1294
 #, c-format
 msgid ""
 "Error creating directory \"%s\": %s\n"
@@ -1605,42 +1616,42 @@ msgstr ""
 "Erro ao criar directório \"%s\": %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1260 gtk/gtkfilesel.c:1513
+#: gtk/gtkfilesel.c:1295 gtk/gtkfilesel.c:1550
 msgid "You probably used symbols not allowed in filenames."
 msgstr ""
 "Provavelmente você utilizou símbolos não permitidos em nomes de ficheiros."
 
-#: gtk/gtkfilesel.c:1268
+#: gtk/gtkfilesel.c:1303
 #, c-format
 msgid "Error creating directory \"%s\": %s\n"
 msgstr "Erro ao criar directório \"%s\": %s\n"
 
-#: gtk/gtkfilesel.c:1302
+#: gtk/gtkfilesel.c:1337
 msgid "Create Directory"
 msgstr "Criar Directório"
 
-#: gtk/gtkfilesel.c:1316
+#: gtk/gtkfilesel.c:1352
 msgid "_Directory name:"
 msgstr "Nome _directório:"
 
 #. buttons
-#: gtk/gtkfilesel.c:1330 gtk/gtkfilesel.c:1458 gtk/gtkfilesel.c:1615
-#: gtk/gtkgamma.c:417
+#: gtk/gtkfilesel.c:1366 gtk/gtkfilesel.c:1495 gtk/gtkfilesel.c:1653
+#: gtk/gtkgamma.c:419
 msgid "Cancel"
 msgstr "Cancelar"
 
-#: gtk/gtkfilesel.c:1342
+#: gtk/gtkfilesel.c:1378
 msgid "Create"
 msgstr "Criar"
 
-#: gtk/gtkfilesel.c:1376
+#: gtk/gtkfilesel.c:1412
 #, c-format
 msgid "The filename \"%s\" contains symbols that are not allowed in filenames"
 msgstr ""
 "O nome de ficheiro \"%s\" contém símbolos que não são permitidos em nomes de "
 "ficheiros"
 
-#: gtk/gtkfilesel.c:1379
+#: gtk/gtkfilesel.c:1415
 #, c-format
 msgid ""
 "Error deleting file \"%s\": %s\n"
@@ -1649,28 +1660,32 @@ msgstr ""
 "Erro ao apagar ficheiro \"%s\": %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1381 gtk/gtkfilesel.c:1527
+#: gtk/gtkfilesel.c:1417 gtk/gtkfilesel.c:1564
 msgid "It probably contains symbols not allowed in filenames."
 msgstr ""
 "Provavelmente você utilizou símbolos não permitidos em nomes de ficheiros."
 
-#: gtk/gtkfilesel.c:1390
+#: gtk/gtkfilesel.c:1426
 #, c-format
 msgid "Error deleting file \"%s\": %s"
 msgstr "Erro ao apagar ficheiro \"%s\": %s"
 
-#: gtk/gtkfilesel.c:1468
+#: gtk/gtkfilesel.c:1472
+msgid "Delete File"
+msgstr "Apagar Ficheiro"
+
+#: gtk/gtkfilesel.c:1505
 msgid "Delete"
 msgstr "Apagar"
 
-#: gtk/gtkfilesel.c:1509 gtk/gtkfilesel.c:1523
+#: gtk/gtkfilesel.c:1546 gtk/gtkfilesel.c:1560
 #, c-format
 msgid "The file name \"%s\" contains symbols that are not allowed in filenames"
 msgstr ""
 "O nome de ficheiro \"%s\" contém símbolos que não são permitidos em nomes de "
 "ficheiros"
 
-#: gtk/gtkfilesel.c:1511
+#: gtk/gtkfilesel.c:1548
 #, c-format
 msgid ""
 "Error renaming file to \"%s\": %s\n"
@@ -1679,7 +1694,7 @@ msgstr ""
 "Erro ao renomear ficheiro para \"%s\": %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1525
+#: gtk/gtkfilesel.c:1562
 #, c-format
 msgid ""
 "Error renaming file \"%s\": %s\n"
@@ -1688,20 +1703,24 @@ msgstr ""
 "Erro ao renomear ficheiro \"%s\": %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1535
+#: gtk/gtkfilesel.c:1572
 #, c-format
 msgid "Error renaming file \"%s\" to \"%s\": %s"
 msgstr "Erro ao renomear ficheiro \"%s\" para \"%s\": %s"
 
-#: gtk/gtkfilesel.c:1627
+#: gtk/gtkfilesel.c:1619
+msgid "Rename File"
+msgstr "Renomear Ficheiro"
+
+#: gtk/gtkfilesel.c:1665
 msgid "Rename"
 msgstr "Renomear"
 
-#: gtk/gtkfilesel.c:2042
+#: gtk/gtkfilesel.c:2084
 msgid "Selection: "
 msgstr "Selecção: "
 
-#: gtk/gtkfilesel.c:2653
+#: gtk/gtkfilesel.c:2695
 #, c-format
 msgid ""
 "The filename %s couldn't be converted to UTF-8. Try setting the environment "
@@ -1710,52 +1729,53 @@ msgstr ""
 "O nome de ficheiro %s não pode ser convertido em UTF-8. Tente definir a "
 "variável de ambiente G_BROKEN_FILENAMES."
 
-#: gtk/gtkfilesel.c:3521
+#: gtk/gtkfilesel.c:3563
 msgid "Name too long"
 msgstr "Nome demasiado longo"
 
-#: gtk/gtkfilesel.c:3523
+#: gtk/gtkfilesel.c:3565
 msgid "Couldn't convert filename"
 msgstr "Incapaz de converter nome de ficheiro"
 
-#: gtk/gtkfontsel.c:185
+#: gtk/gtkfontsel.c:195
 msgid "Font name"
 msgstr "Nome fonte"
 
-#: gtk/gtkfontsel.c:186
+#: gtk/gtkfontsel.c:196
 msgid "The X string that represents this font."
 msgstr "A expressão X que representa esta fonte."
 
-#: gtk/gtkfontsel.c:193
+#: gtk/gtkfontsel.c:203
 msgid "The GdkFont that is currently selected."
 msgstr "A GdkFont que está actualmente seleccionada."
 
-#: gtk/gtkfontsel.c:199
+#: gtk/gtkfontsel.c:209
 msgid "Preview text"
 msgstr "Prever texto"
 
-#: gtk/gtkfontsel.c:200
+#: gtk/gtkfontsel.c:210
 msgid "The text to display in order to demonstrate the selected font."
 msgstr "O texto a mostrar por forma a demonstrar a fonte seleccionada."
 
-#: gtk/gtkfontsel.c:298
+#: gtk/gtkfontsel.c:312
 msgid "_Family:"
 msgstr "_Família:"
 
-#: gtk/gtkfontsel.c:305
+#: gtk/gtkfontsel.c:318
 msgid "_Style:"
 msgstr "_Estilo:"
 
-#: gtk/gtkfontsel.c:312
+#: gtk/gtkfontsel.c:324
 msgid "Si_ze:"
 msgstr "_Tamanho:"
 
 #. create the text entry widget
-#: gtk/gtkfontsel.c:393
-msgid "Preview:"
+#: gtk/gtkfontsel.c:453
+#, fuzzy
+msgid "_Preview:"
 msgstr "Prever:"
 
-#: gtk/gtkfontsel.c:1065
+#: gtk/gtkfontsel.c:1204
 msgid "Font Selection"
 msgstr "Selecção Fonte"
 
@@ -1799,19 +1819,19 @@ msgstr "Etiqueta widget"
 msgid "A widget to display in place of the usual frame label."
 msgstr "Um widget a mostrar em vez da comum etiqueta de moldura."
 
-#: gtk/gtkgamma.c:396
+#: gtk/gtkgamma.c:395
 msgid "Gamma"
 msgstr "Gamma"
 
-#: gtk/gtkgamma.c:403
+#: gtk/gtkgamma.c:405
 msgid "_Gamma value"
 msgstr "Valor _Gamma"
 
-#: gtk/gtkgamma.c:423
+#: gtk/gtkgamma.c:425
 msgid "OK"
 msgstr "OK"
 
-#: gtk/gtkhandlebox.c:192 gtk/gtkmenubar.c:148 gtk/gtkstatusbar.c:158
+#: gtk/gtkhandlebox.c:192 gtk/gtkmenubar.c:150 gtk/gtkstatusbar.c:158
 #: gtk/gtktoolbar.c:277 gtk/gtkviewport.c:148
 msgid "Shadow type"
 msgstr "Tipo sombra"
@@ -2020,51 +2040,51 @@ msgstr "Widget menmónico"
 msgid "The widget to be activated when the label's mnemonic key is pressed."
 msgstr "O widget a ser activado quando a tecla menmónica é primida."
 
-#: gtk/gtklayout.c:578
+#: gtk/gtklayout.c:597
 msgid "X position"
 msgstr "Posição x"
 
-#: gtk/gtklayout.c:579
+#: gtk/gtklayout.c:598
 msgid "X position of child widget"
 msgstr "A posição x do widget filho"
 
-#: gtk/gtklayout.c:588
+#: gtk/gtklayout.c:607
 msgid "Y position"
 msgstr "Posição y"
 
-#: gtk/gtklayout.c:589
+#: gtk/gtklayout.c:608
 msgid "Y position of child widget"
 msgstr "A posição Y do widget filho"
 
-#: gtk/gtklayout.c:598 gtk/gtkviewport.c:132
+#: gtk/gtklayout.c:617 gtk/gtkviewport.c:132
 msgid "Horizontal adjustment"
 msgstr "Ajustamento horizontal"
 
-#: gtk/gtklayout.c:599
+#: gtk/gtklayout.c:618
 msgid "The GtkAdjustment for the horizontal position."
 msgstr "O GtkAdjustment para a posição horizontal."
 
-#: gtk/gtklayout.c:606 gtk/gtkviewport.c:140
+#: gtk/gtklayout.c:625 gtk/gtkviewport.c:140
 msgid "Vertical adjustment"
 msgstr "Ajustamento vertical"
 
-#: gtk/gtklayout.c:607
+#: gtk/gtklayout.c:626
 msgid "The GtkAdjustment for the vertical position."
 msgstr "O GtkAdjustment para a posição vertical."
 
-#: gtk/gtklayout.c:614 gtk/gtktreeviewcolumn.c:187
+#: gtk/gtklayout.c:633 gtk/gtktreeviewcolumn.c:187
 msgid "Width"
 msgstr "Largura"
 
-#: gtk/gtklayout.c:615
+#: gtk/gtklayout.c:634
 msgid "The width of the layout."
 msgstr "A largura da disposição."
 
-#: gtk/gtklayout.c:623
+#: gtk/gtklayout.c:642
 msgid "Height"
 msgstr "Altura"
 
-#: gtk/gtklayout.c:624
+#: gtk/gtklayout.c:643
 msgid "The height of the layout."
 msgstr "A altura da disposição."
 
@@ -2077,15 +2097,15 @@ msgstr "A altura da disposição."
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: gtk/gtkmenubar.c:149
+#: gtk/gtkmenubar.c:151
 msgid "Style of bevel around the menubar"
 msgstr "Estilo de relevo à volta da barra de menu"
 
-#: gtk/gtkmenubar.c:156 gtk/gtktoolbar.c:251
+#: gtk/gtkmenubar.c:158 gtk/gtktoolbar.c:251
 msgid "Internal padding"
 msgstr "Espaçamento interno"
 
-#: gtk/gtkmenubar.c:157
+#: gtk/gtkmenubar.c:159
 msgid "Amount of border space between the menubar shadow and the menu items"
 msgstr ""
 "QUantidade de espaço de margem entre a sombra da barra de menu e seus itens"
@@ -2231,7 +2251,7 @@ msgstr ""
 msgid "Whether tabs should have homogeneous sizes"
 msgstr "Se os separadores deverão ou não ter um tamanho homogéneo"
 
-#: gtk/gtknotebook.c:2339 gtk/gtknotebook.c:4588
+#: gtk/gtknotebook.c:2339 gtk/gtknotebook.c:4594
 #, c-format
 msgid "Page %u"
 msgstr "Página %u"
@@ -2279,18 +2299,12 @@ msgstr "Tamanho Handler"
 msgid "Width of handle"
 msgstr "Largura do handler"
 
-#: gtk/gtkrc.c:2772
-#, c-format
-msgid "Unable to locate image file in pixmap_path: \"%s\" line %d"
-msgstr ""
-"Incapaz de encontrar ficheiro de imagem na pixmap_path: \"%s\" linha %d"
-
-#: gtk/gtkrc.c:2775
+#: gtk/gtkrc.c:2773 gtk/gtkrc.c:2776
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "Incapaz de encontrar ficheiro de imagem na pixmap_path: \"%s\""
 
-#: gtk/gtkrc.c:3184
+#: gtk/gtkrc.c:3185
 #, c-format
 msgid "Pixmap path element: \"%s\" must be absolute, %s, line %d"
 msgstr "Elemento de caminho pixmap: \"%s\" tem de ser absoluto, %s, linha %d"
@@ -2512,44 +2526,44 @@ msgstr "Tamanho Máx"
 msgid "Maximum size of the ruler"
 msgstr "Tamanho máximo deste rolamento"
 
-#: gtk/gtkscale.c:148 gtk/gtkspinbutton.c:242
+#: gtk/gtkscale.c:155 gtk/gtkspinbutton.c:242
 msgid "Digits"
 msgstr "Dígitos"
 
-#: gtk/gtkscale.c:149
+#: gtk/gtkscale.c:156
 msgid "The number of decimal places that are displayed in the value"
 msgstr "O número de casas decimais que são mostradas no valor"
 
-#: gtk/gtkscale.c:158
+#: gtk/gtkscale.c:165
 msgid "Draw Value"
 msgstr "Mostrar Valor"
 
-#: gtk/gtkscale.c:159
+#: gtk/gtkscale.c:166
 msgid "Whether the current value is displayed as a string next to the slider"
 msgstr ""
 "Se o valor actual é ou não mostrado numa expressão ao lado do rolamento"
 
-#: gtk/gtkscale.c:166
+#: gtk/gtkscale.c:173
 msgid "Value Position"
 msgstr "Posição Valor"
 
-#: gtk/gtkscale.c:167
+#: gtk/gtkscale.c:174
 msgid "The position in which the current value is displayed"
 msgstr "A posição onde o valor actual é mostrado"
 
-#: gtk/gtkscale.c:174
+#: gtk/gtkscale.c:181
 msgid "Slider Length"
 msgstr "Comprimento Rolamento"
 
-#: gtk/gtkscale.c:175
+#: gtk/gtkscale.c:182
 msgid "Length of scale's slider"
 msgstr "Comprimento da escala de rolamento"
 
-#: gtk/gtkscale.c:183
+#: gtk/gtkscale.c:190
 msgid "Value spacing"
 msgstr "Espaçamento valor"
 
-#: gtk/gtkscale.c:184
+#: gtk/gtkscale.c:191
 msgid "Space between value text and the slider/trough area"
 msgstr "Espaço entre o texto de valor e a área do rolamento"
 
@@ -3060,7 +3074,7 @@ msgstr "Homogéneo"
 msgid "If TRUE this means the table cells are all the same width/height"
 msgstr "Se VERDADE significa que as células têm todas a mesma altura/largura"
 
-#: gtk/gtktext.c:604 gtk/gtktreeview.c:508
+#: gtk/gtktext.c:604 gtk/gtktreeview.c:507
 msgid "Horizontal Adjustment"
 msgstr "Ajustamento Horizontal"
 
@@ -3068,7 +3082,7 @@ msgstr "Ajustamento Horizontal"
 msgid "Horizontal adjustment for the text widget"
 msgstr "O ajustamento horizontal para o widget de texto"
 
-#: gtk/gtktext.c:612 gtk/gtktreeview.c:516
+#: gtk/gtktext.c:612 gtk/gtktreeview.c:515
 msgid "Vertical Adjustment"
 msgstr "Ajustamento Vertical"
 
@@ -3364,7 +3378,7 @@ msgstr "Cursor Visível"
 msgid "If the insertion cursor is shown"
 msgstr "Se o cursor de inserção é mostrado"
 
-#: gtk/gtktextview.c:6325
+#: gtk/gtktextview.c:6328
 msgid "Input _Methods"
 msgstr "_Métodos de Entrada"
 
@@ -3458,116 +3472,116 @@ msgstr "Tamanho ícones barra de ferramentas"
 msgid "Size of icons in default toolbars"
 msgstr "O tamanho dos ícones nas barra de ferramentas de defeito"
 
-#: gtk/gtktreeview.c:500
+#: gtk/gtktreeview.c:499
 msgid "TreeView Model"
 msgstr "Modelo VistaÁrvore"
 
-#: gtk/gtktreeview.c:501
+#: gtk/gtktreeview.c:500
 msgid "The model for the tree view"
 msgstr "O modelo para a vista em árvore"
 
-#: gtk/gtktreeview.c:509
+#: gtk/gtktreeview.c:508
 msgid "Horizontal Adjustment for the widget"
 msgstr "Ajustamento Horizontal para o widget"
 
-#: gtk/gtktreeview.c:517
+#: gtk/gtktreeview.c:516
 msgid "Vertical Adjustment for the widget"
 msgstr "Ajustamento Vertical para o widget"
 
-#: gtk/gtktreeview.c:524 gtk/gtktreeviewcolumn.c:171 gtk/gtkwidget.c:425
+#: gtk/gtktreeview.c:523 gtk/gtktreeviewcolumn.c:171 gtk/gtkwidget.c:425
 msgid "Visible"
 msgstr "Visível"
 
-#: gtk/gtktreeview.c:525
+#: gtk/gtktreeview.c:524
 msgid "Show the column header buttons"
 msgstr "Mostrar os botões de cabeçalho de coluna"
 
-#: gtk/gtktreeview.c:532
+#: gtk/gtktreeview.c:531
 msgid "Headers Clickable"
 msgstr "Cabeçalhos Clicáveis"
 
-#: gtk/gtktreeview.c:533
+#: gtk/gtktreeview.c:532
 msgid "Column headers respond to click events"
 msgstr "Os cabeçalhos de coluna respondem a eventos de clique"
 
-#: gtk/gtktreeview.c:540
+#: gtk/gtktreeview.c:539
 msgid "Expander Column"
 msgstr "Coluna Expansão"
 
-#: gtk/gtktreeview.c:541
+#: gtk/gtktreeview.c:540
 msgid "Set the column for the expander column"
 msgstr "Definir a coluna para a coluna de expansão"
 
-#: gtk/gtktreeview.c:548 gtk/gtktreeviewcolumn.c:270
+#: gtk/gtktreeview.c:547 gtk/gtktreeviewcolumn.c:270
 msgid "Reorderable"
 msgstr "Reordenável"
 
-#: gtk/gtktreeview.c:549
+#: gtk/gtktreeview.c:548
 msgid "View is reorderable"
 msgstr "A vista é reordenável"
 
-#: gtk/gtktreeview.c:556
+#: gtk/gtktreeview.c:555
 msgid "Rules Hint"
 msgstr "Dica Réguas"
 
-#: gtk/gtktreeview.c:557
+#: gtk/gtktreeview.c:556
 msgid "Set a hint to the theme engine to draw rows in alternating colors"
 msgstr ""
 "Definir uma dica ao motor de temas para desenhar linhas em cores alternantes"
 
-#: gtk/gtktreeview.c:564
+#: gtk/gtktreeview.c:563
 msgid "Enable Search"
 msgstr "Activar Procura"
 
-#: gtk/gtktreeview.c:565
+#: gtk/gtktreeview.c:564
 msgid "View allows user to search through columns interactively"
 msgstr "Vista permite que utilizadores procurem interactivamente pelas colunas"
 
-#: gtk/gtktreeview.c:572
+#: gtk/gtktreeview.c:571
 msgid "Search Column"
 msgstr "Procurar Coluna"
 
-#: gtk/gtktreeview.c:573
+#: gtk/gtktreeview.c:572
 msgid "Model column to search through when searching through code"
 msgstr "Coluna modelo a procurar ao procurar pelo código"
 
-#: gtk/gtktreeview.c:586
+#: gtk/gtktreeview.c:585
 msgid "Expander Size"
 msgstr "Tamanho Expansor"
 
-#: gtk/gtktreeview.c:587
+#: gtk/gtktreeview.c:586
 msgid "Size of the expander arrow."
 msgstr "Tamanho da seta de expansão."
 
-#: gtk/gtktreeview.c:595
+#: gtk/gtktreeview.c:594
 msgid "Vertical Separator Width"
 msgstr "Largura Separador Vertical"
 
-#: gtk/gtktreeview.c:596
+#: gtk/gtktreeview.c:595
 msgid "Vertical space between cells.  Must be an even number."
 msgstr "Espaço vertical entre células. Tem de ser um número par."
 
-#: gtk/gtktreeview.c:604
+#: gtk/gtktreeview.c:603
 msgid "Horizontal Separator Width"
 msgstr "Largura Separador Horizontal"
 
-#: gtk/gtktreeview.c:605
+#: gtk/gtktreeview.c:604
 msgid "Horizontal space between cells.  Must be an even number."
 msgstr "Espaço horizontal entre células. Tem de ser um número par."
 
-#: gtk/gtktreeview.c:613
+#: gtk/gtktreeview.c:612
 msgid "Allow Rules"
 msgstr "Permitir Réguas"
 
-#: gtk/gtktreeview.c:614
+#: gtk/gtktreeview.c:613
 msgid "Allow drawing of alternating color rows."
 msgstr "Permitir desenhar linhas em cores alternadas."
 
-#: gtk/gtktreeview.c:620
+#: gtk/gtktreeview.c:619
 msgid "Indent Expanders"
 msgstr "Indentar Expansores"
 
-#: gtk/gtktreeview.c:621
+#: gtk/gtktreeview.c:620
 msgid "Make the expanders indented."
 msgstr "Fazer os expansores indentados."
 
@@ -3575,7 +3589,7 @@ msgstr "Fazer os expansores indentados."
 msgid "Whether to display the column"
 msgstr "Mostrar ou não a coluna"
 
-#: gtk/gtktreeviewcolumn.c:179 gtk/gtkwindow.c:394
+#: gtk/gtktreeviewcolumn.c:179 gtk/gtkwindow.c:410
 msgid "Resizable"
 msgstr "Redimensionável"
 
@@ -3858,27 +3872,27 @@ msgstr "Espaçamento focus"
 msgid "Width, in pixels, between focus indicator and the widget 'box'."
 msgstr "Largura, em pixels, entre indicador de focus e o widget 'caixa'."
 
-#: gtk/gtkwindow.c:359
+#: gtk/gtkwindow.c:375
 msgid "Window Type"
 msgstr "Tipo Janela"
 
-#: gtk/gtkwindow.c:360
+#: gtk/gtkwindow.c:376
 msgid "The type of the window"
 msgstr "O tipo da janela"
 
-#: gtk/gtkwindow.c:369
+#: gtk/gtkwindow.c:385
 msgid "Window Title"
 msgstr "Título Janela"
 
-#: gtk/gtkwindow.c:370
+#: gtk/gtkwindow.c:386
 msgid "The title of the window"
 msgstr "O título da janela"
 
-#: gtk/gtkwindow.c:377
+#: gtk/gtkwindow.c:393
 msgid "Allow Shrink"
 msgstr "Permitir Encolher"
 
-#: gtk/gtkwindow.c:379
+#: gtk/gtkwindow.c:395
 #, no-c-format
 msgid ""
 "If TRUE, the window has no mimimum size. Setting this to TRUE is 99% of the "
@@ -3887,25 +3901,25 @@ msgstr ""
 "Se VERDADE, a janela não tem tamanho mínimo. Definir isto como VERDADE é 99% "
 "das vezes uma má ideia."
 
-#: gtk/gtkwindow.c:386
+#: gtk/gtkwindow.c:402
 msgid "Allow Grow"
 msgstr "Permitir Crescer"
 
-#: gtk/gtkwindow.c:387
+#: gtk/gtkwindow.c:403
 msgid "If TRUE, users can expand the window beyond its minimum size."
 msgstr ""
 "Se VERDADE, utilizadores podem expandir janela para além do seu tamanho "
 "mínimo."
 
-#: gtk/gtkwindow.c:395
+#: gtk/gtkwindow.c:411
 msgid "If TRUE, users can resize the window."
 msgstr "Se VERDADE, utilizadores podem redimensionar janela."
 
-#: gtk/gtkwindow.c:402
+#: gtk/gtkwindow.c:418
 msgid "Modal"
 msgstr "Modal"
 
-#: gtk/gtkwindow.c:403
+#: gtk/gtkwindow.c:419
 msgid ""
 "If TRUE, the window is modal (other windows are not usable while this one is "
 "up)."
@@ -3913,45 +3927,45 @@ msgstr ""
 "Se VERDADE, a janela é modal (outras janelas não são utilizáveis enquanto "
 "esta estiver aberta)."
 
-#: gtk/gtkwindow.c:410
+#: gtk/gtkwindow.c:426
 msgid "Window Position"
 msgstr "Posição Janela"
 
-#: gtk/gtkwindow.c:411
+#: gtk/gtkwindow.c:427
 msgid "The initial position of the window."
 msgstr "A posição inicial da janela."
 
-#: gtk/gtkwindow.c:419
+#: gtk/gtkwindow.c:435
 msgid "Default Width"
 msgstr "Largura Defeito"
 
-#: gtk/gtkwindow.c:420
+#: gtk/gtkwindow.c:436
 msgid ""
 "The default width of the window, used when initially showing the window."
 msgstr "A largura de defeito da janela, utilizada inicialmente ao mostra-la."
 
-#: gtk/gtkwindow.c:429
+#: gtk/gtkwindow.c:445
 msgid "Default Height"
 msgstr "Altura Defeito"
 
-#: gtk/gtkwindow.c:430
+#: gtk/gtkwindow.c:446
 msgid ""
 "The default height of the window, used when initially showing the window."
 msgstr "A altura de defeito da janela, utilizada inicialmente ao mostra-la."
 
-#: gtk/gtkwindow.c:439
+#: gtk/gtkwindow.c:455
 msgid "Destroy with Parent"
 msgstr "Destruir com Pai"
 
-#: gtk/gtkwindow.c:440
+#: gtk/gtkwindow.c:456
 msgid "If this window should be destroyed when the parent is destroyed"
 msgstr "Se esta janela deveria ser destruida quando a pai o fosse"
 
-#: gtk/gtkwindow.c:447
+#: gtk/gtkwindow.c:463
 msgid "Icon"
 msgstr "Ícone"
 
-#: gtk/gtkwindow.c:448
+#: gtk/gtkwindow.c:464
 msgid "Icon for this window"
 msgstr "Ícone para esta janela"
 
@@ -3996,6 +4010,10 @@ msgstr "Vietnamita (VIQR)"
 #: modules/input/imxim.c:27
 msgid "X Input Method"
 msgstr "Método de Introdução X"
+
+#~ msgid "Unable to locate image file in pixmap_path: \"%s\" line %d"
+#~ msgstr ""
+#~ "Incapaz de encontrar ficheiro de imagem na pixmap_path: \"%s\" linha %d"
 
 #~ msgid "He_x Value:"
 #~ msgstr "Valor He_x:"

@@ -1,3 +1,43 @@
+Overview of Changes in GTK+ 1.3.13
+==================================
+
+* Tree view fixes. [Kristian Rietveld, Jonathan Blandford, Anders Carlsson]
+* Tree view support for low-vision themes [Bill Haneman]
+* Text view bug fixes. [Havoc Pennington]
+* Win32 fixes and improvements.  [Tor Lillqvist, Hans Breuer, 
+  Archaeopteryx Software]
+* Documentation improvements [Matthias Clasen, Havoc Pennington]
+* Accelerate alpha compositing using RENDER extension if present,
+  and optimize the non-RENDER case a lot. [Owen Taylor]
+* Add support for "optional keybindings" (action signal returns FALSE) [Owen]
+* Fixed the infamous changing directory deletes filename bug 
+  [Owen and a cast of thousands]
+* Add mouse cursor hiding for text widgets [Anders Carlsson]
+* Simple Hangul input module [Yusuke Tabata]
+* Removed the scary startup warning.
+* GdkPixbuf pixel handling fixes [Owen, Michael Hore, Jim Cape]
+* Converted GtkFileSelection and GtkFontSelection to use GtKTreeView widgets
+  instead of the deprecated GtkCList [Owen]
+* gtkhsv.h was installed by mistake, fixed that. [reported by Ross Burton]
+* gdk_pixbuf_render_to_drawable() now also handles alpha pixbufs.
+* Made Gtkimage draw GtkPixmap, GtkImage, GdkPixbuf insensitive, prelighted,
+  etc. [Havoc, Owen]
+* Marked gtk_item_factory_path_from_widget() G_CONST_RETURN. [Matt Wilson]
+* gtk_image_menu_item_new_from_stock() now falls back to
+  new_with_mnemonic, for consistency with gtk_button_new_from_stock()
+  [Havoc Pennington]
+* GdkModifierType is now consistently used for modifier mask parameters
+  [Mark Patton]
+* gtk_widget_set_accel_path() is now publically exported.
+
+Other contributors: Darin Adler, Jeffry Baker, Damon Chaplin, Brian Cameron, 
+  Murray Cumming, James Henstridge, Jacob Berkman, Arnaud Charlet, Jeff Franks, 
+  Jeff Garzik, Jody Goldberg, Diego Gonzalez, Melvin Hadasht, Raja Harinath, 
+  Tim Janik, Mike Kestner, Mathieu Lacage, Alex Larsson, Ryan Lovett, 
+  Mark McLoughlin, Sven Neumann, Padraig O'Briain, Xavier Ordoquy, Chris Phelps, 
+  Detlef Reichl, Guillermo S. Romero, Federico Mena Quintero, Manish Singh,
+  HideToshi Tajima, Vitaly Tishkov, Jon Trowbridge, Sergey Vlasov.
+
 Overview of Changes in GTK+ 1.3.12
 ==================================
 

@@ -1,3 +1,22 @@
+Tue Jan 29 22:52:36 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* 1.3.13
+
+	* configure.in: Micro version 13, interface, binary
+	age 0. Require GLIB-1.3.13, Pango 0.24.
+
+	* docs/Makefile.am (EXTRA_DIST): Add widget_geometry.txt,
+	sizing-test.txt, tree-column-sizing.txt
+
+	* docs/Makefile.am (EXTRA_DIST): Don't distribute
+	Changes-1.2.txt, Changes-2.0.txt, README.linux-fb,
+	since they are no longer canonical.
+
+	* gtk/gtk.def: Convert spaces to tabs in front of
+	gtk_widget_set_accel_path in case it matters.
+
+	* NEWS: Updated for 1.3.13.
+
 Tue Jan 29 22:31:07 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkwidget.[ch] gtkmenuitem.c gtkitemfactory.c: Export 
