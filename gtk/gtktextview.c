@@ -1306,6 +1306,11 @@ gtk_text_view_scroll_to_iter (GtkTextView   *text_view,
   gint scroll_inc;
   gint screen_xoffset, screen_yoffset;
   gint current_x_scroll, current_y_scroll;
+
+  /* FIXME why don't we do the validate-at-scroll-destination thing
+   * from flush_scroll in this function? I think it wasn't done before
+   * because changed_handler was screwed up, but I could be wrong.
+   */
   
   g_return_val_if_fail (GTK_IS_TEXT_VIEW (text_view), FALSE);
   g_return_val_if_fail (iter != NULL, FALSE);
@@ -1316,12 +1321,6 @@ gtk_text_view_scroll_to_iter (GtkTextView   *text_view,
   widget = GTK_WIDGET (text_view);
 
   DV(g_print(G_STRLOC"\n"));
-  
-  if (!GTK_WIDGET_MAPPED (widget))
-    {
-      g_warning ("gtk_text_view_scroll_to_iter(): calling this function before showing the GtkTextView doesn't make sense, maybe try gtk_text_view_scroll_to_mark() instead");
-      return FALSE;
-    }
   
   gtk_text_layout_get_iter_location (text_view->layout,
                                      iter,
@@ -5476,6 +5475,24 @@ typedef struct
   guint time;
 } PopupInfo;
 
+static gboolean
+range_contains_editable_text (const GtkTextIter *start,
+                              const GtkTextIter *end,
+                              gboolean default_editability)
+{
+  GtkTextIter iter = *start;
+
+  while (gtk_text_iter_compare (&iter, end) < 0)
+    {
+      if (gtk_text_iter_editable (&iter, default_editability))
+        return TRUE;
+      
+      gtk_text_iter_forward_to_tag_toggle (&iter, NULL);
+    }
+
+  return FALSE;
+}                             
+
 static void
 popup_targets_received (GtkClipboard     *clipboard,
 			GtkSelectionData *data,
@@ -5495,7 +5512,8 @@ popup_targets_received (GtkClipboard     *clipboard,
       gboolean have_selection;
       gboolean can_insert;
       GtkTextIter iter;
-
+      GtkTextIter sel_start, sel_end;
+      
       if (text_view->popup_menu)
 	gtk_widget_destroy (text_view->popup_menu);
 
@@ -5506,7 +5524,7 @@ popup_targets_received (GtkClipboard     *clipboard,
 				 popup_menu_detach);
       
       have_selection = gtk_text_buffer_get_selection_bounds (get_buffer (text_view),
-							     NULL, NULL);
+                                                             &sel_start, &sel_end);
       
       gtk_text_buffer_get_iter_at_mark (get_buffer (text_view),
 					&iter,
@@ -5515,7 +5533,9 @@ popup_targets_received (GtkClipboard     *clipboard,
       can_insert = gtk_text_iter_can_insert (&iter, text_view->editable);
       
       append_action_signal (text_view, text_view->popup_menu, GTK_STOCK_CUT, "cut_clipboard",
-			    have_selection);
+			    have_selection &&
+                            range_contains_editable_text (&sel_start, &sel_end,
+                                                          text_view->editable));
       append_action_signal (text_view, text_view->popup_menu, GTK_STOCK_COPY, "copy_clipboard",
 			    have_selection);
       append_action_signal (text_view, text_view->popup_menu, GTK_STOCK_PASTE, "paste_clipboard",

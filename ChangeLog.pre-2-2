@@ -1,5 +1,16 @@
 2001-10-23  Havoc Pennington  <hp@redhat.com>
 
+	* gtk/gtktextview.c (popup_targets_received): only sensitize Cut
+	if selection contains some editable text, #60975
+	(gtk_text_view_scroll_to_iter): remove warning about scrolling
+	prior to map; it should actually be OK to do so in many cases, 
+	it would be nice to warn about scrolling when many lines have
+	height 0, but I don't know what to do about that. Perhaps 
+	move part of flush_scroll into this function? comment added 
+	to consider this.
+
+2001-10-23  Havoc Pennington  <hp@redhat.com>
+
 	* gtk/gtktextview.c (changed_handler): Correctly keep the same
 	text on the top of the screen, considering that the changed region
 	may have overlapped the first paragraph. Should fix msw's "text
