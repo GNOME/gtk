@@ -1,3 +1,7 @@
+2000-07-30  Pablo Saratxaga <pablo@mandrakesoft.com>
+
+	* configure.in,po/{sp,sr}.po: Added Serbian files
+
 2000-07-30  Tor Lillqvist  <tml@iki.fi>
 
 	* gdk/Makefile.am: Add makefile.mingw.in to EXTRA_DIST.

@@ -1,0 +1,458 @@
+# Serbian translation of gtk+.po file.
+# Copyright (C) 2000 Mandrake Yugoslavia, Inc.
+# Tomislav Jankovic <tomaja@net.yu>, 2000.
+#
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: gtk+ 1.3.1\n"
+"POT-Creation-Date: 2000-07-30 15:09+0200\n"
+"PO-Revision-Date: 2000-07-29 19:35+0100\n"
+"Last-Translator: Tomislav Jankovic <tomaja@net.yu>\n"
+"Language-Team: Serbian(Latin) <tomaja@net.yu>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=iso-8859-5\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: gtk/gtkcolorsel.c:1418
+msgid "Hue:"
+msgstr "Ниjанса:"
+
+#: gtk/gtkcolorsel.c:1419
+msgid "Saturation:"
+msgstr "Засићеност: "
+
+#: gtk/gtkcolorsel.c:1420
+msgid "Value:"
+msgstr "Вредност:"
+
+#: gtk/gtkcolorsel.c:1421
+msgid "Red:"
+msgstr "Црвенa:"
+
+#: gtk/gtkcolorsel.c:1422
+msgid "Green:"
+msgstr "Зелена:"
+
+#: gtk/gtkcolorsel.c:1423
+msgid "Blue:"
+msgstr "Плава:"
+
+#: gtk/gtkcolorsel.c:1426
+msgid "Opacity:"
+msgstr "Прозирност:"
+
+#: gtk/gtkcolorsel.c:1441
+msgid "Hex Value:"
+msgstr "Hex вредност:"
+
+#: gtk/gtkcolorsel.c:1462
+msgid "Custom Palette"
+msgstr "Класичнa палетa "
+
+#: gtk/gtkcolorsel.c:1467
+msgid "Set Color"
+msgstr "Подеси боjу"
+
+#. The OK button
+#: gtk/gtkcolorseldialog.c:105 gtk/gtkfilesel.c:567 gtk/gtkfontsel.c:952
+#: gtk/gtkgamma.c:415
+msgid "OK"
+msgstr "У реду"
+
+#. The Cancel button
+#: gtk/gtkcolorseldialog.c:111 gtk/gtkfilesel.c:574 gtk/gtkfilesel.c:963
+#: gtk/gtkfilesel.c:1067 gtk/gtkfilesel.c:1182 gtk/gtkfontsel.c:965
+#: gtk/gtkgamma.c:423
+msgid "Cancel"
+msgstr "Поништи"
+
+#: gtk/gtkcolorseldialog.c:116
+msgid "Help"
+msgstr ""
+
+#. The directories clist
+#: gtk/gtkfilesel.c:514
+msgid "Directories"
+msgstr "Директориjуми"
+
+#. The files clist
+#: gtk/gtkfilesel.c:534
+msgid "Files"
+msgstr "Фаjлови"
+
+#: gtk/gtkfilesel.c:605 gtk/gtkfilesel.c:1621
+#, c-format
+msgid "Directory unreadable: %s"
+msgstr "Директориjум %s ниjе могуће  прочитaти"
+
+#: gtk/gtkfilesel.c:637
+msgid "Create Dir"
+msgstr "Креираj директориjум"
+
+#: gtk/gtkfilesel.c:648 gtk/gtkfilesel.c:1036
+msgid "Delete File"
+msgstr "Избриши фаjл"
+
+#: gtk/gtkfilesel.c:659 gtk/gtkfilesel.c:1140
+msgid "Rename File"
+msgstr "Промени име фаjлa"
+
+#.
+#. gtk_signal_connect (GTK_OBJECT (dialog), "destroy",
+#. (GtkSignalFunc) gtk_file_selection_fileop_destroy,
+#. (gpointer) fs);
+#.
+#: gtk/gtkfilesel.c:828
+msgid "Error"
+msgstr "Грeшкa"
+
+#. close button
+#: gtk/gtkfilesel.c:851 gtk/gtkinputdialog.c:338
+msgid "Close"
+msgstr "Затвори"
+
+#: gtk/gtkfilesel.c:927
+msgid "Create Directory"
+msgstr "Креираj директориjум"
+
+#: gtk/gtkfilesel.c:941
+msgid "Directory name:"
+msgstr "Име дректориjума:"
+
+#. buttons
+#: gtk/gtkfilesel.c:954
+msgid "Create"
+msgstr "Креираj"
+
+#. buttons
+#: gtk/gtkfilesel.c:1058
+msgid "Delete"
+msgstr "Избриши"
+
+#. buttons
+#: gtk/gtkfilesel.c:1173
+msgid "Rename"
+msgstr "Промени имe"
+
+#: gtk/gtkfilesel.c:1600
+msgid "Selection: "
+msgstr "Избор:"
+
+#: gtk/gtkfontsel.c:189
+msgid "Family:"
+msgstr "Фамилиjа:"
+
+#: gtk/gtkfontsel.c:194
+#, fuzzy
+msgid "Style:"
+msgstr "Додаj стил:"
+
+#: gtk/gtkfontsel.c:199
+msgid "Size:"
+msgstr "Величина:"
+
+#. create the text entry widget
+#: gtk/gtkfontsel.c:309
+msgid "Preview:"
+msgstr "Приказ: "
+
+#: gtk/gtkfontsel.c:959
+msgid "Apply"
+msgstr "Примени"
+
+#: gtk/gtkfontsel.c:981
+msgid "Font Selection"
+msgstr "Избор фонтa"
+
+#: gtk/gtkgamma.c:395
+msgid "Gamma"
+msgstr "Gamma"
+
+#: gtk/gtkgamma.c:402
+msgid "Gamma value"
+msgstr "Вредност gamma"
+
+#. shell and main vbox
+#: gtk/gtkinputdialog.c:185
+msgid "Input"
+msgstr "Унос"
+
+#: gtk/gtkinputdialog.c:193
+msgid "No input devices"
+msgstr "Нема улазног уређајa"
+
+#: gtk/gtkinputdialog.c:222
+msgid "Device:"
+msgstr "Уређај:"
+
+#: gtk/gtkinputdialog.c:238
+msgid "Disabled"
+msgstr "Искључено"
+
+#: gtk/gtkinputdialog.c:246
+msgid "Screen"
+msgstr "Екран"
+
+#: gtk/gtkinputdialog.c:254
+msgid "Window"
+msgstr "Прозор"
+
+#: gtk/gtkinputdialog.c:262
+msgid "Mode: "
+msgstr "Мод: "
+
+#. The axis listbox
+#: gtk/gtkinputdialog.c:292
+msgid "Axes"
+msgstr "Осe:"
+
+#. Keys listbox
+#: gtk/gtkinputdialog.c:308
+msgid "Keys"
+msgstr "Тастери"
+
+#. We create the save button in any case, so that clients can
+#. connect to it, without paying attention to whether it exits
+#: gtk/gtkinputdialog.c:329
+msgid "Save"
+msgstr "Сними"
+
+#: gtk/gtkinputdialog.c:471
+msgid "X"
+msgstr "X"
+
+#: gtk/gtkinputdialog.c:472
+msgid "Y"
+msgstr "Y"
+
+#: gtk/gtkinputdialog.c:473
+msgid "Pressure"
+msgstr "Притисак"
+
+#: gtk/gtkinputdialog.c:474
+msgid "X Tilt"
+msgstr "X тилт"
+
+#: gtk/gtkinputdialog.c:475
+msgid "Y Tilt"
+msgstr "Y тилт"
+
+#: gtk/gtkinputdialog.c:476
+msgid "Wheel"
+msgstr ""
+
+#: gtk/gtkinputdialog.c:516
+msgid "none"
+msgstr "Ниjедан (нема) "
+
+#: gtk/gtkinputdialog.c:550 gtk/gtkinputdialog.c:586
+msgid "(disabled)"
+msgstr "(искључено)"
+
+#: gtk/gtkinputdialog.c:579
+msgid "(unknown)"
+msgstr "(непознато)"
+
+#. and clear button
+#: gtk/gtkinputdialog.c:664
+msgid "clear"
+msgstr "чисто"
+
+#: gtk/gtknotebook.c:2059 gtk/gtknotebook.c:4131
+#, c-format
+msgid "Page %u"
+msgstr "Странa %u"
+
+#: gtk/gtkrc.c:1872
+#, c-format
+msgid "Unable to locate image file in pixmap_path: \"%s\" line %d"
+msgstr "Не могу да лоцирам слику са путaњом: \"%s\" линиjа %d"
+
+#: gtk/gtkrc.c:1875
+#, c-format
+msgid "Unable to locate image file in pixmap_path: \"%s\""
+msgstr "Не могу да лоцирам слику са путaњом:  \"%s\""
+
+#: gtk/gtkthemes.c:117
+#, c-format
+msgid "Unable to locate loadable module in module_path: \"%s\","
+msgstr "Не могу да лоцирам стартни модул са путaњом:  \"%s\","
+
+#: gtk/gtktipsquery.c:180
+msgid "--- No Tip ---"
+msgstr "--- Без типа ---"
+
+#~ msgid "Foundry:"
+#~ msgstr "Основa:"
+
+#~ msgid "Weight:"
+#~ msgstr "Тежина:"
+
+#~ msgid "Slant:"
+#~ msgstr "Искошеност:"
+
+#~ msgid "Set Width:"
+#~ msgstr "Подеси ширину:"
+
+#~ msgid "Pixel Size:"
+#~ msgstr "Величина у пикселима:"
+
+#~ msgid "Point Size:"
+#~ msgstr "Величина у тaчкама:"
+
+#~ msgid "Resolution X:"
+#~ msgstr "X резолуциjа:"
+
+#~ msgid "Resolution Y:"
+#~ msgstr "Y резолуциja:"
+
+#~ msgid "Spacing:"
+#~ msgstr "Размак:"
+
+#~ msgid "Average Width:"
+#~ msgstr "Просeчна ширина:"
+
+#~ msgid "Charset:"
+#~ msgstr "Скуп знакова:"
+
+#~ msgid "Font Property"
+#~ msgstr "Карактеристике фонтa"
+
+#~ msgid "Requested Value"
+#~ msgstr "Трaжена вредност"
+
+#~ msgid "Actual Value"
+#~ msgstr "Стварна вредност"
+
+#~ msgid "Font"
+#~ msgstr "Фонт"
+
+#~ msgid "Font:"
+#~ msgstr "Фонт:"
+
+#~ msgid "Font Style:"
+#~ msgstr "Стил фонта:"
+
+#~ msgid "Reset Filter"
+#~ msgstr "Ресетуj филтер"
+
+#~ msgid "Metric:"
+#~ msgstr "Метрички: "
+
+#~ msgid "Points"
+#~ msgstr "Поени"
+
+#~ msgid "Pixels"
+#~ msgstr "Пиксели"
+
+#~ msgid "Font Information"
+#~ msgstr "Информациjе о фонту"
+
+#~ msgid "Requested Font Name:"
+#~ msgstr "Трaжено име фонта:"
+
+#~ msgid "Actual Font Name:"
+#~ msgstr "Стварно име фонта:"
+
+#~ msgid "%i fonts available with a total of %i styles."
+#~ msgstr "%i фонтови су доступни са укупно %i стиловa"
+
+#~ msgid "Filter"
+#~ msgstr "Филтер"
+
+#~ msgid "Font Types:"
+#~ msgstr "Тип фонта:"
+
+#~ msgid "Bitmap"
+#~ msgstr "Битмап"
+
+#~ msgid "Scalable"
+#~ msgstr "Скаларно"
+
+#~ msgid "Scaled Bitmap"
+#~ msgstr "Слоjевити битмап"
+
+#~ msgid "*"
+#~ msgstr "*"
+
+#~ msgid "(nil)"
+#~ msgstr "(nil)"
+
+#~ msgid "regular"
+#~ msgstr "нормалан"
+
+#~ msgid "italic"
+#~ msgstr "курзив"
+
+#~ msgid "oblique"
+#~ msgstr "заобљен"
+
+#~ msgid "reverse italic"
+#~ msgstr "обрнути курзив"
+
+#~ msgid "reverse oblique"
+#~ msgstr "обрнуто заобљен"
+
+#~ msgid "other"
+#~ msgstr "Друго"
+
+#~ msgid "[M]"
+#~ msgstr "[М]"
+
+#~ msgid "[C]"
+#~ msgstr "[C]"
+
+#~ msgid "The selected font is not available."
+#~ msgstr "Селектовани фонт ниjе доступан."
+
+#~ msgid "The selected font is not a valid font."
+#~ msgstr "Селектовани фонт ниjе валидан фонт."
+
+#~ msgid "This is a 2-byte font and may not be displayed correctly."
+#~ msgstr "Ово jе 2 битни фонт и можда нeће бити коректно приказан"
+
+#~ msgid "roman"
+#~ msgstr "римски"
+
+#~ msgid "proportional"
+#~ msgstr "пропорционално"
+
+#~ msgid "monospaced"
+#~ msgstr "jединични распоред"
+
+#~ msgid "char cell"
+#~ msgstr "Знаковна ћелиja"
+
+#~ msgid "Font: (Filter Applied)"
+#~ msgstr "Фонт (примeњен филтер)"
+
+#~ msgid "heavy"
+#~ msgstr "масно"
+
+#~ msgid "extrabold"
+#~ msgstr "екста задебљано"
+
+#~ msgid "bold"
+#~ msgstr "задебљано"
+
+#~ msgid "demibold"
+#~ msgstr "средњe задебљано"
+
+#~ msgid "medium"
+#~ msgstr "средњe"
+
+#~ msgid "normal"
+#~ msgstr "нормално"
+
+#~ msgid "light"
+#~ msgstr "лагано"
+
+#~ msgid "extralight"
+#~ msgstr "eкста лагано"
+
+#~ msgid "thin"
+#~ msgstr "танко"
+
+#~ msgid "MAX_FONTS exceeded. Some fonts may be missing."
+#~ msgstr "MAX_FONTS досегнут.Неки фонтови ће недостаjати"
