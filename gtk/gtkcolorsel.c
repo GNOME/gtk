@@ -66,6 +66,9 @@
 #ifdef GDK_WINDOWING_X11
 #include <X11/Xlib.h>
 #include "x11/gdkx.h"
+#elif defined GDK_WINDOWING_WIN32
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
 #endif
 
 /* Number of elements in the custom palatte */
@@ -1311,7 +1314,7 @@ key_press (GtkWidget   *invisible,
       
       return TRUE;
 
-#ifdef GDK_WINDOWING_X11
+#if defined GDK_WINDOWING_X11 || defined GDK_WINDOWING_WIN32
     case GDK_Up:
     case GDK_KP_Up:
       dy = state == GDK_MOD1_MASK ? -BIG_STEP : -1;
@@ -1340,6 +1343,12 @@ key_press (GtkWidget   *invisible,
 #ifdef GDK_WINDOWING_X11
   XWarpPointer (gdk_x11_display_get_xdisplay (display),
 		None, None, 0, 0, 0, 0, dx, dy);
+#elif defined GDK_WINDOWING_WIN32
+  {
+    POINT point;
+    if (GetCursorPos (&point))
+      SetCursorPos (point.x + dx, point.y + dy);
+  }
 #endif
   
   return TRUE;

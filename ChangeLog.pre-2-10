@@ -1,3 +1,8 @@
+2004-12-06  Hans Breuer  <hans@breuer.org>
+
+	* gtk/gtkcolorsel.c (key_press): Implement keynav for the color
+	picker - win32 too. Fixes bug #160437.
+
 2004-12-05  Tor Lillqvist  <tml@iki.fi>
 
 	* demos/gtk-demo/main.c (load_file): Use g_fopen().
