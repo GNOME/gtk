@@ -2261,7 +2261,7 @@ gdk_event_send_client_message_for_display (GdkDisplay     *display,
 
 
 /* Sends a ClientMessage to all toplevel client windows */
-gboolean
+static gboolean
 gdk_event_send_client_message_to_all_recurse (GdkDisplay *display,
 					      XEvent     *xev, 
 					      guint32     xid,

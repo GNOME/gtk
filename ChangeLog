@@ -1,3 +1,8 @@
+Mon Aug  9 14:24:46 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gdk/x11/gdkevents-x11.c (gdk_event_send_client_message_to_all_recurse): 
+	Make static.
+
 Mon Aug  9 12:48:04 2004  Matthias Clasen  <maclas@gmx.de>
 
 	Add hidden aliases for exported symbols which are
