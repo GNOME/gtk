@@ -156,7 +156,7 @@ GtkIMContext *
 im_module_create (const gchar *context_id)
 {
   if (strcmp (context_id, "inuktitut") == 0)
-    return GTK_IM_CONTEXT (gtk_type_new (type_inuktitut_translit));
+    return GTK_IM_CONTEXT (g_object_new (type_inuktitut_translit, NULL));
   else
     return NULL;
 }

@@ -761,19 +761,22 @@ gtk_im_context_simple_get_type (void)
 
   if (!im_context_simple_type)
     {
-      static const GtkTypeInfo im_context_simple_info =
+      static const GTypeInfo im_context_simple_info =
       {
-	"GtkIMContextSimple",
-	sizeof (GtkIMContextSimple),
-	sizeof (GtkIMContextSimpleClass),
-	(GtkClassInitFunc) gtk_im_context_simple_class_init,
-	(GtkObjectInitFunc) gtk_im_context_simple_init,
-	/* reserved_1 */ NULL,
-        /* reserved_2 */ NULL,
-        (GtkClassInitFunc) NULL,
+        sizeof (GtkIMContextSimpleClass),
+        (GBaseInitFunc) NULL,
+        (GBaseFinalizeFunc) NULL,
+        (GClassInitFunc) gtk_im_context_simple_class_init,
+        NULL,           /* class_finalize */
+        NULL,           /* class_data */
+        sizeof (GtkIMContextSimple),
+        0,              /* n_preallocs */
+        (GInstanceInitFunc) gtk_im_context_simple_init,
       };
-
-      im_context_simple_type = gtk_type_unique (GTK_TYPE_IM_CONTEXT, &im_context_simple_info);
+      
+      im_context_simple_type = g_type_register_static (GTK_TYPE_IM_CONTEXT,
+						       "GtkIMContextSimple",
+						       &im_context_simple_info, 0);
     }
 
   return im_context_simple_type;
@@ -817,7 +820,7 @@ gtk_im_context_simple_finalize (GObject *obj)
 GtkIMContext *
 gtk_im_context_simple_new (void)
 {
-  return GTK_IM_CONTEXT (gtk_type_new (GTK_TYPE_IM_CONTEXT_SIMPLE));
+  return GTK_IM_CONTEXT (g_object_new (GTK_TYPE_IM_CONTEXT_SIMPLE, NULL));
 }
 
 static void
@@ -840,11 +843,10 @@ gtk_im_context_simple_commit_char (GtkIMContext *context,
     {
       context_simple->tentative_match = 0;
       context_simple->tentative_match_len = 0;
-      gtk_signal_emit_by_name (GTK_OBJECT (context_simple),
-			       "preedit_changed");
+      g_signal_emit_by_name (context_simple, "preedit_changed");
     }
 
-  gtk_signal_emit_by_name (GTK_OBJECT (context), "commit", &buf);
+  g_signal_emit_by_name (context, "commit", &buf);
 }
 
 static int
@@ -912,8 +914,7 @@ check_table (GtkIMContextSimple    *context_simple,
 		  context_simple->tentative_match = value;
 		  context_simple->tentative_match_len = n_compose;
 
-		  gtk_signal_emit_by_name (GTK_OBJECT (context_simple),
-					   "preedit_changed");
+		  g_signal_emit_by_name (context_simple, "preedit_changed");
 
 		  return TRUE;
 		}
@@ -992,8 +993,7 @@ check_hex (GtkIMContextSimple *context_simple,
   context_simple->tentative_match = n;
   context_simple->tentative_match_len = n_compose;
   
-  gtk_signal_emit_by_name (GTK_OBJECT (context_simple),
-                           "preedit-changed");
+  g_signal_emit_by_name (context_simple, "preedit-changed");
   
   return TRUE;
 }

@@ -1,3 +1,10 @@
+Fri Oct 19 15:08:30 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/{gtkimcontext.c,gtkimcontextsimple.c,gtkimmulticontext.c}
+	modules/input/{gtkimcontextxim.c,imcyrillic-translit.c,iminuktitut.c,
+	imipa.c,imthai-broken.c,imviqr.c}: Make GtkIMContext derive from
+	GObject, not GtkObject. (#62621)
+
 Fri Oct 19 12:49:12 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* tests/testsocket.c: Remove now useless include of unistd.h,
