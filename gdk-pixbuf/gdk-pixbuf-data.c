@@ -37,9 +37,9 @@
  * drops to zero, or NULL if the data should not be freed.
  * @dfunc_data: Closure data to pass to the destroy notification function.
  * 
- * Creates a new &GdkPixbuf out of in-memory RGB data.
+ * Creates a new #GdkPixbuf out of in-memory RGB data.
  * 
- * Return value: A newly-created &GdkPixbuf structure with a reference count of
+ * Return value: A newly-created #GdkPixbuf structure with a reference count of
  * 1.
  **/
 GdkPixbuf *

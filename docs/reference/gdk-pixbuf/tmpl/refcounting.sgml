@@ -17,8 +17,7 @@ Functions to perform reference counting on a #GdkPixbuf.
 
 <!-- ##### SECTION See_Also ##### -->
   <para>
-    #GdkPixbuf
-    #ArtPixBuf
+    #GdkPixbuf, #ArtPixBuf
   </para>
 
 <!-- ##### FUNCTION gdk_pixbuf_ref ##### -->
@@ -36,10 +35,11 @@ Functions to perform reference counting on a #GdkPixbuf.
 
 @pixbuf: 
 
-
 <!--
 Local variables:
 mode: sgml
 sgml-parent-document: ("../gdk-pixbuf.sgml" "book" "refsect2" "")
 End:
 -->
+
+

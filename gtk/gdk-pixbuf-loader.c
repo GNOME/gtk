@@ -89,10 +89,10 @@ gtk_marshal_NONE__INT_INT_INT_INT (GtkObject *object, GtkSignalFunc func, gpoint
  * gdk_pixbuf_loader_get_type:
  * @void: 
  * 
- * Registers the &GdkPixubfLoader class if necessary, and returns the type ID
+ * Registers the #GdkPixubfLoader class if necessary, and returns the type ID
  * associated to it.
  * 
- * Return value: The type ID of the &GdkPixbufLoader class.
+ * Return value: The type ID of the #GdkPixbufLoader class.
  **/
 GtkType
 gdk_pixbuf_loader_get_type (void)

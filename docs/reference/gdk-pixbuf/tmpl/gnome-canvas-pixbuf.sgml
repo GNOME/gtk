@@ -2,45 +2,61 @@
 GnomeCanvasPixbuf
 
 <!-- ##### SECTION Short_Description ##### -->
-
+Canvas item to display #GdkPixbuf images.
 
 <!-- ##### SECTION Long_Description ##### -->
-<para>
+  <para>
+    This canvas item displays #GdkPixbuf images.  It handles full
+    affine transformations in both GDK and antialiased modes, and also
+    supports <ulink
+    url="http://www.w3.org/Graphics/SVG/">SVG</ulink>-like scaling and
+    translation semantics for absolute pixel values.
+  </para>
 
-</para>
+  <para>
+    #GdkPixbuf structures may be shared among different pixbuf canvas
+    items; the pixbuf item uses #GdkPixbuf's reference counting
+    functions for this.
+  </para>
 
 <!-- ##### SECTION See_Also ##### -->
-<para>
-
-</para>
+  <para>
+    #GnomeCanvas, #GdkPixbuf
+  </para>
 
 <!-- ##### MACRO GNOME_CANVAS_PIXBUF ##### -->
-<para>
+  <para>
+    Casts a #GtkOjbect to a #GnomeCanvasPixbuf.
+  </para>
 
-</para>
-
-@obj: 
+@obj: A GTK+ object.
 
 
 <!-- ##### ARG GnomeCanvasPixbuf:pixbuf ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GnomeCanvasPixbuf:width ##### -->
-<para>
-
-</para>
+  <para>
+    Contains a pointer to a #GdkPixbuf structure that will be used by
+    the pixbuf canvas item as an image source.  When a pixbuf is set
+    its reference count is incremented; if the pixbuf item kept a
+    pointer to another #GdkPixbuf structure, the reference count of
+    this structure will be decremented.  When a pixbuf is queried, a
+    reference count will not be added to the return value; you must do
+    this yourself if you intend to keep the pixbuf structure around.
+  </para>
 
 <!-- ##### ARG GnomeCanvasPixbuf:width_set ##### -->
-<para>
-
-</para>
+  <para>
+    Determines whether the 
+  </para>
 
 <!-- ##### ARG GnomeCanvasPixbuf:width_pixels ##### -->
 <para>
 
 </para>
+
+<!-- ##### ARG GnomeCanvasPixbuf:width ##### -->
+  <para>
+    Contains the width of the image in the pixbuf canvas item.  
+  </para>
 
 <!-- ##### ARG GnomeCanvasPixbuf:height ##### -->
 <para>
@@ -57,3 +73,40 @@ GnomeCanvasPixbuf
 
 </para>
 
+<!-- ##### ARG GnomeCanvasPixbuf:x ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GnomeCanvasPixbuf:x_set ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GnomeCanvasPixbuf:x_pixels ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GnomeCanvasPixbuf:y ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GnomeCanvasPixbuf:y_set ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GnomeCanvasPixbuf:y_pixels ##### -->
+<para>
+
+</para>
+
+
+<!--
+Local variables:
+mode: sgml
+sgml-parent-document: ("../gdk-pixbuf.sgml" "book" "refsect2" "")
+End:
+-->

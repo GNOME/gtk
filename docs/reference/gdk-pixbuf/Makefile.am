@@ -16,15 +16,23 @@ HTML_DIR=$(datadir)/gnome/html
 
 TARGET_DIR=$(HTML_DIR)/$(DOC_MODULE)
 
-tmpl_sources = foo
+tmpl_sources =					\
+	tmpl/creating.sgml			\
+	tmpl/file-loading.sgml			\
+	tmpl/gdk-pixbuf-io.sgml			\
+	tmpl/gdk-pixbuf-loader.sgml		\
+	tmpl/gdk-pixbuf-unused.sgml		\
+	tmpl/gdk-pixbuf.sgml			\
+	tmpl/gnome-canvas-pixbuf.sgml		\
+	tmpl/refcounting.sgml			\
+	tmpl/rendering.sgml
 
 gdk_pixbuf_docdir = $(HTML_DIR)
-gdk_pixbuf_doc_DATA =		\
-	gdk-pixbuf.html		\
-	gdk-pixbuf.hierarchy	\
-	gdk-pixbuf.types	\
-	gdk-pixbuf-scan.c	\
-	gdk-pixbuf-decl.txt	\
+gdk_pixbuf_doc_DATA =			\
+	gdk-pixbuf.html			\
+	gdk-pixbuf.hierarchy		\
+	gdk-pixbuf.types		\
+	gdk-pixbuf-decl.txt		\
 	gdk-pixbuf-sections.txt
 
 EXTRA_DIST = $(gdk_pixbuf_doc_DATA)

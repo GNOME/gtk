@@ -34,8 +34,8 @@ the image data.
 
 </para>
 
-@pixbuf:
-@Returns:
+@pixbuf: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gdk_pixbuf_get_n_channels ##### -->
@@ -43,8 +43,8 @@ the image data.
 
 </para>
 
-@pixbuf:
-@Returns:
+@pixbuf: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gdk_pixbuf_get_has_alpha ##### -->
@@ -52,8 +52,8 @@ the image data.
 
 </para>
 
-@pixbuf:
-@Returns:
+@pixbuf: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gdk_pixbuf_get_bits_per_sample ##### -->
@@ -61,8 +61,8 @@ the image data.
 
 </para>
 
-@pixbuf:
-@Returns:
+@pixbuf: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gdk_pixbuf_get_pixels ##### -->
@@ -70,8 +70,8 @@ the image data.
 
 </para>
 
-@pixbuf:
-@Returns:
+@pixbuf: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gdk_pixbuf_get_width ##### -->
@@ -79,8 +79,8 @@ the image data.
 
 </para>
 
-@pixbuf:
-@Returns:
+@pixbuf: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gdk_pixbuf_get_height ##### -->
@@ -88,8 +88,8 @@ the image data.
 
 </para>
 
-@pixbuf:
-@Returns:
+@pixbuf: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gdk_pixbuf_get_rowstride ##### -->
@@ -97,7 +97,7 @@ the image data.
 
 </para>
 
-@pixbuf:
+@pixbuf: 
 @Returns:
 
 <!--
@@ -106,3 +106,5 @@ mode: sgml
 sgml-parent-document: ("../gdk-pixbuf.sgml" "book" "refsect2" "")
 End:
 -->
+
+

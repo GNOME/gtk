@@ -23,6 +23,19 @@ gdk-pixbuf-io
 @user_data: 
 
 
+<!-- ##### USER_FUNCTION ModuleUpdatedNotifyFunc ##### -->
+<para>
+
+</para>
+
+@pixbuf: 
+@user_data: 
+@x: 
+@y: 
+@width: 
+@height: 
+
+
 <!-- ##### STRUCT GdkPixbufModule ##### -->
 <para>
 

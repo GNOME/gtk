@@ -81,9 +81,9 @@ gdk_pixbuf_unref (GdkPixbuf *pixbuf)
  * gdk_pixbuf_new_from_art_pixbuf:
  * @art_pixbuf: A libart pixbuf.
  *
- * Creates a &GdkPixbuf by wrapping a libart pixbuf.
+ * Creates a #GdkPixbuf by wrapping a libart pixbuf.
  *
- * Return value: A newly-created &GdkPixbuf structure with a reference count of
+ * Return value: A newly-created #GdkPixbuf structure with a reference count of
  * 1.
  **/
 GdkPixbuf *
@@ -119,12 +119,12 @@ free_buffer (gpointer user_data, gpointer data)
  * @width: Width of image in pixels.
  * @height: Height of image in pixels.
  *
- * Creates a new &GdkPixbuf structure and allocates a buffer for it.  The buffer
+ * Creates a new #GdkPixbuf structure and allocates a buffer for it.  The buffer
  * has an optimal rowstride.  Note that the buffer is not cleared; you will have
  * to fill it completely.
  *
- * Return value: A newly-created &GdkPixbuf, or NULL if not enough memory
- * could be allocated for the image buffer.
+ * Return value: A newly-created #GdkPixbuf with a reference count of 1, or NULL
+ * if not enough memory could be allocated for the image buffer.
  **/
 GdkPixbuf *
 gdk_pixbuf_new (ArtPixFormat format, gboolean has_alpha, int bits_per_sample,

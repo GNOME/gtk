@@ -176,10 +176,12 @@ remove_alpha (ArtPixBuf *apb, int x, int y, int width, int height, int *rowstrid
  * opacity information for images with an alpha channel; the GC must already
  * have the clipping mask set if you want transparent regions to show through.
  *
- * For an explanation of dither offsets, see the GdkRGB documentation. In brief, the
- * dither offset is important when scrolling (so you can redraw half an image but keep the
- * dithering "lined up" between the part you drew first and the part you drew previously).
- * For unscrolled images, the offset can always be 0.
+ * For an explanation of dither offsets, see the GdkRGB documentation.  In
+ * brief, the dither offset is important when re-rendering partial regions of an
+ * image to a rendered version of the full image, or for when the offsets to a
+ * base position change, as in scrolling.  The dither matrix has to be shifted
+ * for consistent visual results.  If you do not have any of these cases, the
+ * dither offsets can be both zero.
  **/
 void
 gdk_pixbuf_render_to_drawable (GdkPixbuf *pixbuf,
@@ -254,12 +256,13 @@ gdk_pixbuf_render_to_drawable (GdkPixbuf *pixbuf,
  * Renders a rectangular portion of a pixbuf to a drawable.  This is done using
  * GdkRGB, so the specified drawable must have the GdkRGB visual and colormap.
  *
- * This function has a performance penalty; it makes two synchronous
- * round trips to the X server (creating a bitmask and a GC), and it
- * draws the contents of the bitmask. If performance is crucial,
- * consider handling alpha yourself and using
- * gdk_pixbuf_render_to_drawable(). On the other hand it's more convenient
- * than gdk_pixbuf_render_to_drawable() because it handles the alpha channel.
+ * When used with #GDK_PIXBUF_ALPHA_BILEVEL, this function has to create a bitmap
+ * out of the thresholded alpha channel of the image and, it has to set this
+ * bitmap as the clipping mask for the GC used for drawing.  This can be a
+ * significant performance penalty depending on the size and the complexity of
+ * the alpha channel of the image.  If performance is crucial, consider handling
+ * the alpha channel yourself (possibly by caching it in your application) and
+ * using gdk_pixbuf_render_to_drawable() or GdkRGB directly instead.
  **/
 void
 gdk_pixbuf_render_to_drawable_alpha (GdkPixbuf *pixbuf, GdkDrawable *drawable,

@@ -1,26 +1,48 @@
 <!-- ##### SECTION Title ##### -->
-rendering
+Rendering
 
 <!-- ##### SECTION Short_Description ##### -->
-
+Rendering a Pixbuf to a GDK Drawable.
 
 <!-- ##### SECTION Long_Description ##### -->
-<para>
+  <para>
+    The GdkPixbuf library provides several convenience functions to
+    render pixbufs to GDK drawables.  It uses the GdkRGB to render the
+    image data.
+  </para>
 
-</para>
+  <para>
+    At this point there is not a standard alpha channel extension for
+    the X Window System, so it is not possible to use full opacity
+    information when painting images to arbitrary drawables.  The
+    GdkPixbuf convenience functions will threshold the opacity
+    information to create a bi-level clipping mask (black and white),
+    and use that to draw the image onto a drawable.
+  </para>
 
 <!-- ##### SECTION See_Also ##### -->
-<para>
-
-</para>
+  <para>
+    GdkRGB
+  </para>
 
 <!-- ##### ENUM GdkPixbufAlphaMode ##### -->
-<para>
+  <para>
+    These values can be passed to
+    gdk_pixbuf_render_to_drawable_alpha() to control how the alpha
+    chanel of an image should be handled.  This function can create a
+    bilevel clipping mask (black and white) and use it while painting
+    the image.  In the future, when the X Window System gets an alpha
+    channel extension, it will be possible to do full alpha
+    compositing onto arbitrary drawables.  For now both cases fall
+    back to a bilevel clipping mask.
+  </para>
 
-</para>
-
-@GDK_PIXBUF_ALPHA_BILEVEL: 
-@GDK_PIXBUF_ALPHA_FULL: 
+@GDK_PIXBUF_ALPHA_BILEVEL: A bilevel clipping mask (black and white)
+will be created and used to draw the image.  Pixels below 0.5 opacity
+will be considered fully transparent, and all others will be
+considered fully opaque.
+@GDK_PIXBUF_ALPHA_FULL: For now falls back to #GDK_PIXBUF_ALPHA_BILEVEL.
+In the future it will do full alpha compositing.
 
 <!-- ##### FUNCTION gdk_pixbuf_render_to_drawable_alpha ##### -->
 <para>
@@ -74,6 +96,13 @@ rendering
 @dest_y: 
 @width: 
 @height: 
-@alpha_threshold: 
+@alpha_threshold:
+
+<!--
+Local variables:
+mode: sgml
+sgml-parent-document: ("../gdk-pixbuf.sgml" "book" "refsect2" "")
+End:
+-->
 
 
