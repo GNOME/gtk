@@ -1,3 +1,29 @@
+2002-12-21  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/win32/gdkwindow-win32.c (gdk_window_new): Move the code that
+	sets the window style and extended window style, and adjusts the
+	width and height to take the window decorations into account
+	earlier. The adjusted width and height used to be ignored. Remove
+	the local x, y, width and height variables, no need to further
+	confuse the code by having local copies. (Partial fix, I hope, for
+	#101588)
+
+	(gdk_window_move): When moving top-level windows, take title bar
+	and border width into account, offsetting the coordinates before
+	calling SetWindowPos().
+
+	(gdk_window_set_decorations, gdk_window_set_functions):
+	Reimplement, taking into account the peculiar semantics of
+	GDK_DECOR_ALL and GDK_FUNC_ALL. (#79036)
+
+	(gdk_window_get_decorations): Implement. (#98981)
+	
+	(gdk_window_set_type_hint): When setting
+	GDK_WINDOW_TYPE_HINT_MENU, call	gdk_window_set_decorations().
+	(#79036)
+
+	* gdk/gdk.def: Add gdk_window_get_decorations. (#98981)
+
 2002-12-21  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtktextview.c (gtk_text_view_set_background): New static

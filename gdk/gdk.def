@@ -439,6 +439,7 @@ EXPORTS
 	gdk_window_freeze_updates
 	gdk_window_fullscreen
 	gdk_window_get_children
+	gdk_window_get_decorations
 	gdk_window_get_deskrelative_origin
 	gdk_window_get_events
 	gdk_window_get_frame_extents
