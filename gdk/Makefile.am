@@ -1,7 +1,6 @@
 ## Makefile.am for gtk+/gdk
 
 SUBDIRS=$(gdktarget)
-DIST_SUBDIRS=x11 win32
 
 EXTRA_DIST =	\
 	gdkconfig.h.win32 \

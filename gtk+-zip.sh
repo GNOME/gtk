@@ -25,3 +25,4 @@ share/themes/Default/gtk
 EOF
 
 zip -r $ZIP lib/locale/*/LC_MESSAGES/gtk+.mo
+

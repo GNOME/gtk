@@ -1,5 +1,22 @@
 2001-10-28  Tor Lillqvist  <tml@iki.fi>
 
+	* Makefile.am (SUBDIRS): Exclude docs, quick hack as there is no
+	texi2html on Cygwin (?).
+
+	* gdk/win32/rc/Makefile.am (EXTRA_DIST): There is no gdk.rc.in any
+	longer.
+
+	* gdk/win32/Makefile.am (libgdk_win32_la_SOURCES): There is no
+	gdkdrawable-win32.h, gdkinput-win32.h, gdkpixmap-win32.h or
+	gdkwindow-win32.h.
+
+	* gdk/win32/Makefile.am
+	* gdk/win32/rc/Makefile.am: (files): New target.
+
+	* README.win32: Updates.
+
+	* gtk+-zip.sh: New file.
+
 	* configure.in: Check also $CC for -fnative-struct before adding
 	it, to avoid (harmless) duplication.
 

@@ -40,7 +40,6 @@ libgdk_win32_la_SOURCES = \
 	gdkcursor-win32.c \
 	gdkdnd-win32.c \
 	gdkdrawable-win32.c \
-	gdkdrawable-win32.h \
 	gdkevents-win32.c \
 	gdkfont-win32.c \
 	gdkgc-win32.c \
@@ -48,10 +47,8 @@ libgdk_win32_la_SOURCES = \
 	gdkim-win32.c \
 	gdkimage-win32.c \
 	gdkinput-win32.c \
-	gdkinput-win32.h \
 	gdkmain-win32.c \
 	gdkpixmap-win32.c \
-	gdkpixmap-win32.h \
 	gdkprivate-win32.h \
 	gdkproperty-win32.c \
 	gdkregion-win32.c \
@@ -60,7 +57,11 @@ libgdk_win32_la_SOURCES = \
 	gdkwin32.h \
 	gdkwin32id.c \
 	gdkwindow-win32.c \
-	gdkwindow-win32.h \
 	surrogate-dimm.h
 
 libgdk_win32_la_LIBADD = rc/gdk-win32res.lo
+
+files:
+	@files=`ls $(DISTFILES) 2> /dev/null `; for p in $$files; do \
+	  echo $$p; \
+	done

@@ -1,4 +1,4 @@
-The Win32 port of GTk+ is a work in progress, and not as stable or
+The Win32 port of GTK is a work in progress, and not as stable or
 correct as the Unix/X11 version. For more information about the Win32
 port, see http://www.gimp.org/tml/gimp/win32/ or
 http://www.iki.fi/tml/gimp/win32/ .
@@ -12,38 +12,47 @@ useable. (But note, the Win32 backend has never been claimed to be
 "production quality", although it works surprisingly well for the
 GIMP.)
 
-To build GTk+ on Win32, you need either the Microsoft compiler and
-tools, or cygwin's make and some other tools and the gcc from mingw
-(gcc-2.95 or later). Compile in gdk\win32, gdk and gtk with `nmake -f
-makefile.msc` or `make -f makefile.mingw`. 
+There are three ways to build gtk for win32:
 
-Note that I use gcc myself, and thus the build setup for Microsoft's
-nmake and cl might be a bit rusty.
+1) Use the autoconf-generated configure script, and the resulting
+Makefiles (which use libtool and gcc to do the compilation). I use
+this myself, but it might be hell to setup correctly. 
 
-See the README.win32 file in the GLib distribution for instructions
-how to build with gcc. 
+2) Use gcc from mingw, or gcc -mno-cygwin from Cygwin. Say make -f
+makefile.mingw in gdk and gtk.
 
-To use GTk+ on Win32, you also need either of the above mentioned
-compilers. Other compilers might work, but don't count on it.  The
-same instructions on how to set up a correct version of gcc should
-also be followed if you want to build applications that use GTk+ with
-gcc. Especially note that if you use gcc, in order to use the prebuilt
-DLLs, you *must* compile your code with gcc -mno-cygwin
--fnative-struct.
+3) Use the Microsoft compiler, cl and Make, nmake. Say nmake -f
+makefile.msc in gdk and gtk.
+
+Alternatives 1 and 2 also generate Microsoft import libraries (.lib),
+if you have lib.exe available. They should also work for
+cross-compilations from Unix, as long as you pass the correct compiler
+name.
+
+Note that I use mainly gcc myself, and thus the build setup for
+Microsoft's nmake and cl might be a bit rusty. Hans Breuer has been
+taking care of them. At times, I and he disagree a bit, and the gcc
+and msc makefiles might not produce compatible or identically named
+DLLs and import libraries.
+
+To use GTK on Win32, you also need either gcc or MSVC. Other compilers
+might work, but don't count on it. Note that if you use gcc, in order
+to use the prebuilt DLLs, you *must* compile your code with gcc
+-mno-cygwin -fnative-struct.
 
 The tablet support uses the Wintab API. The Wintab development kit can
 be downloaded from http://www.pointing.com. If you don't care for
 that, undefine HAVE_WINTAB_H in config.h.win32 and remove references to
 the wntab32x library from the makefile before building.
 
-GTk+ wants to be built with the GNU "intl" library for
+GTK wants to be built with the GNU "intl" library for
 internationalisation (i18n). Get the version ported to Win32 (not a
-very big deal) from tml's web site mentioned above. The "intl" library
+very big deal) from the web site mentioned above. The "intl" library
 as gets built as a DLL called libintl-1.dll. If you don't want any
 i18n stuff, undefine ENABLE_NLS, HAVE_GETTEXT and HAVE_LIBINTL in the
 config.h.win32 file, and remove references to the intl library from
 the makefiles.
 
 Note that while the GNU gettext package is under the GPL, the "intl"
-part of it is under the LGPL (like GTk+ or GLib), as of
+part of it is under the LGPL (like GTK or GLib), as of
 gettext-0.10.40.
