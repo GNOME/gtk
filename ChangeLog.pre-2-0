@@ -1,3 +1,8 @@
+1998-08-06  Martin Baulig  <martin@home-of-linux.org>
+
+	* gtk/gtkclist.c: Renamed `merge' -> `my_merge' and
+	`mergesort' -> `my_mergesort'.
+
 Wed Aug  5 21:12:37 1998  Stefan Jeske  <stefan@gtk.org>
 
 	* gtk/gtkenums.h: new enum GtkSortType.

@@ -354,12 +354,12 @@ static void extend_selection (GtkCList      *clist,
 static gint default_compare (GtkCList     *clist,
 			     gconstpointer row1,
 			     gconstpointer row2);
-static GList * merge (GtkCList *clist,
-		      GList    *a,
-		      GList    *b);
-static GList * mergesort (GtkCList *clist,
-			  GList    *list,
-			  gint      num);
+static GList * my_merge (GtkCList *clist,
+			 GList    *a,
+			 GList    *b);
+static GList * my_mergesort (GtkCList *clist,
+			     GList    *list,
+			     gint      num);
 
 /* Fill in data after widget is realized and has style */
 
@@ -6063,9 +6063,9 @@ gtk_clist_set_sort_column (GtkCList *clist,
 }
 
 static GList *
-merge (GtkCList *clist,
-       GList    *a,         /* first list to merge */
-       GList    *b)         /* second list to merge */
+my_merge (GtkCList *clist,
+	  GList    *a,         /* first list to merge */
+	  GList    *b)         /* second list to merge */
 {
   GList z = { 0 };          /* auxiliary node */
   GList *c;
@@ -6117,9 +6117,9 @@ merge (GtkCList *clist,
 }
 
 static GList *
-mergesort (GtkCList *clist,
-	   GList    *list,         /* the list to sort */
-	   gint      num)          /* the list's length */
+my_mergesort (GtkCList *clist,
+	      GList    *list,         /* the list to sort */
+	      gint      num)          /* the list's length */
 {
   GList *half;
   gint i;
@@ -6140,9 +6140,9 @@ mergesort (GtkCList *clist,
       half->prev = NULL;
 
       /* recursively sort both lists */
-      return merge (clist,
-		    mergesort (clist, list, num / 2),
-		    mergesort (clist, half, num - num / 2));
+      return my_merge (clist,
+		       my_mergesort (clist, list, num / 2),
+		       my_mergesort (clist, half, num - num / 2));
     }
 }
 
@@ -6178,7 +6178,7 @@ gtk_clist_sort (GtkCList *clist)
       thaw = TRUE;
     }
 
-  clist->row_list = mergesort (clist, clist->row_list, clist->rows);
+  clist->row_list = my_mergesort (clist, clist->row_list, clist->rows);
 
   work = clist->selection;
 
