@@ -1,3 +1,18 @@
+2001-08-06  Havoc Pennington  <hp@pobox.com>
+ 
+ 	* gdk/x11/gdkimage-x11.c (_gdk_x11_get_image): The whole 
+ 	GDK_IS_WINDOW() branch of this was a bit screwed up, because 
+ 	it was expecting a GdkWindow, not a GdkWindowImplX11.
+ 
+ 	Also, we were getting the window rect in screen coords 
+ 	and the screen rect in window coords then intersecting 
+ 	them; instead, get window rect in window coords.
+ 
+ 	Finally, there were codepaths that resulted in a stuck server grab
+ 	(when the window was fully onscreen, or on gdk_image_new()
+ 	failure); make the server ungrab thing a bit more
+ 	robust/consistent.
+
 2001-08-06  Sven Neumann  <sven@gimp.org>
 
 	* gdk/gdkpango.c (gdk_pango_context_destroy): 
