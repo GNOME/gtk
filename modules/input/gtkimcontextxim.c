@@ -216,7 +216,7 @@ get_im (const char *locale)
       if (im)
 	{
 	  info = g_new (GtkXIMInfo, 1);
-	  open_ims = g_slist_prepend (open_ims, im);
+	  open_ims = g_slist_prepend (open_ims, info);
 	  
 	  info->locale = g_strdup (locale);
 	  info->im = im;

@@ -1,3 +1,8 @@
+Tue Oct  8 09:41:43 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* Patch from Takuro Ashie to fix updating of open_ims
+	list. (#95150)
+
 Mon Oct  7 15:52:13 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/x11/gdkkeys-x11.c (update_keymaps): Fix infinite
