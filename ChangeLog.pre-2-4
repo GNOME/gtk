@@ -1,3 +1,16 @@
+Thu Sep 07 20:50:49 2000  George Lebl <jirka@5z.com>
+
+	* gtk/gtkmenu.c:  Backported Nils Barth's patch for submenu
+	  navigation with Owen's fixes and suggestions.  The original
+	  ChangeLog from Owen for HEAD goes as folllows:  Apply patch from
+          Nils Barth and David Santiago to improve submenu
+          navigation. The patch does this by creating a triangular
+          region from the point where the pointer leaves the
+          menu to the submenu.  While the pointer is in
+          that region and a timeout has not expired, events
+          that would cause the active submenu to change are
+          ignored.
+
 Sun Sep 03 00:47:08 2000  George Lebl <jirka@5z.com>
 
 	* gtk/gtkwidget.h:  Add some documenting comments about 
