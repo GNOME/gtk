@@ -1,3 +1,9 @@
+Tue Oct 28 09:21:29 2003  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkmain.c (gtk_check_version): Move docs inline,
+	rewrite docs, mention memory management for the return
+	value. (Partly addresses #125549, Michael Natterer)
+
 2003-10-28  Padraig O'Briain  <padraig.obriain@sun.com>
 
 	* gtk/gtkfilechooserdefault.c (gtk_file_chooser_default_remove_filter):

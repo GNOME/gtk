@@ -76,21 +76,12 @@ about it. ;-)
 
 <!-- ##### FUNCTION gtk_check_version ##### -->
 <para>
-Checks that the GTK+ library in use is equal to the given 
-version. Primarily useful to compare the header file version 
-(from #GTK_MAJOR_VERSION, #GTK_MINOR_VERSION, #GTK_MICRO_VERSION) 
-the the runtime library version. This should only be done 
-in the build for your application, to check that the user's libraries
-and header files are the same. Applications should not do this 
-when deployed, because it's OK for applications to use a different
-micro version of GTK+ than the one they were compiled against.
 </para>
 
-@required_major: the required major version.
-@required_minor: the required major version.
-@required_micro: the required major version.
-@Returns: %NULL if the GTK+ library is compatible with the given version, or
-a string describing the version mismatch.
+@required_major: 
+@required_minor:
+@required_micro:
+@Returns:
 
 
 <!-- ##### MACRO GTK_MAJOR_VERSION ##### -->
