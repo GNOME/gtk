@@ -1525,7 +1525,7 @@ gdk_window_set_transient_for (GdkWindow *window,
   if (!SetParent (window_id, parent_id))
 	WIN32_API_FAILED ("SetParent");
 #else /* make the modal window topmost instead */
-  if (!SetWindowPos (window_id, HWND_TOPMOST, 0, 0, 0, 0,
+  if (!SetWindowPos (window_id, HWND_NOTOPMOST, 0, 0, 0, 0,
                      SWP_NOMOVE | SWP_NOSIZE))
     WIN32_API_FAILED ("SetWindowPos");
 #endif
