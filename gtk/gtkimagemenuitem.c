@@ -149,22 +149,11 @@ gtk_image_menu_item_set_property (GObject         *object,
     {
     case PROP_IMAGE:
       {
-        GtkWidget *child;
+        GtkWidget *image;
 
-        child = (GtkWidget*) g_value_get_object (value);
+        image = (GtkWidget*) g_value_get_object (value);
 
-        if (child != image_menu_item->image)
-          {
-            if (image_menu_item->image)
-              gtk_container_remove (GTK_CONTAINER (image_menu_item),
-                                    image_menu_item->image);
-            
-            if (child)
-              {
-                gtk_image_menu_item_add_image (image_menu_item,
-                                               child);
-              }
-          }
+	gtk_image_menu_item_set_image (image_menu_item, image);
       }
       break;
     default:
@@ -339,8 +328,13 @@ gtk_image_menu_item_forall (GtkContainer   *container,
 }
 
 GtkWidget*
-gtk_image_menu_item_new (GtkWidget   *widget,
-                         const gchar *label)
+gtk_image_menu_item_new (void)
+{
+  return g_object_new (GTK_TYPE_IMAGE_MENU_ITEM, NULL);
+}
+
+GtkWidget*
+gtk_image_menu_item_new_with_label (const gchar *label)
 {
   GtkImageMenuItem *image_menu_item;
   GtkWidget *accel_label;
@@ -356,9 +350,6 @@ gtk_image_menu_item_new (GtkWidget   *widget,
                                     GTK_WIDGET (image_menu_item));
   gtk_widget_show (accel_label);
 
-  if (widget)
-    gtk_image_menu_item_add_image (image_menu_item, widget);
-  
   return GTK_WIDGET(image_menu_item);
 }
 
@@ -376,7 +367,9 @@ gtk_image_menu_item_new_from_stock (const gchar      *stock_id,
 
   if (gtk_stock_lookup (stock_id, &stock_item))
     {
-      item = gtk_image_menu_item_new (image, stock_item.label);
+      item = gtk_image_menu_item_new_with_label (stock_item.label);
+
+      gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (item), image);
       
       if (stock_item.keyval && accel_group)
 	gtk_widget_add_accelerator (item,
@@ -387,33 +380,47 @@ gtk_image_menu_item_new_from_stock (const gchar      *stock_id,
 				    GTK_ACCEL_VISIBLE);
     }
   else
-    item = gtk_image_menu_item_new (image, stock_id);
-  
+    {
+      item = gtk_image_menu_item_new_with_label (stock_id);
+
+      gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (item), image);
+    }
+
   gtk_widget_show (image);
   return item;
 }
 
 void
-gtk_image_menu_item_add_image (GtkImageMenuItem *image_menu_item,
-                               GtkWidget        *child)
+gtk_image_menu_item_set_image (GtkImageMenuItem *image_menu_item,
+                               GtkWidget        *image)
 {
   g_return_if_fail (GTK_IS_IMAGE_MENU_ITEM (image_menu_item));
-  g_return_if_fail (image_menu_item->image == NULL);
-  
-  gtk_widget_set_parent (child, GTK_WIDGET (image_menu_item));
-  image_menu_item->image = child;
+
+  if (image == image_menu_item->image)
+    return;
+
+  if (image_menu_item->image)
+    gtk_container_remove (GTK_CONTAINER (image_menu_item),
+			  image_menu_item->image);
+
+  image_menu_item->image = image;
+
+  if (image == NULL)
+    return;
+
+  gtk_widget_set_parent (image, GTK_WIDGET (image_menu_item));
 
   g_object_notify (G_OBJECT (image_menu_item), "image");
   
-  if (GTK_WIDGET_REALIZED (child->parent))
-    gtk_widget_realize (child);
+  if (GTK_WIDGET_REALIZED (image->parent))
+    gtk_widget_realize (image);
   
-  if (GTK_WIDGET_VISIBLE (child->parent) && GTK_WIDGET_VISIBLE (child))
+  if (GTK_WIDGET_VISIBLE (image->parent) && GTK_WIDGET_VISIBLE (image))
     {
-      if (GTK_WIDGET_MAPPED (child->parent))
-	gtk_widget_map (child);
+      if (GTK_WIDGET_MAPPED (image->parent))
+	gtk_widget_map (image);
 
-      gtk_widget_queue_resize (child);
+      gtk_widget_queue_resize (image);
     }
 }
 

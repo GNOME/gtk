@@ -2771,7 +2771,8 @@ create_menu (gint depth, gint length, gboolean tearoff)
   image = gtk_image_new_from_stock (GTK_STOCK_OPEN,
                                     GTK_ICON_SIZE_MENU);
   gtk_widget_show (image);
-  menuitem = gtk_image_menu_item_new (image, "Image item");
+  menuitem = gtk_image_menu_item_new_with_label ("Image item");
+  gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (menuitem), image);
   gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
   gtk_widget_show (menuitem);
   
@@ -2858,7 +2859,8 @@ create_menus (void)
       image = gtk_image_new_from_stock (GTK_STOCK_HELP,
                                         GTK_ICON_SIZE_MENU);
       gtk_widget_show (image);
-      menuitem = gtk_image_menu_item_new (image, "Help");
+      menuitem = gtk_image_menu_item_new_with_label ("Help");
+      gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (menuitem), image);
       gtk_menu_item_set_submenu (GTK_MENU_ITEM (menuitem), create_menu (4, 5, TRUE));
       gtk_menu_item_right_justify (GTK_MENU_ITEM (menuitem));
       gtk_menu_bar_append (GTK_MENU_BAR (menubar), menuitem);

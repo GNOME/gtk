@@ -1,3 +1,11 @@
+2001-04-28  Martin Baulig  <baulig@suse.de>
+
+	* gtk/gtkimagemenuitem.[ch]: Renamed gtk_image_menu_item_add_icon()
+	to gtk_image_menu_item_set_icon() and made it work if there's already
+	an image.
+	(gtk_image_menu_item_new): This function doesn't take any arguments anymore.
+	(gtk_image_menu_item_new_with_label): New function.
+
 Thu May 17 16:20:04 2001  Jonathan Blandford  <jrb@redhat.com>
 
 	* demos/gtk-demo/main.c (fontify): It's the worlds ugliest
