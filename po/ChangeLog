@@ -1,4 +1,12 @@
-2001-02-22  Tor Lillqvist  <tml@iki.fi>
+2000-10-07  Tor Lillqvist  <tml@iki.fi>
+
+	Change from the 2000-10-07 snapshot:
+
+	* makefile.cygwin: Updates for the Chinese locales.
+
+2000-07-22  Tor Lillqvist  <tml@iki.fi>
+
+	Change from the 2000-07-22 snapshot:
 
 	* makefile.cygwin: Use iconv instead of native2ascii.
 
