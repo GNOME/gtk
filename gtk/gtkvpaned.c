@@ -238,18 +238,10 @@ gtk_vpaned_draw (GtkWidget    *widget,
 	  gtk_widget_intersect (paned->child2, area, &child_area))
         gtk_widget_draw (paned->child2, &child_area);
 
-      gdk_draw_line (widget->window,
-		     widget->style->dark_gc[widget->state],
-		     0,
-		     border_width + paned->child1_size + paned->gutter_size / 2 - 1,
-		     widget->allocation.width - 1,
-		     border_width + paned->child1_size + paned->gutter_size / 2 - 1);
-      gdk_draw_line (widget->window,
-		     widget->style->light_gc[widget->state],
-		     0,
-		     border_width + paned->child1_size + paned->gutter_size / 2,
-		     widget->allocation.width - 1,
-		     border_width + paned->child1_size + paned->gutter_size / 2);
+      gtk_paint_hline(widget->style, widget->window, GTK_STATE_NORMAL,
+		      area, widget, "vpaned",
+		      0, widget->allocation.width - 1,
+		      border_width + paned->child1_size + paned->gutter_size / 2 - 1);
     }
 }
 

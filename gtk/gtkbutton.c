@@ -524,6 +524,8 @@ gtk_button_paint (GtkWidget    *widget,
        if (GTK_WIDGET_HAS_DEFAULT (widget) &&
 	   GTK_BUTTON (widget)->relief == GTK_RELIEF_NORMAL)
 	 {
+	   gdk_window_set_back_pixmap (widget->window, NULL, TRUE);
+	   gdk_window_clear_area (widget->window, area->x, area->y, area->width, area->height);
 	   gtk_paint_box (widget->style, widget->window,
 			  GTK_STATE_NORMAL, GTK_SHADOW_IN,
 			  area, widget, "buttondefault",

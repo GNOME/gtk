@@ -1,3 +1,11 @@
+Mon Aug 10 23:09:30 EDT 1998
+	* Added a few drawing fixes for notebook and other widgets. finished
+	  pixmap theme up to the level that can be supported so far. (need to
+	  add path discovery 9ie where is the rc fiel from - add to pixmap 
+	  path so we can get theimages from there too). then we can package 
+	  themes. After that need to add to theme seartch path stuff in users 
+	  home dir.
+	  
 Thu Aug  6 16:49:25 1998  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtktooltips.c (gtk_tooltips_expose): Draw into a

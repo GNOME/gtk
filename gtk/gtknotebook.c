@@ -1665,8 +1665,6 @@ gtk_notebook_paint (GtkWidget    *widget,
 		}
 	      else
 		{
-		  gint i = 0;
-
 		  switch (notebook->tab_pos)
 		    {
 		    case GTK_POS_TOP:
@@ -2265,7 +2263,7 @@ gtk_notebook_draw_tab (GtkNotebook     *notebook,
 			   state_type, GTK_SHADOW_OUT,
 			   area, widget, "tab",
 			   page_area.x, page_area.y,
-			   page_area.width, page_area.height,
+			   page_area.width - 1, page_area.height - 1,
 			   gap_side);
        if ((GTK_WIDGET_HAS_FOCUS (widget)) &&
 	   (GTK_NOTEBOOK(widget)->focus_tab->data == page) &&

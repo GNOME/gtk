@@ -1,2842 +1,2330 @@
+
 #include "pixmap_theme.h"
 
 extern GtkStyleClass th_default_class;
-extern GdkFont *default_font;
-extern GSList *unattached_styles;
-
+extern GdkFont     *default_font;
+extern GSList      *unattached_styles;
 
 /* Theme functions to export */
-GtkStyle*
-gtk_style_new            (void);
+GtkStyle           *
+                    gtk_style_new(void);
 void
-gtk_style_set_background (GtkStyle     *style,
-			  GdkWindow    *window,
-			  GtkStateType  state_type);
+                    gtk_style_set_background(GtkStyle * style,
+					     GdkWindow * window,
+					     GtkStateType state_type);
 
 /* internal functions */
 void
-draw_hline   (GtkStyle      *style,
-	      GdkWindow     *window,
-	      GtkStateType   state_type,
-	      GdkRectangle  *area,
-	      GtkWidget     *widget,
-	      gchar         *detail,
-	      gint           x1,
-	      gint           x2,
-	      gint           y);
-void 
-draw_vline   (GtkStyle      *style,
-	      GdkWindow     *window,
-	      GtkStateType   state_type,
-	      GdkRectangle  *area,
-	      GtkWidget     *widget,
-	      gchar         *detail,
-	      gint           y1,
-	      gint           y2,
-	      gint           x);
+                    draw_hline(GtkStyle * style,
+			       GdkWindow * window,
+			       GtkStateType state_type,
+			       GdkRectangle * area,
+			       GtkWidget * widget,
+			       gchar * detail,
+			       gint x1,
+			       gint x2,
+			       gint y);
 void
-draw_shadow (GtkStyle      *style,
-	     GdkWindow     *window,
-	     GtkStateType   state_type,
-	     GtkShadowType  shadow_type,
-	     GdkRectangle  *area,
-	     GtkWidget     *widget,
-	     gchar         *detail,
-	     gint           x,
-	     gint           y,
-	     gint           width,
-	     gint           height);
+                    draw_vline(GtkStyle * style,
+			       GdkWindow * window,
+			       GtkStateType state_type,
+			       GdkRectangle * area,
+			       GtkWidget * widget,
+			       gchar * detail,
+			       gint y1,
+			       gint y2,
+			       gint x);
+void
+                    draw_shadow(GtkStyle * style,
+				GdkWindow * window,
+				GtkStateType state_type,
+				GtkShadowType shadow_type,
+				GdkRectangle * area,
+				GtkWidget * widget,
+				gchar * detail,
+				gint x,
+				gint y,
+				gint width,
+				gint height);
 
-void 
-draw_polygon (GtkStyle      *style,
-	      GdkWindow     *window,
-	      GtkStateType   state_type,
-	      GtkShadowType  shadow_type,
-	      GdkRectangle  *area,
-	      GtkWidget     *widget,
-	      gchar         *detail,
-	      GdkPoint      *point,
-	      gint           npoints,
-	      gint           fill);
-void 
-draw_arrow   (GtkStyle      *style,
-	      GdkWindow     *window,
-	      GtkStateType   state_type,
-	      GtkShadowType  shadow_type,
-	      GdkRectangle  *area,
-	      GtkWidget     *widget,
-	      gchar         *detail,
-	      GtkArrowType   arrow_type,
-	      gint           fill,
-	      gint           x,
-	      gint           y,
-	       gint           width,
-	      gint           height);
-void 
-draw_diamond (GtkStyle      *style,
-	      GdkWindow     *window,
-	      GtkStateType   state_type,
-	      GtkShadowType  shadow_type,
-	      GdkRectangle  *area,
-	      GtkWidget     *widget,
-	      gchar         *detail,
-	      gint           x,
-	      gint           y,
-	      gint           width,
-	      gint           height);
-void 
-draw_oval   (GtkStyle      *style,
-	     GdkWindow     *window,
-	     GtkStateType   state_type,
-	     GtkShadowType  shadow_type,
-	     GdkRectangle  *area,
-	     GtkWidget     *widget,
-	     gchar         *detail,
-	     gint           x,
-	     gint           y,
-	     gint           width,
-	     gint           height);
-void 
-draw_string  (GtkStyle      *style,
-	      GdkWindow     *window,
-	      GtkStateType   state_type,
-	      GdkRectangle  *area,
-	      GtkWidget     *widget,
-	      gchar         *detail,
-	      gint           x,
-	      gint           y,
-	      const gchar   *string);
-void 
-draw_box     (GtkStyle      *style,
-	      GdkWindow     *window,
-	      GtkStateType   state_type,
-	      GtkShadowType  shadow_type,
-	      GdkRectangle  *area,
-	      GtkWidget     *widget,
-	      gchar         *detail,
-	      gint           x,
-	      gint           y,
-	      gint           width,
-	      gint           height);
-void 
-draw_flat_box (GtkStyle      *style,
-	       GdkWindow     *window,
-	       GtkStateType   state_type,
-	       GtkShadowType  shadow_type,
-	       GdkRectangle  *area,
-	       GtkWidget     *widget,
-	       gchar         *detail,
-	       gint           x,
-	       gint           y,
-	       gint           width,
-	       gint           height);
 void
-draw_check   (GtkStyle      *style,
-	      GdkWindow     *window,
-	      GtkStateType   state_type,
-	      GtkShadowType  shadow_type,
-	      GdkRectangle  *area,
-	      GtkWidget     *widget,
-	      gchar         *detail,
-	      gint           x,
-	      gint           y,
-	      gint           width,
-	      gint           height);
-void 
-draw_option  (GtkStyle      *style,
-	      GdkWindow     *window,
-	      GtkStateType   state_type,
-	      GtkShadowType  shadow_type,
-	      GdkRectangle  *area,
-	      GtkWidget     *widget,
-	      gchar         *detail,
-	      gint           x,
-	      gint           y,
-	      gint           width,
-	      gint           height);
-void 
-draw_cross   (GtkStyle      *style,
-	      GdkWindow     *window,
-	      GtkStateType   state_type,
-	      GtkShadowType  shadow_type,
-	      GdkRectangle  *area,
-	      GtkWidget     *widget,
-	      gchar         *detail,
-	      gint           x,
-	      gint           y,
-	      gint           width,
-	      gint           height);
-void 
-draw_ramp    (GtkStyle      *style,
-	      GdkWindow     *window,
-	      GtkStateType   state_type,
-	      GtkShadowType  shadow_type,
-	      GdkRectangle  *area,
-	      GtkWidget     *widget,
-	      gchar         *detail,
-	      GtkArrowType   arrow_type,
-	      gint           x,
-	      gint           y,
-	      gint           width,
-	      gint           height);
-void 
-draw_tab     (GtkStyle      *style,
-	      GdkWindow     *window,
-	      GtkStateType   state_type,
-	      GtkShadowType  shadow_type,
-	      GdkRectangle  *area,
-	      GtkWidget     *widget,
-	      gchar         *detail,
-	      gint           x,
-	      gint           y,
-	      gint           width,
-	      gint           height);
-void 
-draw_shadow_gap (GtkStyle      *style,
-		 GdkWindow     *window,
-		 GtkStateType   state_type,
-		 GtkShadowType  shadow_type,
-		 GdkRectangle  *area,
-		 GtkWidget     *widget,
-		 gchar         *detail,
-		 gint           x,
-		 gint           y,
-		 gint           width,
-		 gint           height,
-		 gint           gap_side,
-		 gint           gap_x,
-		 gint           gap_width);
-void 
-draw_box_gap (GtkStyle      *style,
-	      GdkWindow     *window,
-	      GtkStateType   state_type,
-	      GtkShadowType  shadow_type,
-	      GdkRectangle  *area,
-	      GtkWidget     *widget,
-	      gchar         *detail,
-	      gint           x,
-	      gint           y,
-	      gint           width,
-	      gint           height,
-	      gint           gap_side,
-	      gint           gap_x,
-	      gint           gap_width);
-void 
-draw_extension (GtkStyle      *style,
-		GdkWindow     *window,
-		GtkStateType   state_type,
-		GtkShadowType  shadow_type,
-		GdkRectangle  *area,
-		GtkWidget     *widget,
-		gchar         *detail,
-		gint           x,
-		gint           y,
-		gint           width,
-		gint           height,
-		gint           gap_side);
-void 
-draw_focus (GtkStyle      *style,
-	    GdkWindow     *window,
-	    GdkRectangle  *area,
-	    GtkWidget     *widget,
-	    gchar         *detail,
-	    gint           x,
-	    gint           y,
-	    gint           width,
-	    gint           height);
+                    draw_polygon(GtkStyle * style,
+				 GdkWindow * window,
+				 GtkStateType state_type,
+				 GtkShadowType shadow_type,
+				 GdkRectangle * area,
+				 GtkWidget * widget,
+				 gchar * detail,
+				 GdkPoint * point,
+				 gint npoints,
+				 gint fill);
 void
-draw_slider  (GtkStyle      *style,
-	      GdkWindow     *window,
-	      GtkStateType   state_type,
-	      GtkShadowType  shadow_type,
-	      GdkRectangle  *area,
-	      GtkWidget     *widget,
-	      gchar         *detail,
-	      gint           x,
-	      gint           y,
-	      gint           width,
-	      gint           height,
-	      GtkOrientation orientation);
+                    draw_arrow(GtkStyle * style,
+			       GdkWindow * window,
+			       GtkStateType state_type,
+			       GtkShadowType shadow_type,
+			       GdkRectangle * area,
+			       GtkWidget * widget,
+			       gchar * detail,
+			       GtkArrowType arrow_type,
+			       gint fill,
+			       gint x,
+			       gint y,
+			       gint width,
+			       gint height);
 void
-draw_entry   (GtkStyle      *style,
-	      GdkWindow     *window,
-	      GtkStateType   state_type,
-	      GdkRectangle  *area,
-	      GtkWidget     *widget,
-	      gchar         *detail,
-	      gint           x,
-	      gint           y,
-	      gint           width,
-	      gint           height);
+                    draw_diamond(GtkStyle * style,
+				 GdkWindow * window,
+				 GtkStateType state_type,
+				 GtkShadowType shadow_type,
+				 GdkRectangle * area,
+				 GtkWidget * widget,
+				 gchar * detail,
+				 gint x,
+				 gint y,
+				 gint width,
+				 gint height);
 void
-draw_handle  (GtkStyle      *style,
-	      GdkWindow     *window,
-	      GtkStateType   state_type,
-	      GtkShadowType  shadow_type,
-	      GdkRectangle  *area,
-	      GtkWidget     *widget,
-	      gchar         *detail,
-	      gint           x,
-	      gint           y,
-	      gint           width,
-	      gint           height,
-	      GtkOrientation orientation);
+                    draw_oval(GtkStyle * style,
+			      GdkWindow * window,
+			      GtkStateType state_type,
+			      GtkShadowType shadow_type,
+			      GdkRectangle * area,
+			      GtkWidget * widget,
+			      gchar * detail,
+			      gint x,
+			      gint y,
+			      gint width,
+			      gint height);
+void
+                    draw_string(GtkStyle * style,
+				GdkWindow * window,
+				GtkStateType state_type,
+				GdkRectangle * area,
+				GtkWidget * widget,
+				gchar * detail,
+				gint x,
+				gint y,
+				const gchar * string);
+void
+                    draw_box(GtkStyle * style,
+			     GdkWindow * window,
+			     GtkStateType state_type,
+			     GtkShadowType shadow_type,
+			     GdkRectangle * area,
+			     GtkWidget * widget,
+			     gchar * detail,
+			     gint x,
+			     gint y,
+			     gint width,
+			     gint height);
+void
+                    draw_flat_box(GtkStyle * style,
+				  GdkWindow * window,
+				  GtkStateType state_type,
+				  GtkShadowType shadow_type,
+				  GdkRectangle * area,
+				  GtkWidget * widget,
+				  gchar * detail,
+				  gint x,
+				  gint y,
+				  gint width,
+				  gint height);
+void
+                    draw_check(GtkStyle * style,
+			       GdkWindow * window,
+			       GtkStateType state_type,
+			       GtkShadowType shadow_type,
+			       GdkRectangle * area,
+			       GtkWidget * widget,
+			       gchar * detail,
+			       gint x,
+			       gint y,
+			       gint width,
+			       gint height);
+void
+                    draw_option(GtkStyle * style,
+				GdkWindow * window,
+				GtkStateType state_type,
+				GtkShadowType shadow_type,
+				GdkRectangle * area,
+				GtkWidget * widget,
+				gchar * detail,
+				gint x,
+				gint y,
+				gint width,
+				gint height);
+void
+                    draw_cross(GtkStyle * style,
+			       GdkWindow * window,
+			       GtkStateType state_type,
+			       GtkShadowType shadow_type,
+			       GdkRectangle * area,
+			       GtkWidget * widget,
+			       gchar * detail,
+			       gint x,
+			       gint y,
+			       gint width,
+			       gint height);
+void
+                    draw_ramp(GtkStyle * style,
+			      GdkWindow * window,
+			      GtkStateType state_type,
+			      GtkShadowType shadow_type,
+			      GdkRectangle * area,
+			      GtkWidget * widget,
+			      gchar * detail,
+			      GtkArrowType arrow_type,
+			      gint x,
+			      gint y,
+			      gint width,
+			      gint height);
+void
+                    draw_tab(GtkStyle * style,
+			     GdkWindow * window,
+			     GtkStateType state_type,
+			     GtkShadowType shadow_type,
+			     GdkRectangle * area,
+			     GtkWidget * widget,
+			     gchar * detail,
+			     gint x,
+			     gint y,
+			     gint width,
+			     gint height);
+void
+                    draw_shadow_gap(GtkStyle * style,
+				    GdkWindow * window,
+				    GtkStateType state_type,
+				    GtkShadowType shadow_type,
+				    GdkRectangle * area,
+				    GtkWidget * widget,
+				    gchar * detail,
+				    gint x,
+				    gint y,
+				    gint width,
+				    gint height,
+				    gint gap_side,
+				    gint gap_x,
+				    gint gap_width);
+void
+                    draw_box_gap(GtkStyle * style,
+				 GdkWindow * window,
+				 GtkStateType state_type,
+				 GtkShadowType shadow_type,
+				 GdkRectangle * area,
+				 GtkWidget * widget,
+				 gchar * detail,
+				 gint x,
+				 gint y,
+				 gint width,
+				 gint height,
+				 gint gap_side,
+				 gint gap_x,
+				 gint gap_width);
+void
+                    draw_extension(GtkStyle * style,
+				   GdkWindow * window,
+				   GtkStateType state_type,
+				   GtkShadowType shadow_type,
+				   GdkRectangle * area,
+				   GtkWidget * widget,
+				   gchar * detail,
+				   gint x,
+				   gint y,
+				   gint width,
+				   gint height,
+				   gint gap_side);
+void
+                    draw_focus(GtkStyle * style,
+			       GdkWindow * window,
+			       GdkRectangle * area,
+			       GtkWidget * widget,
+			       gchar * detail,
+			       gint x,
+			       gint y,
+			       gint width,
+			       gint height);
+void
+                    draw_slider(GtkStyle * style,
+				GdkWindow * window,
+				GtkStateType state_type,
+				GtkShadowType shadow_type,
+				GdkRectangle * area,
+				GtkWidget * widget,
+				gchar * detail,
+				gint x,
+				gint y,
+				gint width,
+				gint height,
+				GtkOrientation orientation);
+void
+                    draw_entry(GtkStyle * style,
+			       GdkWindow * window,
+			       GtkStateType state_type,
+			       GdkRectangle * area,
+			       GtkWidget * widget,
+			       gchar * detail,
+			       gint x,
+			       gint y,
+			       gint width,
+			       gint height);
+void
+                    draw_handle(GtkStyle * style,
+				GdkWindow * window,
+				GtkStateType state_type,
+				GtkShadowType shadow_type,
+				GdkRectangle * area,
+				GtkWidget * widget,
+				gchar * detail,
+				gint x,
+				gint y,
+				gint width,
+				gint height,
+				GtkOrientation orientation);
 
 /* internal data structs */
 
-GtkStyleClass th_default_class =
+GtkStyleClass       th_default_class =
 {
-   2,
-   2,
-   draw_hline,
-   draw_vline,
-   draw_shadow,
-   draw_polygon,
-   draw_arrow,
-   draw_diamond,
-   draw_oval,
-   draw_string,
-   draw_box,
-   draw_flat_box,
-   draw_check,
-   draw_option,
-   draw_cross,
-   draw_ramp,
-   draw_tab,
-   draw_shadow_gap,
-   draw_box_gap,
-   draw_extension,
-   draw_focus,
-   draw_slider,
-   draw_entry,
-   draw_handle
+  2,
+  2,
+  draw_hline,
+  draw_vline,
+  draw_shadow,
+  draw_polygon,
+  draw_arrow,
+  draw_diamond,
+  draw_oval,
+  draw_string,
+  draw_box,
+  draw_flat_box,
+  draw_check,
+  draw_option,
+  draw_cross,
+  draw_ramp,
+  draw_tab,
+  draw_shadow_gap,
+  draw_box_gap,
+  draw_extension,
+  draw_focus,
+  draw_slider,
+  draw_entry,
+  draw_handle
 };
 
 static GdkImlibImage *
-load_image (char *name)
+load_image(char *name)
 {
-  static char *themedir = NULL;
-  char buf[1024];
+  static char        *themedir = NULL;
+  char                buf[1024];
 
   if (!themedir)
     {
-      char buf2[1024];
-      g_snprintf (buf2, 1024, "%s/themes/", getenv("HOME"));
-      themedir = g_strdup (buf2);
+      char                buf2[1024];
+
+      g_snprintf(buf2, 1024, "%s/themes/", getenv("HOME"));
+      themedir = g_strdup(buf2);
     }
 
-  strcpy (buf, themedir);
-  strncat (buf, name, 1023);
+  strcpy(buf, themedir);
+  strncat(buf, name, 1023);
   buf[1023] = '\0';
 
   return gdk_imlib_load_image(buf);
 }
 
-void
-draw_hline (GtkStyle     *style,
-	    GdkWindow    *window,
-	    GtkStateType  state_type,
-	    GdkRectangle  *area,
-	    GtkWidget     *widget,
-	    gchar         *detail,
-	    gint          x1,
-	    gint          x2,
-	    gint          y)
+struct theme_image *
+match_theme_image(GtkStyle * style, 
+		  GtkStateType state, 
+		  GtkShadowType shadow_type, 
+		  GtkWidget *widget, 
+		  char *detail, 
+		  GtkArrowType arrow_type, 
+		  GtkOrientation orientation, 
+		  gint gap_side, 
+		  guint function)
 {
-   gint thickness_light;
-   gint thickness_dark;
-   gint i;
-   
-   g_return_if_fail (style != NULL);
-   g_return_if_fail (window != NULL);
-   
-   thickness_light = style->klass->ythickness / 2;
-   thickness_dark = style->klass->ythickness - thickness_light;
+  GList              *l;
+  struct theme_image *i;
+  char               *str = "";
 
-   if (area)
-     {
-	gdk_gc_set_clip_rectangle (style->light_gc[state_type], area);
-	gdk_gc_set_clip_rectangle (style->black_gc, area);
-     }
-   for (i = 0; i < thickness_dark; i++)
-     {
-	gdk_draw_line (window, style->light_gc[state_type], x2 - i - 1, y + i, x2, y + i);
-/*	gdk_draw_line (window, style->dark_gc[state_type], x1, y + i, x2 - i - 1, y + i);*/
-	gdk_draw_line (window, style->black_gc, x1, y + i, x2 - i - 1, y + i);
-     }
-   
-   y += thickness_dark;
-   for (i = 0; i < thickness_light; i++)
-     {
-/*	gdk_draw_line (window, style->dark_gc[state_type], x1, y + i, x1 + thickness_light - i - 1, y + i);*/
-	gdk_draw_line (window, style->black_gc, x1, y + i, x1 + thickness_light - i - 1, y + i);
-	gdk_draw_line (window, style->light_gc[state_type], x1 + thickness_light - i - 1, y + i, x2, y + i);
-     }
-   if (area)
-     {
-	gdk_gc_set_clip_rectangle (style->light_gc[state_type], NULL);
-	gdk_gc_set_clip_rectangle (style->black_gc, NULL);
-     }
+  l = ((ThemeStyleData *)(style->engine_data))->img_list;
+  if (!detail) 
+    detail = str;
+  
+  while (l)
+    {
+      i = (struct theme_image *)l->data;
+      if ( (i) &&
+	  (function == i->function) &&
+	  
+	  (((i->__state) &&
+	    (state == i->state))
+	   || (!(i->__state))) &&
+	  
+	  (((i->__shadow) && 
+	    (shadow_type == i->shadow))
+	   || (!(i->__shadow))) &&
+	  
+	  (((i->__arrow_direction) && 
+	    (arrow_type == i->arrow_direction))
+	   || (!(i->__arrow_direction))) &&
+	  
+	  (((i->__orientation) && 
+	    (orientation == i->orientation))
+	   || (!(i->__orientation))) &&
+
+	  (((i->__gap_side) && 
+	    (gap_side == i->gap_side))
+	   || (!(i->__gap_side))) &&
+	  
+	  (((i->__state) && 
+	    (state == i->state))
+	   || (!(i->__state))) &&
+	  
+	  (((i->detail) && 
+	    (!strcmp(detail, i->detail)))
+	   || (!(i->detail))))
+	return i;
+      
+      l = l->next;
+    }
+  return NULL;
 }
 
 void
-draw_vline (GtkStyle     *style,
-	    GdkWindow    *window,
-	    GtkStateType  state_type,
-	    GdkRectangle  *area,
-	    GtkWidget     *widget,
-	    gchar         *detail,
-	    gint          y1,
-	    gint          y2,
-	    gint          x)
+apply_theme_image(GdkWindow *window, struct theme_image *img, gchar setbg, 
+		  GdkGC *gc, GdkRectangle *area, gint x, gint y, gint width, 
+		  gint height)
 {
-   gint thickness_light;
-   gint thickness_dark;
-   gint i;
-   
-   g_return_if_fail (style != NULL);
-   g_return_if_fail (window != NULL);
-   
-   thickness_light = style->klass->xthickness / 2;
-   thickness_dark = style->klass->xthickness - thickness_light;
-   
-   if (area)
-     {
-	gdk_gc_set_clip_rectangle (style->light_gc[state_type], area);
-	gdk_gc_set_clip_rectangle (style->black_gc, area);
-     }
-   for (i = 0; i < thickness_dark; i++)
-     {
-	gdk_draw_line (window, style->light_gc[state_type], x + i, y2 - i - 1, x + i, y2);
-/*	gdk_draw_line (window, style->dark_gc[state_type], x + i, y1, x + i, y2 - i - 1);*/
-	gdk_draw_line (window, style->black_gc, x + i, y1, x + i, y2 - i - 1);
-     }
-   
-   x += thickness_dark;
-   for (i = 0; i < thickness_light; i++)
-     {
-/*	gdk_draw_line (window, style->dark_gc[state_type], x + i, y1, x + i, y1 + thickness_light - i);*/
-	gdk_draw_line (window, style->black_gc, x + i, y1, x + i, y1 + thickness_light - i);
-	gdk_draw_line (window, style->light_gc[state_type], x + i, y1 + thickness_light - i, x + i, y2);
-     }
-   if (area)
-     {
-	gdk_gc_set_clip_rectangle (style->light_gc[state_type], NULL);
-	gdk_gc_set_clip_rectangle (style->black_gc, NULL);
-     }
-}
-
-
-void
-draw_shadow (GtkStyle      *style,
-	     GdkWindow     *window,
-	     GtkStateType   state_type,
-	     GtkShadowType  shadow_type,
-	     GdkRectangle  *area,
-	     GtkWidget     *widget,
-	     gchar         *detail,
-	     gint           x,
-	     gint           y,
-	     gint           width,
-	     gint           height)
-{
-   GdkGC *gc1;
-   GdkGC *gc2;
-   gint thickness_light;
-   gint thickness_dark;
-   gint i;
-   
-   g_return_if_fail (style != NULL);
-   g_return_if_fail (window != NULL);
-   
-   if ((width == -1) && (height == -1))
-     gdk_window_get_size (window, &width, &height);
-   else if (width == -1)
-     gdk_window_get_size (window, &width, NULL);
-   else if (height == -1)
-     gdk_window_get_size (window, NULL, &height);
-   
-   switch (shadow_type)
-     {
-      case GTK_SHADOW_NONE:
-	gc1 = NULL;
-	gc2 = NULL;
-	break;
-      case GTK_SHADOW_IN:
-      case GTK_SHADOW_ETCHED_IN:
-	gc1 = style->light_gc[state_type];
-	gc2 = style->black_gc;
-/*	gc2 = style->dark_gc[state_type];*/
-	break;
-      case GTK_SHADOW_OUT:
-      case GTK_SHADOW_ETCHED_OUT:
-/*	gc1 = style->dark_gc[state_type];*/
-	gc1 = style->black_gc;
-	gc2 = style->light_gc[state_type];
-	break;
-     }
-   if (area)
-     {
-	gdk_gc_set_clip_rectangle (gc1, area);
-	gdk_gc_set_clip_rectangle (gc2, area);
-     }
-   
-   switch (shadow_type)
-     {
-      case GTK_SHADOW_NONE:
-	break;
-	
-      case GTK_SHADOW_IN:
-	gdk_draw_line (window, gc1,
-		       x, y + height - 1, x + width - 1, y + height - 1);
-	gdk_draw_line (window, gc1,
-		       x + width - 1, y, x + width - 1, y + height - 1);
-	
-	gdk_draw_line (window, gc1,
-		       x + 1, y + height - 2, x + width - 2, y + height - 2);
-	gdk_draw_line (window, gc1,
-		       x + width - 2, y + 1, x + width - 2, y + height - 2);
-/*
-	gdk_draw_line (window, style->bg_gc[state_type],
-		       x + 1, y + height - 2, x + width - 2, y + height - 2);
-	gdk_draw_line (window, style->bg_gc[state_type],
-		       x + width - 2, y + 1, x + width - 2, y + height - 2);
-*/	
-	gdk_draw_line (window, gc2,
-		       x + 1, y + 1, x + width - 2, y + 1);
-	gdk_draw_line (window, gc2,
-		       x + 1, y + 1, x + 1, y + height - 2);
-/*
-	gdk_draw_line (window, style->black_gc,
-		       x + 1, y + 1, x + width - 2, y + 1);
-	gdk_draw_line (window, style->black_gc,
-		       x + 1, y + 1, x + 1, y + height - 2);
-*/	
-	gdk_draw_line (window, gc2,
-		       x, y, x + width - 1, y);
-	gdk_draw_line (window, gc2,
-		       x, y, x, y + height - 1);
-	break;
-	
-      case GTK_SHADOW_OUT:
-	gdk_draw_line (window, gc1,
-		       x + 1, y + height - 2, x + width - 2, y + height - 2);
-	gdk_draw_line (window, gc1,
-		       x + width - 2, y + 1, x + width - 2, y + height - 2);
-	
-	gdk_draw_line (window, gc2,
-		       x, y, x + width - 1, y);
-	gdk_draw_line (window, gc2,
-		       x, y, x, y + height - 1);
-	
-	gdk_draw_line (window, gc2,
-		       x + 1, y + 1, x + width - 2, y + 1);
-	gdk_draw_line (window, gc2,
-		       x + 1, y + 1, x + 1, y + height - 2);
-	
-	gdk_draw_line (window, gc1,
-		       x, y + height - 1, x + width - 1, y + height - 1);
-	gdk_draw_line (window, gc1,
-		       x + width - 1, y, x + width - 1, y + height - 1);
-/*
-	gdk_draw_line (window, style->bg_gc[state_type],
-		       x + 1, y + 1, x + width - 2, y + 1);
-	gdk_draw_line (window, style->bg_gc[state_type],
-		       x + 1, y + 1, x + 1, y + height - 2);
-	
-	gdk_draw_line (window, style->black_gc,
-		       x, y + height - 1, x + width - 1, y + height - 1);
-	gdk_draw_line (window, style->black_gc,
-		       x + width - 1, y, x + width - 1, y + height - 1);
- */ 
-	break;
-	
-      case GTK_SHADOW_ETCHED_IN:
-      case GTK_SHADOW_ETCHED_OUT:
-	thickness_light = 1;
-	thickness_dark = 1;
-	
-	for (i = 0; i < thickness_dark; i++)
-	  {
-	     gdk_draw_line (window, gc1,
-			    x + i,
-			    y + height - i - 1,
-			    x + width - i - 1,
-			    y + height - i - 1);
-	     gdk_draw_line (window, gc1,
-			    x + width - i - 1,
-			    y + i,
-			    x + width - i - 1,
-			    y + height - i - 1);
-	     
-	     gdk_draw_line (window, gc2,
-			    x + i,
-			    y + i,
-			    x + width - i - 2,
-			    y + i);
-	     gdk_draw_line (window, gc2,
-			    x + i,
-			    y + i,
-			    x + i,
-			    y + height - i - 2);
-	  }
-	
-	for (i = 0; i < thickness_light; i++)
-	  {
-	     gdk_draw_line (window, gc1,
-			    x + thickness_dark + i,
-			    y + thickness_dark + i,
-			    x + width - thickness_dark - i - 1,
-			    y + thickness_dark + i);
-	     gdk_draw_line (window, gc1,
-			    x + thickness_dark + i,
-			    y + thickness_dark + i,
-			    x + thickness_dark + i,
-			    y + height - thickness_dark - i - 1);
-	     
-	     gdk_draw_line (window, gc2,
-			    x + thickness_dark + i,
-			    y + height - thickness_light - i - 1,
-			    x + width - thickness_light - 1,
-			    y + height - thickness_light - i - 1);
-	     gdk_draw_line (window, gc2,
-			    x + width - thickness_light - i - 1,
-			    y + thickness_dark + i,
-			    x + width - thickness_light - i - 1,
-			    y + height - thickness_light - 1);
-	  }
-	break;
-     }
-
-   if (area)
-     {
-	gdk_gc_set_clip_rectangle (gc1, NULL);
-	gdk_gc_set_clip_rectangle (gc2, NULL);
-     }
+  GdkImlibImage      *im;
+  GdkPixmap          *p, *m;
+  
+  if (img->file)
+    {
+      im = load_image(img->file);
+      if (im)
+	{  
+	  gdk_imlib_set_image_border(im, &(img->border));
+	  if (img->stretch)
+	    gdk_imlib_render(im, width, height);
+	  else
+	    gdk_imlib_render(im, im->rgb_width, im->rgb_height);
+	  p = gdk_imlib_move_image(im);
+	  m = gdk_imlib_move_mask(im);
+	  
+	  if (area)
+	    gdk_gc_set_clip_rectangle(gc, area);
+	  if (p)
+	    {
+	      if (setbg)
+		{
+		  gdk_window_set_back_pixmap(window, p, 0);
+		  if (area)
+		    gdk_window_clear_area(window, area->x, area->y,
+					  area->width, area->height);
+		  else
+		    gdk_window_clear(window);
+		  if (m)
+		    gdk_window_shape_combine_mask(window, m, 0, 0);
+		}
+	      else
+		{
+		  if (m)
+		    {
+		      gdk_gc_set_clip_mask(gc, m);
+		      gdk_gc_set_clip_origin(gc, x, y);
+		    }
+		  gdk_draw_pixmap(window, gc, p, 0, 0, x, y, width, height);
+		  if (m)
+		    {
+		      gdk_gc_set_clip_mask(gc, NULL);
+		      gdk_gc_set_clip_origin(gc, 0, 0);
+		    }
+		}
+	      gdk_imlib_free_pixmap(p);
+	    }
+	  gdk_imlib_destroy_image(im);
+	}
+    }
+  
+  if (!img->overlay_file)
+    {
+      if (area)
+	gdk_gc_set_clip_rectangle(gc, NULL);
+      return;
+    }
+  im = load_image(img->overlay_file);
+  if (!im)
+    {
+      if (area)
+	gdk_gc_set_clip_rectangle(gc, NULL);
+      return;
+    }
+    
+  gdk_imlib_set_image_border(im, &(img->overlay_border));
+  if (img->overlay_stretch)
+    gdk_imlib_render(im, width, height);
+  else
+    {
+      x += (width - im->rgb_width) / 2;
+      y += (height - im->rgb_height) / 2;
+      width = im->rgb_width;
+      height = im->rgb_height;
+      gdk_imlib_render(im, im->rgb_width, im->rgb_height);
+    }
+  p = gdk_imlib_move_image(im);
+  m = gdk_imlib_move_mask(im);
+  if (p)
+    {
+      if (m)
+	{
+	  gdk_gc_set_clip_mask(gc, m);
+	  gdk_gc_set_clip_origin(gc, x, y);
+	}
+      gdk_draw_pixmap(window, gc, p, 0, 0, x, y, width, height);
+      if (m)
+	{
+	  gdk_gc_set_clip_mask(gc, NULL);
+	  gdk_gc_set_clip_origin(gc, 0, 0);
+	}
+      gdk_imlib_free_pixmap(p);
+    }
+  gdk_imlib_destroy_image(im);
+  
+  if (area)
+    gdk_gc_set_clip_rectangle(gc, NULL);
 }
 
 void
-draw_polygon (GtkStyle      *style,
-	      GdkWindow     *window,
-	      GtkStateType   state_type,
-	      GtkShadowType  shadow_type,
-	      GdkRectangle  *area,
-	      GtkWidget     *widget,
-	      gchar         *detail,
-	      GdkPoint      *points,
-	      gint           npoints,
-	      gint           fill)
+apply_theme_image_border(GdkWindow *window, struct theme_image *img, gchar setbg, 
+			 GdkGC *gc, GdkRectangle *area, gint x, gint y, gint width, 
+			 gint height)
+{
+  GdkImlibImage      *im;
+  GdkPixmap          *p, *m;
+  gint                w, h;
+  
+  if (img->file)
+    {
+      im = load_image(img->file);
+      if (im)
+	{  
+	  gdk_imlib_set_image_border(im, &(img->border));
+	  gdk_imlib_render(im, width, height);
+	  p = gdk_imlib_move_image(im);
+	  m = gdk_imlib_move_mask(im);
+	  
+	  if (area)
+	    gdk_gc_set_clip_rectangle(gc, area);
+	  if (p)
+	    {
+	      w = width;
+	      h = height;
+	      
+	      if (m)
+		{
+		  gdk_gc_set_clip_mask(gc, m);
+		  gdk_gc_set_clip_origin(gc, x, y);
+		}
+	      gdk_draw_pixmap(window, gc, p,
+			      0, 0,
+			      x, y,
+			      w, im->border.top);
+	      gdk_draw_pixmap(window, gc, p,
+			      0, h - im->border.bottom,
+			      x, y + (h - im->border.bottom),
+			      w, im->border.bottom);
+	      gdk_draw_pixmap(window, gc, p,
+			      0, im->border.top,
+			      x, y + im->border.top,
+			      im->border.left, h - (im->border.top + im->border.bottom));
+	      gdk_draw_pixmap(window, gc, p,
+			      w - im->border.right, im->border.top,
+			      x + (w - im->border.right), y + im->border.top,
+			      im->border.right, h - (im->border.top + im->border.bottom));
+	      if (m)
+		{
+		  gdk_gc_set_clip_mask(gc, NULL);
+		  gdk_gc_set_clip_origin(gc, 0, 0);
+		}
+	      gdk_imlib_free_pixmap(p);
+	    }
+	  gdk_imlib_destroy_image(im);
+	}
+    }
+  
+  if (!img->overlay_file)
+    {
+      if (area)
+	gdk_gc_set_clip_rectangle(gc, NULL);
+      return;
+    }
+  im = load_image(img->overlay_file);
+  if (!im)
+    {
+      if (area)
+	gdk_gc_set_clip_rectangle(gc, NULL);
+      return;
+    }
+    
+  gdk_imlib_set_image_border(im, &(img->overlay_border));
+  if (img->overlay_stretch)
+    gdk_imlib_render(im, width, height);
+  else
+    {
+      x += (width - im->rgb_width) / 2;
+      y += (height - im->rgb_height) / 2;
+      width = im->rgb_width;
+      height = im->rgb_height;
+      gdk_imlib_render(im, im->rgb_width, im->rgb_height);
+    }
+  p = gdk_imlib_move_image(im);
+  m = gdk_imlib_move_mask(im);
+  if (p)
+    {
+      if (m)
+	{
+	  gdk_gc_set_clip_mask(gc, m);
+	  gdk_gc_set_clip_origin(gc, x, y);
+	}
+      gdk_draw_pixmap(window, gc, p, 0, 0, x, y, width, height);
+      if (m)
+	{
+	  gdk_gc_set_clip_mask(gc, NULL);
+	  gdk_gc_set_clip_origin(gc, 0, 0);
+	}
+      gdk_imlib_free_pixmap(p);
+    }
+  gdk_imlib_destroy_image(im);
+  
+  if (area)
+    gdk_gc_set_clip_rectangle(gc, NULL);
+}
+
+void
+apply_theme_image_shadow_gap(GdkWindow *window, struct theme_image *img, gchar setbg, 
+			     GdkGC *gc, GdkRectangle *area, gint x, gint y, gint width, 
+			     gint height, gint gap_side, gint gap_x, gint gap_width, 
+			     GtkStyle *style)
+{
+  GdkImlibImage      *im, *im1, *im2;
+  GdkPixmap          *p, *m, *p1, *m1, *p2, *m2;
+  gint                w, h;
+  GdkRectangle        r1, r2;
+  
+  if (gap_side == 0)
+    /* top */
+    {
+      r1.x      = x;
+      r1.y      = y;
+      r1.width  = gap_x;
+      r1.height = style->klass->ythickness;
+      r2.x      = x + gap_x + gap_width;
+      r2.y      = y;
+      r2.width  = width - (gap_x + gap_width);
+      r2.height = style->klass->ythickness;
+    }
+  else if (gap_side == 1)
+    /* bottom */
+    {
+      r1.x      = x;
+      r1.y      = y + height - style->klass->ythickness;
+      r1.width  = gap_x;
+      r1.height = style->klass->ythickness;
+      r2.x      = x + gap_x + gap_width;
+      r2.y      = y + height - style->klass->ythickness;
+      r2.width  = width - (gap_x + gap_width);
+      r2.height = style->klass->ythickness;
+    }
+  else if (gap_side == 2)
+    /* left */
+    {
+      r1.x      = x;
+      r1.y      = y;
+      r1.width  = style->klass->xthickness;
+      r1.height = gap_x;
+      r2.x      = x;
+      r2.y      = y + gap_x + gap_width;
+      r2.width  = style->klass->xthickness;
+      r2.height = height - (gap_x + gap_width);
+    }
+  else if (gap_side == 3)
+    /* right */
+    {
+      r1.x      = x + width - style->klass->xthickness;
+      r1.y      = y;
+      r1.width  = style->klass->xthickness;
+      r1.height = gap_x;
+      r2.x      = x + width - style->klass->xthickness;
+      r2.y      = y + gap_x + gap_width;
+      r2.width  = style->klass->xthickness;
+      r2.height = height - (gap_x + gap_width);
+    }
+
+  if ((img->file) && (img->gap_start_file) && (img->gap_end_file))
+    {
+      im = load_image(img->file);
+      im1 = load_image(img->gap_start_file);
+      im2 = load_image(img->gap_end_file);
+      if ((im) && (im1) && (im2))
+	{  
+	  gdk_imlib_set_image_border(im, &(img->border));
+	  gdk_imlib_set_image_border(im1, &(img->gap_start_border));
+	  gdk_imlib_set_image_border(im2, &(img->gap_end_border));
+	  gdk_imlib_render(im, width, height);
+	  p = gdk_imlib_move_image(im);
+	  m = gdk_imlib_move_mask(im);
+	  gdk_imlib_render(im1, r1.width, r1.height);
+	  p1 = gdk_imlib_move_image(im1);
+	  m1 = gdk_imlib_move_mask(im1);
+	  gdk_imlib_render(im2, r2.width, r2.height);
+	  p2 = gdk_imlib_move_image(im2);
+	  m2 = gdk_imlib_move_mask(im2);
+	  
+	  if (area)
+	    gdk_gc_set_clip_rectangle(gc, area);
+	  if (p)
+	    {
+	      w = width;
+	      h = height;
+	      
+	      if (gap_side == 0)
+		/* top */
+		{
+		  if (m1)
+		    {
+		      gdk_gc_set_clip_mask(gc, m1);
+		      gdk_gc_set_clip_origin(gc, r1.x, r1.y);
+		    }
+		  else
+		    {
+		      gdk_gc_set_clip_mask(gc, NULL);
+		      gdk_gc_set_clip_origin(gc, 0, 0);
+		    }
+		  if (p1)
+		    gdk_draw_pixmap(window, gc, p1,
+				    0, 0,
+				    r1.x, r1.y,
+				    r1.width, r1.height);
+		  if (m2)
+		    {
+		      gdk_gc_set_clip_mask(gc, m2);
+		      gdk_gc_set_clip_origin(gc, r2.x, r2.y);
+		    }
+		  else
+		    {
+		      gdk_gc_set_clip_mask(gc, NULL);
+		      gdk_gc_set_clip_origin(gc, 0, 0);
+		    }
+		  if (p2)
+		    gdk_draw_pixmap(window, gc, p2,
+				    0, 0,
+				    r2.x, r2.y,
+				    r2.width, r2.height);
+		  if (m)
+		    {
+		      gdk_gc_set_clip_mask(gc, m);
+		      gdk_gc_set_clip_origin(gc, x, y);
+		    }
+		  else
+		    {
+		      gdk_gc_set_clip_mask(gc, NULL);
+		      gdk_gc_set_clip_origin(gc, 0, 0);
+		    }
+		  gdk_draw_pixmap(window, gc, p,
+				  0, h - im->border.bottom,
+				  x, y + (h - im->border.bottom),
+				  w, im->border.bottom);
+		  gdk_draw_pixmap(window, gc, p,
+				  0, im->border.top,
+				  x, y + im->border.top,
+				  im->border.left, h - (im->border.top + im->border.bottom));
+		  gdk_draw_pixmap(window, gc, p,
+				  w - im->border.right, im->border.top,
+				  x + (w - im->border.right), y + im->border.top,
+				  im->border.right, h - (im->border.top + im->border.bottom));
+		  if (m)
+		    {
+		      gdk_gc_set_clip_mask(gc, NULL);
+		      gdk_gc_set_clip_origin(gc, 0, 0);
+		    }
+		}
+	      else if (gap_side == 1)
+		/* bottom */
+		{
+		  if (m1)
+		    {
+		      gdk_gc_set_clip_mask(gc, m1);
+		      gdk_gc_set_clip_origin(gc, r1.x, r1.y);
+		    }
+		  else
+		    {
+		      gdk_gc_set_clip_mask(gc, NULL);
+		      gdk_gc_set_clip_origin(gc, 0, 0);
+		    }
+		  if (p1)
+		    gdk_draw_pixmap(window, gc, p1,
+				    0, 0,
+				    r1.x, r1.y,
+				    r1.width, r1.height);
+		  if (m2)
+		    {
+		      gdk_gc_set_clip_mask(gc, m2);
+		      gdk_gc_set_clip_origin(gc, r2.x, r2.y);
+		    }
+		  else
+		    {
+		      gdk_gc_set_clip_mask(gc, NULL);
+		      gdk_gc_set_clip_origin(gc, 0, 0);
+		    }
+		  if (p2)
+		    gdk_draw_pixmap(window, gc, p2,
+				    0, 0,
+				    r2.x, r2.y,
+				    r2.width, r2.height);
+		  if (m)
+		    {
+		      gdk_gc_set_clip_mask(gc, m);
+		      gdk_gc_set_clip_origin(gc, x, y);
+		    }
+		  else
+		    {
+		      gdk_gc_set_clip_mask(gc, NULL);
+		      gdk_gc_set_clip_origin(gc, 0, 0);
+		    }
+		  gdk_draw_pixmap(window, gc, p,
+				  0, 0,
+				  x, y,
+				  w, im->border.top);
+		  gdk_draw_pixmap(window, gc, p,
+				  0, im->border.top,
+				  x, y + im->border.top,
+				  im->border.left, h - (im->border.top + im->border.bottom));
+		  gdk_draw_pixmap(window, gc, p,
+				  w - im->border.right, im->border.top,
+				  x + (w - im->border.right), y + im->border.top,
+				  im->border.right, h - (im->border.top + im->border.bottom));
+		  if (m)
+		    {
+		      gdk_gc_set_clip_mask(gc, NULL);
+		      gdk_gc_set_clip_origin(gc, 0, 0);
+		    }
+		}
+	      else if (gap_side == 2)
+		/* left */
+		{
+		  if (m1)
+		    {
+		      gdk_gc_set_clip_mask(gc, m1);
+		      gdk_gc_set_clip_origin(gc, r1.x, r1.y);
+		    }
+		  else
+		    {
+		      gdk_gc_set_clip_mask(gc, NULL);
+		      gdk_gc_set_clip_origin(gc, 0, 0);
+		    }
+		  if (p1)
+		    gdk_draw_pixmap(window, gc, p1,
+				    0, 0,
+				    r1.x, r1.y,
+				    r1.width, r1.height);
+		  if (m2)
+		    {
+		      gdk_gc_set_clip_mask(gc, m2);
+		      gdk_gc_set_clip_origin(gc, r2.x, r2.y);
+		    }
+		  else
+		    {
+		      gdk_gc_set_clip_mask(gc, NULL);
+		      gdk_gc_set_clip_origin(gc, 0, 0);
+		    }
+		  if (p2)
+		    gdk_draw_pixmap(window, gc, p2,
+				    0, 0,
+				    r2.x, r2.y,
+				    r2.width, r2.height);
+		  if (m)
+		    {
+		      gdk_gc_set_clip_mask(gc, m);
+		      gdk_gc_set_clip_origin(gc, x, y);
+		    }
+		  else
+		    {
+		      gdk_gc_set_clip_mask(gc, NULL);
+		      gdk_gc_set_clip_origin(gc, 0, 0);
+		    }
+		  gdk_draw_pixmap(window, gc, p,
+				  0, 0,
+				  x, y,
+				  w, im->border.top);
+		  gdk_draw_pixmap(window, gc, p,
+				  0, h - im->border.bottom,
+				  x, y + (h - im->border.bottom),
+				  w, im->border.bottom);
+		  gdk_draw_pixmap(window, gc, p,
+				  w - im->border.right, im->border.top,
+				  x + (w - im->border.right), y + im->border.top,
+				  im->border.right, h - (im->border.top + im->border.bottom));
+		  if (m)
+		    {
+		      gdk_gc_set_clip_mask(gc, NULL);
+		      gdk_gc_set_clip_origin(gc, 0, 0);
+		    }
+		}
+	      else if (gap_side == 3)
+		/* right */
+		{
+		  if (m1)
+		    {
+		      gdk_gc_set_clip_mask(gc, m1);
+		      gdk_gc_set_clip_origin(gc, r1.x, r1.y);
+		    }
+		  else
+		    {
+		      gdk_gc_set_clip_mask(gc, NULL);
+		      gdk_gc_set_clip_origin(gc, 0, 0);
+		    }
+		  if (p1)
+		    gdk_draw_pixmap(window, gc, p1,
+				    0, 0,
+				    r1.x, r1.y,
+				    r1.width, r1.height);
+		  if (m2)
+		    {
+		      gdk_gc_set_clip_mask(gc, m2);
+		      gdk_gc_set_clip_origin(gc, r2.x, r2.y);
+		    }
+		  else
+		    {
+		      gdk_gc_set_clip_mask(gc, NULL);
+		      gdk_gc_set_clip_origin(gc, 0, 0);
+		    }
+		  if (p2)
+		    gdk_draw_pixmap(window, gc, p2,
+				    0, 0,
+				    r2.x, r2.y,
+				    r2.width, r2.height);
+		  if (m)
+		    {
+		      gdk_gc_set_clip_mask(gc, m);
+		      gdk_gc_set_clip_origin(gc, x, y);
+		    }
+		  else
+		    {
+		      gdk_gc_set_clip_mask(gc, NULL);
+		      gdk_gc_set_clip_origin(gc, 0, 0);
+		    }
+		  gdk_draw_pixmap(window, gc, p,
+				  0, 0,
+				  x, y,
+				  w, im->border.top);
+		  gdk_draw_pixmap(window, gc, p,
+				  0, h - im->border.bottom,
+				  x, y + (h - im->border.bottom),
+				  w, im->border.bottom);
+		  gdk_draw_pixmap(window, gc, p,
+				  0, im->border.top,
+				  x, y + im->border.top,
+				  im->border.left, h - (im->border.top + im->border.bottom));
+		  if (m)
+		    {
+		      gdk_gc_set_clip_mask(gc, NULL);
+		      gdk_gc_set_clip_origin(gc, 0, 0);
+		    }
+		}
+	      gdk_imlib_free_pixmap(p);
+	      gdk_imlib_free_pixmap(p1);
+	      gdk_imlib_free_pixmap(p2);
+	    }
+	  gdk_imlib_destroy_image(im);
+	  gdk_imlib_destroy_image(im1);
+	  gdk_imlib_destroy_image(im2);
+	}
+    }
+  
+  if (!img->overlay_file)
+    {
+      if (area)
+	gdk_gc_set_clip_rectangle(gc, NULL);
+      return;
+    }
+  im = load_image(img->overlay_file);
+  if (!im)
+    {
+      if (area)
+	gdk_gc_set_clip_rectangle(gc, NULL);
+      return;
+    }
+    
+  gdk_imlib_set_image_border(im, &(img->overlay_border));
+  if (img->overlay_stretch)
+    gdk_imlib_render(im, width, height);
+  else
+    {
+      x += (width - im->rgb_width) / 2;
+      y += (height - im->rgb_height) / 2;
+      width = im->rgb_width;
+      height = im->rgb_height;
+      gdk_imlib_render(im, im->rgb_width, im->rgb_height);
+    }
+  p = gdk_imlib_move_image(im);
+  m = gdk_imlib_move_mask(im);
+  if (p)
+    {
+      if (m)
+	{
+	  gdk_gc_set_clip_mask(gc, m);
+	  gdk_gc_set_clip_origin(gc, x, y);
+	}
+      gdk_draw_pixmap(window, gc, p, 0, 0, x, y, width, height);
+      if (m)
+	{
+	  gdk_gc_set_clip_mask(gc, NULL);
+	  gdk_gc_set_clip_origin(gc, 0, 0);
+	}
+      gdk_imlib_free_pixmap(p);
+    }
+  gdk_imlib_destroy_image(im);
+  
+  if (area)
+    gdk_gc_set_clip_rectangle(gc, NULL);
+}
+
+void
+apply_theme_image_box_gap(GdkWindow *window, struct theme_image *img, gchar setbg, 
+			  GdkGC *gc, GdkRectangle *area, gint x, gint y, gint width, 
+			  gint height, gint gap_side, gint gap_x, gint gap_width, 
+			  GtkStyle *style)
+{
+  GdkImlibImage      *im, *im1, *im2, *im3;
+  GdkPixmap          *p, *m, *p1, *m1, *p2, *m2, *p3, *m3;
+  gint                w, h;
+  GdkRectangle        r1, r2, r3;
+  
+  printf("%i %i %i %i\n", width, height, gap_x, gap_width);
+  if (gap_side == 0)
+    /* top */
+    {
+      r1.x      = x;
+      r1.y      = y;
+      r1.width  = gap_x;
+      r1.height = style->klass->ythickness;
+      r2.x      = x + gap_x + gap_width;
+      r2.y      = y;
+      r2.width  = width - (gap_x + gap_width);
+      r2.height = style->klass->ythickness;
+      r3.x      = x + gap_x;
+      r3.y      = y;
+      r3.width  = gap_width;
+      r3.height = style->klass->ythickness;
+    }
+  else if (gap_side == 1)
+    /* bottom */
+    {
+      r1.x      = x;
+      r1.y      = y + height - style->klass->ythickness;
+      r1.width  = gap_x;
+      r1.height = style->klass->ythickness;
+      r2.x      = x + gap_x + gap_width;
+      r2.y      = y + height - style->klass->ythickness;
+      r2.width  = width - (gap_x + gap_width);
+      r2.height = style->klass->ythickness;
+      r3.x      = x + gap_x;
+      r3.y      = y + height - style->klass->ythickness;
+      r3.width  = gap_width;
+      r3.height = style->klass->ythickness;
+    }
+  else if (gap_side == 2)
+    /* left */
+    {
+      r1.x      = x;
+      r1.y      = y;
+      r1.width  = style->klass->xthickness;
+      r1.height = gap_x;
+      r2.x      = x;
+      r2.y      = y + gap_x + gap_width;
+      r2.width  = style->klass->xthickness;
+      r2.height = height - (gap_x + gap_width);
+      r3.x      = x;
+      r3.y      = y + gap_x;
+      r3.width  = style->klass->xthickness;
+      r3.height = gap_width;
+    }
+  else if (gap_side == 3)
+    /* right */
+    {
+      r1.x      = x + width - style->klass->xthickness;
+      r1.y      = y;
+      r1.width  = style->klass->xthickness;
+      r1.height = gap_x;
+      r2.x      = x + width - style->klass->xthickness;
+      r2.y      = y + gap_x + gap_width;
+      r2.width  = style->klass->xthickness;
+      r2.height = height - (gap_x + gap_width);
+      r3.x      = x + width - style->klass->xthickness;
+      r3.y      = y + gap_x;
+      r3.width  = style->klass->xthickness;
+      r3.height = gap_width;
+    }
+
+  if ((img->file) && (img->gap_start_file) && (img->gap_end_file) &&
+      (img->gap_file))
+    {
+      im = load_image(img->file);
+      im1 = load_image(img->gap_start_file);
+      im2 = load_image(img->gap_end_file);
+      im3 = load_image(img->gap_file);
+      printf("%s %s %s %s\n",img->file,img->gap_start_file,img->gap_end_file,img->gap_file);
+      if ((im) && (im1) && (im2) && (im3))
+	{  
+	  gdk_imlib_set_image_border(im, &(img->border));
+	  gdk_imlib_set_image_border(im1, &(img->gap_start_border));
+	  gdk_imlib_set_image_border(im2, &(img->gap_end_border));
+	  gdk_imlib_set_image_border(im3, &(img->gap_border));
+	  gdk_imlib_render(im, width, height);
+	  p = gdk_imlib_move_image(im);
+	  m = gdk_imlib_move_mask(im);
+	  gdk_imlib_render(im1, r1.width, r1.height);
+	  p1 = gdk_imlib_move_image(im1);
+	  m1 = gdk_imlib_move_mask(im1);
+	  gdk_imlib_render(im2, r2.width, r2.height);
+	  p2 = gdk_imlib_move_image(im2);
+	  m2 = gdk_imlib_move_mask(im2);
+	  gdk_imlib_render(im3, r3.width, r3.height);
+	  p3 = gdk_imlib_move_image(im3);
+	  m3 = gdk_imlib_move_mask(im3);
+	  
+	  if (area)
+	    gdk_gc_set_clip_rectangle(gc, area);
+	  if (p)
+	    {
+	      w = width;
+	      h = height;
+	      
+	      if (m)
+		{
+		  gdk_gc_set_clip_mask(gc, m);
+		  gdk_gc_set_clip_origin(gc, x, y);
+		}
+	      else
+		{
+		  gdk_gc_set_clip_mask(gc, NULL);
+		  gdk_gc_set_clip_origin(gc, 0, 0);
+		}
+	      gdk_draw_pixmap(window, gc, p,
+			      0, 0,
+			      x, y,
+			      w, h);
+	      if (m1)
+		{
+		  gdk_gc_set_clip_mask(gc, m1);
+		  gdk_gc_set_clip_origin(gc, r1.x, r1.y);
+		}
+	      else
+		{
+		  gdk_gc_set_clip_mask(gc, NULL);
+		  gdk_gc_set_clip_origin(gc, 0, 0);
+		}
+	      if (p1)
+		gdk_draw_pixmap(window, gc, p1,
+				0, 0,
+				r1.x, r1.y,
+				r1.width, r1.height);
+	      if (m2)
+		{
+		  gdk_gc_set_clip_mask(gc, m2);
+		  gdk_gc_set_clip_origin(gc, r2.x, r2.y);
+		}
+	      else
+		{
+		  gdk_gc_set_clip_mask(gc, NULL);
+		  gdk_gc_set_clip_origin(gc, 0, 0);
+		}
+	      if (p2)
+		gdk_draw_pixmap(window, gc, p2,
+				0, 0,
+				r2.x, r2.y,
+				r2.width, r2.height);
+	      if (m3)
+		{
+		  gdk_gc_set_clip_mask(gc, m3);
+		  gdk_gc_set_clip_origin(gc, r3.x, r3.y);
+		}
+	      else
+		{
+		  gdk_gc_set_clip_mask(gc, NULL);
+		  gdk_gc_set_clip_origin(gc, 0, 0);
+		}
+	      if (p3)
+		gdk_draw_pixmap(window, gc, p3,
+				0, 0,
+				r3.x, r3.y,
+				r3.width, r3.height);
+	      if (m3)
+		{
+		  gdk_gc_set_clip_mask(gc, NULL);
+		  gdk_gc_set_clip_origin(gc, 0, 0);
+		}
+	      gdk_imlib_free_pixmap(p);
+	      gdk_imlib_free_pixmap(p1);
+	      gdk_imlib_free_pixmap(p2);
+	      gdk_imlib_free_pixmap(p3);
+	    }
+	  gdk_imlib_destroy_image(im);
+	  gdk_imlib_destroy_image(im1);
+	  gdk_imlib_destroy_image(im2);
+	  gdk_imlib_destroy_image(im3);
+	}
+    }
+  
+  if (!img->overlay_file)
+    {
+      if (area)
+	gdk_gc_set_clip_rectangle(gc, NULL);
+      return;
+    }
+  im = load_image(img->overlay_file);
+  if (!im)
+    {
+      if (area)
+	gdk_gc_set_clip_rectangle(gc, NULL);
+      return;
+    }
+    
+  gdk_imlib_set_image_border(im, &(img->overlay_border));
+  if (img->overlay_stretch)
+    gdk_imlib_render(im, width, height);
+  else
+    {
+      x += (width - im->rgb_width) / 2;
+      y += (height - im->rgb_height) / 2;
+      width = im->rgb_width;
+      height = im->rgb_height;
+      gdk_imlib_render(im, im->rgb_width, im->rgb_height);
+    }
+  p = gdk_imlib_move_image(im);
+  m = gdk_imlib_move_mask(im);
+  if (p)
+    {
+      if (m)
+	{
+	  gdk_gc_set_clip_mask(gc, m);
+	  gdk_gc_set_clip_origin(gc, x, y);
+	}
+      gdk_draw_pixmap(window, gc, p, 0, 0, x, y, width, height);
+      if (m)
+	{
+	  gdk_gc_set_clip_mask(gc, NULL);
+	  gdk_gc_set_clip_origin(gc, 0, 0);
+	}
+      gdk_imlib_free_pixmap(p);
+    }
+  gdk_imlib_destroy_image(im);
+  
+  if (area)
+    gdk_gc_set_clip_rectangle(gc, NULL);
+}
+
+void
+draw_hline(GtkStyle * style,
+	   GdkWindow * window,
+	   GtkStateType state_type,
+	   GdkRectangle * area,
+	   GtkWidget * widget,
+	   gchar * detail,
+	   gint x1,
+	   gint x2,
+	   gint y)
+{
+  struct theme_image *img;
+  GdkGC              *gc;
+  gchar               setbg = 0;
+  GtkOrientation      orientation;
+  
+  g_return_if_fail(style != NULL);
+  g_return_if_fail(window != NULL);
+
+  orientation = GTK_ORIENTATION_HORIZONTAL;
+  
+  img = match_theme_image(style,
+			  state_type,
+			  GTK_SHADOW_IN,
+			  widget,
+			  detail,
+			  GTK_ARROW_UP,
+			  orientation,
+			  0,
+			  TOKEN_D_HLINE);
+  if (img)
+    {
+      gc = style->bg_gc[state_type];
+      apply_theme_image(window, img, setbg, gc, area, x1, y, (x2 - x1) + 1, 2);
+    }
+}
+
+void
+draw_vline(GtkStyle * style,
+	   GdkWindow * window,
+	   GtkStateType state_type,
+	   GdkRectangle * area,
+	   GtkWidget * widget,
+	   gchar * detail,
+	   gint y1,
+	   gint y2,
+	   gint x)
+{
+  struct theme_image *img;
+  GdkGC              *gc;
+  gchar               setbg = 0;
+  GtkOrientation      orientation;
+  
+  g_return_if_fail(style != NULL);
+  g_return_if_fail(window != NULL);
+
+  orientation = GTK_ORIENTATION_VERTICAL;
+  
+  img = match_theme_image(style,
+			  state_type,
+			  GTK_SHADOW_IN,
+			  widget,
+			  detail,
+			  GTK_ARROW_UP,
+			  orientation,
+			  0,
+			  TOKEN_D_VLINE);
+  if (img)
+    {
+      gc = style->bg_gc[state_type];
+      apply_theme_image(window, img, setbg, gc, area, x, y1, 2, (y2 - y1) + 1);
+    }
+}
+
+void
+draw_shadow(GtkStyle * style,
+	    GdkWindow * window,
+	    GtkStateType state_type,
+	    GtkShadowType shadow_type,
+	    GdkRectangle * area,
+	    GtkWidget * widget,
+	    gchar * detail,
+	    gint x,
+	    gint y,
+	    gint width,
+	    gint height)
+{
+  struct theme_image *img;
+  GdkGC              *gc;
+  gchar               setbg = 0;
+  
+  g_return_if_fail(style != NULL);
+  g_return_if_fail(window != NULL);
+
+  if ((width == -1) && (height == -1))
+    gdk_window_get_size(window, &width, &height);
+  else if (width == -1)
+    gdk_window_get_size(window, &width, NULL);
+  else if (height == -1)
+    gdk_window_get_size(window, NULL, &height);
+
+  img = match_theme_image(style,
+			  state_type,
+			  shadow_type,
+			  widget,
+			  detail,
+			  GTK_ARROW_UP,
+			  GTK_ORIENTATION_HORIZONTAL,
+			  0,
+			  TOKEN_D_SHADOW);
+  if (img)
+    {
+      gc = style->bg_gc[state_type];
+      apply_theme_image_border(window, img, setbg, gc, area, x, y, width, height);
+    }
+}
+
+void
+draw_polygon(GtkStyle * style,
+	     GdkWindow * window,
+	     GtkStateType state_type,
+	     GtkShadowType shadow_type,
+	     GdkRectangle * area,
+	     GtkWidget * widget,
+	     gchar * detail,
+	     GdkPoint * points,
+	     gint npoints,
+	     gint fill)
 {
 #ifndef M_PI
-# define M_PI    3.14159265358979323846
+#define M_PI    3.14159265358979323846
 #endif /* M_PI */
 #ifndef M_PI_4
-# define M_PI_4  0.78539816339744830962
+#define M_PI_4  0.78539816339744830962
 #endif /* M_PI_4 */
-   
-   static const gdouble pi_over_4 = M_PI_4;
-   static const gdouble pi_3_over_4 = M_PI_4 * 3;
-   
-   GdkGC *gc1;
-   GdkGC *gc2;
-   GdkGC *gc3;
-   GdkGC *gc4;
-   gdouble angle;
-   gint xadjust;
-   gint yadjust;
-   gint i;
-   
-   g_return_if_fail (style != NULL);
-   g_return_if_fail (window != NULL);
-   g_return_if_fail (points != NULL);
-   
-   switch (shadow_type)
-     {
-      case GTK_SHADOW_IN:
-	gc1 = style->bg_gc[state_type];
-	gc2 = style->dark_gc[state_type];
-	gc3 = style->light_gc[state_type];
-	gc4 = style->black_gc;
 
-	gc1 = style->light_gc[state_type];
-	gc2 = style->dark_gc[state_type];
-	gc3 = style->light_gc[state_type];
-	gc4 = style->dark_gc[state_type];	
-	break;
-      case GTK_SHADOW_OUT:
-	gc1 = style->dark_gc[state_type];
-	gc2 = style->light_gc[state_type];
-	gc3 = style->black_gc;
-	gc4 = style->bg_gc[state_type];
+  static const gdouble pi_over_4 = M_PI_4;
+  static const gdouble pi_3_over_4 = M_PI_4 * 3;
 
-	gc1 = style->dark_gc[state_type];
-	gc2 = style->light_gc[state_type];
-	gc3 = style->dark_gc[state_type];
-	gc4 = style->light_gc[state_type];
-	break;
-      default:
-	return;
-     }
+  GdkGC              *gc3;
+  GdkGC              *gc4;
+  gdouble             angle;
+  gint                i;
 
-   if (area)
-     {
-	gdk_gc_set_clip_rectangle (gc1, area);
-	gdk_gc_set_clip_rectangle (gc2, area);
-	gdk_gc_set_clip_rectangle (gc3, area);
-	gdk_gc_set_clip_rectangle (gc4, area);
-     }
-   if (fill)
-     gdk_draw_polygon (window, style->bg_gc[state_type], TRUE, points, npoints);
-   
-   npoints--;
-   
-   for (i = 0; i < npoints; i++)
-     {
-	if ((points[i].x == points[i+1].x) &&
-	    (points[i].y == points[i+1].y))
-	  {
-	     angle = 0;
-	  }
-	else
-	  {
-	     angle = atan2 (points[i+1].y - points[i].y,
-			    points[i+1].x - points[i].x);
-	  }
-	
-	if ((angle > -pi_3_over_4) && (angle < pi_over_4))
-	  {
-	     if (angle > -pi_over_4)
-	       {
-		  xadjust = 0;
-		  yadjust = 1;
-	       }
-	     else
-	       {
-		  xadjust = 1;
-		  yadjust = 0;
-	       }
-	     
-	     gdk_draw_line (window, gc1,
-			    points[i].x-xadjust, points[i].y-yadjust,
-			    points[i+1].x-xadjust, points[i+1].y-yadjust);
-	     gdk_draw_line (window, gc3,
-			    points[i].x, points[i].y,
-			    points[i+1].x, points[i+1].y);
-	  }
-	else
-	  {
-	     if ((angle < -pi_3_over_4) || (angle > pi_3_over_4))
-	       {
-		  xadjust = 0;
-		  yadjust = 1;
-	       }
-	     else
-	       {
-		  xadjust = 1;
-		  yadjust = 0;
-	       }
-	     
-	     gdk_draw_line (window, gc4,
-			    points[i].x+xadjust, points[i].y+yadjust,
-			    points[i+1].x+xadjust, points[i+1].y+yadjust);
-	     gdk_draw_line (window, gc2,
-			    points[i].x, points[i].y,
-			    points[i+1].x, points[i+1].y);
-	  }
-     }
-   if (area)
-     {
-	gdk_gc_set_clip_rectangle (gc1, NULL);
-	gdk_gc_set_clip_rectangle (gc2, NULL);
-	gdk_gc_set_clip_rectangle (gc3, NULL);
-	gdk_gc_set_clip_rectangle (gc4, NULL);
-     }
+  g_return_if_fail(style != NULL);
+  g_return_if_fail(window != NULL);
+  g_return_if_fail(points != NULL);
+
+  switch (shadow_type)
+    {
+    case GTK_SHADOW_IN:
+      gc3 = style->light_gc[state_type];
+      gc4 = style->black_gc;
+      break;
+    case GTK_SHADOW_OUT:
+      gc3 = style->black_gc;
+      gc4 = style->light_gc[state_type];
+      break;
+    default:
+      return;
+    }
+
+  if (area)
+    {
+      gdk_gc_set_clip_rectangle(gc3, area);
+      gdk_gc_set_clip_rectangle(gc4, area);
+    }
+  if (fill)
+    gdk_draw_polygon(window, style->bg_gc[state_type], TRUE, points, npoints);
+
+  npoints--;
+
+  for (i = 0; i < npoints; i++)
+    {
+      if ((points[i].x == points[i + 1].x) &&
+	  (points[i].y == points[i + 1].y))
+	angle = 0;
+      else
+	angle = atan2(points[i + 1].y - points[i].y,
+		      points[i + 1].x - points[i].x);
+
+      if ((angle > -pi_3_over_4) && (angle < pi_over_4))
+	gdk_draw_line(window, gc3,
+		      points[i].x, points[i].y,
+		      points[i + 1].x, points[i + 1].y);
+      else
+	gdk_draw_line(window, gc4,
+		      points[i].x, points[i].y,
+		      points[i + 1].x, points[i + 1].y);
+    }
+  if (area)
+    {
+      gdk_gc_set_clip_rectangle(gc3, NULL);
+      gdk_gc_set_clip_rectangle(gc4, NULL);
+    }
 }
 
 void
-draw_arrow (GtkStyle      *style,
-	    GdkWindow     *window,
-	    GtkStateType   state_type,
-	    GtkShadowType  shadow_type,
-	    GdkRectangle  *area,
-	    GtkWidget     *widget,
-	    gchar         *detail,
-	    GtkArrowType   arrow_type,
-	    gint           fill,
-	    gint           x,
-	    gint           y,
-	    gint           width,
-	    gint           height)
+draw_arrow(GtkStyle * style,
+	   GdkWindow * window,
+	   GtkStateType state_type,
+	   GtkShadowType shadow_type,
+	   GdkRectangle * area,
+	   GtkWidget * widget,
+	   gchar * detail,
+	   GtkArrowType arrow_type,
+	   gint fill,
+	   gint x,
+	   gint y,
+	   gint width,
+	   gint height)
 {
-   GdkGC *gc1;
-   GdkGC *gc2;
-   GdkGC *gc3;
-   GdkGC *gc4;
-   gint half_width;
-   gint half_height;
-   GdkPoint points[3];
-   gchar setshape = 0;
-   GdkPixmap *pm = NULL;
-   GdkGC     *pmgc = NULL;
-   GdkColor   col;
-   gchar setbg = 0;
-   
-   g_return_if_fail (style != NULL);
-   g_return_if_fail (window != NULL);
-/*   
-   switch (shadow_type)
-     {
-      case GTK_SHADOW_IN:
-	gc1 = style->bg_gc[state_type];
-	gc2 = style->dark_gc[state_type];
-	gc3 = style->light_gc[state_type];
-	gc4 = style->black_gc;
+  struct theme_image *img;
+  GdkGC              *gc;
+  gchar               setbg = 0;
+  GtkOrientation      orientation;
+  
+  g_return_if_fail(style != NULL);
+  g_return_if_fail(window != NULL);
 
-	gc1 = style->light_gc[state_type];
-	gc2 = style->black_gc;
-	gc3 = style->light_gc[state_type];
-	gc4 = style->black_gc;
-	break;
-      case GTK_SHADOW_OUT:
-	gc1 = style->dark_gc[state_type];
-	gc2 = style->light_gc[state_type];
-	gc3 = style->black_gc;
-	gc4 = style->bg_gc[state_type];
+  if ((width == -1) && (height == -1))
+    {
+      gdk_window_get_size(window, &width, &height);
+      setbg = 1;
+    }
+  else if (width == -1)
+    gdk_window_get_size(window, &width, NULL);
+  else if (height == -1)
+    gdk_window_get_size(window, NULL, &height);
 
-	gc1 = style->black_gc;
-	gc2 = style->light_gc[state_type];
-	gc3 = style->black_gc;
-	gc4 = style->light_gc[state_type];
-	break;
-      default:
-	return;
-     }
-*/   
-   if ((width == -1) && (height == -1))
-     {
-	gdk_window_get_size (window, &width, &height);
-	setshape = 1;
-     }
-   else if (width == -1)
-     gdk_window_get_size (window, &width, NULL);
-   else if (height == -1)
-     gdk_window_get_size (window, NULL, &height);
-   
-   half_width = width / 2;
-   half_height = height / 2;
-
-/*   
-   if (area)
-     {
-	gdk_gc_set_clip_rectangle (gc1, area);
-	gdk_gc_set_clip_rectangle (gc2, area);
-	gdk_gc_set_clip_rectangle (gc3, area);
-	gdk_gc_set_clip_rectangle (gc4, area);
-     }
-*/ 
-/*   if (setshape)
-     {
-	pm = gdk_pixmap_new (window, width, height, 1);
-	pmgc = gdk_gc_new (pm);
-	col.pixel = 0;
-	gdk_gc_set_foreground(pmgc, &col);
-	gdk_draw_rectangle(pm, pmgc, TRUE, 0, 0, width, height);
-	col.pixel = 1;
-	gdk_gc_set_foreground(pmgc, &col);
-     }
-*/   
-     {
-	GdkImlibImage *im;
-	GdkImlibBorder bd;
-	
-	switch (arrow_type)
-	  {
-	   case GTK_ARROW_UP:
-	     switch (shadow_type)
-	       {
-		case GTK_SHADOW_NONE:
-		  return;
-		  break;
-		case GTK_SHADOW_IN:
-		case GTK_SHADOW_ETCHED_IN:
-		case GTK_SHADOW_OUT:
-		case GTK_SHADOW_ETCHED_OUT:
-		  switch (state_type)
-		    {
-		     case GTK_STATE_NORMAL:
-		     case GTK_STATE_INSENSITIVE:
-		       im=load_image("_arrow_u1.png");
-		       break;
-		     case GTK_STATE_PRELIGHT:
-		       im=load_image("_arrow_u2.png");
-		       break;
-		     case GTK_STATE_ACTIVE:
-		     case GTK_STATE_SELECTED:
-		       im=load_image("_arrow_u3.png");
-		       break;
-		    }
-		  break;
-	       }
-	     break;
-	   case GTK_ARROW_DOWN:
-	     switch (shadow_type)
-	       {
-		case GTK_SHADOW_NONE:
-		  return;
-		  break;
-		case GTK_SHADOW_IN:
-		case GTK_SHADOW_ETCHED_IN:
-		case GTK_SHADOW_OUT:
-		case GTK_SHADOW_ETCHED_OUT:
-		  switch (state_type)
-		    {
-		     case GTK_STATE_NORMAL:
-		     case GTK_STATE_INSENSITIVE:
-		       im=load_image("_arrow_d1.png");
-		       break;
-		     case GTK_STATE_PRELIGHT:
-		       im=load_image("_arrow_d2.png");
-		       break;
-		     case GTK_STATE_ACTIVE:
-		     case GTK_STATE_SELECTED:
-		       im=load_image("_arrow_d3.png");
-		       break;
-		    }
-		  break;
-	       }
-	     break;
-	   case GTK_ARROW_LEFT:
-	     switch (shadow_type)
-	       {
-		case GTK_SHADOW_NONE:
-		  return;
-		  break;
-		case GTK_SHADOW_IN:
-		case GTK_SHADOW_ETCHED_IN:
-		case GTK_SHADOW_OUT:
-		case GTK_SHADOW_ETCHED_OUT:
-		  switch (state_type)
-		    {
-		     case GTK_STATE_NORMAL:
-		     case GTK_STATE_INSENSITIVE:
-		       im=load_image("_arrow_l1.png");
-		       break;
-		     case GTK_STATE_PRELIGHT:
-		       im=load_image("_arrow_l2.png");
-		       break;
-		     case GTK_STATE_ACTIVE:
-		     case GTK_STATE_SELECTED:
-		       im=load_image("_arrow_l3.png");
-		       break;
-		    }
-		  break;
-	       }
-	     break;
-	   case GTK_ARROW_RIGHT:
-	     switch (shadow_type)
-	       {
-		case GTK_SHADOW_NONE:
-		  return;
-		  break;
-		case GTK_SHADOW_IN:
-		case GTK_SHADOW_ETCHED_IN:
-		case GTK_SHADOW_OUT:
-		case GTK_SHADOW_ETCHED_OUT:
-		  switch (state_type)
-		    {
-		     case GTK_STATE_NORMAL:
-		     case GTK_STATE_INSENSITIVE:
-		       im=load_image("_arrow_r1.png");
-		       break;
-		     case GTK_STATE_PRELIGHT:
-		       im=load_image("_arrow_r2.png");
-		       break;
-		     case GTK_STATE_ACTIVE:
-		     case GTK_STATE_SELECTED:
-		       im=load_image("_arrow_r3.png");
-		       break;
-		    }
-		  break;
-	       }
-	     break;
-	  }
-	if (im)
-	  {
-	     GdkPixmap *p, *m;
-	     
-	     bd.left=2;
-	     bd.right=2;
-	     bd.top=2;
-	     bd.bottom=2;
-	     gdk_imlib_set_image_border(im,&bd);
-	     gdk_imlib_render(im,width,height);
-	     
-	     gc1 = style->bg_gc[state_type];
-	     
-	     if (area)
-	       gdk_gc_set_clip_rectangle (gc1, area);
-
-	     p = gdk_imlib_move_image(im);
-	     m = gdk_imlib_move_mask(im);
-	     if (p)
-	       {
-		  if (setbg)
-		    {
-		       gdk_window_set_back_pixmap(window, p, 0);
-		       if (area)
-			 gdk_window_clear_area(window, area->x, area->y,
-					       area->width, area->height);
-		       else
-			 {
-			    if (m)
-			      gdk_window_shape_combine_mask(window, m, 0, 0);
-			    gdk_window_clear(window);
-			 }
-		    }
-		  else
-		    {
-		       if (m)
-			 {
-			    gdk_gc_set_clip_mask(gc1, m);
-			    gdk_gc_set_clip_origin(gc1, x, y);
-			 }
-		       gdk_draw_pixmap(window, gc1, p, 0, 0, x, y, width, height);
-		       if (m)
-			 {
-			    gdk_gc_set_clip_mask(gc1, NULL);
-			    gdk_gc_set_clip_origin(gc1, 0, 0);
-			 }
-		    }
-		  gdk_imlib_free_pixmap(p);
-	       }
-	     gdk_imlib_destroy_image(im);
-	     
-	     if (area)
-	       gdk_gc_set_clip_rectangle (gc1, NULL);
-	  }
-	else
-	  {
-	     gdk_window_clear_area(window,x,y,width,height);
-	  }
-     }
-   return;
-   
-   switch (arrow_type)
-     {
-      case GTK_ARROW_UP:
-	if (fill)
-	  {
-	     points[0].x = x + half_width;
-	     points[0].y = y;
-	     points[1].x = x;
-	     points[1].y = y + height - 1;
-	     points[2].x = x + width - 1;
-	     points[2].y = y + height - 1;
-	     
-	     gdk_draw_polygon (window, style->bg_gc[state_type], TRUE, points, 3);
-	     if (pm)
-	       gdk_draw_polygon (pm, pmgc, TRUE, points, 3);
-	  }
-	
-	gdk_draw_line (window, gc1,
-		       x + 1, y + height - 2,
-		       x + width - 2, y + height - 2);
-	gdk_draw_line (window, gc3,
-		       x + 0, y + height - 1,
-		       x + width - 1, y + height - 1);
-	
-	gdk_draw_line (window, gc1,
-		       x + width - 2, y + height - 1,
-		       x + half_width, y + 1);
-	gdk_draw_line (window, gc3,
-		       x + width - 1, y + height - 1,
-		       x + half_width, y);
-	
-	gdk_draw_line (window, gc4,
-		       x + half_width, y + 1,
-		       x + 1, y + height - 1);
-	gdk_draw_line (window, gc2,
-		       x + half_width, y,
-		       x, y + height - 1);
-	break;
-      case GTK_ARROW_DOWN:
-	if (fill)
-	  {
-	     points[0].x = x + width - 1;
-	     points[0].y = y;
-	     points[1].x = x;
-	     points[1].y = y;
-	     points[2].x = x + half_width;
-	     points[2].y = y + height - 1;
-	     
-	     gdk_draw_polygon (window, style->bg_gc[state_type], TRUE, points, 3);
-	     if (pm)
-	       gdk_draw_polygon (pm, pmgc, TRUE, points, 3);
-	  }
-	
-	gdk_draw_line (window, gc4,
-		       x + width - 2,
-		       y + 1, x + 1, y + 1);
-	gdk_draw_line (window, gc2,
-		       x + width - 1, y,
-		       x, y);
-	
-	gdk_draw_line (window, gc4,
-		       x + 1, y,
-		       x + half_width, y + height - 2);
-	gdk_draw_line (window, gc2,
-		       x, y,
-		       x + half_width, y + height - 1);
-	
-	gdk_draw_line (window, gc1,
-		       x + half_width, y + height - 2,
-		       x + width - 2, y);
-	gdk_draw_line (window, gc3,
-		       x + half_width, y + height - 1,
-		       x + width - 1, y);
-	break;
-      case GTK_ARROW_LEFT:
-	if (fill)
-	  {
-	     points[0].x = x;
-	     points[0].y = y + half_height;
-	     points[1].x = x + width - 1;
-	     points[1].y = y + height - 1;
-	     points[2].x = x + width - 1;
-	     points[2].y = y;
-	     
-	     gdk_draw_polygon (window, style->bg_gc[state_type], TRUE, points, 3);
-	     if (pm)
-	       gdk_draw_polygon (pm, pmgc, TRUE, points, 3);
-	  }
-	
-	gdk_draw_line (window, gc1,
-		       x + 1, y + half_height,
-		       x + width - 1, y + height - 1);
-	gdk_draw_line (window, gc3,
-		       x, y + half_height,
-		       x + width - 1, y + height - 1);
-	
-	gdk_draw_line (window, gc1,
-		       x + width - 2, y + height - 1,
-		       x + width - 2, y + 1);
-	gdk_draw_line (window, gc3,
-		       x + width - 1, y + height - 1,
-		       x + width - 1, y);
-	
-	gdk_draw_line (window, gc4,
-		       x + width - 1, y + 1,
-		       x + 1, y + half_height);
-	gdk_draw_line (window, gc2,
-		       x + width - 1, y,
-		       x, y + half_height);
-	break;
-      case GTK_ARROW_RIGHT:
-	if (fill)
-	  {
-	     points[0].x = x + width - 1;
-	     points[0].y = y + half_height;
-	     points[1].x = x;
-	     points[1].y = y;
-	     points[2].x = x;
-	     points[2].y = y + height - 1;
-	     
-	     gdk_draw_polygon (window, style->bg_gc[state_type], TRUE, points, 3);
-	     if (pm)
-	       gdk_draw_polygon (pm, pmgc, TRUE, points, 3);
-	  }
-	
-	gdk_draw_line (window, gc4,
-		       x + width - 1, y + half_height,
-		       x + 1, y + 1);
-	gdk_draw_line (window, gc2,
-		       x + width - 1, y + half_height,
-		       x, y);
-	
-	gdk_draw_line (window, gc4,
-		       x + 1, y + 1,
-		       x + 1, y + height - 2);
-	gdk_draw_line (window, gc2,
-		       x, y,
-		       x, y + height - 1);
-	
-	gdk_draw_line (window, gc1,
-		       x + 1, y + height - 2,
-		       x + width - 1, y + half_height);
-	gdk_draw_line (window, gc3,
-		       x, y + height - 1,
-		       x + width - 1, y + half_height);
-	break;
-     }
-   if (setshape)
-     {
-	gdk_window_shape_combine_mask(window, pm, 0, 0);
-	gdk_pixmap_unref(pm);
-	gdk_gc_destroy(pmgc);
-     }
-   if (area)
-     {
-	gdk_gc_set_clip_rectangle (gc1, NULL);
-	gdk_gc_set_clip_rectangle (gc2, NULL);
-	gdk_gc_set_clip_rectangle (gc3, NULL);
-	gdk_gc_set_clip_rectangle (gc4, NULL);
-     }
+  orientation = GTK_ORIENTATION_HORIZONTAL;
+  if (height > width)
+    orientation = GTK_ORIENTATION_VERTICAL;
+  
+  img = match_theme_image(style,
+			  state_type,
+			  shadow_type,
+			  widget,
+			  detail,
+			  arrow_type,
+			  orientation,
+			  0,
+			  TOKEN_D_ARROW);
+  if (img)
+    {
+      gc = style->bg_gc[state_type];
+      apply_theme_image(window, img, setbg, gc, area, x, y, width, height);
+    }
 }
 
 void
-draw_diamond (GtkStyle      *style,
-	      GdkWindow     *window,
-	      GtkStateType   state_type,
-	      GtkShadowType  shadow_type,
-	      GdkRectangle  *area,
-	      GtkWidget     *widget,
-	      gchar         *detail,
-	      gint           x,
-	      gint           y,
-	      gint           width,
-	      gint           height)
+draw_diamond(GtkStyle * style,
+	     GdkWindow * window,
+	     GtkStateType state_type,
+	     GtkShadowType shadow_type,
+	     GdkRectangle * area,
+	     GtkWidget * widget,
+	     gchar * detail,
+	     gint x,
+	     gint y,
+	     gint width,
+	     gint height)
 {
-   gint half_width;
-   gint half_height;
-   
-   g_return_if_fail (style != NULL);
-   g_return_if_fail (window != NULL);
-   
-   if ((width == -1) && (height == -1))
-     gdk_window_get_size (window, &width, &height);
-   else if (width == -1)
-     gdk_window_get_size (window, &width, NULL);
-   else if (height == -1)
-     gdk_window_get_size (window, NULL, &height);
-   
-   half_width = width / 2;
-   half_height = height / 2;
-   
-   if (area)
-     {
-	gdk_gc_set_clip_rectangle (style->light_gc[state_type], area);
-	gdk_gc_set_clip_rectangle (style->bg_gc[state_type], area);
-	gdk_gc_set_clip_rectangle (style->dark_gc[state_type], area);
-	gdk_gc_set_clip_rectangle (style->black_gc, area);
-     }
-   switch (shadow_type)
-     {
-      case GTK_SHADOW_IN:
-	gdk_draw_line (window, style->light_gc[state_type],
-		       x + 2, y + half_height,
-		       x + half_width, y + height - 2);
-	gdk_draw_line (window, style->light_gc[state_type],
-		       x + half_width, y + height - 2,
-		       x + width - 2, y + half_height);
-	gdk_draw_line (window, style->light_gc[state_type],
-		       x + 1, y + half_height,
-		       x + half_width, y + height - 1);
-	gdk_draw_line (window, style->light_gc[state_type],
-		       x + half_width, y + height - 1,
-		       x + width - 1, y + half_height);
-	gdk_draw_line (window, style->light_gc[state_type],
-		       x, y + half_height,
-		       x + half_width, y + height);
-	gdk_draw_line (window, style->light_gc[state_type],
-		       x + half_width, y + height,
-		       x + width, y + half_height);
-	
-	gdk_draw_line (window, style->black_gc,
-		       x + 2, y + half_height,
-		       x + half_width, y + 2);
-	gdk_draw_line (window, style->black_gc,
-		       x + half_width, y + 2,
-		       x + width - 2, y + half_height);
-	gdk_draw_line (window, style->black_gc,
-		       x + 1, y + half_height,
-		       x + half_width, y + 1);
-	gdk_draw_line (window, style->black_gc,
-		       x + half_width, y + 1,
-		       x + width - 1, y + half_height);
-	gdk_draw_line (window, style->black_gc,
-		       x, y + half_height,
-		       x + half_width, y);
-	gdk_draw_line (window, style->black_gc,
-		       x + half_width, y,
-		       x + width, y + half_height);
-/*
-	gdk_draw_line (window, style->bg_gc[state_type],
-		       x + 2, y + half_height,
-		       x + half_width, y + height - 2);
-	gdk_draw_line (window, style->bg_gc[state_type],
-		       x + half_width, y + height - 2,
-		       x + width - 2, y + half_height);
-	gdk_draw_line (window, style->light_gc[state_type],
-		       x + 1, y + half_height,
-		       x + half_width, y + height - 1);
-	gdk_draw_line (window, style->light_gc[state_type],
-		       x + half_width, y + height - 1,
-		       x + width - 1, y + half_height);
-	gdk_draw_line (window, style->light_gc[state_type],
-		       x, y + half_height,
-		       x + half_width, y + height);
-	gdk_draw_line (window, style->light_gc[state_type],
-		       x + half_width, y + height,
-		       x + width, y + half_height);
-	
-	gdk_draw_line (window, style->black_gc,
-		       x + 2, y + half_height,
-		       x + half_width, y + 2);
-	gdk_draw_line (window, style->black_gc,
-		       x + half_width, y + 2,
-		       x + width - 2, y + half_height);
-	gdk_draw_line (window, style->dark_gc[state_type],
-		       x + 1, y + half_height,
-		       x + half_width, y + 1);
-	gdk_draw_line (window, style->dark_gc[state_type],
-		       x + half_width, y + 1,
-		       x + width - 1, y + half_height);
-	gdk_draw_line (window, style->dark_gc[state_type],
-		       x, y + half_height,
-		       x + half_width, y);
-	gdk_draw_line (window, style->dark_gc[state_type],
-		       x + half_width, y,
-		       x + width, y + half_height);
- */
-	break;
-      case GTK_SHADOW_OUT:
-	gdk_draw_line (window, style->black_gc,
-		       x + 2, y + half_height,
-		       x + half_width, y + height - 2);
-	gdk_draw_line (window, style->black_gc,
-		       x + half_width, y + height - 2,
-		       x + width - 2, y + half_height);
-	gdk_draw_line (window, style->black_gc,
-		       x + 1, y + half_height,
-		       x + half_width, y + height - 1);
-	gdk_draw_line (window, style->black_gc,
-		       x + half_width, y + height - 1,
-		       x + width - 1, y + half_height);
-	gdk_draw_line (window, style->black_gc,
-		       x, y + half_height,
-		       x + half_width, y + height);
-	gdk_draw_line (window, style->black_gc,
-		       x + half_width, y + height,
-		       x + width, y + half_height);
-	
-	gdk_draw_line (window, style->light_gc[state_type],
-		       x + 2, y + half_height,
-		       x + half_width, y + 2);
-	gdk_draw_line (window, style->light_gc[state_type],
-		       x + half_width, y + 2,
-		       x + width - 2, y + half_height);
-	gdk_draw_line (window, style->light_gc[state_type],
-		       x + 1, y + half_height,
-		       x + half_width, y + 1);
-	gdk_draw_line (window, style->light_gc[state_type],
-		       x + half_width, y + 1,
-		       x + width - 1, y + half_height);
-	gdk_draw_line (window, style->light_gc[state_type],
-		       x, y + half_height,
-		       x + half_width, y);
-	gdk_draw_line (window, style->light_gc[state_type],
-		       x + half_width, y,
-		       x + width, y + half_height);
-/*
-	gdk_draw_line (window, style->dark_gc[state_type],
-		       x + 2, y + half_height,
-		       x + half_width, y + height - 2);
-	gdk_draw_line (window, style->dark_gc[state_type],
-		       x + half_width, y + height - 2,
-		       x + width - 2, y + half_height);
-	gdk_draw_line (window, style->dark_gc[state_type],
-		       x + 1, y + half_height,
-		       x + half_width, y + height - 1);
-	gdk_draw_line (window, style->dark_gc[state_type],
-		       x + half_width, y + height - 1,
-		       x + width - 1, y + half_height);
-	gdk_draw_line (window, style->black_gc,
-		       x, y + half_height,
-		       x + half_width, y + height);
-	gdk_draw_line (window, style->black_gc,
-		       x + half_width, y + height,
-		       x + width, y + half_height);
-	
-	gdk_draw_line (window, style->bg_gc[state_type],
-		       x + 2, y + half_height,
-		       x + half_width, y + 2);
-	gdk_draw_line (window, style->bg_gc[state_type],
-		       x + half_width, y + 2,
-		       x + width - 2, y + half_height);
-	gdk_draw_line (window, style->light_gc[state_type],
-		       x + 1, y + half_height,
-		       x + half_width, y + 1);
-	gdk_draw_line (window, style->light_gc[state_type],
-		       x + half_width, y + 1,
-		       x + width - 1, y + half_height);
-	gdk_draw_line (window, style->light_gc[state_type],
-		       x, y + half_height,
-		       x + half_width, y);
-	gdk_draw_line (window, style->light_gc[state_type],
-		       x + half_width, y,
-		       x + width, y + half_height);
-*/
-	break;
-      default:
-	break;
-     }
-   if (area)
-     {
-	gdk_gc_set_clip_rectangle (style->light_gc[state_type], NULL);
-	gdk_gc_set_clip_rectangle (style->bg_gc[state_type], NULL);
-	gdk_gc_set_clip_rectangle (style->dark_gc[state_type], NULL);
-	gdk_gc_set_clip_rectangle (style->black_gc, NULL);
-     }
+  struct theme_image *img;
+  GdkGC              *gc;
+  gchar               setbg = 0;
+  GtkOrientation      orientation;
+  
+  g_return_if_fail(style != NULL);
+  g_return_if_fail(window != NULL);
+
+  if ((width == -1) && (height == -1))
+    {
+      gdk_window_get_size(window, &width, &height);
+      setbg = 1;
+    }
+  else if (width == -1)
+    gdk_window_get_size(window, &width, NULL);
+  else if (height == -1)
+    gdk_window_get_size(window, NULL, &height);
+
+  orientation = GTK_ORIENTATION_HORIZONTAL;
+  if (height > width)
+    orientation = GTK_ORIENTATION_VERTICAL;
+  
+  img = match_theme_image(style,
+			  state_type,
+			  shadow_type,
+			  widget,
+			  detail,
+			  GTK_ARROW_UP,
+			  orientation,
+			  0,
+			  TOKEN_D_DIAMOND);
+  if (img)
+    {
+      gc = style->bg_gc[state_type];
+      apply_theme_image(window, img, setbg, gc, area, x, y, width, height);
+    }
 }
 
 void
-draw_oval (GtkStyle      *style,
-	   GdkWindow     *window,
-	   GtkStateType   state_type,
-	   GtkShadowType  shadow_type,
-	   GdkRectangle  *area,
-	   GtkWidget     *widget,
-	   gchar         *detail,
-	   gint           x,
-	   gint           y,
-	   gint           width,
-	   gint           height)
+draw_oval(GtkStyle * style,
+	  GdkWindow * window,
+	  GtkStateType state_type,
+	  GtkShadowType shadow_type,
+	  GdkRectangle * area,
+	  GtkWidget * widget,
+	  gchar * detail,
+	  gint x,
+	  gint y,
+	  gint width,
+	  gint height)
 {
-   g_return_if_fail (style != NULL);
-   g_return_if_fail (window != NULL);
+  struct theme_image *img;
+  GdkGC              *gc;
+  gchar               setbg = 0;
+  GtkOrientation      orientation;
+  
+  g_return_if_fail(style != NULL);
+  g_return_if_fail(window != NULL);
+
+  if ((width == -1) && (height == -1))
+    {
+      gdk_window_get_size(window, &width, &height);
+      setbg = 1;
+    }
+  else if (width == -1)
+    gdk_window_get_size(window, &width, NULL);
+  else if (height == -1)
+    gdk_window_get_size(window, NULL, &height);
+
+  orientation = GTK_ORIENTATION_HORIZONTAL;
+  if (height > width)
+    orientation = GTK_ORIENTATION_VERTICAL;
+  
+  img = match_theme_image(style,
+			  state_type,
+			  shadow_type,
+			  widget,
+			  detail,
+			  GTK_ARROW_UP,
+			  orientation,
+			  0,
+			  TOKEN_D_OVAL);
+  if (img)
+    {
+      gc = style->bg_gc[state_type];
+      apply_theme_image(window, img, setbg, gc, area, x, y, width, height);
+    }
 }
 
 void
-draw_string (GtkStyle      *style,
-	     GdkWindow     *window,
-	     GtkStateType   state_type,
-	     GdkRectangle  *area,
-	     GtkWidget     *widget,
-	     gchar         *detail,
-	     gint           x,
-	     gint           y,
-	     const gchar   *string)
+draw_string(GtkStyle * style,
+	    GdkWindow * window,
+	    GtkStateType state_type,
+	    GdkRectangle * area,
+	    GtkWidget * widget,
+	    gchar * detail,
+	    gint x,
+	    gint y,
+	    const gchar * string)
 {
-   g_return_if_fail (style != NULL);
-   g_return_if_fail (window != NULL);
-   
-   if (area)
-     {
-	gdk_gc_set_clip_rectangle (style->white_gc, area);
-	gdk_gc_set_clip_rectangle (style->fg_gc[state_type], area);
-     }
-   if (state_type == GTK_STATE_INSENSITIVE)
-     gdk_draw_string (window, style->font, style->white_gc, x + 1, y + 1, string);
-   gdk_draw_string (window, style->font, style->fg_gc[state_type], x, y, string);
-   if (area)
-     {
-	gdk_gc_set_clip_rectangle (style->white_gc, NULL);
-	gdk_gc_set_clip_rectangle (style->fg_gc[state_type], NULL);
-     }
+  g_return_if_fail(style != NULL);
+  g_return_if_fail(window != NULL);
+
+  if (area)
+    {
+      gdk_gc_set_clip_rectangle(style->white_gc, area);
+      gdk_gc_set_clip_rectangle(style->fg_gc[state_type], area);
+    }
+  if (state_type == GTK_STATE_INSENSITIVE)
+    gdk_draw_string(window, style->font, style->white_gc, x + 1, y + 1, string);
+  gdk_draw_string(window, style->font, style->fg_gc[state_type], x, y, string);
+  if (area)
+    {
+      gdk_gc_set_clip_rectangle(style->white_gc, NULL);
+      gdk_gc_set_clip_rectangle(style->fg_gc[state_type], NULL);
+    }
 }
 
-void 
-draw_box     (GtkStyle      *style,
-	      GdkWindow     *window,
-	      GtkStateType   state_type,
-	      GtkShadowType  shadow_type,
-	      GdkRectangle  *area,
-	      GtkWidget     *widget,
-	      gchar         *detail,
-	      gint           x,
-	      gint           y,
-	      gint           width,
-	      gint           height)
+void
+draw_box(GtkStyle * style,
+	 GdkWindow * window,
+	 GtkStateType state_type,
+	 GtkShadowType shadow_type,
+	 GdkRectangle * area,
+	 GtkWidget * widget,
+	 gchar * detail,
+	 gint x,
+	 gint y,
+	 gint width,
+	 gint height)
 {
-   GdkGC *gc1;
-   GdkGC *gc2;
-   gchar setbg = 0;
-   
-   g_return_if_fail (style != NULL);
-   g_return_if_fail (window != NULL);
-   
-   if ((width == -1) && (height == -1))
-     {
-	gdk_window_get_size (window, &width, &height);
-	setbg = 1;
-     }
-   else if (width == -1)
-     gdk_window_get_size (window, &width, NULL);
-   else if (height == -1)
-     gdk_window_get_size (window, NULL, &height);
+  struct theme_image *img;
+  GdkGC              *gc;
+  gchar               setbg = 0;
+  GtkOrientation      orientation;
 
-     {
-	GdkImlibImage *im;
-	GdkImlibBorder bd;
-	
-	if ((detail) && (!strcmp("hruler", detail)))
-	  im=load_image("_ruleh.png");
-	else if ((detail) && (!strcmp("vruler", detail)))
-	  im=load_image("_rulev.png");
-	else if ((detail) && (!strcmp("buttondefault", detail)))
-	  im=load_image("_ruleh.png");
-	else if ((detail) && (!strcmp("bar", detail)))
-	  im=load_image("_prog_vgrad.png");
-	else
-	  {
-	     switch (shadow_type)
-	       {
-		case GTK_SHADOW_NONE:
-		  switch (state_type)
-		    {
-		     case GTK_STATE_NORMAL:
-		     case GTK_STATE_INSENSITIVE:
-		       im=NULL;
-		       break;
-		     case GTK_STATE_PRELIGHT:
-		     case GTK_STATE_ACTIVE:
-		     case GTK_STATE_SELECTED:
-		       im=NULL;
-		       break;
-		    }
-		  break;
-		case GTK_SHADOW_IN:
-		case GTK_SHADOW_ETCHED_IN:
-		  switch (state_type)
-		    {
-		     case GTK_STATE_NORMAL:
-		       im=load_image("_box_out_dgrad6.png");
-		       break;
-		     case GTK_STATE_INSENSITIVE:
-		       im=load_image("_box_out_dgrad5.png");
-		       break;
-		     case GTK_STATE_PRELIGHT:
-		     case GTK_STATE_ACTIVE:
-		     case GTK_STATE_SELECTED:
-		       im=load_image("_box_out_dgrad3.png");
-		       break;
-		    }
-		  break;
-		case GTK_SHADOW_OUT:
-		case GTK_SHADOW_ETCHED_OUT:
-		  switch (state_type)
-		    {
-		     case GTK_STATE_NORMAL:
-		       im=load_image("_box_out_dgrad1.png");
-		       break;
-		     case GTK_STATE_INSENSITIVE:
-		       im=load_image("_box_out_dgrad4.png");
-		       break;
-		     case GTK_STATE_PRELIGHT:
-		     case GTK_STATE_ACTIVE:
-		     case GTK_STATE_SELECTED:
-		       im=load_image("_box_out_dgrad2.png");
-		       break;
-		    }
-		  break;
-	       }
-	  }
-	if (im)
-	  {
-	     GdkPixmap *p, *m;
-	     
-	     bd.left=2;
-	     bd.right=2;
-	     bd.top=2;
-	     bd.bottom=2;
-	     gdk_imlib_set_image_border(im,&bd);
-	     gdk_imlib_render(im,width,height);
-	     
-	     gc1 = style->bg_gc[state_type];
-	     
-	     if (area)
-	       gdk_gc_set_clip_rectangle (gc1, area);
+  printf("%s\n",detail);
+  g_return_if_fail(style != NULL);
+  g_return_if_fail(window != NULL);
 
-	     p = gdk_imlib_move_image(im);
-	     m = gdk_imlib_move_mask(im);
-	     if (p)
-	       {
-		  if (setbg)
-		    {
-		       gdk_window_set_back_pixmap(window, p, 0);
-		       if (area)
-			 gdk_window_clear_area(window, area->x, area->y,
-					       area->width, area->height);
-		       else
-			 {
-			    if (m)
-			      gdk_window_shape_combine_mask(window, m, 0, 0);
-			    gdk_window_clear(window);
-			 }
-		    }
-		  else
-		    {
-		       if (m)
-			 {
-			    gdk_gc_set_clip_mask(gc1, m);
-			    gdk_gc_set_clip_origin(gc1, x, y);
-			 }
-		       gdk_draw_pixmap(window, gc1, p, 0, 0, x, y, width, height);
-		       if (m)
-			 {
-			    gdk_gc_set_clip_mask(gc1, NULL);
-			    gdk_gc_set_clip_origin(gc1, 0, 0);
-			 }
-		    }
-		  gdk_imlib_free_pixmap(p);
-	       }
-	     gdk_imlib_destroy_image(im);
-	     
-	     if (area)
-	       gdk_gc_set_clip_rectangle (gc1, NULL);
-	  }
-	else
-	  {
-	     gdk_window_clear_area(window,x,y,width,height);
-	  }
-     }
-   return;
-   
-   switch (shadow_type)
-     {
-      case GTK_SHADOW_NONE:
-	gc1 = NULL;
-	gc2 = NULL;
-	break;
-      case GTK_SHADOW_IN:
-      case GTK_SHADOW_ETCHED_IN:
-	gc1 = style->light_gc[state_type];
-	gc2 = style->dark_gc[state_type];
-	break;
-      case GTK_SHADOW_OUT:
-      case GTK_SHADOW_ETCHED_OUT:
-	gc1 = style->dark_gc[state_type];
-	gc2 = style->light_gc[state_type];
-	break;
-     }
+  if ((width == -1) && (height == -1))
+    {
+      gdk_window_get_size(window, &width, &height);
+      setbg = 1;
+    }
+  else if (width == -1)
+    gdk_window_get_size(window, &width, NULL);
+  else if (height == -1)
+    gdk_window_get_size(window, NULL, &height);
 
-   if (area)
-     {
-	gdk_gc_set_clip_rectangle (style->bg_gc[state_type], area);
-     }
-   gdk_draw_rectangle(window, style->bg_gc[state_type], TRUE, 
+  orientation = GTK_ORIENTATION_HORIZONTAL;
+  if (height > width)
+    orientation = GTK_ORIENTATION_VERTICAL;
+
+  img = match_theme_image(style,
+			  state_type,
+			  shadow_type,
+			  widget,
+			  detail,
+			  GTK_ARROW_UP,
+			  orientation,
+			  0,
+			  TOKEN_D_BOX);
+  if (img)
+    {
+      gc = style->bg_gc[state_type];
+      apply_theme_image(window, img, setbg, gc, area, x, y, width, height);
+    }
+}
+
+void
+draw_flat_box(GtkStyle * style,
+	      GdkWindow * window,
+	      GtkStateType state_type,
+	      GtkShadowType shadow_type,
+	      GdkRectangle * area,
+	      GtkWidget * widget,
+	      gchar * detail,
+	      gint x,
+	      gint y,
+	      gint width,
+	      gint height)
+{
+  struct theme_image *img;
+  GdkGC              *gc;
+  gchar               setbg = 0;
+  GtkOrientation      orientation;
+  
+  g_return_if_fail(style != NULL);
+  g_return_if_fail(window != NULL);
+
+  if ((width == -1) && (height == -1))
+    {
+      gdk_window_get_size(window, &width, &height);
+      setbg = 1;
+    }
+  else if (width == -1)
+    gdk_window_get_size(window, &width, NULL);
+  else if (height == -1)
+    gdk_window_get_size(window, NULL, &height);
+
+  orientation = GTK_ORIENTATION_HORIZONTAL;
+  if (height > width)
+    orientation = GTK_ORIENTATION_VERTICAL;
+  
+  img = match_theme_image(style,
+			  state_type,
+			  shadow_type,
+			  widget,
+			  detail,
+			  GTK_ARROW_UP,
+			  orientation,
+			  0,
+			  TOKEN_D_FLAT_BOX);
+  if (img)
+    {
+      gc = style->bg_gc[state_type];
+      apply_theme_image(window, img, setbg, gc, area, x, y, width, height);
+    }
+}
+
+void
+draw_check(GtkStyle * style,
+	   GdkWindow * window,
+	   GtkStateType state_type,
+	   GtkShadowType shadow_type,
+	   GdkRectangle * area,
+	   GtkWidget * widget,
+	   gchar * detail,
+	   gint x,
+	   gint y,
+	   gint width,
+	   gint height)
+{
+  struct theme_image *img;
+  GdkGC              *gc;
+  gchar               setbg = 0;
+  GtkOrientation      orientation;
+  
+  g_return_if_fail(style != NULL);
+  g_return_if_fail(window != NULL);
+
+  if ((width == -1) && (height == -1))
+    {
+      gdk_window_get_size(window, &width, &height);
+      setbg = 1;
+    }
+  else if (width == -1)
+    gdk_window_get_size(window, &width, NULL);
+  else if (height == -1)
+    gdk_window_get_size(window, NULL, &height);
+
+  orientation = GTK_ORIENTATION_HORIZONTAL;
+  if (height > width)
+    orientation = GTK_ORIENTATION_VERTICAL;
+  
+  img = match_theme_image(style,
+			  state_type,
+			  shadow_type,
+			  widget,
+			  detail,
+			  GTK_ARROW_UP,
+			  orientation,
+			  0,
+			  TOKEN_D_CHECK);
+  if (img)
+    {
+      gc = style->bg_gc[state_type];
+      apply_theme_image(window, img, setbg, gc, area, x, y, width, height);
+    }
+}
+
+void
+draw_option(GtkStyle * style,
+	    GdkWindow * window,
+	    GtkStateType state_type,
+	    GtkShadowType shadow_type,
+	    GdkRectangle * area,
+	    GtkWidget * widget,
+	    gchar * detail,
+	    gint x,
+	    gint y,
+	    gint width,
+	    gint height)
+{
+  struct theme_image *img;
+  GdkGC              *gc;
+  gchar               setbg = 0;
+  GtkOrientation      orientation;
+  
+  g_return_if_fail(style != NULL);
+  g_return_if_fail(window != NULL);
+
+  if ((width == -1) && (height == -1))
+    {
+      gdk_window_get_size(window, &width, &height);
+      setbg = 1;
+    }
+  else if (width == -1)
+    gdk_window_get_size(window, &width, NULL);
+  else if (height == -1)
+    gdk_window_get_size(window, NULL, &height);
+
+  orientation = GTK_ORIENTATION_HORIZONTAL;
+  if (height > width)
+    orientation = GTK_ORIENTATION_VERTICAL;
+  
+  img = match_theme_image(style,
+			  state_type,
+			  shadow_type,
+			  widget,
+			  detail,
+			  GTK_ARROW_UP,
+			  orientation,
+			  0,
+			  TOKEN_D_OPTION);
+  if (img)
+    {
+      gc = style->bg_gc[state_type];
+      apply_theme_image(window, img, setbg, gc, area, x, y, width, height);
+    }
+}
+
+void
+draw_cross(GtkStyle * style,
+	   GdkWindow * window,
+	   GtkStateType state_type,
+	   GtkShadowType shadow_type,
+	   GdkRectangle * area,
+	   GtkWidget * widget,
+	   gchar * detail,
+	   gint x,
+	   gint y,
+	   gint width,
+	   gint height)
+{
+  struct theme_image *img;
+  GdkGC              *gc;
+  gchar               setbg = 0;
+  GtkOrientation      orientation;
+  
+  g_return_if_fail(style != NULL);
+  g_return_if_fail(window != NULL);
+
+  if ((width == -1) && (height == -1))
+    {
+      gdk_window_get_size(window, &width, &height);
+      setbg = 1;
+    }
+  else if (width == -1)
+    gdk_window_get_size(window, &width, NULL);
+  else if (height == -1)
+    gdk_window_get_size(window, NULL, &height);
+
+  orientation = GTK_ORIENTATION_HORIZONTAL;
+  if (height > width)
+    orientation = GTK_ORIENTATION_VERTICAL;
+  
+  img = match_theme_image(style,
+			  state_type,
+			  shadow_type,
+			  widget,
+			  detail,
+			  GTK_ARROW_UP,
+			  orientation,
+			  0,
+			  TOKEN_D_CROSS);
+  if (img)
+    {
+      gc = style->bg_gc[state_type];
+      apply_theme_image(window, img, setbg, gc, area, x, y, width, height);
+    }
+}
+
+void
+draw_ramp(GtkStyle * style,
+	  GdkWindow * window,
+	  GtkStateType state_type,
+	  GtkShadowType shadow_type,
+	  GdkRectangle * area,
+	  GtkWidget * widget,
+	  gchar * detail,
+	  GtkArrowType arrow_type,
+	  gint x,
+	  gint y,
+	  gint width,
+	  gint height)
+{
+  struct theme_image *img;
+  GdkGC              *gc;
+  gchar               setbg = 0;
+  GtkOrientation      orientation;
+  
+  g_return_if_fail(style != NULL);
+  g_return_if_fail(window != NULL);
+
+  if ((width == -1) && (height == -1))
+    {
+      gdk_window_get_size(window, &width, &height);
+      setbg = 1;
+    }
+  else if (width == -1)
+    gdk_window_get_size(window, &width, NULL);
+  else if (height == -1)
+    gdk_window_get_size(window, NULL, &height);
+
+  orientation = GTK_ORIENTATION_HORIZONTAL;
+  if (height > width)
+    orientation = GTK_ORIENTATION_VERTICAL;
+  
+  img = match_theme_image(style,
+			  state_type,
+			  shadow_type,
+			  widget,
+			  detail,
+			  arrow_type,
+			  orientation,
+			  0,
+			  TOKEN_D_RAMP);
+  if (img)
+    {
+      gc = style->bg_gc[state_type];
+      apply_theme_image(window, img, setbg, gc, area, x, y, width, height);
+    }
+}
+
+void
+draw_tab(GtkStyle * style,
+	 GdkWindow * window,
+	 GtkStateType state_type,
+	 GtkShadowType shadow_type,
+	 GdkRectangle * area,
+	 GtkWidget * widget,
+	 gchar * detail,
+	 gint x,
+	 gint y,
+	 gint width,
+	 gint height)
+{
+  struct theme_image *img;
+  GdkGC              *gc;
+  gchar               setbg = 0;
+  GtkOrientation      orientation;
+  
+  g_return_if_fail(style != NULL);
+  g_return_if_fail(window != NULL);
+
+  if ((width == -1) && (height == -1))
+    {
+      gdk_window_get_size(window, &width, &height);
+      setbg = 1;
+    }
+  else if (width == -1)
+    gdk_window_get_size(window, &width, NULL);
+  else if (height == -1)
+    gdk_window_get_size(window, NULL, &height);
+
+  orientation = GTK_ORIENTATION_HORIZONTAL;
+  if (height > width)
+    orientation = GTK_ORIENTATION_VERTICAL;
+  
+  img = match_theme_image(style,
+			  state_type,
+			  shadow_type,
+			  widget,
+			  detail,
+			  GTK_ARROW_UP,
+			  orientation,
+			  0,
+			  TOKEN_D_TAB);
+  if (img)
+    {
+      gc = style->bg_gc[state_type];
+      apply_theme_image(window, img, setbg, gc, area, x, y, width, height);
+    }
+}
+
+void
+draw_shadow_gap(GtkStyle * style,
+		GdkWindow * window,
+		GtkStateType state_type,
+		GtkShadowType shadow_type,
+		GdkRectangle * area,
+		GtkWidget * widget,
+		gchar * detail,
+		gint x,
+		gint y,
+		gint width,
+		gint height,
+		gint gap_side,
+		gint gap_x,
+		gint gap_width)
+{
+  struct theme_image *img;
+  GdkGC              *gc;
+  gchar               setbg = 0;
+  GtkOrientation      orientation;
+  
+  g_return_if_fail(style != NULL);
+  g_return_if_fail(window != NULL);
+
+  if ((width == -1) && (height == -1))
+    {
+      gdk_window_get_size(window, &width, &height);
+      setbg = 1;
+    }
+  else if (width == -1)
+    gdk_window_get_size(window, &width, NULL);
+  else if (height == -1)
+    gdk_window_get_size(window, NULL, &height);
+
+  orientation = GTK_ORIENTATION_HORIZONTAL;
+  if (height > width)
+    orientation = GTK_ORIENTATION_VERTICAL;
+  
+  img = match_theme_image(style,
+			  state_type,
+			  shadow_type,
+			  widget,
+			  detail,
+			  GTK_ARROW_UP,
+			  orientation,
+			  0,
+			  TOKEN_D_SHADOW_GAP);
+  if (img)
+    {
+      gc = style->bg_gc[state_type];
+      apply_theme_image_shadow_gap(window, img, setbg, gc, area, x, y, width, 
+				   height, gap_side, gap_x, gap_width, style);
+    }
+}
+
+void
+draw_box_gap(GtkStyle * style,
+	     GdkWindow * window,
+	     GtkStateType state_type,
+	     GtkShadowType shadow_type,
+	     GdkRectangle * area,
+	     GtkWidget * widget,
+	     gchar * detail,
+	     gint x,
+	     gint y,
+	     gint width,
+	     gint height,
+	     gint gap_side,
+	     gint gap_x,
+	     gint gap_width)
+{
+  struct theme_image *img;
+  GdkGC              *gc;
+  gchar               setbg = 0;
+  GtkOrientation      orientation;
+  
+  g_return_if_fail(style != NULL);
+  g_return_if_fail(window != NULL);
+
+  if ((width == -1) && (height == -1))
+    {
+      gdk_window_get_size(window, &width, &height);
+      setbg = 1;
+    }
+  else if (width == -1)
+    gdk_window_get_size(window, &width, NULL);
+  else if (height == -1)
+    gdk_window_get_size(window, NULL, &height);
+
+  orientation = GTK_ORIENTATION_HORIZONTAL;
+  if (height > width)
+    orientation = GTK_ORIENTATION_VERTICAL;
+  
+  img = match_theme_image(style,
+			  state_type,
+			  shadow_type,
+			  widget,
+			  detail,
+			  GTK_ARROW_UP,
+			  orientation,
+			  gap_side,
+			  TOKEN_D_BOX_GAP);
+  if (img)
+    {
+      gc = style->bg_gc[state_type];
+      apply_theme_image_box_gap(window, img, setbg, gc, area, x, y, width, 
+				height, gap_side, gap_x, gap_width, style);
+    }
+}
+
+void
+draw_extension(GtkStyle * style,
+	       GdkWindow * window,
+	       GtkStateType state_type,
+	       GtkShadowType shadow_type,
+	       GdkRectangle * area,
+	       GtkWidget * widget,
+	       gchar * detail,
+	       gint x,
+	       gint y,
+	       gint width,
+	       gint height,
+	       gint gap_side)
+{
+  struct theme_image *img;
+  GdkGC              *gc;
+  gchar               setbg = 0;
+  GtkOrientation      orientation;
+  
+  g_return_if_fail(style != NULL);
+  g_return_if_fail(window != NULL);
+
+  if (width >=0)
+    width++;
+  if (height >=0)
+    height++;
+  if ((width == -1) && (height == -1))
+    gdk_window_get_size(window, &width, &height);
+  else if (width == -1)
+    gdk_window_get_size(window, &width, NULL);
+  else if (height == -1)
+    gdk_window_get_size(window, NULL, &height);
+  
+  orientation = GTK_ORIENTATION_HORIZONTAL;
+  if (height > width)
+    orientation = GTK_ORIENTATION_VERTICAL;
+  
+  img = match_theme_image(style,
+			  state_type,
+			  shadow_type,
+			  widget,
+			  detail,
+			  GTK_ARROW_UP,
+			  orientation,
+			  gap_side,
+			  TOKEN_D_EXTENSION);
+  if (img)
+    {
+      gc = style->bg_gc[GTK_STATE_NORMAL];
+      apply_theme_image(window, img, setbg, gc, area, x, y, width, height);
+    }
+}
+
+void
+draw_focus(GtkStyle * style,
+	   GdkWindow * window,
+	   GdkRectangle * area,
+	   GtkWidget * widget,
+	   gchar * detail,
+	   gint x,
+	   gint y,
+	   gint width,
+	   gint height)
+{
+  struct theme_image *img;
+  GdkGC              *gc;
+  gchar               setbg = 0;
+  GtkOrientation      orientation;
+  
+  g_return_if_fail(style != NULL);
+  g_return_if_fail(window != NULL);
+
+  if (width >=0)
+    width++;
+  if (height >=0)
+    height++;
+  if ((width == -1) && (height == -1))
+    gdk_window_get_size(window, &width, &height);
+  else if (width == -1)
+    gdk_window_get_size(window, &width, NULL);
+  else if (height == -1)
+    gdk_window_get_size(window, NULL, &height);
+  
+  orientation = GTK_ORIENTATION_HORIZONTAL;
+  if (height > width)
+    orientation = GTK_ORIENTATION_VERTICAL;
+  
+  img = match_theme_image(style,
+			  GTK_STATE_NORMAL,
+			  GTK_SHADOW_NONE,
+			  widget,
+			  detail,
+			  GTK_ARROW_UP,
+			  orientation,
+			  0,
+			  TOKEN_D_FOCUS);
+  if (img)
+    {
+      gc = style->bg_gc[GTK_STATE_NORMAL];
+      apply_theme_image(window, img, setbg, gc, area, x, y, width, height);
+    }
+}
+
+void
+draw_slider(GtkStyle * style,
+	    GdkWindow * window,
+	    GtkStateType state_type,
+	    GtkShadowType shadow_type,
+	    GdkRectangle * area,
+	    GtkWidget * widget,
+	    gchar * detail,
+	    gint x,
+	    gint y,
+	    gint width,
+	    gint height,
+	    GtkOrientation orientation)
+{
+  struct theme_image *img;
+  GdkGC              *gc;
+  gchar               setbg = 0;
+  
+  g_return_if_fail(style != NULL);
+  g_return_if_fail(window != NULL);
+
+  if ((width == -1) && (height == -1))
+    {
+      setbg = 1;
+      gdk_window_get_size(window, &width, &height);
+    }
+  else if (width == -1)
+    gdk_window_get_size(window, &width, NULL);
+  else if (height == -1)
+    gdk_window_get_size(window, NULL, &height);
+
+  img = match_theme_image(style,
+			  state_type,
+			  shadow_type,
+			  widget,
+			  detail,
+			  GTK_ARROW_UP,
+			  orientation,
+			  0,
+			  TOKEN_D_SLIDER);
+  if (img)
+    {
+      gc = style->bg_gc[state_type];
+      apply_theme_image(window, img, setbg, gc, area, x, y, width, height);
+    }
+}
+
+void
+draw_entry(GtkStyle * style,
+	   GdkWindow * window,
+	   GtkStateType state_type,
+	   GdkRectangle * area,
+	   GtkWidget * widget,
+	   gchar * detail,
+	   gint x,
+	   gint y,
+	   gint width,
+	   gint height)
+{
+  struct theme_image *img;
+  GdkGC              *gc;
+  gchar               setbg = 0;
+  
+  g_return_if_fail(style != NULL);
+  g_return_if_fail(window != NULL);
+
+  if ((width == -1) && (height == -1))
+    gdk_window_get_size(window, &width, &height);
+  else if (width == -1)
+    gdk_window_get_size(window, &width, NULL);
+  else if (height == -1)
+    gdk_window_get_size(window, NULL, &height);
+
+  if (area)
+    gdk_gc_set_clip_rectangle(style->base_gc[state_type], area);
+
+  if (!strcmp("selected", detail))
+    {
+      if (state_type == GTK_STATE_ACTIVE)
+	draw_flat_box(style, window, GTK_STATE_INSENSITIVE, GTK_SHADOW_NONE,
+		      area, widget, detail,
 		      x, y, width, height);
-   if (area)
-     {
-	gdk_gc_set_clip_rectangle (style->bg_gc[state_type], NULL);
-     }
-   draw_shadow (style, window, state_type, shadow_type, area, widget, detail,
-		x, y, width, height);
-}
-
-void
-draw_flat_box (GtkStyle      *style,
-	       GdkWindow     *window,
-	       GtkStateType   state_type,
-	       GtkShadowType  shadow_type,
-	       GdkRectangle  *area,
-	       GtkWidget     *widget,
-	       gchar         *detail,
-	       gint           x,
-	       gint           y,
-	       gint           width,
-	       gint           height)
-{   
-   GdkGC *gc1;
-   gchar setbg = 0;
-   GdkRectangle rect, new_area;
-   
-   g_return_if_fail (style != NULL);
-   g_return_if_fail (window != NULL);
-   
-   if ((width == -1) && (height == -1))
-     {
-	gdk_window_get_size (window, &width, &height);
-	setbg = 1;
-     }
-   else if (width == -1)
-     gdk_window_get_size (window, &width, NULL);
-   else if (height == -1)
-     gdk_window_get_size (window, NULL, &height);
-   
-   if (area)
-     {
-	rect.x = x;
-	rect.y = y;
-	rect.width = width;
-	rect.height = height;
-	gdk_rectangle_intersect(area, &rect, &new_area);
-     }
-     {
-	GdkImlibImage *im;
-	GdkImlibBorder bd;
-
-/*	
-	if ((detail) && ((!strcmp(detail, "listitem")) || (!strcmp(detail, "treeitem"))))
-	  {
-	     gtk_style_set_background (style, window, state_type);
-	     gdk_window_clear_area(window,x,y,width,height);
-	     return;
-	  }
- */
-/*	
-	if (area)
-	  gdk_draw_rectangle(window, style->bg_gc[state_type], TRUE, 
-			     new_area.x, new_area.y, 
-			     new_area.width, new_area.height);
-	else
-	  gdk_draw_rectangle(window, style->bg_gc[state_type], TRUE, 
-			     x, y, width, height);
- */
-	switch (shadow_type)
-	  {
-	   case GTK_SHADOW_NONE:
-	     switch (state_type)
-	       {
-		case GTK_STATE_NORMAL:
-		case GTK_STATE_INSENSITIVE:
-		  if ((detail) && (!strcmp("selected",detail)))
-		    im=load_image("_box_out_dgrad6.png");
-		  else if ((detail) && (!strcmp("viewportbin",detail)))
-		    im=load_image("_box_out_dgrad5.png");
-		  else if ((detail) && (!strcmp("curve_bg",detail)))
-		    im=load_image("_box_out_dgrad3.png");
-		  else
-		    im=load_image("_box_out_dgrad1.png");
-		  break;
-		case GTK_STATE_PRELIGHT:
-		case GTK_STATE_ACTIVE:
-		case GTK_STATE_SELECTED:
-		  im=load_image("_box_out_dgrad1.png");
-		  break;
-	       }
-	     break;
-	   case GTK_SHADOW_IN:
-	   case GTK_SHADOW_ETCHED_IN:
-	     switch (state_type)
-	       {
-		case GTK_STATE_NORMAL:
-		case GTK_STATE_INSENSITIVE:
-		  im=load_image("_box_out_dgrad1.png");
-		  break;
-		case GTK_STATE_PRELIGHT:
-		case GTK_STATE_ACTIVE:
-		case GTK_STATE_SELECTED:
-		  im=load_image("_box_out_dgrad1.png");
-		  break;
-	       }
-	     break;
-	   case GTK_SHADOW_OUT:
-	   case GTK_SHADOW_ETCHED_OUT:
-	     switch (state_type)
-	       {
-		case GTK_STATE_NORMAL:
-		case GTK_STATE_INSENSITIVE:
-		  if ((detail) && (!strcmp("tooltip",detail)))
-		    im=load_image("_ruleh.png");
-		  else
-		    im=load_image("_box_out_dgrad1.png");
-		  break;
-		case GTK_STATE_PRELIGHT:
-		case GTK_STATE_ACTIVE:
-		case GTK_STATE_SELECTED:
-		  im=load_image("_box_out_dgrad1.png");
-		  break;
-	       }
-	     break;
-	  }
-	if (im)
-	  {
-	     GdkPixmap *p, *m;
-	     
-	     bd.left=2;
-	     bd.right=2;
-	     bd.top=2;
-	     bd.bottom=2;
-	     gdk_imlib_set_image_border(im,&bd);
-	     gdk_imlib_render(im,width,height);
-	     
-	     gc1 = style->bg_gc[state_type];
-	     
-	     if (area)
-	       gdk_gc_set_clip_rectangle (gc1, area);
-
-	     p = gdk_imlib_move_image(im);
-	     m = gdk_imlib_move_mask(im);
-	     if (p)
-	       {
-		  if (setbg)
-		    {
-		       gdk_window_set_back_pixmap(window, p, 0);
-		       if (area)
-			 gdk_window_clear_area(window, area->x, area->y,
-					       area->width, area->height);
-		       else
-			 {
-			    if (m)
-			      gdk_window_shape_combine_mask(window, m, 0, 0);
-			    gdk_window_clear(window);
-			 }
-		    }
-		  else
-		    {
-		       if (m)
-			 {
-			    gdk_gc_set_clip_mask(gc1, m);
-			    gdk_gc_set_clip_origin(gc1, x, y);
-			 }
-		       gdk_draw_pixmap(window, gc1, p, 0, 0, x, y, width, height);
-		       if (m)
-			 {
-			    gdk_gc_set_clip_mask(gc1, NULL);
-			    gdk_gc_set_clip_origin(gc1, 0, 0);
-			 }
-		    }
-		  gdk_imlib_free_pixmap(p);
-	       }
-	     gdk_imlib_destroy_image(im);
-	     
-	     if (area)
-	       gdk_gc_set_clip_rectangle (gc1, NULL);
-	  }
-	else
-	  {
-	     gdk_window_clear_area(window,x,y,width,height);
-	  }
-     }
-}
-
-void
-draw_check   (GtkStyle      *style,
-	      GdkWindow     *window,
-	      GtkStateType   state_type,
-	      GtkShadowType  shadow_type,
-	      GdkRectangle  *area,
-	      GtkWidget     *widget,
-	      gchar         *detail,
-	      gint           x,
-	      gint           y,
-	      gint           width,
-	      gint           height)
-{
-   GdkGC *gc1;
-   GdkGC *gc2;
-   gint thickness_light;
-   gint thickness_dark;
-   gint i;
-   gchar setbg = 0;
-
-   g_return_if_fail (style != NULL);
-   g_return_if_fail (window != NULL);
-
-/*   
-   draw_box (style, window, state_type, shadow_type, area, widget, detail,
-	     x, y, width, height);*/
-   
-   if ((width == -1) && (height == -1))
-     {
-	gdk_window_get_size (window, &width, &height);
-	setbg = 1;
-     }
-   else if (width == -1)
-     gdk_window_get_size (window, &width, NULL);
-   else if (height == -1)
-     gdk_window_get_size (window, NULL, &height);
-
-   if ((width > 0) && (height > 0))
-     {
-	GdkImlibImage *im;
-	GdkImlibBorder bd;
-	
-	switch (shadow_type)
-	  {
-	   case GTK_SHADOW_NONE:
-	     switch (state_type)
-	       {
-		case GTK_STATE_NORMAL:
-		case GTK_STATE_INSENSITIVE:
-		  im=load_image("_check1.png");
-		  break;
-		case GTK_STATE_PRELIGHT:
-		case GTK_STATE_ACTIVE:
-		case GTK_STATE_SELECTED:
-		  im=load_image("_check1.png");
-		  break;
-	       }
-	     break;
-	   case GTK_SHADOW_IN:
-	   case GTK_SHADOW_ETCHED_IN:
-	     switch (state_type)
-	       {
-		case GTK_STATE_NORMAL:
-		case GTK_STATE_INSENSITIVE:
-		  im=load_image("_check2.png");
-		  break;
-		case GTK_STATE_PRELIGHT:
-		case GTK_STATE_ACTIVE:
-		case GTK_STATE_SELECTED:
-		  im=load_image("_check2.png");
-		  break;
-	       }
-	     break;
-	   case GTK_SHADOW_OUT:
-	   case GTK_SHADOW_ETCHED_OUT:
-	     switch (state_type)
-	       {
-		case GTK_STATE_NORMAL:
-		case GTK_STATE_INSENSITIVE:
-		  im=load_image("_check1.png");
-		  break;
-		case GTK_STATE_PRELIGHT:
-		case GTK_STATE_ACTIVE:
-		case GTK_STATE_SELECTED:
-		  im=load_image("_check1.png");
-		  break;
-	       }
-	     break;
-	  }
-	if (im)
-	  {
-	     GdkPixmap *p, *m;
-	     
-	     gdk_imlib_render(im,width,height);
-	     
-	     gc1 = style->black_gc;
-	     
-	     if (area)
-	       gdk_gc_set_clip_rectangle (gc1, area);
-
-	     p = gdk_imlib_move_image(im);
-	     m = gdk_imlib_move_mask(im);
-	     if (p)
-	       {
-		  if (m)
-		    {
-		       gdk_gc_set_clip_mask(gc1, m);
-		       gdk_gc_set_clip_origin(gc1, x, y);
-		    }
-		  gdk_draw_pixmap(window, gc1, p, 0, 0, x, y, width, height);
-		  if (m)
-		    {
-		       gdk_gc_set_clip_mask(gc1, NULL);
-		       gdk_gc_set_clip_origin(gc1, 0, 0);
-		    }
-		  gdk_imlib_free_pixmap(p);
-	       }
-	     gdk_imlib_destroy_image(im);
-	     
-	     if (area)
-	       gdk_gc_set_clip_rectangle (gc1, NULL);
-	  }
-     }
-}
-
-void
-draw_option  (GtkStyle      *style,
-	      GdkWindow     *window,
-	      GtkStateType   state_type,
-	      GtkShadowType  shadow_type,
-	      GdkRectangle  *area,
-	      GtkWidget     *widget,
-	      gchar         *detail,
-	      gint           x,
-	      gint           y,
-	      gint           width,
-	      gint           height)
-{
-   GdkGC *gc1;
-   GdkGC *gc2;
-   gint thickness_light;
-   gint thickness_dark;
-   gint i;
-   gchar setbg = 0;
-
-   g_return_if_fail (style != NULL);
-   g_return_if_fail (window != NULL);
-
-/*  
-   draw_diamond(style, window, state_type, shadow_type, area, widget,
-		detail, x, y, width, height);*/
-   
-   if ((width == -1) && (height == -1))
-     {
-	gdk_window_get_size (window, &width, &height);
-	setbg = 1;
-     }
-   else if (width == -1)
-     gdk_window_get_size (window, &width, NULL);
-   else if (height == -1)
-     gdk_window_get_size (window, NULL, &height);
-
-     {
-	GdkImlibImage *im;
-	GdkImlibBorder bd;
-	
-	switch (shadow_type)
-	  {
-	   case GTK_SHADOW_NONE:
-	     switch (state_type)
-	       {
-		case GTK_STATE_NORMAL:
-		case GTK_STATE_INSENSITIVE:
-		  im=NULL;
-		  break;
-		case GTK_STATE_PRELIGHT:
-		case GTK_STATE_ACTIVE:
-		case GTK_STATE_SELECTED:
-		  im=NULL;
-		  break;
-	       }
-	     break;
-	   case GTK_SHADOW_IN:
-	   case GTK_SHADOW_ETCHED_IN:
-	     switch (state_type)
-	       {
-		case GTK_STATE_NORMAL:
-		case GTK_STATE_INSENSITIVE:
-		  im=load_image("_option2.png");
-		  break;
-		case GTK_STATE_PRELIGHT:
-		case GTK_STATE_ACTIVE:
-		case GTK_STATE_SELECTED:
-		  im=load_image("_option2.png");
-		  break;
-	       }
-	     break;
-	   case GTK_SHADOW_OUT:
-	   case GTK_SHADOW_ETCHED_OUT:
-	     switch (state_type)
-	       {
-		case GTK_STATE_NORMAL:
-		case GTK_STATE_INSENSITIVE:
-		  im=load_image("_option1.png");
-		  break;
-		case GTK_STATE_PRELIGHT:
-		case GTK_STATE_ACTIVE:
-		case GTK_STATE_SELECTED:
-		  im=load_image("_option1.png");
-		  break;
-	       }
-	     break;
-	  }
-	if (im)
-	  {
-	     GdkPixmap *p, *m;
-	     
-	     gdk_imlib_render(im,width,height);
-	     
-	     gc1 = style->black_gc;
-	     
-	     if (area)
-	       gdk_gc_set_clip_rectangle (gc1, area);
-
-	     p = gdk_imlib_move_image(im);
-	     m = gdk_imlib_move_mask(im);
-	     if (p)
-	       {
-		  if (setbg)
-		    {
-		       gdk_window_set_back_pixmap(window, p, 0);
-		       if (area)
-			 gdk_window_clear_area(window, area->x, area->y,
-					       area->width, area->height);
-		       else
-			 {
-			    if (m)
-			      gdk_window_shape_combine_mask(window, m, 0, 0);
-			    gdk_window_clear(window);
-			 }
-		    }
-		  else
-		    {
-		       if (m)
-			 {
-			    gdk_gc_set_clip_mask(gc1, m);
-			    gdk_gc_set_clip_origin(gc1, x, y);
-			 }
-		       gdk_draw_pixmap(window, gc1, p, 0, 0, x, y, width, height);
-		       if (m)
-			 {
-			    gdk_gc_set_clip_mask(gc1, NULL);
-			    gdk_gc_set_clip_origin(gc1, 0, 0);
-			 }
-		    }
-		  gdk_imlib_free_pixmap(p);
-	       }
-	     gdk_imlib_destroy_image(im);
-	     
-	     if (area)
-	       gdk_gc_set_clip_rectangle (gc1, NULL);
-	  }
-     }
-}
-
-void
-draw_cross   (GtkStyle      *style,
-	      GdkWindow     *window,
-	      GtkStateType   state_type,
-	      GtkShadowType  shadow_type,
-	      GdkRectangle  *area,
-	      GtkWidget     *widget,
-	      gchar         *detail,
-	      gint           x,
-	      gint           y,
-	      gint           width,
-	      gint           height)
-{
-   g_return_if_fail (style != NULL);
-   g_return_if_fail (window != NULL);
-}
-
-void
-draw_ramp    (GtkStyle      *style,
-	      GdkWindow     *window,
-	      GtkStateType   state_type,
-	      GtkShadowType  shadow_type,
-	      GdkRectangle  *area,
-	      GtkWidget     *widget,
-	      gchar         *detail,
-	      GtkArrowType   arrow_type,
-	      gint           x,
-	      gint           y,
-	      gint           width,
-	      gint           height)
-{
-   g_return_if_fail (style != NULL);
-   g_return_if_fail (window != NULL);
-}
-
-void
-draw_tab     (GtkStyle      *style,
-	      GdkWindow     *window,
-	      GtkStateType   state_type,
-	      GtkShadowType  shadow_type,
-	      GdkRectangle  *area,
-	      GtkWidget     *widget,
-	      gchar         *detail,
-	      gint           x,
-	      gint           y,
-	      gint           width,
-	      gint           height)
-{
-   g_return_if_fail (style != NULL);
-   g_return_if_fail (window != NULL);
-
-   draw_box (style, window, state_type, shadow_type, area, widget, detail,
-	     x, y, width, height);
-}
-
-void
-draw_shadow_gap (GtkStyle      *style,
-		 GdkWindow     *window,
-		 GtkStateType   state_type,
-		 GtkShadowType  shadow_type,
-		 GdkRectangle  *area,
-		 GtkWidget     *widget,
-		 gchar         *detail,
-		 gint           x,
-		 gint           y,
-		 gint           width,
-		 gint           height,
-		 gint           gap_side,
-		 gint           gap_x,
-		 gint           gap_width)
-{
-   GdkRectangle rect, new_area;
-   
-   g_return_if_fail (style != NULL);
-   g_return_if_fail (window != NULL);
-
-   draw_shadow (style, window, state_type, shadow_type, area, widget, detail, x, y, width, height);
-
-   if (gap_side == 0)
-     /* top */
-     {
-	rect.x = x + gap_x;
-	rect.y = y;
-	rect.width = gap_width;
-	rect.height = 2;
-     }
-   else if (gap_side == 1)
-     /* bottom */
-     {
-	rect.x = x+ gap_x;
-	rect.y = y + height - 2;
-	rect.width = gap_width;
-	rect.height = 2;
-     }
-   else if (gap_side == 2)
-     /* left */
-     {
-	rect.x = x;
-	rect.y = y + gap_x;
-	rect.width = 2;
-	rect.height = gap_width;
-     }
-   else if (gap_side == 3)
-     /* right */
-     {
-	rect.x = x + width - 2;
-	rect.y = y + gap_x;
-	rect.width = 2;
-	rect.height = gap_width;
-     }
-
-   if (area)
-     {
-	if (gdk_rectangle_intersect(area, &rect, &new_area))
-	  {
-	     gdk_window_clear_area(window, new_area.x, new_area.y, 
-				   new_area.width, new_area.height);
-	  }
-     }
-   else
-     {
-	new_area.x = rect.x;
-	new_area.y = rect.y;
-	new_area.width = rect.width;
-	new_area.height = rect.height;
-	gdk_window_clear_area(window, new_area.x, new_area.y, 
-			      new_area.width, new_area.height);
-     }
-}
-
-void
-draw_box_gap (GtkStyle      *style,
-		 GdkWindow     *window,
-		 GtkStateType   state_type,
-		 GtkShadowType  shadow_type,
-		 GdkRectangle  *area,
-		 GtkWidget     *widget,
-		 gchar         *detail,
-		 gint           x,
-		 gint           y,
-		 gint           width,
-		 gint           height,
-		 gint           gap_side,
-		 gint           gap_x,
-		 gint           gap_width)
-{
-   GdkGC *gc1;
-   GdkGC *gc2;
-   gint thickness_light;
-   gint thickness_dark;
-   gint i;
-   gchar setbg = 0;
-   GdkRectangle rect, new_area;
-   
-   g_return_if_fail (style != NULL);
-   g_return_if_fail (window != NULL);
-   
-   if ((width == -1) && (height == -1))
-     {
-	gdk_window_get_size (window, &width, &height);
-	setbg = 1;
-     }
-   else if (width == -1)
-     gdk_window_get_size (window, &width, NULL);
-   else if (height == -1)
-     gdk_window_get_size (window, NULL, &height);
-
-   if (gap_side == 0)
-     /* top */
-     {
-	rect.x = x + gap_x;
-	rect.y = y;
-	rect.width = gap_width;
-	rect.height = 2;
-     }
-   else if (gap_side == 1)
-     /* bottom */
-     {
-	rect.x = x+ gap_x;
-	rect.y = y + height - 2;
-	rect.width = gap_width;
-	rect.height = 2;
-     }
-   else if (gap_side == 2)
-     /* left */
-     {
-	rect.x = x;
-	rect.y = y + gap_x;
-	rect.width = 2;
-	rect.height = gap_width;
-     }
-   else if (gap_side == 3)
-     /* right */
-     {
-	rect.x = x + width - 2;
-	rect.y = y + gap_x;
-	rect.width = 2;
-	rect.height = gap_width;
-     }
-
-     {
-	GdkImlibImage *im;
-	GdkImlibBorder bd;
-	
-	if ((detail) && (!strcmp("hruler", detail)))
-	  im=load_image("_ruleh.png");
-	else if ((detail) && (!strcmp("vruler", detail)))
-	  im=load_image("_rulev.png");
-	else if ((detail) && (!strcmp("buttondefault", detail)))
-	  im=load_image("_ruleh.png");
-	else if ((detail) && (!strcmp("bar", detail)))
-	  im=load_image("_prog_vgrad.png");
-	else
-	  {
-	     switch (shadow_type)
-	       {
-		case GTK_SHADOW_NONE:
-		  switch (state_type)
-		    {
-		     case GTK_STATE_NORMAL:
-		     case GTK_STATE_INSENSITIVE:
-		       im=NULL;
-		       break;
-		     case GTK_STATE_PRELIGHT:
-		     case GTK_STATE_ACTIVE:
-		     case GTK_STATE_SELECTED:
-		       im=NULL;
-		       break;
-		    }
-		  break;
-		case GTK_SHADOW_IN:
-		case GTK_SHADOW_ETCHED_IN:
-		  switch (state_type)
-		    {
-		     case GTK_STATE_NORMAL:
-		       im=load_image("_box_out_dgrad6.png");
-		       break;
-		     case GTK_STATE_INSENSITIVE:
-		       im=load_image("_box_out_dgrad5.png");
-		       break;
-		     case GTK_STATE_PRELIGHT:
-		     case GTK_STATE_ACTIVE:
-		     case GTK_STATE_SELECTED:
-		       im=load_image("_box_out_dgrad3.png");
-		       break;
-		    }
-		  break;
-		case GTK_SHADOW_OUT:
-		case GTK_SHADOW_ETCHED_OUT:
-		  switch (state_type)
-		    {
-		     case GTK_STATE_NORMAL:
-		       im=load_image("_box_out_dgrad1.png");
-		       break;
-		     case GTK_STATE_INSENSITIVE:
-		       im=load_image("_box_out_dgrad4.png");
-		       break;
-		     case GTK_STATE_PRELIGHT:
-		     case GTK_STATE_ACTIVE:
-		     case GTK_STATE_SELECTED:
-		       im=load_image("_box_out_dgrad2.png");
-		       break;
-		    }
-		  break;
-	       }
-	  }
-	if (im)
-	  {
-	     GdkPixmap *p, *m;
-	     
-	     bd.left=2;
-	     bd.right=2;
-	     bd.top=2;
-	     bd.bottom=2;
-	     gdk_imlib_set_image_border(im,&bd);
-	     gdk_imlib_render(im,width,height);
-	     
-	     gc1 = style->bg_gc[state_type];
-	     
-	     if (area)
-	       gdk_gc_set_clip_rectangle (gc1, area);
-
-	     p = gdk_imlib_move_image(im);
-	     m = gdk_imlib_move_mask(im);
-	     if (p)
-	       {
-		  if (setbg)
-		    {
-		       gdk_window_set_back_pixmap(window, p, 0);
-		       if (area)
-			 gdk_window_clear_area(window, area->x, area->y,
-					       area->width, area->height);
-		       else
-			 {
-			    if (m)
-			      gdk_window_shape_combine_mask(window, m, 0, 0);
-			    gdk_window_clear(window);
-			 }
-		    }
-		  else
-		    {
-		       if (m)
-			 {
-			    gdk_gc_set_clip_mask(gc1, m);
-			    gdk_gc_set_clip_origin(gc1, x, y);
-			 }
-		       gdk_draw_pixmap(window, gc1, p, 0, 0, x, y, width, height);
-		       if (m)
-			 {
-			    gdk_gc_set_clip_mask(gc1, NULL);
-			    gdk_gc_set_clip_origin(gc1, 0, 0);
-			 }
-		    }
-		  gdk_imlib_free_pixmap(p);
-	       }
-	     gdk_imlib_destroy_image(im);
-	     
-	     if (area)
-	       gdk_gc_set_clip_rectangle (gc1, NULL);
-	  }
-	else
-	  {
-	     gdk_window_clear_area(window,x,y,width,height);
-	  }
-     }
-   if (area)
-     {
-	if (gdk_rectangle_intersect(area, &rect, &new_area))
-	  {
-	     gdk_window_clear_area(window, new_area.x, new_area.y, 
-				   new_area.width, new_area.height);
-	  }
-     }
-   else
-     {
-	new_area.x = rect.x;
-	new_area.y = rect.y;
-	new_area.width = rect.width;
-	new_area.height = rect.height;
-	gdk_window_clear_area(window, new_area.x, new_area.y, 
-			      new_area.width, new_area.height);
-     }
-   return;
-   
-   switch (shadow_type)
-     {
-      case GTK_SHADOW_NONE:
-	gc1 = NULL;
-	gc2 = NULL;
-	break;
-      case GTK_SHADOW_IN:
-      case GTK_SHADOW_ETCHED_IN:
-	gc1 = style->light_gc[state_type];
-	gc2 = style->dark_gc[state_type];
-	break;
-      case GTK_SHADOW_OUT:
-      case GTK_SHADOW_ETCHED_OUT:
-	gc1 = style->dark_gc[state_type];
-	gc2 = style->light_gc[state_type];
-	break;
-     }
-
-   gdk_draw_rectangle(window, style->bg_gc[state_type], TRUE, 
+      else
+	draw_flat_box(style, window, state_type, GTK_SHADOW_NONE,
+		      area, widget, detail,
 		      x, y, width, height);
-   
-   switch (shadow_type)
-     {
-      case GTK_SHADOW_NONE:
-	break;
-	
-      case GTK_SHADOW_IN:
-	gdk_draw_line (window, gc1,
-		       x, y + height - 1, x + width - 1, y + height - 1);
-	gdk_draw_line (window, gc1,
-		       x + width - 1, y, x + width - 1, y + height - 1);
-	
-	gdk_draw_line (window, gc1,
-		       x + 1, y + height - 2, x + width - 2, y + height - 2);
-	gdk_draw_line (window, gc1,
-		       x + width - 2, y + 1, x + width - 2, y + height - 2);
-/*
-	gdk_draw_line (window, style->bg_gc[state_type],
-		       x + 1, y + height - 2, x + width - 2, y + height - 2);
-	gdk_draw_line (window, style->bg_gc[state_type],
-		       x + width - 2, y + 1, x + width - 2, y + height - 2);
-*/	
-	gdk_draw_line (window, gc2,
-		       x + 1, y + 1, x + width - 2, y + 1);
-	gdk_draw_line (window, gc2,
-		       x + 1, y + 1, x + 1, y + height - 2);
-/*
-	gdk_draw_line (window, style->black_gc,
-		       x + 1, y + 1, x + width - 2, y + 1);
-	gdk_draw_line (window, style->black_gc,
-		       x + 1, y + 1, x + 1, y + height - 2);
-*/	
-	gdk_draw_line (window, gc2,
-		       x, y, x + width - 1, y);
-	gdk_draw_line (window, gc2,
-		       x, y, x, y + height - 1);
-	break;
-	
-      case GTK_SHADOW_OUT:
-	gdk_draw_line (window, gc1,
-		       x + 1, y + height - 2, x + width - 2, y + height - 2);
-	gdk_draw_line (window, gc1,
-		       x + width - 2, y + 1, x + width - 2, y + height - 2);
-	
-	gdk_draw_line (window, gc2,
-		       x, y, x + width - 1, y);
-	gdk_draw_line (window, gc2,
-		       x, y, x, y + height - 1);
-	
-	gdk_draw_line (window, gc2,
-		       x + 1, y + 1, x + width - 2, y + 1);
-	gdk_draw_line (window, gc2,
-		       x + 1, y + 1, x + 1, y + height - 2);
-	
-	gdk_draw_line (window, gc1,
-		       x, y + height - 1, x + width - 1, y + height - 1);
-	gdk_draw_line (window, gc1,
-		       x + width - 1, y, x + width - 1, y + height - 1);
-/*
-	gdk_draw_line (window, style->bg_gc[state_type],
-		       x + 1, y + 1, x + width - 2, y + 1);
-	gdk_draw_line (window, style->bg_gc[state_type],
-		       x + 1, y + 1, x + 1, y + height - 2);
-	
-	gdk_draw_line (window, style->black_gc,
-		       x, y + height - 1, x + width - 1, y + height - 1);
-	gdk_draw_line (window, style->black_gc,
-		       x + width - 1, y, x + width - 1, y + height - 1);
- */ 
-	break;
-	
-      case GTK_SHADOW_ETCHED_IN:
-      case GTK_SHADOW_ETCHED_OUT:
-	thickness_light = 1;
-	thickness_dark = 1;
-	
-	for (i = 0; i < thickness_dark; i++)
-	  {
-	     gdk_draw_line (window, gc1,
-			    x + i,
-			    y + height - i - 1,
-			    x + width - i - 1,
-			    y + height - i - 1);
-	     gdk_draw_line (window, gc1,
-			    x + width - i - 1,
-			    y + i,
-			    x + width - i - 1,
-			    y + height - i - 1);
-	     
-	     gdk_draw_line (window, gc2,
-			    x + i,
-			    y + i,
-			    x + width - i - 2,
-			    y + i);
-	     gdk_draw_line (window, gc2,
-			    x + i,
-			    y + i,
-			    x + i,
-			    y + height - i - 2);
-	  }
-	
-	for (i = 0; i < thickness_light; i++)
-	  {
-	     gdk_draw_line (window, gc1,
-			    x + thickness_dark + i,
-			    y + thickness_dark + i,
-			    x + width - thickness_dark - i - 1,
-			    y + thickness_dark + i);
-	     gdk_draw_line (window, gc1,
-			    x + thickness_dark + i,
-			    y + thickness_dark + i,
-			    x + thickness_dark + i,
-			    y + height - thickness_dark - i - 1);
-	     
-	     gdk_draw_line (window, gc2,
-			    x + thickness_dark + i,
-			    y + height - thickness_light - i - 1,
-			    x + width - thickness_light - 1,
-			    y + height - thickness_light - i - 1);
-	     gdk_draw_line (window, gc2,
-			    x + width - thickness_light - i - 1,
-			    y + thickness_dark + i,
-			    x + width - thickness_light - i - 1,
-			    y + height - thickness_light - 1);
-	  }
-	break;
-     }
+    }
+  else
+    {
+      img = match_theme_image(style,
+			      state_type,
+			      GTK_SHADOW_NONE,
+			      widget,
+			      detail,
+			      GTK_ARROW_UP,
+			      GTK_ORIENTATION_HORIZONTAL,
+			      0,
+			      TOKEN_D_ENTRY);
+      if (img)
+	{
+	  gc = style->bg_gc[state_type];
+	  apply_theme_image(window, img, setbg, gc, area, x, y, width, height);
+	}
+    }
 }
 
 void
-draw_extension (GtkStyle      *style,
-		GdkWindow     *window,
-		GtkStateType   state_type,
-		GtkShadowType  shadow_type,
-		GdkRectangle  *area,
-		GtkWidget     *widget,
-		gchar         *detail,
-		gint           x,
-		gint           y,
-		gint           width,
-		gint           height,
-		gint           gap_side)
+draw_handle(GtkStyle * style,
+	    GdkWindow * window,
+	    GtkStateType state_type,
+	    GtkShadowType shadow_type,
+	    GdkRectangle * area,
+	    GtkWidget * widget,
+	    gchar * detail,
+	    gint x,
+	    gint y,
+	    gint width,
+	    gint height,
+	    GtkOrientation orientation)
 {
-   g_return_if_fail (style != NULL);
-   g_return_if_fail (window != NULL);
+  struct theme_image *img;
+  GdkGC              *gc;
+  gchar               setbg = 0;
+  
+  g_return_if_fail(style != NULL);
+  g_return_if_fail(window != NULL);
 
-   draw_box(style, window, state_type, shadow_type, area, widget, detail, 
-	    x, y, width, height);
-}
+  if ((width == -1) && (height == -1))
+    gdk_window_get_size(window, &width, &height);
+  else if (width == -1)
+    gdk_window_get_size(window, &width, NULL);
+  else if (height == -1)
+    gdk_window_get_size(window, NULL, &height);
 
-
-void 
-draw_focus (GtkStyle      *style,
-	    GdkWindow     *window,
-	    GdkRectangle  *area,
-	    GtkWidget     *widget,
-	    gchar         *detail,
-	    gint           x,
-	    gint           y,
-	    gint           width,
-	    gint           height)
-{
-   GdkGC *gc1;
-   GdkGC *gc2;
-   gint thickness_light;
-   gint thickness_dark;
-   gint i;
-   gchar setbg = 0;
-
-   g_return_if_fail (style != NULL);
-   g_return_if_fail (window != NULL);
-   
-   if ((width == -1) && (height == -1))
-     {
-	gdk_window_get_size (window, &width, &height);
-	width -= 1;
-	height -= 1;
-     }
-   else if (width == -1)
-     {
-	gdk_window_get_size (window, &width, NULL);
-	width -= 1;
-     }
-   else if (height == -1)
-     {
-	gdk_window_get_size (window, NULL, &height);
-	height -= 1;
-     }
-   width++; 
-   height++;
-   
-   if ((width > 0) && (height > 0))
-     {
-	GdkImlibImage *im;
-	GdkImlibBorder bd;
-
-	im=load_image("_focus.png");
-	if (im)
-	  {
-	     GdkPixmap *p, *m;
-	     
-	     bd.left=1;
-	     bd.right=1;
-	     bd.top=1;
-	     bd.bottom=1;
-	     gdk_imlib_set_image_border(im,&bd);
-	     gdk_imlib_render(im,width,height);
-	     
-	     gc1 = style->black_gc;
-	     
-	     if (area)
-	       gdk_gc_set_clip_rectangle (gc1, area);
-
-	     p = gdk_imlib_move_image(im);
-	     m = gdk_imlib_move_mask(im);
-	     if (p)
-	       {
-		  if (setbg)
-		    {
-		       gdk_window_set_back_pixmap(window, p, 0);
-		       if (area)
-			 gdk_window_clear_area(window, area->x, area->y,
-					       area->width, area->height);
-		       else
-			 {
-			    if (m)
-			      gdk_window_shape_combine_mask(window, m, 0, 0);
-			    gdk_window_clear(window);
-			 }
-		    }
-		  else
-		    {
-		       if (m)
-			 {
-			    gdk_gc_set_clip_mask(gc1, m);
-			    gdk_gc_set_clip_origin(gc1, x, y);
-			 }
-		       gdk_draw_pixmap(window, gc1, p, 0, 0, x, y, width, height);
-		       if (m)
-			 {
-			    gdk_gc_set_clip_mask(gc1, NULL);
-			    gdk_gc_set_clip_origin(gc1, 0, 0);
-			 }
-		    }
-		  gdk_imlib_free_pixmap(p);
-	       }
-	     gdk_imlib_destroy_image(im);
-	     
-	     if (area)
-	       gdk_gc_set_clip_rectangle (gc1, NULL);
-	  }
-     }
-/*   
-   gdk_draw_rectangle (window,
-		       style->black_gc, FALSE,
-		       x, y, width, height);
- */
-}
-
-void
-draw_slider  (GtkStyle      *style,
-	      GdkWindow     *window,
-	      GtkStateType   state_type,
-	      GtkShadowType  shadow_type,
-	      GdkRectangle  *area,
-	      GtkWidget     *widget,
-	      gchar         *detail,
-	      gint           x,
-	      gint           y,
-	      gint           width,
-	      gint           height,
-	      GtkOrientation orientation)
-{
-   g_return_if_fail (style != NULL);
-   g_return_if_fail (window != NULL);
-
-   if ((width == -1) && (height == -1))
-     gdk_window_get_size (window, &width, &height);
-   else if (width == -1)
-     gdk_window_get_size (window, &width, NULL);
-   else if (height == -1)
-     gdk_window_get_size (window, NULL, &height);
-   
-   gtk_draw_box (style, window, state_type, shadow_type, x, y,
-		 width, height);
-   if (orientation == GTK_ORIENTATION_HORIZONTAL)
-     draw_vline (style, window, state_type, area, widget, detail,
-		 style->klass->ythickness,
-		 height - style->klass->ythickness - 1, width / 2);
-   else
-     draw_hline (style, window, state_type, area, widget, detail,
-		 style->klass->xthickness,
-		 width - style->klass->xthickness - 1, height / 2);
-}
-
-void
-draw_entry   (GtkStyle      *style,
-	      GdkWindow     *window,
-	      GtkStateType   state_type,
-	      GdkRectangle  *area,
-	      GtkWidget     *widget,
-	      gchar         *detail,
-	      gint           x,
-	      gint           y,
-	      gint           width,
-	      gint           height)
-{
-   g_return_if_fail (style != NULL);
-   g_return_if_fail (window != NULL);
-
-   if ((width == -1) && (height == -1))
-     gdk_window_get_size (window, &width, &height);
-   else if (width == -1)
-     gdk_window_get_size (window, &width, NULL);
-   else if (height == -1)
-     gdk_window_get_size (window, NULL, &height);
-
-   if (area)
-     gdk_gc_set_clip_rectangle (style->base_gc[state_type], area);
-   if (!strcmp("selected",detail))
-     {
-	if (state_type == GTK_STATE_ACTIVE)
-	  draw_flat_box(style, window, GTK_STATE_INSENSITIVE, GTK_SHADOW_NONE, 
-			area, widget, detail, 
-			x, y, width, height);
-	else
-	  draw_flat_box(style, window, state_type, GTK_SHADOW_NONE, 
-			area, widget, detail, 
-			x, y, width, height);
-       /*
-	gdk_draw_rectangle (window,
-			    style->bg_gc[state_type],
-			    TRUE,
-			    x, y,
-			    width,
-			    height);*/
-      }
-   else
-     {
-	if (area)
-	  gdk_gc_set_clip_rectangle (style->base_gc[state_type], area);
-	gdk_draw_rectangle (window,
-			    style->base_gc[state_type],
-			    TRUE,
-			    x, y,
-			    width,
-			    height);
-	if (area)
-	  gdk_gc_set_clip_rectangle (style->base_gc[state_type], NULL);
-     }
-}
-
-void
-draw_handle  (GtkStyle      *style,
-	      GdkWindow     *window,
-	      GtkStateType   state_type,
-	      GtkShadowType  shadow_type,
-	      GdkRectangle  *area,
-	      GtkWidget     *widget,
-	      gchar         *detail,
-	      gint           x,
-	      gint           y,
-	      gint           width,
-	      gint           height,
-	      GtkOrientation orientation)
-{
-   int xx, yy;
-   int xthick, ythick;
-   GdkGC *light_gc, *dark_gc;
-   GdkRectangle dest;
-   
-   g_return_if_fail (style != NULL);
-   g_return_if_fail (window != NULL);
-   
-   if ((width == -1) && (height == -1))
-     gdk_window_get_size (window, &width, &height);
-   else if (width == -1)
-     gdk_window_get_size (window, &width, NULL);
-   else if (height == -1)
-     gdk_window_get_size (window, NULL, &height);
-   
-   draw_box (style, window, state_type, shadow_type, area, widget, detail,
-	     x, y, width, height);
-   
-   light_gc = style->light_gc[state_type];
-   dark_gc = style->dark_gc[state_type];
-   
-   xthick = style->klass->xthickness;
-   ythick = style->klass->ythickness;
-   
-   dest.x = x + xthick;
-   dest.y = y + ythick;
-   dest.width = width - (xthick * 2);
-   dest.height = height - (ythick * 2);
-   
-   gdk_gc_set_clip_rectangle (light_gc, &dest);
-   gdk_gc_set_clip_rectangle (dark_gc, &dest);
-   
-   for (yy = y + ythick; yy < (y + height - ythick); yy += 3)
-     for (xx = x + xthick; xx < (x + width - xthick); xx += 6)
-     {
-	gdk_draw_point (window, light_gc, xx, yy);
-	gdk_draw_point (window, dark_gc, xx + 1, yy + 1);
-	
-	gdk_draw_point (window, light_gc, xx + 3, yy + 1);
-	gdk_draw_point (window, dark_gc, xx + 4, yy + 2);
-     }
-   gdk_gc_set_clip_rectangle (light_gc, NULL);
-   gdk_gc_set_clip_rectangle (dark_gc, NULL);
+  img = match_theme_image(style,
+			  state_type,
+			  shadow_type,
+			  widget,
+			  detail,
+			  GTK_ARROW_UP,
+			  orientation,
+			  0,
+			  TOKEN_D_HANDLE);
+  if (img)
+    {
+      gc = style->bg_gc[state_type];
+      apply_theme_image(window, img, setbg, gc, area, x, y, width, height);
+    }
 }

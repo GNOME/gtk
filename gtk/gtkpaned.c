@@ -167,6 +167,8 @@ gtk_paned_realize (GtkWidget *widget)
   gtk_style_set_background (widget->style, widget->window, GTK_STATE_NORMAL);
   gtk_style_set_background (widget->style, paned->handle, GTK_STATE_NORMAL);
 
+  gdk_window_set_back_pixmap (widget->window, NULL, TRUE);
+  
   gdk_window_show (paned->handle);
 }
   

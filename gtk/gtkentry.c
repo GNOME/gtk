@@ -32,7 +32,7 @@
 
 #define MIN_ENTRY_WIDTH  150
 #define DRAW_TIMEOUT     20
-#define INNER_BORDER     2
+#define INNER_BORDER     0
 
 enum {
   ARG_0,
