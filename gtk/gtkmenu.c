@@ -1659,10 +1659,10 @@ gtk_menu_get_toplevel (GtkWidget *menu)
     attach = attach->parent;
 
   if (GTK_IS_MENU (attach))
-    return gtk_menu_get_toplevel (attach->parent);
+    return gtk_menu_get_toplevel (attach);
   else if (GTK_IS_WIDGET (attach))
     {
-      toplevel = gtk_widget_get_toplevel (attach->parent);
+      toplevel = gtk_widget_get_toplevel (attach);
       if (GTK_WIDGET_TOPLEVEL (toplevel)) 
 	return toplevel;
     }
