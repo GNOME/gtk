@@ -3124,8 +3124,8 @@ tree_select (GtkCTree *ctree,
 	     gpointer  data)
 {
   if (node && GTK_CTREE_ROW (node)->row.state != GTK_STATE_SELECTED)
-    gtk_signal_emit (GTK_OBJECT (ctree), ctree_signals[TREE_SELECT_ROW], 
-		     node, data);
+    gtk_signal_emit (GTK_OBJECT (ctree), ctree_signals[TREE_SELECT_ROW],
+		     node, -1);
 }
 
 static void
@@ -3135,7 +3135,7 @@ tree_unselect (GtkCTree *ctree,
 {
   if (node && GTK_CTREE_ROW (node)->row.state == GTK_STATE_SELECTED)
     gtk_signal_emit (GTK_OBJECT (ctree), ctree_signals[TREE_UNSELECT_ROW], 
-		     node, data);
+		     node, -1);
 }
 
 static void
@@ -3144,8 +3144,7 @@ tree_expand (GtkCTree *ctree,
 	     gpointer  data)
 {
   if (node && !GTK_CTREE_ROW (node)->expanded)
-    gtk_signal_emit (GTK_OBJECT (ctree), ctree_signals[TREE_EXPAND], node,
-		     data);
+    gtk_signal_emit (GTK_OBJECT (ctree), ctree_signals[TREE_EXPAND], node);
 }
 
 static void
@@ -3154,8 +3153,7 @@ tree_collapse (GtkCTree *ctree,
 	       gpointer  data)
 {
   if (node && GTK_CTREE_ROW (node)->expanded)
-    gtk_signal_emit (GTK_OBJECT (ctree), ctree_signals[TREE_COLLAPSE], node,
-		     data);
+    gtk_signal_emit (GTK_OBJECT (ctree), ctree_signals[TREE_COLLAPSE], node);
 }
 
 static void
@@ -3176,11 +3174,9 @@ tree_toggle_expansion (GtkCTree *ctree,
     return;
 
   if (GTK_CTREE_ROW (node)->expanded)
-    gtk_signal_emit (GTK_OBJECT (ctree), ctree_signals[TREE_COLLAPSE], node,
-		     data);
+    gtk_signal_emit (GTK_OBJECT (ctree), ctree_signals[TREE_COLLAPSE], node);
   else
-    gtk_signal_emit (GTK_OBJECT (ctree), ctree_signals[TREE_EXPAND], node,
-		     data);
+    gtk_signal_emit (GTK_OBJECT (ctree), ctree_signals[TREE_EXPAND], node);
 }
 
 static GtkCTreeRow *
@@ -3312,7 +3308,7 @@ real_select_row (GtkCList *clist,
   
   if ((node = g_list_nth (clist->row_list, row)))
     gtk_signal_emit (GTK_OBJECT (clist), ctree_signals[TREE_SELECT_ROW],
-		     node, event);
+		     node, column);
 }
 
 static void
@@ -3328,7 +3324,7 @@ real_unselect_row (GtkCList *clist,
 
   if ((node = g_list_nth (clist->row_list, row)))
     gtk_signal_emit (GTK_OBJECT (clist), ctree_signals[TREE_UNSELECT_ROW],
-		     node, event);
+		     node, column);
 }
 
 static void
@@ -4279,7 +4275,8 @@ gtk_ctree_select (GtkCTree *ctree,
   g_return_if_fail (ctree != NULL);
   g_return_if_fail (node != NULL);
 
-  gtk_signal_emit (GTK_OBJECT (ctree), ctree_signals[TREE_SELECT_ROW], node);
+  gtk_signal_emit (GTK_OBJECT (ctree), ctree_signals[TREE_SELECT_ROW],
+		   node, -1);
 }
 
 void
@@ -4289,7 +4286,8 @@ gtk_ctree_unselect (GtkCTree *ctree,
   g_return_if_fail (ctree != NULL);
   g_return_if_fail (node != NULL);
 
-  gtk_signal_emit (GTK_OBJECT (ctree), ctree_signals[TREE_UNSELECT_ROW], node);
+  gtk_signal_emit (GTK_OBJECT (ctree), ctree_signals[TREE_UNSELECT_ROW],
+		   node, -1);
 }
 
 void

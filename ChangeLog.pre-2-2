@@ -1,3 +1,9 @@
+Wed Jul 22 23:00:44 1998  Lars Hamann  <lars@gtk.org>
+
+	* gtk/gtkctree.c (tree_select/unselect) (tree_expand/collapse) 
+	(tree_toggle_expansion) (real_select/unselect_row)
+	(gtk_ctree_select/unselect) : few fixes for gtk_signal_emits
+
 Wed Jul 15 17:44:47 1998  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtktext.c (new_text_property): We free things from
