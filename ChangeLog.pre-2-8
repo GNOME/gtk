@@ -1,3 +1,8 @@
+2003-08-06  Hans Breuer  <hans@breuer.org>
+
+	* gdk/win32/gdkwindow-win32.c (gdk_window_set_icon) :
+	now it works as intended ;-)
+
 2003-08-04  Hans Breuer  <hans@breuer.org>
 
 	* gdk/win32/gdkwindow-win32.c(gdk_window_set_modal_hint) :

@@ -35,6 +35,9 @@
 #include "gdkprivate-win32.h"
 #include "gdkinput-win32.h"
 
+#include <gdk-pixbuf/gdk-pixbuf.h>
+#include <stdio.h> /* sprintf */
+
 static GdkColormap* gdk_window_impl_win32_get_colormap (GdkDrawable *drawable);
 static void         gdk_window_impl_win32_set_colormap (GdkDrawable *drawable,
 							GdkColormap *cmap);
@@ -2185,15 +2188,69 @@ gdk_window_set_icon (GdkWindow *window,
 
   impl = GDK_WINDOW_IMPL_WIN32 (GDK_WINDOW_OBJECT (window)->impl);
 
-  if (pixmap && mask)
+  if (pixmap)
     {
+      static int num = 0;
+      HBITMAP hbmmask = NULL;
+
       gdk_drawable_get_size (GDK_DRAWABLE(pixmap), &w, &h);
+
+      /* we need the inverted mask for the XOR op */
+      {
+        HDC hdc1 = CreateCompatibleDC (NULL);
+        HBITMAP hbmold1;
+
+        hbmmask = CreateCompatibleBitmap (hdc1, w, h);
+        hbmold1 = SelectObject (hdc1, hbmmask);
+        if (mask)
+          {
+            HDC hdc2 = CreateCompatibleDC (NULL);
+            HBITMAP hbmold2 = SelectObject (hdc2, GDK_PIXMAP_HBITMAP (mask));
+            GDI_CALL (BitBlt, (hdc1, 0,0,w,h, hdc2, 0,0, NOTSRCCOPY));
+            GDI_CALL (SelectObject, (hdc2, hbmold2));
+            GDI_CALL (DeleteDC, (hdc2));
+          }
+        else
+          {
+            RECT rect;
+            GetClipBox (hdc1, &rect);
+            GDI_CALL (FillRect, (hdc1, &rect, GetStockObject (WHITE_BRUSH)));
+          }
+        GDI_CALL (SelectObject, (hdc1, hbmold1));
+        GDI_CALL (DeleteDC, (hdc1));
+      }
 
       ii.fIcon = TRUE;
       ii.xHotspot = ii.yHotspot = 0; /* ignored for icons */
-      ii.hbmMask = GDK_PIXMAP_HBITMAP (mask);
+      ii.hbmMask = hbmmask;
       ii.hbmColor = GDK_PIXMAP_HBITMAP (pixmap); 
       hIcon = CreateIconIndirect (&ii);
+      if (!hIcon)
+        WIN32_API_FAILED ("CreateIconIndirect");
+      GDI_CALL (DeleteObject, (hbmmask));
+#if 0 /* to debug pixmap and mask setting */
+      {
+        GdkPixbuf* pixbuf = NULL;
+        char name[256];
+
+        pixbuf = gdk_pixbuf_get_from_drawable (NULL, pixmap, NULL, 0, 0, 0, 0, w, h);
+	if (pixbuf)
+          {
+            num = (num + 1) % 999; /* restrict maximim number */
+            sprintf (name, "c:\\temp\\ico%03dpixm.png", num); 
+            gdk_pixbuf_save (pixbuf, name, "png", NULL, NULL);
+            gdk_pixbuf_unref (pixbuf);
+          }
+        pixbuf = !mask ? NULL : gdk_pixbuf_get_from_drawable (NULL, mask, NULL, 0, 0, 0, 0, w, h);
+	if (pixbuf)
+          {
+            sprintf (name, "c:\\temp\\ico%03dmask.png", num); 
+            gdk_pixbuf_save (pixbuf, name, "png", NULL, NULL);
+            gdk_pixbuf_unref (pixbuf);
+          }
+      }
+#endif
+
       hIcon = (HICON)SendMessage (GDK_WINDOW_HWND (window), WM_SETICON, ICON_BIG, (LPARAM)hIcon);
       if (impl->hicon)
         GDI_CALL (DestroyIcon, (impl->hicon));
