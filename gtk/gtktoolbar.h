@@ -43,6 +43,7 @@ struct _GtkToolbar
 {
   GtkContainer container;
 
+  gint             num_children;
   GList           *children;
   GtkOrientation   orientation;
   GtkToolbarStyle  style;
@@ -58,15 +59,27 @@ struct _GtkToolbarClass
 };
 
 
-guint      gtk_toolbar_get_type     (void);
-GtkWidget *gtk_toolbar_new          (GtkOrientation   orientation,
-				     GtkToolbarStyle  style);
+guint      gtk_toolbar_get_type      (void);
+GtkWidget *gtk_toolbar_new           (GtkOrientation   orientation,
+				      GtkToolbarStyle  style);
 
-void       gtk_toolbar_append_item  (GtkToolbar      *toolbar,
-				     const char      *text,
-				     const char      *tooltip_text,
-				     GtkPixmap       *icon);
-void       gtk_toolbar_append_space (GtkToolbar      *toolbar);
+void       gtk_toolbar_append_item   (GtkToolbar      *toolbar,
+				      const char      *text,
+				      const char      *tooltip_text,
+				      GtkPixmap       *icon);
+void       gtk_toolbar_prepend_item  (GtkToolbar      *toolbar,
+				      const char      *text,
+				      const char      *tooltip_text,
+				      GtkPixmap       *icon);
+void       gtk_toolbar_insert_item   (GtkToolbar      *toolbar,
+				      const char      *text,
+				      const char      *tooltip_text,
+				      GtkPixmap       *icon,
+				      gint             position);
+void       gtk_toolbar_append_space  (GtkToolbar      *toolbar);
+void       gtk_toolbar_prepend_space (GtkToolbar      *toolbar);
+void       gtk_toolbar_insert_space  (GtkToolbar      *toolbar,
+				      gint             position);
 
 
 #ifdef __cplusplus

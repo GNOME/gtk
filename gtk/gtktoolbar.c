@@ -23,6 +23,13 @@
 #define DEFAULT_SPACE_SIZE 5
 
 
+typedef struct {
+	GtkWidget *button;
+	GtkWidget *icon;
+	GtkWidget *label;
+} Child;
+
+
 static void gtk_toolbar_class_init    (GtkToolbarClass *class);
 static void gtk_toolbar_init          (GtkToolbar      *toolbar);
 static void gtk_toolbar_destroy       (GtkObject       *object);
@@ -90,10 +97,11 @@ gtk_toolbar_init(GtkToolbar *toolbar)
 {
 	GTK_WIDGET_SET_FLAGS(toolbar, GTK_NO_WINDOW);
 
-	toolbar->children    = NULL;
-	toolbar->orientation = GTK_ORIENTATION_HORIZONTAL;
-	toolbar->style       = GTK_TOOLBAR_ICONS;
-	toolbar->space_size  = DEFAULT_SPACE_SIZE;
+	toolbar->num_children = 0;
+	toolbar->children     = NULL;
+	toolbar->orientation  = GTK_ORIENTATION_HORIZONTAL;
+	toolbar->style        = GTK_TOOLBAR_ICONS;
+	toolbar->space_size   = DEFAULT_SPACE_SIZE;
 }
 
 GtkWidget *
@@ -126,9 +134,10 @@ gtk_toolbar_destroy(GtkObject *object)
 
 		/* NULL child means it is a space in the toolbar, rather than a button */
 		if (child) {
-			child->parent = NULL;
-			gtk_object_unref(GTK_OBJECT(child));
-			gtk_widget_destroy(child);
+			child->button->parent = NULL;
+			gtk_object_unref(GTK_OBJECT(child->button));
+			gtk_widget_destroy(child->button);
+			g_free(child);
 		}
 	}
 
@@ -154,8 +163,8 @@ gtk_toolbar_map(GtkWidget *widget)
 	for (children = toolbar->children; children; children = children->next) {
 		child = children->data;
 
-		if (child && GTK_WIDGET_VISIBLE(child) && !GTK_WIDGET_MAPPED(child))
-			gtk_widget_map(child);
+		if (child && GTK_WIDGET_VISIBLE(child->button) && !GTK_WIDGET_MAPPED(child->button))
+			gtk_widget_map(child->button);
 	}
 }
 
@@ -175,8 +184,8 @@ gtk_toolbar_unmap(GtkWidget *widget)
 	for (children = toolbar->children; children; children = children->next) {
 		child = children->data;
 
-		if (child && GTK_WIDGET_VISIBLE(child) && GTK_WIDGET_MAPPED(child))
-			gtk_widget_unmap(child);
+		if (child && GTK_WIDGET_VISIBLE(child->button) && GTK_WIDGET_MAPPED(child->button))
+			gtk_widget_unmap(child->button);
 	}
 }
 
@@ -198,8 +207,8 @@ gtk_toolbar_draw(GtkWidget    *widget,
 		for (children = toolbar->children; children; children = children->next) {
 			child = children->data;
 
-			if (child && gtk_widget_intersect(child, area, &child_area))
-				gtk_widget_draw(child, &child_area);
+			if (child && gtk_widget_intersect(child->button, area, &child_area))
+				gtk_widget_draw(child->button, &child_area);
 		}
 	}
 }
@@ -231,10 +240,10 @@ gtk_toolbar_size_request(GtkWidget      *widget,
 		if (child) {
 			nchildren++;
 
-			gtk_widget_size_request(child, &child->requisition);
+			gtk_widget_size_request(child->button, &child->button->requisition);
 
-			toolbar->child_maxw = MAX(toolbar->child_maxw, child->requisition->width);
-			toolbar->child_maxh = MAX(toolbar->child_maxh, child->requisition->height);
+			toolbar->child_maxw = MAX(toolbar->child_maxw, child->button->requisition->width);
+			toolbar->child_maxh = MAX(toolbar->child_maxh, child->button->requisition->height);
 		} else
 			/* NULL child means it is a space in the toolbar, rather than a button */
 			if (toolbar->orientation == GTK_ORIENTATION_HORIZONTAL)
@@ -277,7 +286,7 @@ gtk_toolbar_size_allocate(GtkWidget     *widget,
 		child = children->data;
 
 		if (child) {
-			gtk_widget_size_allocate(child, &alloc);
+			gtk_widget_size_allocate(child->button, &alloc);
 
 			if (toolbar->orientation == GTK_ORIENTATION_HORIZONTAL)
 				alloc.x += toolbar->child_maxw;
@@ -297,4 +306,129 @@ gtk_toolbar_add(GtkContainer *container,
 		GtkWidget    *widget)
 {
 	g_warning("gtk_toolbar_add: use gtk_toolbar_add_item() instead!");
+}
+
+void
+gtk_toolbar_append_item(GtkToolbar      *toolbar,
+			const char      *text,
+			const char      *tooltip_text,
+			GtkPixmap       *icon)
+{
+	gtk_toolbar_insert_item(toolbar, text, tooltip_text, icon, toolbar->num_children);
+}
+
+void
+gtk_toolbar_prepend_item(GtkToolbar      *toolbar,
+			 const char      *text,
+			 const char      *tooltip_text,
+			 GtkPixmap       *icon)
+{
+	gtk_toolbar_insert_item(toolbar, text, tooltip_text, icon, 0);
+}
+
+void
+gtk_toolbar_insert_item(GtkToolbar      *toolbar,
+			const char      *text,
+			const char      *tooltip_text,
+			GtkPixmap       *icon,
+			gint             position)
+{
+	Child     *child;
+	GtkWidget *vbox;
+	GtkWidget *label;
+
+	g_return_if_fail(toolbar != NULL);
+	g_return_if_fail(GTK_IS_TOOLBAR(toolbar));
+
+	child = g_new(Child, 1);
+
+	child->button = gtk_button_new();
+
+	if (text)
+		child->label = gtk_label_new(text);
+	else
+		child->label = NULL;
+	
+	child->icon = icon;
+
+	vbox = gtk_vbox_new(FALSE, 0);
+	gtk_container_add(GTK_CONTAINER(button), vbox);
+	gtk_widget_show(vbox);
+
+	if (child->icon)
+		gtk_box_pack_start(GTK_BOX(vbox), child->icon);
+
+	if (child->label)
+		gtk_box_pack_start(GTK_BOX(vbox), child->label);
+
+	switch (toolbar->style) {
+		case GTK_TOOLBAR_ICONS:
+			if (child->icon)
+				gtk_widget_show(child->icon);
+			break;
+
+		case GTK_TOOLBAR_TEXT:
+			if (child->label)
+				gtk_widget_show(child->label);
+			break;
+
+		case GTK_TOOLBAR_BOTH:
+			if (child->icon)
+				gtk_widget_show(child->icon);
+
+			if (child->label)
+				gtk_widget_show(child->label);
+
+			break;
+
+		default:
+			g_assert_not_reached();
+	}
+
+	gtk_widget_show(child->button);
+
+	toolbar->children = g_list_insert(toolbar->children, child, position);
+	toolbar->num_children++;
+
+	gtk_widget_set_parent(child->button, toolbar);
+
+	if (GTK_WIDGET_VISIBLE(toolbar)) {
+		if (GTK_WIDGET_REALIZED(toolbar)
+		    && !GTK_WIDGET_REALIZED(button))
+			gtk_widget_realize(button);
+
+		if (GTK_WIDGET_MAPPED(toolbar)
+		    && !GTK_WIDGET_MAPPED(button))
+			gtk_widget_map(button);
+	}
+
+	if (GTK_WIDGET_VISIBLE(button) && GTK_WIDGET_VISIBLE(toolbar))
+		gtk_widget_queue_resize(button);
+}
+
+void
+gtk_toolbar_append_space(GtkToolbar *toolbar)
+{
+	gtk_toolbar_insert_space(toolbar, toolbar->num_children);
+}
+
+void
+gtk_toolbar_prepend_space(GtkToolbar *toolbar)
+{
+	gtk_toolbar_insert_space(toolbar, 0);
+}
+
+void
+gtk_toolbar_insert_space(GtkToolbar *toolbar,
+			 gint        position)
+{
+	g_return_if_fail(toolbar != NULL);
+	g_return_if_fail(GTK_IS_TOOLBAR(toolbar));
+
+	/* NULL child means it is a space in the toolbar, rather than a button */
+
+	toolbar->children = g_list_insert(toolbar->children, NULL);
+
+	if (GTK_WIDGET_VISIBLE(toolbar))
+		gtk_widget_queue_resize(GTK_WIDGET(toolbar));
 }

@@ -72,6 +72,7 @@ libgtk_la_SOURCES = \
 	gtktable.c		\
 	gtktext.c		\
 	gtktogglebutton.c	\
+	gtktoolbar.c		\
 	gtktooltips.c		\
 	gtktree.c		\
 	gtktreeitem.c		\
@@ -158,6 +159,7 @@ gtkinclude_HEADERS = \
 	gtktable.h		\
 	gtktext.h		\
 	gtktogglebutton.h	\
+	gtktoolbar.h		\
 	gtktooltips.h		\
 	gtktree.h		\
 	gtktreeitem.h		\

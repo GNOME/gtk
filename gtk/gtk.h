@@ -87,6 +87,7 @@
 #include <gtk/gtktable.h>
 #include <gtk/gtktext.h>
 #include <gtk/gtktogglebutton.h>
+#include <gtk/gtktoolbar.h>
 #include <gtk/gtktooltips.h>
 #include <gtk/gtktree.h>
 #include <gtk/gtktreeitem.h>
