@@ -1701,7 +1701,7 @@ buffer_set_colors (Buffer  *buffer,
   gdouble hue = 0.0;
 
   if (enabled && buffer->color_cycle_timeout == 0)
-    buffer->color_cycle_timeout = gtk_timeout_add (500, color_cycle_timeout, buffer);
+    buffer->color_cycle_timeout = gtk_timeout_add (200, color_cycle_timeout, buffer);
   else if (!enabled && buffer->color_cycle_timeout != 0)
     {
       gtk_timeout_remove (buffer->color_cycle_timeout);

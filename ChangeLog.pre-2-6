@@ -1,3 +1,14 @@
+2000-11-15  Havoc Pennington  <hp@pobox.com>
+
+	* gtk/gtktextview.c (gtk_text_view_start_cursor_blink): Apply
+	patch from Mikael Hermansson to temporarily stop blinking while
+	the user is using the keyboard to type or navigate. 
+
+	Also, when blinking, stay on for longer than we stay off. Also,
+	return from start_cursor_blink if !cursor_visible, to save
+	checking that flag all over the place before we call
+	start_cursor_blink.
+
 Thu Nov 16 01:25:51 2000  Robert Brady  <robert@suse.co.uk>
 
 	* gtk/gtkrc.*: Remove the locale-specific gtkrc's, as they
