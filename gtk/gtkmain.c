@@ -376,7 +376,7 @@ static gboolean do_setlocale = TRUE;
  *
  * Most programs should not need to call this function.
  **/
-static void
+void
 gtk_disable_setlocale (void)
 {
   if (gtk_initialized)

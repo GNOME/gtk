@@ -113,6 +113,8 @@ gchar *get_gtk_win32_directory (gchar *subdir);
 #ifndef GTK_DISABLE_DEPRECATED
 void     gtk_exit                 (gint    error_code);
 #endif /* GTK_DISABLE_DEPRECATED */
+
+void           gtk_disable_setlocale    (void);
 gchar *        gtk_set_locale           (void);
 PangoLanguage *gtk_get_default_language (void);
 gint           gtk_events_pending       (void);
