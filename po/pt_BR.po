@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.2.4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-08-25 13:27-0400\n"
-"PO-Revision-Date: 2004-07-22 00:03-0300\n"
+"POT-Creation-Date: 2004-08-25 13:57-0400\n"
+"PO-Revision-Date: 2004-08-25 13:56-0400\n"
 "Last-Translator: Afonso Celso Medina <medina@maua.br>\n"
 "Language-Team: Portuguese/Brazil <gnome-l10n-br@listas.cipsga.org.br>\n"
 "MIME-Version: 1.0\n"
@@ -1645,7 +1645,7 @@ msgstr "_Copiar"
 
 #: gtk/gtkstock.c:302
 msgid "Cu_t"
-msgstr "Cor_tar"
+msgstr "Recor_tar"
 
 #: gtk/gtkstock.c:303
 msgid "_Delete"
@@ -1657,11 +1657,11 @@ msgstr "E_xecutar"
 
 #: gtk/gtkstock.c:305
 msgid "_Find"
-msgstr "_Procurar"
+msgstr "_Localizar"
 
 #: gtk/gtkstock.c:306
 msgid "Find and _Replace"
-msgstr "Procurar e _Substituir"
+msgstr "Localizar e _Substituir"
 
 #: gtk/gtkstock.c:307
 msgid "_Floppy"
@@ -1685,11 +1685,11 @@ msgstr "_Topo"
 
 #: gtk/gtkstock.c:312
 msgid "_Back"
-msgstr "_Regressar"
+msgstr "_Voltar"
 
 #: gtk/gtkstock.c:313
 msgid "_Down"
-msgstr "_Fundo"
+msgstr "A_baixo"
 
 #: gtk/gtkstock.c:314
 msgid "_Forward"
@@ -1769,7 +1769,7 @@ msgstr "_Abrir"
 
 #: gtk/gtkstock.c:333
 msgid "_Paste"
-msgstr "Co_lar"
+msgstr "C_olar"
 
 #: gtk/gtkstock.c:334
 msgid "_Preferences"
@@ -1865,11 +1865,11 @@ msgstr "A_justar para Caber"
 
 #: gtk/gtkstock.c:358
 msgid "Zoom _In"
-msgstr "_Aumentar o Zoom"
+msgstr "_Ampliar"
 
 #: gtk/gtkstock.c:359
 msgid "Zoom _Out"
-msgstr "_Diminuir o Zoom"
+msgstr "_Reduzir"
 
 #: gtk/gtktextutil.c:47
 msgid "LRM _Left-to-right mark"
@@ -1993,53 +1993,3 @@ msgstr "Método de Entrada do X"
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "Impossível obter informações sobre o arquivo '%s': %s"
-
-#~ msgid "Unsupported TIFF variant"
-#~ msgstr "Tipo de imagem TIFF não suportado"
-
-#~ msgid "%d/%b/%Y"
-#~ msgstr "%d/%b/%Y"
-
-#~ msgid ""
-#~ "Could not go to the parent folder of %s:\n"
-#~ "%s"
-#~ msgstr ""
-#~ "Não foi possível ir para a pasta pai de %s:\n"
-#~ "%s"
-
-#~ msgid "File name"
-#~ msgstr "Nome do arquivo"
-
-#~ msgid "Preview"
-#~ msgstr "Pré-visualização"
-
-#, fuzzy
-#~ msgid "Add"
-#~ msgstr "A_dicionar"
-
-#, fuzzy
-#~ msgid "Remove"
-#~ msgstr "_Remover"
-
-#, fuzzy
-#~ msgid "Up"
-#~ msgstr "_Acima"
-
-#, fuzzy
-#~ msgid "_Filename:"
-#~ msgstr "Nome do arquivo"
-
-#~ msgid "Current folder: %s"
-#~ msgstr "Pasta atual: %s"
-
-#~ msgid "This file system does not support icons"
-#~ msgstr "Esse sistema de arquivos não suporta ícones"
-
-#~ msgid "This file system does not support bookmarks"
-#~ msgstr "Esse sistema de arquivos não suporta marcadores"
-
-#~ msgid "Zoom _100%"
-#~ msgstr "Zoom _100%"
-
-#~ msgid "Zoom to _Fit"
-#~ msgstr "Zoom para _Caber"
