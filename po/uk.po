@@ -1023,7 +1023,7 @@ msgstr "_Додати"
 
 #: gtk/gtkfilechooserdefault.c:1914 gtk/gtkstock.c:324
 msgid "_Remove"
-msgstr "_Видалити"
+msgstr "В_идалити"
 
 #: gtk/gtkfilechooserdefault.c:2000
 msgid "Name"
