@@ -3876,7 +3876,7 @@ real_undo_selection (GtkCList *clist)
 
   for (work = clist->undo_unselection; work; work = work->next)
     {
-      g_print ("unselect %d\n",GPOINTER_TO_INT (work->data));
+      /* g_print ("unselect %d\n",GPOINTER_TO_INT (work->data)); */
       gtk_signal_emit (GTK_OBJECT (clist), clist_signals[UNSELECT_ROW], 
 		       GPOINTER_TO_INT (work->data), -1, NULL);
     }
