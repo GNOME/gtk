@@ -102,6 +102,7 @@ void             egg_icon_list_unselect_path      (EggIconList            *icon_
 						   GtkTreePath            *path);
 gboolean         egg_icon_list_path_is_selected   (EggIconList            *icon_list,
 						   GtkTreePath            *path);
+GList           *egg_icon_list_get_selected_items (EggIconList            *icon_list);
 void             egg_icon_list_select_all         (EggIconList            *icon_list);
 void             egg_icon_list_unselect_all       (EggIconList            *icon_list);
 void             egg_icon_list_item_activated     (EggIconList            *icon_list,

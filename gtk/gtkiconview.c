@@ -34,7 +34,10 @@
 #define ICON_TEXT_PADDING 3
 
 #define EGG_ICON_LIST_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), EGG_TYPE_ICON_LIST, EggIconListPrivate))
-#define VALID_MODEL_AND_COLUMNS(obj) ((obj)->priv->model != NULL)
+#define VALID_MODEL_AND_COLUMNS(obj) ((obj)->priv->model != NULL && \
+                                      ((obj)->priv->pixbuf_column != -1 || \
+				       (obj)->priv->text_column != -1 || \
+				       (obj)->priv->markup_column != -1))
 
 struct _EggIconListItem
 {
@@ -80,7 +83,7 @@ struct _EggIconListPrivate
 
   guint layout_idle_id;
   
-  gboolean rubberbanding;
+  gboolean doing_rubberband;
   gint rubberband_x1, rubberband_y1;
   gint rubberband_x2, rubberband_y2;
 
@@ -131,9 +134,6 @@ enum
   PROP_MODEL,
 };
 
-static void egg_icon_list_class_init      (EggIconListClass *klass);
-static void egg_icon_list_init            (EggIconList      *icon_list);
-
 /* GObject signals */
 static void egg_icon_list_finalize     (GObject      *object);
 static void egg_icon_list_set_property (GObject      *object,
@@ -174,10 +174,6 @@ static void     egg_icon_list_real_select_all             (EggIconList          
 static void     egg_icon_list_real_unselect_all           (EggIconList             *icon_list);
 static void     egg_icon_list_real_select_cursor_item     (EggIconList             *icon_list);
 static void     egg_icon_list_real_toggle_cursor_item     (EggIconList             *icon_list);
-static void     egg_icon_list_select_all_between          (EggIconList             *icon_list,
-							   EggIconListItem         *anchor,
-							   EggIconListItem         *cursor,
-							   gboolean                 emit);
 
 /* Internal functions */
 static void       egg_icon_list_adjustment_changed          (GtkAdjustment   *adjustment,
@@ -207,11 +203,10 @@ static gboolean   egg_icon_list_item_hit_test               (EggIconListItem *it
 static gboolean   egg_icon_list_maybe_begin_dragging_items  (EggIconList     *icon_list,
 							     GdkEventMotion  *event);
 #endif
-static gboolean   egg_icon_list_unselect_all_internal       (EggIconList     *icon_list,
-							     gboolean         emit);
+static gboolean   egg_icon_list_unselect_all_internal       (EggIconList     *icon_list);
 static void       egg_icon_list_calculate_item_size         (EggIconList     *icon_list,
 							     EggIconListItem *item);
-static void       rubberbanding                             (gpointer         data);
+static void       egg_icon_list_update_rubberband           (gpointer         data);
 static void       egg_icon_list_item_invalidate_size        (EggIconListItem *item);
 static void       egg_icon_list_invalidate_sizes            (EggIconList     *icon_list);
 static void       egg_icon_list_add_move_binding            (GtkBindingSet   *binding_set,
@@ -240,11 +235,13 @@ static void       egg_icon_list_select_item                 (EggIconList     *ic
 							     EggIconListItem *item);
 static void       egg_icon_list_unselect_item               (EggIconList     *icon_list,
 							     EggIconListItem *item);
+static gboolean egg_icon_list_select_all_between            (EggIconList     *icon_list,
+							     EggIconListItem *anchor,
+							     EggIconListItem *cursor);
 
-static EggIconListItem *
-egg_icon_list_get_item_at_pos (EggIconList *icon_list,
-			       gint         x,
-			       gint         y);
+static EggIconListItem *egg_icon_list_get_item_at_pos (EggIconList *icon_list,
+						       gint         x,
+						       gint         y);
 
 
 
@@ -253,31 +250,7 @@ egg_icon_list_get_item_at_pos (EggIconList *icon_list,
 static GtkContainerClass *parent_class = NULL;
 static guint icon_list_signals[LAST_SIGNAL] = { 0 };
 
-GType
-egg_icon_list_get_type (void)
-{
-  static GType object_type = 0;
-
-  if (!object_type)
-    {
-      static const GTypeInfo object_info =
-	{	  
-	  sizeof (EggIconListClass),
-	  NULL,		/* base_init */
-	  NULL,		/* base_finalize */
-	  (GClassInitFunc) egg_icon_list_class_init,
-	  NULL,		/* class_finalize */
-	  NULL,		/* class_data */
-	  sizeof (EggIconList),
-	  0,              /* n_preallocs */
-	  (GInstanceInitFunc) egg_icon_list_init
-	};
-
-      object_type = g_type_register_static (GTK_TYPE_CONTAINER, "EggIconList", &object_info, 0);
-    }
-
-  return object_type;
-}
+G_DEFINE_TYPE (EggIconList, egg_icon_list, GTK_TYPE_CONTAINER);
 
 static void
 egg_icon_list_class_init (EggIconListClass *klass)
@@ -839,7 +812,7 @@ egg_icon_list_expose (GtkWidget *widget,
     egg_icon_list_paint_item (icon_list, item, &expose->area);
   }
 
-  if (icon_list->priv->rubberbanding)
+  if (icon_list->priv->doing_rubberband)
     {
       GdkRectangle *rectangles;
       gint n_rectangles;
@@ -873,7 +846,7 @@ scroll_timeout (gpointer data)
   gtk_adjustment_set_value (icon_list->priv->vadjustment,
 			    value);
 
-  rubberbanding (icon_list);
+  egg_icon_list_update_rubberband (icon_list);
   
   return TRUE;
 }
@@ -889,10 +862,10 @@ egg_icon_list_motion (GtkWidget      *widget,
 #ifdef DND_WORKS
   egg_icon_list_maybe_begin_dragging_items (icon_list, event);
 #endif
-  if (icon_list->priv->rubberbanding)
+  if (icon_list->priv->doing_rubberband)
     {
-      rubberbanding (widget);
-
+      egg_icon_list_update_rubberband (widget);
+      
       abs_y = event->y - icon_list->priv->height *
 	(icon_list->priv->vadjustment->value /
 	 (icon_list->priv->vadjustment->upper -
@@ -955,7 +928,7 @@ egg_icon_list_button_press (GtkWidget      *widget,
 	  else if (icon_list->priv->selection_mode == GTK_SELECTION_MULTIPLE &&
 		   (event->state & GDK_SHIFT_MASK))
 	    {
-	      egg_icon_list_unselect_all_internal (icon_list, FALSE);
+	      egg_icon_list_unselect_all_internal (icon_list);
 
 	      egg_icon_list_set_cursor_item (icon_list, item);
 	      if (!icon_list->priv->anchor_item)
@@ -963,7 +936,7 @@ egg_icon_list_button_press (GtkWidget      *widget,
 	      else 
 		egg_icon_list_select_all_between (icon_list,
 						  icon_list->priv->anchor_item,
-						  item, FALSE);
+						  item);
 	      dirty = TRUE;
 	    }
 	  else 
@@ -979,7 +952,7 @@ egg_icon_list_button_press (GtkWidget      *widget,
 		{
 		  if (!item->selected)
 		    {
-		      egg_icon_list_unselect_all_internal (icon_list, FALSE);
+		      egg_icon_list_unselect_all_internal (icon_list);
 		      
 		      item->selected = TRUE;
 		      egg_icon_list_queue_draw_item (icon_list, item);
@@ -1006,7 +979,7 @@ egg_icon_list_button_press (GtkWidget      *widget,
 	  if (icon_list->priv->selection_mode != GTK_SELECTION_BROWSE &&
 	      !(event->state & GDK_CONTROL_MASK))
 	    {
-	      dirty = egg_icon_list_unselect_all_internal (icon_list, FALSE);
+	      dirty = egg_icon_list_unselect_all_internal (icon_list);
 	    }
 	  
 	  if (icon_list->priv->selection_mode == GTK_SELECTION_MULTIPLE)
@@ -1063,7 +1036,7 @@ egg_icon_list_button_release (GtkWidget      *widget,
 
 
 static void
-rubberbanding (gpointer data)
+egg_icon_list_update_rubberband (gpointer data)
 {
   EggIconList *icon_list;
   gint x, y;
@@ -1130,7 +1103,7 @@ egg_icon_list_start_rubberbanding (EggIconList  *icon_list,
 {
   GList *items;
 
-  g_assert (!icon_list->priv->rubberbanding);
+  g_assert (!icon_list->priv->doing_rubberband);
 
   for (items = icon_list->priv->items; items; items = items->next)
     {
@@ -1144,7 +1117,7 @@ egg_icon_list_start_rubberbanding (EggIconList  *icon_list,
   icon_list->priv->rubberband_x2 = x;
   icon_list->priv->rubberband_y2 = y;
 
-  icon_list->priv->rubberbanding = TRUE;
+  icon_list->priv->doing_rubberband = TRUE;
 
   gtk_grab_add (GTK_WIDGET (icon_list));
 }
@@ -1152,10 +1125,10 @@ egg_icon_list_start_rubberbanding (EggIconList  *icon_list,
 static void
 egg_icon_list_stop_rubberbanding (EggIconList *icon_list)
 {
-  if (!icon_list->priv->rubberbanding)
+  if (!icon_list->priv->doing_rubberband)
     return;
 
-  icon_list->priv->rubberbanding = FALSE;
+  icon_list->priv->doing_rubberband = FALSE;
 
   gtk_grab_remove (GTK_WIDGET (icon_list));
   
@@ -1270,11 +1243,14 @@ egg_icon_list_maybe_begin_dragging_items (EggIconList     *icon_list,
 #endif
 
 static gboolean
-egg_icon_list_unselect_all_internal (EggIconList  *icon_list,
-				     gboolean      emit)
+egg_icon_list_unselect_all_internal (EggIconList  *icon_list)
 {
   gboolean dirty = FALSE;
   GList *items;
+
+  if (icon_list->priv->selection_mode == GTK_SELECTION_NONE ||
+      icon_list->priv->selection_mode == GTK_SELECTION_BROWSE)
+    return FALSE;
   
   for (items = icon_list->priv->items; items; items = items->next)
     {
@@ -1287,9 +1263,6 @@ egg_icon_list_unselect_all_internal (EggIconList  *icon_list,
 	  egg_icon_list_queue_draw_item (icon_list, item);
 	}
     }
-
-  if (emit && dirty)
-    g_signal_emit (icon_list, icon_list_signals[SELECTION_CHANGED], 0);
 
   return dirty;
 }
@@ -1357,9 +1330,6 @@ egg_icon_list_set_adjustments (EggIconList   *icon_list,
 static void
 egg_icon_list_real_select_all (EggIconList *icon_list)
 {
-  if (icon_list->priv->selection_mode != GTK_SELECTION_MULTIPLE)
-    return;
-
   egg_icon_list_select_all (icon_list);
 }
 
@@ -1420,8 +1390,8 @@ egg_icon_list_adjustment_changed (GtkAdjustment *adjustment,
 		       - icon_list->priv->hadjustment->value,
 		       - icon_list->priv->vadjustment->value);
 
-      if (icon_list->priv->rubberbanding)
-	rubberbanding (GTK_WIDGET (icon_list));
+      if (icon_list->priv->doing_rubberband)
+	egg_icon_list_update_rubberband (GTK_WIDGET (icon_list));
 
       gdk_window_process_updates (icon_list->priv->bin_window, TRUE);
     }
@@ -1916,25 +1886,11 @@ egg_icon_list_item_new (void)
 }
 
 static void
-egg_icon_list_item_ref (EggIconListItem *item)
+egg_icon_list_item_free (EggIconListItem *item)
 {
   g_return_if_fail (item != NULL);
 
-  item->ref_count += 1;
-}
-
-static void
-egg_icon_list_item_unref (EggIconListItem *item)
-{
-  g_return_if_fail (item != NULL);
-
-  item->ref_count -= 1;
-
-  if (item->ref_count == 0)
-    {
-      g_free (item);
-    }
-  
+  g_free (item);
 }
 
 static void
@@ -2050,13 +2006,13 @@ egg_icon_list_select_item (EggIconList      *icon_list,
   if (icon_list->priv->selection_mode == GTK_SELECTION_NONE)
     return;
   else if (icon_list->priv->selection_mode != GTK_SELECTION_MULTIPLE)
-    egg_icon_list_unselect_all_internal (icon_list, FALSE);
+    egg_icon_list_unselect_all_internal (icon_list);
 
   item->selected = TRUE;
 
-  g_signal_emit (icon_list, icon_list_signals[SELECTION_CHANGED], 0);
-  
   egg_icon_list_queue_draw_item (icon_list, item);
+
+  g_signal_emit (icon_list, icon_list_signals[SELECTION_CHANGED], 0);
 }
 
 
@@ -2082,6 +2038,23 @@ egg_icon_list_unselect_item (EggIconList      *icon_list,
 }
 
 static void
+verify_items (EggIconList *icon_list)
+{
+  GList *items;
+  int i = 0;
+
+  for (items = icon_list->priv->items; items; items = items->next)
+    {
+      EggIconListItem *item = items->data;
+
+      if (item->index != i)
+	g_error ("List item does not match its index: item index %d and list index %d\n", item->index, i);
+
+      i++;
+    }
+}
+
+static void
 egg_icon_list_row_changed (GtkTreeModel *model,
 			   GtkTreePath  *path,
 			   GtkTreeIter  *iter,
@@ -2098,6 +2071,8 @@ egg_icon_list_row_changed (GtkTreeModel *model,
 
   egg_icon_list_item_invalidate_size (item);
   egg_icon_list_queue_layout (icon_list);
+
+  verify_items (icon_list);
 }
 
 static void
@@ -2110,7 +2085,8 @@ egg_icon_list_row_inserted (GtkTreeModel *model,
   EggIconListItem *item;
   gboolean iters_persist;
   EggIconList *icon_list;
-
+  GList *list;
+  
   icon_list = EGG_ICON_LIST (data);
   iters_persist = gtk_tree_model_get_flags (icon_list->priv->model) & GTK_TREE_MODEL_ITERS_PERSIST;
   
@@ -2131,6 +2107,15 @@ egg_icon_list_row_inserted (GtkTreeModel *model,
   icon_list->priv->items = g_list_insert (icon_list->priv->items,
 					 item, index);
   
+  list = g_list_nth (icon_list->priv->items, index + 1);
+  for (; list; list = list->next)
+    {
+      item = list->data;
+
+      item->index++;
+    }
+    
+  verify_items (icon_list);
 }
 
 static void
@@ -2141,7 +2126,7 @@ egg_icon_list_row_deleted (GtkTreeModel *model,
   gint index;
   EggIconList *icon_list;
   EggIconListItem *item;
-  GList *list;
+  GList *list, *next;
   gboolean emit = FALSE;
   
   icon_list = EGG_ICON_LIST (data);
@@ -2160,11 +2145,21 @@ egg_icon_list_row_deleted (GtkTreeModel *model,
   if (item->selected)
     emit = TRUE;
   
-  item->index = -1;
-  egg_icon_list_item_unref (item);
+  egg_icon_list_item_free (item);
 
+  for (next = list->next; next; next = next->next)
+    {
+      item = next->data;
+
+      item->index--;
+    }
+  
   icon_list->priv->items = g_list_delete_link (icon_list->priv->items, list);
 
+  egg_icon_list_queue_layout (icon_list);
+
+  verify_items (icon_list);  
+  
   if (emit)
     g_signal_emit (icon_list, icon_list_signals[SELECTION_CHANGED], 0);
 }
@@ -2198,11 +2193,16 @@ egg_icon_list_rows_reordered (GtkTreeModel *model,
 
   g_free (inverted_order);
   for (i = 0; i < length; i++)
-    items = g_list_prepend (items, item_array[i]);
+    {
+      item_array[i]->index = i;
+      items = g_list_prepend (items, item_array[i]);
+    }
   
   g_free (item_array);
   g_list_free (icon_list->priv->items);
   icon_list->priv->items = g_list_reverse (items);
+
+  verify_items (icon_list);  
 }
 
 static void
@@ -2399,16 +2399,16 @@ find_item_page_up_down (EggIconList     *icon_list,
   return NULL;
 }
 
-static void 
+static gboolean
 egg_icon_list_select_all_between (EggIconList     *icon_list,
 				  EggIconListItem *anchor,
-				  EggIconListItem *cursor,
-				  gboolean         emit)
+				  EggIconListItem *cursor)
 {
   GList *items;
   EggIconListItem *item;
   gint row1, row2, col1, col2;
-
+  gboolean dirty = FALSE;
+  
   if (anchor->row < cursor->row)
     {
       row1 = anchor->row;
@@ -2438,14 +2438,16 @@ egg_icon_list_select_all_between (EggIconList     *icon_list,
       if (row1 <= item->row && item->row <= row2 &&
 	  col1 <= item->col && item->col <= col2)
 	{
+	  if (!item->selected)
+	    dirty = TRUE;
+
 	  item->selected = TRUE;
 	  
 	  egg_icon_list_queue_draw_item (icon_list, item);
 	}
     }
 
-  if (emit)
-    g_signal_emit (icon_list, icon_list_signals[SELECTION_CHANGED], 0);
+  return dirty;
 }
 
 static void 
@@ -2453,7 +2455,8 @@ egg_icon_list_move_cursor_up_down (EggIconList *icon_list,
 				   gint         count)
 {
   EggIconListItem *item;
-
+  gboolean dirty = FALSE;
+  
   if (!GTK_WIDGET_HAS_FOCUS (icon_list))
     return;
   
@@ -2487,13 +2490,16 @@ egg_icon_list_move_cursor_up_down (EggIconList *icon_list,
   if (!icon_list->priv->ctrl_pressed &&
       icon_list->priv->selection_mode != GTK_SELECTION_NONE)
     {
-      egg_icon_list_unselect_all (icon_list);
-      egg_icon_list_select_all_between (icon_list, 
-					icon_list->priv->anchor_item,
-					item, TRUE);
+      egg_icon_list_unselect_all_internal (icon_list);
+      dirty = egg_icon_list_select_all_between (icon_list, 
+						icon_list->priv->anchor_item,
+						item);
     }
 
   egg_icon_list_scroll_to_item (icon_list, item);
+
+  if (dirty)
+    g_signal_emit (icon_list, icon_list_signals[SELECTION_CHANGED], 0);
 }
 
 static void 
@@ -2501,7 +2507,8 @@ egg_icon_list_move_cursor_page_up_down (EggIconList *icon_list,
 					gint         count)
 {
   EggIconListItem *item;
-
+  gboolean dirty = FALSE;
+  
   if (!GTK_WIDGET_HAS_FOCUS (icon_list))
     return;
   
@@ -2535,13 +2542,16 @@ egg_icon_list_move_cursor_page_up_down (EggIconList *icon_list,
   if (!icon_list->priv->ctrl_pressed &&
       icon_list->priv->selection_mode != GTK_SELECTION_NONE)
     {
-      egg_icon_list_unselect_all (icon_list);
-      egg_icon_list_select_all_between (icon_list, 
-					icon_list->priv->anchor_item,
-					item, TRUE);
+      egg_icon_list_unselect_all_internal (icon_list);
+      dirty = egg_icon_list_select_all_between (icon_list, 
+						icon_list->priv->anchor_item,
+						item);
     }
 
   egg_icon_list_scroll_to_item (icon_list, item);
+
+  if (dirty)
+    g_signal_emit (icon_list, icon_list_signals[SELECTION_CHANGED], 0);  
 }
 
 static void 
@@ -2549,7 +2559,8 @@ egg_icon_list_move_cursor_left_right (EggIconList *icon_list,
 				      gint         count)
 {
   EggIconListItem *item;
-
+  gboolean dirty = FALSE;
+  
   if (!GTK_WIDGET_HAS_FOCUS (icon_list))
     return;
   
@@ -2583,13 +2594,16 @@ egg_icon_list_move_cursor_left_right (EggIconList *icon_list,
   if (!icon_list->priv->ctrl_pressed &&
       icon_list->priv->selection_mode != GTK_SELECTION_NONE)
     {
-      egg_icon_list_unselect_all (icon_list);
-      egg_icon_list_select_all_between (icon_list, 
-					icon_list->priv->anchor_item,
-					item, TRUE);
+      egg_icon_list_unselect_all_internal (icon_list);
+      dirty = egg_icon_list_select_all_between (icon_list, 
+						icon_list->priv->anchor_item,
+						item);
     }
 
   egg_icon_list_scroll_to_item (icon_list, item);
+
+  if (dirty)
+    g_signal_emit (icon_list, icon_list_signals[SELECTION_CHANGED], 0);
 }
 
 static void 
@@ -2598,6 +2612,7 @@ egg_icon_list_move_cursor_start_end (EggIconList *icon_list,
 {
   EggIconListItem *item;
   GList *list;
+  gboolean dirty = FALSE;
   
   if (!GTK_WIDGET_HAS_FOCUS (icon_list))
     return;
@@ -2624,12 +2639,15 @@ egg_icon_list_move_cursor_start_end (EggIconList *icon_list,
       icon_list->priv->selection_mode != GTK_SELECTION_NONE)
     {
       egg_icon_list_unselect_all (icon_list);
-      egg_icon_list_select_all_between (icon_list, 
-					icon_list->priv->anchor_item,
-					item, TRUE);
+      dirty = egg_icon_list_select_all_between (icon_list, 
+						icon_list->priv->anchor_item,
+						item);
     }
 
   egg_icon_list_scroll_to_item (icon_list, item);
+
+  if (dirty)
+    g_signal_emit (icon_list, icon_list_signals[SELECTION_CHANGED], 0);
 }
 
 static void     
@@ -2859,7 +2877,7 @@ egg_icon_list_set_model (EggIconList *icon_list,
 
       g_object_unref (icon_list->priv->model);
       
-      g_list_foreach (icon_list->priv->items, (GFunc)egg_icon_list_item_unref, NULL);
+      g_list_foreach (icon_list->priv->items, (GFunc)egg_icon_list_item_free, NULL);
       g_list_free (icon_list->priv->items);
       icon_list->priv->items = NULL;
     }
@@ -3138,6 +3156,49 @@ egg_icon_list_unselect_path (EggIconList *icon_list,
 }
 
 /**
+ * egg_icon_list_get_selected_items:
+ * @selection: A #EggIconList.
+ *
+ * Creates a list of path of all selected items. Additionally, if you are
+ * planning on modifying the model after calling this function, you may
+ * want to convert the returned list into a list of #GtkTreeRowReference<!-- -->s.
+ * To do this, you can use gtk_tree_row_reference_new().
+ *
+ * To free the return value, use:
+ * <informalexample><programlisting>
+ * g_list_foreach (list, gtk_tree_path_free, NULL);
+ * g_list_free (list);
+ * </programlisting></informalexample>
+ *
+ * Return value: A #GList containing a #GtkTreePath for each selected row.
+ *
+ * Since: 2.6
+ **/
+GList *
+egg_icon_list_get_selected_items (EggIconList *icon_list)
+{
+  GList *list;
+  GList *selected = NULL;
+  
+  g_return_val_if_fail (EGG_IS_ICON_LIST (icon_list), NULL);
+  
+  for (list = icon_list->priv->items; list != NULL; list = list->next)
+    {
+      EggIconListItem *item = list->data;
+
+      if (item->selected)
+	{
+	  GtkTreePath *path = gtk_tree_path_new_from_indices (item->index, -1);
+
+	  g_print ("index is: %d\n", item->index);
+	  selected = g_list_prepend (selected, path);
+	}
+    }
+
+  return selected;
+}
+
+/**
  * egg_icon_list_select_all:
  * @icon_list: A #EggIconList.
  * 
@@ -3151,6 +3212,9 @@ egg_icon_list_select_all (EggIconList *icon_list)
   gboolean dirty = FALSE;
   
   g_return_if_fail (EGG_IS_ICON_LIST (icon_list));
+
+  if (icon_list->priv->selection_mode != GTK_SELECTION_MULTIPLE)
+    return;
 
   for (items = icon_list->priv->items; items; items = items->next)
     {
@@ -3177,9 +3241,14 @@ egg_icon_list_select_all (EggIconList *icon_list)
 void
 egg_icon_list_unselect_all (EggIconList *icon_list)
 {
+  gboolean dirty = FALSE;
+  
   g_return_if_fail (EGG_IS_ICON_LIST (icon_list));
 
-  egg_icon_list_unselect_all_internal (icon_list, TRUE);
+  dirty = egg_icon_list_unselect_all_internal (icon_list);
+
+  if (dirty)
+    g_signal_emit (icon_list, icon_list_signals[SELECTION_CHANGED], 0);
 }
 
 /**
