@@ -1,3 +1,4 @@
+
 /* GDK - The GIMP Drawing Kit
  * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
  *
@@ -3905,7 +3906,7 @@ gdk_window_set_group (GdkWindow *window,
     {
       if (toplevel->group_leader)
 	g_object_unref (toplevel->group_leader);
-      toplevel->group_leader = g_object_ref (toplevel->group_leader);
+      toplevel->group_leader = g_object_ref (leader);
     }
 
   update_wm_hints (window, FALSE);
