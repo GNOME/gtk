@@ -7003,49 +7003,31 @@ create_color_selection (GtkWidget *widget)
 
   if (!window)
     {
-      GtkWidget *options_hbox;
-      GtkWidget *check_button;
+      GtkWidget *picker;
+      GtkWidget *hbox;
+      GtkWidget *label;
       
-      window = gtk_color_selection_dialog_new ("color selection dialog");
+      window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
       gtk_window_set_screen (GTK_WINDOW (window), 
 			     gtk_widget_get_screen (widget));
 			     
-      gtk_widget_show (GTK_COLOR_SELECTION_DIALOG (window)->help_button);
-
-      gtk_window_set_position (GTK_WINDOW (window), GTK_WIN_POS_MOUSE);
-
       g_signal_connect (window, "destroy",
-                        G_CALLBACK(gtk_widget_destroyed),
+			G_CALLBACK (gtk_widget_destroyed),
                         &window);
 
-      options_hbox = gtk_hbox_new (FALSE, 0);
-      gtk_box_pack_start (GTK_BOX (GTK_DIALOG (window)->vbox), options_hbox, FALSE, FALSE, 0);
-      gtk_container_set_border_width (GTK_CONTAINER (options_hbox), 10);
+      gtk_window_set_title (GTK_WINDOW (window), "GtkColorButton");
+      gtk_container_set_border_width (GTK_CONTAINER (window), 0);
+
+      hbox = gtk_hbox_new (FALSE, 8);
+      gtk_container_set_border_width (GTK_CONTAINER (hbox), 8);
+      gtk_container_add (GTK_CONTAINER (window), hbox);
       
-      check_button = gtk_check_button_new_with_label ("Show Opacity");
-      gtk_box_pack_start (GTK_BOX (options_hbox), check_button, FALSE, FALSE, 0);
-      g_signal_connect (check_button, "toggled",
-			G_CALLBACK (opacity_toggled_cb), window);
+      label = gtk_label_new ("Pick a color");
+      gtk_container_add (GTK_CONTAINER (hbox), label);
 
-      check_button = gtk_check_button_new_with_label ("Show Palette");
-      gtk_box_pack_end (GTK_BOX (options_hbox), check_button, FALSE, FALSE, 0);
-      g_signal_connect (check_button, "toggled",
-			G_CALLBACK (palette_toggled_cb), window);
-
-      g_signal_connect (GTK_COLOR_SELECTION_DIALOG (window)->colorsel,
-			"color_changed",
-			G_CALLBACK (color_selection_changed),
-			window);
-
-      g_signal_connect (GTK_COLOR_SELECTION_DIALOG (window)->ok_button,
-			"clicked",
-			G_CALLBACK (color_selection_ok),
-			window);
-
-      g_signal_connect_swapped (GTK_COLOR_SELECTION_DIALOG (window)->cancel_button,
-				"clicked",
-				G_CALLBACK (gtk_widget_destroy),
-				window);
+      picker = gtk_color_button_new ();
+      gtk_color_button_set_use_alpha (GTK_COLOR_BUTTON (picker), TRUE);
+      gtk_container_add (GTK_CONTAINER (hbox), picker);
     }
 
   if (!GTK_WIDGET_VISIBLE (window))
@@ -7381,27 +7363,35 @@ create_font_selection (GtkWidget *widget)
 
   if (!window)
     {
-      window = gtk_font_selection_dialog_new ("Font Selection Dialog");
+      GtkWidget *picker;
+      GtkWidget *hbox;
+      GtkWidget *label;
       
+      window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
       gtk_window_set_screen (GTK_WINDOW (window),
 			     gtk_widget_get_screen (widget));
-
-      gtk_window_set_position (GTK_WINDOW (window), GTK_WIN_POS_MOUSE);
 
       g_signal_connect (window, "destroy",
 			G_CALLBACK (gtk_widget_destroyed),
 			&window);
 
-      g_signal_connect (GTK_FONT_SELECTION_DIALOG (window)->ok_button,
-			"clicked", G_CALLBACK (font_selection_ok),
-			GTK_FONT_SELECTION_DIALOG (window));
-      g_signal_connect_swapped (GTK_FONT_SELECTION_DIALOG (window)->cancel_button,
-			        "clicked", G_CALLBACK (gtk_widget_destroy),
-			        window);
+      gtk_window_set_title (GTK_WINDOW (window), "GtkFontButton");
+      gtk_container_set_border_width (GTK_CONTAINER (window), 0);
+
+      hbox = gtk_hbox_new (FALSE, 8);
+      gtk_container_set_border_width (GTK_CONTAINER (hbox), 8);
+      gtk_container_add (GTK_CONTAINER (window), hbox);
+      
+      label = gtk_label_new ("Pick a font");
+      gtk_container_add (GTK_CONTAINER (hbox), label);
+
+      picker = gtk_font_button_new ();
+      gtk_font_button_set_use_font (GTK_FONT_BUTTON (picker), TRUE);
+      gtk_container_add (GTK_CONTAINER (hbox), picker);
     }
   
   if (!GTK_WIDGET_VISIBLE (window))
-    gtk_widget_show (window);
+    gtk_widget_show_all (window);
   else
     gtk_widget_destroy (window);
 }

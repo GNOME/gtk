@@ -1,5 +1,8 @@
 2003-07-01  Matthias Clasen  <maclas@gmx.de>
 
+	* tests/testgtk.c: Use GtkFontButton and GtkColorButton to bring up the corresponding 
+	dialogs.
+
 	* gtk/Makefile.am (gtk_public_h_sources): Add gtkfontbutton.h, gtkcolorbutton.h. 
 	(gtk_c_sources): Add gtkfontbutton.c, gtkcolorbutton.c. 
 
