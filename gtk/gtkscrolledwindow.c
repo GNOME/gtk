@@ -478,7 +478,8 @@ gtk_scrolled_window_foreach (GtkContainer *container,
 
   scrolled_window = GTK_SCROLLED_WINDOW (container);
 
-  (* callback) (scrolled_window->viewport, callback_data);
+  if (scrolled_window->viewport)
+    (* callback) (scrolled_window->viewport, callback_data);
 }
 
 static void

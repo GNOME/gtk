@@ -1,3 +1,9 @@
+Thu Apr 30 09:49:14 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkscrolledwindow.c (gtk_scrolled_window_foreach): check
+	if the viewport already exists before iterating over it, maybe we
+	haven't been constructed yet.
+
 Thu Apr 30 01:51:00 1998  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkbin.c (gtk_bin_add): made this function issue a warning if
