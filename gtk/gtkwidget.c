@@ -187,7 +187,6 @@ static void gtk_widget_real_realize		 (GtkWidget	    *widget);
 static void gtk_widget_real_unrealize		 (GtkWidget	    *widget);
 static void gtk_widget_real_draw		 (GtkWidget	    *widget,
 						  GdkRectangle	    *area);
-static gint gtk_widget_real_queue_draw		 (GtkWidget	    *widget);
 static void gtk_widget_real_size_allocate	 (GtkWidget	    *widget,
 						  GtkAllocation	    *allocation);
 static void gtk_widget_style_set		 (GtkWidget	    *widget,
@@ -1555,23 +1554,10 @@ gtk_widget_unrealize (GtkWidget *widget)
  *****************************************/
 
 static gint
-gtk_widget_idle_draw (void *data)
+gtk_widget_idle_draw (gpointer data)
 {
-  GSList *node;
-  GSList *draw_queue;
-
-  draw_queue = node = gtk_widget_redraw_queue;
-  /* We set this gtk_widget_redraw_queue to NULL first, in case anybody
-   * calls queue_draw recursively
-   */
-  gtk_widget_redraw_queue = NULL;
-  while (node)
-    {
-      gtk_widget_real_queue_draw ((GtkWidget*) node->data);
-      node = node->next;
-    }
-
-  g_slist_free (draw_queue);
+  while (gtk_widget_redraw_queue)
+    gtk_widget_draw (gtk_widget_redraw_queue->data, NULL);
   
   return FALSE;
 }
@@ -1600,7 +1586,8 @@ gtk_widget_queue_draw (GtkWidget *widget)
       GTK_PRIVATE_SET_FLAG (widget, GTK_REDRAW_PENDING);
       if (gtk_widget_redraw_queue == NULL)
 	gtk_idle_add_priority (GTK_PRIORITY_INTERNAL,
-			       (GtkFunction) gtk_widget_idle_draw, NULL);
+			       gtk_widget_idle_draw,
+			       NULL);
 
       gtk_widget_redraw_queue = g_slist_prepend (gtk_widget_redraw_queue, widget);
     }
@@ -1617,22 +1604,44 @@ gtk_widget_queue_draw (GtkWidget *widget)
 static gint
 gtk_widget_idle_sizer (void *data)
 {
-  GSList *slist, *free_slist;
+  GSList *slist;
+  GSList *re_queue;
 
-  free_slist = gtk_widget_resize_queue;
-  gtk_widget_resize_queue = NULL;
-
-  for (slist = free_slist; slist; slist = slist->next)
+  re_queue = NULL;
+  while (gtk_widget_resize_queue)
     {
       GtkWidget *widget;
-      
+
+      slist = gtk_widget_resize_queue;
+      gtk_widget_resize_queue = slist->next;
       widget = slist->data;
-      
+
       GTK_PRIVATE_UNSET_FLAG (widget, GTK_RESIZE_PENDING);
+
+      gtk_widget_ref (widget);
       if (gtk_container_need_resize (GTK_CONTAINER (widget)))
-	gtk_widget_queue_resize (widget);
+	{
+	  slist->next = re_queue;
+	  re_queue = slist;
+	}
+      else
+	{
+	  g_slist_free_1 (slist);
+	  gtk_widget_unref (widget);
+	}
     }
-  g_slist_free (free_slist);
+
+  for (slist = re_queue; slist; slist = slist->next)
+    {
+      GtkWidget *widget;
+
+      widget = slist->data;
+      if (GTK_OBJECT (widget)->ref_count > 1 &&
+	  !GTK_OBJECT_DESTROYED (widget))
+	gtk_widget_queue_resize (widget);
+      gtk_widget_unref (widget);
+    }
+  g_slist_free (re_queue);
 
   return FALSE;
 }
@@ -1643,6 +1652,8 @@ gtk_widget_queue_resize (GtkWidget *widget)
   GtkWidget *toplevel;
   
   g_return_if_fail (widget != NULL);
+  if (GTK_OBJECT_DESTROYED (widget))
+    return;
   
   toplevel = gtk_widget_get_toplevel (widget);
   if (GTK_WIDGET_TOPLEVEL (toplevel))
@@ -1653,8 +1664,9 @@ gtk_widget_queue_resize (GtkWidget *widget)
 	    {
 	      GTK_PRIVATE_SET_FLAG (toplevel, GTK_RESIZE_PENDING);
               if (gtk_widget_resize_queue == NULL)
-		gtk_idle_add_priority (GTK_PRIORITY_INTERNAL,
-				       (GtkFunction) gtk_widget_idle_sizer, NULL);
+		gtk_idle_add_priority (GTK_PRIORITY_INTERNAL - 1,
+				       gtk_widget_idle_sizer,
+				       NULL);
 	      gtk_widget_resize_queue = g_slist_prepend (gtk_widget_resize_queue, toplevel);
 	    }
 	  
@@ -3743,26 +3755,6 @@ gtk_widget_real_draw (GtkWidget	   *widget,
       gtk_widget_event (widget, (GdkEvent*) &event);
       gdk_window_unref (event.window);
     }
-}
-
-/*****************************************
- * gtk_widget_real_queue_draw:
- *
- *   arguments:
- *
- *   results:
- *****************************************/
-
-static gint
-gtk_widget_real_queue_draw (GtkWidget *widget)
-{
-  g_return_val_if_fail (widget != NULL, FALSE);
-  g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
-  
-  GTK_PRIVATE_UNSET_FLAG (widget, GTK_REDRAW_PENDING);
-  gtk_widget_draw (widget, NULL);
-  
-  return FALSE;
 }
 
 /*****************************************
