@@ -3373,16 +3373,20 @@ gdk_window_set_icon (GdkWindow *window,
   
   if (toplevel->icon_pixmap != pixmap)
     {
+      if (pixmap)
+	g_object_ref (pixmap);
       if (toplevel->icon_pixmap)
 	g_object_unref (toplevel->icon_pixmap);
-      toplevel->icon_pixmap = g_object_ref (pixmap);
+      toplevel->icon_pixmap = pixmap;
     }
   
   if (toplevel->icon_mask != mask)
     {
+      if (mask)
+	g_object_ref (mask);
       if (toplevel->icon_mask)
 	g_object_unref (toplevel->icon_mask);
-      toplevel->icon_mask = g_object_ref (mask);
+      toplevel->icon_mask = mask;
     }
   
   update_wm_hints (window, FALSE);
