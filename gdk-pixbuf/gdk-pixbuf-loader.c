@@ -159,7 +159,7 @@ gdk_pixbuf_loader_destroy (GtkObject *loader)
 	priv = GDK_PIXBUF_LOADER (loader)->private;
 
 	/* We want to close it if it's not already closed */
-	if (priv->closed)
+	if (!priv->closed)
 		gdk_pixbuf_loader_close (GDK_PIXBUF_LOADER (loader));
 
 	if (priv->pixbuf)
