@@ -22,7 +22,6 @@ LDADDS = @STRIP_BEGIN@ 	\
 	-lm		\
 @STRIP_END@
 
-if USE_X11
 noinst_LTLIBRARIES = libgdk-x11.la
 
 if XINPUT_GXI
@@ -79,8 +78,6 @@ bin_PROGRAMS = @xinput_progs@
 
 gxid_SOURCES = gxid.c
 gxid_LDADD = $(LDADDS)
-
-endif
 
 install-data-local:
 	$(MKINSTALLDIRS) $(includedir)/gdk

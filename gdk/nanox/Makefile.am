@@ -18,8 +18,6 @@ LDADDS = @STRIP_BEGIN@ 	\
 	-lm		\
 @STRIP_END@
 
-if USE_NANOX
-
 noinst_LTLIBRARIES = libgdk-nanox.la
 
 xinput_sources =	   \
@@ -46,8 +44,3 @@ libgdk_nanox_la_SOURCES =    \
 	gdkwindow-nanox.c    \
 	gdkprivate-nanox.h   \
 	gdkinput-none.c
-
-else
-noinst_LTLIBRARIES =
-endif
-

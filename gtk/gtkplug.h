@@ -63,8 +63,8 @@ struct _GtkPlugClass
 
 
 GtkType    gtk_plug_get_type  (void);
-void       gtk_plug_construct (GtkPlug *plug, guint32 socket_id);
-GtkWidget* gtk_plug_new       (guint32 socket_id);
+void       gtk_plug_construct (GtkPlug *plug, GdkNativeWindow socket_id);
+GtkWidget* gtk_plug_new       (GdkNativeWindow socket_id);
 
 
 #ifdef __cplusplus
