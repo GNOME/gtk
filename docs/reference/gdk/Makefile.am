@@ -126,8 +126,18 @@ extra_files =
 
 # CFLAGS and LDFLAGS for compiling scan program. Only needed
 # if $(DOC_MODULE).types is non-empty.
-GTKDOC_CFLAGS =
-GTKDOC_LIBS =
+GTKDOC_CFLAGS = @STRIP_BEGIN@ 				\
+	@CFLAGS@					\
+	-I$(top_srcdir) 				\
+	-I$(top_builddir) 				\
+	-I$(top_builddir)/gdk 				\
+	@GTK_DEBUG_FLAGS@				\
+	@GDK_DEP_CFLAGS@				\
+@STRIP_END@
+
+GTKDOC_LIBS = @STRIP_BEGIN@ 						\
+	$(top_builddir)/gdk/@gdktargetlib@        			\
+@STRIP_END@
 
 # Commands for compiling and linking 
 GTKDOC_CC=$(LIBTOOL) --mode=compile $(CC)

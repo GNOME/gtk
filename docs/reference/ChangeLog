@@ -1,3 +1,10 @@
+2002-05-02  Matthias Clasen  <maclas@gmx.de>
+
+	* gdk/Makefile.am (GTKDOC_CFLAGS, GTKDOC_LIBS): set these. 
+
+	* gdk/gdk.types: Add types derived from GObject, so that they get
+	an object hierarchy section.
+
 2002-05-01  Matthias Clasen  <maclas@gmx.de>
 
 	* gdk/gdk-sections.txt: Move GdkScreen struct to the GdkScreen section.
