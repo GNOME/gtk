@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2003-07-07 13:08+0200\n"
+"POT-Creation-Date: 2003-07-16 15:41+0200\n"
 "PO-Revision-Date: 2003-06-05 20:24+0100\n"
 "Last-Translator: Vincent van Adrighem <V.vanAdrighem@dirck.mine.nu>\n"
 "Language-Team: Dutch <vertaling@nl.linux.org>\n"
@@ -1282,7 +1282,7 @@ msgstr "Voorgrondkleur als een GdkColor"
 #: gtk/gtkcellrenderertext.c:232 gtk/gtkentry.c:459 gtk/gtktexttag.c:273
 #: gtk/gtktextview.c:576
 msgid "Editable"
-msgstr "Wijzigbaar"
+msgstr "Bewerkbaar"
 
 #: gtk/gtkcellrenderertext.c:233 gtk/gtktexttag.c:274 gtk/gtktextview.c:577
 msgid "Whether the text can be modified by the user"
@@ -2233,7 +2233,7 @@ msgstr "_Voorbeeld:"
 
 #: gtk/gtkfontsel.c:1285
 msgid "Font Selection"
-msgstr "Lettertypeselectie"
+msgstr "Lettertype-selectie"
 
 #: gtk/gtkframe.c:126
 msgid "Text of the frame's label"
@@ -3444,7 +3444,7 @@ msgstr "Of niet-numerieke tekens genegeerd moeten worden"
 
 #: gtk/gtkspinbutton.c:284
 msgid "Wrap"
-msgstr "Doorlopen"
+msgstr "Terugloop"
 
 #: gtk/gtkspinbutton.c:285
 msgid "Whether a spin button should wrap upon reaching its limits"
@@ -3597,7 +3597,7 @@ msgstr "_Index"
 
 #: gtk/gtkstock.c:301
 msgid "_Italic"
-msgstr "Schu_ingedrukt"
+msgstr "_Cursief"
 
 #: gtk/gtkstock.c:302
 msgid "_Jump to"
@@ -3673,7 +3673,7 @@ msgstr "_Verwijderen"
 
 #: gtk/gtkstock.c:320
 msgid "_Revert"
-msgstr "_Terugzetten"
+msgstr "_Terugdraaien"
 
 #: gtk/gtkstock.c:321
 msgid "_Save"
@@ -4063,7 +4063,7 @@ msgstr "Pixels lege ruimte tussen lijnen met regelterugloop in een paragraaf"
 
 #: gtk/gtktexttag.c:480
 msgid "Wrap mode"
-msgstr "Regelterugloopmodus"
+msgstr "Terugloopmodus"
 
 #: gtk/gtktexttag.c:481 gtk/gtktextview.c:585
 msgid ""
@@ -4250,7 +4250,7 @@ msgstr "Pixels binnen regelterugloop"
 
 #: gtk/gtktextview.c:584
 msgid "Wrap Mode"
-msgstr "Regelterugloopmodus"
+msgstr "Terugloopmodus"
 
 #: gtk/gtktextview.c:602
 msgid "Left Margin"
