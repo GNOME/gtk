@@ -151,7 +151,7 @@ gdk_image_new (GdkImageType  type,
 }
 
 GdkImage*
-_gdk_fb_get_image (GdkWindow *window,
+_gdk_fb_get_image (GdkDrawable *drawable,
 		   gint       x,
 		   gint       y,
 		   gint       width,
@@ -162,12 +162,12 @@ _gdk_fb_get_image (GdkWindow *window,
   gint bits_per_pixel = GDK_DRAWABLE_IMPL_FBDATA(gdk_parent_root)->depth;
   GdkPixmapFBData fbd;
 
-  g_return_val_if_fail (window != NULL, NULL);
+  g_return_val_if_fail (drawable != NULL, NULL);
 
   image = (GdkImage *)private = (GdkImagePrivateFB *)g_object_new (gdk_image_get_type(), NULL);
 
   image->type = GDK_IMAGE_NORMAL;
-  image->visual = gdk_window_get_visual (window);
+  image->visual = gdk_drawable_get_visual (drawable);
   image->width = width;
   image->height = height;
   image->depth = bits_per_pixel;
@@ -193,7 +193,7 @@ _gdk_fb_get_image (GdkWindow *window,
   fbd.drawable_data.depth = image->depth;
   fbd.drawable_data.window_type = GDK_DRAWABLE_PIXMAP;
 
-  gdk_fb_draw_drawable_2((GdkPixmap *)&fbd, NULL, window, x, y, 0, 0, width, height, TRUE, TRUE);
+  gdk_fb_draw_drawable_2((GdkPixmap *)&fbd, NULL, drawable, x, y, 0, 0, width, height, TRUE, TRUE);
 
   return image;
 }

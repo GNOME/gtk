@@ -34,6 +34,7 @@
 #include <stdio.h>
 #include <time.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include "gdk.h"
 
@@ -60,6 +61,412 @@ GdkArgDesc _gdk_windowing_args[] = {
   { NULL }
 };
 
+static const GScannerConfig     fb_modes_scanner_config =
+{
+  (
+   " \t\n"
+   )                    /* cset_skip_characters */,
+  (
+   G_CSET_a_2_z
+   G_CSET_A_2_Z
+   )                    /* cset_identifier_first */,
+  (
+   G_CSET_a_2_z
+   "_-0123456789"
+   G_CSET_A_2_Z
+   )                    /* cset_identifier_nth */,
+  ( "#\n" )             /* cpair_comment_single */,
+  
+  FALSE                  /* case_sensitive */,
+  
+  FALSE                 /* skip_comment_multi */,
+  TRUE                  /* skip_comment_single */,
+  FALSE                 /* scan_comment_multi */,
+  TRUE                  /* scan_identifier */,
+  TRUE                  /* scan_identifier_1char */,
+  FALSE                 /* scan_identifier_NULL */,
+  TRUE                  /* scan_symbols */,
+  FALSE                 /* scan_binary */,
+  FALSE                 /* scan_octal */,
+  FALSE                  /* scan_float */,
+  FALSE                  /* scan_hex */,
+  FALSE                 /* scan_hex_dollar */,
+  FALSE                 /* scan_string_sq */,
+  TRUE                  /* scan_string_dq */,
+  TRUE                  /* numbers_2_int */,
+  FALSE                 /* int_2_float */,
+  FALSE                 /* identifier_2_string */,
+  TRUE                  /* char_2_token */,
+  FALSE                 /* symbol_2_token */,
+  FALSE                 /* scope_0_fallback */,
+};
+
+enum {
+  FB_MODE,
+  FB_ENDMODE,
+  FB_GEOMETRY,
+  FB_TIMINGS,
+  FB_LACED,
+  FB_HSYNC,
+  FB_VSYNC,
+  FB_CSYNC,
+  FB_EXTSYNC,
+  FB_DOUBLE
+};
+
+char *fb_modes_keywords[] =
+{
+  "mode",
+  "endmode",
+  "geometry",
+  "timings",
+  "laced",
+  "hsync",
+  "vsync",
+  "csync",
+  "extsync",
+  "double"
+};
+
+static int
+fb_modes_parse_mode (GScanner *scanner,
+		     struct fb_var_screeninfo *modeinfo,
+		     char *specified_modename)
+{
+  guint token;
+  int keyword;
+  int i;
+  char *modename;
+  int geometry[5];
+  int timings[7];
+  int vsync=0, hsync=0, csync=0, extsync=0, doublescan=0, laced=0;
+  int found_geometry = 0;
+  int found_timings = 0;
+    
+  token = g_scanner_get_next_token(scanner);
+  if (token != G_TOKEN_SYMBOL)
+    return -1;
+  
+  keyword = GPOINTER_TO_INT(scanner->value.v_symbol);
+  if (keyword != FB_MODE)
+    return -1;
+
+  token = g_scanner_get_next_token(scanner);
+  if (token != G_TOKEN_STRING)
+    return -1;
+
+  modename = g_strdup(scanner->value.v_string);
+  
+  token = g_scanner_get_next_token(scanner);
+  if (token != G_TOKEN_SYMBOL)
+    {
+      g_free (modename);
+      return -1; /* Not a valid keyword */
+    }
+  keyword = GPOINTER_TO_INT(scanner->value.v_symbol);
+  while ( keyword != FB_ENDMODE )
+    {
+
+      switch (GPOINTER_TO_INT(scanner->value.v_symbol))
+	{
+	case FB_GEOMETRY:
+	  for (i=0;i<5;i++) {
+	    token = g_scanner_get_next_token(scanner);
+	    if (token != G_TOKEN_INT)
+	      {
+		g_free (modename);
+		return -1; /* need a integer */
+	      }
+	    geometry[i] = scanner->value.v_int;
+	  }
+	  found_geometry = TRUE;
+	  break;
+	case FB_TIMINGS:
+	  for (i=0;i<7;i++) {
+	    token = g_scanner_get_next_token(scanner);
+	    if (token != G_TOKEN_INT)
+	      {
+		g_free (modename);
+		return -1; /* need a integer */
+	      }
+	    timings[i] = scanner->value.v_int;
+	  }
+	  found_timings = TRUE;
+	  break;
+	case FB_LACED:
+	  token = g_scanner_get_next_token(scanner);
+	  if (token != G_TOKEN_IDENTIFIER)
+	      {
+		g_free (modename);
+		return -1;
+	      }
+	  if (g_strcasecmp(scanner->value.v_identifier, "true")==0)
+	    laced = 1;
+	  else if (g_strcasecmp(scanner->value.v_identifier, "false")==0)
+	    laced = 0;
+	  else
+	    {
+	      g_free (modename);
+	      return -1;
+	    }
+	  break;
+	case FB_EXTSYNC:
+	  token = g_scanner_get_next_token(scanner);
+	  if (token != G_TOKEN_IDENTIFIER)
+	      {
+		g_free (modename);
+		return -1;
+	      }
+	  if (g_strcasecmp(scanner->value.v_identifier, "true")==0)
+	    extsync = 1;
+	  else if (g_strcasecmp(scanner->value.v_identifier, "false")==0)
+	    extsync = 0;
+	  else
+	    {
+	      g_free (modename);
+	      return -1;
+	    }
+	  break;
+	case FB_DOUBLE:
+	  token = g_scanner_get_next_token(scanner);
+	  if (token != G_TOKEN_IDENTIFIER)
+	      {
+		g_free (modename);
+		return -1;
+	      }
+	  if (g_strcasecmp(scanner->value.v_identifier, "true")==0)
+	    doublescan = 1;
+	  else if (g_strcasecmp(scanner->value.v_identifier, "false")==0)
+	    doublescan = 0;
+	  else
+	    {
+	      g_free (modename);
+	      return -1;
+	    }
+	  break;
+	case FB_VSYNC:
+	  token = g_scanner_get_next_token(scanner);
+	  if (token != G_TOKEN_IDENTIFIER)
+	      {
+		g_free (modename);
+		return -1;
+	      }
+	  if (g_strcasecmp(scanner->value.v_identifier, "high")==0)
+	    vsync = 1;
+	  else if (g_strcasecmp(scanner->value.v_identifier, "low")==0)
+	    vsync = 0;
+	  else
+	    {
+	      g_free (modename);
+	      return -1;
+	    }
+	  break;
+	case FB_HSYNC:
+	  token = g_scanner_get_next_token(scanner);
+	  if (token != G_TOKEN_IDENTIFIER)
+	    {
+	      g_free (modename);
+	      return -1;
+	    }
+	  if (g_strcasecmp(scanner->value.v_identifier, "high")==0)
+	    hsync = 1;
+	  else if (g_strcasecmp(scanner->value.v_identifier, "low")==0)
+	    hsync = 0;
+	  else
+	    {
+	      g_free (modename);
+	      return -1;
+	    }
+	  break;
+	case FB_CSYNC:
+	  token = g_scanner_get_next_token(scanner);
+	  if (token != G_TOKEN_IDENTIFIER)
+	    {
+	      g_free (modename);
+	      return -1;
+	    }
+	  if (g_strcasecmp(scanner->value.v_identifier, "high")==0)
+	    csync = 1;
+	  else if (g_strcasecmp(scanner->value.v_identifier, "low")==0)
+	    csync = 0;
+	  else
+	    {
+	      g_free (modename);
+	      return -1;
+	    }
+	  break;
+	}
+      
+      token = g_scanner_get_next_token(scanner);
+      if (token != G_TOKEN_SYMBOL)
+	{
+	  g_free (modename);
+	  return -1; /* Not a valid keyword */
+	}
+      keyword = GPOINTER_TO_INT(scanner->value.v_symbol);
+    }
+
+  if (strcmp(modename, specified_modename)== 0) {
+    if (!found_geometry)
+      g_warning("Geometry not specified\n");
+
+    if (found_geometry)
+      {
+	modeinfo->xres = geometry[0];
+	modeinfo->yres = geometry[1];
+	modeinfo->xres_virtual = geometry[2];
+	modeinfo->yres_virtual = geometry[3];
+	modeinfo->bits_per_pixel = geometry[4];
+      }
+    
+    if (!found_timings)
+      g_warning("Timing not specified\n");
+    
+    if (found_timings)
+      {
+	modeinfo->pixclock = timings[0];
+	modeinfo->left_margin = timings[1];
+	modeinfo->right_margin = timings[2];
+	modeinfo->upper_margin = timings[3];
+	modeinfo->lower_margin = timings[4];
+	modeinfo->hsync_len = timings[5];
+	modeinfo->vsync_len = timings[6];
+	
+	modeinfo->vmode = 0;
+	if (laced)
+	  modeinfo->vmode |= FB_VMODE_INTERLACED;
+	if (doublescan)
+	  modeinfo->vmode |= FB_VMODE_DOUBLE;
+	  
+	modeinfo->sync = 0;
+	if (hsync)
+	  modeinfo->sync |= FB_SYNC_HOR_HIGH_ACT;
+	if (vsync)
+	  modeinfo->sync |= FB_SYNC_VERT_HIGH_ACT;
+      }
+
+    g_free(modename);
+    return 1;
+  }
+  
+  g_free(modename);
+
+  return 0;
+}
+
+static int
+gdk_fb_setup_mode_from_name(struct fb_var_screeninfo *modeinfo, char *modename)
+{
+  GScanner *scanner;
+  char *filename;
+  gint result;
+  int fd, i;
+  int retval;
+
+  retval = 0;
+  
+  filename = "/etc/fb.modes";
+  
+  fd = open (filename, O_RDONLY);
+  if (fd < 0)
+    {
+      g_warning ("Cannot read %s\n", filename);
+      return retval;
+    }
+  
+  scanner = g_scanner_new ((GScannerConfig *) &fb_modes_scanner_config);
+  scanner->input_name = filename;
+
+  for (i=0;i<sizeof(fb_modes_keywords)/sizeof(fb_modes_keywords[0]);i++)
+    g_scanner_add_symbol(scanner, fb_modes_keywords[i], GINT_TO_POINTER(i));
+
+  g_scanner_input_file (scanner, fd);
+  
+  while (1) {
+    if (g_scanner_peek_next_token(scanner) == G_TOKEN_EOF) {
+      break;
+    } 
+    result = fb_modes_parse_mode(scanner, modeinfo, modename);
+      
+    if (result < 0) {
+      g_warning("parse error in %s at line %d\n", filename, scanner->line);
+      break;
+    }
+    if (result > 0)
+      {
+	retval = 1;
+	break;
+      }
+  }
+  
+  g_scanner_destroy (scanner);
+  
+  close(fd);
+  
+  return retval;
+}
+  
+
+static int
+gdk_fb_set_mode(GdkFBDisplay *display)
+{
+  char *env, *end;
+  int depth, height, width;
+  
+  if (ioctl (display->fd, FBIOGET_VSCREENINFO, &display->modeinfo) < 0)
+    return -1;
+  
+  env = getenv("GDK_DISPLAY_MODE");
+  if (env)
+    {
+      if (!gdk_fb_setup_mode_from_name(&display->modeinfo, env))
+	g_warning("Couldn't find mode named '%s'\n", env);
+    }
+
+  env = getenv("GDK_DISPLAY_DEPTH");
+  if (env)
+    {
+      depth = strtol(env, &end, 10);
+      if (env != end)
+	display->modeinfo.bits_per_pixel = depth;
+    }
+  
+  env = getenv("GDK_DISPLAY_WIDTH");
+  if (env)
+    {
+      width = strtol(env, &end, 10);
+      if (env != end)
+	{
+	  display->modeinfo.xres = width;
+	  display->modeinfo.xres_virtual = width;
+	}
+    }
+    
+  env = getenv("GDK_DISPLAY_HEIGHT");
+  if (env)
+    {
+      height = strtol(env, &end, 10);
+      if (env != end)
+	{
+	  display->modeinfo.yres = height;
+	  display->modeinfo.yres_virtual = height;
+	}
+    }
+
+  if (ioctl (display->fd, FBIOPUT_VSCREENINFO, &display->modeinfo) < 0)
+    {
+      g_warning("Couldn't set specified mode\n");
+      return -1;
+    }
+  
+  if (ioctl (display->fd, FBIOGET_FSCREENINFO, &display->sinfo) < 0)
+    {
+      g_warning("Error getting fixed screen info\n");
+      return -1;
+    }
+  return 0;
+}
+
 static GdkFBDisplay *
 gdk_fb_display_new(const char *filename)
 {
@@ -72,16 +479,21 @@ gdk_fb_display_new(const char *filename)
 
   retval = g_new0(GdkFBDisplay, 1);
   retval->fd = fd;
+
+  if (gdk_fb_set_mode(retval) < 0)
+    {
+      g_free (retval);
+      return NULL;
+    }
+
   ioctl(retval->fd, FBIOBLANK, 0);
-  n = ioctl(fd, FBIOGET_FSCREENINFO, &retval->sinfo);
-  n |= ioctl(fd, FBIOGET_VSCREENINFO, &retval->modeinfo);
-  g_assert(!n);
 
   /* We used to use sinfo.smem_len, but that seemed to be broken in many cases */
   retval->fbmem = mmap(NULL, retval->modeinfo.yres * retval->sinfo.line_length,
 		       PROT_READ|PROT_WRITE, MAP_SHARED, fd, 0);
   g_assert(retval->fbmem != MAP_FAILED);
 
+  
   if(retval->sinfo.visual == FB_VISUAL_PSEUDOCOLOR)
     {
       guint16 red[256], green[256], blue[256];

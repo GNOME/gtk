@@ -18,80 +18,82 @@ typedef enum { GPR_USED_BG, GPR_AA_GRAYVAL, GPR_NONE, GPR_ERR_BOUNDS } GetPixelR
 static GetPixelRet gdk_fb_drawable_get_pixel(GdkDrawable *drawable, GdkGC *gc, int x, int y, GdkColor *spot,
 					     gboolean abs_coords, GdkDrawable *bg_relto, GdkDrawable *bgpm);
 
-void gdk_fb_draw_rectangle (GdkDrawable    *drawable,
-			    GdkGC          *gc,
-			    gint            filled,
-			    gint            x,
-			    gint            y,
-			    gint            width,
-			    gint            height);
-static void gdk_fb_draw_arc       (GdkDrawable    *drawable,
-				   GdkGC          *gc,
-				   gint            filled,
-				   gint            x,
-				   gint            y,
-				   gint            width,
-				   gint            height,
-				   gint            angle1,
-				   gint            angle2);
-static void gdk_fb_draw_polygon   (GdkDrawable    *drawable,
-				   GdkGC          *gc,
-				   gint            filled,
-				   GdkPoint       *points,
-				   gint            npoints);
-static void gdk_fb_draw_text      (GdkDrawable    *drawable,
-				   GdkFont        *font,
-				   GdkGC          *gc,
-				   gint            x,
-				   gint            y,
-				   const gchar    *text,
-				   gint            text_length);
-static void gdk_fb_draw_text_wc   (GdkDrawable    *drawable,
-				   GdkFont        *font,
-				   GdkGC          *gc,
-				   gint            x,
-				   gint            y,
-				   const GdkWChar *text,
-				   gint            text_length);
-static void gdk_fb_draw_glyphs(GdkDrawable      *drawable,
-			       GdkGC	           *gc,
-			       PangoFont        *font,
-			       gint              x,
-			       gint              y,
-			       PangoGlyphString *glyphs);
-void gdk_fb_draw_drawable  (GdkDrawable    *drawable,
-			    GdkGC          *gc,
-			    GdkPixmap      *src,
-			    gint            xsrc,
-			    gint            ysrc,
-			    gint            xdest,
-			    gint            ydest,
-			    gint            width,
-			    gint            height);
-static void gdk_fb_draw_image(GdkDrawable *drawable,
-			      GdkGC       *gc,
-			      GdkImage    *image,
-			      gint         xsrc,
-			      gint         ysrc,
-			      gint         xdest,
-			      gint         ydest,
-			      gint         width,
-			      gint         height);
-static void gdk_fb_draw_points    (GdkDrawable    *drawable,
-				   GdkGC          *gc,
-				   GdkPoint       *points,
-				   gint            npoints);
-static void gdk_fb_draw_segments  (GdkDrawable    *drawable,
-				   GdkGC          *gc,
-				   GdkSegment     *segs,
-				   gint            nsegs);
-static void gdk_fb_draw_lines     (GdkDrawable    *drawable,
-				   GdkGC          *gc,
-				   GdkPoint       *points,
-				   gint            npoints);
-static GdkColormap* gdk_fb_get_colormap (GdkDrawable *drawable);
-static void gdk_fb_set_colormap (GdkDrawable *drawable,
-				 GdkColormap *colormap);
+void                gdk_fb_draw_rectangle (GdkDrawable      *drawable,
+					   GdkGC            *gc,
+					   gint              filled,
+					   gint              x,
+					   gint              y,
+					   gint              width,
+					   gint              height);
+static void         gdk_fb_draw_arc       (GdkDrawable      *drawable,
+					   GdkGC            *gc,
+					   gint              filled,
+					   gint              x,
+					   gint              y,
+					   gint              width,
+					   gint              height,
+					   gint              angle1,
+					   gint              angle2);
+static void         gdk_fb_draw_polygon   (GdkDrawable      *drawable,
+					   GdkGC            *gc,
+					   gint              filled,
+					   GdkPoint         *points,
+					   gint              npoints);
+static void         gdk_fb_draw_text      (GdkDrawable      *drawable,
+					   GdkFont          *font,
+					   GdkGC            *gc,
+					   gint              x,
+					   gint              y,
+					   const gchar      *text,
+					   gint              text_length);
+static void         gdk_fb_draw_text_wc   (GdkDrawable      *drawable,
+					   GdkFont          *font,
+					   GdkGC            *gc,
+					   gint              x,
+					   gint              y,
+					   const GdkWChar   *text,
+					   gint              text_length);
+static void         gdk_fb_draw_glyphs    (GdkDrawable      *drawable,
+					   GdkGC            *gc,
+					   PangoFont        *font,
+					   gint              x,
+					   gint              y,
+					   PangoGlyphString *glyphs);
+void                gdk_fb_draw_drawable  (GdkDrawable      *drawable,
+					   GdkGC            *gc,
+					   GdkPixmap        *src,
+					   gint              xsrc,
+					   gint              ysrc,
+					   gint              xdest,
+					   gint              ydest,
+					   gint              width,
+					   gint              height);
+static void         gdk_fb_draw_image     (GdkDrawable      *drawable,
+					   GdkGC            *gc,
+					   GdkImage         *image,
+					   gint              xsrc,
+					   gint              ysrc,
+					   gint              xdest,
+					   gint              ydest,
+					   gint              width,
+					   gint              height);
+static void         gdk_fb_draw_points    (GdkDrawable      *drawable,
+					   GdkGC            *gc,
+					   GdkPoint         *points,
+					   gint              npoints);
+static void         gdk_fb_draw_segments  (GdkDrawable      *drawable,
+					   GdkGC            *gc,
+					   GdkSegment       *segs,
+					   gint              nsegs);
+static void         gdk_fb_draw_lines     (GdkDrawable      *drawable,
+					   GdkGC            *gc,
+					   GdkPoint         *points,
+					   gint              npoints);
+static GdkColormap* gdk_fb_get_colormap   (GdkDrawable      *drawable);
+static void         gdk_fb_set_colormap   (GdkDrawable      *drawable,
+					   GdkColormap      *colormap);
+static gint         gdk_fb_get_depth      (GdkDrawable      *drawable);
+static GdkVisual*   gdk_fb_get_visual     (GdkDrawable      *drawable);
 
 static gpointer parent_class = NULL;
 
@@ -126,7 +128,11 @@ gdk_drawable_impl_fb_class_init (GdkDrawableFBClass *klass)
   
   drawable_class->set_colormap = gdk_fb_set_colormap;
   drawable_class->get_colormap = gdk_fb_get_colormap;
+  
   drawable_class->get_size = gdk_fb_get_size;
+ 
+  drawable_class->get_depth = gdk_fb_get_depth;
+  drawable_class->get_visual = gdk_fb_get_visual;
   
   drawable_class->get_image = _gdk_fb_get_image;
 }
@@ -1375,4 +1381,16 @@ gdk_fb_draw_image(GdkDrawable *drawable,
   fbd.drawable_data.window_type = GDK_DRAWABLE_PIXMAP;
 
   gdk_fb_draw_drawable_2(drawable, gc, (GdkPixmap *)&fbd, xsrc, ysrc, xdest, ydest, width, height, TRUE, TRUE);
+}
+
+static gint
+gdk_fb_get_depth (GdkDrawable *drawable)
+{
+  return GDK_DRAWABLE_IMPL_FBDATA (drawable)->depth;
+}
+
+static GdkVisual*
+gdk_fb_get_visual (GdkDrawable    *drawable)
+{
+  return gdk_visual_get_system();
 }

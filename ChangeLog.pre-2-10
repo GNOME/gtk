@@ -1,3 +1,23 @@
+2000-11-09  Alexander Larsson  <alexl@redhat.com>
+
+	* demos/testgtk/menus.c:
+	Changes to make the new testgtk compile after
+	gtk_menu_append was removed.
+
+	* gdk/linux-fb/gdkdrawable-fb2.c
+	(gdk_fb_get_depth, gdk_fb_get_visual,
+	gdk_drawable_impl_fb_class_init): Implement
+	these drawable functions. Now GtkImages work again.
+
+	* gdk/linux-fb/gdkimage-fb.c (_gdk_fb_get_image): Change prototype.
+
+	* gdk/linux-fb/gdkprivate-fb.h (_gdk_fb_get_image): Change prototype.
+	
+	* gdk/linux-fb/gdkmain-fb.c (fb_modes_parse_mode,
+	gdk_fb_setup_mode_from_name, gdk_fb_set_mode, gdk_fb_display_new);
+	Parse /etc/fb.modes, use the environment variables GDK_DISPLAY_MODE,
+	GDK_DISPLAY_DEPTH, GDK_DISPLAY_WIDTH, GDK_DISPLAY_HEIGHT.
+
 2000-11-08  Havoc Pennington  <hp@pobox.com>
 
 	* gtk/gtktexttag.c (gtk_text_tag_class_init): Add visible and

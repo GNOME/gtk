@@ -30,7 +30,7 @@ create_menu (gint depth, gboolean tearoff)
   if (tearoff)
     {
       menuitem = gtk_tearoff_menu_item_new ();
-      gtk_menu_append (GTK_MENU (menu), menuitem);
+      gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
       gtk_widget_show (menuitem);
     }
 
@@ -41,7 +41,7 @@ create_menu (gint depth, gboolean tearoff)
       group = gtk_radio_menu_item_group (GTK_RADIO_MENU_ITEM (menuitem));
       if (depth % 2)
 	gtk_check_menu_item_set_show_toggle (GTK_CHECK_MENU_ITEM (menuitem), TRUE);
-      gtk_menu_append (GTK_MENU (menu), menuitem);
+      gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
       gtk_widget_show (menuitem);
       if (i == 3)
 	gtk_widget_set_sensitive (menuitem, FALSE);
@@ -120,7 +120,7 @@ do_menus (void)
       gtk_menu_set_accel_group (GTK_MENU (menu), accel_group);
 
       menuitem = gtk_check_menu_item_new_with_label ("Accelerate Me");
-      gtk_menu_append (GTK_MENU (menu), menuitem);
+      gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
       gtk_widget_show (menuitem);
       gtk_widget_add_accelerator (menuitem,
 				  "activate",
@@ -129,7 +129,7 @@ do_menus (void)
 				  0,
 				  GTK_ACCEL_VISIBLE | GTK_ACCEL_SIGNAL_VISIBLE);
       menuitem = gtk_check_menu_item_new_with_label ("Accelerator Locked");
-      gtk_menu_append (GTK_MENU (menu), menuitem);
+      gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
       gtk_widget_show (menuitem);
       gtk_widget_add_accelerator (menuitem,
 				  "activate",
@@ -138,7 +138,7 @@ do_menus (void)
 				  0,
 				  GTK_ACCEL_VISIBLE | GTK_ACCEL_LOCKED);
       menuitem = gtk_check_menu_item_new_with_label ("Accelerators Frozen");
-      gtk_menu_append (GTK_MENU (menu), menuitem);
+      gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
       gtk_widget_show (menuitem);
       gtk_widget_add_accelerator (menuitem,
 				  "activate",

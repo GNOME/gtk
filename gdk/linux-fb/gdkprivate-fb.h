@@ -72,7 +72,8 @@ struct _GdkDrawableFBData
 
   guint rowstride;
 
-  /* Due to excursions in gdk, this stuff has to be stored here instead of in GdkDrawable where it belongs */
+  /* Due to excursions in gdk, this stuff has to be stored here
+     instead of in GdkDrawable where it belongs */
   gint width, height, depth;
   GdkColormap *colormap;
   GdkWindowType window_type;
@@ -202,11 +203,11 @@ void gdk_window_invalidate_region_clear(GdkWindow *window, GdkRegion *region);
 void gdk_window_invalidate_rect_clear(GdkWindow *window, GdkRectangle *rect);
 GdkGC *_gdk_fb_gc_new(GdkDrawable *drawable, GdkGCValues *values, GdkGCValuesMask values_mask);
 
-GdkImage*_gdk_fb_get_image (GdkWindow *window,
-			    gint       x,
-			    gint       y,
-			    gint       width,
-			    gint       height);
+GdkImage*_gdk_fb_get_image (GdkDrawable *drawable,
+			    gint         x,
+			    gint         y,
+			    gint         width,
+			    gint         height);
   
 void gdk_fb_drawable_clear (GdkDrawable *drawable);
 void gdk_fb_draw_drawable  (GdkDrawable    *drawable,
