@@ -1,3 +1,11 @@
+2002-03-22  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/win32/gdkgc-win32.c (gdk_win32_gc_set_dashes): Backport from
+	HEAD: Don't clear all of the pen_style, just the PS_STYLE_MASK.
+	Fixes at least the special case of one-pixel wide one-pixel on-off
+	dotted lines, for instance as in ctrees. To fully implement
+	generic X11 style dashed lines a major rewrite would be needed.
+
 2002-03-20  Tor Lillqvist  <tml@iki.fi>
 
 	* gdk/win32/gdkselection-win32.c (gdk_selection_convert): Don't

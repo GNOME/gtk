@@ -637,7 +637,8 @@ gdk_win32_gc_set_dashes (GdkGC *gc,
       return;
     }
   
-  /* data->pen_style = PS_COSMETIC; ??? */
+  data->pen_style &= ~(PS_STYLE_MASK);
+
   if (2 == n)
     {
       if ((dash_list[0] == dash_list[1]) && (dash_list[0] > 2))
