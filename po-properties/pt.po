@@ -1,15 +1,15 @@
-# gtk+'s Portuguese Translation
-# Copyright (C) 2001, 2004 gtk+
-# Distributed under the same licence as the gtk+ package
-# Duarte Loreto <happyguy_pt@hotmail.com>, 2002, 2004
+# gtk+-properties's Portuguese Translation
+# Copyright © 2001, 2004 gtk+
+# Distributed under the same licence as the gtk+-properties package
+# Duarte Loreto <happyguy_pt@hotmail.com>, 2002, 2004.
 # Nuno Ferreira <nmrf@rnl.ist.utl.pt>, 1999.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: 2.6\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: Duarte Loreto <happyguy_pt@hotmail.com>\n"
 "POT-Creation-Date: 2004-01-22 18:01-0500\n"
-"PO-Revision-Date: 2004-01-11 01:35+0000\n"
+"PO-Revision-Date: 2004-02-01 16:55+0000\n"
 "Last-Translator: Duarte Loreto <happyguy_pt@hotmail.com>\n"
 "Language-Team: Portuguese <gnome_pt@yahoogroups.com>\n"
 "MIME-Version: 1.0\n"
@@ -215,29 +215,28 @@ msgid "Whether the action is visible."
 msgstr "Se a acção está ou não visível."
 
 #: gtk/gtkaction.c:271
-#, fuzzy
 msgid "Action Group"
-msgstr "Acção"
+msgstr "Grupo de Acção"
 
 #: gtk/gtkaction.c:272
 msgid ""
 "The GtkActionGroup this GtkAction is associated with, or NULL (for internal "
 "use)."
 msgstr ""
+"O GtkActionGroup a que este GtkAction está associado, ou NULL (para utilização "
+"interna)."
 
 #: gtk/gtkactiongroup.c:134
 msgid "A name for the action group."
 msgstr "Um nome para o grupo da acção."
 
 #: gtk/gtkactiongroup.c:142
-#, fuzzy
 msgid "Whether the action group is enabled."
-msgstr "Se a acção está ou não activa."
+msgstr "Se o grupo de acção está ou não activo."
 
 #: gtk/gtkactiongroup.c:149
-#, fuzzy
 msgid "Whether the action group is visible."
-msgstr "Se a acção está ou não visível."
+msgstr "Se o grupo de acção está ou não visível."
 
 #: gtk/gtkalignment.c:116
 msgid "Horizontal alignment"
@@ -2608,9 +2607,8 @@ msgid "Group"
 msgstr "Grupo"
 
 #: gtk/gtkradioaction.c:156
-#, fuzzy
 msgid "The radio action whose group this action belongs."
-msgstr "O botão exclusivo a cujo grupo este widget pertence."
+msgstr "O botão exclusivo a cujo grupo esta acção pertence."
 
 #: gtk/gtkradiobutton.c:110
 msgid "The radio button whose group this widget belongs."
