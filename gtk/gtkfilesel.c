@@ -1041,7 +1041,15 @@ gtk_file_selection_update_history_menu (GtkFileSelection *fs,
 	  
 	  callback_arg = g_new (HistoryCallbackArg, 1);
 	  callback_arg->menu_item = menu_item;
-	  callback_arg->directory = directory;
+	  
+	  /* since the autocompletion gets confused if you don't 
+	   * supply a trailing '/' on a dir entry, set the full
+	   * (current) path to "" which just refreshes the filesel */
+	  if (dir_len == i) {
+	    callback_arg->directory = g_strdup ("");
+	  } else {
+	    callback_arg->directory = directory;
+	  }
 	  
 	  fs->history_list = g_list_append (fs->history_list, callback_arg);
 	  
