@@ -33,6 +33,9 @@ static void gtk_cell_renderer_pixbuf_init       (GtkCellRendererPixbuf      *cel
 static void gtk_cell_renderer_pixbuf_class_init (GtkCellRendererPixbufClass *class);
 static void gtk_cell_renderer_pixbuf_get_size   (GtkCellRenderer            *cell,
 						 GtkWidget                  *widget,
+						 GdkRectangle               *rectangle,
+						 gint                       *x_offset,
+						 gint                       *y_offset,
 						 gint                       *width,
 						 gint                       *height);
 static void gtk_cell_renderer_pixbuf_render     (GtkCellRenderer            *cell,
@@ -172,18 +175,47 @@ gtk_cell_renderer_pixbuf_new (void)
 static void
 gtk_cell_renderer_pixbuf_get_size (GtkCellRenderer *cell,
 				   GtkWidget       *widget,
+				   GdkRectangle    *cell_area,
+				   gint            *x_offset,
+				   gint            *y_offset,
 				   gint            *width,
 				   gint            *height)
 {
   GtkCellRendererPixbuf *cellpixbuf = (GtkCellRendererPixbuf *) cell;
+  GdkPixbuf *pixbuf;
+  gint calc_width;
+  gint calc_height;
+
+  pixbuf = cellpixbuf->pixbuf;
+
+  calc_width = (gint) GTK_CELL_RENDERER (cellpixbuf)->xpad * 2 +
+    (cellpixbuf->pixbuf ? gdk_pixbuf_get_width (cellpixbuf->pixbuf) : 0);
   
-  if (width)
-    *width = (gint) GTK_CELL_RENDERER (cellpixbuf)->xpad * 2 +
-      (cellpixbuf->pixbuf ? gdk_pixbuf_get_width (cellpixbuf->pixbuf) : 0);
+  calc_height = (gint) GTK_CELL_RENDERER (cellpixbuf)->ypad * 2 +
+    (cellpixbuf->pixbuf ? gdk_pixbuf_get_height (cellpixbuf->pixbuf) : 0);
+  
+  if (x_offset) *x_offset = 0;
+  if (y_offset) *y_offset = 0;
+
+  if (cell_area && pixbuf)
+    {
+      if (x_offset)
+	{
+	  *x_offset = GTK_CELL_RENDERER (cellpixbuf)->xalign * (cell_area->width - calc_width - (2 * GTK_CELL_RENDERER (cellpixbuf)->xpad));
+	  *x_offset = MAX (*x_offset, 0) + GTK_CELL_RENDERER (cellpixbuf)->xpad;
+	}
+      if (y_offset)
+	{
+	  *y_offset = GTK_CELL_RENDERER (cellpixbuf)->yalign * (cell_area->height - calc_height - (2 * GTK_CELL_RENDERER (cellpixbuf)->ypad));
+	  *y_offset = MAX (*y_offset, 0) + GTK_CELL_RENDERER (cellpixbuf)->ypad;
+	}
+    }
+
+  if (calc_width)
+    *width = calc_width;
   
   if (height)
-    *height = (gint) GTK_CELL_RENDERER (cellpixbuf)->ypad * 2 +
-      (cellpixbuf->pixbuf ? gdk_pixbuf_get_height (cellpixbuf->pixbuf) : 0);
+    *height = calc_height;
 }
 
 static void
@@ -200,8 +232,6 @@ gtk_cell_renderer_pixbuf_render (GtkCellRenderer    *cell,
   GdkPixbuf *pixbuf;
   guchar *pixels;
   gint rowstride;
-  gint real_xoffset;
-  gint real_yoffset;
   GdkRectangle pix_rect;
   GdkRectangle draw_rect;
 
@@ -213,15 +243,13 @@ gtk_cell_renderer_pixbuf_render (GtkCellRenderer    *cell,
   rowstride = gdk_pixbuf_get_rowstride (pixbuf);
   pixels = gdk_pixbuf_get_pixels (pixbuf);
 
-  real_xoffset = GTK_CELL_RENDERER (cellpixbuf)->xalign * (cell_area->width - gdk_pixbuf_get_width (pixbuf) - (2 * GTK_CELL_RENDERER (cellpixbuf)->xpad));
-  real_xoffset = MAX (real_xoffset, 0) + GTK_CELL_RENDERER (cellpixbuf)->xpad;
-  real_yoffset = GTK_CELL_RENDERER (cellpixbuf)->yalign * (cell_area->height - gdk_pixbuf_get_height (pixbuf) - (2 * GTK_CELL_RENDERER (cellpixbuf)->ypad));
-  real_yoffset = MAX (real_yoffset, 0) + GTK_CELL_RENDERER (cellpixbuf)->ypad;
-
-  pix_rect.x = cell_area->x + real_xoffset;
-  pix_rect.y = cell_area->y + real_yoffset;
-  pix_rect.width = gdk_pixbuf_get_width (pixbuf);
-  pix_rect.height = gdk_pixbuf_get_height (pixbuf);
+  gtk_cell_renderer_pixbuf_get_size (cell, widget, cell_area,
+				     &pix_rect.x,
+				     &pix_rect.x,
+				     &pix_rect.width,
+				     &pix_rect.height);
+  pix_rect.x += cell_area->x;
+  pix_rect.y += cell_area->y;
 
   if (gdk_rectangle_intersect (cell_area, &pix_rect, &draw_rect))
     gdk_pixbuf_render_to_drawable_alpha (pixbuf,

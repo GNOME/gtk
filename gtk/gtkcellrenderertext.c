@@ -35,6 +35,9 @@ static void gtk_cell_renderer_text_set_property  (GObject                  *obje
 						  GParamSpec               *pspec);
 static void gtk_cell_renderer_text_get_size   (GtkCellRenderer          *cell,
 					       GtkWidget                *widget,
+					       GdkRectangle             *cell_area,
+					       gint                     *x_offset,
+					       gint                     *y_offset,
 					       gint                     *width,
 					       gint                     *height);
 static void gtk_cell_renderer_text_render     (GtkCellRenderer          *cell,
@@ -1048,6 +1051,9 @@ get_layout (GtkCellRendererText *celltext,
 static void
 gtk_cell_renderer_text_get_size (GtkCellRenderer *cell,
 				 GtkWidget       *widget,
+				 GdkRectangle    *cell_area,
+				 gint            *x_offset,
+				 gint            *y_offset,
 				 gint            *width,
 				 gint            *height)
 {
@@ -1056,7 +1062,6 @@ gtk_cell_renderer_text_get_size (GtkCellRenderer *cell,
   PangoLayout *layout;
 
   layout = get_layout (celltext, widget, FALSE, 0);
-  
   pango_layout_get_pixel_extents (layout, NULL, &rect);
 
   if (width)
@@ -1064,6 +1069,20 @@ gtk_cell_renderer_text_get_size (GtkCellRenderer *cell,
 
   if (height)
     *height = GTK_CELL_RENDERER (celltext)->ypad * 2 + rect.height;
+
+  if (cell_area)
+    {
+      if (x_offset)
+	{
+	  *x_offset = cell->xalign * (cell_area->width - rect.width - (2 * cell->xpad));
+	  *x_offset = MAX (*x_offset, 0) + cell->xpad;
+	}
+      if (y_offset)
+	{
+	  *y_offset = cell->yalign * (cell_area->height - rect.height - (2 * cell->ypad));
+	  *y_offset = MAX (*y_offset, 0) + cell->ypad;
+	}
+    }
 
   g_object_unref (G_OBJECT (layout));
 }
@@ -1079,21 +1098,14 @@ gtk_cell_renderer_text_render (GtkCellRenderer    *cell,
 
 {
   GtkCellRendererText *celltext = (GtkCellRendererText *) cell;
-  PangoRectangle rect;
   PangoLayout *layout;
   GtkStateType state;
-  
-  gint real_xoffset;
-  gint real_yoffset;
+  gint x_offset;
+  gint y_offset;
 
   layout = get_layout (celltext, widget, TRUE, flags);
 
-  pango_layout_get_pixel_extents (layout, NULL, &rect);
-
-  real_xoffset = cell->xalign * (cell_area->width - rect.width - (2 * cell->xpad));
-  real_xoffset = MAX (real_xoffset, 0) + cell->xpad;
-  real_yoffset = cell->yalign * (cell_area->height - rect.height - (2 * cell->ypad));
-  real_yoffset = MAX (real_yoffset, 0) + cell->ypad;
+  gtk_cell_renderer_text_get_size (cell, widget, cell_area, &x_offset, &y_offset, NULL, NULL);
 
   if ((flags & GTK_CELL_RENDERER_SELECTED) == GTK_CELL_RENDERER_SELECTED)
     state = GTK_STATE_SELECTED;
@@ -1130,8 +1142,8 @@ gtk_cell_renderer_text_render (GtkCellRenderer    *cell,
                     cell_area,
                     widget,
                     "cellrenderertext",
-                    cell_area->x + real_xoffset,
-                    cell_area->y + real_yoffset,
+                    cell_area->x + x_offset,
+                    cell_area->y + y_offset,
                     layout);
 
   g_object_unref (G_OBJECT (layout));

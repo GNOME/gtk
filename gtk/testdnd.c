@@ -303,6 +303,7 @@ target_drag_motion	   (GtkWidget	       *widget,
 			    guint               time)
 {
   GtkWidget *source_widget;
+  GList *tmp_list;
 
   if (!have_drag)
     {
@@ -314,6 +315,16 @@ target_drag_motion	   (GtkWidget	       *widget,
   g_print ("motion, source %s\n", source_widget ?
 	   GTK_OBJECT_TYPE_NAME (source_widget) :
 	   "NULL");
+
+  tmp_list = context->targets;
+  while (tmp_list)
+    {
+      char *name = gdk_atom_name (GPOINTER_TO_UINT (tmp_list->data));
+      g_print ("%s\n", name);
+      g_free (name);
+      
+      tmp_list = tmp_list->next;
+    }
 
   gdk_drag_status (context, context->suggested_action, time);
   return TRUE;

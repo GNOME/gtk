@@ -3332,6 +3332,19 @@ gtk_default_draw_focus (GtkStyle      *style,
       
       gdk_gc_set_line_attributes (style->black_gc, 1, GDK_LINE_SOLID, 0, 0);
     }
+  else if (detail && strcmp (detail, "treeview") == 0)
+    {
+      
+      gdk_gc_set_background (style->black_gc, &style->white);
+      gdk_gc_set_line_attributes (style->black_gc, 1, GDK_LINE_DOUBLE_DASH, 0, 0);
+      gdk_gc_set_dashes (style->black_gc, 0, "\4\4", 2);
+      
+      gdk_draw_rectangle (window,
+                          style->black_gc, FALSE,
+                          x, y, width, height);
+      
+      gdk_gc_set_line_attributes (style->black_gc, 1, GDK_LINE_SOLID, 0, 0);
+    }
   else
     {
       gdk_draw_rectangle (window,

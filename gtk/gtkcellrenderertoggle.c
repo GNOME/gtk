@@ -34,6 +34,9 @@ static void gtk_cell_renderer_toggle_init       (GtkCellRendererToggle      *cel
 static void gtk_cell_renderer_toggle_class_init (GtkCellRendererToggleClass *class);
 static void gtk_cell_renderer_toggle_get_size   (GtkCellRenderer            *cell,
 						 GtkWidget                  *widget,
+ 						 GdkRectangle               *cell_area,
+						 gint                       *x_offset,
+						 gint                       *y_offset,
 						 gint                       *width,
 						 gint                       *height);
 static void gtk_cell_renderer_toggle_render     (GtkCellRenderer            *cell,
@@ -100,6 +103,7 @@ gtk_cell_renderer_toggle_init (GtkCellRendererToggle *celltoggle)
 {
   celltoggle->active = FALSE;
   celltoggle->radio = FALSE;
+  GTK_CELL_RENDERER (celltoggle)->can_activate = TRUE;
   GTK_CELL_RENDERER (celltoggle)->xpad = 2;
   GTK_CELL_RENDERER (celltoggle)->ypad = 2;
 }
@@ -215,14 +219,37 @@ gtk_cell_renderer_toggle_new (void)
 static void
 gtk_cell_renderer_toggle_get_size (GtkCellRenderer *cell,
 				   GtkWidget       *widget,
+				   GdkRectangle    *cell_area,
+				   gint            *x_offset,
+				   gint            *y_offset,
 				   gint            *width,
 				   gint            *height)
 {
+  gint calc_width;
+  gint calc_height;
+
+  calc_width = (gint) cell->xpad * 2 + TOGGLE_WIDTH;
+  calc_height = (gint) cell->ypad * 2 + TOGGLE_WIDTH;
+
   if (width)
-    *width = (gint) cell->xpad * 2 + TOGGLE_WIDTH;
+    *width = calc_width;
 
   if (height)
-    *height = (gint) cell->ypad * 2 + TOGGLE_WIDTH;
+    *height = calc_height;
+
+  if (cell_area)
+    {
+      if (x_offset)
+	{
+	  *x_offset = cell->xalign * (cell_area->width - calc_width - (2 * cell->xpad));
+	  *x_offset = MAX (*x_offset, 0) + cell->xpad;
+	}
+      if (y_offset)
+	{
+	  *y_offset = cell->yalign * (cell_area->height - calc_height - (2 * cell->ypad));
+	  *y_offset = MAX (*y_offset, 0) + cell->ypad;
+	}
+    }
 }
 
 static void
@@ -236,25 +263,26 @@ gtk_cell_renderer_toggle_render (GtkCellRenderer *cell,
 {
   GtkCellRendererToggle *celltoggle = (GtkCellRendererToggle *) cell;
   gint width, height;
-  gint real_xoffset, real_yoffset;
+  gint x_offset, y_offset;
   GtkShadowType shadow;
   GtkStateType state;
   
   width = MIN (TOGGLE_WIDTH, cell_area->width - cell->xpad * 2);
   height = MIN (TOGGLE_WIDTH, cell_area->height - cell->ypad * 2);
 
+  gtk_cell_renderer_toggle_get_size (cell, widget, cell_area,
+				     &x_offset, &y_offset,
+				     &width, &height);
+
   if (width <= 0 || height <= 0)
     return;
-
-  real_xoffset = cell->xalign * (cell_area->width - width - (2 * cell->xpad));
-  real_xoffset = MAX (real_xoffset, 0) + cell->xpad;
-  real_yoffset = cell->yalign * (cell_area->height - height - (2 * cell->ypad));
-  real_yoffset = MAX (real_yoffset, 0) + cell->ypad;
 
   shadow = celltoggle->active ? GTK_SHADOW_IN : GTK_SHADOW_OUT;
 
   if ((flags & GTK_CELL_RENDERER_SELECTED) == GTK_CELL_RENDERER_SELECTED)
     state = GTK_STATE_SELECTED;
+  else if (! cell->can_activate)
+    state = GTK_STATE_INSENSITIVE;
   else
     state = GTK_STATE_NORMAL;
   
@@ -264,8 +292,8 @@ gtk_cell_renderer_toggle_render (GtkCellRenderer *cell,
                         window,
                         state, shadow,
                         cell_area, widget, "cellradio",
-                        cell_area->x + real_xoffset,
-                        cell_area->y + real_yoffset,
+                        cell_area->x + x_offset,
+                        cell_area->y + y_offset,
                         width, height);
     }
   else
@@ -274,8 +302,8 @@ gtk_cell_renderer_toggle_render (GtkCellRenderer *cell,
                        window,
                        state, shadow,
                        cell_area, widget, "cellcheck",
-                       cell_area->x + real_xoffset,
-                       cell_area->y + real_yoffset,
+                       cell_area->x + x_offset,
+                       cell_area->y + y_offset,
                        width, height);
     }
 }

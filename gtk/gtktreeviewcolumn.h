@@ -118,7 +118,7 @@ void               gtk_tree_view_column_set_visible         (GtkTreeViewColumn  
 							     gboolean               visible);
 gboolean           gtk_tree_view_column_get_visible         (GtkTreeViewColumn     *tree_column);
 void               gtk_tree_view_column_set_sizing          (GtkTreeViewColumn     *tree_column,
-                                                             GtkTreeViewColumnSizing  type);
+                                                             GtkTreeViewColumnSizing type);
 gint               gtk_tree_view_column_get_sizing          (GtkTreeViewColumn     *tree_column);
 gint               gtk_tree_view_column_get_width           (GtkTreeViewColumn     *tree_column);
 void               gtk_tree_view_column_set_width           (GtkTreeViewColumn     *tree_column,
@@ -143,7 +143,7 @@ void                  gtk_tree_view_column_set_clickable      (GtkTreeViewColumn
 gboolean              gtk_tree_view_column_get_clickable      (GtkTreeViewColumn *tree_column);
 void                  gtk_tree_view_column_set_widget         (GtkTreeViewColumn *tree_column,
                                                                GtkWidget         *widget);
-GtkWidget         *   gtk_tree_view_column_get_widget         (GtkTreeViewColumn *tree_column);
+GtkWidget            *gtk_tree_view_column_get_widget         (GtkTreeViewColumn *tree_column);
 void                  gtk_tree_view_column_set_alignment      (GtkTreeViewColumn *tree_column,
                                                                gfloat             xalign);
 gfloat                gtk_tree_view_column_get_alignment      (GtkTreeViewColumn *tree_column);
@@ -163,3 +163,4 @@ GtkTreeSortOrder      gtk_tree_view_column_get_sort_order     (GtkTreeViewColumn
 #endif /* __cplusplus */
 
 #endif /* __GTK_TREE_VIEW_COLUMN_H__ */
+

@@ -34,6 +34,7 @@ static void gtk_cell_renderer_set_property  (GObject              *object,
 
 enum {
   PROP_ZERO,
+  PROP_CAN_ACTIVATE,
   PROP_VISIBLE,
   PROP_XALIGN,
   PROP_YALIGN,
@@ -75,6 +76,7 @@ gtk_cell_renderer_init (GtkCellRenderer *cell)
   gtk_object_ref (GTK_OBJECT (cell));
   gtk_object_sink (GTK_OBJECT (cell));
 
+  cell->can_activate = FALSE;
   cell->visible = TRUE;
   cell->xalign = 0.5;
   cell->yalign = 0.5;
@@ -94,6 +96,15 @@ gtk_cell_renderer_class_init (GtkCellRendererClass *class)
   class->get_size = NULL;
 
   g_object_class_install_property (object_class,
+				   PROP_CAN_ACTIVATE,
+				   g_param_spec_boolean ("can_activate",
+							 _("can_activate"),
+							 _("Cell can get activate events."),
+							 FALSE,
+							 G_PARAM_READABLE |
+							 G_PARAM_WRITABLE));
+
+  g_object_class_install_property (object_class,
 				   PROP_VISIBLE,
 				   g_param_spec_boolean ("visible",
 							 _("visible"),
@@ -101,7 +112,7 @@ gtk_cell_renderer_class_init (GtkCellRendererClass *class)
 							 TRUE,
 							 G_PARAM_READABLE |
 							 G_PARAM_WRITABLE));
-  
+
   g_object_class_install_property (object_class,
 				   PROP_XALIGN,
 				   g_param_spec_float ("xalign",
@@ -112,7 +123,7 @@ gtk_cell_renderer_class_init (GtkCellRendererClass *class)
 						       0.0,
 						       G_PARAM_READABLE |
 						       G_PARAM_WRITABLE));
-  
+
   g_object_class_install_property (object_class,
 				   PROP_YALIGN,
 				   g_param_spec_float ("yalign",
@@ -123,7 +134,7 @@ gtk_cell_renderer_class_init (GtkCellRendererClass *class)
 						       0.5,
 						       G_PARAM_READABLE |
 						       G_PARAM_WRITABLE));
-  
+
   g_object_class_install_property (object_class,
 				   PROP_XPAD,
 				   g_param_spec_uint ("xpad",
@@ -134,7 +145,7 @@ gtk_cell_renderer_class_init (GtkCellRendererClass *class)
 						      2,
 						      G_PARAM_READABLE |
 						      G_PARAM_WRITABLE));
-  
+
   g_object_class_install_property (object_class,
 				   PROP_YPAD,
 				   g_param_spec_uint ("ypad",
@@ -157,6 +168,9 @@ gtk_cell_renderer_get_property (GObject     *object,
 
   switch (param_id)
     {
+    case PROP_CAN_ACTIVATE:
+      g_value_set_boolean (value, cell->can_activate);
+      break;
     case PROP_VISIBLE:
       g_value_set_boolean (value, cell->visible);
       break;
@@ -189,6 +203,10 @@ gtk_cell_renderer_set_property (GObject      *object,
 
   switch (param_id)
     {
+    case PROP_CAN_ACTIVATE:
+      cell->can_activate = g_value_get_boolean (value);
+      g_object_notify (object, "can_activate");
+      break;
     case PROP_VISIBLE:
       cell->visible = g_value_get_boolean (value);
       g_object_notify (object, "visible");
@@ -219,23 +237,30 @@ gtk_cell_renderer_set_property (GObject      *object,
  * gtk_cell_renderer_get_size:
  * @cell: a #GtkCellRenderer
  * @widget: the widget the renderer is rendering to
+ * @cell_area: The area a cell will be allocated, or %NULL
+ * @x_offset: location to return x offset of cell relative to @cell_area, or %NULL
+ * @y_offset: location to return y offset of cell relative to @cell_area, or %NULL
  * @width: location to return width needed to render a cell, or %NULL
  * @height: location to return height needed to render a cell, or %NULL
- * 
- * Obtains the width and height needed to render the cell. Used by
- * view widgets to determine the appropriate size for the cell_area
- * passed to gtk_cell_renderer_render().
+ *
+ * Obtains the width and height needed to render the cell. Used by view widgets
+ * to determine the appropriate size for the cell_area passed to
+ * gtk_cell_renderer_render().  If @cell_area is not %NULL, fills in the x and y
+ * offsets (if set) of the cell relative to this location.
  **/
 void
 gtk_cell_renderer_get_size (GtkCellRenderer *cell,
-			    GtkWidget *widget,
-			    gint      *width,
-			    gint      *height)
+			    GtkWidget       *widget,
+			    GdkRectangle    *cell_area,
+			    gint            *x_offset,
+			    gint            *y_offset,
+			    gint            *width,
+			    gint            *height)
 {
   g_return_if_fail (GTK_IS_CELL_RENDERER (cell));
   g_return_if_fail (GTK_CELL_RENDERER_GET_CLASS (cell)->get_size != NULL);
 
-  GTK_CELL_RENDERER_GET_CLASS (cell)->get_size (cell, widget, width, height);
+  GTK_CELL_RENDERER_GET_CLASS (cell)->get_size (cell, widget, cell_area, x_offset, y_offset, width, height);
 }
 
 /**
@@ -257,7 +282,7 @@ gtk_cell_renderer_get_size (GtkCellRenderer *cell,
  * @background_area rectangles for all cells tile to cover the entire
  * @window. Cell renderers can use the @background_area to draw custom expanders, for
  * example. @expose_area is a clip rectangle.
- * 
+ *
  **/
 void
 gtk_cell_renderer_render (GtkCellRenderer     *cell,
@@ -294,11 +319,11 @@ gtk_cell_renderer_render (GtkCellRenderer     *cell,
  * @background_area: background area as passed to gtk_cell_renderer_render()
  * @cell_area: cell area as passed to gtk_cell_renderer_render()
  * @flags: render flags
- * 
+ *
  * Passes an event to the cell renderer for possible processing.  Some
  * cell renderers may use events; for example, #GtkCellRendererToggle
  * toggles when it gets a mouse click.
- * 
+ *
  * Return value: %TRUE if the event was consumed/handled
  **/
 gint

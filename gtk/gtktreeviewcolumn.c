@@ -1504,6 +1504,8 @@ gtk_tree_view_column_set_sort_indicator (GtkTreeViewColumn     *tree_column,
       update_button_contents (tree_column);
       
       g_object_notify (G_OBJECT (tree_column), "sort_indicator");
+      if (GTK_WIDGET_REALIZED (tree_column->tree_view))
+	gtk_widget_queue_draw (tree_column->tree_view);
     }
 }
 

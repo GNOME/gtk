@@ -1,3 +1,16 @@
+Thu Mar 15 18:22:44 2001  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtkcellrenderer.h: Changed prototype to allow for getting
+	the location of the cell relative to its area.
+	* gtk/gtkcell*: modified for above change
+	* gtk/gtktreeview.c: modified for above change.
+
+Wed Mar 14 13:58:32 2001  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtktreeview.c (gtk_tree_view_set_model): Ref the model.
+	 (gtk_tree_view_finalize): actually unref the model.  Thanks to
+	Jamie Strachan <frostfreek@yahoo.com> for noticing this error.
+
 2001-03-14  Havoc Pennington  <hp@redhat.com>
 
         * gtk/gtkdata.h, gtk/gtkdata.c: Delete.
@@ -17,7 +30,7 @@
 
 	* configure.in: handle case where X render exists, but Pango lacks
 	Xft support.
-	
+
 2001-03-15 Alexander Larsson  <alexl@redhat.com>
 
 	* gtk/gtktoolbar.[ch]:

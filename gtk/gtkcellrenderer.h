@@ -51,6 +51,7 @@ struct _GtkCellRenderer
 {
   GtkObject parent;
 
+  gboolean can_activate;
   gboolean visible;
 
   gfloat xalign;
@@ -67,6 +68,9 @@ struct _GtkCellRendererClass
   /* vtable - not signals */
   void (* get_size) (GtkCellRenderer *cell,
 		     GtkWidget       *widget,
+		     GdkRectangle    *cell_area,
+		     gint            *x_offset,
+		     gint            *y_offset,
 		     gint            *width,
 		     gint            *height);
 
@@ -90,6 +94,9 @@ struct _GtkCellRendererClass
 GtkType gtk_cell_renderer_get_type (void);
 void    gtk_cell_renderer_get_size (GtkCellRenderer      *cell,
                                     GtkWidget            *widget,
+				    GdkRectangle         *cell_area,
+                                    gint                 *x_offset,
+                                    gint                 *y_offset,
                                     gint                 *width,
                                     gint                 *height);
 void    gtk_cell_renderer_render   (GtkCellRenderer      *cell,

@@ -44,6 +44,9 @@ static void gtk_cell_renderer_text_pixbuf_init       (GtkCellRendererTextPixbuf 
 static void gtk_cell_renderer_text_pixbuf_class_init (GtkCellRendererTextPixbufClass *class);
 static void gtk_cell_renderer_text_pixbuf_get_size   (GtkCellRenderer                *cell,
 						      GtkWidget                      *view,
+						      GdkRectangle                   *cell_area,
+						      gint                           *x_offset,
+						      gint                           *y_offset,
 						      gint                           *width,
 						      gint                           *height);
 static void gtk_cell_renderer_text_pixbuf_render     (GtkCellRenderer                *cell,
@@ -285,6 +288,9 @@ gtk_cell_renderer_text_pixbuf_new (void)
 
 typedef void (* CellSizeFunc) (GtkCellRenderer    *cell,
 			       GtkWidget          *widget,
+			       GdkRectangle       *rectangle,
+			       gint               *x_offset,
+			       gint               *y_offset,
 			       gint               *width,
 			       gint               *height);
 typedef void (* CellRenderFunc) (GtkCellRenderer *cell,
@@ -298,6 +304,9 @@ typedef void (* CellRenderFunc) (GtkCellRenderer *cell,
 static void
 gtk_cell_renderer_text_pixbuf_get_size (GtkCellRenderer *cell,
 					GtkWidget       *widget,
+					GdkRectangle    *cell_area,
+					gint            *x_offset,
+					gint            *y_offset,
 					gint            *width,
 					gint            *height)
 {
@@ -306,26 +315,44 @@ gtk_cell_renderer_text_pixbuf_get_size (GtkCellRenderer *cell,
   gint pixbuf_height;
   gint text_width;
   gint text_height;
-
-  (* GTK_CELL_RENDERER_CLASS (parent_class)->get_size) (cell, widget, &text_width, &text_height);
+  gint calc_width;
+  gint calc_height;
+  
+  (* GTK_CELL_RENDERER_CLASS (parent_class)->get_size) (cell, widget, NULL, NULL, NULL, &text_width, &text_height);
   (* GTK_CELL_RENDERER_CLASS (G_OBJECT_GET_CLASS (celltextpixbuf->pixbuf))->get_size) (GTK_CELL_RENDERER (celltextpixbuf->pixbuf),
 										       widget,
+										       NULL, NULL, NULL,
 										       &pixbuf_width,
 										       &pixbuf_height);
   if (celltextpixbuf->pixbuf_pos == GTK_POS_LEFT ||
       celltextpixbuf->pixbuf_pos == GTK_POS_RIGHT)
     {
-      if (width)
-        *width = pixbuf_width + text_width;
-      if (height)
-        *height = MAX (pixbuf_height, text_height);
+      calc_width = pixbuf_width + text_width;
+      calc_height = MAX (pixbuf_height, text_height);
     }
   else
     {
-      if (width)
-        *width = MAX (pixbuf_width, text_width);
-      if (height)
-        *height = pixbuf_height + text_height;
+      calc_width = MAX (pixbuf_width, text_width);
+      calc_height = pixbuf_height + text_height;
+    }
+
+  if (width)
+    *width = calc_width;
+  if (height)
+    *height = calc_height;
+
+  if (cell_area)
+    {
+      if (x_offset)
+	{
+	  *x_offset = cell->xalign * (cell_area->width - calc_width - (2 * cell->xpad));
+	  *x_offset = MAX (*x_offset, 0) + cell->xpad;
+	}
+      if (y_offset)
+	{
+	  *y_offset = cell->yalign * (cell_area->height - calc_height - (2 * cell->ypad));
+	  *y_offset = MAX (*y_offset, 0) + cell->ypad;
+	}
     }
 }
 
@@ -369,7 +396,7 @@ gtk_cell_renderer_text_pixbuf_render (GtkCellRenderer *cell,
       cell2 = GTK_CELL_RENDERER (celltextpixbuf->pixbuf);
     }
 
-  (size_func1) (cell1, widget, &tmp_width, &tmp_height);
+  (size_func1) (cell1, widget, NULL, NULL, NULL, &tmp_width, &tmp_height);
 
   real_cell_area.x = cell_area->x;
   real_cell_area.y = cell_area->y;
