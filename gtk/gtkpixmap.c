@@ -75,7 +75,7 @@ gtk_pixmap_class_init (GtkPixmapClass *class)
 
   object_class = (GtkObjectClass*) class;
   widget_class = (GtkWidgetClass*) class;
-  parent_class = gtk_type_class (gtk_widget_get_type ());
+  parent_class = gtk_type_class (gtk_misc_get_type ());
 
   gobject_class->finalize = gtk_pixmap_finalize;
 

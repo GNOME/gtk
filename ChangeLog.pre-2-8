@@ -1,3 +1,11 @@
+2002-02-07  Havoc Pennington  <hp@pobox.com>
+
+	* gtk/gtkspinbutton.h (struct _GtkSpinButtonClass): add
+	change_value virtual function, to fix build
+
+	* gtk/gtkpixmap.c (gtk_pixmap_class_init): parent_class was 
+	from GtkWidget not GtkMisc. Not that it ever mattered.
+
 Thu Feb  7 19:52:00 2002  Owen Taylor  <otaylor@redhat.com>
 
         * gtk/gtknotebook.[ch]: Add ::move-focus-out signal

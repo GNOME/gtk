@@ -1845,6 +1845,7 @@ a widget changes from un-anchored to anchored or vice-versa.
 </para>
 
 @widget: the object which received the signal.
+@Returns: 
 
 <!-- ##### SIGNAL GtkWidget::property-notify-event ##### -->
 <para>
@@ -1949,6 +1950,7 @@ a widget changes from un-anchored to anchored or vice-versa.
 
 @widget: the object which received the signal.
 @arg1: 
+@Returns: 
 
 <!-- ##### SIGNAL GtkWidget::size-allocate ##### -->
 <para>
