@@ -1,3 +1,10 @@
+2004-04-09  Christian Persch  <chpe@cvs.gnome.org>
+
+	* gtk/gtkuimanager.c: (gtk_ui_manager_insert_action_group),
+	(gtk_ui_manager_remove_action_group): Terminate
+	g_object_[dis]connect() calls with NULL instead of 0.
+	Fixes #138997.
+
 2004-04-09  Guntupalli Karunakar  <karunakar@freedomink.org>
 
         * configure.in: Added "gu" (Gujarati) to ALL_LINGUAS.
