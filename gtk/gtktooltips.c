@@ -206,6 +206,8 @@ gtk_tooltips_destroy (GtkObject *object)
     }
 
   gtk_tooltips_unset_tip_window (tooltips);
+
+  GTK_OBJECT_CLASS (parent_class)->destroy (object);
 }
 
 static void

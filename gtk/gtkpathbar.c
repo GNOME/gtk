@@ -106,6 +106,8 @@ gtk_path_bar_destroy (GtkObject *object)
   path_bar = GTK_PATH_BAR (object);
 
   g_free ((void *) path_bar->path);
+
+  GTK_OBJECT_CLASS (gtk_path_bar_parent_class)->destroy (object);
 }
 
 /* Size requisition:

@@ -1,3 +1,15 @@
+Mon Feb 23 00:38:21 2004  Matthias Clasen  <maclas@gmx.de>
+
+	Fix bug 134982, reported by Morten Welinder:
+	
+	* gtk/gtkpathbar.c (gtk_path_bar_destroy): 
+	* gtk/gtktooltips.c (gtk_tooltips_destroy): 
+	* gtk/gtkinvisible.c (gtk_invisible_destroy): Chain up to the 
+	parent's ::destroy handler.
+	
+	* gdk/gdkdisplay.c (gdk_display_dispose): Chain up to the 
+	parent's ::dispose handler.
+
 Sat Feb 21 19:09:55 2004  Manish Singh  <yosh@gimp.org>
 
 	* gtk/gtksettings.c (gtk_default_substitute): Guard the FC_HINT_STYLE

@@ -146,6 +146,8 @@ gtk_invisible_destroy (GtkObject *object)
       invisible->has_user_ref_count = FALSE;
       g_object_unref (invisible);
     }
+
+  GTK_OBJECT_CLASS (parent_class)->destroy (object);  
 }
 
 /**

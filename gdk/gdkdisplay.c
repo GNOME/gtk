@@ -174,12 +174,14 @@ gdk_display_dispose (GObject *object)
 
   if (gdk_display_get_default() == display)
     gdk_display_manager_set_default_display (gdk_display_manager_get(), NULL);
+
+  G_OBJECT_CLASS (parent_class)->dispose (object);
 }
 
 static void
 gdk_display_finalize (GObject *object)
 {
-  parent_class->finalize (object);
+  G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
 /**
