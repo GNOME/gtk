@@ -9,7 +9,7 @@ Makefile
 Makefile.in
 aclocal.m4
 configure
-gtk-config
+gtk-config-2.0
 config.cache
 ABOUT-NLS
 intl

@@ -1,5 +1,8 @@
 2000-09-05  Sebastian Wilhelmi  <wilhelmi@ira.uka.de>
 
+	* configure.in (use_mmx_asm): Remove conftest* after use along the
+	lines of AC_TRY_COMPILE.	
+	
 	* gtk/gtkrc.c (gtk_rc_parse_file): Use g_path_get_dirname instead
 	of g_dirname, which is deprecated.
 	(gtk_rc_parse_any): Removed calls to

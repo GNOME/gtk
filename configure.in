@@ -852,6 +852,8 @@ if test $use_x86_asm = yes; then
         use_mmx_asm=yes
     fi
 
+    rm -rf conftest*
+
     ac_ext=$save_ac_ext
     if test $use_mmx_asm = yes; then
       AC_DEFINE(USE_MMX)
