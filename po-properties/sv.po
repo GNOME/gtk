@@ -8,14 +8,14 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ properties\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-03-02 17:21-0500\n"
-"PO-Revision-Date: 2004-03-01 22:20+0100\n"
+"POT-Creation-Date: 2004-03-03 00:05+0100\n"
+"PO-Revision-Date: 2004-03-03 00:05+0100\n"
 "Last-Translator: Christian Rose <menthos@menthos.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Report-Msgid-Bugs-To: \n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: gdk-pixbuf/gdk-pixbuf.c:100
@@ -1366,11 +1366,12 @@ msgstr "Det objekt som är aktivt för tillfället"
 
 #: gtk/gtkcombobox.c:477
 msgid "Appears as list"
-msgstr ""
+msgstr "Visas som lista"
 
 #: gtk/gtkcombobox.c:478
 msgid "Whether combobox dropdowns should look like lists rather than menus"
 msgstr ""
+"Huruvida combobox-nedfällningar ska visas som listor istället för menyer"
 
 #: gtk/gtkcomboboxentry.c:109
 msgid "Text Column"
