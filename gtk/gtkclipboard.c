@@ -70,7 +70,6 @@ static void selection_received (GtkWidget        *widget,
 				GtkSelectionData *selection_data,
 				guint             time);
 
-static GSList *clipboards;
 static GSList *clipboard_widget_list = NULL;
 
 enum {
@@ -86,6 +85,12 @@ static GQuark request_contents_key_id = 0;
 static const gchar *clipboards_owned_key = "gtk-clipboards-owned";
 static GQuark clipboards_owned_key_id = 0;
   
+static void free_display_clipboard_list (gpointer data)
+{
+  GSList *clipboards = data;
+  g_slist_foreach (clipboards,  (GFunc)g_free, NULL);
+  g_slist_free (clipboards);
+}
 
 /**
  * gtk_clipboard_get_for_display:
@@ -107,6 +112,7 @@ GtkClipboard *
 gtk_clipboard_get_for_display (GdkDisplay *display, GdkAtom selection)
 {
   GtkClipboard *clipboard = NULL;
+  GSList *clipboards;
   GSList *tmp_list;
 
   g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
@@ -114,7 +120,8 @@ gtk_clipboard_get_for_display (GdkDisplay *display, GdkAtom selection)
   if (selection == GDK_NONE)
     selection = gdk_atom_intern ("CLIPBOARD", FALSE);
 
-  tmp_list = clipboards;
+  tmp_list = clipboards = g_object_get_data (G_OBJECT (display), 
+					     "gtk-clipboard-list");
   while (tmp_list)
     {
       clipboard = tmp_list->data;
@@ -130,6 +137,8 @@ gtk_clipboard_get_for_display (GdkDisplay *display, GdkAtom selection)
       clipboard->selection = selection;
       clipboard->display = display;
       clipboards = g_slist_prepend (clipboards, clipboard);
+      g_object_set_data_full (G_OBJECT (display), "gtk-clipboard-list",
+			      clipboards, free_display_clipboard_list);
     }
   
   return clipboard;
