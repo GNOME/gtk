@@ -155,16 +155,11 @@ gdk_cursor_new_from_pixmap (GdkPixmap *source,
 
   residue = (1 << ((8-(width%8))%8)) - 1;
 
-  source_image = gdk_image_get (source, 0, 0, width, height);
-  mask_image = gdk_image_get (mask, 0, 0, width, height);
+  source_image = GDK_DRAWABLE_WIN32DATA (source)->image;
+  mask_image = GDK_DRAWABLE_WIN32DATA (mask)->image;
 
-  if (source_image->depth != 1 || mask_image->depth != 1)
-    {
-      gdk_image_unref (source_image);
-      gdk_image_unref (mask_image);
-      g_return_val_if_fail (source_image->depth == 1 && mask_image->depth == 1,
-			    NULL);
-    }
+  g_return_val_if_fail (source_image->depth == 1 && mask_image->depth == 1,
+			NULL);
 
 #ifdef G_ENABLE_DEBUG
   if (gdk_debug_flags & GDK_DEBUG_CURSOR)
@@ -276,9 +271,6 @@ gdk_cursor_new_from_pixmap (GdkPixmap *source,
 
   g_free (XORmask);
   g_free (ANDmask);
-
-  gdk_image_unref (source_image);
-  gdk_image_unref (mask_image);
 
   private = g_new (GdkCursorPrivate, 1);
   private->xcursor = xcursor;
