@@ -164,6 +164,7 @@ The type macros <function>GTK_TYPE_MAKE()</function> and <function>GTK_TYPE_SEQN
 <para>
 The following type functions vanished/were replaced:
 <informaltable>
+<tgroup>
 <thead>
 <row><entry>Old Function</entry><entry>Replacement</entry></row>
 </thead>
@@ -182,6 +183,7 @@ The following type functions vanished/were replaced:
 <row><entry><function>gtk_type_register_flags()</function></entry><entry><function>g_flags_register_static()</function></entry></row>
 <row><entry><function>gtk_type_parent_class()</function></entry><entry><functiono>g_type_parent()</function>/<function>g_type_class_peek_parent()</function></entry></row>
 </tbody>
+</tgroup>
 </informaltable>
     Use of <function>g_type_class_ref()</function>/<function>g_type_class_unref()</function> and <function>g_type_class_peek()</function>
     is recommended over usage of <function>gtk_type_class()</function>.
@@ -381,7 +383,7 @@ All drawables including pixmaps used to have a type tag, the
   (from class to instance). This gives themes a bit more flexibility
   and is generally more of the Right Thing. You can trivially fix
   your code with <literal>s/style-&gt;klass-&gt;xthickness/style-&gt;xthickness/g</literal> and 
-  same for <structfield>ythickness</structfield>.
+  same for <literal>ythickness</literal>.
 </para>
 </listitem>
 
@@ -422,6 +424,7 @@ A number of functions in GDK have been renamed for consistency and
   included, but can be disabled by defining <literal>GDK_DISABLE_DEPRECATED</literal>.
 
 <informaltable>
+<tgroup>
 <thead>
 <row><entry>Old function</entry><entry>Defined As</entry></row>
 </thead>
@@ -445,6 +448,7 @@ A number of functions in GDK have been renamed for consistency and
 <row><entry><function>gdk_window_copy_area(drawable,gc,x,y,source_drawable,source_x,source_y,width,height)</function></entry><entry><function>gdk_draw_pixmap(drawable,gc,source_drawable,source_x,source_y,x,y,width,height)</function></entry></row>
 <row><entry><function>gdk_rgb_get_cmap</function></entry><entry><function>gdk_rgb_get_colormap</function></entry></row>
 </tbody>
+</tgroup>
 </informaltable>
   (Note that <function>g_object_ref()</function> and 
   <function>g_object_unref()</function> may be used for all of the above ref 
@@ -744,6 +748,7 @@ The <function>set_child_arg()</function> and <function>get_child_arg()</function
 Other removed <structname>GtkContainer</structname> functions with the replacements:
 
 <informaltable>
+<tgroup>
 <thead>
 <row><entry>Old function</entry><entry>Replacement</entry></row>
 </thead>
@@ -755,6 +760,7 @@ Other removed <structname>GtkContainer</structname> functions with the replaceme
 <row><entry><function>gtk_container_add_with_args</function></entry><entry><function>gtk_container_add_with_properties</function></entry></row>
 <row><entry><function>gtk_container_addv</function></entry><entry><function>gtk_container_add</function>/<function>gtk_container_child_set_property</function></entry></row>
 </tbody>
+</tgroup>
 </informaltable>
 </para>
 </listitem>
@@ -902,20 +908,26 @@ The following variables are no longer exported from GDK. (Other variables
   are also no longer exported; the following are the ones found used
   externally in a large sample of GTK+ code.)
 
-<programlisting>
-   Variable                               Replacement
-   ========                               ===========
-   gdk_null_window_warnings               None - did nothing in GTK+ 1.2.
-   gdk_leader_window                      None - private variable
-   gdk_screen                             gdk_x11_get_default_screen ()
-   gdk_root_window                        gdk_x11_get_default_root_xwindow ()
-   gdk_root_parent                        gdk_get_default_root_window ()
-   gdk_error_code/gdk_error_warnings      gdk_error_trap_push()/pop()
-   gdk_display_name                       gdk_get_display ()
-   gdk_wm_delete_window                   gdk_atom_intern ("WM_DELETE_WINDOW", FALSE)
-   gdk_wm_take_focus                      gdk_atom_intern ("WM_TAKE_FOCUS", FALSE)
-   gdk_wm_protocols                       gdk_atom_intern ("WM_PROTOCOLS", FALSE)
-</programlisting>
+<informaltable>
+<tgroup>
+<thead>
+<row><entry>Variable</entry><entry>Replacement</entry></row>
+</thead>
+<tbody>
+<row><entry><literal>gdk_null_window_warnings</literal></entry><entry>None - did nothing in GTK+ 1.2</entry></row>
+<row><entry><literal>gdk_leader_window</literal></entry><entry>None - private variable</entry></row>
+<row><entry><literal>gdk_screen</literal></entry><entry><function>gdk_x11_get_default_screen ()</function></entry></row>
+<row><entry><literal>gdk_root_window</literal></entry><entry><function>gdk_x11_get_default_root_xwindow ()</function></entry></row>
+<row><entry><literal>gdk_root_parent</literal></entry><entry><function>gdk_get_default_root_window ()</function></entry></row>
+<row><entry><literal>gdk_error_code</literal></entry><entry><function>gdk_error_trap_push ()/pop ()</function>/entry></row>
+<row><entry><literal>gdk_error_warnings</literal></entry><entry><function>gdk_error_trap_push ()/pop ()</function></entry></row>
+<row><entry><literal>gdk_display_name</literal></entry><entry><function>gdk_get_display ()</function></entry></row>
+<row><entry><literal>gdk_wm_delete_window</literal></entry><entry><literal>gdk_atom_intern ("WM_DELETE_WINDOW", FALSE)</literal></entry></row>
+<row><entry><literal>gdk_wm_take_focus</literal></entry><entry><literal>gdk_atom_intern ("WM_TAKE_FOCUS", FALSE)</literal></entry></row>
+<row><entry><literal>gdk_wm_protocols</literal></entry><entry><literal>gdk_atom_intern ("WM_PROTOCOLS", FALSE)</literal></entry></row>
+</tbody>
+</tgroup>
+</informaltable>
 </para>
 </listitem>
    
@@ -1042,8 +1054,8 @@ If you are embedding one of these widgets in a custom widget,
 
 <listitem>
 <para>
-<structname>GtkLayout</structname> no longer has the <literal>xoffset</literal>,
-  <literal>yoffset</literal> fields, which used to store the difference between
+<structname>GtkLayout</structname> no longer has the <structfield>xoffset</structfield>,
+  <structfield>yoffset</structfield> fields, which used to store the difference between
   world and window coordinates for <literal>layout-&gt;bin_window</literal>. 
   These coordinate systems are now always the same.
 </para>

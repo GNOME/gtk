@@ -22,27 +22,69 @@ GtkWidget
 
 <!-- ##### ENUM GtkWidgetFlags ##### -->
 <para>
-
+Tells about certain properties of the widget.
 </para>
 
 @GTK_TOPLEVEL: 
+        widgets without a real parent, as there are #GtkWindows and
+        #GtkMenus have this flag set throughout their lifetime.
+        Toplevel widgets always contain their own #GdkWindow.
 @GTK_NO_WINDOW: 
+        Indicative for a widget that does not provide its own #GdkWindow. 
+        Visible action (e.g. drawing) is performed on the parent's #GdkWindow.
 @GTK_REALIZED: 
+        Set by gtk_widget_realize(), unset by gtk_widget_unrealize().
+        A realized widget has an associated #GdkWindow.
 @GTK_MAPPED: 
+        Set by gtk_widget_map(), unset by gtk_widget_unmap().
+        Only realized widgets can be mapped. It means that gdk_window_show() 
+        has been called on the widgets window(s).
 @GTK_VISIBLE: 
+        Set by gtk_widget_show(), unset by gtk_widget_hide(). Implies that a 
+        widget will be mapped as soon as its parent is mapped.
 @GTK_SENSITIVE: 
+        Set and unset by gtk_widget_set_sensitive().
+        The sensitivity of a widget determines whether it will receive
+        certain events (e.g. button or key presses). One premise for
+        the widgets sensitivity is to have this flag set.
 @GTK_PARENT_SENSITIVE: 
+        Set and unset by gtk_widget_set_sensitive() operations on the
+        parents of the widget.
+        This is the second premise for the widgets sensitivity. Once
+        it has %GTK_SENSITIVE and %GTK_PARENT_SENSITIVE set, its state is
+        effectively sensitive. This is expressed (and can be examined) by
+        the #GTK_WIDGET_IS_SENSITIVE macro.
 @GTK_CAN_FOCUS: 
+        Determines whether a widget is able to handle focus grabs.
 @GTK_HAS_FOCUS: 
+        Set by gtk_widget_grab_focus() for widgets that also
+        have %GTK_CAN_FOCUS set. The flag will be unset once another widget
+        grabs the focus.
 @GTK_CAN_DEFAULT: 
+        The widget is allowed to receive the default action via 
+        gtk_widget_grab_default().
 @GTK_HAS_DEFAULT: 
+        The widget currently is receiving the default action.
 @GTK_HAS_GRAB: 
+        Set by gtk_grab_add(), unset by gtk_grab_remove(). It means that the 
+        widget is in the grab_widgets stack, and will be the preferred one for 
+        receiving events other than ones of cosmetic value.
 @GTK_RC_STYLE: 
+        Indicates that the widgets style has been looked up through the rc 
+        mechanism. It does not imply that the widget actually had a style 
+        defined through the rc mechanism.
 @GTK_COMPOSITE_CHILD: 
+        Indicates that the widget is a composite child of its parent; see 
+        gtk_widget_push_composite_child(), gtk_widget_pop_composite_child(). 
 @GTK_NO_REPARENT: 
 @GTK_APP_PAINTABLE: 
+        Set and unset by gtk_widget_set_app_paintable().
 @GTK_RECEIVES_DEFAULT: 
+        The widget when focused will receive the default action and have 
+        %GTK_HAS_DEFAULT set even if there is a different widget set as default.
 @GTK_DOUBLE_BUFFERED: 
+        Set and unset by gtk_widget_set_double_buffered().
+        Indicates that exposes done on the widget should be double-buffered.
 
 <!-- ##### MACRO GTK_WIDGET_TYPE ##### -->
 <para>
@@ -54,175 +96,185 @@ GtkWidget
 
 <!-- ##### MACRO GTK_WIDGET_STATE ##### -->
 <para>
-
+Returns the current state of the widget, as a #GtkStateType.
 </para>
 
-@wid: 
+@wid: a #GtkWidget.
 
 
 <!-- ##### MACRO GTK_WIDGET_SAVED_STATE ##### -->
 <para>
-
+Returns the saved state of the widget, as a #GtkStateType.
+</para>
+<para>
+The saved state will be restored when a widget gets sensitive
+again, after it has been made insensitive with gtk_widget_set_state()
+or gtk_widget_set_sensitive().
 </para>
 
-@wid: 
+@wid: a #GtkWidget. 
 
 
 <!-- ##### MACRO GTK_WIDGET_FLAGS ##### -->
 <para>
-
+Returns the widget flags from @wid.
 </para>
 
-@wid: 
+@wid: a #GtkWidget. 
 
 
 <!-- ##### MACRO GTK_WIDGET_TOPLEVEL ##### -->
 <para>
-
+Evaluates to %TRUE if the widget is a toplevel widget.
 </para>
 
-@wid: 
+@wid: a #GtkWidget. 
 
 
 <!-- ##### MACRO GTK_WIDGET_NO_WINDOW ##### -->
 <para>
-
+Evaluates to %TRUE if the widget doesn't have an own #GdkWindow.
 </para>
 
-@wid: 
+@wid: a #GtkWidget.
 
 
 <!-- ##### MACRO GTK_WIDGET_REALIZED ##### -->
 <para>
-
+Evaluates to %TRUE if the widget is realized.
 </para>
 
-@wid: 
+@wid: a #GtkWidget.
 
 
 <!-- ##### MACRO GTK_WIDGET_MAPPED ##### -->
 <para>
-
+Evaluates to %TRUE if the widget is mapped.
 </para>
 
-@wid: 
+@wid: a #GtkWidget.
 
 
 <!-- ##### MACRO GTK_WIDGET_VISIBLE ##### -->
 <para>
-
+Evaluates to %TRUE if the widget is visible.
 </para>
 
-@wid: 
+@wid: a #GtkWidget.
 
 
 <!-- ##### MACRO GTK_WIDGET_DRAWABLE ##### -->
 <para>
-
+Evaluates to %TRUE if the widget is mapped and visible.
 </para>
 
-@wid: 
+@wid: a #GtkWidget. 
 
 
 <!-- ##### MACRO GTK_WIDGET_SENSITIVE ##### -->
 <para>
-
+Evaluates to %TRUE if the #GTK_SENSITIVE flag has be set on the widget.
 </para>
 
-@wid: 
+@wid: a #GtkWidget.
 
 
 <!-- ##### MACRO GTK_WIDGET_PARENT_SENSITIVE ##### -->
 <para>
-
+Evaluates to %TRUE if the #GTK_PARENT_SENSITIVE flag has be set on the widget.
 </para>
 
-@wid: 
+@wid: a #GtkWidget.
 
 
 <!-- ##### MACRO GTK_WIDGET_IS_SENSITIVE ##### -->
 <para>
-
+Evaluates to %TRUE if the widget is effectively sensitive.
 </para>
 
-@wid: 
+@wid: a #GtkWidget.
 
 
 <!-- ##### MACRO GTK_WIDGET_CAN_FOCUS ##### -->
 <para>
-
+Evaluates to %TRUE if the widget is able to handle focus grabs.
 </para>
 
-@wid: 
+@wid: a #GtkWidget.
 
 
 <!-- ##### MACRO GTK_WIDGET_HAS_FOCUS ##### -->
 <para>
-
+Evaluates to %TRUE if the widget has grabbed the focus and no other
+widget has done so more recently.
 </para>
 
-@wid: 
+@wid: a #GtkWidget.
 
 
 <!-- ##### MACRO GTK_WIDGET_CAN_DEFAULT ##### -->
 <para>
-
+Evaluates to %TRUE if the widget is allowed to receive the default action 
+via gtk_widget_grab_default(). 
 </para>
 
-@wid: 
+@wid: a #GtkWidget.
 
 
 <!-- ##### MACRO GTK_WIDGET_RECEIVES_DEFAULT ##### -->
 <para>
-
+Evaluates to %TRUE if the widget when focused will receive the default action 
+even if there is a different widget set as default.
 </para>
 
-@wid: 
+@wid: a #GtkWidget.
 
 
 <!-- ##### MACRO GTK_WIDGET_HAS_DEFAULT ##### -->
 <para>
-
+Evaluates to %TRUE if the widget currently is receiving the default action.
 </para>
 
-@wid: 
+@wid: a #GtkWidget.
 
 
 <!-- ##### MACRO GTK_WIDGET_HAS_GRAB ##### -->
 <para>
-
+Evaluates to %TRUE if the widget is in the grab_widgets stack, and will be 
+the preferred one for receiving events other than ones of cosmetic value.
 </para>
 
-@wid: 
+@wid: a #GtkWidget.
 
 
 <!-- ##### MACRO GTK_WIDGET_RC_STYLE ##### -->
 <para>
-
+Evaluates to %TRUE if the widgets style has been looked up through the rc
+mechanism.
 </para>
 
-@wid: 
+@wid: a #GtkWidget.
 
 
 <!-- ##### MACRO GTK_WIDGET_COMPOSITE_CHILD ##### -->
 <para>
-
+Evaluates to %TRUE if the widget is a composite child of its parent.
 </para>
 
-@wid: 
+@wid: a #GtkWidget.
 
 
 <!-- ##### MACRO GTK_WIDGET_APP_PAINTABLE ##### -->
 <para>
-
+Evaluates to %TRUE if the #GTK_APP_PAINTABLE flag has been set on the widget.
 </para>
 
-@wid: 
+@wid: a #GtkWidget.
 
 
 <!-- ##### MACRO GTK_WIDGET_DOUBLE_BUFFERED ##### -->
 <para>
-
+Evaluates to %TRUE if the #GTK_DOUBLE_BUFFERED flag has been set on the widget.
 </para>
 
 @wid: 
@@ -230,20 +282,20 @@ GtkWidget
 
 <!-- ##### MACRO GTK_WIDGET_SET_FLAGS ##### -->
 <para>
-
+Turns on certain widget flags.
 </para>
 
-@wid: 
-@flag: 
+@wid: a #GtkWidget. 
+@flag: the flags to set.
 
 
 <!-- ##### MACRO GTK_WIDGET_UNSET_FLAGS ##### -->
 <para>
-
+Turns off certain widget flags.
 </para>
 
-@wid: 
-@flag: 
+@wid: a #GtkWidget. 
+@flag: the flags to unset.
 
 
 <!-- ##### USER_FUNCTION GtkCallback ##### -->

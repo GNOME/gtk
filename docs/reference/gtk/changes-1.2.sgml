@@ -36,7 +36,7 @@ provided to ease the migration phase.
 
 <listitem>
 <para>
-The <stuctname>GtkTypeInfo</structname> structures used in the 
+The <structname>GtkTypeInfo</structname> structures used in the 
 <function>gtk_*_type_init()</function> functions have
 changed a bit, the old format:
 <programlisting>
@@ -89,6 +89,7 @@ A number of GTK+ functions were renamed. For compatibility,
   Here is the list of the old names and replacements:
 
 <informaltable>
+<tgroup>
 <thead>
 <row><entry>Old</entry><entry>Replacement</entry></row>
 </thead>
@@ -106,6 +107,7 @@ A number of GTK+ functions were renamed. For compatibility,
 <row><entry><function>gtk_toggle_button_set_state</function></entry><entry><function>gtk_toggle_button_set_active</function></entry></row>
 <row><entry><function>gtk_window_position</function></entry><entry><function>gtk_window_set_position</function></entry></row>
 </tbody>
+</tgroup>
 </informaltable> 
 Note that <function>gtk_style_apply_default_background()</function> has an 
       additional argument, <literal>set_bg</literal>. This parameter should be 
@@ -120,6 +122,7 @@ During the development phase of the 1.1.x line of GTK+ certain functions
   were deprecated and later removed. Functions affected are:
 
 <informaltable>
+<tgroup>
 <thead>
 <row><entry>Removed</entry><entry>Replacement</entry></row>
 </thead>
@@ -140,6 +143,7 @@ During the development phase of the 1.1.x line of GTK+ certain functions
 <row><entry><function>gtk_widget_thaw_accelerators</function></entry><entry><function>gtk_widget_unlock_accelerators</function></entry></row>
 <row><entry><function>gtk_widget_freeze_accelerators</function></entry><entry><function>gtk_widget_lock_accelerators</function></entry></row>
 </tbody>
+</tgroup>
 </informaltable>
 
 Note that <function>gtk_entry_adjust_scroll()</function> is no longer needed 
@@ -226,19 +230,25 @@ Support for Themes has been added. In general, this does
   not affect application code, however, a few new rules should
   be observed:
 
-<programlisting>
-   - To set a shape for a window, you must use 
+  <itemizedlist>
+  <listitem>
+  <para>To set a shape for a window, you must use 
      <function>gtk_widget_shape_combine_mask()</function> instead of 
      <function>gdk_window_shape_combine_mask()</function>, or the shape will be
      reset when switching themes.
+  </para>
+  </listitem>
 
-   - It is no longer permissable to draw directly on an arbitrary
+  <listitem>
+  <para>It is no longer permissable to draw directly on an arbitrary
      widget, or to set an arbitrary widget's background pixmap.
      If you need to do that, use a <structname>GtkDrawingArea</structname> or 
      (for a toplevel) a <structname>GtkWindow</structname> where 
      <function>gtk_widget_set_app_paintable()</function>
      has been called.
-</programlisting>
+  </para>
+  </listitem>
+  </itemizedlist>
 </para>
 </listitem>
 
@@ -384,14 +394,10 @@ The thread safety in GTK+ 1.2 is slightly different than
            </para>
          </listitem>
          <listitem>
-           <para>Link with the libraries returned by:
- 
+           <para>Link with the libraries returned by
              <command>gtk-config --libs gthread</command>
-
-             and use the cflags from:
-
-             <command>gtk-config --cflags gthread</command>
-
+             and use the cflags from
+             <command>gtk-config --cflags gthread</command>.
              You can get these <envar>CFLAGS</envar> and <envar>LIBS</envar> by 
              passing <literal>gthread</literal> as the fourth parameter to the 
              <literal>AM_PATH_GTK</literal> <application>automake</application>

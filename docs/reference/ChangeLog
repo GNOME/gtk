@@ -1,3 +1,11 @@
+2002-01-04  Matthias Clasen  <matthiasc@poet.de>
+
+	* gtk/changes-1.2.sgml, gtk/changes-2.0.sgml: SGML fixes.
+
+	* gtk/tmpl/gtkobject.sgml: Document GTK_IN_DESTRUCTION.
+	
+	* gtk/tmpl/gtkwidget.sgml: Additions.
+
 2002-01-04  Havoc Pennington  <hp@pobox.com>
 
 	* gtk/question_index.sgml: add question to help people find

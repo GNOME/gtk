@@ -3642,7 +3642,7 @@ gtk_widget_set_redraw_on_allocate (GtkWidget *widget,
 
 /**
  * gtk_widget_set_sensitive:
- * @widget: a @widget
+ * @widget: a #GtkWidget
  * @sensitive: %TRUE to make the widget sensitive
  *
  * Sets the sensitivity of a widget. A widget is sensitive if the user

@@ -119,13 +119,12 @@ Gets the name of an objects type.
 Tells about the state of the object.
 </para>
 
-@GTK_IN_DESTRUCTION: 
-@GTK_FLOATING: whether the object is orphaned.  Objects that take
-strong hold of an object may gtk_object_sink() it, after obtaining
-there own references, if they believe they are nearly primary
-ownership of the object.
-GTK_CONNECTED: refers to whether are signals are connected to this
-object.
+@GTK_IN_DESTRUCTION: the object is currently being destroyed. This is used 
+  internally by GTK+ to prevent reinvokations during destruction. 
+@GTK_FLOATING: the object is orphaned.  Objects that take strong hold of an 
+  object may gtk_object_sink() it, after obtaining their own references, if 
+  they believe they are nearly primary ownership of the object.
+GTK_CONNECTED: signals are connected to this object.
 @GTK_RESERVED_1: reserved for future use
 @GTK_RESERVED_2: reserved for future use
 
