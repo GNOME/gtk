@@ -510,7 +510,8 @@ gtk_main_iteration_do (gboolean blocking)
 	   *  then we send the event to the original event widget.
 	   *  This is the key to implementing modality.
 	   */
-	  if (gtk_widget_is_ancestor (event_widget, grab_widget))
+	  if (!GTK_WIDGET_EXCLUSIVE_GRAB (grab_widget) &&
+	      gtk_widget_is_ancestor (event_widget, grab_widget))
 	    grab_widget = event_widget;
 	}
       else

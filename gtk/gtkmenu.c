@@ -293,6 +293,7 @@ gtk_menu_popup (GtkMenu             *menu,
 
   gtk_widget_show (GTK_WIDGET (menu));
   gtk_grab_add (GTK_WIDGET (menu));
+  GTK_WIDGET_SET_FLAGS (menu, GTK_EXCLUSIVE_GRAB);
 }
 
 void
@@ -317,6 +318,7 @@ gtk_menu_popdown (GtkMenu *menu)
 
   gtk_widget_hide (GTK_WIDGET (menu));
   gtk_grab_remove (GTK_WIDGET (menu));
+  GTK_WIDGET_SET_FLAGS (menu, GTK_EXCLUSIVE_GRAB);
 }
 
 GtkWidget*

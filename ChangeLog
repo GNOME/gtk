@@ -1,3 +1,23 @@
+Sun Mar 15 13:25:28 1998  Tim Janik  <timj@gimp.org>
+
+	* gtk/gtkwidget.h: added new flag GTK_EXCLUSIVE_GRAB.
+	* gtk/gtkmain.c: allow exclusive grabs.
+
+	* gtk/gtkmenu.c: grab exclusively.
+	* gtk/gtkmenushell.c: grab exclusively.
+
+	* gtk/gtkmenushell.c: don't activate insensitive menu items when
+	in click-selects mode.
+
+	* gtk/gtkmenushell.c (gtk_menu_shell_enter_notify): activate submenus
+	on popup.
+
+	* gtk/gtkmenushell.c (gtk_menu_shell_button_release): don't take
+ 	*additional* button presses into account.
+
+	* gtk/gtkmenushell.c (gtk_menu_shell_button_press): don't take
+	foreign button releases into account.
+
 Sun Mar 15 08:27:06 1998  Tim Janik  <timj@gimp.org>
 
 	* gtk/gtktipsquery.c (gtk_tips_query_set_labels): changed run type

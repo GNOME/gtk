@@ -1924,6 +1924,8 @@ create_menu (int depth)
 	gtk_check_menu_item_set_show_toggle (GTK_CHECK_MENU_ITEM (menuitem), TRUE);
       gtk_menu_append (GTK_MENU (menu), menuitem);
       gtk_widget_show (menuitem);
+      if (i == 3)
+	gtk_widget_set_sensitive (menuitem, FALSE);
 
       gtk_menu_item_set_submenu (GTK_MENU_ITEM (menuitem), create_menu (depth - 1));
     }

@@ -298,11 +298,17 @@ gtk_menu_shell_button_press (GtkWidget      *widget,
       if (!menu_shell->active)
 	{
 	  gtk_grab_add (GTK_WIDGET (widget));
+	  GTK_WIDGET_SET_FLAGS (widget, GTK_EXCLUSIVE_GRAB);
 	  menu_shell->have_grab = TRUE;
+	  menu_shell->active = TRUE;
 	}
-      menu_shell->active = TRUE;
+      menu_shell->button = event->button;
 
       menu_item = gtk_get_event_widget ((GdkEvent*) event);
+
+      if (!GTK_WIDGET_IS_SENSITIVE (menu_item))
+	return TRUE;
+
       if (menu_item && GTK_IS_MENU_ITEM (menu_item) &&
 	  gtk_menu_shell_is_item (menu_shell, menu_item))
 	{
@@ -318,13 +324,6 @@ gtk_menu_shell_button_press (GtkWidget      *widget,
 	      gtk_menu_item_select (GTK_MENU_ITEM (menu_shell->active_menu_item));
 	    }
 	}
-      else if (!menu_shell->button)
-	{
-	  gtk_menu_shell_deactivate (menu_shell);
-	}
-      
-      if (menu_shell->active)
-	menu_shell->button = event->button;
     }
   else
     {
@@ -351,16 +350,19 @@ gtk_menu_shell_button_release (GtkWidget      *widget,
   menu_shell = GTK_MENU_SHELL (widget);
   if (menu_shell->active)
     {
-      if (menu_shell->button && (event->button != menu_shell->button))
+      if (event->button != menu_shell->button)
 	{
-	  menu_shell->button = 0;
 	  if (menu_shell->parent_menu_shell)
 	    gtk_widget_event (menu_shell->parent_menu_shell, (GdkEvent*) event);
 	  return TRUE;
 	}
-
+      
       menu_shell->button = 0;
       menu_item = gtk_get_event_widget ((GdkEvent*) event);
+      
+      if (!GTK_WIDGET_IS_SENSITIVE (menu_item))
+	return TRUE;
+
       deactivate = TRUE;
 
       if ((event->time - menu_shell->activate_time) > MENU_SHELL_TIMEOUT)
@@ -437,6 +439,8 @@ gtk_menu_shell_enter_notify (GtkWidget        *widget,
 	      gtk_menu_item_set_placement (GTK_MENU_ITEM (menu_shell->active_menu_item),
 					   MENU_SHELL_CLASS (menu_shell)->submenu_placement);
 	      gtk_menu_item_select (GTK_MENU_ITEM (menu_shell->active_menu_item));
+	      if (GTK_MENU_ITEM (menu_shell->active_menu_item)->submenu)
+		gtk_widget_activate (menu_shell->active_menu_item);
 	    }
 	}
       else if (menu_shell->parent_menu_shell)
@@ -574,6 +578,7 @@ gtk_real_menu_shell_deactivate (GtkMenuShell *menu_shell)
 	{
 	  menu_shell->have_grab = FALSE;
 	  gtk_grab_remove (GTK_WIDGET (menu_shell));
+	  GTK_WIDGET_UNSET_FLAGS (menu_shell, GTK_EXCLUSIVE_GRAB);
 	}
       if (menu_shell->have_xgrab)
 	{

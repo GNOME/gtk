@@ -48,7 +48,7 @@ enum
   GTK_HAS_DEFAULT	= 1 << 14,
   GTK_HAS_GRAB		= 1 << 15,
   GTK_BASIC		= 1 << 16,
-  GTK_RESERVED_3	= 1 << 17,
+  GTK_EXCLUSIVE_GRAB	= 1 << 17,
   GTK_RC_STYLE		= 1 << 18
 };
 
@@ -86,6 +86,7 @@ enum
 #define GTK_WIDGET_HAS_DEFAULT(wid)	  (GTK_WIDGET_FLAGS (wid) & GTK_HAS_DEFAULT)
 #define GTK_WIDGET_HAS_GRAB(wid)	  (GTK_WIDGET_FLAGS (wid) & GTK_HAS_GRAB)
 #define GTK_WIDGET_BASIC(wid)		  (GTK_WIDGET_FLAGS (wid) & GTK_BASIC)
+#define GTK_WIDGET_EXCLUSIVE_GRAB(wid)	  (GTK_WIDGET_FLAGS (wid) & GTK_EXCLUSIVE_GRAB)
 #define GTK_WIDGET_RC_STYLE(wid)	  (GTK_WIDGET_FLAGS (wid) & GTK_RC_STYLE)
   
 /* Macros for setting and clearing widget flags.
