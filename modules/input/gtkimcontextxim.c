@@ -33,8 +33,13 @@ struct _GtkXIMInfo
   GdkDisplay *display;
   XIM im;
   char *locale;
-  gboolean set_style;
+  XIMStyle preedit_style_setting;
+  XIMStyle status_style_setting;
   XIMStyle style;
+  GtkSettings *settings;
+  gulong status_set;
+  gulong preedit_set;
+  XIMStyles *xim_styles;
 };
 
 /* A context status window; these are kept in the status_windows list. */
@@ -68,6 +73,9 @@ static void     gtk_im_context_xim_get_preedit_string (GtkIMContext          *co
 						       gchar                **str,
 						       PangoAttrList        **attrs,
 						       gint                  *cursor_pos);
+
+static void reinitialize_ic (GtkIMContextXIM *context_xim);
+static void setup_styles (GtkXIMInfo *info);
 
 static void status_window_show     (GtkIMContextXIM *context_xim);
 static void status_window_hide     (GtkIMContextXIM *context_xim);
@@ -154,73 +162,114 @@ choose_better_style (XIMStyle style1, XIMStyle style2)
 }
 
 static void
-setup_im (GtkXIMInfo *info)
+status_style_change (GtkXIMInfo *info)
 {
-  XIMStyles *xim_styles = NULL;
-  XIMValuesList *ic_values = NULL;
-  int i;
-  GtkSettings *settings;
-  unsigned long xim_preedit_style = 0;
-  unsigned long xim_status_style = 0;
-  unsigned long user_preference;
-
-  if (info->set_style)
-    {
-      settings = gtk_settings_get_default ();
-
-      if (settings)
-	{
-	  GtkIMPreeditStyle preedit_style;
-	  GtkIMStatusStyle status_style;
-
-	  g_object_get (settings,
-			"gtk-im-status-style", &status_style,
-			"gtk-im-preedit-style", &preedit_style,
-			NULL);
-	  switch (preedit_style)
-	    {
-	    case GTK_IM_PREEDIT_CALLBACK:
-	      xim_preedit_style = XIMPreeditCallbacks;
-	      break;
-	    case GTK_IM_PREEDIT_NOTHING:
-	      xim_preedit_style = XIMPreeditNothing;
-	      break;
-	    }
-	  switch (status_style)
-	    {
-	    case GTK_IM_STATUS_CALLBACK:
-	      xim_status_style = XIMStatusCallbacks;
-	      break;
-	    case GTK_IM_STATUS_NOTHING:
-	      xim_status_style = XIMStatusNothing;
-	      break;
-	    }
-	}
-      info->set_style = FALSE;
-    }
-
-  XGetIMValues (info->im,
-		XNQueryInputStyle, &xim_styles,
-		XNQueryICValuesList, &ic_values,
+  GtkIMStatusStyle status_style;
+  g_object_get (info->settings,
+		"gtk-im-status-style", &status_style,
 		NULL);
+  if (status_style == GTK_IM_STATUS_CALLBACK)
+    info->status_style_setting = XIMStatusCallbacks;
+  else if (status_style == GTK_IM_STATUS_NOTHING)
+    info->status_style_setting = XIMStatusNothing;
+  else
+    return;
 
-  info->style = 0;
-  user_preference = (xim_status_style | xim_preedit_style);
+  setup_styles (info);
+}
+
+static void
+preedit_style_change (GtkXIMInfo *info)
+{
+  GtkIMPreeditStyle preedit_style;
+  g_object_get (info->settings,
+		"gtk-im-preedit-style", &preedit_style,
+		NULL);
+  if (preedit_style == GTK_IM_PREEDIT_CALLBACK)
+    info->preedit_style_setting = XIMPreeditCallbacks;
+  else if (preedit_style == GTK_IM_PREEDIT_NOTHING)
+    info->preedit_style_setting = XIMPreeditNothing;
+  else
+    return;
+
+  setup_styles (info);
+}
+
+static void
+status_style_change_notify (GtkIMContextXIM *context_xim)
+{
+  GtkXIMInfo *info = context_xim->im_info;
+  status_style_change (info);
+
+  reinitialize_ic (context_xim);
+}
+
+static void
+preedit_style_change_notify (GtkIMContextXIM *context_xim)
+{
+  GtkXIMInfo *info = context_xim->im_info;
+  preedit_style_change (info);
+
+  reinitialize_ic (context_xim);
+}
+
+static void
+setup_styles (GtkXIMInfo *info)
+{
+  int i;
+  unsigned long settings_preference;
+  XIMStyles *xim_styles = info->xim_styles;
+
+  settings_preference = info->status_style_setting|info->preedit_style_setting;
   if (xim_styles)
     {
       for (i = 0; i < xim_styles->count_styles; i++)
 	if ((xim_styles->supported_styles[i] & ALLOWED_MASK) == xim_styles->supported_styles[i])
 	  {
-	    if (user_preference == xim_styles->supported_styles[i])
+	    if (settings_preference == xim_styles->supported_styles[i])
 	      {
-		info->style = user_preference;
+		info->style = settings_preference;
 		break;
 	      }
 	    info->style = choose_better_style (info->style,
 					       xim_styles->supported_styles[i]);
 	  }
     }
+}
 
+static void
+setup_im (GtkXIMInfo *info, GdkWindow *window)
+{
+  XIMValuesList *ic_values = NULL;
+  int i;
+  GdkScreen *screen = gdk_drawable_get_screen (window);
+
+  XGetIMValues (info->im,
+		XNQueryInputStyle, &info->xim_styles,
+		XNQueryICValuesList, &ic_values,
+		NULL);
+
+  info->settings = gtk_settings_get_for_screen (screen);
+
+  if (!g_object_class_find_property (G_OBJECT_GET_CLASS (info->settings),
+				     "gtk-im-preedit-style"))
+    gtk_settings_install_property (g_param_spec_enum ("gtk-im-preedit-style",
+						      _("IM Preedit style"),
+						      _("How to draw the input method preedit string"),
+						      GTK_TYPE_IM_PREEDIT_STYLE,
+						      GTK_IM_PREEDIT_CALLBACK,
+						      G_PARAM_READWRITE));
+
+  if (!g_object_class_find_property (G_OBJECT_GET_CLASS (info->settings),
+				     "gtk-im-status-style"))
+    gtk_settings_install_property (g_param_spec_enum ("gtk-im-status-style",
+						      _("IM Status style"),
+						      _("How to draw the input method statusbar"),
+						      GTK_TYPE_IM_STATUS_STYLE,
+						      GTK_IM_STATUS_CALLBACK,
+						      G_PARAM_READWRITE));
+  status_style_change (info);
+  preedit_style_change (info);
 
 #if 0
   if (ic_values)
@@ -232,19 +281,18 @@ setup_im (GtkXIMInfo *info)
     }
 #endif
 
-  if (xim_styles)
-    XFree (xim_styles);
   if (ic_values)
     XFree (ic_values);
 }
 
 static GtkXIMInfo *
-get_im (GdkDisplay *display,
+get_im (GdkWindow *client_window,
 	const char *locale)
 {
   GSList *tmp_list;
   GtkXIMInfo *info;
   XIM im = NULL;
+  GdkDisplay *display = gdk_drawable_get_display (client_window);
 
   tmp_list = open_ims;
   while (tmp_list)
@@ -277,9 +325,14 @@ get_im (GdkDisplay *display,
 	  info->display = display;
 	  info->locale = g_strdup (locale);
 	  info->im = im;
-	  info->set_style = TRUE;
+	  info->xim_styles = NULL;
+	  info->preedit_style_setting = 0;
+	  info->status_style_setting = 0;
+	  info->settings = 0;
+	  info->preedit_set = 0;
+	  info->status_set = 0;
 
-	  setup_im (info);
+	  setup_im (info, client_window);
 	}
     }
 
@@ -304,21 +357,6 @@ gtk_im_context_xim_class_init (GtkIMContextXIMClass *class)
   im_context_class->set_use_preedit = gtk_im_context_xim_set_use_preedit;
   gobject_class->finalize = gtk_im_context_xim_finalize;
 
-  gtk_settings_install_property (g_param_spec_enum ("gtk-im-preedit-style",
-                                                    _("IM Preedit style"),
-                                                    _("How to draw the input method preedit string"),
-                                                    GTK_TYPE_IM_PREEDIT_STYLE,
-                                                    GTK_IM_PREEDIT_CALLBACK,
-                                                    G_PARAM_READWRITE));
-
-  gtk_settings_install_property (g_param_spec_enum ("gtk-im-status-style",
-                                                    _("IM Status style"),
-                                                    _("How to draw the input method statusbar"),
-                                                    GTK_TYPE_IM_STATUS_STYLE,
-                                                    GTK_IM_STATUS_CALLBACK,
-                                                    G_PARAM_READWRITE));
-
-
 }
 
 static void
@@ -338,7 +376,17 @@ gtk_im_context_xim_finalize (GObject *obj)
       XDestroyIC (context_xim->ic);
       context_xim->ic = NULL;
     }
- 
+  if (context_xim->im_info)
+    {
+      GtkXIMInfo *info = context_xim->im_info;
+      XFree (info->xim_styles->supported_styles);
+      XFree (info->xim_styles);
+      g_free (info->locale);
+      g_signal_handler_disconnect (info->settings, info->status_set);
+      g_signal_handler_disconnect (info->settings, info->preedit_set);
+      XCloseIM (info->im);
+    }
+
   g_free (context_xim->locale);
   g_free (context_xim->mb_charset);
 }
@@ -369,7 +417,7 @@ gtk_im_context_xim_set_client_window (GtkIMContext          *context,
   context_xim->client_window = client_window;
 
   if (context_xim->client_window)
-    context_xim->im_info = get_im (gdk_drawable_get_display (context_xim->client_window), context_xim->locale);
+    context_xim->im_info = get_im (context_xim->client_window, context_xim->locale);
   else
     context_xim->im_info = NULL;
 }
@@ -923,64 +971,81 @@ status_draw_callback (XIC      xic,
     }
 }
 
+static XVaNestedList
+set_preedit_callback (GtkIMContextXIM *context_xim)
+{
+  context_xim->preedit_start_callback.client_data = (XPointer)context_xim;
+  context_xim->preedit_start_callback.callback = (XIMProc)preedit_start_callback;
+  context_xim->preedit_done_callback.client_data = (XPointer)context_xim;
+  context_xim->preedit_done_callback.callback = (XIMProc)preedit_done_callback;
+  context_xim->preedit_draw_callback.client_data = (XPointer)context_xim;
+  context_xim->preedit_draw_callback.callback = (XIMProc)preedit_draw_callback;
+  context_xim->preedit_caret_callback.client_data = (XPointer)context_xim;
+  context_xim->preedit_caret_callback.callback = (XIMProc)preedit_caret_callback;
+  return XVaCreateNestedList (0,
+			      XNPreeditStartCallback, &context_xim->preedit_start_callback,
+			      XNPreeditDoneCallback, &context_xim->preedit_done_callback,
+			      XNPreeditDrawCallback, &context_xim->preedit_draw_callback,
+			      XNPreeditCaretCallback, &context_xim->preedit_caret_callback,
+			      NULL);
+}
+
+static XVaNestedList
+set_status_callback (GtkIMContextXIM *context_xim)
+{
+  context_xim->status_start_callback.client_data = (XPointer)context_xim;
+  context_xim->status_start_callback.callback = (XIMProc)status_start_callback;
+  context_xim->status_done_callback.client_data = (XPointer)context_xim;
+  context_xim->status_done_callback.callback = (XIMProc)status_done_callback;
+  context_xim->status_draw_callback.client_data = (XPointer)context_xim;
+  context_xim->status_draw_callback.callback = (XIMProc)status_draw_callback;
+	  
+  return XVaCreateNestedList (0,
+			      XNStatusStartCallback, &context_xim->status_start_callback,
+			      XNStatusDoneCallback, &context_xim->status_done_callback,
+			      XNStatusDrawCallback, &context_xim->status_draw_callback,
+			      NULL);
+}
+
 static XIC
-get_ic_with_preedit (GtkIMContextXIM *context_xim)
+get_ic_real (GtkIMContextXIM *context_xim)
 {
   XIC xic = 0;
   const char *name1 = NULL;
   XVaNestedList list1 = NULL;
   const char *name2 = NULL;
   XVaNestedList list2 = NULL;
+  XIMStyle im_style = 0;
 
-  if ((context_xim->im_info->style & PREEDIT_MASK) == XIMPreeditCallbacks)
+  if (context_xim->use_preedit &&
+      (context_xim->im_info->style & PREEDIT_MASK) == XIMPreeditCallbacks)
     {
-      context_xim->preedit_start_callback.client_data = (XPointer)context_xim;
-      context_xim->preedit_start_callback.callback = (XIMProc)preedit_start_callback;
-      context_xim->preedit_done_callback.client_data = (XPointer)context_xim;
-      context_xim->preedit_done_callback.callback = (XIMProc)preedit_done_callback;
-      context_xim->preedit_draw_callback.client_data = (XPointer)context_xim;
-      context_xim->preedit_draw_callback.callback = (XIMProc)preedit_draw_callback;
-      context_xim->preedit_caret_callback.client_data = (XPointer)context_xim;
-      context_xim->preedit_caret_callback.callback = (XIMProc)preedit_caret_callback;
+      im_style |= XIMPreeditCallbacks;
       name1 = XNPreeditAttributes;
-      list1 = XVaCreateNestedList (0,
-				   XNPreeditStartCallback, &context_xim->preedit_start_callback,
-				   XNPreeditDoneCallback, &context_xim->preedit_done_callback,
-				   XNPreeditDrawCallback, &context_xim->preedit_draw_callback,
-				   XNPreeditCaretCallback, &context_xim->preedit_caret_callback,
-				   NULL);
+      list1 = set_preedit_callback (context_xim);
     }
+  else
+    im_style |= XIMPreeditNothing;
 
   if ((context_xim->im_info->style & STATUS_MASK) == XIMStatusCallbacks)
     {
-      XVaNestedList status_attrs;
-
-      context_xim->status_start_callback.client_data = (XPointer)context_xim;
-      context_xim->status_start_callback.callback = (XIMProc)status_start_callback;
-      context_xim->status_done_callback.client_data = (XPointer)context_xim;
-      context_xim->status_done_callback.callback = (XIMProc)status_done_callback;
-      context_xim->status_draw_callback.client_data = (XPointer)context_xim;
-      context_xim->status_draw_callback.callback = (XIMProc)status_draw_callback;
-	  
-      status_attrs = XVaCreateNestedList (0,
-					  XNStatusStartCallback, &context_xim->status_start_callback,
-					  XNStatusDoneCallback, &context_xim->status_done_callback,
-					  XNStatusDrawCallback, &context_xim->status_draw_callback,
-					  NULL);
+      im_style |= XIMStatusCallbacks;
       if (name1 == NULL)
 	{
 	  name1 = XNStatusAttributes;
-	  list1 = status_attrs;
+	  list1 = set_status_callback (context_xim);
 	}
       else
 	{
 	  name2 = XNStatusAttributes;
-	  list2 = status_attrs;
+	  list2 = set_status_callback (context_xim);
 	}
     }
+  else
+    im_style |= XIMStatusNothing;
 
   xic = XCreateIC (context_xim->im_info->im,
-		   XNInputStyle, context_xim->im_info->style,
+		   XNInputStyle, im_style,
 		   XNClientWindow, GDK_DRAWABLE_XID (context_xim->client_window),
 		   name1, list1,
 		   name2, list2,
@@ -989,17 +1054,23 @@ get_ic_with_preedit (GtkIMContextXIM *context_xim)
     XFree (list1);
   if (list2)
     XFree (list2);
-  
-  return xic;
-}
 
-static XIC
-get_ic_without_preedit (GtkIMContextXIM *context_xim)
-{
-  return XCreateIC (context_xim->im_info->im,
-		    XNInputStyle, XIMPreeditNothing | XIMStatusNothing,
-		    XNClientWindow, GDK_DRAWABLE_XID (context_xim->client_window),
+  if (xic)
+    {
+      /* Don't filter key released events with XFilterEvents unless
+       * input methods ask for. This is a workaround for Solaris input
+       * method bug in C and European locales. It doubles each key
+       * stroke if both key pressed and released events are filtered.
+       * (bugzilla #81759)
+       */
+      gulong mask = 0;
+      XGetICValues (context_xim->ic,
+		    XNFilterEvents, &mask,
 		    NULL);
+      context_xim->filter_key_release = (mask & KeyReleaseMask);
+    }
+
+  return xic;
 }
 
 static XIC
@@ -1007,24 +1078,28 @@ gtk_im_context_xim_get_ic (GtkIMContextXIM *context_xim)
 {
   if (!context_xim->ic && context_xim->im_info)
     {
-      if (!context_xim->use_preedit)
-	context_xim->ic = get_ic_without_preedit (context_xim);
-      else
-	context_xim->ic = get_ic_with_preedit (context_xim);
+      context_xim->ic = get_ic_real (context_xim);
 
-      if (context_xim->ic)
+      /* 
+       * connect property-notify signal handlers to respond runtime
+       * changes of status_style and preedit_style in the settings
+       */
+      if (context_xim->im_info->settings)
 	{
-	  /* Don't filter key released events with XFilterEvents unless
-	   * input methods ask for. This is a workaround for Solaris input
-	   * method bug in C and European locales. It doubles each key
-	   * stroke if both key pressed and released events are filtered.
-	   * (bugzilla #81759)
-	   */
-	  gulong mask = 0;
-	  XGetICValues (context_xim->ic,
-			XNFilterEvents, &mask,
-			NULL);
-	  context_xim->filter_key_release = (mask & KeyReleaseMask);
+	  GtkXIMInfo *info = context_xim->im_info;
+	  if (info->status_set)
+	    g_signal_handler_disconnect (info->settings, info->status_set);
+	  if (info->preedit_set)
+	    g_signal_handler_disconnect (info->settings, info->preedit_set);
+
+	  info->status_set = g_signal_connect_swapped (info->settings,
+						       "notify::gtk-im-status-style",
+						       G_CALLBACK (status_style_change_notify),
+						       context_xim);
+	  info->preedit_set = g_signal_connect_swapped (info->settings,
+							"notify::gtk-im-preedit-style",
+							G_CALLBACK (preedit_style_change_notify),
+							context_xim);
 	}
     }
   return context_xim->ic;
@@ -1192,7 +1267,8 @@ status_window_show (GtkIMContextXIM *context_xim)
 
   context_xim->status_visible = TRUE;
   
-  if (status_window && status_window_has_text (status_window))
+  if ((context_xim->im_info->style & STATUS_MASK) == XIMStatusCallbacks &&
+      status_window && status_window_has_text (status_window))
     gtk_widget_show (status_window);
 }
 

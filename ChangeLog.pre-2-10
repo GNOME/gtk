@@ -1,3 +1,12 @@
+Wed Sep 25 18:23:50 2002  HideToshi Tajima  <hidetoshi.tajima@sun.com>
+
+	* modules/input/gtkimcontextxim.c:
+	- use gtk_settings_get_for_screen () instead of
+	  gtk_settings_get_default () for multihead
+	- connect property-notify signal handlers to respond runtime
+	  changes of status_style and preedit_style in the settings
+	- Some indentation and code cleanup (#59076 - 2nd check-in)
+	
 2002-09-24  Havoc Pennington  <hp@redhat.com>
 
 	* gtk/gtkwindow.c: fix GtkWindowMnemonic to have a separate
