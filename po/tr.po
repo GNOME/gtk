@@ -4,7 +4,7 @@
 # ---------------------------------------------------------------------
 msgid ""
 msgstr ""
-"Project-Id-Version: gtk+ 1.1.9\n"
+"Project-Id-Version: gtk+ CVS-?\n"
 "POT-Creation-Date: 1999-08-30 19:01+0200\n"
 "PO-Revision-Date: 1999-11-18 16:38+02:00\n"
 "Last-Translator: Fatih Demir <kabalak@gmx.net>\n"
