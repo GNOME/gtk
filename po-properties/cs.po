@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-10-19 12:40+0200\n"
-"PO-Revision-Date: 2004-10-19 15:24+0200\n"
+"POT-Creation-Date: 2004-10-20 20:38+0200\n"
+"PO-Revision-Date: 2004-10-20 21:39+0200\n"
 "Last-Translator: Miloslav Trmac <bukm@centrum.cz>\n"
 "Language-Team: Czech <cs@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -102,7 +102,8 @@ msgstr "Název programu"
 msgid ""
 "The name of the program. If this is not set, it defaults to "
 "g_get_application_name()"
-msgstr "Název programu. Pokud není nastaven, je implicitně g_get_application_name()"
+msgstr ""
+"Název programu. Pokud není nastaven, je implicitně g_get_application_name()"
 
 #: gtk/gtkaboutdialog.c:194
 msgid "Program version"
@@ -144,7 +145,9 @@ msgstr "Popisek WWW stránek"
 msgid ""
 "The label for the link to the website of the program. If this is not set, it "
 "defaults to the URL"
-msgstr "Popisek pro odkaz na WWW stránky programu. Není-li nastaven, je implicitně roven URL"
+msgstr ""
+"Popisek pro odkaz na WWW stránky programu. Není-li nastaven, je implicitně "
+"roven URL"
 
 #: gtk/gtkaboutdialog.c:240
 msgid "Authors"
@@ -177,7 +180,8 @@ msgstr "Kredity překladatelů"
 #: gtk/gtkaboutdialog.c:264
 msgid ""
 "Credits to the translators. This string should be marked as translatable"
-msgstr "Kredity překladatelů. Tento řetězec by měl být označen jako přeložitelný"
+msgstr ""
+"Kredity překladatelů. Tento řetězec by měl být označen jako přeložitelný"
 
 #: gtk/gtkaboutdialog.c:271
 msgid "Logo"
@@ -187,7 +191,9 @@ msgstr "Logo"
 msgid ""
 "A logo for the about box. If this is not set, it defaults to "
 "gtk_window_get_default_icon_list()"
-msgstr "Logo pro dialog o aplikaci. Pokud není nastaveno, je implicitně gtk_window_get_default_icon_list()"
+msgstr ""
+"Logo pro dialog o aplikaci. Pokud není nastaveno, je implicitně "
+"gtk_window_get_default_icon_list()"
 
 #: gtk/gtkaboutdialog.c:279
 msgid "Link Color"
@@ -1304,14 +1310,17 @@ msgstr "Podtržení nastaveno"
 msgid "Whether this tag affects underlining"
 msgstr "Jestli tento tag ovlivňuje podtržení"
 
-#: gtk/gtkcellrenderertext.c:470 gtk/gtkcellrenderertext.c:474
-#: gtk/gtktexttag.c:566
+#: gtk/gtkcellrenderertext.c:470 gtk/gtktexttag.c:566
 msgid "Language set"
 msgstr "Jazyk nastaven"
 
 #: gtk/gtkcellrenderertext.c:471 gtk/gtktexttag.c:567
 msgid "Whether this tag affects the language the text is rendered as"
 msgstr "Jestli tento tag ovlivňuje jazyk, ve kterém je zobrazený text"
+
+#: gtk/gtkcellrenderertext.c:474
+msgid "Ellipsize set"
+msgstr "Nastaveno zkracování"
 
 #: gtk/gtkcellrenderertext.c:475
 msgid "Whether this tag affects the ellipsize mode"
@@ -2177,7 +2186,8 @@ msgstr "Sloupec značek"
 
 #: gtk/gtkiconview.c:382
 msgid "Model column used to retrieve the text if using Pango markup"
-msgstr "Sloupec modelu používaný pro získání textu, pokud se používají značky Pango"
+msgstr ""
+"Sloupec modelu používaný pro získání textu, pokud se používají značky Pango"
 
 #: gtk/gtkiconview.c:389
 msgid "Icon View Model"
