@@ -65,8 +65,10 @@ struct _GdkDrawableImplX11
   Window xid;
   GdkScreen *screen;
 
-#ifdef HAVE_XFT
+#ifdef HAVE_XFT2
   XftDraw *xft_draw;
+#elif defined (HAVE_XFT)
+  Picture picture;
 #endif  
 };
  

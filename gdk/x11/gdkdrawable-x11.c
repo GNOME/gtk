@@ -236,6 +236,7 @@ _gdk_x11_have_render (GdkDisplay *display)
 				&event_base, &error_base);
 }
 
+#ifdef HAVE_XFT2
 static XftDraw *
 gdk_x11_drawable_get_xft_draw (GdkDrawable *drawable)
 {
@@ -272,7 +273,7 @@ gdk_x11_drawable_get_picture (GdkDrawable *drawable)
 
   return draw ? XftDrawPicture (draw) : None;
 }
-  
+
 static void
 gdk_x11_drawable_update_xft_clip (GdkDrawable *drawable,
 				  GdkGC       *gc)
@@ -323,7 +324,81 @@ gdk_x11_drawable_update_xft_clip (GdkDrawable *drawable,
       XftDrawSetClip (xft_draw, NULL);
     }
 }
-#endif  
+
+#else /* !HAVE_XFT2 */
+
+static Picture
+gdk_x11_drawable_get_picture (GdkDrawable *drawable)
+{
+  GdkDrawableImplX11 *impl = GDK_DRAWABLE_IMPL_X11 (drawable);
+ 
+  if (!_gdk_x11_have_render (gdk_drawable_get_display (drawable)))
+    return None;
+  
+  if (impl->picture == None)
+    {
+      GdkVisual *visual = gdk_drawable_get_visual (drawable);
+      XRenderPictFormat *format;
+ 
+      if (!visual)
+ 	{
+ 	  g_warning ("Using Xft rendering requires the drawable argument to\n"
+ 		     "have a specified colormap. All windows have a colormap,\n"
+ 		     "however, pixmaps only have colormap by default if they\n"
+ 		     "were created with a non-NULL window argument. Otherwise\n"
+ 		     "a colormap must be set on them with gdk_drawable_set_colormap");
+	  return None;
+ 	}
+ 
+      format = XRenderFindVisualFormat (GDK_SCREEN_XDISPLAY (impl->screen),
+					gdk_x11_visual_get_xvisual(visual));
+      if (format)
+	impl->picture = XRenderCreatePicture (GDK_SCREEN_XDISPLAY (impl->screen),
+					      impl->xid, format, 0, NULL);
+    }
+ 
+  return impl->picture;
+}
+ 
+static void
+gdk_x11_drawable_update_xft_clip (GdkDrawable *drawable,
+				  GdkGC       *gc)
+{
+  GdkGCX11 *gc_private = gc ? GDK_GC_X11 (gc) : NULL;
+  GdkDrawableImplX11 *impl = GDK_DRAWABLE_IMPL_X11 (drawable);
+  Picture picture = gdk_x11_drawable_get_picture (drawable);
+ 
+  if (gc && gc_private->clip_region)
+    {
+      GdkRegionBox *boxes = gc_private->clip_region->rects;
+      gint n_boxes = gc_private->clip_region->numRects;
+      XRectangle *rects = g_new (XRectangle, n_boxes);
+      int i;
+ 
+      for (i=0; i < n_boxes; i++)
+	{
+	  rects[i].x = CLAMP (boxes[i].x1 + gc->clip_x_origin, G_MINSHORT, G_MAXSHORT);
+	  rects[i].y = CLAMP (boxes[i].y1 + gc->clip_y_origin, G_MINSHORT, G_MAXSHORT);
+	  rects[i].width = CLAMP (boxes[i].x2 + gc->clip_x_origin, G_MINSHORT, G_MAXSHORT) - rects[i].x;
+	  rects[i].height = CLAMP (boxes[i].y2 + gc->clip_y_origin, G_MINSHORT, G_MAXSHORT) - rects[i].y;
+	}
+
+      XRenderSetPictureClipRectangles (GDK_SCREEN_XDISPLAY (impl->screen),
+				       picture, 0, 0, rects, n_boxes);
+ 
+      g_free (rects);
+    }
+  else
+    {
+      XRenderPictureAttributes pa;
+      pa.clip_mask = None;
+      XRenderChangePicture (GDK_SCREEN_XDISPLAY (impl->screen),
+			    picture, CPClipMask, &pa);
+    }
+}
+#endif /* HAVE_XFT2 */
+
+#endif /* HAVE_XFT */
 
 /*****************************************************
  * X11 specific implementations of generic functions *
@@ -722,6 +797,7 @@ gdk_x11_draw_glyphs (GdkDrawable      *drawable,
 #if HAVE_XFT
   if (PANGO_XFT_IS_FONT (font))
     {
+#ifdef HAVE_XFT2
       XftColor color;
       XftDraw *draw;
  
@@ -731,9 +807,22 @@ gdk_x11_draw_glyphs (GdkDrawable      *drawable,
       draw = gdk_x11_drawable_get_xft_draw (drawable);
       
       pango_xft_render (draw, &color, font, glyphs, x, y);
+#else /* !HAVE_XFT2 */
+      Picture src_picture;
+      Picture dest_picture;
+      
+      src_picture = _gdk_x11_gc_get_fg_picture (gc);
+      
+      gdk_x11_drawable_update_xft_clip (drawable, gc);
+      dest_picture = gdk_x11_drawable_get_picture (drawable);
+      
+      pango_xft_picture_render (GDK_SCREEN_XDISPLAY (impl->screen), 
+				src_picture, dest_picture, 
+				font, glyphs, x, y);
+#endif /* HAVE_XFT2 */
     }
   else
-#endif  /* !HAVE_XFT */
+#endif  /* HAVE_XFT */
     pango_x_render (GDK_SCREEN_XDISPLAY (impl->screen),
 		    impl->xid,
 		    GDK_GC_GET_XGC (gc),

@@ -1,3 +1,11 @@
+Thu Oct  3 17:09:23 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/x11/{gdkdrawable-x11.[ch],gdkpixmap-x11.c,
+	gdkwindow-x11.c}: Restore the pre-Xft2 code to
+	render text directly via RENDER, conditionalized
+	with !HAVE_XFT2 so that we'll build again on Xft1 
+	systems. (#90181)
+
 Thu Oct  3 14:13:33 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/gdkevents.c (gdk_event_new): Add a 'type'
