@@ -1451,16 +1451,26 @@ gtk_entry_draw_cursor_on_drawable (GtkEntry *entry, GdkDrawable *drawable)
 	}
       else
 	{
+	  int width, height;
+	  GdkRectangle area;
+
 	  gint yoffset = 
 	    (text_area_height - 
 	     (widget->style->font->ascent + widget->style->font->descent)) / 2
 	    + widget->style->font->ascent;
 
+	  area.x = xoffset;
+	  area.y = INNER_BORDER;
+	  area.width = 1;
+	  area.height = text_area_height - INNER_BORDER;
+	  
+	  gdk_window_get_size (entry->text_area, &width, &height);
+	  
 	  gtk_paint_flat_box (widget->style, drawable,
 			      GTK_WIDGET_STATE(widget), GTK_SHADOW_NONE,
-			      NULL, widget, "entry_bg", 
-			      xoffset, INNER_BORDER, 
-			      1, text_area_height - INNER_BORDER);
+			      &area, widget, "entry_bg", 
+			      0, 0, width, height);
+
 	  
 	  /* Draw the character under the cursor again
 	   */

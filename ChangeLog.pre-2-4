@@ -1,3 +1,9 @@
+Mon Dec 13 14:06:03 1999  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkentry.c (gtk_entry_draw_cursor_on_drawable): Draw a small portion
+	of the background image instead of scaling the background down to
+	a line.
+
 Wed Nov 24 13:02:17 1999  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtk[hv]scrollbar.c (gtk_hscrollbar_size_allocate): Removed mysterious
