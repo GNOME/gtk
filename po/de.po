@@ -6,9 +6,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.1.9\n"
-"POT-Creation-Date: 2000-07-03 17:11-0400\n"
-"PO-Revision-Date: 1999-08-24 17:38+02:00\n"
-"Last-Translator: Karsten Weiss <karsten@addx.au.s.shuttle.de>\n"
+"POT-Creation-Date: 2000-07-12 23:26+0200\n"
+"PO-Revision-Date: 2000-07-12 23:25+02:00\n"
+"Last-Translator: Benedikt Roth <Benedikt.Roth@gmx.net>>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=iso-8859-1\n"
@@ -43,17 +43,16 @@ msgid "Opacity:"
 msgstr "Deckkraft:"
 
 #: gtk/gtkcolorsel.c:1438
-#, fuzzy
 msgid "Hex Value:"
-msgstr "Wert:"
+msgstr "Hex Wert:"
 
 #: gtk/gtkcolorsel.c:1459
 msgid "Custom Palette"
-msgstr ""
+msgstr "Angepasste Palette"
 
 #: gtk/gtkcolorsel.c:1464
 msgid "Set Color"
-msgstr ""
+msgstr "Farbe setzen:"
 
 #. The directories clist
 #: gtk/gtkfilesel.c:514
@@ -139,9 +138,8 @@ msgid "Family:"
 msgstr "Familie:"
 
 #: gtk/gtkfontsel.c:194
-#, fuzzy
 msgid "Style:"
-msgstr "Stil hinzufügen:"
+msgstr "Stil:"
 
 #: gtk/gtkfontsel.c:199
 msgid "Size:"
@@ -235,7 +233,7 @@ msgstr "Y-Neigung"
 
 #: gtk/gtkinputdialog.c:476
 msgid "Wheel"
-msgstr ""
+msgstr "Rad"
 
 #: gtk/gtkinputdialog.c:516
 msgid "none"
@@ -259,12 +257,12 @@ msgstr "gelöscht"
 msgid "Page %u"
 msgstr "Seite %u"
 
-#: gtk/gtkrc.c:1824
+#: gtk/gtkrc.c:1902
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\" line %d"
 msgstr "Kann Bilddatei in Pixmap-Pfad: \"%s\" nicht finden. Zeile %d"
 
-#: gtk/gtkrc.c:1827
+#: gtk/gtkrc.c:1905
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "Kann Bilddatei in Pixmap-Pfad: \"%s\" nicht finden"

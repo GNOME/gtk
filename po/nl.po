@@ -1,12 +1,12 @@
 # SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR Free Software Foundation, Inc.
+# Copyright (C) 1998 Free Software Foundation, Inc.
 # FIRST AUTHOR <pauls@euronet.nl>, 1998.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.3.0\n"
-"POT-Creation-Date: 2000-07-03 17:11-0400\n"
-"PO-Revision-Date: 2000-04-25 3:14+0100\n"
+"POT-Creation-Date: 2000-07-12 23:04+0200\n"
+"PO-Revision-Date: 2000-07-12 23:04+0200\n"
 "Last-Translator: Dennis Smit <synap@area101.penguin.nl>\n"
 "Language-Team: dutch <nl@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -42,17 +42,16 @@ msgid "Opacity:"
 msgstr "Doorschijnendheid:"
 
 #: gtk/gtkcolorsel.c:1438
-#, fuzzy
 msgid "Hex Value:"
-msgstr "Waarde:"
+msgstr "Hex Waarde:"
 
 #: gtk/gtkcolorsel.c:1459
 msgid "Custom Palette"
-msgstr ""
+msgstr "Eigen Palette"
 
 #: gtk/gtkcolorsel.c:1464
 msgid "Set Color"
-msgstr ""
+msgstr "Set kleur"
 
 #. The directories clist
 #: gtk/gtkfilesel.c:514
@@ -138,9 +137,8 @@ msgid "Family:"
 msgstr "Familie:"
 
 #: gtk/gtkfontsel.c:194
-#, fuzzy
 msgid "Style:"
-msgstr "Voeg Stijl toe:"
+msgstr "Stijl:"
 
 #: gtk/gtkfontsel.c:199
 msgid "Size:"
@@ -234,11 +232,11 @@ msgstr "Y Helling"
 
 #: gtk/gtkinputdialog.c:476
 msgid "Wheel"
-msgstr ""
+msgstr "Wiel"
 
 #: gtk/gtkinputdialog.c:516
 msgid "none"
-msgstr "niets"
+msgstr "geen"
 
 #: gtk/gtkinputdialog.c:550 gtk/gtkinputdialog.c:586
 msgid "(disabled)"
@@ -258,12 +256,12 @@ msgstr "wissen"
 msgid "Page %u"
 msgstr "Pagina %u"
 
-#: gtk/gtkrc.c:1824
+#: gtk/gtkrc.c:1902
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\" line %d"
 msgstr "Kan plaatjes bestand in pixmap_path: \"%s\" regel %d niet vinden"
 
-#: gtk/gtkrc.c:1827
+#: gtk/gtkrc.c:1905
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "Kan plaatjes bestand in pixmap_path: \"s\" niet vinden"
