@@ -35,7 +35,7 @@ Creates the new GtkImage using the value and the mask.
 
 @val: 
 @mask: a GDKBitmap that indicates which parts of the image should be transparent.
-@Returns: the GtkImage 
+@Returns: the GtkImage
 
 
 <!-- ##### FUNCTION gtk_image_set ##### -->
@@ -53,7 +53,7 @@ Sets the GtkImage
 Gets the GtkImage
 </para>
 
-@image: a #GdkPixmap 
+@image: a #GdkPixmap
 @val: 
 @mask: a GDKBitmap that indicates which parts of the image should be transparent.
 
