@@ -2585,8 +2585,6 @@ gtk_drag_source_info_destroy (gpointer data)
 {
   GtkDragSourceInfo *info = data;
 
-  g_warning ("Destroying drag source info!");
-  
   gtk_drag_remove_icon (data);
 
   if (!info->proxy_dest)
