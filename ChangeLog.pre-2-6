@@ -1,3 +1,7 @@
+Sat Jul 10 01:33:25 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* docs/RELEASE-HOWTO: Updates.
+
 Sat Jul 10 01:55:29 2004  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 	* gdk/x11/gdkwindow-x11.c (_gdk_x11_window_tmp_{re|un}set_bg):
