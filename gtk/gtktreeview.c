@@ -3697,7 +3697,7 @@ _gtk_tree_view_column_start_drag (GtkTreeView       *tree_view,
 	continue;
 
       right_column = tmp_list->data;
-      reorder = g_malloc (sizeof (GtkTreeViewColumnReorder), 1);
+      reorder = g_new (GtkTreeViewColumnReorder, 1);
       reorder->left_align = left;
     }
   /*  if (list == NULL)

@@ -1,3 +1,8 @@
+Thu Apr 12 21:04:26 2001  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtktreeview.c (_gtk_tree_view_column_start_drag): get
+	this to compile.
+
 2001-04-12  Anders Carlsson  <andersca@codefactory.se>
 
 	* gtk/gtkcellrenderertextpixbuf.c (gtk_cell_renderer_text_pixbuf_class_init): It's pixbuf_pos,
