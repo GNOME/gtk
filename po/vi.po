@@ -2360,7 +2360,7 @@ msgstr "Chiều cao của layout"
 #.
 #: gtk/gtkmain.c:732
 msgid "default:LTR"
-msgstr "Mặc định: LTR"
+msgstr "default:LTR"
 
 #: gtk/gtkmenu.c:194
 msgid "Tearoff Title"
