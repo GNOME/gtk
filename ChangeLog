@@ -1,5 +1,12 @@
 2003-12-14  Tor Lillqvist  <tml@iki.fi>
 
+	* gdk/win32/gdkselection-win32.c: Calls to OpenClipboard() must be
+	followed by calls to CloseClipboard(). Add a missing call to
+	CloseClipboard(). Found by Adam Wright, fixes #104944. Use
+	API_CALL macro in more places.
+
+2003-12-14  Tor Lillqvist  <tml@iki.fi>
+
 	Merge from stable:
 
 	* gdk/gdkdisplaymanager.c: Mark default_display static.
