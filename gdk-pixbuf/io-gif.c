@@ -1087,6 +1087,7 @@ GdkPixbuf *
 gdk_pixbuf__gif_image_load (FILE *file)
 {
 	GifContext *context;
+	GdkPixbuf *pixbuf;
 
 	g_return_val_if_fail (file != NULL, NULL);
 
@@ -1095,7 +1096,10 @@ gdk_pixbuf__gif_image_load (FILE *file)
 
 	gif_main_loop (context);
 
-	return context->pixbuf;
+	pixbuf = context->pixbuf;
+	g_free (context);
+ 
+	return pixbuf;
 }
 
 gpointer
@@ -1197,6 +1201,7 @@ GdkPixbufAnimation *
 gdk_pixbuf__gif_image_load_animation (FILE *file)
 {
 	GifContext *context;
+	GdkPixbufAnimation *animation;
 
 	g_return_val_if_fail (file != NULL, NULL);
 
@@ -1208,6 +1213,8 @@ gdk_pixbuf__gif_image_load_animation (FILE *file)
 	context->file = file;
 
 	gif_main_loop (context);
-	
-	return context->animation;
+
+	animation = context->animation;
+	g_free (context);
+	return animation;
 }

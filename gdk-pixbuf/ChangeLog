@@ -1,3 +1,8 @@
+2000-03-08  Jonathan Blandford  <jrb@redhat.com>
+
+	* gdk-pixbuf/io-gif.c (gdk_pixbuf__gif_image_load): free the context.
+	(gdk_pixbuf__gif_image_load_animation): free the context.
+
 2000-03-06  Arjan van de Ven <arjan@fenrus.demon.nl>
 
 	* gdk-pixbuf/io-bmp.c: Fixed to pointer-bugs and a 
