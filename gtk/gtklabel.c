@@ -2820,18 +2820,30 @@ gtk_label_focus (GtkWidget         *widget,
 		 GtkDirectionType   direction)
 {
   GtkLabel *label = GTK_LABEL (widget);
-  GdkModifierType state;
+  GdkEvent *current_event;
+  gboolean is_control_tab = FALSE;
   
   /* We want to be in the tab chain only if we are selectable
-   * and the Control key is pressed
+   * and Control-[Shift]Tab is pressed
    */
   if (label->select_info == NULL)
     return FALSE;
 
-  if (!gtk_get_current_event_state (&state))
-    return FALSE;
+  current_event = gtk_get_current_event ();
 
-  if (state & GDK_CONTROL_MASK)
+  if (current_event)
+    {
+      if (current_event->type == GDK_KEY_PRESS &&
+	  (current_event->key.keyval == GDK_Tab ||
+	   current_event->key.keyval == GDK_KP_Tab ||
+	   current_event->key.keyval == GDK_ISO_Left_Tab) &&
+	  (current_event->key.state & GDK_CONTROL_MASK) != 0)
+	is_control_tab = TRUE;
+      
+      gdk_event_free (current_event);
+    }
+      
+  if (is_control_tab)
     return GTK_WIDGET_CLASS (parent_class)->focus (widget, direction);
   else
     return FALSE;
