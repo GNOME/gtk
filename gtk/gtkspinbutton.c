@@ -965,6 +965,9 @@ gtk_spin_button_value_changed (GtkAdjustment *adjustment,
 
   sprintf (buf, "%0.*f", spin_button->digits, adjustment->value);
   gtk_entry_set_text (GTK_ENTRY (spin_button), buf);
+
+  gtk_spin_button_draw_arrow (spin_button, GTK_ARROW_UP);
+  gtk_spin_button_draw_arrow (spin_button, GTK_ARROW_DOWN);
 }
 
 static gint
@@ -1353,6 +1356,20 @@ gtk_spin_button_new (GtkAdjustment *adjustment,
   return GTK_WIDGET (spin);
 }
 
+/* Callback used when the spin button's adjustment changes.  We need to redraw
+ * the arrows when the adjustment's range changes.
+ */
+static void
+adjustment_changed_cb (GtkAdjustment *adjustment, gpointer data)
+{
+  GtkSpinButton *spin_button;
+
+  spin_button = GTK_SPIN_BUTTON (data);
+
+  gtk_spin_button_draw_arrow (spin_button, GTK_ARROW_UP);
+  gtk_spin_button_draw_arrow (spin_button, GTK_ARROW_DOWN);
+}
+
 void
 gtk_spin_button_set_adjustment (GtkSpinButton *spin_button,
 				GtkAdjustment *adjustment)
@@ -1375,6 +1392,9 @@ gtk_spin_button_set_adjustment (GtkSpinButton *spin_button,
 	  gtk_object_sink (GTK_OBJECT (adjustment));
           gtk_signal_connect (GTK_OBJECT (adjustment), "value_changed",
 			      (GtkSignalFunc) gtk_spin_button_value_changed,
+			      (gpointer) spin_button);
+	  gtk_signal_connect (GTK_OBJECT (adjustment), "changed",
+			      (GtkSignalFunc) adjustment_changed_cb,
 			      (gpointer) spin_button);
         }
     }
