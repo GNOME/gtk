@@ -1,3 +1,7 @@
+2002-12-20  Sven Neumann  <sven@gimp.org>
+
+	* examples/gtkdial/gtkdial.c: use G_PI instead of M_PI.
+
 Thu Dec 19 11:42:00 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/x11/gdkevents-x11.c (gdk_event_translate): Call
