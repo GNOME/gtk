@@ -6,6 +6,7 @@
  * Written by Owen Taylor <otaylor@redhat.com>
  */
 
+#undef GTK_DISABLE_DEPRECATED
 #include <gtk/gtk.h>
 #include <gdk/gdkkeysyms.h>
 
