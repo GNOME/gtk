@@ -1026,7 +1026,7 @@ gtk_spin_button_stop_spinning (GtkSpinButton *spin)
 static void
 start_spinning (GtkSpinButton *spin,
 		GtkArrowType   click_child,
-		gfloat         step)
+		gdouble        step)
 {
   g_return_if_fail (click_child == GTK_ARROW_UP || click_child == GTK_ARROW_DOWN);
   
