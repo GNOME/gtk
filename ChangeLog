@@ -1,3 +1,8 @@
+Fri Sep 14 22:31:25 2001  Matthias Clasen  <matthiasc@poet.de>
+
+	* demos/gtk-demo/main.c (setup_default_icon): Use a shaped
+	icon instead of one with ugly white background.
+
 Fri Sep 14 22:26:01 2001  Matthias Clasen  <matthiasc@poet.de>
 
 	* demos/gtk-demo/stock_browser.c (id_to_macro): make
