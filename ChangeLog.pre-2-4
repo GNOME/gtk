@@ -1,3 +1,22 @@
+2003-08-04  Hans Breuer  <hans@breuer.org>
+
+	* gdk/win32/gdkwindow-win32.c(gdk_window_set_modal_hint) :
+	set HWND_NOTOPMOST for modal==FALSE, fixes bug #118435
+
+	* gdk/win32/gdkwindow-win32.c : implement gdk_window_[un]fullscreen
+	(gdk_window_{move,resize,move_rezize})) : noop if FULLSCREEN
+
+	* gdk/win32/gdkwindow-win32.c (gdk_window_set_icon) :
+	against all expectations it is basically ony a call with WM_SETICON
+	needed (the visual effect is there, though colors or mask are
+	still somewhat wrong).
+	* gdk/win32/gdkwindow-win32.h : place to store the HICON
+
+	* gdk/win32/gdkdrawabke.win32.c : readded the conditional end
+	pixel drawing as it was fixed at 1999-08-23
+
+	gtk/gtk.def : updated
+
 Tue Aug  5 10:07:08 2003  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkmessagedialog.c (gtk_message_dialog_get_property): 

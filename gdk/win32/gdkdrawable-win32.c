@@ -1219,6 +1219,7 @@ draw_segments (GdkGCWin32 *gcwin32,
 	  else
 	    GDI_CALL (MoveToEx, (hdc, segs[i].x1, segs[i].y1, NULL)) &&
 	      GDI_CALL (LineTo, (hdc, segs[i].x2, segs[i].y2));
+
 	}
     }
   else
@@ -1226,6 +1227,22 @@ draw_segments (GdkGCWin32 *gcwin32,
       for (i = 0; i < nsegs; i++)
 	GDI_CALL (MoveToEx, (hdc, segs[i].x1, segs[i].y1, NULL)) &&
 	  GDI_CALL (LineTo, (hdc, segs[i].x2, segs[i].y2));
+
+      /* not drawing the end pixel does produce a crippled mask, look 
+       * e.g. at xpm icons produced with gdk_pixbuf_new_from_xpm_data trough
+       * gdk_pixbuf_render_threshold_alpha (testgtk folder icon or
+       * Dia's toolbox icons) but only on win9x ... --hb
+       */
+      if (gcwin32->pen_width <= 1 && !IS_WIN_NT())
+        {
+          GdkSegment *ps = &segs[nsegs-1];
+          int xc = (ps->y2 == ps->y1) ? 0 : ((ps->x1 < ps->x2) ? 1 : -1);
+          int yc = (ps->x2 == ps->x1) ? 0 : ((ps->y1 < ps->y2) ? 1 : -1);
+	/* don't forget single point lines */
+	xc = (0 == xc && 0 == yc) ? 1 : xc;
+
+          GDI_CALL (LineTo, (hdc, ps->x2 + xc, ps->y2 + yc));
+        }
     }
 }
 

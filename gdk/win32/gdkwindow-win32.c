@@ -89,6 +89,7 @@ gdk_window_impl_win32_init (GdkWindowImplWin32 *impl)
   impl->height = 1;
 
   impl->hcursor = NULL;
+  impl->hicon = NULL;
   impl->hint_flags = 0;
   impl->extension_events_selected = FALSE;
 }
@@ -137,6 +138,11 @@ gdk_window_impl_win32_finalize (GObject *object)
 	SetCursor (NULL);
       GDI_CALL (DestroyCursor, (window_impl->hcursor));
       window_impl->hcursor = NULL;
+    }
+  if (window_impl->hicon != NULL)
+    {
+      GDI_CALL (DestroyIcon, (window_impl->hicon));
+      window_impl->hicon = NULL;
     }
 
   G_OBJECT_CLASS (parent_class)->finalize (object);
@@ -930,7 +936,9 @@ show_window_internal (GdkWindow *window,
 
   old_active_window = GetActiveWindow ();
 
-  if (private->state & GDK_WINDOW_STATE_MAXIMIZED)
+  if (private->state & GDK_WINDOW_STATE_FULLSCREEN)
+    gdk_window_fullscreen (window);
+  else if (private->state & GDK_WINDOW_STATE_MAXIMIZED)
     ShowWindow (GDK_WINDOW_HWND (window), SW_MAXIMIZE);
   else if (private->state & GDK_WINDOW_STATE_ICONIFIED)
     ShowWindow (GDK_WINDOW_HWND (window), SW_RESTORE);
@@ -1038,6 +1046,9 @@ gdk_window_move (GdkWindow *window,
       
   impl = GDK_WINDOW_IMPL_WIN32 (private->impl);
 
+  if (private->state & GDK_WINDOW_STATE_FULLSCREEN)
+    return;
+
   if (GDK_WINDOW_TYPE (private) == GDK_WINDOW_CHILD)
     _gdk_window_move_resize_child (window, x, y, impl->width, impl->height);
   else
@@ -1078,6 +1089,9 @@ gdk_window_resize (GdkWindow *window,
 
   impl = GDK_WINDOW_IMPL_WIN32 (private->impl);
   
+  if (private->state & GDK_WINDOW_STATE_FULLSCREEN)
+    return;
+
   if (GDK_WINDOW_TYPE (private) == GDK_WINDOW_CHILD)
     _gdk_window_move_resize_child (window, private->x, private->y, width, height);
   else
@@ -1116,6 +1130,9 @@ gdk_window_move_resize (GdkWindow *window,
     height = 1;
   
   impl = GDK_WINDOW_IMPL_WIN32 (private->impl);
+
+  if (private->state & GDK_WINDOW_STATE_FULLSCREEN)
+    return;
 
   GDK_NOTE (MISC, g_print ("gdk_window_move_resize: %p: %dx%d@+%d+%d\n",
 			   GDK_WINDOW_HWND (window),
@@ -2155,16 +2172,45 @@ gdk_window_set_icon (GdkWindow *window,
 		     GdkPixmap *pixmap,
 		     GdkBitmap *mask)
 {
+  ICONINFO ii;
+  HICON hIcon;
+  gint w = 0, h = 0;
+  GdkWindowImplWin32 *impl;
+
   g_return_if_fail (window != NULL);
   g_return_if_fail (GDK_IS_WINDOW (window));
 
   if (GDK_WINDOW_DESTROYED (window))
     return;
-  
-  /* Nothing to do, really. As we share window classes between windows
-   * we can't have window-specific icons, sorry. Don't print any warning
-   * either.
-   */
+
+  impl = GDK_WINDOW_IMPL_WIN32 (GDK_WINDOW_OBJECT (window)->impl);
+
+  if (pixmap && mask)
+    {
+      gdk_drawable_get_size (GDK_DRAWABLE(pixmap), &w, &h);
+
+      ii.fIcon = TRUE;
+      ii.xHotspot = ii.yHotspot = 0; /* ignored for icons */
+      ii.hbmMask = GDK_PIXMAP_HBITMAP (mask);
+      ii.hbmColor = GDK_PIXMAP_HBITMAP (pixmap); 
+      hIcon = CreateIconIndirect (&ii);
+      hIcon = (HICON)SendMessage (GDK_WINDOW_HWND (window), WM_SETICON, ICON_BIG, (LPARAM)hIcon);
+      if (impl->hicon)
+        GDI_CALL (DestroyIcon, (impl->hicon));
+      impl->hicon = hIcon;
+    }
+  else
+    {
+      /* reseting to default icon */
+      if (impl->hicon)
+        {
+          hIcon = (HICON)SendMessage (GDK_WINDOW_HWND (window), WM_SETICON, ICON_BIG, 0);
+          GDI_CALL (DestroyIcon, (impl->hicon));
+          impl->hicon = NULL;
+        }
+    }
+
+  GDK_NOTE (MISC, g_print ("gdk_window_set_icon : %p %dx%d\n", hIcon, w, h));
 }
 
 void
@@ -2547,18 +2593,77 @@ gdk_window_unmaximize (GdkWindow *window)
 				 0);
 }
 
+typedef struct _FullscreenInfo FullscreenInfo;
+
+struct _FullscreenInfo
+{
+  RECT  r;
+  guint hint_flags;
+  LONG  style;
+};
+
 void
 gdk_window_fullscreen (GdkWindow *window)
 {
+  gint width, height;
+  FullscreenInfo *fi;
+  GdkWindowObject *private = (GdkWindowObject *) window;
+
   g_return_if_fail (GDK_IS_WINDOW (window));
 
-  g_warning ("gdk_window_fullscreen() not implemented.\n");
+  width = GetSystemMetrics (SM_CXSCREEN);
+  height = GetSystemMetrics (SM_CYSCREEN);
+ 
+  fi = g_new (FullscreenInfo, 1);
+
+  if (!GetWindowRect (GDK_WINDOW_HWND (window), &(fi->r)))
+    g_free (fi);
+  else
+    {
+      GdkWindowImplWin32 *impl = GDK_WINDOW_IMPL_WIN32 (private->impl);
+
+      /* remember for restoring */
+      fi->hint_flags = impl->hint_flags;
+      impl->hint_flags &= ~GDK_HINT_MAX_SIZE;
+      g_object_set_data (G_OBJECT (window), "fullscreen-info", fi);
+      fi->style = GetWindowLong (GDK_WINDOW_HWND (window), GWL_STYLE);
+
+      SetWindowLong (GDK_WINDOW_HWND (window), GWL_STYLE, 
+                     (fi->style & ~WS_OVERLAPPEDWINDOW) | WS_POPUP);
+      if (!SetWindowPos (GDK_WINDOW_HWND (window), HWND_TOP /*not MOST, taskswitch!*/,
+                         0, 0, width, height,
+                         SWP_NOCOPYBITS | SWP_SHOWWINDOW))
+        WIN32_API_FAILED ("SetWindowPos");
+
+      gdk_synthesize_window_state (window, 0, GDK_WINDOW_STATE_FULLSCREEN);
+    }
 }
 
 void
 gdk_window_unfullscreen (GdkWindow *window)
 {
+  FullscreenInfo *fi;
+  GdkWindowObject *private = (GdkWindowObject *) window;
+
   g_return_if_fail (GDK_IS_WINDOW (window));
+
+  fi = g_object_get_data (G_OBJECT(window), "fullscreen-info");
+  if (fi)
+    {
+      GdkWindowImplWin32 *impl = GDK_WINDOW_IMPL_WIN32 (private->impl);
+
+      impl->hint_flags = fi->hint_flags;
+      SetWindowLong (GDK_WINDOW_HWND (window), GWL_STYLE, fi->style);
+      if (!SetWindowPos (GDK_WINDOW_HWND (window), HWND_NOTOPMOST,
+                         fi->r.left, fi->r.top, fi->r.right - fi->r.left, fi->r.bottom - fi->r.top,
+                         SWP_NOCOPYBITS | SWP_SHOWWINDOW))
+         WIN32_API_FAILED ("SetWindowPos");
+
+      g_object_set_data (G_OBJECT (window), "fullscreen-info", NULL);
+      g_free (fi);
+
+      gdk_synthesize_window_state (window, GDK_WINDOW_STATE_FULLSCREEN, 0);
+    }
 }
 
 void
@@ -2595,7 +2700,8 @@ gdk_window_set_modal_hint (GdkWindow *window,
   private->modal_hint = modal;
 
   if (GDK_WINDOW_IS_MAPPED (window))
-    API_CALL (SetWindowPos, (GDK_WINDOW_HWND (window), HWND_TOPMOST,
+    API_CALL (SetWindowPos, (GDK_WINDOW_HWND (window), 
+			     modal ? HWND_TOPMOST : HWND_NOTOPMOST,
 			     0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE));
 }
 
