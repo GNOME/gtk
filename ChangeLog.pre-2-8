@@ -1,5 +1,11 @@
 2004-12-07  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkiconview.c (gtk_icon_view_rows_reordered): Make this
+	work, no need to invert the array. 
+
+	* gtk/gtkliststore.c (gtk_list_store_sort_iter_changed): Emit
+	rows_reordered if the row has been moved.  (#160063)
+
 	* gtk/gtktreeviewcolumn.c (gtk_tree_view_column_button_event): 
 	Don't mess up the column header state if the button release
 	event is missed.  (#159640)

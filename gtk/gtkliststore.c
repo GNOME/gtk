@@ -1673,6 +1673,29 @@ gtk_list_store_sort (GtkListStore *list_store)
   g_free (new_order);
 }
 
+static gboolean
+iter_is_sorted (GtkListStore *list_store,
+                GtkTreeIter  *iter)
+{
+  GtkSequencePtr cmp;
+
+  if (!_gtk_sequence_ptr_is_begin (iter->user_data))
+    {
+      cmp = _gtk_sequence_ptr_prev (iter->user_data);
+      if (gtk_list_store_compare_func (cmp, iter->user_data, list_store) > 0)
+	return FALSE;
+    }
+
+  cmp = _gtk_sequence_ptr_next (iter->user_data);
+  if (!_gtk_sequence_ptr_is_end (cmp))
+    {
+      if (gtk_list_store_compare_func (iter->user_data, cmp, list_store) > 0)
+	return FALSE;
+    }
+  
+  return TRUE;
+}
+
 static void
 gtk_list_store_sort_iter_changed (GtkListStore *list_store,
 				  GtkTreeIter  *iter,
@@ -1681,12 +1704,24 @@ gtk_list_store_sort_iter_changed (GtkListStore *list_store,
 {
   GtkTreePath *tmp_path;
 
-  _gtk_sequence_sort_changed (iter->user_data,
-			      gtk_list_store_compare_func,
-			      list_store);
-
   tmp_path = gtk_tree_model_get_path (GTK_TREE_MODEL (list_store), iter);
   gtk_tree_model_row_changed (GTK_TREE_MODEL (list_store), tmp_path, iter);
+
+  if (!iter_is_sorted (list_store, iter))
+    {
+      GHashTable *old_positions;
+      gint *order;
+
+      old_positions = save_positions (list_store->seq);
+      _gtk_sequence_sort_changed (iter->user_data,
+                                  gtk_list_store_compare_func,
+                                  list_store);
+      order = generate_order (list_store->seq, old_positions);
+      gtk_tree_model_rows_reordered (GTK_TREE_MODEL (list_store),
+                                     tmp_path, NULL, order);
+      g_free (order);
+    }
+
   gtk_tree_path_free (tmp_path);
 }
 

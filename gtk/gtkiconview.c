@@ -2176,56 +2176,12 @@ gtk_icon_view_row_changed (GtkTreeModel *model,
 			   gpointer      data)
 {
   GtkIconViewItem *item;
-  GList *list, *next;
-  gint index, i, pos;
+  gint index;
   GtkIconView *icon_view;
-  gboolean iters_persist;
-  GtkTreePath *p;
 
   icon_view = GTK_ICON_VIEW (data);
-
-  iters_persist = gtk_tree_model_get_flags (icon_view->priv->model) & GTK_TREE_MODEL_ITERS_PERSIST;
   
   index = gtk_tree_path_get_indices(path)[0];
-
-  if (iters_persist)
-    {
-      for (list = icon_view->priv->items, pos = 0; list; list = list->next, pos++)
-	{
-	  item = list->data;
-	  p = gtk_tree_model_get_path (icon_view->priv->model, &item->iter);
-	  i = gtk_tree_path_get_indices (p)[0];
-	  gtk_tree_path_free (p);
-	  if (i == index)
-	    break;
-	}
-
-      if (pos != index)
-	{
-	  for (next = list->next; next; next = next->next)
-	    {
-	      item = next->data;
-	      
-	      item->index--;
-	    }
-	  
-	  item = list->data;
-	  icon_view->priv->items = g_list_delete_link (icon_view->priv->items, list);
-	  item->index = index;
-	  
-	  icon_view->priv->items = g_list_insert (icon_view->priv->items,
-						  item, index);
-	  
-	  list = g_list_nth (icon_view->priv->items, index + 1);
-	  for (; list; list = list->next)
-	    {
-	      item = list->data;
-	      
-	      item->index++;
-	    } 
-	}
-    }
-
   item = g_list_nth (icon_view->priv->items, index)->data;
 
   gtk_icon_view_item_invalidate_size (item);
@@ -2334,24 +2290,17 @@ gtk_icon_view_rows_reordered (GtkTreeModel *model,
   int length;
   GtkIconView *icon_view;
   GList *items = NULL, *list;
-  gint *inverted_order;
   GtkIconViewItem **item_array;
   
   icon_view = GTK_ICON_VIEW (data);
 
   length = gtk_tree_model_iter_n_children (model, NULL);
-  inverted_order = g_new (gint, length);
-
-  /* Invert the array */
-  for (i = 0; i < length; i++)
-    inverted_order[new_order[i]] = i;
 
   item_array = g_new (GtkIconViewItem *, length);
   for (i = 0, list = icon_view->priv->items; list != NULL; list = list->next, i++)
-    item_array[inverted_order[i]] = list->data;
+    item_array[new_order[i]] = list->data;
 
-  g_free (inverted_order);
-  for (i = 0; i < length; i++)
+  for (i = length - 1; i >= 0; i--)
     {
       item_array[i]->index = i;
       items = g_list_prepend (items, item_array[i]);
@@ -2359,7 +2308,7 @@ gtk_icon_view_rows_reordered (GtkTreeModel *model,
   
   g_free (item_array);
   g_list_free (icon_view->priv->items);
-  icon_view->priv->items = g_list_reverse (items);
+  icon_view->priv->items = items;
 
   verify_items (icon_view);  
 }
