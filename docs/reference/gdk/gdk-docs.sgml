@@ -27,6 +27,7 @@
 <!ENTITY gdk-X-Window-System-Interaction SYSTEM "xml/x_interaction.xml">
 <!ENTITY gdk-Screen SYSTEM "xml/gdkscreen.xml">
 <!ENTITY gdk-Display SYSTEM "xml/gdkdisplay.xml">
+<!ENTITY gdk-DisplayManager SYSTEM "xml/gdkdisplaymanager.xml">
 <!ENTITY gdk-Multihead SYSTEM "multihead.sgml">
 ]>
 
@@ -41,6 +42,7 @@
 
     &gdk-Multihead;
     &gdk-Display;
+    &gdk-DisplayManager;
     &gdk-Screen;
 
     &gdk-Points-Rectangles-and-Regions;
