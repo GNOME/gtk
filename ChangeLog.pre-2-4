@@ -1,3 +1,8 @@
+Mon Jan 18 14:26:17 1999  Owen Taylor  <otaylor@redhat.com>
+
+	* docs/Changes-1.2.txt: Some editing, a little more
+	detail.
+
 Mon Jan 18 13:25:14 1999  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkmenu.[ch]: Added gtk_menu_set_title() to

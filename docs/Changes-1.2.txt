@@ -6,7 +6,7 @@ Incompatible Changes from GTK+-1.0 to GTK+-1.2:
   a version of GtkMenuFactory is currently still provided to ease
   the migration phase.
 
-* The GtkTypeInfo structures used in the gtk_*_type_init() functions has
+* The GtkTypeInfo structures used in the gtk_*_type_init() functions have
   changed a bit, the old format:  
       GtkTypeInfo bin_info =
       {
@@ -18,7 +18,9 @@ Incompatible Changes from GTK+-1.0 to GTK+-1.2:
         (GtkArgSetFunc) NULL,
         (GtkArgGetFunc) NULL,
       };
+
   needs to be converted to:
+
       static const GtkTypeInfo bin_info =
       {
         "GtkBin",
@@ -30,19 +32,43 @@ Incompatible Changes from GTK+-1.0 to GTK+-1.2:
         /* reserved_2 */ NULL,
         (GtkClassInitFunc) NULL,
       };
+
   the GtkArgSetFunc and GtkArgGetFunc functions are not supported from the
   type system anymore, and you should make sure that your code only fills
   in these fields with NULL and doesn't use the deprecated function typedefs
   (GtkArgSetFunc) and (GtkArgGetFunc) anymore.
 
-* A number of Gtk functions got renamed. For compatibility, function
-  name aliases covering the old 1.0.x function names are defined in
-  gtkcompat.h. To asure your Gtk program doesn't rely on outdated function
-  variants, compile you program with -DGTK_DISABLE_COMPAT_H to disable
+* A number of Gtk functions were renamed. For compatibility, gtkcompat.h
+  #define's the old 1.0.x function names in terms of the new names.
+  To assure your Gtk program doesn't rely on outdated function
+  variants, compile your program with -DGTK_DISABLE_COMPAT_H to disable
   the compatibility aliases.
 
+  Here is the list of the old names and replacements:
+
+  Old:				      Replacement:
+
+  gtk_accel_label_accelerator_width   gtk_accel_label_get_accel_width
+  gtk_check_menu_item_set_state	      gtk_check_menu_item_set_active
+  gtk_container_border_width	      gtk_container_set_border_width
+  gtk_label_set  	              gtk_label_set_text
+  gtk_notebook_current_page           gtk_notebook_get_current_page
+  gtk_packer_configure                gtk_packer_set_child_packing
+  gtk_paned_gutter_size	              gtk_paned_set_gutter_size
+  gtk_paned_handle_size		      gtk_paned_set_handle_size
+  gtk_scale_value_width               gtk_scale_get_value_width
+  gtk_style_apply_default_pixmap      gtk_style_apply_default_background (1)
+  gtk_toggle_button_set_state         gtk_toggle_button_set_active
+  gtk_window_position		      gtk_window_set_position
+ 
+  (1) gtk_style_apply_default_background() has an additional
+      argument, gboolean set_bg. This parameter should be FALSE if
+      the background is being set for a NO_WINDOW widget, otherwise
+      true.
+
 * During the development phase of the 1.1.x line of Gtk certain functions
-  got deprecated and later removed. Functions affected are:
+  were deprecated and later removed. Functions affected are:
+
   Removed:                          Replacement:
   gtk_clist_set_border		    gtk_clist_set_shadow_type
   gtk_container_block_resize	    gtk_container_set_resize_mode
@@ -51,17 +77,21 @@ Incompatible Changes from GTK+-1.0 to GTK+-1.2:
   gtk_ctree_show_stub		    gtk_ctree_set_show_stub
   gtk_ctree_set_reorderable	    gtk_clist_set_reorderable
   gtk_ctree_set_use_drag_icons	    gtk_clist_set_use_drag_icons
-  gtk_entry_adjust_scroll	    %
+  gtk_entry_adjust_scroll	    (1)
   gtk_object_class_add_user_signal  gtk_object_class_user_signal_new
-  gtk_preview_put_row		    %
+  gtk_preview_put_row		    gtk_preview_put
   gtk_progress_bar_construct	    gtk_progress_set_adjustment
   gtk_scrolled_window_construct	    gtk_scrolled_window_set_{h|v}adjustment
   gtk_spin_button_construct	    gtk_spin_button_configure
   gtk_widget_thaw_accelerators	    gtk_widget_unlock_accelerators
   gtk_widget_freeze_accelerators    gtk_widget_lock_accelerators
 
-* Additionally, all gtk_*_interp function variants got removed, as a
-  replacement gtk_*_full variants are provided now.
+(1) This function is no longer needed as GtkEntry should automatically
+    keep the scroll adjusted properly.
+
+* Additionally, all gtk_*_interp functions were removed.
+  gtk_*_full versions were provided as of GTK+-1.0 and should
+  be used instead.
 
 * GtkButton has been changed to derive from GtkBin.
   To access a button's child, use GTK_BIN (button)->child, instead
