@@ -1,11 +1,11 @@
 
 lib_LTLIBRARIES=libgdk_pixbuf_xlib-1.3.la
 
-INCLUDES = -I$(top_srcdir) -I$(top_builddir) \
-	-I$(top_srcdir)/gdk-pixbuf 	\
-	-I$(top_srcdir)/contrib 	\
-	$(GLIB_CFLAGS)
-
+INCLUDES = -I$(top_srcdir) -I$(top_builddir) 	\
+	-I$(top_srcdir)/gdk-pixbuf 		\
+	-I$(top_srcdir)/contrib 		\
+	$(GLIB_CFLAGS)				\
+	@x_cflags@ 
 LDADDS = @STRIP_BEGIN@ 	\
 	@x_ldflags@	\
 	@x_libs@	\
