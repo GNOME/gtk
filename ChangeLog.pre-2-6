@@ -1,5 +1,8 @@
 2004-10-16  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkaboutdialog.c (gtk_about_dialog_destroy): Don't leak
+	the secondary dialogs.  (#155084, Paolo Borelli)
+
 	* gtk/gtkhsv.c (gtk_hsv_expose): Fix redraw issues with the
 	focus on the ring. 
 
