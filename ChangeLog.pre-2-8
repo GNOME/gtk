@@ -1,3 +1,29 @@
+Tue Jan 12 18:30:51 1999  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/testdnd.c (label_drag_data_received): Add 
+	a drag_data_received handler for the label.
+
+Tue Jan 12 15:01:50 1999  Owen Taylor  <otaylor@redhat.com>
+
+        * gdk/gdkevents.c: Removed the putback_events queue, 
+	since it was causing problems with event ordering -
+	just keep a single queue. If we need it, we can
+	add priorities to events.
+
+	* gdk/gdkevents.c: Annotate events with flags - we allocate
+	a GdkEventPrivate structure in gdk_event_new() and use these
+	flags to mark an event being translated as "pending" -
+	I.e., not yet ready to be dequeued. So we can put
+	the event on the queue and get the order of the
+	events right. (This solves the double-click problems)
+	
+	* gdk/gdk.h gdk/gdkevents.h: Add gdk_event_peek() to get a copy
+	of the next event on the event queue.
+	
+	* gtk/gtkmain.c (gtk_main_do_event): Use gdk_event_peek()
+	to check the next event without causing event queue
+	reordering.
+
 Tue Jan 12 15:41:20 1999  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtklabel.c (gtk_label_expose): Minor fix

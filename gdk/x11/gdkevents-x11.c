@@ -32,17 +32,30 @@
 
 
 typedef struct _GdkIOClosure GdkIOClosure;
+typedef struct _GdkEventPrivate GdkEventPrivate;
 
 #define DOUBLE_CLICK_TIME      250
 #define TRIPLE_CLICK_TIME      500
 #define DOUBLE_CLICK_DIST      5
 #define TRIPLE_CLICK_DIST      5
 
+typedef enum {
+  /* Following flag is set for events on the event queue during
+   * translation and cleared afterwards.
+   */
+  GDK_EVENT_PENDING = 1 << 0
+} GdkEventFlags;
+
 struct _GdkIOClosure {
   GdkInputFunction function;
   GdkInputCondition condition;
   GdkDestroyNotify notify;
   gpointer data;
+};
+
+struct _GdkEventPrivate {
+  GdkEvent event;
+  guint    flags;
 };
 
 /* 
@@ -105,14 +118,10 @@ static GDestroyNotify event_notify;
 static GList *client_filters;	                    /* Filters for client messages */
 
 /* FIFO's for event queue, and for events put back using
- * gdk_event_put(). We keep separate queues so that
- * we can make the putback events both FIFO and preemptive
- * of pending events.
+ * gdk_event_put().
  */
 static GList *queued_events = NULL;
 static GList *queued_tail = NULL;
-static GList *putback_events = NULL;
-static GList *putback_tail = NULL;
 
 static GSourceFuncs event_funcs = {
   gdk_event_prepare,
@@ -122,6 +131,77 @@ static GSourceFuncs event_funcs = {
 };
 
 GPollFD event_poll_fd;
+
+/*********************************************
+ * Functions for maintaining the event queue *
+ *********************************************/
+
+/*************************************************************
+ * gdk_event_queue_find_first:
+ *     Find the first event on the queue that is not still
+ *     being filled in.
+ *   arguments:
+ *     
+ *   results:
+ *     Pointer to the list node for that event, or NULL
+ *************************************************************/
+
+static GList *
+gdk_event_queue_find_first (void)
+{
+  GList *tmp_list = queued_events;
+
+  while (tmp_list)
+    {
+      GdkEventPrivate *event = queued_events->data;
+      if (!(event->flags & GDK_EVENT_PENDING))
+	return tmp_list;
+    }
+
+  return NULL;
+}
+
+/*************************************************************
+ * gdk_event_queue_remove_link:
+ *     Remove a specified list node from the event queue.
+ *   arguments:
+ *     node: Node to remove.
+ *   results:
+ *************************************************************/
+
+static void
+gdk_event_queue_remove_link (GList *node)
+{
+  if (node->prev)
+    node->prev->next = node->next;
+  else
+    queued_events = node->next;
+  
+  if (node->next)
+    node->next->prev = node->prev;
+  else
+    queued_tail = node->prev;
+  
+}
+
+/*************************************************************
+ * gdk_event_queue_append:
+ *     Append an event onto the tail of the event queue.
+ *   arguments:
+ *     event: Event to append.
+ *   results:
+ *************************************************************/
+
+static void
+gdk_event_queue_append (GdkEvent *event)
+{
+  queued_tail = g_list_append(queued_tail, event);
+  
+  if (!queued_events)
+    queued_events = queued_tail;
+  else
+    queued_tail = queued_tail->next;
+}
 
 void 
 gdk_events_init (void)
@@ -137,10 +217,6 @@ gdk_events_init (void)
   
   g_main_add_poll (&event_poll_fd, GDK_PRIORITY_EVENTS);
 
-  /* This is really crappy. We have to look into the display structure
-   *  to find the base resource id. This is only needed for recording
-   *  and playback of events.
-   */
   button_click_time[0] = 0;
   button_click_time[1] = 0;
   button_window[0] = NULL;
@@ -171,7 +247,7 @@ gdk_events_init (void)
 gboolean
 gdk_events_pending (void)
 {
-  return (queued_events || putback_events);
+  return (gdk_event_queue_find_first() || XPending (gdk_display));
 }
 
 /*
@@ -451,11 +527,9 @@ gdk_event_handler_set (GdkEventFunc   func,
  * Arguments:
  *
  * Results:
- *   If an event was received that we care about, returns 
+ *   If an event is waiting that we care about, returns 
  *   a pointer to that event, to be freed with gdk_event_free.
- *   Otherwise, returns NULL. This function will also return
- *   before an event is received if the timeout interval
- *   runs out.
+ *   Otherwise, returns NULL.
  *
  * Side effects:
  *
@@ -470,6 +544,38 @@ gdk_event_get (void)
   return gdk_event_unqueue();
 }
 
+/*
+ *--------------------------------------------------------------
+ * gdk_event_peek
+ *
+ *   Gets the next event.
+ *
+ * Arguments:
+ *
+ * Results:
+ *   If an event is waiting that we care about, returns 
+ *   a copy of that event, but does not remove it from
+ *   the queue. The pointer is to be freed with gdk_event_free.
+ *   Otherwise, returns NULL.
+ *
+ * Side effects:
+ *
+ *--------------------------------------------------------------
+ */
+
+GdkEvent *
+gdk_event_peek (void)
+{
+  GList *tmp_list;
+
+  tmp_list = gdk_event_queue_find_first ();
+  
+  if (tmp_list)
+    return gdk_event_copy (tmp_list->data);
+  else
+    return NULL;
+}
+
 void
 gdk_event_put (GdkEvent *event)
 {
@@ -479,12 +585,7 @@ gdk_event_put (GdkEvent *event)
   
   new_event = gdk_event_copy (event);
 
-  putback_tail = g_list_append(putback_tail, new_event);
-
-  if (!putback_events)
-    putback_events = putback_tail;
-  else
-    putback_tail = putback_tail->next;
+  gdk_event_queue_append (new_event);
 }
 
 /*
@@ -510,17 +611,18 @@ static GMemChunk *event_chunk;
 static GdkEvent*
 gdk_event_new (void)
 {
-  GdkEvent *new_event;
+  GdkEventPrivate *new_event;
   
   if (event_chunk == NULL)
     event_chunk = g_mem_chunk_new ("events",
-				   sizeof (GdkEvent),
+				   sizeof (GdkEventPrivate),
 				   4096,
 				   G_ALLOC_AND_FREE);
   
-  new_event = g_chunk_new (GdkEvent, event_chunk);
+  new_event = g_chunk_new (GdkEventPrivate, event_chunk);
+  new_event->flags = 0;
   
-  return new_event;
+  return (GdkEvent *)new_event;
 }
 
 GdkEvent*
@@ -1835,10 +1937,11 @@ gdk_event_get_type (Display  *display,
 static void
 gdk_events_queue (void)
 {
+  GList *node;
   GdkEvent *event;
   XEvent xevent;
 
-  while (!(putback_events || queued_events) && XPending (gdk_display))
+  while (!gdk_event_queue_find_first() && XPending (gdk_display))
     {
   #ifdef USE_XIM
       Window w = None;
@@ -1867,18 +1970,22 @@ gdk_events_queue (void)
       event->any.window = NULL;
       event->any.send_event = FALSE;
       event->any.send_event = xevent.xany.send_event;
-      
+
+      ((GdkEventPrivate *)event)->flags |= GDK_EVENT_PENDING;
+
+      gdk_event_queue_append (event);
+      node = queued_tail;
+
       if (gdk_event_translate (event, &xevent))
 	{
-	  queued_tail = g_list_append(queued_tail, event);
-
-	  if (!queued_events)
-	    queued_events = queued_tail;
-	  else
-	    queued_tail = queued_tail->next;
+	  ((GdkEventPrivate *)event)->flags &= ~GDK_EVENT_PENDING;
 	}
       else
-	gdk_event_free (event);
+	{
+	  gdk_event_queue_remove_link (node);
+	  g_list_free_1 (node);
+	  gdk_event_free (event);
+	}
     }
 }
 
@@ -1894,7 +2001,7 @@ gdk_event_prepare (gpointer  source_data,
   *timeout = -1;
 
   gdk_events_queue ();
-  retval = (queued_events || putback_events);
+  retval = (gdk_event_queue_find_first () != NULL);
 
   GDK_THREADS_LEAVE ();
 
@@ -1912,7 +2019,7 @@ gdk_event_check   (gpointer  source_data,
   if (event_poll_fd.revents & G_IO_IN)
       gdk_events_queue ();
 
-  retval = (queued_events || putback_events);
+  retval = (gdk_event_queue_find_first () != NULL);
 
   GDK_THREADS_LEAVE ();
 
@@ -1922,29 +2029,17 @@ gdk_event_check   (gpointer  source_data,
 static GdkEvent *
 gdk_event_unqueue (void)
 {
-  GdkEvent *event;
-  GList *tmp_list, **head, **tail;
+  GdkEvent *event = NULL;
+  GList *tmp_list;
 
-  if (putback_events)
-    {
-      head = &putback_events;
-      tail = &putback_tail;
-    }
-  else if (queued_events)
-    {
-      head = &queued_events;
-      tail = &queued_tail;
-    }
-  else
-    return NULL;
+  tmp_list = gdk_event_queue_find_first ();
 
-  if (*head == *tail)
-    *tail = NULL;
-    
-  tmp_list = *head;
-  event = tmp_list->data;
-  *head = g_list_remove_link (tmp_list, tmp_list);
-  g_list_free_1 (tmp_list);
+  if (tmp_list)
+    {
+      event = tmp_list->data;
+      gdk_event_queue_remove_link (tmp_list);
+      g_list_free_1 (tmp_list);
+    }
 
   return event;
 }

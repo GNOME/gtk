@@ -553,7 +553,7 @@ gtk_main_do_event (GdkEvent *event)
 
   /* If there are any events pending then get the next one.
    */
-  next_event = gdk_event_get ();
+  next_event = gdk_event_peek ();
   
   /* Try to compress enter/leave notify events. These event
    *  pairs occur when the mouse is dragged quickly across
@@ -571,19 +571,17 @@ gtk_main_do_event (GdkEvent *event)
 	(next_event->type != event->type) &&
 	(next_event->any.window == event->any.window))
       {
+	/* Throw both the peeked copy and the queued copy away 
+	 */
 	gdk_event_free (next_event);
-	next_event = NULL;
+	next_event = gdk_event_get ();
+	gdk_event_free (next_event);
 	
 	return;
       }
-  
 
   if (next_event)
-    {
-      gdk_event_put (next_event);
-      gdk_event_free (next_event);
-      next_event = NULL;
-    }
+    gdk_event_free (next_event);
 
   /* Find the widget which got the event. We store the widget
    *  in the user_data field of GdkWindow's.

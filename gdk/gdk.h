@@ -37,6 +37,8 @@ gchar*	  gdk_set_locale	   	(void);
 
 gboolean  gdk_events_pending	 	(void);
 GdkEvent* gdk_event_get			(void);
+
+GdkEvent* gdk_event_peek                (void);
 GdkEvent* gdk_event_get_graphics_expose (GdkWindow 	*window);
 void      gdk_event_put	 		(GdkEvent  	*event);
 

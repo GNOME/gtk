@@ -350,7 +350,7 @@ target_drag_data_received  (GtkWidget          *widget,
 {
   if ((data->length >= 0) && (data->format == 8))
     {
-      g_print ("Received %s\n", (gchar *)data->data);
+      g_print ("Received \"%s\" in trashcan\n", (gchar *)data->data);
       gtk_drag_finish (context, TRUE, FALSE, time);
       return;
     }
@@ -358,6 +358,25 @@ target_drag_data_received  (GtkWidget          *widget,
   gtk_drag_finish (context, FALSE, FALSE, time);
 }
   
+void  
+label_drag_data_received  (GtkWidget          *widget,
+			    GdkDragContext     *context,
+			    gint                x,
+			    gint                y,
+			    GtkSelectionData   *data,
+			    guint               info,
+			    guint               time)
+{
+  if ((data->length >= 0) && (data->format == 8))
+    {
+      g_print ("Received \"%s\" in label\n", (gchar *)data->data);
+      gtk_drag_finish (context, TRUE, FALSE, time);
+      return;
+    }
+  
+  gtk_drag_finish (context, FALSE, FALSE, time);
+}
+
 void  
 source_drag_data_get  (GtkWidget          *widget,
 		       GdkDragContext     *context,
@@ -559,6 +578,9 @@ main (int argc, char **argv)
 		     GTK_DEST_DEFAULT_ALL,
 		     target_table, n_targets - 1, /* no rootwin */
 		     GDK_ACTION_COPY | GDK_ACTION_MOVE);
+
+  gtk_signal_connect( GTK_OBJECT(label), "drag_data_received",
+		      GTK_SIGNAL_FUNC( label_drag_data_received), NULL);
 
   gtk_table_attach (GTK_TABLE (table), label, 0, 1, 0, 1,
 		    GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL,
