@@ -1,5 +1,21 @@
 2005-03-07  Matthias Clasen  <mclasen@redhat.com>
 
+	Convert the gdk keyval-keyname tables to a big string
+	+ offsets. (#168901)
+	
+	* gdk/gen-keyname-table.pl: Perl script inspired by
+	pango/tools/gen-color-table.pl to create the 
+	gdk_keys_by_keyval and gdk_keys_by_name tables as lists
+	of offsets pointing into a big const string.
+	
+	* gdk/keynames.txt: List of keyval-keyname pairs.
+	* gdk/keyname-table.h: Generated tables.
+
+	* gdk/gdkkeynames.c: Include keyname-table.h and don't
+	generate the inverse table at runtime.
+
+2005-03-07  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtkstyle.c: Document which parameters may be NULL.  
 	(#166855, Frank Naumann)
 
