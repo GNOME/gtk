@@ -1,3 +1,7 @@
+Tue Aug 24 02:26:25 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/Makefile.am (HTML_IMAGES): Add visual index images.
+
 Mon Aug 23 16:56:15 2004  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/Makefile.am: add images to the doc build.

@@ -106,7 +106,8 @@ content_files =					\
 	tree_widget.sgml			\
 	windows.sgml				\
 	x11.sgml				\
-	gtk-query-immodules-2.0.xml
+	gtk-query-immodules-2.0.xml		\
+	visual_index.xml
 
 # Images to copy into HTML directory
 HTML_IMAGES = \
@@ -203,7 +204,23 @@ HTML_IMAGES = \
 	$(top_srcdir)/gtk/stock-icons/stock_media_previous_24.png	\
 	$(top_srcdir)/gtk/stock-icons/stock_media_record_24.png		\
 	$(top_srcdir)/gtk/stock-icons/stock_media_rewind_24.png		\
-	$(top_srcdir)/gtk/stock-icons/stock_media_stop_24.png
+	$(top_srcdir)/gtk/stock-icons/stock_media_stop_24.png		\
+	$(srcdir)/images/font-button.png				\
+	$(srcdir)/images/button.png					\
+	$(srcdir)/images/check-button.png				\
+	$(srcdir)/images/color-button.png				\
+	$(srcdir)/images/combo-box-entry.png				\
+	$(srcdir)/images/entry.png					\
+	$(srcdir)/images/font-button.png				\
+	$(srcdir)/images/frame.png					\
+	$(srcdir)/images/label.png					\
+	$(srcdir)/images/list-and-tree.png				\
+	$(srcdir)/images/multiline-text.png				\
+	$(srcdir)/images/panes.png					\
+	$(srcdir)/images/radio-group.png				\
+	$(srcdir)/images/separator.png					\
+	$(srcdir)/images/toggle-button.png				\
+	$(srcdir)/images/window.png
 
 # Extra options to supply to gtkdoc-fixref
 FIXXREF_OPTIONS=--extra-dir=../gdk-pixbuf/html --extra-dir=../gdk/html
