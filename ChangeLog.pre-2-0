@@ -1,3 +1,12 @@
+Thu Oct  7 18:31:55 1999  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkrc.c (gtk_rc_init): Always normalize codeset
+	names to lowercase and alphanumeric, before looking
+	them up.
+
+	* gtk/Makefile.am: Install codeset variant gtkrc files
+	with normalized names.
+
 Thu Oct  7 22:52:42 1999  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkitemfactory.c (gtk_item_factory_popup_with_data): even
@@ -68,7 +77,7 @@ Wed Sep 29 15:41:08 1999  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtktreeitem.c (gtk_tree_item_size_allocate): 
 	Get rid of stupid C unsigned integer bug.
-	(Bug #2272)
+	(Bug #2440)
 
 1999-09-28  Kjartan Maraas  <kmaraas@online.no>
 

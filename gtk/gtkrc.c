@@ -387,6 +387,55 @@ gtk_rc_get_default_files (void)
   return gtk_rc_default_files;
 }
 
+/* The following routine is based on _nl_normalize_codeset from
+ * the GNU C library. Contributed by
+ *
+ * Contributed by Ulrich Drepper <drepper@gnu.ai.mit.edu>, 1995.
+ * Copyright (C) 1995, 1996, 1997, 1998, 1999 Free Software Foundation, Inc.
+ * 
+ * Normalize codeset name.  There is no standard for the codeset
+ * names.  Normalization allows the user to use any of the common
+ * names.
+ */
+static char *
+_gtk_normalize_codeset (const char *codeset, int name_len)
+{
+  int len = 0;
+  int only_digit = 1;
+  char *retval;
+  char *wp;
+  int cnt;
+
+  for (cnt = 0; cnt < name_len; ++cnt)
+    if (isalnum (codeset[cnt]))
+      {
+	++len;
+
+	if (isalpha (codeset[cnt]))
+	  only_digit = 0;
+      }
+
+  retval = g_malloc ((only_digit ? 3 : 0) + len + 1);
+
+  if (only_digit)
+    {
+      strcpy (retval, "iso");
+      wp = retval + 3;
+    }
+  else
+    wp = retval;
+  
+  for (cnt = 0; cnt < name_len; ++cnt)
+    if (isalpha (codeset[cnt]))
+      *wp++ = isupper(codeset[cnt]) ? tolower (codeset[cnt]) : codeset[cnt];
+    else if (isdigit (codeset[cnt]))
+      *wp++ = codeset[cnt];
+  
+  *wp = '\0';
+
+  return retval;
+}
+
 void
 gtk_rc_init (void)
 {
@@ -420,25 +469,42 @@ gtk_rc_init (void)
       if (strcmp (locale, "C") && strcmp (locale, "POSIX"))
 	{
 	  /* Determine locale-specific suffixes for RC files
+	   *
+	   * We normalize the charset into a standard form,
+	   * which has all '-' and '_' characters removed,
+	   * and is lowercase.
 	   */
+	  gchar *normalized_locale;
+
 	  p = strchr (locale, '@');
 	  length = p ? (p -locale) : strlen (locale);
-	  
+
 	  p = strchr (locale, '.');
 	  if (p)
 	    {
-	      locale_suffixes[n_locale_suffixes++] = g_strndup (locale, length);
+	      gchar *tmp1 = g_strndup (locale, p - locale + 1);
+	      gchar *tmp2 = _gtk_normalize_codeset (p + 1, length - (p - locale + 1));
+	      
+	      normalized_locale = g_strconcat (tmp1, tmp2, NULL);
+	      g_free (tmp1);
+	      g_free (tmp2);
+						 
+	      locale_suffixes[n_locale_suffixes++] = g_strdup (normalized_locale);
 	      length = p - locale;
 	    }
+	  else
+	    normalized_locale = g_strndup (locale, length);
 	  
-	  p = strchr (locale, '_');
+	  p = strchr (normalized_locale, '_');
 	  if (p)
 	    {
-	      locale_suffixes[n_locale_suffixes++] = g_strndup (locale, length);
-	      length = p - locale;
+	      locale_suffixes[n_locale_suffixes++] = g_strndup (normalized_locale, length);
+	      length = p - normalized_locale;
 	    }
 	  
-	  locale_suffixes[n_locale_suffixes++] = g_strndup (locale, length);
+	  locale_suffixes[n_locale_suffixes++] = g_strndup (normalized_locale, length);
+
+	  g_free (normalized_locale);
 	}
     }
   

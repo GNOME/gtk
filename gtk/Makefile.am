@@ -388,7 +388,7 @@ install-data-local:
 	    rm -f gtkrc.$$i ; \
 	    ln -s gtkrc.iso-8859-2 gtkrc.$$i ; \
 	  done ; \
-	  for i in bg_BG.ISO-8859-5 mk sr ru_RU.ISO-8859-5 ; do \
+	  for i in bg_BG.iso88595 mk sr ru_RU.iso88595 ; do \
 	    rm -f gtkrc.$$i ; \
 	    ln -s gtkrc.iso-8859-5 gtkrc.$$i ; \
 	  done ; \
