@@ -670,7 +670,7 @@ _gtk_rc_init (void)
 		       "style \"gtk-default-progress-bar-style\" {\n"
 		       "  bg[PRELIGHT] = \"#4b6983\"\n"
 		       "  fg[PRELIGHT] = \"#ffffff\"\n"
-		       "  bg[NORMAL]   = \"#bab5ab\"\n"
+		       "  bg[NORMAL]   = \"#c4c2bd\"\n"
 		       "}\n"
 		       "\n"
 		       "style \"gtk-default-menu-bar-item-style\" {\n"

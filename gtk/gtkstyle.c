@@ -446,21 +446,29 @@ static struct {
   { radio_inconsistent_aa_bits, NULL },
   { radio_inconsistent_text_bits, NULL },
 };
+#define GTK_GRAY		0xdcdc, 0xdada, 0xd5d5
+#define GTK_DARK_GRAY		0xc4c4, 0xc2c2, 0xbdbd
+#define GTK_LIGHT_GRAY		0xeeee, 0xebeb, 0xe7e7
+#define GTK_WHITE		0xffff, 0xffff, 0xffff
+#define GTK_BLUE		0x4b4b, 0x6969, 0x8383
+#define GTK_VERY_DARK_GRAY	0x9c9c, 0x9a9a, 0x9494
+#define GTK_BLACK		0x0000, 0x0000, 0x0000
+#define GTK_WEAK_GRAY		0x7530, 0x7530, 0x7530
 
 /* --- variables --- */
-static const GdkColor gtk_default_normal_fg =      { 0,      0,      0,      0 };
-static const GdkColor gtk_default_active_fg =      { 0,      0,      0,      0 };
-static const GdkColor gtk_default_prelight_fg =    { 0,      0,      0,      0 };
-static const GdkColor gtk_default_selected_fg =    { 0, 0xffff, 0xffff, 0xffff };
-static const GdkColor gtk_default_insensitive_fg = { 0, 0x7530, 0x7530, 0x7530 };
+static const GdkColor gtk_default_normal_fg =      { 0, GTK_BLACK };
+static const GdkColor gtk_default_active_fg =      { 0, GTK_BLACK };
+static const GdkColor gtk_default_prelight_fg =    { 0, GTK_BLACK };
+static const GdkColor gtk_default_selected_fg =    { 0, GTK_WHITE };
+static const GdkColor gtk_default_insensitive_fg = { 0, GTK_WEAK_GRAY };
 
-static const GdkColor gtk_default_normal_bg =      { 0, 0xdcdc, 0xdada, 0xd5d5 };
-static const GdkColor gtk_default_active_bg =      { 0, 0xbaba, 0xb5b5, 0xabab };
-static const GdkColor gtk_default_prelight_bg =    { 0, 0xeeee, 0xebeb, 0xe7e7 };
-static const GdkColor gtk_default_selected_bg =    { 0, 0x4b4b, 0x6969, 0x8383 };
-static const GdkColor gtk_default_insensitive_bg = { 0, 0xdcdc, 0xdada, 0xd5d5 };
-static const GdkColor gtk_default_selected_base =  { 0, 0x4b4b, 0x6969, 0x8383 };
-static const GdkColor gtk_default_active_base =    { 0, 0x8080, 0x7d7d, 0x7474 };
+static const GdkColor gtk_default_normal_bg =      { 0, GTK_GRAY };
+static const GdkColor gtk_default_active_bg =      { 0, GTK_DARK_GRAY };
+static const GdkColor gtk_default_prelight_bg =    { 0, GTK_LIGHT_GRAY };
+static const GdkColor gtk_default_selected_bg =    { 0, GTK_BLUE };
+static const GdkColor gtk_default_insensitive_bg = { 0, GTK_GRAY };
+static const GdkColor gtk_default_selected_base =  { 0, GTK_BLUE };
+static const GdkColor gtk_default_active_base =    { 0, GTK_VERY_DARK_GRAY };
 
 static gpointer parent_class = NULL;
 
