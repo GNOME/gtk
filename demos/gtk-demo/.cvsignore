@@ -4,4 +4,4 @@ Makefile.in
 .deps
 gtk-demo
 demos.h
-
+geninclude.pl
