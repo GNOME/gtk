@@ -722,7 +722,7 @@ _gdk_window_process_expose (GdkWindow    *window,
 	  if (item->window == window)
 	    {
 	      if (item->type == GDK_WINDOW_QUEUE_TRANSLATE)
-		gdk_region_offset (invalidate_region, - item->u.translate.dx, - item->u.translate.dy);
+		gdk_region_offset (invalidate_region, item->u.translate.dx, item->u.translate.dy);
 	      else		/* anti-expose */
 		gdk_region_subtract (invalidate_region, item->u.antiexpose.area);
 	    }

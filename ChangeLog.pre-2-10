@@ -1,3 +1,8 @@
+2001-03-16  Alexander Larsson  <alexl@redhat.com>
+
+	* gdk/x11/gdkgeometry-x11.c (_gdk_window_process_expose):
+	Fix sign error with queued region translations.
+
 2001-03-15  HideToshi Tajima  <tajima@happy>
 
 	* modules/input/gtkimcontextxim.c (gtk_im_context_xim_set_cursor_location): 
