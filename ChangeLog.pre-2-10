@@ -1,3 +1,7 @@
+Wed Jan 06 10:04:12 1999  Tristan Tarrant  <ttarrant@etnoteam.it>
+
+	* configure.in,po/it.po: added Italian translations
+
 Tue Jan 05 21:18:00 1999  George Lebl  <jirka@5z.com>
 
 	* gtk/gtkmenu.c,gtk/gtkmenuitem.c,gtk/gtkeditable.c: free the
