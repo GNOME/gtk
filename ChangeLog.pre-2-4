@@ -1,10 +1,14 @@
+Sat Jun 15 23:05:19 2002  Owen Taylor  <otaylor@redhat.com>
+ 
+ 	* gtk/gtkfilesel.c (gtk_file_selection_set_filename):
+ 	Fix backwards asssertion. (#85434)
+ 
 Sat Jun 15 16:10:00 2002  James M. Cape <jcape@ignore-your.tv>
 
 	* gtk/gtktexttag.c (gtk_text_tag_set_property):
 	Notify about "background-full-height-set", not
-	"bg_full_height_set".
+	"bg_full_height_set". (#83336)
 			
-
 Fri Jun 14 15:41:50 2002  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtktreeview.c: Fix bug #84268, where validate_rows sometimes
