@@ -234,8 +234,6 @@ gtk_button_set_arg (GtkButton *button,
   switch (arg_id)
     {
     case ARG_LABEL:
-      gtk_container_disable_resize (GTK_CONTAINER (button));
-
       if (button->child)
 	{
 	  gtk_widget_unparent (button->child);
@@ -246,7 +244,6 @@ gtk_button_set_arg (GtkButton *button,
       gtk_widget_show (label);
 
       gtk_container_add (GTK_CONTAINER (button), label);
-      gtk_container_enable_resize (GTK_CONTAINER (button));
       break;
     default:
       break;

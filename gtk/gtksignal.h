@@ -178,9 +178,9 @@ void   gtk_signal_default_marshaller	  (GtkObject	       *object,
 void   gtk_signal_set_funcs		  (GtkSignalMarshal	marshal_func,
 					   GtkSignalDestroy	destroy_func);
 
-/* Report internal information about a signal. The caller has the response
- *  to invoke a supsequent g_free (returned_data); but must leave the
- *  contents of GtkSignalQuery untouched.
+/* Report internal information about a signal. The caller has the
+ *  responsibility to invoke a supsequent g_free (returned_data); but
+ *  must not modify data pointed to by the members of GtkSignalQuery 
  */
 GtkSignalQuery* gtk_signal_query	  (guint		signal_id);
 

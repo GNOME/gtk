@@ -4428,10 +4428,10 @@ create_file_selection (void)
 }
 
 void
-font_selection_ok (GtkWidget        *w,
-		   GtkFontSelection *fs)
+font_selection_ok (GtkWidget              *w,
+		   GtkFontSelectionDialog *fs)
 {
-  g_print ("%s\n", gtk_font_selection_get_font_name (fs));
+  g_print ("%s\n", gtk_font_selection_dialog_get_font_name (fs));
   gtk_widget_destroy (GTK_WIDGET (fs));
 }
 
@@ -4452,7 +4452,7 @@ create_font_selection (void)
 
       gtk_signal_connect (GTK_OBJECT (GTK_FONT_SELECTION_DIALOG (window)->ok_button),
 			  "clicked", GTK_SIGNAL_FUNC(font_selection_ok),
-			  GTK_FONT_SELECTION_DIALOG (window)->fontsel);
+			  GTK_FONT_SELECTION_DIALOG (window));
       gtk_signal_connect_object (GTK_OBJECT (GTK_FONT_SELECTION_DIALOG (window)->cancel_button),
 				 "clicked", GTK_SIGNAL_FUNC(gtk_widget_destroy),
 				 GTK_OBJECT (window));

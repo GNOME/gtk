@@ -19,9 +19,10 @@
 #include <stdio.h>
 #include <gtk/gtk.h>
 #include "../config.h"
-#include <pthread.h>
 
 #ifdef USE_PTHREADS
+#include <pthread.h>
+
 static int nthreads = 0;
 static pthread_mutex_t nthreads_mutex = PTHREAD_MUTEX_INITIALIZER;
 

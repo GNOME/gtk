@@ -49,9 +49,8 @@ struct _GtkContainer
   GtkWidget *focus_child;
   
   guint border_width : 16;
-  guint auto_resize : 1;
   guint need_resize : 1;
-  guint block_resize : 1;
+  guint resize_mode : 2;
   
   
   /* The list of children that requested a resize
@@ -69,7 +68,7 @@ struct _GtkContainerClass
 				 GtkWidget	 *widget);
   void (* remove)      		(GtkContainer	 *container,
 				 GtkWidget	 *widget);
-  gint (* need_resize) 		(GtkContainer	 *container);
+  void (* check_resize)		(GtkContainer	 *container);
   void (* foreach)     		(GtkContainer	 *container,
 				 GtkCallback	  callback,
 				 gpointer	  callbabck_data);
@@ -88,6 +87,7 @@ struct _GtkContainerClass
 				 guint        	 arg_id);
 };
 
+/* Application-level methods */
 
 GtkType gtk_container_get_type		 (void);
 void    gtk_container_border_width	 (GtkContainer	   *container,
@@ -96,11 +96,12 @@ void    gtk_container_add		 (GtkContainer	   *container,
 					  GtkWidget	   *widget);
 void    gtk_container_remove		 (GtkContainer	   *container,
 					  GtkWidget	   *widget);
-void    gtk_container_disable_resize	 (GtkContainer	   *container);
-void    gtk_container_enable_resize	 (GtkContainer	   *container);
-void    gtk_container_block_resize	 (GtkContainer	   *container);
-void    gtk_container_unblock_resize	 (GtkContainer	   *container);
-gint    gtk_container_need_resize	 (GtkContainer	   *container);
+
+void    gtk_container_set_resize_mode    (GtkContainer     *container,
+					  GtkResizeMode     resize_mode);
+
+void    gtk_container_check_resize       (GtkContainer     *container);
+
 void    gtk_container_foreach		 (GtkContainer	   *container,
 					  GtkCallback	    callback,
 					  gpointer	    callback_data);
@@ -114,16 +115,20 @@ void    gtk_container_foreach_full	 (GtkContainer	   *container,
 					  gpointer	    callback_data,
 					  GtkDestroyNotify  notify);
 GList* gtk_container_children		 (GtkContainer	   *container);
-void   gtk_container_register_toplevel	 (GtkContainer	   *container);
-void   gtk_container_unregister_toplevel (GtkContainer	   *container);
 gint   gtk_container_focus		   (GtkContainer     *container,
 					    GtkDirectionType  direction);
+
+/* Widget-level methods */
+
 void   gtk_container_set_focus_child	   (GtkContainer     *container,
 					    GtkWidget	     *child);
 void   gtk_container_set_focus_vadjustment (GtkContainer     *container,
 					    GtkAdjustment    *adjustment);
 void   gtk_container_set_focus_hadjustment (GtkContainer     *container,
 					    GtkAdjustment    *adjustment);
+void    gtk_container_register_toplevel	   (GtkContainer     *container);
+void    gtk_container_unregister_toplevel  (GtkContainer     *container);
+void    gtk_container_resize_children      (GtkContainer     *container);
 
 GtkType gtk_container_child_type	   (GtkContainer     *container);
 
@@ -173,8 +178,21 @@ void    gtk_container_add_with_argv	   (GtkContainer      *container,
 					    GtkArg	      *args);
 
 
+/* Non-public methods */
+void    gtk_container_clear_resize_widgets (GtkContainer *container);
 
+/* Deprecated methods */
 
+/* completely non-functional */
+void    gtk_container_disable_resize	 (GtkContainer	   *container);
+void    gtk_container_enable_resize	 (GtkContainer	   *container);
+
+/* Use gtk_container_set_resize_mode() instead */
+void    gtk_container_block_resize	 (GtkContainer	   *container);
+void    gtk_container_unblock_resize	 (GtkContainer	   *container);
+
+/* Use gtk_container_check_resize() instead */
+gint    gtk_container_need_resize        (GtkContainer     *container);
 
 #ifdef __cplusplus
 }

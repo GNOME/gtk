@@ -44,6 +44,8 @@
     GTK_TYPE_ENUM, _gtk_preview_type_values },
   { "GtkReliefStyle", &GTK_TYPE_RELIEF_STYLE,
     GTK_TYPE_ENUM, _gtk_relief_style_values },
+  { "GtkResizeMode", &GTK_TYPE_RESIZE_MODE,
+    GTK_TYPE_ENUM, _gtk_resize_mode_values },
   { "GtkSignalRunType", &GTK_TYPE_SIGNAL_RUN_TYPE,
     GTK_TYPE_FLAGS, _gtk_signal_run_type_values },
   { "GtkScrollType", &GTK_TYPE_SCROLL_TYPE,

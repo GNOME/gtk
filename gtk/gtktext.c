@@ -284,6 +284,27 @@ static void move_cursor_page_ver (GtkText *text, int dir);
 static void move_cursor_ver (GtkText *text, int count);
 static void move_cursor_hor (GtkText *text, int count);
 
+/* Binding actions */
+static void gtk_text_move_cursor         (GtkEditable *editable,
+					  gint         x,
+					  gint         y);
+static void gtk_text_move_word           (GtkEditable *editable,
+					  gint         n);
+static void gtk_text_move_page           (GtkEditable *editable,
+					  gint         x,
+					  gint         y);
+static void gtk_text_move_to_row         (GtkEditable *editable,
+					  gint         row);
+static void gtk_text_move_to_column      (GtkEditable *editable,
+					  gint         row);
+static void gtk_text_kill_char           (GtkEditable *editable,
+					  gint         direction);
+static void gtk_text_kill_word           (GtkEditable *editable,
+					  gint         direction);
+static void gtk_text_kill_line           (GtkEditable *editable,
+					  gint         direction);
+
+/* To be removed */
 static void gtk_text_move_forward_character    (GtkText          *text);
 static void gtk_text_move_backward_character   (GtkText          *text);
 static void gtk_text_move_forward_word         (GtkText          *text);
@@ -363,7 +384,7 @@ static GtkTextFunction control_keys[26] =
 {
   (GtkTextFunction)gtk_text_move_beginning_of_line,    /* a */
   (GtkTextFunction)gtk_text_move_backward_character,   /* b */
-  gtk_editable_copy_clipboard,                         /* c */
+  (GtkTextFunction)gtk_editable_copy_clipboard,        /* c */
   (GtkTextFunction)gtk_text_delete_forward_character,  /* d */
   (GtkTextFunction)gtk_text_move_end_of_line,          /* e */
   (GtkTextFunction)gtk_text_move_forward_character,    /* f */
@@ -382,9 +403,9 @@ static GtkTextFunction control_keys[26] =
   NULL,                                                /* s */
   NULL,                                                /* t */
   (GtkTextFunction)gtk_text_delete_line,               /* u */
-  gtk_editable_paste_clipboard,                        /* v */
+  (GtkTextFunction)gtk_editable_paste_clipboard,       /* v */
   (GtkTextFunction)gtk_text_delete_backward_word,      /* w */
-  gtk_editable_cut_clipboard,                          /* x */
+  (GtkTextFunction)gtk_editable_cut_clipboard,         /* x */
   NULL,                                                /* y */
   NULL,                                                /* z */
 };
@@ -481,6 +502,17 @@ gtk_text_class_init (GtkTextClass *class)
 
   editable_class->insert_text = gtk_text_insert_text;
   editable_class->delete_text = gtk_text_delete_text;
+
+  editable_class->move_cursor = gtk_text_move_cursor;
+  editable_class->move_word = gtk_text_move_word;
+  editable_class->move_page = gtk_text_move_page;
+  editable_class->move_to_row = gtk_text_move_to_row;
+  editable_class->move_to_column = gtk_text_move_to_column;
+
+  editable_class->kill_char = gtk_text_kill_char;
+  editable_class->kill_word = gtk_text_kill_word;
+  editable_class->kill_line = gtk_text_kill_line;
+
   editable_class->update_text = gtk_text_update_text;
   editable_class->get_chars   = gtk_text_get_chars;
   editable_class->set_selection = gtk_text_set_selection;
@@ -1793,11 +1825,11 @@ gtk_text_key_press (GtkWidget   *widget,
 	  if (event->state & GDK_SHIFT_MASK)
 	    {
 	      extend_selection = FALSE;
-	      gtk_editable_paste_clipboard (editable, event->time);
+	      gtk_editable_paste_clipboard (editable);
 	    }
 	  else if (event->state & GDK_CONTROL_MASK)
 	    {
-	      gtk_editable_copy_clipboard (editable, event->time);
+	      gtk_editable_copy_clipboard (editable);
 	    }
 	  else
 	    {
@@ -1810,7 +1842,7 @@ gtk_text_key_press (GtkWidget   *widget,
 	  else if (event->state & GDK_SHIFT_MASK)
 	    {
 	      extend_selection = FALSE;
-	      gtk_editable_cut_clipboard (editable, event->time);
+	      gtk_editable_cut_clipboard (editable);
 	    }
 	  else
 	    gtk_text_delete_forward_character (text);
@@ -3434,6 +3466,34 @@ move_cursor_hor (GtkText *text, int count)
   draw_cursor (text, FALSE);
 }
 
+static void 
+gtk_text_move_cursor (GtkEditable *editable,
+		      gint         x,
+		      gint         y)
+{
+  if (x > 0)
+    {
+      while (x-- != 0)
+	move_cursor_hor (GTK_TEXT (editable), 1);
+    }
+  else if (x < 0)
+    {
+      while (x++ != 0)
+	move_cursor_hor (GTK_TEXT (editable), -1);
+    }
+
+  if (y > 0)
+    {
+      while (y-- != 0)
+	move_cursor_ver (GTK_TEXT (editable), 1);
+    }
+  else if (x < 0)
+    {
+      while (y++ != 0)
+	move_cursor_ver (GTK_TEXT (editable), -1);
+    }
+}
+
 static void
 gtk_text_move_forward_character (GtkText *text)
 {
@@ -3456,6 +3516,22 @@ static void
 gtk_text_move_previous_line (GtkText *text)
 {
   move_cursor_ver (text, -1);
+}
+
+static void 
+gtk_text_move_word (GtkEditable *editable,
+		    gint         n)
+{
+  if (n > 0)
+    {
+      while (n-- != 0)
+	gtk_text_move_forward_word (GTK_TEXT (editable));
+    }
+  else if (n < 0)
+    {
+      while (n++ != 0)
+	gtk_text_move_backward_word (GTK_TEXT (editable));
+    }
 }
 
 static void
@@ -3496,135 +3572,166 @@ gtk_text_move_backward_word (GtkText *text)
   draw_cursor (text, FALSE);
 }
 
-static void
-gtk_text_move_beginning_of_line (GtkText *text)
+static void 
+gtk_text_move_page (GtkEditable *editable,
+		    gint         x,
+		    gint         y)
 {
-  text->cursor_virtual_x = 0;
+  if (y != 0)
+    scroll_int (GTK_TEXT (editable), 
+		y * GTK_TEXT(editable)->vadj->page_increment);  
+}
+
+static void 
+gtk_text_move_to_row (GtkEditable *editable,
+		      gint         row)
+{
+}
+
+static void 
+gtk_text_move_to_column (GtkEditable *editable,
+			 gint         column)
+{
+  GtkText *text;
+
+  text = GTK_TEXT (editable);
+
+  text->cursor_virtual_x = 0;	/* FIXME */
 
   undraw_cursor (text, FALSE);
-  
+
+  /* Move to the beginning of the line */
   while ((text->cursor_mark.index > 0) &&
 	 (GTK_TEXT_INDEX (text, text->cursor_mark.index - 1) != LINE_DELIM))
     decrement_mark (&text->cursor_mark);
-	  
+
+  while (!LAST_INDEX (text, text->cursor_mark) &&
+	 (GTK_TEXT_INDEX (text, text->cursor_mark.index) != LINE_DELIM))
+    {
+      if (column > 0)
+	column--;
+      else if (column == 0)
+	break;
+
+      advance_mark (&text->cursor_mark);
+    }
+
   find_cursor (text, TRUE);
   draw_cursor (text, FALSE);
+}
+
+static void
+gtk_text_move_beginning_of_line (GtkText *text)
+{
+  gtk_text_move_to_column (GTK_EDITABLE (text), 0);
+
 }
 
 static void
 gtk_text_move_end_of_line (GtkText *text)
 {
-  text->cursor_virtual_x = 0;
+  gtk_text_move_to_column (GTK_EDITABLE (text), -1);
+}
 
-  undraw_cursor (text, FALSE);
+static void 
+gtk_text_kill_char (GtkEditable *editable,
+		    gint         direction)
+{
+  GtkText *text;
 
-  while (!LAST_INDEX (text, text->cursor_mark) &&
-	 (GTK_TEXT_INDEX (text, text->cursor_mark.index) != LINE_DELIM))
-    advance_mark (&text->cursor_mark);
-	  
-  find_cursor (text, TRUE);
-  draw_cursor (text, FALSE);
+  text = GTK_TEXT (editable);
+  
+  if (editable->selection_start_pos != editable->selection_end_pos)
+    gtk_editable_delete_selection (editable);
+  else
+    {
+      if (direction >= 0)
+	{
+	  if (text->point.index + 1 <= TEXT_LENGTH (text))
+	    gtk_editable_delete_text (editable, text->point.index, text->point.index + 1);
+	}
+      else
+	{
+	  if (text->point.index > 0)
+	    gtk_editable_delete_text (editable, text->point.index - 1, text->point.index);
+	}
+    }
 }
 
 static void
 gtk_text_delete_forward_character (GtkText *text)
 {
-  GtkEditable *editable;
-  editable = GTK_EDITABLE (text);
-
-  if (editable->selection_start_pos != editable->selection_end_pos)
-    gtk_editable_delete_selection (editable);
-  else
-    {
-      if (text->point.index + 1 <= TEXT_LENGTH (text))
-	gtk_editable_delete_text (editable, text->point.index, text->point.index + 1);
-    }
+  gtk_text_kill_char (GTK_EDITABLE (text), 1);
 }
 
 static void
 gtk_text_delete_backward_character (GtkText *text)
 {
-  GtkEditable *editable;
-  editable = GTK_EDITABLE (text);
+  gtk_text_kill_char (GTK_EDITABLE (text), -1);
+}
 
+static void 
+gtk_text_kill_word (GtkEditable *editable,
+		    gint         direction)
+{
   if (editable->selection_start_pos != editable->selection_end_pos)
     gtk_editable_delete_selection (editable);
   else
     {
-      if (text->point.index > 0)
-	gtk_editable_delete_text (editable, text->point.index - 1, text->point.index);
+      gint old_pos = editable->current_pos;
+      if (direction >= 0)
+	{
+	  gtk_text_move_word (editable, 1);
+	  gtk_editable_delete_text (editable, old_pos, editable->current_pos);
+	}
+      else
+	{
+	  gtk_text_move_word (editable, -1);
+	  gtk_editable_delete_text (editable, editable->current_pos, old_pos);
+	}
     }
 }
 
 static void
 gtk_text_delete_forward_word (GtkText *text)
 {
-  guint old_pos;
-
-  GtkEditable *editable;
-  editable = GTK_EDITABLE (text);
-
-  if (editable->selection_start_pos != editable->selection_end_pos)
-    gtk_editable_delete_selection (editable);
-  else
-    {
-      old_pos = text->cursor_mark.index;
-      gtk_text_move_forward_word (text);
-      gtk_editable_delete_text (editable, old_pos, text->cursor_mark.index);
-    }
+  gtk_text_kill_word (GTK_EDITABLE (text), 1);
 }
 
 static void
 gtk_text_delete_backward_word (GtkText *text)
 {
-  gint old_pos;
+  gtk_text_kill_word (GTK_EDITABLE (text), -1);
+}
 
-  GtkEditable *editable;
-  editable = GTK_EDITABLE (text);
-
-  if (editable->selection_start_pos != editable->selection_end_pos)
-    gtk_editable_delete_selection (editable);
+static void 
+gtk_text_kill_line (GtkEditable *editable,
+		    gint         direction)
+{
+  gint old_pos = editable->current_pos;
+  if (direction >= 0)
+    {
+      gtk_text_move_to_column (editable, -1);
+      gtk_editable_delete_text (editable, old_pos, editable->current_pos);
+    }
   else
     {
-      old_pos = text->cursor_mark.index;
-      gtk_text_move_backward_word (text);
-      gtk_editable_delete_text (editable, text->cursor_mark.index, old_pos);
+      gtk_text_move_to_column (editable, 0);
+      gtk_editable_delete_text (editable, editable->current_pos, old_pos);
     }
 }
 
 static void
 gtk_text_delete_line (GtkText *text)
 {
-  gint start_pos;
-  gint end_pos;
-  GtkEditable *editable = GTK_EDITABLE (text);
-
-  gtk_text_move_beginning_of_line (text);
-  start_pos = text->cursor_mark.index;
-
-  gtk_text_move_end_of_line (text);
-  gtk_text_move_forward_character (text);
-  end_pos = text->cursor_mark.index;
-
-  gtk_editable_delete_text (editable, start_pos, end_pos);
+  gtk_text_move_to_column (GTK_EDITABLE (text), 0);
+  gtk_text_kill_line (GTK_EDITABLE (text), 1);
 }
 
 static void
 gtk_text_delete_to_line_end (GtkText *text)
 {
-  gint start_pos;
-  gint end_pos;
-  GtkEditable *editable = GTK_EDITABLE (text);
-
-  start_pos = text->cursor_mark.index;
-
-  gtk_text_move_end_of_line (text);
-
-  if (start_pos == text->cursor_mark.index)
-    gtk_text_move_forward_character (text);
-  end_pos = text->cursor_mark.index;
-
-  gtk_editable_delete_text (editable, start_pos, end_pos);
+  gtk_text_kill_line (GTK_EDITABLE (text), 1);
 }
 
 static void

@@ -56,7 +56,7 @@ static gint gtk_menu_configure	    (GtkWidget	       *widget,
 				     GdkEventConfigure *event);
 static gint gtk_menu_key_press	    (GtkWidget	       *widget,
 				     GdkEventKey       *event);
-static gint gtk_menu_need_resize    (GtkContainer      *container);
+static void gtk_menu_check_resize    (GtkContainer      *container);
 static void gtk_menu_deactivate	    (GtkMenuShell      *menu_shell);
 static void gtk_menu_show_all	    (GtkWidget	       *widget);
 static void gtk_menu_hide_all	    (GtkWidget	       *widget);
@@ -118,7 +118,7 @@ gtk_menu_class_init (GtkMenuClass *class)
   widget_class->show_all = gtk_menu_show_all;
   widget_class->hide_all = gtk_menu_hide_all;  
   
-  container_class->need_resize = gtk_menu_need_resize;
+  container_class->check_resize = gtk_menu_check_resize;
   
   menu_shell_class->submenu_placement = GTK_LEFT_RIGHT;
   menu_shell_class->deactivate = gtk_menu_deactivate;
@@ -128,6 +128,8 @@ static void
 gtk_menu_init (GtkMenu *menu)
 {
   GTK_WIDGET_SET_FLAGS (menu, GTK_TOPLEVEL);
+  
+  gtk_container_set_resize_mode (GTK_CONTAINER (menu), GTK_RESIZE_QUEUE);
   
   menu->parent_menu_item = NULL;
   menu->old_active_menu_item = NULL;
@@ -440,7 +442,7 @@ gtk_menu_show (GtkWidget *widget)
   
   GTK_WIDGET_SET_FLAGS (widget, GTK_VISIBLE);
   if (MENU_NEEDS_RESIZE (widget))
-    gtk_container_need_resize (GTK_CONTAINER (widget));
+    gtk_container_check_resize (GTK_CONTAINER (widget));
   gtk_widget_map (widget);
 }
 
@@ -858,14 +860,14 @@ gtk_menu_key_press (GtkWidget	*widget,
   return FALSE;
 }
 
-static gint
-gtk_menu_need_resize (GtkContainer *container)
+static void
+gtk_menu_check_resize (GtkContainer *container)
 {
   GtkAllocation allocation;
   GtkWidget *widget;
   
-  g_return_val_if_fail (container != NULL, FALSE);
-  g_return_val_if_fail (GTK_IS_MENU (container), FALSE);
+  g_return_if_fail (container != NULL);
+  g_return_if_fail (GTK_IS_MENU (container));
 
   widget = GTK_WIDGET (container);
   
@@ -884,8 +886,6 @@ gtk_menu_need_resize (GtkContainer *container)
     }
   else
     MENU_NEEDS_RESIZE (container) = TRUE;
-  
-  return FALSE;
 }
 
 static void

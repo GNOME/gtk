@@ -28,7 +28,6 @@
 #include "gtkbindings.h"
 
 enum {
-  MOVE_RESIZE,
   SET_FOCUS,
   LAST_SIGNAL
 };
@@ -52,10 +51,6 @@ typedef void (*GtkWindowSignal2) (GtkObject *object,
 				  gpointer   arg1,
 				  gpointer   data);
 
-static void gtk_window_marshal_signal_1 (GtkObject      *object,
-					 GtkSignalFunc   func,
-					 gpointer        func_data,
-					 GtkArg         *args);
 static void gtk_window_marshal_signal_2 (GtkObject      *object,
 					 GtkSignalFunc   func,
 					 gpointer        func_data,
@@ -97,15 +92,10 @@ static gint gtk_window_focus_out_event    (GtkWidget         *widget,
 					   GdkEventFocus     *event);
 static gint gtk_window_client_event	  (GtkWidget	     *widget,
 					   GdkEventClient    *event);
-static gint gtk_window_need_resize        (GtkContainer      *container);
-static gint gtk_real_window_move_resize   (GtkWindow         *window,
-					   gint              *x,
-					   gint              *y,
-					   gint               width,
-					   gint               height);
+static void gtk_window_check_resize       (GtkContainer      *container);
 static void gtk_real_window_set_focus     (GtkWindow         *window,
 					   GtkWidget         *focus);
-static gint gtk_window_move_resize        (GtkWidget         *widget);
+static void gtk_window_move_resize        (GtkWindow         *window);
 static void gtk_window_set_hints          (GtkWidget         *widget,
 					   GtkRequisition    *requisition);
 
@@ -161,16 +151,6 @@ gtk_window_class_init (GtkWindowClass *klass)
   gtk_object_add_arg_type ("GtkWindow::allow_grow", GTK_TYPE_BOOL, GTK_ARG_READWRITE, ARG_ALLOW_GROW);
   gtk_object_add_arg_type ("GtkWindow::window_position", GTK_TYPE_WINDOW_POSITION, GTK_ARG_READWRITE, ARG_WIN_POS);
 
-  window_signals[MOVE_RESIZE] =
-    gtk_signal_new ("move_resize",
-                    GTK_RUN_LAST,
-                    object_class->type,
-                    GTK_SIGNAL_OFFSET (GtkWindowClass, move_resize),
-                    gtk_window_marshal_signal_1,
-		    GTK_TYPE_BOOL, 4,
-                    GTK_TYPE_POINTER, GTK_TYPE_POINTER,
-                    GTK_TYPE_INT, GTK_TYPE_INT);
-
   window_signals[SET_FOCUS] =
     gtk_signal_new ("set_focus",
                     GTK_RUN_LAST,
@@ -202,9 +182,8 @@ gtk_window_class_init (GtkWindowClass *klass)
   widget_class->focus_out_event = gtk_window_focus_out_event;
   widget_class->client_event = gtk_window_client_event;
 
-  container_class->need_resize = gtk_window_need_resize;
+  container_class->check_resize = gtk_window_check_resize;
 
-  klass->move_resize = gtk_real_window_move_resize;
   klass->set_focus = gtk_real_window_set_focus;
 }
 
@@ -221,7 +200,6 @@ gtk_window_init (GtkWindow *window)
   window->focus_widget = NULL;
   window->default_widget = NULL;
   window->resize_count = 0;
-  window->need_resize = FALSE;
   window->allow_shrink = FALSE;
   window->allow_grow = TRUE;
   window->auto_shrink = FALSE;
@@ -229,6 +207,7 @@ gtk_window_init (GtkWindow *window)
   window->position = GTK_WIN_POS_NONE;
   window->use_uposition = TRUE;
   
+  gtk_container_set_resize_mode (GTK_CONTAINER (window), GTK_RESIZE_QUEUE);
   gtk_container_register_toplevel (GTK_CONTAINER (window));
 }
 
@@ -455,26 +434,6 @@ gtk_window_activate_default (GtkWindow      *window)
 }
 
 static void
-gtk_window_marshal_signal_1 (GtkObject      *object,
-			     GtkSignalFunc   func,
-			     gpointer        func_data,
-			     GtkArg         *args)
-{
-  GtkWindowSignal1 rfunc;
-  gint *return_val;
-
-  rfunc = (GtkWindowSignal1) func;
-  return_val = GTK_RETLOC_BOOL (args[4]);
-
-  *return_val = (* rfunc) (object,
-			   GTK_VALUE_POINTER (args[0]),
-			   GTK_VALUE_POINTER (args[1]),
-			   GTK_VALUE_INT (args[2]),
-			   GTK_VALUE_INT (args[3]),
-			   func_data);
-}
-
-static void
 gtk_window_marshal_signal_2 (GtkObject      *object,
 			     GtkSignalFunc   func,
 			     gpointer        func_data,
@@ -522,7 +481,7 @@ gtk_window_show (GtkWidget *widget)
   g_return_if_fail (GTK_IS_WINDOW (widget));
 
   GTK_WIDGET_SET_FLAGS (widget, GTK_VISIBLE);
-  gtk_container_need_resize (GTK_CONTAINER (widget));
+  gtk_container_check_resize (GTK_CONTAINER (widget));
   gtk_widget_map (widget);
 }
 
@@ -650,7 +609,7 @@ gtk_window_size_request (GtkWidget      *widget,
   else
     {
       if (!GTK_WIDGET_VISIBLE (window))
-	window->need_resize = TRUE;
+	GTK_CONTAINER (window)->need_resize = TRUE;
     }
 }
 
@@ -973,206 +932,42 @@ gtk_window_client_event (GtkWidget	*widget,
   return FALSE;
 }
 
-static gint
-gtk_window_need_resize (GtkContainer *container)
+static void
+gtk_window_check_resize (GtkContainer *container)
 {
   GtkWindow *window;
-  gint return_val;
 
-  g_return_val_if_fail (container != NULL, FALSE);
-  g_return_val_if_fail (GTK_IS_WINDOW (container), FALSE);
-
-  return_val = FALSE;
+  g_return_if_fail (container != NULL);
+  g_return_if_fail (GTK_IS_WINDOW (container));
 
   window = GTK_WINDOW (container);
-  if (window->handling_resize)
-    return return_val;
-
-  if (GTK_WIDGET_VISIBLE (container))
-    return_val = gtk_window_move_resize (GTK_WIDGET (window));
-  else
-    window->need_resize = TRUE;
-  
-  return return_val;
-}
-
-static gint
-gtk_real_window_move_resize (GtkWindow *window,
-			     gint      *x,
-			     gint      *y,
-			     gint       width,
-			     gint       height)
-{
-  GtkWidget *widget;
-  gboolean needed_resize;
-  
-  g_return_val_if_fail (window != NULL, FALSE);
-  g_return_val_if_fail (GTK_IS_WINDOW (window), FALSE);
-  g_return_val_if_fail ((x != NULL) || (y != NULL), FALSE);
-
-  widget = GTK_WIDGET (window);
-
-  needed_resize = window->need_resize;
-  window->need_resize = FALSE;
-
-  if ((widget->requisition.width == 0) ||
-      (widget->requisition.height == 0))
+  if (!window->handling_resize)
     {
-      widget->requisition.width = 200;
-      widget->requisition.height = 200;
-    }
-  
-  if (!GTK_WIDGET_REALIZED (window))
-    {
-      GtkAllocation allocation;
-
-      allocation.x = 0;
-      allocation.y = 0;
-      allocation.width = widget->requisition.width;
-      allocation.height = widget->requisition.height;
-      
-      gtk_widget_size_allocate (widget, &allocation);
-
-      return FALSE;
-    }
-  
-  gdk_window_get_geometry (widget->window, NULL, NULL, &width, &height, NULL);
-  
-  if ((window->auto_shrink &&
-       ((width != widget->requisition.width) ||
-	(height != widget->requisition.height))) ||
-      (width < widget->requisition.width) ||
-      (height < widget->requisition.height))
-    {
-      window->resize_count += 1;
-      if ((*x != -1) && (*y != -1))
-	gdk_window_move_resize (widget->window, *x, *y,
-				widget->requisition.width,
-				widget->requisition.height);
+      if (GTK_WIDGET_VISIBLE (container))
+	gtk_window_move_resize (window);
       else
-        gdk_window_resize (widget->window,
-			   widget->requisition.width,
-			   widget->requisition.height);
+	GTK_CONTAINER (window)->need_resize = TRUE;
     }
-  else if (needed_resize)
-    {
-      /* The windows contents changed size while it was not
-       * visible, so reallocate everything, since we didn't
-       * keep track of what changed
-       */
-      GtkAllocation allocation;
-
-      allocation.x = 0;
-      allocation.y = 0;
-      allocation.width = widget->requisition.width;
-      allocation.height = widget->requisition.height;
-      
-      gtk_widget_size_allocate (widget, &allocation);
-    }
-  else
-    {
-      /* The window hasn't changed size but one of its children
-       *  queued a resize request. Which means that the allocation
-       *  is not sufficient for the requisition of some child.
-       *  We've already performed a size request at this point,
-       *  so we simply need to run through the list of resize
-       *  widgets and reallocate their sizes appropriately. We
-       *  make the optimization of not performing reallocation
-       *  for a widget who also has a parent in the resize widgets
-       *  list. GTK_RESIZE_NEEDED is used for flagging those
-       *  parents inside this function.
-       */
-      GSList *resize_widgets;
-      GSList *resize_containers;
-      GSList *node;
-      
-      if ((*x != -1) && (*y != -1))
-	gdk_window_move (widget->window, *x, *y);
-
-      resize_widgets = GTK_CONTAINER (window)->resize_widgets;
-      GTK_CONTAINER (window)->resize_widgets = NULL;
-      
-      for (node = resize_widgets; node; node = node->next)
-	{
-	  widget = node->data;
-	  
-	  GTK_PRIVATE_UNSET_FLAG (widget, GTK_RESIZE_NEEDED);
-	  
-	  while (widget && widget->parent &&
-		 ((widget->allocation.width < widget->requisition.width) ||
-		  (widget->allocation.height < widget->requisition.height)))
-	    widget = widget->parent;
-	  
-	  GTK_PRIVATE_SET_FLAG (widget, GTK_RESIZE_NEEDED);
-	  node->data = widget;
-	}
-      
-      resize_containers = NULL;
-      
-      for (node = resize_widgets; node; node = node->next)
-	{
-	  GtkWidget *resize_container;
-	  
-	  widget = node->data;
-	  
-	  if (!GTK_WIDGET_RESIZE_NEEDED (widget))
-	    continue;
-	  
-	  resize_container = widget->parent;
-	  
-	  if (resize_container)
-	    {
-	      GTK_PRIVATE_UNSET_FLAG (widget, GTK_RESIZE_NEEDED);
-	      widget = resize_container->parent;
-	      
-	      while (widget)
-		{
-		  if (GTK_WIDGET_RESIZE_NEEDED (widget))
-		    {
-		      GTK_PRIVATE_UNSET_FLAG (resize_container, GTK_RESIZE_NEEDED);
-		      resize_container = widget;
-		    }
-		  widget = widget->parent;
-		}
-	    }
-	  else
-	    resize_container = widget;
-	  
-	  if (!g_slist_find (resize_containers, resize_container))
-	    resize_containers = g_slist_prepend (resize_containers,
-						 resize_container);
-	}
-      g_slist_free (resize_widgets);
-      
-      for (node = resize_containers; node; node = node->next)
-	{
-	  widget = node->data;
-	  
-	  GTK_PRIVATE_UNSET_FLAG (widget, GTK_RESIZE_NEEDED);
-	  gtk_widget_size_allocate (widget, &widget->allocation);
-	  gtk_widget_queue_draw (widget);
-	}
-      g_slist_free (resize_containers);
-    }
-
-  return FALSE;
 }
 
-static gint
-gtk_window_move_resize (GtkWidget *widget)
+/* FIXME: we leave container->resize_widgets set under some
+   circumstances ? */
+static void
+gtk_window_move_resize (GtkWindow *window)
 {
-  GtkWindow *window;
+  GtkWidget    *widget;
+  GtkContainer *container;
   gint x, y;
   gint width, height;
   gint screen_width;
   gint screen_height;
-  gint return_val;
+  gboolean needed_resize;
 
-  g_return_val_if_fail (widget != NULL, FALSE);
-  g_return_val_if_fail (GTK_IS_WINDOW (widget), FALSE);
+  g_return_if_fail (window != NULL);
+  g_return_if_fail (GTK_IS_WINDOW (window));
 
-  window = GTK_WINDOW (widget);
-  return_val = FALSE;
+  widget = GTK_WIDGET (window);
+  container = GTK_CONTAINER (widget);
 
   /* Remember old size, to know if we have to reset hints */
   width = widget->requisition.width;
@@ -1218,11 +1013,74 @@ gtk_window_move_resize (GtkWidget *widget)
 	gtk_widget_set_uposition (widget, x, y);
 	break;
       }
-  
-  gtk_signal_emit (GTK_OBJECT (widget), window_signals[MOVE_RESIZE],
-		   &x, &y, width, height, &return_val);
 
-  return return_val;
+  /* Now, do the resizing */
+
+  needed_resize = container->need_resize;
+  container->need_resize = FALSE;
+
+  if ((widget->requisition.width == 0) ||
+      (widget->requisition.height == 0))
+    {
+      widget->requisition.width = 200;
+      widget->requisition.height = 200;
+    }
+  
+  if (!GTK_WIDGET_REALIZED (window))
+    {
+      GtkAllocation allocation;
+
+      allocation.x = 0;
+      allocation.y = 0;
+      allocation.width = widget->requisition.width;
+      allocation.height = widget->requisition.height;
+      
+      gtk_widget_size_allocate (widget, &allocation);
+
+      return;
+    }
+  
+  gdk_window_get_geometry (widget->window, NULL, NULL, &width, &height, NULL);
+  
+  if ((window->auto_shrink &&
+       ((width != widget->requisition.width) ||
+	(height != widget->requisition.height))) ||
+      (width < widget->requisition.width) ||
+      (height < widget->requisition.height))
+    {
+      window->resize_count += 1;
+      if ((x != -1) && (y != -1))
+	gdk_window_move_resize (widget->window, x, y,
+				widget->requisition.width,
+				widget->requisition.height);
+      else
+        gdk_window_resize (widget->window,
+			   widget->requisition.width,
+			   widget->requisition.height);
+    }
+  else if (needed_resize)
+    {
+      /* The windows contents changed size while it was not
+       * visible, so reallocate everything, since we didn't
+       * keep track of what changed
+       */
+      GtkAllocation allocation;
+
+      allocation.x = 0;
+      allocation.y = 0;
+      allocation.width = widget->requisition.width;
+      allocation.height = widget->requisition.height;
+      
+      gtk_widget_size_allocate (widget, &allocation);
+      gtk_container_clear_resize_widgets (GTK_CONTAINER (window));
+    }
+  else
+    {
+      if ((x != -1) && (y != -1))
+	gdk_window_move (widget->window, x, y);
+
+      gtk_container_resize_children (GTK_CONTAINER (window));
+    }
 }
 
 static void

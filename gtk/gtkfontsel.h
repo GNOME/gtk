@@ -53,11 +53,12 @@ typedef struct _GtkFontSelectionDialogClass  GtkFontSelectionDialogClass;
 
 
 /* This is the number of properties which we keep in the properties array,
-   i.e. Foundry, Weight, Slant, Set Width & Spacing. */
+   i.e. Weight, Slant, Set Width, Spacing, Charset & Foundry. */
 #define GTK_NUM_FONT_PROPERTIES  6
 
 /* This is the number of properties each style has i.e. Weight, Slant,
-   Set Width & Spacing. Note that Foundry is not included. */
+   Set Width, Spacing & Charset. Note that Foundry is not included,
+   since it is the same for all styles of the same FontInfo. */
 #define GTK_NUM_STYLE_PROPERTIES 5
 
 
@@ -114,7 +115,7 @@ struct _GtkFontSelection
   gboolean scale_bitmapped_fonts;
 
   /* These are the current property settings. They are indexes into the
-     strings in the class' properties array. */
+     strings in the GtkFontSelInfo properties array. */
   guint16 property_values[GTK_NUM_STYLE_PROPERTIES];
 
   /* These hold the arrays of current filter settings for each property.
@@ -131,7 +132,7 @@ struct _GtkFontSelection
 
 struct _GtkFontSelectionClass
 {
-  GtkWindowClass parent_class;
+  GtkNotebookClass parent_class;
 };
 
 

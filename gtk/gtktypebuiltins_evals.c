@@ -144,6 +144,12 @@ static GtkEnumValue _gtk_relief_style_values[] = {
   { GTK_RELIEF_NONE, "GTK_RELIEF_NONE", "none" },
   { 0, NULL, NULL }
 };
+static GtkEnumValue _gtk_resize_mode_values[] = {
+  { GTK_RESIZE_PARENT, "GTK_RESIZE_PARENT", "parent" },
+  { GTK_RESIZE_QUEUE, "GTK_RESIZE_QUEUE", "queue" },
+  { GTK_RESIZE_IMMEDIATE, "GTK_RESIZE_IMMEDIATE", "immediate" },
+  { 0, NULL, NULL }
+};
 static GtkEnumValue _gtk_signal_run_type_values[] = {
   { GTK_RUN_FIRST, "GTK_RUN_FIRST", "first" },
   { GTK_RUN_LAST, "GTK_RUN_LAST", "last" },

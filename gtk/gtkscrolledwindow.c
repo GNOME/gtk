@@ -380,8 +380,6 @@ gtk_scrolled_window_size_allocate (GtkWidget     *widget,
   scrolled_window = GTK_SCROLLED_WINDOW (widget);
   widget->allocation = *allocation;
 
-  gtk_container_disable_resize (GTK_CONTAINER (scrolled_window));
-
   if (scrolled_window->hscrollbar_policy == GTK_POLICY_ALWAYS)
     scrolled_window->hscrollbar_visible = TRUE;
   if (scrolled_window->vscrollbar_policy == GTK_POLICY_ALWAYS)
@@ -459,8 +457,6 @@ gtk_scrolled_window_size_allocate (GtkWidget     *widget,
       if (GTK_WIDGET_VISIBLE (scrolled_window->vscrollbar))
 	gtk_widget_hide (scrolled_window->vscrollbar);
     }
-
-  gtk_container_enable_resize (GTK_CONTAINER (scrolled_window));
 }
 
 static void

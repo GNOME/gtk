@@ -1,3 +1,90 @@
+Thu Jun 18 21:13:54 1998  Owen Taylor  <otaylor@gtk.org>
+
+	* gtk/gtkmain.c (gtk_init): Remove --g-fatal-warnings flag
+	  from argv.
+
+Thu Jun 18 20:22:28 1998  Owen Taylor  <otaylor@gtk.org>
+
+	* gtk/genmarshal.pl: Modified to be more idiomatic Perl,
+	  to be more readable perl, to spit out stuff that looks
+	  more like readable C, and to pipe output through indent
+	  so output looks a lot like readable C. No functional
+	  changes.
+
+Thu Jun 18 17:43:31 1998  Owen Taylor  <otaylor@gtk.org>
+
+	* gtk/gtkpixmap.[ch] (gtk_pixmap_set): Clear the background if
+	  necessary when switching to a masked pixmap. (Based on a patch
+	  from Ullrich Hafner <hafner@informatik.uni-wuerzburg.de>)
+
+Thu Jun 18 16:18:10 1998  Owen Taylor  <otaylor@gtk.org>
+
+	* gtk/gtkeditable.[ch]: Added action signals for keyboard
+   	  bindings. (move_cursor, kill_word, etc, etc, etc). 
+
+          removed the time argument from
+	  gtk_editable_cut/copy/paste_clipboard (source but not
+          binary incompatible...) Instead get time from
+	  gtk_get_current_event ().
+	
+	* gtk/gtktext.c gtk/gtkentry.c: Support the new editable
+	  signals.
+
+Thu Jun 18 02:52:09 1998  Owen Taylor  <otaylor@gtk.org>
+
+	Patches from Damon Chaplin <DAChaplin@email.msn.com>:
+
+        gtk/gtkfontsel.h: Fixed GtkFontSelectionClass - I forgot to change
+	     parent class to GtkNotebookClass when splitting the widget in
+	     two.  Also updated some comments.
+
+        gtk/gtkfontsel.c: Fixed bug when toggling 'Allow scaled bitmaps'
+               button without a font selected.
+
+             Fixed bug in set_font_name - I hadn't updated the code to
+               search for the style in the font_style clist - it was
+               still assuming the style row was equal to its index,
+               but it isn't any more.
+	
+             Changed 'Reset' button on filter page to 'Clear Filter'.
+             Deleted old code relating to the old 'Filter Fonts' toggle
+             Updated some comments.
+             Cleared 'Actual Fontname' if no font is set.
+
+        gtk/testgtk.c: Fixed problem when 'OK' button is pressed - it was
+	     destroying the GtkFontSelection instead of the
+             GtkFontSelectionDialog.
+
+Thu Jun 18 02:15:31 1998  Owen Taylor  <otaylor@gtk.org>
+
+	* gtk/gtkmain.c (gtk_init): Added --g-fatal-warnings
+	  flag to make all warnings fatal errors.
+
+	* gtk/testthreads.c: moved <pthreads.h> include inside 
+	  #ifdef USE_PTHREADS
+
+Thu Jun 18 01:37:31 1998  Owen Taylor  <otaylor@gtk.org>
+
+	* gtk/gtkenums.h gtk/gtkcontainer.[ch] gtk/gtkwidget.c 
+	  gtk/gtkmenu.c gtk/gtkviewport.c gtk/gtkwindow.c:
+
+	- Added new function gtk_container_set_resize_mode() for
+	  fine-grained control of where resize-queueing is done.
+
+	- Removed GtkContainer::need_resize and GtkWindow::move_resize
+	- Added GtkContainer::check_resize to replace need_resize.
+
+	- Added function gtk_container_check_resize() to trigger
+	  queued resizes, and gtk_container_resize_children() to
+	  Figure which children need to be size-allocated. (logic
+	  moved from gtkwindow.c)
+
+	- Reorganized code in gtkwindow.c
+	
+	- Set the resize-mode for viewports so that resizes within
+	  a viewport don't propagate out of it. 
+	
+
 1998-06-18  Federico Mena Quintero  <federico@nuclecu.unam.mx>
 
 	* gtk/gtkfontsel.c: Use pointer<->int conversion macros to avoid warnings.
@@ -159,7 +246,7 @@ Fri Jun 12 16:33:23 1998  Tim Janik  <timj@gtk.org>
 
 Mon Jun 15 23:39:44 1998  Owen Taylor  <otaylor@gtk.org>
 
-	* gtk/gtkfontsel.c (gtk_font_selection_dialog_init): Moved font
+	* gtk/gtkfontsel.[ch] (gtk_font_selection_dialog_init): Moved font
 	lists from the klass structure to a static structure
 	in gtkfontsel.c; cleans up global the namespace.
 

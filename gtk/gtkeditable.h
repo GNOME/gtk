@@ -57,7 +57,9 @@ struct _GtkEditable
 struct _GtkEditableClass
 {
   GtkWidgetClass parent_class;
-
+  
+  /* Signals for notification/filtering of changes */
+  void (* changed)      (GtkEditable    *editable);
   void (* insert_text)  (GtkEditable    *editable,
 			 const gchar    *text,
 			 gint            length,
@@ -65,6 +67,36 @@ struct _GtkEditableClass
   void (* delete_text)  (GtkEditable    *editable,
 			 gint            start_pos,
 			 gint            end_pos);
+
+  /* Bindings actions */
+  void (* activate)        (GtkEditable *editable);
+  void (* move_cursor)     (GtkEditable *editable,
+			    gint         x,
+			    gint         y);
+  void (* move_word)       (GtkEditable *editable,
+			    gint         n);
+  void (* move_page)       (GtkEditable *editable,
+			    gint         x,
+			    gint         y);
+  void (* move_to_row)     (GtkEditable *editable,
+			    gint         row);
+  void (* move_to_column)  (GtkEditable *editable,
+			    gint         row);
+  void (* kill_char)       (GtkEditable *editable,
+			    gint         direction);
+  void (* kill_word)       (GtkEditable *editable,
+			    gint         direction);
+  void (* kill_line)       (GtkEditable *editable,
+			    gint         direction);
+  void (* cut_clipboard)   (GtkEditable *editable);
+  void (* copy_clipboard)  (GtkEditable *editable);
+  void (* paste_clipboard) (GtkEditable *editable);
+
+  /* Virtual functions. get_chars is in paricular not a signal because
+   * it returns malloced memory. The others are not signals because
+   * they would not be particularly useful as such. (All changes to
+   * selection and position do not go through these functions)
+   */
   void (* update_text)  (GtkEditable    *editable,
 			 gint            start_pos,
 			 gint            end_pos);
@@ -74,8 +106,6 @@ struct _GtkEditableClass
   void (* set_selection)(GtkEditable    *editable,
 			 gint            start_pos,
 			 gint            end_pos);
-  void (* activate)     (GtkEditable    *editable);
-  void (* changed)      (GtkEditable    *editable);
   void (* set_position) (GtkEditable    *editable,
 			 gint            position);
 };
@@ -94,12 +124,9 @@ void       gtk_editable_delete_text    (GtkEditable      *editable,
 gchar *    gtk_editable_get_chars      (GtkEditable      *editable,
 					gint              start_pos,
 					gint              end_pos);
-void       gtk_editable_cut_clipboard  (GtkEditable      *editable,
-					guint32           time);
-void       gtk_editable_copy_clipboard (GtkEditable      *editable, 
-					guint32           time);
-void       gtk_editable_paste_clipboard (GtkEditable     *editable, 
-					 guint32          time);
+void       gtk_editable_cut_clipboard  (GtkEditable      *editable);
+void       gtk_editable_copy_clipboard (GtkEditable      *editable);
+void       gtk_editable_paste_clipboard (GtkEditable     *editable);
 void       gtk_editable_claim_selection (GtkEditable     *editable, 
 					 gboolean         claim, 
 					 guint32          time);

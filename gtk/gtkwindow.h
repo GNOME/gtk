@@ -55,7 +55,6 @@ struct _GtkWindow
   GtkWidget *default_widget;
 
   gushort resize_count;
-  guint need_resize : 1;
   guint allow_shrink : 1;
   guint allow_grow : 1;
   guint auto_shrink : 1;
@@ -68,11 +67,6 @@ struct _GtkWindowClass
 {
   GtkBinClass parent_class;
 
-  gint (* move_resize) (GtkWindow *window,
-			gint      *x,
-			gint      *y,
-			gint       width,
-			gint       height);
   void (* set_focus)   (GtkWindow *window,
 			GtkWidget *focus);
 };

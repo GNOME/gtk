@@ -1,4 +1,4 @@
-#!/usr/bin/perl
+#!/usr/bin/perl -w
 #
 # by Elliot Lee <sopwith@redhat.com>
 
@@ -14,68 +14,95 @@
 	   "C_CALLBACK"=>"gpointer");
 
 open(IL, "<".$ENV{'srcdir'}."/gtkmarshal.list") || die("Open failed: $!");
-open(OH, ">gtkmarshal.h") || die("Open failed: $!");
-open(OS, ">gtkmarshal.c") || die("Open failed: $!");
+open(OH, "|indent > gtkmarshal.h") || die("Open failed: $!");
+open(OS, "|indent > gtkmarshal.c") || die("Open failed: $!");
 
-print OH "#ifndef __GTKMARSHAL_H__\n#define __GTKMARSHAL_H__ 1\n\n";
-print OH "#include \"gtktypeutils.h\"\n#include \"gtkobject.h\"\n";
+print OH <<EOT;
+#ifndef __GTKMARSHAL_H__
+#define __GTKMARSHAL_H__ 1
 
-print OS "#include \"gtkmarshal.h\"\n";
+#include "gtktypeutils.h"
+#include "gtkobject.h"
+
+EOT
+
+print OS qq(#include "gtkmarshal.h"\n\n);
 
 while(chomp($aline = <IL>)) {
   ($retval, $paramlist) = split(/:/, $aline, 2);
   @params = split(/\s*,\s*/, $paramlist);
 
-  if($defs{$retval."__".join("_",@params)} == 1) { next; }
+  my $funcname = $retval."__".join("_",@params);
+  
+  next if (exists $defs{$funcname});
 
   $doequiv = 0;
-  foreach(@params) { if($trans{$_} eq "gpointer") { $doequiv = 1; } }
+  for (@params, $retval) { 
+      if ($trans{$_} eq "gpointer") { 
+	  $doequiv = 1;
+	  last;
+      } 
+  }
 
+  # Translate all function pointers to gpointer
   $defname = "";
   if($doequiv) {
-    $defname = $retval."__".join("_",@params);
-    print OH "#define gtk_marshal_".$retval."__".join("_",@params)." ";
+      print OH "#define gtk_marshal_$funcname ";
+      $defs{$defname} = 1;
+      
+      for (@params, $retval) {
+	  if ($trans{$_} eq "gpointer") {
+	      $_ = "POINTER";
+	  }
+      }
 
-    for($i = 0; $i < scalar @params; $i++)
-      { if($trans{$params[$i]} eq "gpointer") { $params[$i] = "POINTER"; } }
-    if($trans{$retval} eq "gpointer") { $retval = "POINTER"; }
-    print OH "gtk_marshal_".$retval."__".join("_",@params)."\n";
+      $funcname = $retval."__".join("_",@params);
 
-    $regname = $retval."__".join("_",@params);
-    if($defs{$regname} == 1) { next; }
-    $defs{$defname} = 1;
+      print OH "gtk_marshal_$funcname\n";
+      next if (exists $defs{$funcname});
   }
+  $defs{$funcname} = 1;  
 
-  $defs{$retval."__".join("_",@params)} = 1;  
+  print OH <<EOT;
+void gtk_marshal_$funcname (GtkObject    *object, 
+                            GtkSignalFunc func, 
+                            gpointer      func_data, 
+                            GtkArg       *args);
 
-  print OH "void gtk_marshal_".$retval."__".join("_",@params)."(GtkObject *object, GtkSignalFunc func, gpointer func_data, GtkArg *args);\n";
-
-  print OS "typedef ".$trans{$retval}. " (*GtkSignal_"
-    .$retval."__".join("_",@params).")(GtkObject *object, ";
-
+EOT
+  
+  print OS "typedef $trans{$retval} (*GtkSignal_$funcname) (GtkObject *object, \n";
   $argn = 1;
-  foreach $it(@params) { if($it ne "NONE") {print OS $trans{$it}." arg".$argn++.",\n"; } }
+  for (@params) { 
+      print OS "$trans{$_} arg".$argn++.",\n" unless $_ eq "NONE";
+  }
   print OS "gpointer user_data);\n";
 
-  print OS "void gtk_marshal_".$retval."__".join("_",@params)."(GtkObject *object, GtkSignalFunc func, gpointer func_data, GtkArg *args)\n";
+  print OS <<EOT;
+void gtk_marshal_$funcname (GtkObject    *object, 
+                            GtkSignalFunc func, 
+                            gpointer      func_data, 
+                            GtkArg       *args)
+{
+  GtkSignal_$funcname rfunc;
+EOT
 
-  print OS "{\nGtkSignal_".$retval."__".join("_",@params)." rfunc;\n";
   if($retval ne "NONE") {
-    print OS $trans{$retval}." *return_val;\n";
-
-    print OS "return_val = GTK_RETLOC_".$retval."(args[".(scalar @params)."]);\n";
+      print OS "  $trans{$retval}  *return_val;\n";
+      print OS "  return_val = GTK_RETLOC_$retval (args[".(scalar @params)."]);\n";
   }
-  print OS "rfunc = (GtkSignal_".$retval."__".join("_",@params).") func;\n";
+  print OS "  rfunc = (GtkSignal_$funcname) func;\n";
+  print OS "  *return_val = " unless $retval eq "NONE";
+  print OS                  " (* rfunc) (object,\n";
 
-  if($retval ne "NONE") { print OS "*return_val = "; }
-
-  print OS "(* rfunc)(object, ";
   for($i = 0; $i < (scalar @params); $i++) {
-    ($params[$i] eq "NONE") && next;
-    print OS "GTK_VALUE_".$params[$i]."(args[$i]), ";
+      if ($params[$i] ne "NONE") {
+	  print OS "                      GTK_VALUE_$params[$i](args[$i]),\n";
+      }
   }
 
-  print OS "func_data);\n}\n\n";
+  print OS  "                             func_data);\n}\n\n";
 }
 print OH "#endif\n";
+
 close(IL); close(OH); close(OS);

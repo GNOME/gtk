@@ -193,6 +193,7 @@ static GdkColormap* gtk_widget_peek_colormap (void);
 static GdkVisual*   gtk_widget_peek_visual   (void);
 static GtkStyle*    gtk_widget_peek_style    (void);
 
+static GtkWidget*   gtk_widget_get_resize_container (GtkWidget *widget);
 static void gtk_widget_reparent_container_child  (GtkWidget     *widget,
 						  gpointer       client_data);
 static void gtk_widget_propagate_state		 (GtkWidget	*widget,
@@ -1175,11 +1176,15 @@ gtk_widget_unparent (GtkWidget *widget)
   /* Remove the widget and all its children from toplevel->resize_widgets 
    */
 
+
+  toplevel = gtk_widget_get_resize_container (widget);
+
   /* Three ways to make this prettier:
    *   Write a g_slist_conditional_remove (GSList, gboolean (*)(gpointer))
    *   Change resize_widgets to a GList
    *   Just bite the bullet and use g_slist_remove
    */
+  
   tmp_list = GTK_CONTAINER (toplevel)->resize_widgets;
   prev_list = NULL;
   while (tmp_list)
@@ -1606,83 +1611,86 @@ gtk_widget_queue_draw (GtkWidget *widget)
 static gint
 gtk_widget_idle_sizer (void *data)
 {
-  GSList *slist;
-  GSList *re_queue;
-
-  re_queue = NULL;
-  while (gtk_widget_resize_queue)
+  GSList *slist = gtk_widget_resize_queue;
+  GSList *node = slist;
+  
+  gtk_widget_resize_queue = NULL;
+  
+  while (node)
     {
-      GtkWidget *widget;
-
-      slist = gtk_widget_resize_queue;
-      gtk_widget_resize_queue = slist->next;
-      widget = slist->data;
-
+      GtkWidget *widget = node->data;
+      
       GTK_PRIVATE_UNSET_FLAG (widget, GTK_RESIZE_PENDING);
-
-      gtk_widget_ref (widget);
-      if (gtk_container_need_resize (GTK_CONTAINER (widget)))
-	{
-	  slist->next = re_queue;
-	  re_queue = slist;
-	}
-      else
-	{
-	  g_slist_free_1 (slist);
-	  gtk_widget_unref (widget);
-	}
+      gtk_container_check_resize (GTK_CONTAINER (widget));
+      
+      node = node->next;
     }
-
-  for (slist = re_queue; slist; slist = slist->next)
-    {
-      GtkWidget *widget;
-
-      widget = slist->data;
-      if (GTK_OBJECT (widget)->ref_count > 1 &&
-	  !GTK_OBJECT_DESTROYED (widget))
-	gtk_widget_queue_resize (widget);
-      gtk_widget_unref (widget);
-    }
-  g_slist_free (re_queue);
-
+  
+  g_slist_free (slist);
+  
   return FALSE;
 }
+
+/* The guts here should probably be moved into gtkcontainer.c */
 
 void
 gtk_widget_queue_resize (GtkWidget *widget)
 {
-  GtkWidget *toplevel;
+  GtkWidget *resize_widget;
+  GtkContainer *container;
   
   g_return_if_fail (widget != NULL);
   if (GTK_OBJECT_DESTROYED (widget))
     return;
-  
-  toplevel = gtk_widget_get_toplevel (widget);
-  if (GTK_WIDGET_TOPLEVEL (toplevel))
+
+  resize_widget = gtk_widget_get_resize_container (widget);
+
+  if (resize_widget)
     {
-      if (GTK_WIDGET_VISIBLE (toplevel))
+      container = GTK_CONTAINER (resize_widget);
+      
+      if (GTK_WIDGET_VISIBLE (container))
 	{
-	  if (!GTK_CONTAINER_RESIZE_PENDING (toplevel))
+	  switch (container->resize_mode)
 	    {
-	      GTK_PRIVATE_SET_FLAG (toplevel, GTK_RESIZE_PENDING);
-              if (gtk_widget_resize_queue == NULL)
-		gtk_idle_add_priority (GTK_PRIORITY_INTERNAL - 1,
-				       gtk_widget_idle_sizer,
-				       NULL);
-	      gtk_widget_resize_queue = g_slist_prepend (gtk_widget_resize_queue, toplevel);
+	    case GTK_RESIZE_QUEUE:
+	      if (!GTK_CONTAINER_RESIZE_PENDING (container))
+		{
+		  GTK_PRIVATE_SET_FLAG (container, GTK_RESIZE_PENDING);
+		  if (gtk_widget_resize_queue == NULL)
+		    gtk_idle_add_priority (GTK_PRIORITY_INTERNAL - 1,
+					   gtk_widget_idle_sizer,
+					   NULL);
+		  gtk_widget_resize_queue = g_slist_prepend (gtk_widget_resize_queue, container);
+		}
+	      
+	      if (!GTK_WIDGET_RESIZE_NEEDED (widget))
+		{
+		  GTK_PRIVATE_SET_FLAG (widget, GTK_RESIZE_NEEDED);
+		  container->resize_widgets =
+		    g_slist_prepend (container->resize_widgets, widget);
+		}
+	      else
+		g_assert (g_slist_find (container->resize_widgets, widget)); /* paranoid */
+	      break;
+
+	    case GTK_RESIZE_IMMEDIATE:
+	      container->resize_widgets = 
+		g_slist_prepend (container->resize_widgets, widget);
+	      gtk_container_check_resize (container);
+	    case GTK_RESIZE_PARENT:
+	      /* Ignore */
 	    }
-	  
-          if (!GTK_WIDGET_RESIZE_NEEDED (widget))
-	    {
-	      GTK_PRIVATE_SET_FLAG (widget, GTK_RESIZE_NEEDED);
-	      GTK_CONTAINER (toplevel)->resize_widgets =
-		g_slist_prepend (GTK_CONTAINER (toplevel)->resize_widgets, widget);
-	    }
-	  else
-	    g_assert (g_slist_find (GTK_CONTAINER (toplevel)->resize_widgets, widget)); /* paranoid */
 	}
       else
-	gtk_container_need_resize (GTK_CONTAINER (toplevel));
+	{
+	  /* We need to let hidden toplevels know that something
+	   * changed while they where hidden. For other resize containers,
+	   * they will get resized when they are shown.
+	   */
+	  if (GTK_WIDGET_TOPLEVEL (container))
+	    gtk_container_check_resize (container);
+	}
     }
 }
 
@@ -3058,6 +3066,29 @@ gtk_widget_set_extension_events (GtkWidget *widget,
   gtk_object_set_data_by_id (GTK_OBJECT (widget), extension_event_key_id, modep);
 }
 
+
+/*****************************************
+ * gtk_widget_get_resize_container:
+ *
+ *   arguments:
+ *
+ *   results:
+ *****************************************/
+
+static GtkWidget *
+gtk_widget_get_resize_container (GtkWidget *widget)
+{
+  g_return_val_if_fail (widget != NULL, NULL);
+
+  while (widget->parent)
+    {
+      widget = widget->parent;
+      if (GTK_CONTAINER (widget)->resize_mode != GTK_RESIZE_PARENT)
+	break;
+    }
+  
+  return GTK_IS_CONTAINER (widget) ? widget : NULL;
+}
 
 /*****************************************
  * gtk_widget_get_toplevel:

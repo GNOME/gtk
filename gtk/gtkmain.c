@@ -306,6 +306,11 @@ gtk_init (int	 *argc,
 		}
 	      (*argv)[i] = NULL;
 	    }
+	  else if (strcmp ("--g-fatal-warnings", (*argv)[i]) == 0)
+	    {
+	      g_set_warning_handler ((GWarningFunc)g_error);
+	      (*argv)[i] = NULL;
+	    }
 	  i += 1;
 	}
 

@@ -39,7 +39,7 @@ static void gtk_viewport_size_request             (GtkWidget        *widget,
 						   GtkRequisition   *requisition);
 static void gtk_viewport_size_allocate            (GtkWidget        *widget,
 						   GtkAllocation    *allocation);
-static gint gtk_viewport_need_resize              (GtkContainer     *container);
+static void gtk_viewport_check_resize              (GtkContainer     *container);
 static void gtk_viewport_adjustment_changed       (GtkAdjustment    *adjustment,
 						   gpointer          data);
 static void gtk_viewport_adjustment_value_changed (GtkAdjustment    *adjustment,
@@ -95,7 +95,7 @@ gtk_viewport_class_init (GtkViewportClass *class)
   widget_class->size_allocate = gtk_viewport_size_allocate;
 
   container_class->add = gtk_viewport_add;
-  container_class->need_resize = gtk_viewport_need_resize;
+  container_class->check_resize = gtk_viewport_check_resize;
 }
 
 static void
@@ -104,6 +104,8 @@ gtk_viewport_init (GtkViewport *viewport)
   GTK_WIDGET_UNSET_FLAGS (viewport, GTK_NO_WINDOW);
   GTK_WIDGET_SET_FLAGS (viewport, GTK_BASIC);
 
+  gtk_container_set_resize_mode (GTK_CONTAINER (viewport), GTK_RESIZE_QUEUE);
+  
   viewport->shadow_type = GTK_SHADOW_IN;
   viewport->view_window = NULL;
   viewport->bin_window = NULL;
@@ -630,13 +632,13 @@ gtk_viewport_size_allocate (GtkWidget     *widget,
     }
 }
 
-static gint
-gtk_viewport_need_resize (GtkContainer *container)
+static void
+gtk_viewport_check_resize (GtkContainer *container)
 {
   GtkBin *bin;
 
-  g_return_val_if_fail (container != NULL, FALSE);
-  g_return_val_if_fail (GTK_IS_VIEWPORT (container), FALSE);
+  g_return_if_fail (container != NULL);
+  g_return_if_fail (GTK_IS_VIEWPORT (container));
 
   if (GTK_WIDGET_REALIZED (container))
     {
@@ -647,8 +649,6 @@ gtk_viewport_need_resize (GtkContainer *container)
       gtk_widget_size_allocate (GTK_WIDGET (container),
 				&(GTK_WIDGET (container)->allocation));
     }
-
-  return FALSE;
 }
 
 static void
