@@ -269,7 +269,7 @@ get_libdir (void)
 
   if (libdir == NULL)
     libdir = g_win32_get_package_installation_subdirectory
-      (GETTEXT_PACKAGE, dll_name, "lib\\gtk-2.0\\" GTK_VERSION "\\loaders");
+      (GETTEXT_PACKAGE, dll_name, "lib\\gtk-2.0\\" GTK_BINARY_VERSION "\\loaders");
 
   return libdir;
 }
