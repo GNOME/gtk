@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ gtk-2-2\n"
-"POT-Creation-Date: 2003-06-30 10:39+0700\n"
+"POT-Creation-Date: 2003-08-25 22:08-0400\n"
 "PO-Revision-Date: 2003-06-28 20:55+0700\n"
 "Last-Translator: Mohammad DAMT <mdamt@bisnisweb.com>\n"
 "Language-Team: Indonesia <sukarelawan@gnome.linux.or.id>\n"
@@ -1254,11 +1254,11 @@ msgid "Foreground color as a GdkColor"
 msgstr "Warna latar depan dalam GdkColor"
 
 #: gtk/gtkcellrenderertext.c:232 gtk/gtkentry.c:459 gtk/gtktexttag.c:273
-#: gtk/gtktextview.c:576
+#: gtk/gtktextview.c:578
 msgid "Editable"
 msgstr "Bisa diedit"
 
-#: gtk/gtkcellrenderertext.c:233 gtk/gtktexttag.c:274 gtk/gtktextview.c:577
+#: gtk/gtkcellrenderertext.c:233 gtk/gtktexttag.c:274 gtk/gtktextview.c:579
 msgid "Whether the text can be modified by the user"
 msgstr "Menentukan apakah teks bisa diganti-ganti oleh user"
 
@@ -1521,7 +1521,7 @@ msgstr "Tidak konsisten"
 msgid "Whether to display an \"inconsistent\" state"
 msgstr "Menentukan apakah menampilkan kondisi 'tidak konsisten' atau tidak"
 
-#: gtk/gtkcolorsel.c:559
+#: gtk/gtkcolorsel.c:561
 msgid ""
 "The previously-selected color, for comparison to the color you're selecting "
 "now. You can drag this color to a palette entry, or select this color as "
@@ -1531,7 +1531,7 @@ msgstr ""
 "Anda pilih sekarang. Ambil warna ini ke dalam palet, atau pilih warna ini "
 "sebagai warna aktif dengan menyeretnya ke dalam kotak warna."
 
-#: gtk/gtkcolorsel.c:564
+#: gtk/gtkcolorsel.c:566
 msgid ""
 "The color you've chosen. You can drag this color to a palette entry to save "
 "it for use in the future."
@@ -1539,11 +1539,11 @@ msgstr ""
 "Warna yang Anda pilih. Ambil warna ini ke dalam palet agar dapat digunakan "
 "di kemudian hari"
 
-#: gtk/gtkcolorsel.c:925
+#: gtk/gtkcolorsel.c:927
 msgid "_Save color here"
 msgstr "_Simpan warna di sini"
 
-#: gtk/gtkcolorsel.c:1128
+#: gtk/gtkcolorsel.c:1132
 msgid ""
 "Click this palette entry to make it the current color. To change this entry, "
 "drag a color swatch here or right-click it and select \"Save color here.\""
@@ -1552,47 +1552,47 @@ msgstr ""
 "ambil warna pada kotak warna atau klik kanan dan pilih \"Simpan warna di sini"
 "\""
 
-#: gtk/gtkcolorsel.c:1752
+#: gtk/gtkcolorsel.c:1756
 msgid "Has Opacity Control"
 msgstr "Memiliki Kontrol Opasitas"
 
-#: gtk/gtkcolorsel.c:1753
+#: gtk/gtkcolorsel.c:1757
 msgid "Whether the color selector should allow setting opacity"
 msgstr "Menentukan apakah pemilih warna memiliki seting opasitas atau tidak"
 
-#: gtk/gtkcolorsel.c:1759
+#: gtk/gtkcolorsel.c:1763
 msgid "Has palette"
 msgstr "Memiliki palet"
 
-#: gtk/gtkcolorsel.c:1760
+#: gtk/gtkcolorsel.c:1764
 msgid "Whether a palette should be used"
 msgstr "Menentukan apakah palet digunakan atau tidak"
 
-#: gtk/gtkcolorsel.c:1766
+#: gtk/gtkcolorsel.c:1770
 msgid "Current Color"
 msgstr "Warna saat ini"
 
-#: gtk/gtkcolorsel.c:1767
+#: gtk/gtkcolorsel.c:1771
 msgid "The current color"
 msgstr "Warna saat ini"
 
-#: gtk/gtkcolorsel.c:1773
+#: gtk/gtkcolorsel.c:1777
 msgid "Current Alpha"
 msgstr "Alpha saat ini"
 
-#: gtk/gtkcolorsel.c:1774
+#: gtk/gtkcolorsel.c:1778
 msgid "The current opacity value (0 fully transparent, 65535 fully opaque)"
 msgstr "Nilai opasitas saat ini (0 transparan, 65535 tidak transparan)"
 
-#: gtk/gtkcolorsel.c:1788
+#: gtk/gtkcolorsel.c:1792
 msgid "Custom palette"
 msgstr "Palet pilihan sendiri"
 
-#: gtk/gtkcolorsel.c:1789
+#: gtk/gtkcolorsel.c:1793
 msgid "Palette to use in the color selector"
 msgstr "Palet yang digunakan pada pemilih warna"
 
-#: gtk/gtkcolorsel.c:1830
+#: gtk/gtkcolorsel.c:1834
 msgid ""
 "Select the color you want from the outer ring. Select the darkness or "
 "lightness of that color using the inner triangle."
@@ -1600,7 +1600,7 @@ msgstr ""
 "Pilih warna untuk ring terluar. Pilih tingkat kegelapan atau keterangan pada "
 "warna tersebut menggunakan segitiga yang ada di dalam."
 
-#: gtk/gtkcolorsel.c:1855
+#: gtk/gtkcolorsel.c:1859
 msgid ""
 "Click the eyedropper, then click a color anywhere on your screen to select "
 "that color."
@@ -1608,67 +1608,67 @@ msgstr ""
 "Klik pada pengambil warna, lalu klik pada warna apa saja di layar untuk "
 "memilih warna tersebut."
 
-#: gtk/gtkcolorsel.c:1864
+#: gtk/gtkcolorsel.c:1868
 msgid "_Hue:"
 msgstr "_Hue:"
 
-#: gtk/gtkcolorsel.c:1865
+#: gtk/gtkcolorsel.c:1869
 msgid "Position on the color wheel."
 msgstr "Posisi pada roda warna."
 
-#: gtk/gtkcolorsel.c:1866
+#: gtk/gtkcolorsel.c:1870
 msgid "_Saturation:"
 msgstr "_Saturasi:"
 
-#: gtk/gtkcolorsel.c:1867
+#: gtk/gtkcolorsel.c:1871
 msgid "\"Deepness\" of the color."
 msgstr "\"Kedalaman\" warna."
 
-#: gtk/gtkcolorsel.c:1868
+#: gtk/gtkcolorsel.c:1872
 msgid "_Value:"
 msgstr "_Nilai"
 
-#: gtk/gtkcolorsel.c:1869
+#: gtk/gtkcolorsel.c:1873
 msgid "Brightness of the color."
 msgstr "Nilai terang/gelap warna"
 
-#: gtk/gtkcolorsel.c:1870
+#: gtk/gtkcolorsel.c:1874
 msgid "_Red:"
 msgstr "Me_rah"
 
-#: gtk/gtkcolorsel.c:1871
+#: gtk/gtkcolorsel.c:1875
 msgid "Amount of red light in the color."
 msgstr "Jumlah warna merah pada warna."
 
-#: gtk/gtkcolorsel.c:1872
+#: gtk/gtkcolorsel.c:1876
 msgid "_Green:"
 msgstr "_Hijau:"
 
-#: gtk/gtkcolorsel.c:1873
+#: gtk/gtkcolorsel.c:1877
 msgid "Amount of green light in the color."
 msgstr "Jumlah warna hijau pada warna."
 
-#: gtk/gtkcolorsel.c:1874
+#: gtk/gtkcolorsel.c:1878
 msgid "_Blue:"
 msgstr "_Biru:"
 
-#: gtk/gtkcolorsel.c:1875
+#: gtk/gtkcolorsel.c:1879
 msgid "Amount of blue light in the color."
 msgstr "Jumlah warna biru pada warna."
 
-#: gtk/gtkcolorsel.c:1878
+#: gtk/gtkcolorsel.c:1882
 msgid "_Opacity:"
 msgstr "_Opasitas:"
 
-#: gtk/gtkcolorsel.c:1886
+#: gtk/gtkcolorsel.c:1890
 msgid "Transparency of the currently-selected color."
 msgstr "Nilai transparansi warna yang sedang dipilih."
 
-#: gtk/gtkcolorsel.c:1901
+#: gtk/gtkcolorsel.c:1905
 msgid "Color _Name:"
 msgstr "_Nama Warna:"
 
-#: gtk/gtkcolorsel.c:1916
+#: gtk/gtkcolorsel.c:1920
 msgid ""
 "You can enter an HTML-style hexadecimal color value, or simply a color name "
 "such as 'orange' in this entry."
@@ -1676,7 +1676,7 @@ msgstr ""
 "Anda dapat memasukkan nilai warna dalam gaya HTML heksadesimal, atau bisa "
 "juga masukkan namanya, misalnya 'orange'."
 
-#: gtk/gtkcolorsel.c:1935
+#: gtk/gtkcolorsel.c:1939
 msgid "_Palette"
 msgstr "_Palet"
 
@@ -1917,7 +1917,7 @@ msgstr "Langsung pilih saat fokus"
 msgid "Whether to select the contents of an entry when it is focused"
 msgstr "Menentukan apakah isi langsung dipilih saat isian mendapat fokus"
 
-#: gtk/gtkentry.c:3993 gtk/gtklabel.c:3222 gtk/gtktextview.c:6621
+#: gtk/gtkentry.c:3993 gtk/gtklabel.c:3222 gtk/gtktextview.c:6623
 msgid "Select All"
 msgstr "Pilih semua"
 
@@ -1925,57 +1925,57 @@ msgstr "Pilih semua"
 msgid "Input Methods"
 msgstr "Metode input"
 
-#: gtk/gtkentry.c:4013 gtk/gtktextview.c:6640
+#: gtk/gtkentry.c:4013 gtk/gtktextview.c:6642
 msgid "_Insert Unicode control character"
 msgstr "_Isikan karakter kontrol Unicode"
 
-#: gtk/gtkfilesel.c:551 gtk/gtkimage.c:167
+#: gtk/gtkfilesel.c:556 gtk/gtkimage.c:167
 msgid "Filename"
 msgstr "Nama file"
 
-#: gtk/gtkfilesel.c:552
+#: gtk/gtkfilesel.c:557
 msgid "The currently selected filename"
 msgstr "Nama file yang sekarang dipilih"
 
-#: gtk/gtkfilesel.c:558
+#: gtk/gtkfilesel.c:563
 msgid "Show file operations"
 msgstr "Tampilkan operasi file"
 
-#: gtk/gtkfilesel.c:559
+#: gtk/gtkfilesel.c:564
 msgid "Whether buttons for creating/manipulating files should be displayed"
 msgstr ""
 "Menentukan apakah tombol untuk membuat/edit file ditampilkan atau tidak"
 
-#: gtk/gtkfilesel.c:566
+#: gtk/gtkfilesel.c:571
 msgid "Select multiple"
 msgstr "Pilih banyak"
 
-#: gtk/gtkfilesel.c:567
+#: gtk/gtkfilesel.c:572
 msgid "Whether to allow multiple files to be selected"
 msgstr "Menentukan apakah bisa memilih banyak file sekaligus atau tidak"
 
-#: gtk/gtkfilesel.c:722
+#: gtk/gtkfilesel.c:727
 msgid "Folders"
 msgstr "Folder"
 
-#: gtk/gtkfilesel.c:726
+#: gtk/gtkfilesel.c:731
 msgid "Fol_ders"
 msgstr "Fol_der"
 
-#: gtk/gtkfilesel.c:758
+#: gtk/gtkfilesel.c:763
 msgid "Files"
 msgstr "File"
 
-#: gtk/gtkfilesel.c:762
+#: gtk/gtkfilesel.c:767
 msgid "_Files"
 msgstr "_File"
 
-#: gtk/gtkfilesel.c:845 gtk/gtkfilesel.c:2237
+#: gtk/gtkfilesel.c:850 gtk/gtkfilesel.c:2240
 #, c-format
 msgid "Folder unreadable: %s"
 msgstr "Folder tidak dapat dibaca: %s"
 
-#: gtk/gtkfilesel.c:976
+#: gtk/gtkfilesel.c:981
 #, c-format
 msgid ""
 "The file \"%s\" resides on another machine (called %s) and may not be "
@@ -1986,25 +1986,25 @@ msgstr ""
 "program ini.\n"
 "Apakah benar ingin memilih file itu?"
 
-#: gtk/gtkfilesel.c:1107
+#: gtk/gtkfilesel.c:1112
 msgid "_New Folder"
 msgstr "Buat Folder _Baru"
 
-#: gtk/gtkfilesel.c:1118
+#: gtk/gtkfilesel.c:1123
 msgid "De_lete File"
 msgstr "Ha_pus File"
 
-#: gtk/gtkfilesel.c:1129
+#: gtk/gtkfilesel.c:1134
 msgid "_Rename File"
 msgstr "_Ganti Nama File"
 
-#: gtk/gtkfilesel.c:1429
+#: gtk/gtkfilesel.c:1436
 #, c-format
 msgid ""
 "The folder name \"%s\" contains symbols that are not allowed in filenames"
 msgstr "Nama folder %s berisi simbol yang tidak boleh ada pada nama file"
 
-#: gtk/gtkfilesel.c:1431
+#: gtk/gtkfilesel.c:1438
 #, c-format
 msgid ""
 "Error creating folder \"%s\": %s\n"
@@ -2013,33 +2013,33 @@ msgstr ""
 "Error saat membuat folder %s: %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1432 gtk/gtkfilesel.c:1668
+#: gtk/gtkfilesel.c:1439 gtk/gtkfilesel.c:1675
 msgid "You probably used symbols not allowed in filenames."
 msgstr "Mungkin Anda memasukkan simbol yang tidak boleh ada pada nama file."
 
-#: gtk/gtkfilesel.c:1440
+#: gtk/gtkfilesel.c:1447
 #, c-format
 msgid "Error creating folder \"%s\": %s\n"
 msgstr "Error saat membuat folder %s: %s\n"
 
-#: gtk/gtkfilesel.c:1474
+#: gtk/gtkfilesel.c:1481
 msgid "New Folder"
 msgstr "Buat Folder Baru"
 
-#: gtk/gtkfilesel.c:1489
+#: gtk/gtkfilesel.c:1496
 msgid "_Folder name:"
 msgstr "Nama _Folder"
 
-#: gtk/gtkfilesel.c:1513
+#: gtk/gtkfilesel.c:1520
 msgid "C_reate"
 msgstr "Buat Ba_ru"
 
-#: gtk/gtkfilesel.c:1556
+#: gtk/gtkfilesel.c:1563
 #, c-format
 msgid "The filename \"%s\" contains symbols that are not allowed in filenames"
 msgstr "Nama file %s berisi simbol yang tidak boleh dipakai pada nama file"
 
-#: gtk/gtkfilesel.c:1559
+#: gtk/gtkfilesel.c:1566
 #, c-format
 msgid ""
 "Error deleting file \"%s\": %s\n"
@@ -2048,30 +2048,30 @@ msgstr ""
 "Error saat menghapus file '%s': %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1561 gtk/gtkfilesel.c:1682
+#: gtk/gtkfilesel.c:1568 gtk/gtkfilesel.c:1689
 msgid "It probably contains symbols not allowed in filenames."
 msgstr "Mungkin berisi simbol yang tidak boleh ada pada nama file."
 
-#: gtk/gtkfilesel.c:1570
+#: gtk/gtkfilesel.c:1577
 #, c-format
 msgid "Error deleting file \"%s\": %s"
 msgstr "Error saat menghapus file '%s': %s"
 
-#: gtk/gtkfilesel.c:1613
+#: gtk/gtkfilesel.c:1620
 #, c-format
 msgid "Really delete file \"%s\" ?"
 msgstr "Benarkah ingin menghapus file '%s'?"
 
-#: gtk/gtkfilesel.c:1618
+#: gtk/gtkfilesel.c:1625
 msgid "Delete File"
 msgstr "Hapus file"
 
-#: gtk/gtkfilesel.c:1664 gtk/gtkfilesel.c:1678
+#: gtk/gtkfilesel.c:1671 gtk/gtkfilesel.c:1685
 #, c-format
 msgid "The file name \"%s\" contains symbols that are not allowed in filenames"
 msgstr "Nama file '%s' berisi simbol yang tidak boleh dipakai dalam nama file"
 
-#: gtk/gtkfilesel.c:1666
+#: gtk/gtkfilesel.c:1673
 #, c-format
 msgid ""
 "Error renaming file to \"%s\": %s\n"
@@ -2080,7 +2080,7 @@ msgstr ""
 "Error saat mengganti nama file menjadi '%s': %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1680
+#: gtk/gtkfilesel.c:1687
 #, c-format
 msgid ""
 "Error renaming file \"%s\": %s\n"
@@ -2089,29 +2089,29 @@ msgstr ""
 "Error saat mengganti nama file '%s': %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1690
+#: gtk/gtkfilesel.c:1697
 #, c-format
 msgid "Error renaming file \"%s\" to \"%s\": %s"
 msgstr "Error saat mengganti nama dari '%s' ke '%s': %s"
 
-#: gtk/gtkfilesel.c:1737
+#: gtk/gtkfilesel.c:1744
 msgid "Rename File"
 msgstr "Ganti nama file"
 
-#: gtk/gtkfilesel.c:1752
+#: gtk/gtkfilesel.c:1759
 #, c-format
 msgid "Rename file \"%s\" to:"
 msgstr "Ganti nama file %s menjadi:"
 
-#: gtk/gtkfilesel.c:1781
+#: gtk/gtkfilesel.c:1788
 msgid "_Rename"
 msgstr "_Ganti nama"
 
-#: gtk/gtkfilesel.c:2217
+#: gtk/gtkfilesel.c:2220
 msgid "_Selection: "
 msgstr "_Yang Dipilih: "
 
-#: gtk/gtkfilesel.c:3111
+#: gtk/gtkfilesel.c:3136
 #, c-format
 msgid ""
 "The filename \"%s\" couldn't be converted to UTF-8 (try setting the "
@@ -2120,15 +2120,15 @@ msgstr ""
 "Nama file '%s' tidak bisa dikonversikan ke UTF-8 (coba set variabel "
 "environment G_BROKEN_FILENAMES): %s"
 
-#: gtk/gtkfilesel.c:3114
+#: gtk/gtkfilesel.c:3139
 msgid "Invalid Utf-8"
 msgstr "UTF-8 salah"
 
-#: gtk/gtkfilesel.c:3991
+#: gtk/gtkfilesel.c:4016
 msgid "Name too long"
 msgstr "Nama terlalu panjang"
 
-#: gtk/gtkfilesel.c:3993
+#: gtk/gtkfilesel.c:4018
 msgid "Couldn't convert filename"
 msgstr "Tidak bisa konversikan nama file"
 
@@ -2477,7 +2477,7 @@ msgstr ""
 "Label teks termasuk markup XML-nya. Silakan baca pango_parse_markup() untuk "
 "lebih jelasnya"
 
-#: gtk/gtklabel.c:319 gtk/gtktexttag.c:374 gtk/gtktextview.c:593
+#: gtk/gtklabel.c:319 gtk/gtktexttag.c:374 gtk/gtktextview.c:595
 msgid "Justification"
 msgstr "Rata"
 
@@ -2815,7 +2815,7 @@ msgstr ""
 msgid "Tab pack type"
 msgstr "Tipe pak tab"
 
-#: gtk/gtknotebook.c:2473 gtk/gtknotebook.c:4820
+#: gtk/gtknotebook.c:2471 gtk/gtknotebook.c:4818
 #, c-format
 msgid "Page %u"
 msgstr "Halaman %u"
@@ -3077,17 +3077,17 @@ msgstr ""
 "Seberapa jauh pada arah y yang digunakan untuk memindahkan panah saat tombol "
 "dilepas"
 
-#: gtk/gtkrc.c:2376
+#: gtk/gtkrc.c:2382
 #, c-format
 msgid "Unable to find include file: \"%s\""
 msgstr "Tidak dapat menembukan file yang hendak disisipkan: \"%s\""
 
-#: gtk/gtkrc.c:3018 gtk/gtkrc.c:3021
+#: gtk/gtkrc.c:3025 gtk/gtkrc.c:3028
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "TIdak dapat menembukan file gambar pada pixmap_path: \"%s\""
 
-#: gtk/gtkrc.c:3456
+#: gtk/gtkrc.c:3463
 #, c-format
 msgid "Pixmap path element: \"%s\" must be absolute, %s, line %d"
 msgstr "Elemen path pixmap: \"%s\" harus bernilai absolut, %s, baris %d"
@@ -3940,7 +3940,7 @@ msgstr ""
 "diset.  Pango memiliki konstanta untuk beberapa ukuran, sebagai misal "
 "PANGO_SCALE_X_LARGE"
 
-#: gtk/gtktexttag.c:375 gtk/gtktextview.c:594
+#: gtk/gtktexttag.c:375 gtk/gtktextview.c:596
 msgid "Left, right, or center justification"
 msgstr "Rataan kiri, kanan, atau tengah"
 
@@ -3962,7 +3962,7 @@ msgstr ""
 msgid "Left margin"
 msgstr "Margin kiri"
 
-#: gtk/gtktexttag.c:392 gtk/gtktextview.c:603
+#: gtk/gtktexttag.c:392 gtk/gtktextview.c:605
 msgid "Width of the left margin in pixels"
 msgstr "Lebar margin kiri dalam satuan piksel"
 
@@ -3970,15 +3970,15 @@ msgstr "Lebar margin kiri dalam satuan piksel"
 msgid "Right margin"
 msgstr "Margin kanan"
 
-#: gtk/gtktexttag.c:402 gtk/gtktextview.c:613
+#: gtk/gtktexttag.c:402 gtk/gtktextview.c:615
 msgid "Width of the right margin in pixels"
 msgstr "Lebar margin kanan dalam satuan piksel"
 
-#: gtk/gtktexttag.c:412 gtk/gtktextview.c:622
+#: gtk/gtktexttag.c:412 gtk/gtktextview.c:624
 msgid "Indent"
 msgstr "Indentasi"
 
-#: gtk/gtktexttag.c:413 gtk/gtktextview.c:623
+#: gtk/gtktexttag.c:413 gtk/gtktextview.c:625
 msgid "Amount to indent the paragraph, in pixels"
 msgstr "Jumlah piksel untuk membuat indentasi paragraf"
 
@@ -3994,7 +3994,7 @@ msgstr ""
 msgid "Pixels above lines"
 msgstr "Piksel di atas tulisan"
 
-#: gtk/gtktexttag.c:434 gtk/gtktextview.c:547
+#: gtk/gtktexttag.c:434 gtk/gtktextview.c:549
 msgid "Pixels of blank space above paragraphs"
 msgstr "Jumlah piksel ruang kosong di atas paragraf"
 
@@ -4002,7 +4002,7 @@ msgstr "Jumlah piksel ruang kosong di atas paragraf"
 msgid "Pixels below lines"
 msgstr "Piksel di bawah tulisan"
 
-#: gtk/gtktexttag.c:444 gtk/gtktextview.c:557
+#: gtk/gtktexttag.c:444 gtk/gtktextview.c:559
 msgid "Pixels of blank space below paragraphs"
 msgstr "Jumlah piksel ruang kosong di bawah paragraf"
 
@@ -4010,7 +4010,7 @@ msgstr "Jumlah piksel ruang kosong di bawah paragraf"
 msgid "Pixels inside wrap"
 msgstr "Piksel dalam potongan"
 
-#: gtk/gtktexttag.c:454 gtk/gtktextview.c:567
+#: gtk/gtktexttag.c:454 gtk/gtktextview.c:569
 msgid "Pixels of blank space between wrapped lines in a paragraph"
 msgstr "Banyaknya piksel kosong antara baris yang dipotong dalam paragraf"
 
@@ -4018,18 +4018,18 @@ msgstr "Banyaknya piksel kosong antara baris yang dipotong dalam paragraf"
 msgid "Wrap mode"
 msgstr "Mode potong"
 
-#: gtk/gtktexttag.c:481 gtk/gtktextview.c:585
+#: gtk/gtktexttag.c:481 gtk/gtktextview.c:587
 msgid ""
 "Whether to wrap lines never, at word boundaries, or at character boundaries"
 msgstr ""
 "Menentukan apakah baris tidak pernah dipotong, atau dipotong pada batas "
 "kata, atau dipotong pada batas karakter"
 
-#: gtk/gtktexttag.c:490 gtk/gtktextview.c:632
+#: gtk/gtktexttag.c:490 gtk/gtktextview.c:634
 msgid "Tabs"
 msgstr "Tab"
 
-#: gtk/gtktexttag.c:491 gtk/gtktextview.c:633
+#: gtk/gtktexttag.c:491 gtk/gtktextview.c:635
 msgid "Custom tabs for this text"
 msgstr "Tab sendiri untuk teks ini"
 
@@ -4192,39 +4192,39 @@ msgstr "ZWJ Zero width _joiner"
 msgid "ZWNJ Zero width _non-joiner"
 msgstr "ZWNJ Zero width _non-joiner"
 
-#: gtk/gtktextview.c:546
+#: gtk/gtktextview.c:548
 msgid "Pixels Above Lines"
 msgstr "Piksel di atas garis"
 
-#: gtk/gtktextview.c:556
+#: gtk/gtktextview.c:558
 msgid "Pixels Below Lines"
 msgstr "Piksel di bawah garis"
 
-#: gtk/gtktextview.c:566
+#: gtk/gtktextview.c:568
 msgid "Pixels Inside Wrap"
 msgstr "Piksel dalam wrap"
 
-#: gtk/gtktextview.c:584
+#: gtk/gtktextview.c:586
 msgid "Wrap Mode"
 msgstr "Potong Kalimat"
 
-#: gtk/gtktextview.c:602
+#: gtk/gtktextview.c:604
 msgid "Left Margin"
 msgstr "Margin kiri"
 
-#: gtk/gtktextview.c:612
+#: gtk/gtktextview.c:614
 msgid "Right Margin"
 msgstr "Margin Kanan"
 
-#: gtk/gtktextview.c:640
+#: gtk/gtktextview.c:642
 msgid "Cursor Visible"
 msgstr "Kursor kelihatan"
 
-#: gtk/gtktextview.c:641
+#: gtk/gtktextview.c:643
 msgid "If the insertion cursor is shown"
 msgstr "Menentukan apakah kursor untuk menulis kelihatan atau tidak"
 
-#: gtk/gtktextview.c:6631
+#: gtk/gtktextview.c:6633
 msgid "Input _Methods"
 msgstr "_Metode Input"
 
@@ -4928,6 +4928,11 @@ msgid "Amharic (EZ+)"
 msgstr "Amhar (EZ+)"
 
 #. ID
+#: modules/input/imcedilla.c:90
+msgid "Cedilla"
+msgstr ""
+
+#. ID
 #: modules/input/imcyrillic-translit.c:216
 msgid "Cyrillic (Transliterated)"
 msgstr "Cyrillic (Transliterasi)"
@@ -4967,19 +4972,19 @@ msgstr "Vietnam (VIQR)"
 msgid "X Input Method"
 msgstr "X Input Method"
 
-#: modules/input/gtkimcontextxim.c:276
+#: modules/input/gtkimcontextxim.c:321
 msgid "IM Preedit style"
 msgstr "Gaya preedit IM"
 
-#: modules/input/gtkimcontextxim.c:277
+#: modules/input/gtkimcontextxim.c:322
 msgid "How to draw the input method preedit string"
 msgstr "Cara menggambar string preedit metode input"
 
-#: modules/input/gtkimcontextxim.c:285
+#: modules/input/gtkimcontextxim.c:330
 msgid "IM Status style"
 msgstr "Gaya status IM"
 
-#: modules/input/gtkimcontextxim.c:286
+#: modules/input/gtkimcontextxim.c:331
 msgid "How to draw the input method statusbar"
 msgstr "Cara menggambar statusbar metode input"
 

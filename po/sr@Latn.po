@@ -8,7 +8,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.2.0\n"
-"POT-Creation-Date: 2003-08-16 01:01+0200\n"
+"POT-Creation-Date: 2003-08-25 22:08-0400\n"
 "PO-Revision-Date: 2003-08-16 01:00+0200\n"
 "Last-Translator: Danilo Šegan <danilo@prevod.org>\n"
 "Language-Team: Serbian (sr) <serbiangnome-lista@nongnu.org>\n"
@@ -107,8 +107,8 @@ msgid ""
 "Internal error: Image loader module '%s' failed to begin loading an image, "
 "but didn't give a reason for the failure"
 msgstr ""
-"Unutrašnja greška: Deo za učitavanje slika „%s“ nije uspeo da počne učitavanje "
-"slike, a nije naveo razlog neuspeha"
+"Unutrašnja greška: Deo za učitavanje slika „%s“ nije uspeo da počne "
+"učitavanje slike, a nije naveo razlog neuspeha"
 
 #: gdk-pixbuf/gdk-pixdata.c:145
 msgid "Image header corrupt"
@@ -231,7 +231,8 @@ msgstr "GIF slika sadrži kadar izvan granica slike."
 msgid ""
 "GIF image has no global colormap, and a frame inside it has no local "
 "colormap."
-msgstr "GIF slika nema opštu mapu boja, a kadar u njemu nema zasebnu mapu boja."
+msgstr ""
+"GIF slika nema opštu mapu boja, a kadar u njemu nema zasebnu mapu boja."
 
 #: gdk-pixbuf/io-gif.c:1487
 msgid "GIF image was truncated or incomplete."
@@ -784,8 +785,8 @@ msgid ""
 "Horizontal position of child in available space. 0.0 is left aligned, 1.0 is "
 "right aligned"
 msgstr ""
-"Vodoravna pozicija deteta u dostupnom prostoru. 0.0 označava levo poravnanje, "
-"1.0 desno poravnanje."
+"Vodoravna pozicija deteta u dostupnom prostoru. 0.0 označava levo "
+"poravnanje, 1.0 desno poravnanje."
 
 #: gtk/gtkalignment.c:112
 msgid "Vertical alignment"
@@ -927,8 +928,8 @@ msgid ""
 "If TRUE, the child appears in a secondary group of children, suitable for, e."
 "g., help buttons"
 msgstr ""
-"Ukoliko je postavljeno, sadržani element se pojavljuje među drugim elementima, "
-"što je odgovarajuće za npr. dugmiće za pomoć."
+"Ukoliko je postavljeno, sadržani element se pojavljuje među drugim "
+"elementima, što je odgovarajuće za npr. dugmiće za pomoć."
 
 #: gtk/gtkbox.c:128
 msgid "Spacing"
@@ -963,8 +964,8 @@ msgid ""
 "Whether extra space given to the child should be allocated to the child or "
 "used as padding"
 msgstr ""
-"Da li se dodatni prostor namenjen sadržanom elementu treba njemu dodeliti ili "
-"koristiti za popunu"
+"Da li se dodatni prostor namenjen sadržanom elementu treba njemu dodeliti "
+"ili koristiti za popunu"
 
 #: gtk/gtkbox.c:160
 msgid "Padding"
@@ -973,8 +974,8 @@ msgstr "Popuna"
 #: gtk/gtkbox.c:161
 msgid "Extra space to put between the child and its neighbors, in pixels"
 msgstr ""
-"Dodatni razmak koji se postavlja između sadržanog elementa i njegovih komšija, "
-"u tačkama"
+"Dodatni razmak koji se postavlja između sadržanog elementa i njegovih "
+"komšija, u tačkama"
 
 #: gtk/gtkbox.c:167
 msgid "Pack type"
@@ -1283,11 +1284,11 @@ msgid "Foreground color as a GdkColor"
 msgstr "Boja iscrtavanja kao GdkColor"
 
 #: gtk/gtkcellrenderertext.c:232 gtk/gtkentry.c:459 gtk/gtktexttag.c:273
-#: gtk/gtktextview.c:576
+#: gtk/gtktextview.c:578
 msgid "Editable"
 msgstr "Izmenjiv"
 
-#: gtk/gtkcellrenderertext.c:233 gtk/gtktexttag.c:274 gtk/gtktextview.c:577
+#: gtk/gtkcellrenderertext.c:233 gtk/gtktexttag.c:274 gtk/gtktextview.c:579
 msgid "Whether the text can be modified by the user"
 msgstr "Da li korisnik može menjati tekst"
 
@@ -1876,7 +1877,8 @@ msgstr "Najveća dužina"
 
 #: gtk/gtkentry.c:468
 msgid "Maximum number of characters for this entry. Zero if no maximum"
-msgstr "Najviše dozvoljenih znakova za ovo polje. Nula ukoliko nema ograničenja"
+msgstr ""
+"Najviše dozvoljenih znakova za ovo polje. Nula ukoliko nema ograničenja"
 
 #: gtk/gtkentry.c:476
 msgid "Visibility"
@@ -1887,8 +1889,8 @@ msgid ""
 "FALSE displays the \"invisible char\" instead of the actual text (password "
 "mode)"
 msgstr ""
-"Ukoliko nije postavljeno, prikazuje se „nevidljivi znak“ umesto pravog teksta "
-"(unos lozinke)"
+"Ukoliko nije postavljeno, prikazuje se „nevidljivi znak“ umesto pravog "
+"teksta (unos lozinke)"
 
 #: gtk/gtkentry.c:484
 msgid "Has Frame"
@@ -1946,7 +1948,7 @@ msgstr "Izaberi kad je u žiži"
 msgid "Whether to select the contents of an entry when it is focused"
 msgstr "Da li izabrati sadržaj kada polje pređe u žižu"
 
-#: gtk/gtkentry.c:3993 gtk/gtklabel.c:3222 gtk/gtktextview.c:6621
+#: gtk/gtkentry.c:3993 gtk/gtklabel.c:3222 gtk/gtktextview.c:6623
 msgid "Select All"
 msgstr "Izaberi sve"
 
@@ -1954,7 +1956,7 @@ msgstr "Izaberi sve"
 msgid "Input Methods"
 msgstr "Načini unosa"
 
-#: gtk/gtkentry.c:4013 gtk/gtktextview.c:6640
+#: gtk/gtkentry.c:4013 gtk/gtktextview.c:6642
 msgid "_Insert Unicode control character"
 msgstr "_Ubaciti Unikod kontrolni znak"
 
@@ -2503,7 +2505,7 @@ msgstr "Koristi oznake"
 msgid "The text of the label includes XML markup. See pango_parse_markup()"
 msgstr "Tekst oznake sadrži XML oznake. Videti pango_parse_markup()"
 
-#: gtk/gtklabel.c:319 gtk/gtktexttag.c:374 gtk/gtktextview.c:593
+#: gtk/gtklabel.c:319 gtk/gtktexttag.c:374 gtk/gtktextview.c:595
 msgid "Justification"
 msgstr "Slaganje redova"
 
@@ -2628,8 +2630,8 @@ msgstr "Vreme pre pojave podmenija"
 msgid ""
 "Minimum time the pointer must stay over a menu item before the submenu appear"
 msgstr ""
-"Najmanje vreme koje se pokazivač miša mora zadržati preko stavke menija da bi "
-"se pojavio podmeni"
+"Najmanje vreme koje se pokazivač miša mora zadržati preko stavke menija da "
+"bi se pojavio podmeni"
 
 #: gtk/gtkmenu.c:393
 msgid "Delay before hiding a submenu"
@@ -2837,7 +2839,7 @@ msgstr "Da li jezičci treba da popune obezbeđeni prostor ili ne"
 msgid "Tab pack type"
 msgstr "Vrsta jezičaka"
 
-#: gtk/gtknotebook.c:2473 gtk/gtknotebook.c:4820
+#: gtk/gtknotebook.c:2471 gtk/gtknotebook.c:4818
 #, c-format
 msgid "Page %u"
 msgstr "List %u"
@@ -2963,7 +2965,8 @@ msgstr "Korak delovanja"
 #: gtk/gtkprogressbar.c:169
 msgid "The increment used for each iteration in activity mode (Deprecated)"
 msgstr ""
-"Korak koji se koristi pri svakom uvećanju dok je delovanje u toku (prevaziđeno)"
+"Korak koji se koristi pri svakom uvećanju dok je delovanje u toku "
+"(prevaziđeno)"
 
 #: gtk/gtkprogressbar.c:178
 msgid "Activity Blocks"
@@ -3092,17 +3095,17 @@ msgid ""
 "How far in the y direction to move the arrow when the button is depressed"
 msgstr "Koliko pomeriti strelicu u pravcu Y ose kada se dugme pritisne"
 
-#: gtk/gtkrc.c:2376
+#: gtk/gtkrc.c:2382
 #, c-format
 msgid "Unable to find include file: \"%s\""
 msgstr "Ne može pronaći datoteku za uključivanje: „%s“"
 
-#: gtk/gtkrc.c:3018 gtk/gtkrc.c:3021
+#: gtk/gtkrc.c:3025 gtk/gtkrc.c:3028
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "Ne može pronaći datoteku sa slikom u putanji za slike: „%s“"
 
-#: gtk/gtkrc.c:3456
+#: gtk/gtkrc.c:3463
 #, c-format
 msgid "Pixmap path element: \"%s\" must be absolute, %s, line %d"
 msgstr "Deo putanje za slike: „%s“ mora biti apsolutna putanja, %s, red %d"
@@ -3190,8 +3193,8 @@ msgstr "Utvrđena veličina klizača"
 #: gtk/gtkscrollbar.c:90
 msgid "Don't change slider size, just lock it to the minimum length"
 msgstr ""
-"Ne dozvoljava promenu veličine klizača, već je utvrđuje na najmanju dozvoljenu "
-"dužinu"
+"Ne dozvoljava promenu veličine klizača, već je utvrđuje na najmanju "
+"dozvoljenu dužinu"
 
 #: gtk/gtkscrollbar.c:97
 msgid "Backward stepper"
@@ -3753,7 +3756,8 @@ msgstr "Jednoobrazno"
 
 #: gtk/gtktable.c:195
 msgid "If TRUE this means the table cells are all the same width/height"
-msgstr "Ukoliko je postavljeno, onda su sva polja tabele jednake širine i visine"
+msgstr ""
+"Ukoliko je postavljeno, onda su sva polja tabele jednake širine i visine"
 
 #: gtk/gtktable.c:202
 msgid "Left attachment"
@@ -3824,8 +3828,8 @@ msgid ""
 "Extra space to put between the child and its upper and lower neighbors, in "
 "pixels"
 msgstr ""
-"Dodatni razmak između sadržanog elementa i njegovog gornjeg i donjeg suseda, u "
-"tačkama"
+"Dodatni razmak između sadržanog elementa i njegovog gornjeg i donjeg suseda, "
+"u tačkama"
 
 #: gtk/gtktext.c:602
 msgid "Horizontal adjustment for the text widget"
@@ -3951,7 +3955,7 @@ msgstr ""
 "se ispravno prilagođava izmeni teme i slično, pa se preporučuje. Pango "
 "uspostavlja neke razmere kao što je PANGO_SCALE_X_LARGE"
 
-#: gtk/gtktexttag.c:375 gtk/gtktextview.c:594
+#: gtk/gtktexttag.c:375 gtk/gtktextview.c:596
 msgid "Left, right, or center justification"
 msgstr "Levo, desno, ili središnje poravnanje"
 
@@ -3973,7 +3977,7 @@ msgstr ""
 msgid "Left margin"
 msgstr "Leva margina"
 
-#: gtk/gtktexttag.c:392 gtk/gtktextview.c:603
+#: gtk/gtktexttag.c:392 gtk/gtktextview.c:605
 msgid "Width of the left margin in pixels"
 msgstr "Širina leve margine u tačkama"
 
@@ -3981,15 +3985,15 @@ msgstr "Širina leve margine u tačkama"
 msgid "Right margin"
 msgstr "Desna margina"
 
-#: gtk/gtktexttag.c:402 gtk/gtktextview.c:613
+#: gtk/gtktexttag.c:402 gtk/gtktextview.c:615
 msgid "Width of the right margin in pixels"
 msgstr "Širina desne margine u tačkama"
 
-#: gtk/gtktexttag.c:412 gtk/gtktextview.c:622
+#: gtk/gtktexttag.c:412 gtk/gtktextview.c:624
 msgid "Indent"
 msgstr "Uvlačenje"
 
-#: gtk/gtktexttag.c:413 gtk/gtktextview.c:623
+#: gtk/gtktexttag.c:413 gtk/gtktextview.c:625
 msgid "Amount to indent the paragraph, in pixels"
 msgstr "Koliko tačaka treba koristiti za uvlačenje pasusa"
 
@@ -4003,7 +4007,7 @@ msgstr "Pomeraj teksta u odnosu na osnovnu liniju u tačkama"
 msgid "Pixels above lines"
 msgstr "Tačaka iznad linija"
 
-#: gtk/gtktexttag.c:434 gtk/gtktextview.c:547
+#: gtk/gtktexttag.c:434 gtk/gtktextview.c:549
 msgid "Pixels of blank space above paragraphs"
 msgstr "Broj tačaka praznog prostora iznad pasusa"
 
@@ -4011,7 +4015,7 @@ msgstr "Broj tačaka praznog prostora iznad pasusa"
 msgid "Pixels below lines"
 msgstr "Tačaka ispod linija"
 
-#: gtk/gtktexttag.c:444 gtk/gtktextview.c:557
+#: gtk/gtktexttag.c:444 gtk/gtktextview.c:559
 msgid "Pixels of blank space below paragraphs"
 msgstr "Broj tačaka praznog prostora ispod pasusa"
 
@@ -4019,7 +4023,7 @@ msgstr "Broj tačaka praznog prostora ispod pasusa"
 msgid "Pixels inside wrap"
 msgstr "Tačaka unutar pasusa"
 
-#: gtk/gtktexttag.c:454 gtk/gtktextview.c:567
+#: gtk/gtktexttag.c:454 gtk/gtktextview.c:569
 msgid "Pixels of blank space between wrapped lines in a paragraph"
 msgstr "Broj tačaka praznog prostora između prelomljenih redova u pasusu"
 
@@ -4027,16 +4031,16 @@ msgstr "Broj tačaka praznog prostora između prelomljenih redova u pasusu"
 msgid "Wrap mode"
 msgstr "Prelom"
 
-#: gtk/gtktexttag.c:481 gtk/gtktextview.c:585
+#: gtk/gtktexttag.c:481 gtk/gtktextview.c:587
 msgid ""
 "Whether to wrap lines never, at word boundaries, or at character boundaries"
 msgstr "Da li se prelom ne vrši nikad, između reči, ili između znakova"
 
-#: gtk/gtktexttag.c:490 gtk/gtktextview.c:632
+#: gtk/gtktexttag.c:490 gtk/gtktextview.c:634
 msgid "Tabs"
 msgstr "Tabulatori"
 
-#: gtk/gtktexttag.c:491 gtk/gtktextview.c:633
+#: gtk/gtktexttag.c:491 gtk/gtktextview.c:635
 msgid "Custom tabs for this text"
 msgstr "Postavi tabulatore za ovaj tekst"
 
@@ -4196,39 +4200,39 @@ msgstr "ZWJ _spojnica bez širine"
 msgid "ZWNJ Zero width _non-joiner"
 msgstr "ZWNJ _nespojnica bez širine"
 
-#: gtk/gtktextview.c:546
+#: gtk/gtktextview.c:548
 msgid "Pixels Above Lines"
 msgstr "Tačaka iznad linija"
 
-#: gtk/gtktextview.c:556
+#: gtk/gtktextview.c:558
 msgid "Pixels Below Lines"
 msgstr "Tačaka ispod linija"
 
-#: gtk/gtktextview.c:566
+#: gtk/gtktextview.c:568
 msgid "Pixels Inside Wrap"
 msgstr "Tačaka između linija"
 
-#: gtk/gtktextview.c:584
+#: gtk/gtktextview.c:586
 msgid "Wrap Mode"
 msgstr "Način preloma"
 
-#: gtk/gtktextview.c:602
+#: gtk/gtktextview.c:604
 msgid "Left Margin"
 msgstr "Leva margina"
 
-#: gtk/gtktextview.c:612
+#: gtk/gtktextview.c:614
 msgid "Right Margin"
 msgstr "Desna margina"
 
-#: gtk/gtktextview.c:640
+#: gtk/gtktextview.c:642
 msgid "Cursor Visible"
 msgstr "Kursor se vidi"
 
-#: gtk/gtktextview.c:641
+#: gtk/gtktextview.c:643
 msgid "If the insertion cursor is shown"
 msgstr "Da li se prikazuje kursor za unos"
 
-#: gtk/gtktextview.c:6631
+#: gtk/gtktextview.c:6633
 msgid "Input _Methods"
 msgstr "Načini unosa"
 
@@ -4809,8 +4813,8 @@ msgid ""
 "If TRUE, the window has no mimimum size. Setting this to TRUE is 99% of the "
 "time a bad idea"
 msgstr ""
-"Ukoliko je postavljeno, prozor nema najmanju dopuštenu veličinu. Uključivanje "
-"ovoga je u 99 odsto slučajeva neprikladno"
+"Ukoliko je postavljeno, prozor nema najmanju dopuštenu veličinu. "
+"Uključivanje ovoga je u 99 odsto slučajeva neprikladno"
 
 #: gtk/gtkwindow.c:483
 msgid "Allow Grow"
@@ -4819,8 +4823,8 @@ msgstr "Dopusti povećanje"
 #: gtk/gtkwindow.c:484
 msgid "If TRUE, users can expand the window beyond its minimum size"
 msgstr ""
-"Ukoliko je postavljeno, korisnici mogu povećati prozor preko njegove najmanje "
-"veličine"
+"Ukoliko je postavljeno, korisnici mogu povećati prozor preko njegove "
+"najmanje veličine"
 
 #: gtk/gtkwindow.c:492
 msgid "If TRUE, users can resize the window"
@@ -4974,18 +4978,18 @@ msgstr "Vijetnamski (VIQR)"
 msgid "X Input Method"
 msgstr "X način unosa (XIM)"
 
-#: modules/input/gtkimcontextxim.c:276
+#: modules/input/gtkimcontextxim.c:321
 msgid "IM Preedit style"
 msgstr "IM način predunosa"
 
-#: modules/input/gtkimcontextxim.c:277
+#: modules/input/gtkimcontextxim.c:322
 msgid "How to draw the input method preedit string"
 msgstr "Kako iscrtati tekst predunosa za načine unosa"
 
-#: modules/input/gtkimcontextxim.c:285
+#: modules/input/gtkimcontextxim.c:330
 msgid "IM Status style"
 msgstr "Stil stanja IM-a"
 
-#: modules/input/gtkimcontextxim.c:286
+#: modules/input/gtkimcontextxim.c:331
 msgid "How to draw the input method statusbar"
 msgstr "Kako iscrtati liniju stanja načina unosa"

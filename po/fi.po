@@ -8,8 +8,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.2.0\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2003-08-16 19:24+0300\n"
+"POT-Creation-Date: 2003-08-25 22:08-0400\n"
 "PO-Revision-Date: 2003-08-16 18:44+0200\n"
 "Last-Translator: Pauli Virtanen <pauli.virtanen@hut.fi>\n"
 "Language-Team: Gnome Finnish Translation Team <gnome-fi-laatu@lists."
@@ -17,6 +16,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Report-Msgid-Bugs-To: \n"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:147 gdk-pixbuf/gdk-pixbuf-io.c:737
 #, c-format
@@ -1252,11 +1252,11 @@ msgid "Foreground color as a GdkColor"
 msgstr "Edustaväri GdkColor:na"
 
 #: gtk/gtkcellrenderertext.c:232 gtk/gtkentry.c:459 gtk/gtktexttag.c:273
-#: gtk/gtktextview.c:576
+#: gtk/gtktextview.c:578
 msgid "Editable"
 msgstr "Muokattava"
 
-#: gtk/gtkcellrenderertext.c:233 gtk/gtktexttag.c:274 gtk/gtktextview.c:577
+#: gtk/gtkcellrenderertext.c:233 gtk/gtktexttag.c:274 gtk/gtktextview.c:579
 msgid "Whether the text can be modified by the user"
 msgstr "Voiko käyttäjä muuttaa tekstiä"
 
@@ -1910,7 +1910,7 @@ msgstr "Valitse kohdistettaessa"
 msgid "Whether to select the contents of an entry when it is focused"
 msgstr "Muuttuuko sisältö valituksi, kun kenttä saa syöttökohdistuksen"
 
-#: gtk/gtkentry.c:3993 gtk/gtklabel.c:3222 gtk/gtktextview.c:6621
+#: gtk/gtkentry.c:3993 gtk/gtklabel.c:3222 gtk/gtktextview.c:6623
 msgid "Select All"
 msgstr "Valitse kaikki"
 
@@ -1918,7 +1918,7 @@ msgstr "Valitse kaikki"
 msgid "Input Methods"
 msgstr "Syöttötavat"
 
-#: gtk/gtkentry.c:4013 gtk/gtktextview.c:6640
+#: gtk/gtkentry.c:4013 gtk/gtktextview.c:6642
 msgid "_Insert Unicode control character"
 msgstr "_Lisää Unicode-kontrollimerkki"
 
@@ -2470,7 +2470,7 @@ msgstr "Käytä merkintöjä"
 msgid "The text of the label includes XML markup. See pango_parse_markup()"
 msgstr "Nimiön teksti sisältää XML-merkintää. Katso pango_parse_markup()"
 
-#: gtk/gtklabel.c:319 gtk/gtktexttag.c:374 gtk/gtktextview.c:593
+#: gtk/gtklabel.c:319 gtk/gtktexttag.c:374 gtk/gtktextview.c:595
 msgid "Justification"
 msgstr "Reunojen tasaus"
 
@@ -2809,7 +2809,7 @@ msgid "Tab pack type"
 msgstr "Välilehden pakkaustyyppi"
 
 # , c-format
-#: gtk/gtknotebook.c:2473 gtk/gtknotebook.c:4820
+#: gtk/gtknotebook.c:2471 gtk/gtknotebook.c:4818
 #, c-format
 msgid "Page %u"
 msgstr "Sivu %u"
@@ -3059,18 +3059,18 @@ msgid ""
 "How far in the y direction to move the arrow when the button is depressed"
 msgstr "Kuinka paljon y-suuntaan nuoli liikkuu, kun painike päästetään ylös"
 
-#: gtk/gtkrc.c:2376
+#: gtk/gtkrc.c:2382
 #, c-format
 msgid "Unable to find include file: \"%s\""
 msgstr "Ei löytänyt sisällytettävää tiedostoa \"%s\"."
 
 # , c-format
-#: gtk/gtkrc.c:3018 gtk/gtkrc.c:3021
+#: gtk/gtkrc.c:3025 gtk/gtkrc.c:3028
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "Kuvatiedostoa ei löytynyt pixmap_path:sta: \"%s\""
 
-#: gtk/gtkrc.c:3456
+#: gtk/gtkrc.c:3463
 #, c-format
 msgid "Pixmap path element: \"%s\" must be absolute, %s, line %d"
 msgstr "Kuvan polku \"%s\" ei voi olla suhteellinen, %s, rivi %d"
@@ -3918,7 +3918,7 @@ msgstr ""
 "sopeutuu hyvin teemojen muutoksiin yms., joten tämän käyttö on suositeltua. "
 "Pango esimäärittelee joitakin kokoja, kuten PANGO_SCALE_X_LARGE"
 
-#: gtk/gtktexttag.c:375 gtk/gtktextview.c:594
+#: gtk/gtktexttag.c:375 gtk/gtktextview.c:596
 msgid "Left, right, or center justification"
 msgstr "Vasen-, oikea- tai keskikohdistus"
 
@@ -3939,7 +3939,7 @@ msgstr ""
 msgid "Left margin"
 msgstr "Vasen reunus"
 
-#: gtk/gtktexttag.c:392 gtk/gtktextview.c:603
+#: gtk/gtktexttag.c:392 gtk/gtktextview.c:605
 msgid "Width of the left margin in pixels"
 msgstr "Vasemman reunuksen leveys kuvapisteinä"
 
@@ -3947,15 +3947,15 @@ msgstr "Vasemman reunuksen leveys kuvapisteinä"
 msgid "Right margin"
 msgstr "Oikea reunus"
 
-#: gtk/gtktexttag.c:402 gtk/gtktextview.c:613
+#: gtk/gtktexttag.c:402 gtk/gtktextview.c:615
 msgid "Width of the right margin in pixels"
 msgstr "Oikean reunuksen leveys kuvapisteinä"
 
-#: gtk/gtktexttag.c:412 gtk/gtktextview.c:622
+#: gtk/gtktexttag.c:412 gtk/gtktextview.c:624
 msgid "Indent"
 msgstr "Sisennys"
 
-#: gtk/gtktexttag.c:413 gtk/gtktextview.c:623
+#: gtk/gtktexttag.c:413 gtk/gtktextview.c:625
 msgid "Amount to indent the paragraph, in pixels"
 msgstr "Kappaleen sisennys kuvapisteinä"
 
@@ -3971,7 +3971,7 @@ msgstr ""
 msgid "Pixels above lines"
 msgstr "Pikseleitä rivien yllä"
 
-#: gtk/gtktexttag.c:434 gtk/gtktextview.c:547
+#: gtk/gtktexttag.c:434 gtk/gtktextview.c:549
 msgid "Pixels of blank space above paragraphs"
 msgstr "Kappaleiden yllä olevan tyhjän tilan määrä pikseleinä"
 
@@ -3979,7 +3979,7 @@ msgstr "Kappaleiden yllä olevan tyhjän tilan määrä pikseleinä"
 msgid "Pixels below lines"
 msgstr "Pikseleitä rivien alla"
 
-#: gtk/gtktexttag.c:444 gtk/gtktextview.c:557
+#: gtk/gtktexttag.c:444 gtk/gtktextview.c:559
 msgid "Pixels of blank space below paragraphs"
 msgstr "Kappaleiden alla olevan tyhjän tilan määrä pikseleinä"
 
@@ -3987,7 +3987,7 @@ msgstr "Kappaleiden alla olevan tyhjän tilan määrä pikseleinä"
 msgid "Pixels inside wrap"
 msgstr "Pikseliä rivityksessä"
 
-#: gtk/gtktexttag.c:454 gtk/gtktextview.c:567
+#: gtk/gtktexttag.c:454 gtk/gtktextview.c:569
 msgid "Pixels of blank space between wrapped lines in a paragraph"
 msgstr "Tyhjien kuvapisteiden määrä kappaleen rivittyneiden rivien välissä"
 
@@ -3995,16 +3995,16 @@ msgstr "Tyhjien kuvapisteiden määrä kappaleen rivittyneiden rivien välissä"
 msgid "Wrap mode"
 msgstr "Rivitystapa"
 
-#: gtk/gtktexttag.c:481 gtk/gtktextview.c:585
+#: gtk/gtktexttag.c:481 gtk/gtktextview.c:587
 msgid ""
 "Whether to wrap lines never, at word boundaries, or at character boundaries"
 msgstr "Rivittyvätkö rivit ollenkaan, sanojen välistä vai merkkien välistä"
 
-#: gtk/gtktexttag.c:490 gtk/gtktextview.c:632
+#: gtk/gtktexttag.c:490 gtk/gtktextview.c:634
 msgid "Tabs"
 msgstr "Sarkaimet"
 
-#: gtk/gtktexttag.c:491 gtk/gtktextview.c:633
+#: gtk/gtktexttag.c:491 gtk/gtktextview.c:635
 msgid "Custom tabs for this text"
 msgstr "Muokkaa tämän tekstin sarkaimia"
 
@@ -4164,39 +4164,39 @@ msgstr "ZWN Nollan levyinen _yhdistäjä"
 msgid "ZWNJ Zero width _non-joiner"
 msgstr "ZWNJ Nollan levyinen _ei-yhdistäjä"
 
-#: gtk/gtktextview.c:546
+#: gtk/gtktextview.c:548
 msgid "Pixels Above Lines"
 msgstr "Pikseliä rivien yllä"
 
-#: gtk/gtktextview.c:556
+#: gtk/gtktextview.c:558
 msgid "Pixels Below Lines"
 msgstr "Pikseliä rivien alla"
 
-#: gtk/gtktextview.c:566
+#: gtk/gtktextview.c:568
 msgid "Pixels Inside Wrap"
 msgstr "Pikseliä rivityksessä"
 
-#: gtk/gtktextview.c:584
+#: gtk/gtktextview.c:586
 msgid "Wrap Mode"
 msgstr "Rivitystapa"
 
-#: gtk/gtktextview.c:602
+#: gtk/gtktextview.c:604
 msgid "Left Margin"
 msgstr "Vasen reunus"
 
-#: gtk/gtktextview.c:612
+#: gtk/gtktextview.c:614
 msgid "Right Margin"
 msgstr "Oikea reunus"
 
-#: gtk/gtktextview.c:640
+#: gtk/gtktextview.c:642
 msgid "Cursor Visible"
 msgstr "Kohdistin näkyy"
 
-#: gtk/gtktextview.c:641
+#: gtk/gtktextview.c:643
 msgid "If the insertion cursor is shown"
 msgstr "Näkyykö tekstikohdistin"
 
-#: gtk/gtktextview.c:6631
+#: gtk/gtktextview.c:6633
 msgid "Input _Methods"
 msgstr "Syöttö_tavat"
 
@@ -4939,18 +4939,18 @@ msgstr "Vietnam (VIQR)"
 msgid "X Input Method"
 msgstr "X-syöttötapa"
 
-#: modules/input/gtkimcontextxim.c:276
+#: modules/input/gtkimcontextxim.c:321
 msgid "IM Preedit style"
 msgstr "Syöttötavan esimuokkaustyyli"
 
-#: modules/input/gtkimcontextxim.c:277
+#: modules/input/gtkimcontextxim.c:322
 msgid "How to draw the input method preedit string"
 msgstr "Miten syöttötavan esimuokattava merkkijono piirtyy"
 
-#: modules/input/gtkimcontextxim.c:285
+#: modules/input/gtkimcontextxim.c:330
 msgid "IM Status style"
 msgstr "Syöttötavan tilan tyyli"
 
-#: modules/input/gtkimcontextxim.c:286
+#: modules/input/gtkimcontextxim.c:331
 msgid "How to draw the input method statusbar"
 msgstr "Miten syöttötapojen tilarivi piirtyy"

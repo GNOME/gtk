@@ -10,14 +10,14 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.3.x\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2003-08-08 20:50+0200\n"
+"POT-Creation-Date: 2003-08-25 22:08-0400\n"
 "PO-Revision-Date: 2003-08-09 04:21+0800\n"
 "Last-Translator: Funda Wang <fundawang@linux.net.cn>\n"
 "Language-Team: zh_CN <i18n-translation@lists.linux.net.cn>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8-bit\n"
+"Report-Msgid-Bugs-To: \n"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:147 gdk-pixbuf/gdk-pixbuf-io.c:737
 #, c-format
@@ -1217,11 +1217,11 @@ msgid "Foreground color as a GdkColor"
 msgstr "以 GdkColor 方式表达的前景色"
 
 #: gtk/gtkcellrenderertext.c:232 gtk/gtkentry.c:459 gtk/gtktexttag.c:273
-#: gtk/gtktextview.c:576
+#: gtk/gtktextview.c:578
 msgid "Editable"
 msgstr "可编辑"
 
-#: gtk/gtkcellrenderertext.c:233 gtk/gtktexttag.c:274 gtk/gtktextview.c:577
+#: gtk/gtkcellrenderertext.c:233 gtk/gtktexttag.c:274 gtk/gtktextview.c:579
 msgid "Whether the text can be modified by the user"
 msgstr "用户是否可以修改文字"
 
@@ -1859,7 +1859,7 @@ msgstr "聚焦时选中"
 msgid "Whether to select the contents of an entry when it is focused"
 msgstr "当一项被聚焦时是否选中其内容"
 
-#: gtk/gtkentry.c:3993 gtk/gtklabel.c:3222 gtk/gtktextview.c:6621
+#: gtk/gtkentry.c:3993 gtk/gtklabel.c:3222 gtk/gtktextview.c:6623
 msgid "Select All"
 msgstr "选择全部"
 
@@ -1867,56 +1867,56 @@ msgstr "选择全部"
 msgid "Input Methods"
 msgstr "输入法"
 
-#: gtk/gtkentry.c:4013 gtk/gtktextview.c:6640
+#: gtk/gtkentry.c:4013 gtk/gtktextview.c:6642
 msgid "_Insert Unicode control character"
 msgstr "插入 Unicode 控制字符(_I)"
 
-#: gtk/gtkfilesel.c:551 gtk/gtkimage.c:167
+#: gtk/gtkfilesel.c:556 gtk/gtkimage.c:167
 msgid "Filename"
 msgstr "文件名"
 
-#: gtk/gtkfilesel.c:552
+#: gtk/gtkfilesel.c:557
 msgid "The currently selected filename"
 msgstr "当前选择的文件名"
 
-#: gtk/gtkfilesel.c:558
+#: gtk/gtkfilesel.c:563
 msgid "Show file operations"
 msgstr "显示文件操作"
 
-#: gtk/gtkfilesel.c:559
+#: gtk/gtkfilesel.c:564
 msgid "Whether buttons for creating/manipulating files should be displayed"
 msgstr "是否显示创建或处理文件的按钮。"
 
-#: gtk/gtkfilesel.c:566
+#: gtk/gtkfilesel.c:571
 msgid "Select multiple"
 msgstr "选择多个"
 
-#: gtk/gtkfilesel.c:567
+#: gtk/gtkfilesel.c:572
 msgid "Whether to allow multiple files to be selected"
 msgstr "是否允许选择多个文件"
 
-#: gtk/gtkfilesel.c:722
+#: gtk/gtkfilesel.c:727
 msgid "Folders"
 msgstr "文件夹"
 
-#: gtk/gtkfilesel.c:726
+#: gtk/gtkfilesel.c:731
 msgid "Fol_ders"
 msgstr "文件夹(_D)"
 
-#: gtk/gtkfilesel.c:758
+#: gtk/gtkfilesel.c:763
 msgid "Files"
 msgstr "文件"
 
-#: gtk/gtkfilesel.c:762
+#: gtk/gtkfilesel.c:767
 msgid "_Files"
 msgstr "文件(_F)"
 
-#: gtk/gtkfilesel.c:845 gtk/gtkfilesel.c:2239
+#: gtk/gtkfilesel.c:850 gtk/gtkfilesel.c:2240
 #, c-format
 msgid "Folder unreadable: %s"
 msgstr "文件夹不可读：%s"
 
-#: gtk/gtkfilesel.c:976
+#: gtk/gtkfilesel.c:981
 #, c-format
 msgid ""
 "The file \"%s\" resides on another machine (called %s) and may not be "
@@ -1926,25 +1926,25 @@ msgstr ""
 "文件“%s”位于另一台(名为 %s)机器上，可能无法被本程序访问。\n"
 "您确信要选择它？"
 
-#: gtk/gtkfilesel.c:1107
+#: gtk/gtkfilesel.c:1112
 msgid "_New Folder"
 msgstr "新建文件夹(_N)"
 
-#: gtk/gtkfilesel.c:1118
+#: gtk/gtkfilesel.c:1123
 msgid "De_lete File"
 msgstr "删除文件(_L)"
 
-#: gtk/gtkfilesel.c:1129
+#: gtk/gtkfilesel.c:1134
 msgid "_Rename File"
 msgstr "重命名文件(_R)"
 
-#: gtk/gtkfilesel.c:1431
+#: gtk/gtkfilesel.c:1436
 #, c-format
 msgid ""
 "The folder name \"%s\" contains symbols that are not allowed in filenames"
 msgstr "文件夹名称“%s”含有不允许存在于文件名中的符号"
 
-#: gtk/gtkfilesel.c:1433
+#: gtk/gtkfilesel.c:1438
 #, c-format
 msgid ""
 "Error creating folder \"%s\": %s\n"
@@ -1953,33 +1953,33 @@ msgstr ""
 "创建文件夹“%s” 出错：%s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1434 gtk/gtkfilesel.c:1670
+#: gtk/gtkfilesel.c:1439 gtk/gtkfilesel.c:1675
 msgid "You probably used symbols not allowed in filenames."
 msgstr "您可能使用了不允许存在于文件名中的符号。"
 
-#: gtk/gtkfilesel.c:1442
+#: gtk/gtkfilesel.c:1447
 #, c-format
 msgid "Error creating folder \"%s\": %s\n"
 msgstr "创建文件夹“%s”时出错：%s\n"
 
-#: gtk/gtkfilesel.c:1476
+#: gtk/gtkfilesel.c:1481
 msgid "New Folder"
 msgstr "新建文件夹"
 
-#: gtk/gtkfilesel.c:1491
+#: gtk/gtkfilesel.c:1496
 msgid "_Folder name:"
 msgstr "文件夹名称(_F)："
 
-#: gtk/gtkfilesel.c:1515
+#: gtk/gtkfilesel.c:1520
 msgid "C_reate"
 msgstr "创建(_R)"
 
-#: gtk/gtkfilesel.c:1558
+#: gtk/gtkfilesel.c:1563
 #, c-format
 msgid "The filename \"%s\" contains symbols that are not allowed in filenames"
 msgstr "文件名“%s”中含有不允许存在于文件名中的符号"
 
-#: gtk/gtkfilesel.c:1561
+#: gtk/gtkfilesel.c:1566
 #, c-format
 msgid ""
 "Error deleting file \"%s\": %s\n"
@@ -1988,30 +1988,30 @@ msgstr ""
 "删除文件“%s”时出错：%s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1563 gtk/gtkfilesel.c:1684
+#: gtk/gtkfilesel.c:1568 gtk/gtkfilesel.c:1689
 msgid "It probably contains symbols not allowed in filenames."
 msgstr "它可能含有不允许存在于文件名中的符号。"
 
-#: gtk/gtkfilesel.c:1572
+#: gtk/gtkfilesel.c:1577
 #, c-format
 msgid "Error deleting file \"%s\": %s"
 msgstr "删除文件“%s”时出错：%s"
 
-#: gtk/gtkfilesel.c:1615
+#: gtk/gtkfilesel.c:1620
 #, c-format
 msgid "Really delete file \"%s\" ?"
 msgstr "真的要删除文件“%s”吗？"
 
-#: gtk/gtkfilesel.c:1620
+#: gtk/gtkfilesel.c:1625
 msgid "Delete File"
 msgstr "删除文件"
 
-#: gtk/gtkfilesel.c:1666 gtk/gtkfilesel.c:1680
+#: gtk/gtkfilesel.c:1671 gtk/gtkfilesel.c:1685
 #, c-format
 msgid "The file name \"%s\" contains symbols that are not allowed in filenames"
 msgstr "文件名“%s”含有不允许存在于文件名中的符号"
 
-#: gtk/gtkfilesel.c:1668
+#: gtk/gtkfilesel.c:1673
 #, c-format
 msgid ""
 "Error renaming file to \"%s\": %s\n"
@@ -2020,7 +2020,7 @@ msgstr ""
 "将文件重命名为“%s”时出错：%s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1682
+#: gtk/gtkfilesel.c:1687
 #, c-format
 msgid ""
 "Error renaming file \"%s\": %s\n"
@@ -2029,45 +2029,44 @@ msgstr ""
 "重命名文件“%s”时出错：%s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1692
+#: gtk/gtkfilesel.c:1697
 #, c-format
 msgid "Error renaming file \"%s\" to \"%s\": %s"
 msgstr "将重命名文件“%s”为“%s”时出错：%s"
 
-#: gtk/gtkfilesel.c:1739
+#: gtk/gtkfilesel.c:1744
 msgid "Rename File"
 msgstr "重命名文件"
 
-#: gtk/gtkfilesel.c:1754
+#: gtk/gtkfilesel.c:1759
 #, c-format
 msgid "Rename file \"%s\" to:"
 msgstr "将文件“%s”重命名为："
 
-#: gtk/gtkfilesel.c:1783
+#: gtk/gtkfilesel.c:1788
 msgid "_Rename"
 msgstr "重命名(_R)"
 
-#: gtk/gtkfilesel.c:2219
+#: gtk/gtkfilesel.c:2220
 msgid "_Selection: "
 msgstr "选中(_S)："
 
-#: gtk/gtkfilesel.c:3097
+#: gtk/gtkfilesel.c:3136
 #, c-format
 msgid ""
 "The filename \"%s\" couldn't be converted to UTF-8 (try setting the "
 "environment variable G_BROKEN_FILENAMES): %s"
-msgstr ""
-"文件名“%s”无法转换到 UTF-8(请尝试设置环境变量 G_BROKEN_FILENAMES)：%s"
+msgstr "文件名“%s”无法转换到 UTF-8(请尝试设置环境变量 G_BROKEN_FILENAMES)：%s"
 
-#: gtk/gtkfilesel.c:3100
+#: gtk/gtkfilesel.c:3139
 msgid "Invalid Utf-8"
 msgstr "无效的 UTF-8"
 
-#: gtk/gtkfilesel.c:3977
+#: gtk/gtkfilesel.c:4016
 msgid "Name too long"
 msgstr "名称太长"
 
-#: gtk/gtkfilesel.c:3979
+#: gtk/gtkfilesel.c:4018
 msgid "Couldn't convert filename"
 msgstr "无法转换文件名"
 
@@ -2410,7 +2409,7 @@ msgstr "使用标记语言"
 msgid "The text of the label includes XML markup. See pango_parse_markup()"
 msgstr "标签文字包含 XML 标记语言。参见 pango_parse_markup()"
 
-#: gtk/gtklabel.c:319 gtk/gtktexttag.c:374 gtk/gtktextview.c:593
+#: gtk/gtklabel.c:319 gtk/gtktexttag.c:374 gtk/gtktextview.c:595
 msgid "Justification"
 msgstr "对齐"
 
@@ -2736,7 +2735,7 @@ msgstr "子标签是否要占满整个分配区域"
 msgid "Tab pack type"
 msgstr "标签包裹类型"
 
-#: gtk/gtknotebook.c:2473 gtk/gtknotebook.c:4820
+#: gtk/gtknotebook.c:2471 gtk/gtknotebook.c:4818
 #, c-format
 msgid "Page %u"
 msgstr "第 %u 页"
@@ -2974,17 +2973,17 @@ msgid ""
 "How far in the y direction to move the arrow when the button is depressed"
 msgstr "当按钮被按下时，要将箭头在垂直方向上移动的距离"
 
-#: gtk/gtkrc.c:2376
+#: gtk/gtkrc.c:2382
 #, c-format
 msgid "Unable to find include file: \"%s\""
 msgstr "找不到包含文件：“%s”"
 
-#: gtk/gtkrc.c:3018 gtk/gtkrc.c:3021
+#: gtk/gtkrc.c:3025 gtk/gtkrc.c:3028
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "无法在像素图路径中找到图像文件：“%s”"
 
-#: gtk/gtkrc.c:3456
+#: gtk/gtkrc.c:3463
 #, c-format
 msgid "Pixmap path element: \"%s\" must be absolute, %s, line %d"
 msgstr "像素图路径元素：“%s”必须为绝对路径，%s，第%d行"
@@ -3810,7 +3809,7 @@ msgstr ""
 "以相对于默认字体大小的缩放比例表示的字体大小。这可能适合主题更改，所以推荐使"
 "用。Pango 预先定义了一些缩放比例，如 PANGO_SCALE_X_LARGE"
 
-#: gtk/gtktexttag.c:375 gtk/gtktextview.c:594
+#: gtk/gtktexttag.c:375 gtk/gtktextview.c:596
 msgid "Left, right, or center justification"
 msgstr "左对齐、右对齐或是居中对齐"
 
@@ -3831,7 +3830,7 @@ msgstr ""
 msgid "Left margin"
 msgstr "左边距"
 
-#: gtk/gtktexttag.c:392 gtk/gtktextview.c:603
+#: gtk/gtktexttag.c:392 gtk/gtktextview.c:605
 msgid "Width of the left margin in pixels"
 msgstr "左边距的宽度(像素)"
 
@@ -3839,15 +3838,15 @@ msgstr "左边距的宽度(像素)"
 msgid "Right margin"
 msgstr "右边距"
 
-#: gtk/gtktexttag.c:402 gtk/gtktextview.c:613
+#: gtk/gtktexttag.c:402 gtk/gtktextview.c:615
 msgid "Width of the right margin in pixels"
 msgstr "右边距的宽度(像素)"
 
-#: gtk/gtktexttag.c:412 gtk/gtktextview.c:622
+#: gtk/gtktexttag.c:412 gtk/gtktextview.c:624
 msgid "Indent"
 msgstr "缩进"
 
-#: gtk/gtktexttag.c:413 gtk/gtktextview.c:623
+#: gtk/gtktexttag.c:413 gtk/gtktextview.c:625
 msgid "Amount to indent the paragraph, in pixels"
 msgstr "段落缩进的大小(像素)"
 
@@ -3861,7 +3860,7 @@ msgstr "文字与下方(上方如果间距为负)水平基线的间距，按像�
 msgid "Pixels above lines"
 msgstr "行上像素"
 
-#: gtk/gtktexttag.c:434 gtk/gtktextview.c:547
+#: gtk/gtktexttag.c:434 gtk/gtktextview.c:549
 msgid "Pixels of blank space above paragraphs"
 msgstr "段落顶部的间距的像素数目"
 
@@ -3869,7 +3868,7 @@ msgstr "段落顶部的间距的像素数目"
 msgid "Pixels below lines"
 msgstr "行下像素"
 
-#: gtk/gtktexttag.c:444 gtk/gtktextview.c:557
+#: gtk/gtktexttag.c:444 gtk/gtktextview.c:559
 msgid "Pixels of blank space below paragraphs"
 msgstr "段落底部的间距的像素数目"
 
@@ -3877,7 +3876,7 @@ msgstr "段落底部的间距的像素数目"
 msgid "Pixels inside wrap"
 msgstr "回绕行间距"
 
-#: gtk/gtktexttag.c:454 gtk/gtktextview.c:567
+#: gtk/gtktexttag.c:454 gtk/gtktextview.c:569
 msgid "Pixels of blank space between wrapped lines in a paragraph"
 msgstr "段落内部的回绕行之间距离的像素数目"
 
@@ -3885,16 +3884,16 @@ msgstr "段落内部的回绕行之间距离的像素数目"
 msgid "Wrap mode"
 msgstr "换行模式"
 
-#: gtk/gtktexttag.c:481 gtk/gtktextview.c:585
+#: gtk/gtktexttag.c:481 gtk/gtktextview.c:587
 msgid ""
 "Whether to wrap lines never, at word boundaries, or at character boundaries"
 msgstr "选择永远不换行、词边界换行或是字符边界换行"
 
-#: gtk/gtktexttag.c:490 gtk/gtktextview.c:632
+#: gtk/gtktexttag.c:490 gtk/gtktextview.c:634
 msgid "Tabs"
 msgstr "制表符"
 
-#: gtk/gtktexttag.c:491 gtk/gtktextview.c:633
+#: gtk/gtktexttag.c:491 gtk/gtktextview.c:635
 msgid "Custom tabs for this text"
 msgstr "定制文字的制表符"
 
@@ -4054,39 +4053,39 @@ msgstr "ZWJ 零宽度接合(_J)"
 msgid "ZWNJ Zero width _non-joiner"
 msgstr "ZWNJ 零宽度非接合(_N)"
 
-#: gtk/gtktextview.c:546
+#: gtk/gtktextview.c:548
 msgid "Pixels Above Lines"
 msgstr "行上像素"
 
-#: gtk/gtktextview.c:556
+#: gtk/gtktextview.c:558
 msgid "Pixels Below Lines"
 msgstr "行下像素"
 
-#: gtk/gtktextview.c:566
+#: gtk/gtktextview.c:568
 msgid "Pixels Inside Wrap"
 msgstr "回绕行间距"
 
-#: gtk/gtktextview.c:584
+#: gtk/gtktextview.c:586
 msgid "Wrap Mode"
 msgstr "换行模式"
 
-#: gtk/gtktextview.c:602
+#: gtk/gtktextview.c:604
 msgid "Left Margin"
 msgstr "左边距"
 
-#: gtk/gtktextview.c:612
+#: gtk/gtktextview.c:614
 msgid "Right Margin"
 msgstr "右边距"
 
-#: gtk/gtktextview.c:640
+#: gtk/gtktextview.c:642
 msgid "Cursor Visible"
 msgstr "光标可见"
 
-#: gtk/gtktextview.c:641
+#: gtk/gtktextview.c:643
 msgid "If the insertion cursor is shown"
 msgstr "是否显示插入光标"
 
-#: gtk/gtktextview.c:6631
+#: gtk/gtktextview.c:6633
 msgid "Input _Methods"
 msgstr "输入法(_M)"
 
@@ -4762,6 +4761,11 @@ msgid "Amharic (EZ+)"
 msgstr "阿姆哈拉语(EZ+)"
 
 #. ID
+#: modules/input/imcedilla.c:90
+msgid "Cedilla"
+msgstr ""
+
+#. ID
 #: modules/input/imcyrillic-translit.c:216
 msgid "Cyrillic (Transliterated)"
 msgstr "西里尔语(音译)"
@@ -4801,18 +4805,18 @@ msgstr "越南语(VIQR)"
 msgid "X Input Method"
 msgstr "X 输入法"
 
-#: modules/input/gtkimcontextxim.c:276
+#: modules/input/gtkimcontextxim.c:321
 msgid "IM Preedit style"
 msgstr "输入法候选样式"
 
-#: modules/input/gtkimcontextxim.c:277
+#: modules/input/gtkimcontextxim.c:322
 msgid "How to draw the input method preedit string"
 msgstr "如何绘制输入法候选字符串"
 
-#: modules/input/gtkimcontextxim.c:285
+#: modules/input/gtkimcontextxim.c:330
 msgid "IM Status style"
 msgstr "输入法状态样式"
 
-#: modules/input/gtkimcontextxim.c:286
+#: modules/input/gtkimcontextxim.c:331
 msgid "How to draw the input method statusbar"
 msgstr "如何绘制输入法状态栏"

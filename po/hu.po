@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.2\n"
-"POT-Creation-Date: 2003-06-09 16:30-0400\n"
+"POT-Creation-Date: 2003-08-25 22:08-0400\n"
 "PO-Revision-Date: 2003-07-10 13:17+0200\n"
 "Last-Translator: Andras Timar <timar@gnome.hu>\n"
 "Language-Team: Hungarian <hu@gnome.hu>\n"
@@ -1210,11 +1210,11 @@ msgid "Foreground color as a GdkColor"
 msgstr ""
 
 #: gtk/gtkcellrenderertext.c:232 gtk/gtkentry.c:459 gtk/gtktexttag.c:273
-#: gtk/gtktextview.c:576
+#: gtk/gtktextview.c:578
 msgid "Editable"
 msgstr "Szerkeszthető"
 
-#: gtk/gtkcellrenderertext.c:233 gtk/gtktexttag.c:274 gtk/gtktextview.c:577
+#: gtk/gtkcellrenderertext.c:233 gtk/gtktexttag.c:274 gtk/gtktextview.c:579
 msgid "Whether the text can be modified by the user"
 msgstr ""
 
@@ -1478,145 +1478,145 @@ msgstr ""
 msgid "Whether to display an \"inconsistent\" state"
 msgstr ""
 
-#: gtk/gtkcolorsel.c:559
+#: gtk/gtkcolorsel.c:561
 msgid ""
 "The previously-selected color, for comparison to the color you're selecting "
 "now. You can drag this color to a palette entry, or select this color as "
 "current by dragging it to the other color swatch alongside."
 msgstr ""
 
-#: gtk/gtkcolorsel.c:564
+#: gtk/gtkcolorsel.c:566
 msgid ""
 "The color you've chosen. You can drag this color to a palette entry to save "
 "it for use in the future."
 msgstr ""
 
-#: gtk/gtkcolorsel.c:925
+#: gtk/gtkcolorsel.c:927
 msgid "_Save color here"
 msgstr ""
 
-#: gtk/gtkcolorsel.c:1128
+#: gtk/gtkcolorsel.c:1132
 msgid ""
 "Click this palette entry to make it the current color. To change this entry, "
 "drag a color swatch here or right-click it and select \"Save color here.\""
 msgstr ""
 
-#: gtk/gtkcolorsel.c:1752
+#: gtk/gtkcolorsel.c:1756
 msgid "Has Opacity Control"
 msgstr ""
 
-#: gtk/gtkcolorsel.c:1753
+#: gtk/gtkcolorsel.c:1757
 msgid "Whether the color selector should allow setting opacity"
 msgstr ""
 
-#: gtk/gtkcolorsel.c:1759
+#: gtk/gtkcolorsel.c:1763
 #, fuzzy
 msgid "Has palette"
 msgstr "Egyéni paletta"
 
-#: gtk/gtkcolorsel.c:1760
+#: gtk/gtkcolorsel.c:1764
 msgid "Whether a palette should be used"
 msgstr ""
 
-#: gtk/gtkcolorsel.c:1766
+#: gtk/gtkcolorsel.c:1770
 msgid "Current Color"
 msgstr "Jelenlegi szín"
 
-#: gtk/gtkcolorsel.c:1767
+#: gtk/gtkcolorsel.c:1771
 msgid "The current color"
 msgstr "A jelenlegi szín"
 
-#: gtk/gtkcolorsel.c:1773
+#: gtk/gtkcolorsel.c:1777
 msgid "Current Alpha"
 msgstr "Jelenlegi alfa"
 
-#: gtk/gtkcolorsel.c:1774
+#: gtk/gtkcolorsel.c:1778
 msgid "The current opacity value (0 fully transparent, 65535 fully opaque)"
 msgstr ""
 "A jelenlegi átlátszósági érték (0 teljesen átlátszó, 65535 teljesen "
 "átlátszatlan)"
 
-#: gtk/gtkcolorsel.c:1788
+#: gtk/gtkcolorsel.c:1792
 msgid "Custom palette"
 msgstr "Egyéni paletta"
 
-#: gtk/gtkcolorsel.c:1789
+#: gtk/gtkcolorsel.c:1793
 msgid "Palette to use in the color selector"
 msgstr ""
 
-#: gtk/gtkcolorsel.c:1830
+#: gtk/gtkcolorsel.c:1834
 msgid ""
 "Select the color you want from the outer ring. Select the darkness or "
 "lightness of that color using the inner triangle."
 msgstr ""
 
-#: gtk/gtkcolorsel.c:1855
+#: gtk/gtkcolorsel.c:1859
 msgid ""
 "Click the eyedropper, then click a color anywhere on your screen to select "
 "that color."
 msgstr ""
 
-#: gtk/gtkcolorsel.c:1864
+#: gtk/gtkcolorsel.c:1868
 msgid "_Hue:"
 msgstr "Á_rnyalat:"
 
-#: gtk/gtkcolorsel.c:1865
+#: gtk/gtkcolorsel.c:1869
 msgid "Position on the color wheel."
 msgstr ""
 
-#: gtk/gtkcolorsel.c:1866
+#: gtk/gtkcolorsel.c:1870
 msgid "_Saturation:"
 msgstr "_Telítettség:"
 
-#: gtk/gtkcolorsel.c:1867
+#: gtk/gtkcolorsel.c:1871
 msgid "\"Deepness\" of the color."
 msgstr "A szín telítettsége"
 
-#: gtk/gtkcolorsel.c:1868
+#: gtk/gtkcolorsel.c:1872
 msgid "_Value:"
 msgstr "_Érték:"
 
-#: gtk/gtkcolorsel.c:1869
+#: gtk/gtkcolorsel.c:1873
 msgid "Brightness of the color."
 msgstr "A szín fényessége"
 
-#: gtk/gtkcolorsel.c:1870
+#: gtk/gtkcolorsel.c:1874
 msgid "_Red:"
 msgstr "_Vörös:"
 
-#: gtk/gtkcolorsel.c:1871
+#: gtk/gtkcolorsel.c:1875
 msgid "Amount of red light in the color."
 msgstr "A vörös fény mennyisége a színben"
 
-#: gtk/gtkcolorsel.c:1872
+#: gtk/gtkcolorsel.c:1876
 msgid "_Green:"
 msgstr "_Zöld:"
 
-#: gtk/gtkcolorsel.c:1873
+#: gtk/gtkcolorsel.c:1877
 msgid "Amount of green light in the color."
 msgstr "A zöld fény mennyisége a színben"
 
-#: gtk/gtkcolorsel.c:1874
+#: gtk/gtkcolorsel.c:1878
 msgid "_Blue:"
 msgstr "_Kék:"
 
-#: gtk/gtkcolorsel.c:1875
+#: gtk/gtkcolorsel.c:1879
 msgid "Amount of blue light in the color."
 msgstr "A kék fény mennyisége a színben"
 
-#: gtk/gtkcolorsel.c:1878
+#: gtk/gtkcolorsel.c:1882
 msgid "_Opacity:"
 msgstr "Á_tlátszóság:"
 
-#: gtk/gtkcolorsel.c:1886
+#: gtk/gtkcolorsel.c:1890
 msgid "Transparency of the currently-selected color."
 msgstr "A jelenleg kiválasztott szín átlátszósága"
 
-#: gtk/gtkcolorsel.c:1901
+#: gtk/gtkcolorsel.c:1905
 msgid "Color _Name:"
 msgstr "Szín _neve:"
 
-#: gtk/gtkcolorsel.c:1916
+#: gtk/gtkcolorsel.c:1920
 msgid ""
 "You can enter an HTML-style hexadecimal color value, or simply a color name "
 "such as 'orange' in this entry."
@@ -1624,7 +1624,7 @@ msgstr ""
 "Beírhatsz ide egy HTML-stílusú hexadecimális színértéket, vagy egyszerűen "
 "egy színnevet, például 'orange'."
 
-#: gtk/gtkcolorsel.c:1935
+#: gtk/gtkcolorsel.c:1939
 msgid "_Palette"
 msgstr "_Paletta"
 
@@ -1865,7 +1865,7 @@ msgstr ""
 # src/trans.h:52 src/trans.h:336
 # #-#-#-#-#  galeon.HEAD.hu.po-new.po (Galeon 1.2)  #-#-#-#-#
 # src/trans.h:52 src/trans.h:336
-#: gtk/gtkentry.c:3993 gtk/gtklabel.c:3222 gtk/gtktextview.c:6621
+#: gtk/gtkentry.c:3993 gtk/gtklabel.c:3222 gtk/gtktextview.c:6623
 msgid "Select All"
 msgstr "Mindent kijelöl"
 
@@ -1873,7 +1873,7 @@ msgstr "Mindent kijelöl"
 msgid "Input Methods"
 msgstr "Beviteli módok"
 
-#: gtk/gtkentry.c:4013 gtk/gtktextview.c:6640
+#: gtk/gtkentry.c:4013 gtk/gtktextview.c:6642
 msgid "_Insert Unicode control character"
 msgstr "_Unicode vezérlőkarakter beszúrása"
 
@@ -1884,52 +1884,52 @@ msgstr "_Unicode vezérlőkarakter beszúrása"
 # src/trans.h:377
 # #-#-#-#-#  galeon.HEAD.hu.po-new.po (Galeon 1.2)  #-#-#-#-#
 # src/trans.h:377
-#: gtk/gtkfilesel.c:551 gtk/gtkimage.c:167
+#: gtk/gtkfilesel.c:556 gtk/gtkimage.c:167
 msgid "Filename"
 msgstr "Fájlnév"
 
-#: gtk/gtkfilesel.c:552
+#: gtk/gtkfilesel.c:557
 msgid "The currently selected filename"
 msgstr "A jelenleg kiválasztott fájl"
 
-#: gtk/gtkfilesel.c:558
+#: gtk/gtkfilesel.c:563
 msgid "Show file operations"
 msgstr "Fájlműveletek megjelenítése"
 
-#: gtk/gtkfilesel.c:559
+#: gtk/gtkfilesel.c:564
 msgid "Whether buttons for creating/manipulating files should be displayed"
 msgstr ""
 
-#: gtk/gtkfilesel.c:566
+#: gtk/gtkfilesel.c:571
 msgid "Select multiple"
 msgstr "Többszörös kijelölés"
 
-#: gtk/gtkfilesel.c:567
+#: gtk/gtkfilesel.c:572
 msgid "Whether to allow multiple files to be selected"
 msgstr ""
 
-#: gtk/gtkfilesel.c:722
+#: gtk/gtkfilesel.c:727
 msgid "Folders"
 msgstr "Mappák"
 
-#: gtk/gtkfilesel.c:726
+#: gtk/gtkfilesel.c:731
 msgid "Fol_ders"
 msgstr "_Mappák"
 
-#: gtk/gtkfilesel.c:758
+#: gtk/gtkfilesel.c:763
 msgid "Files"
 msgstr "Fájlok"
 
-#: gtk/gtkfilesel.c:762
+#: gtk/gtkfilesel.c:767
 msgid "_Files"
 msgstr "_Fájlok"
 
-#: gtk/gtkfilesel.c:845 gtk/gtkfilesel.c:2237
+#: gtk/gtkfilesel.c:850 gtk/gtkfilesel.c:2240
 #, c-format
 msgid "Folder unreadable: %s"
 msgstr "Olvashatatlan könyvtár: %s"
 
-#: gtk/gtkfilesel.c:976
+#: gtk/gtkfilesel.c:981
 #, c-format
 msgid ""
 "The file \"%s\" resides on another machine (called %s) and may not be "
@@ -1937,139 +1937,139 @@ msgid ""
 "Are you sure that you want to select it?"
 msgstr ""
 
-#: gtk/gtkfilesel.c:1107
+#: gtk/gtkfilesel.c:1112
 msgid "_New Folder"
 msgstr "Új _mappa"
 
-#: gtk/gtkfilesel.c:1118
+#: gtk/gtkfilesel.c:1123
 msgid "De_lete File"
 msgstr "Fájl _törlése"
 
-#: gtk/gtkfilesel.c:1129
+#: gtk/gtkfilesel.c:1134
 msgid "_Rename File"
 msgstr "Fájl át_nevezése"
 
-#: gtk/gtkfilesel.c:1429
+#: gtk/gtkfilesel.c:1436
 #, c-format
 msgid ""
 "The folder name \"%s\" contains symbols that are not allowed in filenames"
 msgstr ""
 
-#: gtk/gtkfilesel.c:1431
+#: gtk/gtkfilesel.c:1438
 #, c-format
 msgid ""
 "Error creating folder \"%s\": %s\n"
 "%s"
 msgstr ""
 
-#: gtk/gtkfilesel.c:1432 gtk/gtkfilesel.c:1668
+#: gtk/gtkfilesel.c:1439 gtk/gtkfilesel.c:1675
 msgid "You probably used symbols not allowed in filenames."
 msgstr ""
 
-#: gtk/gtkfilesel.c:1440
+#: gtk/gtkfilesel.c:1447
 #, c-format
 msgid "Error creating folder \"%s\": %s\n"
 msgstr "Hiba a mappa létrehozásakor: \"%s\": %s\n"
 
-#: gtk/gtkfilesel.c:1474
+#: gtk/gtkfilesel.c:1481
 msgid "New Folder"
 msgstr "Új mappa"
 
-#: gtk/gtkfilesel.c:1489
+#: gtk/gtkfilesel.c:1496
 msgid "_Folder name:"
 msgstr "_Mappa neve:"
 
-#: gtk/gtkfilesel.c:1513
+#: gtk/gtkfilesel.c:1520
 msgid "C_reate"
 msgstr "_Létrehozás"
 
-#: gtk/gtkfilesel.c:1556
+#: gtk/gtkfilesel.c:1563
 #, c-format
 msgid "The filename \"%s\" contains symbols that are not allowed in filenames"
 msgstr ""
 
-#: gtk/gtkfilesel.c:1559
+#: gtk/gtkfilesel.c:1566
 #, c-format
 msgid ""
 "Error deleting file \"%s\": %s\n"
 "%s"
 msgstr ""
 
-#: gtk/gtkfilesel.c:1561 gtk/gtkfilesel.c:1682
+#: gtk/gtkfilesel.c:1568 gtk/gtkfilesel.c:1689
 msgid "It probably contains symbols not allowed in filenames."
 msgstr ""
 
-#: gtk/gtkfilesel.c:1570
+#: gtk/gtkfilesel.c:1577
 #, c-format
 msgid "Error deleting file \"%s\": %s"
 msgstr ""
 
-#: gtk/gtkfilesel.c:1613
+#: gtk/gtkfilesel.c:1620
 #, c-format
 msgid "Really delete file \"%s\" ?"
 msgstr ""
 
-#: gtk/gtkfilesel.c:1618
+#: gtk/gtkfilesel.c:1625
 msgid "Delete File"
 msgstr "Fájl törlése"
 
-#: gtk/gtkfilesel.c:1664 gtk/gtkfilesel.c:1678
+#: gtk/gtkfilesel.c:1671 gtk/gtkfilesel.c:1685
 #, c-format
 msgid "The file name \"%s\" contains symbols that are not allowed in filenames"
 msgstr ""
 
-#: gtk/gtkfilesel.c:1666
+#: gtk/gtkfilesel.c:1673
 #, c-format
 msgid ""
 "Error renaming file to \"%s\": %s\n"
 "%s"
 msgstr ""
 
-#: gtk/gtkfilesel.c:1680
+#: gtk/gtkfilesel.c:1687
 #, c-format
 msgid ""
 "Error renaming file \"%s\": %s\n"
 "%s"
 msgstr ""
 
-#: gtk/gtkfilesel.c:1690
+#: gtk/gtkfilesel.c:1697
 #, c-format
 msgid "Error renaming file \"%s\" to \"%s\": %s"
 msgstr ""
 
-#: gtk/gtkfilesel.c:1737
+#: gtk/gtkfilesel.c:1744
 msgid "Rename File"
 msgstr "Fájl átnevezése"
 
-#: gtk/gtkfilesel.c:1752
+#: gtk/gtkfilesel.c:1759
 #, c-format
 msgid "Rename file \"%s\" to:"
 msgstr "'%s' fájl átnevezése:"
 
-#: gtk/gtkfilesel.c:1781
+#: gtk/gtkfilesel.c:1788
 msgid "_Rename"
 msgstr "Á_tnevezés"
 
-#: gtk/gtkfilesel.c:2217
+#: gtk/gtkfilesel.c:2220
 msgid "_Selection: "
 msgstr "_Kiválasztott: "
 
-#: gtk/gtkfilesel.c:3111
+#: gtk/gtkfilesel.c:3136
 #, c-format
 msgid ""
 "The filename \"%s\" couldn't be converted to UTF-8 (try setting the "
 "environment variable G_BROKEN_FILENAMES): %s"
 msgstr ""
 
-#: gtk/gtkfilesel.c:3114
+#: gtk/gtkfilesel.c:3139
 msgid "Invalid Utf-8"
 msgstr "Érvénytelen UTF-8"
 
-#: gtk/gtkfilesel.c:3991
+#: gtk/gtkfilesel.c:4016
 msgid "Name too long"
 msgstr "A név túl hosszú"
 
-#: gtk/gtkfilesel.c:3993
+#: gtk/gtkfilesel.c:4018
 msgid "Couldn't convert filename"
 msgstr ""
 
@@ -2428,7 +2428,7 @@ msgstr ""
 msgid "The text of the label includes XML markup. See pango_parse_markup()"
 msgstr ""
 
-#: gtk/gtklabel.c:319 gtk/gtktexttag.c:374 gtk/gtktextview.c:593
+#: gtk/gtklabel.c:319 gtk/gtktexttag.c:374 gtk/gtktextview.c:595
 msgid "Justification"
 msgstr "Sorkizárás"
 
@@ -2752,7 +2752,7 @@ msgstr ""
 msgid "Tab pack type"
 msgstr ""
 
-#: gtk/gtknotebook.c:2473 gtk/gtknotebook.c:4820
+#: gtk/gtknotebook.c:2471 gtk/gtknotebook.c:4818
 #, c-format
 msgid "Page %u"
 msgstr "%u. lap"
@@ -2992,17 +2992,17 @@ msgid ""
 "How far in the y direction to move the arrow when the button is depressed"
 msgstr ""
 
-#: gtk/gtkrc.c:2376
+#: gtk/gtkrc.c:2382
 #, c-format
 msgid "Unable to find include file: \"%s\""
 msgstr ""
 
-#: gtk/gtkrc.c:3018 gtk/gtkrc.c:3021
+#: gtk/gtkrc.c:3025 gtk/gtkrc.c:3028
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "Nem találom a pixmap_path (%s) útvonalon a képet"
 
-#: gtk/gtkrc.c:3456
+#: gtk/gtkrc.c:3463
 #, c-format
 msgid "Pixmap path element: \"%s\" must be absolute, %s, line %d"
 msgstr ""
@@ -3998,7 +3998,7 @@ msgid ""
 "such as PANGO_SCALE_X_LARGE"
 msgstr ""
 
-#: gtk/gtktexttag.c:375 gtk/gtktextview.c:594
+#: gtk/gtktexttag.c:375 gtk/gtktextview.c:596
 msgid "Left, right, or center justification"
 msgstr ""
 
@@ -4024,7 +4024,7 @@ msgstr ""
 msgid "Left margin"
 msgstr ""
 
-#: gtk/gtktexttag.c:392 gtk/gtktextview.c:603
+#: gtk/gtktexttag.c:392 gtk/gtktextview.c:605
 msgid "Width of the left margin in pixels"
 msgstr ""
 
@@ -4032,15 +4032,15 @@ msgstr ""
 msgid "Right margin"
 msgstr ""
 
-#: gtk/gtktexttag.c:402 gtk/gtktextview.c:613
+#: gtk/gtktexttag.c:402 gtk/gtktextview.c:615
 msgid "Width of the right margin in pixels"
 msgstr ""
 
-#: gtk/gtktexttag.c:412 gtk/gtktextview.c:622
+#: gtk/gtktexttag.c:412 gtk/gtktextview.c:624
 msgid "Indent"
 msgstr "Behúzás"
 
-#: gtk/gtktexttag.c:413 gtk/gtktextview.c:623
+#: gtk/gtktexttag.c:413 gtk/gtktextview.c:625
 msgid "Amount to indent the paragraph, in pixels"
 msgstr ""
 
@@ -4054,7 +4054,7 @@ msgstr ""
 msgid "Pixels above lines"
 msgstr ""
 
-#: gtk/gtktexttag.c:434 gtk/gtktextview.c:547
+#: gtk/gtktexttag.c:434 gtk/gtktextview.c:549
 msgid "Pixels of blank space above paragraphs"
 msgstr ""
 
@@ -4062,7 +4062,7 @@ msgstr ""
 msgid "Pixels below lines"
 msgstr ""
 
-#: gtk/gtktexttag.c:444 gtk/gtktextview.c:557
+#: gtk/gtktexttag.c:444 gtk/gtktextview.c:559
 msgid "Pixels of blank space below paragraphs"
 msgstr ""
 
@@ -4070,7 +4070,7 @@ msgstr ""
 msgid "Pixels inside wrap"
 msgstr ""
 
-#: gtk/gtktexttag.c:454 gtk/gtktextview.c:567
+#: gtk/gtktexttag.c:454 gtk/gtktextview.c:569
 msgid "Pixels of blank space between wrapped lines in a paragraph"
 msgstr ""
 
@@ -4078,16 +4078,16 @@ msgstr ""
 msgid "Wrap mode"
 msgstr "Sortörési mód"
 
-#: gtk/gtktexttag.c:481 gtk/gtktextview.c:585
+#: gtk/gtktexttag.c:481 gtk/gtktextview.c:587
 msgid ""
 "Whether to wrap lines never, at word boundaries, or at character boundaries"
 msgstr ""
 
-#: gtk/gtktexttag.c:490 gtk/gtktextview.c:632
+#: gtk/gtktexttag.c:490 gtk/gtktextview.c:634
 msgid "Tabs"
 msgstr "Tabulátorok"
 
-#: gtk/gtktexttag.c:491 gtk/gtktextview.c:633
+#: gtk/gtktexttag.c:491 gtk/gtktextview.c:635
 msgid "Custom tabs for this text"
 msgstr ""
 
@@ -4248,39 +4248,39 @@ msgstr "ZWN Null szélességű ö_sszekötő"
 msgid "ZWNJ Zero width _non-joiner"
 msgstr "ZWNJ Null szélességű _nem-összekötő"
 
-#: gtk/gtktextview.c:546
+#: gtk/gtktextview.c:548
 msgid "Pixels Above Lines"
 msgstr "Sorok feletti pixelek"
 
-#: gtk/gtktextview.c:556
+#: gtk/gtktextview.c:558
 msgid "Pixels Below Lines"
 msgstr "Sorok alatti pixelek"
 
-#: gtk/gtktextview.c:566
+#: gtk/gtktextview.c:568
 msgid "Pixels Inside Wrap"
 msgstr "Törésen belüli pixelek"
 
-#: gtk/gtktextview.c:584
+#: gtk/gtktextview.c:586
 msgid "Wrap Mode"
 msgstr "Sortörés módja"
 
-#: gtk/gtktextview.c:602
+#: gtk/gtktextview.c:604
 msgid "Left Margin"
 msgstr "Bal oldali margó"
 
-#: gtk/gtktextview.c:612
+#: gtk/gtktextview.c:614
 msgid "Right Margin"
 msgstr "Jobb oldali margó"
 
-#: gtk/gtktextview.c:640
+#: gtk/gtktextview.c:642
 msgid "Cursor Visible"
 msgstr "Kurzor látható"
 
-#: gtk/gtktextview.c:641
+#: gtk/gtktextview.c:643
 msgid "If the insertion cursor is shown"
 msgstr ""
 
-#: gtk/gtktextview.c:6631
+#: gtk/gtktextview.c:6633
 msgid "Input _Methods"
 msgstr "Beviteli _módok"
 
@@ -4958,6 +4958,11 @@ msgid "Amharic (EZ+)"
 msgstr ""
 
 #. ID
+#: modules/input/imcedilla.c:90
+msgid "Cedilla"
+msgstr ""
+
+#. ID
 #: modules/input/imcyrillic-translit.c:216
 msgid "Cyrillic (Transliterated)"
 msgstr "Cirill (Transliterált)"
@@ -4997,18 +5002,18 @@ msgstr "Vietnami (VIQR)"
 msgid "X Input Method"
 msgstr ""
 
-#: modules/input/gtkimcontextxim.c:276
+#: modules/input/gtkimcontextxim.c:321
 msgid "IM Preedit style"
 msgstr ""
 
-#: modules/input/gtkimcontextxim.c:277
+#: modules/input/gtkimcontextxim.c:322
 msgid "How to draw the input method preedit string"
 msgstr ""
 
-#: modules/input/gtkimcontextxim.c:285
+#: modules/input/gtkimcontextxim.c:330
 msgid "IM Status style"
 msgstr ""
 
-#: modules/input/gtkimcontextxim.c:286
+#: modules/input/gtkimcontextxim.c:331
 msgid "How to draw the input method statusbar"
 msgstr ""

@@ -39,7 +39,7 @@ gtk_widget_style_get_valist() to obtain the value of a style property.
 @allocation: The widgets allocated size.
 @window: The widgets window or its parent window if it does not have a window. (Which 
  will be indicated by the #GTK_NO_WINDOW flag being set).
-
+@parent: 
 
 <!-- ##### STRUCT GtkWidgetClass ##### -->
 <para>

@@ -7,14 +7,14 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.2.3\n"
-"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=l10n\n"
-"POT-Creation-Date: 2003-08-19 03:14+0800\n"
+"POT-Creation-Date: 2003-08-25 22:08-0400\n"
 "PO-Revision-Date: 2003-08-19 06:23+0800\n"
 "Last-Translator: Abel Cheung <maddog@linux.org.hk>\n"
 "Language-Team: Chinese (traditional) <zh-l10n@linux.org.tw>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8-bit\n"
+"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=l10n\n"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:147 gdk-pixbuf/gdk-pixbuf-io.c:737
 #, c-format
@@ -1223,11 +1223,11 @@ msgid "Foreground color as a GdkColor"
 msgstr "以 GdkColor 方式表達的前景顏色"
 
 #: gtk/gtkcellrenderertext.c:232 gtk/gtkentry.c:459 gtk/gtktexttag.c:273
-#: gtk/gtktextview.c:576
+#: gtk/gtktextview.c:578
 msgid "Editable"
 msgstr "可編輯"
 
-#: gtk/gtkcellrenderertext.c:233 gtk/gtktexttag.c:274 gtk/gtktextview.c:577
+#: gtk/gtkcellrenderertext.c:233 gtk/gtktexttag.c:274 gtk/gtktextview.c:579
 msgid "Whether the text can be modified by the user"
 msgstr "用戶可否修改文字"
 
@@ -1492,8 +1492,7 @@ msgid ""
 "now. You can drag this color to a palette entry, or select this color as "
 "current by dragging it to the other color swatch alongside."
 msgstr ""
-"之前選擇的顏色，用來和目前選擇的顏色作比較。您可以將本顏色拖曳至色盤項"
-"目；\n"
+"之前選擇的顏色，用來和目前選擇的顏色作比較。您可以將本顏色拖曳至色盤項目；\n"
 "或以它作為目前選擇的顏色，方法是將它拖曳並覆蓋目前選擇的顏色。"
 
 #: gtk/gtkcolorsel.c:566
@@ -1868,7 +1867,7 @@ msgstr ""
 msgid "Whether to select the contents of an entry when it is focused"
 msgstr ""
 
-#: gtk/gtkentry.c:3993 gtk/gtklabel.c:3222 gtk/gtktextview.c:6621
+#: gtk/gtkentry.c:3993 gtk/gtklabel.c:3222 gtk/gtktextview.c:6623
 msgid "Select All"
 msgstr "選擇全部"
 
@@ -1876,7 +1875,7 @@ msgstr "選擇全部"
 msgid "Input Methods"
 msgstr "輸入法"
 
-#: gtk/gtkentry.c:4013 gtk/gtktextview.c:6640
+#: gtk/gtkentry.c:4013 gtk/gtktextview.c:6642
 msgid "_Insert Unicode control character"
 msgstr "插入 Unicode 控制字元(_I)"
 
@@ -2419,7 +2418,7 @@ msgstr "使用文字標記"
 msgid "The text of the label includes XML markup. See pango_parse_markup()"
 msgstr "標籤中的文字含有 XML 文字標記。請參考 pango_parse_markup()"
 
-#: gtk/gtklabel.c:319 gtk/gtktexttag.c:374 gtk/gtktextview.c:593
+#: gtk/gtklabel.c:319 gtk/gtktexttag.c:374 gtk/gtktextview.c:595
 msgid "Justification"
 msgstr "對齊方式"
 
@@ -2743,7 +2742,7 @@ msgstr ""
 msgid "Tab pack type"
 msgstr ""
 
-#: gtk/gtknotebook.c:2473 gtk/gtknotebook.c:4820
+#: gtk/gtknotebook.c:2471 gtk/gtknotebook.c:4818
 #, c-format
 msgid "Page %u"
 msgstr "第 %u 頁"
@@ -2979,17 +2978,17 @@ msgid ""
 "How far in the y direction to move the arrow when the button is depressed"
 msgstr ""
 
-#: gtk/gtkrc.c:2376
+#: gtk/gtkrc.c:2382
 #, c-format
 msgid "Unable to find include file: \"%s\""
 msgstr "找不到應包括的檔案：“%s”"
 
-#: gtk/gtkrc.c:3018 gtk/gtkrc.c:3021
+#: gtk/gtkrc.c:3025 gtk/gtkrc.c:3028
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "無法在 pixmap_path 中找到圖像檔：“%s”"
 
-#: gtk/gtkrc.c:3456
+#: gtk/gtkrc.c:3463
 #, c-format
 msgid "Pixmap path element: \"%s\" must be absolute, %s, line %d"
 msgstr "Pixmap 路徑組成部份“%s”必須為絕對路徑，%s，第 %d 行"
@@ -3814,7 +3813,7 @@ msgid ""
 "such as PANGO_SCALE_X_LARGE"
 msgstr ""
 
-#: gtk/gtktexttag.c:375 gtk/gtktextview.c:594
+#: gtk/gtktexttag.c:375 gtk/gtktextview.c:596
 msgid "Left, right, or center justification"
 msgstr "靠左、靠右或是置中對齊"
 
@@ -3835,7 +3834,7 @@ msgstr ""
 msgid "Left margin"
 msgstr "左邊邊界"
 
-#: gtk/gtktexttag.c:392 gtk/gtktextview.c:603
+#: gtk/gtktexttag.c:392 gtk/gtktextview.c:605
 msgid "Width of the left margin in pixels"
 msgstr "左邊邊界的寬度，以像素數目表示"
 
@@ -3843,15 +3842,15 @@ msgstr "左邊邊界的寬度，以像素數目表示"
 msgid "Right margin"
 msgstr "右邊邊界"
 
-#: gtk/gtktexttag.c:402 gtk/gtktextview.c:613
+#: gtk/gtktexttag.c:402 gtk/gtktextview.c:615
 msgid "Width of the right margin in pixels"
 msgstr "右邊邊界的寬度，以像素數目表示"
 
-#: gtk/gtktexttag.c:412 gtk/gtktextview.c:622
+#: gtk/gtktexttag.c:412 gtk/gtktextview.c:624
 msgid "Indent"
 msgstr "縮排"
 
-#: gtk/gtktexttag.c:413 gtk/gtktextview.c:623
+#: gtk/gtktexttag.c:413 gtk/gtktextview.c:625
 msgid "Amount to indent the paragraph, in pixels"
 msgstr "段落縮排的程度，以像素數目表示"
 
@@ -3865,7 +3864,7 @@ msgstr "文字在基準線以上的距離 (負數表示文字在基準線以下)
 msgid "Pixels above lines"
 msgstr "段落頂端空間"
 
-#: gtk/gtktexttag.c:434 gtk/gtktextview.c:547
+#: gtk/gtktexttag.c:434 gtk/gtktextview.c:549
 msgid "Pixels of blank space above paragraphs"
 msgstr "段落頂端的空間的像素數目"
 
@@ -3873,7 +3872,7 @@ msgstr "段落頂端的空間的像素數目"
 msgid "Pixels below lines"
 msgstr "段落底部空間"
 
-#: gtk/gtktexttag.c:444 gtk/gtktextview.c:557
+#: gtk/gtktexttag.c:444 gtk/gtktextview.c:559
 msgid "Pixels of blank space below paragraphs"
 msgstr "段落底部的空間的像素數目"
 
@@ -3881,7 +3880,7 @@ msgstr "段落底部的空間的像素數目"
 msgid "Pixels inside wrap"
 msgstr "段落內部行距"
 
-#: gtk/gtktexttag.c:454 gtk/gtktextview.c:567
+#: gtk/gtktexttag.c:454 gtk/gtktextview.c:569
 msgid "Pixels of blank space between wrapped lines in a paragraph"
 msgstr "段落內部的行距的像素數目"
 
@@ -3889,16 +3888,16 @@ msgstr "段落內部的行距的像素數目"
 msgid "Wrap mode"
 msgstr "換行模式"
 
-#: gtk/gtktexttag.c:481 gtk/gtktextview.c:585
+#: gtk/gtktexttag.c:481 gtk/gtktextview.c:587
 msgid ""
 "Whether to wrap lines never, at word boundaries, or at character boundaries"
 msgstr "選擇永遠不換行、字詞邊界換行或是字元邊界換行"
 
-#: gtk/gtktexttag.c:490 gtk/gtktextview.c:632
+#: gtk/gtktexttag.c:490 gtk/gtktextview.c:634
 msgid "Tabs"
 msgstr ""
 
-#: gtk/gtktexttag.c:491 gtk/gtktextview.c:633
+#: gtk/gtktexttag.c:491 gtk/gtktextview.c:635
 msgid "Custom tabs for this text"
 msgstr ""
 
@@ -4058,39 +4057,39 @@ msgstr "ZW_J 零寬度連接符號"
 msgid "ZWNJ Zero width _non-joiner"
 msgstr "ZW_NJ 零寬度非連接符號"
 
-#: gtk/gtktextview.c:546
+#: gtk/gtktextview.c:548
 msgid "Pixels Above Lines"
 msgstr "段落頂端空間"
 
-#: gtk/gtktextview.c:556
+#: gtk/gtktextview.c:558
 msgid "Pixels Below Lines"
 msgstr "段落底部空間"
 
-#: gtk/gtktextview.c:566
+#: gtk/gtktextview.c:568
 msgid "Pixels Inside Wrap"
 msgstr "段落內部行距"
 
-#: gtk/gtktextview.c:584
+#: gtk/gtktextview.c:586
 msgid "Wrap Mode"
 msgstr "換行模式"
 
-#: gtk/gtktextview.c:602
+#: gtk/gtktextview.c:604
 msgid "Left Margin"
 msgstr "左邊邊界"
 
-#: gtk/gtktextview.c:612
+#: gtk/gtktextview.c:614
 msgid "Right Margin"
 msgstr "右邊邊界"
 
-#: gtk/gtktextview.c:640
+#: gtk/gtktextview.c:642
 msgid "Cursor Visible"
 msgstr "顯示游標"
 
-#: gtk/gtktextview.c:641
+#: gtk/gtktextview.c:643
 msgid "If the insertion cursor is shown"
 msgstr "是否顯示游標"
 
-#: gtk/gtktextview.c:6631
+#: gtk/gtktextview.c:6633
 msgid "Input _Methods"
 msgstr "輸入法(_M)"
 
@@ -4812,19 +4811,19 @@ msgstr "越南文 (VIQR)"
 msgid "X Input Method"
 msgstr "X 輸入法"
 
-#: modules/input/gtkimcontextxim.c:276
+#: modules/input/gtkimcontextxim.c:321
 msgid "IM Preedit style"
 msgstr "輸入法 Preedit 樣式"
 
-#: modules/input/gtkimcontextxim.c:277
+#: modules/input/gtkimcontextxim.c:322
 msgid "How to draw the input method preedit string"
 msgstr "如何顯示輸入法 preedit 字串"
 
-#: modules/input/gtkimcontextxim.c:285
+#: modules/input/gtkimcontextxim.c:330
 msgid "IM Status style"
 msgstr "輸入法狀態的式樣"
 
-#: modules/input/gtkimcontextxim.c:286
+#: modules/input/gtkimcontextxim.c:331
 msgid "How to draw the input method statusbar"
 msgstr "如何顯示輸入法的狀態列"
 

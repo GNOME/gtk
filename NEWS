@@ -1,3 +1,76 @@
+Overview of Changes in GTK+ 2.2.3
+=================================
+* GdkPixbuf [Matthias Clasen]
+ - Fix some problems with overflows when scaling down [Tomas Ögren]
+ - Many GIF bug fixes [Matthias, Federico Mena Quintero]
+ - Prefer 32-bpp ICOs, fix bugs with them
+ - Fix problem with absolute filenames and gdk-pixbuf-query-loaders
+   [Jens Elker]
+ - Make gdk-pixbuf-csource include alignment magic [Brian Cameron]
+* Win32 [Tor Lillqvist]
+ - Add multiple monitor support
+ - Major event and key handling rewrite, including IME fixes
+ - Fix handling of toplevel window positions
+ - Add support for all window geometry hints (gridded geometry, etc.)
+ - Fix DND to ignore drag window [Tony M Brown, Herman Bloggs]
+ - Fix GdkImage memory leak [J. Ali Harlow]
+ - Remove leftover OwnerGrabButtonMask emulation (fixes lots)
+ - Misc bug fixes [Many from Hans Breuer, Tim Evans]
+ - Build fixes and improvements [Peter Zelezny]
+* X11
+ - Fix extremely common crash where we interpreted the timestamp
+   field of a XKB event as a window ID and found a pixmap that matched.
+   [Owen Taylor, with essential backtrace from Kjartan Maraas]
+ - Fix CapsLock and NumLock for non-XKB [Robert Basch]
+ - Fix problems with, eg. Ctrl-Alt-Backspace hiding Cntrl-Backspace [Owen]
+ - Workaround Xinerama servers reporting wrong depths [Owen]
+* GtkTreeView [Kristian Rieteld]
+ - Fix scrolling once more [Pedro Gimeno, Michael Natterer, Timo Sirainen]
+ - Don't get confused by the Control key when handling selection
+   from an accelerator like <Control>B [Michael Natterer]
+ - Many misc fixes [Matthias, Marco Pesenti Gritti, Tim Janik, Alex Larsson, 
+   Tim-Philipp Müller, Michael Natterer, Josh Parsons, Yann Rouillard,
+   Rene Seindel, Owen Taylor, Alp Toker, Morten Welinder]
+* Input methods
+ - Handle input methods exiting and starting while the 
+   app is running [Hidetoshi Tajima]
+ - Fix infinite loop when closing input methods [Owen,
+   Takuro Ashie, Hidetoshi]
+ - Add a 'cedilla' input method with c+acute => cedilla and use
+   as the default for languages that use cedilla. [Gustavo De Nardin,
+   Owen, Fco. Javier F. Serrador]
+ - Fix status window for multihead [Owen, James Su]
+ - Remember imcontext attributes when switching methods [Owen, 
+   Botond Botyanszki]
+* GtkFileSelection [Owen]
+ - Fix selection of "UntitledN" on initail map [Mark Finlay]
+ - Fix an annoying bug with cursor positioning on failed completion
+ - Misc Fixes [Owen, Tor]
+* Other widgets
+ - Fix problem with GtkOptionMenus coming up in the wrong place [Kristian]
+   Fix problem with spinbuttons not getting enough space [Morten Welinder,
+   Kristian]
+ - Fix an infinite loop when resizing GtkTextView [Owen]
+ - Don't include menu labels in gtk_notebook_forall [Owen]
+ - Fix problem with XEMBED (GtkPlug) clients that don't take focus stealing
+   focus [Owen]
+ - Accept color drops with wrong format from KDE [Matthias]
+* Fix problem from gnome-theme-manager playing tricks and
+  making event->window a pixmap. [Anders Carlsson]
+* Ignore Caps-lock when matching accelerators
+* Fix 5-year-old bug where toplevels didn't fully refresh properly
+  on theme change [Owen, Rajkumar Siva]
+* Don't require precompiled gdk-pixbuf-csource when cross-compiling
+  from a tarball [Owen]
+* Documentation improvements [Matthias, Noah Levitt, Tor, Doug Quale, 
+  Morten Welinder]
+* Misc bug fixes [Keith Bissett, Botond Botyanszki, Arno Charlet, 
+  Felipe Heidrich, Charles Kerr, George Lebl, Noah, Tor, Callum McKenzie, 
+  Michael Meeks, Denis Mikhalkin, Thomas Mirlacher, Kristian, Masahiro Sakai, 
+  Soeren Sandmann, Benedikt Spranger, Owen, Luis Villa]
+* New and updated translations (ar,az,cs,cy,be,de,es,fi,fr,he,hu,id,is,it,
+  ko,lt,ml,mn,nl,ne,no,pl,pt,pt_BR,ru,sk,sr,sr@Latn,ta,wa,zh_TW,zh_CN)
+
 Overview of Changes in GTK+ 2.2.2
 =================================
 
@@ -60,7 +133,7 @@ Overview of Changes in GTK+ 2.2.2
 * Code cleanups [Matthias, Glynn Foster, Britton Kerin, Sven Neumann, 
   Doug Quale, Manish Singh, Morten Welinder]
 * Switch to using libtool-1.5
-* Build fixes [Matthias, J. Ali Harlowe, Rich Kinder, Jon Nall, Sven, 
+* Build fixes [Matthias, J. Ali Harlow, Rich Kinder, Jon Nall, Sven, 
   Christian Rose]
 * Documentation improvements [Matthias, Noah Levitt, Sven Neumann]
 * New and updated translations (am,az,be,ca,cs,cy,da,de,el,es,fa,fi,fr,id,

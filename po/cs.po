@@ -8,14 +8,14 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.1.x\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2003-08-19 12:40+0200\n"
+"POT-Creation-Date: 2003-08-25 22:08-0400\n"
 "PO-Revision-Date: 2003-08-19 14:52+0200\n"
 "Last-Translator: Miloslav Trmac <bukm@centrum.cz>\n"
 "Language-Team: Czech <cs@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Report-Msgid-Bugs-To: \n"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:147 gdk-pixbuf/gdk-pixbuf-io.c:737
 #, c-format
@@ -1265,11 +1265,11 @@ msgid "Foreground color as a GdkColor"
 msgstr "Barva popředí jako GdkColor"
 
 #: gtk/gtkcellrenderertext.c:232 gtk/gtkentry.c:459 gtk/gtktexttag.c:273
-#: gtk/gtktextview.c:576
+#: gtk/gtktextview.c:578
 msgid "Editable"
 msgstr "Upravitelné"
 
-#: gtk/gtkcellrenderertext.c:233 gtk/gtktexttag.c:274 gtk/gtktextview.c:577
+#: gtk/gtkcellrenderertext.c:233 gtk/gtktexttag.c:274 gtk/gtktextview.c:579
 msgid "Whether the text can be modified by the user"
 msgstr "Zda uživatel může měnit text"
 
@@ -1921,7 +1921,7 @@ msgstr "Vybrat při fokusu"
 msgid "Whether to select the contents of an entry when it is focused"
 msgstr "Zda se má obsah položky vybrat, pokud získá fokus"
 
-#: gtk/gtkentry.c:3993 gtk/gtklabel.c:3222 gtk/gtktextview.c:6621
+#: gtk/gtkentry.c:3993 gtk/gtklabel.c:3222 gtk/gtktextview.c:6623
 msgid "Select All"
 msgstr "Vybrat vše"
 
@@ -1929,7 +1929,7 @@ msgstr "Vybrat vše"
 msgid "Input Methods"
 msgstr "Metody vstupu"
 
-#: gtk/gtkentry.c:4013 gtk/gtktextview.c:6640
+#: gtk/gtkentry.c:4013 gtk/gtktextview.c:6642
 msgid "_Insert Unicode control character"
 msgstr "_Vložit řídící znak Unicode"
 
@@ -2480,7 +2480,7 @@ msgstr "Použít značky"
 msgid "The text of the label includes XML markup. See pango_parse_markup()"
 msgstr "Text popisu obsahuje značky XML. Viz pango_parse_markup()"
 
-#: gtk/gtklabel.c:319 gtk/gtktexttag.c:374 gtk/gtktextview.c:593
+#: gtk/gtklabel.c:319 gtk/gtktexttag.c:374 gtk/gtktextview.c:595
 msgid "Justification"
 msgstr "Zarovnání"
 
@@ -2821,7 +2821,7 @@ msgstr "Jestli by měly záložky potomků vyplnit přidělený prostor"
 msgid "Tab pack type"
 msgstr "Typ balení záložek"
 
-#: gtk/gtknotebook.c:2473 gtk/gtknotebook.c:4820
+#: gtk/gtknotebook.c:2471 gtk/gtknotebook.c:4818
 #, c-format
 msgid "Page %u"
 msgstr "Strana %u"
@@ -3066,17 +3066,17 @@ msgid ""
 "How far in the y direction to move the arrow when the button is depressed"
 msgstr "O kolik se má posunout šipka ve směru osy Y při stisku tlačítka"
 
-#: gtk/gtkrc.c:2376
+#: gtk/gtkrc.c:2382
 #, c-format
 msgid "Unable to find include file: \"%s\""
 msgstr "Nepodařilo se nalézt vložený soubor: \"%s\""
 
-#: gtk/gtkrc.c:3018 gtk/gtkrc.c:3021
+#: gtk/gtkrc.c:3025 gtk/gtkrc.c:3028
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "Obrázek nebyl nalezen na cestě pixmap_path: \"%s\""
 
-#: gtk/gtkrc.c:3456
+#: gtk/gtkrc.c:3463
 #, c-format
 msgid "Pixmap path element: \"%s\" must be absolute, %s, line %d"
 msgstr "Element cesty k bitmapě: \"%s\" musí být absolutní, %s, řádek %d"
@@ -3924,7 +3924,7 @@ msgstr ""
 "velikost se řádně přizpůsobuje změnám tématu, takže je doporučená. Pango má "
 "předdefinované některé hodnoty, například PANGO_SCALE_X_LARGE"
 
-#: gtk/gtktexttag.c:375 gtk/gtktextview.c:594
+#: gtk/gtktexttag.c:375 gtk/gtktextview.c:596
 msgid "Left, right, or center justification"
 msgstr "Zarovnání vlevo, vpravo nebo na střed"
 
@@ -3946,7 +3946,7 @@ msgstr ""
 msgid "Left margin"
 msgstr "Levý okraj"
 
-#: gtk/gtktexttag.c:392 gtk/gtktextview.c:603
+#: gtk/gtktexttag.c:392 gtk/gtktextview.c:605
 msgid "Width of the left margin in pixels"
 msgstr "Šířka levého okraje v bodech"
 
@@ -3954,15 +3954,15 @@ msgstr "Šířka levého okraje v bodech"
 msgid "Right margin"
 msgstr "Pravý okraj"
 
-#: gtk/gtktexttag.c:402 gtk/gtktextview.c:613
+#: gtk/gtktexttag.c:402 gtk/gtktextview.c:615
 msgid "Width of the right margin in pixels"
 msgstr "Šířka pravého okraje v bodech"
 
-#: gtk/gtktexttag.c:412 gtk/gtktextview.c:622
+#: gtk/gtktexttag.c:412 gtk/gtktextview.c:624
 msgid "Indent"
 msgstr "Odsazení"
 
-#: gtk/gtktexttag.c:413 gtk/gtktextview.c:623
+#: gtk/gtktexttag.c:413 gtk/gtktextview.c:625
 msgid "Amount to indent the paragraph, in pixels"
 msgstr "Velikost odsazení odstavce, v bodech"
 
@@ -3978,7 +3978,7 @@ msgstr ""
 msgid "Pixels above lines"
 msgstr "Bodů nad řádkami"
 
-#: gtk/gtktexttag.c:434 gtk/gtktextview.c:547
+#: gtk/gtktexttag.c:434 gtk/gtktextview.c:549
 msgid "Pixels of blank space above paragraphs"
 msgstr "Počet bodů prázdného prostoru nad odstavci"
 
@@ -3986,7 +3986,7 @@ msgstr "Počet bodů prázdného prostoru nad odstavci"
 msgid "Pixels below lines"
 msgstr "Bodů pod řádkami"
 
-#: gtk/gtktexttag.c:444 gtk/gtktextview.c:557
+#: gtk/gtktexttag.c:444 gtk/gtktextview.c:559
 msgid "Pixels of blank space below paragraphs"
 msgstr "Počet bodů prázdného prostoru pod odstavci"
 
@@ -3994,7 +3994,7 @@ msgstr "Počet bodů prázdného prostoru pod odstavci"
 msgid "Pixels inside wrap"
 msgstr "Bodů v zalomení"
 
-#: gtk/gtktexttag.c:454 gtk/gtktextview.c:567
+#: gtk/gtktexttag.c:454 gtk/gtktextview.c:569
 msgid "Pixels of blank space between wrapped lines in a paragraph"
 msgstr "Počet bodů prázdného prostoru mezi zalomenými řádky v odstavci"
 
@@ -4002,18 +4002,18 @@ msgstr "Počet bodů prázdného prostoru mezi zalomenými řádky v odstavci"
 msgid "Wrap mode"
 msgstr "Režim zalamování"
 
-#: gtk/gtktexttag.c:481 gtk/gtktextview.c:585
+#: gtk/gtktexttag.c:481 gtk/gtktextview.c:587
 msgid ""
 "Whether to wrap lines never, at word boundaries, or at character boundaries"
 msgstr ""
 "Zda jsou řádky zalamované na hranicích slov, znaků, nebo nejsou zalamované "
 "vůbec"
 
-#: gtk/gtktexttag.c:490 gtk/gtktextview.c:632
+#: gtk/gtktexttag.c:490 gtk/gtktextview.c:634
 msgid "Tabs"
 msgstr "Tabelátory"
 
-#: gtk/gtktexttag.c:491 gtk/gtktextview.c:633
+#: gtk/gtktexttag.c:491 gtk/gtktextview.c:635
 msgid "Custom tabs for this text"
 msgstr "Vlastní tabelátory pro tento text"
 
@@ -4173,39 +4173,39 @@ msgstr "ZWJ _Spojovatel nulové šířky"
 msgid "ZWNJ Zero width _non-joiner"
 msgstr "ZWNJ _Nespojovatel nulové šířky"
 
-#: gtk/gtktextview.c:546
+#: gtk/gtktextview.c:548
 msgid "Pixels Above Lines"
 msgstr "Bodů nad řádky"
 
-#: gtk/gtktextview.c:556
+#: gtk/gtktextview.c:558
 msgid "Pixels Below Lines"
 msgstr "Bodů pod řádky"
 
-#: gtk/gtktextview.c:566
+#: gtk/gtktextview.c:568
 msgid "Pixels Inside Wrap"
 msgstr "Bodů v zalomení"
 
-#: gtk/gtktextview.c:584
+#: gtk/gtktextview.c:586
 msgid "Wrap Mode"
 msgstr "Režim zalamování"
 
-#: gtk/gtktextview.c:602
+#: gtk/gtktextview.c:604
 msgid "Left Margin"
 msgstr "Levý okraj"
 
-#: gtk/gtktextview.c:612
+#: gtk/gtktextview.c:614
 msgid "Right Margin"
 msgstr "Pravý okraj"
 
-#: gtk/gtktextview.c:640
+#: gtk/gtktextview.c:642
 msgid "Cursor Visible"
 msgstr "Viditelný kurzor"
 
-#: gtk/gtktextview.c:641
+#: gtk/gtktextview.c:643
 msgid "If the insertion cursor is shown"
 msgstr "Zda je zobrazený kurzor pro vkládání"
 
-#: gtk/gtktextview.c:6631
+#: gtk/gtktextview.c:6633
 msgid "Input _Methods"
 msgstr "Vstupní _metody"
 
@@ -4950,19 +4950,19 @@ msgstr "Vietnamsky (VIQR)"
 msgid "X Input Method"
 msgstr "Metoda vstupu X"
 
-#: modules/input/gtkimcontextxim.c:276
+#: modules/input/gtkimcontextxim.c:321
 msgid "IM Preedit style"
 msgstr "Styl IM Preedit"
 
-#: modules/input/gtkimcontextxim.c:277
+#: modules/input/gtkimcontextxim.c:322
 msgid "How to draw the input method preedit string"
 msgstr "Jak vykreslovat přededitovací řetězec vstupní metody"
 
-#: modules/input/gtkimcontextxim.c:285
+#: modules/input/gtkimcontextxim.c:330
 msgid "IM Status style"
 msgstr "Styl stavu IM"
 
-#: modules/input/gtkimcontextxim.c:286
+#: modules/input/gtkimcontextxim.c:331
 msgid "How to draw the input method statusbar"
 msgstr "Jak kreslit stavovou lištu vstupní metody"
 

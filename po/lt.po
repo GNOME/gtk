@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.3.11\n"
-"POT-Creation-Date: 2003-06-09 16:30-0400\n"
+"POT-Creation-Date: 2003-08-25 22:08-0400\n"
 "PO-Revision-Date: 2002-03-09 01:01+0200\n"
 "Last-Translator: Gediminas Paulauskas <menesis@delfi.lt>\n"
 "Language-Team: Lithuanian <komp_lt@konferencijos.lt>\n"
@@ -165,112 +165,104 @@ msgstr ""
 msgid "The BMP image format"
 msgstr ""
 
-#: gdk-pixbuf/io-gif.c:219
+#: gdk-pixbuf/io-gif.c:220
 #, c-format
 msgid "Failure reading GIF: %s"
 msgstr "Klaida skaitant GIF: %s"
 
-#: gdk-pixbuf/io-gif.c:491 gdk-pixbuf/io-gif.c:1428 gdk-pixbuf/io-gif.c:1589
+#: gdk-pixbuf/io-gif.c:492 gdk-pixbuf/io-gif.c:1431 gdk-pixbuf/io-gif.c:1592
 msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
 msgstr ""
 
-#: gdk-pixbuf/io-gif.c:500
+#: gdk-pixbuf/io-gif.c:501
 #, c-format
 msgid "Internal error in the GIF loader (%s)"
 msgstr "Vidinė klaida GIF kelties programoje (%s)"
 
-#: gdk-pixbuf/io-gif.c:574
+#: gdk-pixbuf/io-gif.c:575
 msgid "Stack overflow"
 msgstr ""
 
-#: gdk-pixbuf/io-gif.c:634
+#: gdk-pixbuf/io-gif.c:635
 msgid "GIF image loader can't understand this image."
 msgstr "GIF kelties programa negali suprasti šio paveikslėlio."
 
-#: gdk-pixbuf/io-gif.c:663
+#: gdk-pixbuf/io-gif.c:664
 msgid "Bad code encountered"
 msgstr ""
 
-#: gdk-pixbuf/io-gif.c:673
+#: gdk-pixbuf/io-gif.c:674
 msgid "Circular table entry in GIF file"
 msgstr ""
 
-#: gdk-pixbuf/io-gif.c:806 gdk-pixbuf/io-gif.c:1416 gdk-pixbuf/io-gif.c:1462
-#: gdk-pixbuf/io-gif.c:1577
+#: gdk-pixbuf/io-gif.c:826 gdk-pixbuf/io-gif.c:1419 gdk-pixbuf/io-gif.c:1465
+#: gdk-pixbuf/io-gif.c:1580
 msgid "Not enough memory to load GIF file"
 msgstr "Nepakanka atminties įkelti GIF bylai"
 
-#: gdk-pixbuf/io-gif.c:1053
+#: gdk-pixbuf/io-gif.c:1074
 msgid "GIF image is corrupt (incorrect LZW compression)"
 msgstr ""
 
-#: gdk-pixbuf/io-gif.c:1103
+#: gdk-pixbuf/io-gif.c:1124
 msgid "File does not appear to be a GIF file"
 msgstr "Atrodo, kad tai ne GIF byla"
 
-#: gdk-pixbuf/io-gif.c:1115
+#: gdk-pixbuf/io-gif.c:1136
 #, c-format
 msgid "Version %s of the GIF file format is not supported"
 msgstr "GIF formato versijs %s nėra palaikoma"
 
-#: gdk-pixbuf/io-gif.c:1188
-msgid "GIF image contained a frame with height or width 0."
-msgstr ""
-
-#: gdk-pixbuf/io-gif.c:1201
+#: gdk-pixbuf/io-gif.c:1211
 msgid "GIF image contained a frame appearing outside the image bounds."
 msgstr ""
 
-#: gdk-pixbuf/io-gif.c:1217
-msgid "First frame of GIF image had 'revert to previous' as its disposal mode."
-msgstr ""
-
-#: gdk-pixbuf/io-gif.c:1252
+#: gdk-pixbuf/io-gif.c:1255
 msgid ""
 "GIF image has no global colormap, and a frame inside it has no local "
 "colormap."
 msgstr ""
 
-#: gdk-pixbuf/io-gif.c:1484
+#: gdk-pixbuf/io-gif.c:1487
 msgid "GIF image was truncated or incomplete."
 msgstr ""
 
-#: gdk-pixbuf/io-gif.c:1636
+#: gdk-pixbuf/io-gif.c:1639
 #, fuzzy
 msgid "The GIF image format"
 msgstr "Paveikslėlio formatas nežinomas"
 
-#: gdk-pixbuf/io-ico.c:218 gdk-pixbuf/io-ico.c:277 gdk-pixbuf/io-ico.c:338
-#: gdk-pixbuf/io-ico.c:401 gdk-pixbuf/io-ico.c:418
+#: gdk-pixbuf/io-ico.c:217 gdk-pixbuf/io-ico.c:269 gdk-pixbuf/io-ico.c:330
+#: gdk-pixbuf/io-ico.c:393 gdk-pixbuf/io-ico.c:410
 msgid "Not enough memory to load icon"
 msgstr "Nepakanka atminties įkelti ikonai"
 
-#: gdk-pixbuf/io-ico.c:262
+#: gdk-pixbuf/io-ico.c:254
 msgid "Invalid header in icon"
 msgstr ""
 
-#: gdk-pixbuf/io-ico.c:299
+#: gdk-pixbuf/io-ico.c:291
 msgid "Icon has zero width"
 msgstr "Ikonos plotis yra nulinis"
 
-#: gdk-pixbuf/io-ico.c:309
+#: gdk-pixbuf/io-ico.c:301
 msgid "Icon has zero height"
 msgstr "Ikonos aukštis yra nulinis"
 
-#: gdk-pixbuf/io-ico.c:353
+#: gdk-pixbuf/io-ico.c:345
 #, fuzzy
 msgid "Compressed icons are not supported"
 msgstr "Paveikslėlio tipas '%s' nepalaikomas"
 
-#: gdk-pixbuf/io-ico.c:386
+#: gdk-pixbuf/io-ico.c:378
 msgid "Unsupported icon type"
 msgstr "Nepalaikomas ikonos tipas"
 
-#: gdk-pixbuf/io-ico.c:466
+#: gdk-pixbuf/io-ico.c:458
 msgid "Not enough memory to load ICO file"
 msgstr "Nepakanka atminties įkelti ICO bylai"
 
-#: gdk-pixbuf/io-ico.c:872
+#: gdk-pixbuf/io-ico.c:868
 #, fuzzy
 msgid "The ICO image format"
 msgstr "Paveikslėlio formatas nežinomas"
@@ -1279,11 +1271,11 @@ msgid "Foreground color as a GdkColor"
 msgstr "Priekinio plano spalva kaip GdkColor"
 
 #: gtk/gtkcellrenderertext.c:232 gtk/gtkentry.c:459 gtk/gtktexttag.c:273
-#: gtk/gtktextview.c:576
+#: gtk/gtktextview.c:578
 msgid "Editable"
 msgstr "Taisomas"
 
-#: gtk/gtkcellrenderertext.c:233 gtk/gtktexttag.c:274 gtk/gtktextview.c:577
+#: gtk/gtkcellrenderertext.c:233 gtk/gtktexttag.c:274 gtk/gtktextview.c:579
 msgid "Whether the text can be modified by the user"
 msgstr "Ar tekstas gali būti keičiamas vartotojo"
 
@@ -1557,7 +1549,7 @@ msgstr ""
 msgid "Whether to display an \"inconsistent\" state"
 msgstr ""
 
-#: gtk/gtkcolorsel.c:559
+#: gtk/gtkcolorsel.c:561
 msgid ""
 "The previously-selected color, for comparison to the color you're selecting "
 "now. You can drag this color to a palette entry, or select this color as "
@@ -1567,7 +1559,7 @@ msgstr ""
 "gali nutempti šią spalvą į paletės langelį, arba pasirinkti šią spalvą "
 "nutempiant ją į greta esantį langelį."
 
-#: gtk/gtkcolorsel.c:564
+#: gtk/gtkcolorsel.c:566
 msgid ""
 "The color you've chosen. You can drag this color to a palette entry to save "
 "it for use in the future."
@@ -1575,11 +1567,11 @@ msgstr ""
 "Spalva, kurią pasirinkai. Tu gali nutempti šią spalvą į paletės langelį, kad "
 "išsaugotum naudojimui ateityje."
 
-#: gtk/gtkcolorsel.c:925
+#: gtk/gtkcolorsel.c:927
 msgid "_Save color here"
 msgstr "Iš_saugoti spalvą čia"
 
-#: gtk/gtkcolorsel.c:1128
+#: gtk/gtkcolorsel.c:1132
 msgid ""
 "Click this palette entry to make it the current color. To change this entry, "
 "drag a color swatch here or right-click it and select \"Save color here.\""
@@ -1588,47 +1580,47 @@ msgstr ""
 "pakeistum šį langelį, nutempk spalvos langelį čia arba paspausk dešinį "
 "mygtuką ir pasirink „Išsaugoti spalvą čia“."
 
-#: gtk/gtkcolorsel.c:1752
+#: gtk/gtkcolorsel.c:1756
 msgid "Has Opacity Control"
 msgstr "Rodyti skaidrumo keitiklį"
 
-#: gtk/gtkcolorsel.c:1753
+#: gtk/gtkcolorsel.c:1757
 msgid "Whether the color selector should allow setting opacity"
 msgstr "Ar spalvų parinkiklis leidžia keisti skaidrumą"
 
-#: gtk/gtkcolorsel.c:1759
+#: gtk/gtkcolorsel.c:1763
 msgid "Has palette"
 msgstr "Rodyti paletę"
 
-#: gtk/gtkcolorsel.c:1760
+#: gtk/gtkcolorsel.c:1764
 msgid "Whether a palette should be used"
 msgstr "Ar paletė bus naudojama"
 
-#: gtk/gtkcolorsel.c:1766
+#: gtk/gtkcolorsel.c:1770
 msgid "Current Color"
 msgstr "Esama spalva"
 
-#: gtk/gtkcolorsel.c:1767
+#: gtk/gtkcolorsel.c:1771
 msgid "The current color"
 msgstr "Dabar pasirinkta spalva"
 
-#: gtk/gtkcolorsel.c:1773
+#: gtk/gtkcolorsel.c:1777
 msgid "Current Alpha"
 msgstr "Esamas permatomumas"
 
-#: gtk/gtkcolorsel.c:1774
+#: gtk/gtkcolorsel.c:1778
 msgid "The current opacity value (0 fully transparent, 65535 fully opaque)"
 msgstr ""
 
-#: gtk/gtkcolorsel.c:1788
+#: gtk/gtkcolorsel.c:1792
 msgid "Custom palette"
 msgstr "Tinkinta paletė"
 
-#: gtk/gtkcolorsel.c:1789
+#: gtk/gtkcolorsel.c:1793
 msgid "Palette to use in the color selector"
 msgstr "Paletė, naudojama spalvų parinkiklyje"
 
-#: gtk/gtkcolorsel.c:1830
+#: gtk/gtkcolorsel.c:1834
 msgid ""
 "Select the color you want from the outer ring. Select the darkness or "
 "lightness of that color using the inner triangle."
@@ -1636,7 +1628,7 @@ msgstr ""
 "Pasirink norimą spalvą iš išorinio žiedo. Pasirink spalvos šviesumą ir "
 "sodrumą naudodamasis vidiniu trikampiu."
 
-#: gtk/gtkcolorsel.c:1855
+#: gtk/gtkcolorsel.c:1859
 msgid ""
 "Click the eyedropper, then click a color anywhere on your screen to select "
 "that color."
@@ -1644,68 +1636,68 @@ msgstr ""
 "Paspausk ant teptuko, tada paspausk ant spalvos, esančios bet kurioje ekrano "
 "vietoje, kad pasirinktum ją."
 
-#: gtk/gtkcolorsel.c:1864
+#: gtk/gtkcolorsel.c:1868
 msgid "_Hue:"
 msgstr "_Atspalvis:"
 
-#: gtk/gtkcolorsel.c:1865
+#: gtk/gtkcolorsel.c:1869
 msgid "Position on the color wheel."
 msgstr "Vieta spalvų rate"
 
-#: gtk/gtkcolorsel.c:1866
+#: gtk/gtkcolorsel.c:1870
 msgid "_Saturation:"
 msgstr "_Sodrumas:"
 
-#: gtk/gtkcolorsel.c:1867
+#: gtk/gtkcolorsel.c:1871
 msgid "\"Deepness\" of the color."
 msgstr "Spalvos \"gilumas\""
 
-#: gtk/gtkcolorsel.c:1868
+#: gtk/gtkcolorsel.c:1872
 msgid "_Value:"
 msgstr "_Šviesumas:"
 
-#: gtk/gtkcolorsel.c:1869
+#: gtk/gtkcolorsel.c:1873
 msgid "Brightness of the color."
 msgstr "Spalvos šviesumas."
 
-#: gtk/gtkcolorsel.c:1870
+#: gtk/gtkcolorsel.c:1874
 msgid "_Red:"
 msgstr "_Raudona:"
 
-#: gtk/gtkcolorsel.c:1871
+#: gtk/gtkcolorsel.c:1875
 msgid "Amount of red light in the color."
 msgstr "Raudonos šviesos kiekis spalvoje."
 
-#: gtk/gtkcolorsel.c:1872
+#: gtk/gtkcolorsel.c:1876
 msgid "_Green:"
 msgstr "_Žalia:"
 
-#: gtk/gtkcolorsel.c:1873
+#: gtk/gtkcolorsel.c:1877
 msgid "Amount of green light in the color."
 msgstr "Žalios šviesos kiekis spalvoje."
 
-#: gtk/gtkcolorsel.c:1874
+#: gtk/gtkcolorsel.c:1878
 msgid "_Blue:"
 msgstr "_Mėlyna:"
 
-#: gtk/gtkcolorsel.c:1875
+#: gtk/gtkcolorsel.c:1879
 msgid "Amount of blue light in the color."
 msgstr "Mėlynos šviesos kiekis spalvoje."
 
-#: gtk/gtkcolorsel.c:1878
+#: gtk/gtkcolorsel.c:1882
 #, fuzzy
 msgid "_Opacity:"
 msgstr "Nepermat_omumas:"
 
-#: gtk/gtkcolorsel.c:1886
+#: gtk/gtkcolorsel.c:1890
 msgid "Transparency of the currently-selected color."
 msgstr "Dabar pasirinktos spalvos skaidrumas."
 
-#: gtk/gtkcolorsel.c:1901
+#: gtk/gtkcolorsel.c:1905
 msgid "Color _Name:"
 msgstr "Spalvos _pavadinimas:"
 
-#: gtk/gtkcolorsel.c:1916
+#: gtk/gtkcolorsel.c:1920
 msgid ""
 "You can enter an HTML-style hexadecimal color value, or simply a color name "
 "such as 'orange' in this entry."
@@ -1713,7 +1705,7 @@ msgstr ""
 "Čia gali įrašyti HTML stiliaus šešioliktainę spalvos išraišką, arba tiesiog "
 "spalvos pavadinimą, pvz. „white“."
 
-#: gtk/gtkcolorsel.c:1935
+#: gtk/gtkcolorsel.c:1939
 msgid "_Palette"
 msgstr "_Paletė"
 
@@ -1969,7 +1961,7 @@ msgstr "Pasirinkti lygiai"
 msgid "Whether to select the contents of an entry when it is focused"
 msgstr "Ar įvesties lauko turinys gali būti keičiamas"
 
-#: gtk/gtkentry.c:3993 gtk/gtklabel.c:3222 gtk/gtktextview.c:6621
+#: gtk/gtkentry.c:3993 gtk/gtklabel.c:3222 gtk/gtktextview.c:6623
 msgid "Select All"
 msgstr "Pažymėti viską"
 
@@ -1977,59 +1969,59 @@ msgstr "Pažymėti viską"
 msgid "Input Methods"
 msgstr "Įvesties metodai"
 
-#: gtk/gtkentry.c:4013 gtk/gtktextview.c:6640
+#: gtk/gtkentry.c:4013 gtk/gtktextview.c:6642
 msgid "_Insert Unicode control character"
 msgstr "Įterpt_i Unicode valdantį simbolį"
 
-#: gtk/gtkfilesel.c:551 gtk/gtkimage.c:167
+#: gtk/gtkfilesel.c:556 gtk/gtkimage.c:167
 msgid "Filename"
 msgstr "Bylos vardas"
 
-#: gtk/gtkfilesel.c:552
+#: gtk/gtkfilesel.c:557
 #, fuzzy
 msgid "The currently selected filename"
 msgstr "Dabar pasirinktos bylos vardas."
 
-#: gtk/gtkfilesel.c:558
+#: gtk/gtkfilesel.c:563
 msgid "Show file operations"
 msgstr "Veiksmai su bylomis"
 
-#: gtk/gtkfilesel.c:559
+#: gtk/gtkfilesel.c:564
 #, fuzzy
 msgid "Whether buttons for creating/manipulating files should be displayed"
 msgstr "Ar mygtukai sukurti/dirbti su bylomis turėtų būti rodomi."
 
-#: gtk/gtkfilesel.c:566
+#: gtk/gtkfilesel.c:571
 msgid "Select multiple"
 msgstr "Daugybinis pasirinkimas"
 
-#: gtk/gtkfilesel.c:567
+#: gtk/gtkfilesel.c:572
 #, fuzzy
 msgid "Whether to allow multiple files to be selected"
 msgstr "Ar leidžiama pasirinkti keletą bylų."
 
-#: gtk/gtkfilesel.c:722
+#: gtk/gtkfilesel.c:727
 msgid "Folders"
 msgstr "Aplankai"
 
-#: gtk/gtkfilesel.c:726
+#: gtk/gtkfilesel.c:731
 msgid "Fol_ders"
 msgstr "_Aplankai"
 
-#: gtk/gtkfilesel.c:758
+#: gtk/gtkfilesel.c:763
 msgid "Files"
 msgstr "Bylos"
 
-#: gtk/gtkfilesel.c:762
+#: gtk/gtkfilesel.c:767
 msgid "_Files"
 msgstr "_Bylos"
 
-#: gtk/gtkfilesel.c:845 gtk/gtkfilesel.c:2237
+#: gtk/gtkfilesel.c:850 gtk/gtkfilesel.c:2240
 #, c-format
 msgid "Folder unreadable: %s"
 msgstr "Aplankas neįskaitomas: %s"
 
-#: gtk/gtkfilesel.c:976
+#: gtk/gtkfilesel.c:981
 #, c-format
 msgid ""
 "The file \"%s\" resides on another machine (called %s) and may not be "
@@ -2037,25 +2029,25 @@ msgid ""
 "Are you sure that you want to select it?"
 msgstr ""
 
-#: gtk/gtkfilesel.c:1107
+#: gtk/gtkfilesel.c:1112
 msgid "_New Folder"
 msgstr "_Naujas aplankas"
 
-#: gtk/gtkfilesel.c:1118
+#: gtk/gtkfilesel.c:1123
 msgid "De_lete File"
 msgstr "Iš_trinti bylą"
 
-#: gtk/gtkfilesel.c:1129
+#: gtk/gtkfilesel.c:1134
 msgid "_Rename File"
 msgstr "Pe_rvadinti bylą"
 
-#: gtk/gtkfilesel.c:1429
+#: gtk/gtkfilesel.c:1436
 #, c-format
 msgid ""
 "The folder name \"%s\" contains symbols that are not allowed in filenames"
 msgstr ""
 
-#: gtk/gtkfilesel.c:1431
+#: gtk/gtkfilesel.c:1438
 #, c-format
 msgid ""
 "Error creating folder \"%s\": %s\n"
@@ -2064,34 +2056,34 @@ msgstr ""
 "Klaida kuriant aplanką „%s“: %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1432 gtk/gtkfilesel.c:1668
+#: gtk/gtkfilesel.c:1439 gtk/gtkfilesel.c:1675
 msgid "You probably used symbols not allowed in filenames."
 msgstr "Tu tikriausiai naudojai bylų varduose neleidžiamus simbolius."
 
-#: gtk/gtkfilesel.c:1440
+#: gtk/gtkfilesel.c:1447
 #, c-format
 msgid "Error creating folder \"%s\": %s\n"
 msgstr "Klaida kuriant aplanką „%s“: %s\n"
 
-#: gtk/gtkfilesel.c:1474
+#: gtk/gtkfilesel.c:1481
 msgid "New Folder"
 msgstr "Naujas aplankas"
 
-#: gtk/gtkfilesel.c:1489
+#: gtk/gtkfilesel.c:1496
 msgid "_Folder name:"
 msgstr "_Aplanko vardas:"
 
-#: gtk/gtkfilesel.c:1513
+#: gtk/gtkfilesel.c:1520
 #, fuzzy
 msgid "C_reate"
 msgstr "Sukurti"
 
-#: gtk/gtkfilesel.c:1556
+#: gtk/gtkfilesel.c:1563
 #, c-format
 msgid "The filename \"%s\" contains symbols that are not allowed in filenames"
 msgstr "Bylos varde „%s“ yra varduose neleidžiamų simbolių."
 
-#: gtk/gtkfilesel.c:1559
+#: gtk/gtkfilesel.c:1566
 #, c-format
 msgid ""
 "Error deleting file \"%s\": %s\n"
@@ -2100,30 +2092,30 @@ msgstr ""
 "Klaida trinant bylą „%s“: %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1561 gtk/gtkfilesel.c:1682
+#: gtk/gtkfilesel.c:1568 gtk/gtkfilesel.c:1689
 msgid "It probably contains symbols not allowed in filenames."
 msgstr ""
 
-#: gtk/gtkfilesel.c:1570
+#: gtk/gtkfilesel.c:1577
 #, c-format
 msgid "Error deleting file \"%s\": %s"
 msgstr "Klaida trinant bylą „%s“: %s"
 
-#: gtk/gtkfilesel.c:1613
+#: gtk/gtkfilesel.c:1620
 #, c-format
 msgid "Really delete file \"%s\" ?"
 msgstr "Tikrai ištrinti bylą·„%s“?"
 
-#: gtk/gtkfilesel.c:1618
+#: gtk/gtkfilesel.c:1625
 msgid "Delete File"
 msgstr "Ištrinti bylą"
 
-#: gtk/gtkfilesel.c:1664 gtk/gtkfilesel.c:1678
+#: gtk/gtkfilesel.c:1671 gtk/gtkfilesel.c:1685
 #, c-format
 msgid "The file name \"%s\" contains symbols that are not allowed in filenames"
 msgstr "Bylos varde „%s“ yra varduose neleidžiamų simbolių."
 
-#: gtk/gtkfilesel.c:1666
+#: gtk/gtkfilesel.c:1673
 #, c-format
 msgid ""
 "Error renaming file to \"%s\": %s\n"
@@ -2132,7 +2124,7 @@ msgstr ""
 "Klaida pervadinant bylą į „%s“: %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1680
+#: gtk/gtkfilesel.c:1687
 #, c-format
 msgid ""
 "Error renaming file \"%s\": %s\n"
@@ -2141,46 +2133,46 @@ msgstr ""
 "Klaida pervadinant bylą „%s“: %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1690
+#: gtk/gtkfilesel.c:1697
 #, c-format
 msgid "Error renaming file \"%s\" to \"%s\": %s"
 msgstr "Klaida pervadinant bylą „%s“ į „%s“: %s"
 
-#: gtk/gtkfilesel.c:1737
+#: gtk/gtkfilesel.c:1744
 msgid "Rename File"
 msgstr "Pervadinti bylą"
 
-#: gtk/gtkfilesel.c:1752
+#: gtk/gtkfilesel.c:1759
 #, c-format
 msgid "Rename file \"%s\" to:"
 msgstr "Pervadinti bylą „%s“ į:"
 
-#: gtk/gtkfilesel.c:1781
+#: gtk/gtkfilesel.c:1788
 #, fuzzy
 msgid "_Rename"
 msgstr "Pervadinti"
 
-#: gtk/gtkfilesel.c:2217
+#: gtk/gtkfilesel.c:2220
 #, fuzzy
 msgid "_Selection: "
 msgstr "Pasirinkimas: "
 
-#: gtk/gtkfilesel.c:3111
+#: gtk/gtkfilesel.c:3136
 #, c-format
 msgid ""
 "The filename \"%s\" couldn't be converted to UTF-8 (try setting the "
 "environment variable G_BROKEN_FILENAMES): %s"
 msgstr ""
 
-#: gtk/gtkfilesel.c:3114
+#: gtk/gtkfilesel.c:3139
 msgid "Invalid Utf-8"
 msgstr ""
 
-#: gtk/gtkfilesel.c:3991
+#: gtk/gtkfilesel.c:4016
 msgid "Name too long"
 msgstr "Vardas per ilgas"
 
-#: gtk/gtkfilesel.c:3993
+#: gtk/gtkfilesel.c:4018
 #, fuzzy
 msgid "Couldn't convert filename"
 msgstr "Negaliu išmesti temos"
@@ -2574,7 +2566,7 @@ msgstr "Perkelti žymelę aukštyn"
 msgid "The text of the label includes XML markup. See pango_parse_markup()"
 msgstr "tekstas Žiūrėti."
 
-#: gtk/gtklabel.c:319 gtk/gtktexttag.c:374 gtk/gtktextview.c:593
+#: gtk/gtklabel.c:319 gtk/gtktexttag.c:374 gtk/gtktextview.c:595
 #, fuzzy
 msgid "Justification"
 msgstr "Pranešimas:"
@@ -2945,7 +2937,7 @@ msgstr "Ar visi vaikai turėtų būti to paties dydžio."
 msgid "Tab pack type"
 msgstr ""
 
-#: gtk/gtknotebook.c:2473 gtk/gtknotebook.c:4820
+#: gtk/gtknotebook.c:2471 gtk/gtknotebook.c:4818
 #, c-format
 msgid "Page %u"
 msgstr "%u puslapis"
@@ -3218,17 +3210,17 @@ msgid ""
 "How far in the y direction to move the arrow when the button is depressed"
 msgstr "t yra"
 
-#: gtk/gtkrc.c:2376
+#: gtk/gtkrc.c:2382
 #, c-format
 msgid "Unable to find include file: \"%s\""
 msgstr ""
 
-#: gtk/gtkrc.c:3018 gtk/gtkrc.c:3021
+#: gtk/gtkrc.c:3025 gtk/gtkrc.c:3028
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "Negaliu rasti paveikslėlio bylos pixmap_path: „%s“"
 
-#: gtk/gtkrc.c:3456
+#: gtk/gtkrc.c:3463
 #, fuzzy, c-format
 msgid "Pixmap path element: \"%s\" must be absolute, %s, line %d"
 msgstr "Paveikslėlis"
@@ -4154,7 +4146,7 @@ msgid ""
 "such as PANGO_SCALE_X_LARGE"
 msgstr ""
 
-#: gtk/gtktexttag.c:375 gtk/gtktextview.c:594
+#: gtk/gtktexttag.c:375 gtk/gtktextview.c:596
 #, fuzzy
 msgid "Left, right, or center justification"
 msgstr "Kairėje"
@@ -4175,7 +4167,7 @@ msgstr ""
 msgid "Left margin"
 msgstr "Kairėje"
 
-#: gtk/gtktexttag.c:392 gtk/gtktextview.c:603
+#: gtk/gtktexttag.c:392 gtk/gtktextview.c:605
 #, fuzzy
 msgid "Width of the left margin in pixels"
 msgstr "Plotis"
@@ -4185,16 +4177,16 @@ msgstr "Plotis"
 msgid "Right margin"
 msgstr "Dešinėje"
 
-#: gtk/gtktexttag.c:402 gtk/gtktextview.c:613
+#: gtk/gtktexttag.c:402 gtk/gtktextview.c:615
 #, fuzzy
 msgid "Width of the right margin in pixels"
 msgstr "Plotis"
 
-#: gtk/gtktexttag.c:412 gtk/gtktextview.c:622
+#: gtk/gtktexttag.c:412 gtk/gtktextview.c:624
 msgid "Indent"
 msgstr "Įtraukti"
 
-#: gtk/gtktexttag.c:413 gtk/gtktextview.c:623
+#: gtk/gtktexttag.c:413 gtk/gtktextview.c:625
 #, fuzzy
 msgid "Amount to indent the paragraph, in pixels"
 msgstr "Mažiau įtraukia pastraipą"
@@ -4211,7 +4203,7 @@ msgstr "Poslinkis tekstas yra"
 msgid "Pixels above lines"
 msgstr "Taškelių"
 
-#: gtk/gtktexttag.c:434 gtk/gtktextview.c:547
+#: gtk/gtktexttag.c:434 gtk/gtktextview.c:549
 #, fuzzy
 msgid "Pixels of blank space above paragraphs"
 msgstr "Taškelių"
@@ -4221,7 +4213,7 @@ msgstr "Taškelių"
 msgid "Pixels below lines"
 msgstr "Taškelių"
 
-#: gtk/gtktexttag.c:444 gtk/gtktextview.c:557
+#: gtk/gtktexttag.c:444 gtk/gtktextview.c:559
 #, fuzzy
 msgid "Pixels of blank space below paragraphs"
 msgstr "Taškelių"
@@ -4231,7 +4223,7 @@ msgstr "Taškelių"
 msgid "Pixels inside wrap"
 msgstr "Taškelių"
 
-#: gtk/gtktexttag.c:454 gtk/gtktextview.c:567
+#: gtk/gtktexttag.c:454 gtk/gtktextview.c:569
 #, fuzzy
 msgid "Pixels of blank space between wrapped lines in a paragraph"
 msgstr "Taškelių eilučių"
@@ -4241,17 +4233,17 @@ msgstr "Taškelių eilučių"
 msgid "Wrap mode"
 msgstr "Laužyti"
 
-#: gtk/gtktexttag.c:481 gtk/gtktextview.c:585
+#: gtk/gtktexttag.c:481 gtk/gtktextview.c:587
 #, fuzzy
 msgid ""
 "Whether to wrap lines never, at word boundaries, or at character boundaries"
 msgstr "eilučių"
 
-#: gtk/gtktexttag.c:490 gtk/gtktextview.c:632
+#: gtk/gtktexttag.c:490 gtk/gtktextview.c:634
 msgid "Tabs"
 msgstr "Tabai"
 
-#: gtk/gtktexttag.c:491 gtk/gtktextview.c:633
+#: gtk/gtktexttag.c:491 gtk/gtktextview.c:635
 #, fuzzy
 msgid "Custom tabs for this text"
 msgstr "Pasirinkta kol"
@@ -4441,47 +4433,47 @@ msgstr "plotis"
 msgid "ZWNJ Zero width _non-joiner"
 msgstr "plotis"
 
-#: gtk/gtktextview.c:546
+#: gtk/gtktextview.c:548
 #, fuzzy
 msgid "Pixels Above Lines"
 msgstr "Taškelių Virš"
 
-#: gtk/gtktextview.c:556
+#: gtk/gtktextview.c:558
 #, fuzzy
 msgid "Pixels Below Lines"
 msgstr "Taškelių Žemiau"
 
-#: gtk/gtktextview.c:566
+#: gtk/gtktextview.c:568
 #, fuzzy
 msgid "Pixels Inside Wrap"
 msgstr "Taškelių"
 
-#: gtk/gtktextview.c:584
+#: gtk/gtktextview.c:586
 #, fuzzy
 msgid "Wrap Mode"
 msgstr "Laužyti"
 
-#: gtk/gtktextview.c:602
+#: gtk/gtktextview.c:604
 #, fuzzy
 msgid "Left Margin"
 msgstr "Kairėje"
 
-#: gtk/gtktextview.c:612
+#: gtk/gtktextview.c:614
 #, fuzzy
 msgid "Right Margin"
 msgstr "Dešinėje"
 
-#: gtk/gtktextview.c:640
+#: gtk/gtktextview.c:642
 #, fuzzy
 msgid "Cursor Visible"
 msgstr "Matoma"
 
-#: gtk/gtktextview.c:641
+#: gtk/gtktextview.c:643
 #, fuzzy
 msgid "If the insertion cursor is shown"
 msgstr "Jeigu yra"
 
-#: gtk/gtktextview.c:6631
+#: gtk/gtktextview.c:6633
 msgid "Input _Methods"
 msgstr "Įvesties _metodai"
 
@@ -4612,7 +4604,7 @@ msgstr "Gulsčias Derinimas kol"
 msgid "Vertical Adjustment for the widget"
 msgstr "Stačias Derinimas kol"
 
-#: gtk/gtktreeview.c:544 gtk/gtktreeviewcolumn.c:185 gtk/gtkwidget.c:433
+#: gtk/gtktreeview.c:544 gtk/gtktreeviewcolumn.c:185 gtk/gtkwidget.c:505
 msgid "Visible"
 msgstr "Matoma"
 
@@ -4882,233 +4874,233 @@ msgstr "kol."
 msgid "Determines how the shadowed box around the viewport is drawn"
 msgstr "yra."
 
-#: gtk/gtkwidget.c:400
+#: gtk/gtkwidget.c:472
 #, fuzzy
 msgid "Widget name"
 msgstr "Bylos vardas"
 
-#: gtk/gtkwidget.c:401
+#: gtk/gtkwidget.c:473
 #, fuzzy
 msgid "The name of the widget"
 msgstr "Padvigubinti atvaizdo dydį"
 
-#: gtk/gtkwidget.c:407
+#: gtk/gtkwidget.c:479
 #, fuzzy
 msgid "Parent widget"
 msgstr "Spausdinti atvaizdą"
 
-#: gtk/gtkwidget.c:408
+#: gtk/gtkwidget.c:480
 msgid "The parent widget of this widget. Must be a Container widget"
 msgstr ""
 
-#: gtk/gtkwidget.c:415
+#: gtk/gtkwidget.c:487
 #, fuzzy
 msgid "Width request"
 msgstr "Plotis"
 
-#: gtk/gtkwidget.c:416
+#: gtk/gtkwidget.c:488
 #, fuzzy
 msgid ""
 "Override for width request of the widget, or -1 if natural request should be "
 "used"
 msgstr "kol plotis."
 
-#: gtk/gtkwidget.c:424
+#: gtk/gtkwidget.c:496
 #, fuzzy
 msgid "Height request"
 msgstr "Aukštis"
 
-#: gtk/gtkwidget.c:425
+#: gtk/gtkwidget.c:497
 #, fuzzy
 msgid ""
 "Override for height request of the widget, or -1 if natural request should "
 "be used"
 msgstr "kol aukštis."
 
-#: gtk/gtkwidget.c:434
+#: gtk/gtkwidget.c:506
 #, fuzzy
 msgid "Whether the widget is visible"
 msgstr "yra"
 
-#: gtk/gtkwidget.c:440
+#: gtk/gtkwidget.c:512
 #, fuzzy
 msgid "Sensitive"
 msgstr "Jautrumas"
 
-#: gtk/gtkwidget.c:441
+#: gtk/gtkwidget.c:513
 msgid "Whether the widget responds to input"
 msgstr ""
 
-#: gtk/gtkwidget.c:447
+#: gtk/gtkwidget.c:519
 #, fuzzy
 msgid "Application paintable"
 msgstr "Programa"
 
-#: gtk/gtkwidget.c:448
+#: gtk/gtkwidget.c:520
 #, fuzzy
 msgid "Whether the application will paint directly on the widget"
 msgstr "lygiai"
 
-#: gtk/gtkwidget.c:454
+#: gtk/gtkwidget.c:526
 #, fuzzy
 msgid "Can focus"
 msgstr "Siųsti fokusą"
 
-#: gtk/gtkwidget.c:455
+#: gtk/gtkwidget.c:527
 msgid "Whether the widget can accept the input focus"
 msgstr ""
 
-#: gtk/gtkwidget.c:461
+#: gtk/gtkwidget.c:533
 msgid "Has focus"
 msgstr ""
 
-#: gtk/gtkwidget.c:462
+#: gtk/gtkwidget.c:534
 msgid "Whether the widget has the input focus"
 msgstr ""
 
-#: gtk/gtkwidget.c:468
+#: gtk/gtkwidget.c:540
 #, fuzzy
 msgid "Is focus"
 msgstr "Siųsti fokusą"
 
-#: gtk/gtkwidget.c:469
+#: gtk/gtkwidget.c:541
 #, fuzzy
 msgid "Whether the widget is the focus widget within the toplevel"
 msgstr "yra"
 
-#: gtk/gtkwidget.c:475
+#: gtk/gtkwidget.c:547
 #, fuzzy
 msgid "Can default"
 msgstr " (įprasta)"
 
-#: gtk/gtkwidget.c:476
+#: gtk/gtkwidget.c:548
 msgid "Whether the widget can be the default widget"
 msgstr ""
 
-#: gtk/gtkwidget.c:482
+#: gtk/gtkwidget.c:554
 #, fuzzy
 msgid "Has default"
 msgstr "Padaryti įprastu"
 
-#: gtk/gtkwidget.c:483
+#: gtk/gtkwidget.c:555
 #, fuzzy
 msgid "Whether the widget is the default widget"
 msgstr "yra"
 
-#: gtk/gtkwidget.c:489
+#: gtk/gtkwidget.c:561
 #, fuzzy
 msgid "Receives default"
 msgstr "Gautos bylos"
 
-#: gtk/gtkwidget.c:490
+#: gtk/gtkwidget.c:562
 #, fuzzy
 msgid "If TRUE, the widget will receive the default action when it is focused"
 msgstr "Jeigu yra."
 
-#: gtk/gtkwidget.c:496
+#: gtk/gtkwidget.c:568
 #, fuzzy
 msgid "Composite child"
 msgstr "Sukurti"
 
-#: gtk/gtkwidget.c:497
+#: gtk/gtkwidget.c:569
 #, fuzzy
 msgid "Whether the widget is part of a composite widget"
 msgstr "yra kitoks"
 
-#: gtk/gtkwidget.c:503
+#: gtk/gtkwidget.c:575
 msgid "Style"
 msgstr "Stilius"
 
-#: gtk/gtkwidget.c:504
+#: gtk/gtkwidget.c:576
 #, fuzzy
 msgid ""
 "The style of the widget, which contains information about how it will look "
 "(colors etc)"
 msgstr "turi savyje spalvos."
 
-#: gtk/gtkwidget.c:510
+#: gtk/gtkwidget.c:582
 #, fuzzy
 msgid "Events"
 msgstr "Elementai"
 
-#: gtk/gtkwidget.c:511
+#: gtk/gtkwidget.c:583
 #, fuzzy
 msgid "The event mask that decides what kind of GdkEvents this widget gets"
 msgstr "kaukė."
 
-#: gtk/gtkwidget.c:518
+#: gtk/gtkwidget.c:590
 #, fuzzy
 msgid "Extension events"
 msgstr "Priesaga"
 
-#: gtk/gtkwidget.c:519
+#: gtk/gtkwidget.c:591
 #, fuzzy
 msgid "The mask that decides what kind of extension events this widget gets"
 msgstr "kaukė."
 
-#: gtk/gtkwidget.c:1098
+#: gtk/gtkwidget.c:1170
 #, fuzzy
 msgid "Interior Focus"
 msgstr "Įvadiniai dokumentai"
 
-#: gtk/gtkwidget.c:1099
+#: gtk/gtkwidget.c:1171
 #, fuzzy
 msgid "Whether to draw the focus indicator inside widgets"
 msgstr "Plotis taškeliai."
 
-#: gtk/gtkwidget.c:1105
+#: gtk/gtkwidget.c:1177
 msgid "Focus linewidth"
 msgstr ""
 
-#: gtk/gtkwidget.c:1106
+#: gtk/gtkwidget.c:1178
 #, fuzzy
 msgid "Width, in pixels, of the focus indicator line"
 msgstr "Plotis taškeliai."
 
-#: gtk/gtkwidget.c:1112
+#: gtk/gtkwidget.c:1184
 msgid "Focus line dash pattern"
 msgstr ""
 
-#: gtk/gtkwidget.c:1113
+#: gtk/gtkwidget.c:1185
 msgid "Dash pattern used to draw the focus indicator"
 msgstr ""
 
-#: gtk/gtkwidget.c:1118
+#: gtk/gtkwidget.c:1190
 msgid "Focus padding"
 msgstr ""
 
-#: gtk/gtkwidget.c:1119
+#: gtk/gtkwidget.c:1191
 #, fuzzy
 msgid "Width, in pixels, between focus indicator and the widget 'box'"
 msgstr "Plotis taškeliai."
 
-#: gtk/gtkwidget.c:1124
+#: gtk/gtkwidget.c:1196
 #, fuzzy
 msgid "Cursor color"
 msgstr "Pasirinktos spalvos"
 
-#: gtk/gtkwidget.c:1125
+#: gtk/gtkwidget.c:1197
 #, fuzzy
 msgid "Color with which to draw insertion cursor"
 msgstr "Spalva su"
 
-#: gtk/gtkwidget.c:1130
+#: gtk/gtkwidget.c:1202
 #, fuzzy
 msgid "Secondary cursor color"
 msgstr "Antrinis"
 
-#: gtk/gtkwidget.c:1131
+#: gtk/gtkwidget.c:1203
 #, fuzzy
 msgid ""
 "Color with which to draw the secondary insertion cursor when editing mixed "
 "right-to-left and left-to-right text"
 msgstr "Spalva su tekstas."
 
-#: gtk/gtkwidget.c:1136
+#: gtk/gtkwidget.c:1208
 msgid "Cursor line aspect ratio"
 msgstr ""
 
-#: gtk/gtkwidget.c:1137
+#: gtk/gtkwidget.c:1209
 #, fuzzy
 msgid "Aspect ratio with which to draw insertion cursor"
 msgstr "su"
@@ -5270,6 +5262,11 @@ msgid "Amharic (EZ+)"
 msgstr ""
 
 #. ID
+#: modules/input/imcedilla.c:90
+msgid "Cedilla"
+msgstr ""
+
+#. ID
 #: modules/input/imcyrillic-translit.c:216
 msgid "Cyrillic (Transliterated)"
 msgstr "Kirilica (transliteruota)"
@@ -5309,20 +5306,20 @@ msgstr "Vietnamečių (VIQR)"
 msgid "X Input Method"
 msgstr "X įvesties metodas"
 
-#: modules/input/gtkimcontextxim.c:263
+#: modules/input/gtkimcontextxim.c:321
 msgid "IM Preedit style"
 msgstr ""
 
-#: modules/input/gtkimcontextxim.c:264
+#: modules/input/gtkimcontextxim.c:322
 msgid "How to draw the input method preedit string"
 msgstr ""
 
-#: modules/input/gtkimcontextxim.c:272
+#: modules/input/gtkimcontextxim.c:330
 #, fuzzy
 msgid "IM Status style"
 msgstr "įdėti"
 
-#: modules/input/gtkimcontextxim.c:273
+#: modules/input/gtkimcontextxim.c:331
 #, fuzzy
 msgid "How to draw the input method statusbar"
 msgstr "Kaip piešti įrankių juostą"

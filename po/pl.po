@@ -9,14 +9,14 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2003-08-16 00:44+0200\n"
+"POT-Creation-Date: 2003-08-25 22:08-0400\n"
 "PO-Revision-Date: 2003-07-01 07:33+0100\n"
 "Last-Translator: Gnome PL Team <translators@gnome.pl>\n"
 "Language-Team: Polish <pl@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Report-Msgid-Bugs-To: \n"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:147 gdk-pixbuf/gdk-pixbuf-io.c:737
 #, c-format
@@ -1275,11 +1275,11 @@ msgid "Foreground color as a GdkColor"
 msgstr "Kolor elementu jako GdkColor"
 
 #: gtk/gtkcellrenderertext.c:232 gtk/gtkentry.c:459 gtk/gtktexttag.c:273
-#: gtk/gtktextview.c:576
+#: gtk/gtktextview.c:578
 msgid "Editable"
 msgstr "Modyfikowalny"
 
-#: gtk/gtkcellrenderertext.c:233 gtk/gtktexttag.c:274 gtk/gtktextview.c:577
+#: gtk/gtkcellrenderertext.c:233 gtk/gtktexttag.c:274 gtk/gtktextview.c:579
 msgid "Whether the text can be modified by the user"
 msgstr "Określa, czy tekst może być modyfikowany przez użytkownika"
 
@@ -1954,7 +1954,7 @@ msgstr ""
 "Określa, czy zawartość wejścia powinna być zaznaczana przy otrzymaniu "
 "skupienia"
 
-#: gtk/gtkentry.c:3993 gtk/gtklabel.c:3222 gtk/gtktextview.c:6621
+#: gtk/gtkentry.c:3993 gtk/gtklabel.c:3222 gtk/gtktextview.c:6623
 msgid "Select All"
 msgstr "Zaznacz wszystko"
 
@@ -1962,7 +1962,7 @@ msgstr "Zaznacz wszystko"
 msgid "Input Methods"
 msgstr "Metody wejściowe"
 
-#: gtk/gtkentry.c:4013 gtk/gtktextview.c:6640
+#: gtk/gtkentry.c:4013 gtk/gtktextview.c:6642
 msgid "_Insert Unicode control character"
 msgstr "_Wstaw znak kontrolny Unicode"
 
@@ -2518,7 +2518,7 @@ msgstr "Użycie języka znaczników"
 msgid "The text of the label includes XML markup. See pango_parse_markup()"
 msgstr "Tekst etykiety używa znaczników XML. Zobacz pango_parse_markup()"
 
-#: gtk/gtklabel.c:319 gtk/gtktexttag.c:374 gtk/gtktextview.c:593
+#: gtk/gtklabel.c:319 gtk/gtktexttag.c:374 gtk/gtktextview.c:595
 msgid "Justification"
 msgstr "Justowanie"
 
@@ -2861,7 +2861,7 @@ msgstr ""
 msgid "Tab pack type"
 msgstr "Rodzaj zakładek"
 
-#: gtk/gtknotebook.c:2473 gtk/gtknotebook.c:4820
+#: gtk/gtknotebook.c:2471 gtk/gtknotebook.c:4818
 #, c-format
 msgid "Page %u"
 msgstr "Strona %u"
@@ -3122,17 +3122,17 @@ msgstr ""
 "Określa, jak daleko powinna zostać przemieszczona w pionie strzałka, kiedy "
 "przycisk jest wyciskany."
 
-#: gtk/gtkrc.c:2376
+#: gtk/gtkrc.c:2382
 #, c-format
 msgid "Unable to find include file: \"%s\""
 msgstr "Nie można odnaleźć dołączanego pliku: \"%s\""
 
-#: gtk/gtkrc.c:3018 gtk/gtkrc.c:3021
+#: gtk/gtkrc.c:3025 gtk/gtkrc.c:3028
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "Nie można odnaleźć pliku z obrazem na ścieżce: \"%s\""
 
-#: gtk/gtkrc.c:3456
+#: gtk/gtkrc.c:3463
 #, c-format
 msgid "Pixmap path element: \"%s\" must be absolute, %s, line %d"
 msgstr "Element ścieżki piksmapy: \"%s\" musi być bezwzględne, %s, wiersz %d"
@@ -3995,7 +3995,7 @@ msgstr ""
 "użyciu. Pango definiuje standardowo kilka wartości skalujących, takich jak "
 "PANGO_SCALE_X_LARGE."
 
-#: gtk/gtktexttag.c:375 gtk/gtktextview.c:594
+#: gtk/gtktexttag.c:375 gtk/gtktextview.c:596
 msgid "Left, right, or center justification"
 msgstr "Justowanie do lewej, prawej, lub do środka"
 
@@ -4017,7 +4017,7 @@ msgstr ""
 msgid "Left margin"
 msgstr "Lewy margines"
 
-#: gtk/gtktexttag.c:392 gtk/gtktextview.c:603
+#: gtk/gtktexttag.c:392 gtk/gtktextview.c:605
 msgid "Width of the left margin in pixels"
 msgstr "Szerokość lewego marginesu w pikselach"
 
@@ -4025,15 +4025,15 @@ msgstr "Szerokość lewego marginesu w pikselach"
 msgid "Right margin"
 msgstr "Prawy margines"
 
-#: gtk/gtktexttag.c:402 gtk/gtktextview.c:613
+#: gtk/gtktexttag.c:402 gtk/gtktextview.c:615
 msgid "Width of the right margin in pixels"
 msgstr "Szerokość prawego marginesu w pikselach"
 
-#: gtk/gtktexttag.c:412 gtk/gtktextview.c:622
+#: gtk/gtktexttag.c:412 gtk/gtktextview.c:624
 msgid "Indent"
 msgstr "Wcięcie"
 
-#: gtk/gtktexttag.c:413 gtk/gtktextview.c:623
+#: gtk/gtktexttag.c:413 gtk/gtktextview.c:625
 msgid "Amount to indent the paragraph, in pixels"
 msgstr "Rozmiar wcięcia akapitu w pikselach"
 
@@ -4049,7 +4049,7 @@ msgstr ""
 msgid "Pixels above lines"
 msgstr "Miejsce nad wierszami"
 
-#: gtk/gtktexttag.c:434 gtk/gtktextview.c:547
+#: gtk/gtktexttag.c:434 gtk/gtktextview.c:549
 msgid "Pixels of blank space above paragraphs"
 msgstr "Ilość wolnego miejsca nad akapitami w pikselach"
 
@@ -4057,7 +4057,7 @@ msgstr "Ilość wolnego miejsca nad akapitami w pikselach"
 msgid "Pixels below lines"
 msgstr "Pikseli nad wierszami"
 
-#: gtk/gtktexttag.c:444 gtk/gtktextview.c:557
+#: gtk/gtktexttag.c:444 gtk/gtktextview.c:559
 msgid "Pixels of blank space below paragraphs"
 msgstr "Ilość wolnego miejsca pod akapitami w pikselach"
 
@@ -4065,7 +4065,7 @@ msgstr "Ilość wolnego miejsca pod akapitami w pikselach"
 msgid "Pixels inside wrap"
 msgstr "Piksele w zawinięciu"
 
-#: gtk/gtktexttag.c:454 gtk/gtktextview.c:567
+#: gtk/gtktexttag.c:454 gtk/gtktextview.c:569
 msgid "Pixels of blank space between wrapped lines in a paragraph"
 msgstr ""
 "Ilość wolnego miejsca pomiędzy zawiniętymi wierszami akapitu w pikselach"
@@ -4074,18 +4074,18 @@ msgstr ""
 msgid "Wrap mode"
 msgstr "Tryb zawijania"
 
-#: gtk/gtktexttag.c:481 gtk/gtktextview.c:585
+#: gtk/gtktexttag.c:481 gtk/gtktextview.c:587
 msgid ""
 "Whether to wrap lines never, at word boundaries, or at character boundaries"
 msgstr ""
 "Określa sposób zawijania wierszy: nigdy, na granicach słów lub na granicach "
 "znaków"
 
-#: gtk/gtktexttag.c:490 gtk/gtktextview.c:632
+#: gtk/gtktexttag.c:490 gtk/gtktextview.c:634
 msgid "Tabs"
 msgstr "Tabulacje"
 
-#: gtk/gtktexttag.c:491 gtk/gtktextview.c:633
+#: gtk/gtktexttag.c:491 gtk/gtktextview.c:635
 msgid "Custom tabs for this text"
 msgstr "Dowolne tabulacje powiązane z tekstem"
 
@@ -4250,39 +4250,39 @@ msgstr "ZWN - łączn_ik znaków o zerowej szerokości"
 msgid "ZWNJ Zero width _non-joiner"
 msgstr "ZWNJ - rozłączni_k znaków o zerowej szerokości"
 
-#: gtk/gtktextview.c:546
+#: gtk/gtktextview.c:548
 msgid "Pixels Above Lines"
 msgstr "Miejsce nad wierszami"
 
-#: gtk/gtktextview.c:556
+#: gtk/gtktextview.c:558
 msgid "Pixels Below Lines"
 msgstr "Miejsce pod wierszami"
 
-#: gtk/gtktextview.c:566
+#: gtk/gtktextview.c:568
 msgid "Pixels Inside Wrap"
 msgstr "Piksele w zawinięciu"
 
-#: gtk/gtktextview.c:584
+#: gtk/gtktextview.c:586
 msgid "Wrap Mode"
 msgstr "Tryb zawijania"
 
-#: gtk/gtktextview.c:602
+#: gtk/gtktextview.c:604
 msgid "Left Margin"
 msgstr "Lewy margines"
 
-#: gtk/gtktextview.c:612
+#: gtk/gtktextview.c:614
 msgid "Right Margin"
 msgstr "Prawy margines"
 
-#: gtk/gtktextview.c:640
+#: gtk/gtktextview.c:642
 msgid "Cursor Visible"
 msgstr "Widoczny kursor"
 
-#: gtk/gtktextview.c:641
+#: gtk/gtktextview.c:643
 msgid "If the insertion cursor is shown"
 msgstr "Określa, czy kursor wstawiania jest widoczny."
 
-#: gtk/gtktextview.c:6631
+#: gtk/gtktextview.c:6633
 msgid "Input _Methods"
 msgstr "_Metody wejściowe"
 
@@ -5046,18 +5046,18 @@ msgstr "Wietnamska ((VIQR)"
 msgid "X Input Method"
 msgstr "Metoda wejściowa X"
 
-#: modules/input/gtkimcontextxim.c:276
+#: modules/input/gtkimcontextxim.c:321
 msgid "IM Preedit style"
 msgstr "Styl edycji wstępnej metody wejściowej"
 
-#: modules/input/gtkimcontextxim.c:277
+#: modules/input/gtkimcontextxim.c:322
 msgid "How to draw the input method preedit string"
 msgstr "Sposób rysowania napisu edycji wstępnej metody wejściowej"
 
-#: modules/input/gtkimcontextxim.c:285
+#: modules/input/gtkimcontextxim.c:330
 msgid "IM Status style"
 msgstr "Styl stanu metody wejściowej"
 
-#: modules/input/gtkimcontextxim.c:286
+#: modules/input/gtkimcontextxim.c:331
 msgid "How to draw the input method statusbar"
 msgstr "Sposób rysowania paska stanu metody wejściowej"

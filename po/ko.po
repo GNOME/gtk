@@ -5,14 +5,14 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: $PACKAGE $VERSION, no-define\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2003-08-22 22:44+0900\n"
+"POT-Creation-Date: 2003-08-25 22:08-0400\n"
 "PO-Revision-Date: 2003-08-22 22:46+0900\n"
 "Last-Translator: Young-Ho, Cha <ganadist@chollian.net>\n"
 "Language-Team: GTP Korean <gnome-kr-translation@gnome.or.kr>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Report-Msgid-Bugs-To: \n"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:147 gdk-pixbuf/gdk-pixbuf-io.c:737
 #, c-format
@@ -1248,11 +1248,11 @@ msgid "Foreground color as a GdkColor"
 msgstr "전경 색 GdkColor"
 
 #: gtk/gtkcellrenderertext.c:232 gtk/gtkentry.c:459 gtk/gtktexttag.c:273
-#: gtk/gtktextview.c:576
+#: gtk/gtktextview.c:578
 msgid "Editable"
 msgstr "편집 가능"
 
-#: gtk/gtkcellrenderertext.c:233 gtk/gtktexttag.c:274 gtk/gtktextview.c:577
+#: gtk/gtkcellrenderertext.c:233 gtk/gtktexttag.c:274 gtk/gtktextview.c:579
 msgid "Whether the text can be modified by the user"
 msgstr "텍스트를 사용자가 수정할 수 있는 지 여부"
 
@@ -1902,7 +1902,7 @@ msgstr "포커스시 선택"
 msgid "Whether to select the contents of an entry when it is focused"
 msgstr "포커스될 때 항목의 내용을 선택할 것인지 여부"
 
-#: gtk/gtkentry.c:3993 gtk/gtklabel.c:3222 gtk/gtktextview.c:6621
+#: gtk/gtkentry.c:3993 gtk/gtklabel.c:3222 gtk/gtktextview.c:6623
 msgid "Select All"
 msgstr "모두 선택"
 
@@ -1910,7 +1910,7 @@ msgstr "모두 선택"
 msgid "Input Methods"
 msgstr "입력기"
 
-#: gtk/gtkentry.c:4013 gtk/gtktextview.c:6640
+#: gtk/gtkentry.c:4013 gtk/gtktextview.c:6642
 msgid "_Insert Unicode control character"
 msgstr "유니코드 제어문자 삽입(_I)"
 
@@ -2461,7 +2461,7 @@ msgstr "마크업 사용"
 msgid "The text of the label includes XML markup. See pango_parse_markup()"
 msgstr "레이블의 텍스트에 XML 마크업 포함.  pango_parse_markup() 참고"
 
-#: gtk/gtklabel.c:319 gtk/gtktexttag.c:374 gtk/gtktextview.c:593
+#: gtk/gtklabel.c:319 gtk/gtktexttag.c:374 gtk/gtktextview.c:595
 msgid "Justification"
 msgstr "행 맞춤"
 
@@ -2790,7 +2790,7 @@ msgstr "하위 탭이 할당된 영역을 채울 것인지의 여부"
 msgid "Tab pack type"
 msgstr "탭 묶음 형식"
 
-#: gtk/gtknotebook.c:2473 gtk/gtknotebook.c:4820
+#: gtk/gtknotebook.c:2471 gtk/gtknotebook.c:4818
 #, c-format
 msgid "Page %u"
 msgstr "%u쪽"
@@ -3031,17 +3031,17 @@ msgid ""
 "How far in the y direction to move the arrow when the button is depressed"
 msgstr "단추를 눌렀을 때 화살표가 세로 방향으로 움직이는 거리"
 
-#: gtk/gtkrc.c:2379
+#: gtk/gtkrc.c:2382
 #, c-format
 msgid "Unable to find include file: \"%s\""
 msgstr "include 파일을 찾을 수 없습니다: \"%s\""
 
-#: gtk/gtkrc.c:3022 gtk/gtkrc.c:3025
+#: gtk/gtkrc.c:3025 gtk/gtkrc.c:3028
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "그림 파일을 pixmap_path에서 찾을 수 없음: \"%s\""
 
-#: gtk/gtkrc.c:3460
+#: gtk/gtkrc.c:3463
 #, c-format
 msgid "Pixmap path element: \"%s\" must be absolute, %s, line %d"
 msgstr ""
@@ -3878,7 +3878,7 @@ msgstr ""
 "게 적용되게 됩니다. 그러므로 추천합니다. 판고는 PANGO_SCALE_X_LARGE과 같은 몇"
 "몇 비율을 미리 정의하고 있습니다."
 
-#: gtk/gtktexttag.c:375 gtk/gtktextview.c:594
+#: gtk/gtktexttag.c:375 gtk/gtktextview.c:596
 msgid "Left, right, or center justification"
 msgstr "좌, 우, 혹은 가운데 정렬"
 
@@ -3899,7 +3899,7 @@ msgstr ""
 msgid "Left margin"
 msgstr "왼쪽 여백"
 
-#: gtk/gtktexttag.c:392 gtk/gtktextview.c:603
+#: gtk/gtktexttag.c:392 gtk/gtktextview.c:605
 msgid "Width of the left margin in pixels"
 msgstr "왼쪽 여백의 너비 (픽셀 단위)"
 
@@ -3907,15 +3907,15 @@ msgstr "왼쪽 여백의 너비 (픽셀 단위)"
 msgid "Right margin"
 msgstr "오른쪽 여백"
 
-#: gtk/gtktexttag.c:402 gtk/gtktextview.c:613
+#: gtk/gtktexttag.c:402 gtk/gtktextview.c:615
 msgid "Width of the right margin in pixels"
 msgstr "오른쪽 여백의 너비 (픽셀 단위)"
 
-#: gtk/gtktexttag.c:412 gtk/gtktextview.c:622
+#: gtk/gtktexttag.c:412 gtk/gtktextview.c:624
 msgid "Indent"
 msgstr "들여쓰기"
 
-#: gtk/gtktexttag.c:413 gtk/gtktextview.c:623
+#: gtk/gtktexttag.c:413 gtk/gtktextview.c:625
 msgid "Amount to indent the paragraph, in pixels"
 msgstr "문장 들여 쓰기할 크기 (픽셀 단위)"
 
@@ -3930,7 +3930,7 @@ msgstr ""
 msgid "Pixels above lines"
 msgstr "줄 위 픽셀"
 
-#: gtk/gtktexttag.c:434 gtk/gtktextview.c:547
+#: gtk/gtktexttag.c:434 gtk/gtktextview.c:549
 msgid "Pixels of blank space above paragraphs"
 msgstr "문단 위의 빈 공간의 픽셀수"
 
@@ -3938,7 +3938,7 @@ msgstr "문단 위의 빈 공간의 픽셀수"
 msgid "Pixels below lines"
 msgstr "줄 아래 픽셀"
 
-#: gtk/gtktexttag.c:444 gtk/gtktextview.c:557
+#: gtk/gtktexttag.c:444 gtk/gtktextview.c:559
 msgid "Pixels of blank space below paragraphs"
 msgstr "문단 아래 빈 공간의 픽셀수"
 
@@ -3946,7 +3946,7 @@ msgstr "문단 아래 빈 공간의 픽셀수"
 msgid "Pixels inside wrap"
 msgstr "바꿔쓴 줄 픽셀수"
 
-#: gtk/gtktexttag.c:454 gtk/gtktextview.c:567
+#: gtk/gtktexttag.c:454 gtk/gtktextview.c:569
 msgid "Pixels of blank space between wrapped lines in a paragraph"
 msgstr "문단 내에서 줄 바꿈한 사이 빈 공간의 픽셀수"
 
@@ -3954,16 +3954,16 @@ msgstr "문단 내에서 줄 바꿈한 사이 빈 공간의 픽셀수"
 msgid "Wrap mode"
 msgstr "줄바꿈 모드"
 
-#: gtk/gtktexttag.c:481 gtk/gtktextview.c:585
+#: gtk/gtktexttag.c:481 gtk/gtktextview.c:587
 msgid ""
 "Whether to wrap lines never, at word boundaries, or at character boundaries"
 msgstr "절대 단어 경계나, 문자 경계에서 줄을 바꾸지 않을 것인지 여부"
 
-#: gtk/gtktexttag.c:490 gtk/gtktextview.c:632
+#: gtk/gtktexttag.c:490 gtk/gtktextview.c:634
 msgid "Tabs"
 msgstr "탭"
 
-#: gtk/gtktexttag.c:491 gtk/gtktextview.c:633
+#: gtk/gtktexttag.c:491 gtk/gtktextview.c:635
 msgid "Custom tabs for this text"
 msgstr "이 텍스트에 쓸 사용자 정의 탭"
 
@@ -4123,39 +4123,39 @@ msgstr "ZWJ 너비 0 결합(_J)"
 msgid "ZWNJ Zero width _non-joiner"
 msgstr "ZWNJ 너비 0 결합 금지(_N)"
 
-#: gtk/gtktextview.c:546
+#: gtk/gtktextview.c:548
 msgid "Pixels Above Lines"
 msgstr "줄 위 픽셀"
 
-#: gtk/gtktextview.c:556
+#: gtk/gtktextview.c:558
 msgid "Pixels Below Lines"
 msgstr "줄 아래 픽셀"
 
-#: gtk/gtktextview.c:566
+#: gtk/gtktextview.c:568
 msgid "Pixels Inside Wrap"
 msgstr "바꿔쓴 줄 픽셀수"
 
-#: gtk/gtktextview.c:584
+#: gtk/gtktextview.c:586
 msgid "Wrap Mode"
 msgstr "줄바꿈 모드"
 
-#: gtk/gtktextview.c:602
+#: gtk/gtktextview.c:604
 msgid "Left Margin"
 msgstr "왼쪽 여백"
 
-#: gtk/gtktextview.c:612
+#: gtk/gtktextview.c:614
 msgid "Right Margin"
 msgstr "오른쪽 여백"
 
-#: gtk/gtktextview.c:640
+#: gtk/gtktextview.c:642
 msgid "Cursor Visible"
 msgstr "커서 보여주기"
 
-#: gtk/gtktextview.c:641
+#: gtk/gtktextview.c:643
 msgid "If the insertion cursor is shown"
 msgstr "삽입 커서를 보여줄 지 여부"
 
-#: gtk/gtktextview.c:6631
+#: gtk/gtktextview.c:6633
 msgid "Input _Methods"
 msgstr "입력방법(_M)"
 

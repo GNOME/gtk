@@ -8,7 +8,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
-"POT-Creation-Date: 2003-08-16 00:33+0200\n"
+"POT-Creation-Date: 2003-08-25 22:08-0400\n"
 "PO-Revision-Date: 2003-08-16 00:34+0200\n"
 "Last-Translator: Christian Rose <menthos@menthos.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -1267,11 +1267,11 @@ msgid "Foreground color as a GdkColor"
 msgstr "Förgrundsfärg som en GdkColor"
 
 #: gtk/gtkcellrenderertext.c:232 gtk/gtkentry.c:459 gtk/gtktexttag.c:273
-#: gtk/gtktextview.c:576
+#: gtk/gtktextview.c:578
 msgid "Editable"
 msgstr "Redigerbar"
 
-#: gtk/gtkcellrenderertext.c:233 gtk/gtktexttag.c:274 gtk/gtktextview.c:577
+#: gtk/gtkcellrenderertext.c:233 gtk/gtktexttag.c:274 gtk/gtktextview.c:579
 msgid "Whether the text can be modified by the user"
 msgstr "Huruvida texten kan ändras av användaren"
 
@@ -1929,7 +1929,7 @@ msgstr "Markera vid fokus"
 msgid "Whether to select the contents of an entry when it is focused"
 msgstr "Huruvida ett fälts innehåll markeras då fältet får fokus"
 
-#: gtk/gtkentry.c:3993 gtk/gtklabel.c:3222 gtk/gtktextview.c:6621
+#: gtk/gtkentry.c:3993 gtk/gtklabel.c:3222 gtk/gtktextview.c:6623
 msgid "Select All"
 msgstr "Markera allt"
 
@@ -1937,7 +1937,7 @@ msgstr "Markera allt"
 msgid "Input Methods"
 msgstr "Inmatningsmetoder"
 
-#: gtk/gtkentry.c:4013 gtk/gtktextview.c:6640
+#: gtk/gtkentry.c:4013 gtk/gtktextview.c:6642
 msgid "_Insert Unicode control character"
 msgstr "_Infoga Unicode-styrtecken"
 
@@ -2486,7 +2486,7 @@ msgstr "Använd markup"
 msgid "The text of the label includes XML markup. See pango_parse_markup()"
 msgstr "Etikettens text innehåller XML-markup. Se pango_parse_markup()"
 
-#: gtk/gtklabel.c:319 gtk/gtktexttag.c:374 gtk/gtktextview.c:593
+#: gtk/gtklabel.c:319 gtk/gtktexttag.c:374 gtk/gtktextview.c:595
 msgid "Justification"
 msgstr "Justering"
 
@@ -2824,7 +2824,7 @@ msgstr "Huruvida barnets flik ska fylla den allokerade ytan eller inte"
 msgid "Tab pack type"
 msgstr "Flikpackningstyp"
 
-#: gtk/gtknotebook.c:2473 gtk/gtknotebook.c:4820
+#: gtk/gtknotebook.c:2471 gtk/gtknotebook.c:4818
 #, c-format
 msgid "Page %u"
 msgstr "Sida %u"
@@ -3079,17 +3079,17 @@ msgid ""
 "How far in the y direction to move the arrow when the button is depressed"
 msgstr "Hur långt bort i y-riktningen pilen ska flyttas då knappen trycks ned"
 
-#: gtk/gtkrc.c:2376
+#: gtk/gtkrc.c:2382
 #, c-format
 msgid "Unable to find include file: \"%s\""
 msgstr "Kan inte hitta inkluderingsfil: \"%s\""
 
-#: gtk/gtkrc.c:3018 gtk/gtkrc.c:3021
+#: gtk/gtkrc.c:3025 gtk/gtkrc.c:3028
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "Kan inte hitta bildfil i \"pixmap_path\": \"%s\""
 
-#: gtk/gtkrc.c:3456
+#: gtk/gtkrc.c:3463
 #, c-format
 msgid "Pixmap path element: \"%s\" must be absolute, %s, line %d"
 msgstr "Sökvägselement till bild: \"%s\" måste vara absolut, %s, rad %d"
@@ -3936,7 +3936,7 @@ msgstr ""
 "Detta anpassar sig till temaändringar med mera och rekommenderas. Pango "
 "fördefinierar en del skalor som exempelvis PANGO_SCALE_X_LARGE"
 
-#: gtk/gtktexttag.c:375 gtk/gtktextview.c:594
+#: gtk/gtktexttag.c:375 gtk/gtktextview.c:596
 msgid "Left, right, or center justification"
 msgstr "Vänsterjustering, högerjustering eller centrering"
 
@@ -3958,7 +3958,7 @@ msgstr ""
 msgid "Left margin"
 msgstr "Vänstermarginal"
 
-#: gtk/gtktexttag.c:392 gtk/gtktextview.c:603
+#: gtk/gtktexttag.c:392 gtk/gtktextview.c:605
 msgid "Width of the left margin in pixels"
 msgstr "Bredd på vänstermarginalen i bildpunkter"
 
@@ -3966,15 +3966,15 @@ msgstr "Bredd på vänstermarginalen i bildpunkter"
 msgid "Right margin"
 msgstr "Högermarginal"
 
-#: gtk/gtktexttag.c:402 gtk/gtktextview.c:613
+#: gtk/gtktexttag.c:402 gtk/gtktextview.c:615
 msgid "Width of the right margin in pixels"
 msgstr "Bredd på högermarginalen i bildpunkter"
 
-#: gtk/gtktexttag.c:412 gtk/gtktextview.c:622
+#: gtk/gtktexttag.c:412 gtk/gtktextview.c:624
 msgid "Indent"
 msgstr "Gör indrag"
 
-#: gtk/gtktexttag.c:413 gtk/gtktextview.c:623
+#: gtk/gtktexttag.c:413 gtk/gtktextview.c:625
 msgid "Amount to indent the paragraph, in pixels"
 msgstr "Hur mycket stycket ska dras in, i bildpunkter"
 
@@ -3990,7 +3990,7 @@ msgstr ""
 msgid "Pixels above lines"
 msgstr "Bildpunkter ovanför rader"
 
-#: gtk/gtktexttag.c:434 gtk/gtktextview.c:547
+#: gtk/gtktexttag.c:434 gtk/gtktextview.c:549
 msgid "Pixels of blank space above paragraphs"
 msgstr "Bildpunkter med tomt utrymme ovanför stycken"
 
@@ -3998,7 +3998,7 @@ msgstr "Bildpunkter med tomt utrymme ovanför stycken"
 msgid "Pixels below lines"
 msgstr "Bildpunkter nedanför rader"
 
-#: gtk/gtktexttag.c:444 gtk/gtktextview.c:557
+#: gtk/gtktexttag.c:444 gtk/gtktextview.c:559
 msgid "Pixels of blank space below paragraphs"
 msgstr "Bildpunkter med tomt utrymme nedanför stycken"
 
@@ -4006,7 +4006,7 @@ msgstr "Bildpunkter med tomt utrymme nedanför stycken"
 msgid "Pixels inside wrap"
 msgstr "Bildpunkter mellan radbrytningar"
 
-#: gtk/gtktexttag.c:454 gtk/gtktextview.c:567
+#: gtk/gtktexttag.c:454 gtk/gtktextview.c:569
 msgid "Pixels of blank space between wrapped lines in a paragraph"
 msgstr "Bildpunkter med tomt utrymme mellan radbrytningar i ett stycke"
 
@@ -4014,18 +4014,18 @@ msgstr "Bildpunkter med tomt utrymme mellan radbrytningar i ett stycke"
 msgid "Wrap mode"
 msgstr "Automatisk radbrytning"
 
-#: gtk/gtktexttag.c:481 gtk/gtktextview.c:585
+#: gtk/gtktexttag.c:481 gtk/gtktextview.c:587
 msgid ""
 "Whether to wrap lines never, at word boundaries, or at character boundaries"
 msgstr ""
 "Huruvida radbrytningar inte alls ska ske, om de ska ske mellan ord, eller "
 "mellan tecken"
 
-#: gtk/gtktexttag.c:490 gtk/gtktextview.c:632
+#: gtk/gtktexttag.c:490 gtk/gtktextview.c:634
 msgid "Tabs"
 msgstr "Tabbsteg"
 
-#: gtk/gtktexttag.c:491 gtk/gtktextview.c:633
+#: gtk/gtktexttag.c:491 gtk/gtktextview.c:635
 msgid "Custom tabs for this text"
 msgstr "Anpassade tabbsteg för denna text"
 
@@ -4185,39 +4185,39 @@ msgstr "ZWJ-_sammanslagare utan bredd"
 msgid "ZWNJ Zero width _non-joiner"
 msgstr "ZWNJ-_ickesammanslagare utan bredd"
 
-#: gtk/gtktextview.c:546
+#: gtk/gtktextview.c:548
 msgid "Pixels Above Lines"
 msgstr "Bildpunkter ovanför rader"
 
-#: gtk/gtktextview.c:556
+#: gtk/gtktextview.c:558
 msgid "Pixels Below Lines"
 msgstr "Bildpunkter nedanför rader"
 
-#: gtk/gtktextview.c:566
+#: gtk/gtktextview.c:568
 msgid "Pixels Inside Wrap"
 msgstr "Bildpunkter mellan radbrytningar"
 
-#: gtk/gtktextview.c:584
+#: gtk/gtktextview.c:586
 msgid "Wrap Mode"
 msgstr "Radbrytningsläge"
 
-#: gtk/gtktextview.c:602
+#: gtk/gtktextview.c:604
 msgid "Left Margin"
 msgstr "Vänstermarginal"
 
-#: gtk/gtktextview.c:612
+#: gtk/gtktextview.c:614
 msgid "Right Margin"
 msgstr "Högermarginal"
 
-#: gtk/gtktextview.c:640
+#: gtk/gtktextview.c:642
 msgid "Cursor Visible"
 msgstr "Synlig markör"
 
-#: gtk/gtktextview.c:641
+#: gtk/gtktextview.c:643
 msgid "If the insertion cursor is shown"
 msgstr "Huruvida insättningsmarkören visas"
 
-#: gtk/gtktextview.c:6631
+#: gtk/gtktextview.c:6633
 msgid "Input _Methods"
 msgstr "Inmatnings_metoder"
 
@@ -4957,19 +4957,19 @@ msgstr "Vietnamesisk (VIQR)"
 msgid "X Input Method"
 msgstr "X-inmatningsmetod"
 
-#: modules/input/gtkimcontextxim.c:276
+#: modules/input/gtkimcontextxim.c:321
 msgid "IM Preedit style"
 msgstr "IM-förredigeringsstil"
 
-#: modules/input/gtkimcontextxim.c:277
+#: modules/input/gtkimcontextxim.c:322
 msgid "How to draw the input method preedit string"
 msgstr "Hur inmatningsmetodens förredigeringssträng ska ritas"
 
-#: modules/input/gtkimcontextxim.c:285
+#: modules/input/gtkimcontextxim.c:330
 msgid "IM Status style"
 msgstr "IM-statusstil"
 
-#: modules/input/gtkimcontextxim.c:286
+#: modules/input/gtkimcontextxim.c:331
 msgid "How to draw the input method statusbar"
 msgstr "Hur inmatningsmetodens statusrad ska ritas"
 

@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.3.14\n"
-"POT-Creation-Date: 2003-08-20 13:04+0200\n"
+"POT-Creation-Date: 2003-08-25 22:08-0400\n"
 "PO-Revision-Date: 2003-08-20 13:04+0200\n"
 "Last-Translator: Kjartan Maraas <kmaraas@gnome.org>\n"
 "Language-Team: Norwegian (bokmål) <no@li.org>\n"
@@ -1252,11 +1252,11 @@ msgid "Foreground color as a GdkColor"
 msgstr "Forgrunnsfarge som en GdkColor"
 
 #: gtk/gtkcellrenderertext.c:232 gtk/gtkentry.c:459 gtk/gtktexttag.c:273
-#: gtk/gtktextview.c:576
+#: gtk/gtktextview.c:578
 msgid "Editable"
 msgstr "Redigerbar"
 
-#: gtk/gtkcellrenderertext.c:233 gtk/gtktexttag.c:274 gtk/gtktextview.c:577
+#: gtk/gtkcellrenderertext.c:233 gtk/gtktexttag.c:274 gtk/gtktextview.c:579
 msgid "Whether the text can be modified by the user"
 msgstr "Om teksten kan endres av brukeren"
 
@@ -1912,7 +1912,7 @@ msgstr "Velg på fokus"
 msgid "Whether to select the contents of an entry when it is focused"
 msgstr "Om innholdet i oppføringen skal markeres når den får fokus"
 
-#: gtk/gtkentry.c:3993 gtk/gtklabel.c:3222 gtk/gtktextview.c:6621
+#: gtk/gtkentry.c:3993 gtk/gtklabel.c:3222 gtk/gtktextview.c:6623
 msgid "Select All"
 msgstr "Velg alt"
 
@@ -1920,7 +1920,7 @@ msgstr "Velg alt"
 msgid "Input Methods"
 msgstr "Inndatametode"
 
-#: gtk/gtkentry.c:4013 gtk/gtktextview.c:6640
+#: gtk/gtkentry.c:4013 gtk/gtktextview.c:6642
 msgid "_Insert Unicode control character"
 msgstr "Sett _inn Unicode kontrolltegn"
 
@@ -2468,7 +2468,7 @@ msgstr "Bruk tagging"
 msgid "The text of the label includes XML markup. See pango_parse_markup()"
 msgstr "Teksten i etiketten inneholder XML-tagger. Se pango_parse_markup()"
 
-#: gtk/gtklabel.c:319 gtk/gtktexttag.c:374 gtk/gtktextview.c:593
+#: gtk/gtklabel.c:319 gtk/gtktexttag.c:374 gtk/gtktextview.c:595
 msgid "Justification"
 msgstr "Justering"
 
@@ -2804,7 +2804,7 @@ msgstr "Om etterkommers fane skal fylle allokert område eller ikke"
 msgid "Tab pack type"
 msgstr "Type fanepakking"
 
-#: gtk/gtknotebook.c:2473 gtk/gtknotebook.c:4820
+#: gtk/gtknotebook.c:2471 gtk/gtknotebook.c:4818
 #, c-format
 msgid "Page %u"
 msgstr "Side %u"
@@ -3051,17 +3051,17 @@ msgid ""
 "How far in the y direction to move the arrow when the button is depressed"
 msgstr "Hvor langt pilen flyttes i y-retning når knappen er nedtrykt"
 
-#: gtk/gtkrc.c:2376
+#: gtk/gtkrc.c:2382
 #, c-format
 msgid "Unable to find include file: \"%s\""
 msgstr "Kan ikke finne include-fil: «%s»"
 
-#: gtk/gtkrc.c:3018 gtk/gtkrc.c:3021
+#: gtk/gtkrc.c:3025 gtk/gtkrc.c:3028
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "Kunne ikke finne bildefil i pixmap_path: «%s»"
 
-#: gtk/gtkrc.c:3456
+#: gtk/gtkrc.c:3463
 #, c-format
 msgid "Pixmap path element: \"%s\" must be absolute, %s, line %d"
 msgstr "Stielement for pixmap: «%s» må være absolutt, %s, linje %d"
@@ -3904,7 +3904,7 @@ msgstr ""
 "er derfor anbefalt. Pango predefinerer noen skaleringer slik som "
 "PANGO_SCALE_X_LARGE"
 
-#: gtk/gtktexttag.c:375 gtk/gtktextview.c:594
+#: gtk/gtktexttag.c:375 gtk/gtktextview.c:596
 msgid "Left, right, or center justification"
 msgstr "Venstre-, høyre- eller senterjustering"
 
@@ -3926,7 +3926,7 @@ msgstr ""
 msgid "Left margin"
 msgstr "Venstre marg"
 
-#: gtk/gtktexttag.c:392 gtk/gtktextview.c:603
+#: gtk/gtktexttag.c:392 gtk/gtktextview.c:605
 msgid "Width of the left margin in pixels"
 msgstr "Bredde på venstre marg i piksler"
 
@@ -3934,15 +3934,15 @@ msgstr "Bredde på venstre marg i piksler"
 msgid "Right margin"
 msgstr "Høyre marg"
 
-#: gtk/gtktexttag.c:402 gtk/gtktextview.c:613
+#: gtk/gtktexttag.c:402 gtk/gtktextview.c:615
 msgid "Width of the right margin in pixels"
 msgstr "Bredde på høyre marg i piksler"
 
-#: gtk/gtktexttag.c:412 gtk/gtktextview.c:622
+#: gtk/gtktexttag.c:412 gtk/gtktextview.c:624
 msgid "Indent"
 msgstr "Rykk inn"
 
-#: gtk/gtktexttag.c:413 gtk/gtktextview.c:623
+#: gtk/gtktexttag.c:413 gtk/gtktextview.c:625
 msgid "Amount to indent the paragraph, in pixels"
 msgstr "Innrykksmengde for avsnittet, i piksler"
 
@@ -3957,7 +3957,7 @@ msgstr ""
 msgid "Pixels above lines"
 msgstr "Piksler over linjer"
 
-#: gtk/gtktexttag.c:434 gtk/gtktextview.c:547
+#: gtk/gtktexttag.c:434 gtk/gtktextview.c:549
 msgid "Pixels of blank space above paragraphs"
 msgstr "Antall piksler med tomrom over avsnittene"
 
@@ -3965,7 +3965,7 @@ msgstr "Antall piksler med tomrom over avsnittene"
 msgid "Pixels below lines"
 msgstr "Piksler under linjer"
 
-#: gtk/gtktexttag.c:444 gtk/gtktextview.c:557
+#: gtk/gtktexttag.c:444 gtk/gtktextview.c:559
 msgid "Pixels of blank space below paragraphs"
 msgstr "Antall piksler med tomrom under avsnittene"
 
@@ -3973,7 +3973,7 @@ msgstr "Antall piksler med tomrom under avsnittene"
 msgid "Pixels inside wrap"
 msgstr "Piksler før brytning"
 
-#: gtk/gtktexttag.c:454 gtk/gtktextview.c:567
+#: gtk/gtktexttag.c:454 gtk/gtktextview.c:569
 msgid "Pixels of blank space between wrapped lines in a paragraph"
 msgstr "Piksler med tomt rom mellom brutte linjer i et avsnitt"
 
@@ -3981,16 +3981,16 @@ msgstr "Piksler med tomt rom mellom brutte linjer i et avsnitt"
 msgid "Wrap mode"
 msgstr "Brytningsmodus"
 
-#: gtk/gtktexttag.c:481 gtk/gtktextview.c:585
+#: gtk/gtktexttag.c:481 gtk/gtktextview.c:587
 msgid ""
 "Whether to wrap lines never, at word boundaries, or at character boundaries"
 msgstr "Regler for linjebryting; aldri, ved ordgrenser eller ved tegngrenser"
 
-#: gtk/gtktexttag.c:490 gtk/gtktextview.c:632
+#: gtk/gtktexttag.c:490 gtk/gtktextview.c:634
 msgid "Tabs"
 msgstr "Faner"
 
-#: gtk/gtktexttag.c:491 gtk/gtktextview.c:633
+#: gtk/gtktexttag.c:491 gtk/gtktextview.c:635
 msgid "Custom tabs for this text"
 msgstr "Egendefinerte faner for denne teksten"
 
@@ -4150,39 +4150,39 @@ msgstr "ZWJ Zero width _joiner"
 msgid "ZWNJ Zero width _non-joiner"
 msgstr "ZWNJ Zero width _non-joiner"
 
-#: gtk/gtktextview.c:546
+#: gtk/gtktextview.c:548
 msgid "Pixels Above Lines"
 msgstr "Piksler over linjer"
 
-#: gtk/gtktextview.c:556
+#: gtk/gtktextview.c:558
 msgid "Pixels Below Lines"
 msgstr "Piksler under linjer"
 
-#: gtk/gtktextview.c:566
+#: gtk/gtktextview.c:568
 msgid "Pixels Inside Wrap"
 msgstr "Piksler før brytning"
 
-#: gtk/gtktextview.c:584
+#: gtk/gtktextview.c:586
 msgid "Wrap Mode"
 msgstr "Brytningsmodus"
 
-#: gtk/gtktextview.c:602
+#: gtk/gtktextview.c:604
 msgid "Left Margin"
 msgstr "Venstre marg"
 
-#: gtk/gtktextview.c:612
+#: gtk/gtktextview.c:614
 msgid "Right Margin"
 msgstr "Høyre marg"
 
-#: gtk/gtktextview.c:640
+#: gtk/gtktextview.c:642
 msgid "Cursor Visible"
 msgstr "Synlig markør"
 
-#: gtk/gtktextview.c:641
+#: gtk/gtktextview.c:643
 msgid "If the insertion cursor is shown"
 msgstr "Vis innsettingsmarkør"
 
-#: gtk/gtktextview.c:6631
+#: gtk/gtktextview.c:6633
 msgid "Input _Methods"
 msgstr "Inndata_metoder"
 
