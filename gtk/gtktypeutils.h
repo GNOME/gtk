@@ -33,34 +33,35 @@ extern "C" {
  */
 typedef enum
 {
-  GTK_TYPE_INVALID,
-  GTK_TYPE_NONE,
-  GTK_TYPE_CHAR,
-  GTK_TYPE_BOOL,
-  GTK_TYPE_INT,
-  GTK_TYPE_UINT,
-  GTK_TYPE_LONG,
-  GTK_TYPE_ULONG,
-  GTK_TYPE_FLOAT,
-  GTK_TYPE_DOUBLE,
-  GTK_TYPE_STRING,
-  GTK_TYPE_ENUM,
-  GTK_TYPE_FLAGS,
-  GTK_TYPE_BOXED,
-  GTK_TYPE_FOREIGN,
-  GTK_TYPE_CALLBACK,
-  GTK_TYPE_ARGS,
+  G_SV (GTK_TYPE_INVALID,	invalid),
+  G_SV (GTK_TYPE_NONE,		none),
+  G_SV (GTK_TYPE_CHAR,		char),
+  G_SV (GTK_TYPE_BOOL,		bool),
+  G_SV (GTK_TYPE_INT,		int),
+  G_SV (GTK_TYPE_UINT,		uint),
+  G_SV (GTK_TYPE_LONG,		long),
+  G_SV (GTK_TYPE_ULONG,		ulong),
+  G_SV (GTK_TYPE_FLOAT,		float),
+  G_SV (GTK_TYPE_DOUBLE,	double),
+  G_SV (GTK_TYPE_STRING,	string),
+  G_SV (GTK_TYPE_ENUM,		enum),
+  G_SV (GTK_TYPE_FLAGS,		flags),
+  G_SV (GTK_TYPE_BOXED,		boxed),
+  G_SV (GTK_TYPE_FOREIGN,	foreign),
+  G_SV (GTK_TYPE_CALLBACK,	callback),
+  G_SV (GTK_TYPE_ARGS,		args),
   
-  GTK_TYPE_POINTER,
-  
-  /* It'd be great if the next two could be removed eventually
+  G_SV (GTK_TYPE_POINTER,	pointer),
+
+  /* It'd be great if GTK_TYPE_POINTER and GTK_TYPE_C_CALLBACK
+   * could be removed eventually
    */
-  GTK_TYPE_SIGNAL,
-  GTK_TYPE_C_CALLBACK,
+  G_SV (GTK_TYPE_SIGNAL,	signal),
+  G_SV (GTK_TYPE_C_CALLBACK,	c-callback),
   
-  GTK_TYPE_OBJECT
+  G_SV (GTK_TYPE_OBJECT,	object)
   
-} GtkFundamentalType;
+} G_ENUM (GtkFundamentalType);
 
 typedef guint GtkType;
 

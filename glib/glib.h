@@ -117,6 +117,23 @@
 #undef	CLAMP
 #define CLAMP(x, low, high)  (((x) > (high)) ? (high) : (((x) < (low)) ? (low) : (x)))
 
+
+/* Provide simple enum value macro wrappers that ease automated enum value
+ * stringification code.
+ */
+#if	!defined (G_CODE_GENERATION)
+#define G_ENUM( EnumerationName )		EnumerationName
+#define G_FLAGS( EnumerationName )		EnumerationName
+#define G_NV( VALUE_NAME , value_nick, VALUE)	VALUE_NAME = (VALUE)
+#define G_SV( VALUE_NAME, value_nick )		VALUE_NAME
+#else	/* G_CODE_GENERATION */
+#define G_ENUM( EnumerationName )		G_ENUM_E + EnumerationName +
+#define G_FLAGS( EnumerationName )		G_ENUM_F + EnumerationName +
+#define G_NV( VALUE_NAME , value_nick, VALUE)	G_ENUM_V + VALUE_NAME + value_nick +
+#define G_SV( VALUE_NAME, value_nick )		G_ENUM_V + VALUE_NAME + value_nick +
+#endif	/* G_CODE_GENERATION */
+
+
 /* Provide simple macro statement wrappers (adapted from Pearl):
  *  G_STMT_START { statements; } G_STMT_END;
  *  can be used as a single statement, as in

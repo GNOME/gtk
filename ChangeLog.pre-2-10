@@ -1,3 +1,14 @@
+Mon Jun  8 02:52:37 1998  Tim Janik  <timj@gtk.org>
+
+	* gdk/gdkprivate.h: 
+	* gdk/gdktypes.h: 
+	* gtk/gtkprivate.h: 
+	* gtk/gtkwidget.h: 
+	* gtk/gtkobject.h: wrapped enum definitions with glib macros.
+
+	* reworked enum value array generation code. gtk.defs is a generated
+	file now.
+
 Sun Jun  7 14:34:31 1998  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkitemfactory.c (gtk_item_factory_create_menu_entries): feature

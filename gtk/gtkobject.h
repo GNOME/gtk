@@ -100,12 +100,12 @@ extern "C" {
  */
 typedef enum
 {
-  GTK_DESTROYED		= 1 << 0,
-  GTK_FLOATING		= 1 << 1,
-  GTK_CONNECTED		= 1 << 2,
-  GTK_RESERVED_2	= 1 << 3,
-  GTK_OBJECT_FLAG_LAST	= GTK_RESERVED_2
-} GtkObjectFlags;
+  G_NV (GTK_DESTROYED,		destroyed,		1 << 0),
+  G_NV (GTK_FLOATING,		floating,		1 << 1),
+  G_NV (GTK_CONNECTED,		connected,		1 << 2),
+  GTK_RESERVED_2,
+  G_NV (GTK_OBJECT_FLAG_LAST,	object-flag-last,	GTK_RESERVED_2)
+} G_FLAGS (GtkObjectFlags);
 
 /* Macros for extracting the object_flags from GtkObject.
  */
@@ -123,14 +123,14 @@ typedef enum
  */
 typedef enum
 {
-  GTK_ARG_READABLE	= 1 << 0,
-  GTK_ARG_WRITABLE	= 1 << 1,
-  GTK_ARG_CONSTRUCT	= 1 << 2,
-  GTK_ARG_MASK		= 0x03,
+  G_NV (GTK_ARG_READABLE,	readable,	1 << 0),
+  G_NV (GTK_ARG_WRITABLE,	writable,	1 << 1),
+  G_NV (GTK_ARG_CONSTRUCT,	construct,	1 << 2),
+  G_NV (GTK_ARG_MASK,		mask,		0x03),
   /* aliases
    */
-  GTK_ARG_READWRITE	= GTK_ARG_READABLE | GTK_ARG_WRITABLE
-} GtkArgFlags;
+  G_NV (GTK_ARG_READWRITE,	readwrite,	GTK_ARG_READABLE | GTK_ARG_WRITABLE)
+} G_FLAGS (GtkArgFlags);
 
 
 typedef struct _GtkObjectClass	GtkObjectClass;

@@ -615,9 +615,8 @@ extern void gtk_object_init_type (void);
 
 GtkType gtk_type_builtins[GTK_TYPE_NUM_BUILTINS];
 
-#include "gtkwidget.h"		/* include for enum values from GtkWidgetFlags */
-#include "gtkprivate.h"		/* include for enum values from GtkPrivateFlags */
-#include "gtkenumvalues.c"
+#include "makeenums.h"		/* include for various places with enum definitions */
+#include "gtktypebuiltins1.c"
 
 static void
 gtk_type_init_builtin_types (void)
@@ -656,7 +655,7 @@ gtk_type_init_builtin_types (void)
     GtkType parent;
     GtkEnumValue *values;
   } builtin_info[] = {
-#include "gtktypebuiltins.c"
+#include "gtktypebuiltins2.c"
     { NULL }
   };
   guint i;

@@ -19,11 +19,6 @@
 #ifndef __GTK_COLORSEL_H__
 #define __GTK_COLORSEL_H__
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <math.h>
-#include <gdk/gdk.h>
-
 #include <gtk/gtkwindow.h>
 #include <gtk/gtkvbox.h>
 #include <gtk/gtkframe.h>

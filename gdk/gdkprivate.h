@@ -204,12 +204,12 @@ struct _GdkRegionPrivate
 };
 
 typedef enum {
-  GDK_DEBUG_MISC = 1<<0,
-  GDK_DEBUG_EVENTS = 1 << 1,
-  GDK_DEBUG_DND = 1<<2,
-  GDK_DEBUG_COLOR_CONTEXT = 1<<3,
-  GDK_DEBUG_XIM = 1<<4
-} GdkDebugFlag;
+  G_NV (GDK_DEBUG_MISC,		misc,		1 << 0),
+  G_NV (GDK_DEBUG_EVENTS,	events,		1 << 1),
+  G_NV (GDK_DEBUG_DND,		dnd,		1 << 2),
+  G_NV (GDK_DEBUG_COLOR_CONTEXT,color-context,	1 << 3),
+  G_NV (GDK_DEBUG_XIM,		xim,		1 << 4)
+} G_FLAGS (GdkDebugFlag);
 
 void gdk_window_init (void);
 void gdk_visual_init (void);

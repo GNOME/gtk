@@ -202,19 +202,38 @@ gtkinclude_HEADERS = \
 	gtkwindow.h             \
 	gtktypebuiltins.h
 
+auto-files:
+	make $(srcdir)/gtk.defs
+	make $(srcdir)/gtktypebuiltins1.c
+	make $(srcdir)/gtktypebuiltins2.c
+	make $(srcdir)/gtktypebuiltins.h
+
+$(srcdir)/gtk.defs: @MAINT@
+	$(COMPILE) -E -DG_CODE_GENERATION $(srcdir)/makeenums.h $(CFLAGS) | \
+	  awk -f $(srcdir)/makeenums.awk - defs > $@
+	cat $(srcdir)/gtk-boxed.defs >> $@
+	
+$(srcdir)/gtktypebuiltins1.c: @MAINT@
+	$(COMPILE) -E -DG_CODE_GENERATION $(srcdir)/makeenums.h $(CFLAGS) | \
+	  awk -f $(srcdir)/makeenums.awk - arrays > $@
+
+$(srcdir)/gtktypebuiltins2.c: @MAINT@ $(srcdir)/gtk.defs $(srcdir)/gentypeinfo.el
+	$(SHELL) $(srcdir)/runelisp $(srcdir)/gentypeinfo.el id $< $@
+
 $(srcdir)/gtktypebuiltins.h: @MAINT@ $(srcdir)/gtk.defs $(srcdir)/gentypeinfo.el
 	$(SHELL) $(srcdir)/runelisp $(srcdir)/gentypeinfo.el idmac $< $@
 
-$(srcdir)/gtktypebuiltins.c: @MAINT@ $(srcdir)/gtk.defs $(srcdir)/gentypeinfo.el
-	$(SHELL) $(srcdir)/runelisp $(srcdir)/gentypeinfo.el id $< $@
-
-$(srcdir)/gtkenumvalues.c: @MAINT@ $(srcdir)/gtk.defs $(srcdir)/makeenums.awk
-	awk -f makeenums.awk $(srcdir)/gtk.defs > $@
-
 # special remake rules
-$(srcdir)/gtktypeutils.h: @MAINT@ $(srcdir)/gtktypebuiltins.h
-$(srcdir)/gtktypeutils.c: @MAINT@ $(srcdir)/gtktypebuiltins.c
-$(srcdir)/gtktypeutils.c: @MAINT@ $(srcdir)/gtkenumvalues.c
+$(srcdir)/gtk.defs: @MAINT@ $(srcdir)/makeenums.awk
+$(srcdir)/gtk.defs: @MAINT@ $(srcdir)/makeenums.h
+$(srcdir)/gtk.defs: @MAINT@ $(srcdir)/gtk-boxed.defs
+$(srcdir)/gtktypebuiltins1.c: @MAINT@ $(srcdir)/gtk.defs
+$(srcdir)/gtktypebuiltins1.c: @MAINT@ $(srcdir)/makeenums.awk
+$(srcdir)/gtktypebuiltins1.c: @MAINT@ $(srcdir)/makeenums.h
+$(srcdir)/gtktypebuiltins2.c: @MAINT@ $(srcdir)/gtk.defs
+$(srcdir)/gtktypebuiltins2.c: @MAINT@ $(srcdir)/gentypeinfo.el
+$(srcdir)/gtktypebuiltins.h: @MAINT@ $(srcdir)/gtk.defs
+$(srcdir)/gtktypebuiltins.h: @MAINT@ $(srcdir)/gentypeinfo.el
 
 libgtk_1_1_la_LDFLAGS = -version-info $(LT_CURRENT):$(LT_REVISION):$(LT_AGE)
 
@@ -223,13 +242,15 @@ EXTRA_DIST = \
 	line-wrap.xbm 		\
 	testgtkrc 		\
 	testgtkrc2 		\
-	gtk.defs		\
 	gtkfeatures.h.in	\
+	makeenums.awk		\
+	makeenums.h		\
 	runelisp 		\
 	gentypeinfo.el 		\
-	makeenums.awk		\
-	gtktypebuiltins.c	\
-	gtkenumvalues.c		\
+	gtktypebuiltins1.c	\
+	gtktypebuiltins2.c	\
+	gtk-boxed.defs		\
+	gtk.defs		\
 	test.xpm		\
 	marble.xpm		\
 	3DRings.xpm		\
