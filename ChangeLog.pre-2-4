@@ -1,3 +1,11 @@
+Mon Oct 29 11:31:40 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* m4macros/gtk-2.0.m4: Don't try to use pkg-config
+	when we didn't find it. (#62944, Eric Lemings)
+
+	* m4macros/gtk-2.0.m4: Fix problem with spaces around =
+	sign in assignment. (#63209, Arkadiusz Miskiewicz)
+
 2001-10-29  Anders Carlsson  <andersca@gnu.org>
 
 	* gtk/gtktreeview.c (gtk_tree_view_size_request): Calculate
@@ -90,7 +98,6 @@
 	file. Install import libraries.
 
 2001-10-29  Anders Carlsson  <andersca@gnu.org>
->>>>>>> 1.2482
 
 	* gtk/gtkiconfactory.c (get_default_icons): Fix build.
 
@@ -143,6 +150,7 @@
 	* docs/Changes-2.0.txt: add a little note about the GtkPreviewInfo
 	changes
 
+>>>>>>> 1.2483
 Sun Oct 28 09:15:39 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkimcontext.h (struct _GtkIMContext): Fixed
