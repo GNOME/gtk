@@ -148,6 +148,8 @@ static void   gtk_entry_direction_changed    (GtkWidget        *widget,
 					      GtkTextDirection  previous_dir);
 static void   gtk_entry_state_changed        (GtkWidget        *widget,
 					      GtkStateType      previous_state);
+static void   gtk_entry_screen_changed       (GtkWidget        *widget,
+					      GdkScreen        *old_screen);
 
 static gboolean gtk_entry_drag_drop          (GtkWidget        *widget,
                                               GdkDragContext   *context,
@@ -410,6 +412,7 @@ gtk_entry_class_init (GtkEntryClass *class)
   widget_class->style_set = gtk_entry_style_set;
   widget_class->direction_changed = gtk_entry_direction_changed;
   widget_class->state_changed = gtk_entry_state_changed;
+  widget_class->screen_changed = gtk_entry_screen_changed;
   widget_class->mnemonic_activate = gtk_entry_mnemonic_activate;
 
   widget_class->drag_drop = gtk_entry_drag_drop;
@@ -1725,6 +1728,13 @@ gtk_entry_state_changed (GtkWidget      *widget,
   gtk_widget_queue_draw (widget);
 }
 
+static void
+gtk_entry_screen_changed (GtkWidget *widget,
+			  GdkScreen *old_screen)
+{
+  gtk_entry_recompute (GTK_ENTRY (widget));
+}
+
 /* GtkEditable method implementations
  */
 static void
@@ -1869,10 +1879,10 @@ gtk_entry_style_set	(GtkWidget      *widget,
 {
   GtkEntry *entry = GTK_ENTRY (widget);
 
+  gtk_entry_recompute (entry);
+
   if (previous_style && GTK_WIDGET_REALIZED (widget))
     {
-      gtk_entry_recompute (entry);
-
       gdk_window_set_background (widget->window, &widget->style->base[GTK_WIDGET_STATE (widget)]);
       gdk_window_set_background (entry->text_area, &widget->style->base[GTK_WIDGET_STATE (widget)]);
     }
@@ -2517,12 +2527,15 @@ recompute_idle_func (gpointer data)
 
   entry = GTK_ENTRY (data);
 
-  gtk_entry_adjust_scroll (entry);
-  gtk_entry_queue_draw (entry);
-
-  entry->recompute_idle = FALSE;
+  entry->recompute_idle = 0;
   
-  update_im_cursor_location (entry);
+  if (gtk_widget_has_screen (GTK_WIDGET (entry)))
+    {
+      gtk_entry_adjust_scroll (entry);
+      gtk_entry_queue_draw (entry);
+      
+      update_im_cursor_location (entry);
+    }
 
   GDK_THREADS_LEAVE ();
 
