@@ -1,3 +1,12 @@
+1998-03-14  Federico Mena Quintero  <federico@nuclecu.unam.mx>
+
+	* gtk/gtktoolbar.c (gtk_toolbar_insert_element): Moved the
+	gtk_signal_connect of the specified callback into the big switch()
+	for buttons.  We don't want to connect to the "clicked" signal of
+	a custom widget or a space element, because it may not have one.
+	(gtk_toolbar_insert_element): Extra sanity check; if the type is
+	GTK_TOOLBAR_CHILD_WIDGET, then the specified widget must not be NULL.
+
 Sat Mar 14 02:54:28 PST 1998 Manish Singh <yosh@gimp.org>
 
         * gtk.m4: fixed a bashism in gtk tests
