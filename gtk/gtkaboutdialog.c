@@ -1981,6 +1981,8 @@ gtk_about_dialog_set_url_hook (GtkAboutDialogActivateLinkFunc func,
  * @Varargs: value of first property, followed by more properties, %NULL-terminated
  *
  * This is a convenience function for showing an application's about box.
+ * The constructed dialog is associated with the parent window and 
+ * reused for future invocations of this function.
  *
  * Since: 2.6
  */

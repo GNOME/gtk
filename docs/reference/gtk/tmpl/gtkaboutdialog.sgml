@@ -19,6 +19,11 @@ supports this by offering global hooks, which are called when the user
 clicks on a link or email address, see gtk_about_dialog_set_email_hook()
 and gtk_about_dialog_set_url_hook().
 </para>
+<para>
+To make constructing a #GtkAboutDialog as convenient as possible, you can
+use the function gtk_show_about_dialog() which constructs and shows a dialog 
+and keeps it around so that it can be shown again.
+</para>
 
 <!-- ##### SECTION See_Also ##### -->
 <para>
@@ -324,6 +329,24 @@ only private fields and should not be directly accessed.
 
 @about: 
 @logo: 
+
+
+<!-- ##### FUNCTION gtk_about_dialog_get_logo_icon_name ##### -->
+<para>
+
+</para>
+
+@about: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_about_dialog_set_logo_icon_name ##### -->
+<para>
+
+</para>
+
+@about: 
+@icon_name: 
 
 
 <!-- ##### USER_FUNCTION GtkAboutDialogActivateLinkFunc ##### -->

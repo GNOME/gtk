@@ -1,5 +1,7 @@
 2004-11-01  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/tmpl/gtkaboutdialog.sgml: Small update.
+
 	* gdk-pixbuf/tmpl/initialization_versions.sgml: Document
 	gdk_pixbuf_{major,minor,micro}_version.
 
