@@ -1,7 +1,4 @@
 EXPORTS
-	_gdk_pixbuf_get_module
-	_gdk_pixbuf_get_named_module
-	_gdk_pixbuf_load_module
 	gdk_colorspace_get_type
 	gdk_interp_type_get_type
 	gdk_pixbuf_add_alpha

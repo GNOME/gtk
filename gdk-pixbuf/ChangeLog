@@ -1,3 +1,10 @@
+2002-01-04  Hans Breuer  <hans@breuer.org>
+
+	* gdk_pixbuf.def : don't export functions prefixed
+	with underscore
+
+	* makefile.msc : use -FImsvc_recommende_pragmas.h
+
 Thu Jan  3 19:31:58 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* pixops/pixops.c (scale_line_22_33): Fix and uncomment
