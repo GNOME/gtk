@@ -344,10 +344,10 @@ gtk_entry_init (GtkEntry *entry)
 
   gtk_selection_add_handler (GTK_WIDGET(entry), GDK_SELECTION_PRIMARY,
 			     GDK_TARGET_STRING, gtk_entry_selection_handler,
-			     NULL, NULL);
+			     NULL);
   gtk_selection_add_handler (GTK_WIDGET(entry), clipboard_atom,
 			     GDK_TARGET_STRING, gtk_entry_selection_handler,
-			     NULL, NULL);
+			     NULL);
 
   if (!text_atom)
     text_atom = gdk_atom_intern ("TEXT", FALSE);
@@ -355,11 +355,11 @@ gtk_entry_init (GtkEntry *entry)
   gtk_selection_add_handler (GTK_WIDGET(entry), GDK_SELECTION_PRIMARY,
 			     text_atom,
 			     gtk_entry_selection_handler,
-			     NULL, NULL);
+			     NULL);
   gtk_selection_add_handler (GTK_WIDGET(entry), clipboard_atom,
 			     text_atom,
 			     gtk_entry_selection_handler,
-			     NULL, NULL);
+			     NULL);
 
   if (!ctext_atom)
     ctext_atom = gdk_atom_intern ("COMPOUND_TEXT", FALSE);
@@ -367,11 +367,11 @@ gtk_entry_init (GtkEntry *entry)
   gtk_selection_add_handler (GTK_WIDGET(entry), GDK_SELECTION_PRIMARY,
 			     ctext_atom,
 			     gtk_entry_selection_handler,
-			     NULL, NULL);
+			     NULL);
   gtk_selection_add_handler (GTK_WIDGET(entry), clipboard_atom,
 			     ctext_atom,
 			     gtk_entry_selection_handler,
-			     NULL, NULL);
+			     NULL);
 }
 
 GtkWidget*
@@ -599,8 +599,8 @@ gtk_entry_realize (GtkWidget *widget)
 
   widget->style = gtk_style_attach (widget->style, widget->window);
 
-  gdk_window_set_background (widget->window, &widget->style->white);
-  gdk_window_set_background (entry->text_area, &widget->style->white);
+  gdk_window_set_background (widget->window, &widget->style->base[GTK_STATE_NORMAL]);
+  gdk_window_set_background (entry->text_area, &widget->style->base[GTK_STATE_NORMAL]);
 
 #ifdef USE_XIM
   if (gdk_im_ready ())
@@ -664,7 +664,7 @@ gtk_entry_realize (GtkWidget *widget)
 	    }
 	  gdk_ic_set_attr (entry->ic,"preeditAttributes",
 		     "foreground", widget->style->fg[GTK_STATE_NORMAL].pixel,
-		     "background", widget->style->white.pixel,
+		     "background", widget->style->base[GTK_STATE_NORMAL].pixel,
 		     NULL);
 	}
     }
@@ -720,8 +720,9 @@ gtk_entry_draw_focus (GtkWidget *widget)
 	}
       else
 	{
-	  gdk_draw_rectangle (widget->window, widget->style->white_gc, FALSE,
-			      x + 2, y + 2, width - 5, height - 5);
+	  gdk_draw_rectangle (widget->window, 
+			      widget->style->base_gc[GTK_WIDGET_STATE(widget)],
+			      FALSE, x + 2, y + 2, width - 5, height - 5);
 	}
 
       gtk_draw_shadow (widget->style, widget->window,
@@ -1457,7 +1458,7 @@ gtk_entry_draw_text (GtkEntry *entry)
 	  gtk_entry_make_backing_pixmap (entry, width, height);
 	  drawable = entry->backing_pixmap;
 	  gdk_draw_rectangle (drawable,
-			      widget->style->white_gc,
+			      widget->style->base_gc[GTK_WIDGET_STATE(widget)],
 			      TRUE,
 			      0, 0,
 			      width,
@@ -1570,7 +1571,7 @@ gtk_entry_draw_cursor_on_drawable (GtkEntry *entry, GdkDrawable *drawable)
 	  (entry->selection_start_pos == entry->selection_end_pos))
 	gc = widget->style->fg_gc[GTK_STATE_NORMAL];
       else
-	gc = widget->style->white_gc;
+	gc = widget->style->base_gc[GTK_WIDGET_STATE(widget)];
 
       gdk_window_get_size (entry->text_area, NULL, &text_area_height);
       gdk_draw_line (drawable, gc, xoffset, 0, xoffset, text_area_height);

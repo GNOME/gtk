@@ -145,7 +145,8 @@ gtk_list_item_realize (GtkWidget *widget)
   if (GTK_WIDGET_CLASS (parent_class)->realize)
     (* GTK_WIDGET_CLASS (parent_class)->realize) (widget);
 
-  gdk_window_set_background (widget->window, &widget->style->white);
+  gdk_window_set_background (widget->window, 
+			     &widget->style->base[GTK_STATE_NORMAL]);
 }
 
 static void
@@ -222,7 +223,8 @@ gtk_list_item_draw (GtkWidget    *widget,
       if (!GTK_WIDGET_IS_SENSITIVE (widget))
 	gtk_style_set_background (widget->style, widget->window, GTK_STATE_INSENSITIVE);
       else if (widget->state == GTK_STATE_NORMAL)
-	gdk_window_set_background (widget->window, &widget->style->white);
+	gdk_window_set_background (widget->window, 
+				   &widget->style->base[GTK_STATE_NORMAL]);
       else
 	gtk_style_set_background (widget->style, widget->window, widget->state);
 
@@ -251,7 +253,7 @@ gtk_list_item_draw_focus (GtkWidget *widget)
       else if (!GTK_WIDGET_IS_SENSITIVE (widget))
 	gc = widget->style->bg_gc[GTK_STATE_INSENSITIVE];
       else if (widget->state == GTK_STATE_NORMAL)
-	gc = widget->style->white_gc;
+	gc = widget->style->base_gc[GTK_STATE_NORMAL];
       else
 	gc = widget->style->bg_gc[widget->state];
 
@@ -294,7 +296,7 @@ gtk_list_item_expose (GtkWidget      *widget,
       if (!GTK_WIDGET_IS_SENSITIVE (widget))
 	gdk_window_set_background (widget->window, &widget->style->bg[GTK_STATE_INSENSITIVE]);
       else if (widget->state == GTK_STATE_NORMAL)
-	gdk_window_set_background (widget->window, &widget->style->white);
+	gdk_window_set_background (widget->window, &widget->style->base[GTK_STATE_NORMAL]);
       else
 	gdk_window_set_background (widget->window, &widget->style->bg[widget->state]);
 

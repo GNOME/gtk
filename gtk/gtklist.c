@@ -604,7 +604,8 @@ gtk_list_realize (GtkWidget *widget)
   gdk_window_set_user_data (widget->window, widget);
 
   widget->style = gtk_style_attach (widget->style, widget->window);
-  gdk_window_set_background (widget->window, &widget->style->white);
+  gdk_window_set_background (widget->window, 
+			     &widget->style->base[GTK_STATE_NORMAL]);
 }
 
 static void

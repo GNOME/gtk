@@ -529,7 +529,7 @@ gtk_input_dialog_fill_axes(GtkInputDialog *inputd, GdkDeviceInfo *info)
 
   gtk_widget_realize (inputd->axis_list);
   gdk_window_set_background (inputd->axis_list->window,
-			     &inputd->axis_list->style->white);
+			     &inputd->axis_list->style->base[GTK_STATE_NORMAL]);
 
   for (i=GDK_AXIS_X;i<GDK_AXIS_LAST;i++)
     {
@@ -664,7 +664,7 @@ gtk_input_dialog_fill_keys(GtkInputDialog *inputd, GdkDeviceInfo *info)
 
   gtk_widget_realize (inputd->keys_list);
   gdk_window_set_background (inputd->keys_list->window,
-			     &inputd->keys_list->style->white);
+			     &inputd->keys_list->style->base[GTK_STATE_NORMAL]);
 
   for (i=0;i<info->num_keys;i++)
     {

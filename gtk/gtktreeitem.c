@@ -187,7 +187,7 @@ gtk_tree_item_subtree_button_changed_state(GtkWidget *w)
   if(GTK_WIDGET_VISIBLE (w)) {
 
     if (w->state == GTK_STATE_NORMAL)
-      gdk_window_set_background (w->window, &w->style->white);
+      gdk_window_set_background (w->window, &w->style->base[w->state]);
     else
       gdk_window_set_background (w->window, &w->style->bg[w->state]);
 
@@ -410,7 +410,8 @@ gtk_tree_item_realize (GtkWidget *widget)
   if (GTK_WIDGET_CLASS (parent_class)->realize)
     (* GTK_WIDGET_CLASS (parent_class)->realize) (widget);
   
-  gdk_window_set_background (widget->window, &widget->style->white);
+  gdk_window_set_background (widget->window, 
+			     &widget->style->base[GTK_STATE_NORMAL]);
 }
 
 static void
@@ -602,7 +603,8 @@ gtk_tree_item_draw (GtkWidget    *widget,
 		widget->state == GTK_STATE_SELECTED)
 	  gtk_style_set_background (widget->style, widget->window, widget->state);
 	else
-	  gdk_window_set_background (widget->window, &widget->style->white);
+	  gdk_window_set_background (widget->window, 
+				     &widget->style->base[GTK_STATE_NORMAL]);
 
 	gdk_window_clear_area (widget->window, 
 			       child_area.x, child_area.y,
@@ -623,7 +625,7 @@ gtk_tree_item_draw (GtkWidget    *widget,
 	  gtk_style_set_background (widget->style, widget->window, 
 				    GTK_STATE_INSENSITIVE);
 	else if (widget->state == GTK_STATE_NORMAL)
-	  gdk_window_set_background(widget->window, &widget->style->white);
+	  gdk_window_set_background(widget->window, &widget->style->base[GTK_STATE_NORMAL]);
 	else
 	  gtk_style_set_background (widget->style, widget->window, widget->state);
 
@@ -656,7 +658,7 @@ gtk_tree_item_draw_focus (GtkWidget *widget)
       else if (!GTK_WIDGET_IS_SENSITIVE (widget))
 	gc = widget->style->bg_gc[GTK_STATE_INSENSITIVE];
       else if (widget->state == GTK_STATE_NORMAL)
-	gc = widget->style->white_gc;
+	gc = widget->style->base_gc[GTK_STATE_NORMAL];
       else
 	gc = widget->style->bg_gc[widget->state];
 

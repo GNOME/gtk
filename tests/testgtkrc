@@ -13,6 +13,7 @@ pixmap_path "."
 style "default"
 {
   fontset = "-adobe-helvetica-medium-r-normal--*-100-*-*-*-*-*-*,*"
+  base[NORMAL] = { 1.0, 0.8, 0.8 }
 }
 
 style "window"
@@ -61,7 +62,7 @@ style "curve"
   fg[NORMAL] = { 58000, 0, 0 }			# red
 }
 
-#widget_class "*" style "default"
+widget_class "*" style "default"
 widget_class "GtkWindow" style "window"
 widget_class "GtkDialog" style "window"
 widget_class "GtkFileSelection" style "window"
