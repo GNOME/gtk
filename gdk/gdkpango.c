@@ -52,7 +52,8 @@ static void gdk_pango_get_item_properties (PangoItem      *item,
 static void
 gdk_pango_context_destroy (GdkPangoContextInfo *info)
 {
-  gdk_colormap_unref (info->colormap);
+  if (info->colormap)
+    gdk_colormap_unref (info->colormap);
   g_free (info);
 }
 
@@ -336,7 +337,7 @@ gdk_draw_layout_line_with_colors (GdkDrawable      *drawable,
 }
 
 /**
- * gdk_draw_layout:
+ * gdk_draw_layout_with_colors:
  * @drawable:  the drawable on which to draw string
  * @gc:        base graphics context to use
  * @x:         the X position of the left of the layout (in pixels)
