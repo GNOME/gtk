@@ -7414,6 +7414,7 @@ gtk_clist_merge (GtkCList *clist,
 	}
     }
 
+  z.next->prev = NULL;
   return z.next;
 }
 
@@ -7425,7 +7426,7 @@ gtk_clist_mergesort (GtkCList *clist,
   GList *half;
   gint i;
 
-  if (num == 1)
+  if (num <= 1)
     {
       return list;
     }

@@ -1,3 +1,9 @@
+Fri Aug 18 17:27:46 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkclist.c (gtk_clist_merge): Don't leave dangling
+	->prev fields when merging lists. (Found simultaneously
+	by Pawel Salek and Jakub Jelinek)
+
 2000-08-12  Tor Lillqvist  <tml@iki.fi>
 
 	* gdk/gdk.def
@@ -36,7 +42,8 @@
 
 2000-08-03  Elliot Lee  <sopwith@redhat.com>
 
-	* gdk/gdkpango.c (gdk_draw_layout_line): Don't runs with a PANGO_ATTR_SHAPE set.
+	* gdk/gdkpango.c (gdk_draw_layout_line): Don't shape runs with a
+	PANGO_ATTR_SHAPE set.
 
 Thu Aug  3 09:17:06 2000  Owen Taylor  <otaylor@redhat.com>
 

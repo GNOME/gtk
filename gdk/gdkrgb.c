@@ -771,7 +771,7 @@ gdk_rgb_create_info (GdkVisual *visual, GdkColormap *colormap)
 
   image_info->bitmap = (image_info->visual->depth == 1);
 
-      /* Try to allocate as few possible shared images */
+  /* Try to allocate as few possible shared images */
   for (i=0; i < G_N_ELEMENTS (possible_n_images); i++)
     {
       if (gdk_rgb_allocate_images (image_info, possible_n_images[i], TRUE))
