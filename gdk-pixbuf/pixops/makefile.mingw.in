@@ -1,0 +1,40 @@
+## Makefile for building libpixops.a with gcc on Win32
+## Use: make -f makefile.mingw
+
+TOP = ../../..
+
+include $(TOP)/build/win32/make.mingw
+
+# Possibly override GTK+ version from build/win32/module.defs
+GTK_VER = @GTK_MAJOR_VERSION@.@GTK_MINOR_VERSION@
+
+OPTIMIZE = -g
+
+INCLUDES = -I .. -I ../..
+DEPCFLAGS = $(GLIB_CFLAGS) $(PNG_CFLAGS) $(ZLIB_CFLAGS) $(JPEG_CLFAGS) $(TIFF_CFLAGS)
+
+all :						\
+	../../config.h				\
+	libpixops.a				\
+	timescale.exe
+
+libpixops_OBJECTS = 				\
+	pixops.o				\
+	have_mmx.o				\
+	scale_line_22_33_mmx.o			\
+	composite_line_22_4a4_mmx.o		\
+	composite_line_color_22_4a4_mmx.o
+
+../../config.h : ../../config.h.win32
+	cp $< $@
+
+libpixops.a : $(libpixops_OBJECTS)
+	ar rv $@ $?
+
+timescale.exe : timescale.o libpixops.a
+	$(CC) $(CFLAGS) -o $@ timescale.o libpixops.a $(GLIB_LIBS)
+
+makefile.mingw: makefile.mingw.in
+	sed -e 's,@GTK_MAJOR[_]VERSION@,@GTK_MAJOR_VERSION@,' \
+	    -e 's,@GTK_MINOR[_]VERSION@,@GTK_MINOR_VERSION@,' <$< >$@
+

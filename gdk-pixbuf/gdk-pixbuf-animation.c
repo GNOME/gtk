@@ -113,7 +113,7 @@ gdk_pixbuf_animation_new_from_file (const char *filename)
 
 	g_return_val_if_fail (filename != NULL, NULL);
 
-	f = fopen (filename, "r");
+	f = fopen (filename, "rb");
 	if (!f)
 		return NULL;
 

@@ -1,0 +1,109 @@
+## Makefile for building the gdk_pixbuf DLL with gcc on Win32
+## Use: make -f makefile.mingw
+
+TOP = ../..
+
+include ../build/win32/make.mingw
+
+# Possibly override GTK+ version from build/win32/module.defs
+GTK_VER = @GTK_MAJOR_VERSION@.@GTK_MINOR_VERSION@
+
+OPTIMIZE = -g
+
+INCLUDES = -I . -I .. 
+DEPCFLAGS = $(GLIB_CFLAGS)
+
+all :						\
+	../config.h				\
+	gdk_pixbuf-$(GTK_VER).dll		\
+	pixbufloader_png.dll			\
+	pixbufloader_jpeg.dll			\
+	pixbufloader_gif.dll			\
+	pixbufloader_ico.dll			\
+	pixbufloader_ras.dll			\
+	pixbufloader_tiff.dll			\
+	pixbufloader_xpm.dll			\
+	pixbufloader_pnm.dll			\
+	pixbufloader_bmp.dll			\
+	test-gdk-pixbuf.exe
+	
+gdk_pixbuf_OBJECTS =				\
+	gdk-pixbuf.o				\
+	gdk-pixbuf-animation.o			\
+	gdk-pixbuf-data.o			\
+	gdk-pixbuf-io.o				\
+	gdk-pixbuf-scale.o			\
+	gdk-pixbuf-util.o			\
+	pixops/libpixops.a
+
+../config.h : ../config.h.win32
+	cp $< $@
+
+gdk_pixbuf-$(GTK_VER).dll : $(gdk_pixbuf_OBJECTS) gdk_pixbuf.def
+	$(GLIB)/build-dll gdk_pixbuf $(GTK_VER) gdk_pixbuf.def $(gdk_pixbuf_OBJECTS) -L ../gdk -lgdk-$(GTK_VER) $(GLIB_LIBS)
+
+pixops/libpixops.a :
+	cd pixops && $(MAKE) -f makefile.mingw libpixops.a
+
+pixbufloader_png_OBJECTS = io-png.o
+
+pixbufloader_png.dll : $(pixbufloader_png_OBJECTS) pixbufloader_png.def
+	$(GLIB)/build-dll pixbufloader_png - pixbuf_png.def $(pixbufloader_png_OBJECTS) -L . -lgdk_pixbuf-$(GTK_VER) $(GLIB_LIBS) $(PNG_LIBS)
+
+io-png.o : io-png.c
+	$(CC) $(CFLAGS) $(PNG_CFLAGS) -c $<
+
+pixbufloader_jpeg_OBJECTS = io-jpeg.o
+
+pixbufloader_jpeg.dll : $(pixbufloader_jpeg_OBJECTS) pixbufloader_jpeg.def
+	$(GLIB)/build-dll pixbufloader_jpeg - pixbuf_jpeg.def $(pixbufloader_jpeg_OBJECTS) -L . -lgdk_pixbuf-$(GTK_VER) $(GLIB_LIBS) $(JPEG_LIBS)
+
+io-jpeg.o : io-jpeg.c
+	$(CC) $(CFLAGS) $(JPEG_CFLAGS) -c $<
+
+pixbufloader_gif_OBJECTS = io-gif.o
+
+pixbufloader_gif.dll : $(pixbufloader_gif_OBJECTS) pixbufloader_gif.def
+	$(GLIB)/build-dll pixbufloader_gif - pixbuf_gif.def $(pixbufloader_gif_OBJECTS) -L . -lgdk_pixbuf-$(GTK_VER) $(GLIB_LIBS)
+
+pixbufloader_ico_OBJECTS = io-ico.o
+
+pixbufloader_ico.dll : $(pixbufloader_ico_OBJECTS) pixbufloader_ico.def
+	$(GLIB)/build-dll pixbufloader_ico - pixbuf_ico.def $(pixbufloader_ico_OBJECTS) -L  . -lgdk_pixbuf-$(GTK_VER) $(GLIB_LIBS)
+
+pixbufloader_ras_OBJECTS = io-ras.o
+
+pixbufloader_ras.dll : $(pixbufloader_ras_OBJECTS) pixbufloader_ras.def
+	$(GLIB)/build-dll pixbufloader_ras - pixbuf_ras.def $(pixbufloader_ras_OBJECTS) -L . -lgdk_pixbuf-$(GTK_VER) $(GLIB_LIBS)
+
+pixbufloader_tiff_OBJECTS = io-tiff.o
+
+pixbufloader_tiff.dll : $(pixbufloader_tiff_OBJECTS) pixbufloader_tiff.def
+	$(GLIB)/build-dll pixbufloader_tiff - pixbuf_tiff.def $(pixbufloader_tiff_OBJECTS) -L . -lgdk_pixbuf-$(GTK_VER) $(GLIB_LIBS) $(TIFF_LIBS) $(JPEG_LIBS) $(ZLIB_LIBS)
+
+io-tiff.o : io-tiff.c
+	$(CC) $(CFLAGS) $(TIFF_CFLAGS) -c $<
+
+pixbufloader_xpm_OBJECTS = io-xpm.o
+
+pixbufloader_xpm.dll : $(pixbufloader_xpm_OBJECTS) pixbufloader_xpm.def
+	$(GLIB)/build-dll pixbufloader_xpm - pixbuf_xpm.def $(pixbufloader_xpm_OBJECTS) -L  . -lgdk_pixbuf-$(GTK_VER) $(GLIB_LIBS)
+
+pixbufloader_pnm_OBJECTS = io-pnm.o
+
+pixbufloader_pnm.dll : $(pixbufloader_pnm_OBJECTS) pixbufloader_pnm.def
+	$(GLIB)/build-dll pixbufloader_pnm - pixbuf_pnm.def $(pixbufloader_pnm_OBJECTS) -L . -lgdk_pixbuf-$(GTK_VER) $(GLIB_LIBS)
+
+pixbufloader_bmp_OBJECTS = io-bmp.o
+
+pixbufloader_bmp.dll : $(pixbufloader_bmp_OBJECTS) pixbufloader_bmp.def
+	$(GLIB)/build-dll pixbufloader_bmp - pixbuf_bmp.def $(pixbufloader_bmp_OBJECTS) -L . -lgdk_pixbuf-$(GTK_VER) $(GLIB_LIBS)
+
+test-gdk-pixbuf.exe : test-gdk-pixbuf.o gdk_pixbuf-$(GTK_VER).dll
+	$(CC) $(CFLAGS) -o $@ test-gdk-pixbuf.o -L . -lgdk_pixbuf-$(GTK_VER) $(GTK_LIBS) $(GLIB_LIBS)
+
+# Hack to get an updated makefile.mingw automatically after updating
+# makefile.mingw.in. Only for developer use.
+makefile.mingw: makefile.mingw.in
+	sed -e 's,@GTK_MAJOR[_]VERSION@,@GTK_MAJOR_VERSION@,' \
+	    -e 's,@GTK_MINOR[_]VERSION@,@GTK_MINOR_VERSION@,' <$< >$@

@@ -1,0 +1,3 @@
+EXPORTS
+	gdk_pixbuf__xpm_image_load
+	gdk_pixbuf__xpm_image_load_xpm_data

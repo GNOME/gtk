@@ -1,3 +1,43 @@
+2000-07-23  Tor Lillqvist  <tml@iki.fi>
+
+	Win32 build setup:
+	
+	* makefile.mingw.in
+	* pixops/makefile.mingw.in
+	* pixbuf_*.def: New files.
+
+	* Makefile.am
+	* pixops/Makefile.am: Add them. Add rule to generate makefile.mingw.
+
+	* gdk-pixbuf-io.c (gtk_win32_get_installation_directory):
+	New function, to get the GTK+ installation directory from
+	the Windows Registry, where the installation program
+	for whatever software includes GTK+ has stored it.
+
+	Used to avoid having hardcoding the directory where to look for
+	loaders. This function is needed by gtk, too, so it should
+	really be just in one place. Maybe a small static library
+	one level up from here?
+
+	* gdk-pixbuf-animation.c (gdk_pixbuf_animation_new_from_file)
+	* gdk-pixbuf-io.c (gdk_pixbuf_new_from_file): 
+	Open file in binary mode. This *is* standard C. (No-op on Unix,
+	of course.)
+
+	* io-jpeg.c: If we don't HAVE_SIGSETJMP, use normal setjmp().
+
+	* io-tiff.c: Use g_get_tmp_dir(). If we don't HAVE_MKSTEMP, use
+	mktemp() and open().
+	(gdk_pixbuf__tiff_image_stop_load): g_free() also the tempname.
+
+	* pixops/*.S: The Gas from mingw32 doesn't like the .type
+	pseudo-op. Conditionalise on __MINGW32__, but probably
+	should conditionalise on Gas version instead? Or could we
+	do without .type on all systems?
+
+	* pixops/timescale.c: Use g_get_current_time()
+	instead of gettimeofday().
+
 Sat Jul 22 10:57:22 2000  Owen Taylor  <otaylor@redhat.com>
 
 	* Makefile.am (test_gdk_pixbuf_LDADD): Remove -lgmodule

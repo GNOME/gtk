@@ -3,8 +3,19 @@
 gcc2_compiled.:
 .text
 	.align 16
+
+#ifndef __MINGW32__
+	
 .globl pixops_scale_line_22_33_mmx
 	.type	 pixops_scale_line_22_33_mmx,@function
+pixops_scale_line_22_33_mmx:
+	
+#else
+	
+.globl _pixops_scale_line_22_33_mmx
+_pixops_scale_line_22_33_mmx:
+	
+#endif
 /*
  * Arguments
  *		
@@ -17,7 +28,7 @@ gcc2_compiled.:
  * xinit:       32(%ebp)
  *	
 */
-pixops_scale_line_22_33_mmx:
+
 /*
  * Function call entry
  */

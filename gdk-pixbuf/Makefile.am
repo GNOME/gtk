@@ -167,3 +167,20 @@ libgdk_pixbufinclude_HEADERS =	\
 noinst_HEADERS = 		\
 	gdk-pixbuf-io.h		\
 	gdk-pixbuf-private.h
+
+EXTRA_DIST =			\
+	makefile.mingw		\
+	makefile.mingw.in	\
+	gdk_pixbuf.def		\
+	pixbuf_ico.def		\
+	pixbuf_pnm.def		\
+	pixbuf_xpm.def		\
+	pixbuf_bmp.def		\
+	pixbuf_jpeg.def		\
+	pixbuf_ras.def		\
+	pixbuf_gif.def		\
+	pixbuf_png.def		\
+	pixbuf_tiff.def
+
+makefile.mingw: $(top_builddir)/config.status $(top_srcdir)/gdk-pixbuf/makefile.mingw.in
+	cd $(top_builddir) && CONFIG_FILES=gdk-pixbuf/$@ CONFIG_HEADERS= $(SHELL) ./config.status

@@ -1,24 +1,24 @@
-#include <unistd.h>
+#include <glib.h>
 #include <string.h>
-#include <sys/time.h>
 #include <stdlib.h>
 #include <stdio.h>
+
 #include "pixops.h"
 
-struct timeval start_time;
+static GTimeVal start_time;
 
 void start_timing (void)
 {
-  gettimeofday (&start_time, NULL);
+  g_get_current_time (&start_time);
 }
 
 double
 stop_timing (const char *test, int iterations, int bytes)
 {
-  struct timeval stop_time;
+  GTimeVal stop_time;
   double msecs;
   
-  gettimeofday (&stop_time, NULL);
+  g_get_current_time (&stop_time);
   if (stop_time.tv_usec < start_time.tv_usec)
     {
       stop_time.tv_usec += 1000000;

@@ -50,6 +50,11 @@
 #include "gdk-pixbuf-private.h"
 #include "gdk-pixbuf-io.h"
 
+#ifndef HAVE_SIGSETJMP
+#define sigjmp_buf jmp_buf
+#define sigsetjmp(jb, x) setjmp(jb)
+#define siglongjmp longjmp
+#endif
 
 
 /* we are a "source manager" as far as libjpeg is concerned */
