@@ -1,3 +1,9 @@
+Fri Sep 27 16:15:11 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtknotebook.c (gtk_notebook_get_event_window_position):
+	Handle the case where the first page isn't visible.
+	(#90336, bug tracked down by Chema Celorio)
+
 Fri Sep 27 15:57:15 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkstock.c (builtin_items): Change accelerator
