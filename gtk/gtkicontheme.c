@@ -254,6 +254,8 @@ gtk_icon_theme_get_type (void)
  * a new icon theme object for scratch.
  * 
  * Return value: the newly created #GtkIconTheme object.
+ *
+ * Since: 2.4
  **/
 GtkIconTheme *
 gtk_icon_theme_new (void)
@@ -271,6 +273,8 @@ gtk_icon_theme_new (void)
  *  the default screen. This icon theme is associated with
  *  the screen and can be used as long as the screen
  *  is open.
+ *
+ * Since: 2.4
  **/
 GtkIconTheme *
 gtk_icon_theme_get_default (void)
@@ -295,6 +299,8 @@ gtk_icon_theme_get_default (void)
  *  the given screen. This icon theme is associated with
  *  the screen and can be used as long as the screen
  *  is open.
+ *
+ * Since: 2.4
  **/
 GtkIconTheme *
 gtk_icon_theme_get_for_screen (GdkScreen *screen)
@@ -446,6 +452,8 @@ unset_screen (GtkIconTheme *icon_theme)
  * Sets the screen for an icon theme; the screen is used
  * to track the user's currently configured icon theme,
  * which might be different for different screens.
+ *
+ * Since: 2.4
  **/
 void
 gtk_icon_theme_set_screen (GtkIconTheme *icon_theme,
@@ -624,6 +632,8 @@ gtk_icon_theme_finalize (GObject *object)
  * (This is legacy feature, and new icons should be put
  * into the default icon theme, which is called "hicolor", rather than
  * directly on the icon path.)
+ *
+ * Since: 2.4
  **/
 void
 gtk_icon_theme_set_search_path (GtkIconTheme *icon_theme,
@@ -659,6 +669,8 @@ gtk_icon_theme_set_search_path (GtkIconTheme *icon_theme,
  *              in @path, or %NULL
  * 
  * Gets the current search path. See gtk_icon_theme_set_search_path().
+ *
+ * Since: 2.4
  **/
 void
 gtk_icon_theme_get_search_path (GtkIconTheme      *icon_theme,
@@ -689,7 +701,9 @@ gtk_icon_theme_get_search_path (GtkIconTheme      *icon_theme,
  * @icon_theme: a #GtkIconTheme
  * @path: directory name to append to the icon path
  * 
- * Appends a directory to the search path. See gtk_icon_theme_set_search_path().
+ * Appends a directory to the search path. See gtk_icon_theme_set_search_path(). 
+ *
+ * Since: 2.4
  **/
 void
 gtk_icon_theme_append_search_path (GtkIconTheme *icon_theme,
@@ -715,6 +729,8 @@ gtk_icon_theme_append_search_path (GtkIconTheme *icon_theme,
  * @path: directory name to prepend to the icon path
  * 
  * Prepends a directory to the search path. See gtk_icon_theme_set_search_path().
+ *
+ * Since: 2.4
  **/
 void
 gtk_icon_theme_prepend_search_path (GtkIconTheme *icon_theme,
@@ -748,6 +764,8 @@ gtk_icon_theme_prepend_search_path (GtkIconTheme *icon_theme,
  * overriding system configuration. This function cannot be called
  * on the icon theme objects returned from gtk_icon_theme_get_default()
  * and gtk_icon_theme_get_default().
+ *
+ * Since: 2.4
  **/
 void
 gtk_icon_theme_set_custom_theme (GtkIconTheme *icon_theme,
@@ -1056,6 +1074,8 @@ ensure_valid_themes (GtkIconTheme *icon_theme)
  * Return value: a #GtkIconInfo structure containing information
  * about the icon, or %NULL if the icon wasn't found. Free with
  * gtk_icon_info_free()
+ *
+ * Since: 2.4
  **/
 GtkIconInfo *
 gtk_icon_theme_lookup_icon (GtkIconTheme       *icon_theme,
@@ -1170,6 +1190,8 @@ gtk_icon_theme_error_quark (void)
  *  or a new reference to an internal icon, so you must not modify
  *  the icon. Use g_object_unref() to release your reference to the
  *  icon. %NULL if the icon isn't found.
+ *
+ * Since: 2.4
  **/
 GdkPixbuf *
 gtk_icon_theme_load_icon (GtkIconTheme         *icon_theme,
@@ -1212,6 +1234,8 @@ gtk_icon_theme_load_icon (GtkIconTheme         *icon_theme,
  * 
  * Return value: %TRUE if @icon_theme includes an
  *  icon for @icon_name.
+ *
+ * Since: 2.4
  **/
 gboolean 
 gtk_icon_theme_has_icon (GtkIconTheme *icon_theme,
@@ -1272,6 +1296,8 @@ add_key_to_list (gpointer  key,
  *  icons in the theme. You must first free each element
  *  in the list with g_free(), then free the list itself
  *  with g_list_free().
+ *
+ * Since: 2.4
  **/
 GList *
 gtk_icon_theme_list_icons (GtkIconTheme *icon_theme,
@@ -1331,6 +1357,8 @@ gtk_icon_theme_list_icons (GtkIconTheme *icon_theme,
  * 
  * Return value: the name of an example icon or %NULL.
  *  Free with g_free().
+ *
+ * Since: 2.4
  **/
 char *
 gtk_icon_theme_get_example_icon_name (GtkIconTheme *icon_theme)
@@ -1368,6 +1396,8 @@ gtk_icon_theme_get_example_icon_name (GtkIconTheme *icon_theme)
  * 
  * Return value: %TRUE if the icon theme has changed and needed
  *   to be reloaded.
+ *
+ * Since: 2.4
  **/
 gboolean
 gtk_icon_theme_rescan_if_needed (GtkIconTheme *icon_theme)
@@ -1931,6 +1961,8 @@ icon_info_new_builtin (BuiltinIcon *icon)
  * Make a copy of a #GtkIconInfo.
  * 
  * Return value: the new GtkIconInfo
+ *
+ * Since: 2.4
  **/
 GtkIconInfo *
 gtk_icon_info_copy (GtkIconInfo *icon_info)
@@ -1957,6 +1989,8 @@ gtk_icon_info_copy (GtkIconInfo *icon_info)
  * @icon_info: a #GtkIconInfo
  * 
  * Free a #GtkIconInfo and associated information
+ *
+ * Since: 2.4
  **/
 void
 gtk_icon_info_free (GtkIconInfo *icon_info)
@@ -1988,6 +2022,8 @@ gtk_icon_info_free (GtkIconInfo *icon_info)
  * 
  * Return value: the base size, or 0, if no base
  *  size is known for the icon.
+ *
+ * Since: 2.4
  **/
 gint
 gtk_icon_info_get_base_size (GtkIconInfo *icon_info)
@@ -2011,6 +2047,8 @@ gtk_icon_info_get_base_size (GtkIconInfo *icon_info)
  *  if gtk_icon_info_get_builtin_pixbuf() should
  *  be used instead. The return value is owned by
  *  GTK+ and should not be modified or freed.
+ *
+ * Since: 2.4
  **/
 G_CONST_RETURN gchar *
 gtk_icon_info_get_filename (GtkIconInfo *icon_info)
@@ -2033,6 +2071,8 @@ gtk_icon_info_get_filename (GtkIconInfo *icon_info)
  *  extra reference is added to the returned pixbuf, so if
  *  you want to keep it around, you must use g_object_ref().
  *  The returned image must not be modified.
+ *
+ * Since: 2.4
  **/
 GdkPixbuf *
 gtk_icon_info_get_builtin_pixbuf (GtkIconInfo *icon_info)
@@ -2210,6 +2250,8 @@ icon_info_ensure_scale_and_pixbuf (GtkIconInfo *icon_info,
  *  or a new reference to an internal icon, so you must not modify
  *  the icon. Use g_object_unref() to release your reference to the
  *  icon.
+ *
+ * Since: 2.4
  **/
 GdkPixbuf *
 gtk_icon_info_load_icon (GtkIconInfo *icon_info,
@@ -2252,6 +2294,8 @@ gtk_icon_info_load_icon (GtkIconInfo *icon_info,
  *
  * This function is provided primarily to allow compatibility wrappers
  * for older API's, and is not expected to be useful for applications.
+ *
+ * Since: 2.4
  **/
 void
 gtk_icon_info_set_raw_coordinates (GtkIconInfo *icon_info,
@@ -2303,6 +2347,8 @@ icon_info_scale_point (GtkIconInfo  *icon_info,
  * information about the coordinate system.
  * 
  * Return value: %TRUE if the icon has an embedded rectangle
+ *
+ * Since: 2.4
  **/
 gboolean
 gtk_icon_info_get_embedded_rect (GtkIconInfo  *icon_info,
@@ -2349,6 +2395,8 @@ gtk_icon_info_get_embedded_rect (GtkIconInfo  *icon_info,
  * emblems or overlays to the icon.
  * 
  * Return value: %TRUE if there are any attach points for the icon.
+ *
+ * Since: 2.4
  **/
 gboolean
 gtk_icon_info_get_attach_points (GtkIconInfo *icon_info,
@@ -2400,6 +2448,8 @@ gtk_icon_info_get_attach_points (GtkIconInfo *icon_info,
  * Return value: the display name for the icon or %NULL, if
  *  the icon doesn't have a specified display name. This value
  *  is owned @icon_info and must not be modified or free.
+ *
+ * Since: 2.4
  **/
 G_CONST_RETURN gchar *
 gtk_icon_info_get_display_name  (GtkIconInfo *icon_info)
@@ -2439,6 +2489,8 @@ gtk_icon_info_get_display_name  (GtkIconInfo *icon_info)
  *
  * This function will generally be used with pixbufs loaded
  * via gdk_pixbuf_new_from_inline ().
+ *
+ * Since: 2.4
  **/
 void
 gtk_icon_theme_add_builtin_icon (const gchar *icon_name,

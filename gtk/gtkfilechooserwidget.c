@@ -204,6 +204,8 @@ gtk_file_chooser_widget_get_property (GObject         *object,
  * #GtkFileChooserDialog.
  * 
  * Return value: a new #GtkFileChooserWidget
+ *
+ * Since: 2.4
  **/
 GtkWidget *
 gtk_file_chooser_widget_new (GtkFileChooserAction action)

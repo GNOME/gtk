@@ -748,6 +748,8 @@ gtk_file_chooser_unselect_uri (GtkFileChooser *chooser,
  * @chooser: a #GtkFileChooser
  * 
  * Selects all the files in the current folder of a file chooser.
+ *
+ * Since: 2.4
  **/
 void
 gtk_file_chooser_select_all (GtkFileChooser *chooser)
@@ -762,6 +764,8 @@ gtk_file_chooser_select_all (GtkFileChooser *chooser)
  * @chooser: a #GtkFileChooser
  * 
  * Unselects all the files in the current folder of a file chooser.
+ *
+ * Since: 2.4
  **/
 void
 gtk_file_chooser_unselect_all (GtkFileChooser *chooser)

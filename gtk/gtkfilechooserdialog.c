@@ -211,6 +211,8 @@ gtk_file_chooser_dialog_get_property (GObject         *object,
  * gtk_dialog_new_with_buttons().
  * 
  * Return value: a new #GtkFileChooserDialog
+ *
+ * Since: 2.4
  **/
 GtkWidget *
 gtk_file_chooser_dialog_new (const gchar         *title,
