@@ -1,3 +1,9 @@
+Thu Jun 25 10:50:34 1998  Stefan Jeske  <stefan@gtk.org>
+
+	* gdk/gdk.h gdk/gdkfont.c: Added functions gdk_text_height,
+ 	gdk_string_height, gdk_char_height to retrieve the exact
+	height of a text.
+
 Thu Jun 25 07:53:51 BST 1998  Tony Gale  <gale@gtk.org>
 
 	* docs/gtk_tut.sgml: add section on GtkCList widget, contributed

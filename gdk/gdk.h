@@ -489,26 +489,33 @@ gint gdk_color_equal	 (GdkColor	*colora,
 /* Fonts
  */
 GdkFont* gdk_font_load	    (const gchar    *font_name);
-GdkFont* gdk_fontset_load   (gchar    *fontset_name);
-GdkFont* gdk_font_ref	    (GdkFont  *font);
-void	 gdk_font_unref	    (GdkFont  *font);
+GdkFont* gdk_fontset_load   (gchar          *fontset_name);
+GdkFont* gdk_font_ref	    (GdkFont        *font);
+void	 gdk_font_unref	    (GdkFont        *font);
 gint	 gdk_font_id	    (const GdkFont  *font);
 gint	 gdk_font_equal	    (const GdkFont  *fonta,
 			     const GdkFont  *fontb);
-gint	 gdk_string_width   (GdkFont  *font,
+gint	 gdk_string_width   (GdkFont        *font,
 			     const gchar    *string);
-gint	 gdk_text_width	    (GdkFont  *font,
+gint	 gdk_text_width	    (GdkFont        *font,
 			     const gchar    *text,
-			     gint      text_length);
-gint	 gdk_char_width	    (GdkFont  *font,
-			     gchar     character);
-gint	 gdk_string_measure (GdkFont  *font,
+			     gint            text_length);
+gint	 gdk_char_width	    (GdkFont        *font,
+			     gchar           character);
+gint	 gdk_string_measure (GdkFont        *font,
 			     const gchar    *string);
-gint	 gdk_text_measure   (GdkFont  *font,
+gint	 gdk_text_measure   (GdkFont        *font,
 			     const gchar    *text,
-			     gint      text_length);
-gint	 gdk_char_measure   (GdkFont  *font,
-			     gchar     character);
+			     gint            text_length);
+gint	 gdk_char_measure   (GdkFont        *font,
+			     gchar           character);
+gint	 gdk_string_height  (GdkFont        *font,
+			     const gchar    *string);
+gint	 gdk_text_height    (GdkFont        *font,
+			     const gchar    *text,
+			     gint            text_length);
+gint	 gdk_char_height    (GdkFont        *font,
+			     gchar           character);
 
 
 /* Drawing

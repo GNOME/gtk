@@ -385,3 +385,71 @@ gdk_char_measure (GdkFont *font,
 
   return gdk_text_measure (font, &character, 1);
 }
+
+gint
+gdk_string_height (GdkFont     *font,
+		   const gchar *string)
+{
+  g_return_val_if_fail (font != NULL, -1);
+  g_return_val_if_fail (string != NULL, -1);
+
+  return gdk_text_height (font, string, strlen (string));
+}
+
+gint
+gdk_text_height (GdkFont     *font,
+		 const gchar *text,
+		 gint         text_length)
+{
+  GdkFontPrivate *private;
+  XCharStruct overall;
+  XFontStruct *xfont;
+  XFontSet    fontset;
+  XRectangle  ink, log;
+  int direction;
+  int font_ascent;
+  int font_descent;
+  gint height;
+
+  g_return_val_if_fail (font != NULL, -1);
+  g_return_val_if_fail (text != NULL, -1);
+
+  private = (GdkFontPrivate*) font;
+
+  switch (font->type)
+    {
+    case GDK_FONT_FONT:
+      xfont = (XFontStruct *) private->xfont;
+      if ((xfont->min_byte1 == 0) && (xfont->max_byte1 == 0))
+	{
+	  XTextExtents (xfont, text, text_length,
+			&direction, &font_ascent, &font_descent,
+			&overall);
+	}
+      else
+	{
+	  XTextExtents16 (xfont, (XChar2b *) text, text_length / 2,
+			  &direction, &font_ascent, &font_descent,
+			  &overall);
+	}
+      height = overall.ascent + overall.descent;
+      break;
+    case GDK_FONT_FONTSET:
+      fontset = (XFontSet) private->xfont;
+      XmbTextExtents (fontset, text, text_length, &ink, &log);
+      height = log.height;
+      break;
+    default:
+      height = 0;
+    }
+  return height;
+}
+
+gint
+gdk_char_height (GdkFont *font,
+		 gchar    character)
+{
+  g_return_val_if_fail (font != NULL, -1);
+
+  return gdk_text_height (font, &character, 1);
+}
