@@ -281,6 +281,7 @@ gtk_private_h_sources =         \
 	gtkfilechooserutils.h	\
 	gtkfilesystemunix.h	\
 	gtkfilesystemmodel.h	\
+	gtkpathbar.h		\
 	gtkrbtree.h 		\
 	gtktextbtree.h		\
 	gtktextchildprivate.h   \
@@ -407,6 +408,7 @@ gtk_c_sources =                 \
 	gtkoldeditable.c	\
 	gtkoptionmenu.c		\
 	gtkpaned.c		\
+	gtkpathbar.c		\
 	gtkpixmap.c		\
 	gtkpreview.c		\
 	gtkprogress.c		\
