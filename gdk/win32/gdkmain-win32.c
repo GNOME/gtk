@@ -38,11 +38,11 @@
 #include "gdkinputprivate.h"
 #include "gdkkeysyms.h"
 
+#include <objbase.h>
+
 static void	 gdkx_XConvertCase	(KeySym	       symbol,
 					 KeySym	      *lower,
 					 KeySym	      *upper);
-#define XConvertCase gdkx_XConvertCase
-
 static void	    gdk_exit_func		 (void);
 
 
@@ -234,6 +234,9 @@ gdk_init_check (int    *argc,
   
   gdk_ProgInstance = GetModuleHandle (NULL);
   gdk_DC = CreateDC ("DISPLAY", NULL, NULL, NULL);
+  gdk_root_window = GetDesktopWindow ();
+
+  CoInitialize (NULL);
 
   gdk_selection_request_msg = RegisterWindowMessage ("gdk-selection-request");
   gdk_selection_notify_msg = RegisterWindowMessage ("gdk-selection-notify");
@@ -246,8 +249,6 @@ gdk_init_check (int    *argc,
 
   gdk_progclass = g_basename (g_get_prgname ());
   gdk_progclass[0] = toupper (gdk_progclass[0]);
-
-  gdk_root_window = HWND_DESKTOP;
 
   g_atexit (gdk_exit_func);
   
@@ -333,7 +334,7 @@ gdk_screen_width (void)
 {
   gint return_val;
   
-  return_val = gdk_root_parent.drawable.width;
+  return_val = gdk_root_parent->drawable.width;
 
   return return_val;
 }
@@ -358,7 +359,7 @@ gdk_screen_height (void)
 {
   gint return_val;
   
-  return_val = gdk_root_parent.drawable.height;
+  return_val = gdk_root_parent->drawable.height;
 
   return return_val;
 }
@@ -498,6 +499,9 @@ gdk_exit_func (void)
       gdk_input_exit ();
       gdk_key_repeat_restore ();
       gdk_dnd_exit ();
+
+      CoUninitialize ();
+
       DeleteDC (gdk_DC);
       gdk_DC = NULL;
       gdk_initialized = 0;
@@ -1670,6 +1674,22 @@ static struct gdk_key {
   { 0x000ef9, "Hangul_J_KkogjiDalrinIeung" },
   { 0x000efa, "Hangul_J_YeorinHieuh" },
   { 0x000eff, "Korean_Won" },
+  { 0x0013bc, "OE" },
+  { 0x0013bd, "oe" },
+  { 0x0013be, "Ydiaeresis" },
+  { 0x0020a0, "EcuSign" },
+  { 0x0020a1, "ColonSign" },
+  { 0x0020a2, "CruzeiroSign" },
+  { 0x0020a3, "FFrancSign" },
+  { 0x0020a4, "LiraSign" },
+  { 0x0020a5, "MillSign" },
+  { 0x0020a6, "NairaSign" },
+  { 0x0020a7, "PesetaSign" },
+  { 0x0020a8, "RupeeSign" },
+  { 0x0020a9, "WonSign" },
+  { 0x0020aa, "NewSheqelSign" },
+  { 0x0020ab, "DongSign" },
+  { 0x0020ac, "EuroSign" },
   { 0x00fd01, "3270_Duplicate" },
   { 0x00fd02, "3270_FieldMark" },
   { 0x00fd03, "3270_Right2" },
@@ -1826,11 +1846,21 @@ static struct gdk_key {
   { 0x00ff2e, "Kana_Shift" },
   { 0x00ff2f, "Eisu_Shift" },
   { 0x00ff30, "Eisu_toggle" },
+  { 0x00ff31, "Hangul" },
+  { 0x00ff32, "Hangul_Start" },
+  { 0x00ff33, "Hangul_End" },
+  { 0x00ff34, "Hangul_Hanja" },
+  { 0x00ff35, "Hangul_Jamo" },
+  { 0x00ff36, "Hangul_Romaja" },
+  { 0x00ff37, "Codeinput" },
+  { 0x00ff38, "Hangul_Jeonja" },
+  { 0x00ff39, "Hangul_Banja" },
+  { 0x00ff3a, "Hangul_PreHanja" },
+  { 0x00ff3b, "Hangul_PostHanja" },
   { 0x00ff3c, "SingleCandidate" },
   { 0x00ff3d, "MultipleCandidate" },
-  { 0x00ff3d, "Zen_Koho" },
-  { 0x00ff3e, "Mae_Koho" },
   { 0x00ff3e, "PreviousCandidate" },
+  { 0x00ff3f, "Hangul_Special" },
   { 0x00ff50, "Home" },
   { 0x00ff51, "Left" },
   { 0x00ff52, "Up" },
@@ -1949,21 +1979,6 @@ static struct gdk_key {
   { 0x00ffed, "Hyper_L" },
   { 0x00ffee, "Hyper_R" },
   { 0x00ffff, "Delete" },
-  { 0x00ff31, "Hangul" },
-  { 0x00ff32, "Hangul_Start" },
-  { 0x00ff33, "Hangul_End" },
-  { 0x00ff34, "Hangul_Hanja" },
-  { 0x00ff35, "Hangul_Jamo" },
-  { 0x00ff36, "Hangul_Romaja" },
-  { 0x00ff37, "Hangul_Codeinput" },
-  { 0x00ff38, "Hangul_Jeonja" },
-  { 0x00ff39, "Hangul_Banja" },
-  { 0x00ff3a, "Hangul_PreHanja" },
-  { 0x00ff3b, "Hangul_PostHanja" },
-  { 0x00ff3c, "Hangul_SingleCandidate" },
-  { 0x00ff3d, "Hangul_MultipleCandidate" },
-  { 0x00ff3e, "Hangul_PreviousCandidate" },
-  { 0x00ff3f, "Hangul_Special" },
   { 0xffffff, "VoidSymbol" },
 };
 
@@ -1985,7 +2000,7 @@ gdk_keyval_name (guint	      keyval)
 	     GDK_NUM_KEYS, sizeof (struct gdk_key),
 	     gdk_keys_keyval_compare);
   if (found != NULL)
-    return found->name;
+    return (gchar *) found->name;
   else
     return NULL;
 }
@@ -2037,7 +2052,7 @@ gdk_keyval_to_upper (guint	  keyval)
       KeySym lower_val = 0;
       KeySym upper_val = 0;
       
-      XConvertCase (keyval, &lower_val, &upper_val);
+      gdkx_XConvertCase (keyval, &lower_val, &upper_val);
       return upper_val;
     }
   return 0;
@@ -2051,7 +2066,7 @@ gdk_keyval_to_lower (guint	  keyval)
       KeySym lower_val = 0;
       KeySym upper_val = 0;
       
-      XConvertCase (keyval, &lower_val, &upper_val);
+      gdkx_XConvertCase (keyval, &lower_val, &upper_val);
       return lower_val;
     }
   return 0;
@@ -2065,7 +2080,7 @@ gdk_keyval_is_upper (guint	  keyval)
       KeySym lower_val = 0;
       KeySym upper_val = 0;
       
-      XConvertCase (keyval, &lower_val, &upper_val);
+      gdkx_XConvertCase (keyval, &lower_val, &upper_val);
       return upper_val == keyval;
     }
   return TRUE;
@@ -2079,7 +2094,7 @@ gdk_keyval_is_lower (guint        keyval)
       KeySym lower_val = 0;
       KeySym upper_val = 0;
       
-      XConvertCase (keyval, &lower_val, &upper_val);
+      gdkx_XConvertCase (keyval, &lower_val, &upper_val);
       return lower_val == keyval;
     }
   return TRUE;

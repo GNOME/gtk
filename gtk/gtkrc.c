@@ -239,7 +239,7 @@ get_gtk_sysconf_directory (void)
   gchar win_dir[100];
 
   GetWindowsDirectory (win_dir, sizeof (win_dir));
-  sprintf (gtk_sysconf_dir, "%s\\gtk", win_dir);
+  sprintf (gtk_sysconf_dir, "%s\\gtk+", win_dir);
   return gtk_sysconf_dir;
 }
 
@@ -467,10 +467,14 @@ gtk_rc_init (void)
   gchar *locale_suffixes[3];
   gint n_locale_suffixes = 0;
   gint i, j;
+#ifdef G_OS_WIN32
+  char *locale = gwin_getlocale ();
+#else
 #ifdef HAVE_LC_MESSAGES
   char *locale = setlocale (LC_MESSAGES, NULL);
 #else
   char *locale = setlocale (LC_CTYPE, NULL);
+#endif
 #endif
   guint length;
   char *p;

@@ -38,6 +38,8 @@
 
 #ifdef OLE2_DND
 #include <ole2.h>
+#else
+#include <objbase.h>
 #endif
 
 #ifdef _MSC_VER			/* These aren't in mingw32 */
@@ -596,7 +598,7 @@ gdk_dropfiles_filter (GdkXEvent *xev,
       private = (GdkDragContextPrivate *) context;
       context->protocol = GDK_DRAG_PROTO_WIN32_DROPFILES;
       context->is_source = FALSE;
-      context->source_window = (GdkWindow *) &gdk_root_parent;
+      context->source_window = (GdkWindow *) gdk_root_parent;
       context->dest_window = event->any.window;
       gdk_window_ref (context->dest_window);
       /* WM_DROPFILES drops are always file names */
@@ -638,7 +640,7 @@ gdk_dropfiles_filter (GdkXEvent *xev,
 	    }
 	  g_string_append (result, "\015\012");
 	}
-      gdk_sel_prop_store ((GdkWindow *) &gdk_root_parent,
+      gdk_sel_prop_store ((GdkWindow *) gdk_root_parent,
 			  text_uri_list_atom, 8, result->str, result->len + 1);
 
       DragFinish (hdrop);

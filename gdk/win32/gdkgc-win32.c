@@ -87,7 +87,8 @@ gdk_gc_new_with_values (GdkWindow	*window,
   else
     private->background = white;
 
-  if ((values_mask & GDK_GC_FONT) && (values->font->type == GDK_FONT_FONT))
+  if ((values_mask & GDK_GC_FONT) && (values->font->type == GDK_FONT_FONT
+				      || values->font->type == GDK_FONT_FONTSET))
     {
       private->font = (HFONT) ((GdkFontPrivate*) values->font)->xfont;
       GDK_NOTE (MISC, g_print (" font=%#x", private->font));
@@ -480,7 +481,8 @@ gdk_gc_set_font (GdkGC	 *gc,
   g_return_if_fail (gc != NULL);
   g_return_if_fail (font != NULL);
 
-  if (font->type == GDK_FONT_FONT)
+  if (font->type == GDK_FONT_FONT
+      || font->type == GDK_FONT_FONTSET)
     {
       gc_private = (GdkGCPrivate*) gc;
       font_private = (GdkFontPrivate*) font;

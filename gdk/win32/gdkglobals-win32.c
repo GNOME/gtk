@@ -28,9 +28,9 @@
 #include "gdkprivate.h"
 
 guint             gdk_debug_flags = 0;
-HWND              gdk_root_window;
+HWND              gdk_root_window = NULL;
 HWND              gdk_leader_window;
-GDKVAR GdkWindowPrivate  gdk_root_parent = { { NULL, }, NULL, };
+GDKVAR GdkWindowPrivate *gdk_root_parent = NULL;
 HDC		  gdk_DC;
 HINSTANCE	  gdk_DLLInstance;
 HINSTANCE	  gdk_ProgInstance;
@@ -45,18 +45,8 @@ gchar            *gdk_progclass = NULL;
 gint              gdk_error_code;
 gint              gdk_error_warnings = TRUE;
 gint              gdk_null_window_warnings = TRUE;
-GList            *gdk_default_filters = NULL;
-
-gboolean      gdk_xim_using;  	        /* using XIM Protocol if TRUE */
-GdkWindow    *gdk_xim_window;		/* currently using Widow */
-
-GdkWindowPrivate *gdk_xgrab_window = NULL;  /* Window that currently holds the
-					     *	x pointer grab
-					     */
 
 GMutex *gdk_threads_mutex = NULL;          /* Global GDK lock */
 
-#ifdef USE_XIM
-GdkICPrivate *gdk_xim_ic;		/* currently using IC */
-GdkWindow *gdk_xim_window;	        /* currently using Window */
-#endif
+BOOL (WINAPI *p_TrackMouseEvent) (TRACKMOUSEEVENT *tme) = NULL;
+

@@ -469,47 +469,35 @@ gdk_draw_text (GdkDrawable *drawable,
   if (text_length == 0)
     return;
 
+  g_assert (font->type == GDK_FONT_FONT || font->type == GDK_FONT_FONTSET);
+
   drawable_private = (GdkDrawablePrivate*) drawable;
   gc_private = (GdkGCPrivate*) gc;
   font_private = (GdkFontPrivate*) font;
 
-  if (font->type == GDK_FONT_FONT)
-    {
-      hdc = gdk_gc_predraw (drawable_private, gc_private);
-      xfont = (HFONT) font_private->xfont;
+  hdc = gdk_gc_predraw (drawable_private, gc_private);
+  xfont = (HFONT) font_private->xfont;
 
-      GDK_NOTE (MISC, g_print ("gdk_draw_text: %#x (%d) %#x "
-			       "+%d+%d font: %#x \"%.*s\" length: %d\n",
-			       drawable_private->xwindow,
-			       gc_private, gc_private->xgc,
-			       x, y, xfont,
-			       (text_length > 10 ? 10 : text_length),
-			       text, text_length));
-      
-      if ((oldfont = SelectObject (hdc, xfont)) == NULL)
-	g_warning ("gdk_draw_text: SelectObject failed");
-      if (font_private->cpinfo.MaxCharSize > 1)
-	{
-	  wcstr = g_new (wchar_t, text_length);
-	  if ((wlen = MultiByteToWideChar (font_private->codepage, 0,
-					   text, text_length,
-					   wcstr, text_length)) == 0)
-	    g_warning ("gdk_draw_text: MultiByteToWideChar failed");
-	  else if (!TextOutW (hdc, x, y, wcstr, wlen))
-	    g_warning ("gdk_draw_text: TextOutW failed");
-	  g_free (wcstr);
-	}
-      else
-	{
-	  if (!TextOutA (hdc, x, y, text, text_length))
-	    g_warning ("gdk_draw_text: TextOutA failed");
-	}
-      if (oldfont != NULL)
-	SelectObject (hdc, oldfont);
-      gdk_gc_postdraw (drawable_private, gc_private);
-    }
-  else
-    g_error ("undefined font type");
+  GDK_NOTE (MISC, g_print ("gdk_draw_text: %#x (%d) %#x "
+			   "+%d+%d font: %#x \"%.*s\" length: %d\n",
+			   drawable_private->xwindow,
+			   gc_private, gc_private->xgc,
+			   x, y, xfont,
+			   (text_length > 10 ? 10 : text_length),
+			   text, text_length));
+  
+  if ((oldfont = SelectObject (hdc, xfont)) == NULL)
+    g_warning ("gdk_draw_text: SelectObject failed");
+
+  wcstr = g_new (wchar_t, text_length);
+  if ((wlen = gdk_nmbstowchar_ts (wcstr, text, text_length, text_length)) == -1)
+    g_warning ("gdk_draw_text: gdk_nmbstowchar_ts failed");
+  else if (!TextOutW (hdc, x, y, wcstr, wlen))
+    g_warning ("gdk_draw_text: TextOutW failed");
+  g_free (wcstr);
+  if (oldfont != NULL)
+    SelectObject (hdc, oldfont);
+  gdk_gc_postdraw (drawable_private, gc_private);
 }
 
 void
@@ -521,6 +509,8 @@ gdk_draw_text_wc (GdkDrawable	 *drawable,
 		  const GdkWChar *text,
 		  gint		  text_length)
 {
+  HDC hdc;
+  HGDIOBJ oldfont;
   GdkDrawablePrivate *drawable_private;
   GdkFontPrivate *font_private;
   GdkGCPrivate *gc_private;
@@ -539,68 +529,40 @@ gdk_draw_text_wc (GdkDrawable	 *drawable,
   if (text_length == 0)
     return;
 
+  g_assert (font->type == GDK_FONT_FONT || font->type == GDK_FONT_FONTSET);
+
   drawable_private = (GdkDrawablePrivate*) drawable;
   gc_private = (GdkGCPrivate*) gc;
   font_private = (GdkFontPrivate*) font;
 
-  if (font->type == GDK_FONT_FONT)
-    {
-      HDC hdc;
-      HFONT xfont;
-      HGDIOBJ oldfont;
+  hdc = gdk_gc_predraw (drawable_private, gc_private);
 
-      hdc = gdk_gc_predraw (drawable_private, gc_private);
-      xfont = (HFONT) font_private->xfont;
-
-      GDK_NOTE (MISC, g_print ("gdk_draw_text_wc: %#x (%d) %#x "
-			       "+%d+%d font: %#x length: %d\n",
-			       drawable_private->xwindow,
-			       gc_private, gc_private->xgc,
-			       x, y, xfont,
-			       text_length));
+  GDK_NOTE (MISC, g_print ("gdk_draw_text_wc: %#x (%d) %#x "
+			   "+%d+%d font: %#x length: %d\n",
+			   drawable_private->xwindow,
+			   gc_private, gc_private->xgc,
+			   x, y, font_private->xfont,
+			   text_length));
       
-      if ((oldfont = SelectObject (hdc, xfont)) == NULL)
-	  g_warning ("gdk_draw_text_wc: SelectObject failed");
-#if 0 /* No. Don't use TextOutW directly. Compare to the X11 version,
-       * it uses plain XDrawString for GDK_FONT_FONT fonts, too.
-       * TextOutW by definition interprets the string as Unicode.
-       * We don't have that, but either chars from some single-byte codepage
-       * or from a DBCS.
-       */
+  if ((oldfont = SelectObject (hdc, font_private->xfont)) == NULL)
+    g_warning ("gdk_draw_text_wc: SelectObject failed");
+  if (sizeof (wchar_t) != sizeof (GdkWChar))
+    {
       wcstr = g_new (wchar_t, text_length);
       for (i = 0; i < text_length; i++)
 	wcstr[i] = text[i];
-      if (!TextOutW (hdc, x, y, wcstr, text_length))
-	g_warning ("gdk_draw_text_wc: TextOutW failed");
-      g_free (wcstr);
-#else
-      str = g_new (guchar, text_length);
-      for (i = 0; i < text_length; i++)
-	str[i] = text[i];
-      if (font_private->cpinfo.MaxCharSize > 1)
-	{
-	  wcstr = g_new (wchar_t, text_length);
-	  if ((wlen = MultiByteToWideChar (font_private->codepage, 0,
-					   str, text_length,
-					   wcstr, text_length)) == 0)
-	    g_warning ("gdk_draw_text: MultiByteToWideChar failed");
-	  else if (!TextOutW (hdc, x, y, wcstr, wlen))
-	    g_warning ("gdk_draw_text_wc: TextOutW failed");
-	  g_free (wcstr);
-	}
-      else
-	{
-	  if (!TextOutA (hdc, x, y, str, text_length))
-	    g_warning ("gdk_draw_text_wc: TextOutA failed");
-	}
-      g_free (str);
-#endif
-      if (oldfont != NULL)
-	SelectObject (hdc, oldfont);
-      gdk_gc_postdraw (drawable_private, gc_private);
     }
   else
-    g_error ("undefined font type");
+    wcstr = (wchar_t *) text;
+
+  if (!TextOutW (hdc, x, y, wcstr, text_length))
+    g_warning ("gdk_draw_text_wc: TextOutW failed");
+
+  if (sizeof (wchar_t) != sizeof (GdkWChar))
+    g_free (wcstr);
+  if (oldfont != NULL)
+    SelectObject (hdc, oldfont);
+  gdk_gc_postdraw (drawable_private, gc_private);
 }
 
 void

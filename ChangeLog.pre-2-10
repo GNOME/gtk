@@ -1,3 +1,58 @@
+1999-10-31  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/gdkkeysyms.h: Add new keysyms from X11R6.4 (including
+	EuroSign).
+
+	* gdk/gdktypes.h: Add note about wchar_t not necessarily being the
+	same type as GdkWChar, especially on Win32.
+
+	* gdk/win32/*.c: Change gdk_root_parent to be a pointer.
+
+	* gdk/win32/*.c: Assume all strings are UTF-8. Convert to Unicode
+	before passing to Windows GDI for drawing etc. Convert to the
+	system default codepage before passing to Windows as window
+	titles.
+
+	* gdk/win32/gdkprivate.h: Add more fields to GdkWindowPrivate to
+	support changing input locale on the fly.
+
+	* gdk/win32/gdkevent.c: Support input language (keyboard locale)
+	on-the-fly changes. Convert incoming characters from the current
+	codepage to Unicode (and then to a UTF-8 multi-byte string) based
+	on the current input language. Use keysym<->Unicode mapping tables
+	and functions borrowed from xterm sources.
+
+	Support IMEs (Input Method Editors) for CJK languages. On non-CJK
+	editions of Win9x, use the ActiveX-based Active IMM (Input Method
+	Manager) if available. IMEs and the Active IMM are available under
+	the disguise of Chinese, Korean and Japanese support for IE and
+	Outlook Express from "Windows Update" for Win98. On Win2k, the CJK
+	support is present in all editions (as long as you install it).
+
+	Call DispatchMessage from gdk_events_queue() (and thus
+	gdk_WindowProc()), instead of duplicating the code in
+	gdk_WindowProc().
+
+	Reworked the grab handling and propagation code, factored out
+	duplicated code snippets into separate functions. Other cleanups,
+	too.
+
+	* gdk/win32/surrogate-dimm.h: Provide just the bits we need from
+	the <dimm.h> header describing the Active IMM.
+
+	* gdk/win32/gdkfont.c: Pretend to support fontsets, but so far
+	just do the same as for "single" fonts.
+
+	* gdk/win32/gdk.c: Call CoInitialize() (COM initialisation) from
+	gdk_init_check, and CoUninitialize() from gdk_exit_func. Handle
+	the new keysyms from gdkkeysyms.h.
+
+	* gtk/gtkfontsel.c (Win32): Load the font for the preview as a
+	fontset, so that gtkentry uses wide characters.
+
+	* gtk/gtkrc.c (Win32): Get the locale with gwin_getlocale(). Call
+	GTk+'s system directory "gtk+", not "gtk".
+
 Sat Oct 30 13:17:18 BST 1999 Tony Gale <gale@gtk.org>
 
 	* docs/gtkfaq.sgml: FAQ update

@@ -257,11 +257,11 @@ gdk_selection_convert (GdkWindow *requestor,
        */
       GdkSelProp *prop;
 
-      prop = g_hash_table_lookup (sel_prop_table, &gdk_root_parent.drawable.xwindow);
+      prop = g_hash_table_lookup (sel_prop_table, &gdk_root_parent->drawable.xwindow);
 
       if (prop != NULL)
 	{
-	  g_hash_table_remove (sel_prop_table, &gdk_root_parent.drawable.xwindow);
+	  g_hash_table_remove (sel_prop_table, &gdk_root_parent->drawable.xwindow);
 	  gdk_sel_prop_store (requestor, prop->type, prop->format,
 			      prop->data, prop->length);
 	  g_free (prop);

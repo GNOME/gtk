@@ -1773,7 +1773,12 @@ gtk_font_selection_load_font (GtkFontSelection *fontsel)
 #ifdef FONTSEL_DEBUG
       g_message("Loading: %s\n", fontname);
 #endif
+#ifndef GDK_WINDOWING_WIN32
       font = gdk_font_load (fontname);
+#else
+      /* Load as a fontset so that gtkentry uses wide chars for it */
+      font = gdk_fontset_load (fontname);
+#endif
       g_free(fontname);
       
       if (font)

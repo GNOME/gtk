@@ -1,4 +1,4 @@
-/* config.h.win32.  Handcrafted for Microsoft C */
+/* config.h.win32.  Handcrafted for Microsoft C and gcc -mno-cygwin */
 
 #if ! (defined(_MSC_VER) || defined(__GNUC__))
 #error Unrecognized Win32 compiler, edit config.h.win32 by hand
@@ -185,3 +185,10 @@
 
 /* Define if you have the Wintab programmer's kit */
 #define HAVE_WINTAB 1
+
+/* Define if you have the <dimm.h> header file
+ * (available in the Platform SDK)
+*/
+#ifdef _MSC_VER
+#define HAVE_DIMM_H 1
+#endif

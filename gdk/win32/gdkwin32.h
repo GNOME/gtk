@@ -34,7 +34,7 @@
 #include <locale.h>
 
 #define GDK_ROOT_WINDOW()             ((guint32) HWND_DESKTOP)
-#define GDK_ROOT_PARENT()             ((GdkWindow *)&gdk_root_parent)
+#define GDK_ROOT_PARENT()             ((GdkWindow *) gdk_root_parent)
 #define GDK_DISPLAY()                 NULL
 #define GDK_DRAWABLE_XDISPLAY(win)    NULL
 #define GDK_DRAWABLE_XID(win)         (((GdkDrawablePrivate*) win)->xwindow)

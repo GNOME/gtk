@@ -77,7 +77,7 @@ gdk_pixmap_new (GdkWindow *window,
   g_return_val_if_fail ((width != 0) && (height != 0), NULL);
 
   if (!window)
-    window = (GdkWindow*) &gdk_root_parent;
+    window = (GdkWindow*) gdk_root_parent;
 
   if (GDK_DRAWABLE_DESTROYED (window))
     return NULL;
@@ -287,7 +287,7 @@ gdk_bitmap_create_from_data (GdkWindow   *window,
   g_return_val_if_fail (window == NULL || GDK_IS_WINDOW (window), NULL);
 
   if (!window)
-    window = (GdkWindow*) &gdk_root_parent;
+    window = (GdkWindow*) gdk_root_parent;
 
   if (GDK_DRAWABLE_DESTROYED (window))
     return NULL;
@@ -616,7 +616,7 @@ _gdk_pixmap_create_from_xpm (GdkWindow   *window,
     g_warning ("Creating pixmap from xpm with NULL window and colormap");
 
   if (window == NULL)
-    window = (GdkWindow *)&gdk_root_parent;
+    window = (GdkWindow *) gdk_root_parent;
 
   if (colormap == NULL)
     {
@@ -929,7 +929,7 @@ gdk_pixmap_foreign_new (guint32 anid)
   /* set the pixmap to the passed in value */
   xpixmap = (HBITMAP) anid;
   /* get the root window */
-  window_private = &gdk_root_parent;
+  window_private = gdk_root_parent;
 
   /* get information about the BITMAP to fill in the structure for
      the gdk window */

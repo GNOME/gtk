@@ -1006,7 +1006,7 @@ gdk_input_win32_other_event (GdkEvent  *event,
 #if USE_SYSCONTEXT
   window = gdk_window_at_pointer (&x, &y);
   if (window == NULL)
-    window = (GdkWindow *) &gdk_root_parent;
+    window = (GdkWindow *) gdk_root_parent;
 
   gdk_window_ref (window);
 
@@ -1036,7 +1036,7 @@ gdk_input_win32_other_event (GdkEvent  *event,
   switch (xevent->message)
     {
     case WT_PACKET:
-      if (window_private == &gdk_root_parent)
+      if (window_private == gdk_root_parent)
 	{
 	  GDK_NOTE (EVENTS, g_print ("...is root\n"));
 	  return FALSE;
@@ -1104,7 +1104,7 @@ gdk_input_win32_other_event (GdkEvent  *event,
 	{
 	  GDK_NOTE (EVENTS, g_print ("...not selected\n"));
 
-	  if (window_private->parent == (GdkWindow *) &gdk_root_parent)
+	  if (window_private->parent == (GdkWindow *) gdk_root_parent)
 	    return FALSE;
 	  
 	  pt.x = x;

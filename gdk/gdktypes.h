@@ -68,6 +68,11 @@ typedef struct _GdkPoint	      GdkPoint;
 typedef struct _GdkRectangle	      GdkRectangle;
 typedef struct _GdkSegment	      GdkSegment;
 
+/*
+ * Note that on some platforms the wchar_t type
+ * is not the same as GdkWChar. For instance
+ * on Win32, wchar_t is unsigned short.
+ */
 typedef guint32			    GdkWChar;
 typedef gulong     		    GdkAtom;
  

@@ -10,6 +10,7 @@
 #define GDK_Escape 0xFF1B
 #define GDK_Delete 0xFFFF
 #define GDK_Multi_key 0xFF20
+#define GDK_Codeinput 0xFF37
 #define GDK_SingleCandidate 0xFF3C
 #define GDK_MultipleCandidate 0xFF3D
 #define GDK_PreviousCandidate 0xFF3E
@@ -30,6 +31,7 @@
 #define GDK_Kana_Shift 0xFF2E
 #define GDK_Eisu_Shift 0xFF2F
 #define GDK_Eisu_toggle 0xFF30
+#define GDK_Kanji_Bangou 0xFF37
 #define GDK_Zen_Koho 0xFF3D
 #define GDK_Mae_Koho 0xFF3E
 #define GDK_Home 0xFF50
@@ -608,6 +610,9 @@
 #define GDK_uogonek 0x3f9
 #define GDK_utilde 0x3fd
 #define GDK_umacron 0x3fe
+#define GDK_OE 0x13bc
+#define GDK_oe 0x13bd
+#define GDK_Ydiaeresis 0x13be
 #define GDK_overline 0x47e
 #define GDK_kana_fullstop 0x4a1
 #define GDK_kana_openingbracket 0x4a2
@@ -1315,3 +1320,16 @@
 #define GDK_Hangul_J_KkogjiDalrinIeung 0xef9
 #define GDK_Hangul_J_YeorinHieuh 0xefa
 #define GDK_Korean_Won 0xeff
+#define GDK_EcuSign 0x20a0
+#define GDK_ColonSign 0x20a1
+#define GDK_CruzeiroSign 0x20a2
+#define GDK_FFrancSign 0x20a3
+#define GDK_LiraSign 0x20a4
+#define GDK_MillSign 0x20a5
+#define GDK_NairaSign 0x20a6
+#define GDK_PesetaSign 0x20a7
+#define GDK_RupeeSign 0x20a8
+#define GDK_WonSign 0x20a9
+#define GDK_NewSheqelSign 0x20aa
+#define GDK_DongSign 0x20ab
+#define GDK_EuroSign 0x20ac

@@ -50,10 +50,8 @@
 #define VIETNAMESE_CHARSET 163
 #endif
 
-/* MB_CUR_MAX is missing */
-#ifndef MB_CUR_MAX
-extern int *__imp___mb_cur_max;
-#define MB_CUR_MAX (*__imp___mb_cur_max)
+#ifndef VM_OEM_PLUS
+#define VK_OEM_PLUS 0xBB
 #endif
 
 #include <time.h>
@@ -217,6 +215,9 @@ struct _GdkWindowPrivate
 
   GList *filters;
   GList *children;
+
+  HKL input_locale;
+  CHARSETINFO charset_info;
 };
 
 struct _GdkImagePrivate
@@ -304,6 +305,9 @@ struct _GdkVisualPrivate
 struct _GdkFontPrivate
 {
   GdkFont font;
+  /* For now, both GDK_FONT_FONT and GDK_FONT_FONTSET fonts
+   * just have one Windows font loaded. This will change.
+   */
   HFONT xfont;
   guint ref_count;
 
@@ -382,6 +386,15 @@ void    gdk_sel_prop_store (GdkWindow *owner,
 
 void       gdk_event_queue_append (GdkEvent *event);
 
+gint	   gdk_nmbstowcs (GdkWChar    *dest,
+			  const gchar *src,
+			  gint         src_len,
+			  gint         dest_max);
+gint	   gdk_nmbstowchar_ts (wchar_t     *dest,
+			       const gchar *src,
+			       gint         src_len,
+			       gint         dest_max);
+
 /* Please see gdkwindow.c for comments on how to use */ 
 HWND gdk_window_xid_at(HWND base, gint bx, gint by, gint x, gint y, GList *excludes, gboolean excl_child);
 HWND gdk_window_xid_at_coords(gint x, gint y, GList *excludes, gboolean excl_child);
@@ -391,14 +404,12 @@ extern gint		 gdk_show_events;
 extern gint		 gdk_stack_trace;
 extern HWND		 gdk_root_window;
 extern HWND		 gdk_leader_window;
-GDKVAR GdkWindowPrivate	 gdk_root_parent;
+GDKVAR GdkWindowPrivate	*gdk_root_parent;
 GDKVAR Atom		 gdk_selection_property;
-extern GdkWindow	*selection_owner[];
 GDKVAR gchar		*gdk_progclass;
 GDKVAR gint		 gdk_error_code;
 GDKVAR gint		 gdk_error_warnings;
 GDKVAR gint              gdk_null_window_warnings;
-extern GList            *gdk_default_filters;
 extern gint		 gdk_event_func_from_window_proc;
 
 extern HDC		 gdk_DC;
@@ -411,6 +422,7 @@ extern UINT		 gdk_selection_clear_msg;
 extern GdkAtom		 gdk_clipboard_atom;
 extern GdkAtom		 gdk_win32_dropfiles_atom;
 extern GdkAtom		 gdk_ole2_dnd_atom;
+extern BOOL (WINAPI *p_TrackMouseEvent) (TRACKMOUSEEVENT *tme);
 
 extern LRESULT CALLBACK gdk_WindowProc (HWND, UINT, WPARAM, LPARAM);
 

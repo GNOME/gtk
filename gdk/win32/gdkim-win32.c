@@ -37,12 +37,6 @@
 #include "gdki18n.h"
 #include "gdkx.h"
 
-/* If this variable is FALSE, it indicates that we should
- * avoid trying to use multibyte conversion functions and
- * assume everything is 1-byte per character
- */
-static gboolean gdk_use_mb;
-
 /*
  *--------------------------------------------------------------
  * gdk_set_locale
@@ -59,22 +53,13 @@ static gboolean gdk_use_mb;
 gchar*
 gdk_set_locale (void)
 {
-  wchar_t result;
   gchar *current_locale;
-
-  gdk_use_mb = FALSE;
 
   if (!setlocale (LC_ALL,""))
     g_warning ("locale not supported by C library");
   
   current_locale = setlocale (LC_ALL, NULL);
 
-  if (MB_CUR_MAX > 1)
-    gdk_use_mb = TRUE;
-
-  GDK_NOTE (XIM, g_message ("%s multi-byte string functions.", 
-			    gdk_use_mb ? "Using" : "Not using"));
-  
   return current_locale;
 }
 
@@ -158,50 +143,91 @@ gdk_ic_get_events (GdkIC *ic)
  * of wide characters. The string is newly allocated. The array of
  * wide characters must be null-terminated. If the conversion is
  * failed, it returns NULL.
+ *
+ * On Win32, we always use UTF-8.
  */
 gchar *
 gdk_wcstombs (const GdkWChar *src)
 {
-  gchar *mbstr;
+  gint len;
+  const GdkWChar *wcp;
+  guchar *mbstr, *bp;
 
-  if (gdk_use_mb)
+  wcp = src;
+  len = 0;
+  while (*wcp)
     {
-      gint i, wcsl, mbsl;
-      wchar_t *src_alt;
+      const GdkWChar c = *wcp++;
 
-      for (wcsl = 0; src[wcsl]; wcsl++)
-	;
-      src_alt = g_new (wchar_t, wcsl+1);
-      for (i = wcsl; i >= 0; i--)
-	src_alt[i] = src[i];
-      mbsl = WideCharToMultiByte (CP_OEMCP, 0, src_alt, wcsl,
-				  NULL, 0, NULL, NULL);
-      mbstr = g_new (guchar, mbsl + 1);
-      if (!WideCharToMultiByte (CP_OEMCP, 0, src_alt, wcsl,
-				mbstr, mbsl, NULL, NULL))
+      if (c < 0x80)
+	len += 1;
+      else if (c < 0x800)
+	len += 2;
+      else if (c < 0x10000)
+	len += 3;
+      else if (c < 0x200000)
+	len += 4;
+      else if (c < 0x4000000)
+	len += 5;
+      else
+	len += 6;
+    }
+
+  mbstr = g_malloc (len + 1);
+  
+  wcp = src;
+  bp = mbstr;
+  while (*wcp)
+    {
+      int first;
+      int i;
+      GdkWChar c = *wcp++;
+
+      if (c < 0x80)
 	{
-	  g_warning ("gdk_wcstombs: WideCharToMultiByte failed");
-	  g_free (mbstr);
-	  g_free (src_alt);
-	  return NULL;
+	  first = 0;
+	  len = 1;
 	}
-      mbstr[mbsl] = '\0';
-      g_free (src_alt);
-    }
-  else
-    {
-      gint length = 0;
-      gint i;
-
-      while (src[length] != 0)
-	length++;
+      else if (c < 0x800)
+	{
+	  first = 0xc0;
+	  len = 2;
+	}
+      else if (c < 0x10000)
+	{
+	  first = 0xe0;
+	  len = 3;
+	}
+      else if (c < 0x200000)
+	{
+	  first = 0xf0;
+	  len = 4;
+	}
+      else if (c < 0x4000000)
+	{
+	  first = 0xf8;
+	  len = 5;
+	}
+      else
+	{
+	  first = 0xfc;
+	  len = 6;
+	}
       
-      mbstr = g_new (gchar, length + 1);
+      /* Woo-hoo! */
+      switch (len)
+	{
+	case 6: bp[5] = (c & 0x3f) | 0x80; c >>= 6; /* Fall through */
+	case 5: bp[4] = (c & 0x3f) | 0x80; c >>= 6; /* Fall through */
+	case 4: bp[3] = (c & 0x3f) | 0x80; c >>= 6; /* Fall through */
+	case 3: bp[2] = (c & 0x3f) | 0x80; c >>= 6; /* Fall through */
+	case 2: bp[1] = (c & 0x3f) | 0x80; c >>= 6; /* Fall through */
+	case 1: bp[0] = c | first;
+	}
 
-      for (i=0; i<length+1; i++)
-	mbstr[i] = src[i];
+      bp += len;
     }
-
+  *bp = 0;
   return mbstr;
 }
 
@@ -209,41 +235,158 @@ gdk_wcstombs (const GdkWChar *src)
 /*
  * gdk_mbstowcs
  *
- * Converts the specified string into wide characters, and, returns the
- * number of wide characters written. The string 'src' must be
- * null-terminated. If the conversion is failed, it returns -1.
+ * Converts the specified string into GDK wide characters, and,
+ * returns the number of wide characters written. The string 'src'
+ * must be null-terminated. If the conversion is failed, it returns
+ * -1.
+ *
+ * On Win32, thr string is assumed to be in UTF-8.  Also note that
+ * GdkWChar is 32 bits, while wchar_t, and the wide characters the
+ * Windows API uses, are 16 bits!
  */
+
+/* First a helper function for not zero-terminated strings */
 gint
-gdk_mbstowcs (GdkWChar *dest, const gchar *src, gint dest_max)
+gdk_nmbstowcs (GdkWChar    *dest,
+	       const gchar *src,
+	       gint         src_len,
+	       gint         dest_max)
 {
-  if (gdk_use_mb)
+  guchar *cp, *end;
+  gint n;
+  
+  cp = (guchar *) src;
+  end = cp + src_len;
+  n = 0;
+  while (cp != end && dest != dest + dest_max)
     {
-      gint i, wcsl;
-      wchar_t *wcstr;
+      gint i, mask = 0, len;
+      guchar c = *cp;
 
-      wcsl = MultiByteToWideChar (CP_OEMCP, 0, src, -1, NULL, 0);
-      wcstr = g_new (wchar_t, wcsl);
-      if (!MultiByteToWideChar (CP_OEMCP, 0, src, -1, wcstr, wcsl))
+      if (c < 0x80)
 	{
-	  g_warning ("gdk_mbstowcs: MultiByteToWideChar failed");
-	  g_free (wcstr);
-	  return -1;
+	  len = 1;
+	  mask = 0x7f;
 	}
-      if (wcsl > dest_max)
-	wcsl = dest_max;
-      for (i = 0; i < wcsl && wcstr[i]; i++)
-	dest[i] = wcstr[i];
-      g_free (wcstr);
+      else if ((c & 0xe0) == 0xc0)
+	{
+	  len = 2;
+	  mask = 0x1f;
+	}
+      else if ((c & 0xf0) == 0xe0)
+	{
+	  len = 3;
+	  mask = 0x0f;
+	}
+      else if ((c & 0xf8) == 0xf0)
+	{
+	  len = 4;
+	  mask = 0x07;
+	}
+      else if ((c & 0xfc) == 0xf8)
+	{
+	  len = 5;
+	  mask = 0x03;
+	}
+      else if ((c & 0xfc) == 0xfc)
+	{
+	  len = 6;
+	  mask = 0x01;
+	}
+      else
+	return -1;
 
-      return i;
+      if (cp + len > end)
+	return -1;
+
+      *dest = (cp[0] & mask);
+      for (i = 1; i < len; i++)
+	{
+	  if ((cp[i] & 0xc0) != 0x80)
+	    return -1;
+	  *dest <<= 6;
+	  *dest |= (cp[i] & 0x3f);
+	}
+      if (*dest == -1)
+	return -1;
+
+      cp += len;
+      dest++;
+      n++;
     }
-  else
-    {
-      gint i;
+  if (cp != end)
+    return -1;
 
-      for (i=0; i<dest_max && src[i]; i++)
-	dest[i] = src[i];
-
-      return i;
-    }
+  return n;
 }
+
+gint
+gdk_mbstowcs (GdkWChar    *dest,
+	      const gchar *src,
+	      gint         dest_max)
+{
+  return gdk_nmbstowcs (dest, src, strlen (src), dest_max);
+}
+
+
+/* A version that converts to wchar_t wide chars */
+
+gint
+gdk_nmbstowchar_ts (wchar_t     *dest,
+		    const gchar *src,
+		    gint         src_len,
+		    gint         dest_max)
+{
+  guchar *cp, *end;
+  gint n;
+  
+  cp = (guchar *) src;
+  end = cp + src_len;
+  n = 0;
+  while (cp != end && dest != dest + dest_max)
+    {
+      gint i, mask = 0, len;
+      guchar c = *cp;
+
+      if (c < 0x80)
+	{
+	  len = 1;
+	  mask = 0x7f;
+	}
+      else if ((c & 0xe0) == 0xc0)
+	{
+	  len = 2;
+	  mask = 0x1f;
+	}
+      else if ((c & 0xf0) == 0xe0)
+	{
+	  len = 3;
+	  mask = 0x0f;
+	}
+      else /* Other lengths are not possible with 16-bit wchar_t! */
+	return -1;
+
+      if (cp + len > end)
+	return -1;
+
+      *dest = (cp[0] & mask);
+      for (i = 1; i < len; i++)
+	{
+	  if ((cp[i] & 0xc0) != 0x80)
+	    return -1;
+	  *dest <<= 6;
+	  *dest |= (cp[i] & 0x3f);
+	}
+      if (*dest == 0xFFFF)
+	return -1;
+
+      cp += len;
+      dest++;
+      n++;
+    }
+  if (cp != end)
+    return -1;
+
+  return n;
+}
+

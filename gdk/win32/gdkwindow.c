@@ -105,29 +105,25 @@ gdk_window_xid_at_coords (gint     x,
 void
 gdk_window_init (void)
 {
-  unsigned int width;
-  unsigned int height;
-#if 0
-  width = GetSystemMetrics (SM_CXSCREEN);
-  height = GetSystemMetrics (SM_CYSCREEN);
-#else
-  { RECT r; /* //HB: don't obscure tray window (task bar) */
-    SystemParametersInfo(SPI_GETWORKAREA, 0, &r, 0);
-    width  = r.right - r.left;
-    height = r.bottom - r.top;
-  }
-#endif
+  RECT r;
+  guint width;
+  guint height;
 
-  gdk_root_parent.drawable.xwindow = gdk_root_window;
-  gdk_root_parent.drawable.window_type = GDK_WINDOW_ROOT;
-  gdk_root_parent.drawable.drawable.user_data = NULL;
-  gdk_root_parent.drawable.width = width;
-  gdk_root_parent.drawable.height = height;
-  gdk_root_parent.drawable.ref_count = 1;
-  gdk_root_parent.drawable.colormap = NULL;
-  gdk_root_parent.children = NULL;
+  SystemParametersInfo(SPI_GETWORKAREA, 0, &r, 0);
+  width  = r.right - r.left;
+  height = r.bottom - r.top;
 
-  gdk_xid_table_insert (&gdk_root_window, &gdk_root_parent);
+  gdk_root_parent = g_new (GdkWindowPrivate, 1);
+  gdk_root_parent->drawable.xwindow = gdk_root_window;
+  gdk_root_parent->drawable.window_type = GDK_WINDOW_ROOT;
+  gdk_root_parent->drawable.drawable.user_data = NULL;
+  gdk_root_parent->drawable.width = width;
+  gdk_root_parent->drawable.height = height;
+  gdk_root_parent->drawable.ref_count = 1;
+  gdk_root_parent->drawable.colormap = NULL;
+  gdk_root_parent->children = NULL;
+
+  gdk_xid_table_insert (&gdk_root_window, gdk_root_parent);
 }
 
 /* RegisterGdkClass
@@ -258,14 +254,19 @@ gdk_window_new (GdkWindow     *parent,
   ATOM klass = 0;
   DWORD dwStyle, dwExStyle;
   RECT rect;
+  UINT acp;
   int width, height;
   int x, y;
   char *title;
+  gint titlelen;
+  wchar_t *wctitle;
+  gint wlen;
+  char *mbtitle;
 
   g_return_val_if_fail (attributes != NULL, NULL);
 
   if (!parent)
-    parent = (GdkWindow*) &gdk_root_parent;
+    parent = (GdkWindow*) gdk_root_parent;
 
   parent_private = (GdkWindowPrivate*) parent;
   if (GDK_DRAWABLE_DESTROYED (parent))
@@ -413,10 +414,23 @@ gdk_window_new (GdkWindow     *parent,
       height = private->drawable.height;
     }
 
+  acp = GetACP ();
+  private->input_locale = GetKeyboardLayout (0);
+  TranslateCharsetInfo ((DWORD FAR *) acp,
+			&private->charset_info,
+			TCI_SRCCODEPAGE);
+
+  titlelen = strlen (title);
+  wctitle = g_new (wchar_t, titlelen);
+  mbtitle = g_new (char, 3*titlelen + 1);
+  wlen = gdk_nmbstowchar_ts (wctitle, title, titlelen, titlelen);
+  WideCharToMultiByte (GetACP (), 0, wctitle, wlen,
+		       mbtitle, 3*titlelen, NULL, NULL);
+  
   private->drawable.xwindow =
     CreateWindowEx (dwExStyle,
 		    MAKEINTRESOURCE(klass),
-		    title,
+		    mbtitle,
 		    dwStyle,
 		    x, y, 
 		    width, height,
@@ -424,19 +438,31 @@ gdk_window_new (GdkWindow     *parent,
 		    NULL,
 		    gdk_ProgInstance,
 		    NULL);
+
+  g_free (mbtitle);
+  g_free (wctitle);
+
+  if (private->drawable.xwindow == NULL)
+    {
+      g_warning ("gdk_window_create: CreateWindowEx failed");
+      g_free (private);
+      return NULL;
+    }
+
   GDK_NOTE (MISC,
-	    g_print ("gdk_window_create: %s %s %#x %#x %dx%d@+%d+%d %#x = %#x\n",
+	    g_print ("gdk_window_create: %s %s %dx%d@+%d+%d %#x = %#x\n"
+		     "...locale %#x codepage %d\n",
 		     (private->drawable.window_type == GDK_WINDOW_TOPLEVEL ? "TOPLEVEL" :
 		      (private->drawable.window_type == GDK_WINDOW_CHILD ? "CHILD" :
 		       (private->drawable.window_type == GDK_WINDOW_DIALOG ? "DIALOG" :
 			(private->drawable.window_type == GDK_WINDOW_TEMP ? "TEMP" :
 			 "???")))),
 		     title,
-		     dwStyle,
-		     private->event_mask,
 		     width, height, (x == CW_USEDEFAULT ? -9999 : x), y, 
 		     xparent,
-		     private->drawable.xwindow));
+		     private->drawable.xwindow,
+		     private->input_locale,
+		     private->charset_info.ciACP));
 
   gdk_window_ref (window);
   gdk_xid_table_insert (&private->drawable.xwindow, window);
@@ -477,7 +503,7 @@ gdk_window_foreign_new (guint32 anid)
   point.x = rect.left;
   point.y = rect.right;
   ClientToScreen ((HWND) anid, &point);
-  if (parent != HWND_DESKTOP)
+  if (parent != GetDesktopWindow ())
     ScreenToClient (parent, &point);
   private->x = point.x;
   private->y = point.y;
@@ -727,6 +753,7 @@ gdk_window_show (GdkWindow *window)
 	  ShowWindow (private->drawable.xwindow, SW_SHOWNORMAL);
 	  ShowWindow (private->drawable.xwindow, SW_RESTORE);
 	  SetForegroundWindow (private->drawable.xwindow);
+	  BringWindowToTop (private->drawable.xwindow);
 #if 0
 	  ShowOwnedPopups (private->drawable.xwindow, TRUE);
 #endif
@@ -991,7 +1018,7 @@ gdk_window_reparent (GdkWindow *window,
   g_return_if_fail (window != NULL);
 
   if (!new_parent)
-    new_parent = (GdkWindow*) &gdk_root_parent;
+    new_parent = (GdkWindow*) gdk_root_parent;
 
   window_private = (GdkWindowPrivate*) window;
   old_parent_private = (GdkWindowPrivate*)window_private->parent;
@@ -1370,6 +1397,11 @@ void
 gdk_window_set_title (GdkWindow   *window,
 		      const gchar *title)
 {
+  gint titlelen;
+  wchar_t *wcstr;
+  gint wlen;
+  char *mbstr;
+
   g_return_if_fail (window != NULL);
   g_return_if_fail (GDK_IS_WINDOW (window));
   
@@ -1377,8 +1409,21 @@ gdk_window_set_title (GdkWindow   *window,
 			   GDK_DRAWABLE_XID (window), title));
   if (!GDK_DRAWABLE_DESTROYED (window))
     {
-      if (!SetWindowText (GDK_DRAWABLE_XID (window), title))
+      /* As the title most is in UTF-8 we must translate it
+       * to the system codepage.
+       */
+      titlelen = strlen (title);
+      wcstr = g_new (wchar_t, titlelen);
+      mbstr = g_new (char, 3*titlelen + 1);
+      wlen = gdk_nmbstowchar_ts (wcstr, title, titlelen, titlelen);
+      WideCharToMultiByte (GetACP (), 0, wcstr, wlen,
+			   mbstr, 3*titlelen, NULL, NULL);
+
+      if (!SetWindowText (GDK_DRAWABLE_XID (window), mbstr))
 	g_warning ("gdk_window_set_title: SetWindowText failed");
+
+      g_free (mbstr);
+      g_free (wcstr);
     }
 }
 
@@ -1527,7 +1572,7 @@ gdk_window_get_geometry (GdkWindow *window,
   g_return_if_fail (window == NULL || GDK_IS_WINDOW (window));
   
   if (!window)
-    window = (GdkWindow*) &gdk_root_parent;
+    window = (GdkWindow*) gdk_root_parent;
   
   if (!GDK_DRAWABLE_DESTROYED (window))
     {
@@ -1660,7 +1705,7 @@ gdk_window_get_pointer (GdkWindow       *window,
   g_return_val_if_fail (window == NULL || GDK_IS_WINDOW (window), NULL);
   
   if (!window)
-    window = (GdkWindow*) &gdk_root_parent;
+    window = (GdkWindow*) gdk_root_parent;
 
   return_val = NULL;
   GetCursorPos (&pointc);
@@ -1724,7 +1769,7 @@ gdk_window_at_pointer (gint *win_x,
 
   if (hwnd == NULL)
     {
-      window = (GdkWindow *) &gdk_root_parent;
+      window = (GdkWindow *) gdk_root_parent;
       if (win_x)
 	*win_x = pointc.x;
       if (win_y)
@@ -1902,10 +1947,7 @@ gdk_window_add_filter (GdkWindow     *window,
   if (private && GDK_DRAWABLE_DESTROYED (window))
     return;
   
-  if (private)
-    tmp_list = private->filters;
-  else
-    tmp_list = gdk_default_filters;
+  tmp_list = private->filters;
   
   while (tmp_list)
     {
@@ -1919,10 +1961,7 @@ gdk_window_add_filter (GdkWindow     *window,
   filter->function = function;
   filter->data = data;
   
-  if (private)
-    private->filters = g_list_append (private->filters, filter);
-  else
-    gdk_default_filters = g_list_append (gdk_default_filters, filter);
+  private->filters = g_list_append (private->filters, filter);
 }
 
 void
@@ -1939,10 +1978,7 @@ gdk_window_remove_filter (GdkWindow     *window,
 
   private = (GdkWindowPrivate*) window;
   
-  if (private)
-    tmp_list = private->filters;
-  else
-    tmp_list = gdk_default_filters;
+  tmp_list = private->filters;
   
   while (tmp_list)
     {
@@ -1952,10 +1988,8 @@ gdk_window_remove_filter (GdkWindow     *window,
       
       if ((filter->function == function) && (filter->data == data))
 	{
-	  if (private)
-	    private->filters = g_list_remove_link (private->filters, node);
-	  else
-	    gdk_default_filters = g_list_remove_link (gdk_default_filters, node);
+	  private->filters = g_list_remove_link (private->filters, node);
+
 	  g_list_free_1 (node);
 	  g_free (filter);
 	  
@@ -2091,7 +2125,7 @@ gdk_window_get_toplevels (void)
   GList *new_list = NULL;
   GList *tmp_list;
 
-  tmp_list = gdk_root_parent.children;
+  tmp_list = gdk_root_parent->children;
   while (tmp_list)
     {
       new_list = g_list_prepend (new_list, tmp_list->data);
@@ -2244,7 +2278,7 @@ gdk_window_is_viewable (GdkWindow *window)
   g_return_val_if_fail (GDK_IS_WINDOW (window), FALSE);
 
   while (private && 
-	 (private != &gdk_root_parent) &&
+	 (private != gdk_root_parent) &&
 	 (private->drawable.window_type != GDK_WINDOW_FOREIGN))
     {
       if (!private->mapped)
