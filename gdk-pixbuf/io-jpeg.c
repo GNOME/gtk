@@ -58,7 +58,7 @@
 
 
 /* we are a "source manager" as far as libjpeg is concerned */
-#define JPEG_PROG_BUF_SIZE 4096
+#define JPEG_PROG_BUF_SIZE 65536
 
 typedef struct {
 	struct jpeg_source_mgr pub;   /* public fields */
@@ -89,6 +89,7 @@ typedef struct {
 	gboolean                 did_prescan;  /* are we in image data yet? */
 	gboolean                 got_header;  /* have we loaded jpeg header? */
 	gboolean                 src_initialized;/* TRUE when jpeg lib initialized */
+	gboolean                 in_output;   /* did we get suspended in an output pass? */
 	struct jpeg_decompress_struct cinfo;
 	struct error_handler_data     jerr;
 } JpegProgContext;
@@ -139,14 +140,6 @@ output_message_handler (j_common_ptr cinfo)
   /* do nothing */
 }
 
-/* Destroy notification function for the pixbuf */
-static void
-free_buffer (guchar *pixels, gpointer data)
-{
-	g_free (pixels);
-}
-
-
 /* explode gray image data from jpeg library into rgb components in pixbuf */
 static void
 explode_gray_into_buf (struct jpeg_decompress_struct *cinfo,
@@ -177,12 +170,76 @@ explode_gray_into_buf (struct jpeg_decompress_struct *cinfo,
 	}
 }
 
+typedef struct {
+  struct jpeg_source_mgr pub;	/* public fields */
+
+  FILE * infile;		/* source stream */
+  JOCTET * buffer;		/* start of buffer */
+  boolean start_of_file;	/* have we gotten any data yet? */
+} stdio_source_mgr;
+
+typedef stdio_source_mgr * stdio_src_ptr;
+
+static void
+stdio_init_source (j_decompress_ptr cinfo)
+{
+  stdio_src_ptr src = (stdio_src_ptr)cinfo->src;
+  src->start_of_file = FALSE;
+}
+
+static boolean
+stdio_fill_input_buffer (j_decompress_ptr cinfo)
+{
+  stdio_src_ptr src = (stdio_src_ptr) cinfo->src;
+  size_t nbytes;
+
+  nbytes = fread (src->buffer, 1, JPEG_PROG_BUF_SIZE, src->infile);
+
+  if (nbytes <= 0) {
+#if 0
+    if (src->start_of_file)	/* Treat empty input file as fatal error */
+      ERREXIT(cinfo, JERR_INPUT_EMPTY);
+    WARNMS(cinfo, JWRN_JPEG_EOF);
+#endif
+    /* Insert a fake EOI marker */
+    src->buffer[0] = (JOCTET) 0xFF;
+    src->buffer[1] = (JOCTET) JPEG_EOI;
+    nbytes = 2;
+  }
+
+  src->pub.next_input_byte = src->buffer;
+  src->pub.bytes_in_buffer = nbytes;
+  src->start_of_file = FALSE;
+
+  return TRUE;
+}
+
+static void
+stdio_skip_input_data (j_decompress_ptr cinfo, long num_bytes)
+{
+  stdio_src_ptr src = (stdio_src_ptr) cinfo->src;
+
+  if (num_bytes > 0) {
+    while (num_bytes > (long) src->pub.bytes_in_buffer) {
+      num_bytes -= (long) src->pub.bytes_in_buffer;
+      (void)stdio_fill_input_buffer(cinfo);
+    }
+    src->pub.next_input_byte += (size_t) num_bytes;
+    src->pub.bytes_in_buffer -= (size_t) num_bytes;
+  }
+}
+
+static void
+stdio_term_source (j_decompress_ptr cinfo)
+{
+}
+
 /* Shared library entry point */
 static GdkPixbuf *
 gdk_pixbuf__jpeg_image_load (FILE *f, GError **error)
 {
-	gint w, h, i;
-	guchar * volatile pixels = NULL;
+	gint i;
+	GdkPixbuf * volatile pixbuf = NULL;
 	guchar *dptr;
 	guchar *lines[4]; /* Used to expand rows, via rec_outbuf_height, 
                            * from the header file: 
@@ -192,6 +249,7 @@ gdk_pixbuf__jpeg_image_load (FILE *f, GError **error)
 	guchar **lptr;
 	struct jpeg_decompress_struct cinfo;
 	struct error_handler_data jerr;
+	stdio_src_ptr src;
 
 	/* setup error handler */
 	cinfo.err = jpeg_std_error (&jerr.pub);
@@ -202,8 +260,8 @@ gdk_pixbuf__jpeg_image_load (FILE *f, GError **error)
         
 	if (sigsetjmp (jerr.setjmp_buffer, 1)) {
 		/* Whoops there was a jpeg error */
-		if (pixels)
-			g_free (pixels);
+		if (pixbuf)
+			g_object_unref (pixbuf);
 
 		jpeg_destroy_decompress (&cinfo);
 		return NULL;
@@ -211,17 +269,32 @@ gdk_pixbuf__jpeg_image_load (FILE *f, GError **error)
 
 	/* load header, setup */
 	jpeg_create_decompress (&cinfo);
-	jpeg_stdio_src (&cinfo, f);
+
+	cinfo.src = (struct jpeg_source_mgr *)
+	  (*cinfo.mem->alloc_small) ((j_common_ptr) &cinfo, JPOOL_PERMANENT,
+				  sizeof (stdio_source_mgr));
+	src = (stdio_src_ptr) cinfo.src;
+	src->buffer = (JOCTET *)
+	  (*cinfo.mem->alloc_small) ((j_common_ptr) &cinfo, JPOOL_PERMANENT,
+				      JPEG_PROG_BUF_SIZE * sizeof (JOCTET));
+
+	src->pub.init_source = stdio_init_source;
+	src->pub.fill_input_buffer = stdio_fill_input_buffer;
+	src->pub.skip_input_data = stdio_skip_input_data;
+	src->pub.resync_to_restart = jpeg_resync_to_restart; /* use default method */
+	src->pub.term_source = stdio_term_source;
+	src->infile = f;
+	src->pub.bytes_in_buffer = 0; /* forces fill_input_buffer on first read */
+	src->pub.next_input_byte = NULL; /* until buffer loaded */
+
 	jpeg_read_header (&cinfo, TRUE);
 	jpeg_start_decompress (&cinfo);
 	cinfo.do_fancy_upsampling = FALSE;
 	cinfo.do_block_smoothing = FALSE;
 
-	w = cinfo.output_width;
-	h = cinfo.output_height;
-
-	pixels = g_try_malloc (h * w * 3);
-	if (!pixels) {
+	pixbuf = gdk_pixbuf_new (GDK_COLORSPACE_RGB, FALSE, 8, cinfo.output_width, cinfo.output_height);
+ 
+	if (!pixbuf) {
 		jpeg_destroy_decompress (&cinfo);
 
                 /* broken check for *error == NULL for robustness against
@@ -237,7 +310,7 @@ gdk_pixbuf__jpeg_image_load (FILE *f, GError **error)
 		return NULL;
 	}
 
-	dptr = pixels;
+	dptr = pixbuf->pixels;
 
 	/* decompress all the lines, a few at a time */
 
@@ -245,7 +318,7 @@ gdk_pixbuf__jpeg_image_load (FILE *f, GError **error)
 		lptr = lines;
 		for (i = 0; i < cinfo.rec_outbuf_height; i++) {
 			*lptr++ = dptr;
-			dptr += w * 3;
+			dptr += pixbuf->rowstride;
 		}
 
 		jpeg_read_scanlines (&cinfo, lines, cinfo.rec_outbuf_height);
@@ -257,9 +330,7 @@ gdk_pixbuf__jpeg_image_load (FILE *f, GError **error)
 	jpeg_finish_decompress (&cinfo);
 	jpeg_destroy_decompress (&cinfo);
 
-	return gdk_pixbuf_new_from_data (pixels, GDK_COLORSPACE_RGB, FALSE, 8,
-					 w, h, w * 3,
-					 free_buffer, NULL);
+	return pixbuf;
 }
 
 
@@ -333,6 +404,7 @@ gdk_pixbuf__jpeg_image_begin_load (ModulePreparedNotifyFunc prepared_func,
 	context->got_header = FALSE;
 	context->did_prescan = FALSE;
 	context->src_initialized = FALSE;
+	context->in_output = FALSE;
 
 	/* create libjpeg structures */
 	jpeg_create_decompress (&context->cinfo);
@@ -483,9 +555,6 @@ gdk_pixbuf__jpeg_image_load_increment (gpointer data,
 			num_copy = MIN (JPEG_PROG_BUF_SIZE - src->pub.bytes_in_buffer,
 					num_left);
 
-/*			if (num_copy == 0) 
-				g_error ("Buffer overflow!");
-*/
 			memcpy(src->buffer + src->pub.bytes_in_buffer, bufhd,num_copy);
 			src->pub.next_input_byte = src->buffer;
 			src->pub.bytes_in_buffer += num_copy;
@@ -518,13 +587,6 @@ gdk_pixbuf__jpeg_image_load_increment (gpointer data,
 
 			context->got_header = TRUE;
 
-#if 0
-			if (jpeg_has_multiple_scans (cinfo)) {
-				g_print ("io-jpeg.c: Does not currently "
-					 "support progressive jpeg files.\n");
-				return FALSE;
-			}
-#endif
 			context->pixbuf = gdk_pixbuf_new(GDK_COLORSPACE_RGB, 
 							 FALSE,
 							 8, 
@@ -549,75 +611,70 @@ gdk_pixbuf__jpeg_image_load_increment (gpointer data,
 
 		} else if (!context->did_prescan) {
 			int rc;
-
+			
 			/* start decompression */
+			cinfo->buffered_image = TRUE;
 			rc = jpeg_start_decompress (cinfo);
 			cinfo->do_fancy_upsampling = FALSE;
 			cinfo->do_block_smoothing = FALSE;
-
+			
 			if (rc == JPEG_SUSPENDED)
 				continue;
 
 			context->did_prescan = TRUE;
 		} else {
-
 			/* we're decompressing so feed jpeg lib scanlines */
 			guchar *lines[4];
 			guchar **lptr;
 			guchar *rowptr;
 			gint   nlines, i;
-			gint   start_scanline;
 
-			/* keep going until we've done all scanlines */
-			while (cinfo->output_scanline < cinfo->output_height) {
-				start_scanline = cinfo->output_scanline;
-				lptr = lines;
-				rowptr = context->dptr;
-				for (i=0; i < cinfo->rec_outbuf_height; i++) {
-					*lptr++ = rowptr;
-					rowptr += context->pixbuf->rowstride;
+			/* keep going until we've done all passes */
+			while (!jpeg_input_complete (cinfo)) {
+				if (!context->in_output) {
+					if (jpeg_start_output (cinfo, cinfo->input_scan_number)) {
+						context->in_output = TRUE;
+						context->dptr = context->pixbuf->pixels;
+					}
+					else
+						break;
 				}
+				/* keep going until we've done all scanlines */
+				while (cinfo->output_scanline < cinfo->output_height) {
+					lptr = lines;
+					rowptr = context->dptr;
+					for (i=0; i < cinfo->rec_outbuf_height; i++) {
+						*lptr++ = rowptr;
+						rowptr += context->pixbuf->rowstride;
+					}
+					
+					nlines = jpeg_read_scanlines (cinfo, lines,
+								      cinfo->rec_outbuf_height);
+					if (nlines == 0)
+						break;
 
-				nlines = jpeg_read_scanlines (cinfo, lines,
-							      cinfo->rec_outbuf_height);
-				if (nlines == 0)
+				        /* handle gray */
+					if (cinfo->output_components == 1)
+						explode_gray_into_buf (cinfo, lines);
+					
+					context->dptr += nlines * context->pixbuf->rowstride;
+					
+				        /* send updated signal */
+					(* context->updated_func) (context->pixbuf,
+								   0, 
+								   cinfo->output_scanline-1,
+								   cinfo->image_width, 
+								   nlines,
+								   context->user_data);
+				}
+				if (cinfo->output_scanline >= cinfo->output_height && 
+				    jpeg_finish_output (cinfo))
+					context->in_output = FALSE;
+				else
 					break;
-
-				/* handle gray */
-				if (cinfo->output_components == 1)
-					explode_gray_into_buf (cinfo, lines);
-
-				context->dptr += nlines * context->pixbuf->rowstride;
-
-				/* send updated signal */
-				(* context->updated_func) (context->pixbuf,
-							   0, 
-							   cinfo->output_scanline-1,
-							   cinfo->image_width, 
-							   nlines,
-							   context->user_data);
-
-#undef DEBUG_JPEG_PROGRESSIVE
-#ifdef DEBUG_JPEG_PROGRESSIVE
-				
-				if (start_scanline != cinfo->output_scanline)
-					g_print("jpeg: Input pass=%2d, next input scanline=%3d,"
-						" emitted %3d - %3d\n",
-						cinfo->input_scan_number, cinfo->input_iMCU_row * 16,
-						start_scanline, cinfo->output_scanline - 1);
-				
-				
-				
-				g_print ("Scanline %d of %d - ", 
-					 cinfo->output_scanline,
-					 cinfo->output_height);
-/*			g_print ("rec_height %d -", cinfo->rec_outbuf_height); */
-				g_print ("Processed %d lines - bytes left = %d\n",
-					 nlines, cinfo->src->bytes_in_buffer);
-#endif
 			}
-			/* did entire image */
-			if (cinfo->output_scanline >= cinfo->output_height)
+			if (jpeg_input_complete (cinfo))
+				/* did entire image */
 				return TRUE;
 			else
 				continue;
@@ -642,7 +699,7 @@ gdk_pixbuf__jpeg_image_save (FILE          *f,
        guchar *pixels = NULL;
        JSAMPROW *jbuf;
        int y = 0;
-       int quality = 75; /* default; must be between 0 and 100 */
+       volatile int quality = 75; /* default; must be between 0 and 100 */
        int i, j;
        int w, h = 0;
        int rowstride = 0;

@@ -93,13 +93,6 @@ static gboolean    gdk_pixbuf__pnm_image_load_increment (gpointer context,
 static void explode_bitmap_into_buf              (PnmLoaderContext *context);
 static void explode_gray_into_buf                (PnmLoaderContext *context);
 
-/* Destroy notification function for the pixbuf */
-static void
-free_buffer (guchar *pixels, gpointer data)
-{
-	g_free (pixels);
-}
-
 
 /* explode bitmap data into rgb components         */
 /* we need to know what the row so we can          */
@@ -764,10 +757,10 @@ gdk_pixbuf__pnm_image_load (FILE *f, GError **error)
 			context.output_row = 0;
 			context.output_col = 0;
 			
-			context.rowstride = context.width * 3;
-			context.pixels = g_try_malloc (context.height * context.width * 3);
+			context.pixbuf = gdk_pixbuf_new (GDK_COLORSPACE_RGB, FALSE, 8,
+							 context.width, context.height);
 			
-			if (!context.pixels) {
+			if (!context.pixbuf) {
 				/* Failed to allocate memory */
 				g_set_error (error,
 					     GDK_PIXBUF_ERROR,
@@ -775,6 +768,9 @@ gdk_pixbuf__pnm_image_load (FILE *f, GError **error)
 					     _("Can't allocate memory for loading PNM image"));
 				return NULL;
 			}
+
+			context.rowstride = context.pixbuf->rowstride;
+			context.pixels = context.pixbuf->pixels;
 		}
 		
 		/* if we got here we're reading image data */
@@ -797,10 +793,7 @@ gdk_pixbuf__pnm_image_load (FILE *f, GError **error)
 			break;
 	}
 	
-	return gdk_pixbuf_new_from_data (context.pixels, GDK_COLORSPACE_RGB, FALSE, 8,
-					 context.width, context.height, 
-					 context.width * 3, free_buffer, NULL);
-
+	return context.pixbuf;
 }
 
 /* 

@@ -1203,13 +1203,6 @@ mem_buffer (enum buf_op op, gpointer handle)
 	return NULL;
 }
 
-/* Destroy notification function for the pixbuf */
-static void
-free_buffer (guchar *pixels, gpointer data)
-{
-	g_free (pixels);
-}
-
 /* This function does all the work. */
 static GdkPixbuf *
 pixbuf_create_from_xpm (const gchar * (*get_buf) (enum buf_op op, gpointer handle), gpointer handle,
@@ -1223,7 +1216,8 @@ pixbuf_create_from_xpm (const gchar * (*get_buf) (enum buf_op op, gpointer handl
 	gchar pixel_str[32];
 	GHashTable *color_hash;
 	XPMColor *colors, *color, *fallbackcolor;
-	guchar *pixels, *pixtmp;
+	guchar *pixtmp;
+	GdkPixbuf *pixbuf;
 
 	fallbackcolor = NULL;
 
@@ -1314,12 +1308,9 @@ pixbuf_create_from_xpm (const gchar * (*get_buf) (enum buf_op op, gpointer handl
 			fallbackcolor = color;
 	}
 
-	if (is_trans)
-		pixels = g_try_malloc (w * h * 4);
-	else
-		pixels = g_try_malloc (w * h * 3);
+	pixbuf = gdk_pixbuf_new (GDK_COLORSPACE_RGB, is_trans, 8, w, h);
 
-	if (!pixels) {
+	if (!pixbuf) {
                 g_set_error (error,
                              GDK_PIXBUF_ERROR,
                              GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY,
@@ -1331,7 +1322,7 @@ pixbuf_create_from_xpm (const gchar * (*get_buf) (enum buf_op op, gpointer handl
 	}
 
 	wbytes = w * cpp;
-	pixtmp = pixels;
+	pixtmp = pixbuf->pixels;
 
 	for (ycnt = 0; ycnt < h; ycnt++) {
 		buffer = (*get_buf) (op_body, handle);
@@ -1364,9 +1355,7 @@ pixbuf_create_from_xpm (const gchar * (*get_buf) (enum buf_op op, gpointer handl
 	g_free (colors);
 	g_free (name_buf);
 
-	return gdk_pixbuf_new_from_data (pixels, GDK_COLORSPACE_RGB, is_trans, 8,
-					 w, h, is_trans ? (w * 4) : (w * 3),
-					 free_buffer, NULL);
+	return pixbuf;
 }
 
 /* Shared library entry point for file loading */

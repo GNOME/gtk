@@ -242,6 +242,37 @@ static void free_buffer(guchar *pixels, gpointer data)
 	g_free(pixels);
 }
 
+static GdkPixbuf *get_contiguous_pixbuf (guint width, 
+					 guint height, 
+					 gboolean has_alpha)
+{
+	guchar *pixels;
+	guint channels, rowstride, bytes;
+	
+	if (has_alpha) 
+		channels = 4;
+	else 
+		channels = 3;
+	
+	rowstride = width * channels;
+	
+	if (rowstride / channels != width)
+                return NULL;                
+
+	bytes = height * rowstride;
+
+        if (bytes / rowstride != height)
+                return NULL;                
+
+        pixels = g_try_malloc (bytes);
+
+	if (!pixels)
+		return NULL;
+	
+	return gdk_pixbuf_new_from_data (pixels, GDK_COLORSPACE_RGB, has_alpha, 8,
+					 width, height, rowstride, free_buffer, NULL);
+}
+
 static gboolean fread_check(gpointer dest, 
 			    size_t size, size_t count, 
 			    FILE *f, GError **err)
@@ -268,7 +299,6 @@ static gboolean fill_in_context(TGAContext *ctx, GError **err)
 {
 	gboolean alpha;
 	guint w, h;
-	guchar *pixels;
 
 	g_return_val_if_fail(ctx != NULL, FALSE);
 
@@ -288,23 +318,14 @@ static gboolean fill_in_context(TGAContext *ctx, GError **err)
 	w = LE16(ctx->hdr->width);
 	h = LE16(ctx->hdr->height);
 
-	pixels = g_try_malloc (w * h * (alpha ? 4 : 3));
-
-	if (!pixels) {
-		g_set_error(err, GDK_PIXBUF_ERROR, GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY,
-			    _("Insufficient memory to load TGA image"));
-		return FALSE;
-	}	
-	
-	ctx->pbuf = gdk_pixbuf_new_from_data (pixels, GDK_COLORSPACE_RGB, alpha, 8,
-					      w, h, w * (alpha ? 4 : 3),
-					      free_buffer, NULL);
+	ctx->pbuf = get_contiguous_pixbuf (w, h, alpha);
 
 	if (!ctx->pbuf) {
 		g_set_error(err, GDK_PIXBUF_ERROR, GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY,
 			    _("Can't allocate new pixbuf"));
 		return FALSE;
 	}
+
 	ctx->pbuf_bytes = ctx->pbuf->rowstride * ctx->pbuf->height;
 	ctx->pptr = ctx->pbuf->pixels;
 
@@ -1000,7 +1021,6 @@ static GdkPixbuf *get_image_pseudocolor(FILE *f, TGAHeader *hdr,
 	guchar *p, color, tag;
 	glong n, image_offset;
 	guint count, w, h;
-	guchar *pixels;
 	gboolean alpha;
 
 	image_offset = sizeof(TGAHeader) + hdr->infolen;
@@ -1023,17 +1043,8 @@ static GdkPixbuf *get_image_pseudocolor(FILE *f, TGAHeader *hdr,
 
 	alpha = (hdr->cmap_bpp == 32);
 
-	pixels = g_try_malloc (w * h * (alpha ? 4 : 3));
+	pbuf = get_contiguous_pixbuf (w, h, alpha);
 
-	if (!pixels) {
-		g_set_error(err, GDK_PIXBUF_ERROR, GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY,
-			    _("Insufficient memory to load TGA image"));
-		return FALSE;
-	}	
-	
-	pbuf = gdk_pixbuf_new_from_data (pixels, GDK_COLORSPACE_RGB, alpha, 8,
-					 w, h, w * (alpha ? 4 : 3),
-					 free_buffer, NULL);
 	if (!pbuf) {
 		g_set_error(err, GDK_PIXBUF_ERROR, 
 			    GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY,
@@ -1120,7 +1131,6 @@ static GdkPixbuf *get_image_truecolor(FILE *f, TGAHeader *hdr,
 	glong n, image_offset;
 	guint32 pixel;
 	guint count, w, h;
-	guchar *pixels;
 	gboolean alpha;
 
 	image_offset = sizeof(TGAHeader) + hdr->infolen;
@@ -1135,17 +1145,7 @@ static GdkPixbuf *get_image_truecolor(FILE *f, TGAHeader *hdr,
 	
 	alpha = (hdr->bpp == 32);
 
-	pixels = g_try_malloc (w * h * (alpha ? 4 : 3));
-
-	if (!pixels) {
-		g_set_error(err, GDK_PIXBUF_ERROR, GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY,
-			    _("Insufficient memory to load TGA image"));
-		return FALSE;
-	}	
-	
-	pbuf = gdk_pixbuf_new_from_data (pixels, GDK_COLORSPACE_RGB, alpha, 8,
-					 w, h, w * (alpha ? 4 : 3),
-					 free_buffer, NULL);
+	pbuf = get_contiguous_pixbuf (w, h, alpha);
 
 	if (!pbuf) {
 		g_set_error(err, GDK_PIXBUF_ERROR, 
@@ -1153,8 +1153,6 @@ static GdkPixbuf *get_image_truecolor(FILE *f, TGAHeader *hdr,
 			    _("Can't allocate pixbuf"));
 		return NULL;
 	}
-	pbuf->destroy_fn = free_buffer;
-	pbuf->destroy_fn_data = NULL;
 	p = pbuf->pixels;
 
 	if (rle) {
@@ -1203,7 +1201,6 @@ static GdkPixbuf *get_image_grayscale(FILE *f, TGAHeader *hdr,
 	glong n, image_offset;
 	guchar *p, color[2], tag;
 	guint count, w, h;
-	guchar *pixels;
 	gboolean alpha;
 
 	image_offset = sizeof(TGAHeader) + hdr->infolen;
@@ -1218,26 +1215,14 @@ static GdkPixbuf *get_image_grayscale(FILE *f, TGAHeader *hdr,
 
 	alpha = (hdr->bpp == 16);
 
-	pixels = g_try_malloc (w * h * (alpha ? 4 : 3));
-
-	if (!pixels) {
-		g_set_error(err, GDK_PIXBUF_ERROR, GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY,
-			    _("Insufficient memory to load TGA image"));
-		return FALSE;
-	}	
+	pbuf = get_contiguous_pixbuf (w, h, alpha);
 	
-	pbuf = gdk_pixbuf_new_from_data (pixels, GDK_COLORSPACE_RGB, alpha, 8,
-					 w, h, w * (alpha ? 4 : 3),
-					 free_buffer, NULL);
-
 	if (!pbuf) {
 		g_set_error(err, GDK_PIXBUF_ERROR, 
 			    GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY,
 			    _("Can't allocate pixbuf"));
 		return NULL;
 	}
-	pbuf->destroy_fn = free_buffer;
-	pbuf->destroy_fn_data = NULL;
 	p = pbuf->pixels;
 
 	if (rle) {

@@ -1,3 +1,21 @@
+2002-04-11  Matthias Clasen  <maclas@gmx.de>
+
+	More fixes for #77807:
+	
+	* io-tga.c (get_contiguous_pixbuf): Helper function to create
+	a pixbuf with a contiguous pixel array while being careful about
+	overflow. 
+
+	* io-tga.c (fill_in_context, get_image_pseudocolor,
+	get_image_truecolor, get_image_grayscale): Use 
+	get_contiguous_pixbuf instead of manually allocating image
+	storage. 
+
+	* io-xpm.c (pixbuf_create_from_xpm): 
+	* io-pnm.c (gdk_pixbuf__pnm_image_load):
+	* io-jpeg.c (gdk_pixbuf__jpeg_image_load): Use gdk_pixbuf_new
+	instead of manually allocating image storage.
+
 2002-04-09  Matthias Clasen  <maclas@gmx.de>
 
 	* gdk-pixbuf-loader.c (gdk_pixbuf_loader_load_module): Use 
