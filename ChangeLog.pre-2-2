@@ -1,3 +1,8 @@
+Thu Apr 25 00:26:34 2002  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtktreemodelsort.c (gtk_tree_model_sort_reset_default_sort_func):
+	resort if we're already in 'unsorted' state, and update the docs
+
 2002-04-24  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtktreeview.c (gtk_tree_view_stop_editing): Remove doc
