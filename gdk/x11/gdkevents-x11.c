@@ -1611,7 +1611,17 @@ gdk_event_translate (GdkEvent *event,
       break;
       
     case CreateNotify:
-      /* Not currently handled */
+      GDK_NOTE (EVENTS,
+		g_message ("create notify:\twindow: %ld  x,y: %d %d	w,h: %d %d  b-w: %d  parent: %ld	 ovr: %d",
+			   xevent->xcreatewindow.window,
+			   xevent->xcreatewindow.x,
+			   xevent->xcreatewindow.y,
+			   xevent->xcreatewindow.width,
+			   xevent->xcreatewindow.height,
+			   xevent->xcreatewindow.border_width,
+			   xevent->xcreatewindow.parent,
+			   xevent->xcreatewindow.override_redirect));
+      /* not really handled */
       break;
       
     case DestroyNotify:
@@ -1661,8 +1671,12 @@ gdk_event_translate (GdkEvent *event,
       /* Print debugging info.
        */
       GDK_NOTE (EVENTS,
-		g_message ("reparent notify:\twindow: %ld",
-			   xevent->xreparent.window));
+		g_message ("reparent notify:\twindow: %ld  x,y: %d %d  parent: %ld	ovr: %d",
+			   xevent->xreparent.window,
+			   xevent->xreparent.x,
+			   xevent->xreparent.y,
+			   xevent->xreparent.parent,
+			   xevent->xreparent.override_redirect));
 
       /* Not currently handled */
       return_val = FALSE;
@@ -1737,17 +1751,23 @@ gdk_event_translate (GdkEvent *event,
 	      gint tx = 0;
 	      gint ty = 0;
 	      Window child_window = 0;
-	      
-	      if (!XTranslateCoordinates (window_private->xdisplay,
-					  window_private->xwindow,
-					  gdk_root_window,
-					  0, 0,
-					  &tx, &ty,
-					  &child_window))
-		g_warning ("GdkWindow %ld doesn't share root windows display?",
-			   window_private->xwindow);
-	      event->configure.x = tx;
-	      event->configure.y = ty;
+
+	      gdk_error_trap_push ();
+	      if (XTranslateCoordinates (window_private->xdisplay,
+					 window_private->xwindow,
+					 gdk_root_window,
+					 0, 0,
+					 &tx, &ty,
+					 &child_window))
+		{
+		  if (!gdk_error_trap_pop ())
+		    {
+		      event->configure.x = tx;
+		      event->configure.y = ty;
+		    }
+		}
+	      else
+		gdk_error_trap_pop ();
 	    }
 	  else
 	    {
@@ -1932,8 +1952,8 @@ gdk_event_translate (GdkEvent *event,
 
 GdkFilterReturn
 gdk_wm_protocols_filter (GdkXEvent *xev,
-		     GdkEvent  *event,
-		     gpointer data)
+			 GdkEvent  *event,
+			 gpointer data)
 {
   XEvent *xevent = (XEvent *)xev;
 
