@@ -252,7 +252,7 @@ static void         gtk_entry_paste                    (GtkEntry       *entry,
 static void         gtk_entry_update_primary_selection (GtkEntry       *entry);
 static void         gtk_entry_do_popup                 (GtkEntry       *entry,
 							GdkEventButton *event);
-static gboolean     gtk_entry_activate_mnemonic        (GtkWidget     *widget,
+static gboolean     gtk_entry_mnemonic_activate        (GtkWidget     *widget,
 							gboolean       group_cycling);
 
 static GtkWidgetClass *parent_class = NULL;
@@ -345,7 +345,7 @@ gtk_entry_class_init (GtkEntryClass *class)
   widget_class->style_set = gtk_entry_style_set;
   widget_class->direction_changed = gtk_entry_direction_changed;
   widget_class->state_changed = gtk_entry_state_changed;
-  widget_class->activate_mnemonic = gtk_entry_activate_mnemonic;
+  widget_class->mnemonic_activate = gtk_entry_mnemonic_activate;
 
   widget_class->drag_motion = gtk_entry_drag_motion;
   widget_class->drag_leave = gtk_entry_drag_leave;
@@ -3150,7 +3150,7 @@ activate_cb (GtkWidget *menuitem,
 
 
 static gboolean
-gtk_entry_activate_mnemonic (GtkWidget *widget,
+gtk_entry_mnemonic_activate (GtkWidget *widget,
 			     gboolean   group_cycling)
 {
   gtk_widget_grab_focus (widget);

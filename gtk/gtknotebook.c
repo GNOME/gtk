@@ -95,7 +95,7 @@ struct _GtkNotebookPage
   GtkRequisition requisition;
   GtkAllocation allocation;
 
-  guint activate_mnemonic_signal;
+  guint mnemonic_activate_signal;
 };
 
 #ifdef G_DISABLE_CHECKS
@@ -1977,9 +1977,9 @@ gtk_notebook_real_remove (GtkNotebook *notebook,
   if (GTK_WIDGET_VISIBLE (page->child) && GTK_WIDGET_VISIBLE (notebook))
     need_resize = TRUE;
 
-  if (page->tab_label && page->activate_mnemonic_signal)
+  if (page->tab_label && page->mnemonic_activate_signal)
     gtk_signal_disconnect (page->tab_label,
-			   page->activate_mnemonic_signal);
+			   page->mnemonic_activate_signal);
 
   gtk_widget_unparent (page->child);
 
@@ -3636,7 +3636,7 @@ gtk_notebook_page_compare_tab (gconstpointer a,
 }
 
 static gboolean
-gtk_notebook_activate_mnemonic_switch_page (GtkWidget *child,
+gtk_notebook_mnemonic_activate_switch_page (GtkWidget *child,
 					    gboolean overload,
 					    gpointer data)
 {
@@ -3698,7 +3698,7 @@ gtk_notebook_insert_page_menu (GtkNotebook *notebook,
   page->allocation.height = 0;
   page->default_menu = FALSE;
   page->default_tab = FALSE;
-  page->activate_mnemonic_signal = 0;
+  page->mnemonic_activate_signal = 0;
    
   nchildren = g_list_length (notebook->children);
   if ((position < 0) || (position > nchildren))
@@ -3781,10 +3781,10 @@ gtk_notebook_insert_page_menu (GtkNotebook *notebook,
     }
 
   if (tab_label)
-    page->activate_mnemonic_signal =
+    page->mnemonic_activate_signal =
       gtk_signal_connect (GTK_OBJECT (tab_label),
-			  "activate_mnemonic",
-			  (GtkSignalFunc) gtk_notebook_activate_mnemonic_switch_page,
+			  "mnemonic_activate",
+			  (GtkSignalFunc) gtk_notebook_mnemonic_activate_switch_page,
 			  notebook);
 }
 

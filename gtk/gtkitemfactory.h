@@ -32,7 +32,6 @@
 
 
 #include <gtk/gtkwidget.h>
-#include <gtk/gtkmenufactory.h>	/* for GtkMenuEntry */
 #include <gtk/gtkbindings.h>	/* for GtkPatternSpec */
 
 
@@ -217,6 +216,15 @@ void   gtk_item_factory_set_translate_func (GtkItemFactory      *ifactory,
 
 /* Compatibility functions for deprecated GtkMenuFactory code
  */
+typedef void (*GtkMenuCallback) (GtkWidget *widget,
+				 gpointer   user_data);
+typedef struct {
+  gchar *path;
+  gchar *accelerator;
+  GtkMenuCallback callback;
+  gpointer callback_data;
+  GtkWidget *widget;
+} GtkMenuEntry;
 GtkItemFactory*	gtk_item_factory_from_path   (const gchar       *path);
 void	gtk_item_factory_create_menu_entries (guint		 n_entries,
 					      GtkMenuEntry      *entries);

@@ -181,7 +181,7 @@ void     gtk_window_add_mnemonic          (GtkWindow       *window,
 void     gtk_window_remove_mnemonic       (GtkWindow       *window,
 					   guint            keyval,
 					   GtkWidget       *target);
-gboolean gtk_window_activate_mnemonic     (GtkWindow       *window,
+gboolean gtk_window_mnemonic_activate     (GtkWindow       *window,
 					   guint            keyval,
 					   GdkModifierType  modifier);
 void     gtk_window_set_mnemonic_modifier (GtkWindow       *window,
@@ -230,7 +230,7 @@ void       gtk_window_remove_embedded_xid      (GtkWindow           *window,
 				                guint                xid);
 void       gtk_window_add_embedded_xid         (GtkWindow           *window,
 						guint                xid);
-void       gtk_window_reposition               (GtkWindow           *window,
+void       _gtk_window_reposition              (GtkWindow           *window,
 						gint                 x,
 						gint                 y);
 void       _gtk_window_constrain_size          (GtkWindow           *window,

@@ -1,3 +1,18 @@
+Sun Apr  1 08:00:13 2001  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkwidget.[hc]: got rid of gtk_widget_popup(), a function that
+	bad needs to be nuked, not just deprecated.
+
+	* gtk/gtktooltips.c (gtk_tooltips_draw_tips): don't use 
+	gtk_widget_popup().
+
+	* gtk/*.[hc]: s/activate_mnemonic/mnemonic_activate/g;
+	
+	* gtk/gtkmenufactory.[hc]: removed this long-standingly deprecated
+	widget.
+	
+	* docs/Changes-2.0.txt: updates.
+	
 Sun Apr  1 01:02:54 2001  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtktreestore.c (gtk_tree_store_sort_iter_changed):

@@ -717,6 +717,15 @@ produce superscript and subscript.
 </para>
 
 
+<!-- ##### SIGNAL GtkWidget::activate-mnemonic ##### -->
+<para>
+
+</para>
+
+@widget: the object which received the signal.
+@arg1: 
+@Returns: 
+
 <!-- ##### SIGNAL GtkWidget::debug-msg ##### -->
 <para>
 
@@ -1453,6 +1462,34 @@ Set the varargs type for a fundamental type @foreign_type.
 @foreign_type: Must be a GtkType with a sequence number of zero.  Must not be a
 fundamental type.
 @varargs_type: Must be a GtkType which is either structured or flag, or NONE.
+
+<!-- ##### FUNCTION gtk_widget_activate_mnemonic ##### -->
+<para>
+
+</para>
+
+@widget: 
+@group_cycling: 
+@Returns: 
+
+<!-- ##### FUNCTION gtk_widget_popup ##### -->
+<para>
+
+</para>
+
+@widget: 
+@x: 
+@y: 
+
+<!-- ##### FUNCTION gtk_window_activate_mnemonic ##### -->
+<para>
+
+</para>
+
+@window: 
+@keyval: 
+@modifier: 
+@Returns: 
 
 <!-- ##### FUNCTION gtk_window_get_default_accel_group ##### -->
 <para>

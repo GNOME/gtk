@@ -20,11 +20,13 @@ GtkTreeStore
 </para>
 
 @parent: 
-@sort_list: 
 @stamp: 
 @root: 
 @last: 
 @n_columns: 
+@sort_column_id: 
+@sort_list: 
+@order: 
 @column_headers: 
 
 <!-- ##### FUNCTION gtk_tree_store_new ##### -->

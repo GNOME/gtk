@@ -206,12 +206,16 @@ Incompatible Changes from GTK+-1.2 to GTK+-2.0:
   #define gdk_cursor_destroy             gdk_cursor_unref
 
   (Note that g_object_ref() and g_object_unref() may be used for all of
-  the above.)
+  the above _ref and _unref functions.)
 
   #define gdk_window_copy_area(drawable,gc,x,y,source_drawable,source_x,source_y,width,height) \
      gdk_draw_pixmap(drawable,gc,source_drawable,source_x,source_y,x,y,width,height)
 
   #define gdk_rgb_get_cmap               gdk_rgb_get_colormap
+  
+  gtk_widget_popup() was removed, it was only usable for GtkWindows, and
+  there the same effect can be achived by gtk_widget_set_uposition() and
+  gtk_widget_show().
 
 * gdk_pixmap_foreign_new() no longer calls XFreePixmap() on the 
   pixmap when the GdkPixmap is finalized. This change corresponds

@@ -357,7 +357,8 @@ gtk_tooltips_draw_tips (GtkTooltips * tooltips)
   else
     y = y + widget->allocation.height + 4;
 
-  gtk_widget_popup (tooltips->tip_window, x, y);
+  gtk_widget_set_uposition (tooltips->tip_window, x, y);
+  gtk_widget_show (tooltips->tip_window);
 }
 
 static gint

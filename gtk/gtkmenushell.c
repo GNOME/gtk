@@ -568,7 +568,7 @@ gtk_menu_shell_key_press (GtkWidget	*widget,
 
   toplevel = gtk_widget_get_toplevel (widget);
   if (GTK_IS_WINDOW (toplevel) &&
-      gtk_window_activate_mnemonic (GTK_WINDOW (toplevel),
+      gtk_window_mnemonic_activate (GTK_WINDOW (toplevel),
 				    event->keyval,
 				    event->state))
     return TRUE;

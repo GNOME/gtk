@@ -67,7 +67,7 @@ static void gtk_real_menu_item_toggle_size_request  (GtkMenuItem *menu_item,
 						     gint        *requisition);
 static void gtk_real_menu_item_toggle_size_allocate (GtkMenuItem *menu_item,
 						     gint         allocation);
-static gboolean gtk_menu_item_activate_mnemonic     (GtkWidget   *widget,
+static gboolean gtk_menu_item_mnemonic_activate     (GtkWidget   *widget,
 						     gboolean     group_cycling);
 
 static gint gtk_menu_item_select_timeout (gpointer          data);
@@ -140,7 +140,7 @@ gtk_menu_item_class_init (GtkMenuItemClass *klass)
   widget_class->expose_event = gtk_menu_item_expose;
   widget_class->show_all = gtk_menu_item_show_all;
   widget_class->hide_all = gtk_menu_item_hide_all;
-  widget_class->activate_mnemonic = gtk_menu_item_activate_mnemonic;
+  widget_class->mnemonic_activate = gtk_menu_item_mnemonic_activate;
 
   container_class->forall = gtk_menu_item_forall;
 
@@ -606,7 +606,7 @@ gtk_real_menu_item_deselect (GtkItem *item)
 }
 
 static gboolean
-gtk_menu_item_activate_mnemonic (GtkWidget *widget,
+gtk_menu_item_mnemonic_activate (GtkWidget *widget,
 				 gboolean   group_cycling)
 {
   if (group_cycling)

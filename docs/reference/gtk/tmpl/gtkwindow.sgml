@@ -236,17 +236,6 @@ it's larger
 @Returns: 
 
 
-<!-- ##### FUNCTION gtk_window_activate_mnemonic ##### -->
-<para>
-
-</para>
-
-@window: 
-@keyval: 
-@modifier: 
-@Returns: 
-
-
 <!-- ##### FUNCTION gtk_window_add_mnemonic ##### -->
 <para>
 

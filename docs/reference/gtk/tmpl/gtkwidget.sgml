@@ -571,16 +571,6 @@ GtkWidget
 @new_parent: 
 
 
-<!-- ##### FUNCTION gtk_widget_popup ##### -->
-<para>
-
-</para>
-
-@widget: 
-@x: 
-@y: 
-
-
 <!-- ##### FUNCTION gtk_widget_intersect ##### -->
 <para>
 
@@ -1249,16 +1239,6 @@ GtkWidget
 @Returns: 
 
 
-<!-- ##### FUNCTION gtk_widget_activate_mnemonic ##### -->
-<para>
-
-</para>
-
-@widget: 
-@group_cycling: 
-@Returns: 
-
-
 <!-- ##### FUNCTION gtk_widget_class_install_style_property ##### -->
 <para>
 
@@ -1331,15 +1311,6 @@ GtkWidget
 @first_property_name: 
 @var_args: 
 
-
-<!-- ##### SIGNAL GtkWidget::activate-mnemonic ##### -->
-<para>
-
-</para>
-
-@widget: the object which received the signal.
-@arg1: 
-@Returns: 
 
 <!-- ##### SIGNAL GtkWidget::add-accelerator ##### -->
 <para>
@@ -1607,6 +1578,15 @@ a widget changes from un-anchored to anchored or vice-versa.
 
 @widget: the object which received the signal.
 @event: 
+@Returns: 
+
+<!-- ##### SIGNAL GtkWidget::mnemonic-activate ##### -->
+<para>
+
+</para>
+
+@widget: the object which received the signal.
+@arg1: 
 @Returns: 
 
 <!-- ##### SIGNAL GtkWidget::motion-notify-event ##### -->

@@ -195,7 +195,7 @@ static gint gtk_widget_event_internal            (GtkWidget     *widget,
 
 static void gtk_widget_propagate_hierarchy_changed (GtkWidget *widget,
 						    gpointer   client_data);
-static gboolean gtk_widget_real_activate_mnemonic  (GtkWidget *widget,
+static gboolean gtk_widget_real_mnemonic_activate  (GtkWidget *widget,
 						    gboolean   group_cycling);
 
 static void		 gtk_widget_aux_info_destroy (GtkWidgetAuxInfo *aux_info);
@@ -317,7 +317,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   klass->direction_changed = gtk_widget_direction_changed;
   klass->add_accelerator = (void*) gtk_accel_group_handle_add;
   klass->remove_accelerator = (void*) gtk_accel_group_handle_remove;
-  klass->activate_mnemonic = gtk_widget_real_activate_mnemonic;
+  klass->mnemonic_activate = gtk_widget_real_mnemonic_activate;
   klass->grab_focus = gtk_widget_real_grab_focus;
   klass->event = NULL;
   klass->button_press_event = NULL;
@@ -626,10 +626,10 @@ gtk_widget_class_init (GtkWidgetClass *klass)
     gtk_accel_group_create_remove (GTK_CLASS_TYPE (object_class), GTK_RUN_LAST,
 				   GTK_SIGNAL_OFFSET (GtkWidgetClass, remove_accelerator));
   widget_signals[ACTIVATE_MNEMONIC] =
-    g_signal_newc ("activate_mnemonic",
+    g_signal_newc ("mnemonic_activate",
 		   GTK_CLASS_TYPE (object_class),
 		   GTK_RUN_LAST,
-		   GTK_SIGNAL_OFFSET (GtkWidgetClass, activate_mnemonic),
+		   GTK_SIGNAL_OFFSET (GtkWidgetClass, mnemonic_activate),
 		   accumulator_stop_handled_emission, NULL,
 		   gtk_marshal_BOOLEAN__BOOLEAN,
 		   GTK_TYPE_BOOL, 1,
@@ -2391,7 +2391,7 @@ gtk_widget_accelerator_signal (GtkWidget           *widget,
 }
 
 gboolean
-gtk_widget_activate_mnemonic (GtkWidget *widget,
+gtk_widget_mnemonic_activate (GtkWidget *widget,
                               gboolean   group_cycling)
 {
   gboolean handled;
@@ -2410,7 +2410,7 @@ gtk_widget_activate_mnemonic (GtkWidget *widget,
 }
 
 static gboolean
-gtk_widget_real_activate_mnemonic (GtkWidget *widget,
+gtk_widget_real_mnemonic_activate (GtkWidget *widget,
                                    gboolean   group_cycling)
 {
   if (!group_cycling && GTK_WIDGET_GET_CLASS (widget)->activate_signal)
@@ -2810,34 +2810,6 @@ gtk_widget_reparent (GtkWidget *widget,
 	  gtk_widget_reparent_container_child (widget,
 					       gtk_widget_get_parent_window (widget));
 	}
-    }
-}
-
-/**
- * gtk_widget_popup:
- * @widget: 
- * @x: 
- * @y: 
- *
- * DEPRECATED. Completely useless function as far as we know.
- * Probably does something bad.
- * 
- **/
-void
-gtk_widget_popup (GtkWidget *widget,
-		  gint	     x,
-		  gint	     y)
-{
-  g_return_if_fail (widget != NULL);
-  g_return_if_fail (GTK_IS_WIDGET (widget));
-  
-  if (!GTK_WIDGET_VISIBLE (widget))
-    {
-      if (!GTK_WIDGET_REALIZED (widget))
-	gtk_widget_realize (widget);
-      if (!GTK_WIDGET_NO_WINDOW (widget))
-	gdk_window_move (widget->window, x, y);
-      gtk_widget_show (widget);
     }
 }
 

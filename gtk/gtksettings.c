@@ -234,7 +234,6 @@ gtk_settings_notify (GObject    *object,
   g_value_init (&tmp_value, G_PARAM_SPEC_VALUE_TYPE (pspec));
   g_object_get_property (object, pspec->name, &tmp_value);
   contents = g_strdup_value_contents (&tmp_value);
-#endif
 
   switch (property_id)
     {
@@ -252,7 +251,6 @@ gtk_settings_notify (GObject    *object,
       break;
     }
 
-#if 1
   g_free (contents);
   g_value_unset (&tmp_value);
 #endif

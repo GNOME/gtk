@@ -272,7 +272,7 @@ struct _GtkWidgetClass
 				GdkModifierType accel_mods);
 
   /* Mnemonics */
-  gboolean (* activate_mnemonic) (GtkWidget    *widget,
+  gboolean (* mnemonic_activate) (GtkWidget    *widget,
 				  gboolean      group_cycling);
   
   /* explicit focus */
@@ -476,7 +476,7 @@ guint	   gtk_widget_accelerator_signal  (GtkWidget           *widget,
 void	   gtk_widget_lock_accelerators   (GtkWidget	       *widget);
 void	   gtk_widget_unlock_accelerators (GtkWidget	       *widget);
 gboolean   gtk_widget_accelerators_locked (GtkWidget	       *widget);
-gboolean   gtk_widget_activate_mnemonic   (GtkWidget           *widget,
+gboolean   gtk_widget_mnemonic_activate   (GtkWidget           *widget,
 					   gboolean             group_cycling);
 gboolean   gtk_widget_event		  (GtkWidget	       *widget,
 					   GdkEvent	       *event);
@@ -490,9 +490,6 @@ gboolean   gtk_widget_set_scroll_adjustments (GtkWidget        *widget,
      
 void	   gtk_widget_reparent		  (GtkWidget	       *widget,
 					   GtkWidget	       *new_parent);
-void	   gtk_widget_popup		  (GtkWidget	       *widget,
-					   gint			x,
-					   gint			y);
 gboolean   gtk_widget_intersect		  (GtkWidget	       *widget,
 					   GdkRectangle	       *area,
 					   GdkRectangle	       *intersection);

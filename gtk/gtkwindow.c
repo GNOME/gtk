@@ -876,7 +876,7 @@ gtk_window_remove_mnemonic (GtkWindow *window,
 }
 
 gboolean
-gtk_window_activate_mnemonic (GtkWindow      *window,
+gtk_window_mnemonic_activate (GtkWindow      *window,
 			      guint           keyval,
 			      GdkModifierType modifier)
 {
@@ -927,7 +927,7 @@ gtk_window_activate_mnemonic (GtkWindow      *window,
       mnemonic->targets = g_slist_remove (mnemonic->targets, chosen_widget);
       mnemonic->targets = g_slist_append (mnemonic->targets, chosen_widget);
 
-      return gtk_widget_activate_mnemonic (chosen_widget, overloaded);
+      return gtk_widget_mnemonic_activate (chosen_widget, overloaded);
     }
   return FALSE;
 }
@@ -2051,7 +2051,7 @@ gtk_window_key_press_event (GtkWidget   *widget,
     handled = gtk_widget_event (window->focus_widget, (GdkEvent*) event);
 
   if (!handled)
-    handled = gtk_window_activate_mnemonic (window,
+    handled = gtk_window_mnemonic_activate (window,
 					    event->keyval,
 					    event->state);
 

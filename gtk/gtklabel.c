@@ -123,7 +123,7 @@ static void gtk_label_select_region_index (GtkLabel *label,
                                            gint      anchor_index,
                                            gint      end_index);
 
-static gboolean gtk_label_activate_mnemonic (GtkWidget *widget,
+static gboolean gtk_label_mnemonic_activate (GtkWidget *widget,
 					     gboolean   group_cycling);
 
 
@@ -184,7 +184,7 @@ gtk_label_class_init (GtkLabelClass *class)
   widget_class->button_release_event = gtk_label_button_release;
   widget_class->motion_notify_event = gtk_label_motion;
   widget_class->hierarchy_changed = gtk_label_hierarchy_changed;
-  widget_class->activate_mnemonic = gtk_label_activate_mnemonic;
+  widget_class->mnemonic_activate = gtk_label_mnemonic_activate;
 
   g_object_class_install_property (G_OBJECT_CLASS(object_class),
                                    PROP_LABEL,
@@ -431,13 +431,13 @@ gtk_label_new_with_mnemonic (const gchar *str)
 }
 
 static gboolean
-gtk_label_activate_mnemonic (GtkWidget *widget,
+gtk_label_mnemonic_activate (GtkWidget *widget,
 			     gboolean   group_cycling)
 {
   GtkWidget *parent;
 
   if (GTK_LABEL (widget)->mnemonic_widget)
-    return gtk_widget_activate_mnemonic (GTK_LABEL (widget)->mnemonic_widget, group_cycling);
+    return gtk_widget_mnemonic_activate (GTK_LABEL (widget)->mnemonic_widget, group_cycling);
 
   /* Try to find the widget to activate by traversing the
    * widget's ancestry.
@@ -449,7 +449,7 @@ gtk_label_activate_mnemonic (GtkWidget *widget,
 	  (!group_cycling && GTK_WIDGET_GET_CLASS (parent)->activate_signal) ||
           (parent->parent && GTK_IS_NOTEBOOK (parent->parent)) ||
 	  (GTK_IS_MENU_ITEM (parent)))
-	return gtk_widget_activate_mnemonic (parent, group_cycling);
+	return gtk_widget_mnemonic_activate (parent, group_cycling);
       parent = parent->parent;
     }
 
@@ -509,7 +509,7 @@ gtk_label_hierarchy_changed (GtkWidget *widget)
  * (i.e. when the target is a #GtkEntry next to the label) you need to
  * set it explicitly using this function.
  *
- * The target widget will be accelerated by emitting "activate_mnemonic" on it.
+ * The target widget will be accelerated by emitting "mnemonic_activate" on it.
  * The default handler for this signal will activate the widget if there are no
  * mnemonic collisions and toggle focus between the colliding widgets otherwise.
  **/
