@@ -2633,8 +2633,16 @@ gdk_window_get_frame_extents (GdkWindow    *window,
   
   while (private->parent && ((GdkWindowObject*) private->parent)->parent)
     private = (GdkWindowObject*) private->parent;
-  if (GDK_WINDOW_DESTROYED (window))
+
+  /* Refine our fallback answer a bit using local information */
+  rect->x = private->x;
+  rect->y = private->y;
+  gdk_drawable_get_size ((GdkDrawable *)private, &rect->width, &rect->height);
+
+  if (GDK_WINDOW_DESTROYED (private))
     return;
+
+  gdk_error_trap_push();
   
   xparent = GDK_WINDOW_XID (window);
   do
@@ -2643,7 +2651,7 @@ gdk_window_get_frame_extents (GdkWindow    *window,
       if (!XQueryTree (GDK_WINDOW_XDISPLAY (window), xwindow,
 		       &root, &xparent,
 		       &children, &nchildren))
-	return;
+	goto fail;
       
       if (children)
 	XFree (children);
@@ -2663,6 +2671,9 @@ gdk_window_get_frame_extents (GdkWindow    *window,
           rect->height = wh;
 	}
     }
+
+ fail:
+  gdk_error_trap_pop ();
 }
 
 void

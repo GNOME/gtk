@@ -1,3 +1,10 @@
+Sat Dec 14 22:18:45 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/x11/gdkwindow-x11.c (gdk_window_get_frame_extents):
+	Fix a bug with checking the private flag on the wrong
+	window; improve the answer on failure a bit; push
+	an error trap around the X operations. (#100933)
+
 Sat Dec 14 22:03:21 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* modules/input/gtkimcontextxim.c (status_window_hide): Don't
