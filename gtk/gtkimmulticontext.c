@@ -26,6 +26,7 @@
 #include "gtkimmodule.h"
 #include "gtkradiomenuitem.h"
 #include "gtkintl.h"
+#include "gtkprivate.h"
 
 static void     gtk_im_multicontext_class_init         (GtkIMMulticontextClass  *class);
 static void     gtk_im_multicontext_init               (GtkIMMulticontext       *im_multicontext);

@@ -74,8 +74,8 @@ EXPORTS
 	gdk_display_keyboard_ungrab
 	gdk_display_list_devices
 	gdk_display_manager_get
-	gdk_display_manager_get_type
 	gdk_display_manager_get_default_display
+	gdk_display_manager_get_type
 	gdk_display_manager_list_displays
 	gdk_display_manager_set_default_display
 	gdk_display_open
@@ -411,6 +411,7 @@ EXPORTS
 	gdk_text_height
 	gdk_text_measure
 	gdk_text_property_to_text_list
+	gdk_text_property_to_text_list_for_display
 	gdk_text_property_to_utf8_list
 	gdk_text_property_to_utf8_list_for_display
 	gdk_text_width
@@ -544,3 +545,4 @@ EXPORTS
 	gdk_window_withdraw
 	gdk_wm_decoration_get_type
 	gdk_wm_function_get_type
+

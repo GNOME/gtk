@@ -995,7 +995,7 @@ icon_sizes_init_for_settings (GtkSettings *settings)
   icon_size_set_all_from_settings (settings);
 }
      
-gboolean
+static gboolean
 icon_size_lookup_intern (GtkSettings *settings,
 			 GtkIconSize  size,
 			 gint        *widthp,

@@ -47,7 +47,7 @@ all :						\
 	..\config.h				\
 	generated				\
 	gtk-stocks-icons			\
-	gtk-win32-$(GTK_VER).dll		\
+	libgtk-win32-$(GTK_VER)-0.dll		\
 	gtk-query-immodules-$(GTK_VER).exe \
 #	gtk-win32-$(GTK_VER)s.lib \
 #	gtk-x11-$(GTK_VER).dll
@@ -69,6 +69,7 @@ gtk_OBJECTS = 					\
 	gtkbutton.obj				\
 	gtkcalendar.obj				\
 	gtkcelleditable.obj			\
+	gtkcelllayout.obj			\
 	gtkcellrenderer.obj			\
 	gtkcellrenderertext.obj			\
 	gtkcellrenderertoggle.obj		\
@@ -77,6 +78,7 @@ gtk_OBJECTS = 					\
 	gtkcheckmenuitem.obj			\
 	gtkclipboard.obj			\
 	gtkclist.obj				\
+	gtkcolorbutton.obj				\
 	gtkcolorsel.obj				\
 	gtkcolorseldialog.obj			\
 	gtkcombo.obj				\
@@ -88,10 +90,13 @@ gtk_OBJECTS = 					\
 	gtkdrawingarea.obj			\
 	gtkeditable.obj				\
 	gtkentry.obj				\
+	gtkentrycompletion.obj		\
 	gtkeventbox.obj				\
+	gtkexpander.obj			\
 	gtkfilesel.obj				\
 	gtkfixed.obj				\
 	gtkfontsel.obj				\
+	gtkfontbutton.obj				\
 	gtkframe.obj				\
 	gtkgamma.obj				\
 	gtkgc.obj				\
@@ -105,6 +110,8 @@ gtk_OBJECTS = 					\
 	gtkhseparator.obj			\
 	gtkhsv.obj				\
 	gtkiconfactory.obj			\
+	gtkicontheme.obj			\
+	gtkiconthemeparser.obj			\
 	gtkimage.obj				\
 	gtkimagemenuitem.obj	\
 	gtkimcontext.obj			\
@@ -141,6 +148,7 @@ gtk_OBJECTS = 					\
 	gtkprogress.obj				\
 	gtkprogressbar.obj			\
 	gtkradiobutton.obj			\
+	gtkradiotoolbutton.obj			\
 	gtkradiomenuitem.obj			\
 	gtkrange.obj				\
 	gtkrbtree.obj	\
@@ -152,6 +160,7 @@ gtk_OBJECTS = 					\
 	gtkselection.obj			\
 	gtkseparator.obj			\
 	gtkseparatormenuitem.obj \
+	gtkseparatortoolitem.obj \
 	gtksettings.obj \
 	gtksignal.obj				\
 	gtksizegroup.obj \
@@ -179,13 +188,17 @@ gtk_OBJECTS = 					\
 	gtkthemes.obj				\
 	gtktipsquery.obj			\
 	gtktogglebutton.obj			\
+	gtktoggletoolbutton.obj			\
 	gtktoolbar.obj				\
+	gtktoolbutton.obj				\
+	gtktoolitem.obj				\
 	gtktooltips.obj				\
 	gtktree.obj				\
 	gtktreedatalist.obj	\
 	gtktreednd.obj				\
 	gtktreeitem.obj				\
 	gtktreemodel.obj			\
+	gtktreemodelfilter.obj			\
 	gtktreemodelsort.obj			\
 	gtktreeselection.obj			\
 	gtktreesortable.obj \
@@ -211,42 +224,49 @@ gtk_public_h_sources =		\
 	gtk.h			\
 	gtkaccelgroup.h		\
 	gtkaccellabel.h		\
+	gtkaccelmap.h		\
 	gtkaccessible.h \
 	gtkadjustment.h		\
 	gtkalignment.h		\
 	gtkarrow.h		\
 	gtkaspectframe.h	\
+	gtkbbox.h		\
 	gtkbin.h		\
 	gtkbindings.h		\
-	gtkbbox.h		\
 	gtkbox.h		\
 	gtkbutton.h		\
 	gtkcalendar.h		\
+	gtkcelleditable.h	\
+	gtkcelllayout.h		\
+	gtkcellrenderer.h	\
+	gtkcellrendererpixbuf.h	\
+	gtkcellrenderertext.h	\
+	gtkcellrenderertoggle.h	\
 	gtkcheckbutton.h	\
 	gtkcheckmenuitem.h	\
+	gtkclipboard.h		\
 	gtkclist.h		\
 	gtkclipboard.h		\
+	gtkcolorbutton.h	\
 	gtkcolorsel.h		\
 	gtkcolorseldialog.h	\
 	gtkcombo.h		\
 	gtkcontainer.h		\
 	gtkctree.h		\
 	gtkcurve.h		\
-	gtkcelleditable.h \
-	gtkcellrenderer.h	\
-	gtkcellrenderertext.h	\
-	gtkcellrenderertoggle.h	\
-	gtkcellrendererpixbuf.h	\
 	gtkdebug.h		\
 	gtkdialog.h		\
 	gtkdnd.h		\
 	gtkdrawingarea.h	\
 	gtkeditable.h		\
 	gtkentry.h		\
+	gtkentrycompletion.h	\
 	gtkenums.h		\
 	gtkeventbox.h		\
+	gtkexpander.h		\
 	gtkfilesel.h		\
 	gtkfixed.h		\
+	gtkfontbutton.h		\
 	gtkfontsel.h		\
 	gtkframe.h		\
 	gtkgamma.h		\
@@ -261,8 +281,11 @@ gtk_public_h_sources =		\
 	gtkhseparator.h		\
 	gtkhsv.h		\
 	gtkiconfactory.h	\
+	gtkicontheme.h		\
 	gtkimage.h		\
+	gtkimagemenuitem.h	\
 	gtkimcontext.h		\
+	gtkimcontextsimple.h	\
 	gtkimmodule.h		\
 	gtkimmulticontext.h	\
 	gtkinputdialog.h	\
@@ -283,8 +306,8 @@ gtk_public_h_sources =		\
 	gtkmessagedialog.h	\
 	gtkmisc.h		\
 	gtknotebook.h		\
-	gtkoldeditable.h	\
 	gtkobject.h		\
+	gtkoldeditable.h	\
 	gtkoptionmenu.h		\
 	gtkpaned.h		\
 	gtkpixmap.h		\
@@ -295,6 +318,7 @@ gtk_public_h_sources =		\
 	gtkprogressbar.h	\
 	gtkradiobutton.h	\
 	gtkradiomenuitem.h	\
+	gtkradiotoolbutton.h	\
 	gtkrange.h		\
 	gtkrc.h			\
 	gtkruler.h		\
@@ -303,15 +327,20 @@ gtk_public_h_sources =		\
 	gtkscrolledwindow.h	\
 	gtkselection.h		\
 	gtkseparator.h		\
+	gtkseparatormenuitem.h	\
+	gtkseparatortoolitem.h	\
+	gtksettings.h		\
+	gtksignal.h		\
 	gtksizegroup.h	\
 	gtksignal.h		\
 	gtksocket.h		\
 	gtkspinbutton.h		\
-	gtkstyle.h		\
 	gtkstatusbar.h		\
 	gtkstock.h		\
+	gtkstyle.h		\
 	gtktable.h		\
 	gtktearoffmenuitem.h	\
+	gtktext.h		\
 	gtktextbuffer.h		\
 	gtktextchild.h		\
 	gtktextdisplay.h	\
@@ -321,14 +350,18 @@ gtk_public_h_sources =		\
 	gtktexttag.h		\
 	gtktexttagtable.h	\
 	gtktextview.h		\
-	gtktext.h		\
 	gtktipsquery.h		\
 	gtktogglebutton.h	\
+	gtktoggletoolbutton.h	\
 	gtktoolbar.h		\
+	gtktoolbutton.h		\
+	gtktoolitem.h		\
 	gtktooltips.h		\
 	gtktree.h		\
+	gtktreednd.h		\
 	gtktreeitem.h		\
 	gtktreemodel.h		\
+	gtktreemodelfilter.h	\
 	gtktreemodelsort.h	\
 	gtktreeselection.h	\
 	gtktreesortable.h	\
@@ -420,8 +453,11 @@ gtksignal.obj : gtksignal.c gtkmarshal.c gtkmarshal.h
 #
 # Linking:
 #
-gtk-win32-$(GTK_VER).dll : $(gtk_OBJECTS) gtk.def
-	$(CC) $(CFLAGS) -LD -Fm -Fegtk-win32-$(GTK_VER).dll $(gtk_OBJECTS) $(GDK_LIBS) $(GDK_PIXBUF_LIBS) $(PANGO_LIBS) $(INTL_LIBS) $(GLIB_LIBS) gdi32.lib user32.lib advapi32.lib wsock32.lib $(LDFLAGS) /def:gtk.def
+libgtk-win32-$(GTK_VER)-0.dll : $(gtk_OBJECTS) gtk.def
+	$(CC) $(CFLAGS) -LD -Fm -Fe$@ $(gtk_OBJECTS) \
+	$(GDK_LIBS) $(GDK_PIXBUF_LIBS) $(PANGO_LIBS) $(INTL_LIBS) $(GLIB_LIBS) \
+	gdi32.lib user32.lib advapi32.lib wsock32.lib \
+	$(LDFLAGS) /implib:gtk-win32-$(GTK_VER).lib /def:gtk.def
 
 gtk-win32-$(GTK_VER)s.lib : $(gtk_OBJECTS)
 	lib /out:gtk-win32-$(GTK_VER)s.lib $(gtk_OBJECTS)

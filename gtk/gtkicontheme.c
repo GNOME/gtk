@@ -17,18 +17,28 @@
  * Boston, MA 02111-1307, USA.
  */
 
-#include <sys/time.h>
+#include "config.h"
+
 #include <sys/types.h>
 #include <sys/stat.h>
+#ifdef HAVE_UNISTD_H
 #include <unistd.h>
+#endif
 #include <string.h>
 #include <stdlib.h>
 #include <glib.h>
+
+#ifdef G_OS_WIN32
+#ifndef S_ISDIR
+#define S_ISDIR(mode) ((mode)&_S_IFDIR)
+#endif
+#endif /* G_OS_WIN32 */
 
 #include "gtkicontheme.h"
 #include "gtkiconthemeparser.h"
 #include "gtkintl.h"
 #include "gtksettings.h"
+#include "gtkprivate.h"
 
 #define DEFAULT_THEME_NAME "hicolor"
 
@@ -514,8 +524,8 @@ gtk_icon_theme_init (GtkIconTheme *icon_theme)
   priv->search_path[0] = g_build_filename (g_get_home_dir (),
 					   ".icons",
 					   NULL);
-  priv->search_path[1] = g_strdup (GTK_DATADIR "/pixmaps");
-  priv->search_path[2] = g_strdup (GTK_DATADIR "/icons");
+  priv->search_path[1] = g_build_filename (GTK_DATA_PREFIX, "pixmaps", NULL);
+  priv->search_path[2] = g_build_filename (GTK_DATA_PREFIX, "icons", NULL);
   priv->search_path[3] = g_strdup ("/usr/share/icons");
   priv->search_path[4] = g_strdup ("/usr/share/pixmaps");
   priv->search_path_len = 5;
@@ -920,7 +930,7 @@ load_themes (GtkIconTheme *icon_theme)
   char *abs_file;
   UnthemedIcon *unthemed_icon;
   IconSuffix old_suffix, new_suffix;
-  struct timeval tv;
+  GTimeVal tv;
   
   priv = icon_theme->priv;
 
@@ -1008,7 +1018,7 @@ load_themes (GtkIconTheme *icon_theme)
 
   priv->themes_valid = TRUE;
   
-  gettimeofday(&tv, NULL);
+  g_get_current_time(&tv);
   priv->last_stat_time = tv.tv_sec;
 }
 
@@ -1016,11 +1026,11 @@ static void
 ensure_valid_themes (GtkIconTheme *icon_theme)
 {
   GtkIconThemePrivate *priv = icon_theme->priv;
-  struct timeval tv;
+  GTimeVal tv;
   
   if (priv->themes_valid)
     {
-      gettimeofday(&tv, NULL);
+      g_get_current_time(&tv);
 
       if (ABS (tv.tv_sec - priv->last_stat_time) > 5)
 	gtk_icon_theme_rescan_if_needed (icon_theme);
@@ -1367,7 +1377,7 @@ gtk_icon_theme_rescan_if_needed (GtkIconTheme *icon_theme)
   GList *d;
   int stat_res;
   struct stat stat_buf;
-  struct timeval tv;
+  GTimeVal tv;
 
   g_return_val_if_fail (GTK_IS_ICON_THEME (icon_theme), FALSE);
 
@@ -1393,7 +1403,7 @@ gtk_icon_theme_rescan_if_needed (GtkIconTheme *icon_theme)
       return TRUE;
     }
   
-  gettimeofday (&tv, NULL);
+  g_get_current_time (&tv);
   priv->last_stat_time = tv.tv_sec;
 
   return FALSE;

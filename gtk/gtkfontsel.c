@@ -1053,7 +1053,7 @@ gtk_font_selection_update_preview (GtkFontSelection *fontsel)
   gtk_editable_set_position (GTK_EDITABLE (preview_entry), 0);
 }
 
-GdkFont*
+static GdkFont*
 gtk_font_selection_get_font_internal (GtkFontSelection *fontsel)
 {
   if (!fontsel->font)

@@ -343,8 +343,8 @@ gtk_button_box_get_child_secondary (GtkButtonBox *widget,
   GList *list;
   GtkBoxChild *child_info;
 
-  g_return_if_fail (GTK_IS_BUTTON_BOX (widget));
-  g_return_if_fail (GTK_IS_WIDGET (child));
+  g_return_val_if_fail (GTK_IS_BUTTON_BOX (widget), FALSE);
+  g_return_val_if_fail (GTK_IS_WIDGET (child), FALSE);
 
   child_info = NULL;
   list = GTK_BOX (widget)->children;

@@ -276,8 +276,10 @@ _gdk_events_init (void)
     LANG_LITHUANIAN,
     LANG_VIETNAMESE,
     LANG_AFRIKAANS,
-    LANG_FAEROESE,
-    LANG_SWAHILI
+    LANG_FAEROESE
+#ifdef LANG_SWAHILI
+   ,LANG_SWAHILI
+#endif
   };
 
   gdk_ping_msg = RegisterWindowMessage ("gdk-ping");

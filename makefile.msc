@@ -1,0 +1,24 @@
+## Makefile for building the Gtk+ dlls with Microsoft C
+## Use: nmake -f makefile.msc
+
+PARTS = gdk-pixbuf gdk gtk tests
+
+all : \
+	config.h \
+	sub-all
+
+sub-all: 
+	for %d in ($(PARTS)) do nmake -nologo -f makefile.msc sub-one THIS=%d TARGET=all
+
+clean : sub-clean
+
+sub-clean:
+	for %d in ($(PARTS)) do nmake -nologo -f makefile.msc sub-one THIS=%d TARGET=clean
+
+sub-one:
+	@cd $(THIS)
+	@nmake -nologo -f makefile.msc $(TARGET)
+	@cd ..
+
+config.h: config.h.win32
+	copy config.h.win32 config.h

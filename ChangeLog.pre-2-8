@@ -1,3 +1,38 @@
+2003-07-20  Hans Breuer  <hans@breuer.org>
+
+	* makefile.msc : new file to build it all
+	* Makefile.am : ... added to EXTRA_DIST
+
+	* gdk/makefile.msc gtk/stock-icons/makefile.msc 
+	  gtk/makefile.msc.in tests/makefile.msc : updated
+
+	* gdk/gdk.def gtk/gtk.def : export a bunch of new 
+	functions
+
+	* gtk/gtkbbox.c : use g_return_val_if_fail() if
+	there is a value to return
+
+	* gtk/gtkfontsel.c gtk/gtkiconfactory.c :
+	static correctness
+
+	* gtk/gtkicontheme.c : ported to use GTimeVal instead of
+	struct timeval and GTK_DATA_PREFIX instead of GTK_DATADIR
+
+	* gtk/gtkicontheme.c : use HAVE_LC_MESSAGES
+
+	* gtk/gtkimmulticontext.c : use gtkprivate.h
+
+	* gtk/stock-icons/stock_color_picker_25.png
+	  gtk/stock-icons/stock_jump_to_rtl_16.png
+	  gtk/stock-icons/stock_jump_to_rtl_24.png
+	  gtk/stock-icons/stock_redo_rtl_16.png
+	  gtk/stock-icons/stock_redo_rtl_24.png
+	  gtk/stock-icons/stock_undelete_rtl_16.png
+	  gtk/stock-icons/stock_undelete_rtl_24.png
+	  gtk/stock-icons/stock_undo_rtl_16.png :
+	  gtk/stock-icons/stock_undo_rtl_24.png :
+	readded as binary
+
 Sat Jul 19 22:39:24 2003  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 	* gtk/gtktoolitem.c (gtk_tool_item_size_request): remove

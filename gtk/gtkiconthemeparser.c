@@ -17,6 +17,8 @@
  * Boston, MA 02111-1307, USA.
  */
 
+#include "config.h"
+
 #include <string.h>
 #include <locale.h>
 #include <stdlib.h>
@@ -762,7 +764,11 @@ calculate_locale (GtkIconThemeFile   *df)
 {
   char *p, *lang;
 
+#ifdef HAVE_LC_MESSAGES
   lang = g_strdup (setlocale (LC_MESSAGES, NULL));
+#else
+  lang = g_strdup (setlocale (LC_CTYPE, NULL));
+#endif
   
   if (lang)
     {
