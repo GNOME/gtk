@@ -1,5 +1,12 @@
 2002-10-14  Matthias Clasen  <maclas@gmx.de>
 
+	* gdk-pixbuf/Makefile.am (dist-hook): 
+	* gdk/Makefile.am (dist-hook): 
+	* gtk/Makefile.am (dist-hook): Dist the xml/*.xml, not
+	sgml/*.sgml.  (#95678, Owen Taylor)
+
+2002-10-14  Matthias Clasen  <maclas@gmx.de>
+
 	* gtk/Makefile.am (SCANOBJ_FILES): 
 	* gdk-pixbuf/Makefile.am (SCANOBJ_FILES): 
 	* gdk/Makefile.am (SCANOBJ_FILES): Add $(DOC_MODULE).interfaces.
