@@ -399,12 +399,13 @@ button_clicked_callback (GtkWidget *w, gpointer data)
 	  gtk_box_pack_start (GTK_BOX (vbox), hbox, TRUE, TRUE, 2);
 	  gtk_widget_show (hbox);
 	  
-	  label = gtk_label_new (_("Gamma value"));
+	  label = gtk_label_new (_("_Gamma value"));
 	  gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, FALSE, 2);
 	  gtk_widget_show (label);
 	  
 	  sprintf (buf, "%g", c->gamma);
 	  c->gamma_text = gtk_entry_new ();
+          gtk_label_set_mnemonic_widget (GTK_LABEL (label), c->gamma_text);
 	  gtk_entry_set_text (GTK_ENTRY (c->gamma_text), buf);
 	  gtk_box_pack_start (GTK_BOX (hbox), c->gamma_text, TRUE, TRUE, 2);
 	  gtk_widget_show (c->gamma_text);

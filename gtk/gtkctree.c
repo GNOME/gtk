@@ -824,9 +824,10 @@ gtk_ctree_button_press (GtkWidget      *widget,
 	  else
 	    gtk_ctree_expand (ctree, work);
 
-	  return FALSE;
+	  return TRUE;
 	}
     }
+  
   return GTK_WIDGET_CLASS (parent_class)->button_press_event (widget, event);
 }
 

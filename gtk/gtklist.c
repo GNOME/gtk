@@ -776,6 +776,8 @@ gtk_list_button_press (GtkWidget      *widget,
 	default:
 	  break;
 	}
+
+      return TRUE;
     }
 
   return FALSE;
@@ -828,6 +830,8 @@ gtk_list_button_release (GtkWidget	*widget,
 	default:
 	  break;
 	}
+
+      return TRUE;
     }
   
   return FALSE;

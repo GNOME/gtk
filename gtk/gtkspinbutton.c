@@ -892,9 +892,10 @@ gtk_spin_button_button_press (GtkWidget      *widget,
 		}
 	      gtk_spin_button_draw_arrow (spin, GTK_ARROW_DOWN);
 	    }
+	  return TRUE;
 	}
       else
-	GTK_WIDGET_CLASS (parent_class)->button_press_event (widget, event);
+	return GTK_WIDGET_CLASS (parent_class)->button_press_event (widget, event);
     }
   return FALSE;
 }
@@ -954,9 +955,10 @@ gtk_spin_button_button_release (GtkWidget      *widget,
       spin->click_child = 2;
       spin->button = 0;
       gtk_spin_button_draw_arrow (spin, click_child);
+      return TRUE;
     }
   else
-    GTK_WIDGET_CLASS (parent_class)->button_release_event (widget, event);
+    return GTK_WIDGET_CLASS (parent_class)->button_release_event (widget, event);
 
   return FALSE;
 }

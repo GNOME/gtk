@@ -1,3 +1,82 @@
+2001-03-23  Havoc Pennington  <hp@pobox.com>
+
+	* gtk/gtkhsv.c: make this somewhat key-navigable
+
+	* gtk/gtkfontsel.c: mnemonics
+
+	* gtk/gtkgamma.c: mnemonics
+
+	* gtk/gtkcolorsel.c: add mnemonics to labels
+
+2001-03-22  Havoc Pennington  <hp@pobox.com>
+
+	Applied big patch from Seth Lytle to fix event handler return
+	values, slightly modified.
+
+	* gtk/gtkcalendar.c (gtk_calendar_button_press): return TRUE if
+	handled.
+	(gtk_calendar_key_press): return TRUE for GDK_space triggers
+	select_day
+
+	* gtk/gtkclist.c (gtk_clist_button_press): return TRUE if handled
+	(gtk_clist_button_release): return TRUE if handled
+
+	* gtk/gtkcolorsel.c (mouse_release):
+	(palette_activate): 
+	(palette_press): 
+	(palette_new): 
+	(mouse_press): 
+	(get_screen_color): 
+	fixed return type (void to gboolean), return TRUE,
+	added GTK_SIGNAL_FUNC cast
+
+	* gtk/gtkcombo.c (gtk_combo_popup_button_press): fixed return type
+	(void to gboolean), and return TRUE
+	(gtk_combo_button_release): changed return value to TRUE after
+	gtk_grab_add on combo->popwin
+
+	* gtk/gtkctree.c (gtk_ctree_button_press): return TRUE if triggers a
+	collapse or expand
+
+	* gtk/gtkcurve.c (gtk_curve_graph_events): return TRUE for
+	button/motion
+
+	* gtk/gtkdnd.c (gtk_drag_source_event_cb): return TRUE for button
+	press/release and motion that trigger act
+
+	* gtk/gtkentry.c (gtk_entry_button_release): return TRUE
+
+	* gtk/gtkfontsel.c (gtk_font_selection_size_key_press): return TRUE
+	for GDK_Return
+	
+	* gtk/gtklist.c (gtk_list_button_press): return TRUE mostly
+	(gtk_list_button_release): return TRUE if selection
+
+	* gtk/gtklistitem.c (gtk_list_item_button_press): return TRUE on
+	press
+
+	* gtk/gtkmenushell.c (gtk_menu_shell_button_press):
+	(gtk_menu_shell_button_release): chain parent_menu_shell retval
+
+	* gtk/gtknotebook.c (gtk_notebook_button_press): return FALSE if
+	nothing triggered
+	(gtk_notebook_button_release): return TRUE if we do anything
+
+	* gtk/gtkspinbutton.c (gtk_spin_button_button_press): 
+	(gtk_spin_button_button_release): return TRUE or chained retval
+
+	* gtk/gtktext.c (gtk_text_button_press): 
+	(gtk_text_button_release): return TRUE
+	(gtk_text_key_press): remove redundant retval code
+	
+	* gtk/gtktreeitem.c (gtk_tree_item_button_press): return TRUE if button
+	and sensitive
+	(gtk_tree_item_subtree_button_click): changed type to gint, and return
+	TRUE if sensitive
+
+	* gtk/gtktooltips.c (gtk_tooltips_event_handler): deactivate implies 
+	return TRUE
+
 2001-03-23  Havoc Pennington  <hp@redhat.com>
 
 	* gtk/testgtk.c: fix warnings

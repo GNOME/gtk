@@ -2466,6 +2466,7 @@ gtk_drag_source_event_cb (GtkWidget      *widget,
 			  gpointer        data)
 {
   GtkDragSourceSite *site;
+  gboolean retval = FALSE;
   site = (GtkDragSourceSite *)data;
 
   switch (event->type)
@@ -2476,6 +2477,7 @@ gtk_drag_source_event_cb (GtkWidget      *widget,
 	  site->state |= (GDK_BUTTON1_MASK << (event->button.button - 1));
 	  site->x = event->button.x;
 	  site->y = event->button.y;
+	  retval = TRUE;
 	}
       break;
       
@@ -2483,6 +2485,7 @@ gtk_drag_source_event_cb (GtkWidget      *widget,
       if ((GDK_BUTTON1_MASK << (event->button.button - 1)) & site->start_button_mask)
 	{
 	  site->state &= ~(GDK_BUTTON1_MASK << (event->button.button - 1));
+	  retval = TRUE;
 	}
       break;
       
@@ -2524,7 +2527,7 @@ gtk_drag_source_event_cb (GtkWidget      *widget,
 		    gtk_drag_set_icon_default (context);
 		}
 
-	      return TRUE;
+	      retval = TRUE;
 	    }
 	}
       break;
@@ -2532,7 +2535,8 @@ gtk_drag_source_event_cb (GtkWidget      *widget,
     default:			/* hit for 2/3BUTTON_PRESS */
       break;
     }
-  return FALSE;
+  
+  return retval;
 }
 
 static void 

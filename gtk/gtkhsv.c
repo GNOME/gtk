@@ -25,6 +25,9 @@
 #include <math.h>
 #include "gtksignal.h"
 #include "gtkhsv.h"
+#include "gdk/gdkkeysyms.h"
+#include "gtkbindings.h"
+#include "gtkcontainer.h"
 
 /*
  * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
@@ -66,6 +69,9 @@ typedef struct {
   
   /* Dragging mode */
   DragMode mode;
+
+  guint focus_on_ring : 1;
+  
 } HSVPrivate;
 
 
@@ -74,6 +80,7 @@ typedef struct {
 
 enum {
   CHANGED,
+  MOVE,
   LAST_SIGNAL
 };
 
@@ -96,6 +103,11 @@ static gint gtk_hsv_motion         (GtkWidget      *widget,
 				    GdkEventMotion *event);
 static gint gtk_hsv_expose         (GtkWidget      *widget,
 				    GdkEventExpose *event);
+static gboolean gtk_hsv_focus      (GtkContainer    *container,
+                                    GtkDirectionType direction);
+
+static void gtk_hsv_move           (GtkHSV          *hsv,
+                                    GtkDirectionType dir);
 
 static guint hsv_signals[LAST_SIGNAL];
 static GtkWidgetClass *parent_class;
@@ -127,7 +139,7 @@ gtk_hsv_get_type (void)
       (GtkClassInitFunc) NULL
     };
     
-    hsv_type = gtk_type_unique (GTK_TYPE_WIDGET, &hsv_info);
+    hsv_type = gtk_type_unique (GTK_TYPE_CONTAINER, &hsv_info);
   }
   
   return hsv_type;
@@ -139,12 +151,16 @@ gtk_hsv_class_init (GtkHSVClass *class)
 {
   GtkObjectClass *object_class;
   GtkWidgetClass *widget_class;
+  GtkContainerClass *container_class;
+  GtkHSVClass    *hsv_class;
+  GtkBindingSet *binding_set;
   
   object_class = (GtkObjectClass *) class;
   widget_class = (GtkWidgetClass *) class;
+  container_class = GTK_CONTAINER_CLASS (class);
+  hsv_class = GTK_HSV_CLASS (class);
   
-  parent_class = gtk_type_class (GTK_TYPE_WIDGET);
-  
+  parent_class = gtk_type_class (GTK_TYPE_WIDGET);  
   
   object_class->destroy = gtk_hsv_destroy;
   
@@ -159,6 +175,10 @@ gtk_hsv_class_init (GtkHSVClass *class)
   widget_class->motion_notify_event = gtk_hsv_motion;
   widget_class->expose_event = gtk_hsv_expose;
 
+  container_class->focus = gtk_hsv_focus;
+  
+  hsv_class->move = gtk_hsv_move;
+  
   hsv_signals[CHANGED] =
     gtk_signal_new ("changed",
 		    GTK_RUN_FIRST,
@@ -166,6 +186,45 @@ gtk_hsv_class_init (GtkHSVClass *class)
 		    GTK_SIGNAL_OFFSET (GtkHSVClass, changed),
 		    gtk_marshal_VOID__VOID,
 		    GTK_TYPE_NONE, 0);
+
+  hsv_signals[MOVE] =
+    gtk_signal_new ("move",
+		    GTK_RUN_LAST | GTK_RUN_ACTION,
+		    GTK_CLASS_TYPE (object_class),
+		    GTK_SIGNAL_OFFSET (GtkHSVClass, move),
+		    gtk_marshal_VOID__ENUM,
+		    GTK_TYPE_NONE, 1, GTK_TYPE_DIRECTION_TYPE);
+
+  binding_set = gtk_binding_set_by_class (class);
+
+  gtk_binding_entry_add_signal (binding_set, GDK_Up, 0,
+                                "move", 1,
+                                GTK_TYPE_ENUM, GTK_DIR_UP);
+  gtk_binding_entry_add_signal (binding_set, GDK_KP_Up, 0,
+                                "move", 1,
+                                GTK_TYPE_ENUM, GTK_DIR_UP);
+  
+  gtk_binding_entry_add_signal (binding_set, GDK_Down, 0,
+                                "move", 1,
+                                GTK_TYPE_ENUM, GTK_DIR_DOWN);
+  gtk_binding_entry_add_signal (binding_set, GDK_KP_Down, 0,
+                                "move", 1,
+                                GTK_TYPE_ENUM, GTK_DIR_DOWN);
+
+  
+  gtk_binding_entry_add_signal (binding_set, GDK_Right, 0,
+                                "move", 1,
+                                GTK_TYPE_ENUM, GTK_DIR_RIGHT);
+  gtk_binding_entry_add_signal (binding_set, GDK_KP_Right, 0,
+                                "move", 1,
+                                GTK_TYPE_ENUM, GTK_DIR_RIGHT);
+  
+  gtk_binding_entry_add_signal (binding_set, GDK_Left, 0,
+                                "move", 1,
+                                GTK_TYPE_ENUM, GTK_DIR_LEFT);
+  gtk_binding_entry_add_signal (binding_set, GDK_KP_Left, 0,
+                                "move", 1,
+                                GTK_TYPE_ENUM, GTK_DIR_LEFT);
 }
 
 /* Object initialization function for the HSV color selector */
@@ -178,6 +237,7 @@ gtk_hsv_init (GtkHSV *hsv)
   hsv->priv = priv;
   
   GTK_WIDGET_SET_FLAGS (hsv, GTK_NO_WINDOW);
+  GTK_WIDGET_SET_FLAGS (hsv, GTK_CAN_FOCUS);
   
   priv->h = 0.0;
   priv->s = 0.0;
@@ -268,7 +328,8 @@ gtk_hsv_realize (GtkWidget *widget)
   attr.height = widget->allocation.height;
   attr.wclass = GDK_INPUT_ONLY;
   attr.event_mask = gtk_widget_get_events (widget);
-  attr.event_mask |= (GDK_BUTTON_PRESS_MASK
+  attr.event_mask |= (GDK_KEY_PRESS_MASK
+                      | GDK_BUTTON_PRESS_MASK
 		      | GDK_BUTTON_RELEASE_MASK
 		      | GDK_POINTER_MOTION_MASK);
   
@@ -727,6 +788,9 @@ gtk_hsv_button_press (GtkWidget      *widget,
 			 compute_v (hsv, x, y),
 			 priv->s,
 			 priv->v);
+
+      gtk_widget_grab_focus (widget);
+      priv->focus_on_ring = TRUE;
       
       return TRUE;
     }
@@ -740,6 +804,10 @@ gtk_hsv_button_press (GtkWidget      *widget,
       
       compute_sv (hsv, x, y, &s, &v);
       gtk_hsv_set_color (hsv, priv->h, s, v);
+
+      gtk_widget_grab_focus (widget);
+      priv->focus_on_ring = FALSE;
+      
       return TRUE;
     }
   
@@ -967,17 +1035,21 @@ paint_ring (GtkHSV      *hsv,
   g_free (buf);
   
   /* Draw ring outline */
-  
-  gdk_rgb_gc_set_foreground (priv->gc, 0x000000);
-  
-  gdk_draw_arc (drawable, priv->gc, FALSE,
-		-x, -y,
-		priv->size - 1, priv->size - 1,
-		0, 360 * 64);
-  gdk_draw_arc (drawable, priv->gc, FALSE,
-		-x + priv->ring_width - 1, -y + priv->ring_width - 1,
-		priv->size - 2 * priv->ring_width + 1, priv->size - 2 * priv->ring_width + 1,
-		0, 360 * 64);
+
+  if (GTK_WIDGET_HAS_FOCUS (hsv) &&
+      priv->focus_on_ring)
+    {
+      gdk_rgb_gc_set_foreground (priv->gc, 0x000000);
+      
+      gdk_draw_arc (drawable, priv->gc, FALSE,
+                    -x, -y,
+                    priv->size - 1, priv->size - 1,
+                    0, 360 * 64);
+      gdk_draw_arc (drawable, priv->gc, FALSE,
+                    -x + priv->ring_width - 1, -y + priv->ring_width - 1,
+                    priv->size - 2 * priv->ring_width + 1, priv->size - 2 * priv->ring_width + 1,
+                    0, 360 * 64);
+    }
 }
 
 /* Converts an HSV triplet to an integer RGB triplet */
@@ -1175,11 +1247,15 @@ paint_triangle (GtkHSV      *hsv,
   
   g_free (buf);
   
-  /* Draw triangle outline */
+  /* Draw triangle focus outline */
+
+  if (GTK_WIDGET_HAS_FOCUS (hsv) &&
+      !priv->focus_on_ring)
+    {
+      gdk_rgb_gc_set_foreground (priv->gc, 0x000000);
   
-  gdk_rgb_gc_set_foreground (priv->gc, 0x000000);
-  
-  gdk_draw_polygon (drawable, priv->gc, FALSE, points, 3);
+      gdk_draw_polygon (drawable, priv->gc, FALSE, points, 3);
+    }
   
   /* Draw value marker */
   
@@ -1271,6 +1347,63 @@ gtk_hsv_expose (GtkWidget      *widget,
   return FALSE;
 }
 
+static gboolean
+gtk_hsv_focus (GtkContainer    *container,
+               GtkDirectionType dir)
+{
+  GtkHSV *hsv;
+  HSVPrivate *priv;
+
+  hsv = GTK_HSV (container);
+  priv = hsv->priv;
+  
+  if (!GTK_WIDGET_DRAWABLE (container) ||
+      !GTK_WIDGET_IS_SENSITIVE (container))
+    return FALSE;
+
+  if (!GTK_WIDGET_HAS_FOCUS (hsv))
+    {
+      gtk_widget_grab_focus (GTK_WIDGET (hsv));
+      return TRUE;
+    }
+  
+  switch (dir)
+    {
+    case GTK_DIR_UP:
+      if (priv->focus_on_ring)
+        return FALSE;
+      else
+        priv->focus_on_ring = TRUE;
+      break;
+
+    case GTK_DIR_DOWN:
+      if (priv->focus_on_ring)
+        priv->focus_on_ring = FALSE;
+      else
+        return FALSE;
+      break;
+
+    case GTK_DIR_LEFT:
+    case GTK_DIR_TAB_BACKWARD:
+      if (priv->focus_on_ring)
+        return FALSE;
+      else
+        priv->focus_on_ring = TRUE;
+      break;
+
+    case GTK_DIR_RIGHT:
+    case GTK_DIR_TAB_FORWARD:
+      if (priv->focus_on_ring)
+        priv->focus_on_ring = FALSE;
+      else
+        return FALSE;
+      break;
+    }
+
+  gtk_widget_queue_draw (GTK_WIDGET (hsv));
+
+  return TRUE;
+}
 
 /**
  * gtk_hsv_new:
@@ -1509,4 +1642,80 @@ gtk_rgb_to_hsv (gdouble  r,
   
   if (v)
     *v = b;
+}
+
+static void
+gtk_hsv_move (GtkHSV          *hsv,
+              GtkDirectionType dir)
+{
+  HSVPrivate *priv;
+  gdouble hue, sat, val;
+  gint hx, hy, sx, sy, vx, vy; /* HSV vertices */
+  gint x, y; /* position in triangle */
+  
+  priv = hsv->priv;
+
+  hue = priv->h;
+  sat = priv->s;
+  val = priv->v;
+
+  compute_triangle (hsv, &hx, &hy, &sx, &sy, &vx, &vy);
+
+  x = floor (sx + (vx - sx) * priv->v + (hx - vx) * priv->s * priv->v + 0.5);
+  y = floor (sy + (vy - sy) * priv->v + (hy - vy) * priv->s * priv->v + 0.5);
+  
+  switch (dir)
+    {
+    case GTK_DIR_UP:
+      if (priv->focus_on_ring)
+        hue += 0.02;
+      else
+        {
+          y -= 1;
+          compute_sv (hsv, x, y, &sat, &val);
+        }
+      break;
+
+    case GTK_DIR_DOWN:
+      if (priv->focus_on_ring)
+        hue -= 0.02;
+      else
+        {
+          y += 1;
+          compute_sv (hsv, x, y, &sat, &val);
+        }
+      break;
+
+    case GTK_DIR_LEFT:
+      if (priv->focus_on_ring)
+        hue += 0.02;
+      else
+        {
+          x -= 1;
+          compute_sv (hsv, x, y, &sat, &val);
+        }
+      break;
+
+    case GTK_DIR_RIGHT:
+      if (priv->focus_on_ring)
+        hue -= 0.02;
+      else
+        {
+          x += 1;
+          compute_sv (hsv, x, y, &sat, &val);
+        }
+      break;
+
+    default:
+      /* we don't care about the tab directions */
+      break;
+    }
+
+  /* Wrap */
+  if (hue < 0.0)
+    hue = 1.0;
+  else if (hue > 1.0)
+    hue = 0.0;
+  
+  gtk_hsv_set_color (hsv, hue, sat, val);
 }

@@ -5024,7 +5024,7 @@ gtk_clist_button_press (GtkWidget      *widget,
 		}
 	    }
 	}
-      return FALSE;
+      return TRUE;
     }
 
   /* press on resize windows */
@@ -5059,7 +5059,10 @@ gtk_clist_button_press (GtkWidget      *widget,
 	if (GTK_CLIST_ADD_MODE(clist))
 	  gdk_gc_set_line_attributes (clist->xor_gc, 1, GDK_LINE_SOLID, 0, 0);
 	draw_xor_line (clist);
+
+        return TRUE;
       }
+
   return FALSE;
 }
 
@@ -5113,7 +5116,8 @@ gtk_clist_button_release (GtkWidget      *widget,
 
       width = new_column_width (clist, i, &x);
       gtk_clist_set_column_width (clist, i, width);
-      return FALSE;
+
+      return TRUE;
     }
 
   if (clist->drag_button == event->button)
@@ -5153,7 +5157,10 @@ gtk_clist_button_release (GtkWidget      *widget,
 	      break;
 	    }
 	}
+
+      return TRUE;
     }
+  
   return FALSE;
 }
 

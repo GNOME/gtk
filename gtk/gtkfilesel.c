@@ -1058,13 +1058,14 @@ gtk_file_selection_create_dir (GtkWidget *widget,
 		     FALSE, FALSE, 0);
   gtk_widget_show( vbox);
   
-  label = gtk_label_new (_("Directory name:"));
+  label = gtk_label_new_with_mnemonic (_("_Directory name:"));
   gtk_misc_set_alignment(GTK_MISC (label), 0.0, 0.0);
   gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, FALSE, 5);
   gtk_widget_show (label);
 
   /*  The directory entry widget  */
   fs->fileop_entry = gtk_entry_new ();
+  gtk_label_set_mnemonic_widget (GTK_LABEL (label), fs->fileop_entry);
   gtk_box_pack_start (GTK_BOX (vbox), fs->fileop_entry, 
 		      TRUE, TRUE, 5);
   GTK_WIDGET_SET_FLAGS (fs->fileop_entry, GTK_CAN_DEFAULT);

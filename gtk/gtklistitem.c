@@ -451,8 +451,12 @@ gtk_list_item_button_press (GtkWidget      *widget,
   g_return_val_if_fail (event != NULL, FALSE);
 
   if (event->type == GDK_BUTTON_PRESS)
-    if (!GTK_WIDGET_HAS_FOCUS (widget))
-      gtk_widget_grab_focus (widget);
+    {
+      if (!GTK_WIDGET_HAS_FOCUS (widget))
+	gtk_widget_grab_focus (widget);
+
+      return TRUE;
+    }
 
   return FALSE;
 }

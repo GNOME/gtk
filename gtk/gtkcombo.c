@@ -71,7 +71,7 @@ static void         gtk_combo_get_pos            (GtkCombo         *combo,
 static void         gtk_combo_popup_list         (GtkCombo         *combo);
 static void         gtk_combo_activate           (GtkWidget        *widget,
 						  GtkCombo         *combo);
-static void         gtk_combo_popup_button_press (GtkWidget        *button,
+static gboolean     gtk_combo_popup_button_press (GtkWidget        *button,
 						  GdkEventButton   *event,
 						  GtkCombo         *combo);
 static void         gtk_combo_popup_button_leave (GtkWidget        *button,
@@ -491,7 +491,7 @@ gtk_combo_activate (GtkWidget        *widget,
 		    NULL, NULL, GDK_CURRENT_TIME);
 }
 
-static void        
+static gboolean
 gtk_combo_popup_button_press (GtkWidget        *button,
 			      GdkEventButton   *event,
 			      GtkCombo         *combo)
@@ -510,6 +510,7 @@ gtk_combo_popup_button_press (GtkWidget        *button,
 		    GDK_BUTTON_RELEASE_MASK,
 		    NULL, NULL, event->time);
   gtk_grab_add (combo->list);
+  return TRUE;
 }
 
 static void         
@@ -628,7 +629,7 @@ gtk_combo_button_release (GtkWidget * widget, GdkEvent * event, GtkCombo * combo
 			    GDK_BUTTON_RELEASE_MASK |
 			    GDK_POINTER_MOTION_MASK, 
 			    NULL, NULL, GDK_CURRENT_TIME);
-	  return FALSE;
+	  return TRUE;
 	}
     }
   else

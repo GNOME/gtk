@@ -317,7 +317,7 @@ gtk_cell_renderer_toggle_event (GtkCellRenderer *cell,
 				guint            flags)
 {
   GtkCellRendererToggle *celltoggle;
-  gint retval = FALSE;
+  gboolean retval = FALSE;
   
   celltoggle = GTK_CELL_RENDERER_TOGGLE (cell);
   

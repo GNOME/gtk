@@ -215,10 +215,11 @@ gtk_input_dialog_init (GtkInputDialog *inputd)
       util_box = gtk_hbox_new (FALSE, 2);
       gtk_box_pack_start (GTK_BOX (vbox), util_box, FALSE, FALSE, 0);
 
-      label = gtk_label_new(_("Device:"));
+      label = gtk_label_new(_("_Device:"));
       gtk_box_pack_start (GTK_BOX (util_box), label, FALSE, FALSE, 2);
 
       optionmenu = gtk_option_menu_new ();
+      gtk_label_set_mnemonic_widget (GTK_LABEL (label), optionmenu);
       gtk_box_pack_start (GTK_BOX (util_box), optionmenu, TRUE, TRUE, 2);
       gtk_widget_show (optionmenu);
       gtk_option_menu_set_menu (GTK_OPTION_MENU (optionmenu), device_menu);
@@ -255,10 +256,11 @@ gtk_input_dialog_init (GtkInputDialog *inputd)
 			  (GtkSignalFunc) gtk_input_dialog_set_mapping_mode,
 			  GINT_TO_POINTER (GDK_MODE_WINDOW));
 
-      label = gtk_label_new(_("Mode: "));
+      label = gtk_label_new(_("_Mode: "));
       gtk_box_pack_start (GTK_BOX (util_box), label, FALSE, FALSE, 2);
 
       inputd->mode_optionmenu = gtk_option_menu_new ();
+      gtk_label_set_mnemonic_widget (GTK_LABEL (label), inputd->mode_optionmenu);
       gtk_box_pack_start (GTK_BOX (util_box), inputd->mode_optionmenu, FALSE, FALSE, 2);
       gtk_widget_show (inputd->mode_optionmenu);
       gtk_option_menu_set_menu (GTK_OPTION_MENU (inputd->mode_optionmenu), mapping_menu);
@@ -285,7 +287,7 @@ gtk_input_dialog_init (GtkInputDialog *inputd)
       
       /*  The axis listbox  */
 
-      label = gtk_label_new (_("Axes"));
+      label = gtk_label_new (_("_Axes"));
 
       inputd->axis_listbox = gtk_scrolled_window_new (NULL, NULL);
       gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW(inputd->axis_listbox),
@@ -301,7 +303,7 @@ gtk_input_dialog_init (GtkInputDialog *inputd)
 
       /* Keys listbox */
 
-      label = gtk_label_new (_("Keys"));
+      label = gtk_label_new (_("_Keys"));
 
       inputd->keys_listbox = gtk_scrolled_window_new (NULL, NULL);
       gtk_widget_set_usize (inputd->keys_listbox, KEYS_LIST_WIDTH, KEYS_LIST_HEIGHT);

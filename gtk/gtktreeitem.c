@@ -84,7 +84,7 @@ static void gtk_real_tree_item_collapse (GtkTreeItem      *item);
 static void gtk_real_tree_item_expand   (GtkTreeItem      *item);
 static void gtk_real_tree_item_collapse (GtkTreeItem      *item);
 static void gtk_tree_item_destroy        (GtkObject *object);
-static void gtk_tree_item_subtree_button_click (GtkWidget *widget);
+static gint gtk_tree_item_subtree_button_click (GtkWidget *widget);
 static void gtk_tree_item_subtree_button_changed_state (GtkWidget *widget);
 
 static void gtk_tree_item_map(GtkWidget*);
@@ -172,7 +172,7 @@ gtk_tree_item_class_init (GtkTreeItemClass *class)
 }
 
 /* callback for event box mouse event */
-static void 
+static gint
 gtk_tree_item_subtree_button_click (GtkWidget *widget)
 {
   GtkTreeItem* item;
@@ -182,12 +182,14 @@ gtk_tree_item_subtree_button_click (GtkWidget *widget)
   
   item = (GtkTreeItem*) gtk_object_get_user_data (GTK_OBJECT (widget));
   if (!GTK_WIDGET_IS_SENSITIVE (item))
-    return;
+    return FALSE;
   
   if (item->expanded)
     gtk_tree_item_collapse (item);
   else
     gtk_tree_item_expand (item);
+
+  return TRUE;
 }
 
 /* callback for event box state changed */
@@ -711,7 +713,7 @@ gtk_tree_item_button_press (GtkWidget      *widget,
      	&& !GTK_WIDGET_HAS_FOCUS (widget))
       gtk_widget_grab_focus (widget);
 
-  return FALSE;
+  return (event->type == GDK_BUTTON_PRESS && GTK_WIDGET_IS_SENSITIVE(widget));
 }
 
 static gint

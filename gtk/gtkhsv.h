@@ -31,7 +31,7 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
-#include <gtk/gtkwidget.h>
+#include <gtk/gtkcontainer.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -39,7 +39,7 @@ extern "C" {
 
 #define GTK_TYPE_HSV            (gtk_hsv_get_type ())
 #define GTK_HSV(obj)            (GTK_CHECK_CAST ((obj), GTK_TYPE_HSV, GtkHSV))
-#define GTK_HSV_CLASS(klass)    (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_HSV, GtkHSV))
+#define GTK_HSV_CLASS(klass)    (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_HSV, GtkHSVClass))
 #define GTK_IS_HSV(obj)         (GTK_CHECK_TYPE ((obj), GTK_TYPE_HSV))
 #define GTK_IS_HSV_CLASS(klass) (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_HSV))
 #define GTK_HSV_GET_CLASS(obj)  (GTK_CHECK_GET_CLASS ((obj), GTK_TYPE_HSV, GtkHSVClass))
@@ -50,7 +50,8 @@ typedef struct _GtkHSVClass GtkHSVClass;
 
 struct _GtkHSV
 {
-  GtkWidget parent_instance;
+  /* we derive from container purely so we can have a _focus method */
+  GtkContainer parent_instance;
   
   /* Private data */
   gpointer priv;
@@ -58,11 +59,15 @@ struct _GtkHSV
 
 struct _GtkHSVClass
 {
-  GtkWidgetClass parent_class;
+  GtkContainerClass parent_class;
   
   /* Notification signals */
   
   void (*changed) (GtkHSV *hsv);
+
+  /* Keybindings */
+  void (* move) (GtkHSV          *hsv,
+                 GtkDirectionType type);
 };
 
 

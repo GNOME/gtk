@@ -3178,7 +3178,7 @@ gtk_tree_view_discover_dirty_iter (GtkTreeView *tree_view,
   GtkTreeViewColumn *column;
   GList *list;
   gint i;
-  gint retval = FALSE;
+  gboolean retval = FALSE;
   gint tmpheight;
 
   if (height)

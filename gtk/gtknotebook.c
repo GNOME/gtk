@@ -1103,9 +1103,10 @@ gtk_notebook_button_press (GtkWidget      *widget,
 	}
       if (!children && !GTK_WIDGET_HAS_FOCUS (widget))
 	gtk_widget_grab_focus (widget);
+      return TRUE;
     }
    
-  return TRUE;
+  return FALSE;
 }
 
 static gint
@@ -1137,9 +1138,11 @@ gtk_notebook_button_release (GtkWidget      *widget,
       notebook->click_child = 0;
       notebook->button = 0;
       gtk_notebook_redraw_arrows (notebook);
-      
+
+      return TRUE;
     }
-  return FALSE;
+  else
+    return FALSE;
 }
 
 static gint

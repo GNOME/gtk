@@ -2846,7 +2846,7 @@ emit_event_on_tags (GtkWidget   *widget,
 {
   GSList *tags;
   GSList *tmp;
-  gint retval = FALSE;
+  gboolean retval = FALSE;
   GtkTextView *text_view;
 
   text_view = GTK_TEXT_VIEW (widget);
@@ -2924,7 +2924,7 @@ gtk_text_view_event (GtkWidget *widget, GdkEvent *event)
 static gint
 gtk_text_view_key_press_event (GtkWidget *widget, GdkEventKey *event)
 {
-  gint retval = FALSE;
+  gboolean retval = FALSE;
   GtkTextView *text_view = GTK_TEXT_VIEW (widget);
 
   if (text_view->layout == NULL ||

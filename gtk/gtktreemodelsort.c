@@ -1080,7 +1080,7 @@ gtk_tree_model_sort_func  (gconstpointer a,
   GValue value_a = {0, };
   GValue value_b = {0, };
   SortData *sort_data = user_data;
-  gint retval;
+  gboolean retval;
 
   gtk_tree_model_get_value (sort_data->model, (GtkTreeIter *) a, sort_data->sort_col, &value_a);
   gtk_tree_model_get_value (sort_data->model, (GtkTreeIter *) b, sort_data->sort_col, &value_b);

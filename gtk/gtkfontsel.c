@@ -186,23 +186,7 @@ gtk_font_selection_init(GtkFontSelection *fontsel)
   gtk_widget_show (table);
   gtk_table_set_col_spacings(GTK_TABLE(table), 8);
   gtk_box_pack_start (GTK_BOX (fontsel), table, TRUE, TRUE, 0);
-  
-  fontsel->font_label = gtk_label_new(_("Family:"));
-  gtk_misc_set_alignment (GTK_MISC (fontsel->font_label), 0.0, 0.5);
-  gtk_widget_show (fontsel->font_label);
-  gtk_table_attach (GTK_TABLE (table), fontsel->font_label, 0, 1, 0, 1,
-		    GTK_FILL, 0, 0, 0);
-  label = gtk_label_new(_("Style:"));
-  gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
-  gtk_widget_show (label);
-  gtk_table_attach (GTK_TABLE (table), label, 1, 2, 0, 1,
-		    GTK_FILL, 0, 0, 0);
-  label = gtk_label_new(_("Size:"));
-  gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
-  gtk_widget_show (label);
-  gtk_table_attach (GTK_TABLE (table), label, 2, 3, 0, 1,
-		    GTK_FILL, 0, 0, 0);
-  
+
   fontsel->font_entry = gtk_entry_new ();
   gtk_entry_set_editable(GTK_ENTRY(fontsel->font_entry), FALSE);
   gtk_widget_set_usize (fontsel->font_entry, 20, -1);
@@ -225,6 +209,29 @@ gtk_font_selection_init(GtkFontSelection *fontsel)
   gtk_signal_connect (GTK_OBJECT (fontsel->size_entry), "key_press_event",
 		      (GtkSignalFunc) gtk_font_selection_size_key_press,
 		      fontsel);
+  
+  fontsel->font_label = gtk_label_new_with_mnemonic (_("_Family:"));
+  gtk_label_set_mnemonic_widget (GTK_LABEL (fontsel->font_label),
+                                 fontsel->font_entry);
+  gtk_misc_set_alignment (GTK_MISC (fontsel->font_label), 0.0, 0.5);
+  gtk_widget_show (fontsel->font_label);
+  gtk_table_attach (GTK_TABLE (table), fontsel->font_label, 0, 1, 0, 1,
+		    GTK_FILL, 0, 0, 0);  
+  label = gtk_label_new_with_mnemonic (_("_Style:"));
+  gtk_label_set_mnemonic_widget (GTK_LABEL (label),
+                                 fontsel->font_style_entry);
+  gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+  gtk_widget_show (label);
+  gtk_table_attach (GTK_TABLE (table), label, 1, 2, 0, 1,
+		    GTK_FILL, 0, 0, 0);
+  label = gtk_label_new_with_mnemonic (_("Si_ze:"));
+  gtk_label_set_mnemonic_widget (GTK_LABEL (label),
+                                 fontsel->size_entry);
+  gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+  gtk_widget_show (label);
+  gtk_table_attach (GTK_TABLE (table), label, 2, 3, 0, 1,
+		    GTK_FILL, 0, 0, 0);
+  
   
   /* Create the clists  */
   fontsel->font_clist = gtk_clist_new (1);
@@ -716,6 +723,7 @@ gtk_font_selection_size_key_press (GtkWidget   *w,
 	  fontsel->font_desc->size = new_size;
 	  gtk_font_selection_load_font (fontsel);
 	}
+      return TRUE;
     }
   
   return FALSE;

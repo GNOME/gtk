@@ -1729,7 +1729,7 @@ gtk_text_button_press (GtkWidget      *widget,
 	}
     }
   
-  return FALSE;
+  return TRUE;
 }
 
 static gint
@@ -1790,7 +1790,7 @@ gtk_text_button_release (GtkWidget      *widget,
   find_cursor (text, TRUE);
   draw_cursor (text, FALSE);
   
-  return FALSE;
+  return TRUE;
 }
 
 static gint
@@ -1906,8 +1906,6 @@ gtk_text_key_press (GtkWidget   *widget,
   g_return_val_if_fail (widget != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_TEXT (widget), FALSE);
   g_return_val_if_fail (event != NULL, FALSE);
-  
-  return_val = FALSE;
   
   text = GTK_TEXT (widget);
   old_editable = GTK_OLD_EDITABLE (widget);
@@ -2094,8 +2092,6 @@ gtk_text_key_press (GtkWidget   *widget,
 	      
 	      return_val = TRUE;
 	    }
-	  else
-	    return_val = FALSE;
 	}
       
       if (return_val && (old_editable->current_pos != initial_pos))

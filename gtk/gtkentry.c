@@ -1348,7 +1348,7 @@ gtk_entry_button_release (GtkWidget      *widget,
   
   gtk_entry_update_primary_selection (entry);
 	      
-  return FALSE;
+  return TRUE;
 }
 
 static gint

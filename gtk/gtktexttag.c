@@ -1622,7 +1622,7 @@ gtk_text_tag_event (GtkTextTag        *tag,
                     GdkEvent          *event,
                     const GtkTextIter *iter)
 {
-  gint retval = FALSE;
+  gboolean retval = FALSE;
 
   g_return_val_if_fail (GTK_IS_TEXT_TAG (tag), FALSE);
   g_return_val_if_fail (GTK_IS_OBJECT (event_object), FALSE);

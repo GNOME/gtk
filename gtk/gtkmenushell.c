@@ -430,7 +430,7 @@ gtk_menu_shell_button_press (GtkWidget      *widget,
 
   if (menu_shell->parent_menu_shell)
     {
-      gtk_widget_event (menu_shell->parent_menu_shell, (GdkEvent*) event);
+      return gtk_widget_event (menu_shell->parent_menu_shell, (GdkEvent*) event);
     }
   else if (!menu_shell->active || !menu_shell->button)
     {
@@ -484,8 +484,7 @@ gtk_menu_shell_button_release (GtkWidget      *widget,
 	{
 	  menu_shell->button = 0;
 	  if (menu_shell->parent_menu_shell)
-	    gtk_widget_event (menu_shell->parent_menu_shell, (GdkEvent*) event);
-	  return TRUE;
+	    return gtk_widget_event (menu_shell->parent_menu_shell, (GdkEvent*) event);
 	}
       
       menu_shell->button = 0;

@@ -433,6 +433,7 @@ gtk_curve_graph_events (GtkWidget *widget, GdkEvent *event, GtkCurve *c)
   gfloat rx, ry, min_x;
   guint distance;
   gint x1, x2, y1, y2;
+  gint retval = FALSE;
 
   w = GTK_WIDGET (c);
   width = w->allocation.width - RADIUS * 2;
@@ -519,6 +520,7 @@ gtk_curve_graph_events (GtkWidget *widget, GdkEvent *event, GtkCurve *c)
 	  break;
 	}
       gtk_curve_draw (c, width, height);
+      retval = TRUE;
       break;
 
     case GDK_BUTTON_RELEASE:
@@ -554,6 +556,7 @@ gtk_curve_graph_events (GtkWidget *widget, GdkEvent *event, GtkCurve *c)
 	}
       new_type = GDK_FLEUR;
       c->grab_point = -1;
+      retval = TRUE;
       break;
 
     case GDK_MOTION_NOTIFY:
@@ -652,12 +655,14 @@ gtk_curve_graph_events (GtkWidget *widget, GdkEvent *event, GtkCurve *c)
 	  gdk_window_set_cursor (w->window, cursor);
 	  gdk_cursor_destroy (cursor);
 	}
+      retval = TRUE;
       break;
 
     default:
       break;
     }
-  return FALSE;
+
+  return retval;
 }
 
 void

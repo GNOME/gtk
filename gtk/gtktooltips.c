@@ -486,8 +486,10 @@ gtk_tooltips_event_handler (GtkWidget *widget,
 	tooltips->use_sticky_delay = use_sticky_delay;
       }
       break;
+      
     default:
       gtk_tooltips_set_active_widget (tooltips, NULL);
+      return TRUE;
       break;
     }
 

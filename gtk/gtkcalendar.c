@@ -2305,6 +2305,7 @@ gtk_calendar_button_press (GtkWidget	  *widget,
   GtkCalendar *calendar;
   GtkCalendarPrivateData *private_data;
   gint x, y;
+  void (* action_func) (GtkCalendar *);
   
   g_return_val_if_fail (widget != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_CALENDAR (widget), FALSE);
@@ -2318,23 +2319,23 @@ gtk_calendar_button_press (GtkWidget	  *widget,
   
   if (event->window == private_data->main_win)
     gtk_calendar_main_button (widget, event);
-  
-  if (event->type != GDK_BUTTON_PRESS)
-    return FALSE; /* Double-clicks? Triple-clicks? No thanks! */
+
+  action_func = NULL;  
 
   if (event->window == private_data->arrow_win[ARROW_MONTH_LEFT])
-    gtk_calendar_set_month_prev (calendar);
+    action_func = gtk_calendar_set_month_prev;
+  else if (event->window == private_data->arrow_win[ARROW_MONTH_RIGHT])
+    action_func = gtk_calendar_set_month_next;
+  else if (event->window == private_data->arrow_win[ARROW_YEAR_LEFT])
+    action_func = gtk_calendar_set_year_prev;
+  else if (event->window == private_data->arrow_win[ARROW_YEAR_RIGHT])
+    action_func = gtk_calendar_set_year_next;
+
+  /* only call the action on single click, not double */
+  if (event->type == GDK_BUTTON_PRESS)
+    (* action_func) (calendar);
   
-  if (event->window == private_data->arrow_win[ARROW_MONTH_RIGHT])
-    gtk_calendar_set_month_next (calendar);
-  
-  if (event->window == private_data->arrow_win[ARROW_YEAR_LEFT])
-    gtk_calendar_set_year_prev (calendar);
-  
-  if (event->window == private_data->arrow_win[ARROW_YEAR_RIGHT])
-    gtk_calendar_set_year_next (calendar);
-  
-  return FALSE;
+  return action_func != NULL;
 }
 
 static gboolean
@@ -2732,6 +2733,7 @@ gtk_calendar_key_press (GtkWidget   *widget,
       
       if (row > -1 && col > -1)
 	{
+	  return_val = TRUE;
 	  gtk_calendar_freeze (calendar);	  
 
 	  if (calendar->day_month[row][col] == MONTH_PREV)
