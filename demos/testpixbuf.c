@@ -122,6 +122,9 @@ new_testrgb_window (GdkPixBuf *pixbuf)
 int
 main (int argc, char **argv)
 {
+  int i;
+  int found_valid = FALSE; 
+
   GdkPixBuf *pixbuf;
 
   gtk_init (&argc, &argv);
@@ -132,11 +135,24 @@ main (int argc, char **argv)
 
   gtk_widget_set_default_colormap (gdk_rgb_get_cmap ());
   gtk_widget_set_default_visual (gdk_rgb_get_visual ());
-  pixbuf = gdk_pixbuf_load_image ("test.gif");
 
-  new_testrgb_window (pixbuf);
+  i = 1;
+  for (i = 1; i < argc; i++)
+    {
+      if (argv[i])
+	{
+	  pixbuf = gdk_pixbuf_load_image (argv[i]);
+   
+	  if (pixbuf)
+	    {
+	      new_testrgb_window (pixbuf);
+	      found_valid = TRUE;
+	    }
+	}
+    }
 
-  gtk_main ();
+  if (found_valid)
+    gtk_main ();
 
   return 0;
 }

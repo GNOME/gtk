@@ -99,7 +99,7 @@ GdkPixBuf *image_load(FILE *f)
 				unsigned char *from, *to;
 				from = lines[i]+w-1;
 				to = lines[i]+w*3-3;
-				for (j=w-1;j>=0;j++) {
+				for (j=w-1;j>=0;j--) {
 					to[0] = from[0];
 					to[1] = from[0];
 					to[2] = from[0];
@@ -120,7 +120,7 @@ GdkPixBuf *image_load(FILE *f)
 		return NULL;
 	pixbuf->ref_count = 0;
 	pixbuf->unref_func = NULL;
-
+	
 	return pixbuf;
 }
 

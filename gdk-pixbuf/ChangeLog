@@ -1,3 +1,11 @@
+1999-07-15  Larry Ewing  <lewing@gimp.org>
+
+	* src/io-jpeg.c (image_load): add raph@gimp.org's fix to the jpeg
+	indexing routine
+
+	* src/testpixbuf.c (main): fix up the file routines a little so
+	that you can load multiple files given the file names
+
 1999-07-14  Larry Ewing  <lewing@gimp.org>
 
 	* src/testpixbuf.c (expose_func): added an almost proper expose 
