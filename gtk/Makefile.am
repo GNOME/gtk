@@ -370,7 +370,12 @@ gtktypebuiltins_evals.c: @REBUILD@ makeenums.pl $(gtk_public_h_sources) $(gdk_he
 
 
 gtkconfdir = $(sysconfdir)/gtk
-gtkconf_DATA = gtkrc.ja gtkrc.ko gtkrc.ru gtkrc.iso-8859-2
+gtkconf_DATA = gtkrc gtkrc.bg gtkrc.el gtkrc.eo gtkrc.he gtkrc.hy gtkrc.ja \
+	gtkrc.ko gtkrc.ru gtkrc.tr gtkrc.th gtkrc.uk gtkrc.iso-8859-2 \
+	gtkrc.iso88592 gtkrc.iso88595 gtkrc.iso885913 gtkrc.iso885914 \
+	gtkrc.iso885915 gtkrc.zh_CN gtkrc.zh_TW.Big5 \
+	gtkrc.ka_GE.georgianacademy gtkrc.ka_GE.georgianps \
+	gtkrc.vi_VN.tcvn gtkrc.vi_VN.viscii
 
 # We create a dummy theme for the default GTK+ theme
 install-data-local:
@@ -379,10 +384,22 @@ install-data-local:
 	    $(DESTDIR)$(datadir)/themes/Default/gtk/gtkrc
 	$(mkinstalldirs) $(DESTDIR)$(gtkconfdir)
 	cd $(DESTDIR)$(gtkconfdir) && \
-	  for i in cs hr hu pl sk sl ; do \
+	  for i in cs hr hu pl ro sk sl sq ; do \
 	    rm -f gtkrc.$$i ; \
             ln -s gtkrc.iso-8859-2 gtkrc.$$i ; \
-          done
+          done ; \
+	ln -s gtkrc.iso88595 gtkrc.bg_BG.iso88595 ; \
+	ln -s gtkrc.iso88595 gtkrc.mk ; \
+	ln -s gtkrc.iso88595 gtkrc.sr ; \
+	ln -s gtkrc.iso88595 gtkrc.ru_RU.iso88595 ; \
+	ln -s gtkrc.iso885913 gtkrc.lt ; \
+	ln -s gtkrc.iso885914 gtkrc.cy ; \
+	ln -s gtkrc.iso885914 gtkrc.ga ; \
+	ln -s gtkrc.iso885915 gtkrc.et ; \
+	ln -s gtkrc.ka_GE.georgianacademy gtkrc.ka ; \
+	ln -s gtkrc.vi_VN.viscii gtkrc.vi_VN.viscii111 ; \
+	ln -s gtkrc.vi_VN.tcvn gtkrc.vi_VN.tcvn5712 ; \
+	ln -s gtkrc.vi_VN.tcvn5712 gtkrc.vi 
 
 uninstall-local:
 	rm -f $(DESTDIR)$(datadir)/themes/Default/gtkrc
@@ -454,8 +471,5 @@ EXTRA_DIST += @STRIP_BEGIN@ \
 	check-y.xpm		\
 	check-n.xpm		\
 	test.xpm		\
-	gtkrc.iso-8859-2        \
-	gtkrc.ja 		\
-	gtkrc.ko		\
-	gtkrc.ru		\
+	$(gtkconf_DATA)		\
 @STRIP_END@
