@@ -2062,9 +2062,9 @@ gtk_window_set_icon_list (GtkWindow  *window,
   info->icon_list = g_list_copy (list);
   g_list_foreach (info->icon_list,
                   (GFunc) g_object_ref, NULL);
-  
-  g_object_notify (G_OBJECT (window), "icon_list");
 
+  g_object_notify (G_OBJECT (window), "icon");
+  
   gtk_window_unrealize_icon (window);
   
   if (GTK_WIDGET_REALIZED (window))

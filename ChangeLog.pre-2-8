@@ -1,5 +1,9 @@
 2001-08-28  Havoc Pennington  <hp@pobox.com>
 
+	* gtk/gtkwindow.c (gtk_window_set_icon_list): fix g_object_notify
+
+2001-08-28  Havoc Pennington  <hp@pobox.com>
+
 	* demos/gtk-demo/main.c (setup_default_icon): add default icon
 
 	* gtk/gtkradiobutton.c (gtk_radio_button_new_with_mnemonic):
