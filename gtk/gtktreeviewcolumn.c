@@ -695,7 +695,9 @@ gtk_tree_view_column_update_button (GtkTreeViewColumn *tree_column)
 	{
 	  GtkWidget *toplevel = gtk_widget_get_toplevel (tree_column->tree_view);
 	  if (GTK_WIDGET_TOPLEVEL (toplevel))
-	    gtk_window_set_focus (GTK_WINDOW (toplevel), NULL);
+	    {
+	      gtk_window_set_focus (GTK_WINDOW (toplevel), NULL);
+	    }
 	}
     }
 

@@ -93,6 +93,7 @@ main (int argc, char *argv[])
   ssmodel = gtk_tree_model_sort_new_with_model (GTK_TREE_MODEL (smodel));
 */
   tree_view = gtk_tree_view_new_with_model (GTK_TREE_MODEL (model));
+
   /* 12 iters now, 12 later... */
   for (i = 0; data[i].word_1 != NULL; i++)
     {

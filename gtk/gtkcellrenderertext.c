@@ -1272,7 +1272,10 @@ gtk_cell_renderer_text_render (GtkCellRenderer    *cell,
     }
   else
     {
-      state = GTK_STATE_NORMAL;
+      if (GTK_WIDGET_STATE (widget) == GTK_STATE_INSENSITIVE)
+	state = GTK_STATE_INSENSITIVE;
+      else
+	state = GTK_STATE_NORMAL;
     }
 
   if (celltext->background_set && state != GTK_STATE_SELECTED)
