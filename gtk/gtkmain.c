@@ -26,7 +26,7 @@
 
 #include "gdkx.h"		/* For GDK_WINDOWING */
 
-#if GDK_WINDOWING == GDK_WINDOWING_X11
+#ifdef GDK_WINDOWING_X11
 #include <X11/Xlocale.h>	/* so we get the right setlocale */
 #else
 #include <locale.h>

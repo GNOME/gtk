@@ -464,7 +464,7 @@ GdkPixmap* gdk_pixmap_new		(GdkWindow  *window,
 					 gint	     width,
 					 gint	     height,
 					 gint	     depth);
-#if GDK_WINDOWING == GDK_WINDOWING_WIN32
+#ifdef GDK_WINDOWING_WIN32
 GdkPixmap* gdk_pixmap_create_on_shared_image
 					(GdkImage  **image_return,
 					 GdkWindow  *window,
@@ -521,7 +521,7 @@ GdkImage*  gdk_image_new       (GdkImageType  type,
 				GdkVisual    *visual,
 				gint	      width,
 				gint	      height);
-#if GDK_WINDOWING == GDK_WINDOWING_WIN32
+#ifdef GDK_WINDOWING_WIN32
 GdkImage*  gdk_image_bitmap_new(GdkImageType  type,
 				GdkVisual    *visual,
 				gint	      width,

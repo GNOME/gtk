@@ -869,7 +869,7 @@ gtk_layout_expose_area (GtkLayout    *layout,
     }
 }
 
-#if GDK_WINDOWING == GDK_WINDOWING_X11
+#ifdef GDK_WINDOWING_X11
 
 /* This function is used to find events to process while scrolling
  */
@@ -920,7 +920,7 @@ gtk_layout_adjustment_changed (GtkAdjustment *adjustment,
 			       GtkLayout     *layout)
 {
   GtkWidget *widget;
-#if GDK_WINDOWING == GDK_WINDOWING_X11
+#ifdef GDK_WINDOWING_X11
   XEvent xevent;
 #endif
   gint dx, dy;
@@ -1056,7 +1056,7 @@ gtk_layout_adjustment_changed (GtkAdjustment *adjustment,
 
   gdk_flush();
 
-#if GDK_WINDOWING == GDK_WINDOWING_X11
+#ifdef GDK_WINDOWING_X11
   while (XCheckIfEvent(GDK_WINDOW_XDISPLAY (layout->bin_window),
 		       &xevent,
 		       gtk_layout_expose_predicate,
@@ -1090,7 +1090,7 @@ gtk_layout_adjustment_changed (GtkAdjustment *adjustment,
 	    }
 	}
     }
-#elif GDK_WINDOWING == GDK_WINDOWING_WIN32
+#elif defined (GDK_WINDOWING_WIN32)
   /* XXX Not implemented */
 #endif
 }
@@ -1110,7 +1110,7 @@ gtk_layout_filter (GdkXEvent *gdk_xevent,
 		   GdkEvent  *event,
 		   gpointer   data)
 {
-#if GDK_WINDOWING == GDK_WINDOWING_X11
+#ifdef GDK_WINDOWING_X11
 
   XEvent *xevent;
   GtkLayout *layout;
@@ -1144,7 +1144,7 @@ gtk_layout_filter (GdkXEvent *gdk_xevent,
 	}
       break;
     }
-#elif GDK_WINDOWING == GDK_WINDOWING_WIN32
+#elif defined (GDK_WINDOWING_WIN32)
   /* XXX Not implemented */
 #endif
   
@@ -1160,7 +1160,7 @@ gtk_layout_main_filter (GdkXEvent *gdk_xevent,
 			GdkEvent  *event,
 			gpointer   data)
 {
-#if GDK_WINDOWING == GDK_WINDOWING_X11
+#ifdef GDK_WINDOWING_X11
   XEvent *xevent;
   GtkLayout *layout;
 
@@ -1186,7 +1186,7 @@ gtk_layout_main_filter (GdkXEvent *gdk_xevent,
 
       return GDK_FILTER_REMOVE;
     }
-#elif GDK_WINDOWING == GDK_WINDOWING_WIN32
+#elif defined (GDK_WINDOWING_WIN32)
   /* XXX Not implemented */
 #endif
   

@@ -71,11 +71,11 @@
 
 #include "gdk/gdk.h"
 /* Protect against the CHARSET struct in Win32 */
-#if GDK_WINDOWING == GDK_WINDOWING_WIN32
+#ifdef GDK_WINDOWING_WIN32
 # define CHARSET CHARSETstruct
 #endif
 #include "gdkx.h"
-#if GDK_WINDOWING == GDK_WINDOWING_WIN32
+#ifdef GDK_WINDOWING_WIN32
 # undef CHARSET
 #endif
 #include "gdk/gdkkeysyms.h"
@@ -401,7 +401,7 @@ static gint    gtk_font_selection_dialog_on_configure(GtkWidget      *widget,
 						      GdkEventConfigure *event,
 						      GtkFontSelectionDialog *fsd);
 
-#if GDK_WINDOWING == GDK_WINDOWING_WIN32
+#ifdef GDK_WINDOWING_WIN32
 static char *logfont_to_xlfd (const LOGFONT *lfp,
 			      int size,
 			      int res,
@@ -1816,7 +1816,7 @@ gtk_font_selection_update_preview (GtkFontSelection *fontsel)
   GtkStyle *style;
   gint text_height, new_height;
   gchar *text;
-#if GDK_WINDOWING == GDK_WINDOWING_X11
+#ifdef GDK_WINDOWING_X11
   XFontStruct *xfs;
 #endif
 
@@ -1851,7 +1851,7 @@ gtk_font_selection_update_preview (GtkFontSelection *fontsel)
     gtk_entry_set_text(GTK_ENTRY(fontsel->preview_entry), PREVIEW_TEXT);
   gtk_entry_set_position(GTK_ENTRY(fontsel->preview_entry), 0);
   
-#if GDK_WINDOWING == GDK_WINDOWING_X11
+#ifdef GDK_WINDOWING_X11
   /* If this is a 2-byte font display a message to say it may not be
      displayed properly. */
   xfs = GDK_FONT_XFONT(fontsel->font);
@@ -1885,7 +1885,7 @@ gtk_font_selection_switch_page (GtkWidget       *w,
 static void
 gtk_font_selection_show_font_info (GtkFontSelection *fontsel)
 {
-#if GDK_WINDOWING == GDK_WINDOWING_X11
+#ifdef GDK_WINDOWING_X11
   Atom font_atom, atom;
   Bool status;
 #endif
@@ -1917,7 +1917,7 @@ gtk_font_selection_show_font_info (GtkFontSelection *fontsel)
       gtk_clist_set_text(GTK_CLIST(fontsel->info_clist), i, 1,
 			 field ? field : "");
     }
-#if GDK_WINDOWING == GDK_WINDOWING_X11
+#ifdef GDK_WINDOWING_X11
   if (fontsel->font)
     {
       font_atom = XInternAtom(GDK_DISPLAY(), "FONT", True);
@@ -1946,7 +1946,7 @@ gtk_font_selection_show_font_info (GtkFontSelection *fontsel)
 	    }
 	}
     }
-#elif GDK_WINDOWING == GDK_WINDOWING_WIN32
+#elif defined (GDK_WINDOWING_WIN32)
   if (fontsel->font)
     {
       LOGFONT logfont;
@@ -2648,7 +2648,7 @@ gtk_font_selection_filter_state (GtkFontSelection *fontsel,
 }
 
 
-#if GDK_WINDOWING == GDK_WINDOWING_WIN32
+#ifdef GDK_WINDOWING_WIN32
 
 static gint num_fonts;
 static gint font_names_size;
@@ -2839,10 +2839,10 @@ EnumFontFamExProc (const LOGFONT *lfp,
 static void
 gtk_font_selection_get_fonts (void)
 {
-#if GDK_WINDOWING == GDK_WINDOWING_X11
+#ifdef GDK_WINDOWING_X11
   gchar **xfontnames;
   gint num_fonts;
-#elif GDK_WINDOWING == GDK_WINDOWING_WIN32
+#elif defined (GDK_WINDOWING_WIN32)
   LOGFONT logfont;
 #else
   gint num_fonts = 0;
@@ -2864,7 +2864,7 @@ gtk_font_selection_get_fonts (void)
   
   fontsel_info = g_new (GtkFontSelInfo, 1);
 
-#if GDK_WINDOWING == GDK_WINDOWING_X11
+#ifdef GDK_WINDOWING_X11
   /* Get a maximum of MAX_FONTS fontnames from the X server.
      Use "-*" as the pattern rather than "-*-*-*-*-*-*-*-*-*-*-*-*-*-*" since
      the latter may result in fonts being returned which don't actually exist.
@@ -2874,7 +2874,7 @@ gtk_font_selection_get_fonts (void)
   if (num_fonts == MAX_FONTS)
     g_warning(_("MAX_FONTS exceeded. Some fonts may be missing."));
   
-#elif GDK_WINDOWING == GDK_WINDOWING_WIN32
+#elif defined (GDK_WINDOWING_WIN32)
   num_fonts = 0;
   hdc = GetDC (NULL);
   font_names_size = 100;
@@ -3128,9 +3128,9 @@ gtk_font_selection_get_fonts (void)
 					sizeof(guint16) * npoint_sizes);
   g_free(fontnames);
 
-#if GDK_WINDOWING == GDK_WINDOWING_X11
+#ifdef GDK_WINDOWING_X11
   XFreeFontNames (xfontnames);
-#elif GDK_WINDOWING == GDK_WINDOWING_WIN32
+#elif defined (GDK_WINDOWING_WIN32)
   for (i = 0; i < num_fonts; i++)
     g_free (xfontnames[i]);
   g_free (xfontnames);
@@ -3602,7 +3602,7 @@ gtk_font_selection_get_xlfd_field (const gchar *fontname,
 	return NULL;
       strncpy (buffer, t1, len);
       buffer[len] = 0;
-#if GDK_WINDOWING == GDK_WINDOWING_X11
+#ifdef GDK_WINDOWING_X11
       /* Convert to lower case. */
       g_strdown (buffer);
 #endif

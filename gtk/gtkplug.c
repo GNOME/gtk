@@ -271,11 +271,11 @@ gtk_plug_key_press_event (GtkWidget   *widget,
 	      gtk_window_set_focus (GTK_WINDOW (widget), NULL);
 
 	      gdk_error_trap_push ();
-#if GDK_WINDOWING == GDK_WINDOWING_X11
+#ifdef GDK_WINDOWING_X11
 	      XSetInputFocus (GDK_DISPLAY (),
 			      GDK_WINDOW_XWINDOW (plug->socket_window),
 			      RevertToParent, event->time);
-#elif GDK_WINDOWING == GDK_WINDOWING_WIN32
+#elif defined (GDK_WINDOWING_WIN32)
 	      SetFocus (GDK_WINDOW_XWINDOW (plug->socket_window));
 #endif
 	      gdk_flush ();
@@ -296,7 +296,7 @@ gtk_plug_key_press_event (GtkWidget   *widget,
 static void
 gtk_plug_forward_key_press (GtkPlug *plug, GdkEventKey *event)
 {
-#if GDK_WINDOWING == GDK_WINDOWING_X11
+#ifdef GDK_WINDOWING_X11
   XEvent xevent;
   
   xevent.xkey.type = KeyPress;
@@ -321,7 +321,7 @@ gtk_plug_forward_key_press (GtkPlug *plug, GdkEventKey *event)
 	      False, NoEventMask, &xevent);
   gdk_flush ();
   gdk_error_trap_pop ();
-#elif GDK_WINDOWING == GDK_WINDOWING_WIN32
+#elif defined (GDK_WINDOWING_WIN32)
   /* This is pretty bogus, and not tested at all. */
   WPARAM wParam;
   LPARAM lParam;
@@ -568,7 +568,7 @@ gtk_plug_set_focus (GtkWindow *window,
 
   if (focus && !GTK_WIDGET_HAS_FOCUS(window))
     {
-#if GDK_WINDOWING == GDK_WINDOWING_X11
+#ifdef GDK_WINDOWING_X11
       XEvent xevent;
 
       xevent.xfocus.type = FocusIn;
@@ -583,7 +583,7 @@ gtk_plug_set_focus (GtkWindow *window,
 		  False, NoEventMask, &xevent);
       gdk_flush ();
       gdk_error_trap_pop ();
-#elif GDK_WINDOWING == GDK_WINDOWING_WIN32
+#elif defined (GDK_WINDOWING_WIN32)
       /* XXX Not implemented */
 #endif
     }

@@ -2048,12 +2048,12 @@ gtk_drag_source_handle_event (GtkWidget *widget,
 	    cursor = gtk_drag_get_cursor (event->dnd.context->action);
 	    if (info->cursor != cursor)
 	      {
-#if GDK_WINDOWING == GDK_WINDOWING_X11
+#ifdef GDK_WINDOWING_X11
 		XChangeActivePointerGrab (GDK_WINDOW_XDISPLAY (widget->window), 
 					  PointerMotionMask | PointerMotionHintMask | ButtonReleaseMask,
 					  ((GdkCursorPrivate *)cursor)->xcursor,
 					  event->dnd.time);
-#elif GDK_WINDOWING == GDK_WINDOWING_WIN32
+#elif defined (GDK_WINDOWING_WIN32)
 		gdk_pointer_grab (widget->window, FALSE,
 				  GDK_POINTER_MOTION_MASK |
 				  GDK_POINTER_MOTION_HINT_MASK |

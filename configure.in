@@ -593,7 +593,7 @@ esac
 ],[
 # Currently we always use X11 on those systems where we run configure...
 gdk_windowing='
-#define GDK_WINDOWING GDK_WINDOWING_X11'
+#define GDK_WINDOWING_X11'
 if test x$gdk_wchar_h = xyes; then
   gdk_wc='
 #define GDK_HAVE_WCHAR_H 1'

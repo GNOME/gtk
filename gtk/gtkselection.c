@@ -63,7 +63,7 @@
 
 /* Maximum size of a sent chunk, in bytes. Also the default size of
    our buffers */
-#if GDK_WINDOWING == GDK_WINDOWING_WIN32
+#ifdef GDK_WINDOWING_WIN32
 /* No chunks on Win32 */
 #define GTK_SELECTION_MAX_SIZE G_MAXINT
 #else

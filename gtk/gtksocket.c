@@ -32,7 +32,7 @@
 #include "gtksocket.h"
 #include "gtkdnd.h"
 
-#if GDK_WINDOWING == GDK_WINDOWING_X11
+#ifdef GDK_WINDOWING_X11
 
 /* Forward declararations */
 
@@ -748,7 +748,7 @@ gtk_socket_filter_func (GdkXEvent *gdk_xevent, GdkEvent *event, gpointer data)
   return return_val;
 }
 
-#elif GDK_WINDOWING == GDK_WINDOWING_WIN32
+#elif defined (GDK_WINDOWING_WIN32)
 
 guint
 gtk_socket_get_type ()

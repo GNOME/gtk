@@ -1,3 +1,8 @@
+Wed Sep 29 19:55:35 1999  Owen Taylor  <otaylor@redhat.com>
+
+	* */*.[ch]: Changed from #if GDK_WINDOWING == GDK_WINDOWING_X11
+	to #ifdef GDK_WINDOWING_X11.
+
 [ Merges from gtk-1-2 ]
 
 Wed Sep  8 07:13:29 1999  Tim Janik  <timj@gtk.org>
