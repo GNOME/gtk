@@ -2,6 +2,7 @@
 # Copyright (C) 1999 Free Software Foundation, Inc.
 # Stanislav Brabec <utx@k332.feld.cvut.cz>, 1998.
 # Jiří Pavlovský <pavlovsk@ff.cuni.cz>, 1998.
+# Jiří Lebl <jirka@5z.com>, 2002.
 #
 msgid ""
 msgstr ""
@@ -22,7 +23,7 @@ msgstr "Nelze otevřít souvor '%s': %s"
 #: gdk-pixbuf/gdk-pixbuf-animation.c:155 gdk-pixbuf/gdk-pixbuf-io.c:591
 #, c-format
 msgid "Image file '%s' contains no data"
-msgstr ""
+msgstr "Soubor obrázku '%s' neobsahuje žádné data"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:183
 #, c-format
@@ -57,7 +58,7 @@ msgstr ""
 #: gdk-pixbuf/gdk-pixbuf-io.c:490 gdk-pixbuf/gdk-pixbuf-io.c:516
 #, c-format
 msgid "Image type '%s' is not supported"
-msgstr ""
+msgstr "Obrázek typu '%s' není podporován"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:538
 #, c-format
@@ -1073,9 +1074,8 @@ msgid "Font description as a PangoFontDescription struct"
 msgstr ""
 
 #: gtk/gtkcellrenderertext.c:255 gtk/gtktexttag.c:302
-#, fuzzy
 msgid "Font family"
-msgstr "Rodina:"
+msgstr "Rodina písma"
 
 #: gtk/gtkcellrenderertext.c:256 gtk/gtktexttag.c:303
 msgid "Name of the font family, e.g. Sans, Helvetica, Times, Monospace"
@@ -1391,54 +1391,48 @@ msgid ""
 msgstr ""
 
 #: gtk/gtkcolorsel.c:1821
-#, fuzzy
 msgid "_Hue:"
-msgstr "Odstín:"
+msgstr "_Odstín:"
 
 #: gtk/gtkcolorsel.c:1822
 msgid "Position on the color wheel."
 msgstr ""
 
 #: gtk/gtkcolorsel.c:1823
-#, fuzzy
 msgid "_Saturation:"
-msgstr "Sytost:"
+msgstr "_Sytost:"
 
 #: gtk/gtkcolorsel.c:1824
 msgid "\"Deepness\" of the color."
 msgstr ""
 
 #: gtk/gtkcolorsel.c:1825
-#, fuzzy
 msgid "_Value:"
-msgstr "Jas:"
+msgstr "_Hodnota:"
 
 #: gtk/gtkcolorsel.c:1826
 msgid "Brightness of the color."
 msgstr ""
 
 #: gtk/gtkcolorsel.c:1827
-#, fuzzy
 msgid "_Red:"
-msgstr "Červená:"
+msgstr "Če_rvená:"
 
 #: gtk/gtkcolorsel.c:1828
 msgid "Amount of red light in the color."
 msgstr ""
 
 #: gtk/gtkcolorsel.c:1829
-#, fuzzy
 msgid "_Green:"
-msgstr "Zelená:"
+msgstr "Ze_lená:"
 
 #: gtk/gtkcolorsel.c:1830
 msgid "Amount of green light in the color."
 msgstr ""
 
 #: gtk/gtkcolorsel.c:1831
-#, fuzzy
 msgid "_Blue:"
-msgstr "Modrá:"
+msgstr "_Modrá:"
 
 #: gtk/gtkcolorsel.c:1832
 msgid "Amount of blue light in the color."
@@ -1702,9 +1696,8 @@ msgid "Whether to select the contents of an entry when it is focused."
 msgstr ""
 
 #: gtk/gtkentry.c:3850 gtk/gtklabel.c:3177
-#, fuzzy
 msgid "Select All"
-msgstr "Smazat"
+msgstr "Vybrat vše"
 
 #: gtk/gtkentry.c:3860 gtk/gtklabel.c:3187
 msgid "Input Methods"
@@ -1715,9 +1708,8 @@ msgid "_Insert Unicode control character"
 msgstr ""
 
 #: gtk/gtkfilesel.c:536 gtk/gtkimage.c:161
-#, fuzzy
 msgid "Filename"
-msgstr "Přejmenovat"
+msgstr "Jméno souboru"
 
 #: gtk/gtkfilesel.c:537
 msgid "The currently selected filename."
@@ -1732,9 +1724,8 @@ msgid "Whether buttons for creating/manipulating files should be displayed."
 msgstr ""
 
 #: gtk/gtkfilesel.c:551
-#, fuzzy
 msgid "Select multiple"
-msgstr "Smazat"
+msgstr "Smazat několik"
 
 #: gtk/gtkfilesel.c:552
 msgid "Whether to allow multiple files to be selected."
@@ -1757,7 +1748,7 @@ msgid "_Files"
 msgstr "_Soubory"
 
 #: gtk/gtkfilesel.c:822 gtk/gtkfilesel.c:2124
-#, fuzzy, c-format
+#, c-format
 msgid "Folder unreadable: %s"
 msgstr "Adresář nečitelný: %s"
 
@@ -1808,9 +1799,8 @@ msgid "New Folder"
 msgstr "Nový adresář"
 
 #: gtk/gtkfilesel.c:1418
-#, fuzzy
 msgid "_Folder name:"
-msgstr "Přejmenovat"
+msgstr "_Jméno adresáře:"
 
 #: gtk/gtkfilesel.c:1444
 msgid "Create"
@@ -1875,9 +1865,9 @@ msgid "Rename File"
 msgstr "Přejmenovat soubor"
 
 #: gtk/gtkfilesel.c:1681
-#, fuzzy, c-format
+#, c-format
 msgid "Rename file \"%s\" to:"
-msgstr "Přejmenovat soubor"
+msgstr "Přejmenovat soubor \"%s\" na:"
 
 #: gtk/gtkfilesel.c:1712
 msgid "Rename"
@@ -1929,9 +1919,8 @@ msgid "abcdefghijk ABCDEFGHIJK"
 msgstr ""
 
 #: gtk/gtkfontsel.c:205
-#, fuzzy
 msgid "Font name"
-msgstr "Rodina:"
+msgstr "Jméno písma"
 
 #: gtk/gtkfontsel.c:206
 msgid "The X string that represents this font."
@@ -1942,34 +1931,29 @@ msgid "The GdkFont that is currently selected."
 msgstr ""
 
 #: gtk/gtkfontsel.c:219
-#, fuzzy
 msgid "Preview text"
-msgstr "Náhled:"
+msgstr "Náhled textu"
 
 #: gtk/gtkfontsel.c:220
 msgid "The text to display in order to demonstrate the selected font."
 msgstr ""
 
 #: gtk/gtkfontsel.c:327
-#, fuzzy
 msgid "_Family:"
-msgstr "Rodina:"
+msgstr "_Rodina:"
 
 #: gtk/gtkfontsel.c:333
-#, fuzzy
 msgid "_Style:"
-msgstr "Upřesnění stylu:"
+msgstr "_Stylu:"
 
 #: gtk/gtkfontsel.c:339
-#, fuzzy
 msgid "Si_ze:"
-msgstr "Velikost:"
+msgstr "_Velikost:"
 
 #. create the text entry widget
 #: gtk/gtkfontsel.c:468
-#, fuzzy
 msgid "_Preview:"
-msgstr "Náhled:"
+msgstr "_Náhled:"
 
 #: gtk/gtkfontsel.c:1269
 msgid "Font Selection"
@@ -3083,9 +3067,8 @@ msgid ""
 msgstr ""
 
 #: gtk/gtkspinbutton.c:298
-#, fuzzy
 msgid "Value"
-msgstr "Jas:"
+msgstr "Hodnota"
 
 #: gtk/gtkspinbutton.c:299
 msgid "Reads the current value, or sets a new value"
@@ -3097,13 +3080,12 @@ msgstr ""
 
 #. KEEP IN SYNC with gtkiconfactory.c stock icons, when appropriate
 #: gtk/gtkstock.c:267
-#, fuzzy
 msgid "Information"
-msgstr "Informace o písmu"
+msgstr "Informace"
 
 #: gtk/gtkstock.c:268
 msgid "Warning"
-msgstr ""
+msgstr "Varování"
 
 #: gtk/gtkstock.c:269
 msgid "Error"
@@ -3111,23 +3093,22 @@ msgstr "Chyba"
 
 #: gtk/gtkstock.c:270
 msgid "Question"
-msgstr ""
+msgstr "Otázka"
 
 #. FIXME these need accelerators when appropriate, and
 #. * need the mnemonics to be rationalized
 #.
 #: gtk/gtkstock.c:275
 msgid "_Add"
-msgstr ""
+msgstr "_Přidat"
 
 #: gtk/gtkstock.c:276
 msgid "_Apply"
 msgstr "_Použít"
 
 #: gtk/gtkstock.c:277
-#, fuzzy
 msgid "_Bold"
-msgstr "tučný"
+msgstr "_Tučný"
 
 #: gtk/gtkstock.c:278
 msgid "_Cancel"
@@ -3135,37 +3116,35 @@ msgstr "_Zrušit"
 
 #: gtk/gtkstock.c:279
 msgid "_CD-Rom"
-msgstr ""
+msgstr "_CD-Rom"
 
 #: gtk/gtkstock.c:280
 msgid "_Clear"
-msgstr "_Smazat"
+msgstr "Vy_mazat"
 
 #: gtk/gtkstock.c:281
 msgid "_Close"
 msgstr "_Zavřít"
 
 #: gtk/gtkstock.c:282
-#, fuzzy
 msgid "_Convert"
-msgstr "Vytvořit"
+msgstr "_Převést"
 
 #: gtk/gtkstock.c:283
 msgid "_Copy"
-msgstr ""
+msgstr "_Kopírovat"
 
 #: gtk/gtkstock.c:284
 msgid "C_ut"
-msgstr ""
+msgstr "_Vyjmout"
 
 #: gtk/gtkstock.c:285
-#, fuzzy
 msgid "_Delete"
-msgstr "Smazat"
+msgstr "_Smazat"
 
 #: gtk/gtkstock.c:286
 msgid "_Execute"
-msgstr ""
+msgstr "_Spustit"
 
 #: gtk/gtkstock.c:287
 msgid "_Find"
@@ -3173,7 +3152,7 @@ msgstr "_Najít"
 
 #: gtk/gtkstock.c:288
 msgid "Find and _Replace"
-msgstr ""
+msgstr "Najít a _vyměnit"
 
 #: gtk/gtkstock.c:289
 #, fuzzy
@@ -3186,11 +3165,11 @@ msgstr ""
 
 #: gtk/gtkstock.c:291
 msgid "_First"
-msgstr ""
+msgstr "P_rvní"
 
 #: gtk/gtkstock.c:292
 msgid "_Last"
-msgstr ""
+msgstr "_Poslední"
 
 #: gtk/gtkstock.c:293
 msgid "_Top"
@@ -3202,15 +3181,15 @@ msgstr ""
 
 #: gtk/gtkstock.c:295
 msgid "_Down"
-msgstr ""
+msgstr "_Dolů"
 
 #: gtk/gtkstock.c:296
 msgid "_Forward"
-msgstr ""
+msgstr "_Vpřed"
 
 #: gtk/gtkstock.c:297
 msgid "_Up"
-msgstr ""
+msgstr "_Nahoru"
 
 #: gtk/gtkstock.c:298
 msgid "_Help"
@@ -3222,35 +3201,31 @@ msgstr "_Domov"
 
 #: gtk/gtkstock.c:300
 msgid "_Index"
-msgstr ""
+msgstr "_Index"
 
 #: gtk/gtkstock.c:301
-#, fuzzy
 msgid "_Italic"
-msgstr "kurzíva"
+msgstr "_Kurzíva"
 
 #: gtk/gtkstock.c:302
 msgid "_Jump to"
-msgstr ""
+msgstr "_Skoč na"
 
 #: gtk/gtkstock.c:303
-#, fuzzy
 msgid "_Center"
-msgstr "Vytvořit"
+msgstr "_Centrovat"
 
 #: gtk/gtkstock.c:304
-#, fuzzy
 msgid "_Fill"
-msgstr "Rodina:"
+msgstr "Nap_lnit"
 
 #: gtk/gtkstock.c:305
 msgid "_Left"
-msgstr ""
+msgstr "V_levo"
 
 #: gtk/gtkstock.c:306
-#, fuzzy
 msgid "_Right"
-msgstr "světlý"
+msgstr "V_pravo"
 
 #: gtk/gtkstock.c:307
 msgid "_New"
@@ -3270,16 +3245,15 @@ msgstr "_Otevřít"
 
 #: gtk/gtkstock.c:311
 msgid "_Paste"
-msgstr ""
+msgstr "Vl_ožit"
 
 #: gtk/gtkstock.c:312
 msgid "_Preferences"
-msgstr ""
+msgstr "_Nastavení"
 
 #: gtk/gtkstock.c:313
-#, fuzzy
 msgid "_Print"
-msgstr "Body"
+msgstr "_Tisk"
 
 #: gtk/gtkstock.c:314
 msgid "Print Pre_view"
@@ -3287,49 +3261,43 @@ msgstr "Náhled _tisku"
 
 #: gtk/gtkstock.c:315
 msgid "_Properties"
-msgstr ""
+msgstr "_Vlastnosti"
 
 #: gtk/gtkstock.c:316
 msgid "_Quit"
 msgstr "_Konec"
 
 #: gtk/gtkstock.c:317
-#, fuzzy
 msgid "_Redo"
-msgstr "Červená:"
+msgstr "Z_novu"
 
 #: gtk/gtkstock.c:318
 msgid "_Refresh"
-msgstr ""
+msgstr "Ob_novit"
 
 #: gtk/gtkstock.c:319
-#, fuzzy
 msgid "_Remove"
-msgstr "Červená:"
+msgstr "_Odstranit"
 
 #: gtk/gtkstock.c:320
 msgid "_Revert"
-msgstr ""
+msgstr "_Vrátit"
 
 #: gtk/gtkstock.c:321
-#, fuzzy
 msgid "_Save"
-msgstr "Zapsat"
+msgstr "Zap_sat"
 
 #: gtk/gtkstock.c:322
-#, fuzzy
 msgid "Save _As"
-msgstr "Zapsat"
+msgstr "Zapsat _jako"
 
 #: gtk/gtkstock.c:323
-#, fuzzy
 msgid "_Color"
-msgstr "Zavřít"
+msgstr "_Barva"
 
 #: gtk/gtkstock.c:324
-#, fuzzy
 msgid "_Font"
-msgstr "Písmo"
+msgstr "_Písmo"
 
 #: gtk/gtkstock.c:325
 msgid "_Ascending"
@@ -3345,7 +3313,7 @@ msgstr ""
 
 #: gtk/gtkstock.c:328
 msgid "_Stop"
-msgstr "_Stop"
+msgstr "_Stůj"
 
 #: gtk/gtkstock.c:329
 msgid "_Strikethrough"
@@ -3358,11 +3326,11 @@ msgstr "Smazat"
 
 #: gtk/gtkstock.c:331
 msgid "_Underline"
-msgstr ""
+msgstr "Po_dtrženo"
 
 #: gtk/gtkstock.c:332
 msgid "_Undo"
-msgstr ""
+msgstr "_Zpět"
 
 #: gtk/gtkstock.c:333
 msgid "_Yes"
@@ -3370,7 +3338,7 @@ msgstr "_Ano"
 
 #: gtk/gtkstock.c:334
 msgid "Zoom _100%"
-msgstr ""
+msgstr "Zoom _100%"
 
 #: gtk/gtkstock.c:335
 msgid "Zoom to _Fit"
@@ -3378,11 +3346,11 @@ msgstr ""
 
 #: gtk/gtkstock.c:336
 msgid "Zoom _In"
-msgstr ""
+msgstr "Zoom _dovnitř"
 
 #: gtk/gtkstock.c:337
 msgid "Zoom _Out"
-msgstr ""
+msgstr "Zoom _ven"
 
 #: gtk/gtktable.c:156
 msgid "Rows"
@@ -4367,11 +4335,11 @@ msgstr ""
 
 #: gtk/gtkwindow.c:499
 msgid "Icon"
-msgstr ""
+msgstr "Ikona"
 
 #: gtk/gtkwindow.c:500
 msgid "Icon for this window"
-msgstr ""
+msgstr "Ikona tohoto okna"
 
 #. ID
 #: modules/input/imam-et.c:454
