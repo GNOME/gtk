@@ -1,3 +1,9 @@
+1998-05-22    <sopwith@redhat.com>
+
+	* gtk/gtkeventbox.c: Pass size_allocate on to the child
+	regardless of whether it is visible or not. Also
+        locate child at (border_width,border_width), not (0,0)
+
 Fri May 22 03:02:40 1998  Owen Taylor  <otaylor@gtk.org>
 
 	* gtk/gtkhandlebox.c: Added style_set handler.

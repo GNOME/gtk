@@ -161,8 +161,8 @@ gtk_event_box_size_allocate (GtkWidget     *widget,
   widget->allocation = *allocation;
   bin = GTK_BIN (widget);
 
-  child_allocation.x = 0;
-  child_allocation.y = 0;
+  child_allocation.x = GTK_CONTAINER (widget)->border_width;
+  child_allocation.y = GTK_CONTAINER (widget)->border_width;
   child_allocation.width = MAX (allocation->width - GTK_CONTAINER (widget)->border_width * 2, 0);
   child_allocation.height = MAX (allocation->height - GTK_CONTAINER (widget)->border_width * 2, 0);
 
@@ -175,7 +175,7 @@ gtk_event_box_size_allocate (GtkWidget     *widget,
 			      child_allocation.height);
     }
   
-  if (bin->child && GTK_WIDGET_VISIBLE (bin->child))
+  if (bin->child)
     {
       gtk_widget_size_allocate (bin->child, &child_allocation);
     }
