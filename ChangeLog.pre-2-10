@@ -1,3 +1,11 @@
+2002-05-13 Vitaly Tishkov <tvv@sparc.spb.su>
+
+        * gtk/gtkfilesel.c
+        * gtk/gtkplug.c 
+        * gtk/gtkwidget.c
+        * gtk/gtkwindow.c
+        a few typos in docs were fixed
+
 2002-05-10  Daniel Elstner  <daniel.elstner@gmx.net>
 
 	[ merge from stable ]

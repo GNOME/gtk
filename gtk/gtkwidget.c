@@ -4657,7 +4657,7 @@ gtk_widget_get_screen (GtkWidget *widget)
  * screen, and all widgets added into a heirarchy with a toplevel
  * window at the top.
  * 
- * Return value: %TRUE if there is a #GdkScreen assoicated
+ * Return value: %TRUE if there is a #GdkScreen associcated
  *   with the widget.
  **/
 gboolean

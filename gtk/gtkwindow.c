@@ -5384,7 +5384,7 @@ gtk_window_begin_move_drag  (GtkWindow *window,
 /** 
  * gtk_window_set_screen:
  * @window: a #GtkWindow.
- * @screen: a #GtkScreen.
+ * @screen: a #GdkScreen.
  *
  * Sets the #GdkScreen where the @window is displayed; if
  * the window is already mapped, it will be unmapped, and

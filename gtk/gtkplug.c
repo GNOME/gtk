@@ -313,7 +313,7 @@ _gtk_plug_remove_from_socket (GtkPlug   *plug,
  * @plug: a #GtkPlug.
  * @socket_id: the XID of the socket's window.
  *
- * Finish the Initialization of @plug for a given #GtkSocket identified by
+ * Finish the initialization of @plug for a given #GtkSocket identified by
  * @socket_id. This function will generally only be used by classes deriving from #GtkPlug.
  **/
 void
@@ -330,7 +330,7 @@ gtk_plug_construct (GtkPlug         *plug,
  *	     #GtkSocket.
  * @socket_id: the XID of the socket's window.
  *
- * Finish the Initialization of @plug for a given #GtkSocket identified by
+ * Finish the initialization of @plug for a given #GtkSocket identified by
  * @socket_id which is currently displayed on @display.
  * This function will generally only be used by classes deriving from #GtkPlug.
  **/
@@ -387,7 +387,7 @@ gtk_plug_new (GdkNativeWindow socket_id)
  * @display : the #GdkDisplay on which @socket_id is displayed
  * @socket_id: the XID of the socket's window.
  * 
- * Create a new plug widget inside the GtkSocket identified by socket_id.
+ * Create a new plug widget inside the #GtkSocket identified by socket_id.
  *
  * Return value: the new #GtkPlug widget.
  */
