@@ -144,9 +144,7 @@ gtk_adjustment_assimilate_value (GtkAdjustment        *adjustment,
   g_return_if_fail (GTK_IS_ADJUSTMENT (adjustment));
 
   if (gtk_signal_n_emissions (GTK_OBJECT (adjustment),
-			      adjustment_signals[VALUE_CHANGED]))
-    adjustment->value = CLAMP (value, adjustment->lower, adjustment->upper);
-  else
+			      adjustment_signals[VALUE_CHANGED]) == 0)
     gtk_adjustment_set_value (adjustment, value);
 }
 

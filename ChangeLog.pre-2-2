@@ -1,8 +1,7 @@
 Sun May  3 19:45:09 1998  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkadjustment.c (gtk_adjustment_assimilate_value): new function
-	to set the adjustments value without causing a current emission of
-	"value_changed" to be restarted.
+	to set the adjustments value when there is no current emissioin.
 
 	* gtk/gtksignal.c: added new functions to retrive the number of
 	existing emissions for a certain signal.
