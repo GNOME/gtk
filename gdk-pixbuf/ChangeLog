@@ -1,3 +1,8 @@
+2004-11-01  Matthias Clasen  <mclasen@redhat.com>
+
+	* gdk-pixbuf-features.h.in: Break the declaration of the three 
+	version variables, so that gtk-doc can grok it.
+
 2004-10-29  Hans Breuer  <hans@breuer.org>
 
 	* makefile.msc : updated
