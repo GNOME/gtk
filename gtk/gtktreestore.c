@@ -433,10 +433,11 @@ gtk_tree_store_set_column_type (GtkTreeStore *tree_store,
   tree_store->column_headers[column] = type;
 }
 
-static void
+static gboolean
 node_free (GNode *node, gpointer data)
 {
   _gtk_tree_data_list_free (node->data, (GType*)data);
+  return FALSE;
 }
 
 static void
@@ -444,7 +445,8 @@ gtk_tree_store_finalize (GObject *object)
 {
   GtkTreeStore *tree_store = GTK_TREE_STORE (object);
 
-  g_node_children_foreach (tree_store->root, G_TRAVERSE_ALL, node_free, tree_store->column_headers);
+  g_node_traverse (tree_store->root, G_POST_ORDER, G_TRAVERSE_ALL, -1,
+		   node_free, tree_store->column_headers);
   _gtk_tree_data_list_header_free (tree_store->sort_list);
   g_free (tree_store->column_headers);
 

@@ -1,3 +1,10 @@
+Fri Jul 26 21:39:21 2002  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtktreestore.c (node_free): return FALSE,
+	(gtk_tree_store_finalize): use g_node_traverse instead of
+	g_node_children_foreach, so the whole tree will be freed (#88854,
+	patch from Emmanuel Briot).
+
 Fri Jul 26 21:24:03 2002  Kristian Rietveld  <kris@gtk.org>
 
 	* gtk/gtktreeview.c (gtk_tree_view_button_press): fix some memleaks,
