@@ -1,3 +1,11 @@
+Tue May  1 19:09:21 2001  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtktreeview.c (gtk_tree_view_horizontal_autoscroll): Add
+	autoscroll support.  It mostly works, but could use some fine
+	tuning.
+	* gtk/gtktreeview.c (gtk_tree_view_button_release_drag_column):
+	Actually move the column.
+
 Mon Apr 30 20:29:27 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkbutton.c gtk/gtkcheckbutton.c gtk/gtkoptionmenu.c 
