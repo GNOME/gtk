@@ -1,3 +1,8 @@
+2002-11-26  Matthias Clasen  <maclas@gmx.de>
+
+	* gdk/tmpl/threads.sgml: Add hint about calling gdk_flush() before
+	gdk_threads_leave().  (#70665, wording suggested by Owen Taylor)
+
 2002-11-23  Matthias Clasen  <maclas@gmx.de>
 
 	* gdk/tmpl/x_interaction.sgml: 
