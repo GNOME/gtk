@@ -34,6 +34,7 @@
 #include "gtkclipboard.h"
 #include "gtkdnd.h"
 #include "gtkentry.h"
+#include "gtkimagemenuitem.h"
 #include "gtkimmulticontext.h"
 #include "gtkintl.h"
 #include "gtkmain.h"
@@ -42,6 +43,7 @@
 #include "gtkseparatormenuitem.h"
 #include "gtkselection.h"
 #include "gtksettings.h"
+#include "gtkstock.h"
 #include "gtksignal.h"
 #include "gtkwindow.h"
 
@@ -3701,11 +3703,11 @@ gtk_entry_mnemonic_activate (GtkWidget *widget,
 static void
 append_action_signal (GtkEntry     *entry,
 		      GtkWidget    *menu,
-		      const gchar  *label,
+		      const gchar  *stock_id,
 		      const gchar  *signal,
                       gboolean      sensitive)
 {
-  GtkWidget *menuitem = gtk_menu_item_new_with_label (label);
+  GtkWidget *menuitem = gtk_image_menu_item_new_from_stock (stock_id, NULL);
 
   gtk_object_set_data (GTK_OBJECT (menuitem), "gtk-signal", (char *)signal);
   gtk_signal_connect (GTK_OBJECT (menuitem), "activate",
@@ -3781,11 +3783,11 @@ popup_targets_received (GtkClipboard     *clipboard,
 				 GTK_WIDGET (entry),
 				 popup_menu_detach);
       
-      append_action_signal (entry, entry->popup_menu, _("Cut"), "cut_clipboard",
+      append_action_signal (entry, entry->popup_menu, GTK_STOCK_CUT, "cut_clipboard",
 			    entry->editable && entry->current_pos != entry->selection_bound);
-      append_action_signal (entry, entry->popup_menu, _("Copy"), "copy_clipboard",
+      append_action_signal (entry, entry->popup_menu, GTK_STOCK_COPY, "copy_clipboard",
 			    entry->current_pos != entry->selection_bound);
-      append_action_signal (entry, entry->popup_menu, _("Paste"), "paste_clipboard",
+      append_action_signal (entry, entry->popup_menu, GTK_STOCK_PASTE, "paste_clipboard",
 			    entry->editable && clipboard_contains_text);
       
       menuitem = gtk_menu_item_new_with_label (_("Select All"));

@@ -29,6 +29,7 @@
 #define GTK_TEXT_USE_INTERNAL_UNSUPPORTED_API
 #include "gtkbindings.h"
 #include "gtkdnd.h"
+#include "gtkimagemenuitem.h"
 #include "gtkintl.h"
 #include "gtkmain.h"
 #include "gtkmenu.h"
@@ -36,6 +37,7 @@
 #include "gtkseparatormenuitem.h"
 #include "gtksettings.h"
 #include "gtksignal.h"
+#include "gtkstock.h"
 #include "gtktextdisplay.h"
 #include "gtktextview.h"
 #include "gtkimmulticontext.h"
@@ -5354,11 +5356,11 @@ activate_cb (GtkWidget   *menuitem,
 static void
 append_action_signal (GtkTextView  *text_view,
 		      GtkWidget    *menu,
-		      const gchar  *label,
+		      const gchar  *stock_id,
 		      const gchar  *signal,
                       gboolean      sensitive)
 {
-  GtkWidget *menuitem = gtk_menu_item_new_with_label (label);
+  GtkWidget *menuitem = gtk_image_menu_item_new_from_stock (stock_id, NULL);
 
   g_object_set_data (G_OBJECT (menuitem), "gtk-signal", (char *)signal);
   gtk_signal_connect (GTK_OBJECT (menuitem), "activate",
@@ -5485,11 +5487,11 @@ popup_targets_received (GtkClipboard     *clipboard,
       
       can_insert = gtk_text_iter_can_insert (&iter, text_view->editable);
       
-      append_action_signal (text_view, text_view->popup_menu, _("Cut"), "cut_clipboard",
+      append_action_signal (text_view, text_view->popup_menu, GTK_STOCK_CUT, "cut_clipboard",
 			    have_selection);
-      append_action_signal (text_view, text_view->popup_menu, _("Copy"), "copy_clipboard",
+      append_action_signal (text_view, text_view->popup_menu, GTK_STOCK_COPY, "copy_clipboard",
 			    have_selection);
-      append_action_signal (text_view, text_view->popup_menu, _("Paste"), "paste_clipboard",
+      append_action_signal (text_view, text_view->popup_menu, GTK_STOCK_PASTE, "paste_clipboard",
 			    can_insert && clipboard_contains_text);
       
       menuitem = gtk_separator_menu_item_new ();

@@ -1,3 +1,14 @@
+2001-10-24  Anders Carlsson  <andersca@gnu.org>
+
+	* gtk/gtkentry.c: (append_action_signal): Use an image menu item here
+	(popup_targets_received): Call append_action_signal with stock items
+	
+	* gtk/gtklabel.c: (append_action_signal): Use an image menu item here
+	(gtk_label_do_popup): Call append_action_signal with stock items
+	
+	* gtk/gtktextview.c: (append_action_signal): Use an image menu item here
+	(popup_targets_received): Call append_action_signal with stock items
+
 2001-10-23  Havoc Pennington  <hp@redhat.com>
 
 	* gtk/gtktextview.c (changed_handler): queue a resize here; will

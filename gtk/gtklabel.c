@@ -33,10 +33,12 @@
 #include "gtkclipboard.h"
 #include "gdk/gdki18n.h"
 #include <pango/pango.h>
+#include "gtkimagemenuitem.h"
 #include "gtkintl.h"
 #include "gtkseparatormenuitem.h"
 #include "gtkmenuitem.h"
 #include "gtknotebook.h"
+#include "gtkstock.h"
 #include "gtkbindings.h"
 
 struct _GtkLabelSelectionInfo
@@ -3087,11 +3089,11 @@ activate_cb (GtkWidget *menuitem,
 static void
 append_action_signal (GtkLabel     *label,
 		      GtkWidget    *menu,
-		      const gchar  *label_text,
+		      const gchar  *stock_id,
 		      const gchar  *signal,
                       gboolean      sensitive)
 {
-  GtkWidget *menuitem = gtk_menu_item_new_with_label (label_text);
+  GtkWidget *menuitem = gtk_image_menu_item_new_from_stock (stock_id, NULL);
 
   gtk_object_set_data (GTK_OBJECT (menuitem), "gtk-signal", (char *)signal);
   gtk_signal_connect (GTK_OBJECT (menuitem), "activate",
@@ -3168,11 +3170,11 @@ gtk_label_do_popup (GtkLabel       *label,
     label->select_info->selection_anchor != label->select_info->selection_end;
 
 
-  append_action_signal (label, label->select_info->popup_menu, _("Cut"), "cut_clipboard",
+  append_action_signal (label, label->select_info->popup_menu, GTK_STOCK_CUT, "cut_clipboard",
                         FALSE);
-  append_action_signal (label, label->select_info->popup_menu, _("Copy"), "copy_clipboard",
+  append_action_signal (label, label->select_info->popup_menu, GTK_STOCK_COPY, "copy_clipboard",
                         have_selection);
-  append_action_signal (label, label->select_info->popup_menu, _("Paste"), "paste_clipboard",
+  append_action_signal (label, label->select_info->popup_menu, GTK_STOCK_PASTE, "paste_clipboard",
                         FALSE);
   
   menuitem = gtk_menu_item_new_with_label (_("Select All"));
