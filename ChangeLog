@@ -1,3 +1,11 @@
+Sat May  8 22:43:11 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtktearoffmenuitem.h: 
+	* gtk/gtktearoffmenuitem.c: Put the torn_off flag back
+	into the GtkTearoffMenuItem struct, since it is used
+	by the Gimp, and keep it synchronized with the 
+	tearoff_state property of the parent menu.
+
 2004-05-07  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkbutton.c (gtk_button_size_allocate): Don't let the child

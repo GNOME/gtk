@@ -39,8 +39,8 @@ static void gtk_tearoff_menu_item_size_request (GtkWidget             *widget,
 static gint gtk_tearoff_menu_item_expose     (GtkWidget             *widget,
 					      GdkEventExpose        *event);
 static void gtk_tearoff_menu_item_activate   (GtkMenuItem           *menu_item);
-static gint gtk_tearoff_menu_item_delete_cb  (GtkMenuItem           *menu_item,
-					      GdkEventAny           *event);
+static void gtk_tearoff_menu_item_parent_set (GtkWidget             *widget,
+					      GtkWidget             *previous);
 
 GType
 gtk_tearoff_menu_item_get_type (void)
@@ -89,6 +89,7 @@ gtk_tearoff_menu_item_class_init (GtkTearoffMenuItemClass *klass)
 
   widget_class->expose_event = gtk_tearoff_menu_item_expose;
   widget_class->size_request = gtk_tearoff_menu_item_size_request;
+  widget_class->parent_set = gtk_tearoff_menu_item_parent_set;
 
   menu_item_class->activate = gtk_tearoff_menu_item_activate;
 }
@@ -96,6 +97,7 @@ gtk_tearoff_menu_item_class_init (GtkTearoffMenuItemClass *klass)
 static void
 gtk_tearoff_menu_item_init (GtkTearoffMenuItem *tearoff_menu_item)
 {
+  tearoff_menu_item->torn_off = FALSE;
 }
 
 static void
@@ -241,8 +243,6 @@ gtk_tearoff_menu_item_expose (GtkWidget      *widget,
 static void
 gtk_tearoff_menu_item_activate (GtkMenuItem *menu_item)
 {
-  GtkTearoffMenuItem *tearoff_menu_item = GTK_TEAROFF_MENU_ITEM (menu_item);
-
   if (GTK_IS_MENU (GTK_WIDGET (menu_item)->parent))
     {
       GtkMenu *menu = GTK_MENU (GTK_WIDGET (menu_item)->parent);
@@ -252,5 +252,32 @@ gtk_tearoff_menu_item_activate (GtkMenuItem *menu_item)
     }
 
   gtk_widget_queue_resize (GTK_WIDGET (menu_item));
- }
+}
 
+static void
+tearoff_state_changed (GtkMenu            *menu,
+		       GtkTearoffMenuItem *tearoff_menu_item)
+{
+  tearoff_menu_item->torn_off = gtk_menu_get_tearoff_state (menu);
+}
+
+static void
+gtk_tearoff_menu_item_parent_set (GtkWidget *widget,
+				  GtkWidget *previous)
+{
+  GtkTearoffMenuItem *tearoff_menu_item = GTK_TEAROFF_MENU_ITEM (widget);
+  GtkMenu *menu = GTK_IS_MENU (widget->parent) ? GTK_MENU (widget->parent) : NULL;
+
+  if (previous)
+    g_signal_handlers_disconnect_by_func (previous, 
+					  tearoff_state_changed, 
+					  tearoff_menu_item);
+  
+  if (menu)
+    {
+      tearoff_menu_item->torn_off = gtk_menu_get_tearoff_state (menu);
+      g_signal_connect (menu, "notify::tearoff-state", 
+			G_CALLBACK (tearoff_state_changed), 
+			tearoff_menu_item);
+    }  
+}
