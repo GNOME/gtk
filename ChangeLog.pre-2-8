@@ -1,5 +1,8 @@
 2004-09-27  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtktreeview.c (gtk_tree_view_append_column): Fix typo in
+	docs.  (#153811, Billy Biggs)
+
 	* gtk/gtkpathbar.h (struct _GtkPathBar): Only need a bit for
 	need_timer.
 

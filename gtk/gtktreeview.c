@@ -9653,7 +9653,7 @@ gtk_tree_view_get_rules_hint (GtkTreeView  *tree_view)
  * @column: The #GtkTreeViewColumn to add.
  *
  * Appends @column to the list of columns. If @tree_view has "fixed_height"
- * mode enbabled, then @column must have its "sizing" property set to be
+ * mode enabled, then @column must have its "sizing" property set to be
  * GTK_TREE_VIEW_COLUMN_FIXED.
  *
  * Return value: The number of columns in @tree_view after appending.
