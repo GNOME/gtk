@@ -3626,7 +3626,7 @@ static char * gtk_mini_xpm[] = {
 "     >%$$      ",
 "      >=       "};
 
-#define TESTGTK_CLIST_COLUMNS 20
+#define TESTGTK_CLIST_COLUMNS 12
 static gint clist_rows = 0;
 static GtkWidget *clist_omenu;
 
@@ -3703,23 +3703,36 @@ clear_clist (GtkWidget *widget, gpointer data)
   clist_rows = 0;
 }
 
-void
-remove_row_clist (GtkWidget *widget, gpointer data)
+void clist_remove_selection (GtkWidget *widget, GtkCList *clist)
 {
-  gtk_clist_remove (GTK_CLIST (data), GTK_CLIST (data)->focus_row);
-  clist_rows--;
+  gtk_clist_freeze (clist);
+
+  while (clist->selection)
+    {
+      gint row;
+
+      clist_rows--;
+      row = GPOINTER_TO_INT (clist->selection->data);
+
+      gtk_clist_remove (clist, row);
+
+      if (clist->selection_mode == GTK_SELECTION_BROWSE)
+	break;
+    }
+
+  if (clist->selection_mode == GTK_SELECTION_EXTENDED && !clist->selection &&
+      clist->focus_row >= 0)
+    gtk_clist_select_row (clist, clist->focus_row, -1);
+
+  gtk_clist_thaw (clist);
 }
 
-void
-show_titles_clist (GtkWidget *widget, gpointer data)
+void toggle_title_buttons (GtkWidget *widget, GtkCList *clist)
 {
-  gtk_clist_column_titles_show (GTK_CLIST (data));
-}
-
-void
-hide_titles_clist (GtkWidget *widget, gpointer data)
-{
-  gtk_clist_column_titles_hide (GTK_CLIST (data));
+  if (GTK_TOGGLE_BUTTON (widget)->active)
+    gtk_clist_column_titles_show (clist);
+  else
+    gtk_clist_column_titles_hide (clist);
 }
 
 void toggle_reorderable (GtkWidget *widget, GtkCList *clist)
@@ -3727,135 +3740,14 @@ void toggle_reorderable (GtkWidget *widget, GtkCList *clist)
   gtk_clist_set_reorderable (clist, GTK_TOGGLE_BUTTON (widget)->active);
 }
 
-void
-select_clist (GtkWidget *widget,
-	      gint row, 
-	      gint column, 
-	      GdkEventButton * bevent,
-	      GtkWidget *button)
-{
-  gint i;
-  guint8 spacing;
-  gchar *text;
-  GdkPixmap *pixmap;
-  GdkBitmap *mask;
-  GList *list;
-
-  g_print ("GtkCList Selection: row %d column %d button %d\n", 
-	   row, column, bevent ? bevent->button : 0);
-
-  for (i = 0; i < TESTGTK_CLIST_COLUMNS; i++)
-    {
-      switch (gtk_clist_get_cell_type (GTK_CLIST (widget), row, i))
-	{
-	case GTK_CELL_TEXT:
-	  g_print ("CELL %d GTK_CELL_TEXT\n", i);
-	  gtk_clist_get_text (GTK_CLIST (widget), row, i, &text);
-	  g_print ("TEXT: %s\n", text);
-	  break;
-
-	case GTK_CELL_PIXMAP:
-	  g_print ("CELL %d GTK_CELL_PIXMAP\n", i);
-	  gtk_clist_get_pixmap (GTK_CLIST (widget), row, i, &pixmap, &mask);
-	  g_print ("PIXMAP: %p\n", pixmap);
-	  g_print ("MASK: %p\n", mask);
-	  break;
-
-	case GTK_CELL_PIXTEXT:
-	  g_print ("CELL %d GTK_CELL_PIXTEXT\n", i);
-	  gtk_clist_get_pixtext (GTK_CLIST (widget), row, i, &text, &spacing, &pixmap, &mask);
-	  g_print ("TEXT: %s\n", text);
-	  g_print ("SPACING: %d\n", spacing);
-	  g_print ("PIXMAP: %p\n", pixmap);
-	  g_print ("MASK: %p\n", mask);
-	  break;
-
-	default:
-	  break;
-	}
-    }
-
-  /* print selections list */
-  g_print ("\nSelected Rows:");
-  list = GTK_CLIST (widget)->selection;
-  while (list)
-    {
-      g_print (" %d ", GPOINTER_TO_INT (list->data));
-      list = list->next;
-    }
-
-  g_print ("\n\n\n");
-}
-
-void
-unselect_clist (GtkWidget *widget,
-		gint row, 
-		gint column, 
-		GdkEventButton * bevent,
-		GtkWidget *button)
-{
-  gint i;
-  guint8 spacing;
-  gchar *text;
-  GdkPixmap *pixmap;
-  GdkBitmap *mask;
-  GList *list;
-
-  g_print ("GtkCList Unselection: row %d column %d button %d\n", 
-	   row, column, bevent ? bevent->button : 0);
-
-  for (i = 0; i < TESTGTK_CLIST_COLUMNS; i++)
-    {
-      switch (gtk_clist_get_cell_type (GTK_CLIST (widget), row, i))
-	{
-	case GTK_CELL_TEXT:
-	  g_print ("CELL %d GTK_CELL_TEXT\n", i);
-	  gtk_clist_get_text (GTK_CLIST (widget), row, i, &text);
-	  g_print ("TEXT: %s\n", text);
-	  break;
-
-	case GTK_CELL_PIXMAP:
-	  g_print ("CELL %d GTK_CELL_PIXMAP\n", i);
-	  gtk_clist_get_pixmap (GTK_CLIST (widget), row, i, &pixmap, &mask);
-	  g_print ("PIXMAP: %p\n", pixmap);
-	  g_print ("MASK: %p\n", mask);
-	  break;
-
-	case GTK_CELL_PIXTEXT:
-	  g_print ("CELL %d GTK_CELL_PIXTEXT\n", i);
-	  gtk_clist_get_pixtext (GTK_CLIST (widget), row, i, &text, &spacing, &pixmap, &mask);
-	  g_print ("TEXT: %s\n", text);
-	  g_print ("SPACING: %d\n", spacing);
-	  g_print ("PIXMAP: %p\n", pixmap);
-	  g_print ("MASK: %p\n", mask);
-	  break;
-
-	default:
-	  break;
-	}
-    }
-
-  /* print selections list */
-  g_print ("\nSelected Rows:");
-  list = GTK_CLIST (widget)->selection;
-  while (list)
-    {
-      g_print (" %d ", GPOINTER_TO_INT (list->data));
-      list = list->next;
-    }
-
-  g_print ("\n\n\n");
-}
-
 static void
 insert_row_clist (GtkWidget *widget, gpointer data)
 {
   static char *text[] =
   {
-    "This", "is", "an", "inserted", "row.",
-    "This", "is", "an", "inserted", "row.",
-    "This", "is", "an", "inserted", "row.",
-    "This", "is", "an", "inserted", "row."
+    "This", "is an", "inserted", "row.",
+    "This", "is an", "inserted", "row.",
+    "This", "is an", "inserted", "row."
   };
 
   static GtkStyle *style1 = NULL;
@@ -3978,9 +3870,7 @@ create_clist (void)
   {
     "auto resize", "not resizeable", "max width 100", "min width 50",
     "hide column", "Title 5", "Title 6", "Title 7",
-    "Title 8",  "Title 9",  "Title 10", "Title 11", "Title 12",
-    "Title 13", "Title 14", "Title 15", "Title 16", "Title 17",
-    "Title 18", "Title 19"
+    "Title 8",  "Title 9",  "Title 10", "Title 11"
   };
 
   static OptionMenuItem items[] =
@@ -4023,90 +3913,80 @@ create_clist (void)
       box1 = gtk_vbox_new (FALSE, 0);
       gtk_container_add (GTK_CONTAINER (window), box1);
 
-      box2 = gtk_hbox_new (FALSE, 10);
-      gtk_container_set_border_width (GTK_CONTAINER (box2), 10);
-      gtk_box_pack_start (GTK_BOX (box1), box2, FALSE, FALSE, 0);
+      scrolled_win = gtk_scrolled_window_new (NULL, NULL);
+      gtk_container_set_border_width (GTK_CONTAINER (scrolled_win), 5);
+      gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled_win),
+				      GTK_POLICY_AUTOMATIC, 
+				      GTK_POLICY_AUTOMATIC);
 
       /* create GtkCList here so we have a pointer to throw at the 
        * button callbacks -- more is done with it later */
       clist = gtk_clist_new_with_titles (TESTGTK_CLIST_COLUMNS, titles);
-      gtk_widget_show (clist);
-      scrolled_win = gtk_scrolled_window_new (NULL, NULL);
-      gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled_win),
-				      GTK_POLICY_AUTOMATIC, 
-				      GTK_POLICY_AUTOMATIC);
       gtk_container_add (GTK_CONTAINER (scrolled_win), clist);
-
       gtk_signal_connect (GTK_OBJECT (clist), "click_column",
 			  (GtkSignalFunc) clist_click_column, NULL);
 
       /* control buttons */
+      box2 = gtk_hbox_new (FALSE, 5);
+      gtk_container_set_border_width (GTK_CONTAINER (box2), 5);
+      gtk_box_pack_start (GTK_BOX (box1), box2, FALSE, FALSE, 0);
+
+      button = gtk_button_new_with_label ("Insert Row");
+      gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
+      gtk_signal_connect (GTK_OBJECT (button), "clicked",
+                          (GtkSignalFunc) insert_row_clist, (gpointer) clist);
+
       button = gtk_button_new_with_label ("Add 1,000 Rows With Pixmaps");
       gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
-
       gtk_signal_connect (GTK_OBJECT (button), "clicked",
                           (GtkSignalFunc) add1000_clist, (gpointer) clist);
 
       button = gtk_button_new_with_label ("Add 10,000 Rows");
       gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
-
       gtk_signal_connect (GTK_OBJECT (button), "clicked",
                           (GtkSignalFunc) add10000_clist, (gpointer) clist);
 
+      /* second layer of buttons */
+      box2 = gtk_hbox_new (FALSE, 5);
+      gtk_container_set_border_width (GTK_CONTAINER (box2), 5);
+      gtk_box_pack_start (GTK_BOX (box1), box2, FALSE, FALSE, 0);
+
       button = gtk_button_new_with_label ("Clear List");
       gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
-
       gtk_signal_connect (GTK_OBJECT (button), "clicked",
                           (GtkSignalFunc) clear_clist, (gpointer) clist);
 
-      button = gtk_button_new_with_label ("Remove Row");
+      button = gtk_button_new_with_label ("Remove Selection");
       gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
-
       gtk_signal_connect (GTK_OBJECT (button), "clicked",
-                          (GtkSignalFunc) remove_row_clist, (gpointer) clist);
+                          (GtkSignalFunc) clist_remove_selection,
+			  (gpointer) clist);
 
-      /* second layer of buttons */
-      box2 = gtk_hbox_new (FALSE, 10);
-      gtk_container_set_border_width (GTK_CONTAINER (box2), 10);
-      gtk_box_pack_start (GTK_BOX (box1), box2, FALSE, FALSE, 0);
-
-      button = gtk_button_new_with_label ("Insert Row");
-      gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
-
-      gtk_signal_connect (GTK_OBJECT (button), "clicked",
-                          (GtkSignalFunc) insert_row_clist, (gpointer) clist);
-
-      button = gtk_button_new_with_label ("Show Title Buttons");
-      gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
-
-      gtk_signal_connect (GTK_OBJECT (button), "clicked",
-                          (GtkSignalFunc) show_titles_clist, (gpointer) clist);
-
-      button = gtk_button_new_with_label ("Hide Title Buttons");
-      gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
-
-      gtk_signal_connect (GTK_OBJECT (button), "clicked",
-                          (GtkSignalFunc) hide_titles_clist, (gpointer) clist);
-
-      button = gtk_button_new_with_label ("Warning Test");
-      gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
-
-      gtk_signal_connect (GTK_OBJECT (button), "clicked",
-                          (GtkSignalFunc) clist_warning_test,(gpointer) clist);
-
-      box2 = gtk_hbox_new (FALSE, 10);
-      gtk_container_set_border_width (GTK_CONTAINER (box2), 10);
-      gtk_box_pack_start (GTK_BOX (box1), box2, FALSE, FALSE, 0);
-
-      undo_button = gtk_button_new_with_label ("Undo last selection");
+      undo_button = gtk_button_new_with_label ("Undo Selection");
       gtk_box_pack_start (GTK_BOX (box2), undo_button, TRUE, TRUE, 0);
       gtk_signal_connect (GTK_OBJECT (undo_button), "clicked",
                           (GtkSignalFunc) undo_selection, (gpointer) clist);
 
+      button = gtk_button_new_with_label ("Warning Test");
+      gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
+      gtk_signal_connect (GTK_OBJECT (button), "clicked",
+                          (GtkSignalFunc) clist_warning_test,(gpointer) clist);
+
+      /* third layer of buttons */
+      box2 = gtk_hbox_new (FALSE, 5);
+      gtk_container_set_border_width (GTK_CONTAINER (box2), 5);
+      gtk_box_pack_start (GTK_BOX (box1), box2, FALSE, FALSE, 0);
+
+      check = gtk_check_button_new_with_label ("Show Title Buttons");
+      gtk_box_pack_start (GTK_BOX (box2), check, FALSE, TRUE, 0);
+      gtk_signal_connect (GTK_OBJECT (check), "clicked",
+			  GTK_SIGNAL_FUNC (toggle_title_buttons), clist);
+      gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check), TRUE);
+
       check = gtk_check_button_new_with_label ("Reorderable");
+      gtk_box_pack_start (GTK_BOX (box2), check, FALSE, TRUE, 0);
       gtk_signal_connect (GTK_OBJECT (check), "clicked",
 			  GTK_SIGNAL_FUNC (toggle_reorderable), clist);
-      gtk_box_pack_start (GTK_BOX (box2), check, FALSE, TRUE, 0);
       gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check), TRUE);
 
       label = gtk_label_new ("Selection Mode :");
@@ -4115,15 +3995,11 @@ create_clist (void)
       clist_omenu = build_option_menu (items, 4, 3, clist);
       gtk_box_pack_start (GTK_BOX (box2), clist_omenu, FALSE, TRUE, 0);
 
-      /* vbox for the list itself */
-      box2 = gtk_vbox_new (FALSE, 10);
-      gtk_container_set_border_width (GTK_CONTAINER (box2), 10);
-      gtk_box_pack_start (GTK_BOX (box1), box2, TRUE, TRUE, 0);
-
       /* 
        * the rest of the clist configuration
        */
 
+      gtk_box_pack_start (GTK_BOX (box1), scrolled_win, TRUE, TRUE, 0);
       gtk_clist_set_row_height (GTK_CLIST (clist), 18);
       gtk_widget_set_usize (clist, -1, 300);
 
@@ -4134,9 +4010,7 @@ create_clist (void)
       gtk_clist_set_column_resizeable (GTK_CLIST (clist), 1, FALSE);
       gtk_clist_set_column_max_width (GTK_CLIST (clist), 2, 100);
       gtk_clist_set_column_min_width (GTK_CLIST (clist), 3, 50);
-
       gtk_clist_set_selection_mode (GTK_CLIST (clist), GTK_SELECTION_EXTENDED);
-
       gtk_clist_set_column_justification (GTK_CLIST (clist), 1,
 					  GTK_JUSTIFY_RIGHT);
       gtk_clist_set_column_justification (GTK_CLIST (clist), 2,
@@ -4182,22 +4056,16 @@ create_clist (void)
 	    }
 	}
 
-      gtk_container_set_border_width (GTK_CONTAINER (scrolled_win), 5);
-      gtk_box_pack_start (GTK_BOX (box2), scrolled_win, TRUE, TRUE, 0);
-
       separator = gtk_hseparator_new ();
       gtk_box_pack_start (GTK_BOX (box1), separator, FALSE, TRUE, 0);
 
-      box2 = gtk_vbox_new (FALSE, 10);
-      gtk_container_set_border_width (GTK_CONTAINER (box2), 10);
-      gtk_box_pack_start (GTK_BOX (box1), box2, FALSE, TRUE, 0);
-
       button = gtk_button_new_with_label ("close");
+      gtk_container_set_border_width (GTK_CONTAINER (button), 10);
+      gtk_box_pack_start (GTK_BOX (box1), button, TRUE, TRUE, 0);
       gtk_signal_connect_object (GTK_OBJECT (button), "clicked",
 				 GTK_SIGNAL_FUNC(gtk_widget_destroy),
 				 GTK_OBJECT (window));
 
-      gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
       GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
       gtk_widget_grab_default (button);
     }
@@ -4359,34 +4227,36 @@ void remove_selection (GtkWidget *widget, GtkCTree *ctree)
 {
   GtkCList *clist;
   GtkCTreeNode *node;
-  GList *selection;
-  GList *list = NULL;
 
   clist = GTK_CLIST (ctree);
 
   gtk_clist_freeze (clist);
 
-  for (selection = clist->selection; selection; selection = selection->next)
-    list = g_list_prepend (list, selection->data);
-
-  selection = clist->selection;
-  while (selection)
+  while (clist->selection)
     {
-      node = selection->data;
-
-      if (!g_list_find (list, node))
-	break;
+      node = clist->selection->data;
 
       if (GTK_CTREE_ROW (node)->is_leaf)
 	pages--;
       else
-	gtk_ctree_post_recursive (ctree, node, 
+	gtk_ctree_post_recursive (ctree, node,
 				  (GtkCTreeFunc) count_items, NULL);
 
       gtk_ctree_remove_node (ctree, node);
-      selection = clist->selection;
+
+      if (clist->selection_mode == GTK_SELECTION_BROWSE)
+	break;
     }
-  g_list_free (list);
+
+  if (clist->selection_mode == GTK_SELECTION_EXTENDED && !clist->selection &&
+      clist->focus_row >= 0)
+    {
+      node = gtk_ctree_node_nth (ctree, clist->focus_row);
+
+      if (node)
+	gtk_ctree_select (ctree, node);
+    }
+    
   gtk_clist_thaw (clist);
   after_press (ctree, NULL);
 }
@@ -4870,19 +4740,30 @@ void create_ctree (void)
 				 (GtkSignalFunc) gtk_widget_destroy,
 				 GTK_OBJECT(window));
 
-      button = gtk_button_new_with_label ("Rebuild tree");
+      button = gtk_button_new_with_label ("Rebuild Tree");
       gtk_box_pack_start (GTK_BOX (hbox), button, TRUE, TRUE, 0);
 
+      scrolled_win = gtk_scrolled_window_new (NULL, NULL);
+      gtk_container_set_border_width (GTK_CONTAINER (scrolled_win), 5);
+      gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled_win),
+				      GTK_POLICY_AUTOMATIC,
+				      GTK_POLICY_ALWAYS);
+      gtk_box_pack_start (GTK_BOX (vbox), scrolled_win, TRUE, TRUE, 0);
+
       ctree = GTK_CTREE (gtk_ctree_new_with_titles (2, 0, title));
-      gtk_signal_connect (GTK_OBJECT (button), "clicked",
-			  GTK_SIGNAL_FUNC (rebuild_tree), ctree);
-      
+      gtk_container_add (GTK_CONTAINER (scrolled_win), GTK_WIDGET (ctree));
+
+      gtk_clist_set_column_auto_resize (GTK_CLIST (ctree), 0, TRUE);
+      gtk_clist_set_column_width (GTK_CLIST (ctree), 1, 200);
+      gtk_clist_set_selection_mode (GTK_CLIST (ctree), GTK_SELECTION_EXTENDED);
       gtk_ctree_set_line_style (ctree, GTK_CTREE_LINES_DOTTED);
       line_style = GTK_CTREE_LINES_DOTTED;
 
+      gtk_signal_connect (GTK_OBJECT (button), "clicked",
+			  GTK_SIGNAL_FUNC (rebuild_tree), ctree);
       gtk_signal_connect (GTK_OBJECT (ctree), "click_column",
-			  (GtkSignalFunc) ctree_click_column,
-			  NULL);
+			  (GtkSignalFunc) ctree_click_column, NULL);
+
       gtk_signal_connect_after (GTK_OBJECT (ctree), "button_press_event",
 				GTK_SIGNAL_FUNC (after_press), NULL);
       gtk_signal_connect_after (GTK_OBJECT (ctree), "button_release_event",
@@ -4899,16 +4780,6 @@ void create_ctree (void)
 				GTK_SIGNAL_FUNC (after_press), NULL);
       gtk_signal_connect_after (GTK_OBJECT (ctree), "scroll_vertical",
 				GTK_SIGNAL_FUNC (after_press), NULL);
-      
-      scrolled_win = gtk_scrolled_window_new (NULL, NULL);
-      gtk_container_add (GTK_CONTAINER (scrolled_win), GTK_WIDGET (ctree));
-      gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled_win),
-				      GTK_POLICY_AUTOMATIC, GTK_POLICY_ALWAYS);
-      gtk_container_set_border_width (GTK_CONTAINER (scrolled_win), 5);
-      gtk_box_pack_start (GTK_BOX (vbox), scrolled_win, TRUE, TRUE, 0);
-      gtk_clist_set_selection_mode (GTK_CLIST (ctree), GTK_SELECTION_EXTENDED);
-      gtk_clist_set_column_auto_resize (GTK_CLIST (ctree), 0, TRUE);
-      gtk_clist_set_column_width (GTK_CLIST (ctree), 1, 200);
 
       bbox = gtk_hbox_new (FALSE, 5);
       gtk_container_set_border_width (GTK_CONTAINER (bbox), 5);
@@ -4917,7 +4788,7 @@ void create_ctree (void)
       mbox = gtk_vbox_new (TRUE, 5);
       gtk_box_pack_start (GTK_BOX (bbox), mbox, FALSE, TRUE, 0);
 
-      label = gtk_label_new ("Row height :");
+      label = gtk_label_new ("Row Height :");
       gtk_box_pack_start (GTK_BOX (mbox), label, FALSE, FALSE, 0);
 
       label = gtk_label_new ("Indent :");
@@ -4931,26 +4802,26 @@ void create_ctree (void)
 
       adj = (GtkAdjustment *) gtk_adjustment_new (20, 12, 100, 1, 10, 0);
       spinner = gtk_spin_button_new (adj, 0, 0);
+      gtk_box_pack_start (GTK_BOX (mbox), spinner, FALSE, FALSE, 5);
       gtk_tooltips_set_tip (tooltips, spinner,
 			    "Row height of list items", NULL);
       gtk_signal_connect (GTK_OBJECT (adj), "value_changed",
 			  GTK_SIGNAL_FUNC (change_row_height), ctree);
-      gtk_box_pack_start (GTK_BOX (mbox), spinner, FALSE, FALSE, 5);
       gtk_clist_set_row_height ( GTK_CLIST (ctree), adj->value);
 
       adj = (GtkAdjustment *) gtk_adjustment_new (20, 0, 60, 1, 10, 0);
       spinner = gtk_spin_button_new (adj, 0, 0);
-      gtk_tooltips_set_tip (tooltips, spinner, "Tree indentation.", NULL);
+      gtk_box_pack_start (GTK_BOX (mbox), spinner, FALSE, FALSE, 5);
+      gtk_tooltips_set_tip (tooltips, spinner, "Tree Indentation.", NULL);
       gtk_signal_connect (GTK_OBJECT (adj), "value_changed",
 			  GTK_SIGNAL_FUNC (change_indent), ctree);
-      gtk_box_pack_start (GTK_BOX (mbox), spinner, FALSE, FALSE, 5);
 
       adj = (GtkAdjustment *) gtk_adjustment_new (5, 0, 60, 1, 10, 0);
       spinner = gtk_spin_button_new (adj, 0, 0);
-      gtk_tooltips_set_tip (tooltips, spinner, "Tree spacing.", NULL);
+      gtk_box_pack_start (GTK_BOX (mbox), spinner, FALSE, FALSE, 5);
+      gtk_tooltips_set_tip (tooltips, spinner, "Tree Spacing.", NULL);
       gtk_signal_connect (GTK_OBJECT (adj), "value_changed",
 			  GTK_SIGNAL_FUNC (change_spacing), ctree);
-      gtk_box_pack_start (GTK_BOX (mbox), spinner, FALSE, FALSE, 5);
 
       mbox = gtk_vbox_new (TRUE, 5);
       gtk_box_pack_start (GTK_BOX (bbox), mbox, FALSE, TRUE, 0);
@@ -4958,150 +4829,150 @@ void create_ctree (void)
       hbox = gtk_hbox_new (FALSE, 5);
       gtk_box_pack_start (GTK_BOX (mbox), hbox, FALSE, FALSE, 0);
 
-      button = gtk_button_new_with_label ("Expand all");
+      button = gtk_button_new_with_label ("Expand All");
+      gtk_box_pack_start (GTK_BOX (hbox), button, TRUE, TRUE, 0);
       gtk_signal_connect (GTK_OBJECT (button), "clicked",
 			  GTK_SIGNAL_FUNC (expand_all), ctree);
-      gtk_box_pack_start (GTK_BOX (hbox), button, TRUE, TRUE, 0);
 
-      button = gtk_button_new_with_label ("Collapse all");
+      button = gtk_button_new_with_label ("Collapse All");
+      gtk_box_pack_start (GTK_BOX (hbox), button, TRUE, TRUE, 0);
       gtk_signal_connect (GTK_OBJECT (button), "clicked",
 			  GTK_SIGNAL_FUNC (collapse_all), ctree);
-      gtk_box_pack_start (GTK_BOX (hbox), button, TRUE, TRUE, 0);
 
       button = gtk_button_new_with_label ("Change Style");
+      gtk_box_pack_start (GTK_BOX (hbox), button, TRUE, TRUE, 0);
       gtk_signal_connect (GTK_OBJECT (button), "clicked",
 			  GTK_SIGNAL_FUNC (change_style), ctree);
-      gtk_box_pack_start (GTK_BOX (hbox), button, TRUE, TRUE, 0);
 
-      button = gtk_button_new_with_label ("Export tree");
+      button = gtk_button_new_with_label ("Export Tree");
+      gtk_box_pack_start (GTK_BOX (hbox), button, TRUE, TRUE, 0);
       gtk_signal_connect (GTK_OBJECT (button), "clicked",
 			  GTK_SIGNAL_FUNC (export_ctree), ctree);
-      gtk_box_pack_start (GTK_BOX (hbox), button, TRUE, TRUE, 0);
 
       hbox = gtk_hbox_new (FALSE, 5);
       gtk_box_pack_start (GTK_BOX (mbox), hbox, FALSE, FALSE, 0);
 
-      button = gtk_button_new_with_label ("Select all");
+      button = gtk_button_new_with_label ("Select All");
+      gtk_box_pack_start (GTK_BOX (hbox), button, TRUE, TRUE, 0);
       gtk_signal_connect (GTK_OBJECT (button), "clicked",
 			  GTK_SIGNAL_FUNC (select_all), ctree);
-      gtk_box_pack_start (GTK_BOX (hbox), button, TRUE, TRUE, 0);
 
-      button = gtk_button_new_with_label ("Unselect all");
+      button = gtk_button_new_with_label ("Unselect All");
+      gtk_box_pack_start (GTK_BOX (hbox), button, TRUE, TRUE, 0);
       gtk_signal_connect (GTK_OBJECT (button), "clicked",
 			  GTK_SIGNAL_FUNC (unselect_all), ctree);
-      gtk_box_pack_start (GTK_BOX (hbox), button, TRUE, TRUE, 0);
 
-      button = gtk_button_new_with_label ("Remove selection");
+      button = gtk_button_new_with_label ("Remove Selection");
+      gtk_box_pack_start (GTK_BOX (hbox), button, TRUE, TRUE, 0);
       gtk_signal_connect (GTK_OBJECT (button), "clicked",
 			  GTK_SIGNAL_FUNC (remove_selection), ctree);
-      gtk_box_pack_start (GTK_BOX (hbox), button, TRUE, TRUE, 0);
 
       check = gtk_check_button_new_with_label ("Reorderable");
+      gtk_box_pack_start (GTK_BOX (hbox), check, FALSE, TRUE, 0);
       gtk_tooltips_set_tip (tooltips, check,
 			    "Tree items can be reordered by dragging.", NULL);
       gtk_signal_connect (GTK_OBJECT (check), "clicked",
 			  GTK_SIGNAL_FUNC (toggle_reorderable), ctree);
-      gtk_box_pack_start (GTK_BOX (hbox), check, FALSE, TRUE, 0);
       gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check), TRUE);
 
       hbox = gtk_hbox_new (TRUE, 5);
       gtk_box_pack_start (GTK_BOX (mbox), hbox, FALSE, FALSE, 0);
-      
+
       omenu1 = build_option_menu (items1, 4, 2, ctree);
-      gtk_tooltips_set_tip (tooltips, omenu1, "The tree's line style.", NULL);
       gtk_box_pack_start (GTK_BOX (hbox), omenu1, FALSE, TRUE, 0);
-      
+      gtk_tooltips_set_tip (tooltips, omenu1, "The tree's line style.", NULL);
+
       omenu2 = build_option_menu (items2, 4, 1, ctree);
+      gtk_box_pack_start (GTK_BOX (hbox), omenu2, FALSE, TRUE, 0);
       gtk_tooltips_set_tip (tooltips, omenu2, "The tree's expander style.",
 			    NULL);
-      gtk_box_pack_start (GTK_BOX (hbox), omenu2, FALSE, TRUE, 0);
 
       omenu3 = build_option_menu (items3, 2, 0, ctree);
+      gtk_box_pack_start (GTK_BOX (hbox), omenu3, FALSE, TRUE, 0);
       gtk_tooltips_set_tip (tooltips, omenu3, "The tree's justification.",
 			    NULL);
-      gtk_box_pack_start (GTK_BOX (hbox), omenu3, FALSE, TRUE, 0);
-      
+
       omenu4 = build_option_menu (items4, 4, 3, ctree);
+      gtk_box_pack_start (GTK_BOX (hbox), omenu4, FALSE, TRUE, 0);
       gtk_tooltips_set_tip (tooltips, omenu4, "The list's selection mode.",
 			    NULL);
-      gtk_box_pack_start (GTK_BOX (hbox), omenu4, FALSE, TRUE, 0);
-      
+
       gtk_widget_realize (window);
-      
+
       pixmap1 = gdk_pixmap_create_from_xpm_d (window->window, &mask1, 
 					      &transparent, book_closed_xpm);
       pixmap2 = gdk_pixmap_create_from_xpm_d (window->window, &mask2, 
 					      &transparent, book_open_xpm);
       pixmap3 = gdk_pixmap_create_from_xpm_d (window->window, &mask3,
 					      &transparent, mini_page_xpm);
-      
+
       gtk_widget_set_usize (GTK_WIDGET (ctree), 0, 300);
-      
+
       frame = gtk_frame_new (NULL);
       gtk_container_set_border_width (GTK_CONTAINER (frame), 0);
       gtk_frame_set_shadow_type (GTK_FRAME (frame), GTK_SHADOW_OUT);
       gtk_box_pack_start (GTK_BOX (vbox), frame, FALSE, TRUE, 0);
-      
+
       hbox = gtk_hbox_new (TRUE, 2);
       gtk_container_set_border_width (GTK_CONTAINER (hbox), 2);
       gtk_container_add (GTK_CONTAINER (frame), hbox);
-      
+
       frame = gtk_frame_new (NULL);
       gtk_frame_set_shadow_type (GTK_FRAME (frame), GTK_SHADOW_IN);
       gtk_box_pack_start (GTK_BOX (hbox), frame, FALSE, TRUE, 0);
-      
+
       hbox2 = gtk_hbox_new (FALSE, 0);
       gtk_container_set_border_width (GTK_CONTAINER (hbox2), 2);
       gtk_container_add (GTK_CONTAINER (frame), hbox2);
-      
+
       label = gtk_label_new ("Books :");
       gtk_box_pack_start (GTK_BOX (hbox2), label, FALSE, TRUE, 0);
-      
+
       sprintf (buf, "%d", books);
       book_label = gtk_label_new (buf);
       gtk_box_pack_end (GTK_BOX (hbox2), book_label, FALSE, TRUE, 5);
-      
+
       frame = gtk_frame_new (NULL);
       gtk_frame_set_shadow_type (GTK_FRAME (frame), GTK_SHADOW_IN);
       gtk_box_pack_start (GTK_BOX (hbox), frame, FALSE, TRUE, 0);
-      
+
       hbox2 = gtk_hbox_new (FALSE, 0);
       gtk_container_set_border_width (GTK_CONTAINER (hbox2), 2);
       gtk_container_add (GTK_CONTAINER (frame), hbox2);
-      
+
       label = gtk_label_new ("Pages :");
       gtk_box_pack_start (GTK_BOX (hbox2), label, FALSE, TRUE, 0);
-      
+
       sprintf (buf, "%d", pages);
       page_label = gtk_label_new (buf);
       gtk_box_pack_end (GTK_BOX (hbox2), page_label, FALSE, TRUE, 5);
-      
+
       frame = gtk_frame_new (NULL);
       gtk_frame_set_shadow_type (GTK_FRAME (frame), GTK_SHADOW_IN);
       gtk_box_pack_start (GTK_BOX (hbox), frame, FALSE, TRUE, 0);
-      
+
       hbox2 = gtk_hbox_new (FALSE, 0);
       gtk_container_set_border_width (GTK_CONTAINER (hbox2), 2);
       gtk_container_add (GTK_CONTAINER (frame), hbox2);
-      
+
       label = gtk_label_new ("Selected :");
       gtk_box_pack_start (GTK_BOX (hbox2), label, FALSE, TRUE, 0);
-      
+
       sprintf (buf, "%d", g_list_length (GTK_CLIST (ctree)->selection));
       sel_label = gtk_label_new (buf);
       gtk_box_pack_end (GTK_BOX (hbox2), sel_label, FALSE, TRUE, 5);
-      
+
       frame = gtk_frame_new (NULL);
       gtk_frame_set_shadow_type (GTK_FRAME (frame), GTK_SHADOW_IN);
       gtk_box_pack_start (GTK_BOX (hbox), frame, FALSE, TRUE, 0);
-      
+
       hbox2 = gtk_hbox_new (FALSE, 0);
       gtk_container_set_border_width (GTK_CONTAINER (hbox2), 2);
       gtk_container_add (GTK_CONTAINER (frame), hbox2);
-      
+
       label = gtk_label_new ("Visible :");
       gtk_box_pack_start (GTK_BOX (hbox2), label, FALSE, TRUE, 0);
-      
+
       sprintf (buf, "%d", g_list_length (GTK_CLIST (ctree)->row_list));
       vis_label = gtk_label_new (buf);
       gtk_box_pack_end (GTK_BOX (hbox2), vis_label, FALSE, TRUE, 5);

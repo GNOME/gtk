@@ -2861,8 +2861,8 @@ real_remove_row (GtkCList *clist,
 
   sync_selection (clist, row, SYNC_REMOVE);
 
-  if ((clist->selection_mode == GTK_SELECTION_BROWSE ||
-       clist->selection_mode == GTK_SELECTION_EXTENDED) && !clist->selection)
+  if (clist->selection_mode == GTK_SELECTION_BROWSE && !clist->selection &&
+      clist->focus_row >= 0)
     gtk_signal_emit (GTK_OBJECT (clist), clist_signals[SELECT_ROW],
 		     clist->focus_row, -1, NULL);
 

@@ -3857,9 +3857,8 @@ gtk_ctree_remove_node (GtkCTree     *ctree,
       gtk_ctree_unlink (ctree, node, TRUE);
       gtk_ctree_post_recursive (ctree, node, GTK_CTREE_FUNC (tree_delete),
 				NULL);
-      if ((clist->selection_mode == GTK_SELECTION_BROWSE ||
-	   clist->selection_mode == GTK_SELECTION_EXTENDED) &&
-	  !clist->selection && clist->focus_row >= 0)
+      if (clist->selection_mode == GTK_SELECTION_BROWSE && !clist->selection &&
+	  clist->focus_row >= 0)
 	gtk_clist_select_row (clist, clist->focus_row, -1);
 
       auto_resize_columns (clist);

@@ -1,3 +1,11 @@
+Wed Feb 10 01:02:46 1999  Lars Hamann  <lars@gtk.org>
+
+	* gtk/gtkclist.c (real_remove_row): 
+	* gtk/gtkctree.c (gtk_ctree_remove_node): don't autoselect focus_row
+	in case of GTK_SELECTION_EXTENDED
+
+	* gtk/testgtk.c : few changes in clist/ctree examples.
+
 Wed Feb 10 15:49:16 1999  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkwindow.c (gtk_window_class_init):
