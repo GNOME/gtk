@@ -4575,8 +4575,8 @@ gtk_entry_completion_key_press (GtkWidget   *widget,
       else if (event->keyval == GDK_Down || event->keyval == GDK_KP_Down)
         {
           completion->priv->current_selected++;
-          if (completion->priv->current_selected >= matches + actions)
-            completion->priv->current_selected = matches + actions;
+          if (completion->priv->current_selected > matches + actions - 1)
+            completion->priv->current_selected = matches + actions - 1;
         }
       else if (event->keyval == GDK_Home || event->keyval == GDK_KP_Home)
         completion->priv->current_selected = -1;

@@ -1,3 +1,8 @@
+Tue Nov 18 22:26:30 2003  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtkentry.c (gtk_entry_completion_key_press): the total
+	number of actions is "matches + actions - 1". (Fixes #126572).
+
 Tue Nov 18 21:05:05 2003  Christian Persch  <chp@cvs.gnome.org>
 
 	* gtk/gtktreemodelfilter.c (gtk_tree_model_filter_row_inserted): fix
