@@ -723,8 +723,8 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
                   G_SIGNAL_RUN_LAST | GTK_RUN_ACTION,
                   G_STRUCT_OFFSET (GtkTreeViewClass, move_cursor),
                   NULL, NULL,
-                  _gtk_marshal_VOID__ENUM_INT,
-                  GTK_TYPE_NONE, 2, GTK_TYPE_MOVEMENT_STEP, GTK_TYPE_INT);
+                  _gtk_marshal_BOOLEAN__ENUM_INT,
+                  GTK_TYPE_BOOL, 2, GTK_TYPE_MOVEMENT_STEP, GTK_TYPE_INT);
 
   tree_view_signals[SELECT_ALL] =
     g_signal_new ("select_all",
