@@ -74,7 +74,8 @@ static void gtk_dialog_map               (GtkWidget        *widget);
 
 static void gtk_dialog_close             (GtkDialog        *dialog);
 
-static ResponseData* get_response_data   (GtkWidget        *widget);
+static ResponseData* get_response_data   (GtkWidget        *widget,
+					  gboolean          create);
 
 enum {
   PROP_0,
@@ -378,7 +379,7 @@ dialog_has_cancel (GtkDialog *dialog)
 
   for (tmp_list = children; tmp_list; tmp_list = tmp_list->next)
     {
-      ResponseData *rd = get_response_data (tmp_list->data);
+      ResponseData *rd = get_response_data (tmp_list->data, FALSE);
       
       if (rd && rd->response_id == GTK_RESPONSE_CANCEL)
 	{
@@ -510,12 +511,13 @@ gtk_dialog_new_with_buttons (const gchar    *title,
 }
 
 static ResponseData*
-get_response_data (GtkWidget *widget)
+get_response_data (GtkWidget *widget,
+		   gboolean   create)
 {
   ResponseData *ad = g_object_get_data (G_OBJECT (widget),
                                         "gtk-dialog-response-data");
 
-  if (ad == NULL)
+  if (ad == NULL && create)
     {
       ad = g_new (ResponseData, 1);
       
@@ -538,7 +540,7 @@ action_widget_activated (GtkWidget *widget, GtkDialog *dialog)
 
   response_id = GTK_RESPONSE_NONE;
   
-  ad = get_response_data (widget);
+  ad = get_response_data (widget, TRUE);
 
   g_assert (ad != NULL);
   
@@ -571,7 +573,7 @@ gtk_dialog_add_action_widget (GtkDialog *dialog,
   g_return_if_fail (GTK_IS_DIALOG (dialog));
   g_return_if_fail (GTK_IS_WIDGET (child));
 
-  ad = get_response_data (child);
+  ad = get_response_data (child, TRUE);
 
   ad->response_id = response_id;
 
@@ -1034,4 +1036,17 @@ _gtk_dialog_set_ignore_separator (GtkDialog *dialog,
 
   priv = GET_PRIVATE (dialog);
   priv->ignore_separator = ignore_separator;
+}
+
+gint
+_gtk_dialog_get_response_for_widget (GtkDialog *dialog,
+				     GtkWidget *widget)
+{
+  ResponseData *rd;
+
+  rd = get_response_data (widget, FALSE);
+  if (!rd)
+    return GTK_RESPONSE_NONE;
+  else
+    return rd->response_id;
 }

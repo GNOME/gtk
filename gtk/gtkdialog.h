@@ -163,6 +163,8 @@ gint gtk_dialog_run                (GtkDialog *dialog);
 /* For private use only */
 void _gtk_dialog_set_ignore_separator (GtkDialog *dialog,
 				       gboolean   ignore_separator);
+gint _gtk_dialog_get_response_for_widget (GtkDialog *dialog,
+					  GtkWidget *widget);
 
 #ifdef __cplusplus
 }

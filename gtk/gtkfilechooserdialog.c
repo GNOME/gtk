@@ -162,7 +162,35 @@ static void
 file_chooser_widget_file_activated (GtkFileChooser       *chooser,
 				    GtkFileChooserDialog *dialog)
 {
-  gtk_window_activate_default (GTK_WINDOW (dialog));
+  GList *children, *l;
+
+  if (gtk_window_activate_default (GTK_WINDOW (dialog)))
+    return;
+
+  /* There probably isn't a default widget, so make things easier for the
+   * programmer by looking for a reasonable button on our own.
+   */
+
+  children = gtk_container_get_children (GTK_CONTAINER (GTK_DIALOG (dialog)->action_area));
+
+  for (l = children; l; l = l->next)
+    {
+      GtkWidget *widget;
+      int response_id;
+
+      widget = GTK_WIDGET (l->data);
+      response_id = _gtk_dialog_get_response_for_widget (GTK_DIALOG (dialog), widget);
+      if (response_id == GTK_RESPONSE_ACCEPT
+	  || response_id == GTK_RESPONSE_OK
+	  || response_id == GTK_RESPONSE_YES
+	  || response_id == GTK_RESPONSE_APPLY)
+	{
+	  gtk_widget_activate (widget); /* Should we gtk_dialog_response (dialog, response_id) instead? */
+	  break;
+	}
+    }
+
+  g_list_free (children);
 }
 
 static void
@@ -465,14 +493,11 @@ response_cb (GtkDialog *dialog,
 
   priv = GTK_FILE_CHOOSER_DIALOG_GET_PRIVATE (dialog);
 
-  /* Ugh, try to filter out cancel-type responses */
-  if (response_id == GTK_RESPONSE_NONE
-      || response_id == GTK_RESPONSE_REJECT
-      || response_id == GTK_RESPONSE_DELETE_EVENT
-      || response_id == GTK_RESPONSE_CANCEL
-      || response_id == GTK_RESPONSE_CLOSE
-      || response_id == GTK_RESPONSE_NO
-      || response_id == GTK_RESPONSE_HELP)
+  /* Act only on response IDs we recognize */
+  if (!(response_id == GTK_RESPONSE_ACCEPT
+	|| response_id == GTK_RESPONSE_OK
+	|| response_id == GTK_RESPONSE_YES
+	|| response_id == GTK_RESPONSE_APPLY))
     return;
 
   if (!_gtk_file_chooser_embed_should_respond (GTK_FILE_CHOOSER_EMBED (priv->widget)))

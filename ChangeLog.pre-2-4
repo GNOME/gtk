@@ -1,3 +1,23 @@
+2004-03-12  Federico Mena Quintero  <federico@ximian.com>
+
+	* gtk/gtkwindow.c (gtk_window_activate_focus): Don't ignore the
+	return value of gtk_widget_activate().
+	(gtk_window_activate_default): Likewise.  Fixes #137008.
+
+	* gtk/gtkfilechooserdialog.c (response_cb): Act on positive
+	response IDs we recognize, rather than bailing out on cancellation
+	ones.  Fixes #136237; patch by Olivier Andrieu
+	<oliv__a@users.sourceforge.net>.
+	(file_chooser_widget_file_activated): If the dialog doesn't have a
+	default widget, try to find a suitable response widget on our own.
+	People should *really* be using gtk_dialog_set_default_response(),
+	but this is to help lazy programmers.
+
+	* gtk/gtkdialog.c (_gtk_dialog_get_response_for_widget): New
+	internal function.
+	(get_response_data): Add a "create" argument so that we don't
+	unconditionally create the response data.
+
 2004-03-12  Morten Welinder  <terra@gnome.org>
 
 	* tests/Makefile.am: Add new testspinbutton.c

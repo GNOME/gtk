@@ -1571,12 +1571,8 @@ gtk_window_activate_focus (GtkWindow *window)
 {
   g_return_val_if_fail (GTK_IS_WINDOW (window), FALSE);
 
-  if (window->focus_widget)
-    {
-      if (GTK_WIDGET_IS_SENSITIVE (window->focus_widget))
-        gtk_widget_activate (window->focus_widget);
-      return TRUE;
-    }
+  if (window->focus_widget && GTK_WIDGET_IS_SENSITIVE (window->focus_widget))
+    return gtk_widget_activate (window->focus_widget);
 
   return FALSE;
 }
@@ -1619,16 +1615,9 @@ gtk_window_activate_default (GtkWindow *window)
 
   if (window->default_widget && GTK_WIDGET_IS_SENSITIVE (window->default_widget) &&
       (!window->focus_widget || !GTK_WIDGET_RECEIVES_DEFAULT (window->focus_widget)))
-    {
-      gtk_widget_activate (window->default_widget);
-      return TRUE;
-    }
-  else if (window->focus_widget)
-    {
-      if (GTK_WIDGET_IS_SENSITIVE (window->focus_widget))
-        gtk_widget_activate (window->focus_widget);
-      return TRUE;
-    }
+    return gtk_widget_activate (window->default_widget);
+  else if (window->focus_widget && GTK_WIDGET_IS_SENSITIVE (window->focus_widget))
+    return gtk_widget_activate (window->focus_widget);
 
   return FALSE;
 }
