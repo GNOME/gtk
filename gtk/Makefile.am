@@ -297,6 +297,7 @@ gtk_private_h_sources =		\
 	gtkfilechooserutils.h	\
 	gtkfilesystemunix.h	\
 	gtkfilesystemmodel.h	\
+	gtkiconcache.h		\
 	gtkpathbar.h		\
 	gtkrbtree.h		\
 	gtksequence.h		\
@@ -393,6 +394,7 @@ gtk_c_sources =                 \
 	gtkhsv.c		\
 	gtkhsv.h		\
 	gtkiconfactory.c	\
+	gtkiconcache.c		\
 	gtkicontheme.c		\
 	gtkiconthemeparser.c	\
 	gtkiconthemeparser.h	\
@@ -701,12 +703,18 @@ LDADDS =								\
 #
 # Installed tools
 #
-bin_PROGRAMS = gtk-query-immodules-2.0
+bin_PROGRAMS = gtk-query-immodules-2.0 gtk-update-icon-cache
 
 gtk_query_immodules_2_0_DEPENDENCIES = $(DEPS)
 gtk_query_immodules_2_0_LDADD = $(LDADDS)
 
 gtk_query_immodules_2_0_SOURCES = queryimmodules.c
+
+
+gtk_update_icon_cache_DEPENDENCIES = $(DEPS)
+gtk_update_icon_cache_LDADD = $(LDADDS)
+
+gtk_update_icon_cache_SOURCES = updateiconcache.c
 
 .PHONY: files test test-debug
 

@@ -37,6 +37,7 @@
 
 #include "gtkicontheme.h"
 #include "gtkiconthemeparser.h"
+#include "gtkiconcache.h"
 #include "gtkintl.h"
 #include "gtksettings.h"
 #include "gtkprivate.h"
@@ -61,7 +62,8 @@ typedef enum
   ICON_SUFFIX_NONE = 0,
   ICON_SUFFIX_XPM = 1 << 0,
   ICON_SUFFIX_SVG = 1 << 1,
-  ICON_SUFFIX_PNG = 1 << 2
+  ICON_SUFFIX_PNG = 1 << 2,
+  HAS_ICON_FILE = 1 << 3
 } IconSuffix;
 
 
@@ -81,7 +83,8 @@ struct _GtkIconThemePrivate
    */
   GList *themes;
   GHashTable *unthemed_icons;
-
+  GList *unthemed_icons_caches;
+  
   /* Note: The keys of this hashtable are owned by the
    * themedir and unthemed hashtables.
    */
@@ -132,6 +135,11 @@ typedef struct
   char *comment;
   char *example;
 
+  /* Icon caches, per theme directory, key is NULL if
+   * no cache exists for that directory
+   */
+  GHashTable *icon_caches;
+  
   /* In search order */
   GList *dirs;
 } IconTheme;
@@ -158,6 +166,9 @@ typedef struct
   int threshold;
 
   char *dir;
+  char *subdir;
+  
+  GtkIconCache *cache;
   
   GHashTable *icons;
   GHashTable *icon_data;
@@ -204,6 +215,14 @@ static void         do_theme_change   (GtkIconTheme     *icon_theme);
 static void  blow_themes               (GtkIconTheme    *icon_themes);
 
 static void  icon_data_free            (GtkIconData          *icon_data);
+static void load_icon_data (IconThemeDir *dir,
+			    const char   *path,
+			    const char   *name);
+
+static IconSuffix theme_dir_get_icon_suffix (IconThemeDir *dir,
+					     const gchar  *icon_name,
+					     gboolean     *has_icon_file);
+
 
 static GtkIconInfo *icon_info_new             (void);
 static GtkIconInfo *icon_info_new_builtin     (BuiltinIcon *icon);
@@ -499,8 +518,12 @@ pixbuf_supports_svg ()
 {
   GSList *formats = gdk_pixbuf_get_formats ();
   GSList *tmp_list;
-  gboolean found_svg = FALSE;
+  static gboolean found_svg = FALSE;
+  static gboolean value_known = FALSE;
 
+  if (value_known)
+    return found_svg;
+  
   for (tmp_list = formats; tmp_list && !found_svg; tmp_list = tmp_list->next)
     {
       gchar **mime_types = gdk_pixbuf_format_get_mime_types (tmp_list->data);
@@ -516,7 +539,8 @@ pixbuf_supports_svg ()
     }
 
   g_slist_free (formats);
-    
+  value_known = TRUE;
+  
   return found_svg;
 }
 
@@ -553,7 +577,8 @@ gtk_icon_theme_init (GtkIconTheme *icon_theme)
   priv->themes_valid = FALSE;
   priv->themes = NULL;
   priv->unthemed_icons = NULL;
-
+  priv->unthemed_icons_caches = NULL;
+  
   priv->pixbuf_supports_svg = pixbuf_supports_svg ();
 }
 
@@ -569,6 +594,8 @@ do_theme_change (GtkIconTheme *icon_theme)
 {
   GtkIconThemePrivate *priv = icon_theme->priv;
   
+  GTK_NOTE (ICONTHEME, 
+	    g_print ("change to icon theme \"%s\"\n", priv->current_theme));
   blow_themes (icon_theme);
   g_signal_emit (icon_theme, signal_changed, 0);
   
@@ -577,6 +604,16 @@ do_theme_change (GtkIconTheme *icon_theme)
       GtkSettings *settings = gtk_settings_get_for_screen (priv->screen);
       gtk_rc_reset_styles (settings);
     }
+}
+
+static void 
+free_cache (gpointer data, 
+	    gpointer user_data)
+{
+  GtkIconCache *cache = (GtkIconCache *)data;
+
+  if (cache)
+    _gtk_icon_cache_unref (cache);
 }
 
 static void
@@ -592,9 +629,13 @@ blow_themes (GtkIconTheme *icon_theme)
       g_list_foreach (priv->dir_mtimes, (GFunc)free_dir_mtime, NULL);
       g_list_free (priv->dir_mtimes);
       g_hash_table_destroy (priv->unthemed_icons);
+      if (priv->unthemed_icons_caches)
+	g_list_foreach (priv->unthemed_icons_caches, free_cache, NULL);
+      g_list_free (priv->unthemed_icons_caches);
     }
   priv->themes = NULL;
   priv->unthemed_icons = NULL;
+  priv->unthemed_icons_caches = NULL;
   priv->dir_mtimes = NULL;
   priv->all_icons = NULL;
   priv->themes_valid = FALSE;
@@ -830,7 +871,7 @@ insert_theme (GtkIconTheme *icon_theme, const char *theme_name)
   struct stat stat_buf;
   
   priv = icon_theme->priv;
-  
+
   for (l = priv->themes; l != NULL; l = l->next)
     {
       theme = l->data;
@@ -910,6 +951,7 @@ insert_theme (GtkIconTheme *icon_theme, const char *theme_name)
   
   dirs = g_strsplit (directories, ",", 0);
 
+  theme->icon_caches = NULL;
   theme->dirs = NULL;
   for (i = 0; dirs[i] != NULL; i++)
       theme_subdir_load (icon_theme, theme, theme_file, dirs[i]);
@@ -973,13 +1015,25 @@ load_themes (GtkIconTheme *icon_theme)
   /* Always look in the "default" icon theme */
   insert_theme (icon_theme, DEFAULT_THEME_NAME);
   priv->themes = g_list_reverse (priv->themes);
-  
+
+
   priv->unthemed_icons = g_hash_table_new_full (g_str_hash, g_str_equal,
 						g_free, (GDestroyNotify)free_unthemed_icon);
 
   for (base = 0; base < icon_theme->priv->search_path_len; base++)
     {
+      GtkIconCache *cache;
       dir = icon_theme->priv->search_path[base];
+
+      cache = _gtk_icon_cache_new_for_path (dir);
+
+      if (cache != NULL)
+	{
+	  priv->unthemed_icons_caches = g_list_prepend (priv->unthemed_icons_caches, cache);
+
+	  continue;
+	}
+	   
       gdir = g_dir_open (dir, 0, NULL);
 
       if (gdir == NULL)
@@ -1036,7 +1090,7 @@ load_themes (GtkIconTheme *icon_theme)
 		    unthemed_icon->svg_filename = abs_file;
 		  else
 		    unthemed_icon->no_svg_filename = abs_file;
-		  
+
 		  g_hash_table_insert (priv->unthemed_icons,
 				       base_name,
 				       unthemed_icon);
@@ -1357,8 +1411,8 @@ gtk_icon_theme_get_icon_sizes (GtkIconTheme *icon_theme,
       for (d = theme->dirs; d; d = d->next)
 	{
 	  IconThemeDir *dir = d->data;
-	  
-	  suffix = GPOINTER_TO_UINT (g_hash_table_lookup (dir->icons, icon_name));
+
+	  suffix = theme_dir_get_icon_suffix (dir, icon_name, NULL);	  
 	  if (suffix != ICON_SUFFIX_NONE)
 	    {
 	      if (suffix == ICON_SUFFIX_SVG)
@@ -1566,16 +1620,25 @@ theme_destroy (IconTheme *theme)
 
   g_list_foreach (theme->dirs, (GFunc)theme_dir_destroy, NULL);
   g_list_free (theme->dirs);
+  
+  if (theme->icon_caches)
+    g_hash_table_destroy (theme->icon_caches);
+
   g_free (theme);
 }
 
 static void
 theme_dir_destroy (IconThemeDir *dir)
 {
-  g_hash_table_destroy (dir->icons);
+  if (dir->cache)
+      _gtk_icon_cache_unref (dir->cache);
+  else
+    g_hash_table_destroy (dir->icons);
+  
   if (dir->icon_data)
     g_hash_table_destroy (dir->icon_data);
   g_free (dir->dir);
+  g_free (dir->subdir);
   g_free (dir);
 }
 
@@ -1663,6 +1726,31 @@ best_suffix (IconSuffix suffix,
     return ICON_SUFFIX_NONE;
 }
 
+
+static IconSuffix
+theme_dir_get_icon_suffix (IconThemeDir *dir,
+			   const gchar  *icon_name,
+			   gboolean     *has_icon_file)
+{
+  IconSuffix suffix;
+
+  if (dir->cache)
+    {
+      suffix = (IconSuffix)_gtk_icon_cache_get_icon_flags (dir->cache,
+							   icon_name,
+							   dir->subdir);
+
+      if (has_icon_file)
+	{
+	  *has_icon_file = suffix & HAS_ICON_FILE;
+	}
+    }
+  else
+      suffix = GPOINTER_TO_UINT (g_hash_table_lookup (dir->icons, icon_name));
+
+  return suffix;
+}
+
 static GtkIconInfo *
 theme_lookup_icon (IconTheme          *theme,
 		   const char         *icon_name,
@@ -1700,7 +1788,7 @@ theme_lookup_icon (IconTheme          *theme,
     {
       dir = l->data;
 
-      suffix = GPOINTER_TO_UINT (g_hash_table_lookup (dir->icons, icon_name));
+      suffix = theme_dir_get_icon_suffix (dir, icon_name, NULL);
       
       if (suffix != ICON_SUFFIX_NONE &&
 	  (allow_svg || suffix != ICON_SUFFIX_SVG))
@@ -1744,8 +1832,9 @@ theme_lookup_icon (IconTheme          *theme,
   if (min_dir)
     {
       GtkIconInfo *icon_info = icon_info_new ();
+      gboolean has_icon_file;
       
-      suffix = GPOINTER_TO_UINT (g_hash_table_lookup (min_dir->icons, icon_name));
+      suffix = theme_dir_get_icon_suffix (min_dir, icon_name, &has_icon_file);
       suffix = best_suffix (suffix, allow_svg);
       g_assert (suffix != ICON_SUFFIX_NONE);
       
@@ -1753,6 +1842,24 @@ theme_lookup_icon (IconTheme          *theme,
       icon_info->filename = g_build_filename (min_dir->dir, file, NULL);
       g_free (file);
 
+      if (min_dir->cache && has_icon_file)
+	{
+	  gchar *icon_file_name, *icon_file_path;
+
+	  icon_file_name = g_strconcat (icon_name, ".icon", NULL);
+	  icon_file_path = g_build_filename (min_dir->dir, icon_file_name, NULL);
+
+	  if (g_file_test (icon_file_path, G_FILE_TEST_IS_REGULAR))
+	    {
+	      if (min_dir->icon_data == NULL)
+		min_dir->icon_data = g_hash_table_new_full (g_str_hash, g_str_equal,
+							    g_free, (GDestroyNotify)icon_data_free);
+	      load_icon_data (min_dir, icon_file_path, icon_file_name);
+	    }
+	  g_free (icon_file_name);
+	  g_free (icon_file_path);
+	}
+      
       if (min_dir->icon_data != NULL)
 	icon_info->data = g_hash_table_lookup (min_dir->icon_data, icon_name);
 
@@ -1779,10 +1886,21 @@ theme_list_icons (IconTheme *theme, GHashTable *icons,
 
       if (context == dir->context ||
 	  context == 0)
-	g_hash_table_foreach (dir->icons,
-			      add_key_to_hash,
-			      icons);
-
+	{
+	  if (dir->cache)
+	    {
+	      _gtk_icon_cache_add_icons (dir->cache,
+					 dir->subdir,
+					 icons);
+					 
+	    }
+	  else
+	    {
+	      g_hash_table_foreach (dir->icons,
+				    add_key_to_hash,
+				    icons);
+	    }
+	}
       l = l->next;
     }
 }
@@ -1889,7 +2007,9 @@ scan_directory (GtkIconThemePrivate *icon_theme,
   char *base_name, *dot;
   char *path;
   IconSuffix suffix, hash_suffix;
-  
+
+  GTK_NOTE (ICONTHEME, 
+	    g_print ("scanning directory %s\n", full_dir));
   dir->icons = g_hash_table_new_full (g_str_hash, g_str_equal,
 				      g_free, NULL);
   
@@ -1998,11 +2118,35 @@ theme_subdir_load (GtkIconTheme *icon_theme,
 
   for (base = 0; base < icon_theme->priv->search_path_len; base++)
     {
+      GtkIconCache *cache;
+      gchar *theme_path;
+
       full_dir = g_build_filename (icon_theme->priv->search_path[base],
 				   theme->name,
 				   subdir,
 				   NULL);
-      if (g_file_test (full_dir, G_FILE_TEST_IS_DIR))
+
+      /* First, see if we have a cache for the directory */
+      if (!theme->icon_caches)
+	theme->icon_caches = g_hash_table_new_full (g_str_hash, g_str_equal,
+						    g_free, (GDestroyNotify)free_cache);
+						   
+      theme_path = g_build_filename (icon_theme->priv->search_path[base],
+				     theme->name,
+				     NULL);
+	  
+      if (!g_hash_table_lookup_extended (theme->icon_caches, theme_path, 
+					 NULL, (gpointer)&cache))
+	{
+	  /* This will return NULL if the cache doesn't exist or is outdated */
+	  cache = _gtk_icon_cache_new_for_path (theme_path);
+
+	  g_hash_table_insert (theme->icon_caches, g_strdup (theme_path), cache);
+	}
+
+      g_free (theme_path);
+
+      if (cache != NULL || g_file_test (full_dir, G_FILE_TEST_IS_DIR))
 	{
 	  dir = g_new (IconThemeDir, 1);
 	  dir->type = type;
@@ -2013,8 +2157,14 @@ theme_subdir_load (GtkIconTheme *icon_theme,
 	  dir->threshold = threshold;
 	  dir->dir = full_dir;
 	  dir->icon_data = NULL;
-	  
-	  scan_directory (icon_theme->priv, dir, full_dir);
+	  dir->subdir = g_strdup (subdir);
+	  if (cache != NULL)
+	    dir->cache = _gtk_icon_cache_ref (cache);
+	  else
+	    {
+	      dir->cache = NULL;
+	      scan_directory (icon_theme->priv, dir, full_dir);
+	    }
 
 	  theme->dirs = g_list_prepend (theme->dirs, dir);
 	}

@@ -158,7 +158,8 @@ static const GDebugKey gtk_debug_keys[] = {
   {"keybindings", GTK_DEBUG_KEYBINDINGS},
   {"multihead", GTK_DEBUG_MULTIHEAD},
   {"modules", GTK_DEBUG_MODULES},
-  {"geometry", GTK_DEBUG_GEOMETRY}
+  {"geometry", GTK_DEBUG_GEOMETRY},
+  {"icontheme", GTK_DEBUG_ICONTHEME}
 };
 
 static const guint gtk_ndebug_keys = sizeof (gtk_debug_keys) / sizeof (GDebugKey);

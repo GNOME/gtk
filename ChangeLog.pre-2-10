@@ -1,5 +1,31 @@
 2004-10-19  Matthias Clasen  <mclasen@redhat.com>
 
+	Implement icon theme caching.  (#154034, Martijn Vernooij,
+	caching schema proposed by Owen Taylor, initial implementation
+	by Anders Carlsson)
+	
+	* gtk/gtkdebug.h: 
+	* gtk/gtkmain.c: Add a "icontheme" debug flag.
+
+	* gtk/Makefile.am (gtk_c_sources): Add gtkiconcache.c
+	(gtk_private_h_sources): Add gtkiconcache.h
+	(bin_PROGRAMS): Add gtk-update-icon-cache
+
+	* gtk/gtkicontheme.c: Use icon caches if they are available.
+	Currently, GTK+ uses the cache to get information about the
+	available sizes, image file formats and .icon files. The
+	actual image data, and the .icon file contents are not 
+	cached yet.
+
+	* gtk/updateiconcache.c: A cmdline utility for generating
+	icon cache files.
+
+	* gtk/gtkiconcache.h: 
+	* gtk/gtkiconcache.c: The glue code to mmap an icon cache
+	file and manage the information it contains.
+
+2004-10-19  Matthias Clasen  <mclasen@redhat.com>
+
 	* tests/testicontheme.c: Set the locale, tidy up output.
 
 2004-10-18  Matthias Clasen  <mclasen@redhat.com>

@@ -104,6 +104,7 @@ content_files =					\
 	windows.sgml				\
 	x11.sgml				\
 	gtk-query-immodules-2.0.xml		\
+	gtk-update-icon-cache.xml		\
 	visual_index.xml
 
 # Images to copy into HTML directory
@@ -240,7 +241,7 @@ EXTRA_DIST += version.xml.in
 
 ########################################################################
 
-man_MANS = gtk-query-immodules-2.0.1 
+man_MANS = gtk-query-immodules-2.0.1 gtk-update-icon-cache.1 
 
 if ENABLE_MAN
 
