@@ -415,7 +415,6 @@ gtk_handle_box_size_request (GtkWidget      *widget,
 	  requisition->height += CHILDLESS_SIZE;
 	}
     }
-  g_print ("size_request: width=%d height=%d\n", requisition->width, requisition->height);
 }
 
 static void
