@@ -1,3 +1,9 @@
+2004-09-01  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkfilesystemunix.c: 
+	* gtk/gtkfilechooserbutton.c: Protect the unistd.h include
+	by HAVE_UNISTD_H.
+
 Wed Sep  1 02:38:48 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkaccellabel.c (gtk_accel_label_expose_event): Make
