@@ -1141,16 +1141,17 @@ gtk_file_selection_file_button (GtkWidget *widget,
 			       gpointer user_data)
 {
   GtkFileSelection *fs = NULL;
-  gchar *filename;
+  gchar *filename, *temp = NULL;
   
   g_return_if_fail (GTK_IS_CLIST (widget));
 
   fs = user_data;
   g_return_if_fail (fs != NULL);
   g_return_if_fail (GTK_IS_FILE_SELECTION (fs));
-
-  filename = gtk_clist_get_row_data (GTK_CLIST (fs->file_list), row);
   
+  gtk_clist_get_text (GTK_CLIST (fs->file_list), row, 0, &temp);
+  filename = g_strdup (temp);
+
   if (bevent && filename)
     {
       switch (bevent->type)
@@ -1167,6 +1168,9 @@ gtk_file_selection_file_button (GtkWidget *widget,
 	  break;
 	}
     }
+
+  if (filename)
+    g_free (filename);
 }
 
 static void
@@ -1177,32 +1181,36 @@ gtk_file_selection_dir_button (GtkWidget *widget,
 			       gpointer user_data)
 {
   GtkFileSelection *fs = NULL;
-  gchar *filename;
-  
+  gchar *filename, *temp = NULL;
+
   g_return_if_fail (GTK_IS_CLIST (widget));
 
   fs = GTK_FILE_SELECTION (user_data);
   g_return_if_fail (fs != NULL);
   g_return_if_fail (GTK_IS_FILE_SELECTION (fs));
 
-  filename = gtk_clist_get_row_data (GTK_CLIST (fs->dir_list), row);
+  gtk_clist_get_text (GTK_CLIST (fs->dir_list), row, 0, &temp);
+  filename = g_strdup (temp);
+
+  if (bevent && filename)
+    {
+      switch (bevent->type)
+	{
+	case GDK_BUTTON_PRESS:
+	  gtk_entry_set_text (GTK_ENTRY (fs->selection_entry), filename);
+	  break;
+	  
+	case GDK_2BUTTON_PRESS:
+	  gtk_file_selection_populate (fs, filename, FALSE);
+	  break;
+	  
+	default:
+	  break;
+	}
+    }
   
-  if (bevent && filename) {
-  
-    switch (bevent->type)
-      {
-      case GDK_BUTTON_PRESS:
-	gtk_entry_set_text (GTK_ENTRY (fs->selection_entry), filename);
-	break;
-      
-      case GDK_2BUTTON_PRESS:
-	gtk_file_selection_populate (fs, filename, FALSE);
-	break;
-	
-      default:
-	break;
-      }
-  }
+  if (filename)
+    g_free (filename);
 }
 
 static void
@@ -1245,11 +1253,9 @@ gtk_file_selection_populate (GtkFileSelection *fs,
   text[1] = NULL;
   text[0] = "./";
   row = gtk_clist_append (GTK_CLIST (fs->dir_list), text);
-  gtk_clist_set_row_data (GTK_CLIST (fs->dir_list), row, "./");
 
   text[0] = "../";
   row = gtk_clist_append (GTK_CLIST (fs->dir_list), text);
-  gtk_clist_set_row_data (GTK_CLIST (fs->dir_list), row, "../");
 
   while (poss)
     {
@@ -1267,15 +1273,11 @@ gtk_file_selection_populate (GtkFileSelection *fs,
                   strcmp (filename, "../") != 0)
 		{
 		  row = gtk_clist_append (GTK_CLIST (fs->dir_list), text);
-		  gtk_clist_set_row_data_full (GTK_CLIST (fs->dir_list), row,
-					       filename, (GtkDestroyNotify) g_free);
  		}
 	    }
           else
 	    {
 	      row = gtk_clist_append (GTK_CLIST (fs->file_list), text);
-	      gtk_clist_set_row_data_full (GTK_CLIST (fs->file_list), row,
-					   filename ,(GtkDestroyNotify) g_free);
             }
 	}
 
