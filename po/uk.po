@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.3.0\n"
 "POT-Creation-Date: 2002-02-08 12:16+0200\n"
-"PO-Revision-Date: 2002-02-08 12:15+0200\n"
+"PO-Revision-Date: 2002-02-08 15:57+0200\n"
 "Last-Translator: Yuriy Syrota <yuri@renome.rovno.ua>\n"
 "Language-Team: Ukrainian <uk@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -116,9 +116,9 @@ msgid "Not enough memory to load bitmap image"
 msgstr "Не вістачає пам'яті для завантаження растрового зображення"
 
 #: gdk-pixbuf/io-ico.c:207
-#, fuzzy, c-format
+#, c-format
 msgid "Failure reading ICO: %s"
-msgstr "Збій зчитування GIF: %s"
+msgstr "Збій зчитування ICO: %s"
 
 #: gdk-pixbuf/io-ico.c:224
 msgid "ICO file was missing some data (perhaps it was truncated somehow?)"
@@ -128,9 +128,8 @@ msgstr ""
 #: gdk-pixbuf/io-ico.c:310
 #: gdk-pixbuf/io-ico.c:373
 #: gdk-pixbuf/io-ico.c:435
-#, fuzzy
 msgid "Not enough memory to load icon"
-msgstr "Недостатньо пам'яті для завантаження файлу GIF"
+msgstr "Недостатньо пам'яті для завантаження піктограми"
 
 #: gdk-pixbuf/io-ico.c:332
 msgid "Icon has zero width"
@@ -141,18 +140,16 @@ msgid "Icon has zero height"
 msgstr "Піктограма має нульову висоту"
 
 #: gdk-pixbuf/io-ico.c:387
-#, fuzzy
 msgid "Compressed icons are not supported"
-msgstr "Тип зображення \"%s\" не підтримується"
+msgstr "Стиснуті піктограми не підтримуються"
 
 #: gdk-pixbuf/io-ico.c:420
 msgid "Unsupported icon type"
-msgstr ""
+msgstr "Непідтримуваний тип піктограми"
 
 #: gdk-pixbuf/io-ico.c:484
-#, fuzzy
 msgid "Not enough memory to load ICO file"
-msgstr "Недостатньо пам'яті для завантаження файлу GIF"
+msgstr "Недостатньо пам'яті для завантаження файлу ICO"
 
 #: gdk-pixbuf/io-gif.c:218
 #, c-format
@@ -402,9 +399,8 @@ msgid "TGA image comment length is too long"
 msgstr ""
 
 #: gdk-pixbuf/io-tga.c:628
-#, fuzzy
 msgid "TGA image type not supported"
-msgstr "Тип зображення \"%s\" не підтримується"
+msgstr "Тип зображення TGA не підтримується"
 
 #: gdk-pixbuf/io-tga.c:671
 #, fuzzy
@@ -1725,17 +1721,17 @@ msgid "_Rename File"
 msgstr "Пере_йменувати файл"
 
 #: gtk/gtkfilesel.c:1292
-#, fuzzy, c-format
+#, c-format
 msgid "The folder name \"%s\" contains symbols that are not allowed in filenames"
-msgstr "Назва файлу \"%s\" містить символи, що заборонені у назвах файлів"
+msgstr "Назва теки \"%s\" містить символи, що заборонені у назвах файлів"
 
 #: gtk/gtkfilesel.c:1294
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error creating folder \"%s\": %s\n"
 "%s"
 msgstr ""
-"Помилка перейменування файлу \"%s\": %s\n"
+"Помилка створення теки \"%s\": %s\n"
 "%s"
 
 #: gtk/gtkfilesel.c:1295
@@ -1744,12 +1740,12 @@ msgid "You probably used symbols not allowed in filenames."
 msgstr "Очевидно ви використали символи, що заборонені у назвах файлів."
 
 #: gtk/gtkfilesel.c:1303
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error creating folder \"%s\": %s\n"
 ""
 msgstr ""
-"Помилка створення каталогу \"%s\": %s\n"
+"Помилка створення теки \"%s\": %s\n"
 ""
 
 #: gtk/gtkfilesel.c:1337
@@ -1948,11 +1944,11 @@ msgstr ""
 
 #: gtk/gtkframe.c:160
 msgid "Frame shadow"
-msgstr ""
+msgstr "Тінь кадру"
 
 #: gtk/gtkframe.c:161
 msgid "Appearance of the frame border."
-msgstr ""
+msgstr "Вигляд рамки кадру."
 
 #: gtk/gtkframe.c:169
 msgid "Label widget"
@@ -2075,9 +2071,8 @@ msgid "Size to use for stock icon or icon set."
 msgstr ""
 
 #: gtk/gtkimage.c:195
-#, fuzzy
 msgid "Animation"
-msgstr "Інформація"
+msgstr "Анімація"
 
 #: gtk/gtkimage.c:196
 msgid "GdkPixbufAnimation to display."
@@ -2094,11 +2089,11 @@ msgstr ""
 
 #: gtk/gtkimagemenuitem.c:124
 msgid "Image widget"
-msgstr ""
+msgstr "Віджет зображення"
 
 #: gtk/gtkimagemenuitem.c:125
 msgid "Child widget to appear next to the menu text"
-msgstr ""
+msgstr "Спадкоємний віджет, що з'являтиметься за текстом меню"
 
 #. shell and main vbox
 #: gtk/gtkinputdialog.c:184
@@ -2197,7 +2192,7 @@ msgstr "Текст позначки."
 
 #: gtk/gtklabel.c:290
 msgid "A list of style attributes to apply to the text of the label."
-msgstr ""
+msgstr "Список стильових ознак для застосування до тексту позначки."
 
 #: gtk/gtklabel.c:296
 msgid "Use markup"
@@ -2330,11 +2325,11 @@ msgstr "Стиль фаски навколо панелі меню"
 #: gtk/gtkmenubar.c:158
 #: gtk/gtktoolbar.c:251
 msgid "Internal padding"
-msgstr ""
+msgstr "Внутрішній відступ"
 
 #: gtk/gtkmenubar.c:159
 msgid "Amount of border space between the menubar shadow and the menu items"
-msgstr ""
+msgstr "Розмір проміжку між тінню панелі меню і елементами меню"
 
 #: gtk/gtkmessagedialog.c:104
 msgid "Image/label border"
@@ -2398,7 +2393,7 @@ msgstr "Сторінка"
 
 #: gtk/gtknotebook.c:366
 msgid "The index of the current page"
-msgstr ""
+msgstr "Індекс поточної сторінки"
 
 #: gtk/gtknotebook.c:374
 msgid "Tab Position"
@@ -2854,23 +2849,20 @@ msgid "When the vertical scrollbar is displayed"
 msgstr ""
 
 #: gtk/gtkscrolledwindow.c:208
-#, fuzzy
 msgid "Window Placement"
-msgstr "Заголовок вікна"
+msgstr "Розміщення вікна"
 
 #: gtk/gtkscrolledwindow.c:209
 msgid "Where the contents are located with respect to the scrollbars"
 msgstr ""
 
 #: gtk/gtkscrolledwindow.c:216
-#, fuzzy
 msgid "Shadow Type"
 msgstr "Тип тіні"
 
 #: gtk/gtkscrolledwindow.c:217
-#, fuzzy
 msgid "Style of bevel around the contents"
-msgstr "Стиль фаски навколо панелі меню"
+msgstr "Стиль фаски навколо вмісту"
 
 #: gtk/gtksettings.c:147
 msgid "Double Click Time"
@@ -3174,7 +3166,7 @@ msgstr "Вставити"
 
 #: gtk/gtkstock.c:312
 msgid "_Preferences"
-msgstr ""
+msgstr "_Параметри"
 
 #: gtk/gtkstock.c:313
 msgid "_Print"
@@ -3263,11 +3255,11 @@ msgstr "Так"
 #: gtk/gtkstock.c:334
 #, c-format
 msgid "Zoom _100%"
-msgstr ""
+msgstr "Масштаб _100%"
 
 #: gtk/gtkstock.c:335
 msgid "Zoom to _Fit"
-msgstr ""
+msgstr "_Підігнати"
 
 #: gtk/gtkstock.c:336
 msgid "Zoom _In"
@@ -3882,7 +3874,7 @@ msgstr "Розмір можна змінювати"
 
 #: gtk/gtktreeviewcolumn.c:180
 msgid "Column is user-resizable"
-msgstr ""
+msgstr "Користувач може змінювати розмір стовпчика"
 
 #: gtk/gtktreeviewcolumn.c:188
 msgid "Current width of the column"
@@ -3890,11 +3882,11 @@ msgstr "Поточна ширина стовпчика"
 
 #: gtk/gtktreeviewcolumn.c:196
 msgid "Sizing"
-msgstr ""
+msgstr "Зміна розміру"
 
 #: gtk/gtktreeviewcolumn.c:197
 msgid "Resize mode of the column"
-msgstr ""
+msgstr "Режим зміни розміру стовпчика"
 
 #: gtk/gtktreeviewcolumn.c:205
 msgid "Fixed Width"
@@ -4114,9 +4106,8 @@ msgid "Interior Focus"
 msgstr ""
 
 #: gtk/gtkwidget.c:1054
-#, fuzzy
 msgid "Whether to draw the focus indicator inside widgets."
-msgstr "Стан відображення індикатора сортування"
+msgstr "Стан відображення індикатора фокусу у віджетах."
 
 #: gtk/gtkwidget.c:1060
 msgid "Focus linewidth"
