@@ -1,5 +1,8 @@
 2004-10-08  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtktreeview.c (gtk_tree_view_grab_notify): Don't start a 
+	drag if we loose the grab.
+
 	* gtk/gtkfilechooserdefault.c (renderer_edited_cb): Set the cell 
 	renderer to inert mode to avoid bug #154921.  This fixes a crash
 	which would otherwise occur if the editing is stopped for the second
