@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.3.0\n"
-"POT-Creation-Date: 1999-07-10 23:31+0200\n"
+"POT-Creation-Date: 1999-08-30 14:10+0200\n"
 "PO-Revision-Date: 1999-01-12 22:50+0100\n"
 "Last-Translator: Tomas Ögren <stric@ing.umu.se>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -42,14 +42,14 @@ msgid "Opacity:"
 msgstr "Opacitet:"
 
 #. The OK button
-#: gtk/gtkcolorsel.c:1668 gtk/gtkfilesel.c:571 gtk/gtkfontsel.c:3718
+#: gtk/gtkcolorsel.c:1668 gtk/gtkfilesel.c:571 gtk/gtkfontsel.c:3722
 #: gtk/gtkgamma.c:416
 msgid "OK"
 msgstr "OK"
 
 #. The Cancel button
 #: gtk/gtkcolorsel.c:1674 gtk/gtkfilesel.c:578 gtk/gtkfilesel.c:956
-#: gtk/gtkfilesel.c:1060 gtk/gtkfilesel.c:1175 gtk/gtkfontsel.c:3731
+#: gtk/gtkfilesel.c:1060 gtk/gtkfilesel.c:1175 gtk/gtkfontsel.c:3735
 #: gtk/gtkgamma.c:424
 msgid "Cancel"
 msgstr "Avbryt"
@@ -275,7 +275,7 @@ msgstr "*"
 msgid "(nil)"
 msgstr "(nil)"
 
-#: gtk/gtkfontsel.c:1228 gtk/gtkfontsel.c:2698
+#: gtk/gtkfontsel.c:1228 gtk/gtkfontsel.c:2700
 msgid "regular"
 msgstr "reguljär"
 
@@ -355,39 +355,39 @@ msgstr "extrafet"
 msgid "bold"
 msgstr "fet"
 
-#: gtk/gtkfontsel.c:2686
+#: gtk/gtkfontsel.c:2687
 msgid "demibold"
 msgstr "halvfet"
 
-#: gtk/gtkfontsel.c:2688
+#: gtk/gtkfontsel.c:2690
 msgid "medium"
 msgstr "medium"
 
-#: gtk/gtkfontsel.c:2690
+#: gtk/gtkfontsel.c:2692
 msgid "normal"
 msgstr "normal"
 
-#: gtk/gtkfontsel.c:2692
+#: gtk/gtkfontsel.c:2694
 msgid "light"
 msgstr "lätt"
 
-#: gtk/gtkfontsel.c:2694
+#: gtk/gtkfontsel.c:2696
 msgid "extralight"
 msgstr "extralätt"
 
-#: gtk/gtkfontsel.c:2696
+#: gtk/gtkfontsel.c:2698
 msgid "thin"
 msgstr "tunn"
 
-#: gtk/gtkfontsel.c:2871
+#: gtk/gtkfontsel.c:2875
 msgid "MAX_FONTS exceeded. Some fonts may be missing."
 msgstr "MAX_FONTS nått. Några typsnitt kanske saknas."
 
-#: gtk/gtkfontsel.c:3725
+#: gtk/gtkfontsel.c:3729
 msgid "Apply"
 msgstr "Verkställ"
 
-#: gtk/gtkfontsel.c:3747
+#: gtk/gtkfontsel.c:3751
 msgid "Font Selection"
 msgstr "Typsnittsval"
 

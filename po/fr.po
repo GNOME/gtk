@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ VERSION\n"
-"POT-Creation-Date: 1999-07-21 19:27+0200\n"
+"POT-Creation-Date: 1999-08-30 14:10+0200\n"
 "PO-Revision-Date: 1998-12-18 20:32+0100\n"
 "Last-Translator: Vincent Renardias <vincent@debian.org>\n"
 "Language-Team: Vincent Renardias <vincent@debian.org>\n"
@@ -42,14 +42,14 @@ msgid "Opacity:"
 msgstr "Opacité :"
 
 #. The OK button
-#: gtk/gtkcolorsel.c:1668 gtk/gtkfilesel.c:571 gtk/gtkfontsel.c:3718
+#: gtk/gtkcolorsel.c:1668 gtk/gtkfilesel.c:571 gtk/gtkfontsel.c:3722
 #: gtk/gtkgamma.c:416
 msgid "OK"
 msgstr "OK"
 
 #. The Cancel button
 #: gtk/gtkcolorsel.c:1674 gtk/gtkfilesel.c:578 gtk/gtkfilesel.c:956
-#: gtk/gtkfilesel.c:1060 gtk/gtkfilesel.c:1175 gtk/gtkfontsel.c:3731
+#: gtk/gtkfilesel.c:1060 gtk/gtkfilesel.c:1175 gtk/gtkfontsel.c:3735
 #: gtk/gtkgamma.c:424
 msgid "Cancel"
 msgstr "Annuler"
@@ -275,7 +275,7 @@ msgstr "*"
 msgid "(nil)"
 msgstr "(vide)"
 
-#: gtk/gtkfontsel.c:1228 gtk/gtkfontsel.c:2698
+#: gtk/gtkfontsel.c:1228 gtk/gtkfontsel.c:2700
 msgid "regular"
 msgstr "normal"
 
@@ -357,39 +357,39 @@ msgstr "extragras"
 msgid "bold"
 msgstr "gras"
 
-#: gtk/gtkfontsel.c:2686
+#: gtk/gtkfontsel.c:2687
 msgid "demibold"
 msgstr "demigras"
 
-#: gtk/gtkfontsel.c:2688
+#: gtk/gtkfontsel.c:2690
 msgid "medium"
 msgstr "médium"
 
-#: gtk/gtkfontsel.c:2690
+#: gtk/gtkfontsel.c:2692
 msgid "normal"
 msgstr "normal"
 
-#: gtk/gtkfontsel.c:2692
+#: gtk/gtkfontsel.c:2694
 msgid "light"
 msgstr "léger"
 
-#: gtk/gtkfontsel.c:2694
+#: gtk/gtkfontsel.c:2696
 msgid "extralight"
 msgstr "extraléger"
 
-#: gtk/gtkfontsel.c:2696
+#: gtk/gtkfontsel.c:2698
 msgid "thin"
 msgstr "fin"
 
-#: gtk/gtkfontsel.c:2871
+#: gtk/gtkfontsel.c:2875
 msgid "MAX_FONTS exceeded. Some fonts may be missing."
 msgstr "Valeur MAX_FONTS dépassée. Des polices peuvent manquer."
 
-#: gtk/gtkfontsel.c:3725
+#: gtk/gtkfontsel.c:3729
 msgid "Apply"
 msgstr "Appliquer"
 
-#: gtk/gtkfontsel.c:3747
+#: gtk/gtkfontsel.c:3751
 msgid "Font Selection"
 msgstr "Sélection de police"
 
@@ -497,7 +497,7 @@ msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr ""
 "Impossible de localiser le fichier image dans le chemin des pixmaps : \"%s\""
 
-#: gtk/gtkthemes.c:115
+#: gtk/gtkthemes.c:103
 #, c-format
 msgid "Unable to locate loadable module in module_path: \"%s\","
 msgstr ""

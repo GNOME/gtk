@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ VERSION\n"
-"POT-Creation-Date: 1999-07-05 19:17+0200\n"
+"POT-Creation-Date: 1999-08-30 14:10+0200\n"
 "PO-Revision-Date: 1999-07-05 19:17+0200\n"
 "Last-Translator: Joseba Bidaurrazaga van Dierdonck <gcpbivaj@lg.ehu.es>\n"
 "Language-Team: euskare <linux-eu@chanae.alphanet.ch>\n"
@@ -42,14 +42,14 @@ msgid "Opacity:"
 msgstr "Opazitatea"
 
 #. The OK button
-#: gtk/gtkcolorsel.c:1668 gtk/gtkfilesel.c:571 gtk/gtkfontsel.c:3718
+#: gtk/gtkcolorsel.c:1668 gtk/gtkfilesel.c:571 gtk/gtkfontsel.c:3722
 #: gtk/gtkgamma.c:416
 msgid "OK"
 msgstr "Ados"
 
 #. The Cancel button
 #: gtk/gtkcolorsel.c:1674 gtk/gtkfilesel.c:578 gtk/gtkfilesel.c:956
-#: gtk/gtkfilesel.c:1060 gtk/gtkfilesel.c:1175 gtk/gtkfontsel.c:3731
+#: gtk/gtkfilesel.c:1060 gtk/gtkfilesel.c:1175 gtk/gtkfontsel.c:3735
 #: gtk/gtkgamma.c:424
 msgid "Cancel"
 msgstr "Ezeztatu"
@@ -275,7 +275,7 @@ msgstr "*"
 msgid "(nil)"
 msgstr "(nil)"
 
-#: gtk/gtkfontsel.c:1228 gtk/gtkfontsel.c:2698
+#: gtk/gtkfontsel.c:1228 gtk/gtkfontsel.c:2700
 msgid "regular"
 msgstr "arrunta"
 
@@ -355,39 +355,39 @@ msgstr "extrailuna"
 msgid "bold"
 msgstr "iluna"
 
-#: gtk/gtkfontsel.c:2686
+#: gtk/gtkfontsel.c:2687
 msgid "demibold"
 msgstr "erdi iluna"
 
-#: gtk/gtkfontsel.c:2688
+#: gtk/gtkfontsel.c:2690
 msgid "medium"
 msgstr "ertaina"
 
-#: gtk/gtkfontsel.c:2690
+#: gtk/gtkfontsel.c:2692
 msgid "normal"
 msgstr "arrunta"
 
-#: gtk/gtkfontsel.c:2692
+#: gtk/gtkfontsel.c:2694
 msgid "light"
 msgstr "argia"
 
-#: gtk/gtkfontsel.c:2694
+#: gtk/gtkfontsel.c:2696
 msgid "extralight"
 msgstr "extra argia"
 
-#: gtk/gtkfontsel.c:2696
+#: gtk/gtkfontsel.c:2698
 msgid "thin"
 msgstr "mehea"
 
-#: gtk/gtkfontsel.c:2871
+#: gtk/gtkfontsel.c:2875
 msgid "MAX_FONTS exceeded. Some fonts may be missing."
 msgstr "MAX_FONTS gehiegizkoa. Zenbait Font galduta daitezke."
 
-#: gtk/gtkfontsel.c:3725
+#: gtk/gtkfontsel.c:3729
 msgid "Apply"
 msgstr "Ezarri"
 
-#: gtk/gtkfontsel.c:3747
+#: gtk/gtkfontsel.c:3751
 msgid "Font Selection"
 msgstr "Font aukera"
 
@@ -482,12 +482,12 @@ msgstr "garbitu"
 msgid "Page %u"
 msgstr "Orria %u"
 
-#: gtk/gtkrc.c:1609
+#: gtk/gtkrc.c:1611
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\" line %d"
 msgstr "Imaginaren fitxategia ezin aurkitu pixmap_path-en: \"%s\",%d lerroa"
 
-#: gtk/gtkrc.c:1612
+#: gtk/gtkrc.c:1614
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "Imaginaren fitxategia ezin aurkitu pixmap_path-en: \"%s\""
