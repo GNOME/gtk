@@ -160,4 +160,4 @@ gtkstockpixbufs.h: $(pixbuf_dir)/gdk-pixbuf-csource $(IMAGES)
 	GDK_PIXBUF_MODULEDIR=$(pixbuf_dir)/.libs \
 	   $(pixbuf_dir)/gdk-pixbuf-csource --raw --build-list $(VARIABLES) >$(srcdir)/gtkstockpixbufs.h
 
-EXTRA_DIST = $(IMAGES)
+EXTRA_DIST = $(IMAGES) gtkstockpixbufs.h

@@ -1,3 +1,12 @@
+Wed Jan 16 10:18:42 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/stock-icons/Makefile.am (EXTRA_DIST): Add 
+	gtkstockpixbufs.h.
+
+	* configure.in: Make TIFF, JPEG, PNG loaders mandatory
+	unless you configure with --without-libtiff, etc.
+	(#54045, Brian Cameron)
+
 2002-01-16  Padraig O'Briain <padraig.obriain@sun.com>
 
 	* gtk/gtkmenushell.c (gtk_real_menu_shell_move_current):
