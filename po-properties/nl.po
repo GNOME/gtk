@@ -3,6 +3,7 @@
 # Dirk-Jan C. Binnema <djcb@djcbsoftware.nl>, 2002.
 # Ronald Hummelink <ronald@hummelink.xs4all.nl>, 2002.
 # Tino Meinen <a.t.meinen@chelo.nl>, 2002, 2003, 2004.
+# Vincent van Adrighem <adrighem@gnome.org>, 2004.
 # --------------
 # Discussiepunten:
 # tag -> markering/etiket?
@@ -13,15 +14,13 @@
 # expander -> uitklapper
 # separator -> scheiding/scheidingslijn
 # selected -> geselecteerde/gekozen
-#
-# Vincent van Adrighem <adrighem@gnome.org>, 2004.
 # focus -> aandacht/invoeraandacht/de aandacht
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-03-02 17:21-0500\n"
-"PO-Revision-Date: 2004-02-26 11:52+0100\n"
+"POT-Creation-Date: 2004-03-03 04:13+0100\n"
+"PO-Revision-Date: 2004-03-03 11:48+0100\n"
 "Last-Translator: Tino Meinen <a.t.meinen@chello.nl>\n"
 "Language-Team: Dutch <vertaling@nl.linux.org>\n"
 "MIME-Version: 1.0\n"
@@ -1389,11 +1388,11 @@ msgstr "Het item dat momenteel actief is"
 
 #: gtk/gtkcombobox.c:477
 msgid "Appears as list"
-msgstr ""
+msgstr "Verschijnt als lijst"
 
 #: gtk/gtkcombobox.c:478
 msgid "Whether combobox dropdowns should look like lists rather than menus"
-msgstr ""
+msgstr "Of combobox dropdowns als lijsten getoond worden in plaats van als menus"
 
 #: gtk/gtkcomboboxentry.c:109
 msgid "Text Column"
@@ -1602,12 +1601,13 @@ msgstr "De inhoud van het veld"
 msgid "X align"
 msgstr "X-uitlijning"
 
+# RTL right to left
+# misschien omzetten naar RNL?
 #: gtk/gtkentry.c:553 gtk/gtkmisc.c:99
-#, fuzzy
 msgid ""
 "The horizontal alignment, from 0 (left) to 1 (right). Reversed for RTL "
 "layouts"
-msgstr "De horizontale uitlijning, van 0 (links) naar 1 (rechts)"
+msgstr "De horizontale uitlijning, van 0 (links) naar 1 (rechts). Omgekeerd voor RTL indelingen"
 
 #: gtk/gtkentry.c:786
 msgid "Select on focus"
@@ -1758,13 +1758,12 @@ msgstr ""
 "wordt getoond."
 
 #: gtk/gtkfilechooser.c:129
-#, fuzzy
 msgid "Use Preview Label"
-msgstr "Grootte gebruiken in label"
+msgstr "Voorbeeldlabel gebruiken"
 
 #: gtk/gtkfilechooser.c:130
 msgid "Whether to display a stock label with the name of the previewed file."
-msgstr ""
+msgstr "Of een standaardlabel weergegeven wordt bij de naam van het bestand."
 
 #: gtk/gtkfilechooser.c:135
 msgid "Extra widget"
@@ -1792,17 +1791,17 @@ msgstr "Of verborgen bestanden en mappen moeten worden weergegeven"
 
 #: gtk/gtkfilechooserdefault.c:473
 msgid "Default file chooser backend"
-msgstr ""
+msgstr "Standaard backend bestandkiezer"
 
 #: gtk/gtkfilechooserdefault.c:474
-#, fuzzy
 msgid "Name of the GtkFileChooser backend to use by default"
-msgstr "Naam van de gebruikte backend voor het bestandsysteem"
+msgstr "Naam van de gebruikte backend voor de bestandkiezer"
 
 #: gtk/gtkfilesel.c:559 gtk/gtkimage.c:167
 msgid "Filename"
 msgstr "Bestandsnaam"
 
+# momenteel
 #: gtk/gtkfilesel.c:560
 msgid "The currently selected filename"
 msgstr "De nu geselecteerde bestandsnaam"
@@ -3695,14 +3694,12 @@ msgid "Whether Tab will result in a tab character being entered"
 msgstr "Of Tab resulteert in het in het invoeren van een tab-teken"
 
 #: gtk/gtktextview.c:683
-#, fuzzy
 msgid "Error underline color"
-msgstr "Voorgrondkleur"
+msgstr "Foutkleur"
 
 #: gtk/gtktextview.c:684
-#, fuzzy
 msgid "Color with which to draw error-indication underlines"
-msgstr "Kleur van de invoegcursor"
+msgstr "Kleur waarmee fouten onderstreept worden"
 
 #: gtk/gtktoggleaction.c:129
 msgid "Create the same proxies as a radio action"
