@@ -1021,7 +1021,7 @@ gtk_tree_selection_real_select_all (GtkTreeSelection *selection)
  * gtk_tree_selection_select_all:
  * @selection: A #GtkTreeSelection.
  *
- * Selects all the nodes.  @selection is must be set to #GTK_SELECTION_MULTIPLE
+ * Selects all the nodes. @selection must be set to #GTK_SELECTION_MULTIPLE
  * mode.
  **/
 void
@@ -1243,6 +1243,7 @@ gtk_tree_selection_real_modify_range (GtkTreeSelection *selection,
  * @end_path: The final node of the range.
  *
  * Selects a range of nodes, determined by @start_path and @end_path inclusive.
+ * @selection must be set to #GTK_SELECTION_MULTIPLE mode. 
  **/
 void
 gtk_tree_selection_select_range (GtkTreeSelection *selection,
@@ -1251,6 +1252,7 @@ gtk_tree_selection_select_range (GtkTreeSelection *selection,
 {
   g_return_if_fail (GTK_IS_TREE_SELECTION (selection));
   g_return_if_fail (selection->tree_view != NULL);
+  g_return_if_fail (selection->type == GTK_SELECTION_MULTIPLE);
 
   if (gtk_tree_selection_real_modify_range (selection, RANGE_SELECT, start_path, end_path))
     g_signal_emit (selection, tree_selection_signals[CHANGED], 0);

@@ -1,3 +1,8 @@
+Wed Jun  2 00:13:57 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtktreeselection.c (gtk_tree_selection_select_range): Don't
+	allow unless selection mode is multiple.  (#142634, John Finlay)
+
 Tue Jun  1 23:00:20 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtktoolbar.h: 
