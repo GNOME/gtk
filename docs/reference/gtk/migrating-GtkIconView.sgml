@@ -3,27 +3,32 @@
   <title>Migrating from GnomeIconList to GtkIconView</title>
 
   <para>
-    Since version 2.6, GTK+ provides the <link linkend="GtkIconView">GtkIconView</link>
-    widget. It is similar in functionality to the GnomeIconList widget in the libgnomeui
-    library, both widgets provide a way to lay out named icons in a grid. The distinctive
-    feature of the GTK+ widget is that it follows the model-view pattern, allowing
-    it to share the actual data (i.e. the names and images of the icons) with other
-    views.
+    Since version 2.6, GTK+ provides the <link 
+    linkend="GtkIconView">GtkIconView</link>
+    widget. It is similar in functionality to the 
+    <structname>GnomeIconList</structname> widget in the 
+    libgnomeui library, both widgets provide a way to lay out named icons in 
+    a grid. The distinctive feature of the GTK+ widget is that it follows the 
+    model-view pattern, allowing it to share the actual data (i.e. the names 
+    and images of the icons) with other views.
   </para>
 
   <para>
-    <link linkend="GtkIconView">GtkIconView</link> currently doesn't support some features
-    found in GnomeIconList. Icons can not be positioned freely, the spacing is not customizable,
-    and it is not possible to edit the names of icons. 
+    <link linkend="GtkIconView">GtkIconView</link> currently doesn't support 
+    some features found in <structname>GnomeIconList</structname>. Icons can 
+    not be positioned freely, the spacing is not customizable, and it is not 
+    possible to edit the names of icons. 
   </para>
 
   <para>
-    To convert an application that uses GnomeIconList to 
-    <link linkend="GtkIconView">GtkIconView</link>, the first step is to organize your data
-    in a <link linkend="GtkTreeModel">GtkTreeModel</link>. GnomeIconList lets you directly
-    insert data with gnome_icon_list_insert() and gnome_icon_list_insert_pixbuf() and their
-    append variants. So, if you previously had a function to fill your icon list similar
-    to this one:
+    To convert an application that uses <structname>GnomeIconList</structname> 
+    to <link linkend="GtkIconView">GtkIconView</link>, the first step is to 
+    organize your data in a <link linkend="GtkTreeModel">GtkTreeModel</link>. 
+    <structname>GnomeIconList</structname> lets you directly insert data with 
+    <function>gnome_icon_list_insert()</function> and 
+    <function>gnome_icon_list_insert_pixbuf()</function> and their
+    append variants. So, if you previously had a function to fill your icon 
+    list similar to this one:
     <informalexample><programlisting>
       void 
       fill_icon_list (GnomeIconList *icon_list)
@@ -34,7 +39,8 @@
         /* more icons ... */ 
       }
     </programlisting></informalexample>
-    you will have to create a tree model, attach your icon view to it, and fill the model:
+    you will have to create a tree model, attach your icon view to it, and 
+    fill the model:
     <informalexample><programlisting>
       enum { 
         PIXBUF_COLUMN,
@@ -88,15 +94,19 @@
       }
     </programlisting></informalexample>
     This example uses a <link linkend="GtkListStore">GtkListStore</link> as
-    model, but part of the elegance of the model-view pattern is that you can easily
-    use another tree model implementation, or even write your own custom tree model.
+    model, but part of the elegance of the model-view pattern is that you can 
+    easily use another tree model implementation, or even write your own 
+    custom tree model.
   </para>
 
   <para>
     Your application may make use of extra data attached to the icons in the 
-    GnomeIconList via gnome_icon_list_set_icon_data() and gnome_icon_list_get_icon_data(). 
-    With <link linkend="GtkIconView">GtkIconView</link> such data is most conveniently
-    stored in an extra column in the tree model, so you would call a function like
+    <structname>GnomeIconList</structname> via 
+    <function>gnome_icon_list_set_icon_data()</function> and 
+    <function>gnome_icon_list_get_icon_data()</function>. With 
+    <link linkend="GtkIconView">GtkIconView</link> such data is most 
+    conveniently stored in an extra column in the tree model, so you would 
+    call a function like
     <informalexample><programlisting>
     void 
     set_icon_data (GtkIconView *icon_view,
@@ -113,20 +123,27 @@
                              DATA_COLUMN, data, -1);
     }
     </programlisting></informalexample>
-    assuming that your tree model has a DATA_COLUMN of type G_TYPE_POINTER.
+    assuming that your tree model has a <literal>DATA_COLUMN</literal> of type 
+    <literal>G_TYPE_POINTER</literal>.
   </para>
 
   <para>
-    There is a number of minor API differences between GnomeIconList and GtkIconView:
+    There is a number of minor API differences between 
+    <structname>GnomeIconList</structname> and 
+    <structname>GtkIconView</structname>:
     <itemizedlist> 
      <listitem><para>
-       GnomeIconListMode is replaced by the orientation property of GtkIconView
+       <typename>GnomeIconListMode</typename> is replaced by the 
+       <link linkend="GtkIconView--orientation">orientation</link> 
+       property of <structname>GtkIconView</structname>
      </para></listitem>
      <listitem><para>
-       GtkIconView can not be frozen in the same was as GnomeIconList with 
-       gnome_icon_list_freeze() and gnome_icon_list_thaw(). Instead you can 
-       replace the whole model of a GtkIconView, instead of doing many small 
-       changes to the existing model.
+       <structname>GtkIconView</structname> can not be frozen in the same 
+       way as <structname>GnomeIconList</structname> can with 
+       <function>gnome_icon_list_freeze()</function> and 
+       <function>gnome_icon_list_thaw()</function>. Instead you can 
+       replace the whole model of a <structname>GtkIconView</structname>, 
+       instead of doing many small changes to the existing model.
      </para></listitem>
     </itemizedlist>
   </para> 

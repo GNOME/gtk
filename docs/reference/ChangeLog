@@ -1,5 +1,12 @@
 2004-11-04  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/tmpl/gtkaboutdialog.sgml: 
+	* gtk/migrating-GtkColorButton.sgml: 
+	* gtk/migrating-GtkIconView.sgml: 
+	* gtk/migrating-GtkAboutDialog.sgml: Markup fixes. 
+
+2004-11-04  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtk-docs.sgml: 
 	* gtk/migrating-GtkColorButton.sgml: Add some hints about
 	GnomeColorPicker --> GtkColorButton migration.
