@@ -26,12 +26,13 @@
 extern "C" {
 #endif /* __cplusplus */
 
+#if 0
+
 #define GTK_TYPE_MODEL_SIMPLE			(gtk_model_simple_get_type ())
 #define GTK_MODEL_SIMPLE(obj)			(GTK_CHECK_CAST ((obj), GTK_TYPE_MODEL_SIMPLE, GtkModelSimple))
 #define GTK_MODEL_SIMPLE_CLASS(klass)		(GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_MODEL_SIMPLE, GtkModelSimpleClass))
 #define GTK_IS_MODEL_SIMPLE(obj)		(GTK_CHECK_TYPE ((obj), GTK_TYPE_MODEL_SIMPLE))
 #define GTK_IS_MODEL_SIMPLE_CLASS(klass)	(GTK_CHECK_CLASS_TYPE ((obj), GTK_TYPE_MODEL_SIMPLE))
-
 
 typedef struct _GtkModelSimple       GtkModelSimple;
 typedef struct _GtkModelSimpleClass  GtkModelSimpleClass;
@@ -47,16 +48,16 @@ struct _GtkModelSimpleClass
 
   /* signals */
   /* Will be moved into the GtkTreeModelIface eventually */
-  void       (* node_changed)         (GtkTreeModel *tree_model,
+  void       (* changed)         (GtkTreeModel *tree_model,
 				       GtkTreePath  *path,
 				       GtkTreeNode   node);
-  void       (* node_inserted)        (GtkTreeModel *tree_model,
+  void       (* inserted)        (GtkTreeModel *tree_model,
 				       GtkTreePath  *path,
 				       GtkTreeNode   node);
-  void       (* node_child_toggled)   (GtkTreeModel *tree_model,
+  void       (* child_toggled)   (GtkTreeModel *tree_model,
 				       GtkTreePath  *path,
 				       GtkTreeNode   node);
-  void       (* node_deleted)         (GtkTreeModel *tree_model,
+  void       (* deleted)         (GtkTreeModel *tree_model,
 				       GtkTreePath  *path);
 };
 
@@ -78,7 +79,7 @@ void       gtk_model_simple_node_deleted       (GtkModelSimple *simple,
 						GtkTreeNode     node);
 
 
-
+#endif
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */

@@ -1,3 +1,24 @@
+Wed Oct 25 20:40:25 2000  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtktreemodel.h: Got rid of GtkTreeNode, and changed it to
+	GtkTreeIter.  Added iterators everywhere.
+
+	* gtk/gtktreeviewcolumn.c: Changed to use the iterators.
+
+	* gtk/gtktreeviewselection.c: Changed to use the iterators.
+
+	* gtk/gtktreestore.c: Changed to use the iterators.
+
+	* gtk/gtkliststore.c: Commented out the code.  Will convert to
+	iterators tomorrow.
+
+	* gtk/gtkmodelsimple.c: Commented out the code.  Will convert to
+	iterators tomorrow.
+
+	* gtk/treestoretest.c: Changed to use iterators.
+
+	* demos/testgtk/main.c: Moved to use the new iterator system.
+
 Thu Oct 26 02:10:32 2000  Tim Janik  <timj@gtk.org>
 
 	* gtk/Makefile.am: invoke maketypes.awk with LC_ALL=C to avoid

@@ -9,9 +9,16 @@
 
 static GtkTextBuffer *info_buffer;
 static GtkTextBuffer *source_buffer;
-static GtkWidget *demo_clist;
 
-static Demo *current_demo;
+static gchar *current_file = NULL;
+
+enum {
+  TITLE_COLUMN,
+  FILENAME_COLUMN,
+  FUNC_COLUMN,
+  ITALIC_COLUMN,
+  NUM_COLUMNS
+};
 
 gboolean
 read_line (FILE *stream, GString *str)
@@ -60,7 +67,7 @@ read_line (FILE *stream, GString *str)
 }
 
 void
-load_file (Demo *demo)
+load_file (const gchar *filename)
 {
   FILE *file;
   GtkTextIter start, end;
@@ -68,10 +75,11 @@ load_file (Demo *demo)
   int state = 0;
   gboolean in_para = 0;
 
-  if (current_demo == demo)
+  if (current_file && !strcmp (current_file, filename))
     return;
 
-  current_demo = demo;
+  g_free (current_file);
+  current_file = g_strdup (filename);
   
   gtk_text_buffer_get_bounds (info_buffer, &start, &end);
   gtk_text_buffer_delete (info_buffer, &start, &end);
@@ -79,10 +87,10 @@ load_file (Demo *demo)
   gtk_text_buffer_get_bounds (source_buffer, &start, &end);
   gtk_text_buffer_delete (source_buffer, &start, &end);
 
-  file = fopen (demo->filename, "r");
+  file = fopen (filename, "r");
   if (!file)
     {
-      g_warning ("Cannot open %s: %s\n", demo->filename, g_strerror (errno));
+      g_warning ("Cannot open %s: %s\n", filename, g_strerror (errno));
       return;
     }
 
@@ -184,41 +192,65 @@ load_file (Demo *demo)
 }
 
 gboolean
-button_press_event_cb (GtkCList       *clist,
-		       GdkEventButton *event)
+button_press_event_cb (GtkTreeView    *tree_view,
+		       GdkEventButton *event,
+		       GtkTreeModel   *model)
 {
-  if (event->type == GDK_2BUTTON_PRESS &&
-      event->window == clist->clist_window)
+  if (event->type == GDK_2BUTTON_PRESS)
     {
-      gint row, column;
-      
-      if (gtk_clist_get_selection_info (clist,
-					event->x, event->y,
-					&row, &column))
+      GtkTreePath *path = NULL;
 
+      gtk_tree_view_get_path_at_pos (tree_view,
+				     event->window,
+				     event->x,
+				     event->y,
+				     &path,
+				     NULL);
+
+      if (path)
 	{
-	  Demo *demo = gtk_clist_get_row_data (clist, row);
-	  demo->func();
+	  GtkTreeIter iter;
+	  gboolean italic;
+	  GVoidFunc func;
+
+	  gtk_tree_model_get_iter (model, &iter, path);
+	  gtk_tree_store_iter_get (model, &iter,
+				   FUNC_COLUMN, &func,
+				   ITALIC_COLUMN, &italic,
+				   -1);
+	  (func) ();
+	  gtk_tree_store_iter_set (model, &iter,
+				   ITALIC_COLUMN, !italic,
+				   -1);
+	  gtk_tree_path_free (path);
 	}
 
-      gtk_signal_emit_stop_by_name (GTK_OBJECT (clist), "button_press_event");
+      gtk_signal_emit_stop_by_name (GTK_OBJECT (tree_view),
+				    "button_press_event");
       return TRUE;
     }
   
   return FALSE;
 }
 
-void
-select_row_cb (GtkCList *clist,
-	       gint      row,
-	       gint      column,
-	       GdkEvent *event)
+static void
+selection_cb (GtkTreeSelection *selection,
+	      GtkTreeModel     *model)
 {
-  Demo *demo = gtk_clist_get_row_data (clist, row);
-  load_file (demo);
+  GtkTreeIter iter;
+  GValue value = {0, };
+
+  if (! gtk_tree_selection_get_selected (selection, &iter))
+    return;
+
+  gtk_tree_model_iter_get_value (model, &iter,
+				 FILENAME_COLUMN,
+				 &value);
+  load_file (g_value_get_string (&value));
+  g_value_unset (&value);
 }
 
-GtkWidget *
+static GtkWidget *
 create_text (GtkTextBuffer **buffer,
 	     gboolean        is_source)
 {
@@ -253,14 +285,62 @@ create_text (GtkTextBuffer **buffer,
   return scrolled_window;
 }
 
+/* Technically a list, but if we do go to 80 demos, we may want to move to a tree */
+static GtkWidget *
+create_tree (void)
+{
+  GtkTreeSelection *selection;
+  GtkCellRenderer *cell;
+  GtkWidget *tree_view;
+  GtkObject *column;
+  GtkObject *model;
+  GtkTreeIter iter;
+  gint i;
+
+  model = gtk_tree_store_new_with_values (NUM_COLUMNS, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_POINTER, G_TYPE_BOOLEAN);
+  tree_view = gtk_tree_view_new_with_model (GTK_TREE_MODEL (model));
+  selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (tree_view));
+
+  gtk_tree_selection_set_type (GTK_TREE_SELECTION (selection),
+			       GTK_TREE_SELECTION_SINGLE);
+  gtk_widget_set_usize (tree_view, 200, -1);
+
+  for (i=0; i < G_N_ELEMENTS (testgtk_demos); i++)
+    {
+      gtk_tree_store_iter_append (GTK_TREE_STORE (model), &iter, NULL);
+
+      gtk_tree_store_iter_set (GTK_TREE_STORE (model),
+			       &iter,
+			       TITLE_COLUMN, testgtk_demos[i].title,
+			       FILENAME_COLUMN, testgtk_demos[i].filename,
+			       FUNC_COLUMN, testgtk_demos[i].func,
+			       ITALIC_COLUMN, FALSE,
+			       -1);
+    }
+
+  cell = gtk_cell_renderer_text_new ();
+  column = gtk_tree_view_column_new_with_attributes ("Widget",
+						     cell,
+						     "text", TITLE_COLUMN,
+						     "italic", ITALIC_COLUMN,
+						     NULL);
+  gtk_tree_view_append_column (GTK_TREE_VIEW (tree_view),
+			       GTK_TREE_VIEW_COLUMN (column));
+
+  gtk_signal_connect (GTK_OBJECT (selection), "selection_changed", selection_cb, model);
+  gtk_signal_connect (GTK_OBJECT (tree_view), "button_press_event", GTK_SIGNAL_FUNC (button_press_event_cb), model);
+
+  return tree_view;
+}
+
 int
 main (int argc, char **argv)
 {
   GtkWidget *window;
   GtkWidget *notebook;
   GtkWidget *hbox;
+  GtkWidget *tree;
   GtkTextTag *tag;
-  int i;
 
   gtk_init (&argc, &argv);
   
@@ -271,11 +351,8 @@ main (int argc, char **argv)
   hbox = gtk_hbox_new (FALSE, 0);
   gtk_container_add (GTK_CONTAINER (window), hbox);
 
-  demo_clist = gtk_clist_new (1);
-  gtk_clist_set_selection_mode (GTK_CLIST (demo_clist), GTK_SELECTION_BROWSE);
-
-  gtk_widget_set_usize (demo_clist, 200, -1);
-  gtk_box_pack_start (GTK_BOX (hbox), demo_clist, FALSE, FALSE, 0);
+  tree = create_tree ();
+  gtk_box_pack_start (GTK_BOX (hbox), tree, FALSE, FALSE, 0);
 
   notebook = gtk_notebook_new ();
   gtk_box_pack_start (GTK_BOX (hbox), notebook, TRUE, TRUE, 0);
@@ -304,19 +381,8 @@ main (int argc, char **argv)
   gtk_window_set_default_size (GTK_WINDOW (window), 600, 400);
   gtk_widget_show_all (window);
   
-  for (i=0; i < G_N_ELEMENTS (testgtk_demos); i++)
-    {
-      gint row = gtk_clist_append (GTK_CLIST (demo_clist), &testgtk_demos[i].title);
-      gtk_clist_set_row_data (GTK_CLIST (demo_clist), row, &testgtk_demos[i]);
-    }
 
-  load_file (&testgtk_demos[0]);
-  
-  gtk_signal_connect (GTK_OBJECT (demo_clist), "button_press_event",
-		      GTK_SIGNAL_FUNC (button_press_event_cb), NULL);
-  
-  gtk_signal_connect (GTK_OBJECT (demo_clist), "select_row",
-		      GTK_SIGNAL_FUNC (select_row_cb), NULL);
+  load_file (testgtk_demos[0].filename);
   
   gtk_main ();
 

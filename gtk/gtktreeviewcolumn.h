@@ -46,7 +46,7 @@ typedef struct _GtkTreeViewColumnClass GtkTreeViewColumnClass;
 
 typedef gboolean (* GtkTreeViewColumnFunc) (GtkTreeViewColumn *tree_column,
 					    GtkTreeModel      *tree_model,
-					    GtkTreeNode        tree_node,
+					    GtkTreeIter       *iter,
 					    gpointer           data);
 
 struct _GtkTreeViewColumn
@@ -96,7 +96,7 @@ void             gtk_tree_view_column_set_attributes      (GtkTreeViewColumn    
 							   ...);
 void             gtk_tree_view_column_set_cell_data       (GtkTreeViewColumn     *tree_column,
 							   GtkTreeModel          *tree_model,
-							   GtkTreeNode            tree_node);
+							   GtkTreeIter           *iter);
 void             gtk_tree_view_column_set_visible         (GtkTreeViewColumn     *tree_column,
 							   gboolean               visible);
 gboolean         gtk_tree_view_column_get_visible         (GtkTreeViewColumn     *tree_column);

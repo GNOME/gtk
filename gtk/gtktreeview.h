@@ -56,47 +56,53 @@ struct _GtkTreeViewClass
 				  GtkAdjustment *hadjustment,
 				  GtkAdjustment *vadjustment);
   gint (*expand_row)             (GtkTreeView   *tree_view,
-				  GtkTreeNode    node);
+				  GtkTreeIter   *iter);
 };
 
-/* Creators */
 GtkType                gtk_tree_view_get_type            (void);
 GtkWidget             *gtk_tree_view_new                 (void);
-GtkWidget             *gtk_tree_view_new_with_model      (GtkTreeModel      *model);
-GtkTreeModel          *gtk_tree_view_get_model           (GtkTreeView       *tree_view);
-void                   gtk_tree_view_set_model           (GtkTreeView       *tree_view,
-							  GtkTreeModel      *tree_model);
-GtkTreeSelection      *gtk_tree_view_get_selection       (GtkTreeView       *tree_view);
-GtkAdjustment         *gtk_tree_view_get_hadjustment     (GtkTreeView       *layout);
-void                   gtk_tree_view_set_hadjustment     (GtkTreeView       *layout,
-							  GtkAdjustment     *adjustment);
-GtkAdjustment         *gtk_tree_view_get_vadjustment     (GtkTreeView       *layout);
-void                   gtk_tree_view_set_vadjustment     (GtkTreeView       *layout,
-							  GtkAdjustment     *adjustment);
-gboolean               gtk_tree_view_get_headers_visible (GtkTreeView       *tree_view);
-void                   gtk_tree_view_set_headers_visible (GtkTreeView       *tree_view,
-							  gboolean           headers_visible);
-void                   gtk_tree_view_columns_autosize    (GtkTreeView       *tree_view);
-void                   gtk_tree_view_set_headers_active  (GtkTreeView       *tree_view,
-							  gboolean           active);
-gint                   gtk_tree_view_append_column       (GtkTreeView       *tree_view,
-							  GtkTreeViewColumn *column);
-gint                   gtk_tree_view_remove_column       (GtkTreeView       *tree_view,
-							  GtkTreeViewColumn *column);
-gint                   gtk_tree_view_insert_column       (GtkTreeView       *tree_view,
-							  GtkTreeViewColumn *column,
-							  gint               position);
-GtkTreeViewColumn     *gtk_tree_view_get_column          (GtkTreeView       *tree_view,
-							  gint               n);
+GtkWidget             *gtk_tree_view_new_with_model      (GtkTreeModel       *model);
+
+GtkTreeModel          *gtk_tree_view_get_model           (GtkTreeView        *tree_view);
+void                   gtk_tree_view_set_model           (GtkTreeView        *tree_view,
+							  GtkTreeModel       *tree_model);
+GtkTreeSelection      *gtk_tree_view_get_selection       (GtkTreeView        *tree_view);
+GtkAdjustment         *gtk_tree_view_get_hadjustment     (GtkTreeView        *layout);
+void                   gtk_tree_view_set_hadjustment     (GtkTreeView        *layout,
+							  GtkAdjustment      *adjustment);
+GtkAdjustment         *gtk_tree_view_get_vadjustment     (GtkTreeView        *layout);
+void                   gtk_tree_view_set_vadjustment     (GtkTreeView        *layout,
+							  GtkAdjustment      *adjustment);
+gboolean               gtk_tree_view_get_headers_visible (GtkTreeView        *tree_view);
+void                   gtk_tree_view_set_headers_visible (GtkTreeView        *tree_view,
+							  gboolean            headers_visible);
+void                   gtk_tree_view_columns_autosize    (GtkTreeView        *tree_view);
+void                   gtk_tree_view_set_headers_active  (GtkTreeView        *tree_view,
+							  gboolean            active);
+gint                   gtk_tree_view_append_column       (GtkTreeView        *tree_view,
+							  GtkTreeViewColumn  *column);
+gint                   gtk_tree_view_remove_column       (GtkTreeView        *tree_view,
+							  GtkTreeViewColumn  *column);
+gint                   gtk_tree_view_insert_column       (GtkTreeView        *tree_view,
+							  GtkTreeViewColumn  *column,
+							  gint                position);
+GtkTreeViewColumn     *gtk_tree_view_get_column          (GtkTreeView        *tree_view,
+							  gint                n);
 
 /* Actions */
-void                   gtk_tree_view_move_to             (GtkTreeView       *tree_view,
-							  GtkTreePath       *path,
-							  GtkTreeViewColumn *column,
-							  gfloat             row_align,
-							  gfloat             col_align);
-void                   gtk_tree_view_expand_all          (GtkTreeView       *tree_view);
-void                   gtk_tree_view_collapse_all        (GtkTreeView       *tree_view);
+void                   gtk_tree_view_move_to             (GtkTreeView        *tree_view,
+							  GtkTreePath        *path,
+							  GtkTreeViewColumn  *column,
+							  gfloat              row_align,
+							  gfloat              col_align);
+gboolean               gtk_tree_view_get_path_at_pos     (GtkTreeView        *tree_view,
+							  GdkWindow          *window,
+							  gint                x,
+							  gint                y,
+							  GtkTreePath       **path,
+							  GtkTreeViewColumn **column);
+void                   gtk_tree_view_expand_all          (GtkTreeView        *tree_view);
+void                   gtk_tree_view_collapse_all        (GtkTreeView        *tree_view);
 
 
 #ifdef __cplusplus

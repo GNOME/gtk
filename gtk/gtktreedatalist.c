@@ -152,6 +152,9 @@ gtk_tree_data_list_node_to_value (GtkTreeDataList *list,
     case G_TYPE_UINT:
       g_value_set_uint (value, list->data.v_uint);
       break;
+    case G_TYPE_POINTER:
+      g_value_set_pointer (value, (gpointer) list->data.v_pointer);
+      break;
     case G_TYPE_FLOAT:
       g_value_set_float (value, list->data.v_float);
       break;
@@ -161,6 +164,9 @@ gtk_tree_data_list_node_to_value (GtkTreeDataList *list,
     case G_TYPE_OBJECT:
       g_value_set_object (value, (GObject *) list->data.v_pointer);
       break;
+    default:
+      g_warning ("Unsupported type (%s) retrieved.", g_type_name (value->g_type));
+      return;
     }
 }
 
@@ -184,6 +190,9 @@ gtk_tree_data_list_value_to_node (GtkTreeDataList *list,
       break;
     case G_TYPE_UINT:
       list->data.v_uint = g_value_get_uint (value);
+      break;
+    case G_TYPE_POINTER:
+      list->data.v_pointer = g_value_get_pointer (value);
       break;
     case G_TYPE_FLOAT:
       list->data.v_float = g_value_get_float (value);

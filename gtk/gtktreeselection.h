@@ -45,7 +45,7 @@ typedef gboolean (* GtkTreeSelectionFunc)    (GtkTreeSelection  *selection,
 					      GtkTreePath       *path,
 					      gpointer           data);
 typedef void (* GtkTreeSelectionForeachFunc) (GtkTreeModel      *model,
-					      GtkTreeNode        node,
+					      GtkTreeIter       *iter,
 					      gpointer           data);
 
 struct _GtkTreeSelection
@@ -78,7 +78,8 @@ gpointer         gtk_tree_selection_get_user_data       (GtkTreeSelection       
 
 /* Only meaningful if GTK_TREE_SELECTION_SINGLE is set */
 /* Use selected_foreach for GTK_TREE_SELECTION_MULTI */
-GtkTreeNode      gtk_tree_selection_get_selected        (GtkTreeSelection            *selection);
+gboolean         gtk_tree_selection_get_selected        (GtkTreeSelection            *selection,
+							 GtkTreeIter                 *iter);
 
 /* FIXME: Get a more convenient get_selection function????  one returning GSList?? */
 void             gtk_tree_selection_selected_foreach    (GtkTreeSelection            *selection,
@@ -88,10 +89,10 @@ void             gtk_tree_selection_select_path         (GtkTreeSelection       
 							 GtkTreePath                 *path);
 void             gtk_tree_selection_unselect_path       (GtkTreeSelection            *selection,
 							 GtkTreePath                 *path);
-void             gtk_tree_selection_select_node         (GtkTreeSelection            *selection,
-							 GtkTreeNode                  tree_node);
-void             gtk_tree_selection_unselect_node       (GtkTreeSelection            *selection,
-							 GtkTreeNode                  tree_node);
+void             gtk_tree_selection_select_iter         (GtkTreeSelection            *selection,
+							 GtkTreeIter                 *iter);
+void             gtk_tree_selection_unselect_iter       (GtkTreeSelection            *selection,
+							 GtkTreeIter                 *iter);
 void             gtk_tree_selection_select_all          (GtkTreeSelection            *selection);
 void             gtk_tree_selection_unselect_all        (GtkTreeSelection            *selection);
 void             gtk_tree_selection_select_range        (GtkTreeSelection            *selection,

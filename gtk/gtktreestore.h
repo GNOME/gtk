@@ -21,6 +21,7 @@
 #define __GTK_TREE_STORE_H__
 
 #include <gtk/gtktreemodel.h>
+#include <stdarg.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -38,7 +39,9 @@ typedef struct _GtkTreeStoreClass  GtkTreeStoreClass;
 struct _GtkTreeStore
 {
   GtkObject parent;
-  GtkTreeNode root;
+
+  gint stamp;
+  gpointer root;
   gint n_columns;
   GType *column_headers;
 };
@@ -49,62 +52,72 @@ struct _GtkTreeStoreClass
 
   /* signals */
   /* Will be moved into the GtkTreeModelIface eventually */
-  void       (* node_changed)         (GtkTreeModel *tree_model,
-				       GtkTreePath  *path,
-				       GtkTreeNode   node);
-  void       (* node_inserted)        (GtkTreeModel *tree_model,
-				       GtkTreePath  *path,
-				       GtkTreeNode   node);
-  void       (* node_child_toggled)   (GtkTreeModel *tree_model,
-				       GtkTreePath  *path,
-				       GtkTreeNode   node);
-  void       (* node_deleted)         (GtkTreeModel *tree_model,
-				       GtkTreePath  *path);
+  void       (* changed)         (GtkTreeModel *tree_model,
+				  GtkTreePath  *path,
+				  GtkTreeIter  *iter);
+  void       (* inserted)        (GtkTreeModel *tree_model,
+				  GtkTreePath  *path,
+				  GtkTreeIter  *iter);
+  void       (* child_toggled)   (GtkTreeModel *tree_model,
+				  GtkTreePath  *path,
+				  GtkTreeIter  *iter);
+  void       (* deleted)         (GtkTreeModel *tree_model,
+				  GtkTreePath  *path);
 };
 
 
-GtkType      gtk_tree_store_get_type           (void);
-GtkObject   *gtk_tree_store_new                (void);
-GtkObject   *gtk_tree_store_new_with_values    (gint          n_columns,
-						...);
-void         gtk_tree_store_set_n_columns      (GtkTreeStore *tree_store,
-						gint          n_columns);
-void         gtk_tree_store_set_column_type    (GtkTreeStore *store,
-						gint          column,
-						GType         type);
-
-GtkTreeNode  gtk_tree_store_node_new           (void);
-void         gtk_tree_store_node_set_cell      (GtkTreeStore *tree_store,
-						GtkTreeNode   node,
-						gint          column,
-						GValue       *value);
-void         gtk_tree_store_node_remove        (GtkTreeStore *tree_store,
-						GtkTreeNode   node);
-GtkTreeNode  gtk_tree_store_node_insert        (GtkTreeStore *tree_store,
-						GtkTreeNode   parent,
-						gint          position,
-						GtkTreeNode   node);
-GtkTreeNode  gtk_tree_store_node_insert_before (GtkTreeStore *tree_store,
-						GtkTreeNode   parent,
-						GtkTreeNode   sibling,
-						GtkTreeNode   node);
-GtkTreeNode  gtk_tree_store_node_insert_after  (GtkTreeStore *tree_store,
-						GtkTreeNode   parent,
-						GtkTreeNode   sibling,
-						GtkTreeNode   node);
-GtkTreeNode  gtk_tree_store_node_prepend       (GtkTreeStore *tree_store,
-						GtkTreeNode   parent,
-						GtkTreeNode   node);
-GtkTreeNode  gtk_tree_store_node_append        (GtkTreeStore *tree_store,
-						GtkTreeNode   parent,
-						GtkTreeNode   node);
-GtkTreeNode  gtk_tree_store_node_get_root      (GtkTreeStore *tree_store);
-gboolean     gtk_tree_store_node_is_ancestor   (GtkTreeStore *tree_store,
-						GtkTreeNode   node,
-						GtkTreeNode   descendant);
-gint         gtk_tree_store_node_depth         (GtkTreeStore *tree_store,
-						GtkTreeNode   node);
-
+GtkType       gtk_tree_store_get_type           (void);
+GtkTreeStore *gtk_tree_store_new                (void);
+GtkTreeStore *gtk_tree_store_new_with_values    (gint          n_columns,
+						 ...);
+void          gtk_tree_store_set_n_columns      (GtkTreeStore *tree_store,
+						 gint          n_columns);
+void          gtk_tree_store_set_column_type    (GtkTreeStore *store,
+						 gint          column,
+						 GType         type);
+void          gtk_tree_store_iter_set_cell      (GtkTreeStore *tree_store,
+						 GtkTreeIter  *iter,
+						 gint          column,
+						 GValue       *value);
+void          gtk_tree_store_iter_set           (GtkTreeStore *tree_store,
+						 GtkTreeIter  *iter,
+						 ...);
+void          gtk_tree_store_iter_setv          (GtkTreeStore *tree_store,
+						 GtkTreeIter  *iter,
+						 va_list       var_args);
+void          gtk_tree_store_iter_get           (GtkTreeStore *tree_store,
+						 GtkTreeIter  *iter,
+						 ...);
+void          gtk_tree_store_iter_getv          (GtkTreeStore *tree_store,
+						 GtkTreeIter  *iter,
+						 va_list       var_args);
+void          gtk_tree_store_iter_remove        (GtkTreeStore *tree_store,
+						 GtkTreeIter  *iter);
+void          gtk_tree_store_iter_insert        (GtkTreeStore *tree_store,
+						 GtkTreeIter  *iter,
+						 GtkTreeIter  *parent,
+						 gint          position);
+void          gtk_tree_store_iter_insert_before (GtkTreeStore *tree_store,
+						 GtkTreeIter  *iter,
+						 GtkTreeIter  *parent,
+						 GtkTreeIter  *sibling);
+void          gtk_tree_store_iter_insert_after  (GtkTreeStore *tree_store,
+						 GtkTreeIter  *iter,
+						 GtkTreeIter  *parent,
+						 GtkTreeIter  *sibling);
+void          gtk_tree_store_iter_prepend       (GtkTreeStore *tree_store,
+						 GtkTreeIter  *iter,
+						 GtkTreeIter  *parent);
+void          gtk_tree_store_iter_append        (GtkTreeStore *tree_store,
+						 GtkTreeIter  *iter,
+						 GtkTreeIter  *parent);
+void          gtk_tree_store_get_root           (GtkTreeStore *tree_store,
+						 GtkTreeIter  *iter);
+gboolean      gtk_tree_store_iter_is_ancestor   (GtkTreeStore *tree_store,
+						 GtkTreeIter  *iter,
+						 GtkTreeIter  *descendant);
+gint          gtk_tree_store_iter_depth         (GtkTreeStore *tree_store,
+						 GtkTreeIter  *iter);
 
 
 #ifdef __cplusplus

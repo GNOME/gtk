@@ -32,10 +32,16 @@ extern "C" {
 #define GTK_TREE_MODEL_GET_IFACE(obj)  ((GtkTreeModelIface *)g_type_interface_peek (((GTypeInstance *)GTK_TREE_MODEL (obj))->g_class, GTK_TYPE_TREE_MODEL))
 					
 
-typedef gpointer                  GtkTreeNode;
+typedef struct _GtkTreeIter       GtkTreeIter;
 typedef struct _GtkTreePath       GtkTreePath;
 typedef struct _GtkTreeModel      GtkTreeModel; /* Dummy typedef */
 typedef struct _GtkTreeModelIface GtkTreeModelIface;
+
+struct _GtkTreeIter
+{
+  gint stamp;
+  gpointer tree_node;
+};
 
 struct _GtkTreeModelIface
 {
@@ -46,92 +52,111 @@ struct _GtkTreeModelIface
    * objects implementing this interface need this.  Later, it will be moved
    * back here.
    */
-  void       (* node_changed)         (GtkTreeModel *tree_model,
-				       GtkTreePath  *path,
-				       GtkTreeNode   node);
-  void       (* node_inserted)        (GtkTreeModel *tree_model,
-				       GtkTreePath  *path,
-				       GtkTreeNode   node);
-  void       (* node_child_toggled)   (GtkTreeModel *tree_model,
-				       GtkTreePath  *path,
-				       GtkTreeNode   node);
-  void       (* node_deleted)         (GtkTreeModel *tree_model,
-				       GtkTreePath  *path);
+  void         (* changed)           (GtkTreeModel *tree_model,
+				      GtkTreePath  *path,
+				      GtkTreeIter  *iter);
+  void         (* inserted)          (GtkTreeModel *tree_model,
+				      GtkTreePath  *path,
+				      GtkTreeIter  *iter);
+  void         (* child_toggled)     (GtkTreeModel *tree_model,
+				      GtkTreePath  *path,
+				      GtkTreeIter  *iter);
+  void         (* deleted)           (GtkTreeModel *tree_model,
+				      GtkTreePath  *path);
 
   /* VTable - not signals */
   gint         (* get_n_columns)   (GtkTreeModel *tree_model);
-  GtkTreeNode  (* get_node)        (GtkTreeModel *tree_model,
+  GType        (* get_column_type) (GtkTreeModel *tree_model,
+				    gint          index);
+  gboolean     (* get_iter)        (GtkTreeModel *tree_model,
+				    GtkTreeIter  *iter,
 				    GtkTreePath  *path);
+  gboolean     (* iter_invalid)    (GtkTreeModel *tree_model,
+				    GtkTreeIter  *iter);
   GtkTreePath *(* get_path)        (GtkTreeModel *tree_model,
-				    GtkTreeNode   node);
-  void         (* node_get_value)  (GtkTreeModel *tree_model,
-				    GtkTreeNode   node,
+				    GtkTreeIter  *iter);
+  void         (* iter_get_value)  (GtkTreeModel *tree_model,
+				    GtkTreeIter  *iter,
 				    gint          column,
 				    GValue       *value);
-  gboolean     (* node_next)       (GtkTreeModel *tree_model,
-				    GtkTreeNode  *node);
-  GtkTreeNode  (* node_children)   (GtkTreeModel *tree_model,
-				    GtkTreeNode   node);
-  gboolean     (* node_has_child)  (GtkTreeModel *tree_model,
-				    GtkTreeNode   node);
-  gint         (* node_n_children) (GtkTreeModel *tree_model,
-				    GtkTreeNode   node);
-  GtkTreeNode  (* node_nth_child)  (GtkTreeModel *tree_model,
-				    GtkTreeNode   node,
+  gboolean     (* iter_next)       (GtkTreeModel *tree_model,
+				    GtkTreeIter  *iter);
+  gboolean     (* iter_children)   (GtkTreeModel *tree_model,
+				    GtkTreeIter  *iter,
+				    GtkTreeIter  *child);
+  gboolean     (* iter_has_child)  (GtkTreeModel *tree_model,
+				    GtkTreeIter  *iter);
+  gint         (* iter_n_children) (GtkTreeModel *tree_model,
+				    GtkTreeIter  *iter);
+  gboolean     (* iter_nth_child)  (GtkTreeModel *tree_model,
+				    GtkTreeIter  *iter,
+				    GtkTreeIter  *parent,
 				    gint          n);
-  GtkTreeNode  (* node_parent)     (GtkTreeModel *tree_model,
-				    GtkTreeNode   node);
+  gboolean     (* iter_parent)     (GtkTreeModel *tree_model,
+				    GtkTreeIter  *iter,
+				    GtkTreeIter  *parent);
 };
 
 
-/* Basic tree_model operations */
-GtkType        gtk_tree_model_get_type        (void) G_GNUC_CONST;
+/* Path operations */
+GtkTreePath *gtk_tree_path_new              (void);
+GtkTreePath *gtk_tree_path_new_from_string  (gchar             *path);
+gchar       *gtk_tree_path_to_string        (GtkTreePath       *path);
+GtkTreePath *gtk_tree_path_new_root         (void);
+void         gtk_tree_path_append_index     (GtkTreePath       *path,
+					     gint               index);
+void         gtk_tree_path_prepend_index    (GtkTreePath       *path,
+					     gint               index);
+gint         gtk_tree_path_get_depth        (GtkTreePath       *path);
+gint        *gtk_tree_path_get_indices      (GtkTreePath       *path);
+void         gtk_tree_path_free             (GtkTreePath       *path);
+GtkTreePath *gtk_tree_path_copy             (GtkTreePath       *path);
+gint         gtk_tree_path_compare          (const GtkTreePath *a,
+					     const GtkTreePath *b);
+void         gtk_tree_path_next             (GtkTreePath       *path);
+gint         gtk_tree_path_prev             (GtkTreePath       *path);
+gint         gtk_tree_path_up               (GtkTreePath       *path);
+void         gtk_tree_path_down             (GtkTreePath       *path);
 
-/* GtkTreePath Operations */
-GtkTreePath   *gtk_tree_path_new              (void);
-GtkTreePath   *gtk_tree_path_new_from_string  (gchar        *path);
-gchar         *gtk_tree_path_to_string        (GtkTreePath  *path);
-GtkTreePath   *gtk_tree_path_new_root         (void);
-void           gtk_tree_path_append_index     (GtkTreePath  *path,
-					       gint          index);
-void           gtk_tree_path_prepend_index    (GtkTreePath  *path,
-					       gint          index);
-gint           gtk_tree_path_get_depth        (GtkTreePath  *path);
-gint          *gtk_tree_path_get_indices      (GtkTreePath  *path);
-void           gtk_tree_path_free             (GtkTreePath  *path);
-GtkTreePath   *gtk_tree_path_copy             (GtkTreePath  *path);
-gint           gtk_tree_path_compare          (const GtkTreePath *a,
-					       const GtkTreePath *b);
-void           gtk_tree_path_next             (GtkTreePath  *path);
-gint           gtk_tree_path_prev             (GtkTreePath  *path);
-gint           gtk_tree_path_up               (GtkTreePath  *path);
-void           gtk_tree_path_down             (GtkTreePath  *path);
 
-/* Header operations */
-gint           gtk_tree_model_get_n_columns   (GtkTreeModel *tree_model);
+/* GtkTreeModel stuff */
+GtkType      gtk_tree_model_get_type        (void) G_GNUC_CONST;
 
-/* Node operations */
-GtkTreeNode    gtk_tree_model_get_node        (GtkTreeModel *tree_model,
-					       GtkTreePath  *path);
-GtkTreePath   *gtk_tree_model_get_path        (GtkTreeModel *tree_model,
-					       GtkTreeNode   node);
-void           gtk_tree_model_node_get_value  (GtkTreeModel *tree_model,
-					       GtkTreeNode   node,
-					       gint          column,
-					       GValue       *value);
-gboolean       gtk_tree_model_node_next       (GtkTreeModel *tree_model,
-					       GtkTreeNode  *node);
-GtkTreeNode    gtk_tree_model_node_children   (GtkTreeModel *tree_model,
-					       GtkTreeNode   node);
-gboolean       gtk_tree_model_node_has_child  (GtkTreeModel *tree_model,
-					       GtkTreeNode   node);
-gint           gtk_tree_model_node_n_children (GtkTreeModel *tree_model,
-					       GtkTreeNode   node);
-GtkTreeNode    gtk_tree_model_node_nth_child  (GtkTreeModel *tree_model,
-					       GtkTreeNode   node,
-					       gint          n);
-GtkTreeNode    gtk_tree_model_node_parent     (GtkTreeModel *tree_model,
-					       GtkTreeNode   node);
+
+/* Column information */
+gint         gtk_tree_model_get_n_columns   (GtkTreeModel      *tree_model);
+GType        gtk_tree_model_get_column_type (GtkTreeModel      *tree_model,
+					     gint               index);
+
+
+/* Iterator movement */
+gboolean     gtk_tree_model_get_iter        (GtkTreeModel      *tree_model,
+					     GtkTreeIter       *iter,
+					     GtkTreePath       *path);
+gboolean     gtk_tree_model_iter_invalid    (GtkTreeModel      *tree_model,
+					     GtkTreeIter       *iter);
+GtkTreePath *gtk_tree_model_get_path        (GtkTreeModel      *tree_model,
+					     GtkTreeIter       *iter);
+void         gtk_tree_model_iter_get_value  (GtkTreeModel      *tree_model,
+					     GtkTreeIter       *iter,
+					     gint               column,
+					     GValue            *value);
+gboolean     gtk_tree_model_iter_next       (GtkTreeModel      *tree_model,
+					     GtkTreeIter       *iter);
+gboolean     gtk_tree_model_iter_children   (GtkTreeModel      *tree_model,
+					     GtkTreeIter       *iter,
+					     GtkTreeIter       *parent);
+gboolean     gtk_tree_model_iter_has_child  (GtkTreeModel      *tree_model,
+					     GtkTreeIter       *iter);
+gint         gtk_tree_model_iter_n_children (GtkTreeModel      *tree_model,
+					     GtkTreeIter       *iter);
+gboolean     gtk_tree_model_iter_nth_child  (GtkTreeModel      *tree_model,
+					     GtkTreeIter       *iter,
+					     GtkTreeIter       *parent,
+					     gint               n);
+gboolean     gtk_tree_model_iter_parent     (GtkTreeModel      *tree_model,
+					     GtkTreeIter       *iter,
+					     GtkTreeIter       *child);
 
 
 #ifdef __cplusplus
@@ -140,4 +165,3 @@ GtkTreeNode    gtk_tree_model_node_parent     (GtkTreeModel *tree_model,
 
 
 #endif /* __GTK_TREE_MODEL_H__ */
-

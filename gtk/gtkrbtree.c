@@ -661,6 +661,13 @@ _gtk_rbtree_find_offset (GtkRBTree  *tree,
 {
   GtkRBNode *tmp_node;
 
+  if (height < 0)
+    {
+      *new_tree = NULL;
+      *new_node = NULL;
+      return 0;
+    }
+    
   tmp_node = tree->root;
   while (tmp_node != tree->nil &&
 	 (tmp_node->left->offset > height ||

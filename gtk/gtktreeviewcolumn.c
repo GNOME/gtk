@@ -315,7 +315,7 @@ gtk_tree_view_column_set_attributes (GtkTreeViewColumn *tree_column,
 void
 gtk_tree_view_column_set_cell_data (GtkTreeViewColumn *tree_column,
 				    GtkTreeModel      *tree_model,
-				    GtkTreeNode        tree_node)
+				    GtkTreeIter       *iter)
 {
   GSList *list;
   GValue value = { 0, };
@@ -327,7 +327,7 @@ gtk_tree_view_column_set_cell_data (GtkTreeViewColumn *tree_column,
 
   if (tree_column->func && (* tree_column->func) (tree_column,
 						  tree_model,
-						  tree_node,
+						  iter,
 						  tree_column->func_data))
     return;
 
@@ -336,8 +336,8 @@ gtk_tree_view_column_set_cell_data (GtkTreeViewColumn *tree_column,
 
   while (list && list->next)
     {
-      gtk_tree_model_node_get_value (tree_model,
-				     tree_node,
+      gtk_tree_model_iter_get_value (tree_model,
+				     iter,
 				     GPOINTER_TO_INT (list->next->data),
 				     &value);
       g_object_set_param (cell, (gchar *) list->data, &value);

@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
  * Boston, MA 02111-1307, USA.
  */
-
+#if 0
 #include "gtkmodelsimple.h"
 #include "gtksignal.h"
 enum {
@@ -418,3 +418,4 @@ gtk_model_simple_node_deleted (GtkModelSimple *simple,
 
   gtk_signal_emit_by_name (GTK_OBJECT (simple), "node_deleted", path, node);
 }
+#endif
