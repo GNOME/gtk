@@ -958,6 +958,7 @@ EXPORTS
 	gtk_rc_get_default_files
 	gtk_rc_get_style
 	gtk_rc_init
+	gtk_rc_load_image
 	gtk_rc_parse
 	gtk_rc_parse_color
 	gtk_rc_parse_priority

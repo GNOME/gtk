@@ -207,7 +207,7 @@ gdk_pixmap_new (GdkWindow *window,
     }
   if ((private->xwindow =
        CreateDIBSection (hdc, (BITMAPINFO *) &bmi,
-			 iUsage, &bits, NULL, 0)) == NULL)
+			 iUsage, (PVOID *) &bits, NULL, 0)) == NULL)
     {
       g_warning ("gdk_pixmap_new: CreateDIBSection failed: %d", GetLastError ());
       ReleaseDC (window_private->xwindow, hdc);
