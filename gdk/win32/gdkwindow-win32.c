@@ -1003,7 +1003,7 @@ gdk_window_clear (GdkWindow *window)
   g_return_if_fail (GDK_IS_WINDOW (window));
 
   if (!GDK_DRAWABLE_DESTROYED (window))
-    gdk_window_clear_area (window, 0, 0, -1, -1);
+    gdk_window_clear_area (window, 0, 0, 0, 0);
 }
 
 

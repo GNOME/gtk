@@ -132,6 +132,7 @@ gdk_cursor_new (GdkCursorType cursor_type)
   private->xcursor = xcursor;
   cursor = (GdkCursor*) private;
   cursor->type = cursor_type;
+  cursor->refcount = 1;
 
   return cursor;
 }
@@ -262,12 +263,12 @@ _gdk_cursor_destroy (GdkCursor *cursor)
   g_return_if_fail (cursor != NULL);
   private = (GdkCursorPrivate *) cursor;
 
-  GDK_NOTE (MISC, g_print ("gdk_cursor_destroy: %#x\n",
+  GDK_NOTE (MISC, g_print ("_gdk_cursor_destroy: %#x\n",
 			   (cursor->type == GDK_CURSOR_IS_PIXMAP) ? private->xcursor : 0));
 
   if (cursor->type == GDK_CURSOR_IS_PIXMAP)
     if (!DestroyIcon (private->xcursor))
-      g_warning ("gdk_cursor_destroy: DestroyIcon failed");
+      g_warning ("_gdk_cursor_destroy: DestroyIcon failed");
 
   g_free (private);
 }

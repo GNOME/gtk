@@ -26,10 +26,6 @@
 
 #include "config.h"
 
-#include <glib.h>		/* To get stat->_stat redefinition
-				 *  for mingw32
-				 */
-
 #include <stdio.h>
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -137,8 +133,6 @@ struct _CompletionDirSent
   dev_t device;
 
   gint entry_count;
-  gchar *name_buffer; /* memory segment containing names of all entries */
-
   struct _CompletionDirEntry *entries;
 };
 
@@ -164,7 +158,7 @@ struct _CompletionDir
  */
 struct _CompletionDirEntry
 {
-  gint is_dir;
+  gboolean is_dir;
   gchar *entry_name;
 };
 
@@ -181,7 +175,7 @@ struct _PossibleCompletion
    */
   gchar *text;
   gint is_a_completion;
-  gint is_directory;
+  gboolean is_directory;
 
   /* Private fields
    */
@@ -194,7 +188,7 @@ struct _CompletionState
   gchar *updated_text;
   gint updated_text_len;
   gint updated_text_alloc;
-  gint re_complete;
+  gboolean re_complete;
 
   gchar *user_dir_name_buffer;
   gint user_directories_len;
@@ -242,7 +236,7 @@ static gint                cmpl_is_a_completion   (PossibleCompletion*);
 
 /* True if the completion is a directory
  */
-static gint                cmpl_is_directory      (PossibleCompletion*);
+static gboolean            cmpl_is_directory      (PossibleCompletion*);
 
 /* Obtains the next completion, or NULL
  */
@@ -260,7 +254,7 @@ static gchar*              cmpl_updated_text       (CompletionState* cmpl_state)
 /* After updating, to see if the completion was a directory, call
  * this.  If it was, you should consider re-calling completion_matches.
  */
-static gint                cmpl_updated_dir        (CompletionState* cmpl_state);
+static gboolean            cmpl_updated_dir        (CompletionState* cmpl_state);
 
 /* Current location: if using file completion, return the current
  * directory, from which file completion begins.  More specifically,
@@ -703,7 +697,7 @@ void
 gtk_file_selection_set_filename (GtkFileSelection *filesel,
 				 const gchar      *filename)
 {
-  char  buf[MAXPATHLEN];
+  gchar *buf;
   const char *name, *last_slash;
 
   g_return_if_fail (filesel != NULL);
@@ -714,16 +708,13 @@ gtk_file_selection_set_filename (GtkFileSelection *filesel,
 
   if (!last_slash)
     {
-      buf[0] = 0;
+      buf = g_strdup ("");
       name = filename;
     }
   else
     {
-      gint len = MIN (MAXPATHLEN - 1, last_slash - filename + 1);
-
-      strncpy (buf, filename, len);
-      buf[len] = 0;
-
+      buf = g_strdup (filename);
+      buf[last_slash - filename + 1] = 0;
       name = last_slash + 1;
     }
 
@@ -731,6 +722,7 @@ gtk_file_selection_set_filename (GtkFileSelection *filesel,
 
   if (filesel->selection_entry)
     gtk_entry_set_text (GTK_ENTRY (filesel->selection_entry), name);
+  g_free (buf);
 }
 
 gchar*
@@ -750,7 +742,7 @@ gtk_file_selection_get_filename (GtkFileSelection *filesel)
   if (text)
     {
       filename = cmpl_completion_fullname (text, filesel->cmpl_state);
-      return filename;
+      return g_filename_from_utf8 (filename);
     }
 
   return nothing;
@@ -1661,7 +1653,7 @@ cmpl_updated_text (CompletionState* cmpl_state)
   return cmpl_state->updated_text;
 }
 
-static gint
+static gboolean
 cmpl_updated_dir (CompletionState* cmpl_state)
 {
   return cmpl_state->re_complete;
@@ -1737,7 +1729,7 @@ cmpl_this_completion (PossibleCompletion* pc)
   return pc->text;
 }
 
-static gint
+static gboolean
 cmpl_is_directory (PossibleCompletion* pc)
 {
   return pc->is_directory;
@@ -1845,7 +1837,9 @@ free_dir(CompletionDir* dir)
 static void
 free_dir_sent(CompletionDirSent* sent)
 {
-  g_free(sent->name_buffer);
+  gint i;
+  for (i = 0; i < sent->entry_count; i++)
+    g_free(sent->entries[i].entry_name);
   g_free(sent->entries);
   g_free(sent);
 }
@@ -2102,32 +2096,22 @@ open_relative_dir(gchar* dir_name,
 		  CompletionDir* dir,
 		  CompletionState *cmpl_state)
 {
-  gchar path_buf[2*MAXPATHLEN];
+  CompletionDir *result;
+  GString *path;
 
-  if(dir->fullname_len + strlen(dir_name) + 2 >= MAXPATHLEN)
-    {
-      cmpl_errno = CMPL_ERRNO_TOO_LONG;
-      return NULL;
-    }
+  path = g_string_sized_new (dir->fullname_len + strlen (dir_name) + 10);
+  g_string_assign (path, dir->fullname);
 
-  strcpy(path_buf, dir->fullname);
+  if(dir->fullname_len > 1
+    && path->str[dir->fullname_len - 1] != G_DIR_SEPARATOR)
+     g_string_append_c (path, G_DIR_SEPARATOR);
+  g_string_append (path, dir_name);
 
-  if(dir->fullname_len > 1)
-    {
-      if (path_buf[dir->fullname_len - 1] != G_DIR_SEPARATOR)
-	{
-	  path_buf[dir->fullname_len] = G_DIR_SEPARATOR;
-	  strcpy (path_buf + dir->fullname_len + 1, dir_name);
-	}
-      else
-	strcpy (path_buf + dir->fullname_len, dir_name);
-    }
-  else
-    {
-      strcpy(path_buf + dir->fullname_len, dir_name);
-    }
+  result = open_dir(path->str, cmpl_state);
 
-  return open_dir(path_buf, cmpl_state);
+  g_string_free (path, TRUE);
+
+  return result;
 }
 
 /* after the cache lookup fails, really open a new directory */
@@ -2138,29 +2122,23 @@ open_new_dir(gchar* dir_name, struct stat* sbuf, gboolean stat_subdirs)
   DIR* directory;
   gchar *buffer_ptr;
   struct dirent *dirent_ptr;
-  gint buffer_size = 0;
   gint entry_count = 0;
   gint i;
   struct stat ent_sbuf;
-  char path_buf[MAXPATHLEN*2];
-  gint path_buf_len;
+  GString *path;
+  gchar *xdir, *xname;
+  int entry_len;
 
   sent = g_new(CompletionDirSent, 1);
   sent->mtime = sbuf->st_mtime;
   sent->inode = sbuf->st_ino;
   sent->device = sbuf->st_dev;
 
-  path_buf_len = strlen(dir_name);
+  path = g_string_sized_new (2*MAXPATHLEN + 10);
 
-  if (path_buf_len > MAXPATHLEN)
-    {
-      cmpl_errno = CMPL_ERRNO_TOO_LONG;
-      return NULL;
-    }
-
-  strcpy(path_buf, dir_name);
-
-  directory = opendir(dir_name);
+  xdir = g_filename_from_utf8 (dir_name);
+  directory = opendir(xdir);
+  g_free (xdir);
 
   if(!directory)
     {
@@ -2170,23 +2148,11 @@ open_new_dir(gchar* dir_name, struct stat* sbuf, gboolean stat_subdirs)
 
   while((dirent_ptr = readdir(directory)) != NULL)
     {
-      int entry_len = strlen(dirent_ptr->d_name);
-      buffer_size += entry_len + 1;
-      entry_count += 1;
-
-      if(path_buf_len + entry_len + 2 >= MAXPATHLEN)
-	{
-	  cmpl_errno = CMPL_ERRNO_TOO_LONG;
- 	  closedir(directory);
-	  return NULL;
-	}
+      entry_count++;
     }
 
-  sent->name_buffer = g_new(gchar, buffer_size);
   sent->entries = g_new(CompletionDirEntry, entry_count);
   sent->entry_count = entry_count;
-
-  buffer_ptr = sent->name_buffer;
 
   rewinddir(directory);
 
@@ -2201,33 +2167,29 @@ open_new_dir(gchar* dir_name, struct stat* sbuf, gboolean stat_subdirs)
 	  return NULL;
 	}
 
-      strcpy(buffer_ptr, dirent_ptr->d_name);
-      sent->entries[i].entry_name = buffer_ptr;
-      buffer_ptr += strlen(dirent_ptr->d_name);
-      *buffer_ptr = 0;
-      buffer_ptr += 1;
+      sent->entries[i].entry_name = g_filename_to_utf8 (dirent_ptr->d_name);
 
-      if (path_buf[path_buf_len-1] != G_DIR_SEPARATOR)
+      g_string_assign (path, dir_name);
+      if (path->str[path->len-1] != G_DIR_SEPARATOR)
 	{
-	  path_buf[path_buf_len] = G_DIR_SEPARATOR;
-	  strcpy(path_buf + path_buf_len + 1, dirent_ptr->d_name);
+	  g_string_append_c (path, G_DIR_SEPARATOR);
 	}
-      else
-	strcpy(path_buf + path_buf_len, dirent_ptr->d_name);
+      g_string_append (path, dirent_ptr->d_name);
 
       if (stat_subdirs)
 	{
-	  if(stat(path_buf, &ent_sbuf) >= 0 && S_ISDIR(ent_sbuf.st_mode))
-	    sent->entries[i].is_dir = 1;
+	  if(stat(path->str, &ent_sbuf) >= 0 && S_ISDIR(ent_sbuf.st_mode))
+	    sent->entries[i].is_dir = TRUE;
 	  else
 	    /* stat may fail, and we don't mind, since it could be a
 	     * dangling symlink. */
-	    sent->entries[i].is_dir = 0;
+	    sent->entries[i].is_dir = FALSE;
 	}
       else
 	sent->entries[i].is_dir = 1;
     }
 
+  g_string_free (path, TRUE);
   qsort(sent->entries, sent->entry_count, sizeof(CompletionDirEntry), compare_cmpl_dir);
 
   closedir(directory);
@@ -2562,7 +2524,7 @@ attempt_homedir_completion(gchar* text_to_complete,
 	}
 
       cmpl_state->the_completion.is_a_completion = 1;
-      cmpl_state->the_completion.is_directory = 1;
+      cmpl_state->the_completion.is_directory = TRUE;
 
       append_completion_text("~", cmpl_state);
 
@@ -2583,7 +2545,7 @@ attempt_homedir_completion(gchar* text_to_complete,
     {
       cmpl_state->user_completion_index += 1;
       cmpl_state->the_completion.is_a_completion = 1;
-      cmpl_state->the_completion.is_directory = 1;
+      cmpl_state->the_completion.is_directory = TRUE;
 
       return append_completion_text("~" G_DIR_SEPARATOR_S, cmpl_state);
     }

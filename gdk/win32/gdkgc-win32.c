@@ -431,7 +431,7 @@ gdk_win32_gc_set_values (GdkGC           *gc,
   if (values_mask & GDK_GC_BACKGROUND)
     {
       GDK_NOTE (MISC, g_print ("bg = %s ",
-			       gdk_color_to_string (&values->foreground)));
+			       gdk_color_to_string (&values->background)));
       data->background = values->background;
       data->values_mask |= GDK_GC_BACKGROUND;
     }

@@ -40,6 +40,7 @@ all: \
 gdk_OBJECTS = \
 	gdk.obj \
 	gdkcolor.obj \
+	gdkcursor.obj \
 	gdkdraw.obj \
 	gdkevents.obj \
 	gdkfont.obj \

@@ -343,6 +343,7 @@ EXPORTS
 	gtk_container_forall
 	gtk_container_foreach
 	gtk_container_foreach_full
+	gtk_container_get_toplevels
 	gtk_container_get_type
 	gtk_container_query_child_args
 	gtk_container_queue_resize
@@ -353,6 +354,7 @@ EXPORTS
 	gtk_container_set_focus_child
 	gtk_container_set_focus_hadjustment
 	gtk_container_set_focus_vadjustment
+	gtk_container_set_reallocate_redraws
 	gtk_container_set_resize_mode
 	gtk_container_unregister_toplevel
 	gtk_ctree_collapse
@@ -365,6 +367,7 @@ EXPORTS
 	gtk_ctree_export_to_gnode
 	gtk_ctree_find
 	gtk_ctree_find_all_by_row_data
+	gtk_ctree_find_all_by_row_data_custom
 	gtk_ctree_find_by_row_data
 	gtk_ctree_find_by_row_data_custom
 	gtk_ctree_find_node_ptr
@@ -663,6 +666,7 @@ EXPORTS
 	gtk_list_unselect_child
 	gtk_list_unselect_item
 	gtk_main
+	gtk_main_do_event
 	gtk_main_iteration
 	gtk_main_iteration_do
 	gtk_main_level
@@ -811,6 +815,7 @@ EXPORTS
 	gtk_object_ref
 	gtk_object_remove_data
 	gtk_object_remove_data_by_id
+	gtk_object_remove_no_notify
 	gtk_object_remove_no_notify_by_id
 	gtk_object_set
 	gtk_object_set_data
@@ -1279,10 +1284,12 @@ EXPORTS
 	gtk_widget_newv
 	gtk_widget_path
 	gtk_widget_pop_colormap
+	gtk_widget_pop_composite_child
 	gtk_widget_pop_style
 	gtk_widget_pop_visual
 	gtk_widget_popup
 	gtk_widget_push_colormap
+	gtk_widget_push_composite_child
 	gtk_widget_push_style
 	gtk_widget_push_visual
 	gtk_widget_queue_clear

@@ -1,8 +1,42 @@
+2000-02-04  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/win32/gdkfont-win32.c (logfont_to_xlfd): Use
+	g_filename_to_utf8 to convert the font names Windows gives us from
+	whatever is the default codepage to UTF-8.
+	(gdk_font_load_internal) Use g_filename_from_utf8 for conversion
+	in the other direction.
+
+	* gdk/win32/gdkgc-win32.c (gdk_win32_gc_set_values): Fix cut&paste
+	error in debugging output.
+
+2000-02-02  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/win32/gdkwindow-win32.c (gdk_window_clear): Pass zero width
+	and height parameters to gdk_window_clear_area(). Not minus one.
+
 Wed Feb  2 11:58:05 2000  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkdnd.c (gtk_drag_selection_received): Add some sanity
 	checks if the widget passed to gtk_drag_get_data() was not the
 	dest widget.
+
+2000-02-01  Tor Lillqvist  <tml@iki.fi>
+
+	* gtk/gtkfilesel.c: Use the g_filename_to_utf8 and
+	g_filename_from_utf8 functions (which were added a moment ago to
+	GLib). Some cleanups: Use gbooleans. Use GStrings instead of fixed
+	size buffers.
+
+	* gtk/gtkfilesel.h: Add comment about
+	gtk_file_selection_get_filename returning the filename in the C
+	runtime's encoding.
+
+	* README.win32
+	* gdk/gdk.def
+	* gdk/makefile.{cygwin,msc}
+	* gtk/gtk.def: Updates.
+
+	* gdk/gdkcursor-win32.c: Initialise refcount.
 
 2000-01-31  Yuan-Chung Cheng <platin@linux.org.tw>
 

@@ -10,12 +10,6 @@ EXPORTS
 	gdk_color_alloc
 	gdk_color_black
 	gdk_color_change
-	gdk_color_copy
-	gdk_color_equal
-	gdk_color_free
-	gdk_color_hash
-	gdk_color_parse
-	gdk_color_white
 	gdk_color_context_add_palette
 	gdk_color_context_free
 	gdk_color_context_free_dither
@@ -29,6 +23,12 @@ EXPORTS
 	gdk_color_context_new_mono
 	gdk_color_context_query_color
 	gdk_color_context_query_colors
+	gdk_color_copy
+	gdk_color_equal
+	gdk_color_free
+	gdk_color_hash
+	gdk_color_parse
+	gdk_color_white
 	gdk_colormap_alloc_color
 	gdk_colormap_alloc_colors
 	gdk_colormap_change
@@ -42,9 +42,10 @@ EXPORTS
 	gdk_colors_alloc
 	gdk_colors_free
 	gdk_colors_store
-	gdk_cursor_destroy
 	gdk_cursor_new
 	gdk_cursor_new_from_pixmap
+	gdk_cursor_ref
+	gdk_cursor_unref
 	gdk_dnd_init
 	gdk_drag_abort
 	gdk_drag_begin
@@ -112,14 +113,14 @@ EXPORTS
 	gdk_exit
 	gdk_flush
 	gdk_font_equal
+	gdk_font_full_name_free
+	gdk_font_full_name_get
 	gdk_font_id
 	gdk_font_list_free
 	gdk_font_list_new
 	gdk_font_load
 	gdk_font_ref
 	gdk_font_unref
-	gdk_font_full_name_get
-	gdk_font_full_name_free
 	gdk_fontset_load
 	gdk_free_compound_text
 	gdk_free_text_list

@@ -134,7 +134,8 @@ logfont_to_xlfd (const LOGFONT *lfp,
   const gchar *registry, *encoding;
   int point_size;
   static int logpixelsy = 0;
-  gchar facename[LF_FACESIZE*3];
+  gchar facename[LF_FACESIZE*5];
+  gchar *utf8_facename;
   gchar *p;
   const gchar *q;
 
@@ -218,9 +219,14 @@ logfont_to_xlfd (const LOGFONT *lfp,
   if (res == -1)
     res = logpixelsy;
 
-  /* Replace illegal characters with hex escapes. */
+  /* Convert the facename Windows fives us from the locale-dependent
+   * codepage to UTF-8.
+   */
+  utf8_facename = g_filename_to_utf8 (lfp->lfFaceName);
+
+  /* Replace characters illegal in an XLFD with hex escapes. */
   p = facename;
-  q = lfp->lfFaceName;
+  q = utf8_facename;
   while (*q)
     {
       if (*q == '-' || *q == '*' || *q == '?' || *q == '%')
@@ -230,8 +236,9 @@ logfont_to_xlfd (const LOGFONT *lfp,
       q++;
     }
   *p = '\0';
+  g_free (utf8_facename);
 
-  return  g_strdup_printf
+  return g_strdup_printf
     ("-%s-%s-%s-%s-%s-%s-%d-%d-%d-%d-%s-%d-%s-%s",
      "unknown", 
      facename,
@@ -259,6 +266,7 @@ gdk_font_full_name_get (GdkFont *font)
   GSList *list;
   GString *string;
   gchar *result;
+  gchar *xlfd;
   LOGFONT logfont;
 
   g_return_val_if_fail (font != NULL, NULL);
@@ -278,9 +286,9 @@ gdk_font_full_name_get (GdkFont *font)
 	  return NULL;
 	}
 
-      string =
-	g_string_append (string,
-			 logfont_to_xlfd (&logfont, logfont.lfHeight, -1, 0));
+      xlfd = logfont_to_xlfd (&logfont, logfont.lfHeight, -1, 0);
+      string = g_string_append (string, xlfd);
+      g_free (xlfd);
       list = list->next;
       if (list)
 	string = g_string_append_c (string, ',');
@@ -1124,7 +1132,7 @@ gdk_font_load_internal (const gchar *font_name)
   DWORD fdwItalic, fdwUnderline, fdwStrikeOut, fdwCharSet,
     fdwOutputPrecision, fdwClipPrecision, fdwQuality, fdwPitchAndFamily;
   HGDIOBJ oldfont;
-  const char *lpszFace;
+  char *lpszFace;
   gchar face[100];
 
   int numfields, n1, n2, tries;
@@ -1164,7 +1172,7 @@ gdk_font_load_internal (const gchar *font_name)
       fdwClipPrecision = CLIP_DEFAULT_PRECIS;
       fdwQuality = PROOF_QUALITY;
       fdwPitchAndFamily = DEFAULT_PITCH;
-      lpszFace = font_name;
+      lpszFace = g_filename_from_utf8 (font_name);
     }
   else if (numfields != 5)
     {
@@ -1176,7 +1184,7 @@ gdk_font_load_internal (const gchar *font_name)
       /* It must be a XLFD name */
 
       /* Check for hex escapes in the font family,
-       * put in there by gtkfontsel.
+       * put in there by logfont_to_xlfd. Convert them in-place.
        */
       p = family;
       while (*p)
@@ -1351,7 +1359,7 @@ gdk_font_load_internal (const gchar *font_name)
 	fdwPitchAndFamily = VARIABLE_PITCH;
       else 
 	fdwPitchAndFamily = DEFAULT_PITCH;
-      lpszFace = family;
+      lpszFace = g_filename_from_utf8 (family);
     }
 
   for (tries = 0; ; tries++)
@@ -1364,15 +1372,20 @@ gdk_font_load_internal (const gchar *font_name)
 			       fnWeight, fdwItalic, fdwUnderline, fdwStrikeOut,
 			       fdwCharSet, fdwOutputPrecision, fdwClipPrecision,
 			       fdwQuality, fdwPitchAndFamily, lpszFace));
-      if ((hfont =
-	   CreateFont (nHeight, nWidth, nEscapement, nOrientation,
-		       fnWeight, fdwItalic, fdwUnderline, fdwStrikeOut,
-		       fdwCharSet, fdwOutputPrecision, fdwClipPrecision,
-		       fdwQuality, fdwPitchAndFamily, lpszFace)) != NULL)
+      hfont = CreateFont (nHeight, nWidth, nEscapement, nOrientation,
+			  fnWeight, fdwItalic, fdwUnderline, fdwStrikeOut,
+			  fdwCharSet, fdwOutputPrecision, fdwClipPrecision,
+			  fdwQuality, fdwPitchAndFamily, lpszFace);
+      /* After the first try lpszFace contains a return value
+       * from g_filename_from_utf8(), so free it.
+       */
+      if (tries == 0)
+	g_free (lpszFace);
+
+      if (hfont != NULL)
 	break;
 
       /* If we fail, try some similar fonts often found on Windows. */
-
       if (tries == 0)
 	{
 	  if (g_strcasecmp (family, "helvetica") == 0)

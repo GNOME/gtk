@@ -31,6 +31,7 @@ all: \
 gdk_OBJECTS = \
 	gdk.o		\
 	gdkcolor.o	\
+	gdkcursor.o	\
 	gdkdraw.o	\
 	gdkevents.o     \
 	gdkfont.o	\
