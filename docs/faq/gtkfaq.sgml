@@ -8,7 +8,7 @@
 
 <!-- NOTE: Use only one author tag, otherwise sgml2txt barfs - TRG --> 
 <author>Nathan Froyd, Tony Gale, Shawn T. Amundson.
-<date>March 9th 1998
+<date>March 13th 1998
 <abstract>
 This document is intended to answer questions that are likely to be 
 frequently asked by programmers using GTK+ or people who are just
@@ -79,19 +79,17 @@ GNU, though."
 <sect1>Where is the documentation for GTK+?
 <p>
 In the GTK+ distribution's doc/ directory you will find the
-reference material for both GTK and GDK, and this FAQ.
+reference material for both GTK and GDK, this FAQ and the
+GTK Tutorial.
 
-There is also a GTK+ Tutorial which can be found at 
-<htmlurl url="http://www.levien.com/~slow/gtk/" 
-name="http://www.levien.com/~slow/gtk/">.
+In addition, you can find links to HTML versions of these documents 
+by going to 
+<htmlurl url="http://www.gimp.org/gtk/" 
+name="http://www.gimp.org/gtk/">.
 
 The Tutorial and FAQ can also be found at
 <htmlurl url="http://www.geocities.com/ResearchTriangle/Lab/4299/"
 name="http://www.geocities.com/ResearchTriangle/Lab/4299/">.
-       
-In addition, you can find links to all of these documents by going to
-<htmlurl url="http://www.gimp.org/gtk/docs" 
-name="http://www.gimp.org/gtk/docs">.
 
 <!-- ----------------------------------------------------------------- -->
 <sect1>Is there a mailing list (or mailing list archive) for GTK+?
@@ -110,7 +108,7 @@ email message to <htmlurl url="mailto:gtk-list-request@redhat.com"
 name="gtk-list-request@redhat.com">
 with <em>subscribe</em> in the <bf>subject</bf>.
 <p>
-A searchable archive of the mailing list can be found at <htmlurl url="http://www.redhat.com/linux-info/gtk/gtk-list/index.html" name="http://www.redhat.com/linux-info/gtk/gtk-list/index.html">
+A searchable archive of the mailing list can be found at <htmlurl url="http://archive.redhat.com/gtk-list" name="http://archive.redhat.com/gtk-list">
 </itemize>
 <!-- ----------------------------------------------------------------- -->
 <sect1>The gtk-list hasn't had any traffic for days, is it dead?
@@ -238,46 +236,6 @@ and reinstall gtk+.
 <!-- ***************************************************************** -->
 <sect>Development of GTK+
 <!-- ***************************************************************** -->
-
-<!-- ----------------------------------------------------------------- -->
-<sect1>When will it reach version 1.0?
-<p>
-The file 'TODO' in the gtk+ distribution lists the things that need to be done
-before version 1.0 is repleased. Not including bugs, this includes:
-
-<itemize>
-<item>New Features
-<itemize>
-<item>gdk_expose_compress: ala-Xt, this would really help for opaque moves and
-   such
-</itemize>
-<p>
-
-<item>Widgets
-<itemize>
-<item>Column-list (Jay Painter)
-<item>Text widget (needs to be finished)
-<item>Entry should have a password mode (and it should show stars
-   for user feedback)
-</itemize>
-<p>
-
-<item>Drag-and-Drop (DND)
-<itemize>
-<item>  It seems to be having problems again.  The way DND data types are set in
-  GtkWidget really needs to be fixed.  This is pretty high on my priority
-  list, and I'll get to it as soon as the column list widget is done.  The
-  correct way dnd data needs to be set is to have a additional keyed data
-  type with GtkWidget, which is applied to the widget's window upon realize.
-  There also needs to be a way to set dnd-data on widget windows which are
-  not the main window (for widgets that create more than one window).
-    -- Jay Painter
-<item>  DnD seems to work for me, but yes, there needs to be some sort of
-  gtk_widget layer that makes it easier... Also, adding support for drop
-  zones might be nice.
-    -- Elliot
-</itemize>
-</itemize>
 
 <!-- ----------------------------------------------------------------- -->
 <sect1>Whats this CVS thing that everyone keeps talking about, and how do I access it?
@@ -449,9 +407,9 @@ http://www.sakuranet.or.jp/~aozasa/shige/doc/comp/gtk/gtkGL/files-en.html
 <p>
 So, after you have installed GTK+ there are a couple of things that can
 ease you into developing applications with it. There is the
-GTK+ Tutorial <htmlurl url="http://www.levien.com/~slow/gtk/tutorial" 
-name="&lt;http://www.levien.com/~slow/gtk/tutorial&gt;">, which is undergoing development. This will introduce you
-to writing applications using C.
+GTK+ Tutorial <htmlurl url="http://www.gimp.org/gtk/tutorial/" 
+name="&lt;http://www.gimp.org/gtk/tutorial/&gt;">, which is undergoing 
+development. This will introduce you to writing applications using C.
 
 The Tutorial doesn't (yet) contain information on all of the widgets
 that are in GTK+. For example code on how to use the basics of all the
@@ -752,7 +710,7 @@ determined it didn't look good and removed it.
 <!-- ----------------------------------------------------------------- -->
 <sect1>How can I define a separation line in a menu? 
 <p>
-See the <htmlurl url="http://www.levien.com/~slow/gtk/"
+See the <htmlurl url="http://www.gimp.org/gtk/tutorial/"
 name="Tutorial"> for information on how to create menus.
 However, to create a separation line in a menu, just insert an
 empty menu item:

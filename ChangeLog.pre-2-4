@@ -1,3 +1,8 @@
+Fri Mar 13 09:40:17 GMT 199 Tony Gale  <gale@gimp.org>
+
+	* docs/gtkfaq.sgml: update links to documentation and
+	  remove question on whats needs to be done before 1.0
+
 Fri Mar 13 01:17:44 1998  George Lebl  <jirka@5z.com>
 
 	* gtk/gtkfilesel.c: Set the column width of the clists
