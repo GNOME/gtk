@@ -1,3 +1,8 @@
+Mon Aug 24 23:37:26 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtktext.c: Fixed some remaining background drawing,
+	  merges from main branch, cleanups.
+
 Mon Aug 24 10:55:51 1998  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtknotebook.c (gtk_notebook_draw_tab): Don't
@@ -74,6 +79,104 @@ Thu Aug 20 18:27:29 EDT 1998 The Rasterman <raster@redhat.com>
 	
 Thu Aug 20 18:27:29 EDT 1998 The Rasterman <raster@redhat.com>
 	* made gtkrc scanner append dir that gtkrc is read from to pixmap path.
+
+Mon Aug 24 18:37:15 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtktext.c: Reference count the fonts used in
+	the text widget.
+
+	* gdk/gdk.h gdk/gdkcolor.c: Rename the color allocation
+	freeing functions to be more consistent, and more 
+	convenient; leave the old names in for backwards compatibility.
+
+	* gdk/gdkcolor.c gdk/gdkprivate.h: Reference count the
+	allocations in pseudo-color colormaps to greatly reduce
+	calls to XAllocColor. Keep a per-colormap hashtable to
+	speed up finding if there is an already-allocated matching
+	color.
+
+	* gdk/gdkcolor.c: Don't just match read the system colormap
+	when the colormap is created, but synchronize our copy
+	with the system colormap periodically.
+	
+	* gdk/gdk.c gdk/gdktypes.h gtk/gtkentry.c gtk/gtktext.c: 
+	Change XIM constants names to match GDK conventions
+
+	* gtk/testinput.c: Allow the drawing area to get the focus.
+
+	* gtk/testgtk.c: Change around the Text test to demonstrates
+	multiple fonts, use more colors.
+
+	* gtk/gtkwidget.c: Improve gtk_widget_get_colormap()/visual()
+	so they work after a widget is unrealized.
+
+	* gtk/gtktext.[ch]: Remove the requirement that the text
+	widget be realized before adding text (!) Allocate colors
+	ourself, instead of requiring the caller allocate them.
+	Allow changing styles to work properly by keeping track
+	of the values for a certain property are default or
+	set explicitely.
+
+	* gtk/gtkmenu.h: Added some comments.
+
+	* gtk/gtkentry.c: Changes to match XIM constants.
+
+	* gtk/gdk.h gdk/gdkwindow.c: Add gdk_drawable_set_data(),
+	for adding keyed data to drawables. (Uses g_dataset
+	internally)
+
+	* gdk/gdkpixmap.c: Keep track of the colors we allocate,
+	when creating an XPM - store them as user data for the GdkPixmap,
+	so we don't leak colors when we create pixmaps from XPM's.
+
+	Allocate memory for color information in large blocks instead of 
+	as many little pieces.
+	
+Mon Aug 24 11:09:32 PDT 1998 Manish Singh <yosh@gimp.org>
+
+	* gdk/gdkrgb.c: removed some unused variables
+
+	* gtk/gtkclist.c
+	* gtk/gtkmain.c: #if 0'd out some unused code
+
+	* gtk/gtkobject.c: check for NULL object hash table in gtk_object_debug
+
+Mon Aug 24 02:36:53 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkarg.h:
+	* gtk/gtkarg.c:
+	* gtk/gtkwidget.h: 
+	* gtk/gtkwidget.c: 
+	* gtk/gtkobject.h:
+	* gtk/gtkobject.c:
+	* gtk/gtkcontainer.h: 
+	* gtk/gtkcontainer.c: 
+	(gtk_object_new):
+	(gtk_object_set):
+	(gtk_widget_new):
+	(gtk_widget_set): 
+	(gtk_container_add_with_args):
+	(gtk_container_child_set):
+	begin the parameter elipsis (...) after the first argument name. this
+	change is source compatible, since it was always required, even as NULL.
+ 	(gtk_args_collect): 
+	(gtk_object_args_collect): 
+	(gtk_container_child_args_collect):
+ 	changed prototypes to pass first_arg_name, also, pass va_list variable
+	by value (portability concerns). callers changed.
+
+	* gtk/gtkargcollector.c: implemented gtk_arg_collect_value() as
+	a huge macro GTK_ARG_COLLECT_VALUE() <shrug>. this is needed because we
+ 	can't pass va_list variables by reference for portability reasons.
+
+Fri Aug 21 22:40:00  Raph Levien  <raph@gtk.org>
+
+	* gdk/gdkrgb.c: added calls to gdk_rgb_init in the get_cmap and
+	get_visual calls, so that it gets implicitly initialized.
+
+Fri Aug 21 13:06:04 1998  Stuart Parmenter  <pavlov@gimp.org>
+	* gtk/gtkfeatures.h.in:  added GTK_HAVE_FEATURES_1_1_2 for changes
+	such as GtkCTree function name changes
 	
 Mon Aug 10 23:03:55 1998  The Rasterman <raster@redhat.com>
 	* Fixed minor problem in gtkhandlebox.c with drawing, and some

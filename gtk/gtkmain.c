@@ -116,10 +116,12 @@ static void  gtk_handle_idle		 (void);
 static void  gtk_handle_timer		 (void);
 static void  gtk_propagate_event	 (GtkWidget	     *widget,
 					  GdkEvent	     *event);
+#if 0
 static void  gtk_error			 (gchar		     *str);
 static void  gtk_warning		 (gchar		     *str);
 static void  gtk_message		 (gchar		     *str);
 static void  gtk_print			 (gchar		     *str);
+#endif
 
 static gint  gtk_idle_remove_from_list    (GList               **list, 
 					   guint                 tag, 
@@ -1788,6 +1790,7 @@ gtk_propagate_event (GtkWidget *widget,
 }
 
 
+#if 0
 static void
 gtk_error (gchar *str)
 {
@@ -1898,4 +1901,4 @@ gtk_print (gchar *str)
   if (!GTK_WIDGET_VISIBLE (window))
     gtk_widget_show (window);
 }
-
+#endif

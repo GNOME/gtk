@@ -105,7 +105,8 @@ gtk_object_debug_foreach (gpointer key, gpointer value, gpointer user_data)
 static void
 gtk_object_debug (void)
 {
-  g_hash_table_foreach (living_objs_ht, gtk_object_debug_foreach, NULL);
+  if (living_objs_ht)
+    g_hash_table_foreach (living_objs_ht, gtk_object_debug_foreach, NULL);
   
   g_message ("living objects count = %d", obj_count);
 }
@@ -621,7 +622,8 @@ gtk_object_notify_weaks (GtkObject *object)
  ****************************************************/
 
 GtkObject*
-gtk_object_new (GtkType object_type,
+gtk_object_new (GtkType      object_type,
+		const gchar *first_arg_name,
 		...)
 {
   GtkObject *object;
@@ -634,11 +636,12 @@ gtk_object_new (GtkType object_type,
 
   object = gtk_type_new (object_type);
 
-  va_start (var_args, object_type);
+  va_start (var_args, first_arg_name);
   error = gtk_object_args_collect (GTK_OBJECT_TYPE (object),
 				   &arg_list,
 				   &info_list,
-				   &var_args);
+				   first_arg_name,
+				   var_args);
   va_end (var_args);
   
   if (error)
@@ -719,6 +722,7 @@ gtk_object_getv (GtkObject           *object,
 
 void
 gtk_object_set (GtkObject *object,
+		const gchar    *first_arg_name,
 		...)
 {
   va_list var_args;
@@ -729,11 +733,12 @@ gtk_object_set (GtkObject *object,
   g_return_if_fail (object != NULL);
   g_return_if_fail (GTK_IS_OBJECT (object));
   
-  va_start (var_args, object);
+  va_start (var_args, first_arg_name);
   error = gtk_object_args_collect (GTK_OBJECT_TYPE (object),
 				   &arg_list,
 				   &info_list,
-				   &var_args);
+				   first_arg_name,
+				   var_args);
   va_end (var_args);
   
   if (error)
@@ -878,13 +883,15 @@ gchar*
 gtk_object_args_collect (GtkType      object_type,
 			 GSList      **arg_list_p,
 			 GSList      **info_list_p,
-			 gpointer      var_args_p)
+			 const gchar  *first_arg_name,
+			 va_list       var_args)
 {
   return gtk_args_collect (object_type,
 			   object_arg_info_ht,
 			   arg_list_p,
 			   info_list_p,
-			   var_args_p);
+			   first_arg_name,
+			   var_args);
 }
 
 gchar*

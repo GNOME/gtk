@@ -242,6 +242,7 @@ guint	gtk_object_class_user_signal_newv (GtkObjectClass     *klass,
 					   guint	       nparams,
 					   GtkType	      *params);
 GtkObject*	gtk_object_new		  (GtkType	       type,
+					   const gchar	      *first_arg_name,
 					   ...);
 GtkObject*	gtk_object_newv		  (GtkType	       object_type,
 					   guint	       n_args,
@@ -272,6 +273,7 @@ void	gtk_object_getv		(GtkObject	*object,
  * more than one c-function argument.
  */
 void	gtk_object_set		(GtkObject	*object,
+				 const gchar    *first_arg_name,
 				 ...);
 void	gtk_object_setv		(GtkObject	*object,
 				 guint		n_args,
@@ -372,7 +374,8 @@ void	gtk_object_arg_get	(GtkObject   *object,
 gchar*	gtk_object_args_collect (GtkType      object_type,
 				 GSList	    **arg_list_p,
 				 GSList	    **info_list_p,
-				 gpointer     var_args_p);
+				 const gchar *first_arg_name,
+				 va_list      var_args);
 gchar*  gtk_object_arg_get_info (GtkType      object_type,
 				 const gchar *arg_name,
 				 GtkArgInfo **info_p);

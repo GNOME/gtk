@@ -60,7 +60,8 @@ gchar*	gtk_args_collect		(GtkType	object_type,
 					 GHashTable    *arg_info_hash_table,
 					 GSList	      **arg_list_p,
 					 GSList	      **info_list_p,
-					 gpointer	var_args_p);
+					 const gchar   *first_arg_name,
+					 va_list	var_args);
 void	gtk_args_collect_cleanup	(GSList	       *arg_list,
 					 GSList	       *info_list);
 gchar*	gtk_arg_get_info		(GtkType	object_type,

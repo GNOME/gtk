@@ -41,6 +41,7 @@ typedef struct _GdkWindowPrivate       GdkPixmapPrivate;
 typedef struct _GdkImagePrivate	       GdkImagePrivate;
 typedef struct _GdkGCPrivate	       GdkGCPrivate;
 typedef struct _GdkColormapPrivate     GdkColormapPrivate;
+typedef struct _GdkColorInfo           GdkColorInfo;
 typedef struct _GdkVisualPrivate       GdkVisualPrivate;
 typedef struct _GdkFontPrivate	       GdkFontPrivate;
 typedef struct _GdkCursorPrivate       GdkCursorPrivate;
@@ -111,6 +112,16 @@ struct _GdkGCPrivate
   guint ref_count;
 };
 
+typedef enum {
+  GDK_COLOR_WRITEABLE = 1 << 0
+} GdkColorInfoFlags;
+
+struct _GdkColorInfo
+{
+  GdkColorInfoFlags flags;
+  guint ref_count;
+};
+
 struct _GdkColormapPrivate
 {
   GdkColormap colormap;
@@ -118,7 +129,11 @@ struct _GdkColormapPrivate
   Display *xdisplay;
   GdkVisual *visual;
   gint private_val;
-  gint next_color;
+
+  GHashTable *hash;
+  GdkColorInfo *info;
+  time_t last_sync_time;
+  
   guint ref_count;
 };
 

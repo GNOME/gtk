@@ -59,11 +59,25 @@
 #define MARK_NEXT_LIST_PTR(mark)    ((mark)->property->next)
 #define MARK_OFFSET(mark)           ((mark)->offset)
 #define MARK_PROPERTY_LENGTH(mark)  (MARK_CURRENT_PROPERTY(mark)->length)
-#define MARK_CURRENT_FONT(mark)     (((TextProperty*)(mark)->property->data)->font->gdk_font)
-#define MARK_CURRENT_FORE(mark)     (&((TextProperty*)(mark)->property->data)->fore_color)
-#define MARK_CURRENT_BACK(mark)     (&((TextProperty*)(mark)->property->data)->back_color)
 
-#define MARK_CURRENT_TEXT_FONT(m)   (((TextProperty*)(m)->property->data)->font)
+
+#define MARK_CURRENT_FONT(text, mark) \
+  ((MARK_CURRENT_PROPERTY(mark)->flags & PROPERTY_FONT) ? \
+         MARK_CURRENT_PROPERTY(mark)->font->gdk_font : \
+         GTK_WIDGET (text)->style->font)
+#define MARK_CURRENT_FORE(text, mark) \
+  ((MARK_CURRENT_PROPERTY(mark)->flags & PROPERTY_FOREGROUND) ? \
+         &MARK_CURRENT_PROPERTY(mark)->fore_color : \
+         &((GtkWidget *)text)->style->text[((GtkWidget *)text)->state])
+#define MARK_CURRENT_BACK(text, mark) \
+  ((MARK_CURRENT_PROPERTY(mark)->flags & PROPERTY_BACKGROUND) ? \
+         &MARK_CURRENT_PROPERTY(mark)->back_color : \
+         &((GtkWidget *)text)->style->base[((GtkWidget *)text)->state])
+#define MARK_CURRENT_TEXT_FONT(text, mark) \
+  ((MARK_CURRENT_PROPERTY(mark)->flags & PROPERTY_FONT) ? \
+         MARK_CURRENT_PROPERTY(mark)->font : \
+         text->current_font)
+
 #define TEXT_LENGTH(t)              ((t)->text_end - (t)->gap_size)
 #define FONT_HEIGHT(f)              ((f)->ascent + (f)->descent)
 #define LINE_HEIGHT(l)              ((l).font_ascent + (l).font_descent)
@@ -73,7 +87,6 @@
 #define LAST_INDEX(t, m)            ((m).index == TEXT_LENGTH(t))
 #define CACHE_DATA(c)               (*(LineParams*)(c)->data)
 
-typedef struct _TextFont              TextFont;
 typedef struct _TextProperty          TextProperty;
 typedef struct _TabStopMark           TabStopMark;
 typedef struct _PrevTabCont           PrevTabCont;
@@ -96,25 +109,35 @@ struct _SetVerticalScrollData {
   GtkPropertyMark mark;
 };
 
-struct _TextFont
+struct _GtkTextFont
 {
   /* The actual font. */
   GdkFont *gdk_font;
-  
+  guint ref_count;
+
   gint16 char_widths[256];
 };
+
+typedef enum {
+  PROPERTY_FONT =       1 << 0,
+  PROPERTY_FOREGROUND = 1 << 1,
+  PROPERTY_BACKGROUND = 1 << 2
+} TextPropertyFlags;
 
 struct _TextProperty
 {
   /* Font. */
-  TextFont* font;
-  
+  GtkTextFont* font;
+
   /* Background Color. */
   GdkColor back_color;
   
   /* Foreground Color. */
   GdkColor fore_color;
-  
+
+  /* Show which properties are set */
+  TextPropertyFlags flags;
+
   /* Length of this property. */
   guint length;
 };
@@ -213,10 +236,24 @@ static gint  gtk_text_focus_out         (GtkWidget         *widget,
 
 static void move_gap_to_point (GtkText* text);
 static void make_forward_space (GtkText* text, guint len);
+
+/* Property management */
+static GtkTextFont* get_text_font (GdkFont* gfont);
+static void         text_font_unref (GtkTextFont *text_font);
+
 static void insert_text_property (GtkText* text, GdkFont* font,
 				  GdkColor *fore, GdkColor* back, guint len);
+static TextProperty* new_text_property (GtkText *text, GdkFont* font, 
+					GdkColor* fore, GdkColor* back, guint length);
+static void destroy_text_property (TextProperty *prop);
+static void init_properties      (GtkText *text);
+static void realize_property     (GtkText *text, TextProperty *prop);
+static void realize_properties   (GtkText *text);
+static void unrealize_property   (GtkText *text, TextProperty *prop);
+static void unrealize_properties (GtkText *text);
+
 static void delete_text_property (GtkText* text, guint len);
-static void init_properties (GtkText *text);
+
 static guint pixel_height_of (GtkText* text, GList* cache_line);
 
 /* Property Movement and Size Computations */
@@ -229,7 +266,6 @@ static GtkPropertyMark find_mark (GtkText* text, guint mark_position);
 static GtkPropertyMark find_mark_near (GtkText* text, guint mark_position, const GtkPropertyMark* near);
 static void find_line_containing_point (GtkText* text, guint point,
 					gboolean scroll);
-static TextProperty* new_text_property (GdkFont* font, GdkColor* fore, GdkColor* back, guint length);
 
 /* Display */
 static void compute_lines_pixels (GtkText* text, guint char_count,
@@ -551,6 +587,10 @@ gtk_text_init (GtkText *text)
   text->timer = 0;
   text->button = 0;
   
+  text->current_font = NULL;
+
+  init_properties (text);
+
   GTK_EDITABLE(text)->editable = FALSE;
 }
 
@@ -745,10 +785,7 @@ gtk_text_insert (GtkText    *text,
   
   g_return_if_fail (text != NULL);
   g_return_if_fail (GTK_IS_TEXT (text));
-  
-  /* This must be because we need to have the style set up. */
-  g_assert (GTK_WIDGET_REALIZED(text));
-  
+
   if (nchars < 0)
     length = strlen (chars);
   else
@@ -762,11 +799,6 @@ gtk_text_insert (GtkText    *text,
       gtk_text_freeze (text);
       frozen = TRUE;
     }
-  
-  if (fore == NULL)
-    fore = &GTK_WIDGET (text)->style->text[GTK_STATE_NORMAL];
-  if (back == NULL)
-    back = &GTK_WIDGET (text)->style->base[GTK_STATE_NORMAL];
   
   if (!text->freeze && (text->line_start_cache != NULL))
     {
@@ -789,12 +821,8 @@ gtk_text_insert (GtkText    *text,
     text->cursor_mark.index += length;
   
   move_gap_to_point (text);
-  
-  if (font == NULL)
-    font = GTK_WIDGET (text)->style->font;
-  
+
   make_forward_space (text, length);
-  
   memcpy (text->text + text->gap_position, chars, length);
   
   insert_text_property (text, font, fore, back, length);
@@ -1010,9 +1038,11 @@ gtk_text_finalize (GtkObject *object)
   tmp_list = text->text_properties;
   while (tmp_list)
     {
-      g_mem_chunk_free (text_property_chunk, tmp_list->data);
+      destroy_text_property (tmp_list->data);
       tmp_list = tmp_list->next;
     }
+
+  text_font_unref (text->current_font);
   
   g_list_free (text->text_properties);
   
@@ -1096,17 +1126,19 @@ gtk_text_realize (GtkWidget *widget)
       gint width, height;
       GdkEventMask mask;
       GdkIMStyle style;
-      GdkIMStyle supported_style = GdkIMPreeditNone | GdkIMPreeditNothing |
-	GdkIMPreeditPosition |
-	GdkIMStatusNone | GdkIMStatusNothing;
+      GdkIMStyle supported_style = GDK_IM_PREEDIT_NONE | 
+	                           GDK_IM_PREEDIT_NOTHING |
+	                           GDK_IM_PREEDIT_POSITION |
+	                           GDK_IM_STATUS_NONE |
+	                           GDK_IM_STATUS_NOTHING;
       
       if (widget->style && widget->style->font->type != GDK_FONT_FONTSET)
-	supported_style &= ~GdkIMPreeditPosition;
+	supported_style &= ~GDK_IM_PREEDIT_POSITION;
       
       style = gdk_im_decide_style (supported_style);
-      switch (style & GdkIMPreeditMask)
+      switch (style & GDK_IM_PREEDIT_MASK)
 	{
-	case GdkIMPreeditPosition:
+	case GDK_IM_PREEDIT_POSITION:
 	  if (widget->style && widget->style->font->type != GDK_FONT_FONTSET)
 	    {
 	      g_warning ("over-the-spot style requires fontset");
@@ -1152,11 +1184,11 @@ gtk_text_realize (GtkWidget *widget)
 	}
     }
 #endif
-  
+
+  realize_properties (text);
+  gdk_window_show (text->text_area);
   init_properties (text);
 
-  gdk_window_show (text->text_area);
-  
   if (editable->selection_start_pos != editable->selection_end_pos)
     gtk_editable_claim_selection (editable, TRUE, GDK_CURRENT_TIME);
   
@@ -1182,7 +1214,11 @@ gtk_text_style_set	(GtkWidget      *widget,
       if ((widget->allocation.width > 1) || (widget->allocation.height > 1))
 	recompute_geometry (text);
     }
-  
+
+  if (text->current_font)
+    text_font_unref (text->current_font);
+  text->current_font = get_text_font (widget->style->font);
+
   if (GTK_WIDGET_DRAWABLE (widget))
     gdk_window_clear (widget->window);
 }
@@ -1206,7 +1242,9 @@ gtk_text_unrealize (GtkWidget *widget)
   
   gdk_pixmap_unref (text->line_wrap_bitmap);
   gdk_pixmap_unref (text->line_arrow_bitmap);
-  
+
+  unrealize_properties (text);
+
   if (GTK_WIDGET_CLASS (parent_class)->unrealize)
     (* GTK_WIDGET_CLASS (parent_class)->unrealize) (widget);
 }
@@ -1392,7 +1430,7 @@ gtk_text_size_allocate (GtkWidget     *widget,
 							   TEXT_BORDER_ROOM) * 2);
       
 #ifdef USE_XIM
-      if (editable->ic && (gdk_ic_get_style (editable->ic) & GdkIMPreeditPosition))
+      if (editable->ic && (gdk_ic_get_style (editable->ic) & GDK_IM_PREEDIT_POSITION))
 	{
 	  gint width, height;
 	  GdkRectangle rect;
@@ -1696,14 +1734,20 @@ gtk_text_insert_text    (GtkEditable       *editable,
 			 gint              *position)
 {
   GtkText *text = GTK_TEXT (editable);
-  
+  GdkFont *font;
+  GdkColor *fore, *back;
+
+  TextProperty *property;
+
   gtk_text_set_point (text, *position);
-  gtk_text_insert (text,
-		   MARK_CURRENT_FONT (&text->point),
-		   MARK_CURRENT_FORE (&text->point),
-		   MARK_CURRENT_BACK (&text->point),
-		   new_text, new_text_length);
+
+  property = MARK_CURRENT_PROPERTY (&text->point);
+  font = property->flags & PROPERTY_FONT ? property->font->gdk_font : NULL; 
+  fore = property->flags & PROPERTY_FOREGROUND ? &property->fore_color : NULL; 
+  back = property->flags & PROPERTY_BACKGROUND ? &property->back_color : NULL; 
   
+  gtk_text_insert (text, font, fore, back, new_text, new_text_length);
+
   *position = text->point.index;
 }
 
@@ -2642,31 +2686,38 @@ insert_expose (GtkText* text, guint old_pixels, gint nchars,
   TEXT_SHOW(text);
 }
 
+/* Text property functions */
+
 static guint
 font_hash (gconstpointer font)
 {
   return gdk_font_id ((const GdkFont*) font);
 }
 
-static TextFont*
+static GHashTable *font_cache_table = NULL;
+
+static GtkTextFont*
 get_text_font (GdkFont* gfont)
 {
-  static GHashTable *font_cache_table = NULL;
-  TextFont* tf;
-  gpointer lu;
+  GtkTextFont* tf;
   gint i;
   
   if (!font_cache_table)
     font_cache_table = g_hash_table_new (font_hash, (GCompareFunc) gdk_font_equal);
   
-  lu = g_hash_table_lookup (font_cache_table, gfont);
+  tf = g_hash_table_lookup (font_cache_table, gfont);
   
-  if (lu)
-    return (TextFont*)lu;
-  
-  tf = g_new (TextFont, 1);
-  
+  if (tf)
+    {
+      tf->ref_count++;
+      return tf;
+    }
+
+  tf = g_new (GtkTextFont, 1);
+  tf->ref_count = 1;
+
   tf->gdk_font = gfont;
+  gdk_font_ref (gfont);
   
   for(i = 0; i < 256; i += 1)
     tf->char_widths[i] = gdk_char_width (gfont, (char)i);
@@ -2676,16 +2727,115 @@ get_text_font (GdkFont* gfont)
   return tf;
 }
 
+static void
+text_font_unref (GtkTextFont *text_font)
+{
+  text_font->ref_count--;
+  if (text_font->ref_count == 0)
+    {
+      g_hash_table_remove (font_cache_table, text_font->gdk_font);
+      gdk_font_unref (text_font->gdk_font);
+      g_free (text_font);
+    }
+}
+
 static gint
 text_properties_equal (TextProperty* prop, GdkFont* font, GdkColor *fore, GdkColor *back)
 {
-  return prop->font == get_text_font(font) &&
-    gdk_color_equal(&prop->fore_color, fore) &&
-    gdk_color_equal(&prop->back_color, back);
+  if (prop->flags & PROPERTY_FONT)
+    {
+      gboolean retval;
+      GtkTextFont *text_font;
+
+      if (!font)
+	return FALSE;
+
+      text_font = get_text_font (font);
+
+      retval = (prop->font == text_font);
+      text_font_unref (text_font);
+      
+      if (!retval)
+	return FALSE;
+    }
+  else
+    if (font != NULL)
+      return FALSE;
+
+  if (prop->flags & PROPERTY_FOREGROUND)
+    {
+      if (!fore || !gdk_color_equal (&prop->fore_color, fore))
+	return FALSE;
+    }
+  else
+    if (fore != NULL)
+      return FALSE;
+
+  if (prop->flags & PROPERTY_BACKGROUND)
+    {
+      if (!back || !gdk_color_equal (&prop->fore_color, fore))
+	return FALSE;
+    }
+  else
+    if (fore != NULL)
+      return FALSE;
+  
+  return TRUE;
+}
+
+static void
+realize_property (GtkText *text, TextProperty *prop)
+{
+  GdkColormap *colormap = gtk_widget_get_colormap (GTK_WIDGET (text));
+
+  if (prop->flags & PROPERTY_FOREGROUND)
+    gdk_colormap_alloc_color (colormap, &prop->fore_color, FALSE, FALSE);
+  
+  if (prop->flags & PROPERTY_BACKGROUND)
+    gdk_colormap_alloc_color (colormap, &prop->back_color, FALSE, FALSE);
+}
+
+static void
+realize_properties (GtkText *text)
+{
+  GList *tmp_list = text->text_properties;
+
+  while (tmp_list)
+    {
+      realize_property (text, tmp_list->data);
+      
+      tmp_list = tmp_list->next;
+    }
+}
+
+static void
+unrealize_property (GtkText *text, TextProperty *prop)
+{
+  GdkColormap *colormap = gtk_widget_get_colormap (GTK_WIDGET (text));
+
+  if (prop->flags & PROPERTY_FOREGROUND)
+    gdk_colormap_free_colors (colormap, &prop->fore_color, 1);
+  
+  if (prop->flags & PROPERTY_BACKGROUND)
+    gdk_colormap_free_colors (colormap, &prop->back_color, 1);
+}
+
+static void
+unrealize_properties (GtkText *text)
+{
+  GList *tmp_list = text->text_properties;
+
+  while (tmp_list)
+    {
+      unrealize_property (text, tmp_list->data);
+
+      tmp_list = tmp_list->next;
+    }
 }
 
 static TextProperty*
-new_text_property (GdkFont* font, GdkColor* fore, GdkColor* back, guint length)
+new_text_property (GtkText *text, GdkFont *font, GdkColor* fore, 
+		   GdkColor* back, guint length)
 {
   TextProperty *prop;
   
@@ -2698,14 +2848,43 @@ new_text_property (GdkFont* font, GdkColor* fore, GdkColor* back, guint length)
     }
   
   prop = g_chunk_new(TextProperty, text_property_chunk);
+
+  prop->flags = 0;
+  if (font)
+    {
+      prop->flags |= PROPERTY_FONT;
+      prop->font = get_text_font (font);
+    }
+  else
+    prop->font = NULL;
   
-  prop->font = get_text_font (font);
-  prop->fore_color = *fore;
+  if (fore)
+    {
+      prop->flags |= PROPERTY_FOREGROUND;
+      prop->fore_color = *fore;
+    }
+      
   if (back)
-    prop->back_color = *back;
+    {
+      prop->flags |= PROPERTY_BACKGROUND;
+      prop->back_color = *back;
+    }
+
   prop->length = length;
-  
+
+  if (GTK_WIDGET_REALIZED (text))
+    realize_property (text, prop);
+
   return prop;
+}
+
+static void
+destroy_text_property (TextProperty *prop)
+{
+  if (prop->font)
+    text_font_unref (prop->font);
+  
+  g_mem_chunk_free (text_property_chunk, prop);
 }
 
 /* Flop the memory between the point and the gap around like a
@@ -2802,10 +2981,33 @@ insert_text_property (GtkText* text, GdkFont* font,
 	       (forward_prop->length == 1))
 	{
 	  /* Next property just has last position, take it over */
-	  forward_prop->font = get_text_font (font);
-	  forward_prop->fore_color = *fore;
-	  forward_prop->back_color = *back;
+
+	  if (GTK_WIDGET_REALIZED (text))
+	    unrealize_property (text, forward_prop);
+
+	  forward_prop->flags = 0;
+	  if (font)
+	    {
+	      forward_prop->flags |= PROPERTY_FONT;
+	      forward_prop->font = get_text_font (font);
+	    }
+	  else
+	    forward_prop->font = NULL;
+	    
+	  if (fore)
+	    {
+	      forward_prop->flags |= PROPERTY_FOREGROUND;
+	      forward_prop->fore_color = *fore;
+	    }
+	  if (back)
+	    {
+	      forward_prop->flags |= PROPERTY_BACKGROUND;
+	      forward_prop->back_color = *back;
+	    }
 	  forward_prop->length += len;
+
+	  if (GTK_WIDGET_REALIZED (text))
+	    realize_property (text, forward_prop);
 	}
       else
 	{
@@ -2819,9 +3021,9 @@ insert_text_property (GtkText* text, GdkFont* font,
 	  
 	  if (new_prop->prev)
 	    new_prop->prev->next = new_prop;
-	  
-	  new_prop->data = new_text_property (font, fore, back, len);
-	  
+
+	  new_prop->data = new_text_property (text, font, fore, back, len);
+
 	  SET_PROPERTY_MARK (mark, new_prop, 0);
 	}
     }
@@ -2847,7 +3049,7 @@ insert_text_property (GtkText* text, GdkFont* font,
 	  forward_prop->length -= 1;
 	  
 	  new_prop = g_list_alloc();
-	  new_prop->data = new_text_property (font, fore, back, len+1);
+	  new_prop->data = new_text_property (text, font, fore, back, len+1);
 	  new_prop->prev = MARK_LIST_PTR(mark);
 	  new_prop->next = NULL;
 	  MARK_NEXT_LIST_PTR(mark) = new_prop;
@@ -2864,14 +3066,19 @@ insert_text_property (GtkText* text, GdkFont* font,
 	  /* Set the new lengths according to where they are split.  Construct
 	   * two new properties. */
 	  forward_prop->length = MARK_OFFSET(mark);
-	  
-	  new_prop_forward->data = new_text_property(forward_prop->font->gdk_font,
-						     &forward_prop->fore_color,
-						     &forward_prop->back_color,
-						     old_length - forward_prop->length);
-	  
-	  new_prop->data = new_text_property(font, fore, back, len);
-	  
+
+	  new_prop_forward->data = 
+	    new_text_property(text,
+			      forward_prop->flags & PROPERTY_FONT ? 
+                                     forward_prop->font->gdk_font : NULL,
+			      forward_prop->flags & PROPERTY_FOREGROUND ? 
+  			             &forward_prop->fore_color : NULL,
+			      forward_prop->flags & PROPERTY_BACKGROUND ? 
+  			             &forward_prop->back_color : NULL,
+			      old_length - forward_prop->length);
+
+	  new_prop->data = new_text_property(text, font, fore, back, len);
+
 	  /* Now splice things in. */
 	  MARK_NEXT_LIST_PTR(mark) = new_prop;
 	  new_prop->prev = MARK_LIST_PTR(mark);
@@ -2935,8 +3142,11 @@ delete_text_property (GtkText* text, guint nchars)
 	  
 	  MARK_LIST_PTR (&text->point) = g_list_remove_link (tmp, tmp);
 	  text->point.offset = 0;
-	  
-	  g_mem_chunk_free (text_property_chunk, prop);
+
+	  if (GTK_WIDGET_REALIZED (text))
+	    unrealize_property (text, prop);
+
+	  destroy_text_property (prop);
 	  g_list_free_1 (tmp);
 	  
 	  prop = MARK_CURRENT_PROPERTY (&text->point);
@@ -2968,8 +3178,11 @@ delete_text_property (GtkText* text, guint nchars)
       MARK_NEXT_LIST_PTR(&text->point) = NULL;
       
       text->point.offset = MARK_CURRENT_PROPERTY(&text->point)->length - 1;
+      
+      if (GTK_WIDGET_REALIZED (text))
+	unrealize_property (text, prop);
 
-      g_mem_chunk_free (text_property_chunk, prop);
+      destroy_text_property (prop);
       g_list_free_1 (tmp);
     }
 }
@@ -2977,17 +3190,12 @@ delete_text_property (GtkText* text, guint nchars)
 static void
 init_properties (GtkText *text)
 {
-  GtkWidget *widget = (GtkWidget *)text;
-  
   if (!text->text_properties)
     {
       text->text_properties = g_list_alloc();
       text->text_properties->next = NULL;
       text->text_properties->prev = NULL;
-      text->text_properties->data = new_text_property (widget->style->font,
-						       &widget->style->text[GTK_STATE_NORMAL],
-						       &widget->style->base[GTK_STATE_NORMAL],
-						       1);
+      text->text_properties->data = new_text_property (text, NULL, NULL, NULL, 1);
       text->text_properties_end = text->text_properties;
       
       SET_PROPERTY_MARK (&text->point, text->text_properties, 0);
@@ -3219,8 +3427,8 @@ find_char_width (GtkText* text, const GtkPropertyMark *mark, const TabStopMark *
     return 0;
   
   ch = GTK_TEXT_INDEX (text, mark->index);
-  char_widths = MARK_CURRENT_TEXT_FONT (mark)->char_widths;
-  
+  char_widths = MARK_CURRENT_TEXT_FONT (text, mark)->char_widths;
+
   if (ch == '\t')
     {
       return tab_mark->to_next_tab * char_widths[' '];
@@ -3293,22 +3501,22 @@ find_cursor_at_line (GtkText* text, const LineParams* start_line, gint pixel_hei
   
 #ifdef USE_XIM
   if (gdk_im_ready() && editable->ic && 
-      gdk_ic_get_style (editable->ic) & GdkIMPreeditPosition)
+      gdk_ic_get_style (editable->ic) & GDK_IM_PREEDIT_POSITION)
     {
       GdkPoint spot;
       
       spot.x = text->cursor_pos_x;
       spot.y = text->cursor_pos_y - text->cursor_char_offset;
-      if (MARK_CURRENT_FONT (&mark)->type == GDK_FONT_FONTSET)
+      if (MARK_CURRENT_FONT (text, &mark)->type == GDK_FONT_FONTSET)
 	gdk_ic_set_attr (editable->ic, "preeditAttributes", 
-			 "fontSet", GDK_FONT_XFONT (MARK_CURRENT_FONT (&mark)),
+			 "fontSet", GDK_FONT_XFONT (MARK_CURRENT_FONT (text, &mark)),
 			 NULL);
       
       gdk_ic_set_attr (editable->ic, "preeditAttributes", 
 		       "spotLocation", &spot,
 		       "lineSpace", LINE_HEIGHT (*start_line),
-		       "foreground", MARK_CURRENT_FORE (&mark)->pixel,
-		       "background", MARK_CURRENT_BACK (&mark)->pixel,
+		       "foreground", MARK_CURRENT_FORE (text, &mark)->pixel,
+		       "background", MARK_CURRENT_BACK (text, &mark)->pixel,
 		       NULL);
     }
 #endif 
@@ -4212,8 +4420,8 @@ find_line_params (GtkText* text,
       g_assert (lp.end.property);
       
       ch   = GTK_TEXT_INDEX (text, lp.end.index);
-      font = MARK_CURRENT_FONT (&lp.end);
-      
+      font = MARK_CURRENT_FONT (text, &lp.end);
+
       if (ch == LINE_DELIM)
 	{
 	  /* Newline doesn't count in computation of line height, even
@@ -4246,7 +4454,7 @@ find_line_params (GtkText* text,
 		{
 		  /* Here's the tough case, a tab is wrapping. */
 		  gint pixels_avail = max_display_pixels - lp.pixel_width;
-		  gint space_width  = MARK_CURRENT_TEXT_FONT(&lp.end)->char_widths[' '];
+		  gint space_width  = MARK_CURRENT_TEXT_FONT(text, &lp.end)->char_widths[' '];
 		  gint spaces_avail = pixels_avail / space_width;
 		  
 		  if (spaces_avail == 0)
@@ -4313,8 +4521,8 @@ find_line_params (GtkText* text,
   if (LAST_INDEX(text, lp.start))
     {
       /* Special case, empty last line. */
-      font = MARK_CURRENT_FONT (&lp.end);
-      
+      font = MARK_CURRENT_FONT (text, &lp.end);
+
       lp.font_ascent = font->ascent;
       lp.font_descent = font->descent;
     }
@@ -4342,40 +4550,49 @@ expand_scratch_buffer (GtkText* text, guint len)
     }
 }
 
-/* Returns a GC to draw a background for the text at a mark,
- * or NULL, if the mark's background is NULL
- *
- * Side effect: modifies text->gc
+/* Side effect: modifies text->gc
  */
-static GdkGC *
-mark_bg_gc (GtkText* text, const GtkPropertyMark *mark, GtkStateType *state)
+
+static void
+draw_bg_rect (GtkText* text, GtkPropertyMark *mark,
+	      gint x, gint y, gint width, gint height,
+	      gboolean already_cleared)
 {
   GtkEditable *editable = GTK_EDITABLE(text);
 
-  *state = GTK_STATE_NORMAL;
-  
   if ((mark->index >= MIN(editable->selection_start_pos, editable->selection_end_pos) &&
        mark->index < MAX(editable->selection_start_pos, editable->selection_end_pos)))
     {
-      if (editable->has_selection)
-	{
-	  *state = GTK_STATE_SELECTED;
-	  return GTK_WIDGET(text)->style->bg_gc[GTK_STATE_SELECTED];
-	}
-      else
-	{
-	  *state = GTK_STATE_ACTIVE;
-	  return GTK_WIDGET(text)->style->bg_gc[GTK_STATE_ACTIVE];
-	}
+      gtk_paint_flat_box(GTK_WIDGET(text)->style, text->text_area,
+			 editable->has_selection ?
+			    GTK_STATE_SELECTED : GTK_STATE_ACTIVE, 
+			 GTK_SHADOW_NONE,
+			 NULL, GTK_WIDGET(text), "text",
+			 x, y, width, height);
     }
-  else if (!gdk_color_equal(MARK_CURRENT_BACK (mark),
+  else if (!gdk_color_equal(MARK_CURRENT_BACK (text, mark),
 			    &GTK_WIDGET(text)->style->base[GTK_STATE_NORMAL]))
     
     {
-      gdk_gc_set_foreground (text->gc, MARK_CURRENT_BACK (mark));
-      return text->gc;
+      gdk_gc_set_foreground (text->gc, MARK_CURRENT_BACK (text, mark));
+
+      gdk_draw_rectangle (text->text_area,
+			  text->gc,
+			  TRUE, x, y, width, height);
     }
-  return NULL;
+  else if (GTK_WIDGET (text)->style->bg_pixmap[GTK_STATE_NORMAL])
+    {
+      GdkRectangle rect;
+      
+      rect.x = x;
+      rect.y = y;
+      rect.width = width;
+      rect.height = height;
+      
+      clear_area (text, &rect);
+    }
+  else if (!already_cleared)
+    gdk_window_clear_area (text->text_area, x, y, width, height);
 }
 
 static void
@@ -4388,8 +4605,7 @@ draw_line (GtkText* text,
   gint len = 0;
   guint running_offset = lp->tab_cont.pixel_offset;
   guchar* buffer;
-  GdkGC *fg_gc, *bg_gc;
-  GtkStateType bg_state;
+  GdkGC *fg_gc;
   
   GtkEditable *editable = GTK_EDITABLE(text);
   
@@ -4425,36 +4641,8 @@ draw_line (GtkText* text,
   
   if (running_offset > 0)
     {
-      bg_gc = mark_bg_gc (text, &mark, &bg_state);
-      
-      if (bg_gc)
-	{
-	  if (bg_state != GTK_STATE_NORMAL)
-	    gtk_paint_flat_box(GTK_WIDGET(text)->style, text->text_area,
-			       bg_state, GTK_SHADOW_NONE,
-			       NULL, GTK_WIDGET(text), "text",
-			       0, pixel_start_height,
-			       running_offset, LINE_HEIGHT (*lp));
-	  else
-	    gdk_draw_rectangle (text->text_area,
-				bg_gc,
-				TRUE,
-				0,
-				pixel_start_height,
-				running_offset,
-				LINE_HEIGHT (*lp));
-	}
-      else if (GTK_WIDGET (text)->style->bg_pixmap[GTK_STATE_NORMAL])
-	{
-	  GdkRectangle rect;
-	  
-	  rect.x = 0;
-	  rect.y = pixel_start_height;
-	  rect.width = running_offset;
-	  rect.height = LINE_HEIGHT (*lp);
-	  
-	  clear_area (text, &rect);
-	}
+      draw_bg_rect (text, &mark, 0, pixel_start_height, running_offset,
+		    LINE_HEIGHT (*lp), TRUE);
     }
   
   for (; chars > 0; chars -= len, buffer += len, len = 0)
@@ -4474,8 +4662,8 @@ draw_line (GtkText* text,
 	    len = MIN (len, selection_start_pos - mark.index);
 	  else if (mark.index < selection_end_pos)
 	    len = MIN (len, selection_end_pos - mark.index);
-	  
-	  font = MARK_CURRENT_PROPERTY (&mark)->font->gdk_font;
+
+	  font = MARK_CURRENT_FONT (text, &mark);
 	  if (font->type == GDK_FONT_FONT)
 	    {
 	      gdk_gc_set_font (text->gc, font);
@@ -4486,37 +4674,8 @@ draw_line (GtkText* text,
 	  else
 	    pixel_width = gdk_text_width (font, (gchar*) buffer, len);
 	  
-	  bg_gc = mark_bg_gc (text, &mark, &bg_state);
-	  if (bg_gc)
-	    {
-	      if (bg_state != GTK_STATE_NORMAL)
-		{
-		  gtk_paint_flat_box(GTK_WIDGET(text)->style, text->text_area,
-				     bg_state, GTK_SHADOW_NONE,
-				     NULL, GTK_WIDGET(text), "text",
-				     running_offset, pixel_start_height,
-				     pixel_width, LINE_HEIGHT (*lp));
-		}
-	      else
-		gdk_draw_rectangle (text->text_area,
-				    bg_gc,
-				    TRUE,
-				    running_offset,
-				    pixel_start_height,
-				    pixel_width,
-				    LINE_HEIGHT(*lp));
-	    }
-	  else if (GTK_WIDGET (text)->style->bg_pixmap[GTK_STATE_NORMAL])
-	    {
-	      GdkRectangle rect;
-	      
-	      rect.x = running_offset;
-	      rect.y = pixel_start_height;
-	      rect.width = pixel_width;
-	      rect.height = LINE_HEIGHT (*lp);
-	      
-	      clear_area (text, &rect);
-	    }
+	  draw_bg_rect (text, &mark, running_offset, pixel_start_height,
+			pixel_width, LINE_HEIGHT (*lp), TRUE);
 	  
 	  if ((mark.index >= selection_start_pos) && 
 	      (mark.index < selection_end_pos))
@@ -4528,11 +4687,11 @@ draw_line (GtkText* text,
 	    }
 	  else
 	    {
-	      gdk_gc_set_foreground (text->gc, MARK_CURRENT_FORE (&mark));
+	      gdk_gc_set_foreground (text->gc, MARK_CURRENT_FORE (text, &mark));
 	      fg_gc = text->gc;
 	    }
-	  
-	  gdk_draw_text (text->text_area, MARK_CURRENT_FONT (&mark),
+
+	  gdk_draw_text (text->text_area, MARK_CURRENT_FONT (text, &mark),
 			 fg_gc,
 			 running_offset,
 			 pixel_height,
@@ -4545,42 +4704,26 @@ draw_line (GtkText* text,
 	}
       else
 	{
+	  gint pixels_remaining;
+	  gint space_width;
+	  gint spaces_avail;
+	      
 	  len = 1;
 	  
-	  bg_gc = mark_bg_gc (text, &mark, &bg_state);
-	  if (bg_gc)
-	    {
-	      gint pixels_remaining;
-	      gint space_width;
-	      gint spaces_avail;
-	      
-	      gdk_window_get_size (text->text_area, &pixels_remaining, NULL);
-	      pixels_remaining -= (LINE_WRAP_ROOM + running_offset);
-	      
-	      space_width = MARK_CURRENT_TEXT_FONT(&mark)->char_widths[' '];
-	      
-	      spaces_avail = pixels_remaining / space_width;
-	      spaces_avail = MIN (spaces_avail, tab_mark.to_next_tab);
-	       
-	      if (bg_state != GTK_STATE_NORMAL)
-		gtk_paint_flat_box(GTK_WIDGET(text)->style, text->text_area,
-				   bg_state, GTK_SHADOW_NONE,
-				   NULL, GTK_WIDGET(text), "text",
-				   running_offset, pixel_start_height,
-				   spaces_avail * space_width, LINE_HEIGHT (*lp));
-	      else
-		gdk_draw_rectangle (text->text_area,
-				    bg_gc,
-				    TRUE,
-				    running_offset,
-				    pixel_start_height,
-				    spaces_avail * space_width,
-				    LINE_HEIGHT (*lp));
-	    }
+	  gdk_window_get_size (text->text_area, &pixels_remaining, NULL);
+	  pixels_remaining -= (LINE_WRAP_ROOM + running_offset);
 	  
+	  space_width = MARK_CURRENT_TEXT_FONT(text, &mark)->char_widths[' '];
+	  
+	  spaces_avail = pixels_remaining / space_width;
+	  spaces_avail = MIN (spaces_avail, tab_mark.to_next_tab);
+
+	  draw_bg_rect (text, &mark, running_offset, pixel_start_height,
+			spaces_avail * space_width, LINE_HEIGHT (*lp), TRUE);
+
 	  running_offset += tab_mark.to_next_tab *
-	    MARK_CURRENT_TEXT_FONT(&mark)->char_widths[' '];
-	  
+	    MARK_CURRENT_TEXT_FONT(text, &mark)->char_widths[' '];
+
 	  advance_tab_mark (text, &tab_mark, '\t');
 	}
       
@@ -4640,7 +4783,7 @@ static void
 undraw_cursor (GtkText* text, gint absolute)
 {
   GtkEditable *editable = (GtkEditable *)text;
-  
+
   TDEBUG (("in undraw_cursor\n"));
   
   if (absolute)
@@ -4653,35 +4796,21 @@ undraw_cursor (GtkText* text, gint absolute)
       GdkFont* font;
       
       g_assert(text->cursor_mark.property);
-      
-      font = MARK_CURRENT_FONT(&text->cursor_mark);
-      
-      if (GTK_WIDGET (text)->style->bg_pixmap[GTK_STATE_NORMAL])
-	{
-	  GdkRectangle rect;
-	  
-	  rect.x = text->cursor_pos_x;
-	  rect.y = text->cursor_pos_y - text->cursor_char_offset - font->ascent;
-	  rect.width = 1;
-	  rect.height = font->ascent + 1; /* @@@ I add one here because draw_line is inclusive, right? */
-	  
-	  clear_area (text, &rect);
-	}
-      else
-	{
-	  gdk_gc_set_foreground (text->gc, MARK_CURRENT_BACK (&text->cursor_mark));
-	  gdk_draw_line (text->text_area, text->gc, text->cursor_pos_x,
-			 text->cursor_pos_y - text->cursor_char_offset, text->cursor_pos_x,
-			 text->cursor_pos_y - text->cursor_char_offset - font->ascent);
-	}
+
+      font = MARK_CURRENT_FONT(text, &text->cursor_mark);
+
+      draw_bg_rect (text, &text->cursor_mark, 
+		    text->cursor_pos_x,
+		    text->cursor_pos_y - text->cursor_char_offset - font->ascent,
+		    1, font->ascent + 1, FALSE);
       
       if (text->cursor_char)
 	{
 	  if (font->type == GDK_FONT_FONT)
 	    gdk_gc_set_font (text->gc, font);
-	  
-	  gdk_gc_set_foreground (text->gc, MARK_CURRENT_FORE (&text->cursor_mark));
-	  
+
+	  gdk_gc_set_foreground (text->gc, MARK_CURRENT_FORE (text, &text->cursor_mark));
+
 	  gdk_draw_text (text->text_area, font,
 			 text->gc,
 			 text->cursor_pos_x,
@@ -4699,7 +4828,7 @@ drawn_cursor_min (GtkText* text)
   
   g_assert(text->cursor_mark.property);
   
-  font = MARK_CURRENT_FONT(&text->cursor_mark);
+  font = MARK_CURRENT_FONT(text, &text->cursor_mark);
   
   return text->cursor_pos_y - text->cursor_char_offset - font->ascent;
 }
@@ -4711,7 +4840,7 @@ drawn_cursor_max (GtkText* text)
   
   g_assert(text->cursor_mark.property);
   
-  font = MARK_CURRENT_FONT(&text->cursor_mark);
+  font = MARK_CURRENT_FONT(text, &text->cursor_mark);
   
   return text->cursor_pos_y - text->cursor_char_offset;
 }
@@ -4734,9 +4863,9 @@ draw_cursor (GtkText* text, gint absolute)
       GdkFont* font;
       
       g_assert (text->cursor_mark.property);
-      
-      font = MARK_CURRENT_FONT (&text->cursor_mark);
-      
+
+      font = MARK_CURRENT_FONT (text, &text->cursor_mark);
+
       gdk_gc_set_foreground (text->gc, &GTK_WIDGET (text)->style->text[GTK_STATE_NORMAL]);
       
       gdk_draw_line (text->text_area, text->gc, text->cursor_pos_x,
@@ -5101,8 +5230,20 @@ gtk_text_show_props (GtkText *text,
       TextProperty *p = (TextProperty*)props->data;
       
       proplen += p->length;
-      
-      g_message ("[%d,%p,%p,%ld,%ld] ", p->length, p, p->font, p->fore_color.pixel, p->back_color.pixel);
+
+      g_message ("[%d,%p,", p->length, p);
+      if (p->flags & PROPERTY_FONT)
+	g_message ("%p,", p->font);
+      else
+	g_message ("-,");
+      if (p->flags & PROPERTY_FOREGROUND)
+	g_message ("%ld, ", p->fore_color.pixel);
+      else
+	g_message ("-,");
+      if (p->flags & PROPERTY_BACKGROUND)
+	g_message ("%ld] ", p->back_color.pixel);
+      else
+	g_message ("-] ");
     }
   
   g_message ("\n");

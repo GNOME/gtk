@@ -24,7 +24,6 @@
 #include <gtk/gtkadjustment.h>
 #include <gtk/gtkeditable.h>
 
-
 #ifdef __cplusplus
 extern "C" {
 #pragma }
@@ -37,7 +36,7 @@ extern "C" {
 #define GTK_IS_TEXT(obj)               (GTK_CHECK_TYPE ((obj), GTK_TYPE_TEXT))
 #define GTK_IS_TEXT_CLASS(klass)       (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_TEXT))
 
-  
+typedef struct _GtkTextFont       GtkTextFont;
 typedef struct _GtkPropertyMark   GtkPropertyMark;
 typedef struct _GtkText           GtkText;
 typedef struct _GtkTextClass      GtkTextClass;
@@ -146,6 +145,8 @@ struct _GtkText
 
   GList *tab_stops;
   gint default_tab_width;
+
+  GtkTextFont *current_font;	/* Text font for current style */
 
   /* Timer used for auto-scrolling off ends */
   gint timer;

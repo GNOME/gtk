@@ -438,6 +438,10 @@ static GtkEnumValue _gtk_widget_flags_values[] = {
   { GTK_BASIC, "GTK_BASIC", "basic" },
   { 0, NULL, NULL }
 };
+static GtkEnumValue _gdk_color_info_flags_values[] = {
+  { GDK_COLOR_WRITEABLE, "GDK_COLOR_WRITEABLE", "writeable" },
+  { 0, NULL, NULL }
+};
 static GtkEnumValue _gdk_debug_flag_values[] = {
   { GDK_DEBUG_MISC, "GDK_DEBUG_MISC", "misc" },
   { GDK_DEBUG_EVENTS, "GDK_DEBUG_EVENTS", "events" },
@@ -865,15 +869,17 @@ static GtkEnumValue _gdk_extension_mode_values[] = {
   { 0, NULL, NULL }
 };
 static GtkEnumValue _gdk_im_style_values[] = {
-  { GdkIMPreeditArea, "GdkIMPreeditArea", "preedit-area" },
-  { GdkIMPreeditCallbacks, "GdkIMPreeditCallbacks", "preedit-callbacks" },
-  { GdkIMPreeditPosition, "GdkIMPreeditPosition", "preedit-position" },
-  { GdkIMPreeditNothing, "GdkIMPreeditNothing", "preedit-nothing" },
-  { GdkIMPreeditNone, "GdkIMPreeditNone", "preedit-none" },
-  { GdkIMStatusArea, "GdkIMStatusArea", "status-area" },
-  { GdkIMStatusCallbacks, "GdkIMStatusCallbacks", "status-callbacks" },
-  { GdkIMStatusNothing, "GdkIMStatusNothing", "status-nothing" },
-  { GdkIMStatusNone, "GdkIMStatusNone", "status-none" },
+  { GDK_IM_PREEDIT_AREA, "GDK_IM_PREEDIT_AREA", "preedit-area" },
+  { GDK_IM_PREEDIT_CALLBACKS, "GDK_IM_PREEDIT_CALLBACKS", "preedit-callbacks" },
+  { GDK_IM_PREEDIT_POSITION, "GDK_IM_PREEDIT_POSITION", "preedit-position" },
+  { GDK_IM_PREEDIT_NOTHING, "GDK_IM_PREEDIT_NOTHING", "preedit-nothing" },
+  { GDK_IM_PREEDIT_NONE, "GDK_IM_PREEDIT_NONE", "preedit-none" },
+  { GDK_IM_PREEDIT_MASK, "GDK_IM_PREEDIT_MASK", "preedit-mask" },
+  { GDK_IM_STATUS_AREA, "GDK_IM_STATUS_AREA", "status-area" },
+  { GDK_IM_STATUS_CALLBACKS, "GDK_IM_STATUS_CALLBACKS", "status-callbacks" },
+  { GDK_IM_STATUS_NOTHING, "GDK_IM_STATUS_NOTHING", "status-nothing" },
+  { GDK_IM_STATUS_NONE, "GDK_IM_STATUS_NONE", "status-none" },
+  { GDK_IM_STATUS_MASK, "GDK_IM_STATUS_MASK", "status-mask" },
   { 0, NULL, NULL }
 };
 static GtkEnumValue _gdk_wm_decoration_values[] = {

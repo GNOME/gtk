@@ -270,9 +270,12 @@ Text/Edit widget:
 
   - "changed" emitted when doing deletes on empty Text widget.
 
+  - Delete IC in editable->unrealize, not editable->finalize?
+
 Themes
 ======
 
  - When a scale gets shown/hidden only queue a redraw on the
    non-window portion, not the whole area.
+
 
