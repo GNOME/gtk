@@ -970,6 +970,7 @@ draw_extension (GtkStyle       *style,
 static void
 draw_focus (GtkStyle     *style,
 	    GdkWindow    *window,
+	    GtkStateType  state_type,
 	    GdkRectangle *area,
 	    GtkWidget    *widget,
 	    const gchar  *detail,
@@ -983,19 +984,13 @@ draw_focus (GtkStyle     *style,
   g_return_if_fail(style != NULL);
   g_return_if_fail(window != NULL);
 
-  /* Why? */
-  if (width >=0)
-    width++;
-  if (height >=0)
-    height++;
-
   match_data.function = TOKEN_D_FOCUS;
   match_data.detail = (gchar *)detail;
   match_data.flags = 0;
   
   if (!draw_simple_image (style, window, area, widget, &match_data, TRUE, FALSE,
 			  x, y, width, height))
-    parent_class->draw_focus (style, window, area, widget, detail,
+    parent_class->draw_focus (style, window, state_type, area, widget, detail,
 			      x, y, width, height);
 }
 

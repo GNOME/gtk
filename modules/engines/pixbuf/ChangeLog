@@ -1,3 +1,7 @@
+Fri Jan 18 18:14:11 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* src/pixbuf-draw.c (draw_focus): Fix for changes to draw_focus.
+
 2001-09-21  Hans Breuer  <hans@breuer.org>
 
 	* src/pixbuf-rc-style-c :  GtkRcStyle::parse has a GtkSettings
