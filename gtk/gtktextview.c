@@ -6563,8 +6563,8 @@ popup_targets_received (GtkClipboard     *clipboard,
       gtk_menu_shell_append (GTK_MENU_SHELL (text_view->popup_menu), menuitem);
 
       menuitem = gtk_menu_item_new_with_label (_("Select All"));
-      gtk_signal_connect (GTK_OBJECT (menuitem), "activate",
-			  GTK_SIGNAL_FUNC (select_all_cb), text_view);
+      g_signal_connect (G_OBJECT (menuitem), "activate",
+			G_CALLBACK (select_all_cb), text_view);
       gtk_widget_show (menuitem);
       gtk_menu_shell_append (GTK_MENU_SHELL (text_view->popup_menu), menuitem);
 
