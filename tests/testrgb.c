@@ -17,6 +17,10 @@
  * Boston, MA 02111-1307, USA.
  */
 
+#ifdef GTK_COMPILATION
+#undef GTK_COMPILATION
+#endif
+
 #include "config.h"
 
 #include <glib.h>

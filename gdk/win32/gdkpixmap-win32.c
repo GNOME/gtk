@@ -55,7 +55,7 @@ gdk_win32_pixmap_destroy (GdkPixmap *pixmap)
   GdkDrawablePrivate *private = (GdkDrawablePrivate *) pixmap;
   HWND hwnd = GDK_DRAWABLE_XID (pixmap);
 
-  GDK_NOTE (MISC, g_print ("gdk_win32_pixmap_destroy: %#x\n", hwnd);
+  GDK_NOTE (MISC, g_print ("gdk_win32_pixmap_destroy: %#x\n", hwnd));
 
   gdk_win32_clear_hdc_cache_for_hwnd (hwnd);
   if (!DeleteObject (hwnd))

@@ -1,5 +1,5 @@
 ## Makefile for building the machine dependent part of GDK with gcc on cygwin
-## Use: make -f makefile.cygwin 
+## Use: make -f makefile.mingw
 
 # Location of the Wintab toolkit. Downloadable from http://www.pointing.com.
 # We use the wntab32x.lib archive library directly (copy it as libwntab32x.a).

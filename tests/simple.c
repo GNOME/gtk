@@ -1,3 +1,7 @@
+#ifdef GTK_COMPILATION
+#undef GTK_COMPILATION
+#endif
+
 #include <gtk/gtk.h>
 
 

@@ -24,6 +24,10 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
+#ifdef GTK_COMPILATION
+#undef GTK_COMPILATION
+#endif
+
 #include "config.h"
 
 #undef	G_LOG_DOMAIN

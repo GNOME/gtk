@@ -1,5 +1,5 @@
 ## Makefile for building the GTK DLL with gcc-2.95 or later on mingw or cygwin
-## Use: make -f makefile.cygwin
+## Use: make -f makefile.mingw
 
 ## There is no install target, you have to decide where and 
 ## how to install for yourself.
@@ -27,7 +27,7 @@ PERL = perl
 AWK = awk
 
 INCLUDES = -I . -I .. -I ../gdk -I $(GLIB) -I $(GLIB)/gmodule -I $(INTL)
-DEFINES = -DGTK_DISABLE_COMPAT_H -DGTK_COMPILATION -DG_LOG_DOMAIN=\"Gtk\" -DG_LOG_DOMAIN=\"Gtk\" 
+DEFINES = -DGTK_DISABLE_COMPAT_H -DGTK_COMPILATION -DG_LOG_DOMAIN=\"Gtk\"
 
 all : \
 	../config.h	\
