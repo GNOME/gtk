@@ -71,7 +71,7 @@ static gint gtk_handle_box_delete_float   (GtkWidget         *widget,
 
 
 static GtkBinClass *parent_class;
-static gint         handle_box_signals[SIGNAL_LAST] = { 0 };
+static guint        handle_box_signals[SIGNAL_LAST] = { 0 };
 
 
 guint

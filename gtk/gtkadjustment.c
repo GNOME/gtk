@@ -30,7 +30,7 @@ static void gtk_adjustment_class_init (GtkAdjustmentClass *klass);
 static void gtk_adjustment_init       (GtkAdjustment      *adjustment);
 
 
-static gint adjustment_signals[LAST_SIGNAL] = { 0 };
+static guint adjustment_signals[LAST_SIGNAL] = { 0 };
 
 
 guint

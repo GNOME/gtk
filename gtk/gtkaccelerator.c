@@ -27,7 +27,7 @@ struct _GtkAcceleratorEntry
 {
   guint8 modifiers;
   GtkObject *object;
-  gint signal_num;
+  guint signal_id;
 };
 
 
@@ -37,7 +37,7 @@ static void gtk_accelerator_table_clean (GtkAcceleratorTable *table);
 
 static GtkAcceleratorTable *default_table = NULL;
 static GSList *tables = NULL;
-static guint8 gtk_accelerator_table_default_mod_mask = ~0;
+static guint8 gtk_accelerator_table_default_mod_mask = (guint8) ~0;
 
 
 GtkAcceleratorTable*
@@ -63,13 +63,13 @@ gtk_accelerator_table_find (GtkObject   *object,
   GtkAcceleratorEntry *entry;
   GSList *tmp_list;
   GList *entries;
-  gint signal_num;
+  guint signal_id;
   guint hash;
 
   g_return_val_if_fail (object != NULL, NULL);
   g_return_val_if_fail (signal_name != NULL, NULL);
 
-  signal_num = gtk_signal_lookup (signal_name, GTK_OBJECT_TYPE (object));
+  signal_id = gtk_signal_lookup (signal_name, GTK_OBJECT_TYPE (object));
   hash = (guint) accelerator_key;
 
   tmp_list = tables;
@@ -85,7 +85,7 @@ gtk_accelerator_table_find (GtkObject   *object,
 	  entries = entries->next;
 
 	  if ((entry->object == object) &&
-	      (entry->signal_num == signal_num) &&
+	      (entry->signal_id == signal_id) &&
 	      ((entry->modifiers & table->modifier_mask) ==
 	       (accelerator_mods & table->modifier_mask)))
 	    return table;
@@ -128,7 +128,7 @@ gtk_accelerator_table_install (GtkAcceleratorTable *table,
   GtkAcceleratorEntry *entry;
   GList *entries;
   gchar *signame;
-  gint signal_num;
+  guint signal_id;
   guint hash;
 
   g_return_if_fail (object != NULL);
@@ -140,8 +140,8 @@ gtk_accelerator_table_install (GtkAcceleratorTable *table,
       table = default_table;
     }
 
-  signal_num = gtk_signal_lookup (signal_name, GTK_OBJECT_TYPE (object));
-  g_return_if_fail (signal_num != 0);
+  signal_id = gtk_signal_lookup (signal_name, GTK_OBJECT_TYPE (object));
+  g_return_if_fail (signal_id != 0);
 
   hash = (guint) accelerator_key;
   entries = table->entries[hash];
@@ -155,7 +155,7 @@ gtk_accelerator_table_install (GtkAcceleratorTable *table,
 	{
 	  if (GTK_IS_WIDGET (entry->object))
 	    {
-	      signame = gtk_signal_name (entry->signal_num);
+	      signame = gtk_signal_name (entry->signal_id);
 	      gtk_signal_emit_by_name (entry->object,
 				       "remove_accelerator",
 				       signame);
@@ -163,7 +163,7 @@ gtk_accelerator_table_install (GtkAcceleratorTable *table,
 
 	  entry->modifiers = accelerator_mods;
 	  entry->object = object;
-	  entry->signal_num = signal_num;
+	  entry->signal_id = signal_id;
 	  return;
 	}
 
@@ -173,7 +173,7 @@ gtk_accelerator_table_install (GtkAcceleratorTable *table,
   entry = g_new (GtkAcceleratorEntry, 1);
   entry->modifiers = accelerator_mods;
   entry->object = object;
-  entry->signal_num = signal_num;
+  entry->signal_id = signal_id;
 
   table->entries[hash] = g_list_prepend (table->entries[hash], entry);
 }
@@ -186,7 +186,7 @@ gtk_accelerator_table_remove (GtkAcceleratorTable *table,
   GtkAcceleratorEntry *entry;
   GList *entries;
   GList *temp_list;
-  gint signal_num;
+  guint signal_id;
   gint i;
 
   g_return_if_fail (object != NULL);
@@ -198,8 +198,8 @@ gtk_accelerator_table_remove (GtkAcceleratorTable *table,
       table = default_table;
     }
 
-  signal_num = gtk_signal_lookup (signal_name, GTK_OBJECT_TYPE (object));
-  g_return_if_fail (signal_num != 0);
+  signal_id = gtk_signal_lookup (signal_name, GTK_OBJECT_TYPE (object));
+  g_return_if_fail (signal_id != 0);
 
   for (i = 0; i < 256; i++)
     {
@@ -209,7 +209,7 @@ gtk_accelerator_table_remove (GtkAcceleratorTable *table,
 	{
 	  entry = entries->data;
 
-	  if ((entry->object == object) && (entry->signal_num == signal_num))
+	  if ((entry->object == object) && (entry->signal_id == signal_id))
 	    {
 	      g_free (entry);
 
@@ -259,7 +259,7 @@ gtk_accelerator_table_check (GtkAcceleratorTable *table,
       if ((entry->modifiers & table->modifier_mask) ==
           (accelerator_mods & table->modifier_mask))
 	{
-	  gtk_signal_emit (entry->object, entry->signal_num);
+	  gtk_signal_emit (entry->object, entry->signal_id);
 	  return TRUE;
 	}
 
@@ -280,7 +280,7 @@ gtk_accelerator_table_check (GtkAcceleratorTable *table,
 	      (GTK_IS_WIDGET (entry->object) &&
 	       GTK_WIDGET_SENSITIVE (entry->object)))
 	    {
-	      gtk_signal_emit (entry->object, entry->signal_num);
+	      gtk_signal_emit (entry->object, entry->signal_id);
 	      return TRUE;
 	    }
 

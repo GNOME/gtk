@@ -169,7 +169,7 @@ static GDebugKey gtk_debug_keys[] = {
   {"objects", GTK_DEBUG_OBJECTS}
 };
 
-static const int gtk_ndebug_keys = sizeof(gtk_debug_keys)/sizeof(GDebugKey);
+static const guint gtk_ndebug_keys = sizeof (gtk_debug_keys) / sizeof (GDebugKey);
 
 #endif /* G_ENABLE_DEBUG */
 

@@ -39,7 +39,7 @@
 			 GDK_BUTTON1_MOTION_MASK)
 
 static GtkDrawingAreaClass *parent_class = NULL;
-static gint curve_type_changed_signal = 0;
+static guint curve_type_changed_signal = 0;
 
 
 /* forward declarations: */

@@ -43,7 +43,7 @@ static void gtk_real_check_menu_item_draw_indicator (GtkCheckMenuItem      *chec
 
 
 static GtkMenuItemClass *parent_class = NULL;
-static gint check_menu_item_signals[LAST_SIGNAL] = { 0 };
+static guint check_menu_item_signals[LAST_SIGNAL] = { 0 };
 
 
 guint

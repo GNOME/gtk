@@ -80,21 +80,21 @@ GtkArg*               gtk_object_collect_args  (guint   *nargs,
 						va_list  args1,
 						va_list  args2);
 
-static gint object_signals[LAST_SIGNAL] = { 0 };
+static guint object_signals[LAST_SIGNAL] = { 0 };
 
 static gint object_data_init = TRUE;
 static GHashTable *object_data_ht = NULL;
 static GMemChunk *object_data_mem_chunk = NULL;
 static GSList *object_data_id_list = NULL;
-static gint object_data_id_index = 0;
+static guint object_data_id_index = 0;
 
 static GHashTable *arg_info_ht = NULL;
 
-static const char *user_data_key = "user_data";
+static const gchar *user_data_key = "user_data";
 
 
 #ifdef G_ENABLE_DEBUG
-static gint obj_count = 0;
+static guint obj_count = 0;
 static GHashTable *living_objs_ht = NULL;
 static void
 gtk_object_debug_foreach (gpointer key, gpointer value, gpointer user_data)
@@ -335,11 +335,11 @@ gtk_object_get_arg (GtkObject *object,
 
 void
 gtk_object_class_add_signals (GtkObjectClass *class,
-			      gint           *signals,
-			      gint            nsignals)
+			      guint          *signals,
+			      guint           nsignals)
 {
-  gint *new_signals;
-  gint i;
+  guint *new_signals;
+  guint i;
 
   g_return_if_fail (class != NULL);
 
@@ -362,18 +362,18 @@ gtk_object_class_add_signals (GtkObjectClass *class,
  *   results:
  *****************************************/
 
-gint
+guint
 gtk_object_class_add_user_signal (GtkObjectClass     *class,
 				  const gchar        *name,
 				  GtkSignalMarshaller marshaller,
 				  GtkType             return_val,
-				  gint                nparams,
+				  guint               nparams,
 				  ...)
 {
   GtkType *params;
   guint i;
   va_list args;
-  gint signal_id;
+  guint signal_id;
 
   g_return_val_if_fail (class != NULL, 0);
 
@@ -575,7 +575,7 @@ gtk_object_notify_weaks (gpointer data)
  *****************************************/
 
 GtkObject*
-gtk_object_new (guint type,
+gtk_object_new (GtkType type,
 		...)
 {
   GtkObject *obj;
@@ -608,7 +608,7 @@ gtk_object_new (guint type,
  *****************************************/
 
 GtkObject*
-gtk_object_newv (guint   type,
+gtk_object_newv (GtkType  type,
 		 guint    nargs,
 		 GtkArg *args)
 {
@@ -956,11 +956,11 @@ gtk_object_add_arg_type (const char *arg_name,
  *****************************************/
 
 GtkType
-gtk_object_get_arg_type (const char *arg_name)
+gtk_object_get_arg_type (const gchar *arg_name)
 {
   GtkArgInfo *info;
-  char buffer[1024];
-  char *t;
+  gchar buffer[1024];
+  gchar *t;
 
   if (!arg_info_ht)
     return GTK_TYPE_INVALID;

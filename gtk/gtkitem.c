@@ -34,7 +34,7 @@ static void gtk_item_unmap      (GtkWidget    *widget);
 static void gtk_item_realize    (GtkWidget    *widget);
 
 
-static gint item_signals[LAST_SIGNAL] = { 0 };
+static guint item_signals[LAST_SIGNAL] = { 0 };
 
 
 guint

@@ -89,7 +89,7 @@ static void gtk_tree_item_remove_pixmaps (GtkTreeItem       *tree_item);
 
 static GtkItemClass *parent_class = NULL;
 static GtkContainerClass *container_class = NULL;
-static gint tree_item_signals[LAST_SIGNAL] = { 0 };
+static guint tree_item_signals[LAST_SIGNAL] = { 0 };
 
 guint
 gtk_tree_item_get_type ()

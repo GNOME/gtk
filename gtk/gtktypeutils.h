@@ -83,7 +83,7 @@ typedef void (*GtkArgSetFunc) (GtkObject *object, GtkArg *arg, guint arg_id);
 typedef gint (*GtkFunction) (gpointer data);
 typedef void (*GtkCallbackMarshal) (GtkObject *object,
 				    gpointer data,
-				    int n_args,
+				    guint n_args,
 				    GtkArg *args);
 typedef void (*GtkDestroyNotify) (gpointer data);
 

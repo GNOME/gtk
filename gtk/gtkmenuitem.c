@@ -69,7 +69,7 @@ static void gtk_menu_item_show_all       (GtkWidget        *widget);
 static void gtk_menu_item_hide_all       (GtkWidget        *widget);
 
 static GtkItemClass *parent_class;
-static gint menu_item_signals[LAST_SIGNAL] = { 0 };
+static guint menu_item_signals[LAST_SIGNAL] = { 0 };
 
 
 guint
@@ -439,7 +439,7 @@ gtk_menu_item_remove_accel (GtkWidget   *widget,
 			    const gchar *signal_name)
 {
   GtkMenuItem *menu_item;
-  gint signal_num;
+  guint signal_num;
 
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_MENU_ITEM (widget));

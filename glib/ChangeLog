@@ -1,3 +1,12 @@
+Mon Mar  9 15:02:21 1998  Tim Janik  <timj@gimp.org>
+
+	* glib.h: changed *_length functions to return guint.
+	changed *_nth functions to take guint as argument.
+
+	* glist.c: adapted g_list_length and g_list_length.
+
+	* gslist.c: adapted g_slist_length and g_slist_length.
+
 Mon Mar  2 17:51:18 1998  Owen Taylor  <owt1@cornell.edu>
 
 	* glib.h gutils.c : changed g_strcasecmp

@@ -70,7 +70,7 @@ static void gtk_tree_marshal_signal (GtkObject      *object,
 				     GtkArg         *args);
 
 static GtkContainerClass *parent_class = NULL;
-static gint tree_signals[LAST_SIGNAL] = { 0 };
+static guint tree_signals[LAST_SIGNAL] = { 0 };
 
 guint
 gtk_tree_get_type ()

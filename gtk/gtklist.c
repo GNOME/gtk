@@ -74,7 +74,7 @@ static void gtk_list_marshal_signal (GtkObject      *object,
 
 
 static GtkContainerClass *parent_class = NULL;
-static gint list_signals[LAST_SIGNAL] = { 0 };
+static guint list_signals[LAST_SIGNAL] = { 0 };
 
 
 guint

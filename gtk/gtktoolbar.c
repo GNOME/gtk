@@ -72,7 +72,7 @@ static void gtk_real_toolbar_style_changed       (GtkToolbar      *toolbar,
 
 static GtkContainerClass *parent_class;
 
-static gint toolbar_signals[LAST_SIGNAL] = { 0 };
+static guint toolbar_signals[LAST_SIGNAL] = { 0 };
 
 
 guint

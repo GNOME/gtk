@@ -42,7 +42,7 @@ struct _GtkMenuItem
 
   GtkWidget *submenu;
 
-  gint    accelerator_signal;
+  guint   accelerator_signal;
   gchar   accelerator_key;
   guint8  accelerator_mods;
   guint16 accelerator_size;

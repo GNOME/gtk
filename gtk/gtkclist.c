@@ -277,7 +277,7 @@ static void gtk_clist_marshal_signal_2 (GtkObject * object,
 static void add_style_data (GtkCList * clist);
 
 static GtkContainerClass *parent_class = NULL;
-static gint clist_signals[LAST_SIGNAL] = {0};
+static guint clist_signals[LAST_SIGNAL] = {0};
 
 
 guint

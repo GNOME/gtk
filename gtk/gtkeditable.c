@@ -87,7 +87,7 @@ static void gtk_editable_set_selection    (GtkEditable          *editable,
 					   gint               end);
 
 static GtkWidgetClass *parent_class = NULL;
-static gint editable_signals[LAST_SIGNAL] = { 0 };
+static guint editable_signals[LAST_SIGNAL] = { 0 };
 static GdkAtom ctext_atom = GDK_NONE;
 static GdkAtom text_atom = GDK_NONE;
 static GdkAtom clipboard_atom = GDK_NONE;
@@ -391,20 +391,20 @@ gtk_editable_set_selection (GtkEditable *editable,
 
 static gint
 gtk_editable_selection_clear (GtkWidget         *widget,
-			   GdkEventSelection *event)
+			      GdkEventSelection *event)
 {
   GtkEditable *editable;
-
+  
   g_return_val_if_fail (widget != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_EDITABLE (widget), FALSE);
   g_return_val_if_fail (event != NULL, FALSE);
-
+  
   /* Let the selection handling code know that the selection
    * has been changed, since we've overriden the default handler */
   gtk_selection_clear (widget, event);
-
+  
   editable = GTK_EDITABLE (widget);
-
+  
   if (event->selection == GDK_SELECTION_PRIMARY)
     {
       if (editable->has_selection)
@@ -419,7 +419,7 @@ gtk_editable_selection_clear (GtkWidget         *widget,
       g_free (editable->clipboard_text);
       editable->clipboard_text = NULL;
     }
-
+  
   return FALSE;
 }
 

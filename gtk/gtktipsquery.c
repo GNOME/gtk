@@ -81,7 +81,7 @@ static void	gtk_tips_query_widget_entered	(GtkTipsQuery		*tips_query,
 
 /* --- variables --- */
 static GtkLabelClass	*parent_class = NULL;
-static gint		 tips_query_signals[SIGNAL_LAST] = { 0 };
+static guint		 tips_query_signals[SIGNAL_LAST] = { 0 };
 
 
 /* --- functions --- */

@@ -101,7 +101,7 @@ static void gtk_container_hide_all          (GtkWidget         *widget);
 
 
 
-static gint container_signals[LAST_SIGNAL] = { 0 };
+static guint container_signals[LAST_SIGNAL] = { 0 };
 
 static GtkWidgetClass *parent_class = NULL;
 
@@ -650,8 +650,8 @@ gtk_container_focus_tab (GtkContainer     *container,
   GtkWidget *child;
   GtkWidget *child2;
   GList *tmp_list;
-  gint length;
-  gint i, j;
+  guint length;
+  guint i, j;
 
   length = g_list_length (children);
 
@@ -724,8 +724,8 @@ gtk_container_focus_up_down (GtkContainer     *container,
   gint dist1, dist2;
   gint focus_x;
   gint focus_width;
-  gint length;
-  gint i, j;
+  guint length;
+  guint i, j;
 
   /* return failure if there isn't a focus child */
   if (container->focus_child)
@@ -834,8 +834,8 @@ gtk_container_focus_left_right (GtkContainer     *container,
   gint dist1, dist2;
   gint focus_y;
   gint focus_height;
-  gint length;
-  gint i, j;
+  guint length;
+  guint i, j;
 
   /* return failure if there isn't a focus child */
   if (container->focus_child)

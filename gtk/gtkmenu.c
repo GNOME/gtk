@@ -276,7 +276,7 @@ gtk_menu_popup (GtkMenu             *menu,
 		GtkWidget           *parent_menu_item,
 		GtkMenuPositionFunc  func,
 		gpointer             data,
-		gint                 button,
+		guint                button,
 		guint32              activate_time)
 {
   g_return_if_fail (menu != NULL);
@@ -351,7 +351,7 @@ gtk_menu_get_active (GtkMenu *menu)
 
 void
 gtk_menu_set_active (GtkMenu *menu,
-		     gint     index)
+		     guint    index)
 {
   GtkWidget *child;
   GList *tmp_list;

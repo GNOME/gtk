@@ -111,7 +111,7 @@ static gint gtk_window_check_accelerator  (GtkWindow         *window,
 
 
 static GtkBinClass *parent_class = NULL;
-static gint window_signals[LAST_SIGNAL] = { 0 };
+static guint window_signals[LAST_SIGNAL] = { 0 };
 
 
 guint

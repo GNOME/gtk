@@ -1,3 +1,67 @@
+Mon Mar  9 15:48:10 1998  Tim Janik  <timj@gimp.org>
+
+	* Signal signedness and naming corrections, plus GtkType fixes:
+
+	* gtk/gtkadjustment.c: 
+	* gtk/gtkbutton.c:
+	* gtk/gtkcheckmenuitem.c:
+	* gtk/gtkclist.c: 
+	* gtk/gtkcolorsel.c: 
+	* gtk/gtkcontainer.c: 
+	* gtk/gtkcurve.c: 
+	* gtk/gtkdata.c: 
+	* gtk/gtkeditable.c: 
+	* gtk/gtkentry.c: 
+	* gtk/gtkhandlebox.c: 
+	* gtk/gtkinputdialog.c: 
+	* gtk/gtkitem.c: 
+	* gtk/gtklist.c: 
+	* gtk/gtkmenuitem.c: 
+	* gtk/gtkmenushell.c: 
+	* gtk/gtknotebook.c: 
+	* gtk/gtkstatusbar.c: 
+	* gtk/gtktoolbar.c: 
+	* gtk/gtktree.c: 
+	* gtk/gtktreeitem.c: 
+	* gtk/gtkwidget.c: 
+	* gtk/gtktogglebutton.c: 
+	* gtk/gtkwindow.c: 
+	made the <widget>_signals[] arrays of type guint rather than gint.
+
+	* gtk/gtkwidget.c (gtk_widget_get_ancestor): made widget_type a GtkType.
+
+	* gtk/gtkcombo.h:
+	handler ids need to be of type guint (entry_change_id, list_change_id).
+
+	* gtk/gtkaccelerator.c:
+	changed signal_num to signal_id and typed it guint.
+
+	* gtk/gtkmain.c: made gtk_ndebug_keys a guint.
+
+	* gtk/gtkmenu.h: 
+	* gtk/gtkmenu.c:
+	(gtk_menu_popup): made button a guint.
+	(gtk_menu_set_active): made index a guint.
+
+	* gtk/gtkmenuitem.h: 
+	* gtk/gtkmenuitem.c: 
+	made accelerator_signal a guint.
+
+	* gtk/gtkoptionmenu.h:
+	* gtk/gtkoptionmenu.c:
+	(gtk_option_menu_set_history): made index a guint.
+
+	* gtk/gtksignal.h: 
+	* gtk/gtksignal.c: 
+	* gtk/gtkobject.h: 
+	* gtk/gtkobject.c: changed a bunch of prototypes to take guints rather
+	than gints. also made some conversions from guint to GtkType, left over
+ 	from when the fundamental-types system was introduced.
+
+	* gtk/gtkobject.h: 
+	* gtk/gtkobject.c: made object_data_id_index and obj_count guints.
+	made *signals and nsignals guints in GtkObjectClass.
+
 Mon Mar  9 13:36:53 GMT 1998 Tony Gale  <gale@gimp.org>
 
         * docs/gtkfaq.sgml:

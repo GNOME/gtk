@@ -280,7 +280,7 @@ g_slist_reverse (GSList *list)
 
 GSList*
 g_slist_nth (GSList *list,
-	     gint    n)
+	     guint   n)
 {
   while ((n-- > 0) && list)
     list = list->next;
@@ -314,10 +314,10 @@ g_slist_last (GSList *list)
   return list;
 }
 
-gint
+guint
 g_slist_length (GSList *list)
 {
-  gint length;
+  guint length;
 
   length = 0;
   while (list)

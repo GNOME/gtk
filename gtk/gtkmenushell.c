@@ -56,7 +56,7 @@ static gint gtk_menu_shell_is_item           (GtkMenuShell      *menu_shell,
 
 
 static GtkContainerClass *parent_class = NULL;
-static gint menu_shell_signals[LAST_SIGNAL] = { 0 };
+static guint menu_shell_signals[LAST_SIGNAL] = { 0 };
 
 
 guint

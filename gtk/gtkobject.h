@@ -151,11 +151,11 @@ struct _GtkObjectClass
   /* The signals this object class handles. "signals" is an
    *  array of signal ID's.
    */
-  gint *signals;
+  guint *signals;
 
   /* The number of signals listed in "signals".
    */
-  gint nsignals;
+  guint nsignals;
 
   /* The number of arguments per class.
    */
@@ -193,22 +193,22 @@ guint	gtk_object_get_type		(void);
 /* Append "signals" to those already defined in "class".
  */
 void	gtk_object_class_add_signals	(GtkObjectClass	*klass,
-					 gint           *signals,
-					 gint            nsignals);
+					 guint          *signals,
+					 guint           nsignals);
 
 /* Append a user defined signal without default handler to a class.
  */
-gint    gtk_object_class_add_user_signal (GtkObjectClass     *klass,
+guint   gtk_object_class_add_user_signal (GtkObjectClass     *klass,
 					  const gchar        *name,
 					  GtkSignalMarshaller marshaller,
 					  GtkType             return_val,
-					  gint                nparams,
+					  guint               nparams,
 					  ...);
 
-GtkObject*	gtk_object_new		(guint		type,
+GtkObject*	gtk_object_new		(GtkType	type,
 					 ...);
 
-GtkObject*	gtk_object_newv		(guint		type,
+GtkObject*	gtk_object_newv		(GtkType	type,
 					 guint		nargs,
 					 GtkArg		*args);
 void gtk_object_sink      (GtkObject        *object);

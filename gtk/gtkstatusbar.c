@@ -44,7 +44,7 @@ static void gtk_statusbar_update		   (GtkStatusbar      *statusbar,
 						    const gchar       *text);
      
 static GtkContainerClass *parent_class;
-static gint              statusbar_signals[SIGNAL_LAST] = { 0 };
+static guint              statusbar_signals[SIGNAL_LAST] = { 0 };
 
 guint      
 gtk_statusbar_get_type ()

@@ -198,7 +198,7 @@ gtk_option_menu_remove_menu (GtkOptionMenu *option_menu)
 
 void
 gtk_option_menu_set_history (GtkOptionMenu *option_menu,
-			     gint           index)
+			     guint          index)
 {
   GtkWidget *menu_item;
 

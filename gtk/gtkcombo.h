@@ -43,8 +43,8 @@ struct _GtkCombo {
 	GtkWidget *popwin;
 	GtkWidget *list;
 
-	gint entry_change_id;
-	gint list_change_id;
+	guint entry_change_id;
+	guint list_change_id;
 
 	guint value_in_list:1;
 	guint ok_if_empty:1;

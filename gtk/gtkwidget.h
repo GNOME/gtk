@@ -234,7 +234,7 @@ struct _GtkWidgetClass
    *  This is used when activating the current focus widget and
    *  the default widget.
    */
-  gint activate_signal;
+  guint activate_signal;
   
   /* basics */
   void (* show)		       (GtkWidget      *widget);
@@ -446,7 +446,7 @@ void	   gtk_widget_set_extension_events (GtkWidget		*widget,
 GdkExtensionMode gtk_widget_get_extension_events (GtkWidget	*widget);
 GtkWidget*   gtk_widget_get_toplevel	(GtkWidget	*widget);
 GtkWidget*   gtk_widget_get_ancestor	(GtkWidget	*widget,
-					 gint		type);
+					 GtkType	widget_type);
 GdkColormap* gtk_widget_get_colormap	(GtkWidget	*widget);
 GdkVisual*   gtk_widget_get_visual	(GtkWidget	*widget);
 gint	     gtk_widget_get_events	(GtkWidget	*widget);

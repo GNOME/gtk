@@ -214,7 +214,7 @@ static GtkWidgetAuxInfo* gtk_widget_aux_info_new     (void);
 static void		 gtk_widget_aux_info_destroy (GtkWidgetAuxInfo *aux_info);
 
 static GtkObjectClass *parent_class = NULL;
-static gint widget_signals[LAST_SIGNAL] = { 0 };
+static guint widget_signals[LAST_SIGNAL] = { 0 };
 
 static GMemChunk *aux_info_mem_chunk = NULL;
 
@@ -2124,7 +2124,7 @@ gtk_widget_grab_focus (GtkWidget *widget)
 {
   GtkWidget *window;
   GtkWidget *child;
-  gint window_type;
+  GtkType window_type;
   
   g_return_if_fail (widget != NULL);
   
@@ -2158,7 +2158,7 @@ void
 gtk_widget_grab_default (GtkWidget *widget)
 {
   GtkWidget *window;
-  gint window_type;
+  GtkType window_type;
   
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_WIDGET_CAN_DEFAULT (widget));
@@ -2823,14 +2823,14 @@ gtk_widget_get_toplevel (GtkWidget *widget)
 
 GtkWidget*
 gtk_widget_get_ancestor (GtkWidget *widget,
-			 gint	    type)
+			 GtkType    widget_type)
 {
   g_return_val_if_fail (widget != NULL, NULL);
   
-  while (widget && !gtk_type_is_a (GTK_WIDGET_TYPE (widget), type))
+  while (widget && !gtk_type_is_a (GTK_WIDGET_TYPE (widget), widget_type))
     widget = widget->parent;
   
-  if (!(widget && gtk_type_is_a (GTK_WIDGET_TYPE (widget), type)))
+  if (!(widget && gtk_type_is_a (GTK_WIDGET_TYPE (widget), widget_type)))
     return NULL;
   
   return widget;

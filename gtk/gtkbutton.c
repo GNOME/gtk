@@ -89,7 +89,7 @@ static void gtk_real_button_leave     (GtkButton        *button);
 
 
 static GtkContainerClass *parent_class;
-static gint button_signals[LAST_SIGNAL] = { 0 };
+static guint button_signals[LAST_SIGNAL] = { 0 };
 
 
 guint

@@ -28,7 +28,7 @@ enum {
 static void gtk_data_class_init (GtkDataClass *klass);
 
 
-static gint data_signals[LAST_SIGNAL] = { 0 };
+static guint data_signals[LAST_SIGNAL] = { 0 };
 
 
 guint

@@ -439,12 +439,12 @@ GList* g_list_remove_link (GList     *list,
 			   GList     *link);
 GList* g_list_reverse	  (GList     *list);
 GList* g_list_nth	  (GList     *list,
-			   gint	      n);
+			   guint      n);
 GList* g_list_find	  (GList     *list,
 			   gpointer   data);
 GList* g_list_last	  (GList     *list);
 GList* g_list_first	  (GList     *list);
-gint   g_list_length	  (GList     *list);
+guint  g_list_length	  (GList     *list);
 void   g_list_foreach	  (GList     *list,
 			   GFunc      func,
 			   gpointer   user_data);
@@ -476,11 +476,11 @@ GSList* g_slist_remove_link (GSList   *list,
 			     GSList   *link);
 GSList* g_slist_reverse	    (GSList   *list);
 GSList* g_slist_nth	    (GSList   *list,
-			     gint      n);
+			     guint     n);
 GSList* g_slist_find	    (GSList   *list,
 			     gpointer  data);
 GSList* g_slist_last	    (GSList   *list);
-gint	g_slist_length	    (GSList   *list);
+guint	g_slist_length	    (GSList   *list);
 void	g_slist_foreach	    (GSList   *list,
 			     GFunc     func,
 			     gpointer  user_data);

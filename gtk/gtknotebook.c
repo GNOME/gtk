@@ -140,7 +140,7 @@ static void gtk_notebook_menu_item_create    (GtkNotebook      *notebook,
 
 
 static GtkContainerClass *parent_class = NULL;
-static gint notebook_signals[LAST_SIGNAL] = { 0 };
+static guint notebook_signals[LAST_SIGNAL] = { 0 };
 
 guint
 gtk_notebook_get_type ()

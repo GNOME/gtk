@@ -111,7 +111,7 @@ static void gtk_entry_set_selection       (GtkEditable       *editable,
 					   gint               end);
 
 static GtkWidgetClass *parent_class = NULL;
-static gint entry_signals[LAST_SIGNAL] = { 0 };
+static guint entry_signals[LAST_SIGNAL] = { 0 };
 static GdkAtom ctext_atom = GDK_NONE;
 
 static GtkTextFunction control_keys[26] =

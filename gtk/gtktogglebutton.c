@@ -41,7 +41,7 @@ static void gtk_toggle_button_enter      (GtkButton            *button);
 static void gtk_toggle_button_leave      (GtkButton            *button);
 
 
-static gint toggle_button_signals[LAST_SIGNAL] = { 0 };
+static guint toggle_button_signals[LAST_SIGNAL] = { 0 };
 
 
 guint

@@ -164,7 +164,7 @@ static GtkVBoxClass *color_selection_parent_class = NULL;
 static GtkWindowClass *color_selection_dialog_parent_class = NULL;
 
 
-static gint color_selection_signals[LAST_SIGNAL] = {0};
+static guint color_selection_signals[LAST_SIGNAL] = {0};
 
 static const gchar	*value_index_key = "gtk-value-index";
 

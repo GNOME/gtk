@@ -78,12 +78,12 @@ void       gtk_menu_popup                 (GtkMenu             *menu,
 					   GtkWidget           *parent_menu_item,
 					   GtkMenuPositionFunc  func,
 					   gpointer             data,
-					   gint                 button,
+					   guint                button,
 					   guint32              activate_time);
 void       gtk_menu_popdown               (GtkMenu             *menu);
 GtkWidget* gtk_menu_get_active            (GtkMenu             *menu);
 void       gtk_menu_set_active            (GtkMenu             *menu,
-					   gint                 index);
+					   guint                index);
 void       gtk_menu_set_accelerator_table (GtkMenu             *menu,
 					   GtkAcceleratorTable *table);
 void	   gtk_menu_attach_to_widget	  (GtkMenu	       *menu,

@@ -98,7 +98,7 @@ static void gtk_input_dialog_fill_keys (GtkInputDialog *inputd,
 					GdkDeviceInfo *info);
 
 static GtkObjectClass *parent_class = NULL;
-static gint input_dialog_signals[LAST_SIGNAL] = { 0 };
+static guint input_dialog_signals[LAST_SIGNAL] = { 0 };
 
 static void
 gtk_input_dialog_marshal_signal1 (GtkObject      *object,
