@@ -1,3 +1,10 @@
+2002-04-11  Michael Meeks  <michael@ximian.com>
+
+	* gtk/gtklabel.c
+	(gtk_label_parse_uline, gtk_label_set_text),
+	(gtk_label_set_text_with_mnemonic): add freeze / thaws
+	to stop deluge of 'notify' signals.
+
 Sat Apr  6 06:57:00 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkmenushell.[ch] gtk/gtkmenuitem.c: Export
