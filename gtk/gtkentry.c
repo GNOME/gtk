@@ -65,6 +65,8 @@ static void gtk_entry_draw_cursor         (GtkEntry          *entry);
 static void gtk_entry_draw_cursor_on_drawable
 					  (GtkEntry          *entry,
 					   GdkDrawable       *drawable);
+static void gtk_entry_style_set	          (GtkWidget         *widget,
+					   GtkStyle          *previous_style);
 static void gtk_entry_queue_draw          (GtkEntry          *entry);
 static gint gtk_entry_timer               (gpointer           data);
 static gint gtk_entry_position            (GtkEntry          *entry,
@@ -229,6 +231,7 @@ gtk_entry_class_init (GtkEntryClass *class)
   widget_class->key_press_event = gtk_entry_key_press;
   widget_class->focus_in_event = gtk_entry_focus_in;
   widget_class->focus_out_event = gtk_entry_focus_out;
+  widget_class->style_set    = gtk_entry_style_set;
 
   editable_class->insert_text = gtk_entry_insert_text;
   editable_class->delete_text = gtk_entry_delete_text;
@@ -2072,4 +2075,24 @@ gtk_entry_set_max_length (GtkEntry     *entry,
   if (max && entry->text_length > max)
   	gtk_editable_delete_text(GTK_EDITABLE(entry), max, -1);
   entry->text_max_length = max;
+}
+
+static void 
+gtk_entry_style_set	(GtkWidget      *widget,
+			 GtkStyle       *previous_style)
+{
+  GtkEntry *entry;
+  gint scroll_char;
+
+  g_return_if_fail (widget != NULL);
+  g_return_if_fail (GTK_IS_ENTRY (widget));
+
+  if (previous_style && GTK_WIDGET_REALIZED (widget))
+    {
+      entry = GTK_ENTRY (widget);
+  
+      scroll_char = gtk_entry_find_position (entry, entry->scroll_offset);
+      gtk_entry_recompute_offsets (GTK_ENTRY (widget));
+      entry->scroll_offset = entry->char_offset[scroll_char];
+    }
 }
