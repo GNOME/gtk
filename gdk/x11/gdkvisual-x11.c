@@ -562,6 +562,14 @@ gdk_x11_screen_lookup_visual (GdkScreen *screen,
   return NULL;
 }
 
+/**
+ * gdkx_visual_get:
+ * @xvisualid: a X visual id.
+ * 
+ * Returns a #GdkVisual corresponding to a X visual. 
+ * 
+ * Return value: the #GdkVisual.
+ **/
 GdkVisual*
 gdkx_visual_get (VisualID xvisualid)
 {
@@ -615,6 +623,14 @@ gdk_visual_equal (Visual *a,
   return (a->visualid == b->visualid);
 }
 
+/**
+ * gdk_x11_visual_get_xvisual:
+ * @visual: a #GdkVisual.
+ * 
+ * Returns the X visual belonging to a #GdkVisual.
+ * 
+ * Return value: an Xlib <type>Visual*</type>.
+ **/
 Visual *
 gdk_x11_visual_get_xvisual (GdkVisual *visual)
 {

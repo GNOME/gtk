@@ -790,6 +790,14 @@ gdk_x11_image_destroy (GdkImage *image)
   image->windowing_data = NULL;
 }
 
+/**
+ * gdk_x11_image_get_xdisplay:
+ * @image: a #GdkImage.
+ * 
+ * Returns the display of a #GdkImage.
+ * 
+ * Return value: an Xlib <type>Display*</type>.
+ **/
 Display *
 gdk_x11_image_get_xdisplay (GdkImage *image)
 {
@@ -802,6 +810,14 @@ gdk_x11_image_get_xdisplay (GdkImage *image)
   return GDK_SCREEN_XDISPLAY (private->screen);
 }
 
+/**
+ * gdk_x11_image_get_ximage:
+ * @image: a #GdkImage.
+ * 
+ * Returns the X image belonging to a #GdkImage.
+ * 
+ * Return value: an <type>XImage*</type>.
+ **/
 XImage *
 gdk_x11_image_get_ximage (GdkImage *image)
 {

@@ -465,6 +465,15 @@ gdk_display_sync (GdkDisplay * display)
   XSync (GDK_DISPLAY_XDISPLAY (display), False);
 }
 
+/**
+ * gdk_x11_display_grab:
+ * @display: a #GdkDisplay 
+ * 
+ * Call XGrabServer() on @display. 
+ * To ungrab the display again, use gdk_x11_display_ungrab(). 
+ *
+ * gdk_x11_display_grab()/gdk_x11_display_ungrab() calls can be nested.
+ **/
 void
 gdk_x11_display_grab (GdkDisplay * display)
 {
@@ -479,6 +488,13 @@ gdk_x11_display_grab (GdkDisplay * display)
   display_x11->grab_count++;
 }
 
+/**
+ * gdk_x11_display_ungrab:
+ * @display: a #GdkDisplay
+ * 
+ * Ungrab @display after it has been grabbed with 
+ * gdk_x11_display_grab(). 
+ **/
 void
 gdk_x11_display_ungrab (GdkDisplay * display)
 {

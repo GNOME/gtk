@@ -736,12 +736,26 @@ _gdk_region_get_xrectangles (GdkRegion   *region,
   *n_rects = region->numRects;
 }
 
+/**
+ * gdk_x11_grab_server:
+ * 
+ * Call gdk_x11_display_grab() on the default display. 
+ * To ungrab the server again, use gdk_x11_ungrab_server(). 
+ *
+ * gdk_x11_grab_server()/gdk_x11_ungrab_server() calls can be nested.
+ **/ 
 void
 gdk_x11_grab_server ()
 {
   gdk_x11_display_grab (gdk_display_get_default ());
 }
 
+/**
+ * gdk_x11_ungrab_server:
+ *
+ * Ungrab the default display after it has been grabbed with 
+ * gdk_x11_grab_server(). 
+ **/
 void
 gdk_x11_ungrab_server ()
 {
@@ -763,14 +777,33 @@ gdk_x11_get_default_screen (void)
   return gdk_screen_get_number (gdk_screen_get_default ());
 }
 
+/**
+ * gdk_x11_get_default_root_xwindow:
+ * 
+ * Gets the root window of the default screen 
+ * (see gdk_x11_get_default_screen()).  
+ * 
+ * Return value: an Xlib <type>Window</type>.
+ **/
 Window
 gdk_x11_get_default_root_xwindow (void)
 {
   return GDK_SCREEN_XROOTWIN (gdk_screen_get_default ());
 }
 
+/**
+ * gdk_x11_get_default_xdisplay:
+ * 
+ * Gets the default GTK+ display.
+ * 
+ * Return value: the Xlib <type>Display*</type> for the display
+ * specified in the <option>--display</option> command line option 
+ * or the <envar>DISPLAY</envar> environment variable.
+ **/
 Display *
 gdk_x11_get_default_xdisplay (void)
 {
   return GDK_DISPLAY_XDISPLAY (gdk_display_get_default ());
 }
+
+

@@ -2244,6 +2244,16 @@ fetch_net_wm_check_window (GdkScreen *screen)
   _gdk_x11_screen_window_manager_changed (GDK_SCREEN (screen_x11));
 }
 
+/**
+ * gdk_x11_screen_get_window_manager_name:
+ * @screen: a #GdkScreen 
+ * 
+ * Returns the name of the window manager for @screen. 
+ * 
+ * Return value: the name of the window manager screen @screen, or 
+ * "unknown" if the window manager is unknown. The string is owned by GDK
+ * and should not be freed.
+ **/
 const char*
 gdk_x11_screen_get_window_manager_name (GdkScreen *screen)
 {

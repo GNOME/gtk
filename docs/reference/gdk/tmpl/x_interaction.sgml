@@ -252,19 +252,19 @@ Another name for GDK_DRAWABLE_XID().
 
 <!-- ##### FUNCTION gdkx_visual_get ##### -->
 <para>
-Returns a #GdkVisual corresponding to a X visual.
+
 </para>
 
-@xvisualid: a X visual id.
-@Returns: the #GdkVisual.
+@xvisualid: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gdkx_colormap_get ##### -->
 <para>
 </para>
 
-@xcolormap: a X colormap.
-@Returns: the #GdkColormap.
+@xcolormap: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gdk_pixmap_foreign_new ##### -->
@@ -307,12 +307,11 @@ Returns a #GdkVisual corresponding to a X visual.
 
 <!-- ##### FUNCTION gdk_xid_table_lookup ##### -->
 <para>
-Returns the Gdk object associated with the given X id.
+
 </para>
 
-@xid: an X id.
-@Returns: the associated Gdk object, which may be a #GdkPixmap,
-a #GdkWindow or a #GdkFont.
+@xid: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gdk_xid_table_lookup_for_display ##### -->
@@ -448,40 +447,38 @@ Obtains the #GdkFont for the given Xlib font ID on @display, or %NULL if no
 
 <!-- ##### FUNCTION gdk_x11_colormap_get_xcolormap ##### -->
 <para>
-Returns the X colormap belonging to a #GdkColormap.
+
 </para>
 
-@colormap: a #GdkColormap.
-@Returns: an Xlib <type>Colormap</type>.
+@colormap: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gdk_x11_colormap_get_xdisplay ##### -->
 <para>
-Returns the display of a #GdkColormap.
+
 </para>
 
-@colormap: a #GdkColormap.
-@Returns: an Xlib <type>Display*</type>.
+@colormap: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gdk_x11_cursor_get_xcursor ##### -->
 <para>
-Returns the X cursor belonging to a #GdkCursor.
+
 </para>
 
-@cursor: a #GdkCursor.
+@cursor: 
 @Returns: 
-<!-- # Unused Parameters # -->
-@Retursn: an Xlib <type>Cursor</type.
 
 
 <!-- ##### FUNCTION gdk_x11_cursor_get_xdisplay ##### -->
 <para>
-Returns the display of a #GdkCursor.
+
 </para>
 
-@cursor: a #GdkCursor.
-@Returns: an Xlib <type>Display*</type>.
+@cursor: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gdk_x11_display_get_xdisplay ##### -->
@@ -511,20 +508,20 @@ Returns the display of a #GdkCursor.
 
 <!-- ##### FUNCTION gdk_x11_drawable_get_xdisplay ##### -->
 <para>
-Returns the display of a #GdkDrawable.
+
 </para>
 
-@drawable: a #GdkDrawable.
-@Returns: an Xlib <type>Display*</type>.
+@drawable: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gdk_x11_drawable_get_xid ##### -->
 <para>
-Returns the X resource (window or pixmap) belonging to a #GdkDrawable.
+
 </para>
 
-@drawable: a #GdkDrawable.
-@Returns: the ID of @win's X resource.
+@drawable: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gdk_x11_font_get_name ##### -->
@@ -538,47 +535,46 @@ Returns the X resource (window or pixmap) belonging to a #GdkDrawable.
 
 <!-- ##### FUNCTION gdk_x11_font_get_xdisplay ##### -->
 <para>
-Returns the display of a #GdkFont.
+
 </para>
 
-@font: a #GdkFont.
-@Returns: an Xlib <type>Display*</type>.
+@font: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gdk_x11_font_get_xfont ##### -->
 <para>
-Returns the X font belonging to a #GdkFont.
+
 </para>
 
-@font: a #GdkFont.
-@Returns: an Xlib <type>XFontStruct*</type> or an <type>XFontSet</type>.
+@font: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gdk_x11_gc_get_xdisplay ##### -->
 <para>
-Returns the display of a #GdkGC.
+
 </para>
 
-@gc: a #GdkGC.
-@Returns: an Xlib <type>Display*</type>.
+@gc: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gdk_x11_gc_get_xgc ##### -->
 <para>
-Returns the X GC of a #GdkGC.
+
 </para>
 
-@gc: a #GdkGC.
-@Returns: an Xlib <type>GC</type>.
+@gc: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gdk_x11_get_default_root_xwindow ##### -->
 <para>
-Gets the root window of the default screen 
-(see gdk_x11_get_default_screen()).  
+
 </para>
 
-@Returns: an Xlib <type>Window</type>.
+@Returns: 
 
 
 <!-- ##### FUNCTION gdk_x11_get_default_screen ##### -->
@@ -591,43 +587,35 @@ Gets the root window of the default screen
 
 <!-- ##### FUNCTION gdk_x11_get_default_xdisplay ##### -->
 <para>
-Gets the default GTK+ display.
+
 </para>
 
-@Returns: the Xlib <type>Display*</type> for the display
-  specified in the <option>--display</option> command line option 
-  or the <envar>DISPLAY</envar> environment variable.
+@Returns: 
 
 
 <!-- ##### FUNCTION gdk_x11_grab_server ##### -->
 <para>
-Call <function>XGrabServer()</function> on the default display. 
-To ungrab the server again, use gdk_x11_ungrab_server(). 
-</para>
-<para>
-gdk_x11_grab_server()/gdk_x11_ungrab_server() calls can be nested.
+
 </para>
 
 
 
 <!-- ##### FUNCTION gdk_x11_image_get_xdisplay ##### -->
 <para>
-Returns the display of a #GdkImage.
+
 </para>
 
 @image: 
-@Returns: an Xlib <type>Display*</type>.
-<!-- # Unused Parameters # -->
-@drawable: a #GdkImage.
+@Returns: 
 
 
 <!-- ##### FUNCTION gdk_x11_image_get_ximage ##### -->
 <para>
-Returns the X image belonging to a #GdkImage.
+
 </para>
 
-@image: a #GdkImage.
-@Returns: an <type>XImage*</type>.
+@image: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gdk_x11_screen_get_screen_number ##### -->
@@ -650,19 +638,18 @@ Returns the X image belonging to a #GdkImage.
 
 <!-- ##### FUNCTION gdk_x11_ungrab_server ##### -->
 <para>
-Ungrab the default display after it has been grabbed with 
-gdk_x11_grab_server(). 
+
 </para>
 
 
 
 <!-- ##### FUNCTION gdk_x11_visual_get_xvisual ##### -->
 <para>
-Returns the X visual belonging to a #GdkVisual.
+
 </para>
 
-@visual: a #GdkVisual.
-@Returns: an Xlib <type>Visual*</type>.
+@visual: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gdk_x11_atom_to_xatom ##### -->
@@ -682,8 +669,6 @@ Returns the X visual belonging to a #GdkVisual.
 @display: 
 @atom: 
 @Returns: 
-<!-- # Unused Parameters # -->
-@virtual_atom: 
 
 
 <!-- ##### FUNCTION gdk_x11_xatom_to_atom ##### -->

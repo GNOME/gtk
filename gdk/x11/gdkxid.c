@@ -92,6 +92,16 @@ gdk_xid_table_lookup_for_display (GdkDisplay  *display,
   return data;
 }
 
+
+/**
+ * gdk_xid_table_lookup:
+ * @xid: an X id.
+ * 
+ * Returns the Gdk object associated with the given X id.
+ * 
+ * Return value: the associated Gdk object, which may be a #GdkPixmap,
+ * a #GdkWindow or a #GdkFont.
+ **/
 gpointer
 gdk_xid_table_lookup (XID xid)
 {

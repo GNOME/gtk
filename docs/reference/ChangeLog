@@ -1,3 +1,9 @@
+2002-10-22  Matthias Clasen  <maclas@gmx.de>
+
+	* gdk/tmpl/gdkdisplay.sgml: Document GdkDisplayPointerHooks.
+
+	* gdk/tmpl/x_interaction.sgml: Some docs moved inline.
+
 2002-10-20  Matthias Clasen  <maclas@gmx.de>
 
 	* gdk-pixbuf/Makefile.am (SCANOBJ_FILES): 

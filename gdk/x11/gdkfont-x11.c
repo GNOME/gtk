@@ -764,6 +764,14 @@ gdk_text_extents_wc (GdkFont        *font,
 
 }
 
+/**
+ * gdk_x11_font_get_xdisplay:
+ * @font: a #GdkFont.
+ * 
+ * Returns the display of a #GdkFont.
+ * 
+ * Return value:  an Xlib <type>Display*</type>.
+ **/
 Display *
 gdk_x11_font_get_xdisplay (GdkFont *font)
 {
@@ -772,6 +780,14 @@ gdk_x11_font_get_xdisplay (GdkFont *font)
   return GDK_DISPLAY_XDISPLAY (((GdkFontPrivateX *)font)->display);
 }
 
+/**
+ * gdk_x11_font_get_xfont:
+ * @font: a #GdkFont.
+ * 
+ * Returns the X font belonging to a #GdkFont.
+ * 
+ * Return value: an Xlib <type>XFontStruct*</type> or an <type>XFontSet</type>.
+ **/
 gpointer
 gdk_x11_font_get_xfont (GdkFont *font)
 {

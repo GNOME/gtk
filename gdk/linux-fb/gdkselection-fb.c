@@ -285,6 +285,7 @@ gdk_utf8_to_string_target (const gchar *str)
 
 /**
  * gdk_utf8_to_compound_text_for_display:
+ * @display:  a #GdkDisplay
  * @str:      a UTF-8 string
  * @encoding: location to store resulting encoding
  * @format:   location to store format of the result
@@ -381,6 +382,7 @@ make_list (const gchar  *text,
 
 /**
  * gdk_text_property_to_utf8_list_for_display:
+ * @display:  a #GdkDisplay
  * @encoding: an atom representing the encoding of the text
  * @format:   the format of the property
  * @text:     the text to convert

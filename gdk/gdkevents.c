@@ -260,6 +260,15 @@ gdk_event_put (GdkEvent *event)
 static GMemChunk *event_chunk = NULL;
 static GHashTable *event_hash = NULL;
 
+/**
+ * gdk_event_new:
+ * @type: a #GdkEventType 
+ * 
+ * Creates a new event of the given type. All fields are set to 0.
+ * 
+ * Return value: a newly-allocated #GdkEvent. The returned #GdkEvent 
+ * should be freed with gdk_event_free().
+ **/
 GdkEvent*
 gdk_event_new (GdkEventType type)
 {

@@ -187,6 +187,14 @@ _gdk_cursor_destroy (GdkCursor *cursor)
   g_free (private);
 }
 
+/**
+ * gdk_x11_cursor_get_xdisplay:
+ * @cursor: a #GdkCursor.
+ * 
+ * Returns the display of a #GdkCursor.
+ * 
+ * Return value: an Xlib <type>Display*</type>.
+ **/
 Display *
 gdk_x11_cursor_get_xdisplay (GdkCursor *cursor)
 {
@@ -195,6 +203,14 @@ gdk_x11_cursor_get_xdisplay (GdkCursor *cursor)
   return GDK_DISPLAY_XDISPLAY(((GdkCursorPrivate *)cursor)->display);
 }
 
+/**
+ * gdk_x11_cursor_get_xcursor:
+ * @cursor: a #GdkCursor.
+ * 
+ * Returns the X cursor belonging to a #GdkCursor.
+ * 
+ * Return value: an Xlib <type>Cursor</type>.
+ **/
 Cursor
 gdk_x11_cursor_get_xcursor (GdkCursor *cursor)
 {

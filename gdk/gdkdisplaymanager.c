@@ -176,11 +176,7 @@ gdk_display_manager_get (void)
  * gdk_display_manager_get_default_display:
  * @display_manager: a #GdkDisplayManager 
  *
- * Gets the default #GdkDisplay. This is a convenience
- * function for:
- * <programlisting>
- *   gdk_display_manager_get_default_display (gdk_display_manager_get ())
- * </programlisting>
+ * Gets the default #GdkDisplay. 
  * 
  * Returns: a #GdkDisplay, or %NULL if there is no default
  *   display.
@@ -258,3 +254,4 @@ gdk_display_manager_list_displays (GdkDisplayManager *display_manager)
 {
   return g_slist_copy (_gdk_displays);
 }
+

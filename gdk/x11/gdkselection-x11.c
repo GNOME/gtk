@@ -363,7 +363,7 @@ gdk_selection_property_get (GdkWindow  *requestor,
 }
 
 /**
- * gdk_selection_send_notify_for_display :
+ * gdk_selection_send_notify_for_display:
  * @display : the #GdkDisplay where @requestor is realized
  * @requestor : window to which to deliver response.
  * @selection : selection that was requested.
@@ -416,7 +416,7 @@ gdk_selection_send_notify_for_display (GdkDisplay *display,
  * the current local. (The elements of the array represent the
  * null-separated elements of the original text string.)
  *
- * Returns : he number of strings stored in list, or 0, 
+ * Returns : the number of strings stored in list, or 0, 
  * if the conversion failed. 
  */
 gint

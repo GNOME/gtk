@@ -1344,6 +1344,14 @@ gdk_colormap_equal (Colormap *a,
   return (*a == *b);
 }
 
+/**
+ * gdk_x11_colormap_get_xdisplay:
+ * @colormap: a #GdkColormap.
+ * 
+ * Returns the display of a #GdkColormap.
+ * 
+ * Return value: an Xlib <type>Display*</type>.
+ **/
 Display *
 gdk_x11_colormap_get_xdisplay (GdkColormap *colormap)
 {
@@ -1356,6 +1364,14 @@ gdk_x11_colormap_get_xdisplay (GdkColormap *colormap)
   return private->xdisplay;
 }
 
+/**
+ * gdk_x11_colormap_get_xcolormap:
+ * @colormap:  a #GdkColormap.
+ * 
+ * Returns the X colormap belonging to a #GdkColormap.
+ * 
+ * Return value: an Xlib <type>Colormap</type>.
+ **/
 Colormap
 gdk_x11_colormap_get_xcolormap (GdkColormap *colormap)
 {

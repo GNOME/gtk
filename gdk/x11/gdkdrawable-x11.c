@@ -895,6 +895,14 @@ gdk_x11_get_visual (GdkDrawable    *drawable)
   return gdk_drawable_get_visual (GDK_DRAWABLE_IMPL_X11 (drawable)->wrapper);
 }
 
+/**
+ * gdk_x11_drawable_get_xdisplay:
+ * @drawable: a #GdkDrawable.
+ * 
+ * Returns the display of a #GdkDrawable.
+ * 
+ * Return value: an Xlib <type>Display*</type>.
+ **/
 Display *
 gdk_x11_drawable_get_xdisplay (GdkDrawable *drawable)
 {
@@ -904,6 +912,14 @@ gdk_x11_drawable_get_xdisplay (GdkDrawable *drawable)
     return GDK_SCREEN_XDISPLAY (GDK_DRAWABLE_IMPL_X11 (get_impl_drawable (drawable))->screen);
 }
 
+/**
+ * gdk_x11_drawable_get_xid:
+ * @drawable: a #GdkDrawable.
+ * 
+ * Returns the X resource (window or pixmap) belonging to a #GdkDrawable.
+ * 
+ * Return value: the ID of @drawable's X resource.
+ **/
 XID
 gdk_x11_drawable_get_xid (GdkDrawable *drawable)
 {

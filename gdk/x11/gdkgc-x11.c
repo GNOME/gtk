@@ -751,6 +751,14 @@ gdk_gc_get_screen (GdkGC *gc)
   return GDK_GC_X11 (gc)->screen;
 }
 
+/**
+ * gdk_x11_gc_get_xdisplay:
+ * @gc: a #GdkGC.
+ * 
+ * Returns the display of a #GdkGC.
+ * 
+ * Return value: an Xlib <type>Display*</type>.
+ **/
 Display *
 gdk_x11_gc_get_xdisplay (GdkGC *gc)
 {
@@ -759,6 +767,14 @@ gdk_x11_gc_get_xdisplay (GdkGC *gc)
   return GDK_SCREEN_XDISPLAY (gdk_gc_get_screen (gc));
 }
 
+/**
+ * gdk_x11_gc_get_xgc:
+ * @gc: a #GdkGC.
+ * 
+ * Returns the X GC of a #GdkGC.
+ * 
+ * Return value: an Xlib <type>GC</type>.
+ **/
 GC
 gdk_x11_gc_get_xgc (GdkGC *gc)
 {

@@ -1,3 +1,40 @@
+2002-10-23  Matthias Clasen  <maclas@gmx.de>
+
+	* gdk/linux-fb/gdkselection-fb.c (gdk_text_property_to_utf8_list_for_display): 
+	(gdk_utf8_to_compound_text_for_display): Fix doc comments - why
+	do these overwrite the ones from gdk/x11/*.c ?!
+
+	* gdk/gdkdisplaymanager.c
+	(gdk_display_manager_get_default_display): 
+	Documentation fix.
+
+	* gdk/gdkevents.c (gdk_event_new): 
+	* gdk/x11/gdkdnd-x11.c (gdk_drag_find_window_for_screen): 
+	* gdk/x11/gdkevents-x11.c (gdk_x11_screen_get_window_manager_name): 
+	* gdk/x11/gdkdisplay-x11.c (gdk_x11_display_grab): 
+	(gdk_x11_display_ungrab): Add documentation.
+
+	* gdk/x11/gdkimage-x11.c (gdk_x11_image_get_xdisplay): 
+	(gdk_x11_image_get_ximage): 
+	* gdk/x11/gdkgc-x11.c (gdk_x11_gc_get_xdisplay): 
+	(gdk_x11_gc_get_xgc): 
+	* gdk/x11/gdkfont-x11.c (gdk_x11_font_get_xdisplay): 
+	(gdk_x11_font_get_xfont): 
+	* gdk/x11/gdkdrawable-x11.c (gdk_x11_drawable_get_xdisplay): 
+	(gdk_x11_drawable_get_xid): 
+	* gdk/x11/gdkcursor-x11.c (gdk_x11_cursor_get_xdisplay): 
+	(gdk_x11_cursor_get_xcursor): 
+	* gdk/x11/gdkcolor-x11.c (gdk_x11_colormap_get_xcolormap): 
+	(gdk_x11_colormap_get_xdisplay): 
+	* gdk/x11/gdkxid.c (gdk_xid_table_lookup): 
+	* gdk/x11/gdkvisual-x11.c (gdkx_visual_get): 
+	(gdk_x11_visual_get_xvisual):
+	* gdk/x11/gdkmain-x11.c (gdk_x11_grab_server): 
+	(gdk_x11_ungrab_server): 
+	(gdk_x11_get_default_root_xwindow): 
+	(gdk_x11_get_default_xdisplay): 
+	Some docs moved inline.
+	
 Tue Oct 22 16:37:12 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtktooltips.c: Multihead safety fixes, handle
