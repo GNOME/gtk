@@ -1,0 +1,41 @@
+Source: gtk+
+Priority: optional
+Section: libs
+Maintainer: Ben Gertzfield <che@debian.org>
+Standards-Version: 2.4.0.0
+
+Package: libgtk1
+Architecture: any
+Section: libs
+Depends: ${shlibs:Depends}
+Description: The GIMP Toolkit set of widgets for X
+ The GIMP Toolkit is a freely available set of widgets for X.
+ GTK is easy to use, and has been implemented in such projects as
+ The GNU Image Manipulation Program (The GIMP), GNOME, a GNU
+ desktop set of utilities for X, and gzilla, a GNU web-browser.
+
+Package: libgtk-dev
+Architecture: any
+Section: devel
+Depends: libgtk1 (>= 1:0.99.8)
+Suggests: libgtk-doc
+Replaces: libgtk1 (<= 0.99.7)
+Description: Header files and static libraries for the GIMP Toolkit
+ This package contains the header files and static libraries for the
+ GIMP Toolkit set of widgets for X. 
+ .
+ Install this package if you wish to develop your own X programs using
+ the GIMP Toolkit, or if you wish to compile your own plug-ins for
+ The GIMP.
+
+Package: libgtk-doc
+Architecture: all
+Section: docs
+Replaces: libgtk-dev (<< 1:0.99.4)
+Description: Documentation and example code for the GIMP Toolkit
+ This package contains lots of info-files, HTML docs, FAQs, and
+ other handy documentation about the GIMP Toolkit set of widgets
+ for X.
+ .
+ Install this package if you want to have lots of info about the
+ GIMP toolkit when you're programming.

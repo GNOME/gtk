@@ -1,0 +1,12 @@
+usr/lib/libglib.so
+usr/lib/libglib.a
+usr/lib/libgdk.so
+usr/lib/libgdk.a
+usr/lib/libgtk.so
+usr/lib/libgtk.a
+usr/include/glib.h
+usr/include/gdk/
+usr/include/gtk/
+usr/bin/gtk-config
+usr/lib/glib/
+usr/share/aclocal/gtk.m4

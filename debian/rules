@@ -1,0 +1,120 @@
+#!/usr/bin/make -f
+
+# Uncomment this to turn on verbose mode.
+#export DH_VERBOSE=1
+
+build: build-stamp
+build-stamp:
+	dh_testdir
+	# Add here commands to compile the package.
+	./configure --prefix=/usr --with-xinput=xfree
+	$(MAKE)
+	cd docs && make -f Makefile.sgml
+	cd ..
+	touch build-stamp
+
+clean:
+	dh_testdir
+	dh_testroot
+	rm -f build-stamp
+	# Add here commands to clean up after the build process.
+	-$(MAKE) distclean
+	-rm docs/*.html
+	dh_clean
+
+install: install-stamp
+install-stamp: build
+	dh_testdir
+	dh_testroot
+	dh_clean
+	$(MAKE) prefix=`pwd`/debian/tmp/usr install
+	touch install-stamp
+
+# Build architecture-independent files here.
+binary-indep: build install libgtk-doc
+# We have nothing to do by default.
+
+# Build architecture-dependent files here.
+binary-arch: build install libgtk-dev libgtk1
+
+libgtk1: build
+	dh_testdir -plibgtk1 
+	dh_testroot -plibgtk1
+#	dh_clean -plibgtk1
+	dh_installdirs -plibgtk1
+	# Add here commands to install the files into debian/tmp
+	rm -rf debian/tmp/usr/bin debian/tmp/usr/include debian/tmp/usr/info debian/tmp/usr/lib/glib debian/tmp/usr/share
+#	dh_movefiles -plibgtk1
+#	$(MAKE) prefix=`pwd`/debian/tmp/usr install
+#	rmdir debian/tmp/usr/bin
+#	rm debian/tmp/usr/lib/*.{so,la,a}
+#	rm -rf debian/tmp/usr/{include,info}
+	dh_installdocs -plibgtk1
+	dh_installchangelogs -plibgtk1
+	dh_strip -plibgtk1
+	dh_compress -plibgtk1
+	dh_fixperms -plibgtk1
+	dh_installdeb -plibgtk1
+	dh_shlibdeps -plibgtk1
+	dh_gencontrol -plibgtk1
+	dh_makeshlibs -plibgtk1 -V 'libgtk1 (>= 1:0.99.7)'
+#	echo "libglib 1 libgtk1 (>=0.99.4)" >> debian/tmp/DEBIAN/shlibs
+#	echo "libgtk 1 libgtk1 (>=0.99.4)" >> debian/tmp/DEBIAN/shlibs
+#	echo "libgdk 1 libgtk1 (>=0.99.4)" >> debian/tmp/DEBIAN/shlibs
+	dh_md5sums -plibgtk1
+	dh_builddeb -plibgtk1
+
+libgtk-dev: build
+	dh_testdir -plibgtk-dev
+	dh_testroot -plibgtk-dev
+	dh_clean -plibgtk-dev -k
+	dh_installdirs -plibgtk-dev
+	# Add here commands to install the files into debian/tmp
+	dh_movefiles -plibgtk-dev
+	cp gtk-config debian/tmp/usr/bin
+#	$(MAKE) prefix=`pwd`/debian/libgtk-dev/usr install
+#	find debian/libgtk-dev/usr/lib \( -type f -or -type l \) -and ! \( -name \*.so -or -name \*.a \) | xargs rm
+#	cp gtk/.libs/testgtk debian/libgtk-dev/usr/bin
+#	cp debian/testgtk.1 debian/libgtk-dev/usr/man/man1
+	dh_installdocs -plibgtk-dev 
+	dh_installchangelogs -plibgtk-dev
+	dh_strip -plibgtk-dev
+	dh_compress -plibgtk-dev
+	dh_fixperms -plibgtk-dev
+	dh_installdeb -plibgtk-dev
+	dh_shlibdeps -plibgtk-dev
+	dh_gencontrol -plibgtk-dev
+	dh_makeshlibs -plibgtk-dev
+	dh_md5sums -plibgtk-dev
+	dh_builddeb -plibgtk-dev
+
+libgtk-doc:
+	dh_testdir -plibgtk-doc
+	dh_testroot -plibgtk-doc
+	dh_clean -plibgtk-doc -k
+	dh_installdirs -plibgtk-doc usr/doc/libgtk-doc/faq-html \
+	  usr/doc/libgtk-doc/tutorial-html usr/doc/libgtk-doc/italian-tutorial-html
+	# Add here commands to install the files into debian/tmp
+	dh_movefiles -plibgtk-doc
+	cp docs/gtkfaq*.html debian/libgtk-doc/usr/doc/libgtk-doc/faq-html
+	cp docs/gtk_tut-*.html debian/libgtk-doc/usr/doc/libgtk-doc/tutorial-html
+	cp docs/gtk_tut.html debian/libgtk-doc/usr/doc/libgtk-doc/tutorial-html
+	cp docs/gtk_tut_it*.html debian/libgtk-doc/usr/doc/libgtk-doc/italian-tutorial-html
+	dh_installdocs -plibgtk-doc docs/{debugging,developers,styles,text_widget,widget_system,gtk-config}.txt ChangeLog TODO NEWS
+	dh_installchangelogs -plibgtk-doc
+	dh_strip -plibgtk-doc
+	dh_compress -plibgtk-doc
+	dh_fixperms -plibgtk-doc
+	dh_installdeb -plibgtk-doc
+	dh_shlibdeps -plibgtk-doc
+	dh_gencontrol -plibgtk-doc
+	dh_makeshlibs -plibgtk-doc
+	dh_md5sums -plibgtk-doc
+	dh_builddeb -plibgtk-doc
+
+
+source diff:                                                                  
+	@echo >&2 'source and diff are obsolete - use dpkg-source -b'; false
+
+binary: binary-indep binary-arch
+.PHONY: build clean binary-indep binary-arch binary

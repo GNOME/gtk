@@ -1,0 +1,18 @@
+libgtk1 for Debian
+----------------------
+
+The GIMP Tool Kit (gtk) is a set of widgets to help you program
+programs for the X Windowing System easily and powerfully.
+
+gtk is the moving force behind The GNU Image Manipulation Program (The
+GIMP) -- the number one freely-available image editing and creation
+program available. 
+
+gtk is rapidly under development, and the source tree has officially
+been separated from The GIMP now, as other teams of programmers
+are beginning to write software using its great widget set -- like
+GNOME, a desktop interface for X, and gzilla, a freely available
+web browser for X.
+
+Ben Gertzfield <che@debian.org>, Mon, 29 Sep 1997 13:11:45 -0700
+
