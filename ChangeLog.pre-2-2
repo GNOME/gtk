@@ -1,3 +1,7 @@
+Thu Jun 10 17:59:38 1999  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkdrawingarea.c (gtk_drawing_area_size): queue a resize.
+
 Wed Jun  9 15:13:16 1999  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkaccelgroup.h: mark certain functions as internal.
