@@ -979,7 +979,6 @@ gtk_packer_size_request (GtkWidget      *widget,
   gint nvis_horz_children;
   gint width, height;
   gint maxWidth, maxHeight;
-  GtkRequisition child_requisition;
   
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_PACKER (widget));
