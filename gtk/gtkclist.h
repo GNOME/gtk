@@ -3,23 +3,23 @@
  * Copyright (C) 1997-1998 Jay Painter <jpaint@serv.net><jpaint@gimp.org>
  *
  * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
+ * modify it under the terms of the GNU Library General Public
  * License as published by the Free Software Foundation; either
  * version 2 of the License, or (at your option) any later version.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
+ * Library General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public
+ * You should have received a copy of the GNU Library General Public
  * License along with this library; if not, write to the
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
  * Boston, MA 02111-1307, USA.
  */
 
 /*
- * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
+ * Modified by the GTK+ Team and others 1997-1999.  See the AUTHORS
  * file for a list of people on the GTK+ Team.  See the ChangeLog
  * files for a list of changes.  These files are distributed with
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
@@ -46,7 +46,7 @@ enum {
   GTK_CLIST_IN_DRAG             = 1 <<  0,
   GTK_CLIST_ROW_HEIGHT_SET      = 1 <<  1,
   GTK_CLIST_SHOW_TITLES         = 1 <<  2,
-  /* Unused */
+  GTK_CLIST_CHILD_HAS_FOCUS     = 1 <<  3,
   GTK_CLIST_ADD_MODE            = 1 <<  4,
   GTK_CLIST_AUTO_SORT           = 1 <<  5,
   GTK_CLIST_AUTO_RESIZE_BLOCKED = 1 <<  6,
@@ -97,6 +97,7 @@ typedef enum
 #define GTK_CLIST_IN_DRAG(clist)           (GTK_CLIST_FLAGS (clist) & GTK_CLIST_IN_DRAG)
 #define GTK_CLIST_ROW_HEIGHT_SET(clist)    (GTK_CLIST_FLAGS (clist) & GTK_CLIST_ROW_HEIGHT_SET)
 #define GTK_CLIST_SHOW_TITLES(clist)       (GTK_CLIST_FLAGS (clist) & GTK_CLIST_SHOW_TITLES)
+#define GTK_CLIST_CHILD_HAS_FOCUS(clist)   (GTK_CLIST_FLAGS (clist) & GTK_CLIST_CHILD_HAS_FOCUS)
 #define GTK_CLIST_ADD_MODE(clist)          (GTK_CLIST_FLAGS (clist) & GTK_CLIST_ADD_MODE)
 #define GTK_CLIST_AUTO_SORT(clist)         (GTK_CLIST_FLAGS (clist) & GTK_CLIST_AUTO_SORT)
 #define GTK_CLIST_AUTO_RESIZE_BLOCKED(clist) (GTK_CLIST_FLAGS (clist) & GTK_CLIST_AUTO_RESIZE_BLOCKED)
@@ -161,6 +162,7 @@ struct _GtkCList
   
   /* rows */
   gint rows;
+  gint row_center_offset;
   gint row_height;
   GList *row_list;
   GList *row_list_end;
@@ -224,8 +226,6 @@ struct _GtkCList
   
   /* focus handling */
   gint focus_row;
-
-  gint focus_header_column;
   
   /* dragging the selection */
   gint anchor;
@@ -437,7 +437,12 @@ struct _GtkCell
   } u;
 };
 
-GtkType gtk_clist_get_type (void) G_GNUC_CONST;
+GtkType gtk_clist_get_type (void);
+
+/* constructors useful for gtk-- wrappers */
+void gtk_clist_construct (GtkCList *clist,
+			  gint      columns,
+			  gchar    *titles[]);
 
 /* create a new GtkCList */
 GtkWidget* gtk_clist_new             (gint   columns);
@@ -774,11 +779,6 @@ void gtk_clist_sort (GtkCList *clist);
 void gtk_clist_set_auto_sort (GtkCList *clist,
 			      gboolean  auto_sort);
 
-/* Private function for clist, ctree */
-
-PangoLayout *_gtk_clist_create_cell_layout (GtkCList       *clist,
-					    GtkCListRow    *clist_row,
-					    gint            column);
 
 #ifdef __cplusplus
 }

@@ -1,1 +1,0 @@
-SUBDIRS=linux-fb input

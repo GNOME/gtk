@@ -2,23 +2,23 @@
  * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
  *
  * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
+ * modify it under the terms of the GNU Library General Public
  * License as published by the Free Software Foundation; either
  * version 2 of the License, or (at your option) any later version.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
+ * Library General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public
+ * You should have received a copy of the GNU Library General Public
  * License along with this library; if not, write to the
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
  * Boston, MA 02111-1307, USA.
  */
 
 /*
- * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
+ * Modified by the GTK+ Team and others 1997-1999.  See the AUTHORS
  * file for a list of people on the GTK+ Team.  See the ChangeLog
  * files for a list of changes.  These files are distributed with
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
@@ -36,6 +36,8 @@ static void gtk_fixed_size_request  (GtkWidget        *widget,
 static void gtk_fixed_size_allocate (GtkWidget        *widget,
 				     GtkAllocation    *allocation);
 static void gtk_fixed_paint         (GtkWidget        *widget,
+				     GdkRectangle     *area);
+static void gtk_fixed_draw          (GtkWidget        *widget,
 				     GdkRectangle     *area);
 static gint gtk_fixed_expose        (GtkWidget        *widget,
 				     GdkEventExpose   *event);
@@ -95,6 +97,7 @@ gtk_fixed_class_init (GtkFixedClass *class)
   widget_class->realize = gtk_fixed_realize;
   widget_class->size_request = gtk_fixed_size_request;
   widget_class->size_allocate = gtk_fixed_size_allocate;
+  widget_class->draw = gtk_fixed_draw;
   widget_class->expose_event = gtk_fixed_expose;
 
   container_class->add = gtk_fixed_add;
@@ -347,6 +350,35 @@ gtk_fixed_paint (GtkWidget    *widget,
     gdk_window_clear_area (widget->window,
 			   area->x, area->y,
 			   area->width, area->height);
+}
+
+static void
+gtk_fixed_draw (GtkWidget    *widget,
+		GdkRectangle *area)
+{
+  GtkFixed *fixed;
+  GtkFixedChild *child;
+  GdkRectangle child_area;
+  GList *children;
+
+  g_return_if_fail (widget != NULL);
+  g_return_if_fail (GTK_IS_FIXED (widget));
+
+  if (GTK_WIDGET_DRAWABLE (widget))
+    {
+      fixed = GTK_FIXED (widget);
+      gtk_fixed_paint (widget, area);
+
+      children = fixed->children;
+      while (children)
+	{
+	  child = children->data;
+	  children = children->next;
+
+	  if (gtk_widget_intersect (child->widget, area, &child_area))
+	    gtk_widget_draw (child->widget, &child_area);
+	}
+    }
 }
 
 static gint

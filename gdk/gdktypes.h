@@ -2,23 +2,23 @@
  * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
  *
  * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
+ * modify it under the terms of the GNU Library General Public
  * License as published by the Free Software Foundation; either
  * version 2 of the License, or (at your option) any later version.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	 See the GNU
- * Lesser General Public License for more details.
+ * Library General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public
+ * You should have received a copy of the GNU Library General Public
  * License along with this library; if not, write to the
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
  * Boston, MA 02111-1307, USA.
  */
 
 /*
- * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
+ * Modified by the GTK+ Team and others 1997-1999.  See the AUTHORS
  * file for a list of people on the GTK+ Team.  See the ChangeLog
  * files for a list of changes.  These files are distributed with
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
@@ -30,8 +30,6 @@
 /* GDK uses "glib". (And so does GTK).
  */
 #include <glib.h>
-#include <pango/pango.h>
-#include <glib-object.h>
 
 #ifdef G_OS_WIN32
 #  ifdef GDK_COMPILATION
@@ -55,6 +53,8 @@
 #define GDK_CURRENT_TIME     0L
 #define GDK_PARENT_RELATIVE  1L
 
+/* special deviceid for core pointer events */
+#define GDK_CORE_POINTER 0xfedc
 
 
 #ifdef __cplusplus
@@ -64,11 +64,9 @@ extern "C" {
 
 /* Type definitions for the basic structures.
  */
-typedef struct _GdkKeyInfo            GdkKeyInfo;
 typedef struct _GdkPoint	      GdkPoint;
 typedef struct _GdkRectangle	      GdkRectangle;
 typedef struct _GdkSegment	      GdkSegment;
-typedef struct _GdkSpan	              GdkSpan;
 
 /*
  * Note that on some platforms the wchar_t type
@@ -77,12 +75,6 @@ typedef struct _GdkSpan	              GdkSpan;
  */
 typedef guint32			    GdkWChar;
 typedef gulong     		    GdkAtom;
-
-#ifdef GDK_NATIVE_WINDOW_POINTER
-typedef gpointer GdkNativeWindow;
-#else
-typedef guint32 GdkNativeWindow;
-#endif
  
 /* Forward declarations of commonly used types
  */
@@ -123,10 +115,8 @@ typedef enum
   GDK_BUTTON3_MASK  = 1 << 10,
   GDK_BUTTON4_MASK  = 1 << 11,
   GDK_BUTTON5_MASK  = 1 << 12,
-  /* The next few modifiers are used by XKB, so we skip to the end
-   */
-  GDK_RELEASE_MASK  = 1 << 31,
-  GDK_MODIFIER_MASK = GDK_RELEASE_MASK | 0x1fff
+  GDK_RELEASE_MASK  = 1 << 13,
+  GDK_MODIFIER_MASK = 0x3fff
 } GdkModifierType;
 
 typedef enum
@@ -145,63 +135,34 @@ typedef enum
   GDK_ERROR_MEM	  = -4
 } GdkStatus;
 
-/* We define specific numeric values for these constants,
- * since old application code may depend on them matching the X values
- * We don't actually depend on the matchup ourselves.
- */
-typedef enum
-{
-  GDK_GRAB_SUCCESS         = 0,
-  GDK_GRAB_ALREADY_GRABBED = 1,
-  GDK_GRAB_INVALID_TIME    = 2,
-  GDK_GRAB_NOT_VIEWABLE    = 3,
-  GDK_GRAB_FROZEN          = 4
-} GdkGrabStatus;
-
 typedef void (*GdkInputFunction) (gpointer	    data,
 				  gint		    source,
 				  GdkInputCondition condition);
 
 typedef void (*GdkDestroyNotify) (gpointer data);
 
-/* GdkKeyInfo is a description of a the hardware key and state that
- * can be mapped to some keysym.
- */
-struct _GdkKeyInfo
-{
-  guint keycode;
-  gint  group;
-  gint  level;
-};
-
 struct _GdkPoint
 {
-  gint x;
-  gint y;
+  gint16 x;
+  gint16 y;
 };
 
 struct _GdkRectangle
 {
-  gint x;
-  gint y;
-  gint width;
-  gint height;
+  gint16 x;
+  gint16 y;
+  guint16 width;
+  guint16 height;
 };
 
 struct _GdkSegment
 {
-  gint x1;
-  gint y1;
-  gint x2;
-  gint y2;
+  gint16 x1;
+  gint16 y1;
+  gint16 x2;
+  gint16 y2;
 };
 
-struct _GdkSpan
-{
-  gint x;
-  gint y;
-  gint width;
-};
 
 #ifdef __cplusplus
 }

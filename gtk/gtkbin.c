@@ -2,23 +2,23 @@
  * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
  *
  * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
+ * modify it under the terms of the GNU Library General Public
  * License as published by the Free Software Foundation; either
  * version 2 of the License, or (at your option) any later version.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
+ * Library General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public
+ * You should have received a copy of the GNU Library General Public
  * License along with this library; if not, write to the
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
  * Boston, MA 02111-1307, USA.
  */
 
 /*
- * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
+ * Modified by the GTK+ Team and others 1997-1999.  See the AUTHORS
  * file for a list of people on the GTK+ Team.  See the ChangeLog
  * files for a list of changes.  These files are distributed with
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
@@ -31,6 +31,8 @@ static void gtk_bin_class_init (GtkBinClass    *klass);
 static void gtk_bin_init       (GtkBin         *bin);
 static void gtk_bin_map        (GtkWidget      *widget);
 static void gtk_bin_unmap      (GtkWidget      *widget);
+static void gtk_bin_draw       (GtkWidget      *widget,
+			        GdkRectangle   *area);
 static gint gtk_bin_expose     (GtkWidget      *widget,
 			        GdkEventExpose *event);
 static void gtk_bin_add        (GtkContainer   *container,
@@ -87,6 +89,7 @@ gtk_bin_class_init (GtkBinClass *class)
 
   widget_class->map = gtk_bin_map;
   widget_class->unmap = gtk_bin_unmap;
+  widget_class->draw = gtk_bin_draw;
   widget_class->expose_event = gtk_bin_expose;
 
   container_class->add = gtk_bin_add;
@@ -144,11 +147,33 @@ gtk_bin_unmap (GtkWidget *widget)
   GTK_WIDGET_UNSET_FLAGS (widget, GTK_MAPPED);
   bin = GTK_BIN (widget);
 
-  if (!GTK_WIDGET_NO_WINDOW (widget))
+  if (GTK_WIDGET_NO_WINDOW (widget))
+     gtk_widget_queue_clear (widget);
+  else
     gdk_window_hide (widget->window);
 
   if (bin->child && GTK_WIDGET_MAPPED (bin->child))
     gtk_widget_unmap (bin->child);
+}
+
+static void
+gtk_bin_draw (GtkWidget    *widget,
+	      GdkRectangle *area)
+{
+  GtkBin *bin;
+  GdkRectangle child_area;
+
+  g_return_if_fail (widget != NULL);
+  g_return_if_fail (GTK_IS_BIN (widget));
+
+  bin = GTK_BIN (widget);
+
+  if (GTK_WIDGET_DRAWABLE (bin))
+    {
+      if (bin->child && GTK_WIDGET_DRAWABLE (bin->child) &&
+	  gtk_widget_intersect (bin->child, area, &child_area))
+	gtk_widget_draw (bin->child, &child_area);
+    }
 }
 
 static gint

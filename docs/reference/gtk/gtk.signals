@@ -1,0 +1,1097 @@
+<SIGNAL>
+<NAME>GtkAdjustment::changed</NAME>
+<RETURNS>void</RETURNS>
+GtkAdjustment *adjustment
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkAdjustment::value-changed</NAME>
+<RETURNS>void</RETURNS>
+GtkAdjustment *adjustment
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkButton::pressed</NAME>
+<RETURNS>void</RETURNS>
+GtkButton *button
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkButton::released</NAME>
+<RETURNS>void</RETURNS>
+GtkButton *button
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkButton::clicked</NAME>
+<RETURNS>void</RETURNS>
+GtkButton *button
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkButton::enter</NAME>
+<RETURNS>void</RETURNS>
+GtkButton *button
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkButton::leave</NAME>
+<RETURNS>void</RETURNS>
+GtkButton *button
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkCalendar::month-changed</NAME>
+<RETURNS>void</RETURNS>
+GtkCalendar *calendar
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkCalendar::day-selected</NAME>
+<RETURNS>void</RETURNS>
+GtkCalendar *calendar
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkCalendar::day-selected-double-click</NAME>
+<RETURNS>void</RETURNS>
+GtkCalendar *calendar
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkCalendar::prev-month</NAME>
+<RETURNS>void</RETURNS>
+GtkCalendar *calendar
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkCalendar::next-month</NAME>
+<RETURNS>void</RETURNS>
+GtkCalendar *calendar
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkCalendar::prev-year</NAME>
+<RETURNS>void</RETURNS>
+GtkCalendar *calendar
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkCalendar::next-year</NAME>
+<RETURNS>void</RETURNS>
+GtkCalendar *calendar
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkCheckMenuItem::toggled</NAME>
+<RETURNS>void</RETURNS>
+GtkCheckMenuItem *checkmenuitem
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkCList::select-row</NAME>
+<RETURNS>void</RETURNS>
+GtkCList *clist
+gint             row
+gint             column
+GdkEventButton  *event
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkCList::unselect-row</NAME>
+<RETURNS>void</RETURNS>
+GtkCList *clist
+gint             row
+gint             column
+GdkEventButton  *event
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkCList::row-move</NAME>
+<RETURNS>void</RETURNS>
+GtkCList *clist
+gint  arg1
+gint  arg2
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkCList::click-column</NAME>
+<RETURNS>void</RETURNS>
+GtkCList *clist
+gint             column
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkCList::resize-column</NAME>
+<RETURNS>void</RETURNS>
+GtkCList *clist
+gint             column
+gint             width
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkCList::toggle-focus-row</NAME>
+<RETURNS>void</RETURNS>
+GtkCList *clist
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkCList::select-all</NAME>
+<RETURNS>void</RETURNS>
+GtkCList *clist
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkCList::unselect-all</NAME>
+<RETURNS>void</RETURNS>
+GtkCList *clist
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkCList::undo-selection</NAME>
+<RETURNS>void</RETURNS>
+GtkCList *clist
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkCList::start-selection</NAME>
+<RETURNS>void</RETURNS>
+GtkCList *clist
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkCList::end-selection</NAME>
+<RETURNS>void</RETURNS>
+GtkCList *clist
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkCList::toggle-add-mode</NAME>
+<RETURNS>void</RETURNS>
+GtkCList *clist
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkCList::extend-selection</NAME>
+<RETURNS>void</RETURNS>
+GtkCList *clist
+GtkScrollType    scroll_type
+gfloat           position
+gboolean         auto_start_selection
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkCList::scroll-vertical</NAME>
+<RETURNS>void</RETURNS>
+GtkCList *clist
+GtkScrollType    scroll_type
+gfloat           position
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkCList::scroll-horizontal</NAME>
+<RETURNS>void</RETURNS>
+GtkCList *clist
+GtkScrollType    scroll_type
+gfloat           position
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkCList::abort-column-resize</NAME>
+<RETURNS>void</RETURNS>
+GtkCList *clist
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkColorSelection::color-changed</NAME>
+<RETURNS>void</RETURNS>
+GtkColorSelection *colorselection
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkContainer::add</NAME>
+<RETURNS>void</RETURNS>
+GtkContainer *container
+GtkWidget *widget
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkContainer::remove</NAME>
+<RETURNS>void</RETURNS>
+GtkContainer *container
+GtkWidget *widget
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkContainer::check-resize</NAME>
+<RETURNS>void</RETURNS>
+GtkContainer *container
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkContainer::focus</NAME>
+<RETURNS>GtkDirectionType</RETURNS>
+GtkContainer *container
+GtkDirectionType direction
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkContainer::set-focus-child</NAME>
+<RETURNS>void</RETURNS>
+GtkContainer *container
+GtkWidget *widget
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkCTree::tree-select-row</NAME>
+<RETURNS>void</RETURNS>
+GtkCTree *ctree
+GList           *node
+gint             column
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkCTree::tree-unselect-row</NAME>
+<RETURNS>void</RETURNS>
+GtkCTree *ctree
+GList           *node
+gint             column
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkCTree::tree-expand</NAME>
+<RETURNS>void</RETURNS>
+GtkCTree *ctree
+GList           *node
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkCTree::tree-collapse</NAME>
+<RETURNS>void</RETURNS>
+GtkCTree *ctree
+GList           *node
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkCTree::tree-move</NAME>
+<RETURNS>void</RETURNS>
+GtkCTree *ctree
+GList           *node
+GList           *new_parent
+GList           *new_sibling
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkCTree::change-focus-row-expansion</NAME>
+<RETURNS>void</RETURNS>
+GtkCTree *ctree
+GtkCTreeExpansionType expansion
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkCurve::curve-type-changed</NAME>
+<RETURNS>void</RETURNS>
+GtkCurve *curve
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkData::disconnect</NAME>
+<RETURNS>void</RETURNS>
+GtkData *data
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkEditable::changed</NAME>
+<RETURNS>void</RETURNS>
+GtkEditable *editable
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkEditable::insert-text</NAME>
+<RETURNS>void</RETURNS>
+GtkEditable *editable
+gchar           *new_text
+gint             new_text_length
+gint            *position
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkEditable::delete-text</NAME>
+<RETURNS>void</RETURNS>
+GtkEditable *editable
+gint             start_pos
+gint             end_pos
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkEditable::activate</NAME>
+<RETURNS>void</RETURNS>
+GtkEditable *editable
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkEditable::set-editable</NAME>
+<RETURNS>void</RETURNS>
+GtkEditable *editable
+gboolean         is_editable
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkEditable::move-cursor</NAME>
+<RETURNS>void</RETURNS>
+GtkEditable *editable
+gint             x
+gint             y
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkEditable::move-word</NAME>
+<RETURNS>void</RETURNS>
+GtkEditable *editable
+gint             num_words
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkEditable::move-page</NAME>
+<RETURNS>void</RETURNS>
+GtkEditable *editable
+gint             x
+gint             y
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkEditable::move-to-row</NAME>
+<RETURNS>void</RETURNS>
+GtkEditable *editable
+gint             row
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkEditable::move-to-column</NAME>
+<RETURNS>void</RETURNS>
+GtkEditable *editable
+gint             column
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkEditable::kill-char</NAME>
+<RETURNS>void</RETURNS>
+GtkEditable *editable
+gint             direction
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkEditable::kill-word</NAME>
+<RETURNS>void</RETURNS>
+GtkEditable *editable
+gint             direction
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkEditable::kill-line</NAME>
+<RETURNS>void</RETURNS>
+GtkEditable *editable
+gint             direction
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkEditable::cut-clipboard</NAME>
+<RETURNS>void</RETURNS>
+GtkEditable *editable
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkEditable::copy-clipboard</NAME>
+<RETURNS>void</RETURNS>
+GtkEditable *editable
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkEditable::paste-clipboard</NAME>
+<RETURNS>void</RETURNS>
+GtkEditable *editable
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkHandleBox::child-attached</NAME>
+<RETURNS>void</RETURNS>
+GtkHandleBox *handlebox
+GtkWidget *widget
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkHandleBox::child-detached</NAME>
+<RETURNS>void</RETURNS>
+GtkHandleBox *handlebox
+GtkWidget *widget
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkInputDialog::enable-device</NAME>
+<RETURNS>void</RETURNS>
+GtkInputDialog *inputdialog
+gint             deviceid
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkInputDialog::disable-device</NAME>
+<RETURNS>void</RETURNS>
+GtkInputDialog *inputdialog
+gint             deviceid
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkItem::select</NAME>
+<RETURNS>void</RETURNS>
+GtkItem *item
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkItem::deselect</NAME>
+<RETURNS>void</RETURNS>
+GtkItem *item
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkItem::toggle</NAME>
+<RETURNS>void</RETURNS>
+GtkItem *item
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkList::selection-changed</NAME>
+<RETURNS>void</RETURNS>
+GtkList *list
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkList::select-child</NAME>
+<RETURNS>void</RETURNS>
+GtkList *list
+GtkWidget *widget
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkList::unselect-child</NAME>
+<RETURNS>void</RETURNS>
+GtkList *list
+GtkWidget *widget
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkListItem::toggle-focus-row</NAME>
+<RETURNS>void</RETURNS>
+GtkListItem *listitem
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkListItem::select-all</NAME>
+<RETURNS>void</RETURNS>
+GtkListItem *listitem
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkListItem::unselect-all</NAME>
+<RETURNS>void</RETURNS>
+GtkListItem *listitem
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkListItem::undo-selection</NAME>
+<RETURNS>void</RETURNS>
+GtkListItem *listitem
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkListItem::start-selection</NAME>
+<RETURNS>void</RETURNS>
+GtkListItem *listitem
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkListItem::end-selection</NAME>
+<RETURNS>void</RETURNS>
+GtkListItem *listitem
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkListItem::toggle-add-mode</NAME>
+<RETURNS>void</RETURNS>
+GtkListItem *listitem
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkListItem::extend-selection</NAME>
+<RETURNS>void</RETURNS>
+GtkListItem *listitem
+GtkScrollType    scroll_type
+gfloat           position
+gboolean         auto_start_selection
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkListItem::scroll-vertical</NAME>
+<RETURNS>void</RETURNS>
+GtkListItem *listitem
+GtkScrollType    scroll_type
+gfloat           position
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkListItem::scroll-horizontal</NAME>
+<RETURNS>void</RETURNS>
+GtkListItem *listitem
+GtkScrollType    scroll_type
+gfloat           position
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkMenuItem::activate</NAME>
+<RETURNS>void</RETURNS>
+GtkMenuItem *menuitem
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkMenuItem::activate-item</NAME>
+<RETURNS>void</RETURNS>
+GtkMenuItem *menuitem
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkMenuShell::deactivate</NAME>
+<RETURNS>void</RETURNS>
+GtkMenuShell *menushell
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkMenuShell::selection-done</NAME>
+<RETURNS>void</RETURNS>
+GtkMenuShell *menushell
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkMenuShell::move-current</NAME>
+<RETURNS>void</RETURNS>
+GtkMenuShell *menushell
+GtkMenuDirectionType direction
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkMenuShell::activate-current</NAME>
+<RETURNS>void</RETURNS>
+GtkMenuShell *menushell
+gboolean         force_hide
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkMenuShell::cancel</NAME>
+<RETURNS>void</RETURNS>
+GtkMenuShell *menushell
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkNotebook::switch-page</NAME>
+<RETURNS>void</RETURNS>
+GtkNotebook *notebook
+GtkNotebookPage *page
+gint             page_num
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkObject::destroy</NAME>
+<RETURNS>void</RETURNS>
+GtkObject *object
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkStatusbar::text-pushed</NAME>
+<RETURNS>void</RETURNS>
+GtkStatusbar *statusbar
+guint            context_id
+gchar           *text
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkStatusbar::text-popped</NAME>
+<RETURNS>void</RETURNS>
+GtkStatusbar *statusbar
+guint            context_id
+gchar           *text
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkTipsQuery::start-query</NAME>
+<RETURNS>void</RETURNS>
+GtkTipsQuery *tipsquery
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkTipsQuery::stop-query</NAME>
+<RETURNS>void</RETURNS>
+GtkTipsQuery *tipsquery
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkTipsQuery::widget-entered</NAME>
+<RETURNS>void</RETURNS>
+GtkTipsQuery *tipsquery
+GtkWidget       *widget
+gchar           *tip_text
+gchar           *tip_private
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkTipsQuery::widget-selected</NAME>
+<RETURNS>gboolean</RETURNS>
+GtkTipsQuery *tipsquery
+GtkWidget       *widget
+gchar           *tip_text
+gchar           *tip_private
+GdkEventButton  *event
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkToggleButton::toggled</NAME>
+<RETURNS>void</RETURNS>
+GtkToggleButton *togglebutton
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkToolbar::orientation-changed</NAME>
+<RETURNS>void</RETURNS>
+GtkToolbar *toolbar
+GtkOrientation   orientation
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkToolbar::style-changed</NAME>
+<RETURNS>void</RETURNS>
+GtkToolbar *toolbar
+GtkToolbarStyle  style
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkTree::selection-changed</NAME>
+<RETURNS>void</RETURNS>
+GtkTree *tree
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkTree::select-child</NAME>
+<RETURNS>void</RETURNS>
+GtkTree *tree
+GtkWidget *widget
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkTree::unselect-child</NAME>
+<RETURNS>void</RETURNS>
+GtkTree *tree
+GtkWidget *widget
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkTreeItem::collapse</NAME>
+<RETURNS>void</RETURNS>
+GtkTreeItem *treeitem
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkTreeItem::expand</NAME>
+<RETURNS>void</RETURNS>
+GtkTreeItem *treeitem
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkWidget::show</NAME>
+<RETURNS>void</RETURNS>
+GtkWidget *widget
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkWidget::hide</NAME>
+<RETURNS>void</RETURNS>
+GtkWidget *widget
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkWidget::map</NAME>
+<RETURNS>void</RETURNS>
+GtkWidget *widget
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkWidget::unmap</NAME>
+<RETURNS>void</RETURNS>
+GtkWidget *widget
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkWidget::realize</NAME>
+<RETURNS>void</RETURNS>
+GtkWidget *widget
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkWidget::unrealize</NAME>
+<RETURNS>void</RETURNS>
+GtkWidget *widget
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkWidget::draw</NAME>
+<RETURNS>void</RETURNS>
+GtkWidget *widget
+GdkRectangle    *area
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkWidget::draw-focus</NAME>
+<RETURNS>void</RETURNS>
+GtkWidget *widget
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkWidget::draw-default</NAME>
+<RETURNS>void</RETURNS>
+GtkWidget *widget
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkWidget::size-request</NAME>
+<RETURNS>void</RETURNS>
+GtkWidget *widget
+GtkRequisition  *requisition
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkWidget::size-allocate</NAME>
+<RETURNS>void</RETURNS>
+GtkWidget *widget
+GtkAllocation   *allocation
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkWidget::state-changed</NAME>
+<RETURNS>void</RETURNS>
+GtkWidget *widget
+GtkStateType     state
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkWidget::parent-set</NAME>
+<RETURNS>void</RETURNS>
+GtkWidget *widget
+GtkObject       *old_parent
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkWidget::style-set</NAME>
+<RETURNS>void</RETURNS>
+GtkWidget *widget
+GtkStyle        *previous_style
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkWidget::add-accelerator</NAME>
+<RETURNS>void</RETURNS>
+GtkWidget *widget
+guint            accel_signal_id
+GtkAccelGroup   *accel_group
+guint            accel_key
+GdkModifierType  accel_mods
+GtkAccelFlags    accel_flags
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkWidget::remove-accelerator</NAME>
+<RETURNS>void</RETURNS>
+GtkWidget *widget
+GtkAccelGroup   *accel_group
+guint            accel_key
+GdkModifierType  accel_mods
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkWidget::grab-focus</NAME>
+<RETURNS>void</RETURNS>
+GtkWidget *widget
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkWidget::event</NAME>
+<RETURNS>gboolean</RETURNS>
+GtkWidget *widget
+GdkEvent *event
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkWidget::button-press-event</NAME>
+<RETURNS>gboolean</RETURNS>
+GtkWidget *widget
+GdkEventButton *event
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkWidget::button-release-event</NAME>
+<RETURNS>gboolean</RETURNS>
+GtkWidget *widget
+GdkEventButton *event
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkWidget::motion-notify-event</NAME>
+<RETURNS>gboolean</RETURNS>
+GtkWidget *widget
+GdkEventMotion *event
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkWidget::delete-event</NAME>
+<RETURNS>gboolean</RETURNS>
+GtkWidget *widget
+GdkEvent *event
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkWidget::destroy-event</NAME>
+<RETURNS>gboolean</RETURNS>
+GtkWidget *widget
+GdkEvent *event
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkWidget::expose-event</NAME>
+<RETURNS>gboolean</RETURNS>
+GtkWidget *widget
+GdkEventExpose *event
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkWidget::key-press-event</NAME>
+<RETURNS>gboolean</RETURNS>
+GtkWidget *widget
+GdkEventKey *event
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkWidget::key-release-event</NAME>
+<RETURNS>gboolean</RETURNS>
+GtkWidget *widget
+GdkEventKey *event
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkWidget::enter-notify-event</NAME>
+<RETURNS>gboolean</RETURNS>
+GtkWidget *widget
+GdkEventCrossing *event
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkWidget::leave-notify-event</NAME>
+<RETURNS>gboolean</RETURNS>
+GtkWidget *widget
+GdkEventCrossing *event
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkWidget::configure-event</NAME>
+<RETURNS>gboolean</RETURNS>
+GtkWidget *widget
+GdkEventConfigure *event
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkWidget::focus-in-event</NAME>
+<RETURNS>gboolean</RETURNS>
+GtkWidget *widget
+GdkEventFocus *event
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkWidget::focus-out-event</NAME>
+<RETURNS>gboolean</RETURNS>
+GtkWidget *widget
+GdkEventFocus *event
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkWidget::map-event</NAME>
+<RETURNS>gboolean</RETURNS>
+GtkWidget *widget
+GdkEvent *event
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkWidget::unmap-event</NAME>
+<RETURNS>gboolean</RETURNS>
+GtkWidget *widget
+GdkEvent *event
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkWidget::property-notify-event</NAME>
+<RETURNS>gboolean</RETURNS>
+GtkWidget *widget
+GdkEventProperty *event
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkWidget::selection-clear-event</NAME>
+<RETURNS>gboolean</RETURNS>
+GtkWidget *widget
+GdkEventSelection *event
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkWidget::selection-request-event</NAME>
+<RETURNS>gboolean</RETURNS>
+GtkWidget *widget
+GdkEventSelection *event
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkWidget::selection-notify-event</NAME>
+<RETURNS>gboolean</RETURNS>
+GtkWidget *widget
+GdkEventSelection *event
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkWidget::selection-get</NAME>
+<RETURNS>void</RETURNS>
+GtkWidget *widget
+GtkSelectionData *data
+guint            info
+guint            time
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkWidget::selection-received</NAME>
+<RETURNS>void</RETURNS>
+GtkWidget *widget
+GtkSelectionData *data
+guint            time
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkWidget::proximity-in-event</NAME>
+<RETURNS>gboolean</RETURNS>
+GtkWidget *widget
+GdkEventProximity *event
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkWidget::proximity-out-event</NAME>
+<RETURNS>gboolean</RETURNS>
+GtkWidget *widget
+GdkEventProximity *event
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkWidget::drag-begin</NAME>
+<RETURNS>void</RETURNS>
+GtkWidget *widget
+GdkDragContext  *drag_context
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkWidget::drag-end</NAME>
+<RETURNS>void</RETURNS>
+GtkWidget *widget
+GdkDragContext  *drag_context
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkWidget::drag-data-delete</NAME>
+<RETURNS>void</RETURNS>
+GtkWidget *widget
+GdkDragContext  *drag_context
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkWidget::drag-leave</NAME>
+<RETURNS>void</RETURNS>
+GtkWidget *widget
+GdkDragContext  *drag_context
+guint            time
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkWidget::drag-motion</NAME>
+<RETURNS>gboolean</RETURNS>
+GtkWidget *widget
+GdkDragContext  *drag_context
+gint             x
+gint             y
+guint            time
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkWidget::drag-drop</NAME>
+<RETURNS>gboolean</RETURNS>
+GtkWidget *widget
+GdkDragContext  *drag_context
+gint             x
+gint             y
+guint            time
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkWidget::drag-data-get</NAME>
+<RETURNS>void</RETURNS>
+GtkWidget *widget
+GdkDragContext  *drag_context
+GtkSelectionData *data
+guint            info
+guint            time
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkWidget::drag-data-received</NAME>
+<RETURNS>void</RETURNS>
+GtkWidget *widget
+GdkDragContext  *drag_context
+gint             x
+gint             y
+GtkSelectionData *data
+guint            info
+guint            time
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkWidget::client-event</NAME>
+<RETURNS>gboolean</RETURNS>
+GtkWidget *widget
+GdkEventClient *event
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkWidget::no-expose-event</NAME>
+<RETURNS>gboolean</RETURNS>
+GtkWidget *widget
+GdkEventNoExpose *event
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkWidget::visibility-notify-event</NAME>
+<RETURNS>gboolean</RETURNS>
+GtkWidget *widget
+GdkEvent *event
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkWidget::debug-msg</NAME>
+<RETURNS>void</RETURNS>
+GtkWidget *widget
+gchar           *message
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkWindow::set-focus</NAME>
+<RETURNS>void</RETURNS>
+GtkWindow *window
+GtkWidget       *widget
+</SIGNAL>
+

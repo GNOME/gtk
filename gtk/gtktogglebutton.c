@@ -2,23 +2,23 @@
  * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
  *
  * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
+ * modify it under the terms of the GNU Library General Public
  * License as published by the Free Software Foundation; either
  * version 2 of the License, or (at your option) any later version.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
+ * Library General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public
+ * You should have received a copy of the GNU Library General Public
  * License along with this library; if not, write to the
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
  * Boston, MA 02111-1307, USA.
  */
 
 /*
- * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
+ * Modified by the GTK+ Team and others 1997-1999.  See the AUTHORS
  * file for a list of people on the GTK+ Team.  See the ChangeLog
  * files for a list of changes.  These files are distributed with
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
@@ -52,6 +52,8 @@ static void gtk_toggle_button_paint      (GtkWidget            *widget,
 					  GdkRectangle         *area);
 static void gtk_toggle_button_size_allocate (GtkWidget         *widget,
 					     GtkAllocation     *allocation);
+static void gtk_toggle_button_draw       (GtkWidget            *widget,
+					  GdkRectangle         *area);
 static gint gtk_toggle_button_expose     (GtkWidget            *widget,
 					  GdkEventExpose       *event);
 static void gtk_toggle_button_pressed    (GtkButton            *button);
@@ -114,11 +116,24 @@ gtk_toggle_button_class_init (GtkToggleButtonClass *class)
 
   parent_class = gtk_type_class (GTK_TYPE_BUTTON);
 
+  gtk_object_add_arg_type ("GtkToggleButton::active", GTK_TYPE_BOOL, GTK_ARG_READWRITE, ARG_ACTIVE);
+  gtk_object_add_arg_type ("GtkToggleButton::draw_indicator", GTK_TYPE_BOOL, GTK_ARG_READWRITE, ARG_DRAW_INDICATOR);
+
+  toggle_button_signals[TOGGLED] =
+    gtk_signal_new ("toggled",
+                    GTK_RUN_FIRST,
+                    object_class->type,
+                    GTK_SIGNAL_OFFSET (GtkToggleButtonClass, toggled),
+                    gtk_marshal_NONE__NONE,
+		    GTK_TYPE_NONE, 0);
+
+  gtk_object_class_add_signals (object_class, toggle_button_signals, LAST_SIGNAL);
 
   object_class->set_arg = gtk_toggle_button_set_arg;
   object_class->get_arg = gtk_toggle_button_get_arg;
 
   widget_class->size_allocate = gtk_toggle_button_size_allocate;
+  widget_class->draw = gtk_toggle_button_draw;
   widget_class->expose_event = gtk_toggle_button_expose;
   widget_class->realize = gtk_toggle_button_realize;
   widget_class->unrealize = gtk_toggle_button_unrealize;
@@ -132,17 +147,6 @@ gtk_toggle_button_class_init (GtkToggleButtonClass *class)
   button_class->leave = gtk_toggle_button_leave;
 
   class->toggled = NULL;
-
-  gtk_object_add_arg_type ("GtkToggleButton::active", GTK_TYPE_BOOL, GTK_ARG_READWRITE, ARG_ACTIVE);
-  gtk_object_add_arg_type ("GtkToggleButton::draw_indicator", GTK_TYPE_BOOL, GTK_ARG_READWRITE, ARG_DRAW_INDICATOR);
-
-  toggle_button_signals[TOGGLED] =
-    gtk_signal_new ("toggled",
-                    GTK_RUN_FIRST,
-                    GTK_CLASS_TYPE (object_class),
-                    GTK_SIGNAL_OFFSET (GtkToggleButtonClass, toggled),
-                    gtk_marshal_VOID__VOID,
-		    GTK_TYPE_NONE, 0);
 }
 
 static void
@@ -340,8 +344,8 @@ gtk_toggle_button_paint (GtkWidget    *widget,
 
       if (GTK_WIDGET_CAN_DEFAULT (widget))
         {
-          x += widget->style->xthickness;
-          y += widget->style->ythickness;
+          x += widget->style->klass->xthickness;
+          y += widget->style->klass->ythickness;
           width -= 2 * x + DEFAULT_SPACING;
           height -= 2 * y + DEFAULT_SPACING;
           x += DEFAULT_LEFT_POS;
@@ -397,22 +401,38 @@ static gint
 gtk_toggle_button_expose (GtkWidget      *widget,
 			  GdkEventExpose *event)
 {
+  if (!GTK_WIDGET_NO_WINDOW (widget) &&
+      GTK_WIDGET_CLASS (parent_class)->expose_event)
+    return GTK_WIDGET_CLASS (parent_class)->expose_event (widget, event);
+  else
+    return FALSE;
+}
+
+static void
+gtk_toggle_button_draw (GtkWidget    *widget,
+			GdkRectangle *area)
+{
+  GdkRectangle child_area;
+  GdkRectangle tmp_area;
   GtkBin *bin;
-  GdkEventExpose child_event;
 
-  if (GTK_WIDGET_DRAWABLE (widget))
+  g_return_if_fail (widget != NULL);
+  g_return_if_fail (GTK_IS_TOGGLE_BUTTON (widget));
+  g_return_if_fail (area != NULL);
+
+  bin = GTK_BIN (widget);
+
+  if (GTK_WIDGET_DRAWABLE (widget) && !GTK_WIDGET_NO_WINDOW (widget))
     {
-      bin = GTK_BIN (widget);
+      tmp_area = *area;
+      tmp_area.x -= GTK_CONTAINER (widget)->border_width;
+      tmp_area.y -= GTK_CONTAINER (widget)->border_width;
 
-      gtk_toggle_button_paint (widget, &event->area);
+      gtk_toggle_button_paint (widget, &tmp_area);
 
-      child_event = *event;
-      if (bin->child && GTK_WIDGET_NO_WINDOW (bin->child) &&
-	  gtk_widget_intersect (bin->child, &event->area, &child_event.area))
-	gtk_widget_event (bin->child, (GdkEvent*) &child_event);
+      if (bin->child && gtk_widget_intersect (bin->child, &tmp_area, &child_area))
+	gtk_widget_draw (bin->child, &child_area);
     }
-  
-  return TRUE;
 }
 
 static void

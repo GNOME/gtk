@@ -2,23 +2,23 @@
  * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
  *
  * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
+ * modify it under the terms of the GNU Library General Public
  * License as published by the Free Software Foundation; either
  * version 2 of the License, or (at your option) any later version.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
+ * Library General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public
+ * You should have received a copy of the GNU Library General Public
  * License along with this library; if not, write to the
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
  * Boston, MA 02111-1307, USA.
  */
 
 /*
- * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
+ * Modified by the GTK+ Team and others 1997-1999.  See the AUTHORS
  * file for a list of people on the GTK+ Team.  See the ChangeLog
  * files for a list of changes.  These files are distributed with
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
@@ -52,10 +52,10 @@ static gpointer  gtk_gc_new              (gpointer       key);
 static void      gtk_gc_destroy          (gpointer       value);
 static guint     gtk_gc_key_hash         (gpointer       key);
 static guint     gtk_gc_value_hash       (gpointer       value);
-static gint      gtk_gc_key_equal        (gpointer       a,
+static gint      gtk_gc_key_compare      (gpointer       a,
 					  gpointer       b);
 static guint     gtk_gc_drawable_hash    (GtkGCDrawable *d);
-static gint      gtk_gc_drawable_equal   (GtkGCDrawable *a,
+static gint      gtk_gc_drawable_compare (GtkGCDrawable *a,
 					  GtkGCDrawable *b);
 
 
@@ -109,10 +109,10 @@ gtk_gc_init (void)
 			  (GCacheDestroyFunc) gtk_gc_key_destroy,
 			  (GHashFunc) gtk_gc_key_hash,
 			  (GHashFunc) gtk_gc_value_hash,
-			  (GEqualFunc) gtk_gc_key_equal);
+			  (GCompareFunc) gtk_gc_key_compare);
 
   gc_drawable_ht = g_hash_table_new ((GHashFunc) gtk_gc_drawable_hash,
-				     (GEqualFunc) gtk_gc_drawable_equal);
+				     (GCompareFunc) gtk_gc_drawable_compare);
 }
 
 static GtkGCKey*
@@ -157,7 +157,6 @@ gtk_gc_new (gpointer key)
     }
 
   gc = gdk_gc_new_with_values (drawable->drawable, &keyval->values, keyval->mask);
-  gdk_gc_set_colormap (gc, keyval->colormap);
 
   return (gpointer) gc;
 }
@@ -259,9 +258,9 @@ gtk_gc_value_hash (gpointer value)
   return (gulong) value;
 }
 
-static gboolean
-gtk_gc_key_equal (gpointer a,
-		  gpointer b)
+static gint
+gtk_gc_key_compare (gpointer a,
+		    gpointer b)
 {
   GtkGCKey *akey;
   GtkGCKey *bkey;
@@ -384,9 +383,9 @@ gtk_gc_drawable_hash (GtkGCDrawable *d)
   return d->depth;
 }
 
-static gboolean
-gtk_gc_drawable_equal (GtkGCDrawable *a,
-		       GtkGCDrawable *b)
+static gint
+gtk_gc_drawable_compare (GtkGCDrawable *a,
+			 GtkGCDrawable *b)
 {
   return (a->depth == b->depth);
 }

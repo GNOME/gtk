@@ -2,23 +2,23 @@
  * Copyright (C) 1997 David Mosberger
  *
  * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
+ * modify it under the terms of the GNU Library General Public
  * License as published by the Free Software Foundation; either
  * version 2 of the License, or (at your option) any later version.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
+ * Library General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public
+ * You should have received a copy of the GNU Library General Public
  * License along with this library; if not, write to the
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
  * Boston, MA 02111-1307, USA.
  */
 
 /*
- * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
+ * Modified by the GTK+ Team and others 1997-1999.  See the AUTHORS
  * file for a list of people on the GTK+ Team.  See the ChangeLog
  * files for a list of changes.  These files are distributed with
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
@@ -68,7 +68,7 @@ static void gtk_curve_set_arg     (GtkObject      *object,
 static void gtk_curve_get_arg     (GtkObject      *object,
 				   GtkArg         *arg,
 				   guint           arg_id);
-static void gtk_curve_finalize     (GObject       *object);
+static void gtk_curve_finalize     (GtkObject     *object);
 static gint gtk_curve_graph_events (GtkWidget     *widget, 
 				    GdkEvent      *event, 
 				    GtkCurve      *c);
@@ -101,20 +101,21 @@ gtk_curve_get_type (void)
 static void
 gtk_curve_class_init (GtkCurveClass *class)
 {
-  GObjectClass *gobject_class = G_OBJECT_CLASS (class);
-  GtkObjectClass *object_class = GTK_OBJECT_CLASS (class);
+  GtkObjectClass *object_class;
   
   parent_class = gtk_type_class (GTK_TYPE_DRAWING_AREA);
   
-  gobject_class->finalize = gtk_curve_finalize;
-
+  object_class = (GtkObjectClass *) class;
+  
   object_class->set_arg = gtk_curve_set_arg;
   object_class->get_arg = gtk_curve_get_arg;
+  object_class->finalize = gtk_curve_finalize;
   
   curve_type_changed_signal =
-    gtk_signal_new ("curve_type_changed", GTK_RUN_FIRST, GTK_CLASS_TYPE (object_class),
+    gtk_signal_new ("curve_type_changed", GTK_RUN_FIRST, object_class->type,
 		    GTK_SIGNAL_OFFSET (GtkCurveClass, curve_type_changed),
-		    gtk_marshal_VOID__VOID, GTK_TYPE_NONE, 0);
+		    gtk_marshal_NONE__NONE, GTK_TYPE_NONE, 0);
+  gtk_object_class_add_signals (object_class, &curve_type_changed_signal, 1);
   
   gtk_object_add_arg_type ("GtkCurve::curve_type", GTK_TYPE_CURVE_TYPE,
 			   GTK_ARG_READWRITE, ARG_CURVE_TYPE);
@@ -941,7 +942,7 @@ gtk_curve_new (void)
 }
 
 static void
-gtk_curve_finalize (GObject *object)
+gtk_curve_finalize (GtkObject *object)
 {
   GtkCurve *curve;
 
@@ -956,5 +957,5 @@ gtk_curve_finalize (GObject *object)
   if (curve->ctlpoint)
     g_free (curve->ctlpoint);
 
-  G_OBJECT_CLASS (parent_class)->finalize (object);
+  (*GTK_OBJECT_CLASS (parent_class)->finalize) (object);
 }

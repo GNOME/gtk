@@ -3,23 +3,23 @@
  * GtkStatusbar Copyright (C) 1998 Shawn T. Amundson
  *
  * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
+ * modify it under the terms of the GNU Library General Public
  * License as published by the Free Software Foundation; either
  * version 2 of the License, or (at your option) any later version.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
+ * Library General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public
+ * You should have received a copy of the GNU Library General Public
  * License along with this library; if not, write to the
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
  * Boston, MA 02111-1307, USA.
  */
 
 /*
- * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
+ * Modified by the GTK+ Team and others 1997-1999.  See the AUTHORS
  * file for a list of people on the GTK+ Team.  See the ChangeLog
  * files for a list of changes.  These files are distributed with
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
@@ -41,6 +41,7 @@ enum
 static void gtk_statusbar_class_init               (GtkStatusbarClass *class);
 static void gtk_statusbar_init                     (GtkStatusbar      *statusbar);
 static void gtk_statusbar_destroy                  (GtkObject         *object);
+static void gtk_statusbar_finalize                 (GtkObject         *object);
 static void gtk_statusbar_update		   (GtkStatusbar      *statusbar,
 						    guint	       context_id,
 						    const gchar       *text);
@@ -85,8 +86,29 @@ gtk_statusbar_class_init (GtkStatusbarClass *class)
   container_class = (GtkContainerClass *) class;
 
   parent_class = gtk_type_class (GTK_TYPE_HBOX);
+
+  statusbar_signals[SIGNAL_TEXT_PUSHED] =
+    gtk_signal_new ("text_pushed",
+		    GTK_RUN_LAST,
+		    object_class->type,
+		    GTK_SIGNAL_OFFSET (GtkStatusbarClass, text_pushed),
+		    gtk_marshal_NONE__UINT_STRING,
+		    GTK_TYPE_NONE, 2,
+		    GTK_TYPE_UINT,
+		    GTK_TYPE_STRING);
+  statusbar_signals[SIGNAL_TEXT_POPPED] =
+    gtk_signal_new ("text_popped",
+		    GTK_RUN_LAST,
+		    object_class->type,
+		    GTK_SIGNAL_OFFSET (GtkStatusbarClass, text_popped),
+		    gtk_marshal_NONE__UINT_STRING,
+		    GTK_TYPE_NONE, 2,
+		    GTK_TYPE_UINT,
+		    GTK_TYPE_STRING);
+  gtk_object_class_add_signals (object_class, statusbar_signals, SIGNAL_LAST);
   
   object_class->destroy = gtk_statusbar_destroy;
+  object_class->finalize = gtk_statusbar_finalize;
 
   class->messages_mem_chunk = g_mem_chunk_new ("GtkStatusBar messages mem chunk",
 					       sizeof (GtkStatusbarMsg),
@@ -95,25 +117,6 @@ gtk_statusbar_class_init (GtkStatusbarClass *class)
 
   class->text_pushed = gtk_statusbar_update;
   class->text_popped = gtk_statusbar_update;
-
-  statusbar_signals[SIGNAL_TEXT_PUSHED] =
-    gtk_signal_new ("text_pushed",
-		    GTK_RUN_LAST,
-		    GTK_CLASS_TYPE (object_class),
-		    GTK_SIGNAL_OFFSET (GtkStatusbarClass, text_pushed),
-		    gtk_marshal_VOID__UINT_STRING,
-		    GTK_TYPE_NONE, 2,
-		    GTK_TYPE_UINT,
-		    GTK_TYPE_STRING);
-  statusbar_signals[SIGNAL_TEXT_POPPED] =
-    gtk_signal_new ("text_popped",
-		    GTK_RUN_LAST,
-		    GTK_CLASS_TYPE (object_class),
-		    GTK_SIGNAL_OFFSET (GtkStatusbarClass, text_popped),
-		    gtk_marshal_VOID__UINT_STRING,
-		    GTK_TYPE_NONE, 2,
-		    GTK_TYPE_UINT,
-		    GTK_TYPE_STRING);
 }
 
 static void
@@ -201,8 +204,9 @@ gtk_statusbar_push (GtkStatusbar *statusbar,
   g_return_val_if_fail (statusbar != NULL, 0);
   g_return_val_if_fail (GTK_IS_STATUSBAR (statusbar), 0);
   g_return_val_if_fail (text != NULL, 0);
+  g_return_val_if_fail (context_id > 0, 0);
 
-  class = GTK_STATUSBAR_GET_CLASS (statusbar);
+  class = GTK_STATUSBAR_CLASS (GTK_OBJECT (statusbar)->klass);
   msg = g_chunk_new (GtkStatusbarMsg, class->messages_mem_chunk);
   msg->text = g_strdup (text);
   msg->context_id = context_id;
@@ -226,6 +230,7 @@ gtk_statusbar_pop (GtkStatusbar *statusbar,
 
   g_return_if_fail (statusbar != NULL);
   g_return_if_fail (GTK_IS_STATUSBAR (statusbar));
+  g_return_if_fail (context_id > 0);
 
   if (statusbar->messages)
     {
@@ -239,7 +244,7 @@ gtk_statusbar_pop (GtkStatusbar *statusbar,
 	    {
 	      GtkStatusbarClass *class;
 
-	      class = GTK_STATUSBAR_GET_CLASS (statusbar);
+	      class = GTK_STATUSBAR_CLASS (GTK_OBJECT (statusbar)->klass);
 
 	      statusbar->messages = g_slist_remove_link (statusbar->messages,
 							 list);
@@ -268,6 +273,7 @@ gtk_statusbar_remove (GtkStatusbar *statusbar,
 
   g_return_if_fail (statusbar != NULL);
   g_return_if_fail (GTK_IS_STATUSBAR (statusbar));
+  g_return_if_fail (context_id > 0);
   g_return_if_fail (message_id > 0);
 
   msg = statusbar->messages ? statusbar->messages->data : NULL;
@@ -292,7 +298,7 @@ gtk_statusbar_remove (GtkStatusbar *statusbar,
 	    {
 	      GtkStatusbarClass *class;
 	      
-	      class = GTK_STATUSBAR_GET_CLASS (statusbar);
+	      class = GTK_STATUSBAR_CLASS (GTK_OBJECT (statusbar)->klass);
 	      statusbar->messages = g_slist_remove_link (statusbar->messages, list);
 	      g_free (msg->text);
 	      g_mem_chunk_free (class->messages_mem_chunk, msg);
@@ -315,7 +321,7 @@ gtk_statusbar_destroy (GtkObject *object)
   g_return_if_fail (GTK_IS_STATUSBAR (object));
 
   statusbar = GTK_STATUSBAR (object);
-  class = GTK_STATUSBAR_GET_CLASS (statusbar);
+  class = GTK_STATUSBAR_CLASS (GTK_OBJECT (statusbar)->klass);
 
   for (list = statusbar->messages; list; list = list->next)
     {
@@ -334,4 +340,17 @@ gtk_statusbar_destroy (GtkObject *object)
   statusbar->keys = NULL;
 
   GTK_OBJECT_CLASS (parent_class)->destroy (object);
+}
+
+static void
+gtk_statusbar_finalize (GtkObject *object)
+{
+  GtkStatusbar *statusbar;
+
+  g_return_if_fail (object != NULL);
+  g_return_if_fail (GTK_IS_STATUSBAR (object));
+
+  statusbar = GTK_STATUSBAR (object);
+
+  GTK_OBJECT_CLASS (parent_class)->finalize (object);
 }

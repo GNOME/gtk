@@ -2,23 +2,23 @@
  * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
  *
  * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
+ * modify it under the terms of the GNU Library General Public
  * License as published by the Free Software Foundation; either
  * version 2 of the License, or (at your option) any later version.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
+ * Library General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public
+ * You should have received a copy of the GNU Library General Public
  * License along with this library; if not, write to the
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
  * Boston, MA 02111-1307, USA.
  */
 
 /*
- * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
+ * Modified by the GTK+ Team and others 1997-1999.  See the AUTHORS
  * file for a list of people on the GTK+ Team.  See the ChangeLog
  * files for a list of changes.  These files are distributed with
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
@@ -92,8 +92,8 @@ gtk_vruler_init (GtkVRuler *vruler)
   GtkWidget *widget;
 
   widget = GTK_WIDGET (vruler);
-  widget->requisition.width = widget->style->xthickness * 2 + RULER_WIDTH;
-  widget->requisition.height = widget->style->ythickness * 2 + 1;
+  widget->requisition.width = widget->style->klass->xthickness * 2 + RULER_WIDTH;
+  widget->requisition.height = widget->style->klass->ythickness * 2 + 1;
 }
 
 GtkWidget*
@@ -135,6 +135,7 @@ gtk_vruler_draw_ticks (GtkRuler *ruler)
 {
   GtkWidget *widget;
   GdkGC *gc, *bg_gc;
+  GdkFont *font;
   gint i, j;
   gint width, height;
   gint xthickness;
@@ -146,12 +147,10 @@ gtk_vruler_draw_ticks (GtkRuler *ruler)
   gfloat subd_incr;
   gfloat start, end, cur;
   gchar unit_str[32];
+  gchar digit_str[2] = { '\0', '\0' };
   gint digit_height;
-  gint digit_offset;
   gint text_height;
   gint pos;
-  PangoLayout *layout;
-  PangoRectangle logical_rect, ink_rect;
 
   g_return_if_fail (ruler != NULL);
   g_return_if_fail (GTK_IS_VRULER (ruler));
@@ -163,31 +162,26 @@ gtk_vruler_draw_ticks (GtkRuler *ruler)
 
   gc = widget->style->fg_gc[GTK_STATE_NORMAL];
   bg_gc = widget->style->bg_gc[GTK_STATE_NORMAL];
-
-  xthickness = widget->style->xthickness;
-  ythickness = widget->style->ythickness;
-
-  layout = gtk_widget_create_pango_layout (widget, "012456789");
-  pango_layout_get_extents (layout, &ink_rect, &logical_rect);
-  
-  digit_height = PANGO_PIXELS (ink_rect.height) + 2;
-  digit_offset = ink_rect.y;
+  font = widget->style->font;
+  xthickness = widget->style->klass->xthickness;
+  ythickness = widget->style->klass->ythickness;
+  digit_height = font->ascent; /* assume descent == 0 ? */
 
   width = widget->allocation.height;
   height = widget->allocation.width - ythickness * 2;
 
-  gtk_paint_box (widget->style, ruler->backing_store,
-		 GTK_STATE_NORMAL, GTK_SHADOW_OUT, 
-		 NULL, widget, "vruler",
-		 0, 0, 
+   gtk_paint_box (widget->style, ruler->backing_store,
+		  GTK_STATE_NORMAL, GTK_SHADOW_OUT, 
+		  NULL, widget, "vruler",
+		  0, 0, 
 		  widget->allocation.width, widget->allocation.height);
-  
-  gdk_draw_line (ruler->backing_store, gc,
+
+   gdk_draw_line (ruler->backing_store, gc,
 		 height + xthickness,
 		 ythickness,
 		 height + xthickness,
 		 widget->allocation.height - ythickness);
-  
+
   upper = ruler->upper / ruler->metric->pixels_per_unit;
   lower = ruler->lower / ruler->metric->pixels_per_unit;
 
@@ -251,22 +245,17 @@ gtk_vruler_draw_ticks (GtkRuler *ruler)
 	  if (i == 0)
 	    {
 	      sprintf (unit_str, "%d", (int) cur);
-	      
 	      for (j = 0; j < (int) strlen (unit_str); j++)
 		{
-		  pango_layout_set_text (layout, unit_str + j, 1);
-		  pango_layout_get_extents (layout, NULL, &logical_rect);
-		  
-		  gdk_draw_layout (ruler->backing_store, gc,
+		  digit_str[0] = unit_str[j];
+		  gdk_draw_string (ruler->backing_store, font, gc,
 				   xthickness + 1,
-				   pos + digit_height * j + 2 + PANGO_PIXELS (logical_rect.y - digit_offset),
-				   layout);
+				   pos + digit_height * (j + 1) + 1,
+				   digit_str);
 		}
 	    }
 	}
     }
-
-  g_object_unref (G_OBJECT (layout));
 }
 
 
@@ -291,8 +280,8 @@ gtk_vruler_draw_pos (GtkRuler *ruler)
       widget = GTK_WIDGET (ruler);
 
       gc = widget->style->fg_gc[GTK_STATE_NORMAL];
-      xthickness = widget->style->xthickness;
-      ythickness = widget->style->ythickness;
+      xthickness = widget->style->klass->xthickness;
+      ythickness = widget->style->klass->ythickness;
       width = widget->allocation.width - xthickness * 2;
       height = widget->allocation.height;
 

@@ -89,14 +89,6 @@ Selects the menu item from the menu shell.
 @menu_item: The #GtkMenuItem to select.
 
 
-<!-- ##### FUNCTION gtk_menu_shell_deselect ##### -->
-<para>
-
-</para>
-
-@menu_shell: 
-
-
 <!-- ##### FUNCTION gtk_menu_shell_activate_item ##### -->
 <para>
 Activates the menu item within the menu shell.
@@ -144,26 +136,17 @@ An enumeration representing directional movements within a menu.
 @GTK_MENU_DIR_NEXT: 
 @GTK_MENU_DIR_PREV: 
 
-<!-- ##### SIGNAL GtkMenuShell::activate-current ##### -->
-<para>
-An action signal that activates the current menu item within the menu
-shell.
-</para>
-
-@menushell: the object which received the signal.
-@force_hide: if TRUE, hide the menu after activating the menu item.
-
-<!-- ##### SIGNAL GtkMenuShell::cancel ##### -->
-<para>
-An action signal which cancels the selection within the menu shell.
-Causes the GtkMenuShell::selection-done signal to be emitted.
-</para>
-
-@menushell: the object which received the signal.
-
 <!-- ##### SIGNAL GtkMenuShell::deactivate ##### -->
 <para>
 This signal is emitted when a menu shell is deactivated.
+</para>
+
+@menushell: the object which received the signal.
+
+<!-- ##### SIGNAL GtkMenuShell::selection-done ##### -->
+<para>
+This signal is emitted when a selection has been completed within a menu
+shell.
 </para>
 
 @menushell: the object which received the signal.
@@ -177,10 +160,19 @@ specified by @direction.
 @menushell: the object which received the signal.
 @direction: the direction to move.
 
-<!-- ##### SIGNAL GtkMenuShell::selection-done ##### -->
+<!-- ##### SIGNAL GtkMenuShell::activate-current ##### -->
 <para>
-This signal is emitted when a selection has been completed within a menu
+An action signal that activates the current menu item within the menu
 shell.
+</para>
+
+@menushell: the object which received the signal.
+@force_hide: if TRUE, hide the menu after activating the menu item.
+
+<!-- ##### SIGNAL GtkMenuShell::cancel ##### -->
+<para>
+An action signal which cancels the selection within the menu shell.
+Causes the GtkMenuShell::selection-done signal to be emitted.
 </para>
 
 @menushell: the object which received the signal.

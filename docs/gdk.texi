@@ -1,0 +1,334 @@
+\input texinfo @c -*-texinfo-*-
+@c %**start of header
+@setfilename gdk.info
+@settitle GDK
+@setchapternewpage odd
+@c %**end of header
+
+@set edition 1.0
+@set update-date 16 May 1996
+@set update-month May 1996
+
+@ifinfo
+This file documents GDK, the General Drawing Kit
+
+Copyright (C) 1996 Peter Mattis
+
+Permission is granted to make and distribute verbatim copies of this
+manual provided the copyright notice and this permission notice are
+preserved on all copies
+
+@ignore
+Permission is granted to process this file throught TeX and print the
+results, provided the printed document carries copying permission notice
+identical to this one except for the removal of this paragraph (this
+paragraph not being relevant to the printed manual).
+
+@end ignore
+Permission is granted to copy and distribute modified versions of this
+manual under the conditions for verbatim copying, provided that the
+entire resulting derived work is distributed under the terms of a
+permission notice identical to this one.
+
+Permission is granted to copy and distribute translations of this manual
+into another language, under the above conditions for modified versions,
+except that this permission notice may be stated in a translation
+approved by Peter Mattis.
+@end ifinfo
+
+@titlepage
+@title The General Drawing Kit
+@subtitle Version 1.0
+@subtitle @value{update-month}
+@author by Peter Mattis
+
+@page
+@vskip 0pt plus 1filll
+Copyright @copyright{} 1996 Peter Mattis
+
+Permission is granted to make and distribute verbatim copies of this
+manual provided the copyright notice and this permission notice are
+preserved on all copies.
+
+Permission is granted to copy and distribute modified versions of this
+manual under the conditions for verbatim copying, provided that the
+entire resulting derived work is distributed under the terms of a
+permission notice identical to this one.
+
+Permission is granted to copy and distribute translations of this manual
+into another language, under the above conditions for modified versions,
+except that this permission notice may be stated in a translation
+approved by Peter Mattis.
+@end titlepage
+
+@dircategory User Interface Toolkit
+@direntry
+* GDK: (gdk).		The General Drawing Kit
+@end direntry
+
+@node Top, Copying, (dir), (dir)
+@top The General Drawing Kit
+@ifinfo
+This is edition @value{edition} of the GDK documentation,
+@w{@value{update-date}}.
+@end ifinfo
+
+@menu
+* Copying::                     Your rights.
+* Overview::                    What is GDK?
+* Initialization::              Initialization and exit.
+* Events::                      Event handling.
+* Visuals::                     Understanding and using visuals.
+* Windows::                     Creating and using windows.
+* Graphics Contexts::           Creating and modifying GCs.
+* Pixmaps::                     Creating pixmaps.
+* Images::                      Creating images.
+* Color::                       Specifying color.
+* Fonts::                       Creating fonts.
+* Drawing::                     Drawing commands.
+* XInput Support::              Using extended devices.
+* Miscellany::                  Other stuff.
+* Examples::                    Using GDK.
+* Function Index::              Index of functions
+* Concept Index::               Index of concepts
+@end menu
+
+@node Copying, Overview, Top, Top
+@comment node-name, next, previous, up
+@chapter Copying
+
+GDK is @dfn{free}; this means that everyone is free to use it and free
+to redestribute it on a free basis. GDK is not in the public domain; it
+is copyrighted and there are restrictions on its distribution, but these
+restrictions are designed to permit everything that a good cooperating
+citizen would want to do. What is not allowed is to try to prevent
+others from further sharing any version of GDK that they might get from
+you.
+
+Specifically, we want to make sure that you have the right to give away
+copies of GDK, that you receive source code or else can get it if you
+want it, that you can change GDK or use pieces of it in new free
+programs, and that you know you can do these things.
+
+To make sure that everyone has such rights, we have to forbid you to
+deprive anyone else of these rights. For example, if you distribute
+copies of GDK, you must give the recipients all the rights that you
+have. You must make sure that they, too, receive or can get the source
+code. And you must tell them their rights.
+
+Also, for my own protection, we must make certain that everyone finds
+out that there is no warranty for GDK. If GDK is modified by someone
+else and passed on, we want their recipients to know that what they have
+is not what we distributed, so that any problems introduced by others
+will no reflect on our reputation.
+
+The precise conditions of the licenses for GDK are found in the General
+Public Licenses that accompanies it.
+
+
+@node Overview, Initialization, Copying, Top
+@comment node-name, next, previous, up
+@chapter What is GDK?
+@cindex Overview
+
+GDK is designed as a wrapper library that lies on top of Xlib. It
+performs many common and desired operations for a programmer instead
+of the programmer having to explicitly ask for such functionality from
+Xlib directly. For example, GDK provides a common interface to both
+regular and shared memory XImage types. By doing so, an application
+can nearly transparently use the fastest image type available. GDK
+also provides routines for determining the best available color depth
+and the best available visual which is not always the default visual
+for a screen.
+
+@node Initialization, Events, Overview, Top
+@comment node-name, next, previous, up
+@chapter Initialization and exit
+@cindex Initialization
+@cindex Exit
+
+Initializing GDK is easy. Simply call @code{gdk_init} passing in the
+@var{argc} and @var{argv} parameters. Exit is similarly easy. Just
+call @code{gdk_exit}.
+
+@deftypefun void gdk_init (int *@var{argc}, char ***@var{argv})
+Initializes the GDK library. The arguments @var{argc} and @var{argv}
+are scanned and any arguments that GDK recognizes are handled and
+removed. The @var{argc} and @var{argv} parameters are the values
+passed to @code{main} upon program invocation.
+@end deftypefun
+
+@deftypefun void gdk_exit (int @var{errorcode})
+Exit GDK and perform any necessary cleanup. @code{gdk_exit} will call
+the systems @code{exit} function passing @var{errorcode} as the
+parameter.
+@end deftypefun
+
+@example
+int
+main (int argc, char *argv[])
+@{
+  /* Initialize GDK. */
+  gdk_init (&argc, &argv);
+
+  /* Exit from GDK...this call will never return. */
+  gdk_exit (0);
+
+  /* Keep compiler from issuing a warning */
+  return 0;
+@}
+@end example
+
+
+@node Events, Visuals, Initialization, Top
+@comment node-name, next, previous, up
+@chapter Event handling
+@cindex Events
+
+Events are the means by which GDK lets the programmer know of user
+interaction. An event is normally a button or key press or some other
+indirect user action, such as a the mouse cursor entering or leaving a
+window.
+
+There exist only a few functions for getting events and event
+information. These are @code{gdk_events_pending},
+@code{gdk_event_get}, @code{gdk_events_record} and
+@code{gdk_events_playback}. The latter two functions are useful for
+automatic testing of a software package and should normally not be
+needed in a program.
+
+@deftypefun gint gdk_events_pending (void)
+Returns the number of events pending on the event queue.
+@end deftypefun
+
+@deftypefun gint gdk_event_get (GdkEvent *@var{event})
+Return the next available event in the @var{event}
+structure. @code{gdk_event_get} will return @code{TRUE} on success and
+@code{FALSE} on failure. Success and failure is determined by whether
+an event arrived before the timeout period expired.
+@end deftypefun
+
+@deftypefun void gdk_events_record (char *@var{filename})
+Turn on recording of events. User events and certain system events will
+be saved in the file named by the variable @var{filename}. This stream
+of events can later be played back and ``should'' produce the same
+results as when the original events were handled. However, the
+programmer does need to be careful in that the state of the program must
+be the same when @code{gdk_events_record} is called and when
+@code{gdk_events_playback} is called. For this reason,
+@code{gdk_events_record} is normally not called directly, but is instead
+invoked indirectly by specifying the ``-record'' command line option.
+@end deftypefun
+
+@deftypefun void gdk_events_playback (char *@var{filename})
+Start playback of events from a file. (See the above description of
+@code{gdk_events_record}). Normally this function is not called directly
+but is invoked by the ``-playback'' command line option.
+@end deftypefun
+
+@deftypefun void gdk_events_stop (void)
+Stop recording and playback of events.
+@end deftypefun
+
+@example
+void
+handle_event ()
+@{
+  GdkEvent event;
+
+  if (gdk_event_get (&event))
+    @{
+      switch (event.type)
+       @{
+         @dots{}
+       @}
+    @}
+@}
+@end example
+
+
+@node Visuals, Windows, Events, Top
+@comment node-name, next, previous, up
+@chapter Understanding and using visuals
+@cindex Visuals
+
+@node Windows, Graphics Contexts, Visuals, Top
+@comment node-name, next, previous, up
+@chapter Creating and using windows
+@cindex Windows
+
+@node Graphics Contexts, Pixmaps, Windows, Top
+@comment node-name, next, previous, up
+@chapter Creating and modifying GCs
+@cindex Graphics Contexts
+@cindex GC
+
+@node Pixmaps, Images, Graphics Contexts, Top
+@comment node-name, next, previous, up
+@chapter Creating pixmaps
+@cindex Pixmaps
+
+@node Images, Color, Pixmaps, Top
+@comment node-name, next, previous, up
+@chapter Creating images
+@cindex Images
+
+@node Color, Fonts, Images, Top
+@comment node-name, next, previous, up
+@chapter Specifying color
+@cindex Color
+
+@node Fonts, Drawing, Color, Top
+@comment node-name, next, previous, up
+@chapter Creating Fonts
+@cindex Fonts
+
+@node Drawing, XInput Support, Fonts, Top
+@comment node-name, next, previous, up
+@chapter Drawing Commands
+@cindex Drawing
+
+@node XInput Support, Miscellany, Drawing, Top
+@comment node-name, next, previous, up
+@chapter Using extended devices
+@cindex Overview
+@cindex Using extended device capabilities
+@cindex Controlling extended devices
+
+@node Miscellany, Examples, XInput Support, Top
+@comment node-name, next, previous, up
+@chapter Other stuff
+@cindex Timers
+@cindex Debugging
+@cindex Miscellaneous
+
+
+@node Examples, Function Index, Miscellany, Top
+@comment node-name, next, previous, up
+@chapter Using GDK
+@cindex Examples
+
+
+@node Function Index, Concept Index, Examples, Top
+@comment node-name, next, previous, up
+@unnumbered Variable Index
+
+@printindex fn
+
+@node Concept Index, , Function Index, Top
+@comment node-name, next, previous, up
+@unnumbered Concept Index
+
+@printindex cp
+
+@summarycontents
+@contents
+@bye
+
+
+
+
+
+
+
+

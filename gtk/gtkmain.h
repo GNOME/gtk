@@ -2,23 +2,23 @@
  * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
  *
  * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
+ * modify it under the terms of the GNU Library General Public
  * License as published by the Free Software Foundation; either
  * version 2 of the License, or (at your option) any later version.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	 See the GNU
- * Lesser General Public License for more details.
+ * Library General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public
+ * You should have received a copy of the GNU Library General Public
  * License along with this library; if not, write to the
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
  * Boston, MA 02111-1307, USA.
  */
 
 /*
- * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
+ * Modified by the GTK+ Team and others 1997-1999.  See the AUTHORS
  * file for a list of people on the GTK+ Team.  See the ChangeLog
  * files for a list of changes.  These files are distributed with
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
@@ -60,7 +60,7 @@ typedef gint	(*GtkKeySnoopFunc)	(GtkWidget	*grab_widget,
 #ifdef GTK_COMPILATION
 #define GTKMAIN_C_VAR __declspec(dllexport)
 #else
-#define GTKMAIN_C_VAR extern __declspec(dllimport)
+#define GTKMAIN_C_VAR __declspec(dllimport) extern
 #endif
 #else
 #define GTKMAIN_C_VAR extern
@@ -78,37 +78,13 @@ gchar* gtk_check_version (guint	required_major,
 
 /* Initialization, exit, mainloop and miscellaneous routines
  */
-
-void     gtk_init                 (int    *argc,
-                                   char ***argv);
-
-gboolean gtk_init_check           (int    *argc,
-                                   char ***argv);
-#ifdef G_OS_WIN32
-
-/* Variants that are used to check for correct struct packing
- * when building GTK+-using code.
- */
-void	 gtk_init_abi_check       (int	  *argc,
-				   char	***argv,
-				   int     num_checks,
-				   size_t  sizeof_GtkWindow);
-gboolean gtk_init_check_abi_check (int	  *argc,
-				   char	***argv,
-				   int     num_checks,
-				   size_t  sizeof_GtkWindow);
-
-#define gtk_init(argc, argv) gtk_init_abi_check (argc, argv, 1, sizeof (GtkWindow))
-#define gtk_init_check(args, argv) gtk_init_check_abi_check (argc, argv, 1, sizeof (GtkWindow))
-
-#endif
-
-void     gtk_exit                 (gint    error_code);
-gchar*   gtk_set_locale           (void);
-gchar*   gtk_get_default_language (void);
-gint     gtk_events_pending       (void);
-
-
+void	   gtk_init		 (int	       *argc,
+				  char	     ***argv);
+gboolean   gtk_init_check        (int	       *argc,
+				  char	     ***argv);
+void	   gtk_exit		 (gint		error_code);
+gchar*	   gtk_set_locale	 (void);
+gint	   gtk_events_pending	 (void);
 
 /* The following is the event func GTK+ registers with GDK
  * we expose it mainly to allow filtering of events between
@@ -123,8 +99,8 @@ gint	   gtk_main_iteration	 (void);
 /* gtk_main_iteration() calls gtk_main_iteration_do(TRUE) */
 gint	   gtk_main_iteration_do (gboolean blocking);
 
-gint	   gtk_true		   (void) G_GNUC_CONST;
-gint	   gtk_false		   (void) G_GNUC_CONST;
+gint	   gtk_true		   (void);
+gint	   gtk_false		   (void);
 
 void	   gtk_grab_add		   (GtkWidget	       *widget);
 GtkWidget* gtk_grab_get_current	   (void);
@@ -179,9 +155,7 @@ guint	   gtk_key_snooper_install (GtkKeySnoopFunc snooper,
 				    gpointer	    func_data);
 void	   gtk_key_snooper_remove  (guint	    snooper_handler_id);
   
-GdkEvent*  gtk_get_current_event      (void);
-guint32    gtk_get_current_event_time (void);
-
+GdkEvent*  gtk_get_current_event   (void);
 GtkWidget* gtk_get_event_widget	   (GdkEvent	   *event);
 
 

@@ -2,37 +2,35 @@
  * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
  *
  * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
+ * modify it under the terms of the GNU Library General Public
  * License as published by the Free Software Foundation; either
  * version 2 of the License, or (at your option) any later version.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
+ * Library General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public
+ * You should have received a copy of the GNU Library General Public
  * License along with this library; if not, write to the
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
  * Boston, MA 02111-1307, USA.
  */
 
 /*
- * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
+ * Modified by the GTK+ Team and others 1997-1999.  See the AUTHORS
  * file for a list of people on the GTK+ Team.  See the ChangeLog
  * files for a list of changes.  These files are distributed with
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
-#include <stdarg.h>
 #include <string.h>
-#include <stdlib.h>
-
 #include "gtkcontainer.h"
 #include "gtkprivate.h"
 #include "gtksignal.h"
 #include "gtkmain.h"
-#include "gtkwindow.h"
+#include <stdarg.h>
+
 
 enum {
   ADD,
@@ -61,42 +59,44 @@ struct _GtkChildArgInfo
   guint seq_id;
 };
 
-static void     gtk_container_base_class_init      (GtkContainerClass *klass);
-static void     gtk_container_class_init           (GtkContainerClass *klass);
-static void     gtk_container_init                 (GtkContainer      *container);
-static void     gtk_container_destroy              (GtkObject         *object);
-static void     gtk_container_get_arg              (GtkObject         *object,
-						    GtkArg            *arg,
-						    guint              arg_id);
-static void     gtk_container_set_arg              (GtkObject         *object,
-						    GtkArg            *arg,
-						    guint              arg_id);
-static void     gtk_container_add_unimplemented    (GtkContainer      *container,
-						    GtkWidget         *widget);
-static void     gtk_container_remove_unimplemented (GtkContainer      *container,
-						    GtkWidget         *widget);
-static void     gtk_container_real_check_resize    (GtkContainer      *container);
-static gboolean gtk_container_real_focus           (GtkContainer      *container,
-						    GtkDirectionType   direction);
-static void     gtk_container_real_set_focus_child (GtkContainer      *container,
-						    GtkWidget         *widget);
-static gboolean gtk_container_focus_tab            (GtkContainer      *container,
-						    GList             *children,
-						    GtkDirectionType   direction);
-static gboolean gtk_container_focus_up_down        (GtkContainer      *container,
-						    GList            **children,
-						    GtkDirectionType   direction);
-static gboolean gtk_container_focus_left_right     (GtkContainer      *container,
-						    GList            **children,
-						    GtkDirectionType   direction);
-static gboolean gtk_container_focus_move           (GtkContainer      *container,
-						    GList             *children,
-						    GtkDirectionType   direction);
-static void     gtk_container_children_callback    (GtkWidget         *widget,
-						    gpointer           client_data);
-static void     gtk_container_show_all             (GtkWidget         *widget);
-static void     gtk_container_hide_all             (GtkWidget         *widget);
+/* The global list of toplevel windows */
+static GList *toplevel_list = NULL;
 
+static void gtk_container_base_class_init   (GtkContainerClass *klass);
+static void gtk_container_class_init        (GtkContainerClass *klass);
+static void gtk_container_init              (GtkContainer      *container);
+static void gtk_container_destroy           (GtkObject         *object);
+static void gtk_container_get_arg           (GtkObject	       *object,
+					     GtkArg            *arg,
+					     guint		arg_id);
+static void gtk_container_set_arg           (GtkObject	       *object,
+					     GtkArg            *arg,
+					     guint		arg_id);
+static void gtk_container_add_unimplemented (GtkContainer      *container,
+					     GtkWidget         *widget);
+static void gtk_container_remove_unimplemented (GtkContainer   *container,
+						GtkWidget      *widget);
+static void gtk_container_real_check_resize (GtkContainer      *container);
+static gint gtk_container_real_focus        (GtkContainer      *container,
+					     GtkDirectionType   direction);
+static void gtk_container_real_set_focus_child (GtkContainer      *container,
+					     GtkWidget	       *widget);
+static gint gtk_container_focus_tab         (GtkContainer      *container,
+					     GList             *children,
+					     GtkDirectionType   direction);
+static gint gtk_container_focus_up_down     (GtkContainer      *container,
+					     GList             *children,
+					     GtkDirectionType   direction);
+static gint gtk_container_focus_left_right  (GtkContainer      *container,
+					     GList             *children,
+					     GtkDirectionType   direction);
+static gint gtk_container_focus_move        (GtkContainer      *container,
+					     GList             *children,
+					     GtkDirectionType   direction);
+static void gtk_container_children_callback (GtkWidget         *widget,
+                                             gpointer           client_data);
+static void gtk_container_show_all          (GtkWidget         *widget);
+static void gtk_container_hide_all          (GtkWidget         *widget);
 
 static gchar* gtk_container_child_default_composite_name (GtkContainer *container,
 							  GtkWidget    *child);
@@ -165,6 +165,51 @@ gtk_container_class_init (GtkContainerClass *class)
   vadjustment_key_id = g_quark_from_static_string (vadjustment_key);
   hadjustment_key_id = g_quark_from_static_string (hadjustment_key);
   
+  gtk_object_add_arg_type ("GtkContainer::border_width", GTK_TYPE_ULONG, GTK_ARG_READWRITE, ARG_BORDER_WIDTH);
+  gtk_object_add_arg_type ("GtkContainer::resize_mode", GTK_TYPE_RESIZE_MODE, GTK_ARG_READWRITE, ARG_RESIZE_MODE);
+  gtk_object_add_arg_type ("GtkContainer::child", GTK_TYPE_WIDGET, GTK_ARG_WRITABLE, ARG_CHILD);
+  gtk_object_add_arg_type ("GtkContainer::reallocate_redraws", GTK_TYPE_BOOL, GTK_ARG_READWRITE, ARG_REALLOCATE_REDRAWS);
+
+  container_signals[ADD] =
+    gtk_signal_new ("add",
+                    GTK_RUN_FIRST,
+                    object_class->type,
+                    GTK_SIGNAL_OFFSET (GtkContainerClass, add),
+                    gtk_marshal_NONE__POINTER,
+		    GTK_TYPE_NONE, 1,
+                    GTK_TYPE_WIDGET);
+  container_signals[REMOVE] =
+    gtk_signal_new ("remove",
+                    GTK_RUN_FIRST,
+                    object_class->type,
+                    GTK_SIGNAL_OFFSET (GtkContainerClass, remove),
+                    gtk_marshal_NONE__POINTER,
+		    GTK_TYPE_NONE, 1,
+                    GTK_TYPE_WIDGET);
+  container_signals[CHECK_RESIZE] =
+    gtk_signal_new ("check_resize",
+                    GTK_RUN_LAST,
+                    object_class->type,
+                    GTK_SIGNAL_OFFSET (GtkContainerClass, check_resize),
+		    gtk_marshal_NONE__NONE,
+		    GTK_TYPE_NONE, 0);
+  container_signals[FOCUS] =
+    gtk_signal_new ("focus",
+                    GTK_RUN_LAST,
+                    object_class->type,
+                    GTK_SIGNAL_OFFSET (GtkContainerClass, focus),
+                    gtk_marshal_ENUM__ENUM,
+		    GTK_TYPE_DIRECTION_TYPE, 1,
+                    GTK_TYPE_DIRECTION_TYPE);
+  container_signals[SET_FOCUS_CHILD] =
+    gtk_signal_new ("set-focus-child",
+                    GTK_RUN_FIRST,
+                    object_class->type,
+                    GTK_SIGNAL_OFFSET (GtkContainerClass, set_focus_child),
+                    gtk_marshal_NONE__POINTER,
+		    GTK_TYPE_NONE, 1,
+                    GTK_TYPE_WIDGET);
+  gtk_object_class_add_signals (object_class, container_signals, LAST_SIGNAL);
 
   object_class->get_arg = gtk_container_get_arg;
   object_class->set_arg = gtk_container_set_arg;
@@ -181,51 +226,6 @@ gtk_container_class_init (GtkContainerClass *class)
   class->set_focus_child = gtk_container_real_set_focus_child;
   class->child_type = NULL;
   class->composite_name = gtk_container_child_default_composite_name;
-
-  gtk_object_add_arg_type ("GtkContainer::border_width", GTK_TYPE_UINT, GTK_ARG_READWRITE, ARG_BORDER_WIDTH);
-  gtk_object_add_arg_type ("GtkContainer::resize_mode", GTK_TYPE_RESIZE_MODE, GTK_ARG_READWRITE, ARG_RESIZE_MODE);
-  gtk_object_add_arg_type ("GtkContainer::child", GTK_TYPE_WIDGET, GTK_ARG_WRITABLE, ARG_CHILD);
-  gtk_object_add_arg_type ("GtkContainer::reallocate_redraws", GTK_TYPE_BOOL, GTK_ARG_READWRITE, ARG_REALLOCATE_REDRAWS);
-
-  container_signals[ADD] =
-    gtk_signal_new ("add",
-                    GTK_RUN_FIRST,
-                    GTK_CLASS_TYPE (object_class),
-                    GTK_SIGNAL_OFFSET (GtkContainerClass, add),
-                    gtk_marshal_VOID__POINTER,
-		    GTK_TYPE_NONE, 1,
-                    GTK_TYPE_WIDGET);
-  container_signals[REMOVE] =
-    gtk_signal_new ("remove",
-                    GTK_RUN_FIRST,
-                    GTK_CLASS_TYPE (object_class),
-                    GTK_SIGNAL_OFFSET (GtkContainerClass, remove),
-                    gtk_marshal_VOID__POINTER,
-		    GTK_TYPE_NONE, 1,
-                    GTK_TYPE_WIDGET);
-  container_signals[CHECK_RESIZE] =
-    gtk_signal_new ("check_resize",
-                    GTK_RUN_LAST,
-                    GTK_CLASS_TYPE (object_class),
-                    GTK_SIGNAL_OFFSET (GtkContainerClass, check_resize),
-		    gtk_marshal_VOID__VOID,
-		    GTK_TYPE_NONE, 0);
-  container_signals[FOCUS] =
-    gtk_signal_new ("focus",
-                    GTK_RUN_LAST,
-                    GTK_CLASS_TYPE (object_class),
-                    GTK_SIGNAL_OFFSET (GtkContainerClass, focus),
-                    gtk_marshal_ENUM__ENUM,
-		    GTK_TYPE_DIRECTION_TYPE, 1,
-                    GTK_TYPE_DIRECTION_TYPE);
-  container_signals[SET_FOCUS_CHILD] =
-    gtk_signal_new ("set-focus-child",
-                    GTK_RUN_FIRST,
-                    GTK_CLASS_TYPE (object_class),
-                    GTK_SIGNAL_OFFSET (GtkContainerClass, set_focus_child),
-                    gtk_marshal_VOID__POINTER,
-		    GTK_TYPE_NONE, 1,
-                    GTK_TYPE_WIDGET);
 }
 
 GtkType
@@ -237,7 +237,7 @@ gtk_container_child_type (GtkContainer      *container)
   g_return_val_if_fail (container != NULL, 0);
   g_return_val_if_fail (GTK_IS_CONTAINER (container), 0);
 
-  class = GTK_CONTAINER_GET_CLASS (container);
+  class = GTK_CONTAINER_CLASS (GTK_OBJECT (container)->klass);
   if (class->child_type)
     slot = class->child_type (container);
   else
@@ -266,6 +266,8 @@ gtk_container_add_with_args (GtkContainer      *container,
   gtk_widget_ref (GTK_WIDGET (container));
   gtk_widget_ref (widget);
 
+  if (!GTK_OBJECT_CONSTRUCTED (widget))
+    gtk_object_default_construct (GTK_OBJECT (widget));
   gtk_signal_emit (GTK_OBJECT (container), container_signals[ADD], widget);
   
   if (widget->parent)
@@ -324,6 +326,8 @@ gtk_container_addv (GtkContainer      *container,
   gtk_widget_ref (GTK_WIDGET (container));
   gtk_widget_ref (widget);
 
+  if (!GTK_OBJECT_CONSTRUCTED (widget))
+    gtk_object_default_construct (GTK_OBJECT (widget));
   gtk_signal_emit (GTK_OBJECT (container), container_signals[ADD], widget);
   
   if (widget->parent)
@@ -642,7 +646,7 @@ gtk_container_set_arg (GtkObject    *object,
   switch (arg_id)
     {
     case ARG_BORDER_WIDTH:
-      gtk_container_set_border_width (container, GTK_VALUE_UINT (*arg));
+      gtk_container_set_border_width (container, GTK_VALUE_ULONG (*arg));
       break;
     case ARG_RESIZE_MODE:
       gtk_container_set_resize_mode (container, GTK_VALUE_ENUM (*arg));
@@ -670,7 +674,7 @@ gtk_container_get_arg (GtkObject    *object,
   switch (arg_id)
     {
     case ARG_BORDER_WIDTH:
-      GTK_VALUE_UINT (*arg) = container->border_width;
+      GTK_VALUE_ULONG (*arg) = container->border_width;
       break;
     case ARG_RESIZE_MODE:
       GTK_VALUE_ENUM (*arg) = container->resize_mode;
@@ -710,6 +714,8 @@ gtk_container_add (GtkContainer *container,
   g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (widget->parent == NULL);
 
+  if (!GTK_OBJECT_CONSTRUCTED (widget))
+    gtk_object_default_construct (GTK_OBJECT (widget));
   gtk_signal_emit (GTK_OBJECT (container), container_signals[ADD], widget);
 }
 
@@ -841,10 +847,8 @@ gtk_container_idle_sizer (gpointer data)
       gtk_container_check_resize (GTK_CONTAINER (widget));
     }
 
-  gdk_window_process_all_updates ();
-
   GDK_THREADS_LEAVE ();
-
+  
   return FALSE;
 }
 
@@ -1098,7 +1102,7 @@ gtk_container_forall (GtkContainer *container,
   g_return_if_fail (GTK_IS_CONTAINER (container));
   g_return_if_fail (callback != NULL);
 
-  class = GTK_CONTAINER_GET_CLASS (container);
+  class = GTK_CONTAINER_CLASS (GTK_OBJECT (container)->klass);
 
   if (class->forall)
     class->forall (container, TRUE, callback, callback_data);
@@ -1115,7 +1119,7 @@ gtk_container_foreach (GtkContainer *container,
   g_return_if_fail (GTK_IS_CONTAINER (container));
   g_return_if_fail (callback != NULL);
 
-  class = GTK_CONTAINER_GET_CLASS (container);
+  class = GTK_CONTAINER_CLASS (GTK_OBJECT (container)->klass);
 
   if (class->forall)
     class->forall (container, FALSE, callback, callback_data);
@@ -1138,8 +1142,8 @@ gtk_container_foreach_unmarshal (GtkWidget *child,
   
   /* first argument */
   args[0].name = NULL;
-  args[0].type = GTK_OBJECT_TYPE (child);
-  GTK_VALUE_OBJECT (args[0]) = GTK_OBJECT (child);
+  args[0].type = GTK_OBJECT(child)->klass->type;
+  GTK_VALUE_OBJECT(args[0]) = GTK_OBJECT (child);
   
   /* location for return value */
   args[1].name = NULL;
@@ -1179,7 +1183,7 @@ gtk_container_foreach_full (GtkContainer       *container,
     notify (callback_data);
 }
 
-gboolean
+gint
 gtk_container_focus (GtkContainer     *container,
 		     GtkDirectionType  direction)
 {
@@ -1219,6 +1223,42 @@ gtk_container_children (GtkContainer *container)
 			 &children);
 
   return g_list_reverse (children);
+}
+
+void
+gtk_container_register_toplevel (GtkContainer *container)
+{
+  g_return_if_fail (container != NULL);
+  
+  toplevel_list = g_list_prepend (toplevel_list, container);
+  
+  gtk_widget_ref (GTK_WIDGET (container));
+  gtk_object_sink (GTK_OBJECT (container));
+}
+
+void
+gtk_container_unregister_toplevel (GtkContainer *container)
+{
+  GList *node;
+
+  g_return_if_fail (container != NULL);
+
+  node = g_list_find (toplevel_list, container);
+  g_return_if_fail (node != NULL);
+
+  toplevel_list = g_list_remove_link (toplevel_list, node);
+  g_list_free_1 (node);
+
+  gtk_widget_unref (GTK_WIDGET (container));
+}
+
+GList*
+gtk_container_get_toplevels (void)
+{
+  /* XXX: fixme we should ref all these widgets and duplicate
+   * the list.
+   */
+  return toplevel_list;
 }
 
 static void
@@ -1285,7 +1325,7 @@ gtk_container_child_composite_name (GtkContainer *container,
 	{
 	  GtkContainerClass *class;
 
-	  class = GTK_CONTAINER_GET_CLASS (container);
+	  class = GTK_CONTAINER_CLASS (GTK_OBJECT (container)->klass);
 	  if (class->composite_name)
 	    name = class->composite_name (container, child);
 	}
@@ -1339,7 +1379,7 @@ gtk_container_real_set_focus_child (GtkContainer     *container,
     }
 }
 
-static gboolean
+static gint
 gtk_container_real_focus (GtkContainer     *container,
 			  GtkDirectionType  direction)
 {
@@ -1361,11 +1401,8 @@ gtk_container_real_focus (GtkContainer     *container,
 
   if (GTK_WIDGET_CAN_FOCUS (container))
     {
-      if (!GTK_WIDGET_HAS_FOCUS (container))
-	{
-	  gtk_widget_grab_focus (GTK_WIDGET (container));
-	  return_val = TRUE;
-	}
+      gtk_widget_grab_focus (GTK_WIDGET (container));
+      return_val = TRUE;
     }
   else
     {
@@ -1407,11 +1444,11 @@ gtk_container_real_focus (GtkContainer     *container,
 	      break;
 	    case GTK_DIR_UP:
 	    case GTK_DIR_DOWN:
-	      return_val = gtk_container_focus_up_down (container, &children, direction);
+	      return_val = gtk_container_focus_up_down (container, children, direction);
 	      break;
 	    case GTK_DIR_LEFT:
 	    case GTK_DIR_RIGHT:
-	      return_val = gtk_container_focus_left_right (container, &children, direction);
+	      return_val = gtk_container_focus_left_right (container, children, direction);
 	      break;
 	    }
 
@@ -1422,7 +1459,7 @@ gtk_container_real_focus (GtkContainer     *container,
   return return_val;
 }
 
-static gboolean
+static gint
 gtk_container_focus_tab (GtkContainer     *container,
 			 GList            *children,
 			 GtkDirectionType  direction)
@@ -1493,285 +1530,227 @@ gtk_container_focus_tab (GtkContainer     *container,
   return gtk_container_focus_move (container, children, direction);
 }
 
-static gboolean
-old_focus_coords (GtkContainer *container, GdkRectangle *old_focus_rect)
-{
-  GtkWidget *widget = GTK_WIDGET (container);
-  GtkWidget *toplevel = gtk_widget_get_toplevel (widget);
-  
-  if (toplevel &&
-      GTK_IS_WINDOW (toplevel) && GTK_WINDOW (toplevel)->focus_widget &&
-      GTK_WIDGET_REALIZED (container) &&
-      GTK_WIDGET_REALIZED (GTK_WINDOW (toplevel)->focus_widget))
-    {
-      GtkWidget *old_focus = GTK_WINDOW (toplevel)->focus_widget;
-      GdkWindow *old_parent_window = old_focus->parent ? old_focus->parent->window : old_focus->window;
-      GdkWindow *new_parent_window = widget->window;
-      GdkWindow *toplevel_window = toplevel->window;
-      
-      *old_focus_rect = old_focus->allocation;
-      
-      /* Translate coordinates to the toplevel */
-      
-      while (old_parent_window != toplevel_window)
-	{
-	  gint dx, dy;
-	  
-	  gdk_window_get_position (old_parent_window, &dx, &dy);
-	  
-	  old_focus_rect->x += dx;
-	  old_focus_rect->y += dy;
-	  
-	  old_parent_window = gdk_window_get_parent (old_parent_window);
-	}
-      
-      /* Translate coordinates back to the new container */
-      
-      while (new_parent_window != toplevel_window)
-	{
-	  gint dx, dy;
-	  
-	  gdk_window_get_position (new_parent_window, &dx, &dy);
-	  
-	  old_focus_rect->x -= dx;
-	  old_focus_rect->y -= dy;
-	  
-	  new_parent_window = gdk_window_get_parent (new_parent_window);
-	}
-
-      return TRUE;
-    }
-
-  return FALSE;
-}
-
-typedef struct _CompareInfo CompareInfo;
-
-struct _CompareInfo
-{
-  gint x;
-  gint y;
-};
-
 static gint
-up_down_compare (gconstpointer a,
-		 gconstpointer b,
-		 gpointer      data)
-{
-  const GtkWidget *child1 = a;
-  const GtkWidget *child2 = b;
-  CompareInfo *compare = data;
-
-  gint y1 = child1->allocation.y + child1->allocation.height / 2;
-  gint y2 = child2->allocation.y + child2->allocation.height / 2;
-
-  if (y1 == y2)
-    {
-      gint x1 = abs (child1->allocation.x + child1->allocation.width / 2 - compare->x);
-      gint x2 = abs (child2->allocation.x + child2->allocation.width / 2 - compare->x);
-
-      if (compare->y < y1)
-	return (x1 < x2) ? -1 : ((x1 == x2) ? 0 : 1);
-      else
-	return (x1 < x2) ? 1 : ((x1 == x2) ? 0 : -1);
-    }
-  else
-    return (y1 < y2) ? -1 : 1;
-}
-
-static gboolean
 gtk_container_focus_up_down (GtkContainer     *container,
-			     GList           **children,
+			     GList            *children,
 			     GtkDirectionType  direction)
 {
-  CompareInfo compare;
+  GtkWidget *child;
+  GtkWidget *child2;
   GList *tmp_list;
+  gint dist1, dist2;
+  gint focus_x;
+  gint focus_width;
+  guint length;
+  guint i, j;
 
+  /* return failure if there isn't a focus child */
   if (container->focus_child)
     {
-      gint compare_x1;
-      gint compare_x2;
-      gint compare_y;
-      
-      /* Delete widgets from list that don't match minimum criteria */
-
-      compare_x1 = container->focus_child->allocation.x;
-      compare_x2 = container->focus_child->allocation.x + container->focus_child->allocation.width;
-
-      if (direction == GTK_DIR_UP)
-	compare_y = container->focus_child->allocation.y;
-      else
-	compare_y = container->focus_child->allocation.y + container->focus_child->allocation.height;
-      
-      tmp_list = *children;
-      while (tmp_list)
-	{
-	  GtkWidget *child = tmp_list->data;
-	  GList *next = tmp_list->next;
-	  gint child_x1, child_x2;
-	  
-	  if (child != container->focus_child)
-	    {
-	      child_x1 = child->allocation.x;
-	      child_x2 = child->allocation.x + child->allocation.width;
-	      
-	      if ((child_x2 <= compare_x1 || child_x1 >= compare_x2) /* No horizontal overlap */ ||
-		  (direction == GTK_DIR_DOWN && child->allocation.y + child->allocation.height < compare_y) || /* Not below */
-		  (direction == GTK_DIR_UP && child->allocation.y > compare_y)) /* Not above */
-		{
-		  *children = g_list_delete_link (*children, tmp_list);
-		}
-	    }
-	  
-	  tmp_list = next;
-	}
-
-      compare.x = (compare_x1 + compare_x2) / 2;
-      compare.y = container->focus_child->allocation.y + container->focus_child->allocation.height / 2;
+      focus_width = container->focus_child->allocation.width / 2;
+      focus_x = container->focus_child->allocation.x + focus_width;
     }
   else
     {
-      /* No old focus widget, need to figure out starting x,y some other way
-       */
-      GtkWidget *widget = GTK_WIDGET (container);
-      GdkRectangle old_focus_rect;
-
-      if (old_focus_coords (container, &old_focus_rect))
-	{
-	  compare.x = old_focus_rect.x + old_focus_rect.width / 2;
-	}
+      focus_width = GTK_WIDGET (container)->allocation.width;
+      if (GTK_WIDGET_NO_WINDOW (container))
+	focus_x = GTK_WIDGET (container)->allocation.x;
       else
-	{
-	  if (GTK_WIDGET_NO_WINDOW (widget))
-	    compare.x = widget->allocation.x + widget->allocation.width / 2;
-	  else
-	    compare.x = widget->allocation.width / 2;
-	}
-      
-      if (GTK_WIDGET_NO_WINDOW (widget))
-	compare.y = (direction == GTK_DIR_DOWN) ? widget->allocation.y : widget->allocation.y + widget->allocation.height;
-      else
-	compare.y = (direction == GTK_DIR_DOWN) ? 0 : + widget->allocation.height;
+	focus_x = 0;
     }
 
-  *children = g_list_sort_with_data (*children, up_down_compare, &compare);
+  length = g_list_length (children);
+
+  /* sort the children in the y direction */
+  for (i = 1; i < length; i++)
+    {
+      j = i;
+      tmp_list = g_list_nth (children, j);
+      child = tmp_list->data;
+
+      while (j > 0)
+	{
+	  child2 = tmp_list->prev->data;
+	  if (child->allocation.y < child2->allocation.y)
+	    {
+	      tmp_list->data = tmp_list->prev->data;
+	      tmp_list = tmp_list->prev;
+	      j--;
+	    }
+	  else
+	    break;
+	}
+
+      tmp_list->data = child;
+    }
+
+  /* sort the children in distance in the x direction
+   *  in distance from the current focus child while maintaining the
+   *  sort in the y direction
+   */
+  for (i = 1; i < length; i++)
+    {
+      j = i;
+      tmp_list = g_list_nth (children, j);
+      child = tmp_list->data;
+      dist1 = (child->allocation.x + child->allocation.width / 2) - focus_x;
+
+      while (j > 0)
+	{
+	  child2 = tmp_list->prev->data;
+	  dist2 = (child2->allocation.x + child2->allocation.width / 2) - focus_x;
+
+	  if ((dist1 < dist2) &&
+	      (child->allocation.y >= child2->allocation.y))
+	    {
+	      tmp_list->data = tmp_list->prev->data;
+	      tmp_list = tmp_list->prev;
+	      j--;
+	    }
+	  else
+	    break;
+	}
+
+      tmp_list->data = child;
+    }
+
+  /* go and invalidate any widget which is too
+   *  far from the focus widget.
+   */
+  if (!container->focus_child &&
+      (direction == GTK_DIR_UP))
+    focus_x += focus_width;
+
+  tmp_list = children;
+  while (tmp_list)
+    {
+      child = tmp_list->data;
+
+      dist1 = (child->allocation.x + child->allocation.width / 2) - focus_x;
+      if (((direction == GTK_DIR_DOWN) && (dist1 < 0)) ||
+	  ((direction == GTK_DIR_UP) && (dist1 > 0)))
+	tmp_list->data = NULL;
+
+      tmp_list = tmp_list->next;
+    }
 
   if (direction == GTK_DIR_UP)
-    *children = g_list_reverse (*children);
+    children = g_list_reverse (children);
 
-  return gtk_container_focus_move (container, *children, direction);
+  return gtk_container_focus_move (container, children, direction);
 }
 
 static gint
-left_right_compare (gconstpointer a,
-		    gconstpointer b,
-		    gpointer      data)
-{
-  const GtkWidget *child1 = a;
-  const GtkWidget *child2 = b;
-  CompareInfo *compare = data;
-
-  gint x1 = child1->allocation.x + child1->allocation.width / 2;
-  gint x2 = child2->allocation.x + child2->allocation.width / 2;
-
-  if (x1 == x2)
-    {
-      gint y1 = abs (child1->allocation.y + child1->allocation.height / 2 - compare->y);
-      gint y2 = abs (child2->allocation.y + child2->allocation.height / 2 - compare->y);
-
-      if (compare->x < x1)
-	return (y1 < y2) ? -1 : ((y1 == y2) ? 0 : 1);
-      else
-	return (y1 < y2) ? 1 : ((y1 == y2) ? 0 : -1);
-    }
-  else
-    return (x1 < x2) ? -1 : 1;
-}
-
-static gboolean
 gtk_container_focus_left_right (GtkContainer     *container,
-				GList           **children,
+				GList            *children,
 				GtkDirectionType  direction)
 {
-  CompareInfo compare;
+  GtkWidget *child;
+  GtkWidget *child2;
   GList *tmp_list;
+  gint dist1, dist2;
+  gint focus_y;
+  gint focus_height;
+  guint length;
+  guint i, j;
 
+  /* return failure if there isn't a focus child */
   if (container->focus_child)
     {
-      gint compare_y1;
-      gint compare_y2;
-      gint compare_x;
-      
-      /* Delete widgets from list that don't match minimum criteria */
-
-      compare_y1 = container->focus_child->allocation.y;
-      compare_y2 = container->focus_child->allocation.y + container->focus_child->allocation.height;
-
-      if (direction == GTK_DIR_LEFT)
-	compare_x = container->focus_child->allocation.x;
-      else
-	compare_x = container->focus_child->allocation.x + container->focus_child->allocation.width;
-      
-      tmp_list = *children;
-      while (tmp_list)
-	{
-	  GtkWidget *child = tmp_list->data;
-	  GList *next = tmp_list->next;
-	  gint child_y1, child_y2;
-	  
-	  if (child != container->focus_child)
-	    {
-	      child_y1 = child->allocation.y;
-	      child_y2 = child->allocation.y + child->allocation.height;
-	      
-	      if ((child_y2 <= compare_y1 || child_y1 >= compare_y2) /* No vertical overlap */ ||
-		  (direction == GTK_DIR_RIGHT && child->allocation.x + child->allocation.width < compare_x) || /* Not to left */
-		  (direction == GTK_DIR_LEFT && child->allocation.x > compare_x)) /* Not to right */
-		{
-		  *children = g_list_delete_link (*children, tmp_list);
-		}
-	    }
-	  
-	  tmp_list = next;
-	}
-
-      compare.y = (compare_y1 + compare_y2) / 2;
-      compare.x = container->focus_child->allocation.x + container->focus_child->allocation.width / 2;
+      focus_height = container->focus_child->allocation.height / 2;
+      focus_y = container->focus_child->allocation.y + focus_height;
     }
   else
     {
-      /* No old focus widget, need to figure out starting x,y some other way
-       */
-      GtkWidget *widget = GTK_WIDGET (container);
-      GdkRectangle old_focus_rect;
-
-      if (old_focus_coords (container, &old_focus_rect))
-	{
-	  compare.y = old_focus_rect.y + old_focus_rect.height / 2;
-	}
+      focus_height = GTK_WIDGET (container)->allocation.height;
+      if (GTK_WIDGET_NO_WINDOW (container))
+	focus_y = GTK_WIDGET (container)->allocation.y;
       else
-	{
-	  if (GTK_WIDGET_NO_WINDOW (widget))
-	    compare.y = widget->allocation.y + widget->allocation.height / 2;
-	  else
-	    compare.y = widget->allocation.height / 2;
-	}
-      
-      if (GTK_WIDGET_NO_WINDOW (widget))
-	compare.x = (direction == GTK_DIR_RIGHT) ? widget->allocation.x : widget->allocation.x + widget->allocation.width;
-      else
-	compare.x = (direction == GTK_DIR_RIGHT) ? 0 : widget->allocation.width;
+	focus_y = 0;
     }
 
-  *children = g_list_sort_with_data (*children, left_right_compare, &compare);
+  length = g_list_length (children);
+
+  /* sort the children in the x direction */
+  for (i = 1; i < length; i++)
+    {
+      j = i;
+      tmp_list = g_list_nth (children, j);
+      child = tmp_list->data;
+
+      while (j > 0)
+	{
+	  child2 = tmp_list->prev->data;
+	  if (child->allocation.x < child2->allocation.x)
+	    {
+	      tmp_list->data = tmp_list->prev->data;
+	      tmp_list = tmp_list->prev;
+	      j--;
+	    }
+	  else
+	    break;
+	}
+
+      tmp_list->data = child;
+    }
+
+  /* sort the children in distance in the y direction
+   *  in distance from the current focus child while maintaining the
+   *  sort in the x direction
+   */
+  for (i = 1; i < length; i++)
+    {
+      j = i;
+      tmp_list = g_list_nth (children, j);
+      child = tmp_list->data;
+      dist1 = (child->allocation.y + child->allocation.height / 2) - focus_y;
+
+      while (j > 0)
+	{
+	  child2 = tmp_list->prev->data;
+	  dist2 = (child2->allocation.y + child2->allocation.height / 2) - focus_y;
+
+	  if ((dist1 < dist2) &&
+	      (child->allocation.x >= child2->allocation.x))
+	    {
+	      tmp_list->data = tmp_list->prev->data;
+	      tmp_list = tmp_list->prev;
+	      j--;
+	    }
+	  else
+	    break;
+	}
+
+      tmp_list->data = child;
+    }
+
+  /* go and invalidate any widget which is too
+   *  far from the focus widget.
+   */
+  if (!container->focus_child &&
+      (direction == GTK_DIR_LEFT))
+    focus_y += focus_height;
+
+  tmp_list = children;
+  while (tmp_list)
+    {
+      child = tmp_list->data;
+
+      dist1 = (child->allocation.y + child->allocation.height / 2) - focus_y;
+      if (((direction == GTK_DIR_RIGHT) && (dist1 < 0)) ||
+	  ((direction == GTK_DIR_LEFT) && (dist1 > 0)))
+	tmp_list->data = NULL;
+
+      tmp_list = tmp_list->next;
+    }
 
   if (direction == GTK_DIR_LEFT)
-    *children = g_list_reverse (*children);
+    children = g_list_reverse (children);
 
-  return gtk_container_focus_move (container, *children, direction);
+  return gtk_container_focus_move (container, children, direction);
 }
 
-static gboolean
+static gint
 gtk_container_focus_move (GtkContainer     *container,
 			  GList            *children,
 			  GtkDirectionType  direction)
@@ -1780,6 +1759,7 @@ gtk_container_focus_move (GtkContainer     *container,
   GtkWidget *child;
 
   focus_child = container->focus_child;
+  gtk_container_set_focus_child (container, NULL);
 
   while (children)
     {
@@ -1796,7 +1776,8 @@ gtk_container_focus_move (GtkContainer     *container,
               focus_child = NULL;
 
               if (GTK_WIDGET_DRAWABLE (child) &&
-		  GTK_IS_CONTAINER (child))
+		  GTK_IS_CONTAINER (child) &&
+		  !GTK_WIDGET_HAS_FOCUS (child))
 		if (gtk_container_focus (GTK_CONTAINER (child), direction))
 		  return TRUE;
             }

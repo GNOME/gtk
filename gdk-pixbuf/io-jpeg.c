@@ -10,16 +10,16 @@
  *          Michael Fulbright <drmike@redhat.com>
  *
  * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
+ * modify it under the terms of the GNU Library General Public
  * License as published by the Free Software Foundation; either
  * version 2 of the License, or (at your option) any later version.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
+ * Library General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public
+ * You should have received a copy of the GNU Library General Public
  * License along with this library; if not, write to the
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
  * Boston, MA 02111-1307, USA.
@@ -47,14 +47,9 @@
 #include <string.h>
 #include <setjmp.h>
 #include <jpeglib.h>
-#include "gdk-pixbuf-private.h"
+#include "gdk-pixbuf.h"
 #include "gdk-pixbuf-io.h"
 
-#ifndef HAVE_SIGSETJMP
-#define sigjmp_buf jmp_buf
-#define sigsetjmp(jb, x) setjmp(jb)
-#define siglongjmp longjmp
-#endif
 
 
 /* we are a "source manager" as far as libjpeg is concerned */
@@ -74,7 +69,6 @@ typedef my_source_mgr * my_src_ptr;
 struct error_handler_data {
 	struct jpeg_error_mgr pub;
 	sigjmp_buf setjmp_buffer;
-        GError **error;
 };
 
 /* progressive loader context */
@@ -93,58 +87,35 @@ typedef struct {
 	struct error_handler_data     jerr;
 } JpegProgContext;
 
-GdkPixbuf *gdk_pixbuf__jpeg_image_load (FILE *f, GError **error);
+GdkPixbuf *gdk_pixbuf__jpeg_image_load (FILE *f);
 gpointer gdk_pixbuf__jpeg_image_begin_load (ModulePreparedNotifyFunc func, 
 					    ModuleUpdatedNotifyFunc func2,
 					    ModuleFrameDoneNotifyFunc func3,
 					    ModuleAnimationDoneNotifyFunc func4,
-					    gpointer user_data,
-                                            GError **error);
+					    gpointer user_data);
 void gdk_pixbuf__jpeg_image_stop_load (gpointer context);
-gboolean gdk_pixbuf__jpeg_image_load_increment(gpointer context, guchar *buf, guint size,
-                                               GError **error);
+gboolean gdk_pixbuf__jpeg_image_load_increment(gpointer context, guchar *buf, guint size);
 
 
 static void
 fatal_error_handler (j_common_ptr cinfo)
 {
+	/* FIXME:
+	 * We should somehow signal what error occurred to the caller so the
+	 * caller can handle the error message */
 	struct error_handler_data *errmgr;
-        char buffer[JMSG_LENGTH_MAX];
-        
+
 	errmgr = (struct error_handler_data *) cinfo->err;
-        
-        /* Create the message */
-        (* cinfo->err->format_message) (cinfo, buffer);
-
-        /* broken check for *error == NULL for robustness against
-         * crappy JPEG library
-         */
-        if (errmgr->error && *errmgr->error == NULL) {
-                g_set_error (errmgr->error,
-                             GDK_PIXBUF_ERROR,
-                             GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
-                             _("Error interpreting JPEG image file (%s)"),
-                             buffer);
-        }
-        
+	cinfo->err->output_message (cinfo);
 	siglongjmp (errmgr->setjmp_buffer, 1);
-
-        g_assert_not_reached ();
+	return;
 }
 
+/* Destroy notification function for the libart pixbuf */
 static void
-output_message_handler (j_common_ptr cinfo)
+free_buffer (gpointer user_data, gpointer data)
 {
-  /* This method keeps libjpeg from dumping crap to stderr */
-
-  /* do nothing */
-}
-
-/* Destroy notification function for the pixbuf */
-static void
-free_buffer (guchar *pixels, gpointer data)
-{
-	free (pixels);
+	free (data);
 }
 
 
@@ -180,7 +151,7 @@ explode_gray_into_buf (struct jpeg_decompress_struct *cinfo,
 
 /* Shared library entry point */
 GdkPixbuf *
-gdk_pixbuf__jpeg_image_load (FILE *f, GError **error)
+gdk_pixbuf__jpeg_image_load (FILE *f)
 {
 	gint w, h, i;
 	guchar *pixels = NULL;
@@ -197,10 +168,7 @@ gdk_pixbuf__jpeg_image_load (FILE *f, GError **error)
 	/* setup error handler */
 	cinfo.err = jpeg_std_error (&jerr.pub);
 	jerr.pub.error_exit = fatal_error_handler;
-        jerr.pub.output_message = output_message_handler;
 
-        jerr.error = error;
-        
 	if (sigsetjmp (jerr.setjmp_buffer, 1)) {
 		/* Whoops there was a jpeg error */
 		if (pixels)
@@ -221,20 +189,9 @@ gdk_pixbuf__jpeg_image_load (FILE *f, GError **error)
 	w = cinfo.output_width;
 	h = cinfo.output_height;
 
-	pixels = malloc (h * w * 3);
+	pixels = g_malloc (h * w * 3);
 	if (!pixels) {
 		jpeg_destroy_decompress (&cinfo);
-
-                /* broken check for *error == NULL for robustness against
-                 * crappy JPEG library
-                 */
-                if (error && *error == NULL) {
-                        g_set_error (error,
-                                     GDK_PIXBUF_ERROR,
-                                     GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY,
-                                     _("Insufficient memory to load image, try exiting some applications to free memory"));
-                }
-                
 		return NULL;
 	}
 
@@ -258,7 +215,7 @@ gdk_pixbuf__jpeg_image_load (FILE *f, GError **error)
 	jpeg_finish_decompress (&cinfo);
 	jpeg_destroy_decompress (&cinfo);
 
-	return gdk_pixbuf_new_from_data (pixels, GDK_COLORSPACE_RGB, FALSE, 8,
+	return gdk_pixbuf_new_from_data (pixels, ART_PIX_RGB, FALSE,
 					 w, h, w * 3,
 					 free_buffer, NULL);
 }
@@ -322,8 +279,7 @@ gdk_pixbuf__jpeg_image_begin_load (ModulePreparedNotifyFunc prepared_func,
 				   ModuleUpdatedNotifyFunc  updated_func,
 				   ModuleFrameDoneNotifyFunc frame_func,
 				   ModuleAnimationDoneNotifyFunc anim_done_func,
-				   gpointer user_data,
-                                   GError **error)
+				   gpointer user_data)
 {
 	JpegProgContext *context;
 	my_source_mgr   *src;
@@ -344,10 +300,7 @@ gdk_pixbuf__jpeg_image_begin_load (ModulePreparedNotifyFunc prepared_func,
 	src = (my_src_ptr) context->cinfo.src;
 
 	context->cinfo.err = jpeg_std_error (&context->jerr.pub);
-	context->jerr.pub.error_exit = fatal_error_handler;
-        context->jerr.pub.output_message = output_message_handler;
-        context->jerr.error = error;
-        
+
 	src = (my_src_ptr) context->cinfo.src;
 	src->pub.init_source = init_source;
 	src->pub.fill_input_buffer = fill_input_buffer;
@@ -357,8 +310,6 @@ gdk_pixbuf__jpeg_image_begin_load (ModulePreparedNotifyFunc prepared_func,
 	src->pub.bytes_in_buffer = 0;
 	src->pub.next_input_byte = NULL;
 
-        context->jerr.error = NULL;
-        
 	return (gpointer) context;
 }
 
@@ -377,13 +328,8 @@ gdk_pixbuf__jpeg_image_stop_load (gpointer data)
 	if (context->pixbuf)
 		gdk_pixbuf_unref (context->pixbuf);
 
-	/* if we have an error? */
-	if (sigsetjmp (context->jerr.setjmp_buffer, 1)) {
-		jpeg_destroy_decompress (&context->cinfo);
-	} else {
-		jpeg_finish_decompress(&context->cinfo);
-		jpeg_destroy_decompress(&context->cinfo);
-	}
+	jpeg_finish_decompress(&context->cinfo);
+	jpeg_destroy_decompress(&context->cinfo);
 
 	if (context->cinfo.src) {
 		my_src_ptr src = (my_src_ptr) context->cinfo.src;
@@ -405,8 +351,7 @@ gdk_pixbuf__jpeg_image_stop_load (gpointer data)
  * append image data onto inrecrementally built output image
  */
 gboolean
-gdk_pixbuf__jpeg_image_load_increment (gpointer data, guchar *buf, guint size,
-                                       GError **error)
+gdk_pixbuf__jpeg_image_load_increment (gpointer data, guchar *buf, guint size)
 {
 	JpegProgContext *context = (JpegProgContext *)data;
 	struct jpeg_decompress_struct *cinfo;
@@ -424,16 +369,10 @@ gdk_pixbuf__jpeg_image_load_increment (gpointer data, guchar *buf, guint size,
 
 	cinfo = &context->cinfo;
 
-        context->jerr.error = error;
-        
 	/* XXXXXXX (drmike) - loop(s) below need to be recoded now I
          *                    have a grasp of what the flow needs to be!
          */
 
-	/* check for fatal error */
-	if (sigsetjmp (context->jerr.setjmp_buffer, 1)) {
-		return FALSE;
-	}
 
 	/* skip over data if requested, handle unsigned int sizes cleanly */
 	/* only can happen if we've already called jpeg_get_header once   */
@@ -512,8 +451,8 @@ gdk_pixbuf__jpeg_image_load_increment (gpointer data, guchar *buf, guint size,
 				return FALSE;
 			}
 #endif
-			context->pixbuf = gdk_pixbuf_new(GDK_COLORSPACE_RGB, 
-							 FALSE,
+			context->pixbuf = gdk_pixbuf_new(ART_PIX_RGB, 
+							 /*have_alpha*/ FALSE,
 							 8, 
 							 cinfo->image_width,
 							 cinfo->image_height);
@@ -524,7 +463,7 @@ gdk_pixbuf__jpeg_image_load_increment (gpointer data, guchar *buf, guint size,
 			}
 
 			/* Use pixbuf buffer to store decompressed data */
-			context->dptr = context->pixbuf->pixels;
+			context->dptr = context->pixbuf->art_pixbuf->pixels;
 
 			/* Notify the client that we are ready to go */
 			(* context->prepared_func) (context->pixbuf,
@@ -558,7 +497,7 @@ gdk_pixbuf__jpeg_image_load_increment (gpointer data, guchar *buf, guint size,
 				rowptr = context->dptr;
 				for (i=0; i < cinfo->rec_outbuf_height; i++) {
 					*lptr++ = rowptr;
-					rowptr += context->pixbuf->rowstride;
+					rowptr += context->pixbuf->art_pixbuf->rowstride;
 				}
 
 				nlines = jpeg_read_scanlines (cinfo, lines,
@@ -570,7 +509,7 @@ gdk_pixbuf__jpeg_image_load_increment (gpointer data, guchar *buf, guint size,
 				if (cinfo->output_components == 1)
 					explode_gray_into_buf (cinfo, lines);
 
-				context->dptr += nlines * context->pixbuf->rowstride;
+				context->dptr += nlines * context->pixbuf->art_pixbuf->rowstride;
 
 				/* send updated signal */
 				(* context->updated_func) (context->pixbuf,
@@ -608,128 +547,4 @@ gdk_pixbuf__jpeg_image_load_increment (gpointer data, guchar *buf, guint size,
 	}
 
 	return TRUE;
-}
-
-gboolean
-gdk_pixbuf__jpeg_image_save (FILE          *f, 
-                             GdkPixbuf     *pixbuf, 
-                             gchar        **keys,
-                             gchar        **values,
-                             GError       **error)
-{
-        /* FIXME error handling is broken */
-        
-       struct jpeg_compress_struct cinfo;
-       guchar *buf = NULL;
-       guchar *ptr;
-       guchar *pixels = NULL;
-       JSAMPROW *jbuf;
-       int y = 0;
-       int quality = 75; /* default; must be between 0 and 100 */
-       int i, j;
-       int w, h = 0;
-       int rowstride = 0;
-       struct error_handler_data jerr;
-
-       if (keys && *keys) {
-               gchar **kiter = keys;
-               gchar **viter = values;
-
-               while (*kiter) {
-                       if (strcmp (*kiter, "quality") == 0) {
-                               char *endptr = NULL;
-                               quality = strtol (*viter, &endptr, 10);
-
-                               if (endptr == *viter) {
-                                       g_set_error (error,
-                                                    GDK_PIXBUF_ERROR,
-                                                    GDK_PIXBUF_ERROR_BAD_OPTION_VALUE,
-                                                    _("JPEG quality must be a value between 0 and 100; value '%s' could not be parsed."),
-                                                    *viter);
-
-                                       return FALSE;
-                               }
-                               
-                               if (quality < 0 ||
-                                   quality > 100) {
-                                       /* This is a user-visible error;
-                                        * lets people skip the range-checking
-                                        * in their app.
-                                        */
-                                       g_set_error (error,
-                                                    GDK_PIXBUF_ERROR,
-                                                    GDK_PIXBUF_ERROR_BAD_OPTION_VALUE,
-                                                    _("JPEG quality must be a value between 0 and 100; value '%d' is not allowed."),
-                                                    quality);
-
-                                       return FALSE;
-                               }
-                       } else {
-                               g_warning ("Bad option name '%s' passed to JPEG saver",
-                                          *kiter);
-                               return FALSE;
-                       }
-               
-                       ++kiter;
-                       ++viter;
-               }
-       }
-       
-       rowstride = gdk_pixbuf_get_rowstride (pixbuf);
-
-       w = gdk_pixbuf_get_width (pixbuf);
-       h = gdk_pixbuf_get_height (pixbuf);
-
-       /* no image data? abort */
-       pixels = gdk_pixbuf_get_pixels (pixbuf);
-       g_return_val_if_fail (pixels != NULL, FALSE);
-
-       /* allocate a small buffer to convert image data */
-       buf = g_malloc (w * 3 * sizeof (guchar));
-
-       /* set up error handling */
-       jerr.pub.error_exit = fatal_error_handler;
-       jerr.pub.output_message = output_message_handler;
-       jerr.error = error;
-       
-       cinfo.err = jpeg_std_error (&(jerr.pub));
-       if (sigsetjmp (jerr.setjmp_buffer, 1)) {
-               jpeg_destroy_compress (&cinfo);
-               free (buf);
-               return FALSE;
-       }
-
-       /* setup compress params */
-       jpeg_create_compress (&cinfo);
-       jpeg_stdio_dest (&cinfo, f);
-       cinfo.image_width      = w;
-       cinfo.image_height     = h;
-       cinfo.input_components = 3; 
-       cinfo.in_color_space   = JCS_RGB;
-
-       /* set up jepg compression parameters */
-       jpeg_set_defaults (&cinfo);
-       jpeg_set_quality (&cinfo, quality, TRUE);
-       jpeg_start_compress (&cinfo, TRUE);
-       /* get the start pointer */
-       ptr = pixels;
-       /* go one scanline at a time... and save */
-       i = 0;
-       while (cinfo.next_scanline < cinfo.image_height) {
-               /* convert scanline from ARGB to RGB packed */
-               for (j = 0; j < w; j++)
-                       memcpy (&(buf[j*3]), &(ptr[i*rowstride + j*3]), 3);
-
-               /* write scanline */
-               jbuf = (JSAMPROW *)(&buf);
-               jpeg_write_scanlines (&cinfo, jbuf, 1);
-               i++;
-               y++;
-
-       }
-       
-       /* finish off */
-       jpeg_finish_compress (&cinfo);   
-       free (buf);
-       return TRUE;
 }

@@ -34,6 +34,21 @@ type.</para></listitem>
 
 </para>
 
+@container: the parent class object
+@children: a GList with the children of the list; belonging to #GtkListitem
+@selection: a GList with selected items of the list
+@undo_selection:
+@undo_unselection:
+@last_focus_child:
+@undo_focus_child:
+@htimer:
+@vtimer:
+@anchor:
+@drag_pos: 
+@anchor_state: 
+@selection_mode: the selection mode of the list
+@drag_selection: 
+@add_mode: 
 
 <!-- ##### FUNCTION gtk_list_new ##### -->
 <para>
@@ -332,6 +347,13 @@ effect if a drag selection is not active.
 @list: the list widget.
 
 
+<!-- ##### SIGNAL GtkList::selection-changed ##### -->
+<para>
+The selection of the widget has just changed.
+</para>
+
+@list: the object which received the signal.
+
 <!-- ##### SIGNAL GtkList::select-child ##### -->
 <para>
 The child @widget has just been selected.
@@ -340,13 +362,6 @@ The child @widget has just been selected.
 @list: the object which received the signal.
 @widget: the newly selected child.
 
-<!-- ##### SIGNAL GtkList::selection-changed ##### -->
-<para>
-The selection of the widget has just changed.
-</para>
-
-@list: the object which received the signal.
-
 <!-- ##### SIGNAL GtkList::unselect-child ##### -->
 <para>
 The child @widget has just been unselected.
@@ -354,9 +369,4 @@ The child @widget has just been unselected.
 
 @list: the object which received the signal.
 @widget: the newly unselected child.
-
-<!-- ##### ARG GtkList:selection_mode ##### -->
-<para>
-
-</para>
 

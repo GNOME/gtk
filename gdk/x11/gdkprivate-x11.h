@@ -1,44 +1,109 @@
-/* GDK - The GIMP Drawing Kit
- * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
- *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2 of the License, or (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the
- * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
- * Boston, MA 02111-1307, USA.
- */
-
-/*
- * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
- * file for a list of people on the GTK+ Team.  See the ChangeLog
- * files for a list of changes.  These files are distributed with
- * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
- */
-
-/*
- * Private uninstalled header defining things local to X windowing code
- */
-
 #ifndef __GDK_PRIVATE_X11_H__
 #define __GDK_PRIVATE_X11_H__
 
-#include <gdk/gdkprivate.h>
-#include "gdkx.h"
+#include <X11/Xlib.h>
+#include <X11/Xutil.h>
 
-#include <config.h>
+#include <gdk/gdkfont.h>
+#include <gdk/gdkprivate.h>
+#include <gdk/gdkcursor.h>
+
+typedef struct _GdkGCXData          GdkGCXData;
+typedef struct _GdkDrawableXData    GdkDrawableXData;
+typedef struct _GdkColormapPrivateX GdkColormapPrivateX;
+typedef struct _GdkCursorPrivate    GdkCursorPrivate;
+typedef struct _GdkFontPrivateX     GdkFontPrivateX;
+typedef struct _GdkImagePrivateX    GdkImagePrivateX;
+typedef struct _GdkVisualPrivate    GdkVisualPrivate;
+typedef struct _GdkRegionPrivate    GdkRegionPrivate;
+
+#ifdef USE_XIM
+typedef struct _GdkICPrivate        GdkICPrivate;
+#endif /* USE_XIM */
+
+#define GDK_DRAWABLE_XDATA(win) ((GdkDrawableXData *)(((GdkDrawablePrivate*)(win))->klass_data))
+#define GDK_GC_XDATA(gc) ((GdkGCXData *)(((GdkGCPrivate*)(gc))->klass_data))
+
+struct _GdkGCXData
+{
+  GC xgc;
+  Display *xdisplay;
+};
+
+struct _GdkDrawableXData
+{
+  Window xid;
+  Display *xdisplay;
+};
+
+struct _GdkCursorPrivate
+{
+  GdkCursor cursor;
+  Cursor xcursor;
+  Display *xdisplay;
+};
+
+struct _GdkFontPrivateX
+{
+  GdkFontPrivate base;
+  /* XFontStruct *xfont; */
+  /* generic pointer point to XFontStruct or XFontSet */
+  gpointer xfont;
+  Display *xdisplay;
+
+  GSList *names;
+};
+
+struct _GdkVisualPrivate
+{
+  GdkVisual visual;
+  Visual *xvisual;
+};
+
+struct _GdkColormapPrivateX
+{
+  GdkColormapPrivate base;
+
+  Colormap xcolormap;
+  Display *xdisplay;
+  gint private_val;
+
+  GHashTable *hash;
+  GdkColorInfo *info;
+  time_t last_sync_time;
+};
+
+struct _GdkImagePrivateX
+{
+  GdkImagePrivate base;
+  
+  XImage *ximage;
+  Display *xdisplay;
+  gpointer x_shm_info;
+};
+
+struct _GdkRegionPrivate
+{
+  GdkRegion region;
+  Region xregion;
+};
+
+
+#ifdef USE_XIM
+
+struct _GdkICPrivate
+{
+  XIC xic;
+  GdkICAttr *attr;
+  GdkICAttributesType mask;
+};
+
+#endif /* USE_XIM */
 
 void          gdk_xid_table_insert     (XID             *xid,
 					gpointer         data);
 void          gdk_xid_table_remove     (XID              xid);
+gpointer      gdk_xid_table_lookup     (XID              xid);
 gint          gdk_send_xevent          (Window           window,
 					gboolean         propagate,
 					glong            event_mask,
@@ -48,14 +113,6 @@ GdkGC *       _gdk_x11_gc_new          (GdkDrawable     *drawable,
 					GdkGCValuesMask  values_mask);
 GdkColormap * gdk_colormap_lookup      (Colormap         xcolormap);
 GdkVisual *   gdk_visual_lookup        (Visual          *xvisual);
-
-void gdk_window_add_colormap_windows (GdkWindow *window);
-
-GdkImage* _gdk_x11_get_image (GdkDrawable    *drawable,
-                              gint            x,
-                              gint            y,
-                              gint            width,
-                              gint            height);
 
 /* Please see gdkwindow.c for comments on how to use */ 
 Window gdk_window_xid_at        (Window    base,
@@ -70,43 +127,32 @@ Window gdk_window_xid_at_coords (gint      x,
 				 GList    *excludes,
 				 gboolean  excl_child);
 
-/* Routines from gdkgeometry-x11.c */
-void _gdk_window_init_position     (GdkWindow     *window);
-void _gdk_window_move_resize_child (GdkWindow     *window,
-                                    gint           x,
-                                    gint           y,
-                                    gint           width,
-                                    gint           height);
-void _gdk_window_process_expose    (GdkWindow     *window,
-                                    gulong         serial,
-                                    GdkRectangle  *area);
-
-void     _gdk_selection_window_destroyed   (GdkWindow            *window);
-gboolean _gdk_selection_filter_clear_event (XSelectionClearEvent *event);
-
 extern GdkDrawableClass  _gdk_x11_drawable_class;
 extern gboolean	         gdk_use_xshm;
+extern gchar		*gdk_display_name;
+extern Display		*gdk_display;
+extern Window		 gdk_root_window;
+extern Window		 gdk_leader_window;
 extern Atom		 gdk_wm_delete_window;
 extern Atom		 gdk_wm_take_focus;
 extern Atom		 gdk_wm_protocols;
 extern Atom		 gdk_wm_window_protocols[];
+extern Atom		 gdk_selection_property;
+extern GdkWindow	*selection_owner[];
+extern gchar		*gdk_progclass;
 extern gboolean          gdk_null_window_warnings;
 extern const int         gdk_nevent_masks;
 extern const int         gdk_event_mask_table[];
 
-extern GdkWindowObject *gdk_xgrab_window;  /* Window that currently holds the
-					    * x pointer grab
-					    */
+extern GdkWindowPrivate *gdk_xgrab_window;  /* Window that currently holds the
+					     * x pointer grab
+					     */
 
 #ifdef USE_XIM
 extern GdkICPrivate *gdk_xim_ic;		/* currently using IC */
 extern GdkWindow *gdk_xim_window;	        /* currently using Window */
 #endif /* USE_XIM */
 
-/* Used to detect not-up-to-date keymap */
-extern guint _gdk_keymap_serial;
-#ifdef HAVE_XKB
-extern gboolean _gdk_use_xkb;
-#endif
 
 #endif /* __GDK_PRIVATE_X11_H__ */
+

@@ -8,16 +8,16 @@
  * Based on io-bmp.c
  *
  * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
+ * modify it under the terms of the GNU Library General Public
  * License as published by the Free Software Foundation; either
  * version 2 of the License, or (at your option) any later version.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
+ * Library General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public
+ * You should have received a copy of the GNU Library General Public
  * License along with this library; if not, write to the
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
  * Boston, MA 02111-1307, USA.
@@ -35,14 +35,13 @@ Known bugs:
 
 #include <config.h>
 #include <stdio.h>
-#ifdef HAVE_UNISTD_H
 #include <unistd.h>
-#endif
 #include <string.h>
-#include "gdk-pixbuf-private.h"
+#include "gdk-pixbuf.h"
 #include "gdk-pixbuf-io.h"
-
 
+
+
 
 /* 
 
@@ -158,18 +157,16 @@ gdk_pixbuf__ico_image_begin_load(ModulePreparedNotifyFunc prepared_func,
 				 ModuleUpdatedNotifyFunc updated_func,
 				 ModuleFrameDoneNotifyFunc frame_done_func,
 				 ModuleAnimationDoneNotifyFunc anim_done_func,
-				 gpointer user_data,
-                                 GError **error);
+				 gpointer user_data);
 void gdk_pixbuf__ico_image_stop_load(gpointer data);
-gboolean gdk_pixbuf__ico_image_load_increment(gpointer data, guchar * buf, guint size,
-                                              GError **error);
+gboolean gdk_pixbuf__ico_image_load_increment(gpointer data, guchar * buf, guint size);
 
 
 
 /* Shared library entry point --> Can go when generic_image_load
    enters gdk-pixbuf-io */
 GdkPixbuf *
-gdk_pixbuf__ico_image_load(FILE * f, GError **error)
+gdk_pixbuf__ico_image_load(FILE * f)
 {
 	guchar *membuf;
 	size_t length;
@@ -177,11 +174,7 @@ gdk_pixbuf__ico_image_load(FILE * f, GError **error)
 
 	GdkPixbuf *pb;
 
-	State = gdk_pixbuf__ico_image_begin_load(NULL, NULL, NULL,
-                                                 NULL, NULL, error);
-        if (State == NULL)
-          return NULL;
-        
+	State = gdk_pixbuf__ico_image_begin_load(NULL, NULL, NULL, NULL, NULL);
 	membuf = g_malloc(4096);
 
 	g_assert(membuf != NULL);
@@ -189,11 +182,8 @@ gdk_pixbuf__ico_image_load(FILE * f, GError **error)
 	while (feof(f) == 0) {
 		length = fread(membuf, 1, 4096, f);
 		if (length > 0)
-                        if (!gdk_pixbuf__ico_image_load_increment(State, membuf, length,
-                                                                  error)) {
-                                gdk_pixbuf__ico_image_stop_load (State);
-                                return NULL;
-                        }
+			gdk_pixbuf__ico_image_load_increment(State, membuf, length);
+
 	}
 	g_free(membuf);
 	if (State->pixbuf != NULL)
@@ -355,7 +345,7 @@ static void DecodeHeader(guchar *Data, gint Bytes,
 
 	if (State->pixbuf == NULL) {
 		State->pixbuf =
-		    gdk_pixbuf_new(GDK_COLORSPACE_RGB, TRUE, 8,
+		    gdk_pixbuf_new(ART_PIX_RGB, TRUE, 8,
 				   (gint) State->Header.width,
 				   (gint) State->Header.height);
 
@@ -379,8 +369,7 @@ gdk_pixbuf__ico_image_begin_load(ModulePreparedNotifyFunc prepared_func,
 				 ModuleUpdatedNotifyFunc updated_func,
 				 ModuleFrameDoneNotifyFunc frame_done_func,
 				 ModuleAnimationDoneNotifyFunc anim_done_func,
-				 gpointer user_data,
-                                 GError **error)
+				 gpointer user_data)
 {
 	struct ico_progressive_state *context;
 
@@ -444,13 +433,13 @@ static void OneLine24(struct ico_progressive_state *context)
 
 	X = 0;
 	if (context->Header.Negative == 0)
-		Pixels = (context->pixbuf->pixels +
-			  context->pixbuf->rowstride *
-			  (context->Header.height - context->Lines - 1));
+		Pixels = context->pixbuf->art_pixbuf->pixels +
+		    gdk_pixbuf_get_rowstride(context->pixbuf) *
+		    (context->Header.height - context->Lines - 1);
 	else
-		Pixels = (context->pixbuf->pixels +
-			  context->pixbuf->rowstride *
-			  context->Lines);
+		Pixels = context->pixbuf->art_pixbuf->pixels +
+		    gdk_pixbuf_get_rowstride(context->pixbuf) *
+		    context->Lines;
 	while (X < context->Header.width) {
 		Pixels[X * 4 + 0] = context->LineBuf[X * 3 + 2];
 		Pixels[X * 4 + 1] = context->LineBuf[X * 3 + 1];
@@ -467,13 +456,13 @@ static void OneLine8(struct ico_progressive_state *context)
 
 	X = 0;
 	if (context->Header.Negative == 0)
-		Pixels = (context->pixbuf->pixels +
-			  context->pixbuf->rowstride *
-			  (context->Header.height - context->Lines - 1));
+		Pixels = context->pixbuf->art_pixbuf->pixels +
+		    gdk_pixbuf_get_rowstride(context->pixbuf) *
+		    (context->Header.height - context->Lines - 1);
 	else
-		Pixels = (context->pixbuf->pixels +
-			  context->pixbuf->rowstride *
-			  context->Lines);
+		Pixels = context->pixbuf->art_pixbuf->pixels +
+		    gdk_pixbuf_get_rowstride(context->pixbuf) *
+		    context->Lines;
 	while (X < context->Header.width) {
 		/* The joys of having a BGR byteorder */
 		Pixels[X * 4 + 0] =
@@ -492,13 +481,13 @@ static void OneLine4(struct ico_progressive_state *context)
 
 	X = 0;
 	if (context->Header.Negative == 0)
-		Pixels = (context->pixbuf->pixels +
-			  context->pixbuf->rowstride *
-			  (context->Header.height - context->Lines - 1));
+		Pixels = context->pixbuf->art_pixbuf->pixels +
+		    gdk_pixbuf_get_rowstride(context->pixbuf) *
+		    (context->Header.height - context->Lines - 1);
 	else
-		Pixels = (context->pixbuf->pixels +
-			  context->pixbuf->rowstride *
-			  context->Lines);
+		Pixels = context->pixbuf->art_pixbuf->pixels +
+		    gdk_pixbuf_get_rowstride(context->pixbuf) *
+		    context->Lines;
 	
 	while (X < context->Header.width) {
 		guchar Pix;
@@ -533,13 +522,13 @@ static void OneLine1(struct ico_progressive_state *context)
 
 	X = 0;
 	if (context->Header.Negative == 0)
-		Pixels = (context->pixbuf->pixels +
-			  context->pixbuf->rowstride *
-			  (context->Header.height - context->Lines - 1));
+		Pixels = context->pixbuf->art_pixbuf->pixels +
+		    gdk_pixbuf_get_rowstride(context->pixbuf) *
+		    (context->Header.height - context->Lines - 1);
 	else
-		Pixels = (context->pixbuf->pixels +
-			  context->pixbuf->rowstride *
-			  context->Lines);
+		Pixels = context->pixbuf->art_pixbuf->pixels +
+		    gdk_pixbuf_get_rowstride(context->pixbuf) *
+		    context->Lines;
 	while (X < context->Header.width) {
 		int Bit;
 
@@ -560,13 +549,13 @@ static void OneLineTransp(struct ico_progressive_state *context)
 
 	X = 0;
 	if (context->Header.Negative == 0)
-		Pixels = (context->pixbuf->pixels +
-			  context->pixbuf->rowstride *
-			  (2*context->Header.height - context->Lines - 1));
+		Pixels = context->pixbuf->art_pixbuf->pixels +
+		    gdk_pixbuf_get_rowstride(context->pixbuf) *
+		    (2*context->Header.height - context->Lines - 1);
 	else
-		Pixels = (context->pixbuf->pixels +
-			  context->pixbuf->rowstride *
-			  (context->Lines-context->Header.height));
+		Pixels = context->pixbuf->art_pixbuf->pixels +
+		    gdk_pixbuf_get_rowstride(context->pixbuf) *
+		    (context->Lines-context->Header.height);
 	while (X < context->Header.width) {
 		int Bit;
 
@@ -643,8 +632,7 @@ static void OneLine(struct ico_progressive_state *context)
  * append image data onto inrecrementally built output image
  */
 gboolean
-gdk_pixbuf__ico_image_load_increment(gpointer data, guchar * buf, guint size,
-                                     GError **error)
+gdk_pixbuf__ico_image_load_increment(gpointer data, guchar * buf, guint size)
 {
 	struct ico_progressive_state *context =
 	    (struct ico_progressive_state *) data;

@@ -4,22 +4,22 @@
  * Themes added by The Rasterman <raster@redhat.com>
  * 
  * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
+ * modify it under the terms of the GNU Library General Public
  * License as published by the Free Software Foundation; either
  * version 2 of the License, or (at your option) any later version.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	 See the GNU
- * Lesser General Public License for more details.
+ * Library General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public
+ * You should have received a copy of the GNU Library General Public
  * License along with this library; if not, write to the Free
  * Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
 /*
- * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
+ * Modified by the GTK+ Team and others 1997-1999.  See the AUTHORS
  * file for a list of people on the GTK+ Team.  See the ChangeLog
  * files for a list of changes.  These files are distributed with
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
@@ -29,167 +29,155 @@
 #include <stdlib.h>
 #include <gmodule.h>
 #include "gtkthemes.h"
+#include "gtkmain.h"
 #include "gtkrc.h"
+#include "gtkselection.h"
+#include "gtksignal.h"
+#include "gtkwidget.h"
 #include "config.h"
 #include "gtkintl.h"
 
-typedef struct _GtkThemeEngineClass GtkThemeEngineClass;
+typedef struct _GtkThemeEnginePrivate GtkThemeEnginePrivate;
 
-struct _GtkThemeEngine
-{
-  GTypeModule parent_instance;
+struct _GtkThemeEnginePrivate {
+  GtkThemeEngine engine;
   
   GModule *library;
+  void *name;
 
-  void (*init) (GTypeModule *);
+  void (*init) (GtkThemeEngine *);
   void (*exit) (void);
-  GtkRcStyle *(*create_rc_style) ();
 
-  gchar *name;
-};
-
-struct _GtkThemeEngineClass
-{
-  GTypeModuleClass parent_class;
+  guint refcount;
 };
 
 static GHashTable *engine_hash = NULL;
 
-static gboolean
-gtk_theme_engine_load (GTypeModule *module)
+#ifdef __EMX__
+static void gen_8_3_dll_name(gchar *name, gchar *fullname)
 {
-  GtkThemeEngine *engine = GTK_THEME_ENGINE (module);
-  
-  gchar *fullname;
-  gchar *engine_path;
-      
-  fullname = g_module_build_path (NULL, engine->name);
-  engine_path = gtk_rc_find_module_in_path (fullname);
-  
-  if (!engine_path)
-    {
-      g_warning (_("Unable to locate loadable module in module_path: \"%s\","),
-		 fullname);
-      
-      g_free (fullname);
-      return FALSE;
-    }
-    
-  g_free (fullname);
-       
-  /* load the lib */
-  
-  GTK_NOTE (MISC, g_message ("Loading Theme %s\n", engine_path));
-       
-  engine->library = g_module_open (engine_path, 0);
-  g_free(engine_path);
-  if (!engine->library)
-    {
-      g_warning (g_module_error());
-      return FALSE;
-    }
-  
-  /* extract symbols from the lib */
-  if (!g_module_symbol (engine->library, "theme_init",
-			(gpointer *)&engine->init) ||
-      !g_module_symbol (engine->library, "theme_exit", 
-			(gpointer *)&engine->exit) ||
-      !g_module_symbol (engine->library, "theme_create_rc_style", 
-			(gpointer *)&engine->create_rc_style))
-    {
-      g_warning (g_module_error());
-      g_module_close (engine->library);
-      
-      return FALSE;
-    }
-	    
-  /* call the theme's init (theme_init) function to let it */
-  /* setup anything it needs to set up. */
-  engine->init (module);
-
-  return TRUE;
-}
-
-static void
-gtk_theme_engine_unload (GTypeModule *module)
-{
-  GtkThemeEngine *engine = GTK_THEME_ENGINE (module);
-
-  engine->exit();
-
-  g_module_close (engine->library);
-  engine->library = NULL;
-
-  engine->init = NULL;
-  engine->exit = NULL;
-  engine->create_rc_style = NULL;
-}
-
-static void
-gtk_theme_engine_class_init (GtkThemeEngineClass *class)
-{
-  GTypeModuleClass *module_class = G_TYPE_MODULE_CLASS (class);
-
-  module_class->load = gtk_theme_engine_load;
-  module_class->unload = gtk_theme_engine_unload;
-}
-
-GType
-gtk_theme_engine_get_type (void)
-{
-  static GType theme_engine_type = 0;
-
-  if (!theme_engine_type)
-    {
-      static const GTypeInfo theme_engine_info = {
-        sizeof (GtkThemeEngineClass),
-        NULL,           /* base_init */
-        NULL,           /* base_finalize */
-        (GClassInitFunc) gtk_theme_engine_class_init,
-        NULL,           /* class_finalize */
-        NULL,           /* class_data */
-        sizeof (GtkThemeEngine),
-        0,              /* n_preallocs */
-        NULL,           /* instance_init */
-      };
-
-      theme_engine_type = g_type_register_static (G_TYPE_TYPE_MODULE, "GtkThemeEngine", &theme_engine_info, 0);
-    }
-  
-  return theme_engine_type;
-}
+    /* 8.3 dll filename restriction */
+    fullname[0] = '_';
+    strncpy (fullname + 1, name, 7);
+    fullname[8] = '\0';
+    strcat (fullname, ".dll");
+}                                                	
+#endif
 
 GtkThemeEngine*
 gtk_theme_engine_get (const gchar *name)
 {
-  GtkThemeEngine *result;
+  GtkThemeEnginePrivate *result;
   
   if (!engine_hash)
     engine_hash = g_hash_table_new (g_str_hash, g_str_equal);
 
-  /* get the library name for the theme
-   */
+  /* get the library name for the theme */
+  
   result = g_hash_table_lookup (engine_hash, name);
 
   if (!result)
     {
-      result = GTK_THEME_ENGINE (g_object_new (GTK_TYPE_THEME_ENGINE, NULL));
-      g_type_module_set_name (G_TYPE_MODULE (result), name);
-      result->name = g_strdup (name);
+       gchar *fullname;
+       gchar *engine_path;
+       GModule *library;
+      
+#ifndef __EMX__
+       fullname = g_module_build_path (NULL, name);
+#else
+       fullname = g_malloc (13);
+       gen_8_3_dll_name(name, fullname);
+#endif
+       engine_path = gtk_rc_find_module_in_path (fullname);
+#ifdef __EMX__
+       if (!engine_path)
+	 {
+	   /* try theme name without prefix '_' */
+	   memmove(fullname, fullname + 1, strlen(fullname));
+	   engine_path = gtk_rc_find_module_in_path (fullname);
+	 }
+#endif
 
-      g_hash_table_insert (engine_hash, result->name, result);
+       if (!engine_path)
+	 {
+	   g_warning (_("Unable to locate loadable module in module_path: \"%s\","),
+		      fullname);
+	   
+	   g_free (fullname);
+	   return NULL;
+	 }
+       g_free (fullname);
+       
+       /* load the lib */
+
+       GTK_NOTE (MISC, g_message ("Loading Theme %s\n", engine_path));
+       
+       library = g_module_open (engine_path, 0);
+       g_free(engine_path);
+       if (!library)
+	 {
+	   g_warning (g_module_error());
+	   return NULL;
+	 }
+       else
+	 {
+	    result = g_new (GtkThemeEnginePrivate, 1);
+	    
+	    result->refcount = 1;
+	    result->name = g_strdup (name);
+	    result->library = library;
+	    
+	    /* extract symbols from the lib */
+	    if (!g_module_symbol (library, "theme_init",
+				  (gpointer *)&result->init) ||
+		!g_module_symbol (library, "theme_exit", 
+				  (gpointer *)&result->exit))
+	      {
+		g_warning (g_module_error());
+		g_free (result);
+		return NULL;
+	      }
+	    
+	    /* call the theme's init (theme_init) function to let it */
+	    /* setup anything it needs to set up. */
+	    result->init((GtkThemeEngine *)result);
+	    
+	    g_hash_table_insert (engine_hash, result->name, result);
+	 }
     }
+  else
+    result->refcount++;
 
-  if (!g_type_module_use (G_TYPE_MODULE (result)))
-    return NULL;
-
-  return result;
+  return (GtkThemeEngine *)result;
 }
 
-GtkRcStyle *
-gtk_theme_engine_create_rc_style (GtkThemeEngine *engine)
+void
+gtk_theme_engine_ref (GtkThemeEngine *engine)
 {
-  g_return_val_if_fail (engine != NULL, NULL);
+  g_return_if_fail (engine != NULL);
+  
+  ((GtkThemeEnginePrivate *)engine)->refcount++;
+}
 
-  return engine->create_rc_style ();
+void
+gtk_theme_engine_unref (GtkThemeEngine *engine)
+{
+  GtkThemeEnginePrivate *private;
+  private = (GtkThemeEnginePrivate *)engine;
+
+  g_return_if_fail (engine != NULL);
+  g_return_if_fail (private->refcount > 0);
+
+  private->refcount--;
+
+  if (private->refcount == 0)
+    {
+      private->exit();
+      
+      g_hash_table_remove (engine_hash, private->name);
+      
+      g_module_close (private->library);
+      g_free (private->name);
+      g_free (private);
+    }
 }

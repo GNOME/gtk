@@ -2,210 +2,224 @@
  * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
  *
  * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
+ * modify it under the terms of the GNU Library General Public
  * License as published by the Free Software Foundation; either
  * version 2 of the License, or (at your option) any later version.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
+ * Library General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public
+ * You should have received a copy of the GNU Library General Public
  * License along with this library; if not, write to the
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
  * Boston, MA 02111-1307, USA.
  */
 
 /*
- * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
+ * Modified by the GTK+ Team and others 1997-1999.  See the AUTHORS
  * file for a list of people on the GTK+ Team.  See the ChangeLog
  * files for a list of changes.  These files are distributed with
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
+#include <ctype.h>
 #include <string.h>
-
-#include <pango/pango.h>
-
 #include "gdk/gdkkeysyms.h"
-#include "gtkbindings.h"
-#include "gtkclipboard.h"
+#include "gdk/gdki18n.h"
 #include "gtkentry.h"
-#include "gtkimmulticontext.h"
-#include "gtkintl.h"
 #include "gtkmain.h"
-#include "gtkmenu.h"
-#include "gtkmenuitem.h"
 #include "gtkselection.h"
 #include "gtksignal.h"
+#include "gtkstyle.h"
 
 #define MIN_ENTRY_WIDTH  150
 #define DRAW_TIMEOUT     20
+
+/* If you are going to change this, see the note in entry_adjust_scroll */
 #define INNER_BORDER     2
-
-/* Initial size of buffer, in bytes */
-#define MIN_SIZE 16
-
-/* Maximum size of text buffer, in bytes */
-#define MAX_SIZE G_MAXUSHORT
-
-enum {
-  INSERT_TEXT,
-  DELETE_TEXT,
-  CHANGED,
-  ACTIVATE,
-  MOVE_CURSOR,
-  INSERT_AT_CURSOR,
-  DELETE_FROM_CURSOR,
-  CUT_CLIPBOARD,
-  COPY_CLIPBOARD,
-  PASTE_CLIPBOARD,
-  TOGGLE_OVERWRITE,
-  LAST_SIGNAL
-};
 
 enum {
   ARG_0,
-  ARG_TEXT_POSITION,
-  ARG_EDITABLE,
   ARG_MAX_LENGTH,
-  ARG_VISIBILITY,
-  ARG_INVISIBLE_CHAR
+  ARG_VISIBILITY
 };
 
-static guint signals[LAST_SIGNAL] = { 0 };
 
-/* GObject, GtkObject methods
- */
-static void   gtk_entry_class_init           (GtkEntryClass    *klass);
-static void   gtk_entry_editable_init        (GtkEditableClass *iface);
-static void   gtk_entry_init                 (GtkEntry         *entry);
-static void   gtk_entry_set_arg              (GtkObject        *object,
-					      GtkArg           *arg,
-					      guint             arg_id);
-static void   gtk_entry_get_arg              (GtkObject        *object,
-					      GtkArg           *arg,
-					      guint             arg_id);
-static void   gtk_entry_finalize             (GObject          *object);
+static void gtk_entry_class_init          (GtkEntryClass     *klass);
+static void gtk_entry_init                (GtkEntry          *entry);
+static void gtk_entry_set_arg      	  (GtkObject         *object,
+					   GtkArg            *arg,
+					   guint              arg_id);
+static void gtk_entry_get_arg		  (GtkObject         *object,
+					   GtkArg            *arg,
+					   guint              arg_id);
+static void gtk_entry_finalize            (GtkObject         *object);
+static void gtk_entry_realize             (GtkWidget         *widget);
+static void gtk_entry_unrealize           (GtkWidget         *widget);
+static void gtk_entry_draw_focus          (GtkWidget         *widget);
+static void gtk_entry_size_request        (GtkWidget         *widget,
+					   GtkRequisition    *requisition);
+static void gtk_entry_size_allocate       (GtkWidget         *widget,
+					   GtkAllocation     *allocation);
+static void gtk_entry_make_backing_pixmap (GtkEntry *entry,
+					   gint width, gint height);
+static void gtk_entry_draw                (GtkWidget         *widget,
+					   GdkRectangle      *area);
+static gint gtk_entry_expose              (GtkWidget         *widget,
+					   GdkEventExpose    *event);
+static gint gtk_entry_button_press        (GtkWidget         *widget,
+					   GdkEventButton    *event);
+static gint gtk_entry_button_release      (GtkWidget         *widget,
+					   GdkEventButton    *event);
+static gint gtk_entry_motion_notify       (GtkWidget         *widget,
+					   GdkEventMotion    *event);
+static gint gtk_entry_key_press           (GtkWidget         *widget,
+					   GdkEventKey       *event);
+static gint gtk_entry_focus_in            (GtkWidget         *widget,
+					   GdkEventFocus     *event);
+static gint gtk_entry_focus_out           (GtkWidget         *widget,
+					   GdkEventFocus     *event);
+static void gtk_entry_draw_text           (GtkEntry          *entry);
+static void gtk_entry_draw_cursor         (GtkEntry          *entry);
+static void gtk_entry_draw_cursor_on_drawable
+					  (GtkEntry          *entry,
+					   GdkDrawable       *drawable);
+static void gtk_entry_style_set	          (GtkWidget         *widget,
+					   GtkStyle          *previous_style);
+static void gtk_entry_state_changed	  (GtkWidget         *widget,
+					   GtkStateType       previous_state);
+#ifdef USE_XIM
+static void gtk_entry_update_ic_attr      (GtkWidget         *widget);
+#endif
+static void gtk_entry_queue_draw          (GtkEntry          *entry);
+static gint gtk_entry_timer               (gpointer           data);
+static gint gtk_entry_position            (GtkEntry          *entry,
+					   gint               x);
+static void entry_adjust_scroll           (GtkEntry          *entry);
+static void gtk_entry_grow_text           (GtkEntry          *entry);
+static void gtk_entry_insert_text         (GtkEditable       *editable,
+					   const gchar       *new_text,
+					   gint               new_text_length,
+					   gint              *position);
+static void gtk_entry_delete_text         (GtkEditable       *editable,
+					   gint               start_pos,
+					   gint               end_pos);
+static void gtk_entry_update_text         (GtkEditable       *editable,
+					   gint               start_pos,
+					   gint               end_pos);
+static gchar *gtk_entry_get_chars         (GtkEditable       *editable,
+					   gint               start_pos,
+					   gint               end_pos);
 
-/* GtkWidget methods
- */
-static void   gtk_entry_realize              (GtkWidget        *widget);
-static void   gtk_entry_unrealize            (GtkWidget        *widget);
-static void   gtk_entry_size_request         (GtkWidget        *widget,
-					      GtkRequisition   *requisition);
-static void   gtk_entry_size_allocate        (GtkWidget        *widget,
-					      GtkAllocation    *allocation);
-static void   gtk_entry_draw_focus           (GtkWidget        *widget);
-static gint   gtk_entry_expose               (GtkWidget        *widget,
-					      GdkEventExpose   *event);
-static gint   gtk_entry_button_press         (GtkWidget        *widget,
-					      GdkEventButton   *event);
-static gint   gtk_entry_button_release       (GtkWidget        *widget,
-					      GdkEventButton   *event);
-static gint   gtk_entry_motion_notify        (GtkWidget        *widget,
-					      GdkEventMotion   *event);
-static gint   gtk_entry_key_press            (GtkWidget        *widget,
-					      GdkEventKey      *event);
-static gint   gtk_entry_focus_in             (GtkWidget        *widget,
-					      GdkEventFocus    *event);
-static gint   gtk_entry_focus_out            (GtkWidget        *widget,
-					      GdkEventFocus    *event);
-static void   gtk_entry_style_set            (GtkWidget        *widget,
-					      GtkStyle         *previous_style);
-static void   gtk_entry_direction_changed    (GtkWidget        *widget,
-					      GtkTextDirection  previous_dir);
-static void   gtk_entry_state_changed        (GtkWidget        *widget,
-					      GtkStateType      previous_state);
+/* Binding actions */
+static void gtk_entry_move_cursor         (GtkEditable *editable,
+					   gint         x,
+					   gint         y);
+static void gtk_entry_move_word           (GtkEditable *editable,
+					   gint         n);
+static void gtk_entry_move_to_column      (GtkEditable *editable,
+					   gint         row);
+static void gtk_entry_kill_char           (GtkEditable *editable,
+					   gint         direction);
+static void gtk_entry_kill_word           (GtkEditable *editable,
+					   gint         direction);
+static void gtk_entry_kill_line           (GtkEditable *editable,
+					   gint         direction);
 
-/* GtkEditable method implementations
- */
-static void     gtk_entry_insert_text          (GtkEditable *editable,
-						const gchar *new_text,
-						gint         new_text_length,
-						gint        *position);
-static void     gtk_entry_delete_text          (GtkEditable *editable,
-						gint         start_pos,
-						gint         end_pos);
-static gchar *  gtk_entry_get_chars            (GtkEditable *editable,
-						gint         start_pos,
-						gint         end_pos);
-static void     gtk_entry_real_set_position    (GtkEditable *editable,
-						gint         position);
-static gint     gtk_entry_get_position         (GtkEditable *editable);
-static void     gtk_entry_set_selection_bounds (GtkEditable *editable,
-						gint         start,
-						gint         end);
-static gboolean gtk_entry_get_selection_bounds (GtkEditable *editable,
-						gint        *start,
-						gint        *end);
+/* To be removed */
+static void gtk_move_forward_character    (GtkEntry          *entry);
+static void gtk_move_backward_character   (GtkEntry          *entry);
+static void gtk_move_forward_word         (GtkEntry          *entry);
+static void gtk_move_backward_word        (GtkEntry          *entry);
+static void gtk_move_beginning_of_line    (GtkEntry          *entry);
+static void gtk_move_end_of_line          (GtkEntry          *entry);
+static void gtk_delete_forward_character  (GtkEntry          *entry);
+static void gtk_delete_backward_character (GtkEntry          *entry);
+static void gtk_delete_forward_word       (GtkEntry          *entry);
+static void gtk_delete_backward_word      (GtkEntry          *entry);
+static void gtk_delete_line               (GtkEntry          *entry);
+static void gtk_delete_to_line_end        (GtkEntry          *entry);
+static void gtk_select_word               (GtkEntry          *entry,
+					   guint32            time);
+static void gtk_select_line               (GtkEntry          *entry,
+					   guint32            time);
 
-/* Default signal handlers
- */
-static void gtk_entry_real_insert_text   (GtkEntry        *entry,
-					  const gchar     *new_text,
-					  gint             new_text_length,
-					  gint            *position);
-static void gtk_entry_real_delete_text   (GtkEntry        *entry,
-					  gint             start_pos,
-					  gint             end_pos);
-static void gtk_entry_move_cursor        (GtkEntry        *entry,
-					  GtkMovementStep  step,
-					  gint             count,
-					  gboolean         extend_selection);
-static void gtk_entry_insert_at_cursor   (GtkEntry        *entry,
-					  const gchar     *str);
-static void gtk_entry_delete_from_cursor (GtkEntry        *entry,
-					  GtkDeleteType    type,
-					  gint             count);
-static void gtk_entry_cut_clipboard      (GtkEntry        *entry);
-static void gtk_entry_copy_clipboard     (GtkEntry        *entry);
-static void gtk_entry_paste_clipboard    (GtkEntry        *entry);
-static void gtk_entry_toggle_overwrite   (GtkEntry        *entry);
 
-/* IM Context Callbacks
- */
-static void gtk_entry_commit_cb           (GtkIMContext      *context,
-					   const gchar       *str,
-					   GtkEntry          *entry);
-static void gtk_entry_preedit_changed_cb  (GtkIMContext      *context,
-					   GtkEntry          *entry);
-/* Internal routines
- */
-static void         gtk_entry_draw_text                (GtkEntry       *entry);
-static void         gtk_entry_draw_cursor              (GtkEntry       *entry);
-static PangoLayout *gtk_entry_get_layout               (GtkEntry       *entry,
-							gboolean        include_preedit);
-static void         gtk_entry_queue_draw               (GtkEntry       *entry);
-static void         gtk_entry_reset_im_context         (GtkEntry       *entry);
-static void         gtk_entry_recompute                (GtkEntry       *entry);
-static gint         gtk_entry_find_position            (GtkEntry       *entry,
-							gint            x);
-static void         gtk_entry_get_cursor_locations     (GtkEntry       *entry,
-							gint           *strong_x,
-							gint           *weak_x);
-static void         gtk_entry_adjust_scroll            (GtkEntry       *entry);
-static gint         gtk_entry_move_visually            (GtkEntry       *editable,
-							gint            start,
-							gint            count);
-static gint         gtk_entry_move_forward_word        (GtkEntry       *entry,
-							gint            start);
-static gint         gtk_entry_move_backward_word       (GtkEntry       *entry,
-							gint            start);
-static void         gtk_entry_delete_whitespace        (GtkEntry       *entry);
-static void         gtk_entry_select_word              (GtkEntry       *entry);
-static void         gtk_entry_select_line              (GtkEntry       *entry);
-static char *       gtk_entry_get_public_chars         (GtkEntry       *entry,
-							gint            start,
-							gint            end);
-static void         gtk_entry_paste                    (GtkEntry       *entry,
-							GdkAtom         selection);
-static void         gtk_entry_update_primary_selection (GtkEntry       *entry);
-static void         gtk_entry_popup_menu               (GtkEntry       *entry,
-							GdkEventButton *event);
+static void gtk_entry_set_selection       (GtkEditable       *editable,
+					   gint               start,
+					   gint               end);
+
+static void gtk_entry_recompute_offsets   (GtkEntry          *entry);
+static gint gtk_entry_find_position       (GtkEntry          *entry, 
+					   gint               position);
+static void gtk_entry_set_position_from_editable (GtkEditable *editable,
+						  gint         position);
 
 static GtkWidgetClass *parent_class = NULL;
+static GdkAtom ctext_atom = GDK_NONE;
+
+static const GtkTextFunction control_keys[26] =
+{
+  (GtkTextFunction)gtk_move_beginning_of_line,    /* a */
+  (GtkTextFunction)gtk_move_backward_character,   /* b */
+  (GtkTextFunction)gtk_editable_copy_clipboard,   /* c */
+  (GtkTextFunction)gtk_delete_forward_character,  /* d */
+  (GtkTextFunction)gtk_move_end_of_line,          /* e */
+  (GtkTextFunction)gtk_move_forward_character,    /* f */
+  NULL,                                           /* g */
+  (GtkTextFunction)gtk_delete_backward_character, /* h */
+  NULL,                                           /* i */
+  NULL,                                           /* j */
+  (GtkTextFunction)gtk_delete_to_line_end,        /* k */
+  NULL,                                           /* l */
+  NULL,                                           /* m */
+  NULL,                                           /* n */
+  NULL,                                           /* o */
+  NULL,                                           /* p */
+  NULL,                                           /* q */
+  NULL,                                           /* r */
+  NULL,                                           /* s */
+  NULL,                                           /* t */
+  (GtkTextFunction)gtk_delete_line,               /* u */
+  (GtkTextFunction)gtk_editable_paste_clipboard,  /* v */
+  (GtkTextFunction)gtk_delete_backward_word,      /* w */
+  (GtkTextFunction)gtk_editable_cut_clipboard,    /* x */
+  NULL,                                           /* y */
+  NULL,                                           /* z */
+};
+
+static const GtkTextFunction alt_keys[26] =
+{
+  NULL,                                           /* a */
+  (GtkTextFunction)gtk_move_backward_word,        /* b */
+  NULL,                                           /* c */
+  (GtkTextFunction)gtk_delete_forward_word,       /* d */
+  NULL,                                           /* e */
+  (GtkTextFunction)gtk_move_forward_word,         /* f */
+  NULL,                                           /* g */
+  NULL,                                           /* h */
+  NULL,                                           /* i */
+  NULL,                                           /* j */
+  NULL,                                           /* k */
+  NULL,                                           /* l */
+  NULL,                                           /* m */
+  NULL,                                           /* n */
+  NULL,                                           /* o */
+  NULL,                                           /* p */
+  NULL,                                           /* q */
+  NULL,                                           /* r */
+  NULL,                                           /* s */
+  NULL,                                           /* t */
+  NULL,                                           /* u */
+  NULL,                                           /* v */
+  NULL,                                           /* w */
+  NULL,                                           /* x */
+  NULL,                                           /* y */
+  NULL,                                           /* z */
+};
+
 
 GtkType
 gtk_entry_get_type (void)
@@ -225,68 +239,38 @@ gtk_entry_get_type (void)
 	/* reserved_2 */ NULL,
         (GtkClassInitFunc) NULL,
       };
-      
-      static const GInterfaceInfo editable_info =
-      {
-	(GInterfaceInitFunc) gtk_entry_editable_init,	 /* interface_init */
-	NULL,			                         /* interface_finalize */
-	NULL			                         /* interface_data */
-      };
 
-      entry_type = gtk_type_unique (GTK_TYPE_WIDGET, &entry_info);
-      g_type_add_interface_static (entry_type,
-				   GTK_TYPE_EDITABLE,
-				   &editable_info);
+      entry_type = gtk_type_unique (GTK_TYPE_EDITABLE, &entry_info);
     }
 
   return entry_type;
 }
 
 static void
-add_move_binding (GtkBindingSet  *binding_set,
-		  guint           keyval,
-		  guint           modmask,
-		  GtkMovementStep step,
-		  gint            count)
-{
-  g_return_if_fail ((modmask & GDK_SHIFT_MASK) == 0);
-  
-  gtk_binding_entry_add_signal (binding_set, keyval, modmask,
-				"move_cursor", 3,
-				GTK_TYPE_ENUM, step,
-				G_TYPE_INT, count,
-                                G_TYPE_BOOLEAN, FALSE);
-
-  /* Selection-extending version */
-  gtk_binding_entry_add_signal (binding_set, keyval, modmask | GDK_SHIFT_MASK,
-				"move_cursor", 3,
-				GTK_TYPE_ENUM, step,
-				G_TYPE_INT, count,
-                                G_TYPE_BOOLEAN, TRUE);
-}
-
-static void
 gtk_entry_class_init (GtkEntryClass *class)
 {
-  GObjectClass *gobject_class = G_OBJECT_CLASS (class);
   GtkObjectClass *object_class;
   GtkWidgetClass *widget_class;
-  GtkBindingSet *binding_set;
+  GtkEditableClass *editable_class;
 
   object_class = (GtkObjectClass*) class;
   widget_class = (GtkWidgetClass*) class;
-  parent_class = gtk_type_class (GTK_TYPE_WIDGET);
+  editable_class = (GtkEditableClass*) class;
+  parent_class = gtk_type_class (GTK_TYPE_EDITABLE);
 
-  gobject_class->finalize = gtk_entry_finalize;
-  
+  gtk_object_add_arg_type ("GtkEntry::max_length", GTK_TYPE_UINT, GTK_ARG_READWRITE, ARG_MAX_LENGTH);
+  gtk_object_add_arg_type ("GtkEntry::visibility", GTK_TYPE_BOOL, GTK_ARG_READWRITE, ARG_VISIBILITY);
+
   object_class->set_arg = gtk_entry_set_arg;
   object_class->get_arg = gtk_entry_get_arg;
+  object_class->finalize = gtk_entry_finalize;
 
   widget_class->realize = gtk_entry_realize;
   widget_class->unrealize = gtk_entry_unrealize;
   widget_class->draw_focus = gtk_entry_draw_focus;
   widget_class->size_request = gtk_entry_size_request;
   widget_class->size_allocate = gtk_entry_size_allocate;
+  widget_class->draw = gtk_entry_draw;
   widget_class->expose_event = gtk_entry_expose;
   widget_class->button_press_event = gtk_entry_button_press;
   widget_class->button_release_event = gtk_entry_button_release;
@@ -295,258 +279,24 @@ gtk_entry_class_init (GtkEntryClass *class)
   widget_class->focus_in_event = gtk_entry_focus_in;
   widget_class->focus_out_event = gtk_entry_focus_out;
   widget_class->style_set = gtk_entry_style_set;
-  widget_class->direction_changed = gtk_entry_direction_changed;
   widget_class->state_changed = gtk_entry_state_changed;
 
-  class->insert_text = gtk_entry_real_insert_text;
-  class->delete_text = gtk_entry_real_delete_text;
-  class->move_cursor = gtk_entry_move_cursor;
-  class->insert_at_cursor = gtk_entry_insert_at_cursor;
-  class->delete_from_cursor = gtk_entry_delete_from_cursor;
-  class->cut_clipboard = gtk_entry_cut_clipboard;
-  class->copy_clipboard = gtk_entry_copy_clipboard;
-  class->paste_clipboard = gtk_entry_paste_clipboard;
-  class->toggle_overwrite = gtk_entry_toggle_overwrite;
+  editable_class->insert_text = gtk_entry_insert_text;
+  editable_class->delete_text = gtk_entry_delete_text;
+  editable_class->changed = (void (*)(GtkEditable *)) entry_adjust_scroll;
 
-  gtk_object_add_arg_type ("GtkEntry::text_position", GTK_TYPE_INT,  GTK_ARG_READWRITE, ARG_TEXT_POSITION);
-  gtk_object_add_arg_type ("GtkEntry::editable",      GTK_TYPE_BOOL, GTK_ARG_READWRITE, ARG_EDITABLE);
-  gtk_object_add_arg_type ("GtkEntry::max_length",    GTK_TYPE_UINT, GTK_ARG_READWRITE, ARG_MAX_LENGTH);
-  gtk_object_add_arg_type ("GtkEntry::visibility",    GTK_TYPE_BOOL, GTK_ARG_READWRITE, ARG_VISIBILITY);
-  gtk_object_add_arg_type ("GtkEntry::invisible_char", GTK_TYPE_INT, GTK_ARG_READWRITE, ARG_INVISIBLE_CHAR);
-  
-  signals[INSERT_TEXT] =
-    gtk_signal_new ("insert_text",
-		    GTK_RUN_LAST,
-		    GTK_CLASS_TYPE (object_class),
-		    GTK_SIGNAL_OFFSET (GtkEntryClass, insert_text),
-		    gtk_marshal_VOID__STRING_INT_POINTER,
-		    GTK_TYPE_NONE,
-		    3,
-		    GTK_TYPE_STRING,
-		    GTK_TYPE_INT,
-		    GTK_TYPE_POINTER);
+  editable_class->move_cursor = gtk_entry_move_cursor;
+  editable_class->move_word = gtk_entry_move_word;
+  editable_class->move_to_column = gtk_entry_move_to_column;
 
-  signals[DELETE_TEXT] =
-    gtk_signal_new ("delete_text",
-		    GTK_RUN_LAST,
-		    GTK_CLASS_TYPE (object_class),
-		    GTK_SIGNAL_OFFSET (GtkEntryClass, delete_text),
-		    gtk_marshal_VOID__INT_INT,
-		    GTK_TYPE_NONE,
-		    2,
-		    GTK_TYPE_INT,
-		    GTK_TYPE_INT);		    
+  editable_class->kill_char = gtk_entry_kill_char;
+  editable_class->kill_word = gtk_entry_kill_word;
+  editable_class->kill_line = gtk_entry_kill_line;
 
-  signals[CHANGED] =
-    gtk_signal_new ("changed",
-		    GTK_RUN_LAST,
-		    GTK_CLASS_TYPE (object_class),
-		    GTK_SIGNAL_OFFSET (GtkEntryClass, changed),
-		    gtk_marshal_VOID__VOID,
-		    GTK_TYPE_NONE, 0);
-
- /* Action signals */
-  
-  signals[ACTIVATE] =
-    gtk_signal_new ("activate",
-		    GTK_RUN_LAST | GTK_RUN_ACTION,
-		    GTK_CLASS_TYPE (object_class),
-		    GTK_SIGNAL_OFFSET (GtkEntryClass, activate),
-		    gtk_marshal_VOID__VOID,
-		    GTK_TYPE_NONE, 0);
-  widget_class->activate_signal = signals[ACTIVATE];
-
-  signals[MOVE_CURSOR] = 
-      gtk_signal_new ("move_cursor",
-                      GTK_RUN_LAST | GTK_RUN_ACTION,
-                      GTK_CLASS_TYPE (object_class),
-                      GTK_SIGNAL_OFFSET (GtkEntryClass, move_cursor),
-                      gtk_marshal_VOID__ENUM_INT_BOOLEAN,
-                      GTK_TYPE_NONE, 3, GTK_TYPE_MOVEMENT_STEP, GTK_TYPE_INT, GTK_TYPE_BOOL);
-
-  signals[INSERT_AT_CURSOR] = 
-      gtk_signal_new ("insert_at_cursor",
-                      GTK_RUN_LAST | GTK_RUN_ACTION,
-                      GTK_CLASS_TYPE (object_class),
-                      GTK_SIGNAL_OFFSET (GtkEntryClass, insert_at_cursor),
-                      gtk_marshal_VOID__STRING,
-                      GTK_TYPE_NONE, 1, GTK_TYPE_STRING);
-
-  signals[DELETE_FROM_CURSOR] = 
-      gtk_signal_new ("delete_from_cursor",
-                      GTK_RUN_LAST | GTK_RUN_ACTION,
-                      GTK_CLASS_TYPE (object_class),
-                      GTK_SIGNAL_OFFSET (GtkEntryClass, delete_from_cursor),
-                      gtk_marshal_VOID__ENUM_INT,
-                      GTK_TYPE_NONE, 2, GTK_TYPE_DELETE_TYPE, GTK_TYPE_INT);
-
-  signals[CUT_CLIPBOARD] =
-    gtk_signal_new ("cut_clipboard",
-                    GTK_RUN_LAST | GTK_RUN_ACTION,
-                    GTK_CLASS_TYPE (object_class),
-                    GTK_SIGNAL_OFFSET (GtkEntryClass, cut_clipboard),
-                    gtk_marshal_VOID__VOID,
-                    GTK_TYPE_NONE, 0);
-
-  signals[COPY_CLIPBOARD] =
-    gtk_signal_new ("copy_clipboard",
-                    GTK_RUN_LAST | GTK_RUN_ACTION,
-                    GTK_CLASS_TYPE (object_class),
-                    GTK_SIGNAL_OFFSET (GtkEntryClass, copy_clipboard),
-                    gtk_marshal_VOID__VOID,
-                    GTK_TYPE_NONE, 0);
-
-  signals[PASTE_CLIPBOARD] =
-    gtk_signal_new ("paste_clipboard",
-                    GTK_RUN_LAST | GTK_RUN_ACTION,
-                    GTK_CLASS_TYPE (object_class),
-                    GTK_SIGNAL_OFFSET (GtkEntryClass, paste_clipboard),
-                    gtk_marshal_VOID__VOID,
-                    GTK_TYPE_NONE, 0);
-
-  signals[TOGGLE_OVERWRITE] =
-    gtk_signal_new ("toggle_overwrite",
-                    GTK_RUN_LAST | GTK_RUN_ACTION,
-                    GTK_CLASS_TYPE (object_class),
-                    GTK_SIGNAL_OFFSET (GtkEntryClass, toggle_overwrite),
-                    gtk_marshal_VOID__VOID,
-                    GTK_TYPE_NONE, 0);
-
-  /*
-   * Key bindings
-   */
-
-  binding_set = gtk_binding_set_by_class (class);
-
-  /* Moving the insertion point */
-  add_move_binding (binding_set, GDK_Right, 0,
-		    GTK_MOVEMENT_POSITIONS, 1);
-  
-  add_move_binding (binding_set, GDK_Left, 0,
-		    GTK_MOVEMENT_POSITIONS, -1);
-
-  add_move_binding (binding_set, GDK_f, GDK_CONTROL_MASK,
-		    GTK_MOVEMENT_CHARS, 1);
-  
-  add_move_binding (binding_set, GDK_b, GDK_CONTROL_MASK,
-		    GTK_MOVEMENT_CHARS, -1);
-  
-  add_move_binding (binding_set, GDK_Right, GDK_CONTROL_MASK,
-		    GTK_MOVEMENT_WORDS, 1);
-
-  add_move_binding (binding_set, GDK_Left, GDK_CONTROL_MASK,
-		    GTK_MOVEMENT_WORDS, -1);
-  
-  add_move_binding (binding_set, GDK_a, GDK_CONTROL_MASK,
-		    GTK_MOVEMENT_PARAGRAPH_ENDS, -1);
-
-  add_move_binding (binding_set, GDK_e, GDK_CONTROL_MASK,
-		    GTK_MOVEMENT_PARAGRAPH_ENDS, 1);
-
-  add_move_binding (binding_set, GDK_f, GDK_MOD1_MASK,
-		    GTK_MOVEMENT_WORDS, 1);
-
-  add_move_binding (binding_set, GDK_b, GDK_MOD1_MASK,
-		    GTK_MOVEMENT_WORDS, -1);
-
-  add_move_binding (binding_set, GDK_Home, 0,
-		    GTK_MOVEMENT_DISPLAY_LINE_ENDS, -1);
-
-  add_move_binding (binding_set, GDK_End, 0,
-		    GTK_MOVEMENT_DISPLAY_LINE_ENDS, 1);
-  
-  add_move_binding (binding_set, GDK_Home, GDK_CONTROL_MASK,
-		    GTK_MOVEMENT_BUFFER_ENDS, -1);
-
-  add_move_binding (binding_set, GDK_End, GDK_CONTROL_MASK,
-		    GTK_MOVEMENT_BUFFER_ENDS, 1);
-
-  /* Deleting text */
-  gtk_binding_entry_add_signal (binding_set, GDK_Delete, 0,
-				"delete_from_cursor", 2,
-				GTK_TYPE_ENUM, GTK_DELETE_CHARS,
-				GTK_TYPE_INT, 1);
-
-  gtk_binding_entry_add_signal (binding_set, GDK_d, GDK_CONTROL_MASK,
-				"delete_from_cursor", 2,
-				GTK_TYPE_ENUM, GTK_DELETE_CHARS,
-				GTK_TYPE_INT, 1);
-
-  gtk_binding_entry_add_signal (binding_set, GDK_BackSpace, 0,
-				"delete_from_cursor", 2,
-				GTK_TYPE_ENUM, GTK_DELETE_CHARS,
-				GTK_TYPE_INT, -1);
-
-  gtk_binding_entry_add_signal (binding_set, GDK_Delete, GDK_CONTROL_MASK,
-				"delete_from_cursor", 2,
-				GTK_TYPE_ENUM, GTK_DELETE_WORD_ENDS,
-				GTK_TYPE_INT, 1);
-
-  gtk_binding_entry_add_signal (binding_set, GDK_d, GDK_MOD1_MASK,
-				"delete_from_cursor", 2,
-				GTK_TYPE_ENUM, GTK_DELETE_WORD_ENDS,
-				GTK_TYPE_INT, 1);
-
-  gtk_binding_entry_add_signal (binding_set, GDK_BackSpace, GDK_CONTROL_MASK,
-				"delete_from_cursor", 2,
-				GTK_TYPE_ENUM, GTK_DELETE_WORD_ENDS,
-				GTK_TYPE_INT, -1);
-
-  gtk_binding_entry_add_signal (binding_set, GDK_k, GDK_CONTROL_MASK,
-				"delete_from_cursor", 2,
-				GTK_TYPE_ENUM, GTK_DELETE_PARAGRAPH_ENDS,
-				GTK_TYPE_INT, 1);
-
-  gtk_binding_entry_add_signal (binding_set, GDK_u, GDK_CONTROL_MASK,
-				"delete_from_cursor", 2,
-				GTK_TYPE_ENUM, GTK_DELETE_PARAGRAPHS,
-				GTK_TYPE_INT, 1);
-
-  gtk_binding_entry_add_signal (binding_set, GDK_space, GDK_MOD1_MASK,
-				"delete_from_cursor", 2,
-				GTK_TYPE_ENUM, GTK_DELETE_WHITESPACE,
-				GTK_TYPE_INT, 1);
-  gtk_binding_entry_add_signal (binding_set, GDK_space, GDK_MOD1_MASK,
-				"insert_at_cursor", 1,
-				GTK_TYPE_STRING, " ");
-
-  gtk_binding_entry_add_signal (binding_set, GDK_backslash, GDK_MOD1_MASK,
-				"delete_from_cursor", 2,
-				GTK_TYPE_ENUM, GTK_DELETE_WHITESPACE,
-				GTK_TYPE_INT, 1);
-  
-  /* Cut/copy/paste */
-
-  gtk_binding_entry_add_signal (binding_set, GDK_x, GDK_CONTROL_MASK,
-				"cut_clipboard", 0);
-
-  gtk_binding_entry_add_signal (binding_set, GDK_w, GDK_CONTROL_MASK,
-				"cut_clipboard", 0);
-  
-  gtk_binding_entry_add_signal (binding_set, GDK_c, GDK_CONTROL_MASK,
-				"copy_clipboard", 0);
-  
-  gtk_binding_entry_add_signal (binding_set, GDK_v, GDK_CONTROL_MASK,
-				"paste_clipboard", 0);
-
-  gtk_binding_entry_add_signal (binding_set, GDK_y, GDK_CONTROL_MASK,
-				"paste_clipboard", 0);
-
-  /* Overwrite */
-  gtk_binding_entry_add_signal (binding_set, GDK_Insert, 0,
-				"toggle_overwrite", 0);
-}
-
-static void
-gtk_entry_editable_init (GtkEditableClass *iface)
-{
-  iface->insert_text = gtk_entry_insert_text;
-  iface->delete_text = gtk_entry_delete_text;
-  iface->get_chars = gtk_entry_get_chars;
-  iface->set_selection_bounds = gtk_entry_set_selection_bounds;
-  iface->get_selection_bounds = gtk_entry_get_selection_bounds;
-  iface->set_position = gtk_entry_real_set_position;
-  iface->get_position = gtk_entry_get_position;
+  editable_class->update_text = gtk_entry_update_text;
+  editable_class->get_chars   = gtk_entry_get_chars;
+  editable_class->set_selection = gtk_entry_set_selection;
+  editable_class->set_position = gtk_entry_set_position_from_editable;
 }
 
 static void
@@ -554,31 +304,17 @@ gtk_entry_set_arg (GtkObject      *object,
 		   GtkArg         *arg,
 		   guint           arg_id)
 {
-  GtkEntry *entry = GTK_ENTRY (object);
+  GtkEntry *entry;
+
+  entry = GTK_ENTRY (object);
 
   switch (arg_id)
     {
-    case ARG_TEXT_POSITION:
-      gtk_editable_set_position (GTK_EDITABLE (object), GTK_VALUE_INT (*arg));
-      break;
-    case ARG_EDITABLE:
-      {
-	gboolean new_value = GTK_VALUE_BOOL (*arg) != 0;
-	if (new_value != entry->editable)
-	  {
-	    entry->editable = new_value;
-	    gtk_entry_queue_draw (entry);
-	  }
-      }
-      break;
     case ARG_MAX_LENGTH:
       gtk_entry_set_max_length (entry, GTK_VALUE_UINT (*arg));
       break;
     case ARG_VISIBILITY:
       gtk_entry_set_visibility (entry, GTK_VALUE_BOOL (*arg));
-      break;
-    case ARG_INVISIBLE_CHAR:
-      gtk_entry_set_invisible_char (entry, GTK_VALUE_INT (*arg));
       break;
     default:
       break;
@@ -596,20 +332,11 @@ gtk_entry_get_arg (GtkObject      *object,
 
   switch (arg_id)
     {
-    case ARG_TEXT_POSITION:
-      GTK_VALUE_INT (*arg) = entry->current_pos;
-      break;
-    case ARG_EDITABLE:
-      GTK_VALUE_BOOL (*arg) = entry->editable;
-      break;
     case ARG_MAX_LENGTH:
       GTK_VALUE_UINT (*arg) = entry->text_max_length;
       break;
     case ARG_VISIBILITY:
-      GTK_VALUE_BOOL (*arg) = entry->visible;
-      break;
-    case ARG_INVISIBLE_CHAR:
-      GTK_VALUE_INT (*arg) = entry->invisible_char;
+      GTK_VALUE_BOOL (*arg) = GTK_EDITABLE (entry)->visible;
       break;
     default:
       arg->type = GTK_TYPE_INVALID;
@@ -622,52 +349,198 @@ gtk_entry_init (GtkEntry *entry)
 {
   GTK_WIDGET_SET_FLAGS (entry, GTK_CAN_FOCUS);
 
-  entry->text_size = MIN_SIZE;
-  entry->text = g_malloc (entry->text_size);
-  entry->text[0] = '\0';
+  entry->text_area = NULL;
+  entry->backing_pixmap = NULL;
+  entry->text = NULL;
+  entry->text_size = 0;
+  entry->text_length = 0;
+  entry->text_max_length = 0;
+  entry->scroll_offset = 0;
+  entry->timer = 0;
+  entry->button = 0;
+  entry->visible = 1;
 
-  entry->editable = TRUE;
-  entry->visible = TRUE;
-  entry->invisible_char = '*';
-  
-  /* This object is completely private. No external entity can gain a reference
-   * to it; so we create it here and destroy it in finalize().
-   */
-  entry->im_context = gtk_im_multicontext_new ();
-  
-  gtk_signal_connect (GTK_OBJECT (entry->im_context), "commit",
-		      GTK_SIGNAL_FUNC (gtk_entry_commit_cb), entry);
-  gtk_signal_connect (GTK_OBJECT (entry->im_context), "preedit_changed",
-		      GTK_SIGNAL_FUNC (gtk_entry_preedit_changed_cb), entry);
+  entry->char_offset = NULL;
+  entry->text_mb = NULL;
+  entry->text_mb_dirty = TRUE;
+  entry->use_wchar = FALSE;
+
+  gtk_entry_grow_text (entry);
 }
 
-static void
-gtk_entry_finalize (GObject *object)
+GtkWidget*
+gtk_entry_new (void)
+{
+  return GTK_WIDGET (gtk_type_new (GTK_TYPE_ENTRY));
+}
+
+GtkWidget*
+gtk_entry_new_with_max_length (guint16 max)
 {
   GtkEntry *entry;
 
+  entry = gtk_type_new (GTK_TYPE_ENTRY);
+  entry->text_max_length = max;
+
+  return GTK_WIDGET (entry);
+}
+
+void
+gtk_entry_set_text (GtkEntry *entry,
+		    const gchar *text)
+{
+  gint tmp_pos;
+
+  GtkEditable *editable;
+
+  g_return_if_fail (entry != NULL);
+  g_return_if_fail (GTK_IS_ENTRY (entry));
+  g_return_if_fail (text != NULL);
+
+  editable = GTK_EDITABLE (entry);
+  
+  gtk_entry_delete_text (GTK_EDITABLE(entry), 0, entry->text_length);
+
+  tmp_pos = 0;
+  gtk_editable_insert_text (editable, text, strlen (text), &tmp_pos);
+  editable->current_pos = tmp_pos;
+
+  editable->selection_start_pos = 0;
+  editable->selection_end_pos = 0;
+
+  if (GTK_WIDGET_DRAWABLE (entry))
+    gtk_entry_draw_text (entry);
+}
+
+void
+gtk_entry_append_text (GtkEntry *entry,
+		       const gchar *text)
+{
+  gint tmp_pos;
+
+  g_return_if_fail (entry != NULL);
+  g_return_if_fail (GTK_IS_ENTRY (entry));
+  g_return_if_fail (text != NULL);
+
+  tmp_pos = entry->text_length;
+  gtk_editable_insert_text (GTK_EDITABLE(entry), text, strlen (text), &tmp_pos);
+  GTK_EDITABLE(entry)->current_pos = tmp_pos;
+}
+
+void
+gtk_entry_prepend_text (GtkEntry *entry,
+			const gchar *text)
+{
+  gint tmp_pos;
+
+  g_return_if_fail (entry != NULL);
+  g_return_if_fail (GTK_IS_ENTRY (entry));
+  g_return_if_fail (text != NULL);
+
+  tmp_pos = 0;
+  gtk_editable_insert_text (GTK_EDITABLE(entry), text, strlen (text), &tmp_pos);
+  GTK_EDITABLE(entry)->current_pos = tmp_pos;
+}
+
+void
+gtk_entry_set_position (GtkEntry *entry,
+			gint      position)
+{
+  g_return_if_fail (entry != NULL);
+  g_return_if_fail (GTK_IS_ENTRY (entry));
+
+  if ((position == -1) || (position > entry->text_length))
+    GTK_EDITABLE(entry)->current_pos = entry->text_length;
+  else
+    GTK_EDITABLE(entry)->current_pos = position;
+  entry_adjust_scroll (entry);
+}
+
+static void
+gtk_entry_set_position_from_editable (GtkEditable *editable,
+				      gint position)
+{
+  gtk_entry_set_position (GTK_ENTRY (editable), position);
+}
+
+void
+gtk_entry_set_visibility (GtkEntry *entry,
+			  gboolean visible)
+{
+  g_return_if_fail (entry != NULL);
+  g_return_if_fail (GTK_IS_ENTRY (entry));
+
+  entry->visible = visible ? TRUE : FALSE;
+  GTK_EDITABLE (entry)->visible = visible ? TRUE : FALSE;
+  gtk_entry_recompute_offsets (entry);
+  gtk_widget_queue_draw (GTK_WIDGET (entry));
+}
+
+void
+gtk_entry_set_editable(GtkEntry *entry,
+		       gboolean  editable)
+{
+  g_return_if_fail (entry != NULL);
+  g_return_if_fail (GTK_IS_ENTRY (entry));
+
+  gtk_editable_set_editable (GTK_EDITABLE (entry), editable);
+}
+
+gchar*
+gtk_entry_get_text (GtkEntry *entry)
+{
+  g_return_val_if_fail (entry != NULL, NULL);
+  g_return_val_if_fail (GTK_IS_ENTRY (entry), NULL);
+
+  if (!entry->text_mb_dirty)
+    return entry->text_mb;
+
+  if (entry->text_mb)
+    g_free(entry->text_mb);
+
+  if (!entry->text)
+    {
+      entry->text_mb = g_new(gchar, 1);
+      entry->text_mb[0] = 0;
+    }
+  else
+    {
+      entry->text_mb = gtk_entry_get_chars(GTK_EDITABLE(entry), 0, -1);
+    }
+  entry->text_mb_dirty = 0;
+
+  return entry->text_mb;
+}
+
+static void
+gtk_entry_finalize (GtkObject *object)
+{
+  GtkEntry *entry;
+
+  g_return_if_fail (object != NULL);
   g_return_if_fail (GTK_IS_ENTRY (object));
 
   entry = GTK_ENTRY (object);
 
-  if (entry->cached_layout)
-    g_object_unref (G_OBJECT (entry->cached_layout));
-
-  gtk_object_unref (GTK_OBJECT (entry->im_context));
-
   if (entry->timer)
-    g_source_remove (entry->timer);
-
-  if (entry->recompute_idle)
-    g_source_remove (entry->recompute_idle);
+    gtk_timeout_remove (entry->timer);
 
   entry->text_size = 0;
 
   if (entry->text)
     g_free (entry->text);
+  if (entry->char_offset)
+    g_free (entry->char_offset);
   entry->text = NULL;
 
-  G_OBJECT_CLASS (parent_class)->finalize (object);
+  if (entry->text_mb)
+    g_free (entry->text_mb);
+  entry->text_mb = NULL;
+ 
+  if (entry->backing_pixmap)
+    gdk_pixmap_unref (entry->backing_pixmap);
+
+  (* GTK_OBJECT_CLASS (parent_class)->finalize) (object);
 }
 
 static void
@@ -703,17 +576,20 @@ gtk_entry_realize (GtkWidget *widget)
 			    GDK_BUTTON_RELEASE_MASK |
 			    GDK_BUTTON1_MOTION_MASK |
 			    GDK_BUTTON3_MOTION_MASK |
-			    GDK_POINTER_MOTION_HINT_MASK);
+			    GDK_POINTER_MOTION_HINT_MASK |
+			    GDK_ENTER_NOTIFY_MASK |
+			    GDK_LEAVE_NOTIFY_MASK |
+			    GDK_KEY_PRESS_MASK);
   attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_VISUAL | GDK_WA_COLORMAP;
 
   widget->window = gdk_window_new (gtk_widget_get_parent_window (widget), &attributes, attributes_mask);
   gdk_window_set_user_data (widget->window, entry);
 
-  attributes.x = widget->style->xthickness;
-  attributes.y = widget->style->ythickness;
+  attributes.x = widget->style->klass->xthickness;
+  attributes.y = widget->style->klass->ythickness;
   attributes.width = widget->allocation.width - attributes.x * 2;
   attributes.height = requisition.height - attributes.y * 2;
-  attributes.cursor = gdk_cursor_new (GDK_XTERM);
+  attributes.cursor = entry->cursor = gdk_cursor_new (GDK_XTERM);
   attributes_mask |= GDK_WA_CURSOR;
 
   entry->text_area = gdk_window_new (widget->window, &attributes, attributes_mask);
@@ -724,11 +600,82 @@ gtk_entry_realize (GtkWidget *widget)
   gdk_window_set_background (widget->window, &widget->style->base[GTK_WIDGET_STATE (widget)]);
   gdk_window_set_background (entry->text_area, &widget->style->base[GTK_WIDGET_STATE (widget)]);
 
+#ifdef USE_XIM
+  if (gdk_im_ready () && (editable->ic_attr = gdk_ic_attr_new ()) != NULL)
+    {
+      gint width, height;
+      GdkEventMask mask;
+      GdkColormap *colormap;
+      GdkICAttr *attr = editable->ic_attr;
+      GdkICAttributesType attrmask = GDK_IC_ALL_REQ;
+      GdkIMStyle style;
+      GdkIMStyle supported_style = GDK_IM_PREEDIT_NONE |
+				   GDK_IM_PREEDIT_NOTHING |
+			           GDK_IM_PREEDIT_POSITION |
+			           GDK_IM_STATUS_NONE |
+				   GDK_IM_STATUS_NOTHING;
+
+      if (widget->style && widget->style->font->type != GDK_FONT_FONTSET)
+	supported_style &= ~GDK_IM_PREEDIT_POSITION;
+
+      attr->style = style = gdk_im_decide_style (supported_style);
+      attr->client_window = entry->text_area;
+
+      if ((colormap = gtk_widget_get_colormap (widget)) !=
+	    gtk_widget_get_default_colormap ())
+	{
+	  attrmask |= GDK_IC_PREEDIT_COLORMAP;
+	  attr->preedit_colormap = colormap;
+	}
+      attrmask |= GDK_IC_PREEDIT_FOREGROUND;
+      attrmask |= GDK_IC_PREEDIT_BACKGROUND;
+      attr->preedit_foreground = widget->style->fg[GTK_STATE_NORMAL];
+      attr->preedit_background = widget->style->base[GTK_STATE_NORMAL];
+
+      switch (style & GDK_IM_PREEDIT_MASK)
+	{
+	case GDK_IM_PREEDIT_POSITION:
+	  if (widget->style && widget->style->font->type != GDK_FONT_FONTSET)
+	    {
+	      g_warning ("over-the-spot style requires fontset");
+	      break;
+	    }
+
+	  gdk_window_get_size (entry->text_area, &width, &height);
+
+	  attrmask |= GDK_IC_PREEDIT_POSITION_REQ;
+	  attr->spot_location.x = 0;
+	  attr->spot_location.y = height;
+	  attr->preedit_area.x = 0;
+	  attr->preedit_area.y = 0;
+	  attr->preedit_area.width = width;
+	  attr->preedit_area.height = height;
+	  attr->preedit_fontset = widget->style->font;
+
+	  break;
+	}
+      editable->ic = gdk_ic_new (attr, attrmask);
+     
+      if (editable->ic == NULL)
+	g_warning ("Can't create input context.");
+      else
+	{
+	  mask = gdk_window_get_events (entry->text_area);
+	  mask |= gdk_ic_get_events (editable->ic);
+	  gdk_window_set_events (entry->text_area, mask);
+
+	  if (GTK_WIDGET_HAS_FOCUS(widget))
+	    gdk_im_begin (editable->ic, entry->text_area);
+	}
+    }
+#endif
+
   gdk_window_show (entry->text_area);
 
-  gtk_im_context_set_client_window (entry->im_context, entry->text_area);
+  if (editable->selection_start_pos != editable->selection_end_pos)
+    gtk_editable_claim_selection (editable, TRUE, GDK_CURRENT_TIME);
 
-  gtk_entry_adjust_scroll (entry);
+  gtk_entry_recompute_offsets (entry);
 }
 
 static void
@@ -741,91 +688,30 @@ gtk_entry_unrealize (GtkWidget *widget)
 
   entry = GTK_ENTRY (widget);
 
-  gtk_im_context_set_client_window (entry->im_context, entry->text_area);
-  
+#ifdef USE_XIM
+  if (GTK_EDITABLE (widget)->ic)
+    {
+      gdk_ic_destroy (GTK_EDITABLE (widget)->ic);
+      GTK_EDITABLE (widget)->ic = NULL;
+    }
+  if (GTK_EDITABLE (widget)->ic_attr)
+    {
+      gdk_ic_attr_destroy (GTK_EDITABLE (widget)->ic_attr);
+      GTK_EDITABLE (widget)->ic_attr = NULL;
+    }
+#endif
+
   if (entry->text_area)
     {
       gdk_window_set_user_data (entry->text_area, NULL);
       gdk_window_destroy (entry->text_area);
       entry->text_area = NULL;
+      gdk_cursor_destroy (entry->cursor);
+      entry->cursor = NULL;
     }
-
-  if (entry->popup_menu)
-    gtk_widget_destroy (entry->popup_menu);
 
   if (GTK_WIDGET_CLASS (parent_class)->unrealize)
     (* GTK_WIDGET_CLASS (parent_class)->unrealize) (widget);
-}
-
-static void
-gtk_entry_size_request (GtkWidget      *widget,
-			GtkRequisition *requisition)
-{
-  GtkEntry *entry;
-  PangoFontMetrics metrics;
-  PangoFont *font;
-  gchar *lang;
-  
-  g_return_if_fail (widget != NULL);
-  g_return_if_fail (GTK_IS_ENTRY (widget));
-  g_return_if_fail (requisition != NULL);
-
-  entry = GTK_ENTRY (widget);
-  
-  /* hackish for now, get metrics
-   */
-  font = pango_context_load_font (gtk_widget_get_pango_context (widget),
-				  widget->style->font_desc);
-  lang = pango_context_get_lang (gtk_widget_get_pango_context (widget));
-  pango_font_get_metrics (font, lang, &metrics);
-  g_free (lang);
-  
-  g_object_unref (G_OBJECT (font));
-
-  entry->ascent = metrics.ascent;
-  entry->descent = metrics.descent;
-  
-  requisition->width = MIN_ENTRY_WIDTH + (widget->style->xthickness + INNER_BORDER) * 2;
-  requisition->height = ((metrics.ascent + metrics.descent) / PANGO_SCALE + 
-			 (widget->style->ythickness + INNER_BORDER) * 2);
-}
-
-static void
-gtk_entry_size_allocate (GtkWidget     *widget,
-			 GtkAllocation *allocation)
-{
-  GtkEntry *entry;
-  GtkEditable *editable;
-
-  g_return_if_fail (widget != NULL);
-  g_return_if_fail (GTK_IS_ENTRY (widget));
-  g_return_if_fail (allocation != NULL);
-
-  widget->allocation = *allocation;
-  entry = GTK_ENTRY (widget);
-  editable = GTK_EDITABLE (widget);
-
-  if (GTK_WIDGET_REALIZED (widget))
-    {
-      /* We call gtk_widget_get_child_requisition, since we want (for
-       * backwards compatibility reasons) the realization here to
-       * be affected by the usize of the entry, if set
-       */
-      GtkRequisition requisition;
-      gtk_widget_get_child_requisition (widget, &requisition);
-  
-      gdk_window_move_resize (widget->window,
-			      allocation->x,
-			      allocation->y + (allocation->height - requisition.height) / 2,
-			      allocation->width, requisition.height);
-      gdk_window_move_resize (entry->text_area,
-			      widget->style->xthickness,
-			      widget->style->ythickness,
-			      allocation->width - widget->style->xthickness * 2,
-			      requisition.height - widget->style->ythickness * 2);
-
-      gtk_entry_recompute (entry);
-    }
 }
 
 static void
@@ -863,6 +749,91 @@ gtk_entry_draw_focus (GtkWidget *widget)
 			    NULL, widget, "entry",
 			    0, 0, width - 1, height - 1);
 	}
+
+      if (GTK_EDITABLE (widget)->editable)
+	gtk_entry_draw_cursor (GTK_ENTRY (widget));
+    }
+}
+
+static void
+gtk_entry_size_request (GtkWidget      *widget,
+			GtkRequisition *requisition)
+{
+  g_return_if_fail (widget != NULL);
+  g_return_if_fail (GTK_IS_ENTRY (widget));
+  g_return_if_fail (requisition != NULL);
+
+  requisition->width = MIN_ENTRY_WIDTH + (widget->style->klass->xthickness + INNER_BORDER) * 2;
+  requisition->height = (widget->style->font->ascent +
+			 widget->style->font->descent +
+			 (widget->style->klass->ythickness + INNER_BORDER) * 2);
+}
+
+static void
+gtk_entry_size_allocate (GtkWidget     *widget,
+			 GtkAllocation *allocation)
+{
+  GtkEntry *entry;
+  GtkEditable *editable;
+
+  g_return_if_fail (widget != NULL);
+  g_return_if_fail (GTK_IS_ENTRY (widget));
+  g_return_if_fail (allocation != NULL);
+
+  widget->allocation = *allocation;
+  entry = GTK_ENTRY (widget);
+  editable = GTK_EDITABLE (widget);
+
+  if (GTK_WIDGET_REALIZED (widget))
+    {
+      /* We call gtk_widget_get_child_requisition, since we want (for
+       * backwards compatibility reasons) the realization here to
+       * be affected by the usize of the entry, if set
+       */
+      GtkRequisition requisition;
+      gtk_widget_get_child_requisition (widget, &requisition);
+  
+      gdk_window_move_resize (widget->window,
+			      allocation->x,
+			      allocation->y + (allocation->height - requisition.height) / 2,
+			      allocation->width, requisition.height);
+      gdk_window_move_resize (entry->text_area,
+			      widget->style->klass->xthickness,
+			      widget->style->klass->ythickness,
+			      allocation->width - widget->style->klass->xthickness * 2,
+			      requisition.height - widget->style->klass->ythickness * 2);
+
+      /* And make sure the cursor is on screen */
+      entry_adjust_scroll (entry);
+      
+#ifdef USE_XIM
+      if (editable->ic &&
+	  (gdk_ic_get_style (editable->ic) & GDK_IM_PREEDIT_POSITION))
+	{
+	  gint width, height;
+
+	  gdk_window_get_size (entry->text_area, &width, &height);
+	  editable->ic_attr->preedit_area.width = width;
+	  editable->ic_attr->preedit_area.height = height;
+	  gdk_ic_set_attr (editable->ic, editable->ic_attr,
+	      		   GDK_IC_PREEDIT_AREA);
+	}
+#endif
+    }
+}
+
+static void
+gtk_entry_draw (GtkWidget    *widget,
+		GdkRectangle *area)
+{
+  g_return_if_fail (widget != NULL);
+  g_return_if_fail (GTK_IS_ENTRY (widget));
+  g_return_if_fail (area != NULL);
+
+  if (GTK_WIDGET_DRAWABLE (widget))
+    {
+      gtk_widget_draw_focus (widget);
+      gtk_entry_draw_text (GTK_ENTRY (widget));
     }
 }
 
@@ -881,10 +852,7 @@ gtk_entry_expose (GtkWidget      *widget,
   if (widget->window == event->window)
     gtk_widget_draw_focus (widget);
   else if (entry->text_area == event->window)
-    {
-      gtk_entry_draw_text (GTK_ENTRY (widget));
-      gtk_entry_draw_cursor (GTK_ENTRY (widget));
-    }
+    gtk_entry_draw_text (GTK_ENTRY (widget));
 
   return FALSE;
 }
@@ -893,44 +861,49 @@ static gint
 gtk_entry_button_press (GtkWidget      *widget,
 			GdkEventButton *event)
 {
-  GtkEntry *entry = GTK_ENTRY (widget);
-  GtkEditable *editable = GTK_EDITABLE (widget);
+  GtkEntry *entry;
+  GtkEditable *editable;
   gint tmp_pos;
+
+  g_return_val_if_fail (widget != NULL, FALSE);
+  g_return_val_if_fail (GTK_IS_ENTRY (widget), FALSE);
+  g_return_val_if_fail (event != NULL, FALSE);
+
+  if (ctext_atom == GDK_NONE)
+    ctext_atom = gdk_atom_intern ("COMPOUND_TEXT", FALSE);
 
   entry = GTK_ENTRY (widget);
   editable = GTK_EDITABLE (widget);
   
-  if (event->window != entry->text_area ||
-      (entry->button && event->button != entry->button))
+  if (entry->button && (event->button != entry->button))
     return FALSE;
 
   entry->button = event->button;
   
   if (!GTK_WIDGET_HAS_FOCUS (widget))
     gtk_widget_grab_focus (widget);
-  
-  tmp_pos = gtk_entry_find_position (entry, event->x + entry->scroll_offset);
-    
+
   if (event->button == 1)
     {
       switch (event->type)
 	{
 	case GDK_BUTTON_PRESS:
-	  gtk_entry_reset_im_context (entry);
-	  
-	  entry->current_pos = tmp_pos;
-	  entry->selection_bound = tmp_pos;
+	  gtk_grab_add (widget);
 
-	  gtk_entry_recompute (entry);
-	  
+	  tmp_pos = gtk_entry_position (entry, event->x + entry->scroll_offset);
+	  /* Set it now, so we display things right. We'll unset it
+	   * later if things don't work out */
+	  editable->has_selection = TRUE;
+	  gtk_entry_set_selection (editable, tmp_pos, tmp_pos);
+	  editable->current_pos = editable->selection_start_pos;
 	  break;
 
 	case GDK_2BUTTON_PRESS:
-	  gtk_entry_select_word (entry);
+	  gtk_select_word (entry, event->time);
 	  break;
 
 	case GDK_3BUTTON_PRESS:
-	  gtk_entry_select_line (entry);
+	  gtk_select_line (entry, event->time);
 	  break;
 
 	default:
@@ -939,17 +912,28 @@ gtk_entry_button_press (GtkWidget      *widget,
 
       return TRUE;
     }
-  else if (event->button == 2 && event->type == GDK_BUTTON_PRESS && entry->editable)
+  else if (event->type == GDK_BUTTON_PRESS)
     {
-      gtk_editable_select_region (editable, tmp_pos, tmp_pos);
-      gtk_entry_paste (entry, GDK_SELECTION_PRIMARY);
+      if ((event->button == 2) && editable->editable)
+	{
+	  if (editable->selection_start_pos == editable->selection_end_pos ||
+	      editable->has_selection)
+	    editable->current_pos = gtk_entry_position (entry, event->x + entry->scroll_offset);
+	  gtk_selection_convert (widget, GDK_SELECTION_PRIMARY,
+				 ctext_atom, event->time);
+	}
+      else
+	{
+	  gtk_grab_add (widget);
 
-      return TRUE;
-    }
-  else if (event->button == 3 && event->type == GDK_BUTTON_PRESS)
-    {
-      gtk_entry_popup_menu (entry, event);
-      entry->button = 0;	/* Don't wait for release, since the menu will gtk_grab_add */
+	  tmp_pos = gtk_entry_position (entry, event->x + entry->scroll_offset);
+	  gtk_entry_set_selection (editable, tmp_pos, tmp_pos);
+	  editable->has_selection = FALSE;
+	  editable->current_pos = editable->selection_start_pos;
+
+	  if (gdk_selection_owner_get (GDK_SELECTION_PRIMARY) == widget->window)
+	    gtk_selection_owner_set (NULL, GDK_SELECTION_PRIMARY, event->time);
+	}
 
       return TRUE;
     }
@@ -961,14 +945,50 @@ static gint
 gtk_entry_button_release (GtkWidget      *widget,
 			  GdkEventButton *event)
 {
-  GtkEntry *entry = GTK_ENTRY (widget);
-  GtkEditable *editable = GTK_EDITABLE (widget);
+  GtkEntry *entry;
+  GtkEditable *editable;
 
-  if (event->window != entry->text_area || entry->button != event->button)
+  g_return_val_if_fail (widget != NULL, FALSE);
+  g_return_val_if_fail (GTK_IS_ENTRY (widget), FALSE);
+  g_return_val_if_fail (event != NULL, FALSE);
+
+  entry = GTK_ENTRY (widget);
+  editable = GTK_EDITABLE (widget);
+
+  if (entry->button != event->button)
     return FALSE;
 
   entry->button = 0;
   
+  if (event->button == 1)
+    {
+      gtk_grab_remove (widget);
+
+      editable->has_selection = FALSE;
+      if (editable->selection_start_pos != editable->selection_end_pos)
+	{
+	  if (gtk_selection_owner_set (widget,
+				       GDK_SELECTION_PRIMARY,
+				       event->time))
+	    editable->has_selection = TRUE;
+	  else
+	    gtk_entry_queue_draw (entry);
+	}
+      else
+	{
+	  if (gdk_selection_owner_get (GDK_SELECTION_PRIMARY) == widget->window)
+	    gtk_selection_owner_set (NULL, GDK_SELECTION_PRIMARY, event->time);
+	}
+
+      return TRUE;
+    }
+  else if (event->button == 3)
+    {
+      gtk_grab_remove (widget);
+
+      return TRUE;
+    }
+
   return FALSE;
 }
 
@@ -976,23 +996,27 @@ static gint
 gtk_entry_motion_notify (GtkWidget      *widget,
 			 GdkEventMotion *event)
 {
-  GtkEntry *entry = GTK_ENTRY (widget);
-  gint tmp_pos;
+  GtkEntry *entry;
+  gint x;
 
-  if (event->window != entry->text_area || entry->button != 1)
+  g_return_val_if_fail (widget != NULL, FALSE);
+  g_return_val_if_fail (GTK_IS_ENTRY (widget), FALSE);
+  g_return_val_if_fail (event != NULL, FALSE);
+
+  entry = GTK_ENTRY (widget);
+
+  if (entry->button == 0)
     return FALSE;
 
+  x = event->x;
   if (event->is_hint || (entry->text_area != event->window))
-    gdk_window_get_pointer (entry->text_area, NULL, NULL, NULL);
+    gdk_window_get_pointer (entry->text_area, &x, NULL, NULL);
 
-  tmp_pos = gtk_entry_find_position (entry, event->x + entry->scroll_offset);
+  GTK_EDITABLE(entry)->selection_end_pos = gtk_entry_position (entry, x + entry->scroll_offset);
+  GTK_EDITABLE(entry)->current_pos = GTK_EDITABLE(entry)->selection_end_pos;
+  entry_adjust_scroll (entry);
+  gtk_entry_queue_draw (entry);
 
-  if (tmp_pos != entry->current_pos)
-    {
-      entry->current_pos = tmp_pos;
-      gtk_entry_recompute (entry);
-    }
-      
   return TRUE;
 }
 
@@ -1000,27 +1024,195 @@ static gint
 gtk_entry_key_press (GtkWidget   *widget,
 		     GdkEventKey *event)
 {
-  GtkEntry *entry = GTK_ENTRY (widget);
+  GtkEntry *entry;
+  GtkEditable *editable;
 
-  if (!entry->editable)
+  gint return_val;
+  gint key;
+  guint initial_pos;
+  gint extend_selection;
+  gint extend_start;
+
+  g_return_val_if_fail (widget != NULL, FALSE);
+  g_return_val_if_fail (GTK_IS_ENTRY (widget), FALSE);
+  g_return_val_if_fail (event != NULL, FALSE);
+
+  entry = GTK_ENTRY (widget);
+  editable = GTK_EDITABLE (widget);
+  return_val = FALSE;
+
+  if(editable->editable == FALSE)
     return FALSE;
 
-  if (gtk_im_context_filter_keypress (entry->im_context, event))
+  initial_pos = editable->current_pos;
+
+  extend_selection = event->state & GDK_SHIFT_MASK;
+  extend_start = FALSE;
+
+  if (extend_selection)
     {
-      entry->need_im_reset = TRUE;
-      return TRUE;
-    }
-  else if (GTK_WIDGET_CLASS (parent_class)->key_press_event (widget, event))
-    /* Activate key bindings
-     */
-    return TRUE;
-  else if (event->keyval == GDK_Return)
-    {
-      gtk_widget_activate (widget);
-      return TRUE;
+      if (editable->selection_start_pos == editable->selection_end_pos)
+	{
+	  editable->selection_start_pos = editable->current_pos;
+	  editable->selection_end_pos = editable->current_pos;
+	}
+      
+      extend_start = (editable->current_pos == editable->selection_start_pos);
     }
 
-  return FALSE;
+  switch (event->keyval)
+    {
+    case GDK_BackSpace:
+      return_val = TRUE;
+      if (event->state & GDK_CONTROL_MASK)
+	gtk_delete_backward_word (entry);
+      else
+	gtk_delete_backward_character (entry);
+      break;
+    case GDK_Clear:
+      return_val = TRUE;
+      gtk_delete_line (entry);
+      break;
+    case GDK_Insert:
+      return_val = TRUE;
+      if (event->state & GDK_SHIFT_MASK)
+	{
+	  extend_selection = FALSE;
+	  gtk_editable_paste_clipboard (editable);
+	}
+      else if (event->state & GDK_CONTROL_MASK)
+	{
+	  gtk_editable_copy_clipboard (editable);
+	}
+      else
+	{
+	  /* gtk_toggle_insert(entry) -- IMPLEMENT */
+	}
+      break;
+    case GDK_Delete:
+      return_val = TRUE;
+      if (event->state & GDK_CONTROL_MASK)
+	gtk_delete_forward_word (entry);
+      else if (event->state & GDK_SHIFT_MASK)
+	{
+	  extend_selection = FALSE;
+	  gtk_editable_cut_clipboard (editable);
+	}
+      else
+	gtk_delete_forward_character (entry);
+      break;
+    case GDK_Home:
+      return_val = TRUE;
+      gtk_move_beginning_of_line (entry);
+      break;
+    case GDK_End:
+      return_val = TRUE;
+      gtk_move_end_of_line (entry);
+      break;
+    case GDK_Left:
+      return_val = TRUE;
+      if (event->state & GDK_CONTROL_MASK)
+	gtk_move_backward_word (entry);
+      else
+	gtk_move_backward_character (entry);
+      break;
+    case GDK_Right:
+      return_val = TRUE;
+      if (event->state & GDK_CONTROL_MASK)
+	gtk_move_forward_word (entry);
+      else
+	gtk_move_forward_character (entry);
+      break;
+    case GDK_Return:
+      return_val = TRUE;
+      gtk_widget_activate (widget);
+      break;
+    /* The next two keys should not be inserted literally. Any others ??? */
+    case GDK_Tab:
+    case GDK_Escape:
+      break;
+    default:
+      if ((event->keyval >= 0x20) && (event->keyval <= 0xFF))
+	{
+	  key = event->keyval;
+
+	  if (event->state & GDK_CONTROL_MASK)
+	    {
+	      if ((key >= 'A') && (key <= 'Z'))
+		key -= 'A' - 'a';
+
+	      if ((key >= 'a') && (key <= 'z') && control_keys[key - 'a'])
+		{
+		  (* control_keys[key - 'a']) (editable, event->time);
+		  return_val = TRUE;
+		}
+	      break;
+	    }
+	  else if (event->state & GDK_MOD1_MASK)
+	    {
+	      if ((key >= 'A') && (key <= 'Z'))
+		key -= 'A' - 'a';
+
+	      if ((key >= 'a') && (key <= 'z') && alt_keys[key - 'a'])
+		{
+		  (* alt_keys[key - 'a']) (editable, event->time);
+		  return_val = TRUE;
+		}
+	      break;
+	    }
+	}
+      if (event->length > 0)
+	{
+	  gint tmp_pos;
+
+	  extend_selection = FALSE;
+	  gtk_editable_delete_selection (editable);
+
+	  tmp_pos = editable->current_pos;
+	  gtk_editable_insert_text (editable, event->string, event->length, &tmp_pos);
+	  editable->current_pos = tmp_pos;
+
+	  return_val = TRUE;
+	}
+      break;
+    }
+
+  /* since we emit signals from within the above code,
+   * the widget might already be destroyed or at least
+   * unrealized.
+   */
+  if (GTK_WIDGET_REALIZED (editable) &&
+      return_val && (editable->current_pos != initial_pos))
+    {
+      if (extend_selection)
+	{
+	  if (editable->current_pos < editable->selection_start_pos)
+	    editable->selection_start_pos = editable->current_pos;
+	  else if (editable->current_pos > editable->selection_end_pos)
+	    editable->selection_end_pos = editable->current_pos;
+	  else
+	    {
+	      if (extend_start)
+		editable->selection_start_pos = editable->current_pos;
+	      else
+		editable->selection_end_pos = editable->current_pos;
+	    }
+	}
+      else
+	{
+	  editable->selection_start_pos = 0;
+	  editable->selection_end_pos = 0;
+	}
+
+      gtk_editable_claim_selection (editable,
+				    editable->selection_start_pos != editable->selection_end_pos,
+				    event->time);
+      
+      entry_adjust_scroll (entry);
+      gtk_entry_queue_draw (entry);
+    }
+
+  return return_val;
 }
 
 static gint
@@ -1033,10 +1225,11 @@ gtk_entry_focus_in (GtkWidget     *widget,
 
   GTK_WIDGET_SET_FLAGS (widget, GTK_HAS_FOCUS);
   gtk_widget_draw_focus (widget);
-  gtk_entry_queue_draw (GTK_ENTRY (widget));
-  
-  GTK_ENTRY (widget)->need_im_reset = TRUE;
-  gtk_im_context_focus_in (GTK_ENTRY (widget)->im_context);
+
+#ifdef USE_XIM
+  if (GTK_EDITABLE(widget)->ic)
+    gdk_im_begin (GTK_EDITABLE(widget)->ic, GTK_ENTRY(widget)->text_area);
+#endif
 
   return FALSE;
 }
@@ -1051,758 +1244,192 @@ gtk_entry_focus_out (GtkWidget     *widget,
 
   GTK_WIDGET_UNSET_FLAGS (widget, GTK_HAS_FOCUS);
   gtk_widget_draw_focus (widget);
-  gtk_entry_queue_draw (GTK_ENTRY (widget));
 
-  GTK_ENTRY (widget)->need_im_reset = TRUE;
-  gtk_im_context_focus_out (GTK_ENTRY (widget)->im_context);
+#ifdef USE_XIM
+  gdk_im_end ();
+#endif
 
   return FALSE;
 }
 
-static void 
-gtk_entry_direction_changed (GtkWidget        *widget,
-			     GtkTextDirection  previous_dir)
-{
-  GtkEntry *entry = GTK_ENTRY (widget);
-
-  gtk_entry_recompute (entry);
-      
-  GTK_WIDGET_CLASS (parent_class)->direction_changed (widget, previous_dir);
-}
-
 static void
-gtk_entry_state_changed (GtkWidget      *widget,
-			 GtkStateType    previous_state)
+gtk_entry_make_backing_pixmap (GtkEntry *entry, gint width, gint height)
 {
-  g_return_if_fail (widget != NULL);
-  g_return_if_fail (GTK_IS_ENTRY (widget));
+  gint pixmap_width, pixmap_height;
 
-  if (GTK_WIDGET_REALIZED (widget))
+  if (!entry->backing_pixmap)
     {
-      gdk_window_set_background (widget->window, &widget->style->base[GTK_WIDGET_STATE (widget)]);
-      gdk_window_set_background (GTK_ENTRY (widget)->text_area, &widget->style->base[GTK_WIDGET_STATE (widget)]);
-    }
-
-  gtk_widget_queue_clear (widget);
-}
-
-/* GtkEditable method implementations
- */
-static void
-gtk_entry_insert_text (GtkEditable *editable,
-		       const gchar *new_text,
-		       gint         new_text_length,
-		       gint        *position)
-{
-  GtkEntry *entry = GTK_ENTRY (editable);
-  gchar buf[64];
-  gchar *text;
-
-  if (*position < 0 || *position > entry->text_length)
-    *position = entry->text_length;
-  
-  g_object_ref (G_OBJECT (editable));
-  
-  if (new_text_length <= 63)
-    text = buf;
-  else
-    text = g_new (gchar, new_text_length + 1);
-
-  text[new_text_length] = '\0';
-  strncpy (text, new_text, new_text_length);
-
-  gtk_signal_emit (GTK_OBJECT (editable), signals[INSERT_TEXT], text, new_text_length, position);
-  gtk_signal_emit (GTK_OBJECT (editable), signals[CHANGED]);
-
-  if (new_text_length > 63)
-    g_free (text);
-
-  g_object_unref (G_OBJECT (editable));
-}
-
-static void
-gtk_entry_delete_text (GtkEditable *editable,
-		       gint         start_pos,
-		       gint         end_pos)
-{
-  GtkEntry *entry = GTK_ENTRY (editable);
-
-  if (end_pos < 0 || end_pos > entry->text_length)
-    end_pos = entry->text_length;
-  if (start_pos < 0)
-    start_pos = 0;
-  if (start_pos > end_pos)
-    start_pos = end_pos;
-  
-  g_object_ref (G_OBJECT (editable));
-
-  gtk_signal_emit (GTK_OBJECT (editable), signals[DELETE_TEXT], start_pos, end_pos);
-  gtk_signal_emit (GTK_OBJECT (editable), signals[CHANGED]);
-
-  g_object_unref (G_OBJECT (editable));
-}
-
-static gchar *    
-gtk_entry_get_chars      (GtkEditable   *editable,
-			  gint           start_pos,
-			  gint           end_pos)
-{
-  GtkEntry *entry;
-  gint start_index, end_index;
-  
-  g_return_val_if_fail (editable != NULL, NULL);
-  g_return_val_if_fail (GTK_IS_ENTRY (editable), NULL);
-
-  entry = GTK_ENTRY (editable);
-
-  if (end_pos < 0)
-    end_pos = entry->text_length;
-
-  start_pos = MIN (entry->text_length, start_pos);
-  end_pos = MIN (entry->text_length, end_pos);
-
-  start_index = g_utf8_offset_to_pointer (entry->text, start_pos) - entry->text;
-  end_index = g_utf8_offset_to_pointer (entry->text, end_pos) - entry->text;
-
-  return g_strndup (entry->text + start_index, end_index - start_index);
-}
-
-static void
-gtk_entry_real_set_position (GtkEditable *editable,
-			     gint         position)
-{
-  GtkEntry *entry = GTK_ENTRY (editable);
-  
-  if (position < 0 || position > entry->text_length)
-    position = entry->text_length;
-
-  if (position != entry->current_pos)
-    {
-      gtk_entry_reset_im_context (entry);
-
-      entry->current_pos = entry->selection_bound = position;
-      gtk_entry_recompute (entry);
-    }
-}
-
-static gint
-gtk_entry_get_position (GtkEditable *editable)
-{
-  return GTK_ENTRY (editable)->current_pos;
-}
-
-static void
-gtk_entry_set_selection_bounds (GtkEditable *editable,
-				gint         start,
-				gint         end)
-{
-  GtkEntry *entry = GTK_ENTRY (editable);
-
-  if (start < 0)
-    start = entry->text_length;
-  if (end < 0)
-    end = entry->text_length;
-  
-  gtk_entry_reset_im_context (entry);
-
-  entry->selection_bound = MIN (start, entry->text_length);
-  entry->current_pos = MIN (end, entry->text_length);
-
-  gtk_entry_update_primary_selection (entry);
-  
-  gtk_entry_recompute (entry);
-}
-
-static gboolean
-gtk_entry_get_selection_bounds (GtkEditable *editable,
-				gint        *start,
-				gint        *end)
-{
-  GtkEntry *entry = GTK_ENTRY (editable);
-
-  *start = entry->selection_bound;
-  *end = entry->current_pos;
-
-  return (entry->selection_bound != entry->current_pos);
-}
-
-static void 
-gtk_entry_style_set	(GtkWidget      *widget,
-			 GtkStyle       *previous_style)
-{
-  GtkEntry *entry = GTK_ENTRY (widget);
-
-  if (previous_style && GTK_WIDGET_REALIZED (widget))
-    {
-      gtk_entry_recompute (entry);
-
-      gdk_window_set_background (widget->window, &widget->style->base[GTK_WIDGET_STATE (widget)]);
-      gdk_window_set_background (entry->text_area, &widget->style->base[GTK_WIDGET_STATE (widget)]);
-    }
-}
-
-/* Default signal handlers
- */
-static void
-gtk_entry_real_insert_text (GtkEntry    *entry,
-			    const gchar *new_text,
-			    gint         new_text_length,
-			    gint        *position)
-{
-  gint index;
-  gint n_chars;
-
-  if (new_text_length < 0)
-    new_text_length = strlen (new_text);
-
-  n_chars = g_utf8_strlen (new_text, new_text_length);
-  if (entry->text_max_length > 0 && n_chars + entry->text_length > entry->text_max_length)
-    {
-      gdk_beep ();
-      n_chars = entry->text_max_length - entry->text_length;
-    }
-
-  if (new_text_length + entry->n_bytes + 1 > entry->text_size)
-    {
-      while (new_text_length + entry->n_bytes + 1 > entry->text_size)
-	{
-	  if (entry->text_size == 0)
-	    entry->text_size = MIN_SIZE;
-	  else
-	    {
-	      if (2 * (guint)entry->text_size < MAX_SIZE &&
-		  2 * (guint)entry->text_size > entry->text_size)
-		entry->text_size *= 2;
-	      else
-		{
-		  entry->text_size = MAX_SIZE;
-		  new_text_length = entry->text_size - new_text_length - 1;
-		  break;
-		}
-	    }
-	}
-
-      entry->text = g_realloc (entry->text, entry->text_size);
-    }
-
-  index = g_utf8_offset_to_pointer (entry->text, *position) - entry->text;
-
-  g_memmove (entry->text + index + new_text_length, entry->text + index, entry->n_bytes - index);
-  memcpy (entry->text + index, new_text, new_text_length);
-
-  entry->n_bytes += new_text_length;
-  entry->text_length += n_chars;
-
-  /* NUL terminate for safety and convenience */
-  entry->text[entry->n_bytes] = '\0';
-  
-  if (entry->current_pos > *position)
-    entry->current_pos += n_chars;
-  
-  if (entry->selection_bound > *position)
-    entry->selection_bound += n_chars;
-
-  *position += n_chars;
-
-  gtk_entry_recompute (entry);
-}
-
-static void
-gtk_entry_real_delete_text (GtkEntry *entry,
-			    gint      start_pos,
-			    gint      end_pos)
-{
-  if (start_pos < 0)
-    start_pos = 0;
-  if (end_pos < 0 || end_pos > entry->text_length)
-    end_pos = entry->text_length;
-  
-  if (start_pos < end_pos)
-    {
-      gint start_index = g_utf8_offset_to_pointer (entry->text, start_pos) - entry->text;
-      gint end_index = g_utf8_offset_to_pointer (entry->text, end_pos) - entry->text;
-
-      g_memmove (entry->text + start_index, entry->text + end_index, entry->n_bytes - end_index);
-      entry->text_length -= (end_pos - start_pos);
-      entry->n_bytes -= (end_index - start_index);
-      
-      if (entry->current_pos > start_pos)
-	entry->current_pos -= MIN (entry->current_pos, end_pos) - start_pos;
-
-      if (entry->selection_bound > start_pos)
-	entry->selection_bound -= MIN (entry->selection_bound, end_pos) - start_pos;
-    }
-
-  /* We might have deleted the selection
-   */
-  gtk_entry_update_primary_selection (entry);
-
-  gtk_entry_recompute (entry);
-}
-
-
-static void
-gtk_entry_move_cursor (GtkEntry       *entry,
-		       GtkMovementStep step,
-		       gint            count,
-		       gboolean        extend_selection)
-{
-  gint new_pos = entry->current_pos;
-
-  gtk_entry_reset_im_context (entry);
-  
-  switch (step)
-    {
-    case GTK_MOVEMENT_CHARS:
-      new_pos = CLAMP (new_pos + count, 0, entry->text_length);
-      break;
-    case GTK_MOVEMENT_POSITIONS:
-      new_pos = gtk_entry_move_visually (entry, new_pos, count);
-      break;
-    case GTK_MOVEMENT_WORDS:
-      while (count > 0)
-	{
-	  new_pos = gtk_entry_move_forward_word (entry, new_pos);
-	  count--;
-	}
-      while (count < 0)
-	{
-	  new_pos = gtk_entry_move_backward_word (entry, new_pos);
-	  count++;
-	}
-      break;
-    case GTK_MOVEMENT_DISPLAY_LINE_ENDS:
-    case GTK_MOVEMENT_PARAGRAPH_ENDS:
-    case GTK_MOVEMENT_BUFFER_ENDS:
-      new_pos = count < 0 ? 0 : entry->text_length;
-      break;
-    case GTK_MOVEMENT_DISPLAY_LINES:
-    case GTK_MOVEMENT_PARAGRAPHS:
-    case GTK_MOVEMENT_PAGES:
-      break;
-    }
-
-  if (extend_selection)
-    gtk_editable_select_region (GTK_EDITABLE (entry), entry->selection_bound, new_pos);
-  else
-    gtk_editable_set_position (GTK_EDITABLE (entry), new_pos);
-}
-
-static void
-gtk_entry_insert_at_cursor (GtkEntry    *entry,
-			    const gchar *str)
-{
-  GtkEditable *editable = GTK_EDITABLE (entry);
-  gint pos = entry->current_pos;
-
-  gtk_entry_reset_im_context (entry);
-
-  gtk_editable_insert_text (editable, str, -1, &pos);
-  gtk_editable_set_position (editable, pos);
-}
-
-static void
-gtk_entry_delete_from_cursor (GtkEntry       *entry,
-			      GtkDeleteType   type,
-			      gint            count)
-{
-  GtkEditable *editable = GTK_EDITABLE (entry);
-  gint start_pos = entry->current_pos;
-  gint end_pos = entry->current_pos;
-  
-  gtk_entry_reset_im_context (entry);
-
-  if (!entry->editable)
-    return;
-
-  if (entry->selection_bound != entry->current_pos)
-    {
-      gtk_editable_delete_selection (editable);
-      return;
-    }
-  
-  switch (type)
-    {
-    case GTK_DELETE_CHARS:
-      end_pos = entry->current_pos + count;
-      gtk_editable_delete_text (editable, MIN (start_pos, end_pos), MAX (start_pos, end_pos));
-      break;
-    case GTK_DELETE_WORDS:
-      if (count < 0)
-	{
-	  /* Move to end of current word, or if not on a word, end of previous word */
-	  end_pos = gtk_entry_move_backward_word (entry, end_pos);
-	  end_pos = gtk_entry_move_forward_word (entry, end_pos);
-	}
-      else if (count > 0)
-	{
-	  /* Move to beginning of current word, or if not on a word, begining of next word */
-	  start_pos = gtk_entry_move_forward_word (entry, start_pos);
-	  start_pos = gtk_entry_move_backward_word (entry, start_pos);
-	}
-	
-      /* Fall through */
-    case GTK_DELETE_WORD_ENDS:
-      while (count < 0)
-	{
-	  start_pos = gtk_entry_move_backward_word (entry, start_pos);
-	  count++;
-	}
-      while (count > 0)
-	{
-	  end_pos = gtk_entry_move_forward_word (entry, end_pos);
-	  count--;
-	}
-      gtk_editable_delete_text (editable, start_pos, end_pos);
-      break;
-    case GTK_DELETE_DISPLAY_LINE_ENDS:
-    case GTK_DELETE_PARAGRAPH_ENDS:
-      if (count < 0)
-	gtk_editable_delete_text (editable, 0, entry->current_pos);
-      else
-	gtk_editable_delete_text (editable, entry->current_pos, -1);
-      break;
-    case GTK_DELETE_DISPLAY_LINES:
-    case GTK_DELETE_PARAGRAPHS:
-      gtk_editable_delete_text (editable, 0, -1);  
-      break;
-    case GTK_DELETE_WHITESPACE:
-      gtk_entry_delete_whitespace (entry);
-      break;
-    }
-}
-
-static void
-gtk_entry_copy_clipboard (GtkEntry *entry)
-{
-  GtkEditable *editable = GTK_EDITABLE (entry);
-  gint start, end;
-
-  if (gtk_editable_get_selection_bounds (editable, &start, &end))
-    {
-      gchar *str = gtk_entry_get_public_chars (entry, start, end);
-      gtk_clipboard_set_text (gtk_clipboard_get (GDK_NONE), str, -1);
-      g_free (str);
-    }
-}
-
-static void
-gtk_entry_cut_clipboard (GtkEntry *entry)
-{
-  GtkEditable *editable = GTK_EDITABLE (entry);
-  gint start, end;
-
-  gtk_entry_copy_clipboard (entry);
-  if (gtk_editable_get_selection_bounds (editable, &start, &end))
-    gtk_editable_delete_text (editable, start, end);
-}
-
-static void
-gtk_entry_paste_clipboard (GtkEntry *entry)
-{
-  gtk_entry_paste (entry, GDK_NONE);
-}
-
-static void
-gtk_entry_toggle_overwrite (GtkEntry *entry)
-{
-  entry->overwrite_mode = !entry->overwrite_mode;
-}
-
-/* IM Context Callbacks
- */
-
-static void
-gtk_entry_commit_cb (GtkIMContext *context,
-		     const gchar  *str,
-		     GtkEntry     *entry)
-{
-  GtkEditable *editable = GTK_EDITABLE (entry);
-  gint tmp_pos = entry->current_pos;
-
-  gtk_editable_insert_text (editable, str, strlen (str), &tmp_pos);
-  gtk_editable_set_position (editable, tmp_pos);
-}
-
-static void 
-gtk_entry_preedit_changed_cb (GtkIMContext *context,
-			      GtkEntry     *entry)
-{
-  gchar *preedit_string;
-  gint cursor_pos;
-  
-  gtk_im_context_get_preedit_string (entry->im_context,
-				     &preedit_string, NULL,
-				     &cursor_pos);
-  entry->preedit_length = strlen (preedit_string);
-  cursor_pos = CLAMP (cursor_pos, 0, g_utf8_strlen (preedit_string, -1));
-  entry->preedit_cursor = cursor_pos;
-  g_free (preedit_string);
-
-  gtk_entry_recompute (entry);
-}
-
-/* Internal functions
- */
-
-static void
-gtk_entry_reset_layout (GtkEntry *entry)
-{
-  if (entry->cached_layout)
-    {
-      g_object_unref (G_OBJECT (entry->cached_layout));
-      entry->cached_layout = NULL;
-    }
-}
-
-static gboolean
-recompute_idle_func (gpointer data)
-{
-  GtkEntry *entry = GTK_ENTRY (data);
-
-  gtk_entry_adjust_scroll (entry);
-  gtk_entry_queue_draw (entry);
-
-  entry->recompute_idle = FALSE;
-  
-  return FALSE;
-}
-
-static void
-gtk_entry_recompute (GtkEntry *entry)
-{
-  gtk_entry_reset_layout (entry);
-
-  if (!entry->recompute_idle)
-    {
-      entry->recompute_idle = g_idle_add_full (G_PRIORITY_HIGH_IDLE + 15, /* between resize and redraw */
-					       recompute_idle_func, entry, NULL); 
-    }
-}
-
-static void
-append_char (GString *str,
-             gunichar ch,
-             gint     count)
-{
-  gint i;
-  gint char_len;
-  gchar buf[7];
-  
-  char_len = g_unichar_to_utf8 (ch, buf);
-  
-  i = 0;
-  while (i < count)
-    {
-      g_string_append_len (str, buf, char_len);
-      ++i;
-    }
-}
-     
-static PangoLayout *
-gtk_entry_create_layout (GtkEntry *entry,
-			 gboolean  include_preedit)
-{
-  PangoLayout *layout = gtk_widget_create_pango_layout (GTK_WIDGET (entry), NULL);
-  PangoAttrList *tmp_attrs = pango_attr_list_new ();
-  
-  gchar *preedit_string = NULL;
-  gint preedit_length = 0;
-  PangoAttrList *preedit_attrs = NULL;
-
-  if (include_preedit)
-    {
-      gtk_im_context_get_preedit_string (entry->im_context,
-					 &preedit_string, &preedit_attrs, NULL);
-      preedit_length = entry->preedit_length;
-    }
-
-  if (preedit_length)
-    {
-      GString *tmp_string = g_string_new (NULL);
-      
-      gint cursor_index = g_utf8_offset_to_pointer (entry->text, entry->current_pos) - entry->text;
-      
-      if (entry->visible)
-        {
-          g_string_prepend_len (tmp_string, entry->text, entry->n_bytes);
-          g_string_insert (tmp_string, cursor_index, preedit_string);
-        }
-      else
-        {
-          gint ch_len;
-          gint preedit_len_chars;
-          gunichar invisible_char;
-          
-          ch_len = g_utf8_strlen (entry->text, entry->n_bytes);
-          preedit_len_chars = g_utf8_strlen (preedit_string, -1);
-          ch_len += preedit_len_chars;
-
-          if (entry->invisible_char != 0)
-            invisible_char = entry->invisible_char;
-          else
-            invisible_char = ' '; /* just pick a char */
-          
-          append_char (tmp_string, invisible_char, ch_len);
-          
-          /* Fix cursor index to point to invisible char corresponding
-           * to the preedit, fix preedit_length to be the length of
-           * the invisible chars representing the preedit
-           */
-          cursor_index =
-            g_utf8_offset_to_pointer (tmp_string->str, entry->current_pos) -
-            tmp_string->str;
-          preedit_length =
-            preedit_len_chars *
-            g_unichar_to_utf8 (invisible_char, NULL);
-        }
-      
-      pango_layout_set_text (layout, tmp_string->str, tmp_string->len);
-      
-      pango_attr_list_splice (tmp_attrs, preedit_attrs,
-			      cursor_index, preedit_length);
-      
-      g_string_free (tmp_string, TRUE);
+      /* allocate */
+      entry->backing_pixmap = gdk_pixmap_new (entry->text_area,
+					      width, height,
+					      -1);
     }
   else
     {
-      if (entry->visible)
-        {
-          pango_layout_set_text (layout, entry->text, entry->n_bytes);
-        }
-      else
-        {
-          GString *str = g_string_new (NULL);
-          gunichar invisible_char;
-          
-          if (entry->invisible_char != 0)
-            invisible_char = entry->invisible_char;
-          else
-            invisible_char = ' '; /* just pick a char */
-          
-          append_char (str, invisible_char, entry->text_length);
-          pango_layout_set_text (layout, str->str, str->len);
-          g_string_free (str, TRUE);
-        }
+      /* reallocate if sizes don't match */
+      gdk_window_get_size (entry->backing_pixmap,
+			   &pixmap_width, &pixmap_height);
+      if ((pixmap_width != width) || (pixmap_height != height))
+	{
+	  gdk_pixmap_unref (entry->backing_pixmap);
+	  entry->backing_pixmap = gdk_pixmap_new (entry->text_area,
+						  width, height,
+						  -1);
+	}
     }
-      
-  pango_layout_set_attributes (layout, tmp_attrs);
-
-  if (preedit_string)
-    g_free (preedit_string);
-  if (preedit_attrs)
-    pango_attr_list_unref (preedit_attrs);
-      
-  pango_attr_list_unref (tmp_attrs);
-
-  return layout;
-}
-
-static PangoLayout *
-gtk_entry_get_layout (GtkEntry *entry,
-		      gboolean  include_preedit)
-{
-  if (entry->preedit_length > 0 &&
-      !include_preedit != !entry->cache_includes_preedit)
-    gtk_entry_reset_layout (entry);
-
-  if (!entry->cached_layout)
-    {
-      entry->cached_layout = gtk_entry_create_layout (entry, include_preedit);
-      entry->cache_includes_preedit = include_preedit;
-    }
-  
-  g_object_ref (G_OBJECT (entry->cached_layout));
-  return entry->cached_layout;
 }
 
 static void
 gtk_entry_draw_text (GtkEntry *entry)
 {
   GtkWidget *widget;
-  PangoLayoutLine *line;
-  
+  GtkEditable *editable;
+  GtkStateType selected_state;
+  gint start_pos;
+  gint end_pos;
+  gint start_xoffset;
+  gint selection_start_pos;
+  gint selection_end_pos;
+  gint selection_start_xoffset;
+  gint selection_end_xoffset;
+  gint width, height;
+  gint y;
+  GdkDrawable *drawable;
+  gint use_backing_pixmap;
+  GdkWChar *stars;
+  GdkWChar *toprint;
+
   g_return_if_fail (entry != NULL);
   g_return_if_fail (GTK_IS_ENTRY (entry));
 
-  if (!entry->visible && entry->invisible_char == 0)
-    return;
-  
+  if (entry->timer)
+    {
+      gtk_timeout_remove (entry->timer);
+      entry->timer = 0;
+    }
+
   if (GTK_WIDGET_DRAWABLE (entry))
     {
-      PangoLayout *layout = gtk_entry_get_layout (entry, TRUE);
-      PangoRectangle logical_rect;
-      gint area_width, area_height;
-      gint start_pos, end_pos;
-      gint y_pos;
-
-      gdk_window_get_size (entry->text_area, &area_width, &area_height);
-      area_height = PANGO_SCALE * (area_height - 2 * INNER_BORDER);
-      
       widget = GTK_WIDGET (entry);
+      editable = GTK_EDITABLE (entry);
 
-      gtk_paint_flat_box (widget->style, entry->text_area, 
-			  GTK_WIDGET_STATE(widget), GTK_SHADOW_NONE,
-			  NULL, widget, "entry_bg", 
-			  0, 0, area_width, area_height);
-      
-      line = pango_layout_get_lines (layout)->data;
-      pango_layout_line_get_extents (line, NULL, &logical_rect);
+      if (!entry->text)
+	{	  
+	  gtk_paint_flat_box (widget->style, entry->text_area,
+			      GTK_WIDGET_STATE(widget), GTK_SHADOW_NONE,
+			      NULL, widget, "entry_bg", 
+			      0, 0, -1, -1);
 
-      /* Align primarily for locale's ascent/descent */
-      y_pos = ((area_height - entry->ascent - entry->descent) / 2 + 
-	       entry->ascent + logical_rect.y);
-
-      /* Now see if we need to adjust to fit in actual drawn string */
-      if (logical_rect.height > area_height)
-	y_pos = (area_height - logical_rect.height) / 2;
-      else if (y_pos < 0)
-	y_pos = 0;
-      else if (y_pos + logical_rect.height > area_height)
-	y_pos = area_height - logical_rect.height;
-      
-      y_pos = INNER_BORDER + y_pos / PANGO_SCALE;
-
-      gdk_draw_layout (entry->text_area, widget->style->text_gc [widget->state], 
-		       INNER_BORDER - entry->scroll_offset, y_pos,
-		       layout);
-
-      if (gtk_editable_get_selection_bounds (GTK_EDITABLE (entry), &start_pos, &end_pos))
-	{
-	  gint *ranges;
-	  gint n_ranges, i;
-	  gint start_index = g_utf8_offset_to_pointer (entry->text, start_pos) - entry->text;
-	  gint end_index = g_utf8_offset_to_pointer (entry->text, end_pos) - entry->text;
-	  GdkRegion *clip_region = gdk_region_new ();
-
-	  pango_layout_line_get_x_ranges (line, start_index, end_index, &ranges, &n_ranges);
-
-	  for (i=0; i < n_ranges; i++)
-	    {
-	      GdkRectangle rect;
-
-	      rect.x = INNER_BORDER - entry->scroll_offset + ranges[2*i] / PANGO_SCALE;
-	      rect.y = y_pos;
-	      rect.width = (ranges[2*i + 1] - ranges[2*i]) / PANGO_SCALE;
-	      rect.height = logical_rect.height / PANGO_SCALE;
-	      
-	      gdk_draw_rectangle (entry->text_area, widget->style->bg_gc [GTK_STATE_SELECTED], TRUE,
-				  rect.x, rect.y, rect.width, rect.height);
-
-	      gdk_region_union_with_rect (clip_region, &rect);
-	    }
-
-	  gdk_gc_set_clip_region (widget->style->fg_gc [GTK_STATE_SELECTED], clip_region);
-	  gdk_draw_layout (entry->text_area, widget->style->fg_gc [GTK_STATE_SELECTED], 
-			   INNER_BORDER - entry->scroll_offset, y_pos,
-			   layout);
-	  gdk_gc_set_clip_region (widget->style->fg_gc [GTK_STATE_SELECTED], NULL);
-	  
-	  gdk_region_destroy (clip_region);
-	  g_free (ranges);
+	  if (editable->editable)
+	    gtk_entry_draw_cursor (entry);
+	  return;
 	}
 
-      g_object_unref (G_OBJECT (layout));
+      gdk_window_get_size (entry->text_area, &width, &height);
+
+      /*
+	If the widget has focus, draw on a backing pixmap to avoid flickering
+	and copy it to the text_area.
+	Otherwise draw to text_area directly for better speed.
+      */
+      use_backing_pixmap = GTK_WIDGET_HAS_FOCUS (widget) && (entry->text != NULL);
+      if (use_backing_pixmap)
+	{
+	   gtk_entry_make_backing_pixmap (entry, width, height);
+	   drawable = entry->backing_pixmap;
+	}
+       else
+	 {
+	    drawable = entry->text_area;
+	 }
+       gtk_paint_flat_box (widget->style, drawable, 
+			   GTK_WIDGET_STATE(widget), GTK_SHADOW_NONE,
+			   NULL, widget, "entry_bg", 
+			   0, 0, width, height);
+
+      y = (height - (widget->style->font->ascent + widget->style->font->descent)) / 2;
+      y += widget->style->font->ascent;
+
+      start_pos = gtk_entry_find_position (entry, entry->scroll_offset);
+      start_xoffset = entry->char_offset[start_pos] - entry->scroll_offset;
+
+      end_pos = gtk_entry_find_position (entry, entry->scroll_offset + width);
+      if (end_pos < entry->text_length)
+	end_pos += 1;
+
+      selected_state = GTK_STATE_SELECTED;
+      if (!editable->has_selection)
+	selected_state = GTK_STATE_ACTIVE;
+
+      selection_start_pos = MIN (editable->selection_start_pos, editable->selection_end_pos);
+      selection_end_pos = MAX (editable->selection_start_pos, editable->selection_end_pos);
+      
+      selection_start_pos = CLAMP (selection_start_pos, start_pos, end_pos);
+      selection_end_pos = CLAMP (selection_end_pos, start_pos, end_pos);
+
+      selection_start_xoffset = 
+	entry->char_offset[selection_start_pos] - entry->scroll_offset;
+      selection_end_xoffset = 
+	entry->char_offset[selection_end_pos] -entry->scroll_offset;
+
+      /* if editable->visible, print a bunch of stars.  If not, print the standard text. */
+      if (editable->visible)
+	{
+	  toprint = entry->text + start_pos;
+	}
+      else
+	{
+	  gint i;
+	  
+	  stars = g_new (GdkWChar, end_pos - start_pos);
+	  for (i = 0; i < end_pos - start_pos; i++)
+	    stars[i] = '*';
+	  toprint = stars;
+	}
+      
+      if (selection_start_pos > start_pos)
+	gdk_draw_text_wc (drawable, widget->style->font,
+			  widget->style->fg_gc[GTK_WIDGET_STATE (widget)],
+			  INNER_BORDER + start_xoffset, y,
+			  toprint,
+			  selection_start_pos - start_pos);
+      
+      if ((selection_end_pos >= start_pos) && 
+	  (selection_start_pos < end_pos) &&
+	  (selection_start_pos != selection_end_pos))
+	 {
+	    gtk_paint_flat_box (widget->style, drawable, 
+				selected_state, GTK_SHADOW_NONE,
+				NULL, widget, "text",
+				INNER_BORDER + selection_start_xoffset,
+				INNER_BORDER,
+				selection_end_xoffset - selection_start_xoffset,
+				height - 2*INNER_BORDER);
+	    gdk_draw_text_wc (drawable, widget->style->font,
+			      widget->style->fg_gc[selected_state],
+			      INNER_BORDER + selection_start_xoffset, y,
+			      toprint + selection_start_pos - start_pos,
+			      selection_end_pos - selection_start_pos);
+	 }	    
+       
+       if (selection_end_pos < end_pos)
+	 gdk_draw_text_wc (drawable, widget->style->font,
+			   widget->style->fg_gc[GTK_WIDGET_STATE (widget)],
+			   INNER_BORDER + selection_end_xoffset, y,
+			   toprint + selection_end_pos - start_pos,
+			   end_pos - selection_end_pos);
+       /* free the space allocated for the stars if it's neccessary. */
+      if (!editable->visible)
+	g_free (toprint);
+
+      if (editable->editable)
+	gtk_entry_draw_cursor_on_drawable (entry, drawable);
+
+      if (use_backing_pixmap)
+	gdk_draw_pixmap(entry->text_area,
+			widget->style->fg_gc[GTK_STATE_NORMAL],
+			entry->backing_pixmap,
+			0, 0, 0, 0, width, height);	  
     }
 }
 
@@ -1812,34 +1439,79 @@ gtk_entry_draw_cursor (GtkEntry *entry)
   g_return_if_fail (entry != NULL);
   g_return_if_fail (GTK_IS_ENTRY (entry));
 
-  if (!entry->visible && entry->invisible_char == 0)
-    return;
-  
+  gtk_entry_draw_cursor_on_drawable (entry, entry->text_area);
+}
+
+static void
+gtk_entry_draw_cursor_on_drawable (GtkEntry *entry, GdkDrawable *drawable)
+{
+  GtkWidget *widget;
+  GtkEditable *editable;
+  gint xoffset;
+  gint text_area_height;
+
+  g_return_if_fail (entry != NULL);
+  g_return_if_fail (GTK_IS_ENTRY (entry));
+
   if (GTK_WIDGET_DRAWABLE (entry))
     {
-      GtkWidget *widget = GTK_WIDGET (entry);
+      widget = GTK_WIDGET (entry);
+      editable = GTK_EDITABLE (entry);
+
+      xoffset = INNER_BORDER + entry->char_offset[editable->current_pos];
+      xoffset -= entry->scroll_offset;
+
+      gdk_window_get_size (entry->text_area, NULL, &text_area_height);
 
       if (GTK_WIDGET_HAS_FOCUS (widget) &&
-	  (entry->selection_bound == entry->current_pos))
+	  (editable->selection_start_pos == editable->selection_end_pos))
 	{
-	  gint xoffset = INNER_BORDER - entry->scroll_offset;
-	  gint strong_x, weak_x;
-	  gint text_area_height;
-
-	  gdk_window_get_size (entry->text_area, NULL, &text_area_height);
-
-	  gtk_entry_get_cursor_locations (entry, &strong_x, &weak_x);
-
-	  gdk_draw_line (entry->text_area, widget->style->bg_gc[GTK_STATE_SELECTED], 
-			 xoffset + strong_x, INNER_BORDER,
-			 xoffset + strong_x, text_area_height - INNER_BORDER);
-
-	  if (weak_x != strong_x)
-	    gdk_draw_line (entry->text_area, widget->style->fg_gc[GTK_STATE_NORMAL], 
-			   xoffset + weak_x, INNER_BORDER,
-			   xoffset + weak_x, text_area_height - INNER_BORDER);
-
+	  gdk_draw_line (drawable, widget->style->fg_gc[GTK_STATE_NORMAL], 
+			 xoffset, INNER_BORDER,
+			 xoffset, text_area_height - INNER_BORDER);
 	}
+      else
+	{
+	  gint yoffset = 
+	    (text_area_height - 
+	     (widget->style->font->ascent + widget->style->font->descent)) / 2
+	    + widget->style->font->ascent;
+
+	  gtk_paint_flat_box (widget->style, drawable,
+			      GTK_WIDGET_STATE(widget), GTK_SHADOW_NONE,
+			      NULL, widget, "entry_bg", 
+			      xoffset, INNER_BORDER, 
+			      1, text_area_height - INNER_BORDER);
+	  
+	  /* Draw the character under the cursor again
+	   */
+	  if ((editable->current_pos < entry->text_length) &&
+	      (editable->selection_start_pos == editable->selection_end_pos))
+	    {
+	      GdkWChar c = editable->visible ?
+		                 *(entry->text + editable->current_pos) :
+		                 '*';
+	      
+	      gdk_draw_text_wc (drawable, widget->style->font,
+				widget->style->fg_gc[GTK_WIDGET_STATE (widget)],
+				xoffset, yoffset, &c, 1);
+	    }
+	}
+
+
+#ifdef USE_XIM
+      if (GTK_WIDGET_HAS_FOCUS(widget) && gdk_im_ready() && editable->ic && 
+	  (gdk_ic_get_style (editable->ic) & GDK_IM_PREEDIT_POSITION))
+	{
+	  editable->ic_attr->spot_location.x = xoffset;
+	  editable->ic_attr->spot_location.y =
+	    (text_area_height + (widget->style->font->ascent
+	        - widget->style->font->descent) + 1) / 2;
+
+	  gdk_ic_set_attr (editable->ic,
+	      		   editable->ic_attr, GDK_IC_SPOT_LOCATION);
+	}
+#endif 
     }
 }
 
@@ -1849,134 +1521,84 @@ gtk_entry_queue_draw (GtkEntry *entry)
   g_return_if_fail (entry != NULL);
   g_return_if_fail (GTK_IS_ENTRY (entry));
 
-  if (GTK_WIDGET_REALIZED (entry))
-    {
-      GdkRectangle rect = { 0 };
-
-      gdk_window_get_size (entry->text_area, &rect.width, &rect.height);
-      gdk_window_invalidate_rect (entry->text_area, &rect, FALSE);
-    }
+  if (!entry->timer)
+    entry->timer = gtk_timeout_add (DRAW_TIMEOUT, gtk_entry_timer, entry);
 }
 
-static void
-gtk_entry_reset_im_context (GtkEntry *entry)
+static gint
+gtk_entry_timer (gpointer data)
 {
-  if (entry->need_im_reset)
-    {
-      entry->need_im_reset = 0;
-      gtk_im_context_reset (entry->im_context);
-    }
+  GtkEntry *entry;
+
+  GDK_THREADS_ENTER ();
+
+  entry = GTK_ENTRY (data);
+  entry->timer = 0;
+  gtk_entry_draw_text (entry);
+
+  GDK_THREADS_LEAVE ();
+
+  return FALSE;
 }
 
 static gint
 gtk_entry_find_position (GtkEntry *entry,
 			 gint      x)
 {
-  PangoLayout *layout;
-  PangoLayoutLine *line;
-  gint index;
-  gint pos;
-  gboolean trailing;
-  gint cursor_index = g_utf8_offset_to_pointer (entry->text, entry->current_pos) - entry->text;
-  
-  layout = gtk_entry_get_layout (entry, TRUE);
-  
-  line = pango_layout_get_lines (layout)->data;
-  pango_layout_line_x_to_index (line, x * PANGO_SCALE, &index, &trailing);
-  
-  g_object_unref (G_OBJECT (layout));
+  gint start = 0;
+  gint end = entry->text_length;
+  gint half;
 
-  if (index >= cursor_index && entry->preedit_length)
+  if (x <= 0)
+    return 0;
+  if (x >= entry->char_offset[end])
+    return end;
+  
+  /* invariant - char_offset[start] <= x < char_offset[end] */
+
+  while (start != end)
     {
-      if (index >= cursor_index + entry->preedit_length)
-	index -= entry->preedit_length;
+      half = (start+end)/2;
+      if (half == start)
+	return half;
+      else if (entry->char_offset[half] <= x)
+	start = half;
       else
-	{
-	  index = cursor_index;
-	  trailing = 0;
-	}
+	end = half;
     }
 
-  pos = g_utf8_pointer_to_offset (entry->text, entry->text + index);
-  
-  if (trailing)
-    pos += 1;
+  return start;
+}
 
-  return pos;
+static gint
+gtk_entry_position (GtkEntry *entry,
+		    gint      x)
+{
+  return gtk_entry_find_position(entry, x);
 }
 
 static void
-gtk_entry_get_cursor_locations (GtkEntry *entry,
-				gint     *strong_x,
-				gint     *weak_x)
+entry_adjust_scroll (GtkEntry *entry)
 {
-  PangoLayout *layout = gtk_entry_get_layout (entry, TRUE);
-  const gchar *text;
-  PangoRectangle strong_pos, weak_pos;
-  gint index;
-  
-  text = pango_layout_get_text (layout);
-
-  index =
-    g_utf8_offset_to_pointer (text,
-                              entry->current_pos +
-                              entry->preedit_cursor) - text;
-  
-  pango_layout_get_cursor_pos (layout, index, &strong_pos, &weak_pos);
-  g_object_unref (G_OBJECT (layout));
-
-  if (strong_x)
-    *strong_x = strong_pos.x / PANGO_SCALE;
-
-  if (weak_x)
-    *weak_x = weak_pos.x / PANGO_SCALE;
-}
-
-static void
-gtk_entry_adjust_scroll (GtkEntry *entry)
-{
-  GtkWidget *widget;
-  gint min_offset, max_offset;
+  gint xoffset, max_offset;
   gint text_area_width;
-  gint strong_x, weak_x;
-  gint strong_xoffset, weak_xoffset;
-  PangoLayout *layout;
-  PangoLayoutLine *line;
-  PangoRectangle logical_rect;
 
   g_return_if_fail (entry != NULL);
   g_return_if_fail (GTK_IS_ENTRY (entry));
 
-  widget = GTK_WIDGET (entry);
-
-  if (!GTK_WIDGET_REALIZED (entry))
+  if (!entry->text_area)
     return;
-  
+
   gdk_window_get_size (entry->text_area, &text_area_width, NULL);
   text_area_width -= 2 * INNER_BORDER;
 
-  layout = gtk_entry_get_layout (entry, TRUE);
-  line = pango_layout_get_lines (layout)->data;
-
-  pango_layout_line_get_extents (line, NULL, &logical_rect);
-  g_object_unref (G_OBJECT (layout));
-
   /* Display as much text as we can */
+  max_offset = MAX(0, entry->char_offset[entry->text_length] - text_area_width);
 
-  if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_LTR)
-    {
-      min_offset = 0;
-      max_offset = MAX (min_offset, logical_rect.width / PANGO_SCALE - text_area_width);
-    }
-  else
-    {
-      max_offset = logical_rect.width / PANGO_SCALE - text_area_width;
-      min_offset = MIN (0, max_offset);
-    }
+  if (entry->scroll_offset > max_offset)
+    entry->scroll_offset = max_offset;
 
-  entry->scroll_offset = CLAMP (entry->scroll_offset, min_offset, max_offset);
-
-  /* And make sure cursors are on screen. Note that the cursor is
+  /* And make sure cursor is on screen. Note that the cursor is
    * actually drawn one pixel into the INNER_BORDER space on
    * the right, when the scroll is at the utmost right. This
    * looks better to to me than confining the cursor inside the
@@ -1985,417 +1607,616 @@ gtk_entry_adjust_scroll (GtkEntry *entry)
    * on the left. This might need changing if one changed
    * INNER_BORDER from 2 to 1, as one would do on a
    * small-screen-real-estate display.
-   *
-   * We always make sure that the strong cursor is on screen, and
-   * put the weak cursor on screen if possible.
    */
+  xoffset = entry->char_offset[GTK_EDITABLE(entry)->current_pos];
+  xoffset -= entry->scroll_offset;
 
-  gtk_entry_get_cursor_locations (entry, &strong_x, &weak_x);
-  
-  strong_xoffset = strong_x - entry->scroll_offset;
+  if (xoffset < 0)
+    entry->scroll_offset += xoffset;
+  else if (xoffset > text_area_width)
+    entry->scroll_offset += xoffset - text_area_width;
 
-  if (strong_xoffset < 0)
-    {
-      entry->scroll_offset += strong_xoffset;
-      strong_xoffset = 0;
-    }
-  else if (strong_xoffset > text_area_width)
-    {
-      entry->scroll_offset += strong_xoffset - text_area_width;
-      strong_xoffset = text_area_width;
-    }
-
-  weak_xoffset = weak_x - entry->scroll_offset;
-
-  if (weak_xoffset < 0 && strong_xoffset - weak_xoffset <= text_area_width)
-    {
-      entry->scroll_offset += weak_xoffset;
-    }
-  else if (weak_xoffset > text_area_width &&
-	   strong_xoffset - (weak_xoffset - text_area_width) >= 0)
-    {
-      entry->scroll_offset += weak_xoffset - text_area_width;
-    }
-}
-
-static gint
-gtk_entry_move_visually (GtkEntry *entry,
-			 gint      start,
-			 gint      count)
-{
-  gint index;
-  PangoLayout *layout = gtk_entry_get_layout (entry, FALSE);
-  const gchar *text;
-
-  text = pango_layout_get_text (layout);
-  
-  index = g_utf8_offset_to_pointer (text, start) - text;
-
-  while (count != 0)
-    {
-      int new_index, new_trailing;
-      
-      if (count > 0)
-	{
-	  pango_layout_move_cursor_visually (layout, index, 0, 1, &new_index, &new_trailing);
-	  count--;
-	}
-      else
-	{
-	  pango_layout_move_cursor_visually (layout, index, 0, -1, &new_index, &new_trailing);
-	  count++;
-	}
-
-      if (new_index < 0 || new_index == G_MAXINT)
-	break;
-      
-      if (new_trailing)
-	index = g_utf8_next_char (entry->text + new_index) - entry->text;
-      else
-	index = new_index;
-    }
-
-  g_object_unref (G_OBJECT (layout));
-  
-  return g_utf8_pointer_to_offset (text, text + index);
-}
-
-static gint
-gtk_entry_move_forward_word (GtkEntry *entry,
-			     gint      start)
-{
-  gint new_pos = start;
-
-  /* Prevent any leak of information */
-  if (!entry->visible)
-    {
-      new_pos = entry->text_length;
-    }
-  else if (entry->text && (new_pos < entry->text_length))
-    {
-      PangoLayout *layout = gtk_entry_get_layout (entry, FALSE);
-      PangoLogAttr *log_attrs;
-      gint n_attrs;
-
-      pango_layout_get_log_attrs (layout, &log_attrs, &n_attrs);
-      
-      /* Find the next word end */
-      new_pos++;
-      while (new_pos < n_attrs && !log_attrs[new_pos].is_word_end)
-	new_pos++;
-
-      g_free (log_attrs);
-      g_object_unref (G_OBJECT (layout));
-    }
-
-  return new_pos;
-}
-
-
-static gint
-gtk_entry_move_backward_word (GtkEntry *entry,
-			      gint      start)
-{
-  gint new_pos = start;
-
-  /* Prevent any leak of information */
-  if (!entry->visible)
-    {
-      new_pos = 0;
-    }
-  else if (entry->text && start > 0)
-    {
-      PangoLayout *layout = gtk_entry_get_layout (entry, FALSE);
-      PangoLogAttr *log_attrs;
-      gint n_attrs;
-
-      pango_layout_get_log_attrs (layout, &log_attrs, &n_attrs);
-
-      new_pos = start - 1;
-
-      /* Find the previous word beginning */
-      while (new_pos > 0 && !log_attrs[new_pos].is_word_start)
-	new_pos--;
-
-      g_free (log_attrs);
-      g_object_unref (G_OBJECT (layout));
-    }
-
-  return new_pos;
+  gtk_widget_queue_draw (GTK_WIDGET (entry));
 }
 
 static void
-gtk_entry_delete_whitespace (GtkEntry *entry)
+gtk_entry_grow_text (GtkEntry *entry)
 {
-  PangoLayout *layout = gtk_entry_get_layout (entry, FALSE);
-  PangoLogAttr *log_attrs;
-  gint n_attrs;
-  gint start, end;
+  gint previous_size;
+  gint i;
 
-  pango_layout_get_log_attrs (layout, &log_attrs, &n_attrs);
+  g_return_if_fail (entry != NULL);
+  g_return_if_fail (GTK_IS_ENTRY (entry));
 
-  start = end = entry->current_pos;
-  
-  while (start > 0 && log_attrs[start-1].is_white)
-    start--;
-
-  while (end < n_attrs && log_attrs[start-1].is_white)
-    end++;
-
-  g_free (log_attrs);
-  g_object_unref (G_OBJECT (layout));
-
-  if (start != end)
-    gtk_editable_delete_text (GTK_EDITABLE (entry), start, end);
-}
-
-
-static void
-gtk_entry_select_word (GtkEntry *entry)
-{
-  gint start_pos = gtk_entry_move_backward_word (entry, entry->current_pos);
-  gint end_pos = gtk_entry_move_forward_word (entry, entry->current_pos);
-
-  gtk_editable_select_region (GTK_EDITABLE (entry), start_pos, end_pos);
-}
-
-static void
-gtk_entry_select_line (GtkEntry *entry)
-{
-  gtk_editable_select_region (GTK_EDITABLE (entry), 0, -1);
-}
-
-/*
- * Like gtk_editable_get_chars, but if the editable is not
- * visible, return asterisks; also convert result to UTF-8.
- */
-static char *    
-gtk_entry_get_public_chars (GtkEntry *entry,
-			    gint      start,
-			    gint      end)
-{
-  if (end < 0)
-    end = entry->text_length;
-  
-  if (entry->visible)
-    return gtk_editable_get_chars (GTK_EDITABLE (entry), start, end);
+  previous_size = entry->text_size;
+  if (!entry->text_size)
+    entry->text_size = 128;
   else
+    entry->text_size *= 2;
+  entry->text = g_realloc (entry->text, entry->text_size * sizeof(GdkWChar));
+  entry->char_offset = g_realloc (entry->char_offset, 
+				  entry->text_size * sizeof(guint));
+
+  if (entry->text_length == 0)	/* initial allocation */
     {
-      gchar *str;
-      gint i;
-      gint n_chars = end - start;
-       
-      str = g_malloc (n_chars + 1);
-      for (i = 0; i < n_chars; i++)
-	str[i] = '*';
-      str[i] = '\0';
-      
-      return str;
+      entry->char_offset[0] = 0;
     }
 
+  for (i = previous_size; i < entry->text_size; i++)
+    entry->text[i] = '\0';
 }
 
 static void
-paste_received (GtkClipboard *clipboard,
-		const gchar  *text,
-		gpointer      data)
+gtk_entry_insert_text (GtkEditable *editable,
+		       const gchar *new_text,
+		       gint         new_text_length,
+		       gint        *position)
 {
-  GtkEntry *entry = GTK_ENTRY (data);
-  GtkEditable *editable = GTK_EDITABLE (entry);
-      
-  if (text)
+  GdkWChar *text;
+  gint start_pos;
+  gint end_pos;
+  gint last_pos;
+  gint max_length;
+  gint i;
+
+  guchar *new_text_nt;
+  gint insertion_length;
+  GdkWChar *insertion_text;
+  
+  GtkEntry *entry;
+  GtkWidget *widget;
+  
+  g_return_if_fail (editable != NULL);
+  g_return_if_fail (GTK_IS_ENTRY (editable));
+
+  entry = GTK_ENTRY (editable);
+  widget = GTK_WIDGET (editable);
+
+  if ((entry->text_length == 0) && (entry->use_wchar == FALSE))
     {
-      gint pos = entry->current_pos;
-      
-      gtk_editable_insert_text (editable, text, -1, &pos);
-      gtk_editable_set_position (editable, pos);
+      if (!GTK_WIDGET_REALIZED (widget))
+	gtk_widget_ensure_style (widget);
+      if ((widget->style) && (widget->style->font->type == GDK_FONT_FONTSET))
+	entry->use_wchar = TRUE;
     }
 
-  g_object_unref (G_OBJECT (entry));
-}
-
-static void
-gtk_entry_paste (GtkEntry *entry,
-		 GdkAtom   selection)
-{
-  g_object_ref (G_OBJECT (entry));
-  gtk_clipboard_request_text (gtk_clipboard_get (selection),
-			      paste_received, entry);
-}
-
-static void
-primary_get_cb (GtkClipboard     *clipboard,
-		GtkSelectionData *selection_data,
-		guint             info,
-		gpointer          data)
-{
-  GtkEntry *entry = GTK_ENTRY (data);
-  gint start, end;
-  
-  if (gtk_editable_get_selection_bounds (GTK_EDITABLE (entry), &start, &end))
+  if (new_text_length < 0)
     {
-      gchar *str = gtk_entry_get_public_chars (entry, start, end);
-      gtk_selection_data_set_text (selection_data, str);
-      g_free (str);
+      new_text_nt = (gchar *)new_text;
+      new_text_length = strlen (new_text);
+      if (new_text_length <= 0) return;
     }
-}
-
-static void
-primary_clear_cb (GtkClipboard *clipboard,
-		  gpointer      data)
-{
-  GtkEntry *entry = GTK_ENTRY (data);
-
-  gtk_editable_select_region (GTK_EDITABLE (entry), entry->current_pos, entry->current_pos);
-}
-
-static void
-gtk_entry_update_primary_selection (GtkEntry *entry)
-{
-  static const GtkTargetEntry targets[] = {
-    { "UTF8_STRING", 0, 0 },
-    { "STRING", 0, 0 },
-    { "TEXT",   0, 0 }, 
-    { "COMPOUND_TEXT", 0, 0 }
-  };
-  
-  GtkClipboard *clipboard = gtk_clipboard_get (GDK_SELECTION_PRIMARY);
-  gint start, end;
-  
-  if (gtk_editable_get_selection_bounds (GTK_EDITABLE (entry), &start, &end))
+  else if (new_text_length == 0)
     {
-      if (!gtk_clipboard_set_with_owner (clipboard, targets, G_N_ELEMENTS (targets),
-					 primary_get_cb, primary_clear_cb, G_OBJECT (entry)))
-	primary_clear_cb (clipboard, entry);
+      return;
     }
   else
     {
-      if (gtk_clipboard_get_owner (clipboard) == G_OBJECT (entry))
-	gtk_clipboard_clear (clipboard);
+      /* make a null-terminated copy of new_text */
+      new_text_nt = g_new (gchar, new_text_length + 1);
+      memcpy (new_text_nt, new_text, new_text_length);
+      new_text_nt[new_text_length] = 0;
+    }
+    
+  /* The algorithms here will work as long as, the text size (a
+   * multiple of 2), fits into a guint16 but we specify a shorter
+   * maximum length so that if the user pastes a very long text, there
+   * is not a long hang from the slow X_LOCALE functions.  */
+ 
+  if (entry->text_max_length == 0)
+    max_length = 2047;
+  else
+    max_length = MIN (2047, entry->text_max_length);
+
+  /* Convert to wide characters */
+  insertion_text = g_new (GdkWChar, new_text_length);
+  if (entry->use_wchar)
+    insertion_length = gdk_mbstowcs (insertion_text, new_text_nt,
+				     new_text_length);
+  else
+    for (insertion_length=0; new_text_nt[insertion_length]; insertion_length++)
+      insertion_text[insertion_length] = new_text_nt[insertion_length];
+  if (new_text_nt != (guchar *)new_text)
+    g_free (new_text_nt);
+
+  /* Make sure we do not exceed the maximum size of the entry. */
+  if (insertion_length + entry->text_length > max_length)
+    insertion_length = max_length - entry->text_length;
+
+  /* Don't insert anything, if there was nothing to insert. */
+  if (insertion_length <= 0)
+    {
+      g_free(insertion_text);
+      return;
+    }
+
+  /* Make sure we are inserting at integral character position */
+  start_pos = *position;
+  if (start_pos < 0)
+    start_pos = 0;
+  else if (start_pos > entry->text_length)
+    start_pos = entry->text_length;
+
+  end_pos = start_pos + insertion_length;
+  last_pos = insertion_length + entry->text_length;
+
+  if (editable->selection_start_pos >= *position)
+    editable->selection_start_pos += insertion_length;
+  if (editable->selection_end_pos >= *position)
+    editable->selection_end_pos += insertion_length;
+
+  while (last_pos >= entry->text_size)
+    gtk_entry_grow_text (entry);
+
+  text = entry->text;
+  for (i = last_pos - 1; i >= end_pos; i--)
+    text[i] = text[i- (end_pos - start_pos)];
+  for (i = start_pos; i < end_pos; i++)
+    text[i] = insertion_text[i - start_pos];
+  g_free (insertion_text);
+
+  /* Fix up the the character offsets */
+  
+  if (GTK_WIDGET_REALIZED (entry))
+    {
+      gint offset = 0;
+      
+      for (i = last_pos; i >= end_pos; i--)
+	entry->char_offset[i] 
+	  = entry->char_offset[i - insertion_length];
+      
+      for (i=start_pos; i<end_pos; i++)
+	{
+	  entry->char_offset[i] = entry->char_offset[start_pos] + offset;
+	  if (editable->visible)
+	    {
+	      offset += gdk_char_width_wc (GTK_WIDGET (entry)->style->font,
+					   entry->text[i]);
+	    }
+	  else
+	    {
+	      offset += gdk_char_width (GTK_WIDGET (entry)->style->font, '*');
+	    }
+	}
+      for (i = end_pos; i <= last_pos; i++)
+	entry->char_offset[i] += offset;
+    }
+
+  entry->text_length += insertion_length;
+  *position = end_pos;
+
+  entry->text_mb_dirty = 1;
+  gtk_entry_queue_draw (entry);
+}
+
+/* Recompute the x offsets of all characters in the buffer */
+static void
+gtk_entry_recompute_offsets (GtkEntry *entry)
+{
+  gint i;
+  gint offset = 0;
+
+  for (i=0; i<entry->text_length; i++)
+    {
+      entry->char_offset[i] = offset;
+      if (GTK_EDITABLE (entry)->visible)
+	{
+	  offset += gdk_char_width_wc (GTK_WIDGET (entry)->style->font,
+				       entry->text[i]);
+	}
+      else
+	{
+	  offset += gdk_char_width (GTK_WIDGET (entry)->style->font, '*');
+	}
+    }
+
+  entry->char_offset[i] = offset;
+}
+
+static void
+gtk_entry_delete_text (GtkEditable *editable,
+		       gint         start_pos,
+		       gint         end_pos)
+{
+  GdkWChar *text;
+  gint deletion_length;
+  gint i;
+
+  GtkEntry *entry;
+  
+  g_return_if_fail (editable != NULL);
+  g_return_if_fail (GTK_IS_ENTRY (editable));
+
+  entry = GTK_ENTRY (editable);
+
+  if (end_pos < 0)
+    end_pos = entry->text_length;
+
+  if (editable->selection_start_pos > start_pos)
+    editable->selection_start_pos -= MIN(end_pos, editable->selection_start_pos) - start_pos;
+  if (editable->selection_end_pos > start_pos)
+    editable->selection_end_pos -= MIN(end_pos, editable->selection_end_pos) - start_pos;
+  
+  if ((start_pos < end_pos) &&
+      (start_pos >= 0) &&
+      (end_pos <= entry->text_length))
+    {
+      text = entry->text;
+      deletion_length = end_pos - start_pos;
+
+      /* Fix up the character offsets */
+      if (GTK_WIDGET_REALIZED (entry))
+	{
+	  gint deletion_width = 
+	    entry->char_offset[end_pos] - entry->char_offset[start_pos];
+
+	  for (i = 0 ; i <= entry->text_length - end_pos; i++)
+	    entry->char_offset[start_pos+i] = entry->char_offset[end_pos+i] - deletion_width;
+	}
+
+      for (i = end_pos; i < entry->text_length; i++)
+        text[i - deletion_length] = text[i];
+
+      for (i = entry->text_length - deletion_length; i < entry->text_length; i++)
+        text[i] = '\0';
+
+      entry->text_length -= deletion_length;
+      editable->current_pos = start_pos;
+    }
+
+  entry->text_mb_dirty = 1;
+  gtk_entry_queue_draw (entry);
+}
+
+static void
+gtk_entry_update_text (GtkEditable *editable,
+		       gint         start_pos,
+		       gint         end_pos)
+{
+  gtk_entry_queue_draw (GTK_ENTRY(editable));
+}
+
+static gchar *    
+gtk_entry_get_chars      (GtkEditable   *editable,
+			  gint           start_pos,
+			  gint           end_pos)
+{
+  GtkEntry *entry;
+  
+  g_return_val_if_fail (editable != NULL, NULL);
+  g_return_val_if_fail (GTK_IS_ENTRY (editable), NULL);
+
+  entry = GTK_ENTRY (editable);
+
+  if (end_pos < 0)
+    end_pos = entry->text_length;
+
+  start_pos = MIN(entry->text_length, start_pos);
+  end_pos = MIN(entry->text_length, end_pos);
+
+  if (start_pos <= end_pos)
+    {
+      guchar *mbstr;
+      if (entry->use_wchar)
+	{
+	  GdkWChar ch;
+	  if (end_pos >= entry->text_size)
+	    gtk_entry_grow_text(entry);
+	  ch = entry->text[end_pos];
+	  entry->text[end_pos] = 0;
+	  mbstr = gdk_wcstombs (entry->text + start_pos);
+	  entry->text[end_pos] = ch;
+	  return (gchar *)mbstr;
+	}
+      else
+	{
+	  gint i;
+	  mbstr = g_new (gchar, end_pos - start_pos + 1);
+	  for (i=0; i<end_pos-start_pos; i++)
+	    mbstr[i] = entry->text[start_pos + i];
+	  mbstr[i] = 0;
+	  return (gchar *)mbstr;
+	}
+    }
+  else
+    return NULL;
+}
+
+static void 
+gtk_entry_move_cursor (GtkEditable *editable,
+		       gint         x,
+		       gint         y)
+{
+  GtkEntry *entry;
+  entry = GTK_ENTRY (editable);
+
+  /* Horizontal motion */
+  if ((gint)editable->current_pos < -x)
+    editable->current_pos = 0;
+  else if (editable->current_pos + x > entry->text_length)
+    editable->current_pos = entry->text_length;
+  else
+    editable->current_pos += x;
+
+  /* Ignore vertical motion */
+}
+
+static void
+gtk_move_forward_character (GtkEntry *entry)
+{
+  gtk_entry_move_cursor (GTK_EDITABLE (entry), 1, 0);
+}
+
+static void
+gtk_move_backward_character (GtkEntry *entry)
+{
+  gtk_entry_move_cursor (GTK_EDITABLE (entry), -1, 0);
+}
+
+static void 
+gtk_entry_move_word (GtkEditable *editable,
+		     gint         n)
+{
+  while (n-- > 0)
+    gtk_move_forward_word (GTK_ENTRY (editable));
+  while (n++ < 0)
+    gtk_move_backward_word (GTK_ENTRY (editable));
+}
+
+static void
+gtk_move_forward_word (GtkEntry *entry)
+{
+  GtkEditable *editable;
+  GdkWChar *text;
+  gint i;
+
+  editable = GTK_EDITABLE (entry);
+
+  /* Prevent any leak of information */
+  if (!editable->visible)
+    {
+      editable->current_pos = entry->text_length;
+      return;
+    }
+
+  if (entry->text && (editable->current_pos < entry->text_length))
+    {
+      text = entry->text;
+      i = editable->current_pos;
+	  
+      if ((entry->use_wchar) ? (!gdk_iswalnum (text[i])) : (!isalnum (text[i])))
+	for (; i < entry->text_length; i++)
+	  {
+	    if ((entry->use_wchar) ? gdk_iswalnum (text[i]) : isalnum (text[i]))
+	      break;
+	  }
+
+      for (; i < entry->text_length; i++)
+	{
+	  if ((entry->use_wchar) ? (!gdk_iswalnum (text[i])) : (!isalnum (text[i])))
+	    break;
+	}
+
+      editable->current_pos = i;
     }
 }
 
-/* Public API
- */
-
-GtkWidget*
-gtk_entry_new (void)
+static void
+gtk_move_backward_word (GtkEntry *entry)
 {
-  return GTK_WIDGET (gtk_type_new (GTK_TYPE_ENTRY));
+  GtkEditable *editable;
+  GdkWChar *text;
+  gint i;
+
+  editable = GTK_EDITABLE (entry);
+
+  /* Prevent any leak of information */
+  if (!editable->visible)
+    {
+      editable->current_pos = 0;
+      return;
+    }
+
+  if (entry->text && editable->current_pos > 0)
+    {
+      text = entry->text;
+      i = editable->current_pos - 1;
+      if ((entry->use_wchar) ? (!gdk_iswalnum (text[i])) : (!isalnum (text[i])))
+	for (; i >= 0; i--)
+	  {
+	    if ((entry->use_wchar) ? gdk_iswalnum (text[i]) : isalnum (text[i]))
+	      break;
+	  }
+      for (; i >= 0; i--)
+	{
+	  if ((entry->use_wchar) ? (!gdk_iswalnum (text[i])) : (!isalnum (text[i])))
+	    {
+	      i++;
+	      break;
+	    }
+	}
+	  
+      if (i < 0)
+	i = 0;
+	  
+      editable->current_pos = i;
+    }
 }
 
-GtkWidget*
-gtk_entry_new_with_max_length (guint16 max)
+static void
+gtk_entry_move_to_column (GtkEditable *editable, gint column)
 {
   GtkEntry *entry;
 
-  entry = gtk_type_new (GTK_TYPE_ENTRY);
-  entry->text_max_length = max;
-
-  return GTK_WIDGET (entry);
+  entry = GTK_ENTRY (editable);
+  
+  if (column < 0 || column > entry->text_length)
+    editable->current_pos = entry->text_length;
+  else
+    editable->current_pos = column;
 }
 
-void
-gtk_entry_set_text (GtkEntry *entry,
-		    const gchar *text)
+static void
+gtk_move_beginning_of_line (GtkEntry *entry)
 {
-  gint tmp_pos;
+  gtk_entry_move_to_column (GTK_EDITABLE (entry), 0);
+}
 
+static void
+gtk_move_end_of_line (GtkEntry *entry)
+{
+  gtk_entry_move_to_column (GTK_EDITABLE (entry), -1);
+}
+
+static void
+gtk_entry_kill_char (GtkEditable *editable,
+		     gint         direction)
+{
+  if (editable->selection_start_pos != editable->selection_end_pos)
+    gtk_editable_delete_selection (editable);
+  else
+    {
+      gint old_pos = editable->current_pos;
+      if (direction >= 0)
+	{
+	  gtk_entry_move_cursor (editable, 1, 0);
+	  gtk_editable_delete_text (editable, old_pos, editable->current_pos);
+	}
+      else
+	{
+	  gtk_entry_move_cursor (editable, -1, 0);
+	  gtk_editable_delete_text (editable, editable->current_pos, old_pos);
+	}
+    }
+}
+
+static void
+gtk_delete_forward_character (GtkEntry *entry)
+{
+  gtk_entry_kill_char (GTK_EDITABLE (entry), 1);
+}
+
+static void
+gtk_delete_backward_character (GtkEntry *entry)
+{
+  gtk_entry_kill_char (GTK_EDITABLE (entry), -1);
+}
+
+static void
+gtk_entry_kill_word (GtkEditable *editable,
+		     gint         direction)
+{
+  if (editable->selection_start_pos != editable->selection_end_pos)
+    gtk_editable_delete_selection (editable);
+  else
+    {
+      gint old_pos = editable->current_pos;
+      if (direction >= 0)
+	{
+	  gtk_entry_move_word (editable, 1);
+	  gtk_editable_delete_text (editable, old_pos, editable->current_pos);
+	}
+      else
+	{
+	  gtk_entry_move_word (editable, -1);
+	  gtk_editable_delete_text (editable, editable->current_pos, old_pos);
+	}
+    }
+}
+
+static void
+gtk_delete_forward_word (GtkEntry *entry)
+{
+  gtk_entry_kill_word (GTK_EDITABLE (entry), 1);
+}
+
+static void
+gtk_delete_backward_word (GtkEntry *entry)
+{
+  gtk_entry_kill_word (GTK_EDITABLE (entry), -1);
+}
+
+static void
+gtk_entry_kill_line (GtkEditable *editable,
+		     gint         direction)
+{
+  gint old_pos = editable->current_pos;
+  if (direction >= 0)
+    {
+      gtk_entry_move_to_column (editable, -1);
+      gtk_editable_delete_text (editable, old_pos, editable->current_pos);
+    }
+  else
+    {
+      gtk_entry_move_to_column (editable, 0);
+      gtk_editable_delete_text (editable, editable->current_pos, old_pos);
+    }
+}
+
+static void
+gtk_delete_line (GtkEntry *entry)
+{
+  gtk_entry_move_to_column (GTK_EDITABLE (entry), 0);
+  gtk_entry_kill_line (GTK_EDITABLE (entry), 1);
+}
+
+static void
+gtk_delete_to_line_end (GtkEntry *entry)
+{
+  gtk_editable_delete_text (GTK_EDITABLE(entry), GTK_EDITABLE(entry)->current_pos, entry->text_length);
+}
+
+static void
+gtk_select_word (GtkEntry *entry,
+		 guint32   time)
+{
   GtkEditable *editable;
-
-  g_return_if_fail (entry != NULL);
-  g_return_if_fail (GTK_IS_ENTRY (entry));
-  g_return_if_fail (text != NULL);
+  gint start_pos;
+  gint end_pos;
 
   editable = GTK_EDITABLE (entry);
+
+  gtk_move_backward_word (entry);
+  start_pos = editable->current_pos;
+
+  gtk_move_forward_word (entry);
+  end_pos = editable->current_pos;
+
+  editable->has_selection = TRUE;
+  gtk_entry_set_selection (editable, start_pos, end_pos);
+  gtk_editable_claim_selection (editable, start_pos != end_pos, time);
+}
+
+static void
+gtk_select_line (GtkEntry *entry,
+		 guint32   time)
+{
+  GtkEditable *editable;
+
+  editable = GTK_EDITABLE (entry);
+
+  editable->has_selection = TRUE;
+  gtk_entry_set_selection (editable, 0, entry->text_length);
+  gtk_editable_claim_selection (editable, entry->text_length != 0, time);
+
+  editable->current_pos = editable->selection_end_pos;
+}
+
+static void 
+gtk_entry_set_selection (GtkEditable       *editable,
+			 gint               start,
+			 gint               end)
+{
+  g_return_if_fail (editable != NULL);
+  g_return_if_fail (GTK_IS_ENTRY (editable));
+
+  if (end < 0)
+    end = GTK_ENTRY (editable)->text_length;
   
-  gtk_editable_delete_text (GTK_EDITABLE(entry), 0, -1);
+  editable->selection_start_pos = start;
+  editable->selection_end_pos = end;
 
-  tmp_pos = 0;
-  gtk_editable_insert_text (editable, text, strlen (text), &tmp_pos);
-}
-
-void
-gtk_entry_append_text (GtkEntry *entry,
-		       const gchar *text)
-{
-  gint tmp_pos;
-
-  g_return_if_fail (entry != NULL);
-  g_return_if_fail (GTK_IS_ENTRY (entry));
-  g_return_if_fail (text != NULL);
-
-  tmp_pos = entry->text_length;
-  gtk_editable_insert_text (GTK_EDITABLE(entry), text, -1, &tmp_pos);
-}
-
-void
-gtk_entry_prepend_text (GtkEntry *entry,
-			const gchar *text)
-{
-  gint tmp_pos;
-
-  g_return_if_fail (entry != NULL);
-  g_return_if_fail (GTK_IS_ENTRY (entry));
-  g_return_if_fail (text != NULL);
-
-  tmp_pos = 0;
-  gtk_editable_insert_text (GTK_EDITABLE(entry), text, -1, &tmp_pos);
-}
-
-void
-gtk_entry_set_position (GtkEntry *entry,
-			gint       position)
-{
-  g_return_if_fail (entry != NULL);
-  g_return_if_fail (GTK_IS_ENTRY (entry));
-
-  gtk_editable_set_position (GTK_EDITABLE (entry), position);
-}
-
-void
-gtk_entry_set_visibility (GtkEntry *entry,
-			  gboolean visible)
-{
-  g_return_if_fail (entry != NULL);
-  g_return_if_fail (GTK_IS_ENTRY (entry));
-
-  entry->visible = visible ? TRUE : FALSE;
-
-  gtk_entry_recompute (entry);
-}
-
-void
-gtk_entry_set_invisible_char (GtkEntry *entry,
-                              gunichar  ch)
-{
-  g_return_if_fail (GTK_IS_ENTRY (entry));
-
-  if (ch == entry->invisible_char)
-    return;
-
-  entry->invisible_char = ch;
-
-  gtk_entry_recompute (entry);  
-}
-
-void
-gtk_entry_set_editable(GtkEntry *entry,
-		       gboolean  editable)
-{
-  g_return_if_fail (entry != NULL);
-  g_return_if_fail (GTK_IS_ENTRY (entry));
-
-  gtk_editable_set_editable (GTK_EDITABLE (entry), editable);
-}
-
-gchar*
-gtk_entry_get_text (GtkEntry *entry)
-{
-  g_return_val_if_fail (entry != NULL, NULL);
-  g_return_val_if_fail (GTK_IS_ENTRY (entry), NULL);
-
-  return entry->text;
+  gtk_entry_queue_draw (GTK_ENTRY (editable));
 }
 
 void       
@@ -2414,71 +2235,99 @@ gtk_entry_set_max_length (GtkEntry     *entry,
   g_return_if_fail (GTK_IS_ENTRY (entry));
 
   if (max && entry->text_length > max)
-    gtk_editable_delete_text (GTK_EDITABLE(entry), max, -1);
-  
+  	gtk_editable_delete_text(GTK_EDITABLE(entry), max, -1);
   entry->text_max_length = max;
 }
 
-/* Quick hack of a popup menu
- */
+#ifdef USE_XIM
 static void
-activate_cb (GtkWidget *menuitem,
-	     GtkEntry  *entry)
+gtk_entry_update_ic_attr (GtkWidget *widget)
 {
-  const gchar *signal = gtk_object_get_data (GTK_OBJECT (menuitem), "gtk-signal");
-  gtk_signal_emit_by_name (GTK_OBJECT (entry), signal);
-}
+  GtkEditable *editable = (GtkEditable *) widget;
+  GdkICAttributesType mask = 0;
 
-static void
-append_action_signal (GtkEntry     *entry,
-		      GtkWidget    *menu,
-		      const gchar  *label,
-		      const gchar  *signal)
-{
-  GtkWidget *menuitem = gtk_menu_item_new_with_label (label);
+  if (editable->ic == NULL)
+    return;
 
-  gtk_object_set_data (GTK_OBJECT (menuitem), "gtk-signal", (char *)signal);
-  gtk_signal_connect (GTK_OBJECT (menuitem), "activate",
-		      activate_cb, entry);
+  gdk_ic_get_attr (editable->ic, editable->ic_attr,
+		   GDK_IC_PREEDIT_FOREGROUND |
+		   GDK_IC_PREEDIT_BACKGROUND |
+		   GDK_IC_PREEDIT_FONTSET);
 
-  gtk_widget_show (menuitem);
-  gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
-}
-	
-static void
-popup_menu_detach (GtkWidget *attach_widget,
-		   GtkMenu   *menu)
-{
-  GTK_ENTRY (attach_widget)->popup_menu = NULL;
-}
-
-static void
-gtk_entry_popup_menu (GtkEntry       *entry,
-		      GdkEventButton *event)
-{
-  if (!entry->popup_menu)
+  if (editable->ic_attr->preedit_foreground.pixel != 
+      widget->style->fg[GTK_STATE_NORMAL].pixel)
     {
-      GtkWidget *menuitem;
-      
-      entry->popup_menu = gtk_menu_new ();
+      mask |= GDK_IC_PREEDIT_FOREGROUND;
+      editable->ic_attr->preedit_foreground
+	= widget->style->fg[GTK_STATE_NORMAL];
+    }
+  if (editable->ic_attr->preedit_background.pixel != 
+      widget->style->base[GTK_STATE_NORMAL].pixel)
+    {
+      mask |= GDK_IC_PREEDIT_BACKGROUND;
+      editable->ic_attr->preedit_background
+	= widget->style->base[GTK_STATE_NORMAL];
+    }
+  if ((gdk_ic_get_style (editable->ic) & GDK_IM_PREEDIT_POSITION) && 
+      widget->style->font != NULL &&
+      widget->style->font->type == GDK_FONT_FONTSET &&
+      !gdk_font_equal (editable->ic_attr->preedit_fontset,
+		       widget->style->font))
+    {
+      mask |= GDK_IC_PREEDIT_FONTSET;
+      editable->ic_attr->preedit_fontset = widget->style->font;
+    }
+  
+  if (mask)
+    gdk_ic_set_attr (editable->ic, editable->ic_attr, mask);
+}
+#endif /* USE_XIM */
+    			  
+static void 
+gtk_entry_style_set	(GtkWidget      *widget,
+			 GtkStyle       *previous_style)
+{
+  GtkEntry *entry;
+  gint scroll_char;
 
-      gtk_menu_attach_to_widget (GTK_MENU (entry->popup_menu),
-				 GTK_WIDGET (entry),
-				 popup_menu_detach);
+  g_return_if_fail (widget != NULL);
+  g_return_if_fail (GTK_IS_ENTRY (widget));
 
-      append_action_signal (entry, entry->popup_menu, _("Cut"), "cut_clipboard");
-      append_action_signal (entry, entry->popup_menu, _("Copy"), "copy_clipboard");
-      append_action_signal (entry, entry->popup_menu, _("Paste"), "paste_clipboard");
+  if (previous_style && GTK_WIDGET_REALIZED (widget))
+    {
+      entry = GTK_ENTRY (widget);
+  
+      scroll_char = gtk_entry_find_position (entry, entry->scroll_offset);
+      gtk_entry_recompute_offsets (GTK_ENTRY (widget));
+      entry->scroll_offset = entry->char_offset[scroll_char];
+      entry_adjust_scroll (entry);
 
-      menuitem = gtk_menu_item_new (); /* Separator */
-      gtk_widget_show (menuitem);
-      gtk_menu_shell_append (GTK_MENU_SHELL (entry->popup_menu), menuitem);
+      gdk_window_set_background (widget->window, &widget->style->base[GTK_WIDGET_STATE (widget)]);
+      gdk_window_set_background (entry->text_area, &widget->style->base[GTK_WIDGET_STATE (widget)]);
 
-      gtk_im_multicontext_append_menuitems (GTK_IM_MULTICONTEXT (entry->im_context),
-					    GTK_MENU_SHELL (entry->popup_menu));
+#ifdef USE_XIM
+      gtk_entry_update_ic_attr (widget);
+#endif
+    }
+}
+
+static void
+gtk_entry_state_changed (GtkWidget      *widget,
+			 GtkStateType    previous_state)
+{
+  g_return_if_fail (widget != NULL);
+  g_return_if_fail (GTK_IS_ENTRY (widget));
+
+  if (GTK_WIDGET_REALIZED (widget))
+    {
+      gdk_window_set_background (widget->window, &widget->style->base[GTK_WIDGET_STATE (widget)]);
+      gdk_window_set_background (GTK_ENTRY (widget)->text_area, &widget->style->base[GTK_WIDGET_STATE (widget)]);
+
+#ifdef USE_XIM
+      gtk_entry_update_ic_attr (widget);
+#endif
     }
 
-  gtk_menu_popup (GTK_MENU (entry->popup_menu), NULL, NULL,
-		  NULL, NULL,
-		  event->button, event->time);
+  if (GTK_WIDGET_DRAWABLE (widget))
+    gtk_widget_queue_clear(widget);
 }

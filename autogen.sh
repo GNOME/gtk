@@ -49,7 +49,7 @@ esac
 if test -z "$ACLOCAL_FLAGS"; then
 
 	acdir=`aclocal --print-ac-dir`
-        m4list="glib-2.0.m4 gettext.m4"
+        m4list="glib.m4 gettext.m4"
 
 	for file in $m4list
 	do
@@ -70,12 +70,6 @@ echo "Running gettextize...  Ignore non-fatal messages."
 # get added reliably, but we don't want to overwrite intl
 # while making dist.
 echo "no" | gettextize --copy --force
-
-#
-# Really bad hack
-echo "Munging po/Makefile.in.in"
-sed s%@PACKAGE@%@GETTEXT_PACKAGE@% < po/Makefile.in.in > po/Makefile.in.in.new
-mv po/Makefile.in.in.new po/Makefile.in.in
 
 aclocal $ACLOCAL_FLAGS
 

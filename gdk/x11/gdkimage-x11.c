@@ -2,23 +2,23 @@
  * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
  *
  * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
+ * modify it under the terms of the GNU Library General Public
  * License as published by the Free Software Foundation; either
  * version 2 of the License, or (at your option) any later version.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
+ * Library General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public
+ * You should have received a copy of the GNU Library General Public
  * License along with this library; if not, write to the
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
  * Boston, MA 02111-1307, USA.
  */
 
 /*
- * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
+ * Modified by the GTK+ Team and others 1997-1999.  See the AUTHORS
  * file for a list of people on the GTK+ Team.  See the ChangeLog
  * files for a list of changes.  These files are distributed with
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
@@ -53,77 +53,42 @@
 #include <X11/extensions/XShm.h>
 #endif /* USE_SHM */
 
-#include <errno.h>
-
 #include "gdk.h"		/* For gdk_error_trap_* / gdk_flush_* */
 #include "gdkimage.h"
 #include "gdkprivate.h"
-#include "gdkprivate-x11.h"
+#include "gdkx.h"
+
+static void gdk_x11_image_destroy (GdkImage    *image);
+static void gdk_image_put_normal  (GdkImage    *image,
+				   GdkDrawable *drawable,
+				   GdkGC       *gc,
+				   gint         xsrc,
+				   gint         ysrc,
+				   gint         xdest,
+				   gint         ydest,
+				   gint         width,
+				   gint         height);
+static void gdk_image_put_shared  (GdkImage    *image,
+				   GdkDrawable *drawable,
+				   GdkGC       *gc,
+				   gint         xsrc,
+				   gint         ysrc,
+				   gint         xdest,
+				   gint         ydest,
+				   gint         width,
+				   gint         height);
+
+static GdkImageClass image_class_normal = {
+  gdk_x11_image_destroy,
+  gdk_image_put_normal
+};
+
+static GdkImageClass image_class_shared = {
+  gdk_x11_image_destroy,
+  gdk_image_put_shared
+};
 
 static GList *image_list = NULL;
-static gpointer parent_class = NULL;
-
-static void gdk_x11_image_destroy    (GdkImage      *image);
-static void gdk_image_init       (GdkImage      *image);
-static void gdk_image_class_init (GdkImageClass *klass);
-static void gdk_image_finalize   (GObject       *object);
-
-#define PRIVATE_DATA(image) ((GdkImagePrivateX11 *) GDK_IMAGE (image)->windowing_data)
-
-GType
-gdk_image_get_type (void)
-{
-  static GType object_type = 0;
-
-  if (!object_type)
-    {
-      static const GTypeInfo object_info =
-      {
-        sizeof (GdkImageClass),
-        (GBaseInitFunc) NULL,
-        (GBaseFinalizeFunc) NULL,
-        (GClassInitFunc) gdk_image_class_init,
-        NULL,           /* class_finalize */
-        NULL,           /* class_data */
-        sizeof (GdkImage),
-        0,              /* n_preallocs */
-        (GInstanceInitFunc) gdk_image_init,
-      };
-      
-      object_type = g_type_register_static (G_TYPE_OBJECT,
-                                            "GdkImage",
-                                            &object_info, 0);
-    }
-  
-  return object_type;
-}
-
-static void
-gdk_image_init (GdkImage *image)
-{
-  image->windowing_data = g_new0 (GdkImagePrivateX11, 1);
-  
-}
-
-static void
-gdk_image_class_init (GdkImageClass *klass)
-{
-  GObjectClass *object_class = G_OBJECT_CLASS (klass);
-
-  parent_class = g_type_class_peek_parent (klass);
-
-  object_class->finalize = gdk_image_finalize;
-}
-
-static void
-gdk_image_finalize (GObject *object)
-{
-  GdkImage *image = GDK_IMAGE (object);
-
-  gdk_x11_image_destroy (image);
-  
-  G_OBJECT_CLASS (parent_class)->finalize (object);
-}
 
 
 void
@@ -144,28 +109,30 @@ gdk_image_new_bitmap(GdkVisual *visual, gpointer data, gint w, gint h)
  * Desc: create a new bitmap image
  */
 {
-  Visual *xvisual;
-  GdkImage *image;
-  GdkImagePrivateX11 *private;
-  image = g_object_new (gdk_image_get_type (), NULL);
-  private = PRIVATE_DATA (image);
-  private->xdisplay = gdk_display;
-  image->type = GDK_IMAGE_NORMAL;
-  image->visual = visual;
-  image->width = w;
-  image->height = h;
-  image->depth = 1;
-  xvisual = ((GdkVisualPrivate*) visual)->xvisual;
-  private->ximage = XCreateImage(private->xdisplay, xvisual, 1, XYBitmap,
-				 0, 0, w ,h, 8, 0);
-  private->ximage->data = data;
-  private->ximage->bitmap_bit_order = MSBFirst;
-  private->ximage->byte_order = MSBFirst;
-  image->byte_order = MSBFirst;
-  image->mem =  private->ximage->data;
-  image->bpl = private->ximage->bytes_per_line;
-  image->bpp = 1;
-  return(image);
+        Visual *xvisual;
+        GdkImage *image;
+        GdkImagePrivateX *private;
+        private = g_new(GdkImagePrivateX, 1);
+        image = (GdkImage *) private;
+        private->xdisplay = gdk_display;
+        private->base.ref_count = 1;
+        private->base.klass = &image_class_normal;
+        image->type = GDK_IMAGE_NORMAL;
+        image->visual = visual;
+        image->width = w;
+        image->height = h;
+        image->depth = 1;
+        xvisual = ((GdkVisualPrivate*) visual)->xvisual;
+        private->ximage = XCreateImage(private->xdisplay, xvisual, 1, XYBitmap,
+				       0, 0, w ,h, 8, 0);
+        private->ximage->data = data;
+        private->ximage->bitmap_bit_order = MSBFirst;
+        private->ximage->byte_order = MSBFirst;
+        image->byte_order = MSBFirst;
+        image->mem =  private->ximage->data;
+        image->bpl = private->ximage->bytes_per_line;
+        image->bpp = 1;
+	return(image);
 } /* gdk_image_new_bitmap() */
 
 static int
@@ -193,7 +160,7 @@ gdk_image_check_xshm(Display *display)
 }
 
 void
-_gdk_windowing_image_init (void)
+gdk_image_init (void)
 {
   if (gdk_use_xshm)
     {
@@ -211,7 +178,7 @@ gdk_image_new (GdkImageType  type,
 	       gint          height)
 {
   GdkImage *image;
-  GdkImagePrivateX11 *private;
+  GdkImagePrivateX *private;
 #ifdef USE_SHM
   XShmSegmentInfo *x_shm_info;
 #endif /* USE_SHM */
@@ -227,10 +194,10 @@ gdk_image_new (GdkImageType  type,
       break;
 
     default:
-      image = g_object_new (gdk_image_get_type (), NULL);
-      
-      private = PRIVATE_DATA (image);
+      private = g_new (GdkImagePrivateX, 1);
+      image = (GdkImage*) private;
 
+      private->base.ref_count = 1;
       private->xdisplay = gdk_display;
 
       image->type = type;
@@ -247,6 +214,8 @@ gdk_image_new (GdkImageType  type,
 #ifdef USE_SHM
 	  if (gdk_use_xshm)
 	    {
+	      private->base.klass = &image_class_shared;
+
 	      private->x_shm_info = g_new (XShmSegmentInfo, 1);
 	      x_shm_info = private->x_shm_info;
 
@@ -267,21 +236,13 @@ gdk_image_new (GdkImageType  type,
 
 	      if (x_shm_info->shmid == -1)
 		{
-		  /* EINVAL indicates, most likely, that the segment we asked for
-		   * is bigger than SHMMAX, so we don't treat it as a permanently
-		   * fatal error. ENOSPC and ENOMEM may also indicate this, but
-		   * more likely are permanent errors.
-		   */
-		  if (errno != EINVAL)
-		    {
-		      g_warning ("shmget failed!");
-		      gdk_use_xshm = False;
-		    }
+		  g_warning ("shmget failed!");
 
 		  XDestroyImage (private->ximage);
 		  g_free (private->x_shm_info);
 		  g_free (image);
 
+		  gdk_use_xshm = False;
 		  return NULL;
 		}
 
@@ -344,6 +305,8 @@ gdk_image_new (GdkImageType  type,
 	  return NULL;
 #endif /* USE_SHM */
 	case GDK_IMAGE_NORMAL:
+	  private->base.klass = &image_class_normal;
+
 	  private->ximage = XCreateImage (private->xdisplay, xvisual, visual->depth,
 					  ZPixmap, 0, 0, width, height, 32, 0);
 
@@ -355,6 +318,7 @@ gdk_image_new (GdkImageType  type,
 	  break;
 
 	case GDK_IMAGE_FASTEST:
+	case GDK_IMAGE_SHARED_PIXMAP:
 	  g_assert_not_reached ();
 	}
 
@@ -371,44 +335,33 @@ gdk_image_new (GdkImageType  type,
 }
 
 GdkImage*
-_gdk_x11_get_image (GdkDrawable    *drawable,
-                    gint            x,
-                    gint            y,
-                    gint            width,
-                    gint            height)
+gdk_image_get (GdkWindow *window,
+	       gint       x,
+	       gint       y,
+	       gint       width,
+	       gint       height)
 {
   GdkImage *image;
-  GdkImagePrivateX11 *private;
-  GdkDrawableImplX11 *impl;
-  GdkVisual *visual;
-  
-  g_return_val_if_fail (GDK_IS_DRAWABLE_IMPL_X11 (drawable), NULL);
+  GdkImagePrivateX *private;
 
-  visual = gdk_drawable_get_visual (drawable);
+  g_return_val_if_fail (window != NULL, NULL);
 
-  if (visual == NULL)
-    {
-      g_warning ("To get the image from a drawable, the drawable "
-                 "must have a visual and colormap; calling "
-                 "gtk_drawable_set_colormap() on a drawable "
-                 "created without a colormap should solve this problem");
+  if (GDK_DRAWABLE_DESTROYED (window))
+    return NULL;
 
-      return NULL;
-    }
-  
-  impl = GDK_DRAWABLE_IMPL_X11 (drawable);
-  
-  image = g_object_new (gdk_image_get_type (), NULL);
-  private = PRIVATE_DATA (image);
+  private = g_new (GdkImagePrivateX, 1);
+  image = (GdkImage*) private;
 
+  private->base.ref_count = 1;
+  private->base.klass = &image_class_normal;
   private->xdisplay = gdk_display;
   private->ximage = XGetImage (private->xdisplay,
-                               impl->xid,
+			       GDK_DRAWABLE_XID (window),
 			       x, y, width, height,
 			       AllPlanes, ZPixmap);
 
   image->type = GDK_IMAGE_NORMAL;
-  image->visual = visual;
+  image->visual = gdk_window_get_visual (window);
   image->width = width;
   image->height = height;
   image->depth = private->ximage->depth;
@@ -434,11 +387,11 @@ gdk_image_get_pixel (GdkImage *image,
 		     gint y)
 {
   guint32 pixel;
-  GdkImagePrivateX11 *private;
+  GdkImagePrivateX *private;
 
-  g_return_val_if_fail (GDK_IS_IMAGE (image), 0);
+  g_return_val_if_fail (image != NULL, 0);
 
-  private = PRIVATE_DATA (image);
+  private = (GdkImagePrivateX *) image;
 
   pixel = XGetPixel (private->ximage, x, y);
 
@@ -451,11 +404,11 @@ gdk_image_put_pixel (GdkImage *image,
 		     gint y,
 		     guint32 pixel)
 {
-  GdkImagePrivateX11 *private;
+  GdkImagePrivateX *private;
 
-  g_return_if_fail (GDK_IS_IMAGE (image));
+  g_return_if_fail (image != NULL);
 
-  private = PRIVATE_DATA (image);
+  private = (GdkImagePrivateX *) image;
 
   pixel = XPutPixel (private->ximage, x, y, pixel);
 }
@@ -463,21 +416,14 @@ gdk_image_put_pixel (GdkImage *image,
 static void
 gdk_x11_image_destroy (GdkImage *image)
 {
-  GdkImagePrivateX11 *private;
+  GdkImagePrivateX *private;
 #ifdef USE_SHM
   XShmSegmentInfo *x_shm_info;
 #endif /* USE_SHM */
 
-  g_return_if_fail (GDK_IS_IMAGE (image));
+  g_return_if_fail (image != NULL);
 
-  private = PRIVATE_DATA (image);
-
-  if (private == NULL) /* This means that gdk_image_exit() destroyed the
-                        * image already, and now we're called a second
-                        * time from _finalize()
-                        */
-    return;
-  
+  private = (GdkImagePrivateX*) image;
   switch (image->type)
     {
     case GDK_IMAGE_NORMAL:
@@ -495,8 +441,7 @@ gdk_x11_image_destroy (GdkImage *image)
       shmdt (x_shm_info->shmaddr);
       
       g_free (private->x_shm_info);
-      private->x_shm_info = NULL;
-      
+
       image_list = g_list_remove (image_list, image);
 #else /* USE_SHM */
       g_error ("trying to destroy shared memory image when gdk was compiled without shared memory support");
@@ -504,9 +449,69 @@ gdk_x11_image_destroy (GdkImage *image)
       break;
 
     case GDK_IMAGE_FASTEST:
+    case GDK_IMAGE_SHARED_PIXMAP:
       g_assert_not_reached ();
     }
 
-  g_free (private);
-  image->windowing_data = NULL;
+  g_free (image);
+}
+
+static void
+gdk_image_put_normal (GdkImage    *image,
+		      GdkDrawable *drawable,
+		      GdkGC       *gc,
+		      gint         xsrc,
+		      gint         ysrc,
+		      gint         xdest,
+		      gint         ydest,
+		      gint         width,
+		      gint         height)
+{
+  GdkImagePrivateX *image_private;
+
+  g_return_if_fail (drawable != NULL);
+  g_return_if_fail (image != NULL);
+  g_return_if_fail (gc != NULL);
+
+  if (GDK_DRAWABLE_DESTROYED (drawable))
+    return;
+  image_private = (GdkImagePrivateX*) image;
+
+  g_return_if_fail (image->type == GDK_IMAGE_NORMAL);
+
+  XPutImage (GDK_DRAWABLE_XDISPLAY (drawable), GDK_DRAWABLE_XID (drawable), 
+	     GDK_GC_XGC (gc), image_private->ximage,
+	     xsrc, ysrc, xdest, ydest, width, height);
+}
+
+static void
+gdk_image_put_shared (GdkImage    *image,
+		      GdkDrawable *drawable,
+		      GdkGC       *gc,
+		      gint         xsrc,
+		      gint         ysrc,
+		      gint         xdest,
+		      gint         ydest,
+		      gint         width,
+		      gint         height)
+{
+#ifdef USE_SHM
+  GdkImagePrivateX *image_private;
+
+  g_return_if_fail (drawable != NULL);
+  g_return_if_fail (image != NULL);
+  g_return_if_fail (gc != NULL);
+
+  if (GDK_DRAWABLE_DESTROYED (drawable))
+    return;
+  image_private = (GdkImagePrivateX*) image;
+
+  g_return_if_fail (image->type == GDK_IMAGE_SHARED);
+
+  XShmPutImage (GDK_DRAWABLE_XDISPLAY (drawable), GDK_DRAWABLE_XID (drawable), 
+		GDK_GC_XGC (gc), image_private->ximage,
+		xsrc, ysrc, xdest, ydest, width, height, False);
+#else /* USE_SHM */
+  g_error ("trying to draw shared memory image when gdk was compiled without shared memory support");
+#endif /* USE_SHM */
 }

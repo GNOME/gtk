@@ -265,14 +265,6 @@ elements are:
        </para>
      </listitem>
   </varlistentry>
-  <varlistentry>
-    <term><literal>stock[<replaceable>"stock-id"</replaceable>] = { <replaceable>icon source specifications</replaceable> }</literal></term>
-     <listitem>
-       <para>
-        Defines the icon for a stock item.
-       </para>
-     </listitem>
-  </varlistentry>
 </variablelist>
 </para>
 <para>
@@ -327,7 +319,7 @@ state of the widget. The states are:
     <listitem>
       <para>
         A color used for the background of widgets that have
-        been set insensitive with gtk_widget_set_sensitive()
+        been set insenstivie with gtk_widget_set_senstive()
       </para>
     </listitem>
   </varlistentry>
@@ -343,70 +335,6 @@ hex digits, or they can be specified as a triplet of floats
 <literal>{ <replaceable>r</replaceable>, <replaceable>g</replaceable>,
 <replaceable>b</replaceable>}</literal>.
 </para>
-
-<para>
-In a <literal>stock</literal> definition, icon sources are specified as a
-4-tuple of image filename, text direction, widget state, and size, in that
-order.  Each icon source specifies an image filename to use with a given
-direction, state, and size. The <literal>*</literal> character can be used as a
-wildcard, and if direction/state/size are omitted they default to
-<literal>*</literal>. So for example, the following specifies different icons to
-use for left-to-right and right-to-left languages:
-<programlisting>
-stock["my-stock-item"] = 
-{
-  { "itemltr.png", LTR, *, * },
-  { "itemrtl.png", RTL, *, * }
-}
-</programlisting>
-This could be abbreviated as follows:
-<programlisting>
-stock["my-stock-item"] = 
-{
-  { "itemltr.png", LTR },
-  { "itemrtl.png", RTL }
-}
-</programlisting>
-</para>
-
-<para>
-You can specify custom icons for specific sizes, as follows:
-<programlisting>
-stock["my-stock-item"] = 
-{
-  { "itemmenusize.png", *, *, "gtk-menu" },
-  { "itemtoolbarsize.png", *, *, "gtk-large-toolbar" }
-  { "itemgeneric.png" } /* implicit *, *, * as a fallback */
-}
-</programlisting>
-The sizes that come with GTK+ itself are <literal>"gtk-menu"</literal>,
-<literal>"gtk-small-toolbar"</literal>, <literal>"gtk-large-toolbar"</literal>,
-<literal>"gtk-button"</literal>, <literal>"gtk-dialog"</literal>. Applications
-can define other sizes.
-</para>
-
-<para>
-It's also possible to use custom icons for a given state, for example:
-You can specify custom icons for specific sizes, as follows:
-<programlisting>
-stock["my-stock-item"] = 
-{
-  { "itemprelight.png", *, PRELIGHT },
-  { "iteminsensitive.png", *, INSENSITIVE }, 
-  { "itemgeneric.png" } /* implicit *, *, * as a fallback */
-}
-</programlisting>
-</para>
-
-<para>
-When selecting an icon source to use, GTK+ will consider text direction most
-important, state second, and size third. It will select the best match based on
-those criteria. If an attribute matches exactly (e.g. you specified
-<literal>PRELIGHT</literal> or specified the size), GTK+ won't modify the image;
-if the attribute matches with a wildcard, GTK+ will scale or modify the image to
-match the state and size the user requested.
-</para>
-
 </refsect2>
 
 <refsect2><title>Key bindings</title>
@@ -496,23 +424,18 @@ This can later be composited together with other
 #GtkRcStyle structures to form a #GtkStyle.
 </para>
 
-@parent_instance: 
 @name: 
+@font_name: 
+@fontset_name: 
 @bg_pixmap_name: 
-@font_desc: 
 @color_flags: 
 @fg: 
 @bg: 
 @text: 
 @base: 
-@xthickness: 
-@ythickness: 
-
-<!-- ##### STRUCT GtkRcStyleClass ##### -->
-<para>
-
-</para>
-
+@engine: 
+@engine_data: 
+@ref_count: 
 
 <!-- ##### ENUM GtkRcFlags ##### -->
 <para>
@@ -587,13 +510,10 @@ specific portions of a RC file.
 @GTK_RC_TOKEN_INSENSITIVE: 
 @GTK_RC_TOKEN_FG: 
 @GTK_RC_TOKEN_BG: 
-@GTK_RC_TOKEN_TEXT: 
 @GTK_RC_TOKEN_BASE: 
-@GTK_RC_TOKEN_XTHICKNESS: 
-@GTK_RC_TOKEN_YTHICKNESS: 
+@GTK_RC_TOKEN_TEXT: 
 @GTK_RC_TOKEN_FONT: 
 @GTK_RC_TOKEN_FONTSET: 
-@GTK_RC_TOKEN_FONT_NAME: 
 @GTK_RC_TOKEN_BG_PIXMAP: 
 @GTK_RC_TOKEN_PIXMAP_PATH: 
 @GTK_RC_TOKEN_STYLE: 
@@ -609,11 +529,6 @@ specific portions of a RC file.
 @GTK_RC_TOKEN_HIGHEST: 
 @GTK_RC_TOKEN_ENGINE: 
 @GTK_RC_TOKEN_MODULE_PATH: 
-@GTK_RC_TOKEN_IM_MODULE_PATH: 
-@GTK_RC_TOKEN_IM_MODULE_FILE: 
-@GTK_RC_TOKEN_STOCK: 
-@GTK_RC_TOKEN_LTR: 
-@GTK_RC_TOKEN_RTL: 
 @GTK_RC_TOKEN_LAST: 
 
 <!-- ##### FUNCTION gtk_rc_get_style ##### -->
@@ -802,22 +717,6 @@ theme engines.
 @Returns: The directory. (Must be freed with g_free())
 
 
-<!-- ##### FUNCTION gtk_rc_get_im_module_path ##### -->
-<para>
-
-</para>
-
-@Returns: 
-
-
-<!-- ##### FUNCTION gtk_rc_get_im_module_file ##### -->
-<para>
-
-</para>
-
-@Returns: 
-
-
 <!-- ##### FUNCTION gtk_rc_get_theme_dir ##### -->
 <para>
 Returns the standard directory in which themes should
@@ -857,15 +756,6 @@ a reference count of 1.
 @Returns: the newly create #GtkRcStyle
 
 
-<!-- ##### FUNCTION gtk_rc_style_copy ##### -->
-<para>
-
-</para>
-
-@orig: 
-@Returns: 
-
-
 <!-- ##### FUNCTION gtk_rc_style_ref ##### -->
 <para>
 Increment the reference count of a #GtkRcStyle.
@@ -881,5 +771,12 @@ free if the result is 0.
 </para>
 
 @rc_style: a #GtkRcStyle
+
+
+<!-- ##### FUNCTION gtk_rc_init ##### -->
+<para>
+Internal function.
+</para>
+
 
 

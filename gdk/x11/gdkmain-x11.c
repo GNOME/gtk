@@ -2,23 +2,23 @@
  * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
  *
  * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
+ * modify it under the terms of the GNU Library General Public
  * License as published by the Free Software Foundation; either
  * version 2 of the License, or (at your option) any later version.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	 See the GNU
- * Lesser General Public License for more details.
+ * Library General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public
+ * You should have received a copy of the GNU Library General Public
  * License along with this library; if not, write to the
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
  * Boston, MA 02111-1307, USA.
  */
 
 /*
- * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
+ * Modified by the GTK+ Team and others 1997-1999.  See the AUTHORS
  * file for a list of people on the GTK+ Team.  See the ChangeLog
  * files for a list of changes.  These files are distributed with
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
@@ -30,7 +30,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <unistd.h>
 #include <limits.h>
 #include <errno.h>
 
@@ -45,17 +44,11 @@
 #include <X11/Xutil.h>
 #include <X11/cursorfont.h>
 
-#ifdef HAVE_XKB
-#include <X11/XKBlib.h>
-#endif
-
 #include "gdk.h"
 
-#include "gdkprivate-x11.h"
-#include "gdkinternals.h"
+#include "gdkx.h"
+#include "gdkprivate.h"
 #include "gdkinputprivate.h"
-
-#include <pango/pangox.h>
 
 typedef struct _GdkPredicate  GdkPredicate;
 typedef struct _GdkErrorTrap  GdkErrorTrap;
@@ -154,7 +147,6 @@ _gdk_windowing_init_check (int argc, char **argv)
 {
   XKeyboardState keyboard_state;
   XClassHint *class_hint;
-  guint pid;
   
   XSetErrorHandler (gdk_x_error);
   XSetIOErrorHandler (gdk_x_io_error);
@@ -183,46 +175,16 @@ _gdk_windowing_init_check (int argc, char **argv)
                       NULL, NULL, argv, argc, 
                       NULL, NULL, class_hint);
   XFree (class_hint);
-
-  pid = getpid();
-  XChangeProperty (gdk_display, gdk_leader_window,
-		   gdk_atom_intern ("_NET_WM_PID", FALSE),
-		   XA_CARDINAL, 32,
-		   PropModeReplace,
-		   (guchar *)&pid, 1);
   
-  gdk_wm_delete_window = gdk_atom_intern ("WM_DELETE_WINDOW", FALSE);
-  gdk_wm_take_focus = gdk_atom_intern ("WM_TAKE_FOCUS", FALSE);
-  gdk_wm_protocols = gdk_atom_intern ("WM_PROTOCOLS", FALSE);
+  gdk_wm_delete_window = XInternAtom (gdk_display, "WM_DELETE_WINDOW", False);
+  gdk_wm_take_focus = XInternAtom (gdk_display, "WM_TAKE_FOCUS", False);
+  gdk_wm_protocols = XInternAtom (gdk_display, "WM_PROTOCOLS", False);
   gdk_wm_window_protocols[0] = gdk_wm_delete_window;
   gdk_wm_window_protocols[1] = gdk_wm_take_focus;
-  gdk_wm_window_protocols[2] = gdk_atom_intern ("_NET_WM_PING", FALSE);
-  gdk_selection_property = gdk_atom_intern ("GDK_SELECTION", FALSE);
+  gdk_selection_property = XInternAtom (gdk_display, "GDK_SELECTION", False);
   
   XGetKeyboardControl (gdk_display, &keyboard_state);
   autorepeat = keyboard_state.global_auto_repeat;
-
-#ifdef HAVE_XKB
-  {
-    gint xkb_major = XkbMajorVersion;
-    gint xkb_minor = XkbMinorVersion;
-    if (XkbLibraryVersion (&xkb_major, &xkb_minor))
-      {
-        xkb_major = XkbMajorVersion;
-        xkb_minor = XkbMinorVersion;
-        if (XkbQueryExtension (gdk_display, NULL, NULL, NULL,
-                               &xkb_major, &xkb_minor))
-          {
-            _gdk_use_xkb = TRUE;
-
-            XkbSelectEvents (gdk_display,
-                             XkbUseCoreKbd,
-                             XkbMapNotifyMask,
-                             XkbMapNotifyMask);
-          }
-      }
-  }
-#endif
   
   return TRUE;
 }
@@ -237,26 +199,6 @@ gboolean
 gdk_get_use_xshm (void)
 {
   return gdk_use_xshm;
-}
-
-static GdkGrabStatus
-gdk_x11_convert_grab_status (gint status)
-{
-  switch (status)
-    {
-    case GrabSuccess:
-      return GDK_GRAB_SUCCESS;
-    case AlreadyGrabbed:
-      return GDK_GRAB_ALREADY_GRABBED;
-    case GrabInvalidTime:
-      return GDK_GRAB_INVALID_TIME;
-    case GrabNotViewable:
-      return GDK_GRAB_NOT_VIEWABLE;
-    case GrabFrozen:
-      return GDK_GRAB_FROZEN;
-    }
-
-  g_assert_not_reached();
 }
 
 /*
@@ -282,7 +224,7 @@ gdk_x11_convert_grab_status (gint status)
  *--------------------------------------------------------------
  */
 
-GdkGrabStatus
+gint
 gdk_pointer_grab (GdkWindow *	  window,
 		  gboolean	  owner_events,
 		  GdkEventMask	  event_mask,
@@ -304,12 +246,12 @@ gdk_pointer_grab (GdkWindow *	  window,
   
   cursor_private = (GdkCursorPrivate*) cursor;
   
-  xwindow = GDK_WINDOW_XID (window);
+  xwindow = GDK_DRAWABLE_XID (window);
   
-  if (!confine_to || GDK_WINDOW_DESTROYED (confine_to))
+  if (!confine_to || GDK_DRAWABLE_DESTROYED (confine_to))
     xconfine_to = None;
   else
-    xconfine_to = GDK_WINDOW_XID (confine_to);
+    xconfine_to = GDK_DRAWABLE_XID (confine_to);
   
   if (!cursor)
     xcursor = None;
@@ -324,16 +266,19 @@ gdk_pointer_grab (GdkWindow *	  window,
 	xevent_mask |= gdk_event_mask_table[i];
     }
   
-  return_val = _gdk_input_grab_pointer (window,
-					owner_events,
-					event_mask,
-					confine_to,
-					time);
-
-  if (return_val == GrabSuccess)
+  if (gdk_input_vtable.grab_pointer)
+    return_val = gdk_input_vtable.grab_pointer (window,
+						owner_events,
+						event_mask,
+						confine_to,
+						time);
+  else
+    return_val = Success;
+  
+  if (return_val == Success)
     {
-      if (!GDK_WINDOW_DESTROYED (window))
-	return_val = XGrabPointer (GDK_WINDOW_XDISPLAY (window),
+      if (!GDK_DRAWABLE_DESTROYED (window))
+	return_val = XGrabPointer (GDK_DRAWABLE_XDISPLAY (window),
 				   xwindow,
 				   owner_events,
 				   xevent_mask,
@@ -346,9 +291,9 @@ gdk_pointer_grab (GdkWindow *	  window,
     }
   
   if (return_val == GrabSuccess)
-    gdk_xgrab_window = (GdkWindowObject *)window;
-
-  return gdk_x11_convert_grab_status (return_val);
+    gdk_xgrab_window = (GdkWindowPrivate *)window;
+  
+  return return_val;
 }
 
 /*
@@ -369,7 +314,8 @@ gdk_pointer_grab (GdkWindow *	  window,
 void
 gdk_pointer_ungrab (guint32 time)
 {
-  _gdk_input_ungrab_pointer (time);
+  if (gdk_input_vtable.ungrab_pointer)
+    gdk_input_vtable.ungrab_pointer (time);
   
   XUngrabPointer (gdk_display, time);
   gdk_xgrab_window = NULL;
@@ -416,26 +362,22 @@ gdk_pointer_is_grabbed (void)
  *--------------------------------------------------------------
  */
 
-GdkGrabStatus
+gint
 gdk_keyboard_grab (GdkWindow *	   window,
 		   gboolean	   owner_events,
 		   guint32	   time)
 {
-  gint return_val;
-  
   g_return_val_if_fail (window != NULL, 0);
   g_return_val_if_fail (GDK_IS_WINDOW (window), 0);
   
-  if (!GDK_WINDOW_DESTROYED (window))
-    return_val = XGrabKeyboard (GDK_WINDOW_XDISPLAY (window),
-				GDK_WINDOW_XID (window),
-				owner_events,
-				GrabModeAsync, GrabModeAsync,
-				time);
+  if (!GDK_DRAWABLE_DESTROYED (window))
+    return XGrabKeyboard (GDK_DRAWABLE_XDISPLAY (window),
+			  GDK_DRAWABLE_XID (window),
+			  owner_events,
+			  GrabModeAsync, GrabModeAsync,
+			  time);
   else
-    return_val = AlreadyGrabbed;
-
-  return gdk_x11_convert_grab_status (return_val);
+    return AlreadyGrabbed;
 }
 
 /*
@@ -621,8 +563,6 @@ gdk_beep (void)
 void
 gdk_windowing_exit (void)
 {
-  pango_x_shutdown_display (gdk_display);
-  
   XCloseDisplay (gdk_display);
 }
 
@@ -752,3 +692,35 @@ gdk_send_xevent (Window window, gboolean propagate, glong event_mask,
   return result && !gdk_error_code;
 }
 
+gchar*
+gdk_keyval_name (guint	      keyval)
+{
+  return XKeysymToString (keyval);
+}
+
+guint
+gdk_keyval_from_name (const gchar *keyval_name)
+{
+  g_return_val_if_fail (keyval_name != NULL, 0);
+  
+  return XStringToKeysym (keyval_name);
+}
+
+#ifdef HAVE_XCONVERTCASE
+void
+gdk_keyval_convert_case (guint symbol,
+			 guint *lower,
+			 guint *upper)
+{
+  KeySym xlower = 0;
+  KeySym xupper = 0;
+
+  if (symbol)
+    XConvertCase (symbol, &xlower, &xupper);
+
+  if (lower)
+    *lower = xlower;
+  if (upper)
+    *upper = xupper;
+}  
+#endif HAVE_XCONVERTCASE

@@ -9,8 +9,7 @@ extern "C" {
 
 typedef struct _GdkDragContext        GdkDragContext;
 
-typedef enum
-{
+typedef enum {
   GDK_ACTION_DEFAULT = 1 << 0,
   GDK_ACTION_COPY    = 1 << 1,
   GDK_ACTION_MOVE    = 1 << 2,
@@ -19,8 +18,7 @@ typedef enum
   GDK_ACTION_ASK     = 1 << 5
 } GdkDragAction;
 
-typedef enum
-{
+typedef enum {
   GDK_DRAG_PROTO_MOTIF,
   GDK_DRAG_PROTO_XDND,
   GDK_DRAG_PROTO_ROOTWIN,	  /* A root window with nobody claiming
@@ -28,27 +26,12 @@ typedef enum
   GDK_DRAG_PROTO_NONE,		  /* Not a valid drag window */
   GDK_DRAG_PROTO_WIN32_DROPFILES, /* The simple WM_DROPFILES dnd */
   GDK_DRAG_PROTO_OLE2,		  /* The complex OLE2 dnd (not implemented) */
-  GDK_DRAG_PROTO_LOCAL            /* Intra-app */
 } GdkDragProtocol;
 
-/* Object that holds information about a drag in progress.
+/* Structure that holds information about a drag in progress.
  * this is used on both source and destination sides.
  */
-
-typedef struct _GdkDragContextClass GdkDragContextClass;
-
-#define GDK_TYPE_DRAG_CONTEXT              (gdk_drag_context_get_type ())
-#define GDK_DRAG_CONTEXT(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_DRAG_CONTEXT, GdkDragContext))
-#define GDK_DRAG_CONTEXT_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), GDK_TYPE_DRAG_CONTEXT, GdkDragContextClass))
-#define GDK_IS_DRAG_CONTEXT(object)        (G_TYPE_CHECK_INSTANCE_TYPE ((object), GDK_TYPE_DRAG_CONTEXT))
-#define GDK_IS_DRAG_CONTEXT_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GDK_TYPE_DRAG_CONTEXT))
-#define GDK_DRAG_CONTEXT_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GDK_TYPE_DRAG_CONTEXT, GdkDragContextClass))
-
 struct _GdkDragContext {
-  GObject parent_instance;
-
-  /*< public >*/
-  
   GdkDragProtocol protocol;
   
   gboolean is_source;
@@ -62,21 +45,10 @@ struct _GdkDragContext {
   GdkDragAction action; 
 
   guint32 start_time;
-
-  /*< private >*/
-  
-  gpointer windowing_data;
-};
-
-struct _GdkDragContextClass {
-  GObjectClass parent_class;
-
-  
 };
 
 /* Drag and Drop */
 
-GType            gdk_drag_context_get_type   (void) G_GNUC_CONST;
 GdkDragContext * gdk_drag_context_new        (void);
 void             gdk_drag_context_ref        (GdkDragContext *context);
 void             gdk_drag_context_unref      (GdkDragContext *context);
@@ -123,4 +95,4 @@ void            gdk_drag_abort       (GdkDragContext *context,
 }
 #endif /* __cplusplus */
 
-#endif /* __GDK_DND_H__ */
+#endif __GDK_DND_H__

@@ -1,44 +1,42 @@
 ## Makefile.am for gtk+/gdk
 
-SUBDIRS=$(gdktarget)
-DIST_SUBDIRS=linux-fb nanox win32 x11
+SUBDIRS=x11 win32
 
-EXTRA_DIST =			\
-	gdkconfig.h.win32 	\
-	gdk.def 		\
-	makefile.mingw 		\
-	makefile.mingw.in 	\
+EXTRA_DIST =	\
+	gdkconfig.h.win32 \
+	gdk.def \
+	makefile.cygwin \
 	makefile.msc
 
-common_includes = @STRIP_BEGIN@ 	\
-	-DG_LOG_DOMAIN=\"Gdk\"		\
-	-I$(top_srcdir)			\
-	-I$(top_builddir)/gdk		\
-	-I$(top_srcdir)/gdk-pixbuf 	\
-	@GTK_DEBUG_FLAGS@ 		\
-	@GTK_XIM_FLAGS@			\
-	@GTK_LOCALE_FLAGS@		\
-	@PANGO_CFLAGS@			\
-	@GLIB_CFLAGS@			\
-	@more_cflags@ 			\
+INCLUDES = @STRIP_BEGIN@ \
+	-DG_LOG_DOMAIN=\"Gdk\"	\
+	-I$(top_srcdir)		\
+	@GTK_DEBUG_FLAGS@ 	\
+	@GTK_XIM_FLAGS@		\
+	@GTK_LOCALE_FLAGS@	\
+	@GLIB_CFLAGS@		\
+	@x_cflags@ 		\
 @STRIP_END@
 
-INCLUDES = $(common_includes)
-gtarget=@gdktarget@
+#
+# libraries to compile and install
+#
+lib_LTLIBRARIES = libgdk.la
 
 # libtool stuff: set version and export symbols for resolving
-# since automake doesn't support conditionalized libsomething_la_LDFLAGS
-# we use the general approach here
-LDFLAGS = @STRIP_BEGIN@ 					\
-	-version-info $(LT_CURRENT):$(LT_REVISION):$(LT_AGE) 	\
-	-export-dynamic 					\
-	-rpath @prefix@/lib 					\
-	@PANGO_LIBS@						\
-	@GLIB_DEPLIBS@						\
-	@more_ldflags@						\
-	@more_libs@						\
-	-lm							\
+libgdkincludedir = $(includedir)/gdk
+libgdk_la_LDFLAGS = @STRIP_BEGIN@ \
+	-version-info $(LT_CURRENT):$(LT_REVISION):$(LT_AGE) \
+	-release $(LT_RELEASE) \
+	-export-dynamic \
+	@GLIB_DEPLIBS@	\
+	@x_ldflags@	\
+	@x_libs@	\
+	-lm		\
 @STRIP_END@
+
+libgdk_la_LIBADD = \
+	x11/libgdk-x11.la	
 
 #
 # setup source file variables
@@ -65,9 +63,6 @@ gdk_public_h_sources = @STRIP_BEGIN@ \
 	gdkim.h		\
 	gdkimage.h	\
 	gdkinput.h	\
-	gdkkeys.h	\
-	gdkpango.h	\
-	gdkpixbuf.h	\
 	gdkpixmap.h	\
 	gdkprivate.h	\
 	gdkproperty.h	\
@@ -78,73 +73,26 @@ gdk_public_h_sources = @STRIP_BEGIN@ \
 	gdkvisual.h	\
 	gdkwindow.h	\
 @STRIP_END@
-
-gdk_c_sources = @STRIP_BEGIN@ 	\
-	gdk.c			\
-	gdkcolor.c		\
-	gdkcursor.c		\
-	gdkdraw.c		\
-	gdkevents.c     	\
-	gdkfont.c		\
-	gdkgc.c			\
-	gdkglobals.c		\
-	gdkkeys.c		\
-	gdkkeyuni.c		\
-	gdkimage.c		\
-	gdkinternals.h  	\
-	gdkpango.c		\
-	gdkpixbuf-drawable.c	\
-	gdkpixbuf-render.c	\
-	gdkpixmap.c		\
-	gdkpoly-generic.h	\
-	gdkpolyreg-generic.c	\
-	gdkrgb.c		\
-	gdkrectangle.c		\
-	gdkregion-generic.c	\
-	gdkregion-generic.h	\
-	gdkwindow.c		\
+gdk_c_sources = @STRIP_BEGIN@ \
+	gdk.c		\
+	gdkcolor.c	\
+	gdkcursor.c	\
+	gdkdraw.c	\
+	gdkevents.c     \
+	gdkfont.c	\
+	gdkgc.c		\
+	gdkglobals.c	\
+	gdkimage.c	\
+	gdkrgb.c	\
+	gdkrectangle.c	\
+	gdkwindow.c	\
 @STRIP_END@
 
 #
 # setup GDK sources and their dependancies
 #
-extra = @gdktargetlib@
-
-if USE_X11
-libgdk_x11_includedir = $(includedir)/gtk-2.0/gdk
-
-libgdk_x11_1_3_la_LIBADD = \
-	$(gtarget)/libgdk-$(gtarget).la	
-
-libgdk_x11_include_HEADERS = $(gdk_public_h_sources)
-libgdk_x11_1_3_la_SOURCES = $(gdk_c_sources)
-endif
-
-if USE_NANOX
-libgdk_nanox_includedir = $(includedir)/gtk-2.0/gdk
-
-libgdk_nanox_1_3_la_LIBADD = \
-	$(gtarget)/libgdk-$(gtarget).la	
-
-libgdk_nanox_include_HEADERS = $(gdk_public_h_sources)
-libgdk_nanox_1_3_la_SOURCES = $(gdk_c_sources)
-endif
-
-if USE_LINUX_FB
-libgdk_linux_fb_includedir = $(includedir)/gtk-2.0/gdk
-
-libgdk_linux_fb_1_3_la_LIBADD = \
-	$(gtarget)/libgdk-$(gtarget).la	
-
-libgdk_linux_fb_include_HEADERS = $(gdk_public_h_sources)
-libgdk_linux_fb_1_3_la_SOURCES = $(gdk_c_sources)
-endif
-
-# now define the real one to workaround automake's mishandling
-lib_LTLIBRARIES = $(extra)
-
-EXTRA_LTLIBRARIES = libgdk-x11-1.3.la libgdk-nanox-1.3.la libgdk-linux-fb-1.3.la
-
+libgdkinclude_HEADERS = $(gdk_public_h_sources)
+libgdk_la_SOURCES = $(gdk_c_sources)
 MAINTAINERCLEANFILES +=
 EXTRA_HEADERS +=
 EXTRA_DIST +=
@@ -166,7 +114,7 @@ X-derived-headers:
 #
 # Rule to install gdkconfig.h header file
 #
-configexecincludedir = $(libdir)/gtk-2.0/include
+configexecincludedir = $(pkglibdir)/include
 #configexecinclude_DATA = gdkconfig.h
 install-exec-local: gdkconfig.h
 	$(mkinstalldirs) $(DESTDIR)$(configexecincludedir)

@@ -3,19 +3,8 @@
 gcc2_compiled.:
 .text
 	.align 16
-
-#ifndef __MINGW32__
-
 .globl pixops_composite_line_color_22_4a4_mmx
 	.type	 pixops_composite_line_color_22_4a4_mmx,@function
-pixops_composite_line_color_22_4a4_mmx:
-
-#else
-
-.globl _pixops_composite_line_color_22_4a4_mmx
-_pixops_composite_line_color_22_4a4_mmx:
-	
-#endif
 /*
  * Arguments
  *		
@@ -31,7 +20,7 @@ _pixops_composite_line_color_22_4a4_mmx:
  * colors:	44(%ebp)
  *	
 */
-
+pixops_composite_line_color_22_4a4_mmx:
 /*
  * Function call entry
  */

@@ -2,23 +2,23 @@
  * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
  *
  * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
+ * modify it under the terms of the GNU Library General Public
  * License as published by the Free Software Foundation; either
  * version 2 of the License, or (at your option) any later version.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	 See the GNU
- * Lesser General Public License for more details.
+ * Library General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public
+ * You should have received a copy of the GNU Library General Public
  * License along with this library; if not, write to the
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
  * Boston, MA 02111-1307, USA.
  */
 
 /*
- * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
+ * Modified by the GTK+ Team and others 1997-1999.  See the AUTHORS
  * file for a list of people on the GTK+ Team.  See the ChangeLog
  * files for a list of changes.  These files are distributed with
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
@@ -29,9 +29,9 @@
 #include "gdk.h"		/* For gdk_flush() */
 #include "gdkim.h"
 #include "gdkpixmap.h"
+#include "gdkprivate.h"
 #include "gdki18n.h"
-#include "gdkinternals.h"
-#include "gdkprivate-x11.h"
+#include "gdkx.h"
 
 #if HAVE_CONFIG_H
 #  include <config.h>
@@ -625,7 +625,7 @@ gdk_ic_new (GdkICAttr *attr, GdkICAttributesType mask)
     }
 
   if (attr->client_window == NULL ||
-      GDK_WINDOW_DESTROYED (attr->client_window))
+      GDK_DRAWABLE_DESTROYED (attr->client_window))
     {
       g_warning ("Client_window is null or already destroyed.\n");
       return NULL;
@@ -1084,7 +1084,7 @@ gdk_ic_set_attr (GdkIC *ic,
   if (mask & GDK_IC_PREEDIT_PIXMAP)
     {
       if (attr->preedit_pixmap != NULL &&
-	  GDK_WINDOW_DESTROYED (attr->preedit_pixmap))
+	  GDK_DRAWABLE_DESTROYED (attr->preedit_pixmap))
 	{
 	  g_warning ("Preedit pixmap is already destroyed.\n");
 	  error |= GDK_IC_PREEDIT_PIXMAP;
@@ -1171,7 +1171,7 @@ gdk_ic_set_attr (GdkIC *ic,
   if (mask & GDK_IC_STATUS_PIXMAP)
     {
       if (attr->status_pixmap != NULL &&
-	  GDK_WINDOW_DESTROYED (attr->status_pixmap))
+	  GDK_DRAWABLE_DESTROYED (attr->status_pixmap))
 	{
 	  g_warning ("Preedit pixmap is already destroyed.\n");
 	  error |= GDK_IC_STATUS_PIXMAP;

@@ -51,6 +51,7 @@ Windows
 @GDK_WINDOW_CHILD: 
 @GDK_WINDOW_DIALOG: 
 @GDK_WINDOW_TEMP: 
+@GDK_WINDOW_PIXMAP: 
 @GDK_WINDOW_FOREIGN: 
 
 <!-- ##### ENUM GdkWindowClass ##### -->
@@ -86,7 +87,6 @@ Windows
 @GDK_HINT_BASE_SIZE: 
 @GDK_HINT_ASPECT: 
 @GDK_HINT_RESIZE_INC: 
-@GDK_HINT_WIN_GRAVITY: 
 
 <!-- ##### STRUCT GdkGeometry ##### -->
 <para>
@@ -103,23 +103,6 @@ Windows
 @height_inc: 
 @min_aspect: 
 @max_aspect: 
-@win_gravity: 
-
-<!-- ##### ENUM GdkGravity ##### -->
-<para>
-
-</para>
-
-@GDK_GRAVITY_NORTH_WEST: 
-@GDK_GRAVITY_NORTH: 
-@GDK_GRAVITY_NORTH_EAST: 
-@GDK_GRAVITY_WEST: 
-@GDK_GRAVITY_CENTER: 
-@GDK_GRAVITY_EAST: 
-@GDK_GRAVITY_SOUTH_WEST: 
-@GDK_GRAVITY_SOUTH: 
-@GDK_GRAVITY_SOUTH_EAST: 
-@GDK_GRAVITY_STATIC: 
 
 <!-- ##### FUNCTION gdk_window_new ##### -->
 <para>
@@ -140,32 +123,21 @@ Windows
 @window: 
 
 
-<!-- ##### MACRO gdk_window_ref ##### -->
-<para>
-
-</para>
-
-@Returns: 
-<!-- # Unused Parameters # -->
-@window: 
-
-
-<!-- ##### MACRO gdk_window_unref ##### -->
-<para>
-
-</para>
-
-<!-- # Unused Parameters # -->
-@window: 
-
-
-<!-- ##### FUNCTION gdk_window_get_window_type ##### -->
+<!-- ##### FUNCTION gdk_window_ref ##### -->
 <para>
 
 </para>
 
 @window: 
 @Returns: 
+
+
+<!-- ##### FUNCTION gdk_window_unref ##### -->
+<para>
+
+</para>
+
+@window: 
 
 
 <!-- ##### FUNCTION gdk_window_at_pointer ##### -->
@@ -220,14 +192,6 @@ Windows
 @window: 
 
 
-<!-- ##### FUNCTION gdk_window_iconify ##### -->
-<para>
-
-</para>
-
-@window: 
-
-
 <!-- ##### FUNCTION gdk_window_move ##### -->
 <para>
 
@@ -258,16 +222,6 @@ Windows
 @y: 
 @width: 
 @height: 
-
-
-<!-- ##### FUNCTION gdk_window_scroll ##### -->
-<para>
-
-</para>
-
-@window: 
-@dx: 
-@dy: 
 
 
 <!-- ##### FUNCTION gdk_window_reparent ##### -->
@@ -313,23 +267,20 @@ Windows
 @height: 
 
 
-<!-- ##### MACRO gdk_window_copy_area ##### -->
+<!-- ##### FUNCTION gdk_window_copy_area ##### -->
 <para>
 
 </para>
 
-@drawable: 
+@window: 
 @gc: 
 @x: 
 @y: 
-@source_drawable: 
+@source_window: 
 @source_x: 
 @source_y: 
 @width: 
 @height: 
-<!-- # Unused Parameters # -->
-@window: 
-@source_window: 
 
 
 <!-- ##### FUNCTION gdk_window_raise ##### -->
@@ -354,93 +305,6 @@ Windows
 </para>
 
 @window: 
-
-
-<!-- ##### FUNCTION gdk_window_begin_paint_rect ##### -->
-<para>
-
-</para>
-
-@window: 
-@rectangle: 
-
-
-<!-- ##### FUNCTION gdk_window_begin_paint_region ##### -->
-<para>
-
-</para>
-
-@window: 
-@region: 
-
-
-<!-- ##### FUNCTION gdk_window_end_paint ##### -->
-<para>
-
-</para>
-
-@window: 
-
-
-<!-- ##### FUNCTION gdk_window_invalidate_rect ##### -->
-<para>
-
-</para>
-
-@window: 
-@rect: 
-@invalidate_children: 
-
-
-<!-- ##### FUNCTION gdk_window_invalidate_region ##### -->
-<para>
-
-</para>
-
-@window: 
-@region: 
-@invalidate_children: 
-
-
-<!-- ##### FUNCTION gdk_window_get_update_area ##### -->
-<para>
-
-</para>
-
-@window: 
-@Returns: 
-
-
-<!-- ##### FUNCTION gdk_window_freeze_updates ##### -->
-<para>
-
-</para>
-
-@window: 
-
-
-<!-- ##### FUNCTION gdk_window_thaw_updates ##### -->
-<para>
-
-</para>
-
-@window: 
-
-
-<!-- ##### FUNCTION gdk_window_process_all_updates ##### -->
-<para>
-
-</para>
-
-
-
-<!-- ##### FUNCTION gdk_window_process_updates ##### -->
-<para>
-
-</para>
-
-@window: 
-@update_children: 
 
 
 <!-- ##### FUNCTION gdk_window_set_user_data ##### -->
@@ -603,12 +467,11 @@ Windows
 @cursor: 
 
 
-<!-- ##### MACRO gdk_window_set_colormap ##### -->
+<!-- ##### FUNCTION gdk_window_set_colormap ##### -->
 <para>
 
 </para>
 
-<!-- # Unused Parameters # -->
 @window: 
 @colormap: 
 
@@ -665,45 +528,41 @@ Windows
 @y: 
 
 
-<!-- ##### MACRO gdk_window_get_size ##### -->
+<!-- ##### FUNCTION gdk_window_get_size ##### -->
 <para>
 
 </para>
 
-<!-- # Unused Parameters # -->
 @window: 
 @width: 
 @height: 
 
 
-<!-- ##### MACRO gdk_window_get_visual ##### -->
+<!-- ##### FUNCTION gdk_window_get_visual ##### -->
 <para>
 
 </para>
 
-@Returns: 
-<!-- # Unused Parameters # -->
 @window: 
+@Returns: 
 
 
-<!-- ##### MACRO gdk_window_get_colormap ##### -->
+<!-- ##### FUNCTION gdk_window_get_colormap ##### -->
 <para>
 
 </para>
 
-@Returns: 
-<!-- # Unused Parameters # -->
 @window: 
+@Returns: 
 
 
-<!-- ##### MACRO gdk_window_get_type ##### -->
+<!-- ##### FUNCTION gdk_window_get_type ##### -->
 <para>
 
 </para>
 
-@Returns: 
-<!-- # Unused Parameters # -->
 @window: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gdk_window_get_origin ##### -->
@@ -780,15 +639,6 @@ Windows
 
 
 <!-- ##### FUNCTION gdk_window_get_children ##### -->
-<para>
-
-</para>
-
-@window: 
-@Returns: 
-
-
-<!-- ##### FUNCTION gdk_window_peek_children ##### -->
 <para>
 
 </para>
@@ -911,5 +761,23 @@ Windows
 </para>
 
 @Returns: 
+
+
+<!-- ##### STRUCT GdkDrawable ##### -->
+<para>
+
+</para>
+
+@user_data: 
+
+<!-- ##### FUNCTION gdk_drawable_set_data ##### -->
+<para>
+
+</para>
+
+@drawable: 
+@key: 
+@data: 
+@destroy_func: 
 
 

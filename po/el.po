@@ -6,121 +6,101 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.2.6\n"
-"POT-Creation-Date: 2000-11-16 16:11-0500\n"
+"POT-Creation-Date: 1999-11-24 17:51+0100\n"
 "PO-Revision-Date: 1999-10-22 22:43-0000\n"
 "Last-Translator: Spiros Papadimitriou <spapadim+@cs.cmu.edu>\n"
 "Language-Team: Greek <nls@tux.hellug.gr>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Type: text/plain; charset=iso-8859-7\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: gdk-pixbuf/io-gif.c:426
-msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
-msgstr ""
-
-#: gdk-pixbuf/io-gif.c:435
-#, c-format
-msgid "Internal error in the GIF loader (%s)"
-msgstr ""
-
-#: gdk-pixbuf/io-gif.c:584
-msgid "Circular table entry in GIF file"
-msgstr ""
-
-#: gdk-pixbuf/io-gif.c:921
-msgid "File does not appear to be a GIF file"
-msgstr ""
-
-#: gdk-pixbuf/io-gif.c:933
-#, c-format
-msgid "Version %s of the GIF file format is not supported"
-msgstr ""
-
-#: gdk-pixbuf/io-gif.c:985
-msgid "GIF animation contained a frame with an incorrect size"
-msgstr ""
-
 #
-#: gtk/gtkcolorsel.c:1422
+#: gtk/gtkcolorsel.c:221
 msgid "Hue:"
-msgstr "Ξ‘Ο€ΟΟ‡ΟΟ‰ΟƒΞ·:"
+msgstr "Απόχρωση:"
 
 #
-#: gtk/gtkcolorsel.c:1423
+#: gtk/gtkcolorsel.c:222
 msgid "Saturation:"
-msgstr "ΞΞΏΟΞµΟƒΞΌΟΟ‚:"
+msgstr "Κορεσμός:"
 
 #
-#: gtk/gtkcolorsel.c:1424
+#: gtk/gtkcolorsel.c:223
 msgid "Value:"
-msgstr "Ξ¤ΞΉΞΌΞ®:"
+msgstr "Τιμή:"
 
 #
-#: gtk/gtkcolorsel.c:1425
+#: gtk/gtkcolorsel.c:224
 msgid "Red:"
-msgstr "ΞΟΞΊΞΊΞΉΞ½ΞΏ:"
+msgstr "Κόκκινο:"
 
 #
-#: gtk/gtkcolorsel.c:1426
+#: gtk/gtkcolorsel.c:225
 msgid "Green:"
-msgstr "Ξ ΟΞ¬ΟƒΞΉΞ½ΞΏ:"
+msgstr "Πράσινο:"
 
 #
-#: gtk/gtkcolorsel.c:1427
+#: gtk/gtkcolorsel.c:226
 msgid "Blue:"
-msgstr "ΞΟ€Ξ»Ξ­:"
+msgstr "Μπλέ:"
 
 #
-#: gtk/gtkcolorsel.c:1430
+#: gtk/gtkcolorsel.c:227
 msgid "Opacity:"
-msgstr "Ξ”ΞΉΞ±Ο†Ξ¬Ξ½ΞµΞΉΞ±:"
+msgstr "Διαφάνεια:"
 
 #
-#: gtk/gtkcolorsel.c:1445
-#, fuzzy
-msgid "Hex Value:"
-msgstr "Ξ¤ΞΉΞΌΞ®:"
+#. The OK button
+#: gtk/gtkcolorsel.c:1727 gtk/gtkfilesel.c:571 gtk/gtkfontsel.c:3772
+#: gtk/gtkgamma.c:416
+msgid "OK"
+msgstr "Εντάξει"
 
-#: gtk/gtkcolorsel.c:1466
-msgid "Custom Palette"
-msgstr ""
+#
+#. The Cancel button
+#: gtk/gtkcolorsel.c:1733 gtk/gtkfilesel.c:578 gtk/gtkfilesel.c:961
+#: gtk/gtkfilesel.c:1065 gtk/gtkfilesel.c:1180 gtk/gtkfontsel.c:3785
+#: gtk/gtkgamma.c:424
+msgid "Cancel"
+msgstr "¶κυρο"
 
-#: gtk/gtkcolorsel.c:1471
-msgid "Set Color"
-msgstr ""
+#
+#: gtk/gtkcolorsel.c:1738
+msgid "Help"
+msgstr "Βοήθεια"
 
 #
 #. The directories clist
-#: gtk/gtkfilesel.c:514
+#: gtk/gtkfilesel.c:520
 msgid "Directories"
-msgstr "ΞΞ±Ο„Ξ¬Ξ»ΞΏΞ³ΞΏΞΉ"
+msgstr "Κατάλογοι"
 
 #
 #. The files clist
-#: gtk/gtkfilesel.c:534
+#: gtk/gtkfilesel.c:539
 msgid "Files"
-msgstr "Ξ‘ΟΟ‡ΞµΞ―Ξ±"
+msgstr "Αρχεία"
 
 #
-#: gtk/gtkfilesel.c:600 gtk/gtkfilesel.c:1636
+#: gtk/gtkfilesel.c:609 gtk/gtkfilesel.c:1644
 #, c-format
 msgid "Directory unreadable: %s"
-msgstr "ΞΞ· Ξ±Ξ½Ξ±Ξ³Ξ½ΟΟƒΞΉΞΌΞΏΟ‚ ΞΊΞ±Ο„Ξ¬Ξ»ΞΏΞ³ΞΏΟ‚: %s"
+msgstr "Μη αναγνώσιμος κατάλογος: %s"
 
 #
-#: gtk/gtkfilesel.c:632
+#: gtk/gtkfilesel.c:641
 msgid "Create Dir"
-msgstr "Ξ”Ξ·ΞΌΞΉΞΏΟ…ΟΞ³Ξ―Ξ± ΞΊΞ±Ο„Ξ±Ξ»ΟΞ³ΞΏΟ…"
+msgstr "Δημιουργία καταλόγου"
 
 #
-#: gtk/gtkfilesel.c:643 gtk/gtkfilesel.c:1043
+#: gtk/gtkfilesel.c:652 gtk/gtkfilesel.c:1034
 msgid "Delete File"
-msgstr "Ξ”ΞΉΞ±Ξ³ΟΞ±Ο†Ξ® Ξ±ΟΟ‡ΞµΞ―ΞΏΟ…"
+msgstr "Διαγραφή αρχείου"
 
 #
-#: gtk/gtkfilesel.c:654 gtk/gtkfilesel.c:1156
+#: gtk/gtkfilesel.c:663 gtk/gtkfilesel.c:1138
 msgid "Rename File"
-msgstr "ΞΞµΟ„ΞΏΞ½ΞΏΞΌΞ±ΟƒΞ―Ξ± Ξ±ΟΟ‡ΞµΞ―ΞΏΟ…"
+msgstr "Μετονομασία αρχείου"
 
 #
 #.
@@ -128,530 +108,511 @@ msgstr "ΞΞµΟ„ΞΏΞ½ΞΏΞΌΞ±ΟƒΞ―Ξ± Ξ±ΟΟ‡ΞµΞ―ΞΏΟ…"
 #. (GtkSignalFunc) gtk_file_selection_fileop_destroy,
 #. (gpointer) fs);
 #.
-#: gtk/gtkfilesel.c:824 gtk/gtkstock.c:171
+#: gtk/gtkfilesel.c:827
 msgid "Error"
-msgstr "Ξ£Ο†Ξ¬Ξ»ΞΌΞ±"
+msgstr "Σφάλμα"
 
 #
 #. close button
-#: gtk/gtkfilesel.c:847 gtk/gtkinputdialog.c:338 gtk/gtkstock.c:181
+#: gtk/gtkfilesel.c:850 gtk/gtkinputdialog.c:354
 msgid "Close"
-msgstr "ΞΞ»ΞµΞ―ΟƒΞΉΞΌΞΏ"
+msgstr "Κλείσιμο"
 
 #
-#: gtk/gtkfilesel.c:929
+#: gtk/gtkfilesel.c:925
 msgid "Create Directory"
-msgstr "Ξ”Ξ·ΞΌΞΉΞΏΟ…ΟΞ³Ξ―Ξ± ΞΊΞ±Ο„Ξ±Ξ»ΟΞ³ΞΏΟ…"
+msgstr "Δημιουργία καταλόγου"
 
 #
-#: gtk/gtkfilesel.c:943
+#: gtk/gtkfilesel.c:939
 msgid "Directory name:"
-msgstr "ΞΞ½ΞΏΞΌΞ± ΞΊΞ±Ο„Ξ±Ξ»ΟΞ³ΞΏΟ…:"
+msgstr "Όνομα καταλόγου:"
 
 #
 #. buttons
-#: gtk/gtkfilesel.c:956
+#: gtk/gtkfilesel.c:952
 msgid "Create"
-msgstr "Ξ”Ξ·ΞΌΞΉΞΏΟ…ΟΞ³Ξ―Ξ±"
-
-#
-#: gtk/gtkfilesel.c:965 gtk/gtkfilesel.c:1074 gtk/gtkfilesel.c:1198
-#: gtk/gtkgamma.c:423 gtk/gtkstock.c:176
-msgid "Cancel"
-msgstr "Ξ†ΞΊΟ…ΟΞΏ"
+msgstr "Δημιουργία"
 
 #
 #. buttons
-#: gtk/gtkfilesel.c:1065
+#: gtk/gtkfilesel.c:1056
 msgid "Delete"
-msgstr "Ξ”ΞΉΞ±Ξ³ΟΞ±Ο†Ξ®"
+msgstr "Διαγραφή"
 
 #
 #. buttons
-#: gtk/gtkfilesel.c:1189
+#: gtk/gtkfilesel.c:1171
 msgid "Rename"
-msgstr "ΞΞµΟ„ΞΏΞ½ΞΏΞΌΞ±ΟƒΞ―Ξ±"
+msgstr "Μετονομασία"
 
 #
-#: gtk/gtkfilesel.c:1615
+#: gtk/gtkfilesel.c:1623
 msgid "Selection: "
-msgstr "Ξ•Ο€ΞΉΞ»ΞΏΞ³Ξ®: "
+msgstr "Επιλογή: "
 
 #
-#: gtk/gtkfontsel.c:190
+#: gtk/gtkfontsel.c:216
+msgid "Foundry:"
+msgstr "Χυτήριο:"
+
+#
+#: gtk/gtkfontsel.c:217
 msgid "Family:"
-msgstr "ΞΞΉΞΊΞΏΞ³Ξ­Ξ½ΞµΞΉΞ±:"
+msgstr "Οικογένεια:"
 
 #
-#: gtk/gtkfontsel.c:195
-#, fuzzy
-msgid "Style:"
-msgstr "Ξ ΟΞΏΟƒΞΈΞ®ΞΊΞ· ΟƒΟ„Ο…Ξ»:"
+#: gtk/gtkfontsel.c:218
+msgid "Weight:"
+msgstr "Βάρος:"
 
 #
-#: gtk/gtkfontsel.c:200
+#: gtk/gtkfontsel.c:219
+msgid "Slant:"
+msgstr "Κλίση:"
+
+#
+#: gtk/gtkfontsel.c:220
+msgid "Set Width:"
+msgstr "Ορισμός πλάτους:"
+
+#
+#: gtk/gtkfontsel.c:221
+msgid "Add Style:"
+msgstr "Προσθήκη στυλ:"
+
+#
+#: gtk/gtkfontsel.c:222
+msgid "Pixel Size:"
+msgstr "Μέγεθος σε pixel:"
+
+#
+#: gtk/gtkfontsel.c:223
+msgid "Point Size:"
+msgstr "Μέγεθος σε στιγμές"
+
+#
+#: gtk/gtkfontsel.c:224
+msgid "Resolution X:"
+msgstr "Χ ανάλυση:"
+
+#
+#: gtk/gtkfontsel.c:225
+msgid "Resolution Y:"
+msgstr "Υ ανάλυση:"
+
+#
+#: gtk/gtkfontsel.c:226
+msgid "Spacing:"
+msgstr "Διάκενα:"
+
+#
+#: gtk/gtkfontsel.c:227
+msgid "Average Width:"
+msgstr "Μέσο πλάτος:"
+
+#
+#: gtk/gtkfontsel.c:228
+msgid "Charset:"
+msgstr "Σύνολο χαρακτήρων:"
+
+#
+#. Number of internationalized titles here must match number
+#. of NULL initializers above
+#: gtk/gtkfontsel.c:472
+msgid "Font Property"
+msgstr "Ιδιότητες γραμματοσειράς:"
+
+#
+#: gtk/gtkfontsel.c:473
+msgid "Requested Value"
+msgstr "Επιθυμητή τιμή"
+
+#
+#: gtk/gtkfontsel.c:474
+msgid "Actual Value"
+msgstr "Πραγματικκή τιμή"
+
+#
+#: gtk/gtkfontsel.c:507
+msgid "Font"
+msgstr "Γραμματοσειρά"
+
+#
+#: gtk/gtkfontsel.c:517 gtk/gtkfontsel.c:2209 gtk/gtkfontsel.c:2439
+msgid "Font:"
+msgstr "Γραμματοσειρά:"
+
+#
+#: gtk/gtkfontsel.c:522
+msgid "Font Style:"
+msgstr "Στυλ γραμματοσειράς:"
+
+#
+#: gtk/gtkfontsel.c:527
 msgid "Size:"
-msgstr "ΞΞ­Ξ³ΞµΞΈΞΏΟ‚:"
+msgstr "Μέγεθος:"
+
+#
+#: gtk/gtkfontsel.c:659 gtk/gtkfontsel.c:881
+msgid "Reset Filter"
+msgstr "Επαναρχικοποίηση Φίλτρου"
+
+#
+#: gtk/gtkfontsel.c:673
+msgid "Metric:"
+msgstr "Μονάδες:"
+
+#
+#: gtk/gtkfontsel.c:677
+msgid "Points"
+msgstr "Στιγμές"
+
+#
+#: gtk/gtkfontsel.c:684
+msgid "Pixels"
+msgstr "Pixel"
 
 #
 #. create the text entry widget
-#: gtk/gtkfontsel.c:310
+#: gtk/gtkfontsel.c:700
 msgid "Preview:"
-msgstr "Ξ ΟΞΏΞµΟ€ΞΉΟƒΞΊΟΟ€ΞΉΟƒΞ·:"
+msgstr "Προεπισκόπιση:"
 
 #
-#: gtk/gtkfontsel.c:966
+#: gtk/gtkfontsel.c:729
+msgid "Font Information"
+msgstr "Πληροφορίες γραμματοσειράς"
+
+#
+#: gtk/gtkfontsel.c:762
+msgid "Requested Font Name:"
+msgstr "Επιθυμητό Όνομα Γραμματοσειράς:"
+
+#
+#: gtk/gtkfontsel.c:773
+msgid "Actual Font Name:"
+msgstr "Πραγματικό Όνομα Γραμματοσειράς:"
+
+#
+#: gtk/gtkfontsel.c:784
+#, c-format
+msgid "%i fonts available with a total of %i styles."
+msgstr "%i γραμματοσειρές είναι διαθέσιμες με %i συνολικά στυλ."
+
+#
+#: gtk/gtkfontsel.c:799
+msgid "Filter"
+msgstr "Φίλτρο"
+
+#
+#: gtk/gtkfontsel.c:812
+msgid "Font Types:"
+msgstr "Τύποι Γραμματοσειρών:"
+
+#
+#: gtk/gtkfontsel.c:820
+msgid "Bitmap"
+msgstr "Πλέγμα κουκίδων"
+
+#
+#: gtk/gtkfontsel.c:826
+msgid "Scalable"
+msgstr "Κλιμακούμενο"
+
+#
+#: gtk/gtkfontsel.c:832
+msgid "Scaled Bitmap"
+msgstr "Κλιμακωμένο πλέγμα κουκίδων"
+
+#
+#: gtk/gtkfontsel.c:903
+msgid "*"
+msgstr "*"
+
+#
+#. Convert '(nil)' weights to 'regular', since it looks nicer.
+#: gtk/gtkfontsel.c:1228
+msgid "(nil)"
+msgstr "(κενό)"
+
+#
+#: gtk/gtkfontsel.c:1228 gtk/gtkfontsel.c:2708
+msgid "regular"
+msgstr "κανονικό"
+
+#
+#: gtk/gtkfontsel.c:1233 gtk/gtkfontsel.c:2001
+msgid "italic"
+msgstr "πλάγια"
+
+#
+#: gtk/gtkfontsel.c:1234 gtk/gtkfontsel.c:2002
+msgid "oblique"
+msgstr "λοξά"
+
+#
+#: gtk/gtkfontsel.c:1235 gtk/gtkfontsel.c:2003
+msgid "reverse italic"
+msgstr "ανάποδα πλάγια"
+
+#
+#: gtk/gtkfontsel.c:1236 gtk/gtkfontsel.c:2004
+msgid "reverse oblique"
+msgstr "ανάποδα λοξά"
+
+#
+#: gtk/gtkfontsel.c:1237 gtk/gtkfontsel.c:2005
+msgid "other"
+msgstr "άλλο"
+
+#
+#: gtk/gtkfontsel.c:1244
+msgid "[M]"
+msgstr "[M]"
+
+#
+#: gtk/gtkfontsel.c:1245
+msgid "[C]"
+msgstr "[C]"
+
+#
+#: gtk/gtkfontsel.c:1800
+msgid "The selected font is not available."
+msgstr "Η επιλεγμένη γραμματοσειρά δεν είναι διαθέσιμη."
+
+#
+#: gtk/gtkfontsel.c:1806
+msgid "The selected font is not a valid font."
+msgstr "Η επιλεγμένη γραμματοσειρά δεν είναι έγκυρη."
+
+#
+#: gtk/gtkfontsel.c:1867
+msgid "This is a 2-byte font and may not be displayed correctly."
+msgstr ""
+"Η παρούσα είναι γραμματοσειρά 2 byte και πιθανόν να μην απεικονισθεί σωστά."
+
+#
+#: gtk/gtkfontsel.c:1989 gtk/gtkinputdialog.c:607
+msgid "(unknown)"
+msgstr "(άγνωστο)"
+
+#
+#: gtk/gtkfontsel.c:2000
+msgid "roman"
+msgstr "roman"
+
+#
+#: gtk/gtkfontsel.c:2012
+msgid "proportional"
+msgstr "αναλογικά"
+
+#
+#: gtk/gtkfontsel.c:2013
+msgid "monospaced"
+msgstr "monospaced"
+
+#
+#: gtk/gtkfontsel.c:2014
+msgid "char cell"
+msgstr "κελί χαρακτήρα"
+
+#
+#: gtk/gtkfontsel.c:2214
+msgid "Font: (Filter Applied)"
+msgstr "Γραμματοσειρά: (Φιλτραρισμένη)"
+
+#
+#: gtk/gtkfontsel.c:2688
+msgid "heavy"
+msgstr "παχύ"
+
+#
+#: gtk/gtkfontsel.c:2690
+msgid "extrabold"
+msgstr "υπέρ-έντονο"
+
+#
+#: gtk/gtkfontsel.c:2692
+msgid "bold"
+msgstr "έντονο"
+
+#
+#: gtk/gtkfontsel.c:2695
+msgid "demibold"
+msgstr "ημι-έντονο"
+
+#
+#: gtk/gtkfontsel.c:2698
+msgid "medium"
+msgstr "μεσαίο"
+
+#
+#: gtk/gtkfontsel.c:2700
+msgid "normal"
+msgstr "κανονικό"
+
+#
+#: gtk/gtkfontsel.c:2702
+msgid "light"
+msgstr "ελαφρύ"
+
+#
+#: gtk/gtkfontsel.c:2704
+msgid "extralight"
+msgstr "υπερ-ελαφρύ"
+
+#
+#: gtk/gtkfontsel.c:2706
+msgid "thin"
+msgstr "λεπτό"
+
+#
+#: gtk/gtkfontsel.c:2883
+msgid "MAX_FONTS exceeded. Some fonts may be missing."
+msgstr "Υπέρβαση ορίου MAX_FONTS. Πιθανό να λείπουν μερικές γραμματοσειρές."
+
+#
+#: gtk/gtkfontsel.c:3779
+msgid "Apply"
+msgstr "Εφαρμογή"
+
+#
+#: gtk/gtkfontsel.c:3801
 msgid "Font Selection"
-msgstr "Ξ•Ο€ΞΉΞ»ΞΏΞ³Ξ® Ξ“ΟΞ±ΞΌΞΌΞ±Ο„ΞΏΟƒΞµΞΉΟΞ¬Ο‚"
+msgstr "Επιλογή Γραμματοσειράς"
 
 #
-#: gtk/gtkgamma.c:395
+#: gtk/gtkgamma.c:396
 msgid "Gamma"
-msgstr "Ξ“Ξ¬ΞΌΞΌΞ±"
+msgstr "Γάμμα"
 
 #
-#: gtk/gtkgamma.c:402
+#: gtk/gtkgamma.c:403
 msgid "Gamma value"
-msgstr "Ξ¤ΞΉΞΌΞ® Ξ³Ξ¬ΞΌΞΌΞ±"
-
-#
-#: gtk/gtkgamma.c:415 gtk/gtkstock.c:175
-msgid "OK"
-msgstr "Ξ•Ξ½Ο„Ξ¬ΞΎΞµΞΉ"
+msgstr "Τιμή γάμμα"
 
 #
 #. shell and main vbox
-#: gtk/gtkinputdialog.c:185
+#: gtk/gtkinputdialog.c:200
 msgid "Input"
-msgstr "Ξ•Ξ―ΟƒΞΏΞ΄ΞΏΟ‚"
+msgstr "Είσοδος"
 
 #
-#: gtk/gtkinputdialog.c:193
+#: gtk/gtkinputdialog.c:208
 msgid "No input devices"
-msgstr "Ξ”ΞµΞ½ Ο…Ο€Ξ¬ΟΟ‡ΞΏΟ…Ξ½ ΟƒΟ…ΟƒΞΊΞµΟ…Ξ­Ο‚ ΞµΞΉΟƒΟΞ΄ΞΏΟ…"
+msgstr "Δεν υπάρχουν συσκευές εισόδου"
 
 #
-#: gtk/gtkinputdialog.c:222
+#: gtk/gtkinputdialog.c:237
 msgid "Device:"
-msgstr "Ξ£Ο…ΟƒΞΊΞµΟ…Ξ®:"
+msgstr "Συσκευή:"
 
 #
-#: gtk/gtkinputdialog.c:238
+#: gtk/gtkinputdialog.c:253
 msgid "Disabled"
-msgstr "Ξ‘Ξ½ΞµΞ½ΞµΟΞ³Ο"
+msgstr "Ανενεργό"
 
 #
-#: gtk/gtkinputdialog.c:246
+#: gtk/gtkinputdialog.c:261
 msgid "Screen"
-msgstr "ΞΞΈΟΞ½Ξ·"
+msgstr "Οθόνη"
 
 #
-#: gtk/gtkinputdialog.c:254
+#: gtk/gtkinputdialog.c:269
 msgid "Window"
-msgstr "Ξ Ξ±ΟΞ¬ΞΈΟ…ΟΞΏ"
+msgstr "Παράθυρο"
 
 #
-#: gtk/gtkinputdialog.c:262
+#: gtk/gtkinputdialog.c:277
 msgid "Mode: "
-msgstr "ΞΞ±Ο„Ξ¬ΟƒΟ„Ξ±ΟƒΞ· Ξ»ΞµΞΉΟ„ΞΏΟ…ΟΞ³Ξ―Ξ±Ο‚: "
+msgstr "Κατάσταση λειτουργίας: "
 
 #
 #. The axis listbox
-#: gtk/gtkinputdialog.c:292
+#: gtk/gtkinputdialog.c:307
 msgid "Axes"
-msgstr "Ξ†ΞΎΞΏΞ½ΞµΟ‚"
+msgstr "¶ξονες"
 
 #
 #. Keys listbox
-#: gtk/gtkinputdialog.c:308
+#: gtk/gtkinputdialog.c:323
 msgid "Keys"
-msgstr "Ξ Ξ»Ξ®ΞΊΟ„ΟΞ±"
+msgstr "Πλήκτρα"
 
 #
 #. We create the save button in any case, so that clients can
 #. connect to it, without paying attention to whether it exits
-#: gtk/gtkinputdialog.c:329 gtk/gtkstock.c:186
+#: gtk/gtkinputdialog.c:345
 msgid "Save"
-msgstr "Ξ‘Ο€ΞΏΞΈΞ®ΞΊΞµΟ…ΟƒΞ·"
+msgstr "Αποθήκευση"
 
 #
-#: gtk/gtkinputdialog.c:471
+#: gtk/gtkinputdialog.c:500
 msgid "X"
-msgstr "Ξ§"
+msgstr "Χ"
 
 #
-#: gtk/gtkinputdialog.c:472
+#: gtk/gtkinputdialog.c:501
 msgid "Y"
-msgstr "Ξ¨"
+msgstr "Ψ"
 
 #
-#: gtk/gtkinputdialog.c:473
+#: gtk/gtkinputdialog.c:502
 msgid "Pressure"
-msgstr "Ξ Ξ―ΞµΟƒΞ·"
+msgstr "Πίεση"
 
 #
-#: gtk/gtkinputdialog.c:474
+#: gtk/gtkinputdialog.c:503
 msgid "X Tilt"
-msgstr "Ξ§-ΞΊΞ»Ξ―ΟƒΞ·"
+msgstr "Χ-κλίση"
 
 #
-#: gtk/gtkinputdialog.c:475
+#: gtk/gtkinputdialog.c:504
 msgid "Y Tilt"
-msgstr "Ξ¨-ΞΊΞ»Ξ―ΟƒΞ·"
-
-#: gtk/gtkinputdialog.c:476
-msgid "Wheel"
-msgstr ""
+msgstr "Ψ-κλίση"
 
 #
-#: gtk/gtkinputdialog.c:516
+#: gtk/gtkinputdialog.c:544
 msgid "none"
-msgstr "ΞΊΞ±ΞΌΞ―Ξ±"
+msgstr "καμία"
 
 #
-#: gtk/gtkinputdialog.c:550 gtk/gtkinputdialog.c:586
+#: gtk/gtkinputdialog.c:578 gtk/gtkinputdialog.c:614
 msgid "(disabled)"
-msgstr "(Ξ±Ξ½ΞµΞ½ΞµΟΞ³Ο)"
-
-#
-#: gtk/gtkinputdialog.c:579
-msgid "(unknown)"
-msgstr "(Ξ¬Ξ³Ξ½Ο‰ΟƒΟ„ΞΏ)"
+msgstr "(ανενεργό)"
 
 #
 #. and clear button
-#: gtk/gtkinputdialog.c:664
+#: gtk/gtkinputdialog.c:692
 msgid "clear"
-msgstr "ΞΊΞ±ΞΈΞ±ΟΞΉΟƒΞΌΟΟ‚"
-
-#. Translate to default:RTL if you want your widgets
-#. * to be RTL, otherwise translate to default:LTR.
-#. * Do *not* translate it to "predefinito:LTR", if it
-#. * it isn't default:LTR or default:RTL it will not work
-#.
-#: gtk/gtkmain.c:424
-msgid "default:LTR"
-msgstr ""
+msgstr "καθαρισμός"
 
 #
-#. KEEP IN SYNC with gtkiconfactory.c stock icons
-#: gtk/gtkstock.c:169
-#, fuzzy
-msgid "Information"
-msgstr "Ξ Ξ»Ξ·ΟΞΏΟ†ΞΏΟΞ―ΞµΟ‚ Ξ³ΟΞ±ΞΌΞΌΞ±Ο„ΞΏΟƒΞµΞΉΟΞ¬Ο‚"
-
-#: gtk/gtkstock.c:170
-msgid "Warning"
-msgstr ""
-
-#: gtk/gtkstock.c:172
-msgid "Question"
-msgstr ""
-
-#
-#: gtk/gtkstock.c:174
-#, fuzzy
-msgid "_Apply"
-msgstr "Ξ•Ο†Ξ±ΟΞΌΞΏΞ³Ξ®"
-
-#
-#: gtk/gtkstock.c:177
-#, fuzzy
-msgid "_Close"
-msgstr "ΞΞ»ΞµΞ―ΟƒΞΉΞΌΞΏ"
-
-#: gtk/gtkstock.c:178
-msgid "_Yes"
-msgstr ""
-
-#: gtk/gtkstock.c:179
-msgid "_No"
-msgstr ""
-
-#: gtk/gtkstock.c:182
-msgid "Quit"
-msgstr ""
-
-#
-#: gtk/gtkstock.c:183
-msgid "Help"
-msgstr "Ξ’ΞΏΞ®ΞΈΞµΞΉΞ±"
-
-#: gtk/gtkstock.c:184
-msgid "New"
-msgstr ""
-
-#: gtk/gtkstock.c:185
-msgid "Open"
-msgstr ""
-
-#
-#: gtk/gtknotebook.c:2059 gtk/gtknotebook.c:4131
+#: gtk/gtknotebook.c:2048 gtk/gtknotebook.c:4120
 #, c-format
 msgid "Page %u"
-msgstr "Ξ£ΞµΞ»Ξ―Ξ΄Ξ± %u"
+msgstr "Σελίδα %u"
 
 #
-#: gtk/gtkrc.c:2046
+#: gtk/gtkrc.c:1781
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\" line %d"
-msgstr ""
-"Ξ¤ΞΏ Ξ±ΟΟ‡ΞµΞ―ΞΏ ΞµΞΉΞΊΟΞ½Ξ±Ο‚ Ξ΄Ξµ Ξ²ΟΞ­ΞΈΞ·ΞΊΞµ ΟƒΟ„ΞΏ pixmap_path: "
-"\"%s\" line %d"
+msgstr "Το αρχείο εικόνας δε βρέθηκε στο pixmap_path: \"%s\" line %d"
 
 #
-#: gtk/gtkrc.c:2049
+#: gtk/gtkrc.c:1784
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
-msgstr ""
-"Ξ¤ΞΏ Ξ±ΟΟ‡ΞµΞ―ΞΏ ΞµΞΉΞΊΟΞ½Ξ±Ο‚ Ξ΄Ξµ Ξ²ΟΞ­ΞΈΞ·ΞΊΞµ ΟƒΟ„ΞΏ pixmap_path: "
-"\"%s\""
+msgstr "Το αρχείο εικόνας δε βρέθηκε στο pixmap_path: \"%s\""
 
 #
-#: gtk/gtkthemes.c:71
+#: gtk/gtkthemes.c:103
 #, c-format
 msgid "Unable to locate loadable module in module_path: \"%s\","
-msgstr "Ξ¤ΞΏ module Ξ΄Ξµ Ξ²ΟΞ­ΞΈΞ·ΞΊΞµ ΟƒΟ„ΞΏ module_path: \"%s\","
+msgstr "Το module δε βρέθηκε στο module_path: \"%s\","
 
 #
 #: gtk/gtktipsquery.c:180
 msgid "--- No Tip ---"
-msgstr "--- ΞΞ±ΞΌΞ―Ξ± ΟƒΟ…ΞΌΞ²ΞΏΟ…Ξ»Ξ® ---"
-
-#
-#~ msgid "Foundry:"
-#~ msgstr "Ξ§Ο…Ο„Ξ®ΟΞΉΞΏ:"
-
-#
-#~ msgid "Weight:"
-#~ msgstr "Ξ’Ξ¬ΟΞΏΟ‚:"
-
-#
-#~ msgid "Slant:"
-#~ msgstr "ΞΞ»Ξ―ΟƒΞ·:"
-
-#
-#~ msgid "Set Width:"
-#~ msgstr "ΞΟΞΉΟƒΞΌΟΟ‚ Ο€Ξ»Ξ¬Ο„ΞΏΟ…Ο‚:"
-
-#
-#~ msgid "Pixel Size:"
-#~ msgstr "ΞΞ­Ξ³ΞµΞΈΞΏΟ‚ ΟƒΞµ pixel:"
-
-#
-#~ msgid "Point Size:"
-#~ msgstr "ΞΞ­Ξ³ΞµΞΈΞΏΟ‚ ΟƒΞµ ΟƒΟ„ΞΉΞ³ΞΌΞ­Ο‚"
-
-#
-#~ msgid "Resolution X:"
-#~ msgstr "Ξ§ Ξ±Ξ½Ξ¬Ξ»Ο…ΟƒΞ·:"
-
-#
-#~ msgid "Resolution Y:"
-#~ msgstr "Ξ¥ Ξ±Ξ½Ξ¬Ξ»Ο…ΟƒΞ·:"
-
-#
-#~ msgid "Spacing:"
-#~ msgstr "Ξ”ΞΉΞ¬ΞΊΞµΞ½Ξ±:"
-
-#
-#~ msgid "Average Width:"
-#~ msgstr "ΞΞ­ΟƒΞΏ Ο€Ξ»Ξ¬Ο„ΞΏΟ‚:"
-
-#
-#~ msgid "Charset:"
-#~ msgstr "Ξ£ΟΞ½ΞΏΞ»ΞΏ Ο‡Ξ±ΟΞ±ΞΊΟ„Ξ®ΟΟ‰Ξ½:"
-
-#
-#~ msgid "Font Property"
-#~ msgstr "Ξ™Ξ΄ΞΉΟΟ„Ξ·Ο„ΞµΟ‚ Ξ³ΟΞ±ΞΌΞΌΞ±Ο„ΞΏΟƒΞµΞΉΟΞ¬Ο‚:"
-
-#
-#~ msgid "Requested Value"
-#~ msgstr "Ξ•Ο€ΞΉΞΈΟ…ΞΌΞ·Ο„Ξ® Ο„ΞΉΞΌΞ®"
-
-#
-#~ msgid "Actual Value"
-#~ msgstr "Ξ ΟΞ±Ξ³ΞΌΞ±Ο„ΞΉΞΊΞΊΞ® Ο„ΞΉΞΌΞ®"
-
-#
-#~ msgid "Font"
-#~ msgstr "Ξ“ΟΞ±ΞΌΞΌΞ±Ο„ΞΏΟƒΞµΞΉΟΞ¬"
-
-#
-#~ msgid "Font:"
-#~ msgstr "Ξ“ΟΞ±ΞΌΞΌΞ±Ο„ΞΏΟƒΞµΞΉΟΞ¬:"
-
-#
-#~ msgid "Font Style:"
-#~ msgstr "Ξ£Ο„Ο…Ξ» Ξ³ΟΞ±ΞΌΞΌΞ±Ο„ΞΏΟƒΞµΞΉΟΞ¬Ο‚:"
-
-#
-#~ msgid "Reset Filter"
-#~ msgstr "Ξ•Ο€Ξ±Ξ½Ξ±ΟΟ‡ΞΉΞΊΞΏΟ€ΞΏΞ―Ξ·ΟƒΞ· Ξ¦Ξ―Ξ»Ο„ΟΞΏΟ…"
-
-#
-#~ msgid "Metric:"
-#~ msgstr "ΞΞΏΞ½Ξ¬Ξ΄ΞµΟ‚:"
-
-#
-#~ msgid "Points"
-#~ msgstr "Ξ£Ο„ΞΉΞ³ΞΌΞ­Ο‚"
-
-#
-#~ msgid "Pixels"
-#~ msgstr "Pixel"
-
-#
-#~ msgid "Requested Font Name:"
-#~ msgstr "Ξ•Ο€ΞΉΞΈΟ…ΞΌΞ·Ο„Ο ΞΞ½ΞΏΞΌΞ± Ξ“ΟΞ±ΞΌΞΌΞ±Ο„ΞΏΟƒΞµΞΉΟΞ¬Ο‚:"
-
-#
-#~ msgid "Actual Font Name:"
-#~ msgstr "Ξ ΟΞ±Ξ³ΞΌΞ±Ο„ΞΉΞΊΟ ΞΞ½ΞΏΞΌΞ± Ξ“ΟΞ±ΞΌΞΌΞ±Ο„ΞΏΟƒΞµΞΉΟΞ¬Ο‚:"
-
-#
-#~ msgid "%i fonts available with a total of %i styles."
-#~ msgstr ""
-#~ "%i Ξ³ΟΞ±ΞΌΞΌΞ±Ο„ΞΏΟƒΞµΞΉΟΞ­Ο‚ ΞµΞ―Ξ½Ξ±ΞΉ Ξ΄ΞΉΞ±ΞΈΞ­ΟƒΞΉΞΌΞµΟ‚ ΞΌΞµ %i "
-#~ "ΟƒΟ…Ξ½ΞΏΞ»ΞΉΞΊΞ¬ ΟƒΟ„Ο…Ξ»."
-
-#
-#~ msgid "Filter"
-#~ msgstr "Ξ¦Ξ―Ξ»Ο„ΟΞΏ"
-
-#
-#~ msgid "Font Types:"
-#~ msgstr "Ξ¤ΟΟ€ΞΏΞΉ Ξ“ΟΞ±ΞΌΞΌΞ±Ο„ΞΏΟƒΞµΞΉΟΟΞ½:"
-
-#
-#~ msgid "Bitmap"
-#~ msgstr "Ξ Ξ»Ξ­Ξ³ΞΌΞ± ΞΊΞΏΟ…ΞΊΞ―Ξ΄Ο‰Ξ½"
-
-#
-#~ msgid "Scalable"
-#~ msgstr "ΞΞ»ΞΉΞΌΞ±ΞΊΞΏΟΞΌΞµΞ½ΞΏ"
-
-#
-#~ msgid "Scaled Bitmap"
-#~ msgstr "ΞΞ»ΞΉΞΌΞ±ΞΊΟ‰ΞΌΞ­Ξ½ΞΏ Ο€Ξ»Ξ­Ξ³ΞΌΞ± ΞΊΞΏΟ…ΞΊΞ―Ξ΄Ο‰Ξ½"
-
-#
-#~ msgid "*"
-#~ msgstr "*"
-
-#
-#~ msgid "(nil)"
-#~ msgstr "(ΞΊΞµΞ½Ο)"
-
-#
-#~ msgid "regular"
-#~ msgstr "ΞΊΞ±Ξ½ΞΏΞ½ΞΉΞΊΟ"
-
-#
-#~ msgid "italic"
-#~ msgstr "Ο€Ξ»Ξ¬Ξ³ΞΉΞ±"
-
-#
-#~ msgid "oblique"
-#~ msgstr "Ξ»ΞΏΞΎΞ¬"
-
-#
-#~ msgid "reverse italic"
-#~ msgstr "Ξ±Ξ½Ξ¬Ο€ΞΏΞ΄Ξ± Ο€Ξ»Ξ¬Ξ³ΞΉΞ±"
-
-#
-#~ msgid "reverse oblique"
-#~ msgstr "Ξ±Ξ½Ξ¬Ο€ΞΏΞ΄Ξ± Ξ»ΞΏΞΎΞ¬"
-
-#
-#~ msgid "other"
-#~ msgstr "Ξ¬Ξ»Ξ»ΞΏ"
-
-#
-#~ msgid "[M]"
-#~ msgstr "[M]"
-
-#
-#~ msgid "[C]"
-#~ msgstr "[C]"
-
-#
-#~ msgid "The selected font is not available."
-#~ msgstr ""
-#~ "Ξ— ΞµΟ€ΞΉΞ»ΞµΞ³ΞΌΞ­Ξ½Ξ· Ξ³ΟΞ±ΞΌΞΌΞ±Ο„ΞΏΟƒΞµΞΉΟΞ¬ Ξ΄ΞµΞ½ ΞµΞ―Ξ½Ξ±ΞΉ "
-#~ "Ξ΄ΞΉΞ±ΞΈΞ­ΟƒΞΉΞΌΞ·."
-
-#
-#~ msgid "The selected font is not a valid font."
-#~ msgstr ""
-#~ "Ξ— ΞµΟ€ΞΉΞ»ΞµΞ³ΞΌΞ­Ξ½Ξ· Ξ³ΟΞ±ΞΌΞΌΞ±Ο„ΞΏΟƒΞµΞΉΟΞ¬ Ξ΄ΞµΞ½ ΞµΞ―Ξ½Ξ±ΞΉ "
-#~ "Ξ­Ξ³ΞΊΟ…ΟΞ·."
-
-#
-#~ msgid "This is a 2-byte font and may not be displayed correctly."
-#~ msgstr ""
-#~ "Ξ— Ο€Ξ±ΟΞΏΟΟƒΞ± ΞµΞ―Ξ½Ξ±ΞΉ Ξ³ΟΞ±ΞΌΞΌΞ±Ο„ΞΏΟƒΞµΞΉΟΞ¬ 2 byte ΞΊΞ±ΞΉ "
-#~ "Ο€ΞΉΞΈΞ±Ξ½ΟΞ½ Ξ½Ξ± ΞΌΞ·Ξ½ Ξ±Ο€ΞµΞΉΞΊΞΏΞ½ΞΉΟƒΞΈΞµΞ― ΟƒΟ‰ΟƒΟ„Ξ¬."
-
-#
-#~ msgid "roman"
-#~ msgstr "roman"
-
-#
-#~ msgid "proportional"
-#~ msgstr "Ξ±Ξ½Ξ±Ξ»ΞΏΞ³ΞΉΞΊΞ¬"
-
-#
-#~ msgid "monospaced"
-#~ msgstr "monospaced"
-
-#
-#~ msgid "char cell"
-#~ msgstr "ΞΊΞµΞ»Ξ― Ο‡Ξ±ΟΞ±ΞΊΟ„Ξ®ΟΞ±"
-
-#
-#~ msgid "Font: (Filter Applied)"
-#~ msgstr "Ξ“ΟΞ±ΞΌΞΌΞ±Ο„ΞΏΟƒΞµΞΉΟΞ¬: (Ξ¦ΞΉΞ»Ο„ΟΞ±ΟΞΉΟƒΞΌΞ­Ξ½Ξ·)"
-
-#
-#~ msgid "heavy"
-#~ msgstr "Ο€Ξ±Ο‡Ο"
-
-#
-#~ msgid "extrabold"
-#~ msgstr "Ο…Ο€Ξ­Ο-Ξ­Ξ½Ο„ΞΏΞ½ΞΏ"
-
-#
-#~ msgid "bold"
-#~ msgstr "Ξ­Ξ½Ο„ΞΏΞ½ΞΏ"
-
-#
-#~ msgid "demibold"
-#~ msgstr "Ξ·ΞΌΞΉ-Ξ­Ξ½Ο„ΞΏΞ½ΞΏ"
-
-#
-#~ msgid "medium"
-#~ msgstr "ΞΌΞµΟƒΞ±Ξ―ΞΏ"
-
-#
-#~ msgid "normal"
-#~ msgstr "ΞΊΞ±Ξ½ΞΏΞ½ΞΉΞΊΟ"
-
-#
-#~ msgid "light"
-#~ msgstr "ΞµΞ»Ξ±Ο†ΟΟ"
-
-#
-#~ msgid "extralight"
-#~ msgstr "Ο…Ο€ΞµΟ-ΞµΞ»Ξ±Ο†ΟΟ"
-
-#
-#~ msgid "thin"
-#~ msgstr "Ξ»ΞµΟ€Ο„Ο"
-
-#
-#~ msgid "MAX_FONTS exceeded. Some fonts may be missing."
-#~ msgstr ""
-#~ "Ξ¥Ο€Ξ­ΟΞ²Ξ±ΟƒΞ· ΞΏΟΞ―ΞΏΟ… MAX_FONTS. Ξ ΞΉΞΈΞ±Ξ½Ο Ξ½Ξ± Ξ»ΞµΞ―Ο€ΞΏΟ…Ξ½ "
-#~ "ΞΌΞµΟΞΉΞΊΞ­Ο‚ Ξ³ΟΞ±ΞΌΞΌΞ±Ο„ΞΏΟƒΞµΞΉΟΞ­Ο‚."
+msgstr "--- Καμία συμβουλή ---"

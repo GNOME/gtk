@@ -2,23 +2,23 @@
  * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
  *
  * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
+ * modify it under the terms of the GNU Library General Public
  * License as published by the Free Software Foundation; either
  * version 2 of the License, or (at your option) any later version.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	 See the GNU
- * Lesser General Public License for more details.
+ * Library General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public
+ * You should have received a copy of the GNU Library General Public
  * License along with this library; if not, write to the
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
  * Boston, MA 02111-1307, USA.
  */
 
 /*
- * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
+ * Modified by the GTK+ Team and others 1997-1999.  See the AUTHORS
  * file for a list of people on the GTK+ Team.  See the ChangeLog
  * files for a list of changes.  These files are distributed with
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
@@ -35,35 +35,20 @@
 extern "C" {
 #endif /* __cplusplus */
 
-/* Forward declaration */
-typedef struct _GtkIconFactory GtkIconFactory;
 
-#define GTK_TYPE_RC_STYLE              (gtk_rc_style_get_type ())
-#define GTK_RC_STYLE(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), GTK_TYPE_RC_STYLE, GtkRcStyle))
-#define GTK_RC_STYLE_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_RC_STYLE, GtkRcStyleClass))
-#define GTK_IS_RC_STYLE(object)        (G_TYPE_CHECK_INSTANCE_TYPE ((object), GTK_TYPE_RC_STYLE))
-#define GTK_IS_RC_STYLE_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_RC_STYLE))
-#define GTK_RC_STYLE_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_RC_STYLE, GtkRcStyleClass))
-
-typedef enum
-{
-  GTK_RC_FG		= 1 << 0,
-  GTK_RC_BG		= 1 << 1,
-  GTK_RC_TEXT		= 1 << 2,
-  GTK_RC_BASE		= 1 << 3
+typedef enum {
+  GTK_RC_FG   = 1 << 0,
+  GTK_RC_BG   = 1 << 1,
+  GTK_RC_TEXT = 1 << 2,
+  GTK_RC_BASE = 1 << 3
 } GtkRcFlags;
-
-typedef struct _GtkRcStyleClass GtkRcStyleClass;
 
 struct _GtkRcStyle
 {
-  GObject parent_instance;
-
-  /*< public >*/
-  
   gchar *name;
+  gchar *font_name;
+  gchar *fontset_name;
   gchar *bg_pixmap_name[5];
-  PangoFontDescription *font_desc;
 
   GtkRcFlags color_flags[5];
   GdkColor   fg[5];
@@ -71,42 +56,8 @@ struct _GtkRcStyle
   GdkColor   text[5];
   GdkColor   base[5];
 
-  gint xthickness;
-  gint ythickness;
-  
-  /*< private >*/
-  
-  /* list of RC style lists including this RC style */
-  GSList *rc_style_lists;
-
-  GSList *icon_factories;
-};
-
-struct _GtkRcStyleClass
-{
-  GObjectClass parent_class;
-
-  /* Create an empty RC style of the same type as this RC style.
-   * The default implementation, which does
-   * g_object_new (G_OBJECT_TYPE (style), NULL);
-   * should work in most cases.
-   */
-  GtkRcStyle *(*clone) (GtkRcStyle *rc_style);
-
-  /* Fill in engine specific parts of GtkRcStyle by parsing contents
-   * of brackets. Returns G_TOKEN_NONE if succesful, otherwise returns
-   * the token it expected but didn't get.
-   */
-  guint     (*parse)  (GtkRcStyle *rc_style, GScanner *scanner);
-  
-  /* Combine RC style data from src into dest. If overriden, this
-   * function should chain to the parent.
-   */
-  void      (*merge)  (GtkRcStyle *dest, GtkRcStyle *src);
-
-  /* Create an empty style suitable to this RC style
-   */
-  GtkStyle *(*create_style) (GtkRcStyle *rc_style);
+  GtkThemeEngine *engine;
+  gpointer        engine_data;
 };
 
 void	  gtk_rc_init			(void);
@@ -124,11 +75,9 @@ void	  gtk_rc_add_widget_class_style (GtkRcStyle  *rc_style,
 void	  gtk_rc_add_class_style	(GtkRcStyle  *rc_style,
 					 const gchar *pattern);
 
-GType       gtk_rc_style_get_type   (void) G_GNUC_CONST;
-GtkRcStyle* gtk_rc_style_new        (void);
-GtkRcStyle *gtk_rc_style_copy       (GtkRcStyle *orig);
-void        gtk_rc_style_ref        (GtkRcStyle *rc_style);
-void        gtk_rc_style_unref      (GtkRcStyle *rc_style);
+GtkRcStyle* gtk_rc_style_new              (void);
+void        gtk_rc_style_ref              (GtkRcStyle  *rc_style);
+void        gtk_rc_style_unref            (GtkRcStyle  *rc_style);
 
 /* Tell gtkrc to use a custom routine to load images specified in rc files instead of
  *   the default xpm-only loader
@@ -148,8 +97,6 @@ gchar*		gtk_rc_find_pixmap_in_path	(GScanner    	*scanner,
 gchar*		gtk_rc_find_module_in_path	(const gchar 	*module_file);
 gchar*		gtk_rc_get_theme_dir		(void);
 gchar*		gtk_rc_get_module_dir		(void);
-gchar*		gtk_rc_get_im_module_path	(void);
-gchar*		gtk_rc_get_im_module_file	(void);
 
 /* private functions/definitions */
 typedef enum {
@@ -162,13 +109,10 @@ typedef enum {
   GTK_RC_TOKEN_INSENSITIVE,
   GTK_RC_TOKEN_FG,
   GTK_RC_TOKEN_BG,
-  GTK_RC_TOKEN_TEXT,
   GTK_RC_TOKEN_BASE,
-  GTK_RC_TOKEN_XTHICKNESS,
-  GTK_RC_TOKEN_YTHICKNESS,
+  GTK_RC_TOKEN_TEXT,
   GTK_RC_TOKEN_FONT,
   GTK_RC_TOKEN_FONTSET,
-  GTK_RC_TOKEN_FONT_NAME,
   GTK_RC_TOKEN_BG_PIXMAP,
   GTK_RC_TOKEN_PIXMAP_PATH,
   GTK_RC_TOKEN_STYLE,
@@ -184,11 +128,6 @@ typedef enum {
   GTK_RC_TOKEN_HIGHEST,
   GTK_RC_TOKEN_ENGINE,
   GTK_RC_TOKEN_MODULE_PATH,
-  GTK_RC_TOKEN_IM_MODULE_PATH,
-  GTK_RC_TOKEN_IM_MODULE_FILE,
-  GTK_RC_TOKEN_STOCK,
-  GTK_RC_TOKEN_LTR,
-  GTK_RC_TOKEN_RTL,
   GTK_RC_TOKEN_LAST
 } GtkRcTokenType;
 
@@ -199,11 +138,6 @@ guint	gtk_rc_parse_state	(GScanner	     *scanner,
 guint	gtk_rc_parse_priority	(GScanner	     *scanner,
 				 GtkPathPriorityType *priority);
      
-#ifdef G_OS_WIN32
-
-gchar  *gtk_win32_get_installation_directory (void);
-
-#endif
 
 
 #ifdef __cplusplus

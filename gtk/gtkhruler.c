@@ -2,23 +2,23 @@
  * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
  *
  * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
+ * modify it under the terms of the GNU Library General Public
  * License as published by the Free Software Foundation; either
  * version 2 of the License, or (at your option) any later version.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
+ * Library General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public
+ * You should have received a copy of the GNU Library General Public
  * License along with this library; if not, write to the
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
  * Boston, MA 02111-1307, USA.
  */
 
 /*
- * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
+ * Modified by the GTK+ Team and others 1997-1999.  See the AUTHORS
  * file for a list of people on the GTK+ Team.  See the ChangeLog
  * files for a list of changes.  These files are distributed with
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
@@ -92,8 +92,8 @@ gtk_hruler_init (GtkHRuler *hruler)
   GtkWidget *widget;
 
   widget = GTK_WIDGET (hruler);
-  widget->requisition.width = widget->style->xthickness * 2 + 1;
-  widget->requisition.height = widget->style->ythickness * 2 + RULER_HEIGHT;
+  widget->requisition.width = widget->style->klass->xthickness * 2 + 1;
+  widget->requisition.height = widget->style->klass->ythickness * 2 + RULER_HEIGHT;
 }
 
 
@@ -148,11 +148,8 @@ gtk_hruler_draw_ticks (GtkRuler *ruler)
   gfloat start, end, cur;
   gchar unit_str[32];
   gint digit_height;
-  gint digit_offset;
   gint text_width;
   gint pos;
-  PangoLayout *layout;
-  PangoRectangle logical_rect, ink_rect;
 
   g_return_if_fail (ruler != NULL);
   g_return_if_fail (GTK_IS_HRULER (ruler));
@@ -166,29 +163,22 @@ gtk_hruler_draw_ticks (GtkRuler *ruler)
   bg_gc = widget->style->bg_gc[GTK_STATE_NORMAL];
   font = widget->style->font;
 
-  xthickness = widget->style->xthickness;
-  ythickness = widget->style->ythickness;
-
-  digit_height = PANGO_PIXELS (ink_rect.height) + 2;
-  digit_offset = ink_rect.y;
-
-  layout = gtk_widget_create_pango_layout (widget, "012456789");
-  pango_layout_get_extents (layout, &ink_rect, &logical_rect);
-  
-  digit_height = PANGO_PIXELS (ink_rect.height) + 1;
-  digit_offset = ink_rect.y;
+  xthickness = widget->style->klass->xthickness;
+  ythickness = widget->style->klass->ythickness;
+  digit_height = font->ascent; /* assume descent == 0 ? */
 
   width = widget->allocation.width;
   height = widget->allocation.height - ythickness * 2;
+
    
-  gtk_paint_box (widget->style, ruler->backing_store,
-		 GTK_STATE_NORMAL, GTK_SHADOW_OUT, 
-		 NULL, widget, "hruler",
-		 0, 0, 
-		 widget->allocation.width, widget->allocation.height);
-  
-  
-  gdk_draw_line (ruler->backing_store, gc,
+   gtk_paint_box (widget->style, ruler->backing_store,
+		  GTK_STATE_NORMAL, GTK_SHADOW_OUT, 
+		  NULL, widget, "hruler",
+		  0, 0, 
+		  widget->allocation.width, widget->allocation.height);
+
+
+   gdk_draw_line (ruler->backing_store, gc,
 		 xthickness,
 		 height + ythickness,
 		 widget->allocation.width - xthickness,
@@ -257,18 +247,12 @@ gtk_hruler_draw_ticks (GtkRuler *ruler)
 	  if (i == 0)
 	    {
 	      sprintf (unit_str, "%d", (int) cur);
-	      
-	      pango_layout_set_text (layout, unit_str, -1);
-	      pango_layout_get_extents (layout, &logical_rect, NULL);
-
-	      gdk_draw_layout (ruler->backing_store, gc,
-			       pos + 2, ythickness + PANGO_PIXELS (logical_rect.y - digit_offset),
-			       layout);
+	      gdk_draw_string (ruler->backing_store, font, gc,
+			       pos + 2, ythickness + font->ascent - 1,
+			       unit_str);
 	    }
 	}
     }
-
-  g_object_unref (G_OBJECT (layout));
 }
 
 static void
@@ -292,8 +276,8 @@ gtk_hruler_draw_pos (GtkRuler *ruler)
       widget = GTK_WIDGET (ruler);
 
       gc = widget->style->fg_gc[GTK_STATE_NORMAL];
-      xthickness = widget->style->xthickness;
-      ythickness = widget->style->ythickness;
+      xthickness = widget->style->klass->xthickness;
+      ythickness = widget->style->klass->ythickness;
       width = widget->allocation.width;
       height = widget->allocation.height - ythickness * 2;
 

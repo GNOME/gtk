@@ -2,23 +2,23 @@
  * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
  *
  * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
+ * modify it under the terms of the GNU Library General Public
  * License as published by the Free Software Foundation; either
  * version 2 of the License, or (at your option) any later version.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
+ * Library General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public
+ * You should have received a copy of the GNU Library General Public
  * License along with this library; if not, write to the
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
  * Boston, MA 02111-1307, USA.
  */
 
 /*
- * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
+ * Modified by the GTK+ Team and others 1997-1999.  See the AUTHORS
  * file for a list of people on the GTK+ Team.  See the ChangeLog
  * files for a list of changes.  These files are distributed with
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
@@ -28,7 +28,9 @@
 #include "gtkaccellabel.h"
 #include "gtksignal.h"
 
-#define CHECK_TOGGLE_SIZE 12
+
+#define CHECK_MENU_ITEM_CLASS(w)  GTK_CHECK_MENU_ITEM_CLASS (GTK_OBJECT (w)->klass)
+
 
 enum {
   TOGGLED,
@@ -36,17 +38,17 @@ enum {
 };
 
 
-static void gtk_check_menu_item_class_init           (GtkCheckMenuItemClass *klass);
-static void gtk_check_menu_item_init                 (GtkCheckMenuItem      *check_menu_item);
-static gint gtk_check_menu_item_expose               (GtkWidget             *widget,
-						      GdkEventExpose        *event);
-static void gtk_check_menu_item_activate             (GtkMenuItem           *menu_item);
-static void gtk_check_menu_item_toggle_size_request  (GtkMenuItem           *menu_item,
-						      guint16               *requisition);
-static void gtk_check_menu_item_draw_indicator       (GtkCheckMenuItem      *check_menu_item,
-						      GdkRectangle          *area);
-static void gtk_real_check_menu_item_draw_indicator  (GtkCheckMenuItem      *check_menu_item,
-						      GdkRectangle          *area);
+static void gtk_check_menu_item_class_init          (GtkCheckMenuItemClass *klass);
+static void gtk_check_menu_item_init                (GtkCheckMenuItem      *check_menu_item);
+static void gtk_check_menu_item_draw                (GtkWidget             *widget,
+						     GdkRectangle          *area);
+static gint gtk_check_menu_item_expose              (GtkWidget             *widget,
+						     GdkEventExpose        *event);
+static void gtk_check_menu_item_activate            (GtkMenuItem           *menu_item);
+static void gtk_check_menu_item_draw_indicator      (GtkCheckMenuItem      *check_menu_item,
+						     GdkRectangle          *area);
+static void gtk_real_check_menu_item_draw_indicator (GtkCheckMenuItem      *check_menu_item,
+						     GdkRectangle          *area);
 
 
 static GtkMenuItemClass *parent_class = NULL;
@@ -91,11 +93,12 @@ gtk_check_menu_item_class_init (GtkCheckMenuItemClass *klass)
   
   parent_class = gtk_type_class (GTK_TYPE_MENU_ITEM);
   
+  widget_class->draw = gtk_check_menu_item_draw;
   widget_class->expose_event = gtk_check_menu_item_expose;
   
   menu_item_class->activate = gtk_check_menu_item_activate;
+  menu_item_class->toggle_size = 12;
   menu_item_class->hide_on_activate = FALSE;
-  menu_item_class->toggle_size_request = gtk_check_menu_item_toggle_size_request;
   
   klass->toggled = NULL;
   klass->draw_indicator = gtk_real_check_menu_item_draw_indicator;
@@ -103,10 +106,11 @@ gtk_check_menu_item_class_init (GtkCheckMenuItemClass *klass)
   check_menu_item_signals[TOGGLED] =
     gtk_signal_new ("toggled",
                     GTK_RUN_FIRST,
-                    GTK_CLASS_TYPE (object_class),
+                    object_class->type,
                     GTK_SIGNAL_OFFSET (GtkCheckMenuItemClass, toggled),
-                    gtk_marshal_VOID__VOID,
+                    gtk_marshal_NONE__NONE,
 		    GTK_TYPE_NONE, 0);
+  gtk_object_class_add_signals (object_class, check_menu_item_signals, LAST_SIGNAL);
 }
 
 GtkWidget*
@@ -145,26 +149,14 @@ gtk_check_menu_item_set_active (GtkCheckMenuItem *check_menu_item,
     gtk_menu_item_activate (GTK_MENU_ITEM (check_menu_item));
 }
 
-static void
-gtk_check_menu_item_toggle_size_request (GtkMenuItem *menu_item,
-					 guint16     *requisition)
-{
-  g_return_if_fail (menu_item != NULL);
-  g_return_if_fail (GTK_IS_CHECK_MENU_ITEM (menu_item));
-
-  *requisition = CHECK_TOGGLE_SIZE;
-}
-
 void
 gtk_check_menu_item_set_show_toggle (GtkCheckMenuItem *menu_item,
 				     gboolean          always)
 {
   g_return_if_fail (menu_item != NULL);
   g_return_if_fail (GTK_IS_CHECK_MENU_ITEM (menu_item));
-
-#if 0
+  
   menu_item->always_show_toggle = always != FALSE;
-#endif  
 }
 
 void
@@ -177,7 +169,21 @@ static void
 gtk_check_menu_item_init (GtkCheckMenuItem *check_menu_item)
 {
   check_menu_item->active = FALSE;
-  check_menu_item->always_show_toggle = TRUE;
+  check_menu_item->always_show_toggle = FALSE;
+}
+
+static void
+gtk_check_menu_item_draw (GtkWidget    *widget,
+			  GdkRectangle *area)
+{
+  g_return_if_fail (widget != NULL);
+  g_return_if_fail (GTK_IS_CHECK_MENU_ITEM (widget));
+  g_return_if_fail (area != NULL);
+
+  if (GTK_WIDGET_CLASS (parent_class)->draw)
+    (* GTK_WIDGET_CLASS (parent_class)->draw) (widget, area);
+
+  gtk_check_menu_item_draw_indicator (GTK_CHECK_MENU_ITEM (widget), area);
 }
 
 static gint
@@ -217,10 +223,10 @@ gtk_check_menu_item_draw_indicator (GtkCheckMenuItem *check_menu_item,
 {
   g_return_if_fail (check_menu_item != NULL);
   g_return_if_fail (GTK_IS_CHECK_MENU_ITEM (check_menu_item));
-  g_return_if_fail (GTK_CHECK_MENU_ITEM_GET_CLASS (check_menu_item) != NULL);
+  g_return_if_fail (CHECK_MENU_ITEM_CLASS (check_menu_item) != NULL);
 
-  if (GTK_CHECK_MENU_ITEM_GET_CLASS (check_menu_item)->draw_indicator)
-    (* GTK_CHECK_MENU_ITEM_GET_CLASS (check_menu_item)->draw_indicator) (check_menu_item, area);
+  if (CHECK_MENU_ITEM_CLASS (check_menu_item)->draw_indicator)
+    (* CHECK_MENU_ITEM_CLASS (check_menu_item)->draw_indicator) (check_menu_item, area);
 }
 
 static void
@@ -243,7 +249,7 @@ gtk_real_check_menu_item_draw_indicator (GtkCheckMenuItem *check_menu_item,
       width = 8;
       height = 8;
       x = (GTK_CONTAINER (check_menu_item)->border_width +
-	   widget->style->xthickness + 2);
+	   widget->style->klass->xthickness + 2);
       y = (widget->allocation.height - height) / 2;
 
       if (check_menu_item->active ||

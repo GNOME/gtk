@@ -68,5 +68,3 @@ Creates a new #GtkColorSelectionDialog.
 
 @title: a string containing the title text for the dialog.
 @Returns: a #GtkColorSelectionDialog.
-
-

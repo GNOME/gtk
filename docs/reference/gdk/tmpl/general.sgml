@@ -199,10 +199,9 @@ this application are reported with respect to @window and only if selected by
 @event_mask. In either mode, unreported events are discarded.
 @event_mask: specifies the event mask, which is used in accordance with
 @owner_events.
-@confine_to: If non-%NULL, the pointer will be confined to this
-window during the grab. If the pointer is outside @confine_to, it will
-automatically be moved to the closest edge of @confine_to and enter
-and leave events will be generated as necessary.
+@confine_to: TRUE to confine the pointer to @window. If the pointer is outside
+@window, it will automatically be moved to the closest edge of @window and
+enter and leave events will be generated as necessary.
 @cursor: the cursor to display while the grab is active. If this is NULL then
 the normal cursors are used for @window and its descendants, and the cursor
 for @window is used for all other windows.
@@ -211,17 +210,6 @@ comes from a #GdkEventButton struct, though #GDK_CURRENT_TIME can be used if
 the time isn't known.
 @Returns: 0 if the grab was successful.
 
-
-<!-- ##### ENUM GdkGrabStatus ##### -->
-<para>
-
-</para>
-
-@GDK_GRAB_SUCCESS: 
-@GDK_GRAB_ALREADY_GRABBED: 
-@GDK_GRAB_INVALID_TIME: 
-@GDK_GRAB_NOT_VIEWABLE: 
-@GDK_GRAB_FROZEN: 
 
 <!-- ##### FUNCTION gdk_pointer_ungrab ##### -->
 <para>
@@ -258,7 +246,7 @@ This overrides any previous keyboard grab by this client.
 @owner_events: if FALSE then all keyboard events are reported with respect to
 @window. If TRUE then keyboard events for this application are reported as
 normal, but keyboard events outside this application are reported with respect
-to @window. Both key press and key release events are always reported,
+to @window. Both key press and key release events are alwasy reported,
 independant of the event mask set by the application.
 @time: a timestamp from a #GdkEvent, or #GDK_CURRENT_TIME if no timestamp is
 available.
@@ -354,33 +342,5 @@ Removes the X error trap installed with gdk_error_trap_push().
 </para>
 
 @Returns: the X error code, or 0 if no error occurred.
-
-
-<!-- ##### MACRO GDK_WINDOWING_X11 ##### -->
-<para>
-
-</para>
-
-
-
-<!-- ##### MACRO GDK_WINDOWING_WIN32 ##### -->
-<para>
-
-</para>
-
-
-
-<!-- ##### MACRO GDK_WINDOWING_NANOX ##### -->
-<para>
-
-</para>
-
-
-
-<!-- ##### MACRO GDK_WINDOWING_FB ##### -->
-<para>
-
-</para>
-
 
 

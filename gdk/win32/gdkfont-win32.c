@@ -2,37 +2,35 @@
  * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
  *
  * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
+ * modify it under the terms of the GNU Library General Public
  * License as published by the Free Software Foundation; either
  * version 2 of the License, or (at your option) any later version.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
+ * Library General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public
+ * You should have received a copy of the GNU Library General Public
  * License along with this library; if not, write to the
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
  * Boston, MA 02111-1307, USA.
  */
 
 /*
- * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
+ * Modified by the GTK+ Team and others 1997-1999.  See the AUTHORS
  * file for a list of people on the GTK+ Team.  See the ChangeLog
  * files for a list of changes.  These files are distributed with
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
+#include "config.h"
+
 #include <stdio.h>
-#include <stdlib.h>
 #include <ctype.h>
 
-#include <pango/pangowin32.h>
-
 #include "gdkfont.h"
-#include "gdkinternals.h"
-#include "gdkprivate-win32.h"
+#include "gdkwin32.h"
 
 static GHashTable *font_name_hash = NULL;
 static GHashTable *fontset_name_hash = NULL;
@@ -143,7 +141,7 @@ logfont_to_xlfd (const LOGFONT *lfp,
 
   if (logpixelsy == 0)
     {
-      logpixelsy = GetDeviceCaps (gdk_display_hdc, LOGPIXELSY);
+      logpixelsy = GetDeviceCaps (gdk_DC, LOGPIXELSY);
     }
 
   if (lfp->lfWeight >= FW_HEAVY)
@@ -224,7 +222,7 @@ logfont_to_xlfd (const LOGFONT *lfp,
   /* Convert the facename Windows fives us from the locale-dependent
    * codepage to UTF-8.
    */
-  utf8_facename = g_filename_to_utf8 (lfp->lfFaceName, NULL);
+  utf8_facename = g_filename_to_utf8 (lfp->lfFaceName);
 
   /* Replace characters illegal in an XLFD with hex escapes. */
   p = facename;
@@ -282,7 +280,7 @@ gdk_font_full_name_get (GdkFont *font)
     {
       singlefont = (GdkWin32SingleFont *) list->data;
 
-      if (GetObject (singlefont->hfont, sizeof (LOGFONT), &logfont) == 0)
+      if (GetObject (singlefont->xfont, sizeof (LOGFONT), &logfont) == 0)
 	{
 	  WIN32_GDI_FAILED ("GetObject");
 	  return NULL;
@@ -410,7 +408,7 @@ EnumFontFamExProc (const LOGFONT    *lfp,
 
       lf = *lfp;
 
-      EnumFontFamiliesEx (gdk_display_hdc, &lf, InnerEnumFontFamExProc, lParam, 0);
+      EnumFontFamiliesEx (gdk_DC, &lf, InnerEnumFontFamExProc, lParam, 0);
     }
   else
     InnerEnumFontFamExProc (lfp, metrics, fontType, lParam);
@@ -430,7 +428,7 @@ gdk_font_list_new (const gchar *font_pattern,
   xfontnames = g_new (gchar *, font_names_size);
   memset (&logfont, 0, sizeof (logfont));
   logfont.lfCharSet = DEFAULT_CHARSET;
-  EnumFontFamiliesEx (gdk_display_hdc, &logfont, EnumFontFamExProc,
+  EnumFontFamiliesEx (gdk_DC, &logfont, EnumFontFamExProc,
 		      (LPARAM) font_pattern, 0);
 
   result = g_new (gchar *, num_fonts + 1);
@@ -449,15 +447,11 @@ gdk_font_list_free (gchar **font_list)
 }
 
 /* This table classifies Unicode characters according to the Microsoft
- * Unicode subset numbering. This is based on the table in "Developing
+ * Unicode subset numbering. This is from the table in "Developing
  * International Software for Windows 95 and Windows NT". This is almost,
  * but not quite, the same as the official Unicode block table in
  * Blocks.txt from ftp.unicode.org. The bit number field is the bitfield
  * number as in the FONTSIGNATURE struct's fsUsb field.
- * There are some grave bugs in the table in the books. For instance
- * it claims there are Hangul at U+3400..U+4DFF while this range in
- * fact contains CJK Unified Ideographs Extension A. Also, the whole
- * block of Hangul Syllables U+AC00..U+D7A3 is missing from the book.
  */
 
 typedef enum
@@ -653,20 +647,14 @@ static struct {
     U_ENCLOSED_CJK, "Enclosed CJK" },
   { 0x3300, 0x33FF,
     U_CJK_COMPATIBILITY, "CJK Compatibility" },
-  /* The book claims:
-   * U+3400..U+3D2D = Hangul
-   * U+3D2E..U+44B7 = Hangul Supplementary A
-   * U+44B8..U+4DFF = Hangul Supplementary B
-   * but actually in Unicode
-   * U+3400..U+4DB5 = CJK Unified Ideographs Extension A
-   */
-  { 0x3400, 0x4DB5,
-    U_CJK_UNIFIED_IDEOGRAPHS, "CJK Unified Ideographs Extension A" },
+  { 0x3400, 0x3D2D,
+    U_HANGUL, "Hangul" },
+  { 0x3D2E, 0x44B7,
+    U_HANGUL_SUPPLEMENTARY_A, "Hangul Supplementary-A" },
+  { 0x44B8, 0x4DFF,
+    U_HANGUL_SUPPLEMENTARY_B, "Hangul Supplementary-B" },
   { 0x4E00, 0x9FFF,
     U_CJK_UNIFIED_IDEOGRAPHS, "CJK Unified Ideographs" },
-  /* This was missing completely from the book's table. */
-  { 0xAC00, 0xD7A3,
-    U_HANGUL, "Hangul Syllables" },
   { 0xE000, 0xF8FF,
     U_PRIVATE_USE_AREA, "Private Use Area" },
   { 0xF900, 0xFAFF,
@@ -841,7 +829,6 @@ check_unicode_subranges (UINT           charset,
       set_bit (U_SPACING_MODIFIER_LETTERS);
       set_bit (U_BASIC_GREEK);
       set_bit (U_CYRILLIC);
-      set_bit (U_HANGUL_JAMO);
       set_bit (U_GENERAL_PUNCTUATION);
       set_bit (U_SUPERSCRIPTS_AND_SUBSCRIPTS);
       set_bit (U_CURRENCY_SYMBOLS);
@@ -971,7 +958,6 @@ check_unicode_subranges (UINT           charset,
       set_bit (U_COMBINING_DIACRITICAL_MARKS_FOR_SYMBOLS);
       set_bit (U_BASIC_GREEK);
       set_bit (U_CYRILLIC);
-      set_bit (U_HANGUL_JAMO);
       set_bit (U_GENERAL_PUNCTUATION);
       set_bit (U_SUPERSCRIPTS_AND_SUBSCRIPTS);
       set_bit (U_CURRENCY_SYMBOLS);
@@ -1136,124 +1122,26 @@ check_unicode_subranges (UINT           charset,
   return retval;
 }
 
-static GdkWin32SingleFont *
-gdk_font_load_logfont (LOGFONT *lfp)
+GdkWin32SingleFont*
+gdk_font_load_internal (const gchar *font_name)
 {
   GdkWin32SingleFont *singlefont;
   HFONT hfont;
   LOGFONT logfont;
   CHARSETINFO csi;
+  DWORD fdwItalic, fdwUnderline, fdwStrikeOut, fdwCharSet,
+    fdwOutputPrecision, fdwClipPrecision, fdwQuality, fdwPitchAndFamily;
   HGDIOBJ oldfont;
-  int tries;
+  char *lpszFace;
   gchar face[100];
 
-  for (tries = 0; ; tries++)
-    {
-      GDK_NOTE (MISC, g_print ("... trying %ld,%ld,%ld,%ld,"
-			       "%ld,%d,%d,%d,"
-			       "%d,%d,%d,"
-			       "%d,%#.02x,\"%s\"\n",
-			       lfp->lfHeight, lfp->lfWidth,
-			       lfp->lfEscapement, lfp->lfOrientation,
-			       lfp->lfWeight, lfp->lfItalic,
-			       lfp->lfUnderline, lfp->lfStrikeOut,
-			       lfp->lfCharSet,
-			       lfp->lfOutPrecision, lfp->lfClipPrecision,
-			       lfp->lfQuality, lfp->lfPitchAndFamily,
-			       lfp->lfFaceName));
-      hfont = CreateFontIndirect (lfp);
-
-      if (hfont != NULL)
-	break;
-      
-      /* If we fail, try some similar fonts often found on Windows. */
-      if (tries == 0)
-	{
-	  if (g_strcasecmp (lfp->lfFaceName, "helvetica") == 0)
-	    strcpy (lfp->lfFaceName, "arial");
-	  else if (g_strcasecmp (lfp->lfFaceName, "new century schoolbook") == 0)
-	    strcpy (lfp->lfFaceName, "century schoolbook");
-	  else if (g_strcasecmp (lfp->lfFaceName, "courier") == 0)
-	    strcpy (lfp->lfFaceName, "courier new");
-	  else if (g_strcasecmp (lfp->lfFaceName, "lucida") == 0)
-	    strcpy (lfp->lfFaceName, "lucida sans unicode");
-	  else if (g_strcasecmp (lfp->lfFaceName, "lucidatypewriter") == 0)
-	    strcpy (lfp->lfFaceName, "lucida console");
-	  else if (g_strcasecmp (lfp->lfFaceName, "times") == 0)
-	    strcpy (lfp->lfFaceName, "times new roman");
-	}
-      else if (tries == 1)
-	{
-	  if (g_strcasecmp (lfp->lfFaceName, "courier") == 0)
-	    {
-	      strcpy (lfp->lfFaceName, "");
-	      lfp->lfPitchAndFamily |= FF_MODERN;
-	    }
-	  else if (g_strcasecmp (lfp->lfFaceName, "times new roman") == 0)
-	    {
-	      strcpy (lfp->lfFaceName, "");
-	      lfp->lfPitchAndFamily |= FF_ROMAN;
-	    }
-	  else if (g_strcasecmp (lfp->lfFaceName, "helvetica") == 0
-		   || g_strcasecmp (lfp->lfFaceName, "lucida") == 0)
-	    {
-	      strcpy (lfp->lfFaceName, "");
-	      lfp->lfPitchAndFamily |= FF_SWISS;
-	    }
-	  else
-	    {
-	      strcpy (lfp->lfFaceName, "");
-	      lfp->lfPitchAndFamily = (lfp->lfPitchAndFamily & 0x0F) | FF_DONTCARE;
-	    }
-	}
-      else
-	break;
-      tries++;
-    }
-
-  if (!hfont)
-    return NULL;
-      
-  singlefont = g_new (GdkWin32SingleFont, 1);
-  singlefont->hfont = hfont;
-  GetObject (singlefont->hfont, sizeof (logfont), &logfont);
-  oldfont = SelectObject (gdk_display_hdc, singlefont->hfont);
-  memset (&singlefont->fs, 0, sizeof (singlefont->fs));
-  singlefont->charset = GetTextCharsetInfo (gdk_display_hdc, &singlefont->fs, 0);
-  GetTextFace (gdk_display_hdc, sizeof (face), face);
-  SelectObject (gdk_display_hdc, oldfont);
-  if (TranslateCharsetInfo ((DWORD *) singlefont->charset, &csi,
-			    TCI_SRCCHARSET)
-      && singlefont->charset != MAC_CHARSET)
-    singlefont->codepage = csi.ciACP;
-  else
-    singlefont->codepage = 0;
-
-  GDK_NOTE (MISC, (g_print ("... = %#x %s cs %s cp%d\n",
-			    (guint) singlefont->hfont, face,
-			    charset_name (singlefont->charset),
-			    singlefont->codepage),
-		   g_print ("... Unicode subranges:"),
-		   print_unicode_subranges (&singlefont->fs)));
-  if (check_unicode_subranges (singlefont->charset, &singlefont->fs))
-    GDK_NOTE (MISC, (g_print ("... Guesstimated Unicode subranges:"),
-		     print_unicode_subranges (&singlefont->fs)));
-
-  return singlefont;
-}
-
-static GdkWin32SingleFont *
-gdk_font_load_internal (const gchar *font_name)
-{
-  LOGFONT logfont;
-
-  char *fn;
-  int numfields, n1, n2;
+  int numfields, n1, n2, tries;
   char foundry[32], family[100], weight[32], slant[32], set_width[32],
     spacing[32], registry[32], encoding[32];
   char pixel_size[10], point_size[10], res_x[10], res_y[10], avg_width[10];
   int c;
   char *p;
+  int nHeight, nWidth, nEscapement, nOrientation, fnWeight;
   int logpixelsy;
 
   g_return_val_if_fail (font_name != NULL, NULL);
@@ -1271,22 +1159,20 @@ gdk_font_load_internal (const gchar *font_name)
   if (numfields == 0)
     {
       /* Probably a plain Windows font name */
-      logfont.lfHeight = 0;
-      logfont.lfWidth = 0;
-      logfont.lfEscapement = 0;
-      logfont.lfOrientation = 0;
-      logfont.lfWeight = FW_DONTCARE;
-      logfont.lfItalic = FALSE;
-      logfont.lfUnderline = FALSE;
-      logfont.lfStrikeOut = FALSE;
-      logfont.lfCharSet = ANSI_CHARSET;
-      logfont.lfOutPrecision = OUT_TT_ONLY_PRECIS;
-      logfont.lfClipPrecision = CLIP_DEFAULT_PRECIS;
-      logfont.lfQuality = PROOF_QUALITY;
-      logfont.lfPitchAndFamily = DEFAULT_PITCH;
-      fn = g_filename_from_utf8 (font_name, NULL);
-      strcpy (logfont.lfFaceName, fn);
-      g_free (fn);
+      nHeight = 0;
+      nWidth = 0;
+      nEscapement = 0;
+      nOrientation = 0;
+      fnWeight = FW_DONTCARE;
+      fdwItalic = FALSE;
+      fdwUnderline = FALSE;
+      fdwStrikeOut = FALSE;
+      fdwCharSet = ANSI_CHARSET;
+      fdwOutputPrecision = OUT_TT_PRECIS;
+      fdwClipPrecision = CLIP_DEFAULT_PRECIS;
+      fdwQuality = PROOF_QUALITY;
+      fdwPitchAndFamily = DEFAULT_PITCH;
+      lpszFace = g_filename_from_utf8 (font_name);
     }
   else if (numfields != 5)
     {
@@ -1335,159 +1221,263 @@ gdk_font_load_internal (const gchar *font_name)
 	  return NULL;
 	}
 
-      logpixelsy = GetDeviceCaps (gdk_display_hdc, LOGPIXELSY);
+      logpixelsy = GetDeviceCaps (gdk_DC, LOGPIXELSY);
 
       if (strcmp (pixel_size, "*") == 0)
 	if (strcmp (point_size, "*") == 0)
-	  logfont.lfHeight = 0;
+	  nHeight = 0;
 	else
-	  logfont.lfHeight = (int) (((double) atoi (point_size))/720.*logpixelsy);
+	  nHeight = (int) (((double) atoi (point_size))/720.*logpixelsy);
       else
-	logfont.lfHeight = atoi (pixel_size);
+	nHeight = atoi (pixel_size);
 
-      logfont.lfWidth = 0;
-      logfont.lfEscapement = 0;
-      logfont.lfOrientation = 0;
+      nWidth = 0;
+      nEscapement = 0;
+      nOrientation = 0;
 
       if (g_strcasecmp (weight, "thin") == 0)
-	logfont.lfWeight = FW_THIN;
+	fnWeight = FW_THIN;
       else if (g_strcasecmp (weight, "extralight") == 0)
-	logfont.lfWeight = FW_EXTRALIGHT;
+	fnWeight = FW_EXTRALIGHT;
       else if (g_strcasecmp (weight, "ultralight") == 0)
 #ifdef FW_ULTRALIGHT
-	logfont.lfWeight = FW_ULTRALIGHT;
+	fnWeight = FW_ULTRALIGHT;
 #else
-	logfont.lfWeight = FW_EXTRALIGHT; /* In fact, FW_ULTRALIGHT really is 
-					   * defined as FW_EXTRALIGHT anyway.
-					   */
+	fnWeight = FW_EXTRALIGHT; /* In fact, FW_ULTRALIGHT really is 
+				   * defined as FW_EXTRALIGHT anyway.
+				   */
 #endif
       else if (g_strcasecmp (weight, "light") == 0)
-	logfont.lfWeight = FW_LIGHT;
+	fnWeight = FW_LIGHT;
       else if (g_strcasecmp (weight, "normal") == 0)
-	logfont.lfWeight = FW_NORMAL;
+	fnWeight = FW_NORMAL;
       else if (g_strcasecmp (weight, "regular") == 0)
-	logfont.lfWeight = FW_REGULAR;
+	fnWeight = FW_REGULAR;
       else if (g_strcasecmp (weight, "medium") == 0)
-	logfont.lfWeight = FW_MEDIUM;
+	fnWeight = FW_MEDIUM;
       else if (g_strcasecmp (weight, "semibold") == 0)
-	logfont.lfWeight = FW_SEMIBOLD;
+	fnWeight = FW_SEMIBOLD;
       else if (g_strcasecmp (weight, "demibold") == 0)
 #ifdef FW_DEMIBOLD
-	logfont.lfWeight = FW_DEMIBOLD;
+	fnWeight = FW_DEMIBOLD;
 #else
-	logfont.lfWeight = FW_SEMIBOLD;	/* As above */
+	fnWeight = FW_SEMIBOLD;	/* As above */
 #endif
       else if (g_strcasecmp (weight, "bold") == 0)
-	logfont.lfWeight = FW_BOLD;
+	fnWeight = FW_BOLD;
       else if (g_strcasecmp (weight, "extrabold") == 0)
-	logfont.lfWeight = FW_EXTRABOLD;
+	fnWeight = FW_EXTRABOLD;
       else if (g_strcasecmp (weight, "ultrabold") == 0)
 #ifdef FW_ULTRABOLD
-	logfont.lfWeight = FW_ULTRABOLD;
+	fnWeight = FW_ULTRABOLD;
 #else
-	logfont.lfWeight = FW_EXTRABOLD; /* As above */
+	fnWeight = FW_EXTRABOLD; /* As above */
 #endif
       else if (g_strcasecmp (weight, "heavy") == 0)
-	logfont.lfWeight = FW_HEAVY;
+	fnWeight = FW_HEAVY;
       else if (g_strcasecmp (weight, "black") == 0)
 #ifdef FW_BLACK
-	logfont.lfWeight = FW_BLACK;
+	fnWeight = FW_BLACK;
 #else
-	logfont.lfWeight = FW_HEAVY;	/* As above */
+	fnWeight = FW_HEAVY;	/* As above */
 #endif
       else
-	logfont.lfWeight = FW_DONTCARE;
+	fnWeight = FW_DONTCARE;
 
       if (g_strcasecmp (slant, "italic") == 0
 	  || g_strcasecmp (slant, "oblique") == 0
 	  || g_strcasecmp (slant, "i") == 0
 	  || g_strcasecmp (slant, "o") == 0)
-	logfont.lfItalic = TRUE;
+	fdwItalic = TRUE;
       else
-	logfont.lfItalic = FALSE;
-      logfont.lfUnderline = FALSE;
-      logfont.lfStrikeOut = FALSE;
+	fdwItalic = FALSE;
+      fdwUnderline = FALSE;
+      fdwStrikeOut = FALSE;
       if (g_strcasecmp (registry, "iso8859") == 0)
 	if (strcmp (encoding, "1") == 0)
-	  logfont.lfCharSet = ANSI_CHARSET;
+	  fdwCharSet = ANSI_CHARSET;
 	else if (strcmp (encoding, "2") == 0)
-	  logfont.lfCharSet = EASTEUROPE_CHARSET;
+	  fdwCharSet = EASTEUROPE_CHARSET;
 	else if (strcmp (encoding, "7") == 0)
-	  logfont.lfCharSet = GREEK_CHARSET;
+	  fdwCharSet = GREEK_CHARSET;
 	else if (strcmp (encoding, "8") == 0)
-	  logfont.lfCharSet = HEBREW_CHARSET;
+	  fdwCharSet = HEBREW_CHARSET;
 	else if (strcmp (encoding, "9") == 0)
-	  logfont.lfCharSet = TURKISH_CHARSET;
+	  fdwCharSet = TURKISH_CHARSET;
 	else
-	  logfont.lfCharSet = ANSI_CHARSET; /* XXX ??? */
+	  fdwCharSet = ANSI_CHARSET; /* XXX ??? */
       else if (g_strcasecmp (registry, "jisx0208.1983") == 0)
-	logfont.lfCharSet = SHIFTJIS_CHARSET;
+	fdwCharSet = SHIFTJIS_CHARSET;
       else if (g_strcasecmp (registry, "ksc5601.1987") == 0)
-	logfont.lfCharSet = HANGEUL_CHARSET;
+	fdwCharSet = HANGEUL_CHARSET;
       else if (g_strcasecmp (registry, "gb2312.1980") == 0)
-	logfont.lfCharSet = GB2312_CHARSET;
+	fdwCharSet = GB2312_CHARSET;
       else if (g_strcasecmp (registry, "big5") == 0)
-	logfont.lfCharSet = CHINESEBIG5_CHARSET;
+	fdwCharSet = CHINESEBIG5_CHARSET;
       else if (g_strcasecmp (registry, "windows") == 0
 	       || g_strcasecmp (registry, "microsoft") == 0)
 	if (g_strcasecmp (encoding, "symbol") == 0)
-	  logfont.lfCharSet = SYMBOL_CHARSET;
+	  fdwCharSet = SYMBOL_CHARSET;
 	else if (g_strcasecmp (encoding, "shiftjis") == 0)
-	  logfont.lfCharSet = SHIFTJIS_CHARSET;
+	  fdwCharSet = SHIFTJIS_CHARSET;
 	else if (g_strcasecmp (encoding, "gb2312") == 0)
-	  logfont.lfCharSet = GB2312_CHARSET;
+	  fdwCharSet = GB2312_CHARSET;
 	else if (g_strcasecmp (encoding, "hangeul") == 0)
-	  logfont.lfCharSet = HANGEUL_CHARSET;
+	  fdwCharSet = HANGEUL_CHARSET;
 	else if (g_strcasecmp (encoding, "big5") == 0)
-	  logfont.lfCharSet = CHINESEBIG5_CHARSET;
+	  fdwCharSet = CHINESEBIG5_CHARSET;
 	else if (g_strcasecmp (encoding, "johab") == 0)
-	  logfont.lfCharSet = JOHAB_CHARSET;
+	  fdwCharSet = JOHAB_CHARSET;
 	else if (g_strcasecmp (encoding, "hebrew") == 0)
-	  logfont.lfCharSet = HEBREW_CHARSET;
+	  fdwCharSet = HEBREW_CHARSET;
 	else if (g_strcasecmp (encoding, "arabic") == 0)
-	  logfont.lfCharSet = ARABIC_CHARSET;
+	  fdwCharSet = ARABIC_CHARSET;
 	else if (g_strcasecmp (encoding, "greek") == 0)
-	  logfont.lfCharSet = GREEK_CHARSET;
+	  fdwCharSet = GREEK_CHARSET;
 	else if (g_strcasecmp (encoding, "turkish") == 0)
-	  logfont.lfCharSet = TURKISH_CHARSET;
+	  fdwCharSet = TURKISH_CHARSET;
 	else if (g_strcasecmp (encoding, "easteurope") == 0)
-	  logfont.lfCharSet = EASTEUROPE_CHARSET;
+	  fdwCharSet = EASTEUROPE_CHARSET;
 	else if (g_strcasecmp (encoding, "russian") == 0)
-	  logfont.lfCharSet = RUSSIAN_CHARSET;
+	  fdwCharSet = RUSSIAN_CHARSET;
 	else if (g_strcasecmp (encoding, "mac") == 0)
-	  logfont.lfCharSet = MAC_CHARSET;
+	  fdwCharSet = MAC_CHARSET;
 	else if (g_strcasecmp (encoding, "baltic") == 0)
-	  logfont.lfCharSet = BALTIC_CHARSET;
+	  fdwCharSet = BALTIC_CHARSET;
 	else if (g_strcasecmp (encoding, "cp1251") == 0)
-	  logfont.lfCharSet = RUSSIAN_CHARSET;
+	  fdwCharSet = RUSSIAN_CHARSET;
 	else
-	  logfont.lfCharSet = ANSI_CHARSET; /* XXX ??? */
+	  fdwCharSet = ANSI_CHARSET; /* XXX ??? */
       else
-	logfont.lfCharSet = ANSI_CHARSET; /* XXX ??? */
-      logfont.lfOutPrecision = OUT_TT_PRECIS;
-      logfont.lfClipPrecision = CLIP_DEFAULT_PRECIS;
-      logfont.lfQuality = PROOF_QUALITY;
+	fdwCharSet = ANSI_CHARSET; /* XXX ??? */
+      fdwOutputPrecision = OUT_TT_PRECIS;
+      fdwClipPrecision = CLIP_DEFAULT_PRECIS;
+      fdwQuality = PROOF_QUALITY;
       if (g_strcasecmp (spacing, "m") == 0)
-	logfont.lfPitchAndFamily = FIXED_PITCH;
+	fdwPitchAndFamily = FIXED_PITCH;
       else if (g_strcasecmp (spacing, "p") == 0)
-	logfont.lfPitchAndFamily = VARIABLE_PITCH;
+	fdwPitchAndFamily = VARIABLE_PITCH;
       else 
-	logfont.lfPitchAndFamily = DEFAULT_PITCH;
-      fn = g_filename_from_utf8 (family, NULL);
-      strcpy (logfont.lfFaceName, fn);
-      g_free (fn);
+	fdwPitchAndFamily = DEFAULT_PITCH;
+      lpszFace = g_filename_from_utf8 (family);
     }
 
-  return gdk_font_load_logfont (&logfont);
+  for (tries = 0; ; tries++)
+    {
+      GDK_NOTE (MISC, g_print ("...trying CreateFont(%d,%d,%d,%d,"
+			       "%d,%d,%d,%d,"
+			       "%d,%d,%d,"
+			       "%d,%#.02x,\"%s\")\n",
+			       nHeight, nWidth, nEscapement, nOrientation,
+			       fnWeight, fdwItalic, fdwUnderline, fdwStrikeOut,
+			       fdwCharSet, fdwOutputPrecision, fdwClipPrecision,
+			       fdwQuality, fdwPitchAndFamily, lpszFace));
+      hfont = CreateFont (nHeight, nWidth, nEscapement, nOrientation,
+			  fnWeight, fdwItalic, fdwUnderline, fdwStrikeOut,
+			  fdwCharSet, fdwOutputPrecision, fdwClipPrecision,
+			  fdwQuality, fdwPitchAndFamily, lpszFace);
+      /* After the first try lpszFace contains a return value
+       * from g_filename_from_utf8(), so free it.
+       */
+      if (tries == 0)
+	g_free (lpszFace);
+
+      if (hfont != NULL)
+	break;
+
+      /* If we fail, try some similar fonts often found on Windows. */
+      if (tries == 0)
+	{
+	  if (g_strcasecmp (family, "helvetica") == 0)
+	    lpszFace = "arial";
+	  else if (g_strcasecmp (family, "new century schoolbook") == 0)
+	    lpszFace = "century schoolbook";
+	  else if (g_strcasecmp (family, "courier") == 0)
+	    lpszFace = "courier new";
+	  else if (g_strcasecmp (family, "lucida") == 0)
+	    lpszFace = "lucida sans unicode";
+	  else if (g_strcasecmp (family, "lucidatypewriter") == 0)
+	    lpszFace = "lucida console";
+	  else if (g_strcasecmp (family, "times") == 0)
+	    lpszFace = "times new roman";
+	}
+      else if (tries == 1)
+	{
+	  if (g_strcasecmp (family, "courier") == 0)
+	    {
+	      lpszFace = "";
+	      fdwPitchAndFamily |= FF_MODERN;
+	    }
+	  else if (g_strcasecmp (family, "times new roman") == 0)
+	    {
+	      lpszFace = "";
+	      fdwPitchAndFamily |= FF_ROMAN;
+	    }
+	  else if (g_strcasecmp (family, "helvetica") == 0
+		   || g_strcasecmp (family, "lucida") == 0)
+	    {
+	      lpszFace = "";
+	      fdwPitchAndFamily |= FF_SWISS;
+	    }
+	  else
+	    {
+	      lpszFace = "";
+	      fdwPitchAndFamily = (fdwPitchAndFamily & 0x0F) | FF_DONTCARE;
+	    }
+	}
+      else
+	break;
+      tries++;
+    }
+  
+  if (!hfont)
+    return NULL;
+      
+  singlefont = g_new (GdkWin32SingleFont, 1);
+  singlefont->xfont = hfont;
+  GetObject (singlefont->xfont, sizeof (logfont), &logfont);
+  oldfont = SelectObject (gdk_DC, singlefont->xfont);
+  memset (&singlefont->fs, 0, sizeof (singlefont->fs));
+  singlefont->charset = GetTextCharsetInfo (gdk_DC, &singlefont->fs, 0);
+  GetTextFace (gdk_DC, sizeof (face), face);
+  SelectObject (gdk_DC, oldfont);
+  if (TranslateCharsetInfo ((DWORD *) singlefont->charset, &csi,
+			    TCI_SRCCHARSET)
+      && singlefont->charset != MAC_CHARSET)
+    singlefont->codepage = csi.ciACP;
+  else
+    singlefont->codepage = 0;
+
+  GDK_NOTE (MISC, (g_print ("... = %#x %s cs %s cp%d ",
+			    singlefont->xfont, face,
+			    charset_name (singlefont->charset),
+			    singlefont->codepage),
+		   g_print ("... Unicode subranges:"),
+		   print_unicode_subranges (&singlefont->fs)));
+  if (check_unicode_subranges (singlefont->charset, &singlefont->fs))
+    GDK_NOTE (MISC, (g_print ("... Guesstimated Unicode subranges:"),
+		     print_unicode_subranges (&singlefont->fs)));
+
+  return singlefont;
 }
 
-static GdkFont *
-gdk_font_from_one_singlefont (GdkWin32SingleFont *singlefont)
+GdkFont*
+gdk_font_load (const gchar *font_name)
 {
   GdkFont *font;
   GdkFontPrivateWin32 *private;
+  GdkWin32SingleFont *singlefont;
   HGDIOBJ oldfont;
+  HANDLE *f;
   TEXTMETRIC textmetric;
+
+  g_return_val_if_fail (font_name != NULL, NULL);
+
+  font = gdk_font_hash_lookup (GDK_FONT_FONTSET, font_name);
+  if (font)
+    return font;
+
+  singlefont = gdk_font_load_internal (font_name);
 
   private = g_new (GdkFontPrivateWin32, 1);
   font = (GdkFont*) private;
@@ -1501,80 +1491,18 @@ gdk_font_from_one_singlefont (GdkWin32SingleFont *singlefont)
    * chars to work. (Yes, even Latin-1, as we use Unicode internally.)
    */
   font->type = GDK_FONT_FONTSET;
-  oldfont = SelectObject (gdk_display_hdc, singlefont->hfont);
-  GetTextMetrics (gdk_display_hdc, &textmetric);
-  SelectObject (gdk_display_hdc, oldfont);
+  oldfont = SelectObject (gdk_DC, singlefont->xfont);
+  GetTextMetrics (gdk_DC, &textmetric);
+  SelectObject (gdk_DC, oldfont);
   font->ascent = textmetric.tmAscent;
   font->descent = textmetric.tmDescent;
 
   GDK_NOTE (MISC, g_print ("... asc %d desc %d\n",
 			   font->ascent, font->descent));
 
-  return font;
-}
-
-GdkFont*
-gdk_font_load (const gchar *font_name)
-{
-  GdkFont *font;
-
-  g_return_val_if_fail (font_name != NULL, NULL);
-
-  font = gdk_font_hash_lookup (GDK_FONT_FONTSET, font_name);
-  if (font)
-    return font;
-
   gdk_font_hash_insert (GDK_FONT_FONTSET, font, font_name);
 
-  return gdk_font_from_one_singlefont (gdk_font_load_internal (font_name));
-}
-
-/**
- * gdk_font_from_description:
- * @font_desc: a #PangoFontDescription.
- * 
- * Load a #GdkFont based on a Pango font description. This font will
- * only be an approximation of the Pango font, and
- * internationalization will not be handled correctly. This function
- * should only be used for legacy code that cannot be easily converted
- * to use Pango. Using Pango directly will produce better results.
- * 
- * Return value: the newly loaded font, or %NULL if the font
- * cannot be loaded.
- **/
-GdkFont*
-gdk_font_from_description (PangoFontDescription *font_desc)
-{
-  PangoFontMap *font_map;
-  PangoFont *font;
-  GdkFont *result = NULL;
-
-  g_return_val_if_fail (font_desc != NULL, NULL);
-
-  font_map = pango_win32_font_map_for_display ();
-  font = pango_font_map_load_font (font_map, font_desc);
-
-  if (font)
-    {
-      gint n_subfonts;
-      PangoWin32Subfont *subfont_ids;
-
-      n_subfonts = pango_win32_list_subfonts (font, PANGO_WIN32_U_BASIC_LATIN,
-					      &subfont_ids);
-      if (n_subfonts > 0)
-	{
-	  LOGFONT *lfp =
-	    pango_win32_font_subfont_logfont (font, subfont_ids[0]);
-	  result = gdk_font_from_one_singlefont (gdk_font_load_logfont (lfp));
-	  g_free (lfp);
-	}
-
-      g_free (subfont_ids);
-
-      g_object_unref (G_OBJECT (font));
-    }
-
-  return result;
+  return font;
 }
 
 GdkFont*
@@ -1584,7 +1512,9 @@ gdk_fontset_load (const gchar *fontset_name)
   GdkFontPrivateWin32 *private;
   GdkWin32SingleFont *singlefont;
   HGDIOBJ oldfont;
+  HANDLE *f;
   TEXTMETRIC textmetric;
+  GSList *base_font_list = NULL;
   gchar *fs;
   gchar *b, *p, *s;
 
@@ -1625,9 +1555,9 @@ gdk_fontset_load (const gchar *fontset_name)
       if (singlefont)
 	{
 	  private->fonts = g_slist_append (private->fonts, singlefont);
-	  oldfont = SelectObject (gdk_display_hdc, singlefont->hfont);
-	  GetTextMetrics (gdk_display_hdc, &textmetric);
-	  SelectObject (gdk_display_hdc, oldfont);
+	  oldfont = SelectObject (gdk_DC, singlefont->xfont);
+	  GetTextMetrics (gdk_DC, &textmetric);
+	  SelectObject (gdk_DC, oldfont);
 	  font->ascent = MAX (font->ascent, textmetric.tmAscent);
 	  font->descent = MAX (font->descent, textmetric.tmDescent);
 	}
@@ -1659,14 +1589,14 @@ _gdk_font_destroy (GdkFont *font)
 
   singlefont = (GdkWin32SingleFont *) private->fonts->data;
   GDK_NOTE (MISC, g_print ("_gdk_font_destroy %#x\n",
-			   (guint)singlefont->hfont));
+			   singlefont->xfont));
 
   gdk_font_hash_remove (font->type, font);
   
   switch (font->type)
     {
     case GDK_FONT_FONT:
-      DeleteObject (singlefont->hfont);
+      DeleteObject (singlefont->xfont);
       break;
       
     case GDK_FONT_FONTSET:
@@ -1674,7 +1604,7 @@ _gdk_font_destroy (GdkFont *font)
       while (list)
 	{
 	  singlefont = (GdkWin32SingleFont *) list->data;
-	  DeleteObject (singlefont->hfont);
+	  DeleteObject (singlefont->xfont);
 	  
 	  list = list->next;
 	}
@@ -1704,7 +1634,7 @@ gdk_font_id (const GdkFont *font)
   private = (const GdkFontPrivateWin32 *) font;
 
   if (font->type == GDK_FONT_FONT)
-    return (gint) ((GdkWin32SingleFont *) private->fonts->data)->hfont;
+    return (gint) ((GdkWin32SingleFont *) private->fonts->data)->xfont;
   else
     return 0;
 }
@@ -1723,8 +1653,8 @@ gdk_font_equal (const GdkFont *fonta,
   privateb = (const GdkFontPrivateWin32 *) fontb;
 
   if (fonta->type == GDK_FONT_FONT && fontb->type == GDK_FONT_FONT)
-    return (((GdkWin32SingleFont *) privatea->fonts->data)->hfont
-	    == ((GdkWin32SingleFont *) privateb->fonts->data)->hfont);
+    return (((GdkWin32SingleFont *) privatea->fonts->data)->xfont
+	    == ((GdkWin32SingleFont *) privateb->fonts->data)->xfont);
   else if (fonta->type == GDK_FONT_FONTSET && fontb->type == GDK_FONT_FONTSET)
     {
       GSList *lista = privatea->fonts;
@@ -1732,8 +1662,8 @@ gdk_font_equal (const GdkFont *fonta,
 
       while (lista && listb)
 	{
-	  if (((GdkWin32SingleFont *) lista->data)->hfont
-	      != ((GdkWin32SingleFont *) listb->data)->hfont)
+	  if (((GdkWin32SingleFont *) lista->data)->xfont
+	      != ((GdkWin32SingleFont *) listb->data)->xfont)
 	    return 0;
 	  lista = lista->next;
 	  listb = listb->next;
@@ -1768,8 +1698,6 @@ unicode_classify (wchar_t wc)
       else
 	return -1;
     }
-  /* NOTREACHED */
-  return -1;
 }
 
 void
@@ -1785,7 +1713,7 @@ gdk_wchar_text_handle (GdkFont       *font,
   GdkFontPrivateWin32 *private;
   GdkWin32SingleFont *singlefont;
   GSList *list;
-  int  block;
+  int i, block;
   const wchar_t *start, *end, *wcp;
 
   wcp = wcstr;
@@ -1793,8 +1721,6 @@ gdk_wchar_text_handle (GdkFont       *font,
   private = (GdkFontPrivateWin32 *) font;
 
   g_assert (private->base.ref_count > 0);
-
-  GDK_NOTE (MISC, g_print ("gdk_wchar_text_handle: "));
 
   while (wcp < end)
     {
@@ -1819,15 +1745,10 @@ gdk_wchar_text_handle (GdkFont       *font,
       if (!list)
 	singlefont = NULL;
 
-      GDK_NOTE (MISC, g_print ("%d:%d:%d:%#x ",
-			       start-wcstr, wcp-wcstr, block,
-			       (singlefont ? (guint) singlefont->hfont : 0)));
-
       /* Call the callback function */
       (*handler) (singlefont, start, wcp+1 - start, arg);
       wcp++;
     }
-  GDK_NOTE (MISC, g_print ("\n"));
 }
 
 typedef struct
@@ -1848,13 +1769,13 @@ gdk_text_size_handler (GdkWin32SingleFont *singlefont,
   if (!singlefont)
     return;
 
-  if ((oldfont = SelectObject (gdk_display_hdc, singlefont->hfont)) == NULL)
+  if ((oldfont = SelectObject (gdk_DC, singlefont->xfont)) == NULL)
     {
       WIN32_GDI_FAILED ("SelectObject");
       return;
     }
-  GetTextExtentPoint32W (gdk_display_hdc, wcstr, wclen, &this_size);
-  SelectObject (gdk_display_hdc, oldfont);
+  GetTextExtentPoint32W (gdk_DC, wcstr, wclen, &this_size);
+  SelectObject (gdk_DC, oldfont);
 
   arg->total.cx += this_size.cx;
   arg->total.cy = MAX (arg->total.cy, this_size.cy);

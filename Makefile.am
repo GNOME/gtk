@@ -1,50 +1,38 @@
 ## Makefile.am for GTK+
 
-SRC_SUBDIRS = gdk-pixbuf gdk modules gtk demos contrib
-SUBDIRS = po $(SRC_SUBDIRS) docs build
+SRC_SUBDIRS = gdk gtk
+SUBDIRS = po $(SRC_SUBDIRS) docs
 
-bin_SCRIPTS = gtk-config-2.0
+bin_SCRIPTS = gtk-config
 
 # require automake 1.4
 AUTOMAKE_OPTIONS = 1.4
 
-EXTRA_DIST =			\
-	HACKING			\
-	gtk+.spec.in		\
-        gtk-2.0.m4          	\
-	makecopyright		\
-	TODO			\
-	TODO.xml		\
-	NEWS.pre-1-0		\
+EXTRA_DIST =	\
+	HACKING		\
+	gtk+.spec.in	\
+        gtk.m4          \
+	makecopyright	\
+	TODO		\
+	NEWS.pre-1-0	\
 	ChangeLog.pre-1-0	\
-	ChangeLog.pre-1-2	\
 	README.cvs-commits	\
-	README.win32		\
-	README.nanox		\
+	README.win32	\
 	intl/libgettext.h	\
 	intl/po2tbl.sed.in	\
-	po/README.tools		\
-	po/README.translators	\
-	po/desk.pl		\
-	po/makefile.mingw	\
-	po/update.pl		\
 	examples/aspectframe/Makefile  \
 	examples/aspectframe/aspectframe.c  \
 	examples/Makefile  \
 	examples/README.1ST  \
 	examples/extract.awk  \
 	examples/extract.sh  \
-	examples/arrow/Makefile	\
-	examples/arrow/arrow.c	\
 	examples/base/Makefile  \
 	examples/base/base.c  \
-	examples/buttonbox/Makefile \
-	examples/buttonbox/buttonbox.c	\
 	examples/buttons/Makefile  \
 	examples/buttons/buttons.c  \
 	examples/buttons/info.xpm  \
 	examples/calendar/Makefile  \
-	examples/calendar/calendar.c  \
+	examples/calendar/gcalendar.c  \
 	examples/clist/Makefile  \
 	examples/clist/clist.c  \
 	examples/entry/Makefile  \
@@ -61,8 +49,6 @@ EXTRA_DIST =			\
 	examples/helloworld/helloworld.c  \
 	examples/helloworld2/Makefile  \
 	examples/helloworld2/helloworld2.c  \
-	examples/label/Makefile	\
-	examples/label/label.c	\
 	examples/list/Makefile  \
 	examples/list/list.c  \
 	examples/menu/Makefile  \
@@ -88,8 +74,6 @@ EXTRA_DIST =			\
 	examples/rulers/rulers.c  \
 	examples/scribble-simple/Makefile  \
 	examples/scribble-simple/scribble-simple.c  \
-	examples/scribble-xinput/Makefile	\
-	examples/scribble-xinput/scribble-xinput.c	\
 	examples/scrolledwin/Makefile  \
 	examples/scrolledwin/scrolledwin.c  \
 	examples/selection/Makefile  \
@@ -117,9 +101,6 @@ EXTRA_DIST =			\
 	examples/spinbutton/Makefile  \
 	examples/find-examples.sh
 
-pkgconfigdir = $(libdir)/pkgconfig
-pkgconfig_DATA= gdk-pixbuf-2.0.pc gdk-2.0.pc gtk+-2.0.pc
-
 dist-hook: gtk+.spec
 	if test -e $(srcdir)/INSTALL.in && test -e $(srcdir)/README.in ; then \
 	     CONFIG_FILES="INSTALL:$(srcdir)/INSTALL.in README:$(srcdir)/README.in" \
@@ -130,7 +111,7 @@ dist-hook: gtk+.spec
 	&& cp gtk+.spec $(distdir)
 
 m4datadir = $(datadir)/aclocal
-m4data_DATA = gtk-2.0.m4
+m4data_DATA = gtk.m4
 
 .PHONY: files release sanity snapshot
 
@@ -154,4 +135,4 @@ sanity:
 
 
 snapshot:
-	$(MAKE) dist distdir=$(PACKAGE)-snap`date +"%Y%m%d"`
+	$(MAKE) dist distdir=$(PACKAGE)`date +"%y%m%d"`

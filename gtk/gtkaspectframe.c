@@ -7,23 +7,23 @@
  *     Copyright Owen Taylor                          4/9/97
  *
  * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
+ * modify it under the terms of the GNU Library General Public
  * License as published by the Free Software Foundation; either
  * version 2 of the License, or (at your option) any later version.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
+ * Library General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public
+ * You should have received a copy of the GNU Library General Public
  * License along with this library; if not, write to the
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
  * Boston, MA 02111-1307, USA.
  */
 
 /*
- * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
+ * Modified by the GTK+ Team and others 1997-1999.  See the AUTHORS
  * file for a list of people on the GTK+ Team.  See the ChangeLog
  * files for a list of changes.  These files are distributed with
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
@@ -39,21 +39,25 @@ enum {
   ARG_OBEY_CHILD
 };
 
-static void gtk_aspect_frame_class_init               (GtkAspectFrameClass *klass);
-static void gtk_aspect_frame_init                     (GtkAspectFrame      *aspect_frame);
-static void gtk_aspect_frame_set_arg                  (GtkObject           *object,
-						       GtkArg              *arg,
-						       guint                arg_id);
-static void gtk_aspect_frame_get_arg                  (GtkObject           *object,
-						       GtkArg              *arg,
-						       guint                arg_id);
-static void gtk_aspect_frame_compute_child_allocation (GtkFrame            *frame,
-						       GtkAllocation       *child_allocation);
+static void gtk_aspect_frame_class_init    (GtkAspectFrameClass *klass);
+static void gtk_aspect_frame_init          (GtkAspectFrame *aspect_frame);
+static void gtk_aspect_frame_set_arg       (GtkObject      *object,
+					    GtkArg         *arg,
+					    guint           arg_id);
+static void gtk_aspect_frame_get_arg       (GtkObject      *object,
+					    GtkArg         *arg,
+					    guint           arg_id);
+static void gtk_aspect_frame_draw          (GtkWidget      *widget,
+					    GdkRectangle   *area);
+static void gtk_aspect_frame_paint         (GtkWidget      *widget,
+					    GdkRectangle   *area);
+static gint gtk_aspect_frame_expose        (GtkWidget      *widget,
+					    GdkEventExpose *event);
+static void gtk_aspect_frame_size_allocate (GtkWidget         *widget,
+					    GtkAllocation     *allocation);
 
 #define MAX_RATIO 10000.0
 #define MIN_RATIO 0.0001
-
-static GtkFrameClass *parent_class = NULL;
 
 GtkType
 gtk_aspect_frame_get_type (void)
@@ -84,17 +88,17 @@ static void
 gtk_aspect_frame_class_init (GtkAspectFrameClass *class)
 {
   GtkObjectClass *object_class;
-  GtkFrameClass *frame_class;
+  GtkWidgetClass *widget_class;
   
-  parent_class = gtk_type_class (GTK_TYPE_FRAME);
-
   object_class = GTK_OBJECT_CLASS (class);
-  frame_class = GTK_FRAME_CLASS (class);
+  widget_class = GTK_WIDGET_CLASS (class);
   
   object_class->set_arg = gtk_aspect_frame_set_arg;
   object_class->get_arg = gtk_aspect_frame_get_arg;
 
-  frame_class->compute_child_allocation = gtk_aspect_frame_compute_child_allocation;
+  widget_class->draw = gtk_aspect_frame_draw;
+  widget_class->expose_event = gtk_aspect_frame_expose;
+  widget_class->size_allocate = gtk_aspect_frame_size_allocate;
 
   gtk_object_add_arg_type ("GtkAspectFrame::xalign", GTK_TYPE_FLOAT,
 			   GTK_ARG_READWRITE, ARG_XALIGN);
@@ -113,6 +117,10 @@ gtk_aspect_frame_init (GtkAspectFrame *aspect_frame)
   aspect_frame->yalign = 0.5;
   aspect_frame->ratio = 1.0;
   aspect_frame->obey_child = TRUE;
+  aspect_frame->center_allocation.x = -1;
+  aspect_frame->center_allocation.y = -1;
+  aspect_frame->center_allocation.width = 1;
+  aspect_frame->center_allocation.height = 1;
 }
 
 static void
@@ -230,22 +238,165 @@ gtk_aspect_frame_set (GtkAspectFrame *aspect_frame,
       aspect_frame->ratio = ratio;
       aspect_frame->obey_child = obey_child;
       
+      if (GTK_WIDGET_DRAWABLE(widget))
+	gtk_widget_queue_clear (widget);
+      
       gtk_widget_queue_resize (widget);
     }
 }
 
 static void
-gtk_aspect_frame_compute_child_allocation (GtkFrame      *frame,
-					   GtkAllocation *child_allocation)
+gtk_aspect_frame_paint (GtkWidget    *widget,
+			GdkRectangle *area)
 {
-  GtkAspectFrame *aspect_frame = GTK_ASPECT_FRAME (frame);
-  GtkBin *bin = GTK_BIN (frame);
+  GtkFrame *frame;
+  gint height_extra;
+  gint label_area_width;
+  gint x, y, x2, y2;
+  GtkAllocation *allocation;
+
+  g_return_if_fail (widget != NULL);
+  g_return_if_fail (GTK_IS_ASPECT_FRAME (widget));
+  g_return_if_fail (area != NULL);
+
+  if (GTK_WIDGET_DRAWABLE (widget))
+    {
+      frame = GTK_FRAME (widget);
+      allocation = &GTK_ASPECT_FRAME(widget)->center_allocation;
+
+      height_extra = frame->label_height - widget->style->klass->xthickness;
+      height_extra = MAX (height_extra, 0);
+
+      x = GTK_CONTAINER (frame)->border_width;
+      y = GTK_CONTAINER (frame)->border_width;
+
+      if (frame->label)
+	{
+	  label_area_width = (allocation->width +
+			      GTK_CONTAINER (frame)->border_width * 2 -
+			      widget->style->klass->xthickness * 2);
+
+	  x2 = ((label_area_width - frame->label_width) * frame->label_xalign +
+		GTK_CONTAINER (frame)->border_width + widget->style->klass->xthickness);
+	  y2 = (GTK_CONTAINER (frame)->border_width + widget->style->font->ascent);
+	  
+	  gtk_paint_shadow_gap (widget->style, widget->window,
+				GTK_STATE_NORMAL, frame->shadow_type,
+				area, widget, "frame",
+				allocation->x + x,
+				allocation->y + y + height_extra / 2,
+				allocation->width - x * 2,
+				allocation->height - y * 2 - height_extra / 2,
+				GTK_POS_TOP, 
+				x2 + 2 - x, frame->label_width - 4);
+	  
+	  gtk_paint_string (widget->style, widget->window, GTK_WIDGET_STATE (widget),
+			    area, widget, "frame",
+			    allocation->x + x2 + 3,
+			    allocation->y + y2,
+			    frame->label);
+	}
+      else
+	gtk_paint_shadow (widget->style, widget->window,
+			  GTK_STATE_NORMAL, frame->shadow_type,
+			  area, widget, "frame",
+			  allocation->x + x,
+			  allocation->y + y + height_extra / 2,
+			  allocation->width - x * 2,
+			  allocation->height - y * 2 - height_extra / 2);
+    }
+}
+
+/* the only modification to the next two routines is to call
+   gtk_aspect_frame_paint instead of gtk_frame_paint */
+
+static void
+gtk_aspect_frame_draw (GtkWidget    *widget,
+		       GdkRectangle *area)
+{
+  GtkBin *bin;
+  GdkRectangle child_area;
+
+  g_return_if_fail (widget != NULL);
+  g_return_if_fail (GTK_IS_ASPECT_FRAME (widget));
+  g_return_if_fail (area != NULL);
+
+  if (GTK_WIDGET_DRAWABLE (widget))
+    {
+      bin = GTK_BIN (widget);
+
+      gtk_aspect_frame_paint (widget, area);
+
+      if (bin->child && gtk_widget_intersect (bin->child, area, &child_area))
+	gtk_widget_draw (bin->child, &child_area);
+    }
+}
+
+static gint
+gtk_aspect_frame_expose (GtkWidget      *widget,
+			 GdkEventExpose *event)
+{
+  GtkBin *bin;
+  GdkEventExpose child_event;
+
+  g_return_val_if_fail (widget != NULL, FALSE);
+  g_return_val_if_fail (GTK_IS_ASPECT_FRAME (widget), FALSE);
+  g_return_val_if_fail (event != NULL, FALSE);
+
+  if (GTK_WIDGET_DRAWABLE (widget))
+    {
+      bin = GTK_BIN (widget);
+
+      gtk_aspect_frame_paint (widget, &event->area);
+
+      child_event = *event;
+      if (bin->child &&
+	  GTK_WIDGET_NO_WINDOW (bin->child) &&
+	  gtk_widget_intersect (bin->child, &event->area, &child_event.area))
+	gtk_widget_event (bin->child, (GdkEvent*) &child_event);
+    }
+
+  return FALSE;
+}
+
+static void
+gtk_aspect_frame_size_allocate (GtkWidget     *widget,
+			  GtkAllocation *allocation)
+{
+  GtkFrame *frame;
+  GtkAspectFrame *aspect_frame;
+  GtkBin *bin;
+
+  GtkAllocation child_allocation;
+  gint x,y;
+  gint width,height;
   gdouble ratio;
+
+  g_return_if_fail (widget != NULL);
+  g_return_if_fail (GTK_IS_ASPECT_FRAME (widget));
+  g_return_if_fail (allocation != NULL);
+
+  aspect_frame = GTK_ASPECT_FRAME (widget);
+  frame = GTK_FRAME (widget);
+  bin = GTK_BIN (widget);
+
+  if (GTK_WIDGET_DRAWABLE (widget) &&
+      ((widget->allocation.x != allocation->x) ||
+       (widget->allocation.y != allocation->y) ||
+       (widget->allocation.width != allocation->width) ||
+       (widget->allocation.height != allocation->height)) &&
+      (widget->allocation.width != 0) &&
+      (widget->allocation.height != 0))
+    gdk_window_clear_area (widget->window,
+			   widget->allocation.x,
+			   widget->allocation.y,
+			   widget->allocation.width,
+			   widget->allocation.height);
+
+  widget->allocation = *allocation;
 
   if (bin->child && GTK_WIDGET_VISIBLE (bin->child))
     {
-      GtkAllocation full_allocation;
-      
       if (aspect_frame->obey_child)
 	{
 	  GtkRequisition child_requisition;
@@ -265,23 +416,43 @@ gtk_aspect_frame_compute_child_allocation (GtkFrame      *frame,
 	}
       else
 	ratio = aspect_frame->ratio;
-
-      parent_class->compute_child_allocation (frame, &full_allocation);
       
-      if (ratio * full_allocation.height > full_allocation.width)
+      x = (GTK_CONTAINER (frame)->border_width +
+	   GTK_WIDGET (frame)->style->klass->xthickness);
+      width = allocation->width - x * 2;
+      
+      y = (GTK_CONTAINER (frame)->border_width +
+	   MAX (frame->label_height, GTK_WIDGET (frame)->style->klass->ythickness));
+      height = (allocation->height - y -
+		GTK_CONTAINER (frame)->border_width -
+		GTK_WIDGET (frame)->style->klass->ythickness);
+      
+      /* make sure we don't allocate a negative width or height,
+       * since that will be cast to a (very big) guint16 */
+      width = MAX (1, width);
+      height = MAX (1, height);
+      
+      if (ratio * height > width)
 	{
-	  child_allocation->width = full_allocation.width;
-	  child_allocation->height = full_allocation.width / ratio + 0.5;
+	  child_allocation.width = width;
+	  child_allocation.height = width/ratio + 0.5;
 	}
       else
 	{
-	  child_allocation->width = ratio * full_allocation.height + 0.5;
-	  child_allocation->height = full_allocation.height;
+	  child_allocation.width = ratio*height + 0.5;
+	  child_allocation.height = height;
 	}
       
-      child_allocation->x = full_allocation.x + aspect_frame->xalign * (full_allocation.width - child_allocation->width);
-      child_allocation->y = full_allocation.y + aspect_frame->yalign * (full_allocation.height - child_allocation->height);
+      child_allocation.x = aspect_frame->xalign * (width - child_allocation.width) + allocation->x + x;
+      child_allocation.y = aspect_frame->yalign * (height - child_allocation.height) + allocation->y + y;
+
+      aspect_frame->center_allocation.width = child_allocation.width + 2*x;
+      aspect_frame->center_allocation.x = child_allocation.x - x;
+      aspect_frame->center_allocation.height = child_allocation.height + y +
+				 GTK_CONTAINER (frame)->border_width +
+				 GTK_WIDGET (frame)->style->klass->ythickness;
+      aspect_frame->center_allocation.y = child_allocation.y - y;
+
+      gtk_widget_size_allocate (bin->child, &child_allocation);
     }
-  else
-    parent_class->compute_child_allocation (frame, child_allocation);
 }

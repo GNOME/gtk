@@ -5,23 +5,23 @@
  * Copyright (C) 1998 Tim Janik
  *
  * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
+ * modify it under the terms of the GNU Library General Public
  * License as published by the Free Software Foundation; either
  * version 2 of the License, or (at your option) any later version.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	 See the GNU
- * Lesser General Public License for more details.
+ * Library General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public
+ * You should have received a copy of the GNU Library General Public
  * License along with this library; if not, write to the
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
  * Boston, MA 02111-1307, USA.
  */
 
 /*
- * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
+ * Modified by the GTK+ Team and others 1997-1999.  See the AUTHORS
  * file for a list of people on the GTK+ Team.  See the ChangeLog
  * files for a list of changes.  These files are distributed with
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
@@ -48,7 +48,7 @@ static void gtk_accel_label_get_arg	 (GtkObject      *object,
 					  GtkArg	 *arg,
 					  guint		  arg_id);
 static void gtk_accel_label_destroy	 (GtkObject	 *object);
-static void gtk_accel_label_finalize	 (GObject	 *object);
+static void gtk_accel_label_finalize	 (GtkObject	 *object);
 static void gtk_accel_label_size_request (GtkWidget	 *widget,
 					  GtkRequisition *requisition);
 static gint gtk_accel_label_expose_event (GtkWidget	 *widget,
@@ -87,7 +87,6 @@ gtk_accel_label_get_type (void)
 static void
 gtk_accel_label_class_init (GtkAccelLabelClass *class)
 {
-  GObjectClass *gobject_class = G_OBJECT_CLASS (class);
   GtkObjectClass *object_class;
   GtkWidgetClass *widget_class;
   GtkMiscClass *misc_class;
@@ -103,11 +102,10 @@ gtk_accel_label_class_init (GtkAccelLabelClass *class)
   
   gtk_object_add_arg_type ("GtkAccelLabel::accel_widget", GTK_TYPE_WIDGET, GTK_ARG_READWRITE, ARG_ACCEL_WIDGET);
 
-  gobject_class->finalize = gtk_accel_label_finalize;
-
   object_class->set_arg = gtk_accel_label_set_arg;
   object_class->get_arg = gtk_accel_label_get_arg;
   object_class->destroy = gtk_accel_label_destroy;
+  object_class->finalize = gtk_accel_label_finalize;
   
   widget_class->size_request = gtk_accel_label_size_request;
   widget_class->expose_event = gtk_accel_label_expose_event;
@@ -202,17 +200,18 @@ gtk_accel_label_destroy (GtkObject *object)
 }
 
 static void
-gtk_accel_label_finalize (GObject *object)
+gtk_accel_label_finalize (GtkObject *object)
 {
   GtkAccelLabel *accel_label;
   
+  g_return_if_fail (object != NULL);
   g_return_if_fail (GTK_IS_ACCEL_LABEL (object));
   
   accel_label = GTK_ACCEL_LABEL (object);
   
   g_free (accel_label->accel_string);
   
-  G_OBJECT_CLASS (parent_class)->finalize (object);
+  GTK_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
 guint
@@ -230,8 +229,6 @@ gtk_accel_label_size_request (GtkWidget	     *widget,
 			      GtkRequisition *requisition)
 {
   GtkAccelLabel *accel_label;
-  PangoLayout *layout;
-  gint width;
   
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_ACCEL_LABEL (widget));
@@ -241,12 +238,9 @@ gtk_accel_label_size_request (GtkWidget	     *widget,
   
   if (GTK_WIDGET_CLASS (parent_class)->size_request)
     GTK_WIDGET_CLASS (parent_class)->size_request (widget, requisition);
-
-  layout = gtk_widget_create_pango_layout (widget, accel_label->accel_string);
-  pango_layout_get_pixel_size (layout, &width, NULL);
-  accel_label->accel_string_width = width;
   
-  g_object_unref (G_OBJECT (layout));
+  accel_label->accel_string_width = gdk_string_width (GTK_WIDGET (accel_label)->style->font,
+						      accel_label->accel_string);
 }
 
 static gint
@@ -255,7 +249,6 @@ gtk_accel_label_expose_event (GtkWidget      *widget,
 {
   GtkMisc *misc;
   GtkAccelLabel *accel_label;
-  PangoLayout *layout;
   
   g_return_val_if_fail (widget != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_ACCEL_LABEL (widget), FALSE);
@@ -285,24 +278,22 @@ gtk_accel_label_expose_event (GtkWidget      *widget,
 	  y = (widget->allocation.y * (1.0 - misc->yalign) +
 	       (widget->allocation.y + widget->allocation.height -
 		(widget->requisition.height - misc->ypad * 2)) *
-	       misc->yalign) + 1.5;
-	  
-	  layout = gtk_widget_create_pango_layout (widget, accel_label->accel_string);
+	       misc->yalign + widget->style->font->ascent) + 1.5;
 	  
 	  if (GTK_WIDGET_STATE (accel_label) == GTK_STATE_INSENSITIVE)
-	    gdk_draw_layout (widget->window,
+	    gdk_draw_string (widget->window,
+			     widget->style->font,
 			     widget->style->white_gc,
 			     x + 1,
 			     y + 1,
-			     layout);
+			     accel_label->accel_string);
 	  
-	  gdk_draw_layout (widget->window,
+	  gdk_draw_string (widget->window,
+			   widget->style->font,
 			   widget->style->fg_gc[GTK_WIDGET_STATE (accel_label)],
 			   x,
 			   y,
-			   layout);
-
-          g_object_unref (G_OBJECT (layout));
+			   accel_label->accel_string);
 	}
       else
 	{
@@ -385,7 +376,7 @@ gtk_accel_label_refetch (GtkAccelLabel *accel_label)
   g_return_val_if_fail (accel_label != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_ACCEL_LABEL (accel_label), FALSE);
 
-  class = GTK_ACCEL_LABEL_GET_CLASS (accel_label);
+  class = GTK_ACCEL_LABEL_CLASS (GTK_OBJECT (accel_label)->klass);
   
   g_free (accel_label->accel_string);
   accel_label->accel_string = NULL;

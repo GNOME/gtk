@@ -2,23 +2,23 @@
  * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
  *
  * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
+ * modify it under the terms of the GNU Library General Public
  * License as published by the Free Software Foundation; either
  * version 2 of the License, or (at your option) any later version.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
+ * Library General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public
+ * You should have received a copy of the GNU Library General Public
  * License along with this library; if not, write to the
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
  * Boston, MA 02111-1307, USA.
  */
 
 /*
- * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
+ * Modified by the GTK+ Team and others 1997-1999.  See the AUTHORS
  * file for a list of people on the GTK+ Team.  See the ChangeLog
  * files for a list of changes.  These files are distributed with
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
@@ -36,29 +36,9 @@
 extern "C" {
 #endif /* __cplusplus */
 
+typedef struct _GtkSelectionData GtkSelectioData;
 typedef struct _GtkTargetList    GtkTargetList;
 typedef struct _GtkTargetEntry   GtkTargetEntry;
-
-/* The contents of a selection are returned in a GtkSelectionData
- * structure. selection/target identify the request.  type specifies
- * the type of the return; if length < 0, and the data should be
- * ignored. This structure has object semantics - no fields should be
- * modified directly, they should not be created directly, and
- * pointers to them should not be stored beyond the duration of a
- * callback. (If the last is changed, we'll need to add reference
- * counting.) The time field gives the timestamp at which the data was
- * sent.
- */
-
-struct _GtkSelectionData
-{
-  GdkAtom selection;
-  GdkAtom target;
-  GdkAtom type;
-  gint	  format;
-  guchar *data;  
-  gint	  length;
-};
 
 struct _GtkTargetEntry {
   gchar *target;
@@ -103,31 +83,28 @@ gboolean       gtk_target_list_find      (GtkTargetList  *list,
 
 /* Public interface */
 
-gboolean gtk_selection_owner_set     (GtkWidget            *widget,
-				      GdkAtom               selection,
-				      guint32               time);
-void     gtk_selection_add_target    (GtkWidget            *widget,
-				      GdkAtom               selection,
-				      GdkAtom               target,
-				      guint                 info);
-void     gtk_selection_add_targets   (GtkWidget            *widget,
-				      GdkAtom               selection,
-				      const GtkTargetEntry *targets,
-				      guint                 ntargets);
-void     gtk_selection_clear_targets (GtkWidget            *widget,
-				      GdkAtom               selection);
-gint     gtk_selection_convert       (GtkWidget            *widget,
-				      GdkAtom               selection,
-				      GdkAtom               target,
-				      guint32               time);
-void     gtk_selection_data_set      (GtkSelectionData     *selection_data,
-				      GdkAtom               type,
-				      gint                  format,
-				      const guchar         *data,
-				      gint                  length);
-gboolean gtk_selection_data_set_text (GtkSelectionData     *selection_data,
-				      const guchar         *str);
-guchar * gtk_selection_data_get_text (GtkSelectionData     *selection_data);
+gint gtk_selection_owner_set (GtkWidget 	  *widget,
+			      GdkAtom    	   selection,
+			      guint32    	   time);
+void gtk_selection_add_target (GtkWidget           *widget, 
+			       GdkAtom              selection,
+			       GdkAtom              target,
+			       guint                info);
+void gtk_selection_add_targets (GtkWidget            *widget, 
+				GdkAtom               selection,
+				const GtkTargetEntry *targets,
+				guint                 ntargets);
+gint gtk_selection_convert   (GtkWidget 	  *widget, 
+			      GdkAtom    	   selection, 
+			      GdkAtom    	   target,
+			      guint32    	   time);
+
+
+void gtk_selection_data_set (GtkSelectionData *selection_data,
+			     GdkAtom           type,
+			     gint              format,
+			     const guchar     *data,
+			     gint              length);
 
 /* Called when a widget is destroyed */
 
@@ -145,8 +122,8 @@ gint gtk_selection_notify          (GtkWidget         *widget,
 				    GdkEventSelection *event);
 gint gtk_selection_property_notify (GtkWidget         *widget,
 				    GdkEventProperty  *event);
-GtkSelectionData *gtk_selection_data_copy (GtkSelectionData *data);
-void		  gtk_selection_data_free (GtkSelectionData *data);
+GtkSelectioData *gtk_selection_data_copy (GtkSelectionData *data);
+void		 gtk_selection_data_free (GtkSelectionData *data);
 
 
 

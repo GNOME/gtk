@@ -9,16 +9,16 @@
  *          Permission to relicense under the LGPL obtained.
  *
  * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
+ * modify it under the terms of the GNU Library General Public
  * License as published by the Free Software Foundation; either
  * version 2 of the License, or (at your option) any later version.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
+ * Library General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public
+ * You should have received a copy of the GNU Library General Public
  * License along with this library; if not, write to the
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
  * Boston, MA 02111-1307, USA.
@@ -59,7 +59,7 @@
 #include <config.h>
 #include <stdio.h>
 #include <string.h>
-#include "gdk-pixbuf-private.h"
+#include "gdk-pixbuf.h"
 #include "gdk-pixbuf-io.h"
 
 
@@ -180,9 +180,6 @@ struct _GifContext
 	gint draw_xpos;
 	gint draw_ypos;
 	gint draw_pass;
-
-        /* error pointer */
-        GError **error;
 };
 
 static int GetDataBlock (GifContext *, unsigned char *);
@@ -207,7 +204,7 @@ gif_read (GifContext *context, guchar *buffer, size_t len)
 		count += len;
 		g_print ("Fsize :%d\tcount :%d\t", len, count);
 #endif
-		retval = (fread(buffer, len, 1, context->file) != 0);                
+		retval = (fread(buffer, len, 1, context->file) != 0);
 #ifdef IO_GIFDEBUG
 		if (len < 100) {
 			for (i = 0; i < len; i++)
@@ -215,7 +212,6 @@ gif_read (GifContext *context, guchar *buffer, size_t len)
 		}
 		g_print ("\n");
 #endif
-                
 		return retval;
 	} else {
 #ifdef IO_GIFDEBUG
@@ -420,21 +416,10 @@ gif_lzw_fill_buffer (GifContext *context)
 
 	if (context->code_done) {
 		if (context->code_curbit >= context->code_lastbit) {
-                        g_set_error (context->error,
-                                     GDK_PIXBUF_ERROR,
-                                     GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
-                                     _("GIF file was missing some data (perhaps it was truncated somehow?)"));
-
+				g_message ("GIF: ran off the end of by bits\n");
 			return -2;
 		}
-                /* Is this supposed to be an error or what? */
-		/* g_message ("trying to read more data after we've done stuff\n"); */
-                g_set_error (context->error,
-                             GDK_PIXBUF_ERROR,
-                             GDK_PIXBUF_ERROR_FAILED,
-                             _("Internal error in the GIF loader (%s)"),
-                             G_STRLOC);
-                
+		g_message ("trying to read more data after we've done stuff\n");
 		return -2;
 	}
 
@@ -552,7 +537,7 @@ lzw_read_byte (GifContext *context)
 			unsigned char buf[260];
 
 			/*g_error (" DID WE EVER EVER GET HERE\n");*/
-			g_warning ("Unhandled Case.  If you have an image that causes this, let me <jrb@redhat.com> know.\n");
+			g_error ("Unhandled Case.  If you have an image that causes this, let me <jrb@redhat.com> know.\n");
 
 			if (ZeroDataBlock) {
 				return -2;
@@ -578,10 +563,8 @@ lzw_read_byte (GifContext *context)
 			*(context->lzw_sp)++ = context->lzw_table[1][code];
 
 			if (code == context->lzw_table[0][code]) {
-                                g_set_error (context->error,
-                                             GDK_PIXBUF_ERROR,
-                                             GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
-                                             _("Circular table entry in GIF file"));
+				/*g_message (_("GIF: circular table entry BIG ERROR\n"));*/
+				/*gimp_quit ();*/
 				return -2;
 			}
 			code = context->lzw_table[0][code];
@@ -683,15 +666,15 @@ gif_get_lzw (GifContext *context)
 	gint v;
 
 	if (context->pixbuf == NULL) {
-		context->pixbuf = gdk_pixbuf_new (GDK_COLORSPACE_RGB,
+		context->pixbuf = gdk_pixbuf_new (ART_PIX_RGB,
 						  context->gif89.transparent != -1,
 						  8,
-						  context->frame_len,
-						  context->frame_height);
+						  context->width,
+						  context->height);
 
 		if (context->prepare_func)
 			(* context->prepare_func) (context->pixbuf, context->user_data);
-		if (context->animation || context->frame_done_func || context->anim_done_func) {
+		if (context->animation || context->frame_done_func) {
 			context->frame = g_new (GdkPixbufFrame, 1);
 			context->frame->x_offset = context->x_offset;
 			context->frame->y_offset = context->y_offset;;
@@ -713,15 +696,8 @@ gif_get_lzw (GifContext *context)
 			}
 			context->frame->pixbuf = context->pixbuf;
 			if (context->animation) {
-				int w,h;
 				context->animation->n_frames ++;
 				context->animation->frames = g_list_append (context->animation->frames, context->frame);
-				w = gdk_pixbuf_get_width (context->pixbuf);
-				h = gdk_pixbuf_get_height (context->pixbuf);
-				if (w > context->animation->width)
-					context->animation->width = w;
-				if (h > context->animation->height)
-					context->animation->height = h;
 			}
 		}
 	}
@@ -806,7 +782,7 @@ gif_get_lzw (GifContext *context)
 	}
  done:
 	/* we got enough data. there may be more (ie, newer layers) but we can quit now */
-	if (context->animation || context->frame_done_func || context->anim_done_func) {
+	if (context->animation) {
 		context->state = GIF_GET_NEXT_STEP;
 	} else
 		context->state = GIF_DONE;
@@ -845,8 +821,7 @@ gif_get_lzw (GifContext *context)
 		}
 	}
 
-	if ((context->animation || context->frame_done_func || context->anim_done_func)
-	    && context->state == GIF_GET_NEXT_STEP) {
+	if (context->animation && context->state == GIF_GET_NEXT_STEP) {
 		if (context->frame_done_func)
 			(* context->frame_done_func) (context->frame,
 						      context->user_data);
@@ -907,18 +882,12 @@ gif_init (GifContext *context)
 	char version[4];
 
 	if (!gif_read (context, buf, 6)) {
-		/* Unable to read magic number,
-                 * gif_read() should have set error
-                 */
+		/* Unable to read magic number */
 		return -1;
 	}
 
 	if (strncmp ((char *) buf, "GIF", 3) != 0) {
 		/* Not a GIF file */
-                g_set_error (context->error,
-                             GDK_PIXBUF_ERROR,
-                             GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
-                             _("File does not appear to be a GIF file"));
 		return -1;
 	}
 
@@ -927,17 +896,12 @@ gif_init (GifContext *context)
 
 	if ((strcmp (version, "87a") != 0) && (strcmp (version, "89a") != 0)) {
 		/* bad version number, not '87a' or '89a' */
-                g_set_error (context->error,
-                             GDK_PIXBUF_ERROR,
-                             GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
-                             _("Version %s of the GIF file format is not supported"),
-                             version);
 		return -1;
 	}
 
 	/* read the screen descriptor */
 	if (!gif_read (context, buf, 7)) {
-		/* Failed to read screen descriptor, error set */
+		/* Failed to read screen descriptor */
 		return -1;
 	}
 
@@ -978,12 +942,6 @@ gif_get_frame_info (GifContext *context)
 	if (context->frame_height > context->height) {
 		/* we don't want to resize things.  So we exit */
 		context->state = GIF_DONE;
-
-                g_set_error (context->error,
-                             GDK_PIXBUF_ERROR,
-                             GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
-                             _("GIF animation contained a frame with an incorrect size"));
-                
 		return -2;
 	}
 
@@ -1016,7 +974,7 @@ gif_get_next_step (GifContext *context)
 			/* hmm.  Not 100% sure what to do about this.  Should
 			 * i try to return a blank image instead? */
 			context->state = GIF_DONE;
-			return 0;
+			return -2;
 		}
 
 		if (c == '!') {
@@ -1126,7 +1084,7 @@ new_context (void)
 }
 /* Shared library entry point */
 GdkPixbuf *
-gdk_pixbuf__gif_image_load (FILE *file, GError **error)
+gdk_pixbuf__gif_image_load (FILE *file)
 {
 	GifContext *context;
 	GdkPixbuf *pixbuf;
@@ -1135,8 +1093,7 @@ gdk_pixbuf__gif_image_load (FILE *file, GError **error)
 
 	context = new_context ();
 	context->file = file;
-        context->error = error;
-        
+
 	gif_main_loop (context);
 
 	pixbuf = context->pixbuf;
@@ -1150,8 +1107,7 @@ gdk_pixbuf__gif_image_begin_load (ModulePreparedNotifyFunc prepare_func,
 				  ModuleUpdatedNotifyFunc update_func,
 				  ModuleFrameDoneNotifyFunc frame_done_func,
 				  ModuleAnimationDoneNotifyFunc anim_done_func,
-				  gpointer user_data,
-                                  GError **error)
+				  gpointer user_data)
 {
 	GifContext *context;
 
@@ -1159,7 +1115,6 @@ gdk_pixbuf__gif_image_begin_load (ModulePreparedNotifyFunc prepare_func,
 	count = 0;
 #endif
 	context = new_context ();
-        context->error = error;
 	context->prepare_func = prepare_func;
 	context->update_func = update_func;
 	context->frame_done_func = frame_done_func;
@@ -1185,14 +1140,11 @@ gdk_pixbuf__gif_image_stop_load (gpointer data)
 }
 
 gboolean
-gdk_pixbuf__gif_image_load_increment (gpointer data, guchar *buf, guint size,
-                                      GError **error)
+gdk_pixbuf__gif_image_load_increment (gpointer data, guchar *buf, guint size)
 {
 	gint retval;
 	GifContext *context = (GifContext *) data;
 
-        context->error = error;
-        
 	if (context->amount_needed == 0) {
 		/* we aren't looking for some bytes. */
 		/* we can use buf now, but we don't want to keep it around at all.
@@ -1246,8 +1198,7 @@ gdk_pixbuf__gif_image_load_increment (gpointer data, guchar *buf, guint size,
 }
 
 GdkPixbufAnimation *
-gdk_pixbuf__gif_image_load_animation (FILE *file,
-                                      GError **error)
+gdk_pixbuf__gif_image_load_animation (FILE *file)
 {
 	GifContext *context;
 	GdkPixbufAnimation *animation;
@@ -1255,15 +1206,10 @@ gdk_pixbuf__gif_image_load_animation (FILE *file,
 	g_return_val_if_fail (file != NULL, NULL);
 
 	context = new_context ();
-
-        context->error = error;
-        
-	context->animation = g_object_new (GDK_TYPE_PIXBUF_ANIMATION, NULL);
-
+	context->animation = g_new (GdkPixbufAnimation, 1);
+	context->animation->ref_count = 1;
 	context->animation->n_frames = 0;
 	context->animation->frames = NULL;
-	context->animation->width = 0;
-	context->animation->height = 0;
 	context->file = file;
 
 	gif_main_loop (context);

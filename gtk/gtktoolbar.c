@@ -3,23 +3,23 @@
  * GtkToolbar copyright (C) Federico Mena
  *
  * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
+ * modify it under the terms of the GNU Library General Public
  * License as published by the Free Software Foundation; either
  * version 2 of the License, or (at your option) any later version.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
+ * Library General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public
+ * You should have received a copy of the GNU Library General Public
  * License along with this library; if not, write to the
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
  * Boston, MA 02111-1307, USA.
  */
 
 /*
- * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
+ * Modified by the GTK+ Team and others 1997-1999.  See the AUTHORS
  * file for a list of people on the GTK+ Team.  See the ChangeLog
  * files for a list of changes.  These files are distributed with
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
@@ -75,6 +75,8 @@ static void gtk_toolbar_get_arg                  (GtkObject       *object,
 static void gtk_toolbar_destroy                  (GtkObject       *object);
 static void gtk_toolbar_map                      (GtkWidget       *widget);
 static void gtk_toolbar_unmap                    (GtkWidget       *widget);
+static void gtk_toolbar_draw                     (GtkWidget       *widget,
+				                  GdkRectangle    *area);
 static gint gtk_toolbar_expose                   (GtkWidget       *widget,
 						  GdkEventExpose  *event);
 static void gtk_toolbar_size_request             (GtkWidget       *widget,
@@ -138,12 +140,32 @@ gtk_toolbar_class_init (GtkToolbarClass *class)
 
   parent_class = gtk_type_class (gtk_container_get_type ());
   
+  toolbar_signals[ORIENTATION_CHANGED] =
+    gtk_signal_new ("orientation_changed",
+		    GTK_RUN_FIRST,
+		    object_class->type,
+		    GTK_SIGNAL_OFFSET (GtkToolbarClass, orientation_changed),
+		    gtk_marshal_NONE__INT,
+		    GTK_TYPE_NONE, 1,
+		    GTK_TYPE_INT);
+  toolbar_signals[STYLE_CHANGED] =
+    gtk_signal_new ("style_changed",
+		    GTK_RUN_FIRST,
+		    object_class->type,
+		    GTK_SIGNAL_OFFSET (GtkToolbarClass, style_changed),
+		    gtk_marshal_NONE__INT,
+		    GTK_TYPE_NONE, 1,
+		    GTK_TYPE_INT);
+
+  gtk_object_class_add_signals (object_class, toolbar_signals, LAST_SIGNAL);
+
   object_class->destroy = gtk_toolbar_destroy;
   object_class->set_arg = gtk_toolbar_set_arg;
   object_class->get_arg = gtk_toolbar_get_arg;
 
   widget_class->map = gtk_toolbar_map;
   widget_class->unmap = gtk_toolbar_unmap;
+  widget_class->draw = gtk_toolbar_draw;
   widget_class->expose_event = gtk_toolbar_expose;
   widget_class->size_request = gtk_toolbar_size_request;
   widget_class->size_allocate = gtk_toolbar_size_allocate;
@@ -155,23 +177,6 @@ gtk_toolbar_class_init (GtkToolbarClass *class)
   
   class->orientation_changed = gtk_real_toolbar_orientation_changed;
   class->style_changed = gtk_real_toolbar_style_changed;
-
-  toolbar_signals[ORIENTATION_CHANGED] =
-    gtk_signal_new ("orientation_changed",
-		    GTK_RUN_FIRST,
-		    GTK_CLASS_TYPE (object_class),
-		    GTK_SIGNAL_OFFSET (GtkToolbarClass, orientation_changed),
-		    gtk_marshal_VOID__INT,
-		    GTK_TYPE_NONE, 1,
-		    GTK_TYPE_INT);
-  toolbar_signals[STYLE_CHANGED] =
-    gtk_signal_new ("style_changed",
-		    GTK_RUN_FIRST,
-		    GTK_CLASS_TYPE (object_class),
-		    GTK_SIGNAL_OFFSET (GtkToolbarClass, style_changed),
-		    gtk_marshal_VOID__INT,
-		    GTK_TYPE_NONE, 1,
-		    GTK_TYPE_INT);
   
   gtk_object_add_arg_type ("GtkToolbar::orientation", GTK_TYPE_ORIENTATION,
 			   GTK_ARG_READWRITE, ARG_ORIENTATION);
@@ -285,11 +290,8 @@ gtk_toolbar_destroy (GtkObject *object)
 
   toolbar = GTK_TOOLBAR (object);
 
-  if (toolbar->tooltips)
-    {
-      gtk_object_unref (GTK_OBJECT (toolbar->tooltips));
-      toolbar->tooltips = NULL;
-    }
+  gtk_object_unref (GTK_OBJECT (toolbar->tooltips));
+  toolbar->tooltips = NULL;
 
   for (children = toolbar->children; children; children = children->next)
     {
@@ -307,10 +309,12 @@ gtk_toolbar_destroy (GtkObject *object)
 
       g_free (child);
     }
+
   g_list_free (toolbar->children);
   toolbar->children = NULL;
   
-  GTK_OBJECT_CLASS (parent_class)->destroy (object);
+  if (GTK_OBJECT_CLASS (parent_class)->destroy)
+    (* GTK_OBJECT_CLASS (parent_class)->destroy) (object);
 }
 
 static void
@@ -386,7 +390,7 @@ gtk_toolbar_paint_space_line (GtkWidget       *widget,
 		     SPACE_LINE_END / SPACE_LINE_DIVISION,
 		     child_space->alloc_x +
 		     (toolbar->space_size -
-		      widget->style->xthickness) / 2);
+		      widget->style->klass->xthickness) / 2);
   else
     gtk_paint_hline (widget->style, widget->window,
 		     GTK_WIDGET_STATE (widget), area, widget,
@@ -397,7 +401,38 @@ gtk_toolbar_paint_space_line (GtkWidget       *widget,
 		     SPACE_LINE_END / SPACE_LINE_DIVISION,
 		     child_space->alloc_y +
 		     (toolbar->space_size -
-		      widget->style->ythickness) / 2);
+		      widget->style->klass->ythickness) / 2);
+}
+
+static void
+gtk_toolbar_draw (GtkWidget    *widget,
+		  GdkRectangle *area)
+{
+  GtkToolbar *toolbar;
+  GList *children;
+  GtkToolbarChild *child;
+  GdkRectangle child_area;
+
+  g_return_if_fail (widget != NULL);
+  g_return_if_fail (GTK_IS_TOOLBAR (widget));
+
+  if (GTK_WIDGET_DRAWABLE (widget))
+    {
+      toolbar = GTK_TOOLBAR (widget);
+
+      for (children = toolbar->children; children; children = children->next)
+	{
+	  child = children->data;
+
+	  if (child->type == GTK_TOOLBAR_CHILD_SPACE)
+	    {
+	      if (toolbar->space_style == GTK_TOOLBAR_SPACE_LINE)
+		gtk_toolbar_paint_space_line (widget, area, child);
+	    }
+	  else if (gtk_widget_intersect (child->widget, area, &child_area))
+	    gtk_widget_draw (child->widget, &child_area);
+	}
+    }
 }
 
 static gint
@@ -807,7 +842,7 @@ gtk_toolbar_prepend_widget (GtkToolbar  *toolbar,
 			      widget, NULL,
 			      tooltip_text, tooltip_private_text,
 			      NULL, NULL, NULL,
-			      0);
+			      toolbar->num_children);
 }
 
 void

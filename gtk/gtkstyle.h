@@ -2,23 +2,23 @@
  * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
  *
  * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
+ * modify it under the terms of the GNU Library General Public
  * License as published by the Free Software Foundation; either
  * version 2 of the License, or (at your option) any later version.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	 See the GNU
- * Lesser General Public License for more details.
+ * Library General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public
+ * You should have received a copy of the GNU Library General Public
  * License along with this library; if not, write to the
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
  * Boston, MA 02111-1307, USA.
  */
 
 /*
- * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
+ * Modified by the GTK+ Team and others 1997-1999.  See the AUTHORS
  * file for a list of people on the GTK+ Team.  See the ChangeLog
  * files for a list of changes.  These files are distributed with
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
@@ -30,7 +30,6 @@
 
 #include <gdk/gdk.h>
 #include <gtk/gtkenums.h>
-#include <pango/pango.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -39,20 +38,12 @@ extern "C" {
 typedef struct _GtkStyle       GtkStyle;
 typedef struct _GtkStyleClass  GtkStyleClass;
 
-#define GTK_TYPE_STYLE              (gtk_style_get_type ())
-#define GTK_STYLE(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), GTK_TYPE_STYLE, GtkStyle))
-#define GTK_STYLE_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_STYLE, GtkStyleClass))
-#define GTK_IS_STYLE(object)        (G_TYPE_CHECK_INSTANCE_TYPE ((object), GTK_TYPE_STYLE))
-#define GTK_IS_STYLE_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_STYLE))
-#define GTK_STYLE_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_STYLE, GtkStyleClass))
-
 /* Some forward declarations needed to rationalize the header
  * files.
  */
 typedef struct _GtkThemeEngine GtkThemeEngine;
 typedef struct _GtkRcStyle     GtkRcStyle;
-typedef struct _GtkIconSet     GtkIconSet;
-typedef struct _GtkIconSource  GtkIconSource;
+
 
 /* We make this forward declaration here, since we pass
  * GtkWidgt's to the draw functions.
@@ -68,10 +59,8 @@ typedef struct _GtkWidget      GtkWidget;
 
 struct _GtkStyle
 {
-  GObject parent_instance;
+  GtkStyleClass *klass;
 
-  /*< public >*/
-  
   GdkColor fg[5];
   GdkColor bg[5];
   GdkColor light[5];
@@ -83,10 +72,6 @@ struct _GtkStyle
   GdkColor black;
   GdkColor white;
   GdkFont *font;
-  PangoFontDescription *font_desc;
-  
-  gint xthickness;
-  gint ythickness;
   
   GdkGC *fg_gc[5];
   GdkGC *bg_gc[5];
@@ -99,70 +84,29 @@ struct _GtkStyle
   GdkGC *white_gc;
   
   GdkPixmap *bg_pixmap[5];
-
-  /*< private >*/
   
+  /* private */
+  
+  gint ref_count;
   gint attach_count;
   
   gint depth;
   GdkColormap *colormap;
   
+  GtkThemeEngine *engine;
+  
+  gpointer	  engine_data;
+  
   GtkRcStyle	 *rc_style;	/* the Rc style from which this style
 				 * was created
 				 */
   GSList	 *styles;
-
-  GSList         *icon_factories;
 };
 
 struct _GtkStyleClass
 {
-  GObjectClass parent_class;
-
-  /* Initialize for a particular colormap/depth
-   * combination. style->colormap/style->depth will have
-   * been set at this point. Will typically chain to parent.
-   */
-  void (*realize)               (GtkStyle               *style);
-
-  /* Clean up for a particular colormap/depth combination. Will
-   * typically chain to parent.
-   */
-  void (*unrealize)             (GtkStyle               *style);
-
-  /* Make style an exact duplicate of src.
-   */
-  void (*copy)                  (GtkStyle               *style,
-				 GtkStyle               *src);
-
-  /* Create an empty style of the same type as this style.
-   * The default implementation, which does
-   * g_object_new (G_OBJECT_TYPE (style), NULL);
-   * should work in most cases.
-   */
-  GtkStyle *(*clone)             (GtkStyle               *style);
-
-  /* Initialize the GtkStyle with the values in the GtkRcStyle.
-   * should chain to the parent implementation.
-   */
-  void     (*init_from_rc)      (GtkStyle               *style,
-				 GtkRcStyle             *rc_style);
-
-  void (*set_background)        (GtkStyle               *style,
-				 GdkWindow              *window,
-				 GtkStateType            state_type);
-
-
-  GdkPixbuf * (* render_icon)   (GtkStyle               *style,
-                                 const GtkIconSource    *source,
-                                 GtkTextDirection        direction,
-                                 GtkStateType            state,
-                                 const gchar            *size,
-                                 GtkWidget              *widget,
-                                 const gchar            *detail);
-  
-  /* Drawing functions
-   */
+  gint xthickness;
+  gint ythickness;
   
   void (*draw_hline)		(GtkStyle		*style,
 				 GdkWindow		*window,
@@ -400,7 +344,6 @@ struct _GtkStyleClass
 				 GtkOrientation		 orientation);
 };
 
-GType     gtk_style_get_type                 (void) G_GNUC_CONST;
 GtkStyle* gtk_style_new			     (void);
 GtkStyle* gtk_style_copy		     (GtkStyle	    *style);
 GtkStyle* gtk_style_attach		     (GtkStyle	    *style,
@@ -421,15 +364,6 @@ void	  gtk_style_apply_default_background (GtkStyle	   *style,
 					      gint	    width, 
 					      gint	    height);
 
-GtkIconSet* gtk_style_lookup_icon_set (GtkStyle            *style,
-                                       const gchar         *stock_id);
-GdkPixbuf * gtk_style_render_icon     (GtkStyle            *style,
-                                       const GtkIconSource *source,
-                                       GtkTextDirection     direction,
-                                       GtkStateType         state,
-                                       const gchar *        size,
-                                       GtkWidget           *widget,
-                                       const gchar         *detail);
 void gtk_draw_hline      (GtkStyle        *style,
 			  GdkWindow       *window,
 			  GtkStateType     state_type,
@@ -836,7 +770,6 @@ void gtk_paint_handle     (GtkStyle        *style,
 			   gint             width,
 			   gint             height,
 			   GtkOrientation   orientation);
-
 
 #ifdef __cplusplus
 }

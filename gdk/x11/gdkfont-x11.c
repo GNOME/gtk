@@ -2,23 +2,23 @@
  * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
  *
  * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
+ * modify it under the terms of the GNU Library General Public
  * License as published by the Free Software Foundation; either
  * version 2 of the License, or (at your option) any later version.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
+ * Library General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public
+ * You should have received a copy of the GNU Library General Public
  * License along with this library; if not, write to the
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
  * Boston, MA 02111-1307, USA.
  */
 
 /*
- * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
+ * Modified by the GTK+ Team and others 1997-1999.  See the AUTHORS
  * file for a list of people on the GTK+ Team.  See the ChangeLog
  * files for a list of changes.  These files are distributed with
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
@@ -26,11 +26,8 @@
 
 #include <X11/Xlib.h>
 #include <X11/Xos.h>
-
-#include <pango/pangox.h>
-
 #include "gdkfont.h"
-#include "gdkprivate-x11.h"
+#include "gdkx.h"
 
 static GHashTable *font_name_hash = NULL;
 static GHashTable *fontset_name_hash = NULL;
@@ -134,95 +131,6 @@ gdk_font_load (const gchar *font_name)
   gdk_font_hash_insert (GDK_FONT_FONT, font, font_name);
 
   return font;
-}
-
-static char *
-gdk_font_charset_for_locale ()
-{
-  static char *charset_map[][2] = {
-    { "ANSI_X3.4-1968", "iso8859-1" },
-    { "US-ASCII",   "iso8859-1" },
-    { "ISO-8859-1", "iso8859-1" },
-    { "ISO-8859-2", "iso8859-2" },
-    { "ISO-8859-3", "iso8859-3" },
-    { "ISO-8859-4", "iso8859-4" },
-    { "ISO-8859-5", "iso8859-5" },
-    { "ISO-8859-6", "iso8859-6" },
-    { "ISO-8859-7", "iso8859-7" },
-    { "ISO-8859-8", "iso8859-8" },
-    { "ISO-8859-9", "iso8859-9" },
-    { "UTF-8",      "iso8859-1" }
-  };
-
-  char *codeset;
-  char *result = NULL;
-  int i;
-
-  g_get_charset (&codeset);
-  
-  for (i=0; i < G_N_ELEMENTS (charset_map); i++)
-    if (strcmp (charset_map[i][0], codeset) == 0)
-      {
-	result = charset_map[i][1];
-	break;
-      }
-
-  if (result)
-    return g_strdup (result);
-  else
-    return g_strdup ("iso8859-1");
-};
-
-/**
- * gdk_font_from_description:
- * @font_desc: a #PangoFontDescription.
- * 
- * Load a #GdkFont based on a Pango font description. This font will
- * only be an approximation of the Pango font, and
- * internationalization will not be handled correctly. This function
- * should only be used for legacy code that cannot be easily converted
- * to use Pango. Using Pango directly will produce better results.
- * 
- * Return value: the newly loaded font, or %NULL if the font
- * cannot be loaded.
- **/
-GdkFont*
-gdk_font_from_description (PangoFontDescription *font_desc)
-{
-  PangoFontMap *font_map;
-  PangoFont *font;
-  GdkFont *result = NULL;
-
-  g_return_val_if_fail (font_desc != NULL, NULL);
-
-  font_map = pango_x_font_map_for_display (GDK_DISPLAY ());
-  font = pango_font_map_load_font (font_map, font_desc);
-
-  if (font)
-    {
-      gchar *charset = gdk_font_charset_for_locale ();
-      gint n_subfonts;
-      PangoXSubfont *subfont_ids;
-      gint *subfont_charsets;
-
-      n_subfonts = pango_x_list_subfonts (font, &charset, 1,
-					  &subfont_ids, &subfont_charsets);
-      if (n_subfonts > 0)
-	{
-	  gchar *xlfd = pango_x_font_subfont_xlfd (font, subfont_ids[0]);
-	  result = gdk_font_load (xlfd);
-
-	  g_free (xlfd);
-	}
-
-      g_free (subfont_ids);
-      g_free (subfont_charsets);
-
-      g_free (charset);
-      g_object_unref (G_OBJECT (font));
-    }
-
-  return result;
 }
 
 GdkFont*

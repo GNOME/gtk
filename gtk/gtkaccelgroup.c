@@ -5,23 +5,23 @@
  * Copyright (C) 1998 Tim Janik
  *
  * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
+ * modify it under the terms of the GNU Library General Public
  * License as published by the Free Software Foundation; either
  * version 2 of the License, or (at your option) any later version.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	 See the GNU
- * Lesser General Public License for more details.
+ * Library General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public
+ * You should have received a copy of the GNU Library General Public
  * License along with this library; if not, write to the
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
  * Boston, MA 02111-1307, USA.
  */
 
 /*
- * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
+ * Modified by the GTK+ Team and others 1997-1999.  See the AUTHORS
  * file for a list of people on the GTK+ Team.  See the ChangeLog
  * files for a list of changes.  These files are distributed with
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
@@ -342,7 +342,7 @@ gtk_accel_group_add (GtkAccelGroup	*accel_group,
   guint add_accelerator_signal_id = 0;
   guint remove_accelerator_signal_id = 0;
   gchar *signal;
-  GSignalQuery query;
+  GtkSignalQuery *query;
   GSList *slist;
   GSList *groups;
   GSList *attach_objects;
@@ -377,16 +377,20 @@ gtk_accel_group_add (GtkAccelGroup	*accel_group,
 		 gtk_type_name (GTK_OBJECT_TYPE (object)));
       return;
     }
-  g_signal_query (accel_signal_id, &query);
-  if (!query.signal_id || query.n_params > 0)
+  query = gtk_signal_query (accel_signal_id);
+  if (!query ||
+      query->nparams > 0)
     {
       g_warning ("gtk_accel_group_add(): signal \"%s\" in the `%s' class ancestry"
 		 "cannot be used as accelerator signal",
 		 accel_signal,
 		 gtk_type_name (GTK_OBJECT_TYPE (object)));
+      if (query)
+	g_free (query);
 
       return;
     }
+  g_free (query);
 
   /* prematurely abort if the group/entry is already locked
    */
@@ -652,13 +656,13 @@ gtk_accel_group_create_add (GtkType          class_type,
 			    GtkSignalRunType signal_flags,
 			    guint            handler_offset)
 {
-  g_return_val_if_fail (GTK_TYPE_IS_OBJECT (class_type), 0);
+  g_return_val_if_fail (gtk_type_is_a (class_type, GTK_TYPE_OBJECT), 0);
 
   return gtk_signal_new ("add-accelerator",
 			 signal_flags,
 			 class_type,
 			 handler_offset,
-			 gtk_marshal_VOID__UINT_BOXED_UINT_FLAGS_FLAGS,
+			 gtk_marshal_NONE__UINT_POINTER_UINT_UINT_ENUM,
 			 GTK_TYPE_NONE, 5,
 			 GTK_TYPE_UINT,
 			 GTK_TYPE_ACCEL_GROUP,
@@ -672,13 +676,13 @@ gtk_accel_group_create_remove (GtkType          class_type,
 			       GtkSignalRunType signal_flags,
 			       guint            handler_offset)
 {
-  g_return_val_if_fail (GTK_TYPE_IS_OBJECT (class_type), 0);
+  g_return_val_if_fail (gtk_type_is_a (class_type, GTK_TYPE_OBJECT), 0);
 
   return gtk_signal_new ("remove-accelerator",
 			 signal_flags,
 			 class_type,
 			 handler_offset,
-			 gtk_marshal_VOID__BOXED_UINT_FLAGS,
+			 gtk_marshal_NONE__POINTER_UINT_UINT,
 			 GTK_TYPE_NONE, 3,
 			 GTK_TYPE_ACCEL_GROUP,
 			 GTK_TYPE_UINT,

@@ -5,23 +5,23 @@
  * Copyright (C) 1998 Tim Janik
  *
  * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
+ * modify it under the terms of the GNU Library General Public
  * License as published by the Free Software Foundation; either
  * version 2 of the License, or (at your option) any later version.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	 See the GNU
- * Lesser General Public License for more details.
+ * Library General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public
+ * You should have received a copy of the GNU Library General Public
  * License along with this library; if not, write to the
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
  * Boston, MA 02111-1307, USA.
  */
 
 /*
- * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
+ * Modified by the GTK+ Team and others 1997-1999.  See the AUTHORS
  * file for a list of people on the GTK+ Team.  See the ChangeLog
  * files for a list of changes.  These files are distributed with
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
@@ -122,9 +122,11 @@ binding_entry_new (GtkBindingSet *binding_set,
   binding_set->entries = entry;
 
   entry->hash_next = g_hash_table_lookup (binding_entry_hash_table, entry);
+  g_hash_table_freeze (binding_entry_hash_table);
   if (entry->hash_next)
     g_hash_table_remove (binding_entry_hash_table, entry->hash_next);
   g_hash_table_insert (binding_entry_hash_table, entry, entry);
+  g_hash_table_thaw (binding_entry_hash_table);
   
   return entry;
 }
@@ -203,8 +205,10 @@ binding_entry_destroy (GtkBindingEntry *entry)
     g_hash_table_remove (binding_entry_hash_table, entry);
   else if (begin != o_entry)
     {
+      g_hash_table_freeze (binding_entry_hash_table);
       g_hash_table_remove (binding_entry_hash_table, entry);
       g_hash_table_insert (binding_entry_hash_table, begin, begin);
+      g_hash_table_thaw (binding_entry_hash_table);
     }
 
   entry->destroyed = TRUE;
@@ -252,7 +256,7 @@ binding_ht_lookup_entry (GtkBindingSet *set,
 
 static gboolean
 binding_compose_params (GtkBindingArg	*args,
-			GSignalQuery	*query,
+			GtkSignalQuery	*query,
 			GtkArg		**params_p)
 {
   GtkArg *params;
@@ -260,12 +264,12 @@ binding_compose_params (GtkBindingArg	*args,
   guint i;
   gboolean valid;
   
-  params = g_new0 (GtkArg, query->n_params);
+  params = g_new0 (GtkArg, query->nparams);
   *params_p = params;
   
-  types = query->param_types;
+  types = query->params;
   valid = TRUE;
-  for (i = 0; i < query->n_params && valid; i++)
+  for (i = 0; i < query->nparams && valid; i++)
     {
       GtkType param_ftype;
 
@@ -357,7 +361,7 @@ gtk_binding_entry_activate (GtkBindingEntry	*entry,
   
   for (sig = entry->signals; sig; sig = sig->next)
     {
-      GSignalQuery query;
+      GtkSignalQuery *query;
       guint signal_id;
       GtkArg *params = NULL;
       gchar *accelerator = NULL;
@@ -376,10 +380,10 @@ gtk_binding_entry_activate (GtkBindingEntry	*entry,
 	  continue;
 	}
       
-      g_signal_query (signal_id, &query);
-      if (query.n_params != sig->n_args ||
-	  query.return_type != G_TYPE_NONE ||
-	  !binding_compose_params (sig->args, &query, &params))
+      query = gtk_signal_query (signal_id);
+      if (query->nparams != sig->n_args ||
+	  query->return_val != GTK_TYPE_NONE ||
+	  !binding_compose_params (sig->args, query, &params))
 	{
 	  accelerator = gtk_accelerator_name (entry->keyval, entry->modifiers);
 	  g_warning ("gtk_binding_entry_activate(): binding \"%s::%s\": "
@@ -389,7 +393,7 @@ gtk_binding_entry_activate (GtkBindingEntry	*entry,
 		     sig->signal_name,
 		     gtk_type_name (GTK_OBJECT_TYPE (object)));
 	}
-      else if (!(query.signal_flags & GTK_RUN_ACTION))
+      else if (!(query->signal_flags & GTK_RUN_ACTION))
 	{
 	  accelerator = gtk_accelerator_name (entry->keyval, entry->modifiers);
 	  g_warning ("gtk_binding_entry_activate(): binding \"%s::%s\": "
@@ -400,6 +404,7 @@ gtk_binding_entry_activate (GtkBindingEntry	*entry,
 		     gtk_type_name (GTK_OBJECT_TYPE (object)));
 	}
       g_free (accelerator);
+      g_free (query);
       if (accelerator)
 	continue;
 
@@ -453,10 +458,10 @@ gtk_binding_set_by_class (gpointer object_class)
   if (binding_set)
     return binding_set;
 
-  binding_set = gtk_binding_set_new (gtk_type_name (GTK_CLASS_TYPE (class)));
+  binding_set = gtk_binding_set_new (gtk_type_name (class->type));
   gtk_binding_set_add_path (binding_set,
 			    GTK_PATH_CLASS,
-			    gtk_type_name (GTK_CLASS_TYPE (class)),
+			    gtk_type_name (class->type),
 			    GTK_PATH_PRIO_GTK);
   g_dataset_id_set_data (class, key_id_class_binding_set, binding_set);
 

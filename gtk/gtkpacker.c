@@ -5,16 +5,16 @@
  * Copyright (C) 1998 Shawn T. Amundson, James S. Mitchell, Michael L. Staiger
  *
  * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
+ * modify it under the terms of the GNU Library General Public
  * License as published by the Free Software Foundation; either
  * version 2 of the License, or (at your option) any later version.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
+ * Library General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public
+ * You should have received a copy of the GNU Library General Public
  * License along with this library; if not, write to the
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
  * Boston, MA 02111-1307, USA.
@@ -86,7 +86,7 @@ terms specified in this license.
  */
 
 /*
- * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
+ * Modified by the GTK+ Team and others 1997-1999.  See the AUTHORS
  * file for a list of people on the GTK+ Team.  See the ChangeLog
  * files for a list of changes.  These files are distributed with
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
@@ -127,6 +127,8 @@ static void gtk_packer_class_init    (GtkPackerClass   *klass);
 static void gtk_packer_init          (GtkPacker        *packer);
 static void gtk_packer_map           (GtkWidget        *widget);
 static void gtk_packer_unmap         (GtkWidget        *widget);
+static void gtk_packer_draw          (GtkWidget        *widget,
+                                      GdkRectangle     *area);
 static gint gtk_packer_expose        (GtkWidget        *widget,
                                       GdkEventExpose   *event);
 static void gtk_packer_size_request  (GtkWidget      *widget,
@@ -215,13 +217,14 @@ gtk_packer_class_init (GtkPackerClass *klass)
   gtk_container_add_child_arg_type ("GtkPacker::pad_y", GTK_TYPE_UINT, GTK_ARG_READWRITE, CHILD_ARG_PAD_Y);
   gtk_container_add_child_arg_type ("GtkPacker::ipad_x", GTK_TYPE_UINT, GTK_ARG_READWRITE, CHILD_ARG_I_PAD_X);
   gtk_container_add_child_arg_type ("GtkPacker::ipad_y", GTK_TYPE_UINT, GTK_ARG_READWRITE, CHILD_ARG_I_PAD_Y);
-  gtk_container_add_child_arg_type ("GtkPacker::position", GTK_TYPE_INT, GTK_ARG_READWRITE, CHILD_ARG_POSITION);
+  gtk_container_add_child_arg_type ("GtkPacker::position", GTK_TYPE_LONG, GTK_ARG_READWRITE, CHILD_ARG_POSITION);
 
   object_class->set_arg = gtk_packer_set_arg;
   object_class->get_arg = gtk_packer_get_arg;
 
   widget_class->map = gtk_packer_map;
   widget_class->unmap = gtk_packer_unmap;
+  widget_class->draw = gtk_packer_draw;
   widget_class->expose_event = gtk_packer_expose;
   
   widget_class->size_request = gtk_packer_size_request;
@@ -398,7 +401,7 @@ gtk_packer_set_child_arg (GtkContainer   *container,
     case CHILD_ARG_POSITION:
       gtk_packer_reorder_child (packer,
 				child,
-				GTK_VALUE_INT (*arg));
+				GTK_VALUE_LONG (*arg));
       break;
     default:
       break;
@@ -476,16 +479,16 @@ gtk_packer_get_child_arg (GtkContainer   *container,
       GTK_VALUE_UINT (*arg) = child_info->i_pad_y;
       break;
     case CHILD_ARG_POSITION:
-      GTK_VALUE_INT (*arg) = 0;
+      GTK_VALUE_LONG (*arg) = 0;
       for (list = packer->children; list; list = list->next)
 	{
 	  child_info = list->data;
 	  if (child_info->widget == child)
 	    break;
-	  GTK_VALUE_INT (*arg)++;
+	  GTK_VALUE_LONG (*arg)++;
 	}
       if (!list)
-	GTK_VALUE_INT (*arg) = -1;
+	GTK_VALUE_LONG (*arg) = -1;
       break;
     default:
       arg->type = GTK_TYPE_INVALID;
@@ -891,6 +894,35 @@ gtk_packer_unmap (GtkWidget *widget)
 	  GTK_WIDGET_MAPPED (child->widget))
 	gtk_widget_unmap (child->widget);
     }
+}
+
+static void 
+gtk_packer_draw (GtkWidget    *widget,
+		 GdkRectangle *area)
+{
+  GtkPacker *packer;
+  GtkPackerChild *child;
+  GdkRectangle child_area;
+  GList *children;
+
+  g_return_if_fail (widget != NULL);
+  g_return_if_fail (GTK_IS_PACKER (widget));
+ 
+  if (GTK_WIDGET_DRAWABLE (widget)) 
+    {
+      packer = GTK_PACKER (widget);
+      
+      children = g_list_first(packer->children);
+      while (children != NULL) 
+	{
+	  child = children->data;
+	  children = g_list_next(children);
+	  
+	  if (gtk_widget_intersect (child->widget, area, &child_area))
+	    gtk_widget_draw (child->widget, &child_area);
+        }
+    }
+  
 }
 
 static gint 

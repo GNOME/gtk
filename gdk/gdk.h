@@ -2,23 +2,23 @@
  * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
  *
  * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
+ * modify it under the terms of the GNU Library General Public
  * License as published by the Free Software Foundation; either
  * version 2 of the License, or (at your option) any later version.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	 See the GNU
- * Lesser General Public License for more details.
+ * Library General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public
+ * You should have received a copy of the GNU Library General Public
  * License along with this library; if not, write to the
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
  * Boston, MA 02111-1307, USA.
  */
 
 /*
- * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
+ * Modified by the GTK+ Team and others 1997-1999.  See the AUTHORS
  * file for a list of people on the GTK+ Team.  See the ChangeLog
  * files for a list of changes.  These files are distributed with
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
@@ -38,9 +38,6 @@
 #include <gdk/gdkim.h>
 #include <gdk/gdkimage.h>
 #include <gdk/gdkinput.h>
-#include <gdk/gdkkeys.h>
-#include <gdk/gdkpango.h>
-#include <gdk/gdkpixbuf.h>
 #include <gdk/gdkpixmap.h>
 #include <gdk/gdkproperty.h>
 #include <gdk/gdkregion.h>
@@ -89,24 +86,24 @@ gint gdk_input_add	  (gint		     source,
 			   gpointer	     data);
 void gdk_input_remove	  (gint		     tag);
 
-GdkGrabStatus gdk_pointer_grab       (GdkWindow    *window,
-				      gboolean      owner_events,
-				      GdkEventMask  event_mask,
-				      GdkWindow    *confine_to,
-				      GdkCursor    *cursor,
-				      guint32       time);
-void          gdk_pointer_ungrab     (guint32       time);
-GdkGrabStatus gdk_keyboard_grab      (GdkWindow    *window,
-				      gboolean      owner_events,
-				      guint32       time);
-void          gdk_keyboard_ungrab    (guint32       time);
-gboolean      gdk_pointer_is_grabbed (void);
+gint     gdk_pointer_grab       (GdkWindow    *window,
+				 gboolean      owner_events,
+				 GdkEventMask  event_mask,
+				 GdkWindow    *confine_to,
+				 GdkCursor    *cursor,
+				 guint32       time);
+void     gdk_pointer_ungrab     (guint32       time);
+gint     gdk_keyboard_grab      (GdkWindow    *window,
+				 gboolean      owner_events,
+				 guint32       time);
+void     gdk_keyboard_ungrab    (guint32       time);
+gboolean gdk_pointer_is_grabbed (void);
 
-gint gdk_screen_width  (void) G_GNUC_CONST;
-gint gdk_screen_height (void) G_GNUC_CONST;
+gint gdk_screen_width  (void);
+gint gdk_screen_height (void);
 
-gint gdk_screen_width_mm  (void) G_GNUC_CONST;
-gint gdk_screen_height_mm (void) G_GNUC_CONST;
+gint gdk_screen_width_mm  (void);
+gint gdk_screen_height_mm (void);
 
 void gdk_flush (void);
 void gdk_beep (void);
@@ -134,6 +131,19 @@ gint       gdk_mbstowcs          (GdkWChar         *dest,
 void     gdk_event_send_clientmessage_toall (GdkEvent    *event);
 gboolean gdk_event_send_client_message (GdkEvent    *event,
 					guint32      xid);
+
+/* Key values
+ */
+gchar*   gdk_keyval_name         (guint        keyval);
+guint    gdk_keyval_from_name    (const gchar *keyval_name);
+void     gdk_keyval_convert_case (guint        symbol,
+				  guint       *lower,
+				  guint       *upper);
+guint    gdk_keyval_to_upper     (guint        keyval);
+guint    gdk_keyval_to_lower     (guint        keyval);
+gboolean gdk_keyval_is_upper     (guint        keyval);
+gboolean gdk_keyval_is_lower     (guint        keyval);
+
 
 /* Threading
  */

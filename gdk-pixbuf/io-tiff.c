@@ -1,4 +1,4 @@
-/* GdkPixbuf library - TIFF image loader
+/* GdkPixbuf library - JPEG image loader
  *
  * Copyright (C) 1999 Mark Crichton
  * Copyright (C) 1999 The Free Software Foundation
@@ -8,16 +8,16 @@
  *          Jonathan Blandford <jrb@redhat.com>
  *
  * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
+ * modify it under the terms of the GNU Library General Public
  * License as published by the Free Software Foundation; either
  * version 2 of the License, or (at your option) any later version.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
+ * Library General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public
+ * You should have received a copy of the GNU Library General Public
  * License along with this library; if not, write to the
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
  * Boston, MA 02111-1307, USA.
@@ -28,17 +28,11 @@
 #include <config.h>
 #include <stdlib.h>
 #include <string.h>
-#ifdef HAVE_UNISTD_H
 #include <unistd.h>
-#endif
 #include <tiffio.h>
-#include "gdk-pixbuf-private.h"
+#include "gdk-pixbuf.h"
 #include "gdk-pixbuf-io.h"
 
-#ifdef G_OS_WIN32
-#include <fcntl.h>
-#define O_RDWR _O_RDWR
-#endif
 
 
 typedef struct _TiffData TiffData;
@@ -74,7 +68,7 @@ gdk_pixbuf__tiff_image_load_real (FILE *f, TiffData *context)
 	TIFFGetField (tiff, TIFFTAG_IMAGEWIDTH, &w);
 	TIFFGetField (tiff, TIFFTAG_IMAGELENGTH, &h);
 	num_pixs = w * h;
-	pixbuf = gdk_pixbuf_new (GDK_COLORSPACE_RGB, TRUE, 8, w, h);
+	pixbuf = gdk_pixbuf_new (ART_PIX_RGB, TRUE, 8, w, h);
 
 	if (context)
 		(* context->prepare_func) (pixbuf, context->user_data);
@@ -148,8 +142,7 @@ gdk_pixbuf__tiff_image_begin_load (ModulePreparedNotifyFunc prepare_func,
 				   ModuleUpdatedNotifyFunc update_func,
 				   ModuleFrameDoneNotifyFunc frame_done_func,
 				   ModuleAnimationDoneNotifyFunc anim_done_func,
-				   gpointer user_data,
-                                   GError **error)
+				   gpointer user_data)
 {
 	TiffData *context;
 	gint fd;
@@ -159,8 +152,8 @@ gdk_pixbuf__tiff_image_begin_load (ModulePreparedNotifyFunc prepare_func,
 	context->update_func = update_func;
 	context->user_data = user_data;
 	context->all_okay = TRUE;
-	fd = g_file_open_tmp ("gdkpixbuf-tif-tmp.XXXXXX", &context->tempname,
-			      NULL);
+	context->tempname = g_strdup ("/tmp/gdkpixbuf-tif-tmp.XXXXXX");
+	fd = mkstemp (context->tempname);
 	if (fd < 0) {
 		g_free (context);
 		return NULL;
@@ -168,7 +161,6 @@ gdk_pixbuf__tiff_image_begin_load (ModulePreparedNotifyFunc prepare_func,
 
 	context->file = fdopen (fd, "w");
 	if (context->file == NULL) {
-                g_free (context->tempname);
 		g_free (context);
 		return NULL;
 	}
@@ -190,7 +182,6 @@ gdk_pixbuf__tiff_image_stop_load (gpointer data)
 
 	fclose (context->file);
 	unlink (context->tempname);
-	g_free (context->tempname);
 	g_free ((TiffData *) context);
 }
 

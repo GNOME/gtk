@@ -2,16 +2,16 @@
  * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
  *
  * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
+ * modify it under the terms of the GNU Library General Public
  * License as published by the Free Software Foundation; either
  * version 2 of the License, or (at your option) any later version.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	 See the GNU
- * Lesser General Public License for more details.
+ * Library General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public
+ * You should have received a copy of the GNU Library General Public
  * License along with this library; if not, write to the
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
  * Boston, MA 02111-1307, USA.
@@ -22,7 +22,7 @@
  */
 
 /*
- * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
+ * Modified by the GTK+ Team and others 1997-1999.  See the AUTHORS
  * file for a list of people on the GTK+ Team.  See the ChangeLog
  * files for a list of changes.  These files are distributed with
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
@@ -30,11 +30,23 @@
 
 #include "gdkconfig.h"
 
+#if defined (GDK_WINDOWING_X11)
+#include "x11/gdkx.h"
+#elif defined (GDK_WINDOWING_WIN32)
+#include "win32/gdkwin32.h"
+#endif
+
 #include "gtklayout.h"
 #include "gtksignal.h"
 #include "gtkprivate.h"
 
+typedef struct _GtkLayoutAdjData GtkLayoutAdjData;
 typedef struct _GtkLayoutChild   GtkLayoutChild;
+
+struct _GtkLayoutAdjData {
+  gint dx;
+  gint dy;
+};
 
 struct _GtkLayoutChild {
   GtkWidget *widget;
@@ -42,10 +54,13 @@ struct _GtkLayoutChild {
   gint y;
 };
 
+#define IS_ONSCREEN(x,y) ((x >= G_MINSHORT) && (x <= G_MAXSHORT) && \
+                          (y >= G_MINSHORT) && (y <= G_MAXSHORT))
+
 static void     gtk_layout_class_init         (GtkLayoutClass *class);
 static void     gtk_layout_init               (GtkLayout      *layout);
 
-static void     gtk_layout_finalize           (GObject        *object);
+static void     gtk_layout_finalize           (GtkObject      *object);
 static void     gtk_layout_realize            (GtkWidget      *widget);
 static void     gtk_layout_unrealize          (GtkWidget      *widget);
 static void     gtk_layout_map                (GtkWidget      *widget);
@@ -53,6 +68,8 @@ static void     gtk_layout_size_request       (GtkWidget      *widget,
 					       GtkRequisition *requisition);
 static void     gtk_layout_size_allocate      (GtkWidget      *widget,
 					       GtkAllocation  *allocation);
+static void     gtk_layout_draw               (GtkWidget      *widget, 
+					       GdkRectangle   *area);
 static gint     gtk_layout_expose             (GtkWidget      *widget, 
 					       GdkEventExpose *event);
 
@@ -66,14 +83,33 @@ static void     gtk_layout_set_adjustments    (GtkLayout     *layout,
 					       GtkAdjustment *hadj,
 					       GtkAdjustment *vadj);
 
+static void     gtk_layout_position_child     (GtkLayout      *layout,
+					       GtkLayoutChild *child);
 static void     gtk_layout_allocate_child     (GtkLayout      *layout,
 					       GtkLayoutChild *child);
+static void     gtk_layout_position_children  (GtkLayout      *layout);
+
+static void     gtk_layout_adjust_allocations_recurse (GtkWidget *widget,
+						       gpointer   cb_data);
+static void     gtk_layout_adjust_allocations         (GtkLayout *layout,
+					               gint       dx,
+						       gint       dy);
 
 
+
+static void     gtk_layout_expose_area        (GtkLayout      *layout,
+					       gint            x, 
+					       gint            y, 
+					       gint            width, 
+					       gint            height);
 static void     gtk_layout_adjustment_changed (GtkAdjustment  *adjustment,
 					       GtkLayout      *layout);
+static GdkFilterReturn gtk_layout_main_filter (GdkXEvent      *gdk_xevent,
+					       GdkEvent       *event,
+					       gpointer        data);
 
 static GtkWidgetClass *parent_class = NULL;
+static gboolean gravity_works;
 
 /* Public interface
  */
@@ -168,14 +204,14 @@ gtk_layout_set_adjustments (GtkLayout     *layout,
 }
 
 static void
-gtk_layout_finalize (GObject *object)
+gtk_layout_finalize (GtkObject *object)
 {
   GtkLayout *layout = GTK_LAYOUT (object);
 
   gtk_object_unref (GTK_OBJECT (layout->hadjustment));
   gtk_object_unref (GTK_OBJECT (layout->vadjustment));
 
-  G_OBJECT_CLASS (parent_class)->finalize (object);
+  GTK_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
 void           
@@ -225,6 +261,9 @@ gtk_layout_put (GtkLayout     *layout,
   if (GTK_WIDGET_REALIZED (layout))
     gtk_widget_set_parent_window (child->widget, layout->bin_window);
 
+  if (!IS_ONSCREEN (x, y))
+    GTK_PRIVATE_SET_FLAG (child_widget, GTK_IS_OFFSCREEN);
+
   if (GTK_WIDGET_REALIZED (layout))
     gtk_widget_realize (child_widget);
     
@@ -268,52 +307,22 @@ gtk_layout_move (GtkLayout     *layout,
     }
 }
 
-static void
-gtk_layout_set_adjustment_upper (GtkAdjustment *adj, gfloat upper)
-{
-  if (upper != adj->upper)
-    {
-      gfloat min = MAX (0., upper - adj->page_size);
-      gboolean value_changed = FALSE;
-      
-      adj->upper = upper;
-      
-      if (adj->value > min)
-	{
-	  adj->value = min;
-	  value_changed = TRUE;
-	}
-      
-      gtk_signal_emit_by_name (GTK_OBJECT (adj), "changed");
-      if (value_changed)
-	gtk_signal_emit_by_name (GTK_OBJECT (adj), "value_changed");
-    }
-}
-
 void
 gtk_layout_set_size (GtkLayout     *layout, 
 		     guint          width,
 		     guint          height)
 {
-  GtkWidget *widget;
-  
   g_return_if_fail (layout != NULL);
   g_return_if_fail (GTK_IS_LAYOUT (layout));
 
-  widget = GTK_WIDGET (layout);
-  
   layout->width = width;
   layout->height = height;
 
-  gtk_layout_set_adjustment_upper (layout->hadjustment, layout->width);
-  gtk_layout_set_adjustment_upper (layout->vadjustment, layout->height);
+  layout->hadjustment->upper = layout->width;
+  gtk_signal_emit_by_name (GTK_OBJECT (layout->hadjustment), "changed");
 
-  if (GTK_WIDGET_REALIZED (layout))
-    {
-      width = MAX (width, widget->allocation.width);
-      height = MAX (height, widget->allocation.height);
-      gdk_window_resize (layout->bin_window, width, height);
-    }
+  layout->vadjustment->upper = layout->height;
+  gtk_signal_emit_by_name (GTK_OBJECT (layout->vadjustment), "changed");
 }
 
 void
@@ -333,7 +342,10 @@ gtk_layout_thaw (GtkLayout *layout)
 
   if (layout->freeze_count)
     if (!(--layout->freeze_count))
-      gtk_widget_draw (GTK_WIDGET (layout), NULL);
+      {
+	gtk_layout_position_children (layout);
+	gtk_widget_draw (GTK_WIDGET (layout), NULL);
+      }
 }
 
 /* Basic Object handling procedures
@@ -345,20 +357,18 @@ gtk_layout_get_type (void)
 
   if (!layout_type)
     {
-      static const GTypeInfo layout_info =
+      static const GtkTypeInfo layout_info =
       {
-	sizeof (GtkLayoutClass),
-	NULL,           /* base_init */
-	NULL,           /* base_finalize */
-	(GClassInitFunc) gtk_layout_class_init,
-	NULL,           /* class_finalize */
-	NULL,           /* class_data */
+	"GtkLayout",
 	sizeof (GtkLayout),
-	16,             /* n_preallocs */
-	(GInstanceInitFunc) gtk_layout_init,
+	sizeof (GtkLayoutClass),
+	(GtkClassInitFunc) gtk_layout_class_init,
+	(GtkObjectInitFunc) gtk_layout_init,
+	(GtkArgSetFunc) NULL,
+        (GtkArgGetFunc) NULL,
       };
 
-      layout_type = g_type_register_static (GTK_TYPE_CONTAINER, "GtkLayout", &layout_info, 0);
+      layout_type = gtk_type_unique (GTK_TYPE_CONTAINER, &layout_info);
     }
 
   return layout_type;
@@ -367,7 +377,6 @@ gtk_layout_get_type (void)
 static void
 gtk_layout_class_init (GtkLayoutClass *class)
 {
-  GObjectClass *gobject_class = G_OBJECT_CLASS (class);
   GtkObjectClass *object_class;
   GtkWidgetClass *widget_class;
   GtkContainerClass *container_class;
@@ -378,13 +387,14 @@ gtk_layout_class_init (GtkLayoutClass *class)
 
   parent_class = gtk_type_class (GTK_TYPE_CONTAINER);
 
-  gobject_class->finalize = gtk_layout_finalize;
+  object_class->finalize = gtk_layout_finalize;
 
   widget_class->realize = gtk_layout_realize;
   widget_class->unrealize = gtk_layout_unrealize;
   widget_class->map = gtk_layout_map;
   widget_class->size_request = gtk_layout_size_request;
   widget_class->size_allocate = gtk_layout_size_allocate;
+  widget_class->draw = gtk_layout_draw;
   widget_class->expose_event = gtk_layout_expose;
 
   container_class->remove = gtk_layout_remove;
@@ -395,9 +405,9 @@ gtk_layout_class_init (GtkLayoutClass *class)
   widget_class->set_scroll_adjustments_signal =
     gtk_signal_new ("set_scroll_adjustments",
 		    GTK_RUN_LAST,
-		    GTK_CLASS_TYPE (object_class),
+		    object_class->type,
 		    GTK_SIGNAL_OFFSET (GtkLayoutClass, set_scroll_adjustments),
-		    gtk_marshal_VOID__POINTER_POINTER,
+		    gtk_marshal_NONE__POINTER_POINTER,
 		    GTK_TYPE_NONE, 2, GTK_TYPE_ADJUSTMENT, GTK_TYPE_ADJUSTMENT);
 }
 
@@ -414,6 +424,7 @@ gtk_layout_init (GtkLayout *layout)
 
   layout->bin_window = NULL;
 
+  layout->configure_serial = 0;
   layout->scroll_x = 0;
   layout->scroll_y = 0;
   layout->visibility = GDK_VISIBILITY_PARTIAL;
@@ -456,9 +467,7 @@ gtk_layout_realize (GtkWidget *widget)
 
   attributes.x = 0;
   attributes.y = 0;
-  attributes.width = MAX (layout->width, widget->allocation.width);
-  attributes.height = MAX (layout->height, widget->allocation.height);
-  attributes.event_mask = GDK_EXPOSURE_MASK | GDK_SCROLL_MASK | 
+  attributes.event_mask = GDK_EXPOSURE_MASK | GDK_SCROLL_MASK |
                           gtk_widget_get_events (widget);
 
   layout->bin_window = gdk_window_new (widget->window,
@@ -468,6 +477,15 @@ gtk_layout_realize (GtkWidget *widget)
   widget->style = gtk_style_attach (widget->style, widget->window);
   gtk_style_set_background (widget->style, widget->window, GTK_STATE_NORMAL);
   gtk_style_set_background (widget->style, layout->bin_window, GTK_STATE_NORMAL);
+
+  gdk_window_add_filter (widget->window, gtk_layout_main_filter, layout);
+  /*   gdk_window_add_filter (layout->bin_window, gtk_layout_filter, layout);*/
+
+  /* XXX: If we ever get multiple displays for GTK+, then gravity_works
+   *      will have to become a widget member. Right now we just
+   *      keep it as a global
+   */
+  gravity_works = gdk_window_set_static_gravities (layout->bin_window, TRUE);
 
   tmp_list = layout->children;
   while (tmp_list)
@@ -500,7 +518,8 @@ gtk_layout_map (GtkWidget *widget)
 
       if (GTK_WIDGET_VISIBLE (child->widget))
 	{
-	  if (!GTK_WIDGET_MAPPED (child->widget))
+	  if (!GTK_WIDGET_MAPPED (child->widget) && 
+	      !GTK_WIDGET_IS_OFFSCREEN (child->widget))
 	    gtk_widget_map (child->widget);
 	}
     }
@@ -576,6 +595,7 @@ gtk_layout_size_allocate (GtkWidget     *widget,
       GtkLayoutChild *child = tmp_list->data;
       tmp_list = tmp_list->next;
 
+      gtk_layout_position_child (layout, child);
       gtk_layout_allocate_child (layout, child);
     }
 
@@ -584,23 +604,52 @@ gtk_layout_size_allocate (GtkWidget     *widget,
       gdk_window_move_resize (widget->window,
 			      allocation->x, allocation->y,
 			      allocation->width, allocation->height);
-
-      gdk_window_resize (layout->bin_window,
-			 MAX (layout->width, allocation->width),
-			 MAX (layout->height, allocation->height));
+      gdk_window_move_resize (GTK_LAYOUT(widget)->bin_window,
+			      0, 0,
+			      allocation->width, allocation->height);
     }
 
   layout->hadjustment->page_size = allocation->width;
   layout->hadjustment->page_increment = allocation->width / 2;
   layout->hadjustment->lower = 0;
-  layout->hadjustment->upper = MAX (allocation->width, layout->width);
+  layout->hadjustment->upper = layout->width;
   gtk_signal_emit_by_name (GTK_OBJECT (layout->hadjustment), "changed");
 
   layout->vadjustment->page_size = allocation->height;
   layout->vadjustment->page_increment = allocation->height / 2;
   layout->vadjustment->lower = 0;
-  layout->vadjustment->upper = MAX (allocation->height, layout->height);
+  layout->vadjustment->upper = layout->height;
   gtk_signal_emit_by_name (GTK_OBJECT (layout->vadjustment), "changed");
+}
+
+static void 
+gtk_layout_draw (GtkWidget *widget, GdkRectangle *area)
+{
+  GList *tmp_list;
+  GtkLayout *layout;
+  GdkRectangle child_area;
+
+  g_return_if_fail (widget != NULL);
+  g_return_if_fail (GTK_IS_LAYOUT (widget));
+
+  layout = GTK_LAYOUT (widget);
+
+  /* We don't have any way of telling themes about this properly,
+   * so we just assume a background pixmap
+   */
+  if (!GTK_WIDGET_APP_PAINTABLE (widget))
+    gdk_window_clear_area (layout->bin_window,
+			   area->x, area->y, area->width, area->height);
+  
+  tmp_list = layout->children;
+  while (tmp_list)
+    {
+      GtkLayoutChild *child = tmp_list->data;
+      tmp_list = tmp_list->next;
+
+      if (gtk_widget_intersect (child->widget, area, &child_area))
+	gtk_widget_draw (child->widget, &child_area);
+    }
 }
 
 static gint 
@@ -660,6 +709,8 @@ gtk_layout_remove (GtkContainer *container,
 
   if (tmp_list)
     {
+      GTK_PRIVATE_UNSET_FLAG (widget, GTK_IS_OFFSCREEN);
+
       gtk_widget_unparent (widget);
 
       layout->children = g_list_remove_link (layout->children, tmp_list);
@@ -698,6 +749,38 @@ gtk_layout_forall (GtkContainer *container,
  */
 
 static void
+gtk_layout_position_child (GtkLayout      *layout,
+			   GtkLayoutChild *child)
+{
+  gint x;
+  gint y;
+
+  x = child->x - layout->xoffset;
+  y = child->y - layout->yoffset;
+
+  if (IS_ONSCREEN (x,y))
+    {
+      if (GTK_WIDGET_MAPPED (layout) &&
+	  GTK_WIDGET_VISIBLE (child->widget))
+	{
+	  if (!GTK_WIDGET_MAPPED (child->widget))
+	    gtk_widget_map (child->widget);
+	}
+
+      if (GTK_WIDGET_IS_OFFSCREEN (child->widget))
+	GTK_PRIVATE_UNSET_FLAG (child->widget, GTK_IS_OFFSCREEN);
+    }
+  else
+    {
+      if (!GTK_WIDGET_IS_OFFSCREEN (child->widget))
+	GTK_PRIVATE_SET_FLAG (child->widget, GTK_IS_OFFSCREEN);
+
+      if (GTK_WIDGET_MAPPED (child->widget))
+	gtk_widget_unmap (child->widget);
+    }
+}
+
+static void
 gtk_layout_allocate_child (GtkLayout      *layout,
 			   GtkLayoutChild *child)
 {
@@ -713,25 +796,451 @@ gtk_layout_allocate_child (GtkLayout      *layout,
   gtk_widget_size_allocate (child->widget, &allocation);
 }
 
+static void
+gtk_layout_position_children (GtkLayout *layout)
+{
+  GList *tmp_list;
+
+  tmp_list = layout->children;
+  while (tmp_list)
+    {
+      GtkLayoutChild *child = tmp_list->data;
+      tmp_list = tmp_list->next;
+      
+      gtk_layout_position_child (layout, child);
+    }
+}
+
+static void
+gtk_layout_adjust_allocations_recurse (GtkWidget *widget,
+				       gpointer   cb_data)
+{
+  GtkLayoutAdjData *data = cb_data;
+
+  widget->allocation.x += data->dx;
+  widget->allocation.y += data->dy;
+
+  if (GTK_WIDGET_NO_WINDOW (widget) &&
+      GTK_IS_CONTAINER (widget))
+    gtk_container_forall (GTK_CONTAINER (widget), 
+			  gtk_layout_adjust_allocations_recurse,
+			  cb_data);
+}
+
+static void
+gtk_layout_adjust_allocations (GtkLayout *layout,
+			       gint       dx,
+			       gint       dy)
+{
+  GList *tmp_list;
+  GtkLayoutAdjData data;
+
+  data.dx = dx;
+  data.dy = dy;
+
+  tmp_list = layout->children;
+  while (tmp_list)
+    {
+      GtkLayoutChild *child = tmp_list->data;
+      tmp_list = tmp_list->next;
+      
+      child->widget->allocation.x += dx;
+      child->widget->allocation.y += dy;
+
+      if (GTK_WIDGET_NO_WINDOW (child->widget) &&
+	  GTK_IS_CONTAINER (child->widget))
+	gtk_container_forall (GTK_CONTAINER (child->widget), 
+			      gtk_layout_adjust_allocations_recurse,
+			      &data);
+    }
+}
+  
 /* Callbacks */
+
+/* Send a synthetic expose event to the widget
+ */
+static void
+gtk_layout_expose_area (GtkLayout    *layout,
+			gint x, gint y, gint width, gint height)
+{
+  if (layout->visibility == GDK_VISIBILITY_UNOBSCURED)
+    {
+      GdkEventExpose event;
+      
+      event.type = GDK_EXPOSE;
+      event.send_event = TRUE;
+      event.window = layout->bin_window;
+      event.count = 0;
+      
+      event.area.x = x;
+      event.area.y = y;
+      event.area.width = width;
+      event.area.height = height;
+      
+      gdk_window_ref (event.window);
+      gtk_widget_event (GTK_WIDGET (layout), (GdkEvent *)&event);
+      gdk_window_unref (event.window);
+    }
+}
+
+#ifdef GDK_WINDOWING_X11
+
+/* This function is used to find events to process while scrolling
+ */
+
+static Bool 
+gtk_layout_expose_predicate (Display *display, 
+		  XEvent  *xevent, 
+		  XPointer arg)
+{
+  if ((xevent->type == Expose) || 
+      ((xevent->xany.window == *(Window *)arg) &&
+       (xevent->type == ConfigureNotify)))
+    return True;
+  else
+    return False;
+}
+
+#endif /* X11 */
+
+/* This is the main routine to do the scrolling. Scrolling is
+ * done by "Guffaw" scrolling, as in the Mozilla XFE, with
+ * a few modifications.
+ * 
+ * The main improvement is that we keep track of whether we
+ * are obscured or not. If not, we ignore the generated expose
+ * events and instead do the exposes ourself, without having
+ * to wait for a roundtrip to the server. This also provides
+ * a limited form of expose-event compression, since we do
+ * the affected area as one big chunk.
+ *
+ * Real expose event compression, as in the XFE, could be added
+ * here. It would help opaque drags over the region, and the
+ * obscured case.
+ *
+ * Code needs to be added here to do the scrolling on machines
+ * that don't have working WindowGravity. That could be done
+ *
+ *  - XCopyArea and move the windows, and accept trailing the
+ *    background color. (Since it is only a fallback method)
+ *  - XmHTML style. As above, but turn off expose events when
+ *    not obscured and do the exposures ourself.
+ *  - gzilla-style. Move the window continuously, and reset
+ *    every 32768 pixels
+ */
 
 static void
 gtk_layout_adjustment_changed (GtkAdjustment *adjustment,
 			       GtkLayout     *layout)
 {
   GtkWidget *widget;
+#ifdef GDK_WINDOWING_X11
+  XEvent xevent;
+#endif
+  gint dx, dy;
 
   widget = GTK_WIDGET (layout);
+
+  dx = (gint)layout->hadjustment->value - layout->xoffset;
+  dy = (gint)layout->vadjustment->value - layout->yoffset;
+
+  layout->xoffset = (gint)layout->hadjustment->value;
+  layout->yoffset = (gint)layout->vadjustment->value;
 
   if (layout->freeze_count)
     return;
 
-  if (GTK_WIDGET_REALIZED (layout))
+  if (!GTK_WIDGET_MAPPED (layout))
     {
-      gdk_window_move (layout->bin_window,
-		       - layout->hadjustment->value,
-		       - layout->vadjustment->value);
-      
-      gdk_window_process_updates (layout->bin_window, TRUE);
+      gtk_layout_position_children (layout);
+      return;
     }
+
+  gtk_layout_adjust_allocations (layout, -dx, -dy);
+
+  if (dx > 0)
+    {
+      if (gravity_works)
+	{
+	  gdk_window_resize (layout->bin_window,
+			     widget->allocation.width + dx,
+			     widget->allocation.height);
+	  gdk_window_move   (layout->bin_window, -dx, 0);
+	  gdk_window_move_resize (layout->bin_window,
+				  0, 0,
+				  widget->allocation.width,
+				  widget->allocation.height);
+	}
+      else
+	{
+	  /* FIXME */
+	}
+
+      gtk_layout_expose_area (layout, 
+			      MAX ((gint)widget->allocation.width - dx, 0),
+			      0,
+			      MIN (dx, widget->allocation.width),
+			      widget->allocation.height);
+    }
+  else if (dx < 0)
+    {
+      if (gravity_works)
+	{
+	  gdk_window_move_resize (layout->bin_window,
+				  dx, 0,
+				  widget->allocation.width - dx,
+				  widget->allocation.height);
+	  gdk_window_move   (layout->bin_window, 0, 0);
+	  gdk_window_resize (layout->bin_window,
+			     widget->allocation.width,
+			     widget->allocation.height);
+	}
+      else
+	{
+	  /* FIXME */
+	}
+
+      gtk_layout_expose_area (layout,
+			      0,
+			      0,
+			      MIN (-dx, widget->allocation.width),
+			      widget->allocation.height);
+    }
+
+  if (dy > 0)
+    {
+      if (gravity_works)
+	{
+	  gdk_window_resize (layout->bin_window,
+			     widget->allocation.width,
+			     widget->allocation.height + dy);
+	  gdk_window_move   (layout->bin_window, 0, -dy);
+	  gdk_window_move_resize (layout->bin_window,
+				  0, 0,
+				  widget->allocation.width,
+				  widget->allocation.height);
+	}
+      else
+	{
+	  /* FIXME */
+	}
+
+      gtk_layout_expose_area (layout, 
+			      0,
+			      MAX ((gint)widget->allocation.height - dy, 0),
+			      widget->allocation.width,
+			      MIN (dy, widget->allocation.height));
+    }
+  else if (dy < 0)
+    {
+      if (gravity_works)
+	{
+	  gdk_window_move_resize (layout->bin_window,
+				  0, dy,
+				  widget->allocation.width,
+				  widget->allocation.height - dy);
+	  gdk_window_move   (layout->bin_window, 0, 0);
+	  gdk_window_resize (layout->bin_window,
+			     widget->allocation.width,
+			     widget->allocation.height);
+	}
+      else
+	{
+	  /* FIXME */
+	}
+      gtk_layout_expose_area (layout, 
+			      0,
+			      0,
+			      widget->allocation.width,
+			      MIN (-dy, (gint)widget->allocation.height));
+    }
+
+  gtk_layout_position_children (layout);
+
+  /* We have to make sure that all exposes from this scroll get
+   * processed before we scroll again, or the expose events will
+   * have invalid coordinates.
+   *
+   * We also do expose events for other windows, since otherwise
+   * their updating will fall behind the scrolling 
+   *
+   * This also avoids a problem in pre-1.0 GTK where filters don't
+   * have access to configure events that were compressed.
+   */
+
+  gdk_flush();
+
+#ifdef GDK_WINDOWING_X11
+  while (XCheckIfEvent(GDK_WINDOW_XDISPLAY (layout->bin_window),
+		       &xevent,
+		       gtk_layout_expose_predicate,
+		       (XPointer)&GDK_WINDOW_XWINDOW (layout->bin_window)))
+    {
+      GdkEvent event;
+      GtkWidget *event_widget;
+
+      switch (xevent.type)
+	{
+	case Expose:
+
+	  if (xevent.xany.window == GDK_WINDOW_XWINDOW (layout->bin_window))
+	    {
+	      /* If the window is unobscured, then we've exposed the
+	       * regions with the following serials already, so we
+	       * can throw out the expose events.
+	       */
+	      if (layout->visibility == GDK_VISIBILITY_UNOBSCURED &&
+		  (((dx > 0 || dy > 0) && 
+		    xevent.xexpose.serial == layout->configure_serial) ||
+		   ((dx < 0 || dy < 0) && 
+		    xevent.xexpose.serial == layout->configure_serial + 1)))
+		continue;
+	      /* The following expose was generated while the origin was
+	       * different from the current origin, so we need to offset it.
+	       */
+	      else if (xevent.xexpose.serial == layout->configure_serial)
+		{
+		  xevent.xexpose.x += layout->scroll_x;
+		  xevent.xexpose.y += layout->scroll_y;
+		}
+	      event.expose.window = layout->bin_window;
+	      event_widget = widget;
+	    }
+	  else
+	    {
+	      event.expose.window = gdk_window_lookup (xevent.xany.window);
+	      gdk_window_get_user_data (event.expose.window, 
+					(gpointer *)&event_widget);
+	    }
+
+	  if (event_widget)
+	    {
+	      event.expose.type = GDK_EXPOSE;
+	      event.expose.area.x = xevent.xexpose.x;
+	      event.expose.area.y = xevent.xexpose.y;
+	      event.expose.area.width = xevent.xexpose.width;
+	      event.expose.area.height = xevent.xexpose.height;
+	      event.expose.count = xevent.xexpose.count;
+	      
+	      gdk_window_ref (event.expose.window);
+	      gtk_widget_event (event_widget, &event);
+	      gdk_window_unref (event.expose.window);
+	    }
+	  break;
+
+ 	case ConfigureNotify:
+ 	  if (xevent.xany.window == GDK_WINDOW_XWINDOW (layout->bin_window) &&
+ 	      (xevent.xconfigure.x != 0 || xevent.xconfigure.y != 0))
+ 	    {
+ 	      layout->configure_serial = xevent.xconfigure.serial;
+ 	      layout->scroll_x = xevent.xconfigure.x;
+ 	      layout->scroll_y = xevent.xconfigure.y;
+ 	    }
+ 	  break;
+	}
+    }
+#elif defined (GDK_WINDOWING_WIN32)
+  /* XXX Not implemented */
+#endif
 }
+
+#if 0
+/* The main event filter. Actually, we probably don't really need
+ * this filter at all, since we are calling it directly above in the
+ * expose-handling hack. But in case scrollbars
+ * are fixed up in some manner...
+ *
+ * This routine identifies expose events that are generated when
+ * we've temporarily moved the bin_window_origin, and translates
+ * them or discards them, depending on whether we are obscured
+ * or not.
+ */
+static GdkFilterReturn 
+gtk_layout_filter (GdkXEvent *gdk_xevent,
+		   GdkEvent  *event,
+		   gpointer   data)
+{
+#ifdef GDK_WINDOWING_X11
+
+  XEvent *xevent;
+  GtkLayout *layout;
+
+  xevent = (XEvent *)gdk_xevent;
+  layout = GTK_LAYOUT (data);
+
+  switch (xevent->type)
+    {
+    case Expose:
+      if (xevent->xexpose.serial == layout->configure_serial)
+	{
+	  if (layout->visibility == GDK_VISIBILITY_UNOBSCURED)
+	    return GDK_FILTER_REMOVE;
+	  else
+	    {
+	      xevent->xexpose.x += layout->scroll_x;
+	      xevent->xexpose.y += layout->scroll_y;
+	      
+	      break;
+	    }
+	}
+      break;
+      
+    case ConfigureNotify:
+       if ((xevent->xconfigure.x != 0) || (xevent->xconfigure.y != 0))
+	{
+	  layout->configure_serial = xevent->xconfigure.serial;
+	  layout->scroll_x = xevent->xconfigure.x;
+	  layout->scroll_y = xevent->xconfigure.y;
+	}
+      break;
+    }
+#elif defined (GDK_WINDOWING_WIN32)
+  /* XXX Not implemented */
+#endif
+  
+  return GDK_FILTER_CONTINUE;
+}
+#endif 0
+
+/* Although GDK does have a GDK_VISIBILITY_NOTIFY event,
+ * there is no corresponding event in GTK, so we have
+ * to get the events from a filter
+ */
+static GdkFilterReturn 
+gtk_layout_main_filter (GdkXEvent *gdk_xevent,
+			GdkEvent  *event,
+			gpointer   data)
+{
+#ifdef GDK_WINDOWING_X11
+  XEvent *xevent;
+  GtkLayout *layout;
+
+  xevent = (XEvent *)gdk_xevent;
+  layout = GTK_LAYOUT (data);
+
+  if (xevent->type == VisibilityNotify)
+    {
+      switch (xevent->xvisibility.state)
+	{
+	case VisibilityFullyObscured:
+	  layout->visibility = GDK_VISIBILITY_FULLY_OBSCURED;
+	  break;
+
+	case VisibilityPartiallyObscured:
+	  layout->visibility = GDK_VISIBILITY_PARTIAL;
+	  break;
+
+	case VisibilityUnobscured:
+	  layout->visibility = GDK_VISIBILITY_UNOBSCURED;
+	  break;
+	}
+
+      return GDK_FILTER_REMOVE;
+    }
+#elif defined (GDK_WINDOWING_WIN32)
+  /* XXX Not implemented */
+#endif
+  
+  return GDK_FILTER_CONTINUE;
+}
+

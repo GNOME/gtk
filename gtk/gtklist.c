@@ -2,23 +2,23 @@
  * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
  *
  * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
+ * modify it under the terms of the GNU Library General Public
  * License as published by the Free Software Foundation; either
  * version 2 of the License, or (at your option) any later version.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	 See the GNU
- * Lesser General Public License for more details.
+ * Library General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public
+ * You should have received a copy of the GNU Library General Public
  * License along with this library; if not, write to the
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
  * Boston, MA 02111-1307, USA.
  */
 
 /*
- * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
+ * Modified by the GTK+ Team and others 1997-1999.  See the AUTHORS
  * file for a list of people on the GTK+ Team.  See the ChangeLog
  * files for a list of changes.  These files are distributed with
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
@@ -44,7 +44,7 @@ enum {
 
 #define SCROLL_TIME  100
 
-/*** GtkList Methods ***/
+/** GtkList Methods **/
 static void gtk_list_class_init	     (GtkListClass   *klass);
 static void gtk_list_init	     (GtkList	     *list);
 static void gtk_list_set_arg         (GtkObject      *object,
@@ -53,10 +53,10 @@ static void gtk_list_set_arg         (GtkObject      *object,
 static void gtk_list_get_arg         (GtkObject      *object,
 				      GtkArg         *arg,
 				      guint           arg_id);
-/*** GtkObject Methods ***/
-static void gtk_list_shutdown	     (GObject	     *object);
+/** GtkObject Methods **/
+static void gtk_list_shutdown	     (GtkObject	     *object);
 
-/*** GtkWidget Methods ***/
+/** GtkWidget Methods **/
 static void gtk_list_size_request    (GtkWidget	     *widget,
 				      GtkRequisition *requisition);
 static void gtk_list_size_allocate   (GtkWidget	     *widget,
@@ -66,6 +66,8 @@ static void gtk_list_map	     (GtkWidget	     *widget);
 static void gtk_list_unmap	     (GtkWidget	     *widget);
 static void gtk_list_style_set	     (GtkWidget      *widget,
 				      GtkStyle       *previous_style);
+static void gtk_list_draw	     (GtkWidget	     *widget,
+				      GdkRectangle   *area);
 static gint gtk_list_expose	     (GtkWidget	     *widget,
 				      GdkEventExpose *event);
 static gint gtk_list_motion_notify   (GtkWidget      *widget,
@@ -75,7 +77,7 @@ static gint gtk_list_button_press    (GtkWidget      *widget,
 static gint gtk_list_button_release  (GtkWidget	     *widget,
 				      GdkEventButton *event);
 
-/*** GtkContainer Methods ***/
+/** GtkContainer Methods **/
 static void gtk_list_add	     (GtkContainer     *container,
 				      GtkWidget        *widget);
 static void gtk_list_remove	     (GtkContainer     *container,
@@ -90,7 +92,7 @@ static void gtk_list_set_focus_child (GtkContainer     *container,
 static gint gtk_list_focus           (GtkContainer     *container,
 				      GtkDirectionType  direction);
 
-/*** GtkList Private Functions ***/
+/** GtkList Private Functions **/
 static void gtk_list_move_focus_child      (GtkList       *list,
 					    GtkScrollType  scroll_type,
 					    gfloat         position);
@@ -100,13 +102,13 @@ static void gtk_list_remove_items_internal (GtkList       *list,
 					    GList         *items,
 					    gboolean       no_unref);
 
-/*** GtkList Selection Methods ***/
+/** GtkList Selection Methods **/
 static void gtk_real_list_select_child	        (GtkList   *list,
 						 GtkWidget *child);
 static void gtk_real_list_unselect_child        (GtkList   *list,
 						 GtkWidget *child);
 
-/*** GtkList Selection Functions ***/
+/** GtkList Selection Functions **/
 static void gtk_list_set_anchor                 (GtkList   *list,
 					         gboolean   add_mode,
 					         gint       anchor,
@@ -119,7 +121,7 @@ static void gtk_list_update_extended_selection  (GtkList   *list,
 					         gint       row);
 static void gtk_list_reset_extended_selection   (GtkList   *list);
 
-/*** GtkListItem Signal Functions ***/
+/** GtkListItem Signal Functions **/
 static void gtk_list_signal_drag_begin         (GtkWidget      *widget,
 						GdkDragContext *context,
 						GtkList        *list);
@@ -198,7 +200,6 @@ gtk_list_get_type (void)
 static void
 gtk_list_class_init (GtkListClass *class)
 {
-  GObjectClass *gobject_class = G_OBJECT_CLASS (class);
   GtkObjectClass *object_class;
   GtkWidgetClass *widget_class;
   GtkContainerClass *container_class;
@@ -212,9 +213,33 @@ gtk_list_class_init (GtkListClass *class)
   vadjustment_key_id = g_quark_from_static_string (vadjustment_key);
   hadjustment_key_id = g_quark_from_static_string (hadjustment_key);
 
-  gobject_class->shutdown = gtk_list_shutdown;
+  list_signals[SELECTION_CHANGED] =
+    gtk_signal_new ("selection_changed",
+		    GTK_RUN_FIRST,
+		    object_class->type,
+		    GTK_SIGNAL_OFFSET (GtkListClass, selection_changed),
+		    gtk_marshal_NONE__NONE,
+		    GTK_TYPE_NONE, 0);
+  list_signals[SELECT_CHILD] =
+    gtk_signal_new ("select_child",
+		    GTK_RUN_FIRST,
+		    object_class->type,
+		    GTK_SIGNAL_OFFSET (GtkListClass, select_child),
+		    gtk_marshal_NONE__POINTER,
+		    GTK_TYPE_NONE, 1,
+		    GTK_TYPE_WIDGET);
+  list_signals[UNSELECT_CHILD] =
+    gtk_signal_new ("unselect_child",
+		    GTK_RUN_FIRST,
+		    object_class->type,
+		    GTK_SIGNAL_OFFSET (GtkListClass, unselect_child),
+		    gtk_marshal_NONE__POINTER,
+		    GTK_TYPE_NONE, 1,
+		    GTK_TYPE_WIDGET);
 
+  gtk_object_class_add_signals (object_class, list_signals, LAST_SIGNAL);
 
+  object_class->shutdown = gtk_list_shutdown;
   object_class->set_arg = gtk_list_set_arg;
   object_class->get_arg = gtk_list_get_arg;
 
@@ -222,6 +247,7 @@ gtk_list_class_init (GtkListClass *class)
   widget_class->unmap = gtk_list_unmap;
   widget_class->style_set = gtk_list_style_set;
   widget_class->realize = gtk_list_realize;
+  widget_class->draw = gtk_list_draw;
   widget_class->expose_event = gtk_list_expose;
   widget_class->button_press_event = gtk_list_button_press;
   widget_class->button_release_event = gtk_list_button_release;
@@ -240,30 +266,6 @@ gtk_list_class_init (GtkListClass *class)
   class->selection_changed = NULL;
   class->select_child = gtk_real_list_select_child;
   class->unselect_child = gtk_real_list_unselect_child;
-
-  list_signals[SELECTION_CHANGED] =
-    gtk_signal_new ("selection_changed",
-		    GTK_RUN_FIRST,
-		    GTK_CLASS_TYPE (object_class),
-		    GTK_SIGNAL_OFFSET (GtkListClass, selection_changed),
-		    gtk_marshal_VOID__VOID,
-		    GTK_TYPE_NONE, 0);
-  list_signals[SELECT_CHILD] =
-    gtk_signal_new ("select_child",
-		    GTK_RUN_FIRST,
-		    GTK_CLASS_TYPE (object_class),
-		    GTK_SIGNAL_OFFSET (GtkListClass, select_child),
-		    gtk_marshal_VOID__POINTER,
-		    GTK_TYPE_NONE, 1,
-		    GTK_TYPE_WIDGET);
-  list_signals[UNSELECT_CHILD] =
-    gtk_signal_new ("unselect_child",
-		    GTK_RUN_FIRST,
-		    GTK_CLASS_TYPE (object_class),
-		    GTK_SIGNAL_OFFSET (GtkListClass, unselect_child),
-		    gtk_marshal_VOID__POINTER,
-		    GTK_TYPE_NONE, 1,
-		    GTK_TYPE_WIDGET);
   
   gtk_object_add_arg_type ("GtkList::selection_mode",
 			   GTK_TYPE_SELECTION_MODE, GTK_ARG_READWRITE,
@@ -339,11 +341,10 @@ gtk_list_new (void)
  * gtk_list_shutdown
  */
 static void
-gtk_list_shutdown (GObject *object)
+gtk_list_shutdown (GtkObject *object)
 {
   gtk_list_clear_items (GTK_LIST (object), 0, -1);
-
-  G_OBJECT_CLASS (parent_class)->shutdown (object);
+  GTK_OBJECT_CLASS (parent_class)->shutdown (object);
 }
 
 
@@ -562,11 +563,6 @@ gtk_list_motion_notify (GtkWidget      *widget,
 
   if (event->is_hint || event->window != widget->window)
     gdk_window_get_pointer (widget->window, &x, &y, NULL);
-  else
-    {
-      x = event->x;
-      y = event->y;
-    }
 
   adj = gtk_object_get_data_by_id (GTK_OBJECT (list), hadjustment_key_id);
 
@@ -832,6 +828,35 @@ gtk_list_button_release (GtkWidget	*widget,
     }
   
   return FALSE;
+}
+
+static void
+gtk_list_draw (GtkWidget    *widget,
+	       GdkRectangle *area)
+{
+  GtkList *list;
+  GtkWidget *child;
+  GdkRectangle child_area;
+  GList *children;
+
+  g_return_if_fail (widget != NULL);
+  g_return_if_fail (GTK_IS_LIST (widget));
+  g_return_if_fail (area != NULL);
+
+  if (GTK_WIDGET_DRAWABLE (widget))
+    {
+      list = GTK_LIST (widget);
+
+      children = list->children;
+      while (children)
+	{
+	  child = children->data;
+	  children = children->next;
+
+	  if (gtk_widget_intersect (child, area, &child_area))
+	    gtk_widget_draw (child, &child_area);
+	}
+    }
 }
 
 static gint

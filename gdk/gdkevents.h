@@ -9,9 +9,7 @@
 extern "C" {
 #endif /* __cplusplus */
 
-#define GDK_PRIORITY_EVENTS	(G_PRIORITY_DEFAULT)
-#define GDK_PRIORITY_REDRAW     (G_PRIORITY_HIGH_IDLE + 20)
-
+#define	  GDK_PRIORITY_EVENTS		(G_PRIORITY_DEFAULT)
 
 typedef struct _GdkEventAny	    GdkEventAny;
 typedef struct _GdkEventExpose	    GdkEventExpose;
@@ -38,9 +36,7 @@ typedef void (*GdkEventFunc) (GdkEvent *event,
 
 /* Event filtering */
 
-typedef void GdkXEvent;	  /* Can be cast to window system specific
-			   * even type, XEvent on X11, MSG on Win32.
-			   */
+typedef void GdkXEvent;	  /* Can be cast to XEvent */
 
 typedef enum {
   GDK_FILTER_CONTINUE,	  /* Event not handled, continue processesing */
@@ -233,10 +229,13 @@ struct _GdkEventMotion
   guint32 time;
   gdouble x;
   gdouble y;
-  gdouble *axes;
+  gdouble pressure;
+  gdouble xtilt;
+  gdouble ytilt;
   guint state;
   gint16 is_hint;
-  GdkDevice *device;
+  GdkInputSource source;
+  guint32 deviceid;
   gdouble x_root, y_root;
 };
 
@@ -248,10 +247,13 @@ struct _GdkEventButton
   guint32 time;
   gdouble x;
   gdouble y;
-  gdouble *axes;
+  gdouble pressure;
+  gdouble xtilt;
+  gdouble ytilt;
   guint state;
   guint button;
-  GdkDevice *device;
+  GdkInputSource source;
+  guint32 deviceid;
   gdouble x_root, y_root;
 };
 
@@ -263,9 +265,13 @@ struct _GdkEventScroll
   guint32 time;
   gdouble x;
   gdouble y;
+  gdouble pressure;
+  gdouble xtilt;
+  gdouble ytilt;
   guint state;
   GdkScrollDirection direction;
-  GdkDevice *device;
+  GdkInputSource source;
+  guint32 deviceid;
   gdouble x_root, y_root;
 };
 
@@ -279,8 +285,6 @@ struct _GdkEventKey
   guint keyval;
   gint length;
   gchar *string;
-  guint16 hardware_keycode;
-  guint8 group;
 };
 
 struct _GdkEventCrossing
@@ -313,9 +317,9 @@ struct _GdkEventConfigure
   GdkEventType type;
   GdkWindow *window;
   gint8 send_event;
-  gint x, y;
-  gint width;
-  gint height;
+  gint16 x, y;
+  gint16 width;
+  gint16 height;
 };
 
 struct _GdkEventProperty
@@ -336,8 +340,8 @@ struct _GdkEventSelection
   GdkAtom selection;
   GdkAtom target;
   GdkAtom property;
+  guint32 requestor;
   guint32 time;
-  GdkNativeWindow requestor;
 };
 
 /* This event type will be used pretty rarely. It only is important
@@ -349,7 +353,8 @@ struct _GdkEventProximity
   GdkWindow *window;
   gint8 send_event;
   guint32 time;
-  GdkDevice *device;
+  GdkInputSource source;
+  guint32 deviceid;
 };
 
 struct _GdkEventClient
@@ -409,9 +414,6 @@ void      gdk_event_put	 		(GdkEvent  	*event);
 GdkEvent* gdk_event_copy     		(GdkEvent 	*event);
 void	  gdk_event_free     		(GdkEvent 	*event);
 guint32   gdk_event_get_time 		(GdkEvent 	*event);
-gboolean  gdk_event_get_axis            (GdkEvent       *event,
-					 GdkAxisUse      axis_use,
-					 gdouble        *value);
 
 void	  gdk_event_handler_set 	(GdkEventFunc    func,
 					 gpointer        data,

@@ -2,23 +2,23 @@
  * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
  *
  * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
+ * modify it under the terms of the GNU Library General Public
  * License as published by the Free Software Foundation; either
  * version 2 of the License, or (at your option) any later version.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
+ * Library General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public
+ * You should have received a copy of the GNU Library General Public
  * License along with this library; if not, write to the
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
  * Boston, MA 02111-1307, USA.
  */
 
 /*
- * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
+ * Modified by the GTK+ Team and others 1997-1999.  See the AUTHORS
  * file for a list of people on the GTK+ Team.  See the ChangeLog
  * files for a list of changes.  These files are distributed with
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
@@ -49,6 +49,8 @@ static void gtk_option_menu_size_allocate   (GtkWidget          *widget,
 					     GtkAllocation      *allocation);
 static void gtk_option_menu_paint           (GtkWidget          *widget,
 					     GdkRectangle       *area);
+static void gtk_option_menu_draw            (GtkWidget          *widget,
+					     GdkRectangle       *area);
 static gint gtk_option_menu_expose          (GtkWidget          *widget,
 					     GdkEventExpose     *event);
 static gint gtk_option_menu_button_press    (GtkWidget          *widget,
@@ -63,7 +65,6 @@ static void gtk_option_menu_calc_size       (GtkOptionMenu      *option_menu);
 static void gtk_option_menu_position        (GtkMenu            *menu,
 					     gint               *x,
 					     gint               *y,
-					     gint               *scroll_offet,
 					     gpointer            user_data);
 static void gtk_option_menu_show_all        (GtkWidget          *widget);
 static void gtk_option_menu_hide_all        (GtkWidget          *widget);
@@ -115,7 +116,8 @@ gtk_option_menu_class_init (GtkOptionMenuClass *class)
   parent_class = gtk_type_class (gtk_button_get_type ());
 
   object_class->destroy = gtk_option_menu_destroy;
-  
+
+  widget_class->draw = gtk_option_menu_draw;
   widget_class->size_request = gtk_option_menu_size_request;
   widget_class->size_allocate = gtk_option_menu_size_allocate;
   widget_class->expose_event = gtk_option_menu_expose;
@@ -202,9 +204,6 @@ gtk_option_menu_set_menu (GtkOptionMenu *option_menu,
       gtk_signal_connect (GTK_OBJECT (option_menu->menu), "deactivate",
 			  (GtkSignalFunc) gtk_option_menu_deactivate,
 			  option_menu);
-      gtk_signal_connect_object (GTK_OBJECT (option_menu->menu), "size_request",
-				 (GtkSignalFunc) gtk_option_menu_calc_size,
-				 GTK_OBJECT (option_menu));
 
       if (GTK_WIDGET (option_menu)->parent)
 	gtk_widget_queue_resize (GTK_WIDGET (option_menu));
@@ -289,8 +288,6 @@ gtk_option_menu_size_request (GtkWidget      *widget,
 {
   GtkOptionMenu *option_menu;
   gint tmp;
-  GtkRequisition child_requisition = { 0, 0 };
-      
 
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_OPTION_MENU (widget));
@@ -298,23 +295,15 @@ gtk_option_menu_size_request (GtkWidget      *widget,
 
   option_menu = GTK_OPTION_MENU (widget);
 
-  if (GTK_BIN (option_menu)->child && GTK_WIDGET_VISIBLE (GTK_BIN (option_menu)->child))
-    {
-      gtk_widget_size_request (GTK_BIN (option_menu)->child, &child_requisition);
-
-      requisition->width += child_requisition.width;
-      requisition->height += child_requisition.height;
-    }
-  
   requisition->width = ((GTK_CONTAINER (widget)->border_width +
-			 GTK_WIDGET (widget)->style->xthickness) * 2 +
-			MAX (child_requisition.width, option_menu->width) +
+			 GTK_WIDGET (widget)->style->klass->xthickness) * 2 +
+			option_menu->width +
 			OPTION_INDICATOR_WIDTH +
 			OPTION_INDICATOR_SPACING * 5 +
 			CHILD_LEFT_SPACING + CHILD_RIGHT_SPACING + 2);
   requisition->height = ((GTK_CONTAINER (widget)->border_width +
-			  GTK_WIDGET (widget)->style->ythickness) * 2 +
-			 MAX (child_requisition.height, option_menu->height) +
+			  GTK_WIDGET (widget)->style->klass->ythickness) * 2 +
+			 option_menu->height +
 			 CHILD_TOP_SPACING + CHILD_BOTTOM_SPACING + 2);
 
   tmp = (requisition->height - option_menu->height +
@@ -343,9 +332,9 @@ gtk_option_menu_size_allocate (GtkWidget     *widget,
   if (child && GTK_WIDGET_VISIBLE (child))
     {
       child_allocation.x = (GTK_CONTAINER (widget)->border_width +
-			    GTK_WIDGET (widget)->style->xthickness) + 1;
+			    GTK_WIDGET (widget)->style->klass->xthickness) + 1;
       child_allocation.y = (GTK_CONTAINER (widget)->border_width +
-			    GTK_WIDGET (widget)->style->ythickness) + 1;
+			    GTK_WIDGET (widget)->style->klass->ythickness) + 1;
       child_allocation.width = MAX (1, (gint)allocation->width - child_allocation.x * 2 -
 				    OPTION_INDICATOR_WIDTH - OPTION_INDICATOR_SPACING * 5 -
 				    CHILD_LEFT_SPACING - CHILD_RIGHT_SPACING - 2);
@@ -403,6 +392,27 @@ gtk_option_menu_paint (GtkWidget    *widget,
 			 button_area.y - 1, 
 			 button_area.width + 1,
 			 button_area.height + 1);
+    }
+}
+
+static void
+gtk_option_menu_draw (GtkWidget    *widget,
+		      GdkRectangle *area)
+{
+  GtkWidget *child;
+  GdkRectangle child_area;
+
+  g_return_if_fail (widget != NULL);
+  g_return_if_fail (GTK_IS_OPTION_MENU (widget));
+  g_return_if_fail (area != NULL);
+
+  if (GTK_WIDGET_DRAWABLE (widget))
+    {
+      gtk_option_menu_paint (widget, area);
+
+      child = GTK_BIN (widget)->child;
+      if (child && gtk_widget_intersect (child, area, &child_area))
+	gtk_widget_draw (child, &child_area);
     }
 }
 
@@ -475,7 +485,6 @@ gtk_option_menu_button_press (GtkWidget      *widget,
 			      GdkEventButton *event)
 {
   GtkOptionMenu *option_menu;
-  GtkWidget *menu_item;
 
   g_return_val_if_fail (widget != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_OPTION_MENU (widget), FALSE);
@@ -490,9 +499,6 @@ gtk_option_menu_button_press (GtkWidget      *widget,
       gtk_menu_popup (GTK_MENU (option_menu->menu), NULL, NULL,
 		      gtk_option_menu_position, option_menu,
 		      event->button, event->time);
-      menu_item = gtk_menu_get_active (GTK_MENU (option_menu->menu));
-      if (menu_item)
-	gtk_menu_shell_select_item (GTK_MENU_SHELL (option_menu->menu), menu_item);
       return TRUE;
     }
 
@@ -504,7 +510,6 @@ gtk_option_menu_key_press (GtkWidget   *widget,
 			   GdkEventKey *event)
 {
   GtkOptionMenu *option_menu;
-  GtkWidget *menu_item;
 
   g_return_val_if_fail (widget != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_OPTION_MENU (widget), FALSE);
@@ -519,9 +524,6 @@ gtk_option_menu_key_press (GtkWidget   *widget,
       gtk_menu_popup (GTK_MENU (option_menu->menu), NULL, NULL,
 		      gtk_option_menu_position, option_menu,
 		      0, event->time);
-      menu_item = gtk_menu_get_active (GTK_MENU (option_menu->menu));
-      if (menu_item)
-	gtk_menu_shell_select_item (GTK_MENU_SHELL (option_menu->menu), menu_item);
       return TRUE;
     }
   
@@ -600,8 +602,6 @@ gtk_option_menu_calc_size (GtkOptionMenu *option_menu)
   GtkWidget *child;
   GList *children;
   GtkRequisition child_requisition;
-  gint old_width = option_menu->width;
-  gint old_height = option_menu->height;
 
   g_return_if_fail (option_menu != NULL);
   g_return_if_fail (GTK_IS_OPTION_MENU (option_menu));
@@ -626,16 +626,12 @@ gtk_option_menu_calc_size (GtkOptionMenu *option_menu)
 	    }
 	}
     }
-
-  if (old_width != option_menu->width || old_height != option_menu->height)
-    gtk_widget_queue_resize (GTK_WIDGET (option_menu));
 }
 
 static void
 gtk_option_menu_position (GtkMenu  *menu,
 			  gint     *x,
 			  gint     *y,
-			  gboolean *push_in,
 			  gpointer  user_data)
 {
   GtkOptionMenu *option_menu;
@@ -643,10 +639,13 @@ gtk_option_menu_position (GtkMenu  *menu,
   GtkWidget *child;
   GtkRequisition requisition;
   GList *children;
+  gint shift_menu;
   gint screen_width;
+  gint screen_height;
   gint menu_xpos;
   gint menu_ypos;
-  gint menu_width;
+  gint width;
+  gint height;
 
   g_return_if_fail (user_data != NULL);
   g_return_if_fail (GTK_IS_OPTION_MENU (user_data));
@@ -654,9 +653,11 @@ gtk_option_menu_position (GtkMenu  *menu,
   option_menu = GTK_OPTION_MENU (user_data);
 
   gtk_widget_get_child_requisition (GTK_WIDGET (menu), &requisition);
-  menu_width = requisition.width;
+  width = requisition.width;
+  height = requisition.height;
 
   active = gtk_menu_get_active (GTK_MENU (option_menu->menu));
+  children = GTK_MENU_SHELL (option_menu->menu)->children;
   gdk_window_get_origin (GTK_WIDGET (option_menu)->window, &menu_xpos, &menu_ypos);
 
   menu_ypos += GTK_WIDGET (option_menu)->allocation.height / 2 - 2;
@@ -667,7 +668,6 @@ gtk_option_menu_position (GtkMenu  *menu,
       menu_ypos -= requisition.height / 2;
     }
 
-  children = GTK_MENU_SHELL (option_menu->menu)->children;
   while (children)
     {
       child = children->data;
@@ -685,15 +685,35 @@ gtk_option_menu_position (GtkMenu  *menu,
     }
 
   screen_width = gdk_screen_width ();
-  
+  screen_height = gdk_screen_height ();
+
+  shift_menu = FALSE;
+  if (menu_ypos < 0)
+    {
+      menu_ypos = 0;
+      shift_menu = TRUE;
+    }
+  else if ((menu_ypos + height) > screen_height)
+    {
+      menu_ypos -= ((menu_ypos + height) - screen_height);
+      shift_menu = TRUE;
+    }
+
+  if (shift_menu)
+    {
+      if ((menu_xpos + GTK_WIDGET (option_menu)->allocation.width + width) <= screen_width)
+	menu_xpos += GTK_WIDGET (option_menu)->allocation.width;
+      else
+	menu_xpos -= width;
+    }
+
   if (menu_xpos < 0)
     menu_xpos = 0;
-  else if ((menu_xpos + menu_width) > screen_width)
-    menu_xpos -= ((menu_xpos + menu_width) - screen_width);
+  else if ((menu_xpos + width) > screen_width)
+    menu_xpos -= ((menu_xpos + width) - screen_width);
 
   *x = menu_xpos;
   *y = menu_ypos;
-  *push_in = TRUE;
 }
 
 

@@ -2,23 +2,23 @@
  * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
  *
  * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
+ * modify it under the terms of the GNU Library General Public
  * License as published by the Free Software Foundation; either
  * version 2 of the License, or (at your option) any later version.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
+ * Library General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public
+ * You should have received a copy of the GNU Library General Public
  * License along with this library; if not, write to the
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
  * Boston, MA 02111-1307, USA.
  */
 
 /*
- * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
+ * Modified by the GTK+ Team and others 1997-1999.  See the AUTHORS
  * file for a list of people on the GTK+ Team.  See the ChangeLog
  * files for a list of changes.  These files are distributed with
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
@@ -37,6 +37,8 @@ static void gtk_event_box_size_allocate            (GtkWidget        *widget,
 						    GtkAllocation    *allocation);
 static void gtk_event_box_paint                    (GtkWidget         *widget,
 						    GdkRectangle      *area);
+static void gtk_event_box_draw                     (GtkWidget         *widget,
+						   GdkRectangle       *area);
 static gint gtk_event_box_expose                   (GtkWidget         *widget,
 						   GdkEventExpose     *event);
 
@@ -76,6 +78,7 @@ gtk_event_box_class_init (GtkEventBoxClass *class)
   widget_class->realize = gtk_event_box_realize;
   widget_class->size_request = gtk_event_box_size_request;
   widget_class->size_allocate = gtk_event_box_size_allocate;
+  widget_class->draw = gtk_event_box_draw;
   widget_class->expose_event = gtk_event_box_expose;
 }
 
@@ -198,6 +201,34 @@ gtk_event_box_paint (GtkWidget    *widget,
 		      widget->state, GTK_SHADOW_NONE,
 		      area, widget, "eventbox",
 		      0, 0, -1, -1);
+}
+
+static void
+gtk_event_box_draw (GtkWidget    *widget,
+		    GdkRectangle *area)
+{
+  GtkBin *bin;
+  GdkRectangle tmp_area;
+  GdkRectangle child_area;
+
+  g_return_if_fail (widget != NULL);
+  g_return_if_fail (GTK_IS_EVENT_BOX (widget));
+
+  if (GTK_WIDGET_DRAWABLE (widget))
+    {
+      bin = GTK_BIN (widget);
+      tmp_area = *area;
+      tmp_area.x -= GTK_CONTAINER (widget)->border_width;
+      tmp_area.y -= GTK_CONTAINER (widget)->border_width;
+
+      gtk_event_box_paint (widget, &tmp_area);
+      
+      if (bin->child)
+	{
+	  if (gtk_widget_intersect (bin->child, &tmp_area, &child_area))
+	    gtk_widget_draw (bin->child, &child_area);
+	}
+    }
 }
 
 static gint

@@ -1,6 +1,7 @@
 #include <config.h>
 #include <gtk/gtk.h>
-#include <gdk/x11/gdkx.h>
+#include <gdk/gdkx.h>
+#include "gdk-pixbuf.h"
 
 int close_app(GtkWidget *widget, gpointer data)
 {
@@ -14,7 +15,7 @@ int expose_cb(GtkWidget *drawing_area, GdkEventExpose *evt, gpointer data)
          
    pixbuf = (GdkPixbuf *) gtk_object_get_data(GTK_OBJECT(drawing_area),
                                               "pixbuf");
-   if(gdk_pixbuf_get_has_alpha (pixbuf))
+   if(pixbuf->art_pixbuf->has_alpha)
    {
       gdk_draw_rgb_32_image(drawing_area->window,
                             drawing_area->style->black_gc,
@@ -22,10 +23,10 @@ int expose_cb(GtkWidget *drawing_area, GdkEventExpose *evt, gpointer data)
                             evt->area.width,
                             evt->area.height,
                             GDK_RGB_DITHER_MAX,
-                            gdk_pixbuf_get_pixels (pixbuf) +
-			    (evt->area.y * gdk_pixbuf_get_rowstride (pixbuf)) +
-			    (evt->area.x * gdk_pixbuf_get_n_channels (pixbuf)),
-                            gdk_pixbuf_get_rowstride (pixbuf));
+                            pixbuf->art_pixbuf->pixels +
+                              (evt->area.y * pixbuf->art_pixbuf->rowstride) +
+                              (evt->area.x *  pixbuf->art_pixbuf->n_channels),
+                            pixbuf->art_pixbuf->rowstride);
    }
    else
    {
@@ -35,10 +36,10 @@ int expose_cb(GtkWidget *drawing_area, GdkEventExpose *evt, gpointer data)
 			 evt->area.width,
 			 evt->area.height,  
 			 GDK_RGB_DITHER_NORMAL,
-			 gdk_pixbuf_get_pixels (pixbuf) +
-			 (evt->area.y * gdk_pixbuf_get_rowstride (pixbuf)) +
-			 (evt->area.x * gdk_pixbuf_get_n_channels (pixbuf)),
-			 gdk_pixbuf_get_rowstride (pixbuf));
+			 pixbuf->art_pixbuf->pixels +
+			 (evt->area.y * pixbuf->art_pixbuf->rowstride) +
+			 (evt->area.x * pixbuf->art_pixbuf->n_channels),
+			 pixbuf->art_pixbuf->rowstride);
    }
    return FALSE;
 }
@@ -51,7 +52,7 @@ int configure_cb(GtkWidget *drawing_area, GdkEventConfigure *evt, gpointer data)
                                               "pixbuf");
     
    g_print("X:%d Y:%d\n", evt->width, evt->height);
-   if(evt->width != gdk_pixbuf_get_width (pixbuf) || evt->height != gdk_pixbuf_get_height (pixbuf))
+   if(evt->width != pixbuf->art_pixbuf->width || evt->height != pixbuf->art_pixbuf->height)
    {
       GdkWindow *root;
       GdkPixbuf *new_pixbuf;
@@ -66,8 +67,6 @@ int configure_cb(GtkWidget *drawing_area, GdkEventConfigure *evt, gpointer data)
    return FALSE;
 }
 
-extern void pixbuf_init();
-
 int main(int argc, char **argv)
 {   
    GdkWindow     *root;
@@ -76,13 +75,12 @@ int main(int argc, char **argv)
    GtkWidget     *drawing_area;
    GdkPixbuf     *pixbuf;    
    
-   pixbuf_init ();
-
    gtk_init(&argc, &argv);   
    gdk_rgb_set_verbose(TRUE);
    gdk_rgb_init();
 
    gtk_widget_set_default_colormap(gdk_rgb_get_cmap());
+   gtk_widget_set_default_visual(gdk_rgb_get_visual());
 
    root = GDK_ROOT_PARENT();
    pixbuf = gdk_pixbuf_get_from_drawable(NULL, root, NULL,
@@ -99,8 +97,8 @@ int main(int argc, char **argv)
    
    drawing_area = gtk_drawing_area_new();
    gtk_drawing_area_size(GTK_DRAWING_AREA(drawing_area),
-                         gdk_pixbuf_get_width (pixbuf),
-                         gdk_pixbuf_get_height (pixbuf));
+                         pixbuf->art_pixbuf->width,
+                         pixbuf->art_pixbuf->height);
    gtk_signal_connect(GTK_OBJECT(drawing_area), "expose_event",
                       GTK_SIGNAL_FUNC(expose_cb), NULL);
 

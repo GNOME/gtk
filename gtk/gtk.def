@@ -14,22 +14,28 @@ EXPORTS
 	GTK_TYPE_CTREE_EXPANDER_STYLE
 	GTK_TYPE_CTREE_EXPANSION_TYPE
 	GTK_TYPE_CTREE_LINE_STYLE
+	GTK_TYPE_CTREE_NODE
 	GTK_TYPE_CTREE_POS
 	GTK_TYPE_CURVE_TYPE
 	GTK_TYPE_DEBUG_FLAG
-	GTK_TYPE_DELETE_TYPE
 	GTK_TYPE_DEST_DEFAULTS
 	GTK_TYPE_DIRECTION_TYPE
+	GTK_TYPE_FONT_FILTER_TYPE
+	GTK_TYPE_FONT_METRIC_TYPE
+	GTK_TYPE_FONT_TYPE
 	GTK_TYPE_FUNDAMENTAL_TYPE
 	GTK_TYPE_GDK_AXIS_USE
 	GTK_TYPE_GDK_BYTE_ORDER
 	GTK_TYPE_GDK_CAP_STYLE
 	GTK_TYPE_GDK_COLOR
+	GTK_TYPE_GDK_COLORMAP
 	GTK_TYPE_GDK_COLOR_CONTEXT_MODE
 	GTK_TYPE_GDK_CROSSING_MODE
 	GTK_TYPE_GDK_CURSOR_TYPE
 	GTK_TYPE_GDK_DRAG_ACTION
+	GTK_TYPE_GDK_DRAG_CONTEXT
 	GTK_TYPE_GDK_DRAG_PROTOCOL
+	GTK_TYPE_GDK_DRAWABLE_TYPE
 	GTK_TYPE_GDK_EVENT
 	GTK_TYPE_GDK_EVENT_MASK
 	GTK_TYPE_GDK_EVENT_TYPE
@@ -41,7 +47,6 @@ EXPORTS
 	GTK_TYPE_GDK_FONT_TYPE
 	GTK_TYPE_GDK_FUNCTION
 	GTK_TYPE_GDK_GC_VALUES_MASK
-	GTK_TYPE_GDK_GRAB_STATUS
 	GTK_TYPE_GDK_IC_ATTRIBUTES_TYPE
 	GTK_TYPE_GDK_IMAGE_TYPE
 	GTK_TYPE_GDK_IM_STYLE
@@ -56,7 +61,6 @@ EXPORTS
 	GTK_TYPE_GDK_PROPERTY_STATE
 	GTK_TYPE_GDK_PROP_MODE
 	GTK_TYPE_GDK_RGB_DITHER
-	GTK_TYPE_GDK_SCROLL_DIRECTION
 	GTK_TYPE_GDK_SELECTION
 	GTK_TYPE_GDK_SELECTION_TYPE
 	GTK_TYPE_GDK_STATUS
@@ -65,19 +69,17 @@ EXPORTS
 	GTK_TYPE_GDK_VISIBILITY_STATE
 	GTK_TYPE_GDK_VISUAL
 	GTK_TYPE_GDK_VISUAL_TYPE
+	GTK_TYPE_GDK_WINDOW
 	GTK_TYPE_GDK_WINDOW_ATTRIBUTES_TYPE
 	GTK_TYPE_GDK_WINDOW_CLASS
 	GTK_TYPE_GDK_WINDOW_HINTS
-	GTK_TYPE_GDK_WINDOW_TYPE
 	GTK_TYPE_GDK_WM_DECORATION
 	GTK_TYPE_GDK_WM_FUNCTION
-	GTK_TYPE_IMAGE_TYPE
 	GTK_TYPE_JUSTIFICATION
 	GTK_TYPE_MATCH_TYPE
 	GTK_TYPE_MENU_DIRECTION_TYPE
 	GTK_TYPE_MENU_FACTORY_TYPE
 	GTK_TYPE_METRIC_TYPE
-	GTK_TYPE_MOVEMENT_STEP
 	GTK_TYPE_OBJECT_FLAGS
 	GTK_TYPE_ORIENTATION
 	GTK_TYPE_PACKER_OPTIONS
@@ -104,11 +106,10 @@ EXPORTS
 	GTK_TYPE_SPIN_BUTTON_UPDATE_POLICY
 	GTK_TYPE_SPIN_TYPE
 	GTK_TYPE_STATE_TYPE
+	GTK_TYPE_STYLE
 	GTK_TYPE_SUBMENU_DIRECTION
 	GTK_TYPE_SUBMENU_PLACEMENT
 	GTK_TYPE_TARGET_FLAGS
-	GTK_TYPE_TEXT_DIRECTION
-	GTK_TYPE_TEXT_WINDOW_TYPE
 	GTK_TYPE_TOOLBAR_CHILD_TYPE
 	GTK_TYPE_TOOLBAR_SPACE_STYLE
 	GTK_TYPE_TOOLBAR_STYLE
@@ -119,7 +120,6 @@ EXPORTS
 	GTK_TYPE_WIDGET_FLAGS
 	GTK_TYPE_WINDOW_POSITION
 	GTK_TYPE_WINDOW_TYPE
-	GTK_TYPE_WRAP_MODE
 	gtk_accel_group_activate
 	gtk_accel_group_add
 	gtk_accel_group_attach
@@ -208,8 +208,6 @@ EXPORTS
 	gtk_button_get_type
 	gtk_button_leave
 	gtk_button_new
-	gtk_button_new_accel
-	gtk_button_new_stock
 	gtk_button_new_with_label
 	gtk_button_pressed
 	gtk_button_released
@@ -219,22 +217,12 @@ EXPORTS
 	gtk_calendar_freeze
 	gtk_calendar_get_date
 	gtk_calendar_get_type
-	gtk_calendar_mark_day
 	gtk_calendar_new
+	gtk_calendar_mark_day
 	gtk_calendar_select_day
 	gtk_calendar_select_month
 	gtk_calendar_thaw
 	gtk_calendar_unmark_day
-	gtk_cell_renderer_event
-	gtk_cell_renderer_get_size
-	gtk_cell_renderer_get_type
-	gtk_cell_renderer_pixbuf_get_type
-	gtk_cell_renderer_pixbuf_new
-	gtk_cell_renderer_render
-	gtk_cell_renderer_text_get_type
-	gtk_cell_renderer_text_new
-	gtk_cell_renderer_text_pixbuf_get_type
-	gtk_cell_renderer_text_pixbuf_new
 	gtk_check_button_get_type
 	gtk_check_button_new
 	gtk_check_button_new_with_label
@@ -254,6 +242,7 @@ EXPORTS
 	gtk_clist_column_titles_passive
 	gtk_clist_column_titles_show
 	gtk_clist_columns_autosize
+	gtk_clist_construct
 	gtk_clist_find_row_from_data
 	gtk_clist_freeze
 	gtk_clist_get_cell_style
@@ -308,6 +297,7 @@ EXPORTS
 	gtk_clist_set_selection_mode
 	gtk_clist_set_shadow_type
 	gtk_clist_set_shift
+	gtk_ctree_set_show_stub
 	gtk_clist_set_sort_column
 	gtk_clist_set_sort_type
 	gtk_clist_set_text
@@ -325,9 +315,8 @@ EXPORTS
 	gtk_color_selection_get_type
 	gtk_color_selection_new
 	gtk_color_selection_set_color
+	gtk_color_selection_set_opacity
 	gtk_color_selection_set_update_policy
-	gtk_color_selection_set_use_opacity
-	gtk_color_selection_set_use_palette
 	gtk_combo_disable_activate
 	gtk_combo_get_type
 	gtk_combo_new
@@ -356,9 +345,11 @@ EXPORTS
 	gtk_container_forall
 	gtk_container_foreach
 	gtk_container_foreach_full
+	gtk_container_get_toplevels
 	gtk_container_get_type
 	gtk_container_query_child_args
 	gtk_container_queue_resize
+	gtk_container_register_toplevel
 	gtk_container_remove
 	gtk_container_resize_children
 	gtk_container_set_border_width
@@ -367,9 +358,11 @@ EXPORTS
 	gtk_container_set_focus_vadjustment
 	gtk_container_set_reallocate_redraws
 	gtk_container_set_resize_mode
+	gtk_container_unregister_toplevel
 	gtk_ctree_collapse
 	gtk_ctree_collapse_recursive
 	gtk_ctree_collapse_to_depth
+	gtk_ctree_construct
 	gtk_ctree_expand
 	gtk_ctree_expand_recursive
 	gtk_ctree_expand_to_depth
@@ -426,7 +419,6 @@ EXPORTS
 	gtk_ctree_set_indent
 	gtk_ctree_set_line_style
 	gtk_ctree_set_node_info
-	gtk_ctree_set_show_stub
 	gtk_ctree_set_spacing
 	gtk_ctree_sort_node
 	gtk_ctree_sort_recursive
@@ -443,15 +435,8 @@ EXPORTS
 	gtk_curve_set_range
 	gtk_curve_set_vector
 	gtk_data_get_type
-	gtk_debug_flags
-	gtk_dialog_add_action_widget
-	gtk_dialog_add_button
-	gtk_dialog_add_buttons
 	gtk_dialog_get_type
 	gtk_dialog_new
-	gtk_dialog_new_with_buttons
-	gtk_dialog_response
-	gtk_dialog_run
 	gtk_drag_begin
 	gtk_drag_dest_handle_event
 	gtk_drag_dest_set
@@ -463,8 +448,8 @@ EXPORTS
 	gtk_drag_highlight
 	gtk_drag_set_default_icon
 	gtk_drag_set_icon_default
-	gtk_drag_set_icon_pixmap
 	gtk_drag_set_icon_widget
+	gtk_drag_set_icon_pixmap
 	gtk_drag_source_handle_event
 	gtk_drag_source_set
 	gtk_drag_source_set_icon
@@ -482,6 +467,8 @@ EXPORTS
 	gtk_drawing_area_get_type
 	gtk_drawing_area_new
 	gtk_drawing_area_size
+	gtk_editable_changed
+	gtk_editable_claim_selection
 	gtk_editable_copy_clipboard
 	gtk_editable_cut_clipboard
 	gtk_editable_delete_selection
@@ -502,7 +489,6 @@ EXPORTS
 	gtk_entry_prepend_text
 	gtk_entry_select_region
 	gtk_entry_set_editable
-	gtk_entry_set_invisible_char
 	gtk_entry_set_max_length
 	gtk_entry_set_position
 	gtk_entry_set_text
@@ -528,6 +514,7 @@ EXPORTS
 	gtk_font_selection_dialog_get_preview_text
 	gtk_font_selection_dialog_get_type
 	gtk_font_selection_dialog_new
+	gtk_font_selection_dialog_set_filter
 	gtk_font_selection_dialog_set_font_name
 	gtk_font_selection_dialog_set_preview_text
 	gtk_font_selection_get_font
@@ -535,6 +522,7 @@ EXPORTS
 	gtk_font_selection_get_preview_text
 	gtk_font_selection_get_type
 	gtk_font_selection_new
+	gtk_font_selection_set_filter
 	gtk_font_selection_set_font_name
 	gtk_font_selection_set_preview_text
 	gtk_frame_get_type
@@ -574,38 +562,19 @@ EXPORTS
 	gtk_hscrollbar_new
 	gtk_hseparator_get_type
 	gtk_hseparator_new
+	gtk_identifier_get_type
 	gtk_idle_add
 	gtk_idle_add_full
 	gtk_idle_add_priority
 	gtk_idle_remove
 	gtk_idle_remove_by_data
 	gtk_image_get
-	gtk_image_get_icon_set
-	gtk_image_get_image
-	gtk_image_get_pixbuf
-	gtk_image_get_pixmap
-	gtk_image_get_stock
-	gtk_image_get_storage_type
 	gtk_image_get_type
 	gtk_image_new
-	gtk_image_new_from_file
-	gtk_image_new_from_icon_set
-	gtk_image_new_from_image
-	gtk_image_new_from_pixbuf
-	gtk_image_new_from_pixmap
-	gtk_image_new_from_stock
 	gtk_image_set
-	gtk_image_set_from_file
-	gtk_image_set_from_icon_set
-	gtk_image_set_from_image
-	gtk_image_set_from_pixbuf
-	gtk_image_set_from_pixmap
-	gtk_image_set_from_stock
 	gtk_init
-	gtk_init_abi_check
 	gtk_init_add
 	gtk_init_check
-	gtk_init_check_abi_check
 	gtk_input_add_full
 	gtk_input_dialog_get_type
 	gtk_input_dialog_new
@@ -655,8 +624,6 @@ EXPORTS
 	gtk_label_parse_uline
 	gtk_label_set_justify
 	gtk_label_set_line_wrap
-	gtk_label_set_markup
-	gtk_label_set_markup_with_accel
 	gtk_label_set_pattern
 	gtk_label_set_text
 	gtk_layout_freeze
@@ -708,51 +675,36 @@ EXPORTS
 	gtk_main_level
 	gtk_main_quit
 	gtk_major_version
-	gtk_marshal_BOOLEAN__POINTER
-	gtk_marshal_BOOLEAN__POINTER_INT_INT
-	gtk_marshal_BOOLEAN__POINTER_INT_INT_UINT
-	gtk_marshal_BOOLEAN__POINTER_POINTER_INT_INT
-	gtk_marshal_BOOLEAN__POINTER_POINTER_POINTER_POINTER
-	gtk_marshal_BOOLEAN__VOID
-	gtk_marshal_ENUM__ENUM
+	gtk_marshal_BOOL__NONE
+	gtk_marshal_BOOL__POINTER
+	gtk_marshal_BOOL__POINTER_INT_INT
+	gtk_marshal_BOOL__POINTER_INT_INT_INT
+	gtk_marshal_BOOL__POINTER_POINTER_INT_INT
+	gtk_marshal_BOOL__POINTER_POINTER_POINTER_POINTER
+	gtk_marshal_INT__INT
 	gtk_marshal_INT__POINTER
 	gtk_marshal_INT__POINTER_CHAR_CHAR
-	gtk_marshal_INT__POINTER_POINTER_POINTER
-	gtk_marshal_INT__VOID
-	gtk_marshal_POINTER__POINTER
-	gtk_marshal_POINTER__POINTER_INT
-	gtk_marshal_POINTER__VOID
-	gtk_marshal_VOID__BOOLEAN
-	gtk_marshal_VOID__ENUM
-	gtk_marshal_VOID__ENUM_FLOAT
-	gtk_marshal_VOID__ENUM_FLOAT_BOOLEAN
-	gtk_marshal_VOID__INT
-	gtk_marshal_VOID__INT_INT
-	gtk_marshal_VOID__INT_INT_INT
-	gtk_marshal_VOID__INT_INT_INT_INT
-	gtk_marshal_VOID__INT_INT_POINTER
-	gtk_marshal_VOID__POINTER
-	gtk_marshal_VOID__POINTER_BOOLEAN
-	gtk_marshal_VOID__POINTER_INT
-	gtk_marshal_VOID__POINTER_INT_INT_POINTER_UINT_UINT
-	gtk_marshal_VOID__POINTER_INT_POINTER
-	gtk_marshal_VOID__POINTER_POINTER
-	gtk_marshal_VOID__POINTER_POINTER_BOOLEAN
-	gtk_marshal_VOID__POINTER_POINTER_INT
-	gtk_marshal_VOID__POINTER_POINTER_INT_BOOLEAN
-	gtk_marshal_VOID__POINTER_POINTER_INT_INT
-	gtk_marshal_VOID__POINTER_POINTER_POINTER
-	gtk_marshal_VOID__POINTER_POINTER_UINT_UINT
-	gtk_marshal_VOID__POINTER_UINT
-	gtk_marshal_VOID__POINTER_UINT_ENUM
-	gtk_marshal_VOID__POINTER_UINT_FLAGS
-	gtk_marshal_VOID__POINTER_UINT_UINT
-	gtk_marshal_VOID__UINT
-	gtk_marshal_VOID__UINT_POINTER
-	gtk_marshal_VOID__UINT_POINTER_UINT_ENUM_ENUM_POINTER
-	gtk_marshal_VOID__UINT_POINTER_UINT_FLAGS_FLAGS
-	gtk_marshal_VOID__UINT_POINTER_UINT_UINT_ENUM
-	gtk_marshal_VOID__VOID
+	gtk_marshal_NONE__BOOL
+	gtk_marshal_NONE__C_CALLBACK
+	gtk_marshal_NONE__C_CALLBACK_C_CALLBACK
+	gtk_marshal_NONE__INT
+	gtk_marshal_NONE__INT_FLOAT
+	gtk_marshal_NONE__INT_FLOAT_BOOL
+	gtk_marshal_NONE__INT_INT
+	gtk_marshal_NONE__INT_INT_POINTER
+	gtk_marshal_NONE__INT_POINTER
+	gtk_marshal_NONE__INT_POINTER_INT_INT_INT
+	gtk_marshal_NONE__INT_POINTER_INT_INT_INT_POINTER
+	gtk_marshal_NONE__NONE
+	gtk_marshal_NONE__POINTER
+	gtk_marshal_NONE__POINTER_INT
+	gtk_marshal_NONE__POINTER_INT_INT
+	gtk_marshal_NONE__POINTER_INT_POINTER
+	gtk_marshal_NONE__POINTER_INT_INT_POINTER_INT_INT
+	gtk_marshal_NONE__POINTER_POINTER
+	gtk_marshal_NONE__POINTER_POINTER_INT_INT
+	gtk_marshal_NONE__POINTER_POINTER_POINTER
+	gtk_menu_append
 	gtk_menu_attach_to_widget
 	gtk_menu_bar_append
 	gtk_menu_bar_get_type
@@ -775,6 +727,7 @@ EXPORTS
 	gtk_menu_get_attach_widget
 	gtk_menu_get_type
 	gtk_menu_get_uline_accel_group
+	gtk_menu_insert
 	gtk_menu_item_activate
 	gtk_menu_item_configure
 	gtk_menu_item_deselect
@@ -789,6 +742,7 @@ EXPORTS
 	gtk_menu_new
 	gtk_menu_popdown
 	gtk_menu_popup
+	gtk_menu_prepend
 	gtk_menu_reorder_child
 	gtk_menu_reposition
 	gtk_menu_set_accel_group
@@ -803,8 +757,6 @@ EXPORTS
 	gtk_menu_shell_insert
 	gtk_menu_shell_prepend
 	gtk_menu_shell_select_item
-	gtk_message_dialog_get_type
-	gtk_message_dialog_new
 	gtk_micro_version
 	gtk_minor_version
 	gtk_misc_get_type
@@ -845,13 +797,24 @@ EXPORTS
 	gtk_notebook_set_tab_pos
 	gtk_notebook_set_tab_vborder
 	gtk_object_add_arg_type
+	gtk_object_arg_get
+	gtk_object_arg_get_info
+	gtk_object_arg_set
+	gtk_object_args_collect
+	gtk_object_class_add_signals
+	gtk_object_class_user_signal_new
+	gtk_object_class_user_signal_newv
+	gtk_object_constructed
+	gtk_object_default_construct
 	gtk_object_destroy
-	gtk_object_get
 	gtk_object_get_data
 	gtk_object_get_data_by_id
 	gtk_object_get_type
 	gtk_object_get_user_data
+	gtk_object_getv
 	gtk_object_new
+	gtk_object_newv
+	gtk_object_query_args
 	gtk_object_ref
 	gtk_object_remove_data
 	gtk_object_remove_data_by_id
@@ -863,14 +826,11 @@ EXPORTS
 	gtk_object_set_data_by_id_full
 	gtk_object_set_data_full
 	gtk_object_set_user_data
+	gtk_object_setv
 	gtk_object_sink
 	gtk_object_unref
 	gtk_object_weakref
 	gtk_object_weakunref
-	gtk_old_editable_changed
-	gtk_old_editable_claim_selection
-	gtk_old_editable_get_type
-	gtk_option_menu_get_history
 	gtk_option_menu_get_menu
 	gtk_option_menu_get_type
 	gtk_option_menu_new
@@ -898,13 +858,13 @@ EXPORTS
 	gtk_paint_focus
 	gtk_paint_handle
 	gtk_paint_hline
-	gtk_paint_option
 	gtk_paint_oval
+	gtk_paint_option
 	gtk_paint_polygon
 	gtk_paint_ramp
+	gtk_paint_slider
 	gtk_paint_shadow
 	gtk_paint_shadow_gap
-	gtk_paint_slider
 	gtk_paint_string
 	gtk_paint_tab
 	gtk_paint_vline
@@ -1011,8 +971,8 @@ EXPORTS
 	gtk_rc_find_pixmap_in_path
 	gtk_rc_get_default_files
 	gtk_rc_get_module_dir
-	gtk_rc_get_style
 	gtk_rc_get_theme_dir
+	gtk_rc_get_style
 	gtk_rc_init
 	gtk_rc_load_image
 	gtk_rc_parse
@@ -1025,7 +985,6 @@ EXPORTS
 	gtk_rc_set_image_loader
 	gtk_rc_style_new
 	gtk_rc_style_ref
-	gtk_rc_style_unref
 	gtk_ruler_draw_pos
 	gtk_ruler_draw_ticks
 	gtk_ruler_get_type
@@ -1046,7 +1005,6 @@ EXPORTS
 	gtk_scrolled_window_set_hadjustment
 	gtk_scrolled_window_set_placement
 	gtk_scrolled_window_set_policy
-	gtk_scrolled_window_set_shadow_type
 	gtk_scrolled_window_set_vadjustment
 	gtk_selection_add_target
 	gtk_selection_add_targets
@@ -1063,17 +1021,44 @@ EXPORTS
 	gtk_selection_request
 	gtk_separator_get_type
 	gtk_set_locale
-	gtk_signal_compat_matched
+	gtk_signal_add_emission_hook
+	gtk_signal_add_emission_hook_full
+	gtk_signal_connect
+	gtk_signal_connect_after
 	gtk_signal_connect_full
+	gtk_signal_connect_object
+	gtk_signal_connect_object_after
 	gtk_signal_connect_object_while_alive
 	gtk_signal_connect_while_alive
+	gtk_signal_disconnect
+	gtk_signal_disconnect_by_data
+	gtk_signal_disconnect_by_func
 	gtk_signal_emit
 	gtk_signal_emit_by_name
+	gtk_signal_emit_stop
 	gtk_signal_emit_stop_by_name
 	gtk_signal_emitv
 	gtk_signal_emitv_by_name
+	gtk_signal_handler_block
+	gtk_signal_handler_block_by_data
+	gtk_signal_handler_block_by_func
+	gtk_signal_handler_pending
+	gtk_signal_handler_pending_by_func
+	gtk_signal_handler_pending_by_id
+	gtk_signal_handler_unblock
+	gtk_signal_handler_unblock_by_data
+	gtk_signal_handler_unblock_by_func
+	gtk_signal_handlers_destroy
+	gtk_signal_init
+	gtk_signal_lookup
+	gtk_signal_n_emissions
+	gtk_signal_n_emissions_by_name
+	gtk_signal_name
 	gtk_signal_new
 	gtk_signal_newv
+	gtk_signal_set_funcs
+	gtk_signal_query
+	gtk_signal_remove_emission_hook
 	gtk_socket_get_type
 	gtk_socket_new
 	gtk_socket_steal
@@ -1121,128 +1106,20 @@ EXPORTS
 	gtk_target_list_unref
 	gtk_tearoff_menu_item_get_type
 	gtk_tearoff_menu_item_new
-	gtk_text_attributes_new
-	gtk_text_attributes_unref
 	gtk_text_backward_delete
-	gtk_text_buffer_apply_tag
-	gtk_text_buffer_apply_tag_by_name
-	gtk_text_buffer_create_child_anchor
-	gtk_text_buffer_create_mark
-	gtk_text_buffer_create_tag
-	gtk_text_buffer_delete
-	gtk_text_buffer_delete_interactive
-	gtk_text_buffer_delete_mark
-	gtk_text_buffer_delete_mark_by_name
-	gtk_text_buffer_get_bounds
-	gtk_text_buffer_get_char_count
-	gtk_text_buffer_get_insert
-	gtk_text_buffer_get_iter_at_line
-	gtk_text_buffer_get_iter_at_line_offset
-	gtk_text_buffer_get_iter_at_mark
-	gtk_text_buffer_get_iter_at_offset
-	gtk_text_buffer_get_last_iter
-	gtk_text_buffer_get_line_count
-	gtk_text_buffer_get_mark
-	gtk_text_buffer_get_selection_bounds
-	gtk_text_buffer_get_slice
-	gtk_text_buffer_get_tag_table
-	gtk_text_buffer_get_text
-	gtk_text_buffer_insert
-	gtk_text_buffer_insert_at_cursor
-	gtk_text_buffer_insert_interactive
-	gtk_text_buffer_insert_interactive_at_cursor
-	gtk_text_buffer_insert_pixbuf
-	gtk_text_buffer_insert_range
-	gtk_text_buffer_insert_range_interactive
-	gtk_text_buffer_insert_with_tags
-	gtk_text_buffer_insert_with_tags_by_name
-	gtk_text_buffer_modified
-	gtk_text_buffer_move_mark
-	gtk_text_buffer_move_mark_by_name
-	gtk_text_buffer_new
-	gtk_text_buffer_place_cursor
-	gtk_text_buffer_remove_tag
-	gtk_text_buffer_remove_tag_by_name
-	gtk_text_buffer_set_modified
-	gtk_text_byte_begins_utf8_char
-	gtk_text_child_anchor_get_deleted
-	gtk_text_child_anchor_get_type
-	gtk_text_child_anchor_get_widgets
 	gtk_text_forward_delete
 	gtk_text_freeze
 	gtk_text_get_length
 	gtk_text_get_point
 	gtk_text_get_type
 	gtk_text_insert
-	gtk_text_iter_backward_char
-	gtk_text_iter_backward_chars
-	gtk_text_iter_backward_find_char
-	gtk_text_iter_backward_search
-	gtk_text_iter_backward_to_tag_toggle
-	gtk_text_iter_begins_tag
-	gtk_text_iter_compare
-	gtk_text_iter_ends_tag
-	gtk_text_iter_equal
-	gtk_text_iter_forward_char
-	gtk_text_iter_forward_chars
-	gtk_text_iter_forward_find_char
-	gtk_text_iter_forward_line
-	gtk_text_iter_forward_search
-	gtk_text_iter_forward_to_tag_toggle
-	gtk_text_iter_get_attributes
-	gtk_text_iter_get_line
-	gtk_text_iter_get_offset
-	gtk_text_iter_get_text
-	gtk_text_iter_get_toggled_tags
-	gtk_text_iter_in_range
-	gtk_text_iter_is_last
-	gtk_text_iter_reorder
-	gtk_text_iter_spew
-	gtk_text_iter_toggles_tag
 	gtk_text_new
-	gtk_text_pixbuf_type
 	gtk_text_set_adjustments
 	gtk_text_set_editable
 	gtk_text_set_line_wrap
 	gtk_text_set_point
 	gtk_text_set_word_wrap
-	gtk_text_tag_get_type
-	gtk_text_tag_table_lookup
 	gtk_text_thaw
-	gtk_text_unknown_char_utf8
-	gtk_text_view_add_child_at_anchor
-	gtk_text_view_add_child_in_window
-	gtk_text_view_buffer_to_window_coords
-	gtk_text_view_get_buffer
-	gtk_text_view_get_editable
-	gtk_text_view_get_indent
-	gtk_text_view_get_justification
-	gtk_text_view_get_left_margin
-	gtk_text_view_get_line_at_y
-	gtk_text_view_get_line_yrange
-	gtk_text_view_get_pixels_above_lines
-	gtk_text_view_get_pixels_below_lines
-	gtk_text_view_get_pixels_inside_wrap
-	gtk_text_view_get_right_margin
-	gtk_text_view_get_tabs
-	gtk_text_view_get_type
-	gtk_text_view_get_window
-	gtk_text_view_get_wrap_mode
-	gtk_text_view_move_child
-	gtk_text_view_new_with_buffer
-	gtk_text_view_set_border_window_size
-	gtk_text_view_set_cursor_visible
-	gtk_text_view_set_editable
-	gtk_text_view_set_indent
-	gtk_text_view_set_justification
-	gtk_text_view_set_left_margin
-	gtk_text_view_set_pixels_above_lines
-	gtk_text_view_set_pixels_below_lines
-	gtk_text_view_set_pixels_inside_wrap
-	gtk_text_view_set_right_margin
-	gtk_text_view_set_tabs
-	gtk_text_view_set_wrap_mode
-	gtk_text_view_window_to_buffer_coords
 	gtk_timeout_add
 	gtk_timeout_add_full
 	gtk_timeout_remove
@@ -1289,6 +1166,7 @@ EXPORTS
 	gtk_tooltips_set_colors
 	gtk_tooltips_set_delay
 	gtk_tooltips_set_tip
+	gtk_trace_referencing
 	gtk_tree_append
 	gtk_tree_child_position
 	gtk_tree_clear_items
@@ -1315,13 +1193,30 @@ EXPORTS
 	gtk_tree_unselect_child
 	gtk_tree_unselect_item
 	gtk_true
+	gtk_type_check_class_cast
+	gtk_type_check_object_cast
+	gtk_type_children_types
 	gtk_type_class
+	gtk_type_describe_heritage
+	gtk_type_describe_tree
 	gtk_type_enum_find_value
 	gtk_type_enum_get_values
 	gtk_type_flags_find_value
 	gtk_type_flags_get_values
+	gtk_type_free
+	gtk_type_from_name
+	gtk_type_get_varargs_type
 	gtk_type_init
+	gtk_type_is_a
+	gtk_type_name
 	gtk_type_new
+	gtk_type_parent
+	gtk_type_parent_class
+	gtk_type_query
+	gtk_type_register_enum
+	gtk_type_register_flags
+	gtk_type_set_chunk_alloc
+	gtk_type_set_varargs_type
 	gtk_type_unique
 	gtk_vbox_get_type
 	gtk_vbox_new
@@ -1354,8 +1249,6 @@ EXPORTS
 	gtk_widget_add_accelerator
 	gtk_widget_add_events
 	gtk_widget_class_path
-	gtk_widget_create_pango_context
-	gtk_widget_create_pango_layout
 	gtk_widget_destroy
 	gtk_widget_destroyed
 	gtk_widget_draw
@@ -1363,26 +1256,24 @@ EXPORTS
 	gtk_widget_draw_focus
 	gtk_widget_ensure_style
 	gtk_widget_event
+	gtk_widget_get
 	gtk_widget_get_ancestor
 	gtk_widget_get_child_requisition
 	gtk_widget_get_colormap
 	gtk_widget_get_composite_name
 	gtk_widget_get_default_colormap
-	gtk_widget_get_default_direction
 	gtk_widget_get_default_style
 	gtk_widget_get_default_visual
-	gtk_widget_get_direction
 	gtk_widget_get_events
 	gtk_widget_get_extension_events
-	gtk_widget_get_modifier_style
 	gtk_widget_get_name
-	gtk_widget_get_pango_context
 	gtk_widget_get_parent_window
 	gtk_widget_get_pointer
 	gtk_widget_get_style
 	gtk_widget_get_toplevel
 	gtk_widget_get_type
 	gtk_widget_get_visual
+	gtk_widget_getv
 	gtk_widget_grab_default
 	gtk_widget_grab_focus
 	gtk_widget_hide
@@ -1392,21 +1283,19 @@ EXPORTS
 	gtk_widget_is_ancestor
 	gtk_widget_lock_accelerators
 	gtk_widget_map
-	gtk_widget_modify_base
-	gtk_widget_modify_bg
-	gtk_widget_modify_fg
-	gtk_widget_modify_font
 	gtk_widget_modify_style
-	gtk_widget_modify_text
 	gtk_widget_new
+	gtk_widget_newv
 	gtk_widget_path
 	gtk_widget_pop_colormap
 	gtk_widget_pop_composite_child
 	gtk_widget_pop_style
+	gtk_widget_pop_visual
 	gtk_widget_popup
 	gtk_widget_push_colormap
 	gtk_widget_push_composite_child
 	gtk_widget_push_style
+	gtk_widget_push_visual
 	gtk_widget_queue_clear
 	gtk_widget_queue_clear_area
 	gtk_widget_queue_draw
@@ -1425,10 +1314,8 @@ EXPORTS
 	gtk_widget_set_colormap
 	gtk_widget_set_composite_name
 	gtk_widget_set_default_colormap
-	gtk_widget_set_default_direction
 	gtk_widget_set_default_style
-	gtk_widget_set_direction
-	gtk_widget_set_double_buffered
+	gtk_widget_set_default_visual
 	gtk_widget_set_events
 	gtk_widget_set_extension_events
 	gtk_widget_set_name
@@ -1441,6 +1328,8 @@ EXPORTS
 	gtk_widget_set_style
 	gtk_widget_set_uposition
 	gtk_widget_set_usize
+	gtk_widget_set_visual
+	gtk_widget_setv
 	gtk_widget_shape_combine_mask
 	gtk_widget_show
 	gtk_widget_show_all
@@ -1452,12 +1341,10 @@ EXPORTS
 	gtk_widget_unparent
 	gtk_widget_unrealize
 	gtk_widget_unref
-	gtk_win32_get_installation_directory
 	gtk_window_activate_default
 	gtk_window_activate_focus
 	gtk_window_add_accel_group
 	gtk_window_add_embedded_xid
-	gtk_window_get_default_accel_group
 	gtk_window_get_type
 	gtk_window_new
 	gtk_window_remove_accel_group

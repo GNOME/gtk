@@ -42,24 +42,13 @@ EXPORTS
 	gdk_colors_alloc
 	gdk_colors_free
 	gdk_colors_store
-	gdk_core_pointer
 	gdk_cursor_new
 	gdk_cursor_new_from_pixmap
 	gdk_cursor_ref
 	gdk_cursor_unref
-	gdk_device_free_history
-	gdk_device_get_axis
-	gdk_device_get_history
-	gdk_device_get_state
-	gdk_device_set_axis_use
-	gdk_device_set_key
-	gdk_device_set_mode
-	gdk_device_set_source
-	gdk_devices_list
 	gdk_dnd_init
 	gdk_drag_abort
 	gdk_drag_begin
-	gdk_drag_context_get_type
 	gdk_drag_context_new
 	gdk_drag_context_ref
 	gdk_drag_context_unref
@@ -71,12 +60,9 @@ EXPORTS
 	gdk_drag_status
 	gdk_draw_arc
 	gdk_draw_drawable
-	gdk_draw_glyphs
 	gdk_draw_gray_image
 	gdk_draw_image
 	gdk_draw_indexed_image
-	gdk_draw_layout
-	gdk_draw_layout_line
 	gdk_draw_line
 	gdk_draw_lines
 	gdk_draw_point
@@ -84,19 +70,17 @@ EXPORTS
 	gdk_draw_polygon
 	gdk_draw_rectangle
 	gdk_draw_rgb_32_image
-	gdk_draw_rgb_32_image_dithalign
 	gdk_draw_rgb_image
 	gdk_draw_rgb_image_dithalign
 	gdk_draw_segments
 	gdk_draw_string
 	gdk_draw_text
 	gdk_draw_text_wc
+	gdk_drawable_alloc
 	gdk_drawable_get_colormap
-	gdk_drawable_get_image
 	gdk_drawable_get_size
 	gdk_drawable_get_type
 	gdk_drawable_get_visual
-	gdk_drawable_impl_win32_get_type
 	gdk_drawable_ref
 	gdk_drawable_set_colormap
 	gdk_drawable_set_data
@@ -113,7 +97,6 @@ EXPORTS
 	gdk_event_free
 	gdk_event_func
 	gdk_event_get
-	gdk_event_get_axis
 	gdk_event_get_graphics_expose
 	gdk_event_get_time
 	gdk_event_handler_set
@@ -130,16 +113,18 @@ EXPORTS
 	gdk_exit
 	gdk_flush
 	gdk_font_equal
-	gdk_font_from_description
 	gdk_font_full_name_free
 	gdk_font_full_name_get
 	gdk_font_id
+	gdk_font_list_free
+	gdk_font_list_new
 	gdk_font_load
 	gdk_font_ref
 	gdk_font_unref
 	gdk_fontset_load
 	gdk_free_compound_text
 	gdk_free_text_list
+	gdk_gc_alloc
 	gdk_gc_copy
 	gdk_gc_get_values
 	gdk_gc_new
@@ -150,7 +135,6 @@ EXPORTS
 	gdk_gc_set_clip_origin
 	gdk_gc_set_clip_rectangle
 	gdk_gc_set_clip_region
-	gdk_gc_set_colormap
 	gdk_gc_set_dashes
 	gdk_gc_set_exposures
 	gdk_gc_set_fill
@@ -158,8 +142,6 @@ EXPORTS
 	gdk_gc_set_foreground
 	gdk_gc_set_function
 	gdk_gc_set_line_attributes
-	gdk_gc_set_rgb_bg_color
-	gdk_gc_set_rgb_fg_color
 	gdk_gc_set_stipple
 	gdk_gc_set_subwindow
 	gdk_gc_set_tile
@@ -181,9 +163,9 @@ EXPORTS
 	gdk_im_end
 	gdk_im_ready
 	gdk_im_set_best_style
+	gdk_image_bitmap_new
 	gdk_image_get
 	gdk_image_get_pixel
-	gdk_image_get_type
 	gdk_image_new
 	gdk_image_new_bitmap
 	gdk_image_put_pixel
@@ -195,44 +177,36 @@ EXPORTS
 	gdk_input_add_full
 	gdk_input_exit
 	gdk_input_init
+	gdk_input_list_devices
 	gdk_input_motion_events
 	gdk_input_remove
+	gdk_input_set_axes
 	gdk_input_set_extension_events
+	gdk_input_set_key
+	gdk_input_set_mode
+	gdk_input_set_source
+	gdk_input_window_get_pointer
 	gdk_key_repeat_disable
 	gdk_key_repeat_restore
 	gdk_keyboard_grab
 	gdk_keyboard_ungrab
-	gdk_keymap_get_default
-	gdk_keymap_get_entries_for_keycode
-	gdk_keymap_get_entries_for_keyval
-	gdk_keymap_get_type
-	gdk_keymap_lookup_key
-	gdk_keymap_translate_keyboard_state
-	gdk_keyval_convert_case
 	gdk_keyval_from_name
 	gdk_keyval_is_lower
 	gdk_keyval_is_upper
 	gdk_keyval_name
 	gdk_keyval_to_lower
-	gdk_keyval_to_unicode
 	gdk_keyval_to_upper
 	gdk_list_visuals
 	gdk_mbstowcs
 	gdk_null_window_warnings
-	gdk_pango_context_get
-	gdk_pango_context_set_colormap
 	gdk_parent_root
-	gdk_pixbuf_render_pixmap_and_mask
-	gdk_pixbuf_render_threshold_alpha
-	gdk_pixbuf_render_to_drawable
-	gdk_pixbuf_render_to_drawable_alpha
 	gdk_pixmap_colormap_create_from_xpm
 	gdk_pixmap_colormap_create_from_xpm_d
 	gdk_pixmap_create_from_data
 	gdk_pixmap_create_from_xpm
 	gdk_pixmap_create_from_xpm_d
+	gdk_pixmap_create_on_shared_image
 	gdk_pixmap_foreign_new
-	gdk_pixmap_get_type
 	gdk_pixmap_new
 	gdk_pointer_grab
 	gdk_pointer_is_grabbed
@@ -249,25 +223,23 @@ EXPORTS
 	gdk_region_empty
 	gdk_region_equal
 	gdk_region_get_clipbox
-	gdk_region_intersect
 	gdk_region_new
 	gdk_region_offset
 	gdk_region_point_in
 	gdk_region_polygon
 	gdk_region_rect_in
-	gdk_region_rectangle
 	gdk_region_shrink
-	gdk_region_subtract
-	gdk_region_union
 	gdk_region_union_with_rect
-	gdk_region_xor
+	gdk_regions_intersect
+	gdk_regions_subtract
+	gdk_regions_union
+	gdk_regions_xor
 	gdk_rgb_cmap_free
 	gdk_rgb_cmap_new
-	gdk_rgb_colormap_ditherable
 	gdk_rgb_ditherable
 	gdk_rgb_gc_set_background
 	gdk_rgb_gc_set_foreground
-	gdk_rgb_get_colormap
+	gdk_rgb_get_cmap
 	gdk_rgb_get_visual
 	gdk_rgb_init
 	gdk_rgb_set_install
@@ -286,7 +258,6 @@ EXPORTS
 	gdk_selection_send_notify
 	gdk_set_locale
 	gdk_set_show_events
-	gdk_set_sm_client_id
 	gdk_set_use_xshm
 	gdk_string_extents
 	gdk_string_height
@@ -298,15 +269,11 @@ EXPORTS
 	gdk_text_height
 	gdk_text_measure
 	gdk_text_property_to_text_list
-	gdk_text_property_to_utf8_list
 	gdk_text_width
 	gdk_text_width_wc
 	gdk_threads_enter
 	gdk_threads_leave
 	gdk_threads_mutex
-	gdk_unicode_to_keyval
-	gdk_utf8_to_compound_text
-	gdk_utf8_to_string_target
 	gdk_visual_get_best
 	gdk_visual_get_best_depth
 	gdk_visual_get_best_type
@@ -317,17 +284,14 @@ EXPORTS
 	gdk_visual_ref
 	gdk_visual_unref
 	gdk_wcstombs
-	gdk_win32_handle_table_lookup
 	gdk_win32_hdc_get
 	gdk_win32_hdc_release
 	gdk_window_add_filter
 	gdk_window_at_pointer
-	gdk_window_begin_paint_rect
 	gdk_window_clear
 	gdk_window_clear_area
 	gdk_window_clear_area_e
 	gdk_window_destroy
-	gdk_window_end_paint
 	gdk_window_foreign_new
 	gdk_window_get_children
 	gdk_window_get_deskrelative_origin
@@ -342,8 +306,6 @@ EXPORTS
 	gdk_window_get_toplevels
 	gdk_window_get_user_data
 	gdk_window_hide
-	gdk_window_invalidate_rect
-	gdk_window_invalidate_region
 	gdk_window_is_viewable
 	gdk_window_is_visible
 	gdk_window_lower
@@ -351,16 +313,11 @@ EXPORTS
 	gdk_window_move
 	gdk_window_move_resize
 	gdk_window_new
-	gdk_window_object_get_type
-	gdk_window_peek_children
-	gdk_window_process_all_updates
-	gdk_window_process_updates
 	gdk_window_raise
 	gdk_window_register_dnd
 	gdk_window_remove_filter
 	gdk_window_reparent
 	gdk_window_resize
-	gdk_window_scroll
 	gdk_window_set_back_pixmap
 	gdk_window_set_background
 	gdk_window_set_child_shapes
@@ -382,3 +339,5 @@ EXPORTS
 	gdk_window_shape_combine_mask
 	gdk_window_show
 	gdk_window_withdraw
+	gdk_xid_table_insert
+	gdk_xid_table_lookup

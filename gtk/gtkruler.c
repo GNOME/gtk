@@ -2,23 +2,23 @@
  * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
  *
  * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
+ * modify it under the terms of the GNU Library General Public
  * License as published by the Free Software Foundation; either
  * version 2 of the License, or (at your option) any later version.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
+ * Library General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public
+ * You should have received a copy of the GNU Library General Public
  * License along with this library; if not, write to the
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
  * Boston, MA 02111-1307, USA.
  */
 
 /*
- * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
+ * Modified by the GTK+ Team and others 1997-1999.  See the AUTHORS
  * file for a list of people on the GTK+ Team.  See the ChangeLog
  * files for a list of changes.  These files are distributed with
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
@@ -226,8 +226,8 @@ gtk_ruler_draw_ticks (GtkRuler *ruler)
   g_return_if_fail (ruler != NULL);
   g_return_if_fail (GTK_IS_RULER (ruler));
 
-  if (GTK_RULER_GET_CLASS (ruler)->draw_ticks)
-    GTK_RULER_GET_CLASS (ruler)->draw_ticks (ruler);
+  if (GTK_RULER_CLASS (GTK_OBJECT (ruler)->klass)->draw_ticks)
+    (* GTK_RULER_CLASS (GTK_OBJECT (ruler)->klass)->draw_ticks) (ruler);
 }
 
 void
@@ -236,8 +236,8 @@ gtk_ruler_draw_pos (GtkRuler *ruler)
   g_return_if_fail (ruler != NULL);
   g_return_if_fail (GTK_IS_RULER (ruler));
 
-  if (GTK_RULER_GET_CLASS (ruler)->draw_pos)
-     GTK_RULER_GET_CLASS (ruler)->draw_pos (ruler);
+  if (GTK_RULER_CLASS (GTK_OBJECT (ruler)->klass)->draw_pos)
+    (* GTK_RULER_CLASS (GTK_OBJECT (ruler)->klass)->draw_pos) (ruler);
 }
 
 

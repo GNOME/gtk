@@ -16,12 +16,10 @@
 
 /* Define if you have alloca, as a function or macro.  */
 #define HAVE_ALLOCA 1
-#ifndef alloca
-  #ifdef _MSC_VER
-    #define alloca _alloca
-  #elif defined (__GNUC__)
-    #define alloca __builtin_alloca
-  #endif
+#ifdef _MSC_VER
+#define alloca _alloca
+#elif defined (__GNUC__)
+#define alloca __builtin_alloca
 #endif
 
 /* Define if you have <alloca.h> and it should be used (not on Ultrix).  */
@@ -192,10 +190,3 @@
  * (available in the Platform SDK)
 */
 /* #define HAVE_DIMM_H 1 */
-
-#define USE_GMODULE 1
-#define USE_MMX 1
-
-/* #undef HAVE_SIGSETJMP */
-
-#define GETTEXT_PACKAGE "gtk20"

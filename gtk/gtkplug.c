@@ -2,16 +2,16 @@
  * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
  *
  * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
+ * modify it under the terms of the GNU Library General Public
  * License as published by the Free Software Foundation; either
  * version 2 of the License, or (at your option) any later version.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
+ * Library General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public
+ * You should have received a copy of the GNU Library General Public
  * License along with this library; if not, write to the Free
  * Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
@@ -19,23 +19,18 @@
 /* By Owen Taylor <otaylor@gtk.org>              98/4/4 */
 
 /*
- * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
+ * Modified by the GTK+ Team and others 1997-1999.  See the AUTHORS
  * file for a list of people on the GTK+ Team.  See the ChangeLog
  * files for a list of changes.  These files are distributed with
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
 #include "gdkconfig.h"
-#include "gdkprivate.h"
 
 #if defined (GDK_WINDOWING_X11)
 #include "x11/gdkx.h"
 #elif defined (GDK_WINDOWING_WIN32)
 #include "win32/gdkwin32.h"
-#elif defined (GDK_WINDOWING_NANOX)
-#include "nanox/gdkprivate-nanox.h"
-#elif defined (GDK_WINDOWING_FB)
-#include "linux-fb/gdkfb.h"
 #endif
 
 #include "gdk/gdkkeysyms.h"
@@ -56,6 +51,7 @@ static void gtk_plug_set_focus       (GtkWindow         *window,
 
 /* From Tk */
 #define EMBEDDED_APP_WANTS_FOCUS NotifyNormal+20
+
   
 static GtkWindowClass *parent_class = NULL;
 
@@ -66,20 +62,18 @@ gtk_plug_get_type ()
 
   if (!plug_type)
     {
-      static const GTypeInfo plug_info =
+      static const GtkTypeInfo plug_info =
       {
-	sizeof (GtkPlugClass),
-	NULL,           /* base_init */
-	NULL,           /* base_finalize */
-	(GClassInitFunc) gtk_plug_class_init,
-	NULL,           /* class_finalize */
-	NULL,           /* class_data */
+	"GtkPlug",
 	sizeof (GtkPlug),
-	16,             /* n_preallocs */
-	(GInstanceInitFunc) gtk_plug_init,
+	sizeof (GtkPlugClass),
+	(GtkClassInitFunc) gtk_plug_class_init,
+	(GtkObjectInitFunc) gtk_plug_init,
+	(GtkArgSetFunc) NULL,
+	(GtkArgGetFunc) NULL
       };
 
-      plug_type = g_type_register_static (GTK_TYPE_WINDOW, "GtkPlug", &plug_info, 0);
+      plug_type = gtk_type_unique (GTK_TYPE_WINDOW, &plug_info);
     }
 
   return plug_type;
@@ -117,7 +111,7 @@ gtk_plug_init (GtkPlug *plug)
 }
 
 void
-gtk_plug_construct (GtkPlug *plug, GdkNativeWindow socket_id)
+gtk_plug_construct (GtkPlug *plug, guint32 socket_id)
 {
   plug->socket_window = gdk_window_lookup (socket_id);
   plug->same_app = TRUE;
@@ -130,7 +124,7 @@ gtk_plug_construct (GtkPlug *plug, GdkNativeWindow socket_id)
 }
 
 GtkWidget*
-gtk_plug_new (GdkNativeWindow socket_id)
+gtk_plug_new (guint32 socket_id)
 {
   GtkPlug *plug;
 
@@ -212,7 +206,7 @@ gtk_plug_realize (GtkWidget *widget)
       widget->window = gdk_window_new (NULL, &attributes, attributes_mask);
     }
   
-  GDK_WINDOW_TYPE (window) = GDK_WINDOW_TOPLEVEL;
+  GDK_DRAWABLE_TYPE (window) = GDK_WINDOW_TOPLEVEL;
   gdk_window_set_user_data (widget->window, window);
 
   widget->style = gtk_style_attach (widget->style, widget->window);
@@ -317,7 +311,7 @@ gtk_plug_key_press_event (GtkWidget   *widget,
 			      GDK_WINDOW_XWINDOW (plug->socket_window),
 			      RevertToParent, event->time);
 #elif defined (GDK_WINDOWING_WIN32)
-	      SetFocus (GDK_WINDOW_HWND (plug->socket_window));
+	      SetFocus (GDK_WINDOW_XWINDOW (plug->socket_window));
 #endif
 	      gdk_flush ();
 	      gdk_error_trap_pop ();
@@ -495,12 +489,12 @@ gtk_plug_forward_key_press (GtkPlug *plug, GdkEventKey *event)
       break;
     }
   
-  PostMessage (GDK_WINDOW_HWND (plug->socket_window),
+  PostMessage (GDK_WINDOW_XWINDOW (plug->socket_window),
 	       WM_KEYDOWN, wParam, lParam);
   if (!no_WM_CHAR)
-    PostMessage (GDK_WINDOW_HWND (plug->socket_window),
+    PostMessage (GDK_WINDOW_XWINDOW (plug->socket_window),
 		 WM_CHAR, wParam, lParam);
-  PostMessage (GDK_WINDOW_HWND (plug->socket_window),
+  PostMessage (GDK_WINDOW_XWINDOW (plug->socket_window),
 	       WM_KEYUP, wParam, lParam);
 #endif
 }

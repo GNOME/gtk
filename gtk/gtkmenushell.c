@@ -2,23 +2,23 @@
  * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
  *
  * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
+ * modify it under the terms of the GNU Library General Public
  * License as published by the Free Software Foundation; either
  * version 2 of the License, or (at your option) any later version.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
+ * Library General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public
+ * You should have received a copy of the GNU Library General Public
  * License along with this library; if not, write to the
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
  * Boston, MA 02111-1307, USA.
  */
 
 /*
- * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
+ * Modified by the GTK+ Team and others 1997-1999.  See the AUTHORS
  * file for a list of people on the GTK+ Team.  See the ChangeLog
  * files for a list of changes.  These files are distributed with
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
@@ -34,6 +34,7 @@
 
 
 #define MENU_SHELL_TIMEOUT   500
+#define MENU_SHELL_CLASS(w)  GTK_MENU_SHELL_CLASS (GTK_OBJECT (w)->klass)
 
 
 enum {
@@ -129,18 +130,12 @@ static void gtk_menu_shell_forall            (GtkContainer      *container,
 					      gboolean		 include_internals,
 					      GtkCallback        callback,
 					      gpointer           callback_data);
-static void gtk_menu_shell_real_insert       (GtkMenuShell *menu_shell,
-					      GtkWidget    *child,
-					      gint          position);
 static void gtk_real_menu_shell_deactivate   (GtkMenuShell      *menu_shell);
 static gint gtk_menu_shell_is_item           (GtkMenuShell      *menu_shell,
 					      GtkWidget         *child);
 static GtkWidget *gtk_menu_shell_get_item    (GtkMenuShell      *menu_shell,
 					      GdkEvent          *event);
 static GtkType    gtk_menu_shell_child_type  (GtkContainer      *container);
-static void gtk_menu_shell_real_select_item  (GtkMenuShell      *menu_shell,
-					      GtkWidget         *menu_item);
-static void gtk_menu_shell_select_submenu_first (GtkMenuShell   *menu_shell); 
 
 static void gtk_real_menu_shell_move_current (GtkMenuShell      *menu_shell,
 					      GtkMenuDirectionType direction);
@@ -192,6 +187,46 @@ gtk_menu_shell_class_init (GtkMenuShellClass *klass)
 
   parent_class = gtk_type_class (gtk_container_get_type ());
 
+  menu_shell_signals[DEACTIVATE] =
+    gtk_signal_new ("deactivate",
+                    GTK_RUN_FIRST,
+                    object_class->type,
+                    GTK_SIGNAL_OFFSET (GtkMenuShellClass, deactivate),
+                    gtk_marshal_NONE__NONE,
+		    GTK_TYPE_NONE, 0);
+  menu_shell_signals[SELECTION_DONE] =
+    gtk_signal_new ("selection-done",
+                    GTK_RUN_FIRST,
+                    object_class->type,
+                    GTK_SIGNAL_OFFSET (GtkMenuShellClass, selection_done),
+                    gtk_marshal_NONE__NONE,
+		    GTK_TYPE_NONE, 0);
+  menu_shell_signals[MOVE_CURRENT] =
+    gtk_signal_new ("move_current",
+		    GTK_RUN_LAST | GTK_RUN_ACTION,
+		    object_class->type,
+                    GTK_SIGNAL_OFFSET (GtkMenuShellClass, move_current),
+		    gtk_marshal_NONE__ENUM,
+		    GTK_TYPE_NONE, 1, 
+		    GTK_TYPE_MENU_DIRECTION_TYPE);
+  menu_shell_signals[ACTIVATE_CURRENT] =
+    gtk_signal_new ("activate_current",
+		    GTK_RUN_LAST | GTK_RUN_ACTION,
+		    object_class->type,
+                    GTK_SIGNAL_OFFSET (GtkMenuShellClass, activate_current),
+		    gtk_marshal_NONE__BOOL,
+		    GTK_TYPE_NONE, 1, 
+		    GTK_TYPE_BOOL);
+  menu_shell_signals[CANCEL] =
+    gtk_signal_new ("cancel",
+		    GTK_RUN_LAST | GTK_RUN_ACTION,
+		    object_class->type,
+                    GTK_SIGNAL_OFFSET (GtkMenuShellClass, cancel),
+                    gtk_marshal_NONE__NONE,
+		    GTK_TYPE_NONE, 0);
+  
+  gtk_object_class_add_signals (object_class, menu_shell_signals, LAST_SIGNAL);
+
   widget_class->map = gtk_menu_shell_map;
   widget_class->realize = gtk_menu_shell_realize;
   widget_class->button_press_event = gtk_menu_shell_button_press;
@@ -211,46 +246,6 @@ gtk_menu_shell_class_init (GtkMenuShellClass *klass)
   klass->move_current = gtk_real_menu_shell_move_current;
   klass->activate_current = gtk_real_menu_shell_activate_current;
   klass->cancel = gtk_real_menu_shell_cancel;
-  klass->select_item = gtk_menu_shell_real_select_item;
-  klass->insert = gtk_menu_shell_real_insert;
-
-  menu_shell_signals[DEACTIVATE] =
-    gtk_signal_new ("deactivate",
-                    GTK_RUN_FIRST,
-                    GTK_CLASS_TYPE (object_class),
-                    GTK_SIGNAL_OFFSET (GtkMenuShellClass, deactivate),
-                    gtk_marshal_VOID__VOID,
-		    GTK_TYPE_NONE, 0);
-  menu_shell_signals[SELECTION_DONE] =
-    gtk_signal_new ("selection-done",
-                    GTK_RUN_FIRST,
-                    GTK_CLASS_TYPE (object_class),
-                    GTK_SIGNAL_OFFSET (GtkMenuShellClass, selection_done),
-                    gtk_marshal_VOID__VOID,
-		    GTK_TYPE_NONE, 0);
-  menu_shell_signals[MOVE_CURRENT] =
-    gtk_signal_new ("move_current",
-		    GTK_RUN_LAST | GTK_RUN_ACTION,
-		    GTK_CLASS_TYPE (object_class),
-                    GTK_SIGNAL_OFFSET (GtkMenuShellClass, move_current),
-		    gtk_marshal_VOID__ENUM,
-		    GTK_TYPE_NONE, 1, 
-		    GTK_TYPE_MENU_DIRECTION_TYPE);
-  menu_shell_signals[ACTIVATE_CURRENT] =
-    gtk_signal_new ("activate_current",
-		    GTK_RUN_LAST | GTK_RUN_ACTION,
-		    GTK_CLASS_TYPE (object_class),
-                    GTK_SIGNAL_OFFSET (GtkMenuShellClass, activate_current),
-		    gtk_marshal_VOID__BOOLEAN,
-		    GTK_TYPE_NONE, 1, 
-		    GTK_TYPE_BOOL);
-  menu_shell_signals[CANCEL] =
-    gtk_signal_new ("cancel",
-		    GTK_RUN_LAST | GTK_RUN_ACTION,
-		    GTK_CLASS_TYPE (object_class),
-                    GTK_SIGNAL_OFFSET (GtkMenuShellClass, cancel),
-                    gtk_marshal_VOID__VOID,
-		    GTK_TYPE_NONE, 0);
 
   binding_set = gtk_binding_set_by_class (klass);
   gtk_binding_entry_add_signal (binding_set,
@@ -308,24 +303,11 @@ gtk_menu_shell_insert (GtkMenuShell *menu_shell,
 		       GtkWidget    *child,
 		       gint          position)
 {
-  GtkMenuShellClass *class;
-
   g_return_if_fail (menu_shell != NULL);
   g_return_if_fail (GTK_IS_MENU_SHELL (menu_shell));
   g_return_if_fail (child != NULL);
   g_return_if_fail (GTK_IS_MENU_ITEM (child));
 
-  class = GTK_MENU_SHELL_GET_CLASS (menu_shell);
-
-  if (class->insert)
-    class->insert (menu_shell, child, position);
-}
-
-static void
-gtk_menu_shell_real_insert (GtkMenuShell *menu_shell,
-			    GtkWidget    *child,
-			    gint          position)
-{
   menu_shell->children = g_list_insert (menu_shell->children, child, position);
 
   gtk_widget_set_parent (child, GTK_WIDGET (menu_shell));
@@ -591,7 +573,7 @@ gtk_menu_shell_enter_notify (GtkWidget        *widget,
 
       if (!menu_item || !GTK_WIDGET_IS_SENSITIVE (menu_item))
 	return TRUE;
-      
+
       if ((menu_item->parent == widget) &&
 	  (menu_shell->active_menu_item != menu_item) &&
 	  GTK_IS_MENU_ITEM (menu_item))
@@ -722,6 +704,9 @@ gtk_menu_shell_forall (GtkContainer *container,
 static void
 gtk_real_menu_shell_deactivate (GtkMenuShell *menu_shell)
 {
+  g_return_if_fail (menu_shell != NULL);
+  g_return_if_fail (GTK_IS_MENU_SHELL (menu_shell));
+
   if (menu_shell->active)
     {
       menu_shell->button = 0;
@@ -791,29 +776,16 @@ void
 gtk_menu_shell_select_item (GtkMenuShell *menu_shell,
 			    GtkWidget    *menu_item)
 {
-  GtkMenuShellClass *class;
-
   g_return_if_fail (menu_shell != NULL);
   g_return_if_fail (GTK_IS_MENU_SHELL (menu_shell));
   g_return_if_fail (menu_item != NULL);
   g_return_if_fail (GTK_IS_MENU_ITEM (menu_item));
 
-  class = GTK_MENU_SHELL_GET_CLASS (menu_shell);
-
-  if (class->select_item)
-    class->select_item (menu_shell, menu_item);
-}
-
-
-static void
-gtk_menu_shell_real_select_item (GtkMenuShell *menu_shell,
-				 GtkWidget    *menu_item)
-{
   gtk_menu_shell_deselect (menu_shell);
   
   menu_shell->active_menu_item = menu_item;
   gtk_menu_item_set_placement (GTK_MENU_ITEM (menu_shell->active_menu_item),
-			       GTK_MENU_SHELL_GET_CLASS (menu_shell)->submenu_placement);
+			       MENU_SHELL_CLASS (menu_shell)->submenu_placement);
   gtk_menu_item_select (GTK_MENU_ITEM (menu_shell->active_menu_item));
 
   /* This allows the bizarre radio buttons-with-submenus-display-history
@@ -849,7 +821,7 @@ gtk_menu_shell_activate_item (GtkMenuShell      *menu_shell,
   g_return_if_fail (GTK_IS_MENU_ITEM (menu_item));
 
   if (!deactivate)
-    deactivate = GTK_MENU_ITEM_GET_CLASS (menu_item)->hide_on_activate;
+    deactivate = GTK_MENU_ITEM_CLASS (GTK_OBJECT (menu_item)->klass)->hide_on_activate;
 
   gtk_widget_ref (GTK_WIDGET (menu_shell));
 
@@ -932,21 +904,6 @@ gtk_menu_shell_move_selected (GtkMenuShell  *menu_shell,
 }
 
 static void
-gtk_menu_shell_select_submenu_first (GtkMenuShell     *menu_shell)
-{
-  GtkMenuItem *menu_item;
-
-  menu_item = GTK_MENU_ITEM (menu_shell->active_menu_item); 
-  
-  if (menu_item->submenu)
-    {
-      GtkMenuShell *submenu = GTK_MENU_SHELL (menu_item->submenu); 
-      if (submenu->children)
-	gtk_menu_shell_select_item (submenu, submenu->children->data); 
-    }
-}
-
-static void
 gtk_real_menu_shell_move_current (GtkMenuShell      *menu_shell,
 				  GtkMenuDirectionType direction)
 {
@@ -963,14 +920,11 @@ gtk_real_menu_shell_move_current (GtkMenuShell      *menu_shell,
     case GTK_MENU_DIR_PARENT:
       if (parent_menu_shell)
 	{
-	  if (GTK_MENU_SHELL_GET_CLASS (parent_menu_shell)->submenu_placement == 
-		       GTK_MENU_SHELL_GET_CLASS (menu_shell)->submenu_placement)
+	  if (GTK_MENU_SHELL_CLASS (GTK_OBJECT (parent_menu_shell)->klass)->submenu_placement == 
+		       GTK_MENU_SHELL_CLASS (GTK_OBJECT (menu_shell)->klass)->submenu_placement)
 	    gtk_menu_shell_deselect (menu_shell);
-	  else 
-	    {
-	      gtk_menu_shell_move_selected (parent_menu_shell, -1);
-	      gtk_menu_shell_select_submenu_first (parent_menu_shell); 
-	    }
+	  else
+	    gtk_menu_shell_move_selected (parent_menu_shell, -1);
 	}
       break;
       
@@ -987,15 +941,12 @@ gtk_real_menu_shell_move_current (GtkMenuShell      *menu_shell,
 	{
 	  /* Try to find a menu running the opposite direction */
 	  while (parent_menu_shell && 
-		 (GTK_MENU_SHELL_GET_CLASS (parent_menu_shell)->submenu_placement ==
-		  GTK_MENU_SHELL_GET_CLASS (menu_shell)->submenu_placement))
+		 (GTK_MENU_SHELL_CLASS (GTK_OBJECT (parent_menu_shell)->klass)->submenu_placement ==
+		  GTK_MENU_SHELL_CLASS (GTK_OBJECT (menu_shell)->klass)->submenu_placement))
 	    parent_menu_shell = GTK_MENU_SHELL (parent_menu_shell->parent_menu_shell);
 	  
 	  if (parent_menu_shell)
-	    {
-	      gtk_menu_shell_move_selected (parent_menu_shell, 1);
-	      gtk_menu_shell_select_submenu_first (parent_menu_shell);
-	    }
+	    gtk_menu_shell_move_selected (parent_menu_shell, 1);
 	}
       break;
       

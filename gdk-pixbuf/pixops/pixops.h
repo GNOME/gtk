@@ -1,17 +1,12 @@
-#ifndef PIXOPS_H
-#define PIXOPS_H
-
-#include <glib.h>
-#include "gdk-pixbuf.h"
-
-
+#include <libart_lgpl/art_misc.h>
+#include <libart_lgpl/art_filterlevel.h>
 
 /* Scale src_buf from src_width / src_height by factors scale_x, scale_y
  * and composite the portion corresponding to
  * render_x, render_y, render_width, render_height in the new
  * coordinate system into dest_buf starting at 0, 0
  */
-void pixops_composite (guchar         *dest_buf,
+void pixops_composite (art_u8         *dest_buf,
 		       int             render_x0,
 		       int             render_y0,
 		       int             render_x1,
@@ -19,7 +14,7 @@ void pixops_composite (guchar         *dest_buf,
 		       int             dest_rowstride,
 		       int             dest_channels,
 		       int             dest_has_alpha,
-		       const guchar   *src_buf,
+		       const art_u8   *src_buf,
 		       int             src_width,
 		       int             src_height,
 		       int             src_rowstride,
@@ -27,7 +22,7 @@ void pixops_composite (guchar         *dest_buf,
 		       int             src_has_alpha,
 		       double          scale_x,
 		       double          scale_y,
-		       GdkInterpType   interp_type,
+		       ArtFilterLevel  filter_level,
 		       int             overall_alpha);
 
 /* Scale src_buf from src_width / src_height by factors scale_x, scale_y
@@ -36,7 +31,7 @@ void pixops_composite (guchar         *dest_buf,
  * coordinate system against a checkboard with checks of size check_size
  * of the colors color1 and color2 into dest_buf starting at 0, 0
  */
-void pixops_composite_color (guchar         *dest_buf,
+void pixops_composite_color (art_u8         *dest_buf,
 			     int             render_x0,
 			     int             render_y0,
 			     int             render_x1,
@@ -44,7 +39,7 @@ void pixops_composite_color (guchar         *dest_buf,
 			     int             dest_rowstride,
 			     int             dest_channels,
 			     int             dest_has_alpha,
-			     const guchar   *src_buf,
+			     const art_u8   *src_buf,
 			     int             src_width,
 			     int             src_height,
 			     int             src_rowstride,
@@ -52,20 +47,20 @@ void pixops_composite_color (guchar         *dest_buf,
 			     int             src_has_alpha,
 			     double          scale_x,
 			     double          scale_y,
-			     GdkInterpType   interp_type,
+			     ArtFilterLevel  filter_level,
 			     int             overall_alpha,
 			     int             check_x,
 			     int             check_y,
 			     int             check_size,
-			     guint32         color1,
-			     guint32         color2);
+			     art_u32         color1,
+			     art_u32         color2);
 
 /* Scale src_buf from src_width / src_height by factors scale_x, scale_y
  * and composite the portion corresponding to
  * render_x, render_y, render_width, render_height in the new
  * coordinate system into dest_buf starting at 0, 0
  */
-void pixops_scale     (guchar         *dest_buf,
+void pixops_scale     (art_u8         *dest_buf,
 		       int             render_x0,
 		       int             render_y0,
 		       int             render_x1,
@@ -73,7 +68,7 @@ void pixops_scale     (guchar         *dest_buf,
 		       int             dest_rowstride,
 		       int             dest_channels,
 		       int             dest_has_alpha,
-		       const guchar   *src_buf,
+		       const art_u8   *src_buf,
 		       int             src_width,
 		       int             src_height,
 		       int             src_rowstride,
@@ -81,8 +76,5 @@ void pixops_scale     (guchar         *dest_buf,
 		       int             src_has_alpha,
 		       double          scale_x,
 		       double          scale_y,
-		       GdkInterpType   interp_type);
+		       ArtFilterLevel  filter_level);
 
-
-
-#endif

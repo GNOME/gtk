@@ -3,23 +3,23 @@
  * Copyright (C) 1998 Elliot Lee
  *
  * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
+ * modify it under the terms of the GNU Library General Public
  * License as published by the Free Software Foundation; either
  * version 2 of the License, or (at your option) any later version.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
+ * Library General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public
+ * You should have received a copy of the GNU Library General Public
  * License along with this library; if not, write to the
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
  * Boston, MA 02111-1307, USA.
  */
 
 /*
- * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
+ * Modified by the GTK+ Team and others 1997-1999.  See the AUTHORS
  * file for a list of people on the GTK+ Team.  See the ChangeLog
  * files for a list of changes.  These files are distributed with
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
@@ -116,6 +116,8 @@ static void gtk_handle_box_draw_ghost     (GtkHandleBox      *hb);
 static void gtk_handle_box_paint          (GtkWidget         *widget,
 					   GdkEventExpose    *event,
 					   GdkRectangle      *area);
+static void gtk_handle_box_draw           (GtkWidget         *widget,
+					   GdkRectangle      *area);
 static gint gtk_handle_box_expose         (GtkWidget         *widget,
 					   GdkEventExpose    *event);
 static gint gtk_handle_box_button_changed (GtkWidget         *widget,
@@ -176,6 +178,23 @@ gtk_handle_box_class_init (GtkHandleBoxClass *class)
   object_class->set_arg = gtk_handle_box_set_arg;
   object_class->get_arg = gtk_handle_box_get_arg;
   
+  handle_box_signals[SIGNAL_CHILD_ATTACHED] =
+    gtk_signal_new ("child_attached",
+		    GTK_RUN_FIRST,
+		    object_class->type,
+		    GTK_SIGNAL_OFFSET (GtkHandleBoxClass, child_attached),
+		    gtk_marshal_NONE__POINTER,
+		    GTK_TYPE_NONE, 1,
+		    GTK_TYPE_WIDGET);
+  handle_box_signals[SIGNAL_CHILD_DETACHED] =
+    gtk_signal_new ("child_detached",
+		    GTK_RUN_FIRST,
+		    object_class->type,
+		    GTK_SIGNAL_OFFSET (GtkHandleBoxClass, child_detached),
+		    gtk_marshal_NONE__POINTER,
+		    GTK_TYPE_NONE, 1,
+		    GTK_TYPE_WIDGET);
+  gtk_object_class_add_signals (object_class, handle_box_signals, SIGNAL_LAST);
   
   object_class->destroy = gtk_handle_box_destroy;
 
@@ -186,6 +205,7 @@ gtk_handle_box_class_init (GtkHandleBoxClass *class)
   widget_class->style_set = gtk_handle_box_style_set;
   widget_class->size_request = gtk_handle_box_size_request;
   widget_class->size_allocate = gtk_handle_box_size_allocate;
+  widget_class->draw = gtk_handle_box_draw;
   widget_class->expose_event = gtk_handle_box_expose;
   widget_class->button_press_event = gtk_handle_box_button_changed;
   widget_class->button_release_event = gtk_handle_box_button_changed;
@@ -197,23 +217,6 @@ gtk_handle_box_class_init (GtkHandleBoxClass *class)
 
   class->child_attached = NULL;
   class->child_detached = NULL;
-
-  handle_box_signals[SIGNAL_CHILD_ATTACHED] =
-    gtk_signal_new ("child_attached",
-		    GTK_RUN_FIRST,
-		    GTK_CLASS_TYPE (object_class),
-		    GTK_SIGNAL_OFFSET (GtkHandleBoxClass, child_attached),
-		    gtk_marshal_VOID__POINTER,
-		    GTK_TYPE_NONE, 1,
-		    GTK_TYPE_WIDGET);
-  handle_box_signals[SIGNAL_CHILD_DETACHED] =
-    gtk_signal_new ("child_detached",
-		    GTK_RUN_FIRST,
-		    GTK_CLASS_TYPE (object_class),
-		    GTK_SIGNAL_OFFSET (GtkHandleBoxClass, child_detached),
-		    gtk_marshal_VOID__POINTER,
-		    GTK_TYPE_NONE, 1,
-		    GTK_TYPE_WIDGET);
 }
 
 static void
@@ -512,9 +515,9 @@ gtk_handle_box_size_request (GtkWidget      *widget,
 	{
 	  if (hb->handle_position == GTK_POS_LEFT ||
 	      hb->handle_position == GTK_POS_RIGHT)
-	    requisition->height += widget->style->ythickness;
+	    requisition->height += widget->style->klass->ythickness;
 	  else
-	    requisition->width += widget->style->xthickness;
+	    requisition->width += widget->style->klass->xthickness;
 	}
     }
   else
@@ -826,6 +829,41 @@ gtk_handle_box_paint (GtkWidget      *widget,
 	      gtk_widget_intersect (bin->child, &event->area, &child_event.area))
 	    gtk_widget_event (bin->child, (GdkEvent *) &child_event);
 	}
+    }
+}
+
+static void
+gtk_handle_box_draw (GtkWidget    *widget,
+		     GdkRectangle *area)
+{
+  GtkHandleBox *hb;
+
+  g_return_if_fail (widget != NULL);
+  g_return_if_fail (GTK_IS_HANDLE_BOX (widget));
+  g_return_if_fail (area != NULL);
+
+  hb = GTK_HANDLE_BOX (widget);
+
+  if (GTK_WIDGET_DRAWABLE (widget))
+    {
+      if (hb->child_detached)
+	{
+	  /* The area parameter does not make sense in this case, so we
+	   * repaint everything.
+	   */
+
+	  gtk_handle_box_draw_ghost (hb);
+
+	  area->x = 0;
+	  area->y = 0;
+	  area->width = 2 * GTK_CONTAINER (hb)->border_width + DRAG_HANDLE_SIZE;
+	  area->height = area->width + GTK_BIN (hb)->child->allocation.height;
+	  area->width += GTK_BIN (hb)->child->allocation.width;
+
+	  gtk_handle_box_paint (widget, NULL, area);
+	}
+      else
+	gtk_handle_box_paint (widget, NULL, area);
     }
 }
 

@@ -2,23 +2,23 @@
  * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
  *
  * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
+ * modify it under the terms of the GNU Library General Public
  * License as published by the Free Software Foundation; either
  * version 2 of the License, or (at your option) any later version.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
+ * Library General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public
+ * You should have received a copy of the GNU Library General Public
  * License along with this library; if not, write to the
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
  * Boston, MA 02111-1307, USA.
  */
 
 /*
- * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
+ * Modified by the GTK+ Team and others 1997-1999.  See the AUTHORS
  * file for a list of people on the GTK+ Team.  See the ChangeLog
  * files for a list of changes.  These files are distributed with
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
@@ -84,7 +84,31 @@ gtk_item_class_init (GtkItemClass *class)
   object_class = (GtkObjectClass*) class;
   widget_class = (GtkWidgetClass*) class;
 
+  item_signals[SELECT] =
+    gtk_signal_new ("select",
+                    GTK_RUN_FIRST,
+                    object_class->type,
+                    GTK_SIGNAL_OFFSET (GtkItemClass, select),
+                    gtk_marshal_NONE__NONE,
+		    GTK_TYPE_NONE, 0);
+  item_signals[DESELECT] =
+    gtk_signal_new ("deselect",
+                    GTK_RUN_FIRST,
+                    object_class->type,
+                    GTK_SIGNAL_OFFSET (GtkItemClass, deselect),
+                    gtk_marshal_NONE__NONE,
+		    GTK_TYPE_NONE, 0);
+  item_signals[TOGGLE] =
+    gtk_signal_new ("toggle",
+                    GTK_RUN_FIRST,
+                    object_class->type,
+                    GTK_SIGNAL_OFFSET (GtkItemClass, toggle),
+                    gtk_marshal_NONE__NONE,
+		    GTK_TYPE_NONE, 0);
 
+  gtk_object_class_add_signals (object_class, item_signals, LAST_SIGNAL);
+
+  widget_class->activate_signal = item_signals[TOGGLE];
   widget_class->map = gtk_item_map;
   widget_class->unmap = gtk_item_unmap;
   widget_class->realize = gtk_item_realize;
@@ -94,29 +118,6 @@ gtk_item_class_init (GtkItemClass *class)
   class->select = NULL;
   class->deselect = NULL;
   class->toggle = NULL;
-
-  item_signals[SELECT] =
-    gtk_signal_new ("select",
-                    GTK_RUN_FIRST,
-                    GTK_CLASS_TYPE (object_class),
-                    GTK_SIGNAL_OFFSET (GtkItemClass, select),
-                    gtk_marshal_VOID__VOID,
-		    GTK_TYPE_NONE, 0);
-  item_signals[DESELECT] =
-    gtk_signal_new ("deselect",
-                    GTK_RUN_FIRST,
-                    GTK_CLASS_TYPE (object_class),
-                    GTK_SIGNAL_OFFSET (GtkItemClass, deselect),
-                    gtk_marshal_VOID__VOID,
-		    GTK_TYPE_NONE, 0);
-  item_signals[TOGGLE] =
-    gtk_signal_new ("toggle",
-                    GTK_RUN_FIRST,
-                    GTK_CLASS_TYPE (object_class),
-                    GTK_SIGNAL_OFFSET (GtkItemClass, toggle),
-                    gtk_marshal_VOID__VOID,
-		    GTK_TYPE_NONE, 0);
-  widget_class->activate_signal = item_signals[TOGGLE];
 }
 
 static void

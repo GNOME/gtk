@@ -2,23 +2,23 @@
  * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
  *
  * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
+ * modify it under the terms of the GNU Library General Public
  * License as published by the Free Software Foundation; either
  * version 2 of the License, or (at your option) any later version.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
+ * Library General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public
+ * You should have received a copy of the GNU Library General Public
  * License along with this library; if not, write to the
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
  * Boston, MA 02111-1307, USA.
  */
 
 /*
- * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
+ * Modified by the GTK+ Team and others 1997-1999.  See the AUTHORS
  * file for a list of people on the GTK+ Team.  See the ChangeLog
  * files for a list of changes.  These files are distributed with
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
@@ -31,7 +31,7 @@
 
 #define EPSILON 0.01
 
-#define RANGE_CLASS(w)  GTK_RANGE_GET_CLASS (w)
+#define RANGE_CLASS(w)  GTK_RANGE_CLASS (GTK_OBJECT (w)->klass)
 
 enum {
   ARG_0,
@@ -97,7 +97,7 @@ gtk_hscrollbar_class_init (GtkHScrollbarClass *class)
   
   gtk_object_add_arg_type ("GtkHScrollbar::adjustment",
                            GTK_TYPE_ADJUSTMENT,
-                           GTK_ARG_READWRITE,
+                           GTK_ARG_READWRITE | GTK_ARG_CONSTRUCT,
                            ARG_ADJUSTMENT);
   
   object_class->set_arg = gtk_hscrollbar_set_arg;
@@ -165,9 +165,9 @@ gtk_hscrollbar_init (GtkHScrollbar *hscrollbar)
   requisition->width = (RANGE_CLASS (widget)->min_slider_size +
                         RANGE_CLASS (widget)->stepper_size +
                         RANGE_CLASS (widget)->stepper_slider_spacing +
-                        widget->style->xthickness) * 2;
+                        widget->style->klass->xthickness) * 2;
   requisition->height = (RANGE_CLASS (widget)->slider_width +
-                         widget->style->ythickness * 2);
+                         widget->style->klass->ythickness * 2);
 }
 
 GtkWidget*
@@ -217,21 +217,21 @@ gtk_hscrollbar_realize (GtkWidget *widget)
   range->trough = widget->window;
   gdk_window_ref (range->trough);
   
-  attributes.x = widget->style->xthickness;
-  attributes.y = widget->style->ythickness;
+  attributes.x = widget->style->klass->xthickness;
+  attributes.y = widget->style->klass->ythickness;
   attributes.width = RANGE_CLASS (widget)->stepper_size;
   attributes.height = RANGE_CLASS (widget)->stepper_size;
   
   range->step_back = gdk_window_new (range->trough, &attributes, attributes_mask);
   
   attributes.x = (widget->allocation.width -
-                  widget->style->xthickness -
+                  widget->style->klass->xthickness -
                   RANGE_CLASS (widget)->stepper_size);
   
   range->step_forw = gdk_window_new (range->trough, &attributes, attributes_mask);
   
   attributes.x = 0;
-  attributes.y = widget->style->ythickness;
+  attributes.y = widget->style->klass->ythickness;
   attributes.width = RANGE_CLASS (widget)->min_slider_size;
   attributes.height = RANGE_CLASS (widget)->slider_width;
   attributes.event_mask |= (GDK_BUTTON_MOTION_MASK |
@@ -279,16 +279,19 @@ gtk_hscrollbar_size_allocate (GtkWidget     *widget,
                               allocation->y + (allocation->height - widget->requisition.height) / 2,
                               allocation->width, widget->requisition.height);
       gdk_window_move_resize (range->step_back,
-                              widget->style->xthickness,
-                              widget->style->ythickness,
+                              widget->style->klass->xthickness,
+                              widget->style->klass->ythickness,
                               RANGE_CLASS (widget)->stepper_size,
-                              widget->requisition.height - widget->style->ythickness * 2);
+                              widget->requisition.height - widget->style->klass->ythickness * 2);
       gdk_window_move_resize (range->step_forw,
-                              allocation->width - widget->style->xthickness -
+                              allocation->width - widget->style->klass->xthickness -
                               RANGE_CLASS (widget)->stepper_size,
-                              widget->style->ythickness,
+                              widget->style->klass->ythickness,
                               RANGE_CLASS (widget)->stepper_size,
-                              widget->requisition.height - widget->style->ythickness * 2);
+                              widget->requisition.height - widget->style->klass->ythickness * 2);
+      gdk_window_resize (range->slider,
+                         RANGE_CLASS (widget)->min_slider_size,
+                         widget->requisition.height - widget->style->klass->ythickness * 2);
       
       gtk_range_slider_update (GTK_RANGE (widget));
     }
@@ -418,10 +421,7 @@ gtk_hscrollbar_calc_slider_size (GtkHScrollbar *hscrollbar)
       gdk_window_get_size (range->slider, &slider_width, &slider_height);
       
       if (slider_width != width)
-	{
-	  gdk_window_resize (range->slider, width, slider_height);
-	  gdk_window_invalidate_rect (range->slider, NULL, FALSE);
-	}
+        gdk_window_resize (range->slider, width, slider_height);
     }
 }
 

@@ -8,16 +8,16 @@
  * Based on io-ras.c
  *
  * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
+ * modify it under the terms of the GNU Library General Public
  * License as published by the Free Software Foundation; either
  * version 2 of the License, or (at your option) any later version.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
+ * Library General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public
+ * You should have received a copy of the GNU Library General Public
  * License along with this library; if not, write to the
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
  * Boston, MA 02111-1307, USA.
@@ -33,14 +33,14 @@ Known bugs:
 
 #include <config.h>
 #include <stdio.h>
-#ifdef HAVE_UNISTD_H
 #include <unistd.h>
-#endif
 #include <string.h>
-#include "gdk-pixbuf-private.h"
-#include "gdk-pixbuf-io.h"
-
+#include <gdk-pixbuf/gdk-pixbuf.h>
+#include <gdk-pixbuf/gdk-pixbuf-io.h>
 
+
+
+
 
 /* 
 
@@ -176,45 +176,42 @@ gdk_pixbuf__bmp_image_begin_load(ModulePreparedNotifyFunc prepared_func,
 				 ModuleUpdatedNotifyFunc updated_func,
 				 ModuleFrameDoneNotifyFunc frame_done_func,
 				 ModuleAnimationDoneNotifyFunc
-				 anim_done_func, gpointer user_data,
-                                 GError **error);
+				 anim_done_func, gpointer user_data);
 
 void gdk_pixbuf__bmp_image_stop_load(gpointer data);
 gboolean gdk_pixbuf__bmp_image_load_increment(gpointer data, guchar * buf,
-					      guint size,
-                                              GError **error);
+					      guint size);
 
 
 
 /* Shared library entry point --> This should be removed when
    generic_image_load enters gdk-pixbuf-io. */
-GdkPixbuf *gdk_pixbuf__bmp_image_load(FILE * f, GError **error)
+GdkPixbuf *gdk_pixbuf__bmp_image_load(FILE * f)
 {
-	guchar membuf[4096];
+	guchar *membuf;
 	size_t length;
 	struct bmp_progressive_state *State;
 
 	GdkPixbuf *pb;
 
 	State =
-	    gdk_pixbuf__bmp_image_begin_load(NULL, NULL, NULL, NULL, NULL,
-                                             error);
+	    gdk_pixbuf__bmp_image_begin_load(NULL, NULL, NULL, NULL, NULL);
+	membuf = g_malloc(4096);
 
-        if (State == NULL)
-          return NULL;
-        
+	g_assert(membuf != NULL);
+
+
 	while (feof(f) == 0) {
 		length = fread(membuf, 1, 4096, f);
 		if (length > 0)
-                  if (!gdk_pixbuf__bmp_image_load_increment(State,
-                                                            membuf,
-                                                            length,
-                                                            error)) {
-                          gdk_pixbuf__bmp_image_stop_load (State);
-                          return NULL;
-                  }
+
+			(void)
+			    gdk_pixbuf__bmp_image_load_increment(State,
+								 membuf,
+								 length);
 
 	}
+	g_free(membuf);
 	if (State->pixbuf != NULL)
 		gdk_pixbuf_ref(State->pixbuf);
 
@@ -290,12 +287,12 @@ static void DecodeHeader(unsigned char *BFH, unsigned char *BIH,
 	if (State->pixbuf == NULL) {
 		if (State->Type == 32)
 			State->pixbuf =
-			    gdk_pixbuf_new(GDK_COLORSPACE_RGB, TRUE, 8,
+			    gdk_pixbuf_new(ART_PIX_RGB, TRUE, 8,
 					   (gint) State->Header.width,
 					   (gint) State->Header.height);
 		else
 			State->pixbuf =
-			    gdk_pixbuf_new(GDK_COLORSPACE_RGB, FALSE, 8,
+			    gdk_pixbuf_new(ART_PIX_RGB, FALSE, 8,
 					   (gint) State->Header.width,
 					   (gint) State->Header.height);
 
@@ -318,8 +315,7 @@ gdk_pixbuf__bmp_image_begin_load(ModulePreparedNotifyFunc prepared_func,
 				 ModuleUpdatedNotifyFunc updated_func,
 				 ModuleFrameDoneNotifyFunc frame_done_func,
 				 ModuleAnimationDoneNotifyFunc
-				 anim_done_func, gpointer user_data,
-                                 GError **error)
+				 anim_done_func, gpointer user_data)
 {
 	struct bmp_progressive_state *context;
 
@@ -391,13 +387,14 @@ static void OneLine32(struct bmp_progressive_state *context)
 
 	X = 0;
 	if (context->Header.Negative == 0)
-		Pixels = (context->pixbuf->pixels +
-			  context->pixbuf->rowstride *
-			  (context->Header.height - context->Lines - 1));
+		Pixels = context->pixbuf->art_pixbuf->pixels +
+		    gdk_pixbuf_get_rowstride(context->pixbuf) *
+		    (context->Header.height - context->Lines - 1);
 	else
-		Pixels = (context->pixbuf->pixels +
-			  context->pixbuf->rowstride *
-			  context->Lines);
+		Pixels =
+		    context->pixbuf->art_pixbuf->pixels +
+		    gdk_pixbuf_get_rowstride(context->pixbuf) *
+		    context->Lines;
 	while (X < context->Header.width) {
 		Pixels[X * 4 + 0] = context->LineBuf[X * 4 + 2];
 		Pixels[X * 4 + 1] = context->LineBuf[X * 4 + 1];
@@ -415,13 +412,14 @@ static void OneLine24(struct bmp_progressive_state *context)
 
 	X = 0;
 	if (context->Header.Negative == 0)
-		Pixels = (context->pixbuf->pixels +
-			  context->pixbuf->rowstride *
-			  (context->Header.height - context->Lines - 1));
+		Pixels = context->pixbuf->art_pixbuf->pixels +
+		    gdk_pixbuf_get_rowstride(context->pixbuf) *
+		    (context->Header.height - context->Lines - 1);
 	else
-		Pixels = (context->pixbuf->pixels +
-			  context->pixbuf->rowstride *
-			  context->Lines);
+		Pixels =
+		    context->pixbuf->art_pixbuf->pixels +
+		    gdk_pixbuf_get_rowstride(context->pixbuf) *
+		    context->Lines;
 	while (X < context->Header.width) {
 		Pixels[X * 3 + 0] = context->LineBuf[X * 3 + 2];
 		Pixels[X * 3 + 1] = context->LineBuf[X * 3 + 1];
@@ -438,13 +436,14 @@ static void OneLine8(struct bmp_progressive_state *context)
 
 	X = 0;
 	if (context->Header.Negative == 0)
-		Pixels = (context->pixbuf->pixels +
-			  context->pixbuf->rowstride *
-			  (context->Header.height - context->Lines - 1));
+		Pixels = context->pixbuf->art_pixbuf->pixels +
+		    gdk_pixbuf_get_rowstride(context->pixbuf) *
+		    (context->Header.height - context->Lines - 1);
 	else
-		Pixels = (context->pixbuf->pixels +
-			  context->pixbuf->rowstride *
-			  context->Lines);
+		Pixels =
+		    context->pixbuf->art_pixbuf->pixels +
+		    gdk_pixbuf_get_rowstride(context->pixbuf) *
+		    context->Lines;
 	while (X < context->Header.width) {
 		Pixels[X * 3 + 0] =
 		    context->HeaderBuf[4 * context->LineBuf[X] + 56];
@@ -463,13 +462,14 @@ static void OneLine4(struct bmp_progressive_state *context)
 
 	X = 0;
 	if (context->Header.Negative == 0)
-		Pixels = (context->pixbuf->pixels +
-			  context->pixbuf->rowstride *
-			  (context->Header.height - context->Lines - 1));
+		Pixels = context->pixbuf->art_pixbuf->pixels +
+		    gdk_pixbuf_get_rowstride(context->pixbuf) *
+		    (context->Header.height - context->Lines - 1);
 	else
-		Pixels = (context->pixbuf->pixels +
-			  context->pixbuf->rowstride *
-			  context->Lines);
+		Pixels =
+		    context->pixbuf->art_pixbuf->pixels +
+		    gdk_pixbuf_get_rowstride(context->pixbuf) *
+		    context->Lines;
 
 	while (X < context->Header.width) {
 		guchar Pix;
@@ -504,13 +504,14 @@ static void OneLine1(struct bmp_progressive_state *context)
 
 	X = 0;
 	if (context->Header.Negative == 0)
-		Pixels = (context->pixbuf->pixels +
-			  context->pixbuf->rowstride *
-			  (context->Header.height - context->Lines - 1));
+		Pixels = context->pixbuf->art_pixbuf->pixels +
+		    gdk_pixbuf_get_rowstride(context->pixbuf) *
+		    (context->Header.height - context->Lines - 1);
 	else
-		Pixels = (context->pixbuf->pixels +
-			  context->pixbuf->rowstride *
-			  context->Lines);
+		Pixels =
+		    context->pixbuf->art_pixbuf->pixels +
+		    gdk_pixbuf_get_rowstride(context->pixbuf) *
+		    context->Lines;
 	while (X < context->Header.width) {
 		gint Bit;
 
@@ -705,10 +706,8 @@ void DoCompressedByte(struct bmp_progressive_state *context, guchar ** buf,
  *
  * append image data onto inrecrementally built output image
  */
-gboolean gdk_pixbuf__bmp_image_load_increment(gpointer data,
-                                              guchar * buf,
-					      guint size,
-                                              GError **error)
+gboolean gdk_pixbuf__bmp_image_load_increment(gpointer data, guchar * buf,
+					      guint size)
 {
 	struct bmp_progressive_state *context =
 	    (struct bmp_progressive_state *) data;

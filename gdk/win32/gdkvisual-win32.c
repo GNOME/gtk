@@ -2,23 +2,23 @@
  * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
  *
  * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
+ * modify it under the terms of the GNU Library General Public
  * License as published by the Free Software Foundation; either
  * version 2 of the License, or (at your option) any later version.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
+ * Library General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public
+ * You should have received a copy of the GNU Library General Public
  * License along with this library; if not, write to the
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
  * Boston, MA 02111-1307, USA.
  */
 
 /*
- * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
+ * Modified by the GTK+ Team and others 1997-1999.  See the AUTHORS
  * file for a list of people on the GTK+ Team.  See the ChangeLog
  * files for a list of changes.  These files are distributed with
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
@@ -39,6 +39,20 @@ static gint available_depths[1];
 
 static GdkVisualType available_types[1];
 
+#ifdef G_ENABLE_DEBUG
+
+static const gchar* visual_names[] =
+{
+  "static gray",
+  "grayscale",
+  "static color",
+  "pseudo color",
+  "true color",
+  "direct color",
+};
+
+#endif /* G_ENABLE_DEBUG */
+
 void
 gdk_visual_init (void)
 {
@@ -57,8 +71,8 @@ gdk_visual_init (void)
 
   system_visual = g_new (GdkVisualPrivate, 1);
 
-  bitspixel = GetDeviceCaps (gdk_display_hdc, BITSPIXEL);
-  rastercaps = GetDeviceCaps (gdk_display_hdc, RASTERCAPS);
+  bitspixel = GetDeviceCaps (gdk_DC, BITSPIXEL);
+  rastercaps = GetDeviceCaps (gdk_DC, RASTERCAPS);
   system_visual->xvisual = g_new (Visual, 1);
   system_visual->xvisual->visualid = 0;
   system_visual->xvisual->bitspixel = bitspixel;
@@ -66,8 +80,8 @@ gdk_visual_init (void)
   if (rastercaps & RC_PALETTE)
     {
       system_visual->visual.type = GDK_VISUAL_PSEUDO_COLOR;
-      numcolors = GetDeviceCaps (gdk_display_hdc, NUMCOLORS);
-      sizepalette = GetDeviceCaps (gdk_display_hdc, SIZEPALETTE);
+      numcolors = GetDeviceCaps (gdk_DC, NUMCOLORS);
+      sizepalette = GetDeviceCaps (gdk_DC, SIZEPALETTE);
       system_visual->xvisual->map_entries = sizepalette;
     }
   else if (bitspixel == 1)
@@ -95,10 +109,10 @@ gdk_visual_init (void)
       memset (&bmi, 0, sizeof (bmi));
       bmi.bi.biSize = sizeof (bmi.bi);
 
-      hbm = CreateCompatibleBitmap (gdk_display_hdc, 1, 1);
-      GetDIBits (gdk_display_hdc, hbm, 0, 1, NULL,
+      hbm = CreateCompatibleBitmap (gdk_DC, 1, 1);
+      GetDIBits (gdk_DC, hbm, 0, 1, NULL,
 		 (BITMAPINFO *) &bmi, DIB_RGB_COLORS);
-      GetDIBits (gdk_display_hdc, hbm, 0, 1, NULL,
+      GetDIBits (gdk_DC, hbm, 0, 1, NULL,
 		 (BITMAPINFO *) &bmi, DIB_RGB_COLORS);
       DeleteObject (hbm);
 
@@ -297,6 +311,15 @@ gdk_visual_lookup (Visual *xvisual)
 {
   if (system_visual->xvisual == xvisual)
     return (GdkVisual *) system_visual;
+  else
+    return NULL;
+}
+
+GdkVisual*
+gdkx_visual_get (VisualID xvisualid)
+{
+  if (xvisualid == system_visual->xvisual->visualid)
+    return (GdkVisual*) system_visual;
   else
     return NULL;
 }

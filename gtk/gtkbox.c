@@ -2,23 +2,23 @@
  * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
  *
  * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
+ * modify it under the terms of the GNU Library General Public
  * License as published by the Free Software Foundation; either
  * version 2 of the License, or (at your option) any later version.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
+ * Library General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public
+ * You should have received a copy of the GNU Library General Public
  * License along with this library; if not, write to the
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
  * Boston, MA 02111-1307, USA.
  */
 
 /*
- * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
+ * Modified by the GTK+ Team and others 1997-1999.  See the AUTHORS
  * file for a list of people on the GTK+ Team.  See the ChangeLog
  * files for a list of changes.  These files are distributed with
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
@@ -51,6 +51,8 @@ static void gtk_box_set_arg    (GtkObject      *object,
 				guint           arg_id);
 static void gtk_box_map        (GtkWidget      *widget);
 static void gtk_box_unmap      (GtkWidget      *widget);
+static void gtk_box_draw       (GtkWidget      *widget,
+			        GdkRectangle   *area);
 static gint gtk_box_expose     (GtkWidget      *widget,
 			        GdkEventExpose *event);
 static void gtk_box_add        (GtkContainer   *container,
@@ -117,15 +119,16 @@ gtk_box_class_init (GtkBoxClass *class)
   gtk_object_add_arg_type ("GtkBox::homogeneous", GTK_TYPE_BOOL, GTK_ARG_READWRITE, ARG_HOMOGENEOUS);
   gtk_container_add_child_arg_type ("GtkBox::expand", GTK_TYPE_BOOL, GTK_ARG_READWRITE, CHILD_ARG_EXPAND);
   gtk_container_add_child_arg_type ("GtkBox::fill", GTK_TYPE_BOOL, GTK_ARG_READWRITE, CHILD_ARG_FILL);
-  gtk_container_add_child_arg_type ("GtkBox::padding", GTK_TYPE_UINT, GTK_ARG_READWRITE, CHILD_ARG_PADDING);
+  gtk_container_add_child_arg_type ("GtkBox::padding", GTK_TYPE_ULONG, GTK_ARG_READWRITE, CHILD_ARG_PADDING);
   gtk_container_add_child_arg_type ("GtkBox::pack_type", GTK_TYPE_PACK_TYPE, GTK_ARG_READWRITE, CHILD_ARG_PACK_TYPE);
-  gtk_container_add_child_arg_type ("GtkBox::position", GTK_TYPE_INT, GTK_ARG_READWRITE, CHILD_ARG_POSITION);
+  gtk_container_add_child_arg_type ("GtkBox::position", GTK_TYPE_LONG, GTK_ARG_READWRITE, CHILD_ARG_POSITION);
 
   object_class->set_arg = gtk_box_set_arg;
   object_class->get_arg = gtk_box_get_arg;
 
   widget_class->map = gtk_box_map;
   widget_class->unmap = gtk_box_unmap;
+  widget_class->draw = gtk_box_draw;
   widget_class->expose_event = gtk_box_expose;
 
   container_class->add = gtk_box_add;
@@ -239,7 +242,7 @@ gtk_box_set_child_arg (GtkContainer   *container,
 				 child,
 				 expand,
 				 fill,
-				 GTK_VALUE_UINT (*arg),
+				 GTK_VALUE_ULONG (*arg),
 				 pack_type);
       break;
     case CHILD_ARG_PACK_TYPE:
@@ -253,7 +256,7 @@ gtk_box_set_child_arg (GtkContainer   *container,
     case CHILD_ARG_POSITION:
       gtk_box_reorder_child (GTK_BOX (container),
 			     child,
-			     GTK_VALUE_INT (*arg));
+			     GTK_VALUE_LONG (*arg));
       break;
     default:
       break;
@@ -289,13 +292,13 @@ gtk_box_get_child_arg (GtkContainer   *container,
       GTK_VALUE_BOOL (*arg) = fill;
       break;
     case CHILD_ARG_PADDING:
-      GTK_VALUE_UINT (*arg) = padding;
+      GTK_VALUE_ULONG (*arg) = padding;
       break;
     case CHILD_ARG_PACK_TYPE:
       GTK_VALUE_ENUM (*arg) = pack_type;
       break;
     case CHILD_ARG_POSITION:
-      GTK_VALUE_INT (*arg) = 0;
+      GTK_VALUE_LONG (*arg) = 0;
       for (list = GTK_BOX (container)->children; list; list = list->next)
 	{
 	  GtkBoxChild *child_entry;
@@ -303,10 +306,10 @@ gtk_box_get_child_arg (GtkContainer   *container,
 	  child_entry = list->data;
 	  if (child_entry->widget == child)
 	    break;
-	  GTK_VALUE_INT (*arg)++;
+	  GTK_VALUE_LONG (*arg)++;
 	}
       if (!list)
-	GTK_VALUE_INT (*arg) = -1;
+	GTK_VALUE_LONG (*arg) = -1;
       break;
     default:
       arg->type = GTK_TYPE_INVALID;
@@ -626,6 +629,35 @@ gtk_box_unmap (GtkWidget *widget)
       if (GTK_WIDGET_VISIBLE (child->widget) &&
 	  GTK_WIDGET_MAPPED (child->widget))
 	gtk_widget_unmap (child->widget);
+    }
+}
+
+static void
+gtk_box_draw (GtkWidget    *widget,
+	      GdkRectangle *area)
+{
+  GtkBox *box;
+  GtkBoxChild *child;
+  GdkRectangle child_area;
+  GList *children;
+  
+  g_return_if_fail (widget != NULL);
+  g_return_if_fail (GTK_IS_BOX (widget));
+   
+  if (GTK_WIDGET_DRAWABLE (widget))
+    {
+      box = GTK_BOX (widget);
+	
+      children = box->children;
+      while (children)
+	{
+	  child = children->data;
+	  children = children->next;
+	     
+	  if (GTK_WIDGET_DRAWABLE (child->widget) &&
+	      gtk_widget_intersect (child->widget, area, &child_area))
+	    gtk_widget_draw (child->widget, &child_area);
+	}
     }
 }
 

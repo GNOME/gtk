@@ -1,46 +1,6 @@
-/* GDK - The GIMP Drawing Kit
- * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
- *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2 of the License, or (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the
- * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
- * Boston, MA 02111-1307, USA.
- */
+#include "gdkx.h"
 
-/*
- * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
- * file for a list of people on the GTK+ Team.  See the ChangeLog
- * files for a list of changes.  These files are distributed with
- * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
- */
-
-#include "gdkprivate-x11.h"
-#include <pango/pangox.h>
-#include <config.h>
-
-#include <stdlib.h>
-
-#if defined (HAVE_IPC_H) && defined (HAVE_SHM_H) && defined (HAVE_XSHM_H)
-#define USE_SHM
-#endif
-
-#ifdef USE_SHM
-#include <X11/extensions/XShm.h>
-#endif /* USE_SHM */
-
-#include "gdkprivate-x11.h"
-#include "gdkdrawable-x11.h"
-#include "gdkpixmap-x11.h"
+static void    gdk_x11_drawable_destroy   (GdkDrawable     *drawable);
 
 static void gdk_x11_draw_rectangle (GdkDrawable    *drawable,
 				    GdkGC          *gc,
@@ -98,128 +58,95 @@ static void gdk_x11_draw_lines     (GdkDrawable    *drawable,
 				    GdkGC          *gc,
 				    GdkPoint       *points,
 				    gint            npoints);
-static void gdk_x11_draw_glyphs    (GdkDrawable      *drawable,
-                                    GdkGC            *gc,
-                                    PangoFont        *font,
-                                    gint              x,
-                                    gint              y,
-                                    PangoGlyphString *glyphs);
-static void gdk_x11_draw_image     (GdkDrawable     *drawable,
-                                    GdkGC           *gc,
-                                    GdkImage        *image,
-                                    gint             xsrc,
-                                    gint             ysrc,
-                                    gint             xdest,
-                                    gint             ydest,
-                                    gint             width,
-                                    gint             height);
 
-static void gdk_x11_set_colormap   (GdkDrawable    *drawable,
-                                    GdkColormap    *colormap);
 
-static GdkColormap* gdk_x11_get_colormap   (GdkDrawable    *drawable);
-
-static gint         gdk_x11_get_depth      (GdkDrawable    *drawable);
-
-static GdkVisual*   gdk_x11_get_visual     (GdkDrawable    *drawable);
-
-static void gdk_drawable_impl_x11_class_init (GdkDrawableImplX11Class *klass);
-
-static gpointer parent_class = NULL;
-
-GType
-gdk_drawable_impl_x11_get_type (void)
-{
-  static GType object_type = 0;
-
-  if (!object_type)
-    {
-      static const GTypeInfo object_info =
-      {
-        sizeof (GdkDrawableImplX11Class),
-        (GBaseInitFunc) NULL,
-        (GBaseFinalizeFunc) NULL,
-        (GClassInitFunc) gdk_drawable_impl_x11_class_init,
-        NULL,           /* class_finalize */
-        NULL,           /* class_data */
-        sizeof (GdkDrawableImplX11),
-        0,              /* n_preallocs */
-        (GInstanceInitFunc) NULL,
-      };
-      
-      object_type = g_type_register_static (GDK_TYPE_DRAWABLE,
-                                            "GdkDrawableImplX11",
-                                            &object_info, 0);
-    }
-  
-  return object_type;
-}
-
-static void
-gdk_drawable_impl_x11_class_init (GdkDrawableImplX11Class *klass)
-{
-  GdkDrawableClass *drawable_class = GDK_DRAWABLE_CLASS (klass);
-
-  parent_class = g_type_class_peek_parent (klass);
-
-  drawable_class->create_gc = _gdk_x11_gc_new;
-  drawable_class->draw_rectangle = gdk_x11_draw_rectangle;
-  drawable_class->draw_arc = gdk_x11_draw_arc;
-  drawable_class->draw_polygon = gdk_x11_draw_polygon;
-  drawable_class->draw_text = gdk_x11_draw_text;
-  drawable_class->draw_text_wc = gdk_x11_draw_text_wc;
-  drawable_class->draw_drawable = gdk_x11_draw_drawable;
-  drawable_class->draw_points = gdk_x11_draw_points;
-  drawable_class->draw_segments = gdk_x11_draw_segments;
-  drawable_class->draw_lines = gdk_x11_draw_lines;
-  drawable_class->draw_glyphs = gdk_x11_draw_glyphs;
-  drawable_class->draw_image = gdk_x11_draw_image;
-  
-  drawable_class->set_colormap = gdk_x11_set_colormap;
-  drawable_class->get_colormap = gdk_x11_get_colormap;
-
-  drawable_class->get_depth = gdk_x11_get_depth;
-  drawable_class->get_visual = gdk_x11_get_visual;
-  
-  drawable_class->get_image = _gdk_x11_get_image;
-}
+GdkDrawableClass _gdk_x11_drawable_class = {
+  gdk_x11_drawable_destroy,
+  _gdk_x11_gc_new,
+  gdk_x11_draw_rectangle,
+  gdk_x11_draw_arc,
+  gdk_x11_draw_polygon,
+  gdk_x11_draw_text,
+  gdk_x11_draw_text_wc,
+  gdk_x11_draw_drawable,
+  gdk_x11_draw_points,
+  gdk_x11_draw_segments,
+  gdk_x11_draw_lines
+};
 
 /*****************************************************
  * X11 specific implementations of generic functions *
  *****************************************************/
 
-static GdkColormap*
-gdk_x11_get_colormap (GdkDrawable *drawable)
+GdkColormap*
+gdk_drawable_get_colormap (GdkDrawable *drawable)
 {
-  GdkDrawableImplX11 *impl;
+  GdkDrawablePrivate *drawable_private;
+  XWindowAttributes window_attributes;
+  
+  g_return_val_if_fail (drawable != NULL, NULL);
+  drawable_private = (GdkDrawablePrivate*) drawable;
+  
+  if (!GDK_DRAWABLE_DESTROYED (drawable))
+    {
+      if (drawable_private->colormap == NULL &&
+	  GDK_IS_WINDOW (drawable))
+	{
+	  XGetWindowAttributes (GDK_DRAWABLE_XDISPLAY (drawable),
+				GDK_DRAWABLE_XID (drawable),
+				&window_attributes);
+	  drawable_private->colormap =  gdk_colormap_lookup (window_attributes.colormap);
+	}
 
-  impl = GDK_DRAWABLE_IMPL_X11 (drawable);
-
-  return impl->colormap;
+      return drawable_private->colormap;
+    }
+  
+  return NULL;
 }
 
-static void
-gdk_x11_set_colormap (GdkDrawable *drawable,
-                      GdkColormap *colormap)
+void
+gdk_drawable_set_colormap (GdkDrawable *drawable,
+			   GdkColormap *colormap)
 {
-  GdkDrawableImplX11 *impl;
+  GdkDrawablePrivate *drawable_private;
+  GdkColormapPrivateX *colormap_private;
   
-  g_return_if_fail (colormap != NULL);  
-
-  impl = GDK_DRAWABLE_IMPL_X11 (drawable);
-
-  if (impl->colormap == colormap)
-    return;
+  g_return_if_fail (drawable != NULL);
+  g_return_if_fail (colormap != NULL);
   
-  if (impl->colormap)
-    gdk_colormap_unref (impl->colormap);
-  impl->colormap = colormap;
-  if (impl->colormap)
-    gdk_colormap_ref (impl->colormap);
+  drawable_private = (GdkDrawablePrivate *)drawable;
+  colormap_private = (GdkColormapPrivateX *)colormap;
+  
+  if (!GDK_DRAWABLE_DESTROYED (drawable))
+    {
+      if (GDK_IS_WINDOW (drawable))
+	{
+	  g_return_if_fail (colormap_private->base.visual !=
+			    ((GdkColormapPrivate *)(drawable_private->colormap))->visual);
+
+	  XSetWindowColormap (GDK_DRAWABLE_XDISPLAY (drawable),
+			      GDK_DRAWABLE_XID (drawable),
+			      colormap_private->xcolormap);
+	}
+
+      if (drawable_private->colormap)
+	gdk_colormap_unref (drawable_private->colormap);
+      drawable_private->colormap = colormap;
+      gdk_colormap_ref (drawable_private->colormap);
+
+      if (GDK_IS_WINDOW (drawable) &&
+	  drawable_private->window_type != GDK_WINDOW_TOPLEVEL)
+	gdk_window_add_colormap_windows (drawable);
+    }
 }
 
 /* Drawing
  */
+static void 
+gdk_x11_drawable_destroy (GdkDrawable *drawable)
+{
+  
+}
 
 static void
 gdk_x11_draw_rectangle (GdkDrawable *drawable,
@@ -230,16 +157,12 @@ gdk_x11_draw_rectangle (GdkDrawable *drawable,
 			gint         width,
 			gint         height)
 {
-  GdkDrawableImplX11 *impl;
-
-  impl = GDK_DRAWABLE_IMPL_X11 (drawable);
-  
   if (filled)
-    XFillRectangle (impl->xdisplay, impl->xid,
-		    GDK_GC_GET_XGC (gc), x, y, width, height);
+    XFillRectangle (GDK_DRAWABLE_XDISPLAY (drawable), GDK_DRAWABLE_XID (drawable),
+		    GDK_GC_XGC (gc), x, y, width, height);
   else
-    XDrawRectangle (impl->xdisplay, impl->xid,
-		    GDK_GC_GET_XGC (gc), x, y, width, height);
+    XDrawRectangle (GDK_DRAWABLE_XDISPLAY (drawable), GDK_DRAWABLE_XID (drawable),
+		    GDK_GC_XGC (gc), x, y, width, height);
 }
 
 static void
@@ -253,17 +176,12 @@ gdk_x11_draw_arc (GdkDrawable *drawable,
 		  gint         angle1,
 		  gint         angle2)
 {
-  GdkDrawableImplX11 *impl;
-
-  impl = GDK_DRAWABLE_IMPL_X11 (drawable);
-
-  
   if (filled)
-    XFillArc (impl->xdisplay, impl->xid,
-	      GDK_GC_GET_XGC (gc), x, y, width, height, angle1, angle2);
+    XFillArc (GDK_DRAWABLE_XDISPLAY (drawable), GDK_DRAWABLE_XID (drawable),
+	      GDK_GC_XGC (gc), x, y, width, height, angle1, angle2);
   else
-    XDrawArc (impl->xdisplay, impl->xid,
-	      GDK_GC_GET_XGC (gc), x, y, width, height, angle1, angle2);
+    XDrawArc (GDK_DRAWABLE_XDISPLAY (drawable), GDK_DRAWABLE_XID (drawable),
+	      GDK_GC_XGC (gc), x, y, width, height, angle1, angle2);
 }
 
 static void
@@ -273,41 +191,36 @@ gdk_x11_draw_polygon (GdkDrawable *drawable,
 		      GdkPoint    *points,
 		      gint         npoints)
 {
-  XPoint *tmp_points;
-  gint tmp_npoints, i;
-  GdkDrawableImplX11 *impl;
-
-  impl = GDK_DRAWABLE_IMPL_X11 (drawable);
-
-  
-  if (!filled &&
-      (points[0].x != points[npoints-1].x || points[0].y != points[npoints-1].y))
-    {
-      tmp_npoints = npoints + 1;
-      tmp_points = g_new (XPoint, tmp_npoints);
-      tmp_points[npoints].x = points[0].x;
-      tmp_points[npoints].y = points[0].y;
-    }
-  else
-    {
-      tmp_npoints = npoints;
-      tmp_points = g_new (XPoint, tmp_npoints);
-    }
-
-  for (i=0; i<npoints; i++)
-    {
-      tmp_points[i].x = points[i].x;
-      tmp_points[i].y = points[i].y;
-    }
-  
   if (filled)
-    XFillPolygon (impl->xdisplay, impl->xid,
-		  GDK_GC_GET_XGC (gc), tmp_points, tmp_npoints, Complex, CoordModeOrigin);
+    {
+      XFillPolygon (GDK_DRAWABLE_XDISPLAY (drawable), GDK_DRAWABLE_XID (drawable),
+		    GDK_GC_XGC (gc), (XPoint*) points, npoints, Complex, CoordModeOrigin);
+    }
   else
-    XDrawLines (impl->xdisplay, impl->xid,
-		GDK_GC_GET_XGC (gc), tmp_points, tmp_npoints, CoordModeOrigin);
+    {
+      GdkPoint *local_points = points;
+      gint local_npoints = npoints;
+      gint local_alloc = 0;
 
-  g_free (tmp_points);
+      if ((points[0].x != points[npoints-1].x) ||
+        (points[0].y != points[npoints-1].y)) 
+        {
+          local_alloc = 1;
+          ++local_npoints;
+          local_points = (GdkPoint*) g_malloc (local_npoints * sizeof(GdkPoint));
+          memcpy (local_points, points, npoints * sizeof(GdkPoint));
+          local_points[npoints].x = points[0].x;
+          local_points[npoints].y = points[0].y;
+      }
+
+      XDrawLines (GDK_DRAWABLE_XDISPLAY (drawable), GDK_DRAWABLE_XID (drawable),
+		  GDK_GC_XGC (gc),
+		  (XPoint*) local_points, local_npoints,
+		  CoordModeOrigin);
+  
+       if (local_alloc)
+       g_free (local_points);
+    }
 }
 
 /* gdk_x11_draw_text
@@ -325,30 +238,26 @@ gdk_x11_draw_text (GdkDrawable *drawable,
 		   const gchar *text,
 		   gint         text_length)
 {
-  GdkDrawableImplX11 *impl;
-
-  impl = GDK_DRAWABLE_IMPL_X11 (drawable);
-  
   if (font->type == GDK_FONT_FONT)
     {
       XFontStruct *xfont = (XFontStruct *) GDK_FONT_XFONT (font);
-      XSetFont(impl->xdisplay, GDK_GC_GET_XGC (gc), xfont->fid);
+      XSetFont(GDK_DRAWABLE_XDISPLAY (drawable), GDK_GC_XGC (gc), xfont->fid);
       if ((xfont->min_byte1 == 0) && (xfont->max_byte1 == 0))
 	{
-	  XDrawString (impl->xdisplay, impl->xid,
-		       GDK_GC_GET_XGC (gc), x, y, text, text_length);
+	  XDrawString (GDK_DRAWABLE_XDISPLAY (drawable), GDK_DRAWABLE_XID (drawable),
+		       GDK_GC_XGC (gc), x, y, text, text_length);
 	}
       else
 	{
-	  XDrawString16 (impl->xdisplay, impl->xid,
-			 GDK_GC_GET_XGC (gc), x, y, (XChar2b *) text, text_length / 2);
+	  XDrawString16 (GDK_DRAWABLE_XDISPLAY (drawable), GDK_DRAWABLE_XID (drawable),
+			 GDK_GC_XGC (gc), x, y, (XChar2b *) text, text_length / 2);
 	}
     }
   else if (font->type == GDK_FONT_FONTSET)
     {
       XFontSet fontset = (XFontSet) GDK_FONT_XFONT (font);
-      XmbDrawString (impl->xdisplay, impl->xid,
-		     fontset, GDK_GC_GET_XGC (gc), x, y, text, text_length);
+      XmbDrawString (GDK_DRAWABLE_XDISPLAY (drawable), GDK_DRAWABLE_XID (drawable),
+		     fontset, GDK_GC_XGC (gc), x, y, text, text_length);
     }
   else
     g_error("undefined font type\n");
@@ -363,29 +272,25 @@ gdk_x11_draw_text_wc (GdkDrawable    *drawable,
 		      const GdkWChar *text,
 		      gint	      text_length)
 {
-  GdkDrawableImplX11 *impl;
-
-  impl = GDK_DRAWABLE_IMPL_X11 (drawable);
-  
   if (font->type == GDK_FONT_FONT)
     {
       XFontStruct *xfont = (XFontStruct *) GDK_FONT_XFONT (font);
       gchar *text_8bit;
       gint i;
-      XSetFont(impl->xdisplay, GDK_GC_GET_XGC (gc), xfont->fid);
+      XSetFont(GDK_DRAWABLE_XDISPLAY (drawable), GDK_GC_XGC (gc), xfont->fid);
       text_8bit = g_new (gchar, text_length);
       for (i=0; i<text_length; i++) text_8bit[i] = text[i];
-      XDrawString (impl->xdisplay, impl->xid,
-                   GDK_GC_GET_XGC (gc), x, y, text_8bit, text_length);
+      XDrawString (GDK_DRAWABLE_XDISPLAY (drawable), GDK_DRAWABLE_XID (drawable),
+                   GDK_GC_XGC (gc), x, y, text_8bit, text_length);
       g_free (text_8bit);
     }
   else if (font->type == GDK_FONT_FONTSET)
     {
       if (sizeof(GdkWChar) == sizeof(wchar_t))
 	{
-	  XwcDrawString (impl->xdisplay, impl->xid,
+	  XwcDrawString (GDK_DRAWABLE_XDISPLAY (drawable), GDK_DRAWABLE_XID (drawable),
 			 (XFontSet) GDK_FONT_XFONT (font),
-			 GDK_GC_GET_XGC (gc), x, y, (wchar_t *)text, text_length);
+			 GDK_GC_XGC (gc), x, y, (wchar_t *)text, text_length);
 	}
       else
 	{
@@ -393,9 +298,9 @@ gdk_x11_draw_text_wc (GdkDrawable    *drawable,
 	  gint i;
 	  text_wchar = g_new (wchar_t, text_length);
 	  for (i=0; i<text_length; i++) text_wchar[i] = text[i];
-	  XwcDrawString (impl->xdisplay, impl->xid,
+	  XwcDrawString (GDK_DRAWABLE_XDISPLAY (drawable), GDK_DRAWABLE_XID (drawable),
 			 (XFontSet) GDK_FONT_XFONT (font),
-			 GDK_GC_GET_XGC (gc), x, y, text_wchar, text_length);
+			 GDK_GC_XGC (gc), x, y, text_wchar, text_length);
 	  g_free (text_wchar);
 	}
     }
@@ -414,41 +319,27 @@ gdk_x11_draw_drawable (GdkDrawable *drawable,
 		       gint         width,
 		       gint         height)
 {
-  int src_depth = gdk_drawable_get_depth (src);
-  int dest_depth = gdk_drawable_get_depth (drawable);
-  GdkDrawableImplX11 *impl;
-  GdkDrawableImplX11 *src_impl;
-  
-  impl = GDK_DRAWABLE_IMPL_X11 (drawable);
-
-  if (GDK_IS_DRAWABLE_IMPL_X11 (src))
-    src_impl = GDK_DRAWABLE_IMPL_X11 (src);
-  else
-    src_impl = NULL;
-  
-  if (src_depth == 1)
+  /* FIXME: this doesn't work because bitmaps don't have visuals */
+  if (gdk_drawable_get_visual (src)->depth == 1)
     {
-      XCopyArea (impl->xdisplay,
-                 src_impl ? src_impl->xid : GDK_DRAWABLE_XID (src),
-		 impl->xid,
-		 GDK_GC_GET_XGC (gc),
-		 xsrc, ysrc,
-		 width, height,
-		 xdest, ydest);
-    }
-  else if (dest_depth != 0 && src_depth == dest_depth)
-    {
-      XCopyArea (impl->xdisplay,
-                 src_impl ? src_impl->xid : GDK_DRAWABLE_XID (src),
-		 impl->xid,
-		 GDK_GC_GET_XGC (gc),
+      XCopyArea (GDK_DRAWABLE_XDISPLAY (drawable),
+		 GDK_DRAWABLE_XID (src),
+		 GDK_DRAWABLE_XID (drawable),
+		 GDK_GC_XGC (gc),
 		 xsrc, ysrc,
 		 width, height,
 		 xdest, ydest);
     }
   else
-    g_warning ("Attempt to draw a drawable with depth %d to a drawable with depth %d",
-               src_depth, dest_depth);
+    {
+      XCopyArea (GDK_DRAWABLE_XDISPLAY (drawable),
+		 GDK_DRAWABLE_XID (src),
+		 GDK_DRAWABLE_XID (drawable),
+		 GDK_GC_XGC (gc),
+		 xsrc, ysrc,
+		 width, height,
+		 xdest, ydest);
+    }
 }
 
 static void
@@ -457,40 +348,24 @@ gdk_x11_draw_points (GdkDrawable *drawable,
 		     GdkPoint    *points,
 		     gint         npoints)
 {
-  GdkDrawableImplX11 *impl;
-
-  impl = GDK_DRAWABLE_IMPL_X11 (drawable);
-
-  
   /* We special-case npoints == 1, because X will merge multiple
    * consecutive XDrawPoint requests into a PolyPoint request
    */
   if (npoints == 1)
     {
-      XDrawPoint (impl->xdisplay,
-		  impl->xid,
-		  GDK_GC_GET_XGC (gc),
+      XDrawPoint (GDK_DRAWABLE_XDISPLAY (drawable),
+		  GDK_DRAWABLE_XID (drawable),
+		  GDK_GC_XGC (gc),
 		  points[0].x, points[0].y);
     }
   else
     {
-      gint i;
-      XPoint *tmp_points = g_new (XPoint, npoints);
-
-      for (i=0; i<npoints; i++)
-	{
-	  tmp_points[i].x = points[i].x;
-	  tmp_points[i].y = points[i].y;
-	}
-      
-      XDrawPoints (impl->xdisplay,
-		   impl->xid,
-		   GDK_GC_GET_XGC (gc),
-		   tmp_points,
+      XDrawPoints (GDK_DRAWABLE_XDISPLAY (drawable),
+		   GDK_DRAWABLE_XID (drawable),
+		   GDK_GC_XGC (gc),
+		   (XPoint *) points,
 		   npoints,
 		   CoordModeOrigin);
-
-      g_free (tmp_points);
     }
 }
 
@@ -500,39 +375,22 @@ gdk_x11_draw_segments (GdkDrawable *drawable,
 		       GdkSegment  *segs,
 		       gint         nsegs)
 {
-  GdkDrawableImplX11 *impl;
-
-  impl = GDK_DRAWABLE_IMPL_X11 (drawable);
-
-  
   /* We special-case nsegs == 1, because X will merge multiple
    * consecutive XDrawLine requests into a PolySegment request
    */
   if (nsegs == 1)
     {
-      XDrawLine (impl->xdisplay, impl->xid,
-		 GDK_GC_GET_XGC (gc), segs[0].x1, segs[0].y1,
+      XDrawLine (GDK_DRAWABLE_XDISPLAY (drawable), GDK_DRAWABLE_XID (drawable),
+		 GDK_GC_XGC (gc), segs[0].x1, segs[0].y1,
 		 segs[0].x2, segs[0].y2);
     }
   else
     {
-      gint i;
-      XSegment *tmp_segs = g_new (XSegment, nsegs);
-
-      for (i=0; i<nsegs; i++)
-	{
-	  tmp_segs[i].x1 = segs[i].x1;
-	  tmp_segs[i].x2 = segs[i].x2;
-	  tmp_segs[i].y1 = segs[i].y1;
-	  tmp_segs[i].y2 = segs[i].y2;
-	}
-      
-      XDrawSegments (impl->xdisplay,
-		     impl->xid,
-		     GDK_GC_GET_XGC (gc),
-		     tmp_segs, nsegs);
-
-      g_free (tmp_segs);
+      XDrawSegments (GDK_DRAWABLE_XDISPLAY (drawable),
+		     GDK_DRAWABLE_XID (drawable),
+		     GDK_GC_XGC (gc),
+		     (XSegment *) segs,
+		     nsegs);
     }
 }
 
@@ -542,81 +400,10 @@ gdk_x11_draw_lines (GdkDrawable *drawable,
 		    GdkPoint    *points,
 		    gint         npoints)
 {
-  gint i;
-  XPoint *tmp_points = g_new (XPoint, npoints);
-  GdkDrawableImplX11 *impl;
-
-  impl = GDK_DRAWABLE_IMPL_X11 (drawable);
-
-  
-  for (i=0; i<npoints; i++)
-    {
-      tmp_points[i].x = points[i].x;
-      tmp_points[i].y = points[i].y;
-    }
-      
-  XDrawLines (impl->xdisplay,
-	      impl->xid,
-	      GDK_GC_GET_XGC (gc),
-	      tmp_points, npoints,
+  XDrawLines (GDK_DRAWABLE_XDISPLAY (drawable),
+	      GDK_DRAWABLE_XID (drawable),
+	      GDK_GC_XGC (gc),
+	      (XPoint *) points,
+	      npoints,
 	      CoordModeOrigin);
-
-  g_free (tmp_points);
-}
-
-static void
-gdk_x11_draw_glyphs (GdkDrawable      *drawable,
-		     GdkGC            *gc,
-		     PangoFont        *font,
-		     gint              x,
-		     gint              y,
-		     PangoGlyphString *glyphs)
-{
-  GdkDrawableImplX11 *impl;
-
-  impl = GDK_DRAWABLE_IMPL_X11 (drawable);
-
-  pango_x_render (impl->xdisplay,
-                  impl->xid,
-		  GDK_GC_GET_XGC (gc),
-		  font, glyphs, x, y);
-}
-
-static void
-gdk_x11_draw_image     (GdkDrawable     *drawable,
-                        GdkGC           *gc,
-                        GdkImage        *image,
-                        gint             xsrc,
-                        gint             ysrc,
-                        gint             xdest,
-                        gint             ydest,
-                        gint             width,
-                        gint             height)
-{
-  GdkDrawableImplX11 *impl;
-  
-  impl = GDK_DRAWABLE_IMPL_X11 (drawable);
-
-  if (image->type == GDK_IMAGE_SHARED)
-    XShmPutImage (impl->xdisplay, impl->xid,
-                  GDK_GC_GET_XGC (gc), GDK_IMAGE_XIMAGE (image),
-                  xsrc, ysrc, xdest, ydest, width, height, False);
-  else
-    XPutImage (impl->xdisplay, impl->xid,
-               GDK_GC_GET_XGC (gc), GDK_IMAGE_XIMAGE (image),
-               xsrc, ysrc, xdest, ydest, width, height);
-}
-
-static gint
-gdk_x11_get_depth (GdkDrawable *drawable)
-{
-  /* This is a bit bogus but I'm not sure the other way is better */
-
-  return gdk_drawable_get_depth (GDK_DRAWABLE_IMPL_X11 (drawable)->wrapper);
-}
-
-static GdkVisual*
-gdk_x11_get_visual (GdkDrawable    *drawable)
-{
-  return gdk_drawable_get_visual (GDK_DRAWABLE_IMPL_X11 (drawable)->wrapper);
 }

@@ -8,16 +8,16 @@
  * Based on io-gif.c, io-tiff.c and io-png.c
  *
  * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
+ * modify it under the terms of the GNU Library General Public
  * License as published by the Free Software Foundation; either
  * version 2 of the License, or (at your option) any later version.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
+ * Library General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public
+ * You should have received a copy of the GNU Library General Public
  * License along with this library; if not, write to the
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
  * Boston, MA 02111-1307, USA.
@@ -32,14 +32,13 @@ Known bugs:
 
 #include <config.h>
 #include <stdio.h>
-#ifdef HAVE_UNISTD_H
 #include <unistd.h>
-#endif
 #include <string.h>
-#include "gdk-pixbuf-private.h"
+#include "gdk-pixbuf.h"
 #include "gdk-pixbuf-io.h"
 
 
+
 
 /* 
    Header structure for sunras files.
@@ -98,16 +97,14 @@ gdk_pixbuf__ras_image_begin_load(ModulePreparedNotifyFunc prepared_func,
 				 ModuleUpdatedNotifyFunc updated_func,
 				 ModuleFrameDoneNotifyFunc frame_done_func,
 				 ModuleAnimationDoneNotifyFunc anim_done_func,
-				 gpointer user_data,
-                                 GError **error);
+				 gpointer user_data);
 void gdk_pixbuf__ras_image_stop_load(gpointer data);
-gboolean gdk_pixbuf__ras_image_load_increment(gpointer data, guchar * buf, guint size,
-                                              GError **error);
+gboolean gdk_pixbuf__ras_image_load_increment(gpointer data, guchar * buf, guint size);
 
 
 
 /* Shared library entry point */
-GdkPixbuf *gdk_pixbuf__ras_image_load(FILE * f, GError **error)
+GdkPixbuf *gdk_pixbuf__ras_image_load(FILE * f)
 {
 	guchar *membuf;
 	size_t length;
@@ -115,8 +112,7 @@ GdkPixbuf *gdk_pixbuf__ras_image_load(FILE * f, GError **error)
 	
 	GdkPixbuf *pb;
 	
-	State = gdk_pixbuf__ras_image_begin_load(NULL, NULL, NULL,
-                                                 NULL, NULL, error);
+	State = gdk_pixbuf__ras_image_begin_load(NULL, NULL, NULL, NULL, NULL);
 	
 	membuf = g_malloc(4096);
 	
@@ -124,12 +120,8 @@ GdkPixbuf *gdk_pixbuf__ras_image_load(FILE * f, GError **error)
 	
 	while (feof(f) == 0) {
 		length = fread(membuf, 1, 4096, f);
-                if (!gdk_pixbuf__ras_image_load_increment(State, membuf, length,
-                                                          error)) {
-                        gdk_pixbuf__ras_image_stop_load (State);
-                        return NULL;
-                }
-	}
+		(void)gdk_pixbuf__ras_image_load_increment(State, membuf, length);
+	} 
 	g_free(membuf);
 	if (State->pixbuf != NULL)
 		gdk_pixbuf_ref(State->pixbuf);
@@ -179,7 +171,7 @@ static void RAS2State(struct rasterfile *RAS,
 
 	if (State->pixbuf == NULL) {
 		if (State->RasType == 32)
-			State->pixbuf = gdk_pixbuf_new(GDK_COLORSPACE_RGB, TRUE,
+			State->pixbuf = gdk_pixbuf_new(ART_PIX_RGB, TRUE,
 						       8,
 						       (gint)
 						       State->Header.width,
@@ -188,7 +180,7 @@ static void RAS2State(struct rasterfile *RAS,
 						       height);
 		else
 			State->pixbuf =
-			    gdk_pixbuf_new(GDK_COLORSPACE_RGB, FALSE, 8,
+			    gdk_pixbuf_new(ART_PIX_RGB, FALSE, 8,
 					   (gint) State->Header.width,
 					   (gint) State->Header.height);
 		if (State->prepared_func != NULL)
@@ -220,8 +212,7 @@ gdk_pixbuf__ras_image_begin_load(ModulePreparedNotifyFunc prepared_func,
 				 ModuleUpdatedNotifyFunc updated_func,
 				 ModuleFrameDoneNotifyFunc frame_done_func,
 				 ModuleAnimationDoneNotifyFunc anim_done_func,
-				 gpointer user_data,
-                                 GError **error)
+				 gpointer user_data)
 {
 	struct ras_progressive_state *context;
 
@@ -287,7 +278,8 @@ static void OneLine32(struct ras_progressive_state *context)
 	guchar *Pixels;
 
 	X = 0;
-	Pixels = context->pixbuf->pixels + context->pixbuf->rowstride * context->Lines;
+	Pixels = context->pixbuf->art_pixbuf->pixels +
+	    context->pixbuf->art_pixbuf->rowstride * context->Lines;
 	while (X < context->Header.width) {
 		/* The joys of having a BGR byteorder */
 		Pixels[X * 4 + 0] = context->LineBuf[X * 4 + 2];
@@ -304,7 +296,8 @@ static void OneLine24(struct ras_progressive_state *context)
 	guchar *Pixels;
 
 	X = 0;
-	Pixels = context->pixbuf->pixels + context->pixbuf->rowstride * context->Lines;
+	Pixels = context->pixbuf->art_pixbuf->pixels +
+	    context->pixbuf->art_pixbuf->rowstride * context->Lines;
 	while (X < context->Header.width) {
 		/* The joys of having a BGR byteorder */
 		Pixels[X * 3 + 0] = context->LineBuf[X * 3 + 2];
@@ -321,7 +314,8 @@ static void OneLine8(struct ras_progressive_state *context)
 	guchar *Pixels;
 
 	X = 0;
-	Pixels = context->pixbuf->pixels + context->pixbuf->rowstride * context->Lines;
+	Pixels = context->pixbuf->art_pixbuf->pixels +
+	    context->pixbuf->art_pixbuf->rowstride * context->Lines;
 	while (X < context->Header.width) {
 		/* The joys of having a BGR byteorder */
 		Pixels[X * 3 + 0] =
@@ -340,7 +334,8 @@ static void OneLine1(struct ras_progressive_state *context)
 	guchar *Pixels;
 
 	X = 0;
-	Pixels = context->pixbuf->pixels + context->pixbuf->rowstride * context->Lines;
+	Pixels = context->pixbuf->art_pixbuf->pixels +
+	    context->pixbuf->art_pixbuf->rowstride * context->Lines;
 	while (X < context->Header.width) {
 		int Bit;
 		
@@ -393,8 +388,7 @@ static void OneLine(struct ras_progressive_state *context)
  * append image data onto inrecrementally built output image
  */
 gboolean
-gdk_pixbuf__ras_image_load_increment(gpointer data, guchar * buf, guint size,
-                                     GError **error)
+gdk_pixbuf__ras_image_load_increment(gpointer data, guchar * buf, guint size)
 {
 	struct ras_progressive_state *context =
 	    (struct ras_progressive_state *) data;

@@ -2,23 +2,23 @@
  * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
  *
  * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
+ * modify it under the terms of the GNU Library General Public
  * License as published by the Free Software Foundation; either
  * version 2 of the License, or (at your option) any later version.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
+ * Library General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public
+ * You should have received a copy of the GNU Library General Public
  * License along with this library; if not, write to the
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
  * Boston, MA 02111-1307, USA.
  */
 
 /*
- * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
+ * Modified by the GTK+ Team and others 1997-1999.  See the AUTHORS
  * file for a list of people on the GTK+ Team.  See the ChangeLog
  * files for a list of changes.  These files are distributed with
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
@@ -53,7 +53,7 @@ static void   gtk_preview_set_arg	(GtkObject        *object,
 static void   gtk_preview_get_arg	(GtkObject        *object,
 					 GtkArg           *arg,
 					 guint             arg_id);
-static void   gtk_preview_finalize      (GObject          *object);
+static void   gtk_preview_finalize      (GtkObject        *object);
 static void   gtk_preview_realize       (GtkWidget        *widget);
 static void   gtk_preview_size_allocate (GtkWidget        *widget,
 					 GtkAllocation    *allocation);
@@ -95,7 +95,6 @@ gtk_preview_get_type (void)
 static void
 gtk_preview_class_init (GtkPreviewClass *klass)
 {
-  GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
   GtkObjectClass *object_class;
   GtkWidgetClass *widget_class;
 
@@ -105,10 +104,9 @@ gtk_preview_class_init (GtkPreviewClass *klass)
   parent_class = gtk_type_class (GTK_TYPE_WIDGET);
   preview_class = klass;
 
-  gobject_class->finalize = gtk_preview_finalize;
-
   object_class->set_arg = gtk_preview_set_arg;
   object_class->get_arg = gtk_preview_get_arg;
+  object_class->finalize = gtk_preview_finalize;
 
   widget_class->realize = gtk_preview_realize;
   widget_class->size_allocate = gtk_preview_size_allocate;
@@ -184,6 +182,7 @@ gtk_preview_init (GtkPreview *preview)
 void
 gtk_preview_uninit (void)
 {
+
   /* unimplemented */
 }
 
@@ -439,10 +438,11 @@ gtk_preview_get_info (void)
 
 
 static void
-gtk_preview_finalize (GObject *object)
+gtk_preview_finalize (GtkObject *object)
 {
   GtkPreview *preview;
 
+  g_return_if_fail (object != NULL);
   g_return_if_fail (GTK_IS_PREVIEW (object));
 
   preview = GTK_PREVIEW (object);
@@ -450,7 +450,7 @@ gtk_preview_finalize (GObject *object)
     g_free (preview->buffer);
   preview->type = (GtkPreviewType) -1;
 
-  G_OBJECT_CLASS (parent_class)->finalize (object);
+  (* GTK_OBJECT_CLASS (parent_class)->finalize) (object);
 }
 
 static void

@@ -2,30 +2,30 @@
  * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
  *
  * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
+ * modify it under the terms of the GNU Library General Public
  * License as published by the Free Software Foundation; either
  * version 2 of the License, or (at your option) any later version.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	 See the GNU
- * Lesser General Public License for more details.
+ * Library General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public
+ * You should have received a copy of the GNU Library General Public
  * License along with this library; if not, write to the
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
  * Boston, MA 02111-1307, USA.
  */
 
 /*
- * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
+ * Modified by the GTK+ Team and others 1997-1999.  See the AUTHORS
  * file for a list of people on the GTK+ Team.  See the ChangeLog
  * files for a list of changes.  These files are distributed with
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
 #include "gdk.h"
-#include "gdkinternals.h"
+#include "gdkprivate.h"
 
 typedef struct _GdkIOClosure GdkIOClosure;
 typedef struct _GdkEventPrivate GdkEventPrivate;
@@ -135,6 +135,7 @@ gdk_event_queue_remove_link (GList *node)
     node->next->prev = node->prev;
   else
     gdk_queued_tail = node->prev;
+  
 }
 
 /*************************************************************
@@ -297,8 +298,7 @@ gdk_event_copy (GdkEvent *event)
   new_event = gdk_event_new ();
   
   *new_event = *event;
-  if (new_event->any.window)
-    gdk_window_ref (new_event->any.window);
+  gdk_window_ref (new_event->any.window);
   
   switch (event->any.type)
     {
@@ -378,17 +378,6 @@ gdk_event_free (GdkEvent *event)
     case GDK_DROP_FINISHED:
       gdk_drag_context_unref (event->dnd.context);
       break;
-
-    case GDK_BUTTON_PRESS:
-    case GDK_BUTTON_RELEASE:
-      if (event->button.axes)
-	g_free (event->button.axes);
-      break;
-
-    case GDK_MOTION_NOTIFY:
-      if (event->motion.axes)
-	g_free (event->motion.axes);
-      break;
       
     default:
       break;
@@ -450,80 +439,6 @@ gdk_event_get_time (GdkEvent *event)
       }
   
   return GDK_CURRENT_TIME;
-}
-
-/**
- * gdk_event_get_axis:
- * @event: a #GdkEvent
- * @axis_use: the axis use to look for
- * @value: location to store the value found
- * 
- * Extract the axis value for a particular axis use from
- * an event structure.
- * 
- * Return value: %TRUE if the specified axis was found, otherwise %FALSE
- **/
-gboolean
-gdk_event_get_axis (GdkEvent   *event,
-		    GdkAxisUse  axis_use,
-		    gdouble    *value)
-{
-  gdouble *axes;
-  GdkDevice *device;
-  
-  g_return_val_if_fail (event != NULL, FALSE);
-  
-  if (axis_use == GDK_AXIS_X || axis_use == GDK_AXIS_Y)
-    {
-      gdouble x, y;
-      
-      switch (event->type)
-	{
-	case GDK_MOTION_NOTIFY:
-	  x = event->motion.x;
-	  y = event->motion.y;
-	  break;
-	case GDK_SCROLL:
-	  x = event->scroll.x;
-	  y = event->scroll.y;
-	  break;
-	case GDK_BUTTON_PRESS:
-	case GDK_BUTTON_RELEASE:
-	  x = event->button.x;
-	  y = event->button.y;
-	  break;
-	case GDK_ENTER_NOTIFY:
-	case GDK_LEAVE_NOTIFY:
-	  x = event->crossing.x;
-	  y = event->crossing.y;
-	  break;
-	  
-	default:
-	  return FALSE;
-	}
-
-      if (axis_use == GDK_AXIS_X && value)
-	*value = x;
-      if (axis_use == GDK_AXIS_Y && value)
-	*value = y;
-
-      return TRUE;
-    }
-  else if (event->type == GDK_BUTTON_PRESS ||
-	   event->type == GDK_BUTTON_RELEASE)
-    {
-      device = event->button.device;
-      axes = event->button.axes;
-    }
-  else if (event->type == GDK_MOTION_NOTIFY)
-    {
-      device = event->motion.device;
-      axes = event->motion.axes;
-    }
-  else
-    return FALSE;
-
-  return gdk_device_get_axis (device, axes, axis_use, value);
 }
 
 /*

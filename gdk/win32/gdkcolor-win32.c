@@ -2,23 +2,23 @@
  * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
  *
  * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
+ * modify it under the terms of the GNU Library General Public
  * License as published by the Free Software Foundation; either
  * version 2 of the License, or (at your option) any later version.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
+ * Library General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public
+ * You should have received a copy of the GNU Library General Public
  * License along with this library; if not, write to the
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
  * Boston, MA 02111-1307, USA.
  */
 
 /*
- * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
+ * Modified by the GTK+ Team and others 1997-1999.  See the AUTHORS
  * file for a list of people on the GTK+ Team.  See the ChangeLog
  * files for a list of changes.  These files are distributed with
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
@@ -32,102 +32,20 @@
 #include <time.h>
 
 #include "gdkcolor.h"
-#include "gdkprivate-win32.h"
+#include "gdkwin32.h"
 
-static void     free_colormap            (Colormap          colormap);
-
-static gint     gdk_colormap_match_color (GdkColormap      *cmap,
-					  GdkColor         *color,
-					  const gchar      *available);
-static void     gdk_colormap_add         (GdkColormap      *cmap);
-static void     gdk_colormap_remove      (GdkColormap      *cmap);
-static guint    gdk_colormap_hash        (Colormap         *cmap);
-static gboolean gdk_colormap_equal       (Colormap         *a,
-					  Colormap         *b);
-
-static void     gdk_colormap_init        (GdkColormap      *colormap);
-static void     gdk_colormap_class_init  (GdkColormapClass *klass);
-static void     gdk_colormap_finalize    (GObject          *object);
-
-static gpointer parent_class = NULL;
+static gint  gdk_colormap_match_color (GdkColormap *cmap,
+				       GdkColor    *color,
+				       const gchar *available);
+static void  gdk_colormap_add         (GdkColormap *cmap);
+static void  gdk_colormap_remove      (GdkColormap *cmap);
+static guint gdk_colormap_hash        (Colormap    *cmap);
+static gint  gdk_colormap_cmp         (Colormap    *a,
+				       Colormap    *b);
 
 static GHashTable *colormap_hash = NULL;
 
-GType
-gdk_colormap_get_type (void)
-{
-  static GType object_type = 0;
-
-  if (!object_type)
-    {
-      static const GTypeInfo object_info =
-      {
-        sizeof (GdkColormapClass),
-        (GBaseInitFunc) NULL,
-        (GBaseFinalizeFunc) NULL,
-        (GClassInitFunc) gdk_colormap_class_init,
-        NULL,           /* class_finalize */
-        NULL,           /* class_data */
-        sizeof (GdkColormap),
-        0,              /* n_preallocs */
-        (GInstanceInitFunc) gdk_colormap_init,
-      };
-      
-      object_type = g_type_register_static (G_TYPE_OBJECT,
-                                            "GdkColormap",
-                                            &object_info, 0);
-    }
-  
-  return object_type;
-}
-
-static void
-gdk_colormap_init (GdkColormap *colormap)
-{
-  GdkColormapPrivateWin32 *private;
-
-  private = g_new (GdkColormapPrivateWin32, 1);
-
-  colormap->windowing_data = private;
-  
-  private->hash = NULL;
-  private->last_sync_time = 0;
-  private->info = NULL;
-
-  colormap->size = 0;
-  colormap->colors = NULL;
-}
-
-static void
-gdk_colormap_class_init (GdkColormapClass *klass)
-{
-  GObjectClass *object_class = G_OBJECT_CLASS (klass);
-
-  parent_class = g_type_class_peek_parent (klass);
-
-  object_class->finalize = gdk_colormap_finalize;
-}
-
-static void
-gdk_colormap_finalize (GObject *object)
-{
-  GdkColormap *colormap = GDK_COLORMAP (object);
-  GdkColormapPrivateWin32 *private = GDK_COLORMAP_PRIVATE_DATA (colormap);
-
-  gdk_colormap_remove (colormap);
-
-  free_colormap (private->xcolormap);
-
-  if (private->hash)
-    g_hash_table_destroy (private->hash);
-  
-  g_free (private->info);
-  g_free (colormap->colors);
-  
-  G_OBJECT_CLASS (parent_class)->finalize (object);
-}
-
-static gboolean
+static Status
 alloc_color_cells(Colormap      colormap,
 		  gboolean      contig,
 		  unsigned long plane_masks_return[],
@@ -190,7 +108,7 @@ alloc_color_cells(Colormap      colormap,
 
 /* The following functions are from Tk8.0, but heavily modified.
    Here are tk's licensing terms. I hope these terms don't conflict
-   with the GNU Lesser General Public License? They shouldn't, as
+   with the GNU Library General Public License? They shouldn't, as
    they are looser that the GLPL, yes? */
 
 /*
@@ -254,9 +172,10 @@ terms specified in this license.
 static int
 alloc_color(Colormap  colormap,
 	    XColor   *color,
-	    guint    *pixelp)
+	    gulong   *pixelp)
 {
   PALETTEENTRY entry, closeEntry;
+  HDC hdc;
   unsigned int i;
     
   entry = *color;
@@ -344,7 +263,7 @@ alloc_color(Colormap  colormap,
       /*
        * Determine what color will actually be used on non-colormap systems.
        */
-      *pixelp = GetNearestColor (gdk_display_hdc, RGB(entry.peRed, entry.peGreen, entry.peBlue));
+      *pixelp = GetNearestColor (gdk_DC, RGB(entry.peRed, entry.peGreen, entry.peBlue));
       
       color->peRed = GetRValue (*pixelp);
       color->peGreen = GetGValue (*pixelp);
@@ -441,6 +360,7 @@ create_colormap (HWND     w,
 {
   char logPalBuf[sizeof(LOGPALETTE) + 256 * sizeof(PALETTEENTRY)];
   LOGPALETTE *logPalettePtr;
+  PALETTEENTRY *entryPtr;
   Colormap colormap;
   guint i;
   HPALETTE sysPal;
@@ -498,7 +418,7 @@ create_colormap (HWND     w,
  */
 
 static void
-free_colormap(Colormap colormap)
+free_colormap(Colormap  colormap)
  
 {
   if (!DeleteObject (colormap->palette))
@@ -1385,6 +1305,7 @@ static Colormap
 default_colormap ()
 {
   static Colormap colormap;
+  gint i;
 
   if (colormap)
     return colormap;
@@ -1395,36 +1316,43 @@ default_colormap ()
 
 GdkColormap*
 gdk_colormap_new (GdkVisual *visual,
-		  gboolean   private_cmap)
+		  gint       private_cmap)
 {
   GdkColormap *colormap;
   GdkColormapPrivateWin32 *private;
   Visual *xvisual;
+  int size;
   int i;
 
   g_return_val_if_fail (visual != NULL, NULL);
 
-  colormap = g_object_new (gdk_colormap_get_type (), NULL);
-  private = GDK_COLORMAP_PRIVATE_DATA (colormap);
+  private = g_new (GdkColormapPrivateWin32, 1);
+  colormap = (GdkColormap*) private;
 
-  colormap->visual = visual;
+  private->base.visual = visual;
+  private->base.ref_count = 1;
 
+  private->hash = NULL;
+  private->last_sync_time = 0;
+  private->info = NULL;
+  
   xvisual = ((GdkVisualPrivate*) visual)->xvisual;
 
   colormap->size = visual->colormap_size;
+  colormap->colors = g_new (GdkColor, colormap->size);
 
   switch (visual->type)
     {
     case GDK_VISUAL_GRAYSCALE:
     case GDK_VISUAL_PSEUDO_COLOR:
       private->info = g_new0 (GdkColorInfo, colormap->size);
-      colormap->colors = g_new (GdkColor, colormap->size);
       
       private->hash = g_hash_table_new ((GHashFunc) gdk_color_hash,
-					(GEqualFunc) gdk_color_equal);
+					(GCompareFunc) gdk_color_equal);
       
       private->private_val = private_cmap;
-      private->xcolormap = create_colormap (gdk_root_window, xvisual, private_cmap);
+      private->xcolormap = create_colormap (gdk_root_window, xvisual,
+					    private_cmap);
 
       if (private_cmap)
 	{
@@ -1459,14 +1387,30 @@ gdk_colormap_new (GdkVisual *visual,
       private->xcolormap = create_colormap (gdk_root_window,
 					    xvisual, FALSE);
       break;
-
-    case GDK_VISUAL_DIRECT_COLOR:
-      g_assert_not_reached ();
     }
 
   gdk_colormap_add (colormap);
 
   return colormap;
+}
+
+void
+_gdk_colormap_real_destroy (GdkColormap *colormap)
+{
+  GdkColormapPrivateWin32 *private = (GdkColormapPrivateWin32 *) colormap;
+
+  g_return_if_fail (colormap != NULL);
+  g_return_if_fail (private->base.ref_count == 0);
+
+  gdk_colormap_remove (colormap);
+  free_colormap (private->xcolormap);
+
+  if (private->hash)
+    g_hash_table_destroy (private->hash);
+  
+  g_free (private->info);
+  g_free (colormap->colors);
+  g_free (colormap);
 }
 
 #define MIN_SYNC_TIME 2
@@ -1476,7 +1420,7 @@ gdk_colormap_sync (GdkColormap *colormap,
 		   gboolean     force)
 {
   time_t current_time;
-  GdkColormapPrivateWin32 *private = GDK_COLORMAP_PRIVATE_DATA (colormap);
+  GdkColormapPrivateWin32 *private = (GdkColormapPrivateWin32 *) colormap;
   XColor *xpalette;
   gint nlookup;
   gint i;
@@ -1519,31 +1463,33 @@ gdk_colormap_get_system (void)
 {
   static GdkColormap *colormap = NULL;
   GdkColormapPrivateWin32 *private;
+  gint i;
 
   if (!colormap)
     {
-      colormap = g_object_new (gdk_colormap_get_type (), NULL);
-      private = GDK_COLORMAP_PRIVATE_DATA (colormap);
+      private = g_new (GdkColormapPrivateWin32, 1);
+      colormap = (GdkColormap*) private;
 
       private->xcolormap = default_colormap ();
-      colormap->visual = gdk_visual_get_system ();
+      private->base.visual = gdk_visual_get_system ();
       private->private_val = FALSE;
+      private->base.ref_count = 1;
 
       private->hash = NULL;
       private->last_sync_time = 0;
       private->info = NULL;
 
       colormap->colors = NULL;
-      colormap->size = colormap->visual->colormap_size;
+      colormap->size = private->base.visual->colormap_size;
 
-      if ((colormap->visual->type == GDK_VISUAL_GRAYSCALE) ||
-	  (colormap->visual->type == GDK_VISUAL_PSEUDO_COLOR))
+      if ((private->base.visual->type == GDK_VISUAL_GRAYSCALE) ||
+	  (private->base.visual->type == GDK_VISUAL_PSEUDO_COLOR))
 	{
 	  private->info = g_new0 (GdkColorInfo, colormap->size);
 	  colormap->colors = g_new (GdkColor, colormap->size);
 	  
 	  private->hash = g_hash_table_new ((GHashFunc) gdk_color_hash,
-					    (GEqualFunc) gdk_color_equal);
+					    (GCompareFunc) gdk_color_equal);
 
 	  gdk_colormap_sync (colormap, TRUE);
 	}
@@ -1558,7 +1504,7 @@ gdk_colormap_get_system_size (void)
 {
   gint bitspixel;
   
-  bitspixel = GetDeviceCaps (gdk_display_hdc, BITSPIXEL);
+  bitspixel = GetDeviceCaps (gdk_DC, BITSPIXEL);
 
   if (bitspixel == 1)
     return 2;
@@ -1579,15 +1525,19 @@ gdk_colormap_change (GdkColormap *colormap,
 		     gint         ncolors)
 {
   GdkColormapPrivateWin32 *private;
+  GdkVisual *visual;
   XColor *palette;
+  gint shift;
+  int max_colors;
+  int size;
   int i;
 
-  g_return_if_fail (GDK_IS_COLORMAP (colormap));
+  g_return_if_fail (colormap != NULL);
 
   palette = g_new (XColor, ncolors);
 
-  private = GDK_COLORMAP_PRIVATE_DATA (colormap);
-  switch (colormap->visual->type)
+  private = (GdkColormapPrivateWin32 *) colormap;
+  switch (private->base.visual->type)
     {
     case GDK_VISUAL_GRAYSCALE:
     case GDK_VISUAL_PSEUDO_COLOR:
@@ -1614,7 +1564,7 @@ gdk_colormap_change (GdkColormap *colormap,
 
 gboolean
 gdk_colors_alloc (GdkColormap   *colormap,
-		  gboolean       contiguous,
+		  gint           contiguous,
 		  gulong        *planes,
 		  gint           nplanes,
 		  gulong        *pixels,
@@ -1624,9 +1574,9 @@ gdk_colors_alloc (GdkColormap   *colormap,
   gint return_val;
   gint i;
 
-  g_return_val_if_fail (GDK_IS_COLORMAP (colormap), 0);
+  g_return_val_if_fail (colormap != NULL, 0);
 
-  private = GDK_COLORMAP_PRIVATE_DATA (colormap);
+  private = (GdkColormapPrivateWin32 *) colormap;
 
   return_val = alloc_color_cells (private->xcolormap, contiguous,
 				  planes, nplanes, pixels, npixels);
@@ -1648,6 +1598,7 @@ gdk_color_parse (const gchar *spec,
 		 GdkColor *color)
 {
   Colormap xcolormap;
+  XColor xcolor;
 
   g_return_val_if_fail (spec != NULL, FALSE);
   g_return_val_if_fail (color != NULL, FALSE);
@@ -1671,13 +1622,13 @@ gdk_colors_free (GdkColormap *colormap,
   gint npixels = 0;
   gint i;
 
-  g_return_if_fail (GDK_IS_COLORMAP (colormap));
+  g_return_if_fail (colormap != NULL);
   g_return_if_fail (in_pixels != NULL);
 
-  private = GDK_COLORMAP_PRIVATE_DATA (colormap);
+  private = (GdkColormapPrivateWin32 *) colormap;
 
-  if ((colormap->visual->type != GDK_VISUAL_PSEUDO_COLOR) &&
-      (colormap->visual->type != GDK_VISUAL_GRAYSCALE))
+  if ((private->base.visual->type != GDK_VISUAL_PSEUDO_COLOR) &&
+      (private->base.visual->type != GDK_VISUAL_GRAYSCALE))
     return;
   
   pixels = g_new (gulong, in_npixels);
@@ -1719,13 +1670,13 @@ gdk_colormap_free_colors (GdkColormap *colormap,
   gint npixels = 0;
   gint i;
 
-  g_return_if_fail (GDK_IS_COLORMAP (colormap));
+  g_return_if_fail (colormap != NULL);
   g_return_if_fail (colors != NULL);
 
-  private = GDK_COLORMAP_PRIVATE_DATA (colormap);
+  private = (GdkColormapPrivateWin32 *) colormap;
 
-  if ((colormap->visual->type != GDK_VISUAL_PSEUDO_COLOR) &&
-      (colormap->visual->type != GDK_VISUAL_GRAYSCALE))
+  if ((private->base.visual->type != GDK_VISUAL_PSEUDO_COLOR) &&
+      (private->base.visual->type != GDK_VISUAL_GRAYSCALE))
     return;
 
   pixels = g_new (gulong, ncolors);
@@ -1767,7 +1718,7 @@ gdk_colormap_alloc1 (GdkColormap *colormap,
   GdkColormapPrivateWin32 *private;
   XColor xcolor;
 
-  private = GDK_COLORMAP_PRIVATE_DATA (colormap);
+  private = (GdkColormapPrivateWin32 *) colormap;
 
   xcolor.peRed = color->red >> 8;
   xcolor.peGreen = color->green >> 8;
@@ -1776,7 +1727,7 @@ gdk_colormap_alloc1 (GdkColormap *colormap,
   if (alloc_color (private->xcolormap, &xcolor, &ret->pixel))
     {
       ret->red = (xcolor.peRed * 65535) / 255;
-      ret->green = (xcolor.peGreen * 65535) / 255;
+      ret->green = (xcolor.peGreen * 65535) / 255;;
       ret->blue = (xcolor.peBlue * 65535) / 255;
       
       if ((guint) ret->pixel < colormap->size)
@@ -1813,10 +1764,10 @@ gdk_colormap_alloc_colors_writeable (GdkColormap *colormap,
 {
   GdkColormapPrivateWin32 *private;
   gulong *pixels;
-  gboolean status;
+  Status status;
   gint i, index;
 
-  private = GDK_COLORMAP_PRIVATE_DATA (colormap);
+  private = (GdkColormapPrivateWin32 *) colormap;
 
   if (private->private_val)
     {
@@ -1875,7 +1826,7 @@ gdk_colormap_alloc_colors_private (GdkColormap *colormap,
   gint nstore = 0;
   gint nremaining = 0;
   
-  private = GDK_COLORMAP_PRIVATE_DATA (colormap);
+  private = (GdkColormapPrivateWin32 *) colormap;
   index = -1;
 
   /* First, store the colors we have room for */
@@ -1956,7 +1907,7 @@ gdk_colormap_alloc_colors_shared (GdkColormap *colormap,
   gint nremaining = 0;
   gint nfailed = 0;
 
-  private = GDK_COLORMAP_PRIVATE_DATA (colormap);
+  private = (GdkColormapPrivateWin32 *) colormap;
   index = -1;
 
   for (i=0; i<ncolors; i++)
@@ -2048,7 +1999,7 @@ gdk_colormap_alloc_colors_pseudocolor (GdkColormap *colormap,
   gint i;
   gint nremaining = 0;
 
-  private = GDK_COLORMAP_PRIVATE_DATA (colormap);
+  private = (GdkColormapPrivateWin32 *) colormap;
 
   /* Check for an exact match among previously allocated colors */
 
@@ -2096,17 +2047,17 @@ gdk_colormap_alloc_colors (GdkColormap *colormap,
   gint nremaining = 0;
   XColor xcolor;
 
-  g_return_val_if_fail (GDK_IS_COLORMAP (colormap), FALSE);
+  g_return_val_if_fail (colormap != NULL, FALSE);
   g_return_val_if_fail (colors != NULL, FALSE);
 
-  private = GDK_COLORMAP_PRIVATE_DATA (colormap);
+  private = (GdkColormapPrivateWin32 *) colormap;
 
   for (i=0; i<ncolors; i++)
     {
       success[i] = FALSE;
     }
 
-  switch (colormap->visual->type)
+  switch (private->base.visual->type)
     {
     case GDK_VISUAL_PSEUDO_COLOR:
     case GDK_VISUAL_GRAYSCALE:
@@ -2119,7 +2070,7 @@ gdk_colormap_alloc_colors (GdkColormap *colormap,
       break;
 
     case GDK_VISUAL_TRUE_COLOR:
-      visual = colormap->visual;
+      visual = private->base.visual;
 
       for (i=0; i<ncolors; i++)
 	{
@@ -2143,9 +2094,6 @@ gdk_colormap_alloc_colors (GdkColormap *colormap,
 	    nremaining++;
 	}
       break;
-
-    case GDK_VISUAL_DIRECT_COLOR:
-      g_assert_not_reached ();
     }
   return nremaining;
 }
@@ -2157,10 +2105,10 @@ gdk_color_change (GdkColormap *colormap,
   GdkColormapPrivateWin32 *private;
   XColor xcolor;
 
-  g_return_val_if_fail (GDK_IS_COLORMAP (colormap), FALSE);
+  g_return_val_if_fail (colormap != NULL, FALSE);
   g_return_val_if_fail (color != NULL, FALSE);
 
-  private = GDK_COLORMAP_PRIVATE_DATA (colormap);
+  private = (GdkColormapPrivateWin32 *) colormap;
 
   xcolor.peRed = color->red >> 8;
   xcolor.peGreen = color->green >> 8;
@@ -2231,9 +2179,9 @@ gdk_colormap_add (GdkColormap *cmap)
 
   if (!colormap_hash)
     colormap_hash = g_hash_table_new ((GHashFunc) gdk_colormap_hash,
-				      (GEqualFunc) gdk_colormap_equal);
+				      (GCompareFunc) gdk_colormap_cmp);
 
-  private = GDK_COLORMAP_PRIVATE_DATA (cmap);
+  private = (GdkColormapPrivateWin32 *) cmap;
 
   g_hash_table_insert (colormap_hash, &private->xcolormap, cmap);
 }
@@ -2245,9 +2193,9 @@ gdk_colormap_remove (GdkColormap *cmap)
 
   if (!colormap_hash)
     colormap_hash = g_hash_table_new ((GHashFunc) gdk_colormap_hash,
-				      (GEqualFunc) gdk_colormap_equal);
+				      (GCompareFunc) gdk_colormap_cmp);
 
-  private = GDK_COLORMAP_PRIVATE_DATA (cmap);
+  private = (GdkColormapPrivateWin32 *) cmap;
 
   g_hash_table_remove (colormap_hash, &private->xcolormap);
 }
@@ -2258,17 +2206,15 @@ gdk_colormap_hash (Colormap *cmap)
   return (guint) *cmap;
 }
 
-static gboolean
-gdk_colormap_equal (Colormap *a,
-		    Colormap *b)
+static gint
+gdk_colormap_cmp (Colormap *a,
+		  Colormap *b)
 {
   return (*a == *b);
 }
 
-#ifdef G_ENABLE_DEBUG
-
 gchar *
-gdk_win32_color_to_string (const GdkColor *color)
+gdk_color_to_string (const GdkColor *color)
 {
   static char buf[100];
 
@@ -2277,5 +2223,3 @@ gdk_win32_color_to_string (const GdkColor *color)
 
   return buf;
 }
-
-#endif

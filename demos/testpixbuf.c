@@ -1,31 +1,31 @@
+
 /* testpixbuf -- test program for gdk-pixbuf code
  * Copyright (C) 1999 Mark Crichton, Larry Ewing
  *
  * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
+ * modify it under the terms of the GNU Library General Public
  * License as published by the Free Software Foundation; either
  * version 2 of the License, or (at your option) any later version.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
+ * Library General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public
+ * You should have received a copy of the GNU Library General Public
  * License along with this library; if not, write to the
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
  * Boston, MA 02111-1307, USA.
  */
 
 #include <config.h>
-#include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
 #include <string.h>
 #include <gtk/gtk.h>
-#include <gtk/gdk-pixbuf-loader.h>
-
-#include "test-inline-pixbufs.h"
+#include "gdk-pixbuf.h"
+#include "gdk-pixbuf-io.h"
+#include "gdk-pixbuf-loader.h"
 
 typedef struct {
 	FILE             *imagefile;
@@ -34,6 +34,7 @@ typedef struct {
 	guchar           *buf;
 	guint            timeout;
 	guint            readlen;
+
 } ProgressFileStatus;
 
 
@@ -320,17 +321,22 @@ expose_func (GtkWidget *drawing_area, GdkEventExpose *event, gpointer data)
 
 	pixbuf = (GdkPixbuf *)gtk_object_get_data(GTK_OBJECT(drawing_area), "pixbuf");
 
-	if (gdk_pixbuf_get_has_alpha (pixbuf)) {
+	if (!pixbuf->art_pixbuf) {
+		g_warning ("art_pixbuf is NULL in expose_func!!\n");
+		return;
+	}
+
+	if (pixbuf->art_pixbuf->has_alpha) {
 		gdk_draw_rgb_32_image (drawing_area->window,
 				       drawing_area->style->black_gc,
 				       event->area.x, event->area.y, 
 				       event->area.width, 
 				       event->area.height,
 				       GDK_RGB_DITHER_MAX, 
-				       gdk_pixbuf_get_pixels (pixbuf)
-				       + (event->area.y * gdk_pixbuf_get_rowstride (pixbuf)) 
-				       + (event->area.x * gdk_pixbuf_get_n_channels (pixbuf)),
-				       gdk_pixbuf_get_rowstride (pixbuf));
+				       pixbuf->art_pixbuf->pixels 
+				       + (event->area.y * pixbuf->art_pixbuf->rowstride) 
+				       + (event->area.x * pixbuf->art_pixbuf->n_channels),
+				       pixbuf->art_pixbuf->rowstride);
 	} else {
 		gdk_draw_rgb_image (drawing_area->window,
 				    drawing_area->style->white_gc,
@@ -338,10 +344,10 @@ expose_func (GtkWidget *drawing_area, GdkEventExpose *event, gpointer data)
 				    event->area.width, 
 				    event->area.height,
 				    GDK_RGB_DITHER_NORMAL,
-				    gdk_pixbuf_get_pixels (pixbuf)
-				    + (event->area.y * gdk_pixbuf_get_rowstride (pixbuf))
-				    + (event->area.x * gdk_pixbuf_get_n_channels (pixbuf)),
-				    gdk_pixbuf_get_rowstride (pixbuf));
+				    pixbuf->art_pixbuf->pixels 
+				    + (event->area.y * pixbuf->art_pixbuf->rowstride) 
+				    + (event->area.x * pixbuf->art_pixbuf->n_channels),
+				    pixbuf->art_pixbuf->rowstride);
 	}
 }
 
@@ -355,8 +361,8 @@ config_func (GtkWidget *drawing_area, GdkEventConfigure *event, gpointer data)
 	g_print("X:%d Y:%d\n", event->width, event->height);
 
 #if 0
-	if (((event->width) != gdk_pixbuf_get_width (pixbuf)) ||
-	    ((event->height) != gdk_pixbuf_get_height (pixbuf)))
+	if (((event->width) != (pixbuf->art_pixbuf->width)) ||
+	    ((event->height) != (pixbuf->art_pixbuf->height))) 
 		gdk_pixbuf_scale(pixbuf, event->width, event->height);
 #endif
 }
@@ -370,15 +376,14 @@ new_testrgb_window (GdkPixbuf *pixbuf, gchar *title)
 	GtkWidget *button;
 	GtkWidget *drawing_area;
 	gint w, h;
-
-        g_return_val_if_fail (pixbuf != NULL, NULL);
-	w = gdk_pixbuf_get_width (pixbuf);
-	h = gdk_pixbuf_get_height (pixbuf);
+ 
+	w = pixbuf->art_pixbuf->width;
+	h = pixbuf->art_pixbuf->height;
 
 	window = gtk_widget_new (gtk_window_get_type (),
 				 "GtkObject::user_data", NULL,
 				 "GtkWindow::type", GTK_WINDOW_TOPLEVEL,
-				 "GtkWindow::title", title ? title : "testrgb",
+				 "GtkWindow::title", "testrgb",
 				 "GtkWindow::allow_shrink", TRUE,
 				 NULL);
 	gtk_signal_connect (GTK_OBJECT (window), "destroy",
@@ -429,33 +434,17 @@ update_timeout(gpointer data)
 {
         ProgressFileStatus *status = data;
 	gboolean done;
-        GError *error;
-        
-	done = FALSE;
-        error = FALSE;
+
+	done = TRUE;
 	if (!feof(status->imagefile)) {
 		gint nbytes;
-                
+
 		nbytes = fread(status->buf, 1, status->readlen, 
 			       status->imagefile);
 
-
-                error = NULL;
-                if (!gdk_pixbuf_loader_write (GDK_PIXBUF_LOADER (status->loader), status->buf, nbytes, &error)) {
-                        g_warning ("Error writing to loader: %s",
-                                   error->message);
-                        g_error_free (error);
-                        done = TRUE;
-                }
-                        
-                        
-        } else { /* Really done */ 
-
-                GdkPixbuf *pixbuf = gdk_pixbuf_loader_get_pixbuf (status->loader); 
-                new_testrgb_window (pixbuf, "After progressive load"); 
-                done = TRUE; 
-
-        }
+		done = !gdk_pixbuf_loader_write (GDK_PIXBUF_LOADER (status->loader), status->buf, nbytes);
+			
+	}
 
 	if (done) {
                 gtk_widget_queue_draw(*status->rgbwin);
@@ -502,8 +491,6 @@ progressive_updated_callback(GdkPixbufLoader* loader, guint x, guint y, guint wi
 
 static int readlen = 4096;
 
-extern void pixbuf_init();
-
 int
 main (int argc, char **argv)
 {
@@ -513,8 +500,6 @@ main (int argc, char **argv)
 	GdkPixbuf *pixbuf;
 	GdkPixbufLoader *pixbuf_loader;
 
-	pixbuf_init ();
-
 	gtk_init (&argc, &argv);
 
 	gdk_rgb_set_verbose (TRUE);
@@ -522,6 +507,7 @@ main (int argc, char **argv)
 	gdk_rgb_init ();
 
 	gtk_widget_set_default_colormap (gdk_rgb_get_cmap ());
+	gtk_widget_set_default_visual (gdk_rgb_get_visual ());
 
 	{
 		char *tbf_readlen = getenv("TBF_READLEN");
@@ -543,7 +529,7 @@ main (int argc, char **argv)
 	if (argc == 1) {
                 const gchar*** xpmp;
                 
-		pixbuf = gdk_pixbuf_new_from_data (default_image, GDK_COLORSPACE_RGB, FALSE, 8,
+		pixbuf = gdk_pixbuf_new_from_data (default_image, ART_PIX_RGB, FALSE,
 						   DEFAULT_WIDTH, DEFAULT_HEIGHT, DEFAULT_WIDTH * 3,
 						   NULL, NULL);
 		new_testrgb_window (pixbuf, NULL);
@@ -554,28 +540,12 @@ main (int argc, char **argv)
                         new_testrgb_window (pixbuf, NULL);
                         ++xpmp;
                 }
-
-                /* Test loading from inline data. */
-                pixbuf = gdk_pixbuf_new_from_inline (apple_red, FALSE, -1, NULL);
-                new_testrgb_window (pixbuf, "Red apple from inline data");
-
-                pixbuf = gdk_pixbuf_new_from_inline (gnome_foot, TRUE, sizeof (gnome_foot), NULL);
-                new_testrgb_window (pixbuf, "Foot from inline data");
                 
 		found_valid = TRUE;
 	} else {
 		for (i = 1; i < argc; i++) {
-                        GError *error;
 
-                        error = NULL;
-			pixbuf = gdk_pixbuf_new_from_file (argv[i], &error);
-
-                        if (pixbuf == NULL) {
-                                g_warning ("Error loading image: %s",
-                                           error->message);
-                                g_error_free (error);
-                        }
-                        
+			pixbuf = gdk_pixbuf_new_from_file (argv[i]);
 #if 0
 			pixbuf = gdk_pixbuf_rotate(pixbuf, 10.0);
 #endif

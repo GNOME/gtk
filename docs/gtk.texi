@@ -1,0 +1,5648 @@
+\input texinfo @c -*-texinfo-*-
+@c Copyright (C) 1996 by Peter Mattis. All rights reserved.
+@c Portions Copyright (C) 1998 Marius Vollmer
+@c
+@c %**start of header
+@setfilename gtk.info
+@settitle GTK
+@setchapternewpage odd
+@include macros.texi
+@c %**end of header
+
+@set edition 1.0
+@set update-date 23 August 1998
+@set update-month August 1998
+
+@ifinfo
+This file documents GTK, the GIMP Toolkit
+
+Copyright (C) 1996 Peter Mattis
+Copyright (C) 1997 Peter Mattis
+
+Permission is granted to make and distribute verbatim copies of this
+manual provided the copyright notice and this permission notice are
+preserved on all copies
+
+@ignore
+Permission is granted to process this file through TeX and print the
+results, provided the printed document carries copying permission notice
+identical to this one except for the removal of this paragraph (this
+paragraph not being relevant to the printed manual).
+
+@end ignore
+Permission is granted to copy and distribute modified versions of this
+manual under the conditions for verbatim copying, provided that the
+entire resulting derived work is distributed under the terms of a
+permission notice identical to this one.
+
+Permission is granted to copy and distribute translations of this manual
+into another language, under the above conditions for modified versions,
+except that this permission notice may be stated in a translation
+approved by Peter Mattis.
+@end ifinfo
+
+@titlepage
+@title The GIMP Toolkit
+@subtitle Version @value{edition}
+@subtitle @value{update-month}
+@author by Peter Mattis and the GTK+ team
+
+@page
+@vskip 0pt plus 1filll
+Copyright @copyright{} 1996 Peter Mattis
+@vskip 0pt plus 1fill
+Copyright @copyright{} 1997 Peter Mattis
+
+Permission is granted to make and distribute verbatim copies of this
+manual provided the copyright notice and this permission notice are
+preserved on all copies.
+
+Permission is granted to copy and distribute modified versions of this
+manual under the conditions for verbatim copying, provided that the
+entire resulting derived work is distributed under the terms of a
+permission notice identical to this one.
+
+Permission is granted to copy and distribute translations of this manual
+into another language, under the above conditions for modified versions,
+except that this permission notice may be stated in a translation
+approved by Peter Mattis.
+@end titlepage
+
+@dircategory User Interface Toolkit
+@direntry
+* GTK: (gtk).		The GIMP Toolkit
+@end direntry
+
+@node Top, Copying, (dir), (dir)
+@top The GIMP Toolkit
+@ifinfo
+This is edition @value{edition} of the GTK documentation,
+@w{@value{update-date}}.
+@end ifinfo
+@c FIXME: Do an introduction to the GTK?
+
+@menu
+* Copying::                     Your rights.
+* Overview::                    What is GTK?
+* Types::                       
+* Objects::                     
+* Signals::                     Signals overview.
+* Widgets::                     Widget overview.
+* Other Objects::               Utility objects.
+* Miscellaneous::               Initialization, exit and other features.
+* Examples::                    Using GTK.
+* Object Implementation::       Object internals.
+* Signal Implementation::       Signal internals.
+* Widget Implementation::       Widget internals.
+* Function Index::              Index of functions.
+* Concept Index::               Index of concepts.
+@end menu
+
+@node Copying, Overview, Top, Top
+@comment node-name, next, previous, up
+@chapter Copying
+@cindex Copying
+
+GTK is @dfn{free}; this means that everyone is free to use it and free
+to redistribute it on a free basis. GTK is not in the public domain; it
+is copyrighted and there are restrictions on its distribution, but
+these restrictions are designed to permit everything that a good
+cooperating citizen would want to do. What is not allowed is to try to
+prevent others from further sharing any version of GTK that they might
+get from you.
+
+Specifically, we want to make sure that you have the right to give away
+copies of GTK, that you receive source code or else can get it if you
+want it, that you can change GTK or use pieces of it in new free
+programs, and that you know you can do these things.
+
+To make sure that everyone has such rights, we have to forbid you to
+deprive anyone else of these rights. For example, if you distribute
+copies of GTK, you must give the recipients all the rights that you
+have. You must make sure that they, too, receive or can get the source
+code. And you must tell them their rights.
+
+Also, for our own protection, we must make certain that everyone finds
+out that there is no warranty for GTK. If GTK is modified by someone
+else and passed on, we want their recipients to know that what they have
+is not what we distributed, so that any problems introduced by others
+will no reflect on our reputation.
+
+The precise conditions of the licenses for GTK are found in the General
+Public Licenses that accompany it.
+
+
+@node Overview, Types, Copying, Top
+@comment node-name, next, previous, up
+@chapter What is GTK?
+@cindex Overview
+
+GTK is a library for creating graphical user interfaces similar to the
+Motif ``look and feel''. It is designed to be small and efficient, but
+still flexible enough to allow the programmer freedom in the interfaces
+created. GTK allows the programmer to use a variety of standard user
+interface widgets (@pxref{Widgets}) such as push, radio and check
+buttons, menus, lists and frames. It also provides several ``container''
+widgets which can be used to control the layout of the user interface
+elements.
+
+GTK provides some unique features. (At least, I know of no other widget
+library which provides them). For example, a button does not contain a
+label, it contains a child widget, which in most instances will be a
+label. However, the child widget can also be a pixmap, image or any
+combination possible the programmer desires. This flexibility is adhered
+to throughout the library.
+
+@c I think the next paragraph takes unproportionally much space for
+@c the thing it wants to say (compared to the rest of this overview).
+@c So Somebody please extend this overview with more generally interesting
+@c stuff. - mvo
+
+To make life easier for you, GTK presents this flexibility in a uniform
+framework.  Specifically, it implements its own support for object
+oriented programming that is well adapted to the purposes of a user
+interface toolkit and it aims at providing a reasonable sane and
+disciplined programming interface.  This uniformity and discipline is
+intended to make it easy and reliable to access GTK from languages other
+than C.  Especially more dynamic languages like Perl, Python or Scheme
+will find amble support, and in fact, bindings to these languages
+already exist.
+
+@node Types, Objects, Overview, Top
+@comment node-name, next, previous, up
+@chapter Types
+@cindex type
+@cindex type system
+@cindex class
+
+@flushright
+Other kid's games are all such a bore!
+They've gotta have rules and they gotta keep score!
+@*
+-- Calvin about CalvinBall(tm)
+@end flushright
+
+GTK implements a semi-simple type system with an associated class
+mechanism for widgets and several other useful objects.  This type
+system is intended to be general enough to allow both a smooth binding
+of dynamically typed languages to Gtk, as well as to serve for a
+rigorous and formalistic definition of the larger part of the Gtk API.
+
+@c  The GtkObject
+@c  type is the root of the class hierarchy. It provides a few items needed
+@c  by all classes, the foundation for the signal (@pxref{Signals})
+@c  mechanism and the ``destroy'' method.
+
+The classes for the individual widgets are by far the most important
+part of this type system, but before we get to them, we describe the
+basics of the type system itself.  This is mostly of interest for widget
+writers and language binders, so you might want to skip ahead to the
+next chapter, which talks about the object oriented stuff.
+
+@menu
+* Type introduction::           
+* Basics::                      
+* Simple types::                
+* Enumerations and flags::      
+* Strings::                     
+* Boxed types::                 
+* Callbacks::                   
+* Composite types::             
+@end menu
+
+@node Type introduction, Basics, Types, Types
+@section Introduction to the Type System
+
+Gtk defines its own system of types, much like a computer language
+defines what types it supports.  Of course, the Gtk type system is build
+on top of the types that C provides, so it includes members like
+@samp{int}, @samp{long} and @samp{float}.  But, compared to C, it allows
+only few carefully selected types and specifies a lot of restrictions on
+the way you can use values of these types.  For example, there is no
+general facility for specifying @emph{pointer to X}.  Instead, we take a
+more higher level approach and define such things as @samp{string},
+which is just like a @code{char*} but with additional rules about how to
+manage the memory that it points to.
+
+The type system has two purposes: to define a formal system with which
+to describe the various exported features of Gtk; and to implement this
+system at run-time so that we get sound and flexible @dfn{dynamic} types
+for the dynamic languages that want to interface with Gtk.
+
+Let me restate this with different words, because I think it is
+important to understand this idea.  We will see in a moment that the
+type system is indeed well defined and all this detail is implemented
+with functions and data structures in Gtk.  For example, every type (and
+there can be any number of them) can be represented with a unique
+integer and Gtk has support for the necessary bookkeeping for this.
+Every type also has a name and there are functions for converting
+between the name of a type and its unique number.  Maybe more useful,
+there is a big discriminated union that can be used to pass around a
+value of any representable type, together with its precise type.
+
+This is the run-time or dynamic side of the type system.  Mostly, you do
+not need to use it when you don't want to.  The compile-time or static
+side of the type system can is used to statically define the programming
+interface of Gtk.  For example, suppose there is function @code{gtk_foo}
+in the Gtk API that has a prototype
+
+@example
+char *gtk_foo (char *);
+@end example
+
+This looks like it does something with strings.  But what does it do
+with the memory of the string that has been passed in, and what are we
+supposed or allowed to do with the memory that the returned pointer
+points to?  The more restricted type @samp{string} from the Gtk type
+system can be used to be more precise.  In fact, the definition of
+@samp{string} below includes the rule that when a @samp{string} is
+passed to a function, that function is not allowed to retain a pointer
+into the string beyond the life time of that function call.  So we are
+safe to deallocate it or override it when the function has returned.
+Likewise, the definition specifies that the memory of a @samp{string}
+that is returned from a function becomes the sole property of the
+calling function.  The calling function is responsible for deallocating
+it eventually and it can be sure that nobody else scribbles in it.  When
+@samp{gtk_foo} really obeys these rules, we can say that it takes one
+argument, which is a @samp{string}, and it returns a @samp{string}.
+
+Now we can understand why it makes sense to have a more restrictive type
+system than that of C.  With it, it is possible to be more precise and
+we actually have a framework where we can be sure that as long as we
+stay inside this framework we are not gratuitously causing trouble for
+languages that are more disciplined than C.  Of course, you are not
+restricted to making all your interfaces expressible within the
+framework.  There are valid reasons for breaking it, for performance or
+simply for convenience.  But please try to provide all the functionality
+of your module in such a way that it can be described with this type
+system and treat the non-conforming functions as additional goodies that
+are nice to have but not essential.  The reward is an instant
+accessibility of your code from a huge number of scripting and extension
+languages such as Perl, Python, and Guile.
+
+These formal specifications of the Gtk interface are contained in
+special declarations in the header files of Gtk.  They are ignored by
+the C compiler, but can be used by other language processors.  For extra
+convenience, these declarations are also available in a more condensed
+form that is easier to parse.  Tools for generating bindings of Gtk to
+other languages can read these declarations and---because all the
+important details are defined---automatically generate the bulk of the
+needed glue code.  It is also possible to feed these declarations into a
+running application (an interface builder, say) and thus make it aware of
+new widgets and functions without recompiling anything.
+
+The run-time side of the type system is also somewhat introspective.
+This means that you can query Gtk about all the members of an
+enumeration for example.  Gtk provides tools that help you provide this
+introspection for your definitions also.
+
+Types are not enough to completely specify an interface, so GTK also has
+@dfn{modes}.  A mode specifies what happens to a value when it crosses a
+module boundary; it can be @samp{in}, @samp{out}, or @samp{inout}.  Most
+fundamental types (and their derived types) support only mode @samp{in}.
+The modes @samp{out} and @samp{inout} can only be used with the
+composite types: lists and vectors.  When argument of these types are
+marked as @samp{out} or @samp{inout} it means that the called module is
+allowed to change the contents of the composite value and that these
+changes need to be propagated back to the originator of the value.  Mode
+@samp{out} means that the argument has no meaningful value at the
+beginning and should not be read.  Mode @samp{in} specifies that the
+called module is not allowed to change the value in any way.
+
+The type system allows for an unbounded number of types.  Every widget
+is a type for example and you can add new widget types at any time
+without confusing the run-time implementation of the type system.
+Nevertheless, all types are derived from a certain @dfn{fundamental}
+type, and there are only a small and finite number of fundamental types.
+We only specify rules for the fundamental types and all other types
+inherit these rules from their fundamental type.  For example,
+@samp{int} is a fundamental type, as is @samp{GtkObject}.  All widgets
+derive from @samp{GtkObject} and so the rules for @samp{GtkObject} apply
+to all widgets as well.
+
+This derivation defines a type hierarchy, but this hierarchy is not
+completely general.  You can't derive from @samp{int} for example, and
+you can only have one level of derivation from @samp{enum}.  The
+fundamental type @samp{GtkObject}, however, is the basis for the large
+and deep hierarchy of widget types.
+
+The individual fundamental types are defined and explained in the
+following sections.  Here is a complete list of them:
+
+@table @samp
+@item none
+The not-a-value type, similar to @samp{void}.
+@item char
+A character.  Internationalization issues are still undecided.
+@item bool
+True or false.
+@item byte, ubyte, int, uint, long, ulong, float, double
+The usual assortment of scalar types.
+@item string
+A string.  Internationalization issues are still undecided.
+@item enum, flags
+Enumerations with a fixed set of literals.  Either used to express a
+single choice from this set or to individually turn on and off several
+flags.
+@item boxed
+A pointer to an opaque structure that can be copied and destroyed.
+@item callback
+A pointer to a function with enough extra information so that it can
+also be used for functions written in languages completely different
+from C.
+@item GtkObject
+A pointer to a GtkObject or derived type.  The fun starts here.
+@item args, slist, dlist, cvec, tvec
+An assortment of composite types like linked lists and counted or
+zero-terminated arrays.
+@item pointer, signal, c_callback
+Obsolete types.
+@end table
+
+@node Basics, Simple types, Type introduction, Types
+@section Basic Concepts
+
+The basis for the type system are the fundamental types.  At run-time,
+they are represented by members of the @code{GtkFundamentalType}
+enumeration.  For the static declarations, they are identified with a
+unique name.
+
+@deftp {Enumeration} GtkFundamentalType
+This enumeration contains a member for each defined fundamental type.
+Most members are listed along with the description of their semantics,
+but one is listed here:
+
+@table @code
+@item GTK_TYPE_INVALID
+No valid type is derived from this.  Use @code{GTK_TYPE_INVALID} to
+express exceptional situations.  This member does not really correspond
+to a fundamental type and thus there is no name for it.
+@end table
+@end deftp
+
+@deftp {Data type} GtkType
+The type @code{GtkType} holds the run-time representation of a type.  It
+is an integer of a certain size.  The follwing macros are defined to
+access the basic properties of a @code{GtkType}:
+
+@deftypefn {Macro} {unsigned int} GTK_TYPE_SEQNO (GtkType type)
+Returns the sequence number of @var{type}.  The sequence numbers are
+guaranteed to be dense, i.e., you can use them to index a table and the
+table need not be much larger than the number of different GtkTypes that
+you might encounter.
+@end deftypefn
+
+@deftypefn {Macro} GtkFundamentalType GTK_FUNDAMENTAL_TYPE (GtkType type)
+Returns the fundamental type of @var{type}.
+@end deftypefn
+
+Both macros simply access different bit-fields of a @code{GtkType}, so
+they are very efficient.
+@end deftp
+
+New types are registered with the @code{gtk_type_unique} function.  Any
+kind oftype can be registered with @code{gtk_type_unique} but there are
+convenience functions for most fundamental types.  Each fundamental type
+has its own interpretation of the rules below and these convenience
+functions should be used to automatically get the type registration
+right.  So, don't be put off by the apparent complexity of the interface
+to @code{gtk_type_unique}.  You will be using it only for new widgets,
+and there the rules are simple.
+
+The @code{GtkTypeInfo} structure is used to communicate information to
+@code{gtk_type_unique} as opposed to passing in large numbers of
+parameters.
+
+@example
+typedef struct _GtkTypeInfo GtkTypeInfo;
+
+struct _GtkTypeInfo
+@{
+  gchar *type_name;
+  guint object_size;
+  guint class_size;
+  GtkClassInitFunc class_init_func;
+  GtkObjectInitFunc object_init_func;
+  gpointer reserved_1;
+  gpointer reserved_2;
+  GtkClassInitFunc base_class_init_func;
+@}
+@end example
+
+@itemize @bullet
+@item
+The @code{type_name} field refers to the name of the type.  This is the
+same name that is used in the static definitions.  It is convention for
+the type name to be closely related to the name of the underlying C
+type. For example, the type name of the @code{GtkObject} structure is
+``GtkObject'', and the name of the @code{GtkWindowType} enumeration is
+``GtkWindowType''.  Note that the C type corresponding to ``GtkObject''
+is really a pointer to a @code{GtkObject} struct, but the name has no
+``*'' in it.
+
+@item
+The @code{object_size} field refers to the size in bytes of the C
+structure for types that have such a structure. The easiest (and
+portable) means of computing this size is by using the C @code{sizeof}
+operator. For instance, the sizeof of the @code{GtkObject} structure is
+computed by doing @code{sizeof (GtkObject)}.  When the type has no
+associated structure or when you do not want to support the
+@code{gtk_type_new} function for the new type, set @code{object_size} to
+0.  Only types derived from GTK_TYPE_OBJECT can be handled by
+@code{gtk_type_new}, anyway.
+
+@item
+The @code{class_size} field refers to the size in bytes of the C
+structure for the class.  Again, the @code{sizeof} operator should be
+used to compute this value.  If you don't want to have a class structure
+for this type, set the field to 0.  @code{gtk_type_class} will then
+always return @code{NULL}.
+
+@item
+The @code{class_init_func} and @code{base_class_init_func} fields are
+callbacks which are used by the type mechanism to initialize class
+specific fields. The single argument these functions take is a pointer to
+a class structure.  When you do not need one or both of them, set the
+corresponding field to @code{NULL}.  The @code{class_init_func} will be
+called at most once, right after the class structure of size
+@code{class_size} has been allocated.  The interaction between
+@code{class_init_func} and @code{base_class_init_func} is only really
+useful for the full-fledged object system.  It is described there
+@pxref{Objects}.
+
+@item
+The @code{object_init_func} field is a callback which is used by the
+type mechanism to initialize object specific fields for structures that
+have been allocated via @code{gtk_type_new}. The single argument this
+functions takes is a pointer to an object structure.  If you do not want
+any special object initialization to take place, set this to
+@code{NULL}.  All object initialization functions for all types that are
+part of the inheritance chain are called, starting with the most basic
+type.
+
+@end itemize
+
+@deftypefun guint gtk_type_unique (GtkType @var{parent_type}, GtkTypeInfo *@var{type_info})
+The @var{parent_type} is simply the new types parent type. If
+@var{parent_type} is GTK_TYPE_INVALID, then the new type is a new
+fundamental type.  You should @b{never} register new fundamental types.
+@var{type_info} is a pointer to a structure which contains necessary
+information for construction of the new type.
+
+You can only register a specific name once.
+@end deftypefun
+
+@deftypefun gchar* gtk_type_name (GtkType @var{type})
+The returned string is the name of @var{type} as specified to
+@code{gtk_type_unique}.
+@end deftypefun
+
+@deftypefun GtkType gtk_type_from_name (guchar *@var{name})
+Return the type associated with @var{name}. If there is no type
+associated with @var{name}, then GTK_TYPE_INVALID will be returned.
+@end deftypefun
+
+@deftypefun GtkType gtk_type_parent (GtkType @var{type})
+Returns the parent type of @var{type} or GTK_TYPE_INVALID if @var{type}
+is a fundamental type.
+@end deftypefun
+
+@deftypefun gpointer gtk_type_class (GtkType @var{type})
+Returns the initialized class structure for @var{type}. The class
+structure is actually created and initialized the first time it is
+needed.  Refer to @pxref{Objects} for details on how this initialization works for GTK_TYPE_OBJECT derived types.
+
+@c  If creation and initialization occurs, the @code{class_size}
+@c  field of the @code{GtkTypeInfo} structure used to initialize this type
+@c  is used to determine how large the class structure is. The
+@c  @code{class_init_func} field from the @code{GtkTypeInfo} structure is
+@c  called for all the members in the types ancestry, including the
+@c  type. The order of this invocation proceeds from the root on down. For
+@c  example, the @code{GtkWidgetClass} is first initialized as an
+@c  @code{GtkObjectClass} by the object class initialization routine and
+@c  then by the widget class initialization routine. This allows the widget
+@c  class initialization routine to override values set by the object class
+@c  initialization routine.
+
+The returned structure is shared by all objects of @var{type} and, as
+such, should not be modified.
+@end deftypefun
+
+@deftypefun gpointer gtk_type_new (GtkType @var{type})
+Returns a new instance of an @var{type} object.  This works only for GTK_TYPE_OBJECT derived types.  Please see @pxref{Objects}.
+@c  The @code{object_size}
+@c  and @code{object_init_func} fields of the @code{GtkTypeInfo} structure
+@c  are used to determine the objects allocated size and the object specific
+@c  initialization routine. Similarly to the class initialization, all the
+@c  object initialization routines from the root on down to the particular
+@c  type being created are invoked.
+@end deftypefun
+
+@deftypefun void gtk_type_describe_heritage (GtkType @var{type})
+Prints the type heritage for @var{type}. The heritage for a type
+includes the type and all its parent types up the type tree.
+@end deftypefun
+
+@deftypefun void gtk_type_describe_tree (GtkType @var{type}, gboolean @var{show_size})
+Prints the type tree which starts at @var{type}. @var{show_size} is a
+boolean which determines whether type sizes are printed.
+@end deftypefun
+
+@deftypefun gboolean gtk_type_is_a (GtkType @var{type}, GtkType @var{is_a_type})
+A predicate function which determines whether the relation @var{type}
+is_a @var{is_a_type} is true.
+@end deftypefun
+
+@c  @deftypefun void gtk_type_get_arg (GtkObject *@var{object}, GtkType @var{type}, GtkArg *@var{arg}, guint @var{arg_id})
+@c  @end deftypefun
+
+@c  @deftypefun void gtk_type_set_arg (GtkObject *@var{object}, GtkType @var{type}, GtkArg *@var{arg}, guint @var{arg_id})
+@c  @end deftypefun
+
+Values of all types can be handled uniformly by storing them into a
+@code{GtkArg} structure.  The @code{GtkArg} has the following fields:
+
+@table @code
+@item gchar *name
+This can be used to give the value represented by this @code{GtkArg}
+structure a name.  It is not used much.
+
+@item GtkType type
+The type of this value.
+
+@item union d
+A big union that has (at least conceptually) one member for each
+fundamental type.  You should not access these members directly.
+Rather, use the @code{GTK_VALUE_*} macros.  There is one macro for each
+fundamental type, and its name is derived from the name of the
+GtkFundamentalType enumeration members simply by replacing ``Gtk_TYPE''
+with ``GTK_VALUE''.  All @code{GTK_VALUE_*} macros take a @code{GtkArg}
+structure as their only parameter (@emph{not} a pointer) and evaluate to
+a lvalue.
+@end table
+
+For example, the accessor for the fundamental type GTK_TYPE_INT is
+called GTK_VALUE_INT and you could use it like this:
+
+@example
+GtkArg value;
+
+value.name = NULL;
+value.type = GTK_TYPE_INT;
+GTK_VALUE_INT(value) = 7;
+@end example
+
+@node Simple types, Enumerations and flags, Basics, Types
+@section Simple Types
+
+The Gtk type system has a full set of the usual simple types: integers,
+floating point numbers, but also boolean and character.  You can not
+derive new types from these.
+
+@multitable {GTK_TYPE_POINTER} {"gpointer"} {xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx}
+@item Enum @tab Name @tab Description
+@item GTK_TYPE_NONE @tab "void"
+@tab A type without value.
+@item GTK_TYPE_CHAR @tab "char"
+@tab A 8-bit unsigned number representing a character.  Numbers
+     between 0 and 127 are ASCII, the rest is undefined.
+@item GTK_TYPE_BOOL @tab "gboolean"
+@tab The boolean type.  It is some small integer where the number 0
+     represents false and 1 is true.  No other values are allowed.
+@item GTK_TYPE_INT @tab "gint"
+@tab A signed integer with at least 32 bits.
+@item GTK_TYPE_UINT @tab "guint"
+@tab A unsigned integer with at least 32 bits.
+@item GTK_TYPE_LONG @tab "glong"
+@tab A signed integer with at least 32 bits.
+@item GTK_TYPE_ULONG @tab "gulong"
+@tab A unsigned integer with at least 32 bits.  This is large enough to
+     hold a coerced pointer.
+@item GTK_TYPE_FLOAT @tab "gfloat"
+@tab A single precision floating point number.
+@item GTK_TYPE_DOUBLE @tab "gfloat"
+@tab A souble precision floating point number.
+@item GTK_TYPE_POINTER @tab "gpointer"
+@tab A untyped pointer.  Do not use this if you can avoid it.
+@end multitable
+
+The values of these types are all represented `directly' with the C
+types that are indicated in the `name' column above.  @pxref{Boxed
+types} for a discussion of this.
+
+@node Enumerations and flags, Strings, Simple types, Types
+@section Enumerations and Flags
+
+@node Strings, Boxed types, Enumerations and flags, Types
+@section Strings
+
+@node Boxed types, Callbacks, Strings, Types
+@section Boxed Types
+
+@node Callbacks, Composite types, Boxed types, Types
+@section Callbacks
+
+@node Composite types,  , Callbacks, Types
+@section Composite Types
+
+@node Objects, Signals, Types, Top
+@chapter Objects
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@section Object functions
+
+The GtkObject type is the root of the type hierarchy used by GTK. It
+provides a minimal set of fields used to implement the actual object,
+class and signal mechanisms, as well as several utility routines which
+make dealing with objects easier.
+
+For the adventurous, see @ref{Object Implementation}.
+
+@deftypefun guint gtk_object_get_type (void)
+Returns the @code{GtkObject} type identifier.
+@end deftypefun
+
+@deftypefun void gtk_object_class_add_signals (GtkObjectClass *@var{class}, gint *@var{signals}, gint @var{nsignals})
+Adds @var{signals} to the @code{signals} field in the GtkObjectClass
+structure @var{class}. @xref{Signals}.
+@end deftypefun
+
+@deftypefun GtkObject* gtk_object_new (guint @var{type}, @dots{})
+@end deftypefun
+
+@deftypefun GtkObject* gtk_object_newv (guint @var{type}, guint @var{nargs}, GtkArg *@var{args})
+@end deftypefun
+
+@deftypefun void gtk_object_ref (GtkObject *@var{object});
+@end deftypefun
+
+@deftypefun void gtk_object_unref (GtkObject *@var{object});
+@end deftypefun
+
+@deftypefun void gtk_object_getv (GtkObject *@var{object}, guint @var{nargs}, GtkArg *@var{args})
+@end deftypefun
+
+@deftypefun void gtk_object_set (GtkObject *@var{object}, @dots{})
+@end deftypefun
+
+@deftypefun void gtk_object_setv (GtkObject *@var{object}, guint @var{nargs}, GtkArg *@var{args})
+@end deftypefun
+
+@deftypefun GtkArg* gtk_object_query_args (GtkType @var{class_type}, guint *@var{nargs})
+@end deftypefun
+
+@deftypefun void gtk_object_add_arg_type (gchar *@var{arg_name}, GtkType @var{arg_type}, guint @var{arg_id})
+@end deftypefun
+
+@deftypefun GtkType gtk_object_get_arg_type (gchar *@var{arg_name})
+@end deftypefun
+
+
+@deftypefun void gtk_object_destroy (GtkObject *@var{object})
+Performs checks to make sure it is alright to destroy @var{object} and
+then emits the @code{destroy} signal. The check which is performed is to
+make sure @var{object} is not already processing another signal. If this
+were the case then destroying the object immediately would undoubtedly
+cause problems as the other signal would not be able to tell the object
+was destroyed. The solution is that if @var{object} is processing another
+signal we mark @var{object} is needing to be destroyed. When we finish
+processing of the other signal we check whether the object needs to be
+destroyed.
+@end deftypefun
+
+The GtkObject type provides a mechanism for associating arbitrary
+amounts of data with an object. The data is associated with the object
+using a character string key. The functions @code{gtk_object_set_data},
+@code{gtk_object_get_data}, and @code{gtk_object_remove_data} are the
+interface to this mechanism. Two other routines,
+@code{gtk_object_set_user_data} and @code{gtk_object_get_user_data},
+exist as convenience functions which simply use the same mechanism.
+
+@deftypefun void gtk_object_set_data (GtkObject *@var{object}, const char *@var{key}, gpointer @var{data})
+Associate @var{data} with @var{key} in the data list of @var{object}.
+@end deftypefun
+
+@deftypefun gpointer gtk_object_get_data (GtkObject *@var{object}, const char *@var{key})
+Retrieve the data associated with @var{key} in the data list of @var{object}.
+@end deftypefun
+
+@deftypefun void gtk_object_remove_data (GtkObject *@var{object}, const char *@var{key})
+Remove the data associated with @var{key} in the data list of @var{object}.
+@end deftypefun
+
+@deftypefun void gtk_object_set_user_data (GtkObject *@var{object}, gpointer @var{data})
+Sets @var{data} into the @code{user_data} field of @var{object}.
+@end deftypefun
+
+@deftypefun gpointer gtk_object_get_user_data (GtkObject *@var{object})
+Returns the @code{user_data} field of @var{object}.
+@end deftypefun
+
+@c ------------ Is this deprecated? -----------------
+
+The GtkObject type also provides a mechanism for specifying
+initialization values for fields. This general mechanism is called
+object value stacks. The reason for using value stacks is that they can
+simplify the life of the programmer. For instance, by default widgets
+are non-visible when created. However, the ``visible'' value for widgets
+may be specified so that widgets are made visible when created. (FIXME:
+unfinished).
+
+@deftypefun void gtk_object_value_stack_new (guint @var{object_type}, const gchar *@var{value_id}, GtkParamType @var{value_type})
+@end deftypefun
+
+@deftypefun void gtk_object_push_value (guint @var{object_type}, const gchar *@var{value_id}, @dots{})
+Push a value on the value stack specified by @var{object_type} and
+@var{value_id}. The type of value is implicitly given in the context of
+@var{object_type} and @var{value_id}. (That is, it is not specified
+explicitly in the function call). Only a single extra argument is
+expected which is the data which is to be placed on the stack.
+@end deftypefun
+
+@deftypefun void gtk_object_pop_value (guint @var{object_type}, const gchar *@var{value_id})
+Pop a value of the value stack specified by @var{object_type} and
+@var{value_id}.
+@end deftypefun
+
+@deftypefun gint gtk_object_peek_value (guint @var{object_type}, const gchar *@var{value_id}, gpointer @var{data})
+Peek at the value on the top of the value stack specified by
+@var{object_type} and @var{value_id}. The @var{data} argument is
+interpreted as the location of where to place the ``peeked'' data. For
+instance, if the peeked data is of type @code{GTK_PARAM_POINTER}, then
+@var{data} will be a pointer to a pointer. If the value stack is empty
+or does not exist or an error occurs, @code{gtk_object_peek_value} will
+return @code{FALSE}. On success it will return @code{TRUE}.
+@end deftypefun
+
+
+@node Signals, Widgets, Objects, Top
+@comment node-name, next, previous, up
+@chapter Signals Overview
+@cindex Signals
+
+Signals are GTK's method for objects to perform callbacks. A signal is
+an event which occurs upon an object. The programmer can connect to a
+signal of an object which involves specifying a function to be called
+when that signal is emitted in the specified object.
+
+When a signal is emitted, both the class function associated with the
+signal (when it was defined) and all signal handlers installed for that
+signal on the particular object emitting the signal are called. The
+widget programmer can specify whether the class function is to be called
+before after or both before and after the signal handlers installed by
+the widget user. The widget user can, however, specify that their signal
+handler is to be run after the class function (using the ``_after''
+signal connection routines). Any signal handling function can emit the
+same signal on the same object while it is running causing that signal
+emission to either restart or to run recursively. Additionally, signal
+emission can be terminated prematurely. While both such abilities are
+rarely used, they do allow for greater flexibility in regards to
+signals. For instance, a programmer can attach to the key press event
+signal and intercept all tab key presses from a widget. This particular
+example is used in the file selection dialog to implement tab completion
+of filenames and prevent the entry widget from inserting the tab into
+its buffer.
+
+Signals are selected using either an integer identifier or a character
+string name. It is convention to name the signal the same as the class
+function which is associated with it. There are two versions of most of
+the signal functions, one which takes an integer identifier and one
+which takes a character string name for the signal.
+
+@deftypefun gint gtk_signal_new (gchar *@var{name}, GtkSignalRunType @var{run_type}, gint @var{object_type}, gint @var{function_offset}, GtkSignalMarshaller @var{marshaller}, GtkParamType @var{return_val}, gint @var{nparams}, @dots{})
+Create a new signal and give it the character string identifier
+@var{name}. @var{name} needs to be unique in the context of
+@var{object_type}'s branch of the class hierarchy. That is,
+@var{object_type} cannot create a signal type with the same name as a
+signal type created by one of its parent types.
+
+@var{run_type} specifies whether the class function should be run before
+(@code{GTK_RUN_FIRST}), after (@code{GTK_RUN_LAST}) or both before and
+after normal signal handlers (@code{GTK_RUN_BOTH}). Additionally, the
+@code{GTK_RUN_NO_RECURSE} value can be or'ed with any of those values to
+specify that the signal should not be recursive. By default, emitting
+the same signal on the same widget will cause the signal to be emitted
+twice. However, if the @code{GTK_RUN_NO_RECURSE} flag is specified,
+emitting the same signal on the same widget will cause the current
+signal emission to be restarted. This allows the widget programmer to
+specify the semantics of signal emission on a per signal
+basis. (The @code{GTK_RUN_NO_RECURSE} flag is used by the GtkAdjustment
+widget).
+
+The @var{function_offset} is the byte offset from the start of the class
+structure to the class function field within the class structure. The
+easiest means to compute this offset is by using the
+@code{GTK_SIGNAL_OFFSET} macro which takes the class structure type as
+the first argument and the field as the second argument. For example,
+@code{GTK_SIGNAL_OFFSET (GtkObjectClass, destroy)} will give the offset
+of the @code{destroy} class function within the
+@code{GtkObjectClass}. Note: An offset is specified instead of an
+absolute location since there will be multiple instances of a class
+structure being referenced. (The @code{GtkWidgetClass} structure ``is
+a'' @code{GtkObjectClass} structure, etc.)
+
+The @var{marshaller} function is used to invoke a signal handler. Since
+signal handlers may take different parameters and return values and a
+general mechanism for invoking them is not apparent, the approach of
+making the signal creator responsible for invoking the signal handler
+was taken. (FIXME: unfinished).
+
+The @var{return_val} and @var{nparams} and the remaining arguments
+specify the return value and the arguments to the signal handler
+respectively. Note: There is an implicit first argument to every signal
+handler which is the widget the signal has been emitted from. The
+variable argument list (@var{@dots{}}) specifies the types of the
+arguments. These can be one of @code{GTK_PARAM_CHAR},
+@code{GTK_PARAM_SHORT}, @code{GTK_PARAM_INT}, @code{GTK_PARAM_LONG},
+@code{GTK_PARAM_POINTER} or @code{GTK_PARAM_FUNCTION}. It is undefined
+to specify @code{GTK_PARAM_NONE} as an argument type, however it is OK
+to use @code{GTK_PARAM_NONE} for @var{return_val}. (This corresponds to
+returning a @code{void}).
+
+@code{gtk_signal_new} returns the integer identifier of the newly
+created signal. Signal identifiers start numbering at 1 and increase
+upwards. A value of -1 will be returned if an error occurs.
+
+@strong{Note:} @code{gtk_signal_new} is only needed by widget writers. A
+normal user of GTK will never needed to invoke this function.
+@end deftypefun
+
+@deftypefun gint gtk_signal_lookup (gchar *@var{name}, gint @var{object_type})
+Returns the integer identifier for the signal referenced by @var{name}
+and @var{object_type}. If @var{object_type} does not define the signal
+@var{name}, then the signal is looked for in @var{object_type}'s parent
+type recursively.
+@end deftypefun
+
+@deftypefun gchar* gtk_signal_name (gint @var{signal_num})
+@end deftypefun
+
+@deftypefun gint gtk_signal_emit (GtkObject *@var{object}, gint @var{signal_type}, @dots{})
+Emit the signal specified by the integer identifier @var{signal_type}
+from @var{object}. If an error occurs, @code{gtk_signal_emit} will
+return @code{FALSE} and will return @code{TRUE} on success. The signal
+definition determines the parameters passed in the variable argument
+list (@code{@dots{}}). For example, if the signal is defined as:
+
+@example
+  gint (* event) (GtkWidget *widget, GdkEvent *event);
+@end example
+
+Then a call to emit the ``event'' signal would look like:
+
+@example
+  GdkEvent event;
+  gint return_val;
+  @dots{}
+  gtk_signal_emit (some_object,
+                   gtk_signal_lookup ("event",
+                     GTK_OBJECT_TYPE (some_object)),
+                   &event, &return_val);
+@end example
+
+Notice that the @code{widget} argument is implicit in that the first
+argument to every signal is a type derived from @code{GtkObject}. The
+@var{return_val} argument is actually a pointer to the return value type
+since the signal mechanism needs to be able to place the return value in
+an actual location. And lastly, the @code{gtk_signal_lookup} call is
+normally avoided by using the @code{gtk_signal_emit_by_name} function
+instead. @code{gtk_signal_emit} is normally used internally by widgets
+which know the signal identifier (since they defined the signal) and can
+therefore side-step the cost of calling @code{gtk_signal_lookup}.
+@end deftypefun
+
+@deftypefun gint gtk_signal_emit_by_name (GtkObject *@var{object}, gchar *@var{name}, @dots{})
+Similar to @code{gtk_signal_emit} except that the signal is referenced
+by @var{name} instead of by its integer identifier.
+@end deftypefun
+
+@deftypefun void gtk_signal_emit_stop (GtkObject *@var{object}, gint @var{signal_type})
+Stop the emission of the signal @var{signal_type} on
+@var{object}. @var{signal_type} is the integer identifier for the signal
+and can be determined using the function
+@code{gtk_signal_lookup}. Alternatively, the function
+@code{gtk_signal_emit_stop_by_name} can be used to refer to the signal
+by name. Attempting to stop the emission of a signal that isn't being
+emitted does nothing.
+@end deftypefun
+
+@deftypefun void gtk_signal_emit_stop_by_name (GtkObject *@var{object}, gchar *@var{name})
+Similar to @code{gtk_signal_emit_stop} except that the signal is
+referenced by @var{name} instead of by its integer identifier.
+@end deftypefun
+
+@deftypefun gint gtk_signal_connect (GtkObject *@var{object}, gchar *@var{name}, GtkSignalFunc @var{func}, gpointer @var{func_data})
+Connects a signal handling function to a signal emitting
+object. @var{func} is connected to the signal @var{name} emitted by
+@var{object}. The arguments and returns type of @var{func} should match
+the arguments and return type of the signal @var{name}. However,
+@var{func} may take the extra argument of @var{func_data}. Due to the C
+calling convention it is OK to ignore the extra argument. (It is OK to
+ignore all the arguments in fact).
+
+@code{gtk_signal_connect} returns an integer identifier for the
+connection which can be used to refer to it in the future. Specifically
+it is useful for removing the connection and/or blocking it from being
+used.
+@end deftypefun
+
+@deftypefun gint gtk_signal_connect_after (GtkObject *@var{object}, gchar *@var{name}, GtkSignalFunc @var{func}, gpointer @var{func_data})
+Similar to @code{gtk_signal_connect} except the signal handler is
+connected in the ``after'' slot. This allows a signal handler to be
+guaranteed to run after other signal handlers connected to the same
+signal on the same object and after the class function associated with
+the signal.
+
+Like @code{gtk_signal_connect}, @code{gtk_signal_connect_after} returns
+an integer identifier which can be used to refer to the connection.
+@end deftypefun
+
+@deftypefun gint gtk_signal_connect_object (GtkObject *@var{object}, gchar *@var{name}, GtkSignalFunc @var{func}, GtkObject *@var{slot_object})
+Connects @var{func} to the signal @var{name} emitted by
+@var{object}. Similar to @code{gtk_signal_connect} with the difference
+that @var{slot_object} is passed as the first parameter to @var{func}
+instead of the signal emitting object. This can be useful for connecting
+a signal emitted by one object to a signal in another object. A common
+usage is to connect the ``destroy'' signal of dialog to the ``clicked''
+signal emitted by a ``close'' button in the dialog. That is, the
+``clicked'' signal emitted by the button will caused the ``destroy''
+signal to be emitted for the dialog. This is also the ``right'' way to
+handle closing of a dialog since the ``destroy'' signal will be sent if
+the dialog is deleted using a window manager function and this enables
+the two methods of closing the window to be handled by the same
+mechanism. Returns an integer identifier which can be used to refer to
+the connection.
+@end deftypefun
+
+@deftypefun gint gtk_signal_connect_object_after (GtkObject *@var{object}, gchar *@var{name}, GtkSignalFunc @var{func}, GtkObject *@var{slot_object})
+Similar to @code{gtk_signal_connect_object} except the signal handler is
+connected in the ``after'' slot. This allows a signal handler to be
+guaranteed to run after other signal handlers connected to the same
+signal on the same object and after the class function associated with
+the signal. Returns an integer identifier which can be used to refer to
+the connection.
+@end deftypefun
+
+@deftypefun gint gtk_signal_connect_interp (GtkObject *@var{object}, gchar *@var{name}, GtkCallbackMarshal @var{func}, gpointer @var{data}, GtkDestroyNotify @var{destroy_func}, gint @var{after})
+@end deftypefun
+
+@deftypefun void gtk_signal_disconnect (GtkObject *@var{object}, gint @var{id})
+Disconnects a signal handler from an object. The signal handler is
+identified by the integer @var{id} which is returned by the
+@code{gtk_signal_connect*} family of functions.
+@end deftypefun
+
+@deftypefun void gtk_signal_disconnect_by_data (GtkObject *@var{object}, gpointer @var{data})
+Disconnects a signal handler from an object. The signal handler is
+identified by the @var{data} argument specified as the @var{func_data}
+argument to the @code{gtk_signal_connect*} family of functions. For the
+@code{gtk_signal_connect_object*} functions, @var{data} refers to the
+@var{slot_object}.
+
+@strong{Note:} This will remove all signal handlers connected to
+@var{object} which were connected using @var{data} as their
+@var{func_data} argument. Multiple signal handlers may be disconnected
+with this call.
+@end deftypefun
+
+@deftypefun void gtk_signal_handler_block (GtkObject *@var{object}, gint @var{id})
+Blocks calling of a signal handler during signal emission. The signal
+handler is identified by the integer @var{id} which is returned by the
+@code{gtk_signal_connect*} family of functions. If the signal is already
+blocked no change is made.
+@end deftypefun
+
+@deftypefun void gtk_signal_handler_block_by_data (GtkObject *@var{object}, gint @var{data})
+Blocks calling of a signal handler during signal emission. The signal
+handler is identified by the @var{data} argument specified as the
+@var{func_data} argument to the @code{gtk_signal_connect*} family of
+functions. For the @code{gtk_signal_connect_object*} functions,
+@var{data} refers to the @var{slot_object}. If the signal is already
+blocked no change is made.
+
+@strong{Note:} This will block all signal handlers connected to
+@var{object} which were connected using @var{data} as their
+@var{func_data} argument. Multiple signal handlers may be blocked
+with this call.
+@end deftypefun
+
+@deftypefun void gtk_signal_handler_unblock (GtkObject *@var{object}, gint @var{id})
+Unblocks calling of a signal handler during signal emission. The signal
+handler is identified by the integer @var{id} which is returned by the
+@code{gtk_signal_connect*} family of functions. If the signal is already
+unblocked no change is made.
+@end deftypefun
+
+@deftypefun void gtk_signal_handler_unblock_by_data (GtkObject *@var{object}, gint @var{data})
+Unblocks calling of a signal handler during signal emission. The signal
+handler is identified by the @var{data} argument specified as the
+@var{func_data} argument to the @code{gtk_signal_connect*} family of
+functions. For the @code{gtk_signal_connect_object*} functions,
+@var{data} refers to the @var{slot_object}. If the signal is already
+unblocked no change is made.
+
+@strong{Note:} This will unblock all signal handlers connected to
+@var{object} which were connected using @var{data} as their
+@var{func_data} argument. Multiple signal handlers may be unblocked
+with this call.
+@end deftypefun
+
+@deftypefun void gtk_signal_handlers_destroy (GtkObject *@var{object})
+Destroy all of the signal handlers connected to @var{object}. There
+should normally never be reason to call this function as it is called
+automatically when @var{object} is destroyed.
+@end deftypefun
+
+@deftypefun void gtk_signal_default_marshaller (GtkObject *@var{object}, GtkSignalFunc @var{func}, gpointer @var{func_data}, GtkSignalParam *@var{params})
+@code{gtk_signal_new} requires a callback in order to actually call a
+signal handler for a particular signal. The vast majority of signals are
+of the particular form:
+
+@example
+  (* std_signal) (gpointer std_arg);
+@end example
+
+@code{gtk_signal_default_marshaller} is a signal marshaller which
+marshals arguments for a signal of that form.
+@end deftypefun
+
+@deftypefun void gtk_signal_set_funcs (GtkSignalMarshal @var{marshal_func}, GtkSignalDestroy @var{destroy_fun})
+@end deftypefun
+
+
+@node Widgets, Other Objects, Signals, Top
+@comment node-name, next, previous, up
+@chapter Widget Overview
+@cindex Widgets
+
+
+Widgets are the general term used to describe user interface objects. A
+widget defines a class interface that all user interface objects conform
+to. This interface allows a uniform method for dealing with operations
+common to all objects such as hiding and showing, size requisition and
+allocation and events.
+
+The common interface that widgets must adhere to is described by the
+GtkWidget and GtkWidgetClass structure. For the purposes of using GTK
+these structures can be considered read-only and, for the most part,
+opaque.
+
+All widget creation routines in GTK return pointers to GtkWidget
+structures. In reality, all widget creation routines create structures
+that can be viewed as equivalent to the GtkWidget structure, but often
+have contain additional information. @xref{Object Implementation}.
+
+The widgets available for use are implemented in a hierarchy. Several
+widgets exist solely as common bases for more specific widgets. For
+example, it is not possible to create a ruler widget itself, but the
+ruler widget provides a base and functionality common to the horizontal
+and vertical rulers.
+
+The available widgets (in alphabetical order):
+
+@menu
+* GtkAlignment::                The alignment widget.
+* GtkArrow::                    The arrow widget.
+* GtkAspectFrame::              The aspect frame widget.
+* GtkBin::                      The bin widget.
+* GtkBox::                      The box widget.
+* GtkButtonBox::                The button box widget.
+* GtkButton::                   The button widget.
+* GtkCheckButton::              The check button widget.
+* GtkCheckMenuItem::            The check menu item widget.
+* GtkCList::                    The compound list widget.
+* GtkColorSelection::           The color selector widget.
+* GtkCombo::                    The combo box widget.
+* GtkContainer::                The container widget.
+* GtkCTree::                    The multi-column tree widget.
+* GtkCurve::                    The curve widget.
+* GtkGammaCurve::               The gamma curve widget.
+* GtkDialog::                   The dialog widget.
+* GtkDrawingArea::              The drawing area widget.
+* GtkEntry::                    The entry widget.
+* GtkEventBox::                 The event box widget.
+* GtkFileSelection::            The file selection dialog widget.
+* GtkFixed::                    The fixed widget.
+* GtkFrame::                    The frame widget.
+* GtkGamma::                    The gamma widget.
+* GtkHBox::                     The horizontal box widget.
+* GtkHButtonBox::               The horizontal button box widget.
+* GtkHPaned::                   The horizontal paned widget.
+* GtkHRuler::                   The horizontal ruler widget.
+* GtkHScale::                   The horizontal scale widget.
+* GtkHScrollbar::               The horizontal scrollbar widget.
+* GtkHSeparator::               The horizontal separator widget.
+* GtkImage::                    The image widget.
+* GtkInputDialog::              The input dialog widget.
+* GtkItem::                     The item widget.
+* GtkLabel::                    The label widget.
+* GtkList::                     The list widget.
+* GtkListItem::                 The list item widget.
+* GtkMenu::                     The menu widget.
+* GtkMenuBar::                  The menu bar widget.
+* GtkMenuItem::                 The menu item widget.
+* GtkMenuShell::                The menu shell widget.
+* GtkMisc::                     The misc widget.
+* GtkNotebook::                 The notebook widget.
+* GtkOptionMenu::               The option menu widget.
+* GtkPaned::                    The paned widget.
+* GtkPixmap::                   The pixmap widget.
+* GtkPreview::                  The preview widget.
+* GtkProgressBar::              The progress bar widget.
+* GtkRadioButton::              The radio button widget.
+* GtkRadioMenuItem::            The radio menu item widget.
+* GtkRange::                    The range widget.
+* GtkRuler::                    The ruler widget.
+* GtkScale::                    The scale widget.
+* GtkScrollbar::                The scrollbar widget.
+* GtkScrolledWindow::           The scrolled window widget.
+* GtkSeparator::                The separator widget.
+* GtkStatusbar::                The statusbar widget.
+* GtkTable::                    The table widget.
+* GtkText::                     The text widget.
+* GtkToggleButton::             The toggle button widget.
+* GtkToolbar::                  The tool bar widget.
+* GtkTooltips::                 The tool tips widget.
+* GtkTree::                     The tree widget.
+* GtkTreeItem::                 The tree item widget.
+* GtkVBox::                     The vertical box widget.
+* GtkVButtonBox::               The vertical button box widget.
+* GtkViewport::                 The viewport widget.
+* GtkVPaned::                   The vertical paned widget.
+* GtkVRuler::                   The vertical ruler widget.
+* GtkVScale::                   The vertical scale widget.
+* GtkVScrollbar::               The vertical scrollbar widget.
+* GtkVSeparator::               The vertical separator widget.
+* GtkWidget::                   The base widget type.
+* GtkWindow::                   The window widget.
+@end menu
+
+@node GtkAlignment, GtkArrow, Widgets, Widgets
+@comment node-name, next, previous, up
+@section The alignment widget
+
+
+@subsection Description
+
+The alignment widget is a container (@pxref{GtkContainer}) derived from
+the bin widget (@pxref{GtkBin}). Its entire purpose is to give the
+programmer flexibility in how the child it manages is positioned when a
+window is resized.
+
+Normally, a widget is allocated at least as much size as it
+requests. (@pxref{GtkContainer} for a discussion of geometry
+management). When a widget is allocated more size than it requests there
+is a question of how the widget should expand. By convention, most GTK
+widgets expand to fill their allocated space. Sometimes this behavior is
+not desired. The alignment widget allows the programmer to specify how a
+widget should expand and position itself to fill the area it is
+allocated.
+
+@subsection Options
+
+@defopt xscale
+@defoptx yscale
+The @var{xscale} and @var{yscale} options specify how to scale the child
+widget. If the scale value is 0.0, the child widget is allocated exactly
+the size it requested in that dimension. If the scale value is 1.0, the
+child widget is allocated all of the space in a dimension. A scale value
+of 1.0 for both x and y is equivalent to not using an alignment widget.
+@end defopt
+
+@defopt xalign
+@defoptx yalign
+The @var{xalign} and @var{yalign} options specify how to position the
+child widget when it is not allocated all the space available to it
+(because the @var{xscale} and/or @var{yscale} options are less than
+1.0). If an alignment value is 0.0 the widget is positioned to the left
+(or top) of its allocated space. An alignment value of 1.0 positions the
+widget to the right (or bottom) of its allocated space. A common usage
+is to specify @var{xalign} and @var{yalign} to be 0.5 which causes the
+widget to be centered within its allocated area.
+@end defopt
+
+@subsection Signals
+
+@subsection Functions
+
+@deftypefun guint gtk_alignment_get_type (void)
+Returns the @code{GtkAlignment} type identifier.
+@end deftypefun
+
+@deftypefun GtkWidget* gtk_alignment_new (gfloat @var{xalign}, gfloat @var{yalign}, gfloat @var{xscale}, gfloat @var{yscale})
+Create a new @code{GtkAlignment} object and initialize it with the
+values @var{xalign}, @var{yalign}, @var{xscale} and @var{yscale}. The
+new widget is returned as a pointer to a @code{GtkWidget}
+object. @code{NULL} is returned on failure.
+@end deftypefun
+
+@deftypefun void gtk_alignment_set (GtkAlignment *@var{alignment}, gfloat @var{xalign}, gfloat @var{yalign}, gfloat @var{xscale}, gfloat @var{yscale})
+Set the @var{xalign}, @var{yalign}, @var{xscale} and @var{yscale} options
+of an alignment widget. It is important to not set the fields of the
+@code{GtkAlignment} structure directly (or, for that matter, any type
+derived from @code{GtkObject}).
+@end deftypefun
+
+@gtkstdmacros{Alignment, ALIGNMENT}
+
+@page
+@node GtkArrow, GtkAspectFrame, GtkAlignment, Widgets
+@comment node-name, next, previous, up
+@section The arrow widget
+
+@subsection Description
+
+The arrow widget is derived from the misc widget (@pxref{GtkMisc}) and
+is intended for use where a directional arrow (in one of the four
+cardinal directions) is desired. As such, it has very limited
+functionality and basically only draws itself in a particular direction
+and with a particular shadow type. The arrow widget will expand to fill
+all the space it is allocated.
+
+@subsection Options
+
+@defopt arrow_type
+The @var{arrow_type} option specifies which direction the arrow will
+point. It can be one of @code{GTK_ARROW_UP}, @code{GTK_ARROW_DOWN},
+@code{GTK_ARROW_LEFT} or @code{GTK_ARROW_RIGHT}. This will set the arrow
+pointing in the direction specified.
+@end defopt
+
+@defopt shadow_type
+The @var{shadow_type} option specifies how to draw the shadow for the
+arrow. Currently, only the @code{GTK_SHADOW_IN} and
+@code{GTK_SHADOW_OUT} shadow types are supported for drawing
+arrows. Other shadow types will cause nothing to be drawn.
+@end defopt
+
+@subsection Signals
+
+@subsection Functions
+
+@deftypefun guint gtk_arrow_get_type (void)
+Returns the @code{GtkArrow} type identifier.
+@end deftypefun
+
+@deftypefun GtkWidget* gtk_arrow_new (GtkArrowType @var{arrow_type}, GtkShadowType @var{shadow_type})
+Create a new @code{GtkArrow} object and initialize it with the values
+@var{arrow_type} and @var{shadow_type}. The new widget is returned as a
+pointer to a @code{GtkWidget} object. @code{NULL} is returned on
+failure.
+@end deftypefun
+
+@deftypefun void gtk_arrow_set (GtkArrow *@var{arrow}, GtkArrowType @var{arrow_type}, GtkShadowType @var{shadow_type})
+Set the @var{arrow_type} and @var{shadow_type} options of an arrow
+widget. It is important to not set the fields of the @code{GtkArrow}
+structure directly (or, for that matter, any type derived from
+@code{GtkObject}).
+@end deftypefun
+
+@gtkstdmacros{Arrow, ARROW}
+
+
+@page
+@node GtkAspectFrame, GtkBin, GtkArrow, Widgets
+@comment node-name, next, previous, upa
+@section The aspect frame widget
+
+@subsection Description
+
+Ensure that the child window has a specified aspect ratio or, if
+obey_child, has the same aspect ratio as its requested size.  Derived
+from @pxref{GtkFrame}).
+
+@subsection Options
+
+@defopt label
+@end defopt
+
+@defopt xalign
+@end defopt
+
+@defopt yalign
+@end defopt
+
+@defopt ratio
+@end defopt
+
+@defopt obey_child
+@end defopt
+
+@subsection Signals
+
+@subsection Functions
+
+@deftypefun guint gtk_aspect_frame_get_type (void)
+Returns the @code{GtkAspectFrame} type identifier.
+@end deftypefun
+
+@deftypefun GtkWidget* gtk_aspect_frame_new (gchar *@var{label}, gfloat @var{xalign}, gfloat @var{yalign}, gfloat @var{ratio}, gint @var{obey_child})
+Create a new @code{GtkAspectFrame} object and initialize it with the values 
+@var{label}, @var{xalign}, @var{yalign}, @var{ratio} and @var{obey_child}.
+The new widget is returned as a pointer to a @code{GtkWidget} object. 
+@code{NULL} is returned on failure.
+@end deftypefun
+
+@deftypefun void gtk_aspect_frame_set (GtkAspectFrame *@var{aspect_frame}, gfloat @var{xalign}, gfloat @var{yalign}, gfloat @var{ratio}, gint @var{obey_child})
+@end deftypefun
+
+
+@gtkstdmacros{AspectFrame, ASPECT_FRAME}
+
+@page
+@node GtkBin, GtkBox, GtkAspectFrame, Widgets
+@comment node-name, next, previous, up
+@section The bin widget
+
+@subsection Description
+
+The bin widget is a container (@pxref{GtkContainer}) derived from the
+container widget. It is an abstract base class. That is, it is not
+possible to create an actual bin widget. It exists only to provide a
+base of functionality for other widgets. Specifically, the bin widget
+provides a base for several other widgets that contain only a single
+child. These widgets include alignments (@pxref{GtkAlignment}), frames
+(@pxref{GtkFrame}), items (@pxref{GtkItem}), viewports
+(@pxref{GtkViewport}) and windows (@pxref{GtkWindow})
+
+@subsection Options
+
+@subsection Signals
+
+@subsection Functions
+
+@deftypefun guint gtk_bin_get_type (void)
+Returns the @code{GtkBin} type identifier.
+@end deftypefun
+
+@gtkstdmacros{Bin, BIN}
+
+
+@page
+@node GtkBox, GtkButtonBox, GtkBin, Widgets
+@comment node-name, next, previous, up
+@section The box widget
+
+
+@subsection Description
+
+The box widget is a container (@pxref{GtkContainer}) derived from the
+container widget. It is an abstract base class used by the horizontal
+box (@pxref{GtkHBox}), the vertical box (@pxref{GtkVBox}) and the 
+(@pxref{GtkButtonBox}) widgets to provide a base of common functionality.
+
+A box provides an abstraction for organizing the position and size of
+widgets. Widgets in a box are laid out horizontally or vertically. By
+using a box widget appropriately, a programmer can control how widgets
+are positioned and how they will be allocated space when a window gets
+resized.
+
+The key attribute of boxes is that they position their children in a
+single row (horizontal boxes) or column (vertical boxes). In the case of
+horizontal boxes, all children are stretched vertically. The vertical
+size of the box is determined by the largest vertical requisition of all
+of its children. Similarly, a vertical box stretches all of its children
+horizontally. The horizontal size (of the vertical box) is determined by
+the largest horizontal requisition of all of its children. An alignment
+widget (@pxref{GtkAlignment}) can be used to control child allocation
+more precisely on a per child basis.
+
+The second attribute of boxes is how they expand children. In the case
+of a horizontal box, the main control is over how children are expanded
+horizontally to fill the allocated area. (The rest of this discussion
+will focus on horizontal boxes but it applies to vertical boxes as
+well).
+
+There are two flags which can be set controlling how a widget is
+expanded horizontally in a horizontal box. These are the @code{expand}
+and @code{fill}. There operation is fairly simple. If @code{expand} is
+set, the child's potentially allocated area will expand to fill available
+space. If @code{fill} is set, the child's actual allocated area will be
+its potentially allocated area. There is a difference between
+the potentially area (which is the area the box widget sets aside for
+the child) and the actual allocated area (which is the area the box
+widget actual allocates for the widget via
+@code{gtk_widget_size_allocate}).
+
+The allocation of space to children occurs as follows (for horizontal
+boxes):
+@enumerate
+@item
+All children are allocated at least their requested size horizontally
+and the maximum requested child size vertically.
+
+@item
+Any child with the @code{expand} flag set is allocated @code{extra_width
+/ nexpand_children} extra pixels horizontally. If the @code{homogeneous}
+flag was set, all children are considered to have the @code{expand} flag
+set. That is, all children will be allocated the same area.The
+horizontal box is a fair widget and, as such, divides up any extra
+allocated space evenly among the ``expand'' children. (Those children
+which have the @code{expand} flag set). The exception occurs when
+@code{extra_width / nexpand_children} does not divide cleanly. The extra
+space is given to the last widget.
+
+@item
+@code{spacing} number of pixels separate each child. Note: The
+separation is between the potentially allocated area for each child and
+not the actual allocated area. The @code{padding} value associated with
+each child causes that many pixels to be left empty to each side of the
+child.
+
+@item
+If a child has the @code{fill} flag set it is allocated its potentially
+allocated area. If it does not, it is allocated its requested size
+horizontally and centered within its potentially allocated area. Its
+vertical allocation is still the maximum requested size of any child.
+
+@item
+Children placed at the start of the box are placed in order of addition
+to the box from left to right in the boxes allocated area.. Children
+placed at the end of the box are placed in order of addition from right
+to left in the boxes allocated area.
+@end enumerate
+
+@xref{GtkHBox}, and @ref{GtkVBox}, for code examples of using horizontal
+and vertical boxes.
+
+@subsection Options
+
+@defopt expand
+@end defopt
+
+@defopt fill
+@end defopt
+
+@defopt padding
+@end defopt
+
+@defopt expand
+@end defopt
+
+@c FIXME: options for GtkBox
+
+@subsection Signals
+
+@subsection Functions
+
+@deftypefun guint gtk_box_get_type (void)
+Returns the @code{GtkBox} type identifier.
+@end deftypefun
+
+@deftypefun void gtk_box_pack_start (GtkBox *@var{box}, GtkWidget *@var{child}, gint @var{expand}, gint @var{fill}, gint @var{padding})
+Add @var{child} to the front of @var{box}. The flags @var{expand} and
+@var{fill} and the padding value of @var{padding} are associated with
+@var{child}.
+@end deftypefun
+
+@deftypefun void gtk_box_pack_end (GtkBox *@var{box}, GtkWidget *@var{child}, gint @var{expand}, gint @var{fill}, gint @var{padding})
+Add @var{child} to the end of @var{box}. The flags @var{expand} and
+@var{fill} and the padding value of @var{padding} are associated with
+@var{child}.
+@end deftypefun
+
+@deftypefun void gtk_box_pack_start_defaults (GtkBox *@var{box}, GtkWidget *@var{widget})
+A convenience function which is equivalent to the following:
+
+@example
+  gtk_box_pack_start (@var{box}, @var{widget}, TRUE, TRUE, 0);
+@end example
+@end deftypefun
+
+@deftypefun void gtk_box_pack_end_defaults (GtkBox *@var{box}, GtkWidget *@var{widget})
+A convenience function which is equivalent to the following:
+
+@example
+  gtk_box_pack_start (@var{box}, @var{widget}, TRUE, TRUE, 0);
+@end example
+@end deftypefun
+
+@deftypefun void gtk_box_set_homogeneous (GtkBox *@var{box}, gint @var{homogeneous})
+Set the homogeneous setting of this box to @var{homogeneous}.
+@end deftypefun
+
+@deftypefun void gtk_box_set_spacing (GtkBox *@var{box}, gint @var{spacing})
+@end deftypefun
+
+@deftypefun void gtk_box_reorder_child (GtkBox *@var{box}, GtkWidget *@var{child}, guint @var{pos})
+@end deftypefun
+
+@deftypefun void gtk_box_query_child_packing (GtkBox *@var{box}, GtkWidget *@var{child}, gint *@var{expand}, gint *@var{fill}, gint *@var{padding}, GtkPackType *@var{pack_type})
+@end deftypefun
+
+@deftypefun void gtk_box_set_child_packing (GtkBox *@var{box}, GtkWidget *@var{child}, gint @var{expand}, gint @var{fill}, gint @var{padding}, GtkPackType *@var{pack_type})
+@end deftypefun
+
+@gtkstdmacros{Box, BOX}
+
+
+@page
+@node GtkButtonBox, GtkButton, GtkBox, Widgets
+@comment node-name, next, previous, up
+@section The button box widget
+
+@subsection Description
+The button box widget is a container (@pxref{GtkContainer}) derived from the
+(@pxref{GtkBox}) widget. It is an abstract base class used by the horizontal
+button box (@pxref{GtkHButtonBox}) and the vertical button box 
+(@pxref{GtkVButtonBox}) widgets to provide a base of common functionality.
+
+The button box, like the box widget, (@pxref{GtkBox}) provides an abstraction
+for organizing position and size of widgets. In the case of the button box
+it is targeted at the button widget,(@pxref{GtkButton}). Button widgets are
+laid out in the box horizontally or vertically. By using a button box widget 
+appropriately, a programmer can control how the button widgets are positioned
+and how they will be allocated space when a window gets resized.
+ 
+@subsection Options
+@defopt layout_style
+@itemize @bullet
+@itemize @bullet
+@item 
+@code{GTK_BUTTONBOX_SPREAD}
+@end itemize
+
+@item
+The layout style @code{GTK_BUTTONBOX_SPREAD} will spread the buttons out
+evenly within the button box. When the parent window is resized they will
+re-adjust to the new window dimensions. The @code{gtk_button_box_set_spacing}
+function will set the minimum space that the buttons will leave between
+themselves.
+
+@itemize @bullet
+@item
+@code{GTK_BUTTONBOX_EDGE}
+@end itemize
+@item
+
+@itemize @bullet
+@item
+@code{GTK_BUTTONBOX_START}
+@end itemize
+
+@item
+The layout style @code{GTK_BUTTONBOX_START} will place the buttons at the
+start of the button box, taking into account the spacing as set by the
+@code{gtk_button_box_set_spacing} function. The buttons will not move
+when the parent window is re-sized. 
+
+@itemize @bullet
+@item
+@code{GTK_BUTTONBOX_END}
+@end itemize
+
+@item
+The layout style @code{GTK_BUTTONBOX_END} will place the buttons at the
+end of the button box, taking into account the spacing as set by the
+@code{gtk_button_box_set_spacing} function. Again like the
+@code{GTK_BUTTONBOX_START} layout style the buttons will not move when
+the parent window is re-sized.
+@end itemize
+@end defopt
+
+@defopt width
+@end defopt
+
+@defopt height
+@end defopt
+
+@defopt ipad_x
+@defoptx ipad_y
+@end defopt
+
+@subsection Signals
+
+@subsection Functions
+
+@deftypefun guint gtk_button_box_get_type (void)
+Returns the @code{GtkButtonBox} type identifier.
+@end deftypefun
+
+@deftypefun void gtk_button_box_set_child_size_default (gint @var{width}, gint@var{height})
+@end deftypefun
+
+@deftypefun void gtk_button_box_set_child_ipadding_default (gint @var{ipad_x}, gint @var{ipad_y})
+@end deftypefun
+
+@deftypefun void gtk_button_box_get_child_size_default (gint *@var{width}, gint *@var{height})
+@end deftypefun
+
+@deftypefun void gtk_button_box_get_child_ipadding_default (gint *@var{ipad_x}, gint *@var{ipad_y})
+@end deftypefun
+
+@deftypefun void gtk_button_box_set_child_size (GtkButtonBox *@var{widget}, gint @var{width}, gint @var{height})
+@end deftypefun
+
+@deftypefun void gtk_button_box_set_child_ipadding (GtkButtonBox *@var{widget}, gint @var{ipad_x}, gint @var{ipad_y})
+@end deftypefun
+
+@deftypefun void gtk_button_box_set_layout (GtkButtonBox *@var{widget}, gint @var{layout_style})
+This will set the layout style of the buttons within this box. Currently it can
+be set to one of @code{GTK_BUTTONBOX_SPREAD}, @code{GTK_BUTTONBOX_EDGE}, 
+@code{GTK_BUTTONBOX_START} or @code{GTK_BUTTONBOX_END}.
+
+The following example:
+@example
+    gtk_button_box_set_layout (GTK_BUTTON_BOX (box), 
+                               GTK_BUTTONBOX_SPREAD);
+@end example
+Will set the @var{box} argument to the @dfn{SPREAD} layout style described 
+above.
+@end deftypefun
+
+@deftypefun gint gtk_button_box_get_spacing (GtkButtonBox *@var{widget})
+Get the per widget value for spacing within the button box. This value is
+the amount of space that will be between the individual buttons contained by
+this box.
+@end deftypefun
+
+@deftypefun void gtk_button_box_get_child_size (GtkButtonBox *@var{widget}, gint *@var{width}, gint *@var{height})
+@end deftypefun
+
+@deftypefun void gtk_button_box_get_child_ipadding (GtkButtonBox *@var{widget}, gint *@var{ipad_x}, gint *@var{ipad_y})
+Get the per widget value for the padding inside the buttons. This value 
+controls how large the buttons will be within the box.
+@end deftypefun
+
+@deftypefun gint gtk_button_box_get_layout (GtkButtonBox *@var{widget})
+Get the @var{layout_style} for the @code{GtkButtonBox} object passed to this
+function in the @var{widget} variable.
+
+@example
+   layout = gtk_button_box_get_layout(GTK_BUTTON_BOX (box));
+@end example
+
+@end deftypefun
+
+@gtkstdmacros{ButtonBox, BUTTON_BOX}
+
+@page
+@node GtkButton, GtkCheckButton, GtkButtonBox, Widgets
+@comment node-name, next, previous, up
+@section The button widget
+
+
+@subsection Description
+
+A pressable button.  Contains a widget.  Changes its appearance
+(hilites) when it gets the focus.  Changes its appearance (pressed) when
+activated.  Derived from @pxref{GtkContainer}.
+
+@subsection Signals
+
+@deftypefn Signal void GtkButton::pressed (GtkButton *@var{button})
+@end deftypefn
+
+@deftypefn Signal void GtkButton::released (GtkButton *@var{button})
+@end deftypefn
+
+@deftypefn Signal void GtkButton::clicked (GtkButton *@var{button})
+@end deftypefn
+
+@deftypefn Signal void GtkButton::enter (GtkButton *@var{button})
+@end deftypefn
+
+@deftypefn Signal void GtkButton::leave (GtkButton *@var{button})
+@end deftypefn
+
+@subsection Functions
+
+@deftypefun guint gtk_button_get_type (void)
+Returns the @code{GtkButton} type identifier.
+@end deftypefun
+
+@deftypefun GtkWidget* gtk_button_new (void)
+Create a new @code{GtkButton} object. The new widget is returned as a 
+pointer to a @code{GtkWidget} object. @code{NULL} is returned on failure.
+@end deftypefun
+
+@deftypefun GtkWidget* gtk_button_new_with_label (gchar *@var{label})
+Create a new @code{GtkButton} object and set the text that is 
+on the button to @var{label}. The new widget is returned as a 
+pointer to a @code{GtkWidget} object. @code{NULL} is returned on failure.
+@end deftypefun
+
+@deftypefun void gtk_button_pressed (GtkButton *@var{button})
+@end deftypefun
+
+@deftypefun void gtk_button_released (GtkButton *@var{button})
+@end deftypefun
+
+@deftypefun void gtk_button_clicked (GtkButton *@var{button})
+@end deftypefun
+
+@deftypefun void gtk_button_enter (GtkButton *@var{button})
+@end deftypefun
+
+@deftypefun void gtk_button_leave (GtkButton *@var{button})
+@end deftypefun
+
+@gtkstdmacros{Button, BUTTON}
+
+
+@page
+@node GtkCheckButton, GtkCheckMenuItem, GtkButton, Widgets
+@comment node-name, next, previous, up
+@section The check button widget
+
+
+@subsection Description
+
+Another form of toggle button (@pxref{GtkToggleButton}) with an
+indicator.  Contains a widget to the right of the indicator.  Changes
+its appearance (hilites) when it gets the focus.
+
+@subsection Options
+
+@subsection Signals
+
+@subsection Functions
+
+@deftypefun guint gtk_check_button_get_type (void)
+Returns the @code{GtkCheckButton} type identifier.
+@end deftypefun
+
+@deftypefun GtkWidget* gtk_check_button_new (void)
+Create a new @code{GtkCheckButton} object and initialize it with the 
+default values in the library. The new widget is returned as a pointer
+to a @code{GtkWidget} object. A @code{NULL} is returned on failure.
+@end deftypefun
+
+@deftypefun GtkWidget* gtk_check_button_new_with_label (gchar *@var{label})
+Create a new @code{GtkCheckButton} object and initialize it with the 
+values @var{label}. The new widget is returned as a pointer to a
+@code{GtkWidget} object. @code{NULL} is returned on any failure.
+@end deftypefun
+
+@deftypefun GtkCheckButton* GTK_CHECK_BUTTON (gpointer @var{obj})
+@end deftypefun
+
+@deftypefun GtkCheckButtonClass* GTK_CHECK_BUTTON_CLASS (gpointer @var{class})
+@end deftypefun
+
+@deftypefun gint GTK_IS_CHECK_BUTTON (gpointer @var{obj})
+@end deftypefun
+
+@gtkstdmacros{CheckButton, CHECK_BUTTON}
+
+@page
+@node GtkCheckMenuItem, GtkCList, GtkCheckButton, Widgets
+@comment node-name, next, previous, up
+@section The check menu item widget
+
+@subsection Description
+
+Derived from @pxref{GtkMenuItem}.  Very similar to a checkbutton
+(@pxref{GtkCheckButton}), except that it's a menu item.  Has a toggled
+state which is displayed in a small rectangle to the left of the
+contained widget.
+
+@subsection Options
+
+@defopt label
+@end defopt
+
+@defopt state
+@end defopt
+
+@subsection Signals
+
+@deftypefn Signal void GtkCheckMenuItem::toggled (GtkCheckMenuItem *@var{check_menu_item})
+@end deftypefn
+
+@subsection Functions
+
+@deftypefun guint gtk_check_menu_item_get_type (void)
+Returns the @code{GtkCheckMenuItem} type identifier.
+@end deftypefun
+
+@deftypefun GtkWidget* gtk_check_menu_item_new (void)
+Create a new @code{GtkCheckMenuItem} object. The new widget is returned as a
+pointer to a @code{GtkWidget} object. @code{NULL} is returned on failure.
+@end deftypefun
+
+@deftypefun GtkWidget* gtk_check_menu_item_new_with_label (gchar *@var{label})
+Create a new @code{GtkCheckMenuItem} object and initialize it with the values
+@var{label}. The new widget is returned as a pointer to a @code{GtkWidget}
+object. @code{NULL} is returned on failure.
+@end deftypefun
+
+@deftypefun void gtk_check_menu_item_set_state (GtkCheckMenuItem *@var{check_menu_item}, gint @var{state})
+@end deftypefun
+
+@deftypefun void gtk_check_menu_item_toggled (GtkCheckMenuItem *@var{check_menu_item})
+@end deftypefun
+
+@gtkstdmacros{CheckMenuItem, CHECK_MENU_ITEM}
+
+@page 
+@node GtkCList, GtkColorSelection, GtkCheckMenuItem, Widgets
+@comment node-name, next, previous, up
+@section The compound list widget
+
+@subsection Description
+
+A list of rows of columns, with a title row.  You can insert rows, and
+delete rows.  The user can scroll around and select a row.  Derived from
+@pxref{GtkContainer}.  Cells can be empty, have a text and/or pixmap, or
+be a widget.
+
+@subsection Options
+
+@subsection Signals
+
+@subsection Functions
+
+@deftypefun guint gtk_clist_get_type (void)
+Returns the @code{GtkCList} type identifier.
+@end deftypefun
+
+@deftypefun GtkWidget* gtk_clist_new (int @var{columns})
+Create a new @code{GtkCList} initializing it with the value @var{columns}. 
+The new widget is returned as a pointer to a @code{GtkWidget} object.
+@code{NULL} is returned on failure.
+@end deftypefun
+
+
+@deftypefun GtkWidget* gtk_clist_new_with_titles (int @var{columns}, gchar *@var{titles[]})
+@end deftypefun
+
+@deftypefun void gtk_clist_set_border (GtkCList *@var{clist}, GtkShadowType @var{border})
+Set the border style of the @var{clist} to the shadow type @var{border}.
+@end deftypefun
+
+@deftypefun void gtk_clist_set_selection_mode (GtkCList *@var{clist} GtkSelectionMode @var{mode})
+Set the selection mode on the @var{clist} to the @var{mode} selection mode.
+@end deftypefun
+
+@deftypefun void gtk_clist_set_policy (GtkCList *@var{clist}, GtkPolicyType @var{vscrollbar_policy}, GtkPolicyType @var{hscrollbar_policy})
+Set the policy on the scrollbars on the @var{clist} to @var{vscrollbar_policy} and @var{hscrollbar_policy}.
+@end deftypefun
+
+@deftypefun void gtk_clist_freeze (GtkCList *@var{clist})
+Stop all visual updates of the @var{clist}. Useful for when making a large
+number of changes to a @code{GtkCList}.
+@end deftypefun
+
+@deftypefun void gtk_clist_thaw (GtkCList *@var{clist})
+Allow all visual updates of the @var{clist} to resume. 
+@end deftypefun
+
+@deftypefun void gtk_clist_column_titles_show (GtkCList *@var{clist})
+Show the column title buttons on the @var{clist}.
+@end deftypefun
+
+@deftypefun void gtk_clist_column_titles_hide (GtkCList *@var{clist})
+Hide the column title buttons on the @var{clist}.
+@end deftypefun
+
+@deftypefun void gtk_clist_set_column_title (GtkCList *@var{clist}, gint @var{column}, gchar *@var{title})
+Set the title in column @var{column} of the @var{clist} button to @var{title}.
+@end deftypefun
+
+@deftypefun void gtk_clist_set_column_widget (GtkCList *@var{clist}, gint @var{column}, GtkWidget *@var{widget})
+Set the @var{widget} instead of the title button for the column @var{column} 
+in the @var{clist}.
+@end deftypefun
+
+@deftypefun void gtk_clist_set_column_justification (GtkCList *@var{clist}, gint @var{column}, GtkJustification @var{justification})
+Set the @var{column}'s justification, in the @var{clist} to @var{justification}.
+@end deftypefun
+
+@deftypefun void gtk_clist_set_column_width (GtkCList *@var{clist}, gint @var{column}, gint @var{width})
+Set the pixel width of column @var{column} in the @code{GtkCList} @var{clist}
+to @var{width}. This function is a necessary step in creating a 
+@code{GtkCList} because otherwise the column width is chosen from the width
+of the column title, which is almost never correct.
+@end deftypefun
+
+@deftypefun void gtk_clist_set_row_height (GtkCList *@var{clist}, gint @var{height})
+Change the height of the rows in the @var{clist} to @var{height}. The default
+is the height of the current font.
+@end deftypefun
+
+@deftypefun void gtk_clist_moveto (GtkCList *@var{clist}, gint @var{row}, gint@var{column}, gfloat @var{row_align}, gfloat @var{col_align})
+Scroll the viewing area of the @code{GtkClist} in @var{clist} to @var{column}
+and @var{row}. The @var{row_align} and @var{col_align} are between zero and
+one, representing the location the row should appear on screen. Setting 
+@var{row_align} or the @var{col_align} to 0.0 will be the top or left of the
+viewing area. Setting the @var{row_align} or @var{col_align} to 1.0 will
+be the bottom or right of the viewing area. If the @var{row} or @var{column}
+is -1 then there is no change.
+@end deftypefun
+
+@deftypefun void gtk_clist_set_text (GtkCList *@var{clist}, gint @var{row}, gint @var{column}, gchar *@var{text})
+Set a given cell's text, located by the @var{row} and @var{column}, to 
+@var{text} replacing its current contents.
+@end deftypefun
+
+@deftypefun void gtk_clist_set_pixmap (GtkCList *@var{clist}, gint @var{row}, gint @var{column}, GdkPixmap *@var{pixmap}, GdkBitmap *@var{mask})
+Set a given cell's text, located by the @var{column} and @var{row} arguments,
+to the pixmap described by the @var{pixmap} argument using the @var{mask} as 
+its mask. The current contents of the cell will be replaced.
+@end deftypefun
+
+@deftypefun void gtk_clist_setpixtext (GtkCList *@var{clist}, gint @var{row}, gint @var{column}, gchar *@var{text}, guint8 @var{spacing}, GdkPixmap *@var{pixmap}, GdkBitmap *@var{mask})
+Set a given cell's text and pixmap, located by the @var{row} and @var{column}
+arguments, to the text and pixmap described by the @var{pixmap} and @var{text}
+arguments. The @var{mask} will be used for the pixmap mask and the 
+@var{spacing} argument specifies the spacing between the two.
+@end deftypefun
+
+@deftypefun void gtk_clist_set_foreground (GtkCList *@var{clist}, gint @var{row}, GdkColor *@var{color})
+Set the foreground color of row @var{row} to @var{color} in the 
+@code{GtkCList} @var{clist}. The @var{color} must
+already be allocated.
+@end deftypefun
+
+@deftypefun void gtk_clist_set_background (GtkCList *@var{clist}, gint @var{row}, GdkColor *@var{color})
+Set the background color of row @var{row} to @var{color} in the 
+@code{GtkCList} pointed to by @var{clist}. The color must be previously
+allocated.
+@end deftypefun
+
+@deftypefun void gtk_clist_set_shift (GtkCList *@var{clist}, gint @var{row}, gint @var{column}, gint @var{vertical}, gint @var{horizontal})
+Set the horizontal and vertical shift for drawing the contents of the cell
+located at @var{row} and @var{column}. The @var{vertical} and @var{horizontal}
+arguments can be positive or negative. 
+@end deftypefun
+
+@deftypefun gint gtk_clist_append (GtkCList *@var{clist}, gchar *@var{text[]})
+Append the given text, in the @var{text[]} argument,  to the @code{GtkCList} 
+pointed to by the @var{clist}. The return value is the index of the row that
+was just added.
+@end deftypefun
+
+@deftypefun void gtk_clist_insert (GtkCList *@var{clist}, gint @var{row}, gchar *@var{text[]})
+Insert a row into the @code{GtkCList} pointed to by @var{clist} at row 
+@var{row} with the text in @var{text[]}.
+@end deftypefun
+
+@deftypefun void gtk_clist_remove (GtkCList *@var{clist}, gint @var{row})
+Remove row index @var{row} from the @var{clist}.
+@end deftypefun
+
+@deftypefun void gtk_clist_set_row_data (GtkCList *@var{clist}, gint @var{row}, gpointer @var{data})
+Will set an arbitrary data pointer, @var{data}, for row @var{row} in the
+@code{GtkCList} pointed to by @var{clist}.
+@end deftypefun
+
+@deftypefun gpointer gtk_clist_get_row_data (GtkCList *@var{clist}, gint @var{row})
+Return the data that was set for row @var{row} from the @code{GtkCList} pointed
+to by @var{clist}. @code{NULL} is returned if no data was set.
+@end deftypefun
+
+@deftypefun void gtk_clist_select_row (GtkCList *@var{clist}, gint @var{row}, gint @var{column})
+Force selection of a row, located by @var{row} and @var{column}, in the 
+@code{GtkCList} pointed to by @var{clist}.
+@end deftypefun
+
+@deftypefun void gtk_clist_unselect_row (GtkCList *@var{clist}, gint @var{row}, gint @var{column})
+Force the unselection of a row, located by @var{row} and @var{column}, in the
+@code{GtkCList} pointed to by @var{clist}.
+@end deftypefun
+
+@deftypefun void gtk_clist_clear (GtkCList *@var{clist})
+Clear the entire contents of the @code{GtkCList} pointed to by @var{clist}.
+This is much faster then removing each item separately with 
+@code{gtk_clist_remove}.
+@end deftypefun
+
+@gtkstdmacros{CList, CLIST}
+
+@page
+@node GtkColorSelection, GtkCombo, GtkCList, Widgets
+@comment node-name, next, previous, up
+@section The color selector widget
+
+@subsection Description
+
+A widget that allows a user to pick a color in one of many ways.  They
+can click on a color wheel or saturation bar.  They can change hue,
+saturation, value, red, green, or blue with a slider, or by entering
+values.  Also allows the user to set an alpha (opacity) value.  Derived
+from @pxref{GtkVBox}.
+
+@subsection Options
+@defopt policy
+@itemize @bullet
+@item
+GTK_UPDATE_CONTINUOUS
+@item
+GTK_UPDATE_DISCONTINUOUS
+@item
+GTK_UPDATE_DELAYED
+@end itemize
+@end defopt
+
+@defopt color
+@end defopt
+
+@defopt use_opacity
+@end defopt
+
+@defopt title
+@end defopt
+
+@subsection Signals
+
+@subsection Functions
+
+@deftypefun guint gtk_color_selection_get_type (void)
+Returns the @code{GtkColorSelection} type identifier.
+@end deftypefun
+
+@deftypefun GtkWidget* gtk_color_selection_new (void)
+Create a new @code{GtkColorSelection} object. The new object is returned as a
+pointer to a @code{GtkWidget} object. @code{NULL} is returned on failure.
+@end deftypefun
+
+@deftypefun void gtk_color_selection_set_update_policy (GtkColorSelection *@var{colorsel}, GtkUpdateType @var{policy})
+@end deftypefun
+
+@deftypefun void gtk_color_selection_set_color (GtkColorSelection *@var{colorsel}, gdouble *@var{color})
+@end deftypefun
+
+@deftypefun void gtk_color_selection_get_color (GtkColorSelection *@var{colorsel}, gdouble *@var{color})
+@end deftypefun
+
+@deftypefun void gtk_color_selection_set_opacity (GtkColorSelection *@var{colorsel}, gint @var{use_opacity})
+@end deftypefun
+
+@deftypefun guint gtk_color_selection_dialog_get_type (void)
+Returns the @code{GtkColorSelection} type identifier.
+@end deftypefun
+
+@deftypefun GtkWidget* gtk_color_selection_dialog_new (gchar *@var{title})
+Create a new @code{GtkColorSelection} object initializing the title bar of 
+the resulting dialog to @var{title}. The new widget is returned as a pointer
+to a @code{GtkWidget} object. @code{NULL} is returned on failure.
+@end deftypefun
+
+@gtkstdmacros{ColorSelection, COLOR_SELECTION}
+
+@page
+@node GtkCombo, GtkContainer, GtkColorSelection, Widgets
+@comment node-name, next, previous, up
+@section The combo widget
+
+@subsection Description
+
+Text input box which also lets you choose from pre-defined values from a
+drop-down menu.  Derived from @pxref{GtkHBox}.
+
+@subsection Options
+
+@subsection Signals
+
+@subsection Functions
+
+@deftypefun guint gtk_combo_get_type (void)
+Returns the @code{GtkCombo} type identifier.
+@end deftypefun
+
+@deftypefun GtkWidget* gtk_combo_new (void)
+Create a new @code{GtkCombo} object returning the new widget as a pointer to
+a @code{GtkWidget} object. @code{NULL} is returned on failure.
+@end deftypefun
+
+@deftypefun void gtk_combo_set_value_in_list (GtkCombo *@var{combo}, gint @var{val}, gint @var{ok_if_empty})
+@end deftypefun
+
+@deftypefun void gtk_combo_set_use_arrows (GtkCombo *@var{combo}, gint @var{val})
+@end deftypefun
+
+@deftypefun void gtk_combo_set_use_arrows_always (GtkCombo *@var{combo}, gint @var{val})
+@end deftypefun
+
+@deftypefun void gtk_combo_set_case_sensitive (GtkCombo *@var{combo}, gint @var{val})
+@end deftypefun
+
+@deftypefun void gtk_combo_set_item_string (GtkCombo *@var{combo}, GtkItem *@var{item}, gchar *@var{item_value})
+@end deftypefun
+
+@deftypefun void gtk_combo_set_popdown_strings (GtkCombo *@var{combo}, GList *@var{strings})
+@end deftypefun
+
+@gtkstdmacros{Combo, COMBO}
+
+@page
+@node GtkContainer, GtkCTree, GtkCombo, Widgets
+@comment node-name, next, previous, up
+@section The container widget
+
+@subsection Description
+
+A base class for objects that are built out of other widgets.  Many
+widgets are containers.  For example, a button contains a widget.  That
+widget might be a text label (usually is), or a pixmap, or even an hbox
+which has a label and a pixmap.
+
+@subsection Options
+
+@defopt border_width
+@end defopt
+
+@subsection Signals
+
+@deftypefn Signal void GtkContainer::add (GtkContainer *@var{container}, GtkWidget *@var{widget})
+@end deftypefn
+
+@deftypefn Signal void GtkContainer::remove (GtkContainer *@var{container}, GtkWidget *@var{widget})
+@end deftypefn
+
+@deftypefn Signal void GtkContainer::need_resize (GtkContainer *@var{container}, GtkWidget *@var{widget})
+@end deftypefn
+
+@deftypefn Signal void GtkContainer::foreach (GtkContainer *@var{container}, GtkCallback @var{callback}, gpointer @var{callback_data})
+@end deftypefn
+
+@deftypefn Signal gint GtkContainer::focus (GtkContainer *@var{container}, GtkDirectionType @var{direction})
+@end deftypefn
+
+@subsection Functions
+
+@deftypefun guint gtk_container_get_type (void)
+Returns the @code{GtkContainer} type identifier.
+@end deftypefun
+
+@deftypefun void gtk_container_border_width (GtkContainer *@var{container}, gint @var{border_width})
+@end deftypefun
+
+@deftypefun void gtk_container_add (GtkContainer *@var{container}, GtkWidget *@var{widget})
+Add @var{widget} to the @var{container}.
+@end deftypefun
+
+@deftypefun void gtk_container_remove (GtkContainer *@var{container}, GtkWidget *@var{widget})
+Remove @var{widget} from @var{container}.
+@end deftypefun
+
+@deftypefun void gtk_container_disable_resize (GtkContainer *@var{container})
+@end deftypefun
+
+@deftypefun void gtk_container_enable_resize (GtkContainer *@var{container})
+@end deftypefun
+
+@deftypefun void gtk_container_block_resize (GtkContainer *@var{container})
+@end deftypefun
+
+@deftypefun void gtk_container_unblock_resize (GtkContainer *@var{container})
+@end deftypefun
+
+@deftypefun gint gtk_container_need_resize (GtkContainer *@var{container}, GtkWidget *@var{widget})
+@end deftypefun
+
+@deftypefun void gtk_container_check_resize (GtkContainer *@var{container}, GtkWidget *@var{widget})
+@end deftypefun
+
+@deftypefun void gtk_container_foreach (GtkContainer *@var{container}, GtkCallback @var{callback}, gpointer @var{callback_data})
+@end deftypefun
+
+@deftypefun void gtk_container_focus (GtkContainer *@var{container}, GtkDirectionType @var{direction})
+@end deftypefun
+
+@deftypefun GList* gtk_container_children (GtkContainer @var{container})
+@end deftypefun
+
+@gtkstdmacros{Container, CONTAINER}
+
+@page 
+@node GtkCTree, GtkCurve, GtkContainer, Widgets
+@comment node-name, next, previous, up
+@section The multi-column tree widget
+
+@subsection Description
+
+The GtkCTree widget is a multi-columned list with a designated column, the 
+@code{tree column}, to display hierarchically-organized data. Each node is
+either a folder (a branch of the tree) or a leaf. Nodes can be
+(recursively) expanded, collapsed, (un)selected, removed, moved, sorted etc. 
+
+GtkCTree is a descendant of @pxref{GtkCList}. Therefore, a cell in a column
+other than the tree column can only contain a string, a pixmap, both or 
+nothing. A node in the tree column can contain a string and up to two pixmaps
+and masks, indicating the "folder openend" and "folder closed" status.
+
+Compared to GtkCList, there is no concept of row numbers. Therefore, a number
+of GtkCList methods had to be re-implemented taking @code{GList *node} 
+arguments instead of @code{gint row}.
+
+@subsection Options
+
+@subsection Signals
+
+@deftypefn Signal void GtkCTree::tree_expand (GtkCTree *@var{ctree}, GList *@var{node})
+@end deftypefn
+@deftypefn Signal void GtkCTree::tree_collapse (GtkCTree *@var{ctree}, GList *@var{node})
+@end deftypefn
+@deftypefn Signal void GtkCTree::tree_move (GtkCTree *@var{ctree}, GList *@var{node}, GList *@var{new_parent}, GList *@var{new_sibling})
+@end deftypefn
+@deftypefn Signal void GtkCTree::tree_select_row (GtkCTree *@var{ctree}, GList *@var{row}, gint @var{column})
+@end deftypefn
+@deftypefn Signal void GtkCTree::tree_unselect_row (GtkCTree *@var{ctree}, GList *@var{row}, gint @var{column})
+@end deftypefn
+
+@subsection Functions
+
+@deftypefun GtkType gtk_ctree_get_type (void)
+Returns the @code{GtkCTree} type identifier.
+@end deftypefun
+
+@deftypefun GtkWidget* gtk_ctree_new (gint @var{columns}, gint @var{tree_column})
+Creates a new GtkCTree widget with the given number of columns and the given tree column.
+
+On success, a pointer to the newly created widget is returned, and @code{NULL} otherwise.
+@end deftypefun
+
+@deftypefun GtkWidget* gtk_ctree_new_with_titles (gint @var{columns}, gint @var{tree_column}, gchar *@var{titles[]})
+Creates a new GtkCTree widget with the given number of columns and the given tree column. The column titles are initialized to the strings of the array @var{titles}.
+
+On success, a pointer to the newly created widget is returned, and @code{NULL} otherwise.
+@end deftypefun
+
+@deftypefun GList* gtk_ctree_insert (GtkCTree *@var{ctree}, GList *@var{parent}, GList *@var{sibling}, gchar *@var{text[]}, guint8 @var{spacing}, GdkPixmap *@var{pixmap_closed}, GdkPixmap *@var{mask_closed}, GdkPixmap *@var{pixmap_opened}, GdkPixmap *@var{mask_opened}, gboolean @var{is_leaf}, gboolean @var{expanded})
+Inserts a new node at the given position. If @var{parent} == NULL, the node is
+inserted at root level. If @var{sibling} == NULL, the node is appended to the 
+existing list of siblings. Otherwise, the node is inserted before @var{sibling}.
+If not NULL, the two pixmaps/masks are used to indicate the opened/closed status
+of the node. @var{spacing} is the number of pixels between pixmap and text.
+If @var{is_leaf} == TRUE, the node cannot have any children.
+The initial expanded/collapsed status is given by @var{expanded}.
+
+On success, the pointer to the newly inserted node is returned, and NULL 
+otherwise.
+@end deftypefun
+
+@deftypefun void gtk_ctree_remove (GtkCTree *@var{ctree}, GList *@var{node})
+Removes the given node and all its children.
+@end deftypefun
+
+@deftypefun void gtk_ctree_clear (GtkCTree *@var{ctree})
+Removes all nodes of @var{ctree}.
+@end deftypefun
+
+@deftypefun void gtk_ctree_post_recursive (GtkCTree *@var{ctree}, GList *@var{node}, GtkCTreeFunc @var{func}, gpointer @var{data})
+Apply @var{func} to @var{node} and all its children, traversing @var{ctree} in
+post-order.
+@end deftypefun
+
+@deftypefun void gtk_ctree_pre_recursive (GtkCTree *@var{ctree}, GList *@var{node}, GtkCTreeFunc @var{func}, gpointer @var{data})
+Apply @var{func} to @var{node} and all its children, traversing @var{ctree} in
+pre-order.
+@end deftypefun
+
+@deftypefun gboolean gtk_ctree_is_visible (GtkCTree *@var{ctree}, GList *@var{node})
+Returns the visibility status of the given node. A node is said to be visible
+if in the chain of parent nodes every node is expanded. Or : the node is 
+currently being displayed (but not necessarily inside the viewing area).
+@end deftypefun
+
+@c @deftypefun void gtk_ctree_scroll_to (GtkCTree *@var{ctree}, gint @var{row}, gint@var{column}, gfloat @var{row_align}, gfloat @var{col_align})
+@c Scroll the viewing area of the @code{GtkCtree} in @var{ctree} to @var{column}
+@c and @var{row}. The @var{row_align} and @var{col_align} are between zero and
+@c one, representing the location the row should appear on screen. Setting 
+@c @var{row_align} or the @var{col_align} to 0.0 will be the top or left of the
+@c viewing area. Setting the @var{row_align} or @var{col_align} to 1.0 will
+@c be the bottom or right of the viewing area. If the @var{row} or @var{column}
+@c is -1 then there is no change.
+@c @end deftypefun
+
+@gtkstdmacros{CTree, CTREE}
+
+@page
+@node GtkCurve, GtkGammaCurve, GtkCTree, Widgets
+@comment node-name, next, previous, up
+@section The curve widget
+
+@subsection Description
+
+Derived from @pxref{GtkDrawingArea}.
+
+@subsection Options
+
+@defopt type
+@itemize @bullet
+@item GTK_CURVE_TYPE_LINEAR
+@item GTK_CURVE_TYPE_SPLINE
+@item GTK_CURVE_TYPE_FREE
+@end itemize
+@end defopt
+
+@subsection Signals
+
+@subsection Functions
+
+@deftypefun guint gtk_curve_get_type (void)
+Returns the @code{GtkCurve} type identifier.
+@end deftypefun
+
+@deftypefun GtkWidget* gtk_curve_new (void)
+Create a new @code{GtkCurve} returning the new widget as a pointer to a 
+@code{GtkWidget} object.
+@end deftypefun
+
+@deftypefun void gtk_curve_reset (GtkCurve *@var{curve})
+@end deftypefun
+
+@deftypefun void gtk_curve_set_gamma (GtkCurve *@var{curve}, gfloat @var{gamma})
+@end deftypefun
+
+@deftypefun void gtk_curve_set_range (GtkCurve *@var{curve}, gfloat @var{min_x}, gfloat @var{max_x}, gfloat @var{min_y}, gfloat @var{max_y})
+@end deftypefun
+
+@deftypefun void gtk_curve_get_vector (GtkCurve *@var{curve}, int @var{veclen}, gfloat @var{vector[]})
+@end deftypefun
+
+@deftypefun void gtk_curve_set_vector (GtkCurve *@var{curve}, int @var{veclen}, gfloat @var{vector[]})
+@end deftypefun
+
+@deftypefun void gtk_curve_set_curve_type (GtkCurve *@var{curve}, GtkCurveType @var{type})
+@end deftypefun
+
+@gtkstdmacros{Curve, CURVE}
+
+@page
+@node GtkGammaCurve, GtkDialog, GtkCurve, Widgets
+@comment node-name, next, previous, up
+@section The gamma curve widget
+
+@subsection Description
+
+Lets the user edit a gamma curve (a one-to-one mapping usually used to
+adjust the intensity of an image to the physical characteristics of the
+output device).  You can set the minimum and maximum values for input
+and output.  You can set the initial vector as well.  You are guaranteed
+that every input value will have a (not necessarily unique) output value
+specified.  Derived from @pxref{GtkVBox}.  Makes use of @pxref{GtkCurve} to
+draw the curve.
+
+@subsection Options
+
+@subsection Signals
+
+@subsection Functions
+
+@deftypefun guint gtk_gamma_curve_get_type (void)
+Returns the @code{GtkGamma} type identifier.
+@end deftypefun
+
+@deftypefun GtkWidget* gtk_gamma_curve_new (void)
+Create a new @code{GtkGamma} returning the new widget as a pointer to a
+@code{GtkWidget} object.
+@end deftypefun
+
+@gtkstdmacros{GammaCurve, GAMMACURVE}
+
+@page
+@node GtkDialog, GtkDrawingArea, GtkGammaCurve, Widgets
+@comment node-name, next, previous, up
+@section The dialog widget
+
+
+@subsection Description
+The dialog widget is a window (@pxref{GtkWindow}) that has a vertical box
+(@pxref{GtkVBox}), a horizontal box (@pxref{GtkHBox}), separated with a 
+horizontal separator (@pxref{GtkHSeparator}).
+
+@subsection Options
+
+@subsection Signals
+
+@subsection Functions
+
+@deftypefun guint gtk_dialog_get_type (void)
+Returns the @code{GtkDialog} type identifier.
+@end deftypefun
+
+@deftypefun GtkWidget* gtk_dialog_new (void)
+Create a new @code{GtkDialog} object and return the new widget as a pointer
+to a @code{GtkWidget} object. @code{NULL} is returned on failure.
+@end deftypefun
+
+@gtkstdmacros{Dialog, DIALOG}
+
+
+@page
+@node GtkDrawingArea, GtkEntry, GtkDialog, Widgets
+@comment node-name, next, previous, up
+@section The drawing area widget
+
+@subsection Description
+
+A base class for widgets that need a box to draw into.  So far, only
+used by GtkCurve.
+
+@subsection Options
+
+@defopt width
+@end defopt
+
+@defopt height
+@end defopt
+
+@subsection Signals
+
+@subsection Functions
+
+@deftypefun guint gtk_drawing_area_get_type (void)
+Returns the @code{GtkDrawingArea} type identifier.
+@end deftypefun
+
+@deftypefun GtkWidget* gtk_drawing_area_new (void)
+Create a new @code{GtkDrawingArea} object returning the new widget as a 
+pointer to a @code{GtkWidget} object. @code{NULL} is returned on failure.
+@end deftypefun
+
+@deftypefun void gtk_drawing_area_size (GtkDrawingArea *@var{darea}, gint @var{width}, gint @var{height})
+Set the size of the @var{darea} widget, created previously, to @var{width} and @var{height}.
+@end deftypefun
+
+@gtkstdmacros{DrawingArea, DRAWING_AREA}
+
+
+@page
+@node GtkEntry, GtkEventBox, GtkDrawingArea, Widgets
+@comment node-name, next, previous, up
+@section The entry widget
+
+
+@subsection Description
+
+@comment Enter text into this widget.  Derived from @pxref{GtkEditable}.  Can be
+@comment set so it isn't editable.
+
+Enter text into this widget.  Derived from GtkEditable.  Can be
+set so it isn't editable.
+
+@subsection Options
+
+@defopt max
+With this option it is possible to set the @var{text_max_length} to the 
+value specified in the @var{max} option. This value is a guint16 value.
+@end defopt
+
+@defopt text
+With this option it is possible to 'preload' the text that will be displayed 
+in the @code{entry} widget to the string pointed to by @var{text}.
+@end defopt
+
+@subsection Signals
+
+@deftypefn Signal void GtkEntry::insert_text (GtkEntry *@var{entry}, gchar *@var{text}, gint @var{length}, gint *@var{position})
+@end deftypefn
+
+@deftypefn Signal void GtkEntry::delete_text (GtkEntry *@var{entry}, gint @var{start_pos}, gint @var{end_pos})
+@end deftypefn
+
+@deftypefn Signal void GtkEntry::changed (GtkEntry *@var{entry})
+@end deftypefn
+
+@deftypefn Signal void GtkEntry::set_text (GtkEntry *@var{entry})
+@end deftypefn
+
+@deftypefn Signal void GtkEntry::activate (GtkEntry *@var{entry})
+@end deftypefn 
+
+@subsection Functions
+
+@deftypefun guint gtk_entry_get_type (void)
+Returns the @code{GtkEntry} type identifier.
+@end deftypefun
+
+@deftypefun GtkWidget* gtk_entry_new (void)
+Create a new @code{GtkEntry} object. The new widget is returned 
+as a pointer to a @code{GtkWidget} object. @code{NULL} is returned on
+failure.
+@end deftypefun
+
+@deftypefun GtkWidget* gtk_entry_new_with_max_length (guint16 @var{max})
+Create a new @code{GtkEntry} object initializing it with the value @var{max}.
+The new widget is returned as a pointer to a @code{GtkWidget} object. 
+@code{NULL} is returned on failure.
+@end deftypefun
+
+@deftypefun void gtk_entry_set_text (GtkEntry *@var{entry}, gchar *@var{text})
+Will set the text in the previously created @code{GtkEntry} object to 
+@var{text}. It is important to not set the fields of the @code{GtkEntry}
+structure directly (or, for that matter, any type derived from 
+@code{GtkObject}).
+@end deftypefun
+
+@deftypefun void gtk_entry_append_text (GtkEntry *@var{entry}, gchar *@var{text})
+Append the text that is in the @var{text} argument to the widgets text. It is
+important to not set the fields of the @code{GtkEntry} structure directly.
+@end deftypefun
+
+@deftypefun void gtk_entry_prepend_text (GtkEntry *@var{entry}, gchar *@var{text})
+Add the text in the @var{text} argument to the text in the @code{GtkEntry} 
+widget. It is important to not set the fields of the @code{GtkEntry} structure
+directly.
+@end deftypefun
+
+@deftypefun void gtk_entry_set_position (GtkEntry *@var{entry}, gint @var{position})
+@end deftypefun
+
+@deftypefun void gtk_entry_set_visibility (GtkEntry *@var{entry}, gint @var{visible})
+Will make the keystrokes entered into the @code{GtkEntry} object invisible
+when @var{visible} is @code{TRUE}. Defaults to @code{FALSE}.
+@end deftypefun
+
+@deftypefun gchar* gtk_entry_get_text (GtkEntry *@var{entry})
+Returns the text that is contained in the @code{GtkEntry} as a pointer to a 
+@code{gchar} variable.
+@end deftypefun
+
+@gtkstdmacros{Entry, ENTRY}
+
+@page
+@node GtkEventBox, GtkFileSelection, GtkEntry, Widgets
+@comment node-name, next, previous, up
+@section The event box widget
+
+@subsection Description
+
+Derived from @pxref{GtkBin}.  Used by @pxref{GtkTreeItem}.
+
+@subsection Options
+
+@subsection Signals
+
+@subsection Functions
+@deftypefun guint gtk_event_box_get_type (void)
+Returns the @code{GtkEventBox} type identifier.
+@end deftypefun
+
+@deftypefun GtkWidget* gtk_event_box_new (void)
+Create a new @code{GtkEventBox} returning the new widget as a pointer to
+a @code{GtkWidget} object. @code{NULL} is returned on failure.
+@end deftypefun
+
+@gtkstdmacros{GtkEventBox, EVENT_BOX}
+
+@page
+@node GtkFileSelection, GtkFixed, GtkEventBox, Widgets
+@comment node-name, next, previous, up
+@section The file selection dialog widget
+
+@subsection Description
+
+@subsection Options
+
+@defopt title
+@end defopt
+
+@defopt filename
+@end defopt
+
+@subsection Signals
+
+@subsection Functions
+
+@deftypefun guint gtk_file_selection_get_type (void)
+Returns the @code{GtkFileSelection} type identifier.
+@end deftypefun
+
+@deftypefun GtkWidget* gtk_file_selection_new (gchar *@var{title})
+Create a new @code{GtkFileSelection} object and return the new widget as a
+pointer to a @code{GtkWidget}. @code{NULL} is returned on failure.
+@end deftypefun
+
+@deftypefun void gtk_file_selection_set_filename (GtkFileSelection *@var{filesel}, gchar *@var{filename})
+@end deftypefun
+
+@deftypefun gchar* gtk_file_selection_get_filename (GtkFileSelection *@var{filesel})
+@end deftypefun
+
+@gtkstdmacros{FileSelection, FILE_SELECTION}
+
+@page
+@node GtkFixed, GtkFrame, GtkFileSelection, Widgets
+@comment node-name, next, previous, up
+@section The fixed widget
+
+@subsection Description
+
+@subsection Options
+
+@subsection Signals
+
+@subsection Functions
+
+@deftypefun guint gtk_fixed_get_type (void)
+Returns the @code{GtkFixed} type identifier.
+@end deftypefun
+
+@deftypefun GtkWidget* gtk_fixed_new (void)
+Create a new @code{GtkFixed} object returning the new widget as a pointer to 
+a @code{GtkWidget} object. @code{NULL} is returned on failure.
+@end deftypefun
+
+@deftypefun void gtk_fixed_put_new (GtkFixed *@var{fixed}, GtkWidget *@var{widget}, gint16 @var{x}, gint16 @var{y})
+@end deftypefun
+
+@deftypefun void gtk_fixed_move (GtkFixed *@var{fixed}, GtkWidget *@var{widget}, gint16 @var{x}, gint16 @var{y})
+@end deftypefun
+
+@gtkstdmacros{Fixed, FIXED}
+
+@page
+@node GtkFrame, GtkGamma, GtkFixed, Widgets
+@comment node-name, next, previous, up
+@section The frame widget
+
+
+@subsection Options
+@defopt label
+@end defopt
+
+@defopt xalign
+@end defopt
+
+@defopt yalign
+@end defopt
+
+@defopt type
+@end defopt
+
+@subsection Description
+
+@subsection Signals
+
+@subsection Functions
+
+@deftypefun guint gtk_frame_get_type (void)
+Returns the @code{GtkFrame} type identifier.
+@end deftypefun
+
+@deftypefun GtkWidget* gtk_frame_new (gchar *@var{label})
+Create a new @code{GtkFrame} object initializing it with the value in 
+@var{label}. The new widget is returned as a pointer to a @code{GtkWidget}
+object. @code{NULL} is returned on failure.
+@end deftypefun
+
+@deftypefun void gtk_frame_set_label (GtkFrame *@var{frame}, gchar *@var{label})
+@end deftypefun
+
+@deftypefun void gtk_frame_set_label_align (GtkFrame *@var{frame}, gfloat @var{xalign}, gfloat @var{yalign})
+@end deftypefun
+
+@deftypefun void gtk_frame_set_shadow_type (GtkFrame *@var{frame}, GtkShadowType @var{type})
+@end deftypefun
+
+@gtkstdmacros{Frame, FRAME}
+
+@page
+@node GtkGamma, GtkHBox, GtkFrame, Widgets
+@comment node-name, next, previous, up
+@section The gamma widget
+
+@subsection Description
+
+@subsection Options
+
+@subsection Signals
+
+@subsection Functions
+
+@deftypefun guint gtk_gamma_curve_get_type (void)
+Returns the @code{GtkGamma} type identifier.
+@end deftypefun
+
+@deftypefun GtkWidget* gtk_gamma_curve_new (void)
+Create a new @code{GtkGamma} object returning the new widget as a pointer 
+to a @code{GtkWidget} object. @code{NULL} is returned on failure.
+@end deftypefun
+
+@gtkstdmacros{Gamma, GAMMA}
+
+@page
+@node GtkHBox, GtkHButtonBox, GtkGamma, Widgets
+@comment node-name, next, previous, up
+@section The horizontal box widget
+
+
+@subsection Description
+
+@subsection Options
+
+@defopt homogeneous
+This option controls whether each object in the box has the same size. In the
+case of the @code{GtkHBox}, this effects the width. If this option is set then
+the @var{expand} option to the @code{gtk_box_pack} (@pxref{GtkBox}) routines
+is always set to @code{TRUE}.
+@end defopt
+
+@defopt spacing
+This option controls the amount of space that is added between the objects
+packed into this @code{GtkVBox} object.
+@end defopt
+
+@subsection Signals
+
+@subsection Functions
+
+@deftypefun guint gtk_hbox_get_type (void)
+Returns the @code{GtkHBox} type identifier.
+@end deftypefun
+
+@deftypefun GtkWidget* gtk_hbox_new (gint @var{homogeneous}, gint @var{spacing})
+Create a new @code{GtkHBox} object initializing it with the values in 
+@var{homogeneous} and @var{spacing}. The new widget is returned as a pointer 
+to a @code{GtkWidget} object. @code{NULL} is returned on failure.
+@end deftypefun
+
+@gtkstdmacros{HBox, HBOX}
+
+@page
+@node GtkHButtonBox, GtkHPaned, GtkHBox, Widgets
+@comment node-name, next, previous, up
+@section The horizontal button box widget
+
+@subsection Description
+
+@subsection Options
+
+@defopt spacing
+@end defopt
+
+@defopt layout
+@end defopt
+
+@subsection Signals
+
+@subsection Functions
+
+@deftypefun guint gtk_hbutton_box_get_type (void)
+Returns the @code{GtkHButtonBox} type identifier.
+@end deftypefun
+
+@deftypefun GtkWidget* gtk_hbutton_box_new (void)
+Create a new @code{GtkHButtonBox} object returning the new widget as a pointer
+to a @code{GtkWidget} object. @code{NULL} is returned on failure.
+@end deftypefun
+
+@deftypefun void gtk_hbutton_box_set_spacing_default (gint @var{spacing})
+@end deftypefun
+
+@deftypefun void gtk_hbutton_box_set_layout_default (gint @var{layout})
+@end deftypefun
+
+@deftypefun gint gtk_hbutton_box_get_spacing_default (void)
+@end deftypefun
+
+@deftypefun gint gtk_hbutton_box_get_layout_default (void)
+@end deftypefun
+
+@gtkstdmacros {HButtonBox, HBUTTON_BOX}
+
+@page
+@node GtkHPaned, GtkHRuler, GtkHButtonBox, Widgets
+@comment node-name, next, previous, up
+@section The horizontal paned widget
+
+@subsection Description 
+
+@subsection Options
+
+@subsection Signals
+
+@subsection Functions
+
+@deftypefun void gtk_hpaned_get_type (void)
+Returns the @code{GtkHPaned} type identifier.
+@end deftypefun
+
+@deftypefun GtkWidget* gtk_hpaned_new (void)
+Create a new @code{GtkHPaned} object returning the new widget as a pointer 
+to a @code{GtkWidget} object.
+@end deftypefun
+
+@gtkstdmacros{HPaned, HPANED}
+
+@page
+@node GtkHRuler, GtkHScale, GtkHPaned, Widgets
+@comment node-name, next, previous, up
+@section The horizontal ruler widget
+
+
+@subsection Description
+
+@subsection Options
+
+@subsection Signals
+
+@subsection Functions
+
+@deftypefun guint gtk_hruler_get_type (void)
+Returns the @code{GtkHRuler} type identifier.
+@end deftypefun
+
+@deftypefun GtkWidget* gtk_hruler_new (void)
+Create a new @code{GtkHRuler} object returning the new widget as a pointer
+to a @code{GtkWidget} object. @code{NULL} is returned on failure.
+@end deftypefun
+
+@gtkstdmacros{HRuler, HRULER}
+
+
+@page
+@node GtkHScale, GtkHScrollbar, GtkHRuler, Widgets
+@comment node-name, next, previous, up
+@section The horizontal scale widget
+
+
+@subsection Description
+
+@subsection Options
+
+@subsection Signals
+
+@subsection Functions
+
+@deftypefun guint gtk_hscale_get_type (void)
+Returns the @code{GtkHScale} type identifier.
+@end deftypefun
+
+@deftypefun GtkWidget* gtk_hscale_new (GtkAdjustment *@var{adjustment})
+Create a new @code{GtkHScale} object returning the new widget as a pointer
+to a @code{GtkWidget} object. @code{NULL} is returned on failure.
+@end deftypefun
+
+@gtkstdmacros{HScale, HSCALE}
+
+
+@page
+@node GtkHScrollbar, GtkHSeparator, GtkHScale, Widgets
+@comment node-name, next, previous, up
+@section The horizontal scrollbar widget
+
+
+@subsection Description
+
+@subsection Options
+
+@subsection Signals
+
+@subsection Functions
+
+@deftypefun guint gtk_hscrollbar_get_type (void)
+Returns the @code{GtkHScrollbar} type identifier.
+@end deftypefun
+
+@deftypefun GtkWidget* gtk_hscrollbar_new (GtkAdjustment *@var{adjustment})
+Create a new @code{GtkHScrollbar} object returning the new widget as a 
+pointer to a @code{GtkWidget} object. @code{NULL} is returned on failure.
+@end deftypefun
+
+@gtkstdmacros{HScrollbar, HSCROLLBAR}
+
+
+@page
+@node GtkHSeparator, GtkImage, GtkHScrollbar, Widgets
+@comment node-name, next, previous, up
+@section The horizontal separator widget
+
+
+@subsection Description
+
+@subsection Options
+
+@subsection Signals
+
+@subsection Functions
+
+@deftypefun guint gtk_hseparator_get_type (void)
+Returns the @code{GtkHSeparator} type identifier.
+@end deftypefun
+
+@deftypefun GtkWidget* gtk_hseparator_new (void)
+Create a new @code{GtkHSeparator} object returning the new widget as a pointer
+to a @code{GtkWidget} object. @code{NULL} is returned on failure.
+@end deftypefun
+
+@gtkstdmacros{HSeparator, HSEPARATOR}
+
+
+@page
+@node GtkImage, GtkInputDialog, GtkHSeparator, Widgets
+@comment node-name, next, previous, up
+@section The image widget
+
+
+@subsection Description
+
+@subsection Options
+
+@subsection Signals
+
+@subsection Functions
+
+@deftypefun guint gtk_image_get_type (void)
+Returns the @code{GtkImage} type identifier.
+@end deftypefun
+
+@deftypefun GtkWidget* gtk_image_new (GdkImage *@var{val}, GdkBitmap *@var{mask})
+Create a new @code{GtkImage} object initializing it with the values in 
+@var{val} and @var{mask}. The new widget is returned as a pointer to a 
+@code{GtkWidget} object. @code{NULL} is returned on failure.
+@end deftypefun
+
+@deftypefun void gtk_image_set (GtkImage *@var{image}, GdkImage *@var{val}, GdkBitmap *@var{mask})
+@end deftypefun
+
+@deftypefun void gtk_image_get (GtkImage *@var{image}, GdkImage **@var{val}, GdkBitmap **@var{mask})
+@end deftypefun
+
+@gtkstdmacros{Image, IMAGE}
+
+@page
+@node GtkInputDialog, GtkItem, GtkImage, Widgets
+@comment node-name, next, previous, up
+@section The input dialog widget
+
+@subsection Description
+
+@subsection Options
+
+@subsection Signals
+
+@deftypefn Signal void GtkInputDialog::enable_device (GtkInputDialog *@var{inputd}, guint32 @var{devid}, gpointer *@var{data})
+@end deftypefn
+
+@deftypefn Signal void GtkInputDialog::disable_device (GtkInputDialog *@var{inputd}, guint32 @var{devid}, gpointer *@var{data})
+@end deftypefn
+
+@subsection Functions
+
+@deftypefun guint gtk_input_dialog_get_type (void)
+Returns the @code{GtkInputDialog} type identifier.
+@end deftypefun
+
+@deftypefun GtkWidget* gtk_input_dialog_new (void)
+Create a new @code{GtkInputDialog} object and return the new widget as a 
+pointer to a @code{GtkWidget} object. @code{NULL} is returned on failure.
+@end deftypefun
+
+
+@gtkstdmacros{InputDialog, INPUTDIALOG}
+
+@page
+@node GtkItem, GtkLabel, GtkInputDialog, Widgets
+@comment node-name, next, previous, up
+@section The item widget
+
+
+@subsection Description
+
+@subsection Signals
+
+@deftypefn Signal void GtkItem::select (GtkItem *@var{item})
+@end deftypefn
+
+@deftypefn Signal void GtkItem::deselect (GtkItem *@var{item})
+@end deftypefn
+
+@deftypefn Signal void GtkItem::toggle (GtkItem *@var{toggle})
+@end deftypefn
+
+@subsection Functions
+
+@deftypefun guint gtk_item_get_type (void)
+Returns the @code{GtkItem} type identifier.
+@end deftypefun
+
+@deftypefun void gtk_item_select (GtkItem *@var{item})
+@end deftypefun
+
+@deftypefun void gtk_item_deselect (GtkItem *@var{item})
+@end deftypefun
+
+@deftypefun void gtk_item_toggle (GtkItem *@var{item})
+@end deftypefun
+
+@gtkstdmacros{Item, ITEM}
+
+
+@page
+@node GtkLabel, GtkList, GtkItem, Widgets
+@comment node-name, next, previous, up
+@section The label widget
+
+@subsection Description
+
+@subsection Options
+
+@defopt str
+@end defopt
+
+@subsection Signals
+
+@subsection Functions
+
+@deftypefun guint gtk_label_get_type (void)
+Returns the @code{GtkLabel} type identifier.
+@end deftypefun
+
+@deftypefun GtkWidget* gtk_label_new (GtkLabel *@var{label}, gchar *@var{str})
+Create a new @code{GtkLabel} object and initialize it with the 
+text in @var{str}. The new widget is returned as a pointer to a 
+@code{GtkWidget} object. @code{NULL} is returned on failure.
+@end deftypefun
+
+@deftypefun void gtk_label_set (GtkLabel *@var{label}, gchar *@var{str})
+Set the @code{GtkLabel} label value to the value passed in the @var{str} 
+argument.
+@end deftypefun
+
+@deftypefun void gtk_label_get (GtkLabel *@var{label}, gchar **@var{str})
+Copies the current value in the @code{GtkLabel} label field to the variable
+passed in the @var{str} argument.
+@end deftypefun
+
+@gtkstdmacros{Label, LABEL}
+
+
+@page
+@node GtkList, GtkListItem, GtkLabel, Widgets
+@comment node-name, next, previous, up
+@section The list widget
+
+
+@subsection Description
+
+@subsection Signals
+
+@deftypefn Signal void GtkList::selection_changed (GtkList *@var{list})
+@end deftypefn
+
+@deftypefn Signal void GtkList::select_child (GtkList *@var{list}, GtkWidget *@var{child})
+@end deftypefn
+
+@deftypefn Signal void GtkList::unselect_child (GtkList *@var{list}, GtkWidget *@var{child})
+@end deftypefn
+
+@subsection Functions
+
+@deftypefun guint gtk_list_get_type (void)
+Returns the @code{GtkList} type identifier.
+@end deftypefun
+
+@deftypefun GtkWidget* gtk_list_new (void)
+Create a new @code{GtkList} object and return the new widget as a pointer to
+a @code{GtkWidget} object. @code{NULL} is returned on failure.
+@end deftypefun
+
+@deftypefun void gtk_list_insert_items (GtkList *@var{list}, GList *@var{items}, gint @var{position})
+@end deftypefun
+
+@deftypefun void gtk_list_append_items (GtkList *@var{list}, GList *@var{items})
+@end deftypefun
+
+@deftypefun void gtk_list_prepend_items (GtkList *@var{list}, GList *@var{items})
+@end deftypefun
+
+@deftypefun void gtk_list_remove_items (GtkList *@var{list}, GList *@var{items})
+@end deftypefun
+
+@deftypefun void gtk_list_clear_items (GtkList *@var{list}, gint @var{start}, gint @var{end})
+@end deftypefun
+
+@deftypefun void gtk_list_select_item (GtkList *@var{list}, gint @var{item})
+@end deftypefun
+
+@deftypefun void gtk_list_unselect_item (GtkList *@var{list}, gint @var{item})
+@end deftypefun
+
+@deftypefun void gtk_list_select_child (GtkList *@var{list}, GtkWidget *@var{child})
+@end deftypefun
+
+@deftypefun void gtk_list_unselect_child (GtkList *@var{list}, GtkWidget *@var{child})
+@end deftypefun
+
+@deftypefun gint gtk_list_child_position (GtkList *@var{list}, GtkWidget *@var{child})
+@end deftypefun
+
+@deftypefun void gtk_list_set_selection_mode (GtkList *@var{list}, GtkSelectionMode @var{mode})
+@end deftypefun
+
+@gtkstdmacros{List, LIST}
+
+
+@page
+@node GtkListItem, GtkMenu, GtkList, Widgets
+@comment node-name, next, previous, up
+@section The list item widget
+
+
+@subsection Description
+
+@subsection Options
+
+@subsection Signals
+
+@subsection Functions
+
+@deftypefun guint gtk_list_item_get_type (void)
+Returns the @code{GtkListItem} type identifier.
+@end deftypefun
+
+@deftypefun GtkWidget* gtk_list_item_new (void)
+Create a new @code{GtkListItem} object and return the new widget as a 
+pointer to a @code{GtkWidget} object. @code{NULL} is returned on failure.
+@end deftypefun
+
+@deftypefun GtkWidget* gtk_list_item_new_with_label (gchar *@var{label})
+Create a new @code{GtkListItem} object initializing with the value @var{label}.
+The new widget is returned as a pointer to a @code{GtkWidget} object. 
+@code{NULL} is returned on failure.
+@end deftypefun
+
+@deftypefun void gtk_list_item_select (GtkListItem *@var{list_item})
+@end deftypefun
+
+@deftypefun void gtk_list_item_deselect (GtkListItem *@var{list_item})
+@end deftypefun
+
+@gtkstdmacros{ListItem, LIST_ITEM}
+
+
+@page
+@node GtkMenu, GtkMenuBar, GtkListItem, Widgets
+@comment node-name, next, previous, up
+@section The menu widget
+
+
+@subsection Description
+
+@subsection Options
+
+@subsection Signals
+
+@subsection Functions
+
+@deftypefun guint gtk_menu_get_type (void)
+Returns the @code{GtkMenu} type identifier.
+@end deftypefun
+
+@deftypefun GtkWidget* gtk_menu_new (void)
+Create a new @code{GtkMenu} object returning the new widget as a pointer to 
+a @code{GtkWidget}. @code{NULL} is returned on failure.
+@end deftypefun
+
+@deftypefun void gtk_menu_append (GtkMenu *@var{menu}, GtkWidget *@var{child})
+@end deftypefun
+
+@deftypefun void gtk_menu_prepend (GtkMenu *@var{menu}, GtkWidget *@var{child})
+@end deftypefun
+
+@deftypefun void gtk_menu_insert (GtkMenu *@var{menu}, GtkWidget *@var{child}, gint @var{position})
+@end deftypefun
+
+@deftypefun void gtk_menu_popup (GtkMenu *@var{menu}, GtkWidget *@var{parent_menu_shell}, GtkWidget *@var{parent_menu_item}, GtkMenuPositionFunc @var{func}, gpointer @var{data}, gint @var{button})
+@end deftypefun
+
+@deftypefun void gtk_menu_popdown (GtkMenu *@var{menu})
+@end deftypefun
+
+@deftypefun GtkWidget* gtk_menu_get_active (GtkMenu *@var{menu})
+@end deftypefun
+
+@deftypefun void gtk_menu_set_active (GtkMenu *@var{menu})
+@end deftypefun
+
+@deftypefun void gtk_menu_set_accelerator_table (GtkMenu *@var{menu}, GtkAcceleratorTable *@var{table})
+@end deftypefun
+
+@gtkstdmacros{Menu, MENU}
+
+
+@page
+@node GtkMenuBar, GtkMenuItem, GtkMenu, Widgets
+@comment node-name, next, previous, up
+@section The menu bar widget
+
+@subsection Description
+
+@subsection Options
+
+@defopt position
+@end defopt
+
+@subsection Signals
+
+@subsection Functions
+
+@deftypefun guint gtk_menu_bar_get_type (void)
+Returns the @code{GtkMenuBar} type identifier.
+@end deftypefun
+
+@deftypefun GtkWidget* gtk_menu_bar_new (void)
+Create a new @code{GtkMenuBar} object returning the new widget as a pointer
+to a @code{GtkWidget} object. @code{NULL} is returned on failure.
+@end deftypefun
+
+@deftypefun void gtk_menu_bar_append (GtkMenuBar *@var{menu_bar}, GtkWidget *@var{child})
+@end deftypefun
+
+@deftypefun void gtk_menu_bar_prepend (GtkMenuBar *@var{menu_bar}, GtkWidget *@var{child})
+@end deftypefun
+
+@deftypefun void gtk_menu_bar_insert (GtkMenuBar *@var{menu_bar}, GtkWidget *@var{child}, gint @var{position})
+@end deftypefun
+
+@gtkstdmacros{MenuBar, MENU_BAR}
+
+
+@page
+@node GtkMenuItem, GtkMenuShell, GtkMenuBar, Widgets
+@comment node-name, next, previous, up
+@section The menu item widget
+
+
+@subsection Description
+
+@subsection Options
+
+@subsection Signals
+
+@deftypefn Signal void GtkMenuItem::activate (GtkMenuItem *@var{menu_item})
+@end deftypefn
+
+@subsection Functions
+
+@deftypefun guint gtk_menu_item_get_type (void)
+Returns the @code{GtkMenuItem} type identifier.
+@end deftypefun
+
+@deftypefun GtkWidget* gtk_menu_item_new (void)
+Create a new @code{GtkMenuItem} object returning the new widget as a pointer 
+to a @code{GtkWidget} object. @code{NULL} is returned on failure.
+@end deftypefun
+
+@deftypefun GtkWidget* gtk_menu_item_new_with_label (gchar *@var{label})
+Create a new @code{GtkMenuItem} object initializing it with the value in 
+@var{label}. The new widget is returned as a pointer to a @code{GtkWidget}
+object. @code{NULL} is returned on failure.
+@end deftypefun
+
+@deftypefun void gtk_menu_item_set_submenu (GtkMenuItem *@var{menu_item}, GtkWidget *@var{submenu})
+@end deftypefun
+
+@deftypefun void gtk_menu_item_set_placement (GtkMenuItem *@var{menu_item}, GtkSubmenuPlacement @var{placement})
+@end deftypefun
+
+@deftypefun void gtk_menu_item_accelerator_size (GtkMenuItem *@var{menu_item})
+@end deftypefun
+
+@deftypefun void gtk_menu_item_accelerator_text (GtkMenuItem *@var{menu_item}, gchar *@var{buffer})
+@end deftypefun
+
+@deftypefun void gtk_menu_item_configure (GtkMenuItem *@var{menu_item}, gint @var{show_toggle_indicator}, gint @var{show_submenu_indicator})
+@end deftypefun
+
+@deftypefun void gtk_menu_item_select (GtkMenuItem *@var{menu_item})
+@end deftypefun
+
+@deftypefun void gtk_menu_item_deselect (GtkMenuItem *@var{menu_item})
+@end deftypefun
+
+@deftypefun void gtk_menu_item_activate (GtkMenuItem *@var{menu_item})
+@end deftypefun
+
+@gtkstdmacros{MenuItem, MENU_ITEM}
+
+
+@page
+@node GtkMenuShell, GtkMisc, GtkMenuItem, Widgets
+@comment node-name, next, previous, up
+@section The menu shell widget
+
+
+@subsection Description
+
+@subsection Options
+
+@subsection Signals
+
+@deftypefn Signal void GtkMenuShell::deactivate (GtkMenuShell *@var{menu_shell})
+@end deftypefn
+
+@subsection Functions
+
+@deftypefun guint gtk_menu_shell_get_type (void)
+Returns the @code{GtkMenuShell} type identifier.
+@end deftypefun
+
+@deftypefun void gtk_menu_shell_append (GtkMenuShell *@var{menu_shell}, GtkWidget *@var{child})
+@end deftypefun
+
+@deftypefun void gtk_menu_shell_prepend (GtkMenuShell *@var{menu_shell}, GtkWidget *@var{child})
+@end deftypefun
+
+@deftypefun void gtk_menu_shell_insert (GtkMenuShell *@var{menu_shell}, GtkWidget *@var{child}, gint @var{position})
+@end deftypefun
+
+@deftypefun void gtk_menu_shell_deactivate (GtkMenuShell *@var{menu_shell})
+@end deftypefun
+
+@gtkstdmacros{MenuShell, MENU_SHELL}
+
+
+@page
+@node GtkMisc, GtkNotebook, GtkMenuShell, Widgets
+@comment node-name, next, previous, up
+@section The misc widget
+
+@subsection Description
+
+@subsection Options
+
+@defopt xalign
+@end defopt
+
+@defopt yalign
+@end defopt
+
+@defopt xpad
+@end defopt
+
+@defopt ypad
+@end defopt
+
+@subsection Signals
+
+@subsection Functions
+
+@deftypefun guint gtk_misc_get_type (void)
+Returns the @code{GtkMisc} type identifier.
+@end deftypefun
+
+@deftypefun void gtk_misc_set_alignment (GtkMisc *@var{misc}, gfloat @var{xalign}, gfloat @var{yalign})
+@end deftypefun
+
+@deftypefun void gtk_misc_set_padding (GtkMisc *@var{misc}, gint @var{xpad}, gint @var{ypad})
+@end deftypefun
+
+@gtkstdmacros{Misc, MISC}
+
+
+@page
+@node GtkNotebook, GtkOptionMenu, GtkMisc, Widgets
+@comment node-name, next, previous, up
+@section The notebook widget
+
+@subsection Description
+
+@subsection Options
+
+@subsection Signals
+
+@subsection Functions
+
+@deftypefun guint gtk_notebook_get_type (void)
+Returns the @code{GtkNotebook} type identifier.
+@end deftypefun
+
+@deftypefun GtkWidget* gtk_notebook_new (void)
+Create a new @code{GtkNotebook} object returning the new widget as a pointer
+to a @code{GtkWidget} object. @code{NULL} is returned on a failure.
+@end deftypefun
+
+@deftypefun void gtk_notebook_append_page (GtkNotebook *@var{notebook}, GtkWidget *@var{child}, GtkWidget *@var{tab_label})
+@end deftypefun
+
+@deftypefun void gtk_notebook_prepend_page (GtkNotebook *@var{notebook}, GtkWidget *@var{child}, GtkWidget *@var{tab_label})
+@end deftypefun
+
+@deftypefun void gtk_notebook_insert_page (GtkNotebook *@var{notebook}, GtkWidget *@var{child}, GtkWidget *@var{tab_label}, gint @var{position})
+@end deftypefun
+
+@deftypefun void gtk_notebook_remove_page (GtkNotebook *@var{notebook}, gint @var{page_num})
+@end deftypefun
+
+@deftypefun void gtk_notebook_set_page (GtkNotebook *@var{notebook}, gint @var{page_num})
+@end deftypefun
+
+@deftypefun void gtk_notebook_next_page (GtkNotebook *@var{notebook})
+@end deftypefun
+
+@deftypefun void gtk_notebook_prev_page (GtkNotebook *@var{notebook})
+@end deftypefun
+
+@deftypefun void gtk_notebook_set_tab_pos (GtkNotebook *@var{notebook}, GtkPositionType @var{pos})
+@end deftypefun
+
+@deftypefun void gtk_notebook_set_show_tabs (GtkNotebook *@var{notebook}, gint @var{show_tabs})
+@end deftypefun
+
+@deftypefun void gtk_notebook_set_show_border (GtkNotebook *@var{notebook}, gint @var{show_border})
+@end deftypefun
+
+@gtkstdmacros{Notebook, NOTEBOOK}
+
+
+@page
+@node GtkOptionMenu, GtkPaned, GtkNotebook, Widgets
+@comment node-name, next, previous, up
+@section The option menu widget
+
+@subsection Description
+
+@subsection Options
+
+@defopt index
+@end defopt
+
+@subsection Signals
+
+@subsection Functions
+
+@deftypefun guint gtk_option_menu_get_type (void)
+Returns the @code{GtkOptionMenu} type identifier.
+@end deftypefun
+
+@deftypefun GtkWidget* gtk_option_menu_new (void)
+Create a new @code{GtkOptionMenu} object returning the new widget as a 
+pointer to a @code{GtkWidget} object. @code{NULL} is returned on failure.
+@end deftypefun
+
+@deftypefun GtkWidget* gtk_option_menu_get_menu (GtkOptionMenu *@var{option_menu})
+@end deftypefun
+
+@deftypefun void gtk_option_menu_set_menu (GtkOptionMenu *@var{option_menu}, GtkWidget *@var{menu})
+@end deftypefun
+
+@deftypefun void gtk_option_menu_remove_menu (GtkOptionMenu *@var{option_menu})
+@end deftypefun
+
+@deftypefun void gtk_option_menu_set_history (GtkOptionMenu *@var{option_menu}, gint @var{index})
+@end deftypefun
+
+@gtkstdmacros{OptionMenu, OPTION_MENU}
+
+@page
+@node GtkPaned, GtkPixmap, GtkOptionMenu, Widgets
+@comment node-name, next, previous, up
+@section The paned widget
+
+@subsection Description
+
+@subsection Options
+
+@subsection Signals
+
+@subsection Functions
+
+@deftypefun guint gtk_paned_get_type (void)
+Returns the @code{GtkPaned} type identifier.
+@end deftypefun
+
+@deftypefun void gtk_paned_add1 (GtkPaned *@var{paned}, GtkWidget *@var{child})
+@end deftypefun
+
+@deftypefun void gtk_paned_add2 (GtkPaned *@var{paned}, GtkWidget *@var{child})
+@end deftypefun
+
+@deftypefun void gtk_paned_handle_size (GtkPaned *@var{paned}, guint16 @var{size})
+@end deftypefun
+
+
+@deftypefun void gtk_paned_gutter_size (GtkPaned *@var{paned}, guint16 @var{size})
+@end deftypefun
+
+@gtkstdmacros{Paned, PANED}
+
+@page
+@node GtkPixmap, GtkPreview, GtkPaned, Widgets
+@comment node-name, next, previous, up
+@section The pixmap widget
+
+
+@subsection Description
+
+@subsection Options
+
+@subsection Signals
+
+@subsection Functions
+
+@deftypefun guint gtk_pixmap_get_type (void)
+Returns the @code{GtkPixmap} type identifier.
+@end deftypefun
+
+@deftypefun GtkWidget* gtk_pixmap_new (GdkPixmap *@var{normal}, GdkPixmap *@var{active}, GdkPixmap *@var{prelight}, GdkPixmap *@var{selected}, GdkPixmap *@var{insensitive})
+@end deftypefun
+
+@deftypefun void gtk_pixmap_set (GtkPixmap *@var{pixmap}, GdkPixmap *@var{val}, GtkStateType @var{state})
+@end deftypefun
+
+@deftypefun void gtk_pixmap_get (GtkPixmap *@var{pixmap}, GdkPixmap **@var{val}, GtkStateType @var{state})
+@end deftypefun
+
+@gtkstdmacros{Pixmap, PIXMAP}
+
+
+@page
+@node GtkPreview, GtkProgressBar, GtkPixmap, Widgets
+@comment node-name, next, previous, up
+@section The preview widget
+
+@subsection Description
+
+@subsection Options
+
+@defopt type
+@end defopt
+
+@defopt width
+@end defopt
+
+@defopt height
+@end defopt
+
+@subsection Signals
+
+@subsection Functions
+
+@deftypefun guint gtk_preview_get_type (void)
+Returns the @code{GtkPreview} type identifier.
+@end deftypefun
+
+@deftypefun void gtk_preview_uninit (void)
+@end deftypefun
+
+@deftypefun GtkWidget* gtk_preview_new (GtkPreviewType @var{type})
+Create a new @code{GtkPreview} object initializing it with the values in 
+@var{type}. The new widget is returned as a pointer to a @code{GtkWidget} 
+object. @code{NULL} is returned on failure.
+@end deftypefun
+
+@deftypefun void gtk_preview_size (GtkPreview *@var{preview}, gint @var{width}, gint @var{height})
+Set the size of the @var{preview} object to @var{width} and @var{height}.
+@end deftypefun
+
+@deftypefun void gtk_preview_put (GtkPreview *@var{preview}, GdkWindow *@var{window}, GdkGC *@var{gc}, gint @var{srcx}, gint @var{srcy}, gint @var{destx}, gint @var{desty}, gint @var{width}, gint @var{height})
+@end deftypefun
+
+@deftypefun void gtk_preview_put_row (GtkPreview *@var{preview}, guchar *@var{src}, guchar *@var{dest}, gint @var{x}, gint @var{y}, gint @var{w})
+@end deftypefun
+
+@deftypefun void gtk_preview_draw_row (GtkPreview *@var{preview}, guchar @var{data}, gint @var{x}, gint @var{y}, gint @var{w})
+@end deftypefun
+
+@deftypefun void gtk_preview_set_expand (GtkPreview *@var{preview}, gint @var{expand})
+@end deftypefun
+
+@deftypefun void gtk_preview_set_gamma (double @var{gamma})
+@end deftypefun
+
+@deftypefun void gtk_preview_set_color_cube (guint @var{nred_shades}, guint @var{ngreen_shades}, guint @var{nblue_shades}, guint @var{ngray_shades})
+@end deftypefun
+
+@deftypefun void gtk_preview_set_install_cmap (gint @var{install_cmap})
+@end deftypefun
+
+@deftypefun void gtk_preview_set_reserved (gint @var{nreserved})
+@end deftypefun
+
+@deftypefun GdkVisual* gtk_preview_get_visual (void)
+@end deftypefun
+
+@deftypefun GdkColormap* gtk_preview_get_cmap (void)
+@end deftypefun
+
+@deftypefun GtkPreviewInfo* gtk_preview_get_info (void)
+@end deftypefun
+
+@gtkstdmacros{Preview, PREVIEW}
+
+
+@page
+@node GtkProgressBar, GtkRadioButton, GtkPreview, Widgets
+@comment node-name, next, previous, up
+@section The progress bar widget
+
+
+@subsection Description
+
+@subsection Options
+
+@defopt percentage
+@end defopt
+
+@subsection Signals
+
+@subsection Functions
+
+@deftypefun guint gtk_progress_bar_get_type (void)
+Returns the @code{GtkProgressBar} type identifier.
+@end deftypefun
+
+@deftypefun GtkWidget* gtk_progress_bar_new (void)
+Create a new @code{GtkProgressBar} object returning the new widget as a 
+pointer to a @code{GtkWidget} object. @code{NULL} is returned on failure.
+@end deftypefun
+
+@deftypefun void gtk_progress_bar_update (GtkProgressBar *@var{pbar}, gfloat @var{percentage})
+Cause the @code{GtkProgressBar} to update its visual appearance to reflect the
+@var{percentage}.
+@end deftypefun
+
+@gtkstdmacros{ProgressBar, PROGRESS_BAR}
+
+
+@page
+@node GtkRadioButton, GtkRadioMenuItem, GtkProgressBar, Widgets
+@comment node-name, next, previous, up
+@section The radio button widget
+
+@subsection Description
+
+@subsection Options
+
+@defopt group
+@end defopt
+
+@defopt label
+@end defopt
+
+@subsection Signals
+
+@subsection Functions
+
+@deftypefun guint gtk_radio_button_get_type (void)
+Returns the @code{GtkRadioButton} type identifier.
+@end deftypefun
+
+@deftypefun GtkWidget* gtk_radio_button_new (GSList *@var{group})
+Create a new @code{GtkRadioButton} object initializing it with the value
+in the @var{group} argument. The new widget is returned as a pointer to a 
+@code{GtkWidget} object. @code{NULL} is returned on failure.
+@end deftypefun
+
+@deftypefun GtkWidget* gtk_radio_button_new_with_label (GSList *@var{group}, gchar *@var{label})
+Create a new @code{GtkRadioButton} object initializing it with the values in
+the @var{group} and @var{label} arguments. The new widget is returned as a 
+pointer to @code{GtkWidget} object. @code{NULL} is returned on failure.
+@end deftypefun
+
+@deftypefun GSList* gtk_radio_button_group (GtkRadioButton *@var{radio_button})
+@end deftypefun
+
+@gtkstdmacros{RadioButton, RADIO_BUTTON}
+
+
+@page
+@node GtkRadioMenuItem, GtkRange, GtkRadioButton, Widgets
+@comment node-name, next, previous, up
+@section The radio button widget
+
+
+@subsection Description
+
+@subsection Options
+
+@defopt group
+@end defopt
+
+@defopt label
+@end defopt
+
+@subsection Signals
+
+@subsection Functions
+
+@deftypefun guint gtk_radio_menu_item_get_type (void)
+Returns the @code{GtkRadioMenuItem} type identifier.
+@end deftypefun
+
+@deftypefun GtkWidget* gtk_radio_menu_item_new (GSList *@var{group})
+Create a new @code{GtkRadioMenuItem} object and initialize it with the 
+values in @var{group}. The new widget is returned as a pointer to a 
+@code{GtkWidget} object. @code{NULL} is returned on failure.
+@end deftypefun
+
+@deftypefun GtkWidget* gtk_radio_menu_item_new_with_label (GSList *@var{group}, gchar *@var{label})
+@end deftypefun
+
+@deftypefun GSList* gtk_radio_menu_item_group (GtkRadioMenuItem *@var{radio_menu_item})
+@end deftypefun
+
+@gtkstdmacros{RadioMenuItem, RADIO_MENU_ITEM}
+
+
+@page
+@node GtkRange, GtkRuler, GtkRadioMenuItem, Widgets
+@comment node-name, next, previous, up
+@section The range widget
+
+@subsection Description
+
+@subsection Options
+
+@subsection Signals
+
+@subsection Functions
+
+@deftypefun guint gtk_range_get_type (void)
+Returns the @code{GtkRange} type identifier.
+@end deftypefun
+
+@deftypefun GtkAdjustment* gtk_range_get_adjustment (GtkRange *@var{range})
+@end deftypefun
+
+@deftypefun void gtk_range_set_update_policy (GtkRange *@var{range}, GtkUpdatePolicy @var{policy})
+@end deftypefun
+
+@deftypefun void gtk_range_set_adjustment (GtkRange *@var{range}, GtkAdjustment *@var{adjustment})
+@end deftypefun
+
+@deftypefun void gtk_range_draw_background (GtkRange *@var{range})
+@end deftypefun
+
+@deftypefun void gtk_range_draw_trough (GtkRange *@var{range})
+@end deftypefun
+
+@deftypefun void gtk_range_draw_slider (GtkRange *@var{range})
+@end deftypefun
+
+@deftypefun void gtk_range_draw_step_forw (GtkRange *@var{range})
+@end deftypefun
+
+@deftypefun void gtk_range_draw_step_back (GtkRange *@var{range})
+@end deftypefun
+
+@deftypefun void gtk_range_slider_update (GtkRange *@var{range})
+@end deftypefun
+
+@deftypefun gint gtk_range_trough_click (GtkRange *@var{range}, gint @var{x}, gint @var{y})
+@end deftypefun
+
+@deftypefun void gtk_range_default_hslider_update (GtkRange *@var{range})
+@end deftypefun
+
+@deftypefun void gtk_range_default_vslider_update (GtkRange *@var{range})
+@end deftypefun
+
+@deftypefun gint gtk_range_default_htrough_click (GtkRange *@var{range}, gint @var{x}, gint @var{y})
+@end deftypefun
+
+@deftypefun gint gtk_range_default_vtrough_click (GtkRange *@var{range}, gint @var{x}, gint @var{y})
+@end deftypefun
+
+@deftypefun void gtk_range_default_hmotion (GtkRange *@var{range}, gint @var{xdelta}, gint @var{ydelta})
+@end deftypefun
+
+@deftypefun void gtk_range_default_vmotion (GtkRange *@var{range}, gint @var{xdelta}, gint @var{ydelta})
+@end deftypefun
+
+@deftypefun gfloat gtk_range_calc_value (GtkRange *@var{range}, gint @var{position})
+@end deftypefun
+
+@gtkstdmacros{Range, RANGE}
+
+
+@page
+@node GtkRuler, GtkScale, GtkRange, Widgets
+@comment node-name, next, previous, up
+@section The ruler widget
+
+@subsection Description
+
+@subsection Options
+
+@defopt metric
+@end defopt
+
+@defopt lower
+@end defopt
+
+@defopt upper
+@end defopt
+
+@defopt position
+@end defopt
+
+@defopt max_size
+@end defopt
+
+@subsection Signals
+
+@subsection Functions
+
+@deftypefun guint gtk_ruler_get_type (void)
+Returns the @code{GtkRuler} type identifier.
+@end deftypefun
+
+@deftypefun void gtk_ruler_set_metric (GtkRuler *@var{ruler}, GtkMetricType @var{metric})
+@end deftypefun
+
+@deftypefun void gtk_ruler_set_range (GtkRuler *@var{ruler}, gfloat @var{lower}, gfloat @var{upper}, gfloat @var{position}, gfloat @var{max_size})
+@end deftypefun
+
+@deftypefun void gtk_ruler_draw_ticks (GtkRuler *@var{ruler})
+@end deftypefun
+
+@deftypefun void gtk_ruler_draw_pos (GtkRuler *@var{ruler})
+@end deftypefun
+
+@gtkstdmacros{Ruler, RULER}
+
+
+@page
+@node GtkScale, GtkScrollbar, GtkRuler, Widgets
+@comment node-name, next, previous, up
+@section The scale widget
+
+
+@subsection Description
+
+@subsection Options
+
+@defopt digits
+@end defopt
+
+@defopt draw_value
+@end defopt
+
+@defopt pos
+@end defopt
+
+@subsection Signals
+
+@subsection Functions
+
+@deftypefun guint gtk_scale_get_type (void)
+Returns the @code{GtkScale} type identifier.
+@end deftypefun
+
+@deftypefun void gtk_scale_set_digits (GtkScale *@var{scale}, gint @var{digits})
+@end deftypefun
+
+@deftypefun void gtk_scale_set_draw_value (GtkScale *@var{scale}, gint @var{draw_value})
+@end deftypefun
+
+@deftypefun void gtk_scale_set_value_pos (GtkScale *@var{scale}, gint @var{pos})
+@end deftypefun
+
+@deftypefun gint gtk_scale_value_width (GtkScale *@var{scale})
+@end deftypefun
+
+@deftypefun void gtk_scale_draw_value (GtkScale *@var{scale})
+@end deftypefun
+
+@gtkstdmacros{Scale, SCALE}
+
+
+@page
+@node GtkScrollbar, GtkScrolledWindow, GtkScale, Widgets
+@comment node-name, next, previous, up
+@section The scrollbar widget
+
+
+@subsection Description
+
+@subsection Options
+
+@subsection Signals
+
+@subsection Functions
+
+@deftypefun guint gtk_scrollbar_get_type (void)a
+Returns the @code{GtkScrollbar} type identifier.
+@end deftypefun
+
+@gtkstdmacros{Scrollbar, SCROLLBAR}
+
+
+@page
+@node GtkScrolledWindow, GtkSeparator, GtkScrollbar, Widgets
+@comment node-name, next, previous, up
+@section The scrolled window widget
+
+
+@subsection Description
+
+@subsection Options
+
+@subsection Signals
+
+@subsection Functions
+
+@deftypefun guint gtk_scrolled_window_get_type (void)
+Returns the @code{GtkScrolledWindow} type identifier.
+@end deftypefun
+
+@deftypefun GtkWidget* gtk_scrolled_window_new (GtkAdjustment *@var{hadjustment}, GtkAdjustment *@var{vadjustment})
+Create a new @code{GtkScrolledWindow} object initializing it with the values in
+@var{adjustment} and @var{adjustment}. The new widget is returned as a 
+pointer to a @code{GtkWidget} object. @code{NULL} is returned on failure.
+@end deftypefun
+
+@deftypefun GtkAdjustment* gtk_scrolled_window_get_hadjustment (GtkScrolledWindow *@var{scrolled_window})
+@end deftypefun
+
+@deftypefun GtkAdjustment* gtk_scrolled_window_get_vadjustment (GtkScrolledWindow *@var{scrolled_window})
+@end deftypefun
+
+@deftypefun void gtk_scrolled_window_set_policy (GtkScrolledWindow *@var{scrolled_window}, GtkPolicyType @var{hscrollbar_policy}, GtkPolicyType @var{vscrollbar_policy})
+@end deftypefun
+
+@gtkstdmacros{ScrolledWindow, SCROLLED_WINDOW}
+
+
+@page
+@node GtkSeparator, GtkStatusbar, GtkScrolledWindow, Widgets
+@comment node-name, next, previous, up
+@section The separator widget
+
+
+@subsection Description
+
+@subsection Options
+
+@subsection Signals
+
+@subsection Functions
+
+@deftypefun guint gtk_separator_get_type (void)
+Returns the @code{GtkSeparator} type identifier.
+@end deftypefun
+
+@gtkstdmacros{Separator, SEPARATOR}
+
+@page
+@node GtkStatusbar, GtkTable, GtkSeparator, Widgets
+@comment node-name, next, previous, up
+@section The statusbar widget
+
+@subsection Description
+
+@subsection Options
+
+@subsection Signals
+
+@subsection Functions
+
+@deftypefun guint gtk_statusbar_get_type (void)
+Returns the @code{GtkStatusbar} type identifier.
+@end deftypefun
+
+@deftypefun GtkWidget* gtk_statusbar_new (void)
+Create a new @code{GtkStatusbar} object returning the new widget as a pointer
+to a @code{GtkWidget} object. @code{NULL} is returned on failure.
+@end deftypefun
+
+@deftypefun gint gtk_statusbar_push (GtkStatusbar *@var{statusbar}, gchar *@var{text})
+@end deftypefun
+
+@deftypefun void gtk_statusbar_pop (GtkStatusbar *@var{statusbar}, gint @var{context_id})
+@end deftypefun
+
+@gtkstdmacros{Statusbar, STATUSBAR}
+
+@page
+@node GtkTable, GtkText, GtkStatusbar, Widgets
+@comment node-name, next, previous, up
+@section The table widget
+
+@subsection Description
+
+@subsection Options
+
+@defopt rows
+@end defopt
+
+@defopt columns
+@end defopt
+
+@defopt homogeneous
+This option controls whether all child widgets in the @code{GtkTable} will
+be of the same size. The child widgets will be the size of the largest child.
+@end defopt
+
+@subsection Signals
+
+@subsection Functions
+
+@deftypefun guint gtk_table_get_type (void)
+Returns the @code{GtkTable} type identifier.
+@end deftypefun
+
+@deftypefun GtkWidget* gtk_table_new (gint @var{rows}, gint @var{columns}, gint @var{homogeneous})
+Create a new @code{GtkTable} object initializing it with the values in 
+@var{rows}, @var{columns} and @var{homogeneous}. The new widget is returned 
+as a pointer to a @code{GtkWidget}. @code{NULL} is returned on failure.
+@end deftypefun
+
+@deftypefun void gtk_table_attach (GtkTable *@var{table}, GtkWidget *@var{child}, gint @var{left_attach}, gint @var{right_attach}, gint @var{top_attach}, gint @var{bottom_attach}, gint @var{xoptions}, gint @var{yoptions}, gint @var{xpadding}, gint @var{ypadding})
+@end deftypefun
+
+@deftypefun void gtk_table_attach_defaults (GtkTable *@var{table}, GtkWidget *@var{widget}, gint @var{left_attach}, gint @var{right_attach}, gint @var{top_attach}, gint @var{bottom_attach})
+@end deftypefun
+
+@deftypefun void gtk_table_set_row_spacing (GtkTable *@var{table}, gint @var{row}, gint @var{spacing})
+@end deftypefun
+
+@deftypefun void gtk_table_set_col_spacing (GtkTable *@var{table}, gint @var{col}, gint @var{spacing})
+@end deftypefun
+
+@deftypefun void gtk_table_set_row_spacings (GtkTable *@var{table}, gint @var{spacing})
+@end deftypefun
+
+@deftypefun void gtk_table_set_col_spacings (GtkTable *@var{table}, gint @var{spacing})
+@end deftypefun
+
+@gtkstdmacros{Table, TABLE}
+
+
+@page
+@node GtkText, GtkToggleButton, GtkTable, Widgets
+@comment node-name, next, previous, up
+@section The text widget
+
+
+@subsection Description
+
+@subsection Signals
+
+@subsection Functions
+
+@deftypefun guint gtk_text_get_type (void)
+Returns the @code{GtkText} type identifier.
+@end deftypefun
+
+@deftypefun GtkWidget* gtk_text_new (GtkAdjustment *@var{hadj}, GtkAdjustment *@var{vadj});
+Create a new @code{GtkText} object initializing it with the values in 
+@var{hadj} and @var{vadj}. The new widget is returned as a pointer to a 
+@code{GtkWidget}. @code{NULL} is returned on failure.
+@end deftypefun
+
+@deftypefun void gtk_text_set_editable (GtkText *@var{text}, gint @var{editable})
+@end deftypefun
+
+@deftypefun void gtk_text_set_adjustments (GtkText *@var{text}, GtkAdjustment *@var{hadj}, GtkAdjustment *@var{vadj})
+@end deftypefun
+
+@deftypefun void gtk_text_set_point (GtkText *@var{text}, guint @var{index})
+@end deftypefun
+
+@deftypefun guint gtk_text_get_point (GtkText *@var{text})
+@end deftypefun
+
+@deftypefun guint gtk_text_get_length (GtkText *@var{text})
+@end deftypefun
+
+@deftypefun void gtk_text_freeze (GtkText *@var{text})
+@end deftypefun
+
+@deftypefun void gtk_text_thaw (GtkText *@var{text})
+@end deftypefun
+
+@deftypefun void gtk_text_insert (GtkText *@var{text}, GdkFont *@var{font}, GdkColor *@var{fore}, GdkColor *@var{back}, char *@var{chars}, gint @var{length})
+@end deftypefun
+
+@deftypefun gint gtk_text_forward_delete (GtkText *@var{text}, guint @var{nchars})
+@end deftypefun
+
+@deftypefun gint gtk_text_backward_delete (GtkText *@var{text}, guint @var{nchars})
+@end deftypefun
+
+
+@gtkstdmacros{Text, TEXT}
+
+
+@page
+@node GtkToggleButton, GtkToolbar, GtkText, Widgets
+@comment node-name, next, previous, up
+@section The toggle button widget
+
+
+@subsection Description
+
+Another form of button (@pxref{GtkButton}) with two states: on and off.
+The appearance is that of a button which stays pressed on the first
+click, and is released on the second click.
+
+@subsection Options
+
+@defopt state
+@end defopt
+
+@subsection Signals
+
+@deftypefn Signal void GtkToggleButton::toggled (GtkToggleButton *@var{toggle_button})
+@end deftypefn
+
+@subsection Functions
+
+@deftypefun guint gtk_toggle_button_get_type (void)
+Returns the @code{GtkToggleButton} type identifier.
+@end deftypefun
+
+@deftypefun GtkWidget* gtk_toggle_button_new (void)
+Create a new @code{GtkToggleButton} object returning the new widget as a 
+pointer to a @code{GtkWidget} object. @code{NULL} is returned on failure.
+@end deftypefun
+
+@deftypefun GtkWidget* gtk_toggle_button_new_with_label (gchar *@var{label})
+Create a new @code{GtkToggleButton} object initializing it with the values in
+@var{label}. The new widget is returned as a pointer to a @code{GtkWidget} 
+object. @code{NULL} is returned on failure.
+@end deftypefun
+
+@deftypefun void gtk_toggle_button_set_mode (GtkToggleButton *@var{toggle_button}, gint @var{draw_indicator})
+@end deftypefun
+
+@deftypefun void gtk_toggle_button_set_state (GtkToggleButton *@var{toggle_button}, gint @var{state})
+@end deftypefun
+
+@deftypefun void gtk_toggle_button_toggled (GtkToggleButton *@var{toggle_button})
+@end deftypefun
+
+@gtkstdmacros{ToggleButton, TOGGLE_BUTTON}
+
+
+@page 
+@node GtkToolbar, GtkTooltips, GtkToggleButton, Widgets
+@comment node-name, next, previous, up
+@section The tool bar widget
+
+@subsection Description
+
+@subsection Options
+
+@defopt orientation
+@itemize @bullet
+@item GTK_ORIENTATION_HORIZONTAL
+
+@item GTK_ORIENTATION_VERTICAL
+@end itemize
+@end defopt
+
+@defopt style
+@itemize @bullet
+@item GTK_TOOLBAR_ICONS
+@item GTK_TOOLBAR_TEXT
+@item GTK_TOOLBAR_BOTH
+@end itemize
+@end defopt
+
+@defopt space_size
+@end defopt
+
+@subsection Signals
+
+@subsection Functions
+
+@deftypefun guint gtk_toolbar_get_type (void)
+Returns the @code{GtkToolbar} type identifier.
+@end deftypefun
+
+@deftypefun GtkWidget* gtk_toolbar_new (GtkOrientation @var{orientation}, GtkToolbarStyle @var{style})
+Create a new @code{GtkToolbar} object initializing it with the values
+@var{orientation} and @var{style}. @code{NULL} is returned on failure.
+@end deftypefun
+
+@deftypefun void gtk_toolbar_append_item (GtkToolbar *@var{toolbar}, char *@var{text}, char *@var{tooltip_text}, GtkPixmap *@var{icon}, GtkSignalFunc @var{callback}, gpointer @var{user_data})
+@end deftypefun
+
+@deftypefun void gtk_toolbar_prepend_item (GtkToolbar *@var{toolbar}, char *@var{text}, char *@var{tooltip_text}, GtkPixmap *@var{icon}, GtkSignalFunc @var{callback}, gpointer @var{user_data})
+@end deftypefun
+
+@deftypefun void gtk_toolbar_insert_item (GtkToolbar *@var{toolbar}, char *@var{text}, char *@var{tooltip_text}, GtkPixmap *@var{icon}, GtkSignalFunc @var{callback}, gpointer @var{user_data}, gint @var{position})
+@end deftypefun
+
+@deftypefun void gtk_toolbar_append_space (GtkToolbar *@var{toolbar})
+@end deftypefun
+
+@deftypefun void gtk_toolbar_prepend_space (GtkToolbar *@var{toolbar})
+@end deftypefun
+
+@deftypefun void gtk_toolbar_insert_space (GtkToolbar *@var{toolbar}, gint @var{position})
+@end deftypefun
+
+@deftypefun void gtk_toolbar_set_orientation (GtkToolbar *@var{toolbar}, GtkOrientation @var{orientation})
+@end deftypefun
+
+@deftypefun void gtk_toolbar_set_style (GtkToolbar *@var{toolbar}, GtkToolbarStyle @var{style})
+Set the @var{style} of the @var{toolbar} to @var{style}.
+@end deftypefun
+
+@deftypefun void gtk_toolbar_set_space_size (GtkToolbar *@var{toolbar}, gint @var{space_size})
+@end deftypefun
+
+@deftypefun void gtk_toolbar_set_tooltips (GtkToolbar *@var{toolbar}, gint @var{enable})
+@end deftypefun
+
+
+@gtkstdmacros{Toolbar, TOOLBAR}
+
+
+@page
+@node GtkTooltips, GtkTree, GtkToolbar, Widgets
+@comment node-name, next, previous, up
+@section The tool tips widget
+
+@subsection Description
+
+@subsection Options
+
+@subsection Signals
+
+@subsection Functions
+
+@deftypefun GtkTooltips* gtk_tooltips_new (void)
+Create a new @code{GtkTooltips} object returning the new widget as a 
+pointer to a @code{GtkWidget} object. @code{NULL} is returned on failure.
+@end deftypefun
+
+@deftypefun GtkTooltips* gtk_tooltips_ref (GtkTooltips *@var{tooltips})
+@end deftypefun
+
+@deftypefun void gtk_tooltips_unref (GtkTooltips *@var{tooltips})
+@end deftypefun
+
+@deftypefun void gtk_tooltips_free_string (gpointer @var{data}, gpointer @var{user_data})
+@end deftypefun
+
+@deftypefun void gtk_tooltips_enable (GtkTooltips *@var{tooltips})
+@end deftypefun
+
+@deftypefun void gtk_tooltips_disable (GtkTooltips *@var{tooltips})
+@end deftypefun
+
+@deftypefun void gtk_tooltips_set_delay (GtkTooltips *@var{tooltips}, GtkWidget *@var{widget}, gchar *@var{tips_text})
+@end deftypefun
+
+@deftypefun void gtk_tooltips_set_colors (GtkTooltips *@var{tooltips}, GdkColor *@var{background}, GdkColor *@var{foreground})
+@end deftypefun
+
+
+@gtkstdmacros{Tooltips, TOOLTIPS}
+
+
+@page
+@node GtkTree, GtkTreeItem, GtkTooltips, Widgets
+@comment node-name, next, previous, up
+@section The tree widget
+
+
+@subsection Description
+
+@subsection Options
+
+@subsection Signals
+
+@subsection Functions
+
+@deftypefun guint gtk_tree_get_type (void)
+Returns the @code{GtkTree} type identifier.
+@end deftypefun
+
+@deftypefun GtkWidget* gtk_tree_new (void)
+Create a new @code{GtkTree} object returning the new widget as a pointer to
+a @code{GtkWidget} object. @code{NULL} is returned on failure.
+@end deftypefun
+
+@deftypefun void gtk_tree_append (GtkTree *@var{tree}, GtkWidget *@var{child})
+@end deftypefun
+
+@deftypefun void gtk_tree_prepend (GtkTree *@var{tree}, GtkWidget *@var{child})
+@end deftypefun
+
+@deftypefun void gtk_tree_insert (GtkTree *@var{tree}, GtkWidget *@var{child}, gint @var{position})
+@end deftypefun
+
+@deftypefun gint gtk_tree_child_position (GtkTree *@var{tree}, GtkWidget *@var{child})
+@end deftypefun
+
+@deftypefun void gtk_tree_clear_items (GtkTree *@var{tree}, gint @var{start}, gint @var{end})
+@end deftypefun
+
+@deftypefun void gtk_tree_remove_items (GtkTree *@var{tree}, GList *@var{items})
+@end deftypefun
+
+@deftypefun void gtk_tree_select_child (GtkTree *@var{tree}, GtkWidget *@var{child})
+@end deftypefun
+
+@deftypefun void gtk_tree_select_item (GtkTree *@var{tree}, gint @var{item})
+@end deftypefun
+
+@deftypefun void gtk_tree_unselect_child (GtkTree *@var{tree}, GtkWidget *@var{child})
+@end deftypefun
+
+@deftypefun void gtk_tree_unselect_item (GtkTree *@var{tree}, gint @var{item})
+@end deftypefun
+
+@deftypefun void gtk_tree_set_selection_mode (GtkTree *@var{tree}, GtkSelectionMode @var{mode})
+@end deftypefun
+
+@deftypefun void gtk_tree_set_view_mode (GtkTree *@var{tree}, GtkTreeViewMode @var{mode})
+@end deftypefun
+
+@deftypefun void gtk_tree_set_view_lines (GtkTree *@var{tree}, guint @var{flag})
+@end deftypefun
+
+
+@gtkstdmacros{Tree, TREE}
+
+
+@page
+@node GtkTreeItem, GtkVBox, GtkTree, Widgets
+@comment node-name, next, previous, up
+@section The tree item widget
+
+
+@subsection Description
+
+@subsection Options
+
+@subsection Signals
+
+@subsection Functions
+
+@deftypefun guint gtk_tree_item_get_type (void)
+Returns the @code{GtkTreeItem} type identifier.
+@end deftypefun
+
+@deftypefun GtkWidget* gtk_tree_item_new (void)
+Create a new @code{GtkTreeItem} object returning the new widget as a 
+pointer to a @code{GtkWidget} object. @code{NULL} is returned on failure.
+@end deftypefun
+
+@deftypefun GtkWidget* gtk_tree_item_new_with_label (gchar *@var{label})
+Create a new @code{GtkTreeItem} object initializing it with the values in
+@var{label}. The new widget is returned as a pointer to a @code{GtkWidget}
+object. @code{NULL} is returned on failure.
+@end deftypefun
+
+@deftypefun void gtk_tree_item_set_subtree (GtkTreeItem *@var{tree_item}, GtkWidget *@var{subtree})
+@end deftypefun
+
+@deftypefun void gtk_tree_item_select (GtkTreeItem *@var{tree_item})
+@end deftypefun
+
+@deftypefun void gtk_tree_item_deselect (GtkTreeItem *@var{tree_item})
+@end deftypefun
+
+@deftypefun void gtk_tree_item_expand (GtkTreeItem *@var{tree_item})
+@end deftypefun
+
+@deftypefun void gtk_tree_item_collapse (GtkTreeItem *@var{tree_item})
+@end deftypefun
+
+@deftypefun void gtk_tree_item_remove_subtree (GtkTreeItem *@var{item})
+@end deftypefun
+
+
+@gtkstdmacros{TreeItem, TREE_ITEM}
+
+@page
+@node GtkVBox, GtkVButtonBox, GtkTreeItem, Widgets
+@comment node-name, next, previous, up
+@section The vertical box widget
+
+
+@subsection Description
+
+@subsection Options
+
+@defopt homogeneous
+This option controls whether each object in the box has the same size. In the
+case of the @code{GtkVBox}, this refers to the height. If this option is set
+then the @var{expand} option to the @code{gtk_box_pack} (@pxref{GtkBox}) 
+routines is always turned on.
+@end defopt
+
+@defopt spacing
+This option sets the amount of space that is added between the objects packed
+into this @code{GtkVBox} object.
+@end defopt
+
+
+@subsection Signals
+This widget does not define any new signals.
+
+@subsection Functions
+
+@deftypefun guint gtk_vbox_get_type (void)
+Returns the @code{GtkVBox} type identifier.
+@end deftypefun
+
+@deftypefun GtkWidget* gtk_vbox_new (gint @var{homogeneous}, gint @var{spacing})
+Create a new @code{GtkVBox} object initializing it with the values in 
+@var{homogeneous} and @var{spacing}. The new widget is returned as a 
+pointer to a @code{GtkWidget} object. @code{NULL} is returned on failure.
+@end deftypefun
+
+@gtkstdmacros{VBox, VBOX}
+
+@page
+@node GtkVButtonBox, GtkViewport, GtkVBox, Widgets
+@comment node-name, next, previous, up
+@section The vertical button box widget
+
+
+@subsection Description
+
+@subsection Options
+@defopt spacing
+@end defopt
+
+@defopt layout
+@end defopt
+
+@subsection Signals
+
+@subsection Functions
+
+@deftypefun guint gtk_vbutton_box_get_type (void)
+Returns the @code{GtkVButtonBox} type identifier.
+@end deftypefun
+
+@deftypefun GtkWidget* gtk_vbutton_box_new (void)
+Create a new @code{GtkVButtonBox} object returning the new widget as a
+pointer to a @code{GtkWidget} object. @code{NULL} is returned on failure.
+@end deftypefun
+
+@deftypefun void gtk_vbutton_box_set_spacing_default (gint @var{spacing})
+@end deftypefun
+
+@deftypefun void gtk_vbutton_box_set_layout_default (gint @var{layout})
+@end deftypefun
+
+@deftypefun gint gtk_vbutton_box_get_spacing_default (void)
+@end deftypefun
+
+@deftypefun gint gtk_vbutton_box_get_layout_default (void)
+@end deftypefun
+
+@gtkstdmacros{VButtonBox, VBUTTON_BOX}
+
+
+@page
+@node GtkViewport, GtkVPaned, GtkVButtonBox, Widgets
+@comment node-name, next, previous, up
+@section The viewport widget
+
+
+@subsection Description
+
+@subsection Signals
+
+@subsection Functions
+
+@deftypefun guint gtk_viewport_get_type (void)
+Returns the @code{GtkViewport} type identifier.
+@end deftypefun
+
+@deftypefun GtkWidget* gtk_viewport_new (GtkAdjustment *@var{hadjustment}, GtkAdjustment *@var{vadjustment})
+@end deftypefun
+
+@deftypefun GtkAdjustment* gtk_viewport_get_hadjustment (GtkViewport *@var{viewport})
+@end deftypefun
+
+@deftypefun GtkAdjustment* gtk_viewport_get_vadjustment (GtkViewport *@var{viewport})
+@end deftypefun
+
+@deftypefun void gtk_viewport_set_hadjustment (GtkViewport *@var{viewport}, GtkAdjustment *@var{adjustment})
+@end deftypefun
+
+@deftypefun void gtk_viewport_set_vadjustment (GtkViewport *@var{viewport}, GtkAdjustment *@var{adjustment})
+@end deftypefun
+
+@deftypefun void gtk_viewport_set_shadow_type (GtkViewport *@var{viewport}, GtkShadowType @var{type})
+@end deftypefun
+
+@gtkstdmacros{Viewport, VIEWPORT}
+
+@page 
+@node GtkVPaned, GtkVRuler, GtkViewport, Widgets
+@comment node-name, next, previous, up
+@section The vertical paned widget
+
+@subsection Description
+
+@subsection Options
+
+@subsection Signals
+
+@subsection Functions
+
+@deftypefun guint gtk_vpaned_get_type (void)
+Returns the @code{GtkVPaned} type identifier.
+@end deftypefun
+
+@deftypefun GtkWidget* gtk_vpaned_new (void)
+Create a new @code{GtkVPaned} object returning the new widget as a pointer
+to a @code{GtkWidget} object. @code{NULL} is returned on failure.
+@end deftypefun
+
+@gtkstdmacros{VPaned, VPANED}
+
+@page
+@node GtkVRuler, GtkVScale, GtkVPaned, Widgets
+@comment node-name, next, previous, up
+@section The vertical ruler widget
+
+
+@subsection Description
+
+@subsection Options
+
+@subsection Signals
+
+@subsection Functions
+
+@deftypefun guint gtk_vruler_get_type (void)
+Returns the @code{GtkVRuler} type identifier.
+@end deftypefun
+
+@deftypefun GtkWidget* gtk_vruler_new (void)
+Create a new @code{GtkVRuler} object returning the new widget as a pointer to 
+a @code{GtkWidget} object. @code{NULL} is returned on failure.
+@end deftypefun
+
+@gtkstdmacros{VRuler, VRULER}
+
+
+@page
+@node GtkVScale, GtkVScrollbar, GtkVRuler, Widgets
+@comment node-name, next, previous, up
+@section The vertical ruler widget
+
+
+@subsection Description
+
+@subsection Options
+
+@subsection Signals
+
+@subsection Functions
+
+@deftypefun guint gtk_vscale_get_type (void)
+Returns the @code{GtkVScale} type identifier.
+@end deftypefun
+
+@deftypefun GtkWidget* gtk_vscale_new (GtkAdjustment *@var{adjustment})
+Create a new @code{GtkVScale} object returning the new widget as a pointer
+to a @code{GtkWidget} object. @code{NULL} is returned on failure.
+@end deftypefun
+
+@gtkstdmacros{VScale, VSCALE}
+
+
+@page
+@node GtkVScrollbar, GtkVSeparator, GtkVScale, Widgets
+@comment node-name, next, previous, up
+@section The vertical scrollbar widget
+
+
+@subsection Description
+
+@subsection Options
+
+@subsection Signals
+
+@subsection Functions
+
+@deftypefun guint gtk_vscrollbar_get_type (void)
+Returns the @code{GtkVScrollbar} type identifier.
+@end deftypefun
+
+@deftypefun GtkWidget* gtk_vscrollbar_new (GtkAdjustment *@var{adjustment})
+Create a new @code{GtkVScrollbar} object initializing it with the values in
+@var{adjustment}. The new widget is returned as a pointer to a @code{GtkWidget}
+object. @code{NULL} is returned on failure.
+@end deftypefun
+
+@gtkstdmacros{VScrollbar, VSCROLLBAR}
+
+
+@page
+@node GtkVSeparator, GtkWidget, GtkVScrollbar, Widgets
+@comment node-name, next, previous, up
+@section The vertical separator widget
+
+
+@subsection Description
+
+@subsection Signals
+
+@subsection Functions
+
+@deftypefun guint gtk_vseparator_get_type (void)
+Returns the @code{GtkVSeparator} type identifier.
+@end deftypefun
+
+@deftypefun GtkWidget* gtk_vseparator_new (void)
+Create a new @code{GtkVSeparator} object and return the new widget as a 
+pointer to a @code{GtkWidget} object. @code{NULL} is returned on failure.
+@end deftypefun
+
+@gtkstdmacros{VSeparator, VSEPARATOR}
+
+
+@page
+@node GtkWidget, GtkWindow, GtkVSeparator, Widgets
+@comment node-name, next, previous, up
+@section The base widget
+
+
+@subsection Description
+
+@subsection Signals
+
+@deftypefn Signal void GtkWidget::show (GtkWidget *@var{widget})
+@end deftypefn
+
+@deftypefn Signal void GtkWidget::hide (GtkWidget *@var{widget})
+@end deftypefn
+
+@deftypefn Signal void GtkWidget::map (GtkWidget *@var{widget})
+@end deftypefn
+
+@deftypefn Signal void GtkWidget::unmap (GtkWidget *@var{widget})
+@end deftypefn
+
+@deftypefn Signal void GtkWidget::realize (GtkWidget *@var{widget})
+@end deftypefn
+
+@deftypefn Signal void GtkWidget::unrealize (GtkWidget *@var{widget})
+@end deftypefn
+
+@deftypefn Signal void GtkWidget::draw (GtkWidget *@var{widget}, GdkRectangle *@var{area})
+@end deftypefn
+
+@deftypefn Signal void GtkWidget::draw_focus (GtkWidget *@var{widget})
+@end deftypefn
+
+@deftypefn Signal void GtkWidget::draw_default (GtkWidget *@var{widget})
+@end deftypefn
+
+@deftypefn Signal void GtkWidget::size_request (GtkWidget *@var{widget}, GtkRequisition *@var{requisition})
+@end deftypefn
+
+@deftypefn Signal void GtkWidget::size_allocate (GtkWidget *@var{widget}, GtkAllocation *@var{allocation})
+@end deftypefn
+
+@deftypefn Signal void GtkWidget::state_changed (GtkWidget *@var{widget})
+@end deftypefn
+
+@deftypefn Signal gint GtkWidget::install_accelerator (GtkWidget *@var{widget}, gchar *@var{signal_name}, gchar @var{key}, guint8 @var{modifiers})
+@end deftypefn
+
+@deftypefn Signal void GtkWidget::remove_accelerator (GtkWidget *@var{widget}, gchar *@var{signal_name})
+@end deftypefn
+
+@deftypefn Signal gint GtkWidget::event (GtkWidget *@var{widget}, GdkEvent *@var{event})
+@end deftypefn
+
+@deftypefn Signal gint GtkWidget::button_press_event (GtkWidget *@var{widget}, GdkEventButton *@var{event})
+@end deftypefn
+
+@deftypefn Signal gint GtkWidget::button_release_event (GtkWidget *@var{widget}, GdkEventButton *@var{event})
+@end deftypefn
+
+@deftypefn Signal gint GtkWidget::motion_notify_event (GtkWidget *@var{widget}, GdkEventMotion *@var{event})
+@end deftypefn
+
+@deftypefn Signal gint GtkWidget::delete_event (GtkWidget *@var{widget}, GdkEventAny *@var{event})
+@end deftypefn
+
+@deftypefn Signal gint GtkWidget::destroy_event (GtkWidget *@var{widget}, GdkEventAny *@var{event})
+@end deftypefn
+
+@deftypefn Signal gint GtkWidget::expose_event (GtkWidget *@var{widget}, GdkEventExpose *@var{event})
+@end deftypefn
+
+@deftypefn Signal gint GtkWidget::key_press_event (GtkWidget *@var{widget}, GdkEventKey *@var{event})
+@end deftypefn
+
+@deftypefn Signal gint GtkWidget::key_release_event (GtkWidget *@var{widget}, GdkEventKey *@var{event})
+@end deftypefn
+
+@deftypefn Signal gint GtkWidget::enter_notify_event (GtkWidget *@var{widget}, GdkEventCrossing *@var{event})
+@end deftypefn
+
+@deftypefn Signal gint GtkWidget::leave_notify_event (GtkWidget *@var{widget}, GdkEventCrossing *@var{event})
+@end deftypefn
+
+@deftypefn Signal gint GtkWidget::configure_event (GtkWidget *@var{widget}, GdkEventConfigure *@var{event})
+@end deftypefn
+
+@deftypefn Signal gint GtkWidget::focus_in_event (GtkWidget *@var{widget}, GdkEventFocus *@var{event})
+@end deftypefn
+
+@deftypefn Signal gint GtkWidget::focus_out_event (GtkWidget *@var{widget}, GdkEventFocus *@var{event})
+@end deftypefn
+
+@deftypefn Signal gint GtkWidget::map_event (GtkWidget *@var{widget}, GdkEventAny *@var{event})
+@end deftypefn
+
+@deftypefn Signal gint GtkWidget::unmap_event (GtkWidget *@var{widget}, GdkEventAny *@var{event})
+@end deftypefn
+
+@deftypefn Signal gint GtkWidget::property_notify_event (GtkWidget *@var{widget}, GdkEventProperty *@var{event})
+@end deftypefn
+
+@deftypefn Signal gint GtkWidget::selection_clear_event (GtkWidget *@var{widget}, GdkEventSelection *@var{event})
+@end deftypefn
+
+@deftypefn Signal gint GtkWidget::selection_request_event (GtkWidget *@var{widget}, GdkEventSelection *@var{event})
+@end deftypefn
+
+@deftypefn Signal gint GtkWidget::selection_notify_event (GtkWidget *@var{widget}, GdkEventSelection *@var{event})
+@end deftypefn
+
+@deftypefn Signal gint GtkWidget::drop_event (GtkWidget *@var{widget}, GdkEventDrop *@var{event})
+@end deftypefn
+
+@deftypefn Signal gint GtkWidget::drag_begin_event (GtkWidget *@var{widget}, GdkEventDragBegin *@var{event})
+@end deftypefn
+
+@deftypefn Signal gint GtkWidget::other_event (GtkWidget *@var{widget}, GdkEventOther *@var{event})
+@end deftypefn
+
+@subsection Functions
+
+@deftypefun guint gtk_widget_get_type (void)
+Returns the @code{GtkWidget} type identifier.
+@end deftypefun
+
+@deftypefun void gtk_widget_class_init (GtkWidgetClass *@var{class})
+@end deftypefun
+
+@deftypefun void gtk_widget_init (GtkWidget *@var{widget})
+@end deftypefun
+
+@deftypefun void gtk_widget_destroy (GtkWidget *@var{widget})
+@end deftypefun
+
+@deftypefun void gtk_widget_show (GtkWidget *@var{widget})
+@end deftypefun
+
+@deftypefun void gtk_widget_hide (GtkWidget *@var{widget})
+@end deftypefun
+
+@deftypefun void gtk_widget_map (GtkWidget *@var{widget})
+@end deftypefun
+
+@deftypefun void gtk_widget_unmap (GtkWidget *@var{widget})
+@end deftypefun
+
+@deftypefun void gtk_widget_realize (GtkWidget *@var{widget})
+@end deftypefun
+
+@deftypefun void gtk_widget_unrealize (GtkWidget *@var{widget})
+@end deftypefun
+
+@deftypefun void gtk_widget_draw (GtkWidget *@var{widget}, GdkRectangle *@var{area})
+@end deftypefun
+
+@deftypefun void gtk_widget_draw_focus (GtkWidget *@var{widget})
+@end deftypefun
+
+@deftypefun void gtk_widget_draw_children (GtkWidget *@var{widget})
+@end deftypefun
+
+@deftypefun void gtk_widget_size_request (GtkWidget *@var{widget}, GtkRequisition *@var{requisition})
+@end deftypefun
+
+@deftypefun void gtk_widget_size_allocate (GtkWidget *@var{widget}, GtkAllocation *@var{allocation})
+@end deftypefun
+
+@deftypefun void gtk_widget_install_accelerator (GtkWidget *@var{widget}, GtkAcceleratorTable *@var{table}, gchar *@var{signal_name}, gchar @var{key}, guint8 @var{modifiers})
+@end deftypefun
+
+@deftypefun void gtk_widget_remove_accelerator (GtkWidget *@var{widget}, GtkAcceleratorTable *@var{table}, gchar *@var{signal_name})
+@end deftypefun
+
+@deftypefun gint gtk_widget_event (GtkWidget *@var{widget}, GdkEvent *@var{event})
+@end deftypefun
+
+@deftypefun void gtk_widget_reparent (GtkWidget *@var{widget}, GtkWidget *@var{new_parent})
+@end deftypefun
+
+@deftypefun void gtk_widget_popup (GtkWidget *@var{widget}, gint @var{x}, gint @var{y})
+@end deftypefun
+
+@deftypefun gint gtk_widget_intersect (GtkWidget *@var{widget}, GdkRectangle *@var{area}, GdkRectangle *@var{intersection})
+@end deftypefun
+
+@deftypefun void gtk_widget_grab_focus (GtkWidget *@var{widget})
+@end deftypefun
+
+@deftypefun void gtk_widget_grab_default (GtkWidget *@var{widget})
+@end deftypefun
+
+@deftypefun void gtk_widget_restore_state (GtkWidget *@var{widget})
+@end deftypefun
+
+@deftypefun void gtk_widget_set_name (GtkWidget *@var{widget}, gchar *@var{name})
+@end deftypefun
+
+@deftypefun void gtk_widget_set_state (GtkWidget *@var{widget}, GtkStateType @var{state})
+@end deftypefun
+
+@deftypefun void gtk_widget_set_sensitive (GtkWidget *@var{widget}, gint sensitive)
+@end deftypefun
+
+@deftypefun void gtk_widget_set_parent (GtkWidget *@var{widget}, GtkWidget *@var{parent})
+@end deftypefun
+
+@deftypefun void gtk_widget_set_style (GtkWidget *@var{widget}, GtkStyle *@var{style})
+@end deftypefun
+
+@deftypefun void gtk_widget_set_uposition (GtkWidget *@var{widget}, gint @var{x}, gint @var{y})
+@end deftypefun
+
+@deftypefun void gtk_widget_set_usize (GtkWidget *@var{widget}, gint @var{width}, gint @var{height})
+@end deftypefun
+
+@deftypefun GtkWidget* gtk_widget_get_toplevel (GtkWidget *@var{widget})
+@end deftypefun
+
+@deftypefun GtkWidget* gtk_widget_get_ancestor (GtkWidget *@var{widget}, gint @var{type})
+@end deftypefun
+
+@deftypefun GdkColormap* gtk_widget_get_colormap (GtkWidget *@var{widget})
+@end deftypefun
+
+@deftypefun GdkVisual* gtk_widget_get_visual (GtkWidget *@var{visual})
+@end deftypefun
+
+@deftypefun GtkStyle* gtk_widget_get_style (GtkWidget *@var{style})
+@end deftypefun
+
+@gtkstdmacros{Widget, WIDGET}
+
+
+@page
+@node GtkWindow,  , GtkWidget, Widgets
+@comment node-name, next, previous, up
+@section The window widget
+
+
+@subsection Description
+
+@subsection Options
+
+@defopt type
+The @var{type} options specify how this widget will interact with the 
+window manager. Currently the following types and the effect they have
+on the window to window manager interaction is as follows.
+@itemize @bullet
+
+@item
+@code{GTK_WINDOW_TOPLEVEL}
+@itemize @bullet
+@item
+The option @code{GTK_WINDOW_TOPLEVEL} is usually used for the main application
+window that will remain for the entire application run.
+@end itemize
+@item
+@code{GTK_WINDOW_DIALOG}
+@itemize @bullet
+@item
+The option @code{GTK_WINDOW_DIALOG} is usually used for transient
+windows. These windows will open up, gather some input or provide some 
+application specific updates, then close. The window manager is free not
+to provide all the 'normal' window functions to this window.
+@end itemize
+@item
+@code{GTK_WINDOW_POPUP}
+@itemize @bullet
+@item
+The option @code{GTK_WINDOW_POPUP} is usually used for transient windows.
+These windows are typically used for when no user interaction is required,
+to notify the user of some condition. Other uses for these types of windows
+are for 'about windows', startup windows and the like. Typically the window
+manager will @strong{not} provide the usual widgets that surround the 
+window. At the most all that will be provided is a border. Also note that
+windows that set this @var{type} will not be in any window list of the window
+manager. Though this window will @strong{not} get the kill and close widgets
+of the window manager they still can receive said events and should be 
+taken into account.
+@end itemize
+@end itemize
+@end defopt
+
+@defopt title
+The @var{title} option will set the title of the window in the window manager.
+@strong{Note:} On windows that have the @var{type} option set to 
+@code{GTK_WINDOW_POPUP} there is a strong possibility that this will text
+will not be seen.
+@end defopt
+
+@defopt position
+The @var{position} option will determine where the window will be displayed
+when it is finally drawn to the screen. Currently the following positions 
+ and the effect they have on window placement can be specified.
+
+@itemize @bullet
+
+@item
+@code{GTK_WIN_POS_NONE}
+@itemize @bullet
+@item
+This @var{position} type will allow the window manager full freedom, depending
+on the current settings in the window manager. As to where the window will
+be placed.
+@end itemize
+@item
+@code{GTK_WIN_POS_CENTER}
+@itemize @bullet
+@item
+This @var{position} option will cause the window to center itself on the 
+the screen. This option setting will take into account the @var{virtual screen}
+size when calculating the center. This is @strong{not} the same as the 
+@var{virtual desktop} setting of many window managers. It will center itself
+on the current @var{virtual desktop}.
+@end itemize
+@item
+@code{GTK_WIN_POS_MOUSE}
+@itemize @bullet
+This @var{position} option will cause the window to center itself under the 
+mouse pointers' current location. Typical uses for this setting is in 
+warning/error/informational dialogs where user interaction is desired.
+@end itemize
+@end itemize
+@end defopt
+
+
+@subsection Signals
+
+@deftypefn Signal void GtkWindow::move_resize (GtkWindow *@var{window}, gint *@var{x}, gint *@var{y}, gint @var{width}, gint @var{height})
+@end deftypefn
+
+@deftypefn Signal void GtkWindow::set_focus (GtkWindow *@var{window}, GtkWidget *@var{focus})
+@end deftypefn
+
+@subsection Functions
+
+@deftypefun guint gtk_window_get_type (void)
+Returns the @code{GtkWindow} type identifier.
+@end deftypefun
+
+@deftypefun GtkWidget* gtk_window_new (GtkWindowType @var{type})
+Create a new @code{GtkWindow} object. The new widget is returned as a 
+pointer to a @code{GtkWidget} object. @code{NULL} is returned on failure.
+The @var{type} can be one of @code{GTK_WINDOW_TOPLEVEL}, 
+@code{GTK_WINDOW_DIALOG} or, @code{GTK_WINDOW_POPUP}. The @var{type} 
+value determines how this widget will interact with the window manager.
+@end deftypefun
+
+@deftypefun void gtk_window_set_title (GtkWindow *@var{window}, gchar *@var{title})
+Set the title of this window to the text in the @var{title} argument. It is 
+important to not set the fields of the @code{GtkWindow} structure directly.
+@end deftypefun
+
+@deftypefun void gtk_window_set_focus (GtkWindow *@var{window}, GtkWidget *@var{focus})
+@end deftypefun
+
+@deftypefun void gtk_window_set_default (GtkWindow *@var{window}, GtkWidget *@var{defaultw})
+@end deftypefun
+
+@deftypefun void gtk_window_set_policy (GtkWindow *@var{window}, gint @var{allow_shrink}, gint @var{allow_grow}, gint @var{auto_shrink})
+@end deftypefun
+
+@deftypefun void gtk_window_add_accelerator_table (GtkWindow *@var{window}, GtkAcceleratorTable *@var{table})
+@end deftypefun
+
+@deftypefun void gtk_window_remove_accelerator_table (GtkWindow *@var{window}, GtkAcceleratorTable *@var{table})
+@end deftypefun
+
+@deftypefun void gtk_window_position (GtkWindow *@var{window}, GtkWindowPosition @var{position})
+Set the position that the window will be at when it is finally drawn to the
+screen. The @var{position} argument effects the the position as described
+above.
+@end deftypefun
+
+@gtkstdmacros{Window, WINDOW}
+
+
+@node Other Objects, Miscellaneous, Widgets, Top
+@comment node-name, next, previous, up
+@chapter Utility objects
+
+
+@menu
+* GtkAcceleratorTable::         The accelerator table object.
+* GtkAdjustment::               The adjustment object.
+* GtkGC::                       The GC object.
+* GtkData::                     The data object.
+* GtkStyle::                    The style object.
+@end menu
+
+
+@node GtkAcceleratorTable, GtkAdjustment, Other Objects, Other Objects
+@comment node-name, next, previous, up
+@section The accelerator table object
+
+@subsection Description
+
+@subsection Functions
+
+@deftypefun GtkAcceleratorTable* gtk_accelerator_table_new (void)
+@end deftypefun
+
+@deftypefun GtkAcceleratorTable* gtk_accelerator_table_find (GtkObject *@var{object}, gchar *@var{signal_name}, guchar @var{accelerator_key}, guint8 @var{accelerator_mods})
+@end deftypefun
+
+@deftypefun GtkAccelerator *gtk_accelerator_table_ref (GtkAcceleratorTable *@var{table})
+@end deftypefun
+
+@deftypefun void gtk_accelerator_table_unref (GtkAcceleratorTable *@var{table})
+@end deftypefun
+
+@deftypefun void gtk_accelerator_table_install (GtkAcceleratorTable *@var{table}, GtkObject *@var{object}, gchar *@var{signal_name}, guchar @var{accelerator_key}, guint8 @var{accelerator_mods})
+@end deftypefun
+
+@deftypefun void gtk_accelerator_table_remove (GtkAcceleratorTable *@var{table}, GtkObject *@var{object}, gchar *@var{signal_name})
+@end deftypefun
+
+@deftypefun void gtk_accelerator_table_check (GtkAcceleratorTable *@var{table}, guchar @var{accelerator_key}, guint8 @var{accelerator_mods})
+@end deftypefun
+
+@deftypefun void gtk_accelerator_table_set_mod_mask (GtkAcceleratorTable *@var{table}, guint8 @var{modifier_mask})
+@end deftypefun
+
+@page
+@node GtkAdjustment, GtkGC, GtkAcceleratorTable, Other Objects
+@comment node-name, next, previous, up
+@section The adjustment object
+
+@subsection Description
+
+@subsection Functions
+
+@deftypefun guint gtk_adjustment_get_type (void)
+Returns the @code{GtkAdjustment} type identifier.
+@end deftypefun
+
+@deftypefun GtkObject* gtk_adjustment_new (gfloat @var{value}, gfloat @var{lower}, gfloat @var{upper}, gfloat @var{step_increment}, gfloat @var{page_increment}, gfloat @var{page_size})
+@end deftypefun
+
+@gtkstdmacros{GtkAdjustment, ADJUSTMENT}
+
+@page
+@node GtkGC, GtkData, GtkAdjustment, Other Objects
+@section The GC object
+
+@subsection Description
+
+@subsection Functions
+
+@deftypefun GdkGC* gtk_gc_get (gint @var{depth}, GdkColormap *@var{colormap}, GdkGCValues *@var{values}, GdkGCValuesMask @var{values_mask})
+@end deftypefun
+
+@deftypefun void gtk_gc_release (GdkGC *@var{gc})
+@end deftypefun
+
+@page
+@node GtkData, GtkStyle, GtkGC, Other Objects
+@comment node-name, next, previous, up
+@section The data object
+
+@subsection Description
+
+@subsection Functions
+
+@deftypefun guint gtk_data_get_type (void)
+Returns the @code{GtkData} type identifier.
+@end deftypefun
+
+@gtkstdmacros{Data, DATA}
+@page
+@node GtkStyle,  , GtkData, Other Objects
+@section The style object
+
+@subsection Description
+
+@subsection Functions
+
+@page
+@node Miscellaneous, Examples, Other Objects, Top
+@comment node-name, next, previous, up
+@chapter Initialization, exit and other features
+
+
+@menu
+* Initialization and exit::     Initializing and exiting GTK.
+* Customization::               Customizing the library.
+* Menu Factories::              Simplified menu creation.
+* Tree Factories::              Simplified tree creation.
+* Tool Tips::                   Pop up help mechanism.
+* Resource Files::              Resource files.
+* Standard Macros::             Macros defined by all objects.
+@end menu
+
+
+@node Initialization and exit, Customization, Miscellaneous, Miscellaneous
+@comment node-name, next, previous, up
+@section Initializing and exiting GTK
+
+@subsection Initializing
+Before any GTK functions can be utilized the library must be initialized. This
+can be accomplished by calling the @code{gtk_init} function. The arguments
+you pass to this function should be the same arguments that were passed to
+your application. This function will parse the arguments that it understands
+and handle initializing the GDK library for you.
+
+@subsection Exiting
+
+@subsection Functions
+
+@deftypefun void gtk_init (int *@var{argc}, char **@var{argv})
+Function to initialize GTK and GDK for you. This function will remove any
+command line arguments from @var{argc} and @var{argv} that it understands.
+
+@example
+int main (int argc, char *argv[])
+@{
+   @dots{Any local variables or non GTK/GDK initialization}
+
+   /* Initialize GTK. */
+   gtk_init(&argc, &argc);
+   
+@}
+@end example
+@end deftypefun
+
+@deftypefun void gtk_exit (int @var{error_code})
+Exit GTK and perform any necessary cleanup. @code{gtk_exit} will call the
+systems @code{exit} function passing @var{error_code} as the parameter.
+@end deftypefun
+
+@deftypefun gint gtk_events_pending (void)
+Returns the number of events pending on the event queue.
+@end deftypefun
+
+@deftypefun void gtk_main (void)
+@end deftypefun
+
+@deftypefun guint gtk_main_level (void)
+@end deftypefun
+
+@deftypefun void gtk_main_quit (void)
+A call to this function will cause the @code{gtk_main} function to exit, 
+thereby allowing your application to exit.
+@end deftypefun
+
+@page
+@node Customization, Menu Factories, Initialization and exit, Miscellaneous
+@comment node-name, next, previous, up
+@section Customization of the library
+
+@subsection Description
+Like other X-windows applications the GTK library provides a way for the
+user and application programmer to change the colors of just about any widget. 
+You can also specify what pixmap should be tiled onto the background of some
+widgets. All this is handled through a similar method as in the standard 
+X-windows environment, through the use of 'rc' files. The format and 
+functions available in these files is discussed below.
+
+@subsection Functions
+The following functions are available to handle the rc files.
+
+@deftypefun void gtk_rc_parse (char *@var{filename})
+This function will parse the @var{filename} that is passed to it as its 
+argument. It will use the style settings for the widget types defined there.
+@end deftypefun
+
+@deftypefun void gtk_rc_init (void)
+This function will initialize the rc file parser, normally this need not
+be called directly as the @code{gtk_rc_parse} function will handle this for
+you.
+@end deftypefun
+
+@page
+@node Menu Factories, Tree Factories, Customization, Miscellaneous
+@comment node-name, next, previous, up
+@section Simplified menu creation
+
+@page
+@node Tree Factories, Tool Tips, Menu Factories, Miscellaneous
+@comment node-name, next, previous, up
+@section Simplified tree creation
+
+@page
+@node Tool Tips, Resource Files, Tree Factories, Miscellaneous
+@comment node-name, next, previous, up
+@section Pop up help mechanism
+
+@subsection Description
+
+@page
+@node Resource Files, Standard Macros, Tool Tips, Miscellaneous
+@comment node-name, next, previous, up
+@section Resource Files
+
+@page
+@node Standard Macros,  , Resource Files, Miscellaneous
+@comment node-name, next, previous, up
+@section Macros defined by all objects
+
+There are three macros that are defined by all object types. The first
+two are used for performing casts and the last is for querying whether
+an object is of a particular type. These macros are both conveniences
+and debugging tools. If the GTK library was compiled with @code{NDEBUG}
+defined as a preprocessor symbol (via the -DNDEBUG to cc), then the
+macros check the object type and emit a warning if the cast is
+invalid. Doing such checking is fairly expensive since the cast macros
+are used everywhere in GTK and would normally be turned off in a public
+release of a product. Note: The functions below are indeed macros, but
+they may be considered functions for most purposes.
+
+@deftypefun Gtk<ObjectType>* GTK_<OBJECT_TYPE> (gpointer @var{obj})
+Cast a generic pointer to @code{Gtk<ObjectType>*}. This function is
+provided in order to be able to provide checking during development
+stages of code development since it is possible to examine the actual
+type of object (using @code{gtk_type_is_a}) before performing the cast.
+@end deftypefun
+
+@deftypefun Gtk<ObjectType>Class* GTK_<OBJECT_TYPE>_CLASS (gpointer @var{class})
+Cast a generic pointer to @code{Gtk<ObjectType>Class*}. Like
+@code{GTK_<ObjectType>}, this function is, in reality, a macro.
+@end deftypefun
+
+@deftypefun gint GTK_IS_<ObjectType> (gpointer @var{obj})
+Determine if a generic pointer refers to a @code{Gtk<ObjectType>}
+object. This function is, in reality, a macro wrapper around the
+@code{gtk_type_is_a} function (@pxref{Types}).
+@end deftypefun
+
+
+@node Examples, Object Implementation, Miscellaneous, Top
+@comment node-name, next, previous, up
+@chapter Using GTK
+@cindex Using GTK
+
+@menu
+* Simple::                      The simplest GTK program.
+* Hello World::                 Hello world in GTK.
+* Hello World II::              An enhanced hello world.
+* Hello World III::             Making Hello World II robust.
+@end menu
+
+
+@node Simple, Hello World, Examples, Examples
+@comment node-name, next, previous, up
+@section The simplest GTK program
+
+
+The 16 line GTK program shown below is just about the simplest possible
+program which uses GTK. (Well, technically, you don't have to create the
+window and it would still be a program which uses GTK). The program,
+when compiled and run, will create a single window 200x200 pixels in
+size. The program does not exit until its is explicitly killed using the
+shell or a window manager function.
+
+@example
+#include <gtk/gtk.h>
+
+int
+main (int argc, char *argv[])
+@{
+  GtkWidget *window;
+
+  gtk_init (&argc, &argv);
+
+  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  gtk_widget_show (window);
+
+  gtk_main ();
+
+  return 0;
+@}
+@end example
+
+The first point of interest in this program is the standard
+initialization line.
+
+@example
+  gtk_init (&argc, &argv);
+@end example
+
+Almost every GTK program will contain such a line. GTK will initialize
+itself and GDK and remove any command line arguments it recognizes from
+@var{argc} and @var{argv}.
+
+The next two lines of code create and display a window.
+
+@example
+  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  gtk_widget_show (window);
+@end example
+
+The @code{GTK_WINDOW_TOPLEVEL} argument specifies that we want the
+window to undergo window manager decoration and placement. One might be
+lead to think that the window, since it has no children, would be 0x0
+pixels in size. But, this is not the case because a window that has no
+children defaults to 200x200 pixels in size. Mainly because 0x0 windows
+are annoying to manipulate or even see in some cases.
+
+The last line enters the GTK main processing loop.
+
+@example
+  gtk_main ();
+@end example
+
+Normally, @code{gtk_main} is called once and the program should exit
+when it returns. @xref{Initialization and exit}.
+
+
+@node Hello World, Hello World II, Simple, Examples
+@comment node-name, next, previous, up
+@section Hello world in GTK
+
+
+@example
+#include <gtk/gtk.h>
+
+int
+main (int argc, char *argv[])
+@{
+  GtkWidget *window;
+  GtkWidget *label;
+
+  gtk_init (&argc, &argv);
+
+  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  gtk_container_border_width (GTK_CONTAINER (window), 10);
+
+  label = gtk_label_new ("Hello World");
+  gtk_container_add (GTK_CONTAINER (window), label);
+  gtk_widget_show (label);
+
+  gtk_widget_show (window);
+
+  gtk_main ();
+
+  return 0;
+@}
+@end example
+
+
+@node Hello World II, Hello World III, Hello World, Examples
+@comment node-name, next, previous, up
+@section An enhanced hello world
+
+
+@example
+#include "gtk.h"
+
+void
+hello (void)
+@{
+  g_print ("Hello World\n");
+  gtk_exit (0);
+@}
+
+int
+main (int argc, char *argv[])
+@{
+  GtkWidget *window;
+  GtkWidget *button;
+
+  gtk_init (&argc, &argv);
+
+  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  gtk_container_border_width (GTK_CONTAINER (window), 10);
+
+  button = gtk_button_new_with_label ("Hello World");
+  gtk_signal_connect (GTK_OBJECT (button), "clicked",
+		      GTK_SIGNAL_FUNC (hello), NULL);
+  gtk_container_add (GTK_CONTAINER (window), button);
+  gtk_widget_show (button);
+
+  gtk_widget_show (window);
+
+  gtk_main ();
+
+  return 0;
+@}
+@end example
+
+
+@node Hello World III,  , Hello World II, Examples
+@comment node-name, next, previous, up
+@section Making Hello World II robust
+
+
+@example
+#include "gtk.h"
+
+void
+hello (void)
+@{
+  g_print ("Hello World\n");
+  gtk_exit (0);
+@}
+
+void
+destroy (void)
+@{
+  gtk_exit (0);
+@}
+
+int
+main (int argc, char *argv[])
+@{
+  GtkWidget *window;
+  GtkWidget *button;
+
+  gtk_init (&argc, &argv);
+
+  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  gtk_signal_connect (GTK_OBJECT (window), "destroy",
+		      GTK_SIGNAL_FUNC (destroy), NULL);
+  gtk_container_border_width (GTK_CONTAINER (window), 10);
+
+  button = gtk_button_new_with_label ("Hello World");
+  gtk_signal_connect (GTK_OBJECT (button), "clicked",
+		      GTK_SIGNAL_FUNC (hello), NULL);
+  gtk_signal_connect_object (GTK_OBJECT (button), "clicked",
+			     GTK_SIGNAL_FUNC (gtk_widget_destroy),
+			     GTK_OBJECT (window));
+  gtk_container_add (GTK_CONTAINER (window), button);
+  gtk_widget_show (button);
+
+  gtk_widget_show (window);
+
+  gtk_main ();
+
+  return 0;
+@}
+@end example
+
+
+@node Object Implementation, Signal Implementation, Examples, Top
+@comment node-name, next, previous, up
+@chapter Object internals
+@cindex Object Implementation
+
+Objects (or the @code{GtkObject} type) and the class hierarchy in
+general is implemented via a hierarchy of structs and type casting. Be
+aware that when classes are mentioned it is the conceptual idea of
+classes that is being referred to. GTK is written entirely in C which
+provides no direct support for classes.
+
+The first part to the class mechanism is the object fields. These are
+fields that will be used on a per object basis. For example, the widget
+type contains a field for the widgets parent. Every derived type needs a
+reference to its parent type. A descendant class of @code{GtkObject}
+would define itself like:
+
+@example
+struct Descendant
+@{
+  GtkObject object;
+
+  @dots{}
+@};
+@end example
+
+It is important to note that the @code{GtkObject} field needs to appear
+first in the descendant type structure. This allows pointers to objects
+of type @code{Descendant} to be cast to pointers to @code{GtkObject}'s
+and vice-versa.
+
+The second part to the class mechanism is the class fields. These fields
+are defined on a per class basis. In the case of widgets, the class
+fields are all the ``virtual'' functions for widgets. The
+@code{GtkObject} class defines the @code{destroy} virtual function and
+the necessary fields for the signal mechanism as well as a field for
+determining the runtime type of an object. A virtual function is
+semantically the same as it is in C++. That is, the actual function that
+is called is determined based on the type of the object. Or, more
+specifically, the actual function call depends on the class structure
+that is pointed to by the @code{klass} field of the @code{GtkObject}
+structure.
+
+To see how the class fields work it is necessary to see the object
+fields for a @code{GtkObject}. The @code{GtkObject} type is defined as
+follows:
+
+@example
+typedef struct _GtkObject GtkObject;
+
+struct _GtkObject
+@{
+  guint32 flags;
+  GtkObjectClass *klass;
+  gpointer object_data;
+@};
+@end example
+
+The @code{class} field actually points to a class structure derived from
+@code{GtkObjectClass}. By convention, each new type defines its own
+class structure even if it is unnecessary. As an example, the
+hypothetical @code{Descendant} class would define its class structure
+as:
+
+@example
+struct DescendantClass
+@{
+  GtkObjectClass parent_class;
+
+  @dots{}
+@};
+@end example
+
+It is convention to name the parent class field (@code{GtkObjectClass}
+in this case), @code{parent_class}. For the same reason as stated above
+for the object structure, the parent class field must be the first field
+in the class structure.
+
+@strong{Note:} GTK assumes that the first field in a structure will be
+placed by the compiler at the start of the structure. This is certainly
+true for gcc, however, from my precursory reading of the C standard I
+was unable to come to a definite conclusion as to whether this was
+required or simply done for simplicity. I'm not too worried about this
+assumption, though, as every C compiler I've ever encountered would work
+with GTK.
+
+The @code{flags} field of the @code{GtkObject} structure is used to keep
+track of a relatively few object flags and is also used by the
+@code{GtkWidget} type to store additional flags. At this time, the upper
+16 bits of the flags field are reserved but unused.
+
+The @code{object_data} field of the @code{GtkObject} structure is an
+opaque pointer used by the object data mechanism. In truth, it is a
+pointer to the beginning of the data list which is composed of the
+following structures.
+
+@example
+typedef struct _GtkObjectData GtkObjectData;
+
+struct _GtkObjectData
+@{
+  guint id;
+  gpointer data;
+  GtkObjectData *next;
+@};
+@end example
+
+The data mechanism allows arbitrary data to be associated with a
+character string key in any object. A hash table is used to transform
+the character string key into the data id and then a search through the
+list is made to see if the data exists. The assumption being that the
+data list will usually be short and therefore a linear search is
+OK. Future work on the data mechanism might make use of a resizable
+array instead of a linked list. This would shrink the overhead of the
+@code{GtkObjectData} structure by 4 bytes on 32 bit architectures.
+
+
+@node Signal Implementation, Widget Implementation, Object Implementation, Top
+@comment node-name, next, previous, up
+@chapter Signal internals
+@cindex Signal Implementation
+
+
+@node Widget Implementation, Function Index, Signal Implementation, Top
+@comment node-name, next, previous, up
+@chapter Widget internals
+@cindex Widget Implementation
+
+
+@node Function Index, Concept Index, Widget Implementation, Top
+@comment node-name, next, previous, up
+@unnumbered Function Index
+
+@printindex fn
+
+
+@node Concept Index,  , Function Index, Top
+@comment node-name, next, previous, up
+@unnumbered Concept Index
+
+@printindex cp
+
+
+@summarycontents
+@contents
+@bye
+
+@c  LocalWords:  Gtk API formalistic

@@ -2,23 +2,23 @@
  * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
  *
  * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
+ * modify it under the terms of the GNU Library General Public
  * License as published by the Free Software Foundation; either
  * version 2 of the License, or (at your option) any later version.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	 See the GNU
- * Lesser General Public License for more details.
+ * Library General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public
+ * You should have received a copy of the GNU Library General Public
  * License along with this library; if not, write to the
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
  * Boston, MA 02111-1307, USA.
  */
 
 /*
- * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
+ * Modified by the GTK+ Team and others 1997-1999.  See the AUTHORS
  * file for a list of people on the GTK+ Team.  See the ChangeLog
  * files for a list of changes.  These files are distributed with
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
@@ -83,7 +83,7 @@ struct _GtkContainerClass
 				 gboolean	  include_internals,
 				 GtkCallback	  callback,
 				 gpointer	  callbabck_data);
-  gboolean (* focus)   		(GtkContainer	 *container,
+  gint (* focus)       		(GtkContainer	 *container,
 				 GtkDirectionType  direction);
   void (* set_focus_child)	(GtkContainer	 *container,
 				 GtkWidget	 *widget);
@@ -106,7 +106,7 @@ struct _GtkContainerClass
 
 /* Application-level methods */
 
-GtkType gtk_container_get_type		 (void) G_GNUC_CONST;
+GtkType gtk_container_get_type		 (void);
 void    gtk_container_set_border_width	 (GtkContainer	   *container,
 					  guint		    border_width);
 void    gtk_container_add		 (GtkContainer	   *container,
@@ -119,17 +119,17 @@ void    gtk_container_set_resize_mode    (GtkContainer     *container,
 
 void    gtk_container_check_resize       (GtkContainer     *container);
 
-void     gtk_container_foreach      (GtkContainer       *container,
-				     GtkCallback         callback,
-				     gpointer            callback_data);
-void     gtk_container_foreach_full (GtkContainer       *container,
-				     GtkCallback         callback,
-				     GtkCallbackMarshal  marshal,
-				     gpointer            callback_data,
-				     GtkDestroyNotify    notify);
-GList*   gtk_container_children     (GtkContainer       *container);
-gboolean gtk_container_focus        (GtkContainer       *container,
-				     GtkDirectionType    direction);
+void    gtk_container_foreach		 (GtkContainer	   *container,
+					  GtkCallback	    callback,
+					  gpointer	    callback_data);
+void    gtk_container_foreach_full	 (GtkContainer	   *container,
+					  GtkCallback	    callback,
+					  GtkCallbackMarshal marshal,
+					  gpointer	    callback_data,
+					  GtkDestroyNotify  notify);
+GList* gtk_container_children		 (GtkContainer	   *container);
+gint   gtk_container_focus		   (GtkContainer     *container,
+					    GtkDirectionType  direction);
 
 /* Widget-level methods */
 
@@ -141,6 +141,9 @@ void   gtk_container_set_focus_vadjustment (GtkContainer     *container,
 					    GtkAdjustment    *adjustment);
 void   gtk_container_set_focus_hadjustment (GtkContainer     *container,
 					    GtkAdjustment    *adjustment);
+void    gtk_container_register_toplevel	   (GtkContainer     *container);
+void    gtk_container_unregister_toplevel  (GtkContainer     *container);
+GList*  gtk_container_get_toplevels        (void);
 
 void    gtk_container_resize_children      (GtkContainer     *container);
 

@@ -111,15 +111,6 @@ GtkContainer
 @Returns: 
 
 
-<!-- ##### FUNCTION gtk_container_set_reallocate_redraws ##### -->
-<para>
-
-</para>
-
-@container: 
-@needs_redraws: 
-
-
 <!-- ##### FUNCTION gtk_container_set_focus_child ##### -->
 <para>
 
@@ -145,6 +136,22 @@ GtkContainer
 
 @container: 
 @adjustment: 
+
+
+<!-- ##### FUNCTION gtk_container_register_toplevel ##### -->
+<para>
+
+</para>
+
+@container: 
+
+
+<!-- ##### FUNCTION gtk_container_unregister_toplevel ##### -->
+<para>
+
+</para>
+
+@container: 
 
 
 <!-- ##### FUNCTION gtk_container_resize_children ##### -->
@@ -323,6 +330,14 @@ GtkContainer
 @Returns: 
 
 
+<!-- ##### FUNCTION gtk_container_get_toplevels ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+
 <!-- ##### FUNCTION gtk_container_set_border_width ##### -->
 <para>
 
@@ -332,15 +347,15 @@ GtkContainer
 @border_width: 
 
 
-<!-- ##### FUNCTION gtk_container_dequeue_resize_handler ##### -->
+<!-- ##### SIGNAL GtkContainer::add ##### -->
 <para>
 
 </para>
 
-@container: 
+@container: the object which received the signal.
+@widget: 
 
-
-<!-- ##### SIGNAL GtkContainer::add ##### -->
+<!-- ##### SIGNAL GtkContainer::remove ##### -->
 <para>
 
 </para>
@@ -364,14 +379,6 @@ GtkContainer
 @direction: 
 @Returns: 
 
-<!-- ##### SIGNAL GtkContainer::remove ##### -->
-<para>
-
-</para>
-
-@container: the object which received the signal.
-@widget: 
-
 <!-- ##### SIGNAL GtkContainer::set-focus-child ##### -->
 <para>
 
@@ -391,11 +398,6 @@ GtkContainer
 </para>
 
 <!-- ##### ARG GtkContainer:child ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkContainer:reallocate_redraws ##### -->
 <para>
 
 </para>

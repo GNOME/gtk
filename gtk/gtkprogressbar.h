@@ -2,23 +2,23 @@
  * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
  *
  * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
+ * modify it under the terms of the GNU Library General Public
  * License as published by the Free Software Foundation; either
  * version 2 of the License, or (at your option) any later version.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
+ * Library General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public
+ * You should have received a copy of the GNU Library General Public
  * License along with this library; if not, write to the
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
  * Boston, MA 02111-1307, USA.
  */
 
 /*
- * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
+ * Modified by the GTK+ Team and others 1997-1999.  See the AUTHORS
  * file for a list of people on the GTK+ Team.  See the ChangeLog
  * files for a list of changes.  These files are distributed with
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
@@ -75,9 +75,6 @@ struct _GtkProgressBar
   gint  activity_pos;
   guint activity_step;
   guint activity_blocks;
-
-  gfloat pulse_fraction;
-  
   guint activity_dir : 1;
 };
 
@@ -87,63 +84,22 @@ struct _GtkProgressBarClass
 };
 
 
-GtkType    gtk_progress_bar_get_type             (void) G_GNUC_CONST;
+GtkType    gtk_progress_bar_get_type             (void);
 GtkWidget* gtk_progress_bar_new                  (void);
-
-/*
- * GtkProgress/GtkProgressBar had serious problems in GTK 1.2.
- * 
- *  - Only 3 or 4 functions are really needed for 95% of progress  
- *    interfaces; GtkProgress[Bar] had about 25 functions, and 
- *    didn't even include these 3 or 4.
- *  - In activity mode, the API involves setting the adjustment 
- *    to any random value, just to have the side effect of 
- *    calling the progress bar update function - the adjustment
- *    is totally ignored in activity mode
- *  - You set the activity step as a pixel value, which means to 
- *    set the activity step you basically need to connect to 
- *    size_allocate
- *  - There are ctree_set_expander_style()-functions, to randomly 
- *    change look-and-feel for no good reason
- *  - The split between GtkProgress and GtkProgressBar makes no sense 
- *    to me whatsoever.
- *  
- * This was a big wart on GTK and made people waste lots of time,
- * both learning and using the interface.
- * 
- * So, I have added what I feel is the correct API, and marked all the
- * rest deprecated. However, the changes are 100% backward-compatible and
- * should break no existing code.
- *
- * The following 5 functions are the new programming interface. 
- */
-void       gtk_progress_bar_pulse                (GtkProgressBar *pbar);
-void       gtk_progress_bar_set_text             (GtkProgressBar *pbar,
-                                                  const gchar    *text);
-void       gtk_progress_bar_set_fraction         (GtkProgressBar *pbar,
-                                                  gfloat          fraction);
-
-void       gtk_progress_bar_set_pulse_step       (GtkProgressBar *pbar,
-                                                  gfloat          fraction);
-void       gtk_progress_bar_set_orientation      (GtkProgressBar *pbar,
-						  GtkProgressBarOrientation orientation);
-
-/* Everything below here is deprecated */
 GtkWidget* gtk_progress_bar_new_with_adjustment  (GtkAdjustment  *adjustment);
 void       gtk_progress_bar_set_bar_style        (GtkProgressBar *pbar,
 						  GtkProgressBarStyle style);
 void       gtk_progress_bar_set_discrete_blocks  (GtkProgressBar *pbar,
 						  guint           blocks);
-/* set_activity_step() is not only deprecated, it doesn't even work.
- * (Of course, it wasn't usable anyway, you had to set it from a size_allocate
- * handler or something)
- */
 void       gtk_progress_bar_set_activity_step    (GtkProgressBar *pbar,
                                                   guint           step);
 void       gtk_progress_bar_set_activity_blocks  (GtkProgressBar *pbar,
 						  guint           blocks);
+void       gtk_progress_bar_set_orientation      (GtkProgressBar *pbar,
+						  GtkProgressBarOrientation orientation);
 void       gtk_progress_bar_update               (GtkProgressBar *pbar,
 						  gfloat          percentage);
+
 
 #ifdef __cplusplus
 }

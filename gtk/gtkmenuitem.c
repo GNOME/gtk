@@ -2,23 +2,23 @@
  * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
  *
  * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
+ * modify it under the terms of the GNU Library General Public
  * License as published by the Free Software Foundation; either
  * version 2 of the License, or (at your option) any later version.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
+ * Library General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public
+ * You should have received a copy of the GNU Library General Public
  * License along with this library; if not, write to the
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
  * Boston, MA 02111-1307, USA.
  */
 
 /*
- * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
+ * Modified by the GTK+ Team and others 1997-1999.  See the AUTHORS
  * file for a list of people on the GTK+ Team.  See the ChangeLog
  * files for a list of changes.  These files are distributed with
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
@@ -42,8 +42,6 @@
 enum {
   ACTIVATE,
   ACTIVATE_ITEM,
-  TOGGLE_SIZE_REQUEST,
-  TOGGLE_SIZE_ALLOCATE,
   LAST_SIGNAL
 };
 
@@ -57,23 +55,18 @@ static void gtk_menu_item_size_allocate  (GtkWidget        *widget,
 					  GtkAllocation    *allocation);
 static void gtk_menu_item_paint          (GtkWidget        *widget,
 					  GdkRectangle     *area);
+static void gtk_menu_item_draw           (GtkWidget        *widget,
+					  GdkRectangle     *area);
 static gint gtk_menu_item_expose         (GtkWidget        *widget,
 					  GdkEventExpose   *event);
-
-static void gtk_real_menu_item_select               (GtkItem     *item);
-static void gtk_real_menu_item_deselect             (GtkItem     *item);
-static void gtk_real_menu_item_activate_item        (GtkMenuItem *item);
-static void gtk_real_menu_item_toggle_size_request  (GtkMenuItem *menu_item,
-						     guint16     *requisition);
-static void gtk_real_menu_item_toggle_size_allocate (GtkMenuItem *menu_item,
-						     guint16      allocation);
-
+static void gtk_real_menu_item_select    (GtkItem          *item);
+static void gtk_real_menu_item_deselect  (GtkItem          *item);
+static void gtk_real_menu_item_activate_item  (GtkMenuItem      *item);
 static gint gtk_menu_item_select_timeout (gpointer          data);
-static void gtk_menu_item_popup_submenu  (gpointer     data);
+static void gtk_menu_item_select_timeout_unlocked (gpointer     data);
 static void gtk_menu_item_position_menu  (GtkMenu          *menu,
 					  gint             *x,
 					  gint             *y,
-					  gboolean         *push_in,
 					  gpointer          user_data);
 static void gtk_menu_item_show_all       (GtkWidget        *widget);
 static void gtk_menu_item_hide_all       (GtkWidget        *widget);
@@ -95,20 +88,20 @@ gtk_menu_item_get_type (void)
 
   if (!menu_item_type)
     {
-      static const GTypeInfo menu_item_info =
+      static const GtkTypeInfo menu_item_info =
       {
-	sizeof (GtkMenuItemClass),
-	NULL,           /* base_init */
-	NULL,           /* base_finalize */
-	(GClassInitFunc) gtk_menu_item_class_init,
-	NULL,           /* class_finalize */
-	NULL,           /* class_data */
+	"GtkMenuItem",
 	sizeof (GtkMenuItem),
-	16,             /* n_preallocs */
-	(GInstanceInitFunc) gtk_menu_item_init,
+	sizeof (GtkMenuItemClass),
+	(GtkClassInitFunc) gtk_menu_item_class_init,
+	(GtkObjectInitFunc) gtk_menu_item_init,
+	/* reserved_1 */ NULL,
+        /* reserved_2 */ NULL,
+        (GtkClassInitFunc) NULL,
       };
 
-      menu_item_type = g_type_register_static (GTK_TYPE_ITEM, "GtkMenuItem", &menu_item_info, 0);
+      menu_item_type = gtk_type_unique (gtk_item_get_type (), &menu_item_info);
+      gtk_type_set_chunk_alloc (menu_item_type, 16);
     }
 
   return menu_item_type;
@@ -129,11 +122,30 @@ gtk_menu_item_class_init (GtkMenuItemClass *klass)
 
   parent_class = gtk_type_class (gtk_item_get_type ());
 
+  menu_item_signals[ACTIVATE] =
+    gtk_signal_new ("activate",
+                    GTK_RUN_FIRST | GTK_RUN_ACTION,
+                    object_class->type,
+                    GTK_SIGNAL_OFFSET (GtkMenuItemClass, activate),
+                    gtk_marshal_NONE__NONE,
+		    GTK_TYPE_NONE, 0);
+
+  menu_item_signals[ACTIVATE_ITEM] =
+    gtk_signal_new ("activate_item",
+                    GTK_RUN_FIRST,
+                    object_class->type,
+                    GTK_SIGNAL_OFFSET (GtkMenuItemClass, activate_item),
+                    gtk_signal_default_marshaller,
+		    GTK_TYPE_NONE, 0);
+
+  gtk_object_class_add_signals (object_class, menu_item_signals, LAST_SIGNAL);
 
   object_class->destroy = gtk_menu_item_destroy;
 
+  widget_class->activate_signal = menu_item_signals[ACTIVATE];
   widget_class->size_request = gtk_menu_item_size_request;
   widget_class->size_allocate = gtk_menu_item_size_allocate;
+  widget_class->draw = gtk_menu_item_draw;
   widget_class->expose_event = gtk_menu_item_expose;
   widget_class->show_all = gtk_menu_item_show_all;
   widget_class->hide_all = gtk_menu_item_hide_all;
@@ -145,45 +157,9 @@ gtk_menu_item_class_init (GtkMenuItemClass *klass)
 
   klass->activate = NULL;
   klass->activate_item = gtk_real_menu_item_activate_item;
-  klass->toggle_size_request = gtk_real_menu_item_toggle_size_request;
-  klass->toggle_size_allocate = gtk_real_menu_item_toggle_size_allocate;
 
+  klass->toggle_size = 0;
   klass->hide_on_activate = TRUE;
-
-  menu_item_signals[ACTIVATE] =
-    gtk_signal_new ("activate",
-                    GTK_RUN_FIRST | GTK_RUN_ACTION,
-                    GTK_CLASS_TYPE (object_class),
-                    GTK_SIGNAL_OFFSET (GtkMenuItemClass, activate),
-                    gtk_marshal_VOID__VOID,
-		    GTK_TYPE_NONE, 0);
-  widget_class->activate_signal = menu_item_signals[ACTIVATE];
-
-  menu_item_signals[ACTIVATE_ITEM] =
-    gtk_signal_new ("activate_item",
-                    GTK_RUN_FIRST,
-                    GTK_CLASS_TYPE (object_class),
-                    GTK_SIGNAL_OFFSET (GtkMenuItemClass, activate_item),
-                    gtk_signal_default_marshaller,
-		    GTK_TYPE_NONE, 0);
-
-  menu_item_signals[TOGGLE_SIZE_REQUEST] =
-    gtk_signal_new ("toggle_size_request",
-                    GTK_RUN_FIRST,
-                    GTK_CLASS_TYPE (object_class),
-                    GTK_SIGNAL_OFFSET (GtkMenuItemClass, toggle_size_request),
-                    gtk_marshal_NONE__POINTER,
-		    GTK_TYPE_NONE, 1,
-		    GTK_TYPE_POINTER);
-
-  menu_item_signals[TOGGLE_SIZE_ALLOCATE] =
-    gtk_signal_new ("toggle_size_allocate",
-                    GTK_RUN_FIRST,
-                    GTK_CLASS_TYPE (object_class),
-                    GTK_SIGNAL_OFFSET (GtkMenuItemClass, toggle_size_allocate),
-                    gtk_marshal_NONE__UINT,
-		    GTK_TYPE_NONE, 1,
-		    GTK_TYPE_UINT);
 }
 
 static void
@@ -337,26 +313,6 @@ gtk_menu_item_activate (GtkMenuItem *menu_item)
   gtk_signal_emit (GTK_OBJECT (menu_item), menu_item_signals[ACTIVATE]);
 }
 
-void
-gtk_menu_item_toggle_size_request (GtkMenuItem *menu_item,
-				   guint16     *requisition)
-{
-  g_return_if_fail (menu_item != NULL);
-  g_return_if_fail (GTK_IS_MENU_ITEM (menu_item));
-
-  gtk_signal_emit (GTK_OBJECT (menu_item), menu_item_signals[TOGGLE_SIZE_REQUEST], requisition);
-}
-
-void
-gtk_menu_item_toggle_size_allocate (GtkMenuItem *menu_item,
-				    guint16      allocation)
-{
-  g_return_if_fail (menu_item != NULL);
-  g_return_if_fail (GTK_IS_MENU_ITEM (menu_item));
-
-  gtk_signal_emit (GTK_OBJECT (menu_item), menu_item_signals[TOGGLE_SIZE_ALLOCATE], allocation);
-}
-
 static void
 gtk_menu_item_accel_width_foreach (GtkWidget *widget,
 				   gpointer data)
@@ -392,10 +348,10 @@ gtk_menu_item_size_request (GtkWidget      *widget,
   menu_item = GTK_MENU_ITEM (widget);
 
   requisition->width = (GTK_CONTAINER (widget)->border_width +
-			widget->style->xthickness +
+			widget->style->klass->xthickness +
 			BORDER_SPACING) * 2;
   requisition->height = (GTK_CONTAINER (widget)->border_width +
-			 widget->style->ythickness) * 2;
+			 widget->style->klass->ythickness) * 2;
 
   if (bin->child && GTK_WIDGET_VISIBLE (bin->child))
     {
@@ -437,10 +393,10 @@ gtk_menu_item_size_allocate (GtkWidget     *widget,
   if (bin->child)
     {
       child_allocation.x = (GTK_CONTAINER (widget)->border_width +
-                            widget->style->xthickness +
+                            widget->style->klass->xthickness +
 			    BORDER_SPACING);
       child_allocation.y = (GTK_CONTAINER (widget)->border_width +
-			    widget->style->ythickness);
+			    widget->style->klass->ythickness);
       child_allocation.width = MAX (1, (gint)allocation->width - child_allocation.x * 2);
       child_allocation.height = MAX (1, (gint)allocation->height - child_allocation.y * 2);
       child_allocation.x += GTK_MENU_ITEM (widget)->toggle_size;
@@ -519,6 +475,31 @@ gtk_menu_item_paint (GtkWidget    *widget,
     }
 }
 
+static void
+gtk_menu_item_draw (GtkWidget    *widget,
+		    GdkRectangle *area)
+{
+  GtkBin *bin;
+  GdkRectangle child_area;
+
+  g_return_if_fail (widget != NULL);
+  g_return_if_fail (GTK_IS_MENU_ITEM (widget));
+  g_return_if_fail (area != NULL);
+
+  if (GTK_WIDGET_DRAWABLE (widget))
+    {
+      gtk_menu_item_paint (widget, area);
+
+      bin = GTK_BIN (widget);
+
+      if (bin->child)
+        {
+          if (gtk_widget_intersect (bin->child, area, &child_area))
+            gtk_widget_draw (bin->child, &child_area);
+        }
+    }
+}
+
 static gint
 gtk_menu_item_expose (GtkWidget      *widget,
 		      GdkEventExpose *event)
@@ -572,7 +553,7 @@ gtk_real_menu_item_select (GtkItem *item)
 					    gtk_menu_item_select_timeout,
 					    menu_item);
       else
-	gtk_menu_item_popup_submenu (menu_item);
+	gtk_menu_item_select_timeout_unlocked (menu_item);
       if(event) gdk_event_free(event);
     }
   
@@ -617,7 +598,6 @@ static void
 gtk_real_menu_item_activate_item (GtkMenuItem *menu_item)
 {
   GtkWidget *widget;
-  GtkMenuShell *submenu; 
 
   g_return_if_fail (menu_item != NULL);
   g_return_if_fail (GTK_IS_MENU_ITEM (menu_item));
@@ -641,33 +621,9 @@ gtk_real_menu_item_activate_item (GtkMenuItem *menu_item)
 	      menu_shell->active = TRUE;
 	    }
 
-	  gtk_menu_shell_select_item (GTK_MENU_SHELL (widget->parent), widget); 
-	  gtk_menu_item_popup_submenu (widget); 
-
-	  submenu = GTK_MENU_SHELL (menu_item->submenu);
-	  if (submenu->children)
-	    gtk_menu_shell_select_item (submenu, submenu->children->data);
+	  gtk_menu_shell_select_item (GTK_MENU_SHELL (widget->parent), widget);
 	}
     }
-}
-static void
-gtk_real_menu_item_toggle_size_request (GtkMenuItem *menu_item,
-					guint16     *requisition)
-{
-  g_return_if_fail (menu_item != NULL);
-  g_return_if_fail (GTK_IS_MENU_ITEM (menu_item));
-
-  *requisition = 0;
-}
-
-static void
-gtk_real_menu_item_toggle_size_allocate (GtkMenuItem *menu_item,
-					 guint16      allocation)
-{
-  g_return_if_fail (menu_item != NULL);
-  g_return_if_fail (GTK_IS_MENU_ITEM (menu_item));
-
-  menu_item->toggle_size = allocation;
 }
 
 static gint
@@ -675,7 +631,7 @@ gtk_menu_item_select_timeout (gpointer data)
 {
   GDK_THREADS_ENTER ();
 
-  gtk_menu_item_popup_submenu (data);
+  gtk_menu_item_select_timeout_unlocked (data);
 
   GDK_THREADS_LEAVE ();
 
@@ -683,7 +639,7 @@ gtk_menu_item_select_timeout (gpointer data)
 }
 
 static void
-gtk_menu_item_popup_submenu (gpointer data)
+gtk_menu_item_select_timeout_unlocked (gpointer data)
 {
   GtkMenuItem *menu_item;
 
@@ -699,6 +655,16 @@ gtk_menu_item_popup_submenu (gpointer data)
 		      menu_item,
 		      GTK_MENU_SHELL (GTK_WIDGET (menu_item)->parent)->button,
 		      0);
+      
+      /* This is a bit of a hack - we want to select the first item
+       * of menus hanging of a menu bar, but not for cascading submenus
+       */
+      if (GTK_IS_MENU_BAR (GTK_WIDGET (menu_item)->parent))
+	{
+	  GtkMenuShell *submenu = GTK_MENU_SHELL (menu_item->submenu);
+	  if (submenu->children)
+	    gtk_menu_shell_select_item (submenu, submenu->children->data);
+	}
     }
 }
 
@@ -706,7 +672,6 @@ static void
 gtk_menu_item_position_menu (GtkMenu  *menu,
 			     gint     *x,
 			     gint     *y,
-			     gboolean *push_in,
 			     gpointer  user_data)
 {
   GtkMenuItem *menu_item;
@@ -741,10 +706,9 @@ gtk_menu_item_position_menu (GtkMenu  *menu,
 	ty += GTK_WIDGET (menu_item)->allocation.height;
       else if ((ty - theight) >= 0)
 	ty -= theight;
-      else if (screen_height - (ty + GTK_WIDGET (menu_item)->allocation.height) > ty)
-	ty += GTK_WIDGET (menu_item)->allocation.height;
       else
-	ty -= theight;
+	ty += GTK_WIDGET (menu_item)->allocation.height;
+
       break;
 
     case GTK_LEFT_RIGHT:
@@ -778,16 +742,14 @@ gtk_menu_item_position_menu (GtkMenu  *menu,
 
       ty += GTK_WIDGET (menu_item)->allocation.height / 4;
 
-      /* If the height of the menu doesn't fit we move it upward. */
-      ty = CLAMP (ty, 0, MAX (0, screen_height - theight));
       break;
     }
 
-  /* If we have negative, tx, here it is because we can't get
-   * the menu all the way on screen. Favor the left portion.
+  /* If we have negative, tx, ty here it is because we can't get
+   * the menu all the way on screen. Favor the upper-left portion.
    */
   *x = CLAMP (tx, 0, MAX (0, screen_width - twidth));
-  *y = ty;
+  *y = CLAMP (ty, 0, MAX (0, screen_height - theight));
 }
 
 void
@@ -854,4 +816,6 @@ gtk_menu_item_forall (GtkContainer *container,
 
   if (bin->child)
     (* callback) (bin->child, callback_data);
+  if (include_internals && menu_item->submenu)
+    (* callback) (menu_item->submenu, callback_data);
 }

@@ -3,16 +3,16 @@
  * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
  *
  * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
+ * modify it under the terms of the GNU Library General Public
  * License as published by the Free Software Foundation; either
  * version 2 of the License, or (at your option) any later version.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
+ * Library General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public
+ * You should have received a copy of the GNU Library General Public
  * License along with this library; if not, write to the
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
  * Boston, MA 02111-1307, USA.
@@ -86,7 +86,7 @@ struct _GtkPanedClass
 };
 
 
-GtkType gtk_paned_get_type        (void) G_GNUC_CONST;
+GtkType gtk_paned_get_type        (void);
 void    gtk_paned_add1            (GtkPaned  *paned,
 				   GtkWidget *child);
 void    gtk_paned_add2            (GtkPaned  *paned,
@@ -99,7 +99,6 @@ void    gtk_paned_pack2           (GtkPaned  *paned,
 				   GtkWidget *child,
 				   gboolean   resize,
 				   gboolean   shrink);
-gint    gtk_paned_get_position    (GtkPaned  *paned);
 void    gtk_paned_set_position    (GtkPaned  *paned,
 				   gint       position);
 void    gtk_paned_set_handle_size (GtkPaned  *paned,

@@ -2,23 +2,23 @@
  * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
  *
  * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
+ * modify it under the terms of the GNU Library General Public
  * License as published by the Free Software Foundation; either
  * version 2 of the License, or (at your option) any later version.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	 See the GNU
- * Lesser General Public License for more details.
+ * Library General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public
+ * You should have received a copy of the GNU Library General Public
  * License along with this library; if not, write to the
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
  * Boston, MA 02111-1307, USA.
  */
 
 /*
- * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
+ * Modified by the GTK+ Team and others 1997-1999.  See the AUTHORS
  * file for a list of people on the GTK+ Team.  See the ChangeLog
  * files for a list of changes.  These files are distributed with
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
@@ -70,6 +70,7 @@ struct _GtkMenuItemClass
 {
   GtkItemClass parent_class;
   
+  guint toggle_size;
   /* If the following flag is true, then we should always hide
    * the menu when the MenuItem is activated. Otherwise, the 
    * it is up to the caller. For instance, when navigating
@@ -78,35 +79,26 @@ struct _GtkMenuItemClass
    */
   guint hide_on_activate : 1;
   
-  void (* activate)             (GtkMenuItem *menu_item);
-  void (* activate_item)        (GtkMenuItem *menu_item);
-  void (* toggle_size_request)  (GtkMenuItem *menu_item,
-				 guint16     *requisition);
-  void (* toggle_size_allocate) (GtkMenuItem *menu_item,
-				 guint16      allocation);
+  void (* activate)      (GtkMenuItem *menu_item);
+  void (* activate_item) (GtkMenuItem *menu_item);
 };
 
 
-GtkType	   gtk_menu_item_get_type	      (void) G_GNUC_CONST;
-GtkWidget* gtk_menu_item_new                  (void);
-GtkWidget* gtk_menu_item_new_with_label       (const gchar         *label);
-void       gtk_menu_item_set_submenu          (GtkMenuItem         *menu_item,
-					       GtkWidget           *submenu);
-void       gtk_menu_item_remove_submenu       (GtkMenuItem         *menu_item);
-void       gtk_menu_item_set_placement        (GtkMenuItem         *menu_item,
-					       GtkSubmenuPlacement  placement);
-void       gtk_menu_item_configure            (GtkMenuItem         *menu_item,
-					       gint                 show_toggle_indicator,
-					       gint                 show_submenu_indicator);
-void       gtk_menu_item_select               (GtkMenuItem         *menu_item);
-void       gtk_menu_item_deselect             (GtkMenuItem         *menu_item);
-void       gtk_menu_item_activate             (GtkMenuItem         *menu_item);
-void       gtk_menu_item_toggle_size_request  (GtkMenuItem         *menu_item,
-					       guint16             *requisition);
-void       gtk_menu_item_toggle_size_allocate (GtkMenuItem         *menu_item,
-					       guint16              allocation);
-void       gtk_menu_item_right_justify        (GtkMenuItem         *menu_item);
-
+GtkType	   gtk_menu_item_get_type	  (void);
+GtkWidget* gtk_menu_item_new		  (void);
+GtkWidget* gtk_menu_item_new_with_label	  (const gchar	       *label);
+void	   gtk_menu_item_set_submenu	  (GtkMenuItem	       *menu_item,
+					   GtkWidget	       *submenu);
+void	   gtk_menu_item_remove_submenu	  (GtkMenuItem	       *menu_item);
+void	   gtk_menu_item_set_placement	  (GtkMenuItem	       *menu_item,
+					   GtkSubmenuPlacement	placement);
+void	   gtk_menu_item_configure	  (GtkMenuItem	       *menu_item,
+					   gint			show_toggle_indicator,
+					   gint			show_submenu_indicator);
+void	   gtk_menu_item_select		  (GtkMenuItem	       *menu_item);
+void	   gtk_menu_item_deselect	  (GtkMenuItem	       *menu_item);
+void	   gtk_menu_item_activate	  (GtkMenuItem	       *menu_item);
+void	   gtk_menu_item_right_justify	  (GtkMenuItem	       *menu_item);
 
 
 #ifdef __cplusplus

@@ -1,60 +1,35 @@
 <!-- ##### SECTION Title ##### -->
-gdk-pixbuf
+The GdkPixbuf Structure
 
 <!-- ##### SECTION Short_Description ##### -->
-
+Information that describes an image.
 
 <!-- ##### SECTION Long_Description ##### -->
-<para>
 
-</para>
+  <para>
+    The <structname>GdkPixbuf</structname> structure contains
+    information that describes an image in memory.  It is actually a
+    simple wrapper that adds reference counting capabilities to an
+    #ArtPixBuf structure.
+  </para>
 
 <!-- ##### SECTION See_Also ##### -->
-<para>
-
-</para>
-
-<!-- ##### ENUM GdkPixbufError ##### -->
-<para>
-
-</para>
-
-@GDK_PIXBUF_ERROR_CORRUPT_IMAGE: 
-@GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY: 
-@GDK_PIXBUF_ERROR_BAD_OPTION_VALUE: 
-@GDK_PIXBUF_ERROR_UNKNOWN_TYPE: 
-@GDK_PIXBUF_ERROR_UNSUPPORTED_OPERATION: 
-@GDK_PIXBUF_ERROR_FAILED: 
-
-<!-- ##### MACRO GDK_PIXBUF_ERROR ##### -->
-<para>
-
-</para>
-
-
-
-<!-- ##### ENUM GdkColorspace ##### -->
-<para>
-
-</para>
-
-@GDK_COLORSPACE_RGB: 
-
-<!-- ##### ENUM GdkPixbufAlphaMode ##### -->
-<para>
-
-</para>
-
-@GDK_PIXBUF_ALPHA_BILEVEL: 
-@GDK_PIXBUF_ALPHA_FULL: 
+  <para>
+    #ArtPixBuf
+  </para>
 
 <!-- ##### STRUCT GdkPixbuf ##### -->
-<para>
+  <para>
+    This is the main structure in the GdkPixbuf library.  This
+    structure adds reference counting capabilities to an #ArtPixBuf
+    structure.
+  </para>
 
-</para>
+@ref_count: Reference count.
+@art_pixbuf: An #ArtPixBuf that actually contains the description of
+the image data.
 
-
-<!-- ##### FUNCTION gdk_pixbuf_get_colorspace ##### -->
+<!-- ##### FUNCTION gdk_pixbuf_get_format ##### -->
 <para>
 
 </para>
@@ -123,6 +98,11 @@ gdk-pixbuf
 </para>
 
 @pixbuf: 
-@Returns: 
+@Returns: <!--
+Local variables:
+mode: sgml
+sgml-parent-document: ("../gdk-pixbuf.sgml" "book" "refsect2" "")
+End:
+-->
 
 

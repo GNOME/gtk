@@ -2,23 +2,23 @@
  * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
  *
  * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
+ * modify it under the terms of the GNU Library General Public
  * License as published by the Free Software Foundation; either
  * version 2 of the License, or (at your option) any later version.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
+ * Library General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public
+ * You should have received a copy of the GNU Library General Public
  * License along with this library; if not, write to the
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
  * Boston, MA 02111-1307, USA.
  */
 
 /*
- * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
+ * Modified by the GTK+ Team and others 1997-1999.  See the AUTHORS
  * file for a list of people on the GTK+ Team.  See the ChangeLog
  * files for a list of changes.  These files are distributed with
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
@@ -64,6 +64,8 @@ static void gtk_tree_item_size_request  (GtkWidget        *widget,
 					 GtkRequisition   *requisition);
 static void gtk_tree_item_size_allocate (GtkWidget        *widget,
 					 GtkAllocation    *allocation);
+static void gtk_tree_item_draw          (GtkWidget        *widget,
+					 GdkRectangle     *area);
 static void gtk_tree_item_draw_focus    (GtkWidget        *widget);
 static void gtk_tree_item_paint         (GtkWidget        *widget,
 					 GdkRectangle     *area);
@@ -133,18 +135,36 @@ gtk_tree_item_class_init (GtkTreeItemClass *class)
   GtkContainerClass *container_class;
   GtkItemClass *item_class;
 
-  parent_class = gtk_type_class (GTK_TYPE_ITEM);
-  
   object_class = (GtkObjectClass*) class;
   widget_class = (GtkWidgetClass*) class;
   item_class = (GtkItemClass*) class;
   container_class = (GtkContainerClass*) class;
+
+  parent_class = gtk_type_class (gtk_item_get_type ());
+  
+  tree_item_signals[EXPAND_TREE] =
+    gtk_signal_new ("expand",
+		    GTK_RUN_FIRST,
+		    object_class->type,
+		    GTK_SIGNAL_OFFSET (GtkTreeItemClass, expand),
+		    gtk_marshal_NONE__NONE,
+		    GTK_TYPE_NONE, 0);
+  tree_item_signals[COLLAPSE_TREE] =
+    gtk_signal_new ("collapse",
+		    GTK_RUN_FIRST,
+		    object_class->type,
+		    GTK_SIGNAL_OFFSET (GtkTreeItemClass, collapse),
+		    gtk_marshal_NONE__NONE,
+		    GTK_TYPE_NONE, 0);
+
+  gtk_object_class_add_signals (object_class, tree_item_signals, LAST_SIGNAL);
 
   object_class->destroy = gtk_tree_item_destroy;
 
   widget_class->realize = gtk_tree_item_realize;
   widget_class->size_request = gtk_tree_item_size_request;
   widget_class->size_allocate = gtk_tree_item_size_allocate;
+  widget_class->draw = gtk_tree_item_draw;
   widget_class->draw_focus = gtk_tree_item_draw_focus;
   widget_class->button_press_event = gtk_tree_item_button_press;
   widget_class->expose_event = gtk_tree_item_expose;
@@ -161,21 +181,6 @@ gtk_tree_item_class_init (GtkTreeItemClass *class)
 
   class->expand = gtk_real_tree_item_expand;
   class->collapse = gtk_real_tree_item_collapse;
-
-  tree_item_signals[EXPAND_TREE] =
-    gtk_signal_new ("expand",
-		    GTK_RUN_FIRST,
-		    GTK_CLASS_TYPE (object_class),
-		    GTK_SIGNAL_OFFSET (GtkTreeItemClass, expand),
-		    gtk_marshal_VOID__VOID,
-		    GTK_TYPE_NONE, 0);
-  tree_item_signals[COLLAPSE_TREE] =
-    gtk_signal_new ("collapse",
-		    GTK_RUN_FIRST,
-		    GTK_CLASS_TYPE (object_class),
-		    GTK_SIGNAL_OFFSET (GtkTreeItemClass, collapse),
-		    gtk_marshal_VOID__VOID,
-		    GTK_TYPE_NONE, 0);
 }
 
 /* callback for event box mouse event */
@@ -494,7 +499,7 @@ gtk_tree_item_size_request (GtkWidget      *widget,
   item = GTK_TREE_ITEM(widget);
 
   requisition->width = (GTK_CONTAINER (widget)->border_width +
-			widget->style->xthickness) * 2;
+			widget->style->klass->xthickness) * 2;
   requisition->height = GTK_CONTAINER (widget)->border_width * 2;
 
   if (bin->child && GTK_WIDGET_VISIBLE (bin->child))
@@ -541,7 +546,7 @@ gtk_tree_item_size_allocate (GtkWidget     *widget,
   if (bin->child)
     {
       border_width = (GTK_CONTAINER (widget)->border_width +
-		      widget->style->xthickness);
+		      widget->style->klass->xthickness);
 
       child_allocation.x = border_width + GTK_TREE(widget->parent)->current_indent;
       child_allocation.y = GTK_CONTAINER (widget)->border_width;
@@ -699,6 +704,30 @@ gtk_tree_item_paint (GtkWidget    *widget,
 			 widget->allocation.width - 1,
 			 widget->allocation.height - 1);
       
+    }
+}
+
+static void
+gtk_tree_item_draw (GtkWidget    *widget,
+		    GdkRectangle *area)
+{
+  GtkBin *bin;
+  GdkRectangle child_area;
+
+  g_return_if_fail (widget != NULL);
+  g_return_if_fail (GTK_IS_TREE_ITEM (widget));
+  g_return_if_fail (area != NULL);
+
+  if (GTK_WIDGET_DRAWABLE (widget))
+    {
+      bin = GTK_BIN (widget);
+
+      gtk_tree_item_paint (widget, area);
+     
+      if (bin->child && 
+	  gtk_widget_intersect (bin->child, area, &child_area))
+	gtk_widget_draw (bin->child, &child_area);
+
     }
 }
 

@@ -5,23 +5,23 @@
  * Copyright (C) 1998 Tim Janik
  *
  * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
+ * modify it under the terms of the GNU Library General Public
  * License as published by the Free Software Foundation; either
  * version 2 of the License, or (at your option) any later version.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	 See the GNU
- * Lesser General Public License for more details.
+ * Library General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public
+ * You should have received a copy of the GNU Library General Public
  * License along with this library; if not, write to the
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
  * Boston, MA 02111-1307, USA.
  */
 
 /*
- * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
+ * Modified by the GTK+ Team and others 1997-1999.  See the AUTHORS
  * file for a list of people on the GTK+ Team.  See the ChangeLog
  * files for a list of changes.  These files are distributed with
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
@@ -85,12 +85,12 @@ struct _GtkIFDumpData
 static void	gtk_item_factory_class_init		(GtkItemFactoryClass  *klass);
 static void	gtk_item_factory_init			(GtkItemFactory	      *ifactory);
 static void	gtk_item_factory_destroy		(GtkObject	      *object);
-static void	gtk_item_factory_finalize		(GObject	      *object);
+static void	gtk_item_factory_finalize		(GtkObject	      *object);
 
 
 /* --- static variables --- */
 static GtkItemFactoryClass *gtk_item_factory_class = NULL;
-static gpointer          parent_class = NULL;
+static GtkObjectClass	*parent_class = NULL;
 static const gchar	*item_factory_string = "Gtk-<ItemFactory>";
 static GMemChunk	*ifactory_item_chunks = NULL;
 static GMemChunk	*ifactory_cb_data_chunks = NULL;
@@ -181,7 +181,6 @@ gtk_item_factory_get_type (void)
 static void
 gtk_item_factory_class_init (GtkItemFactoryClass  *class)
 {
-  GObjectClass *gobject_class = G_OBJECT_CLASS (class);
   GtkObjectClass *object_class;
 
   gtk_item_factory_class = class;
@@ -190,9 +189,8 @@ gtk_item_factory_class_init (GtkItemFactoryClass  *class)
 
   object_class = (GtkObjectClass*) class;
 
-  gobject_class->finalize = gtk_item_factory_finalize;
-
   object_class->destroy = gtk_item_factory_destroy;
+  object_class->finalize = gtk_item_factory_finalize;
 
   class->cpair_comment_single = g_strdup (";\n");
 
@@ -513,7 +511,7 @@ gtk_item_factory_add_item (GtkItemFactory		*ifactory,
   g_return_if_fail (widget != NULL);
   g_return_if_fail (item_type != NULL);
 
-  class = GTK_ITEM_FACTORY_GET_CLASS (ifactory);
+  class = GTK_ITEM_FACTORY_CLASS (GTK_OBJECT (ifactory)->klass);
 
   /* set accelerator group on menu widgets
    */
@@ -683,11 +681,11 @@ gtk_item_factory_destroy (GtkObject *object)
   g_slist_free (ifactory->items);
   ifactory->items = NULL;
 
-  GTK_OBJECT_CLASS (parent_class)->destroy (object);
+  parent_class->destroy (object);
 }
 
 static void
-gtk_item_factory_finalize (GObject *object)
+gtk_item_factory_finalize (GtkObject		  *object)
 {
   GtkItemFactory *ifactory;
 
@@ -703,7 +701,7 @@ gtk_item_factory_finalize (GObject *object)
   if (ifactory->translate_notify)
     ifactory->translate_notify (ifactory->translate_data);
   
-  G_OBJECT_CLASS (parent_class)->finalize (object);
+  parent_class->finalize (object);
 }
 
 GtkItemFactory*
@@ -861,7 +859,7 @@ gtk_item_factory_get_widget (GtkItemFactory *ifactory,
   g_return_val_if_fail (GTK_IS_ITEM_FACTORY (ifactory), NULL);
   g_return_val_if_fail (path != NULL, NULL);
 
-  class = GTK_ITEM_FACTORY_GET_CLASS (ifactory);
+  class = GTK_ITEM_FACTORY_CLASS (GTK_OBJECT (ifactory)->klass);
 
   if (path[0] == '<')
     item = g_hash_table_lookup (class->item_ht, (gpointer) path);
@@ -955,7 +953,6 @@ gtk_item_factory_parse_path (GtkItemFactory *ifactory,
 
   *path = g_strdup (str);
 
-  /* FIXME: This does not handle __ correctly !!! */
   p = q = *path;
   while (*p)
     {
@@ -1325,7 +1322,7 @@ gtk_item_factory_delete_item (GtkItemFactory         *ifactory,
   g_return_if_fail (GTK_IS_ITEM_FACTORY (ifactory));
   g_return_if_fail (path != NULL);
 
-  class = GTK_ITEM_FACTORY_GET_CLASS (ifactory);
+  class = GTK_ITEM_FACTORY_CLASS (GTK_OBJECT (ifactory)->klass);
 
   fpath = g_strconcat (ifactory->path, path, NULL);
   item = g_hash_table_lookup (class->item_ht, fpath);

@@ -2,23 +2,23 @@
  * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
  *
  * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
+ * modify it under the terms of the GNU Library General Public
  * License as published by the Free Software Foundation; either
  * version 2 of the License, or (at your option) any later version.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
+ * Library General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public
+ * You should have received a copy of the GNU Library General Public
  * License along with this library; if not, write to the
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
  * Boston, MA 02111-1307, USA.
  */
 
 /*
- * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
+ * Modified by the GTK+ Team and others 1997-1999.  See the AUTHORS
  * file for a list of people on the GTK+ Team.  See the ChangeLog
  * files for a list of changes.  These files are distributed with
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
@@ -56,6 +56,8 @@ static void gtk_list_item_size_allocate     (GtkWidget        *widget,
 					     GtkAllocation    *allocation);
 static void gtk_list_item_style_set         (GtkWidget        *widget,
 					     GtkStyle         *previous_style);
+static void gtk_list_item_draw              (GtkWidget        *widget,
+					     GdkRectangle     *area);
 static void gtk_list_item_draw_focus        (GtkWidget        *widget);
 static gint gtk_list_item_button_press      (GtkWidget        *widget,
 					     GdkEventButton   *event);
@@ -113,10 +115,85 @@ gtk_list_item_class_init (GtkListItemClass *class)
 
   parent_class = gtk_type_class (gtk_item_get_type ());
 
+  list_item_signals[TOGGLE_FOCUS_ROW] =
+    gtk_signal_new ("toggle_focus_row",
+                    GTK_RUN_LAST | GTK_RUN_ACTION,
+                    object_class->type,
+                    GTK_SIGNAL_OFFSET (GtkListItemClass, toggle_focus_row),
+                    gtk_marshal_NONE__NONE,
+                    GTK_TYPE_NONE, 0);
+  list_item_signals[SELECT_ALL] =
+    gtk_signal_new ("select_all",
+                    GTK_RUN_LAST | GTK_RUN_ACTION,
+                    object_class->type,
+                    GTK_SIGNAL_OFFSET (GtkListItemClass, select_all),
+                    gtk_marshal_NONE__NONE,
+                    GTK_TYPE_NONE, 0);
+  list_item_signals[UNSELECT_ALL] =
+    gtk_signal_new ("unselect_all",
+                    GTK_RUN_LAST | GTK_RUN_ACTION,
+                    object_class->type,
+                    GTK_SIGNAL_OFFSET (GtkListItemClass, unselect_all),
+                    gtk_marshal_NONE__NONE,
+                    GTK_TYPE_NONE, 0);
+  list_item_signals[UNDO_SELECTION] =
+    gtk_signal_new ("undo_selection",
+		    GTK_RUN_LAST | GTK_RUN_ACTION,
+		    object_class->type,
+		    GTK_SIGNAL_OFFSET (GtkListItemClass, undo_selection),
+		    gtk_marshal_NONE__NONE,
+		    GTK_TYPE_NONE, 0);
+  list_item_signals[START_SELECTION] =
+    gtk_signal_new ("start_selection",
+		    GTK_RUN_LAST | GTK_RUN_ACTION,
+		    object_class->type,
+		    GTK_SIGNAL_OFFSET (GtkListItemClass, start_selection),
+		    gtk_marshal_NONE__NONE,
+		    GTK_TYPE_NONE, 0);
+  list_item_signals[END_SELECTION] =
+    gtk_signal_new ("end_selection",
+		    GTK_RUN_LAST | GTK_RUN_ACTION,
+		    object_class->type,
+		    GTK_SIGNAL_OFFSET (GtkListItemClass, end_selection),
+		    gtk_marshal_NONE__NONE,
+		    GTK_TYPE_NONE, 0);
+  list_item_signals[TOGGLE_ADD_MODE] =
+    gtk_signal_new ("toggle_add_mode",
+		    GTK_RUN_LAST | GTK_RUN_ACTION,
+		    object_class->type,
+		    GTK_SIGNAL_OFFSET (GtkListItemClass, toggle_add_mode),
+		    gtk_marshal_NONE__NONE,
+		    GTK_TYPE_NONE, 0);
+  list_item_signals[EXTEND_SELECTION] =
+    gtk_signal_new ("extend_selection",
+                    GTK_RUN_LAST | GTK_RUN_ACTION,
+                    object_class->type,
+                    GTK_SIGNAL_OFFSET (GtkListItemClass, extend_selection),
+                    gtk_marshal_NONE__ENUM_FLOAT_BOOL,
+                    GTK_TYPE_NONE, 3,
+		    GTK_TYPE_ENUM, GTK_TYPE_FLOAT, GTK_TYPE_BOOL);
+  list_item_signals[SCROLL_VERTICAL] =
+    gtk_signal_new ("scroll_vertical",
+                    GTK_RUN_LAST | GTK_RUN_ACTION,
+                    object_class->type,
+                    GTK_SIGNAL_OFFSET (GtkListItemClass, scroll_vertical),
+                    gtk_marshal_NONE__ENUM_FLOAT,
+                    GTK_TYPE_NONE, 2, GTK_TYPE_ENUM, GTK_TYPE_FLOAT);
+  list_item_signals[SCROLL_HORIZONTAL] =
+    gtk_signal_new ("scroll_horizontal",
+                    GTK_RUN_LAST | GTK_RUN_ACTION,
+                    object_class->type,
+                    GTK_SIGNAL_OFFSET (GtkListItemClass, scroll_horizontal),
+                    gtk_marshal_NONE__ENUM_FLOAT,
+                    GTK_TYPE_NONE, 2, GTK_TYPE_ENUM, GTK_TYPE_FLOAT);
+
+  gtk_object_class_add_signals (object_class, list_item_signals, LAST_SIGNAL);
+
   widget_class->realize = gtk_list_item_realize;
   widget_class->size_request = gtk_list_item_size_request;
   widget_class->size_allocate = gtk_list_item_size_allocate;
   widget_class->style_set = gtk_list_item_style_set;
+  widget_class->draw = gtk_list_item_draw;
   widget_class->draw_focus = gtk_list_item_draw_focus;
   widget_class->button_press_event = gtk_list_item_button_press;
   widget_class->expose_event = gtk_list_item_expose;
@@ -138,77 +215,6 @@ gtk_list_item_class_init (GtkListItemClass *class)
   class->scroll_vertical = NULL;
   class->toggle_add_mode = NULL;
 
-  list_item_signals[TOGGLE_FOCUS_ROW] =
-    gtk_signal_new ("toggle_focus_row",
-                    GTK_RUN_LAST | GTK_RUN_ACTION,
-                    GTK_CLASS_TYPE (object_class),
-                    GTK_SIGNAL_OFFSET (GtkListItemClass, toggle_focus_row),
-                    gtk_marshal_VOID__VOID,
-                    GTK_TYPE_NONE, 0);
-  list_item_signals[SELECT_ALL] =
-    gtk_signal_new ("select_all",
-                    GTK_RUN_LAST | GTK_RUN_ACTION,
-                    GTK_CLASS_TYPE (object_class),
-                    GTK_SIGNAL_OFFSET (GtkListItemClass, select_all),
-                    gtk_marshal_VOID__VOID,
-                    GTK_TYPE_NONE, 0);
-  list_item_signals[UNSELECT_ALL] =
-    gtk_signal_new ("unselect_all",
-                    GTK_RUN_LAST | GTK_RUN_ACTION,
-                    GTK_CLASS_TYPE (object_class),
-                    GTK_SIGNAL_OFFSET (GtkListItemClass, unselect_all),
-                    gtk_marshal_VOID__VOID,
-                    GTK_TYPE_NONE, 0);
-  list_item_signals[UNDO_SELECTION] =
-    gtk_signal_new ("undo_selection",
-		    GTK_RUN_LAST | GTK_RUN_ACTION,
-		    GTK_CLASS_TYPE (object_class),
-		    GTK_SIGNAL_OFFSET (GtkListItemClass, undo_selection),
-		    gtk_marshal_VOID__VOID,
-		    GTK_TYPE_NONE, 0);
-  list_item_signals[START_SELECTION] =
-    gtk_signal_new ("start_selection",
-		    GTK_RUN_LAST | GTK_RUN_ACTION,
-		    GTK_CLASS_TYPE (object_class),
-		    GTK_SIGNAL_OFFSET (GtkListItemClass, start_selection),
-		    gtk_marshal_VOID__VOID,
-		    GTK_TYPE_NONE, 0);
-  list_item_signals[END_SELECTION] =
-    gtk_signal_new ("end_selection",
-		    GTK_RUN_LAST | GTK_RUN_ACTION,
-		    GTK_CLASS_TYPE (object_class),
-		    GTK_SIGNAL_OFFSET (GtkListItemClass, end_selection),
-		    gtk_marshal_VOID__VOID,
-		    GTK_TYPE_NONE, 0);
-  list_item_signals[TOGGLE_ADD_MODE] =
-    gtk_signal_new ("toggle_add_mode",
-		    GTK_RUN_LAST | GTK_RUN_ACTION,
-		    GTK_CLASS_TYPE (object_class),
-		    GTK_SIGNAL_OFFSET (GtkListItemClass, toggle_add_mode),
-		    gtk_marshal_VOID__VOID,
-		    GTK_TYPE_NONE, 0);
-  list_item_signals[EXTEND_SELECTION] =
-    gtk_signal_new ("extend_selection",
-                    GTK_RUN_LAST | GTK_RUN_ACTION,
-                    GTK_CLASS_TYPE (object_class),
-                    GTK_SIGNAL_OFFSET (GtkListItemClass, extend_selection),
-                    gtk_marshal_VOID__ENUM_FLOAT_BOOL,
-                    GTK_TYPE_NONE, 3,
-		    GTK_TYPE_SCROLL_TYPE, GTK_TYPE_FLOAT, GTK_TYPE_BOOL);
-  list_item_signals[SCROLL_VERTICAL] =
-    gtk_signal_new ("scroll_vertical",
-                    GTK_RUN_LAST | GTK_RUN_ACTION,
-                    GTK_CLASS_TYPE (object_class),
-                    GTK_SIGNAL_OFFSET (GtkListItemClass, scroll_vertical),
-                    gtk_marshal_VOID__ENUM_FLOAT,
-                    GTK_TYPE_NONE, 2, GTK_TYPE_SCROLL_TYPE, GTK_TYPE_FLOAT);
-  list_item_signals[SCROLL_HORIZONTAL] =
-    gtk_signal_new ("scroll_horizontal",
-                    GTK_RUN_LAST | GTK_RUN_ACTION,
-                    GTK_CLASS_TYPE (object_class),
-                    GTK_SIGNAL_OFFSET (GtkListItemClass, scroll_horizontal),
-                    gtk_marshal_VOID__ENUM_FLOAT,
-                    GTK_TYPE_NONE, 2, GTK_TYPE_SCROLL_TYPE, GTK_TYPE_FLOAT);
 
   binding_set = gtk_binding_set_by_class (class);
   gtk_binding_entry_add_signal (binding_set, GDK_Up, 0,
@@ -397,7 +403,7 @@ gtk_list_item_size_request (GtkWidget      *widget,
   bin = GTK_BIN (widget);
 
   requisition->width = (GTK_CONTAINER (widget)->border_width +
-			widget->style->xthickness) * 2;
+			widget->style->klass->xthickness) * 2;
   requisition->height = GTK_CONTAINER (widget)->border_width * 2;
 
   if (bin->child && GTK_WIDGET_VISIBLE (bin->child))
@@ -431,7 +437,7 @@ gtk_list_item_size_allocate (GtkWidget     *widget,
   if (bin->child)
     {
       child_allocation.x = (GTK_CONTAINER (widget)->border_width +
-			    widget->style->xthickness);
+			    widget->style->klass->xthickness);
       child_allocation.y = GTK_CONTAINER (widget)->border_width;
       child_allocation.width = allocation->width - child_allocation.x * 2;
       child_allocation.height = allocation->height - child_allocation.y * 2;
@@ -448,6 +454,55 @@ gtk_list_item_style_set	(GtkWidget      *widget,
 
   if (previous_style && GTK_WIDGET_REALIZED (widget))
     gdk_window_set_background (widget->window, &widget->style->base[GTK_WIDGET_STATE (widget)]);
+}
+
+static void
+gtk_list_item_draw (GtkWidget    *widget,
+		    GdkRectangle *area)
+{
+  GtkBin *bin;
+  GdkRectangle child_area;
+
+  g_return_if_fail (widget != NULL);
+  g_return_if_fail (GTK_IS_LIST_ITEM (widget));
+  g_return_if_fail (area != NULL);
+
+  if (GTK_WIDGET_DRAWABLE (widget))
+    {
+      bin = GTK_BIN (widget);
+
+      if (widget->state == GTK_STATE_NORMAL)
+	{
+	  gdk_window_set_back_pixmap (widget->window, NULL, TRUE);
+	  gdk_window_clear_area (widget->window, area->x, area->y, area->width, area->height);
+	}
+      else
+	{
+	  gtk_paint_flat_box(widget->style, widget->window, 
+			     widget->state, GTK_SHADOW_ETCHED_OUT,
+			     area, widget, "listitem",
+			     0, 0, -1, -1);	      
+	}
+
+      if (bin->child && gtk_widget_intersect (bin->child, area, &child_area))
+	gtk_widget_draw (bin->child, &child_area);
+
+      if (GTK_WIDGET_HAS_FOCUS (widget))
+	{
+	  if (GTK_IS_LIST (widget->parent) && GTK_LIST (widget->parent)->add_mode)
+	    gtk_paint_focus (widget->style, widget->window,
+			     NULL, widget, "add-mode",
+			     0, 0,
+			     widget->allocation.width - 1,
+			     widget->allocation.height - 1);
+	  else
+	    gtk_paint_focus (widget->style, widget->window,
+			     NULL, widget, NULL,
+			     0, 0,
+			     widget->allocation.width - 1,
+			     widget->allocation.height - 1);
+	}
+    }
 }
 
 static void
@@ -479,53 +534,36 @@ gtk_list_item_expose (GtkWidget      *widget,
 		      GdkEventExpose *event)
 {
   GtkBin *bin;
+  GdkEventExpose child_event;
 
   g_return_val_if_fail (widget != NULL, FALSE);
+  g_return_val_if_fail (GTK_IS_LIST_ITEM (widget), FALSE);
+  g_return_val_if_fail (event != NULL, FALSE);
 
   if (GTK_WIDGET_DRAWABLE (widget))
     {
       bin = GTK_BIN (widget);
 
-      if (widget->state == GTK_STATE_NORMAL)
-        {
-          gdk_window_set_back_pixmap (widget->window, NULL, TRUE);
-          gdk_window_clear_area (widget->window, event->area.x, event->area.y,
-                                 event->area.width, event->area.height);
-        }
+      if (!GTK_WIDGET_IS_SENSITIVE (widget))
+	gdk_window_set_background (widget->window, &widget->style->bg[GTK_STATE_INSENSITIVE]);
+      else if (widget->state == GTK_STATE_NORMAL)
+	gdk_window_set_background (widget->window, &widget->style->base[GTK_STATE_NORMAL]);
       else
-        {
-          gtk_paint_flat_box (widget->style, widget->window, 
-                              widget->state, GTK_SHADOW_ETCHED_OUT,
-                              &event->area, widget, "listitem",
-                              0, 0, -1, -1);           
-        }
+	gdk_window_set_background (widget->window, &widget->style->bg[widget->state]);
+
+      gdk_window_clear_area (widget->window, event->area.x, event->area.y,
+			     event->area.width, event->area.height);
 
       if (bin->child)
 	{
-          GdkEventExpose child_event;
-          
 	  child_event = *event;
 
 	  if (GTK_WIDGET_NO_WINDOW (bin->child) &&
 	      gtk_widget_intersect (bin->child, &event->area, &child_event.area))
 	    gtk_widget_event (bin->child, (GdkEvent*) &child_event);
 	}
-      
-      if (GTK_WIDGET_HAS_FOCUS (widget))
-        {
-          if (GTK_IS_LIST (widget->parent) && GTK_LIST (widget->parent)->add_mode)
-            gtk_paint_focus (widget->style, widget->window,
-                             NULL, widget, "add-mode",
-                             0, 0,
-                             widget->allocation.width - 1,
-                             widget->allocation.height - 1);
-          else
-            gtk_paint_focus (widget->style, widget->window,
-                             NULL, widget, NULL,
-                             0, 0,
-                             widget->allocation.width - 1,
-                             widget->allocation.height - 1);
-        }
+
+      gtk_widget_draw_focus (widget);
     }
 
   return FALSE;

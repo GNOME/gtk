@@ -5,23 +5,23 @@
  * Copyright (C) 1998 Tim Janik
  *
  * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
+ * modify it under the terms of the GNU Library General Public
  * License as published by the Free Software Foundation; either
  * version 2 of the License, or (at your option) any later version.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	 See the GNU
- * Lesser General Public License for more details.
+ * Library General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public
+ * You should have received a copy of the GNU Library General Public
  * License along with this library; if not, write to the
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
  * Boston, MA 02111-1307, USA.
  */
 
 /*
- * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
+ * Modified by the GTK+ Team and others 1997-1999.  See the AUTHORS
  * file for a list of people on the GTK+ Team.  See the ChangeLog
  * files for a list of changes.  These files are distributed with
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
@@ -117,6 +117,47 @@ gtk_tips_query_class_init (GtkTipsQueryClass *class)
 
   parent_class = gtk_type_class (gtk_label_get_type ());
 
+  gtk_object_add_arg_type ("GtkTipsQuery::emit_always", GTK_TYPE_BOOL, GTK_ARG_READWRITE, ARG_EMIT_ALWAYS);
+  gtk_object_add_arg_type ("GtkTipsQuery::caller", GTK_TYPE_WIDGET, GTK_ARG_READWRITE, ARG_CALLER);
+  gtk_object_add_arg_type ("GtkTipsQuery::label_inactive", GTK_TYPE_STRING, GTK_ARG_READWRITE, ARG_LABEL_INACTIVE);
+  gtk_object_add_arg_type ("GtkTipsQuery::label_no_tip", GTK_TYPE_STRING, GTK_ARG_READWRITE, ARG_LABEL_NO_TIP);
+
+  tips_query_signals[SIGNAL_START_QUERY] =
+    gtk_signal_new ("start_query",
+		    GTK_RUN_FIRST,
+		    object_class->type,
+		    GTK_SIGNAL_OFFSET (GtkTipsQueryClass, start_query),
+		    gtk_marshal_NONE__NONE,
+		    GTK_TYPE_NONE, 0);
+  tips_query_signals[SIGNAL_STOP_QUERY] =
+    gtk_signal_new ("stop_query",
+		    GTK_RUN_FIRST,
+		    object_class->type,
+		    GTK_SIGNAL_OFFSET (GtkTipsQueryClass, stop_query),
+		    gtk_marshal_NONE__NONE,
+		    GTK_TYPE_NONE, 0);
+  tips_query_signals[SIGNAL_WIDGET_ENTERED] =
+    gtk_signal_new ("widget_entered",
+		    GTK_RUN_LAST,
+		    object_class->type,
+		    GTK_SIGNAL_OFFSET (GtkTipsQueryClass, widget_entered),
+		    gtk_marshal_NONE__POINTER_STRING_STRING,
+		    GTK_TYPE_NONE, 3,
+		    GTK_TYPE_WIDGET,
+		    GTK_TYPE_STRING,
+		    GTK_TYPE_STRING);
+  tips_query_signals[SIGNAL_WIDGET_SELECTED] =
+    gtk_signal_new ("widget_selected",
+		    GTK_RUN_LAST,
+		    object_class->type,
+		    GTK_SIGNAL_OFFSET (GtkTipsQueryClass, widget_selected),
+		    gtk_marshal_BOOL__POINTER_STRING_STRING_POINTER,
+		    GTK_TYPE_BOOL, 4,
+		    GTK_TYPE_WIDGET,
+		    GTK_TYPE_STRING,
+		    GTK_TYPE_STRING,
+		    GTK_TYPE_GDK_EVENT);
+  gtk_object_class_add_signals (object_class, tips_query_signals, SIGNAL_LAST);
 
   object_class->set_arg = gtk_tips_query_set_arg;
   object_class->get_arg = gtk_tips_query_get_arg;
@@ -128,47 +169,6 @@ gtk_tips_query_class_init (GtkTipsQueryClass *class)
   class->stop_query = gtk_tips_query_real_stop_query;
   class->widget_entered = gtk_tips_query_widget_entered;
   class->widget_selected = NULL;
-
-  gtk_object_add_arg_type ("GtkTipsQuery::emit_always", GTK_TYPE_BOOL, GTK_ARG_READWRITE, ARG_EMIT_ALWAYS);
-  gtk_object_add_arg_type ("GtkTipsQuery::caller", GTK_TYPE_WIDGET, GTK_ARG_READWRITE, ARG_CALLER);
-  gtk_object_add_arg_type ("GtkTipsQuery::label_inactive", GTK_TYPE_STRING, GTK_ARG_READWRITE, ARG_LABEL_INACTIVE);
-  gtk_object_add_arg_type ("GtkTipsQuery::label_no_tip", GTK_TYPE_STRING, GTK_ARG_READWRITE, ARG_LABEL_NO_TIP);
-
-  tips_query_signals[SIGNAL_START_QUERY] =
-    gtk_signal_new ("start_query",
-		    GTK_RUN_FIRST,
-		    GTK_CLASS_TYPE (object_class),
-		    GTK_SIGNAL_OFFSET (GtkTipsQueryClass, start_query),
-		    gtk_marshal_VOID__VOID,
-		    GTK_TYPE_NONE, 0);
-  tips_query_signals[SIGNAL_STOP_QUERY] =
-    gtk_signal_new ("stop_query",
-		    GTK_RUN_FIRST,
-		    GTK_CLASS_TYPE (object_class),
-		    GTK_SIGNAL_OFFSET (GtkTipsQueryClass, stop_query),
-		    gtk_marshal_VOID__VOID,
-		    GTK_TYPE_NONE, 0);
-  tips_query_signals[SIGNAL_WIDGET_ENTERED] =
-    gtk_signal_new ("widget_entered",
-		    GTK_RUN_LAST,
-		    GTK_CLASS_TYPE (object_class),
-		    GTK_SIGNAL_OFFSET (GtkTipsQueryClass, widget_entered),
-		    gtk_marshal_VOID__POINTER_STRING_STRING,
-		    GTK_TYPE_NONE, 3,
-		    GTK_TYPE_WIDGET,
-		    GTK_TYPE_STRING,
-		    GTK_TYPE_STRING);
-  tips_query_signals[SIGNAL_WIDGET_SELECTED] =
-    gtk_signal_new ("widget_selected",
-		    GTK_RUN_LAST,
-		    GTK_CLASS_TYPE (object_class),
-		    GTK_SIGNAL_OFFSET (GtkTipsQueryClass, widget_selected),
-		    gtk_marshal_BOOLEAN__POINTER_STRING_STRING_POINTER,
-		    GTK_TYPE_BOOL, 4,
-		    GTK_TYPE_WIDGET,
-		    GTK_TYPE_STRING,
-		    GTK_TYPE_STRING,
-		    GTK_TYPE_GDK_EVENT);
 }
 
 static void

@@ -2,23 +2,23 @@
  * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
  *
  * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
+ * modify it under the terms of the GNU Library General Public
  * License as published by the Free Software Foundation; either
  * version 2 of the License, or (at your option) any later version.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	 See the GNU
- * Lesser General Public License for more details.
+ * Library General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public
+ * You should have received a copy of the GNU Library General Public
  * License along with this library; if not, write to the
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
  * Boston, MA 02111-1307, USA.
  */
 
 /*
- * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
+ * Modified by the GTK+ Team and others 1997-1999.  See the AUTHORS
  * file for a list of people on the GTK+ Team.  See the ChangeLog
  * files for a list of changes.  These files are distributed with
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
@@ -52,9 +52,11 @@ enum
 
 static void gtk_table_class_init    (GtkTableClass  *klass);
 static void gtk_table_init	    (GtkTable	    *table);
-static void gtk_table_finalize	    (GObject	    *object);
+static void gtk_table_finalize	    (GtkObject	    *object);
 static void gtk_table_map	    (GtkWidget	    *widget);
 static void gtk_table_unmap	    (GtkWidget	    *widget);
+static void gtk_table_draw	    (GtkWidget	    *widget,
+				     GdkRectangle   *area);
 static gint gtk_table_expose	    (GtkWidget	    *widget,
 				     GdkEventExpose *event);
 static void gtk_table_size_request  (GtkWidget	    *widget,
@@ -127,7 +129,6 @@ gtk_table_get_type (void)
 static void
 gtk_table_class_init (GtkTableClass *class)
 {
-  GObjectClass *gobject_class = G_OBJECT_CLASS (class);
   GtkObjectClass *object_class;
   GtkWidgetClass *widget_class;
   GtkContainerClass *container_class;
@@ -137,24 +138,6 @@ gtk_table_class_init (GtkTableClass *class)
   container_class = (GtkContainerClass*) class;
   
   parent_class = gtk_type_class (gtk_container_get_type ());
-
-  gobject_class->finalize = gtk_table_finalize;
-
-  object_class->get_arg = gtk_table_get_arg;
-  object_class->set_arg = gtk_table_set_arg;
-  
-  widget_class->map = gtk_table_map;
-  widget_class->unmap = gtk_table_unmap;
-  widget_class->expose_event = gtk_table_expose;
-  widget_class->size_request = gtk_table_size_request;
-  widget_class->size_allocate = gtk_table_size_allocate;
-  
-  container_class->add = gtk_table_add;
-  container_class->remove = gtk_table_remove;
-  container_class->forall = gtk_table_forall;
-  container_class->child_type = gtk_table_child_type;
-  container_class->set_child_arg = gtk_table_set_child_arg;
-  container_class->get_child_arg = gtk_table_get_child_arg;
   
   gtk_object_add_arg_type ("GtkTable::n_rows", GTK_TYPE_UINT, GTK_ARG_READWRITE, ARG_N_ROWS);
   gtk_object_add_arg_type ("GtkTable::n_columns", GTK_TYPE_UINT, GTK_ARG_READWRITE, ARG_N_COLUMNS);
@@ -169,6 +152,24 @@ gtk_table_class_init (GtkTableClass *class)
   gtk_container_add_child_arg_type ("GtkTable::y_options", GTK_TYPE_ATTACH_OPTIONS, GTK_ARG_READWRITE, CHILD_ARG_Y_OPTIONS);
   gtk_container_add_child_arg_type ("GtkTable::x_padding", GTK_TYPE_UINT, GTK_ARG_READWRITE, CHILD_ARG_X_PADDING);
   gtk_container_add_child_arg_type ("GtkTable::y_padding", GTK_TYPE_UINT, GTK_ARG_READWRITE, CHILD_ARG_Y_PADDING);
+
+  object_class->get_arg = gtk_table_get_arg;
+  object_class->set_arg = gtk_table_set_arg;
+  object_class->finalize = gtk_table_finalize;
+  
+  widget_class->map = gtk_table_map;
+  widget_class->unmap = gtk_table_unmap;
+  widget_class->draw = gtk_table_draw;
+  widget_class->expose_event = gtk_table_expose;
+  widget_class->size_request = gtk_table_size_request;
+  widget_class->size_allocate = gtk_table_size_allocate;
+  
+  container_class->add = gtk_table_add;
+  container_class->remove = gtk_table_remove;
+  container_class->forall = gtk_table_forall;
+  container_class->child_type = gtk_table_child_type;
+  container_class->set_child_arg = gtk_table_set_child_arg;
+  container_class->get_child_arg = gtk_table_get_child_arg;
 }
 
 static GtkType
@@ -535,16 +536,19 @@ gtk_table_attach (GtkTable	  *table,
   
   gtk_widget_set_parent (child, GTK_WIDGET (table));
   
-  if (GTK_WIDGET_REALIZED (child->parent))
-    gtk_widget_realize (child);
-
-  if (GTK_WIDGET_VISIBLE (child->parent) && GTK_WIDGET_VISIBLE (child))
+  if (GTK_WIDGET_VISIBLE (GTK_WIDGET (table)))
     {
-      if (GTK_WIDGET_MAPPED (child->parent))
+      if (GTK_WIDGET_REALIZED (GTK_WIDGET (table)) &&
+	  !GTK_WIDGET_REALIZED (child))
+	gtk_widget_realize (child);
+      
+      if (GTK_WIDGET_MAPPED (GTK_WIDGET (table)) &&
+	  !GTK_WIDGET_MAPPED (child))
 	gtk_widget_map (child);
-
-      gtk_widget_queue_resize (child);
     }
+  
+  if (GTK_WIDGET_VISIBLE (child) && GTK_WIDGET_VISIBLE (table))
+    gtk_widget_queue_resize (child);
 }
 
 void
@@ -570,7 +574,7 @@ gtk_table_set_row_spacing (GtkTable *table,
 {
   g_return_if_fail (table != NULL);
   g_return_if_fail (GTK_IS_TABLE (table));
-  g_return_if_fail (row < table->nrows);
+  g_return_if_fail (row + 1 < table->nrows);
   
   if (table->rows[row].spacing != spacing)
     {
@@ -588,7 +592,7 @@ gtk_table_set_col_spacing (GtkTable *table,
 {
   g_return_if_fail (table != NULL);
   g_return_if_fail (GTK_IS_TABLE (table));
-  g_return_if_fail (column < table->ncols);
+  g_return_if_fail (column + 1 < table->ncols);
   
   if (table->cols[column].spacing != spacing)
     {
@@ -609,7 +613,7 @@ gtk_table_set_row_spacings (GtkTable *table,
   g_return_if_fail (GTK_IS_TABLE (table));
   
   table->row_spacing = spacing;
-  for (row = 0; row < table->nrows; row++)
+  for (row = 0; row + 1 < table->nrows; row++)
     table->rows[row].spacing = spacing;
   
   if (GTK_WIDGET_VISIBLE (table))
@@ -626,7 +630,7 @@ gtk_table_set_col_spacings (GtkTable *table,
   g_return_if_fail (GTK_IS_TABLE (table));
   
   table->column_spacing = spacing;
-  for (col = 0; col < table->ncols; col++)
+  for (col = 0; col + 1 < table->ncols; col++)
     table->cols[col].spacing = spacing;
   
   if (GTK_WIDGET_VISIBLE (table))
@@ -651,10 +655,11 @@ gtk_table_set_homogeneous (GtkTable *table,
 }
 
 static void
-gtk_table_finalize (GObject *object)
+gtk_table_finalize (GtkObject *object)
 {
   GtkTable *table;
   
+  g_return_if_fail (object != NULL);
   g_return_if_fail (GTK_IS_TABLE (object));
   
   table = GTK_TABLE (object);
@@ -662,7 +667,7 @@ gtk_table_finalize (GObject *object)
   g_free (table->rows);
   g_free (table->cols);
   
-  G_OBJECT_CLASS (parent_class)->finalize (object);
+  (* GTK_OBJECT_CLASS (parent_class)->finalize) (object);
 }
 
 static void
@@ -712,6 +717,34 @@ gtk_table_unmap (GtkWidget *widget)
       if (GTK_WIDGET_VISIBLE (child->widget) &&
 	  GTK_WIDGET_MAPPED (child->widget))
 	gtk_widget_unmap (child->widget);
+    }
+}
+
+static void
+gtk_table_draw (GtkWidget    *widget,
+		GdkRectangle *area)
+{
+  GtkTable *table;
+  GtkTableChild *child;
+  GList *children;
+  GdkRectangle child_area;
+  
+  g_return_if_fail (widget != NULL);
+  g_return_if_fail (GTK_IS_TABLE (widget));
+  
+  if (GTK_WIDGET_VISIBLE (widget) && GTK_WIDGET_MAPPED (widget))
+    {
+      table = GTK_TABLE (widget);
+      
+      children = table->children;
+      while (children)
+	{
+	  child = children->data;
+	  children = children->next;
+	  
+	  if (gtk_widget_intersect (child->widget, area, &child_area))
+	    gtk_widget_draw (child->widget, &child_area);
+	}
     }
 }
 
@@ -1453,7 +1486,6 @@ gtk_table_size_allocate_pass2 (GtkTable *table)
   gint x, y;
   gint row, col;
   GtkAllocation allocation;
-  GtkWidget *widget = GTK_WIDGET (table);
   
   children = table->children;
   while (children)
@@ -1518,10 +1550,6 @@ gtk_table_size_allocate_pass2 (GtkTable *table)
 	      allocation.height = child_requisition.height;
 	      allocation.y = y + (max_height - allocation.height) / 2;
 	    }
-
-	  if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL)
-	    allocation.x = widget->allocation.x + widget->allocation.width
-	      - (allocation.x - widget->allocation.x) - allocation.width;
 	  
 	  gtk_widget_size_allocate (child->widget, &allocation);
 	}

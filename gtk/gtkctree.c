@@ -6,23 +6,23 @@
  * Copyright (C) 1998 Lars Hamann and Stefan Jeske
  *
  * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
+ * modify it under the terms of the GNU Library General Public
  * License as published by the Free Software Foundation; either
  * version 2 of the License, or (at your option) any later version.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
+ * Library General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public
+ * You should have received a copy of the GNU Library General Public
  * License along with this library; if not, write to the
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
  * Boston, MA 02111-1307, USA.
  */
 
 /*
- * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
+ * Modified by the GTK+ Team and others 1997-1999.  See the AUTHORS
  * file for a list of people on the GTK+ Team.  See the ChangeLog
  * files for a list of changes.  These files are distributed with
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
@@ -71,10 +71,11 @@ COLUMN_FROM_XPIXEL (GtkCList * clist,
   return -1;
 }
 
+#define GTK_CLIST_CLASS_FW(_widget_) GTK_CLIST_CLASS (((GtkObject*) (_widget_))->klass)
 #define CLIST_UNFROZEN(clist)     (((GtkCList*) (clist))->freeze_count == 0)
 #define CLIST_REFRESH(clist)    G_STMT_START { \
   if (CLIST_UNFROZEN (clist)) \
-    GTK_CLIST_GET_CLASS (clist)->refresh ((GtkCList*) (clist)); \
+    GTK_CLIST_CLASS_FW (clist)->refresh ((GtkCList*) (clist)); \
 } G_STMT_END
 
 
@@ -90,11 +91,8 @@ enum {
 };
 
 
-static void     gtk_ctree_class_init    (GtkCTreeClass         *klass);
-static void     gtk_ctree_init          (GtkCTree              *ctree);
-static GObject* gtk_ctree_constructor   (GType                  type,
-				         guint                  n_construct_properties,
-				         GObjectConstructParam *construct_params);
+static void gtk_ctree_class_init        (GtkCTreeClass  *klass);
+static void gtk_ctree_init              (GtkCTree       *ctree);
 static void gtk_ctree_set_arg		(GtkObject      *object,
 					 GtkArg         *arg,
 					 guint           arg_id);
@@ -345,13 +343,10 @@ gtk_ctree_get_type (void)
 static void
 gtk_ctree_class_init (GtkCTreeClass *klass)
 {
-  GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
   GtkObjectClass *object_class;
   GtkWidgetClass *widget_class;
   GtkCListClass *clist_class;
   GtkBindingSet *binding_set;
-
-  gobject_class->constructor = gtk_ctree_constructor;
 
   object_class = (GtkObjectClass *) klass;
   widget_class = (GtkWidgetClass *) klass;
@@ -361,8 +356,82 @@ gtk_ctree_class_init (GtkCTreeClass *klass)
   parent_class = gtk_type_class (GTK_TYPE_CLIST);
   container_class = gtk_type_class (GTK_TYPE_CONTAINER);
 
+  gtk_object_add_arg_type ("GtkCTree::n_columns",
+			   GTK_TYPE_UINT,
+			   GTK_ARG_READWRITE | GTK_ARG_CONSTRUCT_ONLY,
+			   ARG_N_COLUMNS);
+  gtk_object_add_arg_type ("GtkCTree::tree_column",
+			   GTK_TYPE_UINT,
+			   GTK_ARG_READWRITE | GTK_ARG_CONSTRUCT_ONLY,
+			   ARG_TREE_COLUMN);
+  gtk_object_add_arg_type ("GtkCTree::indent",
+			   GTK_TYPE_UINT,
+			   GTK_ARG_READWRITE,
+			   ARG_INDENT);
+  gtk_object_add_arg_type ("GtkCTree::spacing",
+			   GTK_TYPE_UINT,
+			   GTK_ARG_READWRITE,
+			   ARG_SPACING);
+  gtk_object_add_arg_type ("GtkCTree::show_stub",
+			   GTK_TYPE_BOOL,
+			   GTK_ARG_READWRITE,
+			   ARG_SHOW_STUB);
+  gtk_object_add_arg_type ("GtkCTree::line_style",
+			   GTK_TYPE_CTREE_LINE_STYLE,
+			   GTK_ARG_READWRITE,
+			   ARG_LINE_STYLE);
+  gtk_object_add_arg_type ("GtkCTree::expander_style",
+			   GTK_TYPE_CTREE_EXPANDER_STYLE,
+			   GTK_ARG_READWRITE,
+			   ARG_EXPANDER_STYLE);
   object_class->set_arg = gtk_ctree_set_arg;
   object_class->get_arg = gtk_ctree_get_arg;
+
+  ctree_signals[TREE_SELECT_ROW] =
+    gtk_signal_new ("tree_select_row",
+		    GTK_RUN_FIRST,
+		    object_class->type,
+		    GTK_SIGNAL_OFFSET (GtkCTreeClass, tree_select_row),
+		    gtk_marshal_NONE__POINTER_INT,
+		    GTK_TYPE_NONE, 2, GTK_TYPE_CTREE_NODE, GTK_TYPE_INT);
+  ctree_signals[TREE_UNSELECT_ROW] =
+    gtk_signal_new ("tree_unselect_row",
+		    GTK_RUN_FIRST,
+		    object_class->type,
+		    GTK_SIGNAL_OFFSET (GtkCTreeClass, tree_unselect_row),
+		    gtk_marshal_NONE__POINTER_INT,
+		    GTK_TYPE_NONE, 2, GTK_TYPE_CTREE_NODE, GTK_TYPE_INT);
+  ctree_signals[TREE_EXPAND] =
+    gtk_signal_new ("tree_expand",
+		    GTK_RUN_LAST,
+		    object_class->type,
+		    GTK_SIGNAL_OFFSET (GtkCTreeClass, tree_expand),
+		    gtk_marshal_NONE__POINTER,
+		    GTK_TYPE_NONE, 1, GTK_TYPE_CTREE_NODE);
+  ctree_signals[TREE_COLLAPSE] =
+    gtk_signal_new ("tree_collapse",
+		    GTK_RUN_LAST,
+		    object_class->type,
+		    GTK_SIGNAL_OFFSET (GtkCTreeClass, tree_collapse),
+		    gtk_marshal_NONE__POINTER,
+		    GTK_TYPE_NONE, 1, GTK_TYPE_CTREE_NODE);
+  ctree_signals[TREE_MOVE] =
+    gtk_signal_new ("tree_move",
+		    GTK_RUN_LAST,
+		    object_class->type,
+		    GTK_SIGNAL_OFFSET (GtkCTreeClass, tree_move),
+		    gtk_marshal_NONE__POINTER_POINTER_POINTER,
+		    GTK_TYPE_NONE, 3, GTK_TYPE_CTREE_NODE,
+		    GTK_TYPE_CTREE_NODE, GTK_TYPE_CTREE_NODE);
+  ctree_signals[CHANGE_FOCUS_ROW_EXPANSION] =
+    gtk_signal_new ("change_focus_row_expansion",
+		    GTK_RUN_LAST | GTK_RUN_ACTION,
+		    object_class->type,
+		    GTK_SIGNAL_OFFSET (GtkCTreeClass,
+				       change_focus_row_expansion),
+		    gtk_marshal_NONE__ENUM,
+		    GTK_TYPE_NONE, 1, GTK_TYPE_CTREE_EXPANSION_TYPE);
+  gtk_object_class_add_signals (object_class, ctree_signals, LAST_SIGNAL);
 
   widget_class->realize = gtk_ctree_realize;
   widget_class->unrealize = gtk_ctree_unrealize;
@@ -397,80 +466,6 @@ gtk_ctree_class_init (GtkCTreeClass *klass)
   klass->tree_collapse = real_tree_collapse;
   klass->tree_move = real_tree_move;
   klass->change_focus_row_expansion = change_focus_row_expansion;
-
-  gtk_object_add_arg_type ("GtkCTree::n_columns", /* overrides GtkCList::n_columns!! */
-			   GTK_TYPE_UINT,
-			   GTK_ARG_READWRITE | GTK_ARG_CONSTRUCT_ONLY,
-			   ARG_N_COLUMNS);
-  gtk_object_add_arg_type ("GtkCTree::tree_column",
-			   GTK_TYPE_UINT,
-			   GTK_ARG_READWRITE | GTK_ARG_CONSTRUCT_ONLY,
-			   ARG_TREE_COLUMN);
-  gtk_object_add_arg_type ("GtkCTree::indent",
-			   GTK_TYPE_UINT,
-			   GTK_ARG_READWRITE,
-			   ARG_INDENT);
-  gtk_object_add_arg_type ("GtkCTree::spacing",
-			   GTK_TYPE_UINT,
-			   GTK_ARG_READWRITE,
-			   ARG_SPACING);
-  gtk_object_add_arg_type ("GtkCTree::show_stub",
-			   GTK_TYPE_BOOL,
-			   GTK_ARG_READWRITE,
-			   ARG_SHOW_STUB);
-  gtk_object_add_arg_type ("GtkCTree::line_style",
-			   GTK_TYPE_CTREE_LINE_STYLE,
-			   GTK_ARG_READWRITE,
-			   ARG_LINE_STYLE);
-  gtk_object_add_arg_type ("GtkCTree::expander_style",
-			   GTK_TYPE_CTREE_EXPANDER_STYLE,
-			   GTK_ARG_READWRITE,
-			   ARG_EXPANDER_STYLE);
-
-  ctree_signals[TREE_SELECT_ROW] =
-    gtk_signal_new ("tree_select_row",
-		    GTK_RUN_FIRST,
-		    GTK_CLASS_TYPE (object_class),
-		    GTK_SIGNAL_OFFSET (GtkCTreeClass, tree_select_row),
-		    gtk_marshal_VOID__POINTER_INT,
-		    GTK_TYPE_NONE, 2, GTK_TYPE_POINTER, GTK_TYPE_INT);
-  ctree_signals[TREE_UNSELECT_ROW] =
-    gtk_signal_new ("tree_unselect_row",
-		    GTK_RUN_FIRST,
-		    GTK_CLASS_TYPE (object_class),
-		    GTK_SIGNAL_OFFSET (GtkCTreeClass, tree_unselect_row),
-		    gtk_marshal_VOID__POINTER_INT,
-		    GTK_TYPE_NONE, 2, GTK_TYPE_POINTER, GTK_TYPE_INT);
-  ctree_signals[TREE_EXPAND] =
-    gtk_signal_new ("tree_expand",
-		    GTK_RUN_LAST,
-		    GTK_CLASS_TYPE (object_class),
-		    GTK_SIGNAL_OFFSET (GtkCTreeClass, tree_expand),
-		    gtk_marshal_VOID__POINTER,
-		    GTK_TYPE_NONE, 1, GTK_TYPE_POINTER);
-  ctree_signals[TREE_COLLAPSE] =
-    gtk_signal_new ("tree_collapse",
-		    GTK_RUN_LAST,
-		    GTK_CLASS_TYPE (object_class),
-		    GTK_SIGNAL_OFFSET (GtkCTreeClass, tree_collapse),
-		    gtk_marshal_VOID__POINTER,
-		    GTK_TYPE_NONE, 1, GTK_TYPE_POINTER);
-  ctree_signals[TREE_MOVE] =
-    gtk_signal_new ("tree_move",
-		    GTK_RUN_LAST,
-		    GTK_CLASS_TYPE (object_class),
-		    GTK_SIGNAL_OFFSET (GtkCTreeClass, tree_move),
-		    gtk_marshal_VOID__POINTER_POINTER_POINTER,
-		    GTK_TYPE_NONE, 3, GTK_TYPE_POINTER,
-		    GTK_TYPE_POINTER, GTK_TYPE_POINTER);
-  ctree_signals[CHANGE_FOCUS_ROW_EXPANSION] =
-    gtk_signal_new ("change_focus_row_expansion",
-		    GTK_RUN_LAST | GTK_RUN_ACTION,
-		    GTK_CLASS_TYPE (object_class),
-		    GTK_SIGNAL_OFFSET (GtkCTreeClass,
-				       change_focus_row_expansion),
-		    gtk_marshal_VOID__ENUM,
-		    GTK_TYPE_NONE, 1, GTK_TYPE_CTREE_EXPANSION_TYPE);
 
   binding_set = gtk_binding_set_by_class (klass);
   gtk_binding_entry_add_signal (binding_set,
@@ -520,32 +515,27 @@ gtk_ctree_set_arg (GtkObject      *object,
 		   guint           arg_id)
 {
   GtkCTree *ctree;
-  GtkCList *clist;
 
   ctree = GTK_CTREE (object);
-  clist = GTK_CLIST (ctree);
 
   switch (arg_id)
     {
-    case ARG_N_COLUMNS: /* construct-only arg, only set at construction time */
-      g_return_if_fail (clist->row_mem_chunk == NULL);
-      clist->columns = MAX (1, GTK_VALUE_UINT (*arg));
-      clist->row_mem_chunk = g_mem_chunk_new ("ctree row mem chunk",
-					      sizeof (GtkCTreeRow),
-					      sizeof (GtkCTreeRow)
-					      * CLIST_OPTIMUM_SIZE,
-					      G_ALLOC_AND_FREE);
-      clist->cell_mem_chunk = g_mem_chunk_new ("ctree cell mem chunk",
-					       sizeof (GtkCell) * clist->columns,
-					       sizeof (GtkCell) * clist->columns
-					       * CLIST_OPTIMUM_SIZE,
-					       G_ALLOC_AND_FREE);
-      ctree->tree_column = CLAMP (ctree->tree_column, 0, clist->columns);
+    case ARG_N_COLUMNS: /* construct-only arg, only set when !GTK_CONSTRUCTED */
+      if (ctree->tree_column)
+	gtk_ctree_construct (ctree,
+			     MAX (1, GTK_VALUE_UINT (*arg)),
+			     ctree->tree_column, NULL);
+      else
+	GTK_CLIST (ctree)->columns = MAX (1, GTK_VALUE_UINT (*arg));
       break;
-    case ARG_TREE_COLUMN: /* construct-only arg, only set at construction time */
-      ctree->tree_column = GTK_VALUE_UINT (*arg);
-      if (clist->row_mem_chunk)
-	ctree->tree_column = CLAMP (ctree->tree_column, 0, clist->columns);
+    case ARG_TREE_COLUMN: /* construct-only arg, only set when !GTK_CONSTRUCTED */
+      if (GTK_CLIST (ctree)->columns)
+	gtk_ctree_construct (ctree,
+			     GTK_CLIST (ctree)->columns,
+			     MAX (1, GTK_VALUE_UINT (*arg)),
+			     NULL);
+      else
+	ctree->tree_column = MAX (1, GTK_VALUE_UINT (*arg));
       break;
     case ARG_INDENT:
       gtk_ctree_set_indent (ctree, GTK_VALUE_UINT (*arg));
@@ -1760,14 +1750,13 @@ draw_row (GtkCList     *clist,
       GtkStyle *style;
       GdkGC *fg_gc; 
       GdkGC *bg_gc;
-      PangoLayout *layout = NULL;
-      PangoRectangle logical_rect;
 
       gint width;
       gint height;
       gint pixmap_width;
       gint string_width;
       gint old_offset;
+      gint row_center_offset;
 
       if (!clist->column[i].visible)
 	continue;
@@ -1798,31 +1787,32 @@ draw_row (GtkCList     *clist,
 	  gdk_draw_rectangle (clist->clist_window, bg_gc, TRUE,
 			      crect->x, crect->y, crect->width, crect->height);
 
-
-	  layout = _gtk_clist_create_cell_layout (clist, clist_row, i);
-	  if (layout)
-	    {
-	      pango_layout_get_pixel_extents (layout, NULL, &logical_rect);
-	      width = logical_rect.width;
-	    }
-	  else
-	    width = 0;
-
+	  /* calculate real width for column justification */
 	  switch (clist_row->cell[i].type)
 	    {
+	    case GTK_CELL_TEXT:
+	      width = gdk_string_width
+		(style->font, GTK_CELL_TEXT (clist_row->cell[i])->text);
+	      break;
 	    case GTK_CELL_PIXMAP:
 	      gdk_window_get_size
 		(GTK_CELL_PIXMAP (clist_row->cell[i])->pixmap, &pixmap_width,
 		 &height);
-	      width += pixmap_width;
+	      width = pixmap_width;
 	      break;
 	    case GTK_CELL_PIXTEXT:
 	      if (GTK_CELL_PIXTEXT (clist_row->cell[i])->pixmap)
+		gdk_window_get_size
+		  (GTK_CELL_PIXTEXT (clist_row->cell[i])->pixmap,
+		   &pixmap_width, &height);
+
+	      width = pixmap_width;
+
+	      if (GTK_CELL_PIXTEXT (clist_row->cell[i])->text)
 		{
-		  gdk_window_get_size 
-		    (GTK_CELL_PIXTEXT (clist_row->cell[i])->pixmap,
-		     &pixmap_width, &height);
-		  width += pixmap_width;
+		  string_width = gdk_string_width
+		    (style->font, GTK_CELL_PIXTEXT (clist_row->cell[i])->text);
+		  width += string_width;
 		}
 
 	      if (GTK_CELL_PIXTEXT (clist_row->cell[i])->text &&
@@ -1834,6 +1824,7 @@ draw_row (GtkCList     *clist,
 			  ((GtkCTreeRow *)clist_row)->level);
 	      break;
 	    default:
+	      continue;
 	      break;
 	    }
 
@@ -1878,21 +1869,25 @@ draw_row (GtkCList     *clist,
 		     (clip_rectangle.height - height) / 2,
 		     pixmap_width, height);
 		  offset += GTK_CELL_PIXTEXT (clist_row->cell[i])->spacing;
-
-		  /* Fall through */
 		case GTK_CELL_TEXT:
-		  if (layout)
-		    {
-		      gint row_center_offset = 1.5 + (clist->row_height - logical_rect.height - 1) / 2;
+		  if (style != GTK_WIDGET (clist)->style)
+		    row_center_offset = (((clist->row_height -
+					   style->font->ascent -
+					   style->font->descent - 1) / 2) +
+					 1.5 + style->font->ascent);
+		  else
+		    row_center_offset = clist->row_center_offset;
 
-		      gdk_gc_set_clip_rectangle (fg_gc, &clip_rectangle);
-		      gdk_draw_layout (clist->clist_window, fg_gc,
-				       offset,
-				       row_rectangle.y + row_center_offset + clist_row->cell[i].vertical,
-				       layout);
-		      gdk_gc_set_clip_rectangle (fg_gc, NULL);
-		      g_object_unref (G_OBJECT (layout));
-		    }
+		  gdk_gc_set_clip_rectangle (fg_gc, &clip_rectangle);
+		  gdk_draw_string
+		    (clist->clist_window, style->font, fg_gc,
+		     offset,
+		     row_rectangle.y + row_center_offset +
+		     clist_row->cell[i].vertical,
+		     (clist_row->cell[i].type == GTK_CELL_PIXTEXT) ?
+		     GTK_CELL_PIXTEXT (clist_row->cell[i])->text :
+		     GTK_CELL_TEXT (clist_row->cell[i])->text);
+		  gdk_gc_set_clip_rectangle (fg_gc, NULL);
 		  break;
 		default:
 		  break;
@@ -1910,11 +1905,7 @@ draw_row (GtkCList     *clist,
 
       if (area && !gdk_rectangle_intersect (area, &cell_rectangle,
 					    &intersect_rectangle))
-	{
-	  if (layout)
-            g_object_unref (G_OBJECT (layout));
-	  continue;
-	}
+	continue;
 
       /* draw lines */
       offset = gtk_ctree_draw_lines (ctree, (GtkCTreeRow *)clist_row, row, i,
@@ -1944,10 +1935,8 @@ draw_row (GtkCList     *clist,
 				 + (clip_rectangle.height - height) / 2,
 				 pixmap_width, height);
 
-      if (layout)
-	{
-	  gint row_center_offset = 1.5 + (clist->row_height - logical_rect.height - 1) / 2;
-	  
+      if (string_width)
+	{ 
 	  if (clist->column[i].justification == GTK_JUSTIFY_RIGHT)
 	    {
 	      offset = (old_offset - string_width);
@@ -1959,14 +1948,19 @@ draw_row (GtkCList     *clist,
 	      if (GTK_CELL_PIXTEXT (clist_row->cell[i])->pixmap)
 		offset += GTK_CELL_PIXTEXT (clist_row->cell[i])->spacing;
 	    }
+
+	  if (style != GTK_WIDGET (clist)->style)
+	    row_center_offset = (((clist->row_height - style->font->ascent -
+				   style->font->descent - 1) / 2) +
+				 1.5 + style->font->ascent);
+	  else
+	    row_center_offset = clist->row_center_offset;
 	  
 	  gdk_gc_set_clip_rectangle (fg_gc, &clip_rectangle);
-	  gdk_draw_layout (clist->clist_window, fg_gc,
-			   offset,
-			   row_rectangle.y + row_center_offset + clist_row->cell[i].vertical,
-			   layout);
-
-          g_object_unref (G_OBJECT (layout));
+	  gdk_draw_string (clist->clist_window, style->font, fg_gc, offset,
+			   row_rectangle.y + row_center_offset +
+			   clist_row->cell[i].vertical,
+			   GTK_CELL_PIXTEXT (clist_row->cell[i])->text);
 	}
       gdk_gc_set_clip_rectangle (fg_gc, NULL);
     }
@@ -2012,7 +2006,7 @@ tree_draw_node (GtkCTree     *ctree,
 	  num++;
 	}
       if (work && gtk_clist_row_is_visible (clist, num) != GTK_VISIBILITY_NONE)
-	GTK_CLIST_GET_CLASS (clist)->draw_row
+	GTK_CLIST_CLASS_FW (clist)->draw_row
 	  (clist, NULL, num, GTK_CLIST_ROW ((GList *) node));
     }
 }
@@ -2061,7 +2055,7 @@ gtk_ctree_link (GtkCTree     *ctree,
 
   if (update_focus_row && clist->selection_mode == GTK_SELECTION_EXTENDED)
     {
-      GTK_CLIST_GET_CLASS (clist)->resync_selection (clist, NULL);
+      GTK_CLIST_CLASS_FW (clist)->resync_selection (clist, NULL);
       
       g_list_free (clist->undo_selection);
       g_list_free (clist->undo_unselection);
@@ -2206,7 +2200,7 @@ gtk_ctree_unlink (GtkCTree     *ctree,
   
   if (update_focus_row && clist->selection_mode == GTK_SELECTION_EXTENDED)
     {
-      GTK_CLIST_GET_CLASS (clist)->resync_selection (clist, NULL);
+      GTK_CLIST_CLASS_FW (clist)->resync_selection (clist, NULL);
       
       g_list_free (clist->undo_selection);
       g_list_free (clist->undo_unselection);
@@ -2388,7 +2382,7 @@ real_tree_move (GtkCTree     *ctree,
 
   if (clist->selection_mode == GTK_SELECTION_EXTENDED)
     {
-      GTK_CLIST_GET_CLASS (clist)->resync_selection (clist, NULL);
+      GTK_CLIST_CLASS_FW (clist)->resync_selection (clist, NULL);
       
       g_list_free (clist->undo_selection);
       g_list_free (clist->undo_unselection);
@@ -2504,7 +2498,7 @@ real_tree_expand (GtkCTree     *ctree,
 
   clist = GTK_CLIST (ctree);
   
-  GTK_CLIST_GET_CLASS (clist)->resync_selection (clist, NULL);
+  GTK_CLIST_CLASS_FW (clist)->resync_selection (clist, NULL);
 
   GTK_CTREE_ROW (node)->expanded = TRUE;
   level = GTK_CTREE_ROW (node)->level;
@@ -2513,7 +2507,7 @@ real_tree_expand (GtkCTree     *ctree,
   /* get cell width if tree_column is auto resized */
   if (visible && clist->column[ctree->tree_column].auto_resize &&
       !GTK_CLIST_AUTO_RESIZE_BLOCKED (clist))
-    GTK_CLIST_GET_CLASS (clist)->cell_size_request
+    GTK_CLIST_CLASS_FW (clist)->cell_size_request
       (clist, &GTK_CTREE_ROW (node)->row, ctree->tree_column, &requisition);
 
   /* unref/unset closed pixmap */
@@ -2573,7 +2567,7 @@ real_tree_expand (GtkCTree     *ctree,
 	      for (i = 0; i < clist->columns; i++)
 		if (clist->column[i].auto_resize)
 		  {
-		    GTK_CLIST_GET_CLASS (clist)->cell_size_request
+		    GTK_CLIST_CLASS_FW (clist)->cell_size_request
 		      (clist, &GTK_CTREE_ROW (work)->row, i, &requisition);
 		    cell_width[i] = MAX (requisition.width, cell_width[i]);
 		  }
@@ -2649,7 +2643,7 @@ real_tree_collapse (GtkCTree     *ctree,
 
   clist = GTK_CLIST (ctree);
 
-  GTK_CLIST_GET_CLASS (clist)->resync_selection (clist, NULL);
+  GTK_CLIST_CLASS_FW (clist)->resync_selection (clist, NULL);
   
   GTK_CTREE_ROW (node)->expanded = FALSE;
   level = GTK_CTREE_ROW (node)->level;
@@ -2658,7 +2652,7 @@ real_tree_collapse (GtkCTree     *ctree,
   /* get cell width if tree_column is auto resized */
   if (visible && clist->column[ctree->tree_column].auto_resize &&
       !GTK_CLIST_AUTO_RESIZE_BLOCKED (clist))
-    GTK_CLIST_GET_CLASS (clist)->cell_size_request
+    GTK_CLIST_CLASS_FW (clist)->cell_size_request
       (clist, &GTK_CTREE_ROW (node)->row, ctree->tree_column, &requisition);
 
   /* unref/unset opened pixmap */
@@ -2759,7 +2753,7 @@ column_auto_resize (GtkCList    *clist,
     return;
 
   if (clist_row)
-    GTK_CLIST_GET_CLASS (clist)->cell_size_request (clist, clist_row,
+    GTK_CLIST_CLASS_FW (clist)->cell_size_request (clist, clist_row,
 						   column, &requisition);
   else
     requisition.width = 0;
@@ -2782,7 +2776,7 @@ column_auto_resize (GtkCList    *clist,
 
       for (list = clist->row_list; list; list = list->next)
 	{
-	  GTK_CLIST_GET_CLASS (clist)->cell_size_request
+	  GTK_CLIST_CLASS_FW (clist)->cell_size_request
 	    (clist, GTK_CLIST_ROW (list), column, &requisition);
 	  new_width = MAX (new_width, requisition.width);
 	  if (new_width == clist->column[column].width)
@@ -2812,10 +2806,9 @@ cell_size_request (GtkCList       *clist,
 		   GtkRequisition *requisition)
 {
   GtkCTree *ctree;
+  GtkStyle *style;
   gint width;
   gint height;
-  PangoLayout *layout;
-  PangoRectangle logical_rect;
 
   g_return_if_fail (clist != NULL);
   g_return_if_fail (GTK_IS_CTREE (clist));
@@ -2823,24 +2816,17 @@ cell_size_request (GtkCList       *clist,
 
   ctree = GTK_CTREE (clist);
 
-  layout = _gtk_clist_create_cell_layout (clist, clist_row, column);
-  if (layout)
-    {
-      pango_layout_get_pixel_extents (layout, NULL, &logical_rect);
-
-      requisition->width = logical_rect.width;
-      requisition->height = logical_rect.height;
-      
-      g_object_unref (G_OBJECT (layout));
-    }
-  else
-    {
-      requisition->width  = 0;
-      requisition->height = 0;
-    }
+  get_cell_style (clist, clist_row, GTK_STATE_NORMAL, column, &style,
+		  NULL, NULL);
 
   switch (clist_row->cell[column].type)
     {
+    case GTK_CELL_TEXT:
+      requisition->width =
+	gdk_string_width (style->font,
+			  GTK_CELL_TEXT (clist_row->cell[column])->text);
+      requisition->height = style->font->ascent + style->font->descent;
+      break;
     case GTK_CELL_PIXTEXT:
       if (GTK_CELL_PIXTEXT (clist_row->cell[column])->pixmap)
 	{
@@ -2852,9 +2838,12 @@ cell_size_request (GtkCList       *clist,
       else
 	width = height = 0;
 	  
-      requisition->width += width;
-      requisition->height = MAX (requisition->height, height);
-      
+      requisition->width = width +
+	gdk_string_width (style->font,
+			  GTK_CELL_TEXT (clist_row->cell[column])->text);
+
+      requisition->height = MAX (style->font->ascent + style->font->descent,
+				 height);
       if (column == ctree->tree_column)
 	{
 	  requisition->width += (ctree->tree_spacing + ctree->tree_indent *
@@ -2878,8 +2867,8 @@ cell_size_request (GtkCList       *clist,
     case GTK_CELL_PIXMAP:
       gdk_window_get_size (GTK_CELL_PIXMAP (clist_row->cell[column])->pixmap,
 			   &width, &height);
-      requisition->width += width;
-      requisition->height = MAX (requisition->height, height);
+      requisition->width = width;
+      requisition->height = height;
       break;
     default:
       requisition->width  = 0;
@@ -2921,7 +2910,7 @@ set_cell_contents (GtkCList    *clist,
 		      gtk_ctree_is_viewable (ctree, parent)))
 	{
 	  visible = TRUE;
-	  GTK_CLIST_GET_CLASS (clist)->cell_size_request (clist, clist_row,
+	  GTK_CLIST_CLASS_FW (clist)->cell_size_request (clist, clist_row,
 							 column, &requisition);
 	}
     }
@@ -3222,7 +3211,7 @@ row_delete (GtkCTree    *ctree,
 
   for (i = 0; i < clist->columns; i++)
     {
-      GTK_CLIST_GET_CLASS (clist)->set_cell_contents
+      GTK_CLIST_CLASS_FW (clist)->set_cell_contents
 	(clist, &(ctree_row->row), i, GTK_CELL_EMPTY, NULL, 0, NULL, NULL);
       if (ctree_row->row.cell[i].style)
 	{
@@ -3550,19 +3539,38 @@ ctree_is_hot_spot (GtkCTree     *ctree,
  *           Creation, insertion, deletion                 *
  ***********************************************************/
 
-static GObject*
-gtk_ctree_constructor (GType                  type,
-		       guint                  n_construct_properties,
-		       GObjectConstructParam *construct_properties)
+void
+gtk_ctree_construct (GtkCTree    *ctree,
+		     gint         columns, 
+		     gint         tree_column,
+		     gchar       *titles[])
 {
-  GObject *object = G_OBJECT_CLASS (parent_class)->constructor (type,
-								n_construct_properties,
-								construct_properties);
+  GtkCList *clist;
 
-  return object;
+  g_return_if_fail (ctree != NULL);
+  g_return_if_fail (GTK_IS_CTREE (ctree));
+  g_return_if_fail (GTK_OBJECT_CONSTRUCTED (ctree) == FALSE);
+
+  clist = GTK_CLIST (ctree);
+
+  clist->row_mem_chunk = g_mem_chunk_new ("ctree row mem chunk",
+					  sizeof (GtkCTreeRow),
+					  sizeof (GtkCTreeRow)
+					  * CLIST_OPTIMUM_SIZE, 
+					  G_ALLOC_AND_FREE);
+
+  clist->cell_mem_chunk = g_mem_chunk_new ("ctree cell mem chunk",
+					   sizeof (GtkCell) * columns,
+					   sizeof (GtkCell) * columns
+					   * CLIST_OPTIMUM_SIZE, 
+					   G_ALLOC_AND_FREE);
+
+  ctree->tree_column = tree_column;
+
+  gtk_clist_construct (clist, columns, titles);
 }
 
-GtkWidget*
+GtkWidget *
 gtk_ctree_new_with_titles (gint         columns, 
 			   gint         tree_column,
 			   gchar       *titles[])
@@ -3572,19 +3580,8 @@ gtk_ctree_new_with_titles (gint         columns,
   g_return_val_if_fail (columns > 0, NULL);
   g_return_val_if_fail (tree_column >= 0 && tree_column < columns, NULL);
 
-  widget = gtk_widget_new (GTK_TYPE_CTREE,
-			   "n_columns", columns,
-			   "tree_column", tree_column,
-			   NULL);
-  if (titles)
-    {
-      GtkCList *clist = GTK_CLIST (widget);
-      guint i;
-
-      for (i = 0; i < columns; i++)
-	gtk_clist_set_column_title (clist, i, titles[i]);
-      gtk_clist_column_titles_show (clist);
-    }
+  widget = gtk_type_new (GTK_TYPE_CTREE);
+  gtk_ctree_construct (GTK_CTREE (widget), columns, tree_column, titles);
 
   return widget;
 }
@@ -3659,7 +3656,7 @@ gtk_ctree_insert_node (GtkCTree     *ctree,
   if (text)
     for (i = 0; i < clist->columns; i++)
       if (text[i] && i != ctree->tree_column)
-	GTK_CLIST_GET_CLASS (clist)->set_cell_contents
+	GTK_CLIST_CLASS_FW (clist)->set_cell_contents
 	  (clist, &(new_row->row), i, GTK_CELL_TEXT, text[i], 0, NULL, NULL);
 
   set_node_info (ctree, node, text ?
@@ -4577,7 +4574,7 @@ gtk_ctree_real_select_recursive (GtkCTree     *ctree,
 
   if (clist->selection_mode == GTK_SELECTION_EXTENDED)
     {
-      GTK_CLIST_GET_CLASS (clist)->resync_selection (clist, NULL);
+      GTK_CLIST_CLASS_FW (clist)->resync_selection (clist, NULL);
       
       g_list_free (clist->undo_selection);
       g_list_free (clist->undo_unselection);
@@ -4619,7 +4616,7 @@ gtk_ctree_node_set_text (GtkCTree     *ctree,
   
   clist = GTK_CLIST (ctree);
 
-  GTK_CLIST_GET_CLASS (clist)->set_cell_contents
+  GTK_CLIST_CLASS_FW (clist)->set_cell_contents
     (clist, &(GTK_CTREE_ROW(node)->row), column, GTK_CELL_TEXT,
      text, 0, NULL, NULL);
 
@@ -4649,7 +4646,7 @@ gtk_ctree_node_set_pixmap (GtkCTree     *ctree,
 
   clist = GTK_CLIST (ctree);
 
-  GTK_CLIST_GET_CLASS (clist)->set_cell_contents
+  GTK_CLIST_CLASS_FW (clist)->set_cell_contents
     (clist, &(GTK_CTREE_ROW (node)->row), column, GTK_CELL_PIXMAP,
      NULL, 0, pixmap, mask);
 
@@ -4684,7 +4681,7 @@ gtk_ctree_node_set_pixtext (GtkCTree     *ctree,
 	gdk_pixmap_ref (mask);
     }
 
-  GTK_CLIST_GET_CLASS (clist)->set_cell_contents
+  GTK_CLIST_CLASS_FW (clist)->set_cell_contents
     (clist, &(GTK_CTREE_ROW (node)->row), column, GTK_CELL_PIXTEXT,
      text, spacing, pixmap, mask);
 
@@ -4769,7 +4766,7 @@ gtk_ctree_node_set_shift (GtkCTree     *ctree,
     {
       visible = gtk_ctree_is_viewable (ctree, node);
       if (visible)
-	GTK_CLIST_GET_CLASS (clist)->cell_size_request
+	GTK_CLIST_CLASS_FW (clist)->cell_size_request
 	  (clist, &GTK_CTREE_ROW (node)->row, column, &requisition);
     }
 
@@ -4831,7 +4828,7 @@ gtk_ctree_node_set_selectable (GtkCTree     *ctree,
 	  clist->drag_button = 0;
 	  remove_grab (clist);
 
-	  GTK_CLIST_GET_CLASS (clist)->resync_selection (clist, NULL);
+	  GTK_CLIST_CLASS_FW (clist)->resync_selection (clist, NULL);
 	}
       gtk_ctree_unselect (ctree, node);
     }      
@@ -5006,7 +5003,7 @@ gtk_ctree_node_set_cell_style (GtkCTree     *ctree,
     {
       visible = gtk_ctree_is_viewable (ctree, node);
       if (visible)
-	GTK_CLIST_GET_CLASS (clist)->cell_size_request
+	GTK_CLIST_CLASS_FW (clist)->cell_size_request
 	  (clist, &GTK_CTREE_ROW (node)->row, column, &requisition);
     }
 
@@ -5078,7 +5075,7 @@ gtk_ctree_node_set_row_style (GtkCTree     *ctree,
       for (i = 0; i < clist->columns; i++)
 	if (clist->column[i].auto_resize)
 	  {
-	    GTK_CLIST_GET_CLASS (clist)->cell_size_request
+	    GTK_CLIST_CLASS_FW (clist)->cell_size_request
 	      (clist, &GTK_CTREE_ROW (node)->row, i, &requisition);
 	    old_width[i] = requisition.width;
 	  }
@@ -5324,7 +5321,7 @@ gtk_ctree_set_show_stub (GtkCTree *ctree,
 
       if (CLIST_UNFROZEN (clist) && clist->rows &&
 	  gtk_clist_row_is_visible (clist, 0) != GTK_VISIBILITY_NONE)
-	GTK_CLIST_GET_CLASS (clist)->draw_row
+	GTK_CLIST_CLASS_FW (clist)->draw_row
 	  (clist, NULL, 0, GTK_CLIST_ROW (clist->row_list));
     }
 }
@@ -5515,7 +5512,7 @@ gtk_ctree_sort_recursive (GtkCTree     *ctree,
 
   if (clist->selection_mode == GTK_SELECTION_EXTENDED)
     {
-      GTK_CLIST_GET_CLASS (clist)->resync_selection (clist, NULL);
+      GTK_CLIST_CLASS_FW (clist)->resync_selection (clist, NULL);
       
       g_list_free (clist->undo_selection);
       g_list_free (clist->undo_unselection);
@@ -5563,7 +5560,7 @@ gtk_ctree_sort_node (GtkCTree     *ctree,
 
   if (clist->selection_mode == GTK_SELECTION_EXTENDED)
     {
-      GTK_CLIST_GET_CLASS (clist)->resync_selection (clist, NULL);
+      GTK_CLIST_CLASS_FW (clist)->resync_selection (clist, NULL);
       
       g_list_free (clist->undo_selection);
       g_list_free (clist->undo_unselection);
@@ -5604,7 +5601,7 @@ fake_unselect_all (GtkCList *clist,
 	  
 	  if (CLIST_UNFROZEN (clist) &&
 	      gtk_clist_row_is_visible (clist, row) != GTK_VISIBILITY_NONE)
-	    GTK_CLIST_GET_CLASS (clist)->draw_row (clist, NULL, row,
+	    GTK_CLIST_CLASS_FW (clist)->draw_row (clist, NULL, row,
 						  GTK_CLIST_ROW (focus_node));
 	}  
     }
@@ -5882,7 +5879,7 @@ drag_dest_cell (GtkCList         *clist,
   dest_info->insert_pos = GTK_CLIST_DRAG_NONE;
 
   y -= (GTK_CONTAINER (widget)->border_width +
-	widget->style->ythickness + clist->column_title_area.height);
+	widget->style->klass->ythickness + clist->column_title_area.height);
   dest_info->cell.row = ROW_FROM_YPIXEL (clist, y);
 
   if (dest_info->cell.row >= clist->rows)
@@ -5892,9 +5889,8 @@ drag_dest_cell (GtkCList         *clist,
     }
   if (dest_info->cell.row < -1)
     dest_info->cell.row = -1;
-  
-  x -= GTK_CONTAINER (widget)->border_width + widget->style->xthickness;
 
+  x -= GTK_CONTAINER (widget)->border_width + widget->style->klass->xthickness;
   dest_info->cell.column = COLUMN_FROM_XPIXEL (clist, x);
 
   if (dest_info->cell.row >= 0)
@@ -6047,7 +6043,7 @@ gtk_ctree_drag_motion (GtkWidget      *widget,
 	       dest_info->insert_pos != new_info.insert_pos))
 	    {
 	      if (dest_info->cell.row >= 0)
-		GTK_CLIST_GET_CLASS (clist)->draw_drag_highlight
+		GTK_CLIST_CLASS_FW (clist)->draw_drag_highlight
 		  (clist,
 		   g_list_nth (clist->row_list, dest_info->cell.row)->data,
 		   dest_info->cell.row, dest_info->insert_pos);
@@ -6056,7 +6052,7 @@ gtk_ctree_drag_motion (GtkWidget      *widget,
 	      dest_info->cell.row    = new_info.cell.row;
 	      dest_info->cell.column = new_info.cell.column;
 
-	      GTK_CLIST_GET_CLASS (clist)->draw_drag_highlight
+	      GTK_CLIST_CLASS_FW (clist)->draw_drag_highlight
 		(clist,
 		 g_list_nth (clist->row_list, dest_info->cell.row)->data,
 		 dest_info->cell.row, dest_info->insert_pos);

@@ -2,23 +2,23 @@
  * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
  *
  * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
+ * modify it under the terms of the GNU Library General Public
  * License as published by the Free Software Foundation; either
  * version 2 of the License, or (at your option) any later version.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
+ * Library General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public
+ * You should have received a copy of the GNU Library General Public
  * License along with this library; if not, write to the
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
  * Boston, MA 02111-1307, USA.
  */
 
 /*
- * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
+ * Modified by the GTK+ Team and others 1997-1999.  See the AUTHORS
  * file for a list of people on the GTK+ Team.  See the ChangeLog
  * files for a list of changes.  These files are distributed with
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
@@ -36,6 +36,8 @@ static void gtk_tearoff_menu_item_class_init (GtkTearoffMenuItemClass *klass);
 static void gtk_tearoff_menu_item_init       (GtkTearoffMenuItem      *tearoff_menu_item);
 static void gtk_tearoff_menu_item_size_request (GtkWidget             *widget,
 				                GtkRequisition        *requisition);
+static void gtk_tearoff_menu_item_draw       (GtkWidget             *widget,
+					      GdkRectangle          *area);
 static gint gtk_tearoff_menu_item_expose     (GtkWidget             *widget,
 					      GdkEventExpose        *event);
 static void gtk_tearoff_menu_item_activate   (GtkMenuItem           *menu_item);
@@ -84,6 +86,7 @@ gtk_tearoff_menu_item_class_init (GtkTearoffMenuItemClass *klass)
   widget_class = (GtkWidgetClass*) klass;
   menu_item_class = (GtkMenuItemClass*) klass;
 
+  widget_class->draw = gtk_tearoff_menu_item_draw;
   widget_class->expose_event = gtk_tearoff_menu_item_expose;
   widget_class->size_request = gtk_tearoff_menu_item_size_request;
 
@@ -105,10 +108,10 @@ gtk_tearoff_menu_item_size_request (GtkWidget      *widget,
   tearoff = GTK_TEAROFF_MENU_ITEM (widget);
   
   requisition->width = (GTK_CONTAINER (widget)->border_width +
-			widget->style->xthickness +
+			widget->style->klass->xthickness +
 			BORDER_SPACING) * 2;
   requisition->height = (GTK_CONTAINER (widget)->border_width +
-			 widget->style->ythickness) * 2;
+			 widget->style->klass->ythickness) * 2;
 
   if (tearoff->torn_off)
     {
@@ -116,7 +119,7 @@ gtk_tearoff_menu_item_size_request (GtkWidget      *widget,
     }
   else
     {
-      requisition->height += widget->style->ythickness;
+      requisition->height += widget->style->klass->ythickness;
     }
 }
 
@@ -185,10 +188,21 @@ gtk_tearoff_menu_item_paint (GtkWidget   *widget,
 	{
 	  gtk_draw_hline (widget->style, widget->window, GTK_STATE_NORMAL,
 			  x, MIN (x+TEAR_LENGTH, right_max),
-			  y + (height - widget->style->ythickness)/2);
+			  y + (height - widget->style->klass->ythickness)/2);
 	  x += 2 * TEAR_LENGTH;
 	}
     }
+}
+
+static void
+gtk_tearoff_menu_item_draw (GtkWidget    *widget,
+			  GdkRectangle *area)
+{
+  g_return_if_fail (widget != NULL);
+  g_return_if_fail (GTK_IS_TEAROFF_MENU_ITEM (widget));
+  g_return_if_fail (area != NULL);
+
+  gtk_tearoff_menu_item_paint (widget, area);
 }
 
 static gint

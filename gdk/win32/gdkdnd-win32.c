@@ -3,23 +3,23 @@
  * Copyright (C) 1998-1999 Tor Lillqvist
  *
  * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
+ * modify it under the terms of the GNU Library General Public
  * License as published by the Free Software Foundation; either
  * version 2 of the License, or (at your option) any later version.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
+ * Library General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public
+ * You should have received a copy of the GNU Library General Public
  * License along with this library; if not, write to the
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
  * Boston, MA 02111-1307, USA.
  */
 
 /*
- * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
+ * Modified by the GTK+ Team and others 1997-1999.  See the AUTHORS
  * file for a list of people on the GTK+ Team.  See the ChangeLog
  * files for a list of changes.  These files are distributed with
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
@@ -35,8 +35,8 @@
 
 #include "gdkdnd.h"
 #include "gdkproperty.h"
-#include "gdkinternals.h"
-#include "gdkprivate-win32.h"
+#include "gdkprivate.h"
+#include "gdkwin32.h"
 
 #ifdef OLE2_DND
 #include <ole2.h>
@@ -44,12 +44,23 @@
 #include <objbase.h>
 #endif
 
+#ifdef _MSC_VER
 #include <shlobj.h>
 #include <shlguid.h>
+#endif
+
+#ifndef _MSC_VER
+static IID IID_IUnknown = {
+  0x00000000, 0x0000, 0x0000, { 0xC0,0x00,0x00,0x00,0x00,0x00,0x00,0x46 } };
+static IID IID_IDropSource = {
+  0x00000121, 0x0000, 0x0000, { 0xC0,0x00,0x00,0x00,0x00,0x00,0x00,0x46 } };
+static IID IID_IDropTarget = {
+  0x00000122, 0x0000, 0x0000, { 0xC0,0x00,0x00,0x00,0x00,0x00,0x00,0x46 } };
+#endif
 
 #include <gdk/gdk.h>
 
-typedef struct _GdkDragContextPrivateWin32 GdkDragContextPrivateWin32;
+typedef struct _GdkDragContextPrivate GdkDragContextPrivate;
 
 typedef enum {
   GDK_DRAG_STATUS_DRAG,
@@ -80,16 +91,15 @@ typedef enum {
 	   ((guchar *)  guid)[15]);
 
 
-static FORMATETC *formats;
-static int nformats;
-
 #endif /* OLE2_DND */
 
 /* Structure that holds information about a drag in progress.
  * this is used on both source and destination sides.
  */
-struct _GdkDragContextPrivateWin32 {
-  gint ref_count;
+struct _GdkDragContextPrivate {
+  GdkDragContext context;
+
+  guint   ref_count;
 
   guint16 last_x;		/* Coordinates from last event */
   guint16 last_y;
@@ -97,111 +107,62 @@ struct _GdkDragContextPrivateWin32 {
   guint drag_status;		/* Current status of drag */
 };
 
-#define PRIVATE_DATA(context) ((GdkDragContextPrivateWin32 *) GDK_DRAG_CONTEXT (context)->windowing_data)
-
 GdkDragContext *current_dest_drag = NULL;
-
-static void gdk_drag_context_init       (GdkDragContext      *dragcontext);
-static void gdk_drag_context_class_init (GdkDragContextClass *klass);
-static void gdk_drag_context_finalize   (GObject              *object);
-
-static gpointer parent_class = NULL;
-static GList *contexts;
-
-GType
-gdk_drag_context_get_type (void)
-{
-  static GType object_type = 0;
-
-  if (!object_type)
-    {
-      static const GTypeInfo object_info =
-      {
-        sizeof (GdkDragContextClass),
-        (GBaseInitFunc) NULL,
-        (GBaseFinalizeFunc) NULL,
-        (GClassInitFunc) gdk_drag_context_class_init,
-        NULL,           /* class_finalize */
-        NULL,           /* class_data */
-        sizeof (GdkDragContext),
-        0,              /* n_preallocs */
-        (GInstanceInitFunc) gdk_drag_context_init,
-      };
-      
-      object_type = g_type_register_static (G_TYPE_OBJECT,
-                                            "GdkDragContext",
-                                            &object_info, 0);
-    }
-  
-  return object_type;
-}
-
-static void
-gdk_drag_context_init (GdkDragContext *dragcontext)
-{
-  GdkDragContextPrivateWin32 *private = g_new0 (GdkDragContextPrivateWin32, 1);
-
-  dragcontext->windowing_data = private;
-  private->ref_count = 1;
-
-  contexts = g_list_prepend (contexts, dragcontext);
-}
-
-static void
-gdk_drag_context_class_init (GdkDragContextClass *klass)
-{
-  GObjectClass *object_class = G_OBJECT_CLASS (klass);
-
-  parent_class = g_type_class_peek_parent (klass);
-
-  object_class->finalize = gdk_drag_context_finalize;
-}
-
-static void
-gdk_drag_context_finalize (GObject *object)
-{
-  GdkDragContext *context = GDK_DRAG_CONTEXT (object);
-  GdkDragContextPrivateWin32 *private = PRIVATE_DATA (context);
-  
-  g_list_free (context->targets);
-
-  if (context->source_window)
-    {
-      gdk_window_unref (context->source_window);
-    }
-  
-  if (context->dest_window)
-    gdk_window_unref (context->dest_window);
-  
-  contexts = g_list_remove (contexts, context);
-
-  g_free (private);
-  
-  G_OBJECT_CLASS (parent_class)->finalize (object);
-}
 
 /* Drag Contexts */
 
+static GList *contexts;
+
 GdkDragContext *
-gdk_drag_context_new (void)
+gdk_drag_context_new        (void)
 {
-  return g_object_new (gdk_drag_context_get_type (), NULL);
+  GdkDragContextPrivate *result;
+
+  result = g_new0 (GdkDragContextPrivate, 1);
+
+  result->ref_count = 1;
+
+  contexts = g_list_prepend (contexts, result);
+
+  return (GdkDragContext *)result;
 }
 
 void
 gdk_drag_context_ref (GdkDragContext *context)
 {
-  g_return_if_fail (GDK_IS_DRAG_CONTEXT (context));
+  g_return_if_fail (context != NULL);
 
-  g_object_ref (G_OBJECT (context));
+  ((GdkDragContextPrivate *)context)->ref_count++;
 }
 
 void
 gdk_drag_context_unref (GdkDragContext *context)
 {
-  g_return_if_fail (GDK_IS_DRAG_CONTEXT (context));
+  GdkDragContextPrivate *private = (GdkDragContextPrivate *)context;
+  
+  g_return_if_fail (context != NULL);
 
-  g_object_unref (G_OBJECT (context));
+  private->ref_count--;
+
+  GDK_NOTE (DND, g_print ("gdk_drag_context_unref: %d%s\n",
+			  private->ref_count,
+			  (private->ref_count == 0 ? " freeing" : "")));
+
+  if (private->ref_count == 0)
+    {
+      g_dataset_destroy (private);
+      
+      g_list_free (context->targets);
+
+      if (context->source_window)
+	gdk_window_unref (context->source_window);
+
+      if (context->dest_window)
+	gdk_window_unref (context->dest_window);
+
+      contexts = g_list_remove (contexts, private);
+      g_free (private);
+    }
 }
 
 #if 0
@@ -249,38 +210,24 @@ typedef struct {
 
 #ifdef OLE2_DND
 
-typedef struct {
-  IDataObject ido;
-  int ref_count;
-} data_object;
-
-typedef struct {
-  IEnumFORMATETC ief;
-  int ref_count;
-  int ix;
-} enum_formats;
-
-static enum_formats *enum_formats_new (void);
-
 static ULONG STDMETHODCALLTYPE
-idroptarget_addref (LPDROPTARGET This)
+m_add_ref_target (IDropTarget __RPC_FAR *This)
 {
   target_drag_context *ctx = (target_drag_context *) This;
-  GdkDragContextPrivateWin32 *private = PRIVATE_DATA (ctx->context);
-  int ref_count = ++private->ref_count;
+  GdkDragContextPrivate *private = (GdkDragContextPrivate *) ctx->context;
 
+  GDK_NOTE (DND, g_print ("m_add_ref_target\n"));
   gdk_drag_context_ref (ctx->context);
-  GDK_NOTE (DND, g_print ("idroptarget_addref %#x %d\n", This, ref_count));
   
-  return ref_count;
+  return private->ref_count;
 }
 
 static HRESULT STDMETHODCALLTYPE
-idroptarget_queryinterface (LPDROPTARGET This,
-			    REFIID       riid,
-			    LPVOID      *ppvObject)
+m_query_interface_target (IDropTarget __RPC_FAR *This,
+			  REFIID riid,
+			  void __RPC_FAR *__RPC_FAR *ppvObject)
 {
-  GDK_NOTE (DND, g_print ("idroptarget_queryinterface %#x\n", This));
+  GDK_NOTE (DND, g_print ("m_query_interface_target\n"));
 
   *ppvObject = NULL;
 
@@ -289,14 +236,14 @@ idroptarget_queryinterface (LPDROPTARGET This,
   if (IsEqualGUID (riid, &IID_IUnknown))
     {
       g_print ("...IUnknown\n");
-      idroptarget_addref (This);
+      m_add_ref_target (This);
       *ppvObject = This;
       return S_OK;
     }
   else if (IsEqualGUID (riid, &IID_IDropTarget))
     {
       g_print ("...IDropTarget\n");
-      idroptarget_addref (This);
+      m_add_ref_target (This);
       *ppvObject = This;
       return S_OK;
     }
@@ -308,83 +255,80 @@ idroptarget_queryinterface (LPDROPTARGET This,
 }
 
 static ULONG STDMETHODCALLTYPE
-idroptarget_release (LPDROPTARGET This)
+m_release_target (IDropTarget __RPC_FAR *This)
 {
   target_drag_context *ctx = (target_drag_context *) This;
-  GdkDragContextPrivateWin32 *private = PRIVATE_DATA (ctx->context);
-  int ref_count = --private->ref_count;
+  GdkDragContextPrivate *private = (GdkDragContextPrivate *) ctx->context;
 
+  GDK_NOTE (DND, g_print ("m_release_target\n"));
   gdk_drag_context_unref (ctx->context);
-  GDK_NOTE (DND, g_print ("idroptarget_release %#x %d\n", This, ref_count));
 
-  if (ref_count == 0)
-    g_free (This);
-
-  return ref_count;
+  if (private->ref_count == 1)
+    {
+      gdk_drag_context_unref (ctx->context);
+      return 0;
+    }
+  else
+    return private->ref_count - 1;
 }
 
 static HRESULT STDMETHODCALLTYPE 
-idroptarget_dragenter (LPDROPTARGET This,
-		       LPDATAOBJECT pDataObj,
-		       DWORD        grfKeyState,
-		       POINTL       pt,
-		       LPDWORD      pdwEffect)
+m_drag_enter (IDropTarget __RPC_FAR *This,
+	      IDataObject __RPC_FAR *pDataObj,
+	      DWORD grfKeyState,
+	      POINTL pt,
+	      DWORD __RPC_FAR *pdwEffect)
 {
-  GDK_NOTE (DND, g_print ("idroptarget_dragenter %#x\n", This));
-
+  GDK_NOTE (DND, g_print ("m_drag_enter\n"));
   return E_UNEXPECTED;
 }
 
 static HRESULT STDMETHODCALLTYPE
-idroptarget_dragover (LPDROPTARGET This,
-		      DWORD        grfKeyState,
-		      POINTL       pt,
-		      LPDWORD      pdwEffect)
+m_drag_over (IDropTarget __RPC_FAR *This,
+	     DWORD grfKeyState,
+	     POINTL pt,
+	     DWORD __RPC_FAR *pdwEffect)
 {
-  GDK_NOTE (DND, g_print ("idroptarget_dragover %#x\n", This));
-
+  GDK_NOTE (DND, g_print ("m_drag_over\n"));
   return E_UNEXPECTED;
 }
 
 static HRESULT STDMETHODCALLTYPE
-idroptarget_dragleave (LPDROPTARGET This)
+m_drag_leave (IDropTarget __RPC_FAR *This)
 {
-  GDK_NOTE (DND, g_print ("idroptarget_dragleave %#x\n", This));
-
+  GDK_NOTE (DND, g_print ("m_drag_leave\n"));
   return E_UNEXPECTED;
 }
 
 static HRESULT STDMETHODCALLTYPE
-idroptarget_drop (LPDROPTARGET This,
-		  LPDATAOBJECT pDataObj,
-		  DWORD        grfKeyState,
-		  POINTL       pt,
-		  LPDWORD      pdwEffect)
+m_drop (IDropTarget __RPC_FAR *This,
+	IDataObject __RPC_FAR *pDataObj,
+	DWORD grfKeyState,
+	POINTL pt,
+	DWORD __RPC_FAR *pdwEffect)
 {
-  GDK_NOTE (DND, g_print ("idroptarget_drop %#x\n", This));
-
+  GDK_NOTE (DND, g_print ("m_drop\n"));
   return E_UNEXPECTED;
 }
 
 static ULONG STDMETHODCALLTYPE
-idropsource_addref (LPDROPSOURCE This)
+m_add_ref_source (IDropSource __RPC_FAR *This)
 {
   source_drag_context *ctx = (source_drag_context *) This;
-  GdkDragContextPrivateWin32 *private = PRIVATE_DATA (ctx->context);
+  GdkDragContextPrivate *private = (GdkDragContextPrivate *) ctx->context;
 
+  GDK_NOTE (DND, g_print ("m_add_ref_source\n"));
   gdk_drag_context_ref (ctx->context);
-  GDK_NOTE (DND, g_print ("idropsource_addref %#x %d\n",
-			  This, private->ref_count));
   
   return private->ref_count;
 }
 
 static HRESULT STDMETHODCALLTYPE
-idropsource_queryinterface (LPDROPSOURCE This,
-			    REFIID       riid,
-			    LPVOID      *ppvObject)
+m_query_interface_source (IDropSource __RPC_FAR *This,
+			  REFIID riid,
+			  void __RPC_FAR *__RPC_FAR *ppvObject)
 {
-  GDK_NOTE (DND, g_print ("idropsource_queryinterface %#x\n", This));
+  GDK_NOTE (DND, g_print ("m_query_interface_source\n"));
 
   *ppvObject = NULL;
 
@@ -392,14 +336,14 @@ idropsource_queryinterface (LPDROPSOURCE This,
   if (IsEqualGUID (riid, &IID_IUnknown))
     {
       g_print ("...IUnknown\n");
-      idropsource_addref (This);
+      m_add_ref_source (This);
       *ppvObject = This;
       return S_OK;
     }
   else if (IsEqualGUID (riid, &IID_IDropSource))
     {
       g_print ("...IDropSource\n");
-      idropsource_addref (This);
+      m_add_ref_source (This);
       *ppvObject = This;
       return S_OK;
     }
@@ -411,368 +355,163 @@ idropsource_queryinterface (LPDROPSOURCE This,
 }
 
 static ULONG STDMETHODCALLTYPE
-idropsource_release (LPDROPSOURCE This)
+m_release_source (IDropSource __RPC_FAR *This)
 {
   source_drag_context *ctx = (source_drag_context *) This;
-  GdkDragContextPrivateWin32 *private = PRIVATE_DATA (ctx->context);
-  int ref_count = --private->ref_count;
+  GdkDragContextPrivate *private = (GdkDragContextPrivate *) ctx->context;
 
+  GDK_NOTE (DND, g_print ("m_release_source\n"));
   gdk_drag_context_unref (ctx->context);
-  GDK_NOTE (DND, g_print ("idropsource_release %#x %d\n", This, ref_count));
 
-  if (ref_count == 0)
-    g_free (This);
-
-  return ref_count;
-}
-
-static HRESULT STDMETHODCALLTYPE
-idropsource_querycontinuedrag (LPDROPSOURCE This,
-			       BOOL         fEscapePressed,
-			       DWORD        grfKeyState)
-{
-  GDK_NOTE (DND, g_print ("idropsource_querycontinuedrag %#x\n", This));
-
-  return E_UNEXPECTED;
-}
-
-static HRESULT STDMETHODCALLTYPE
-idropsource_givefeedback (LPDROPSOURCE This,
-			  DWORD        dwEffect)
-{
-  GDK_NOTE (DND, g_print ("idropsource_givefeedback %#x\n", This));
-
-  return E_UNEXPECTED;
-}
-
-static ULONG STDMETHODCALLTYPE
-idataobject_addref (LPDATAOBJECT This)
-{
-  data_object *dobj = (data_object *) This;
-  int ref_count = ++dobj->ref_count;
-
-  GDK_NOTE (DND, g_print ("idataobject_addref %#x %d\n", This, ref_count));
-
-  return ref_count;
-}
-
-static HRESULT STDMETHODCALLTYPE
-idataobject_queryinterface (LPDATAOBJECT This,
-			    REFIID       riid,
-			    LPVOID      *ppvObject)
-{
-  GDK_NOTE (DND, g_print ("idataobject_queryinterface %#x\n", This));
-
-  *ppvObject = NULL;
-
-  PRINT_GUID (riid);
-  if (IsEqualGUID (riid, &IID_IUnknown))
+  if (private->ref_count == 1)
     {
-      g_print ("...IUnknown\n");
-      idataobject_addref (This);
-      *ppvObject = This;
-      return S_OK;
-    }
-  else if (IsEqualGUID (riid, &IID_IDataObject))
-    {
-      g_print ("...IDataObject\n");
-      idataobject_addref (This);
-      *ppvObject = This;
-      return S_OK;
+      gdk_drag_context_unref (ctx->context);
+      return 0;
     }
   else
-    {
-      g_print ("...Huh?\n");
-      return E_NOINTERFACE;
-    }
+    return private->ref_count - 1;
+}
+
+static HRESULT STDMETHODCALLTYPE
+m_query_continue_drag (IDropSource __RPC_FAR *This,
+		       BOOL fEscapePressed,
+		       DWORD grfKeyState)
+{
+  GDK_NOTE (DND, g_print ("m_query_continue_drag\n"));
+  return E_UNEXPECTED;
+}
+
+static HRESULT STDMETHODCALLTYPE
+m_give_feedback (IDropSource __RPC_FAR *This,
+		 DWORD dwEffect)
+{
+  GDK_NOTE (DND, g_print ("m_give_feedback\n"));
+  return E_UNEXPECTED;
+}
+
+static HRESULT STDMETHODCALLTYPE
+m_query_interface_object (IDataObject __RPC_FAR *This,
+			  REFIID riid,
+			  void __RPC_FAR *__RPC_FAR *ppvObject)
+{
+  return E_UNEXPECTED;
 }
 
 static ULONG STDMETHODCALLTYPE
-idataobject_release (LPDATAOBJECT This)
+m_add_ref_object (IDataObject __RPC_FAR *This)
 {
-  data_object *dobj = (data_object *) This;
-  int ref_count = --dobj->ref_count;
-
-  GDK_NOTE (DND, g_print ("idataobject_release %#x %d\n", This, ref_count));
-
-  if (ref_count == 0)
-    g_free (This);
-
-  return ref_count;
+  return E_UNEXPECTED;
 }
 
-static HRESULT STDMETHODCALLTYPE
-idataobject_getdata (LPDATAOBJECT This,
-		     LPFORMATETC  pFormatEtc,
-		     LPSTGMEDIUM  pMedium)
+static ULONG STDMETHODCALLTYPE
+m_release_object (IDataObject __RPC_FAR *This)
 {
-  GDK_NOTE (DND, g_print ("idataobject_getdata %#x\n", This));
-
   return E_UNEXPECTED;
 }
 
 static HRESULT STDMETHODCALLTYPE
-idataobject_getdatahere (LPDATAOBJECT This,
-			 LPFORMATETC  pFormatEtc,
-			 LPSTGMEDIUM  pMedium)
+m_get_data (IDataObject __RPC_FAR *This,
+	    FORMATETC *pFormatEtc,
+	    STGMEDIUM *pMedium)
 {
-  GDK_NOTE (DND, g_print ("idataobject_getdatahere %#x\n", This));
-
   return E_UNEXPECTED;
 }
 
 static HRESULT STDMETHODCALLTYPE
-idataobject_querygetdata (LPDATAOBJECT This,
-			  LPFORMATETC  pFormatEtc)
+m_get_data_here (IDataObject __RPC_FAR *This,
+		 FORMATETC *pFormatEtc,
+		 STGMEDIUM *pMedium)
 {
-  int i;
-
-  GDK_NOTE (DND, g_print ("idataobject_querygetdata %#x %#x", This, pFormatEtc->cfFormat));
-
-  for (i = 0; i < nformats; i++)
-    if (pFormatEtc->cfFormat == formats[i].cfFormat)
-      {
-	GDK_NOTE (DND, g_print (" S_OK\n"));
-	return S_OK;
-      }
-
-  GDK_NOTE (DND, g_print (" DV_E_FORMATETC\n"));
-  return DV_E_FORMATETC;
-}
-
-static HRESULT STDMETHODCALLTYPE
-idataobject_getcanonicalformatetc (LPDATAOBJECT This,
-				   LPFORMATETC  pFormatEtcIn,
-				   LPFORMATETC  pFormatEtcOut)
-{
-  GDK_NOTE (DND, g_print ("idataobject_getcanonicalformatetc %#x\n", This));
-
-  return E_FAIL;
-}
-
-static HRESULT STDMETHODCALLTYPE
-idataobject_setdata (LPDATAOBJECT This,
-		     LPFORMATETC  pFormatEtc,
-		     LPSTGMEDIUM  pMedium,
-		     BOOL         fRelease)
-{
-  GDK_NOTE (DND, g_print ("idataobject_setdata %#x\n", This));
-
   return E_UNEXPECTED;
 }
 
 static HRESULT STDMETHODCALLTYPE
-idataobject_enumformatetc (LPDATAOBJECT     This,
-			   DWORD            dwDirection,
-			   LPENUMFORMATETC *ppEnumFormatEtc)
+m_query_get_data (IDataObject __RPC_FAR *This,
+		  FORMATETC *pFormatEtc)
 {
-  GDK_NOTE (DND, g_print ("idataobject_enumformatetc %#x\n", This));
-
-  if (dwDirection != DATADIR_GET)
-    return E_NOTIMPL;
-
-  *ppEnumFormatEtc = &enum_formats_new ()->ief;
-  return S_OK;
+  return E_UNEXPECTED;
 }
 
 static HRESULT STDMETHODCALLTYPE
-idataobject_dadvise (LPDATAOBJECT This,
-		     LPFORMATETC  pFormatetc,
-		     DWORD        advf,
-		     LPADVISESINK pAdvSink,
-		     DWORD       *pdwConnection)
+m_get_canonical_format_etc (IDataObject __RPC_FAR *This,
+			    FORMATETC *pFormatEtcIn,
+			    FORMATETC *pFormatEtcOut)
 {
-  GDK_NOTE (DND, g_print ("idataobject_dadvise %#x\n", This));
-
-  return E_FAIL;
+  return E_UNEXPECTED;
 }
 
 static HRESULT STDMETHODCALLTYPE
-idataobject_dunadvise (LPDATAOBJECT This,
-		       DWORD         dwConnection)
+m_set_data (IDataObject __RPC_FAR *This,
+	    FORMATETC *pFormatEtc,
+	    STGMEDIUM *pMedium,
+	    BOOL fRelease)
 {
-  GDK_NOTE (DND, g_print ("idataobject_dunadvise %#x\n", This));
-
-  return E_FAIL;
+  return E_UNEXPECTED;
 }
 
 static HRESULT STDMETHODCALLTYPE
-idataobject_enumdadvise (LPDATAOBJECT    This,
-			 LPENUMSTATDATA *ppenumAdvise)
+m_enum_format_etc (IDataObject __RPC_FAR *This,
+		   DWORD dwDirection,
+		   IEnumFORMATETC **ppEnumFormatEtc)
 {
-  GDK_NOTE (DND, g_print ("idataobject_enumdadvise %#x\n", This));
+  return E_UNEXPECTED;
+}
 
-  return E_FAIL;
+static HRESULT STDMETHODCALLTYPE
+ m_d_advise (IDataObject __RPC_FAR *This,
+	     FORMATETC *pFormatetc,
+	     DWORD advf,
+	     IAdviseSink *pAdvSink,
+	     DWORD *pdwConnection)
+{
+  return E_UNEXPECTED;
+}
+
+static HRESULT STDMETHODCALLTYPE
+ m_d_unadvise (IDataObject __RPC_FAR *This,
+	       DWORD dwConnection)
+{
+  return E_UNEXPECTED;
+}
+
+static HRESULT STDMETHODCALLTYPE
+m_enum_d_advise (IDataObject __RPC_FAR *This,
+		 IEnumSTATDATA **ppenumAdvise)
+{
+  return E_UNEXPECTED;
 }
 		
-static ULONG STDMETHODCALLTYPE
-ienumformatetc_addref (LPENUMFORMATETC This)
-{
-  enum_formats *en = (enum_formats *) This;
-  int ref_count = ++en->ref_count;
-
-  GDK_NOTE (DND, g_print ("ienumformatetc_addref %#x %d\n", This, ref_count));
-
-  return ref_count;
-}
-
-static HRESULT STDMETHODCALLTYPE
-ienumformatetc_queryinterface (LPENUMFORMATETC This,
-			       REFIID          riid,
-			       LPVOID         *ppvObject)
-{
-  GDK_NOTE (DND, g_print ("ienumformatetc_queryinterface %#x\n", This));
-
-  *ppvObject = NULL;
-
-  PRINT_GUID (riid);
-  if (IsEqualGUID (riid, &IID_IUnknown))
-    {
-      g_print ("...IUnknown\n");
-      ienumformatetc_addref (This);
-      *ppvObject = This;
-      return S_OK;
-    }
-  else if (IsEqualGUID (riid, &IID_IEnumFORMATETC))
-    {
-      g_print ("...IEnumFORMATETC\n");
-      ienumformatetc_addref (This);
-      *ppvObject = This;
-      return S_OK;
-    }
-  else
-    {
-      g_print ("...Huh?\n");
-      return E_NOINTERFACE;
-    }
-}
-
-static ULONG STDMETHODCALLTYPE
-ienumformatetc_release (LPENUMFORMATETC This)
-{
-  enum_formats *en = (enum_formats *) This;
-  int ref_count = --en->ref_count;
-
-  GDK_NOTE (DND, g_print ("ienumformatetc_release %#x %d\n", This, ref_count));
-
-  if (ref_count == 0)
-    g_free (This);
-
-  return ref_count;
-}
-
-static HRESULT STDMETHODCALLTYPE
-ienumformatetc_next (LPENUMFORMATETC This,
-		     ULONG	     celt,
-		     LPFORMATETC     elts,
-		     ULONG	    *nelt)
-{
-  enum_formats *en = (enum_formats *) This;
-  int i, n;
-
-  GDK_NOTE (DND, g_print ("ienumformatetc_next %#x %d %d\n", This, en->ix, celt));
-
-  n = 0;
-  for (i = 0; i < celt; i++)
-    {
-      if (en->ix >= nformats)
-	break;
-      elts[i] = formats[en->ix++];
-      n++;
-    }
-
-  if (nelt != NULL)
-    *nelt = n;
-
-  if (n == celt)
-    return S_OK;
-  else
-    return S_FALSE;
-}
-
-static HRESULT STDMETHODCALLTYPE
-ienumformatetc_skip (LPENUMFORMATETC This,
-		     ULONG	     celt)
-{
-  enum_formats *en = (enum_formats *) This;
-
-  GDK_NOTE (DND, g_print ("ienumformatetc_skip %#x %d %d\n", This, en->ix, celt));
-  en->ix += celt;
-
-  return S_OK;
-}
-
-static HRESULT STDMETHODCALLTYPE
-ienumformatetc_reset (LPENUMFORMATETC This)
-{
-  enum_formats *en = (enum_formats *) This;
-
-  GDK_NOTE (DND, g_print ("ienumformatetc_reset %#x\n", This));
-
-  en->ix = 0;
-
-  return S_OK;
-}
-
-static HRESULT STDMETHODCALLTYPE
-ienumformatetc_clone (LPENUMFORMATETC  This,
-		      LPENUMFORMATETC *ppEnumFormatEtc)
-{
-  enum_formats *en = (enum_formats *) This;
-  enum_formats *new;
-
-  GDK_NOTE (DND, g_print ("ienumformatetc_clone %#x\n", This));
-
-  new = enum_formats_new ();
-
-  new->ix = en->ix;
-
-  *ppEnumFormatEtc = &new->ief;
-
-  return S_OK;
-}
-
 static IDropTargetVtbl idt_vtbl = {
-  idroptarget_queryinterface,
-  idroptarget_addref,
-  idroptarget_release,
-  idroptarget_dragenter,
-  idroptarget_dragover,
-  idroptarget_dragleave,
-  idroptarget_drop
+  m_query_interface_target,
+  m_add_ref_target,
+  m_release_target,
+  m_drag_enter,
+  m_drag_over,
+  m_drag_leave,
+  m_drop
 };
 
 static IDropSourceVtbl ids_vtbl = {
-  idropsource_queryinterface,
-  idropsource_addref,
-  idropsource_release,
-  idropsource_querycontinuedrag,
-  idropsource_givefeedback
+  m_query_interface_source,
+  m_add_ref_source,
+  m_release_source,
+  m_query_continue_drag,
+  m_give_feedback
 };
 
 static IDataObjectVtbl ido_vtbl = {
-  idataobject_queryinterface,
-  idataobject_addref,
-  idataobject_release,
-  idataobject_getdata,
-  idataobject_getdatahere,
-  idataobject_querygetdata,
-  idataobject_getcanonicalformatetc,
-  idataobject_setdata,
-  idataobject_enumformatetc,
-  idataobject_dadvise,
-  idataobject_dunadvise,
-  idataobject_enumdadvise
-};
-
-static IEnumFORMATETCVtbl ief_vtbl = {
-  ienumformatetc_queryinterface,
-  ienumformatetc_addref,
-  ienumformatetc_release,
-  ienumformatetc_next,
-  ienumformatetc_skip,
-  ienumformatetc_reset,
-  ienumformatetc_clone
+  m_query_interface_object,
+  m_add_ref_object,
+  m_release_object,
+  m_get_data,
+  m_get_data_here,
+  m_query_get_data,
+  m_get_canonical_format_etc,
+  m_set_data,
+  m_enum_format_etc,
+  m_d_advise,
+  m_d_unadvise,
+  m_enum_d_advise
 };
 
 #endif /* OLE2_DND */
@@ -789,9 +528,6 @@ target_context_new (void)
 #endif
 
   result->context = gdk_drag_context_new ();
-  result->context->is_source = FALSE;
-
-  GDK_NOTE (DND, g_print ("target_context_new: %p\n", result));
 
   return result;
 }
@@ -808,47 +544,11 @@ source_context_new (void)
 #endif
 
   result->context = gdk_drag_context_new ();
-  result->context->is_source = TRUE;
-
-  GDK_NOTE (DND, g_print ("source_context_new: %p\n", result));
 
   return result;
 }
 
-#ifdef OLE2_DND
-static data_object *
-data_object_new (void)
-{
-  data_object *result;
-
-  result = g_new0 (data_object, 1);
-
-  result->ido.lpVtbl = &ido_vtbl;
-  result->ref_count = 1;
-
-  GDK_NOTE (DND, g_print ("data_object_new: %#x\n", result));
-
-  return result;
-}
-
-
-static enum_formats *
-enum_formats_new (void)
-{
-  enum_formats *result;
-
-  result = g_new0 (enum_formats, 1);
-
-  result->ief.lpVtbl = &ief_vtbl;
-  result->ref_count = 1;
-  result->ix = 0;
-
-  GDK_NOTE (DND, g_print ("enum_formats_new: %#x\n", result));
-
-  return result;
-}
-
-#endif
+#ifdef _MSC_VER
 
 /* From MS Knowledge Base article Q130698 */
 
@@ -862,10 +562,10 @@ enum_formats_new (void)
  */
 
 static HRESULT 
-resolve_link(HWND    hWnd,
+resolve_link(HWND hWnd,
 	     LPCTSTR lpszLinkName,
-	     LPSTR   lpszPath,
-	     LPSTR   lpszDescription)
+	     LPSTR lpszPath,
+	     LPSTR lpszDescription)
 {
   HRESULT hres;
   IShellLink *psl;
@@ -939,19 +639,25 @@ resolve_link(HWND    hWnd,
   return SUCCEEDED (hres);
 }
 
+#else
+
+#define resolve_link(hWnd, lpszLinkName, lpszPath, lpszDescription) FALSE
+
+#endif
+
 static GdkFilterReturn
 gdk_dropfiles_filter (GdkXEvent *xev,
 		      GdkEvent  *event,
 		      gpointer   data)
 {
   GdkDragContext *context;
-  GdkDragContextPrivateWin32 *private;
+  GdkDragContextPrivate *private;
   static GdkAtom text_uri_list_atom = GDK_NONE;
   GString *result;
   MSG *msg = (MSG *) xev;
   HANDLE hdrop;
   POINT pt;
-  gint nfiles, i;
+  gint nfiles, i, k;
   guchar fileName[MAX_PATH], linkedFile[MAX_PATH];
   
   if (text_uri_list_atom == GDK_NONE)
@@ -959,15 +665,15 @@ gdk_dropfiles_filter (GdkXEvent *xev,
 
   if (msg->message == WM_DROPFILES)
     {
-      GDK_NOTE (DND, g_print ("WM_DROPFILES: %#x\n", (guint) msg->hwnd));
+      GDK_NOTE (DND, g_print ("WM_DROPFILES: %#x\n", msg->hwnd));
 
       context = gdk_drag_context_new ();
-      private = PRIVATE_DATA (context);
+      private = (GdkDragContextPrivate *) context;
       context->protocol = GDK_DRAG_PROTO_WIN32_DROPFILES;
       context->is_source = FALSE;
       context->source_window = gdk_parent_root;
       context->dest_window = event->any.window;
-      gdk_drawable_ref (context->dest_window);
+      gdk_window_ref (context->dest_window);
       /* WM_DROPFILES drops are always file names */
       context->targets =
 	g_list_append (NULL, GUINT_TO_POINTER (text_uri_list_atom));
@@ -1025,27 +731,12 @@ gdk_dropfiles_filter (GdkXEvent *xev,
 void
 gdk_dnd_init (void)
 {
-#ifdef OLE2_DND
   HRESULT hres;
+#ifdef OLE2_DND
   hres = OleInitialize (NULL);
 
   if (! SUCCEEDED (hres))
     g_error ("OleInitialize failed");
-
-  nformats = 2;
-  formats = g_new (FORMATETC, nformats);
-
-  formats[0].cfFormat = CF_TEXT;
-  formats[0].ptd = NULL;
-  formats[0].dwAspect = DVASPECT_CONTENT;
-  formats[0].lindex = -1;
-  formats[0].tymed = TYMED_HGLOBAL;
-  
-  formats[1].cfFormat = CF_GDIOBJFIRST;
-  formats[1].ptd = NULL;
-  formats[1].dwAspect = DVASPECT_CONTENT;
-  formats[1].lindex = -1;
-  formats[1].tymed = TYMED_HGLOBAL;
 #endif
 }      
 
@@ -1060,42 +751,32 @@ gdk_win32_dnd_exit (void)
 /* Source side */
 
 static void
-gdk_drag_do_leave (GdkDragContext *context,
-		   guint32         time)
+gdk_drag_do_leave (GdkDragContext *context, guint32 time)
 {
   if (context->dest_window)
     {
       GDK_NOTE (DND, g_print ("gdk_drag_do_leave\n"));
-      gdk_drawable_unref (context->dest_window);
+      gdk_window_unref (context->dest_window);
       context->dest_window = NULL;
     }
 }
 
 GdkDragContext * 
-gdk_drag_begin (GdkWindow *window,
-		GList     *targets)
+gdk_drag_begin (GdkWindow     *window,
+		GList         *targets)
 {
-  source_drag_context *ctx;
-#ifdef OLE2_DND
   GList *tmp_list;
-  data_object *dobj;
-  HRESULT hResult;
-  DWORD dwEffect;
-  HGLOBAL global;
-  FORMATETC format;
-  STGMEDIUM medium;
-#endif
-
+  source_drag_context *ctx;
+  
   g_return_val_if_fail (window != NULL, NULL);
 
   GDK_NOTE (DND, g_print ("gdk_drag_begin\n"));
 
   ctx = source_context_new ();
-  ctx->context->protocol = GDK_DRAG_PROTO_OLE2;
+  ctx->context->is_source = TRUE;
   ctx->context->source_window = window;
-  gdk_drawable_ref (window);
+  gdk_window_ref (window);
 
-#ifdef OLE2_DND
   tmp_list = g_list_last (targets);
   ctx->context->targets = NULL;
   while (tmp_list)
@@ -1107,28 +788,8 @@ gdk_drag_begin (GdkWindow *window,
 
   ctx->context->actions = 0;
 
-  dobj = data_object_new ();
-
-  global = GlobalAlloc (GMEM_FIXED, sizeof (ctx));
-
-  memcpy (&global, ctx, sizeof (ctx));
-
-  medium.tymed = TYMED_HGLOBAL;
-  medium.hGlobal = global;
-  medium.pUnkForRelease = NULL;
-
-  dobj->ido.lpVtbl->SetData (&dobj->ido, &formats[1], &medium, TRUE);
-
-  hResult = DoDragDrop (&dobj->ido, &ctx->ids, DROPEFFECT_MOVE|DROPEFFECT_COPY, &dwEffect);
-
-  GDK_NOTE (DND, g_print ("DoDragDrop returned %s\n",
-			  (hResult == DRAGDROP_S_DROP ? "DRAGDROP_S_DROP" :
-			   (hResult == DRAGDROP_S_CANCEL ? "DRAGDROP_S_CANCEL" :
-			    (hResult == E_UNEXPECTED ? "E_UNEXPECTED" :
-			     g_strdup_printf ("%#.8x", hResult))))));
-
-  dobj->ido.lpVtbl->Release (&dobj->ido);
-  ctx->ids.lpVtbl->Release (&ctx->ids);
+#if 0
+  DoDragDrop (...);
 #endif
   return ctx->context;
 }
@@ -1149,11 +810,13 @@ gdk_drag_find_window (GdkDragContext  *context,
 		      GdkWindow      **dest_window,
 		      GdkDragProtocol *protocol)
 {
+  GdkDragContextPrivate *private = (GdkDragContextPrivate *)context;
+  GdkDrawablePrivate *drag_window_private = (GdkDrawablePrivate*) drag_window;
   HWND recipient;
   POINT pt;
 
   GDK_NOTE (DND, g_print ("gdk_drag_find_window: %#x +%d+%d\n",
-			  (drag_window ? (guint) GDK_WINDOW_HWND (drag_window) : 0),
+			  (drag_window ? GDK_DRAWABLE_XID (drag_window) : 0),
 			  x_root, y_root));
 
   pt.x = x_root;
@@ -1163,9 +826,9 @@ gdk_drag_find_window (GdkDragContext  *context,
     *dest_window = NULL;
   else
     {
-      *dest_window = gdk_win32_handle_table_lookup (GPOINTER_TO_UINT(recipient));
+      *dest_window = gdk_window_lookup (recipient);
       if (*dest_window)
-	gdk_drawable_ref (*dest_window);
+	gdk_window_ref (*dest_window);
       *protocol = GDK_DRAG_PROTO_WIN32_DROPFILES;
     }
 }
@@ -1180,8 +843,6 @@ gdk_drag_motion (GdkDragContext *context,
 		 GdkDragAction   possible_actions,
 		 guint32         time)
 {
-  GDK_NOTE (DND, g_print ("gdk_drag_motion\n"));
-
   return FALSE;
 }
 
@@ -1191,7 +852,7 @@ gdk_drag_drop (GdkDragContext *context,
 {
   g_return_if_fail (context != NULL);
 
-  GDK_NOTE (DND, g_print ("gdk_drag_drop\n"));
+  g_warning ("gdk_drag_drop: not implemented\n");
 }
 
 void
@@ -1200,44 +861,39 @@ gdk_drag_abort (GdkDragContext *context,
 {
   g_return_if_fail (context != NULL);
 
-  GDK_NOTE (DND, g_print ("gdk_drag_abort\n"));
-
   gdk_drag_do_leave (context, time);
 }
 
 /* Destination side */
 
 void
-gdk_drag_status (GdkDragContext *context,
-		 GdkDragAction   action,
-		 guint32         time)
+gdk_drag_status (GdkDragContext   *context,
+		 GdkDragAction     action,
+		 guint32           time)
 {
   GDK_NOTE (DND, g_print ("gdk_drag_status\n"));
 }
 
 void 
-gdk_drop_reply (GdkDragContext *context,
-		gboolean        ok,
-		guint32         time)
+gdk_drop_reply (GdkDragContext   *context,
+		gboolean          ok,
+		guint32           time)
 {
-  GDK_NOTE (DND, g_print ("gdk_drop_reply\n"));
 }
 
 void
-gdk_drop_finish (GdkDragContext *context,
-		 gboolean        success,
-		 guint32         time)
+gdk_drop_finish (GdkDragContext   *context,
+		 gboolean          success,
+		 guint32           time)
 {
-  GDK_NOTE (DND, g_print ("gdk_drop_finish\n"));
 }
-
-#ifdef OLE2_DND
 
 static GdkFilterReturn
 gdk_destroy_filter (GdkXEvent *xev,
 		    GdkEvent  *event,
 		    gpointer   data)
 {
+#ifdef OLE2_DND
   MSG *msg = (MSG *) xev;
 
   if (msg->message == WM_DESTROY)
@@ -1245,28 +901,25 @@ gdk_destroy_filter (GdkXEvent *xev,
       IDropTarget *idtp = (IDropTarget *) data;
 
       GDK_NOTE (DND, g_print ("gdk_destroy_filter: WM_DESTROY: %#x\n", msg->hwnd));
-#if 0
-      idtp->lpVtbl->Release (idtp);
-#endif
       RevokeDragDrop (msg->hwnd);
       CoLockObjectExternal (idtp, FALSE, TRUE);
     }
+#endif
   return GDK_FILTER_CONTINUE;
 }
-#endif
 
 void
-gdk_window_register_dnd (GdkWindow *window)
+gdk_window_register_dnd (GdkWindow      *window)
 {
 #ifdef OLE2_DND
-  target_drag_context *ctx;
+  target_drag_context *context;
   HRESULT hres;
 #endif
 
   g_return_if_fail (window != NULL);
 
   GDK_NOTE (DND, g_print ("gdk_window_register_dnd: %#x\n",
-			  (guint) GDK_WINDOW_HWND (window)));
+			  GDK_DRAWABLE_XID (window)));
 
   /* We always claim to accept dropped files, but in fact we might not,
    * of course. This function is called in such a way that it cannot know
@@ -1274,31 +927,27 @@ gdk_window_register_dnd (GdkWindow *window)
    * (in gtk, data of type text/uri-list) or not.
    */
   gdk_window_add_filter (window, gdk_dropfiles_filter, NULL);
-  DragAcceptFiles (GDK_WINDOW_HWND (window), TRUE);
+  DragAcceptFiles (GDK_DRAWABLE_XID (window), TRUE);
 
 #ifdef OLE2_DND
   /* Register for OLE2 d&d */
-  ctx = target_context_new ();
-  ctx->context->protocol = GDK_DRAG_PROTO_OLE2;
-  hres = CoLockObjectExternal ((IUnknown *) &ctx->idt, TRUE, FALSE);
+  context = target_context_new ();
+  hres = CoLockObjectExternal ((IUnknown *) &context->idt, TRUE, FALSE);
   if (!SUCCEEDED (hres))
     OTHER_API_FAILED ("CoLockObjectExternal");
   else
     {
-      hres = RegisterDragDrop (GDK_WINDOW_HWND (window), &ctx->idt);
+      hres = RegisterDragDrop (GDK_DRAWABLE_XID (window), &context->idt);
       if (hres == DRAGDROP_E_ALREADYREGISTERED)
 	{
 	  g_print ("DRAGDROP_E_ALREADYREGISTERED\n");
-#if 0
-	  ctx->idt.lpVtbl->Release (&ctx->idt);
-#endif
-	  CoLockObjectExternal ((IUnknown *) &ctx->idt, FALSE, FALSE);
+	  CoLockObjectExternal ((IUnknown *) &context->idt, FALSE, FALSE);
 	}
       else if (!SUCCEEDED (hres))
 	OTHER_API_FAILED ("RegisterDragDrop");
       else
 	{
-	  gdk_window_add_filter (window, gdk_destroy_filter, &ctx->idt);
+	  gdk_window_add_filter (window, gdk_destroy_filter, &context->idt);
 	}
     }
 #endif

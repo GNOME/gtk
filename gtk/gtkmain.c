@@ -2,23 +2,23 @@
  * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
  *
  * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
+ * modify it under the terms of the GNU Library General Public
  * License as published by the Free Software Foundation; either
  * version 2 of the License, or (at your option) any later version.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	 See the GNU
- * Lesser General Public License for more details.
+ * Library General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public
+ * You should have received a copy of the GNU Library General Public
  * License along with this library; if not, write to the
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
  * Boston, MA 02111-1307, USA.
  */
 
 /*
- * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
+ * Modified by the GTK+ Team and others 1997-1999.  See the AUTHORS
  * file for a list of people on the GTK+ Team.  See the ChangeLog
  * files for a list of changes.  These files are distributed with
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
@@ -29,21 +29,25 @@
 #else
 #include <locale.h>
 #endif
-
-#ifdef HAVE_BIND_TEXTDOMAIN_CODESET
-#include <libintl.h>
-#endif
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <gmodule.h>
+#include "gtkbutton.h"
 #include "gtkdnd.h"
 #include "gtkcompat.h"
+#include "gtkhscrollbar.h"
+#include "gtkhseparator.h"
 #include "gtkmain.h"
+#include "gtkpreview.h"
 #include "gtkrc.h"
+#include "gtkscrolledwindow.h"
 #include "gtkselection.h"
 #include "gtksignal.h"
+#include "gtktable.h"
+#include "gtktext.h"
+#include "gtkvbox.h"
+#include "gtkvscrollbar.h"
 #include "gtkwidget.h"
 #include "gtkwindow.h"
 #include "gtkprivate.h"
@@ -146,8 +150,7 @@ static const GDebugKey gtk_debug_keys[] = {
   {"misc", GTK_DEBUG_MISC},
   {"signals", GTK_DEBUG_SIGNALS},
   {"dnd", GTK_DEBUG_DND},
-  {"plugsocket", GTK_DEBUG_PLUGSOCKET},
-  {"text", GTK_DEBUG_TEXT}
+  {"plugsocket", GTK_DEBUG_PLUGSOCKET}
 };
 
 static const guint gtk_ndebug_keys = sizeof (gtk_debug_keys) / sizeof (GDebugKey);
@@ -190,12 +193,11 @@ static gchar *add_dll_suffix(gchar *module_name)
 }
 #endif
 
-#undef gtk_init_check
-
 gboolean
 gtk_init_check (int	 *argc,
 		char   ***argv)
 {
+  extern void gtk_object_post_arg_parsing_init (void);
   GSList *gtk_modules = NULL;
   GSList *slist;
   gchar *env_string = NULL;
@@ -388,7 +390,7 @@ gtk_init_check (int	 *argc,
 	}
       if (!modinit_func)
 	{
-	  g_message ("Failed to load module \"%s\": %s",
+	  g_warning ("Failed to load module \"%s\": %s",
 		     module ? g_module_name (module) : module_name,
 		     g_module_error ());
 	  if (module)
@@ -398,36 +400,19 @@ gtk_init_check (int	 *argc,
     }
 
 #ifdef ENABLE_NLS
-#  ifndef G_OS_WIN32
-  bindtextdomain(GETTEXT_PACKAGE, GTK_LOCALEDIR);
-#    ifdef HAVE_BIND_TEXTDOMAIN_CODESET
-  bind_textdomain_codeset(GETTEXT_PACKAGE, "UTF-8");
-#    endif
-#  else /* !G_OS_WIN32 */
+#ifndef G_OS_WIN32
+  bindtextdomain("gtk+", GTK_LOCALEDIR);
+#else
   {
     /* GTk+ locale dir is %WinDir%\gtk+\locale */
-    bindtextdomain (GETTEXT_PACKAGE,
-		    g_strconcat (gtk_win32_get_installation_directory (),
-				 G_DIR_SEPARATOR_S,
-				 "locale",
-				 NULL));
+    extern char *get_gtk_sysconf_directory ();
+    bindtextdomain ("gtk+", g_strconcat (get_gtk_sysconf_directory (),
+					 G_DIR_SEPARATOR_S,
+					 "locale",
+					 NULL));
   }
 #endif
 #endif  
-
-  {
-  /* Translate to default:RTL if you want your widgets
-   * to be RTL, otherwise translate to default:LTR.
-   * Do *not* translate it to "predefinito:LTR", if it
-   * it isn't default:LTR or default:RTL it will not work 
-   */
-    char *e = _("default:LTR");
-    if (strcmp (e, "default:RTL")==0) {
-      gtk_widget_set_default_direction (GTK_TEXT_DIR_RTL);
-    } else if (strcmp (e, "default:LTR")) {
-      g_warning ("Whoever translated default:LTR did so wrongly.\n");
-    }
-  }
 
   /* Initialize the default visual and colormap to be
    *  used in creating widgets. (We want to use the system
@@ -437,6 +422,7 @@ gtk_init_check (int	 *argc,
   gtk_colormap = gdk_colormap_get_system ();
 
   gtk_type_init ();
+  gtk_object_post_arg_parsing_init ();
   gtk_signal_init ();
   gtk_rc_init ();
   
@@ -465,7 +451,7 @@ gtk_init_check (int	 *argc,
   
 #ifndef G_OS_WIN32
   /* No use warning on Win32, there aren't any non-devel versions anyhow... */
-  g_message (""              "YOU ARE USING THE DEVEL BRANCH 1.3.x OF GTK+ WHICH IS CURRENTLY\n"
+  g_warning (""              "YOU ARE USING THE DEVEL BRANCH 1.3.x OF GTK+ WHICH IS CURRENTLY\n"
 	     "                UNDER HEAVY DEVELOPMENT AND FREQUENTLY INTRODUCES INSTABILITIES.\n"
 	     "                if you don't know why you are getting this, you probably want to\n"
 	     "                use the stable branch which can be retrived from\n"
@@ -475,9 +461,6 @@ gtk_init_check (int	 *argc,
 
   return TRUE;
 }
-
-#undef gtk_init
-
 void
 gtk_init (int *argc, char ***argv)
 {
@@ -487,38 +470,6 @@ gtk_init (int *argc, char ***argv)
       exit(1);
     }
 }
-
-#ifdef G_OS_WIN32
-
-static void
-check_sizeof_GtkWindow (size_t sizeof_GtkWindow)
-{
-  if (sizeof_GtkWindow != sizeof (GtkWindow))
-    g_error ("Incompatible build!\n"
-	     "The code using GTK+ thinks GtkWindow is of different\n"
-             "size than it actually is in this build of GTK+.\n"
-	     "On Windows, this probably means that you have compiled\n"
-	     "your code with gcc without the -fnative-struct switch.");
-}
-
-/* These two functions might get more checks added later, thus pass
- * in the number of extra args.
- */
-void
-gtk_init_abi_check (int *argc, char ***argv, int num_checks, size_t sizeof_GtkWindow)
-{
-  check_sizeof_GtkWindow (sizeof_GtkWindow);
-  gtk_init (argc, argv);
-}
-
-gboolean
-gtk_init_check_abi_check (int *argc, char ***argv, int num_checks, size_t sizeof_GtkWindow)
-{
-  check_sizeof_GtkWindow (sizeof_GtkWindow);
-  return gtk_init_check (argc, argv);
-}
-
-#endif
 
 void
 gtk_exit (gint errorcode)
@@ -535,23 +486,6 @@ gchar*
 gtk_set_locale (void)
 {
   return gdk_set_locale ();
-}
-
-gchar*
-gtk_get_default_language (void)
-{
-  gchar *lang;
-  gchar *p;
-  
-  lang = g_strdup (setlocale (LC_CTYPE, NULL));
-  p = strchr (lang, '.');
-  if (p)
-    *p = '\0';
-  p = strchr (lang, '@');
-  if (p)
-    *p = '\0';
-
-  return lang;
 }
 
 void
@@ -808,17 +742,8 @@ gtk_main_do_event (GdkEvent *event)
 	}
       break;
       
-    case GDK_EXPOSE:
-      if (event->any.window && GTK_WIDGET_DOUBLE_BUFFERED (event_widget))
-	gdk_window_begin_paint_rect (event->any.window, &event->expose.area);
-
-      gtk_widget_event (event_widget, event);
-
-      if (event->any.window && GTK_WIDGET_DOUBLE_BUFFERED (event_widget))
-	gdk_window_end_paint (event->any.window);
-      break;
-
     case GDK_PROPERTY_NOTIFY:
+    case GDK_EXPOSE:
     case GDK_NO_EXPOSE:
     case GDK_FOCUS_CHANGE:
     case GDK_CONFIGURE:
@@ -1305,26 +1230,9 @@ GdkEvent*
 gtk_get_current_event (void)
 {
   if (current_events)
-    return gdk_event_copy (current_events->data);
+    return gdk_event_copy ((GdkEvent *) current_events->data);
   else
     return NULL;
-}
-
-/**
- * gtk_get_current_event_time:
- * 
- * If there is a current event and it has a timestamp, return that
- * timestamp, otherwise return %GDK_CURRENT_TIME.
- * 
- * Return value: the timestamp from the current event, or %GDK_CURRENT_TIME.
- **/
-guint32
-gtk_get_current_event_time (void)
-{
-  if (current_events)
-    return gdk_event_get_time (current_events->data);
-  else
-    return GDK_CURRENT_TIME;
 }
 
 GtkWidget*
@@ -1345,6 +1253,7 @@ gtk_exit_func (void)
   if (gtk_initialized)
     {
       gtk_initialized = FALSE;
+      gtk_preview_uninit ();
     }
 }
 

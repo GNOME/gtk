@@ -114,9 +114,7 @@ This is a deprecated macro, and is only maintained for compatability reasons.
 
 <!-- ##### FUNCTION gtk_toggle_button_toggled ##### -->
 <para>
-Emits the <link linkend="GtkToggleButton-toggled">toggled</link>
-signal on the #GtkToggleButton. There is no good reason for an
-application ever to call this function.
+Changes the state of the toggle button.
 </para>
 
 @toggle_button: a #GtkToggleButton.

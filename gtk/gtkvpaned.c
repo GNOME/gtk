@@ -2,23 +2,23 @@
  * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
  *
  * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
+ * modify it under the terms of the GNU Library General Public
  * License as published by the Free Software Foundation; either
  * version 2 of the License, or (at your option) any later version.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
+ * Library General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public
+ * You should have received a copy of the GNU Library General Public
  * License along with this library; if not, write to the
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
  * Boston, MA 02111-1307, USA.
  */
 
 /*
- * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
+ * Modified by the GTK+ Team and others 1997-1999.  See the AUTHORS
  * file for a list of people on the GTK+ Team.  See the ChangeLog
  * files for a list of changes.  These files are distributed with
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
@@ -32,8 +32,8 @@ static void     gtk_vpaned_size_request   (GtkWidget      *widget,
 					   GtkRequisition *requisition);
 static void     gtk_vpaned_size_allocate  (GtkWidget      *widget,
 					   GtkAllocation  *allocation);
-static gint     gtk_vpaned_expose         (GtkWidget      *widget,
-                                           GdkEventExpose *expose);
+static void     gtk_vpaned_draw           (GtkWidget      *widget,
+					   GdkRectangle   *area);
 static void     gtk_vpaned_xor_line       (GtkPaned       *paned);
 static gboolean gtk_vpaned_button_press   (GtkWidget      *widget,
 					   GdkEventButton *event);
@@ -41,8 +41,6 @@ static gboolean gtk_vpaned_button_release (GtkWidget      *widget,
 					   GdkEventButton *event);
 static gboolean gtk_vpaned_motion         (GtkWidget      *widget,
 					   GdkEventMotion *event);
-
-static gpointer parent_class;
 
 GtkType
 gtk_vpaned_get_type (void)
@@ -63,7 +61,7 @@ gtk_vpaned_get_type (void)
 	(GtkClassInitFunc) NULL,
       };
 
-      vpaned_type = gtk_type_unique (GTK_TYPE_PANED, &vpaned_info);
+      vpaned_type = gtk_type_unique(gtk_paned_get_type(), &vpaned_info);
     }
 
   return vpaned_type;
@@ -74,13 +72,11 @@ gtk_vpaned_class_init (GtkVPanedClass *class)
 {
   GtkWidgetClass *widget_class;
 
-  parent_class = gtk_type_class (GTK_TYPE_PANED);
-  
   widget_class = (GtkWidgetClass *) class;
 
   widget_class->size_request = gtk_vpaned_size_request;
   widget_class->size_allocate = gtk_vpaned_size_allocate;
-  widget_class->expose_event = gtk_vpaned_expose;
+  widget_class->draw = gtk_vpaned_draw;
   widget_class->button_press_event = gtk_vpaned_button_press;
   widget_class->button_release_event = gtk_vpaned_button_release;
   widget_class->motion_notify_event = gtk_vpaned_motion;
@@ -228,48 +224,54 @@ gtk_vpaned_size_allocate (GtkWidget     *widget,
     }
 }
 
-static gint
-gtk_vpaned_expose (GtkWidget      *widget,
-                   GdkEventExpose *event)
+static void
+gtk_vpaned_draw (GtkWidget    *widget,
+		 GdkRectangle *area)
 {
   GtkPaned *paned;
+  GdkRectangle handle_area, child_area;
   guint16 border_width;
 
-  g_return_val_if_fail (widget != NULL, FALSE);
-  g_return_val_if_fail (GTK_IS_PANED (widget), FALSE);
+  g_return_if_fail (widget != NULL);
+  g_return_if_fail (GTK_IS_PANED (widget));
 
   if (GTK_WIDGET_VISIBLE (widget) && GTK_WIDGET_MAPPED (widget))
     {
       paned = GTK_PANED (widget);
       border_width = GTK_CONTAINER (paned)->border_width;
 
-      if (event->window == widget->window)
-        {
-          gdk_window_clear_area (widget->window,
-                                 event->area.x, event->area.y,
-                                 event->area.width,
-                                 event->area.height);
+      gdk_window_clear_area (widget->window,
+			     area->x, area->y, area->width,
+			     area->height);
 
+      handle_area.x = paned->handle_xpos;
+      handle_area.y = paned->handle_ypos;
+      handle_area.width = paned->handle_width;
+      handle_area.height = paned->handle_size;
 
-          /* Chain up to draw children */
-          GTK_WIDGET_CLASS (parent_class)->expose_event (widget, event);
-        }
-      else if (event->window == paned->handle)
-        {
+      if (gdk_rectangle_intersect (&handle_area, area, &child_area))
+	{
+	  child_area.x -= paned->handle_xpos;
+	  child_area.y -= paned->handle_ypos;
+
 	  gtk_paint_handle (widget->style,
 			    paned->handle,
 			    GTK_STATE_NORMAL,
 			    GTK_SHADOW_NONE,
-                            &event->area,
+			    &child_area,
 			    widget,
 			    "paned",
 			    0, 0, -1, -1,
 			    GTK_ORIENTATION_HORIZONTAL);
 
 	}
+      /* Redraw the children
+       */
+      if (paned->child1 && gtk_widget_intersect (paned->child1, area, &child_area))
+	gtk_widget_draw (paned->child1, &child_area);
+      if (paned->child2 && gtk_widget_intersect (paned->child2, area, &child_area))
+	gtk_widget_draw (paned->child2, &child_area);
     }
-
-  return FALSE;
 }
 
 static void

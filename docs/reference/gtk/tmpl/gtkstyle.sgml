@@ -34,7 +34,7 @@ Styles
 
 </para>
 
-@parent_instance: 
+@klass: 
 @fg: 
 @bg: 
 @light: 
@@ -45,9 +45,6 @@ Styles
 @black: 
 @white: 
 @font: 
-@font_desc: 
-@xthickness: 
-@ythickness: 
 @fg_gc: 
 @bg_gc: 
 @light_gc: 
@@ -58,20 +55,22 @@ Styles
 @black_gc: 
 @white_gc: 
 @bg_pixmap: 
+@ref_count: 
+@attach_count: 
+@depth: 
+@colormap: 
+@engine: 
+@engine_data: 
+@rc_style: 
+@styles: 
 
 <!-- ##### STRUCT GtkStyleClass ##### -->
 <para>
 
 </para>
 
-@parent_class: 
-@realize: 
-@unrealize: 
-@copy: 
-@clone: 
-@init_from_rc: 
-@set_background: 
-@render_icon: 
+@xthickness: 
+@ythickness: 
 @draw_hline: 
 @draw_vline: 
 @draw_shadow: 
@@ -185,31 +184,6 @@ Styles
 @y: 
 @w: 
 @h: 
-
-
-<!-- ##### FUNCTION gtk_style_lookup_icon_set ##### -->
-<para>
-
-</para>
-
-@style: 
-@stock_id: 
-@Returns: 
-
-
-<!-- ##### FUNCTION gtk_style_render_icon ##### -->
-<para>
-
-</para>
-
-@style: 
-@source: 
-@direction: 
-@state: 
-@size: 
-@widget: 
-@detail: 
-@Returns: 
 
 
 <!-- ##### FUNCTION gtk_draw_hline ##### -->

@@ -2,23 +2,23 @@
  * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
  *
  * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
+ * modify it under the terms of the GNU Library General Public
  * License as published by the Free Software Foundation; either
  * version 2 of the License, or (at your option) any later version.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
+ * Library General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public
+ * You should have received a copy of the GNU Library General Public
  * License along with this library; if not, write to the
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
  * Boston, MA 02111-1307, USA.
  */
 
 /*
- * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
+ * Modified by the GTK+ Team and others 1997-1999.  See the AUTHORS
  * file for a list of people on the GTK+ Team.  See the ChangeLog
  * files for a list of changes.  These files are distributed with
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
@@ -30,10 +30,8 @@
 
 #include "gdkproperty.h"
 #include "gdkselection.h"
-#include "gdkinternals.h"
-#include "gdkprivate-win32.h"
-#include "gdkdrawable-win32.h"
-#include "gdkwindow-win32.h"
+#include "gdkprivate.h"
+#include "gdkwin32.h"
 
 GdkAtom
 gdk_atom_intern (const gchar *atom_name,
@@ -103,7 +101,7 @@ gdk_atom_name (GdkAtom atom)
     case GDK_SELECTION_TYPE_STRING: return g_strdup ("STRING");
     }
   if (atom < 0xC000)
-    return g_strdup_printf ("#%x", (guint) atom);
+    return g_strdup_printf ("#%x", atom);
   else if (GlobalGetAtomName (atom, name, sizeof (name)) == 0)
     return NULL;
   return g_strdup (name);
@@ -124,7 +122,7 @@ gdk_property_get (GdkWindow   *window,
   g_return_val_if_fail (window != NULL, FALSE);
   g_return_val_if_fail (GDK_IS_WINDOW (window), FALSE);
 
-  if (GDK_WINDOW_DESTROYED (window))
+  if (GDK_DRAWABLE_DESTROYED (window))
     return FALSE;
 
   g_warning ("gdk_property_get: Not implemented");
@@ -149,16 +147,15 @@ gdk_property_change (GdkWindow    *window,
   g_return_if_fail (window != NULL);
   g_return_if_fail (GDK_IS_WINDOW (window));
 
-  if (GDK_WINDOW_DESTROYED (window))
+  if (GDK_DRAWABLE_DESTROYED (window))
     return;
 
   GDK_NOTE (MISC,
 	    (prop_name = gdk_atom_name (property),
 	     type_name = gdk_atom_name (type),
 	     g_print ("gdk_property_change: %#x %#x (%s) %#x (%s) %s %d*%d bytes %.10s\n",
-		      (guint) GDK_WINDOW_HWND (window),
-		      (guint) property, prop_name,
-		      (guint) type, type_name,
+		      GDK_DRAWABLE_XID (window), property, prop_name,
+		      type, type_name,
 		      (mode == GDK_PROP_MODE_REPLACE ? "REPLACE" :
 		       (mode == GDK_PROP_MODE_PREPEND ? "PREPEND" :
 			(mode == GDK_PROP_MODE_APPEND ? "APPEND" :
@@ -178,8 +175,8 @@ gdk_property_change (GdkWindow    *window,
 	  length++;
 #if 1      
       GDK_NOTE (MISC, g_print ("...OpenClipboard(%#x)\n",
-			       (guint) GDK_WINDOW_HWND (window)));
-      if (!OpenClipboard (GDK_WINDOW_HWND (window)))
+			       GDK_DRAWABLE_XID (window)));
+      if (!OpenClipboard (GDK_DRAWABLE_XID (window)))
 	{
 	  WIN32_API_FAILED ("OpenClipboard");
 	  return;
@@ -187,7 +184,7 @@ gdk_property_change (GdkWindow    *window,
 #endif
       hdata = GlobalAlloc (GMEM_MOVEABLE|GMEM_DDESHARE, length + 1);
       ptr = GlobalLock (hdata);
-      GDK_NOTE (MISC, g_print ("...hdata=%#x, ptr=%p\n", (guint) hdata, ptr));
+      GDK_NOTE (MISC, g_print ("...hdata=%#x, ptr=%#x\n", hdata, ptr));
 
       for (i = 0; i < nelements; i++)
 	{
@@ -198,7 +195,7 @@ gdk_property_change (GdkWindow    *window,
       *ptr++ = '\0';
       GlobalUnlock (hdata);
       GDK_NOTE (MISC, g_print ("...SetClipboardData(CF_TEXT, %#x)\n",
-			       (guint) hdata));
+			       hdata));
       if (!SetClipboardData(CF_TEXT, hdata))
 	WIN32_API_FAILED ("SetClipboardData");
 #if 1
@@ -215,7 +212,7 @@ void
 gdk_property_delete (GdkWindow *window,
 		     GdkAtom    property)
 {
-  gchar *prop_name;
+  gchar *prop_name, *type_name;
   extern void gdk_selection_property_delete (GdkWindow *);
 
   g_return_if_fail (window != NULL);
@@ -224,8 +221,8 @@ gdk_property_delete (GdkWindow *window,
   GDK_NOTE (MISC,
 	    (prop_name = gdk_atom_name (property),
 	     g_print ("gdk_property_delete: %#x %#x (%s)\n",
-		      (window ? (guint) GDK_WINDOW_HWND (window) : 0),
-		      (guint) property, prop_name),
+		      (window ? GDK_DRAWABLE_XID (window) : 0),
+		      property, prop_name),
 	     g_free (prop_name)));
 
   if (property == gdk_selection_property)

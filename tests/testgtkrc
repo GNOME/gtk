@@ -26,18 +26,9 @@ pixmap_path "."
 
 style "defaultfont"
 {
-  font_name = "Sans 12"
+#  fontset = "-adobe-helvetica-medium-r-normal--*-100-*-*-*-*-*-*,*"
+  font = "-adobe-helvetica-medium-r-normal--*-120-*-*-*-*-*-*,*"
 }
-
-style "myicons"
-{
-  stock["gtk-dialog-warning"] = 
-    { 
-      { "3DRings.xpm", *, *, *} 
-    }
-}
-
-class "GtkImage" style "myicons"
 
 # common default
 class "GtkWidget" style "defaultfont"
@@ -86,7 +77,7 @@ style "slider"
 
 style "ruler"
 {
-  font_name = 'Sans 8'
+  font = '-adobe-helvetica-medium-r-normal--*-80-*-*-*-*-*-*'
 }
 
 style "curve"
@@ -102,7 +93,7 @@ style "red-bar"
 # override testgtk2, introduce the green color in the button list
 style 'button_list' = 'button'
 {
-  font_name = "Monospace 10"
+  font = "-adobe-helvetica-medium-r-normal--*-100-*-*-*-*-*-*"
   bg[PRELIGHT] = { 0, 0.75, 0x00 }
 }
 widget "main window.*GtkScrolledWindow.*GtkButton*" style "button_list"
@@ -156,10 +147,3 @@ binding "clist-test"
 }
 
 class "GtkCList" binding "clist-test"
-
-style "testthickness" {
-  xthickness = 15
-  ythickness = 15
-}
-
-#class "GtkFrame" style "testthickness"

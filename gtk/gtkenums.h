@@ -2,23 +2,23 @@
  * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
  *
  * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
+ * modify it under the terms of the GNU Library General Public
  * License as published by the Free Software Foundation; either
  * version 2 of the License, or (at your option) any later version.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
+ * Library General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public
+ * You should have received a copy of the GNU Library General Public
  * License along with this library; if not, write to the
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
  * Boston, MA 02111-1307, USA.
  */
 
 /*
- * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
+ * Modified by the GTK+ Team and others 1997-1999.  See the AUTHORS
  * file for a list of people on the GTK+ Team.  See the ChangeLog
  * files for a list of changes.  These files are distributed with
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
@@ -26,8 +26,6 @@
 
 #ifndef __GTK_ENUMS_H__
 #define __GTK_ENUMS_H__
-
-#include <gobject/gsignal.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -68,19 +66,6 @@ typedef enum
   GTK_CURVE_TYPE_FREE          /* free form curve */
 } GtkCurveType;
  
-typedef enum {
-  GTK_DELETE_CHARS,
-  GTK_DELETE_WORD_ENDS,           /* delete only the portion of the word to the
-                                   * left/right of cursor if we're in the middle
-                                   * of a word */
-  GTK_DELETE_WORDS,
-  GTK_DELETE_DISPLAY_LINES,
-  GTK_DELETE_DISPLAY_LINE_ENDS,
-  GTK_DELETE_PARAGRAPH_ENDS,      /* like C-k in Emacs (or its reverse) */
-  GTK_DELETE_PARAGRAPHS,          /* C-k in pico, kill whole line */
-  GTK_DELETE_WHITESPACE           /* M-\ in Emacs */
-} GtkDeleteType;
-
 /* Focus movement types */
 typedef enum
 {
@@ -91,14 +76,6 @@ typedef enum
   GTK_DIR_LEFT,
   GTK_DIR_RIGHT
 } GtkDirectionType;
-
-/* Reading directions for text */
-typedef enum
-{
-  GTK_TEXT_DIR_NONE,
-  GTK_TEXT_DIR_LTR,
-  GTK_TEXT_DIR_RTL
-} GtkTextDirection;
 
 /* justification for label and maybe other widgets (text?) */
 typedef enum
@@ -142,18 +119,6 @@ typedef enum
   GTK_INCHES,
   GTK_CENTIMETERS
 } GtkMetricType;
-
-typedef enum {
-  GTK_MOVEMENT_CHARS,             /* move by forw/back chars */
-  GTK_MOVEMENT_POSITIONS,         /* move by left/right chars */
-  GTK_MOVEMENT_WORDS,             /* move by forward/back words */
-  GTK_MOVEMENT_DISPLAY_LINES,     /* move up/down lines (wrapped lines) */
-  GTK_MOVEMENT_DISPLAY_LINE_ENDS, /* move up/down lines (wrapped lines) */
-  GTK_MOVEMENT_PARAGRAPHS,        /* move up/down paragraphs (newline-ended lines) */
-  GTK_MOVEMENT_PARAGRAPH_ENDS,    /* move to either end of a paragraph */
-  GTK_MOVEMENT_PAGES,	          /* move by pages */
-  GTK_MOVEMENT_BUFFER_ENDS        /* move to ends of the buffer */
-} GtkMovementStep;
 
 /* Orientation for toolbars, etc. */
 typedef enum
@@ -238,12 +203,12 @@ typedef enum
 /* signal run types */
 typedef enum			/*< flags >*/
 {
-  GTK_RUN_FIRST      = G_SIGNAL_RUN_FIRST,
-  GTK_RUN_LAST       = G_SIGNAL_RUN_LAST,
+  GTK_RUN_FIRST      = 1 << 0,
+  GTK_RUN_LAST       = 1 << 1,
   GTK_RUN_BOTH       = (GTK_RUN_FIRST | GTK_RUN_LAST),
-  GTK_RUN_NO_RECURSE = G_SIGNAL_NO_RECURSE,
-  GTK_RUN_ACTION     = G_SIGNAL_ACTION,
-  GTK_RUN_NO_HOOKS   = G_SIGNAL_NO_HOOKS
+  GTK_RUN_NO_RECURSE = 1 << 2,
+  GTK_RUN_ACTION     = 1 << 3,
+  GTK_RUN_NO_HOOKS   = 1 << 4
 } GtkSignalRunType;
 
 /* scrolling types */
@@ -340,8 +305,7 @@ typedef enum
   GTK_WIN_POS_NONE,
   GTK_WIN_POS_CENTER,
   GTK_WIN_POS_MOUSE,
-  GTK_WIN_POS_CENTER_ALWAYS,
-  GTK_WIN_POS_CENTER_ON_PARENT
+  GTK_WIN_POS_CENTER_ALWAYS
 } GtkWindowPosition;
 
 /* Window types */

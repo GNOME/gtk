@@ -1,25 +1,62 @@
 <!-- ##### SECTION Title ##### -->
-creating
+Image Data in Memory
 
 <!-- ##### SECTION Short_Description ##### -->
-
+Creating a pixbuf from image data that is already in memory.
 
 <!-- ##### SECTION Long_Description ##### -->
-<para>
+  <para>
+    The most basic way to create a pixbuf is to wrap an existing
+    #ArtPixBuf structure with a #GdkPixbuf to add reference counting
+    capabilities to it.  The gdk_pixbuf_new_from_art_pixbuf() performs
+    this operation.
+  </para>
 
-</para>
+  <para>
+    As a convenience, you can use the gdk_pixbuf_new_from_data()
+    function to wrap an existing data buffer with a #GdkPixbuf.  You
+    need to specify the destroy notification function that will be
+    called when the data buffer needs to be freed; this will happen
+    when the pixbuf's reference count drops to zero and thus the
+    #ArtPixBuf needs to be destroyed.  If you have a chunk of static
+    data compiled into your application, you can pass in #NULL as the
+    destroy notification function so that the data will not be freed.
+  </para>
+
+  <para>
+    The gdk_pixbuf_new() function can be used as a convenience to
+    create a pixbuf with an empty buffer.  This is equivalent to
+    allocating a data buffer using malloc() and then wrapping it with
+    gdk_pixbuf_new_from_data().  The gdk_pixbuf_new() function will
+    compute an optimal rowstride so that rendering can be performed
+    with an efficient algorithm.
+  </para>
+
+  <para>
+    As a special case, you can use the gdk_pixbuf_new_from_xpm_data()
+    function to create a pixbuf from inline XPM image data.
+  </para>
 
 <!-- ##### SECTION See_Also ##### -->
+  <para>
+    #ArtPixBuf
+  </para>
+
+<!-- ##### FUNCTION gdk_pixbuf_new_from_art_pixbuf ##### -->
 <para>
 
 </para>
+
+@art_pixbuf: 
+@Returns: 
+
 
 <!-- ##### FUNCTION gdk_pixbuf_new ##### -->
 <para>
 
 </para>
 
-@colorspace: 
+@format: 
 @has_alpha: 
 @bits_per_sample: 
 @width: 
@@ -33,14 +70,13 @@ creating
 </para>
 
 @data: 
-@colorspace: 
+@format: 
 @has_alpha: 
-@bits_per_sample: 
 @width: 
 @height: 
 @rowstride: 
-@destroy_fn: 
-@destroy_fn_data: 
+@dfunc: 
+@dfunc_data: 
 @Returns: 
 
 
@@ -50,40 +86,11 @@ creating
 </para>
 
 @data: 
-@Returns: 
-
-
-<!-- ##### FUNCTION gdk_pixbuf_new_from_inline ##### -->
-<para>
-
-</para>
-
-@inline_pixbuf: 
-@copy_pixels: 
-@length: 
-@error: 
-@Returns: 
-
-
-<!-- ##### FUNCTION gdk_pixbuf_new_subpixbuf ##### -->
-<para>
-
-</para>
-
-@src_pixbuf: 
-@src_x: 
-@src_y: 
-@width: 
-@height: 
-@Returns: 
-
-
-<!-- ##### FUNCTION gdk_pixbuf_copy ##### -->
-<para>
-
-</para>
-
-@pixbuf: 
-@Returns: 
+@Returns: <!--
+Local variables:
+mode: sgml
+sgml-parent-document: ("../gdk-pixbuf.sgml" "book" "refsect2" "")
+End:
+-->
 
 

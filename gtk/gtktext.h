@@ -2,23 +2,23 @@
  * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
  *
  * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
+ * modify it under the terms of the GNU Library General Public
  * License as published by the Free Software Foundation; either
  * version 2 of the License, or (at your option) any later version.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
+ * Library General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public
+ * You should have received a copy of the GNU Library General Public
  * License along with this library; if not, write to the
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
  * Boston, MA 02111-1307, USA.
  */
 
 /*
- * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
+ * Modified by the GTK+ Team and others 1997-1999.  See the AUTHORS
  * file for a list of people on the GTK+ Team.  See the ChangeLog
  * files for a list of changes.  These files are distributed with
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
@@ -30,7 +30,7 @@
 
 #include <gdk/gdk.h>
 #include <gtk/gtkadjustment.h>
-#include <gtk/gtkoldeditable.h>
+#include <gtk/gtkeditable.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -64,7 +64,7 @@ struct _GtkPropertyMark
 
 struct _GtkText
 {
-  GtkOldEditable old_editable;
+  GtkEditable editable;
 
   GdkWindow *text_area;
 
@@ -169,7 +169,7 @@ struct _GtkText
 
 struct _GtkTextClass
 {
-  GtkOldEditableClass parent_class;
+  GtkEditableClass parent_class;
 
   void  (*set_scroll_adjustments)   (GtkText	    *text,
 				     GtkAdjustment  *hadjustment,
@@ -177,7 +177,7 @@ struct _GtkTextClass
 };
 
 
-GtkType    gtk_text_get_type        (void) G_GNUC_CONST;
+GtkType    gtk_text_get_type        (void);
 GtkWidget* gtk_text_new             (GtkAdjustment *hadj,
 				     GtkAdjustment *vadj);
 void       gtk_text_set_editable    (GtkText       *text,

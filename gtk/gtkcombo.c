@@ -2,23 +2,23 @@
  * Copyright 1997 Paolo Molaro
  *
  * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
+ * modify it under the terms of the GNU Library General Public
  * License as published by the Free Software Foundation; either
  * version 2 of the License, or (at your option) any later version.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
+ * Library General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public
+ * You should have received a copy of the GNU Library General Public
  * License along with this library; if not, write to the
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
  * Boston, MA 02111-1307, USA.
  */
 
 /*
- * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
+ * Modified by the GTK+ Team and others 1997-1999.  See the AUTHORS
  * file for a list of people on the GTK+ Team.  See the ChangeLog
  * files for a list of changes.  These files are distributed with
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
@@ -110,18 +110,13 @@ gtk_combo_class_init (GtkComboClass * klass)
 }
 
 static void
-gtk_combo_destroy (GtkObject *object)
+gtk_combo_destroy (GtkObject * combo)
 {
-  GtkCombo *combo = GTK_COMBO (object);
+  gtk_widget_destroy (GTK_COMBO (combo)->popwin);
+  gtk_widget_unref (GTK_COMBO (combo)->popwin);
 
-  if (combo->popwin)
-    {
-      gtk_widget_destroy (combo->popwin);
-      gtk_widget_unref (combo->popwin);
-      combo->popwin = NULL;
-    }
-
-  GTK_OBJECT_CLASS (parent_class)->destroy (object);
+  if (GTK_OBJECT_CLASS (parent_class)->destroy)
+    (*GTK_OBJECT_CLASS (parent_class)->destroy) (combo);
 }
 
 static int
@@ -132,7 +127,6 @@ gtk_combo_entry_key_press (GtkEntry * entry, GdkEventKey * event, GtkCombo * com
   /* completion */
   if ((event->keyval == GDK_Tab) && (event->state & GDK_MOD1_MASK)) 
     {
-      GtkEditable *editable = GTK_EDITABLE (entry);
     GCompletion * cmpl;
     gchar* prefix;
     gchar* nprefix = NULL;
@@ -146,16 +140,16 @@ gtk_combo_entry_key_press (GtkEntry * entry, GdkEventKey * event, GtkCombo * com
     cmpl = g_completion_new ((GCompletionFunc)gtk_combo_func);
     g_completion_add_items (cmpl, GTK_LIST (combo->list)->children);
 
-    pos = gtk_editable_get_position (editable);
-    prefix = gtk_editable_get_chars (editable, 0, pos);
+    pos = GTK_EDITABLE (entry)->current_pos;
+    prefix = gtk_editable_get_chars (GTK_EDITABLE (entry), 0, pos);
 
     g_completion_complete(cmpl, prefix, &nprefix);
 
     if (nprefix && strlen (nprefix) > strlen (prefix)) 
       {
-    	gtk_editable_insert_text (editable, nprefix + pos, 
-				  strlen (nprefix) - strlen (prefix), &pos);
-	gtk_editable_set_position (editable, pos);
+    	gtk_editable_insert_text (GTK_EDITABLE (entry), nprefix + pos, 
+				 strlen (nprefix) - strlen (prefix), &pos);
+    	GTK_EDITABLE (entry)->current_pos = pos;
     }
 
     if (nprefix)
@@ -326,17 +320,17 @@ gtk_combo_get_pos (GtkCombo * combo, gint * x, gint * y, gint * height, gint * w
     list_requisition.height += EMPTY_LIST_HEIGHT;
   
   alloc_width = (widget->allocation.width -
-		 2 * popwin->child->style->xthickness -
+		 2 * popwin->child->style->klass->xthickness -
 		 2 * GTK_CONTAINER (popwin->child)->border_width -
 		 2 * GTK_CONTAINER (combo->popup)->border_width -
 		 2 * GTK_CONTAINER (GTK_BIN (popup)->child)->border_width - 
-		 2 * GTK_BIN (popup)->child->style->xthickness);
+		 2 * GTK_BIN (popup)->child->style->klass->xthickness);
   
-  work_height = (2 * popwin->child->style->ythickness +
+  work_height = (2 * popwin->child->style->klass->ythickness +
 		 2 * GTK_CONTAINER (popwin->child)->border_width +
 		 2 * GTK_CONTAINER (combo->popup)->border_width +
 		 2 * GTK_CONTAINER (GTK_BIN (popup)->child)->border_width +
-		 2 * GTK_BIN (popup)->child->style->xthickness);
+		 2 * GTK_BIN (popup)->child->style->klass->xthickness);
   
   do 
     {
@@ -346,8 +340,9 @@ gtk_combo_get_pos (GtkCombo * combo, gint * x, gint * y, gint * height, gint * w
       if (!show_hscroll &&
 	  alloc_width < list_requisition.width)
 	{
-	  work_height += (popup->hscrollbar->requisition.height +
-			  GTK_SCROLLED_WINDOW_GET_CLASS (combo->popup)->scrollbar_spacing);
+	  work_height += popup->hscrollbar->requisition.height +
+	    GTK_SCROLLED_WINDOW_CLASS 
+	    (GTK_OBJECT (combo->popup)->klass)->scrollbar_spacing;
 	  show_hscroll = TRUE;
 	}
       if (!show_vscroll && 
@@ -359,8 +354,10 @@ gtk_combo_get_pos (GtkCombo * combo, gint * x, gint * y, gint * height, gint * w
 	      *y -= (work_height + list_requisition.height + real_height);
 	      break;
 	    }
-	  alloc_width -= (popup->vscrollbar->requisition.width +
-			  GTK_SCROLLED_WINDOW_GET_CLASS (combo->popup)->scrollbar_spacing);
+	  alloc_width -= 
+	    popup->vscrollbar->requisition.width +
+	    GTK_SCROLLED_WINDOW_CLASS 
+	    (GTK_OBJECT (combo->popup)->klass)->scrollbar_spacing;
 	  show_vscroll = TRUE;
 	}
     } while (old_width != alloc_width || old_height != work_height);
@@ -837,10 +834,7 @@ gtk_combo_item_destroy (GtkObject * object)
 
   key = gtk_object_get_data (object, gtk_combo_string_key);
   if (key)
-    {
-      gtk_object_remove_data (object, gtk_combo_string_key);
-      g_free (key);
-    }
+    g_free (key);
 }
 
 void

@@ -22,6 +22,7 @@ gtk_curve_get_type
 gtk_data_get_type
 gtk_dialog_get_type
 gtk_drawing_area_get_type
+gtk_editable_get_type
 gtk_entry_get_type
 gtk_event_box_get_type
 gtk_file_selection_get_type
@@ -38,9 +39,8 @@ gtk_hruler_get_type
 gtk_hscale_get_type
 gtk_hscrollbar_get_type
 gtk_hseparator_get_type
+gtk_identifier_get_type
 gtk_image_get_type
-gtk_im_context_get_type
-gtk_im_multicontext_get_type
 gtk_input_dialog_get_type
 gtk_invisible_get_type
 gtk_item_get_type
@@ -53,10 +53,8 @@ gtk_menu_get_type
 gtk_menu_bar_get_type
 gtk_menu_item_get_type
 gtk_menu_shell_get_type
-gtk_message_dialog_get_type
 gtk_misc_get_type
 gtk_notebook_get_type
-gtk_old_editable_get_type
 gtk_object_get_type
 gtk_option_menu_get_type
 gtk_packer_get_type
@@ -80,10 +78,6 @@ gtk_statusbar_get_type
 gtk_table_get_type
 gtk_tearoff_menu_item_get_type
 gtk_text_get_type
-gtk_text_buffer_get_type
-gtk_text_tag_get_type
-gtk_text_tag_table_get_type
-gtk_text_view_get_type
 gtk_tips_query_get_type
 gtk_toggle_button_get_type
 gtk_toolbar_get_type

@@ -25,12 +25,11 @@ GtkObject
           GtkListItem
           GtkTreeItem
         GtkWindow
+          GtkColorSelectionDialog
           GtkDialog
-            GtkColorSelectionDialog
-            GtkFileSelection
-            GtkFontSelectionDialog
             GtkInputDialog
-            GtkMessageDialog
+          GtkFileSelection
+          GtkFontSelectionDialog
           GtkPlug
         GtkEventBox
         GtkHandleBox
@@ -42,7 +41,6 @@ GtkObject
           GtkVButtonBox
         GtkVBox
           GtkColorSelection
-          GtkFontSelection
           GtkGammaCurve
         GtkHBox
           GtkCombo
@@ -50,6 +48,8 @@ GtkObject
       GtkCList
         GtkCTree
       GtkFixed
+      GtkNotebook
+        GtkFontSelection
       GtkPaned
         GtkHPaned
         GtkVPaned
@@ -58,18 +58,18 @@ GtkObject
       GtkMenuShell
         GtkMenu
         GtkMenuBar
-      GtkNotebook
       GtkPacker
       GtkSocket
       GtkTable
-      GtkTextView
       GtkToolbar
       GtkTree
     GtkCalendar
     GtkDrawingArea
       GtkCurve
-    GtkEntry
-      GtkSpinButton
+    GtkEditable
+      GtkEntry
+        GtkSpinButton
+      GtkText
     GtkRuler
       GtkHRuler
       GtkVRuler
@@ -84,17 +84,10 @@ GtkObject
       GtkHSeparator
       GtkVSeparator
     GtkInvisible
-    GtkOldEditable
-      GtkText
     GtkPreview
     GtkProgress
       GtkProgressBar
   GtkData
     GtkAdjustment
     GtkTooltips
-  GtkIMContext
-    GtkIMMulticontext
   GtkItemFactory
-  GtkTextBuffer
-  GtkTextTag
-  GtkTextTagTable

@@ -2,23 +2,23 @@
  * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
  *
  * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
+ * modify it under the terms of the GNU Library General Public
  * License as published by the Free Software Foundation; either
  * version 2 of the License, or (at your option) any later version.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
+ * Library General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public
+ * You should have received a copy of the GNU Library General Public
  * License along with this library; if not, write to the
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
  * Boston, MA 02111-1307, USA.
  */
 
 /*
- * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
+ * Modified by the GTK+ Team and others 1997-1999.  See the AUTHORS
  * file for a list of people on the GTK+ Team.  See the ChangeLog
  * files for a list of changes.  These files are distributed with
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
@@ -27,6 +27,9 @@
 #include <math.h>
 #include "gtkcontainer.h"
 #include "gtkscale.h"
+
+
+#define SCALE_CLASS(w)  GTK_SCALE_CLASS (GTK_OBJECT (w)->klass)
 
 enum {
   ARG_0,
@@ -259,28 +262,24 @@ gtk_scale_set_value_pos (GtkScale        *scale,
     }
 }
 
-void
-gtk_scale_get_value_size (GtkScale *scale,
-			  gint     *width,
-			  gint     *height)
+gint
+gtk_scale_get_value_width (GtkScale *scale)
 {
   GtkRange *range;
+  gchar buffer[128];
+  gfloat value;
+  gint temp;
+  gint return_val;
+  gint digits;
+  gint i, j;
 
-  g_return_if_fail (scale != NULL);
-  g_return_if_fail (GTK_IS_SCALE (scale));
+  g_return_val_if_fail (scale != NULL, 0);
+  g_return_val_if_fail (GTK_IS_SCALE (scale), 0);
 
+  return_val = 0;
   if (scale->draw_value)
     {
-      PangoLayout *layout;
-      PangoRectangle logical_rect;
-      gchar buffer[128];
-      gfloat value;
-      gint digits;
-      gint i, j;
-      
       range = GTK_RANGE (scale);
-
-      layout = gtk_widget_create_pango_layout (GTK_WIDGET (scale), NULL);
 
       value = ABS (range->adjustment->lower);
       if (value == 0) value = 1;
@@ -299,14 +298,8 @@ gtk_scale_get_value_size (GtkScale *scale,
         buffer[i++] = '0';
       buffer[i] = '\0';
 
-      pango_layout_set_text (layout, buffer, i);
-      pango_layout_get_pixel_extents (layout, NULL, &logical_rect);
+      return_val = gdk_string_measure (GTK_WIDGET (scale)->style->font, buffer);
 
-      if (width)
-	*width = logical_rect.width;
-      if (height)
-	*height = logical_rect.width;
-      
       value = ABS (range->adjustment->upper);
       if (value == 0) value = 1;
       digits = log10 (value) + 1;
@@ -324,37 +317,11 @@ gtk_scale_get_value_size (GtkScale *scale,
         buffer[i++] = '0';
       buffer[i] = '\0';
 
-      pango_layout_set_text (layout, buffer, i);
-      pango_layout_get_pixel_extents (layout, NULL, &logical_rect);
-
-      if (width)
-	*width = MAX (*width, logical_rect.width);
-      if (height)
-	*height = MAX (*height, logical_rect.height);
-
-      g_object_unref (G_OBJECT (layout));
-    }
-  else
-    {
-      if (width)
-	*width = 0;
-      if (height)
-	*height = 0;
+      temp = gdk_string_measure (GTK_WIDGET (scale)->style->font, buffer);
+      return_val = MAX (return_val, temp);
     }
 
-}
-
-gint
-gtk_scale_get_value_width (GtkScale *scale)
-{
-  gint width;
-
-  g_return_val_if_fail (scale != NULL, 0);
-  g_return_val_if_fail (GTK_IS_SCALE (scale), 0);
-  
-  gtk_scale_get_value_size (scale, &width, NULL);
-
-  return width;
+  return return_val;
 }
 
 void
@@ -363,8 +330,8 @@ gtk_scale_draw_value (GtkScale *scale)
   g_return_if_fail (scale != NULL);
   g_return_if_fail (GTK_IS_SCALE (scale));
 
-  if (GTK_SCALE_GET_CLASS (scale)->draw_value)
-    GTK_SCALE_GET_CLASS (scale)->draw_value (scale);
+  if (SCALE_CLASS (scale)->draw_value)
+    (* SCALE_CLASS (scale)->draw_value) (scale);
 }
 
 

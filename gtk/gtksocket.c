@@ -2,16 +2,16 @@
  * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
  *
  * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
+ * modify it under the terms of the GNU Library General Public
  * License as published by the Free Software Foundation; either
  * version 2 of the License, or (at your option) any later version.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
+ * Library General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public
+ * You should have received a copy of the GNU Library General Public
  * License along with this library; if not, write to the Free
  * Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
@@ -19,7 +19,7 @@
 /* By Owen Taylor <otaylor@gtk.org>              98/4/4 */
 
 /*
- * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
+ * Modified by the GTK+ Team and others 1997-1999.  See the AUTHORS
  * file for a list of people on the GTK+ Team.  See the ChangeLog
  * files for a list of changes.  These files are distributed with
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
@@ -31,8 +31,6 @@
 #include "x11/gdkx.h"
 #elif defined (GDK_WINDOWING_WIN32)
 #include "win32/gdkwin32.h"
-#elif defined(GDK_WINDOWING_FB)
-#include "linux-fb/gdkfb.h"
 #endif
 
 #include "gdk/gdkkeysyms.h"
@@ -79,20 +77,18 @@ gtk_socket_get_type (void)
 
   if (!socket_type)
     {
-      static const GTypeInfo socket_info =
+      static const GtkTypeInfo socket_info =
       {
-	sizeof (GtkSocketClass),
-	NULL,           /* base_init */
-	NULL,           /* base_finalize */
-	(GClassInitFunc) gtk_socket_class_init,
-	NULL,           /* class_finalize */
-	NULL,           /* class_data */
+	"GtkSocket",
 	sizeof (GtkSocket),
-	16,             /* n_preallocs */
-	(GInstanceInitFunc) gtk_socket_init,
+	sizeof (GtkSocketClass),
+	(GtkClassInitFunc) gtk_socket_class_init,
+	(GtkObjectInitFunc) gtk_socket_init,
+	(GtkArgSetFunc) NULL,
+	(GtkArgGetFunc) NULL
       };
 
-      socket_type = g_type_register_static (GTK_TYPE_CONTAINER, "GtkSocket", &socket_info, 0);
+      socket_type = gtk_type_unique (GTK_TYPE_CONTAINER, &socket_info);
     }
 
   return socket_type;
@@ -147,22 +143,17 @@ gtk_socket_new (void)
 }
 
 void           
-gtk_socket_steal (GtkSocket *socket, GdkNativeWindow id)
+gtk_socket_steal (GtkSocket *socket, guint32 id)
 {
   GtkWidget *widget;
-  gpointer user_data = NULL;
-  
+
   widget = GTK_WIDGET (socket);
   
   socket->plug_window = gdk_window_lookup (id);
 
   gdk_error_trap_push ();
-
-  if (socket->plug_window)
-    gdk_window_get_user_data (socket->plug_window,
-                              &user_data);
   
-  if (user_data)      
+  if (socket->plug_window && socket->plug_window->user_data)
     {
       /*
 	GtkWidget *child_widget;
@@ -550,7 +541,7 @@ gtk_socket_send_configure_event (GtkSocket *socket)
 }
 
 static void
-gtk_socket_add_window (GtkSocket *socket, GdkNativeWindow xid)
+gtk_socket_add_window (GtkSocket *socket, guint32 xid)
 {
   socket->plug_window = gdk_window_lookup (xid);
   socket->same_app = TRUE;
@@ -764,7 +755,7 @@ gtk_socket_filter_func (GdkXEvent *gdk_xevent, GdkEvent *event, gpointer data)
   return return_val;
 }
 
-#else
+#elif defined (GDK_WINDOWING_WIN32)
 
 GtkType
 gtk_socket_get_type (void)
@@ -781,7 +772,7 @@ gtk_socket_new ()
 }
 
 void           
-gtk_socket_steal (GtkSocket *socket, GdkNativeWindow id)
+gtk_socket_steal (GtkSocket *socket, guint32 id)
 {
   g_error ("GtkSocket not implemented");
 }

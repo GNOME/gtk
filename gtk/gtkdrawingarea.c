@@ -2,23 +2,23 @@
  * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
  *
  * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
+ * modify it under the terms of the GNU Library General Public
  * License as published by the Free Software Foundation; either
  * version 2 of the License, or (at your option) any later version.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
+ * Library General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public
+ * You should have received a copy of the GNU Library General Public
  * License along with this library; if not, write to the
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
  * Boston, MA 02111-1307, USA.
  */
 
 /*
- * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
+ * Modified by the GTK+ Team and others 1997-1999.  See the AUTHORS
  * file for a list of people on the GTK+ Team.  See the ChangeLog
  * files for a list of changes.  These files are distributed with
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
@@ -54,7 +54,7 @@ gtk_drawing_area_get_type (void)
         (GtkClassInitFunc) NULL,
       };
 
-      drawing_area_type = gtk_type_unique (GTK_TYPE_WIDGET, &drawing_area_info);
+      drawing_area_type = gtk_type_unique (gtk_widget_get_type (), &drawing_area_info);
     }
 
   return drawing_area_type;
@@ -63,7 +63,9 @@ gtk_drawing_area_get_type (void)
 static void
 gtk_drawing_area_class_init (GtkDrawingAreaClass *class)
 {
-  GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (class);
+  GtkWidgetClass *widget_class;
+
+  widget_class = (GtkWidgetClass*) class;
 
   widget_class->realize = gtk_drawing_area_realize;
   widget_class->size_allocate = gtk_drawing_area_size_allocate;
@@ -79,7 +81,7 @@ gtk_drawing_area_init (GtkDrawingArea *darea)
 GtkWidget*
 gtk_drawing_area_new (void)
 {
-  return GTK_WIDGET (gtk_type_new (GTK_TYPE_DRAWING_AREA));
+  return GTK_WIDGET (gtk_type_new (gtk_drawing_area_get_type ()));
 }
 
 void
@@ -87,12 +89,11 @@ gtk_drawing_area_size (GtkDrawingArea *darea,
 		       gint            width,
 		       gint            height)
 {
+  g_return_if_fail (darea != NULL);
   g_return_if_fail (GTK_IS_DRAWING_AREA (darea));
 
   GTK_WIDGET (darea)->requisition.width = width;
   GTK_WIDGET (darea)->requisition.height = height;
-
-  gtk_widget_queue_resize (GTK_WIDGET (darea));
 }
 
 static void
@@ -159,7 +160,6 @@ gtk_drawing_area_send_configure (GtkDrawingArea *darea)
 
   event.type = GDK_CONFIGURE;
   event.window = widget->window;
-  event.send_event = TRUE;
   event.x = widget->allocation.x;
   event.y = widget->allocation.y;
   event.width = widget->allocation.width;

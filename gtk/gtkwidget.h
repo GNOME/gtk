@@ -2,23 +2,23 @@
  * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
  *
  * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
+ * modify it under the terms of the GNU Library General Public
  * License as published by the Free Software Foundation; either
  * version 2 of the License, or (at your option) any later version.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	 See the GNU
- * Lesser General Public License for more details.
+ * Library General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public
+ * You should have received a copy of the GNU Library General Public
  * License along with this library; if not, write to the
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
  * Boston, MA 02111-1307, USA.
  */
 
 /*
- * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
+ * Modified by the GTK+ Team and others 1997-1999.  See the AUTHORS
  * file for a list of people on the GTK+ Team.  See the ChangeLog
  * files for a list of changes.  These files are distributed with
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
@@ -53,26 +53,14 @@ typedef enum
   GTK_PARENT_SENSITIVE = 1 << 10,
   GTK_CAN_FOCUS        = 1 << 11,
   GTK_HAS_FOCUS        = 1 << 12,
-
-  /* widget is allowed to receive the default via gtk_widget_grab_default
-   * and will reserve space to draw the default if possible */
   GTK_CAN_DEFAULT      = 1 << 13,
-
-  /* the widget currently is receiving the default action and should be drawn
-   * appropriately if possible */
   GTK_HAS_DEFAULT      = 1 << 14,
-
   GTK_HAS_GRAB	       = 1 << 15,
   GTK_RC_STYLE	       = 1 << 16,
   GTK_COMPOSITE_CHILD  = 1 << 17,
   GTK_NO_REPARENT      = 1 << 18,
   GTK_APP_PAINTABLE    = 1 << 19,
-
-  /* the widget when focused will receive the default action and have
-   * HAS_DEFAULT set even if there is a different widget set as default */
-  GTK_RECEIVES_DEFAULT = 1 << 20,
-
-  GTK_DOUBLE_BUFFERED  = 1 << 21
+  GTK_RECEIVES_DEFAULT = 1 << 20
 } GtkWidgetFlags;
 
 /* Macro for casting a pointer to a GtkWidget or GtkWidgetClass pointer.
@@ -113,7 +101,6 @@ typedef enum
 #define GTK_WIDGET_COMPOSITE_CHILD(wid)	  ((GTK_WIDGET_FLAGS (wid) & GTK_COMPOSITE_CHILD) != 0)
 #define GTK_WIDGET_APP_PAINTABLE(wid)	  ((GTK_WIDGET_FLAGS (wid) & GTK_APP_PAINTABLE) != 0)
 #define GTK_WIDGET_RECEIVES_DEFAULT(wid)  ((GTK_WIDGET_FLAGS (wid) & GTK_RECEIVES_DEFAULT) != 0)
-#define GTK_WIDGET_DOUBLE_BUFFERED(wid)	  ((GTK_WIDGET_FLAGS (wid) & GTK_DOUBLE_BUFFERED) != 0)
   
 /* Macros for setting and clearing widget flags.
  */
@@ -123,7 +110,7 @@ typedef enum
   
   
 typedef struct _GtkRequisition	  GtkRequisition;
-typedef struct _GdkRectangle	  GtkAllocation;
+typedef struct _GtkAllocation	  GtkAllocation;
 typedef struct _GtkSelectionData GtkSelectionData;
 typedef struct _GtkWidgetClass	  GtkWidgetClass;
 typedef struct _GtkWidgetAuxInfo  GtkWidgetAuxInfo;
@@ -137,8 +124,39 @@ typedef void (*GtkCallback) (GtkWidget *widget,
  */
 struct _GtkRequisition
 {
-  gint width;
-  gint height;
+  gint16 width;
+  gint16 height;
+};
+
+/* An allocation is a size and position. Where a widget
+ *  can ask for a desired size, it is actually given
+ *  this amount of space at the specified position.
+ */
+struct _GtkAllocation
+{
+  gint16 x;
+  gint16 y;
+  guint16 width;
+  guint16 height;
+};
+
+/* The contents of a selection are returned in a GtkSelectionData
+   structure. selection/target identify the request. 
+   type specifies the type of the return; if length < 0, and
+   the data should be ignored. This structure has object semantics -
+   no fields should be modified directly, they should not be created
+   directly, and pointers to them should not be stored beyond the duration of
+   a callback. (If the last is changed, we'll need to add reference
+   counting.) The time field gives the timestamp at which the data was sent. */
+
+struct _GtkSelectionData
+{
+  GdkAtom selection;
+  GdkAtom target;
+  GdkAtom type;
+  gint	  format;
+  guchar *data;
+  gint	  length;
 };
 
 /* The widget is the base of the tree for displayable objects.
@@ -234,28 +252,28 @@ struct _GtkWidgetClass
   guint set_scroll_adjustments_signal;
   
   /* basics */
-  void (* show)		       (GtkWidget        *widget);
-  void (* show_all)            (GtkWidget        *widget);
-  void (* hide)		       (GtkWidget        *widget);
-  void (* hide_all)            (GtkWidget        *widget);
-  void (* map)		       (GtkWidget        *widget);
-  void (* unmap)	       (GtkWidget        *widget);
-  void (* realize)	       (GtkWidget        *widget);
-  void (* unrealize)	       (GtkWidget        *widget);
-  void (* draw_focus)	       (GtkWidget        *widget);
-  void (* draw_default)	       (GtkWidget        *widget);
-  void (* size_request)	       (GtkWidget        *widget,
-				GtkRequisition   *requisition);
-  void (* size_allocate)       (GtkWidget        *widget,
-				GtkAllocation    *allocation);
-  void (* state_changed)       (GtkWidget        *widget,
-				GtkStateType   	  previous_state);
-  void (* parent_set)	       (GtkWidget        *widget,
-				GtkWidget        *previous_parent);
-  void (* style_set)	       (GtkWidget        *widget,
-				GtkStyle         *previous_style);
-  void (* direction_changed)   (GtkWidget        *widget,
-				GtkTextDirection  previous_direction);
+  void (* show)		       (GtkWidget      *widget);
+  void (* show_all)            (GtkWidget      *widget);
+  void (* hide)		       (GtkWidget      *widget);
+  void (* hide_all)            (GtkWidget      *widget);
+  void (* map)		       (GtkWidget      *widget);
+  void (* unmap)	       (GtkWidget      *widget);
+  void (* realize)	       (GtkWidget      *widget);
+  void (* unrealize)	       (GtkWidget      *widget);
+  void (* draw)		       (GtkWidget      *widget,
+				GdkRectangle   *area);
+  void (* draw_focus)	       (GtkWidget      *widget);
+  void (* draw_default)	       (GtkWidget      *widget);
+  void (* size_request)	       (GtkWidget      *widget,
+				GtkRequisition *requisition);
+  void (* size_allocate)       (GtkWidget      *widget,
+				GtkAllocation  *allocation);
+  void (* state_changed)       (GtkWidget      *widget,
+				GtkStateType	previous_state);
+  void (* parent_set)	       (GtkWidget      *widget,
+				GtkWidget      *previous_parent);
+  void (* style_set)	       (GtkWidget      *widget,
+				GtkStyle       *previous_style);
   
   /* accelerators */
   gint (* add_accelerator)     (GtkWidget      *widget,
@@ -396,18 +414,29 @@ struct _GtkWidgetShapeInfo
   GdkBitmap *shape_mask;
 };
 
-GtkType	   gtk_widget_get_type		  (void) G_GNUC_CONST;
+GtkType	   gtk_widget_get_type		  (void);
 GtkWidget* gtk_widget_new		  (GtkType		type,
-					   const gchar	       *first_property_name,
+					   const gchar	       *first_arg_name,
 					   ...);
-GtkWidget* gtk_widget_ref		  (GtkWidget	       *widget);
+GtkWidget* gtk_widget_newv		  (GtkType		type,
+					   guint		nargs,
+					   GtkArg	       *args);
+void	   gtk_widget_ref		  (GtkWidget	       *widget);
 void	   gtk_widget_unref		  (GtkWidget	       *widget);
 void	   gtk_widget_destroy		  (GtkWidget	       *widget);
 void	   gtk_widget_destroyed		  (GtkWidget	       *widget,
 					   GtkWidget	      **widget_pointer);
+void	   gtk_widget_get		  (GtkWidget	       *widget,
+					   GtkArg	       *arg);
+void	   gtk_widget_getv		  (GtkWidget	       *widget,
+					   guint		nargs,
+					   GtkArg	       *args);
 void	   gtk_widget_set		  (GtkWidget	       *widget,
-					   const gchar         *first_property_name,
+					   const gchar         *first_arg_name,
 					   ...);
+void	   gtk_widget_setv		  (GtkWidget	       *widget,
+					   guint		nargs,
+					   GtkArg	       *args);
 void	   gtk_widget_unparent		  (GtkWidget	       *widget);
 void	   gtk_widget_show		  (GtkWidget	       *widget);
 void       gtk_widget_show_now            (GtkWidget           *widget);
@@ -478,11 +507,10 @@ void	   gtk_widget_reparent		  (GtkWidget	       *widget,
 void	   gtk_widget_popup		  (GtkWidget	       *widget,
 					   gint			x,
 					   gint			y);
-gboolean   gtk_widget_intersect		  (GtkWidget	       *widget,
+gint	   gtk_widget_intersect		  (GtkWidget	       *widget,
 					   GdkRectangle	       *area,
 					   GdkRectangle	       *intersection);
 
-gboolean   gtk_widget_is_focus            (GtkWidget           *widget);
 void	   gtk_widget_grab_focus	  (GtkWidget	       *widget);
 void	   gtk_widget_grab_default	  (GtkWidget	       *widget);
 
@@ -495,8 +523,6 @@ void	   gtk_widget_set_sensitive	  (GtkWidget	       *widget,
 					   gboolean		sensitive);
 void	   gtk_widget_set_app_paintable	  (GtkWidget	       *widget,
 					   gboolean		app_paintable);
-void	   gtk_widget_set_double_buffered (GtkWidget	       *widget,
-					   gboolean	        double_buffered);
 void	   gtk_widget_set_parent	  (GtkWidget	       *widget,
 					   GtkWidget	       *parent);
 void	   gtk_widget_set_parent_window	  (GtkWidget	       *widget,
@@ -530,13 +556,16 @@ GdkVisual*   gtk_widget_get_visual	(GtkWidget	*widget);
  */
 void         gtk_widget_set_colormap    (GtkWidget      *widget,
 					 GdkColormap    *colormap);
+void         gtk_widget_set_visual      (GtkWidget      *widget, 
+					 GdkVisual      *visual);
+
 
 gint	     gtk_widget_get_events	(GtkWidget	*widget);
 void	     gtk_widget_get_pointer	(GtkWidget	*widget,
 					 gint		*x,
 					 gint		*y);
 
-gboolean     gtk_widget_is_ancestor	(GtkWidget	*widget,
+gint	     gtk_widget_is_ancestor	(GtkWidget	*widget,
 					 GtkWidget	*ancestor);
 
 /* Hide widget and return TRUE.
@@ -552,33 +581,8 @@ void	   gtk_widget_ensure_style	(GtkWidget	*widget);
 GtkStyle*  gtk_widget_get_style		(GtkWidget	*widget);
 void	   gtk_widget_restore_default_style (GtkWidget	*widget);
 
-void        gtk_widget_modify_style       (GtkWidget            *widget,
-					   GtkRcStyle           *style);
-GtkRcStyle *gtk_widget_get_modifier_style (GtkWidget            *widget);
-void        gtk_widget_modify_fg          (GtkWidget            *widget,
-					   GtkStateType          state,
-					   GdkColor             *color);
-void        gtk_widget_modify_bg          (GtkWidget            *widget,
-					   GtkStateType          state,
-					   GdkColor             *color);
-void        gtk_widget_modify_text        (GtkWidget            *widget,
-					   GtkStateType          state,
-					   GdkColor             *color);
-void        gtk_widget_modify_base        (GtkWidget            *widget,
-					   GtkStateType          state,
-					   GdkColor             *color);
-void        gtk_widget_modify_font        (GtkWidget            *widget,
-					   PangoFontDescription *font_desc);
-
-PangoContext *gtk_widget_create_pango_context (GtkWidget   *widget);
-PangoContext *gtk_widget_get_pango_context    (GtkWidget   *widget);
-PangoLayout  *gtk_widget_create_pango_layout  (GtkWidget   *widget,
-					       const gchar *text);
-
-GdkPixbuf* gtk_widget_render_stock_icon       (GtkWidget      *widget,
-                                               const gchar    *stock_id,
-                                               const gchar    *size,
-                                               const gchar    *detail);
+void       gtk_widget_modify_style      (GtkWidget      *widget,
+					 GtkRcStyle     *style);
 
 /* handle composite names for GTK_COMPOSITE_CHILD widgets,
  * the returned name is newly allocated.
@@ -596,28 +600,21 @@ void       gtk_widget_reset_rc_styles   (GtkWidget      *widget);
  */
 void	     gtk_widget_push_style	     (GtkStyle	 *style);
 void	     gtk_widget_push_colormap	     (GdkColormap *cmap);
+void	     gtk_widget_push_visual	     (GdkVisual	 *visual);
 void	     gtk_widget_push_composite_child (void);
 void	     gtk_widget_pop_composite_child  (void);
 void	     gtk_widget_pop_style	     (void);
 void	     gtk_widget_pop_colormap	     (void);
+void	     gtk_widget_pop_visual	     (void);
 
 /* Set certain default values to be used at widget creation time.
  */
 void	     gtk_widget_set_default_style    (GtkStyle	  *style);
 void	     gtk_widget_set_default_colormap (GdkColormap *colormap);
+void	     gtk_widget_set_default_visual   (GdkVisual	  *visual);
 GtkStyle*    gtk_widget_get_default_style    (void);
 GdkColormap* gtk_widget_get_default_colormap (void);
 GdkVisual*   gtk_widget_get_default_visual   (void);
-
-/* Functions for setting directionality for widgets
- */
-
-void             gtk_widget_set_direction         (GtkWidget        *widget,
-						   GtkTextDirection  dir);
-GtkTextDirection gtk_widget_get_direction         (GtkWidget        *widget);
-
-void             gtk_widget_set_default_direction (GtkTextDirection  dir);
-GtkTextDirection gtk_widget_get_default_direction (void);
 
 /* Counterpart to gdk_window_shape_combine_mask.
  */
@@ -645,6 +642,7 @@ void	     gtk_widget_class_path	   (GtkWidget *widget,
 #  define gtk_widget_ref gtk_object_ref
 #  define gtk_widget_unref gtk_object_unref
 #endif	/* GTK_TRACE_OBJECTS && __GNUC__ */
+
 
 
 #ifdef __cplusplus

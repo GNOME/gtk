@@ -1,6 +1,6 @@
 noinst_LTLIBRARIES = libpixops.la
 
-INCLUDES = $(GLIB_CFLAGS) $(GTK_CFLAGS) -I$(top_srcdir)/gdk-pixbuf
+INCLUDES = $(GLIB_CFLAGS) $(LIBART_CFLAGS)
 
 noinst_PROGRAMS = timescale
 
@@ -20,8 +20,3 @@ libpixops_la_SOURCES =  		\
 	pixops.h			\
 	pixops-internal.h		\
 	$(mmx_sources)
-
-EXTRA_DIST =				\
-	DETAILS				\
-	makefile.mingw			\
-	makefile.mingw.in

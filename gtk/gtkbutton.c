@@ -2,23 +2,23 @@
  * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
  *
  * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
+ * modify it under the terms of the GNU Library General Public
  * License as published by the Free Software Foundation; either
  * version 2 of the License, or (at your option) any later version.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
+ * Library General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public
+ * You should have received a copy of the GNU Library General Public
  * License along with this library; if not, write to the
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
  * Boston, MA 02111-1307, USA.
  */
 
 /*
- * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
+ * Modified by the GTK+ Team and others 1997-1999.  See the AUTHORS
  * file for a list of people on the GTK+ Team.  See the ChangeLog
  * files for a list of changes.  These files are distributed with
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
@@ -29,10 +29,7 @@
 #include "gtklabel.h"
 #include "gtkmain.h"
 #include "gtksignal.h"
-#include "gtkimage.h"
-#include "gtkhbox.h"
-#include "gtkstock.h"
-#include "gtkiconfactory.h"
+
 
 #define CHILD_SPACING     1
 #define DEFAULT_LEFT_POS  4
@@ -48,7 +45,6 @@ enum {
   LEAVE,
   LAST_SIGNAL
 };
-
 enum {
   ARG_0,
   ARG_LABEL,
@@ -71,6 +67,8 @@ static void gtk_button_size_request   (GtkWidget        *widget,
 static void gtk_button_size_allocate  (GtkWidget        *widget,
 				       GtkAllocation    *allocation);
 static void gtk_button_paint          (GtkWidget        *widget,
+				       GdkRectangle     *area);
+static void gtk_button_draw           (GtkWidget        *widget,
 				       GdkRectangle     *area);
 static void gtk_button_draw_focus     (GtkWidget        *widget);
 static void gtk_button_draw_default   (GtkWidget        *widget);
@@ -110,20 +108,20 @@ gtk_button_get_type (void)
 
   if (!button_type)
     {
-      static const GTypeInfo button_info =
+      static const GtkTypeInfo button_info =
       {
-	sizeof (GtkButtonClass),
-	NULL,		/* base_init */
-	NULL,		/* base_finalize */
-	(GClassInitFunc) gtk_button_class_init,
-	NULL,		/* class_finalize */
-	NULL,		/* class_data */
+	"GtkButton",
 	sizeof (GtkButton),
-	16,		/* n_preallocs */
-	(GInstanceInitFunc) gtk_button_init,
+	sizeof (GtkButtonClass),
+	(GtkClassInitFunc) gtk_button_class_init,
+	(GtkObjectInitFunc) gtk_button_init,
+        /* reserved_1 */ NULL,
+	/* reserved_2 */ NULL,
+	(GtkClassInitFunc) NULL,
       };
 
-      button_type = g_type_register_static (GTK_TYPE_BIN, "GtkButton", &button_info, 0);
+      button_type = gtk_type_unique (GTK_TYPE_BIN, &button_info);
+      gtk_type_set_chunk_alloc (button_type, 16);
     }
 
   return button_type;
@@ -142,11 +140,53 @@ gtk_button_class_init (GtkButtonClass *klass)
 
   parent_class = gtk_type_class (GTK_TYPE_BIN);
 
+  gtk_object_add_arg_type ("GtkButton::label", GTK_TYPE_STRING, GTK_ARG_READWRITE, ARG_LABEL);
+  gtk_object_add_arg_type ("GtkButton::relief", GTK_TYPE_RELIEF_STYLE, GTK_ARG_READWRITE, ARG_RELIEF);
+
+  button_signals[PRESSED] =
+    gtk_signal_new ("pressed",
+                    GTK_RUN_FIRST,
+                    object_class->type,
+                    GTK_SIGNAL_OFFSET (GtkButtonClass, pressed),
+                    gtk_marshal_NONE__NONE,
+		    GTK_TYPE_NONE, 0);
+  button_signals[RELEASED] =
+    gtk_signal_new ("released",
+                    GTK_RUN_FIRST,
+                    object_class->type,
+                    GTK_SIGNAL_OFFSET (GtkButtonClass, released),
+                    gtk_marshal_NONE__NONE,
+		    GTK_TYPE_NONE, 0);
+  button_signals[CLICKED] =
+    gtk_signal_new ("clicked",
+                    GTK_RUN_FIRST | GTK_RUN_ACTION,
+                    object_class->type,
+                    GTK_SIGNAL_OFFSET (GtkButtonClass, clicked),
+                    gtk_marshal_NONE__NONE,
+		    GTK_TYPE_NONE, 0);
+  button_signals[ENTER] =
+    gtk_signal_new ("enter",
+                    GTK_RUN_FIRST,
+                    object_class->type,
+                    GTK_SIGNAL_OFFSET (GtkButtonClass, enter),
+                    gtk_marshal_NONE__NONE,
+		    GTK_TYPE_NONE, 0);
+  button_signals[LEAVE] =
+    gtk_signal_new ("leave",
+                    GTK_RUN_FIRST,
+                    object_class->type,
+                    GTK_SIGNAL_OFFSET (GtkButtonClass, leave),
+                    gtk_marshal_NONE__NONE,
+		    GTK_TYPE_NONE, 0);
+
+  gtk_object_class_add_signals (object_class, button_signals, LAST_SIGNAL);
 
   object_class->set_arg = gtk_button_set_arg;
   object_class->get_arg = gtk_button_get_arg;
 
+  widget_class->activate_signal = button_signals[CLICKED];
   widget_class->realize = gtk_button_realize;
+  widget_class->draw = gtk_button_draw;
   widget_class->draw_focus = gtk_button_draw_focus;
   widget_class->draw_default = gtk_button_draw_default;
   widget_class->size_request = gtk_button_size_request;
@@ -168,46 +208,6 @@ gtk_button_class_init (GtkButtonClass *klass)
   klass->clicked = NULL;
   klass->enter = gtk_real_button_enter;
   klass->leave = gtk_real_button_leave;
-
-  gtk_object_add_arg_type ("GtkButton::label", GTK_TYPE_STRING, GTK_ARG_READWRITE, ARG_LABEL);
-  gtk_object_add_arg_type ("GtkButton::relief", GTK_TYPE_RELIEF_STYLE, GTK_ARG_READWRITE, ARG_RELIEF);
-
-  button_signals[PRESSED] =
-    gtk_signal_new ("pressed",
-                    GTK_RUN_FIRST,
-                    GTK_CLASS_TYPE (object_class),
-                    GTK_SIGNAL_OFFSET (GtkButtonClass, pressed),
-                    gtk_marshal_VOID__VOID,
-		    GTK_TYPE_NONE, 0);
-  button_signals[RELEASED] =
-    gtk_signal_new ("released",
-                    GTK_RUN_FIRST,
-                    GTK_CLASS_TYPE (object_class),
-                    GTK_SIGNAL_OFFSET (GtkButtonClass, released),
-                    gtk_marshal_VOID__VOID,
-		    GTK_TYPE_NONE, 0);
-  button_signals[CLICKED] =
-    gtk_signal_new ("clicked",
-                    GTK_RUN_FIRST | GTK_RUN_ACTION,
-                    GTK_CLASS_TYPE (object_class),
-                    GTK_SIGNAL_OFFSET (GtkButtonClass, clicked),
-                    gtk_marshal_VOID__VOID,
-		    GTK_TYPE_NONE, 0);
-  widget_class->activate_signal = button_signals[CLICKED];
-  button_signals[ENTER] =
-    gtk_signal_new ("enter",
-                    GTK_RUN_FIRST,
-                    GTK_CLASS_TYPE (object_class),
-                    GTK_SIGNAL_OFFSET (GtkButtonClass, enter),
-                    gtk_marshal_VOID__VOID,
-		    GTK_TYPE_NONE, 0);
-  button_signals[LEAVE] =
-    gtk_signal_new ("leave",
-                    GTK_RUN_FIRST,
-                    GTK_CLASS_TYPE (object_class),
-                    GTK_SIGNAL_OFFSET (GtkButtonClass, leave),
-                    gtk_marshal_VOID__VOID,
-		    GTK_TYPE_NONE, 0);
 }
 
 static void
@@ -307,93 +307,6 @@ gtk_button_new_with_label (const gchar *label)
 
   gtk_container_add (GTK_CONTAINER (button), label_widget);
   gtk_widget_show (label_widget);
-
-  return button;
-}
-
-GtkWidget*
-gtk_button_new_stock (const gchar   *stock_id,
-                      GtkAccelGroup *accel_group)
-{
-  GtkWidget *button;
-  GtkStockItem item;
-
-  if (gtk_stock_lookup (stock_id, &item))
-    {
-      GtkWidget *label;
-      GtkWidget *image;
-      GtkWidget *hbox;
-      guint keyval;
-      
-      button = gtk_button_new ();
-
-      label = gtk_label_new (NULL);
-      keyval = gtk_label_parse_uline (GTK_LABEL (label),
-                                      item.label);
-
-      if (keyval && accel_group)
-        {
-          gtk_widget_add_accelerator (button,
-                                      "clicked",
-                                      accel_group,
-                                      keyval,
-                                      GDK_MOD1_MASK,
-                                      GTK_ACCEL_LOCKED);
-        }
-
-      /* Also add the stock accelerator if one was specified. */
-      if (item.keyval && accel_group)
-        {
-          gtk_widget_add_accelerator (button,
-                                      "clicked",
-                                      accel_group,
-                                      item.keyval,
-                                      item.modifier,
-                                      GTK_ACCEL_LOCKED);
-        }
-
-      image = gtk_image_new_from_stock (stock_id, GTK_ICON_SIZE_BUTTON);
-      hbox = gtk_hbox_new (FALSE, 0);
-
-      gtk_box_pack_start (GTK_BOX (hbox), image, FALSE, FALSE, 2);
-      gtk_box_pack_end (GTK_BOX (hbox), label, TRUE, TRUE, 2);
-      
-      gtk_container_add (GTK_CONTAINER (button), hbox);
-      gtk_widget_show_all (hbox);
-    }
-  else
-    {
-      button = gtk_button_new_accel (stock_id, accel_group);
-    }
-  
-  return button;
-}
-
-GtkWidget*
-gtk_button_new_accel (const gchar   *uline_label,
-                      GtkAccelGroup *accel_group)
-{
-  GtkWidget *button;
-  GtkWidget *label;
-  guint keyval;
-
-  button = gtk_button_new ();
-  
-  label = gtk_label_new (NULL);
-  keyval = gtk_label_parse_uline (GTK_LABEL (label), uline_label);
-
-  if (keyval && accel_group)
-    {
-      gtk_widget_add_accelerator (button,
-                                  "clicked",
-                                  accel_group,
-                                  keyval,
-                                  GDK_MOD1_MASK,
-                                  GTK_ACCEL_LOCKED);
-    }
-  
-  gtk_container_add (GTK_CONTAINER (button), label);
-  gtk_widget_show (label);
 
   return button;
 }
@@ -516,15 +429,15 @@ gtk_button_size_request (GtkWidget      *widget,
   button = GTK_BUTTON (widget);
 
   requisition->width = (GTK_CONTAINER (widget)->border_width + CHILD_SPACING +
-			GTK_WIDGET (widget)->style->xthickness) * 2;
+			GTK_WIDGET (widget)->style->klass->xthickness) * 2;
   requisition->height = (GTK_CONTAINER (widget)->border_width + CHILD_SPACING +
-			 GTK_WIDGET (widget)->style->ythickness) * 2;
+			 GTK_WIDGET (widget)->style->klass->ythickness) * 2;
 
   if (GTK_WIDGET_CAN_DEFAULT (widget))
     {
-      requisition->width += (GTK_WIDGET (widget)->style->xthickness * 2 +
+      requisition->width += (GTK_WIDGET (widget)->style->klass->xthickness * 2 +
 			     DEFAULT_SPACING);
-      requisition->height += (GTK_WIDGET (widget)->style->ythickness * 2 +
+      requisition->height += (GTK_WIDGET (widget)->style->klass->ythickness * 2 +
 			      DEFAULT_SPACING);
     }
 
@@ -565,8 +478,8 @@ gtk_button_size_allocate (GtkWidget     *widget,
 
   if (GTK_BIN (button)->child && GTK_WIDGET_VISIBLE (GTK_BIN (button)->child))
     {
-      child_allocation.x = (CHILD_SPACING + GTK_WIDGET (widget)->style->xthickness);
-      child_allocation.y = (CHILD_SPACING + GTK_WIDGET (widget)->style->ythickness);
+      child_allocation.x = (CHILD_SPACING + GTK_WIDGET (widget)->style->klass->xthickness);
+      child_allocation.y = (CHILD_SPACING + GTK_WIDGET (widget)->style->klass->ythickness);
 
       child_allocation.width = MAX (1, (gint)widget->allocation.width - child_allocation.x * 2 -
 	                         border_width * 2);
@@ -575,14 +488,14 @@ gtk_button_size_allocate (GtkWidget     *widget,
 
       if (GTK_WIDGET_CAN_DEFAULT (button))
 	{
-	  child_allocation.x += (GTK_WIDGET (widget)->style->xthickness +
+	  child_allocation.x += (GTK_WIDGET (widget)->style->klass->xthickness +
 				 DEFAULT_LEFT_POS);
-	  child_allocation.y += (GTK_WIDGET (widget)->style->ythickness +
+	  child_allocation.y += (GTK_WIDGET (widget)->style->klass->ythickness +
 				 DEFAULT_TOP_POS);
 	  child_allocation.width =  MAX (1, (gint)child_allocation.width -
-					 (gint)(GTK_WIDGET (widget)->style->xthickness * 2 + DEFAULT_SPACING));
+					 (gint)(GTK_WIDGET (widget)->style->klass->xthickness * 2 + DEFAULT_SPACING));
 	  child_allocation.height = MAX (1, (gint)child_allocation.height -
-					 (gint)(GTK_WIDGET (widget)->style->xthickness * 2 + DEFAULT_SPACING));
+					 (gint)(GTK_WIDGET (widget)->style->klass->xthickness * 2 + DEFAULT_SPACING));
 	}
 
       gtk_widget_size_allocate (GTK_BIN (button)->child, &child_allocation);
@@ -647,8 +560,8 @@ gtk_button_paint (GtkWidget    *widget,
 
       if (GTK_WIDGET_CAN_DEFAULT (widget))
 	{
-	  x += widget->style->xthickness;
-	  y += widget->style->ythickness;
+	  x += widget->style->klass->xthickness;
+	  y += widget->style->klass->ythickness;
 	  width -= 2 * x + DEFAULT_SPACING;
 	  height -= 2 * y + DEFAULT_SPACING;
 	  x += DEFAULT_LEFT_POS;
@@ -682,11 +595,38 @@ gtk_button_paint (GtkWidget    *widget,
 	  y -= 1;
 	  width += 2;
 	  height += 2;
-
+	     
 	  gtk_paint_focus (widget->style, widget->window,
 			   area, widget, "button",
 			   x, y, width - 1, height - 1);
 	}
+    }
+}
+
+static void
+gtk_button_draw (GtkWidget    *widget,
+		 GdkRectangle *area)
+{
+  GtkButton *button;
+  GdkRectangle child_area;
+  GdkRectangle tmp_area;
+
+  g_return_if_fail (widget != NULL);
+  g_return_if_fail (GTK_IS_BUTTON (widget));
+  g_return_if_fail (area != NULL);
+
+  if (GTK_WIDGET_DRAWABLE (widget))
+    {
+      button = GTK_BUTTON (widget);
+
+      tmp_area = *area;
+      tmp_area.x -= GTK_CONTAINER (button)->border_width;
+      tmp_area.y -= GTK_CONTAINER (button)->border_width;
+
+      gtk_button_paint (widget, &tmp_area);
+
+      if (GTK_BIN (button)->child && gtk_widget_intersect (GTK_BIN (button)->child, &tmp_area, &child_area))
+	gtk_widget_draw (GTK_BIN (button)->child, &child_area);
     }
 }
 

@@ -2,23 +2,23 @@
  * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
  *
  * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
+ * modify it under the terms of the GNU Library General Public
  * License as published by the Free Software Foundation; either
  * version 2 of the License, or (at your option) any later version.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
+ * Library General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public
+ * You should have received a copy of the GNU Library General Public
  * License along with this library; if not, write to the
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
  * Boston, MA 02111-1307, USA.
  */
 
 /*
- * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
+ * Modified by the GTK+ Team and others 1997-1999.  See the AUTHORS
  * file for a list of people on the GTK+ Team.  See the ChangeLog
  * files for a list of changes.  These files are distributed with
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
@@ -45,6 +45,9 @@ extern "C" {
 #define GTK_NOTEBOOK_GET_CLASS(obj)        (GTK_CHECK_GET_CLASS ((obj), GTK_TYPE_NOTEBOOK, GtkNotebookClass))
 
 
+#define GTK_NOTEBOOK_PAGE(_glist_)         ((GtkNotebookPage *)((GList *)(_glist_))->data)
+
+
 typedef struct _GtkNotebook       GtkNotebook;
 typedef struct _GtkNotebookClass  GtkNotebookClass;
 typedef struct _GtkNotebookPage   GtkNotebookPage;
@@ -55,7 +58,7 @@ struct _GtkNotebook
   
   GtkNotebookPage *cur_page;
   GList *children;
-  GList *first_tab;		/* The first tab visible (for scrolling notebooks) */
+  GList *first_tab;
   GList *focus_tab;
   
   GtkWidget *menu;
@@ -88,11 +91,27 @@ struct _GtkNotebookClass
 			      guint            page_num);
 };
 
+struct _GtkNotebookPage
+{
+  GtkWidget *child;
+  GtkWidget *tab_label;
+  GtkWidget *menu_label;
+
+  guint default_menu : 1;
+  guint default_tab  : 1;
+  guint expand       : 1;
+  guint fill         : 1;
+  guint pack         : 1;
+
+  GtkRequisition requisition;
+  GtkAllocation allocation;
+};
+
 /***********************************************************
  *           Creation, insertion, deletion                 *
  ***********************************************************/
 
-GtkType gtk_notebook_get_type       (void) G_GNUC_CONST;
+GtkType gtk_notebook_get_type       (void);
 GtkWidget * gtk_notebook_new        (void);
 void gtk_notebook_append_page       (GtkNotebook *notebook,
 				     GtkWidget   *child,
@@ -124,15 +143,15 @@ void gtk_notebook_remove_page       (GtkNotebook *notebook,
  *            query, set current NoteebookPage             *
  ***********************************************************/
 
-gint       gtk_notebook_get_current_page (GtkNotebook *notebook);
-GtkWidget* gtk_notebook_get_nth_page     (GtkNotebook *notebook,
-					  gint         page_num);
-gint       gtk_notebook_page_num         (GtkNotebook *notebook,
-					  GtkWidget   *child);
-void       gtk_notebook_set_page         (GtkNotebook *notebook,
-					  gint         page_num);
-void       gtk_notebook_next_page        (GtkNotebook *notebook);
-void       gtk_notebook_prev_page        (GtkNotebook *notebook);
+gint gtk_notebook_get_current_page   (GtkNotebook *notebook);
+GtkWidget* gtk_notebook_get_nth_page (GtkNotebook *notebook,
+				      gint         page_num);
+gint gtk_notebook_page_num         (GtkNotebook *notebook,
+				    GtkWidget   *child);
+void gtk_notebook_set_page         (GtkNotebook *notebook,
+				    gint         page_num);
+void gtk_notebook_next_page        (GtkNotebook *notebook);
+void gtk_notebook_prev_page        (GtkNotebook *notebook);
 
 /***********************************************************
  *            set Notebook, NotebookTab style              *

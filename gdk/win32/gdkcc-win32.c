@@ -2,16 +2,16 @@
  * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
  *
  * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
+ * modify it under the terms of the GNU Library General Public
  * License as published by the Free Software Foundation; either
  * version 2 of the License, or (at your option) any later version.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
+ * Library General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public
+ * You should have received a copy of the GNU Library General Public
  * License along with this library; if not, write to the
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
  * Boston, MA 02111-1307, USA.
@@ -54,7 +54,7 @@
  */
 
 /*
- * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
+ * Modified by the GTK+ Team and others 1997-1999.  See the AUTHORS
  * file for a list of people on the GTK+ Team.  See the ChangeLog
  * files for a list of changes.  These files are distributed with
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
@@ -68,7 +68,6 @@
 #include "gdkcc.h"
 #include "gdkcolor.h"
 #include "gdkwin32.h"
-#include "gdkinternals.h"
 
 #define MAX_IMAGE_COLORS 256
 
@@ -276,6 +275,7 @@ init_color (GdkColorContext *cc)
 static void
 init_true_color (GdkColorContext *cc)
 {
+  GdkColorContextPrivate *ccp = (GdkColorContextPrivate *) cc;
   gulong rmask, gmask, bmask;
   
   cc->mode = GDK_CC_MODE_TRUE;
@@ -338,6 +338,7 @@ init_true_color (GdkColorContext *cc)
     }
   
   cc->num_colors = (cc->visual->red_mask | cc->visual->green_mask | cc->visual->blue_mask) + 1;
+  
   cc->white_pixel = 0xffffff;
   cc->black_pixel = 0;
 }
@@ -346,7 +347,7 @@ static void
 init_palette (GdkColorContext *cc)
 {
   /* restore correct mode for this cc */
-  
+ 
   switch (cc->visual->type)
     {
     case GDK_VISUAL_STATIC_GRAY:
@@ -387,7 +388,7 @@ init_palette (GdkColorContext *cc)
 			    free_hash_entry,
 			    NULL);
       g_hash_table_destroy (cc->color_hash);
-      cc->color_hash = NULL;
+      cc->color_hash = g_hash_table_new (hash_color, compare_colors);
     }
   
   cc->palette = NULL;

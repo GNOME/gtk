@@ -22,8 +22,7 @@
 <!entity GtkData SYSTEM "sgml/gtkdata.sgml">
 <!entity GtkDialog SYSTEM "sgml/gtkdialog.sgml">
 <!entity GtkDrawingArea SYSTEM "sgml/gtkdrawingarea.sgml">
-<!entity gtk-GtkEditable SYSTEM "sgml/gtkeditable.sgml">
-<!entity GtkOldEditable SYSTEM "sgml/gtkoldeditable.sgml">
+<!entity GtkEditable SYSTEM "sgml/gtkeditable.sgml">
 <!entity GtkEntry SYSTEM "sgml/gtkentry.sgml">
 <!entity GtkEventBox SYSTEM "sgml/gtkeventbox.sgml">
 <!entity GtkFileSelection SYSTEM "sgml/gtkfilesel.sgml">
@@ -41,9 +40,6 @@
 <!entity GtkHScrollbar SYSTEM "sgml/gtkhscrollbar.sgml">
 <!entity GtkHSeparator SYSTEM "sgml/gtkhseparator.sgml">
 <!entity GtkImage SYSTEM "sgml/gtkimage.sgml">
-<!entity GtkIMContext SYSTEM "sgml/gtkimcontext.sgml">
-<!entity GtkIMContextSimple SYSTEM "sgml/gtkimcontextsimple.sgml">
-<!entity GtkIMMulticontext SYSTEM "sgml/gtkimmulticontext.sgml">
 <!entity GtkInputDialog SYSTEM "sgml/gtkinputdialog.sgml">
 <!entity GtkInvisible SYSTEM "sgml/gtkinvisible.sgml">
 <!entity GtkItem SYSTEM "sgml/gtkitem.sgml">
@@ -56,7 +52,6 @@
 <!entity GtkMenuBar SYSTEM "sgml/gtkmenubar.sgml">
 <!entity GtkMenuItem SYSTEM "sgml/gtkmenuitem.sgml">
 <!entity GtkMenuShell SYSTEM "sgml/gtkmenushell.sgml">
-<!entity GtkMessageDialog SYSTEM "sgml/gtkmessagedialog.sgml">
 <!entity GtkMisc SYSTEM "sgml/gtkmisc.sgml">
 <!entity GtkNotebook SYSTEM "sgml/gtknotebook.sgml">
 <!entity GtkObject SYSTEM "sgml/gtkobject.sgml">
@@ -82,31 +77,12 @@
 <!entity GtkTable SYSTEM "sgml/gtktable.sgml">
 <!entity GtkTearoffMenuItem SYSTEM "sgml/gtktearoffmenuitem.sgml">
 <!entity GtkText SYSTEM "sgml/gtktext.sgml">
-<!entity GtkTextBuffer SYSTEM "sgml/gtktextbuffer.sgml">
-<!entity gtk-GtkTextIter SYSTEM "sgml/gtktextiter.sgml">
-<!entity gtk-GtkTextMark SYSTEM "sgml/gtktextmark.sgml">
-<!entity GtkTextTag SYSTEM "sgml/gtktexttag.sgml">
-<!entity GtkTextTagTable SYSTEM "sgml/gtktexttagtable.sgml">
-<!entity GtkTextView SYSTEM "sgml/gtktextview.sgml">
 <!entity GtkTipsQuery SYSTEM "sgml/gtktipsquery.sgml">
 <!entity GtkToggleButton SYSTEM "sgml/gtktogglebutton.sgml">
 <!entity GtkToolbar SYSTEM "sgml/gtktoolbar.sgml">
 <!entity GtkTooltips SYSTEM "sgml/gtktooltips.sgml">
 <!entity GtkTree SYSTEM "sgml/gtktree.sgml">
 <!entity GtkTreeItem SYSTEM "sgml/gtktreeitem.sgml">
-<!entity gtk-GtkTreeModel SYSTEM "sgml/gtktreemodel.sgml">
-<!entity gtk-GtkTreeModelSort SYSTEM "sgml/gtktreemodelsort.sgml">
-<!entity gtk-GtkTreeSelection SYSTEM "sgml/gtktreeselection.sgml">
-<!entity gtk-GtkTreeStore SYSTEM "sgml/gtktreestore.sgml">
-<!entity gtk-GtkTreeViewColumn SYSTEM "sgml/gtktreeviewcolumn.sgml">
-<!entity gtk-GtkTreeView SYSTEM "sgml/gtktreeview.sgml">
-<!entity gtk-GtkModelSimple SYSTEM "sgml/gtkmodelsimple.sgml">
-<!entity gtk-GtkCellRenderer SYSTEM "sgml/gtkcellrenderer.sgml">
-<!entity gtk-GtkCellRendererPixbuf SYSTEM "sgml/gtkcellrendererpixbuf.sgml">
-<!entity gtk-GtkCellRendererText SYSTEM "sgml/gtkcellrenderertext.sgml">
-<!entity gtk-GtkCellRendererTextPixbuf SYSTEM "sgml/gtkcellrenderertextpixbuf.sgml">
-<!entity gtk-GtkCellRendererToggle SYSTEM "sgml/gtkcellrenderertoggle.sgml">
-<!entity gtk-GtkListStore SYSTEM "sgml/gtkliststore.sgml">
 <!entity GtkVButtonBox SYSTEM "sgml/gtkvbbox.sgml">
 <!entity GtkVBox SYSTEM "sgml/gtkvbox.sgml">
 <!entity GtkViewport SYSTEM "sgml/gtkviewport.sgml">
@@ -125,21 +101,18 @@
 <!entity gtk-Resource-Files SYSTEM "sgml/gtkrc.sgml">
 <!entity gtk-Keyboard-Accelerators SYSTEM "sgml/gtkaccelgroup.sgml">
 <!entity gtk-Selections SYSTEM "sgml/gtkselection.sgml">
-<!entity gtk-Clipboards SYSTEM "sgml/gtkclipboard.sgml">
 <!entity gtk-Drag-and-Drop SYSTEM "sgml/gtkdnd.sgml">
 <!entity gtk-Signals SYSTEM "sgml/gtksignal.sgml">
+<!entity gtk-Signal-Marshallers SYSTEM "sgml/gtkmarshal.sgml">
 <!entity gtk-Object-Properties SYSTEM "sgml/gtkarg.sgml">
 <!entity gtk-Types SYSTEM "sgml/gtktypeutils.sgml">
 <!entity gtk-Bindings SYSTEM "sgml/gtkbindings.sgml">
 <!entity gtk-Standard-Enumerations SYSTEM "sgml/gtkenums.sgml">
-<!entity gtk-Stock-Items SYSTEM "sgml/gtkstock.sgml">
-<!entity gtk-Themeable-Stock-Images SYSTEM "sgml/gtkiconfactory.sgml">
+<!entity gtk-Private-Information SYSTEM "sgml/gtkprivate.sgml">
 
 <!entity index-Object-Tree SYSTEM "sgml/tree_index.sgml">
 
 <!entity index-Objects-Grouped SYSTEM "objects_grouped.sgml">
-<!entity gtk-TextWidget SYSTEM "text_widget.sgml">
-<!entity gtk-TreeWidget SYSTEM "tree_widget.sgml">
 ]>
 <book id="index">
   <bookinfo>
@@ -193,212 +166,128 @@ An advanced widget set.
 </varlistentry>
 </variablelist>
     </para>
-
     &gtk-General;
     &gtk-Feature-Test-Macros;
     &gtk-Graphics-Contexts;
     &gtk-Styles;
-<!--    &gtk-Themes; -->
+    &gtk-Themes;
     &gtk-Resource-Files;
     &gtk-Keyboard-Accelerators;
     &gtk-Selections;
-    &gtk-Clipboards;
     &gtk-Drag-and-Drop;
     &gtk-Signals;
+    &gtk-Signal-Marshallers;
     &gtk-Object-Properties;
-    &gtk-Stock-Items;
-    &gtk-Themeable-Stock-Images;
     &gtk-Types;
     &gtk-Bindings;
     &gtk-Standard-Enumerations;
-
+    &gtk-Private-Information;
   </chapter>
 
-  <chapter  id="gtkobjects" role="no-toc">
+  <chapter id="gtkobjects" role="no-toc">
     <title>GTK+ Widgets and Objects</title>
+    &index-Objects-Grouped;
 
+    &GtkAccelLabel;
+    &GtkAdjustment;
+    &GtkAlignment;
+    &GtkArrow;
+    &GtkAspectFrame;
+    &GtkButtonBox;
+    &GtkBin;
+    &GtkBox;
+    &GtkButton;
+    &GtkCalendar;
+    &GtkCheckButton;
+    &GtkCheckMenuItem;
+    &GtkCList;
+    &GtkColorSelection;
+    &GtkColorSelectionDialog;
+    &GtkCombo;
+    &GtkContainer;
+    &GtkCTree;
+    &GtkCurve;
+    &GtkData;
+    &GtkDialog;
+    &GtkDrawingArea;
+    &GtkEditable;
+    &GtkEntry;
+    &GtkEventBox;
+    &GtkFileSelection;
+    &GtkFixed;
+    &GtkFontSelection;
+    &GtkFontSelectionDialog;
+    &GtkFrame;
+    &GtkGammaCurve;
+    &GtkHandleBox;
+    &GtkHButtonBox;
+    &GtkHBox;
+    &GtkHPaned;
+    &GtkHRuler;
+    &GtkHScale;
+    &GtkHScrollbar;
+    &GtkHSeparator;
+    &GtkImage;
+    &GtkInputDialog;
+    &GtkInvisible;
+    &GtkItem;
+    &GtkItemFactory;
+    &GtkLabel;
+    &GtkLayout;
+    &GtkList;
+    &GtkListItem;
+    &GtkMenu;
+    &GtkMenuBar;
+    &GtkMenuItem;
+    &GtkMenuShell;
+    &GtkMisc;
+    &GtkNotebook;
+    &GtkObject;
+    &GtkOptionMenu;
+    &GtkPacker;
+    &GtkPaned;
+    &GtkPixmap;
+    &GtkPlug;
+    &GtkPreview;
+    &GtkProgress;
+    &GtkProgressBar;
+    &GtkRadioButton;
+    &GtkRadioMenuItem;
+    &GtkRange;
+    &GtkRuler;
+    &GtkScale;
+    &GtkScrollbar;
+    &GtkScrolledWindow;
+    &GtkSeparator;
+    &GtkSocket;
+    &GtkSpinButton;
+    &GtkStatusbar;
+    &GtkTable;
+    &GtkTearoffMenuItem;
+    &GtkText;
+    &GtkTipsQuery;
+    &GtkToggleButton;
+    &GtkToolbar;
+    &GtkTooltips;
+    &GtkTree;
+    &GtkTreeItem;
+    &GtkVButtonBox;
+    &GtkVBox;
+    &GtkViewport;
+    &GtkVPaned;
+    &GtkVRuler;
+    &GtkVScale;
+    &GtkVScrollbar;
+    &GtkVSeparator;
+    &GtkWidget;
+    &GtkWindow;
+  </chapter>
+
+  <chapter id="gtk-index">
+    <title>Index</title>
     <sect1>
       <title>Object Hierarchy</title>
     &index-Object-Tree;
     </sect1>
-
-    <sect1 id="WindowWidgets">
-      <title>Windows</title>
-        &GtkDialog;
-        &GtkInvisible;
-        &GtkMessageDialog;
-        &GtkPlug;
-        &GtkWindow;
-    </sect1>
-
-    <sect1 id="DisplayWidgets">
-      <title>Display Widgets</title>
-        &GtkAccelLabel;
-        &GtkImage;
-        &GtkLabel;
-        &GtkProgressBar;
-        &GtkStatusbar;
-    </sect1>
-
-    <sect1 id="ButtonWidgets">
-      <title>Buttons and Toggles</title>
-        &GtkButton;
-        &GtkCheckButton;
-        &GtkRadioButton;
-        &GtkToggleButton;
-    </sect1>
-
-    <sect1 id="NumericEntry">
-      <title>Numeric/Text Data Entry</title>
-        &GtkEntry;
-        &GtkHScale;      
-        &GtkSpinButton;
-        &GtkVScale;
-    </sect1>
-
-    <sect1 id="TextWidgetObjects">
-      <title>Multiline Text Editor</title>
-        &gtk-TextWidget;
-        &gtk-GtkTextIter;
-        &gtk-GtkTextMark;
-        &GtkText;
-        &GtkTextBuffer;
-        &GtkTextTag;
-        &GtkTextTagTable;
-        &GtkTextView;
-    </sect1>
-
-    <sect1 id="TreeWidgetObjects">
-      <title>Tree and List Widget</title>
-        &gtk-TreeWidget;
-        &gtk-GtkTreeModel;
-        &gtk-GtkTreeSelection;
-        &gtk-GtkTreeStore;
-        &gtk-GtkTreeViewColumn;
-        &gtk-GtkTreeView;
-        &gtk-GtkModelSimple;
-        &gtk-GtkTreeModelSort;
-        &gtk-GtkCellRenderer;
-        &gtk-GtkCellRendererPixbuf;
-        &gtk-GtkCellRendererText;
-        &gtk-GtkCellRendererTextPixbuf;
-        &gtk-GtkCellRendererToggle;
-        &gtk-GtkListStore;
-    </sect1>
-    <sect1 id="MenusAndCombos">
-      <title>Menus, Combo Box, Toolbar</title>
-        &GtkCheckMenuItem;      
-        &GtkCombo;
-        &GtkItemFactory;
-        &GtkMenu;
-        &GtkMenuBar;
-        &GtkMenuItem;
-        &GtkMenuShell;
-        &GtkOptionMenu;
-        &GtkRadioMenuItem;
-        &GtkTearoffMenuItem;
-        &GtkToolbar;
-    </sect1>
-
-    <sect1 id="SelectorWidgets">
-      <title>Selectors (File/Font/Color/Input Devices)</title>
-        &GtkColorSelection;
-        &GtkColorSelectionDialog;
-        &GtkFileSelection;
-        &GtkFontSelection;
-        &GtkFontSelectionDialog;
-        &GtkInputDialog;
-    </sect1>
-    
-    <sect1 id="LayoutContainers">
-      <title>Layout Containers</title>
-        &GtkAlignment;
-        &GtkAspectFrame;
-        &GtkHBox;
-        &GtkHButtonBox;
-        &GtkFixed;
-        &GtkHPaned;
-        &GtkLayout;
-        &GtkNotebook;
-        &GtkTable;
-        &GtkVButtonBox;
-        &GtkVBox;
-        &GtkVPaned;
-    </sect1>
-
-    <sect1 id="Ornaments">
-      <title>Ornaments</title>
-        &GtkFrame;
-        &GtkHSeparator;
-        &GtkVSeparator;
-    </sect1>
-
-    <sect1 id="ScrollingWidgets">
-      <title>Scrolling</title>
-        &GtkHScrollbar;
-        &GtkScrolledWindow;
-        &GtkVScrollbar;
-    </sect1>
-
-    <sect1 id="MiscObjects">
-      <title>Miscellaneous</title>
-        &GtkAdjustment;
-        &GtkArrow;
-        &GtkCalendar;
-        &GtkDrawingArea;
-        &GtkEventBox;
-        &GtkHandleBox;
-        &GtkIMContext;
-        &GtkIMMulticontext;
-        &GtkTooltips;
-        &GtkViewport;
-    </sect1>
-
-    <sect1 id="AbstractObjects">
-      <title>Abstract Base Classes</title>
-        &GtkBin;
-        &GtkBox;
-        &GtkContainer;
-        &gtk-GtkEditable;
-        &GtkOldEditable;
-        &GtkButtonBox;
-        &GtkMisc;
-        &GtkObject;
-        &GtkPaned;
-        &GtkRange;
-        &GtkScale;
-        &GtkScrollbar;
-        &GtkSeparator;
-        &GtkWidget;
-    </sect1>    
-
-    <sect1 id="PlugSocket">
-      <title>Cross-process Embedding</title>
-        &GtkSocket;
-    </sect1>
-
-    <sect1 id="DeprecatedObjects">
-      <title>Deprecated</title>
-        &GtkCList;      
-        &GtkCTree;
-        &GtkCurve;
-        &GtkData;
-        &GtkGammaCurve;
-        &GtkHRuler;
-        &GtkItem;
-        &GtkList;
-        &GtkListItem;
-        &GtkPacker;
-        &GtkPixmap;
-        &GtkPreview;
-        &GtkProgress;
-        &GtkRuler;
-        &GtkTipsQuery;
-        &GtkTree;
-        &GtkTreeItem;
-        &GtkVRuler;
-    </sect1>
-
   </chapter>
-
 </book>

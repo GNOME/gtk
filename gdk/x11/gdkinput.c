@@ -2,23 +2,23 @@
  * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
  *
  * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
+ * modify it under the terms of the GNU Library General Public
  * License as published by the Free Software Foundation; either
  * version 2 of the License, or (at your option) any later version.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
+ * Library General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public
+ * You should have received a copy of the GNU Library General Public
  * License along with this library; if not, write to the
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
  * Boston, MA 02111-1307, USA.
  */
 
 /*
- * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
+ * Modified by the GTK+ Team and others 1997-1999.  See the AUTHORS
  * file for a list of people on the GTK+ Team.  See the ChangeLog
  * files for a list of changes.  These files are distributed with
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
@@ -34,29 +34,22 @@
 #include "gdkprivate.h"
 #include "gdkinputprivate.h"
 
-static GdkDeviceAxis gdk_input_core_axes[] = {
-  { GDK_AXIS_X, 0, 0 },
-  { GDK_AXIS_Y, 0, 0 }
-};
+static const GdkAxisUse gdk_input_core_axes[] = { GDK_AXIS_X, GDK_AXIS_Y };
 
-static const GdkDevice gdk_input_core_info =
+const GdkDeviceInfo gdk_input_core_info =
 {
+  GDK_CORE_POINTER,
   "Core Pointer",
   GDK_SOURCE_MOUSE,
   GDK_MODE_SCREEN,
   TRUE,
-  
   2,
-  gdk_input_core_axes,
-
-  0,
-  NULL
+  gdk_input_core_axes
 };
 
-GdkDevice *gdk_core_pointer = (GdkDevice *)&gdk_input_core_info;
- 
 /* Global variables  */
 
+GdkInputVTable    gdk_input_vtable;
 /* information about network port and host for gxid daemon */
 gchar            *gdk_input_gxid_host;
 gint              gdk_input_gxid_port;
@@ -66,138 +59,124 @@ GList            *gdk_input_devices;
 GList            *gdk_input_windows;
 
 GList *
-gdk_devices_list (void)
+gdk_input_list_devices (void)
 {
   return gdk_input_devices;
 }
 
 void
-gdk_device_set_source (GdkDevice      *device,
-		       GdkInputSource  source)
+gdk_input_set_source (guint32 deviceid, GdkInputSource source)
 {
-  g_return_if_fail (device != NULL);
+  GdkDevicePrivate *gdkdev = gdk_input_find_device(deviceid);
+  g_return_if_fail (gdkdev != NULL);
 
-  device->source = source;
-}
-
-void
-gdk_device_set_key (GdkDevice      *device,
-		    guint           index,
-		    guint           keyval,
-		    GdkModifierType modifiers)
-{
-  g_return_if_fail (device != NULL);
-  g_return_if_fail (index < device->num_keys);
-
-  device->keys[index].keyval = keyval;
-  device->keys[index].modifiers = modifiers;
-}
-
-void
-gdk_device_set_axis_use (GdkDevice   *device,
-			 guint        index,
-			 GdkAxisUse   use)
-{
-  g_return_if_fail (device != NULL);
-  g_return_if_fail (index < device->num_axes);
-
-  device->axes[index].use = use;
-
-  switch (use)
-    {
-    case GDK_AXIS_X:
-    case GDK_AXIS_Y:
-      device->axes[index].min = 0.;
-      device->axes[index].max = 0.;
-      break;
-    case GDK_AXIS_XTILT:
-    case GDK_AXIS_YTILT:
-      device->axes[index].min = -1.;
-      device->axes[index].max = 1;
-      break;
-    default:
-      device->axes[index].min = 0.;
-      device->axes[index].max = 1;
-      break;
-    }
+  gdkdev->info.source = source;
 }
 
 gboolean
-gdk_device_get_history  (GdkDevice         *device,
-			 GdkWindow         *window,
-			 guint32            start,
-			 guint32            stop,
-			 GdkTimeCoord    ***events,
-			 gint              *n_events)
+gdk_input_set_mode (guint32 deviceid, GdkInputMode mode)
 {
-  GdkTimeCoord **coords;
+  if (deviceid == GDK_CORE_POINTER)
+    return FALSE;
+
+  if (gdk_input_vtable.set_mode)
+    return gdk_input_vtable.set_mode(deviceid,mode);
+  else
+    return FALSE;
+}
+
+void
+gdk_input_set_axes (guint32 deviceid, GdkAxisUse *axes)
+{
+  if (deviceid != GDK_CORE_POINTER && gdk_input_vtable.set_axes)
+    gdk_input_vtable.set_axes (deviceid, axes);
+}
+
+void gdk_input_set_key (guint32 deviceid,
+			guint   index,
+			guint   keyval,
+			GdkModifierType modifiers)
+{
+  if (deviceid != GDK_CORE_POINTER && gdk_input_vtable.set_key)
+    gdk_input_vtable.set_key (deviceid, index, keyval, modifiers);
+}
+
+GdkTimeCoord *
+gdk_input_motion_events (GdkWindow *window,
+			 guint32 deviceid,
+			 guint32 start,
+			 guint32 stop,
+			 gint *nevents_return)
+{
+  XTimeCoord *xcoords;
+  GdkTimeCoord *coords;
   int i;
 
-  g_return_val_if_fail (window != NULL, FALSE);
-  g_return_val_if_fail (GDK_IS_WINDOW (window), FALSE);
-  g_return_val_if_fail (events != NULL, FALSE);
-  g_return_val_if_fail (n_events != NULL, FALSE);
+  g_return_val_if_fail (window != NULL, NULL);
+  g_return_val_if_fail (GDK_IS_WINDOW (window), NULL);
+  
+  if (GDK_DRAWABLE_DESTROYED (window))
+    return NULL;
 
-  *n_events = 0;
-  *events = NULL;
-
-  if (GDK_WINDOW_DESTROYED (window))
-    return FALSE;
-    
-  if (GDK_IS_CORE (device))
+  if (deviceid == GDK_CORE_POINTER)
     {
-      XTimeCoord *xcoords;
-      
       xcoords = XGetMotionEvents (GDK_DRAWABLE_XDISPLAY (window),
 				  GDK_DRAWABLE_XID (window),
-				  start, stop, n_events);
+				  start, stop, nevents_return);
       if (xcoords)
 	{
-	  coords = _gdk_device_allocate_history (device, *n_events);
-	  for (i=0; i<*n_events; i++)
+	  coords = g_new (GdkTimeCoord, *nevents_return);
+	  for (i=0; i<*nevents_return; i++)
 	    {
-	      coords[i]->time = xcoords[i].time;
-	      coords[i]->axes[0] = xcoords[i].x;
-	      coords[i]->axes[1] = xcoords[i].y;
+	      coords[i].time = xcoords[i].time;
+	      coords[i].x = xcoords[i].x;
+	      coords[i].y = xcoords[i].y;
+	      coords[i].pressure = 0.5;
+	      coords[i].xtilt = 0.0;
+	      coords[i].ytilt = 0.0;
 	    }
 
 	  XFree (xcoords);
 
-	  *events = coords;
-	  return TRUE;
+	  return coords;
 	}
       else
-	return FALSE;
+	return NULL;
     }
   else
-    return _gdk_device_get_history (device, window, start, stop, events, n_events);
+    {
+      if (gdk_input_vtable.motion_events)
+	{
+	  return gdk_input_vtable.motion_events(window,
+						deviceid, start, stop,
+						nevents_return);
+	}
+      else
+	{
+	  *nevents_return = 0;
+	  return NULL;
+	}
+    }
 }
 
-GdkTimeCoord ** 
-_gdk_device_allocate_history (GdkDevice *device,
-			      gint       n_events)
+gint
+gdk_input_enable_window (GdkWindow *window, GdkDevicePrivate *gdkdev)
 {
-  GdkTimeCoord **result = g_new (GdkTimeCoord *, n_events);
-  gint i;
-
-  for (i=0; i<n_events; i++)
-    result[i] = g_malloc (sizeof (GdkTimeCoord) -
-			  sizeof (double) * (GDK_MAX_TIMECOORD_AXES - device->num_axes));
-
-  return result;
+  if (gdk_input_vtable.enable_window)
+    return gdk_input_vtable.enable_window (window, gdkdev);
+  else
+    return TRUE;
 }
 
-void 
-gdk_device_free_history (GdkTimeCoord **events,
-			 gint           n_events)
+gint
+gdk_input_disable_window (GdkWindow *window, GdkDevicePrivate *gdkdev)
 {
-  gint i;
-  
-  for (i=0; i<n_events; i++)
-    g_free (events[i]);
-
-  g_free (events);
+  if (gdk_input_vtable.disable_window)
+    return gdk_input_vtable.disable_window(window,gdkdev);
+  else
+    return TRUE;
 }
+
 
 GdkInputWindow *
 gdk_input_window_find(GdkWindow *window)
@@ -221,15 +200,15 @@ void
 gdk_input_set_extension_events (GdkWindow *window, gint mask,
 				GdkExtensionMode mode)
 {
-  GdkWindowObject *window_private;
+  GdkWindowPrivate *window_private;
   GList *tmp_list;
   GdkInputWindow *iw;
 
   g_return_if_fail (window != NULL);
   g_return_if_fail (GDK_IS_WINDOW (window));
 
-  window_private = (GdkWindowObject*) window;
-  if (GDK_WINDOW_DESTROYED (window))
+  window_private = (GdkWindowPrivate*) window;
+  if (GDK_DRAWABLE_DESTROYED (window))
     return;
 
   if (mode == GDK_EXTENSION_EVENTS_NONE)
@@ -269,15 +248,15 @@ gdk_input_set_extension_events (GdkWindow *window, gint mask,
 
   for (tmp_list = gdk_input_devices; tmp_list; tmp_list = tmp_list->next)
     {
-      GdkDevicePrivate *gdkdev = tmp_list->data;
+      GdkDevicePrivate *gdkdev = (GdkDevicePrivate *)(tmp_list->data);
 
-      if (!GDK_IS_CORE (gdkdev))
+      if (gdkdev->info.deviceid != GDK_CORE_POINTER)
 	{
 	  if (mask != 0 && gdkdev->info.mode != GDK_MODE_DISABLED
 	      && (gdkdev->info.has_cursor || mode == GDK_EXTENSION_EVENTS_ALL))
-	    _gdk_input_enable_window (window,gdkdev);
+	    gdk_input_enable_window(window,gdkdev);
 	  else
-	    _gdk_input_disable_window (window,gdkdev);
+	    gdk_input_disable_window(window,gdkdev);
 	}
     }
 }
@@ -303,9 +282,9 @@ gdk_input_exit (void)
   for (tmp_list = gdk_input_devices; tmp_list; tmp_list = tmp_list->next)
     {
       gdkdev = (GdkDevicePrivate *)(tmp_list->data);
-      if (!GDK_IS_CORE (gdkdev))
+      if (gdkdev->info.deviceid != GDK_CORE_POINTER)
 	{
-	  gdk_device_set_mode (&gdkdev->info, GDK_MODE_DISABLED);
+	  gdk_input_set_mode(gdkdev->info.deviceid,GDK_MODE_DISABLED);
 
 	  g_free(gdkdev->info.name);
 #ifndef XINPUT_NONE	  
@@ -320,40 +299,38 @@ gdk_input_exit (void)
   g_list_free(gdk_input_devices);
 
   for (tmp_list = gdk_input_windows; tmp_list; tmp_list = tmp_list->next)
-    g_free(tmp_list->data);
-
+    {
+      g_free(tmp_list->data);
+    }
   g_list_free(gdk_input_windows);
 }
 
-/**
- * gdk_device_get_axis:
- * @device: a #GdkDevice
- * @axes: pointer to an array of axes
- * @use: the use to look for
- * @value: location to store the found value.
- * 
- * Interprets an array of double as axis values for a given device,
- * and locates the value in the array for a given axis use.
- * 
- * Return value: %TRUE if the given axis use was found, otherwies %FALSE
- **/
-gboolean
-gdk_device_get_axis (GdkDevice *device, gdouble *axes, GdkAxisUse use, gdouble *value)
+GdkDevicePrivate *
+gdk_input_find_device(guint32 id)
 {
-  gint i;
-  
-  g_return_val_if_fail (device != NULL, FALSE);
+  GList *tmp_list = gdk_input_devices;
+  GdkDevicePrivate *gdkdev;
+  while (tmp_list)
+    {
+      gdkdev = (GdkDevicePrivate *)(tmp_list->data);
+      if (gdkdev->info.deviceid == id)
+	return gdkdev;
+      tmp_list = tmp_list->next;
+    }
+  return NULL;
+}
 
-  if (axes == NULL)
-    return FALSE;
-  
-  for (i=0; i<device->num_axes; i++)
-    if (device->axes[i].use == use)
-      {
-	if (value)
-	  *value = axes[i];
-	return TRUE;
-      }
-  
-  return FALSE;
+void
+gdk_input_window_get_pointer (GdkWindow       *window,
+			      guint32	  deviceid,
+			      gdouble         *x,
+			      gdouble         *y,
+			      gdouble         *pressure,
+			      gdouble         *xtilt,
+			      gdouble         *ytilt,
+			      GdkModifierType *mask)
+{
+  if (gdk_input_vtable.get_pointer)
+    gdk_input_vtable.get_pointer (window, deviceid, x, y, pressure,
+				  xtilt, ytilt, mask);
 }

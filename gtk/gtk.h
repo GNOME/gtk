@@ -2,23 +2,23 @@
  * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
  *
  * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
+ * modify it under the terms of the GNU Library General Public
  * License as published by the Free Software Foundation; either
  * version 2 of the License, or (at your option) any later version.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
+ * Library General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public
+ * You should have received a copy of the GNU Library General Public
  * License along with this library; if not, write to the
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
  * Boston, MA 02111-1307, USA.
  */
 
 /*
- * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
+ * Modified by the GTK+ Team and others 1997-1999.  See the AUTHORS
  * file for a list of people on the GTK+ Team.  See the ChangeLog
  * files for a list of changes.  These files are distributed with
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
@@ -42,17 +42,10 @@
 #include <gtk/gtkbbox.h>
 #include <gtk/gtkbutton.h>
 #include <gtk/gtkcalendar.h>
-#include <gtk/gtkcellrenderer.h>
-#include <gtk/gtkcellrenderertext.h>
-#include <gtk/gtkcellrenderertextpixbuf.h>
-#include <gtk/gtkcellrenderertoggle.h>
-#include <gtk/gtkcellrendererpixbuf.h>
 #include <gtk/gtkcheckbutton.h>
 #include <gtk/gtkcheckmenuitem.h>
-#include <gtk/gtkclipboard.h>
 #include <gtk/gtkclist.h>
 #include <gtk/gtkcolorsel.h>
-#include <gtk/gtkcolorseldialog.h>
 #include <gtk/gtkcombo.h>
 #include <gtk/gtkcompat.h>
 #include <gtk/gtkcontainer.h>
@@ -80,31 +73,23 @@
 #include <gtk/gtkhscale.h>
 #include <gtk/gtkhscrollbar.h>
 #include <gtk/gtkhseparator.h>
-#include <gtk/gtkiconfactory.h>
 #include <gtk/gtkimage.h>
-#include <gtk/gtkimcontext.h>
-#include <gtk/gtkimmulticontext.h>
 #include <gtk/gtkinputdialog.h>
-#include <gtk/gtkinvisible.h>
 #include <gtk/gtkitem.h>
 #include <gtk/gtkitemfactory.h>
 #include <gtk/gtklabel.h>
 #include <gtk/gtklayout.h>
 #include <gtk/gtklist.h>
 #include <gtk/gtklistitem.h>
-#include <gtk/gtkliststore.h>
 #include <gtk/gtkmain.h>
 #include <gtk/gtkmenu.h>
 #include <gtk/gtkmenubar.h>
 #include <gtk/gtkmenufactory.h>
 #include <gtk/gtkmenuitem.h>
 #include <gtk/gtkmenushell.h>
-#include <gtk/gtkmessagedialog.h>
 #include <gtk/gtkmisc.h>
-#include <gtk/gtkmodelsimple.h>
 #include <gtk/gtknotebook.h>
 #include <gtk/gtkobject.h>
-#include <gtk/gtkoldeditable.h>
 #include <gtk/gtkoptionmenu.h>
 #include <gtk/gtkpacker.h>
 #include <gtk/gtkpaned.h>
@@ -126,26 +111,18 @@
 #include <gtk/gtksignal.h>
 #include <gtk/gtksocket.h>
 #include <gtk/gtkspinbutton.h>
-#include <gtk/gtkstock.h>
 #include <gtk/gtkstyle.h>
 #include <gtk/gtkstatusbar.h>
 #include <gtk/gtktable.h>
 #include <gtk/gtktearoffmenuitem.h>
 #include <gtk/gtktext.h>
-#include <gtk/gtktextbuffer.h>
-#include <gtk/gtktextview.h>
+#include <gtk/gtkthemes.h>
 #include <gtk/gtktipsquery.h>
 #include <gtk/gtktogglebutton.h>
 #include <gtk/gtktoolbar.h>
 #include <gtk/gtktooltips.h>
 #include <gtk/gtktree.h>
 #include <gtk/gtktreeitem.h>
-#include <gtk/gtktreemodel.h>
-#include <gtk/gtktreemodelsort.h>
-#include <gtk/gtktreeselection.h>
-#include <gtk/gtktreestore.h>
-#include <gtk/gtktreeview.h>
-#include <gtk/gtktreeviewcolumn.h>
 #include <gtk/gtktypeutils.h>
 #include <gtk/gtkvbox.h>
 #include <gtk/gtkvbbox.h>

@@ -13,7 +13,11 @@
 	   "OBJECT"=>"gpointer",
 
 # complex types. These need special handling.
-		"SIGNAL"=>"SIGNAL"
+		"FOREIGN"=>"FOREIGN",
+		"C_CALLBACK"=>"C_CALLBACK",
+		"SIGNAL"=>"SIGNAL",
+		"ARGS"=>"ARGS",
+		"CALLBACK"=>"CALLBACK"
 		);
 
 if ($#ARGV != 2) {
@@ -102,7 +106,24 @@ EOT
   print OS "typedef $trans{$retval} (*GtkSignal_$funcname) (GtkObject *object, \n";
   $argn = 1;
   for (@params) { 
-	if($_ eq "SIGNAL") {
+	if($_ eq "C_CALLBACK") {
+		print OS "gpointer arg".$argn."a,\n";
+		print OS "gpointer arg".$argn."b,\n";
+		$argn++;
+	} elsif($_ eq "SIGNAL") {
+		print OS "gpointer arg".$argn."a,\n";
+		print OS "gpointer arg".$argn."b,\n";
+		$argn++;
+	} elsif($_ eq "ARGS") {
+		print OS "gpointer arg".$argn."a,\n";
+		print OS "gpointer arg".$argn."b,\n";
+		$argn++;
+	} elsif($_ eq "CALLBACK") {
+		print OS "gpointer arg".$argn."a,\n";
+		print OS "gpointer arg".$argn."b,\n";
+		print OS "gpointer arg".$argn."c,\n";
+		$argn++;
+	} elsif($_ eq "FOREIGN") {
 		print OS "gpointer arg".$argn."a,\n";
 		print OS "gpointer arg".$argn."b,\n";
 		$argn++;
@@ -132,10 +153,26 @@ EOT
   print OS                  " (* rfunc) (object,\n";
 
   for($i = 0; $i < (scalar @params); $i++) {
-      if ($params[$i] eq "SIGNAL") {
+      if($params[$i] eq "C_CALLBACK") {
+	print OS <<EOT;
+GTK_VALUE_C_CALLBACK(args[$i]).func,
+GTK_VALUE_C_CALLBACK(args[$i]).func_data,
+EOT
+      } elsif ($params[$i] eq "SIGNAL") {
 	print OS <<EOT;
 GTK_VALUE_SIGNAL(args[$i]).f,
 GTK_VALUE_SIGNAL(args[$i]).d,
+EOT
+      } elsif ($params[$i] eq "CALLBACK") {
+	print OS <<EOT;
+GTK_VALUE_CALLBACK(args[$i]).marshal,
+GTK_VALUE_CALLBACK(args[$i]).data,
+GTK_VALUE_CALLBACK(args[$i]).notify,
+EOT
+      } elsif ($params[$i] eq "FOREIGN") {
+	print OS <<EOT;
+GTK_VALUE_FOREIGN(args[$i]).data,
+GTK_VALUE_FOREIGN(args[$i]).notify,
 EOT
       } elsif ($params[$i] eq "NONE") {
       } else {

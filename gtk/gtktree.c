@@ -2,23 +2,23 @@
  * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
  *
  * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
+ * modify it under the terms of the GNU Library General Public
  * License as published by the Free Software Foundation; either
  * version 2 of the License, or (at your option) any later version.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
+ * Library General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public
+ * You should have received a copy of the GNU Library General Public
  * License along with this library; if not, write to the
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
  * Boston, MA 02111-1307, USA.
  */
 
 /*
- * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
+ * Modified by the GTK+ Team and others 1997-1999.  See the AUTHORS
  * file for a list of people on the GTK+ Team.  See the ChangeLog
  * files for a list of changes.  These files are distributed with
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
@@ -43,6 +43,8 @@ static void gtk_tree_destroy         (GtkObject      *object);
 static void gtk_tree_map             (GtkWidget      *widget);
 static void gtk_tree_unmap           (GtkWidget      *widget);
 static void gtk_tree_realize         (GtkWidget      *widget);
+static void gtk_tree_draw            (GtkWidget      *widget,
+				      GdkRectangle   *area);
 static gint gtk_tree_expose          (GtkWidget      *widget,
 				      GdkEventExpose *event);
 static gint gtk_tree_motion_notify   (GtkWidget      *widget,
@@ -110,12 +112,38 @@ gtk_tree_class_init (GtkTreeClass *class)
   
   parent_class = gtk_type_class (gtk_container_get_type ());
   
+  tree_signals[SELECTION_CHANGED] =
+    gtk_signal_new ("selection_changed",
+		    GTK_RUN_FIRST,
+		    object_class->type,
+		    GTK_SIGNAL_OFFSET (GtkTreeClass, selection_changed),
+		    gtk_marshal_NONE__NONE,
+		    GTK_TYPE_NONE, 0);
+  tree_signals[SELECT_CHILD] =
+    gtk_signal_new ("select_child",
+		    GTK_RUN_FIRST,
+		    object_class->type,
+		    GTK_SIGNAL_OFFSET (GtkTreeClass, select_child),
+		    gtk_marshal_NONE__POINTER,
+		    GTK_TYPE_NONE, 1,
+		    GTK_TYPE_WIDGET);
+  tree_signals[UNSELECT_CHILD] =
+    gtk_signal_new ("unselect_child",
+		    GTK_RUN_FIRST,
+		    object_class->type,
+		    GTK_SIGNAL_OFFSET (GtkTreeClass, unselect_child),
+		    gtk_marshal_NONE__POINTER,
+		    GTK_TYPE_NONE, 1,
+		    GTK_TYPE_WIDGET);
+  
+  gtk_object_class_add_signals (object_class, tree_signals, LAST_SIGNAL);
   
   object_class->destroy = gtk_tree_destroy;
   
   widget_class->map = gtk_tree_map;
   widget_class->unmap = gtk_tree_unmap;
   widget_class->realize = gtk_tree_realize;
+  widget_class->draw = gtk_tree_draw;
   widget_class->expose_event = gtk_tree_expose;
   widget_class->motion_notify_event = gtk_tree_motion_notify;
   widget_class->button_press_event = gtk_tree_button_press;
@@ -132,30 +160,6 @@ gtk_tree_class_init (GtkTreeClass *class)
   class->selection_changed = NULL;
   class->select_child = gtk_real_tree_select_child;
   class->unselect_child = gtk_real_tree_unselect_child;
-
-  tree_signals[SELECTION_CHANGED] =
-    gtk_signal_new ("selection_changed",
-		    GTK_RUN_FIRST,
-		    GTK_CLASS_TYPE (object_class),
-		    GTK_SIGNAL_OFFSET (GtkTreeClass, selection_changed),
-		    gtk_marshal_VOID__VOID,
-		    GTK_TYPE_NONE, 0);
-  tree_signals[SELECT_CHILD] =
-    gtk_signal_new ("select_child",
-		    GTK_RUN_FIRST,
-		    GTK_CLASS_TYPE (object_class),
-		    GTK_SIGNAL_OFFSET (GtkTreeClass, select_child),
-		    gtk_marshal_VOID__POINTER,
-		    GTK_TYPE_NONE, 1,
-		    GTK_TYPE_WIDGET);
-  tree_signals[UNSELECT_CHILD] =
-    gtk_signal_new ("unselect_child",
-		    GTK_RUN_FIRST,
-		    GTK_CLASS_TYPE (object_class),
-		    GTK_SIGNAL_OFFSET (GtkTreeClass, unselect_child),
-		    gtk_marshal_VOID__POINTER,
-		    GTK_TYPE_NONE, 1,
-		    GTK_TYPE_WIDGET);
 }
 
 static GtkType
@@ -435,6 +439,43 @@ gtk_tree_destroy (GtkObject *object)
   
   if (GTK_OBJECT_CLASS (parent_class)->destroy)
     (* GTK_OBJECT_CLASS (parent_class)->destroy) (object);
+}
+
+static void
+gtk_tree_draw (GtkWidget    *widget,
+	       GdkRectangle *area)
+{
+  GtkTree *tree;
+  GtkWidget *subtree;
+  GtkWidget *child;
+  GdkRectangle child_area;
+  GList *children;
+  
+  
+  g_return_if_fail (widget != NULL);
+  g_return_if_fail (GTK_IS_TREE (widget));
+  g_return_if_fail (area != NULL);
+  
+  if (GTK_WIDGET_DRAWABLE (widget))
+    {
+      tree = GTK_TREE (widget);
+      
+      children = tree->children;
+      while (children)
+	{
+	  child = children->data;
+	  children = children->next;
+	  
+	  if (gtk_widget_intersect (child, area, &child_area))
+	    gtk_widget_draw (child, &child_area);
+	  
+	  if((subtree = GTK_TREE_ITEM(child)->subtree) &&
+	     GTK_WIDGET_VISIBLE(subtree) &&
+	     gtk_widget_intersect (subtree, area, &child_area))
+	    gtk_widget_draw (subtree, &child_area);
+	}
+    }
+  
 }
 
 static gint
@@ -1016,12 +1057,6 @@ gtk_real_tree_select_child (GtkTree   *tree,
   g_return_if_fail (GTK_IS_TREE (tree));
   g_return_if_fail (child != NULL);
   g_return_if_fail (GTK_IS_TREE_ITEM (child));
-
-  if (!tree->root_tree)
-    {
-      g_warning (G_STRLOC ": unable to select a child in a tree prior to realization");
-      return;
-    }
   
   root_selection = tree->root_tree->selection;
   

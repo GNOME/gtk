@@ -2,23 +2,23 @@
  * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
  *
  * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
+ * modify it under the terms of the GNU Library General Public
  * License as published by the Free Software Foundation; either
  * version 2 of the License, or (at your option) any later version.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
+ * Library General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public
+ * You should have received a copy of the GNU Library General Public
  * License along with this library; if not, write to the
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
  * Boston, MA 02111-1307, USA.
  */
 
 /*
- * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
+ * Modified by the GTK+ Team and others 1997-1999.  See the AUTHORS
  * file for a list of people on the GTK+ Team.  See the ChangeLog
  * files for a list of changes.  These files are distributed with
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
@@ -30,8 +30,8 @@
 #include "gdk/gdkkeysyms.h"
 
 
-#define SCALE_CLASS(w)  GTK_SCALE_GET_CLASS (w)
-#define RANGE_CLASS(w)  GTK_RANGE_GET_CLASS (w)
+#define SCALE_CLASS(w)  GTK_SCALE_CLASS (GTK_OBJECT (w)->klass)
+#define RANGE_CLASS(w)  GTK_RANGE_CLASS (GTK_OBJECT (w)->klass)
 
 enum {
   ARG_0,
@@ -63,6 +63,8 @@ static void gtk_vscale_pos_background (GtkVScale     *vscale,
                                        gint          *h);
 static void gtk_vscale_draw_slider   (GtkRange       *range);
 static void gtk_vscale_draw_value    (GtkScale       *scale);
+static void gtk_vscale_draw          (GtkWidget      *widget,
+                                      GdkRectangle   *area);
 static gint gtk_vscale_trough_keys   (GtkRange *range,
                                       GdkEventKey *key,
                                       GtkScrollType *scroll,
@@ -109,7 +111,7 @@ gtk_vscale_class_init (GtkVScaleClass *class)
   
   gtk_object_add_arg_type ("GtkVScale::adjustment",
                            GTK_TYPE_ADJUSTMENT,
-                           GTK_ARG_READWRITE,
+                           GTK_ARG_READWRITE | GTK_ARG_CONSTRUCT,
                            ARG_ADJUSTMENT);
   
   object_class->set_arg = gtk_vscale_set_arg;
@@ -118,6 +120,7 @@ gtk_vscale_class_init (GtkVScaleClass *class)
   widget_class->realize = gtk_vscale_realize;
   widget_class->size_request = gtk_vscale_size_request;
   widget_class->size_allocate = gtk_vscale_size_allocate;
+  widget_class->draw = gtk_vscale_draw;
   
   range_class->slider_update = gtk_range_default_vslider_update;
   range_class->trough_click = gtk_range_default_vtrough_click;
@@ -247,6 +250,50 @@ gtk_vscale_realize (GtkWidget *widget)
 }
 
 static void
+gtk_vscale_draw (GtkWidget    *widget,
+                 GdkRectangle *area)
+{
+  GtkRange *range;
+  GdkRectangle tmp_area;
+  GdkRectangle child_area;
+  gint x, y, width, height;
+  
+  g_return_if_fail (widget != NULL);
+  g_return_if_fail (GTK_IS_RANGE (widget));
+  g_return_if_fail (area != NULL);
+  
+  if (GTK_WIDGET_VISIBLE (widget) && GTK_WIDGET_MAPPED (widget))
+    {
+      range = GTK_RANGE (widget);
+      
+      gtk_vscale_pos_background (GTK_VSCALE (widget), &x, &y, &width, &height);
+      
+      tmp_area.x = x;
+      tmp_area.y = y;
+      tmp_area.width = width;
+      tmp_area.height = height;
+      
+      if (gdk_rectangle_intersect (area, &tmp_area, &child_area))
+        gtk_range_draw_background (range);
+      
+      gtk_vscale_pos_trough (GTK_VSCALE (widget), &x, &y, &width, &height);
+      
+      tmp_area.x = x;
+      tmp_area.y = y;
+      tmp_area.width = width;
+      tmp_area.height = height;
+      
+      if (gdk_rectangle_intersect (area, &tmp_area, &child_area))
+        {
+          gtk_range_draw_trough (range);
+          gtk_range_draw_slider (range);
+          gtk_range_draw_step_forw (range);
+          gtk_range_draw_step_back (range);
+        }
+    }
+}
+
+static void
 gtk_vscale_clear_background (GtkRange    *range)
 {
   GtkWidget *widget;
@@ -270,36 +317,36 @@ gtk_vscale_size_request (GtkWidget      *widget,
                          GtkRequisition *requisition)
 {
   GtkScale *scale;
-  gint value_width, value_height;
+  gint value_width;
   
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_VSCALE (widget));
   g_return_if_fail (requisition != NULL);
   
   scale = GTK_SCALE (widget);
-
+  
   requisition->width = (RANGE_CLASS (scale)->slider_width +
-                        widget->style->ythickness * 2);
+                        widget->style->klass->ythickness * 2);
   requisition->height = (SCALE_CLASS (scale)->slider_length +
-                         widget->style->xthickness) * 2;
+                         widget->style->klass->xthickness) * 2;
   
   if (scale->draw_value)
     {
-      gtk_scale_get_value_size (scale, &value_width, &value_height);
+      value_width = gtk_scale_get_value_width (scale);
       
       if ((scale->value_pos == GTK_POS_LEFT) ||
           (scale->value_pos == GTK_POS_RIGHT))
         {
           requisition->width += value_width + SCALE_CLASS (scale)->value_spacing;
-          if (requisition->height < (value_height))
-            requisition->height = value_height;
+          if (requisition->height < (widget->style->font->ascent + widget->style->font->descent))
+            requisition->height = widget->style->font->ascent + widget->style->font->descent;
         }
       else if ((scale->value_pos == GTK_POS_TOP) ||
                (scale->value_pos == GTK_POS_BOTTOM))
         {
           if (requisition->width < value_width)
             requisition->width = value_width;
-          requisition->height += value_height;
+          requisition->height += widget->style->font->ascent + widget->style->font->descent;
         }
     }
 }
@@ -339,7 +386,6 @@ gtk_vscale_pos_trough (GtkVScale *vscale,
 {
   GtkWidget *widget;
   GtkScale *scale;
-  gint value_width, value_height;
   
   g_return_if_fail (vscale != NULL);
   g_return_if_fail (GTK_IS_VSCALE (vscale));
@@ -349,7 +395,7 @@ gtk_vscale_pos_trough (GtkVScale *vscale,
   scale = GTK_SCALE (vscale);
   
   *w = (RANGE_CLASS (scale)->slider_width +
-        widget->style->xthickness * 2);
+        widget->style->klass->xthickness * 2);
   *h = widget->allocation.height;
   
   if (scale->draw_value)
@@ -357,12 +403,10 @@ gtk_vscale_pos_trough (GtkVScale *vscale,
       *x = 0;
       *y = 0;
       
-      gtk_scale_get_value_size (scale, &value_width, &value_height);
-
       switch (scale->value_pos)
         {
         case GTK_POS_LEFT:
-          *x = (value_width + SCALE_CLASS (scale)->value_spacing +
+          *x = (gtk_scale_get_value_width (scale) + SCALE_CLASS (scale)->value_spacing +
                 (widget->allocation.width - widget->requisition.width) / 2);
           break;
         case GTK_POS_RIGHT:
@@ -370,12 +414,12 @@ gtk_vscale_pos_trough (GtkVScale *vscale,
           break;
         case GTK_POS_TOP:
           *x = (widget->allocation.width - *w) / 2;
-          *y = value_height;
+          *y = widget->style->font->ascent + widget->style->font->descent;
           *h -= *y;
           break;
         case GTK_POS_BOTTOM:
           *x = (widget->allocation.width - *w) / 2;
-          *h -= value_height;
+          *h -= widget->style->font->ascent + widget->style->font->descent;
           break;
         }
     }
@@ -468,6 +512,7 @@ gtk_vscale_draw_value (GtkScale *scale)
   GtkStateType state_type;
   GtkWidget *widget;
   gchar buffer[32];
+  gint text_width;
   gint width, height;
   gint x, y;
   
@@ -478,14 +523,9 @@ gtk_vscale_draw_value (GtkScale *scale)
   
   if (scale->draw_value)
     {
-      PangoLayout *layout;
-      PangoRectangle logical_rect;
-      
       sprintf (buffer, "%0.*f", GTK_RANGE (scale)->digits, GTK_RANGE (scale)->adjustment->value);
-
-      layout = gtk_widget_create_pango_layout (widget, buffer);
-      pango_layout_get_pixel_extents (layout, NULL, &logical_rect);
-
+      text_width = gdk_string_measure (GTK_WIDGET (scale)->style->font, buffer);
+      
       switch (scale->value_pos)
         {
         case GTK_POS_LEFT:
@@ -494,9 +534,11 @@ gtk_vscale_draw_value (GtkScale *scale)
           gdk_window_get_size (GTK_RANGE (scale)->trough, &width, NULL);
           gdk_window_get_size (GTK_RANGE (scale)->slider, NULL, &height);
           
-          x -= SCALE_CLASS (scale)->value_spacing + logical_rect.width;
-          y += widget->allocation.y + (height - logical_rect.height) / 2 +
-                                       PANGO_ASCENT (logical_rect);
+          x -= SCALE_CLASS (scale)->value_spacing + text_width;
+          y += widget->allocation.y + ((height -
+                                        (GTK_WIDGET (scale)->style->font->ascent +
+                                         GTK_WIDGET (scale)->style->font->descent)) / 2 +
+                                       GTK_WIDGET (scale)->style->font->ascent);
           break;
         case GTK_POS_RIGHT:
           gdk_window_get_position (GTK_RANGE (scale)->trough, &x, NULL);
@@ -505,44 +547,38 @@ gtk_vscale_draw_value (GtkScale *scale)
           gdk_window_get_size (GTK_RANGE (scale)->slider, NULL, &height);
           
           x += width + SCALE_CLASS (scale)->value_spacing;
-          y += widget->allocation.y + (height - logical_rect.height) / 2 +
-                                       PANGO_ASCENT (logical_rect);
+          y += widget->allocation.y + ((height -
+                                        (GTK_WIDGET (scale)->style->font->ascent +
+                                         GTK_WIDGET (scale)->style->font->descent)) / 2 +
+                                       GTK_WIDGET (scale)->style->font->ascent);
           break;
         case GTK_POS_TOP:
           gdk_window_get_position (GTK_RANGE (scale)->trough, &x, &y);
           gdk_window_get_size (GTK_RANGE (scale)->slider, &width, NULL);
           gdk_window_get_size (GTK_RANGE (scale)->trough, NULL, &height);
           
-          x += (width - logical_rect.width) / 2;
-          y -= PANGO_DESCENT (logical_rect);
+          x += (width - text_width) / 2;
+          y -= GTK_WIDGET (scale)->style->font->descent;
           break;
         case GTK_POS_BOTTOM:
           gdk_window_get_position (GTK_RANGE (scale)->trough, &x, &y);
           gdk_window_get_size (GTK_RANGE (scale)->slider, &width, NULL);
           gdk_window_get_size (GTK_RANGE (scale)->trough, NULL, &height);
           
-          x += (width - logical_rect.width) / 2;
-          y += height + PANGO_ASCENT (logical_rect);
+          x += (width - text_width) / 2;
+          y += height + GTK_WIDGET (scale)->style->font->ascent;
           break;
         }
       
       state_type = GTK_STATE_NORMAL;
       if (!GTK_WIDGET_IS_SENSITIVE (scale))
         state_type = GTK_STATE_INSENSITIVE;
-
-#if 0      
+      
       gtk_paint_string (GTK_WIDGET (scale)->style,
                         GTK_WIDGET (scale)->window,
                         state_type, 
                         NULL, GTK_WIDGET (scale), "vscale",
                         x, y, buffer);
-#endif
-
-      gdk_draw_layout (GTK_WIDGET (scale)->window,
-		       GTK_WIDGET (scale)->style->fg_gc [state_type],
-		       x, y, layout);
-
-      g_object_unref (G_OBJECT (layout));
     }
 }
 

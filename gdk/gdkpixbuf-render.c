@@ -5,16 +5,16 @@
  * Author: Federico Mena-Quintero <federico@gimp.org>
  *
  * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
+ * modify it under the terms of the GNU Library General Public
  * License as published by the Free Software Foundation; either
  * version 2 of the License, or (at your option) any later version.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
+ * Library General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public
+ * You should have received a copy of the GNU Library General Public
  * License along with this library; if not, write to the
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
  * Boston, MA 02111-1307, USA.
@@ -22,8 +22,8 @@
 
 #include <config.h>
 #include <gdk/gdk.h>
-#include "gdk-pixbuf-private.h"
-#include "gdkpixbuf.h"
+#include <libart_lgpl/art_rect.h>
+#include "gdk-pixbuf.h"
 
 
 
@@ -46,89 +46,120 @@
  *
  **/
 void
-gdk_pixbuf_render_threshold_alpha (GdkPixbuf *pixbuf,
-				   GdkBitmap *bitmap,
-				   int src_x,  int src_y,
+gdk_pixbuf_render_threshold_alpha (GdkPixbuf *pixbuf, GdkBitmap *bitmap,
+				   int src_x, int src_y,
 				   int dest_x, int dest_y,
-				   int width,  int height,
+				   int width, int height,
 				   int alpha_threshold)
 {
-  GdkGC *gc;
-  GdkColor color;
-  int x, y;
-  guchar *p;
-  int start, start_status;
-  int status;
+	ArtPixBuf *apb;
+	GdkGC *gc;
+	GdkColor color;
+	int x, y;
+	guchar *p;
+	int start, start_status;
+	int status;
 
-  g_return_if_fail (pixbuf != NULL);
-  g_return_if_fail (pixbuf->colorspace == GDK_COLORSPACE_RGB);
-  g_return_if_fail (pixbuf->n_channels == 3 || pixbuf->n_channels == 4);
-  g_return_if_fail (pixbuf->bits_per_sample == 8);
+	g_return_if_fail (pixbuf != NULL);
+	apb = pixbuf->art_pixbuf;
 
-  g_return_if_fail (bitmap != NULL);
-  g_return_if_fail (width >= 0 && height >= 0);
-  g_return_if_fail (src_x >= 0 && src_x + width <= pixbuf->width);
-  g_return_if_fail (src_y >= 0 && src_y + height <= pixbuf->height);
+	g_return_if_fail (apb->format == ART_PIX_RGB);
+	g_return_if_fail (apb->n_channels == 3 || apb->n_channels == 4);
+	g_return_if_fail (apb->bits_per_sample == 8);
 
-  g_return_if_fail (alpha_threshold >= 0 && alpha_threshold <= 255);
+	g_return_if_fail (bitmap != NULL);
+	g_return_if_fail (width >= 0 && height >= 0);
+	g_return_if_fail (src_x >= 0 && src_x + width <= apb->width);
+	g_return_if_fail (src_y >= 0 && src_y + height <= apb->height);
 
-  if (width == 0 || height == 0)
-    return;
+	g_return_if_fail (alpha_threshold >= 0 && alpha_threshold <= 255);
 
-  gc = gdk_gc_new (bitmap);
+	if (width == 0 || height == 0)
+		return;
 
-  if (!pixbuf->has_alpha)
-    {
-      color.pixel = (alpha_threshold == 255) ? 0 : 1;
-      gdk_gc_set_foreground (gc, &color);
-      gdk_draw_rectangle (bitmap, gc, TRUE, dest_x, dest_y, width, height);
-      gdk_gc_unref (gc);
-      return;
-    }
+	gc = gdk_gc_new (bitmap);
 
-  color.pixel = 0;
-  gdk_gc_set_foreground (gc, &color);
-  gdk_draw_rectangle (bitmap, gc, TRUE, dest_x, dest_y, width, height);
-
-  color.pixel = 1;
-  gdk_gc_set_foreground (gc, &color);
-
-  for (y = 0; y < height; y++)
-    {
-      p = (pixbuf->pixels + (y + src_y) * pixbuf->rowstride + src_x * pixbuf->n_channels
-	   + pixbuf->n_channels - 1);
-	    
-      start = 0;
-      start_status = *p < alpha_threshold;
-	    
-      for (x = 0; x < width; x++)
-	{
-	  status = *p < alpha_threshold;
-	  
-	  if (status != start_status)
-	    {
-	      if (!start_status)
-		gdk_draw_line (bitmap, gc,
-			       start + dest_x, y + dest_y,
-			       x - 1 + dest_x, y + dest_y);
-	      
-	      start = x;
-	      start_status = status;
-	    }
-	  
-	  p += pixbuf->n_channels;
+	if (!apb->has_alpha) {
+		color.pixel = (alpha_threshold == 255) ? 0 : 1;
+		gdk_gc_set_foreground (gc, &color);
+		gdk_draw_rectangle (bitmap, gc, TRUE, dest_x, dest_y, width, height);
+		gdk_gc_unref (gc);
+		return;
 	}
-      
-      if (!start_status)
-	gdk_draw_line (bitmap, gc,
-		       start + dest_x, y + dest_y,
-		       x - 1 + dest_x, y + dest_y);
-    }
-	
-  gdk_gc_unref (gc);
+
+	color.pixel = 0;
+	gdk_gc_set_foreground (gc, &color);
+	gdk_draw_rectangle (bitmap, gc, TRUE, dest_x, dest_y, width, height);
+
+	color.pixel = 1;
+	gdk_gc_set_foreground (gc, &color);
+
+	for (y = 0; y < height; y++) {
+		p = (apb->pixels + (y + src_y) * apb->rowstride + src_x * apb->n_channels
+		     + apb->n_channels - 1);
+
+		start = 0;
+		start_status = *p < alpha_threshold;
+
+		for (x = 0; x < width; x++) {
+			status = *p < alpha_threshold;
+
+			if (status != start_status) {
+				if (!start_status)
+					gdk_draw_line (bitmap, gc,
+						       start + dest_x, y + dest_y,
+						       x - 1 + dest_x, y + dest_y);
+
+				start = x;
+				start_status = status;
+			}
+
+			p += apb->n_channels;
+		}
+
+		if (!start_status)
+			gdk_draw_line (bitmap, gc,
+				       start + dest_x, y + dest_y,
+				       x - 1 + dest_x, y + dest_y);
+	}
+
+	gdk_gc_unref (gc);
 }
 
 
+
+/* Creates a buffer by stripping the alpha channel of a pixbuf */
+static guchar *
+remove_alpha (ArtPixBuf *apb, int x, int y, int width, int height, int *rowstride)
+{
+	guchar *buf;
+	int xx, yy;
+	guchar *src, *dest;
+
+	g_assert (apb->n_channels == 4);
+	g_assert (apb->has_alpha);
+	g_assert (width > 0 && height > 0);
+	g_assert (x >= 0 && x + width <= apb->width);
+	g_assert (y >= 0 && y + height <= apb->height);
+
+	*rowstride = 4 * ((width * 3 + 3) / 4);
+
+	buf = g_new (guchar, *rowstride * height);
+
+	for (yy = 0; yy < height; yy++) {
+		src = apb->pixels + apb->rowstride * (yy + y) + x * apb->n_channels;
+		dest = buf + *rowstride * yy;
+
+		for (xx = 0; xx < width; xx++) {
+			*dest++ = *src++;
+			*dest++ = *src++;
+			*dest++ = *src++;
+			src++;
+		}
+	}
+
+	return buf;
+}
 
 /**
  * gdk_pixbuf_render_to_drawable:
@@ -159,60 +190,56 @@ gdk_pixbuf_render_threshold_alpha (GdkPixbuf *pixbuf,
  * dither offsets can be both zero.
  **/
 void
-gdk_pixbuf_render_to_drawable (GdkPixbuf   *pixbuf,
-			       GdkDrawable *drawable,
-			       GdkGC       *gc,
-			       int src_x,    int src_y,
-			       int dest_x,   int dest_y,
-			       int width,    int height,
+gdk_pixbuf_render_to_drawable (GdkPixbuf *pixbuf,
+			       GdkDrawable *drawable, GdkGC *gc,
+			       int src_x, int src_y,
+			       int dest_x, int dest_y,
+			       int width, int height,
 			       GdkRgbDither dither,
 			       int x_dither, int y_dither)
 {
-  int rowstride;
-  guchar *buf;
+	ArtPixBuf *apb;
+	guchar *buf;
+	int rowstride;
 
-  g_return_if_fail (pixbuf != NULL);
-  g_return_if_fail (pixbuf->colorspace == GDK_COLORSPACE_RGB);
-  g_return_if_fail (pixbuf->n_channels == 3 || pixbuf->n_channels == 4);
-  g_return_if_fail (pixbuf->bits_per_sample == 8);
+	g_return_if_fail (pixbuf != NULL);
+	apb = pixbuf->art_pixbuf;
 
-  g_return_if_fail (drawable != NULL);
-  g_return_if_fail (gc != NULL);
+	g_return_if_fail (apb->format == ART_PIX_RGB);
+	g_return_if_fail (apb->n_channels == 3 || apb->n_channels == 4);
+	g_return_if_fail (apb->bits_per_sample == 8);
 
-  g_return_if_fail (width >= 0 && height >= 0);
-  g_return_if_fail (src_x >= 0 && src_x + width <= pixbuf->width);
-  g_return_if_fail (src_y >= 0 && src_y + height <= pixbuf->height);
+	g_return_if_fail (drawable != NULL);
+	g_return_if_fail (gc != NULL);
 
-  if (width == 0 || height == 0)
-    return;
+	g_return_if_fail (width >= 0 && height >= 0);
+	g_return_if_fail (src_x >= 0 && src_x + width <= apb->width);
+	g_return_if_fail (src_y >= 0 && src_y + height <= apb->height);
 
-  /* This will have to be modified once we support other image types.
-   */
+	if (width == 0 || height == 0)
+		return;
 
-  if (pixbuf->n_channels == 4)
-    {
-      buf = pixbuf->pixels + src_y * pixbuf->rowstride + src_x * 4;
-      rowstride = pixbuf->rowstride;
+	/* This will have to be modified once libart supports other image types.
+	 * Also, GdkRGB does not have gdk_draw_rgb_32_image_dithalign(), so we
+	 * have to pack the buffer first.
+	 */
 
-      gdk_draw_rgb_32_image_dithalign (drawable, gc,
-				       dest_x, dest_y,
-				       width, height,
-				       dither,
-				       buf, rowstride,
-				       x_dither, y_dither);
-    }
-  else				/* n_channels == 3 */
-    {
-      buf = pixbuf->pixels + src_y * pixbuf->rowstride + src_x * 3;
-      rowstride = pixbuf->rowstride;
+	if (apb->has_alpha)
+		buf = remove_alpha (apb, src_x, src_y, width, height, &rowstride);
+	else {
+		buf = apb->pixels + src_y * apb->rowstride + src_x * 3;
+		rowstride = apb->rowstride;
+	}
 
-      gdk_draw_rgb_image_dithalign (drawable, gc,
-				    dest_x, dest_y,
-				    width, height,
-				    dither,
-				    buf, rowstride,
-				    x_dither, y_dither);
-    }
+	gdk_draw_rgb_image_dithalign (drawable, gc,
+				      dest_x, dest_y,
+				      width, height,
+				      dither,
+				      buf, rowstride,
+				      x_dither, y_dither);
+
+	if (apb->has_alpha)
+		g_free (buf);
 }
 
 
@@ -246,150 +273,69 @@ gdk_pixbuf_render_to_drawable (GdkPixbuf   *pixbuf,
  * the alpha channel of the image.  If performance is crucial, consider handling
  * the alpha channel yourself (possibly by caching it in your application) and
  * using gdk_pixbuf_render_to_drawable() or GdkRGB directly instead.
- *
- * The #GDK_PIXBUF_ALPHA_FULL mode involves round trips to the X
- * server, and may also be somewhat slow in its current implementation
- * (though in the future it could be made significantly faster, in
- * principle).
  **/
 void
-gdk_pixbuf_render_to_drawable_alpha (GdkPixbuf   *pixbuf,
-				     GdkDrawable *drawable,
-				     int src_x,    int src_y,
-				     int dest_x,   int dest_y,
-				     int width,    int height,
+gdk_pixbuf_render_to_drawable_alpha (GdkPixbuf *pixbuf, GdkDrawable *drawable,
+				     int src_x, int src_y,
+				     int dest_x, int dest_y,
+				     int width, int height,
 				     GdkPixbufAlphaMode alpha_mode,
-				     int                alpha_threshold,
-				     GdkRgbDither       dither,
+				     int alpha_threshold,
+				     GdkRgbDither dither,
 				     int x_dither, int y_dither)
 {
-  GdkBitmap *bitmap = NULL;
-  GdkGC *gc;
-  GdkPixbuf *composited = NULL;
-  gint dwidth, dheight;
+	ArtPixBuf *apb;
+	GdkBitmap *bitmap = NULL;
+	GdkGC *gc;
 
-  
-  g_return_if_fail (pixbuf != NULL);
-  g_return_if_fail (pixbuf->colorspace == GDK_COLORSPACE_RGB);
-  g_return_if_fail (pixbuf->n_channels == 3 || pixbuf->n_channels == 4);
-  g_return_if_fail (pixbuf->bits_per_sample == 8);
+	g_return_if_fail (pixbuf != NULL);
+	apb = pixbuf->art_pixbuf;
 
-  g_return_if_fail (drawable != NULL);
-  g_return_if_fail (width >= 0 && height >= 0);
-  g_return_if_fail (src_x >= 0 && src_x + width <= pixbuf->width);
-  g_return_if_fail (src_y >= 0 && src_y + height <= pixbuf->height);
+	g_return_if_fail (apb->format == ART_PIX_RGB);
+	g_return_if_fail (apb->n_channels == 3 || apb->n_channels == 4);
+	g_return_if_fail (apb->bits_per_sample == 8);
 
-  /* Clip to the drawable; this is required for get_from_drawable() so
-   * can't be done implicitly
-   */
-  
-  if (dest_x < 0)
-    {
-      src_x -= dest_x;
-      width += dest_x;
-      dest_x = 0;
-    }
+	g_return_if_fail (drawable != NULL);
+	g_return_if_fail (width >= 0 && height >= 0);
+	g_return_if_fail (src_x >= 0 && src_x + width <= apb->width);
+	g_return_if_fail (src_y >= 0 && src_y + height <= apb->height);
 
-  if (dest_y < 0)
-    {
-      src_y -= dest_y;
-      height += dest_y;
-      dest_y = 0;
-    }
+	if (width == 0 || height == 0)
+		return;
 
-  gdk_drawable_get_size (drawable, &dwidth, &dheight);
+	gc = gdk_gc_new (drawable);
 
-  if ((dest_x + width) > dwidth)
-    width = dwidth - dest_x;
+	if (apb->has_alpha) {
+		/* Right now we only support GDK_PIXBUF_ALPHA_BILEVEL, so we
+		 * unconditionally create the clipping mask.
+		 */
 
-  if ((dest_y + height) > dheight)
-    height = dheight - dest_y;
+		bitmap = gdk_pixmap_new (NULL, width, height, 1);
+		gdk_pixbuf_render_threshold_alpha (pixbuf, bitmap,
+						   src_x, src_y,
+						   0, 0,
+						   width, height,
+						   alpha_threshold);
 
-  if (width <= 0 || height <= 0)
-    return;
+		gdk_gc_set_clip_mask (gc, bitmap);
+		gdk_gc_set_clip_origin (gc, dest_x, dest_y);
+	}
 
-  /* Actually draw */
-  
-  gc = gdk_gc_new (drawable);
+	gdk_pixbuf_render_to_drawable (pixbuf, drawable, gc,
+				       src_x, src_y,
+				       dest_x, dest_y,
+				       width, height,
+				       dither,
+				       x_dither, y_dither);
 
-  if (pixbuf->has_alpha)
-    {
-      if (alpha_mode == GDK_PIXBUF_ALPHA_BILEVEL)
-        {
-          bitmap = gdk_pixmap_new (NULL, width, height, 1);
-          gdk_pixbuf_render_threshold_alpha (pixbuf, bitmap,
-                                             src_x, src_y,
-                                             0, 0,
-                                             width, height,
-                                             alpha_threshold);
-          
-          gdk_gc_set_clip_mask (gc, bitmap);
-          gdk_gc_set_clip_origin (gc, dest_x, dest_y);
-        }
-      else if (alpha_mode == GDK_PIXBUF_ALPHA_FULL)
-        {
-          GdkPixbuf *sub = NULL;
-          
-          composited = gdk_pixbuf_get_from_drawable (NULL,
-                                                     drawable,
-                                                     NULL,
-                                                     dest_x, dest_y,
-                                                     0, 0,
-                                                     width, height);
-
-          if (src_x != 0 || src_y != 0)
-            {
-              sub = gdk_pixbuf_new_subpixbuf (pixbuf, src_x, src_y,
-                                              width, height);
-            }
-          
-          gdk_pixbuf_composite (sub ? sub : pixbuf,
-                                composited,
-                                0, 0,
-                                width, height,
-                                0, 0,
-                                1.0, 1.0,
-                                GDK_INTERP_BILINEAR,
-                                255);
-
-          if (sub)
-            g_object_unref (G_OBJECT (sub));
-        }
-    }
-
-  if (composited)
-    {
-      gdk_pixbuf_render_to_drawable (composited,
-                                     drawable, gc,
-                                     0, 0,
-                                     dest_x, dest_y,
-                                     width, height,
-                                     dither,
-                                     x_dither, y_dither);
-    }
-  else
-    {
-      gdk_pixbuf_render_to_drawable (pixbuf,
-                                     drawable, gc,
-                                     src_x, src_y,
-                                     dest_x, dest_y,
-                                     width, height,
-                                     dither,
-                                     x_dither, y_dither);
-    }
-
-  if (bitmap)
-    gdk_bitmap_unref (bitmap);
-
-  if (composited)
-    g_object_unref (G_OBJECT (composited));
-
-  gdk_gc_unref (gc);
+	if (bitmap)
+	        gdk_bitmap_unref (bitmap);
+	gdk_gc_unref (gc);
 }
 
 /**
  * gdk_pixbuf_render_pixmap_and_mask:
- * @pixbuf: A pixbuf.
+ * @pixbuf: A pixbuf
  * @pixmap_return: Return value for the created pixmap.
  * @mask_return: Return value for the created mask.
  * @alpha_threshold: Threshold value for opacity values.
@@ -400,44 +346,37 @@ gdk_pixbuf_render_to_drawable_alpha (GdkPixbuf   *pixbuf,
  * function; applications that need to render pixbufs with dither offsets or to
  * given drawables should use gdk_pixbuf_render_to_drawable_alpha() or
  * gdk_pixbuf_render_to_drawable(), and gdk_pixbuf_render_threshold_alpha().
- *
- * If the pixbuf does not have an alpha channel, then *@mask_return will be set
- * to NULL.
  **/
 void
-gdk_pixbuf_render_pixmap_and_mask (GdkPixbuf  *pixbuf,
-				   GdkPixmap **pixmap_return,
-				   GdkBitmap **mask_return,
-				   int         alpha_threshold)
+gdk_pixbuf_render_pixmap_and_mask (GdkPixbuf *pixbuf,
+				   GdkPixmap **pixmap_return, GdkBitmap **mask_return,
+				   int alpha_threshold)
 {
-  g_return_if_fail (pixbuf != NULL);
-  
-  if (pixmap_return)
-    {
-      GdkGC *gc;
-      
-      *pixmap_return = gdk_pixmap_new (NULL, pixbuf->width, pixbuf->height,
-				       gdk_rgb_get_visual ()->depth);
-      gc = gdk_gc_new (*pixmap_return);
-      gdk_pixbuf_render_to_drawable (pixbuf, *pixmap_return, gc,
-				     0, 0, 0, 0,
-				     pixbuf->width, pixbuf->height,
-				     GDK_RGB_DITHER_NORMAL,
-				     0, 0);
-      gdk_gc_unref (gc);
-    }
-  
-  if (mask_return)
-    {
-      if (pixbuf->has_alpha)
-	{
-	  *mask_return = gdk_pixmap_new (NULL, pixbuf->width, pixbuf->height, 1);
-	  gdk_pixbuf_render_threshold_alpha (pixbuf, *mask_return,
-					     0, 0, 0, 0,
-					     pixbuf->width, pixbuf->height,
-					     alpha_threshold);
+	ArtPixBuf *apb;
+
+        g_return_if_fail (pixbuf != NULL);
+
+	apb = pixbuf->art_pixbuf;
+
+	if (pixmap_return) {
+		GdkGC *gc;
+
+		*pixmap_return = gdk_pixmap_new (NULL, apb->width, apb->height,
+						 gdk_rgb_get_visual ()->depth);
+		gc = gdk_gc_new (*pixmap_return);
+		gdk_pixbuf_render_to_drawable (pixbuf, *pixmap_return, gc,
+					       0, 0, 0, 0,
+					       apb->width, apb->height,
+					       GDK_RGB_DITHER_NORMAL,
+					       0, 0);
+		gdk_gc_unref (gc);
 	}
-      else
-	*mask_return = NULL;
-    }
+
+	if (mask_return) {
+		*mask_return = gdk_pixmap_new (NULL, apb->width, apb->height, 1);
+		gdk_pixbuf_render_threshold_alpha (pixbuf, *mask_return,
+						   0, 0, 0, 0,
+						   apb->width, apb->height,
+						   alpha_threshold);
+	}
 }

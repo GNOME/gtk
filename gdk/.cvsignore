@@ -1,11 +1,10 @@
 *.lo
 Makefile
 Makefile.in
-makefile.mingw
 .deps
 _libs
 .libs
-libgdk-*.la
+libgdk-1.1.la
 gdkcursors.h
 gdkkeysyms.h
 libgdk.la

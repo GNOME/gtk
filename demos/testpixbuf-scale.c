@@ -1,16 +1,17 @@
 #include <gtk/gtk.h>
+#include "gdk-pixbuf.h"
 
 #include <stdio.h>
 
-GdkInterpType interp_type = GDK_INTERP_BILINEAR;
+ArtFilterLevel filter_level = ART_FILTER_BILINEAR;
 int overall_alpha = 255;
 GdkPixbuf *pixbuf;
 GtkWidget *darea;
   
 void
-set_interp_type (GtkWidget *widget, gpointer data)
+set_filter_level (GtkWidget *widget, gpointer data)
 {
-  interp_type = GPOINTER_TO_UINT (data);
+  filter_level = GPOINTER_TO_UINT (data);
   gtk_widget_queue_draw (darea);
 }
 
@@ -31,14 +32,14 @@ expose_cb (GtkWidget *widget, GdkEventExpose *event, gpointer data)
 
   gdk_window_set_back_pixmap (widget->window, NULL, FALSE);
   
-  dest = gdk_pixbuf_new (GDK_COLORSPACE_RGB, FALSE, 8, event->area.width, event->area.height);
+  dest = gdk_pixbuf_new (ART_PIX_RGB, FALSE, 8, event->area.width, event->area.height);
 
   gdk_pixbuf_composite_color (pixbuf, dest,
 			      0, 0, event->area.width, event->area.height,
 			      -event->area.x, -event->area.y,
-			      (double) widget->allocation.width / gdk_pixbuf_get_width (pixbuf),
-			      (double) widget->allocation.height / gdk_pixbuf_get_height (pixbuf),
-			      interp_type, overall_alpha,
+			      (double) widget->allocation.width / pixbuf->art_pixbuf->width,
+			      (double) widget->allocation.height / pixbuf->art_pixbuf->height,
+			      filter_level, overall_alpha,
 			      event->area.x, event->area.y, 16, 0xaaaaaa, 0x555555);
 
   gdk_pixbuf_render_to_drawable (dest, widget->window, widget->style->fg_gc[GTK_STATE_NORMAL],
@@ -51,8 +52,6 @@ expose_cb (GtkWidget *widget, GdkEventExpose *event, gpointer data)
   return TRUE;
 }
 
-extern void pixbuf_init();
-
 int
 main(int argc, char **argv)
 {
@@ -62,9 +61,6 @@ main(int argc, char **argv)
 	GtkWidget *hbox, *label, *hscale;
 	GtkAdjustment *adjustment;
 	GtkRequisition scratch_requisition;
-        GError *error;
-        
-	pixbuf_init ();
 
 	gtk_init (&argc, &argv);
 	gdk_rgb_init ();
@@ -74,12 +70,9 @@ main(int argc, char **argv)
 		exit (1);
 	}
 
-        error = NULL;
-	pixbuf = gdk_pixbuf_new_from_file (argv[1], &error);
+	pixbuf = gdk_pixbuf_new_from_file (argv[1]);
 	if (!pixbuf) {
-		fprintf (stderr, "Cannot load image: %s\n",
-                         error->message);
-                g_error_free (error);
+		fprintf (stderr, "Cannot load %s\n", argv[1]);
 		exit(1);
 	}
 
@@ -94,28 +87,28 @@ main(int argc, char **argv)
 	
 	menuitem = gtk_menu_item_new_with_label ("NEAREST");
 	gtk_signal_connect (GTK_OBJECT (menuitem), "activate",
-			    GTK_SIGNAL_FUNC (set_interp_type),
-			    GUINT_TO_POINTER (GDK_INTERP_NEAREST));
+			    GTK_SIGNAL_FUNC (set_filter_level),
+			    GUINT_TO_POINTER (ART_FILTER_NEAREST));
 	gtk_widget_show (menuitem);
 	gtk_container_add (GTK_CONTAINER (menu), menuitem);
 	
 	menuitem = gtk_menu_item_new_with_label ("BILINEAR");
 	gtk_signal_connect (GTK_OBJECT (menuitem), "activate",
-			    GTK_SIGNAL_FUNC (set_interp_type),
-			    GUINT_TO_POINTER (GDK_INTERP_BILINEAR));
+			    GTK_SIGNAL_FUNC (set_filter_level),
+			    GUINT_TO_POINTER (ART_FILTER_BILINEAR));
 	gtk_widget_show (menuitem);
 	gtk_container_add (GTK_CONTAINER (menu), menuitem);
 	
 	menuitem = gtk_menu_item_new_with_label ("TILES");
 	gtk_signal_connect (GTK_OBJECT (menuitem), "activate",
-			    GTK_SIGNAL_FUNC (set_interp_type),
-			    GUINT_TO_POINTER (GDK_INTERP_TILES));
+			    GTK_SIGNAL_FUNC (set_filter_level),
+			    GUINT_TO_POINTER (ART_FILTER_TILES));
 	gtk_container_add (GTK_CONTAINER (menu), menuitem);
 
 	menuitem = gtk_menu_item_new_with_label ("HYPER");
 	gtk_signal_connect (GTK_OBJECT (menuitem), "activate",
-			    GTK_SIGNAL_FUNC (set_interp_type),
-			    GUINT_TO_POINTER (GDK_INTERP_HYPER));
+			    GTK_SIGNAL_FUNC (set_filter_level),
+			    GUINT_TO_POINTER (ART_FILTER_HYPER));
 	gtk_container_add (GTK_CONTAINER (menu), menuitem);
 
 	optionmenu = gtk_option_menu_new ();
@@ -152,8 +145,8 @@ main(int argc, char **argv)
 			    GTK_SIGNAL_FUNC (expose_cb), NULL);
 
 	gtk_window_set_default_size (GTK_WINDOW (window),
-				     gdk_pixbuf_get_width (pixbuf),
-				     scratch_requisition.height + gdk_pixbuf_get_height (pixbuf));
+				     pixbuf->art_pixbuf->width,
+				     scratch_requisition.height + pixbuf->art_pixbuf->height);
 	
 	gtk_widget_show_all (window);
 

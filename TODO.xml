@@ -12,7 +12,7 @@
   <section>
     <title>GDK</title>
     
-    <entry size="medium" status="90%" target="2.0">
+    <entry size="medium" status="70%" target="1.4">
       <title>Add backing store support</title>
       <description>
 	<p>
@@ -39,7 +39,7 @@
       <contact>Owen Taylor &lt;otaylor@redhat.com&gt;</contact>
     </entry>
 
-    <entry size="medium" status="90%" target="2.0">
+    <entry size="medium" status="70%" target="1.4">
       <title>32 Bit Coordinates</title>
       <description>
 	<p>
@@ -60,7 +60,7 @@
       <contact>Owen Taylor &lt;otaylor@redhat.com&gt;</contact>
     </entry>
 
-    <entry size="small" status="0%" target="2.0">
+    <entry size="small" status="0%" target="1.4">
       <title>Customizable double-click timeout</title>
       <description>
 	<p>
@@ -69,61 +69,15 @@
 	  customizable
 	</p>
       </description>
-      <contact>gtk-devel-list@gnome.org</contact>
+      <contact>gtk-devel-list@redhat.com</contact>
       <bugs>#3958</bugs>
     </entry>
-
-    <entry size="small" status="0%" target="2.0">
-      <title>Make color handling more convenient</title>
-      <description>
-	<p>
-          Add some color convenience functions; such as a way to get an
-          allocated GdkColor from GdkRGB, and export functions from gtkstyle.c
-          that lighten/darken a given color, and set a color from HSV in
-          addition to RGB. Also, consider having static variables that contain
-          preallocated common colors (gdk_blue, gdk_red, etc.), the problem
-          being colormap issues.
-	</p>
-      </description>
-      <contact>gtk-devel-list@gnome.org</contact>
-    </entry>
-
-    <entry size="small" status="0%" target="2.0">
-      <title>Cursors</title>
-      <description>
-	<p>
-          Two tasks: 1) move the cursors in the cursor font that people actually
-          care about to the top of the gdkcursor.h header file, and put a nice
-          list of the 15 cursors people actually care about in the docs 2) if
-          the cursor font lacks some commonly-useful cursors (like magnifying
-          glass), add these cursors to gdkcursor.h and then emulate them in
-          gdk_cursor_new by transparently creating the cursor from a bitmap.
-          The list of Qt cursors is worth http://doc.trolltech.com/qcursor.html
-          looking at for this task.
-	</p>
-      </description>
-      <contact>gtk-devel-list@gnome.org</contact>
-    </entry>
-
-    <entry size="medium" status="100%" target="2.0">
-      <title>Make GdkRGB work on any visual</title>
-      <description>
-	<p>
-          GdkRGB should be able to render to an arbitrary visual
-          (i.e. the visual shouldn't be fixed at gdk_rgb_init() 
-          time). This will break gdk_rgb_gc_set_foreground() and 
-          friends, though.
-	</p>
-      </description>
-      <contact>gtk-devel-list@gnome.org</contact>
-    </entry>
-
-  </section> <!-- GDK -->
+  </section>
 
   <section>
     <title>Internationalization</title>
     
-    <entry size="big" status="90%" target="2.0">
+    <entry size="big" status="0%" target="1.4">
       <title>Integrate Pango</title>
       <description>
 	<p>
@@ -136,7 +90,7 @@
       <contact>gtk-i18n-list@redhat.com</contact>
     </entry>
 
-    <entry size="medium" status="90%" target="2.0">
+    <entry size="medium" status="20%" target="1.4">
       <title>Switch to using UTF-8</title>
       <description>
 	<p>
@@ -158,11 +112,11 @@
       <contact>gtk-i18n-list@redhat.com</contact>
     </entry>
 
-    <entry size="big" status="60%" target="2.0">
+    <entry size="big" status="0%" target="1.4">
       <title>Rewrite Input Method Support</title>
       <description>
 	<p>
-	  Support for Input Methods is GTK+-1.2 is done via XIM, with
+	  Current support for Input Methods is done via XIM, with
 	  supported styles being over-the-spot and the root-window
 	  styles. However, the over-the-spot style is not going to
 	  work well with the Pango integration, since it relies on the
@@ -172,19 +126,18 @@
 	  set of callbacks that are invoked by the input methods.
 	</p>
 	<p>
-	  GTK+-2.0 will have a new system with loadable input method
-	  modules. These modules can either be implemented using XIM,
-	  or written from scratch.
+	  While adding the above support, it may be desirable to
+	  generalize the input-method support to the point where 
 	</p>
       </description>
       <contact>gtk-i18n-list@redhat.com</contact>
     </entry>
-  </section> <!-- i18n -->
+  </section>
 
   <section>
     <title>GTK+ Core</title>
 
-    <entry size="big" status="60%" target="2.0">
+    <entry size="big" status="5%" target="1.4">
       <title>GLib based object and type system</title>
       <description>
 	<p>
@@ -197,7 +150,7 @@
       <contact>Tim Janik &lt;timj@gtk.org&gt;</contact>
     </entry>
 
-    <entry size="big" status="1%" target="2.0">
+    <entry size="big" status="1%" target="1.4">
       <title>Overall callback improvements</title>
       <description>
 	<p>
@@ -210,10 +163,10 @@
 	  "GLib based object and type system").
 	</p>
       </description>
-      <contact>gtk-devel-list@gnome.org</contact>
+      <contact>gtk-devel-list@redhat.com</contact>
     </entry>
 
-    <entry size="big" status="0%" target="2.0">
+    <entry size="big" status="0%" target="1.4">
       <title>State change notification</title>
       <description>
 	<p>
@@ -233,7 +186,7 @@
       <contact>Tim Janik &lt;timj@gtk.org&gt;</contact>
     </entry>
 
-    <entry size="big" status="5%" target="2.0">
+    <entry size="big" status="5%" target="1.4">
       <title>Widget as sensitivity/grab state machine</title>
       <description>
 	<p>
@@ -253,7 +206,7 @@
       <contact>Tim Janik &lt;timj@gtk.org&gt;</contact>
     </entry>
 
-    <entry size="big" status="0%" target="2.0">
+    <entry size="big" status="0%" target="1.4">
       <title>Allow argument customization</title>
       <description>
 	<p>
@@ -269,7 +222,7 @@
       </description>
     </entry>
 
-    <entry size="medium" status="0%" target="2.0">
+    <entry size="medium" status="0%" target="1.4">
       <title>Allow global customization</title>
       <description>
 	<p>
@@ -286,7 +239,7 @@
       </description>
     </entry>
 
-    <entry size="small" status="0%" target="2.0">
+    <entry size="small" status="0%" target="1.4">
       <title>Gtk+ Modules installation directory</title>
       <description>
 	<p>
@@ -297,100 +250,15 @@
 	  code (especially on AIX).
 	</p>
       </description>
-      <contact>gtk-devel-list@gnome.org</contact>
+      <contact>gtk-devel-list@redhat.com</contact>
     </entry>
 
-
-    <entry size="small" status="20%" target="2.0">
-      <title>Convenient widget setup</title>
-      <description>
-	<p>
-          Make it simpler to set all the basic attributes of a widget.  Might
-          want set_tooltip(), set_accel(), set_color(FOREGROUND, color),
-          set_min_size() (usize does this, but needs a rename), set_whatsthis(),
-          etc. set_accel() may not work for all widgets, may need a convenience
-          API for button and label accelerators specifically.
-	</p>
-        <p>
-          The idea is that it should be easy, out of the box, to set up a widget
-          with all the nice touches and features the widget really should
-          have. Users shouldn't need to do their own convenience functions for
-          this.
-        </p>
-
-      </description>
-      <contact>gtk-devel-list@gnome.org</contact>
-    </entry>
-
-    <entry size="medium" status="0%" target="> 2.0">
-      <title>Make selections/clipboard more convenient</title>
-      <description>
-	<p>
-          Make GtkSelectionData more like the MIME blobs in Swing and Qt.
-          Consider a GtkClipboard object to simplify cut-and-paste handling.
-	</p>
-      </description>
-      <contact>gtk-devel-list@gnome.org</contact>
-    </entry>
-
-
-    <entry size="small" status="80%" target="2.0">
-      <title>Stock label/icon system</title>
-      <description>
-	<p>
-          A system like GnomeStock for getting a standard labels/icons 
-          for menus and toolbars. Should be extensible by themes, and 
-          by libgnomeui. Some work already done on this.
-	</p>
-      </description>
-      <contact>hp@redhat.com</contact>
-    </entry>
-
-
-    <entry size="big" status="0%" target="> 2.0">
-      <title>Session Management</title>
-      <description>
-	<p>
-          Look in to session management. Consider whether to use 
-          X11R6 SM, or some custom spec shared with KDE. Create
-          GTK+ API for this.
-	</p>
-      </description>
-      <contact>gtk-devel-list@gnome.org</contact>
-    </entry>
-
-    <entry size="big" status="0%" target="> 2.0">
-      <title>Online help enhancements</title>
-      <description>
-	<p>
-          Look at a small "What's This" popup widget, 
-          and a What's This system in general (this part 
-          could maybe be done for 2.0). A more difficult, probably 
-          a post-2.0 task, is to integrate a very simple little
-          help browser gizmo into GTK.
-	</p>
-      </description>
-      <contact>gtk-devel-list@gnome.org</contact>
-    </entry>
-
-
-    <entry size="medium" status="0%" target="2.0">
-      <title>GUI-editable means of user configuration</title>
-      <description>
-	<p>
-          Need to be able to set double click time, whether cursors
-          blink, etc., from a control panel type of deal.
-	</p>
-      </description>
-      <contact>gtk-devel-list@gnome.org</contact>
-    </entry>
-
-  </section> <!-- Core -->
+  </section>
 
   <section>
     <title>GTK+ Widgets</title>
 
-    <entry size="small" status="100%" target="2.0">
+    <entry size="small" status="0%" target="1.4">
       <title>Make GtkFrame use a label</title>
       <description>
 	<p>
@@ -402,31 +270,31 @@
 	  in that slot.)
 	</p>
       </description>
-      <contact>gtk-devel-list@gnome.org</contact>
+      <contact>gtk-devel-list@redhat.com</contact>
     </entry>
 
-    <entry size="big" status="90%" target="2.0">
+    <entry size="big" status="50%" target="1.4">
       <title>Replace GtkText Widget</title>
       <description>
 	<p>
-	  The GtkText widget is badly in need of replacement, since it
-	  is buggy and insufficiently feature rich. This is being done
-	  using Havoc Pennington's port of the Tk Text widget.
+	  The GtkText widget is badly in need of replacement, since it is
+	  buggy and insufficiently feature rich. There are a number
+	  of possible candidates for a replacement, with the most
+	  promising at the current time being Havoc Pennington's
+	  (hp@redhat.com) port of the Tk Text widget.
 	</p>
 	<p>
-	  As part of this job <a href="http://www.pango.org">Pango</a>
-	  support is being added to the replacement. The structure of
-	  the Tk text widget port is suited to this as it works
-	  paragraph-by-paragraph, and Pango works at a sub-paragraph
-	  scale. The main remaining tasks here are to implement
-	  incremental reflow to make performance acceptable and to
-	  implement embedded pixmaps and widgets.
+	  As part of this job it will be necessary to add
+	  <a href="http://www.pango.org">Pango</a> support to the
+	  replacement. The structure of the Tk text widget port seems
+	  suited to this as it works paragraph-by-paragraph, and
+	  Pango works at a sub-paragraph scale.
 	</p>
       </description>
-      <contact>gtk-devel-list@gnome.org</contact>
+      <contact>gtk-devel-list@redhat.com</contact>
     </entry>
 
-    <entry size="small" status="20%" target="2.0">
+    <entry size="small" status="0%" target="1.4">
       <title>Improve Radio/Checkbutton Look</title>
       <description>
 	<p>
@@ -438,10 +306,10 @@
 	  will fit in with well with the rest of the GTK+ look.
 	</p>
       </description>
-      <contact>gtk-devel-list@gnome.org</contact>
+      <contact>gtk-devel-list@redhat.com</contact>
     </entry>
 
-    <entry size="small" status="99%" target="2.0">
+    <entry size="small" status="0%" target="1.4">
       <title>Improve Submenu Navigation</title>
       <description>
 	<p>
@@ -454,10 +322,10 @@
 	  side of the submenu.
 	</p>
       </description>
-      <contact>gtk-devel-list@gnome.org</contact>
+      <contact>gtk-devel-list@redhat.com</contact>
     </entry>
 
-    <entry size="small" status="0%" target="2.0 ?">
+    <entry size="small" status="0%" target="1.4 ?">
       <title>Improve Spinbutton Look</title>
       <description>
 	<p>
@@ -475,23 +343,23 @@
 	  windowing systems.
 	</p>
       </description>
-      <contact>gtk-devel-list@gnome.org</contact>
+      <contact>gtk-devel-list@redhat.com</contact>
     </entry>
 
-    <entry size="big" status="90%" target="2.0">
+    <entry size="big" status="90%" target="1.4">
       <title>Supply horizontable/vertical wrapping boxes</title>
       <description>
 	<p>
 	  An often requested feature are wrapping containers, at this
 	  point, gimp's development version already uses such widgets:
-	  horizontable/vertical wrap boxes, that need to go into 2.0
+	  horizontable/vertical wrap boxes, that need to go into 1.4
 	  proper at some point.
 	</p>
       </description>
       <contact>Tim Janik &lt;timj@gtk.org&gt;</contact>
     </entry>
 
-    <entry size="medium" status="90%" target="2.0">
+    <entry size="medium" status="90%" target="1.4">
       <title>Improved generic combo support</title>
       <description>
 	<p>
@@ -504,7 +372,7 @@
       <contact>Tim Janik &lt;timj@gtk.org&gt;</contact>
     </entry>
 
-    <entry size="big" status="40%" target="2.0?">
+    <entry size="big" status="0%" target="> 1.4">
       <title>Add unified set of List/Tree/Grid widgets</title>
       <description>
 	<p>
@@ -526,214 +394,7 @@
 	  both the simplicity and power of the interfaces.
 	</p>
       </description>
-      <contact>gtk-devel-list@gnome.org</contact>
+      <contact>gtk-devel-list@redhat.com</contact>
     </entry>
-
-    <entry size="small" status="0%" target="2.0">
-      <title>GtkImage</title>
-      <description>
-	<p>
-          gdk-pixbuf is moving to become a GTK+ dependency, a new image-display
-          widget is thus needed.
-	</p>
-      </description>
-      <contact>hp@redhat.com</contact>
-    </entry>
-
-    <entry size="small" status="0%" target="2.0">
-      <title>Attempt to fix GtkStatusbar</title>
-      <description>
-	<p>
-          GtkStatusbar is too inconvenient to use.
-          The only non-breakage-inducing fix we could
-          come up with is to permit 0 as a context ID, so you
-          don't have to use gtk_statusbar_get_context_id().
-	</p>
-      </description>
-      <contact>gtk-devel-list@gnome.org</contact>
-    </entry>
-    
-    <entry size="small" status="95%" target="2.0">
-      <title>Decruft GtkProgress, GtkProgressbar</title>
-      <description>
-        <p>UPDATE: this is done, just need to apply the patch.
-        </p>
-        
-	<p>
-          This interface is just a disaster of overcomplexity;
-          it should pretty much just be set_percentage(), 
-          pulse() (to move during activity mode), and set_text().
-          There's no reason that there are two objects, should 
-          just be one interface. Almost all the functions
-          that currently exist should be deprecated.
-	</p>
-      </description>
-      <contact>hp@redhat.com</contact>
-    </entry>
-
-    <entry size="small" status="0%" target="2.0">
-      <title>Entry validation hooks</title>
-      <description>
-	<p>
-          Simple hooks for validation in a GtkEntry.  Pretty much just a
-          "validate" callback which takes a string (current entry contents) and
-          returns either VALID, INVALID, or COULDBEVALID. Then the 
-          GtkEntry calls this function if it's set, and does the appropriate 
-          UI things. GTK should come with validators for int and float,
-          see GtkSpinButton where these are already implemented.
-	</p>
-      </description>
-      <contact>gtk-devel-list@gnome.org</contact>
-    </entry>
-
-    <entry size="big" status="0%" target="> 2.0">
-      <title>pseudo-MDI Widget</title>
-      <description>
-	<p>
-          Add a widget that lets you rearrange various views (similar to many
-          IDEs, like Visual SlickEdit or JBuilder). Basically there should be a
-          central slot and 4 slots around the sides; each slot holds one or more
-          views. If two views are dropped in the same slot, then a notebook is
-          created displaying both views. If a view is dropped outside the
-          application window, it becomes a standalone window. It should be
-          possible to restrict whether a view can be dropped on the sides,
-          horizontal/vertical sides only, in the central content area, or in
-          any of those places.
-	</p>
-        <p>
-          (Havoc has a proposed interface for this, mail hp@redhat.com)
-        </p>
-      </description>
-      <contact>gtk-devel-list@gnome.org</contact>
-    </entry>
-
-    <entry size="medium" status="0%" target="> 2.0">
-      <title>Icon List Widget</title>
-      <description>
-	<p>
-          A simple icon list widget, suitable for creating a file selector or
-          the like.
-	</p>
-      </description>
-      <contact>gtk-devel-list@gnome.org</contact>
-    </entry>
-
-    <entry size="medium" status="0%" target="> 2.0">
-      <title>Dock widget</title>
-      <description>
-	<p>
-          Add a widget like GnomeDock (perhaps based on GnomeDock)
-          that allows people to put rearrangeable toolbars, menubars, etc. 
-          around a central content area. The widget should have hooks for 
-          saving the current positions of the various docked bars.
-	</p>
-      </description>
-      <contact>gtk-devel-list@gnome.org</contact>
-    </entry>
-
-    <entry size="big" status="0%" target="> 2.0">
-      <title>Canvas widget</title>
-      <description>
-	<p>
-          Figure out how to get GnomeCanvas or a derived work into GTK+ itself.
-	</p>
-      </description>
-      <contact>gtk-devel-list@gnome.org</contact>
-    </entry>
-
-    <entry size="medium" status="57%" target="2.0">
-      <title>Menu scroll</title>
-      <description>
-	<p>
-          When menus are bigger than the screen, allow scrolling
-          as on the Mac.
-	</p>
-      </description>
-      <contact>gtk-devel-list@gnome.org</contact>
-    </entry>
-
-    <entry size="medium" status="20%" target="2.0">
-      <title>Toolbar/menubar wrap</title>
-      <description>
-	<p>
-          When toolbars and menubars are too wide, do some sort of 
-          wrapping or drop-down deal. (See Windows/Mac apps for examples.)
-	</p>
-      </description>
-      <contact>gtk-devel-list@gnome.org</contact>
-    </entry>
-
-    <entry size="small" status="0%" target="2.0">
-      <title>Blink cursor in GtkEntry</title>
-      <description>
-	<p>
-          Make the cursor optionally blink in GtkEntry. Beware, the entry code
-          is somewhat in flux; mail Owen and ask.
-	</p>
-      </description>
-      <contact>otaylor@redhat.com</contact>
-    </entry>
-
-    <entry size="small" status="100%" target="2.0">
-      <title>Don't highlight first menu item when menus come up</title>
-      <description>
-	<p>
-          Keep GtkMenu from prelighting the first menu item.
-	</p>
-      </description>
-      <contact>gtk-devel-list@gnome.org</contact>
-    </entry>
-
-    <entry size="small" status="100%" target="2.0">
-      <title>Integrate new color selector</title>
-      <description>
-	<p>
-          There's a new color selector in CVS (module gnome-colorsel),
-          it needs to be folded in to GTK and any remaining issues resolved.
-          (This new selector is API-compatible with the old one, and 
-          still called GtkColorSelector).
-	</p>
-      </description>
-      <contact>gtk-devel-list@gnome.org</contact>
-    </entry>
-
-    <entry size="medium" status="70%" target="2.0">
-      <title>Write new font selector</title>
-      <description>
-	<p>
-          Pango introduces a new font handling system,
-          replacing the XLFD system. Need a font selector for this.
-          The XLFD selector should probably remain, for apps where
-          it makes sense (like gnome-terminal probably).
-	</p>
-      </description>
-      <contact>gtk-devel-list@gnome.org</contact>
-    </entry>
-
-    <entry size="small" status="0%" target="2.0">
-      <title>Stack Widget</title>
-      <description>
-	<p>
-          Jonathan has a widget like a tabless/frameless notebook, used for
-          something like the GNOME control center where you want to toggle which
-          widget is visible to the user. Needs to be cleaned up and considered
-          for GTK.
-	</p>
-      </description>
-      <contact>gtk-devel-list@gnome.org, jrb@redhat.com</contact>
-    </entry>
-
-    <entry size="small" status="0%" target="2.0">
-      <title>Clean up GtkNotebook</title>
-      <description>
-	<p>
-          GtkNotebook currently breaks GTK invariants about
-          mapping/visibility/etc., needs fixing.
-	</p>
-      </description>
-      <contact>gtk-devel-list@gnome.org</contact>
-    </entry>
-
-  </section> <!-- GTK+ -->
+  </section>
 </todo>
-

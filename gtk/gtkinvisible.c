@@ -2,35 +2,33 @@
  * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
  *
  * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
+ * modify it under the terms of the GNU Library General Public
  * License as published by the Free Software Foundation; either
  * version 2 of the License, or (at your option) any later version.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
+ * Library General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public
+ * You should have received a copy of the GNU Library General Public
  * License along with this library; if not, write to the
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
  * Boston, MA 02111-1307, USA.
  */
 
 /*
- * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
+ * Modified by the GTK+ Team and others 1997-1999.  See the AUTHORS
  * file for a list of people on the GTK+ Team.  See the ChangeLog
  * files for a list of changes.  These files are distributed with
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
-#include <gdk/gdk.h>
 #include "gtksignal.h"
 #include "gtkinvisible.h"
 
 static void gtk_invisible_class_init               (GtkInvisibleClass *klass);
 static void gtk_invisible_init                     (GtkInvisible      *invisible);
-static void gtk_invisible_destroy                  (GtkObject        *object);
 static void gtk_invisible_realize                  (GtkWidget        *widget);
 static void gtk_invisible_show                     (GtkWidget        *widget);
 static void gtk_invisible_size_allocate            (GtkWidget        *widget,
@@ -64,50 +62,28 @@ gtk_invisible_get_type (void)
 static void
 gtk_invisible_class_init (GtkInvisibleClass *class)
 {
-  GtkObjectClass *object_class;
   GtkWidgetClass *widget_class;
 
   widget_class = (GtkWidgetClass*) class;
-  object_class = (GtkObjectClass*) class;
 
   widget_class->realize = gtk_invisible_realize;
   widget_class->show = gtk_invisible_show;
   widget_class->size_allocate = gtk_invisible_size_allocate;
-
-  object_class->destroy = gtk_invisible_destroy;
 }
 
 static void
 gtk_invisible_init (GtkInvisible *invisible)
 {
   GTK_WIDGET_UNSET_FLAGS (invisible, GTK_NO_WINDOW);
-  GTK_WIDGET_SET_FLAGS (invisible, GTK_TOPLEVEL);
 
   gtk_widget_ref (GTK_WIDGET (invisible));
   gtk_object_sink (GTK_OBJECT (invisible));
-
-  invisible->has_user_ref_count = TRUE;
-}
-
-static void
-gtk_invisible_destroy (GtkObject *object)
-{
-  GtkInvisible *invisible = GTK_INVISIBLE (object);
-  
-  if (invisible->has_user_ref_count)
-    {
-      invisible->has_user_ref_count = FALSE;
-      gtk_widget_unref (GTK_WIDGET (invisible));
-    }
 }
 
 GtkWidget*
 gtk_invisible_new (void)
 {
-  GtkWidget *result = GTK_WIDGET (gtk_type_new (GTK_TYPE_INVISIBLE));
-  gtk_widget_realize (result);
-
-  return result;
+  return GTK_WIDGET (gtk_type_new (GTK_TYPE_INVISIBLE));
 }
 
 static void

@@ -10,16 +10,16 @@
  *          Michael Fulbright <drmike@redhat.com>
  *
  * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
+ * modify it under the terms of the GNU Library General Public
  * License as published by the Free Software Foundation; either
  * version 2 of the License, or (at your option) any later version.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
+ * Library General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public
+ * You should have received a copy of the GNU Library General Public
  * License along with this library; if not, write to the
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
  * Boston, MA 02111-1307, USA.
@@ -31,7 +31,6 @@
 #include <gmodule.h>
 #include <stdio.h>
 #include "gdk-pixbuf.h"
-#include "gdk-pixbuf-i18n.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -55,8 +54,7 @@ struct _GdkPixbufModule {
 	char *module_name;
 	gboolean (* format_check) (guchar *buffer, int size);
 	GModule *module;
-        GdkPixbuf *(* load) (FILE    *f,
-                             GError **error);
+	GdkPixbuf *(* load) (FILE *f);
         GdkPixbuf *(* load_xpm_data) (const char **data);
 
         /* Incremental loading */
@@ -65,33 +63,17 @@ struct _GdkPixbufModule {
 				 ModuleUpdatedNotifyFunc update_func,
 				 ModuleFrameDoneNotifyFunc frame_done_func,
 				 ModuleAnimationDoneNotifyFunc anim_done_func,
-				 gpointer user_data,
-                                 GError **error);
-        void (* stop_load)          (gpointer context);
-        gboolean (* load_increment) (gpointer      context,
-                                     const guchar *buf,
-                                     guint         size,
-                                     GError      **error);
+				 gpointer user_data);
+        void (* stop_load) (gpointer context);
+        gboolean (* load_increment) (gpointer context, const guchar *buf, guint size);
 
 	/* Animation loading */
-	GdkPixbufAnimation *(* load_animation) (FILE    *f,
-                                                GError **error);
-
-        gboolean (* save) (FILE      *f,
-                           GdkPixbuf *pixbuf,
-                           gchar    **param_keys,
-                           gchar    **param_values,
-                           GError   **error);
+	GdkPixbufAnimation *(* load_animation) (FILE *f);
 };
 
 
-GdkPixbufModule *gdk_pixbuf_get_module (guchar *buffer, guint size,
-                                        const gchar *filename,
-                                        GError **error);
-GdkPixbufModule *gdk_pixbuf_get_named_module (const char *name,
-                                              GError **error);
-gboolean gdk_pixbuf_load_module (GdkPixbufModule *image_module,
-                                 GError **error);
+GdkPixbufModule *gdk_pixbuf_get_module (guchar *buffer, guint size);
+void gdk_pixbuf_load_module (GdkPixbufModule *image_module);
 
 
 

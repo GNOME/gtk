@@ -9,15 +9,12 @@ Makefile
 Makefile.in
 aclocal.m4
 configure
-gtk-config-2.0
+gtk-config
 config.cache
 ABOUT-NLS
 intl
 stamp-h.in
 gtk+.spec
-gtk+-2.0.pc
-gdk-2.0.pc
-gdk-pixbuf-2.0.pc
 missing
 install-sh
 mkinstalldirs
