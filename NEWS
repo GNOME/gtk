@@ -1,3 +1,38 @@
+Overview of Changes from GTK+ 2.5.3 to GTK+ 2.5.4
+=================================================
+* GtkFileChooser
+ - Make path bar arrows larger [Matthias Clasen]
+ - Make SELECT_FOLDER mode work [Matthias]
+ - Speed up the completion popup [Matthias]
+ - Add some tooltips [Matthias]
+ - Make path bar scroll [Matthias]
+* Keyboard navigation
+ - Put selectable labels in the regular tab focus 
+  chain [David Hawthorne, Matthias]
+ - Skip selectable labels when looking for the initial 
+  focus widget in dialogs [Matthias]
+* Add a GtkMenuToolButton widget which displays a
+ dropdown menu from a toolbar button.  [Paolo Borelli]
+* Make menus scroll faster [Soeren Sandmann]
+* Allow themes to displace focus recangles in buttons
+ on click [Soeren, Matthias]
+* Add a function to obtain the string representation of
+ accelerators used in GtkAccelLabel [John Spray, Matthias]
+* Win32 bug fixes [Robert Ögren]
+ - Fix commandline option handling [Tor Lillqvist]
+ - Make IME input method work better [Tor]
+* Other bug fixes [Joel Fredrikson, Darren Creutz,
+ Manish Singh, Matthias, Tristan Van Berkom Christian Persch,
+ Padraig O'Briain, Owen Taylor, Jonathan Blandford, 
+ Michèle Garoche, Milosz Derezynski, Christopher Blizzard,
+ Paolo, John Austin, Maryn Russell, Ken Harris, Reinout van 
+ Schouwen, Morten Welinder, Ross Burton, Bernd Demian, Gustavo 
+ Carneiro, John Finlay, Tim Janik, Damon Chaplin]
+* Documentation improvements [John Finlay, Billy Biggs, Matthias,
+ Martyn Russell, Dave Cook]
+* New and updated translations (az_IR,cs,en_CA,en_GB,nl,zh_TW)
+Bugs fixed:141170,153185,153224,153168,153082,153469,153468,153467,153628,152921,153332,153811,151441,153082,153788,153984,138085,152486,154176,154191,153800,153788,150790,153887,154341,153714,154310,154350,154472,154504,154142,154129,154068,151378,154526,153873,154062
+
 Overview of Changes from GTK+ 2.5.2 to GTK+ 2.5.3
 =================================================
 * GtkFileChooser

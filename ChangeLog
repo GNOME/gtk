@@ -1,3 +1,7 @@
+2004-10-05  Matthias Clasen  <mclasen@redhat.com>
+
+	* NEWS: Updates
+
 Tue Oct  5 19:29:06 2004  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkentry.h: removed redundant gtk_entry_get_layout() decl.
@@ -84,7 +88,7 @@ Tue Oct  5 17:06:26 2004  Tim Janik  <timj@gtk.org>
 
 2004-10-01  Paolo Borelli  <pborelli@katamail.com>
 
-	* gtk/gtkmenutoolbutton.c: deactivate the menu before setiing it
+	* gtk/gtkmenutoolbutton.c: deactivate the menu before setting it
 	to something else. Bug #153887.
 
 2004-10-01  Matthias Clasen  <mclasen@redhat.com>
