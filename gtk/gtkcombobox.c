@@ -114,8 +114,9 @@ struct _GtkComboBoxPrivate
  * cell_view -> GtkCellView, regular child
  * cell_view_frame -> NULL
  * button -> GtkToggleButton set_parent to combo
- * arrow -> GtkArrow set_parent to button
- * separator -> GtkVSepator set_parent to button
+ * box -> child of button
+ * arrow -> child of box
+ * separator -> child of box
  * popup_widget -> GtkMenu
  * popup_window -> NULL
  * popup_frame -> NULL
@@ -126,6 +127,7 @@ struct _GtkComboBoxPrivate
  * cell_view -> NULL 
  * cell_view_frame -> NULL
  * button -> GtkToggleButton set_parent to combo
+ * box -> NULL
  * arrow -> GtkArrow, child of button
  * separator -> NULL
  * popup_widget -> GtkMenu
@@ -138,6 +140,7 @@ struct _GtkComboBoxPrivate
  * cell_view -> GtkCellView, regular child
  * cell_view_frame -> GtkFrame, set parent to combo
  * button -> GtkToggleButton, set_parent to combo
+ * box -> NULL
  * arrow -> GtkArrow, child of button
  * separator -> NULL
  * popup_widget -> tree_view
@@ -150,6 +153,7 @@ struct _GtkComboBoxPrivate
  * cell_view -> NULL
  * cell_view_frame -> NULL
  * button -> GtkToggleButton, set_parent to combo
+ * box -> NULL
  * arrow -> GtkArrow, child of button
  * separator -> NULL
  * popup_widget -> tree_view
@@ -336,9 +340,6 @@ static void     gtk_combo_box_menu_row_changed     (GtkTreeModel     *model,
                                                     gpointer          data);
 static gboolean gtk_combo_box_menu_key_press       (GtkWidget        *widget,
 						    GdkEventKey      *event,
-						    gpointer          data);
-static void     gtk_combo_box_menu_state_changed   (GtkWidget        *widget,
-			                            GtkStateType      previous,
 						    gpointer          data);
 
 /* cell layout */
@@ -1502,12 +1503,6 @@ gtk_combo_box_forall (GtkContainer *container,
     {
       if (combo_box->priv->button)
 	(* callback) (combo_box->priv->button, callback_data);
-      if (combo_box->priv->box)
-	(* callback) (combo_box->priv->box, callback_data);
-      if (combo_box->priv->separator)
-	(* callback) (combo_box->priv->separator, callback_data);
-      if (combo_box->priv->arrow)
-	(* callback) (combo_box->priv->arrow, callback_data);
       if (combo_box->priv->cell_view_frame)
 	(* callback) (combo_box->priv->cell_view_frame, callback_data);
     }
@@ -1653,9 +1648,6 @@ gtk_combo_box_menu_setup (GtkComboBox *combo_box,
   g_signal_connect (combo_box->priv->button, "button_press_event",
                     G_CALLBACK (gtk_combo_box_menu_button_press),
                     combo_box);
-  g_signal_connect (combo_box->priv->button, "state_changed",
-		    G_CALLBACK (gtk_combo_box_menu_state_changed), 
-		    combo_box);
 
   /* create our funky menu */
   menu = gtk_menu_new ();
@@ -1714,10 +1706,6 @@ gtk_combo_box_menu_destroy (GtkComboBox *combo_box)
                                         G_SIGNAL_MATCH_DATA,
                                         0, 0, NULL,
                                         gtk_combo_box_menu_button_press, NULL);
-  g_signal_handlers_disconnect_matched (combo_box->priv->button,
-                                        G_SIGNAL_MATCH_DATA,
-                                        0, 0, NULL,
-                                        gtk_combo_box_menu_state_changed, NULL);
 
   /* unparent will remove our latest ref */
   gtk_widget_unparent (combo_box->priv->button);
@@ -1899,22 +1887,6 @@ gtk_combo_box_menu_button_press (GtkWidget      *widget,
     }
 
   return FALSE;
-}
-
-static void
-gtk_combo_box_menu_state_changed (GtkWidget    *widget,
-				  GtkStateType  previous,
-				  gpointer      user_data)
-{
-  GtkComboBox *combo_box = GTK_COMBO_BOX (user_data);
-
-  if (combo_box->priv->cell_view)
-    {
-      gtk_widget_set_state (combo_box->priv->cell_view, 
-			    GTK_WIDGET_STATE (widget));
-      
-      gtk_widget_queue_draw (combo_box->priv->cell_view);
-    }
 }
 
 static void
