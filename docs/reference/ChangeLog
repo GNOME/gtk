@@ -1,3 +1,8 @@
+2003-05-27  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/tmpl/gtkradiomenuitem.sgml: Fix example.  (#113604, 
+	Julien Moutte)
+
 2003-05-08  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/tmpl/gtkcalendar.sgml: Deprecate gtk_calendar_display_options().
