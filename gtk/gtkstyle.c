@@ -31,7 +31,7 @@
 #include "gtkthemes.h"
 #include "gtkwidget.h"
 #include "gtkthemes.h"
-#include "gdk/gdkprivate.h"
+#include "gdkprivate.h"
 
 
 #define LIGHTNESS_MULT  1.3

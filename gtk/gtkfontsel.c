@@ -70,7 +70,7 @@
 #include <ctype.h>
 
 #include "gdk/gdk.h"
-#include "gdk/gdkx.h"
+#include "gdkx.h"
 #include "gdk/gdkkeysyms.h"
 
 #include "gtkbutton.h"

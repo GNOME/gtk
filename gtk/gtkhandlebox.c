@@ -26,7 +26,7 @@
  */
 
 #include <stdlib.h>
-#include "gdk/gdkx.h"
+#include "gdkx.h"
 #include "gtkhandlebox.h"
 #include "gtkmain.h"
 #include "gtksignal.h"

@@ -53,7 +53,7 @@
 
 #include <stdarg.h>
 #include <string.h>
-#include <gdk/gdkx.h>
+#include "gdkx.h"
 /* we need this for gdk_window_lookup() */
 #include "gtkmain.h"
 #include "gtkselection.h"

@@ -27,7 +27,7 @@
 #include <ctype.h>
 #include <string.h>
 #ifdef USE_XIM
-#include "gdk/gdkx.h"
+#include "gdkx.h"
 #endif
 #include "gdk/gdkkeysyms.h"
 #include "gdk/gdki18n.h"

@@ -227,7 +227,7 @@ void gdk_window_set_child_shapes (GdkWindow *window);
 
 /*
  * This routine allows you to merge (ie ADD) child shapes to your
- * own window's shape keeping its current shape and ADDING the shild
+ * own window's shape keeping its current shape and ADDING the child
  * shapes to it.
  * 
  * - Raster
@@ -464,6 +464,15 @@ GdkPixmap* gdk_pixmap_new		(GdkWindow  *window,
 					 gint	     width,
 					 gint	     height,
 					 gint	     depth);
+#if GDK_WINDOWING == GDK_WINDOWING_WIN32
+GdkPixmap* gdk_pixmap_create_on_shared_image
+					(GdkImage  **image_return,
+					 GdkWindow  *window,
+					 GdkVisual  *visual,
+					 gint        width,
+					 gint        height,
+					 gint        depth);
+#endif
 GdkBitmap* gdk_bitmap_create_from_data	(GdkWindow   *window,
 					 const gchar *data,
 					 gint	      width,
@@ -512,6 +521,12 @@ GdkImage*  gdk_image_new       (GdkImageType  type,
 				GdkVisual    *visual,
 				gint	      width,
 				gint	      height);
+#if GDK_WINDOWING == GDK_WINDOWING_WIN32
+GdkImage*  gdk_image_bitmap_new(GdkImageType  type,
+				GdkVisual    *visual,
+				gint	      width,
+				gint	      height);
+#endif
 GdkImage*  gdk_image_get       (GdkWindow    *window,
 				gint	      x,
 				gint	      y,
@@ -562,8 +577,7 @@ void      gdk_color_free (GdkColor *color);
 
 gint gdk_color_parse	 (const gchar	*spec,
 			  GdkColor	*color);
-guint gdk_color_hash     (const GdkColor *colora,
-			  const GdkColor *colorb);
+guint gdk_color_hash     (const GdkColor *colora);
 gint gdk_color_equal	 (const GdkColor *colora,
 			  const GdkColor *colorb);
 
@@ -994,7 +1008,7 @@ gboolean gdk_keyval_is_lower		  (guint	keyval);
 /* Threading
  */
 
-extern GMutex *gdk_threads_mutex;
+GDKVAR GMutex *gdk_threads_mutex;
 
 void     gdk_threads_enter                (void);
 void     gdk_threads_leave                (void);

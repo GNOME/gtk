@@ -1109,8 +1109,7 @@ gdk_color_change (GdkColormap *colormap,
 }
 
 guint
-gdk_color_hash (const GdkColor *colora,
-		const GdkColor *colorb)
+gdk_color_hash (const GdkColor *colora)
 {
   return ((colora->red) +
 	  (colora->green << 11) +

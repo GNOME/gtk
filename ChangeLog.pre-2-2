@@ -1,3 +1,39 @@
+1999-03-18  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/gdktypes.h: Merge in Win32 version: Define macro GDKVAR for
+	declaring gdk variables exported/imported from the DLL. New image
+	type enum, GDK_IMAGE_SHARED_PIXMAP, for gdk_imlib. New drag and
+	drop protocol enums, GDK_DRAG_PROTO_WIN32_DROPFILES and
+	GDK_DRAG_PROTO_OLE2.
+
+	* gdk/gdk.h: Merge in Win32 version: Two new functions,
+	gdk_pixmap_create_on_shared_image and gdk_image_bitmap_new. So far
+	declared only for the Win32 version, but could be in the X11
+	version as well. (Needed for a Xlib-less gdk_imlib.)
+	gdk_color_hash should have only one parameter. Declare
+	gdk_threads_mutex with GDKVAR.
+	
+	* gdk/gdkcolor.c (gdk_color_hash): As a hash function should have
+	just one parameter.
+
+	* gdk/gdkimage.c (gdk_image_get): Initialize bpp correctly. Bytes
+	per pixel, not bits.
+
+	* gdk/gdkrgb.c: Mingle includes somewhat. (gdk_rgb_select_conv):
+	Fetch bpp (which means bits-per-pixel here) from another place on
+	Win32. Accept also depth==32 (which we might get on Win32) with
+	bpp==32.
+
+	* gtk/{gtkclist,gtkctree,gtkdnd,gtkditable,gtkfontsel,
+	gtkhandlebox,gtklayout,gtkmain,gtkplug,gtkpreview,gtkrc,
+	gtkselection,gtksocket,gtkstyle,gtkwidget,gtkwindow}.c:
+	Include gdx.h from "gdkx.h", not "gdk/gdkx.h", as gdkx.h will be
+	in the backend-dependent directory, not in the common gdk
+	directory.
+
+	* gtk/testgtk.c: Ditto. Also, don't use ../gdk patchs to gdk
+	headers.
+
 Wed Mar 17 05:06:49 1999  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkmain.c (gtk_init_check): tell people that they don't really

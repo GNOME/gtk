@@ -56,13 +56,13 @@
 #else
 
 /* Compiling as a part of Gtk 1.1 or later */
-#include "../config.h"
-#include "gdk.h"
+#include "config.h"
+#include <gdk/gdk.h>
 #include "gdkprivate.h"
 
 #endif
 
-#include "gdkrgb.h"
+#include <gdk/gdkrgb.h>
 
 typedef struct _GdkRgbInfo   GdkRgbInfo;
 
@@ -2678,7 +2678,11 @@ gdk_rgb_select_conv (GdkImage *image)
   gboolean mask_rgb, mask_bgr;
 
   depth = image_info->visual->depth;
+#if defined (GDK_RGB_STANDALONE) || (GDK_WINDOWING == GDK_WINDOWING_X11)
   bpp = ((GdkImagePrivate *)image)->ximage->bits_per_pixel;
+#elif GDK_WINDOWING == GDK_WINDOWING_WIN32
+  bpp = ((GdkVisualPrivate *) gdk_visual_get_system())->xvisual->bitspixel;
+#endif
 
   byte_order = image->byte_order;
   if (gdk_rgb_verbose)
@@ -2765,7 +2769,7 @@ gdk_rgb_select_conv (GdkImage *image)
   else if (bpp == 32 && depth == 24 && vtype == GDK_VISUAL_TRUE_COLOR &&
 	   (mask_rgb && byte_order == GDK_MSB_FIRST))
     conv = gdk_rgb_convert_0888_br;
-  else if (bpp == 32 && depth == 24 && vtype == GDK_VISUAL_TRUE_COLOR &&
+  else if (bpp == 32 && (depth == 32 || depth == 24) && vtype == GDK_VISUAL_TRUE_COLOR &&
 	   (mask_rgb && byte_order == GDK_LSB_FIRST))
     conv = gdk_rgb_convert_0888;
   else if (bpp == 32 && depth == 24 && vtype == GDK_VISUAL_TRUE_COLOR &&

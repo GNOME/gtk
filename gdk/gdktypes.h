@@ -32,6 +32,15 @@
  */
 #include <glib.h>
 
+#ifdef NATIVE_WIN32
+#  ifdef GDK_COMPILATION
+#    define GDKVAR __declspec(dllexport)
+#  else
+#    define GDKVAR extern __declspec(dllimport)
+#  endif
+#else
+#  define GDKVAR extern
+#endif
 
 /* The system specific file gdkconfig.h contains such configuration
  * settings that are needed not only when compiling GDK (or GTK)
@@ -174,18 +183,23 @@ typedef enum
 /* Types of images.
  *   Normal: Normal X image type. These are slow as they involve passing
  *	     the entire image through the X connection each time a draw
- *	     request is required.
+ *	     request is required. On Win32, a bitmap.
  *   Shared: Shared memory X image type. These are fast as the X server
  *	     and the program actually use the same piece of memory. They
  *	     should be used with care though as there is the possibility
  *	     for both the X server and the program to be reading/writing
  *	     the image simultaneously and producing undesired results.
+ *	     On Win32, also a bitmap.
+ *   Shared Pixmap: Also a shared memory image, which also has a
+ *	     pixmap using the same memory. Used by gdk_imlib with the
+ *	     Win32 backend.
  */
 typedef enum
 {
   GDK_IMAGE_NORMAL,
   GDK_IMAGE_SHARED,
-  GDK_IMAGE_FASTEST
+  GDK_IMAGE_FASTEST,
+  GDK_IMAGE_SHARED_PIXMAP
 } GdkImageType;
 
 /* Types of visuals.
@@ -766,7 +780,9 @@ typedef enum {
   GDK_DRAG_PROTO_XDND,
   GDK_DRAG_PROTO_ROOTWIN,	/* A root window with nobody claiming
 				 * drags */
-  GDK_DRAG_PROTO_NONE		/* Not a valid drag window */
+  GDK_DRAG_PROTO_NONE,		/* Not a valid drag window */
+  GDK_DRAG_PROTO_WIN32_DROPFILES, /* The simple WM_DROPFILES dnd */
+  GDK_DRAG_PROTO_OLE2,		/* The complex OLE2 dnd (not implemented) */
 } GdkDragProtocol;
 
 /* The color type.

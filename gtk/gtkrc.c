@@ -26,7 +26,7 @@
 
 #include "config.h"
 
-#include "gdk/gdkx.h"
+#include "gdkx.h"
 
 #if GDK_WINDOWING == GDK_WINDOWING_X11
 #include <X11/Xlocale.h>	/* so we get the right setlocale */

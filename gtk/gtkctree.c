@@ -33,7 +33,7 @@
 #include "gtkbindings.h"
 #include "gtkmain.h"
 #include "gtkdnd.h"
-#include <gdk/gdkx.h>
+#include "gdkx.h"
 #include <gdk/gdkkeysyms.h>
 
 #define PM_SIZE                    8
