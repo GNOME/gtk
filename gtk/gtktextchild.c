@@ -142,7 +142,7 @@ child_segment_delete_func (GtkTextLineSegment *seg,
   GSList *tmp_list;
   GSList *copy;
 
-  gtk_text_btree_unregister_child_anchor (seg->body.child.obj);
+  _gtk_text_btree_unregister_child_anchor (seg->body.child.obj);
   
   seg->body.child.tree = NULL;
   seg->body.child.line = NULL;

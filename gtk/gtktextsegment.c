@@ -121,7 +121,7 @@ gtk_text_line_segment_split (const GtkTextIter *iter)
               g_assert (count != seg->byte_count);
               g_assert (seg->byte_count > 0);
 
-              gtk_text_btree_segments_changed (tree);
+              _gtk_text_btree_segments_changed (tree);
 
               seg = (*seg->type->splitFunc)(seg, count);
 

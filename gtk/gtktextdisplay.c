@@ -741,12 +741,12 @@ gtk_text_layout_draw (GtkTextLayout *layout,
       if (have_selection)
         {
           GtkTextIter line_start, line_end;
-          gint byte_count = gtk_text_line_byte_count (line);
+          gint byte_count = _gtk_text_line_byte_count (line);
 
-          gtk_text_btree_get_iter_at_line (_gtk_text_buffer_get_btree (layout->buffer),
+          _gtk_text_btree_get_iter_at_line (_gtk_text_buffer_get_btree (layout->buffer),
                                            &line_start,
                                            line, 0);
-          gtk_text_btree_get_iter_at_line (_gtk_text_buffer_get_btree (layout->buffer),
+          _gtk_text_btree_get_iter_at_line (_gtk_text_buffer_get_btree (layout->buffer),
                                            &line_end,
                                            line, byte_count - 1);
 

@@ -1,3 +1,10 @@
+2000-12-13  Havoc Pennington  <hp@pobox.com>
+
+	* gtk/gtktextbtree.h: Put _ in front of every function in this 
+	header file
+
+	* gtk/gtktext*.[hc]: update to reflect renamed btree functions
+
 2000-12-13    <alexl@redhat.com>
 
 	* gdk/linux-fb/gdkmouse-fb.c (mouse_devs):

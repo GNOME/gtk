@@ -210,7 +210,7 @@ gtk_text_mark_get_buffer (GtkTextMark *mark)
   if (seg->body.mark.tree == NULL)
     return NULL;
   else
-    return gtk_text_btree_get_buffer (seg->body.mark.tree);
+    return _gtk_text_btree_get_buffer (seg->body.mark.tree);
 }
 
 /*

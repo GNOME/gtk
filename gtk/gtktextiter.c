@@ -73,7 +73,7 @@ iter_set_common (GtkTextRealIter *iter,
 {
   /* Update segments stamp */
   iter->segments_changed_stamp =
-    gtk_text_btree_get_segments_changed_stamp (iter->tree);
+    _gtk_text_btree_get_segments_changed_stamp (iter->tree);
 
   iter->line = line;
 
@@ -92,7 +92,7 @@ iter_set_from_byte_offset (GtkTextRealIter *iter,
 {
   iter_set_common (iter, line);
 
-  gtk_text_line_byte_locate (iter->line,
+  _gtk_text_line_byte_locate (iter->line,
                              byte_offset,
                              &iter->segment,
                              &iter->any_segment,
@@ -108,7 +108,7 @@ iter_set_from_char_offset (GtkTextRealIter *iter,
 {
   iter_set_common (iter, line);
 
-  gtk_text_line_char_locate (iter->line,
+  _gtk_text_line_char_locate (iter->line,
                              char_offset,
                              &iter->segment,
                              &iter->any_segment,
@@ -147,7 +147,7 @@ gtk_text_iter_make_surreal (const GtkTextIter *_iter)
   GtkTextRealIter *iter = (GtkTextRealIter*)_iter;
 
   if (iter->chars_changed_stamp !=
-      gtk_text_btree_get_chars_changed_stamp (iter->tree))
+      _gtk_text_btree_get_chars_changed_stamp (iter->tree))
     {
       g_warning ("Invalid text buffer iterator: either the iterator "
                  "is uninitialized, or the characters/pixbufs/widgets "
@@ -168,7 +168,7 @@ gtk_text_iter_make_surreal (const GtkTextIter *_iter)
      should have used make_real. */
 
   if (iter->segments_changed_stamp !=
-      gtk_text_btree_get_segments_changed_stamp (iter->tree))
+      _gtk_text_btree_get_segments_changed_stamp (iter->tree))
     {
       iter->segment = NULL;
       iter->any_segment = NULL;
@@ -188,7 +188,7 @@ gtk_text_iter_make_real (const GtkTextIter *_iter)
   iter = gtk_text_iter_make_surreal (_iter);
 
   if (iter->segments_changed_stamp !=
-      gtk_text_btree_get_segments_changed_stamp (iter->tree))
+      _gtk_text_btree_get_segments_changed_stamp (iter->tree))
     {
       if (iter->line_byte_offset >= 0)
         {
@@ -225,7 +225,7 @@ iter_init_common (GtkTextIter *_iter,
   iter->tree = tree;
 
   iter->chars_changed_stamp =
-    gtk_text_btree_get_chars_changed_stamp (iter->tree);
+    _gtk_text_btree_get_chars_changed_stamp (iter->tree);
 
   return iter;
 }
@@ -342,7 +342,7 @@ ensure_char_offsets (GtkTextRealIter *iter)
     {
       g_assert (iter->line_byte_offset >= 0);
 
-      gtk_text_line_byte_to_char_offsets (iter->line,
+      __gtk_text_line_byte_to_char_offsets (iter->line,
                                           iter->line_byte_offset,
                                           &iter->line_char_offset,
                                           &iter->segment_char_offset);
@@ -356,7 +356,7 @@ ensure_byte_offsets (GtkTextRealIter *iter)
     {
       g_assert (iter->line_char_offset >= 0);
 
-      gtk_text_line_char_to_byte_offsets (iter->line,
+      __gtk_text_line_char_to_byte_offsets (iter->line,
                                           iter->line_char_offset,
                                           &iter->line_byte_offset,
                                           &iter->segment_byte_offset);
@@ -402,7 +402,7 @@ gtk_text_iter_get_buffer (const GtkTextIter *iter)
 
   check_invariants (iter);
 
-  return gtk_text_btree_get_buffer (real->tree);
+  return _gtk_text_btree_get_buffer (real->tree);
 }
 
 /**
@@ -587,7 +587,7 @@ gtk_text_iter_get_offset (const GtkTextIter *iter)
       ensure_char_offsets (real);
       
       real->cached_char_index =
-        gtk_text_line_char_index (real->line);
+        _gtk_text_line_char_index (real->line);
       real->cached_char_index += real->line_char_offset;
     }
 
@@ -620,7 +620,7 @@ gtk_text_iter_get_line (const GtkTextIter *iter)
 
   if (real->cached_line_number < 0)
     real->cached_line_number =
-      gtk_text_line_get_number (real->line);
+      _gtk_text_line_get_number (real->line);
 
   check_invariants (iter);
 
@@ -762,7 +762,7 @@ gtk_text_iter_get_slice       (const GtkTextIter *start,
   check_invariants (start);
   check_invariants (end);
 
-  return gtk_text_btree_get_text (start, end, TRUE, TRUE);
+  return _gtk_text_btree_get_text (start, end, TRUE, TRUE);
 }
 
 /**
@@ -788,7 +788,7 @@ gtk_text_iter_get_text       (const GtkTextIter *start,
   check_invariants (start);
   check_invariants (end);
 
-  return gtk_text_btree_get_text (start, end, TRUE, FALSE);
+  return _gtk_text_btree_get_text (start, end, TRUE, FALSE);
 }
 
 /**
@@ -812,7 +812,7 @@ gtk_text_iter_get_visible_slice (const GtkTextIter  *start,
   check_invariants (start);
   check_invariants (end);
 
-  return gtk_text_btree_get_text (start, end, FALSE, TRUE);
+  return _gtk_text_btree_get_text (start, end, FALSE, TRUE);
 }
 
 /**
@@ -836,7 +836,7 @@ gtk_text_iter_get_visible_text (const GtkTextIter  *start,
   check_invariants (start);
   check_invariants (end);
 
-  return gtk_text_btree_get_text (start, end, FALSE, FALSE);
+  return _gtk_text_btree_get_text (start, end, FALSE, FALSE);
 }
 
 /**
@@ -1163,13 +1163,13 @@ gtk_text_iter_has_tag           (const GtkTextIter   *iter,
 
   if (real->line_byte_offset >= 0)
     {
-      return gtk_text_line_byte_has_tag (real->line, real->tree,
+      return _gtk_text_line_byte_has_tag (real->line, real->tree,
                                          real->line_byte_offset, tag);
     }
   else
     {
       g_assert (real->line_char_offset >= 0);
-      return gtk_text_line_char_has_tag (real->line, real->tree,
+      return _gtk_text_line_char_has_tag (real->line, real->tree,
                                          real->line_char_offset, tag);
     }
 }
@@ -1196,7 +1196,7 @@ gtk_text_iter_get_tags (const GtkTextIter *iter)
   g_return_val_if_fail (iter != NULL, NULL);
   
   /* Get the tags at this spot */
-  tags = gtk_text_btree_get_tags (iter, &tag_count);
+  tags = _gtk_text_btree_get_tags (iter, &tag_count);
 
   /* No tags, use default style */
   if (tags == NULL || tag_count == 0)
@@ -1396,7 +1396,7 @@ gtk_text_iter_is_last (const GtkTextIter *iter)
 
   check_invariants (iter);
 
-  return gtk_text_line_is_last (real->line, real->tree);
+  return _gtk_text_line_is_last (real->line, real->tree);
 }
 
 /**
@@ -1485,7 +1485,7 @@ gtk_text_iter_get_attributes (const GtkTextIter  *iter,
   gint tag_count = 0;
 
   /* Get the tags at this spot */
-  tags = gtk_text_btree_get_tags (iter, &tag_count);
+  tags = _gtk_text_btree_get_tags (iter, &tag_count);
 
   /* No tags, use default style */
   if (tags == NULL || tag_count == 0)
@@ -1521,7 +1521,7 @@ forward_line_leaving_caches_unmodified (GtkTextRealIter *real)
 {
   GtkTextLine *new_line;
 
-  new_line = gtk_text_line_next (real->line);
+  new_line = _gtk_text_line_next (real->line);
 
   g_assert (new_line != real->line);
 
@@ -1556,7 +1556,7 @@ forward_line_leaving_caches_unmodified (GtkTextRealIter *real)
          line at the end is a single char segment containing
          a newline. */
       if (real->segments_changed_stamp ==
-          gtk_text_btree_get_segments_changed_stamp (real->tree))
+          _gtk_text_btree_get_segments_changed_stamp (real->tree))
         {
           g_assert (real->segment->type == &gtk_text_char_type);
           g_assert (real->segment->char_count == 1);
@@ -1577,7 +1577,7 @@ backward_line_leaving_caches_unmodified (GtkTextRealIter *real)
 {
   GtkTextLine *new_line;
 
-  new_line = gtk_text_line_previous (real->line);
+  new_line = _gtk_text_line_previous (real->line);
 
   g_assert (new_line != real->line);
 
@@ -2042,7 +2042,7 @@ gtk_text_iter_forward_chars (GtkTextIter *iter, gint count)
 
       current_char_index = gtk_text_iter_get_offset (iter);
 
-      if (current_char_index == gtk_text_btree_char_count (real->tree))
+      if (current_char_index == _gtk_text_btree_char_count (real->tree))
         return FALSE; /* can't move forward */
 
       new_char_index = current_char_index + count;
@@ -2288,7 +2288,7 @@ gtk_text_iter_backward_line (GtkTextIter *iter)
 
   check_invariants (iter);
 
-  new_line = gtk_text_line_previous (real->line);
+  new_line = _gtk_text_line_previous (real->line);
 
   offset_will_change = FALSE;
   if (real->line_char_offset > 0)
@@ -2316,7 +2316,7 @@ gtk_text_iter_backward_line (GtkTextIter *iter)
 
   /* Find first segment in line */
   real->any_segment = real->line->segments;
-  real->segment = gtk_text_line_byte_to_segment (real->line,
+  real->segment = _gtk_text_line_byte_to_segment (real->line,
                                                  0, &offset);
 
   g_assert (offset == 0);
@@ -2670,7 +2670,7 @@ gtk_text_iter_set_line (GtkTextIter *iter,
 
   check_invariants (iter);
 
-  line = gtk_text_btree_get_line (real->tree, line_number, &real_line);
+  line = _gtk_text_btree_get_line (real->tree, line_number, &real_line);
 
   iter_set_from_char_offset (real, line, 0);
 
@@ -2701,7 +2701,7 @@ gtk_text_iter_set_offset (GtkTextIter *iter, gint char_index)
       real->cached_char_index == char_index)
     return;
 
-  line = gtk_text_btree_get_line_at_char (real->tree,
+  line = __gtk_text_btree_get_line_at_char (real->tree,
                                           char_index,
                                           &line_start,
                                           &real_char_index);
@@ -2727,7 +2727,7 @@ gtk_text_iter_forward_to_end  (GtkTextIter       *iter)
   if (real == NULL)
     return;
 
-  buffer = gtk_text_btree_get_buffer (real->tree);
+  buffer = _gtk_text_btree_get_buffer (real->tree);
 
   gtk_text_buffer_get_last_iter (buffer, iter);
 }
@@ -2799,7 +2799,7 @@ gtk_text_iter_forward_to_tag_toggle (GtkTextIter *iter,
   check_invariants (iter);
 
   current_line = real->line;
-  next_line = gtk_text_line_next_could_contain_tag (current_line,
+  next_line = __gtk_text_line_next_could_contain_tag (current_line,
                                                     real->tree, tag);
 
   while (gtk_text_iter_forward_indexable_segment (iter))
@@ -2813,7 +2813,7 @@ gtk_text_iter_forward_to_tag_toggle (GtkTextIter *iter,
           if (next_line == NULL)
             {
               /* End of search. Set to end of buffer. */
-              gtk_text_btree_get_last_iter (real->tree, iter);
+              _gtk_text_btree_get_last_iter (real->tree, iter);
               return FALSE;
             }
 
@@ -2821,7 +2821,7 @@ gtk_text_iter_forward_to_tag_toggle (GtkTextIter *iter,
             iter_set_from_byte_offset (real, next_line, 0);
 
           current_line = real->line;
-          next_line = gtk_text_line_next_could_contain_tag (current_line,
+          next_line = __gtk_text_line_next_could_contain_tag (current_line,
                                                             real->tree,
                                                             tag);
         }
@@ -2881,7 +2881,7 @@ gtk_text_iter_backward_to_tag_toggle (GtkTextIter *iter,
   check_invariants (iter);
 
   current_line = real->line;
-  prev_line = gtk_text_line_previous_could_contain_tag (current_line,
+  prev_line = __gtk_text_line_previous_could_contain_tag (current_line,
                                                         real->tree, tag);
 
 
@@ -2913,7 +2913,7 @@ gtk_text_iter_backward_to_tag_toggle (GtkTextIter *iter,
           if (prev_line == NULL)
             {
               /* End of search. Set to start of buffer. */
-              gtk_text_btree_get_iter_at_char (real->tree, iter, 0);
+              _gtk_text_btree_get_iter_at_char (real->tree, iter, 0);
               return FALSE;
             }
 
@@ -2929,7 +2929,7 @@ gtk_text_iter_backward_to_tag_toggle (GtkTextIter *iter,
             }
 
           current_line = real->line;
-          prev_line = gtk_text_line_previous_could_contain_tag (current_line,
+          prev_line = __gtk_text_line_previous_could_contain_tag (current_line,
                                                                 real->tree,
                                                                 tag);
         }
@@ -3046,7 +3046,7 @@ forward_chars_with_skipping (GtkTextIter *iter,
 
       if (!ignored &&
           skip_invisible &&
-          gtk_text_btree_char_is_invisible (iter))
+          _gtk_text_btree_char_is_invisible (iter))
         ignored = TRUE;
 
       gtk_text_iter_forward_char (iter);
@@ -3796,7 +3796,7 @@ gtk_text_iter_reorder         (GtkTextIter *first,
  */
 
 void
-gtk_text_btree_get_iter_at_char (GtkTextBTree *tree,
+_gtk_text_btree_get_iter_at_char (GtkTextBTree *tree,
                                  GtkTextIter *iter,
                                  gint char_index)
 {
@@ -3808,7 +3808,7 @@ gtk_text_btree_get_iter_at_char (GtkTextBTree *tree,
   g_return_if_fail (iter != NULL);
   g_return_if_fail (tree != NULL);
 
-  line = gtk_text_btree_get_line_at_char (tree, char_index,
+  line = __gtk_text_btree_get_line_at_char (tree, char_index,
                                           &line_start, &real_char_index);
 
   iter_init_from_char_offset (iter, tree, line, real_char_index - line_start);
@@ -3819,7 +3819,7 @@ gtk_text_btree_get_iter_at_char (GtkTextBTree *tree,
 }
 
 void
-gtk_text_btree_get_iter_at_line_char (GtkTextBTree *tree,
+__gtk_text_btree_get_iter_at_line_char (GtkTextBTree *tree,
                                       GtkTextIter *iter,
                                       gint line_number,
                                       gint char_on_line)
@@ -3831,7 +3831,7 @@ gtk_text_btree_get_iter_at_line_char (GtkTextBTree *tree,
   g_return_if_fail (iter != NULL);
   g_return_if_fail (tree != NULL);
 
-  line = gtk_text_btree_get_line (tree, line_number, &real_line);
+  line = _gtk_text_btree_get_line (tree, line_number, &real_line);
 
   iter_init_from_char_offset (iter, tree, line, char_on_line);
 
@@ -3842,7 +3842,7 @@ gtk_text_btree_get_iter_at_line_char (GtkTextBTree *tree,
 }
 
 void
-gtk_text_btree_get_iter_at_line_byte (GtkTextBTree   *tree,
+__gtk_text_btree_get_iter_at_line_byte (GtkTextBTree   *tree,
                                       GtkTextIter    *iter,
                                       gint            line_number,
                                       gint            byte_index)
@@ -3854,7 +3854,7 @@ gtk_text_btree_get_iter_at_line_byte (GtkTextBTree   *tree,
   g_return_if_fail (iter != NULL);
   g_return_if_fail (tree != NULL);
 
-  line = gtk_text_btree_get_line (tree, line_number, &real_line);
+  line = _gtk_text_btree_get_line (tree, line_number, &real_line);
 
   iter_init_from_byte_offset (iter, tree, line, byte_index);
 
@@ -3872,7 +3872,7 @@ gtk_text_btree_get_iter_at_line_byte (GtkTextBTree   *tree,
 }
 
 void
-gtk_text_btree_get_iter_at_line      (GtkTextBTree   *tree,
+_gtk_text_btree_get_iter_at_line      (GtkTextBTree   *tree,
                                       GtkTextIter    *iter,
                                       GtkTextLine    *line,
                                       gint            byte_offset)
@@ -3887,7 +3887,7 @@ gtk_text_btree_get_iter_at_line      (GtkTextBTree   *tree,
 }
 
 gboolean
-gtk_text_btree_get_iter_at_first_toggle (GtkTextBTree   *tree,
+_gtk_text_btree_get_iter_at_first_toggle (GtkTextBTree   *tree,
                                          GtkTextIter    *iter,
                                          GtkTextTag     *tag)
 {
@@ -3896,12 +3896,12 @@ gtk_text_btree_get_iter_at_first_toggle (GtkTextBTree   *tree,
   g_return_val_if_fail (iter != NULL, FALSE);
   g_return_val_if_fail (tree != NULL, FALSE);
 
-  line = gtk_text_btree_first_could_contain_tag (tree, tag);
+  line = _gtk_text_btree_first_could_contain_tag (tree, tag);
 
   if (line == NULL)
     {
       /* Set iter to last in tree */
-      gtk_text_btree_get_last_iter (tree, iter);
+      _gtk_text_btree_get_last_iter (tree, iter);
       check_invariants (iter);
       return FALSE;
     }
@@ -3915,7 +3915,7 @@ gtk_text_btree_get_iter_at_first_toggle (GtkTextBTree   *tree,
 }
 
 gboolean
-gtk_text_btree_get_iter_at_last_toggle  (GtkTextBTree   *tree,
+_gtk_text_btree_get_iter_at_last_toggle  (GtkTextBTree   *tree,
                                          GtkTextIter    *iter,
                                          GtkTextTag     *tag)
 {
@@ -3924,12 +3924,12 @@ gtk_text_btree_get_iter_at_last_toggle  (GtkTextBTree   *tree,
   g_return_val_if_fail (iter != NULL, FALSE);
   g_return_val_if_fail (tree != NULL, FALSE);
 
-  line = gtk_text_btree_last_could_contain_tag (tree, tag);
+  line = _gtk_text_btree_last_could_contain_tag (tree, tag);
 
   if (line == NULL)
     {
       /* Set iter to first in tree */
-      gtk_text_btree_get_iter_at_line_char (tree, iter, 0, 0);
+      __gtk_text_btree_get_iter_at_line_char (tree, iter, 0, 0);
       check_invariants (iter);
       return FALSE;
     }
@@ -3943,7 +3943,7 @@ gtk_text_btree_get_iter_at_last_toggle  (GtkTextBTree   *tree,
 }
 
 gboolean
-gtk_text_btree_get_iter_at_mark_name (GtkTextBTree *tree,
+__gtk_text_btree_get_iter_at_mark_name (GtkTextBTree *tree,
                                       GtkTextIter *iter,
                                       const gchar *mark_name)
 {
@@ -3952,20 +3952,20 @@ gtk_text_btree_get_iter_at_mark_name (GtkTextBTree *tree,
   g_return_val_if_fail (iter != NULL, FALSE);
   g_return_val_if_fail (tree != NULL, FALSE);
 
-  mark = gtk_text_btree_get_mark_by_name (tree, mark_name);
+  mark = _gtk_text_btree_get_mark_by_name (tree, mark_name);
 
   if (mark == NULL)
     return FALSE;
   else
     {
-      gtk_text_btree_get_iter_at_mark (tree, iter, mark);
+      _gtk_text_btree_get_iter_at_mark (tree, iter, mark);
       check_invariants (iter);
       return TRUE;
     }
 }
 
 void
-gtk_text_btree_get_iter_at_mark (GtkTextBTree *tree,
+_gtk_text_btree_get_iter_at_mark (GtkTextBTree *tree,
                                  GtkTextIter *iter,
                                  GtkTextMark *mark)
 {
@@ -3984,7 +3984,7 @@ gtk_text_btree_get_iter_at_mark (GtkTextBTree *tree,
 }
 
 void
-gtk_text_btree_get_iter_at_child_anchor (GtkTextBTree       *tree,
+_gtk_text_btree_get_iter_at_child_anchor (GtkTextBTree       *tree,
                                          GtkTextIter        *iter,
                                          GtkTextChildAnchor *anchor)
 {
@@ -4003,15 +4003,15 @@ gtk_text_btree_get_iter_at_child_anchor (GtkTextBTree       *tree,
 }
 
 void
-gtk_text_btree_get_last_iter         (GtkTextBTree   *tree,
+_gtk_text_btree_get_last_iter         (GtkTextBTree   *tree,
                                       GtkTextIter    *iter)
 {
   g_return_if_fail (iter != NULL);
   g_return_if_fail (tree != NULL);
 
-  gtk_text_btree_get_iter_at_char (tree,
+  _gtk_text_btree_get_iter_at_char (tree,
                                    iter,
-                                   gtk_text_btree_char_count (tree));
+                                   _gtk_text_btree_char_count (tree));
   check_invariants (iter);
 }
 
@@ -4022,7 +4022,7 @@ gtk_text_iter_spew (const GtkTextIter *iter, const gchar *desc)
 
   g_return_if_fail (iter != NULL);
 
-  if (real->chars_changed_stamp != gtk_text_btree_get_chars_changed_stamp (real->tree))
+  if (real->chars_changed_stamp != _gtk_text_btree_get_chars_changed_stamp (real->tree))
     g_print (" %20s: <invalidated iterator>\n", desc);
   else
     {
@@ -4053,14 +4053,14 @@ gtk_text_iter_check (const GtkTextIter *iter)
   g_assert (sizeof (GtkTextIter) == sizeof (GtkTextRealIter));
 
   if (real->chars_changed_stamp !=
-      gtk_text_btree_get_chars_changed_stamp (real->tree))
+      _gtk_text_btree_get_chars_changed_stamp (real->tree))
     g_error ("iterator check failed: invalid iterator");
 
   if (real->line_char_offset < 0 && real->line_byte_offset < 0)
     g_error ("iterator check failed: both char and byte offsets are invalid");
 
   segments_updated = (real->segments_changed_stamp ==
-                      gtk_text_btree_get_segments_changed_stamp (real->tree));
+                      _gtk_text_btree_get_segments_changed_stamp (real->tree));
 
 #if 0
   printf ("checking iter, segments %s updated, byte %d char %d\n",
@@ -4094,7 +4094,7 @@ gtk_text_iter_check (const GtkTextIter *iter)
 
   if (real->line_byte_offset >= 0)
     {
-      gtk_text_line_byte_locate (real->line, real->line_byte_offset,
+      _gtk_text_line_byte_locate (real->line, real->line_byte_offset,
                                  &byte_segment, &byte_any_segment,
                                  &seg_byte_offset, &line_byte_offset);
 
@@ -4125,7 +4125,7 @@ gtk_text_iter_check (const GtkTextIter *iter)
 
   if (real->line_char_offset >= 0)
     {
-      gtk_text_line_char_locate (real->line, real->line_char_offset,
+      _gtk_text_line_char_locate (real->line, real->line_char_offset,
                                  &char_segment, &char_any_segment,
                                  &seg_char_offset, &line_char_offset);
 
@@ -4195,7 +4195,7 @@ gtk_text_iter_check (const GtkTextIter *iter)
     {
       gint should_be;
 
-      should_be = gtk_text_line_get_number (real->line);
+      should_be = _gtk_text_line_get_number (real->line);
       if (real->cached_line_number != should_be)
         g_error ("wrong line number was cached");
     }
@@ -4208,7 +4208,7 @@ gtk_text_iter_check (const GtkTextIter *iter)
         {
           gint char_index;
 
-          char_index = gtk_text_line_char_index (real->line);
+          char_index = _gtk_text_line_char_index (real->line);
           char_index += real->line_char_offset;
 
           if (real->cached_char_index != char_index)
