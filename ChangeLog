@@ -1,3 +1,8 @@
+Mon Feb  2 14:32:32 2004  Pablo Saratxaga  <pablo@mandrakesoft.com>
+
+	* configure.in po/uz*.po: changed default for Uzbek; now just "uz"
+	is in cyrillic and "uz@Latn" for latin; "uz@Cyrl" has been removed
+
 Sun Feb  1 16:34:07 2004  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 	* gtk/gtktoolbar.c (gtk_toolbar_size_allocate): Only start

@@ -1,3 +1,8 @@
+2004-02-02  Pablo Saratxaga  <pablo@mandrakesoft.com>
+
+	* uz*.po: changed default for Uzbek; now just "uz"
+	is in cyrillic and "uz@Latn" for latin; "uz@Cyrl" has been removed
+
 Mon Feb 02 10:01:00 2004 Alastair McKinstry <mckinstry@computer.org>
 
 	* ga.po: Updated Irish translation.

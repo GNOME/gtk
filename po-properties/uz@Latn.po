@@ -27,7 +27,7 @@ msgstr ""
 #: gdk-pixbuf/gdk-pixbuf.c:111
 #, fuzzy
 msgid "Colorspace"
-msgstr "_Ёпиш"
+msgstr "_Yopish"
 
 #: gdk-pixbuf/gdk-pixbuf.c:112
 msgid "The colorspace in which the samples are interpreted"
@@ -424,7 +424,7 @@ msgstr ""
 #: gtk/gtkbox.c:153
 #, fuzzy
 msgid "Fill"
-msgstr "Файллар"
+msgstr "Fayllar"
 
 #: gtk/gtkbox.c:154
 msgid ""
@@ -548,7 +548,7 @@ msgstr ""
 #: gtk/gtkcalendar.c:464
 #, fuzzy
 msgid "Year"
-msgstr "_Тозалаш"
+msgstr "_Tozalash"
 
 #: gtk/gtkcalendar.c:465
 msgid "The selected year"
@@ -918,7 +918,7 @@ msgstr ""
 
 #: gtk/gtkcellrenderertext.c:386 gtk/gtktexttag.c:383
 msgid "Language"
-msgstr "Тил"
+msgstr "Til"
 
 #: gtk/gtkcellrenderertext.c:387 gtk/gtktexttag.c:384
 msgid ""
@@ -1123,7 +1123,7 @@ msgstr ""
 #: gtk/gtktreeviewcolumn.c:286
 #, fuzzy
 msgid "Title"
-msgstr "Файллар"
+msgstr "Fayllar"
 
 #: gtk/gtkcolorbutton.c:218
 msgid "The title of the color selection dialog"
@@ -1268,7 +1268,7 @@ msgstr ""
 #: gtk/gtkcomboboxentry.c:104
 #, fuzzy
 msgid "Text Column"
-msgstr "Устунлар"
+msgstr "Ustunlar"
 
 #: gtk/gtkcomboboxentry.c:105
 msgid "A column in the data source model to get the strings from"
@@ -1554,7 +1554,7 @@ msgstr ""
 #: gtk/gtkfilechooser.c:99
 #, fuzzy
 msgid "File System"
-msgstr "Файллар"
+msgstr "Fayllar"
 
 #: gtk/gtkfilechooser.c:100
 msgid "File system object to use"
@@ -1563,7 +1563,7 @@ msgstr ""
 #: gtk/gtkfilechooser.c:105
 #, fuzzy
 msgid "Filter"
-msgstr "Файллар"
+msgstr "Fayllar"
 
 #: gtk/gtkfilechooser.c:106
 msgid "The current filter for selecting which files are displayed"
@@ -1572,7 +1572,7 @@ msgstr ""
 #: gtk/gtkfilechooser.c:111
 #, fuzzy
 msgid "Folder Mode"
-msgstr "_Номини ўзгартириш"
+msgstr "_Nomini o'zgartirish"
 
 #: gtk/gtkfilechooser.c:112
 msgid "Whether to select folders rather than files"
@@ -1614,7 +1614,7 @@ msgstr ""
 #: gtk/gtkfilechooser.c:141
 #, fuzzy
 msgid "Select Multiple"
-msgstr "Файллни ўчириш"
+msgstr "Fayllni o'chirish"
 
 #: gtk/gtkfilechooser.c:142 gtk/gtkfilesel.c:575
 msgid "Whether to allow multiple files to be selected"
@@ -1630,7 +1630,7 @@ msgstr ""
 
 #: gtk/gtkfilesel.c:559 gtk/gtkimage.c:167
 msgid "Filename"
-msgstr "Файл номи"
+msgstr "Fayl nomi"
 
 #: gtk/gtkfilesel.c:560
 msgid "The currently selected filename"
@@ -1647,7 +1647,7 @@ msgstr ""
 #: gtk/gtkfilesel.c:574
 #, fuzzy
 msgid "Select multiple"
-msgstr "Файллни ўчириш"
+msgstr "Fayllni o'chirish"
 
 #: gtk/gtkfixed.c:120 gtk/gtklayout.c:611
 msgid "X position"
@@ -2923,7 +2923,7 @@ msgstr ""
 
 #: gtk/gtktable.c:167
 msgid "Columns"
-msgstr "Устунлар"
+msgstr "Ustunlar"
 
 #: gtk/gtktable.c:168
 msgid "The number of columns in the table"

@@ -796,7 +796,7 @@ msgstr ""
 #: gtk/gtkcolorsel.c:1873
 #, fuzzy
 msgid "_Hue:"
-msgstr "_Ёрдам"
+msgstr "_Yordam"
 
 #: gtk/gtkcolorsel.c:1874
 msgid "Position on the color wheel."
@@ -863,7 +863,7 @@ msgstr ""
 #: gtk/gtkcolorsel.c:1948
 #, fuzzy
 msgid "_Palette"
-msgstr "_Ўчириш"
+msgstr "_O'chirish"
 
 #: gtk/gtkcolorseldialog.c:115
 msgid "Color Selection"
@@ -911,7 +911,7 @@ msgstr ""
 #: gtk/gtkfilechooserdefault.c:621
 #, fuzzy
 msgid "Home"
-msgstr "_Уй"
+msgstr "_Uy"
 
 #. FIXME: What is the Right Way of finding the desktop directory?
 #: gtk/gtkfilechooserdefault.c:637
@@ -935,22 +935,22 @@ msgstr ""
 #: gtk/gtkfilechooserdefault.c:1001
 #, fuzzy
 msgid "Add"
-msgstr "_Қўшиш"
+msgstr "_Qo'shish"
 
 #: gtk/gtkfilechooserdefault.c:1011
 #, fuzzy
 msgid "Remove"
-msgstr "Олиб _ташлаш"
+msgstr "Olib _tashlash"
 
 #: gtk/gtkfilechooserdefault.c:1021
 #, fuzzy
 msgid "Up"
-msgstr "_Юқорига"
+msgstr "_Yuqoriga"
 
 #: gtk/gtkfilechooserdefault.c:1101 gtk/gtkfilechooserdefault.c:1456
 #, fuzzy
 msgid "File name"
-msgstr "Файл номи"
+msgstr "Fayl nomi"
 
 #: gtk/gtkfilechooserdefault.c:1127
 #, c-format
@@ -972,7 +972,7 @@ msgstr ""
 #: gtk/gtkfilechooserdefault.c:1403
 #, fuzzy
 msgid "Folder"
-msgstr "Файллар"
+msgstr "Fayllar"
 
 #: gtk/gtkfilechooserdefault.c:1478
 msgid "Size"
@@ -986,7 +986,7 @@ msgstr ""
 #: gtk/gtkfilechooserdefault.c:1513
 #, fuzzy
 msgid "_Filename:"
-msgstr "Файл номи"
+msgstr "Fayl nomi"
 
 #. Preview
 #: gtk/gtkfilechooserdefault.c:1598
@@ -1049,20 +1049,20 @@ msgstr ""
 #: gtk/gtkfilesel.c:730
 #, fuzzy
 msgid "Folders"
-msgstr "Файллар"
+msgstr "Fayllar"
 
 #: gtk/gtkfilesel.c:734
 #, fuzzy
 msgid "Fol_ders"
-msgstr "Файллар"
+msgstr "Fayllar"
 
 #: gtk/gtkfilesel.c:766
 msgid "Files"
-msgstr "Файллар"
+msgstr "Fayllar"
 
 #: gtk/gtkfilesel.c:770
 msgid "_Files"
-msgstr "_Файллар"
+msgstr "_Fayllar"
 
 #: gtk/gtkfilesel.c:853 gtk/gtkfilesel.c:2243
 #, c-format
@@ -1083,11 +1083,11 @@ msgstr ""
 
 #: gtk/gtkfilesel.c:1126
 msgid "De_lete File"
-msgstr "Файллни _ўчириш"
+msgstr "Fayllni _o'chirish"
 
 #: gtk/gtkfilesel.c:1137
 msgid "_Rename File"
-msgstr "Файлнинг но_мини ўзгартириш"
+msgstr "Faylning no_mini o'zgartirish"
 
 #: gtk/gtkfilesel.c:1439
 #, c-format
@@ -1118,7 +1118,7 @@ msgstr ""
 #: gtk/gtkfilesel.c:1499
 #, fuzzy
 msgid "_Folder name:"
-msgstr "_Номини ўзгартириш"
+msgstr "_Nomini o'zgartirish"
 
 #: gtk/gtkfilesel.c:1523
 msgid "C_reate"
@@ -1152,7 +1152,7 @@ msgstr ""
 
 #: gtk/gtkfilesel.c:1628
 msgid "Delete File"
-msgstr "Файллни ўчириш"
+msgstr "Fayllni o'chirish"
 
 #: gtk/gtkfilesel.c:1674 gtk/gtkfilesel.c:1688
 #, c-format
@@ -1180,7 +1180,7 @@ msgstr ""
 
 #: gtk/gtkfilesel.c:1747
 msgid "Rename File"
-msgstr "Файлнинг номини ўзгартириш"
+msgstr "Faylning nomini o'zgartirish"
 
 #: gtk/gtkfilesel.c:1762
 #, c-format
@@ -1189,7 +1189,7 @@ msgstr ""
 
 #: gtk/gtkfilesel.c:1791
 msgid "_Rename"
-msgstr "_Номини ўзгартириш"
+msgstr "_Nomini o'zgartirish"
 
 #: gtk/gtkfilesel.c:2223
 msgid "_Selection: "
@@ -1230,7 +1230,7 @@ msgstr ""
 #: gtk/gtkfilesystemunix.c:386
 #, fuzzy
 msgid "Filesystem"
-msgstr "Файллар"
+msgstr "Fayllar"
 
 #: gtk/gtkfilesystemunix.c:648
 msgid "This file system does not support icons"
@@ -1360,13 +1360,13 @@ msgstr ""
 #: gtk/gtkinputdialog.c:323
 #, fuzzy
 msgid "_Axes"
-msgstr "Ҳ_а"
+msgstr "H_a"
 
 #. Keys listbox
 #: gtk/gtkinputdialog.c:340
 #, fuzzy
 msgid "_Keys"
-msgstr "Ҳ_а"
+msgstr "H_a"
 
 #: gtk/gtkinputdialog.c:560
 msgid "X"
@@ -1408,7 +1408,7 @@ msgstr ""
 #: gtk/gtkinputdialog.c:757
 #, fuzzy
 msgid "clear"
-msgstr "_Тозалаш"
+msgstr "_Tozalash"
 
 #: gtk/gtklabel.c:3225
 msgid "Select All"
@@ -1450,82 +1450,82 @@ msgstr ""
 #. KEEP IN SYNC with gtkiconfactory.c stock icons, when appropriate
 #: gtk/gtkstock.c:267
 msgid "Information"
-msgstr "Маълумот"
+msgstr "Ma'lumot"
 
 #: gtk/gtkstock.c:268
 msgid "Warning"
-msgstr "Диққат"
+msgstr "Diqqat"
 
 #: gtk/gtkstock.c:269
 msgid "Error"
-msgstr "Хато"
+msgstr "Xato"
 
 #: gtk/gtkstock.c:270
 msgid "Question"
-msgstr "Сўроқ"
+msgstr "So'roq"
 
 #. FIXME these need accelerators when appropriate, and
 #. * need the mnemonics to be rationalized
 #.
 #: gtk/gtkstock.c:275
 msgid "_Add"
-msgstr "_Қўшиш"
+msgstr "_Qo'shish"
 
 #: gtk/gtkstock.c:276
 msgid "_Apply"
-msgstr "Қў_ллаш"
+msgstr "Qo'_llash"
 
 #: gtk/gtkstock.c:277
 msgid "_Bold"
-msgstr "Қал_ин"
+msgstr "Qal_in"
 
 #: gtk/gtkstock.c:278
 msgid "_Cancel"
-msgstr "_Бекор қилиш"
+msgstr "_Bekor qilish"
 
 #: gtk/gtkstock.c:279
 msgid "_CD-Rom"
-msgstr "К_омпакт-диск"
+msgstr "K_ompakt-disk"
 
 #: gtk/gtkstock.c:280
 msgid "_Clear"
-msgstr "_Тозалаш"
+msgstr "_Tozalash"
 
 #: gtk/gtkstock.c:281
 msgid "_Close"
-msgstr "_Ёпиш"
+msgstr "_Yopish"
 
 #: gtk/gtkstock.c:282
 msgid "_Convert"
-msgstr "Ай_лантириш"
+msgstr "Ay_lantirish"
 
 #: gtk/gtkstock.c:283
 msgid "_Copy"
-msgstr "_Нусха кўчириш"
+msgstr "_Nusxa ko'chirish"
 
 #: gtk/gtkstock.c:284
 msgid "Cu_t"
-msgstr "_Кесиш"
+msgstr "_Kesish"
 
 #: gtk/gtkstock.c:285
 msgid "_Delete"
-msgstr "_Ўчириш"
+msgstr "_O'chirish"
 
 #: gtk/gtkstock.c:286
 msgid "_Execute"
-msgstr "Ба_жариш"
+msgstr "Ba_jarish"
 
 #: gtk/gtkstock.c:287
 msgid "_Find"
-msgstr "Қ_идириш"
+msgstr "Q_idirish"
 
 #: gtk/gtkstock.c:288
 msgid "Find and _Replace"
-msgstr "Қидириш ва а_лмаштириш"
+msgstr "Qidirish va a_lmashtirish"
 
 #: gtk/gtkstock.c:289
 msgid "_Floppy"
-msgstr "_Дискет"
+msgstr "_Disket"
 
 #: gtk/gtkstock.c:290
 msgid "_Bottom"
@@ -1533,31 +1533,31 @@ msgstr ""
 
 #: gtk/gtkstock.c:291
 msgid "_First"
-msgstr "_Биринчи"
+msgstr "_Birinchi"
 
 #: gtk/gtkstock.c:292
 msgid "_Last"
-msgstr "_Охирги"
+msgstr "_Oxirgi"
 
 #: gtk/gtkstock.c:293
 msgid "_Top"
-msgstr "_Юқорига"
+msgstr "_Yuqoriga"
 
 #: gtk/gtkstock.c:294
 msgid "_Back"
-msgstr "_Орқага"
+msgstr "_Orqaga"
 
 #: gtk/gtkstock.c:295
 msgid "_Down"
-msgstr "_Пастга"
+msgstr "_Pastga"
 
 #: gtk/gtkstock.c:296
 msgid "_Forward"
-msgstr "_Олдинга"
+msgstr "_Oldinga"
 
 #: gtk/gtkstock.c:297
 msgid "_Up"
-msgstr "_Юқорига"
+msgstr "_Yuqoriga"
 
 #: gtk/gtkstock.c:298
 msgid "_Harddisk"
@@ -1565,11 +1565,11 @@ msgstr ""
 
 #: gtk/gtkstock.c:299
 msgid "_Help"
-msgstr "_Ёрдам"
+msgstr "_Yordam"
 
 #: gtk/gtkstock.c:300
 msgid "_Home"
-msgstr "_Уй"
+msgstr "_Uy"
 
 #: gtk/gtkstock.c:301
 msgid "Increase Indent"
@@ -1581,19 +1581,19 @@ msgstr ""
 
 #: gtk/gtkstock.c:303
 msgid "_Index"
-msgstr "_Индекс"
+msgstr "_Indeks"
 
 #: gtk/gtkstock.c:304
 msgid "_Italic"
-msgstr "Қ_ия"
+msgstr "Q_iya"
 
 #: gtk/gtkstock.c:305
 msgid "_Jump to"
-msgstr "Ў_тиш"
+msgstr "O'_tish"
 
 #: gtk/gtkstock.c:306
 msgid "_Center"
-msgstr "_Марказ"
+msgstr "_Markaz"
 
 #: gtk/gtkstock.c:307
 msgid "_Fill"
@@ -1601,40 +1601,40 @@ msgstr ""
 
 #: gtk/gtkstock.c:308
 msgid "_Left"
-msgstr "_Чап"
+msgstr "_Chap"
 
 #: gtk/gtkstock.c:309
 msgid "_Right"
-msgstr "Ў_нг"
+msgstr "O'_ng"
 
 #: gtk/gtkstock.c:310
 msgid "_New"
-msgstr "_Янги"
+msgstr "_Yangi"
 
 #: gtk/gtkstock.c:311
 msgid "_No"
-msgstr "_Йўқ"
+msgstr "_Yo'q"
 
 #: gtk/gtkstock.c:312
 msgid "_OK"
-msgstr "_Ок"
+msgstr "_Ok"
 
 #: gtk/gtkstock.c:313
 msgid "_Open"
-msgstr "_Очиш"
+msgstr "_Ochish"
 
 #: gtk/gtkstock.c:314
 msgid "_Paste"
-msgstr "Қўй_иш"
+msgstr "Qo'y_ish"
 
 #: gtk/gtkstock.c:315
 #, fuzzy
 msgid "_Preferences"
-msgstr "_Янгилаш"
+msgstr "_Yangilash"
 
 #: gtk/gtkstock.c:316
 msgid "_Print"
-msgstr "_Босиб чиқариш"
+msgstr "_Bosib chiqarish"
 
 #: gtk/gtkstock.c:317
 msgid "Print Pre_view"
@@ -1642,45 +1642,45 @@ msgstr ""
 
 #: gtk/gtkstock.c:318
 msgid "_Properties"
-msgstr "Ҳо_ссалари"
+msgstr "Ho_ssalari"
 
 #: gtk/gtkstock.c:319
 msgid "_Quit"
-msgstr "_Чиқиш"
+msgstr "_Chiqish"
 
 #: gtk/gtkstock.c:320
 #, fuzzy
 msgid "_Redo"
-msgstr "Олиб _ташлаш"
+msgstr "Olib _tashlash"
 
 #: gtk/gtkstock.c:321
 msgid "_Refresh"
-msgstr "_Янгилаш"
+msgstr "_Yangilash"
 
 #: gtk/gtkstock.c:322
 msgid "_Remove"
-msgstr "Олиб _ташлаш"
+msgstr "Olib _tashlash"
 
 #: gtk/gtkstock.c:323
 #, fuzzy
 msgid "_Revert"
-msgstr "Олиб _ташлаш"
+msgstr "Olib _tashlash"
 
 #: gtk/gtkstock.c:324
 msgid "_Save"
-msgstr "_Сақлаш"
+msgstr "_Saqlash"
 
 #: gtk/gtkstock.c:325
 msgid "Save _As"
-msgstr "...сиф_атида сақлаш"
+msgstr "...sif_atida saqlash"
 
 #: gtk/gtkstock.c:326
 msgid "_Color"
-msgstr "_Ранг"
+msgstr "_Rang"
 
 #: gtk/gtkstock.c:327
 msgid "_Font"
-msgstr "_Шрифт"
+msgstr "_Shrift"
 
 #: gtk/gtkstock.c:328
 msgid "_Ascending"
@@ -1692,11 +1692,11 @@ msgstr ""
 
 #: gtk/gtkstock.c:330
 msgid "_Spell Check"
-msgstr "Имлони _текшириш"
+msgstr "Imloni _tekshirish"
 
 #: gtk/gtkstock.c:331
 msgid "_Stop"
-msgstr "_Тўхтатиш"
+msgstr "_To'xtatish"
 
 #: gtk/gtkstock.c:332
 msgid "_Strikethrough"
@@ -1705,7 +1705,7 @@ msgstr ""
 #: gtk/gtkstock.c:333
 #, fuzzy
 msgid "_Undelete"
-msgstr "_Ўчириш"
+msgstr "_O'chirish"
 
 #: gtk/gtkstock.c:334
 msgid "_Underline"
@@ -1714,11 +1714,11 @@ msgstr ""
 #: gtk/gtkstock.c:335
 #, fuzzy
 msgid "_Undo"
-msgstr "Қ_идириш"
+msgstr "Q_idirish"
 
 #: gtk/gtkstock.c:336
 msgid "_Yes"
-msgstr "Ҳ_а"
+msgstr "H_a"
 
 #: gtk/gtkstock.c:337
 msgid "Zoom _100%"
@@ -1730,11 +1730,11 @@ msgstr ""
 
 #: gtk/gtkstock.c:339
 msgid "Zoom _In"
-msgstr "К_атталаштириш"
+msgstr "K_attalashtirish"
 
 #: gtk/gtkstock.c:340
 msgid "Zoom _Out"
-msgstr "К_ичиклаштириш"
+msgstr "K_ichiklashtirish"
 
 #: gtk/gtktextutil.c:46
 msgid "LRM _Left-to-right mark"
