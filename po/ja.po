@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.2.8\n"
-"POT-Creation-Date: 2000-11-13 17:00-0500\n"
+"POT-Creation-Date: 2000-11-16 16:11-0500\n"
 "PO-Revision-Date: 2000-10-06 11:42+0900\n"
 "Last-Translator: Yukihiro Nakai <nakai@gnome.gr.jp>\n"
 "Language-Team: Japanese <ja@li.org>\n"
@@ -273,9 +273,11 @@ msgid "clear"
 msgstr "クリア"
 
 #. Translate to default:RTL if you want your widgets
-#. * to be RTL, otherwise translate to default:LTR
+#. * to be RTL, otherwise translate to default:LTR.
+#. * Do *not* translate it to "predefinito:LTR", if it
+#. * it isn't default:LTR or default:RTL it will not work
 #.
-#: gtk/gtkmain.c:417
+#: gtk/gtkmain.c:424
 msgid "default:LTR"
 msgstr ""
 
@@ -331,13 +333,13 @@ msgstr ""
 msgid "Page %u"
 msgstr "ページ %u"
 
-#: gtk/gtkrc.c:2042
+#: gtk/gtkrc.c:2046
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\" line %d"
 msgstr ""
 "画像ファイルが見付かりません piamap_path: \"%s\" %d 行目"
 
-#: gtk/gtkrc.c:2045
+#: gtk/gtkrc.c:2049
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "画像ファイルが見付かりません pixmap_path: \"%s\""

@@ -129,9 +129,16 @@ EXTRA_DIST += \
 	gtk_tut_it.sgml			\
 	gtk_tut_fr.sgml			\
 	gtk_tut_packbox1.gif 		\
+	gtk_tut_packbox1.eps 		\
+	gtk_tut_packbox1.jpg 		\
 	gtk_tut_packbox2.gif 		\
+	gtk_tut_packbox2.eps 		\
+	gtk_tut_packbox2.jpg 		\
 	gtk_tut_table.gif		\
-	package_tutorial.sh
+	gtk_tut_table.eps		\
+	gtk_tut_table.jpg		\
+	package_tutorial.sh		\
+	package-db-tutorial.sh
 
 if HAVE_SGML2HTML
 dist-hook: tutorial tutorial_it tutorial_fr

@@ -8,7 +8,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.1.9\n"
-"POT-Creation-Date: 2000-11-13 17:00-0500\n"
+"POT-Creation-Date: 2000-11-16 16:11-0500\n"
 "PO-Revision-Date: 2000-11-06 21:43+02:00\n"
 "Last-Translator: Pauli Virtanen <pauli.virtanen@saunalahti.fi>\n"
 "Language-Team: Finnish <fi@li.org>\n"
@@ -277,9 +277,11 @@ msgid "clear"
 msgstr "tyhjennä"
 
 #. Translate to default:RTL if you want your widgets
-#. * to be RTL, otherwise translate to default:LTR
+#. * to be RTL, otherwise translate to default:LTR.
+#. * Do *not* translate it to "predefinito:LTR", if it
+#. * it isn't default:LTR or default:RTL it will not work
 #.
-#: gtk/gtkmain.c:417
+#: gtk/gtkmain.c:424
 msgid "default:LTR"
 msgstr "default:LTR"
 
@@ -335,13 +337,13 @@ msgid "Page %u"
 msgstr "Sivu %u"
 
 # , c-format
-#: gtk/gtkrc.c:2042
+#: gtk/gtkrc.c:2046
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\" line %d"
 msgstr "Kuvatiedostoa ei löytynyt pixmap_path:sta: \"%s\" rivi %d"
 
 # , c-format
-#: gtk/gtkrc.c:2045
+#: gtk/gtkrc.c:2049
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "Kuvatiedostoa ei löytynyt pixmap_path:sta: \"%s\""

@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.3.1\n"
-"POT-Creation-Date: 2000-11-13 17:00-0500\n"
+"POT-Creation-Date: 2000-11-16 16:11-0500\n"
 "PO-Revision-Date: 2000-10-10 14:59+0200\n"
 "Last-Translator: Christophe Merlet (RedFox) <christophe@merlet.net>\n"
 "Language-Team: GNOME French Team <gnomefr@gnomefr.traduc.org>\n"
@@ -273,9 +273,11 @@ msgid "clear"
 msgstr "effacer"
 
 #. Translate to default:RTL if you want your widgets
-#. * to be RTL, otherwise translate to default:LTR
+#. * to be RTL, otherwise translate to default:LTR.
+#. * Do *not* translate it to "predefinito:LTR", if it
+#. * it isn't default:LTR or default:RTL it will not work
 #.
-#: gtk/gtkmain.c:417
+#: gtk/gtkmain.c:424
 msgid "default:LTR"
 msgstr ""
 
@@ -332,14 +334,14 @@ msgstr ""
 msgid "Page %u"
 msgstr "Page %u"
 
-#: gtk/gtkrc.c:2042
+#: gtk/gtkrc.c:2046
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\" line %d"
 msgstr ""
 "Incapable de localiser le fichier image dans le chemin des  pixmaps : \"%s\" "
 "ligne %d"
 
-#: gtk/gtkrc.c:2045
+#: gtk/gtkrc.c:2049
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr ""

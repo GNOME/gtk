@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.2.6\n"
-"POT-Creation-Date: 2000-11-13 17:00-0500\n"
+"POT-Creation-Date: 2000-11-16 16:11-0500\n"
 "PO-Revision-Date: 1999-10-22 22:43-0000\n"
 "Last-Translator: Spiros Papadimitriou <spapadim+@cs.cmu.edu>\n"
 "Language-Team: Greek <nls@tux.hellug.gr>\n"
@@ -325,9 +325,11 @@ msgid "clear"
 msgstr "καθαρισμός"
 
 #. Translate to default:RTL if you want your widgets
-#. * to be RTL, otherwise translate to default:LTR
+#. * to be RTL, otherwise translate to default:LTR.
+#. * Do *not* translate it to "predefinito:LTR", if it
+#. * it isn't default:LTR or default:RTL it will not work
 #.
-#: gtk/gtkmain.c:417
+#: gtk/gtkmain.c:424
 msgid "default:LTR"
 msgstr ""
 
@@ -390,7 +392,7 @@ msgid "Page %u"
 msgstr "Σελίδα %u"
 
 #
-#: gtk/gtkrc.c:2042
+#: gtk/gtkrc.c:2046
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\" line %d"
 msgstr ""
@@ -398,7 +400,7 @@ msgstr ""
 "\"%s\" line %d"
 
 #
-#: gtk/gtkrc.c:2045
+#: gtk/gtkrc.c:2049
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr ""

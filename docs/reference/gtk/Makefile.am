@@ -68,7 +68,8 @@ GTKDOC_LD=$(LIBTOOL) --mode=link $(CC)
 
 content_files = 		\
 	objects_grouped.sgml	\
-	text_widget.sgml
+	text_widget.sgml	\
+	tree_widget.sgml
 
 ####################################
 # Everything below here is generic #
@@ -77,6 +78,7 @@ content_files = 		\
 TARGET_DIR=$(HTML_DIR)/$(DOC_MODULE)
 
 EXTRA_DIST = 				\
+	$(DOC_MODULE).types		\
 	$(DOC_MAIN_SGML_FILE)		\
 	$(content_files)		\
 	$(DOC_MODULE)-sections.txt	\

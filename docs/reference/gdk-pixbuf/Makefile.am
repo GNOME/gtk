@@ -54,6 +54,7 @@ content_files =				\
 TARGET_DIR=$(HTML_DIR)/$(DOC_MODULE)
 
 EXTRA_DIST = 				\
+	$(DOC_MODULE).types		\
 	$(DOC_MAIN_SGML_FILE)		\
 	$(content_files)		\
 	$(DOC_MODULE)-sections.txt	\

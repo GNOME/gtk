@@ -242,8 +242,10 @@ Tue Nov 14 11:51:26 2000  Owen Taylor  <otaylor@redhat.com>
 
 2000-07-27  Elliot Lee  <sopwith@redhat.com>
 
-	* gdk-pixbuf-io.h, gdk-pixbuf-io.c: Add gdk_pixbuf_get_named_module() function to facilitate above change
-	* io-wbmp.c, pixbufloader_wbmp.defs, gdk-pixbuf-io.c, Makefile: Implement loader for WBMP format.
+	* gdk-pixbuf-io.h, gdk-pixbuf-io.c: Add
+	gdk_pixbuf_get_named_module() function to facilitate above change
+	* io-wbmp.c, pixbufloader_wbmp.defs, gdk-pixbuf-io.c, Makefile:
+	Implement loader for WBMP format.
 	* io-bmp.c: Don't malloc a temporary buffer - use stack instead.
 
 2000-07-23  Tor Lillqvist  <tml@iki.fi>

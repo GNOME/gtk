@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2000-11-13 17:00-0500\n"
+"POT-Creation-Date: 2000-11-16 16:11-0500\n"
 "PO-Revision-Date: 2000-07-26 HO:MI+ZONE\n"
 "Last-Translator: Tzafrir Cohen <tzafrir@technion.ac.il>\n"
 "Language-Team: LANGUAGE <he@li.org>\n"
@@ -275,9 +275,11 @@ msgid "clear"
 msgstr ""
 
 #. Translate to default:RTL if you want your widgets
-#. * to be RTL, otherwise translate to default:LTR
+#. * to be RTL, otherwise translate to default:LTR.
+#. * Do *not* translate it to "predefinito:LTR", if it
+#. * it isn't default:LTR or default:RTL it will not work
 #.
-#: gtk/gtkmain.c:417
+#: gtk/gtkmain.c:424
 msgid "default:LTR"
 msgstr "default:RTL"
 
@@ -333,14 +335,14 @@ msgstr ""
 msgid "Page %u"
 msgstr "דף %u"
 
-#: gtk/gtkrc.c:2042
+#: gtk/gtkrc.c:2046
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\" line %d"
 msgstr ""
 "לא מצליח לאתר את קובץ התמונה ב-pixmap_path: \"%s\" "
 "שורה %d"
 
-#: gtk/gtkrc.c:2045
+#: gtk/gtkrc.c:2049
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr ""

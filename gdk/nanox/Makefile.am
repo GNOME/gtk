@@ -36,6 +36,7 @@ libgdk_nanox_la_SOURCES =    \
 	gdkim-nanox.c	   \
 	gdkimage-nanox.c	   \
 	gdkinput.c	   \
+	gdkinputprivate.h	\
 	gdkmain-nanox.c	   \
 	gdkpixmap-nanox.c	   \
 	gdkproperty-nanox.c  \

@@ -3,11 +3,11 @@
 SUBDIRS=$(gdktarget)
 DIST_SUBDIRS=linux-fb nanox win32 x11
 
-EXTRA_DIST =	\
-	gdkconfig.h.win32 \
-	gdk.def \
-	makefile.mingw \
-	makefile.mingw.in \
+EXTRA_DIST =			\
+	gdkconfig.h.win32 	\
+	gdk.def 		\
+	makefile.mingw 		\
+	makefile.mingw.in 	\
 	makefile.msc
 
 common_includes = @STRIP_BEGIN@ 	\
