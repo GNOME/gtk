@@ -1,3 +1,8 @@
+Wed Mar 10 01:21:05 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkcombobox.c (gtk_combo_box_menu_position_below): Place
+	grid mode popups left aligned, not right aligned.
+
 Tue Mar  9 23:09:46 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkoptionmenu.c (gtk_option_menu_init): Avoid centering 

@@ -863,7 +863,7 @@ gtk_combo_box_menu_position_below (GtkMenu  *menu,
    
    gtk_widget_size_request (GTK_WIDGET (menu), &req);
    
-   if (gtk_widget_get_direction (GTK_WIDGET (combo_box)) == GTK_TEXT_DIR_RTL)
+   if (gtk_widget_get_direction (GTK_WIDGET (combo_box)) == GTK_TEXT_DIR_LTR)
      *x = sx;
    else
      *x = sx + child->allocation.width - req.width;
