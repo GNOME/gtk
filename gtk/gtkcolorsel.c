@@ -192,11 +192,13 @@ gtk_color_selection_get_type ()
     {
       GtkTypeInfo colorsel_info =
       {
-	"color selection widget",
+	"GtkColorSelection",
 	sizeof (GtkColorSelection),
 	sizeof (GtkColorSelectionClass),
 	(GtkClassInitFunc) gtk_color_selection_class_init,
 	(GtkObjectInitFunc) gtk_color_selection_init,
+	(GtkArgSetFunc) NULL,
+	(GtkArgGetFunc) NULL,
       };
 
       color_selection_type = gtk_type_unique (gtk_vbox_get_type (), &colorsel_info);
@@ -1398,11 +1400,13 @@ gtk_color_selection_dialog_get_type ()
     {
       GtkTypeInfo colorsel_diag_info =
       {
-	"color selection dialog",
+	"GtkColorSelectionDialog",
 	sizeof (GtkColorSelectionDialog),
 	sizeof (GtkColorSelectionDialogClass),
 	(GtkClassInitFunc) gtk_color_selection_dialog_class_init,
 	(GtkObjectInitFunc) gtk_color_selection_dialog_init,
+	(GtkArgSetFunc) NULL,
+	(GtkArgGetFunc) NULL,
       };
 
       color_selection_dialog_type = gtk_type_unique (gtk_window_get_type (), &colorsel_diag_info);
