@@ -359,9 +359,8 @@ gdk_add_client_message_filter (GdkAtom       message_type,
 
 static void
 do_net_wm_state_changes (GdkWindow *window)
-{  
-  GdkWindowObject *window_private = (GdkWindowObject *)window;
-  GdkWindowImplX11 *window_impl = GDK_WINDOW_IMPL_X11 (window_private->impl);
+{
+  GdkToplevelX11 *toplevel = _gdk_x11_window_get_toplevel (window);
   GdkWindowState old_state;
   
   if (GDK_WINDOW_DESTROYED (window) ||
@@ -375,14 +374,14 @@ do_net_wm_state_changes (GdkWindow *window)
    */
   if (old_state & GDK_WINDOW_STATE_STICKY)
     {
-      if (!(window_impl->have_sticky && window_impl->on_all_desktops))
+      if (!(toplevel->have_sticky && toplevel->on_all_desktops))
         gdk_synthesize_window_state (window,
                                      GDK_WINDOW_STATE_STICKY,
                                      0);
     }
   else
     {
-      if (window_impl->have_sticky && window_impl->on_all_desktops)
+      if (toplevel->have_sticky && toplevel->on_all_desktops)
         gdk_synthesize_window_state (window,
                                      0,
                                      GDK_WINDOW_STATE_STICKY);
@@ -390,14 +389,14 @@ do_net_wm_state_changes (GdkWindow *window)
 
   if (old_state & GDK_WINDOW_STATE_FULLSCREEN)
     {
-      if (!window_impl->have_fullscreen)
+      if (!toplevel->have_fullscreen)
         gdk_synthesize_window_state (window,
                                      GDK_WINDOW_STATE_FULLSCREEN,
                                      0);
     }
   else
     {
-      if (window_impl->have_fullscreen)
+      if (toplevel->have_fullscreen)
         gdk_synthesize_window_state (window,
                                      0,
                                      GDK_WINDOW_STATE_FULLSCREEN);
@@ -408,14 +407,14 @@ do_net_wm_state_changes (GdkWindow *window)
    */
   if (old_state & GDK_WINDOW_STATE_MAXIMIZED)
     {
-      if (!(window_impl->have_maxvert && window_impl->have_maxhorz))
+      if (!(toplevel->have_maxvert && toplevel->have_maxhorz))
         gdk_synthesize_window_state (window,
                                      GDK_WINDOW_STATE_MAXIMIZED,
                                      0);
     }
   else
     {
-      if (window_impl->have_maxvert && window_impl->have_maxhorz)
+      if (toplevel->have_maxvert && toplevel->have_maxhorz)
         gdk_synthesize_window_state (window,
                                      0,
                                      GDK_WINDOW_STATE_MAXIMIZED);
@@ -425,8 +424,7 @@ do_net_wm_state_changes (GdkWindow *window)
 static void
 gdk_check_wm_desktop_changed (GdkWindow *window)
 {
-  GdkWindowObject *window_private = (GdkWindowObject *)window;
-  GdkWindowImplX11 *window_impl = GDK_WINDOW_IMPL_X11 (window_private->impl);
+  GdkToplevelX11 *toplevel = _gdk_x11_window_get_toplevel (window);
   GdkDisplay *display = GDK_WINDOW_DISPLAY (window);
 
   Atom type;
@@ -434,7 +432,7 @@ gdk_check_wm_desktop_changed (GdkWindow *window)
   gulong nitems;
   gulong bytes_after;
 
-  if (window_impl->have_sticky)
+  if (toplevel->have_sticky)
     {
       gulong *desktop;
       
@@ -447,11 +445,11 @@ gdk_check_wm_desktop_changed (GdkWindow *window)
 
       if (type != None)
         {
-          window_impl->on_all_desktops = (*desktop == 0xFFFFFFFF);
+          toplevel->on_all_desktops = (*desktop == 0xFFFFFFFF);
           XFree (desktop);
         }
       else
-	window_impl->on_all_desktops = FALSE;
+	toplevel->on_all_desktops = FALSE;
       
       do_net_wm_state_changes (window);
     }
@@ -460,8 +458,7 @@ gdk_check_wm_desktop_changed (GdkWindow *window)
 static void
 gdk_check_wm_state_changed (GdkWindow *window)
 {
-  GdkWindowObject *window_private = (GdkWindowObject *)window;
-  GdkWindowImplX11 *window_impl = GDK_WINDOW_IMPL_X11 (window_private->impl);
+  GdkToplevelX11 *toplevel = _gdk_x11_window_get_toplevel (window);
   GdkDisplay *display = GDK_WINDOW_DISPLAY (window);
   
   Atom type;
@@ -471,7 +468,7 @@ gdk_check_wm_state_changed (GdkWindow *window)
   Atom *atoms = NULL;
   gulong i;
 
-  gboolean had_sticky = window_impl->have_sticky;
+  gboolean had_sticky = toplevel->have_sticky;
 
   XGetWindowProperty (GDK_DISPLAY_XDISPLAY (display), GDK_WINDOW_XID (window),
 		      gdk_x11_get_xatom_by_name_for_display (display, "_NET_WM_STATE"),
@@ -489,13 +486,13 @@ gdk_check_wm_state_changed (GdkWindow *window)
       while (i < nitems)
         {
           if (atoms[i] == sticky_atom)
-            window_impl->have_sticky = TRUE;
+            toplevel->have_sticky = TRUE;
           else if (atoms[i] == maxvert_atom)
-            window_impl->have_maxvert = TRUE;
+            toplevel->have_maxvert = TRUE;
           else if (atoms[i] == maxhorz_atom)
-            window_impl->have_maxhorz = TRUE;
+            toplevel->have_maxhorz = TRUE;
           else if (atoms[i] == fullscreen_atom)
-            window_impl->have_fullscreen = TRUE;
+            toplevel->have_fullscreen = TRUE;
           
           ++i;
         }
@@ -506,14 +503,14 @@ gdk_check_wm_state_changed (GdkWindow *window)
   /* When have_sticky is turned on, we have to check the DESKTOP property
    * as well.
    */
-  if (window_impl->have_sticky && !had_sticky)
+  if (toplevel->have_sticky && !had_sticky)
     gdk_check_wm_desktop_changed (window);
   else
     do_net_wm_state_changes (window);
 }
 
-#define HAS_FOCUS(window_impl)                           \
-  ((window_impl)->has_focus || (window_impl)->has_pointer_focus)
+#define HAS_FOCUS(toplevel)                           \
+  ((toplevel)->has_focus || (toplevel)->has_pointer_focus)
 
 static void
 generate_focus_event (GdkWindow *window,
@@ -724,6 +721,7 @@ gdk_event_translate (GdkDisplay *display,
   gint xoffset, yoffset;
   GdkScreen *screen = NULL;
   GdkScreenX11 *screen_x11 = NULL;
+  GdkToplevelX11 *toplevel = NULL;
   GdkDisplayX11 *display_x11 = GDK_DISPLAY_X11 (display);
   Window xwindow;
   
@@ -769,6 +767,7 @@ gdk_event_translate (GdkDisplay *display,
     {
       screen = GDK_WINDOW_SCREEN (window);
       screen_x11 = GDK_SCREEN_X11 (screen);
+      toplevel = _gdk_x11_window_get_toplevel (window);
     }
     
   if (window != NULL)
@@ -785,7 +784,7 @@ gdk_event_translate (GdkDisplay *display,
           /* Move key events on focus window to the real toplevel, and
            * filter out all other events on focus window
            */          
-          if (xwindow == window_impl->focus_window)
+          if (toplevel && xwindow == toplevel->focus_window)
             {
               switch (xevent->type)
                 {
@@ -1083,16 +1082,15 @@ gdk_event_translate (GdkDisplay *display,
         }
       
       /* Handle focusing (in the case where no window manager is running */
-      if (window &&
-	  GDK_WINDOW_TYPE (window) != GDK_WINDOW_CHILD &&
+      if (toplevel &&
 	  xevent->xcrossing.detail != NotifyInferior &&
-	  xevent->xcrossing.focus && !window_impl->has_focus_window)
+	  xevent->xcrossing.focus && !toplevel->has_focus_window)
 	{
-	  gboolean had_focus = HAS_FOCUS (window_impl);
+	  gboolean had_focus = HAS_FOCUS (toplevel);
 
-	  window_impl->has_pointer_focus = TRUE;
+	  toplevel->has_pointer_focus = TRUE;
 
-	  if (HAS_FOCUS (window_impl) != had_focus)
+	  if (HAS_FOCUS (toplevel) != had_focus)
 	    generate_focus_event (window, TRUE);
 	}
 
@@ -1178,16 +1176,15 @@ gdk_event_translate (GdkDisplay *display,
         }
       
       /* Handle focusing (in the case where no window manager is running */
-      if (window &&
-	  GDK_WINDOW_TYPE (window) != GDK_WINDOW_CHILD &&
+      if (toplevel &&
 	  xevent->xcrossing.detail != NotifyInferior &&
-	  xevent->xcrossing.focus && !window_impl->has_focus_window)
+	  xevent->xcrossing.focus && !toplevel->has_focus_window)
 	{
-	  gboolean had_focus = HAS_FOCUS (window_impl);
+	  gboolean had_focus = HAS_FOCUS (toplevel);
 	  
-	  window_impl->has_pointer_focus = FALSE;
+	  toplevel->has_pointer_focus = FALSE;
 	  
-	  if (HAS_FOCUS (window_impl) != had_focus)
+	  if (HAS_FOCUS (toplevel) != had_focus)
 	    generate_focus_event (window, FALSE);
 	}
 
@@ -1264,9 +1261,9 @@ gdk_event_translate (GdkDisplay *display,
 			   notify_details[xevent->xfocus.detail],
 			   notify_modes[xevent->xfocus.mode]));
       
-      if (window && GDK_WINDOW_TYPE (window) != GDK_WINDOW_CHILD)
+      if (toplevel)
 	{
-	  gboolean had_focus = HAS_FOCUS (window_impl);
+	  gboolean had_focus = HAS_FOCUS (toplevel);
 	  
 	  switch (xevent->xfocus.detail)
 	    {
@@ -1274,13 +1271,13 @@ gdk_event_translate (GdkDisplay *display,
 	    case NotifyNonlinear:
 	    case NotifyVirtual:
 	    case NotifyNonlinearVirtual:
-	      window_impl->has_focus_window = TRUE;
+	      toplevel->has_focus_window = TRUE;
 	      /* We pretend that the focus moves to the grab
 	       * window, so we pay attention to NotifyGrab
 	       * NotifyUngrab, and ignore NotifyWhileGrabbed
 	       */
 	      if (xevent->xfocus.mode != NotifyWhileGrabbed)
-		window_impl->has_focus = TRUE;
+		toplevel->has_focus = TRUE;
 	      break;
 	    case NotifyPointer:
 	      /* The X server sends NotifyPointer/NotifyGrab,
@@ -1288,7 +1285,7 @@ gdk_event_translate (GdkDisplay *display,
 	       * grab is in effect
 	       */
 	      if (xevent->xfocus.mode != NotifyGrab)
-		window_impl->has_pointer_focus = TRUE;
+		toplevel->has_pointer_focus = TRUE;
 	      break;
 	    case NotifyInferior:
 	    case NotifyPointerRoot:
@@ -1296,7 +1293,7 @@ gdk_event_translate (GdkDisplay *display,
 	      break;
 	    }
 
-	  if (HAS_FOCUS (window_impl) != had_focus)
+	  if (HAS_FOCUS (toplevel) != had_focus)
 	    generate_focus_event (window, TRUE);
 	}
       break;
@@ -1307,9 +1304,9 @@ gdk_event_translate (GdkDisplay *display,
 			   notify_details[xevent->xfocus.detail],
 			   notify_modes[xevent->xfocus.mode]));
       
-      if (window && GDK_WINDOW_TYPE (window) != GDK_WINDOW_CHILD)
+      if (toplevel)
 	{
-	  gboolean had_focus = HAS_FOCUS (window_impl);
+	  gboolean had_focus = HAS_FOCUS (toplevel);
 	    
 	  switch (xevent->xfocus.detail)
 	    {
@@ -1317,13 +1314,13 @@ gdk_event_translate (GdkDisplay *display,
 	    case NotifyNonlinear:
 	    case NotifyVirtual:
 	    case NotifyNonlinearVirtual:
-	      window_impl->has_focus_window = FALSE;
+	      toplevel->has_focus_window = FALSE;
 	      if (xevent->xfocus.mode != NotifyWhileGrabbed)
-		window_impl->has_focus = FALSE;
+		toplevel->has_focus = FALSE;
 	      break;
 	    case NotifyPointer:
 	      if (xevent->xfocus.mode != NotifyUngrab)
-		window_impl->has_pointer_focus = FALSE;
+		toplevel->has_pointer_focus = FALSE;
 	    break;
 	    case NotifyInferior:
 	    case NotifyPointerRoot:
@@ -1331,7 +1328,7 @@ gdk_event_translate (GdkDisplay *display,
 	      break;
 	    }
 
-	  if (HAS_FOCUS (window_impl) != had_focus)
+	  if (HAS_FOCUS (toplevel) != had_focus)
 	    generate_focus_event (window, FALSE);
 	}
       break;
@@ -1647,8 +1644,8 @@ gdk_event_translate (GdkDisplay *display,
 	    }
 	  window_private->x = event->configure.x;
 	  window_private->y = event->configure.y;
-	  GDK_WINDOW_IMPL_X11 (window_private->impl)->width = xevent->xconfigure.width;
-	  GDK_WINDOW_IMPL_X11 (window_private->impl)->height = xevent->xconfigure.height;
+	  window_impl->width = xevent->xconfigure.width;
+	  window_impl->height = xevent->xconfigure.height;
 	  if (window_private->resize_count >= 1)
 	    {
 	      window_private->resize_count -= 1;
@@ -1677,7 +1674,8 @@ gdk_event_translate (GdkDisplay *display,
       /* We compare with the serial of the last time we mapped the
        * window to avoid refetching properties that we set ourselves
        */
-      if (xevent->xproperty.serial >= GDK_WINDOW_IMPL_X11 (window_private->impl)->map_serial)
+      if (toplevel &&
+	  xevent->xproperty.serial >= toplevel->map_serial)
 	{
 	  if (xevent->xproperty.atom == gdk_x11_get_xatom_by_name_for_display (display, "_NET_WM_STATE"))
 	    gdk_check_wm_state_changed (window);
@@ -1906,15 +1904,15 @@ gdk_wm_protocols_filter (GdkXEvent *xev,
     }
   else if ((Atom) xevent->xclient.data.l[0] == gdk_x11_get_xatom_by_name_for_display (display, "WM_TAKE_FOCUS"))
     {
-      GdkWindow *win = event->any.window;
-      GdkWindowImplX11 *impl = GDK_WINDOW_IMPL_X11 (((GdkWindowObject *)win)->impl);
+      GdkToplevelX11 *toplevel = _gdk_x11_window_get_toplevel (event->any.window);
 
       /* There is no way of knowing reliably whether we are viewable;
        * _gdk_x11_set_input_focus_safe() traps errors asynchronously.
        */
-      _gdk_x11_set_input_focus_safe (display, impl->focus_window,
-				     RevertToParent,
-				     xevent->xclient.data.l[1]);
+      if (toplevel)
+	_gdk_x11_set_input_focus_safe (display, toplevel->focus_window,
+				       RevertToParent,
+				       xevent->xclient.data.l[1]);
     }
   else if ((Atom) xevent->xclient.data.l[0] == gdk_x11_get_xatom_by_name_for_display (display, "_NET_WM_PING") &&
 	   !_gdk_x11_display_is_root_window (display,

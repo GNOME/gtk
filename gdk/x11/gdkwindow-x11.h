@@ -29,11 +29,12 @@
 
 #include <gdk/x11/gdkdrawable-x11.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
+G_BEGIN_DECLS
 
-typedef struct _GdkXPositionInfo    GdkXPositionInfo;
+typedef struct _GdkToplevelX11 GdkToplevelX11;
+typedef struct _GdkWindowImplX11 GdkWindowImplX11;
+typedef struct _GdkWindowImplX11Class GdkWindowImplX11Class;
+typedef struct _GdkXPositionInfo GdkXPositionInfo;
 
 struct _GdkXPositionInfo
 {
@@ -54,9 +55,6 @@ struct _GdkXPositionInfo
 /* Window implementation for X11
  */
 
-typedef struct _GdkWindowImplX11 GdkWindowImplX11;
-typedef struct _GdkWindowImplX11Class GdkWindowImplX11Class;
-
 #define GDK_TYPE_WINDOW_IMPL_X11              (gdk_window_impl_x11_get_type ())
 #define GDK_WINDOW_IMPL_X11(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_WINDOW_IMPL_X11, GdkWindowImplX11))
 #define GDK_WINDOW_IMPL_X11_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), GDK_TYPE_WINDOW_IMPL_X11, GdkWindowImplX11Class))
@@ -72,6 +70,16 @@ struct _GdkWindowImplX11
   gint height;
   
   GdkXPositionInfo position_info;
+  GdkToplevelX11 *toplevel;	/* Toplevel-specific information */
+};
+ 
+struct _GdkWindowImplX11Class 
+{
+  GdkDrawableImplX11Class parent_class;
+};
+
+struct _GdkToplevelX11
+{
 
   /* Set if the window, or any descendent of it, is the server's focus window
    */
@@ -111,17 +119,11 @@ struct _GdkWindowImplX11
    */
   Window focus_window;
 };
- 
-struct _GdkWindowImplX11Class 
-{
-  GdkDrawableImplX11Class parent_class;
-
-};
 
 GType gdk_window_impl_x11_get_type (void);
 
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
+GdkToplevelX11 *_gdk_x11_window_get_toplevel (GdkWindow *window);
+
+G_END_DECLS
 
 #endif /* __GDK_WINDOW_X11_H__ */

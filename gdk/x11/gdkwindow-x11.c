@@ -142,6 +142,26 @@ gdk_window_impl_x11_init (GdkWindowImplX11 *impl)
   impl->height = 1;
 }
 
+GdkToplevelX11 *
+_gdk_x11_window_get_toplevel (GdkWindow *window)
+{
+  GdkWindowObject *private;
+  GdkWindowImplX11 *impl;
+  
+  g_return_val_if_fail (GDK_IS_WINDOW (window), NULL);
+
+  if (GDK_WINDOW_TYPE (window) == GDK_WINDOW_CHILD)
+    return NULL;
+
+  private = (GdkWindowObject *)window;
+  impl = GDK_WINDOW_IMPL_X11 (private->impl);
+
+  if (!impl->toplevel)
+    impl->toplevel = g_new0 (GdkToplevelX11, 1);
+
+  return impl->toplevel;
+}
+
 static void
 gdk_window_impl_x11_class_init (GdkWindowImplX11Class *klass)
 {
@@ -180,9 +200,12 @@ gdk_window_impl_x11_finalize (GObject *object)
   if (!GDK_WINDOW_DESTROYED (wrapper))
     {
       _gdk_xid_table_remove (GDK_WINDOW_DISPLAY (object), draw_impl->xid);
-      if (window_impl->focus_window)
-	_gdk_xid_table_remove (GDK_WINDOW_DISPLAY (object), window_impl->focus_window);
+      if (window_impl->toplevel && window_impl->toplevel->focus_window)
+	_gdk_xid_table_remove (GDK_WINDOW_DISPLAY (object), window_impl->toplevel->focus_window);
     }
+
+  if (window_impl->toplevel)
+    g_free (window_impl->toplevel);
 
   G_OBJECT_CLASS (parent_class)->finalize (object);
 }
@@ -379,6 +402,7 @@ gdk_window_new (GdkWindow     *parent,
   GdkWindowObject *private;
   GdkWindowImplX11 *impl;
   GdkDrawableImplX11 *draw_impl;
+  GdkToplevelX11 *toplevel;
   GdkScreenX11 *screen_x11;
   GdkScreen *screen;
   
@@ -625,22 +649,24 @@ gdk_window_new (GdkWindow     *parent,
       return window;
     }
 
+  toplevel = _gdk_x11_window_get_toplevel (window);
+
   if (class != InputOnly)
     {
       /* The focus window is off the visible area, and serves to receive key
        * press events so they don't get sent to child windows.
        */
-      impl->focus_window = XCreateSimpleWindow (xdisplay, xid,
-						-1, -1, 1, 1, 0,
-						xattributes.background_pixel,
-						xattributes.background_pixel);
+      toplevel->focus_window = XCreateSimpleWindow (xdisplay, xid,
+						    -1, -1, 1, 1, 0,
+						    xattributes.background_pixel,
+						    xattributes.background_pixel);
       /* FIXME: probably better to actually track the requested event mask for the toplevel
        */
-      XSelectInput (xdisplay, impl->focus_window,
+      XSelectInput (xdisplay, toplevel->focus_window,
 		    KeyPressMask | KeyReleaseMask | FocusChangeMask);
       
-      XMapWindow (xdisplay, impl->focus_window);
-      _gdk_xid_table_insert (screen_x11->display, &impl->focus_window, window);
+      XMapWindow (xdisplay, toplevel->focus_window);
+      _gdk_xid_table_insert (screen_x11->display, &toplevel->focus_window, window);
     }
 
   size_hints.flags = PSize;
@@ -832,43 +858,49 @@ gdk_window_lookup (GdkNativeWindow anid)
   return (GdkWindow*) gdk_xid_table_lookup (anid);
 }
 
+static void
+gdk_toplevel_x11_free_contents (GdkToplevelX11 *toplevel)
+{
+  if (toplevel->icon_window)
+    {
+      g_object_unref (toplevel->icon_window);
+      toplevel->icon_window = NULL;
+    }
+  if (toplevel->icon_pixmap)
+    {
+      g_object_unref (toplevel->icon_pixmap);
+      toplevel->icon_pixmap = NULL;
+    }
+  if (toplevel->icon_mask)
+    {
+      g_object_unref (toplevel->icon_mask);
+      toplevel->icon_mask = NULL;
+    }
+  if (toplevel->group_leader)
+    {
+      g_object_unref (toplevel->group_leader);
+      toplevel->group_leader = NULL;
+    }
+}
+
 void
 _gdk_windowing_window_destroy (GdkWindow *window,
 			       gboolean   recursing,
 			       gboolean   foreign_destroy)
 {
   GdkWindowObject *private = (GdkWindowObject *)window;
-  GdkWindowImplX11 *window_impl;
+  GdkToplevelX11 *toplevel;
   
   g_return_if_fail (GDK_IS_WINDOW (window));
-
-  window_impl = GDK_WINDOW_IMPL_X11 (private->impl);
 
   _gdk_selection_window_destroyed (window);
   
   if (private->extension_events != 0)
     _gdk_input_window_destroy (window);
 
-  if (window_impl->icon_window)
-    {
-      g_object_unref (window_impl->icon_window);
-      window_impl->icon_window = NULL;
-    }
-  if (window_impl->icon_pixmap)
-    {
-      g_object_unref (window_impl->icon_pixmap);
-      window_impl->icon_pixmap = NULL;
-    }
-  if (window_impl->icon_mask)
-    {
-      g_object_unref (window_impl->icon_mask);
-      window_impl->icon_mask = NULL;
-    }
-  if (window_impl->group_leader)
-    {
-      g_object_unref (window_impl->group_leader);
-      window_impl->group_leader = NULL;
-    }
+  toplevel = _gdk_x11_window_get_toplevel (window);
+  if (toplevel)
+    gdk_toplevel_x11_free_contents (toplevel);
 
 #ifdef HAVE_XFT  
   {
@@ -943,8 +975,8 @@ gdk_window_destroy_notify (GdkWindow *window)
     }
   
   _gdk_xid_table_remove (GDK_WINDOW_DISPLAY (window), GDK_WINDOW_XID (window));
-  if (window_impl->focus_window)
-    _gdk_xid_table_remove (GDK_WINDOW_DISPLAY (window), window_impl->focus_window);
+  if (window_impl->toplevel && window_impl->toplevel->focus_window)
+    _gdk_xid_table_remove (GDK_WINDOW_DISPLAY (window), window_impl->toplevel->focus_window);
 
   _gdk_xgrab_check_destroy (window);
   
@@ -955,8 +987,8 @@ static void
 update_wm_hints (GdkWindow *window,
 		 gboolean   force)
 {
+  GdkToplevelX11 *toplevel = _gdk_x11_window_get_toplevel (window);
   GdkWindowObject *private = (GdkWindowObject *)window;
-  GdkWindowImplX11 *impl = GDK_WINDOW_IMPL_X11 (private->impl);
   GdkDisplay *display = GDK_WINDOW_DISPLAY (window);
   XWMHints wm_hints;
 
@@ -974,29 +1006,29 @@ update_wm_hints (GdkWindow *window,
       wm_hints.initial_state = IconicState;
     }
 
-  if (impl->icon_window && !GDK_WINDOW_DESTROYED (impl->icon_window))
+  if (toplevel->icon_window && !GDK_WINDOW_DESTROYED (toplevel->icon_window))
     {
       wm_hints.flags |= IconWindowHint;
-      wm_hints.icon_window = GDK_WINDOW_XID (impl->icon_window);
+      wm_hints.icon_window = GDK_WINDOW_XID (toplevel->icon_window);
     }
 
-  if (impl->icon_pixmap)
+  if (toplevel->icon_pixmap)
     {
       wm_hints.flags |= IconPixmapHint;
-      wm_hints.icon_pixmap = GDK_PIXMAP_XID (impl->icon_pixmap);
+      wm_hints.icon_pixmap = GDK_PIXMAP_XID (toplevel->icon_pixmap);
     }
 
-  if (impl->icon_mask)
+  if (toplevel->icon_mask)
     {
       wm_hints.flags |= IconMaskHint;
-      wm_hints.icon_mask = GDK_PIXMAP_XID (impl->icon_mask);
+      wm_hints.icon_mask = GDK_PIXMAP_XID (toplevel->icon_mask);
     }
   
   wm_hints.flags |= WindowGroupHint;
-  if (impl->group_leader && !GDK_WINDOW_DESTROYED (impl->group_leader))
+  if (toplevel->group_leader && !GDK_WINDOW_DESTROYED (toplevel->group_leader))
     {
       wm_hints.flags |= WindowGroupHint;
-      wm_hints.window_group = GDK_WINDOW_XID (impl->group_leader);
+      wm_hints.window_group = GDK_WINDOW_XID (toplevel->group_leader);
     }
   else
     wm_hints.window_group = GDK_DISPLAY_X11 (display)->leader_window;
@@ -1013,12 +1045,15 @@ set_initial_hints (GdkWindow *window)
   Display *xdisplay = GDK_DISPLAY_XDISPLAY (display);
   Window xwindow = GDK_WINDOW_XID (window);  
   GdkWindowObject *private;
-  GdkWindowImplX11 *impl;
+  GdkToplevelX11 *toplevel;
   Atom atoms[7];
   gint i;
 
   private = (GdkWindowObject*) window;
-  impl = GDK_WINDOW_IMPL_X11 (private->impl);
+  toplevel = _gdk_x11_window_get_toplevel (window);
+
+  if (!toplevel)
+    return;
 
   update_wm_hints (window, TRUE);
   
@@ -1060,14 +1095,14 @@ set_initial_hints (GdkWindow *window)
       ++i;
     }
 
-  if (impl->skip_taskbar_hint)
+  if (toplevel->skip_taskbar_hint)
     {
       atoms[i] = gdk_x11_get_xatom_by_name_for_display (display,
 							"_NET_WM_STATE_SKIP_TASKBAR");
       ++i;
     }
 
-  if (impl->skip_pager_hint)
+  if (toplevel->skip_pager_hint)
     {
       atoms[i] = gdk_x11_get_xatom_by_name_for_display (display,
 							"_NET_WM_STATE_SKIP_PAGER");
@@ -1104,6 +1139,8 @@ set_initial_hints (GdkWindow *window)
                        xwindow,
 		       gdk_x11_get_xatom_by_name_for_display (display, "_NET_WM_DESKTOP"));
     }
+
+  toplevel->map_serial = NextRequest (xdisplay);
 }
 
 static void
@@ -1117,7 +1154,7 @@ show_window_internal (GdkWindow *window,
   private = (GdkWindowObject*) window;
   if (!private->destroyed)
     {
-      GdkWindowImplX11 *impl =GDK_WINDOW_IMPL_X11 (private->impl);
+      GdkWindowImplX11 *impl = GDK_WINDOW_IMPL_X11 (private->impl);
       Display *xdisplay = GDK_WINDOW_XDISPLAY (window);
       Window xwindow = GDK_WINDOW_XID (window);
       
@@ -1131,8 +1168,6 @@ show_window_internal (GdkWindow *window,
           gdk_synthesize_window_state (window,
                                        GDK_WINDOW_STATE_WITHDRAWN,
                                        0);
-
-	  impl->map_serial = NextRequest (xdisplay);
         }
       
       g_assert (GDK_WINDOW_IS_MAPPED (window));
@@ -1488,12 +1523,20 @@ gdk_window_reparent (GdkWindow *window,
       if (GDK_WINDOW_TYPE (window) != GDK_WINDOW_CHILD &&
 	  GDK_WINDOW_TYPE (window) != GDK_WINDOW_FOREIGN)
 	{
+	  GdkWindowImplX11 *impl = GDK_WINDOW_IMPL_X11 (window_private->impl);
+	  
 	  /* If we were being sophisticated, we'd save the old window type
 	   * here, and restore it if we were reparented back to the
 	   * toplevel. However, the difference between different types
 	   * of toplevels only really matters on creation anyways.
 	   */
 	  GDK_WINDOW_TYPE (window) = GDK_WINDOW_CHILD;
+	  if (impl->toplevel)
+	    {
+	      gdk_toplevel_x11_free_contents (impl->toplevel);
+	      g_free (impl->toplevel);
+	      impl->toplevel = NULL;
+	    }
 	}
     }
 
@@ -1863,19 +1906,17 @@ void
 gdk_window_set_skip_taskbar_hint (GdkWindow *window,
                                   gboolean   skips_taskbar)
 {
-  GdkWindowObject *private;
-  GdkWindowImplX11 *impl;
+  GdkToplevelX11 *toplevel;
   
   g_return_if_fail (window != NULL);
   g_return_if_fail (GDK_IS_WINDOW (window));
+  g_return_if_fail (GDK_WINDOW_TYPE (window) != GDK_WINDOW_CHILD);
   
   if (GDK_WINDOW_DESTROYED (window))
     return;
 
-  private = (GdkWindowObject*) window;
-  impl = GDK_WINDOW_IMPL_X11 (private->impl);
-
-  impl->skip_taskbar_hint = skips_taskbar;
+  toplevel = _gdk_x11_window_get_toplevel (window);
+  toplevel->skip_taskbar_hint = skips_taskbar;
 
   if (GDK_WINDOW_IS_MAPPED (window))
     gdk_wmspec_change_state (skips_taskbar, window,
@@ -1902,19 +1943,17 @@ void
 gdk_window_set_skip_pager_hint (GdkWindow *window,
                                 gboolean   skips_pager)
 {
-  GdkWindowObject *private;
-  GdkWindowImplX11 *impl;
-  
+  GdkToplevelX11 *toplevel;
+    
   g_return_if_fail (window != NULL);
   g_return_if_fail (GDK_IS_WINDOW (window));
+  g_return_if_fail (GDK_WINDOW_TYPE (window) != GDK_WINDOW_CHILD);
   
   if (GDK_WINDOW_DESTROYED (window))
     return;
 
-  private = (GdkWindowObject*) window;
-  impl = GDK_WINDOW_IMPL_X11 (private->impl);
-
-  impl->skip_pager_hint = skips_pager;
+  toplevel = _gdk_x11_window_get_toplevel (window);
+  toplevel->skip_pager_hint = skips_pager;
   
   if (GDK_WINDOW_IS_MAPPED (window))
     gdk_wmspec_change_state (skips_pager, window,
@@ -3330,37 +3369,36 @@ gdk_window_set_icon (GdkWindow *window,
 		     GdkPixmap *pixmap,
 		     GdkBitmap *mask)
 {
-  GdkWindowObject *private;
-  GdkWindowImplX11 *impl;
+  GdkToplevelX11 *toplevel;
 
   g_return_if_fail (window != NULL);
   g_return_if_fail (GDK_IS_WINDOW (window));
-
+  g_return_if_fail (GDK_WINDOW_TYPE (window) != GDK_WINDOW_CHILD);
+  
   if (GDK_WINDOW_DESTROYED (window))
     return;
 
-  private = (GdkWindowObject *)window;
-  impl = GDK_WINDOW_IMPL_X11 (private->impl);
+  toplevel = _gdk_x11_window_get_toplevel (window);
 
-  if (impl->icon_window != icon_window)
+  if (toplevel->icon_window != icon_window)
     {
-      if (impl->icon_window)
-	g_object_unref (impl->icon_window);
-      impl->icon_window = g_object_ref (icon_window);
+      if (toplevel->icon_window)
+	g_object_unref (toplevel->icon_window);
+      toplevel->icon_window = g_object_ref (icon_window);
     }
   
-  if (impl->icon_pixmap != pixmap)
+  if (toplevel->icon_pixmap != pixmap)
     {
-      if (impl->icon_pixmap)
-	g_object_unref (impl->icon_pixmap);
-      impl->icon_pixmap = g_object_ref (pixmap);
+      if (toplevel->icon_pixmap)
+	g_object_unref (toplevel->icon_pixmap);
+      toplevel->icon_pixmap = g_object_ref (pixmap);
     }
   
-  if (impl->icon_mask != mask)
+  if (toplevel->icon_mask != mask)
     {
-      if (impl->icon_mask)
-	g_object_unref (impl->icon_mask);
-      impl->icon_mask = g_object_ref (mask);
+      if (toplevel->icon_mask)
+	g_object_unref (toplevel->icon_mask);
+      toplevel->icon_mask = g_object_ref (mask);
     }
   
   update_wm_hints (window, FALSE);
@@ -3791,25 +3829,24 @@ void
 gdk_window_set_group (GdkWindow *window, 
 		      GdkWindow *leader)
 {
-  GdkWindowObject *private;
-  GdkWindowImplX11 *impl;
+  GdkToplevelX11 *toplevel;
   
   g_return_if_fail (window != NULL);
   g_return_if_fail (GDK_IS_WINDOW (window));
+  g_return_if_fail (GDK_WINDOW_TYPE (window) != GDK_WINDOW_CHILD);
   g_return_if_fail (leader != NULL);
   g_return_if_fail (GDK_IS_WINDOW (leader));
+
+  toplevel = _gdk_x11_window_get_toplevel (window);
 
   if (GDK_WINDOW_DESTROYED (window) || GDK_WINDOW_DESTROYED (leader))
     return;
   
-  private = (GdkWindowObject *)window;
-  impl = GDK_WINDOW_IMPL_X11 (private->impl);
-
-  if (impl->group_leader != leader)
+  if (toplevel->group_leader != leader)
     {
-      if (impl->group_leader)
-	g_object_unref (impl->group_leader);
-      impl->group_leader = g_object_ref (impl->group_leader);
+      if (toplevel->group_leader)
+	g_object_unref (toplevel->group_leader);
+      toplevel->group_leader = g_object_ref (toplevel->group_leader);
     }
 
   update_wm_hints (window, FALSE);

@@ -1,3 +1,9 @@
+Fri Jul  4 22:26:27 2003  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/x11/gdkwindow-x11.[ch] gdkevents-x11.c: Split
+	toplevel-specific pieces of GdkWindowImplX11 into
+	a separate GdkToplevelX11 structure.
+
 Fri Jul  4 22:05:09 2003  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/x11/gdkasync.c (struct _SetInputFocusState): Fix
