@@ -30,6 +30,7 @@
 #include "gtkmenubar.h"
 #include "gtkmenufactory.h"
 #include "gtkmenuitem.h"
+#include "gtkseparatormenuitem.h"
 #include "gtksignal.h"
 
 
@@ -244,7 +245,7 @@ gtk_menu_factory_create (GtkMenuFactory *factory,
        */
       if (strcmp (path, "<separator>") == 0)
 	{
-	  entry->widget = gtk_menu_item_new ();
+	  entry->widget = gtk_separator_menu_item_new ();
 	  gtk_container_add (GTK_CONTAINER (parent), entry->widget);
 	  gtk_widget_show (entry->widget);
 	}

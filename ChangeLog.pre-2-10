@@ -1,3 +1,23 @@
+2001-02-21  Alexander Larsson  <alexl@redhat.com>
+	
+        * gtk/gtkseparatormenuitem.[ch]:
+	Added new menu separator item. The drawing and size handling
+	is still done in GtkMenuItem, but the API is a bit more sane.
+	
+	* gtk/Makefile.am:
+	Add gtkseparatormenuitem.[ch].
+
+	* gtk/gtk.h:
+	Add gtkseparatormenuitem.h.
+	
+	* gtk/gtkentry.c:
+	* gtk/gtkmenufactory.c:
+	* gtk/gtktextview.c:
+	Use the new API for menu separators.
+	
+	* demos/gtk-demo/menus.c (create_menu):
+	Add some GtkSeparatorMenuItem demo code.
+
 2001-02-20  Havoc Pennington  <hp@redhat.com>
 
 	* gtk/gtkaspectframe.c: Convert to new property API, patch from 

@@ -118,7 +118,11 @@ do_menus (void)
       
       menu = create_menu (1, FALSE);
       gtk_menu_set_accel_group (GTK_MENU (menu), accel_group);
-
+      
+      menuitem = gtk_separator_menu_item_new ();
+      gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
+      gtk_widget_show (menuitem);
+      
       menuitem = gtk_check_menu_item_new_with_label ("Accelerate Me");
       gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
       gtk_widget_show (menuitem);

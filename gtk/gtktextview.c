@@ -32,6 +32,7 @@
 #include "gtkmain.h"
 #include "gtkmenu.h"
 #include "gtkmenuitem.h"
+#include "gtkseparatormenuitem.h"
 #include "gtksignal.h"
 #include "gtktextdisplay.h"
 #include "gtktextview.h"
@@ -4905,7 +4906,7 @@ gtk_text_view_popup_menu (GtkTextView    *text_view,
       append_action_signal (text_view, text_view->popup_menu, _("Copy"), "copy_clipboard");
       append_action_signal (text_view, text_view->popup_menu, _("Paste"), "paste_clipboard");
 
-      menuitem = gtk_menu_item_new (); /* Separator */
+      menuitem = gtk_separator_menu_item_new ();
       gtk_widget_show (menuitem);
       gtk_menu_shell_append (GTK_MENU_SHELL (text_view->popup_menu), menuitem);
 

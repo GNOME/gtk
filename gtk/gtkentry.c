@@ -38,6 +38,7 @@
 #include "gtkmain.h"
 #include "gtkmenu.h"
 #include "gtkmenuitem.h"
+#include "gtkseparatormenuitem.h"
 #include "gtkselection.h"
 #include "gtksignal.h"
 
@@ -2737,7 +2738,7 @@ gtk_entry_popup_menu (GtkEntry       *entry,
       append_action_signal (entry, entry->popup_menu, _("Copy"), "copy_clipboard");
       append_action_signal (entry, entry->popup_menu, _("Paste"), "paste_clipboard");
 
-      menuitem = gtk_menu_item_new (); /* Separator */
+      menuitem = gtk_separator_menu_item_new ();
       gtk_widget_show (menuitem);
       gtk_menu_shell_append (GTK_MENU_SHELL (entry->popup_menu), menuitem);
 
