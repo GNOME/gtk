@@ -239,7 +239,8 @@ gtk_tree_selection_set_mode (GtkTreeSelection *selection,
 						  node,
 						  tree,
 						  anchor_path,
-						  0);
+						  0,
+						  FALSE);
       if (anchor_path)
 	gtk_tree_path_free (anchor_path);
     }
@@ -549,7 +550,8 @@ gtk_tree_selection_select_path (GtkTreeSelection *selection,
 					    node,
 					    tree,
 					    path,
-					    state);
+					    state,
+					    FALSE);
 }
 
 /**
@@ -584,7 +586,8 @@ gtk_tree_selection_unselect_path (GtkTreeSelection *selection,
 					    node,
 					    tree,
 					    path,
-					    GDK_CONTROL_MASK);
+					    GDK_CONTROL_MASK,
+					    TRUE);
 }
 
 /**
@@ -986,12 +989,19 @@ gtk_tree_selection_select_range (GtkTreeSelection *selection,
 
 /* Called internally by gtktreeview.c It handles actually selecting the tree.
  */
+
+/**
+ * docs about the 'override_browse_mode', we set this flag when we want to
+ * unset select the node and override the select browse mode behaviour (that is
+ * 'one node should *always* be selected').
+ */
 void
 _gtk_tree_selection_internal_select_node (GtkTreeSelection *selection,
 					  GtkRBNode        *node,
 					  GtkRBTree        *tree,
 					  GtkTreePath      *path,
-					  GdkModifierType   state)
+					  GdkModifierType   state,
+					  gboolean          override_browse_mode)
 {
   gint flags;
   gint dirty = FALSE;
@@ -1006,9 +1016,14 @@ _gtk_tree_selection_internal_select_node (GtkTreeSelection *selection,
   if (selection->type == GTK_SELECTION_SINGLE ||
       selection->type == GTK_SELECTION_BROWSE)
     {
+      /* just unselect */
+      if (selection->type == GTK_SELECTION_BROWSE && override_browse_mode)
+        {
+	  dirty = gtk_tree_selection_real_unselect_all (selection);
+	}
       /* Did we try to select the same node again? */
-      if (selection->type == GTK_SELECTION_SINGLE &&
-	  anchor_path && gtk_tree_path_compare (path, anchor_path) == 0)
+      else if (selection->type == GTK_SELECTION_SINGLE &&
+	       anchor_path && gtk_tree_path_compare (path, anchor_path) == 0)
 	{
 	  if ((state & GDK_CONTROL_MASK) == GDK_CONTROL_MASK)
 	    {

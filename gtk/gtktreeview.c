@@ -1794,7 +1794,8 @@ gtk_tree_view_button_press (GtkWidget      *widget,
 	{
 	  GtkTreePath *cursor = gtk_tree_row_reference_get_path (tree_view->priv->cursor);
 
-	  if (cursor && !gtk_tree_path_compare (cursor, path))
+	  if ((cursor && !gtk_tree_path_compare (cursor, path))
+	      || !_gtk_tree_view_column_has_editable_cell (column))
 	    {
 	      GtkCellEditable *cell_editable = NULL;
 
@@ -7165,7 +7166,8 @@ gtk_tree_view_real_select_cursor_row (GtkTreeView *tree_view,
 					    cursor_node,
 					    cursor_tree,
 					    cursor_path,
-					    state);
+					    state,
+					    FALSE);
 
   gtk_tree_view_clamp_node_visible (tree_view, cursor_tree, cursor_node);
 
@@ -7207,7 +7209,8 @@ gtk_tree_view_real_toggle_cursor_row (GtkTreeView *tree_view)
 					    cursor_node,
 					    cursor_tree,
 					    cursor_path,
-					    GDK_CONTROL_MASK);
+					    GDK_CONTROL_MASK,
+					    FALSE);
 
   gtk_tree_view_clamp_node_visible (tree_view, cursor_tree, cursor_node);
 
@@ -7290,7 +7293,8 @@ gtk_tree_view_real_select_cursor_parent (GtkTreeView *tree_view)
 						cursor_node,
 						cursor_tree,
 						cursor_path,
-						0);
+						0,
+						FALSE);
     }
 
   gtk_tree_view_clamp_node_visible (tree_view, cursor_tree, cursor_node);
@@ -9127,7 +9131,7 @@ gtk_tree_view_real_set_cursor (GtkTreeView     *tree_view,
       if (clear_and_select && !((state & GDK_CONTROL_MASK) == GDK_CONTROL_MASK))
 	_gtk_tree_selection_internal_select_node (tree_view->priv->selection,
 						  node, tree, path,
-						  state);
+						  state, FALSE);
       gtk_tree_view_clamp_node_visible (tree_view, tree, node);
       _gtk_tree_view_queue_draw_node (tree_view, tree, node, NULL);
     }

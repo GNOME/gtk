@@ -1040,6 +1040,19 @@ _gtk_tree_view_column_unset_tree_view (GtkTreeViewColumn *column)
   column->button = NULL;
 }
 
+gboolean
+_gtk_tree_view_column_has_editable_cell (GtkTreeViewColumn *column)
+{
+  GList *list;
+
+  for (list = column->cell_list; list; list = list ->next)
+    if (((GtkTreeViewColumnCellInfo *)list->data)->cell->mode ==
+	GTK_CELL_RENDERER_MODE_EDITABLE)
+      return TRUE;
+
+  return FALSE;
+}
+
 /* Public Functions */
 
 

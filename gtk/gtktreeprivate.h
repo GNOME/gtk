@@ -272,7 +272,8 @@ void         _gtk_tree_selection_internal_select_node (GtkTreeSelection  *select
 						       GtkRBNode         *node,
 						       GtkRBTree         *tree,
 						       GtkTreePath       *path,
-						       GdkModifierType    state);
+						       GdkModifierType    state,
+						       gboolean           override_browse_mode);
 gboolean     _gtk_tree_view_find_node                 (GtkTreeView       *tree_view,
 						       GtkTreePath       *path,
 						       GtkRBTree        **tree,
@@ -311,6 +312,7 @@ void _gtk_tree_view_column_start_editing (GtkTreeViewColumn *tree_column,
 					  GtkCellEditable   *editable_widget);
 void _gtk_tree_view_column_stop_editing  (GtkTreeViewColumn *tree_column);
 void _gtk_tree_view_install_mark_rows_col_dirty (GtkTreeView *tree_view);					 
+gboolean _gtk_tree_view_column_has_editable_cell (GtkTreeViewColumn *column);
 
 GtkTreeSelection* _gtk_tree_selection_new                (void);
 GtkTreeSelection* _gtk_tree_selection_new_with_tree_view (GtkTreeView      *tree_view);

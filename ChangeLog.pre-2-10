@@ -1,3 +1,35 @@
+Tue Apr  9 21:41:24 2002  Kristian Rietveld  <kris@gtk.org>
+
+	Fixes #78110
+
+	* gtk/gtktreeselection.c (_gtk_tree_selection_internal_select_node):
+	add override_browse_mode argument and implement,
+	(gtk_tree_selection_unselect_path): always unselect the path,
+	(toplevel): update uses of _gtk_tree_selection_internal_select_node
+
+	* gtk/gtktreeview.c: update uses of
+	_gtk_tree_selection_internal_select_node
+
+	* gtk/gtktreeprivate.h (_gtk_tree_selection_internal_select_node):
+	update prototype
+
+Tue Apr  9 21:39:44 2002  Kristian Rietveld  <kris@gtk.org>
+
+	Fixes #77862
+
+	* gtk/gtktreeprivate.h: add _gtk_tree_view_column_has_editable_cell
+
+	* gtk/gtktreeviewcolumn.c (_gtk_tree_view_column_has_editable_cell):
+	new function
+
+	* gtk/gtktreeview.c (gtk_tree_view_button_press): send cell event
+	on first click when cell isn't editable
+
+Tue Apr  9 21:37:31 2002  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtktreedatalist.c (_gtk_tree_data_list_check_type): add some
+	types which were missing and useful to use (fixes #77870)
+
 2002-04-09  Anders Carlsson  <andersca@gnu.org>
 
 	* gtk/gtkfilesel.c (open_new_dir): Initialize error to NULL.
