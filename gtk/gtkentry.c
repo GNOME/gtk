@@ -1303,6 +1303,9 @@ gtk_entry_button_press (GtkWidget      *widget,
     {
       gboolean have_selection = gtk_editable_get_selection_bounds (editable, &sel_start, &sel_end);
       
+      entry->select_words = FALSE;
+      entry->select_lines = FALSE;
+
       if (event->state & GDK_SHIFT_MASK)
 	{
 	  gtk_entry_reset_im_context (entry);
@@ -1328,10 +1331,12 @@ gtk_entry_button_press (GtkWidget      *widget,
 		  break;
 		  
 		case GDK_2BUTTON_PRESS:
+		  entry->select_words = TRUE;
 		  gtk_entry_select_word (entry);
 		  break;
 		  
 		case GDK_3BUTTON_PRESS:
+		  entry->select_lines = TRUE;
 		  gtk_entry_select_line (entry);
 		  break;
 
@@ -1382,6 +1387,7 @@ gtk_entry_button_press (GtkWidget      *widget,
  	   * entry->in_drag which may have been set above
            */
 	  entry->in_drag = FALSE;
+	  entry->select_words = TRUE;
 	  gtk_entry_select_word (entry);
 	  break;
 	
@@ -1391,6 +1397,7 @@ gtk_entry_button_press (GtkWidget      *widget,
 	   * entry->in_drag which may have been set above
 	   */
 	  entry->in_drag = FALSE;
+	  entry->select_lines = TRUE;
 	  gtk_entry_select_line (entry);
 	  break;
 
@@ -1460,8 +1467,11 @@ gtk_entry_motion_notify (GtkWidget      *widget,
       entry->mouse_cursor_obscured = FALSE;
     }
 
-  if (event->window != entry->text_area || entry->button !=1)
+  if (event->window != entry->text_area || entry->button != 1)
     return FALSE;
+
+  if (entry->select_lines)
+    return TRUE;
 
   if (event->is_hint || (entry->text_area != event->window))
     gdk_window_get_pointer (entry->text_area, NULL, NULL, NULL);
@@ -1499,6 +1509,45 @@ gtk_entry_motion_notify (GtkWidget      *widget,
       else
 	tmp_pos = gtk_entry_find_position (entry, event->x + entry->scroll_offset);
       
+      if (entry->select_words) 
+	{
+	  gint min, max;
+	  gint old_min, old_max;
+	  gint pos, bound;
+	  
+	  min = gtk_entry_move_backward_word (entry, tmp_pos);
+	  max = gtk_entry_move_forward_word (entry, tmp_pos);
+	  
+	  pos = entry->current_pos;
+	  bound = entry->selection_bound;
+
+	  old_min = MIN(entry->current_pos, entry->selection_bound);
+	  old_max = MAX(entry->current_pos, entry->selection_bound);
+	  
+	  if (min < old_min)
+	    {
+	      pos = min;
+	      bound = old_max;
+	    }
+	  else if (old_max < max) 
+	    {
+	      pos = max;
+	      bound = old_min;
+	    }
+	  else if (pos == old_min) 
+	    {
+	      if (entry->current_pos != min)
+		pos = max;
+	    }
+	  else 
+	    {
+	      if (entry->current_pos != max)
+		pos = min;
+	    }
+	
+	  gtk_entry_set_positions (entry, pos, bound);
+	}
+      else
       gtk_entry_set_positions (entry, tmp_pos, -1);
     }
       

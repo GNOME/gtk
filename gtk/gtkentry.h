@@ -90,6 +90,8 @@ struct _GtkEntry
 
   guint        mouse_cursor_obscured : 1;
   
+  guint        select_words : 1;
+  guint        select_lines : 1;
   guint   button;
   guint   blink_timeout;
   guint   recompute_idle;
