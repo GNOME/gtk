@@ -180,8 +180,8 @@ void       gtk_menu_reorder_child         (GtkMenu             *menu,
 
 #ifndef GTK_DISABLE_DEPRECATED
 #define gtk_menu_append(menu,child)	gtk_menu_shell_append  ((GtkMenuShell *)(menu),(child))
-#define gtk_menu_prepend(menu_child)    gtk_menu_shell_prepend ((GtkMenuShell *)(menu),(child))
-#define gtk_menu_insert(menu,child,pos)	gtk_menu_shell_prepend ((GtkMenuShell *)(menu),(child),(pos))
+#define gtk_menu_prepend(menu,child)    gtk_menu_shell_prepend ((GtkMenuShell *)(menu),(child))
+#define gtk_menu_insert(menu,child,pos)	gtk_menu_shell_insert ((GtkMenuShell *)(menu),(child),(pos))
 #endif /* GTK_DISABLE_DEPRECATED */
 
 #ifdef __cplusplus

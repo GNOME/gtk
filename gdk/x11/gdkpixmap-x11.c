@@ -32,7 +32,8 @@
 #include <unistd.h>
 #include <X11/Xlib.h>
 
-#include <gdk/gdkpixmap.h>
+#include "gdkx.h"
+
 #include "gdkpixmap-x11.h"
 #include "gdkprivate-x11.h"
 #include "gdkscreen-x11.h"
@@ -64,7 +65,7 @@ static void gdk_pixmap_impl_x11_finalize   (GObject            *object);
 
 static gpointer parent_class = NULL;
 
-GType
+static GType
 gdk_pixmap_impl_x11_get_type (void)
 {
   static GType object_type = 0;

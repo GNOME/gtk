@@ -186,10 +186,6 @@ dates_difference(N_int year1, N_int mm1, N_int dd1,
 #define BACKGROUND_COLOR(widget)	 (& (widget)->style->base[GTK_WIDGET_STATE (widget)])
 #define HIGHLIGHT_BACK_COLOR(widget)	 (& (widget)->style->mid[GTK_WIDGET_STATE (widget)])
 
-#define HEADER_FONT(widget) ((widget)->style->font)
-#define LABEL_FONT(widget)   ((widget)->style->font)
-#define DAY_FONT(widget)     ((widget)->style->font)
-
 enum {
   ARROW_YEAR_LEFT,
   ARROW_YEAR_RIGHT,
@@ -451,7 +447,7 @@ gtk_calendar_init (GtkCalendar *calendar)
   for (i=0;i<31;i++)
     calendar->marked_date[i] = FALSE;
   calendar->num_marked_dates = 0;
-  calendar->selected_day = 1;
+  calendar->selected_day = tm->tm_mday;
   
   calendar->display_flags = ( GTK_CALENDAR_SHOW_HEADING | 
 			      GTK_CALENDAR_SHOW_DAY_NAMES );

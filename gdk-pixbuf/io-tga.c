@@ -17,6 +17,9 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
  * Boston, MA 02111-1307, USA.
  *
+ */
+
+/*
  * Some NOTES about the TGA loader (2001/06/07, nikke@swlibero.org)
  *
  * - The module doesn't currently provide support for TGA images where the
@@ -117,6 +120,7 @@ struct _TGAColor {
 struct _TGAContext {
 	TGAHeader *hdr;
 	guint rowstride;
+	guint completed_lines;
 	gboolean run_length_encoded;
 
 	TGAColormap *cmap;
@@ -293,6 +297,7 @@ static gboolean fill_in_context(TGAContext *ctx, GError **err)
 	else if (ctx->hdr->type == TGA_TYPE_TRUECOLOR)
 		ctx->rowstride = ctx->pbuf->rowstride;
 
+	ctx->completed_lines = 0;
 	return TRUE;
 }
 
@@ -724,9 +729,16 @@ static gboolean gdk_pixbuf__tga_load_increment(gpointer data,
 		if (!parse_rle_data(ctx, err))
 			return FALSE;
 	} else {
-		while (ctx->in->size >= ctx->rowstride)
+		while (ctx->in->size >= ctx->rowstride) {
+			if (ctx->completed_lines >= ctx->pbuf->height) {
+				g_set_error(err, GDK_PIXBUF_ERROR, GDK_PIXBUF_ERROR_FAILED,
+					    _("Excess data in file"));
+				return FALSE;
+			}
 			if (!parse_data_for_row(ctx, err))
 				return FALSE;
+			ctx->completed_lines++;
+		}
 	}
 
 	return TRUE;

@@ -25,6 +25,7 @@
  */
 
 #include <math.h>
+#include <stdlib.h>
 #include <string.h>
 #include "gtkgc.h"
 #include "gtkrc.h"
@@ -41,17 +42,11 @@
 /* --- typedefs & structures --- */
 
 typedef struct _PropertyValue PropertyValue;
-typedef struct _StyleDefaultFont StyleDefaultFont;
 
 struct _PropertyValue {
   GType       widget_type;
   GParamSpec *pspec;
   GValue      value;
-};
-
-struct _StyleDefaultFont {
-  GdkFont    *font;
-  GdkDisplay *display;
 };
 
 /* --- prototypes --- */
@@ -415,41 +410,10 @@ static GdkColor gtk_default_active_bg =      { 0, 0xc350, 0xc350, 0xc350 };
 static GdkColor gtk_default_prelight_bg =    { 0, 0xea60, 0xea60, 0xea60 };
 static GdkColor gtk_default_selected_bg =    { 0,      0,      0, 0x9c40 };
 static GdkColor gtk_default_insensitive_bg = { 0, 0xd6d6, 0xd6d6, 0xd6d6 };
+static GdkColor gtk_default_selected_base =  { 0, 0xa4a4, 0xdfdf, 0xffff };
+static GdkColor gtk_default_active_base =    { 0, 0xbcbc, 0xd2d2, 0xeeee };
 
 static gpointer parent_class = NULL;
-
-static GdkFont*
-get_default_font (GtkStyle *style, GdkDisplay *display)
-{
-  static GSList *static_default_font_list = NULL;
-  StyleDefaultFont *default_font;
-  GSList *tmp_list;
-
-  tmp_list = static_default_font_list;
-  while (tmp_list)
-    {
-      default_font = tmp_list->data;
-      
-      if (default_font->display == display)
-	return gdk_font_ref (default_font->font);
-
-      tmp_list = tmp_list->next;
-    }
-
-  default_font = g_new (StyleDefaultFont, 1);
-  default_font->display = display;
-  
-  default_font->font = gdk_font_from_description_for_display (display, style->font_desc);
-  if (!default_font->font) 
-    default_font->font = gdk_font_load_for_display (display, "fixed");
-  if (!default_font->font) 
-    g_error ("Unable to load \"fixed\" font");
-
-  static_default_font_list = g_slist_prepend (static_default_font_list, default_font);
-
-  return gdk_font_ref (default_font->font);
-}
-
 
 /* --- functions --- */
 GType
@@ -520,7 +484,10 @@ gtk_style_init (GtkStyle *style)
       style->base[i] = style->white;
     }
 
-  style->base[GTK_STATE_SELECTED] = gtk_default_selected_bg;
+  style->base[GTK_STATE_SELECTED] = gtk_default_selected_base;
+  style->text[GTK_STATE_SELECTED] = style->black;
+  style->base[GTK_STATE_ACTIVE] = gtk_default_active_base;
+  style->text[GTK_STATE_ACTIVE] = style->black;
   style->base[GTK_STATE_INSENSITIVE] = gtk_default_prelight_bg;
   style->text[GTK_STATE_INSENSITIVE] = gtk_default_insensitive_fg;
   
@@ -588,26 +555,32 @@ gtk_style_class_init (GtkStyleClass *klass)
 }
 
 static void
+clear_property_cache (GtkStyle *style)
+{
+  if (style->property_cache)
+    {
+      guint i;
+
+      for (i = 0; i < style->property_cache->len; i++)
+	{
+	  PropertyValue *node = &g_array_index (style->property_cache, PropertyValue, i);
+
+	  g_param_spec_unref (node->pspec);
+	  g_value_unset (&node->value);
+	}
+      g_array_free (style->property_cache, TRUE);
+      style->property_cache = NULL;
+    }
+}
+
+static void
 gtk_style_finalize (GObject *object)
 {
   GtkStyle *style = GTK_STYLE (object);
 
   g_return_if_fail (style->attach_count == 0);
 
-  if (style->property_cache)
-    {
-      guint i;
-
-      for (i = 0; i < style->property_cache->n_nodes; i++)
-	{
-	  PropertyValue *node = g_bsearch_array_get_nth (style->property_cache, i);
-
-	  g_param_spec_unref (node->pspec);
-	  g_value_unset (&node->value);
-	}
-      g_bsearch_array_destroy (style->property_cache);
-      style->property_cache = NULL;
-    }
+  clear_property_cache (style);
   
   if (style->styles)
     {
@@ -625,10 +598,13 @@ gtk_style_finalize (GObject *object)
           g_slist_free_1 (style->styles);
         }
     }
-  
-  if (style->font)
-    gdk_font_unref (style->font);
   pango_font_description_free (style->font_desc);
+  
+  if (style->private_font)
+    gdk_font_unref (style->private_font);
+
+  if (style->private_font_desc)
+    pango_font_description_free (style->private_font_desc);
   
   if (style->rc_style)
     gtk_rc_style_unref (style->rc_style);
@@ -745,23 +721,23 @@ gtk_style_attach (GtkStyle  *style,
     {
       new_style = gtk_style_duplicate (style);
       if (style->colormap->screen != colormap->screen)
-      {
-	if (new_style->font)
-	  gdk_font_unref (new_style->font);
-	new_style->font = NULL;
-      }
+	{
+	  if (new_style->private_font)
+	    gdk_font_unref (new_style->private_font);
+	  new_style->private_font = NULL;
+	}
       gtk_style_realize (new_style, colormap);
     }
 
   /* A style gets a refcount from being attached */
   if (new_style->attach_count == 0)
-    gtk_style_ref (new_style);
+    g_object_ref (new_style);
 
   /* Another refcount belongs to the parent */
   if (style != new_style) 
     {
-      gtk_style_unref (style);
-      gtk_style_ref (new_style);
+      g_object_unref (style);
+      g_object_ref (new_style);
     }
   
   new_style->attach_count++;
@@ -782,7 +758,7 @@ gtk_style_detach (GtkStyle *style)
       gdk_colormap_unref (style->colormap);
       style->colormap = NULL;
       
-      gtk_style_unref (style);
+      g_object_unref (style);
     }
 }
 
@@ -1214,12 +1190,12 @@ gtk_style_real_copy (GtkStyle *style,
       
       style->bg_pixmap[i] = src->bg_pixmap[i];
     }
-
-  if (style->font)
-    gdk_font_unref (style->font);
-  style->font = src->font;
-  if (style->font)
-    gdk_font_ref (style->font);
+  
+  if (style->private_font)
+    gdk_font_unref (style->private_font);
+  style->private_font = src->private_font;
+  if (style->private_font)
+    gdk_font_ref (style->private_font);
 
   if (style->font_desc)
     pango_font_description_free (style->font_desc);
@@ -1238,20 +1214,7 @@ gtk_style_real_copy (GtkStyle *style,
     gtk_rc_style_ref (src->rc_style);
 
   /* don't copy, just clear cache */
-  if (style->property_cache)
-    {
-      guint i;
-
-      for (i = 0; i < style->property_cache->n_nodes; i++)
-	{
-	  PropertyValue *node = g_bsearch_array_get_nth (style->property_cache, i);
-
-	  g_param_spec_unref (node->pspec);
-	  g_value_unset (&node->value);
-	}
-      g_bsearch_array_destroy (style->property_cache);
-      style->property_cache = NULL;
-    }
+  clear_property_cache (style);
 }
 
 static void
@@ -1261,28 +1224,12 @@ gtk_style_real_init_from_rc (GtkStyle   *style,
   gint i;
 
   /* cache _should_ be still empty */
-  if (style->property_cache)
-    {
-      guint i;
-
-      for (i = 0; i < style->property_cache->n_nodes; i++)
-	{
-	  PropertyValue *node = g_bsearch_array_get_nth (style->property_cache, i);
-
-	  g_param_spec_unref (node->pspec);
-	  g_value_unset (&node->value);
-	}
-      g_bsearch_array_destroy (style->property_cache);
-      style->property_cache = NULL;
-    }
+  clear_property_cache (style);
 
   if (rc_style->font_desc)
     {
       pango_font_description_free (style->font_desc);
       style->font_desc = pango_font_description_copy (rc_style->font_desc);
-
-      if (style->font)
-	gdk_font_unref (style->font);
     }
     
   for (i = 0; i < 5; i++)
@@ -1324,13 +1271,11 @@ style_property_values_cmp (gconstpointer bsearch_node1,
 {
   const PropertyValue *val1 = bsearch_node1;
   const PropertyValue *val2 = bsearch_node2;
-  gint cmp;
 
-  cmp = G_BSEARCH_ARRAY_CMP (val1->widget_type, val2->widget_type);
-  if (cmp == 0)
-    cmp = G_BSEARCH_ARRAY_CMP (val1->pspec, val2->pspec);
-
-  return cmp;
+  if (val1->widget_type == val2->widget_type)
+    return val1->pspec < val2->pspec ? -1 : val1->pspec == val2->pspec ? 0 : 1;
+  else
+    return val1->widget_type < val2->widget_type ? -1 : 1;
 }
 
 const GValue*
@@ -1341,23 +1286,35 @@ _gtk_style_peek_property_value (GtkStyle           *style,
 {
   PropertyValue *pcache, key = { 0, NULL, { 0, } };
   const GtkRcProperty *rcprop = NULL;
+  guint i;
 
   g_return_val_if_fail (GTK_IS_STYLE (style), NULL);
   g_return_val_if_fail (G_IS_PARAM_SPEC (pspec), NULL);
   g_return_val_if_fail (g_type_is_a (pspec->owner_type, GTK_TYPE_WIDGET), NULL);
   g_return_val_if_fail (g_type_is_a (widget_type, pspec->owner_type), NULL);
 
-  /* need value cache array */
-  if (!style->property_cache)
-    style->property_cache = g_bsearch_array_new (sizeof (PropertyValue),
-						 style_property_values_cmp,
-						 0);
-  /* lookup, or insert value if not yet present */
   key.widget_type = widget_type;
   key.pspec = pspec;
-  pcache = g_bsearch_array_insert (style->property_cache, &key, FALSE);
-  if (G_VALUE_TYPE (&pcache->value))
-    return &pcache->value;
+
+  /* need value cache array */
+  if (!style->property_cache)
+    style->property_cache = g_array_new (FALSE, FALSE, sizeof (PropertyValue));
+  else
+    {
+      pcache = bsearch (&key,
+			style->property_cache->data, style->property_cache->len,
+			sizeof (PropertyValue), style_property_values_cmp);
+      if (pcache)
+	return &pcache->value;
+    }
+
+  i = 0;
+  while (i < style->property_cache->len &&
+	 style_property_values_cmp (&key, &g_array_index (style->property_cache, PropertyValue, i)) >= 0)
+    i++;
+
+  g_array_insert_val (style->property_cache, i, key);
+  pcache = &g_array_index (style->property_cache, PropertyValue, i);
 
   /* cache miss, initialize value type, then set contents */
   g_param_spec_ref (pcache->pspec);
@@ -1443,19 +1400,7 @@ gtk_style_real_realize (GtkStyle *style)
   gdk_color_black (style->colormap, &style->black);
   gdk_color_white (style->colormap, &style->white);
   
-  gc_values_mask = GDK_GC_FOREGROUND | GDK_GC_FONT;
-
-  if (!style->font)
-    style->font = get_default_font (style, gdk_screen_get_display (style->colormap->screen));
-  
-  if (style->font->type == GDK_FONT_FONT)
-    {
-      gc_values.font = style->font;
-    }
-  else if (style->font->type == GDK_FONT_FONTSET)
-    {
-      gc_values.font = get_default_font (style, gdk_screen_get_display (style->colormap->screen));
-    }
+  gc_values_mask = GDK_GC_FOREGROUND;
   
   gc_values.foreground = style->black;
   style->black_gc = gtk_gc_get (style->depth, style->colormap, &gc_values, gc_values_mask);
@@ -2844,8 +2789,10 @@ gtk_default_draw_string (GtkStyle      *style,
                          gint           y,
                          const gchar   *string)
 {
+  GdkDisplay *display;
   g_return_if_fail (GTK_IS_STYLE (style));
   g_return_if_fail (window != NULL);
+  display = gdk_drawable_get_display (window);
   
   if (area)
     {
@@ -2854,9 +2801,13 @@ gtk_default_draw_string (GtkStyle      *style,
     }
 
   if (state_type == GTK_STATE_INSENSITIVE)
-    gdk_draw_string (window, style->font, style->white_gc, x + 1, y + 1, string);
+    gdk_draw_string (window,
+		     gtk_style_get_font_for_display (display, style),
+		     style->white_gc, x + 1, y + 1, string);
 
-  gdk_draw_string (window, style->font, style->fg_gc[state_type], x, y, string);
+  gdk_draw_string (window,
+		   gtk_style_get_font_for_display (display, style),
+		   style->fg_gc[state_type], x, y, string);
 
   if (area)
     {
@@ -3004,12 +2955,10 @@ gtk_default_draw_flat_box (GtkStyle      *style,
 		   !strncmp ("cell_odd", detail, strlen ("cell_odd")))
             {
 	      /* This has to be really broken; alex made me do it. -jrb */
-	      /* Red rum!!! REd RUM!!! */
 	      if (GTK_WIDGET_HAS_FOCUS (widget))
-		gc1 = style->bg_gc[state_type];
+		gc1 = style->base_gc[state_type];
 	      else 
-		gc1 = style->bg_gc[GTK_STATE_ACTIVE];
-	      
+		gc1 = style->base_gc[GTK_STATE_ACTIVE];
             }
           else
             {
@@ -3104,19 +3053,12 @@ gtk_default_draw_check (GtkStyle      *style,
                           x, y,
 			  width, height);
 
+      x -= (1 + INDICATOR_PART_SIZE - width) / 2;
+      y -= (((1 + INDICATOR_PART_SIZE - height) / 2) - 1);
       if (shadow_type == GTK_SHADOW_IN)
 	{
-	  gdk_draw_line (window,
-			 widget->style->fg_gc[state_type],
-                         x, y,
-                         x + width,
-                         y + height);
-	  gdk_draw_line (window,
-			 widget->style->fg_gc[state_type],
-                         x + width,
-                         y,
-                         x,
-                         y + height);
+	  draw_part (window, style->text_gc[state_type], area, x, y, CHECK_TEXT);
+	  draw_part (window, style->text_aa_gc[state_type], area, x, y, CHECK_AA);
 	}
     }
   else
@@ -5050,5 +4992,211 @@ void
 gtk_border_free (GtkBorder *border)
 {
   g_free (border);
+}
+/**
+ * gtk_style_get_font_for_display:
+ * @display : a #GdkDisplay
+ * @style: a #GtkStyle
+ * 
+ * Gets the #GdkFont to use for the given style. This is
+ * meant only as a replacement for direct access to style->font
+ * and should not be used in new code. New code should
+ * use style->font_desc instead.
+ * 
+ * Return value: the #GdkFont for the style. This font is owned
+ *   by the style; if you want to keep around a copy, you must
+ *   call gdk_font_ref().
+ **/
+
+GdkFont *
+gtk_style_get_font_for_display (GdkDisplay *display,
+				GtkStyle   *style)
+{
+  g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
+  g_return_val_if_fail (GTK_IS_STYLE (style), NULL);
+
+  if (style->private_font && style->private_font_desc)
+    {
+      if (!style->font_desc ||
+	  !pango_font_description_equal (style->private_font_desc, style->font_desc))
+	{
+	  gdk_font_unref (style->private_font);
+	  style->private_font = NULL;
+	  
+	  if (style->private_font_desc)
+	    {
+	      pango_font_description_free (style->private_font_desc);
+	      style->private_font_desc = NULL;
+	    }
+	}
+    }
+  
+  if (!style->private_font)
+    {
+      if (style->font_desc)
+	{
+	  /* no colormap, no screen */
+	  style->private_font = gdk_font_from_description_for_display (display, style->font_desc);
+	  style->private_font_desc = pango_font_description_copy (style->font_desc);
+	}
+
+      if (!style->private_font)
+	style->private_font = gdk_font_load_for_display (display,
+							 "fixed");
+      if (!style->private_font) 
+	g_error ("Unable to load \"fixed\" font");
+    }
+
+  return style->private_font;
+}
+
+
+/**
+ * gtk_style_get_font:
+ * @style: a #GtkStyle
+ * 
+ * Gets the #GdkFont to use for the given style. This is
+ * meant only as a replacement for direct access to style->font
+ * and should not be used in new code. New code should
+ * use style->font_desc instead.
+ * 
+ * Return value: the #GdkFont for the style. This font is owned
+ *   by the style; if you want to keep around a copy, you must
+ *   call gdk_font_ref().
+ **/
+#ifndef GDK_MULTIHEAD_SAFE
+GdkFont *
+gtk_style_get_font (GtkStyle *style)
+{
+  g_return_val_if_fail (GTK_IS_STYLE (style), NULL);
+
+  if (style->private_font && style->private_font_desc)
+    {
+      if (!style->font_desc ||
+	  !pango_font_description_equal (style->private_font_desc, style->font_desc))
+	{
+	  gdk_font_unref (style->private_font);
+	  style->private_font = NULL;
+	  
+	  if (style->private_font_desc)
+	    {
+	      pango_font_description_free (style->private_font_desc);
+	      style->private_font_desc = NULL;
+	    }
+	}
+    }
+  
+  if (!style->private_font)
+    {
+      if (style->font_desc)
+	{
+	  /* no colormap, no screen */
+	  style->private_font = gdk_font_from_description_for_display (
+				    gdk_get_default_screen (),
+				    style->font_desc);
+	  style->private_font_desc = pango_font_description_copy (style->font_desc);
+	}
+
+      if (!style->private_font)
+	style->private_font = gdk_font_load_for_display (
+				  gdk_get_default_screen (),
+				  "fixed");
+      if (!style->private_font) 
+	g_error ("Unable to load \"fixed\" font");
+    }
+
+  return style->private_font;
+}
+#endif
+
+/**
+ * gtk_style_set_font:
+ * @style: a #GtkStyle.
+ * @font: a #GdkFont, or %NULL to use the #GdkFont corresponding
+ *   to style->font_desc.
+ * 
+ * Sets the #GdkFont to use for a given style. This is
+ * meant only as a replacement for direct access to style->font
+ * and should not be used in new code. New code should
+ * use style->font_desc instead.
+ **/
+void
+gtk_style_set_font (GtkStyle *style,
+		    GdkFont  *font)
+{
+  GdkFont *old_font;
+
+  g_return_if_fail (GTK_IS_STYLE (style));
+
+  old_font = style->private_font;
+
+  style->private_font = font;
+  if (font)
+    gdk_font_ref (font);
+
+  if (old_font)
+    gdk_font_unref (old_font);
+
+  if (style->private_font_desc)
+    {
+      pango_font_description_free (style->private_font_desc);
+      style->private_font_desc = NULL;
+    }
+}
+
+/**
+ * _gtk_draw_insertion_cursor:
+ * @drawable: a #GdkDrawable
+ * @gc: a #GdkGC
+ * @location: location where to draw the cursor (@location->width is ignored)
+ * @dir: text direction for the cursor, used to decide whether to draw a
+ *       directional arrow on the cursor and in what direction. Unless both
+ *       strong and weak cursors are displayed, this should be %GTK_TEXT_DIR_NONE.
+ * 
+ * Draws a text caret on @drawable at @location. This is not a style function
+ * but merely a convenience function for drawing the standard cursor shape.
+ **/
+void
+_gtk_draw_insertion_cursor (GdkDrawable      *drawable,
+			    GdkGC            *gc,
+			    GdkRectangle     *location,
+			    GtkTextDirection  dir)
+{
+  gint stem_width = location->height / 30 + 1;
+  gint arrow_width = stem_width + 1;
+  gint x, y;
+  gint i;
+
+  for (i = 0; i < stem_width; i++)
+    gdk_draw_line (drawable, gc,
+		   location->x + i - stem_width / 2, location->y,
+		   location->x + i - stem_width / 2, location->y + location->height);
+
+  if (dir == GTK_TEXT_DIR_RTL)
+    {
+      x = location->x - stem_width / 2 - 1;
+      y = location->y + location->height - arrow_width * 2 - arrow_width + 1;
+  
+      for (i = 0; i < arrow_width; i++)
+	{
+	  gdk_draw_line (drawable, gc,
+			 x, y + i + 1,
+			 x, y + 2 * arrow_width - i - 1);
+	  x --;
+	}
+    }
+  else if (dir == GTK_TEXT_DIR_LTR)
+    {
+      x = location->x + stem_width - stem_width / 2;
+      y = location->y + location->height - arrow_width * 2 - arrow_width + 1;
+  
+      for (i = 0; i < arrow_width; i++) 
+	{
+	  gdk_draw_line (drawable, gc,
+			 x, y + i + 1,
+			 x, y + 2 * arrow_width - i - 1);
+	  x++;
+	}
+    }
 }
 

@@ -28,6 +28,7 @@
 #include <X11/Xutil.h>
 #include <X11/Xatom.h>
 #include <netinet/in.h>
+#include <unistd.h>
 #include "gdk.h"
 #include "config.h"
 
@@ -51,7 +52,7 @@
 #include <X11/extensions/shape.h>
 #endif
 
-const int gdk_event_mask_table[21] =
+const int _gdk_event_mask_table[21] =
 {
   ExposureMask,
   PointerMotionMask,
@@ -75,7 +76,7 @@ const int gdk_event_mask_table[21] =
   SubstructureNotifyMask,
   ButtonPressMask      /* SCROLL; on X mouse wheel events is treated as mouse button 4/5 */
 };
-const int gdk_nevent_masks = sizeof (gdk_event_mask_table) / sizeof (int);
+const int _gdk_nenvent_masks = sizeof (_gdk_event_mask_table) / sizeof (int);
 
 /* Forward declarations */
 static gboolean gdk_window_gravity_works          (GdkDisplay * display);
@@ -341,6 +342,7 @@ gdk_window_new (GdkWindow     *parent,
   unsigned int class;
   char *title;
   int i;
+  int pid;
   
   g_return_val_if_fail (attributes != NULL, NULL);
 
@@ -419,10 +421,10 @@ gdk_window_new (GdkWindow     *parent,
   xvisual = ((GdkVisualPrivate*) visual)->xvisual;
   
   xattributes.event_mask = StructureNotifyMask;
-  for (i = 0; i < gdk_nevent_masks; i++)
+  for (i = 0; i < _gdk_nenvent_masks; i++)
     {
       if (attributes->event_mask & (1 << (i + 1)))
-	xattributes.event_mask |= gdk_event_mask_table[i];
+	xattributes.event_mask |= _gdk_event_mask_table[i];
     }
   
   if (xattributes.event_mask)
@@ -612,6 +614,18 @@ gdk_window_new (GdkWindow     *parent,
   XSetWMNormalHints (xdisplay, xid, &size_hints);
   
   XSetWMHints (xdisplay, xid, &wm_hints);
+  
+  /* This will set WM_CLIENT_MACHINE and WM_LOCALE_NAME */
+  XSetWMProperties (xdisplay, xid, NULL, NULL, NULL, 0, NULL, NULL, NULL);
+
+  pid = getpid ();
+  XChangeProperty (xdisplay, xid,
+		   gdk_x11_get_real_atom_by_name(screen_impl->display,
+						 "_NET_WM_PID"),
+		   XA_CARDINAL, 32,
+		   PropModeReplace,
+		   (guchar *)&pid, 1);
+
   
   XChangeProperty (xdisplay, 
 		   xid, 
@@ -2185,9 +2199,9 @@ gdk_window_get_events (GdkWindow *window)
 			    &attrs);
       
       event_mask = 0;
-      for (i = 0; i < gdk_nevent_masks; i++)
+      for (i = 0; i < _gdk_nenvent_masks; i++)
 	{
-	  if (attrs.your_event_mask & gdk_event_mask_table[i])
+	  if (attrs.your_event_mask & _gdk_event_mask_table[i])
 	    event_mask |= 1 << (i + 1);
 	}
   
@@ -2208,10 +2222,10 @@ gdk_window_set_events (GdkWindow       *window,
   if (!GDK_WINDOW_DESTROYED (window))
     {
       xevent_mask = StructureNotifyMask;
-      for (i = 0; i < gdk_nevent_masks; i++)
+      for (i = 0; i < _gdk_nenvent_masks; i++)
 	{
 	  if (event_mask & (1 << (i + 1)))
-	    xevent_mask |= gdk_event_mask_table[i];
+	    xevent_mask |= _gdk_event_mask_table[i];
 	}
       
       XSelectInput (GDK_WINDOW_XDISPLAY (window),

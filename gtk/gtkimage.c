@@ -1104,7 +1104,6 @@ gtk_image_get_animation (GtkImage *image)
 
 /**
  * gtk_image_new:
- * @void: a #GtkImage
  * 
  * Creates a new empty #GtkImage widget.
  * 

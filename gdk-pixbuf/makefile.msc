@@ -5,6 +5,10 @@ PKG_VER = $(GDK_PIXBUF_VER)
 
 !INCLUDE $(TOP)/build/win32/make.msc
 
+!IFNDEF PERL
+PERL = perl
+!ENDIF
+
 GDK_PIXBUF_VER = 1.3
 
 # force inclusion of gdk-pixbuf-io-include.h
@@ -13,6 +17,7 @@ GDK_PIXBUF_VER = 1.3
 PKG_CFLAGS = -I. -I.. $(GLIB_CFLAGS) \
 	-FIgdk-pixbuf-io-include.h \
 	$(JPEG_CFLAGS) $(PNG_CFLAGS) $(TIFF_CFLAGS) $(INTL_CFLAGS) \
+	$(G_DEBUGGING) \
 	-UUSE_GMODULE # use built-in
 #	-DUSE_GMODULE -DPIXBUF_LIBDIR=\".\"
 
@@ -23,6 +28,7 @@ PKG_LINK = $(GLIB_LIBS) \
 	pixops\pixops.lib \
  
 OBJECTS = \
+	gdk-pixbuf-enum-types.obj \
 	gdk-pixbuf-animation.obj \
 	gdk-pixbuf-data.obj \
 	gdk-pixbuf-io.obj \
@@ -43,6 +49,10 @@ OBJECTS = \
 	io-xpm.obj \
 	io-jpeg.obj \
 
+gdk_pixbuf_headers = 			\
+	gdk-pixbuf.h			\
+	gdk-pixbuf-loader.h
+
 gdk-pixbuf-marshal.h: gdk-pixbuf-marshal.list
 	..\..\glib\gobject\glib-genmarshal --prefix=gdk_pixbuf_marshal gdk-pixbuf-marshal.list --header >gdk-pixbuf-marshal.h
 
@@ -51,11 +61,6 @@ gdk-pixbuf-marshal.c: gdk-pixbuf-marshal.list
 
 ## common stuff
 
-# cl -? describes the options
-CC = cl -G5 -GF $(OPTIMIZE) $(CRUNTIME) -W3 -nologo
-
-# No general LDFLAGS needed
-LDFLAGS = /link $(LINKDEBUG)
 INSTALL = copy
 
 CFLAGS = -I. -DHAVE_CONFIG_H
@@ -72,12 +77,13 @@ all : \
 	gdk-pixbuf-marshal.h \
 	sub-pixops \
 	$(PACKAGE)-$(PKG_VER).dll \
+	$(PACKAGE)-$(PKG_VER)s.lib \
 #	make-inline-pixbuf.exe \
 	gdk-pixbuf-csource.exe \
 	test-gdk-pixbuf.exe
 
-$(PACKAGE).lib : $(OBJECTS)
-	lib /out:$(PACKAGE).lib $(OBJECTS)
+$(PACKAGE)-$(PKG_VER)s.lib : $(OBJECTS)
+	lib /out:$(PACKAGE)-$(PKG_VER)s.lib $(OBJECTS) pixops\pixops.lib
 
 $(PACKAGE)-$(PKG_VER).dll : $(OBJECTS) $(PACKAGE).def
 	$(CC) $(CFLAGS) -LD -Fe$(PACKAGE)-$(PKG_VER).dll $(OBJECTS) $(PKG_LINK) user32.lib advapi32.lib wsock32.lib $(LDFLAGS) /def:$(PACKAGE).def
@@ -90,6 +96,31 @@ gdk-pixbuf-csource.exe : gdk-pixbuf-csource.c
 
 test-gdk-pixbuf.exe : test-gdk-pixbuf.c
 	$(CC) $(PKG_CFLAGS) -Fetest-gdk-pixbuf.exe test-gdk-pixbuf.c $(PKG_LINK) $(PACKAGE)-$(PKG_VER).lib
+
+#
+# gdk-pixbuf-enum-types.h
+#
+gdk-pixbuf-enum-types.h : $(gdk_pixbuf_headers) makefile.msc
+	$(PERL) $(GLIB)\gobject\glib-mkenums \
+		--fhead "#ifndef __GDK_PIXBUF__ENUM_TYPES_H__\n#define __GDK_PIXBUF_ENUM_TYPES_H__\n" \
+		--fprod "/* enumerations from \"@filename@\" */\n" \
+		--vhead "GType @enum_name@_get_type (void);\n#define GDK_TYPE_@ENUMSHORT@ (@enum_name@_get_type())\n"         \
+		--ftail "#endif /* __GDK_PIXBUF_ENUM_TYPES_H__ */" \
+		$(gdk_pixbuf_headers) ) > gdk-pixbuf-enum-types.h
+
+#
+# gdk-pixbuf-enum-types.c
+#
+gdk-pixbuf-enum-types.c: $(gdk_pixbuf_headers) makefile.msc
+	$(PERL) $(GLIB)\gobject\glib-mkenums \
+		--fhead "#include <gdk-pixbuf/gdk-pixbuf.h>" \
+		--fprod "\n/* enumerations from \"@filename@\" */" \
+		--vhead "GType\n@enum_name@_get_type (void)\n{\n  static GType etype = 0;\n  if (etype == 0) {\n    static const G@Type@Value values[] = {"       \
+		--vprod "      { @VALUENAME@, \"@VALUENAME@\", \"@valuenick@\" }," \
+		--vtail "      { 0, NULL, NULL }\n    };\n    etype = g_@type@_register_static (\"@EnumName@\", values);\n  }\n  return etype;\n}\n" \
+		  $(gdk_pixbuf_headers) > gdk-pixbuf-enum-types.c
+
+gdk-pixbuf-enum-types.obj : gdk-pixbuf-enum-types.c gdk-pixbuf-enum-types.h
 
 $(PRJ_TOP)\config.h: $(PRJ_TOP)\config.h.win32
 	copy $(PRJ_TOP)\config.h.win32 $(PRJ_TOP)\config.h

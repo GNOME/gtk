@@ -103,6 +103,13 @@ gboolean gtk_init_check_abi_check (int	  *argc,
 
 #endif
 
+#ifdef G_OS_WIN32
+/* don't hard-code any absolute directory but calculate then from
+ * regristy settings or gtk-*.*.dll placement. 
+ */
+gchar *get_gtk_win32_directory (gchar *subdir);
+#endif
+
 #ifndef GTK_DISABLE_DEPRECATED
 void     gtk_exit                 (gint    error_code);
 #endif /* GTK_DISABLE_DEPRECATED */

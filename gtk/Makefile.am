@@ -9,6 +9,7 @@ INCLUDES = @STRIP_BEGIN@ \
 	-DGTK_SYSCONFDIR=\"$(sysconfdir)\"		\
 	-DGTK_LOCALEDIR=\"$(gtklocaledir)\"		\
 	-DGTK_VERSION=\"@GTK_VERSION@\"			\
+	-DGTK_BINARY_VERSION=\"@GTK_BINARY_VERSION@\"	\
 	-DTESTGTK_RCFILE=\"`pwd`/$(srcdir)/testgtkrc\"	\
 	-DG_DISABLE_CONST_RETURNS			\
 	-I$(top_builddir)/gtk				\
@@ -68,8 +69,8 @@ gtk_public_h_sources = @STRIP_BEGIN@ \
 	gtkctree.h		\
 	gtkcurve.h		\
 	gtkcellrenderer.h	\
+	gtkcelleditable.h	\
 	gtkcellrenderertext.h	\
-	gtkcellrenderertextpixbuf.h	\
 	gtkcellrenderertoggle.h	\
 	gtkcellrendererpixbuf.h	\
 	gtkdebug.h              \
@@ -215,8 +216,8 @@ gtk_c_sources = @STRIP_BEGIN@   \
 	gtkbutton.c		\
 	gtkcalendar.c		\
 	gtkcellrenderer.c	\
+	gtkcelleditable.c	\
 	gtkcellrenderertext.c	\
-	gtkcellrenderertextpixbuf.c	\
 	gtkcellrenderertoggle.c	\
 	gtkcellrendererpixbuf.c	\
 	gtkcheckbutton.c	\
@@ -400,9 +401,9 @@ gtk_extra_sources = @STRIP_BEGIN@ \
 #
 gtk_target_headers = $(gtk_public_h_sources) $(gtk_built_public_sources) gtkversion.h
 gtk_target_sources = $(gtk_c_sources) $(gtk_plug_c_sources)
-MAINTAINERCLEANFILES += $(gtk_built_sources)
-EXTRA_HEADERS +=
-EXTRA_DIST += $(gtk_private_h_sources) $(gtk_extra_sources)
+MAINTAINERCLEANFILES = $(gtk_built_sources)
+EXTRA_HEADERS =
+EXTRA_DIST = $(gtk_private_h_sources) $(gtk_extra_sources)
 EXTRA_DIST += $(gtk_built_sources)
 
 #
@@ -410,7 +411,7 @@ EXTRA_DIST += $(gtk_built_sources)
 #
 # setup autogeneration dependancies
 gen_sources = xgen-gdef xgen-gtbh xgen-gtbvc xgen-gtbic xgen-gtbec xgen-gmh xgen-gmc
-CLEANFILES += $(gen_sources)
+CLEANFILES = $(gen_sources)
 Makefile: oldest-source-stamp	# oh boy, does automake SUCK!
 oldest-source-stamp: $(gtk_built_sources)
 $(OBJECTS): oldest-source-stamp  ${gtk_built_public_sources} # this is our oldest file, used for implicit auto-generation deps
@@ -499,17 +500,12 @@ libgtk_x11_includedir = $(includedir)/gtk-2.0/gtk
 libgtk_x11_include_HEADERS = $(gtk_target_headers)
 libgtk_x11_1_3_la_SOURCES = $(gtk_target_sources)
 endif
-if USE_NANOX
-libgtk_nanox_includedir = $(includedir)/gtk-2.0/gtk
-libgtk_nanox_include_HEADERS = $(gtk_target_headers)
-libgtk_nanox_1_3_la_SOURCES = $(gtk_target_sources)
-endif
 if USE_LINUX_FB
 libgtk_linux_fb_includedir = $(includedir)/gtk-2.0/gtk
 libgtk_linux_fb_include_HEADERS = $(gtk_target_headers)
 libgtk_linux_fb_1_3_la_SOURCES = $(gtk_target_sources)
 endif
-EXTRA_LTLIBRARIES = libgtk-x11-1.3.la libgtk-nanox-1.3.la libgtk-linux-fb-1.3.la
+EXTRA_LTLIBRARIES = libgtk-x11-1.3.la libgtk-linux-fb-1.3.la
 
 
 # We create a dummy theme for the default GTK+ theme

@@ -613,6 +613,14 @@ lzw_read_byte (GifContext *context)
 		}
 
 		while (code >= context->lzw_clear_code) {
+                        if ((code >= (1 << MAX_LZW_BITS)) 
+                            || (context->lzw_sp >= context->lzw_stack + ((1 << (MAX_LZW_BITS)) * 2 + 1))) {
+                                g_set_error (context->error,
+                                             GDK_PIXBUF_ERROR,
+                                             GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
+                                             _("Bad code encountered"));
+				return -2;
+                        }
 			*(context->lzw_sp)++ = context->lzw_table[1][code];
 
 			if (code == context->lzw_table[0][code]) {
@@ -1038,7 +1046,7 @@ gif_init (GifContext *context)
                              GDK_PIXBUF_ERROR,
                              GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
                              _("File does not appear to be a GIF file"));
-		return -1;
+		return -2;
 	}
 
 	strncpy (version, (char *) buf + 3, 3);
@@ -1051,7 +1059,7 @@ gif_init (GifContext *context)
                              GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
                              _("Version %s of the GIF file format is not supported"),
                              version);
-		return -1;
+		return -2;
 	}
 
 	/* read the screen descriptor */

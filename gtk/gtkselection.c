@@ -61,8 +61,6 @@
 #include "win32/gdkwin32.h"	/* For gdk_window_lookup() */
 #elif defined (GDK_WINDOWING_FB)
 #include "linux-fb/gdkfb.h"	/* For gdk_window_lookup() */
-#elif defined (GDK_WINDOWING_NANOX)
-#include "nanox/gdkprivate-nanox.h"	/* For gdk_window_lookup() */
 #endif
 
 #include "gtkmain.h"
@@ -1483,14 +1481,11 @@ gtk_selection_property_notify (GtkWidget	*widget,
   g_return_val_if_fail (widget != NULL, FALSE);
   g_return_val_if_fail (event != NULL, FALSE);
 
-#if defined(GDK_WINDOWING_WIN32) 
+#if defined(GDK_WINDOWING_WIN32) || defined(GDK_WINDOWING_X11)
   if ((event->state != GDK_PROPERTY_NEW_VALUE) ||  /* property was deleted */
-      (event->atom != gdk_selection_property)) /* not the right property */
-#elif defined(GDK_WINDOWING_X11)	  
-if ((event->state != GDK_PROPERTY_NEW_VALUE) ||  /* property was deleted */
-    (event->atom != gdk_atom_intern ("GDK_SELECTION", FALSE)))/* not the right property */
+      (event->atom != gdk_atom_intern ("GDK_SELECTION", FALSE))) /* not the right property */
 #endif
-	  return FALSE;
+    return FALSE;
   
 #ifdef DEBUG_SELECTION
   g_message ("PropertyNewValue, property %ld",

@@ -117,6 +117,8 @@ gtk_invisible_class_init (GtkInvisibleClass *class)
 static void
 gtk_invisible_init (GtkInvisible *invisible)
 {
+  GdkColormap *colormap;
+  
   GTK_WIDGET_UNSET_FLAGS (invisible, GTK_NO_WINDOW);
   GTK_WIDGET_SET_FLAGS (invisible, GTK_TOPLEVEL);
 
@@ -125,6 +127,10 @@ gtk_invisible_init (GtkInvisible *invisible)
 
   invisible->has_user_ref_count = TRUE;
   invisible->screen = gdk_get_default_screen ();
+  
+  colormap = _gtk_widget_peek_colormap ();
+  if (colormap)
+    gtk_widget_set_colormap (GTK_WIDGET (invisible), colormap);
 }
 
 static void

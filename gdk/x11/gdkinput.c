@@ -33,6 +33,7 @@
 #include "gdkinput.h"
 #include "gdkprivate.h"
 #include "gdkinputprivate.h"
+#include "gdkscreen-x11.h"
 #include "gdkdisplay-x11.h"
 #include "gdkdisplaymgr-x11.h"
 
@@ -41,29 +42,29 @@ static GdkDeviceAxis gdk_input_core_axes[] = {
   { GDK_AXIS_Y, 0, 0 }
 };
 
-GdkDevice *gdk_core_pointer = NULL;
+GdkDevice *_gdk_core_pointer = NULL;
  
 /* Global variables  */
 
 /* information about network port and host for gxid daemon 
  * use the GdkDisplayImplX11 equivalent members, these are 
  * command line arguments */
-gchar            *gdk_input_gxid_host;
-gint              gdk_input_gxid_port;
+gchar            *_gdk_input_gxid_host;
+gint              _gdk_input_gxid_port;
 
 void
 _gdk_init_input_core (void)
 {
-  gdk_core_pointer = g_object_new (GDK_TYPE_DEVICE, NULL);
+  _gdk_core_pointer = g_object_new (GDK_TYPE_DEVICE, NULL);
   
-  gdk_core_pointer->name = "Core Pointer";
-  gdk_core_pointer->source = GDK_SOURCE_MOUSE;
-  gdk_core_pointer->mode = GDK_MODE_SCREEN;
-  gdk_core_pointer->has_cursor = TRUE;
-  gdk_core_pointer->num_axes = 2;
-  gdk_core_pointer->axes = gdk_input_core_axes;
-  gdk_core_pointer->num_keys = 0;
-  gdk_core_pointer->keys = NULL;
+  _gdk_core_pointer->name = "Core Pointer";
+  _gdk_core_pointer->source = GDK_SOURCE_MOUSE;
+  _gdk_core_pointer->mode = GDK_MODE_SCREEN;
+  _gdk_core_pointer->has_cursor = TRUE;
+  _gdk_core_pointer->num_axes = 2;
+  _gdk_core_pointer->axes = gdk_input_core_axes;
+  _gdk_core_pointer->num_keys = 0;
+  _gdk_core_pointer->keys = NULL;
 }
 
 GType
@@ -342,7 +343,7 @@ gdk_input_window_destroy (GdkWindow *window)
 }
 
 void
-gdk_input_exit (void)
+_gdk_input_exit (void)
 {
   GList *tmp_list;
   GSList *display_list;

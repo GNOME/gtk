@@ -27,7 +27,7 @@
 #include <X11/Xlib.h>
 #include <X11/cursorfont.h>
 
-#include "gdkx.h"
+#include "gdkprivate-x11.h"
 #include "gdkcursor.h"
 #include "gdkpixmap-x11.h"
 #include <gdk/gdkpixmap.h>
@@ -121,4 +121,20 @@ _gdk_cursor_destroy (GdkCursor *cursor)
   XFreeCursor (GDK_SCREEN_XDISPLAY (private->screen), private->xcursor);
 
   g_free (private);
+}
+
+Display *
+gdk_x11_cursor_get_xdisplay (GdkCursor *cursor)
+{
+  g_return_val_if_fail (cursor != NULL, NULL);
+
+  return GDK_SCREEN_XDISPLAY(((GdkCursorPrivate *)cursor)->screen);
+}
+
+Cursor
+gdk_x11_cursor_get_xcursor (GdkCursor *cursor)
+{
+  g_return_val_if_fail (cursor != NULL, None);
+
+  return ((GdkCursorPrivate *)cursor)->xcursor;
 }

@@ -33,8 +33,6 @@
 #include "x11/gdkx.h"
 #elif defined (GDK_WINDOWING_WIN32)
 #include "win32/gdkwin32.h"
-#elif defined (GDK_WINDOWING_NANOX)
-#include "nanox/gdkprivate-nanox.h"
 #elif defined (GDK_WINDOWING_FB)
 #include "linux-fb/gdkfb.h"
 #endif
@@ -380,6 +378,7 @@ gtk_window_class_init (GtkWindowClass *klass)
                                    PROP_ALLOW_SHRINK,
                                    g_param_spec_boolean ("allow_shrink",
 							 _("Allow Shrink"),
+							 /* xgettext:no-c-format */
 							 _("If TRUE, the window has no mimimum size. Setting this to TRUE is 99% of the time a bad idea."),
 							 FALSE,
 							 G_PARAM_READWRITE));
@@ -585,6 +584,8 @@ gtk_window_class_init (GtkWindowClass *klass)
 static void
 gtk_window_init (GtkWindow *window)
 {
+  GdkColormap *colormap;
+  
   GTK_WIDGET_UNSET_FLAGS (window, GTK_NO_WINDOW);
   GTK_WIDGET_SET_FLAGS (window, GTK_TOPLEVEL);
 
@@ -594,7 +595,7 @@ gtk_window_init (GtkWindow *window)
 
   window->title = NULL;
   window->wmclass_name = g_strdup (g_get_prgname ());
-  window->wmclass_class = g_strdup (gdk_progclass);
+  window->wmclass_class = g_strdup (gdk_get_program_class ());
   window->wm_role = NULL;
   window->geometry_info = NULL;
   window->type = GTK_WINDOW_TOPLEVEL;
@@ -619,6 +620,10 @@ gtk_window_init (GtkWindow *window)
   window->decorated = TRUE;
   window->mnemonic_modifier = GDK_MOD1_MASK;
   window->screen = gdk_get_default_screen ();
+  
+  colormap = _gtk_widget_peek_colormap ();
+  if (colormap)
+    gtk_widget_set_colormap (GTK_WIDGET (window), colormap);
   
   gtk_widget_ref (GTK_WIDGET (window));
   gtk_object_sink (GTK_OBJECT (window));
@@ -748,8 +753,7 @@ gtk_window_get_property (GObject      *object,
       g_value_set_boolean (value, window->destroy_with_parent);
       break;
     case PROP_ICON:
-      g_value_set_object (value,
-                          G_OBJECT (gtk_window_get_icon (window)));
+      g_value_set_object (value, gtk_window_get_icon (window));
       break;
     case PROP_SCREEN:
       g_value_set_object (value, window->screen);
@@ -1752,48 +1756,6 @@ gtk_window_get_decorated (GtkWindow *window)
   return window->decorated;
 }
 
-static void
-gdk_pixbuf_render_pixmap_and_mask_with_colormap (GdkPixbuf   *pixbuf,
-                                                 GdkPixmap  **pixmap_return,
-                                                 GdkBitmap  **mask_return,
-                                                 int          alpha_threshold,
-                                                 GdkColormap *cmap)
-{
-  g_return_if_fail (pixbuf != NULL);
-  
-  if (pixmap_return)
-    {
-      GdkGC *gc;
-      
-      *pixmap_return = gdk_pixmap_new (NULL, gdk_pixbuf_get_width (pixbuf), gdk_pixbuf_get_height (pixbuf),
-				       gdk_colormap_get_visual (cmap)->depth);
-      gdk_drawable_set_colormap (GDK_DRAWABLE (*pixmap_return),
-                                 cmap);
-      gc = gdk_gc_new (*pixmap_return);
-      gdk_pixbuf_render_to_drawable (pixbuf, *pixmap_return, gc,
-				     0, 0, 0, 0,
-				     gdk_pixbuf_get_width (pixbuf), gdk_pixbuf_get_height (pixbuf),
-				     GDK_RGB_DITHER_NORMAL,
-				     0, 0);
-      gdk_gc_unref (gc);
-    }
-  
-  if (mask_return)
-    {
-      if (gdk_pixbuf_get_has_alpha (pixbuf))
-	{
-	  *mask_return = gdk_pixmap_new (NULL, gdk_pixbuf_get_width (pixbuf), gdk_pixbuf_get_height (pixbuf), 1);
-          
-	  gdk_pixbuf_render_threshold_alpha (pixbuf, *mask_return,
-					     0, 0, 0, 0,
-					     gdk_pixbuf_get_width (pixbuf), gdk_pixbuf_get_height (pixbuf),
-					     alpha_threshold);
-	}
-      else
-	*mask_return = NULL;
-    }
-}
-
 static GtkWindowIconInfo*
 get_icon_info (GtkWindow *window)
 {
@@ -1900,11 +1862,11 @@ get_pixmap_and_mask (GdkWindow		*window,
         }
 
       if (best_icon)
-        gdk_pixbuf_render_pixmap_and_mask_with_colormap (best_icon,
-                                                         pmap_return,
-                                                         mask_return,
-                                                         128,
-                    gdk_colormap_get_system_for_screen (gdk_drawable_get_screen (window)));
+        gdk_pixbuf_render_pixmap_and_mask_for_colormap (best_icon,
+		    gdk_colormap_get_system_for_screen (gdk_drawable_get_screen (window)),
+							pmap_return,
+							mask_return,
+							128);
 
       /* Save pmap/mask for others to use if appropriate */
       if (parent_info)
@@ -2428,7 +2390,7 @@ gtk_window_resize (GtkWindow *window,
  * @height: return location for height, or %NULL
  *
  * Obtains the current size of @window. If @window is not onscreen,
- * returns the size GTK+ will suggest to the window manager for the
+ * it returns the size GTK+ will suggest to the window manager for the
  * initial window size (but this is not reliably the same as the size
  * the window manager will actually select). The size obtained by
  * gtk_window_get_size() is the last size received in a
@@ -2440,19 +2402,19 @@ gtk_window_resize (GtkWindow *window,
  * notification that the size has changed via a configure event, and
  * the size of the window gets updated.
  *
- * Note #1: Nearly any use of this function creates a race condition,
+ * Note 1: Nearly any use of this function creates a race condition,
  * because the size of the window may change between the time that you
  * get the size and the time that you perform some action assuming
  * that size is the current size. To avoid race conditions, connect to
  * "configure_event" on the window and adjust your size-dependent
  * state to match the size delivered in the #GdkEventConfigure.
  *
- * Note #2: The returned size does NOT include the size of the window
+ * Note 2: The returned size does NOT include the size of the window
  * manager decorations (aka the window frame or border). Those
  * are not drawn by GTK+ and GTK+ has no reliable method of
  * determining their size.
  *
- * Note #3: If you are getting a window size in order to position
+ * Note 3: If you are getting a window size in order to position
  * the window onscreen, there may be a better way. The preferred
  * way is to simply set the window's semantic type with
  * gtk_window_set_type_hint(), which allows the window manager to
@@ -2627,9 +2589,9 @@ gtk_window_move (GtkWindow *window,
  * 
  * If you haven't changed the window gravity, its gravity will be
  * #GDK_GRAVITY_NORTH_WEST. This means that gtk_window_get_position()
- * returns the position of the top-left corner of the window
- * manager frame for the window. gtk_window_move() sets the
- * position of this same top-left corner.
+ * gets the position of the top-left corner of the window manager
+ * frame for the window. gtk_window_move() sets the position of this
+ * same top-left corner.
  *
  * gtk_window_get_position() is not 100% reliable because the X Window System
  * does not specify a way to obtain the geometry of the
@@ -2703,7 +2665,10 @@ gtk_window_get_position (GtkWindow *window,
       
       if (GTK_WIDGET_MAPPED (widget))
         {
-          gdk_window_get_frame_extents (widget->window, &frame_extents);
+	  if (window->frame)
+	    gdk_window_get_frame_extents (window->frame, &frame_extents);
+	  else
+	    gdk_window_get_frame_extents (widget->window, &frame_extents);
           x = frame_extents.x;
           y = frame_extents.y;
           gtk_window_get_size (window, &w, &h);
@@ -3080,7 +3045,7 @@ gtk_window_realize (GtkWidget *widget)
 	}
       gtk_widget_size_allocate (widget, &allocation);
       
-      gtk_container_queue_resize (GTK_CONTAINER (widget));
+      _gtk_container_queue_resize (GTK_CONTAINER (widget));
 
       g_return_if_fail (!GTK_WIDGET_REALIZED (widget));
     }
@@ -4019,34 +3984,9 @@ gtk_window_move_resize (GtkWindow *window)
       info->last.configure_request.y != new_request.y)
     configure_request_pos_changed = TRUE;
 
-  /* To change, we must be different from BOTH the last request, and
-   * also our current size as received from the most recent configure
-   * notify.
-   *
-   * If different from last request, it means some sizing
-   * parameters have changed; but one possible such sizing
-   * parameter could be the current size.
-   *
-   * We never want to re-request our current size, because that could
-   * lead to some strange infinite loops if a window manager did
-   * something insane but ICCCM-compliant such as add 2 to all
-   * requested sizes. (i.e. if the WM always assigned a size that
-   * was a function of the requested size, rather than a constraint
-   * applied to requested size - so that requesting current size
-   * did not result in getting that size back)
-   *
-   * So here we detect and prevent any attempt to set size
-   * to current size.
-   *
-   * (FIXME I think some race may be possible here, but
-   *  perhaps avoided by configure_request_count?)
-   */
   if ((info->last.configure_request.width != new_request.width ||
-       info->last.configure_request.height != new_request.height) &&
-      (widget->allocation.width != new_request.width ||
-       widget->allocation.height != new_request.height))
+       info->last.configure_request.height != new_request.height))
     configure_request_size_changed = TRUE;
-
   
   hints_changed = FALSE;
   
@@ -4259,24 +4199,24 @@ gtk_window_move_resize (GtkWindow *window)
 	  gtk_widget_queue_resize (widget); /* migth recurse for GTK_RESIZE_IMMEDIATE */
 	}
     }
-  else if (configure_request_pos_changed ||
-           configure_request_size_changed ||
-           hints_changed)
+  else if ((configure_request_size_changed || hints_changed) &&
+	   (widget->allocation.width != new_request.width ||
+	    widget->allocation.height != new_request.height))
+
     {
       /* We are in one of the following situations:
        * A. configure_request_size_changed
        *    our requisition has changed and we need a different window size,
        *    so we request it from the window manager.
-       * B. !configure_request_size_changed
-       *    the window manager wouldn't assign us the size we requested, in this
-       *    case we don't try to request a new size with every resize.
-       * C. !configure_request_size_changed && hints_changed
+       * B. !configure_request_size_changed && hints_changed
        *    the window manager rejects our size, but we have just changed the
-       *    window manager hints, so there's a certain chance our request will
+       *    window manager hints, so there's a chance our request will
        *    be honoured this time, so we try again.
-       * D. configure_request_pos_changed
-       *    we need to move to a new position, in which case we can also request
-       *    a new size since any of A-C might also apply.
+       *
+       * However, if the new requisition is the same as the current allocation,
+       * we don't request it again, since we won't get a ConfigureNotify back from
+       * the window manager unless it decides to change our requisition. If
+       * we don't get the ConfigureNotify back, the resize queue will never be run.
        */
 
       /* Now send the configure request */
@@ -4341,8 +4281,22 @@ gtk_window_move_resize (GtkWindow *window)
     }
   else
     {
-      /* Not requesting anything new from WM, just had a queue resize
-       * for some reason, so handle the resize queue
+      /* Handle any position changes.
+       */
+      if (configure_request_pos_changed)
+	{
+	  if (window->frame)
+	    {
+	      gdk_window_move (window->frame,
+			       new_request.x - window->frame_left,
+			       new_request.y - window->frame_top);
+	    }
+	  else
+	    gdk_window_move (widget->window,
+			     new_request.x, new_request.y);
+	}
+      
+      /* And run the resize queue.
        */
       if (container->resize_widgets)
         gtk_container_resize_children (container);
@@ -4567,6 +4521,11 @@ gtk_window_expose (GtkWidget      *widget,
  * gtk_window_set_has_frame:
  * @window: a #GtkWindow
  * @setting: a boolean
+ *
+ * (Note: this is a special-purpose function for the framebuffer port,
+ *  that causes GTK+ to draw its own window border. For most applications,
+ *  you want gtk_window_set_decorated() instead, which tells the window
+ *  manager whether to draw the window border.)
  * 
  * If this function is called on a window with setting of TRUE, before
  * it is realized or showed, it will have a "frame" window around
@@ -4576,6 +4535,7 @@ gtk_window_expose (GtkWidget      *widget,
  * This function is used by the linux-fb port to implement managed
  * windows, but it could concievably be used by X-programs that
  * want to do their own window decorations.
+ *
  **/
 void
 gtk_window_set_has_frame (GtkWindow *window, 
@@ -4591,8 +4551,8 @@ gtk_window_set_has_frame (GtkWindow *window,
  * gtk_window_get_has_frame:
  * @window: a #GtkWindow
  * 
- * Returns whether the window has a frame window exterior to
- * widget->window. See gtk_window_set_has_frame ().
+ * Accessor for whether the window has a frame window exterior to
+ * widget->window. Gets the value set by gtk_window_set_has_frame ().
  *
  * Return value: %TRUE if a frame has been added to the window
  *   via gtk_widow_has_frame
@@ -4612,6 +4572,11 @@ gtk_window_get_has_frame (GtkWindow *window)
  * @top: The height of the top border
  * @right: The width of the right border
  * @bottom: The height of the bottom border
+ *
+ * (Note: this is a special-purpose function intended for the framebuffer
+ *  port; see gtk_window_set_has_frame(). It will have no effect on the
+ *  window border drawn by the window manager, which is the normal
+ *  case when using the X Window system.)
  *
  * For windows with frames (see #gtk_window_set_has_frame) this function
  * can be used to change the size of the frame border.
@@ -5053,6 +5018,13 @@ gtk_window_begin_resize_drag  (GtkWindow    *window,
  * @right: location to store the width of the frame at the returns, or %NULL
  * @bottom: location to store the height of the frame at the bottom, or %NULL
  *
+ * (Note: this is a special-purpose function intended for the
+ *  framebuffer port; see gtk_window_set_has_frame(). It will not
+ *  return the size of the window border drawn by the window manager,
+ *  which is the normal case when using a windowing system.
+ *  See gdk_window_get_frame_extents() to get the standard
+ *  window border extents.)
+ * 
  * Retrieves the dimensions of the frame window for this toplevel.
  * See gtk_window_set_has_frame(), gtk_window_set_frame_dimensions().
  **/
@@ -5070,9 +5042,9 @@ gtk_window_get_frame_dimensions (GtkWindow *window,
   if (top)
     *top = window->frame_top;
   if (right)
-    *top = window->frame_right;
+    *right = window->frame_right;
   if (bottom)
-    *top = window->frame_bottom;
+    *bottom = window->frame_bottom;
 }
 
 /**

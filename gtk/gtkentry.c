@@ -31,6 +31,7 @@
 #include "gdk/gdk.h"
 #include "gdk/gdkkeysyms.h"
 #include "gtkbindings.h"
+#include "gtkcelleditable.h"
 #include "gtkclipboard.h"
 #include "gtkdnd.h"
 #include "gtkentry.h"
@@ -77,6 +78,7 @@ enum {
   PROP_EDITABLE,
   PROP_MAX_LENGTH,
   PROP_VISIBILITY,
+  PROP_HAS_FRAME,
   PROP_INVISIBLE_CHAR,
   PROP_ACTIVATES_DEFAULT,
   PROP_WIDTH_CHARS,
@@ -100,8 +102,9 @@ static GtkTargetEntry target_table[] = {
 
 /* GObject, GtkObject methods
  */
-static void   gtk_entry_class_init           (GtkEntryClass    *klass);
-static void   gtk_entry_editable_init        (GtkEditableClass *iface);
+static void   gtk_entry_class_init           (GtkEntryClass        *klass);
+static void   gtk_entry_editable_init        (GtkEditableClass     *iface);
+static void   gtk_entry_cell_editable_init   (GtkCellEditableIface *iface);
 static void   gtk_entry_init                 (GtkEntry         *entry);
 static void   gtk_entry_set_property (GObject         *object,
 				      guint            prop_id,
@@ -189,6 +192,11 @@ static gboolean gtk_entry_get_selection_bounds (GtkEditable *editable,
 						gint        *start,
 						gint        *end);
 
+/* GtkCellEditable method implementations
+ */
+static void gtk_entry_start_editing (GtkCellEditable *cell_editable,
+				     GdkEvent        *event);
+
 /* Default signal handlers
  */
 static void gtk_entry_real_insert_text   (GtkEntry        *entry,
@@ -211,6 +219,7 @@ static void gtk_entry_cut_clipboard      (GtkEntry        *entry);
 static void gtk_entry_copy_clipboard     (GtkEntry        *entry);
 static void gtk_entry_paste_clipboard    (GtkEntry        *entry);
 static void gtk_entry_toggle_overwrite   (GtkEntry        *entry);
+static void gtk_entry_select_all         (GtkEntry        *entry);
 static void gtk_entry_real_activate      (GtkEntry        *entry);
 static void gtk_entry_popup_menu         (GtkWidget      *widget);
 
@@ -297,10 +306,20 @@ gtk_entry_get_type (void)
 	NULL			                         /* interface_data */
       };
 
+      static const GInterfaceInfo cell_editable_info =
+      {
+	(GInterfaceInitFunc) gtk_entry_cell_editable_init,    /* interface_init */
+	NULL,                                                 /* interface_finalize */
+	NULL                                                  /* interface_data */
+      };
+      
       entry_type = gtk_type_unique (GTK_TYPE_WIDGET, &entry_info);
       g_type_add_interface_static (entry_type,
 				   GTK_TYPE_EDITABLE,
 				   &editable_info);
+      g_type_add_interface_static (entry_type,
+				   GTK_TYPE_CELL_EDITABLE,
+				   &cell_editable_info);
     }
 
   return entry_type;
@@ -415,7 +434,16 @@ gtk_entry_class_init (GtkEntryClass *class)
 							 _("FALSE displays the \"invisible char\" instead of the actual text (password mode)"),
                                                          TRUE,
 							 G_PARAM_READABLE | G_PARAM_WRITABLE));
+
   g_object_class_install_property (gobject_class,
+                                   PROP_HAS_FRAME,
+                                   g_param_spec_boolean ("has_frame",
+							 _("Has Frame"),
+							 _("FALSE removes outside bevel from entry."),
+                                                         TRUE,
+							 G_PARAM_READABLE | G_PARAM_WRITABLE));
+
+    g_object_class_install_property (gobject_class,
                                    PROP_INVISIBLE_CHAR,
                                    g_param_spec_unichar ("invisible_char",
 							 _("Invisible character"),
@@ -754,6 +782,12 @@ gtk_entry_editable_init (GtkEditableClass *iface)
 }
 
 static void
+gtk_entry_cell_editable_init (GtkCellEditableIface *iface)
+{
+  iface->start_editing = gtk_entry_start_editing;
+}
+
+static void
 gtk_entry_set_property (GObject         *object,
                         guint            prop_id,
                         const GValue    *value,
@@ -786,6 +820,10 @@ gtk_entry_set_property (GObject         *object,
       
     case PROP_VISIBILITY:
       gtk_entry_set_visibility (entry, g_value_get_boolean (value));
+      break;
+
+    case PROP_HAS_FRAME:
+      gtk_entry_set_has_frame (entry, g_value_get_boolean (value));
       break;
 
     case PROP_INVISIBLE_CHAR:
@@ -831,6 +869,9 @@ gtk_entry_get_property (GObject         *object,
     case PROP_VISIBILITY:
       g_value_set_boolean (value, entry->visible);
       break;
+    case PROP_HAS_FRAME:
+      g_value_set_boolean (value, entry->has_frame);
+      break;
     case PROP_INVISIBLE_CHAR:
       g_value_set_uint (value, entry->invisible_char);
       break;
@@ -864,7 +905,7 @@ gtk_entry_init (GtkEntry *entry)
   entry->invisible_char = '*';
   entry->dnd_position = -1;
   entry->width_chars = -1;
-  
+  entry->is_cell_renderer = FALSE;
   entry->has_frame = TRUE;
   
   gtk_drag_dest_set (GTK_WIDGET (entry),
@@ -916,18 +957,17 @@ static void
 gtk_entry_realize_cursor_gc (GtkEntry *entry)
 {
   GdkColor *cursor_color;
+  GdkColor red = {0, 0xffff, 0x0000, 0x0000};
   
   if (entry->cursor_gc)
     gdk_gc_unref (entry->cursor_gc);
 
   gtk_widget_style_get (GTK_WIDGET (entry), "cursor_color", &cursor_color, NULL);
-  if (cursor_color)
-    {
       entry->cursor_gc = gdk_gc_new (entry->text_area);
-      gdk_gc_set_rgb_fg_color (entry->cursor_gc, cursor_color);
-    }
+  if (cursor_color)
+    gdk_gc_set_rgb_fg_color (entry->cursor_gc, cursor_color);
   else
-    entry->cursor_gc = gdk_gc_ref (GTK_WIDGET (entry)->style->base_gc[GTK_STATE_SELECTED]);
+    gdk_gc_set_rgb_fg_color (entry->cursor_gc, &red);
 }
 
 static void
@@ -1045,7 +1085,7 @@ gtk_entry_size_request (GtkWidget      *widget,
 			GtkRequisition *requisition)
 {
   GtkEntry *entry;
-  PangoFontMetrics metrics;
+  PangoFontMetrics *metrics;
   gint xborder, yborder;
   PangoContext *context;
   
@@ -1055,13 +1095,12 @@ gtk_entry_size_request (GtkWidget      *widget,
   entry = GTK_ENTRY (widget);
   
   context = gtk_widget_get_pango_context (widget);
-  pango_context_get_metrics (context,
-			     widget->style->font_desc,
-			     pango_context_get_language (context),
-			     &metrics);
+  metrics = pango_context_get_metrics (context,
+				       widget->style->font_desc,
+				       pango_context_get_language (context));
 
-  entry->ascent = metrics.ascent;
-  entry->descent = metrics.descent;
+  entry->ascent = pango_font_metrics_get_ascent (metrics);
+  entry->descent = pango_font_metrics_get_descent (metrics);
 
   xborder = INNER_BORDER;
   yborder = INNER_BORDER;
@@ -1082,13 +1121,13 @@ gtk_entry_size_request (GtkWidget      *widget,
     requisition->width = MIN_ENTRY_WIDTH + xborder * 2;
   else
     {
-      requisition->width =
-        PANGO_PIXELS (metrics.approximate_char_width) * entry->width_chars +
-        xborder * 2;
+      gint char_width = pango_font_metrics_get_approximate_char_width (metrics);
+      requisition->width = PANGO_PIXELS (char_width) * entry->width_chars + xborder * 2;
     }
     
-  requisition->height = ((metrics.ascent + metrics.descent) / PANGO_SCALE + 
-                         yborder * 2);
+  requisition->height = PANGO_PIXELS (entry->ascent + entry->descent) + yborder * 2;
+
+  pango_font_metrics_unref (metrics);
 }
 
 static void
@@ -1165,13 +1204,23 @@ get_widget_window_size (GtkEntry *entry,
     *x = widget->allocation.x;
 
   if (y)
-    *y = widget->allocation.y + (widget->allocation.height - requisition.height) / 2;
+    {
+      if (entry->is_cell_renderer)
+	*y = widget->allocation.y;
+      else
+	*y = widget->allocation.y + (widget->allocation.height - requisition.height) / 2;
+    }
 
   if (width)
     *width = widget->allocation.width;
 
   if (height)
-    *height = requisition.height;
+    {
+      if (entry->is_cell_renderer)
+	*height = widget->allocation.height;
+      else
+	*height = requisition.height;
+    }
 }
 
 static void
@@ -1764,6 +1813,43 @@ gtk_entry_style_set	(GtkWidget      *widget,
     }
 }
 
+/* GtkCellEditable method implementations
+ */
+static void
+gtk_cell_editable_entry_activated (GtkEntry *entry, gpointer data)
+{
+  gtk_cell_editable_editing_done (GTK_CELL_EDITABLE (entry));
+  gtk_cell_editable_remove_widget (GTK_CELL_EDITABLE (entry));
+}
+
+static gboolean
+gtk_cell_editable_key_press_event (GtkEntry    *entry,
+				   GdkEventKey *key_event,
+				   gpointer     data)
+{
+    if (key_event->keyval == GDK_Escape)
+      {
+	gtk_cell_editable_editing_done (GTK_CELL_EDITABLE (entry));
+	gtk_cell_editable_remove_widget (GTK_CELL_EDITABLE (entry));
+
+	return TRUE;
+      }
+
+    return FALSE;
+}
+
+static void
+gtk_entry_start_editing (GtkCellEditable *cell_editable,
+			 GdkEvent        *event)
+{
+  GTK_ENTRY (cell_editable)->is_cell_renderer = TRUE;
+
+  g_signal_connect (G_OBJECT (cell_editable), "activate",
+		    G_CALLBACK (gtk_cell_editable_entry_activated), NULL);
+  g_signal_connect (G_OBJECT (cell_editable), "key_press_event",
+		    G_CALLBACK (gtk_cell_editable_key_press_event), NULL);
+}
+
 /* Default signal handlers
  */
 static void
@@ -2110,6 +2196,12 @@ static void
 gtk_entry_toggle_overwrite (GtkEntry *entry)
 {
   entry->overwrite_mode = !entry->overwrite_mode;
+}
+
+static void
+gtk_entry_select_all (GtkEntry *entry)
+{
+  gtk_entry_select_line (entry);
 }
 
 static void
@@ -2507,6 +2599,8 @@ gtk_entry_draw_text (GtkEntry *entry)
 	  gint start_index = g_utf8_offset_to_pointer (entry->text, start_pos) - entry->text;
 	  gint end_index = g_utf8_offset_to_pointer (entry->text, end_pos) - entry->text;
 	  GdkRegion *clip_region = gdk_region_new ();
+	  GdkGC *text_gc;
+	  GdkGC *selection_gc;
 
           line = pango_layout_get_lines (layout)->data;
           
@@ -2514,6 +2608,17 @@ gtk_entry_draw_text (GtkEntry *entry)
 
           pango_layout_get_extents (layout, NULL, &logical_rect);
           
+	  if (GTK_WIDGET_HAS_FOCUS (entry))
+	    {
+	      selection_gc = widget->style->base_gc [GTK_STATE_SELECTED];
+	      text_gc = widget->style->text_gc [GTK_STATE_SELECTED];
+	    }
+	  else
+	    {
+	      selection_gc = widget->style->base_gc [GTK_STATE_ACTIVE];
+	      text_gc = widget->style->text_gc [GTK_STATE_ACTIVE];
+	    }
+	  
 	  for (i=0; i < n_ranges; i++)
 	    {
 	      GdkRectangle rect;
@@ -2522,18 +2627,18 @@ gtk_entry_draw_text (GtkEntry *entry)
 	      rect.y = y;
 	      rect.width = (ranges[2*i + 1] - ranges[2*i]) / PANGO_SCALE;
 	      rect.height = logical_rect.height / PANGO_SCALE;
-	      
-	      gdk_draw_rectangle (entry->text_area, widget->style->base_gc [GTK_STATE_SELECTED], TRUE,
+		
+	      gdk_draw_rectangle (entry->text_area, selection_gc, TRUE,
 				  rect.x, rect.y, rect.width, rect.height);
 
 	      gdk_region_union_with_rect (clip_region, &rect);
 	    }
 
-	  gdk_gc_set_clip_region (widget->style->text_gc [GTK_STATE_SELECTED], clip_region);
-	  gdk_draw_layout (entry->text_area, widget->style->text_gc [GTK_STATE_SELECTED], 
+	  gdk_gc_set_clip_region (text_gc, clip_region);
+	  gdk_draw_layout (entry->text_area, text_gc, 
 			   x, y,
 			   layout);
-	  gdk_gc_set_clip_region (widget->style->text_gc [GTK_STATE_SELECTED], NULL);
+	  gdk_gc_set_clip_region (text_gc, NULL);
 	  
 	  gdk_region_destroy (clip_region);
 	  g_free (ranges);
@@ -2556,6 +2661,7 @@ gtk_entry_draw_cursor (GtkEntry  *entry,
   if (GTK_WIDGET_DRAWABLE (entry))
     {
       GtkWidget *widget = GTK_WIDGET (entry);
+      GdkRectangle cursor_location;
       gboolean split_cursor;
 
       gint xoffset = INNER_BORDER - entry->scroll_offset;
@@ -2563,6 +2669,8 @@ gtk_entry_draw_cursor (GtkEntry  *entry,
       gint text_area_height;
       GdkGC *gc1 = NULL;
       GdkGC *gc2 = NULL;
+      GtkTextDirection dir1 = GTK_TEXT_DIR_NONE;
+      GtkTextDirection dir2 = GTK_TEXT_DIR_NONE;
       gint x1 = 0;
       gint x2 = 0;
 
@@ -2581,6 +2689,9 @@ gtk_entry_draw_cursor (GtkEntry  *entry,
 
 	  if (weak_x != strong_x)
 	    {
+	      dir1 = widget_direction;
+	      dir2 = (widget_direction == GTK_TEXT_DIR_LTR) ? GTK_TEXT_DIR_RTL : GTK_TEXT_DIR_LTR;
+	      
 	      gc2 = widget->style->text_gc[GTK_STATE_NORMAL];
 	      x2 = weak_x;
 	    }
@@ -2594,15 +2705,21 @@ gtk_entry_draw_cursor (GtkEntry  *entry,
 	  else
 	    x1 = weak_x;
 	}
+
+      cursor_location.x = xoffset + x1;
+      cursor_location.y = INNER_BORDER;
+      cursor_location.width = 0;
+      cursor_location.height = text_area_height - 2 * INNER_BORDER ;
       
-      gdk_draw_line (entry->text_area, gc1,
-		     xoffset + x1, INNER_BORDER,
-		     xoffset + x1, text_area_height - INNER_BORDER);
+      _gtk_draw_insertion_cursor (entry->text_area, gc1,
+				  &cursor_location, dir1);
       
       if (gc2)
-	gdk_draw_line (entry->text_area, gc2,
-		       xoffset + x2, INNER_BORDER,
-		       xoffset + x2, text_area_height - INNER_BORDER);
+	{
+	  cursor_location.x = xoffset + x2;
+	  _gtk_draw_insertion_cursor (entry->text_area, gc2,
+				      &cursor_location, dir2);
+	}
     }
 }
 
@@ -3397,11 +3514,13 @@ gtk_entry_set_has_frame (GtkEntry *entry,
   g_return_if_fail (GTK_IS_ENTRY (entry));
 
   setting = (setting != FALSE);
-  
-  if (entry->has_frame != setting)
-    gtk_widget_queue_resize (GTK_WIDGET (entry));
-  
+
+  if (entry->has_frame == setting)
+    return;
+
+  gtk_widget_queue_resize (GTK_WIDGET (entry));
   entry->has_frame = setting;
+  g_object_notify (G_OBJECT (entry), "has_frame");
 }
 
 /**
@@ -3659,6 +3778,12 @@ gtk_entry_do_popup (GtkEntry       *entry,
                         have_selection);
   append_action_signal (entry, entry->popup_menu, _("Paste"), "paste_clipboard",
                         TRUE);
+
+  menuitem = gtk_menu_item_new_with_label (_("Select All"));
+  gtk_signal_connect_object (GTK_OBJECT (menuitem), "activate",
+			     GTK_SIGNAL_FUNC (gtk_entry_select_all), entry);
+  gtk_widget_show (menuitem);
+  gtk_menu_shell_append (GTK_MENU_SHELL (entry->popup_menu), menuitem);
 
   menuitem = gtk_separator_menu_item_new ();
   gtk_widget_show (menuitem);

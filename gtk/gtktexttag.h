@@ -54,12 +54,6 @@ struct _GtkTextTag
   guint bg_color_set : 1;
   guint bg_stipple_set : 1;
   guint fg_color_set : 1;
-  guint family_set : 1;
-  guint style_set : 1;
-  guint variant_set : 1;
-  guint weight_set : 1;
-  guint stretch_set : 1;
-  guint size_set : 1;
   guint scale_set : 1;
   guint fg_stipple_set : 1;
   guint justification_set : 1;
@@ -147,7 +141,7 @@ struct _GtkTextAttributes
   GtkTextDirection direction;
 
   /* Individual chunks of this can be set/unset as a group */
-  PangoFontDescription font;
+  PangoFontDescription *font;
 
   gdouble font_scale;
   

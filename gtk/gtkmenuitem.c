@@ -334,7 +334,7 @@ gtk_menu_item_remove_submenu (GtkMenuItem         *menu_item)
 }
 
 void
-gtk_menu_item_set_placement (GtkMenuItem         *menu_item,
+_gtk_menu_item_set_placement (GtkMenuItem         *menu_item,
 			     GtkSubmenuPlacement  placement)
 {
   g_return_if_fail (GTK_IS_MENU_ITEM (menu_item));

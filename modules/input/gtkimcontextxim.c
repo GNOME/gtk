@@ -326,7 +326,7 @@ gtk_im_context_xim_filter_keypress (GtkIMContext *context,
   xevent.send_event = event->send_event;
   xevent.display = GDK_DRAWABLE_XDISPLAY (event->window);
   xevent.window = GDK_DRAWABLE_XID (event->window);
-  xevent.root = GDK_DRAWABLE_XROOTWIN (event->window);
+  xevent.root = GDK_WINDOW_XROOTWIN (event->window);
   xevent.subwindow = xevent.window;
   xevent.time = event->time;
   xevent.x = xevent.x_root = 0;

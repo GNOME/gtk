@@ -74,7 +74,7 @@ typedef enum {
   GTK_SIZE_GROUP_BOTH
 } GtkSizeGroupMode;
 
-GType            gtk_size_group_get_type      (void) G_GNUC_CONST;;
+GType            gtk_size_group_get_type      (void) G_GNUC_CONST;
 
 GtkSizeGroup *   gtk_size_group_new           (GtkSizeGroupMode  mode);
 void             gtk_size_group_set_mode      (GtkSizeGroup     *size_group,

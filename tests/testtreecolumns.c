@@ -312,14 +312,14 @@ update_columns (GtkTreeView *view, ViewColumnModel *view_model)
       if (length < old_length)
 	{
 	  view_model->stamp++;
-	  gtk_tree_model_deleted (GTK_TREE_MODEL (view_model), path);
+	  gtk_tree_model_row_deleted (GTK_TREE_MODEL (view_model), path);
 	}
       else
 	{
 	  GtkTreeIter iter;
 	  iter.stamp = view_model->stamp;
 	  iter.user_data = b;
-	  gtk_tree_model_inserted (GTK_TREE_MODEL (view_model), path, &iter);
+	  gtk_tree_model_row_inserted (GTK_TREE_MODEL (view_model), path, &iter);
 	}
       gtk_tree_path_free (path);
     }
@@ -376,10 +376,10 @@ update_columns (GtkTreeView *view, ViewColumnModel *view_model)
 	}
 
       path = gtk_tree_path_new ();
-      gtk_tree_model_reordered (GTK_TREE_MODEL (view_model),
-				path,
-				NULL,
-				new_order);
+      gtk_tree_model_rows_reordered (GTK_TREE_MODEL (view_model),
+				     path,
+				     NULL,
+				     new_order);
       gtk_tree_path_free (path);
       g_free (new_order);
     }
@@ -464,7 +464,7 @@ set_visible (GtkCellRendererToggle *cell,
   if (column)
     {
       gtk_tree_view_column_set_visible (column, ! gtk_tree_view_column_get_visible (column));
-      gtk_tree_model_range_changed (model, path, &iter, path, &iter);
+      gtk_tree_model_row_changed (model, path, &iter);
     }
   gtk_tree_path_free (path);
 }
@@ -620,14 +620,14 @@ main (int argc, char *argv[])
   gtk_button_box_set_child_size (GTK_BUTTON_BOX (bbox), 0, 0);
   gtk_box_pack_start (GTK_BOX (vbox2), bbox, TRUE, TRUE, 0);
 
-  button = gtk_button_new_with_label ("<<");
+  button = gtk_button_new_with_mnemonic ("<< (_Q)");
   gtk_widget_set_sensitive (button, FALSE);
   gtk_signal_connect (GTK_OBJECT (button), "clicked", GTK_SIGNAL_FUNC (add_left_clicked), top_right_tree_view);
   g_signal_connect (G_OBJECT (gtk_tree_view_get_selection (GTK_TREE_VIEW (top_right_tree_view))),
                     "changed", GTK_SIGNAL_FUNC (selection_changed), button);
   gtk_box_pack_start (GTK_BOX (bbox), button, FALSE, FALSE, 0);
 
-  button = gtk_button_new_with_label (">>");
+  button = gtk_button_new_with_mnemonic (">> (_W)");
   gtk_widget_set_sensitive (button, FALSE);
   gtk_signal_connect (GTK_OBJECT (button), "clicked", GTK_SIGNAL_FUNC (add_right_clicked), top_right_tree_view);
   g_signal_connect (G_OBJECT (gtk_tree_view_get_selection (GTK_TREE_VIEW (left_tree_view))),
@@ -639,14 +639,14 @@ main (int argc, char *argv[])
   gtk_button_box_set_child_size (GTK_BUTTON_BOX (bbox), 0, 0);
   gtk_box_pack_start (GTK_BOX (vbox2), bbox, TRUE, TRUE, 0);
 
-  button = gtk_button_new_with_label ("<<");
+  button = gtk_button_new_with_mnemonic ("<< (_E)");
   gtk_widget_set_sensitive (button, FALSE);
   gtk_signal_connect (GTK_OBJECT (button), "clicked", GTK_SIGNAL_FUNC (add_left_clicked), bottom_right_tree_view);
   g_signal_connect (G_OBJECT (gtk_tree_view_get_selection (GTK_TREE_VIEW (bottom_right_tree_view))),
                     "changed", GTK_SIGNAL_FUNC (selection_changed), button);
   gtk_box_pack_start (GTK_BOX (bbox), button, FALSE, FALSE, 0);
 
-  button = gtk_button_new_with_label (">>");
+  button = gtk_button_new_with_mnemonic (">> (_R)");
   gtk_widget_set_sensitive (button, FALSE);
   gtk_signal_connect (GTK_OBJECT (button), "clicked", GTK_SIGNAL_FUNC (add_right_clicked), bottom_right_tree_view);
   g_signal_connect (G_OBJECT (gtk_tree_view_get_selection (GTK_TREE_VIEW (left_tree_view))),

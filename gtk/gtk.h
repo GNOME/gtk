@@ -44,7 +44,6 @@
 #include <gtk/gtkcalendar.h>
 #include <gtk/gtkcellrenderer.h>
 #include <gtk/gtkcellrenderertext.h>
-#include <gtk/gtkcellrenderertextpixbuf.h>
 #include <gtk/gtkcellrenderertoggle.h>
 #include <gtk/gtkcellrendererpixbuf.h>
 #include <gtk/gtkcheckbutton.h>

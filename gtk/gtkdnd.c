@@ -26,16 +26,6 @@
 
 #include "gdkconfig.h"
 
-#if defined (GDK_WINDOWING_X11)
-#include "x11/gdkx.h"
-#elif defined (GDK_WINDOWING_WIN32)
-#include "win32/gdkwin32.h"
-#elif defined(GDK_WINDOWING_FB)
-#include "linux-fb/gdkfb.h"
-#elif defined (GDK_WINDOWING_NANOX)
-#include "nanox/gdkprivate-nanox.h"
-#endif
-
 #include "gdk/gdkkeysyms.h"
 
 #include "gtkdnd.h"
@@ -2168,7 +2158,7 @@ set_icon_stock_pixbuf (GdkDragContext    *context,
 			gdk_pixbuf_get_height (pixbuf));
   gtk_widget_realize (window);
 
-  gdk_pixbuf_render_pixmap_and_mask_for_screen (pixbuf, screen, &pixmap, &mask, 128);
+  gdk_pixbuf_render_pixmap_and_mask_for_colormap (pixbuf, gdk_rgb_get_colormap_for_screen (screen), &pixmap, &mask, 128);
   
   gdk_window_set_back_pixmap (window->window, pixmap, FALSE);
   
@@ -2407,19 +2397,12 @@ _gtk_drag_source_handle_event (GtkWidget *widget,
 					  gtk_widget_get_screen (widget));
 	    if (info->cursor != cursor)
 	      {
-#ifdef GDK_WINDOWING_X11
-		XChangeActivePointerGrab (GDK_WINDOW_XDISPLAY (widget->window), 
-					  PointerMotionMask | PointerMotionHintMask | ButtonReleaseMask,
-					  ((GdkCursorPrivate *)cursor)->xcursor,
-					  event->dnd.time);
-#elif defined (GDK_WINDOWING_WIN32) || defined (GDK_WINDOWING_FB)
 		gdk_pointer_grab (widget->window, FALSE,
 				  GDK_POINTER_MOTION_MASK |
 				  GDK_POINTER_MOTION_HINT_MASK |
 				  GDK_BUTTON_RELEASE_MASK,
 				  NULL,
 				  cursor, event->dnd.time);
-#endif
 		info->cursor = cursor;
 	      }
 	    
@@ -3004,7 +2987,7 @@ gtk_drag_end (GtkDragSourceInfo *info, guint32 time)
   send_event.button.axes = NULL;
   send_event.button.state = 0;
   send_event.button.button = info->button;
-  send_event.button.device = gdk_core_pointer;
+  send_event.button.device = gdk_device_get_core_pointer ();
   send_event.button.x_root = 0;
   send_event.button.y_root = 0;
 

@@ -204,3 +204,10 @@ gdk_X11_screen_get_window_at_pointer (GdkScreen *screen,
 
   return window;
 }
+
+Window   
+gdk_x11_screen_get_root_xwindow  (GdkScreen   *screen)
+{
+  g_return_val_if_fail (GDK_IS_SCREEN (screen), NULL);
+  return GDK_SCREEN_IMPL_X11 (screen)->xroot_window;
+}

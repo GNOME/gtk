@@ -1249,7 +1249,7 @@ gtk_widget_init (GtkWidget *widget)
 			GTK_DOUBLE_BUFFERED);
 
   widget->style = gtk_widget_get_default_style ();
-  gtk_style_ref (widget->style);
+  g_object_ref (widget->style);
 }
 
 
@@ -1356,7 +1356,7 @@ gtk_widget_new (GtkType      type,
   g_return_val_if_fail (gtk_type_is_a (type, GTK_TYPE_WIDGET), NULL);
   
   va_start (var_args, first_property_name);
-  widget = g_object_new_valist (type, first_property_name, var_args);
+  widget = (GtkWidget *)g_object_new_valist (type, first_property_name, var_args);
   va_end (var_args);
 
   return widget;
@@ -1470,7 +1470,7 @@ gtk_widget_unparent (GtkWidget *widget)
     toplevel = NULL;
 
   if (GTK_IS_RESIZE_CONTAINER (widget))
-    gtk_container_clear_resize_widgets (GTK_CONTAINER (widget));
+    _gtk_container_clear_resize_widgets (GTK_CONTAINER (widget));
   
   /* Remove the widget and all its children from any ->resize_widgets list
    * of all the parents in our branch. This code should move into gtkcontainer.c
@@ -2305,7 +2305,7 @@ gtk_widget_size_allocate (GtkWidget	*widget,
     }
 
   if (GTK_IS_RESIZE_CONTAINER (widget))
-    gtk_container_clear_resize_widgets (GTK_CONTAINER (widget));
+    _gtk_container_clear_resize_widgets (GTK_CONTAINER (widget));
 
   gtk_signal_emit (GTK_OBJECT (widget), widget_signals[SIZE_ALLOCATE], &real_allocation);
 
@@ -3808,7 +3808,7 @@ gtk_widget_set_style_internal (GtkWidget *widget,
       
       previous_style = widget->style;
       widget->style = style;
-      gtk_style_ref (widget->style);
+      g_object_ref (widget->style);
       
       if (GTK_WIDGET_REALIZED (widget))
 	widget->style = gtk_style_attach (widget->style, widget->window);
@@ -3816,7 +3816,7 @@ gtk_widget_set_style_internal (GtkWidget *widget,
       gtk_signal_emit (GTK_OBJECT (widget),
 		       widget_signals[STYLE_SET],
 		       initial_emission ? NULL : previous_style);
-      gtk_style_unref (previous_style);
+      g_object_unref (previous_style);
 
       if (widget->parent && !initial_emission)
 	{
@@ -3920,7 +3920,7 @@ gtk_widget_get_default_style (void)
   if (!gtk_default_style)
     {
       gtk_default_style = gtk_style_new ();
-      gtk_style_ref (gtk_default_style);
+      g_object_ref (gtk_default_style);
     }
   
   return gtk_default_style;
@@ -4758,6 +4758,7 @@ GdkColormap*
 gtk_widget_get_colormap (GtkWidget *widget)
 {
   GdkColormap *colormap;
+  GtkWidget *tmp_widget;
   
   g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
   
@@ -4768,10 +4769,16 @@ gtk_widget_get_colormap (GtkWidget *widget)
       if (colormap)
 	return colormap;
     }
-  
-  colormap = gtk_object_get_data_by_id (GTK_OBJECT (widget), quark_colormap);
-  if (colormap)
-    return colormap;
+
+  tmp_widget = widget;
+  while (tmp_widget)
+    {
+      colormap = gtk_object_get_data_by_id (GTK_OBJECT (tmp_widget), quark_colormap);
+      if (colormap)
+	return colormap;
+
+      tmp_widget= tmp_widget->parent;
+    }
 
   return gdk_screen_get_default_colormap (gtk_widget_get_screen (widget));
 }
@@ -4971,7 +4978,7 @@ gtk_widget_get_composite_name (GtkWidget *widget)
   g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
 
   if (GTK_WIDGET_COMPOSITE_CHILD (widget) && widget->parent)
-    return gtk_container_child_composite_name (GTK_CONTAINER (widget->parent),
+    return _gtk_container_child_composite_name (GTK_CONTAINER (widget->parent),
 					       widget);
   else
     return NULL;
@@ -5017,14 +5024,8 @@ gtk_widget_push_colormap (GdkColormap *cmap)
 void
 gtk_widget_pop_colormap (void)
 {
-  GSList *tmp;
-  
   if (colormap_stack)
-    {
-      tmp = colormap_stack;
-      colormap_stack = colormap_stack->next;
-      g_slist_free_1 (tmp);
-    }
+    colormap_stack = g_slist_delete_link (colormap_stack, colormap_stack);
 }
 
 /**
@@ -5050,13 +5051,14 @@ gtk_widget_set_default_colormap (GdkColormap *colormap)
  * 
  * Return value: default widget colormap
  **/
+#ifndef GDK_MULTIHEAD_SAFE
 GdkColormap*
 gtk_widget_get_default_colormap (void)
 {
   GTK_NOTE (MISC, g_message (G_STRLOC ": don't use this for multihead "));
-  
   return gdk_screen_get_default_colormap (gdk_get_default_screen ());
 }
+#endif
 
 /**
  * gtk_widget_get_default_visual:
@@ -5066,12 +5068,14 @@ gtk_widget_get_default_colormap (void)
  * 
  * Return value: visual of the default colormap
  **/
+#ifndef GDK_MULTIHEAD_SAFE
 GdkVisual*
 gtk_widget_get_default_visual (void)
 {
   GTK_NOTE (MISC, g_message (G_STRLOC ": don't use for multihead !!")); 
   return gdk_colormap_get_visual (gtk_widget_get_default_colormap ());
 }
+#endif
 
 static void
 gtk_widget_emit_direction_changed (GtkWidget        *widget,
@@ -5243,9 +5247,9 @@ gtk_widget_real_destroy (GtkObject *object)
   gtk_grab_remove (widget);
   gtk_selection_remove_all (widget);
   
-  gtk_style_unref (widget->style);
+  g_object_unref (widget->style);
   widget->style = gtk_widget_get_default_style ();
-  gtk_style_ref (widget->style);
+  g_object_ref (widget->style);
 
   GTK_OBJECT_CLASS (parent_class)->destroy (object);
 }
@@ -5262,7 +5266,7 @@ gtk_widget_finalize (GObject *object)
   gtk_grab_remove (widget);
   gtk_selection_remove_all (widget);
 
-  gtk_style_unref (widget->style);
+  g_object_unref (widget->style);
   widget->style = NULL;
 
   if (widget->name)
@@ -5411,6 +5415,21 @@ gtk_widget_real_size_request (GtkWidget         *widget,
 
   requisition->width = widget->requisition.width;
   requisition->height = widget->requisition.height;
+}
+
+/**
+ * _gtk_widget_peek_colormap:
+ * 
+ * Returns colormap currently pushed by gtk_widget_push_colormap, if any.
+ * 
+ * Return value: the currently pushed colormap, or %NULL if there is none.
+ **/
+GdkColormap*
+_gtk_widget_peek_colormap (void)
+{
+  if (colormap_stack)
+    return (GdkColormap*) colormap_stack->data;
+  return NULL;
 }
 
 static void

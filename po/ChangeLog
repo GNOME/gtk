@@ -1,3 +1,62 @@
+2001-09-26  Stanislav Visnovsky  <visnovsky@nenya.ms.mff.cuni.cz>
+
+	* sk.po: Finished Slovak translation.
+
+2001-09-25  Stanislav Visnovsky  <visnovsky@nenya.ms.mff.cuni.cz>
+
+	* sk.po: More updates.
+
+2001-09-24  Fatih Demir <kabalak@gtranslator.org>
+
+	* ta.po: Committed updated Tamil translation by Dinesh.
+
+2001-09-22  Stanislav Visnovsky  <visnovsky@nenya.ms.mff.cuni.cz>
+
+	* sk.po: Updated Slovak translation.
+
+2001-09-19  Kjartan Maraas  <kmaraas@gnome.org>
+
+	* no.po: Updated Norwegian (bokmål) translation.
+	
+2001-09-14  Christian Rose  <menthos@menthos.com>
+
+	* sv.po: Updated Swedish translation.
+
+Sat Sep  8 01:38:39 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* POTFILES.in: Remove a whole lot of duplicates 
+	introduced at some point, to prevent problems
+	like the last.  
+
+Sat Sep  8 01:44:32 2001  Jonathan Blandford  <jrb@redhat.com>
+
+	* POTFILES.in: missed one.
+
+2001-09-07  Darin Adler  <darin@bentspoon.com>
+
+	* POTFILES.in: Removed gtk/gtkcellrenderertextpixbuf.c
+	since it's not around any more.
+
+2001-09-07  Stanislav Visnovsky  <visnovsky@nenya.ms.mff.cuni.cz>
+
+	* sk.po: More translations.
+
+2001-09-06  Stanislav Visnovsky  <visnovsky@nenya.ms.mff.cuni.cz>
+
+	* sk.po: Continued fixing of Slovak translation.
+
+2001-09-06  Roy-Magne Mo  <rmo@sunnmor.net>
+
+	* nn.po: Updated Norwegian nynorsk translation
+
+2001-09-05  Ross Golder  <rossg@golder.org>
+
+	* Makefile.in.in (install-data-yes): Take DESTDIR into account
+
+2001-09-05  Pablo Saratxaga  <pablo@mandrakesoft.com>
+
+	* es.po: Updated Spanish file
+
 2001-09-03  Stanislav Visnovsky  <visnovsky@nenya.ms.mff.cuni.cz>
 
 	* sk.po: Started fixing Slovak translation.

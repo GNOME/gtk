@@ -27,10 +27,23 @@
 #include <time.h>
 
 #include "gdkcolor.h"
+#include "gdkinternals.h"
 #include "gdkprivate-x11.h"
 #include "gdkscreen-x11.h"
 #include "gdkdisplaymgr-x11.h"
-#include "gdkinternals.h"
+
+typedef struct _GdkColormapPrivateX11  GdkColormapPrivateX11;
+
+struct _GdkColormapPrivateX11
+{
+  Colormap xcolormap;
+  Display *xdisplay;
+  gint private_val;
+
+  GHashTable *hash;
+  GdkColorInfo *info;
+  time_t last_sync_time;
+};
 
 #define GDK_COLORMAP_PRIVATE_DATA(cmap) ((GdkColormapPrivateX11 *) GDK_COLORMAP (cmap)->windowing_data)
 
@@ -484,8 +497,6 @@ gdk_colors_alloc (GdkColormap   *colormap,
   return return_val != 0;
 }
 
-
-
 /* This is almost identical to gdk_colormap_free_colors.
  * Keep them in sync!
  */
@@ -812,7 +823,7 @@ gdk_colormap_alloc_colors_shared (GdkColormap *colormap,
       gchar *available = g_new (gchar, colormap->size);
       for (i = 0; i < colormap->size; i++)
 	available[i] = ((private->info[i].ref_count == 0) ||
-			!(private->info[i].flags && GDK_COLOR_WRITEABLE));
+			!(private->info[i].flags & GDK_COLOR_WRITEABLE));
       gdk_colormap_sync (colormap, FALSE);
       
       while (nremaining > 0)
@@ -998,9 +1009,12 @@ gdk_colormap_query_color (GdkColormap *colormap,
 {
   XColor xcolor;
   GdkVisual *visual;
-
+  GdkColormapPrivateX11 *private;
+  
   g_return_if_fail (GDK_IS_COLORMAP (colormap));
   
+  private = GDK_COLORMAP_PRIVATE_DATA (colormap);
+
   visual = gdk_colormap_get_visual (colormap);
 
   switch (visual->type) {
@@ -1069,7 +1083,7 @@ gdkx_colormap_get (Colormap xcolormap)
   if (colormap)
     return colormap;
 
-  if (xcolormap == DefaultColormap (gdk_display, gdk_screen))
+  if (xcolormap == DefaultColormap (gdk_display, _gdk_screen))
     return gdk_colormap_get_system ();
 
   colormap = g_object_new (gdk_colormap_get_type (), NULL);
@@ -1205,4 +1219,28 @@ gdk_colormap_equal (Colormap *a,
 		    Colormap *b)
 {
   return (*a == *b);
+}
+
+Display *
+gdk_x11_colormap_get_xdisplay (GdkColormap *colormap)
+{
+  GdkColormapPrivateX11 *private;
+
+  g_return_val_if_fail (GDK_IS_COLORMAP (colormap), NULL);
+
+  private = GDK_COLORMAP_PRIVATE_DATA (colormap);
+
+  return private->xdisplay;
+}
+
+Colormap
+gdk_x11_colormap_get_xcolormap (GdkColormap *colormap)
+{
+  GdkColormapPrivateX11 *private;
+
+  g_return_val_if_fail (GDK_IS_COLORMAP (colormap), None);
+
+  private = GDK_COLORMAP_PRIVATE_DATA (colormap);
+
+  return private->xcolormap;
 }

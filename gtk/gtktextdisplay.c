@@ -250,7 +250,10 @@ render_layout_line (GdkDrawable        *drawable,
       
       if (selected)
         {
-          fg_gc = render_state->widget->style->text_gc[GTK_STATE_SELECTED];
+	  if (GTK_WIDGET_HAS_FOCUS (render_state->widget))
+	    fg_gc = render_state->widget->style->text_gc[GTK_STATE_SELECTED];
+	  else
+	    fg_gc = render_state->widget->style->text_gc [GTK_STATE_ACTIVE];
         }
       else
         {
@@ -494,6 +497,8 @@ render_para (GdkDrawable        *drawable,
   PangoLayoutIter *iter;
   PangoRectangle layout_logical;
   int screen_width;
+  GdkGC *fg_gc, *bg_gc;
+  gint state;
   
   gboolean first = TRUE;
 
@@ -508,6 +513,14 @@ render_para (GdkDrawable        *drawable,
 
   screen_width = line_display->total_width;
   
+  if (GTK_WIDGET_HAS_FOCUS (render_state->widget))
+    state = GTK_STATE_SELECTED;
+  else
+    state = GTK_STATE_ACTIVE;
+
+  fg_gc = render_state->widget->style->text_gc [state];
+  bg_gc = render_state->widget->style->base_gc [state];
+
   do
     {
       PangoLayoutLine *line = pango_layout_iter_get_line (iter);
@@ -547,7 +560,7 @@ render_para (GdkDrawable        *drawable,
           selection_end_index > line->length + byte_offset) /* All selected */
         {
           gdk_draw_rectangle (drawable,
-                              render_state->widget->style->base_gc[GTK_STATE_SELECTED],
+                              bg_gc,
                               TRUE,
                               x + line_display->left_margin,
                               selection_y,
@@ -577,12 +590,11 @@ render_para (GdkDrawable        *drawable,
                                                           selection_y,
                                                           selection_height,
                                                           selection_start_index, selection_end_index);
-
-              gdk_gc_set_clip_region (render_state->widget->style->text_gc [GTK_STATE_SELECTED], clip_region);
-              gdk_gc_set_clip_region (render_state->widget->style->base_gc [GTK_STATE_SELECTED], clip_region);
+              gdk_gc_set_clip_region (fg_gc, clip_region);
+              gdk_gc_set_clip_region (bg_gc, clip_region);
 
               gdk_draw_rectangle (drawable,
-                                  render_state->widget->style->base_gc[GTK_STATE_SELECTED],
+                                  bg_gc,
                                   TRUE,
                                   x + PANGO_PIXELS (line_rect.x),
                                   selection_y,
@@ -594,8 +606,8 @@ render_para (GdkDrawable        *drawable,
                                   y + PANGO_PIXELS (baseline),
                                   TRUE);
 
-              gdk_gc_set_clip_region (render_state->widget->style->text_gc [GTK_STATE_SELECTED], NULL);
-              gdk_gc_set_clip_region (render_state->widget->style->base_gc [GTK_STATE_SELECTED], NULL);
+              gdk_gc_set_clip_region (fg_gc, NULL);
+              gdk_gc_set_clip_region (bg_gc, NULL);
 
               gdk_region_destroy (clip_region);
 
@@ -605,7 +617,7 @@ render_para (GdkDrawable        *drawable,
                    (line_display->direction == GTK_TEXT_DIR_RTL && selection_end_index > byte_offset + line->length)))
                 {
                   gdk_draw_rectangle (drawable,
-                                      render_state->widget->style->base_gc[GTK_STATE_SELECTED],
+                                      bg_gc,
                                       TRUE,
                                       x + line_display->left_margin,
                                       selection_y,
@@ -625,7 +637,7 @@ render_para (GdkDrawable        *drawable,
                     PANGO_PIXELS (line_rect.x) - PANGO_PIXELS (line_rect.width);
 
                   gdk_draw_rectangle (drawable,
-                                      render_state->widget->style->base_gc[GTK_STATE_SELECTED],
+                                      bg_gc,
                                       TRUE,
                                       x + PANGO_PIXELS (line_rect.x) + PANGO_PIXELS (line_rect.width),
                                       selection_y,
@@ -704,6 +716,7 @@ void
 gtk_text_layout_draw (GtkTextLayout *layout,
                       GtkWidget *widget,
                       GdkDrawable *drawable,
+		      GdkGC       *cursor_gc,
                       /* Location of the drawable
                          in layout coordinates */
                       gint x_offset,
@@ -763,6 +776,8 @@ gtk_text_layout_draw (GtkTextLayout *layout,
       GtkTextLineDisplay *line_display;
       gint selection_start_index = -1;
       gint selection_end_index = -1;
+      gboolean have_strong;
+      gboolean have_weak;
 
       GtkTextLine *line = tmp_list->data;
 
@@ -811,23 +826,53 @@ gtk_text_layout_draw (GtkTextLayout *layout,
           /* We paint the cursors last, because they overlap another chunk
          and need to appear on top. */
 
+ 	  have_strong = FALSE;
+ 	  have_weak = FALSE;
+	  
+	  cursor_list = line_display->cursors;
+	  while (cursor_list)
+	    {
+	      GtkTextCursorDisplay *cursor = cursor_list->data;
+ 	      if (cursor->is_strong)
+ 		have_strong = TRUE;
+ 	      else
+ 		have_weak = TRUE;
+	      
+	      cursor_list = cursor_list->next;
+ 	    }
+	  
           cursor_list = line_display->cursors;
           while (cursor_list)
             {
               GtkTextCursorDisplay *cursor = cursor_list->data;
+	      GtkTextDirection dir;
+ 	      GdkRectangle cursor_location;
+
               GdkGC *gc;
 
               if (cursor->is_strong)
-                gc = widget->style->base_gc[GTK_STATE_SELECTED];
+                gc = cursor_gc;
               else
                 gc = widget->style->text_gc[GTK_STATE_NORMAL];
 
-              gdk_gc_set_clip_rectangle (gc, &clip);
-              gdk_draw_line (drawable, gc,
-                             line_display->x_offset + cursor->x - x_offset,
-                             current_y + line_display->top_margin + cursor->y,
-                             line_display->x_offset + cursor->x - x_offset,
-                             current_y + line_display->top_margin + cursor->y + cursor->height - 1);
+ 	      if (have_strong && have_weak)
+ 		{
+ 		  dir = line_display->direction;
+ 		  if (!cursor->is_strong)
+ 		    dir = (dir == GTK_TEXT_DIR_RTL) ? GTK_TEXT_DIR_LTR : GTK_TEXT_DIR_RTL;
+ 		}
+ 	      else
+ 		{
+ 		  dir = GTK_TEXT_DIR_NONE;
+ 		}
+ 
+ 	      cursor_location.x = line_display->x_offset + cursor->x - x_offset;
+ 	      cursor_location.y = current_y + line_display->top_margin + cursor->y;
+ 	      cursor_location.width = 0;
+ 	      cursor_location.height = cursor->height;
+ 
+	      gdk_gc_set_clip_rectangle(gc, &clip);
+ 	      _gtk_draw_insertion_cursor (drawable, gc, &cursor_location, dir);
               gdk_gc_set_clip_rectangle (gc, NULL);
 
               cursor_list = cursor_list->next;

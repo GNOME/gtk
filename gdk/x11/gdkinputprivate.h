@@ -126,11 +126,11 @@ struct _GdkInputWindow
 
 /* Global data */
 
-#define GDK_IS_CORE(d) (((GdkDevice *)(d)) == gdk_core_pointer)
+#define GDK_IS_CORE(d) (((GdkDevice *)(d)) == _gdk_core_pointer)
 
 /* information about network port and host for gxid daemon */
-extern gchar           *gdk_input_gxid_host;
-extern gint             gdk_input_gxid_port;
+extern gchar           *_gdk_input_gxid_host;
+extern gint             _gdk_input_gxid_port;
 
 /* Function declarations */
 

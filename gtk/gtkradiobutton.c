@@ -323,6 +323,9 @@ gtk_radio_button_destroy (GtkObject *object)
       tmp_button->group = radio_button->group;
     }
 
+  /* this button is no longer in the group */
+  radio_button->group = NULL;
+  
   if (GTK_OBJECT_CLASS (parent_class)->destroy)
     (* GTK_OBJECT_CLASS (parent_class)->destroy) (object);
 }
@@ -463,7 +466,7 @@ gtk_radio_button_draw_indicator (GtkCheckButton *check_button,
 	x = widget->allocation.x + widget->allocation.width - (indicator_size + x - widget->allocation.x);
 
       gtk_paint_option (widget->style, widget->window,
-			GTK_WIDGET_STATE (widget), shadow_type,
+			state_type, shadow_type,
 			area, widget, "radiobutton",
 			x, y, indicator_size, indicator_size);
     }

@@ -228,12 +228,12 @@ static GdkPixbufModule file_formats [] = {
 	{ "pnm",  pixbuf_check_pnm, NULL,  NULL, NULL, NULL, NULL, NULL, NULL },
 	{ "ras",  pixbuf_check_sunras, NULL,  NULL, NULL, NULL, NULL, NULL, NULL },
 	{ "bmp",  pixbuf_check_bmp, NULL,  NULL, NULL, NULL, NULL, NULL, NULL },
-	{ "wbmp", pixbuf_check_wbmp, NULL, NULL, NULL, NULL, NULL, NULL, NULL },
 	{ "xbm",  pixbuf_check_xbm, NULL,  NULL, NULL, NULL, NULL, NULL, NULL },
 	{ "tga", pixbuf_check_tga, NULL, NULL, NULL, NULL, NULL, NULL, NULL },
 	/* Moved at the bottom, because it causes false positives against many
 	   of my TGA files. */
-	{ "ico",  pixbuf_check_ico, NULL,  NULL, NULL, NULL, NULL, NULL, NULL },
+	{ "ico",  pixbuf_check_ico, NULL,  NULL, NULL, NULL, NULL, NULL, NULL },	
+	{ "wbmp", pixbuf_check_wbmp, NULL, NULL, NULL, NULL, NULL, NULL, NULL },
 	{ NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL }
 };
 

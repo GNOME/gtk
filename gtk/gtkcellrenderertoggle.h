@@ -43,6 +43,7 @@ struct _GtkCellRendererToggle
 
   /*< private >*/
   guint active : 1;
+  guint activatable : 1;
   guint radio : 1;
 };
 
@@ -50,7 +51,7 @@ struct _GtkCellRendererToggleClass
 {
   GtkCellRendererClass parent_class;
 
-  void (* toggled) (GtkCellRendererToggle *celltoggle,
+  void (* toggled) (GtkCellRendererToggle *cell_renderer_toggle,
 		    gchar                 *path);
 };
 

@@ -165,6 +165,13 @@ gtk_accel_group_init (GtkAccelGroup *accel_group)
   accel_group->attach_objects = NULL;
 }
 
+/**
+ * gtk_accel_group_new:
+ * 
+ * Creates a new #GtkAccelGroup. 
+ * 
+ * Return value: a new #GtkAccelGroup
+ **/
 GtkAccelGroup*
 gtk_accel_group_new (void)
 {
@@ -175,6 +182,20 @@ gtk_accel_group_new (void)
   return accel_group;
 }
 
+/**
+ * gtk_accel_group_get_default:
+ * 
+ * Gets the global default accelerator group; this is a fallback
+ * used for all objects when gtk_accel_groups_activate() is called
+ * on them. As such it's probably not appropriate for most uses.
+ * (Accelerators are normally specific to a document window or the
+ * like, rather than global to an application.)
+ *
+ * The returned value does not have its reference count incremented,
+ * and should not be unreferenced.
+ * 
+ * Return value: the default accelerator group
+ **/
 GtkAccelGroup*
 gtk_accel_group_get_default (void)
 {
@@ -184,6 +205,15 @@ gtk_accel_group_get_default (void)
   return default_accel_group;
 }
 
+/**
+ * gtk_accel_group_ref:
+ * @accel_group: a #GtkAccelGroup
+ * 
+ * This is simply equivalent to g_object_ref (G_OBJECT (@accel_group)),
+ * and exists for historical reasons only.
+ * 
+ * Return value: @accel_group
+ **/
 GtkAccelGroup*
 gtk_accel_group_ref (GtkAccelGroup	*accel_group)
 {
@@ -192,6 +222,14 @@ gtk_accel_group_ref (GtkAccelGroup	*accel_group)
   return (GtkAccelGroup *)g_object_ref(accel_group);
 }
 
+/**
+ * gtk_accel_group_unref:
+ * @accel_group: a #GtkAccelGroup
+ * 
+ * This is simply equivalent to g_object_unref (G_OBJECT (@accel_group)),
+ * and exists for historical reasons only.
+ * 
+ **/
 void
 gtk_accel_group_unref (GtkAccelGroup  *accel_group)
 {
@@ -217,6 +255,20 @@ gtk_accel_group_object_destroy (GSList *free_list,
   g_slist_free (free_list);
 }
 
+/**
+ * gtk_accel_group_attach:
+ * @accel_group: a #GtkAccelGroup
+ * @object: object to attach accelerators to
+ *
+ * Associate @accel_group with @object, such that calling
+ * gtk_accel_groups_activate() on @object will activate accelerators
+ * in @accel_group.
+ *
+ * After calling this function, you still own a reference to both
+ * @accel_group and @object; gtk_accel_group_attach() will not
+ * "adopt" a reference to either one.
+ * 
+ **/
 void
 gtk_accel_group_attach (GtkAccelGroup	*accel_group,
 			GObject		*object)
@@ -241,6 +293,14 @@ gtk_accel_group_attach (GtkAccelGroup	*accel_group,
 		    slist);
 }
 
+/**
+ * gtk_accel_group_detach:
+ * @accel_group: a #GtkAccelGroup
+ * @object: a #GObject
+ *
+ * Reverses the effects of gtk_accel_group_attach().
+ * 
+ **/
 void
 gtk_accel_group_detach (GtkAccelGroup	*accel_group,
 		        GObject		*object)
@@ -265,6 +325,19 @@ gtk_accel_group_detach (GtkAccelGroup	*accel_group,
 		      slist);
 }
 
+/**
+ * gtk_accel_group_lock:
+ * @accel_group: a #GtkAccelGroup
+ * 
+ * Prevents the addition of new accelerators to @accel_group.
+ * Primarily used to avoid the "dynamic accelerator editing" feature
+ * of #GtkMenu.
+ *
+ * If called more than once, @accel_group remains locked until
+ * gtk_accel_group_unlock() has been called an equivalent number
+ * of times.
+ * 
+ **/
 void
 gtk_accel_group_lock (GtkAccelGroup	 *accel_group)
 {
@@ -273,6 +346,15 @@ gtk_accel_group_lock (GtkAccelGroup	 *accel_group)
   accel_group->lock_count += 1;
 }
 
+/**
+ * gtk_accel_group_unlock:
+ * @accel_group: a #GtkAccelGroup
+ * 
+ * Allows the addition of new accelerators to @accel_group.
+ * Primarily used to enable the "dynamic accelerator editing" feature
+ * of #GtkMenu.
+ * 
+ **/
 void
 gtk_accel_group_unlock (GtkAccelGroup  *accel_group)
 {
@@ -296,6 +378,21 @@ gtk_accel_group_lookup (GtkAccelGroup	*accel_group,
   return g_hash_table_lookup (accel_entry_hash_table, &key_entry);
 }
 
+/**
+ * gtk_accel_group_activate:
+ * @accel_group: a #GtkAccelGroup
+ * @accel_key: keyval from a key event
+ * @accel_mods: modifier mask from a key event
+ *
+ * Checks whether a key event matches an accelerator in @accel_group;
+ * if so, activates the accelerator, and returns %TRUE. Returns
+ * %FALSE if no match.
+ *
+ * gtk_accel_groups_activate() should normally be used instead of
+ * this function.
+ * 
+ * Return value: %TRUE if an accelerator was activated
+ **/
 gboolean
 gtk_accel_group_activate (GtkAccelGroup	 *accel_group,
 			  guint		  accel_key,
@@ -315,6 +412,22 @@ gtk_accel_group_activate (GtkAccelGroup	 *accel_group,
   return FALSE;
 }
 
+/**
+ * gtk_accel_groups_activate:
+ * @object: a #GObject
+ * @accel_key: accelerator keyval from a key event
+ * @accel_mods: keyboard state mask from a key event
+ * 
+ * Finds the first accelerator in any #GtkAccelGroup attached
+ * to @object that matches @accel_key and @accel_mods, and
+ * activates that accelerator. If no accelerators are found
+ * in groups attached to @object, this function also tries
+ * the default #GtkAccelGroup (see gtk_accel_group_get_default()).
+ * If an accelerator is activated, returns %TRUE, otherwise
+ * %FALSE.
+ * 
+ * Return value: %TRUE if an accelerator was activated
+ **/
 gboolean
 gtk_accel_groups_activate (GObject	    *object,
 			   guint	     accel_key,
@@ -373,6 +486,28 @@ gtk_accel_group_get_entry (GtkAccelGroup    *accel_group,
   return gtk_accel_group_lookup (accel_group, accel_key, accel_mods);
 }
 
+/**
+ * gtk_accel_group_add:
+ * @accel_group: a #GtkAccelGroup
+ * @accel_key: accelerator keyval
+ * @accel_mods: accelerator modifiers
+ * @accel_flags: accelerator flags
+ * @object: object that @accel_signal will be emitted on
+ * @accel_signal: name of a #G_SIGNAL_ACTION signal to emit
+ *
+ * Adds an accelerator to @accel_group. When the accelerator is
+ * activated, the @accel_signal signal will be emitted on @object.
+ *
+ * So for example, to click a button when Ctrl+a is pressed, you would
+ * write: gtk_accel_group_add (accel_group, GDK_a, GDK_CONTROL_MASK,
+ * 0, G_OBJECT (button), "clicked").
+ *
+ * @accel_flags is not particularly useful, always pass 0 for
+ * normal applications.
+ *
+ * @object must be an object that specifically supports accelerators,
+ * such as #GtkWidget.
+ **/
 void
 gtk_accel_group_add (GtkAccelGroup	*accel_group,
 		     guint		 accel_key,
@@ -578,6 +713,18 @@ gtk_accel_group_handle_add (GObject	      *object,
     }
 }
 
+/**
+ * gtk_accel_group_remove:
+ * @accel_group: a #GtkAccelGroup
+ * @accel_key: accelerator keyval
+ * @accel_mods: accelerator modifiers
+ * @object: object the accelerator activates
+ *
+ * Removes an accelerator. The @accel_key, @accel_mods, and @object
+ * arguments are the same ones used to add the accelerator
+ * with gtk_accel_group_add().
+ * 
+ **/
 void
 gtk_accel_group_remove (GtkAccelGroup	  *accel_group,
 			guint		   accel_key,
@@ -730,6 +877,18 @@ gtk_accel_group_entries_from_object (GObject	     *object)
   return g_object_get_qdata (object, accel_entries_key_id);
 }
 
+/**
+ * gtk_accelerator_valid:
+ * @keyval: a GDK keyval
+ * @modifiers: modifier mask
+ * 
+ * Determines whether a given keyval and modifier mask constitute
+ * a valid keyboard accelerator. For example, the GDK_a keyval
+ * plus GDK_CONTROL_MASK is valid - this is a "Ctrl+a" accelerator.
+ * But you can't use the NumLock key as an accelerator.
+ * 
+ * Return value: %TRUE if the accelerator is valid
+ **/
 gboolean
 gtk_accelerator_valid (guint		  keyval,
 		       GdkModifierType	  modifiers)
@@ -858,6 +1017,21 @@ is_release (const gchar *string)
 	  (string[8] == '>'));
 }
 
+/**
+ * gtk_accelerator_parse:
+ * @accelerator: string representing an accelerator
+ * @accelerator_key: return location for accelerator keyval
+ * @accelerator_mods: return location for accelerator mod mask
+ *
+ * Parses a string representing an accelerator. The
+ * format looks like "<Control>a" or "<Shift><Alt>F1" or
+ * "<Release>z" (the last one is for key release).
+ * The parser is fairly liberal and allows lower or upper case,
+ * and also abbreviations such as "<Ctl>" and "<Ctrl>".
+ *
+ * If the parse fails, @accelerator_key and @accelerator_mods will
+ * be set to 0 (zero).
+ **/
 void
 gtk_accelerator_parse (const gchar    *accelerator,
 		       guint          *accelerator_key,
@@ -961,6 +1135,20 @@ gtk_accelerator_parse (const gchar    *accelerator,
     *accelerator_mods = mods;
 }
 
+/**
+ * gtk_accelerator_name:
+ * @accelerator_key: an accelerator keyval
+ * @accelerator_mods: modifier mask
+ * 
+ * Converts an accelerator keyval and modifier mask
+ * into a string parseable by gtk_accelerator_parse().
+ * For example, if you pass in GDK_q and GDK_CONTROL_MASK,
+ * this function returns "<Control>q". 
+ *
+ * The caller of this function must free the return value.
+ * 
+ * Return value: the new accelerator name
+ **/
 gchar*
 gtk_accelerator_name (guint           accelerator_key,
 		      GdkModifierType accelerator_mods)
@@ -1051,12 +1239,32 @@ gtk_accelerator_name (guint           accelerator_key,
   return accelerator;
 }
 
+/**
+ * gtk_accelerator_set_default_mod_mask:
+ * @default_mod_mask: a modifier mask
+ *
+ * Sets the modifiers that will be considered significant for keyboard
+ * accelerators. The default mod mask is #GDK_CONTROL_MASK |
+ * #GDK_SHIFT_MASK | #GDK_MOD1_MASK, that is, Control, Shift, and Alt.
+ * Other modifiers will be ignored by #GtkAccelGroup.
+ *
+ * The default mod mask should be changed on application startup,
+ * before creating any accelerator groups.
+ * 
+ **/
 void
 gtk_accelerator_set_default_mod_mask (GdkModifierType default_mod_mask)
 {
   default_accel_mod_mask = default_mod_mask & GDK_MODIFIER_MASK;
 }
 
+/**
+ * gtk_accelerator_get_default_mod_mask:
+ *
+ * Gets the value set by gtk_accelerator_set_default_mod_mask().
+ * 
+ * Return value: the default modifier mask.
+ **/
 guint
 gtk_accelerator_get_default_mod_mask (void)
 {

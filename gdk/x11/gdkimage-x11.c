@@ -54,6 +54,15 @@
 #include "gdkdisplay-x11.h"
 #include "gdkscreen-x11.h"
 
+typedef struct _GdkImagePrivateX11     GdkImagePrivateX11;
+
+struct _GdkImagePrivateX11
+{
+  XImage *ximage;
+  GdkScreen *screen;
+  gpointer x_shm_info;
+};
+
 static GList *image_list = NULL;
 static gpointer parent_class = NULL;
 
@@ -120,7 +129,7 @@ gdk_image_finalize (GObject *object)
 
 
 void
-gdk_image_exit (void)
+_gdk_image_exit (void)
 {
   GdkImage *image;
 
@@ -254,7 +263,6 @@ gdk_image_new (GdkImageType  type,
 		{
 		  g_warning ("XShmCreateImage failed");
 		  GDK_DISPLAY_IMPL_X11 (screen_impl->display)->gdk_use_xshm = FALSE;
-
 		  goto error;
 		}
 
@@ -603,7 +611,7 @@ gdk_x11_image_destroy (GdkImage *image)
 
   private = PRIVATE_DATA (image);
 
-  if (private == NULL) /* This means that gdk_image_exit() destroyed the
+  if (private == NULL) /* This means that _gdk_image_exit() destroyed the
                         * image already, and now we're called a second
                         * time from _finalize()
                         */
@@ -643,4 +651,28 @@ gdk_x11_image_destroy (GdkImage *image)
 
   g_free (private);
   image->windowing_data = NULL;
+}
+
+Display *
+gdk_x11_image_get_xdisplay (GdkImage *image)
+{
+  GdkImagePrivateX11 *private;
+
+  g_return_val_if_fail (GDK_IS_IMAGE (image), NULL);
+
+  private = PRIVATE_DATA (image);
+
+  return GDK_SCREEN_XDISPLAY (private->screen);
+}
+
+XImage *
+gdk_x11_image_get_ximage (GdkImage *image)
+{
+  GdkImagePrivateX11 *private;
+
+  g_return_val_if_fail (GDK_IS_IMAGE (image), NULL);
+
+  private = PRIVATE_DATA (image);
+
+  return private->ximage;
 }

@@ -1,10 +1,10 @@
 ## Process this file with automake to produce Makefile.in
 
 libgdkincludedir = $(includedir)/gtk-2.0/gdk
-libgdkx11includedir = $(includedir)/gtk-2.0/gdk/x11
 
 INCLUDES = @STRIP_BEGIN@ 	\
 	-DG_LOG_DOMAIN=\"Gdk\"	\
+	-DINSIDE_GDK_X11	\
 	-I$(top_srcdir)		\
 	-I$(top_srcdir)/gdk	\
 	-I$(top_builddir)/gdk	\
@@ -41,6 +41,7 @@ libgdk_x11_la_SOURCES =    	\
 	gdkdisplaymgr-x11.c	\
 	gdkdnd-x11.c	   	\
 	gdkdrawable-x11.c  	\
+	gdkdrawable-x11.h	\
 	gdkevents-x11.c	   	\
 	gdkfont-x11.c	   	\
 	gdkgc-x11.c 	   	\
@@ -53,11 +54,13 @@ libgdk_x11_la_SOURCES =    	\
 	gdkmain-x11.c	   	\
 	gdkpango-x11.c		\
 	gdkpixmap-x11.c	   	\
+	gdkpixmap-x11.h		\
 	gdkproperty-x11.c  	\
 	gdkscreen-x11.c		\
 	gdkselection-x11.c 	\
 	gdkvisual-x11.c	   	\
 	gdkwindow-x11.c    	\
+	gdkwindow-x11.h		\
 	gdkxid.c	   	\
 	gxid_lib.c	   	\
 	gxid_lib.h	   	\
@@ -73,11 +76,6 @@ libgdk_x11_la_SOURCES =    	\
 
 libgdkinclude_HEADERS = 	\
 	gdkx.h
-
-libgdkx11include_HEADERS = 	\
-	gdkdrawable-x11.h	\
-	gdkwindow-x11.h		\
-	gdkpixmap-x11.h
 
 EXTRA_PROGRAMS = gxid
 bin_PROGRAMS = @xinput_progs@

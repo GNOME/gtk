@@ -38,6 +38,7 @@ noinst_PROGRAMS = 		\
 	$(testsocket_programs)	\
 	testtext		\
         testtextbuffer		\
+	testtreeedit		\
 	testtreeview		\
 	testtreefocus		\
 	testtreecolumns		\
@@ -58,6 +59,7 @@ testsocket_DEPENDENCIES = $(DEPS)
 testsocket_child_DEPENDENCIES = $(DEPS)
 testtext_DEPENDENCIES = $(TEST_DEPS)
 testtextbuffer_DEPENDENCIES = $(TEST_DEPS)
+testtreeedit_DEPENDENCIS = $(DEPS)
 testtreeview_DEPENDENCIES = $(DEPS)
 testtreefocus_DEPENDENCIES = $(DEPS)
 testtreecolumns_DEPENDENCIES = $(DEPS)
@@ -77,6 +79,7 @@ testselection_LDADD = $(LDADDS)
 testsocket_LDADD = $(LDADDS)
 testsocket_child_LDADD = $(LDADDS)
 testtextbuffer_LDADD = $(LDADDS)
+testtreeedit_LDADD = $(LDADDS)
 testtreeview_LDADD = $(LDADDS)
 testtreefocus_LDADD = $(LDADDS)
 testtreecolumns_LDADD = $(LDADDS)
@@ -87,6 +90,9 @@ treestoretest_LDADD = $(LDADDS)
 testgtk_SOURCES =	\
 	prop-editor.c   \
 	testgtk.c 	
+
+testtreeedit_SOURCES = 	\
+	testtreeedit.c
 
 testtreeview_SOURCES =	\
 	prop-editor.c	\
@@ -104,7 +110,7 @@ testsocket_child_SOURCES =    	\
 	testsocket_child.c	\
 	testsocket_common.c
 
-EXTRA_DIST += @STRIP_BEGIN@ 	\
+EXTRA_DIST = @STRIP_BEGIN@ 	\
 	prop-editor.h		\
 	testgtk.1 		\
 	testgtkrc 		\

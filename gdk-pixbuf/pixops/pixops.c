@@ -1345,7 +1345,7 @@ pixops_composite_color (guchar         *dest_buf,
 			gboolean        src_has_alpha,
 			double          scale_x,
 			double          scale_y,
-			GdkInterpType   interp_type,
+			PixopsInterpType   interp_type,
 			int             overall_alpha,
 			int             check_x,
 			int             check_y,
@@ -1374,7 +1374,7 @@ pixops_composite_color (guchar         *dest_buf,
 
   switch (interp_type)
     {
-    case GDK_INTERP_NEAREST:
+    case PIXOPS_INTERP_NEAREST:
       pixops_composite_color_nearest (dest_buf, render_x0, render_y0, render_x1, render_y1,
 				      dest_rowstride, dest_channels, dest_has_alpha,
 				      src_buf, src_width, src_height, src_rowstride, src_channels, src_has_alpha,
@@ -1382,15 +1382,15 @@ pixops_composite_color (guchar         *dest_buf,
 				      check_x, check_y, check_size, color1, color2);
       return;
 
-    case GDK_INTERP_TILES:
+    case PIXOPS_INTERP_TILES:
       tile_make_weights (&filter, scale_x, scale_y, overall_alpha / 255.);
       break;
       
-    case GDK_INTERP_BILINEAR:
+    case PIXOPS_INTERP_BILINEAR:
       bilinear_make_fast_weights (&filter, scale_x, scale_y, overall_alpha / 255.);
       break;
       
-    case GDK_INTERP_HYPER:
+    case PIXOPS_INTERP_HYPER:
       bilinear_make_weights (&filter, scale_x, scale_y, overall_alpha / 255.);
       break;
     }
@@ -1429,7 +1429,7 @@ pixops_composite (guchar        *dest_buf,
 		  gboolean       src_has_alpha,
 		  double         scale_x,
 		  double         scale_y,
-		  GdkInterpType  interp_type,
+		  PixopsInterpType  interp_type,
 		  int            overall_alpha)
 {
   PixopsFilter filter;
@@ -1453,22 +1453,22 @@ pixops_composite (guchar        *dest_buf,
 
   switch (interp_type)
     {
-    case GDK_INTERP_NEAREST:
+    case PIXOPS_INTERP_NEAREST:
       pixops_composite_nearest (dest_buf, render_x0, render_y0, render_x1, render_y1,
 				dest_rowstride, dest_channels, dest_has_alpha,
 				src_buf, src_width, src_height, src_rowstride, src_channels,
 				src_has_alpha, scale_x, scale_y, overall_alpha);
       return;
 
-    case GDK_INTERP_TILES:
+    case PIXOPS_INTERP_TILES:
       tile_make_weights (&filter, scale_x, scale_y, overall_alpha / 255.);
       break;
       
-    case GDK_INTERP_BILINEAR:
+    case PIXOPS_INTERP_BILINEAR:
       bilinear_make_fast_weights (&filter, scale_x, scale_y, overall_alpha / 255.);
       break;
       
-    case GDK_INTERP_HYPER:
+    case PIXOPS_INTERP_HYPER:
       bilinear_make_weights (&filter, scale_x, scale_y, overall_alpha / 255.);
       break;
     }
@@ -1512,7 +1512,7 @@ pixops_scale (guchar        *dest_buf,
 	      gboolean       src_has_alpha,
 	      double         scale_x,
 	      double         scale_y,
-	      GdkInterpType  interp_type)
+	      PixopsInterpType  interp_type)
 {
   PixopsFilter filter;
   PixopsLineFunc line_func;
@@ -1530,22 +1530,22 @@ pixops_scale (guchar        *dest_buf,
 
   switch (interp_type)
     {
-    case GDK_INTERP_NEAREST:
+    case PIXOPS_INTERP_NEAREST:
       pixops_scale_nearest (dest_buf, render_x0, render_y0, render_x1, render_y1,
 			    dest_rowstride, dest_channels, dest_has_alpha,
 			    src_buf, src_width, src_height, src_rowstride, src_channels, src_has_alpha,
 			    scale_x, scale_y);
       return;
 
-    case GDK_INTERP_TILES:
+    case PIXOPS_INTERP_TILES:
       tile_make_weights (&filter, scale_x, scale_y, 1.0);
       break;
       
-    case GDK_INTERP_BILINEAR:
+    case PIXOPS_INTERP_BILINEAR:
       bilinear_make_fast_weights (&filter, scale_x, scale_y, 1.0);
       break;
       
-    case GDK_INTERP_HYPER:
+    case PIXOPS_INTERP_HYPER:
       bilinear_make_weights (&filter, scale_x, scale_y, 1.0);
       break;
     }

@@ -52,6 +52,8 @@ extern "C" {
 #define GTK_CTREE_NODE_PREV(_pnode_) ((GtkCTreeNode *)(((GList *)(_pnode_))->prev))
 #define GTK_CTREE_FUNC(_func_) ((GtkCTreeFunc)(_func_))
 
+#define GTK_TYPE_CTREE_NODE (gtk_ctree_node_get_type ())
+
 typedef enum
 {
   GTK_CTREE_POS_BEFORE,
@@ -431,6 +433,12 @@ void gtk_ctree_sort_recursive                    (GtkCTree     *ctree,
 
 
 #define gtk_ctree_set_reorderable(t,r)                    gtk_clist_set_reorderable((GtkCList*) (t),(r))
+
+/* GType for the GtkCTreeNode.  This is a boxed type, although it uses
+ * no-op's for the copy and free routines.  It is defined in order to
+ * provide type information for the signal arguments
+ */
+GType   gtk_ctree_node_get_type                  (void) G_GNUC_CONST;
 
 #ifdef __cplusplus
 }

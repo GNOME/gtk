@@ -337,7 +337,16 @@ gdk_pixbuf__jpeg_image_begin_load (ModulePreparedNotifyFunc prepared_func,
 	/* create libjpeg structures */
 	jpeg_create_decompress (&context->cinfo);
 
-	context->cinfo.src = (struct jpeg_source_mgr *) g_new0 (my_source_mgr, 1);
+	context->cinfo.src = (struct jpeg_source_mgr *) g_try_malloc (sizeof (my_source_mgr));
+	if (!context->cinfo.src) {
+	  g_set_error (error,
+		       GDK_PIXBUF_ERROR,
+		       GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY,
+		       _("Couldn't allocate memory for loading JPEG file"));
+	  return NULL;
+	}
+	memset (context->cinfo.src, 0, sizeof (my_source_mgr));
+       
 	src = (my_src_ptr) context->cinfo.src;
 
 	context->cinfo.err = jpeg_std_error (&context->jerr.pub);

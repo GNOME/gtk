@@ -31,6 +31,8 @@
 #include <string.h>
 #include <ctype.h>
 
+#define FIX_OVERFLOWS(varname) if ((varname) == G_MININT) (varname) = G_MININT + 1
+
 typedef struct _GtkTextRealIter GtkTextRealIter;
 
 struct _GtkTextRealIter
@@ -697,6 +699,17 @@ gtk_text_iter_get_line_index (const GtkTextIter *iter)
   return real->line_byte_offset;
 }
 
+/**
+ * gtk_text_iter_get_visible_line_offset:
+ * @iter: a #GtkTextIter
+ * 
+ * Returns the offset in characters from the start of the
+ * line to the given @iter, not counting characters that
+ * are invisible due to tags with the "invisible" flag
+ * toggled on.
+ * 
+ * Return value: offset in visible characters from the start of the line 
+ **/
 gint
 gtk_text_iter_get_visible_line_offset (const GtkTextIter *iter)
 {
@@ -748,6 +761,18 @@ gtk_text_iter_get_visible_line_offset (const GtkTextIter *iter)
   return vis_offset;
 }
 
+
+/**
+ * gtk_text_iter_get_visible_line_index:
+ * @iter: a #GtkTextIter
+ * 
+ * Returns the number of bytes from the start of the
+ * line to the given @iter, not counting bytes that
+ * are invisible due to tags with the "invisible" flag
+ * toggled on.
+ * 
+ * Return value: byte index of @iter with respect to the start of the line
+ **/
 gint
 gtk_text_iter_get_visible_line_index (const GtkTextIter *iter)
 {
@@ -1217,8 +1242,8 @@ gtk_text_iter_ends_tag   (const GtkTextIter  *iter,
  * Return value: whether @tag is toggled on or off at @iter
  **/
 gboolean
-gtk_text_iter_toggles_tag       (const GtkTextIter  *iter,
-                                 GtkTextTag         *tag)
+gtk_text_iter_toggles_tag (const GtkTextIter  *iter,
+                           GtkTextTag         *tag)
 {
   GtkTextRealIter *real;
   GtkTextLineSegment *seg;
@@ -1257,8 +1282,8 @@ gtk_text_iter_toggles_tag       (const GtkTextIter  *iter,
  * Return value: whether @iter is tagged with @tag
  **/
 gboolean
-gtk_text_iter_has_tag           (const GtkTextIter   *iter,
-                                 GtkTextTag          *tag)
+gtk_text_iter_has_tag (const GtkTextIter   *iter,
+                       GtkTextTag          *tag)
 {
   GtkTextRealIter *real;
 
@@ -1275,13 +1300,13 @@ gtk_text_iter_has_tag           (const GtkTextIter   *iter,
   if (real->line_byte_offset >= 0)
     {
       return _gtk_text_line_byte_has_tag (real->line, real->tree,
-                                         real->line_byte_offset, tag);
+                                          real->line_byte_offset, tag);
     }
   else
     {
       g_assert (real->line_char_offset >= 0);
       return _gtk_text_line_char_has_tag (real->line, real->tree,
-                                         real->line_char_offset, tag);
+                                          real->line_char_offset, tag);
     }
 }
 
@@ -1338,14 +1363,21 @@ gtk_text_iter_get_tags (const GtkTextIter *iter)
 /**
  * gtk_text_iter_editable:
  * @iter: an iterator
- * @default_setting: TRUE if text is editable by default
+ * @default_setting: %TRUE if text is editable by default
  *
- * Returns whether @iter is within an editable region of text.
- * Non-editable text is "locked" and can't be changed by the user via
- * #GtkTextView. This function is simply a convenience wrapper around
- * gtk_text_iter_get_attributes (). If no tags applied to this text
- * affect editability, @default_setting will be returned.
+ * Returns whether the character at @iter is within an editable region
+ * of text.  Non-editable text is "locked" and can't be changed by the
+ * user via #GtkTextView. This function is simply a convenience
+ * wrapper around gtk_text_iter_get_attributes (). If no tags applied
+ * to this text affect editability, @default_setting will be returned.
  *
+ * You don't want to use this function to decide whether text can be
+ * inserted at @iter, because for insertion you don't want to know
+ * whether the char at @iter is inside an editable range, you want to
+ * know whether a new character inserted at @iter would be inside an
+ * editable range. Use gtk_text_iter_can_insert() to handle this
+ * case.
+ * 
  * Return value: whether @iter is inside an editable range
  **/
 gboolean
@@ -1355,6 +1387,8 @@ gtk_text_iter_editable (const GtkTextIter *iter,
   GtkTextAttributes *values;
   gboolean retval;
 
+  g_return_val_if_fail (iter != NULL, FALSE);
+  
   values = gtk_text_attributes_new ();
 
   values->editable = default_setting;
@@ -1367,6 +1401,46 @@ gtk_text_iter_editable (const GtkTextIter *iter,
 
   return retval;
 }
+
+/**
+ * gtk_text_iter_can_insert:
+ * @iter: an iterator
+ * @default_editability: %TRUE if text is editable by default
+ * 
+ * Considering the default editability of the buffer, and tags that
+ * affect editability, determines whether text inserted at @iter would
+ * be editable. If text inserted at @iter would be editable then the
+ * user should be allowed to insert text at @iter.
+ * gtk_text_buffer_insert_interactive() uses this function to decide
+ * whether insertions are allowed at a given position.
+ * 
+ * Return value: whether text inserted at @iter would be editable
+ **/
+gboolean
+gtk_text_iter_can_insert (const GtkTextIter *iter,
+                          gboolean           default_editability)
+{
+  g_return_val_if_fail (iter != NULL, FALSE);
+  
+  if (gtk_text_iter_editable (iter, default_editability))
+    return TRUE;
+  /* If at start/end of buffer, default editability is used */
+  else if ((gtk_text_iter_is_start (iter) ||
+            gtk_text_iter_is_end (iter)) &&
+           default_editability)
+    return TRUE;
+  else
+    {
+      /* if iter isn't editable, and the char before iter is,
+       * then iter is the first char in an editable region
+       * and thus insertion at iter results in editable text.
+       */
+      GtkTextIter prev = *iter;
+      gtk_text_iter_backward_char (&prev);
+      return gtk_text_iter_editable (&prev, default_editability);
+    }
+}
+
 
 /**
  * gtk_text_iter_get_language:
@@ -1507,7 +1581,19 @@ gtk_text_iter_is_end (const GtkTextIter *iter)
 
   check_invariants (iter);
 
-  return _gtk_text_line_is_last (real->line, real->tree);
+  if (!_gtk_text_line_contains_end_iter (real->line, real->tree))
+    return FALSE;
+
+  /* Now we need the segments validated */
+  real = gtk_text_iter_make_real (iter);
+
+  if (real == NULL)
+    return FALSE;
+  
+  return _gtk_text_btree_is_end (real->tree, real->line,
+                                 real->segment,
+                                 real->segment_byte_offset,
+                                 real->segment_char_offset);
 }
 
 /**
@@ -1640,7 +1726,7 @@ gtk_text_iter_get_bytes_in_line (const GtkTextIter   *iter)
  **/
 gboolean
 gtk_text_iter_get_attributes (const GtkTextIter  *iter,
-                              GtkTextAttributes *values)
+                              GtkTextAttributes  *values)
 {
   GtkTextTag** tags;
   gint tag_count = 0;
@@ -1676,18 +1762,23 @@ gtk_text_iter_get_attributes (const GtkTextIter  *iter,
 /* The return value of this indicates WHETHER WE MOVED.
  * The return value of public functions indicates
  * (MOVEMENT OCCURRED && NEW ITER IS DEREFERENCEABLE)
+ *
+ * This function will not change the iterator if
+ * it's already on the last (end iter) line, i.e. it
+ * won't move to the end of the last line.
  */
 static gboolean
 forward_line_leaving_caches_unmodified (GtkTextRealIter *real)
 {
-  GtkTextLine *new_line;
-
-  new_line = _gtk_text_line_next (real->line);
-
-  g_assert (new_line != real->line);
-
-  if (new_line != NULL)
+  if (!_gtk_text_line_contains_end_iter (real->line, real->tree))
     {
+      GtkTextLine *new_line;
+      
+      new_line = _gtk_text_line_next (real->line);
+      g_assert (new_line);
+      g_assert (new_line != real->line);
+      g_assert (!_gtk_text_line_is_last (new_line, real->tree));
+      
       real->line = new_line;
 
       real->line_byte_offset = 0;
@@ -1706,24 +1797,11 @@ forward_line_leaving_caches_unmodified (GtkTextRealIter *real)
     }
   else
     {
-      /* There is no way to move forward; we were already
-         at the "end" index. (the end index is the last
-         line pointer, segment_byte_offset of 0) */
-
-      g_assert (real->line_char_offset == 0 ||
-                real->line_byte_offset == 0);
-
-      /* The only indexable segment allowed on the bogus
-         line at the end is a single char segment containing
-         a newline. */
-      if (real->segments_changed_stamp ==
-          _gtk_text_btree_get_segments_changed_stamp (real->tree))
-        {
-          g_assert (real->segment->type == &gtk_text_char_type);
-          g_assert (real->segment->char_count == 1);
-        }
-      /* We leave real->line as-is */
-
+      /* There is no way to move forward a line; we were already at
+       * the line containing the end iterator.
+       * However we may not be at the end iterator itself.
+       */
+      
       return FALSE;
     }
 }
@@ -1925,6 +2003,10 @@ _gtk_text_iter_forward_indexable_segment (GtkTextIter *iter)
         {
           /* End of buffer */
 
+          g_assert (!_gtk_text_line_is_last (real->line, real->tree));
+          g_assert (_gtk_text_line_contains_end_iter (real->line, real->tree));
+          g_assert (gtk_text_iter_is_end (iter));
+          
           check_invariants (iter);
 
           return FALSE;
@@ -2173,6 +2255,8 @@ gtk_text_iter_forward_chars (GtkTextIter *iter, gint count)
 
   g_return_val_if_fail (iter != NULL, FALSE);
 
+  FIX_OVERFLOWS (count);
+  
   real = gtk_text_iter_make_real (iter);
 
   if (real == NULL)
@@ -2243,6 +2327,8 @@ gtk_text_iter_backward_chars (GtkTextIter *iter, gint count)
 
   g_return_val_if_fail (iter != NULL, FALSE);
 
+  FIX_OVERFLOWS (count);
+  
   real = gtk_text_iter_make_real (iter);
 
   if (real == NULL)
@@ -2391,7 +2477,7 @@ gtk_text_iter_forward_line (GtkTextIter *iter)
   GtkTextRealIter *real;
 
   g_return_val_if_fail (iter != NULL, FALSE);
-
+  
   real = gtk_text_iter_make_real (iter);
 
   if (real == NULL)
@@ -2413,6 +2499,11 @@ gtk_text_iter_forward_line (GtkTextIter *iter)
     }
   else
     {
+      /* On the last line, move to end of it */
+      
+      if (!gtk_text_iter_is_end (iter))
+        gtk_text_iter_forward_to_end (iter);
+      
       check_invariants (iter);
       return FALSE;
     }
@@ -2493,9 +2584,27 @@ gtk_text_iter_backward_line (GtkTextIter *iter)
   return TRUE;
 }
 
+
+/**
+ * gtk_text_iter_forward_lines:
+ * @iter: a #GtkTextIter
+ * @count: number of lines to move forward
+ *
+ * Moves @count lines forward, if possible (if @count would move
+ * past the start or end of the buffer, moves to the start or end of
+ * the buffer).  The return value indicates whether the iterator moved
+ * onto a dereferenceable position; if the iterator didn't move, or
+ * moved onto the end iterator, then FALSE is returned. If @count is 0,
+ * the function does nothing and returns FALSE. If @count is negative,
+ * moves backward by 0 - @count lines.
+ *
+ * Return value: whether @iter moved and is dereferenceable
+ **/
 gboolean
 gtk_text_iter_forward_lines (GtkTextIter *iter, gint count)
 {
+  FIX_OVERFLOWS (count);
+  
   if (count < 0)
     return gtk_text_iter_backward_lines (iter, 0 - count);
   else if (count == 0)
@@ -2522,9 +2631,26 @@ gtk_text_iter_forward_lines (GtkTextIter *iter, gint count)
     }
 }
 
+/**
+ * gtk_text_iter_backward_lines:
+ * @iter: a #GtkTextIter
+ * @count: number of lines to move backward
+ *
+ * Moves @count lines backward, if possible (if @count would move
+ * past the start or end of the buffer, moves to the start or end of
+ * the buffer).  The return value indicates whether the iterator moved
+ * onto a dereferenceable position; if the iterator didn't move, or
+ * moved onto the end iterator, then FALSE is returned. If @count is 0,
+ * the function does nothing and returns FALSE. If @count is negative,
+ * moves forward by 0 - @count lines.
+ *
+ * Return value: whether @iter moved and is dereferenceable
+ **/
 gboolean
 gtk_text_iter_backward_lines (GtkTextIter *iter, gint count)
 {
+  FIX_OVERFLOWS (count);
+  
   if (count < 0)
     return gtk_text_iter_forward_lines (iter, 0 - count);
   else if (count == 0)
@@ -2725,7 +2851,9 @@ test_log_attrs (const GtkTextIter *iter,
 
   offset = gtk_text_iter_get_line_offset (iter);
 
-  g_assert (char_len > 0);
+  /* char_len may be 0 and attrs will be NULL if so, if
+   * iter is the end iter and the last line is empty
+   */
   
   if (offset < char_len)
     result = (* func) (attrs, offset, 0, char_len);
@@ -2751,9 +2879,11 @@ find_line_log_attrs (const GtkTextIter *iter,
 
   offset = gtk_text_iter_get_line_offset (iter);
   
-  g_assert (char_len > 0);
+  /* char_len may be 0 and attrs will be NULL if so, if
+   * iter is the end iter and the last line is empty
+   */
   
-  if (offset < char_len)
+  if (attrs)
     result = (* func) (attrs, offset, 0, char_len, found_offset,
                        already_moved_initially);
 
@@ -2789,22 +2919,29 @@ find_by_log_attrs (GtkTextIter    *iter,
         }
       else
         {                    
-          /* go to end of previous line */
-          gtk_text_iter_set_line_offset (iter, 0);
-          
-          if (gtk_text_iter_backward_char (iter))
-            return find_by_log_attrs (iter, func, forward,
-                                      TRUE);
+          /* go to end of previous line. need to check that
+           * line is > 0 because backward_line snaps to start of
+           * line 0 if it's on line 0
+           */
+          if (gtk_text_iter_get_line (iter) > 0 && 
+              gtk_text_iter_backward_line (iter))
+            {
+              if (!gtk_text_iter_ends_line (iter))
+                gtk_text_iter_forward_to_line_end (iter);
+              
+              return find_by_log_attrs (iter, func, forward,
+                                        TRUE);
+            }
           else
             return FALSE;
         }
     }
   else
-    {
+    {      
       gtk_text_iter_set_line_offset (iter, offset);
 
       return
-        !gtk_text_iter_equal (iter, &orig) &&
+        (already_moved_initially || !gtk_text_iter_equal (iter, &orig)) &&
         !gtk_text_iter_is_end (iter);
     }
 }
@@ -2828,7 +2965,7 @@ gtk_text_iter_forward_word_end (GtkTextIter *iter)
 }
 
 /**
- * gtk_text_iter_forward_word_end:
+ * gtk_text_iter_backward_word_start:
  * @iter: a #GtkTextIter
  * 
  * Moves backward to the next word start. (If @iter is currently on a
@@ -2864,6 +3001,8 @@ gtk_text_iter_forward_word_ends (GtkTextIter      *iter,
 {
   g_return_val_if_fail (iter != NULL, FALSE);
 
+  FIX_OVERFLOWS (count);
+  
   if (count == 0)
     return FALSE;
 
@@ -2898,6 +3037,8 @@ gtk_text_iter_backward_word_starts (GtkTextIter      *iter,
 {
   g_return_val_if_fail (iter != NULL, FALSE);
 
+  FIX_OVERFLOWS (count);
+  
   if (count < 0)
     return gtk_text_iter_forward_word_ends (iter, -count);
 
@@ -3061,7 +3202,9 @@ gtk_text_iter_backward_sentence_start (GtkTextIter      *iter)
  * @iter: a #GtkTextIter
  * @count: number of sentences to move
  * 
- * Calls gtk_text_iter_forward_sentence_end() up to @count times.
+ * Calls gtk_text_iter_forward_sentence_end() @count times (or until
+ * gtk_text_iter_forward_sentence_end() returns %FALSE). If @count is
+ * negative, moves backward instead of forward.
  * 
  * Return value: %TRUE if @iter moved and is not the end iterator
  **/
@@ -3091,11 +3234,13 @@ gtk_text_iter_forward_sentence_ends (GtkTextIter      *iter,
 }
 
 /**
- * gtk_text_iter_forward_sentence_ends:
+ * gtk_text_iter_backward_sentence_starts:
  * @iter: a #GtkTextIter
  * @count: number of sentences to move
  * 
- * Calls gtk_text_iter_backward_sentence_start() up to @count times.
+ * Calls gtk_text_iter_backward_sentence_start() up to @count times,
+ * or until it returns %FALSE. If @count is negative, moves forward
+ * instead of backward.
  * 
  * Return value: %TRUE if @iter moved and is not the end iterator
  **/
@@ -3148,7 +3293,7 @@ find_backward_cursor_pos_func (const PangoLogAttr *attrs,
                                gint          len,
                                gint         *found_offset,
                                gboolean      already_moved_initially)
-{
+{  
   if (!already_moved_initially)
     --offset;
 
@@ -3223,6 +3368,8 @@ gtk_text_iter_forward_cursor_positions (GtkTextIter *iter,
 {
   g_return_val_if_fail (iter != NULL, FALSE);
 
+  FIX_OVERFLOWS (count);
+  
   if (count == 0)
     return FALSE;
   
@@ -3258,6 +3405,8 @@ gtk_text_iter_backward_cursor_positions (GtkTextIter *iter,
 {
   g_return_val_if_fail (iter != NULL, FALSE);
 
+  FIX_OVERFLOWS (count);
+  
   if (count == 0)
     return FALSE;
 
@@ -3658,7 +3807,7 @@ gtk_text_iter_forward_to_tag_toggle (GtkTextIter *iter,
 
   current_line = real->line;
   next_line = _gtk_text_line_next_could_contain_tag (current_line,
-                                                    real->tree, tag);
+                                                     real->tree, tag);
 
   while (_gtk_text_iter_forward_indexable_segment (iter))
     {
@@ -3680,8 +3829,8 @@ gtk_text_iter_forward_to_tag_toggle (GtkTextIter *iter,
 
           current_line = real->line;
           next_line = _gtk_text_line_next_could_contain_tag (current_line,
-                                                            real->tree,
-                                                            tag);
+                                                             real->tree,
+                                                             tag);
         }
 
       if (gtk_text_iter_toggles_tag (iter, tag))
@@ -4668,9 +4817,8 @@ gtk_text_iter_compare (const GtkTextIter *lhs,
  * @start: start of range
  * @end: end of range
  * 
- * @start and @end must be in order, unlike most text buffer
- * functions, for efficiency reasons. The function returns %TRUE if
- * @iter falls in the range [@start, @end).
+ * Checks whether @iter falls in the range [@start, @end).
+ * @start and @end must be in ascending order.
  * 
  * Return value: %TRUE if @iter is in the range
  **/
@@ -4679,6 +4827,11 @@ gtk_text_iter_in_range (const GtkTextIter *iter,
                         const GtkTextIter *start,
                         const GtkTextIter *end)
 {
+  g_return_val_if_fail (iter != NULL, FALSE);
+  g_return_val_if_fail (start != NULL, FALSE);
+  g_return_val_if_fail (end != NULL, FALSE);
+  g_return_val_if_fail (gtk_text_iter_compare (start, end) <= 0, FALSE);
+  
   return gtk_text_iter_compare (iter, start) >= 0 &&
     gtk_text_iter_compare (iter, end) < 0;
 }
@@ -4803,8 +4956,8 @@ _gtk_text_btree_get_iter_at_line      (GtkTextBTree   *tree,
 
 gboolean
 _gtk_text_btree_get_iter_at_first_toggle (GtkTextBTree   *tree,
-                                         GtkTextIter    *iter,
-                                         GtkTextTag     *tag)
+                                          GtkTextIter    *iter,
+                                          GtkTextTag     *tag)
 {
   GtkTextLine *line;
 
@@ -4831,8 +4984,8 @@ _gtk_text_btree_get_iter_at_first_toggle (GtkTextBTree   *tree,
 
 gboolean
 _gtk_text_btree_get_iter_at_last_toggle  (GtkTextBTree   *tree,
-                                         GtkTextIter    *iter,
-                                         GtkTextTag     *tag)
+                                          GtkTextIter    *iter,
+                                          GtkTextTag     *tag)
 {
   g_return_val_if_fail (iter != NULL, FALSE);
   g_return_val_if_fail (tree != NULL, FALSE);
@@ -4846,8 +4999,8 @@ _gtk_text_btree_get_iter_at_last_toggle  (GtkTextBTree   *tree,
 
 gboolean
 _gtk_text_btree_get_iter_at_mark_name (GtkTextBTree *tree,
-                                      GtkTextIter *iter,
-                                      const gchar *mark_name)
+                                       GtkTextIter *iter,
+                                       const gchar *mark_name)
 {
   GtkTextMark *mark;
 
@@ -4868,8 +5021,8 @@ _gtk_text_btree_get_iter_at_mark_name (GtkTextBTree *tree,
 
 void
 _gtk_text_btree_get_iter_at_mark (GtkTextBTree *tree,
-                                 GtkTextIter *iter,
-                                 GtkTextMark *mark)
+                                  GtkTextIter *iter,
+                                  GtkTextMark *mark)
 {
   GtkTextLineSegment *seg;
 
@@ -4887,8 +5040,8 @@ _gtk_text_btree_get_iter_at_mark (GtkTextBTree *tree,
 
 void
 _gtk_text_btree_get_iter_at_child_anchor (GtkTextBTree       *tree,
-                                         GtkTextIter        *iter,
-                                         GtkTextChildAnchor *anchor)
+                                          GtkTextIter        *iter,
+                                          GtkTextChildAnchor *anchor)
 {
   GtkTextLineSegment *seg;
 
@@ -4915,28 +5068,6 @@ _gtk_text_btree_get_end_iter         (GtkTextBTree   *tree,
                                    iter,
                                    _gtk_text_btree_char_count (tree));
   check_invariants (iter);
-}
-
-void
-gtk_text_iter_spew (const GtkTextIter *iter, const gchar *desc)
-{
-  GtkTextRealIter *real = (GtkTextRealIter*)iter;
-
-  g_return_if_fail (iter != NULL);
-
-  if (real->chars_changed_stamp != _gtk_text_btree_get_chars_changed_stamp (real->tree))
-    g_print (" %20s: <invalidated iterator>\n", desc);
-  else
-    {
-      check_invariants (iter);
-      g_print (" %20s: line %d / char %d / line char %d / line byte %d\n",
-               desc,
-               gtk_text_iter_get_line (iter),
-               gtk_text_iter_get_offset (iter),
-               gtk_text_iter_get_line_offset (iter),
-               gtk_text_iter_get_line_index (iter));
-      check_invariants (iter);
-    }
 }
 
 void
@@ -5117,5 +5248,8 @@ _gtk_text_iter_check (const GtkTextIter *iter)
             g_error ("wrong char index was cached");
         }
     }
+
+  if (_gtk_text_line_is_last (real->line, real->tree))
+    g_error ("Iterator was on last line (past the end iterator)");
 }
 

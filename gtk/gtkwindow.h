@@ -107,6 +107,7 @@ struct _GtkWindow
   guint frame_bottom;
   
   GdkModifierType mnemonic_modifier;
+  gpointer gtk_reserved1;	/* For future GdkScreen * */
 };
 
 struct _GtkWindowClass
@@ -286,8 +287,8 @@ void     gtk_window_move             (GtkWindow   *window,
                                       gint         x,
                                       gint         y);
 void     gtk_window_get_position     (GtkWindow   *window,
-                                      gint        *x,
-                                      gint        *y);
+                                      gint        *root_x,
+                                      gint        *root_y);
 gboolean gtk_window_parse_geometry   (GtkWindow   *window,
                                       const gchar *geometry);
 
@@ -296,7 +297,7 @@ void     gtk_window_reshow_with_initial_size (GtkWindow *window);
 
 /* Window groups
  */
-GType            gtk_window_group_get_type      (void) G_GNUC_CONST;;
+GType            gtk_window_group_get_type      (void) G_GNUC_CONST;
 
 GtkWindowGroup * gtk_window_group_new           (void);
 void             gtk_window_group_add_window    (GtkWindowGroup     *window_group,

@@ -563,7 +563,7 @@ gtk_object_new (GtkType      object_type,
   g_return_val_if_fail (GTK_TYPE_IS_OBJECT (object_type), NULL);
 
   va_start (var_args, first_property_name);
-  object = g_object_new_valist (object_type, first_property_name, var_args);
+  object = (GtkObject *)g_object_new_valist (object_type, first_property_name, var_args);
   va_end (var_args);
 
   return object;

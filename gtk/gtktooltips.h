@@ -82,8 +82,10 @@ GtkTooltips*	 gtk_tooltips_new	   (void);
 
 void		 gtk_tooltips_enable	   (GtkTooltips   *tooltips);
 void		 gtk_tooltips_disable	   (GtkTooltips   *tooltips);
+#ifndef GTK_DISABLE_DEPRECATED
 void		 gtk_tooltips_set_delay	   (GtkTooltips   *tooltips,
 					    guint	   delay);
+#endif /* GTK_DISABLE_DEPRECATED */
 void		 gtk_tooltips_set_tip	   (GtkTooltips   *tooltips,
 					    GtkWidget	  *widget,
 					    const gchar   *tip_text,

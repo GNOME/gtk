@@ -50,7 +50,7 @@ static GdkDevicePrivate *gdk_input_current_device;
 static GdkDevicePrivate *gdk_input_core_pointer;
 
 void
-gdk_input_init(GdkDisplay *display)
+_gdk_input_init(GdkDisplay *display)
 {
   GList *tmp_list;
   GdkDisplayImplX11 *display_impl = GDK_DISPLAY_IMPL_X11 (display);
@@ -64,11 +64,11 @@ gdk_input_init(GdkDisplay *display)
 
   if (display == gdk_get_default_display ())
     {
-      if (!gdk_input_gxid_host) 
+      if (!_gdk_input_gxid_host) 
 	{
 	  display_impl->gdk_input_gxid_host = getenv("GXID_HOST");
 	}
-      if (!gdk_input_gxid_port) 
+      if (!_gdk_input_gxid_port) 
 	{
 	  char *t = getenv("GXID_PORT");
 	  if (t)

@@ -296,23 +296,21 @@ static GSList *rc_dir_stack = NULL;
 /* RC file handling */
 
 #ifdef G_OS_WIN32
-static gchar *
-get_gtk_dll_name (void)
+gchar *
+get_gtk_win32_directory (gchar *subdir)
 {
   static gchar *gtk_dll = NULL;
 
   if (!gtk_dll)
-    gtk_dll = g_strdup_printf ("gtk-%d.%d.dll", GTK_MAJOR_VERSION, GTK_MINOR_VERSION);
+    gtk_dll = g_strdup_printf ("gtk-win32-%d.%d.dll", GTK_MAJOR_VERSION, GTK_MINOR_VERSION);
 
-  return gtk_dll;
-}
-
-static gchar *
-get_themes_directory (void)
-{
-  return g_win32_get_package_installation_subdirectory (GETTEXT_PACKAGE,
-							get_gtk_dll_name (),
-							"themes");
+  if (subdir && strlen(subdir) > 0)
+    return g_win32_get_package_installation_subdirectory (GETTEXT_PACKAGE,
+							                gtk_dll,
+							                subdir);
+  else
+    return g_win32_get_package_installation_directory (GETTEXT_PACKAGE,
+							             gtk_dll);
 }
 #endif /* G_OS_WIN32 */
  
@@ -324,11 +322,11 @@ gtk_rc_make_default_dir (const gchar *type)
 #ifndef G_OS_WIN32
   var = getenv("GTK_EXE_PREFIX");
   if (var)
-    path = g_strconcat (var, "/lib/gtk-2.0/" GTK_VERSION "/", type, NULL);
+    path = g_build_filename (var, "lib", "gtk-2.0", type, GTK_BINARY_VERSION, NULL);
   else
-    path = g_strconcat (GTK_LIBDIR "/gtk-2.0/" GTK_VERSION "/", type, NULL);
+    path = g_build_filename (GTK_LIBDIR, "gtk-2.0,", type, GTK_BINARY_VERSION, NULL);
 #else
-  path = g_strconcat ("%s\\%s", get_themes_directory (), type);
+  path = g_build_filename (get_gtk_win32_directory (""), type, NULL);
 #endif
 
   return path;
@@ -361,9 +359,9 @@ gtk_rc_get_im_module_file (void)
 	result = g_strdup (im_module_file);
       else
 #ifndef G_OS_WIN32
-	result = g_strdup (GTK_SYSCONFDIR G_DIR_SEPARATOR_S "gtk-2.0" G_DIR_SEPARATOR_S "gtk.immodules");
+	result = g_build_filename (GTK_SYSCONFDIR, "gtk-2.0", "gtk.immodules", NULL);
 #else
-	result = g_strdup_printf ("%s\\gtk.immodules", g_win32_get_package_installation_directory (GETTEXT_PACKAGE, get_gtk_dll_name ()));
+	result = g_build_filename (get_gtk_win32_directory ("gtk-2.0"), "gtk.immodules", NULL);
 #endif
     }
 
@@ -378,11 +376,11 @@ gtk_rc_get_theme_dir(void)
 #ifndef G_OS_WIN32
   var = getenv("GTK_DATA_PREFIX");
   if (var)
-    path = g_strconcat (var, "/share/themes", NULL);
+    path = g_build_filename (var, "share", "themes", NULL);
   else
-    path = g_strconcat (GTK_DATA_PREFIX, "/share/themes", NULL);
+    path = g_build_filename (GTK_DATA_PREFIX, "share", "themes", NULL);
 #else
-  path = g_strdup (get_themes_directory ());
+  path = g_build_filename (get_gtk_win32_directory (""), "themes", NULL);
 #endif
 
   return path;
@@ -408,30 +406,18 @@ gtk_rc_append_default_module_path(void)
 #ifndef G_OS_WIN32
   var = getenv("GTK_EXE_PREFIX");
   if (var)
-    path = g_strconcat(var, "/lib/gtk-2.0/" GTK_VERSION "/engines", NULL);
+    path = g_build_filename (var, "lib", "gtk-2.0", GTK_VERSION, "engines", NULL);
   else
-    path = g_strdup (GTK_LIBDIR "/gtk-2.0/" GTK_VERSION "/engines");
+    path = g_build_filename (GTK_LIBDIR, "gtk-2.0", GTK_VERSION, "engines", NULL);
 #else
-  path = g_strconcat (get_themes_directory (), "\\engines", NULL);
+  path = g_build_filename (get_gtk_win32_directory ("gtk-2.0"), GTK_VERSION, "engines", NULL);
 #endif
   module_path[n++] = path;
 
   var = g_get_home_dir ();
   if (var)
     {
-      gchar *sep;
-      /* Don't duplicate the directory separator, causes trouble at
-       * least on Windows.
-       */
-      if (var[strlen (var) -1] != G_DIR_SEPARATOR)
-	sep = G_DIR_SEPARATOR_S;
-      else
-	sep = "";
-      /* This produces something like ~/.gtk-2.0/2.0/engines */
-      path = g_strconcat (var, sep,
-			  ".gtk-2.0" G_DIR_SEPARATOR_S
-			  GTK_VERSION G_DIR_SEPARATOR_S
-			  "engines", NULL);
+      path = g_build_filename (var, ".gtk-2.0", GTK_VERSION, "engines", NULL);
       module_path[n++] = path;
     }
   module_path[n] = NULL;
@@ -467,9 +453,9 @@ gtk_rc_add_initial_default_files (void)
   else
     {
 #ifndef G_OS_WIN32
-      str = g_strdup (GTK_SYSCONFDIR G_DIR_SEPARATOR_S "gtk-2.0" G_DIR_SEPARATOR_S "gtkrc");
+      str = g_build_filename (GTK_SYSCONFDIR, "gtk-2.0", "gtkrc", NULL);
 #else
-      str = g_strdup_printf ("%s\\gtkrc", g_win32_get_package_installation_directory (GETTEXT_PACKAGE, get_gtk_dll_name ()));
+      str = g_build_filename (get_gtk_win32_directory (""), "gtkrc", NULL);
 #endif
 
       gtk_rc_add_default_file (str);
@@ -478,12 +464,7 @@ gtk_rc_add_initial_default_files (void)
       var = g_get_home_dir ();
       if (var)
 	{
-	  gchar *sep;
-	  if (var[strlen (var) -1] != G_DIR_SEPARATOR)
-	    sep = G_DIR_SEPARATOR_S;
-	  else
-	    sep = "";
-	  str = g_strdup_printf ("%s%s.gtkrc-2.0", var, sep);
+	  str = g_build_filename (var, ".gtkrc-2.0", NULL);
 	  gtk_rc_add_default_file (str);
 	  g_free (str);
 	}
@@ -492,13 +473,13 @@ gtk_rc_add_initial_default_files (void)
 
 /**
  * gtk_rc_add_default_file:
- * @file: the pathname to the file.
+ * @filename: the pathname to the file.
  * 
  * Adds a file to the list of files to be parsed at the
  * end of gtk_init().
  **/
 void
-gtk_rc_add_default_file (const gchar *file)
+gtk_rc_add_default_file (const gchar *filename)
 {
   guint n;
   
@@ -508,19 +489,19 @@ gtk_rc_add_default_file (const gchar *file)
   if (n >= GTK_RC_MAX_DEFAULT_FILES - 1)
     return;
   
-  gtk_rc_default_files[n++] = g_strdup (file);
+  gtk_rc_default_files[n++] = g_strdup (filename);
   gtk_rc_default_files[n] = NULL;
 }
 
 /**
  * gtk_rc_set_default_files:
- * @files: A %NULL terminated list of filenames.
+ * @filenames: A %NULL terminated list of filenames.
  * 
  * Sets the list of files that GTK+ will read at the
  * end of gtk_init()
  **/
 void
-gtk_rc_set_default_files (gchar **files)
+gtk_rc_set_default_files (gchar **filenames)
 {
   gint i;
 
@@ -536,16 +517,15 @@ gtk_rc_set_default_files (gchar **files)
   gtk_rc_default_files[0] = NULL;
 
   i = 0;
-  while (files[i] != NULL)
+  while (filenames[i] != NULL)
     {
-      gtk_rc_add_default_file (files[i]);
+      gtk_rc_add_default_file (filenames[i]);
       i++;
     }
 }
 
 /**
  * gtk_rc_get_default_files:
- * @void: 
  * 
  * Retrieves the current list of RC files that will be parsed
  * at the end of gtk_init()
@@ -683,32 +663,18 @@ gtk_rc_parse_named (GtkRcContext *context,
   gchar *subpath;
 
   if (type)
-    subpath = g_strconcat (G_DIR_SEPARATOR_S "gtk-2.0-",
-			   type,
+    subpath = g_strconcat ("gtk-2.0-", type,
 			   G_DIR_SEPARATOR_S "gtkrc",
 			   NULL);
   else
-    subpath = g_strdup (G_DIR_SEPARATOR_S "gtk-2.0" G_DIR_SEPARATOR_S "gtkrc");
+    subpath = g_strdup ("gtk-2.0" G_DIR_SEPARATOR_S "gtkrc");
   
   /* First look in the users home directory
    */
   home_dir = g_get_home_dir ();
   if (home_dir)
     {
-      gchar *sep;
-      /* Don't duplicate the directory separator, causes trouble at
-       * least on Windows.
-       */
-      if (home_dir[strlen (home_dir) -1] != G_DIR_SEPARATOR)
-	sep = G_DIR_SEPARATOR_S;
-      else
-	sep = "";
-      path = g_strconcat (home_dir, sep,
-			  ".themes" G_DIR_SEPARATOR_S ,
-			  name,
-			  subpath,
-			  NULL);
-
+      path = g_build_filename (home_dir, ".themes", name, subpath, NULL);
       if (!g_file_test (path, G_FILE_TEST_EXISTS))
 	{
 	  g_free (path);
@@ -716,10 +682,10 @@ gtk_rc_parse_named (GtkRcContext *context,
 	}
     }
 
-  if (!name)
+  if (!path)
     {
       gchar *theme_dir = gtk_rc_get_theme_dir ();
-      gchar *path = g_strconcat (theme_dir, G_DIR_SEPARATOR_S, name, subpath);
+      path = g_build_filename (theme_dir, name, subpath, NULL);
       g_free (theme_dir);
       
       if (!g_file_test (path, G_FILE_TEST_EXISTS))
@@ -888,18 +854,11 @@ gtk_rc_parse_file (GtkRcContext *context,
 	rc_file->canonical_name = rc_file->name;
       else
 	{
-	  GString *str;
 	  gchar *cwd;
 
 	  cwd = g_get_current_dir ();
-
-	  str = g_string_new (cwd);
+	  rc_file->canonical_name = g_build_filename (cwd, rc_file->name, NULL);
 	  g_free (cwd);
-	  g_string_append_c (str, G_DIR_SEPARATOR);
-	  g_string_append (str, rc_file->name);
-	  
-	  rc_file->canonical_name = str->str;
-	  g_string_free (str, FALSE);
 	}
     }
 
@@ -1071,14 +1030,14 @@ gtk_rc_style_finalize (GObject *object)
     {
       guint i;
 
-      for (i = 0; i < rc_style->rc_properties->n_nodes; i++)
+      for (i = 0; i < rc_style->rc_properties->len; i++)
 	{
-	  GtkRcProperty *node = g_bsearch_array_get_nth (rc_style->rc_properties, i);
+	  GtkRcProperty *node = &g_array_index (rc_style->rc_properties, GtkRcProperty, i);
 
 	  g_free (node->origin);
 	  g_value_unset (&node->value);
 	}
-      g_bsearch_array_destroy (rc_style->rc_properties);
+      g_array_free (rc_style->rc_properties, TRUE);
       rc_style->rc_properties = NULL;
     }
 
@@ -1155,13 +1114,63 @@ gtk_rc_properties_cmp (gconstpointer bsearch_node1,
 {
   const GtkRcProperty *prop1 = bsearch_node1;
   const GtkRcProperty *prop2 = bsearch_node2;
-  gint cmp;
 
-  cmp = G_BSEARCH_ARRAY_CMP (prop1->type_name, prop2->type_name);
-  if (cmp == 0)
-    cmp = G_BSEARCH_ARRAY_CMP (prop1->property_name, prop2->property_name);
+  if (prop1->type_name == prop2->type_name)
+    return prop1->property_name < prop2->property_name ? -1 : prop1->property_name == prop2->property_name ? 0 : 1;
+  else
+    return prop1->type_name < prop2->type_name ? -1 : 1;
+}
 
-  return cmp;
+static void
+insert_rc_property (GtkRcStyle    *style,
+		    GtkRcProperty *property,
+		    gboolean       replace)
+{
+  guint i;
+  GtkRcProperty *new_property = NULL;
+  GtkRcProperty key = { 0, 0, NULL, { 0, }, };
+
+  key.type_name = property->type_name;
+  key.property_name = property->property_name;
+
+  if (!style->rc_properties)
+    style->rc_properties = g_array_new (FALSE, FALSE, sizeof (GtkRcProperty));
+
+  i = 0;
+  while (i < style->rc_properties->len)
+    {
+      gint cmp = gtk_rc_properties_cmp (&key, &g_array_index (style->rc_properties, GtkRcProperty, i));
+
+      if (cmp == 0)
+	{
+	  if (replace)
+	    {
+	      new_property = &g_array_index (style->rc_properties, GtkRcProperty, i);
+	      
+	      g_free (new_property->origin);
+	      g_value_unset (&new_property->value);
+	      
+	      *new_property = key;
+	      break;
+	    }
+	  else
+	    return;
+	}
+      else if (cmp < 0)
+	break;
+
+      i++;
+    }
+
+  if (!new_property)
+    {
+      g_array_insert_val (style->rc_properties, i, key);
+      new_property = &g_array_index (style->rc_properties, GtkRcProperty, i);
+    }
+
+  new_property->origin = g_strdup (property->origin);
+  g_value_init (&new_property->value, G_VALUE_TYPE (&property->value));
+  g_value_copy (&property->value, &new_property->value);
 }
 
 static void
@@ -1213,25 +1222,10 @@ gtk_rc_style_real_merge (GtkRcStyle *dest,
     {
       guint i;
 
-      if (!dest->rc_properties)
-	dest->rc_properties = g_bsearch_array_new (sizeof (GtkRcProperty),
-						   gtk_rc_properties_cmp,
-						   0);
-      for (i = 0; i < src->rc_properties->n_nodes; i++)
-	{
-	  GtkRcProperty *node = g_bsearch_array_get_nth (src->rc_properties, i);
-	  GtkRcProperty *prop, key = { 0, 0, NULL, { 0, }, };
-
-	  key.type_name = node->type_name;
-	  key.property_name = node->property_name;
-	  prop = g_bsearch_array_insert (dest->rc_properties, &key, FALSE);
-	  if (!prop->origin)
-	    {
-	      prop->origin = g_strdup (node->origin);
-	      g_value_init (&prop->value, G_VALUE_TYPE (&node->value));
-	      g_value_copy (&node->value, &prop->value);
-	    }
-	}
+      for (i = 0; i < src->rc_properties->len; i++)
+	insert_rc_property (dest,
+			    &g_array_index (src->rc_properties, GtkRcProperty, i),
+			    FALSE);
     }
 }
 
@@ -1454,7 +1448,7 @@ gtk_rc_styles_match (GSList       *rc_styles,
  * created styles, so a new style may not be
  * created.)
  * 
- * @Returns: the resulting style. No refcount is added
+ * Returns: the resulting style. No refcount is added
  *   to the returned style, so if you want to save this
  *   style around, you should add a reference yourself.
  **/
@@ -2318,27 +2312,10 @@ gtk_rc_parse_style (GtkRcContext *context,
 	    {
 	      guint i;
 
-	      if (!rc_style->rc_properties)
-		rc_style->rc_properties = g_bsearch_array_new (sizeof (GtkRcProperty),
-							       gtk_rc_properties_cmp,
-							       0);
-	      for (i = 0; i < parent_style->rc_properties->n_nodes; i++)
-		{
-		  GtkRcProperty *node = g_bsearch_array_get_nth (parent_style->rc_properties, i);
-		  GtkRcProperty *prop, key = { 0, 0, NULL, { 0, }, };
-
-		  key.type_name = node->type_name;
-		  key.property_name = node->property_name;
-		  prop = g_bsearch_array_insert (rc_style->rc_properties, &key, FALSE);
-		  if (prop->origin)
-		    {
-		      g_free (prop->origin);
-		      g_value_unset (&prop->value);
-		    }
-		  prop->origin = g_strdup (node->origin);
-		  g_value_init (&prop->value, G_VALUE_TYPE (&node->value));
-		  g_value_copy (&node->value, &prop->value);
-		}
+	      for (i = 0; i < parent_style->rc_properties->len; i++)
+		insert_rc_property (rc_style,
+				    &g_array_index (parent_style->rc_properties, GtkRcProperty, i),
+				    TRUE);
 	    }
 	  
 	  for (i = 0; i < 5; i++)
@@ -2464,29 +2441,13 @@ gtk_rc_parse_style (GtkRcContext *context,
 	      token = gtk_rc_parse_assignment (scanner, &prop);
 	      if (token == G_TOKEN_NONE)
 		{
-		  GtkRcProperty *tmp;
-
 		  g_return_val_if_fail (prop.origin != NULL && G_VALUE_TYPE (&prop.value) != 0, G_TOKEN_ERROR);
-
-		  if (!rc_style->rc_properties)
-		    rc_style->rc_properties = g_bsearch_array_new (sizeof (GtkRcProperty),
-								   gtk_rc_properties_cmp,
-								   0);
-		  tmp = g_bsearch_array_insert (rc_style->rc_properties, &prop, FALSE);
-		  if (prop.origin != tmp->origin)
-		    {
-		      g_free (tmp->origin);
-		      g_value_unset (&tmp->value);
-		      tmp->origin = prop.origin;
-		      memcpy (&tmp->value, &prop.value, sizeof (prop.value));
-		    }
+		  insert_rc_property (rc_style, &prop, TRUE);
 		}
-	      else
-		{
-		  g_free (prop.origin);
-		  if (G_VALUE_TYPE (&prop.value))
-		    g_value_unset (&prop.value);
-		}
+	      
+	      g_free (prop.origin);
+	      if (G_VALUE_TYPE (&prop.value))
+		g_value_unset (&prop.value);
 	    }
 	  else
 	    {
@@ -2555,7 +2516,9 @@ _gtk_rc_style_lookup_rc_property (GtkRcStyle *rc_style,
       key.type_name = type_name;
       key.property_name = property_name;
 
-      node = g_bsearch_array_lookup (rc_style->rc_properties, &key);
+      node = bsearch (&key,
+		      rc_style->rc_properties->data, rc_style->rc_properties->len,
+		      sizeof (GtkRcProperty), gtk_rc_properties_cmp);
     }
 
   return node;
@@ -2737,7 +2700,7 @@ gtk_rc_check_pixmap_dir (const gchar *dir, const gchar *pixmap_file)
   gchar *buf;
   gint fd;
 
-  buf = g_strdup_printf ("%s" G_DIR_SEPARATOR_S "%s", dir, pixmap_file);
+  buf = g_build_filename (dir, pixmap_file, NULL);
   
   fd = open (buf, O_RDONLY);
   if (fd >= 0)
@@ -2811,8 +2774,7 @@ gtk_rc_find_module_in_path (const gchar *module_file)
   
   for (i = 0; (i < GTK_RC_MAX_MODULE_PATHS) && (module_path[i] != NULL); i++)
     {
-      buf = g_strdup_printf ("%s" G_DIR_SEPARATOR_S "%s",
-			     module_path[i], module_file);
+      buf = g_build_filename (module_path[i], module_file, NULL);
       
       fd = open (buf, O_RDONLY);
       if (fd >= 0)

@@ -113,8 +113,6 @@ gtk_text_mark_finalize (GObject *obj)
 
   if (seg)
     {
-      g_return_if_fail (seg->body.mark.tree == NULL);
-
       if (seg->body.mark.tree != NULL)
         g_warning ("GtkTextMark being finalized while still in the buffer; "
                    "someone removed a reference they didn't own! Crash "
@@ -320,21 +318,27 @@ GtkTextLineSegmentClass gtk_text_left_mark_type = {
  *      a mark lies in a range of characters being deleted.
  *
  * Results:
- *      Returns 1 to indicate that deletion has been rejected.
+ *      Returns 1 to indicate that deletion has been rejected,
+ *      or 0 otherwise
  *
  * Side effects:
- *      None (even if the whole tree is being deleted we don't
- *      free up the mark;  it will be done elsewhere).
+ *      Frees mark if tree is going away
  *
  *--------------------------------------------------------------
  */
 
 static gboolean
-mark_segment_delete_func (GtkTextLineSegment *segPtr,
+mark_segment_delete_func (GtkTextLineSegment *seg,
                           GtkTextLine        *line,
                           gboolean            tree_gone)
 {
-  return TRUE;
+  if (tree_gone)
+    {
+      _gtk_text_btree_release_mark_segment (seg->body.mark.tree, seg);
+      return FALSE;
+    }
+  else
+    return TRUE;
 }
 
 /*

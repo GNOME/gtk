@@ -149,7 +149,7 @@ gtk_text_tag_table_finalize (GObject *object)
   table = GTK_TEXT_TAG_TABLE (object);
 
   gtk_text_tag_table_foreach (table, foreach_unref, NULL);
-
+  
   g_hash_table_destroy (table->hash);
   g_slist_free (table->anonymous);
 

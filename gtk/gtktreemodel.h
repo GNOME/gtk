@@ -58,23 +58,21 @@ struct _GtkTreeModelIface
   GTypeInterface g_iface;
 
   /* Signals */
-  void         (* range_changed)     (GtkTreeModel *tree_model,
-				      GtkTreePath  *start_path,
-				      GtkTreeIter  *start_iter,
-				      GtkTreePath  *end_path,
-				      GtkTreeIter  *end_iter);
-  void         (* inserted)          (GtkTreeModel *tree_model,
-				      GtkTreePath  *path,
-				      GtkTreeIter  *iter);
-  void         (* has_child_toggled) (GtkTreeModel *tree_model,
-				      GtkTreePath  *path,
-				      GtkTreeIter  *iter);
-  void         (* deleted)           (GtkTreeModel *tree_model,
-				      GtkTreePath  *path);
-  void         (* reordered)         (GtkTreeModel *tree_model,
-				      GtkTreePath  *path,
-				      GtkTreeIter  *iter,
-				      gint         *new_order);
+  void         (* row_changed)           (GtkTreeModel *tree_model,
+					  GtkTreePath  *path,
+					  GtkTreeIter  *iter);
+  void         (* row_inserted)          (GtkTreeModel *tree_model,
+					  GtkTreePath  *path,
+					  GtkTreeIter  *iter);
+  void         (* row_has_child_toggled) (GtkTreeModel *tree_model,
+					  GtkTreePath  *path,
+					  GtkTreeIter  *iter);
+  void         (* row_deleted)           (GtkTreeModel *tree_model,
+					  GtkTreePath  *path);
+  void         (* rows_reordered)        (GtkTreeModel *tree_model,
+					  GtkTreePath  *path,
+					  GtkTreeIter  *iter,
+					  gint         *new_order);
 
   /* Virtual Table */
   GtkTreeModelFlags (* get_flags)  (GtkTreeModel *tree_model);   
@@ -220,23 +218,22 @@ void              gtk_tree_model_foreach         (GtkTreeModel            *model
 
 
 /* Signals */
-void gtk_tree_model_range_changed     (GtkTreeModel *tree_model,
-				       GtkTreePath  *start_path,
-				       GtkTreeIter  *start_iter,
-				       GtkTreePath  *end_path,
-				       GtkTreeIter  *end_iter);
-void gtk_tree_model_inserted          (GtkTreeModel *tree_model,
-				       GtkTreePath  *path,
-				       GtkTreeIter  *iter);
-void gtk_tree_model_has_child_toggled (GtkTreeModel *tree_model,
-				       GtkTreePath  *path,
-				       GtkTreeIter  *iter);
-void gtk_tree_model_deleted           (GtkTreeModel *tree_model,
-				       GtkTreePath  *path);
-void gtk_tree_model_reordered         (GtkTreeModel *tree_model,
-				       GtkTreePath  *path,
-				       GtkTreeIter  *iter,
-				       gint         *new_order);
+void gtk_tree_model_row_changed           (GtkTreeModel *tree_model,
+					   GtkTreePath  *start_path,
+					   GtkTreeIter  *start_iter);
+void gtk_tree_model_row_inserted          (GtkTreeModel *tree_model,
+					   GtkTreePath  *path,
+					   GtkTreeIter  *iter);
+void gtk_tree_model_row_has_child_toggled (GtkTreeModel *tree_model,
+					   GtkTreePath  *path,
+					   GtkTreeIter  *iter);
+void gtk_tree_model_row_deleted           (GtkTreeModel *tree_model,
+					   GtkTreePath  *path);
+void gtk_tree_model_rows_reordered        (GtkTreeModel *tree_model,
+					   GtkTreePath  *path,
+					   GtkTreeIter  *iter,
+					   gint         *new_order);
+
 
 
 

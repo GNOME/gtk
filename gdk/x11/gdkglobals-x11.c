@@ -31,11 +31,9 @@
 #include "config.h"
 #include "gdkdisplaymgr.h"
 
-gboolean          gdk_use_xshm = TRUE;  /* used as a cmd line arg */
-gchar            *gdk_display_name = NULL;
+gboolean          _gdk_use_xshm = TRUE;  /* used as a cmd line arg */
+gchar            *_gdk_display_name = NULL;
 
-gchar            *gdk_progclass = NULL;
-gboolean          gdk_null_window_warnings = TRUE;
-
-gboolean          gdk_xim_using;  	        /* using XIM Protocol if TRUE */
-GdkWindow        *gdk_xim_window;		/* currently using Widow */
+GdkWindowObject *_gdk_xgrab_window = NULL;  /* Window that currently holds the
+                                            *	x pointer grab
+                                            */

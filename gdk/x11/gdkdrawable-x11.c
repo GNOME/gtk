@@ -24,7 +24,7 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
-#include "gdkprivate-x11.h"
+#include "gdkx.h"
 #include "gdkregion-generic.h"
 
 #include <pango/pangox.h>
@@ -142,7 +142,7 @@ static void gdk_drawable_impl_x11_finalize   (GObject *object);
 static gpointer parent_class = NULL;
 
 GType
-gdk_drawable_impl_x11_get_type (void)
+_gdk_drawable_impl_x11_get_type (void)
 {
   static GType object_type = 0;
 
@@ -729,4 +729,28 @@ static GdkVisual*
 gdk_x11_get_visual (GdkDrawable    *drawable)
 {
   return gdk_drawable_get_visual (GDK_DRAWABLE_IMPL_X11 (drawable)->wrapper);
+}
+
+Display *
+gdk_x11_drawable_get_xdisplay (GdkDrawable *drawable)
+{
+  return GDK_DISPLAY_XDISPLAY (gdk_x11_get_display (drawable));
+}
+
+XID
+gdk_x11_drawable_get_xid (GdkDrawable *drawable)
+{
+  GdkDrawable *impl;
+  
+  if (GDK_IS_WINDOW (drawable))
+    impl = ((GdkPixmapObject *)drawable)->impl;
+  else if (GDK_IS_PIXMAP (drawable))
+    impl = ((GdkPixmapObject *)drawable)->impl;
+  else
+    {
+      g_warning (G_STRLOC " drawable is not a pixmap or window");
+      return None;
+    }
+
+  return ((GdkDrawableImplX11 *)impl)->xid;
 }

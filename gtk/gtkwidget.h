@@ -579,9 +579,6 @@ void	   gtk_widget_set_uposition	  (GtkWidget	       *widget,
 void	   gtk_widget_set_usize		  (GtkWidget	       *widget,
 					   gint			width,
 					   gint			height);
-void       gtk_widget_get_usize           (GtkWidget           *widget,
-					   gint                *width,
-					   gint                *height);
 #endif
 
 void	   gtk_widget_set_events	  (GtkWidget	       *widget,
@@ -712,8 +709,10 @@ void gtk_widget_style_get          (GtkWidget	     *widget,
  */
 void	     gtk_widget_set_default_colormap (GdkColormap *colormap);
 GtkStyle*    gtk_widget_get_default_style    (void);
+#ifndef GDK_MULTIHEAD_SAFE
 GdkColormap* gtk_widget_get_default_colormap (void);
 GdkVisual*   gtk_widget_get_default_visual   (void);
+#endif
 
 /* Functions for setting directionality for widgets
  */
@@ -759,6 +758,8 @@ GtkWidgetAuxInfo *_gtk_widget_get_aux_info                (GtkWidget    *widget,
 							   gboolean      create);
 void              _gtk_widget_propagate_hierarchy_changed (GtkWidget    *widget,
 							   GtkWidget    *previous_toplevel);
+
+GdkColormap* _gtk_widget_peek_colormap (void);
 
 #ifdef __cplusplus
 }

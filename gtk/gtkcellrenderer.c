@@ -34,7 +34,7 @@ static void gtk_cell_renderer_set_property  (GObject              *object,
 
 enum {
   PROP_ZERO,
-  PROP_CAN_ACTIVATE,
+  PROP_MODE,
   PROP_VISIBLE,
   PROP_XALIGN,
   PROP_YALIGN,
@@ -76,7 +76,7 @@ gtk_cell_renderer_get_type (void)
 static void
 gtk_cell_renderer_init (GtkCellRenderer *cell)
 {
-  cell->can_activate = FALSE;
+  cell->mode = GTK_CELL_RENDERER_MODE_INERT;
   cell->visible = TRUE;
   cell->width = -1;
   cell->height = -1;
@@ -98,13 +98,14 @@ gtk_cell_renderer_class_init (GtkCellRendererClass *class)
   class->get_size = NULL;
 
   g_object_class_install_property (object_class,
-				   PROP_CAN_ACTIVATE,
-				   g_param_spec_boolean ("can_activate",
-							 _("can_activate"),
-							 _("Cell can get activate events."),
-							 FALSE,
-							 G_PARAM_READABLE |
-							 G_PARAM_WRITABLE));
+				   PROP_MODE,
+				   g_param_spec_enum ("mode",
+						      _("mode"),
+						      _("Editable mode of the CellRenderer"),
+						      GTK_TYPE_CELL_RENDERER_MODE,
+						      GTK_CELL_RENDERER_MODE_INERT,
+						      G_PARAM_READABLE |
+						      G_PARAM_WRITABLE));
 
   g_object_class_install_property (object_class,
 				   PROP_VISIBLE,
@@ -211,8 +212,8 @@ gtk_cell_renderer_get_property (GObject     *object,
 
   switch (param_id)
     {
-    case PROP_CAN_ACTIVATE:
-      g_value_set_boolean (value, cell->can_activate);
+    case PROP_MODE:
+      g_value_set_enum (value, cell->mode);
       break;
     case PROP_VISIBLE:
       g_value_set_boolean (value, cell->visible);
@@ -258,9 +259,9 @@ gtk_cell_renderer_set_property (GObject      *object,
 
   switch (param_id)
     {
-    case PROP_CAN_ACTIVATE:
-      cell->can_activate = g_value_get_boolean (value);
-      g_object_notify (object, "can_activate");
+    case PROP_MODE:
+      cell->mode = g_value_get_enum (value);
+      g_object_notify (object, "mode");
       break;
     case PROP_VISIBLE:
       cell->visible = g_value_get_boolean (value);
@@ -317,7 +318,9 @@ gtk_cell_renderer_set_property (GObject      *object,
  * Obtains the width and height needed to render the cell. Used by view widgets
  * to determine the appropriate size for the cell_area passed to
  * gtk_cell_renderer_render().  If @cell_area is not %NULL, fills in the x and y
- * offsets (if set) of the cell relative to this location.
+ * offsets (if set) of the cell relative to this location.  Please note that the
+ * values set in @width and @height, as well as those in @x_offset and @y_offset
+ * are inclusive of the xpad and ypad properties.
  **/
 void
 gtk_cell_renderer_get_size (GtkCellRenderer *cell,
@@ -328,29 +331,24 @@ gtk_cell_renderer_get_size (GtkCellRenderer *cell,
 			    gint            *width,
 			    gint            *height)
 {
-  gint *real_width = NULL;
-  gint *real_height = NULL;
+  gint *real_width = width;
+  gint *real_height = height;
 
   g_return_if_fail (GTK_IS_CELL_RENDERER (cell));
   g_return_if_fail (GTK_CELL_RENDERER_GET_CLASS (cell)->get_size != NULL);
 
-  if (width)
+  if (width && cell->width != -1)
     {
-      if (cell->width == -1)
-	real_width = width;
-      else
-	*width = cell->width;
+      real_width = NULL;
+      *width = cell->width;
     }
-  if (height)
+  if (height && cell->height != -1)
     {
-      if (cell->height == -1)
-	real_height = height;
-      else
-	*height = cell->height;
+      real_height = NULL;
+      *height = cell->height;
     }
 
-  if (real_width || real_height)
-    GTK_CELL_RENDERER_GET_CLASS (cell)->get_size (cell, widget, cell_area, x_offset, y_offset, real_width, real_height);
+  GTK_CELL_RENDERER_GET_CLASS (cell)->get_size (cell, widget, cell_area, x_offset, y_offset, real_width, real_height);
 }
 
 /**
@@ -363,15 +361,13 @@ gtk_cell_renderer_get_size (GtkCellRenderer *cell,
  * @expose_area: area that actually needs updating
  * @flags: flags that affect rendering
  *
- * Invokes the virtual render function of the #GtkCellRenderer. The
- * three passed-in rectangles are areas of @window. Most renderers
- * will draw to @cell_area; the xalign, yalign, xpad, and ypad fields
- * of the #GtkCellRenderer should be honored with respect to
- * @cell_area. @background_area includes the blank space around the
- * cell, and also the area containing the tree expander; so the
- * @background_area rectangles for all cells tile to cover the entire
- * @window. Cell renderers can use the @background_area to draw custom expanders, for
- * example. @expose_area is a clip rectangle.
+ * Invokes the virtual render function of the #GtkCellRenderer. The three
+ * passed-in rectangles are areas of @window. Most renderers will draw within
+ * @cell_area; the xalign, yalign, xpad, and ypad fields of the #GtkCellRenderer
+ * should be honored with respect to @cell_area. @background_area includes the
+ * blank space around the cell, and also the area containing the tree expander;
+ * so the @background_area rectangles for all cells tile to cover the entire
+ * @window.  @expose_area is a clip rectangle.
  *
  **/
 void
@@ -383,11 +379,6 @@ gtk_cell_renderer_render (GtkCellRenderer     *cell,
 			  GdkRectangle        *expose_area,
 			  GtkCellRendererState flags)
 {
-  /* It's actually okay to pass in a NULL cell, as we run into that
-   * a lot
-   */
-  if (cell == NULL)
-    return;
   g_return_if_fail (GTK_IS_CELL_RENDERER (cell));
   g_return_if_fail (GTK_CELL_RENDERER_GET_CLASS (cell)->render != NULL);
 
@@ -401,46 +392,87 @@ gtk_cell_renderer_render (GtkCellRenderer     *cell,
 }
 
 /**
- * gtk_cell_renderer_event:
+ * gtk_cell_renderer_activate:
  * @cell: a #GtkCellRenderer
  * @event: a #GdkEvent
  * @widget: widget that received the event
  * @path: widget-dependent string representation of the event location; e.g. for #GtkTreeView, a string representation of #GtkTreePath
- * @background_area: background area as passed to gtk_cell_renderer_render()
- * @cell_area: cell area as passed to gtk_cell_renderer_render()
+ * @background_area: background area as passed to @gtk_cell_renderer_render
+ * @cell_area: cell area as passed to @gtk_cell_renderer_render
  * @flags: render flags
  *
- * Passes an event to the cell renderer for possible processing.  Some
- * cell renderers may use events; for example, #GtkCellRendererToggle
- * toggles when it gets a mouse click.
+ * Passes an activate event to the cell renderer for possible processing.  Some
+ * cell renderers may use events; for example, #GtkCellRendererToggle toggles
+ * when it gets a mouse click.
  *
  * Return value: %TRUE if the event was consumed/handled
  **/
 gboolean
-gtk_cell_renderer_event (GtkCellRenderer     *cell,
-			 GdkEvent            *event,
-			 GtkWidget           *widget,
-			 gchar               *path,
-			 GdkRectangle        *background_area,
-			 GdkRectangle        *cell_area,
-			 GtkCellRendererState flags)
+gtk_cell_renderer_activate (GtkCellRenderer      *cell,
+			    GdkEvent             *event,
+			    GtkWidget            *widget,
+			    gchar                *path,
+			    GdkRectangle         *background_area,
+			    GdkRectangle         *cell_area,
+			    GtkCellRendererState  flags)
 {
-  /* It's actually okay to pass in a NULL cell, as we run into that
-   * a lot
-   */
-  if (cell == NULL)
-    return FALSE;
   g_return_val_if_fail (GTK_IS_CELL_RENDERER (cell), FALSE);
-  if (GTK_CELL_RENDERER_GET_CLASS (cell)->event == NULL)
+
+  if (cell->mode != GTK_CELL_RENDERER_MODE_ACTIVATABLE)
     return FALSE;
 
-  return GTK_CELL_RENDERER_GET_CLASS (cell)->event (cell,
-						    event,
-						    widget,
-						    path,
-						    background_area,
-						    cell_area,
-						    flags);
+  if (GTK_CELL_RENDERER_GET_CLASS (cell)->activate == NULL)
+    return FALSE;
+
+  return GTK_CELL_RENDERER_GET_CLASS (cell)->activate (cell,
+						       event,
+						       widget,
+						       path,
+						       background_area,
+						       cell_area,
+						       flags);
+}
+
+/**
+ * gtk_cell_renderer_start_editing:
+ * @cell: a #GtkCellRenderer
+ * @event: a #GdkEvent
+ * @widget: widget that received the event
+ * @path: widget-dependent string representation of the event location; e.g. for #GtkTreeView, a string representation of #GtkTreePath
+ * @background_area: background area as passed to @gtk_cell_renderer_render
+ * @cell_area: cell area as passed to @gtk_cell_renderer_render
+ * @flags: render flags
+ * 
+ * Passes an activate event to the cell renderer for possible processing.
+ * 
+ * Return value: A new #GtkCellEditable, or %NULL
+ **/
+GtkCellEditable *
+gtk_cell_renderer_start_editing (GtkCellRenderer      *cell,
+				 GdkEvent             *event,
+				 GtkWidget            *widget,
+				 gchar                *path,
+				 GdkRectangle         *background_area,
+				 GdkRectangle         *cell_area,
+				 GtkCellRendererState  flags)
+
+{
+  g_return_val_if_fail (GTK_IS_CELL_RENDERER (cell), NULL);
+
+  if (cell->mode != GTK_CELL_RENDERER_MODE_EDITABLE)
+    return NULL;
+
+  if (GTK_CELL_RENDERER_GET_CLASS (cell)->start_editing == NULL)
+    return NULL;
+
+  
+  return GTK_CELL_RENDERER_GET_CLASS (cell)->start_editing (cell,
+							    event,
+							    widget,
+							    path,
+							    background_area,
+							    cell_area,
+							    flags);
 }
 
 /**

@@ -60,3 +60,7 @@ EXPORTS
 	gdk_pixdata_serialize
 	gdk_pixdata_to_csource
 
+	gdk_pixbuf_alpha_mode_get_type
+	gdk_colorspace_get_type
+	gdk_pixbuf_error_get_type
+	gdk_interp_type_get_type

@@ -285,7 +285,7 @@ randomly_modify (const guchar *image, guint size, gboolean verbose)
 
 #define TEST(bytes, data_is_ok)					\
 do {								\
-	g_print ("%-30s", "                  " #bytes " ");	\
+	g_print ("%-40s", "                  " #bytes " ");	\
 	fflush (stdout);					\
 	if (test_loader (bytes, sizeof (bytes), data_is_ok))	\
 	    g_print ("\tpassed\n");				\
@@ -295,7 +295,7 @@ do {								\
 
 #define LOWMEMTEST(bytes)					\
 do {								\
-	g_print ("%-30s", "memory            " #bytes " ");	\
+	g_print ("%-40s", "memory            " #bytes " ");	\
 	fflush (stdout);					\
 	mem_test (bytes, sizeof (bytes));			\
 	g_print ("\tpassed\n");					\
@@ -304,19 +304,19 @@ do {								\
 #define TEST_RANDOM(header, n_img, verbose)			\
 do {								\
 	static guchar h[] = { header };				\
-	g_print ("%-30s", "random            " #header " ");	\
+	g_print ("%-40s", "random            " #header " ");	\
 	fflush (stdout);					\
 	assault (h, sizeof (h), n_img, verbose);		\
 	g_print ("\tpassed\n");					\
-} while (0);
+} while (0)
 
 #define TEST_RANDOMLY_MODIFIED(image, verbose)			\
 do {								\
-	g_print ("%-30s", "randomly modified " #image " ");	\
+	g_print ("%-40s", "randomly modified " #image " ");	\
 	fflush (stdout);					\
 	randomly_modify (image, sizeof (image), verbose);	\
 	g_print ("\tpassed\n");					\
-} while (0);
+} while (0)
 
 
 
@@ -372,9 +372,23 @@ main (int argc, char **argv)
   g_random_set_seed (seed);
   
   g_type_init ();
-  g_log_set_fatal_mask (NULL, G_LOG_LEVEL_WARNING | G_LOG_LEVEL_ERROR | G_LOG_LEVEL_CRITICAL);
+  g_log_set_always_fatal (G_LOG_LEVEL_WARNING | G_LOG_LEVEL_ERROR | G_LOG_LEVEL_CRITICAL);
   
   putenv ("GDK_PIXBUF_MODULEDIR="BUILT_MODULES_DIR);
+
+  TEST (valid_ppm_1, TRUE);
+  TEST (valid_ppm_2, TRUE);
+  TEST (valid_ppm_3, FALSE); /* image is valid, but we don't handle maxval > 255 */
+  TEST (valid_ppm_4, TRUE);
+
+  TEST (invalid_ppm_1, FALSE); /* this test fails to fail, because it's shorter than LOADER_HEADER_SIZE */
+  TEST (invalid_ppm_2, FALSE);
+  TEST (invalid_ppm_3, FALSE);
+  TEST (invalid_ppm_4, FALSE);
+  TEST (invalid_ppm_5, FALSE);
+  TEST (invalid_ppm_6, FALSE);
+  TEST (invalid_ppm_7, FALSE);
+  TEST (invalid_ppm_8, FALSE);
 
   TEST (valid_gif_test, TRUE); 
   TEST (gif_test_1, FALSE);   
@@ -384,31 +398,39 @@ main (int argc, char **argv)
   
   TEST (valid_png_test, TRUE);
   TEST (png_test_1, FALSE);   
-  
+  TEST (png_test_2, FALSE);
+
+
+#if 0
   TEST (valid_ico_test, TRUE);
+#endif
   
   TEST (ico_test_1, FALSE);
   
-#if 0
-  TEST (wbmp_test_1, FALSE); 
-  TEST (wbmp_test_2, FALSE);
-#endif
-  
-#if 0
-  TEST (png_test_2, FALSE);   
-#endif
-
   TEST (valid_jpeg_test, TRUE);
   
   TEST (valid_tiff1_test, TRUE);
-  TEST (tiff1_test_1, FALSE);   
+  TEST (tiff1_test_1, FALSE);
+  TEST (tiff1_test_2, FALSE);
 
-#if 0
-  TEST_RANDOMLY_MODIFIED (valid_gif_test, FALSE);   /*  these all break more or */
-  TEST_RANDOMLY_MODIFIED (valid_png_test, FALSE);   /*	less spectacularly, patched or not */
+  TEST (valid_tga_test, TRUE);
+  TEST (tga_test_1, FALSE);
+
+  TEST (xpm_test_1, FALSE);
+  
+  TEST_RANDOM (GIF_HEADER, 150, FALSE);
+  TEST_RANDOM (PNG_HEADER, 1100, FALSE);
+  TEST_RANDOM (JPEG_HEADER, 800, FALSE);
+  TEST_RANDOM (TIFF1_HEADER, 150, FALSE);
+  TEST_RANDOM (TIFF2_HEADER, 150, FALSE);
+#define PNM_HEADER 'P', '6'
+  TEST_RANDOM (PNM_HEADER, 150, FALSE);
+  
   TEST_RANDOMLY_MODIFIED (valid_tiff1_test, FALSE);
-#endif
-
+  TEST_RANDOMLY_MODIFIED (valid_gif_test, FALSE);
+  TEST_RANDOMLY_MODIFIED (valid_png_test, FALSE);
+  TEST_RANDOMLY_MODIFIED (valid_tga_test, FALSE);
+  TEST_RANDOMLY_MODIFIED (valid_jpeg_test, FALSE);  /* The jpeg loader does not break */
 #if 0
   TEST_RANDOMLY_MODIFIED (valid_ico_test, TRUE);    /* The ico loader does not seem to
 						     * break, but the image tend to 
@@ -416,16 +438,10 @@ main (int argc, char **argv)
 						     * the wbmp loader is broken
 						     */
 #endif
-  TEST_RANDOMLY_MODIFIED (valid_jpeg_test, FALSE);  /* The jpeg loader does not break */
-
 #if 0
-  TEST_RANDOM (GIF_HEADER, 150, FALSE);
-  TEST_RANDOM (PNG_HEADER, 10000, FALSE);
-  TEST_RANDOM (JPEG_HEADER, 8000, FALSE);
-  TEST_RANDOM (TIFF1_HEADER, 150, FALSE);
-  TEST_RANDOM (TIFF2_HEADER, 150, FALSE);
+  TEST (wbmp_test_1, FALSE); 
+  TEST (wbmp_test_2, FALSE);
 #endif
-  
   /* memory tests */
 
   /* How do the loaders behave when memory is low?

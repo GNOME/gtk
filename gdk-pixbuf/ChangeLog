@@ -1,3 +1,110 @@
+2001-09-21  Matthias Clasen  <matthiasc@poet.de>
+
+	* io-xpm.c (xpm_extract_color): Rewritten to handle
+	xpm colormap entries more thoroughly. (#59939)
+
+2001-09-21  Hans Breuer  <hans@breuer.org>
+
+	* gdk-pixbuf.def : updated externals
+
+	* makefile.msc : generate gdk-pixbuf-enum-types.[hc]
+
+Thu Sep 20 17:22:48 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* io-tiff.c (gdk_pixbuf__tiff_image_load): On OSF, apparently fseek()
+	works in some on-demand way, so the fseek gdk_pixbuf_new_from_file() doesn't 
+	work here since we are using the raw file descriptor. So, we call lseek()
+	on the fileno(f) before using it. (#60840).
+
+2001-09-20  James Henstridge  <james@daa.com.au>
+
+	* Makefile.am (gdk-pixbuf-enum-types.c): same change as in pango,
+	so that flags types are registered as flags rather than enums (not
+	that there are any flags here at the moment).
+
+Wed Sep 19 00:28:24 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* Makefile.am (gdk_pixbuf_headers): Don't include
+	gkd-pixbuf-features.h here since is in builddir
+	and confuses autogen rules.
+
+	* Makefile.am: Don't += variables before they have values,
+	automake-1.5 doesn't like it.
+
+	* Makefile.am: Fix srcdir != builddir for gdk-pixbuf-enum-types.c.
+
+	* Makefile.am: The whitespace strikes back.
+	
+2001-09-17  Matt Wilson  <msw@redhat.com>
+
+	* Makefile.am (libpixbufloader_xbm_la_LDFLAGS): removed duplicate
+	LDFLAGS definition, use the -avoid-version one.
+	(libpixbufloader_tga_la_LDFLAGS): likewise
+
+Mon Sep 17 11:49:02 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* pixops/*: Mirror GdkInterpType to PixopsInterpType
+	to avoid including gdk-pixbuf headers.
+
+2001-09-16  James Henstridge  <james@daa.com.au>
+
+	* .cvsignore: add generated files to ignore list.
+
+	* gdk-pixbuf.h: include gdk-pixbuf-enum-types.h
+
+	* Makefile.am: add rules to build gdk-pixbuf-enum-types.[ch]
+
+Fri Sep 14 23:22:12 2001  Matthias Clasen  <matthiasc@poet.de>
+
+	* io-pnm.c (pnm_read_header): Use GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
+	not GDK_PIXBUF_ERROR_HEADER_CORRUPT. (#58308)
+
+Fri Sep 14 22:53:45 2001  Matthias Clasen  <matthiasc@poet.de>
+
+	* io-jpeg.c (gdk_pixbuf__jpeg_image_begin_load): Handle
+	out-of-memory situation better.
+
+	* io-pnm.c: Robustness fixes for pnm loader
+
+	* io-gif.c: Make gif loader survive TEST_RANDOMLY_MODIFY
+
+	* io-xpm.c (parse_color): detect very long color strings
+
+	All of the above from Matthias Clasen <matthiasc@poet.de>,
+	the remaining from Soeren Sandmann <sandmann@daimi.au.dk>.
+
+	* test-images.h: add tests:
+		- four valid ppm's, eight invalid (matthiasc@poet.de)
+		- one invalid xpm (matthiasc@poet.de)
+		- one valid tga, one invalid (sandmann@daimi.au.dk)
+		- one invalid tiff (sandmann@daimi.au.dk
+
+	* test-loaders.c: enable tests for ppm, png, gif, tga, tiff, xpm
+	
+	* io-tiff.c (gdk_pixbuf__tiff_image_stop_load): TIFFClientOpen can
+	fail - detect it when it happens
+
+	* io-tga.c (gdk_pixbuf__tga_load_increment): Fail if there is too
+	much data in file
+	
+	* gdk-pixbuf-io.c: moved wbmb check after ico check to avoid false
+	positives
+	
+Fri Sep 14 00:30:48 2001  Tim Janik  <timj@gtk.org>
+
+	* Makefile.am: don't used BUILT_SOURCES to build marshal
+	files, as in conjunction with stamp files, this can
+	lead to endless rebuilding loops.
+
+Tue Sep  4 00:22:07 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* Makefile.am: Fix EXTRA_DIST for gdk-pixbuf-csource.1
+
+Tue Sep  4 03:09:52 2001  Tim Janik  <timj@gtk.org>
+
+	* gdk-pixbuf-csource.1: new file, manual page for
+	the publically installed gdk-pixbuf-csource utility.
+
 Thu Aug 30 08:30:03 2001  Matthias Clasen  <matthiasc@poet.de>
 
 	* gdk-pixbuf-loader.c (gdk_pixbuf_loader_close): Propagate

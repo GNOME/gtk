@@ -288,6 +288,7 @@ static void gtk_text_view_queue_scroll           (GtkTextView   *text_view,
                                                   gdouble        yalign);
 
 static gboolean gtk_text_view_flush_scroll       (GtkTextView *text_view);
+static void     gtk_text_view_update_adjustments (GtkTextView *text_view);
 
 /* Container methods */
 static void gtk_text_view_add    (GtkContainer *container,
@@ -300,9 +301,6 @@ static void gtk_text_view_forall (GtkContainer *container,
                                   gpointer      callback_data);
 
 /* FIXME probably need the focus methods. */
-
-/* Hack-around */
-#define g_signal_handlers_disconnect_by_func(obj, func, data) g_signal_handlers_disconnect_matched (obj, G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, 0, 0, NULL, func, data)
 
 typedef struct _GtkTextViewChild GtkTextViewChild;
 
@@ -622,6 +620,18 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
 
   
   /*
+   * Style properties
+   */
+
+  gtk_widget_class_install_style_property (widget_class,
+					   g_param_spec_boxed ("cursor_color",
+							       _("Cursor color"),
+							       _("Color with which to draw insertion cursor"),
+							       GDK_TYPE_COLOR,
+							       G_PARAM_READABLE));
+
+
+  /*
    * Signals
    */
 
@@ -762,6 +772,18 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
   add_move_binding (binding_set, GDK_n, GDK_CONTROL_MASK,
                     GTK_MOVEMENT_DISPLAY_LINES, 1);
 
+  add_move_binding (binding_set, GDK_Up, GDK_CONTROL_MASK,
+                    GTK_MOVEMENT_PARAGRAPHS, -1);
+
+  add_move_binding (binding_set, GDK_KP_Up, GDK_CONTROL_MASK,
+                    GTK_MOVEMENT_PARAGRAPHS, -1);
+  
+  add_move_binding (binding_set, GDK_Down, GDK_CONTROL_MASK,
+                    GTK_MOVEMENT_PARAGRAPHS, 1);
+
+  add_move_binding (binding_set, GDK_KP_Down, GDK_CONTROL_MASK,
+                    GTK_MOVEMENT_PARAGRAPHS, 1);
+  
   add_move_binding (binding_set, GDK_a, GDK_CONTROL_MASK,
                     GTK_MOVEMENT_PARAGRAPH_ENDS, -1);
 
@@ -958,6 +980,8 @@ gtk_text_view_init (GtkTextView *text_view)
 
   text_view->drag_start_x = -1;
   text_view->drag_start_y = -1;
+
+  text_view->pending_place_cursor_button = 0;
 }
 
 /**
@@ -1239,6 +1263,8 @@ gtk_text_view_get_line_at_y (GtkTextView *text_view,
 static gboolean
 set_adjustment_clamped (GtkAdjustment *adj, gdouble val)
 {
+  DV (g_print ("  Setting adj to raw value %g\n", val));
+  
   /* We don't really want to clamp to upper; we want to clamp to
      upper - page_size which is the highest value the scrollbar
      will let us reach. */
@@ -1250,6 +1276,7 @@ set_adjustment_clamped (GtkAdjustment *adj, gdouble val)
 
   if (val != adj->value)
     {
+      DV (g_print ("  Setting adj to clamped value %g\n", val));
       gtk_adjustment_set_value (adj, val);
       return TRUE;
     }
@@ -1312,7 +1339,7 @@ gtk_text_view_scroll_to_iter (GtkTextView   *text_view,
   
   if (!GTK_WIDGET_MAPPED (widget))
     {
-      g_warning ("%s: calling this function before mapping the GtkTextView doesn't make sense, maybe try gtk_text_view_scroll_to_mark() instead", G_STRLOC);
+      g_warning ("gtk_text_view_scroll_to_iter(): calling this function before showing the GtkTextView doesn't make sense, maybe try gtk_text_view_scroll_to_mark() instead");
       return FALSE;
     }
   
@@ -1320,6 +1347,8 @@ gtk_text_view_scroll_to_iter (GtkTextView   *text_view,
                                      iter,
                                      &rect);
 
+  DV (g_print (" target rect %d,%d  %d x %d\n", rect.x, rect.y, rect.width, rect.height));
+  
   current_x_scroll = text_view->xoffset;
   current_y_scroll = text_view->yoffset;
 
@@ -1386,6 +1415,8 @@ gtk_text_view_scroll_to_iter (GtkTextView   *text_view,
     {
       retval = set_adjustment_clamped (get_vadjustment (text_view),
                                        current_y_scroll + scroll_inc);
+
+      DV (g_print (" vert increment %d\n", scroll_inc));
     }
 
   /* Horizontal scroll */
@@ -1421,8 +1452,10 @@ gtk_text_view_scroll_to_iter (GtkTextView   *text_view,
     {
       retval = set_adjustment_clamped (get_hadjustment (text_view),
                                        current_x_scroll + scroll_inc);
-    }
 
+      DV (g_print (" horiz increment %d\n", scroll_inc));
+    }
+  
   if (retval)
     DV(g_print (">Actually scrolled ("G_STRLOC")\n"));
   else
@@ -1479,9 +1512,8 @@ gtk_text_view_queue_scroll (GtkTextView   *text_view,
 static gboolean
 gtk_text_view_flush_scroll (GtkTextView *text_view)
 {
-  GtkTextIter iter, start, end;
+  GtkTextIter iter;
   GtkTextPendingScroll *scroll;
-  gint y0, y1, height;
   gboolean retval;
   
   DV(g_print(G_STRLOC"\n"));
@@ -1496,22 +1528,16 @@ gtk_text_view_flush_scroll (GtkTextView *text_view)
   
   gtk_text_buffer_get_iter_at_mark (get_buffer (text_view), &iter, scroll->mark);
 
-  start = iter;
-  end = iter;
-
-  /* Force-validate the region around the iterator, at least the lines
-   * on either side, so that we can meaningfully get the iter location
+  /* Validate arbitrary area around the scroll destination, so the adjustment
+   * can meaningfully point into that area
    */
-  gtk_text_iter_backward_line (&start);
-  gtk_text_iter_forward_line (&end);
-  
-  gtk_text_layout_get_line_yrange (text_view->layout, &start, &y0, NULL);
-  gtk_text_layout_get_line_yrange (text_view->layout, &end, &y1, &height);
-
   DV(g_print (">Validating scroll destination ("G_STRLOC")\n"));
-  gtk_text_layout_validate_yrange (text_view->layout, &start, y0, y1 + height);
-
+  gtk_text_layout_validate_yrange (text_view->layout, &iter, -300, 300);
+  
   DV(g_print (">Done validating scroll destination ("G_STRLOC")\n"));
+
+  /* Ensure we have updated width/height */
+  gtk_text_view_update_adjustments (text_view);
   
   retval = gtk_text_view_scroll_to_iter (text_view,
                                          &iter,
@@ -1530,7 +1556,7 @@ gtk_text_view_set_adjustment_upper (GtkAdjustment *adj, gdouble upper)
 {  
   if (upper != adj->upper)
     {
-      gdouble min = MAX (0., upper - adj->page_size);
+      gdouble min = MAX (0.0, upper - adj->page_size);
       gboolean value_changed = FALSE;
 
       adj->upper = upper;
@@ -1546,7 +1572,7 @@ gtk_text_view_set_adjustment_upper (GtkAdjustment *adj, gdouble upper)
       
       if (value_changed)
         {
-          DV(g_print(">Changed adj value because upper descreased ("G_STRLOC")\n"));
+          DV(g_print(">Changed adj value because upper decreased ("G_STRLOC")\n"));
           gtk_signal_emit_by_name (GTK_OBJECT (adj), "value_changed");
         }
     }
@@ -2903,6 +2929,24 @@ changed_handler (GtkTextLayout *layout,
 }
 
 static void
+gtk_text_view_realize_cursor_gc (GtkTextView *text_view)
+{
+  GdkColor *cursor_color;
+  GdkColor red = { 0, 0xffff, 0x0000, 0x0000 };
+  
+  if (text_view->cursor_gc)
+    gdk_gc_unref (text_view->cursor_gc);
+
+  gtk_widget_style_get (GTK_WIDGET (text_view), "cursor_color", &cursor_color, NULL);
+
+  if (!cursor_color)
+    cursor_color = &red;
+
+  text_view->cursor_gc = gdk_gc_new (text_view->text_window->bin_window);
+  gdk_gc_set_rgb_fg_color (text_view->cursor_gc, cursor_color);
+}
+
+static void
 gtk_text_view_realize (GtkWidget *widget)
 {
   GtkTextView *text_view;
@@ -2952,6 +2996,8 @@ gtk_text_view_realize (GtkWidget *widget)
     text_window_realize (text_view->bottom_window,
                          widget->window);
 
+  gtk_text_view_realize_cursor_gc (text_view);
+
   gtk_text_view_ensure_layout (text_view);
 
   if (text_view->buffer)
@@ -2974,6 +3020,12 @@ gtk_text_view_unrealize (GtkWidget *widget)
       GtkClipboard *clipboard = gtk_clipboard_get_for_display (gtk_widget_get_display (GTK_WIDGET (text_view)),
 							       GDK_SELECTION_PRIMARY);
       gtk_text_buffer_remove_selection_clipboard (text_view->buffer, clipboard);
+    }
+
+  if (text_view->cursor_gc)
+    {
+      gdk_gc_unref (text_view->cursor_gc);
+      text_view->cursor_gc = NULL;
     }
 
   if (text_view->first_validate_idle)
@@ -3041,6 +3093,8 @@ gtk_text_view_style_set (GtkWidget *widget,
       if (text_view->bottom_window)
         gdk_window_set_background (text_view->bottom_window->bin_window,
                                    &widget->style->bg[GTK_WIDGET_STATE (widget)]);
+      
+      gtk_text_view_realize_cursor_gc (text_view);
     }
 
   if (text_view->layout && previous_style)
@@ -3201,12 +3255,17 @@ gtk_text_view_key_press_event (GtkWidget *widget, GdkEventKey *event)
 {
   gboolean retval = FALSE;
   GtkTextView *text_view = GTK_TEXT_VIEW (widget);
-
+  GtkTextMark *insert;
+  GtkTextIter iter;
+  
   if (text_view->layout == NULL ||
       get_buffer (text_view) == NULL)
     return FALSE;
 
-  if (gtk_im_context_filter_keypress (text_view->im_context, event))
+  insert = gtk_text_buffer_get_insert (get_buffer (text_view));
+  gtk_text_buffer_get_iter_at_mark (get_buffer (text_view), &iter, insert);
+  if (gtk_text_iter_can_insert (&iter, text_view->editable) &&
+      gtk_im_context_filter_keypress (text_view->im_context, event))
     {
       text_view->need_im_reset = TRUE;
       retval = TRUE;
@@ -3301,6 +3360,7 @@ gtk_text_view_button_press_event (GtkWidget *widget, GdkEventButton *event)
             {
               text_view->drag_start_x = event->x;
               text_view->drag_start_y = event->y;
+              text_view->pending_place_cursor_button = event->button;
             }
           else
             {
@@ -3421,12 +3481,13 @@ gtk_text_view_button_release_event (GtkWidget *widget, GdkEventButton *event)
           text_view->just_selected_element = FALSE;
           return FALSE;
         }
-      else
+      else if (text_view->pending_place_cursor_button == event->button)
         {
 	  GtkTextIter iter;
 
-          /* Unselect everything; probably we were dragging, or clicked
-           * without dragging to remove selection.
+          /* Unselect everything; we clicked inside selection, but
+           * didn't move by the drag threshold, so just clear selection
+           * and place cursor.
            */
 	  gtk_text_layout_get_iter_at_pixel (text_view->layout,
 					     &iter,
@@ -3434,7 +3495,9 @@ gtk_text_view_button_release_event (GtkWidget *widget, GdkEventButton *event)
 					     event->y + text_view->yoffset);
 
 	  gtk_text_buffer_place_cursor (get_buffer (text_view), &iter);
-  
+
+          text_view->pending_place_cursor_button = 0;
+          
           return FALSE;
         }
     }
@@ -3569,6 +3632,7 @@ gtk_text_view_paint (GtkWidget *widget, GdkRectangle *area)
   gtk_text_layout_draw (text_view->layout,
                         widget,
                         text_view->text_window->bin_window,
+			text_view->cursor_gc,
                         text_view->xoffset,
                         text_view->yoffset,
                         area->x, area->y,
@@ -3720,6 +3784,10 @@ cursor_blinks (GtkTextView *text_view)
   GtkSettings *settings = gtk_widget_get_settings (GTK_WIDGET (text_view));
   gboolean blink;
 
+#ifdef DEBUG_VALIDATION_AND_SCROLLING
+  return FALSE;
+#endif
+  
   g_object_get (G_OBJECT (settings), "gtk-cursor-blink", &blink, NULL);
   return blink;
 }
@@ -3787,10 +3855,6 @@ gtk_text_view_stop_cursor_blink (GtkTextView *text_view)
 static void
 gtk_text_view_check_cursor_blink (GtkTextView *text_view)
 {
-#ifdef DEBUG_VALIDATION_AND_SCROLLING
-  return;
-#endif
-
   if (text_view->layout != NULL &&
       text_view->cursor_visible &&
       GTK_WIDGET_HAS_FOCUS (text_view))
@@ -3922,9 +3986,8 @@ gtk_text_view_move_cursor (GtkTextView     *text_view,
       break;
 
     case GTK_MOVEMENT_PARAGRAPHS:
-      /* This should almost certainly instead be doing the parallel thing to WORD */
-      /*       gtk_text_iter_down_lines (&newplace, count); */
-      /* FIXME */
+      gtk_text_iter_forward_lines (&newplace, count);
+      gtk_text_iter_set_line_offset (&newplace, 0);
       break;
 
     case GTK_MOVEMENT_PARAGRAPH_ENDS:
@@ -4012,7 +4075,8 @@ gtk_text_view_scroll_pages (GtkTextView *text_view,
     }
 
   gtk_text_layout_validate_yrange (text_view->layout, &anchor, y0, y1);
-
+  /* FIXME do we need to update the adjustment ranges here? */
+  
   gtk_text_view_get_virtual_cursor_pos (text_view, &cursor_x_pos, &cursor_y_pos);
 
   newval = adj->value;
@@ -4424,17 +4488,16 @@ gtk_text_view_end_selection_drag (GtkTextView *text_view, GdkEventButton *event)
 
 static void
 gtk_text_view_set_attributes_from_style (GtkTextView        *text_view,
-                                         GtkTextAttributes *values,
+                                         GtkTextAttributes  *values,
                                          GtkStyle           *style)
 {
   values->appearance.bg_color = style->base[GTK_STATE_NORMAL];
   values->appearance.fg_color = style->text[GTK_STATE_NORMAL];
 
-  if (values->font.family_name)
-    g_free (values->font.family_name);
+  if (values->font)
+    pango_font_description_free (values->font);
 
-  values->font = *style->font_desc;
-  values->font.family_name = g_strdup (style->font_desc->family_name);
+  values->font = pango_font_description_copy (style->font_desc);
 }
 
 static void
@@ -4643,7 +4706,8 @@ gtk_text_view_start_selection_dnd (GtkTextView       *text_view,
 
   text_view->drag_start_x = -1;
   text_view->drag_start_y = -1;
-
+  text_view->pending_place_cursor_button = 0;
+  
   target_list = gtk_target_list_new (target_table,
                                      G_N_ELEMENTS (target_table));
 
@@ -4792,7 +4856,7 @@ gtk_text_view_drag_motion (GtkWidget        *widget,
     }
   else
     {      
-      if (gtk_text_iter_editable (&newplace, text_view->editable))
+      if (gtk_text_iter_can_insert (&newplace, text_view->editable))
         {
           GtkWidget *source_widget;
           
@@ -5395,7 +5459,7 @@ gtk_text_view_do_popup (GtkTextView    *text_view,
                                     &iter,
                                     gtk_text_buffer_get_insert (get_buffer (text_view)));
   
-  can_insert = gtk_text_iter_editable (&iter, text_view->editable);
+  can_insert = gtk_text_iter_can_insert (&iter, text_view->editable);
   
   append_action_signal (text_view, text_view->popup_menu, _("Cut"), "cut_clipboard",
                         have_selection);

@@ -98,6 +98,8 @@ static void     gtk_menu_scroll_to         (GtkMenu          *menu,
 					    gint              offset);
 static void     gtk_menu_stop_scrolling    (GtkMenu          *menu);
 static gboolean gtk_menu_scroll_timeout    (gpointer          data);
+static void     gtk_menu_scroll_item_visible (GtkMenuShell    *menu_shell,
+					      GtkWidget       *menu_item);
 static void     gtk_menu_select_item       (GtkMenuShell     *menu_shell,
 					    GtkWidget        *menu_item);
 static void     gtk_menu_real_insert       (GtkMenuShell     *menu_shell,
@@ -1139,6 +1141,9 @@ gtk_menu_realize (GtkWidget *widget)
   gtk_style_set_background (widget->style, menu->bin_window, GTK_STATE_NORMAL);
   gtk_style_set_background (widget->style, menu->view_window, GTK_STATE_NORMAL);
   gtk_style_set_background (widget->style, widget->window, GTK_STATE_NORMAL);
+
+  gtk_menu_scroll_item_visible (GTK_MENU_SHELL (widget),
+				GTK_MENU_SHELL (widget)->active_menu_item);
 
   gtk_menu_paint (widget);
   
@@ -2221,7 +2226,6 @@ gtk_menu_scroll_to (GtkMenu *menu,
 	y += MENU_SCROLL_ARROW_HEIGHT;
     }
   
-  
   gdk_window_move_resize (menu->view_window,
 			  x,
 			  y,
@@ -2232,8 +2236,8 @@ gtk_menu_scroll_to (GtkMenu *menu,
 }
 
 static void
-gtk_menu_select_item (GtkMenuShell  *menu_shell,
-		      GtkWidget     *menu_item)
+gtk_menu_scroll_item_visible (GtkMenuShell    *menu_shell,
+			      GtkWidget       *menu_item)
 {
   GtkMenu *menu;
   GtkWidget *child;
@@ -2245,8 +2249,6 @@ gtk_menu_select_item (GtkMenuShell  *menu_shell,
   gint arrow_height;
   gboolean last_child = 0;
   
-  g_return_if_fail (GTK_IS_MENU (menu_shell));
-
   menu = GTK_MENU (menu_shell);
 
   /* We need to check if the selected item fully visible.
@@ -2320,6 +2322,16 @@ gtk_menu_select_item (GtkMenuShell  *menu_shell,
 	}    
       
     }
+}
+
+static void
+gtk_menu_select_item (GtkMenuShell  *menu_shell,
+		      GtkWidget     *menu_item)
+{
+  GtkMenu *menu = GTK_MENU (menu_shell);
+
+  if (GTK_WIDGET_REALIZED (GTK_WIDGET (menu)))
+    gtk_menu_scroll_item_visible (menu_shell, menu_item);
 
   GTK_MENU_SHELL_CLASS (parent_class)->select_item (menu_shell, menu_item);
 }

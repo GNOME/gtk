@@ -17,6 +17,8 @@
  * Boston, MA 02111-1307, USA.
  */
 
+/* A Red-Black Tree implementation used specifically by GtkTreeView.
+ */
 #ifndef __GTK_RBTREE_H__
 #define __GTK_RBTREE_H__
 

@@ -46,7 +46,7 @@ struct _OwnerInfo
   gulong     serial;
 };
 
-GSList *owner_list;
+static GSList *owner_list;
 
 /* When a window is destroyed we check if it is the owner
  * of any selections. This is somewhat inefficient, but

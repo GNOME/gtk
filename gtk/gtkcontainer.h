@@ -201,13 +201,14 @@ void	     gtk_container_child_get_property		(GtkContainer	   *container,
     G_OBJECT_WARN_INVALID_PSPEC ((object), "child property id", (property_id), (pspec))
 
 
-/* Non-public methods */
-void	gtk_container_queue_resize	     (GtkContainer *container);
-void    gtk_container_clear_resize_widgets   (GtkContainer *container);
 void    gtk_container_forall		     (GtkContainer *container,
 					      GtkCallback   callback,
 					      gpointer	    callback_data);
-gchar*	gtk_container_child_composite_name   (GtkContainer *container,
+
+/* Non-public methods */
+void	_gtk_container_queue_resize	     (GtkContainer *container);
+void    _gtk_container_clear_resize_widgets   (GtkContainer *container);
+gchar*	_gtk_container_child_composite_name   (GtkContainer *container,
 					      GtkWidget	   *child);
 void   _gtk_container_dequeue_resize_handler (GtkContainer *container);
 

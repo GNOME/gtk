@@ -64,7 +64,7 @@ static void gdk_gc_x11_finalize   (GObject           *object);
 static gpointer parent_class = NULL;
 
 GType
-gdk_gc_x11_get_type (void)
+_gdk_gc_x11_get_type (void)
 {
   static GType object_type = 0;
 
@@ -141,7 +141,7 @@ _gdk_x11_gc_new (GdkDrawable      *drawable,
    */
   g_return_val_if_fail (GDK_IS_DRAWABLE_IMPL_X11 (drawable), NULL);
 
-  gc = g_object_new (gdk_gc_x11_get_type (), NULL);
+  gc = g_object_new (_gdk_gc_x11_get_type (), NULL);
   private = GDK_GC_X11 (gc);
 
   private->dirty_mask = 0;
@@ -749,4 +749,27 @@ gdk_gc_get_screen (GdkGC *gc)
   GdkGCX11 *x11_gc = GDK_GC_X11 (gc);
   
   return x11_gc->screen;
+}
+
+Display *
+gdk_x11_gc_get_xdisplay (GdkGC *gc)
+{
+  g_return_val_if_fail (GDK_IS_GC_X11 (gc), NULL);
+
+  return GDK_SCREEN_XDISPLAY (gdk_gc_get_screen (gc));
+}
+
+GC
+gdk_x11_gc_get_xgc (GdkGC *gc)
+{
+  GdkGCX11 *gc_x11;
+  
+  g_return_val_if_fail (GDK_IS_GC_X11 (gc), NULL);
+
+  gc_x11 = GDK_GC_X11 (gc);
+
+  if (gc_x11->dirty_mask)
+    _gdk_x11_gc_flush (gc);
+
+  return gc_x11->xgc;
 }

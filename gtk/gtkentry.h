@@ -84,7 +84,9 @@ struct _GtkEntry
   guint        cursor_visible : 1;
 
   guint        in_click : 1;	/* Flag so we don't select all when clicking in entry to focus in */
-  
+
+  guint        is_cell_renderer : 1;
+
   guint   button;
   guint   blink_timeout;
   guint   recompute_idle;

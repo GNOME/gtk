@@ -2,9 +2,16 @@
 #define PIXOPS_H
 
 #include <glib.h>
-#include "gdk-pixbuf.h"
 
 
+
+/* Interpolation modes; must match PixopsInterpType */ 
+typedef enum {
+	PIXOPS_INTERP_NEAREST,
+	PIXOPS_INTERP_TILES,
+	PIXOPS_INTERP_BILINEAR,
+	PIXOPS_INTERP_HYPER
+} PixopsInterpType;
 
 /* Scale src_buf from src_width / src_height by factors scale_x, scale_y
  * and composite the portion corresponding to
@@ -27,7 +34,7 @@ void pixops_composite (guchar         *dest_buf,
 		       int             src_has_alpha,
 		       double          scale_x,
 		       double          scale_y,
-		       GdkInterpType   interp_type,
+		       PixopsInterpType   interp_type,
 		       int             overall_alpha);
 
 /* Scale src_buf from src_width / src_height by factors scale_x, scale_y
@@ -52,7 +59,7 @@ void pixops_composite_color (guchar         *dest_buf,
 			     int             src_has_alpha,
 			     double          scale_x,
 			     double          scale_y,
-			     GdkInterpType   interp_type,
+			     PixopsInterpType   interp_type,
 			     int             overall_alpha,
 			     int             check_x,
 			     int             check_y,
@@ -81,7 +88,7 @@ void pixops_scale     (guchar         *dest_buf,
 		       int             src_has_alpha,
 		       double          scale_x,
 		       double          scale_y,
-		       GdkInterpType   interp_type);
+		       PixopsInterpType   interp_type);
 
 
 

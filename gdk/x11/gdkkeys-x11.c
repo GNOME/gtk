@@ -272,7 +272,7 @@ get_keymap (GdkKeymapX11 *keymap_x11)
 }
 
 #if HAVE_XKB
-PangoDirection
+static PangoDirection
 get_direction (GdkKeymapX11 *keymap_x11)
 {
   XkbDescRec *xkb = get_xkb (keymap_x11);
@@ -283,17 +283,21 @@ get_direction (GdkKeymapX11 *keymap_x11)
   GdkDisplay *display = GDK_KEYMAP (keymap_x11)->display;
 
   XkbGetState (GDK_DISPLAY_XDISPLAY (display), XkbUseCoreKbd, &state_rec);
-
-  name = gdk_x11_get_real_atom_name (display, xkb->names->groups[state_rec.locked_group]);
-  if (g_strcasecmp (name, "arabic") == 0 ||
-      g_strcasecmp (name, "hebrew") == 0 ||
-      g_strcasecmp (name, "israelian") == 0)
-    result = PANGO_DIRECTION_RTL;
-  else
+  
+  if (xkb->names->groups[state_rec.locked_group] == None)
     result = PANGO_DIRECTION_LTR;
+  else
+    {
+      name = gdk_x11_get_real_atom_name (display, xkb->names->groups[state_rec.locked_group]);
+      if (g_strcasecmp (name, "arabic") == 0 ||
+	  g_strcasecmp (name, "hebrew") == 0 ||
+	  g_strcasecmp (name, "israelian") == 0)
+	result = PANGO_DIRECTION_RTL;
+      else
+	result = PANGO_DIRECTION_LTR;
+      g_free (name);
+    }
     
-  g_free (name);
-
   return result;
 }
 

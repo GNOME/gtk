@@ -35,6 +35,19 @@
 #include "gdkdisplay-x11.h"
 #include "gdkscreen-x11.h"
 
+typedef struct _GdkFontPrivateX        GdkFontPrivateX;
+
+struct _GdkFontPrivateX
+{
+  GdkFontPrivate base;
+  /* XFontStruct *xfont; */
+  /* generic pointer point to XFontStruct or XFontSet */
+  gpointer xfont;
+  GdkDisplay *display;
+
+  GSList *names;
+};
+
 static GHashTable *
 gdk_font_name_hash_get (GdkDisplay *display)
 {
@@ -739,3 +752,44 @@ gdk_text_extents_wc (GdkFont        *font,
     }
 
 }
+
+Display *
+gdk_x11_font_get_xdisplay (GdkFont *font)
+{
+  g_return_val_if_fail (font != NULL, NULL);
+
+  return GDK_DISPLAY_XDISPLAY(((GdkFontPrivateX *)font)->display);
+}
+
+gpointer
+gdk_x11_font_get_xfont (GdkFont *font)
+{
+  g_return_val_if_fail (font != NULL, NULL);
+
+  return ((GdkFontPrivateX *)font)->xfont;
+}
+
+/**
+ * gdk_x11_font_get_name:
+ * @font: a #GdkFont.
+ * 
+ * Return the X Logical Font Description (for font->type == GDK_FONT_FONT)
+ * or comma separated list of XLFDs (for font->type == GDK_FONT_FONTSET)
+ * that was used to load the font. If the same font was loaded
+ * via multiple names, which name is returned is undefined.
+ * 
+ * Return value: the name of the font. This string is owned
+ *   by GDK and must not be modified or freed.
+ **/
+G_CONST_RETURN char *
+gdk_x11_font_get_name (GdkFont *font)
+{
+  GdkFontPrivateX *private = (GdkFontPrivateX *)font;
+
+  g_return_val_if_fail (font != NULL, NULL);
+
+  g_assert (private->names);
+
+  return private->names->data;
+}
+     

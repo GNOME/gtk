@@ -288,6 +288,7 @@ gboolean                gdk_pixbuf_animation_iter_advance                    (Gd
 
  
 #include <gdk-pixbuf/gdk-pixbuf-loader.h>
+#include <gdk-pixbuf/gdk-pixbuf-enum-types.h>
 
 
 

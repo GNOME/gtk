@@ -415,8 +415,7 @@ gdk_window_cache_new (GdkScreen *screen)
   Window root, parent, *children;
   unsigned int nchildren;
   int i;
-  
-  gint old_warnings = gdk_error_warnings;
+  gint old_warnings = _gdk_error_warnings;
   Display *xdisplay = GDK_SCREEN_XDISPLAY (screen);
   GdkWindow *root_window = gdk_screen_get_root_window (screen);
   
@@ -433,8 +432,8 @@ gdk_window_cache_new (GdkScreen *screen)
   gdk_window_add_filter (gdk_screen_get_root_window (screen),
 			 gdk_window_cache_filter, result);
   
-  gdk_error_code = 0;
-  gdk_error_warnings = 0;
+  _gdk_error_code = 0;
+  _gdk_error_warnings = 0;
 
   if (XQueryTree (xdisplay, GDK_WINDOW_XWINDOW (root_window), 
 		  &root, &parent, &children, &nchildren) == 0)
@@ -448,8 +447,8 @@ gdk_window_cache_new (GdkScreen *screen)
 			    xwa.x, xwa.y, xwa.width, xwa.height,
 			    xwa.map_state != IsUnmapped);
 
-      if (gdk_error_code)
-	gdk_error_code = 0;
+      if (_gdk_error_code)
+	_gdk_error_code = 0;
       else
 	{
 	  gdk_window_cache_add (result, children[i],
@@ -460,7 +459,7 @@ gdk_window_cache_new (GdkScreen *screen)
 
   XFree (children);
 
-  gdk_error_warnings = old_warnings;
+  _gdk_error_warnings = old_warnings;
 
   return result;
 }
@@ -503,9 +502,9 @@ get_client_window_at_coords_recurse (GdkDisplay *display,
 		      wm_state_atom, 0, 0, False, AnyPropertyType,
 		      &type, &format, &nitems, &after, &data);
   
-  if (gdk_error_code)
+  if (_gdk_error_code)
     {
-      gdk_error_code = 0;
+      _gdk_error_code = 0;
 
       return None;
     }
@@ -518,12 +517,12 @@ get_client_window_at_coords_recurse (GdkDisplay *display,
 
 #if 0
   /* This is beautiful! Damn Enlightenment and click-to-focus */
-  XTranslateCoordinates (gdk_display, gdk_root_window, win,
+  XTranslateCoordinates (gdk_display, _gdk_root_window, win,
 			 x_root, y_root, &dest_x, &dest_y, &child);
 
-  if (gdk_error_code)
+  if (_gdk_error_code)
     {
-      gdk_error_code = 0;
+      _gdk_error_code = 0;
 
       return None;
     }
@@ -533,7 +532,7 @@ get_client_window_at_coords_recurse (GdkDisplay *display,
 		 &root, &tmp_parent, &children, &nchildren) == 0)
     return 0;
 
-  if (!gdk_error_code)
+  if (!_gdk_error_code)
     {
       for (i = nchildren - 1; (i >= 0) && (child == None); i--)
 	{
@@ -541,8 +540,8 @@ get_client_window_at_coords_recurse (GdkDisplay *display,
 	  
 	  XGetWindowAttributes (GDK_DISPLAY_XDISPLAY (display), children[i], &xwa);
 	  
-	  if (gdk_error_code)
-	    gdk_error_code = 0;
+	  if (_gdk_error_code)
+	    _gdk_error_code = 0;
 	  else if ((xwa.map_state == IsViewable) && (xwa.class == InputOutput) &&
 		   (x >= xwa.x) && (x < xwa.x + (gint)xwa.width) &&
 		   (y >= xwa.y) && (y < xwa.y + (gint)xwa.height))
@@ -556,7 +555,7 @@ get_client_window_at_coords_recurse (GdkDisplay *display,
       XFree (children);
     }
   else
-    gdk_error_code = 0;
+    _gdk_error_code = 0;
 #endif  
 
   if (child)
@@ -574,10 +573,10 @@ get_client_window_at_coords (GdkWindowCache *cache,
   GList *tmp_list;
   Window retval = None;
 
-  gint old_warnings = gdk_error_warnings;
+  gint old_warnings = _gdk_error_warnings;
   
-  gdk_error_code = 0;
-  gdk_error_warnings = 0;
+  _gdk_error_code = 0;
+  _gdk_error_warnings = 0;
 
   tmp_list = cache->children;
 
@@ -602,7 +601,7 @@ get_client_window_at_coords (GdkWindowCache *cache,
       tmp_list = tmp_list->next;
     }
 
-  gdk_error_warnings = old_warnings;
+  _gdk_error_warnings = old_warnings;
   if (retval)
     return retval;
   else
@@ -631,9 +630,9 @@ get_client_window_at_coords_recurse (Window  win,
 		      wm_state_atom, 0, 0, False, AnyPropertyType,
 		      &type, &format, &nitems, &after, &data);
   
-  if (gdk_error_code)
+  if (_gdk_error_code)
     {
-      gdk_error_code = 0;
+      _gdk_error_code = 0;
 
       return None;
     }
@@ -644,12 +643,12 @@ get_client_window_at_coords_recurse (Window  win,
       return win;
     }
 
-  XTranslateCoordinates (gdk_display, gdk_root_window, win,
+  XTranslateCoordinates (gdk_display, _gdk_root_window, win,
 			 x_root, y_root, &dest_x, &dest_y, &child);
 
-  if (gdk_error_code)
+  if (_gdk_error_code)
     {
-      gdk_error_code = 0;
+      _gdk_error_code = 0;
 
       return None;
     }
@@ -670,12 +669,12 @@ get_client_window_at_coords (Window  ignore,
   int i;
   Window retval = None;
   
-  gint old_warnings = gdk_error_warnings;
+  gint old_warnings = _gdk_error_warnings;
   
-  gdk_error_code = 0;
-  gdk_error_warnings = 0;
+  _gdk_error_code = 0;
+  _gdk_error_warnings = 0;
 
-  if (XQueryTree(gdk_display, gdk_root_window, 
+  if (XQueryTree(gdk_display, _gdk_root_window, 
 		 &root, &parent, &children, &nchildren) == 0)
     return 0;
 
@@ -687,8 +686,8 @@ get_client_window_at_coords (Window  ignore,
 
 	  XGetWindowAttributes (gdk_display, children[i], &xwa);
 
-	  if (gdk_error_code)
-	    gdk_error_code = 0;
+	  if (_gdk_error_code)
+	    _gdk_error_code = 0;
 	  else if ((xwa.map_state == IsViewable) &&
 		   (x_root >= xwa.x) && (x_root < xwa.x + (gint)xwa.width) &&
 		   (y_root >= xwa.y) && (y_root < xwa.y + (gint)xwa.height))
@@ -703,11 +702,11 @@ get_client_window_at_coords (Window  ignore,
 
   XFree (children);
 
-  gdk_error_warnings = old_warnings;
+  _gdk_error_warnings = old_warnings;
   if (retval)
     return retval;
   else
-    return gdk_root_window;
+    return _gdk_root_window;
 }
 #endif
 
@@ -1588,7 +1587,7 @@ motif_read_initiator_info (Window      source_window,
     }
 
 #ifdef G_ENABLE_DEBUG
-  if (gdk_debug_flags & GDK_DEBUG_DND)
+  if (_gdk_debug_flags & GDK_DEBUG_DND)
     print_target_list (display, *targets);
 #endif /* G_ENABLE_DEBUG */
 
@@ -2373,12 +2372,12 @@ xdnd_check_dest (GdkDisplay *display,
   GdkAtom xdnd_proxy_atom = gdk_x11_get_real_atom_by_name (display, "XdndProxy");
   GdkAtom xdnd_aware_atom = gdk_x11_get_real_atom_by_name (display, "XdndAware");
 
-  gint old_warnings = gdk_error_warnings;
+  gint old_warnings = _gdk_error_warnings;
 
   proxy = GDK_NONE;
   
-  gdk_error_code = 0;
-  gdk_error_warnings = 0;
+  _gdk_error_code = 0;
+  _gdk_error_warnings = 0;
 
   XGetWindowProperty (display_impl->xdisplay, win, 
 		      xdnd_proxy_atom, 0, 
@@ -2386,7 +2385,7 @@ xdnd_check_dest (GdkDisplay *display,
 		      &type, &format, &nitems, &after, 
 		      (guchar **)&proxy_data);
 
-  if (!gdk_error_code)
+  if (!_gdk_error_code)
     {
       if (type != None)
 	{
@@ -2407,7 +2406,7 @@ xdnd_check_dest (GdkDisplay *display,
 			  &type, &format, &nitems, &after, 
 			  (guchar **)&version);
       
-      if (!gdk_error_code && type != None)
+      if (!_gdk_error_code && type != None)
 	{
 	  if ((format == 32) && (nitems == 1))
 	    {
@@ -2423,8 +2422,8 @@ xdnd_check_dest (GdkDisplay *display,
       
     }
 
-  gdk_error_warnings = old_warnings;
-  gdk_error_code = 0;
+  _gdk_error_warnings = old_warnings;
+  _gdk_error_code = 0;
   
   return retval ? (proxy ? proxy : win) : GDK_NONE;
 }
@@ -2441,10 +2440,10 @@ xdnd_read_actions (GdkDragContext *context)
 
   gint i;
 
-  gint old_warnings = gdk_error_warnings;
+  gint old_warnings = _gdk_error_warnings;
 
-  gdk_error_code = 0;
-  gdk_error_warnings = 0;
+  _gdk_error_code = 0;
+  _gdk_error_warnings = 0;
 
   /* Get the XdndActionList, if set */
 
@@ -2456,7 +2455,7 @@ xdnd_read_actions (GdkDragContext *context)
 		      False, XA_ATOM, &type, &format, &nitems,
 		      &after, (guchar **)&data);
   
-  if (!gdk_error_code && (format == 32) && (type == XA_ATOM))
+  if (!_gdk_error_code && (format == 32) && (type == XA_ATOM))
     {
       context->actions = 0;
 
@@ -2466,7 +2465,7 @@ xdnd_read_actions (GdkDragContext *context)
       (PRIVATE_DATA (context))->xdnd_have_actions = TRUE;
 
 #ifdef G_ENABLE_DEBUG
-      if (gdk_debug_flags & GDK_DEBUG_DND)
+      if (_gdk_debug_flags & GDK_DEBUG_DND)
 	{
 	  GString *action_str = g_string_new (NULL);
 	  if (context->actions & GDK_ACTION_MOVE)
@@ -2486,8 +2485,8 @@ xdnd_read_actions (GdkDragContext *context)
       XFree(data);
     }
 
-  gdk_error_warnings = old_warnings;
-  gdk_error_code = 0;
+  _gdk_error_warnings = old_warnings;
+  _gdk_error_code = 0;
 }
 
 /* We have to make sure that the XdndActionList we keep internally
@@ -2638,7 +2637,7 @@ xdnd_enter_filter (GdkXEvent *xev,
     }
 
 #ifdef G_ENABLE_DEBUG
-  if (gdk_debug_flags & GDK_DEBUG_DND)
+  if (_gdk_debug_flags & GDK_DEBUG_DND)
     print_target_list (GDK_DRAWABLE_DISPLAY (event->any.window), new_context->targets);
 #endif /* G_ENABLE_DEBUG */
 
@@ -2883,7 +2882,7 @@ gdk_drag_get_protocol (GdkDisplay      *display,
       /* Check if this is a root window */
 
       gboolean rootwin = FALSE;
-      gint old_warnings = gdk_error_warnings;
+      gint old_warnings = _gdk_error_warnings;
       Atom type = None;
       int format;
       unsigned long nitems, after;
@@ -2892,17 +2891,17 @@ gdk_drag_get_protocol (GdkDisplay      *display,
       if (gdk_x11_display_is_root_window (display, (Window) xid))
 	rootwin = TRUE;
 
-      gdk_error_warnings = 0;
+      _gdk_error_warnings = 0;
       
       if (!rootwin)
 	{
-	  gdk_error_code = 0;
+	  _gdk_error_code = 0;
 
 	  XGetWindowProperty (GDK_DISPLAY_XDISPLAY (display), xid,
 			      gdk_x11_get_real_atom_by_name (display, "ENLIGHTENMENT_DESKTOP"),
 			      0, 0, False, AnyPropertyType,
 			      &type, &format, &nitems, &after, &data);
-	  if ((gdk_error_code == 0) && type != None)
+	  if ((_gdk_error_code == 0) && type != None)
 	    {
 	      XFree (data);
 	      rootwin = TRUE;
@@ -2916,18 +2915,18 @@ gdk_drag_get_protocol (GdkDisplay      *display,
 #if 0
       if (!rootwin)
 	{
-	  gdk_error_code = 0;
+	  _gdk_error_code = 0;
 	  
 	  XGetWindowProperty (gdk_display, win,
 			      gdk_atom_intern ("__SWM_VROOT", FALSE),
 			      0, 0, False, AnyPropertyType,
 			      &type, &format, &nitems, &data);
-	  if ((gdk_error_code == 0) && type != None)
+	  if ((_gdk_error_code == 0) && type != None)
 	    rootwin = TRUE;
 	}
 #endif      
 
-      gdk_error_warnings = old_warnings;
+      _gdk_error_warnings = old_warnings;
 
       if (rootwin)
 	{

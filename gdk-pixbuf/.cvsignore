@@ -15,3 +15,5 @@ stamp-gdk-pixbuf-marshal.h
 test-gdk-pixbuf
 test-loaders
 gdk-pixbuf-features.h
+gdk-pixbuf-enum-types.[ch]
+s-enum-types-[ch]

@@ -405,8 +405,6 @@ void
 gdk_property_delete (GdkWindow *window,
 		     GdkAtom    property)
 {
-  GdkDisplay *display;
-
   g_return_if_fail (!window || GDK_IS_WINDOW (window));
 
   if (!window)
@@ -420,9 +418,8 @@ gdk_property_delete (GdkWindow *window,
   if (GDK_WINDOW_DESTROYED (window))
     return;
 
-  display = gdk_drawable_get_display (window);
-
-  XDeleteProperty (GDK_DISPLAY_XDISPLAY (display),
+  XDeleteProperty (GDK_WINDOW_XDISPLAY (window),
 		   GDK_WINDOW_XWINDOW (window),
-		   gdk_x11_get_real_atom (display, property));
+		   gdk_x11_get_real_atom (GDK_WINDOW_DISPLAY (window),
+					  property));
 }

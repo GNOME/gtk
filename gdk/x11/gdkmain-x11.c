@@ -106,12 +106,10 @@ static const int gdk_ndebug_keys = sizeof(gdk_debug_keys)/sizeof(GDebugKey);
 #endif /* G_ENABLE_DEBUG */
 
 GdkArgDesc _gdk_windowing_args[] = {
-  { "display",     GDK_ARG_STRING,   &gdk_display_name,    (GdkArgFunc)NULL   },
+  { "display",     GDK_ARG_STRING,   &_gdk_display_name,    (GdkArgFunc)NULL   },
   { "sync",        GDK_ARG_BOOL,     &gdk_synchronize,     (GdkArgFunc)NULL   },
-  { "no-xshm",     GDK_ARG_NOBOOL,   &gdk_use_xshm,        (GdkArgFunc)NULL   },
-  { "class",       GDK_ARG_STRING,   &gdk_progclass,       (GdkArgFunc)NULL   },
-  { "gxid-host",   GDK_ARG_STRING,   &gdk_input_gxid_host, (GdkArgFunc)NULL   },
-  { "gxid-port",   GDK_ARG_INT,      &gdk_input_gxid_port, (GdkArgFunc)NULL   },
+  { "gxid-host",   GDK_ARG_STRING,   &_gdk_input_gxid_host, (GdkArgFunc)NULL   },
+  { "gxid-port",   GDK_ARG_INT,      &_gdk_input_gxid_port, (GdkArgFunc)NULL   },
   { NULL }
 };
 
@@ -142,12 +140,8 @@ _gdk_windowing_init_check_for_display (int argc,
   
   class_hint = XAllocClassHint();
   class_hint->res_name = g_get_prgname ();
-  if (gdk_progclass == NULL)
-    {
-      gdk_progclass = g_strdup (g_get_prgname ());
-      gdk_progclass[0] = toupper (gdk_progclass[0]);
-    }
-  class_hint->res_class = gdk_progclass;
+  
+  class_hint->res_class = (char *)gdk_get_program_class ();
   XmbSetWMProperties (display_impl->xdisplay,
 		      display_impl->leader_window,
 		      NULL, NULL, argv, argc, NULL, NULL,
@@ -204,15 +198,13 @@ _gdk_windowing_init_check (int argc, char **argv)
 {
   /* This wrapper function is needed because of gdk_display_name exists only
    * in x11 implementation */
-  return _gdk_windowing_init_check_for_display (argc, argv, gdk_display_name);
+  return _gdk_windowing_init_check_for_display (argc, argv, _gdk_display_name);
 }
 
 #ifndef GDK_MULTIHEAD_SAFE
 void
 gdk_set_use_xshm (gboolean use_xshm)
 {
-  GDK_NOTE (MULTIHEAD, g_message ("Use gdk_display_set_use_xshm instead\n"));
-  gdk_display_set_use_xshm (gdk_get_default_display (), use_xshm);
 }
 #endif
 
@@ -306,10 +298,10 @@ gdk_pointer_grab (GdkWindow *	  window,
   
   
   xevent_mask = 0;
-  for (i = 0; i < gdk_nevent_masks; i++)
+  for (i = 0; i < _gdk_nenvent_masks; i++)
     {
       if (event_mask & (1 << (i + 1)))
-	xevent_mask |= gdk_event_mask_table[i];
+	xevent_mask |= _gdk_event_mask_table[i];
     }
   
   return_val = _gdk_input_grab_pointer (window,
@@ -611,7 +603,7 @@ gdk_beep (void)
 /* close all open display */
 
 void
-gdk_windowing_exit (void)
+_gdk_windowing_exit (void)
 {
   GSList *tmp_list = _gdk_display_manager->open_displays;
     
@@ -636,7 +628,7 @@ gdk_windowing_exit (void)
  *
  * Results:
  *   Either we were expecting some sort of error to occur,
- *   in which case we set the "gdk_error_code" flag, or this
+ *   in which case we set the "_gdk_error_code" flag, or this
  *   error was unexpected, in which case we will print an
  *   error message and exit. (Since trying to continue will
  *   most likely simply lead to more errors).
@@ -652,7 +644,7 @@ gdk_x_error (Display	 *display,
 {
   if (error->error_code)
     {
-      if (gdk_error_warnings)
+      if (_gdk_error_warnings)
 	{
 	  gchar buf[64];
           gchar *msg;
@@ -684,7 +676,7 @@ gdk_x_error (Display	 *display,
 	  exit(1);
 #endif /* G_ENABLE_DEBUG */
 	}
-      gdk_error_code = error->error_code;
+      _gdk_error_code = error->error_code;
     }
   
   return 0;
@@ -753,7 +745,7 @@ gdk_get_display (void)
 gchar *
 gdk_get_display_arg_name (void)
 {
-  return gdk_display_name;
+  return _gdk_display_name;
 }
 
 #ifndef GDK_MULTIHEAD_SAFE
@@ -762,17 +754,15 @@ gdk_send_xevent (Window window, gboolean propagate, glong event_mask,
 		 XEvent *event_send)
 {
   Status result;
-  gint old_warnings = gdk_error_warnings;
-  gdk_error_code = 0;
-  
-  gdk_error_warnings = 0;
+  gint old_warnings = _gdk_error_warnings;
+  _gdk_error_code = 0;
+  _gdk_error_warnings = 0;
     
   result = XSendEvent (gdk_get_default_display (), window, propagate, 
 		       event_mask, event_send);
   XSync (event_send->xany.display, False);
   gdk_error_warnings = old_warnings;
-  
-  return result && !gdk_error_code;
+  return result && !_gdk_error_code;
 }
 #endif
 gint 
@@ -783,17 +773,16 @@ gdk_send_xevent_for_display (GdkDisplay *display,
 			     XEvent *event_send)
 {
   Status result;
-  gint old_warnings = gdk_error_warnings;
+  gint old_warnings = _gdk_error_warnings;
+  _gdk_error_code = 0;
+  _gdk_error_warnings = 0;
   
-  gdk_error_code = 0;
-  
-  gdk_error_warnings = 0;
   result = XSendEvent (GDK_DISPLAY_XDISPLAY (display), window, 
 		       propagate, event_mask, event_send);
   XSync (GDK_DISPLAY_XDISPLAY (display), False);
-  gdk_error_warnings = old_warnings;
+  _gdk_error_warnings = old_warnings;
   
-  return result && !gdk_error_code;
+  return result && !_gdk_error_code;
 }
 
 void
@@ -842,5 +831,38 @@ gdk_x11_ungrab_server ()
   --display_impl->grab_count;
   if (display_impl->grab_count == 0)
     XUngrabServer (display_impl->xdisplay);
+}
+#endif
+
+/**
+ * gdk_x11_get_default_screen:
+ * 
+ * Gets the default GTK+ screen number.
+ * 
+ * Return value: returns the screen number specified by
+ *   the --display command line option on the DISPLAY environment
+ *   variable gdk_init() calls XOpenDisplay().
+ **/
+#ifndef GDK_MULTIHEAD_SAFE
+gint
+gdk_x11_get_default_screen (void)
+{
+  return gdk_screen_get_number (gdk_get_default_screen ());
+}
+#endif
+
+#ifndef GDK_MULTIHEAD_SAFE
+Window
+gdk_x11_get_default_root_xwindow (void)
+{
+  return GDK_SCREEN_XROOTWIN (gdk_get_default_screen ());
+}
+#endif
+
+#ifndef GDK_MULTIHEAD_SAFE
+Display *
+gdk_x11_get_default_xdisplay (void)
+{
+  return GDK_DISPLAY_XDISPLAY (gdk_get_default_display ());
 }
 #endif

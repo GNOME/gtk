@@ -33,6 +33,11 @@
 #include "gdkscreen-x11.h"
 #include "gdkdisplay-x11.h"
 
+struct _GdkVisualClass
+{
+  GObjectClass parent_class;
+};
+
 static void     gdk_visual_add            (GdkVisual *visual);
 static void     gdk_visual_decompose_mask (gulong     mask,
 					   gint      *shift,
@@ -259,7 +264,7 @@ _gdk_visual_init (GdkScreen *screen)
       }
 
 #ifdef G_ENABLE_DEBUG 
-  if (gdk_debug_flags & GDK_DEBUG_MISC)
+  if (_gdk_debug_flags & GDK_DEBUG_MISC)
     for (i = 0; i < nvisuals; i++)
       g_message ("visual: %s: %d",
 		 visual_names[visuals[i]->visual.type],
@@ -625,4 +630,12 @@ gdk_visual_equal (Visual *a,
 		  Visual *b)
 {
   return (a->visualid == b->visualid);
+}
+
+Visual *
+gdk_x11_visual_get_xvisual (GdkVisual *visual)
+{
+  g_return_val_if_fail (visual != NULL, NULL);
+
+  return  ((GdkVisualPrivate*) visual)->xvisual;
 }

@@ -1,3 +1,4 @@
+/* -*- Mode: C; tab-width: 8; indent-tabs-mode: t; c-basic-offset: 8 -*- */
 /* GdkPixbuf library - XPM image loader
  *
  * Copyright (C) 1999 Mark Crichton
@@ -926,7 +927,7 @@ find_color(const char *name,
  *	Partial implementation of X color name parsing interface.
  *
  * Results:
- *	Returns non-zero on success.
+ *	Returns TRUE on success.
  *
  * Side effects:
  *	None.
@@ -942,13 +943,14 @@ parse_color (const char *spec,
 		char fmt[16];
 		int i, red, green, blue;
 
-		if ((i = strlen(spec+1))%3) {
+		if ((i = strlen (spec + 1)) % 3) {
 			return FALSE;
 		}
 		i /= 3;
 
-		sprintf(fmt, "%%%dx%%%dx%%%dx", i, i, i);
-		if (sscanf(spec+1, fmt, &red, &green, &blue) != 3) {
+		g_snprintf (fmt, 16, "%%%dx%%%dx%%%dx", i, i, i);
+
+		if (sscanf (spec + 1, fmt, &red, &green, &blue) != 3) {
 			return FALSE;
 		}
 		if (i == 4) {
@@ -977,20 +979,13 @@ parse_color (const char *spec,
 }
 
 static gint
-xpm_seek_string (FILE *infile, const gchar *str, gint skip_comments)
+xpm_seek_string (FILE *infile, const gchar *str)
 {
 	char instr[1024];
 
 	while (!feof (infile)) {
 		if (fscanf (infile, "%1023s", instr) < 0)
                         return FALSE;
-		if (skip_comments == TRUE && strcmp (instr, "/*") == 0) {
-			fscanf (infile, "%1023s", instr);
-			while (!feof (infile) && strcmp (instr, "*/") != 0)
-				fscanf (infile, "%1023s", instr);
-			fscanf (infile, "%1023s", instr);
-		}
-
 		if (strcmp (instr, str) == 0)
 			return TRUE;
 	}
@@ -1097,74 +1092,78 @@ xpm_skip_string (const gchar *buffer)
 	return &buffer[index];
 }
 
-/* Xlib crashed once at a color name lengths around 125 */
-#define MAX_COLOR_LEN 120
-
 static gchar *
 xpm_extract_color (const gchar *buffer)
 {
-	gint counter, numnames;
-	const gchar *ptr = NULL;
-        gchar ch, temp[128];
-	gchar color[MAX_COLOR_LEN], *retcol;
-	gint space;
+	gint new_key = 0;
+	gint key = 0;
+	gint current_key = 1;
+	gint space = 128;
+	gchar word[128], color[128], current_color[128];
+	gchar *r, *p;
 
-	counter = 0;
-	while (ptr == NULL) {
-		if ((buffer[counter] == 'c') || (buffer[counter] == 'g')) {
-			ch = buffer[counter + 1];
-			if (ch == 0x20 || ch == 0x09)
-				ptr = &buffer[counter + 1];
-		} else if (buffer[counter] == 0)
-			return NULL;
-
-		counter++;
-	}
-	ptr = xpm_skip_whitespaces (ptr);
-
-	if (ptr[0] == 0)
-		return NULL;
-	else if (ptr[0] == '#') {
-		counter = 1;
-		while (ptr[counter] != 0 &&
-		       ((ptr[counter] >= '0' && ptr[counter] <= '9') ||
-			(ptr[counter] >= 'a' && ptr[counter] <= 'f') ||
-			(ptr[counter] >= 'A' && ptr[counter] <= 'F')))
-			counter++;
-		retcol = g_new (gchar, counter + 1);
-		strncpy (retcol, ptr, counter);
-
-		retcol[counter] = 0;
-
-		return retcol;
-	}
-	color[0] = 0;
-	numnames = 0;
-
-	space = MAX_COLOR_LEN - 1;
-	while (space > 0) {
-		sscanf (ptr, "%127s", temp);
-
-		if (((gint) ptr[0] == 0) ||
-		    (strcmp ("s", temp) == 0) || (strcmp ("m", temp) == 0) ||
-		    (strcmp ("g", temp) == 0) || (strcmp ("g4", temp) == 0))
-			break;
-		else {
-			if (numnames > 0) {
-				space -= 1;
-				strcat (color, " ");
-			}
-
-			strncat (color, temp, space);
-			space -= MIN (space, strlen (temp));
-			ptr = xpm_skip_string (ptr);
-			ptr = xpm_skip_whitespaces (ptr);
-			numnames++;
+	p = &buffer[0];
+	word[0] = '\0';
+	color[0] = '\0';
+	current_color[0] = '\0';
+        while (1) {
+		/* skip whitespace */
+		for (; *p != '\0' && g_ascii_isspace (*p); p++) {
+		} 
+		/* copy word */
+		for (r = word; *p != '\0' && !g_ascii_isspace (*p) && r - word < sizeof (word) - 1; p++, r++) {
+			*r = *p;
 		}
+		*r = '\0';
+		if (*word == '\0') {
+			if (color[0] == '\0')  /* incomplete colormap entry */
+				return NULL; 				
+			else  /* end of entry, still store the last color */
+				new_key = 1;
+		} 
+		else if (key > 0 && color[0] == '\0')  /* next word must be a color name part */
+			new_key = 0;
+		else {
+			if (strcmp (word, "c") == 0)
+				new_key = 5;
+			else if (strcmp (word, "g") == 0)
+				new_key = 4;
+			else if (strcmp (word, "g4") == 0)
+				new_key = 3;
+			else if (strcmp (word, "m") == 0)
+				new_key = 2;
+			else if (strcmp (word, "s") == 0)
+				new_key = 1;
+			else 
+				new_key = 0;
+		}
+		if (new_key == 0) {  /* word is a color name part */
+			if (key == 0)  /* key expected */
+				return NULL;
+			/* accumulate color name */
+			if (color[0] != '\0') {
+				strcat (color, " ");
+				space--;
+			}
+			strncat (color, word, space);
+			space -= MIN (space, strlen (word));
+		}
+		else {  /* word is a key */
+			if (key > current_key) {
+				current_key = key;
+				strcpy (current_color, color);
+			}
+			space = 128;
+			color[0] = '\0';
+			key = new_key;
+			if (*p == '\0') break;
+		}
+		
 	}
-
-	retcol = g_strdup (color);
-	return retcol;
+	if (current_key > 1)
+		return g_strdup (current_color);
+	else
+		return NULL; 
 }
 
 /* (almost) direct copy from gdkpixmap.c... loads an XPM from a file */
@@ -1176,7 +1175,7 @@ file_buffer (enum buf_op op, gpointer handle)
 
 	switch (op) {
 	case op_header:
-		if (xpm_seek_string (h->infile, "XPM", FALSE) != TRUE)
+		if (xpm_seek_string (h->infile, "XPM") != TRUE)
 			break;
 
 		if (xpm_seek_char (h->infile, '{') != TRUE)
@@ -1258,11 +1257,35 @@ pixbuf_create_from_xpm (const gchar * (*get_buf) (enum buf_op op, gpointer handl
 		return NULL;
 	}
 	sscanf (buffer, "%d %d %d %d", &w, &h, &n_col, &cpp);
-	if (cpp >= 32) {
+	if (w <= 0) {
                 g_set_error (error,
                              GDK_PIXBUF_ERROR,
                              GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
-                             _("XPM has more than 31 chars per pixel"));
+                             _("XPM file has image width <= 0"));
+		return NULL;
+
+	}
+	if (h <= 0) {
+                g_set_error (error,
+                             GDK_PIXBUF_ERROR,
+                             GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
+                             _("XPM file has image height <= 0"));
+		return NULL;
+
+	}
+	if (n_col <= 0) {
+                g_set_error (error,
+                             GDK_PIXBUF_ERROR,
+                             GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
+                             _("XPM file has invalid number of colors"));
+		return NULL;
+
+	}
+	if (cpp <= 0 || cpp >= 32) {
+                g_set_error (error,
+                             GDK_PIXBUF_ERROR,
+                             GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
+                             _("XPM has invalid number of chars per pixel"));
 		return NULL;
 	}
 
@@ -1430,7 +1453,6 @@ gdk_pixbuf__xpm_image_begin_load (ModulePreparedNotifyFunc prepare_func,
        XPMContext *context;
        gint fd;
 
-       g_warning ("load start");
        context = g_new (XPMContext, 1);
        context->prepare_func = prepare_func;
        context->update_func = update_func;
