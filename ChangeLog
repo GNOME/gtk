@@ -1,3 +1,11 @@
+Thu Jun 11 14:38:33 CDT 1998 Shawn T. Amundson <amundson@gtk.org>
+
+	* gtk/gtkpacker.c, gtk/gtkpacker.h, gtk/gtk.h, gtk/Makefile.am: 
+	  Added gtkpacker
+
+	* examples/packer/pack.c, examples/packer/Makefile: Added
+	  gtkpacker example
+
 Thu Jun 11 13:09:00 1998  Owen Taylor  <otaylor@gtk.org>
 
 	* gtk/gtktext.c (remove_cache_line): Fixed broken

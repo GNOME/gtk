@@ -41,6 +41,8 @@ EXTRA_DIST =	\
 	examples/menu/mfmain.h  \
 	examples/notebook/Makefile  \
 	examples/notebook/notebook.c  \
+	examples/packer/Makefile  \
+	examples/packer/pack.c \
 	examples/packbox/Makefile  \
 	examples/packbox/packbox.c  \
 	examples/paned/Makefile  \

@@ -61,6 +61,7 @@ libgtk_1_1_la_SOURCES = \
 	gtknotebook.c		\
 	gtkobject.c		\
 	gtkoptionmenu.c		\
+	gtkpacker.c		\
 	gtkpaned.c		\
 	gtkpixmap.c		\
 	gtkpreview.c		\
@@ -162,6 +163,7 @@ gtkinclude_HEADERS = \
 	gtknotebook.h		\
 	gtkobject.h		\
 	gtkoptionmenu.h		\
+	gtkpacker.h		\
 	gtkpaned.h		\
 	gtkpixmap.h		\
 	gtkpreview.h		\

@@ -78,6 +78,7 @@
 #include <gtk/gtknotebook.h>
 #include <gtk/gtkobject.h>
 #include <gtk/gtkoptionmenu.h>
+#include <gtk/gtkpacker.h>
 #include <gtk/gtkpaned.h>
 #include <gtk/gtkpixmap.h>
 #include <gtk/gtkpreview.h>
