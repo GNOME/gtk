@@ -1,3 +1,9 @@
+Tue Feb 26 10:38:14 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkkeyhash.c (_gtk_key_hash_lookup_keyval): Handle
+	a keyval of 0, by returning an empty list. (#72617,
+	Kevin Breit)
+
 2002-02-26  Richard Hult  <rhult@codefactory.se>
 
 	* gtk/gtktreeview.c (gtk_tree_view_expand_all): Fix

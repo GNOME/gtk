@@ -352,7 +352,10 @@ _gtk_key_hash_lookup_keyval (GtkKeyHash     *key_hash,
   GdkKeymapKey *keys;
   gint n_keys;
   GSList *results = NULL;
-  
+
+  if (!keyval)			/* Key without symbol */
+    return NULL;
+
   /* Find some random keycode for this keycode
    */
   gdk_keymap_get_entries_for_keyval (key_hash->keymap, keyval,
