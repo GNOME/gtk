@@ -335,7 +335,7 @@
     </entry>
 
 
-    <entry size="small" status="10%" target="1.4">
+    <entry size="small" status="50%" target="1.4">
       <title>Stock label/icon system</title>
       <description>
 	<p>
@@ -554,9 +554,12 @@
       <contact>gtk-devel-list@redhat.com</contact>
     </entry>
     
-    <entry size="small" status="0%" target="1.4">
+    <entry size="small" status="95%" target="1.4">
       <title>Decruft GtkProgress, GtkProgressbar</title>
       <description>
+        <p>UPDATE: this is done, just need to apply the patch.
+        </p>
+        
 	<p>
           This interface is just a disaster of overcomplexity;
           it should pretty much just be set_percentage(), 
@@ -566,7 +569,7 @@
           that currently exist should be deprecated.
 	</p>
       </description>
-      <contact>gtk-devel-list@redhat.com</contact>
+      <contact>hp@redhat.com</contact>
     </entry>
 
     <entry size="small" status="0%" target="1.4">
@@ -598,6 +601,9 @@
           horizontal/vertical sides only, in the central content area, or in
           any of those places.
 	</p>
+        <p>
+          (Havoc has a proposed interface for this, mail hp@redhat.com)
+        </p>
       </description>
       <contact>gtk-devel-list@redhat.com</contact>
     </entry>
