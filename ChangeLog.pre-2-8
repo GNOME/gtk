@@ -1,5 +1,12 @@
 2005-02-11  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkpathbar.c (gtk_path_bar_finalize): Stop scrolling 
+	when the pathbar goes away.  (#167094, Rodney Dawes)
+	(change_icon_theme): Use GTK_ICON_SIZE_MENU here as 
+	well  (Vincent Noel)
+
+2005-02-11  Matthias Clasen  <mclasen@redhat.com>
+
 	Support vertical menubars  (#166632): 
 	
 	* gtk/gtkenums.h (GtkPackDirection): New enumeration for pack 
