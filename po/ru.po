@@ -1,17 +1,17 @@
 # SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR Free Software Foundation, Inc.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# Copyright (C) 1999 Free Software Foundation, Inc.
+# Sergey Panov <sipan@mit.edu>, 1999.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "POT-Creation-Date: 1999-01-17 21:39-0500\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"PO-Revision-Date: 1999-01-21 21:51 EST\n"
+"Last-Translator: Sergey Panov <sipan@mit.edu>\n"
+"Language-Team: Russian <ru@li.org>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=CHARSET\n"
-"Content-Transfer-Encoding: ENCODING\n"
+"Content-Type: text/plain; charset=koi8-r\n"
+"Content-Transfer-Encoding: 8bit\n"
 
 #: gtk/gtkcolorsel.c:202
 msgid "Hue:"
@@ -128,7 +128,7 @@ msgstr "Выбор: "
 
 #: gtk/gtkfontsel.c:203
 msgid "Foundry:"
-msgstr ""
+msgstr "Коллекция"
 
 #: gtk/gtkfontsel.c:204
 msgid "Family:"
@@ -136,11 +136,11 @@ msgstr "Семейство:"
 
 #: gtk/gtkfontsel.c:205
 msgid "Weight:"
-msgstr ""
+msgstr "Насыщенность"
 
 #: gtk/gtkfontsel.c:206
 msgid "Slant:"
-msgstr ""
+msgstr "Наклон"
 
 #: gtk/gtkfontsel.c:207
 msgid "Set Width:"
@@ -152,23 +152,23 @@ msgstr "Добавить стиль:"
 
 #: gtk/gtkfontsel.c:209
 msgid "Pixel Size:"
-msgstr ""
+msgstr "Размер в пикселах"
 
 #: gtk/gtkfontsel.c:210
 msgid "Point Size:"
-msgstr ""
+msgstr "Поточечный размер"
 
 #: gtk/gtkfontsel.c:211
 msgid "Resolution X:"
-msgstr "Разрешение X:"
+msgstr "Разрешение по X:"
 
 #: gtk/gtkfontsel.c:212
 msgid "Resolution Y:"
-msgstr "Разрешение Y:"
+msgstr "Разрешение по Y:"
 
 #: gtk/gtkfontsel.c:213
 msgid "Spacing:"
-msgstr ""
+msgstr "Пропорцинальность"
 
 #: gtk/gtkfontsel.c:214
 msgid "Average Width:"
@@ -176,13 +176,13 @@ msgstr "Средняя ширина:"
 
 #: gtk/gtkfontsel.c:215
 msgid "Charset:"
-msgstr ""
+msgstr "Кодировка"
 
 #. Number of internationalized titles here must match number
 #. of NULL initializers above
 #: gtk/gtkfontsel.c:452
 msgid "Font Property"
-msgstr ""
+msgstr "Свойства шрифта"
 
 #: gtk/gtkfontsel.c:453
 msgid "Requested Value"
@@ -214,20 +214,20 @@ msgstr "Переустановить фильтр"
 
 #: gtk/gtkfontsel.c:653
 msgid "Metric:"
-msgstr ""
+msgstr "Метрика:"
 
 #: gtk/gtkfontsel.c:657
 msgid "Points"
-msgstr ""
+msgstr "Точек"
 
 #: gtk/gtkfontsel.c:664
 msgid "Pixels"
-msgstr ""
+msgstr "Пиксел"
 
 #. create the text entry widget
 #: gtk/gtkfontsel.c:680
 msgid "Preview:"
-msgstr ""
+msgstr "Пример:"
 
 #: gtk/gtkfontsel.c:709
 msgid "Font Information"
@@ -235,11 +235,11 @@ msgstr "Информация о шрифте"
 
 #: gtk/gtkfontsel.c:742
 msgid "Requested Font Name:"
-msgstr "Запрошенное имя шрифте:"
+msgstr "Запрошенное имя шрифта:"
 
 #: gtk/gtkfontsel.c:753
 msgid "Actual Font Name:"
-msgstr "Настоящее имя шрифте:"
+msgstr "Настоящее имя шрифта:"
 
 #: gtk/gtkfontsel.c:764
 #, c-format
@@ -256,36 +256,36 @@ msgstr "Типы шрифтов:"
 
 #: gtk/gtkfontsel.c:800
 msgid "Bitmap"
-msgstr ""
+msgstr "Растр"
 
 #: gtk/gtkfontsel.c:806
 msgid "Scalable"
-msgstr ""
+msgstr "Масштабируемый"
 
 #: gtk/gtkfontsel.c:812
 msgid "Scaled Bitmap"
-msgstr ""
+msgstr "Масштабированный растр"
 
 #. Convert '(nil)' weights to 'regular', since it looks nicer.
 #: gtk/gtkfontsel.c:1208
 msgid "regular"
-msgstr ""
+msgstr "прямой"
 
 #: gtk/gtkfontsel.c:1213 gtk/gtkfontsel.c:1938
 msgid "italic"
-msgstr ""
+msgstr "курсив"
 
 #: gtk/gtkfontsel.c:1214 gtk/gtkfontsel.c:1939
 msgid "oblique"
-msgstr ""
+msgstr "наклонный"
 
 #: gtk/gtkfontsel.c:1215 gtk/gtkfontsel.c:1940
 msgid "reverse italic"
-msgstr ""
+msgstr "обратный курсив"
 
 #: gtk/gtkfontsel.c:1216 gtk/gtkfontsel.c:1941
 msgid "reverse oblique"
-msgstr ""
+msgstr "обратный наклонный"
 
 #: gtk/gtkfontsel.c:1217 gtk/gtkfontsel.c:1942
 msgid "other"
@@ -309,7 +309,7 @@ msgstr "Выбранный шрифт не правилен."
 
 #: gtk/gtkfontsel.c:1834
 msgid "This is a 2-byte font and may not be displayed correctly."
-msgstr ""
+msgstr "Это 2-х байтный шрифт, возможны проблемы с начертанием."
 
 #: gtk/gtkfontsel.c:1926 gtk/gtkinputdialog.c:599
 msgid "(unknown)"
@@ -317,15 +317,15 @@ msgstr "(неизвестен)"
 
 #: gtk/gtkfontsel.c:1937
 msgid "roman"
-msgstr ""
+msgstr "романский"
 
 #: gtk/gtkfontsel.c:1949
 msgid "proportional"
-msgstr ""
+msgstr "пропорциональный"
 
 #: gtk/gtkfontsel.c:1950
 msgid "monospaced"
-msgstr ""
+msgstr "моноширинный"
 
 #: gtk/gtkfontsel.c:1951
 msgid "char cell"
@@ -349,11 +349,11 @@ msgstr "Выбор шрифта"
 
 #: gtk/gtkgamma.c:388
 msgid "Gamma"
-msgstr ""
+msgstr "Гамма"
 
 #: gtk/gtkgamma.c:395
 msgid "Gamma value"
-msgstr ""
+msgstr "Гамма величина"
 
 #. shell and main vbox
 #: gtk/gtkinputdialog.c:192
@@ -362,7 +362,7 @@ msgstr "Ввод"
 
 #: gtk/gtkinputdialog.c:200
 msgid "No input devices"
-msgstr "Не устройства ввода"
+msgstr "Нет устройства ввода"
 
 #: gtk/gtkinputdialog.c:229
 msgid "Device:"
@@ -370,7 +370,7 @@ msgstr "Устройство:"
 
 #: gtk/gtkinputdialog.c:245
 msgid "Disabled"
-msgstr ""
+msgstr "Выключен"
 
 #: gtk/gtkinputdialog.c:253
 msgid "Screen"
@@ -426,12 +426,12 @@ msgstr ""
 
 #: gtk/gtkinputdialog.c:570 gtk/gtkinputdialog.c:606
 msgid "(disabled)"
-msgstr ""
+msgstr "(отменен)"
 
 #. and clear button
 #: gtk/gtkinputdialog.c:684
 msgid "clear"
-msgstr ""
+msgstr "очистить"
 
 #: gtk/gtknotebook.c:1967 gtk/gtknotebook.c:3986
 #, c-format
@@ -441,18 +441,18 @@ msgstr "Страница %u"
 #: gtk/gtkrc.c:1517
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\" line %d"
-msgstr ""
+msgstr "Файл с изображением не найден в pixmap_path: \"%s\", строка %d"
 
 #: gtk/gtkrc.c:1520
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
-msgstr ""
+msgstr "Файл с изображением не найден в pixmap_path: \"%s\""
 
 #: gtk/gtkthemes.c:71
 #, c-format
 msgid "Unable to locate loadable module in module_path: \"%s\","
-msgstr ""
+msgstr "Загружаемый модуль не найден в module_path: \"%s\","
 
 #: gtk/gtktipsquery.c:172
 msgid "--- No Tip ---"
-msgstr ""
+msgstr "--- Нет подсказки ---"
