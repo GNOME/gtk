@@ -438,7 +438,8 @@ gtk_extra_sources = @STRIP_BEGIN@ \
 	maketypes.awk		\
 	makeenums.h		\
 	gtk-boxed.defs		\
-	gtkmarshalers.list		\
+	gtkmarshalers.list	\
+	gtkmarshal.list		\
 @STRIP_END@
 
 #
