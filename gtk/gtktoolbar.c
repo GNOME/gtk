@@ -1377,6 +1377,8 @@ gtk_toolbar_list_children_in_focus_order (GtkToolbar       *toolbar,
 	result = g_list_prepend (result, item);
     }
 
+  result = g_list_prepend (result, priv->arrow_button);
+
   for (list = priv->items; list != NULL; list = list->next)
     {
       GtkToolItem *item = list->data;
@@ -1384,8 +1386,6 @@ gtk_toolbar_list_children_in_focus_order (GtkToolbar       *toolbar,
       if (gtk_tool_item_get_pack_end (item))
 	result = g_list_prepend (result, item);
     }
-
-  result = g_list_prepend (result, priv->arrow_button);
 
   rtl = (gtk_widget_get_direction (GTK_WIDGET (toolbar)) == GTK_TEXT_DIR_RTL);
   
