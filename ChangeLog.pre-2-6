@@ -1,3 +1,12 @@
+1999-12-30  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/gdk.c: If we don't HAVE_XCONVERTCASE we must #include
+	gdkkeysyms.h to get the GDK_* keysym constants that are needed by
+	gdk_keyval_convert_case(). Otherwise, gdk_keyval_convert_case()
+	doesn't do anything.
+
+	* gdk/gdk.def: Add gdk_xid_table_insert.
+
 1999-12-18  Tor Lillqvist  <tml@iki.fi>
 
 	* gdk/win32/gdkfont-win32.c (gdk_text_size, gdk_text_extents):

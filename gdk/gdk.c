@@ -32,6 +32,10 @@
 #include "gdk.h"
 #include "gdkprivate.h"
 
+#ifndef HAVE_XCONVERTCASE
+#include "gdkkeysyms.h"
+#endif
+
 typedef struct _GdkPredicate  GdkPredicate;
 typedef struct _GdkErrorTrap  GdkErrorTrap;
 

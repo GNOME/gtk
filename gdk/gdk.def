@@ -336,4 +336,5 @@ EXPORTS
 	gdk_window_shape_combine_mask
 	gdk_window_show
 	gdk_window_withdraw
+	gdk_xid_table_insert
 	gdk_xid_table_lookup
