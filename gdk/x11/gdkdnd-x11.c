@@ -2394,7 +2394,7 @@ xdnd_check_dest (GdkDisplay *display,
 	    }
 	  else
 	    GDK_NOTE (DND, 
-		      g_warning ("Invalid XdndOwner "
+		      g_warning ("Invalid XdndProxy "
 				 "property on window %ld\n", win));
 	  
 	  XFree (proxy_data);

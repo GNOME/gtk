@@ -1,3 +1,8 @@
+Sat Jul 17 01:17:33 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gdk/x11/gdkdnd-x11.c (xdnd_check_dest): Fix a warning
+	message.
+
 Sat Jul 17 00:48:27 2004  Matthias Clasen  <maclas@gmx.de>
 
 	Support text/plain selection target  (#55117, Owen Taylor)
