@@ -1,3 +1,8 @@
+Mon May  6 23:17:42 2002  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtktreeview.c (gtk_tree_view_motion_draw_column_motion_arrow):
+	unset user_data before destroying the window. (fixes #80065).
+
 Mon May  6 12:17:14 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* configure.in: Fix versioning to avoid changing the

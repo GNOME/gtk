@@ -2280,9 +2280,12 @@ gtk_tree_view_motion_draw_column_motion_arrow (GtkTreeView *tree_view)
 
       if (tree_view->priv->drag_column_window_state != DRAG_COLUMN_WINDOW_STATE_ORIGINAL)
 	{
-
 	  if (tree_view->priv->drag_highlight_window)
-	    gdk_window_destroy (tree_view->priv->drag_highlight_window);
+	    {
+	      gdk_window_set_user_data (tree_view->priv->drag_highlight_window,
+					NULL);
+	      gdk_window_destroy (tree_view->priv->drag_highlight_window);
+	    }
 
 	  attributes.window_type = GDK_WINDOW_CHILD;
 	  attributes.wclass = GDK_INPUT_OUTPUT;
@@ -2341,7 +2344,11 @@ gtk_tree_view_motion_draw_column_motion_arrow (GtkTreeView *tree_view)
       if (tree_view->priv->drag_column_window_state != DRAG_COLUMN_WINDOW_STATE_ARROW)
 	{
 	  if (tree_view->priv->drag_highlight_window)
-	    gdk_window_destroy (tree_view->priv->drag_highlight_window);
+	    {
+	      gdk_window_set_user_data (tree_view->priv->drag_highlight_window,
+					NULL);
+	      gdk_window_destroy (tree_view->priv->drag_highlight_window);
+	    }
 
 	  attributes.window_type = GDK_WINDOW_TEMP;
 	  attributes.wclass = GDK_INPUT_OUTPUT;
@@ -2411,7 +2418,11 @@ gtk_tree_view_motion_draw_column_motion_arrow (GtkTreeView *tree_view)
 	  tree_view->priv->drag_column_window_state != DRAG_COLUMN_WINDOW_STATE_ARROW_RIGHT)
 	{
 	  if (tree_view->priv->drag_highlight_window)
-	    gdk_window_destroy (tree_view->priv->drag_highlight_window);
+	    {
+	      gdk_window_set_user_data (tree_view->priv->drag_highlight_window,
+					NULL);
+	      gdk_window_destroy (tree_view->priv->drag_highlight_window);
+	    }
 
 	  attributes.window_type = GDK_WINDOW_TEMP;
 	  attributes.wclass = GDK_INPUT_OUTPUT;
