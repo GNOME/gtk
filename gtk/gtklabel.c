@@ -525,7 +525,7 @@ gtk_label_ensure_layout (GtkLabel *label,
 {
   GtkWidget *widget;
   PangoRectangle logical_rect;
-  gint width, height;
+  gint rwidth, rheight;
 
   widget = GTK_WIDGET (label);
 
@@ -550,8 +550,8 @@ gtk_label_ensure_layout (GtkLabel *label,
    * don't think it's really that slow.
    */
 
-  width = label->misc.xpad * 2;
-  height = label->misc.ypad * 2;
+  rwidth = label->misc.xpad * 2;
+  rheight = label->misc.ypad * 2;
 
   if (!label->layout)
     {
@@ -613,8 +613,8 @@ gtk_label_ensure_layout (GtkLabel *label,
 	  pango_layout_set_width (label->layout, aux_info->width * PANGO_SCALE);
 	  pango_layout_get_extents (label->layout, NULL, &logical_rect);
 
-	  width += aux_info->width;
-	  height += PANGO_PIXELS (logical_rect.height);
+	  rwidth += aux_info->width;
+	  rheight += PANGO_PIXELS (logical_rect.height);
 	}
       else
 	{
@@ -681,8 +681,8 @@ gtk_label_ensure_layout (GtkLabel *label,
 	    }
 	  pango_layout_set_width (label->layout, width);
 
-	  width += PANGO_PIXELS (real_width);
-	  height += PANGO_PIXELS (height);
+	  rwidth += PANGO_PIXELS (real_width);
+	  rheight += PANGO_PIXELS (height);
 	}
     }
   else				/* !label->wrap */
@@ -690,15 +690,15 @@ gtk_label_ensure_layout (GtkLabel *label,
       pango_layout_set_width (label->layout, -1);
       pango_layout_get_extents (label->layout, NULL, &logical_rect);
 
-      width += PANGO_PIXELS (logical_rect.width);
-      height += PANGO_PIXELS (logical_rect.height);
+      rwidth += PANGO_PIXELS (logical_rect.width);
+      rheight += PANGO_PIXELS (logical_rect.height);
     }
 
   if (widthp)
-    *widthp = width;
+    *widthp = rwidth;
 
   if (heightp)
-    *heightp = height;
+    *heightp = rheight;
 }
 
 static void

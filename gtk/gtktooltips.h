@@ -68,6 +68,8 @@ struct _GtkTooltips
   guint   delay : 30;
   guint	  enabled : 1;
   gint	  timer_tag;
+  gboolean use_sticky_delay;
+  GTimeVal last_popdown;
 };
 
 struct _GtkTooltipsClass

@@ -121,7 +121,7 @@ typedef void (*GtkCallbackMarshal)  (GtkObject    *object,
 				     gpointer      data,
 				     guint         n_args,
 				     GtkArg       *args);
-typedef void (*GtkSignalFunc)       ();
+typedef void (*GtkSignalFunc)       (void);
 typedef GSignalCMarshaller          GtkSignalMarshaller;
 #define GTK_SIGNAL_FUNC(f)	    ((GtkSignalFunc) (f))
 

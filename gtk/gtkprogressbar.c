@@ -253,7 +253,7 @@ gtk_progress_bar_get_arg (GtkObject           *object,
       GTK_VALUE_FLOAT (*arg) = pbar->pulse_fraction;
       break;
     case ARG_TEXT:
-      GTK_VALUE_STRING (*arg) = gtk_progress_bar_get_text (pbar);
+      GTK_VALUE_STRING (*arg) = g_strdup (gtk_progress_bar_get_text (pbar));
       break;
     default:
       arg->type = GTK_TYPE_INVALID;
@@ -939,11 +939,14 @@ gtk_progress_bar_set_orientation (GtkProgressBar           *pbar,
  * gtk_progress_bar_get_text:
  * @pbar: a #GtkProgressBar
  * 
- * Retrieves the text displayed superimposed on the progress bar.
+ * Retrieves the text displayed superimposed on the progress bar,
+ * if any, otherwise %NULL. The return value is a reference
+ * to the text, not a copy of it, so will become invalid
+ * if you change the text in the progress bar.
  * 
- * Return value: a string which must be freed, or %NULL
+ * Return value: text, or %NULL; don't free the string
  **/
-gchar*
+G_CONST_RETURN gchar*
 gtk_progress_bar_get_text (GtkProgressBar *pbar)
 {
   g_return_val_if_fail (GTK_IS_PROGRESS_BAR (pbar), NULL);
@@ -951,7 +954,7 @@ gtk_progress_bar_get_text (GtkProgressBar *pbar)
   if (GTK_PROGRESS (pbar)->use_text_format)
     return NULL;
   else
-    return g_strdup (GTK_PROGRESS (pbar)->format);
+    return GTK_PROGRESS (pbar)->format;
 }
 
 /**

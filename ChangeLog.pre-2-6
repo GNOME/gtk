@@ -1,3 +1,36 @@
+2001-02-17  Havoc Pennington  <hp@pobox.com>
+
+	* gtk/gtklabel.c (gtk_label_ensure_layout): fix screwup with
+	shadowed variables that had broken size request in some cases,
+	leading to bogus tooltips (#50996)
+
+2001-02-06  Jon K Hellan  <hellan@acm.org>
+
+	Implement fast browsing of tooltips, bug #50619
+	
+	* gtk/gtktooltips.h (struct _GtkTooltips): Add use_sticky_delay
+	and last_popdown
+	
+	* gtk/gtktooltips.c (gtk_tooltips_init): Initialize sticky_delay,
+	use_sticky_delay and last_popdown.
+	(gtk_tooltips_draw_tips, gtk_tooltips_set_active_widget): Record
+	time of popdown.
+	(gtk_tooltips_set_active_widget): Unset sticky behaviour if widget
+	is NULL.
+	(gtk_tooltips_recently_shown): New static function.  Return true
+	if < sticky_delay has elapsed since last popdown.
+	(gtk_tooltips_event_handler): Display window after sticky_delay
+	(presumably < normal delay) if < STICKY_REVERT_DELAY has elapsed
+	since last popdown.
+	
+2001-02-17  Havoc Pennington  <hp@pobox.com>
+
+	* gtk/gtktypeutils.h (GtkSignalFunc): change it to take (void)
+	instead of (). #6394
+
+	* gtk/gtkprogressbar.c (gtk_progress_bar_get_text): Add
+	G_CONST_RETURN, make it return by reference, #50473
+	
 Sat Feb 17 06:47:27 2001  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkmenu.c (gtk_menu_motion_notify): default initialize the

@@ -38,6 +38,12 @@
 
 
 #define DEFAULT_DELAY 500           /* Default delay in ms */
+#define STICKY_DELAY 0              /* Delay before popping up next tip
+                                     * if we're sticky
+                                     */
+#define STICKY_REVERT_DELAY 1000    /* Delay before sticky tooltips revert
+				     * to normal
+                                     */
 
 static void gtk_tooltips_class_init        (GtkTooltipsClass *klass);
 static void gtk_tooltips_init              (GtkTooltips      *tooltips);
@@ -105,6 +111,9 @@ gtk_tooltips_init (GtkTooltips *tooltips)
   tooltips->delay = DEFAULT_DELAY;
   tooltips->enabled = TRUE;
   tooltips->timer_tag = 0;
+  tooltips->use_sticky_delay = FALSE;
+  tooltips->last_popdown.tv_sec = -1;
+  tooltips->last_popdown.tv_usec = -1;
 }
 
 GtkTooltips *
@@ -310,7 +319,10 @@ gtk_tooltips_draw_tips (GtkTooltips * tooltips)
   if (!tooltips->tip_window)
     gtk_tooltips_force_window (tooltips);
   else if (GTK_WIDGET_VISIBLE (tooltips->tip_window))
-    gtk_widget_hide (tooltips->tip_window);
+    {
+      gtk_widget_hide (tooltips->tip_window);
+      g_get_current_time (&tooltips->last_popdown);
+    }
 
   gtk_widget_ensure_style (tooltips->tip_window);
   style = tooltips->tip_window->style;
@@ -369,7 +381,11 @@ gtk_tooltips_set_active_widget (GtkTooltips *tooltips,
                                 GtkWidget   *widget)
 {
   if (tooltips->tip_window)
-    gtk_widget_hide (tooltips->tip_window);
+    {
+      if (GTK_WIDGET_VISIBLE (tooltips->tip_window))
+	g_get_current_time (&tooltips->last_popdown);
+      gtk_widget_hide (tooltips->tip_window);
+    }
   if (tooltips->timer_tag)
     {
       gtk_timeout_remove (tooltips->timer_tag);
@@ -396,6 +412,22 @@ gtk_tooltips_set_active_widget (GtkTooltips *tooltips,
 	    }
 	}
     }
+  else
+    {
+      tooltips->use_sticky_delay = FALSE;
+    }
+}
+
+static gboolean
+gtk_tooltips_recently_shown (GtkTooltips *tooltips)
+{
+  GTimeVal now;
+  glong msec;
+  
+  g_get_current_time (&now);
+  msec = (now.tv_sec  - tooltips->last_popdown.tv_sec) * 1000 +
+	  (now.tv_usec - tooltips->last_popdown.tv_usec) / 1000;
+  return (msec < STICKY_REVERT_DELAY);
 }
 
 static gint
@@ -429,14 +461,31 @@ gtk_tooltips_event_handler (GtkWidget *widget,
       if (tooltips->enabled &&
 	  (!old_tips_data || old_tips_data->widget != widget))
 	{
+	  guint delay;
+	  
 	  gtk_tooltips_set_active_widget (tooltips, widget);
 	  
-	  tooltips->timer_tag = gtk_timeout_add (tooltips->delay,
+	  if (tooltips->use_sticky_delay  &&
+	      gtk_tooltips_recently_shown (tooltips))
+	    delay = STICKY_DELAY;
+	  else
+	    delay = tooltips->delay;
+	  tooltips->timer_tag = gtk_timeout_add (delay,
 						 gtk_tooltips_timeout,
 						 (gpointer) tooltips);
 	}
       break;
 
+    case GDK_LEAVE_NOTIFY:
+      {
+	gboolean use_sticky_delay;
+
+	use_sticky_delay = tooltips->tip_window &&
+		GTK_WIDGET_VISIBLE (tooltips->tip_window);
+	gtk_tooltips_set_active_widget (tooltips, NULL);
+	tooltips->use_sticky_delay = use_sticky_delay;
+      }
+      break;
     default:
       gtk_tooltips_set_active_widget (tooltips, NULL);
       break;
