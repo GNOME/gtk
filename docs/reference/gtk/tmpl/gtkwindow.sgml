@@ -736,6 +736,14 @@ Deprecated alias for gtk_window_set_position().
 @list: 
 
 
+<!-- ##### FUNCTION gtk_window_set_default_icon ##### -->
+<para>
+
+</para>
+
+@icon: 
+
+
 <!-- ##### FUNCTION gtk_window_set_default_icon_from_file ##### -->
 <para>
 
@@ -876,6 +884,11 @@ Deprecated alias for gtk_window_set_position().
 
 </para>
 
+<!-- ##### ARG GtkWindow:decorated ##### -->
+<para>
+
+</para>
+
 <!-- ##### ARG GtkWindow:default-height ##### -->
 <para>
 
@@ -887,6 +900,11 @@ Deprecated alias for gtk_window_set_position().
 </para>
 
 <!-- ##### ARG GtkWindow:destroy-with-parent ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkWindow:gravity ##### -->
 <para>
 
 </para>

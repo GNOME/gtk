@@ -130,6 +130,18 @@ The standard cursors available.
 @Returns: 
 
 
+<!-- ##### FUNCTION gdk_cursor_new_from_pixbuf ##### -->
+<para>
+
+</para>
+
+@display: 
+@pixbuf: 
+@x: 
+@y: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gdk_cursor_new_for_display ##### -->
 <para>
 

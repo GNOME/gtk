@@ -94,6 +94,16 @@ fields.
 @Returns: 
 
 
+<!-- ##### FUNCTION gdk_pixbuf_loader_new_with_mime_type ##### -->
+<para>
+
+</para>
+
+@mime_type: 
+@error: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gdk_pixbuf_loader_get_format ##### -->
 <para>
 

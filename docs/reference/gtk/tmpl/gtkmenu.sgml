@@ -340,3 +340,18 @@ will be called when the menu is later detached from the widget.
 
 </para>
 
+<!-- ##### ARG GtkMenu:horizontal-offset ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkMenu:vertical-offset ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkMenu:vertical-padding ##### -->
+<para>
+
+</para>
+

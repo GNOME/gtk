@@ -133,6 +133,14 @@ of an X display. All its fields are private and should not be accessed directly.
 @display: 
 
 
+<!-- ##### FUNCTION gdk_display_flush ##### -->
+<para>
+
+</para>
+
+@display: 
+
+
 <!-- ##### FUNCTION gdk_display_close ##### -->
 <para>
 
@@ -251,6 +259,43 @@ Applications should never have any reason to use this facility
 @display: 
 @new_hooks: 
 @Returns: 
+
+
+<!-- ##### FUNCTION gdk_display_supports_cursor_color ##### -->
+<para>
+
+</para>
+
+@display: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_display_supports_cursor_alpha ##### -->
+<para>
+
+</para>
+
+@display: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_display_get_default_cursor_size ##### -->
+<para>
+
+</para>
+
+@display: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_display_get_maximal_cursor_size ##### -->
+<para>
+
+</para>
+
+@display: 
+@width: 
+@height: 
 
 
 <!-- ##### SIGNAL GdkDisplay::closed ##### -->

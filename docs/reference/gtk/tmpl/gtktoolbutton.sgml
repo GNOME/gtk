@@ -19,7 +19,6 @@ GtkToolButton
 
 </para>
 
-@parent: 
 
 <!-- ##### FUNCTION gtk_tool_button_new ##### -->
 <para>
@@ -129,4 +128,36 @@ GtkToolButton
 @button: 
 @Returns: 
 
+
+<!-- ##### SIGNAL GtkToolButton::clicked ##### -->
+<para>
+
+</para>
+
+@toolbutton: the object which received the signal.
+
+<!-- ##### ARG GtkToolButton:icon-widget ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkToolButton:label ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkToolButton:label-widget ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkToolButton:stock-id ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkToolButton:use-underline ##### -->
+<para>
+
+</para>
 

@@ -19,7 +19,6 @@ GtkToolItem
 
 </para>
 
-@parent: 
 
 <!-- ##### FUNCTION gtk_tool_item_new ##### -->
 <para>
@@ -211,4 +210,40 @@ GtkToolItem
 @menu_item_id: 
 @menu_item: 
 
+
+<!-- ##### SIGNAL GtkToolItem::create-menu-proxy ##### -->
+<para>
+
+</para>
+
+@toolitem: the object which received the signal.
+@Returns: 
+
+<!-- ##### SIGNAL GtkToolItem::set-tooltip ##### -->
+<para>
+
+</para>
+
+@toolitem: the object which received the signal.
+@arg1: 
+@arg2: 
+@arg3: 
+@Returns: 
+
+<!-- ##### SIGNAL GtkToolItem::toolbar-reconfigured ##### -->
+<para>
+
+</para>
+
+@toolitem: the object which received the signal.
+
+<!-- ##### ARG GtkToolItem:visible-horizontal ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkToolItem:visible-vertical ##### -->
+<para>
+
+</para>
 

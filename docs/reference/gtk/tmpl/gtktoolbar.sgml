@@ -79,6 +79,145 @@ Creates a new toolbar.
 @Returns: the newly-created toolbar.
 
 
+<!-- ##### FUNCTION gtk_toolbar_insert ##### -->
+<para>
+
+</para>
+
+@toolbar: 
+@item: 
+@pos: 
+
+
+<!-- ##### FUNCTION gtk_toolbar_get_item_index ##### -->
+<para>
+
+</para>
+
+@toolbar: 
+@item: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_toolbar_get_n_items ##### -->
+<para>
+
+</para>
+
+@toolbar: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_toolbar_get_nth_item ##### -->
+<para>
+
+</para>
+
+@toolbar: 
+@n: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_toolbar_get_drop_index ##### -->
+<para>
+
+</para>
+
+@toolbar: 
+@x: 
+@y: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_toolbar_set_show_arrow ##### -->
+<para>
+
+</para>
+
+@toolbar: 
+@show_arrow: 
+
+
+<!-- ##### FUNCTION gtk_toolbar_set_orientation ##### -->
+<para>
+Sets whether a toolbar should appear horizontally or vertically.
+</para>
+
+@toolbar: a #GtkToolbar.
+@orientation: a new #GtkOrientation.
+
+
+<!-- ##### FUNCTION gtk_toolbar_set_tooltips ##### -->
+<para>
+Sets if the tooltips of a toolbar should be active or not.
+</para>
+
+@toolbar: a #GtkToolbar.
+@enable: set to %FALSE to disable the tooltips, or %TRUE to enable them.
+
+
+<!-- ##### FUNCTION gtk_toolbar_unset_icon_size ##### -->
+<para>
+
+</para>
+
+@toolbar: 
+
+
+<!-- ##### FUNCTION gtk_toolbar_get_show_arrow ##### -->
+<para>
+
+</para>
+
+@toolbar: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_toolbar_get_orientation ##### -->
+<para>
+
+</para>
+
+@toolbar: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_toolbar_get_style ##### -->
+<para>
+
+</para>
+
+@toolbar: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_toolbar_get_icon_size ##### -->
+<para>
+
+</para>
+
+@toolbar: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_toolbar_get_tooltips ##### -->
+<para>
+
+</para>
+
+@toolbar: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_toolbar_get_relief_style ##### -->
+<para>
+
+</para>
+
+@toolbar: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gtk_toolbar_append_item ##### -->
 <para>
 Adds a new button to the end (right or bottom edges) of the given toolbar.
@@ -248,15 +387,6 @@ be %NULL.
 @position: 
 
 
-<!-- ##### FUNCTION gtk_toolbar_set_orientation ##### -->
-<para>
-Sets whether a toolbar should appear horizontally or vertically.
-</para>
-
-@toolbar: a #GtkToolbar.
-@orientation: a new #GtkOrientation.
-
-
 <!-- ##### FUNCTION gtk_toolbar_set_style ##### -->
 <para>
 Alters the view of @toolbar to display either icons only, text only, or both.
@@ -264,15 +394,6 @@ Alters the view of @toolbar to display either icons only, text only, or both.
 
 @toolbar: a #GtkToolbar.
 @style: the new style for @toolbar.
-
-
-<!-- ##### FUNCTION gtk_toolbar_set_tooltips ##### -->
-<para>
-Sets if the tooltips of a toolbar should be active or not.
-</para>
-
-@toolbar: a #GtkToolbar.
-@enable: set to %FALSE to disable the tooltips, or %TRUE to enable them.
 
 
 <!-- ##### FUNCTION gtk_toolbar_insert_stock ##### -->
@@ -299,42 +420,6 @@ Sets if the tooltips of a toolbar should be active or not.
 @icon_size: 
 
 
-<!-- ##### FUNCTION gtk_toolbar_get_icon_size ##### -->
-<para>
-
-</para>
-
-@toolbar: 
-@Returns: 
-
-
-<!-- ##### FUNCTION gtk_toolbar_get_orientation ##### -->
-<para>
-
-</para>
-
-@toolbar: 
-@Returns: 
-
-
-<!-- ##### FUNCTION gtk_toolbar_get_style ##### -->
-<para>
-
-</para>
-
-@toolbar: 
-@Returns: 
-
-
-<!-- ##### FUNCTION gtk_toolbar_get_tooltips ##### -->
-<para>
-
-</para>
-
-@toolbar: 
-@Returns: 
-
-
 <!-- ##### FUNCTION gtk_toolbar_remove_space ##### -->
 <para>
 
@@ -342,14 +427,6 @@ Sets if the tooltips of a toolbar should be active or not.
 
 @toolbar: 
 @position: 
-
-
-<!-- ##### FUNCTION gtk_toolbar_unset_icon_size ##### -->
-<para>
-
-</para>
-
-@toolbar: 
 
 
 <!-- ##### FUNCTION gtk_toolbar_unset_style ##### -->
@@ -392,6 +469,13 @@ Should be used if you wish to perform an action when the orientation of a toolba
 </para>
 
 @toolbar: the object which received the signal.
+@: 
+@: 
+@:
+@Returns: 
+@: 
+@: 
+@Returns: 
 
 <!-- ##### SIGNAL GtkToolbar::style-changed ##### -->
 <para>

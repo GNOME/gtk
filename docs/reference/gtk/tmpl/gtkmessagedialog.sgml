@@ -102,6 +102,20 @@ then call gtk_dialog_add_buttons().
 @Returns: 
 
 
+<!-- ##### FUNCTION gtk_message_dialog_new_with_markup ##### -->
+<para>
+
+</para>
+
+@parent: 
+@flags: 
+@type: 
+@buttons: 
+@message_format: 
+@Varargs: 
+@Returns: 
+
+
 <!-- ##### ARG GtkMessageDialog:buttons ##### -->
 <para>
 

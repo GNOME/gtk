@@ -104,6 +104,16 @@ Gets the default number of pixels that pad the buttons in a given button box.
 <literal>"child-internal-pad-x/-y"</literal> instead.
 
 
+<!-- ##### FUNCTION gtk_button_box_get_child_secondary ##### -->
+<para>
+
+</para>
+
+@widget: 
+@child: 
+@Returns: 
+
+
 <!-- ##### MACRO gtk_button_box_set_spacing ##### -->
 <para>
 Sets the amount of spacing between buttons in a given button box.
