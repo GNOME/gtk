@@ -9,8 +9,11 @@ my $preamble = <<EOF;
 #define WAS_BROKEN
 #endif
 #define GTK_ENABLE_BROKEN
-#define GTK_TEXT_USE_INTERNAL_UNSUPPORTED_API
 
+#ifdef GTK_TEXT_USE_INTERNAL_UNSUPPORTED_API
+#define WAS_UNSUPPORTED_TEXT_API
+#endif
+#define GTK_TEXT_USE_INTERNAL_UNSUPPORTED_API
 
 #ifdef  GTK_DISABLE_DEPRECATED
 #define WAS_NO_DEPR
@@ -45,6 +48,12 @@ my $postamble = <<EOF;
 #undef  GTK_ENABLE_BROKEN
 #else
 #undef  WAS_BROKEN
+#endif
+
+#ifndef WAS_UNSUPPORTED_TEXT_API
+#undef GTK_TEXT_USE_INTERNAL_UNSUPPORTED_API
+#else
+#undef WAS_UNSUPPORTED_TEXT_API
 #endif
 
 #ifdef  WAS_NO_DEPR

@@ -1,3 +1,8 @@
+Mon Aug  9 15:27:01 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/makegtkalias.pl: Also revert 
+	GTK_TEXT_USE_INTERNAL_UNSUPPORTED_API to its old status.
+
 Mon Aug  9 15:19:34 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gdk/gdk.h: 
