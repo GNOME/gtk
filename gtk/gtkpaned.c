@@ -487,8 +487,8 @@ gtk_paned_forall (GtkContainer *container,
 gint
 gtk_paned_get_position (GtkPaned  *paned)
 {
-  g_return_if_fail (paned != NULL);
-  g_return_if_fail (GTK_IS_PANED (paned));
+  g_return_val_if_fail (paned != NULL, 0);
+  g_return_val_if_fail (GTK_IS_PANED (paned), 0);
 
   return paned->child1_size;
 }
