@@ -290,6 +290,13 @@ rl_encode_rgbx (guint8 *bp,	/* dest buffer */
   return bp;
 }
 
+/* Used as the destroy notification function for gdk_pixbuf_new() */
+static void
+free_buffer (guchar *pixels, gpointer data)
+{
+	g_free (pixels);
+}
+
 /**
  * gdk_pixdata_from_pixbuf:
  * @pixdata: a #GdkPixdata to fill.
@@ -341,12 +348,12 @@ gdk_pixdata_from_pixbuf (GdkPixdata      *pixdata,
 					  pixbuf->width,
 					  pixbuf->height,
 					  rowstride,
-					  NULL, NULL);
+					  free_buffer, NULL);
 	  gdk_pixbuf_copy_area (pixbuf, 0, 0, pixbuf->width, pixbuf->height,
 				buf, 0, 0);
 	}
       else
-	buf = pixbuf;
+	buf = (GdkPixbuf *)pixbuf;
       pad = rowstride;
       pad = MAX (pad, 130 + n_bytes / 127);
       data = g_new (guint8, pad + n_bytes);
