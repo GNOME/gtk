@@ -872,6 +872,18 @@ gtk_preview_get_visuals (GtkPreviewClass *klass)
       return;
     }
 
+  /* If we are _not_ running with an installed cmap, we must run
+   * with the system visual. Otherwise, we let GDK pick the visual,
+   * and it makes some effort to pick a non-default visual, which
+   * will hopefully provide minimum color flashing.
+   */
+  if ((klass->info.visual->depth == gdk_visual_get_system()->depth) &&
+      (klass->info.visual->type == gdk_visual_get_system()->type) &&
+      !install_cmap)
+    {
+      klass->info.visual = gdk_visual_get_system();
+    }
+    
   switch (klass->info.visual->depth)
     {
     case 8:

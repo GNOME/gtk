@@ -58,6 +58,14 @@ Wed Apr 15 05:13:09 1998  Tim Janik  <timj@gtk.org>
 	(Damon Chaplin), which i got wrong when applying Damon's patch the last
  	time.
 
+Wed Apr 15 20:42:46 1998  Owen Taylor  <otaylor@gtk.org>
+
+        * gtk/gtkpreview.c (gtk_preview_get_visuals): Make sure
+        that when we are running with a non-installed colormap,
+        in 8-bit pseudo-color, we actually are using the system
+        visual. (Fixes *Bad Match* errors on Digital Unix machines
+        with multiple 8-bit pseudo-color visuals)
+
 1998-04-14  Miguel de Icaza  <miguel@nuclecu.unam.mx>
 
 	* gdk/gdkwindow.c (gdk_window_xid_at): Fix the problem introduced
