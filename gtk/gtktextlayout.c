@@ -2026,8 +2026,11 @@ line_display_iter_to_index (GtkTextLayout      *layout,
 
   index = gtk_text_iter_get_visible_line_index (iter);
   
-  if (index >= display->insert_index)
-    index += layout->preedit_len;
+  if (layout->preedit_len > 0 && display->insert_index >= 0)
+    {
+      if (index >= display->insert_index)
+	index += layout->preedit_len;
+    }
 
   return index;
 }
@@ -2042,12 +2045,15 @@ line_display_index_to_iter (GtkTextLayout      *layout,
   g_return_if_fail (!_gtk_text_line_is_last (display->line,
                                              _gtk_text_buffer_get_btree (layout->buffer)));
   
-  if (index >= display->insert_index + layout->preedit_len)
-    index -= layout->preedit_len;
-  else if (index > display->insert_index)
+  if (layout->preedit_len > 0 && display->insert_index >= 0)
     {
-      index = display->insert_index;
-      trailing = 0;
+      if (index >= display->insert_index + layout->preedit_len)
+	index -= layout->preedit_len;
+      else if (index > display->insert_index)
+	{
+	  index = display->insert_index;
+	  trailing = 0;
+	}
     }
 
   _gtk_text_btree_get_iter_at_line (_gtk_text_buffer_get_btree (layout->buffer),
