@@ -1441,10 +1441,52 @@ gtk_rc_styles_match (GSList       *rc_styles,
       sets = sets->next;
 
       if (g_pattern_match (rc_set->pspec, path_length, path, path_reversed))
-	rc_styles = g_slist_append (rc_styles, rc_set->rc_style);
+	rc_styles = g_slist_append (rc_styles, rc_set);
     }
   
   return rc_styles;
+}
+
+static gint
+rc_set_compare (gconstpointer a, gconstpointer b)
+{
+  const GtkRcSet *set_a = a;
+  const GtkRcSet *set_b = b;
+
+  return (set_a->priority < set_b->priority) ? 1 : (set_a->priority == set_b->priority ? 0 : -1);
+}
+
+static GSList *
+sort_and_dereference_sets (GSList *styles)
+{
+  GSList *tmp_list;
+  
+  /* At this point, the list of sets is ordered by:
+   *
+   * a) 'widget' patterns are earlier than 'widget_class' patterns
+   *    which are ealier than 'class' patterns.
+   * a) For two matches for class patterns, a match to a child type
+   *    is before a match to a parent type
+   * c) a match later in the RC file (or in a later RC file) is before a
+   *    match earlier in the RC file.
+   *
+   * With a) taking precedence over b) which takes precendence over c).
+   *
+   * Now sort by priority, which has the highest precendence for sort order
+   */
+  styles = g_slist_sort (styles, rc_set_compare);
+
+  /* Make styles->data = styles->data->rc_style
+   */
+  tmp_list = styles;
+  while (tmp_list)
+    {
+      GtkRcSet *set = tmp_list->data;
+      tmp_list->data = set->rc_style;
+      tmp_list = tmp_list->next;
+    }
+
+  return styles;
 }
 
 /**
@@ -1481,12 +1523,6 @@ gtk_rc_get_style (GtkWidget *widget)
   if (!rc_style_key_id)
     rc_style_key_id = g_quark_from_static_string ("gtk-rc-style");
 
-  widget_rc_style = gtk_object_get_data_by_id (GTK_OBJECT (widget),
-					       rc_style_key_id);
-
-  if (widget_rc_style)
-    rc_styles = g_slist_prepend (rc_styles, widget_rc_style);
-  
   if (context->rc_sets_widget)
     {
       gchar *path, *path_reversed;
@@ -1532,6 +1568,14 @@ gtk_rc_get_style (GtkWidget *widget)
 	}
     }
   
+  rc_styles = sort_and_dereference_sets (rc_styles);
+  
+  widget_rc_style = gtk_object_get_data_by_id (GTK_OBJECT (widget),
+					       rc_style_key_id);
+
+  if (widget_rc_style)
+    rc_styles = g_slist_prepend (rc_styles, widget_rc_style);
+
   if (rc_styles)
     return gtk_rc_init_style (rc_styles);
 
@@ -1628,6 +1672,8 @@ gtk_rc_get_style_by_paths (GtkSettings *settings,
 	  type = g_type_parent (type);
 	}
     }
+ 
+  rc_styles = sort_and_dereference_sets (rc_styles);
   
   if (rc_styles)
     return gtk_rc_init_style (rc_styles);
@@ -3309,21 +3355,6 @@ gtk_rc_parse_module_path_string (const gchar *mod_path)
   gtk_rc_append_default_module_path();
 }
 
-static gint
-rc_set_compare (gconstpointer a, gconstpointer b)
-{
-  const GtkRcSet *set_a = a;
-  const GtkRcSet *set_b = b;
-
-  return (set_a->priority < set_b->priority) ? 1 : (set_a->priority == set_b->priority ? 0 : -1);
-}
-
-static GSList *
-insert_rc_set (GSList *list, GtkRcSet *set)
-{
-  return g_slist_insert_sorted (list, set, rc_set_compare);
-}
-
 static guint
 gtk_rc_parse_path_pattern (GtkRcContext *context,
 			   GScanner     *scanner)
@@ -3415,11 +3446,11 @@ gtk_rc_parse_path_pattern (GtkRcContext *context,
       rc_set->priority = priority;
 
       if (path_type == GTK_PATH_WIDGET)
-	context->rc_sets_widget = insert_rc_set (context->rc_sets_widget, rc_set);
+	context->rc_sets_widget = g_slist_prepend (context->rc_sets_widget, rc_set);
       else if (path_type == GTK_PATH_WIDGET_CLASS)
-	context->rc_sets_widget_class = insert_rc_set (context->rc_sets_widget_class, rc_set);
+	context->rc_sets_widget_class = g_slist_prepend (context->rc_sets_widget_class, rc_set);
       else
-	context->rc_sets_class = insert_rc_set (context->rc_sets_class, rc_set);
+	context->rc_sets_class = g_slist_prepend (context->rc_sets_class, rc_set);
     }
 
   g_free (pattern);

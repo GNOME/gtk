@@ -188,3 +188,26 @@ style "testthickness" {
 }
 
 #class "GtkFrame" style "testthickness"
+
+# Test ordering of RC file priorities
+
+style "testgtk-red-style" {
+  fg[NORMAL] = "red"
+}
+
+style "testgtk-green-style" {
+  fg[NORMAL] = "green"
+}
+
+style "testgtk-blue-style" {
+ fg[NORMAL] = "blue"
+}
+
+widget_class "*.GtkAspectFrame.*.GtkLabel" style "testgtk-green-style"
+widget_class "*.GtkAspectFrame.*.GtkLabel" style "testgtk-blue-style"  # override because it's later
+
+widget "*.testgtk-red-label" style "testgtk-red-style"  # override because it's widget, not widget_class
+
+widget "*.testgtk-green-label" style : highest "testgtk-green-style"
+# overrides the following, because it is higher priority
+widget "*.testgtk-green-label" style "testgtk-red-style"

@@ -10573,6 +10573,9 @@ create_rc_file (void)
 {
   static GtkWidget *window = NULL;
   GtkWidget *button;
+  GtkWidget *frame;
+  GtkWidget *vbox;
+  GtkWidget *label;
 
   if (!window)
     {
@@ -10581,6 +10584,24 @@ create_rc_file (void)
       gtk_signal_connect (GTK_OBJECT (window), "destroy",
 			  GTK_SIGNAL_FUNC(destroy_idle_test),
 			  &window);
+
+      frame = gtk_aspect_frame_new ("Testing RC file prioritization", 0.5, 0.5, 0.0, TRUE);
+      gtk_box_pack_start (GTK_BOX (GTK_DIALOG (window)->vbox), frame, FALSE, FALSE, 0);
+
+      vbox = gtk_vbox_new (FALSE, 0);
+      gtk_container_add (GTK_CONTAINER (frame), vbox);
+      
+      label = gtk_label_new ("This label should be red");
+      gtk_widget_set_name (label, "testgtk-red-label");
+      gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, FALSE, 0);
+
+      label = gtk_label_new ("This label should be green");
+      gtk_widget_set_name (label, "testgtk-green-label");
+      gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, FALSE, 0);
+
+      label = gtk_label_new ("This label should be blue");
+      gtk_widget_set_name (label, "testgtk-blue-label");
+      gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, FALSE, 0);
 
       gtk_window_set_title (GTK_WINDOW (window), "Reload Rc file");
       gtk_container_set_border_width (GTK_CONTAINER (window), 0);
@@ -10592,7 +10613,6 @@ create_rc_file (void)
       gtk_box_pack_start (GTK_BOX (GTK_DIALOG (window)->action_area), 
 			  button, TRUE, TRUE, 0);
       gtk_widget_grab_default (button);
-      gtk_widget_show (button);
 
       button = gtk_button_new_with_label ("Reload All");
       gtk_signal_connect (GTK_OBJECT (button), "clicked",
@@ -10600,7 +10620,6 @@ create_rc_file (void)
       GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
       gtk_box_pack_start (GTK_BOX (GTK_DIALOG (window)->action_area), 
 			  button, TRUE, TRUE, 0);
-      gtk_widget_show (button);
 
       button = gtk_button_new_with_label ("Close");
       gtk_signal_connect_object (GTK_OBJECT (button), "clicked",
@@ -10609,12 +10628,10 @@ create_rc_file (void)
       GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
       gtk_box_pack_start (GTK_BOX (GTK_DIALOG (window)->action_area), 
 			  button, TRUE, TRUE, 0);
-      gtk_widget_show (button);
-
     }
 
   if (!GTK_WIDGET_VISIBLE (window))
-    gtk_widget_show (window);
+    gtk_widget_show_all (window);
   else
     gtk_widget_destroy (window);
 }

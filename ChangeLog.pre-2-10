@@ -1,3 +1,12 @@
+Fri Feb  1 17:48:51 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkrc.c (gtk_rc_get_style): Fix ordering of
+	priorities so that priorities take precendence over
+	the ordering by type. (#70205)
+
+	* test/testgtkrc tests/testgtk.c (create_rc_file): Add 
+	some labels to test priorities in testgtkrc.
+
 Fri Feb  1 00:37:49 2002  Kristian Rietveld  <kris@gtk.org>
 
 	* gtk/gtktreeview.c (gtk_tree_view_move_cursor_page_up_down): use
