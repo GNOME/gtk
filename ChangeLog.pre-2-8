@@ -1,4 +1,4 @@
-Tue Jan 18 13:46:46 2005  Manish Singh  <yosh@gimp.org
+Tue Jan 18 13:46:46 2005  Manish Singh  <yosh@gimp.org>
 
 	* gdk/x11/gdkdrawable-x11.c (_gdk_x11_have_render_with_trapezoids):
 	disambiguate nested if/else.
@@ -18,9 +18,9 @@ Tue Jan 18 13:46:46 2005  Manish Singh  <yosh@gimp.org
 	* gdk/x11/gdkwindow-x11.c (gdk_display_warp_pointer): 
 	* gdk/win32/gdkwindow-win32.c (gdk_display_warp_pointer): Add
 	pointer warping to GDK.  (#160437)
-	
+
 	* gtk/gtkcolorsel.c (key_press): Use gdk_display_warp_pointer.
-	
+
 2005-01-18  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkstyle.c (gtk_default_draw_check) 
