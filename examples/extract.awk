@@ -31,6 +31,15 @@ BEGIN {in_example=0; check=0; spec_example=""; do_output=0; flatten=0; verbose=0
        }
 }
 
+$2 == "example-end" && in_example == 0 	  { printf("\nERROR: multiple ends at line %d\n", NR) > "/dev/stderr";
+					    exit}
+$2 == "example-end" 			  { in_example=0; do_output=0 }
+
+in_example==1 && check==0 && do_output==1 { gsub(/&amp;/, "\\&", $0);
+					    gsub(/&lt;/, "<", $0);
+					    gsub(/&gt;/, ">", $0);
+					    print $0 >file_name } 
+
 $2 == "example-start" && in_example == 1 { printf("\nERROR: nested example at line %d\n", NR) > "/dev/stderr";
 					   exit}
 
@@ -52,15 +61,6 @@ $2 == "example-start" && check == 0 \
     do_output=1;
   }
   }
-
-in_example==1 && check==0 && do_output==1 { gsub(/&amp;/, "\\&", $0);
-					    gsub(/&lt;/, "<", $0);
-					    gsub(/&gt;/, ">", $0);
-					    print $0 >file_name } 
-
-$2 == "example-end" && in_example == 0 	  { printf("\nERROR: multiple ends at line %d\n", NR) > "/dev/stderr";
-					    exit}
-$2 == "example-end" 			  { in_example=0; do_output=0 }
 
 
 END {}
