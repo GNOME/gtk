@@ -630,7 +630,7 @@ gtk_layout_remove (GtkContainer *container,
 {
   GList *tmp_list;
   GtkLayout *layout;
-  GtkLayoutChild *child;
+  GtkLayoutChild *child = NULL;
   
   g_return_if_fail (container != NULL);
   g_return_if_fail (GTK_IS_LAYOUT (container));

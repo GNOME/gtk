@@ -293,7 +293,7 @@ gtk_selection_owner_set (GtkWidget *widget,
 {
   GList *tmp_list;
   GtkWidget *old_owner;
-  GtkSelectionInfo *selection_info;
+  GtkSelectionInfo *selection_info = NULL;
   GdkWindow *window;
   
   if (widget == NULL)
@@ -739,7 +739,7 @@ gtk_selection_clear (GtkWidget *widget,
      somewhat unreliable. */
   
   GList *tmp_list;
-  GtkSelectionInfo *selection_info;
+  GtkSelectionInfo *selection_info = NULL;
   
   tmp_list = current_selections;
   while (tmp_list)
@@ -983,7 +983,7 @@ gtk_selection_incr_event (GdkWindow	   *window,
 			  GdkEventProperty *event)
 {
   GList *tmp_list;
-  GtkIncrInfo *info;
+  GtkIncrInfo *info = NULL;
   gint num_bytes;
   guchar *buffer;
   
@@ -1154,7 +1154,7 @@ gtk_selection_notify (GtkWidget	       *widget,
 		      GdkEventSelection *event)
 {
   GList *tmp_list;
-  GtkRetrievalInfo *info;
+  GtkRetrievalInfo *info = NULL;
   guchar  *buffer;
   gint length;
   GdkAtom type;
@@ -1240,12 +1240,15 @@ gtk_selection_property_notify (GtkWidget	*widget,
 			       GdkEventProperty *event)
 {
   GList *tmp_list;
-  GtkRetrievalInfo *info;
+  GtkRetrievalInfo *info = NULL;
   guchar *new_buffer;
   int length;
   GdkAtom type;
   gint	  format;
   
+  g_return_val_if_fail (widget != NULL, FALSE);
+  g_return_val_if_fail (event != NULL, FALSE);
+
   if ((event->state != GDK_PROPERTY_NEW_VALUE) ||  /* property was deleted */
       (event->atom != gdk_selection_property)) /* not the right property */
     return FALSE;
@@ -1493,24 +1496,18 @@ gtk_selection_default_handler (GtkWidget	*widget,
     {
       /* List of all targets supported for this widget/selection pair */
       GdkAtom *p;
-      gint count;
+      guint count;
       GList *tmp_list;
       GtkTargetList *target_list;
       GtkTargetPair *pair;
       
-      count = 3;
       target_list = gtk_selection_target_list_get (widget,
 						   data->selection);
-      tmp_list = target_list->list;
-      while (tmp_list)
-	{
-	  count++;
-	  tmp_list = tmp_list->next;
-	}
+      count = g_list_length (target_list->list) + 3;
       
       data->type = GDK_SELECTION_TYPE_ATOM;
       data->format = 8*sizeof (GdkAtom);
-      data->length = count*sizeof (GdkAtom);
+      data->length = count * sizeof (GdkAtom);
       
       p = g_new (GdkAtom, count);
       data->data = (guchar *)p;

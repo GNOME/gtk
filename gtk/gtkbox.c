@@ -511,7 +511,7 @@ gtk_box_query_child_packing (GtkBox             *box,
 			     GtkPackType        *pack_type)
 {
   GList *list;
-  GtkBoxChild *child_info;
+  GtkBoxChild *child_info = NULL;
 
   g_return_if_fail (box != NULL);
   g_return_if_fail (GTK_IS_BOX (box));
@@ -549,7 +549,7 @@ gtk_box_set_child_packing (GtkBox               *box,
 			   GtkPackType           pack_type)
 {
   GList *list;
-  GtkBoxChild *child_info;
+  GtkBoxChild *child_info = NULL;
 
   g_return_if_fail (box != NULL);
   g_return_if_fail (GTK_IS_BOX (box));
