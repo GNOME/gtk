@@ -31,15 +31,16 @@
 #include <config.h>
 
 #include <string.h>
-#include "gtkuimanager.h"
-#include "gtktoolbar.h"
-#include "gtkseparatortoolitem.h"
-#include "gtkmenushell.h"
+#include "gtkintl.h"
+#include "gtkmarshalers.h"
 #include "gtkmenu.h"
 #include "gtkmenubar.h"
+#include "gtkmenushell.h"
 #include "gtkseparatormenuitem.h"
+#include "gtkseparatortoolitem.h"
 #include "gtktearoffmenuitem.h"
-#include "gtkintl.h"
+#include "gtktoolbar.h"
+#include "gtkuimanager.h"
 
 #undef DEBUG_UI_MANAGER
 
@@ -1723,6 +1724,7 @@ update_node (GtkUIManager *self,
   Node *info;
   GNode *child;
   GtkAction *action;
+  gchar *tooltip;
 #ifdef DEBUG_UI_MANAGER
   GList *tmp;
 #endif
@@ -1767,6 +1769,7 @@ update_node (GtkUIManager *self,
 	  info->type != NODE_TYPE_ROOT &&
 	  info->type != NODE_TYPE_MENUBAR &&
 	  info->type != NODE_TYPE_TOOLBAR &&
+	  info->type != NODE_TYPE_POPUP &&
 	  info->type != NODE_TYPE_SEPARATOR &&
 	  info->type != NODE_TYPE_MENU_PLACEHOLDER &&
 	  info->type != NODE_TYPE_TOOLBAR_PLACEHOLDER)
@@ -1984,7 +1987,7 @@ update_node (GtkUIManager *self,
 	      if (find_menu_position (node, &menushell, &pos))
 		{
 		  info->proxy = gtk_action_create_menu_item (action);
-
+		  
 		  gtk_menu_shell_insert (GTK_MENU_SHELL (menushell),
 					 info->proxy, pos);
 		}
@@ -2024,7 +2027,13 @@ update_node (GtkUIManager *self,
 		  info->proxy = gtk_action_create_tool_item (action);
 
 		  gtk_toolbar_insert (GTK_TOOLBAR (toolbar),
-					        GTK_TOOL_ITEM (info->proxy), pos);
+				      GTK_TOOL_ITEM (info->proxy), pos);
+
+		  /* FIXME: this is necessary, since tooltips on toolitems
+		   * can't be set before the toolitem is added to the toolbar.
+		   */
+		  g_object_get (G_OBJECT (action), "tooltip", &tooltip, NULL);
+		  g_object_set (G_OBJECT (action), "tooltip", tooltip, NULL);
 		}
 	    }
 	  else
@@ -2033,6 +2042,7 @@ update_node (GtkUIManager *self,
 						    G_CALLBACK (update_smart_separators),
 						    0);
 	      gtk_action_connect_proxy (action, info->proxy);
+
 	    }
 	  g_signal_connect (info->proxy, "notify::visible",
 			    G_CALLBACK (update_smart_separators), 0);
@@ -2222,11 +2232,11 @@ static const gchar *open_tag_format[] = {
   "%*s<UNDECIDED>\n",
   "%*s<ui>\n",
   "%*s<menubar name=\"%s\">\n",  
-  "%*s<menu name='%s' action=\"%s\">\n",
+  "%*s<menu name=\"%s\" action=\"%s\">\n",
   "%*s<toolbar name=\"%s\">\n",
   "%*s<placeholder name=\"%s\">\n",
   "%*s<placeholder name=\"%s\">\n",
-  "%*s<popup name='%s' action=\"%s\">\n",
+  "%*s<popup name=\"%s\">\n",
   "%*s<menuitem name=\"%s\" action=\"%s\"/>\n", 
   "%*s<toolitem name=\"%s\" action=\"%s\"/>\n", 
   "%*s<separator name=\"%s\"/>\n",

@@ -31,15 +31,16 @@
 #include <config.h>
 
 #include "gtkaction.h"
-#include "gtkbutton.h"
-#include "gtktoolbutton.h"
-#include "gtkmenuitem.h"
-#include "gtkimagemenuitem.h"
-#include "gtkstock.h"
-#include "gtklabel.h"
-#include "gtkimage.h"
 #include "gtkaccellabel.h"
+#include "gtkbutton.h"
+#include "gtkimage.h"
+#include "gtkimagemenuitem.h"
 #include "gtkintl.h"
+#include "gtklabel.h"
+#include "gtkmenuitem.h"
+#include "gtkstock.h"
+#include "gtktoolbutton.h"
+#include "gtktoolbar.h"
 
 
 #define GTK_ACTION_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), GTK_TYPE_ACTION, GtkActionPrivate))
@@ -530,6 +531,25 @@ gtk_action_sync_stock_id (GtkAction  *action,
     }
 }
 
+static void
+gtk_action_sync_tooltip (GtkAction  *action, 
+			 GParamSpec *pspec, 
+			 GtkWidget  *proxy)
+{
+  g_return_if_fail (GTK_IS_TOOL_ITEM (proxy));
+
+  if (GTK_IS_TOOLBAR (gtk_widget_get_parent (proxy)))
+    {
+      GtkToolbar *toolbar = GTK_TOOLBAR (gtk_widget_get_parent (proxy));
+      
+      gtk_tool_item_set_tooltip (GTK_TOOL_ITEM (proxy), 
+				 toolbar->tooltips,
+				 action->private_data->tooltip,
+				 NULL);
+    }
+}
+
+
 static gboolean
 gtk_action_create_menu_proxy (GtkToolItem *tool_item, 
 			      GtkAction   *action)
@@ -648,6 +668,9 @@ connect_proxy (GtkAction     *action,
 		    "stock_id", action->private_data->stock_id,
 		    "is_important", action->private_data->is_important,
 		    NULL);
+      /* FIXME: we should set the tooltip here, but the current api
+       * doesn't allow it before the item is added to a toolbar. 
+       */
       g_signal_connect_object (action, "notify::short_label",
 			       G_CALLBACK (gtk_action_sync_short_label),
 			       proxy, 0);      
@@ -656,6 +679,9 @@ connect_proxy (GtkAction     *action,
 			       proxy, 0);
       g_signal_connect_object (action, "notify::is_important",
 			       G_CALLBACK (gtk_action_sync_property), 
+			       proxy, 0);
+      g_signal_connect_object (action, "notify::tooltip",
+			       G_CALLBACK (gtk_action_sync_tooltip), 
 			       proxy, 0);
 
       g_signal_connect_object (proxy, "create_menu_proxy",
