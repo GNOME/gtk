@@ -104,6 +104,11 @@ extern "C" {
  */
 #define GTK_HAVE_FEATURES_1_1_13			1-1-13
 
+/* Gtk+ 1.1.14 version tag
+ * working gtk layout, etc
+ */
+#define GTK_HAVE_FEATURES_1_1_14			1-1-14
+
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */
