@@ -507,9 +507,9 @@ AC_PATH_PROG(PANGO_CONFIG, pango-config, no)
 if test x$PANGO_CONFIG = xno ; then
   AC_MSG_ERROR([*** pango-config not found])
 fi
-PANGO_CFLAGS="`pango-config --cflags pangox`"
+PANGO_CFLAGS="`$PANGO_CONFIG --cflags pangox`"
 CFLAGS="$CFLAGS $PANGO_CFLAGS"
-PANGO_LIBS="`pango-config --libs pangox`"
+PANGO_LIBS="`$PANGO_CONFIG --libs pangox`"
 AC_SUBST(PANGO_LIBS)
 AC_SUBST(PANGO_CFLAGS)
 

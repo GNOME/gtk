@@ -1,3 +1,6 @@
+Wed Jun  7 15:44:42 2000  Elliot Lee <sopwith@redhat.com>
+	* configure.in: Use $PANGO_CONFIG instead of pango-config
+
 Wed Jun  7 15:44:42 2000  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/Makefile.am (LDFLAGS): Add missing backslash that was keeping
