@@ -1821,7 +1821,8 @@ ensure_icon_info (GtkWindow *window)
 }
 
 static void
-get_pixmap_and_mask (GtkWindowIconInfo  *parent_info,
+get_pixmap_and_mask (GdkWindow		*window,
+		     GtkWindowIconInfo  *parent_info,
                      gboolean            is_default_list,
                      GList              *icon_list,
                      GdkPixmap         **pmap_return,
@@ -1903,7 +1904,7 @@ get_pixmap_and_mask (GtkWindowIconInfo  *parent_info,
                                                          pmap_return,
                                                          mask_return,
                                                          128,
-                                                         gdk_colormap_get_system ());
+                    gdk_colormap_get_system_for_screen (gdk_drawable_get_screen (window)));
 
       /* Save pmap/mask for others to use if appropriate */
       if (parent_info)
@@ -1979,7 +1980,8 @@ gtk_window_realize_icon (GtkWindow *window)
   
   gdk_window_set_icon_list (widget->window, icon_list);
 
-  get_pixmap_and_mask (info->using_parent_icon ?
+  get_pixmap_and_mask (widget->window,
+		       info->using_parent_icon ?
                        ensure_icon_info (window->transient_parent) : NULL,
                        info->using_default_icon,
                        icon_list,
@@ -3595,7 +3597,7 @@ gtk_window_read_rcfiles (GtkWidget *widget,
       while (embedded_windows)
 	{
 	  guint xid = GPOINTER_TO_UINT (embedded_windows->data);
-	  gdk_event_send_client_message ((GdkEvent *) &sev, xid);
+	  gdk_event_send_client_message_for_display (gtk_widget_get_display (widget), (GdkEvent *) &sev, xid);
 	  embedded_windows = embedded_windows->next;
 	}
     }

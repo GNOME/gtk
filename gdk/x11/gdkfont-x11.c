@@ -122,9 +122,11 @@ gdk_font_hash_lookup (GdkDisplay  *display,
 		      const gchar *font_name)
 {
   GdkFont *result;
-  GHashTable *hash = (type == GDK_FONT_FONT) ?
-    gdk_font_name_hash_get (display) : gdk_fontset_name_hash_get (display);
+  GHashTable *hash;
+  g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
 
+  hash = (type == GDK_FONT_FONT) ? gdk_font_name_hash_get (display) : 
+				   gdk_fontset_name_hash_get (display);
   if (!hash)
     return NULL;
   else
@@ -146,6 +148,7 @@ gdk_font_load_for_display (GdkDisplay  *display,
   XFontStruct *xfont;
   GdkDisplayImplX11 *display_impl;
 
+  g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
   g_return_val_if_fail (font_name != NULL, NULL);
   display_impl = GDK_DISPLAY_IMPL_X11 (display);
 
@@ -187,12 +190,14 @@ gdk_font_load_for_display (GdkDisplay  *display,
   return font;
 }
 
+#ifndef GDK_MULTIHEAD_SAFE
 GdkFont*
 gdk_font_load (const gchar *font_name)
 {  
    GDK_NOTE (MULTIHEAD,g_message ("Use gdk_font_load_for_display instead\n"));
    return gdk_font_load_for_display (gdk_get_default_display(), font_name);
 }
+#endif
 
 static char *
 gdk_font_charset_for_locale (void)
@@ -239,6 +244,7 @@ gdk_font_from_description_for_display (GdkDisplay           *display,
   PangoFont *font;
   GdkFont *result = NULL;
 
+  g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
   g_return_val_if_fail (font_desc != NULL, NULL);
 
   font_map = pango_x_font_map_for_display (GDK_DISPLAY_IMPL_X11 (display)->xdisplay);
@@ -284,6 +290,7 @@ gdk_font_from_description_for_display (GdkDisplay           *display,
  * Return value: the newly loaded font, or %NULL if the font
  * cannot be loaded.
  **/
+#ifndef GDK_MULTIHEAD_SAFE
 GdkFont*
 gdk_font_from_description (PangoFontDescription *font_desc)
 {
@@ -291,6 +298,7 @@ gdk_font_from_description (PangoFontDescription *font_desc)
     g_message ("Use gdk_font_from_description_for_display or Pango ! instead\n"));
   return gdk_font_from_description_for_display (gdk_get_default_display (),font_desc);
 }
+#endif
 
 GdkFont *
 gdk_fontset_load_for_display (GdkDisplay * display,
@@ -302,8 +310,10 @@ gdk_fontset_load_for_display (GdkDisplay * display,
   gint  missing_charset_count;
   gchar **missing_charset_list;
   gchar *def_string;
-  GdkDisplayImplX11 *display_impl = GDK_DISPLAY_IMPL_X11 (display);
+  GdkDisplayImplX11 *display_impl;
 
+  g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
+  display_impl = GDK_DISPLAY_IMPL_X11 (display);
   font = gdk_font_hash_lookup (display, GDK_FONT_FONTSET, fontset_name);
   if (font)
     return font;
@@ -358,12 +368,14 @@ gdk_fontset_load_for_display (GdkDisplay * display,
     }
 }
 
+#ifndef GDK_MULTIHEAD_SAFE
 GdkFont*
 gdk_fontset_load (const gchar *fontset_name)
 {
   GDK_NOTE (MULTIHEAD,g_message ("Use gdk_fontset_load_for_display instead\n"));
   return gdk_fontset_load_for_display (gdk_get_default_display (), fontset_name);
 }
+#endif
 
 void
 _gdk_font_destroy (GdkFont *font)

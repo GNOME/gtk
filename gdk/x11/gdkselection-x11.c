@@ -115,6 +115,8 @@ gdk_selection_owner_set_for_display (GdkDisplay *display,
   OwnerInfo *info;
   Atom xselection;
 
+  g_return_val_if_fail (GDK_IS_DISPLAY (display), FALSE);
+
   if (owner) 
     {
       if (GDK_WINDOW_DESTROYED (owner))
@@ -159,6 +161,7 @@ gdk_selection_owner_set_for_display (GdkDisplay *display,
   return (XGetSelectionOwner (xdisplay, xselection) == xwindow);
 }
 
+#ifndef GDK_MULTIHEAD_SAFE
 gboolean
 gdk_selection_owner_set (GdkWindow *owner,
 			 GdkAtom    selection,
@@ -169,12 +172,14 @@ gdk_selection_owner_set (GdkWindow *owner,
   return gdk_selection_owner_set_for_display (gdk_get_default_display (), owner,
 					      selection, time, send_event);
 }
+#endif
 
 GdkWindow *
 gdk_selection_owner_get_for_display (GdkDisplay *display,
 				     GdkAtom     selection)
 {
   Window xwindow;
+  g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
 
   xwindow = XGetSelectionOwner (GDK_DISPLAY_XDISPLAY (display),
 				gdk_x11_get_real_atom (display, selection));
@@ -183,13 +188,14 @@ gdk_selection_owner_get_for_display (GdkDisplay *display,
 
   return gdk_window_lookup (xwindow);
 }
-
+#ifndef GDK_MULTIHEAD_SAFE
 GdkWindow*
 gdk_selection_owner_get (GdkAtom selection)
 {
   GDK_NOTE (MULTIHEAD, g_message ("Use gdk_selection_owner_get_for_display instead\n"));
   return gdk_selection_owner_get_for_display (gdk_get_default_display (), selection);
 }
+#endif
 
 void
 gdk_selection_convert (GdkWindow *requestor,
@@ -317,6 +323,7 @@ gdk_selection_send_notify_for_display (GdkDisplay *display,
 				       guint32     time)
 {
   XSelectionEvent xevent;
+  g_return_if_fail (GDK_IS_DISPLAY (display));
 
   xevent.type = SelectionNotify;
   xevent.serial = 0;
@@ -328,9 +335,11 @@ gdk_selection_send_notify_for_display (GdkDisplay *display,
   xevent.property = gdk_x11_get_real_atom (display, property);
   xevent.time = time;
 
-  gdk_send_xevent (requestor, False, NoEventMask, (XEvent*) & xevent);
+  gdk_send_xevent_for_display (display, requestor, False, 
+			       NoEventMask, (XEvent*) & xevent);
 }
 
+#ifndef GDK_MULTIHEAD_SAFE
 void
 gdk_selection_send_notify (guint32  requestor,
 			   GdkAtom  selection,
@@ -343,6 +352,7 @@ gdk_selection_send_notify (guint32  requestor,
     gdk_selection_send_notify_for_display (gdk_get_default_display (), requestor,
 					   selection, target, property, time);
 }
+#endif
 
 gint
 gdk_text_property_to_text_list_for_display (GdkDisplay   *display,
@@ -355,6 +365,7 @@ gdk_text_property_to_text_list_for_display (GdkDisplay   *display,
   XTextProperty property;
   gint count = 0;
   gint res;
+  g_return_val_if_fail (GDK_IS_DISPLAY (display), 0);
 
   if (!list) 
     return 0;
@@ -371,7 +382,7 @@ gdk_text_property_to_text_list_for_display (GdkDisplay   *display,
   else
     return count;
 }
-
+#ifndef GDK_MULTIHEAD_SAFE
 gint
 gdk_text_property_to_text_list (GdkAtom       encoding,
 				gint          format, 
@@ -382,6 +393,7 @@ gdk_text_property_to_text_list (GdkAtom       encoding,
   return gdk_text_property_to_text_list_for_display (gdk_get_default_display (),
 						     encoding, format, text, length, list);
 }
+#endif
 
 void
 gdk_free_text_list (gchar **list)
@@ -486,6 +498,7 @@ gdk_text_property_to_utf8_list_for_display (GdkDisplay    *display,
 {
   g_return_val_if_fail (text != NULL, 0);
   g_return_val_if_fail (length >= 0, 0);
+  g_return_val_if_fail (GDK_IS_DISPLAY (display), 0);
   
   if (encoding == GDK_TARGET_STRING)
     {
@@ -569,6 +582,7 @@ gdk_text_property_to_utf8_list_for_display (GdkDisplay    *display,
  * Return value: the number of strings in the resulting
  *               list.
  **/
+#ifndef GDK_MULTIHEAD_SAFE
 gint 
 gdk_text_property_to_utf8_list (GdkAtom        encoding,
 				gint           format,
@@ -579,6 +593,7 @@ gdk_text_property_to_utf8_list (GdkAtom        encoding,
   return gdk_text_property_to_utf8_list_for_display (gdk_get_default_display (),
 						     encoding, format, text, length, list);
 }
+#endif
 
 gint
 gdk_string_to_compound_text_for_display (GdkDisplay  *display,
@@ -590,6 +605,8 @@ gdk_string_to_compound_text_for_display (GdkDisplay  *display,
 {
   gint res;
   XTextProperty property;
+
+  g_return_val_if_fail (GDK_IS_DISPLAY (display), 0);
 
   res = XmbTextListToTextProperty (GDK_DISPLAY_XDISPLAY (display), 
 				   (char **)&str, 1, XCompoundTextStyle,
@@ -614,6 +631,7 @@ gdk_string_to_compound_text_for_display (GdkDisplay  *display,
   return res;
 }
 
+#ifndef GDK_MULTIHEAD_SAFE
 gint
 gdk_string_to_compound_text (const gchar *str,
 			     GdkAtom     *encoding,
@@ -624,6 +642,7 @@ gdk_string_to_compound_text (const gchar *str,
   return gdk_string_to_compound_text_for_display (gdk_get_default_display (),
 						  str, encoding, format, ctext, length);
 }
+#endif
 
 /* The specifications for COMPOUND_TEXT and STRING specify that C0 and
  * C1 are not allowed except for \n and \t, however the X conversions
@@ -731,6 +750,7 @@ gdk_utf8_to_compound_text_for_display (GdkDisplay  *display,
   gboolean result;
 
   g_return_val_if_fail (str != NULL, FALSE);
+  g_return_val_if_fail (GDK_IS_DISPLAY (display), FALSE);
 
   need_conversion = !g_get_charset (&charset);
 
@@ -787,6 +807,7 @@ gdk_utf8_to_compound_text_for_display (GdkDisplay  *display,
  * Return value: %TRUE if the conversion succeeded, otherwise
  *               false.
  **/
+#ifndef GDK_MULTIHEAD_SAFE
 gboolean
 gdk_utf8_to_compound_text (const gchar *str,
 			   GdkAtom     *encoding,
@@ -797,6 +818,7 @@ gdk_utf8_to_compound_text (const gchar *str,
   return gdk_utf8_to_compound_text_for_display (gdk_get_default_display (),
 						str, encoding, format, ctext, length);
 }
+#endif
 
 void gdk_free_compound_text (guchar *ctext)
 {

@@ -103,6 +103,10 @@ struct _GdkDisplayImplX11
 
   GHashTable *atom_from_virtual;
   GHashTable *atom_to_virtual;
+
+  /* Session Management leader window see ICCCM */
+  Window leader_window;
+
 };
 
 struct _GdkDisplayImplX11Class

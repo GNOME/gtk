@@ -116,8 +116,10 @@ insert_atom_pair (GdkDisplay *display,
 		  GdkAtom     virtual_atom,
 		  GdkAtom     xatom)
 {
-  GdkDisplayImplX11 *display_impl = GDK_DISPLAY_IMPL_X11 (display);
-  
+  GdkDisplayImplX11 *display_impl;
+  g_return_if_fail (GDK_IS_DISPLAY (display));
+  display_impl = GDK_DISPLAY_IMPL_X11 (display);
+
   if (!display_impl->atom_from_virtual)
     {
       display_impl->atom_from_virtual = g_hash_table_new (g_direct_hash, NULL);

@@ -563,8 +563,10 @@ gdk_window_get_toplevels_for_screen (GdkScreen *screen)
 {
   GList *new_list = NULL;
   GList *tmp_list;
-  GdkWindow * root_window = gdk_screen_get_root_window (screen);
-  
+  GdkWindow * root_window;
+  g_return_val_if_fail (GDK_IS_SCREEN (screen), NULL);
+  root_window = gdk_screen_get_root_window (screen);
+
   tmp_list = ((GdkWindowObject *)root_window)->children;
   while (tmp_list)
     {
@@ -574,12 +576,14 @@ gdk_window_get_toplevels_for_screen (GdkScreen *screen)
   
   return new_list;
 }
+#ifndef GDK_MULTIHEAD_SAFE
 GList *
 gdk_window_get_toplevels (void)
 {
   GDK_NOTE (MULTIHEAD,g_message ("Use gdk_window_get_toplevels_for_screen instead\n"));
   return gdk_window_get_toplevels_for_screen (gdk_get_default_screen ());
 }
+#endif
 
 /*************************************************************
  * gdk_window_is_visible:

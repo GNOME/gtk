@@ -102,7 +102,7 @@ gdk_visual_get_type (void)
 void
 _gdk_visual_init (GdkScreen *screen)
 {
-  GdkScreenImplX11 *screen_impl = GDK_SCREEN_IMPL_X11 (screen);
+  GdkScreenImplX11 *screen_impl;
 
   static const gint possible_depths[7] = { 32, 24, 16, 15, 8, 4, 1 };
   static const GdkVisualType possible_types[6] =
@@ -126,6 +126,9 @@ _gdk_visual_init (GdkScreen *screen)
   int nxvisuals;
   int nvisuals;
   int i, j;
+  
+  g_return_if_fail (GDK_IS_SCREEN (screen));
+  screen_impl = GDK_SCREEN_IMPL_X11 (screen);
 
   visual_template.screen = screen_impl->screen_num;
   visual_list = XGetVisualInfo (screen_impl->xdisplay, VisualScreenMask, &visual_template, &nxvisuals);
@@ -306,9 +309,10 @@ _gdk_visual_init (GdkScreen *screen)
 gint
 gdk_visual_get_best_depth_for_screen (GdkScreen * screen)
 {
+  g_return_val_if_fail (GDK_IS_SCREEN (screen), 0);
   return GDK_SCREEN_IMPL_X11 (screen)->available_depths[0];
 }
-
+#ifndef GDK_MULTIHEAD_SAFE
 gint
 gdk_visual_get_best_depth (void)
 {
@@ -316,13 +320,16 @@ gdk_visual_get_best_depth (void)
 	    g_message("Use gdk_visual_get_best_depth_for_screen instead\n"));
   return gdk_visual_get_best_depth_for_screen (gdk_get_default_screen ());
 }
+#endif
 
 GdkVisualType
 gdk_visual_get_best_type_for_screen (GdkScreen * screen)
 {
+  g_return_val_if_fail (GDK_IS_SCREEN (screen), 0);
   return GDK_SCREEN_IMPL_X11 (screen)->available_types[0];
 }
 
+#ifndef GDK_MULTIHEAD_SAFE
 GdkVisualType
 gdk_visual_get_best_type (void)
 {
@@ -330,13 +337,16 @@ gdk_visual_get_best_type (void)
 	    g_message("Use gdk_visual_get_best_type_for_screen instead\n"));
   return gdk_visual_get_best_type_for_screen (gdk_get_default_screen ());
 }
+#endif
 
 GdkVisual *
 gdk_visual_get_system_for_screen (GdkScreen * screen)
 {
+  g_return_val_if_fail (GDK_IS_SCREEN (screen), NULL);
   return ((GdkVisual *) GDK_SCREEN_IMPL_X11 (screen)->system_visual);
 }
 
+#ifndef GDK_MULTIHEAD_SAFE
 GdkVisual*
 gdk_visual_get_system (void)
 {
@@ -344,10 +354,12 @@ gdk_visual_get_system (void)
 	    g_message("Use gdk_visual_get_system_for_screen instead\n"));
   return gdk_visual_get_system_for_screen (gdk_get_default_screen ());
 }
+#endif
 
 GdkVisual *
 gdk_visual_get_best_for_screen (GdkScreen * screen)
 {
+  g_return_val_if_fail (GDK_IS_SCREEN (screen), NULL);
   return ((GdkVisual *)GDK_SCREEN_IMPL_X11 (screen)->visuals[0]);
 }
 
@@ -362,9 +374,11 @@ gdk_visual_get_best_with_depth_for_screen (GdkScreen *screen,
 					   gint       depth)
 {
   GdkVisual *return_val;
-  GdkScreenImplX11 *screen_impl = GDK_SCREEN_IMPL_X11 (screen);
+  GdkScreenImplX11 *screen_impl;
   int i;
-
+  g_return_val_if_fail (GDK_IS_SCREEN (screen), NULL);
+  screen_impl = GDK_SCREEN_IMPL_X11 (screen);
+  
   return_val = NULL;
   for (i = 0; i < screen_impl->nvisuals; i++)
     if (depth == screen_impl->visuals[i]->visual.depth)
@@ -387,9 +401,12 @@ gdk_visual_get_best_with_type_for_screen (GdkScreen     *screen,
 					  GdkVisualType  visual_type)
 {
   GdkVisual *return_val;
-  GdkScreenImplX11 *screen_impl = GDK_SCREEN_IMPL_X11 (screen);
+  GdkScreenImplX11 *screen_impl; 
   int i;
-  
+
+  g_return_val_if_fail (GDK_IS_SCREEN (screen), NULL);
+  screen_impl = GDK_SCREEN_IMPL_X11 (screen);
+
   return_val = NULL;
   for (i = 0; i < screen_impl->nvisuals; i++)
     if (visual_type == screen_impl->visuals[i]->visual.type)
@@ -401,6 +418,7 @@ gdk_visual_get_best_with_type_for_screen (GdkScreen     *screen,
   return return_val;
 }
 
+#ifndef GDK_MULTIHEAD_SAFE
 GdkVisual*
 gdk_visual_get_best_with_type (GdkVisualType visual_type)
 {
@@ -408,6 +426,7 @@ gdk_visual_get_best_with_type (GdkVisualType visual_type)
 	    g_message("Use gdk_visual_get_best_with_type_for_screen instead\n"));	
   return gdk_visual_get_best_with_type_for_screen (gdk_get_default_screen (), visual_type);
 }
+#endif
 
 GdkVisual *
 gdk_visual_get_best_with_both_for_screen (GdkScreen    *screen,
@@ -415,8 +434,11 @@ gdk_visual_get_best_with_both_for_screen (GdkScreen    *screen,
 					  GdkVisualType visual_type)
 {
   GdkVisual *return_val;
-  GdkScreenImplX11 *screen_impl = GDK_SCREEN_IMPL_X11 (screen);
+  GdkScreenImplX11 *screen_impl; 
   int i;
+
+  g_return_val_if_fail (GDK_IS_SCREEN (screen), NULL);
+  screen_impl = GDK_SCREEN_IMPL_X11 (screen);
 
   return_val = NULL;
   for (i = 0; i < screen_impl->nvisuals; i++)
@@ -430,6 +452,7 @@ gdk_visual_get_best_with_both_for_screen (GdkScreen    *screen,
   return return_val;
 }
 
+#ifndef GDK_MULTIHEAD_SAFE
 GdkVisual*
 gdk_visual_get_best_with_both (gint          depth,
 			       GdkVisualType visual_type)
@@ -440,16 +463,19 @@ gdk_visual_get_best_with_both (gint          depth,
 						   depth,
 						   visual_type);
 }
+#endif
 
 void
 gdk_query_depths_for_screen (GdkScreen  *screen,
 			     gint      **depths,
 			     gint       *count)
 {
+  g_return_if_fail (GDK_IS_SCREEN (screen));
   *count = GDK_SCREEN_IMPL_X11 (screen)->navailable_depths;
   *depths = GDK_SCREEN_IMPL_X11 (screen)->available_depths;
 }
 
+#ifndef GDK_MULTIHEAD_SAFE
 void
 gdk_query_depths  (gint **depths,
 		   gint  *count)
@@ -458,16 +484,19 @@ gdk_query_depths  (gint **depths,
 	   g_message("Use gdk_query_depths_for_screen instead\n"));
   gdk_query_depths_for_screen (gdk_get_default_screen (), depths, count);
 }
+#endif
 
 void
 gdk_query_visual_types_for_screen (GdkScreen      *screen,
 				   GdkVisualType **visual_types,
 				   gint           *count)
 {
+  g_return_if_fail (GDK_IS_SCREEN (screen));
   *count = GDK_SCREEN_IMPL_X11 (screen)->navailable_types;
   *visual_types = GDK_SCREEN_IMPL_X11 (screen)->available_types;
 }
 
+#ifndef GDK_MULTIHEAD_SAFE
 void
 gdk_query_visual_types (GdkVisualType **visual_types,
 			gint           *count)
@@ -476,15 +505,19 @@ gdk_query_visual_types (GdkVisualType **visual_types,
 	    g_message("Use gdk_query_visual_types_for_screen instead\n"));
   gdk_query_visual_types_for_screen (gdk_get_default_screen (), visual_types, count);
 }
+#endif
 
 GList *
 gdk_list_visuals_for_screen (GdkScreen *screen)
 {
   GList *list;
-  GdkScreenImplX11 *screen_impl = GDK_SCREEN_IMPL_X11 (screen);
+  GdkScreenImplX11 *screen_impl;
   guint i;
 
+  g_return_val_if_fail (GDK_IS_SCREEN (screen), NULL);
+  screen_impl = GDK_SCREEN_IMPL_X11 (screen);
   list = NULL;
+
   for (i = 0; i < screen_impl->nvisuals; ++i)
     list = g_list_append (list, screen_impl->visuals[i]);
 
@@ -502,7 +535,9 @@ gdk_visual_lookup_for_screen (GdkScreen *screen,
 			      Visual    *xvisual)
 {
   GdkVisual *visual;
-  GdkScreenImplX11 *screen_impl = GDK_SCREEN_IMPL_X11 (screen);
+  GdkScreenImplX11 *screen_impl;
+  g_return_val_if_fail (GDK_IS_SCREEN (screen), NULL);  
+  screen_impl = GDK_SCREEN_IMPL_X11 (screen);
 
   if (!screen_impl->visual_hash)
     return NULL;
@@ -510,20 +545,23 @@ gdk_visual_lookup_for_screen (GdkScreen *screen,
   visual = g_hash_table_lookup (screen_impl->visual_hash, xvisual);
   return visual;
 }
-
+#ifndef GDK_MULTIHEAD_SAFE
 GdkVisual*
 gdk_visual_lookup (Visual *xvisual)
 {
   GDK_NOTE (MULTIHEAD, g_message ("Use gdk_visual_lookup_for_screen instead\n"));
   return gdk_visual_lookup_for_screen (gdk_get_default_screen (), xvisual);
 }
+#endif
 
 GdkVisual *
 gdkx_visual_get_for_screen (GdkScreen *screen,
 			    VisualID   xvisualid)
 {
   int i;
-  GdkScreenImplX11 *screen_impl = GDK_SCREEN_IMPL_X11 (screen);
+  GdkScreenImplX11 *screen_impl;
+  g_return_val_if_fail (GDK_IS_SCREEN (screen), NULL);
+  screen_impl = GDK_SCREEN_IMPL_X11 (screen);
 
   for (i = 0; i < screen_impl->nvisuals; i++)
     if (xvisualid == screen_impl->visuals[i]->xvisual->visualid)
@@ -532,12 +570,14 @@ gdkx_visual_get_for_screen (GdkScreen *screen,
   return NULL;
 }
 
+#ifndef GDK_MULTIHEAD_SAFE
 GdkVisual*
 gdkx_visual_get (VisualID xvisualid)
 {
   GDK_NOTE (MULTIHEAD, g_message ("Use gdkx_visual_get_for_screen instead\n"));
   return gdkx_visual_get_for_screen (gdk_get_default_screen (), xvisualid);
 }
+#endif
 
 static void
 gdk_visual_add (GdkVisual *visual)

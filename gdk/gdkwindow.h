@@ -388,7 +388,7 @@ void          gdk_window_set_modal_hint  (GdkWindow       *window,
 void          gdk_window_set_geometry_hints (GdkWindow        *window,
 					     GdkGeometry      *geometry,
 					     GdkWindowHints    flags);
-void	      gdk_set_sm_client_id_for_screen (GdkScreen   *screen,
+void	      gdk_set_sm_client_id_for_display (GdkDisplay *display,
 					       const gchar *sm_client_id);
 
 void	      gdk_window_begin_paint_rect   (GdkWindow    *window,

@@ -445,6 +445,7 @@ gdk_pixbuf_render_pixmap_and_mask_for_screen (GdkPixbuf  *pixbuf,
 					      int         alpha_threshold)
 {
   g_return_if_fail (pixbuf != NULL);
+  g_return_if_fail (GDK_IS_SCREEN (screen));
   
   if (pixmap_return)
     {
@@ -479,7 +480,7 @@ gdk_pixbuf_render_pixmap_and_mask_for_screen (GdkPixbuf  *pixbuf,
 	*mask_return = NULL;
     }
 }
-
+#ifndef GDK_MULTIHEAD_SAFE
 void
 gdk_pixbuf_render_pixmap_and_mask (GdkPixbuf  *pixbuf,
 				   GdkPixmap **pixmap_return,
@@ -493,3 +494,5 @@ gdk_pixbuf_render_pixmap_and_mask (GdkPixbuf  *pixbuf,
 					       mask_return,
 					       alpha_threshold);
 }
+#endif
+

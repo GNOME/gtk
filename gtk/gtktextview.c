@@ -3465,7 +3465,7 @@ gtk_text_view_focus_in_event (GtkWidget *widget, GdkEventFocus *event)
       gtk_text_view_check_cursor_blink (text_view);
     }
 
-  g_signal_connect (gdk_keymap_get_default (),
+  g_signal_connect (gdk_keymap_get_for_display (gtk_widget_get_display (widget)),
 		    "direction_changed",
 		    G_CALLBACK (keymap_direction_changed), text_view);
   gtk_text_view_check_keymap_direction (text_view);
@@ -3492,9 +3492,7 @@ gtk_text_view_focus_out_event (GtkWidget *widget, GdkEventFocus *event)
       gtk_text_view_check_cursor_blink (text_view);
     }
 
-  g_signal_handlers_disconnect_by_func (gdk_keymap_get_default (),
-                                        keymap_direction_changed,
-                                        text_view);
+  g_signal_handlers_disconnect_by_func (gdk_keymap_get_for_display (gtk_widget_get_display (widget)), keymap_direction_changed, text_view);
 
   text_view->need_im_reset = TRUE;
   gtk_im_context_focus_out (GTK_TEXT_VIEW (widget)->im_context);
@@ -4454,7 +4452,7 @@ gtk_text_view_check_keymap_direction (GtkTextView *text_view)
       if (split_cursor)
 	new_dir = GTK_TEXT_DIR_NONE;
       else
-	new_dir = (gdk_keymap_get_direction (gdk_keymap_get_default ()) == PANGO_DIRECTION_LTR) ?
+	new_dir = (gdk_keymap_get_direction (gdk_keymap_get_for_display (gtk_widget_get_display (GTK_WIDGET (text_view)))) == PANGO_DIRECTION_LTR) ?
 	  GTK_TEXT_DIR_LTR : GTK_TEXT_DIR_RTL;
       
       if (text_view->layout->cursor_direction != new_dir)

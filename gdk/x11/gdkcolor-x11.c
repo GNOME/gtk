@@ -302,7 +302,7 @@ gdk_colormap_get_system_for_screen (GdkScreen * screen)
   GdkColormapPrivateX11 *private;
   GdkScreenImplX11 *screen_impl;
 
-  g_return_if_fail (GDK_IS_SCREEN (screen));
+  g_return_val_if_fail (GDK_IS_SCREEN (screen), NULL);
   screen_impl = GDK_SCREEN_IMPL_X11 (screen);
 
   if (screen_impl->system_colormap)
@@ -349,13 +349,14 @@ gdk_colormap_get_system_for_screen (GdkScreen * screen)
   return colormap;
 }
 
-
+#ifndef GDK_MULTIHEAD_SAFE
 GdkColormap*
 gdk_colormap_get_system (void)
 {
   GDK_NOTE (MULTIHEAD,g_message ("Use gdk_colormap_get_system_for_screen instead\n"));
   return gdk_colormap_get_system_for_screen (gdk_get_default_screen ());
 }
+#endif
 
 gint
 gdk_colormap_get_system_size (void)

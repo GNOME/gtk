@@ -70,9 +70,8 @@ struct _GdkVisual
   gint blue_prec;
 };
 
-#ifndef GDK_MULTIHEAD_SAFE
 GType         gdk_visual_get_type	      (void);
-
+#ifndef GDK_MULTIHEAD_SAFE
 gint          gdk_visual_get_best_depth       (void);
 GdkVisualType gdk_visual_get_best_type        (void);
 GdkVisual*    gdk_visual_get_system           (void);

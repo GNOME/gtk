@@ -109,13 +109,15 @@ _gdk_x11_display_impl_display_new (gchar * display_name)
       screen_impl->screen_num = i;
       screen_impl->xroot_window = (Window) RootWindow (display_impl->xdisplay, i);
       screen_impl->wmspec_check_window = None;
-      screen_impl->leader_window = XCreateSimpleWindow (display_impl->xdisplay,
-						     screen_impl->xroot_window,
-						     10, 10, 10, 10, 0, 0, 0);
       screen_impl->visual_initialised = FALSE;
       screen_impl->colormap_initialised = FALSE;
       if (screen_impl->xscreen == default_screen)
-	display_impl->default_screen = screen;
+	{
+	  display_impl->default_screen = screen;
+	  display_impl->leader_window = XCreateSimpleWindow (display_impl->xdisplay,
+							     screen_impl->xroot_window,
+							     10, 10, 10, 10, 0, 0, 0);
+	}
       display_impl->screen_list = g_slist_append (display_impl->screen_list, screen);
     }
   display_impl->dnd_default_screen = display_impl->default_screen;

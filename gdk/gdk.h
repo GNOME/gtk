@@ -141,9 +141,13 @@ gint       gdk_mbstowcs          (GdkWChar         *dest,
 
 /* Miscellaneous */
 void     gdk_event_send_clientmessage_toall (GdkEvent    *event);
+#ifndef GDK_MULTIHEAD_SAFE
 gboolean gdk_event_send_client_message (GdkEvent    *event,
 					guint32      xid);
-
+#endif
+gboolean gdk_event_send_client_message_for_display (GdkDisplay *display,
+						    GdkEvent   *event,
+						    guint32	xid);
 /* Threading
  */
 

@@ -147,14 +147,14 @@ _gdk_windowing_init_check_for_display (int argc, char **argv, char *display_name
     }
   class_hint->res_class = gdk_progclass;
   XmbSetWMProperties (display_impl->xdisplay,
-		      DEFAULT_GDK_SCREEN_IMPL_X11_FOR_DISPLAY (display)->leader_window,
+		      display_impl->leader_window,
 		      NULL, NULL, argv, argc, NULL, NULL,
 		      class_hint);
   XFree (class_hint);
 
   pid = getpid ();
   XChangeProperty (display_impl->xdisplay,
-		   DEFAULT_GDK_SCREEN_IMPL_X11_FOR_DISPLAY (display)->leader_window,
+		   display_impl->leader_window,
 		   gdk_x11_get_real_atom_by_name (display, "_NET_WM_PID"),
 		   XA_CARDINAL, 32, PropModeReplace, (guchar *) & pid, 1);
 
@@ -259,19 +259,23 @@ gdk_display_init_new (int argc, char **argv, char *display_name)
   return display;
 }
 
+#ifndef GDK_MULTIHEAD_SAFE
 void
 gdk_set_use_xshm (gboolean use_xshm)
 {
   GDK_NOTE (MULTIHEAD, g_message ("Use gdk_display_set_use_xshm instead\n"));
   gdk_display_set_use_xshm (gdk_get_default_display (), use_xshm);
 }
+#endif
 
+#ifndef GDK_MULTIHEAD_SAFE
 gboolean
 gdk_get_use_xshm (void)
 {
   GDK_NOTE (MULTIHEAD, g_message ("Use gdk_display_get_use_xshm instead\n"));
   return gdk_display_get_use_xshm (gdk_get_default_display ());
 }
+#endif
 
 static GdkGrabStatus
 gdk_x11_convert_grab_status (gint status)
@@ -403,12 +407,14 @@ gdk_pointer_grab (GdkWindow *	  window,
  *--------------------------------------------------------------
  */
 
+#ifndef GDK_MULTIHEAD_SAFE
 void
 gdk_pointer_ungrab (guint32 time)
 {
   GDK_NOTE (MULTIHEAD, g_message ("Use gdk_display_pointer_ungrab instead\n"));
   gdk_display_pointer_ungrab (gdk_get_default_display (), time);
 }
+#endif
 
 /*
  *--------------------------------------------------------------
@@ -425,12 +431,14 @@ gdk_pointer_ungrab (guint32 time)
  *--------------------------------------------------------------
  */
 
+#ifndef GDK_MULTIHEAD_SAFE
 gboolean
 gdk_pointer_is_grabbed (void)
 {
   GDK_NOTE (MULTIHEAD, g_message ("Use gdk_display_pointer_is_grabbed instead\n"));
   return gdk_display_pointer_is_grabbed (gdk_get_default_display ());
 }
+#endif
 
 /*
  *--------------------------------------------------------------
@@ -489,12 +497,14 @@ gdk_keyboard_grab (GdkWindow *	   window,
  *--------------------------------------------------------------
  */
 
+#ifndef GDK_MULTIHEAD_SAFE
 void
 gdk_keyboard_ungrab (guint32 time)
 {
   GDK_NOTE (MULTIHEAD, g_message ("Use gdk_display_keyboard_ungrab instead\n"));	 
   gdk_display_keyboard_ungrab (gdk_get_default_display (),time);
 }
+#endif
 
 /*
  *--------------------------------------------------------------
@@ -511,12 +521,14 @@ gdk_keyboard_ungrab (guint32 time)
  *--------------------------------------------------------------
  */
 
+#ifndef GDK_MULTIHEAD_SAFE
 gint
 gdk_screen_width (void)
 {
   GDK_NOTE (MULTIHEAD, g_message ("Use gdk_screen_get_width instead\n"));  
   return gdk_screen_get_width (gdk_get_default_screen());
 }
+#endif
 
 /*
  *--------------------------------------------------------------
@@ -533,12 +545,14 @@ gdk_screen_width (void)
  *--------------------------------------------------------------
  */
 
+#ifndef GDK_MULTIHEAD_SAFE
 gint
 gdk_screen_height (void)
 {
   GDK_NOTE (MULTIHEAD, g_message ("Use gdk_screen_get_height instead\n"));
   return gdk_screen_get_height (gdk_get_default_screen());
 }
+#endif
 
 /*
  *--------------------------------------------------------------
@@ -555,12 +569,14 @@ gdk_screen_height (void)
  *--------------------------------------------------------------
  */
 
+#ifndef GDK_MULTIHEAD_SAFE
 gint
 gdk_screen_width_mm (void)
 {
   GDK_NOTE (MULTIHEAD, g_message ("Use gdk_screen_get_width_mm instead\n"));
   return gdk_screen_get_width_mm (gdk_get_default_screen());
 }
+#endif
 
 /*
  *--------------------------------------------------------------
@@ -577,12 +593,14 @@ gdk_screen_width_mm (void)
  *--------------------------------------------------------------
  */
 
+#ifndef GDK_MULTIHEAD_SAFE
 gint
 gdk_screen_height_mm (void)
 {
   GDK_NOTE (MULTIHEAD, g_message ("Use gdk_screen_get_height_mm instead\n"));
   return gdk_screen_get_height_mm (gdk_get_default_screen ());
 }
+#endif
 
 /*
  *--------------------------------------------------------------
@@ -606,38 +624,41 @@ gdk_screen_height_mm (void)
  *--------------------------------------------------------------
  */
 
+#ifndef GDK_MULTIHEAD_SAFE
 void
 gdk_set_sm_client_id (const gchar* sm_client_id)
 {
-  GDK_NOTE (MULTIHEAD, g_message ("Use gdk_set_sm_client_id_for_screen instead\n"));
-  gdk_set_sm_client_id_for_screen (gdk_get_default_screen (),sm_client_id);
+  GDK_NOTE (MULTIHEAD, g_message ("Use gdk_set_sm_client_id_for_display instead\n"));
+  gdk_set_sm_client_id_for_display (gdk_get_default_display (),sm_client_id);
 }
+#endif
 
 void
-gdk_set_sm_client_id_for_screen (GdkScreen * screen,
-				 const gchar * sm_client_id)
+gdk_set_sm_client_id_for_display (GdkDisplay *display,
+				  const gchar * sm_client_id)
 {
-
-  GdkScreenImplX11 *screen_impl = GDK_SCREEN_IMPL_X11 (screen);
+  GdkDisplayImplX11 *display_impl = GDK_DISPLAY_IMPL_X11 (display);
 
   if (sm_client_id && strcmp (sm_client_id, ""))
     {
-      XChangeProperty (screen_impl->xdisplay, screen_impl->leader_window,
-		       gdk_x11_get_real_atom_by_name (screen_impl->display, "SM_CLIENT_ID"),
+      XChangeProperty (display_impl->xdisplay, display_impl->leader_window,
+		       gdk_x11_get_real_atom_by_name (display, "SM_CLIENT_ID"),
 		       XA_STRING, 8, PropModeReplace, sm_client_id,
 		       strlen (sm_client_id));
     }
   else
-    XDeleteProperty (screen_impl->xdisplay, screen_impl->leader_window,
-		     gdk_x11_get_real_atom_by_name (screen_impl->display, "SM_CLIENT_ID"));
+    XDeleteProperty (display_impl->xdisplay, display_impl->leader_window,
+		     gdk_x11_get_real_atom_by_name (display, "SM_CLIENT_ID"));
 }
 
+#ifndef GDK_MULTIHEAD_SAFE
 void
 gdk_beep (void)
 {
   GDK_NOTE (MULTIHEAD, g_message ("Use gdk_display_beep instead\n"));
   gdk_display_beep (gdk_get_default_display ());
 }
+#endif
 
 /* close all open display */
 
@@ -756,14 +777,14 @@ gdk_x_io_error (Display *display)
                "most likely the X server was shut down or you killed/destroyed\n"
                "the application.\n",
                g_get_prgname (),
-               display ? DisplayString (display) : gdk_get_display ());
+               display ? DisplayString (display) : gdk_get_display_arg_name ());
     }
   else
     {
       fprintf (stderr, "%s: Fatal IO error %d (%s) on X server %s.\n",
                g_get_prgname (),
 	       errno, g_strerror (errno),
-	       display ? DisplayString (display) : gdk_get_display ());
+	       display ? DisplayString (display) : gdk_get_display_arg_name ());
     }
 
   /* Disable the atexit shutdown for GDK */
@@ -772,12 +793,14 @@ gdk_x_io_error (Display *display)
   exit(1);
 }
 
+#ifndef GDK_MULTIHEAD_SAFE
 gchar *
 gdk_get_display (void)
 {
   GDK_NOTE (MULTIHEAD, g_message ("Use gdk_display_get_name instead\n"));
   return gdk_display_get_name (gdk_get_default_display ());
 }
+#endif
 
 gchar *
 gdk_get_display_arg_name (void)
@@ -785,9 +808,31 @@ gdk_get_display_arg_name (void)
   return gdk_display_name;
 }
 
+#ifndef GDK_MULTIHEAD_SAFE
 gint 
 gdk_send_xevent (Window window, gboolean propagate, glong event_mask,
 		 XEvent *event_send)
+{
+  Status result;
+  gint old_warnings = gdk_error_warnings;
+  gdk_error_code = 0;
+  
+  gdk_error_warnings = 0;
+    
+  result = XSendEvent (gdk_get_default_display (), window, propagate, 
+		       event_mask, event_send);
+  XSync (event_send->xany.display, False);
+  gdk_error_warnings = old_warnings;
+  
+  return result && !gdk_error_code;
+}
+#endif
+gint 
+gdk_send_xevent_for_display (GdkDisplay *display,
+			     Window window, 
+			     gboolean propagate, 
+			     glong event_mask,
+			     XEvent *event_send)
 {
   Status result;
   gint old_warnings = gdk_error_warnings;
@@ -795,8 +840,9 @@ gdk_send_xevent (Window window, gboolean propagate, glong event_mask,
   gdk_error_code = 0;
   
   gdk_error_warnings = 0;
-  result = XSendEvent (event_send->xany.display, window, propagate, event_mask, event_send);
-  XSync (event_send->xany.display, False);
+  result = XSendEvent (GDK_DISPLAY_XDISPLAY (display), window, 
+		       propagate, event_mask, event_send);
+  XSync (GDK_DISPLAY_XDISPLAY (display), False);
   gdk_error_warnings = old_warnings;
   
   return result && !gdk_error_code;
@@ -825,20 +871,23 @@ _gdk_region_get_xrectangles (GdkRegion   *region,
   *n_rects = region->numRects;
 }
 
+#ifndef GDK_MULTIHEAD_SAFE
 void
 gdk_x11_grab_server ()
 { 
-  GdkDisplayImplX11 *display_impl = gdk_get_default_display;
+  GdkDisplayImplX11 *display_impl = gdk_get_default_display ();
   
   if (display_impl->grab_count == 0)
     XGrabServer (display_impl->xdisplay);
   ++display_impl->grab_count;
 }
+#endif
 
+#ifndef GDK_MULTIHEAD_SAFE
 void
 gdk_x11_ungrab_server ()
 {
-  GdkDisplayImplX11 *display_impl = gdk_get_default_display;
+  GdkDisplayImplX11 *display_impl = gdk_get_default_display ();
   
   g_return_if_fail (display_impl->grab_count > 0);
   
@@ -846,3 +895,4 @@ gdk_x11_ungrab_server ()
   if (display_impl->grab_count == 0)
     XUngrabServer (display_impl->xdisplay);
 }
+#endif

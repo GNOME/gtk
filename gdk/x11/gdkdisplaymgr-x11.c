@@ -61,6 +61,7 @@ gdk_display_manager_open_display (GdkDisplayManager *display_mgr,
 				  gchar             *display_name)
 {
   GdkDisplay *display;
+  g_return_val_if_fail (GDK_IS_DISPLAY_MANAGER (display_mgr), NULL);
   display= _gdk_x11_display_impl_display_new (display_name);
   if (!display)
     return NULL;
@@ -77,12 +78,15 @@ static void
 gdk_display_manager_set_default_display (GdkDisplayManager * display_mgr,
 					 GdkDisplay * default_display)
 {
+  g_return_if_fail (GDK_IS_DISPLAY_MANAGER (display_mgr));
+  g_return_if_fail (GDK_IS_DISPLAY (default_display));
   display_mgr->default_display = default_display;
 }
 
 GdkDisplay *
 gdk_display_manager_get_default_display (GdkDisplayManager * display_mgr)
 {
+  g_return_val_if_fail (GDK_IS_DISPLAY_MANAGER (display_mgr), NULL);
   g_assert (display_mgr->default_display != NULL);
   return display_mgr->default_display;
 }
@@ -91,7 +95,10 @@ gint
 gdk_display_manager_get_display_count (GdkDisplayManager * display_mgr)
 {
   gint i = 0;
-  GSList *tmp = display_mgr->open_displays;
+  GSList *tmp;
+  g_return_val_if_fail (GDK_IS_DISPLAY_MANAGER (display_mgr), 0);
+  
+  tmp = display_mgr->open_displays;
 
   while (tmp != NULL)
     {
@@ -107,9 +114,14 @@ gdk_x11_display_manager_get_screen_for_root (GdkDisplayManager * display_mgr,
 {
   GdkDisplayImplX11 *tmp_display;
   GdkScreenImplX11 *tmp_screen;
-  GSList *tmp_display_list = display_mgr->open_displays;
+  GSList *tmp_display_list;
   GSList *tmp_screen_list;
+
+  g_return_val_if_fail (GDK_IS_DISPLAY_MANAGER (display_mgr), NULL);
+  
+  tmp_display_list = display_mgr->open_displays;
   g_assert (tmp_display_list != NULL);
+  
   while (tmp_display_list != NULL)
     {
       tmp_display= (GdkDisplayImplX11 *) tmp_display_list->data;
@@ -132,7 +144,11 @@ gdk_x11_display_manager_get_display (GdkDisplayManager * display_mgr,
 				     Display * display)
 {
   GdkDisplayImplX11 *tmp_display;
-  GSList *tmp_display_list = display_mgr->open_displays;
+  GSList *tmp_display_list; 
+  
+  g_return_val_if_fail (GDK_IS_DISPLAY_MANAGER (display_mgr), NULL);
+
+  tmp_display_list = display_mgr->open_displays;
   g_assert (tmp_display_list != NULL);
   while (tmp_display_list != NULL)
     {

@@ -34,10 +34,7 @@ main (int argc, char *argv[])
     g_print ("Set property didn't work\n");
   else
     g_print ("Set property worked\n");
-     
-  
-      
-	  
+
 /*  gtk_widget_show (window);
 
   gtk_main ();*/

@@ -587,7 +587,7 @@ gdk_window_new (GdkWindow     *parent,
   
   wm_hints.flags = StateHint | WindowGroupHint;
   wm_hints.window_group =
-    GDK_SCREEN_IMPL_X11 (GDK_WINDOW_SCREEN (window))->leader_window;
+    GDK_DISPLAY_IMPL_X11 (GDK_WINDOW_DISPLAY (window))->leader_window;
   wm_hints.input = True;
   wm_hints.initial_state = NormalState;
   
@@ -604,10 +604,12 @@ gdk_window_new (GdkWindow     *parent,
       gdk_x11_get_real_atom_by_name (screen_impl->display, "WM_CLIENT_LEADER");
 
 
-  XChangeProperty (xdisplay, xid,
-		   GDK_DISPLAY_IMPL_X11 (GDK_SCREEN_IMPL_X11 (GDK_WINDOW_SCREEN (window))->display)->wm_client_leader_atom,
+  XChangeProperty (xdisplay, 
+		   xid, 
+		   GDK_DISPLAY_IMPL_X11 (GDK_WINDOW_DISPLAY (window))->wm_client_leader_atom,
 		   XA_WINDOW, 32, PropModeReplace,
-		   (guchar *) &screen_impl->leader_window, 1);
+		   (guchar *) &GDK_DISPLAY_IMPL_X11 (GDK_WINDOW_DISPLAY (window))->leader_window,
+		   1);
   
   if (attributes_mask & GDK_WA_TITLE)
     title = attributes->title;
@@ -3498,6 +3500,7 @@ gdk_window_xid_at_coords_for_screen (gint       x,
   unsigned int num;
   int i;
 
+  g_return_val_if_fail (GDK_IS_SCREEN (screen), 0);
   window = GDK_SCREEN_IMPL_X11 (screen)->root_window;
   xdisplay = GDK_WINDOW_XDISPLAY (window);
   root = GDK_WINDOW_XID (window);
@@ -4043,6 +4046,9 @@ gdk_window_set_screen (GdkWindow *window,
 {
   GdkWindowObject *private;
   GdkDrawableImplX11 *draw_impl;
+  g_return_if_fail (GDK_IS_WINDOW (window));
+  g_return_if_fail (GDK_IS_SCREEN (screen));
+
   private = (GdkWindowObject *) window;
   draw_impl = GDK_DRAWABLE_IMPL_X11 (private->impl);
   draw_impl->screen = screen;

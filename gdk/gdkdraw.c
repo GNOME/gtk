@@ -27,6 +27,7 @@
 #include "gdkdrawable.h"
 #include "gdkinternals.h"
 #include "gdkwindow.h"
+#include "gdkscreen.h"
 
 static GdkDrawable* gdk_drawable_real_get_composite_drawable (GdkDrawable *drawable,
 							      gint         x,

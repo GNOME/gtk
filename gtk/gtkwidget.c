@@ -2509,7 +2509,7 @@ gtk_widget_real_mnemonic_activate (GtkWidget *widget,
     {
       g_warning ("widget `%s' isn't suitable for mnemonic activation",
 		 G_OBJECT_TYPE_NAME (widget));
-      gdk_beep ();
+      gdk_display_beep (gtk_widget_get_display (widget));
     }
   return TRUE;
 }

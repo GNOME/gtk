@@ -32,6 +32,7 @@ PangoContext *
 gdk_pango_context_get_for_screen (GdkScreen *screen)
 {
   PangoContext *context;
+  g_return_val_if_fail (GDK_IS_SCREEN (screen), NULL);
   
 #ifdef HAVE_XFT
   static gint use_xft = -1;
@@ -53,9 +54,10 @@ gdk_pango_context_get_for_screen (GdkScreen *screen)
   
   return context;
 }
-
+#ifndef GDK_MULTIHEAD_SAFE
 PangoContext *
 gdk_pango_context_get (void)
 {
   return gdk_pango_context_get_for_screen (gdk_get_default_screen ());
 }
+#endif

@@ -3540,7 +3540,7 @@ gdk_rgb_colormap_ditherable (GdkColormap *cmap)
 
   return (image_info->conv != image_info->conv_d);
 }
-
+#ifndef GDK_MULTIHEAD_SAFE
 gboolean
 gdk_rgb_ditherable (void)
 {
@@ -3548,6 +3548,7 @@ gdk_rgb_ditherable (void)
 	    "use gdk_rgb_colormap_ditherable\n");
   return gdk_rgb_colormap_ditherable (gdk_rgb_get_colormap ());
 }
+#endif
 
 /**
  * gdk_rgb_get_colormap:
@@ -3560,6 +3561,7 @@ gdk_rgb_ditherable (void)
  * 
  * Return value: the preferred colormap
  **/
+#ifndef GDK_MULTIHEAD_SAFE
 GdkColormap *
 gdk_rgb_get_colormap (void)
 {
@@ -3574,6 +3576,7 @@ gdk_rgb_get_colormap (void)
 
   return cmap;
 }
+#endif
 
 GdkColormap *
 gdk_rgb_get_colormap_for_screen (GdkScreen *screen)
@@ -3594,12 +3597,14 @@ gdk_rgb_get_colormap_for_screen (GdkScreen *screen)
 GdkVisual *
 gdk_rgb_get_visual_for_screen (GdkScreen *screen)
 {
+  g_return_val_if_fail (GDK_IS_SCREEN (screen), NULL);
   return gdk_colormap_get_visual (gdk_rgb_get_colormap_for_screen (screen));
 }
-
+#ifndef GDK_MULTIHEAD_SAFE
 GdkVisual *
 gdk_rgb_get_visual (void)
 {
   GDK_NOTE (MULTIHEAD,g_message ("Use gdk_rgb_get_visual_for_screen instead\n"));
   return gdk_rgb_get_visual_for_screen (gdk_get_default_screen ());
 }
+#endif

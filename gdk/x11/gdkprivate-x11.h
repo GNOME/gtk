@@ -39,10 +39,17 @@
 void          gdk_xid_table_insert     (XID             *xid,
 					gpointer         data);
 void          gdk_xid_table_remove     (XID              xid);
+#ifndef GDK_MULTIHEAD_SAFE
 gint          gdk_send_xevent          (Window           window,
 					gboolean         propagate,
 					glong            event_mask,
 					XEvent          *event_send);
+#endif
+gint  gdk_send_xevent_for_display      (GdkDisplay	*display,
+					Window		 window, 
+					gboolean	 propagate, 
+					glong		 event_mask,
+					XEvent		*event_send);
 
 GdkGC *_gdk_x11_gc_new                  (GdkDrawable     *drawable,
 					 GdkGCValues     *values,

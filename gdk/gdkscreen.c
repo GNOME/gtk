@@ -22,6 +22,7 @@
  */
 
 #include "gdkscreen.h"
+#include "gdkcolor.h"
 
 static void gdk_screen_class_init (GObjectClass * class);
 
@@ -61,30 +62,36 @@ gdk_screen_class_init (GObjectClass * class)
 GdkColormap *
 gdk_screen_get_default_colormap (GdkScreen * screen)
 {
+  g_return_val_if_fail (GDK_IS_SCREEN (screen), NULL);
   return GDK_SCREEN_GET_CLASS (screen)->get_default_colormap (screen);
 }
 
 void
 gdk_screen_set_default_colormap (GdkScreen * screen, GdkColormap * colormap)
 {
+  g_return_if_fail (GDK_IS_SCREEN (screen));
+  g_return_if_fail (GDK_IS_COLORMAP (colormap));
   GDK_SCREEN_GET_CLASS (screen)->set_default_colormap (screen, colormap);
 }
 
 GdkWindow *
 gdk_screen_get_root_window (GdkScreen * screen)
 {
+  g_return_val_if_fail (GDK_IS_SCREEN (screen), NULL);
   return GDK_SCREEN_GET_CLASS (screen)->get_root_window (screen);
 }
 
 GdkDisplay *
 gdk_screen_get_display (GdkScreen * screen)
 {
+  g_return_val_if_fail (GDK_IS_SCREEN (screen), NULL);
   return GDK_SCREEN_GET_CLASS (screen)->get_display (screen);
 }
 
 gint
 gdk_screen_get_number (GdkScreen * screen)
 {
+  g_return_val_if_fail (GDK_IS_SCREEN (screen), 0);
   return GDK_SCREEN_GET_CLASS (screen)->get_screen_num (screen);
 }
 
@@ -92,6 +99,7 @@ GdkWindow *
 gdk_screen_get_window_at_pointer (GdkScreen * screen,
 				  gint * win_x, gint * win_y)
 {
+  g_return_val_if_fail (GDK_IS_SCREEN (screen), NULL);
   return GDK_SCREEN_GET_CLASS (screen)->get_window_at_pointer (screen,
 							       win_x, win_y);
 }
@@ -99,12 +107,14 @@ gdk_screen_get_window_at_pointer (GdkScreen * screen,
 gint
 gdk_screen_get_width (GdkScreen * screen)
 {
+  g_return_val_if_fail (GDK_IS_SCREEN (screen), 0);
   return GDK_SCREEN_GET_CLASS (screen)->get_width (screen);
 }
 
 gint
 gdk_screen_get_height (GdkScreen * screen)
 {
+  g_return_val_if_fail (GDK_IS_SCREEN (screen), 0);
   return GDK_SCREEN_GET_CLASS (screen)->get_height (screen);
 }
 
@@ -112,11 +122,13 @@ gdk_screen_get_height (GdkScreen * screen)
 gint
 gdk_screen_get_width_mm (GdkScreen * screen)
 {
+  g_return_val_if_fail (GDK_IS_SCREEN (screen), 0);
   return GDK_SCREEN_GET_CLASS (screen)->get_width_mm (screen);
 }
 
 gint
 gdk_screen_get_height_mm (GdkScreen * screen)
 {
+  g_return_val_if_fail (GDK_IS_SCREEN (screen), 0);
   return GDK_SCREEN_GET_CLASS (screen)->get_height_mm (screen);
 }

@@ -4247,7 +4247,7 @@ set_cursor (GtkWidget *spinner,
   else
     gtk_label_set_text (GTK_LABEL (label), "<unknown>");
 
-  cursor = gdk_cursor_new (c);
+  cursor = gdk_cursor_new_for_screen (gtk_widget_get_screen (widget), c);
   gdk_window_set_cursor (widget->window, cursor);
   gdk_cursor_unref (cursor);
 }
@@ -7670,7 +7670,8 @@ static void
 shape_released (GtkWidget *widget)
 {
   gtk_grab_remove (widget);
-  gdk_pointer_ungrab (0);
+  gdk_display_pointer_ungrab (gtk_widget_get_display (widget),
+			      GDK_CURRENT_TIME);
 }
 
 static void
@@ -8328,24 +8329,25 @@ get_screen_corner (GtkWindow *window,
                    gint      *y)
 {
   int w, h;
+  GdkScreen * screen = gtk_window_get_screen (window);
   
   gtk_window_get_size (GTK_WINDOW (window), &w, &h);
 
   switch (gtk_window_get_gravity (window))
     {
     case GDK_GRAVITY_SOUTH_EAST:
-      *x = gdk_screen_width () - w;
-      *y = gdk_screen_height () - h;
+      *x = gdk_screen_get_width (screen) - w;
+      *y = gdk_screen_get_height (screen) - h;
       break;
 
     case GDK_GRAVITY_NORTH_EAST:
-      *x = gdk_screen_width () - w;
+      *x = gdk_screen_get_width (screen) - w;
       *y = 0;
       break;
 
     case GDK_GRAVITY_SOUTH_WEST:
       *x = 0;
-      *y = gdk_screen_height () - h;
+      *y = gdk_screen_get_height (screen) - h;
       break;
 
     case GDK_GRAVITY_NORTH_WEST:
@@ -8354,28 +8356,28 @@ get_screen_corner (GtkWindow *window,
       break;
       
     case GDK_GRAVITY_SOUTH:
-      *x = (gdk_screen_width () - w) / 2;
-      *y = gdk_screen_height () - h;
+      *x = (gdk_screen_get_width (screen) - w) / 2;
+      *y = gdk_screen_get_height (screen) - h;
       break;
 
     case GDK_GRAVITY_NORTH:
-      *x = (gdk_screen_width () - w) / 2;
+      *x = (gdk_screen_get_width (screen) - w) / 2;
       *y = 0;
       break;
 
     case GDK_GRAVITY_WEST:
       *x = 0;
-      *y = (gdk_screen_height () - h) / 2;
+      *y = (gdk_screen_get_height (screen) - h) / 2;
       break;
 
     case GDK_GRAVITY_EAST:
-      *x = gdk_screen_width () - w;
-      *y = (gdk_screen_height () - h) / 2;
+      *x = gdk_screen_get_width (screen) - w;
+      *y = (gdk_screen_get_height (screen) - h) / 2;
       break;
 
     case GDK_GRAVITY_CENTER:
-      *x = (gdk_screen_width () - w) / 2;
-      *y = (gdk_screen_height () - h) / 2;
+      *x = (gdk_screen_get_width (screen) - w) / 2;
+      *y = (gdk_screen_get_height (screen) - h) / 2;
       break;
 
     case GDK_GRAVITY_STATIC:
@@ -9397,7 +9399,8 @@ property_query_event (GtkWidget	       *widget,
   if (event->type == GDK_BUTTON_RELEASE)
     {
       gtk_grab_remove (widget);
-      gdk_pointer_ungrab (GDK_CURRENT_TIME);
+      gdk_display_pointer_ungrab (gtk_widget_get_display (widget),
+				  GDK_CURRENT_TIME);
       
       res_widget = find_widget_at_pointer ();
       if (res_widget)
@@ -9420,7 +9423,7 @@ query_properties (GtkButton *button,
 
 
   if (!data->cursor)
-    data->cursor = gdk_cursor_new (GDK_TARGET);
+    data->cursor = gdk_cursor_new_for_screen (gtk_widget_get_screen (GTK_WIDGET (button)), GDK_TARGET);
   
   failure = gdk_pointer_grab (GTK_WIDGET (button)->window,
 			      TRUE,
@@ -9534,7 +9537,7 @@ create_color_preview (void)
 
   if (!window)
     {
-      gtk_widget_push_colormap (gdk_rgb_get_cmap ());
+      gtk_widget_push_colormap (gdk_rgb_get_colormap_for_screen (gdk_get_default_screen ()));
       window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
       gtk_widget_pop_colormap ();
 

@@ -54,7 +54,6 @@ struct _GdkScreenImplX11
   Screen *xscreen;
   gint screen_num;
   Window xroot_window;
-  Window leader_window;
   GdkWindow *root_window;
   Window wmspec_check_window;
   /* Visual Part */

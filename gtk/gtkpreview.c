@@ -125,8 +125,8 @@ gtk_preview_class_init (GtkPreviewClass *klass)
   klass->info.gamma = 1.0;
 
   gdk_rgb_init ();
-  klass->info.cmap = gdk_rgb_get_cmap ();
-  klass->info.visual = gdk_rgb_get_visual ();
+  klass->info.cmap = gdk_rgb_get_colormap_for_screen (gdk_get_default_screen ()); 
+  klass->info.visual = gdk_rgb_get_visual_for_screen (gdk_get_default_screen ()); 
 
   g_object_class_install_property (gobject_class,
                                    PROP_EXPAND,

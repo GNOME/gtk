@@ -35,11 +35,14 @@
 #include <gdk/gdkinternals.h>
 
 GdkCursor*
-gdk_cursor_new_for_screen (GdkScreen * screen, GdkCursorType cursor_type)
+gdk_cursor_new_for_screen (GdkScreen* screen,
+			   GdkCursorType cursor_type)
 {
   GdkCursorPrivate *private;
   GdkCursor *cursor;
   Cursor xcursor;
+
+  g_return_val_if_fail (GDK_IS_SCREEN (screen), NULL);
 
   xcursor = XCreateFontCursor (GDK_SCREEN_XDISPLAY (screen), cursor_type);
   private = g_new (GdkCursorPrivate, 1);
@@ -51,13 +54,14 @@ gdk_cursor_new_for_screen (GdkScreen * screen, GdkCursorType cursor_type)
   
   return cursor;
 }
-
+#ifndef GDK_MULTIHEAD_SAFE
 GdkCursor*
 gdk_cursor_new (GdkCursorType cursor_type)
 {
   GDK_NOTE (MULTIHEAD,g_message ("Use gdk_cursor_new_for_screen instead\n"));
   return gdk_cursor_new_for_screen (gdk_get_default_screen(), cursor_type);
 }
+#endif
 
 GdkCursor*
 gdk_cursor_new_from_pixmap (GdkPixmap *source,

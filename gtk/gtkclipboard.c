@@ -109,6 +109,8 @@ gtk_clipboard_get_for_display (GdkDisplay *display, GdkAtom selection)
   GtkClipboard *clipboard = NULL;
   GSList *tmp_list;
 
+  g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
+
   if (selection == GDK_NONE)
     selection = gdk_atom_intern ("CLIPBOARD", FALSE);
 
@@ -865,6 +867,8 @@ gtk_clipboard_wait_for_text (GtkClipboard *clipboard)
 GdkDisplay *
 gtk_clipboard_get_display (GtkClipboard *clipboard)
 {
-    return clipboard->display;
+  g_return_val_if_fail (clipboard != NULL, NULL);
+
+  return clipboard->display;
 }
 

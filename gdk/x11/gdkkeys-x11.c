@@ -167,8 +167,10 @@ get_xkb (GdkKeymapX11 *keymap_x11)
 GdkKeymap*
 gdk_keymap_get_for_display (GdkDisplay *display)
 {
-  GdkDisplayImplX11 *display_impl = GDK_DISPLAY_IMPL_X11 (display);
-
+  GdkDisplayImplX11 *display_impl;
+  g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
+  display_impl = GDK_DISPLAY_IMPL_X11 (display);
+  
   if (!display_impl->keymap)
     display_impl->keymap = g_object_new (gdk_keymap_x11_get_type (), NULL);
 
@@ -176,12 +178,13 @@ gdk_keymap_get_for_display (GdkDisplay *display)
 
   return display_impl->keymap;
 }
-
+#ifndef GDK_MULTIHEAD_SAFE
 GdkKeymap*
 gdk_keymap_get_default (void)
 {
   return gdk_keymap_get_for_display (gdk_get_default_display ());
 }
+#endif
 
 static void
 update_keymaps (GdkKeymapX11 *keymap_x11)
@@ -297,7 +300,9 @@ get_direction (GdkKeymapX11 *keymap_x11)
 void
 _gdk_keymap_state_changed (GdkDisplay *display)
 {
-  GdkDisplayImplX11 *display_impl= GDK_DISPLAY_IMPL_X11 (display);
+  GdkDisplayImplX11 *display_impl;
+  g_return_if_fail (GDK_IS_DISPLAY (display));
+  display_impl = GDK_DISPLAY_IMPL_X11 (display);
   
   if (display_impl->keymap)
     {
@@ -319,7 +324,11 @@ PangoDirection
 gdk_keymap_get_direction (GdkKeymap *keymap)
 {
   if (!keymap)
-    keymap = gdk_keymap_get_default ();
+    {
+      keymap = gdk_keymap_get_for_display (gdk_get_default_display ());
+      g_warning ("multihead : reverting to default display keymap"
+		 "in gdk_keymap_get_direction\n");
+    }
   
 #if HAVE_XKB
   if (KEYMAP_USE_XKB (keymap))
@@ -375,7 +384,11 @@ gdk_keymap_get_entries_for_keyval (GdkKeymap     *keymap,
   g_return_val_if_fail (keyval != 0, FALSE);
 
   if (!keymap)
-    keymap = gdk_keymap_get_default ();
+    {
+      keymap = gdk_keymap_get_for_display (gdk_get_default_display ());
+      g_warning ("multihead : reverting to default display keymap"
+		 "in gdk_keymap_get_entries_for_keyval\n");
+    }
 
   keymap_x11 = GDK_KEYMAP_X11 (keymap);
   
@@ -523,7 +536,11 @@ gdk_keymap_get_entries_for_keycode (GdkKeymap     *keymap,
   g_return_val_if_fail (n_entries != NULL, FALSE);
 
   if (!keymap)
-    keymap = gdk_keymap_get_default ();
+    {
+      keymap = gdk_keymap_get_for_display (gdk_get_default_display ());
+      g_warning ("multihead : reverting to default display keymap"
+		 "in gdk_keymap_get_entries_for_keycode\n");
+    }
 
   keymap_x11 = GDK_KEYMAP_X11 (keymap);
 
@@ -692,7 +709,11 @@ gdk_keymap_lookup_key (GdkKeymap          *keymap,
   g_return_val_if_fail (key->group < 4, 0);
   
   if (!keymap)
-    keymap = gdk_keymap_get_default ();
+    {
+      keymap = gdk_keymap_get_for_display (gdk_get_default_display ());
+      g_warning ("multihead : reverting to default display keymap"
+		 "in gdk_keymap_lookup_key\n");
+    }
 
   keymap_x11 = GDK_KEYMAP_X11 (keymap);
   
@@ -864,7 +885,11 @@ gdk_keymap_translate_keyboard_state (GdkKeymap       *keymap,
   g_return_val_if_fail (group < 4, FALSE);
   
   if (!keymap)
-    keymap = gdk_keymap_get_default ();
+    {
+      keymap = gdk_keymap_get_for_display (gdk_get_default_display ());
+      g_warning ("multihead : reverting to default display keymap"
+		 "in gdk_keymap_translate_keyboard_state\n");
+    }
 
   keymap_x11 = GDK_KEYMAP_X11 (keymap);
 

@@ -24,8 +24,6 @@
 #include "gdkinternals.h"
 #include "gdkdisplaymgr.h"
 
-static void gdk_display_manager_class_init (GObjectClass * class);
-
 GdkDisplay *
 gdk_get_default_display (void)
 {
@@ -35,7 +33,7 @@ gdk_get_default_display (void)
 GdkScreen *
 gdk_get_default_screen (void)
 {
-  GdkDisplay *display= gdk_get_default_display ();
+  GdkDisplay *display = gdk_get_default_display ();
   return gdk_display_get_default_screen (display);
 }
 

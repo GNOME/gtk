@@ -1814,18 +1814,17 @@ gdk_event_dispatch (GSource    *source,
 
   return TRUE;
 }
-
-/* Sends a ClientMessage to all toplevel client windows */
+#ifndef GDK_MULTIHEAD_SAFE
 gboolean
 gdk_event_send_client_message (GdkEvent *event, guint32 xid)
 {
   XEvent sev;
   
   g_return_val_if_fail(event != NULL, FALSE);
-  
+
   /* Set up our event to send, with the exception of its target window */
   sev.xclient.type = ClientMessage;
-  sev.xclient.display = GDK_WINDOW_XDISPLAY (event->any.window);
+  sev.xclient.display = GDK_DISPLAY_XDISPLAY (gdk_get_default_display ());
   sev.xclient.format = event->client.data_format;
   sev.xclient.window = xid;
   memcpy(&sev.xclient.data, &event->client.data, sizeof (sev.xclient.data));
@@ -1834,6 +1833,30 @@ gdk_event_send_client_message (GdkEvent *event, guint32 xid)
   
   return gdk_send_xevent (xid, False, NoEventMask, &sev);
 }
+#endif
+
+gboolean
+gdk_event_send_client_message_for_display (GdkDisplay *display,
+					   GdkEvent *event,
+					   guint32 xid)
+{
+  XEvent sev;
+  
+  g_return_val_if_fail(event != NULL, FALSE);
+
+  /* Set up our event to send, with the exception of its target window */
+  sev.xclient.type = ClientMessage;
+  sev.xclient.display = GDK_DISPLAY_XDISPLAY (display);
+  sev.xclient.format = event->client.data_format;
+  sev.xclient.window = xid;
+  memcpy(&sev.xclient.data, &event->client.data, sizeof (sev.xclient.data));
+  sev.xclient.message_type = gdk_x11_get_real_atom (GDK_WINDOW_DISPLAY (event->any.window),
+						    event->client.message_type);
+  
+  return gdk_send_xevent_for_display (display, xid, False, NoEventMask, &sev);
+}
+
+
 
 /* Sends a ClientMessage to all toplevel client windows */
 gboolean
@@ -1894,8 +1917,7 @@ gdk_event_send_client_message_to_all_recurse (XEvent  *xev,
   if (send || (!found && (level == 1)))
     {
       xev->xclient.window = xid;
-      xev->xclient.display = GDK_DISPLAY_XDISPLAY (display);
-      gdk_send_xevent (xid, False, NoEventMask, xev);
+      gdk_send_xevent_for_display (display, xid, False, NoEventMask, xev);
     }
 
   gdk_error_warnings = old_warnings;
@@ -2021,8 +2043,12 @@ gdk_net_wm_supports_for_screen (GdkScreen *screen,
   gulong bytes_after;
   Window *xwindow;
   gulong i;
-  GdkScreenImplX11 *screen_impl = GDK_SCREEN_IMPL_X11 (screen);
-  GdkDisplayImplX11 *display_impl = GDK_DISPLAY_IMPL_X11 (screen_impl->display);
+  GdkScreenImplX11 *screen_impl;
+  GdkDisplayImplX11 *display_impl;
+
+  g_return_val_if_fail (GDK_IS_SCREEN (screen), FALSE);
+  screen_impl = GDK_SCREEN_IMPL_X11 (screen);
+  display_impl = GDK_DISPLAY_IMPL_X11 (screen_impl->display);
 
   if (screen_impl->wmspec_check_window != None)
     {

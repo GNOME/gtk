@@ -70,23 +70,27 @@ gdk_display_new (gchar * display_name)
 gchar *
 gdk_display_get_name (GdkDisplay * display)
 {
+  g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
   return GDK_DISPLAY_GET_CLASS (display)->get_display_name (display);
 }
 
 gint
 gdk_display_get_n_screens (GdkDisplay * display)
 {
+  g_return_val_if_fail (GDK_IS_DISPLAY (display), 0);
   return GDK_DISPLAY_GET_CLASS (display)->get_n_screens (display);
 }
 
 GdkScreen *
 gdk_display_get_screen (GdkDisplay * display, gint screen_num)
 {
+  g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
   return GDK_DISPLAY_GET_CLASS (display)->get_screen (display, screen_num);
 }
 
 GdkScreen *
 gdk_display_get_default_screen (GdkDisplay * display)
 {
+  g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
   return GDK_DISPLAY_GET_CLASS (display)->get_default_screen (display);
 }

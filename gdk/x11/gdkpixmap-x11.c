@@ -313,7 +313,8 @@ gdk_pixmap_foreign_new_for_screen (GdkScreen       *screen,
 
   /* check to make sure we were passed something at
      least a little sane */
-  g_return_val_if_fail((anid != 0), NULL);
+  g_return_val_if_fail ((anid != 0), NULL);
+  g_return_val_if_fail (GDK_IS_SCREEN (screen), NULL);
   
   screen_impl = GDK_SCREEN_IMPL_X11 (screen);
 
