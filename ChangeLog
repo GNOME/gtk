@@ -1,3 +1,8 @@
+Fri Sep 27 17:23:31 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkcolorsel.c: Fix some signed/unsigned warnings.
+	(#85863, David L. Cooper II)
+
 Fri Sep 27 16:23:49 2002  Owen Taylor  <otaylor@redhat.com>
 	 
  	* gtk/gtklabel.c : Replaced instances where strlen (label->label) is
