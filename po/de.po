@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.1.9\n"
-"POT-Creation-Date: 1999-08-30 19:05+0200\n"
+"POT-Creation-Date: 1999-08-30 19:25+0200\n"
 "PO-Revision-Date: 1999-08-24 17:38+02:00\n"
 "Last-Translator: Karsten Weiss <karsten@addx.au.s.shuttle.de>\n"
 "Language-Team: German <de@li.org>\n"
@@ -267,7 +267,15 @@ msgstr "Skalierbar"
 msgid "Scaled Bitmap"
 msgstr "Skalierte Bitmap"
 
+#: gtk/gtkfontsel.c:890
+msgid "*"
+msgstr "*"
+
 #. Convert '(nil)' weights to 'regular', since it looks nicer.
+#: gtk/gtkfontsel.c:1215
+msgid "(nil)"
+msgstr "(nil)"
+
 #: gtk/gtkfontsel.c:1215
 msgid "regular"
 msgstr "regulär"
@@ -458,35 +466,29 @@ msgstr "Kann ladbares Modul in Module-Pfad: \"%s\" nicht finden,"
 msgid "--- No Tip ---"
 msgstr "--- Kein Tip ---"
 
-#~ msgid "*"
-#~ msgstr "*"
-
-#~ msgid "(nil)"
-#~ msgstr "(nil)"
-
-#~ msgid "heavy"
-#~ msgstr "stark"
-
-#~ msgid "extrabold"
-#~ msgstr "extra fett"
-
-#~ msgid "bold"
-#~ msgstr "fett"
-
-#~ msgid "demibold"
-#~ msgstr "halb fett"
-
-#~ msgid "medium"
-#~ msgstr "mittel"
-
-#~ msgid "normal"
-#~ msgstr "normal"
-
-#~ msgid "light"
-#~ msgstr "licht"
+#~ msgid "thin"
+#~ msgstr "dünn"
 
 #~ msgid "extralight"
 #~ msgstr "extra licht"
 
-#~ msgid "thin"
-#~ msgstr "dünn"
+#~ msgid "light"
+#~ msgstr "licht"
+
+#~ msgid "normal"
+#~ msgstr "normal"
+
+#~ msgid "medium"
+#~ msgstr "mittel"
+
+#~ msgid "demibold"
+#~ msgstr "halb fett"
+
+#~ msgid "bold"
+#~ msgstr "fett"
+
+#~ msgid "extrabold"
+#~ msgstr "extra fett"
+
+#~ msgid "heavy"
+#~ msgstr "stark"

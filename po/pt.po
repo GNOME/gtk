@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.1.12\n"
-"POT-Creation-Date: 1999-08-30 19:05+0200\n"
+"POT-Creation-Date: 1999-08-30 19:25+0200\n"
 "PO-Revision-Date: 1999-02-17 01:20+00:00\n"
 "Last-Translator: Nuno Ferreira <nmrf@rnl.ist.utl.pt>\n"
 "Language-Team: Portuguese <pt@li.org>\n"
@@ -266,7 +266,15 @@ msgstr "Escalável"
 msgid "Scaled Bitmap"
 msgstr "Bitmap Escalado"
 
+#: gtk/gtkfontsel.c:890
+msgid "*"
+msgstr "*"
+
 #. Convert '(nil)' weights to 'regular', since it looks nicer.
+#: gtk/gtkfontsel.c:1215
+msgid "(nil)"
+msgstr ""
+
 #: gtk/gtkfontsel.c:1215
 msgid "regular"
 msgstr "regular"

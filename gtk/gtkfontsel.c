@@ -887,11 +887,11 @@ gtk_font_selection_init(GtkFontSelection *fontsel)
       /* Insert the property names, expanded, and in sorted order.
 	 But we make sure that the wildcard '*' is first. */
       gtk_clist_freeze (GTK_CLIST(clist));
-      property = "*";
+      property = N_("*");
       gtk_clist_append(GTK_CLIST(clist), &property);
       
       for (i = 1; i < fontsel_info->nproperties[prop]; i++) {
-	property = fontsel_info->properties[prop][i];
+	property = _(fontsel_info->properties[prop][i]);
 	if (prop == SLANT)
 	  property = gtk_font_selection_expand_slant_code(property);
 	else if (prop == SPACING)
@@ -1212,42 +1212,42 @@ gtk_font_selection_show_available_styles (GtkFontSelection *fontsel)
 	  spacing   = fontsel_info->properties[SPACING]  [spacing_index];
 	  
 	  /* Convert '(nil)' weights to 'regular', since it looks nicer. */
-	  if      (!g_strcasecmp(weight, "(nil)"))	weight = _("regular");
+	  if      (!g_strcasecmp(weight, N_("(nil)")))	weight = N_("regular");
 	  
 	  /* We don't show default values or (nil) in the other properties. */
 	  if      (!g_strcasecmp(slant, "r"))        slant = NULL;
 	  else if (!g_strcasecmp(slant, "(nil)"))    slant = NULL;
-	  else if (!g_strcasecmp(slant, "i"))        slant = _("italic");
-	  else if (!g_strcasecmp(slant, "o"))        slant = _("oblique");
-	  else if (!g_strcasecmp(slant, "ri"))       slant = _("reverse italic");
-	  else if (!g_strcasecmp(slant, "ro"))       slant = _("reverse oblique");
-	  else if (!g_strcasecmp(slant, "ot"))       slant = _("other");
+	  else if (!g_strcasecmp(slant, "i"))        slant = N_("italic");
+	  else if (!g_strcasecmp(slant, "o"))        slant = N_("oblique");
+	  else if (!g_strcasecmp(slant, "ri"))       slant = N_("reverse italic");
+	  else if (!g_strcasecmp(slant, "ro"))       slant = N_("reverse oblique");
+	  else if (!g_strcasecmp(slant, "ot"))       slant = N_("other");
 	  
 	  if      (!g_strcasecmp(set_width, "normal")) set_width = NULL;
 	  else if (!g_strcasecmp(set_width, "(nil)"))  set_width = NULL;
 	  
 	  if      (!g_strcasecmp(spacing, "p"))        spacing = NULL;
 	  else if (!g_strcasecmp(spacing, "(nil)"))    spacing = NULL;
-	  else if (!g_strcasecmp(spacing, "m"))        spacing = _("[M]");
-	  else if (!g_strcasecmp(spacing, "c"))        spacing = _("[C]");
+	  else if (!g_strcasecmp(spacing, "m"))        spacing = N_("[M]");
+	  else if (!g_strcasecmp(spacing, "c"))        spacing = N_("[C]");
 	  
 	  /* Add the strings together, making sure there is 1 space between
 	     them */
-	  strcpy(buffer, weight);
+	  strcpy(buffer, _(weight));
 	  if (slant)
 	    {
 	      strcat(buffer, " ");
-	      strcat(buffer, slant);
+	      strcat(buffer, _(slant));
 	    }
 	  if (set_width)
 	    {
 	      strcat(buffer, " ");
-	      strcat(buffer, set_width);
+	      strcat(buffer, _(set_width));
 	    }
 	  if (spacing)
 	    {
 	      strcat(buffer, " ");
-	      strcat(buffer, spacing);
+	      strcat(buffer, _(spacing));
 	    }
 	  
 	  new_item = buffer;
@@ -2445,7 +2445,7 @@ gtk_font_selection_set_filter	(GtkFontSelection *fontsel,
 	      filter_string = filter_strings[prop][i];
 	      for (j = 0; j < fontsel_info->nproperties[prop]; j++)
 		{
-		  property = fontsel_info->properties[prop][j];
+		  property = _(fontsel_info->properties[prop][j]);
 		  property_alt = NULL;
 		  if (prop == SLANT)
 		    property_alt = gtk_font_selection_expand_slant_code(property);

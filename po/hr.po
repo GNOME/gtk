@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.2.0\n"
-"POT-Creation-Date: 1999-08-30 19:05+0200\n"
+"POT-Creation-Date: 1999-08-30 19:25+0200\n"
 "PO-Revision-Date: 1999-02-28 02:00+0100\n"
 "Last-Translator: Tomislav Vujec <tvujec@carnet.hr>\n"
 "Language-Team: hr <LL@li.org>\n"
@@ -267,7 +267,15 @@ msgstr "Promjenjive velièine"
 msgid "Scaled Bitmap"
 msgstr "Bitna mapa promjenjene velièine"
 
+#: gtk/gtkfontsel.c:890
+msgid "*"
+msgstr "*"
+
 #. Convert '(nil)' weights to 'regular', since it looks nicer.
+#: gtk/gtkfontsel.c:1215
+msgid "(nil)"
+msgstr "(nil)"
+
 #: gtk/gtkfontsel.c:1215
 msgid "regular"
 msgstr ""
@@ -457,9 +465,3 @@ msgstr "Ne mogu pronaæi modul u module_path: \"%s\","
 #: gtk/gtktipsquery.c:180
 msgid "--- No Tip ---"
 msgstr "--- Nema savjeta ---"
-
-#~ msgid "*"
-#~ msgstr "*"
-
-#~ msgid "(nil)"
-#~ msgstr "(nil)"

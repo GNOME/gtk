@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ VERSION\n"
-"POT-Creation-Date: 1999-08-30 19:05+0200\n"
+"POT-Creation-Date: 1999-08-30 19:25+0200\n"
 "PO-Revision-Date: 1999-07-05 19:17+0200\n"
 "Last-Translator: Joseba Bidaurrazaga van Dierdonck <gcpbivaj@lg.ehu.es>\n"
 "Language-Team: euskare <linux-eu@chanae.alphanet.ch>\n"
@@ -266,7 +266,15 @@ msgstr "Eskalatzeko gai"
 msgid "Scaled Bitmap"
 msgstr "Eskalaratutako bitmap"
 
+#: gtk/gtkfontsel.c:890
+msgid "*"
+msgstr "*"
+
 #. Convert '(nil)' weights to 'regular', since it looks nicer.
+#: gtk/gtkfontsel.c:1215
+msgid "(nil)"
+msgstr "(nil)"
+
 #: gtk/gtkfontsel.c:1215
 msgid "regular"
 msgstr "arrunta"
@@ -457,35 +465,29 @@ msgstr "Modulua ezin aurkitu modulu_path-en: \"%s\","
 msgid "--- No Tip ---"
 msgstr "--- Erpinik ez ---"
 
-#~ msgid "thin"
-#~ msgstr "mehea"
-
-#~ msgid "extralight"
-#~ msgstr "extra argia"
-
-#~ msgid "light"
-#~ msgstr "argia"
-
-#~ msgid "normal"
-#~ msgstr "arrunta"
-
-#~ msgid "medium"
-#~ msgstr "ertaina"
-
-#~ msgid "demibold"
-#~ msgstr "erdi iluna"
-
-#~ msgid "bold"
-#~ msgstr "iluna"
+#~ msgid "heavy"
+#~ msgstr "astuna"
 
 #~ msgid "extrabold"
 #~ msgstr "extrailuna"
 
-#~ msgid "heavy"
-#~ msgstr "astuna"
+#~ msgid "bold"
+#~ msgstr "iluna"
 
-#~ msgid "(nil)"
-#~ msgstr "(nil)"
+#~ msgid "demibold"
+#~ msgstr "erdi iluna"
 
-#~ msgid "*"
-#~ msgstr "*"
+#~ msgid "medium"
+#~ msgstr "ertaina"
+
+#~ msgid "normal"
+#~ msgstr "arrunta"
+
+#~ msgid "light"
+#~ msgstr "argia"
+
+#~ msgid "extralight"
+#~ msgstr "extra argia"
+
+#~ msgid "thin"
+#~ msgstr "mehea"

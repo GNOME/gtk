@@ -1,3 +1,9 @@
+Mon Aug 30 19:00:00 1999 Pablo Saratxaga <srtxg@chanae.alphanet.ch>
+	* gtk/gtkfontsel.c: little i18n patch backported from gtk+ 1.3.0
+	( now all font properties showing in the font selector are 
+	translatable)
+	* po/*.po: get the corresponding stringsfrom gtk+ 1.3.0
+
 Sun Aug 29 13:38:59 BST 1999 Tony Gale <gale@gtk.org>
 
         * docs/gtkfaq.sgml: Minor FAQ Update

@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.1.9\n"
-"POT-Creation-Date: 1999-08-30 19:05+0200\n"
+"POT-Creation-Date: 1999-08-30 19:25+0200\n"
 "PO-Revision-Date: 1999-08-13 14:15+0100\n"
 "Last-Translator: Mikko Rauhala <lukka@iki.fi>\n"
 "Language-Team: Finnish <fi@li.org>\n"
@@ -268,7 +268,15 @@ msgstr "Skaalautuva"
 msgid "Scaled Bitmap"
 msgstr "Skaalattu bittikartta"
 
+#: gtk/gtkfontsel.c:890
+msgid "*"
+msgstr "*"
+
 #. Convert '(nil)' weights to 'regular', since it looks nicer.
+#: gtk/gtkfontsel.c:1215
+msgid "(nil)"
+msgstr "(nil)"
+
 #: gtk/gtkfontsel.c:1215
 msgid "regular"
 msgstr "tavallinen"
@@ -463,35 +471,29 @@ msgstr "Ladattavaa moduulia ei löytynyt module_path:sta:\"%s\","
 msgid "--- No Tip ---"
 msgstr "--- Ei vinkkiä ---"
 
-#~ msgid "thin"
-#~ msgstr "ohut"
-
-#~ msgid "extralight"
-#~ msgstr "erityisvaalea"
-
-#~ msgid "light"
-#~ msgstr "vaalea"
-
-#~ msgid "normal"
-#~ msgstr "normaali"
-
-#~ msgid "medium"
-#~ msgstr "tummahko"
-
-#~ msgid "demibold"
-#~ msgstr "osalihavoitu"
-
-#~ msgid "bold"
-#~ msgstr "lihavoitu"
+#~ msgid "heavy"
+#~ msgstr "raskas"
 
 #~ msgid "extrabold"
 #~ msgstr "erikoislihavoitu"
 
-#~ msgid "heavy"
-#~ msgstr "raskas"
+#~ msgid "bold"
+#~ msgstr "lihavoitu"
 
-#~ msgid "(nil)"
-#~ msgstr "(nil)"
+#~ msgid "demibold"
+#~ msgstr "osalihavoitu"
 
-#~ msgid "*"
-#~ msgstr "*"
+#~ msgid "medium"
+#~ msgstr "tummahko"
+
+#~ msgid "normal"
+#~ msgstr "normaali"
+
+#~ msgid "light"
+#~ msgstr "vaalea"
+
+#~ msgid "extralight"
+#~ msgstr "erityisvaalea"
+
+#~ msgid "thin"
+#~ msgstr "ohut"
