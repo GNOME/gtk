@@ -96,7 +96,7 @@ gtk_socket_class_init (GtkSocketClass *class)
   widget_class = (GtkWidgetClass*) class;
   container_class = (GtkContainerClass*) class;
 
-  parent_class = gtk_type_class (gtk_widget_get_type ());
+  parent_class = gtk_type_class (GTK_TYPE_CONTAINER);
 
   widget_class->realize = gtk_socket_realize;
   widget_class->unrealize = gtk_socket_unrealize;

@@ -1,3 +1,8 @@
+Sun Feb 13 08:02:21 2000  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtksocket.c (gtk_socket_class_init): parent class is GtkContainer,
+	not GtkWidget.
+
 Fri Feb 11 02:19:32 2000  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkhpaned.c (gtk_hpaned_size_allocate): 
