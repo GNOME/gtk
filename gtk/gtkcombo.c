@@ -426,11 +426,14 @@ gtk_combo_get_pos (GtkCombo * combo, gint * x, gint * y, gint * height, gint * w
   gint work_height;
   gint old_height;
   gint old_width;
+  gint scrollbar_spacing;
   
   widget = GTK_WIDGET (combo);
   popup  = GTK_SCROLLED_WINDOW (combo->popup);
   popwin = GTK_BIN (combo->popwin);
-  
+
+  scrollbar_spacing = _gtk_scrolled_window_get_scrollbar_spacing (popup);
+
   gdk_window_get_origin (combo->entry->window, x, y);
   real_height = MIN (combo->entry->requisition.height, 
 		     combo->entry->allocation.height);
@@ -454,7 +457,7 @@ gtk_combo_get_pos (GtkCombo * combo, gint * x, gint * y, gint * height, gint * w
 		 2 * GTK_CONTAINER (popwin->child)->border_width +
 		 2 * GTK_CONTAINER (combo->popup)->border_width +
 		 2 * GTK_CONTAINER (GTK_BIN (popup)->child)->border_width +
-		 2 * GTK_BIN (popup)->child->style->xthickness);
+		 2 * GTK_BIN (popup)->child->style->ythickness);
   
   do 
     {
@@ -464,21 +467,26 @@ gtk_combo_get_pos (GtkCombo * combo, gint * x, gint * y, gint * height, gint * w
       if (!show_hscroll &&
 	  alloc_width < list_requisition.width)
 	{
-	  work_height += (popup->hscrollbar->requisition.height +
-			  GTK_SCROLLED_WINDOW_GET_CLASS (combo->popup)->scrollbar_spacing);
+	  GtkRequisition requisition;
+	  
+	  gtk_widget_size_request (popup->hscrollbar, &requisition);
+	  work_height += (requisition.height + scrollbar_spacing);
+	  
 	  show_hscroll = TRUE;
 	}
       if (!show_vscroll && 
 	  work_height + list_requisition.height > avail_height)
 	{
+	  GtkRequisition requisition;
+	  
 	  if (work_height + min_height > avail_height && 
 	      *y - real_height > avail_height)
 	    {
 	      *y -= (work_height + list_requisition.height + real_height);
 	      break;
 	    }
-	  alloc_width -= (popup->vscrollbar->requisition.width +
-			  GTK_SCROLLED_WINDOW_GET_CLASS (combo->popup)->scrollbar_spacing);
+	  gtk_widget_size_request (popup->hscrollbar, &requisition);
+	  alloc_width -= (requisition.width + scrollbar_spacing);
 	  show_vscroll = TRUE;
 	}
     } while (old_width != alloc_width || old_height != work_height);

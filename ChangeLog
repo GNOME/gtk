@@ -1,3 +1,12 @@
+Thu Oct 10 14:35:31 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkscrolledwindow.[ch]: Privately export
+	_gtk_scrolled_window_get_scrollbar_spacing().
+
+	* gtk/gtkcombo.c: Properly account from scrollbar
+	spacing when computing the size of the popup window.
+	(#84955, Marco Pesenti Gritti)
+
 Wed Oct  9 17:40:13 2002  Manish Singh  <yosh@gimp.org>
 
 	* gtk/gtkaccelmap.c gtk/gtkfixed.[ch] gtk/gtkkeyhash.c gtk/gtkmenu.c
