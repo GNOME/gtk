@@ -330,7 +330,6 @@ typedef enum {
   CHECK_LIGHT,
   CHECK_MID,
   CHECK_TEXT,
-  CHECK_INCONSISTENT_AA,
   CHECK_INCONSISTENT_TEXT,
   RADIO_BASE,
   RADIO_BLACK,
@@ -368,14 +367,19 @@ static guchar check_base_bits[] = {
   0x07,0xfc,0x07,0xfc,0x07,0xfc,0x07,0x00,0x00,0x00,0x00,0x00,0x00};
 
 /*
- * Extracted from check-13-inconsistent-ssp.png, width=13, height=13
+ * Extracted from check-13-inconsistent.png, width=13, height=13
  */
 static guchar check_inconsistent_text_bits[] = {
   0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0xf8,0x03,0xf8,
   0x03,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00};
+#if 0
+/*
+ * check_inconsistent_aa_bits is currently not used, since it is all zeros.
+ */
 static guchar check_inconsistent_aa_bits[] = {
   0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
   0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00};
+#endif
 
 /*
  * Extracted from radio-13.png, width=13, height=13
@@ -428,7 +432,6 @@ static struct {
   { check_light_bits, NULL },
   { check_mid_bits, NULL },
   { check_text_bits, NULL },
-  { check_inconsistent_aa_bits, NULL },
   { check_inconsistent_text_bits, NULL },
   { radio_base_bits, NULL },
   { radio_black_bits, NULL },
@@ -3570,6 +3573,21 @@ gtk_default_draw_flat_box (GtkStyle      *style,
     g_object_unref (freeme);
 }
 
+static GdkGC *
+create_aa_gc (GdkWindow *window, GtkStyle *style, GtkStateType state_type)
+{
+  GdkColor aa_color;
+  GdkGC *gc = gdk_gc_new (window);
+   
+  aa_color.red = (style->fg[state_type].red + style->bg[state_type].red) / 2;
+  aa_color.green = (style->fg[state_type].green + style->bg[state_type].green) / 2;
+  aa_color.blue = (style->fg[state_type].blue + style->bg[state_type].blue) / 2;
+  
+  gdk_gc_set_rgb_fg_color (gc, &aa_color);
+
+  return gc;
+}
+
 static void 
 gtk_default_draw_check (GtkStyle      *style,
 			GdkWindow     *window,
@@ -3606,48 +3624,56 @@ gtk_default_draw_check (GtkStyle      *style,
     }
   else
     {
+      GdkGC *free_me = NULL;
+      
+      GdkGC *base_gc;
+      GdkGC *text_gc;
+      GdkGC *aa_gc;
+
       x -= (1 + INDICATOR_PART_SIZE - width) / 2;
       y -= (1 + INDICATOR_PART_SIZE - height) / 2;
-      
+
       if (strcmp (detail, "check") == 0)	/* Menu item */
 	{
-	  if (shadow_type == GTK_SHADOW_IN)
-	    {
-	      draw_part (window, style->black_gc, area, x, y, CHECK_TEXT);
-	      draw_part (window, style->dark_gc[state_type], area, x, y, CHECK_AA);
-	    }
-	  else if (shadow_type == GTK_SHADOW_ETCHED_IN) /* inconsistent */
-	    {
-	      draw_part (window, style->black_gc, area, x, y, CHECK_INCONSISTENT_TEXT);
-	      draw_part (window, style->dark_gc[state_type], area, x, y, CHECK_INCONSISTENT_AA);
-	    }
+	  text_gc = style->fg_gc[state_type];
+	  base_gc = style->bg_gc[state_type];
+	  aa_gc = free_me = create_aa_gc (window, style, state_type);
 	}
       else
 	{
-	  GdkGC *base_gc = style->base_gc[state_type];
-
 	  if (state_type == GTK_STATE_ACTIVE)
-	    base_gc = style->bg_gc[GTK_STATE_ACTIVE];
-	  
+	    {
+	      text_gc = style->fg_gc[state_type];
+	      base_gc = style->bg_gc[state_type];
+	      aa_gc = free_me = create_aa_gc (window, style, state_type);
+	    }
+	  else
+	    {
+	      text_gc = style->text_gc[state_type];
+	      base_gc = style->base_gc[state_type];
+	      aa_gc = style->text_aa_gc[state_type];
+	    }
+
 	  draw_part (window, base_gc, area, x, y, CHECK_BASE);
 	  draw_part (window, style->black_gc, area, x, y, CHECK_BLACK);
 	  draw_part (window, style->dark_gc[state_type], area, x, y, CHECK_DARK);
 	  draw_part (window, style->mid_gc[state_type], area, x, y, CHECK_MID);
 	  draw_part (window, style->light_gc[state_type], area, x, y, CHECK_LIGHT);
-	  
-	  if (shadow_type == GTK_SHADOW_IN)
-	    {
-	      draw_part (window, style->text_gc[state_type], area, x, y, CHECK_TEXT);
-	      draw_part (window, style->text_aa_gc[state_type], area, x, y, CHECK_AA);
-	    }
-	  else if (shadow_type == GTK_SHADOW_ETCHED_IN) /* inconsistent */
-	    {
-	      draw_part (window, style->text_gc[state_type], area, x, y, CHECK_INCONSISTENT_TEXT);
-	      draw_part (window, style->text_aa_gc[state_type], area, x, y, CHECK_INCONSISTENT_AA);
-	    }
 	}
-    }
 
+      if (shadow_type == GTK_SHADOW_IN)
+	{
+	  draw_part (window, text_gc, area, x, y, CHECK_TEXT);
+	  draw_part (window, aa_gc, area, x, y, CHECK_AA);
+	}
+      else if (shadow_type == GTK_SHADOW_ETCHED_IN) /* inconsistent */
+	{
+	  draw_part (window, text_gc, area, x, y, CHECK_INCONSISTENT_TEXT);
+	}
+
+      if (free_me)
+	g_object_unref (G_OBJECT (free_me));
+    }
 }
 
 static void 
@@ -3687,44 +3713,62 @@ gtk_default_draw_option (GtkStyle      *style,
     }
   else
     {
+      GdkGC *free_me = NULL;
+      
+      GdkGC *base_gc;
+      GdkGC *text_gc;
+      GdkGC *aa_gc;
+
       x -= (1 + INDICATOR_PART_SIZE - width) / 2;
       y -= (1 + INDICATOR_PART_SIZE - height) / 2;
-      
+
       if (strcmp (detail, "option") == 0)	/* Menu item */
 	{
-	  if (shadow_type == GTK_SHADOW_IN)
-	    {
-	      draw_part (window, style->fg_gc[state_type], area, x, y, RADIO_TEXT);
-	    }
-	  else if (shadow_type == GTK_SHADOW_ETCHED_IN) /* inconsistent */
-	    {
-	      draw_part (window, style->black_gc, area, x, y, CHECK_INCONSISTENT_TEXT);
-	      draw_part (window, style->dark_gc[state_type], area, x, y, CHECK_INCONSISTENT_AA);
-	    }
+	  text_gc = style->fg_gc[state_type];
+	  base_gc = style->bg_gc[state_type];
+	  aa_gc = free_me = create_aa_gc (window, style, state_type);
 	}
       else
 	{
-	  GdkGC *base_gc = style->base_gc[state_type];
-
 	  if (state_type == GTK_STATE_ACTIVE)
-	    base_gc = style->bg_gc[GTK_STATE_ACTIVE];
+	    {
+	      text_gc = style->fg_gc[state_type];
+	      base_gc = style->bg_gc[state_type];
+	      aa_gc = free_me = create_aa_gc (window, style, state_type);
+	    }
+	  else
+	    {
+	      text_gc = style->text_gc[state_type];
+	      base_gc = style->base_gc[state_type];
+	      aa_gc = style->text_aa_gc[state_type];
+	    }
 
 	  draw_part (window, base_gc, area, x, y, RADIO_BASE);
 	  draw_part (window, style->black_gc, area, x, y, RADIO_BLACK);
 	  draw_part (window, style->dark_gc[state_type], area, x, y, RADIO_DARK);
 	  draw_part (window, style->mid_gc[state_type], area, x, y, RADIO_MID);
 	  draw_part (window, style->light_gc[state_type], area, x, y, RADIO_LIGHT);
-	  
-	  if (shadow_type == GTK_SHADOW_IN)
+	}
+
+      if (shadow_type == GTK_SHADOW_IN)
+	{
+	  draw_part (window, text_gc, area, x, y, RADIO_TEXT);
+	}
+      else if (shadow_type == GTK_SHADOW_ETCHED_IN) /* inconsistent */
+	{
+	  if (strcmp (detail, "option") == 0)  /* Menu item */
 	    {
-	      draw_part (window, style->text_gc[state_type], area, x, y, RADIO_TEXT);
+	      draw_part (window, text_gc, area, x, y, CHECK_INCONSISTENT_TEXT);
 	    }
-	  else if (shadow_type == GTK_SHADOW_ETCHED_IN) /* inconsistent */
+	  else
 	    {
-	      draw_part (window, style->text_aa_gc[state_type], area, x, y, RADIO_INCONSISTENT_AA);
-	      draw_part (window, style->text_gc[state_type], area, x, y, RADIO_INCONSISTENT_TEXT);
+	      draw_part (window, text_gc, area, x, y, RADIO_INCONSISTENT_TEXT);
+	      draw_part (window, aa_gc, area, x, y, RADIO_INCONSISTENT_AA);
 	    }
 	}
+
+      if (free_me)
+	g_object_unref (G_OBJECT (free_me));
     }
 }
 

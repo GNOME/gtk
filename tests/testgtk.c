@@ -3758,6 +3758,9 @@ static GtkItemFactoryEntry menu_items[] =
   { "/_Preferences/Shape/_Rectangle",   NULL, gtk_ifactory_cb, 0, "/Preferences/Shape/Square" },
   { "/_Preferences/Shape/_Oval",        NULL, gtk_ifactory_cb, 0, "/Preferences/Shape/Rectangle" },
   { "/_Preferences/Shape/_Image",       NULL, gtk_ifactory_cb, 0, "<ImageItem>", apple },
+  { "/_Preferences/Coffee",                  NULL, gtk_ifactory_cb, 0, "<CheckItem>" },
+  { "/_Preferences/Toast",                   NULL, gtk_ifactory_cb, 0, "<CheckItem>" },
+  { "/_Preferences/Marshmallow Froot Loops", NULL, gtk_ifactory_cb, 0, "<CheckItem>" },
 
   /* For testing deletion of menus */
   { "/_Preferences/Should_NotAppear",          NULL, 0,               0, "<Branch>" },
@@ -3817,6 +3820,21 @@ create_item_factory (GtkWidget *widget)
 										      "/Preferences/Shape/Oval")),
 				      TRUE);
 
+      /* preselect /Preferences/Coffee
+       */
+      gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (gtk_item_factory_get_item (item_factory,
+										      "/Preferences/Coffee")),
+				      TRUE);
+
+      /* preselect /Preferences/Marshmallow Froot Loops and set it insensitive
+       */
+      gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (gtk_item_factory_get_item (item_factory,
+										      "/Preferences/Marshmallow Froot Loops")),
+				      TRUE);
+      gtk_widget_set_sensitive (GTK_WIDGET (gtk_item_factory_get_item (item_factory,
+								       "/Preferences/Marshmallow Froot Loops")),
+				FALSE);
+       
       /* Test how tooltips (ugh) work on menu items
        */
       tooltips = gtk_tooltips_new ();

@@ -1,3 +1,18 @@
+Wed Nov 13 14:01:44 2002  Soeren Sandmann  <sandmann@daimi.au.dk>
+
+	* gtk/gtkstyle.c: 
+
+          - comment out check_inconsistent_aa_bits[].
+
+          - use fg/bg with a generated aa color to draw check and option
+	    marks in menu items.
+
+	  - use text/base to draw check and option buttons, except when
+	    state is ACTIVE, in which case we use fg/bg with a generated
+	    aa color.
+
+	* tests/testgtk.c (menu_items): Add three check items.
+	
 2002-11-12  Tor Lillqvist  <tml@iki.fi>
 
 	* gdk/win32/gdkprivate-win32.h
