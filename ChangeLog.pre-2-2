@@ -1,3 +1,9 @@
+Thu Nov  7 15:42:12 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkfontsel.c (gtk_font_selection_get_font_description):
+	If called when fontsel->face is NULL, just return
+	"Sans 10". (#82745, Vitaly Tishkov)
+
 Thu Nov  7 15:29:43 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkimcontextsimple.c (check_hex): Use '_'

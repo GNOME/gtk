@@ -1000,8 +1000,15 @@ gtk_font_selection_load_font (GtkFontSelection *fontsel)
 static PangoFontDescription *
 gtk_font_selection_get_font_description (GtkFontSelection *fontsel)
 {
-  PangoFontDescription *font_desc = pango_font_face_describe (fontsel->face);
-  pango_font_description_set_size (font_desc, fontsel->size);
+  PangoFontDescription *font_desc;
+
+  if (fontsel->face)
+    {
+      font_desc = pango_font_face_describe (fontsel->face);
+      pango_font_description_set_size (font_desc, fontsel->size);
+    }
+  else
+    font_desc = pango_font_description_from_string ("Sans 10");
 
   return font_desc;
 }
