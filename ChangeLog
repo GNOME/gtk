@@ -1,3 +1,8 @@
+Sat Dec  6 01:42:04 2003  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkalignment.c (gtk_alignment_size_allocate): Implement
+	RTL flipping for GtkAlignment.  (#127585)
+
 Sat Dec  6 01:13:09 2003  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkcombo.c (gtk_combo_get_pos): Fix the position of the 
