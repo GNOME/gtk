@@ -1336,22 +1336,30 @@ gdk_color_context_get_num_colors(GdkColorContext *cc)
 }
 
 gint
-gdk_color_context_get_depth (GdkColorContext *cc)
+gdk_color_context_get_depth(GdkColorContext *cc)
 {
 	GdkColorContextPrivate *ccp = (GdkColorContextPrivate *) cc;
 
-	g_assert (cc != NULL);
+	g_assert(cc != NULL);
 
 	return ccp->visual->depth;
 }
 
 GdkColorContextMode
-gdk_color_context_get_mode (GdkColorContext *cc)
+gdk_color_context_get_mode(GdkColorContext *cc)
 {
-	g_assert (cc != NULL);
+	g_assert(cc != NULL);
 
 	return ((GdkColorContextPrivate *) cc)->mode;
 	
+}
+
+GdkVisual *
+gdk_color_context_get_visual(GdkColorContext *cc)
+{
+	g_assert(cc != NULL);
+	
+	return ((GdkColorContextPrivate *) cc)->visual;
 }
 
 gint
