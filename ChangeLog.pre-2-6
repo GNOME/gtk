@@ -1,3 +1,10 @@
+2002-03-29  Hans Breuer  <hans@breuer.org>
+
+	* gtk/gtkmain.h : fix typo in gtk_init_check macro, which
+	caused crashes if argc != 0
+
+	* gtk/stock-icons/makefile.msc : added new icons
+
 Fri Mar 29 20:17:35 2002  Kristian Rietveld  <kris@gtk.org>
 
 	* gtk/gtktreemodelsort.c (gtk_tree_model_sort_rows_reordered):
