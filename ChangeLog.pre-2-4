@@ -1,3 +1,9 @@
+Thu Mar 19 00:37:44 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkscrolledwindow.c (gtk_scrolled_window_construct): perform the
+ 	neccessary checks on funtion begin. use the scrolled_window that got
+	passed to this function, and not a new one.
+
 Wed Mar 18 11:09:10 1998  Owen Taylor  <owt1@cornell.edu>
 	( From: James Henstridge <james@daa.com.au> )
 

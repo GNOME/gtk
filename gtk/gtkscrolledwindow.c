@@ -118,13 +118,13 @@ GtkWidget*
 gtk_scrolled_window_new (GtkAdjustment *hadjustment,
 			 GtkAdjustment *vadjustment)
 {
-  GtkScrolledWindow *scrolled_window;
+  GtkWidget *scrolled_window;
 
   scrolled_window = gtk_type_new (gtk_scrolled_window_get_type ());
 
-  gtk_scrolled_window_construct (scrolled_window, hadjustment, vadjustment);
+  gtk_scrolled_window_construct (GTK_SCROLLED_WINDOW (scrolled_window), hadjustment, vadjustment);
   
-  return GTK_WIDGET (scrolled_window);
+  return scrolled_window;
 }
 
 void
@@ -132,7 +132,9 @@ gtk_scrolled_window_construct (GtkScrolledWindow *scrolled_window,
 			       GtkAdjustment     *hadjustment,
 			       GtkAdjustment     *vadjustment)
 {
-  scrolled_window = gtk_type_new (gtk_scrolled_window_get_type ());
+  g_return_if_fail (scrolled_window != NULL);
+  g_return_if_fail (GTK_IS_SCROLLED_WINDOW (scrolled_window));
+  g_return_if_fail (scrolled_window->viewport == NULL);
 
   scrolled_window->viewport = gtk_viewport_new (hadjustment, vadjustment);
   hadjustment = gtk_viewport_get_hadjustment (GTK_VIEWPORT (scrolled_window->viewport));
