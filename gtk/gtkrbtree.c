@@ -1044,6 +1044,8 @@ _gtk_rbtree_reorder (GtkRBTree *tree,
       node = _gtk_rbtree_next (tree, node);
     }
   gtk_rbtree_reorder_fixup (tree, tree->root);
+
+  g_array_free (array, TRUE);
 }
 
 

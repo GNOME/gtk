@@ -1,3 +1,8 @@
+Thu Jun  6 17:34:00 2002  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtkrbtree.c (_gtk_rbtree_reorder): don't leak the GArray
+        (figured out by Matthias Clasen, fixes #82026).
+
 Tue Jun  4 17:39:34 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* configure.in: If we have xft .pc file, use that
