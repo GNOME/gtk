@@ -1,3 +1,10 @@
+1998-12-23  Elliot Lee  <sopwith@redhat.com>
+
+	* gtk/gtkmenu.c: Allow programmer to gtk_object_set_data(obj,
+ 	"GtkTearoffMenuItem_window_title", ..) on a GtkMenuItem and have
+ 	it be recognized. If we're getting the title out of the GtkLabel,
+ 	then remove all underscores.
+
 Tue Dec 22 17:01:43 1998  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkdnd.c (gtk_drag_dest_handle_event): 

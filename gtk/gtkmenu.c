@@ -616,9 +616,23 @@ gtk_menu_set_tearoff_state (GtkMenu  *menu,
 		  GtkWidget *child = GTK_BIN (attach_widget)->child;
 		  if (GTK_IS_LABEL (child))
 		    {
-		      gchar *ret;
-		      gtk_label_get (GTK_LABEL (child), &ret);
-		      gdk_window_set_title (menu->tearoff_window->window, ret);
+		      gchar *ret, *retdup = NULL, *ctmp;
+		      
+		      ret = gtk_object_get_data(GTK_OBJECT(attach_widget),
+						"GtkTearoffMenuItem_window_title");
+		      if(!ret) {
+			gtk_label_get (GTK_LABEL (child), &ret);
+
+			retdup = ctmp = g_strdup(ret);
+			
+			/* Get rid of all the _'s from menu item hotkeys */
+			while((ctmp = strchr(ctmp, '_')))
+			  g_memmove(ctmp, ctmp+1, strlen(ctmp+1)+1);
+		      }
+
+		      gdk_window_set_title (menu->tearoff_window->window,
+					    retdup?retdup:ret);
+		      g_free(retdup);
 		    }
 		}
 

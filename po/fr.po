@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ VERSION\n"
-"POT-Creation-Date: 1998-12-18 20:32+0100\n"
+"POT-Creation-Date: 1998-12-20 12:00-0500\n"
 "PO-Revision-Date: 1998-12-18 20:32+0100\n"
 "Last-Translator: Vincent Renardias <vincent@debian.org>\n"
 "Language-Team: Vincent Renardias <vincent@debian.org>\n"
@@ -436,7 +436,8 @@ msgstr "Page %u"
 #: gtk/gtkrc.c:1533
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\" line %d"
-msgstr "Impossible de localiser le fichier image dans pixmap_path: \"%s\" ligne %d"
+msgstr ""
+"Impossible de localiser le fichier image dans pixmap_path: \"%s\" ligne %d"
 
 #: gtk/gtkrc.c:1536
 #, c-format
