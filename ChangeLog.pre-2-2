@@ -1,3 +1,12 @@
+Tue May 12 00:24:59 1998  Owen Taylor  <otaylor@gtk.org>
+
+	* docs/gtk-config.1: Rewritten and hopefully improved.
+
+Mon May 11 20:26:39 PDT 1998 Manish Singh <yosh@gimp.org>
+
+	* docs/Makefile.am
+	* docs/gtk-config.1: added man page for gtk-config by Ben Gertzfield
+
 1998-05-11  Federico Mena Quintero  <federico@nuclecu.unam.mx>
 
 	* gtk/gtkpreview.c (gtk_preview_realize): Create the window using

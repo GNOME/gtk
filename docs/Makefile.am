@@ -2,6 +2,8 @@
 
 info_TEXINFOS = gdk.texi gtk.texi glib.texi
 
+man_MANS = gtk-config.1
+
 EXTRA_DIST =	\
 	texinfo.tex 		\
 	macros.texi		\
@@ -19,7 +21,8 @@ EXTRA_DIST =	\
 	widget_system.txt 	\
 	gtk_tut_packbox1.gif 	\
 	gtk_tut_packbox2.gif 	\
-	gtk_tut_table.gif
+	gtk_tut_table.gif	\
+	gtk-config.1
 
 	
 
