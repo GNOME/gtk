@@ -4,9 +4,9 @@
 # Changwoo Ryu <cwryu@debian.org>, 2002
 msgid ""
 msgstr ""
-"Project-Id-Version: gtk+ 2.1.4\n"
+"Project-Id-Version: gtk+ 2.1.5\n"
 "POT-Creation-Date: 2002-12-16 22:22-0500\n"
-"PO-Revision-Date: 2002-12-13 15:06+0900\n"
+"PO-Revision-Date: 2002-12-20 16:43+0900\n"
 "Last-Translator: Nam SungHyun <namsh@kldp.org>\n"
 "Language-Team: Korean <gnome-kr-translation@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -21,14 +21,14 @@ msgstr "파일 '%s' 열기 실패 : %s"
 #: gdk-pixbuf/gdk-pixbuf-animation.c:157 gdk-pixbuf/gdk-pixbuf-io.c:713
 #, c-format
 msgid "Image file '%s' contains no data"
-msgstr "그림 파일 '%s' 는 데이타가 없습니다"
+msgstr "그림 파일 '%s'에 데이타가 없습니다"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:197 gdk-pixbuf/gdk-pixbuf-io.c:747
 #, c-format
 msgid ""
 "Failed to load image '%s': reason not known, probably a corrupt image file"
 msgstr ""
-"그림 '%s' 읽기 실패: 이유를 알수 없습니다, 아마 그림파일이 깨졌을 것입니다"
+"그림 '%s' 읽기 실패: 이유를 알 수 없습니다, 아마 그림파일이 깨졌을 것입니다"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:225
 #, c-format
@@ -36,8 +36,8 @@ msgid ""
 "Failed to load animation '%s': reason not known, probably a corrupt "
 "animation file"
 msgstr ""
-"움직이는 그림 '%s' 읽기 실패 : 이유를 알수 없습니다, 아마 움직이는 그림파일이"
-"깨졌을 것입니다"
+"움직이는 그림 '%s' 읽기 실패 : 이유를 알 수 없습니다, 아마 움직이는 "
+"그림파일이 깨졌을 것입니다"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:377
 #, c-format
@@ -50,22 +50,22 @@ msgid ""
 "Image-loading module %s does not export the proper interface; perhaps it's "
 "from a different GTK version?"
 msgstr ""
-"그림 읽기 모듈 %s가 올바른 인터페이스를 내놓지 않습니다; 아마 다른 GTK 버전"
+"%s 그림 읽기 모듈이 올바른 인터페이스를 내놓지 않습니다; 아마 다른 GTK 버전"
 "의 모듈일 것입니다"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:531 gdk-pixbuf/gdk-pixbuf-io.c:579
 #, c-format
 msgid "Image type '%s' is not supported"
-msgstr "그림 형식 '%s'를 지원하지 않습니다"
+msgstr "그림 형식 '%s'을(를) 지원하지 않습니다"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:611
 #, c-format
 msgid "Couldn't recognize the image file format for file '%s'"
-msgstr "파일 '%s'의 그림파일 형식을 알수 없습니다"
+msgstr "파일 '%s'의 그림파일 형식을 알 수 없습니다"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:617
 msgid "Unrecognized image file format"
-msgstr "알수없는 그림 파일 형식"
+msgstr "알 수 없는 그림 파일 형식"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:758
 #, c-format
@@ -88,8 +88,8 @@ msgid ""
 "Failed to close '%s' while writing image, all data may not have been saved: %"
 "s"
 msgstr ""
-"그림을 저장하는 동안 '%s'를 닫는데 실패하였습니다, 모든 데이타가 저장되지 않"
-"았을 것입니다: %s"
+"그림을 저장하는 동안 '%s'을(를) 닫는데 실패하였습니다, 모든 데이타가 "
+"저장되지 않았을 것입니다: %s"
 
 #: gdk-pixbuf/gdk-pixbuf-loader.c:332
 #, c-format
@@ -111,7 +111,7 @@ msgstr "잘못된 그림 헤더"
 
 #: gdk-pixbuf/gdk-pixdata.c:150
 msgid "Image format unknown"
-msgstr "알수없는 그림 형식"
+msgstr "알 수 없는 그림 형식"
 
 #: gdk-pixbuf/gdk-pixdata.c:155 gdk-pixbuf/gdk-pixdata.c:456
 msgid "Image pixel data corrupt"
@@ -183,7 +183,7 @@ msgstr "스택 넘침"
 
 #: gdk-pixbuf/io-gif.c:634
 msgid "GIF image loader can't understand this image."
-msgstr "GIF 그림 읽기가 이 그림을 이해할수 없습니다"
+msgstr "GIF 그림 읽기가 이 그림을 이해할 수 없습니다"
 
 #: gdk-pixbuf/io-gif.c:663
 msgid "Bad code encountered"
@@ -291,7 +291,7 @@ msgstr "지원하지 않는 JPEG 색 공간 (%s)"
 
 #: gdk-pixbuf/io-jpeg.c:481 gdk-pixbuf/io-jpeg.c:673 gdk-pixbuf/io-jpeg.c:858
 msgid "Couldn't allocate memory for loading JPEG file"
-msgstr "JPEG파일을 읽는 중 메모리 할당을 할수 없습니다"
+msgstr "JPEG파일을 읽는 중 메모리 할당을 할 수 없습니다"
 
 #: gdk-pixbuf/io-jpeg.c:812
 #, c-format
@@ -1000,8 +1000,8 @@ msgstr "스톡 사용"
 msgid ""
 "If set, the label is used to pick a stock item instead of being displayed"
 msgstr ""
-"참이면, 레이블은 그 텍스트 표시하는 게 아니라 스톡 아이템을 선택하는 데 쓰입"
-"니다"
+"참이면, 레이블은 그 텍스트를 표시하는 게 아니라 스톡 아이템을 선택하는 "
+"데 쓰입니다"
 
 #: gtk/gtkbutton.c:213
 msgid "Border relief"
@@ -2087,7 +2087,7 @@ msgstr ""
 #: gtk/gtkfilesel.c:1652
 #, c-format
 msgid "Error renaming file \"%s\" to \"%s\": %s"
-msgstr "파일 \"%s\"를 \"%s\"로 이름바꾸는 중 오류: %s"
+msgstr "파일 \"%s\"을(를) \"%s\"(으)로 이름바꾸는 중 오류: %s"
 
 #: gtk/gtkfilesel.c:1699
 msgid "Rename File"
