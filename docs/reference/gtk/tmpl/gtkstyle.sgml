@@ -209,8 +209,8 @@ Returns whether the style is attached to a window.
 @style: 
 @window: 
 @state_type: 
-@y1: 
-@y2: 
+@y1_: 
+@y2_: 
 @x: 
 
 
@@ -826,8 +826,8 @@ Returns whether the style is attached to a window.
 @area: 
 @widget: 
 @detail: 
-@y1: 
-@y2: 
+@y1_: 
+@y2_: 
 @x: 
 
 
@@ -899,7 +899,7 @@ Returns whether the style is attached to a window.
 
 </para>
 
-@border: 
+@border_: 
 @Returns: 
 
 
@@ -908,7 +908,7 @@ Returns whether the style is attached to a window.
 
 </para>
 
-@border: 
+@border_: 
 
 
 <!-- ##### STRUCT GtkRcProperty ##### -->

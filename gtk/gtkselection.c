@@ -300,7 +300,7 @@ gtk_target_list_find (GtkTargetList *list,
  * @display: the #Gdkdisplay where the selection is set 
  * @widget: new selection owner (a #GdkWidget), or %NULL.
  * @selection: an interned atom representing the selection to claim.
- * @time: timestamp with which to claim the selection
+ * @time_: timestamp with which to claim the selection
  *
  * Claim ownership of a given selection for a particular widget, or,
  * if @widget is %NULL, release ownership of the selection.
@@ -399,7 +399,7 @@ gtk_selection_owner_set_for_display (GdkDisplay   *display,
  * gtk_selection_owner_set:
  * @widget:  a #GtkWidget, or %NULL.
  * @selection:  an interned atom representing the selection to claim
- * @time: timestamp with which to claim the selection
+ * @time_: timestamp with which to claim the selection
  * 
  * Claims ownership of a given selection for a particular widget,
  * or, if @widget is %NULL, release ownership of the selection.

@@ -184,8 +184,8 @@ struct _GtkStyleClass
 				 GdkRectangle		*area,
 				 GtkWidget		*widget,
 				 const gchar		*detail,
-				 gint			 y1,
-				 gint			 y2,
+				 gint			 y1_,
+				 gint			 y2_,
 				 gint			 x);
   void (*draw_shadow)		(GtkStyle		*style,
 				 GdkWindow		*window,
@@ -473,8 +473,8 @@ void gtk_draw_hline      (GtkStyle        *style,
 void gtk_draw_vline      (GtkStyle        *style,
 			  GdkWindow       *window,
 			  GtkStateType     state_type,
-			  gint             y1,
-			  gint             y2,
+			  gint             y1_,
+			  gint             y2_,
 			  gint             x);
 void gtk_draw_shadow     (GtkStyle        *style,
 			  GdkWindow       *window,
@@ -642,8 +642,8 @@ void gtk_paint_vline      (GtkStyle        *style,
 			   GdkRectangle    *area,
 			   GtkWidget       *widget,
 			   const gchar     *detail,
-			   gint             y1,
-			   gint             y2,
+			   gint             y1_,
+			   gint             y2_,
 			   gint             x);
 void gtk_paint_shadow     (GtkStyle        *style,
 			   GdkWindow       *window,
@@ -853,8 +853,8 @@ void gtk_paint_resize_grip (GtkStyle		*style,
 
 
 GType      gtk_border_get_type (void);
-GtkBorder *gtk_border_copy     (const GtkBorder *border);
-void       gtk_border_free (   GtkBorder       *border);
+GtkBorder *gtk_border_copy     (const GtkBorder *border_);
+void       gtk_border_free (   GtkBorder       *border_);
 
 /* --- private API --- */
 const GValue* _gtk_style_peek_property_value (GtkStyle           *style,

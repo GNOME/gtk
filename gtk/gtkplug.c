@@ -213,7 +213,7 @@ gtk_plug_set_is_child (GtkPlug  *plug,
 /**
  * _gtk_plug_add_to_socket:
  * @plug: a #GtkPlug
- * @socket: a #GtkSocket
+ * @socket_: a #GtkSocket
  * 
  * Adds a plug to a socket within the same application.
  **/
@@ -269,7 +269,7 @@ send_delete_event (GtkWidget *widget)
 /**
  * _gtk_plug_remove_from_socket:
  * @plug: a #GtkPlug
- * @socket: a #GtkSocket
+ * @socket_: a #GtkSocket
  * 
  * Removes a plug from a socket within the same application.
  **/

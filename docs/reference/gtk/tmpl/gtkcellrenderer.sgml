@@ -30,6 +30,7 @@ of properties will always yield a cell renderer of the same size,
 barring a #GtkStyle change.  The #GtkCellRenderer also has a number of
 generic properties that are expected to be honored by all children.
 </para>
+
 <!-- ##### SECTION See_Also ##### -->
 <para>
 #GtkCellRendererText,#GtkCellRendererPixbuf,#GtkCellRendererToggle
@@ -142,56 +143,6 @@ it cannot be individually modified.
 @height: 
 
 
-<!-- ##### ARG GtkCellRenderer:mode ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkCellRenderer:visible ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkCellRenderer:xalign ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkCellRenderer:yalign ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkCellRenderer:xpad ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkCellRenderer:ypad ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkCellRenderer:width ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkCellRenderer:height ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkCellRenderer:is-expander ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkCellRenderer:is-expanded ##### -->
-<para>
-
-</para>
-
 <!-- ##### ARG GtkCellRenderer:cell-background ##### -->
 <para>
 
@@ -203,6 +154,56 @@ it cannot be individually modified.
 </para>
 
 <!-- ##### ARG GtkCellRenderer:cell-background-set ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkCellRenderer:height ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkCellRenderer:is-expanded ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkCellRenderer:is-expander ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkCellRenderer:mode ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkCellRenderer:visible ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkCellRenderer:width ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkCellRenderer:xalign ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkCellRenderer:xpad ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkCellRenderer:yalign ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkCellRenderer:ypad ##### -->
 <para>
 
 </para>

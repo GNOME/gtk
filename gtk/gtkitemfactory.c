@@ -1472,7 +1472,7 @@ ifactory_delete_popup_data (GtkObject	   *object,
  * @x: the x position 
  * @y: the y position
  * @mouse_button: the mouse button which was pressed to initiate the popup
- * @time: the time at which the activation event occurred
+ * @time_: the time at which the activation event occurred
  *
  * Pops up the menu constructed from the item factory at (@x, @y).
  *
@@ -1481,11 +1481,11 @@ ifactory_delete_popup_data (GtkObject	   *object,
  * a mouse button press, such as a mouse button release or a keypress,
  * @mouse_button should be 0.
  *
- * The @time parameter should be the time stamp of the event that
+ * The @time_ parameter should be the time stamp of the event that
  * initiated the popup. If such an event is not available, use
  * gtk_get_current_event_time() instead.
  *
- * The operation of the @mouse_button and the @time parameter is the same
+ * The operation of the @mouse_button and the @time_ parameter is the same
  * as the @button and @activation_time parameters for gtk_menu_popup().
  */
 void
@@ -1507,7 +1507,7 @@ gtk_item_factory_popup (GtkItemFactory		*ifactory,
  * @x: the x position 
  * @y: the y position
  * @mouse_button: the mouse button which was pressed to initiate the popup
- * @time: the time at which the activation event occurred
+ * @time_: the time at which the activation event occurred
  *
  * Pops up the menu constructed from the item factory at (@x, @y). Callbacks
  * can access the @popup_data while the menu is posted via 
@@ -1518,11 +1518,11 @@ gtk_item_factory_popup (GtkItemFactory		*ifactory,
  * a mouse button press, such as a mouse button release or a keypress,
  * @mouse_button should be 0.
  *
- * The @time parameter should be the time stamp of the event that
+ * The @time_ parameter should be the time stamp of the event that
  * initiated the popup. If such an event is not available, use
  * gtk_get_current_event_time() instead.
  *
- * The operation of the @mouse_button and the @time parameters is the same
+ * The operation of the @mouse_button and the @time_ parameters is the same
  * as the @button and @activation_time parameters for gtk_menu_popup().
  */
 void

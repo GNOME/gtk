@@ -105,7 +105,7 @@ _gdk_selection_filter_clear_event (XSelectionClearEvent *event)
  * @owner : a GdkWindow or NULL to indicate that the the owner for
  * the given should be unset.
  * @selection : an atom identifying a selection.
- * @time : timestamp to use when setting the selection. 
+ * @time_ : timestamp to use when setting the selection. 
  * If this is older than the timestamp given last time the owner was 
  * set for the given selection, the request will be ignored.
  * @send_event : if TRUE, and the new owner is different from the current
@@ -370,7 +370,7 @@ gdk_selection_property_get (GdkWindow  *requestor,
  * @target : target that was selected.
  * @property : property in which the selection owner stored the data,
  * or GDK_NONE to indicate that the request was rejected.
- * @time : timestamp. 
+ * @time_ : timestamp. 
  *
  * Send a response to SelectionRequest event.
  **/

@@ -343,10 +343,10 @@ gdk_draw_point (GdkDrawable *drawable,
  * gdk_draw_line:
  * @drawable: a #GdkDrawable (a #GdkWindow or a #GdkPixmap). 
  * @gc: a #GdkGC.
- * @x1: the x coordinate of the start point.
- * @y1: the y coordinate of the start point.
- * @x2: the x coordinate of the end point.
- * @y2: the y coordinate of the end point.
+ * @x1_: the x coordinate of the start point.
+ * @y1_: the y coordinate of the start point.
+ * @x2_: the x coordinate of the end point.
+ * @y2_: the y coordinate of the end point.
  * 
  * Draws a line, using the foreground color and other attributes of 
  * the #GdkGC.

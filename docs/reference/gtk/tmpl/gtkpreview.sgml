@@ -172,7 +172,7 @@ value will not affect existing data in preview
 widgets.
 </para>
 
-@gamma: the new gamma value.
+@gamma_: the new gamma value.
 
 
 <!-- ##### FUNCTION gtk_preview_set_color_cube ##### -->

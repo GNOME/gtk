@@ -778,12 +778,12 @@ update_layout_size (GtkTextLayout *layout)
  * @layout: a #GtkTextLayout
  * @anchor: iter pointing into a line that will be used as the
  *          coordinate origin
- * @y0: offset from the top of the line pointed to by @anchor at
- *      which to begin validation. (The offset here is in pixels
- *      after validation.)
- * @y1: offset from the top of the line pointed to by @anchor at
- *      which to end validation. (The offset here is in pixels
- *      after validation.)
+ * @y0_: offset from the top of the line pointed to by @anchor at
+ *       which to begin validation. (The offset here is in pixels
+ *       after validation.)
+ * @y1_: offset from the top of the line pointed to by @anchor at
+ *       which to end validation. (The offset here is in pixels
+ *       after validation.)
  *
  * Ensure that a region of a #GtkTextLayout is valid. The ::changed
  * signal will be emitted if any lines are validated.

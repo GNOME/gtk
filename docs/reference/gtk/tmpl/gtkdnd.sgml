@@ -148,7 +148,7 @@ that the data of the drag will no longer be required.
 @success: a flag indicating whether the drop was successful
 @del: a flag indicating whether the source should delete the
       original data. (This should be %TRUE for a move)
-@time: the timestamp from the "drag_data_drop" signal.
+@time_: the timestamp from the "drag_data_drop" signal.
 
 
 <!-- ##### FUNCTION gtk_drag_get_data ##### -->
@@ -167,7 +167,7 @@ drops.
  signal.
 @context: the drag context
 @target: the target (form of the data) to retrieve.
-@time: a timestamp for retrieving the data. This will
+@time_: a timestamp for retrieving the data. This will
        generally be the time received in a "drag_data_motion"
        or "drag_data_drop" signal.
 

@@ -259,7 +259,7 @@ gdk_display_put_event (GdkDisplay *display,
 
 /**
  * gdk_pointer_ungrab:
- * @time: a timestamp from a #GdkEvent, or %GDK_CURRENT_TIME if no timestamp is
+ * @time_: a timestamp from a #GdkEvent, or %GDK_CURRENT_TIME if no timestamp is
  *        available.
  *
  * Ungrabs the pointer, if it is grabbed by this application.
@@ -288,7 +288,7 @@ gdk_pointer_is_grabbed (void)
 
 /**
  * gdk_keyboard_ungrab:
- * @time: a timestamp from a #GdkEvent, or %GDK_CURRENT_TIME if no
+ * @time_: a timestamp from a #GdkEvent, or %GDK_CURRENT_TIME if no
  *        timestamp is available.
  * 
  * Ungrabs the keyboard, if it is grabbed by this application.

@@ -550,7 +550,7 @@ types related to the text widget and how they work together.
 @override_location: 
 @default_editable: 
 <!-- # Unused Parameters # -->
-@time: 
+@time_: 
 @interactive: 
 
 

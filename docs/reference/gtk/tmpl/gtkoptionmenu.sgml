@@ -70,12 +70,12 @@ Removes the menu from the option menu.
 
 <!-- ##### FUNCTION gtk_option_menu_set_history ##### -->
 <para>
-Selects the menu item specified by @index making it the newly
+Selects the menu item specified by @index_ making it the newly
 selected value for the option menu.
 </para>
 
 @option_menu: a #GtkOptionMenu.
-@index: the index of the menu item to select.  Index values are from 
+@index_: the index of the menu item to select.  Index values are from 
 0 to n-1.
 
 

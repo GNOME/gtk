@@ -92,9 +92,9 @@ GtkWidget* gtk_plug_new_for_display       (GdkDisplay      *display,
 GdkNativeWindow gtk_plug_get_id (GtkPlug         *plug);
 
 void _gtk_plug_add_to_socket      (GtkPlug   *plug,
-				   GtkSocket *socket);
+				   GtkSocket *socket_);
 void _gtk_plug_remove_from_socket (GtkPlug   *plug,
-				   GtkSocket *socket);
+				   GtkSocket *socket_);
 
 #ifdef __cplusplus
 }

@@ -55,11 +55,11 @@ typedef enum {
 void gtk_drag_get_data (GtkWidget      *widget,
 			GdkDragContext *context,
 			GdkAtom         target,
-			guint32         time);
+			guint32         time_);
 void gtk_drag_finish   (GdkDragContext *context,
 			gboolean        success,
 			gboolean        del,
-			guint32         time);
+			guint32         time_);
 
 GtkWidget *gtk_drag_get_source_widget (GdkDragContext *context);
 

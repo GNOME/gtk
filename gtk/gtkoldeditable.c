@@ -715,7 +715,7 @@ old_editable_text_received_cb (GtkClipboard *clipboard,
  * @old_editable: a #GtkOldEditable
  * @claim: if %TRUE, claim ownership of the selection, if %FALSE, give
  *   up ownership
- * @time: timestamp for this operation
+ * @time_: timestamp for this operation
  * 
  * Claims or gives up ownership of the selection.
  */

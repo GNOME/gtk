@@ -197,7 +197,7 @@ Sets the owner of the given selection.
 @owner: a #GdkWindow or %NULL to indicate that the
         the owner for the given should be unset.
 @selection: an atom identifying a selection.
-@time: timestamp to use when setting the selection.
+@time_: timestamp to use when setting the selection.
        If this is older than the timestamp given last
        time the owner was set for the given selection, the 
        request will be ignored.
@@ -216,7 +216,7 @@ Sets the owner of the given selection.
 @display: 
 @owner: 
 @selection: 
-@time: 
+@time_: 
 @send_event: 
 @Returns: 
 
@@ -257,7 +257,7 @@ form.
 @selection: an atom identifying the selection to get the
             contents of.
 @target: the form in which to retrieve the selection.
-@time: the timestamp to use when retrieving the
+@time_: the timestamp to use when retrieving the
        selection. The selection owner may refuse the
        request if it did not own the selection at 
        the time indicated by the timestamp.
@@ -285,7 +285,7 @@ Sends a response to SelectionRequest event.
 @property: property in which the selection owner stored the
            data, or %GDK_NONE to indicate that the request
            was rejected.
-@time: timestamp.
+@time_: timestamp.
 
 
 <!-- ##### FUNCTION gdk_selection_send_notify_for_display ##### -->
@@ -298,6 +298,6 @@ Sends a response to SelectionRequest event.
 @selection: 
 @target: 
 @property: 
-@time: 
+@time_: 
 
 

@@ -113,7 +113,7 @@ void            gtk_preview_draw_row           (GtkPreview      *preview,
 void            gtk_preview_set_expand         (GtkPreview      *preview,
 						gboolean         expand);
 
-void            gtk_preview_set_gamma          (double           gamma);
+void            gtk_preview_set_gamma          (double           gamma_);
 void            gtk_preview_set_color_cube     (guint            nred_shades,
 						guint            ngreen_shades,
 						guint            nblue_shades,

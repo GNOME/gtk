@@ -207,7 +207,7 @@ is pressed.
 </para>
 
 @device: a #GdkDevice.
-@index: the index of the macro button to set.
+@index_: the index of the macro button to set.
 @keyval: the keyval to generate.
 @modifiers: the modifiers to set.
 
@@ -218,7 +218,7 @@ Specifies how an axis of a device is used.
 </para>
 
 @device: a #GdkDevice.
-@index: the index of the axis.
+@index_: the index of the axis.
 @use: specifies how the axis is used.
 
 

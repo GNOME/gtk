@@ -110,12 +110,12 @@ gboolean       gdk_device_set_mode      (GdkDevice      *device,
 					 GdkInputMode    mode);
 
 void           gdk_device_set_key       (GdkDevice      *device,
-					 guint           index,
+					 guint           index_,
 					 guint           keyval,
 					 GdkModifierType modifiers);
 
 void     gdk_device_set_axis_use (GdkDevice         *device,
-				  guint              index,
+				  guint              index_,
 				  GdkAxisUse         use);
 void     gdk_device_get_state    (GdkDevice         *device,
 				  GdkWindow         *window,

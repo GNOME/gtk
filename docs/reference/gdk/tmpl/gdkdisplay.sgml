@@ -95,7 +95,7 @@ of an X display. All its fields are private and should not be accessed directly.
 </para>
 
 @display: 
-@time: 
+@time_: 
 
 
 <!-- ##### FUNCTION gdk_display_keyboard_ungrab ##### -->
@@ -104,7 +104,7 @@ of an X display. All its fields are private and should not be accessed directly.
 </para>
 
 @display: 
-@time: 
+@time_: 
 
 
 <!-- ##### FUNCTION gdk_display_pointer_is_grabbed ##### -->

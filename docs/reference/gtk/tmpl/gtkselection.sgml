@@ -154,7 +154,7 @@ Looks up a given target in a #GtkTargetList.
 
 @widget: 
 @selection: 
-@time: 
+@time_: 
 @Returns: 
 
 
@@ -166,7 +166,7 @@ Looks up a given target in a #GtkTargetList.
 @display: 
 @widget: 
 @selection: 
-@time: 
+@time_: 
 @Returns: 
 
 
@@ -212,7 +212,7 @@ a "selection_received" signal will be generated.
 @widget: The widget which acts as requestor
 @selection: Which selection to get
 @target: Form of information desired (e.g., STRING)
-@time: Time of request (usually of triggering event)
+@time_: Time of request (usually of triggering event)
        In emergency, you could use #GDK_CURRENT_TIME
 @Returns: %TRUE if requested succeeded. %FALSE if we could not process
           request. (e.g., there was already a request in process for

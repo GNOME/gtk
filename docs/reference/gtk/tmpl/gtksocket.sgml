@@ -111,7 +111,7 @@ never be set by an application.)
 <para>
 </para>
 
-@socket: a #GtkSocket.
+@socket_: a #GtkSocket.
 @wid: 
 
 
@@ -120,7 +120,7 @@ never be set by an application.)
 
 </para>
 
-@socket: 
+@socket_: 
 @window_id: 
 <!-- # Unused Parameters # -->
 @id: 
@@ -131,7 +131,7 @@ never be set by an application.)
 
 </para>
 
-@socket: 
+@socket_: 
 @Returns: 
 
 
@@ -140,6 +140,8 @@ never be set by an application.)
 
 </para>
 
+@socket_: the object which received the signal.
+<!-- # Unused Parameters # -->
 @socket: the object which received the signal.
 
 <!-- ##### SIGNAL GtkSocket::plug-removed ##### -->
@@ -147,6 +149,8 @@ never be set by an application.)
 
 </para>
 
-@socket: the object which received the signal.
+@socket_: the object which received the signal.
 @Returns: 
+<!-- # Unused Parameters # -->
+@socket: the object which received the signal.
 

@@ -382,7 +382,7 @@ _gdk_x11_display_is_root_window (GdkDisplay *display,
 /**
  * gdk_display_pointer_ungrab:
  * @display : a #GdkDisplay.
- * @time: a timestap (e.g. GDK_CURRENT_TIME).
+ * @time_: a timestap (e.g. GDK_CURRENT_TIME).
  *
  * Release any pointer grab.
  */
@@ -416,7 +416,7 @@ gdk_display_pointer_is_grabbed (GdkDisplay * display)
 /**
  * gdk_display_keyboard_ungrab:
  * @display : a #GdkDisplay.
- * @time : a timestap (e.g #GDK_CURRENT_TIME).
+ * @time_ : a timestap (e.g #GDK_CURRENT_TIME).
  *
  * Release any keyboard grab
  */

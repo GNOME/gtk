@@ -221,7 +221,7 @@ and leave events will be generated as necessary.
 @cursor: the cursor to display while the grab is active. If this is %NULL then
 the normal cursors are used for @window and its descendants, and the cursor
 for @window is used for all other windows.
-@time: the timestamp of the event which led to this pointer grab. This usually
+@time_: the timestamp of the event which led to this pointer grab. This usually
 comes from a #GdkEventButton struct, though %GDK_CURRENT_TIME can be used if
 the time isn't known.
 @Returns: %GDK_GRAB_SUCCESS if the grab was successful.
@@ -246,7 +246,7 @@ success or the reason for the failure of the grab attempt.
 
 </para>
 
-@time: 
+@time_: 
 
 
 <!-- ##### FUNCTION gdk_pointer_is_grabbed ##### -->
@@ -279,7 +279,7 @@ This overrides any previous keyboard grab by this client.
 normal, but keyboard events outside this application are reported with respect
 to @window. Both key press and key release events are always reported,
 independant of the event mask set by the application.
-@time: a timestamp from a #GdkEvent, or %GDK_CURRENT_TIME if no timestamp is
+@time_: a timestamp from a #GdkEvent, or %GDK_CURRENT_TIME if no timestamp is
 available.
 @Returns: %GDK_GRAB_SUCCESS if the grab was successful.
 
@@ -288,7 +288,7 @@ available.
 <para>
 </para>
 
-@time: 
+@time_: 
 
 
 <!-- ##### FUNCTION gdk_beep ##### -->

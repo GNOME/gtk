@@ -30,7 +30,7 @@ GtkOldEditable
 </para>
 
 @editable: 
-@time: 
+@time_: 
 
 
 <!-- ##### FUNCTION gtk_old_editable_claim_selection ##### -->
@@ -40,7 +40,7 @@ GtkOldEditable
 
 @old_editable: 
 @claim: 
-@time: 
+@time_: 
 
 
 <!-- ##### FUNCTION gtk_old_editable_changed ##### -->

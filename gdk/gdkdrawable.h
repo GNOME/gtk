@@ -211,10 +211,10 @@ void gdk_draw_point     (GdkDrawable      *drawable,
 			 gint              y);
 void gdk_draw_line      (GdkDrawable      *drawable,
 			 GdkGC            *gc,
-			 gint              x1,
-			 gint              y1,
-			 gint              x2,
-			 gint              y2);
+			 gint              x1_,
+			 gint              y1_,
+			 gint              x2_,
+			 gint              y2_);
 void gdk_draw_rectangle (GdkDrawable      *drawable,
 			 GdkGC            *gc,
 			 gboolean          filled,

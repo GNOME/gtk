@@ -108,11 +108,11 @@ gboolean       gtk_target_list_find      (GtkTargetList  *list,
 
 gboolean gtk_selection_owner_set             (GtkWidget  *widget,
 					      GdkAtom     selection,
-					      guint32     time);
+					      guint32     time_);
 gboolean gtk_selection_owner_set_for_display (GdkDisplay *display,
 					      GtkWidget  *widget,
 					      GdkAtom     selection,
-					      guint32     time);
+					      guint32     time_);
 
 void     gtk_selection_add_target    (GtkWidget            *widget,
 				      GdkAtom               selection,
@@ -127,7 +127,7 @@ void     gtk_selection_clear_targets (GtkWidget            *widget,
 gboolean gtk_selection_convert       (GtkWidget            *widget,
 				      GdkAtom               selection,
 				      GdkAtom               target,
-				      guint32               time);
+				      guint32               time_);
 void     gtk_selection_data_set      (GtkSelectionData     *selection_data,
 				      GdkAtom               type,
 				      gint                  format,

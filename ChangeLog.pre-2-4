@@ -1,3 +1,40 @@
+Fri Nov  8 20:14:52 2002  Soeren Sandmann  <sandmann@daimi.au.dk>
+
+	* docs/reference/gdk/tmpl/dnd.sgml
+	docs/reference/gdk/tmpl/drawing.sgml
+	docs/reference/gdk/tmpl/gdk-unused.sgml
+	docs/reference/gdk/tmpl/gdkdisplay.sgml
+	docs/reference/gdk/tmpl/general.sgml
+	docs/reference/gdk/tmpl/input_devices.sgml
+	docs/reference/gdk/tmpl/selections.sgml
+	docs/reference/gtk/tmpl/gtkcellrenderer.sgml
+	docs/reference/gtk/tmpl/gtkcurve.sgml
+	docs/reference/gtk/tmpl/gtkdnd.sgml
+	docs/reference/gtk/tmpl/gtkitemfactory.sgml
+	docs/reference/gtk/tmpl/gtkmenu.sgml
+	docs/reference/gtk/tmpl/gtkoldeditable.sgml
+	docs/reference/gtk/tmpl/gtkoptionmenu.sgml
+	docs/reference/gtk/tmpl/gtkpreview.sgml
+	docs/reference/gtk/tmpl/gtkselection.sgml
+	docs/reference/gtk/tmpl/gtksocket.sgml
+	docs/reference/gtk/tmpl/gtkstyle.sgml
+	docs/reference/gtk/tmpl/gtktextbuffer.sgml
+	docs/reference/gtk/tmpl/gtktreemodel.sgml
+	docs/reference/gtk/tmpl/gtkwidget.sgml gdk/gdk.h gdk/gdkdisplay.c
+	gdk/gdkdisplay.h gdk/gdkdnd.h gdk/gdkdraw.c gdk/gdkdrawable.h
+	gdk/gdkinput.h gdk/gdkselection.h gdk/x11/gdkdisplay-x11.c
+	gdk/x11/gdkdnd-x11.c gdk/x11/gdkselection-x11.c gtk/gtkcurve.h
+	gtk/gtkdnd.h gtk/gtkitemfactory.c gtk/gtkitemfactory.h
+	gtk/gtkmenu.h gtk/gtkoldeditable.c gtk/gtkoldeditable.h
+	gtk/gtkoptionmenu.h gtk/gtkplug.c gtk/gtkplug.h gtk/gtkpreview.h
+	gtk/gtkrange.h gtk/gtkselection.c gtk/gtkselection.h
+	gtk/gtksocket.c gtk/gtksocket.h gtk/gtkstyle.c gtk/gtkstyle.h
+	gtk/gtktextlayout.c gtk/gtktextlayout.h gtk/gtktreemodel.c
+	gtk/gtktreemodel.h gtk/gtkwidget.h
+
+	Trivial s/foo/foo_/ fixes to make gtk.h includable with -Wshadow
+	without warnings. (#91680)
+	
 Thu Nov  7 16:13:41 2002  Eric Warmenhoven <eric@warmenhoven.org>
 
 	* gdk/linux-fb/gdkscreen-fb.c: fix compilation

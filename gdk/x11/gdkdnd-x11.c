@@ -2978,7 +2978,7 @@ gdk_drag_find_window_for_screen (GdkDragContext  *context,
  * @y_root: the y position of the pointer in root coordinates.
  * @suggested_action: the suggested action.
  * @possible_actions: the possible actions.
- * @time: the timestamp for this operation.
+ * @time_: the timestamp for this operation.
  * 
  * Updates the drag context when the pointer moves or the 
  * set of actions changes.
@@ -3132,7 +3132,7 @@ gdk_drag_motion (GdkDragContext *context,
 /**
  * gdk_drag_drop:
  * @context: a #GdkDragContext.
- * @time: the timestamp for this operation.
+ * @time_: the timestamp for this operation.
  * 
  * Drops on the current destination.
  * 
@@ -3172,7 +3172,7 @@ gdk_drag_drop (GdkDragContext *context,
 /**
  * gdk_drag_abort:
  * @context: a #GdkDragContext.
- * @time: the timestamp for this operation.
+ * @time_: the timestamp for this operation.
  * 
  * Aborts a drag without dropping. 
  *
@@ -3194,7 +3194,7 @@ gdk_drag_abort (GdkDragContext *context,
  * @context: a #GdkDragContext.
  * @action: the selected action which will be taken when a drop happens, 
  *    or 0 to indicate that a drop will not be accepted.
- * @time: the timestamp for this operation.
+ * @time_: the timestamp for this operation.
  * 
  * Selects one of the actions offered by the drag source.
  *
@@ -3304,7 +3304,7 @@ gdk_drag_status (GdkDragContext   *context,
  * gdk_drop_reply:
  * @context: a #GdkDragContext.
  * @ok: %TRUE if the drop is accepted.
- * @time: the timestamp for this operation.
+ * @time_: the timestamp for this operation.
  * 
  * Accepts or rejects a drop. 
  *
@@ -3357,7 +3357,7 @@ gdk_drop_reply (GdkDragContext   *context,
  * gdk_drop_finish:
  * @context: a #GtkDragContext.
  * @success: %TRUE if the data was successfully received.
- * @time: the timestamp for this operation.
+ * @time_: the timestamp for this operation.
  * 
  * Ends the drag operation after a drop.
  *

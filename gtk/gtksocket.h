@@ -72,8 +72,8 @@ struct _GtkSocketClass
 {
   GtkContainerClass parent_class;
 
-  void     (*plug_added)   (GtkSocket *socket);
-  gboolean (*plug_removed) (GtkSocket *socket);
+  void     (*plug_added)   (GtkSocket *socket_);
+  gboolean (*plug_removed) (GtkSocket *socket_);
 
   /* Padding for future expansion */
   void (*_gtk_reserved1) (void);
@@ -86,12 +86,12 @@ struct _GtkSocketClass
 GType          gtk_socket_get_type (void) G_GNUC_CONST;
 GtkWidget*     gtk_socket_new      (void);
 
-void            gtk_socket_add_id (GtkSocket       *socket,
+void            gtk_socket_add_id (GtkSocket       *socket_,
 				   GdkNativeWindow  window_id);
-GdkNativeWindow gtk_socket_get_id (GtkSocket       *socket);
+GdkNativeWindow gtk_socket_get_id (GtkSocket       *socket_);
 
 #ifndef GTK_DISABLE_DEPRECATED
-void           gtk_socket_steal    (GtkSocket      *socket,
+void           gtk_socket_steal    (GtkSocket      *socket_,
 				    GdkNativeWindow wid);
 #endif /* GTK_DISABLE_DEPRECATED */
 

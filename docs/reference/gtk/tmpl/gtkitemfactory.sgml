@@ -249,7 +249,7 @@ GtkItemFactory
 @x: 
 @y: 
 @mouse_button: 
-@time: 
+@time_: 
 
 
 <!-- ##### FUNCTION gtk_item_factory_popup_with_data ##### -->
@@ -263,7 +263,7 @@ GtkItemFactory
 @x: 
 @y: 
 @mouse_button: 
-@time: 
+@time_: 
 
 
 <!-- ##### FUNCTION gtk_item_factory_popup_data ##### -->

@@ -107,9 +107,9 @@ GdkScreen * gdk_display_get_screen         (GdkDisplay  *display,
 					    gint         screen_num);
 GdkScreen * gdk_display_get_default_screen (GdkDisplay  *display);
 void        gdk_display_pointer_ungrab     (GdkDisplay  *display,
-					    guint32      time);
+					    guint32      time_);
 void        gdk_display_keyboard_ungrab    (GdkDisplay  *display,
-					    guint32      time);
+					    guint32      time_);
 gboolean    gdk_display_pointer_is_grabbed (GdkDisplay  *display);
 void        gdk_display_beep               (GdkDisplay  *display);
 void        gdk_display_sync               (GdkDisplay  *display);

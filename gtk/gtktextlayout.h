@@ -322,8 +322,8 @@ void gtk_text_layout_free_line_data    (GtkTextLayout     *layout,
 gboolean gtk_text_layout_is_valid        (GtkTextLayout *layout);
 void     gtk_text_layout_validate_yrange (GtkTextLayout *layout,
                                           GtkTextIter   *anchor_line,
-                                          gint           y0,
-                                          gint           y1);
+                                          gint           y0_,
+                                          gint           y1_);
 void     gtk_text_layout_validate        (GtkTextLayout *layout,
                                           gint           max_pixels);
 

@@ -307,7 +307,7 @@ gtk_tree_path_new_first (void)
 /**
  * gtk_tree_path_append_index:
  * @path: A #GtkTreePath.
- * @index: The index.
+ * @index_: The index.
  *
  * Appends a new index to a path.  As a result, the depth of the path is
  * increased.
@@ -327,7 +327,7 @@ gtk_tree_path_append_index (GtkTreePath *path,
 /**
  * gtk_tree_path_prepend_index:
  * @path: A #GtkTreePath.
- * @index: The index.
+ * @index_: The index.
  *
  * Prepends a new index to a path.  As a result, the depth of the path is
  * increased.
@@ -701,7 +701,7 @@ gtk_tree_model_get_n_columns (GtkTreeModel *tree_model)
 /**
  * gtk_tree_model_get_column_type:
  * @tree_model: A #GtkTreeModel.
- * @index: The column index.
+ * @index_: The column index.
  *
  * Returns the type of the column.
  *
@@ -978,7 +978,7 @@ gtk_tree_model_iter_n_children (GtkTreeModel *tree_model,
  * @n: Then index of the desired child.
  *
  * Sets @iter to be the child of @parent, using the given index.  The first
- * index is 0.  If @index is too big, or @parent has no children, @iter is set
+ * index is 0.  If @index_ is too big, or @parent has no children, @iter is set
  * to an invalid iterator and %FALSE is returned.  @parent will remain a valid
  * node after this function has been called.  As a special case, if @parent is
  * %NULL, then the @n<!-- -->th root node is set.

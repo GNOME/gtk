@@ -88,13 +88,13 @@ void             gdk_drag_context_unref      (GdkDragContext *context);
 
 void             gdk_drag_status        (GdkDragContext   *context,
 				         GdkDragAction     action,
-					 guint32           time);
+					 guint32           time_);
 void             gdk_drop_reply         (GdkDragContext   *context,
 					 gboolean          ok,
-					 guint32           time);
+					 guint32           time_);
 void             gdk_drop_finish        (GdkDragContext   *context,
 					 gboolean          success,
-					 guint32           time);
+					 guint32           time_);
 GdkAtom          gdk_drag_get_selection (GdkDragContext   *context);
 
 /* Source side */
@@ -131,11 +131,11 @@ gboolean        gdk_drag_motion      (GdkDragContext *context,
 				      gint            y_root,
 				      GdkDragAction   suggested_action,
 				      GdkDragAction   possible_actions,
-				      guint32         time);
+				      guint32         time_);
 void            gdk_drag_drop        (GdkDragContext *context,
-				      guint32         time);
+				      guint32         time_);
 void            gdk_drag_abort       (GdkDragContext *context,
-				      guint32         time);
+				      guint32         time_);
 
 #ifdef __cplusplus
 }

@@ -256,7 +256,7 @@ gtk_socket_new (void)
 
 /**
  * gtk_socket_steal:
- * @socket: a #GtkSocket
+ * @socket_: a #GtkSocket
  * @wid: the window ID of an existing toplevel window.
  * 
  * Reparents a pre-existing toplevel window into a #GtkSocket. This is
@@ -281,7 +281,7 @@ gtk_socket_steal (GtkSocket *socket, GdkNativeWindow wid)
 
 /**
  * gtk_socket_add_id:
- * @socket: a #GtkSocket
+ * @socket_: a #GtkSocket
  * @window_id: the window ID of a client participating in the XEMBED protocol.
  *
  * Adds an XEMBED client, such as a #GtkPlug, to the #GtkSocket.  The
@@ -311,7 +311,7 @@ gtk_socket_add_id (GtkSocket *socket, GdkNativeWindow window_id)
 
 /**
  * gtk_socket_get_id:
- * @socket: a #GtkSocket.
+ * @socket_: a #GtkSocket.
  * 
  * Gets the window ID of a #GtkSocket widget, which can then
  * be used to create a client embedded inside the socket, for

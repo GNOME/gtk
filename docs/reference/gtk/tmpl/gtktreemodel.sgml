@@ -334,7 +334,7 @@ versions of GTK+.
 </para>
 
 @path: 
-@index: 
+@index_: 
 
 
 <!-- ##### FUNCTION gtk_tree_path_prepend_index ##### -->
@@ -343,7 +343,7 @@ versions of GTK+.
 </para>
 
 @path: 
-@index: 
+@index_: 
 
 
 <!-- ##### FUNCTION gtk_tree_path_get_depth ##### -->
@@ -571,7 +571,7 @@ versions of GTK+.
 </para>
 
 @tree_model: 
-@index: 
+@index_: 
 @Returns: 
 
 

@@ -1703,6 +1703,8 @@ This function is deprecated; it does nothing.
 @data: 
 @info: 
 @time: 
+<!-- # Unused Parameters # -->
+@time_: 
 
 <!-- ##### SIGNAL GtkWidget::drag-data-received ##### -->
 <para>
@@ -1716,6 +1718,8 @@ This function is deprecated; it does nothing.
 @data: 
 @info: 
 @time: 
+<!-- # Unused Parameters # -->
+@time_: 
 
 <!-- ##### SIGNAL GtkWidget::drag-drop ##### -->
 <para>
@@ -1728,6 +1732,8 @@ This function is deprecated; it does nothing.
 @y: 
 @time: 
 @Returns: 
+<!-- # Unused Parameters # -->
+@time_: 
 
 <!-- ##### SIGNAL GtkWidget::drag-end ##### -->
 <para>
@@ -1745,6 +1751,8 @@ This function is deprecated; it does nothing.
 @widget: the object which received the signal.
 @drag_context: 
 @time: 
+<!-- # Unused Parameters # -->
+@time_: 
 
 <!-- ##### SIGNAL GtkWidget::drag-motion ##### -->
 <para>
@@ -1757,6 +1765,8 @@ This function is deprecated; it does nothing.
 @y: 
 @time: 
 @Returns: 
+<!-- # Unused Parameters # -->
+@time_: 
 
 <!-- ##### SIGNAL GtkWidget::enter-notify-event ##### -->
 <para>
@@ -1853,8 +1863,6 @@ a widget changes from un-anchored to anchored or vice-versa.
 
 @widget: the object which received the signal.
 @widget2: 
-<!-- # Unused Parameters # -->
-@widget: 
 
 <!-- ##### SIGNAL GtkWidget::key-press-event ##### -->
 <para>
@@ -1976,6 +1984,14 @@ a widget changes from un-anchored to anchored or vice-versa.
 
 @widget: the object which received the signal.
 
+<!-- ##### SIGNAL GtkWidget::screen-changed ##### -->
+<para>
+
+</para>
+
+@widget: the object which received the signal.
+@arg1: 
+
 <!-- ##### SIGNAL GtkWidget::scroll-event ##### -->
 <para>
 
@@ -2003,6 +2019,8 @@ a widget changes from un-anchored to anchored or vice-versa.
 @data: 
 @info: 
 @time: 
+<!-- # Unused Parameters # -->
+@time_: 
 
 <!-- ##### SIGNAL GtkWidget::selection-notify-event ##### -->
 <para>
@@ -2021,6 +2039,8 @@ a widget changes from un-anchored to anchored or vice-versa.
 @widget: the object which received the signal.
 @data: 
 @time: 
+<!-- # Unused Parameters # -->
+@time_: 
 
 <!-- ##### SIGNAL GtkWidget::selection-request-event ##### -->
 <para>

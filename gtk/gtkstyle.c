@@ -952,11 +952,11 @@ gtk_draw_hline (GtkStyle     *style,
  * @style: a #GtkStyle
  * @window: a #GdkWindow
  * @state_type: a state
- * @y1: the starting y coordinate
- * @y2: the ending y coordinate
+ * @y1_: the starting y coordinate
+ * @y2_: the ending y coordinate
  * @x: the x coordinate
  * 
- * Draws a vertical line from (@x, @y1) to (@x, @y2) in @window
+ * Draws a vertical line from (@x, @y1_) to (@x, @y2_) in @window
  * using the given style and state.
  * 
  * This function is deprecated, use gtk_paint_vline() instead.
@@ -5533,11 +5533,11 @@ gtk_paint_hline (GtkStyle      *style,
  * @area: rectangle to which the output is clipped
  * @widget:
  * @detail: 
- * @y1: the starting y coordinate
- * @y2: the ending y coordinate
+ * @y1_: the starting y coordinate
+ * @y2_: the ending y coordinate
  * @x: the x coordinate
  * 
- * Draws a vertical line from (@x, @y1) to (@x, @y1) in @window
+ * Draws a vertical line from (@x, @y1_) to (@x, @y2_) in @window
  * using the given style and state.
  */
 void
@@ -5946,8 +5946,8 @@ gtk_paint_resize_grip (GtkStyle      *style,
 
 /**
  * gtk_border_copy:
- * @border: a #GtkBorder.
- * @returns: a copy of @border.
+ * @border_: a #GtkBorder.
+ * @returns: a copy of @border_.
  *
  * Copies a #GtkBorder structure.
  **/
@@ -5959,7 +5959,7 @@ gtk_border_copy (const GtkBorder *border)
 
 /**
  * gtk_border_free:
- * @border: a #GtkBorder.
+ * @border_: a #GtkBorder.
  * 
  * Frees a #GtkBorder structure.
  **/

@@ -50,7 +50,7 @@ extern "C" {
 typedef struct _GtkOldEditable       GtkOldEditable;
 typedef struct _GtkOldEditableClass  GtkOldEditableClass;
 
-typedef void (*GtkTextFunction) (GtkOldEditable  *editable, guint32 time);
+typedef void (*GtkTextFunction) (GtkOldEditable  *editable, guint32 time_);
 
 struct _GtkOldEditable
 {
@@ -121,7 +121,7 @@ struct _GtkOldEditableClass
 GtkType    gtk_old_editable_get_type        (void) G_GNUC_CONST;
 void       gtk_old_editable_claim_selection (GtkOldEditable *old_editable,
 					     gboolean        claim,
-					     guint32         time);
+					     guint32         time_);
 void       gtk_old_editable_changed         (GtkOldEditable *old_editable);
 
 #ifdef __cplusplus

@@ -35,7 +35,7 @@ the GTK+ documentation for more information.
 </para>
 
 @context: 
-@time: 
+@time_: 
 
 
 <!-- ##### FUNCTION gdk_drop_reply ##### -->
@@ -44,7 +44,7 @@ the GTK+ documentation for more information.
 
 @context: 
 @ok: 
-@time: 
+@time_: 
 
 
 <!-- ##### FUNCTION gdk_drag_context_new ##### -->
@@ -59,7 +59,7 @@ the GTK+ documentation for more information.
 </para>
 
 @context: 
-@time: 
+@time_: 
 
 
 <!-- ##### FUNCTION gdk_drag_find_window ##### -->
@@ -115,7 +115,7 @@ the GTK+ documentation for more information.
 @y_root: 
 @suggested_action: 
 @possible_actions: 
-@time: 
+@time_: 
 @Returns: 
 
 
@@ -125,7 +125,7 @@ the GTK+ documentation for more information.
 
 @context: 
 @success: 
-@time: 
+@time_: 
 
 
 <!-- ##### FUNCTION gdk_drag_get_protocol ##### -->
@@ -210,6 +210,6 @@ should do with the dropped data.
 
 @context: 
 @action: 
-@time: 
+@time_: 
 
 

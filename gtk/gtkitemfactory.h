@@ -185,14 +185,14 @@ void	gtk_item_factory_popup		(GtkItemFactory		*ifactory,
 					 guint			 x,
 					 guint			 y,
 					 guint			 mouse_button,
-					 guint32		 time);
+					 guint32		 time_);
 void	gtk_item_factory_popup_with_data(GtkItemFactory		*ifactory,
 					 gpointer		 popup_data,
 					 GtkDestroyNotify	 destroy,
 					 guint			 x,
 					 guint			 y,
 					 guint			 mouse_button,
-					 guint32		 time);
+					 guint32		 time_);
 gpointer gtk_item_factory_popup_data	(GtkItemFactory		*ifactory);
 gpointer gtk_item_factory_popup_data_from_widget (GtkWidget	*widget);
 void   gtk_item_factory_set_translate_func (GtkItemFactory      *ifactory,

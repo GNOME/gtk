@@ -41,7 +41,7 @@ typedef GdkAtom GdkSelectionType;
 #ifndef GDK_MULTIHEAD_SAFE
 gboolean   gdk_selection_owner_set (GdkWindow	 *owner,
 				    GdkAtom	  selection,
-				    guint32	  time,
+				    guint32	  time_,
 				    gboolean      send_event);
 GdkWindow* gdk_selection_owner_get (GdkAtom	  selection);
 #endif/* GDK_MULTIHEAD_SAFE */
@@ -49,7 +49,7 @@ GdkWindow* gdk_selection_owner_get (GdkAtom	  selection);
 gboolean   gdk_selection_owner_set_for_display (GdkDisplay *display,
 						GdkWindow  *owner,
 						GdkAtom     selection,
-						guint32     time,
+						guint32     time_,
 						gboolean    send_event);
 GdkWindow *gdk_selection_owner_get_for_display (GdkDisplay *display,
 						GdkAtom     selection);
@@ -57,7 +57,7 @@ GdkWindow *gdk_selection_owner_get_for_display (GdkDisplay *display,
 void	   gdk_selection_convert   (GdkWindow	 *requestor,
 				    GdkAtom	  selection,
 				    GdkAtom	  target,
-				    guint32	  time);
+				    guint32	  time_);
 gboolean   gdk_selection_property_get (GdkWindow  *requestor,
 				       guchar	 **data,
 				       GdkAtom	  *prop_type,
@@ -68,7 +68,7 @@ void	   gdk_selection_send_notify (guint32	    requestor,
 				      GdkAtom	    selection,
 				      GdkAtom	    target,
 				      GdkAtom	    property,
-				      guint32	    time);
+				      guint32	    time_);
 #endif /* GDK_MULTIHEAD_SAFE */
 
 void       gdk_selection_send_notify_for_display (GdkDisplay *display,
@@ -76,7 +76,7 @@ void       gdk_selection_send_notify_for_display (GdkDisplay *display,
 						  GdkAtom     selection,
 						  GdkAtom     target,
 						  GdkAtom     property,
-						  guint32     time);
+						  guint32     time_);
 
 #ifdef __cplusplus
 }

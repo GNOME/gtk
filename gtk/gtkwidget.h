@@ -343,10 +343,10 @@ struct _GtkWidgetClass
   void (* selection_get)           (GtkWidget          *widget,
 				    GtkSelectionData   *selection_data,
 				    guint               info,
-				    guint               time);
+				    guint               time_);
   void (* selection_received)      (GtkWidget          *widget,
 				    GtkSelectionData   *selection_data,
-				    guint               time);
+				    guint               time_);
 
   /* Source side drag signals */
   void (* drag_begin)	           (GtkWidget	       *widget,
@@ -357,31 +357,31 @@ struct _GtkWidgetClass
 				    GdkDragContext     *context,
 				    GtkSelectionData   *selection_data,
 				    guint               info,
-				    guint               time);
+				    guint               time_);
   void (* drag_data_delete)        (GtkWidget	       *widget,
 				    GdkDragContext     *context);
 
   /* Target side drag signals */
   void (* drag_leave)	           (GtkWidget	       *widget,
 				    GdkDragContext     *context,
-				    guint               time);
+				    guint               time_);
   gboolean (* drag_motion)         (GtkWidget	       *widget,
 				    GdkDragContext     *context,
 				    gint                x,
 				    gint                y,
-				    guint               time);
+				    guint               time_);
   gboolean (* drag_drop)           (GtkWidget	       *widget,
 				    GdkDragContext     *context,
 				    gint                x,
 				    gint                y,
-				    guint               time);
+				    guint               time_);
   void (* drag_data_received)      (GtkWidget          *widget,
 				    GdkDragContext     *context,
 				    gint                x,
 				    gint                y,
 				    GtkSelectionData   *selection_data,
 				    guint               info,
-				    guint               time);
+				    guint               time_);
 
   /* Signals used only for keybindings */
   gboolean (* popup_menu)          (GtkWidget          *widget);

@@ -106,14 +106,14 @@ GdkGrabStatus gdk_pointer_grab       (GdkWindow    *window,
 				      GdkEventMask  event_mask,
 				      GdkWindow    *confine_to,
 				      GdkCursor    *cursor,
-				      guint32       time);
+				      guint32       time_);
 GdkGrabStatus gdk_keyboard_grab      (GdkWindow    *window,
 				      gboolean      owner_events,
-				      guint32       time);
+				      guint32       time_);
 
 #ifndef GDK_MULTIHEAD_SAFE
-void          gdk_pointer_ungrab     (guint32       time);
-void          gdk_keyboard_ungrab    (guint32       time);
+void          gdk_pointer_ungrab     (guint32       time_);
+void          gdk_keyboard_ungrab    (guint32       time_);
 gboolean      gdk_pointer_is_grabbed (void);
 
 gint gdk_screen_width  (void) G_GNUC_CONST;

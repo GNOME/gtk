@@ -839,7 +839,7 @@ Sets the key event generated when a macro button is pressed.
 </para>
 
 @deviceid: the device to configure.
-@index: the index of the macro button.
+@index_: the index of the macro button.
 @keyval: the key value for the #GdkKeypressEvent to generate.
          (a value of 0 means no event will be generated.)
 @modifiers: the modifier field for the generated 

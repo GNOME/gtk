@@ -84,7 +84,7 @@ struct _GtkTreeModelIface
 
   gint         (* get_n_columns)   (GtkTreeModel *tree_model);
   GType        (* get_column_type) (GtkTreeModel *tree_model,
-				    gint          index);
+				    gint          index_);
   gboolean     (* get_iter)        (GtkTreeModel *tree_model,
 				    GtkTreeIter  *iter,
 				    GtkTreePath  *path);
@@ -126,9 +126,9 @@ gchar       *gtk_tree_path_to_string        (GtkTreePath       *path);
 #define gtk_tree_path_new_root() gtk_tree_path_new_first()
 GtkTreePath *gtk_tree_path_new_first        (void);
 void         gtk_tree_path_append_index     (GtkTreePath       *path,
-					     gint               index);
+					     gint               index_);
 void         gtk_tree_path_prepend_index    (GtkTreePath       *path,
-					     gint               index);
+					     gint               index_);
 gint         gtk_tree_path_get_depth        (GtkTreePath       *path);
 gint        *gtk_tree_path_get_indices      (GtkTreePath       *path);
 void         gtk_tree_path_free             (GtkTreePath       *path);
@@ -180,7 +180,7 @@ GType             gtk_tree_model_get_type        (void) G_GNUC_CONST;
 GtkTreeModelFlags gtk_tree_model_get_flags       (GtkTreeModel *tree_model);
 gint              gtk_tree_model_get_n_columns   (GtkTreeModel *tree_model);
 GType             gtk_tree_model_get_column_type (GtkTreeModel *tree_model,
-						  gint          index);
+						  gint          index_);
 
 
 /* Iterator movement */

@@ -179,10 +179,10 @@ or a #GdkWindow.
 
 @drawable: 
 @gc: 
-@x1: 
-@y1: 
-@x2: 
-@y2: 
+@x1_: 
+@y1_: 
+@x2_: 
+@y2_: 
 
 
 <!-- ##### FUNCTION gdk_draw_lines ##### -->

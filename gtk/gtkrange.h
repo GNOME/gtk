@@ -118,7 +118,7 @@ struct _GtkRangeClass
 
   /* Virtual functions */
   void (* get_range_border) (GtkRange     *range,
-                             GtkBorder    *border);
+                             GtkBorder    *border_);
 
   /* Padding for future expansion */
   void (*_gtk_reserved1) (void);

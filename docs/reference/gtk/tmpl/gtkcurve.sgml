@@ -74,7 +74,7 @@ FIXME: Needs a more precise definition of gamma.
 </para>
 
 @curve: a #GtkCurve.
-@gamma: the gamma value.
+@gamma_: the gamma value.
 
 
 <!-- ##### FUNCTION gtk_curve_set_range ##### -->

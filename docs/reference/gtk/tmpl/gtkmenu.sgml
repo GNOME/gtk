@@ -253,7 +253,7 @@ Selects the specified menu item within the menu.  This is used by the
 </para>
 
 @menu: a #GtkMenu.
-@index: the index of the menu item to select.  Index values are from
+@index_: the index of the menu item to select.  Index values are from
 0 to n-1.
 
 
