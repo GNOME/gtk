@@ -167,6 +167,8 @@ gdk_window_scroll (GdkWindow *window,
   tmp_list = obj->children;
   while (tmp_list)
     {
+      GDK_WINDOW_OBJECT(tmp_list->data)->x += dx;
+      GDK_WINDOW_OBJECT(tmp_list->data)->y += dy;
       gdk_window_postmove (tmp_list->data, &parent_pos, FALSE);
       tmp_list = tmp_list->next;
     }

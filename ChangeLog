@@ -1,3 +1,8 @@
+2005-03-13  Ivan, Wong Yat Cheung  <email@ivanwong.info>
+
+	* gdk/win32/gdkgeometry-win32.c (gdk_window_scroll): A further fix
+	for big window support. Now also the test in testgtk works.
+
 2005-03-11  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkaboutdialog.c (add_credits_page): Don't crash on
