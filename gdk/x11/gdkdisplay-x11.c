@@ -764,10 +764,9 @@ _gdk_windowing_set_default_display (GdkDisplay *display)
 	display_x11->startup_notification_id = g_strdup (startup_id);
       
       /* Clear the environment variable so it won't be inherited by
-       * child processes and confuse things.  unsetenv isn't portable,
-       * right...
+       * child processes and confuse things.  
        */
-      putenv ("DESKTOP_STARTUP_ID=");
+      g_unsetenv ("DESKTOP_STARTUP_ID");
 
       /* Set the startup id on the leader window so it
        * applies to all windows we create on this display

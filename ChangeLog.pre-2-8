@@ -1,3 +1,13 @@
+2003-08-02  Matthias Clasen  <maclas@gmx.de>
+
+	* tests/testtext.c (test_init): 
+	* tests/testgtk.c (test_init): 
+	* tests/testdnd.c (test_init): 
+	* demos/pixbuf-init.c (pixbuf_init): 
+	* demos/gtk-demo/main.c (main): Use g_setenv().
+
+	* gdk/x11/gdkdisplay-x11.c (_gdk_windowing_set_default_display): Use g_unsetenv().
+
 Sat Aug  2 12:53:16 2003  Owen Taylor  <otaylor@redhat.com>
 
 	* configure.in: Requires glib-2.3.0, pango-1.2.0.
@@ -16,6 +26,12 @@ Sat Aug  2 12:53:16 2003  Owen Taylor  <otaylor@redhat.com>
 	for pangox.
 
 2003-08-02  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkcolorsel.c (color_sample_drop_handle) 
+	(palette_drop_handle): 
+	* gtk/gtkcolorbutton.c (gtk_color_button_drag_data_received):  Accept drops with the 
+	wrong format, since the KDE color chooser incorrectly drops application/x-color with 
+	format 8.
 
 	* gtk/gtkcolorsel.c (color_sample_drop_handle) (palette_drop_handle): 
 	* gtk/gtkcolorbutton.c (gtk_color_button_drag_data_received):  
