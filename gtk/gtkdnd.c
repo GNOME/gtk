@@ -1206,6 +1206,15 @@ gtk_drag_selection_received (GtkWidget        *widget,
   gtk_drag_release_ipc_widget (widget);
 }
 
+static void
+prepend_and_ref_widget (GtkWidget *widget,
+			gpointer   data)
+{
+  GSList **slist_p = data;
+
+  *slist_p = g_slist_prepend (*slist_p, g_object_ref (widget));
+}
+
 /*************************************************************
  * gtk_drag_find_widget:
  *     Recursive callback used to locate widgets for 
@@ -1223,8 +1232,6 @@ gtk_drag_find_widget (GtkWidget       *widget,
   gint x_offset = 0;
   gint y_offset = 0;
 
-  new_allocation = widget->allocation;
-
   if (data->found || !GTK_WIDGET_MAPPED (widget))
     return;
 
@@ -1233,19 +1240,35 @@ gtk_drag_find_widget (GtkWidget       *widget,
    * widget->window; points that are outside of widget->window
    * but within the allocation are not counted. This is consistent
    * with the way we highlight drag targets.
-   */
-  if (!GTK_WIDGET_NO_WINDOW (widget))
-    {
-      new_allocation.x = 0;
-      new_allocation.y = 0;
-    }
-  
+   *
+   * data->x,y are relative to widget->parent->window (if
+   * widget is not a toplevel, widget->window otherwise).
+   * We compute the allocation of widget in the same coordinates,
+   * clipping to widget->window, and all intermediate
+   * windows. If data->x,y is inside that, then we translate
+   * our coordinates to be relative to widget->window and
+   * recurse.
+   */  
+  new_allocation = widget->allocation;
+
   if (widget->parent)
     {
+      gint tx, ty, twidth, theight;
       GdkWindow *window = widget->window;
-      while (window != widget->parent->window)
+
+      /* Correct for the fact that the allocation is relative
+       * to the parent window for window widgets, not to widget->window.
+       */
+      if (!GTK_WIDGET_NO_WINDOW (widget))
 	{
-	  gint tx, ty, twidth, theight;
+          gdk_window_get_position (window, &tx, &ty);
+	  
+          new_allocation.x -= tx;
+	  new_allocation.y -= ty;
+	}
+      
+      while (window && window != widget->parent->window)
+	{	
 	  gdk_window_get_size (window, &twidth, &theight);
 
 	  if (new_allocation.x < 0)
@@ -1271,6 +1294,9 @@ gtk_drag_find_widget (GtkWidget       *widget,
 	  
 	  window = gdk_window_get_parent (window);
 	}
+
+      if (!window)		/* Window and widget heirarchies didn't match. */
+	return;
     }
 
   if (data->toplevel ||
@@ -1284,15 +1310,25 @@ gtk_drag_find_widget (GtkWidget       *widget,
       if (GTK_IS_CONTAINER (widget))
 	{
 	  GtkDragFindData new_data = *data;
+	  GSList *children = NULL;
+	  GSList *tmp_list;
 	  
 	  new_data.x -= x_offset;
 	  new_data.y -= y_offset;
 	  new_data.found = FALSE;
 	  new_data.toplevel = FALSE;
 	  
-	  gtk_container_forall (GTK_CONTAINER (widget),
-				(GtkCallback)gtk_drag_find_widget,
-				&new_data);
+	  /* need to reference children temporarily in case the
+	   * ::drag_motion/::drag_drop callbacks change the widget heirarchy.
+	   */
+	  gtk_container_forall (GTK_CONTAINER (widget), prepend_and_ref_widget, &children);
+	  for (tmp_list = children; tmp_list; tmp_list = tmp_list->next)
+	    {
+	      if (!new_data.found && GTK_WIDGET_DRAWABLE (tmp_list->data))
+		gtk_drag_find_widget (tmp_list->data, &new_data);
+	      gtk_widget_unref (tmp_list->data);
+	    }
+	  g_slist_free (children);
 	  
 	  data->found = new_data.found;
 	}

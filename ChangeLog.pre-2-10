@@ -1,3 +1,16 @@
+Fri Jan  4 13:05:15 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkdnd.c (gtk_drag_find_widget): At least
+	don't infinite loop if the widget and window heirarchies
+	don't correspond.
+
+	* gtk/gtkdnd.c (gtk_drag_find_widget): Handle changes
+	in heirarchy in ::drag_motion, ::drag_drop callbacks
+	by referencing child widget lists. (Patch from Tim)
+
+	* gtk/gtkdnd.c (gtk_drag_find_widget): Fix a problem
+	with widgets where window.x != widget->allocation.x
+
 Fri Jan  4 01:36:48 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/x11/gdkdrawable-x11.c (convert_to_format): Optimize
