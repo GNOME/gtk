@@ -405,9 +405,5 @@ gdk_pixbuf_loader_close (GdkPixbufLoader *loader)
 	priv->closed = TRUE;
 
 	gtk_signal_emit (GTK_OBJECT (loader),
-			 pixbuf_loader_signals[CLOSED],
-			 x, y,
-			 /* sanity check in here.  Defend against an errant loader */
-			 MIN (width, gdk_pixbuf_get_width (priv->pixbuf)),
-			 MIN (height, gdk_pixbuf_get_height (priv->pixbuf)));
+			 pixbuf_loader_signals[CLOSED]);
 }
