@@ -1,3 +1,7 @@
+2001-02-17  Havoc Pennington  <hp@pobox.com>
+
+	* gdk-pixbuf-loader.c (gdk_pixbuf_loader_new_with_type): docs
+
 2001-02-07  Alexander Larsson  <alexl@redhat.com>
 
 	* io-xpm.c (free_buffer):

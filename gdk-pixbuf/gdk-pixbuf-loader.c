@@ -498,8 +498,15 @@ gdk_pixbuf_loader_new (void)
 
 /**
  * gdk_pixbuf_loader_new_with_type:
+ * @image_type: name of the image format to be loaded with the image
+ * @error: return location for an allocated #GError, or %NULL to ignore errors
  *
- * Creates a new pixbuf loader object.
+ * Creates a new pixbuf loader object that always attempts to parse
+ * image data as if it were an image of type @image_type, instead of
+ * identifying the type automatically. Useful if you want an error if
+ * the image isn't the expected type, for loading image formats
+ * that can't be reliably identified by looking at the data, or if
+ * the user manually forces a specific type.
  *
  * Return value: A newly-created pixbuf loader.
  **/
