@@ -51,6 +51,19 @@
 
 typedef unsigned char CMap[3][MAXCOLORMAPSIZE];
 
+/* Possible states we can be in. */
+enum {
+	GIF_START = 1,
+	GIF_GET_COLORMAP = 2,
+	GIF_GET_NEXT_STEP = 3,
+	GIF_GET_EXTENTION = 4,
+	GIF_GET_COLORMAP2 = 5,
+	GIF_PREPARE_LZW = 6,
+	GIF_GET_LZW = 7,
+	GIF_DONE = 8
+};
+
+
 typedef struct _Gif89 Gif89;
 struct _Gif89
 {
@@ -63,6 +76,7 @@ struct _Gif89
 typedef struct _GifContext GifContext;
 struct _GifContext
 {
+	int state; /* really only relevant for progressive loading */
 	unsigned int width;
 	unsigned int height;
 	CMap color_map;
@@ -73,7 +87,6 @@ struct _GifContext
 	int gray_scale;
 	GdkPixbuf *pixbuf;
 	Gif89 gif89;
-	gint stage;
 
 	/* stuff per frame.  As we only support the first one, not so
 	 * relevant.  But still needed */
@@ -90,127 +103,232 @@ struct _GifContext
 	guchar *buf;
 	guint ptr;
 	guint size;
+	guint amount_needed;
+
+	/* our colormap context */
+	gint colormap_index;
+	gint colormap_flag;
+
+	/* our extension context */
+	guchar extension_label;
+	guchar extension_flag;
+
+	/* get block context */
+	guchar block_count;
+	guchar block_buf[256];
+	gint block_ptr;
 
 	/* our lwz context */
-	int lwz_fresh;
-	int lwz_code_size;
-	int lwz_set_code_size;
-	int lwz_max_code;
-	int lwz_max_code_size;
-	int lwz_firstcode;
-	int lwz_oldcode;
-	int lwz_clear_code;
-	int lwz_end_code;
-	int lwz_table[2][(1 << MAX_LWZ_BITS)];
-	int lwz_stack[(1 << (MAX_LWZ_BITS)) * 2];
-	int *lwz_sp;
-
+	gint lwz_fresh;
+	gint lwz_code_size;
+	guchar lwz_set_code_size;
+	gint lwz_max_code;
+	gint lwz_max_code_size;
+	gint lwz_firstcode;
+	gint lwz_oldcode;
+	gint lwz_clear_code;
+	gint lwz_end_code;
+	gint lwz_table[2][(1 << MAX_LWZ_BITS)];
+	gint lwz_stack[(1 << (MAX_LWZ_BITS)) * 2];
+	gint *lwz_sp;
 };
 
-
-
-static int ReadColorMap (GifContext *, int, CMap, int *);
-static int DoExtension (GifContext *, int label);
 static int GetDataBlock (GifContext *, unsigned char *);
 static int GetCode (GifContext *, int, int);
-static int LWZReadByte (GifContext *, int, int);
-
-static void ReadImage (GifContext *context);
+static int LWZReadByte (GifContext *);
 
 static int
 ReadOK (GifContext *context, guchar *buffer, size_t len)
 {
+	static int count = 0;
+	count += len;
+	g_print ("size :%d\tcount :%d\n", len, count);
 	if (context->file)
 		return fread(buffer, len, 1, context->file) != 0;
+	else {
+		if ((context->size - context->ptr) < len) {
+			memcpy (buffer, context->buf + context->ptr, len);
+			context->ptr += len;
+			context->amount_needed = 0;
+			return 0;
+		}
+		context->amount_needed = len - (context->size - context->ptr);
+	}
+	return 1;
+}
+
+
+/*
+ * Return vals.
+ *
+ * for the gif_get* functions,
+ *-1 -> more bytes needed.
+ * 0 -> success
+ * 1 -> failure; abort the load
+ */
+
+
+
+/* Changes the stage to be GIF_GET_COLORMAP */
+static void
+gif_set_get_colormap (GifContext *context)
+{
+	context->colormap_flag = TRUE;
+	context->colormap_index = 0;
+	context->state = GIF_GET_COLORMAP;
+}
+
+static void
+gif_set_get_colormap2 (GifContext *context)
+{
+	context->colormap_flag = TRUE;
+	context->colormap_index = 0;
+	context->state = GIF_GET_COLORMAP2;
+}
+
+static gint
+gif_get_colormap (GifContext *context)
+{
+	unsigned char rgb[3];
+
+	while (context->colormap_index < context->bit_pixel) {
+		if (!ReadOK (context, rgb, sizeof (rgb))) {
+			/*g_message (_("GIF: bad colormap\n"));*/
+			return -1;
+		}
+
+		context->color_map[CM_RED][context->colormap_index] = rgb[0];
+		context->color_map[CM_GREEN][context->colormap_index] = rgb[1];
+		context->color_map[CM_BLUE][context->colormap_index] = rgb[2];
+
+		context->colormap_flag &= (rgb[0] == rgb[1] && rgb[1] == rgb[2]);
+		context->colormap_index ++;
+	}
+
+	context->gray_scale = (context->colormap_flag) ? GRAYSCALE : COLOR;
+
 	return 0;
 }
 
+/*
+ * in order for this function to work, we need to perform some black magic.
+ * We want to return -1 to let the calling function know, as before, that it needs
+ * more bytes.  If we return 0, we were able to successfully read all block->count bytes.
+ * Problem is, we don't want to reread block_count every time, so we check to see if
+ * context->block_count is 0 before we read in the function.
+ *
+ * As a result, context->block_count MUST be 0 the first time the get_data_block is called
+ * within a context.
+ */
+
 static int
-ReadColorMap (GifContext *context,
-	      int   number,
-	      CMap  buffer,
-	      int  *format)
+get_data_block (GifContext *context,
+		unsigned char *buf,
+		gint *empty_block)
 {
-	int i;
-	unsigned char rgb[3];
-	int flag;
 
-	flag = TRUE;
-
-	for (i = 0; i < number; ++i) {
-		if (!ReadOK (context, rgb, sizeof (rgb))) {
-			/*g_message (_("GIF: bad colormap\n"));*/
-			return TRUE;
+	if (context->block_count == 0) {
+		if (!ReadOK (context, &context->block_count, 1)) {
+			return -1;
 		}
-
-		buffer[CM_RED][i] = rgb[0];
-		buffer[CM_GREEN][i] = rgb[1];
-		buffer[CM_BLUE][i] = rgb[2];
-
-		flag &= (rgb[0] == rgb[1] && rgb[1] == rgb[2]);
 	}
 
-	*format = (flag) ? GRAYSCALE : COLOR;
+	if (context->block_count == 0)
+		if (empty_block)
+			*empty_block = TRUE;
 
-	return FALSE;
+	return 0;
+
+	if (!ReadOK (context, buf, context->block_count)) {
+		return -1;
+	}
+
+	return 0;
+}
+
+static void
+gif_set_get_extension (GifContext *context)
+{
+	g_print ("getting the extension woooooo\n");
+	context->state = GIF_GET_EXTENTION;
+	context->extension_flag = TRUE;
+	context->extension_label = '\000';
+	context->block_count = 0;
+	context->block_ptr = 0;
 }
 
 static int
-DoExtension (GifContext *context, int label)
+gif_get_extension (GifContext *context)
 {
-	static guchar buf[256];
+	gint retval;
+	gint empty_block = FALSE;
 
-	switch (label) {
-	case 0xf9:			/* Graphic Control Extension */
-		(void) GetDataBlock (context, (unsigned char *) buf);
-		context->gif89.disposal = (buf[0] >> 2) & 0x7;
-		context->gif89.input_flag = (buf[0] >> 1) & 0x1;
-		context->gif89.delay_time = LM_to_uint (buf[1], buf[2]);
-		if (context->pixbuf == NULL) {
-			/* I only want to set the transparency if I haven't
-			 * created the pixbuf yet. */
-			if ((buf[0] & 0x1) != 0)
-				context->gif89.transparent = buf[3];
-			else
-				context->gif89.transparent = -1;
+	g_print ("in gif_get_extension\n");
+	if (context->extension_flag) {
+		if (!context->extension_label) {
+			if (!ReadOK (context, &context->extension_label , 1)) {
+				return -1;
+			}
 		}
-		while (GetDataBlock (context, (unsigned char *) buf) != 0)
-			;
-		return FALSE;
-		break;
-	default:
-		/* Unhandled extension */
-		break;
+
+		switch (context->extension_label) {
+		case 0xf9:			/* Graphic Control Extension */
+			retval = get_data_block (context, (unsigned char *) context->block_buf, NULL);
+			if (retval != 0)
+				return retval;
+			context->gif89.disposal = (context->block_buf[0] >> 2) & 0x7;
+			context->gif89.input_flag = (context->block_buf[0] >> 1) & 0x1;
+			context->gif89.delay_time = LM_to_uint (context->block_buf[1], context->block_buf[2]);
+			if (context->pixbuf == NULL) {
+				/* I only want to set the transparency if I haven't
+				 * created the pixbuf yet. */
+				if ((context->block_buf[0] & 0x1) != 0)
+					context->gif89.transparent = context->block_buf[3];
+				else
+					context->gif89.transparent = -1;
+			}
+			
+			/* Now we've successfully loaded this one, we continue on our way */
+			context->extension_flag = FALSE;
+		default:
+			/* Unhandled extension */
+			break;
+		}
 	}
+	/* read all blocks, until I get an empty block */
+	/* not sure why, but it makes it work.  -jrb */
+	do {
+		retval = get_data_block (context, (unsigned char *) context->block_buf, &empty_block);
+		if (retval != 0)
+			return retval;
+	} while (!empty_block);
 
-	while (GetDataBlock (context, (unsigned char *) buf) != 0)
-		;
-
-	return FALSE;
+	return 0;
 }
 
 static int ZeroDataBlock = FALSE;
 
 static int
-GetDataBlock (GifContext    *context,
+GetDataBlock (GifContext *context,
 	      unsigned char *buf)
 {
-	unsigned char count;
+//	unsigned char count;
 
-	if (!ReadOK (context, &count, 1)) {
+	if (!ReadOK (context, &context->block_count, 1)) {
 		/*g_message (_("GIF: error in getting DataBlock size\n"));*/
 		return -1;
 	}
 
-	ZeroDataBlock = count == 0;
+	ZeroDataBlock = context->block_count == 0;
 
-	if ((count != 0) && (!ReadOK (context, buf, count))) {
+	if ((context->block_count != 0) && (!ReadOK (context, buf, context->block_count))) {
 		/*g_message (_("GIF: error in reading DataBlock\n"));*/
 		return -1;
 	}
 
-	return count;
+	return context->block_count;
 }
+
 
 static int
 GetCode (GifContext *context,
@@ -258,36 +376,12 @@ GetCode (GifContext *context,
 }
 
 static int
-LWZReadByte (GifContext *context,
-	     int   flag,
-	     int   input_code_size)
+LWZReadByte (GifContext *context)
 {
 	int code, incode;
 	register int i;
 
-	if (flag) {
-		context->lwz_set_code_size = input_code_size;
-		context->lwz_code_size = context->lwz_set_code_size + 1;
-		context->lwz_clear_code = 1 << context->lwz_set_code_size;
-		context->lwz_end_code = context->lwz_clear_code + 1;
-		context->lwz_max_code_size = 2 * context->lwz_clear_code;
-		context->lwz_max_code = context->lwz_clear_code + 2;
-
-		GetCode (context, 0, TRUE);
-
-		context->lwz_fresh = TRUE;
-
-		for (i = 0; i < context->lwz_clear_code; ++i) {
-			context->lwz_table[0][i] = 0;
-			context->lwz_table[1][i] = i;
-		}
-		for (; i < (1 << MAX_LWZ_BITS); ++i)
-			context->lwz_table[0][i] = context->lwz_table[1][0] = 0;
-
-		context->lwz_sp = context->lwz_stack;
-
-		return 0;
-	} else if (context->lwz_fresh) {
+	if (context->lwz_fresh) {
 		context->lwz_fresh = FALSE;
 		do {
 			context->lwz_firstcode = context->lwz_oldcode = GetCode (context, context->lwz_code_size, FALSE);
@@ -367,25 +461,11 @@ LWZReadByte (GifContext *context,
 }
 
 static void
-ReadImage (GifContext *context)
+gif_get_lzw (GifContext *context)
 {
 	guchar *dest, *temp;
-	guchar c;
 	gint xpos = 0, ypos = 0, pass = 0;
 	gint v;
-
-	/*
-	**  Initialize the Compression routines
-	*/
-	if (!ReadOK (context, &c, 1)) {
-		/*g_message (_("GIF: EOF / read error on image data\n"));*/
-		return;
-	}
-
-	if (LWZReadByte (context, TRUE, c) < 0) {
-		/*g_message (_("GIF: error while reading\n"));*/
-		return;
-	}
 
 	context->pixbuf = gdk_pixbuf_new (ART_PIX_RGB,
 					  context->gif89.transparent,
@@ -394,7 +474,7 @@ ReadImage (GifContext *context)
 					  context->height);
 
 	dest = gdk_pixbuf_get_pixels (context->pixbuf);
-	while ((v = LWZReadByte ( context, FALSE, c)) >= 0) {
+	while ((v = LWZReadByte ( context)) >= 0) {
 		if (context->gif89.transparent) {
 			temp = dest + ypos * gdk_pixbuf_get_rowstride (context->pixbuf) + xpos * 4;
 			*temp = context->color_map [0][(guchar) v];
@@ -438,7 +518,7 @@ ReadImage (GifContext *context)
 						ypos = 1;
 						break;
 					default:
-						goto fini;
+						goto done;
 					}
 				}
 			} else {
@@ -449,29 +529,52 @@ ReadImage (GifContext *context)
 			break;
 	}
 
- fini:
-	ypos = 0;
-
-	if (LWZReadByte (context, FALSE, c) >= 0)
-		g_print ("GIF: too much input data, ignoring extra...\n");
+ done:
+	/* we got enough data. there may be more (ie, newer layers) but we can quit now */
+	context->state = GIF_DONE;
 }
 
-/* called until 1 is returned.
- * if -1 is returned, then there was an error, and we must stop loading the image
- * if 0 is returned, we need more bytes.  However, this isn't handled correctly currently,
- * so we assume that the initial 128 bytes is enough to get us started.
- * If 1 is returned, then we are ready to start loading the image. */
+static int
+gif_prepare_lzw (GifContext *context)
+{
+	gint i;
 
+	if (!ReadOK (context, &(context->lwz_set_code_size), 1)) {
+		/*g_message (_("GIF: EOF / read error on image data\n"));*/
+		return -1;
+	}
+
+	context->lwz_code_size = context->lwz_set_code_size + 1;
+	context->lwz_clear_code = 1 << context->lwz_set_code_size;
+	context->lwz_end_code = context->lwz_clear_code + 1;
+	context->lwz_max_code_size = 2 * context->lwz_clear_code;
+	context->lwz_max_code = context->lwz_clear_code + 2;
+
+	GetCode (context, 0, TRUE);
+
+	context->lwz_fresh = TRUE;
+
+	for (i = 0; i < context->lwz_clear_code; ++i) {
+		context->lwz_table[0][i] = 0;
+		context->lwz_table[1][i] = i;
+	}
+	for (; i < (1 << MAX_LWZ_BITS); ++i)
+		context->lwz_table[0][i] = context->lwz_table[1][0] = 0;
+
+	context->lwz_sp = context->lwz_stack;
+	return 0;
+}
+
+/* needs 13 bytes to proceed. */
 static gint
-prepare_iter_loop (GifContext *context)
+gif_init (GifContext *context)
 {
 	unsigned char buf[16];
-	unsigned char c;
 	char version[4];
 
 	if (!ReadOK (context, buf, 6)) {
 		/* Unable to read magic number */
-		return 0;
+		return -1;
 	}
 
 	if (strncmp ((char *) buf, "GIF", 3) != 0) {
@@ -490,7 +593,7 @@ prepare_iter_loop (GifContext *context)
 	/* read the screen descriptor */
 	if (!ReadOK (context, buf, 7)) {
 		/* Failed to read screen descriptor */
-		return 0;
+		return -1;
 	}
 
 	context->width = LM_to_uint (buf[0], buf[1]);
@@ -502,66 +605,135 @@ prepare_iter_loop (GifContext *context)
 	context->pixbuf = NULL;
 
 	if (BitSet (buf[4], LOCALCOLORMAP)) {
-		/* Global Colormap */
-		if (ReadColorMap (context, context->bit_pixel,
-				  context->color_map,
-				  &context->gray_scale)) {
-			return -1;
-		}
+		gif_set_get_colormap (context);
+	} else {
+		context->state = GIF_GET_NEXT_STEP;
 	}
+	return 0;
+}
 
-	context->stage = 1;
+
+static gint
+gif_get_next_step (GifContext *context)
+{
+	unsigned char buf[16];
+	unsigned char c;
 	for (;;) {
 		if (!ReadOK (context, &c, 1)) {
-			return 0;
+			return -1;
 		}
-		
+		g_print ("c== %c\n", c);
 		if (c == ';') {
 			/* GIF terminator */
 			/* hmm.  Not 100% sure what to do about this.  Should
 			 * i try to return a blank image instead? */
-			return -1;
+			context->state = GIF_DONE;
+			return 1;
 		}
 
 		if (c == '!') {
-				/* Check the extention */
-			if (!ReadOK (context, &c, 1)) {
-				return 0;
-			}
-			DoExtension (context, c);
+			/* Check the extention */
+			gif_set_get_extension (context);
 			continue;
 		}
+
+		/* look for frame */
 		if (c != ',') {
-				/* Not a valid start character */
+			/* Not a valid start character */
 			continue;
 		}
 
 		if (!ReadOK (context, buf, 9)) {
-			return 0;
+			return -1;
 		}
 
 		/* Okay, we got all the info we need.  Lets record it */
 		context->frame_len = LM_to_uint (buf[4], buf[5]);
 		context->frame_height = LM_to_uint (buf[6], buf[7]);
-		if (context->frame_height >context->height)
-			return -1;
+		if (context->frame_height > context->height) {
+			context->state = GIF_DONE;
+			return 1;
+		}
 
 		context->frame_interlace = BitSet (buf[8], INTERLACE);
-		if (!BitSet (buf[8], LOCALCOLORMAP)) {
+		if (BitSet (buf[8], LOCALCOLORMAP)) {
 			/* Does this frame have it's own colormap. */
 			/* really only relevant when looking at the first frame
 			 * of an animated gif. */
 			/* if it does, we need to re-read in the colormap,
 			 * the gray_scale, and the bit_pixel */
 			context->bit_pixel = 1 << ((buf[8] & 0x07) + 1);
-			if (ReadColorMap (context, context->bit_pixel, context->color_map, &context->gray_scale)) {
-				return -1;
-			}
+			gif_set_get_colormap2 (context);
+			return 0;
 		}
-		return 1;
+		context->state = GIF_PREPARE_LZW;
+		return 0;
 	}
 	g_assert_not_reached ();
-	return -1;
+	return 1;
+}
+
+
+static gint
+gif_main_loop (GifContext *context)
+{
+	gint retval = 0;
+
+	do {
+		switch (context->state) {
+		case GIF_START:
+			g_print ("in GIF_START\n");
+			retval = gif_init (context);
+			break;
+
+		case GIF_GET_COLORMAP:
+			g_print ("in GIF_GET_COLORMAP\n");
+			retval = gif_get_colormap (context);
+			if (retval == 0)
+				context->state = GIF_GET_NEXT_STEP;
+			break;
+
+		case GIF_GET_NEXT_STEP:
+			g_print ("in GIF_GET_NEXT_STEP\n");
+			retval = gif_get_next_step (context);
+			break;
+
+		case GIF_GET_EXTENTION:
+			g_print ("in GIF_GET_EXTENTION\n");
+			retval = gif_get_extension (context);
+			if (retval == 0)
+				context->state = GIF_GET_NEXT_STEP;
+			break;
+
+		case GIF_GET_COLORMAP2:
+			g_print ("in GIF_GET_COLORMAP2\n");
+			retval = gif_get_colormap (context);
+			if (retval == 0)
+				context->state = GIF_PREPARE_LZW;
+			break;
+
+		case GIF_PREPARE_LZW:
+			g_print ("in GIF_PREPARE_LZW\n");
+			retval = gif_prepare_lzw (context);
+			if (retval == 0)
+				context->state = GIF_GET_LZW;
+			break;
+
+		case GIF_GET_LZW:
+			g_print ("in GIF_GET_LZW\n");
+			gif_get_lzw (context);
+			retval = 0;
+			break;
+
+		case GIF_DONE:
+		default:
+			g_print ("in GIF_DONE\n");
+			retval = 0;
+			goto done;
+		};
+	} while (retval == 0);
+ done:
+	return retval;
 }
 
 /* Shared library entry point */
@@ -576,10 +748,10 @@ image_load (FILE *file)
 	context->lwz_fresh = FALSE;
 	context->file = file;
 	context->pixbuf = NULL;
-	context->stage = 0;
+	context->state = GIF_START;
 
-	prepare_iter_loop (context);
-	ReadImage (context);
+	gif_main_loop (context);
+
 	return context->pixbuf;
 }
 
@@ -594,7 +766,7 @@ image_begin_load (ModulePreparedNotifyFunc func, gpointer user_data)
 	context->lwz_fresh = FALSE;
 	context->file = NULL;
 	context->pixbuf = NULL;
-	context->stage = 0;
+	context->state = GIF_START;
 
 	return (gpointer) context;
 }
@@ -612,7 +784,20 @@ image_stop_load (gpointer data)
 gboolean
 image_load_increment (gpointer data, guchar *buf, guint size)
 {
+	gint retval;
 	GifContext *context = (GifContext *) data;
 
 	return FALSE;
+	if (context->amount_needed == 0) {
+		/* we aren't looking for some bytes. */
+		context->buf = buf;
+		context->ptr = 0;
+		context->size = size;
+	} 
+	retval = gif_main_loop (context);
+	if (retval == 1)
+		return FALSE;
+	if (retval == -1) {
+	}
+	return TRUE;
 }
