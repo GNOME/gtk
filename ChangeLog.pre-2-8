@@ -1,3 +1,8 @@
+Thu Mar 11 15:59:05 2004  Owen Taylor  <otaylor@redhat.com>
+
+	* tests/testgtk.c (create_spins): Use gtk_entry_set_width_chars()
+	rather than gtk_widget_set_size_request().
+
 2004-03-11  Federico Mena Quintero  <federico@ximian.com>
 
 	* gtk/gtkfilechooserdefault.c (remove_settings_signal): New

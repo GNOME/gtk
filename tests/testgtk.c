@@ -5108,7 +5108,7 @@ create_spins (GtkWidget *widget)
 			G_CALLBACK (spin_button_time_output_func),
 			NULL);
       gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), TRUE);
-      gtk_widget_set_size_request (spinner, 55, -1);
+      gtk_entry_set_width_chars (GTK_ENTRY (spinner), 5);
       gtk_box_pack_start (GTK_BOX (vbox2), spinner, FALSE, TRUE, 0);
 
       vbox2 = gtk_vbox_new (FALSE, 0);
@@ -5132,7 +5132,7 @@ create_spins (GtkWidget *widget)
 			G_CALLBACK (spin_button_month_output_func),
 			NULL);
       gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), TRUE);
-      gtk_widget_set_size_request (spinner, 85, -1);
+      gtk_entry_set_width_chars (GTK_ENTRY (spinner), 9);
       gtk_box_pack_start (GTK_BOX (vbox2), spinner, FALSE, TRUE, 0);
       
       vbox2 = gtk_vbox_new (FALSE, 0);
@@ -5154,7 +5154,7 @@ create_spins (GtkWidget *widget)
 			G_CALLBACK (spin_button_hex_output_func),
 			NULL);
       gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), TRUE);
-      gtk_widget_set_size_request (spinner, 55, -1);
+      gtk_entry_set_width_chars (GTK_ENTRY (spinner), 4);
       gtk_box_pack_start (GTK_BOX (vbox2), spinner, FALSE, TRUE, 0);
 
       frame = gtk_frame_new ("Accelerated");
