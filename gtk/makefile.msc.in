@@ -27,7 +27,7 @@ AWK = gawk
 
 INCLUDES = -FImsvc_recommended_pragmas.h -I . -I .. -I ../gdk -I ../gdk-pixbuf
 DEPCFLAGS = $(PANGO_CFLAGS) $(GLIB_CFLAGS) $(LIBICONV_CFLAGS) \
-		$(INTL_CFLAGS) $(ATK_CFLAGS)
+		$(INTL_CFLAGS) $(ATK_CFLAGS) $(CAIRO_CFLAGS)
 LDFLAGS = $(ATK_LIBS) /link /machine:ix86 $(LINKDEBUG)
 # Some files use near as an identifier
 # Don't define GTK_COMPILATION here, because it's for gtk-x.x.dll only
@@ -160,6 +160,7 @@ gtk_OBJECTS = 					\
 	gtkmenutoolbutton.obj	\
 	gtkmessagedialog.obj			\
 	gtkmisc.obj				\
+	gtkmnemonichash.obj	\
 	gtkmodules.obj	\
 	gtknotebook.obj				\
 	gtkobject.obj				\
@@ -443,7 +444,7 @@ GENERATED = \
 generated : $(GENERATED)
 	$(TOUCH) generated
 
-gtk.def: gtk.symbols
+gtk.def: gtk.symbols makefile.msc
 	echo EXPORTS > gtk.def
 	cl /EP -DINCLUDE_VARIABLES -DG_OS_WIN32 gtk.symbols >> gtk.def
 
@@ -500,8 +501,8 @@ gtk-win32.res : gtk-win32.rc
 #
 libgtk-win32-$(GTK_VER)-0.dll : $(gtk_OBJECTS) gtk.def gtk-win32.res
 	$(CC) $(CFLAGS) -LD -Fm -Fe$@ $(gtk_OBJECTS) gtk-win32.res \
-	$(GDK_LIBS) $(GDK_PIXBUF_LIBS) $(PANGO_LIBS) $(INTL_LIBS) $(GLIB_LIBS) \
-	gdi32.lib user32.lib advapi32.lib wsock32.lib shell32.lib \
+	$(GDK_LIBS) $(GDK_PIXBUF_LIBS) $(PANGO_LIBS) $(INTL_LIBS) $(GLIB_LIBS) $(GMODULE_LIBS) \
+	gdi32.lib user32.lib advapi32.lib wsock32.lib shell32.lib ole32.lib \
 	$(LDFLAGS) /implib:gtk-win32-$(GTK_VER).lib /def:gtk.def
 
 gtk-win32-$(GTK_VER)s.lib : $(gtk_OBJECTS)

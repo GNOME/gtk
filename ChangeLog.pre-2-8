@@ -1,3 +1,13 @@
+2005-02-05  Hans Breuer  <hans@breuer.org>
+
+	* gdk/makefile.msc gdk/win32/makefile.msc gtk/makefile.msc.in :
+	build with Cairo dependency. The patch to acually use Cairo
+	on win32 will be on gtk-devel-list soon.
+	* tests/makefile.msc : add testcairo building
+
+	* gtk/stock-icons/makefile.msc : split command line into two to
+	work with the shells default
+
 Fri Feb  4 14:16:31 2005  Manish Singh  <yosh@gimp.org>
 
 	* gtk/gtkaccelgroup.c (substitute_underscores): remove unused

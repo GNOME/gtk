@@ -94,6 +94,8 @@ VARIABLES = \
 	stock_media_rewind_24		stock_media_rewind_24.png	\
 	stock_media_stop_16		stock_media_stop_16.png	\
 	stock_media_stop_24		stock_media_stop_24.png	\
+
+VARIABLES2 = \
 	stock_network_16		stock_network_16.png	\
 	stock_network_24		stock_network_24.png	\
 	stock_new_16		stock_new_16.png	\
@@ -181,3 +183,4 @@ all: \
 
 gtkstockpixbufs.h : makefile.msc
 	..\..\gdk-pixbuf\gdk-pixbuf-csource --rle --build-list $(VARIABLES) > gtkstockpixbufs.h
+	..\..\gdk-pixbuf\gdk-pixbuf-csource --rle --build-list $(VARIABLES2) >> gtkstockpixbufs.h

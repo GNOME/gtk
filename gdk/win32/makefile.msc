@@ -14,7 +14,7 @@ TOP = ../../..
 GTK_VER=2.0
 
 CFLAGS = -FImsvc_recommended_pragmas.h \
-	-I. -I.. -I..\.. $(GLIB_CFLAGS) $(PANGO_CFLAGS) \
+	-I. -I.. -I..\.. $(GLIB_CFLAGS) $(PANGO_CFLAGS) $(CAIRO_CFLAGS) \
 	-I$(WTKIT)\include -I$(GLIB) \
 	$(G_DEBUGGING) -DHAVE_CONFIG_H -DINSIDE_GDK_WIN32 -DGDK_VERSION=\"$(GTK_VER)\"
 
