@@ -1,3 +1,16 @@
+1998-10-31  Raja R Harinath  <harinath@cs.umn.edu>
+
+	* gtk/gtkfeatures.h.in: Remove `#pragma }'.
+
+	* gdk/gdki18n.h: Update to use new `glib' widechar defines.
+
+	* configure.in (CFLAGS): Don't use test -z "echo .. | grep".  Use
+	case instead.
+	(wchar.h, wctype.h, iswalnum): Duplicate widechar tests from `glib'.
+	(GDK_WLIBS): New variable.  Lists extra libraries needed to use
+	widechar functions.
+	* gtk-config.in (--libs): List $GDK_WLIBS, too.
+
 Sat Oct 31 03:11:57 CST 1998 Shawn T. Amundson <amundson@gtk.org>
 
 	* Released GTK+ 1.1.3
