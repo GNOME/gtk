@@ -336,12 +336,12 @@ gtk_rc_add_initial_default_files (void)
     }
   else
     {
-      str = g_malloc (strlen(GTK_SYSCONFDIR) + strlen("/gtkrc"));
+      str = g_malloc (strlen(GTK_SYSCONFDIR) + strlen("/gtkrc") + 1);
       sprintf (str, "%s%s", GTK_SYSCONFDIR, "/gtkrc");
       gtk_rc_add_default_file (str);
 
       var = g_get_home_dir ();
-      str = g_malloc (strlen(var) + strlen("/.gtkrc"));
+      str = g_malloc (strlen(var) + strlen("/.gtkrc") + 1);
       sprintf (str, "%s%s", var, "/.gtkrc");
       gtk_rc_add_default_file (str);
     }

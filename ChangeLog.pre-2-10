@@ -1,3 +1,8 @@
+Wed Dec  9 00:41:41 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkrc.c (gtk_rc_add_initial_default_files): Allocate
+	correct amount of memory for strings.
+
 Tue Dec  8 18:29:05 CST 1998 Shawn T. Amundson <amundson@gtk.org>
 
 	* Released GTK+ 1.1.6
