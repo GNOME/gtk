@@ -268,12 +268,12 @@ msgstr "Mapa Giotáin Buntomhaiste"
 
 #: gtk/gtkfontsel.c:903
 msgid "*"
-msgstr ""
+msgstr "*"
 
 #. Convert '(nil)' weights to 'regular', since it looks nicer.
 #: gtk/gtkfontsel.c:1228
 msgid "(nil)"
-msgstr ""
+msgstr "(náid)"
 
 #: gtk/gtkfontsel.c:1228 gtk/gtkfontsel.c:2700
 msgid "regular"
@@ -317,8 +317,7 @@ msgstr "Ní clófhoireann bailí í an chlófhoireann roghnaithe."
 
 #: gtk/gtkfontsel.c:1860
 msgid "This is a 2-byte font and may not be displayed correctly."
-msgstr ""
-"Is clófhoireann 2-beart í agus is féidir nach dtaispeánfaidh sí i gceart."
+msgstr "Is clófhoireann 2-beart í agus is féidir nach dtaispeánfaidh sí i gceart."
 
 #: gtk/gtkfontsel.c:1982 gtk/gtkinputdialog.c:607
 msgid "(unknown)"
@@ -346,45 +345,43 @@ msgstr "Clófhoireann: (Scagaire Feidhmeach)"
 
 #: gtk/gtkfontsel.c:2680
 msgid "heavy"
-msgstr ""
+msgstr "cló trom"
 
 #: gtk/gtkfontsel.c:2682
 msgid "extrabold"
-msgstr ""
+msgstr "cló sárthrom"
 
 #: gtk/gtkfontsel.c:2684
 msgid "bold"
-msgstr ""
+msgstr "cló trom"
 
 #: gtk/gtkfontsel.c:2687
 msgid "demibold"
-msgstr ""
+msgstr "cló leaththrom"
 
 #: gtk/gtkfontsel.c:2690
 msgid "medium"
-msgstr ""
+msgstr "cló meán"
 
 #: gtk/gtkfontsel.c:2692
 msgid "normal"
-msgstr ""
+msgstr "cló gnách"
 
 #: gtk/gtkfontsel.c:2694
-#, fuzzy
 msgid "light"
-msgstr "Meachán:"
+msgstr "cló éadrom"
 
 #: gtk/gtkfontsel.c:2696
 msgid "extralight"
-msgstr ""
+msgstr "cló sáréadrom"
 
 #: gtk/gtkfontsel.c:2698
 msgid "thin"
-msgstr ""
+msgstr "cló caol"
 
 #: gtk/gtkfontsel.c:2875
 msgid "MAX_FONTS exceeded. Some fonts may be missing."
-msgstr ""
-"Chuathas thar MAX_FONTS.  Seans go bhfuil roinnt clófhoirne ar iarraidh."
+msgstr "Chuathas thar MAX_FONTS.  Seans go bhfuil roinnt clófhoirne ar iarraidh."
 
 #: gtk/gtkfontsel.c:3729
 msgid "Apply"
