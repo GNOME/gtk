@@ -104,64 +104,62 @@ struct _GtkRadioActionEntry
 };
 
 GType           gtk_action_group_get_type                (void);
-GtkActionGroup *gtk_action_group_new                     (const gchar          *name);
-const gchar    *gtk_action_group_get_name                (GtkActionGroup       *action_group);
-gboolean        gtk_action_group_get_sensitive           (GtkActionGroup       *action_group);
-void            gtk_action_group_set_sensitive           (GtkActionGroup       *action_group,
-                                                          gboolean              sensitive);
-gboolean        gtk_action_group_get_visible             (GtkActionGroup       *action_group);
-void            gtk_action_group_set_visible             (GtkActionGroup       *action_group,
-                                                          gboolean              visible);
-GtkAction      *gtk_action_group_get_action              (GtkActionGroup       *action_group,
-                                                          const gchar          *action_name);
-GList          *gtk_action_group_list_actions            (GtkActionGroup       *action_group);
-void            gtk_action_group_add_action              (GtkActionGroup       *action_group,
-                                                          GtkAction            *action);
-void            gtk_action_group_add_action_with_accel   (GtkActionGroup *action_group,
-                                                          GtkAction   *action,
-                                                          const gchar *accelerator);
+GtkActionGroup *gtk_action_group_new                     (const gchar                *name);
+const gchar    *gtk_action_group_get_name                (GtkActionGroup             *action_group);
+gboolean        gtk_action_group_get_sensitive           (GtkActionGroup             *action_group);
+void            gtk_action_group_set_sensitive           (GtkActionGroup             *action_group,
+							  gboolean                    sensitive);
+gboolean        gtk_action_group_get_visible             (GtkActionGroup             *action_group);
+void            gtk_action_group_set_visible             (GtkActionGroup             *action_group,
+							  gboolean                    visible);
+GtkAction      *gtk_action_group_get_action              (GtkActionGroup             *action_group,
+							  const gchar                *action_name);
+GList          *gtk_action_group_list_actions            (GtkActionGroup             *action_group);
+void            gtk_action_group_add_action              (GtkActionGroup             *action_group,
+							  GtkAction                  *action);
+void            gtk_action_group_add_action_with_accel   (GtkActionGroup             *action_group,
+							  GtkAction                  *action,
+							  const gchar                *accelerator);
+void            gtk_action_group_remove_action           (GtkActionGroup             *action_group,
+							  GtkAction                  *action);
+void            gtk_action_group_add_actions             (GtkActionGroup             *action_group,
+							  const GtkActionEntry       *entries,
+							  guint                       n_entries,
+							  gpointer                    user_data);
+void            gtk_action_group_add_toggle_actions      (GtkActionGroup             *action_group,
+							  const GtkToggleActionEntry *entries,
+							  guint                       n_entries,
+							  gpointer                    user_data);
+void            gtk_action_group_add_radio_actions       (GtkActionGroup             *action_group,
+							  const GtkRadioActionEntry  *entries,
+							  guint                       n_entries,
+							  gint                        value,
+							  GCallback                   on_change,
+							  gpointer                    user_data);
+void            gtk_action_group_add_actions_full        (GtkActionGroup             *action_group,
+							  const GtkActionEntry       *entries,
+							  guint                       n_entries,
+							  gpointer                    user_data,
+							  GDestroyNotify              destroy);
+void            gtk_action_group_add_toggle_actions_full (GtkActionGroup             *action_group,
+							  const GtkToggleActionEntry *entries,
+							  guint                       n_entries,
+							  gpointer                    user_data,
+							  GDestroyNotify              destroy);
+void            gtk_action_group_add_radio_actions_full  (GtkActionGroup             *action_group,
+							  const GtkRadioActionEntry  *entries,
+							  guint                       n_entries,
+							  gint                        value,
+							  GCallback                   on_change,
+							  gpointer                    user_data,
+							  GDestroyNotify              destroy);
+void            gtk_action_group_set_translate_func      (GtkActionGroup             *action_group,
+							  GtkTranslateFunc            func,
+							  gpointer                    data,
+							  GtkDestroyNotify            notify);
+void            gtk_action_group_set_translation_domain  (GtkActionGroup             *action_group,
+							  const gchar                *domain);
 
-void            gtk_action_group_remove_action           (GtkActionGroup       *action_group,
-                                                          GtkAction            *action);
-void            gtk_action_group_add_actions             (GtkActionGroup       *action_group,
-                                                          GtkActionEntry       *entries,
-                                                          guint                 n_entries,
-                                                          gpointer              user_data);
-void            gtk_action_group_add_toggle_actions      (GtkActionGroup       *action_group,
-                                                          GtkToggleActionEntry *entries,
-                                                          guint                 n_entries,
-                                                          gpointer              user_data);
-void            gtk_action_group_add_radio_actions       (GtkActionGroup       *action_group,
-                                                          GtkRadioActionEntry  *entries,
-                                                          guint                 n_entries,
-                                                          gint                  value,
-                                                          GCallback             on_change,
-                                                          gpointer              user_data);
-void            gtk_action_group_add_actions_full        (GtkActionGroup       *action_group,
-                                                          GtkActionEntry       *entries,
-                                                          guint                 n_entries,
-                                                          gpointer              user_data,
-                                                          GDestroyNotify        destroy);
-void            gtk_action_group_add_toggle_actions_full (GtkActionGroup       *action_group,
-                                                          GtkToggleActionEntry *entries,
-                                                          guint                 n_entries,
-                                                          gpointer              user_data,
-                                                          GDestroyNotify        destroy);
-void            gtk_action_group_add_radio_actions_full  (GtkActionGroup       *action_group,
-                                                          GtkRadioActionEntry  *entries,
-                                                          guint                 n_entries,
-                                                          gint                  value,
-                                                          GCallback             on_change,
-                                                          gpointer              user_data,
-                                                          GDestroyNotify        destroy);
-void            gtk_action_group_set_translate_func      (GtkActionGroup       *action_group,
-                                                          GtkTranslateFunc      func,
-                                                          gpointer              data,
-                                                          GtkDestroyNotify      notify);
-void            gtk_action_group_set_translation_domain  (GtkActionGroup       *action_group,
-                                                          const gchar          *domain);
-gchar          *gtk_action_group_translate_string        (GtkActionGroup       *action_group,
-							  const gchar          *string);
 
 /* Protected for use by GtkAction */
 void _gtk_action_group_emit_connect_proxy    (GtkActionGroup *action_group,

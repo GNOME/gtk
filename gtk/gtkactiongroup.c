@@ -308,7 +308,8 @@ gtk_action_group_finalize (GObject *object)
   if (self->private_data->translate_notify)
     self->private_data->translate_notify (self->private_data->translate_data);
 
-  (* parent_class->finalize) (object);
+  if (parent_class->finalize)
+    (* parent_class->finalize) (object);
 }
 
 static void
@@ -683,10 +684,10 @@ gtk_action_group_list_actions (GtkActionGroup *action_group)
  * Since: 2.4
  */
 void
-gtk_action_group_add_actions (GtkActionGroup *action_group,
-			      GtkActionEntry *entries,
-			      guint           n_entries,
-			      gpointer        user_data)
+gtk_action_group_add_actions (GtkActionGroup       *action_group,
+			      const GtkActionEntry *entries,
+			      guint                 n_entries,
+			      gpointer              user_data)
 {
   gtk_action_group_add_actions_full (action_group, 
 				     entries, n_entries, 
@@ -731,20 +732,25 @@ shared_data_unref (gpointer data)
  * Since: 2.4
  */
 void
-gtk_action_group_add_actions_full (GtkActionGroup *action_group,
-				   GtkActionEntry *entries,
-				   guint           n_entries,
-				   gpointer        user_data,
-				   GDestroyNotify  destroy)
+gtk_action_group_add_actions_full (GtkActionGroup       *action_group,
+				   const GtkActionEntry *entries,
+				   guint                 n_entries,
+				   gpointer              user_data,
+				   GDestroyNotify        destroy)
 {
 
   /* Keep this in sync with the other 
    * gtk_action_group_add_..._actions_full() functions.
    */
   guint i;
+  GtkTranslateFunc translate_func;
+  gpointer translate_data;
   SharedData *shared_data;
 
   g_return_if_fail (GTK_IS_ACTION_GROUP (action_group));
+
+  translate_func = action_group->private_data->translate_func;
+  translate_data = action_group->private_data->translate_data;
 
   shared_data = g_new0 (SharedData, 1);
   shared_data->ref_count = 1;
@@ -757,8 +763,16 @@ gtk_action_group_add_actions_full (GtkActionGroup *action_group,
       const gchar *label;
       const gchar *tooltip;
 
-      label = gtk_action_group_translate_string (action_group, entries[i].label);
-      tooltip = gtk_action_group_translate_string (action_group, entries[i].tooltip);
+      if (translate_func)
+	{
+	  label = translate_func (entries[i].label, translate_data);
+	  tooltip = translate_func (entries[i].tooltip, translate_data);
+	}
+      else
+	{
+	  label = entries[i].label;
+	  tooltip = entries[i].tooltip;
+	}
 
       action = gtk_action_new (entries[i].name,
 			       label,
@@ -803,10 +817,10 @@ gtk_action_group_add_actions_full (GtkActionGroup *action_group,
  * Since: 2.4
  */
 void
-gtk_action_group_add_toggle_actions (GtkActionGroup       *action_group,
-				     GtkToggleActionEntry *entries,
-				     guint                 n_entries,
-				     gpointer              user_data)
+gtk_action_group_add_toggle_actions (GtkActionGroup             *action_group,
+				     const GtkToggleActionEntry *entries,
+				     guint                       n_entries,
+				     gpointer                    user_data)
 {
   gtk_action_group_add_toggle_actions_full (action_group, 
 					    entries, n_entries, 
@@ -828,19 +842,24 @@ gtk_action_group_add_toggle_actions (GtkActionGroup       *action_group,
  * Since: 2.4
  */
 void
-gtk_action_group_add_toggle_actions_full (GtkActionGroup       *action_group,
-					  GtkToggleActionEntry *entries,
-					  guint                 n_entries,
-					  gpointer              user_data,
-					  GDestroyNotify        destroy)
+gtk_action_group_add_toggle_actions_full (GtkActionGroup             *action_group,
+					  const GtkToggleActionEntry *entries,
+					  guint                       n_entries,
+					  gpointer                    user_data,
+					  GDestroyNotify              destroy)
 {
   /* Keep this in sync with the other 
    * gtk_action_group_add_..._actions_full() functions.
    */
   guint i;
+  GtkTranslateFunc translate_func;
+  gpointer translate_data;
   SharedData *shared_data;
 
   g_return_if_fail (GTK_IS_ACTION_GROUP (action_group));
+
+  translate_func = action_group->private_data->translate_func;
+  translate_data = action_group->private_data->translate_data;
 
   shared_data = g_new0 (SharedData, 1);
   shared_data->ref_count = 1;
@@ -853,8 +872,16 @@ gtk_action_group_add_toggle_actions_full (GtkActionGroup       *action_group,
       const gchar *label;
       const gchar *tooltip;
 
-      label = gtk_action_group_translate_string (action_group, entries[i].label);
-      tooltip = gtk_action_group_translate_string (action_group, entries[i].tooltip);
+      if (translate_func)
+	{
+	  label = translate_func (entries[i].label, translate_data);
+	  tooltip = translate_func (entries[i].tooltip, translate_data);
+	}
+      else
+	{
+	  label = entries[i].label;
+	  tooltip = entries[i].tooltip;
+	}
 
       action = gtk_toggle_action_new (entries[i].name,
 				      label,
@@ -904,12 +931,12 @@ gtk_action_group_add_toggle_actions_full (GtkActionGroup       *action_group,
  * Since: 2.4
  **/
 void            
-gtk_action_group_add_radio_actions (GtkActionGroup      *action_group,
-				    GtkRadioActionEntry *entries,
-				    guint                n_entries,
-				    gint                 value,
-				    GCallback            on_change,
-				    gpointer             user_data)
+gtk_action_group_add_radio_actions (GtkActionGroup            *action_group,
+				    const GtkRadioActionEntry *entries,
+				    guint                      n_entries,
+				    gint                       value,
+				    GCallback                  on_change,
+				    gpointer                   user_data)
 {
   gtk_action_group_add_radio_actions_full (action_group, 
 					   entries, n_entries, 
@@ -934,22 +961,27 @@ gtk_action_group_add_radio_actions (GtkActionGroup      *action_group,
  * Since: 2.4
  **/
 void            
-gtk_action_group_add_radio_actions_full (GtkActionGroup      *action_group,
-					 GtkRadioActionEntry *entries,
-					 guint                n_entries,
-					 gint                 value,
-					 GCallback            on_change,
-					 gpointer             user_data,
-					 GDestroyNotify       destroy)
+gtk_action_group_add_radio_actions_full (GtkActionGroup            *action_group,
+					 const GtkRadioActionEntry *entries,
+					 guint                      n_entries,
+					 gint                       value,
+					 GCallback                  on_change,
+					 gpointer                   user_data,
+					 GDestroyNotify             destroy)
 {
   /* Keep this in sync with the other 
    * gtk_action_group_add_..._actions_full() functions.
    */
   guint i;
+  GtkTranslateFunc translate_func;
+  gpointer translate_data;
   GSList *group = NULL;
   GtkRadioAction *first_action = NULL;
 
   g_return_if_fail (GTK_IS_ACTION_GROUP (action_group));
+
+  translate_func = action_group->private_data->translate_func;
+  translate_data = action_group->private_data->translate_data;
 
   for (i = 0; i < n_entries; i++)
     {
@@ -957,8 +989,16 @@ gtk_action_group_add_radio_actions_full (GtkActionGroup      *action_group,
       const gchar *label;
       const gchar *tooltip; 
 
-      label = gtk_action_group_translate_string (action_group, entries[i].label);
-      tooltip = gtk_action_group_translate_string (action_group, entries[i].tooltip);
+      if (translate_func)
+	{
+	  label = translate_func (entries[i].label, translate_data);
+	  tooltip = translate_func (entries[i].tooltip, translate_data);
+	}
+      else
+	{
+	  label = entries[i].label;
+	  tooltip = entries[i].tooltip;
+	}
 
       action = gtk_radio_action_new (entries[i].name,
 				     label,
@@ -1033,10 +1073,7 @@ dgettext_swapped (const gchar *msgid,
  * 
  * Sets the translation domain and uses dgettext() for translating the 
  * @label and @tooltip of #GtkActionEntry<!-- -->s added by 
- * gtk_action_group_add_actions(). Note that GTK+ expects all strings
- * to be encoded in UTF-8, therefore the translation domain must have
- * its codeset set to UTF-8, see bind_textdomain_codeset() in the 
- * gettext() documentation. 
+ * gtk_action_group_add_actions().
  *
  * If you're not using gettext() for localization, see 
  * gtk_action_group_set_translate_func().
@@ -1054,36 +1091,6 @@ gtk_action_group_set_translation_domain (GtkActionGroup *action_group,
 				       g_strdup (domain),
 				       g_free);
 } 
-
-/**
- * gtk_action_group_translate_string:
- * @action_group: a #GtkActionGroup
- * @string: a string
- *
- * Translates a string using the specified translate_func(). This
- * is mainly intended for language bindings. 
- *
- * Returns: the translation of @string
- *
- * Since: 2.6
- **/
-gchar *
-gtk_action_group_translate_string (GtkActionGroup *action_group,
-				   const gchar    *string)
-{
-  GtkTranslateFunc translate_func;
-  gpointer translate_data;
-
-  g_return_val_if_fail (GTK_IS_ACTION_GROUP (action_group), string);
-
-  translate_func = action_group->private_data->translate_func;
-  translate_data = action_group->private_data->translate_data;
-
-  if (translate_func)
-    return translate_func (string, translate_data);
-  else
-    return string;
-}
 
 /* Protected for use by GtkAction */
 void

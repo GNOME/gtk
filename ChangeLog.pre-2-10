@@ -1,3 +1,10 @@
+Tue Aug  3 20:16:26 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkactiongroup.[hc]: Make the the GtkAction{Toggle,Radio,}Entry*
+	arguments to the gtk_action_group_add_..._actions() functions const, 
+	since the most common use case is to use a static array.  (142334, 
+	Mariano Suarez-Alvarez)
+
 Tue Aug  3 20:03:33 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkuimanager.c (get_node): Make gtk_ui_manager_add_ui()
