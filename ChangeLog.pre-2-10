@@ -1,3 +1,9 @@
+2003-03-09  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/win32/gdkdrawable-win32.c (draw_segments): Don't try to
+	compensate for LineTo() not drawing the end pixel. It causes more
+	harm than benefits, see bug #81895.
+
 2003-03-08  Matthias Clasen  <maclas@gmx.de>
 
 	Bug #107664 continued:
