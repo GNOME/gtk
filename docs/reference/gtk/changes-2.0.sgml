@@ -553,6 +553,15 @@ The <structname>GtkNotebookPage</structname> structure has been removed from
 
 <listitem>
 <para>
+Negative values of the <parameter>position</parameter> parameter to
+  <function>gtk_notebook_reorder_child()</function> now cause the page to be appended, not
+  inserted at the beginning. (This gives consistency with
+  <function>gtk_box_reorder_child()</function>, <function>gtk_menu_reorder_child()</function>.)
+</para>
+</listitem>
+
+<listitem>
+<para>
 <function>GtkMenuPositionFunc</function> has a new parameter 
   <literal>push_in</literal> which controls how menus placed outside the 
   screen is handled. If this is set to <literal>TRUE</literal> and
