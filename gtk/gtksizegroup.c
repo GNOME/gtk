@@ -20,6 +20,7 @@
 
 #include "gtkcontainer.h"
 #include "gtkintl.h"
+#include "gtkprivate.h"
 #include "gtksignal.h"
 #include "gtksizegroup.h"
 
@@ -116,8 +117,8 @@ add_widget_to_closure (GtkWidget       *widget,
 static void
 real_queue_resize (GtkWidget *widget)
 {
-  if (GTK_IS_RESIZE_CONTAINER (widget))
-    _gtk_container_clear_resize_widgets (GTK_CONTAINER (widget));
+  GTK_PRIVATE_SET_FLAG (widget, GTK_ALLOC_NEEDED);
+  GTK_PRIVATE_SET_FLAG (widget, GTK_REQUEST_NEEDED);
   
   if (widget->parent)
     _gtk_container_queue_resize (GTK_CONTAINER (widget->parent));
@@ -476,12 +477,23 @@ get_base_dimension (GtkWidget        *widget,
     }
 }
 
+static void
+do_size_request (GtkWidget *widget)
+{
+  if (GTK_WIDGET_REQUEST_NEEDED (widget))
+    {
+      gtk_widget_ensure_style (widget);
+      gtk_signal_emit_by_name (GTK_OBJECT (widget), "size_request", &widget->requisition);
+      
+      GTK_PRIVATE_UNSET_FLAG (widget, GTK_REQUEST_NEEDED);
+    }
+}
+
 static gint
 compute_base_dimension (GtkWidget        *widget,
 			GtkSizeGroupMode  mode)
 {
-  gtk_widget_ensure_style (widget);
-  gtk_signal_emit_by_name (GTK_OBJECT (widget), "size_request", &widget->requisition);
+  do_size_request (widget);
 
   return get_base_dimension (widget, mode);
 }
@@ -658,9 +670,8 @@ _gtk_size_group_compute_requisition (GtkWidget      *widget,
     }
   else
     {
-      gtk_widget_ensure_style (widget);
-      gtk_signal_emit_by_name (GTK_OBJECT (widget), "size_request", &widget->requisition);
-
+      do_size_request (widget);
+      
       if (requisition)
 	get_fast_child_requisition (widget, requisition);
     }

@@ -100,6 +100,16 @@ GtkIMContext
 @imcontext: the object which received the signal.
 @arg1: 
 
+<!-- ##### SIGNAL GtkIMContext::delete-surrounding ##### -->
+<para>
+
+</para>
+
+@imcontext: the object which received the signal.
+@arg1: 
+@arg2: 
+@Returns: 
+
 <!-- ##### SIGNAL GtkIMContext::preedit-changed ##### -->
 <para>
 
@@ -120,4 +130,12 @@ GtkIMContext
 </para>
 
 @imcontext: the object which received the signal.
+
+<!-- ##### SIGNAL GtkIMContext::retrieve-surrounding ##### -->
+<para>
+
+</para>
+
+@imcontext: the object which received the signal.
+@Returns: 
 

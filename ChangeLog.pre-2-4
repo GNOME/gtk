@@ -1,3 +1,47 @@
+Sun Nov  4 16:02:08 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdkwindow.[ch]: Add a function gdk_window_invalidate_maybe_recurse() 
+	for use in "shallow invalidation" of a widget. (Windows belonging
+	to the widget, but not to the widget's children)
+
+        * gtk/gtkprivate.h gtk/gtkwidget.c gtk/gtksizegroup.c: Add private
+	flags GTK_ALLOC_NEEDED, GTK_REQUEST_NEEDED.  These flags are set
+	up on ancestors up to the resize container on queue_resize. Size
+	requests only actually take place if GTK_REQUEST_NEEDED, size
+	allocations only take place if GTK_ALLOC_NEEDED or the size
+	changed.
+
+        * gtk/gtkcontainer.c gtk/gtkwidget.c: Remove
+	container->resize_widgets and the RESIZE_NEEDED flag since the
+	above flags are sufficient to figure out what needs to be
+	resized/reallocated. Remove code manipulating
+	container->resize_widget.
+
+        * gtk/gtkwidget.[ch]: Add gtk_widget_set_redraw_on_alloc(); this
+	allows widgets to turn off being automatically invalidated is when
+	they are resized.
+
+	* gtk/gtkwidget.[ch] (gtk_widget_size_allocate): Invalidation when
+	a widget is resized or moved is "shallow" as described above -
+	only the windows that need to be invalidated are invalidated.
+
+	* gtk/gtkbox.c gtk/gtktable.c gtk/gtkalignment.c docs/Changes-2.0.txt: 
+	Make these widget's init functions call 
+	gtk_widget_set_redraw_on_allocate(widget,FALSE).
+
+	* gtk/gtkwindow.c (gtk_window_configure_event): Call 
+	_gtk_container_queue_resize(), since we don't want
+	redrawing. (Probably could be done for other 
+	calls to gtk_widget_queue_resize() in gtkwindow.c,
+	but this is the most important one.)
+
+	* gtk/gtkwindow.c (gtk_window_move_resize): Don't call
+	gtk_widget_queue_draw() - size_allocate() handles
+	that as appropriate.
+
+	* gtk/gtkframe.c (gtk_frame_size_allocate): Invalidate instead
+	of queue_clear() to avoid invalidating children.
+
 2001-11-04  jacob berkman  <jacob@ximian.com>
 
 	* gtk/gtkmain.c (find_module): don't free the module name until

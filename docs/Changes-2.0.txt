@@ -508,3 +508,9 @@ Incompatible Changes from GTK+-1.2 to GTK+-2.0:
   are deprecated, as GdkRgb works on any colormap and visual.  You no
   longer need to gtk_widget_push_cmap (gtk_preview_get_cmap ()) in
   your code.
+
+* The GtkBox, GtkTable, and GtkAlignment widgets now call
+  gtk_widget_set_redraw_on_allocate (widget, FALSE); on themselves.
+  If you want to actually draw contents in a widget derived from
+  one of these widgets, you'll probably want to change this
+  in your init() function.

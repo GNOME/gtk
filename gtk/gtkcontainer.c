@@ -698,7 +698,6 @@ gtk_container_init (GtkContainer *container)
   container->need_resize = FALSE;
   container->resize_mode = GTK_RESIZE_PARENT;
   container->reallocate_redraws = FALSE;
-  container->resize_widgets = NULL;
 }
 
 static void
@@ -713,8 +712,6 @@ gtk_container_destroy (GtkObject *object)
   
   if (GTK_CONTAINER_RESIZE_PENDING (container))
     _gtk_container_dequeue_resize_handler (container);
-  if (container->resize_widgets)
-    _gtk_container_clear_resize_widgets (container);
 
   /* do this before walking child widgets, to avoid
    * removing children from focus chain one by one.
@@ -900,28 +897,6 @@ _gtk_container_dequeue_resize_handler (GtkContainer *container)
 }
 
 void
-_gtk_container_clear_resize_widgets (GtkContainer *container)
-{
-  GSList *node;
-
-  g_return_if_fail (container != NULL);
-  g_return_if_fail (GTK_IS_CONTAINER (container));
-
-  node = container->resize_widgets;
-
-  while (node)
-    {
-      GtkWidget *widget = node->data;
-
-      GTK_PRIVATE_UNSET_FLAG (widget, GTK_RESIZE_NEEDED);
-      node = node->next;
-    }
-  
-  g_slist_free (container->resize_widgets);
-  container->resize_widgets = NULL;
-}
-
-void
 gtk_container_set_resize_mode (GtkContainer  *container,
 			       GtkResizeMode  resize_mode)
 {
@@ -940,14 +915,8 @@ gtk_container_set_resize_mode (GtkContainer  *container,
     {
       container->resize_mode = resize_mode;
       
-      if (resize_mode == GTK_RESIZE_IMMEDIATE)
-	gtk_container_check_resize (container);
-      else
-	{
-	  _gtk_container_clear_resize_widgets (container);
-	  gtk_widget_queue_resize (GTK_WIDGET (container));
-	}
-       g_object_notify (G_OBJECT (container), "resize_mode");
+      gtk_widget_queue_resize (GTK_WIDGET (container));
+      g_object_notify (G_OBJECT (container), "resize_mode");
     }
 }
 
@@ -987,7 +956,7 @@ gtk_container_get_resize_container (GtkContainer *container)
   while (widget->parent)
     {
       widget = widget->parent;
-      if (GTK_IS_RESIZE_CONTAINER (widget) && !GTK_WIDGET_RESIZE_NEEDED (widget))
+      if (GTK_IS_RESIZE_CONTAINER (widget))
 	break;
     }
 
@@ -997,31 +966,51 @@ gtk_container_get_resize_container (GtkContainer *container)
 static gboolean
 gtk_container_idle_sizer (gpointer data)
 {
+  static gboolean initialized = 0;
+  static GTimeVal last_time;
+  GTimeVal current_time;
+  
   GDK_THREADS_ENTER ();
 
-  /* we may be invoked with a container_resize_queue of NULL, because
-   * queue_resize could have been adding an extra idle function while
-   * the queue still got processed. we better just ignore such case
-   * than trying to explicitely work around them with some extra flags,
-   * since it doesn't cause any actual harm.
-   */
-  while (container_resize_queue)
+  if (container_resize_queue)
     {
-      GSList *slist;
-      GtkWidget *widget;
-
-      slist = container_resize_queue;
-      container_resize_queue = slist->next;
-      widget = slist->data;
-      g_slist_free_1 (slist);
-
-      GTK_PRIVATE_UNSET_FLAG (widget, GTK_RESIZE_PENDING);
-      gtk_container_check_resize (GTK_CONTAINER (widget));
+      /* we may be invoked with a container_resize_queue of NULL, because
+       * queue_resize could have been adding an extra idle function while
+       * the queue still got processed. we better just ignore such case
+       * than trying to explicitely work around them with some extra flags,
+       * since it doesn't cause any actual harm.
+       */
+      while (container_resize_queue)
+	{
+	  GSList *slist;
+	  GtkWidget *widget;
+	  
+	  slist = container_resize_queue;
+	  container_resize_queue = slist->next;
+	  widget = slist->data;
+	  g_slist_free_1 (slist);
+	  
+	  GTK_PRIVATE_UNSET_FLAG (widget, GTK_RESIZE_PENDING);
+	  gtk_container_check_resize (GTK_CONTAINER (widget));
+	}
+      
+      gdk_window_process_all_updates ();
+      
+      g_get_current_time (&current_time);
+      
+      if (initialized)
+	{
+	  gdouble diff = ((current_time.tv_usec - last_time.tv_usec) / 1000. +
+			  (current_time.tv_sec - last_time.tv_sec) * 1000.);
+	  /*	  g_print ("Frame time: %g msec\n", diff);	     */
+	}
+      else
+	initialized = TRUE;
+      
+      last_time = current_time;
+      
+      GDK_THREADS_LEAVE ();
     }
-
-  gdk_window_process_all_updates ();
-
-  GDK_THREADS_LEAVE ();
 
   return FALSE;
 }
@@ -1034,21 +1023,22 @@ _gtk_container_queue_resize (GtkContainer *container)
   g_return_if_fail (container != NULL);
   g_return_if_fail (GTK_IS_CONTAINER (container));
 
-  /* clear resize widgets for resize containers
-   * before aborting prematurely. this is especially
-   * important for toplevels which may need imemdiate
-   * processing or their resize handler to be queued.
-   */
-  if (GTK_IS_RESIZE_CONTAINER (container))
-    _gtk_container_clear_resize_widgets (container);
-  if (GTK_OBJECT_DESTROYED (container) ||
-      GTK_WIDGET_RESIZE_NEEDED (container))
-    return;
-  
   resize_container = gtk_container_get_resize_container (container);
   
   if (resize_container)
     {
+      GtkWidget *widget = GTK_WIDGET (container);
+      
+      while (!GTK_WIDGET_ALLOC_NEEDED (widget) || !GTK_WIDGET_REQUEST_NEEDED (widget))
+	{
+	  GTK_PRIVATE_SET_FLAG (widget, GTK_ALLOC_NEEDED);
+	  GTK_PRIVATE_SET_FLAG (widget, GTK_REQUEST_NEEDED);
+	  if (widget == GTK_WIDGET (resize_container))
+	    break;
+	  
+	  widget = widget->parent;
+	}
+      
       if (GTK_WIDGET_VISIBLE (resize_container) &&
 	  (GTK_WIDGET_TOPLEVEL (resize_container) || GTK_WIDGET_DRAWABLE (resize_container)))
 	{
@@ -1064,16 +1054,9 @@ _gtk_container_queue_resize (GtkContainer *container)
 					   NULL);
 		  container_resize_queue = g_slist_prepend (container_resize_queue, resize_container);
 		}
-	      
-	      GTK_PRIVATE_SET_FLAG (container, GTK_RESIZE_NEEDED);
-	      resize_container->resize_widgets =
-		g_slist_prepend (resize_container->resize_widgets, container);
 	      break;
 
 	    case GTK_RESIZE_IMMEDIATE:
-	      GTK_PRIVATE_SET_FLAG (container, GTK_RESIZE_NEEDED);
-	      resize_container->resize_widgets =
-		g_slist_prepend (resize_container->resize_widgets, container);
 	      gtk_container_check_resize (resize_container);
 	      break;
 
@@ -1134,135 +1117,24 @@ gtk_container_real_check_resize (GtkContainer *container)
  *  queued a resize request. Which means that the allocation
  *  is not sufficient for the requisition of some child.
  *  We've already performed a size request at this point,
- *  so we simply need to run through the list of resize
- *  widgets and reallocate their sizes appropriately. We
- *  make the optimization of not performing reallocation
- *  for a widget who also has a parent in the resize widgets
- *  list. GTK_RESIZE_NEEDED is used for flagging those
- *  parents inside this function.
+ *  so we simply need to reallocate and let the allocation
+ *  trickle down via GTK_WIDGET_ALLOC_NEEDED flags. 
  */
 void
 gtk_container_resize_children (GtkContainer *container)
 {
   GtkWidget *widget;
-  GtkWidget *resize_container;
-  GSList *resize_widgets;
-  GSList *resize_containers;
-  GSList *node;
   
   /* resizing invariants:
    * toplevels have *always* resize_mode != GTK_RESIZE_PARENT set.
-   * containers with resize_mode==GTK_RESIZE_PARENT have to have resize_widgets
-   * set to NULL.
-   * containers that are flagged RESIZE_NEEDED must have resize_widgets set to
-   * NULL, or are toplevels (thus have ->parent set to NULL).
-   * widgets that are in some container->resize_widgets list must be flagged with
-   * RESIZE_NEEDED.
-   * widgets that have RESIZE_NEEDED set must be referenced in some
-   * GTK_IS_RESIZE_CONTAINER (container)->resize_widgets list.
    * containers that have an idle sizer pending must be flagged with
    * RESIZE_PENDING.
    */
-  
   g_return_if_fail (container != NULL);
   g_return_if_fail (GTK_IS_CONTAINER (container));
 
-  /* we first check out if we actually need to perform a resize,
-   * which is not the case if we got another container queued for
-   * a resize in our ancestry. also we can skip the whole
-   * resize_widgets checks if we are a toplevel and NEED_RESIZE.
-   * this code assumes that our allocation is sufficient for our
-   * requisition, since otherwise we would NEED_RESIZE.
-   */
-  resize_container = GTK_WIDGET (container);
-  while (resize_container)
-    {
-      if (GTK_WIDGET_RESIZE_NEEDED (resize_container))
-	break;
-      resize_container = resize_container->parent;
-    }
-  if (resize_container)
-    {
-      /* queue_resize and size_allocate both clear our
-       * resize_widgets list.
-       */
-      if (resize_container->parent)
-	_gtk_container_queue_resize (container);
-      else
-	gtk_widget_size_allocate (GTK_WIDGET (container),
-				  &GTK_WIDGET (container)->allocation);
-      return;
-    }
-
-  resize_container = GTK_WIDGET (container);
-
-  /* we now walk the ancestry for all resize widgets as long
-   * as they are our children and as long as their allocation
-   * is insufficient, since we don't need to reallocate below that.
-   */
-  resize_widgets = container->resize_widgets;
-  container->resize_widgets = NULL;
-  for (node = resize_widgets; node; node = node->next)
-    {
-      widget = node->data;
-
-      GTK_PRIVATE_UNSET_FLAG (widget, GTK_RESIZE_NEEDED);
-
-      while (widget->parent != resize_container &&
-	     ((widget->allocation.width < widget->requisition.width) ||
-	      (widget->allocation.height < widget->requisition.height)))
-	widget = widget->parent;
-      
-      GTK_PRIVATE_SET_FLAG (widget, GTK_RESIZE_NEEDED);
-      node->data = widget;
-    }
-
-  /* for the newly setup resize_widgets list, we now walk each widget's
-   * ancestry to sort those widgets out that have RESIZE_NEEDED parents.
-   * we can safely stop the walk if we are the parent, since we checked
-   * our own ancestry already.
-   */
-  resize_containers = NULL;
-  for (node = resize_widgets; node; node = node->next)
-    {
-      GtkWidget *parent;
-
-      widget = node->data;
-      
-      if (!GTK_WIDGET_RESIZE_NEEDED (widget))
-	continue;
-      
-      parent = widget->parent;
-      
-      while (parent != resize_container)
-	{
-	  if (GTK_WIDGET_RESIZE_NEEDED (parent))
-	    {
-	      GTK_PRIVATE_UNSET_FLAG (widget, GTK_RESIZE_NEEDED);
-	      widget = parent;
-	    }
-	  parent = parent->parent;
-	}
-      
-      if (!g_slist_find (resize_containers, widget))
-	{
-	  resize_containers = g_slist_prepend (resize_containers, widget);
-	  gtk_widget_ref (widget);
-	}
-    }
-  g_slist_free (resize_widgets);
-  
-  for (node = resize_containers; node; node = node->next)
-    {
-      widget = node->data;
-      
-      GTK_PRIVATE_UNSET_FLAG (widget, GTK_RESIZE_NEEDED);
-
-      gtk_widget_size_allocate (widget, &widget->allocation);
-
-      gtk_widget_unref (widget);
-    }
-  g_slist_free (resize_containers);
+  widget = GTK_WIDGET (container);
+  gtk_widget_size_allocate (widget, &widget->allocation);
 }
 
 /**
@@ -1630,8 +1502,6 @@ get_allocation_coords (GtkContainer  *container,
 		       GtkWidget     *widget,
 		       GdkRectangle  *allocation)
 {
-  GtkWidget *toplevel = gtk_widget_get_toplevel (widget);
-
   *allocation = widget->allocation;
 
   return gtk_widget_translate_coordinates (widget, GTK_WIDGET (container),

@@ -139,6 +139,7 @@ static void
 gtk_alignment_init (GtkAlignment *alignment)
 {
   GTK_WIDGET_SET_FLAGS (alignment, GTK_NO_WINDOW);
+  gtk_widget_set_redraw_on_allocate (GTK_WIDGET (alignment), FALSE);
 
   alignment->xalign = 0.5;
   alignment->yalign = 0.5;

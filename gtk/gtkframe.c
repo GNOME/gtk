@@ -613,7 +613,7 @@ gtk_frame_size_allocate (GtkWidget     *widget,
        new_allocation.y != frame->child_allocation.y ||
        new_allocation.width != frame->child_allocation.width ||
        new_allocation.height != frame->child_allocation.height))
-    gtk_widget_queue_clear (widget);
+    gdk_window_invalidate_rect (widget->window, &widget->allocation, FALSE);
   
   if (bin->child && GTK_WIDGET_VISIBLE (bin->child))
     gtk_widget_size_allocate (bin->child, &new_allocation);

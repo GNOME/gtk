@@ -63,10 +63,6 @@ struct _GtkContainer
   guint resize_mode : 2;
   guint reallocate_redraws : 1;
   guint has_focus_chain : 1;
-  
-  /* The list of children that requested a resize
-   */
-  GSList *resize_widgets;
 };
 
 struct _GtkContainerClass

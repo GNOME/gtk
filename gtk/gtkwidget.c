@@ -213,6 +213,9 @@ static void		gtk_widget_aux_info_destroy		(GtkWidgetAuxInfo *aux_info);
 static AtkObject*	gtk_widget_real_get_accessible		(GtkWidget	  *widget);
 static void		gtk_widget_accessible_interface_init	(AtkImplementorIface *iface);
 static AtkObject*	gtk_widget_ref_accessible		(AtkImplementor *implementor);
+static void             gtk_widget_invalidate_widget_windows    (GtkWidget        *widget,
+								 GdkRegion        *region);
+
 
 /* --- variables --- */
 static gpointer         parent_class = NULL;
@@ -1248,6 +1251,8 @@ gtk_widget_init (GtkWidget *widget)
 			(composite_child_stack ? GTK_COMPOSITE_CHILD : 0) |
 			GTK_DOUBLE_BUFFERED);
 
+  GTK_PRIVATE_SET_FLAG (widget, GTK_REDRAW_ON_ALLOC);
+
   widget->style = gtk_widget_get_default_style ();
   g_object_ref (widget->style);
 }
@@ -1412,7 +1417,6 @@ gtk_widget_unparent (GtkWidget *widget)
 {
   GObjectNotifyQueue *nqueue;
   GtkWidget *toplevel;
-  GtkWidget *ancestor;
   GtkWidget *old_parent;
   
   g_return_if_fail (GTK_IS_WIDGET (widget));
@@ -1468,64 +1472,6 @@ gtk_widget_unparent (GtkWidget *widget)
     g_object_ref (toplevel);
   else
     toplevel = NULL;
-
-  if (GTK_IS_RESIZE_CONTAINER (widget))
-    _gtk_container_clear_resize_widgets (GTK_CONTAINER (widget));
-  
-  /* Remove the widget and all its children from any ->resize_widgets list
-   * of all the parents in our branch. This code should move into gtkcontainer.c
-   * somwhen, since we mess around with ->resize_widgets, which is
-   * actually not of our business.
-   *
-   * Two ways to make this prettier:
-   *   Write a g_slist_conditional_remove (GSList, gboolean (*)(gpointer))
-   *   Change resize_widgets to a GList
-   */
-  ancestor = widget->parent;
-  while (ancestor)
-    {
-      GSList *slist;
-      GSList *prev;
-
-      if (!GTK_CONTAINER (ancestor)->resize_widgets)
-	{
-	  ancestor = ancestor->parent;
-	  continue;
-	}
-
-      prev = NULL;
-      slist = GTK_CONTAINER (ancestor)->resize_widgets;
-      while (slist)
-	{
-	  GtkWidget *child;
-	  GtkWidget *parent;
-	  GSList *last;
-
-	  last = slist;
-	  slist = last->next;
-	  child = last->data;
-	  
-	  parent = child;
-	  while (parent && (parent != widget))
-	    parent = parent->parent;
-	  
-	  if (parent == widget)
-	    {
-	      GTK_PRIVATE_UNSET_FLAG (child, GTK_RESIZE_NEEDED);
-	      
-	      if (prev)
-		prev->next = slist;
-	      else
-		GTK_CONTAINER (ancestor)->resize_widgets = slist;
-	      
-	      g_slist_free_1 (last);
-	    }
-	  else
-	    prev = last;
-	}
-
-      ancestor = ancestor->parent;
-    }
 
   gtk_widget_queue_clear_child (widget);
 
@@ -1831,7 +1777,7 @@ gtk_widget_map (GtkWidget *widget)
       gtk_signal_emit (GTK_OBJECT (widget), widget_signals[MAP]);
 
       if (GTK_WIDGET_NO_WINDOW (widget))
-	gtk_widget_queue_draw (widget);
+	gdk_window_invalidate_rect (widget->window, &widget->allocation, FALSE);
     }
 }
 
@@ -1851,7 +1797,7 @@ gtk_widget_unmap (GtkWidget *widget)
   if (GTK_WIDGET_MAPPED (widget))
     {
       if (GTK_WIDGET_NO_WINDOW (widget))
-	gtk_widget_queue_clear_child (widget);
+	gdk_window_invalidate_rect (widget->window, &widget->allocation, FALSE);
       gtk_signal_emit (GTK_OBJECT (widget), widget_signals[UNMAP]);
     }
 }
@@ -2135,10 +2081,17 @@ gtk_widget_queue_clear (GtkWidget *widget)
 void
 gtk_widget_queue_resize (GtkWidget *widget)
 {
+  GdkRegion *region;
+  
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
-  gtk_widget_queue_clear (widget);
-
+  if (GTK_WIDGET_REALIZED (widget))
+    {
+      region = gdk_region_rectangle (&widget->allocation);
+      gtk_widget_invalidate_widget_windows (widget, region);
+      gdk_region_destroy (region);
+    }
+      
   _gtk_size_group_queue_resize (widget);
 }
 
@@ -2208,13 +2161,6 @@ gtk_widget_size_request (GtkWidget	*widget,
 #endif /* G_ENABLE_DEBUG */
 
   _gtk_size_group_compute_requisition (widget, requisition);
-
-#if 0  
-  if (requisition)
-    gtk_widget_get_child_requisition (widget, requisition);
-
-  gtk_widget_unref (widget);
-#endif  
 }
 
 /**
@@ -2247,6 +2193,38 @@ gtk_widget_get_child_requisition (GtkWidget	 *widget,
   _gtk_size_group_get_child_requisition (widget, requisition);
 }
 
+static gboolean
+invalidate_predicate (GdkWindow *window,
+		      gpointer   data)
+{
+  gpointer user_data;
+
+  gdk_window_get_user_data (window, &user_data);
+
+  return (user_data == data);
+}
+
+/* Invalidate @region in widget->window and all children
+ * of widget->window owned by widget. @region is in the
+ * same coordinates as widget->allocation and will be
+ * modified by this call.
+ */
+static void
+gtk_widget_invalidate_widget_windows (GtkWidget *widget,
+				      GdkRegion *region)
+{
+  if (!GTK_WIDGET_NO_WINDOW (widget))
+    {
+      int x, y;
+      
+      gdk_window_get_position (widget->window, &x, &y);
+      gdk_region_offset (region, -x, -y);
+    }
+
+  gdk_window_invalidate_maybe_recurse (widget->window, region,
+				       invalidate_predicate, widget);
+}
+
 /**
  * gtk_widget_size_allocate:
  * @widget: a #GtkWidget
@@ -2261,11 +2239,18 @@ gtk_widget_size_allocate (GtkWidget	*widget,
 			  GtkAllocation *allocation)
 {
   GtkWidgetAuxInfo *aux_info;
-  GtkAllocation real_allocation;
-  gboolean needs_draw = FALSE;
+  GdkRectangle real_allocation;
+  GdkRectangle old_allocation;
+  gboolean alloc_needed;
+  gboolean size_changed;
+  gboolean position_changed;
   
   g_return_if_fail (GTK_IS_WIDGET (widget));
-  
+
+  alloc_needed = GTK_WIDGET_ALLOC_NEEDED (widget);
+  GTK_PRIVATE_UNSET_FLAG (widget, GTK_ALLOC_NEEDED);
+
+  old_allocation = widget->allocation;
   real_allocation = *allocation;
   aux_info =_gtk_widget_get_aux_info (widget, FALSE);
   
@@ -2287,33 +2272,50 @@ gtk_widget_size_allocate (GtkWidget	*widget,
   real_allocation.width = MAX (real_allocation.width, 1);
   real_allocation.height = MAX (real_allocation.height, 1);
 
-  if (GTK_WIDGET_NO_WINDOW (widget))
-    {
-      if (widget->allocation.x != real_allocation.x ||
-	  widget->allocation.y != real_allocation.y ||
-	  widget->allocation.width != real_allocation.width ||
-	  widget->allocation.height != real_allocation.height)
-	{
-	  gtk_widget_queue_clear_child (widget);
-	  needs_draw = TRUE;
-	}
-    }
-  else if (widget->allocation.width != real_allocation.width ||
-	   widget->allocation.height != real_allocation.height)
-    {
-      needs_draw = TRUE;
-    }
+  size_changed = (old_allocation.width != real_allocation.width ||
+		  old_allocation.height != real_allocation.height);
+  position_changed = (old_allocation.x != real_allocation.x ||
+		      old_allocation.y != real_allocation.y);
 
-  if (GTK_IS_RESIZE_CONTAINER (widget))
-    _gtk_container_clear_resize_widgets (GTK_CONTAINER (widget));
-
+  if (!alloc_needed && !size_changed && !position_changed)
+    return;
+  
   gtk_signal_emit (GTK_OBJECT (widget), widget_signals[SIZE_ALLOCATE], &real_allocation);
 
-  if (needs_draw)
+  if (GTK_WIDGET_MAPPED (widget))
     {
-      gtk_widget_queue_draw (widget);
-      if (widget->parent && GTK_CONTAINER (widget->parent)->reallocate_redraws)
-	gtk_widget_queue_draw (widget->parent);
+      if (GTK_WIDGET_NO_WINDOW (widget) && GTK_WIDGET_REDRAW_ON_ALLOC (widget) && position_changed)
+	{
+	  /* Invalidate union(old_allaction,widget->allocation) in widget->window
+	   */
+	  GdkRegion *invalidate = gdk_region_rectangle (&widget->allocation);
+	  gdk_region_union_with_rect (invalidate, &old_allocation);
+
+	  gdk_window_invalidate_region (widget->window, invalidate, FALSE);
+	  gdk_region_destroy (invalidate);
+	}
+      
+      if (size_changed)
+	{
+	  if (GTK_WIDGET_REDRAW_ON_ALLOC (widget))
+	    {
+	      /* Invalidate union(old_allaction,widget->allocation) in widget->window and descendents owned by widget
+	       */
+	      GdkRegion *invalidate = gdk_region_rectangle (&widget->allocation);
+	      gdk_region_union_with_rect (invalidate, &old_allocation);
+
+	      gtk_widget_invalidate_widget_windows (widget, invalidate);
+	      gdk_region_destroy (invalidate);
+	    }
+	}
+    }
+
+  if ((size_changed || position_changed) && widget->parent &&
+      GTK_WIDGET_REALIZED (widget->parent) && GTK_CONTAINER (widget->parent)->reallocate_redraws)
+    {
+      GdkRegion *invalidate = gdk_region_rectangle (&widget->parent->allocation);
+      gtk_widget_invalidate_widget_windows (widget->parent, invalidate);
+      gdk_region_destroy (invalidate);
     }
 }
 
@@ -3453,6 +3455,40 @@ gtk_widget_set_double_buffered (GtkWidget *widget,
     GTK_WIDGET_SET_FLAGS (widget, GTK_DOUBLE_BUFFERED);
   else
     GTK_WIDGET_UNSET_FLAGS (widget, GTK_DOUBLE_BUFFERED);
+}
+
+/**
+ * gtk_widget_set_redraw_on_allocate:
+ * @widget: a #GtkWidget
+ * @redraw_on_allocate: if %TRUE, the entire widget will be redrawn
+ *   when it is allocated to a new size. Otherwise, only the
+ *   new portion of the widget will be redrawn.
+ *
+ * Sets whether a when a widgets size allocation changes, the entire
+ * widget is queued for drawing. By default, this setting is %TRUE and
+ * the entire widget is redrawn on every size change. If your widget
+ * leaves the upper left are unchanged when made bigger, turning this
+ * setting on will improve performance.
+
+ * Note that for NO_WINDOW widgets setting this flag to %FALSE turns
+ * off all allocation on resizing: the widget will not even redraw if
+ * its position changes; this is to allow containers that don't draw
+ * anything to avoid excess invalidations. If you set this flag on a
+ * NO_WINDOW widget that _does_ draw on widget->window, you are
+ * responsible for invalidating both the old and new allocation of the
+ * widget when the widget is moved and responsible for invalidating
+ * regions newly when the widget increases size.
+ **/
+void
+gtk_widget_set_redraw_on_allocate (GtkWidget *widget,
+				   gboolean   redraw_on_allocate)
+{
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+
+  if (redraw_on_allocate)
+    GTK_PRIVATE_SET_FLAG (widget, GTK_REDRAW_ON_ALLOC);
+  else
+    GTK_PRIVATE_UNSET_FLAG (widget, GTK_REDRAW_ON_ALLOC);
 }
 
 /**

@@ -3366,7 +3366,7 @@ gtk_window_configure_event (GtkWidget         *widget,
   widget->allocation.width = event->width;
   widget->allocation.height = event->height;
   
-  gtk_widget_queue_resize (widget);
+  _gtk_container_queue_resize (GTK_CONTAINER (widget));
   
   return TRUE;
 }
@@ -4144,7 +4144,6 @@ gtk_window_move_resize (GtkWindow *window)
       /* gtk_window_configure_event() filled in widget->allocation */
       allocation = widget->allocation;
       gtk_widget_size_allocate (widget, &allocation);
-      gtk_widget_queue_draw (widget);
 
       /* If the configure request changed, it means that
        * we either:
@@ -4284,8 +4283,7 @@ gtk_window_move_resize (GtkWindow *window)
       
       /* And run the resize queue.
        */
-      if (container->resize_widgets)
-        gtk_container_resize_children (container);
+      gtk_container_resize_children (container);
     }
 }
 

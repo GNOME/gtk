@@ -491,12 +491,16 @@ void gdk_window_begin_move_drag   (GdkWindow     *window,
                                    guint32        timestamp);
 
 /* Interface for dirty-region queueing */
-void       gdk_window_invalidate_rect     (GdkWindow    *window,
-					   GdkRectangle *rect,
-					   gboolean      invalidate_children);
-void       gdk_window_invalidate_region   (GdkWindow    *window,
-					   GdkRegion    *region,
-					   gboolean      invalidate_children);
+void       gdk_window_invalidate_rect           (GdkWindow    *window,
+					         GdkRectangle *rect,
+					         gboolean      invalidate_children);
+void       gdk_window_invalidate_region         (GdkWindow    *window,
+					         GdkRegion    *region,
+					         gboolean      invalidate_children);
+void       gdk_window_invalidate_maybe_recurse  (GdkWindow *window,
+						 GdkRegion *region,
+						 gboolean (*child_func) (GdkWindow *, gpointer),
+						 gpointer   user_data);
 GdkRegion *gdk_window_get_update_area     (GdkWindow    *window);
 
 void       gdk_window_freeze_updates      (GdkWindow    *window);
