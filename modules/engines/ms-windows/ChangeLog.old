@@ -5,6 +5,7 @@
 	* src/Makefile.am:
 	* src/Makefile.msc:
 	* src/Theme/gtk-2.0/gtkrc: Rename DLL back to "wimp"
+	* src/wimp_style.c: Fix hilite around toolbar buttons in the Luna theme
 	
 2004-03-20  Raymond Penners  <raymond@dotsphinx.com>
 

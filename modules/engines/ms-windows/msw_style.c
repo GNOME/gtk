@@ -1476,6 +1476,19 @@ option_menu_get_props (GtkWidget      *widget,
     *indicator_spacing = default_option_indicator_spacing;
 }
 
+static gboolean is_toolbar_child(GtkWidget * wid)
+{
+	while(wid)
+	{
+		if(GTK_IS_TOOLBAR(wid))
+			return TRUE;
+		else
+			wid = wid->parent;
+	}
+
+	return FALSE;
+}
+
 static void
 draw_box (GtkStyle      *style,
 	  GdkWindow     *window,
@@ -1499,7 +1512,7 @@ draw_box (GtkStyle      *style,
                             width, height, state_type, area))
             return;
         }
-      else if (GTK_IS_TOOLBAR (widget->parent))
+      else if (is_toolbar_child (widget->parent))
       {
 		    if (xp_theme_draw(window, XP_THEME_ELEMENT_TOOLBAR_BUTTON, style, x, y,
 		                              width, height, state_type, area))
