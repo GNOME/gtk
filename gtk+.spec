@@ -36,15 +36,11 @@ structures, GDK is a drawing toolkit which provides a thin layer over
 Xlib to help automate things like dealing with different color depths,
 and GTK is a widget set for creating user interfaces.
 
-%package -n glib
-Summary: Handy library of utility functions
-Group: Libraries
-
-%description -n glib
-Handy library of utility functions.  Development libs and headers
-are in gtk+-devel.
-
 %changelog
+
+* Thu Jun 11 1998 Dick Porter <dick@cymru.net>
+
+- Removed glib, since it is its own module now
 
 * Mon Apr 13 1998 Marc Ewing <marc@redhat.com>
 
@@ -124,10 +120,6 @@ rm -rf $RPM_BUILD_ROOT
 
 %postun -p /sbin/ldconfig
 
-%post -n glib -p /sbin/ldconfig
-
-%postun -n glib -p /sbin/ldconfig
-
 %post devel
 /sbin/install-info %{prefix}/info/gdk.info.gz %{prefix}/info/dir
 /sbin/install-info %{prefix}/info/gtk.info.gz %{prefix}/info/dir
@@ -145,16 +137,11 @@ fi
 %{prefix}/lib/libgtk-1.1.so.*
 %{prefix}/lib/libgdk-1.1.so.*
 
-%files -n glib
-%defattr(-, root, root)
-%{prefix}/lib/libglib-1.1.so.*
-
 %files devel
 %defattr(-, root, root)
 
 %{prefix}/lib/lib*.so
 %{prefix}/lib/*a
-%{prefix}/lib/glib
 %{prefix}/include/*
 %{prefix}/info/*
 %{prefix}/share/aclocal/*
