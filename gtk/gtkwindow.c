@@ -1701,7 +1701,7 @@ gtk_window_move_resize (GtkWindow *window)
        * FIXME: we should also dequeue the pending redraws here, since
        * we handle those ourselves in ->handling_resize==TRUE.
        */
-      gtk_container_queue_resize (container);
+      gtk_widget_queue_resize (GTK_WIDGET (container));
       if (container->resize_mode == GTK_RESIZE_QUEUE)
 	gtk_container_dequeue_resize_handler (container);
     }

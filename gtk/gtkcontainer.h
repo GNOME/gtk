@@ -60,7 +60,7 @@ struct _GtkContainer
   guint border_width : 16;
   guint need_resize : 1;
   guint resize_mode : 2;
-  
+  guint reallocate_redraws : 1;
   
   /* The list of children that requested a resize
    */
@@ -132,6 +132,8 @@ gint   gtk_container_focus		   (GtkContainer     *container,
 
 /* Widget-level methods */
 
+void   gtk_container_set_reallocate_redraws (GtkContainer    *container,
+					     gboolean         needs_redraws);
 void   gtk_container_set_focus_child	   (GtkContainer     *container,
 					    GtkWidget	     *child);
 void   gtk_container_set_focus_vadjustment (GtkContainer     *container,
@@ -140,7 +142,7 @@ void   gtk_container_set_focus_hadjustment (GtkContainer     *container,
 					    GtkAdjustment    *adjustment);
 void    gtk_container_register_toplevel	   (GtkContainer     *container);
 void    gtk_container_unregister_toplevel  (GtkContainer     *container);
-GList * gtk_container_get_toplevels        (void);
+GList*  gtk_container_get_toplevels        (void);
 
 void    gtk_container_resize_children      (GtkContainer     *container);
 

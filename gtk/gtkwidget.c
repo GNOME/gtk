@@ -1760,6 +1760,11 @@ gtk_widget_queue_draw_data (GtkWidget *widget,
       data->rect.x = x;
       data->rect.y = y;
 
+      if ((width < 1 && height < 1) ||
+	  (width >= widget->allocation.width &&
+	   height >= widget->allocation.height))
+	GTK_PRIVATE_SET_FLAG (widget, GTK_FULLDRAW_PENDING);
+
       if ((width < 0) || (height < 0))
 	{
 	  data->rect.width = 0;
@@ -1912,6 +1917,7 @@ gtk_widget_redraw_queue_remove (GtkWidget *widget)
 			     NULL);
   
   GTK_PRIVATE_UNSET_FLAG (widget, GTK_REDRAW_PENDING);
+  GTK_PRIVATE_UNSET_FLAG (widget, GTK_FULLDRAW_PENDING);
 }
 
 void	   
@@ -2071,7 +2077,8 @@ gtk_widget_idle_draw (gpointer cb_data)
        * flag GTK_REDRAW_PROCESSING or something.
        */
       GTK_PRIVATE_UNSET_FLAG (widget, GTK_REDRAW_PENDING);
-
+      GTK_PRIVATE_UNSET_FLAG (widget, GTK_FULLDRAW_PENDING);
+      
       while (draw_data_list)
 	{
 	  gboolean full_allocation = FALSE;
@@ -2228,7 +2235,7 @@ gtk_widget_idle_draw (gpointer cb_data)
       while (tmp_list)
 	{
 	  GtkDrawData *data = tmp_list->data;
-	  if ((data->rect.width != 0) || (data->rect.height != 0))
+	  if ((data->rect.width != 0) && (data->rect.height != 0))
 	    gtk_widget_draw (widget, &data->rect);
 	  
 	  if (tmp_list->next)
@@ -2260,16 +2267,12 @@ gtk_widget_queue_resize (GtkWidget *widget)
   if (GTK_IS_RESIZE_CONTAINER (widget))
     gtk_container_clear_resize_widgets (GTK_CONTAINER (widget));
 
+  gtk_widget_queue_clear (widget);
+
   if (widget->parent)
-    {
-      gtk_widget_queue_clear (widget->parent);
-      gtk_container_queue_resize (GTK_CONTAINER (widget->parent));
-    }
+    gtk_container_queue_resize (GTK_CONTAINER (widget->parent));
   else if (GTK_WIDGET_TOPLEVEL (widget))
-    {
-      gtk_widget_queue_clear (widget);
-      gtk_container_queue_resize (GTK_CONTAINER (widget));
-    }
+    gtk_container_queue_resize (GTK_CONTAINER (widget));
 }
 
 /*****************************************
@@ -2473,7 +2476,11 @@ gtk_widget_size_allocate (GtkWidget	*widget,
   gtk_signal_emit (GTK_OBJECT (widget), widget_signals[SIZE_ALLOCATE], &real_allocation);
 
   if (needs_draw)
-    gtk_widget_queue_draw (widget);
+    {
+      gtk_widget_queue_draw (widget);
+      if (widget->parent && GTK_CONTAINER (widget->parent)->reallocate_redraws)
+	gtk_widget_queue_draw (widget->parent);
+    }
 }
 
 static void
@@ -2787,15 +2794,20 @@ gtk_widget_event (GtkWidget *widget,
     case GDK_EXPOSE:
       /* there is no sense in providing a widget with bogus expose events.
        * also we make the optimization to discard expose events for widgets
-       * that have a resize pending, because a redraw is already queued for
-       * them.
+       * that have a full redraw pending (given that the event is !send_event,
+       * otherwise we assume we can trust the event).
        */
-      parent = widget;
-      while (parent)
+      if (event->any.send_event)
+	parent = NULL;
+      else
 	{
-	  if (GTK_WIDGET_RESIZE_NEEDED (parent))
-	    break;
-	  parent = parent->parent;
+	  parent = widget;
+	  while (parent)
+	    {
+	      if (GTK_WIDGET_FULLDRAW_PENDING (parent))
+		break;
+	      parent = parent->parent;
+	    }
 	}
       if (!event->any.window || parent)
 	{

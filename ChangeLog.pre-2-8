@@ -1,3 +1,50 @@
+Tue Sep 14 19:37:53 1999  Tim Janik  <timj@gtk.org>
+
+	* configure.in (GTK_VERSION): slight version increment to 1.2.5-pre2.
+
+Tue Sep 14 19:22:19 1999  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkwidget.c (gtk_widget_queue_resize): don't queue the parent
+	for a redraw but just the widget that requested the resize.
+
+Tue Sep 14 18:29:47 1999  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkcontainer.c: added new widget level method
+	gtk_container_set_reallocate_redraws() and a GtkContainer flag
+	reallocate_redraws : 1 to reflect the setting, exported this through
+	the argument system as a boolean ::reallocate_redraws.
+
+	* gtk/gtkwidget.c (gtk_widget_size_allocate): when queueing redraws
+	on the widget because the allocation changes, do so as well for
+	widget->parent if the parent has reallocate_redraws set to TRUE.
+	with that containers requesting reallocation redraws get automatically
+	redrawn if their children changed allocation (this unfortunately
+	affects also other children that didn't change allocation, but we
+	cannot work around that before 1.3).
+
+Tue Sep 14 18:23:01 1999  Tim Janik  <timj@gtk.org>
+
+	* gdk/gdkevents.c (gdk_event_translate): tell if expose events have
+	send_event set in debugging output.
+	(gdk_compress_exposures): default initialize the event so we don't
+	operate on bogus values (namely send_event).
+
+	* gtk/gtkwidget.c (gtk_widget_idle_draw): only emit ::draw if width
+	_and_ height are >0 (not _or_).
+
+	* gtk/gtktable.c (gtk_table_remove): use gtk_widget_queue_resize()
+	instead of gtk_container_queue_resize(), which is a core gtk internal
+	function (must have been on crack when i queued that).
+
+	* gtk/gtkprivate.h: added new private flag GTK_FULLDRAW_PENDING, so
+	we can check more reliably if we want to discard expose events.
+	* gtk/gtkwidget.c: added setting/unsetting of the GTK_FULLDRAW_PENDING
+	flag.
+	
+	* gtk/gtkwidget.c (gtk_widget_event): don't discard synthesized exposes,
+	we simply trust these events. for deciding whether to discard exposes,
+	check GTK_FULLDRAW_PENDING instead of RESIZE_PENDING.
+	
 Mon Sep 13 15:01:21 1999  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkwidget.c (gtk_widget_queue_clear_area): Ignore

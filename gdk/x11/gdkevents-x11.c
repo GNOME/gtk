@@ -436,6 +436,10 @@ gdk_compress_exposures (XEvent    *xevent,
   rect1.width = xevent->xexpose.width;
   rect1.height = xevent->xexpose.height;
 
+  event.any.type = GDK_EXPOSE;
+  event.any.window = None;
+  event.any.send_event = FALSE;
+  
   while (1)
     {
       if (count == 0)
@@ -1010,7 +1014,7 @@ gdk_event_translate (GdkEvent *event,
     gdk_window_ref (window);
   
   event->any.window = window;
-  event->any.send_event = xevent->xany.send_event;
+  event->any.send_event = xevent->xany.send_event ? TRUE : FALSE;
   
   if (window_private && window_private->destroyed)
     {
@@ -1518,10 +1522,11 @@ gdk_event_translate (GdkEvent *event,
       /* Print debugging info.
        */
       GDK_NOTE (EVENTS,
-		g_message ("expose:\t\twindow: %ld  %d	x,y: %d %d  w,h: %d %d",
+		g_message ("expose:\t\twindow: %ld  %d	x,y: %d %d  w,h: %d %d%s",
 			   xevent->xexpose.window, xevent->xexpose.count,
 			   xevent->xexpose.x, xevent->xexpose.y,
-			   xevent->xexpose.width, xevent->xexpose.height));
+			   xevent->xexpose.width, xevent->xexpose.height,
+			   event->any.send_event ? " (send)" : ""));
       gdk_compress_exposures (xevent, window);
       
       event->expose.type = GDK_EXPOSE;
@@ -2010,8 +2015,7 @@ gdk_events_queue (void)
       
       event->any.type = GDK_NOTHING;
       event->any.window = NULL;
-      event->any.send_event = FALSE;
-      event->any.send_event = xevent.xany.send_event;
+      event->any.send_event = xevent.xany.send_event ? TRUE : FALSE;
 
       ((GdkEventPrivate *)event)->flags |= GDK_EVENT_PENDING;
 
