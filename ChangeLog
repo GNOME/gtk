@@ -1,3 +1,13 @@
+Tue May 14 18:13:10 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/x11/gdkdnd-x11.c (gdk_window_cache_filter): Fix
+	prepending at the start of the list. (#56349,
+	Thomas Leonard.)
+
+	* gtk/gtksignal.h (gtk_signal_disconnect_by_func): Add
+	explicit casts to GSignalMatchType for C++ compatibility.
+	(#77601)
+
 Tue May 14 18:02:37 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkwindow.c (gtk_window_realize): Fix
