@@ -36,6 +36,11 @@
 #include "gtkbindings.h"
 #include "gtkmain.h"
 
+/* TODO: remove this define and assorted code in 1.3 and fix up the
+ * real culprits.
+ */
+#define FIXME_ZVT_ME_HARDER
+
 enum {
   SET_FOCUS,
   LAST_SIGNAL
@@ -1602,6 +1607,42 @@ gtk_window_move_resize (GtkWindow *window)
       
       gtk_widget_size_allocate (widget, &allocation);
       gtk_widget_queue_draw (widget);
+
+#ifdef FIXME_ZVT_ME_HARDER
+      if ((size_changed || hints_changed) && (width != new_width || height != new_height))
+	{
+	  /* We could be here for two reasons
+	   *  1) We coincidentally got a resize while handling
+	   *     another resize.
+	   *  2) Our computation of size_changed was completely
+	   *     screwed up, probably because one of our children
+	   *     is broken (i.e. changes requisition during
+	   *     size allocation). It's probably a zvt widget.
+	   *
+	   * For 1), we could just go ahead and ask for the
+	   * new size right now, but doing that for 2)
+	   * might well be fighting the user (and can even
+	   * trigger a loop). Since we really don't want to
+	   * do that, we requeue a resize in hopes that
+	   * by the time it gets handled, the child has seen
+	   * the light and is willing to go along with the
+	   * new size. (this happens for the zvt widget, since
+	   * the size_allocate() above will have stored the
+	   * requisition corresponding to the new size in the
+	   * zvt widget)
+	   *
+	   * This doesn't buy us anything for 1), but it shouldn't
+	   * hurt us too badly, since it is what would have
+	   * happened if we had gotten the configure event before
+	   * the new size had been set.
+	   */
+	  
+	  if (x != -1 && y != -1)
+	    gdk_window_move (widget->window, x, y);
+	  gtk_widget_queue_resize (widget);
+	  return;
+	}
+#endif /* FIXME_ZVT_ME_HARDER */
     }
 
   if ((size_changed || hints_changed) &&

@@ -1,3 +1,36 @@
+Thu Sep  2 05:47:47 1999  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkwindow.c (gtk_window_move_resize): queue a new resize if
+	we have size_changed upon handling_resize. this is a gross
+	workaround for the broken zvt widget and should be removed in
+	1.3 again (search for FIXME).
+	Owen provided an accurate comment for this:
+
+        /* We could be here for two reasons
+         *  1) We coincidentally got a resize while handling
+         *     another resize.
+         *  2) Our computation of size_changed was completely
+         *     screwed up, probably because one of our children
+         *     is broken. It's probably a zvt widget.
+         *
+         * For 1), we could just go ahead and ask for the
+         * new size right now, but doing that for 2)
+         * might well be fighting the user (and can even
+         * trigger a loop). Since we really don't want to
+         * do that, we requeue a resize in hopes that
+         * by the time it gets handled, the child has seen
+         * the light and is willing to go along with the
+         * new size. (this happens for the zvt widget, since
+         * the size_allocate() above will have stored the
+         * requisition corresponding to the new size in the
+         * zvt widget)
+         *
+         * This doesn't buy us anything for 1), but it shouldn't
+         * hurt us too badly, since it is what would have
+         * happened if we had gotten the configure event before
+         * the new size had been set.
+         */
+
 Sat Sep  4 08:39:26 1999  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/gdkwindow.c (gdk_window_set_geometry_hints)
