@@ -1096,7 +1096,7 @@ gtk_combo_box_size_allocate (GtkWidget     *widget,
       if (is_rtl)
         child.x = allocation->x;
       else
-        child.x += allocation->x + allocation->width - req.width;
+        child.x = allocation->x + allocation->width - req.width;
       child.y = allocation->y;
       child.width = req.width;
       child.height = allocation->height;

@@ -1,4 +1,8 @@
-Mon Feb 23 01:56:09 2004  Matthias Clasen  <maclas@gmx.de>
+Mon Feb 23 02:26:15 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkcombobox.c (gtk_combo_box_size_allocate): Fix the 
+	allocation for the toggle button so that it actually shows up 
+	in LTR list mode.
 
 	* gtk/gtkcombobox.c (gtk_combo_box_set_column_span_column): 
 	* gtk/gtkcombobox.c (gtk_combo_box_set_row_span_column): 
