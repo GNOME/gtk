@@ -1,3 +1,8 @@
+2003-05-19 Arafat Medini <lumina@silverpen.de>
+
+	* ar.po: Added Arabic translation.
+
+
 2003-05-19  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtksettings.c (gtk_rc_property_parse_border,
