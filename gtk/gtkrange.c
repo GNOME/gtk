@@ -688,7 +688,22 @@ gtk_range_expose (GtkWidget      *widget,
 
   if (event->window == range->trough)
     {
-      gtk_range_draw_trough (range);
+      /* Don't redraw if we are only exposing the literal trough region.
+       * this may not work correctly if someone overrides the default
+       * trough-drawing handler. (Probably should really pass another
+       * argument - the redrawn area to all the drawing functions)
+       */
+
+      gint xt = widget->style->klass->xthickness;
+      gint yt = widget->style->klass->ythickness;
+      
+      if (!((event->area.x >= xt) &&
+	    (event->area.y >= yt) &&
+	    (event->area.x + event->area.width <= 
+	     widget->allocation.width - xt) &&
+	    (event->area.y + event->area.height <= 
+	     widget->allocation.height - xt)))
+	gtk_range_draw_trough (range);
     }
   else if (event->window == widget->window)
     {

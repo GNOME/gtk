@@ -1,3 +1,10 @@
+Sat Mar  7 01:07:24 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* gtk/gtkrange.c (gtk_range_expose): Fixed the vscrollbar
+	  flickering problem, by checking the area on expose events.
+	  (There was a hscrollbar flickering problem as well, it
+	   just wasn't very noticeable)
+
 Fri Mar  6 21:30:05 1998  Owen Taylor  <owt1@cornell.edu>
 
 	* gtk/gtkeditable.c: Disallow pasting into non-editable
