@@ -7,26 +7,11 @@ broken for some reason on some apps.
 
 to use a specific theme do:
 
-app --theme theme_name
+app --theme theme2
 
-i have 2 themes provided here - theme and theme2
+i have a theme provided here - theme2
 
-theme is the default GTK look
-theme2 is an alternative look for testing purposes only.
-
-this gtk theme lib looks for the themes in ~/themes
-the themes are compile dinti .libs here called:
-libtheme.so
-libtheme2.so
-
-by defautl gtk loosk for ~/themes/libtheme2.so
-
-just for the hell of it (yes it SHOULD do libtheme.so - but this is just for
-now soo I KNOW the theme is working)
-
-you will need to compile these themes beofre runing anythng but running
-
-COMPILE_THEME
-and
-COMPILE_THEME2
-
+read COMPILE_THEME2 and at the end you'll see what ti does to "install" this
+theme.. currently it's rather braindead.. but I'll fix that later once this
+is working to my satisfaction.. I'm putitng effor intot he code for buttons
+right now for the "sample theme" so it can take some config options.

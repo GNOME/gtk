@@ -1,0 +1,164 @@
+#-----------------------------------------------------------------------------#
+#                                                                             #
+# Raster's BDCFF File (Brain Dead Config File Format)                         #
+#                                                                             #
+#-----------------------------------------------------------------------------#
+#
+# button specs begin with: (the tags denoted by respective numbers)
+#
+# button cannot|can|has_default normal|active|prelight|selected|insensitive
+# no_focus|focus background %s ....
+
+button padding                      4  4  4  4
+button 0 0 0 background image       pix/btn2.xpm
+button 0 0 0 background color       128 128 128
+button 0 0 0 background border      4  4  4  4
+button 0 0 0 background scale       1
+button 0 0 0 background parent_tile 0
+button 0 1 0 background image       pix/btn3.xpm
+button 0 1 0 background color       128 128 128
+button 0 1 0 background border      4  4  4  4
+button 0 1 0 background scale       1
+button 0 1 0 background parent_tile 0
+button 0 2 0 background image       pix/btn1.xpm
+button 0 2 0 background color       128 128 128
+button 0 2 0 background border      4  4  4  4
+button 0 2 0 background scale       1
+button 0 2 0 background parent_tile 0
+button 0 3 0 background image       pix/btn1.xpm
+button 0 3 0 background color       128 128 128
+button 0 3 0 background border      4  4  4  4
+button 0 3 0 background scale       1
+button 0 3 0 background parent_tile 0
+button 0 4 0 background image       pix/btn2.xpm
+button 0 4 0 background color       128 128 128
+button 0 4 0 background border      4  4  4  4
+button 0 4 0 background scale       1
+button 0 4 0 background parent_tile 0
+button 0 0 1 background image       pix/btn2.xpm
+button 0 0 1 background color       128 128 128
+button 0 0 1 background border      4  4  4  4
+button 0 0 1 background scale       1
+button 0 0 1 background parent_tile 0
+button 0 1 1 background image       pix/btn3.xpm
+button 0 1 1 background color       128 128 128
+button 0 1 1 background border      4  4  4  4
+button 0 1 1 background scale       1
+button 0 1 1 background parent_tile 0
+button 0 2 1 background image       pix/btn1.xpm
+button 0 2 1 background color       128 128 128
+button 0 2 1 background border      4  4  4  4
+button 0 2 1 background scale       1
+button 0 2 1 background parent_tile 0
+button 0 3 1 background image       pix/btn1.xpm
+button 0 3 1 background color       128 128 128
+button 0 3 1 background border      4  4  4  4
+button 0 3 1 background scale       1
+button 0 3 1 background parent_tile 0
+button 0 4 1 background image       pix/btn2.xpm
+button 0 4 1 background color       128 128 128
+button 0 4 1 background border      4  4  4  4
+button 0 4 1 background scale       1
+button 0 4 1 background parent_tile 0
+
+button 1 0 0 background image       pix/btn2.xpm
+button 1 0 0 background color       128 128 128
+button 1 0 0 background border      4  4  4  4
+button 1 0 0 background scale       1
+button 1 0 0 background parent_tile 0
+button 1 1 0 background image       pix/btn3.xpm
+button 1 1 0 background color       128 128 128
+button 1 1 0 background border      4  4  4  4
+button 1 1 0 background scale       1
+button 1 1 0 background parent_tile 0
+button 1 2 0 background image       pix/btn1.xpm
+button 1 2 0 background color       128 128 128
+button 1 2 0 background border      4  4  4  4
+button 1 2 0 background scale       1
+button 1 2 0 background parent_tile 0
+button 1 3 0 background image       pix/btn1.xpm
+button 1 3 0 background color       128 128 128
+button 1 3 0 background border      4  4  4  4
+button 1 3 0 background scale       1
+button 1 3 0 background parent_tile 0
+button 1 4 0 background image       pix/btn2.xpm
+button 1 4 0 background color       128 128 128
+button 1 4 0 background border      4  4  4  4
+button 1 4 0 background scale       1
+button 1 4 0 background parent_tile 0
+button 1 0 1 background image       pix/btn2.xpm
+button 1 0 1 background color       128 128 128
+button 1 0 1 background border      4  4  4  4
+button 1 0 1 background scale       1
+button 1 0 1 background parent_tile 0
+button 1 1 1 background image       pix/btn3.xpm
+button 1 1 1 background color       128 128 128
+button 1 1 1 background border      4  4  4  4
+button 1 1 1 background scale       1
+button 1 1 1 background parent_tile 0
+button 1 2 1 background image       pix/btn1.xpm
+button 1 2 1 background color       128 128 128
+button 1 2 1 background border      4  4  4  4
+button 1 2 1 background scale       1
+button 1 2 1 background parent_tile 0
+button 1 3 1 background image       pix/btn1.xpm
+button 1 3 1 background color       128 128 128
+button 1 3 1 background border      4  4  4  4
+button 1 3 1 background scale       1
+button 1 3 1 background parent_tile 0
+button 1 4 1 background image       pix/btn2.xpm
+button 1 4 1 background color       128 128 128
+button 1 4 1 background border      4  4  4  4
+button 1 4 1 background scale       1
+button 1 4 1 background parent_tile 0
+
+button 2 0 0 background image       pix/btn2.xpm
+button 2 0 0 background color       128 128 128
+button 2 0 0 background border      4  4  4  4
+button 2 0 0 background scale       1
+button 2 0 0 background parent_tile 0
+button 2 1 0 background image       pix/btn3.xpm
+button 2 1 0 background color       128 128 128
+button 2 1 0 background border      4  4  4  4
+button 2 1 0 background scale       1
+button 2 1 0 background parent_tile 0
+button 2 2 0 background image       pix/btn1.xpm
+button 2 2 0 background color       128 128 128
+button 2 2 0 background border      4  4  4  4
+button 2 2 0 background scale       1
+button 2 2 0 background parent_tile 0
+button 2 3 0 background image       pix/btn1.xpm
+button 2 3 0 background color       128 128 128
+button 2 3 0 background border      4  4  4  4
+button 2 3 0 background scale       1
+button 2 3 0 background parent_tile 0
+button 2 4 0 background image       pix/btn2.xpm
+button 2 4 0 background color       128 128 128
+button 2 4 0 background border      4  4  4  4
+button 2 4 0 background scale       1
+button 2 4 0 background parent_tile 0
+button 2 0 1 background image       pix/btn2.xpm
+button 2 0 1 background color       128 128 128
+button 2 0 1 background border      4  4  4  4
+button 2 0 1 background scale       1
+button 2 0 1 background parent_tile 0
+button 2 1 1 background image       pix/btn3.xpm
+button 2 1 1 background color       128 128 128
+button 2 1 1 background border      4  4  4  4
+button 2 1 1 background scale       1
+button 2 1 1 background parent_tile 0
+button 2 2 1 background image       pix/btn1.xpm
+button 2 2 1 background color       128 128 128
+button 2 2 1 background border      4  4  4  4
+button 2 2 1 background scale       1
+button 2 2 1 background parent_tile 0
+button 2 3 1 background image       pix/btn1.xpm
+button 2 3 1 background color       128 128 128
+button 2 3 1 background border      4  4  4  4
+button 2 3 1 background scale       1
+button 2 3 1 background parent_tile 0
+button 2 4 1 background image       pix/btn2.xpm
+button 2 4 1 background color       128 128 128
+button 2 4 1 background border      4  4  4  4
+button 2 4 1 background scale       1
+button 2 4 1 background parent_tile 0

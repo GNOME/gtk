@@ -13,7 +13,7 @@ theme_read_config        ()
    ThemeConfig *cf;
    char *h,s[2048],ss[2048];
    FILE *f;
-   int a,b;
+   int a,b,c;
    int i,j,k,l;
    
    h=getenv("HOME");
@@ -28,12 +28,15 @@ theme_read_config        ()
      {
 	for(j=0;j<5;j++)
 	  {
-	     cf->buttonconfig[i][j].border.filename=NULL;
-	     cf->buttonconfig[i][j].border.image=NULL;
-	     cf->buttonconfig[i][j].background.filename=NULL;
-	     cf->buttonconfig[i][j].background.image=NULL;
-	     cf->buttonconfig[i][j].number_of_decorations=0;
-	     cf->buttonconfig[i][j].decoration=NULL;
+	     for(k=0;k<2;k++)
+	       {
+		  cf->buttonconfig[i][j][k].border.filename=NULL;
+		  cf->buttonconfig[i][j][k].border.image=NULL;
+		  cf->buttonconfig[i][j][k].background.filename=NULL;
+		  cf->buttonconfig[i][j][k].background.image=NULL;
+		  cf->buttonconfig[i][j][k].number_of_decorations=0;
+		  cf->buttonconfig[i][j][k].decoration=NULL;
+	       }
 	  }
      }
    if (!f)
@@ -43,6 +46,7 @@ theme_read_config        ()
      }
    while(fgets(s,2048,f))
      {
+	printf("%s\n",s);
 	if (s[0]!='#')
 	  {
 	     ss[0]=0;
@@ -60,49 +64,53 @@ theme_read_config        ()
 		    }
 		  else
 		    {
-		       sscanf(s,"%*s %i %i %s",&a,&b,ss);
+		       sscanf(s,"%*s %i %i %i %s",&a,&b,&c,ss);
 		       if (!strcmp(ss,"background"))
 			 {
-			    sscanf(s,"%*s %*i %*i %*s %s",ss);
+			    sscanf(s,"%*s %*i %*i %*i %*s %s",ss);
 			    if (!strcmp(ss,"image"))
 			      {
-				 sscanf(s,"%*s %*i %*i %*s %*s %s",ss);
+				 sscanf(s,"%*s %*i %*i %*i %*s %*s %s",ss);
 				 snprintf(s,2048,"%s/themes/%s",h,ss);
-				 cf->buttonconfig[a][b].background.filename=strdup(s);
-				 cf->buttonconfig[a][b].background.image=
-				   gdk_imlib_load_image(cf->buttonconfig[a][b].background.filename);
-				 if (!cf->buttonconfig[a][b].background.image)
+				 cf->buttonconfig[a][b][c].background.filename=strdup(s);
+				 printf("%i %i %i %s\n",a,b,c,s);
+				 cf->buttonconfig[a][b][c].background.image=
+				   gdk_imlib_load_image(cf->buttonconfig[a][b][c].background.filename);
+				 if (!cf->buttonconfig[a][b][c].background.image)
 				   {
-				      fprintf(stderr,"ERROR: Cannot load %s\n",cf->buttonconfig[a][b].background.filename);
+				      fprintf(stderr,"ERROR: Cannot load %s\n",cf->buttonconfig[a][b][c].background.filename);
 				      exit(1);
 				   }
 			      }
 			    else if (!strcmp(ss,"color"))
 			      {
-				 sscanf(s,"%*s %*i %*i %*s %*s %i %i %i",&i,&j,&k);
-				 cf->buttonconfig[a][b].background.color.r=i;
-				 cf->buttonconfig[a][b].background.color.g=j;
-				 cf->buttonconfig[a][b].background.color.b=k;
-				 cf->buttonconfig[a][b].background.color.pixel=
+				 sscanf(s,"%*s %*i %*i %*i %*s %*s %i %i %i",&i,&j,&k);
+				 cf->buttonconfig[a][b][c].background.color.r=i;
+				 cf->buttonconfig[a][b][c].background.color.g=j;
+				 cf->buttonconfig[a][b][c].background.color.b=k;
+				 cf->buttonconfig[a][b][c].background.color.pixel=
 				   gdk_imlib_best_color_match(&i,&j,&k);
 			      }
 			    else if (!strcmp(ss,"border"))
 			      {
-				 sscanf(s,"%*s %*i %*i %*s %*s %i %i %i %i",&i,&j,&k,&l);
-				 cf->buttonconfig[a][b].background.border.left=i;
-				 cf->buttonconfig[a][b].background.border.right=j;
-				 cf->buttonconfig[a][b].background.border.top=k;
-				 cf->buttonconfig[a][b].background.border.bottom=l;
+				 sscanf(s,"%*s %*i %*i %*i %*s %*s %i %i %i %i",&i,&j,&k,&l);
+				 cf->buttonconfig[a][b][c].background.border.left=i;
+				 cf->buttonconfig[a][b][c].background.border.right=j;
+				 cf->buttonconfig[a][b][c].background.border.top=k;
+				 cf->buttonconfig[a][b][c].background.border.bottom=l;
+				 if (cf->buttonconfig[a][b][c].background.image)
+				   gdk_imlib_set_image_border(cf->buttonconfig[a][b][c].background.image,
+							      &cf->buttonconfig[a][b][c].background.border);
 			      }
 			    else if (!strcmp(ss,"scale"))
 			      {
-				 sscanf(s,"%*s %*i %*i %*s %*s %i",&i);
-				 cf->buttonconfig[a][b].background.scale_to_fit=i;
+				 sscanf(s,"%*s %*i %*i %*i %*s %*s %i",&i);
+				 cf->buttonconfig[a][b][c].background.scale_to_fit=i;
 			      }
 			    else if (!strcmp(ss,"parent_tile"))
 			      {
-				 sscanf(s,"%*s %*i %*i %*s %*s %i",&i);
-				 cf->buttonconfig[a][b].background.tile_relative_to_parent=i;
+				 sscanf(s,"%*s %*i %*i %*i %*s %*s %i",&i);
+				 cf->buttonconfig[a][b][c].background.tile_relative_to_parent=i;
 			      }
 			 }
 		    }

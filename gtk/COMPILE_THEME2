@@ -11,3 +11,9 @@ gcc -c theme2_main.c -o theme2_main.lo \
 -DUSE_XIM  -o libtheme2.la -rpath /usr/local/lib -version-info 1:0:0 \
 theme2_button.lo \
 theme2_main.lo
+
+# NEED to do this to install sample theme (run testgtk with --theme theme2) 
+# for user
+
+ln -s .libs ~/themes
+cp -r theme_data/* ~/themes
