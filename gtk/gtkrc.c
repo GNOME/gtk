@@ -2998,7 +2998,11 @@ gtk_rc_parse_font_name (GScanner   *scanner,
   if (token != G_TOKEN_STRING)
     return G_TOKEN_STRING;
 
-  rc_style->font_desc = pango_font_description_from_string (scanner->value.v_string);
+  if (rc_style->font_desc)
+    pango_font_description_free (rc_style->font_desc);
+
+  rc_style->font_desc = 
+    pango_font_description_from_string (scanner->value.v_string);
   
   return G_TOKEN_NONE;
 }
@@ -3752,12 +3756,13 @@ gtk_rc_parse_stock (GtkRcContext   *context,
         }
     }
 
-  if (icon_set && icon_set_valid)
+  if (icon_set)
     {
-      gtk_icon_factory_add (factory,
-                            stock_id,
-                            icon_set);
-      
+      if (icon_set_valid)
+        gtk_icon_factory_add (factory,
+                              stock_id,
+                              icon_set);
+
       gtk_icon_set_unref (icon_set);
     }
   

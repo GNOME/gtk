@@ -1,3 +1,9 @@
+2002-03-25  Sven Neumann  <sven@gimp.org>
+
+	* gtk/gtkrc.c (gtk_rc_parse_font_name): free the style's
+	font_description before accessing a new one.
+	(gtk_rc_parse_stock): always unref the created icon_set. #76289
+	
 2002-03-25  Mark McLoughlin  <mark@skynet.ie>
 
 	* gtk/gtkbindings.c: (gtk_binding_entry_add_signal),
