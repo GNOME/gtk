@@ -1,3 +1,18 @@
+Fri Sep  7 20:45:29 2001  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtktreeviewcolumn.c (gtk_tree_view_column_pack_{start,end}):
+	Removed 'fill' attribute.  It was silly b/c that was a property of
+	the cell renderer, anyway.
+	(gtk_tree_view_column_render): Actually render the packed
+	renderers.
+	* doc/tree-column-sizing.txt: initial devel documentation.
+	* gtk/gtktreeview.c (gtk_tree_view_expand_all): Fix bug.
+	* gtk/gtkcellrenderertextpixbuf.[ch]: removed.
+
+	* tests/testtreefocus.c: fix up to reflect above changes.
+	* tests/testtreeview.c: ditto
+	* demos/gtk-demo/stock_browser.c: ditto
+
 2001-09-07  Alex Larsson  <alexl@redhat.com>
 
 	* gdk/linux-fb/gdkcolor-fb.c:

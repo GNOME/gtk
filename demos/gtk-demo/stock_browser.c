@@ -304,11 +304,11 @@ selection_changed (GtkTreeSelection *selection)
 }
 
 static void
-macro_set_func (GtkTreeViewColumn *tree_column,
-                GtkCellRenderer   *cell,
-                GtkTreeModel      *model,
-                GtkTreeIter       *iter,
-                gpointer           data)
+macro_set_func_text (GtkTreeViewColumn *tree_column,
+		     GtkCellRenderer   *cell,
+		     GtkTreeModel      *model,
+		     GtkTreeIter       *iter,
+		     gpointer           data)
 {
   StockItemInfo *info;
   
@@ -318,6 +318,25 @@ macro_set_func (GtkTreeViewColumn *tree_column,
   
   g_object_set (GTK_CELL_RENDERER (cell),
                 "text", info->macro,
+                NULL);
+  
+  stock_item_info_free (info);
+}
+
+static void
+macro_set_func_pixbuf (GtkTreeViewColumn *tree_column,
+		       GtkCellRenderer   *cell,
+		       GtkTreeModel      *model,
+		       GtkTreeIter       *iter,
+		       gpointer           data)
+{
+  StockItemInfo *info;
+  
+  gtk_tree_model_get (model, iter,
+                      0, &info,
+                      -1);
+  
+  g_object_set (GTK_CELL_RENDERER (cell),
                 "pixbuf", info->small_icon,
                 NULL);
   
@@ -399,7 +418,8 @@ do_stock_browser (void)
       GtkCellRenderer *cell_renderer;
       StockItemDisplay *display;
       GtkTreeSelection *selection;
-      
+      GtkTreeViewColumn *column;
+
       window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
       gtk_window_set_title (GTK_WINDOW (window), "Stock Icons and Items");
 
@@ -423,15 +443,25 @@ do_stock_browser (void)
 
       gtk_container_add (GTK_CONTAINER (sw), treeview);
       
-      cell_renderer = gtk_cell_renderer_text_pixbuf_new ();
+      column = gtk_tree_view_column_new ();
+      gtk_tree_view_column_set_title (column, "Macro");
 
-      gtk_tree_view_insert_column_with_data_func (GTK_TREE_VIEW (treeview),
-                                                  -1,
-                                                  "Macro",
-                                                  cell_renderer,
-                                                  macro_set_func,
-                                                  NULL,
-                                                  NULL);
+      cell_renderer = gtk_cell_renderer_pixbuf_new ();
+      gtk_tree_view_column_pack_start (column,
+				       cell_renderer,
+				       FALSE);
+      gtk_tree_view_column_set_cell_data_func (column, cell_renderer,
+					       macro_set_func_pixbuf, NULL, NULL);
+      cell_renderer = gtk_cell_renderer_text_new ();
+      gtk_tree_view_column_pack_start (column,
+				       cell_renderer,
+				       TRUE);
+      gtk_tree_view_column_set_cell_data_func (column, cell_renderer,
+					       macro_set_func_text, NULL, NULL);
+
+      gtk_tree_view_append_column (GTK_TREE_VIEW (treeview),
+				   column);
+
       cell_renderer = gtk_cell_renderer_text_new ();
 
       gtk_tree_view_insert_column_with_data_func (GTK_TREE_VIEW (treeview),

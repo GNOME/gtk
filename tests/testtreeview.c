@@ -279,13 +279,15 @@ set_columns_type (GtkTreeView *tree_view, ColumnsType type)
       
       gtk_tree_view_append_column (GTK_TREE_VIEW (tree_view), col);
       
-      rend = gtk_cell_renderer_text_pixbuf_new ();
+      col = gtk_tree_view_column_new();
+      gtk_tree_view_column_set_title (col, "Column 2");
       
-      col = gtk_tree_view_column_new_with_attributes ("Column 2",
-                                                      rend,
-                                                      "text", 0,
-                                                      "pixbuf", 2,
-                                                      NULL);
+      rend = gtk_cell_renderer_pixbuf_new ();
+      gtk_tree_view_column_pack_start (col, rend, FALSE);
+      gtk_tree_view_column_add_attribute (col, rend, "pixbuf", 2);
+      rend = gtk_cell_renderer_text_new ();
+      gtk_tree_view_column_pack_start (col, rend, TRUE);
+      gtk_tree_view_column_add_attribute (col, rend, "text", 0);
 
       setup_column (col);
       

@@ -1,0 +1,67 @@
+The way that the GtkTreeView calculates sizing is pretty confusing.
+This is written down to help keep track of it in my head, and thus help
+anyone who hopes to work with the code in the future.
+
+HOW THE GTKTREEVIEW CALCULATES SIZE:
+====================================
+When the view is given a new model, the first thing it does is walk
+through the model at the top level, creating an GtkRBNode for each
+element of the model.  Each node has a height of 0.  The RBTree is kept
+updated as the models structure changes.  Additionally, the user can
+expand, collapse, and select rows at this stage.  The RBTree is accurate
+-- it just doesn't have a height for any row.  
+
+When the TreeView is realized, it calculates the actual height of each
+row by walking the tree and measuring them.  While doing so, it gets the
+size of each column.
+
+
+
+Columns are initially marked as 'dirty'.  When sized,
+gtk_tree_view_check_dirty_and_clean () is called on each column.  This
+function walks through all visible columns, and sees if they're dirty or
+not.  If any are dirty, it then walks the tree, calling
+gtk_tree_view_calc_size on each row.  gtk_tree_view_calc_size requests
+the size of every dirty column in the tree.  Finally, it updates the
+size of the widget (including adjustments).
+
+
+HOW THE GTKTREEVIEWCOLUMN STORES SIZE:
+======================================
+
+There are a number of size related fields in the GtkTreeViewColumn
+structure:
+
+  sizing	    The sizing method to use when calculating the size
+		    of the column.  Can be grow_only, resizable, auto, and fixed.
+
+  requested_width   The width of the column as requested by the column
+
+  width             The actual width.  This is requested width for all
+		    columns but possibly the last one.
+
+  fixed_width       The requested fixed width for the column iff it's
+		    sizing type is set to GTK_TREE_VIEW_COLUMN_FIXED.
+
+  min_width	    The minimum width the column can be
+
+  max_width	    The maximum width the column can be.  This can be
+		    overridden for the last column, if the tree_view is
+		    actually wider than the sum of all of the columns
+		    requested_widths.
+
+The following invariants are true:
+
+min_width is less than or equal to width
+
+max_width is greater than or equal to width
+
+(sizing == GTK_TREE_VIEW_COLUMN_FIXED) => (requested_width == fixed_width)
+
+(column != last visible column) => width == requested_width 
+
+
+/* Functions needed by gtktreeview for gtktreeviewcolumn */
+size_request_button
+set_width (for resizing resizable columns)
+calculate_width
