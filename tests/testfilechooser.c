@@ -368,6 +368,13 @@ set_filename_existing_nonexistent_cb (GtkButton      *button,
   set_filename (chooser, "/usr/nonexistent");
 }
 
+static void
+kill_dependent (GtkWindow *win, GtkObject *dep)
+{
+  gtk_object_destroy (dep);
+  g_object_unref (dep);
+}
+
 int
 main (int argc, char **argv)
 {
@@ -530,8 +537,18 @@ main (int argc, char **argv)
 		    G_CALLBACK (set_filename_existing_nonexistent_cb), dialog);
 
   gtk_widget_show_all (control_window);
-  
+
+  g_object_ref (control_window);
+  g_signal_connect (G_OBJECT (dialog), "destroy",
+		    G_CALLBACK (kill_dependent), control_window);
+
+  /* We need to hold a ref until we have destroyed the widgets, just in case
+   * someone else destroys them.  We explicitly destroy windows to catch leaks.
+   */
+  g_object_ref (dialog);
   gtk_main ();
+  gtk_widget_destroy (dialog);
+  g_object_unref (dialog);
 
   return 0;
 }

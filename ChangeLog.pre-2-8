@@ -1,5 +1,8 @@
 2004-03-17  Morten Welinder  <terra@gnome.org>
 
+	* tests/testfilechooser.c (main): Plug some leaks and expose
+	others.
+
 	* tests/prop-editor.c (create_prop_editor): Don't leak the tooltip
 	object.  Fixed #136652.
 
