@@ -22,6 +22,13 @@
    Raph Levien <raph@acm.org>
    */
 
+/*
+ * Modified by the GTK+ Team and others 1997-1999.  See the AUTHORS
+ * file for a list of people on the GTK+ Team.  See the ChangeLog
+ * files for a list of changes.  These files are distributed with
+ * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
+ */
+
 #include <math.h>
 
 #if HAVE_CONFIG_H

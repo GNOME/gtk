@@ -1,3 +1,8 @@
+Wed Feb 24 01:22:39 CST 1999 Shawn T. Amundson <amundson@gtk.org>
+
+	* *.[ch]: Added notice to look in AUTHORS and ChangeLog files
+	  for a list of changes.
+
 Tue Feb 23 17:52:37 1999  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkitemfactory.c (gtk_item_factory_create_item): fix implicit
