@@ -1,3 +1,8 @@
+Sun Aug  8 22:52:26 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkcombobox.c (find_menu_by_path): Don't stumble over
+	separators which are not backed by model rows.
+
 Sun Aug  8 11:01:23 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkcombobox.c (gtk_combo_box_set_active): Don't leak

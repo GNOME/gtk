@@ -2733,7 +2733,12 @@ find_menu_by_path (GtkWidget   *menu,
     {
       if (GTK_IS_SEPARATOR_MENU_ITEM (i->data))
 	{
-	  mpath = gtk_tree_path_copy (g_object_get_data (G_OBJECT (i->data), "gtk-combo-box-item-path"));
+	  
+	  mpath = g_object_get_data (G_OBJECT (i->data), "gtk-combo-box-item-path");
+	  if (!mpath)
+	    continue;
+	  
+	  mpath = gtk_tree_path_copy (mpath);
 	}
       else if (GTK_IS_CELL_VIEW (GTK_BIN (i->data)->child))
 	{
@@ -4172,7 +4177,7 @@ gtk_combo_box_set_active (GtkComboBox *combo_box,
 
   if (index_ != -1)
     path = gtk_tree_path_new_from_indices (index_, -1);
-  
+   
   gtk_combo_box_set_active_internal (combo_box, path);
 
   if (path)
