@@ -1,3 +1,9 @@
+Fri Dec 13 23:10:21 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkclist.c: Fix a problem with the focus row
+	ending up off the list when rows were deleted
+	(#94812, Christian Reis, Jon Nelson).
+
 Tue May 14 18:13:10 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/gdkdnd.c (gdk_window_cache_filter): Fix
