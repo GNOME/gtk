@@ -1777,11 +1777,9 @@ gtk_list_store_sort_iter_changed (GtkListStore *list_store,
 	cmp_a = (* func) (GTK_TREE_MODEL (list_store), iter, &tmp_iter, data);
     }
 
-  if (!list->next && cmp_a > 0)
-    new_location++;
-
   if ((!list->next) && (cmp_a > 0))
     {
+      new_location++;
       list->next = G_SLIST (iter->user_data);
       list_store->tail = list->next;
     }
