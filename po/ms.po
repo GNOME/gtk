@@ -12,6 +12,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:147 gdk-pixbuf/gdk-pixbuf-io.c:736
 #: gdk-pixbuf/gdk-pixbuf-io.c:869 tests/testfilechooser.c:198
@@ -143,8 +144,8 @@ msgstr "Data piksel imej rosak"
 #, c-format
 msgid "failed to allocate image buffer of %u byte"
 msgid_plural "failed to allocate image buffer of %u bytes"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Gagal memperuntukkan penimbal imej %u bait"
+msgstr[1] "Gagal memperuntukkan penimbal imej %u bait"
 
 #: gdk-pixbuf/io-ani.c:244
 msgid "Unexpected icon chunk in animation"
@@ -987,7 +988,7 @@ msgstr "Nama fail"
 #: gtk/gtkfilechooserdefault.c:1127
 #, c-format
 msgid "Could not add bookmark for %s because it is not a folder."
-msgstr "Tak dapat menambah tandabuku bagi %s kerana ia adalah bukan folder.%s"
+msgstr "Tak dapat menambah tandabuku bagi %s kerana ia adalah bukan folder."
 
 #: gtk/gtkfilechooserdefault.c:1175
 #, c-format
@@ -1044,8 +1045,8 @@ msgstr "Taip nama bagi folder baru"
 #, c-format
 msgid "%d byte"
 msgid_plural "%d bytes"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%d bait"
+msgstr[1] "%d bait"
 
 #: gtk/gtkfilechooserdefault.c:3092
 #, c-format
