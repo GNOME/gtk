@@ -1,3 +1,9 @@
+2004-08-17  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/tmpl/gtkfilechooserbutton.sgml: 
+	* gtk/gtk-sections.txt: 
+	* gtk/gtk-docs.sgml: Add section for GtkFileChooserButton.
+
 Mon Aug 16 01:44:30 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtk-sections.txt: Updates.

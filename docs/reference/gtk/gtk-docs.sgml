@@ -35,6 +35,7 @@
 <!ENTITY GtkEventBox SYSTEM "xml/gtkeventbox.xml">
 <!ENTITY GtkExpander SYSTEM "xml/gtkexpander.xml">
 <!ENTITY GtkFileChooser SYSTEM "xml/gtkfilechooser.xml">
+<!ENTITY GtkFileChooserButton SYSTEM "xml/gtkfilechooserbutton.xml">
 <!ENTITY GtkFileChooserDialog SYSTEM "xml/gtkfilechooserdialog.xml">
 <!ENTITY GtkFileChooserWidget SYSTEM "xml/gtkfilechooserwidget.xml">
 <!ENTITY GtkFileFilter SYSTEM "xml/gtkfilefilter.xml">
@@ -434,6 +435,7 @@ that is, GUI components such as <link linkend="GtkButton">GtkButton</link> or
         &GtkColorSelection;
         &GtkColorSelectionDialog;
         &GtkFileSelection;
+	&GtkFileChooserButton;
 	&GtkFileChooser;
 	&GtkFileChooserDialog;
 	&GtkFileChooserWidget;

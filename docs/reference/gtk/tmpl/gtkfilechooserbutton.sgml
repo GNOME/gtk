@@ -1,0 +1,88 @@
+<!-- ##### SECTION Title ##### -->
+GtkFileChooserButton
+
+<!-- ##### SECTION Short_Description ##### -->
+
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### STRUCT GtkFileChooserButton ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### FUNCTION gtk_file_chooser_button_new ##### -->
+<para>
+
+</para>
+
+@title: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_file_chooser_button_new_with_backend ##### -->
+<para>
+
+</para>
+
+@title: 
+@backend: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_file_chooser_button_new_with_dialog ##### -->
+<para>
+
+</para>
+
+@dialog: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_file_chooser_button_get_title ##### -->
+<para>
+
+</para>
+
+@button: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_file_chooser_button_set_title ##### -->
+<para>
+
+</para>
+
+@button: 
+@title: 
+
+
+<!-- ##### FUNCTION gtk_file_chooser_button_get_active ##### -->
+<para>
+
+</para>
+
+@button: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_file_chooser_button_set_active ##### -->
+<para>
+
+</para>
+
+@button: 
+@is_active: 
+
+
