@@ -51,7 +51,7 @@
 #include <windows.h>
 #undef STRICT
 #endif /* G_OS_WIN32 || G_WITH_CYGWIN */
-#if defined(HAVE_WINSOCK_H) && !defined(G_WITH_CYGWIN)
+#ifdef G_OS_WIN32
 #include <winsock.h>		/* For gethostname */
 #endif
 
