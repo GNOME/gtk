@@ -2254,10 +2254,8 @@ gtk_menu_enter_notify (GtkWidget        *widget,
     {
       GtkMenuShell *menu_shell = GTK_MENU_SHELL (widget);
 
-      if (menu_shell->ignore_enter)
-	return FALSE;
-
-      gtk_menu_handle_scrolling (GTK_MENU (widget), TRUE);
+      if (!menu_shell->ignore_enter)
+	gtk_menu_handle_scrolling (GTK_MENU (widget), TRUE);
     }
   
   /* If this is a faked enter (see gtk_menu_motion_notify), 'widget'

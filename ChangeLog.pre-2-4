@@ -1,3 +1,8 @@
+Tue Nov 12 14:20:53 2002  Soeren Sandmann  <sandmann@daimi.au.dk>
+
+	* gtk/gtkmenu.c (gtk_menu_enter_notify): Do not return when
+	menu_shell->ignore_enter is TRUE.
+
 2002-11-10  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkstatusbar.c (gtk_statusbar_button_press): Don't start
