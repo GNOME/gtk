@@ -2892,7 +2892,6 @@ static gboolean
 gtk_widget_real_focus_in_event (GtkWidget     *widget,
                                 GdkEventFocus *event)
 {
-  GTK_WIDGET_SET_FLAGS (widget, GTK_HAS_FOCUS);
   gtk_widget_queue_draw (widget);
 
   return FALSE;
@@ -2902,7 +2901,6 @@ static gboolean
 gtk_widget_real_focus_out_event (GtkWidget     *widget,
                                  GdkEventFocus *event)
 {
-  GTK_WIDGET_UNSET_FLAGS (widget, GTK_HAS_FOCUS);
   gtk_widget_queue_draw (widget);
 
   return FALSE;
@@ -3226,6 +3224,8 @@ gtk_widget_reparent (GtkWidget *widget,
 	  gtk_widget_reparent_container_child (widget,
 					       gtk_widget_get_parent_window (widget));
 	}
+
+      g_object_notify (G_OBJECT (widget), "parent");
     }
 }
 

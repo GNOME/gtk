@@ -1,3 +1,17 @@
+Fri Feb 22 19:17:46 2002  Owen Taylor  <otaylor@redhat.com>
+
+	Patch from Matthias Clasen (#54488)
+
+	* gtk/gtkwindow.c: Set/unset HAS_FOCUS flags here,
+	and do ::has-focus notifications.
+
+	* gtk/gtkclist.c gtk/gtkentry.c gtk/gtksocket.c
+	gtk/gtktext.c gtk/gtktextview.c gtk/gtkwidget.c:
+	Remove unecessary focus_in/out handles and unecessary
+	flag setting.
+
+	* gtk/gtkwidget.c: Adda missing notification on ::parent.
+
 Fri Feb 22 18:36:45 2002  Owen Taylor  <otaylor@redhat.com>
 
 	Fixes for AIX compilation from Miroslaw Dobrzanski-Neumann,

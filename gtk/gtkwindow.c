@@ -3627,12 +3627,35 @@ gtk_window_leave_notify_event (GtkWidget        *widget,
   return FALSE;
 }
 
+static void
+do_focus_change (GtkWidget *widget,
+		 gboolean   in)
+{
+  GdkEventFocus fevent;
+
+  g_object_ref (widget);
+   
+ if (in)
+    GTK_WIDGET_SET_FLAGS (widget, GTK_HAS_FOCUS);
+  else
+    GTK_WIDGET_UNSET_FLAGS (widget, GTK_HAS_FOCUS);
+
+  fevent.type = GDK_FOCUS_CHANGE;
+  fevent.window = widget->window;
+  fevent.in = in;
+  
+  gtk_widget_event (widget, (GdkEvent*) &fevent);
+  
+  g_object_notify (G_OBJECT (widget), "has_focus");
+
+  g_object_unref (widget);
+}
+
 static gint
 gtk_window_focus_in_event (GtkWidget     *widget,
 			   GdkEventFocus *event)
 {
   GtkWindow *window = GTK_WINDOW (widget);
-  GdkEventFocus fevent;
 
   /* It appears spurious focus in events can occur when
    *  the window is hidden. So we'll just check to see if
@@ -3646,13 +3669,7 @@ gtk_window_focus_in_event (GtkWidget     *widget,
       if (window->focus_widget &&
 	  window->focus_widget != widget &&
 	  !GTK_WIDGET_HAS_FOCUS (window->focus_widget))
-	{
-	  fevent.type = GDK_FOCUS_CHANGE;
-	  fevent.window = window->focus_widget->window;
-	  fevent.in = TRUE;
-
-	  gtk_widget_event (window->focus_widget, (GdkEvent*) &fevent);
-	}
+	do_focus_change (window->focus_widget, TRUE);	
     }
 
   return FALSE;
@@ -3663,20 +3680,13 @@ gtk_window_focus_out_event (GtkWidget     *widget,
 			    GdkEventFocus *event)
 {
   GtkWindow *window = GTK_WINDOW (widget);
-  GdkEventFocus fevent;
 
   window->has_focus = FALSE;
   
   if (window->focus_widget &&
       window->focus_widget != widget &&
       GTK_WIDGET_HAS_FOCUS (window->focus_widget))
-    {
-      fevent.type = GDK_FOCUS_CHANGE;
-      fevent.window = window->focus_widget->window;
-      fevent.in = FALSE;
-
-      gtk_widget_event (window->focus_widget, (GdkEvent*) &fevent);
-    }
+    do_focus_change (window->focus_widget, FALSE);
 
   return FALSE;
 }
@@ -3786,7 +3796,6 @@ static void
 gtk_window_real_set_focus (GtkWindow *window,
 			   GtkWidget *focus)
 {
-  GdkEventFocus event;
   gboolean def_flags = 0;
 
   if (window->default_widget)
@@ -3804,13 +3813,7 @@ gtk_window_real_set_focus (GtkWindow *window,
         }
 
       if (window->has_focus)
-	{
-	  event.type = GDK_FOCUS_CHANGE;
-	  event.window = window->focus_widget->window;
-	  event.in = FALSE;
-	  
-	  gtk_widget_event (window->focus_widget, (GdkEvent*) &event);
-	}
+	do_focus_change (window->focus_widget, FALSE);
     }
   
   window->focus_widget = focus;
@@ -3828,13 +3831,7 @@ gtk_window_real_set_focus (GtkWindow *window,
 	}
 
       if (window->has_focus)
-	{
-	  event.type = GDK_FOCUS_CHANGE;
-	  event.window = window->focus_widget->window;
-	  event.in = TRUE;
-	  
-	  gtk_widget_event (window->focus_widget, (GdkEvent*) &event);
-	}
+	do_focus_change (window->focus_widget, TRUE);
     }
   
   if (window->default_widget &&

@@ -1567,7 +1567,6 @@ gtk_entry_focus_in (GtkWidget     *widget,
 {
   GtkEntry *entry = GTK_ENTRY (widget);
   
-  GTK_WIDGET_SET_FLAGS (widget, GTK_HAS_FOCUS);
   gtk_widget_queue_draw (widget);
   
   entry->need_im_reset = TRUE;
@@ -1588,7 +1587,6 @@ gtk_entry_focus_out (GtkWidget     *widget,
 {
   GtkEntry *entry = GTK_ENTRY (widget);
   
-  GTK_WIDGET_UNSET_FLAGS (widget, GTK_HAS_FOCUS);
   gtk_widget_queue_draw (widget);
 
   entry->need_im_reset = TRUE;

@@ -6544,14 +6544,7 @@ static gint
 gtk_clist_focus_in (GtkWidget     *widget,
 		    GdkEventFocus *event)
 {
-  GtkCList *clist;
-
-  g_return_val_if_fail (GTK_IS_CLIST (widget), FALSE);
-  g_return_val_if_fail (event != NULL, FALSE);
-
-  GTK_WIDGET_SET_FLAGS (widget, GTK_HAS_FOCUS);
-
-  clist = GTK_CLIST (widget);
+  GtkCList *clist = GTK_CLIST (widget);
 
   if (clist->selection_mode == GTK_SELECTION_BROWSE &&
       clist->selection == NULL && clist->focus_row > -1)
@@ -6575,17 +6568,10 @@ static gint
 gtk_clist_focus_out (GtkWidget     *widget,
 		     GdkEventFocus *event)
 {
-  GtkCList *clist;
-
-  g_return_val_if_fail (GTK_IS_CLIST (widget), FALSE);
-  g_return_val_if_fail (event != NULL, FALSE);
-
-  GTK_WIDGET_UNSET_FLAGS (widget, GTK_HAS_FOCUS);
+  GtkCList *clist = GTK_CLIST (widget);
 
   gtk_clist_draw_focus (widget);
   
-  clist = GTK_CLIST (widget);
-
   GTK_CLIST_GET_CLASS (widget)->resync_selection (clist, (GdkEvent *) event);
 
   return FALSE;

@@ -731,16 +731,9 @@ gtk_socket_focus_in_event (GtkWidget *widget, GdkEventFocus *event)
 {
   GtkSocket *socket = GTK_SOCKET (widget);
 
-  if (!GTK_WIDGET_HAS_FOCUS (widget))
-    {
-      GTK_WIDGET_SET_FLAGS (widget, GTK_HAS_FOCUS);
-  
-      if (socket->plug_window)
-	{
-          send_xembed_message (socket, XEMBED_FOCUS_IN, XEMBED_FOCUS_CURRENT, 0, 0,
-			       gtk_get_current_event_time ());
-	}
-    }
+  if (socket->plug_window)
+    send_xembed_message (socket, XEMBED_FOCUS_IN, XEMBED_FOCUS_CURRENT, 0, 0,
+			 gtk_get_current_event_time ());
   
   return TRUE;
 }
@@ -749,8 +742,6 @@ static gboolean
 gtk_socket_focus_out_event (GtkWidget *widget, GdkEventFocus *event)
 {
   GtkSocket *socket = GTK_SOCKET (widget);
-
-  GTK_WIDGET_UNSET_FLAGS (widget, GTK_HAS_FOCUS);
 
 #if 0
   GtkWidget *toplevel;

@@ -255,10 +255,6 @@ static gint  gtk_text_motion_notify     (GtkWidget         *widget,
 					 GdkEventMotion    *event);
 static gint  gtk_text_key_press         (GtkWidget         *widget,
 					 GdkEventKey       *event);
-static gint  gtk_text_focus_in          (GtkWidget         *widget,
-					 GdkEventFocus     *event);
-static gint  gtk_text_focus_out         (GtkWidget         *widget,
-				         GdkEventFocus     *event);
 
 static void move_gap (GtkText* text, guint index);
 static void make_forward_space (GtkText* text, guint len);
@@ -576,8 +572,6 @@ gtk_text_class_init (GtkTextClass *class)
   widget_class->button_release_event = gtk_text_button_release;
   widget_class->motion_notify_event = gtk_text_motion_notify;
   widget_class->key_press_event = gtk_text_key_press;
-  widget_class->focus_in_event = gtk_text_focus_in;
-  widget_class->focus_out_event = gtk_text_focus_out;
 
   old_editable_class->set_editable = gtk_text_real_set_editable;
   
@@ -2175,30 +2169,6 @@ gtk_text_key_press (GtkWidget   *widget,
     }
   
   return return_val;
-}
-
-static gint
-gtk_text_focus_in (GtkWidget     *widget,
-		   GdkEventFocus *event)
-{
-  g_return_val_if_fail (GTK_IS_TEXT (widget), FALSE);
-  g_return_val_if_fail (event != NULL, FALSE);
-  
-  TDEBUG (("in gtk_text_focus_in\n"));
-  
-  return (* GTK_WIDGET_CLASS (parent_class)->focus_in_event) (widget, event);
-}
-
-static gint
-gtk_text_focus_out (GtkWidget     *widget,
-		    GdkEventFocus *event)
-{
-  g_return_val_if_fail (GTK_IS_TEXT (widget), FALSE);
-  g_return_val_if_fail (event != NULL, FALSE);
-  
-  TDEBUG (("in gtk_text_focus_out\n"));
-  
-  return (* GTK_WIDGET_CLASS (parent_class)->focus_out_event) (widget, event);
 }
 
 static void

@@ -3909,7 +3909,6 @@ gtk_text_view_focus_in_event (GtkWidget *widget, GdkEventFocus *event)
 {
   GtkTextView *text_view = GTK_TEXT_VIEW (widget);
 
-  GTK_WIDGET_SET_FLAGS (widget, GTK_HAS_FOCUS);
   gtk_widget_queue_draw (widget);
 
   DV(g_print (G_STRLOC": focus_in_event\n"));
@@ -3936,7 +3935,6 @@ gtk_text_view_focus_out_event (GtkWidget *widget, GdkEventFocus *event)
 {
   GtkTextView *text_view = GTK_TEXT_VIEW (widget);
 
-  GTK_WIDGET_UNSET_FLAGS (widget, GTK_HAS_FOCUS);
   gtk_widget_queue_draw (widget);
 
   DV(g_print (G_STRLOC": focus_out_event\n"));
