@@ -1,3 +1,12 @@
+Wed Aug  4 01:04:48 2004  Matthias Clasen  <maclas@gmx.de>
+
+	Fix #133446, noticed by Christian Persch:
+	
+	* gtk/gtkaction.c (gtk_action_class_init): Add a new boolean 
+	property ::visible-overflown. 
+	* gtk/gtkaction.c (gtk_action_create_menu_proxy): Don't create 
+	a menu proxy if visible_overflown is FALSE.  
+
 Tue Aug  3 20:16:26 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkactiongroup.[hc]: Make the the GtkAction{Toggle,Radio,}Entry*

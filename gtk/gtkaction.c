@@ -56,14 +56,15 @@ struct _GtkActionPrivate
   gchar *tooltip;
   gchar *stock_id; /* icon */
 
-  guint sensitive       : 1;
-  guint visible         : 1;
-  guint label_set       : 1; /* these two used so we can set label */
-  guint short_label_set : 1; /* based on stock id */
+  guint sensitive          : 1;
+  guint visible            : 1;
+  guint label_set          : 1; /* these two used so we can set label */
+  guint short_label_set    : 1; /* based on stock id */
   guint visible_horizontal : 1;
   guint visible_vertical   : 1;
-  guint is_important    : 1;
-  guint hide_if_empty   : 1;
+  guint is_important       : 1;
+  guint hide_if_empty      : 1;
+  guint visible_overflown  : 1;
 
   /* accelerator */
   guint          accel_count;
@@ -93,6 +94,7 @@ enum
   PROP_STOCK_ID,
   PROP_VISIBLE_HORIZONTAL,
   PROP_VISIBLE_VERTICAL,
+  PROP_VISIBLE_OVERFLOWN,
   PROP_IS_IMPORTANT,
   PROP_HIDE_IF_EMPTY,
   PROP_SENSITIVE,
@@ -199,7 +201,8 @@ gtk_action_class_init (GtkActionClass *klass)
 				   PROP_LABEL,
 				   g_param_spec_string ("label",
 							P_("Label"),
-							P_("The label used for menu items and buttons that activate this action."),
+							P_("The label used for menu items and buttons "
+							   "that activate this action."),
 							NULL,
 							G_PARAM_READWRITE));
   g_object_class_install_property (gobject_class,
@@ -220,28 +223,49 @@ gtk_action_class_init (GtkActionClass *klass)
 				   PROP_STOCK_ID,
 				   g_param_spec_string ("stock_id",
 							P_("Stock Icon"),
-							P_("The stock icon displayed in widgets representing this action."),
+							P_("The stock icon displayed in widgets representing "
+							   "this action."),
 							NULL,
 							G_PARAM_READWRITE));
   g_object_class_install_property (gobject_class,
 				   PROP_VISIBLE_HORIZONTAL,
 				   g_param_spec_boolean ("visible_horizontal",
 							 P_("Visible when horizontal"),
-							 P_("Whether the toolbar item is visible when the toolbar is in a horizontal orientation."),
+							 P_("Whether the toolbar item is visible when the toolbar "
+							    "is in a horizontal orientation."),
+							 TRUE,
+							 G_PARAM_READWRITE));
+  /**
+   * GtkAction:visible-overflown:
+   *
+   * When %TRUE, toolitem proxies for this action are represented in the 
+   * toolbar overflow menu.
+   *
+   * Since: 2.6
+   */
+  g_object_class_install_property (gobject_class,
+				   PROP_VISIBLE_OVERFLOWN,
+				   g_param_spec_boolean ("visible_overflown",
+							 P_("Visible when overflown"),
+							 P_("When TRUE, toolitem proxies for this action "
+							    "are represented in the toolbar overflow menu."),
 							 TRUE,
 							 G_PARAM_READWRITE));
   g_object_class_install_property (gobject_class,
 				   PROP_VISIBLE_VERTICAL,
 				   g_param_spec_boolean ("visible_vertical",
 							 P_("Visible when vertical"),
-							 P_("Whether the toolbar item is visible when the toolbar is in a vertical orientation."),
+							 P_("Whether the toolbar item is visible when the toolbar "
+							    "is in a vertical orientation."),
 							 TRUE,
 							 G_PARAM_READWRITE));
   g_object_class_install_property (gobject_class,
 				   PROP_IS_IMPORTANT,
 				   g_param_spec_boolean ("is_important",
 							 P_("Is important"),
-							 P_("Whether the action is considered important. When TRUE, toolitem proxies for this action show text in GTK_TOOLBAR_BOTH_HORIZ mode."),
+							 P_("Whether the action is considered important. "
+							    "When TRUE, toolitem proxies for this action "
+							    "show text in GTK_TOOLBAR_BOTH_HORIZ mode."),
 							 FALSE,
 							 G_PARAM_READWRITE));
   g_object_class_install_property (gobject_class,
@@ -305,6 +329,7 @@ gtk_action_init (GtkAction *action)
   action->private_data->stock_id = NULL;
   action->private_data->visible_horizontal = TRUE;
   action->private_data->visible_vertical   = TRUE;
+  action->private_data->visible_overflown  = TRUE;
   action->private_data->is_important = FALSE;
   action->private_data->hide_if_empty = TRUE;
 
@@ -467,6 +492,9 @@ gtk_action_set_property (GObject         *object,
     case PROP_VISIBLE_VERTICAL:
       action->private_data->visible_vertical = g_value_get_boolean (value);
       break;
+    case PROP_VISIBLE_OVERFLOWN:
+      action->private_data->visible_overflown = g_value_get_boolean (value);
+      break;
     case PROP_IS_IMPORTANT:
       action->private_data->is_important = g_value_get_boolean (value);
       break;
@@ -520,6 +548,9 @@ gtk_action_get_property (GObject    *object,
       break;
     case PROP_VISIBLE_VERTICAL:
       g_value_set_boolean (value, action->private_data->visible_vertical);
+      break;
+    case PROP_VISIBLE_OVERFLOWN:
+      g_value_set_boolean (value, action->private_data->visible_overflown);
       break;
     case PROP_IS_IMPORTANT:
       g_value_set_boolean (value, action->private_data->is_important);
@@ -726,13 +757,22 @@ static gboolean
 gtk_action_create_menu_proxy (GtkToolItem *tool_item, 
 			      GtkAction   *action)
 {
-  GtkWidget *menu_item = gtk_action_create_menu_item (action);
-
-  g_object_ref (menu_item);
-  gtk_object_sink (GTK_OBJECT (menu_item));
+  GtkWidget *menu_item;
   
-  gtk_tool_item_set_proxy_menu_item (tool_item, "gtk-action-menu-item", menu_item);
-  g_object_unref (menu_item);
+  if (action->private_data->visible_overflown)
+    {
+      menu_item = gtk_action_create_menu_item (action);
+
+      g_object_ref (menu_item);
+      gtk_object_sink (GTK_OBJECT (menu_item));
+      
+      gtk_tool_item_set_proxy_menu_item (tool_item, 
+					 "gtk-action-menu-item", menu_item);
+      g_object_unref (menu_item);
+    }
+  else
+    gtk_tool_item_set_proxy_menu_item (tool_item, 
+				       "gtk-action-menu-item", NULL);
 
   return TRUE;
 }
