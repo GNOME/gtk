@@ -1,3 +1,9 @@
+2000-02-25  Federico Mena Quintero  <federico@helixcode.com>
+
+	* gdk-pixbuf.m4: Use the correct name for
+	gdk-pixbuf/gdk-pixbuf.h.  Thanks to Jacob Berkman for pointing
+	this out.
+
 2000-02-21  Federico Mena Quintero  <federico@helixcode.com>
 
 	* configure.in (GDK_PIXBUF_MINOR): Bumped version number to 0.6.0.
