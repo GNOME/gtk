@@ -376,8 +376,11 @@ gtk_style_init (GtkStyle *style)
     {
       default_font = gdk_font_from_description (style->font_desc);
 
-      if (!default_font)
-	g_error ("Unable to load default font.");
+      if (!default_font) 
+	default_font = gdk_font_load ("fixed");
+
+      if (!default_font) 
+	g_error ("Unable to load \"fixed\" font!");
     }
   
   style->font = default_font;
