@@ -169,7 +169,7 @@ fetch_card8 (XSettingsBuffer *buffer,
   if (BYTES_LEFT (buffer) < 1)
     return XSETTINGS_ACCESS;
 
-  *result = *(CARD32 *)buffer->pos;
+  *result = *(CARD8 *)buffer->pos;
   buffer->pos += 1;
 
   return XSETTINGS_SUCCESS;

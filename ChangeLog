@@ -1,3 +1,8 @@
+2002-04-12  jacob berkman  <jacob@ximian.com>
+
+	* gdk/x11/xsettings-client.c (fetch_card8): fix cut-n-paste bug
+	which breaks big-endian machines (fixes #73585)
+
 2002-04-12  Havoc Pennington  <hp@redhat.com>
 
 	* gtk/gtknotebook.c (gtk_notebook_real_remove): relocate the
