@@ -1,5 +1,5 @@
 <!-- ##### SECTION Title ##### -->
-gtktoggletoolbutton
+GtkToggleToolButton
 
 <!-- ##### SECTION Short_Description ##### -->
 A #GtkToolItem containing a toggle button.
@@ -46,6 +46,13 @@ A #GtkToolItem containing a toggle button.
   should only be accessed through the functions described below.
 </para>
 
+
+<!-- ##### SIGNAL GtkToggleToolButton::toggled ##### -->
+<para>
+
+</para>
+
+@toggletoolbutton: the object which received the signal.
 
 <!-- ##### FUNCTION gtk_toggle_tool_button_new ##### -->
 <para>

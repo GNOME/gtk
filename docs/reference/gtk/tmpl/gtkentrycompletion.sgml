@@ -1,0 +1,145 @@
+<!-- ##### SECTION Title ##### -->
+GtkEntryCompletion
+
+<!-- ##### SECTION Short_Description ##### -->
+
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### STRUCT GtkEntryCompletion ##### -->
+<para>
+
+</para>
+
+@parent_instance: 
+
+<!-- ##### USER_FUNCTION GtkEntryCompletionMatchFunc ##### -->
+<para>
+
+</para>
+
+@completion: 
+@key: 
+@iter: 
+@user_data: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_entry_completion_new ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_entry_completion_get_entry ##### -->
+<para>
+
+</para>
+
+@entry: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_entry_completion_set_model ##### -->
+<para>
+
+</para>
+
+@completion: 
+@model: 
+
+
+<!-- ##### FUNCTION gtk_entry_completion_get_model ##### -->
+<para>
+
+</para>
+
+@completion: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_entry_completion_set_match_func ##### -->
+<para>
+
+</para>
+
+@completion: 
+@func: 
+@func_data: 
+@func_notify: 
+
+
+<!-- ##### FUNCTION gtk_entry_completion_set_minimum_key_length ##### -->
+<para>
+
+</para>
+
+@completion: 
+@length: 
+
+
+<!-- ##### FUNCTION gtk_entry_completion_get_minimum_key_length ##### -->
+<para>
+
+</para>
+
+@completion: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_entry_completion_complete ##### -->
+<para>
+
+</para>
+
+@completion: 
+
+
+<!-- ##### FUNCTION gtk_entry_completion_insert_action_text ##### -->
+<para>
+
+</para>
+
+@completion: 
+@index: 
+@text: 
+
+
+<!-- ##### FUNCTION gtk_entry_completion_insert_action_markup ##### -->
+<para>
+
+</para>
+
+@completion: 
+@index: 
+@markup: 
+
+
+<!-- ##### FUNCTION gtk_entry_completion_delete_action ##### -->
+<para>
+
+</para>
+
+@completion: 
+@index: 
+
+
+<!-- ##### FUNCTION gtk_entry_completion_set_text_column ##### -->
+<para>
+
+</para>
+
+@completion: 
+@column: 
+
+

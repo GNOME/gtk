@@ -1,3 +1,24 @@
+2003-10-02  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/Makefile.am (IGNORE_HFILES): Add gtkcellview.h and
+	gtkcellviewmenuitem.h.
+
+	* gtk/tmpl/gtkentrycompletion.sgml: 
+	* gtk/tmpl/gtktreemodelfilter.sgml: 
+	* gtk/tmpl/gtkcelllayout.sgml: 
+	* gtk/tmpl/gtkcombobox.sgml: 
+	* gtk/tmpl/gtkcomboboxentry.sgml: New templates.
+
+	* gtk/gtk-sections.txt: 
+	* gtk/gtk-docs.sgml: Add sections for GtkEntryCompletion, 
+	GtkTreeModelFilter, GtkCellLayout, GtkComboBox, GtkComboBoxEntry.
+
+	* gtk/tmpl/gtktreednd.sgml: Add short description.
+
+	* gtk/gtk-docs.sgml: Move GtkItemFactory to the "Deprecated" chapter.
+
+	* gtk/tmpl/gtktoggletoolbutton.sgml: Fix section title.
+
 2003-10-01  Matthias Clasen  <maclas@gmx.de>
 
 	* gdk/tmpl/keys.sgml: Add two missing signals.

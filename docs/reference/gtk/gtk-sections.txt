@@ -639,6 +639,51 @@ gtk_combo_get_type
 </SECTION>
 
 <SECTION>
+<FILE>gtkcombobox</FILE>
+<TITLE>GtkComboBox</TITLE>
+GtkComboBox
+gtk_combo_box_new
+gtk_combo_box_set_wrap_width
+gtk_combo_box_set_row_span_column
+gtk_combo_box_set_column_span_column
+gtk_combo_box_get_active
+gtk_combo_box_set_active
+gtk_combo_box_get_model
+gtk_combo_box_new_text
+gtk_combo_box_append_text
+gtk_combo_box_insert_text
+gtk_combo_box_prepend_text
+<SUBSECTION Standard>
+GTK_TYPE_COMBO_BOX
+GTK_COMBO_BOX
+GTK_COMBO_BOX_CLASS
+GTK_IS_COMBO_BOX
+GTK_IS_COMBO_BOX_CLASS
+GTK_COMBO_BOX_GET_CLASS
+<SUBSECTION Private>
+GtkComboBoxPrivate
+gtk_combo_box_get_type
+</SECTION>
+
+<SECTION>
+<FILE>gtkcomboboxentry</FILE>
+<TITLE>GtkComboBoxEntry</TITLE>
+GtkComboBoxEntry
+gtk_combo_box_entry_new
+gtk_combo_box_entry_get_text_column
+<SUBSECTION Standard>
+GTK_TYPE_COMBO_BOX_ENTRY
+GTK_COMBO_BOX_ENTRY
+GTK_COMBO_BOX_ENTRY_CLASS
+GTK_IS_COMBO_BOX_ENTRY
+GTK_IS_COMBO_BOX_ENTRY_CLASS
+GTK_COMBO_BOX_ENTRY_GET_CLASS
+<SUBSECTION Private>
+GtkComboBoxEntryPrivate
+gtk_combo_box_entry_get_type
+</SECTION>
+
+<SECTION>
 <FILE>gtkcontainer</FILE>
 <TITLE>GtkContainer</TITLE>
 GtkContainer
@@ -928,6 +973,8 @@ gtk_entry_get_layout
 gtk_entry_get_layout_offsets
 gtk_entry_get_max_length
 gtk_entry_get_visibility
+gtk_entry_set_completion
+gtk_entry_get_completion
 <SUBSECTION Standard>
 GTK_ENTRY
 GTK_IS_ENTRY
@@ -937,6 +984,36 @@ GTK_IS_ENTRY_CLASS
 GTK_ENTRY_GET_CLASS
 <SUBSECTION Private>
 gtk_entry_get_type
+</SECTION>
+
+<SECTION>
+<FILE>gtkentrycompletion</FILE>
+<TITLE>GtkEntryCompletion</TITLE>
+GtkEntryCompletion
+GtkEntryCompletionMatchFunc
+gtk_entry_completion_new
+gtk_entry_completion_get_entry
+gtk_entry_completion_set_model
+gtk_entry_completion_get_model
+gtk_entry_completion_set_match_func
+gtk_entry_completion_set_minimum_key_length
+gtk_entry_completion_get_minimum_key_length
+gtk_entry_completion_complete
+gtk_entry_completion_insert_action_text
+gtk_entry_completion_insert_action_markup
+gtk_entry_completion_delete_action
+gtk_entry_completion_set_text_column
+<SUBSECTION Standard>
+GTK_TYPE_ENTRY_COMPLETION
+GTK_ENTRY_COMPLETION
+GTK_ENTRY_COMPLETION_CLASS
+GTK_IS_ENTRY_COMPLETION
+GTK_IS_ENTRY_COMPLETION_CLASS
+GTK_ENTRY_COMPLETION_GET_CLASS
+GTK_ENTRY_COMPLETION_GET_PRIVATE
+<SUBSECTION Private>
+GtkEntryCompletionPrivate
+gtk_entry_completion_get_type
 </SECTION>
 
 <SECTION>
@@ -3324,6 +3401,35 @@ gtk_tree_model_sort_get_type
 </SECTION>
 
 <SECTION>
+<FILE>gtktreemodelfilter</FILE>
+<TITLE>GtkTreeModelFilter</TITLE>
+GtkTreeModelFilter
+GtkTreeModelFilterVisibleFunc
+GtkTreeModelFilterModifyFunc
+gtk_tree_model_filter_new
+gtk_tree_model_filter_set_visible_func
+gtk_tree_model_filter_set_modify_func
+gtk_tree_model_filter_set_visible_column
+gtk_tree_model_filter_get_model
+gtk_tree_model_filter_convert_child_iter_to_iter
+gtk_tree_model_filter_convert_iter_to_child_iter
+gtk_tree_model_filter_convert_child_path_to_path
+gtk_tree_model_filter_convert_path_to_child_path
+gtk_tree_model_filter_refilter
+gtk_tree_model_filter_clear_cache
+<SUBSECTION Standard>
+GTK_TYPE_TREE_MODEL_FILTER
+GTK_TREE_MODEL_FILTER
+GTK_TREE_MODEL_FILTER_CLASS
+GTK_IS_TREE_MODEL_FILTER
+GTK_IS_TREE_MODEL_FILTER_CLASS
+GTK_TREE_MODEL_FILTER_GET_CLASS
+<SUBSECTION Private>
+GtkTreeModelFilterPrivate
+gtk_tree_model_filter_get_type
+</SECTION>
+
+<SECTION>
 <FILE>gtktreeselection</FILE>
 <TITLE>GtkTreeSelection</TITLE>
 GtkTreeSelection
@@ -3611,6 +3717,28 @@ GTK_TREE_DRAG_DEST_GET_IFACE
 GTK_TREE_DRAG_SOURCE
 GTK_TREE_DRAG_SOURCE_GET_IFACE
 
+</SECTION>
+
+<SECTION>
+<FILE>gtkcelllayout</FILE>
+<TITLE>GtkCellLayout</TITLE>
+GtkCellLayout
+GtkCellLayoutIface
+GtkCellLayoutDataFunc
+gtk_cell_layout_pack_start
+gtk_cell_layout_pack_end
+gtk_cell_layout_clear
+gtk_cell_layout_set_attributes
+gtk_cell_layout_add_attribute
+gtk_cell_layout_set_cell_data_func
+gtk_cell_layout_clear_attributes
+<SUBSECTION Standard>
+GTK_TYPE_CELL_LAYOUT
+GTK_CELL_LAYOUT
+GTK_IS_CELL_LAYOUT
+GTK_CELL_LAYOUT_GET_IFACE
+<SUBSECTION Private>
+gtk_cell_layout_get_type
 </SECTION>
 
 <SECTION>
@@ -4722,6 +4850,7 @@ GtkPositionType
 GtkPreviewType
 GtkReliefStyle
 GtkResizeMode
+GtkScrollStep
 GtkScrollType
 GtkSelectionMode
 GtkShadowType

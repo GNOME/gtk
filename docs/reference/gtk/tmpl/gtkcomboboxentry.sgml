@@ -1,0 +1,42 @@
+<!-- ##### SECTION Title ##### -->
+GtkComboBoxEntry
+
+<!-- ##### SECTION Short_Description ##### -->
+
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### STRUCT GtkComboBoxEntry ##### -->
+<para>
+
+</para>
+
+@parent_instance: 
+
+<!-- ##### FUNCTION gtk_combo_box_entry_new ##### -->
+<para>
+
+</para>
+
+@model: 
+@text_column: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_combo_box_entry_get_text_column ##### -->
+<para>
+
+</para>
+
+@entry_box: 
+@Returns: 
+
+

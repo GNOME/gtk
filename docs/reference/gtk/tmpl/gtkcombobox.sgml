@@ -1,0 +1,122 @@
+<!-- ##### SECTION Title ##### -->
+GtkComboBox
+
+<!-- ##### SECTION Short_Description ##### -->
+
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### STRUCT GtkComboBox ##### -->
+<para>
+
+</para>
+
+@parent_instance: 
+
+<!-- ##### FUNCTION gtk_combo_box_new ##### -->
+<para>
+
+</para>
+
+@model: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_combo_box_set_wrap_width ##### -->
+<para>
+
+</para>
+
+@combo_box: 
+@width: 
+
+
+<!-- ##### FUNCTION gtk_combo_box_set_row_span_column ##### -->
+<para>
+
+</para>
+
+@combo_box: 
+@row_span: 
+
+
+<!-- ##### FUNCTION gtk_combo_box_set_column_span_column ##### -->
+<para>
+
+</para>
+
+@combo_box: 
+@column_span: 
+
+
+<!-- ##### FUNCTION gtk_combo_box_get_active ##### -->
+<para>
+
+</para>
+
+@combo_box: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_combo_box_set_active ##### -->
+<para>
+
+</para>
+
+@combo_box: 
+@index: 
+
+
+<!-- ##### FUNCTION gtk_combo_box_get_model ##### -->
+<para>
+
+</para>
+
+@combo_box: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_combo_box_new_text ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_combo_box_append_text ##### -->
+<para>
+
+</para>
+
+@combo_box: 
+@text: 
+
+
+<!-- ##### FUNCTION gtk_combo_box_insert_text ##### -->
+<para>
+
+</para>
+
+@combo_box: 
+@position: 
+@text: 
+
+
+<!-- ##### FUNCTION gtk_combo_box_prepend_text ##### -->
+<para>
+
+</para>
+
+@combo_box: 
+@text: 
+
+

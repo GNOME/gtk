@@ -20,6 +20,8 @@
 <!ENTITY GtkColorSelection SYSTEM "xml/gtkcolorsel.xml">
 <!ENTITY GtkColorSelectionDialog SYSTEM "xml/gtkcolorseldlg.xml">
 <!ENTITY GtkCombo SYSTEM "xml/gtkcombo.xml">
+<!ENTITY GtkComboBox SYSTEM "xml/gtkcombobox.xml">
+<!ENTITY GtkComboBoxEntry SYSTEM "xml/gtkcomboboxentry.xml">
 <!ENTITY GtkContainer SYSTEM "xml/gtkcontainer.xml">
 <!ENTITY GtkCTree SYSTEM "xml/gtkctree.xml">
 <!ENTITY GtkCurve SYSTEM "xml/gtkcurve.xml">
@@ -28,6 +30,7 @@
 <!ENTITY GtkEditable SYSTEM "xml/gtkeditable.xml">
 <!ENTITY GtkOldEditable SYSTEM "xml/gtkoldeditable.xml">
 <!ENTITY GtkEntry SYSTEM "xml/gtkentry.xml">
+<!ENTITY GtkEntryCompletion SYSTEM "xml/gtkentrycompletion.xml">
 <!ENTITY GtkEventBox SYSTEM "xml/gtkeventbox.xml">
 <!ENTITY GtkExpander SYSTEM "xml/gtkexpander.xml">
 <!ENTITY GtkFileSelection SYSTEM "xml/gtkfilesel.xml">
@@ -111,11 +114,13 @@
 <!ENTITY GtkTreeModel SYSTEM "xml/gtktreemodel.xml">
 <!ENTITY GtkTreeSortable SYSTEM "xml/gtktreesortable.xml">
 <!ENTITY GtkTreeModelSort SYSTEM "xml/gtktreemodelsort.xml">
+<!ENTITY GtkTreeModelFilter SYSTEM "xml/gtktreemodelfilter.xml">
 <!ENTITY GtkTreeSelection SYSTEM "xml/gtktreeselection.xml">
 <!ENTITY GtkTreeStore SYSTEM "xml/gtktreestore.xml">
 <!ENTITY GtkTreeViewColumn SYSTEM "xml/gtktreeviewcolumn.xml">
 <!ENTITY GtkTreeView SYSTEM "xml/gtktreeview.xml">
 <!ENTITY GtkUIManager SYSTEM "xml/gtkuimanager.xml">
+<!ENTITY GtkCellLayout SYSTEM "xml/gtkcelllayout.xml">
 <!ENTITY GtkCellRenderer SYSTEM "xml/gtkcellrenderer.xml">
 <!ENTITY GtkCellEditable SYSTEM "xml/gtkcelleditable.xml">
 <!ENTITY GtkCellRendererPixbuf SYSTEM "xml/gtkcellrendererpixbuf.xml">
@@ -339,6 +344,7 @@ that is, GUI components such as <link linkend="GtkButton">GtkButton</link> or
     <chapter id="NumericEntry">
       <title>Numeric/Text Data Entry</title>
         &GtkEntry;
+        &GtkEntryCompletion;
         &GtkHScale;      
         &GtkVScale;
         &GtkSpinButton;
@@ -366,6 +372,8 @@ that is, GUI components such as <link linkend="GtkButton">GtkButton</link> or
         &GtkTreeDND;
 	&GtkTreeSortable;
         &GtkTreeModelSort;
+        &GtkTreeModelFilter;
+        &GtkCellLayout;
         &GtkCellRenderer;
         &GtkCellEditable;
         &GtkCellRendererPixbuf;
@@ -378,7 +386,8 @@ that is, GUI components such as <link linkend="GtkButton">GtkButton</link> or
     <chapter id="MenusAndCombos">
       <title>Menus, Combo Box, Toolbar</title>
         &GtkCombo;
-        &GtkItemFactory;
+	&GtkComboBox;
+	&GtkComboBoxEntry;
         &GtkMenu;
         &GtkMenuBar;
         &GtkMenuItem;
@@ -500,6 +509,7 @@ that is, GUI components such as <link linkend="GtkButton">GtkButton</link> or
 
     <chapter id="DeprecatedObjects">
       <title>Deprecated</title>
+        &GtkItemFactory;
         &GtkCList;      
         &GtkCTree;
         &GtkList;

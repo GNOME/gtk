@@ -1,0 +1,154 @@
+<!-- ##### SECTION Title ##### -->
+GtkTreeModelFilter
+
+<!-- ##### SECTION Short_Description ##### -->
+
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### STRUCT GtkTreeModelFilter ##### -->
+<para>
+
+</para>
+
+@parent: 
+
+<!-- ##### USER_FUNCTION GtkTreeModelFilterVisibleFunc ##### -->
+<para>
+
+</para>
+
+@model: 
+@iter: 
+@data: 
+@Returns: 
+
+
+<!-- ##### USER_FUNCTION GtkTreeModelFilterModifyFunc ##### -->
+<para>
+
+</para>
+
+@model: 
+@iter: 
+@value: 
+@column: 
+@data: 
+
+
+<!-- ##### FUNCTION gtk_tree_model_filter_new ##### -->
+<para>
+
+</para>
+
+@child_model: 
+@root: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_tree_model_filter_set_visible_func ##### -->
+<para>
+
+</para>
+
+@filter: 
+@func: 
+@data: 
+@destroy: 
+
+
+<!-- ##### FUNCTION gtk_tree_model_filter_set_modify_func ##### -->
+<para>
+
+</para>
+
+@filter: 
+@n_columns: 
+@types: 
+@func: 
+@data: 
+@destroy: 
+
+
+<!-- ##### FUNCTION gtk_tree_model_filter_set_visible_column ##### -->
+<para>
+
+</para>
+
+@filter: 
+@column: 
+
+
+<!-- ##### FUNCTION gtk_tree_model_filter_get_model ##### -->
+<para>
+
+</para>
+
+@filter: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_tree_model_filter_convert_child_iter_to_iter ##### -->
+<para>
+
+</para>
+
+@filter: 
+@filter_iter: 
+@child_iter: 
+
+
+<!-- ##### FUNCTION gtk_tree_model_filter_convert_iter_to_child_iter ##### -->
+<para>
+
+</para>
+
+@filter: 
+@child_iter: 
+@filter_iter: 
+
+
+<!-- ##### FUNCTION gtk_tree_model_filter_convert_child_path_to_path ##### -->
+<para>
+
+</para>
+
+@filter: 
+@child_path: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_tree_model_filter_convert_path_to_child_path ##### -->
+<para>
+
+</para>
+
+@path: 
+@filter_path: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_tree_model_filter_refilter ##### -->
+<para>
+
+</para>
+
+@filter: 
+
+
+<!-- ##### FUNCTION gtk_tree_model_filter_clear_cache ##### -->
+<para>
+
+</para>
+
+@filter: 
+
+
