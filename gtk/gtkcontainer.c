@@ -897,16 +897,17 @@ static void
 gtk_container_real_check_resize (GtkContainer *container)
 {
   GtkWidget *widget;
+  GtkRequisition requisition;
   
   g_return_if_fail (container != NULL);
   g_return_if_fail (GTK_IS_CONTAINER (container));
   
   widget = GTK_WIDGET (container);
   
-  gtk_widget_size_request (widget, &widget->requisition);
+  gtk_widget_size_request (widget, &requisition);
   
-  if (widget->requisition.width > widget->allocation.width ||
-      widget->requisition.height > widget->allocation.height)
+  if (requisition.width > widget->allocation.width ||
+      requisition.height > widget->allocation.height)
     {
       if (GTK_IS_RESIZE_CONTAINER (container))
 	gtk_widget_size_allocate (GTK_WIDGET (container),

@@ -250,6 +250,7 @@ gtk_fixed_size_request (GtkWidget      *widget,
   GtkFixed *fixed;  
   GtkFixedChild *child;
   GList *children;
+  GtkRequisition child_requisition;
 
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_FIXED (widget));
@@ -267,14 +268,14 @@ gtk_fixed_size_request (GtkWidget      *widget,
 
       if (GTK_WIDGET_VISIBLE (child->widget))
 	{
-          gtk_widget_size_request (child->widget, &child->widget->requisition);
+          gtk_widget_size_request (child->widget, &child_requisition);
 
           requisition->height = MAX (requisition->height,
                                      child->y +
-                                     child->widget->requisition.height);
+                                     child_requisition.height);
           requisition->width = MAX (requisition->width,
                                     child->x +
-                                    child->widget->requisition.width);
+                                    child_requisition.width);
 	}
     }
 
@@ -289,6 +290,7 @@ gtk_fixed_size_allocate (GtkWidget     *widget,
   GtkFixed *fixed;
   GtkFixedChild *child;
   GtkAllocation child_allocation;
+  GtkRequisition child_requisition;
   GList *children;
   guint16 border_width;
 
@@ -316,10 +318,11 @@ gtk_fixed_size_allocate (GtkWidget     *widget,
       
       if (GTK_WIDGET_VISIBLE (child->widget))
 	{
+	  gtk_widget_get_child_requisition (child->widget, &child_requisition);
 	  child_allocation.x = child->x + border_width;
 	  child_allocation.y = child->y + border_width;
-	  child_allocation.width = child->widget->requisition.width;
-	  child_allocation.height = child->widget->requisition.height;
+	  child_allocation.width = child_requisition.width;
+	  child_allocation.height = child_requisition.height;
 	  gtk_widget_size_allocate (child->widget, &child_allocation);
 	}
     }

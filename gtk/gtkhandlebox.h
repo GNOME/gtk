@@ -57,7 +57,14 @@ struct _GtkHandleBox
   guint		  in_drag : 1;
   guint		  shrink_on_detach : 1;
 
-  gint dragoff_x, dragoff_y; /* start drag position (wrt widget->window) */
+  /* Variables used during a drag
+   */
+  gint dragoff_x, dragoff_y; /* offset from event->root_x/y and
+			      * attach point on float */
+  gint deskoff_x, deskoff_y; /* Offset between root relative coordinates
+			      * and deskrelative coordinates */
+  gint attach_x, attach_y;   /* Root relative-coordinates of attach
+			      * point on widget->window */
 };
 
 struct _GtkHandleBoxClass

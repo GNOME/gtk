@@ -2346,15 +2346,44 @@ void
 gtk_widget_size_request (GtkWidget	*widget,
 			 GtkRequisition *requisition)
 {
+  g_return_if_fail (widget != NULL);
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+
+#ifdef G_ENABLE_DEBUG
+  if (!GTK_WIDGET_TOPLEVEL (widget) && (requisition == &widget->requisition))
+    g_warning ("gtk_widget_size_request() called on child widget with widget equal\n to widget->requisition. gtk_widget_set_usize() may not work properly.");
+#endif /* G_ENABLE_DEBUG */
+
+  gtk_widget_ref (widget);
+  gtk_widget_ensure_style (widget);
+  gtk_signal_emit (GTK_OBJECT (widget), widget_signals[SIZE_REQUEST],
+		   &widget->requisition);
+
+  if (requisition)
+    gtk_widget_get_child_requisition (widget, requisition);
+
+  gtk_widget_unref (widget);
+}
+
+/*****************************************
+ * gtk_widget_get_requesition:
+ *
+ *   arguments:
+ *
+ *   results:
+ *****************************************/
+
+void
+gtk_widget_get_child_requisition (GtkWidget	   *widget,
+			    GtkRequisition *requisition)
+{
   GtkWidgetAuxInfo *aux_info;
 
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
-  gtk_widget_ref (widget);
-  gtk_widget_ensure_style (widget);
-  gtk_signal_emit (GTK_OBJECT (widget), widget_signals[SIZE_REQUEST],
-		   requisition);
+  *requisition = widget->requisition;
+  
   aux_info = gtk_object_get_data_by_id (GTK_OBJECT (widget), aux_info_key_id);
   if (aux_info)
     {
@@ -2363,7 +2392,6 @@ gtk_widget_size_request (GtkWidget	*widget,
       if (aux_info->height > 0)
 	requisition->height = aux_info->height;
     }
-  gtk_widget_unref (widget);
 }
 
 /*****************************************
@@ -3462,7 +3490,7 @@ gtk_widget_set_style_internal (GtkWidget *widget,
 	  GtkRequisition old_requisition;
 	  
 	  old_requisition = widget->requisition;
-	  gtk_widget_size_request (widget, &widget->requisition);
+	  gtk_widget_size_request (widget, NULL);
 	  
 	  if ((old_requisition.width != widget->requisition.width) ||
 	      (old_requisition.height != widget->requisition.height))

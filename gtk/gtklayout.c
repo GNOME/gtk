@@ -244,8 +244,6 @@ gtk_layout_put (GtkLayout     *layout,
   child->widget = child_widget;
   child->x = x;
   child->y = y;
-  child->widget->requisition.width = 0;
-  child->widget->requisition.height = 0;
 
   layout->children = g_list_append (layout->children, child);
   
@@ -559,9 +557,11 @@ gtk_layout_size_request (GtkWidget     *widget,
   while (tmp_list)
     {
       GtkLayoutChild *child = tmp_list->data;
+      GtkRequisition child_requisition;
+      
       tmp_list = tmp_list->next;
 
-      gtk_widget_size_request (child->widget, &child->widget->requisition);
+      gtk_widget_size_request (child->widget, &child_requisition);
     }
 }
 
@@ -776,11 +776,13 @@ gtk_layout_allocate_child (GtkLayout      *layout,
 			   GtkLayoutChild *child)
 {
   GtkAllocation allocation;
+  GtkRequisition requisition;
 
   allocation.x = child->x - layout->xoffset;
   allocation.y = child->y - layout->yoffset;
-  allocation.width = child->widget->requisition.width;
-  allocation.height = child->widget->requisition.height;
+  gtk_widget_get_child_requisition (child->widget, &requisition);
+  allocation.width = requisition.width;
+  allocation.height = requisition.height;
   
   gtk_widget_size_allocate (child->widget, &allocation);
 }

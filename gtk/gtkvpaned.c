@@ -96,6 +96,7 @@ gtk_vpaned_size_request (GtkWidget      *widget,
 			 GtkRequisition *requisition)
 {
   GtkPaned *paned;
+  GtkRequisition child_requisition;
 
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_VPANED (widget));
@@ -107,19 +108,18 @@ gtk_vpaned_size_request (GtkWidget      *widget,
 
   if (paned->child1 && GTK_WIDGET_VISIBLE (paned->child1))
     {
-      gtk_widget_size_request (paned->child1, &paned->child1->requisition);
+      gtk_widget_size_request (paned->child1, &child_requisition);
 
-      requisition->height = paned->child1->requisition.height;
-      requisition->width = paned->child1->requisition.width;
+      requisition->height = child_requisition.height;
+      requisition->width = child_requisition.width;
     }
 
   if (paned->child2 && GTK_WIDGET_VISIBLE (paned->child2))
     {
-      gtk_widget_size_request (paned->child2, &paned->child2->requisition);
+      gtk_widget_size_request (paned->child2, &child_requisition);
 
-      requisition->width = MAX (requisition->width,
-				paned->child2->requisition.width);
-      requisition->height += paned->child2->requisition.height;
+      requisition->width = MAX (requisition->width, child_requisition.width);
+      requisition->height += child_requisition.height;
     }
 
   requisition->height += GTK_CONTAINER (paned)->border_width * 2 + paned->gutter_size;
@@ -131,6 +131,8 @@ gtk_vpaned_size_allocate (GtkWidget     *widget,
 			  GtkAllocation *allocation)
 {
   GtkPaned *paned;
+  GtkRequisition child1_requisition;
+  GtkRequisition child2_requisition;
   GtkAllocation child1_allocation;
   GtkAllocation child2_allocation;
   GdkRectangle old_groove_rectangle;
@@ -145,12 +147,22 @@ gtk_vpaned_size_allocate (GtkWidget     *widget,
   paned = GTK_PANED (widget);
   border_width = GTK_CONTAINER (widget)->border_width;
 
+  if (paned->child1)
+    gtk_widget_get_child_requisition (paned->child1, &child1_requisition);
+  else
+    child1_requisition.height = 0;
+
+  if (paned->child2)
+    gtk_widget_get_child_requisition (paned->child2, &child2_requisition);
+  else
+    child2_requisition.height = 0;
+    
   gtk_paned_compute_position (paned,
 			      widget->allocation.height
 			        - paned->gutter_size
 			        - 2 * border_width,
-			      paned->child1 ? paned->child1->requisition.height : 0,
-			      paned->child2 ? paned->child2->requisition.height : 0);
+			      child1_requisition.height,
+			      child2_requisition.height);
 
   /* Move the handle before the children so we don't get extra expose events */
 

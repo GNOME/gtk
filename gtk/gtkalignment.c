@@ -241,10 +241,12 @@ gtk_alignment_size_request (GtkWidget      *widget,
 
   if (bin->child && GTK_WIDGET_VISIBLE (bin->child))
     {
-      gtk_widget_size_request (bin->child, &bin->child->requisition);
+      GtkRequisition child_requisition;
+      
+      gtk_widget_size_request (bin->child, &child_requisition);
 
-      requisition->width += bin->child->requisition.width;
-      requisition->height += bin->child->requisition.height;
+      requisition->width += child_requisition.width;
+      requisition->height += child_requisition.height;
     }
 }
 
@@ -255,6 +257,7 @@ gtk_alignment_size_allocate (GtkWidget     *widget,
   GtkAlignment *alignment;
   GtkBin *bin;
   GtkAllocation child_allocation;
+  GtkRequisition child_requisition;
   gint width, height;
   gint x, y;
 
@@ -268,20 +271,22 @@ gtk_alignment_size_allocate (GtkWidget     *widget,
   
   if (bin->child && GTK_WIDGET_VISIBLE (bin->child))
     {
+      gtk_widget_get_child_requisition (bin->child, &child_requisition);
+      
       x = GTK_CONTAINER (alignment)->border_width;
       y = GTK_CONTAINER (alignment)->border_width;
       width = MAX (allocation->width - 2 * x, 0);
       height = MAX (allocation->height - 2 * y, 0);
       
-      if (width > bin->child->requisition.width)
-	child_allocation.width = (bin->child->requisition.width *
+      if (width > child_requisition.width)
+	child_allocation.width = (child_requisition.width *
 				  (1.0 - alignment->xscale) +
 				  width * alignment->xscale);
       else
 	child_allocation.width = width;
       
-      if (height > bin->child->requisition.height)
-	child_allocation.height = (bin->child->requisition.height *
+      if (height > child_requisition.height)
+	child_allocation.height = (child_requisition.height *
 				   (1.0 - alignment->yscale) +
 				   height * alignment->yscale);
       else

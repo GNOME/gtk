@@ -919,7 +919,7 @@ gtk_table_size_request_init (GtkTable *table)
       children = children->next;
       
       if (GTK_WIDGET_VISIBLE (child->widget))
-	gtk_widget_size_request (child->widget, &child->widget->requisition);
+	gtk_widget_size_request (child->widget, NULL);
     }
 }
 
@@ -939,11 +939,14 @@ gtk_table_size_request_pass1 (GtkTable *table)
       
       if (GTK_WIDGET_VISIBLE (child->widget))
 	{
+	  GtkRequisition child_requisition;
+	  gtk_widget_get_child_requisition (child->widget, &child_requisition);
+
 	  /* Child spans a single column.
 	   */
 	  if (child->left_attach == (child->right_attach - 1))
 	    {
-	      width = child->widget->requisition.width + child->xpadding * 2;
+	      width = child_requisition.width + child->xpadding * 2;
 	      table->cols[child->left_attach].requisition = MAX (table->cols[child->left_attach].requisition, width);
 	    }
 	  
@@ -951,7 +954,7 @@ gtk_table_size_request_pass1 (GtkTable *table)
 	   */
 	  if (child->top_attach == (child->bottom_attach - 1))
 	    {
-	      height = child->widget->requisition.height + child->ypadding * 2;
+	      height = child_requisition.height + child->ypadding * 2;
 	      table->rows[child->top_attach].requisition = MAX (table->rows[child->top_attach].requisition, height);
 	    }
 	}
@@ -1003,6 +1006,10 @@ gtk_table_size_request_pass3 (GtkTable *table)
 	   */
 	  if (child->left_attach != (child->right_attach - 1))
 	    {
+	      GtkRequisition child_requisition;
+
+	      gtk_widget_get_child_requisition (child->widget, &child_requisition);
+	      
 	      /* Check and see if there is already enough space
 	       *  for the child.
 	       */
@@ -1018,9 +1025,9 @@ gtk_table_size_request_pass3 (GtkTable *table)
 	       *  its requisition, then divide up the needed space evenly
 	       *  amongst the columns it spans.
 	       */
-	      if (width < child->widget->requisition.width + child->xpadding * 2)
+	      if (width < child_requisition.width + child->xpadding * 2)
 		{
-		  width = child->widget->requisition.width + child->xpadding * 2 - width;
+		  width = child_requisition.width + child->xpadding * 2 - width;
 		  
 		  for (col = child->left_attach; col < child->right_attach; col++)
 		    {
@@ -1035,6 +1042,10 @@ gtk_table_size_request_pass3 (GtkTable *table)
 	   */
 	  if (child->top_attach != (child->bottom_attach - 1))
 	    {
+	      GtkRequisition child_requisition;
+
+	      gtk_widget_get_child_requisition (child->widget, &child_requisition);
+
 	      /* Check and see if there is already enough space
 	       *  for the child.
 	       */
@@ -1050,9 +1061,9 @@ gtk_table_size_request_pass3 (GtkTable *table)
 	       *  its requisition, then divide up the needed space evenly
 	       *  amongst the columns it spans.
 	       */
-	      if (height < child->widget->requisition.height + child->ypadding * 2)
+	      if (height < child_requisition.height + child->ypadding * 2)
 		{
-		  height = child->widget->requisition.height + child->ypadding * 2 - height;
+		  height = child_requisition.height + child->ypadding * 2 - height;
 		  
 		  for (row = child->top_attach; row < child->bottom_attach; row++)
 		    {
@@ -1454,6 +1465,9 @@ gtk_table_size_allocate_pass2 (GtkTable *table)
       
       if (GTK_WIDGET_VISIBLE (child->widget))
 	{
+	  GtkRequisition child_requisition;
+	  gtk_widget_get_child_requisition (child->widget, &child_requisition);
+
 	  x = GTK_WIDGET (table)->allocation.x + GTK_CONTAINER (table)->border_width;
 	  y = GTK_WIDGET (table)->allocation.y + GTK_CONTAINER (table)->border_width;
 	  max_width = 0;
@@ -1492,7 +1506,7 @@ gtk_table_size_allocate_pass2 (GtkTable *table)
 	    }
 	  else
 	    {
-	      allocation.width = child->widget->requisition.width;
+	      allocation.width = child_requisition.width;
 	      allocation.x = x + (max_width - allocation.width) / 2;
 	    }
 	  
@@ -1503,7 +1517,7 @@ gtk_table_size_allocate_pass2 (GtkTable *table)
 	    }
 	  else
 	    {
-	      allocation.height = child->widget->requisition.height;
+	      allocation.height = child_requisition.height;
 	      allocation.y = y + (max_height - allocation.height) / 2;
 	    }
 	  

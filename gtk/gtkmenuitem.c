@@ -346,10 +346,12 @@ gtk_menu_item_size_request (GtkWidget      *widget,
 
   if (bin->child && GTK_WIDGET_VISIBLE (bin->child))
     {
-      gtk_widget_size_request (bin->child, &bin->child->requisition);
+      GtkRequisition child_requisition;
+      
+      gtk_widget_size_request (bin->child, &child_requisition);
 
-      requisition->width += bin->child->requisition.width;
-      requisition->height += bin->child->requisition.height;
+      requisition->width += child_requisition.width;
+      requisition->height += child_requisition.height;
     }
 
   if (menu_item->submenu && menu_item->show_submenu_indicator)

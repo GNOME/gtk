@@ -456,10 +456,12 @@ gtk_frame_size_request (GtkWidget      *widget,
 
   if (bin->child && GTK_WIDGET_VISIBLE (bin->child))
     {
-      gtk_widget_size_request (bin->child, &bin->child->requisition);
+      GtkRequisition child_requisition;
+      
+      gtk_widget_size_request (bin->child, &child_requisition);
 
-      requisition->width += MAX (bin->child->requisition.width, frame->label_width);
-      requisition->height += bin->child->requisition.height;
+      requisition->width += MAX (child_requisition.width, frame->label_width);
+      requisition->height += child_requisition.height;
     }
   else
     {

@@ -890,10 +890,12 @@ gtk_window_size_request (GtkWidget      *widget,
 
   if (bin->child && GTK_WIDGET_VISIBLE (bin->child))
     {
-      gtk_widget_size_request (bin->child, &bin->child->requisition);
+      GtkRequisition child_requisition;
+      
+      gtk_widget_size_request (bin->child, &child_requisition);
 
-      requisition->width += bin->child->requisition.width;
-      requisition->height += bin->child->requisition.height;
+      requisition->width += child_requisition.width;
+      requisition->height += child_requisition.height;
     }
   else
     {
@@ -1320,7 +1322,7 @@ gtk_window_move_resize (GtkWindow *window)
 
   if (info && info->width > 0)
     {
-      size_changed = size_changed || (width != info->width);
+      size_changed = size_changed || (width != info->last_width);
       info->last_width = width;
       new_width = info->width;
     }
@@ -1332,7 +1334,7 @@ gtk_window_move_resize (GtkWindow *window)
 
   if (info && info->height > 0)
     {
-      size_changed = size_changed || (height != info->height);
+      size_changed = size_changed || (height != info->last_height);
       info->last_height = height;
       new_height = info->height;
     }

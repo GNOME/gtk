@@ -326,11 +326,13 @@ gtk_list_size_request (GtkWidget      *widget,
 
       if (GTK_WIDGET_VISIBLE (child))
 	{
-	  gtk_widget_size_request (child, &child->requisition);
+	  GtkRequisition child_requisition;
+	  
+	  gtk_widget_size_request (child, &child_requisition);
 
 	  requisition->width = MAX (requisition->width,
-				    child->requisition.width);
-	  requisition->height += child->requisition.height;
+				    child_requisition.width);
+	  requisition->height += child_requisition.height;
 	}
     }
 
@@ -378,7 +380,10 @@ gtk_list_size_allocate (GtkWidget     *widget,
 
 	  if (GTK_WIDGET_VISIBLE (child))
 	    {
-	      child_allocation.height = child->requisition.height;
+	      GtkRequisition child_requisition;
+	      gtk_widget_get_child_requisition (child, &child_requisition);
+	      
+	      child_allocation.height = child_requisition.height;
 
 	      gtk_widget_size_allocate (child, &child_allocation);
 

@@ -392,6 +392,7 @@ gtk_list_item_size_request (GtkWidget      *widget,
 			    GtkRequisition *requisition)
 {
   GtkBin *bin;
+  GtkRequisition child_requisition;
 
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_LIST_ITEM (widget));
@@ -405,10 +406,10 @@ gtk_list_item_size_request (GtkWidget      *widget,
 
   if (bin->child && GTK_WIDGET_VISIBLE (bin->child))
     {
-      gtk_widget_size_request (bin->child, &bin->child->requisition);
+      gtk_widget_size_request (bin->child, &child_requisition);
 
-      requisition->width += bin->child->requisition.width;
-      requisition->height += bin->child->requisition.height;
+      requisition->width += child_requisition.width;
+      requisition->height += child_requisition.height;
     }
 }
 

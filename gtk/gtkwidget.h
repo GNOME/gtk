@@ -456,6 +456,8 @@ void	   gtk_widget_size_request	  (GtkWidget	       *widget,
 					   GtkRequisition      *requisition);
 void	   gtk_widget_size_allocate	  (GtkWidget	       *widget,
 					   GtkAllocation       *allocation);
+void       gtk_widget_get_child_requisition     (GtkWidget	       *widget,
+					   GtkRequisition      *requisition);
 void	   gtk_widget_add_accelerator	  (GtkWidget           *widget,
 					   const gchar         *accel_signal,
 					   GtkAccelGroup       *accel_group,

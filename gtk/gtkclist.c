@@ -5393,11 +5393,13 @@ gtk_clist_size_request (GtkWidget      *widget,
     for (i = 0; i < clist->columns; i++)
       if (clist->column[i].button)
 	{
+	  GtkRequisition child_requisition;
+	  
 	  gtk_widget_size_request (clist->column[i].button,
-				   &clist->column[i].button->requisition);
+				   &child_requisition);
 	  clist->column_title_area.height =
 	    MAX (clist->column_title_area.height,
-		 clist->column[i].button->requisition.height);
+		 child_requisition.height);
 	}
 
   requisition->width += (widget->style->klass->xthickness +
@@ -6088,14 +6090,15 @@ adjust_adjustments (GtkCList *clist,
   if (!block_resize && (!clist->vadjustment || !clist->hadjustment))
     {
       GtkWidget *widget;
+      GtkRequisition requisition;
 
       widget = GTK_WIDGET (clist);
-      gtk_widget_size_request (widget, &widget->requisition);
+      gtk_widget_size_request (widget, &requisition);
 
       if ((!clist->hadjustment &&
-	   widget->requisition.width != widget->allocation.width) ||
+	   requisition.width != widget->allocation.width) ||
 	  (!clist->vadjustment &&
-	   widget->requisition.height != widget->allocation.height))
+	   requisition.height != widget->allocation.height))
 	gtk_widget_queue_resize (widget);
     }
 }

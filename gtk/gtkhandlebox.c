@@ -415,6 +415,7 @@ gtk_handle_box_size_request (GtkWidget      *widget,
 {
   GtkBin *bin;
   GtkHandleBox *hb;
+  GtkRequisition child_requisition;
 
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_HANDLE_BOX (widget));
@@ -439,7 +440,7 @@ gtk_handle_box_size_request (GtkWidget      *widget,
    * won't have any usefull hint for our size otherwise.
    */
   if (bin->child)
-    gtk_widget_size_request (bin->child, &bin->child->requisition);
+    gtk_widget_size_request (bin->child, &child_requisition);
 
   if (hb->child_detached)
     {
@@ -447,9 +448,9 @@ gtk_handle_box_size_request (GtkWidget      *widget,
 	{
 	  if (hb->handle_position == GTK_POS_LEFT ||
 	      hb->handle_position == GTK_POS_RIGHT)
-	    requisition->height += bin->child->requisition.height;
+	    requisition->height += child_requisition.height;
 	  else
-	    requisition->width += bin->child->requisition.width;
+	    requisition->width += child_requisition.width;
 	}
       else
 	{
@@ -467,8 +468,8 @@ gtk_handle_box_size_request (GtkWidget      *widget,
       
       if (bin->child)
 	{
-	  requisition->width += bin->child->requisition.width;
-	  requisition->height += bin->child->requisition.height;
+	  requisition->width += child_requisition.width;
+	  requisition->height += child_requisition.height;
 	}
       else
 	{
@@ -484,6 +485,7 @@ gtk_handle_box_size_allocate (GtkWidget     *widget,
 {
   GtkBin *bin;
   GtkHandleBox *hb;
+  GtkRequisition child_requisition;
   
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_HANDLE_BOX (widget));
@@ -494,16 +496,24 @@ gtk_handle_box_size_allocate (GtkWidget     *widget,
   
   widget->allocation.x = allocation->x;
 
+  if (bin->child)
+    gtk_widget_get_child_requisition (bin->child, &child_requisition);
+  else
+    {
+      child_requisition.width = 0;
+      child_requisition.height = 0;
+    }
+  
   if (hb->child_detached)
     {
       guint max_req_height;
       guint max_req_width;
 
       max_req_height = MAX (widget->requisition.height,
-			    bin->child->requisition.height +
+			    child_requisition.height +
 			    2 * widget->style->klass->ythickness);
       max_req_width = MAX (widget->requisition.width,
-			   bin->child->requisition.width +
+			   child_requisition.width +
 			   2 * widget->style->klass->xthickness);
       
       if (allocation->height > max_req_height)
@@ -549,8 +559,8 @@ gtk_handle_box_size_allocate (GtkWidget     *widget,
 	  guint float_width;
 	  guint float_height;
 	  
-	  child_allocation.width = child->requisition.width;
-	  child_allocation.height = child->requisition.height;
+	  child_allocation.width = child_requisition.width;
+	  child_allocation.height = child_requisition.height;
 	  
 	  float_width = child_allocation.width + 2 * border_width;
 	  float_height = child_allocation.height + 2 * border_width;

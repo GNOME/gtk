@@ -435,10 +435,12 @@ gtk_button_size_request (GtkWidget      *widget,
 
   if (GTK_BIN (button)->child && GTK_WIDGET_VISIBLE (GTK_BIN (button)->child))
     {
-      gtk_widget_size_request (GTK_BIN (button)->child, &GTK_BIN (button)->child->requisition);
+      GtkRequisition child_requisition;
 
-      requisition->width += GTK_BIN (button)->child->requisition.width;
-      requisition->height += GTK_BIN (button)->child->requisition.height;
+      gtk_widget_size_request (GTK_BIN (button)->child, &child_requisition);
+
+      requisition->width += child_requisition.width;
+      requisition->height += child_requisition.height;
     }
 }
 

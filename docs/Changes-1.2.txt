@@ -245,3 +245,30 @@ Incompatible Changes from GTK+-1.0 to GTK+-1.2:
      You can get these CFLAGS and LIBS by passing gthread
      as the fourth parameter to the AM_PATH_GTK automake
      macro.
+
+* Prior to GTK+-1.2, there were two conflicting interpretations
+  of widget->requistion. It was either taken to be
+  the size that the widget requested, or that size
+  modified by calls to gtk_widget_set_usize(). In GTK+-1.2,
+  it is always interpreted the first way.
+
+  Container widgets are affected in two ways by this:
+
+   1) Container widgets should not pass widget->requisition
+      as the second parameter to gtk_widget_size_request().
+      Instead they should call it like:
+   
+      GtkRequisition child_requisition;
+      gtk_widget_size_request (widget, &child_requisition);
+
+   2) Container widgets should not access child->requisition
+      directly. Either they should use the values returned
+      by gtk_widget_size_request(), or they should call
+      the new function:
+
+    void gtk_widget_get_child_requisition (GtkWidget      *widget,
+					   GtkRequisition *requisition);
+
+      which returns the requisition of the given widget, modified
+      by calls to gtk_widget_set_usize().
+

@@ -702,6 +702,7 @@ gtk_menu_size_request (GtkWidget      *widget,
   GList *children;
   guint max_toggle_size;
   guint max_accel_width;
+  GtkRequisition child_requisition;
   
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_MENU (widget));
@@ -725,10 +726,10 @@ gtk_menu_size_request (GtkWidget      *widget,
       if (GTK_WIDGET_VISIBLE (child))
 	{
 	  GTK_MENU_ITEM (child)->show_submenu_indicator = TRUE;
-	  gtk_widget_size_request (child, &child->requisition);
+	  gtk_widget_size_request (child, &child_requisition);
 	  
-	  requisition->width = MAX (requisition->width, child->requisition.width);
-	  requisition->height += child->requisition.height;
+	  requisition->width = MAX (requisition->width, child_requisition.width);
+	  requisition->height += child_requisition.height;
 	  
 	  max_toggle_size = MAX (max_toggle_size, MENU_ITEM_CLASS (child)->toggle_size);
 	  max_accel_width = MAX (max_accel_width, GTK_MENU_ITEM (child)->accelerator_width);
@@ -791,7 +792,10 @@ gtk_menu_size_allocate (GtkWidget     *widget,
 	  
 	  if (GTK_WIDGET_VISIBLE (child))
 	    {
-	      child_allocation.height = child->requisition.height;
+	      GtkRequisition child_requisition;
+	      gtk_widget_get_child_requisition (child, &child_requisition);
+	      
+	      child_allocation.height = child_requisition.height;
 	      
 	      gtk_widget_size_allocate (child, &child_allocation);
 	      gtk_widget_queue_draw (child);
@@ -1013,6 +1017,7 @@ static void
 gtk_menu_position (GtkMenu *menu)
 {
   GtkWidget *widget;
+  GtkRequisition requisition;
   gint x, y;
  
   g_return_if_fail (menu != NULL);
@@ -1027,7 +1032,7 @@ gtk_menu_position (GtkMenu *menu)
    * if one a size_request was queued while we weren't popped up,
    * the requisition won't have been recomputed yet.
    */
-  gtk_widget_size_request (widget, &widget->requisition);
+  gtk_widget_size_request (widget, &requisition);
       
   if (menu->position_func)
     (* menu->position_func) (menu, &x, &y, menu->position_func_data);
@@ -1042,12 +1047,12 @@ gtk_menu_position (GtkMenu *menu)
       x -= 2;
       y -= 2;
       
-      if ((x + widget->requisition.width) > screen_width)
-	x -= ((x + widget->requisition.width) - screen_width);
+      if ((x + requisition.width) > screen_width)
+	x -= ((x + requisition.width) - screen_width);
       if (x < 0)
 	x = 0;
-      if ((y + widget->requisition.height) > screen_height)
-	y -= ((y + widget->requisition.height) - screen_height);
+      if ((y + requisition.height) > screen_height)
+	y -= ((y + requisition.height) - screen_height);
       if (y < 0)
 	y = 0;
     }

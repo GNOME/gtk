@@ -389,6 +389,7 @@ gtk_toolbar_size_request (GtkWidget      *widget,
   gint nbuttons;
   gint button_maxw, button_maxh;
   gint widget_maxw, widget_maxh;
+  GtkRequisition child_requisition;
 
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_TOOLBAR (widget));
@@ -423,11 +424,11 @@ gtk_toolbar_size_request (GtkWidget      *widget,
 	case GTK_TOOLBAR_CHILD_TOGGLEBUTTON:
 	  if (GTK_WIDGET_VISIBLE (child->widget))
 	    {
-	      gtk_widget_size_request (child->widget, &child->widget->requisition);
+	      gtk_widget_size_request (child->widget, &child_requisition);
 
 	      nbuttons++;
-	      button_maxw = MAX (button_maxw, child->widget->requisition.width);
-	      button_maxh = MAX (button_maxh, child->widget->requisition.height);
+	      button_maxw = MAX (button_maxw, child_requisition.width);
+	      button_maxh = MAX (button_maxh, child_requisition.height);
 	    }
 
 	  break;
@@ -435,15 +436,15 @@ gtk_toolbar_size_request (GtkWidget      *widget,
 	case GTK_TOOLBAR_CHILD_WIDGET:
 	  if (GTK_WIDGET_VISIBLE (child->widget))
 	    {
-	      gtk_widget_size_request (child->widget, &child->widget->requisition);
+	      gtk_widget_size_request (child->widget, &child_requisition);
 
-	      widget_maxw = MAX (widget_maxw, child->widget->requisition.width);
-	      widget_maxh = MAX (widget_maxh, child->widget->requisition.height);
+	      widget_maxw = MAX (widget_maxw, child_requisition.width);
+	      widget_maxh = MAX (widget_maxh, child_requisition.height);
 
 	      if (toolbar->orientation == GTK_ORIENTATION_HORIZONTAL)
-		requisition->width += child->widget->requisition.width;
+		requisition->width += child_requisition.width;
 	      else
-		requisition->height += child->widget->requisition.height;
+		requisition->height += child_requisition.height;
 	    }
 
 	  break;
@@ -477,6 +478,7 @@ gtk_toolbar_size_allocate (GtkWidget     *widget,
   GtkToolbarChild *child;
   GtkToolbarChildSpace *child_space;
   GtkAllocation alloc;
+  GtkRequisition child_requisition;
   gint border_width;
 
   g_return_if_fail (widget != NULL);
@@ -545,20 +547,22 @@ gtk_toolbar_size_allocate (GtkWidget     *widget,
 	  if (!GTK_WIDGET_VISIBLE (child->widget))
 	    break;
 
-	  alloc.width = child->widget->requisition.width;
-	  alloc.height = child->widget->requisition.height;
+	  gtk_widget_get_child_requisition (child->widget, &child_requisition);
+	  
+	  alloc.width = child_requisition.width;
+	  alloc.height = child_requisition.height;
 
 	  if (toolbar->orientation == GTK_ORIENTATION_HORIZONTAL)
-	    alloc.y = allocation->y + (allocation->height - child->widget->requisition.height) / 2;
+	    alloc.y = allocation->y + (allocation->height - child_requisition.height) / 2;
 	  else
-	    alloc.x = allocation->x + (allocation->width - child->widget->requisition.width) / 2;
+	    alloc.x = allocation->x + (allocation->width - child_requisition.width) / 2;
 
 	  gtk_widget_size_allocate (child->widget, &alloc);
 
 	  if (toolbar->orientation == GTK_ORIENTATION_HORIZONTAL)
-	    alloc.x += child->widget->requisition.width;
+	    alloc.x += child_requisition.width;
 	  else
-	    alloc.y += child->widget->requisition.height;
+	    alloc.y += child_requisition.height;
 
 	  break;
 

@@ -110,19 +110,21 @@ gtk_hbox_size_request (GtkWidget      *widget,
 
       if (GTK_WIDGET_VISIBLE (child->widget))
 	{
-	  gtk_widget_size_request (child->widget, &child->widget->requisition);
+	  GtkRequisition child_requisition;
+
+	  gtk_widget_size_request (child->widget, &child_requisition);
 
 	  if (box->homogeneous)
 	    {
-	      width = child->widget->requisition.width + child->padding * 2;
+	      width = child_requisition.width + child->padding * 2;
 	      requisition->width = MAX (requisition->width, width);
 	    }
 	  else
 	    {
-	      requisition->width += child->widget->requisition.width + child->padding * 2;
+	      requisition->width += child_requisition.width + child->padding * 2;
 	    }
 
-	  requisition->height = MAX (requisition->height, child->widget->requisition.height);
+	  requisition->height = MAX (requisition->height, child_requisition.height);
 
 	  nvis_children += 1;
 	}
@@ -189,7 +191,7 @@ gtk_hbox_size_allocate (GtkWidget     *widget,
 	}
       else if (nexpand_children > 0)
 	{
-	  width = (gint)allocation->width - (gint)widget->requisition.width;
+	  width = (gint) allocation->width - (gint) widget->requisition.width;
 	  extra = width / nexpand_children;
 	}
       else
@@ -200,7 +202,7 @@ gtk_hbox_size_allocate (GtkWidget     *widget,
 
       x = allocation->x + GTK_CONTAINER (box)->border_width;
       child_allocation.y = allocation->y + GTK_CONTAINER (box)->border_width;
-      child_allocation.height = MAX (1, (gint)allocation->height - (gint)GTK_CONTAINER (box)->border_width * 2);
+      child_allocation.height = MAX (1, (gint) allocation->height - (gint) GTK_CONTAINER (box)->border_width * 2);
 
       children = box->children;
       while (children)
@@ -222,7 +224,11 @@ gtk_hbox_size_allocate (GtkWidget     *widget,
 		}
 	      else
 		{
-		  child_width = child->widget->requisition.width + child->padding * 2;
+		  GtkRequisition child_requisition;
+
+		  gtk_widget_get_child_requisition (child->widget, &child_requisition);
+
+		  child_width = child_requisition.width + child->padding * 2;
 
 		  if (child->expand)
 		    {
@@ -238,12 +244,15 @@ gtk_hbox_size_allocate (GtkWidget     *widget,
 
 	      if (child->fill)
 		{
-		  child_allocation.width = MAX (1, (gint)child_width - (gint)child->padding * 2);
+		  child_allocation.width = MAX (1, (gint) child_width - (gint) child->padding * 2);
 		  child_allocation.x = x + child->padding;
 		}
 	      else
 		{
-		  child_allocation.width = child->widget->requisition.width;
+		  GtkRequisition child_requisition;
+
+		  gtk_widget_get_child_requisition (child->widget, &child_requisition);
+		  child_allocation.width = child_requisition.width;
 		  child_allocation.x = x + (child_width - child_allocation.width) / 2;
 		}
 
@@ -263,6 +272,9 @@ gtk_hbox_size_allocate (GtkWidget     *widget,
 
 	  if ((child->pack == GTK_PACK_END) && GTK_WIDGET_VISIBLE (child->widget))
 	    {
+	      GtkRequisition child_requisition;
+	      gtk_widget_get_child_requisition (child->widget, &child_requisition);
+
               if (box->homogeneous)
                 {
                   if (nvis_children == 1)
@@ -275,7 +287,7 @@ gtk_hbox_size_allocate (GtkWidget     *widget,
                 }
               else
                 {
-		  child_width = child->widget->requisition.width + child->padding * 2;
+		  child_width = child_requisition.width + child->padding * 2;
 
                   if (child->expand)
                     {
@@ -296,7 +308,7 @@ gtk_hbox_size_allocate (GtkWidget     *widget,
                 }
               else
                 {
-                  child_allocation.width = child->widget->requisition.width;
+		  child_allocation.width = child_requisition.width;
                   child_allocation.x = x + (child_width - child_allocation.width) / 2 - child_width;
                 }
 

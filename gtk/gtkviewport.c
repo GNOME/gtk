@@ -637,6 +637,7 @@ gtk_viewport_size_request (GtkWidget      *widget,
 {
   GtkViewport *viewport;
   GtkBin *bin;
+  GtkRequisition child_requisition;
 
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_VIEWPORT (widget));
@@ -653,9 +654,9 @@ gtk_viewport_size_request (GtkWidget      *widget,
 
   if (bin->child && GTK_WIDGET_VISIBLE (bin->child))
     {
-      gtk_widget_size_request (bin->child, &bin->child->requisition);
-      requisition->width += bin->child->requisition.width;
-      requisition->height += bin->child->requisition.height;
+      gtk_widget_size_request (bin->child, &child_requisition);
+      requisition->width += child_requisition.width;
+      requisition->height += child_requisition.height;
     }
 }
 
@@ -719,8 +720,11 @@ gtk_viewport_size_allocate (GtkWidget     *widget,
 
   if (bin->child && GTK_WIDGET_VISIBLE (bin->child))
     {
+      GtkRequisition child_requisition;
+      gtk_widget_get_child_requisition (bin->child, &child_requisition);
+      
       viewport->hadjustment->lower = 0;
-      viewport->hadjustment->upper = MAX (bin->child->requisition.width,
+      viewport->hadjustment->upper = MAX (child_requisition.width,
 					  child_allocation.width);
 
       hval = CLAMP (hval, 0,
@@ -728,7 +732,7 @@ gtk_viewport_size_allocate (GtkWidget     *widget,
 		    viewport->hadjustment->page_size);
 
       viewport->vadjustment->lower = 0;
-      viewport->vadjustment->upper = MAX (bin->child->requisition.height,
+      viewport->vadjustment->upper = MAX (child_requisition.height,
 					  child_allocation.height);
 
       vval = CLAMP (vval, 0,

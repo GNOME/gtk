@@ -47,6 +47,8 @@ static GdkFilterReturn gtk_socket_filter_func   (GdkXEvent *gdk_xevent,
 						 GdkEvent *event, 
 						 gpointer data);
 
+#define DEBUG_PLUGSOCKET
+
 #ifdef DEBUG_PLUGSOCKET
 #define DPRINTF(arg) g_print arg
 #else

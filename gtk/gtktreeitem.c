@@ -485,6 +485,7 @@ gtk_tree_item_size_request (GtkWidget      *widget,
 {
   GtkBin *bin;
   GtkTreeItem* item;
+  GtkRequisition child_requisition;
 
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_TREE_ITEM (widget));
@@ -499,16 +500,16 @@ gtk_tree_item_size_request (GtkWidget      *widget,
 
   if (bin->child && GTK_WIDGET_VISIBLE (bin->child))
     {
-      gtk_widget_size_request (bin->child, &bin->child->requisition);
+      gtk_widget_size_request (bin->child, &child_requisition);
 
-      requisition->width += bin->child->requisition.width;
+      requisition->width += child_requisition.width;
 
       gtk_widget_size_request (item->pixmaps_box, 
 			       &item->pixmaps_box->requisition);
       requisition->width += item->pixmaps_box->requisition.width + DEFAULT_DELTA + 
 	GTK_TREE(widget->parent)->current_indent;
 
-      requisition->height += MAX (bin->child->requisition.height,
+      requisition->height += MAX (child_requisition.height,
 				  item->pixmaps_box->requisition.height);
     }
 }

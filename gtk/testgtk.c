@@ -1571,7 +1571,7 @@ create_handle_box (void)
     gtk_widget_show (label);
 
     handle_box = gtk_handle_box_new ();
-    gtk_container_add (GTK_CONTAINER (hbox), handle_box);
+    gtk_box_pack_start (GTK_BOX (hbox), handle_box, FALSE, FALSE, 0);
     gtk_signal_connect (GTK_OBJECT (handle_box),
 			"child_attached",
 			GTK_SIGNAL_FUNC (handle_box_child_signal),
@@ -1588,7 +1588,7 @@ create_handle_box (void)
     gtk_widget_show (toolbar);
 
     handle_box = gtk_handle_box_new ();
-    gtk_container_add (GTK_CONTAINER (hbox), handle_box);
+    gtk_box_pack_start (GTK_BOX (hbox), handle_box, FALSE, FALSE, 0);
     gtk_signal_connect (GTK_OBJECT (handle_box),
 			"child_attached",
 			GTK_SIGNAL_FUNC (handle_box_child_signal),

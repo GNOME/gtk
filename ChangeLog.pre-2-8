@@ -1,3 +1,42 @@
+Sun Feb  7 19:49:21 1999  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkwindow.c (gtk_window_move_resize): Fixed some
+	  bugs with set_default_size.
+
+Sat Feb  6 13:23:51 1999  Owen Taylor  <otaylor@redhat.com>
+
+	* docs/Changes-1.2.txt: Added information about
+	 the change to gtk_widget_size_request().
+
+	* gtk/gtkentry.c: Call gtk_widget_get_child_requisition
+	 explicitely since we differentiate between the usize
+	 set by the user and what we got. (Ugh)
+
+	* gtk/gtkwidget.[ch] (gtk_widget_get_child_requisition):
+	 New function to return the effective size of a widget
+	 as it looks to its parent.
+
+	* gtk/gtkwidget.c (gtk_widget_size_request): Leave
+	 widget->requisition set to exactly what the widget
+	 asked for, and then make a copy of that into
+	 the requisition argument. Allow a NULL requisition
+	 argument, and, if G_ENABLE_DEBUG, warn if
+	 requisition == &widget->requisition.
+
+	* gtkalignment.c gtkaspectframe.c gtkbutton.c gtkclist.c
+	  gtkcontainer.c gtkentry.c gtkeventbox.c gtkfixed.c
+	  gtkframe.c gtkhandlebox.c gtkhbox.c gtkhpaned.c 
+	  gtklayout.c gtklist.c gtklistitem.c gtkmenu.c
+	  gtkmenubar.c gtkmenuitem.c gtknotebook.c
+	  gtkoptionmenu.c gtkpacker.c gtkscrolledwindow.c
+	  gtktable.c gtktoolbar.c gtktree.c gtktreeitem.c
+	  gtkvbox.c gtkviewport.c gtkvpaned.c gtkwindow.c
+
+	 Avoid calling gtk_widget_size_request with
+	 requisition == widget->requisition; use 
+	 gtk_widget_get_child_requisition to get the
+	 size of children.
+
 Tue Feb  9 19:49:46 1999  Owen Taylor  <otaylor@redhat.com>
 
 	* configure.in (LDFLAGS): Removed extraneous line
@@ -59,6 +98,7 @@ Mon Feb  8 12:50:06 GMT 1999 Tony Gale  <gale@gtk.org>
 
 	* Makefile.am: update to include the latest Tutorial examples.
 
+>>>>>>> 1.1009
 Sat Feb  6 11:20:16 1999  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkwidget.c (gtk_widget_idle_draw): Add the

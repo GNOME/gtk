@@ -208,6 +208,7 @@ gtk_menu_bar_size_request (GtkWidget      *widget,
   GtkWidget *child;
   GList *children;
   gint nchildren;
+  GtkRequisition child_requisition;
 
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_MENU_BAR (widget));
@@ -232,13 +233,13 @@ gtk_menu_bar_size_request (GtkWidget      *widget,
 	  if (GTK_WIDGET_VISIBLE (child))
 	    {
 	      GTK_MENU_ITEM (child)->show_submenu_indicator = FALSE;
-	      gtk_widget_size_request (child, &child->requisition);
+	      gtk_widget_size_request (child, &child_requisition);
 
-	      requisition->width += child->requisition.width;
-	      requisition->height = MAX (requisition->height, child->requisition.height);
+	      requisition->width += child_requisition.width;
+	      requisition->height = MAX (requisition->height, child_requisition.height);
 	      /* Support for the right justified help menu */
-	      if ( (children == NULL) && (GTK_IS_MENU_ITEM(child))
-		   && (GTK_MENU_ITEM(child)->right_justify))
+	      if ((children == NULL) && GTK_IS_MENU_ITEM(child) &&
+		  GTK_MENU_ITEM(child)->right_justify)
 		{
 		  requisition->width += CHILD_SPACING;
 		}
@@ -268,6 +269,7 @@ gtk_menu_bar_size_allocate (GtkWidget     *widget,
   GtkWidget *child;
   GList *children;
   GtkAllocation child_allocation;
+  GtkRequisition child_requisition;
   guint offset;
   
   g_return_if_fail (widget != NULL);
@@ -301,16 +303,18 @@ gtk_menu_bar_size_allocate (GtkWidget     *widget,
 	  child = children->data;
 	  children = children->next;
 
+	  gtk_widget_get_child_requisition (child, &child_requisition);
+	  
 	  /* Support for the right justified help menu */
 	  if ( (children == NULL) && (GTK_IS_MENU_ITEM(child))
 	      && (GTK_MENU_ITEM(child)->right_justify)) 
 	    {
 	      child_allocation.x = allocation->width -
-		  child->requisition.width - CHILD_SPACING - offset;
+		  child_requisition.width - CHILD_SPACING - offset;
 	    }
 	  if (GTK_WIDGET_VISIBLE (child))
 	    {
-	      child_allocation.width = child->requisition.width;
+	      child_allocation.width = child_requisition.width;
 
 	      gtk_widget_size_allocate (child, &child_allocation);
 

@@ -539,6 +539,7 @@ gtk_entry_realize (GtkWidget *widget)
 {
   GtkEntry *entry;
   GtkEditable *editable;
+  GtkRequisition requisition;
   GdkWindowAttr attributes;
   gint attributes_mask;
 
@@ -548,13 +549,15 @@ gtk_entry_realize (GtkWidget *widget)
   GTK_WIDGET_SET_FLAGS (widget, GTK_REALIZED);
   entry = GTK_ENTRY (widget);
   editable = GTK_EDITABLE (widget);
+
+  gtk_widget_get_child_requisition (widget, &requisition);
   
   attributes.window_type = GDK_WINDOW_CHILD;
   attributes.x = widget->allocation.x;
   attributes.y = widget->allocation.y + (widget->allocation.height -
-					 widget->requisition.height) / 2;
+					 requisition.height) / 2;
   attributes.width = widget->allocation.width;
-  attributes.height = widget->requisition.height;
+  attributes.height = requisition.height;
   attributes.wclass = GDK_INPUT_OUTPUT;
   attributes.visual = gtk_widget_get_visual (widget);
   attributes.colormap = gtk_widget_get_colormap (widget);
@@ -576,7 +579,7 @@ gtk_entry_realize (GtkWidget *widget)
   attributes.x = widget->style->klass->xthickness;
   attributes.y = widget->style->klass->ythickness;
   attributes.width = widget->allocation.width - attributes.x * 2;
-  attributes.height = widget->requisition.height - attributes.y * 2;
+  attributes.height = requisition.height - attributes.y * 2;
   attributes.cursor = entry->cursor = gdk_cursor_new (GDK_XTERM);
   attributes_mask |= GDK_WA_CURSOR;
 
@@ -774,15 +777,22 @@ gtk_entry_size_allocate (GtkWidget     *widget,
 
   if (GTK_WIDGET_REALIZED (widget))
     {
+      /* We call gtk_widget_get_child_requisition, since we want (for
+       * backwards compatibility reasons) the realization here to
+       * be affected by the usize of the entry, if set
+       */
+      GtkRequisition requisition;
+      gtk_widget_get_child_requisition (widget, &requisition);
+  
       gdk_window_move_resize (widget->window,
 			      allocation->x,
-			      allocation->y + (allocation->height - widget->requisition.height) / 2,
-			      allocation->width, widget->requisition.height);
+			      allocation->y + (allocation->height - requisition.height) / 2,
+			      allocation->width, requisition.height);
       gdk_window_move_resize (entry->text_area,
 			      widget->style->klass->xthickness,
 			      widget->style->klass->ythickness,
 			      allocation->width - widget->style->klass->xthickness * 2,
-			      widget->requisition.height - widget->style->klass->ythickness * 2);
+			      requisition.height - widget->style->klass->ythickness * 2);
 
       /* And make sure the cursor is on screen */
       entry_adjust_scroll (entry);

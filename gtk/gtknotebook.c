@@ -563,6 +563,7 @@ gtk_notebook_size_request (GtkWidget      *widget,
   GtkNotebook *notebook;
   GtkNotebookPage *page;
   GList *children;
+  GtkRequisition child_requisition;
   gboolean switch_page = FALSE;
   gint vis_pages;
 
@@ -582,12 +583,12 @@ gtk_notebook_size_request (GtkWidget      *widget,
       if (GTK_WIDGET_VISIBLE (page->child))
 	{
 	  vis_pages++;
-	  gtk_widget_size_request (page->child, &page->child->requisition);
+	  gtk_widget_size_request (page->child, &child_requisition);
 	  
 	  widget->requisition.width = MAX (widget->requisition.width,
-					   page->child->requisition.width);
+					   child_requisition.width);
 	  widget->requisition.height = MAX (widget->requisition.height,
-					    page->child->requisition.height);
+					    child_requisition.height);
 
 	  if (GTK_WIDGET_MAPPED (page->child) && page != notebook->cur_page)
 	    gtk_widget_unmap (page->child);
@@ -627,14 +628,14 @@ gtk_notebook_size_request (GtkWidget      *widget,
 		  if (!GTK_WIDGET_VISIBLE (page->tab_label))
 		    gtk_widget_show (page->tab_label);
 
-		  gtk_widget_size_request (page->tab_label, 
-					   &page->tab_label->requisition);
+		  gtk_widget_size_request (page->tab_label,
+					   &child_requisition);
 
 		  page->requisition.width = 
-		    page->tab_label->requisition.width +
+		    child_requisition.width +
 		    2 * widget->style->klass->xthickness;
 		  page->requisition.height = 
-		    page->tab_label->requisition.height +
+		    child_requisition.height +
 		    2 * widget->style->klass->ythickness;
 		  
 		  switch (notebook->tab_pos)
@@ -2990,6 +2991,7 @@ gtk_notebook_page_allocate (GtkNotebook     *notebook,
 {
   GtkWidget *widget;
   GtkAllocation child_allocation;
+  GtkRequisition tab_requisition;
   gint xthickness;
   gint ythickness;
   gint padding;
@@ -3051,6 +3053,7 @@ gtk_notebook_page_allocate (GtkNotebook     *notebook,
     }
 
   page->allocation = *allocation;
+  gtk_widget_get_child_requisition (page->tab_label, &tab_requisition);
 
   if (notebook->cur_page != page)
     {
@@ -3086,8 +3089,8 @@ gtk_notebook_page_allocate (GtkNotebook     *notebook,
 	{
 	  child_allocation.x = (page->allocation.x +
 				(page->allocation.width -
-				 page->tab_label->requisition.width) / 2);
-	  child_allocation.width = page->tab_label->requisition.width;
+				 tab_requisition.width) / 2);
+	  child_allocation.width = tab_requisition.width;
 	}
       child_allocation.y = (notebook->tab_vborder + FOCUS_WIDTH +
 			    page->allocation.y);
@@ -3110,8 +3113,8 @@ gtk_notebook_page_allocate (GtkNotebook     *notebook,
 	{
 	  child_allocation.y = (page->allocation.y +
 				(page->allocation.height -
-				 page->tab_label->requisition.height) / 2);
-	  child_allocation.height = page->tab_label->requisition.height;
+				 tab_requisition.height) / 2);
+	  child_allocation.height = tab_requisition.height;
 	}
       child_allocation.x = (page->allocation.x + notebook->tab_hborder +
 			    FOCUS_WIDTH);

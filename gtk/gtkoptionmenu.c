@@ -517,6 +517,7 @@ static void
 gtk_option_menu_update_contents (GtkOptionMenu *option_menu)
 {
   GtkWidget *child;
+  GtkRequisition child_requisition;
 
   g_return_if_fail (option_menu != NULL);
   g_return_if_fail (GTK_IS_OPTION_MENU (option_menu));
@@ -540,7 +541,7 @@ gtk_option_menu_update_contents (GtkOptionMenu *option_menu)
 	      gtk_widget_reparent (child, GTK_WIDGET (option_menu));
 	    }
 
-	  gtk_widget_size_request (child, &child->requisition);
+	  gtk_widget_size_request (child, &child_requisition);
 	  gtk_widget_size_allocate (GTK_WIDGET (option_menu),
 				    &(GTK_WIDGET (option_menu)->allocation));
 
@@ -572,6 +573,7 @@ gtk_option_menu_calc_size (GtkOptionMenu *option_menu)
 {
   GtkWidget *child;
   GList *children;
+  GtkRequisition child_requisition;
 
   g_return_if_fail (option_menu != NULL);
   g_return_if_fail (GTK_IS_OPTION_MENU (option_menu));
@@ -589,10 +591,10 @@ gtk_option_menu_calc_size (GtkOptionMenu *option_menu)
 
 	  if (GTK_WIDGET_VISIBLE (child))
 	    {
-	      gtk_widget_size_request (child, &child->requisition);
+	      gtk_widget_size_request (child, &child_requisition);
 
-	      option_menu->width = MAX (option_menu->width, child->requisition.width);
-	      option_menu->height = MAX (option_menu->height, child->requisition.height);
+	      option_menu->width = MAX (option_menu->width, child_requisition.width);
+	      option_menu->height = MAX (option_menu->height, child_requisition.height);
 	    }
 	}
     }
