@@ -2347,7 +2347,7 @@ msgstr "ارتفاع المخطط."
 #.
 #: gtk/gtkmain.c:732
 msgid "default:LTR"
-msgstr "الافتراضي:LTR"
+msgstr "default:RTL"
 
 #: gtk/gtkmenu.c:191
 msgid "Tearoff Title"
