@@ -1,3 +1,9 @@
+Fri Jun  1 11:47:11 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkcombo.c (gtk_combo_set_use_arrows_always): Fix 
+	notifications on non-existant "enable_arrow_keys".
+	(#53753, Skip Montanaro)
+
 Fri Jun  1 11:31:55 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/gdkrectangle.c (gdk_rectangle_get_type): Add 

@@ -893,7 +893,7 @@ gtk_combo_set_use_arrows (GtkCombo * combo, gboolean val)
   g_return_if_fail (GTK_IS_COMBO (combo));
 
   combo->use_arrows = val;
-  g_object_notify (G_OBJECT (combo), "enable_arrows");
+  g_object_notify (G_OBJECT (combo), "enable_arrow_keys");
 }
 
 void
@@ -904,7 +904,7 @@ gtk_combo_set_use_arrows_always (GtkCombo * combo, gboolean val)
 
   combo->use_arrows_always = val;
   combo->use_arrows = TRUE;
-  g_object_notify (G_OBJECT (combo), "enable_arrows");
+  g_object_notify (G_OBJECT (combo), "enable_arrow_keys");
   g_object_notify (G_OBJECT (combo), "enable_arrows_always");
 }
 
