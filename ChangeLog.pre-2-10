@@ -1,8 +1,17 @@
+Thu Jan  7 12:31:41 1999  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkselection.c (gtk_target_list_unref): Fix some
+	more memory leaks.
+
 Wed Jan  6 23:14:19 1999  Lars Hamann  <lars@gtk.org>
 
 	* gtk/gtkctree.c (gtk_ctree_drag_motion): fix for dnd bug reported
 	by Bertrand Guiheneuf. Don't return FALSE if source widget != dest.
 	widget.
+
+Wed Jan 06 10:04:12 1999  Tristan Tarrant  <ttarrant@etnoteam.it>
+
+	* configure.in,po/it.po: added Italian translations
 
 Tue Jan 05 21:18:00 1999  George Lebl  <jirka@5z.com>
 

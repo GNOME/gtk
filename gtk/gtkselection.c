@@ -179,11 +179,13 @@ gtk_target_list_unref (GtkTargetList *list)
       GList *tmp_list = list->list;
       while (tmp_list)
 	{
-	  GtkTargetEntry *entry = tmp_list->data;
-	  g_free (entry);
+	  GtkTargetPair *pair = tmp_list->data;
+	  g_free (pair);
 
 	  tmp_list = tmp_list->next;
 	}
+      
+      g_list_free (list->list);
       g_free (list);
     }
 }
