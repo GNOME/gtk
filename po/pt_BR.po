@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-03-27 18:27-0300\n"
-"PO-Revision-Date: 2005-03-27 18:13-0300\n"
+"POT-Creation-Date: 2005-03-30 16:55-0300\n"
+"PO-Revision-Date: 2005-03-30 17:08-0300\n"
 "Last-Translator: Afonso Celso Medina <medina@maua.br>\n"
 "Language-Team: Brazilian Portuguese <gnome-l10n-br@listas.cipsga.org.br>\n"
 "MIME-Version: 1.0\n"
@@ -182,34 +182,33 @@ msgstr "Pedaço malformado na animação"
 msgid "The ANI image format"
 msgstr "Formato de imagem ANI"
 
-#: ../gdk-pixbuf/io-bmp.c:227 ../gdk-pixbuf/io-bmp.c:383
-msgid "Not enough memory to load bitmap image"
-msgstr "Memória insuficiente para carregar imagem bitmap"
-
-#: ../gdk-pixbuf/io-bmp.c:269
-msgid "BMP image has unsupported header size"
-msgstr "A imagem BMP possui um tamanho de cabeçalho não suportado"
-
-#: ../gdk-pixbuf/io-bmp.c:288 ../gdk-pixbuf/io-bmp.c:320
-#: ../gdk-pixbuf/io-bmp.c:343 ../gdk-pixbuf/io-bmp.c:424
+#: ../gdk-pixbuf/io-bmp.c:228 ../gdk-pixbuf/io-bmp.c:301
+#: ../gdk-pixbuf/io-bmp.c:333 ../gdk-pixbuf/io-bmp.c:356
+#: ../gdk-pixbuf/io-bmp.c:437
 msgid "BMP image has bogus header data"
 msgstr "A imagem BMP tem dados de cabeçalho incorretos"
 
-#: ../gdk-pixbuf/io-bmp.c:307
+#: ../gdk-pixbuf/io-bmp.c:239 ../gdk-pixbuf/io-bmp.c:396
+msgid "Not enough memory to load bitmap image"
+msgstr "Memória insuficiente para carregar imagem bitmap"
+
+#: ../gdk-pixbuf/io-bmp.c:282
+msgid "BMP image has unsupported header size"
+msgstr "A imagem BMP possui um tamanho de cabeçalho não suportado"
+
+#: ../gdk-pixbuf/io-bmp.c:320
 msgid "Topdown BMP images cannot be compressed"
 msgstr "Imagens BMP topdown não podem ser compactadas"
 
-#: ../gdk-pixbuf/io-bmp.c:1181
-#, fuzzy
+#: ../gdk-pixbuf/io-bmp.c:1194
 msgid "Couldn't allocate memory for saving BMP file"
-msgstr "Impossível alocar memória para carregar o arquivo JPEG"
+msgstr "Impossível alocar memória para carregar o arquivo BMP"
 
-#: ../gdk-pixbuf/io-bmp.c:1222
-#, fuzzy
+#: ../gdk-pixbuf/io-bmp.c:1235
 msgid "Couldn't write to BMP file"
-msgstr "Impossível converter o nome do arquivo"
+msgstr "Impossível gravar o arquivo BMP"
 
-#: ../gdk-pixbuf/io-bmp.c:1271
+#: ../gdk-pixbuf/io-bmp.c:1284
 msgid "The BMP image format"
 msgstr "Formato de imagem BMP"
 
@@ -586,61 +585,61 @@ msgstr "Memória insuficiente para carregar a imagem RAS"
 msgid "The Sun raster image format"
 msgstr "Formato de imagem raster Sun"
 
-#: ../gdk-pixbuf/io-tga.c:159
+#: ../gdk-pixbuf/io-tga.c:154
 msgid "Cannot allocate memory for IOBuffer struct"
 msgstr "Impossível alocar memória para a estrutura IOBuffer"
 
-#: ../gdk-pixbuf/io-tga.c:178
+#: ../gdk-pixbuf/io-tga.c:173
 msgid "Cannot allocate memory for IOBuffer data"
 msgstr "Impossível alocar memória para os dados de IOBuffer"
 
-#: ../gdk-pixbuf/io-tga.c:189
+#: ../gdk-pixbuf/io-tga.c:184
 msgid "Cannot realloc IOBuffer data"
 msgstr "Impossível realocar os dados de IOBuffer"
 
-#: ../gdk-pixbuf/io-tga.c:219
+#: ../gdk-pixbuf/io-tga.c:214
 msgid "Cannot allocate temporary IOBuffer data"
 msgstr "Impossível alocar os dados de IOBuffer temporários"
 
-#: ../gdk-pixbuf/io-tga.c:353
+#: ../gdk-pixbuf/io-tga.c:348
 msgid "Cannot allocate new pixbuf"
 msgstr "Impossível alocar novo pixbuf"
 
-#: ../gdk-pixbuf/io-tga.c:692
+#: ../gdk-pixbuf/io-tga.c:689
 msgid "Cannot allocate colormap structure"
 msgstr "Impossível alocar estrutura do mapa de cores"
 
-#: ../gdk-pixbuf/io-tga.c:699
+#: ../gdk-pixbuf/io-tga.c:696
 msgid "Cannot allocate colormap entries"
 msgstr "Impossível alocar entradas do mapa de cores"
 
-#: ../gdk-pixbuf/io-tga.c:721
+#: ../gdk-pixbuf/io-tga.c:718
 msgid "Unexpected bitdepth for colormap entries"
 msgstr "Profundidade de bits inesperada para as entradas do mapa de cores"
 
-#: ../gdk-pixbuf/io-tga.c:739
+#: ../gdk-pixbuf/io-tga.c:736
 msgid "Cannot allocate TGA header memory"
 msgstr "Impossível alocar a memória do cabeçalho TGA"
 
-#: ../gdk-pixbuf/io-tga.c:772
+#: ../gdk-pixbuf/io-tga.c:769
 msgid "TGA image has invalid dimensions"
 msgstr "A imagem TGA tem dimensões inválidas"
 
-#: ../gdk-pixbuf/io-tga.c:778 ../gdk-pixbuf/io-tga.c:787
-#: ../gdk-pixbuf/io-tga.c:797 ../gdk-pixbuf/io-tga.c:807
-#: ../gdk-pixbuf/io-tga.c:814
+#: ../gdk-pixbuf/io-tga.c:775 ../gdk-pixbuf/io-tga.c:784
+#: ../gdk-pixbuf/io-tga.c:794 ../gdk-pixbuf/io-tga.c:804
+#: ../gdk-pixbuf/io-tga.c:811
 msgid "TGA image type not supported"
 msgstr "Tipo de imagem TGA não suportado"
 
-#: ../gdk-pixbuf/io-tga.c:861
+#: ../gdk-pixbuf/io-tga.c:858
 msgid "Cannot allocate memory for TGA context struct"
 msgstr "Impossível alocar memória para a estrutura de contexto TGA"
 
-#: ../gdk-pixbuf/io-tga.c:926
+#: ../gdk-pixbuf/io-tga.c:923
 msgid "Excess data in file"
 msgstr "Excesso de dados no arquivo"
 
-#: ../gdk-pixbuf/io-tga.c:995
+#: ../gdk-pixbuf/io-tga.c:992
 msgid "The Targa image format"
 msgstr "Formato de imagem Targa"
 
@@ -865,9 +864,8 @@ msgstr "A licença do programa"
 
 #. Add the credits button
 #: ../gtk/gtkaboutdialog.c:491
-#, fuzzy
 msgid "C_redits"
-msgstr "Créditos"
+msgstr "C_réditos"
 
 #. Add the license button
 #: ../gtk/gtkaboutdialog.c:500
@@ -1112,12 +1110,12 @@ msgstr "Nome de arquivo inválido: %s"
 msgid "Select A File"
 msgstr "Selecione um Arquivo"
 
-#: ../gtk/gtkfilechooserbutton.c:68 ../gtk/gtkfilechooserdefault.c:1287
+#: ../gtk/gtkfilechooserbutton.c:68 ../gtk/gtkfilechooserdefault.c:1288
 #: ../gtk/gtkpathbar.c:996
 msgid "Home"
 msgstr "Pasta Pessoal"
 
-#: ../gtk/gtkfilechooserbutton.c:69 ../gtk/gtkfilechooserdefault.c:1314
+#: ../gtk/gtkfilechooserbutton.c:69 ../gtk/gtkfilechooserdefault.c:1315
 #: ../gtk/gtkpathbar.c:998
 msgid "Desktop"
 msgstr "Desktop"
@@ -1154,202 +1152,200 @@ msgstr "Nome de arquivo inválido"
 msgid "The folder contents could not be displayed"
 msgstr "Os conteúdos da pasta não puderam ser mostrados"
 
-#: ../gtk/gtkfilechooserdefault.c:1177
+#: ../gtk/gtkfilechooserdefault.c:1178
 #, c-format
 msgid "Could not get information about '%s': %s"
 msgstr "Impossível obter informações sobre '%s': %s"
 
-#: ../gtk/gtkfilechooserdefault.c:2208
+#: ../gtk/gtkfilechooserdefault.c:2209
 #, c-format
 msgid "Add the folder '%s' to the bookmarks"
 msgstr "Adiciona a pasta '%s' aos marcadores"
 
-#: ../gtk/gtkfilechooserdefault.c:2249
+#: ../gtk/gtkfilechooserdefault.c:2250
 msgid "Add the current folder to the bookmarks"
 msgstr "Adiciona a pasta atual aos marcadores"
 
-#: ../gtk/gtkfilechooserdefault.c:2251
+#: ../gtk/gtkfilechooserdefault.c:2252
 msgid "Add the selected folders to the bookmarks"
 msgstr "Adiciona as pastas selecionadas aos marcadores"
 
-#: ../gtk/gtkfilechooserdefault.c:2291
+#: ../gtk/gtkfilechooserdefault.c:2292
 #, c-format
 msgid "Remove the bookmark '%s'"
 msgstr "Remove o marcador '%s'"
 
-#: ../gtk/gtkfilechooserdefault.c:2722
+#: ../gtk/gtkfilechooserdefault.c:2723
 #, c-format
 msgid "Could not add a bookmark for '%s' because it is an invalid path name."
 msgstr ""
 "Impossível adicionar um marcador para '%s' porque ele não é um caminho "
 "válido."
 
-#: ../gtk/gtkfilechooserdefault.c:2937
-#, fuzzy
+#: ../gtk/gtkfilechooserdefault.c:2938
 msgid "Remove"
-msgstr "_Remover"
+msgstr "Remover"
 
-#: ../gtk/gtkfilechooserdefault.c:2946
-#, fuzzy
+#: ../gtk/gtkfilechooserdefault.c:2947
 msgid "Rename..."
-msgstr "_Renomear"
+msgstr "Renomear..."
 
-#: ../gtk/gtkfilechooserdefault.c:3069
+#: ../gtk/gtkfilechooserdefault.c:3070
 msgid "Shortcuts"
 msgstr "Atalhos"
 
-#: ../gtk/gtkfilechooserdefault.c:3123
+#: ../gtk/gtkfilechooserdefault.c:3124
 msgid "Folder"
 msgstr "Pasta"
 
-#: ../gtk/gtkfilechooserdefault.c:3179 ../gtk/gtkstock.c:317
+#: ../gtk/gtkfilechooserdefault.c:3180 ../gtk/gtkstock.c:317
 msgid "_Add"
 msgstr "_Adicionar"
 
-#: ../gtk/gtkfilechooserdefault.c:3186
+#: ../gtk/gtkfilechooserdefault.c:3187
 msgid "Add the selected folder to the bookmarks"
 msgstr "Adiciona a pasta selecionada aos marcadores"
 
-#: ../gtk/gtkfilechooserdefault.c:3191 ../gtk/gtkstock.c:395
+#: ../gtk/gtkfilechooserdefault.c:3192 ../gtk/gtkstock.c:395
 msgid "_Remove"
 msgstr "_Remover"
 
-#: ../gtk/gtkfilechooserdefault.c:3198
+#: ../gtk/gtkfilechooserdefault.c:3199
 msgid "Remove the selected bookmark"
 msgstr "Remove o marcador selecionado"
 
-#: ../gtk/gtkfilechooserdefault.c:3301
+#: ../gtk/gtkfilechooserdefault.c:3302
 msgid "_Add to Shortcuts"
 msgstr "_Adicionar aos Atalhos"
 
-#: ../gtk/gtkfilechooserdefault.c:3311
+#: ../gtk/gtkfilechooserdefault.c:3312
 msgid "Open _Location"
 msgstr "Abrir _Localização"
 
-#: ../gtk/gtkfilechooserdefault.c:3323
+#: ../gtk/gtkfilechooserdefault.c:3324
 msgid "Show _Hidden Files"
 msgstr "Mostrar Arquivos _Ocultos"
 
-#: ../gtk/gtkfilechooserdefault.c:3447 ../gtk/gtkfilesel.c:766
+#: ../gtk/gtkfilechooserdefault.c:3448 ../gtk/gtkfilesel.c:766
 msgid "Files"
 msgstr "Arquivos"
 
-#: ../gtk/gtkfilechooserdefault.c:3478
+#: ../gtk/gtkfilechooserdefault.c:3479
 msgid "Name"
 msgstr "Nome"
 
-#: ../gtk/gtkfilechooserdefault.c:3503
+#: ../gtk/gtkfilechooserdefault.c:3504
 msgid "Size"
 msgstr "Tamanho"
 
-#: ../gtk/gtkfilechooserdefault.c:3516
+#: ../gtk/gtkfilechooserdefault.c:3517
 msgid "Modified"
 msgstr "Modificado"
 
-#: ../gtk/gtkfilechooserdefault.c:3548
+#: ../gtk/gtkfilechooserdefault.c:3549
 msgid "Select which types of files are shown"
 msgstr "Seleciona quais tipos de arquivos são mostrados"
 
 #. Create Folder
-#: ../gtk/gtkfilechooserdefault.c:3584
+#: ../gtk/gtkfilechooserdefault.c:3585
 msgid "Create Fo_lder"
 msgstr "Criar _Pasta"
 
 #. Name entry
-#: ../gtk/gtkfilechooserdefault.c:3705
+#: ../gtk/gtkfilechooserdefault.c:3706
 msgid "_Name:"
 msgstr "_Nome:"
 
-#: ../gtk/gtkfilechooserdefault.c:3745
+#: ../gtk/gtkfilechooserdefault.c:3746
 msgid "_Browse for other folders"
 msgstr "_Navegar em outras pastas"
 
-#: ../gtk/gtkfilechooserdefault.c:3996
+#: ../gtk/gtkfilechooserdefault.c:3997
 msgid "Save in _folder:"
 msgstr "Salvar na _pasta:"
 
-#: ../gtk/gtkfilechooserdefault.c:3998
+#: ../gtk/gtkfilechooserdefault.c:3999
 msgid "Create in _folder:"
 msgstr "Criar na _pasta:"
 
-#: ../gtk/gtkfilechooserdefault.c:4938
+#: ../gtk/gtkfilechooserdefault.c:4939
 msgid "Cannot change to folder because it is not local"
 msgstr "Impossível ir para a pasta porque ela não é local"
 
-#: ../gtk/gtkfilechooserdefault.c:5454
+#: ../gtk/gtkfilechooserdefault.c:5455
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "O atalho %s não existe"
 
-#: ../gtk/gtkfilechooserdefault.c:5918
+#: ../gtk/gtkfilechooserdefault.c:5919
 #, c-format
 msgid "Could not mount %s"
 msgstr "Impossível montar %s"
 
-#: ../gtk/gtkfilechooserdefault.c:6211
+#: ../gtk/gtkfilechooserdefault.c:6212
 msgid "Type name of new folder"
 msgstr "Digite o nome da nova pasta"
 
-#: ../gtk/gtkfilechooserdefault.c:6253
+#: ../gtk/gtkfilechooserdefault.c:6254
 #, c-format
 msgid "%d byte"
 msgid_plural "%d bytes"
 msgstr[0] "%d byte"
 msgstr[1] "%d bytes"
 
-#: ../gtk/gtkfilechooserdefault.c:6255
+#: ../gtk/gtkfilechooserdefault.c:6256
 #, c-format
 msgid "%.1f K"
 msgstr "%.1f K"
 
-#: ../gtk/gtkfilechooserdefault.c:6257
+#: ../gtk/gtkfilechooserdefault.c:6258
 #, c-format
 msgid "%.1f M"
 msgstr "%.1f M"
 
-#: ../gtk/gtkfilechooserdefault.c:6259
+#: ../gtk/gtkfilechooserdefault.c:6260
 #, c-format
 msgid "%.1f G"
 msgstr "%.1f G"
 
-#: ../gtk/gtkfilechooserdefault.c:6311
+#: ../gtk/gtkfilechooserdefault.c:6312
 msgid "Today"
 msgstr "Hoje"
 
-#: ../gtk/gtkfilechooserdefault.c:6313
+#: ../gtk/gtkfilechooserdefault.c:6314
 msgid "Yesterday"
 msgstr "Ontem"
 
-#: ../gtk/gtkfilechooserdefault.c:6324
+#: ../gtk/gtkfilechooserdefault.c:6325
 msgid "Unknown"
 msgstr "Desconhecido"
 
-#: ../gtk/gtkfilechooserdefault.c:6394
+#: ../gtk/gtkfilechooserdefault.c:6395
 msgid "Cannot change folder"
 msgstr "Impossível alterar a pasta"
 
-#: ../gtk/gtkfilechooserdefault.c:6395
+#: ../gtk/gtkfilechooserdefault.c:6396
 msgid "The folder you specified is an invalid path."
 msgstr "A pasta que você especificou tem um caminho inválido."
 
-#: ../gtk/gtkfilechooserdefault.c:6434
+#: ../gtk/gtkfilechooserdefault.c:6435
 #, c-format
 msgid "Could not build file name from '%s' and '%s'"
 msgstr "Impossível construir o nome do arquivo a partir de '%s' e '%s'"
 
-#: ../gtk/gtkfilechooserdefault.c:6470
+#: ../gtk/gtkfilechooserdefault.c:6471
 msgid "Could not select item"
 msgstr "Impossível selecionar o item"
 
-#: ../gtk/gtkfilechooserdefault.c:6510
+#: ../gtk/gtkfilechooserdefault.c:6511
 msgid "Open Location"
 msgstr "Abrir Localização"
 
-#: ../gtk/gtkfilechooserdefault.c:6517
+#: ../gtk/gtkfilechooserdefault.c:6518
 msgid "Save in Location"
 msgstr "Salvar na Localização"
 
-#: ../gtk/gtkfilechooserdefault.c:6541
+#: ../gtk/gtkfilechooserdefault.c:6542
 msgid "_Location:"
 msgstr "_Localização:"
 
@@ -1573,9 +1569,9 @@ msgstr ""
 "utilize um nome diferente."
 
 #: ../gtk/gtkfilesystemunix.c:1449
-#, fuzzy, c-format
+#, c-format
 msgid "Writing %s failed: %s"
-msgstr "Falha ao salvar o marcador: %s"
+msgstr "Falha ao graver %s: %s"
 
 #: ../gtk/gtkfilesystemunix.c:1538
 #, c-format
@@ -1595,12 +1591,12 @@ msgstr "Erro ao obter informações para '/': %s"
 #: ../gtk/gtkfilesystemwin32.c:611
 #, c-format
 msgid "Network Drive (%s)"
-msgstr ""
+msgstr "Dispositivo de Rede (%s)"
 
 #: ../gtk/gtkfilesystemwin32.c:626
 #, c-format
 msgid "%s (%s)"
-msgstr ""
+msgstr "%s (%s)"
 
 #: ../gtk/gtkfilesystemwin32.c:1007
 #, c-format
@@ -1925,42 +1921,42 @@ msgstr "_Disquete"
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkstock.c:334
 msgid "Navigation|_Bottom"
-msgstr ""
+msgstr "_Baixo"
 
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkstock.c:336
 msgid "Navigation|_First"
-msgstr ""
+msgstr "_Primeiro"
 
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkstock.c:338
 msgid "Navigation|_Last"
-msgstr ""
+msgstr "Ú_ltimo"
 
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkstock.c:340
 msgid "Navigation|_Top"
-msgstr ""
+msgstr "_Cima"
 
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkstock.c:342
 msgid "Navigation|_Back"
-msgstr ""
+msgstr "_Anterior"
 
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkstock.c:344
 msgid "Navigation|_Down"
-msgstr ""
+msgstr "A_baixo"
 
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkstock.c:346
 msgid "Navigation|_Forward"
-msgstr ""
+msgstr "_Próximo"
 
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkstock.c:348
 msgid "Navigation|_Up"
-msgstr ""
+msgstr "_Acima"
 
 #: ../gtk/gtkstock.c:349
 msgid "_Harddisk"
@@ -1996,71 +1992,61 @@ msgstr "_Ir para"
 
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkstock.c:358
-#, fuzzy
 msgid "Justify|_Center"
 msgstr "_Centralizar"
 
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkstock.c:360
 msgid "Justify|_Fill"
-msgstr ""
+msgstr "_Justificar"
 
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkstock.c:362
 msgid "Justify|_Left"
-msgstr ""
+msgstr "_Esquerda"
 
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkstock.c:364
-#, fuzzy
 msgid "Justify|_Right"
 msgstr "_Direita"
 
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkstock.c:367
-#, fuzzy
 msgid "Media|_Forward"
 msgstr "_Avançar"
 
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkstock.c:369
-#, fuzzy
 msgid "Media|_Next"
 msgstr "_Próximo"
 
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkstock.c:371
-#, fuzzy
 msgid "Media|P_ause"
 msgstr "P_ausar"
 
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkstock.c:373
-#, fuzzy
 msgid "Media|_Play"
 msgstr "_Reproduzir"
 
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkstock.c:375
-#, fuzzy
 msgid "Media|Pre_vious"
 msgstr "_Anterior"
 
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkstock.c:377
-#, fuzzy
 msgid "Media|_Record"
 msgstr "_Gravar"
 
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkstock.c:379
-#, fuzzy
 msgid "Media|R_ewind"
 msgstr "_Voltar"
 
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkstock.c:381
-#, fuzzy
 msgid "Media|_Stop"
 msgstr "_Parar"
 
