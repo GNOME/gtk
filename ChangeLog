@@ -1,3 +1,7 @@
+Thu Mar 12 11:51:33 PST 1998 Shawn T. Amundson <amundson@gimp.org>
+
+	* docs/gtk.texi: Changed name of GTK to the GIMP Toolkit
+
 Wed Mar 11 22:52:57 1998  Russell Nelson <nelson@crynwr.com>
 
 	* gtk/gtktest.c: new_pixmap wasn't using its filename argument.

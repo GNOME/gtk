@@ -13,7 +13,7 @@
 @set update-month January 1998
 
 @ifinfo
-This file documents GTK, the General Toolkit
+This file documents GTK, the GIMP Toolkit
 
 Copyright (C) 1996 Peter Mattis
 Copyright (C) 1997 Peter Mattis
@@ -41,7 +41,7 @@ approved by Peter Mattis.
 @end ifinfo
 
 @titlepage
-@title The General Toolkit
+@title The GIMP Toolkit
 @subtitle Version @value{edition}
 @subtitle @value{update-month}
 @author by Peter Mattis
@@ -69,11 +69,11 @@ approved by Peter Mattis.
 
 @dircategory User Interface Toolkit
 @direntry
-* GTK: (gtk).		The General Toolkit
+* GTK: (gtk).		The GIMP Toolkit
 @end direntry
 
 @node Top, Copying, (dir), (dir)
-@top The General Toolkit
+@top The GIMP Toolkit
 @ifinfo
 This is edition @value{edition} of the GTK documentation,
 @w{@value{update-date}}.
