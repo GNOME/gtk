@@ -1,3 +1,9 @@
+2003-03-01  Hans Breuer  <hans@breuer.org>
+
+	* makefile.msc : updated
+
+	* gdk_pixbuf.def : export a bunch of new functions
+
 2003-07-18  Matthias Clasen  <maclas@gmx.de>
 
 	* pixops/pixops.c (correct_total): Split correction into multiple pieces if no single weight is large

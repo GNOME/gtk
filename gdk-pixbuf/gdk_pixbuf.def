@@ -25,9 +25,15 @@ EXPORTS
 	gdk_pixbuf_error_get_type
 	gdk_pixbuf_error_quark
 	gdk_pixbuf_fill
+	gdk_pixbuf_format_get_description
+	gdk_pixbuf_format_get_extensions
+	gdk_pixbuf_format_get_mime_types
+	gdk_pixbuf_format_get_name
+	gdk_pixbuf_format_is_writable
 	gdk_pixbuf_from_pixdata
 	gdk_pixbuf_get_bits_per_sample
 	gdk_pixbuf_get_colorspace
+	gdk_pixbuf_get_formats
 	gdk_pixbuf_get_has_alpha
 	gdk_pixbuf_get_height
 	gdk_pixbuf_get_n_channels
@@ -38,6 +44,7 @@ EXPORTS
 	gdk_pixbuf_get_width
 	gdk_pixbuf_loader_close
 	gdk_pixbuf_loader_get_animation
+	gdk_pixbuf_loader_get_format
 	gdk_pixbuf_loader_get_pixbuf
 	gdk_pixbuf_loader_get_type
 	gdk_pixbuf_loader_new
@@ -62,3 +69,4 @@ EXPORTS
 	gdk_pixdata_from_pixbuf
 	gdk_pixdata_serialize
 	gdk_pixdata_to_csource
+
