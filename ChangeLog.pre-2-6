@@ -1,3 +1,17 @@
+Mon Feb 16 23:47:09 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* gtk/gtkviewport.c: (gtk-fortier-980130-0)
+	  From Patrice Fortier <Patrice.Fortier@aquarel.fr>
+	
+	  Eliminate some extra expose events for viewports.
+	  (To be conservative, I set the user's event mask for
+	   both widget->window, and viewport->bin_window  -owt)
+
+Mon Feb 16 23:12:14 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* gtk/gtkmain.c: Make timeout and idle insertion code
+	  use g_list_insert_sorted().
+
 Mon Feb 16 17:35:17 1998  Owen Taylor  <owt1@cornell.edu>
 
 	* gtk/gtktreeitem.c: Use gtk_signal_default_marshaller,

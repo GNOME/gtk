@@ -281,6 +281,7 @@ gtk_viewport_realize (GtkWidget *widget)
   GdkWindowAttr attributes;
   GtkRequisition *child_requisition;
   gint attributes_mask;
+  gint event_mask;
 
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_VIEWPORT (widget));
@@ -297,7 +298,9 @@ gtk_viewport_realize (GtkWidget *widget)
   attributes.wclass = GDK_INPUT_OUTPUT;
   attributes.visual = gtk_widget_get_visual (widget);
   attributes.colormap = gtk_widget_get_colormap (widget);
-  attributes.event_mask = gtk_widget_get_events (widget) | GDK_EXPOSURE_MASK;
+
+  event_mask = gtk_widget_get_events (widget) | GDK_EXPOSURE_MASK;
+  attributes.event_mask = event_mask;
 
   attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_VISUAL | GDK_WA_COLORMAP;
 
@@ -309,12 +312,14 @@ gtk_viewport_realize (GtkWidget *widget)
   attributes.y += widget->style->klass->ythickness;
   attributes.width -= widget->style->klass->xthickness * 2;
   attributes.height -= widget->style->klass->ythickness * 2;
+  attributes.event_mask = 0;
 
   viewport->view_window = gdk_window_new (widget->window, &attributes, attributes_mask);
   gdk_window_set_user_data (viewport->view_window, viewport);
 
   attributes.x = 0;
   attributes.y = 0;
+  attributes.event_mask = event_mask;
 
   viewport->bin_window = gdk_window_new (viewport->view_window, &attributes, attributes_mask);
   gdk_window_set_user_data (viewport->bin_window, viewport);
@@ -431,7 +436,8 @@ gtk_viewport_expose (GtkWidget      *widget,
 	gtk_viewport_paint (widget, &event->area);
 
       child_event = *event;
-      if (bin->child &&
+      if ((event->window == viewport->bin_window) &&
+	  (bin->child != NULL) &&
 	  GTK_WIDGET_NO_WINDOW (bin->child) &&
 	  gtk_widget_intersect (bin->child, &event->area, &child_event.area))
 	gtk_widget_event (bin->child, (GdkEvent*) &child_event);
