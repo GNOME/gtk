@@ -1,3 +1,7 @@
+2003-04-13  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtk-sections.txt: Add gtk_tree_view_column_cell_get_position().
+
 2003-04-07  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/tmpl/gtkenums.sgml, gtk/tmpl/gtkmain.sgml,

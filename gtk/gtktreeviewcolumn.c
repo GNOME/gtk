@@ -1623,9 +1623,9 @@ gtk_tree_view_column_set_resizable (GtkTreeViewColumn *tree_column,
  * gtk_tree_view_column_get_resizable:
  * @tree_column: A #GtkTreeViewColumn
  * 
- * Returns #TRUE if the @tree_column can be resized by the end user.
+ * Returns %TRUE if the @tree_column can be resized by the end user.
  * 
- * Return value: #TRUE, if the @tree_column can be resized.
+ * Return value: %TRUE, if the @tree_column can be resized.
  **/
 gboolean
 gtk_tree_view_column_get_resizable (GtkTreeViewColumn *tree_column)
@@ -3295,6 +3295,20 @@ _gtk_tree_view_column_get_neighbor_sizes (GtkTreeViewColumn *column,
     }
 }
 
+/**
+ * gtk_tree_view_column_cell_get_position:
+ * @tree_column: a #GtkTreeViewColumn
+ * @cell: a #GtkCellRenderer
+ * @start_pos: return location for the horizontal position of @cell within
+ *            @tree_column, may be %NULL
+ * @width: return location for the width of @cell, may be %NULL
+ *
+ * Obtains the horizontal position and size of a cell in a column. If the
+ * cell is not found in the column, @start_pos and @width are not changed and
+ * %FALSE is returned.
+ * 
+ * Return value: %TRUE if @cell belongs to @tree_column.
+ */
 gboolean
 gtk_tree_view_column_cell_get_position (GtkTreeViewColumn *tree_column,
 					GtkCellRenderer   *cell_renderer,
@@ -3330,3 +3344,5 @@ gtk_tree_view_column_cell_get_position (GtkTreeViewColumn *tree_column,
 
   return found_cell;
 }
+
+
