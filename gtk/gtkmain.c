@@ -54,6 +54,7 @@
 
 #include "gtkaccelmap.h"
 #include "gtkbox.h"
+#include "gtkclipboard.h"
 #include "gtkdnd.h"
 #include "gtkversion.h"
 #include "gtkmain.h"
