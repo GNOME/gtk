@@ -1,3 +1,9 @@
+Wed Jan 27 22:59:07 1999  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/Makefile.am (static_SOURCES): Move gtkintl.h
+	from $source_headers to $static_sources since
+	it should not be installed.
+
 Wed Jan 27 22:51:23 1999  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/gdkevents.c (expose_predicate): Allow exposure

@@ -49,6 +49,7 @@ static_SOURCES = \
 	gtkhseparator.c		\
 	gtkimage.c		\
 	gtkinputdialog.c	\
+	gtkintl.h		\
 	gtkinvisible.c		\
 	gtkitem.c		\
 	gtkitemfactory.c	\
@@ -166,7 +167,6 @@ source_headers = \
 	gtkhseparator.h		\
 	gtkimage.h		\
 	gtkinputdialog.h	\
-	gtkintl.h		\
 	gtkinvisible.h		\
 	gtkitem.h		\
 	gtkitemfactory.h	\
