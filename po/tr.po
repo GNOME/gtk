@@ -1,17 +1,17 @@
-# Turkish translations for gtk+ messages.
+# Turkish translations of gtk+.
 # Copyright (C) 1999-2002 Free Software Foundation, Inc.
 # Ömer Fadıl USTA <omer_fad@hotmail.com>,2002.
 # Nilgün Belma Bugüner <nilgun@fide.org>, 2001, 2002.
-# Fatih Demir <kabalak@gmx.net>, 1999-2001.
+# Fatih Demir <kabalak@gtranslator.org>, 1999-2001.
 # Görkem Cetin <gorkem@gelecek.com.tr>, 2001.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: gtk+ \n"
+"Project-Id-Version: gtk+\n"
 "POT-Creation-Date: 2002-04-14 20:08-0400\n"
 "PO-Revision-Date: 2002-04-28 03:43+0200\n"
 "Last-Translator: Ömer Fadıl USTA <omer_fad@hotmail.com>\n"
-"Language-Team: Turkish <tr@li.org>\n"
+"Language-Team: GNOME Turk <gnome-turk@gnome.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
