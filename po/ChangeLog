@@ -1,3 +1,7 @@
+2004-01-19  Pablo Saratxaga  <pablo@mandrakesoft.com>
+
+	* wa.po: Updated Walloon file
+
 2004-01-19  Laurent Dhima  <laurenti@alblinux.net>
 
 	* sq.po: Updated Albanian translation.
@@ -33,7 +37,7 @@ Sat Jan 17 23:12:45 2004  Matthias Clasen  <maclas@gmx.de>
 	the property blurbs and nicks are now collected in
 	a separate domain, see ../po-properties.
 
-2004-01-01  Pablo Saratxaga  <pablo@mandrakesoft.com>
+2004-01-17  Pablo Saratxaga  <pablo@mandrakesoft.com>
 
 	* wa.po: Updated Walloon file
 	* br.po: Added Britton file
