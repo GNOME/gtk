@@ -1307,8 +1307,7 @@ gdk_pointer_grab (GdkWindow *	  window,
 	xevent_mask |= event_mask_table[i];
     }
   
-  if (((GdkWindowPrivate *)window)->extension_events &&
-      gdk_input_vtable.grab_pointer)
+  if (gdk_input_vtable.grab_pointer)
     return_val = gdk_input_vtable.grab_pointer (window,
 						owner_events,
 						event_mask,

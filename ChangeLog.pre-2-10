@@ -1,3 +1,11 @@
+Sat Sep  5 16:01:19 1998  Owen Taylor  <otaylor@gtk.org>
+
+	* gdk/gdkinputxfree.h gdk/gdk.c gdk/gdkinputgxi.h:
+	When the pointer is grabbed on an input window,
+	either explicitely, or through press-grab, and
+	then grabbed on a non-input window, ungrab the
+	devices.
+
 Sat Sep  5 07:13:19 1998  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtktypeutils.h: don't include any gdk headers.
