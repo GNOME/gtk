@@ -294,6 +294,24 @@ void       gtk_menu_item_remove_submenu (GtkMenuItem      *menu_item);
 void       gtk_option_menu_remove_menu  (GtkOptionMenu    *option_menu);
 
 
+Gnits to care about
+-------------------
+
+On another note, though somewhat unrelated, the notification nature
+of the signal mechanism might cause events to be emitted that have their
+GdkWindow pointer set to NULL. This is due to the fact that certain
+events need to be emitted after the real GdkWindow of a widget is not
+any longer pertinent. It's up to the application to check for the window
+field of the event structure to be != NULL, if it is going to perform
+any operations through Gdk calls on it.
+Events that a likely to trigger a missing check for the window pointer
+currently are (and correspond to the trailing signals):
+
+GDK_SELECTION_CLEAR     GtkWidget::selection_clear_event
+GDK_EXPOSE              GtkWidget::expose_event
+GDK_FOCUS_CHANGE        GtkWidget::focus_in_event
+                        GtkWidget::focus_out_event
+
 
 
 Initial proposal:
