@@ -3365,13 +3365,21 @@ gtk_default_draw_box (GtkStyle      *style,
   if (!style->bg_pixmap[state_type] || 
       GDK_IS_PIXMAP (window))
     {
-      if (area)
-	gdk_gc_set_clip_rectangle (style->bg_gc[state_type], area);
+      GdkGC *gc = style->bg_gc[state_type];
+      
+      if (state_type == GTK_STATE_SELECTED && strcmp (detail, "paned") == 0)
+	{
+	  if (!GTK_WIDGET_HAS_FOCUS (widget))
+	    gc = style->base_gc[GTK_STATE_ACTIVE];
+	}
 
-      gdk_draw_rectangle (window, style->bg_gc[state_type], TRUE,
+      if (area)
+	gdk_gc_set_clip_rectangle (gc, area);
+
+      gdk_draw_rectangle (window, gc, TRUE,
                           x, y, width, height);
       if (area)
-	gdk_gc_set_clip_rectangle (style->bg_gc[state_type], NULL);
+	gdk_gc_set_clip_rectangle (gc, NULL);
     }
   else
     gtk_style_apply_default_background (style, window,
@@ -4750,6 +4758,7 @@ gtk_default_draw_handle (GtkStyle      *style,
   gint xx, yy;
   gint xthick, ythick;
   GdkGC *light_gc, *dark_gc;
+  GdkGC *free_me = NULL;
   GdkRectangle rect;
   GdkRectangle dest;
   gint intersect;
@@ -4769,7 +4778,19 @@ gtk_default_draw_handle (GtkStyle      *style,
       xthick = 0;
       ythick = 0;
 
-      light_gc = style->light_gc[state_type];
+      if (state_type == GTK_STATE_SELECTED && !GTK_WIDGET_HAS_FOCUS (widget))
+	{
+	  GdkColor unfocused_light;
+      
+	  gtk_style_shade (&style->base[GTK_STATE_ACTIVE], &unfocused_light,
+			   LIGHTNESS_MULT);
+
+	  light_gc = free_me = gdk_gc_new (window);
+	  gdk_gc_set_rgb_fg_color (light_gc, &unfocused_light);
+	}
+      else
+	light_gc = style->light_gc[state_type];
+
       dark_gc = style->black_gc;
     }
   else
@@ -4787,7 +4808,7 @@ gtk_default_draw_handle (GtkStyle      *style,
   rect.height = height - (ythick * 2);
 
   if (area)
-      intersect = gdk_rectangle_intersect (area, &rect, &dest);
+    intersect = gdk_rectangle_intersect (area, &rect, &dest);
   else
     {
       intersect = TRUE;
@@ -4795,7 +4816,7 @@ gtk_default_draw_handle (GtkStyle      *style,
     }
 
   if (!intersect)
-    return;
+    goto out;
 
   gdk_gc_set_clip_rectangle (light_gc, &dest);
   gdk_gc_set_clip_rectangle (dark_gc, &dest);
@@ -4821,6 +4842,10 @@ gtk_default_draw_handle (GtkStyle      *style,
 
   gdk_gc_set_clip_rectangle (light_gc, NULL);
   gdk_gc_set_clip_rectangle (dark_gc, NULL);
+
+ out:
+  if (free_me)
+    g_object_unref (G_OBJECT (free_me));
 }
 
 static void

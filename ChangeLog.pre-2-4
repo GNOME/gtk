@@ -1,3 +1,9 @@
+Fri Feb 20 00:21:38 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkstyle.c (gtk_default_draw_handle): 
+	(gtk_default_draw_box): Make the paned handles gray when the the 
+	widget is_focus() but not HAS_FOCUS().  (#122751, Soeren Sandmann)
+
 Thu Feb 19 23:41:06 2004  Matthias Clasen  <maclas@gmx.de>
 
 	Fixes for #82099:
@@ -6,8 +12,8 @@ Thu Feb 19 23:41:06 2004  Matthias Clasen  <maclas@gmx.de>
 	and "Gtk/MenuImages" and map them to "gtk-button-images" and 
 	"gtk-menu-images".
 
-	* gtk/gtkimagemenuitem.c: Add a boolean setting "gtk-menu-images" and use
-	it to set the visibility of the embedded image.
+	* gtk/gtkimagemenuitem.c: Add a boolean setting "gtk-menu-images" and 
+	use it to set the visibility of the embedded image.
 
 	* gtk/gtkbutton.c: Add a boolean setting "gtk-button-images" and use
 	it to set the visibility of an embedded image.
