@@ -34,10 +34,11 @@
 #include <io.h>
 
 #include "gdk.h"
+#include "gdkkeysyms.h"
 #include "gdkinternals.h"
 #include "gdkprivate-win32.h"
-#include "gdkinputprivate.h"
-#include "gdkkeysyms.h"
+#include "gdkwindow-win32.h"
+#include "gdkinput-win32.h"
 
 #include <objbase.h>
 
@@ -71,9 +72,10 @@ _gdk_windowing_init_check (int    argc,
 {
   gint i, j, k;
   
+#ifdef HAVE_WINTAB
   if (getenv ("GDK_IGNORE_WINTAB") != NULL)
     gdk_input_ignore_wintab = TRUE;
-
+#endif
   if (getenv ("GDK_EVENT_FUNC_FROM_WINDOW_PROC") != NULL)
     gdk_event_func_from_window_proc = TRUE;
 
@@ -127,7 +129,7 @@ gdk_win32_gdi_failed (const gchar *where,
   /* On Win9x GDI calls are implemented in 16-bit code and thus
    * don't set the 32-bit error code, sigh.
    */
-  if (IS_WIN_NT (windows_version))
+  if (IS_WIN_NT ())
     gdk_win32_api_failed (where, line, api);
   else
     gdk_other_api_failed (where, line, api);
@@ -163,7 +165,7 @@ gdk_get_use_xshm (void)
 gint
 gdk_screen_width (void)
 {
-  return ((GdkWindowPrivate *) gdk_parent_root)->drawable.width;
+  return GDK_WINDOW_IMPL_WIN32 (GDK_WINDOW_OBJECT (gdk_parent_root)->impl)->width;
 }
 
 /*
@@ -184,7 +186,7 @@ gdk_screen_width (void)
 gint
 gdk_screen_height (void)
 {
-  return ((GdkWindowPrivate *) gdk_parent_root)->drawable.height;
+  return GDK_WINDOW_IMPL_WIN32 (GDK_WINDOW_OBJECT (gdk_parent_root)->impl)->height;
 }
 
 /*

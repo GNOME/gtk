@@ -17,7 +17,7 @@ OPTIMIZE = -g
 
 INCLUDES = -I ../.. -I .. -I $(WTKIT)/include
 DEPCFLAGS = $(GLIB_CFLAGS) $(PANGO_CFLAGS)
-DEFINES = -DG_ENABLE_DEBUG -DHAVE_CONFIG_H -DGDK_VERSION=\"$(GTK_VER)\"
+DEFINES = -DG_ENABLE_DEBUG -DHAVE_CONFIG_H -DGDK_VERSION=\"$(GTK_VER)\" -DGDK_COMPILATION
 
 all:						\
 	../../config.h				\
@@ -39,6 +39,7 @@ gdk_win32_OBJECTS =				\
 	gdkglobals-win32.o			\
 	gdkim-win32.o				\
 	gdkimage-win32.o			\
+	gdkinput.o				\
 	gdkinput-win32.o			\
 	gdkmain-win32.o				\
 	gdkpixmap-win32.o			\

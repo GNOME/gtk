@@ -34,8 +34,6 @@
 #include "gdkcolor.h"
 #include "gdkprivate-win32.h"
 
-#define GDK_COLORMAP_PRIVATE_DATA(cmap) ((GdkColormapPrivateWin32 *) GDK_COLORMAP (cmap)->windowing_data)
-
 static void   free_colormap           (Colormap  colormap);
 
 static gint  gdk_colormap_match_color (GdkColormap *cmap,

@@ -218,8 +218,8 @@ EXPORTS
 	gtk_calendar_freeze
 	gtk_calendar_get_date
 	gtk_calendar_get_type
-	gtk_calendar_new
 	gtk_calendar_mark_day
+	gtk_calendar_new
 	gtk_calendar_select_day
 	gtk_calendar_select_month
 	gtk_calendar_thaw
@@ -298,7 +298,6 @@ EXPORTS
 	gtk_clist_set_selection_mode
 	gtk_clist_set_shadow_type
 	gtk_clist_set_shift
-	gtk_ctree_set_show_stub
 	gtk_clist_set_sort_column
 	gtk_clist_set_sort_type
 	gtk_clist_set_text
@@ -418,6 +417,7 @@ EXPORTS
 	gtk_ctree_set_indent
 	gtk_ctree_set_line_style
 	gtk_ctree_set_node_info
+	gtk_ctree_set_show_stub
 	gtk_ctree_set_spacing
 	gtk_ctree_sort_node
 	gtk_ctree_sort_recursive
@@ -447,8 +447,8 @@ EXPORTS
 	gtk_drag_highlight
 	gtk_drag_set_default_icon
 	gtk_drag_set_icon_default
-	gtk_drag_set_icon_widget
 	gtk_drag_set_icon_pixmap
+	gtk_drag_set_icon_widget
 	gtk_drag_source_handle_event
 	gtk_drag_source_set
 	gtk_drag_source_set_icon
@@ -695,8 +695,8 @@ EXPORTS
 	gtk_marshal_NONE__POINTER
 	gtk_marshal_NONE__POINTER_INT
 	gtk_marshal_NONE__POINTER_INT_INT
-	gtk_marshal_NONE__POINTER_INT_POINTER
 	gtk_marshal_NONE__POINTER_INT_INT_POINTER_INT_INT
+	gtk_marshal_NONE__POINTER_INT_POINTER
 	gtk_marshal_NONE__POINTER_POINTER
 	gtk_marshal_NONE__POINTER_POINTER_INT_INT
 	gtk_marshal_NONE__POINTER_POINTER_POINTER
@@ -854,13 +854,13 @@ EXPORTS
 	gtk_paint_focus
 	gtk_paint_handle
 	gtk_paint_hline
-	gtk_paint_oval
 	gtk_paint_option
+	gtk_paint_oval
 	gtk_paint_polygon
 	gtk_paint_ramp
-	gtk_paint_slider
 	gtk_paint_shadow
 	gtk_paint_shadow_gap
+	gtk_paint_slider
 	gtk_paint_string
 	gtk_paint_tab
 	gtk_paint_vline
@@ -967,8 +967,8 @@ EXPORTS
 	gtk_rc_find_pixmap_in_path
 	gtk_rc_get_default_files
 	gtk_rc_get_module_dir
-	gtk_rc_get_theme_dir
 	gtk_rc_get_style
+	gtk_rc_get_theme_dir
 	gtk_rc_init
 	gtk_rc_load_image
 	gtk_rc_parse
@@ -1053,9 +1053,9 @@ EXPORTS
 	gtk_signal_name
 	gtk_signal_new
 	gtk_signal_newv
-	gtk_signal_set_funcs
 	gtk_signal_query
 	gtk_signal_remove_emission_hook
+	gtk_signal_set_funcs
 	gtk_socket_get_type
 	gtk_socket_new
 	gtk_socket_steal
@@ -1320,6 +1320,7 @@ EXPORTS
 	gtk_widget_unparent
 	gtk_widget_unrealize
 	gtk_widget_unref
+	gtk_win32_get_installation_directory
 	gtk_window_activate_default
 	gtk_window_activate_focus
 	gtk_window_add_accel_group

@@ -229,7 +229,7 @@ gdk_win32_draw_rectangle (GdkDrawable *drawable,
 			   (filled ? "fill " : ""),
 			   width, height, x, y));
     
-  hdc = gdk_gc_predraw (drawable, gc_private, mask);
+  hdc = gdk_win32_hdc_get (drawable, gc, mask);
 
 #if 0
   {
@@ -307,7 +307,7 @@ gdk_win32_draw_rectangle (GdkDrawable *drawable,
 	SelectObject (hdc, oldbrush);
     }
 
-  gdk_gc_postdraw (drawable, gc_private, mask);
+  gdk_win32_hdc_release (drawable, gc, mask);
 }
 
 static void
@@ -336,7 +336,7 @@ gdk_win32_draw_arc (GdkDrawable *drawable,
   if (width <= 2 || height <= 2 || angle2 == 0)
     return;
 
-  hdc = gdk_gc_predraw (drawable, gc_private, mask);
+  hdc = gdk_win32_hdc_get (drawable, gc, mask);
 
   if (angle2 >= 360*64)
     {
@@ -380,7 +380,7 @@ gdk_win32_draw_arc (GdkDrawable *drawable,
 		nXStartArc, nYStartArc, nXEndArc, nYEndArc))
 	WIN32_GDI_FAILED ("Arc");
     }
-  gdk_gc_postdraw (drawable, gc_private, mask);
+  gdk_win32_hdc_release (drawable, gc, mask);
 }
 
 static void
@@ -405,7 +405,7 @@ gdk_win32_draw_polygon (GdkDrawable *drawable,
   if (npoints < 2)
     return;
 
-  hdc = gdk_gc_predraw (drawable, gc_private, mask);
+  hdc = gdk_win32_hdc_get (drawable, gc, mask);
   pts = g_new (POINT, npoints+1);
 
   for (i = 0; i < npoints; i++)
@@ -467,7 +467,7 @@ gdk_win32_draw_polygon (GdkDrawable *drawable,
 	}
     }
   g_free (pts);
-  gdk_gc_postdraw (drawable, gc_private, mask);
+  gdk_win32_hdc_release (drawable, gc, mask);
 }
 
 typedef struct
@@ -525,7 +525,7 @@ gdk_win32_draw_text (GdkDrawable *drawable,
 
   arg.x = x;
   arg.y = y;
-  arg.hdc = gdk_gc_predraw (drawable, gc_private, mask);
+  arg.hdc = gdk_win32_hdc_get (drawable, gc, mask);
 
   GDK_NOTE (MISC, g_print ("gdk_draw_text: %#x (%d,%d) \"%.*s\" (len %d)\n",
 			   GDK_DRAWABLE_HANDLE (drawable),
@@ -550,7 +550,7 @@ gdk_win32_draw_text (GdkDrawable *drawable,
     }
 
 
-  gdk_gc_postdraw (drawable, gc_private, mask);
+  gdk_win32_hdc_release (drawable, gc, mask);
 }
 
 static void
@@ -575,7 +575,7 @@ gdk_win32_draw_text_wc (GdkDrawable	 *drawable,
 
   arg.x = x;
   arg.y = y;
-  arg.hdc = gdk_gc_predraw (drawable, gc_private, mask);
+  arg.hdc = gdk_win32_hdc_get (drawable, gc, mask);
 
   GDK_NOTE (MISC, g_print ("gdk_draw_text_wc: %#x (%d,%d) len: %d\n",
 			   GDK_DRAWABLE_HANDLE (drawable),
@@ -596,7 +596,7 @@ gdk_win32_draw_text_wc (GdkDrawable	 *drawable,
   if (sizeof (wchar_t) != sizeof (GdkWChar))
     g_free (wcstr);
 
-  gdk_gc_postdraw (drawable, gc_private, mask);
+  gdk_win32_hdc_release (drawable, gc, mask);
 }
 
 static void
@@ -626,13 +626,13 @@ gdk_win32_draw_drawable (GdkDrawable *drawable,
 			   GDK_PIXMAP_HBITMAP (src),
 			   width, height, xsrc, ysrc));
 
-  hdc = gdk_gc_predraw (drawable, gc_private, 0);
+  hdc = gdk_win32_hdc_get (drawable, gc, 0);
 
   gdk_drawable_get_size (src, &src_width, &src_height);
   src_rgn = CreateRectRgn (0, 0, src_width + 1, src_height + 1);
   draw_rgn = CreateRectRgn (xsrc, ysrc, xsrc + width + 1, ysrc + height + 1);
   
-  if (!GDK_IS_PIXMAP (drawable))
+  if (GDK_IS_WINDOW (drawable))
     {
       /* If we are drawing on a window, calculate the region that is
        * outside the source pixmap, and invalidate that, causing it to
@@ -738,7 +738,7 @@ gdk_win32_draw_drawable (GdkDrawable *drawable,
 	WIN32_GDI_FAILED ("BitBlt");
       ReleaseDC (GDK_WINDOW_HWND (src), srcdc);
     }
-  gdk_gc_postdraw (drawable, gc_private, 0);
+  gdk_win32_hdc_release (drawable, gc, 0);
 }
 
 static void
@@ -751,21 +751,19 @@ gdk_win32_draw_points (GdkDrawable *drawable,
   COLORREF fg;
   GdkGCWin32 *gc_private = GDK_GC_WIN32 (gc);
   GdkDrawableImplWin32 *impl = GDK_DRAWABLE_IMPL_WIN32 (drawable);
-  GdkColormapPrivateWin32 *colormap_private =
-    (GdkColormapPrivateWin32 *) impl->colormap;
   int i;
 
-  hdc = gdk_gc_predraw (drawable, gc_private, 0);
+  hdc = gdk_win32_hdc_get (drawable, gc, 0);
   
-  fg = gdk_colormap_color (colormap_private, gc_private->foreground);
+  fg = gdk_colormap_color (impl->colormap, gc_private->foreground);
 
   GDK_NOTE (MISC, g_print ("gdk_draw_points: %#x %dx%.06x\n",
-			   GDK_DRAWABLE_XID (drawable), npoints, fg));
+			   GDK_DRAWABLE_HANDLE (drawable), npoints, fg));
 
   for (i = 0; i < npoints; i++)
     SetPixel (hdc, points[i].x, points[i].y, fg);
 
-  gdk_gc_postdraw (drawable, gc_private, 0);
+  gdk_win32_hdc_release (drawable, gc, 0);
 }
 
 static void
@@ -784,7 +782,7 @@ gdk_win32_draw_segments (GdkDrawable *drawable,
   GDK_NOTE (MISC, g_print ("gdk_win32_draw_segments: %#x nsegs: %d\n",
 			   GDK_DRAWABLE_HANDLE (drawable), nsegs));
 
-  hdc = gdk_gc_predraw (drawable, gc_private, mask);
+  hdc = gdk_win32_hdc_get (drawable, gc, mask);
 
   if (gc_private->fill_style == GDK_OPAQUE_STIPPLED)
     {
@@ -832,7 +830,7 @@ gdk_win32_draw_segments (GdkDrawable *drawable,
 	      WIN32_GDI_FAILED ("LineTo"), ok = FALSE;
 	}
     }
-  gdk_gc_postdraw (drawable, gc_private, mask);
+  gdk_win32_hdc_release (drawable, gc, mask);
 }
 
 static void
@@ -851,7 +849,7 @@ gdk_win32_draw_lines (GdkDrawable *drawable,
   if (npoints < 2)
     return;
 
-  hdc = gdk_gc_predraw (drawable, gc_private, mask);
+  hdc = gdk_win32_hdc_get (drawable, gc, mask);
 
   pts = g_new (POINT, npoints);
 
@@ -873,7 +871,7 @@ gdk_win32_draw_lines (GdkDrawable *drawable,
       if (!LineTo (hdc, points[npoints-1].x + 1, points[npoints-1].y))
 	WIN32_GDI_FAILED ("LineTo");
     }
-  gdk_gc_postdraw (drawable, gc_private, mask);
+  gdk_win32_hdc_release (drawable, gc, mask);
 }
 
 static void
@@ -889,11 +887,11 @@ gdk_win32_draw_glyphs (GdkDrawable      *drawable,
   const GdkGCValuesMask mask = GDK_GC_FOREGROUND;
   HDC hdc;
 
-  hdc = gdk_gc_predraw (drawable, gc_private, mask);
+  hdc = gdk_win32_hdc_get (drawable, gc, mask);
 
   pango_win32_render (hdc, font, glyphs, x, y);
 
-  gdk_gc_postdraw (drawable, gc_private, mask);
+  gdk_win32_hdc_release (drawable, gc, mask);
 }
 
 static void
@@ -922,7 +920,7 @@ gdk_win32_draw_image (GdkDrawable     *drawable,
   gboolean ok = TRUE;
   int i;
 
-  hdc = gdk_gc_predraw (drawable, gc_private, 0);
+  hdc = gdk_win32_hdc_get (drawable, gc, 0);
 
   if (colormap_private && colormap_private->xcolormap->rc_palette)
     {
@@ -978,7 +976,7 @@ gdk_win32_draw_image (GdkDrawable     *drawable,
       if (memdc != NULL && !DeleteDC (memdc))
 	WIN32_GDI_FAILED ("DeleteDC");
     }
-  gdk_gc_postdraw (drawable, gc_private, 0);
+  gdk_win32_hdc_release (drawable, gc, 0);
 }
 
 static gint

@@ -1,3 +1,30 @@
+2000-07-25  Tor Lillqvist  <tml@iki.fi>
+
+	* Makefile.am: Include the build directory.
+
+	* configure.in: Generate build/Makefile and build/win32/Makefile.
+
+	* config.h.win32: Add USE_GMODULE and USE_MMX for gdk-pixbuf.
+
+	* gdk/gdk.def
+	* gtk/gtk.def: Updates.
+
+	* gdk/makefile.mingw.in: Define GDK_COMPILATION. Link with
+	PANGOWIN32_LIBS and gdk_pixbuf.
+
+	* gdk/win32: Compiles, but no doubt doesn't work at all.
+
+	* gdk/win32/makefile.mingw.in: Define GDK_COMPILATION. 
+
+	* gdk/win32/gdkinput.c: New file, temporarily.
+	
+	* gdk/win32/gdkinput-win32.h: New file
+
+	* gdk/win32/gdkinputprivate.h: Remove.
+
+	* gtk/gtkrc.[ch] (gtk_win32_get_installation_directory): Renamed and
+	made externally visible.
+
 2000-07-24 Elliot Lee <sopwith@redhat.com>
 	* gdk/gdkprivate.h: Remove gdk_*_lookup() defines, since they are defined by the
 	individual backends already.
@@ -33,12 +60,13 @@
 
 	* gdk/win32/gdkcolor-win32.c
 	* gdk/win32/gdkcursor-win32.c
+	* gdk/win32/gdkdrawable-win32.c
 	* gdk/win32/gdkgc-win32.c
 	* gdk/win32/gdkimage-win32.c
 	* gdk/win32/gdkprivate-win32.h
 	* gdk/win32/gdkwin32.h: Update data structures. Cosmetics:
-	don't use fields and variables called xcursor, xid, etc (leftovers
-	from the X11 backend).
+	Rename fields and variables called xcursor, xid, etc (these names
+	were leftovers from the X11 backend) to hcursor, hwnd, hbitmap etc.
 
 Sat Jul 22 17:41:26 2000  Owen Taylor  <otaylor@redhat.com>
 

@@ -1113,7 +1113,7 @@ gdk_drag_find_window (GdkDragContext  *context,
   POINT pt;
 
   GDK_NOTE (DND, g_print ("gdk_drag_find_window: %#x +%d+%d\n",
-			  (drag_window ? GDK_DRAWABLE_XID (drag_window) : 0),
+			  (drag_window ? GDK_WINDOW_HWND (drag_window) : 0),
 			  x_root, y_root));
 
   pt.x = x_root;
@@ -1123,7 +1123,7 @@ gdk_drag_find_window (GdkDragContext  *context,
     *dest_window = NULL;
   else
     {
-      *dest_window = gdk_window_lookup (recipient);
+      *dest_window = gdk_win32_handle_table_lookup (recipient);
       if (*dest_window)
 	gdk_drawable_ref (*dest_window);
       *protocol = GDK_DRAG_PROTO_WIN32_DROPFILES;
@@ -1225,7 +1225,7 @@ gdk_window_register_dnd (GdkWindow *window)
   g_return_if_fail (window != NULL);
 
   GDK_NOTE (DND, g_print ("gdk_window_register_dnd: %#x\n",
-			  GDK_DRAWABLE_XID (window)));
+			  GDK_WINDOW_HWND (window)));
 
   /* We always claim to accept dropped files, but in fact we might not,
    * of course. This function is called in such a way that it cannot know
@@ -1244,7 +1244,7 @@ gdk_window_register_dnd (GdkWindow *window)
     OTHER_API_FAILED ("CoLockObjectExternal");
   else
     {
-      hres = RegisterDragDrop (GDK_DRAWABLE_XID (window), &ctx->idt);
+      hres = RegisterDragDrop (GDK_WINDOW_HWND (window), &ctx->idt);
       if (hres == DRAGDROP_E_ALREADYREGISTERED)
 	{
 	  g_print ("DRAGDROP_E_ALREADYREGISTERED\n");

@@ -34,6 +34,9 @@
 #include "gdkregion-generic.h"
 #include "gdkinternals.h"
 #include "gdkprivate-win32.h"
+#include "gdkdrawable-win32.h"
+#include "gdkwindow-win32.h"
+#include "gdkpixmap-win32.h"
 
 static void gdk_win32_gc_destroy    (GdkGC           *gc);
 static void gdk_win32_gc_get_values (GdkGC           *gc,
@@ -257,7 +260,7 @@ gdk_win32_gc_values_to_win32values (GdkGCValues    *values,
 	  gdk_drawable_ref (win32_gc->tile);
 	  win32_gc->values_mask |= GDK_GC_TILE;
 	  GDK_NOTE (MISC, (g_print ("%stile=%#x", s,
-				    GDK_DRAWABLE_XID (win32_gc->tile)),
+				    GDK_PIXMAP_HBITMAP (win32_gc->tile)),
 			   s = ","));
 	}
       else
@@ -307,7 +310,7 @@ gdk_win32_gc_values_to_win32values (GdkGCValues    *values,
 	    gdk_drawable_ref (win32_gc->stipple);
 	  win32_gc->values_mask |= GDK_GC_STIPPLE;
 	  GDK_NOTE (MISC, (g_print ("%sstipple=%#x", s,
-				    GDK_DRAWABLE_XID (win32_gc->stipple)),
+				    GDK_PIXMAP_HBITMAP (win32_gc->stipple)),
 			   s = ","));
 	}
       else
@@ -331,7 +334,7 @@ gdk_win32_gc_values_to_win32values (GdkGCValues    *values,
       if (values->clip_mask != NULL)
 	{
 	  win32_gc->hcliprgn =
-	    BitmapToRegion ((HBITMAP) GDK_DRAWABLE_XID (values->clip_mask));
+	    BitmapToRegion ((HBITMAP) GDK_PIXMAP_HBITMAP (values->clip_mask));
 	  win32_gc->values_mask |= GDK_GC_CLIP_MASK;
 	  OffsetRgn (win32_gc->hcliprgn,
 		     win32_gc->parent_instance.clip_x_origin,
@@ -636,7 +639,7 @@ gdk_win32_gc_set_dashes (GdkGC *gc,
    * More workarounds for Win9x descibed at:
    * http://www.codeguru.com/gdi/dashed.shtml
    */
-  if (!IS_WIN_NT (windows_version) && win32_gc->pen_width > 1)
+  if (!IS_WIN_NT () && win32_gc->pen_width > 1)
     {
       GDK_NOTE (MISC, g_print ("gdk_win32_gc_set_dashes: not fully supported\n"));
       win32_gc->pen_style |= PS_SOLID;
@@ -755,8 +758,8 @@ void
 gdk_gc_copy (GdkGC *dst_gc,
 	     GdkGC *src_gc)
 {
-  GdkGCWin32 *dst_data;
-  GdkGCWin32 *src_data;
+  GdkGCWin32 *dst_win32_gc;
+  GdkGCWin32 *src_win32_gc;
   DWORD nbytes;
   LPRGNDATA rgn;
 
@@ -790,39 +793,45 @@ gdk_gc_copy (GdkGC *dst_gc,
 static guint bitmask[9] = { 0, 1, 3, 7, 15, 31, 63, 127, 255 };
 
 COLORREF
-gdk_colormap_color (GdkColormapPrivateWin32 *colormap_private,
-		    gulong                   pixel)
+gdk_colormap_color (GdkColormap *colormap,
+		    gulong       pixel)
 {
-  GdkVisual *visual;
+  const GdkVisual *visual;
+  GdkColormapPrivateWin32 *colormap_private;
   guchar r, g, b;
 
-  if (colormap_private == NULL || colormap_private->xcolormap->rc_palette)
+  if (colormap == NULL)
     return PALETTEINDEX (pixel);
-  else
-    {
-      visual = colormap_private->base.visual;
-      r = (pixel & visual->red_mask) >> visual->red_shift;
-      r = (r * 255) / bitmask[visual->red_prec];
-      g = (pixel & visual->green_mask) >> visual->green_shift;
-      g = (g * 255) / bitmask[visual->green_prec];
-      b = (pixel & visual->blue_mask) >> visual->blue_shift;
-      b = (b * 255) / bitmask[visual->blue_prec];
 
-      return RGB (r, g, b);
-    }
+  colormap_private = GDK_COLORMAP_PRIVATE_DATA (colormap);
+
+  if (colormap_private->xcolormap->rc_palette)
+    return PALETTEINDEX (pixel);
+
+  visual = colormap->visual;
+  r = (pixel & visual->red_mask) >> visual->red_shift;
+  r = (r * 255) / bitmask[visual->red_prec];
+  g = (pixel & visual->green_mask) >> visual->green_shift;
+  g = (g * 255) / bitmask[visual->green_prec];
+  b = (pixel & visual->blue_mask) >> visual->blue_shift;
+  b = (b * 255) / bitmask[visual->blue_prec];
+  
+  return RGB (r, g, b);
 }
 
 static void
-predraw_set_foreground (GdkGCWin32              *gc_win32,
-			GdkColormapPrivateWin32 *colormap_private,
-			gboolean                *ok)
+predraw_set_foreground (GdkGC       *gc,
+			GdkColormap *colormap,
+			gboolean    *ok)
 {
+  GdkGCWin32 *win32_gc = (GdkGCWin32 *) gc;
+  GdkColormapPrivateWin32 *colormap_private;
   COLORREF fg;
   LOGBRUSH logbrush;
   HPEN hpen;
   HBRUSH hbr;
 
-  if (colormap_private == NULL)
+  if (colormap == NULL)
     {
       /* A 1 bit deep bitmap */
       struct
@@ -853,25 +862,29 @@ predraw_set_foreground (GdkGCWin32              *gc_win32,
       RealizePalette (win32_gc->hdc);
       fg = PALETTEINDEX (win32_gc->foreground);
     }
-  else if (colormap_private->xcolormap->rc_palette)
+  else
     {
-      int k;
-      if (SelectPalette (win32_gc->hdc, colormap_private->xcolormap->palette,
-			 FALSE) == NULL)
-	WIN32_GDI_FAILED ("SelectPalette"), *ok = FALSE;
-      if (TRUE || colormap_private->xcolormap->stale)
+      colormap_private = GDK_COLORMAP_PRIVATE_DATA (colormap);
+      if (colormap_private->xcolormap->rc_palette)
 	{
-	  if ((k = RealizePalette (win32_gc->hdc)) == GDI_ERROR)
-	    WIN32_GDI_FAILED ("RealizePalette"), *ok = FALSE;
-	  colormap_private->xcolormap->stale = FALSE;
-	}
+	  int k;
+	  if (SelectPalette (win32_gc->hdc, colormap_private->xcolormap->palette,
+			     FALSE) == NULL)
+	    WIN32_GDI_FAILED ("SelectPalette"), *ok = FALSE;
+	  if (TRUE || colormap_private->xcolormap->stale)
+	    {
+	      if ((k = RealizePalette (win32_gc->hdc)) == GDI_ERROR)
+		WIN32_GDI_FAILED ("RealizePalette"), *ok = FALSE;
+	      colormap_private->xcolormap->stale = FALSE;
+	    }
 #if 0
-      g_print ("Selected palette %#x for gc %#x, realized %d colors\n",
-	       colormap_private->xcolormap->palette, win32_gc->hdc, k);
+	  g_print ("Selected palette %#x for gc %#x, realized %d colors\n",
+		   colormap_private->xcolormap->palette, win32_gc->hdc, k);
 #endif
+	}
     }
 
-  fg = gdk_colormap_color (colormap_private, win32_gc->foreground);
+  fg = gdk_colormap_color (colormap, win32_gc->foreground);
 
   if (SetTextColor (win32_gc->hdc, fg) == CLR_INVALID)
     WIN32_GDI_FAILED ("SetTextColor"), *ok = FALSE;
@@ -892,11 +905,11 @@ predraw_set_foreground (GdkGCWin32              *gc_win32,
   switch (win32_gc->fill_style)
     {
     case GDK_OPAQUE_STIPPLED:
-      if (*ok && (hbr = CreatePatternBrush (GDK_DRAWABLE_XID (win32_gc->stipple))) == NULL)
+      if (*ok && (hbr = CreatePatternBrush (GDK_PIXMAP_HBITMAP (win32_gc->stipple))) == NULL)
 	WIN32_GDI_FAILED ("CreatePatternBrush"), *ok = FALSE;
 	
-      if (*ok && !SetBrushOrgEx(win32_gc->hdc, gc_private->ts_x_origin,
-				gc_private->ts_y_origin, NULL))
+      if (*ok && !SetBrushOrgEx(win32_gc->hdc, gc->ts_x_origin,
+				gc->ts_y_origin, NULL))
 	WIN32_GDI_FAILED ("SetBrushOrgEx"), *ok = FALSE;
       break;
 
@@ -911,21 +924,23 @@ predraw_set_foreground (GdkGCWin32              *gc_win32,
 }  
 
 void
-predraw_set_background (GdkGCWin32              *win32_gc,
-			GdkColormapPrivateWin32 *colormap_private,
-			gboolean                *ok)
+predraw_set_background (GdkGC       *gc,
+			GdkColormap *colormap,
+			gboolean    *ok)
 {
-  COLORREF bg = gdk_colormap_color (colormap_private, win32_gc->background);
+  GdkGCWin32 *win32_gc = (GdkGCWin32 *) gc;
+  COLORREF bg = gdk_colormap_color (colormap, win32_gc->background);
 
   if (SetBkColor (win32_gc->hdc, bg) == CLR_INVALID)
     WIN32_GDI_FAILED ("SetBkColor"), *ok = FALSE;
 }
 
 HDC
-gdk_gc_predraw (GdkDrawable    *drawable,
-		GdkGCWin32     *win32_gc,
-		GdkGCValuesMask usage)
+gdk_win32_hdc_get (GdkDrawable    *drawable,
+		   GdkGC          *gc,
+		   GdkGCValuesMask usage)
 {
+  GdkGCWin32 *win32_gc = (GdkGCWin32 *) gc;
   GdkColormapPrivateWin32 *colormap_private =
     (GdkColormapPrivateWin32 *) GDK_DRAWABLE_IMPL_WIN32 (drawable)->colormap;
   gboolean ok = TRUE;
@@ -933,9 +948,9 @@ gdk_gc_predraw (GdkDrawable    *drawable,
 
   g_assert (win32_gc->hdc == NULL);
 
-  win32_gc->hwnd = GDK_DRAWABLE_XID (drawable);
+  win32_gc->hwnd = GDK_DRAWABLE_HANDLE (drawable);
   
-  if (GDK_DRAWABLE_TYPE (drawable) == GDK_DRAWABLE_PIXMAP)
+  if (GDK_IS_PIXMAP (drawable))
     {
       if ((win32_gc->hdc = CreateCompatibleDC (NULL)) == NULL)
 	WIN32_GDI_FAILED ("CreateCompatibleDC"), ok = FALSE;
@@ -956,12 +971,12 @@ gdk_gc_predraw (GdkDrawable    *drawable,
     }
   
   if (ok && (usage & GDK_GC_FOREGROUND))
-    predraw_set_foreground (gc_private, colormap_private, &ok);
+    predraw_set_foreground (gc, GDK_DRAWABLE_IMPL_WIN32 (drawable)->colormap, &ok);
 
   if (ok
       && (usage & GDK_GC_BACKGROUND)
       && (win32_gc->values_mask & GDK_GC_BACKGROUND))
-    predraw_set_background (win32_gc, colormap_private, &ok);
+    predraw_set_background (gc, GDK_DRAWABLE_IMPL_WIN32 (drawable)->colormap, &ok);
   
   if (ok && (usage & GDK_GC_FONT))
     {
@@ -1002,13 +1017,13 @@ gdk_gc_predraw (GdkDrawable    *drawable,
 	{
 	  rect = ((RECT *) rgndata->Buffer) + rgndata->rdh.nCount++;
 
-	  rect->left = CLAMP (boxes[i].x1 + gc_private->clip_x_origin,
+	  rect->left = CLAMP (boxes[i].x1 + gc->clip_x_origin,
 			      G_MINSHORT, G_MAXSHORT);
-	  rect->right = CLAMP (boxes[i].x2 + gc_private->clip_x_origin,
+	  rect->right = CLAMP (boxes[i].x2 + gc->clip_x_origin,
 			       G_MINSHORT, G_MAXSHORT);
-	  rect->top = CLAMP (boxes[i].y1 + gc_private->clip_y_origin,
+	  rect->top = CLAMP (boxes[i].y1 + gc->clip_y_origin,
 			     G_MINSHORT, G_MAXSHORT);
-	  rect->bottom = CLAMP (boxes[i].y2 + gc_private->clip_y_origin,
+	  rect->bottom = CLAMP (boxes[i].y2 + gc->clip_y_origin,
 				G_MINSHORT, G_MAXSHORT);
 
 	  GDK_NOTE (MISC, g_print ("clip rgn box %d: %dx%d@+%d+%d\n",
@@ -1051,7 +1066,7 @@ gdk_gc_predraw (GdkDrawable    *drawable,
       HRGN hrgn;
       RECT rect;
 
-      g_print ("gdk_gc_predraw: %d: %#x\n", win32_gc, win32_gc->hdc);
+      g_print ("gdk_win32_hdc_get: %d: %#x\n", win32_gc, win32_gc->hdc);
       obj = GetCurrentObject (win32_gc->hdc, OBJ_BRUSH);
       GetObject (obj, sizeof (LOGBRUSH), &logbrush);
       g_print ("brush: style: %s color: %.06x hatch: %#x\n",
@@ -1110,13 +1125,11 @@ gdk_gc_predraw (GdkDrawable    *drawable,
 }
 
 void
-gdk_gc_postdraw (GdkDrawable    *drawable,
-		 GdkGCWin32     *win32_gc,
-		 GdkGCValuesMask usage)
+gdk_win32_hdc_release (GdkDrawable    *drawable,
+		       GdkGC          *gc,
+		       GdkGCValuesMask usage)
 {
-  GdkDrawablePrivate *drawable_private = (GdkDrawablePrivate *) drawable;
-  GdkColormapPrivateWin32 *colormap_private =
-    (GdkColormapPrivateWin32 *) drawable_private->colormap;
+  GdkGCWin32 *win32_gc = (GdkGCWin32 *) gc;
   HGDIOBJ hpen = NULL;
   HGDIOBJ hbr = NULL;
 
@@ -1141,7 +1154,7 @@ gdk_gc_postdraw (GdkDrawable    *drawable,
 	WIN32_GDI_FAILED ("UnrealizeObject");
     }
 #endif
-  if (GDK_DRAWABLE_TYPE (drawable) == GDK_DRAWABLE_PIXMAP)
+  if (GDK_IS_PIXMAP (drawable))
     {
       if (!DeleteDC (win32_gc->hdc))
 	WIN32_GDI_FAILED ("DeleteDC");
@@ -1160,22 +1173,6 @@ gdk_gc_postdraw (GdkDrawable    *drawable,
       WIN32_GDI_FAILED ("DeleteObject");
 
   win32_gc->hdc = NULL;
-}
-
-HDC
-gdk_win32_hdc_get (GdkDrawable     *drawable,
-		   GdkGC           *gc,
-		   GdkGCValuesMask usage)
-{
-  return gdk_gc_predraw (drawable, GDK_GC_WIN32 (gc), usage);
-}
-
-void
-gdk_win32_hdc_release (GdkDrawable     *drawable,
-		       GdkGC           *gc,
-		       GdkGCValuesMask usage)
-{
-  gdk_gc_postdraw (drawable, GDK_GC_WIN32 (gc), usage);
 }
 
 /* This function originally from Jean-Edouard Lachand-Robert, and

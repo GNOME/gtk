@@ -32,6 +32,8 @@
 #include "gdkselection.h"
 #include "gdkinternals.h"
 #include "gdkprivate-win32.h"
+#include "gdkdrawable-win32.h"
+#include "gdkwindow-win32.h"
 
 GdkAtom
 gdk_atom_intern (const gchar *atom_name,
@@ -122,7 +124,7 @@ gdk_property_get (GdkWindow   *window,
   g_return_val_if_fail (window != NULL, FALSE);
   g_return_val_if_fail (GDK_IS_WINDOW (window), FALSE);
 
-  if (GDK_DRAWABLE_DESTROYED (window))
+  if (GDK_WINDOW_DESTROYED (window))
     return FALSE;
 
   g_warning ("gdk_property_get: Not implemented");
@@ -147,14 +149,14 @@ gdk_property_change (GdkWindow    *window,
   g_return_if_fail (window != NULL);
   g_return_if_fail (GDK_IS_WINDOW (window));
 
-  if (GDK_DRAWABLE_DESTROYED (window))
+  if (GDK_WINDOW_DESTROYED (window))
     return;
 
   GDK_NOTE (MISC,
 	    (prop_name = gdk_atom_name (property),
 	     type_name = gdk_atom_name (type),
 	     g_print ("gdk_property_change: %#x %#x (%s) %#x (%s) %s %d*%d bytes %.10s\n",
-		      GDK_DRAWABLE_XID (window), property, prop_name,
+		      GDK_WINDOW_HWND (window), property, prop_name,
 		      type, type_name,
 		      (mode == GDK_PROP_MODE_REPLACE ? "REPLACE" :
 		       (mode == GDK_PROP_MODE_PREPEND ? "PREPEND" :
@@ -175,8 +177,8 @@ gdk_property_change (GdkWindow    *window,
 	  length++;
 #if 1      
       GDK_NOTE (MISC, g_print ("...OpenClipboard(%#x)\n",
-			       GDK_DRAWABLE_XID (window)));
-      if (!OpenClipboard (GDK_DRAWABLE_XID (window)))
+			       GDK_WINDOW_HWND (window)));
+      if (!OpenClipboard (GDK_WINDOW_HWND (window)))
 	{
 	  WIN32_API_FAILED ("OpenClipboard");
 	  return;
@@ -221,7 +223,7 @@ gdk_property_delete (GdkWindow *window,
   GDK_NOTE (MISC,
 	    (prop_name = gdk_atom_name (property),
 	     g_print ("gdk_property_delete: %#x %#x (%s)\n",
-		      (window ? GDK_DRAWABLE_XID (window) : 0),
+		      (window ? GDK_WINDOW_HWND (window) : 0),
 		      property, prop_name),
 	     g_free (prop_name)));
 

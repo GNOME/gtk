@@ -77,18 +77,6 @@ struct _GdkWindowImplWin32
   /* We must keep the event mask here to filter them ourselves */
   gint event_mask;
 
-  /* Values for bg_type */
-#define GDK_WIN32_BG_NORMAL 0
-#define GDK_WIN32_BG_PIXEL 1
-#define GDK_WIN32_BG_PIXMAP 2
-#define GDK_WIN32_BG_PARENT_RELATIVE 3
-#define GDK_WIN32_BG_TRANSPARENT 4
-
-  /* We draw the background ourselves at WM_ERASEBKGND  */
-  guchar bg_type;
-  gulong bg_pixel;
-  GdkPixmap *bg_pixmap;
-
   HCURSOR hcursor;
 
   /* Window size hints */

@@ -41,3 +41,4 @@ GdkAtom		  gdk_ole2_dnd_atom;
 ATOM              gdk_selection_property;
 gint              gdk_null_window_warnings = TRUE;
 DWORD		  windows_version = 0;
+gint		  gdk_input_ignore_wintab = FALSE;

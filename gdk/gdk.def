@@ -46,6 +46,11 @@ EXPORTS
 	gdk_cursor_new_from_pixmap
 	gdk_cursor_ref
 	gdk_cursor_unref
+	gdk_device_set_axis_use
+	gdk_device_set_key
+	gdk_device_set_mode
+	gdk_device_set_source
+	gdk_devices_list
 	gdk_dnd_init
 	gdk_drag_abort
 	gdk_drag_begin
@@ -70,13 +75,13 @@ EXPORTS
 	gdk_draw_polygon
 	gdk_draw_rectangle
 	gdk_draw_rgb_32_image
+	gdk_draw_rgb_32_image_dithalign
 	gdk_draw_rgb_image
 	gdk_draw_rgb_image_dithalign
 	gdk_draw_segments
 	gdk_draw_string
 	gdk_draw_text
 	gdk_draw_text_wc
-	gdk_drawable_alloc
 	gdk_drawable_get_colormap
 	gdk_drawable_get_size
 	gdk_drawable_get_type
@@ -124,7 +129,6 @@ EXPORTS
 	gdk_fontset_load
 	gdk_free_compound_text
 	gdk_free_text_list
-	gdk_gc_alloc
 	gdk_gc_copy
 	gdk_gc_get_values
 	gdk_gc_new
@@ -163,7 +167,6 @@ EXPORTS
 	gdk_im_end
 	gdk_im_ready
 	gdk_im_set_best_style
-	gdk_image_bitmap_new
 	gdk_image_get
 	gdk_image_get_pixel
 	gdk_image_new
@@ -177,15 +180,9 @@ EXPORTS
 	gdk_input_add_full
 	gdk_input_exit
 	gdk_input_init
-	gdk_input_list_devices
 	gdk_input_motion_events
 	gdk_input_remove
-	gdk_input_set_axes
 	gdk_input_set_extension_events
-	gdk_input_set_key
-	gdk_input_set_mode
-	gdk_input_set_source
-	gdk_input_window_get_pointer
 	gdk_key_repeat_disable
 	gdk_key_repeat_restore
 	gdk_keyboard_grab
@@ -205,7 +202,6 @@ EXPORTS
 	gdk_pixmap_create_from_data
 	gdk_pixmap_create_from_xpm
 	gdk_pixmap_create_from_xpm_d
-	gdk_pixmap_create_on_shared_image
 	gdk_pixmap_foreign_new
 	gdk_pixmap_new
 	gdk_pointer_grab
@@ -236,10 +232,11 @@ EXPORTS
 	gdk_region_xor
 	gdk_rgb_cmap_free
 	gdk_rgb_cmap_new
+	gdk_rgb_colormap_ditherable
 	gdk_rgb_ditherable
 	gdk_rgb_gc_set_background
 	gdk_rgb_gc_set_foreground
-	gdk_rgb_get_cmap
+	gdk_rgb_get_colormap
 	gdk_rgb_get_visual
 	gdk_rgb_init
 	gdk_rgb_set_install
@@ -285,6 +282,7 @@ EXPORTS
 	gdk_visual_ref
 	gdk_visual_unref
 	gdk_wcstombs
+	gdk_win32_handle_table_lookup
 	gdk_win32_hdc_get
 	gdk_win32_hdc_release
 	gdk_window_add_filter
@@ -345,5 +343,3 @@ EXPORTS
 	gdk_window_shape_combine_mask
 	gdk_window_show
 	gdk_window_withdraw
-	gdk_xid_table_insert
-	gdk_xid_table_lookup

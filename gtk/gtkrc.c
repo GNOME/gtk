@@ -255,35 +255,35 @@ static GtkImageLoader image_loader = NULL;
 #ifdef G_OS_WIN32
 
 gchar *
-get_gtk_sysconf_directory (void)
+gtk_win32_get_installation_directory (void)
 {
   static gboolean been_here = FALSE;
-  static gchar gtk_sysconf_dir[200];
+  static gchar gtk_installation_dir[200];
   gchar win_dir[100];
   HKEY reg_key = NULL;
   DWORD type;
-  DWORD nbytes = sizeof (gtk_sysconf_dir);
+  DWORD nbytes = sizeof (gtk_installation_dir);
 
   if (been_here)
-    return gtk_sysconf_dir;
+    return gtk_installation_dir;
 
   been_here = TRUE;
 
   if (RegOpenKeyEx (HKEY_LOCAL_MACHINE, "Software\\GNU\\GTk+", 0,
 		    KEY_QUERY_VALUE, &reg_key) != ERROR_SUCCESS
       || RegQueryValueEx (reg_key, "InstallationDirectory", 0,
-			  &type, gtk_sysconf_dir, &nbytes) != ERROR_SUCCESS
+			  &type, gtk_installation_dir, &nbytes) != ERROR_SUCCESS
       || type != REG_SZ)
     {
       /* Uh oh. Use the old hard-coded %WinDir%\GTk+ value */
       GetWindowsDirectory (win_dir, sizeof (win_dir));
-      sprintf (gtk_sysconf_dir, "%s\\gtk+", win_dir);
+      sprintf (gtk_installation_dir, "%s\\gtk+", win_dir);
     }
 
   if (reg_key != NULL)
     RegCloseKey (reg_key);
 
-  return gtk_sysconf_dir;
+  return gtk_installation_dir;
 }
 
 static gchar *
@@ -291,7 +291,7 @@ get_themes_directory (void)
 {
   static gchar themes_dir[200];
 
-  sprintf (themes_dir, "%s\\themes", get_gtk_sysconf_directory ());
+  sprintf (themes_dir, "%s\\themes", gtk_win32_get_installation_directory ());
   return themes_dir;
 }
 
@@ -398,7 +398,7 @@ gtk_rc_add_initial_default_files (void)
 #ifndef G_OS_WIN32
       str = g_strdup (GTK_SYSCONFDIR G_DIR_SEPARATOR_S "gtk-2.0" G_DIR_SEPARATOR_S "gtkrc");
 #else
-      str = g_strdup_printf ("%s\\gtkrc", get_gtk_sysconf_directory ());
+      str = g_strdup_printf ("%s\\gtkrc", gtk_win32_get_installation_directory ());
 #endif
 
       gtk_rc_add_default_file (str);

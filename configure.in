@@ -993,6 +993,8 @@ docs/gtk-config.1
 Makefile
 gtk-config-2.0
 po/Makefile.in
+build/Makefile
+build/win32/Makefile
 demos/Makefile
 docs/Makefile
 docs/reference/Makefile

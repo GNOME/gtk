@@ -33,6 +33,7 @@
 #include "gdkinternals.h"
 #include "gdkprivate.h"
 #include "gdkprivate-win32.h"
+#include "gdkwindow-win32.h"
 
 /* We emulate the GDK_SELECTION window properties by storing
  * it's data in a per-window hashtable.
@@ -63,18 +64,18 @@ gdk_sel_prop_store (GdkWindow *owner,
 {
   GdkSelProp *prop;
 
-  prop = g_hash_table_lookup (sel_prop_table, &GDK_DRAWABLE_XID (owner));
+  prop = g_hash_table_lookup (sel_prop_table, &GDK_WINDOW_HWND (owner));
   if (prop != NULL)
     {
       g_free (prop->data);
-      g_hash_table_remove (sel_prop_table, &GDK_DRAWABLE_XID (owner));
+      g_hash_table_remove (sel_prop_table, &GDK_WINDOW_HWND (owner));
     }
   prop = g_new (GdkSelProp, 1);
   prop->data = data;
   prop->length = length;
   prop->format = format;
   prop->type = type;
-  g_hash_table_insert (sel_prop_table, &GDK_DRAWABLE_XID (owner), prop);
+  g_hash_table_insert (sel_prop_table, &GDK_WINDOW_HWND (owner), prop);
 }
 
 gboolean
@@ -89,7 +90,7 @@ gdk_selection_owner_set (GdkWindow *owner,
   GDK_NOTE (MISC,
 	    (sel_name = gdk_atom_name (selection),
 	     g_print ("gdk_selection_owner_set: %#x %#x (%s)\n",
-		      (owner ? GDK_DRAWABLE_XID (owner) : 0),
+		      (owner ? GDK_WINDOW_HWND (owner) : 0),
 		      selection, sel_name),
 	     g_free (sel_name)));
 
@@ -97,7 +98,7 @@ gdk_selection_owner_set (GdkWindow *owner,
     return FALSE;
 
   if (owner != NULL)
-    xwindow = GDK_DRAWABLE_XID (owner);
+    xwindow = GDK_WINDOW_HWND (owner);
   else
     xwindow = NULL;
 
@@ -153,7 +154,7 @@ gdk_selection_owner_get (GdkAtom selection)
   if (selection != gdk_clipboard_atom)
     window = NULL;
   else
-    window = gdk_window_lookup (GetClipboardOwner ());
+    window = gdk_win32_handle_table_lookup (GetClipboardOwner ());
 
 #endif
 
@@ -161,7 +162,7 @@ gdk_selection_owner_get (GdkAtom selection)
 	    (sel_name = gdk_atom_name (selection),
 	     g_print ("gdk_selection_owner_get: %#x (%s) = %#x\n",
 		      selection, sel_name,
-		      (window ? GDK_DRAWABLE_XID (window) : 0)),
+		      (window ? GDK_WINDOW_HWND (window) : 0)),
 	     g_free (sel_name)));
 
   return window;
@@ -180,14 +181,14 @@ gdk_selection_convert (GdkWindow *requestor,
   gchar *sel_name, *tgt_name;
 
   g_return_if_fail (requestor != NULL);
-  if (GDK_DRAWABLE_DESTROYED (requestor))
+  if (GDK_WINDOW_DESTROYED (requestor))
     return;
 
   GDK_NOTE (MISC,
 	    (sel_name = gdk_atom_name (selection),
 	     tgt_name = gdk_atom_name (target),
 	     g_print ("gdk_selection_convert: %#x %#x (%s) %#x (%s)\n",
-		      GDK_DRAWABLE_XID (requestor), selection, sel_name, target, tgt_name),
+		      GDK_WINDOW_HWND (requestor), selection, sel_name, target, tgt_name),
 	     g_free (sel_name),
 	     g_free (tgt_name)));
 
@@ -198,8 +199,8 @@ gdk_selection_convert (GdkWindow *requestor,
        * and store it for later.
        */
       GDK_NOTE (MISC, g_print ("...OpenClipboard(%#x)\n",
-				    GDK_DRAWABLE_XID (requestor)));
-      if (!OpenClipboard (GDK_DRAWABLE_XID (requestor)))
+				    GDK_WINDOW_HWND (requestor)));
+      if (!OpenClipboard (GDK_WINDOW_HWND (requestor)))
 	{
 	  WIN32_API_FAILED ("OpenClipboard");
 	  return;
@@ -250,7 +251,7 @@ gdk_selection_convert (GdkWindow *requestor,
       /* Send ourselves an ersatz selection notify message so that we actually
        * fetch the data.
        */
-      SendMessage (GDK_DRAWABLE_XID (requestor), gdk_selection_notify_msg, selection, target);
+      SendMessage (GDK_WINDOW_HWND (requestor), gdk_selection_notify_msg, selection, target);
     }
   else if (selection == gdk_win32_dropfiles_atom)
     {
@@ -261,16 +262,16 @@ gdk_selection_convert (GdkWindow *requestor,
       GdkSelProp *prop;
 
       prop = g_hash_table_lookup (sel_prop_table,
-				  &GDK_DRAWABLE_XID (gdk_parent_root));
+				  &GDK_WINDOW_HWND (gdk_parent_root));
 
       if (prop != NULL)
 	{
 	  g_hash_table_remove (sel_prop_table,
-			       &GDK_DRAWABLE_XID (gdk_parent_root));
+			       &GDK_WINDOW_HWND (gdk_parent_root));
 	  gdk_sel_prop_store (requestor, prop->type, prop->format,
 			      prop->data, prop->length);
 	  g_free (prop);
-	  SendMessage (GDK_DRAWABLE_XID (requestor), gdk_selection_notify_msg, selection, target);
+	  SendMessage (GDK_WINDOW_HWND (requestor), gdk_selection_notify_msg, selection, target);
 	}
     }
   else
@@ -290,13 +291,13 @@ gdk_selection_property_get (GdkWindow  *requestor,
   g_return_val_if_fail (requestor != NULL, 0);
   g_return_val_if_fail (GDK_IS_WINDOW (requestor), 0);
 
-  if (GDK_DRAWABLE_DESTROYED (requestor))
+  if (GDK_WINDOW_DESTROYED (requestor))
     return 0;
   
   GDK_NOTE (MISC, g_print ("gdk_selection_property_get: %#x\n",
-			   GDK_DRAWABLE_XID (requestor)));
+			   GDK_WINDOW_HWND (requestor)));
 
-  prop = g_hash_table_lookup (sel_prop_table, &GDK_DRAWABLE_XID (requestor));
+  prop = g_hash_table_lookup (sel_prop_table, &GDK_WINDOW_HWND (requestor));
 
   if (prop == NULL)
     {
@@ -319,11 +320,11 @@ gdk_selection_property_delete (GdkWindow *window)
 {
   GdkSelProp *prop;
   
-  prop = g_hash_table_lookup (sel_prop_table, &GDK_DRAWABLE_XID (window));
+  prop = g_hash_table_lookup (sel_prop_table, &GDK_WINDOW_HWND (window));
   if (prop != NULL)
     {
       g_free (prop->data);
-      g_hash_table_remove (sel_prop_table, &GDK_DRAWABLE_XID (window));
+      g_hash_table_remove (sel_prop_table, &GDK_WINDOW_HWND (window));
     }
   else
     g_warning ("huh?");

@@ -190,3 +190,8 @@
  * (available in the Platform SDK)
 */
 /* #define HAVE_DIMM_H 1 */
+
+#define USE_GMODULE 1
+#define USE_MMX 1
+
+/* #undef HAVE_SIGSETJMP */

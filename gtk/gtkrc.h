@@ -186,6 +186,11 @@ guint	gtk_rc_parse_state	(GScanner	     *scanner,
 guint	gtk_rc_parse_priority	(GScanner	     *scanner,
 				 GtkPathPriorityType *priority);
      
+#ifdef G_OS_WIN32
+
+gchar  *gtk_win32_get_installation_directory (void);
+
+#endif
 
 
 #ifdef __cplusplus

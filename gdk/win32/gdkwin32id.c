@@ -24,65 +24,56 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
-#include "config.h"
-
-#include <stdio.h>
 #include <gdk/gdk.h>
 
 #include "gdkprivate-win32.h"
 
-static guint gdk_xid_hash    (HANDLE *xid);
-static gint  gdk_xid_compare (HANDLE *a,
-			      HANDLE *b);
-
-
-static GHashTable *xid_ht = NULL;
-
-
-void
-gdk_xid_table_insert (HANDLE   *xid,
-		      gpointer  data)
-{
-  g_return_if_fail (xid != NULL);
-
-  if (!xid_ht)
-    xid_ht = g_hash_table_new ((GHashFunc) gdk_xid_hash,
-			       (GCompareFunc) gdk_xid_compare);
-
-  g_hash_table_insert (xid_ht, xid, data);
-}
-
-void
-gdk_xid_table_remove (HANDLE xid)
-{
-  if (!xid_ht)
-    xid_ht = g_hash_table_new ((GHashFunc) gdk_xid_hash,
-			       (GCompareFunc) gdk_xid_compare);
-
-  g_hash_table_remove (xid_ht, &xid);
-}
-
-gpointer
-gdk_xid_table_lookup (HANDLE xid)
-{
-  gpointer data = NULL;
-
-  if (xid_ht)
-    data = g_hash_table_lookup (xid_ht, &xid);
-  
-  return data;
-}
-
+static GHashTable *handle_ht = NULL;
 
 static guint
-gdk_xid_hash (HANDLE *xid)
+gdk_handle_hash (HANDLE *handle)
 {
-  return (guint) *xid;
+  return (guint) *handle;
 }
 
 static gint
-gdk_xid_compare (HANDLE *a,
+gdk_handle_compare (HANDLE *a,
 		 HANDLE *b)
 {
   return (*a == *b);
+}
+
+/* Note that the handle is passed by value to this function! */
+void
+gdk_win32_handle_table_insert (HANDLE   handle,
+			       gpointer data)
+{
+  g_return_if_fail (handle != NULL);
+
+  if (!handle_ht)
+    handle_ht = g_hash_table_new ((GHashFunc) gdk_handle_hash,
+				  (GCompareFunc) gdk_handle_compare);
+
+  g_hash_table_insert (handle_ht, &handle, data);
+}
+
+void
+gdk_win32_handle_table_remove (HANDLE handle)
+{
+  if (!handle_ht)
+    handle_ht = g_hash_table_new ((GHashFunc) gdk_handle_hash,
+				  (GCompareFunc) gdk_handle_compare);
+
+  g_hash_table_remove (handle_ht, &handle);
+}
+
+gpointer
+gdk_win32_handle_table_lookup (HANDLE handle)
+{
+  gpointer data = NULL;
+
+  if (handle_ht)
+    data = g_hash_table_lookup (handle_ht, &handle);
+  
+  return data;
 }

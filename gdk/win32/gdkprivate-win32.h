@@ -30,21 +30,15 @@
 #include <gdk/gdkprivate.h>
 #include "gdkwin32.h"
 
-void	 gdk_xid_table_insert    (HANDLE   *hnd,
-				  gpointer data);
-void	 gdk_xid_table_remove    (HANDLE xid);
+void	 gdk_win32_handle_table_insert    (HANDLE   handle,
+					   gpointer data);
+void	 gdk_win32_handle_table_remove    (HANDLE handle);
 
 GdkGC *  _gdk_win32_gc_new       (GdkDrawable        *drawable,
 				  GdkGCValues        *values,
 				  GdkGCValuesMask     values_mask);
-COLORREF gdk_colormap_color      (GdkColormapPrivateWin32 *colormap_private,
-				  gulong                   pixel);
-HDC	gdk_gc_predraw           (GdkDrawable        *drawable,
-				  GdkGCWin32         *gcwin32,
-				  GdkGCValuesMask     usage);
-void	gdk_gc_postdraw          (GdkDrawable        *drawable,
-				  GdkGCWin32         *gcwin32,
-				  GdkGCValuesMask     usage);
+COLORREF gdk_colormap_color      (GdkColormap        *colormap,
+				  gulong              pixel);
 HRGN	BitmapToRegion           (HBITMAP hBmp);
 
 gchar  *gdk_font_full_name_get   (GdkFont *font);
@@ -95,7 +89,6 @@ void    gdk_win32_api_failed        (const gchar *where,
  
 extern LRESULT CALLBACK gdk_window_procedure (HWND, UINT, WPARAM, LPARAM);
 
-extern GdkDrawableClass  _gdk_win32_drawable_class;
 extern HWND		 gdk_root_window;
 extern gboolean		 gdk_event_func_from_window_proc;
 
@@ -111,6 +104,8 @@ extern GdkAtom		 gdk_win32_dropfiles_atom;
 extern GdkAtom		 gdk_ole2_dnd_atom;
 
 extern DWORD		 windows_version;
-#define IS_WIN_NT(dwVersion) (dwVersion < 0x80000000)
+#define IS_WIN_NT()      (windows_version < 0x80000000)
+
+extern gint		 gdk_input_ignore_wintab;
 
 #endif /* __GDK_PRIVATE_WIN32_H__ */
