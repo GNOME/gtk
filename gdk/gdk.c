@@ -1668,11 +1668,6 @@ gdk_event_translate (GdkEvent *event,
   gint return_val;
 
   /* Are static variables used for this purpose thread-safe? */
-  static GdkPoint dnd_drag_start = {0,0},
-		  dnd_drag_oldpos = {0,0};
-  static GdkRectangle dnd_drag_dropzone = {0,0,0,0};
-  static GdkWindowPrivate *real_sw = NULL;
-  static Window dnd_drag_curwin = None;
 
   return_val = FALSE;
 
@@ -1913,9 +1908,9 @@ gdk_event_translate (GdkEvent *event,
 	 && !gdk_dnd.drag_really)
 	{
 	  gdk_dnd.drag_perhaps = 1;
-	  dnd_drag_start.x = xevent->xbutton.x_root;
-	  dnd_drag_start.y = xevent->xbutton.y_root;
-	  real_sw = window_private;
+	  gdk_dnd.dnd_drag_start.x = xevent->xbutton.x_root;
+	  gdk_dnd.dnd_drag_start.y = xevent->xbutton.y_root;
+	  gdk_dnd.real_sw = window_private;
 	  
 	  if(gdk_dnd.drag_startwindows)
 	    {
@@ -1938,7 +1933,8 @@ gdk_event_translate (GdkEvent *event,
 	    
 	    window_private->dnd_drag_savedeventmask = dnd_winattr.your_event_mask;
 	    dnd_setwinattr.event_mask = 
-	      window_private->dnd_drag_eventmask = ButtonMotionMask | EnterWindowMask | LeaveWindowMask;
+	      window_private->dnd_drag_eventmask = ButtonMotionMask |
+			EnterWindowMask | LeaveWindowMask;
 	    XChangeWindowAttributes(gdk_display, window_private->xwindow,
 				    CWEventMask, &dnd_setwinattr);
 	}
@@ -1982,8 +1978,8 @@ gdk_event_translate (GdkEvent *event,
 	    XSetWindowAttributes attrs;
 	    /* Reset event mask to pre-drag value, assuming event_mask
 	       doesn't change during drag */
-	    attrs.event_mask = real_sw->dnd_drag_savedeventmask;
-	    XChangeWindowAttributes(gdk_display, real_sw->xwindow,
+	    attrs.event_mask = gdk_dnd.real_sw->dnd_drag_savedeventmask;
+	    XChangeWindowAttributes(gdk_display, gdk_dnd.real_sw->xwindow,
 				      CWEventMask, &attrs);
 	  }
 	  
@@ -2013,14 +2009,14 @@ gdk_event_translate (GdkEvent *event,
 	    gdk_dnd.drag_startwindows = NULL;
 	    }
 
-	  real_sw = NULL;
+	  gdk_dnd.real_sw = NULL;
 	  }
 
 	gdk_dnd.drag_perhaps = 0;
-	dnd_drag_start.x = dnd_drag_start.y = 0;
-	dnd_drag_dropzone.x = dnd_drag_dropzone.y = 0;
-	dnd_drag_dropzone.width = dnd_drag_dropzone.height = 0;
-	dnd_drag_curwin = None;
+	gdk_dnd.dnd_drag_start.x = gdk_dnd.dnd_drag_start.y = 0;
+	gdk_dnd.dnd_drag_dropzone.x = gdk_dnd.dnd_drag_dropzone.y = 0;
+	gdk_dnd.dnd_drag_dropzone.width = gdk_dnd.dnd_drag_dropzone.height = 0;
+	gdk_dnd.dnd_drag_curwin = None;
 	return_val = window_private?TRUE:FALSE;
       } else
 	return_val = window_private && !window_private->destroyed;
@@ -2056,12 +2052,13 @@ gdk_event_translate (GdkEvent *event,
       event->motion.source = GDK_SOURCE_MOUSE;
       event->motion.deviceid = GDK_CORE_POINTER;
 
-#define IS_IN_ZONE(cx, cy) (cx >= dnd_drag_dropzone.x \
-     && cy >= dnd_drag_dropzone.y \
-     && cx < (dnd_drag_dropzone.x + dnd_drag_dropzone.width) \
-     && cy < (dnd_drag_dropzone.y + dnd_drag_dropzone.height))
+#define IS_IN_ZONE(cx, cy) (cx >= gdk_dnd.dnd_drag_dropzone.x \
+     && cy >= gdk_dnd.dnd_drag_dropzone.y \
+     && cx < (gdk_dnd.dnd_drag_dropzone.x + gdk_dnd.dnd_drag_dropzone.width) \
+     && cy < (gdk_dnd.dnd_drag_dropzone.y + gdk_dnd.dnd_drag_dropzone.height))
 
-      if(gdk_dnd.drag_perhaps && gdk_dnd.drag_really)
+      if(gdk_dnd.drag_perhaps && gdk_dnd.drag_really
+	 /* && event->motion.is_hint */ /* HINTME */)
 	{
 	  /* First, we have to find what window the motion was in... */
 	  /* XXX there has to be a better way to do this, perhaps with
@@ -2095,37 +2092,37 @@ gdk_event_translate (GdkEvent *event,
 	    }
 	  GDK_NOTE (DND,
 	    g_print("Drag is now in window %#lx, lastwin was %#lx, ddc = %#lx\n",
-		    curwin, lastwin, dnd_drag_curwin));
-	  if(curwin != dnd_drag_curwin && curwin != lastwin)
+		    curwin, lastwin, gdk_dnd.dnd_drag_curwin));
+	  if(curwin != gdk_dnd.dnd_drag_curwin && curwin != lastwin)
 	    {
 	      /* We have left one window and entered another
 		 (do leave & enter bits) */
-	      if(dnd_drag_curwin != None)
-		  gdk_dnd_drag_leave(dnd_drag_curwin);
-	      dnd_drag_curwin = curwin;
-	      gdk_dnd_drag_enter(dnd_drag_curwin);
-	      dnd_drag_dropzone.x = dnd_drag_dropzone.y = 0;
-	      dnd_drag_dropzone.width = dnd_drag_dropzone.height = 0;
+	      if(gdk_dnd.dnd_drag_curwin != None)
+		  gdk_dnd_drag_leave(gdk_dnd.dnd_drag_curwin);
+	      gdk_dnd.dnd_drag_curwin = curwin;
+	      gdk_dnd_drag_enter(gdk_dnd.dnd_drag_curwin);
+	      gdk_dnd.dnd_drag_dropzone.x = gdk_dnd.dnd_drag_dropzone.y = 0;
+	      gdk_dnd.dnd_drag_dropzone.width = gdk_dnd.dnd_drag_dropzone.height = 0;
 	      gdk_dnd.dnd_drag_target = None;
 	      GDK_NOTE (DND,
 	        g_print("curwin = %#lx, lastwin = %#lx, dnd_drag_curwin = %#lx\n",
-		        curwin, lastwin, dnd_drag_curwin));
+		        curwin, lastwin, gdk_dnd.dnd_drag_curwin));
 
 	      gdk_dnd_display_drag_cursor(xevent->xmotion.x_root,
 					  xevent->xmotion.y_root,
 					  FALSE, TRUE);
 	    }
-	  else if(dnd_drag_dropzone.width > 0
-		  && dnd_drag_dropzone.height > 0
-		  && curwin == dnd_drag_curwin)
+	  else if(gdk_dnd.dnd_drag_dropzone.width > 0
+		  && gdk_dnd.dnd_drag_dropzone.height > 0
+		  && curwin == gdk_dnd.dnd_drag_curwin)
 	    {
 	      /* Handle all that dropzone stuff - thanks John ;-) */
 	      if (gdk_dnd.dnd_drag_target != None)
 		{
 		  gboolean in_zone = IS_IN_ZONE(xevent->xmotion.x_root,
 						xevent->xmotion.y_root);
-		  gboolean old_in_zone = IS_IN_ZONE(dnd_drag_oldpos.x, 
-						    dnd_drag_oldpos.y);
+		  gboolean old_in_zone = IS_IN_ZONE(gdk_dnd.dnd_drag_oldpos.x, 
+						    gdk_dnd.dnd_drag_oldpos.y);
 
 		  if (!in_zone && old_in_zone)
 		    {
@@ -2141,8 +2138,8 @@ gdk_event_translate (GdkEvent *event,
 		      /* We were outside drop zone but in the window
 			 - have to send enter events */
 		      gdk_dnd_drag_enter(curwin);
-		      dnd_drag_curwin = curwin;
-		      dnd_drag_dropzone.x = dnd_drag_dropzone.y = 0;
+		      gdk_dnd.dnd_drag_curwin = curwin;
+		      gdk_dnd.dnd_drag_dropzone.x = gdk_dnd.dnd_drag_dropzone.y = 0;
 		      gdk_dnd.dnd_drag_target = None;
 		    }
 		}
@@ -2209,12 +2206,12 @@ gdk_event_translate (GdkEvent *event,
 	  {
 	    g_print("We may[%d] have a drag into %#lx = %#lx\n",
 		    gdk_dnd.drag_really,
-		    xevent->xcrossing.window, real_sw->xwindow);
+		    xevent->xcrossing.window, gdk_dnd.real_sw->xwindow);
 	  }
 #endif /* G_ENABLE_DEBUG */
 
 	if (gdk_dnd.drag_perhaps && gdk_dnd.drag_really && 
-	    (xevent->xcrossing.window == real_sw->xwindow))
+	    (xevent->xcrossing.window == gdk_dnd.real_sw->xwindow))
 	  {
 	    gdk_dnd.drag_really = 0;
 
@@ -2280,19 +2277,25 @@ gdk_event_translate (GdkEvent *event,
 	{
 	  g_print("We may[%d] have a drag out of %#lx = %#lx\n",
 		  gdk_dnd.drag_really,
-		  xevent->xcrossing.window, real_sw->xwindow);
+		  xevent->xcrossing.window, gdk_dnd.real_sw->xwindow);
 	}
 #endif /* G_ENABLE_DEBUG */
       if (gdk_dnd.drag_perhaps && !gdk_dnd.drag_really &&
-	  (xevent->xcrossing.window == real_sw->xwindow))
+	  (xevent->xcrossing.window == gdk_dnd.real_sw->xwindow))
 	{
-	  gdk_dnd_drag_addwindow((GdkWindow *) real_sw);
-	  gdk_dnd_drag_begin((GdkWindow *) real_sw);
-	  XGrabPointer(gdk_display, real_sw->xwindow, False,
-		       ButtonMotionMask |
+	  gboolean xgpret;
+	  gdk_dnd_drag_addwindow((GdkWindow *) gdk_dnd.real_sw);
+	  gdk_dnd_drag_begin((GdkWindow *) gdk_dnd.real_sw);
+	  xgpret = 
+	  XGrabPointer(gdk_display, gdk_dnd.real_sw->xwindow, False,
+		       ButtonMotionMask | PointerMotionMask |
+		       /* PointerMotionHintMask | */ /* HINTME */
 		       ButtonPressMask | ButtonReleaseMask,
 		       GrabModeAsync, GrabModeAsync, gdk_root_window,
 		       None, CurrentTime);
+#ifdef G_ENABLE_DEBUG
+	  GDK_NOTE(DND, g_print("xgpret = %d\n", xgpret));
+#endif
 	  gdk_dnd.dnd_grabbed = TRUE;
 	  gdk_dnd.drag_really = 1;
 	  gdk_dnd_display_drag_cursor(xevent->xmotion.x_root,
@@ -2751,7 +2754,7 @@ gdk_event_translate (GdkEvent *event,
 	  return_val = FALSE;
 
 	  if (window && gdk_dnd.drag_really &&
-	      xevent->xclient.data.l[0] == dnd_drag_curwin &&
+	      xevent->xclient.data.l[0] == gdk_dnd.dnd_drag_curwin &&
 	      event->dragrequest.u.flags.sendreply == 0)
 	    {
 	      /* Got request - do we need to ask user? */
@@ -2775,14 +2778,14 @@ gdk_event_translate (GdkEvent *event,
 		  window_private->dnd_drag_data_type =
 		    xevent->xclient.data.l[4];
 
-		  gdk_dnd.dnd_drag_target = dnd_drag_curwin;
+		  gdk_dnd.dnd_drag_target = gdk_dnd.dnd_drag_curwin;
 		  gdk_dnd_display_drag_cursor(-1, -1, TRUE, TRUE);
 		}
-	      dnd_drag_dropzone.x = xevent->xclient.data.l[2] & 65535;
-	      dnd_drag_dropzone.y =
+	      gdk_dnd.dnd_drag_dropzone.x = xevent->xclient.data.l[2] & 65535;
+	      gdk_dnd.dnd_drag_dropzone.y =
 		(xevent->xclient.data.l[2] >> 16) & 65535;
-	      dnd_drag_dropzone.width = xevent->xclient.data.l[3] & 65535;
-	      dnd_drag_dropzone.height =
+	      gdk_dnd.dnd_drag_dropzone.width = xevent->xclient.data.l[3] & 65535;
+	      gdk_dnd.dnd_drag_dropzone.height =
 		(xevent->xclient.data.l[3] >> 16) & 65535;
 	    }
 	}

@@ -160,6 +160,11 @@ struct _GdkDndGlobals {
   gboolean	  drag_really, drag_perhaps, dnd_grabbed;
   Window	  dnd_drag_target;
   GdkPoint	  drag_dropcoords;
+
+  GdkPoint dnd_drag_start, dnd_drag_oldpos;
+  GdkRectangle dnd_drag_dropzone;
+  GdkWindowPrivate *real_sw;
+  Window dnd_drag_curwin;
 };
 typedef struct _GdkDndGlobals GdkDndGlobals;
 
