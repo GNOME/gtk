@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.0\n"
 "POT-Creation-Date: 2002-10-24 05:28+0200\n"
-"PO-Revision-Date: 2002-12-29 19:37+EDT\n"
+"PO-Revision-Date: 2003-01-14 11:02+EDT\n"
 "Last-Translator: Ge'ez Frontier Foundation <locales@geez.org>\n"
 "Language-Team: Amharic <locales@geez.org>\n"
 "MIME-Version: 1.0\n"
@@ -1105,7 +1105,7 @@ msgstr ""
 #: gtk/gtkcellrenderertext.c:291 gtk/gtkcellrenderertext.c:292
 #: gtk/gtktexttag.c:339 gtk/gtktexttag.c:340
 msgid "Font stretch"
-msgstr ""
+msgstr "የፊደል ቅርጽ ዘርጋ"
 
 #: gtk/gtkcellrenderertext.c:300 gtk/gtkcellrenderertext.c:301
 #: gtk/gtktexttag.c:348 gtk/gtktexttag.c:349
@@ -1759,7 +1759,7 @@ msgstr "_አዲስ ዶሴ"
 
 #: gtk/gtkfilesel.c:1074
 msgid "De_lete File"
-msgstr "ፋይል _ሰረዝ"
+msgstr "ፋይል _አጥፉ"
 
 #: gtk/gtkfilesel.c:1085
 msgid "_Rename File"
@@ -1855,7 +1855,7 @@ msgstr ""
 
 #: gtk/gtkfilesel.c:1671
 msgid "Rename File"
-msgstr ""
+msgstr "ፋይልን እንደገና ሰይም"
 
 #: gtk/gtkfilesel.c:1686
 #, c-format
@@ -1925,7 +1925,7 @@ msgstr ""
 
 #: gtk/gtkfontsel.c:219
 msgid "Preview text"
-msgstr "የጽሑፉ ቅድመ እይታ"
+msgstr "የጽሑፉ ቅድመ ዕይታ"
 
 #: gtk/gtkfontsel.c:220
 msgid "The text to display in order to demonstrate the selected font."
@@ -3230,7 +3230,7 @@ msgstr "እንደገና አድርግ (_R)"
 
 #: gtk/gtkstock.c:318
 msgid "_Refresh"
-msgstr "አድስ (_R)"
+msgstr "በድጋሚ ጀምር (_R)"
 
 #: gtk/gtkstock.c:319
 msgid "_Remove"
@@ -3302,11 +3302,11 @@ msgstr "በመስኮቱ ልክ አጉላ (_F)"
 
 #: gtk/gtkstock.c:336
 msgid "Zoom _In"
-msgstr "ከቅርበት እይታ (_I)"
+msgstr "ከቅርበት ዕይታ (_I)"
 
 #: gtk/gtkstock.c:337
 msgid "Zoom _Out"
-msgstr "ከርቀት እይታ (_O)"
+msgstr "ከርቀት ዕይታ (_O)"
 
 #: gtk/gtktable.c:156
 msgid "Rows"
@@ -4111,7 +4111,7 @@ msgstr ""
 
 #: gtk/gtkwidget.c:486
 msgid "Style"
-msgstr "ዓይነት"
+msgstr "ዘይቤ"
 
 #: gtk/gtkwidget.c:487
 msgid ""
