@@ -1,5 +1,14 @@
 Mon Feb  2 04:15:08 1998  Tim Janik  <timj@gimp.org>
 
+	* gtk/gtkwindow.c:
+	* gtk/gtkwidget.c:
+	* gtk/gtkmain.c:
+	* gtk/gtkwidget.c:
+	* gtk/gtkcontainer.c:
+	* gtk/gtkprivate.h (GTK_PRIVATE_UNSET_FLAG) (GTK_PRIVATE_UNSET_FLAGS): 
+	  changed name to reflect that these macros in fact can't operate on
+	  multiple flags.
+
 	* gtk/gtktoolbar.c: fixed destroy handler, so it doesn't
 	  segfault with the new refcounting scheme anymore.
 
