@@ -1,11 +1,15 @@
+2005-02-08  Rhys Jones  <rhys@sucs.org>
+
+	* cy.po: Updated Welsh (fuzzy-bashing, plural-forms standardisation).
+
 2005-02-07  Nikos Charonitakis  <charosn@her.forthnet.gr>
 
 	* el.po: Updated Greek translation.
 
 2005-02-07  David Lodge <dave@cirt.net>
-                                                                                
-        * en_GB.po: Updated British translation.
-                                                                                
+
+	* en_GB.po: Updated British translation.
+
 2005-02-06  Alexander Shopov  <ash@contact.bg>
 
 	* bg.po: Updated Bulgarian translation by
