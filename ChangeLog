@@ -1,3 +1,16 @@
+Wed May  5 10:47:54 1999  Owen Taylor  <otaylor@redhat.com>
+
+	* configure.in (LIBS): Add $INTLLIBS into $LIBS
+	directly, rather than repeating the checks for
+	gettext.
+
+	* INSTALL: Added information about gettext and
+	NLS support.
+
+	* acinclude.m4 (LIBM): Check for dgettext, not
+	just gettext. This should hopefully fix things wrt
+	systems with old versions of GNU gettext installed.
+
 Tue May  4 11:12:56 PDT 1999 Manish Singh <yosh@gimp.org>
 
 	* gdk/gdkim.c (gdk_im_real_open): cast the return value of
