@@ -1,3 +1,9 @@
+Sat Jul  3 01:48:19 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkentry.c (gtk_entry_move_visually): Let the cursor move
+	to the right end of the entry text, even if it ends in combining
+	marks.  (#141728, Theppitak Karoonboonyanan)
+
 Fri Jul  2 23:34:33 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkcombobox.c (gtk_combo_box_unset_model): Unset the displayed
