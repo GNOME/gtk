@@ -14,6 +14,7 @@ gtk_box_get_type
 gtk_button_box_get_type
 gtk_button_get_type
 gtk_calendar_get_type
+gtk_cell_layout_get_type
 gtk_cell_renderer_get_type
 gtk_cell_renderer_pixbuf_get_type
 gtk_cell_renderer_text_get_type
@@ -24,12 +25,15 @@ gtk_clist_get_type
 gtk_color_button_get_type
 gtk_color_selection_dialog_get_type
 gtk_color_selection_get_type
+gtk_combo_box_get_type
+gtk_combo_box_entry_get_type
 gtk_combo_get_type
 gtk_container_get_type
 gtk_ctree_get_type
 gtk_curve_get_type
 gtk_dialog_get_type
 gtk_drawing_area_get_type
+gtk_entry_completion_get_type
 gtk_entry_get_type
 gtk_event_box_get_type
 gtk_expander_get_type
@@ -118,6 +122,7 @@ gtk_tool_button_get_type
 gtk_tool_item_get_type
 gtk_tree_get_type
 gtk_tree_item_get_type
+gtk_tree_model_filter_get_type
 gtk_tree_model_sort_get_type
 gtk_tree_selection_get_type
 gtk_tree_store_get_type
