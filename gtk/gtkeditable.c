@@ -298,7 +298,8 @@ gtk_editable_selection_clear (GtkWidget         *widget,
   
   /* Let the selection handling code know that the selection
    * has been changed, since we've overriden the default handler */
-  gtk_selection_clear (widget, event);
+  if (!gtk_selection_clear (widget, event))
+    return FALSE;
   
   editable = GTK_EDITABLE (widget);
   
@@ -317,7 +318,7 @@ gtk_editable_selection_clear (GtkWidget         *widget,
       editable->clipboard_text = NULL;
     }
   
-  return FALSE;
+  return TRUE;
 }
 
 static void

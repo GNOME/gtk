@@ -387,32 +387,35 @@ gtk_range_default_htrough_click (GtkRange *range,
 				 gint      y,
 				 gfloat	  *jump_perc)
 {
-  gint xthickness;
   gint ythickness;
   gint trough_width;
   gint trough_height;
   gint slider_x;
+  gint slider_length;
+  gint left, right;
 
   g_return_val_if_fail (range != NULL, GTK_TROUGH_NONE);
   g_return_val_if_fail (GTK_IS_RANGE (range), GTK_TROUGH_NONE);
 
-  xthickness = GTK_WIDGET (range)->style->klass->xthickness;
   ythickness = GTK_WIDGET (range)->style->klass->ythickness;
 
-  if ((x > xthickness) && (y > ythickness))
+  gtk_range_trough_hdims (range, &left, &right);
+  gdk_window_get_size (range->slider, &slider_length, NULL);
+  right += slider_length;
+	      
+  if ((x > left) && (y > ythickness))
     {
       gdk_window_get_size (range->trough, &trough_width, &trough_height);
 
-      if ((x < (trough_width - xthickness) && (y < (trough_height - ythickness))))
+      if ((x < right) && (y < (trough_height - ythickness)))
 	{
-	  gdk_window_get_position (range->slider, &slider_x, NULL);
-	  
 	  if (jump_perc)
 	    {
-	      *jump_perc = ((double) x) / ((double) trough_width);
-
+	      *jump_perc = ((gdouble) (x - left)) / ((gdouble) (right - left));
 	      return GTK_TROUGH_JUMP;
 	    }
+	  
+	  gdk_window_get_position (range->slider, &slider_x, NULL);
 	  
 	  if (x < slider_x)
 	    return GTK_TROUGH_START;
@@ -431,31 +434,35 @@ gtk_range_default_vtrough_click (GtkRange *range,
 				 gfloat   *jump_perc)
 {
   gint xthickness;
-  gint ythickness;
   gint trough_width;
   gint trough_height;
   gint slider_y;
+  gint top, bottom;
+  gint slider_length;
 
   g_return_val_if_fail (range != NULL, GTK_TROUGH_NONE);
   g_return_val_if_fail (GTK_IS_RANGE (range), GTK_TROUGH_NONE);
 
   xthickness = GTK_WIDGET (range)->style->klass->xthickness;
-  ythickness = GTK_WIDGET (range)->style->klass->ythickness;
 
-  if ((x > xthickness) && (y > ythickness))
+  gtk_range_trough_vdims (range, &top, &bottom);
+  gdk_window_get_size (range->slider, NULL, &slider_length);
+  bottom += slider_length;
+	      
+  if ((x > xthickness) && (y > top))
     {
       gdk_window_get_size (range->trough, &trough_width, &trough_height);
 
-      if ((x < (trough_width - xthickness) && (y < (trough_height - ythickness))))
+      if ((x < (trough_width - xthickness) && (y < bottom)))
 	{
-	  gdk_window_get_position (range->slider, NULL, &slider_y);
-	  
 	  if (jump_perc)
 	    {
-	      *jump_perc = ((double) y) / ((double) trough_height);
+	      *jump_perc = ((gdouble) (y - top)) / ((gdouble) (bottom - top));
 
 	      return GTK_TROUGH_JUMP;
 	    }
+	  
+	  gdk_window_get_position (range->slider, NULL, &slider_y);
 	  
 	  if (y < slider_y)
 	    return GTK_TROUGH_START;

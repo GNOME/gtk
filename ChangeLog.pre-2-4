@@ -1,3 +1,30 @@
+Tue Mar 10 14:24:09 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* gtk/gtkselection.c (gtk_selection_clear): Make the return
+	  result reflect whether the clear event was out of data.
+
+	* gtk/gtkeditable.c: Ignore out of date selection clear
+	  events.
+
+	* gtk/gtkentry.c gtk/gtktext.c: Don't synthesize releases
+	  on [2/3]BUTTON presses, since we get the normal click as well.
+
+	  Claim the selection when selecting words/lines.
+
+Tue Mar 10 13:34:29 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* gtk/gtkrange.c (gtk_range_default_[vh]trough_click): 
+	  Take forward/back step arrows into account when computing
+	  position for middle button clicks.
+
+	* gtk/gtktext.c gtk/gtkentry.c:
+	  - Fixes for deleting characters (don't subtract guints and get
+	    negative numbers!)
+	  - Reset cursor_virtual_x when moving by words and lines
+	  - Extra sanity checks
+	  - Fix to gtk_text_get_chars 
+	         (from Tony Gale <gale@daedalus.dera.gov.uk>)
+
 1998-03-10  Federico Mena Quintero  <federico@nuclecu.unam.mx>
 
 	* gdk/gdkgc.c (gdk_gc_set_function): Replace GXor by GXxor.  Seems

@@ -97,8 +97,10 @@ static void gtk_delete_forward_word       (GtkEntry          *entry);
 static void gtk_delete_backward_word      (GtkEntry          *entry);
 static void gtk_delete_line               (GtkEntry          *entry);
 static void gtk_delete_to_line_end        (GtkEntry          *entry);
-static void gtk_select_word               (GtkEntry          *entry);
-static void gtk_select_line               (GtkEntry          *entry);
+static void gtk_select_word               (GtkEntry          *entry,
+					   guint32            time);
+static void gtk_select_line               (GtkEntry          *entry,
+					   guint32            time);
 
 
 static void gtk_entry_set_selection       (GtkEditable       *editable,
@@ -705,7 +707,7 @@ gtk_entry_button_press (GtkWidget      *widget,
   entry = GTK_ENTRY (widget);
   editable = GTK_EDITABLE (widget);
   
-  if (entry->button)
+  if (entry->button && (event->type == GDK_BUTTON_PRESS))
     {
       GdkEventButton release_event = *event;
 
@@ -736,11 +738,11 @@ gtk_entry_button_press (GtkWidget      *widget,
 	  break;
 
 	case GDK_2BUTTON_PRESS:
-	  gtk_select_word (entry);
+	  gtk_select_word (entry, event->time);
 	  break;
 
 	case GDK_3BUTTON_PRESS:
-	  gtk_select_line (entry);
+	  gtk_select_line (entry, event->time);
 	  break;
 
 	default:
@@ -1424,8 +1426,11 @@ gtk_entry_insert_text (GtkEditable *editable,
     new_text_length = entry->text_max_length - entry->text_length;
 
   /* Don't insert anything, if there was nothing to insert. */
-  if (new_text_length <= 0)
+  if (new_text_length == 0)
     return;
+
+  if (new_text_length < 0)
+    new_text_length = strlen (new_text);
 
   start_pos = *position;
   end_pos = start_pos + new_text_length;
@@ -1523,14 +1528,19 @@ gtk_entry_get_chars      (GtkEditable   *editable,
   start_pos = MIN(entry->text_length, start_pos);
   end_pos = MIN(entry->text_length, end_pos);
 
-  c = entry->text[end_pos];
-  entry->text[end_pos] = '\0';
-
-  retval = g_strdup (&entry->text[start_pos]);
-
-  entry->text[end_pos] = c;
-
-  return retval;
+  if (start_pos <= end_pos)
+    {
+      c = entry->text[end_pos];
+      entry->text[end_pos] = '\0';
+      
+      retval = g_strdup (&entry->text[start_pos]);
+      
+      entry->text[end_pos] = c;
+      
+      return retval;
+    }
+  else
+    return NULL;
 }
 
 static void
@@ -1767,7 +1777,7 @@ gtk_delete_to_line_end (GtkEntry *entry)
 }
 
 static void
-gtk_select_word (GtkEntry *entry)
+gtk_select_word (GtkEntry *entry, guint32 time)
 {
   gint start_pos;
   gint end_pos;
@@ -1781,16 +1791,21 @@ gtk_select_word (GtkEntry *entry)
   gtk_move_forward_word (entry);
   end_pos = editable->current_pos;
 
+  editable->has_selection = TRUE;
   gtk_entry_set_selection (editable, start_pos, end_pos);
+  gtk_editable_claim_selection (editable, start_pos != end_pos, time);
 }
 
 static void
-gtk_select_line (GtkEntry *entry)
+gtk_select_line (GtkEntry *entry, guint32 time)
 {
   GtkEditable *editable;
   editable = GTK_EDITABLE (entry);
 
+  editable->has_selection = TRUE;
   gtk_entry_set_selection (editable, 0, entry->text_length);
+  gtk_editable_claim_selection (editable, entry->text_length != 0, time);
+
   editable->current_pos = editable->selection_end_pos;
 }
 
