@@ -693,9 +693,9 @@ gtk_combo_box_set_popup_widget (GtkComboBox *combo_box,
       if (!combo_box->priv->popup_window)
         {
           combo_box->priv->popup_window = gtk_window_new (GTK_WINDOW_POPUP);
-	  gtk_window_set_screen (combo_box->priv->popup_window, 
-				 gtk_widget_get_screen (combo_box));
-	  
+          gtk_window_set_screen (GTK_WINDOW (combo_box->priv->popup_window),
+                                 gtk_widget_get_screen (GTK_WIDGET (combo_box)));
+
           combo_box->priv->popup_frame = gtk_frame_new (NULL);
           gtk_frame_set_shadow_type (GTK_FRAME (combo_box->priv->popup_frame),
                                      GTK_SHADOW_NONE);

@@ -1,3 +1,8 @@
+Sun Feb  8 01:28:02 2004  Manish Singh  <yosh@gimp.org>
+
+	* gtk/gtkcombobox.c (gtk_combo_box_set_popup_widget): Add appropriate
+	type casts for the gtk_window_set_screen() call.
+
 Sun Feb  8 01:44:06 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkcombobox.c (gtk_combo_box_set_popup_widget): Make popups 
