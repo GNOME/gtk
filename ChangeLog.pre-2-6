@@ -1,3 +1,12 @@
+2002-06-04  Daniel Elstner  <daniel.elstner@gmx.net>
+
+	[ merge from stable ]
+
+	* gtk/gtkcellrenderertoggle.c (gtk_cell_renderer_toggle_render):
+	Really fix #83796: Revert jrb's last patch, and move the second
+	if-clause into the fist one's else-branch.  This is also what
+	the other cell renderers do.
+
 2002-06-03  Federico Mena Quintero  <federico@ximian.com>
 
 	* gdk/gdkpixbuf-drawable.c (rgb565msb): Fix the MSB -> MSB case.
