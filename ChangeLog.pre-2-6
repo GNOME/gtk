@@ -1,3 +1,14 @@
+Fri Sep 27 16:23:49 2002  Owen Taylor  <otaylor@redhat.com>
+	 
+ 	* gtk/gtklabel.c : Replaced instances where strlen (label->label) is
+ 	used to get a byte code with strlen (label->text) as label->text 
+	contains the actual display text, while label->label contains
+	markup / mnemonics. (#92683, Patch from Shivram U  
+	<shivaram.upadhyayula@wipro.com>, with some additions.)
+
+	* gtk/gtklabel.c (gtk_label_set_uline_text_internal): 
+	Fix a leftover, now incorrect comment.
+	
 Fri Sep 27 16:15:11 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtknotebook.c (gtk_notebook_get_event_window_position):

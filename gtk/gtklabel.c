@@ -539,8 +539,8 @@ gtk_label_get_property (GObject     *object,
     case PROP_CURSOR_POSITION:
       if (label->select_info)
 	{
-	  gint offset = g_utf8_pointer_to_offset (label->label,
-						  label->label + label->select_info->selection_end);
+	  gint offset = g_utf8_pointer_to_offset (label->text,
+						  label->text + label->select_info->selection_end);
 	  g_value_set_int (value, offset);
 	}
       else
@@ -549,8 +549,8 @@ gtk_label_get_property (GObject     *object,
     case PROP_SELECTION_BOUND:
       if (label->select_info)
 	{
-	  gint offset = g_utf8_pointer_to_offset (label->label,
-						  label->label + label->select_info->selection_anchor);
+	  gint offset = g_utf8_pointer_to_offset (label->text,
+						  label->text + label->select_info->selection_anchor);
 	  g_value_set_int (value, offset);
 	}
       else
@@ -1851,8 +1851,10 @@ gtk_label_set_uline_text_internal (GtkLabel    *label,
   g_return_if_fail (GTK_IS_LABEL (label));
   g_return_if_fail (str != NULL);
 
-  /* Convert text to wide characters */
-
+  /* Split text into the base text and a separate pattern
+   * of underscores.
+   */
+  
   new_str = g_new (gchar, strlen (str) + 1);
   pattern = g_new (gchar, g_utf8_strlen (str, -1) + 1);
   
@@ -2167,7 +2169,7 @@ gtk_label_button_press (GtkWidget      *widget,
 
       if (event->type == GDK_3BUTTON_PRESS)
 	{
-	  gtk_label_select_region_index (label, 0, strlen (label->label));
+	  gtk_label_select_region_index (label, 0, strlen (label->text));
 	  return TRUE;
 	}
       
@@ -2207,7 +2209,7 @@ gtk_label_button_press (GtkWidget      *widget,
       else
 	{
 	  if (event->type == GDK_3BUTTON_PRESS)
-	      gtk_label_select_region_index (label, 0, strlen (label->label));
+	      gtk_label_select_region_index (label, 0, strlen (label->text));
 	  else if (event->type == GDK_2BUTTON_PRESS)
 	      gtk_label_select_word (label);
 	  else 
@@ -2799,10 +2801,10 @@ gtk_label_move_logically (GtkLabel *label,
 			  gint      start,
 			  gint      count)
 {
-  gint offset = g_utf8_pointer_to_offset (label->label,
-					  label->label + start);
+  gint offset = g_utf8_pointer_to_offset (label->text,
+					  label->text + start);
 
-  if (label->label)
+  if (label->text)
     {
       PangoLogAttr *log_attrs;
       gint n_attrs;
@@ -2810,7 +2812,7 @@ gtk_label_move_logically (GtkLabel *label,
 
       gtk_label_ensure_layout (label);
       
-      length = g_utf8_strlen (label->label, -1);
+      length = g_utf8_strlen (label->text, -1);
 
       pango_layout_get_log_attrs (label->layout, &log_attrs, &n_attrs);
 
@@ -2834,7 +2836,7 @@ gtk_label_move_logically (GtkLabel *label,
       g_free (log_attrs);
     }
 
-  return g_utf8_offset_to_pointer (label->label, offset) - label->label;
+  return g_utf8_offset_to_pointer (label->text, offset) - label->text;
 }
 
 static gint
@@ -2887,7 +2889,7 @@ gtk_label_move_visually (GtkLabel *label,
       index = new_index;
       
       while (new_trailing--)
-	index = g_utf8_next_char (label->label + new_index) - label->label;
+	index = g_utf8_next_char (label->text + new_index) - label->text;
     }
   
   return index;
@@ -2897,11 +2899,11 @@ static gint
 gtk_label_move_forward_word (GtkLabel *label,
 			     gint      start)
 {
-  gint new_pos = g_utf8_pointer_to_offset (label->label,
-					   label->label + start);
+  gint new_pos = g_utf8_pointer_to_offset (label->text,
+					   label->text + start);
   gint length;
 
-  length = g_utf8_strlen (label->label, -1);
+  length = g_utf8_strlen (label->text, -1);
   if (new_pos < length)
     {
       PangoLogAttr *log_attrs;
@@ -2919,7 +2921,7 @@ gtk_label_move_forward_word (GtkLabel *label,
       g_free (log_attrs);
     }
 
-  return g_utf8_offset_to_pointer (label->label, new_pos) - label->label;
+  return g_utf8_offset_to_pointer (label->text, new_pos) - label->text;
 }
 
 
@@ -2927,11 +2929,11 @@ static gint
 gtk_label_move_backward_word (GtkLabel *label,
 			      gint      start)
 {
-  gint new_pos = g_utf8_pointer_to_offset (label->label,
-					   label->label + start);
+  gint new_pos = g_utf8_pointer_to_offset (label->text,
+					   label->text + start);
   gint length;
 
-  length = g_utf8_strlen (label->label, -1);
+  length = g_utf8_strlen (label->text, -1);
   
   if (new_pos > 0)
     {
@@ -2951,7 +2953,7 @@ gtk_label_move_backward_word (GtkLabel *label,
       g_free (log_attrs);
     }
 
-  return g_utf8_offset_to_pointer (label->label, new_pos) - label->label;
+  return g_utf8_offset_to_pointer (label->text, new_pos) - label->text;
 }
 
 static void
@@ -3004,7 +3006,7 @@ gtk_label_move_cursor (GtkLabel       *label,
 	case GTK_MOVEMENT_PARAGRAPH_ENDS:
 	case GTK_MOVEMENT_BUFFER_ENDS:
 	  /* FIXME: Can do better here */
-	  new_pos = count < 0 ? 0 : strlen (label->label);
+	  new_pos = count < 0 ? 0 : strlen (label->text);
 	  break;
 	case GTK_MOVEMENT_DISPLAY_LINES:
 	case GTK_MOVEMENT_PARAGRAPHS:
@@ -3038,7 +3040,7 @@ gtk_label_move_cursor (GtkLabel       *label,
 	case GTK_MOVEMENT_PARAGRAPH_ENDS:
 	case GTK_MOVEMENT_BUFFER_ENDS:
 	  /* FIXME: Can do better here */
-	  new_pos = count < 0 ? 0 : strlen (label->label);
+	  new_pos = count < 0 ? 0 : strlen (label->text);
 	  break;
 	case GTK_MOVEMENT_DISPLAY_LINES:
 	case GTK_MOVEMENT_PARAGRAPHS:
@@ -3086,7 +3088,7 @@ gtk_label_copy_clipboard (GtkLabel *label)
 static void
 gtk_label_select_all (GtkLabel *label)
 {
-  gtk_label_select_region_index (label, 0, strlen (label->label));
+  gtk_label_select_region_index (label, 0, strlen (label->text));
 }
 
 /* Quick hack of a popup menu
