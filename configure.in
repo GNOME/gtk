@@ -1027,7 +1027,7 @@ if test "x$gdktarget" = "xx11"; then
 	  use_solaris_xinerama=yes
 	  AC_CHECK_LIB(Xext, XineramaGetInfo,
 			use_solaris_xinerama=yes, use_solaris_xinerama=no)
-	  if test "x$use_solaris_xinerama" == "xyes"; then
+	  if test "x$use_solaris_xinerama" = "xyes"; then
 	      AC_CHECK_HEADER(X11/extensions/xinerama.h,
 		if test -z "`echo $x_extra_libs $x_libs | grep "\-lXext" 2> /dev/null`"; then
 		    x_extra_libs="-lXext $x_extra_libs"
