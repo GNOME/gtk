@@ -1,3 +1,9 @@
+1999-10-09  ERDI Gergo  <cactus@cactus.rulez.org>
+
+	* gtk/gtktoolbar.h, gtk/gtktoolbar.c: Added horizontal icon/text
+	layout support (as mentioned on
+	http://www.jcinteractive.com/gnome-ui/software/widgets/)
+
 Wed Oct  6 12:46:17 PDT 1999 Manish Singh <yosh@gimp.org>
 
 	* gtk/fnmatch.c
