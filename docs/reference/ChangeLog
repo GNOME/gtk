@@ -1,3 +1,7 @@
+2001-02-03  Havoc Pennington  <hp@pobox.com>
+
+	* gtk/tmpl/gtkfixed.sgml: Add the intro docs section
+
 2001-02-01  Havoc Pennington  <hp@redhat.com>
 
 	* gtk/gtk-sections.txt: updated
