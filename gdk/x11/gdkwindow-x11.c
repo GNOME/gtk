@@ -807,6 +807,9 @@ gdk_window_foreign_new_for_display (GdkDisplay     *display,
 
   display_x11 = GDK_DISPLAY_X11 (display);
   
+  if (gdk_xid_table_lookup_for_display (display, anid) != NULL)
+    g_warning ("XID %#lx already known", anid);
+    
   gdk_error_trap_push ();
   result = XGetWindowAttributes (display_x11->xdisplay, anid, &attrs);
   if (gdk_error_trap_pop () || !result)

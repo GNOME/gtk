@@ -1,3 +1,9 @@
+2004-10-05  Matthias Clasen  <mclasen@redhat.com>
+
+	* gdk/x11/gdkwindow-x11.c (gdk_window_foreign_new_for_display): 
+	Warn if the window is not foreign after all.  (#151378, 
+	Gustavo Carneiro)
+
 2004-10-04  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkicontheme.c (icon_info_ensure_scale_and_pixbuf): 
