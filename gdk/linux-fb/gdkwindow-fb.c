@@ -281,12 +281,19 @@ _gdk_windowing_window_destroy (GdkWindow *window,
 
   _gdk_selection_window_destroyed (window);
 
-  /* Invalidate the area. */
   r.x = private->x;
   r.y = private->y;
   r.width = GDK_DRAWABLE_IMPL_FBDATA (window)->width;
   r.height = GDK_DRAWABLE_IMPL_FBDATA (window)->height;
-  gdk_window_invalidate_rect_clear ((GdkWindow *)private->parent, &r);
+  /* Clear the root window, as it might be visible under
+     the destroyed window */
+  gdk_window_clear_area (gdk_parent_root,
+			 r.x,
+			 r.y,
+			 r.width,
+			 r.height);
+  /* Invalidate the rect */
+  gdk_window_invalidate_rect ((GdkWindow *)private->parent, &r, TRUE);
 }
 
 static gboolean
@@ -747,7 +754,7 @@ gdk_window_show (GdkWindow *window)
 	  rect.y = GDK_DRAWABLE_IMPL_FBDATA (window)->llim_y;
 	  rect.width = GDK_DRAWABLE_IMPL_FBDATA (window)->lim_x - rect.x;
 	  rect.height = GDK_DRAWABLE_IMPL_FBDATA (window)->lim_y - rect.y;
-	  gdk_window_invalidate_rect_clear (gdk_parent_root, &rect);
+	  gdk_window_invalidate_rect (gdk_parent_root, &rect, TRUE);
 	}
     }
 }
@@ -789,7 +796,17 @@ gdk_window_hide (GdkWindow *window)
 	gdk_pointer_ungrab (GDK_CURRENT_TIME);
       if (window == _gdk_fb_keyboard_grab_window)
 	gdk_keyboard_ungrab (GDK_CURRENT_TIME);
-      gdk_window_invalidate_rect_clear (gdk_parent_root, &r);
+
+      /* Clear the root window, as it might be visible under
+	 the hidden window*/
+      gdk_window_clear_area (gdk_parent_root,
+			     r.x,
+			     r.y,
+			     r.width,
+			     r.height);
+      /* Invalidate the rect */
+      gdk_window_invalidate_rect (gdk_parent_root, &r, TRUE);
+      
       if (do_hide)
 	gdk_fb_cursor_unhide ();
     }
@@ -1173,7 +1190,7 @@ gdk_window_reparent (GdkWindow *window,
       r.height = GDK_DRAWABLE_IMPL_FBDATA (window)->lim_y - r.y;
       gdk_region_union_with_rect (region, &r);
 
-      gdk_window_invalidate_region_clear (gdk_parent_root, region);
+      gdk_window_invalidate_region (gdk_parent_root, region, TRUE);
       gdk_region_destroy (region);
     }
 }

@@ -1,5 +1,12 @@
 2001-01-15  Alexander Larsson  <alexl@redhat.com>
 
+	* gdk/linux-fb/gdkwindow-fb.c:
+	Use gdk_window_invalidate_rect instead of
+	gdk_window_invalidate_rect_clear to minimise flashing.
+	When hiding windows you need to clear the root window though.
+
+2001-01-15  Alexander Larsson  <alexl@redhat.com>
+
 	* gdk/linux-fb/gdkdrawable-fb2.c:
 	For optization, add an full_shapes argument to gdk_fb_clip_region.
 	If this is false, only the cliprects of the shapes are used.
