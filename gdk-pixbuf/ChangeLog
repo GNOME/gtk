@@ -1,4 +1,10 @@
 1999-07-13    <crichton@gimp.org>
 
+	* configure.in: Fixed GIF check.  Replaced " with '
+	* src/gdk-pixbuf.c: More (minor) work on gdk_pixbuf_scale
+
+1999-07-13    <crichton@gimp.org>
+
 	* configure.in: I am a bonehead.  Added gif-lib check.
+	
 

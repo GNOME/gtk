@@ -38,4 +38,16 @@ gdk_pixbuf_unref (GdkPixBuf *pixbuf)
 GdkPixBuf *
 gdk_pixbuf_scale (GdkPixBuf *pixbuf, gint w, gint h)
 {
+    GdkPixBuf *spb;
+    double affine[6];
+    
 }
+
+
+/*
+ * Local variables:
+ *  c-basic-offset: 4
+ *  c-file-offsets: ((substatement-open . 0))
+ * End:
+ */
+
