@@ -493,13 +493,13 @@ composite_line_22_4a4 (int *weights, int n_x, int n_y,
       b += ta * q0[6];
       a += ta;
 
-      ta = w3 * q0[3];
-      r += ta * q0[0];
-      g += ta * q0[1];
-      b += ta * q0[2];
+      ta = w3 * q1[3];
+      r += ta * q1[0];
+      g += ta * q1[1];
+      b += ta * q1[2];
       a += ta;
 
-      ta += w4 * q1[7];
+      ta = w4 * q1[7];
       r += ta * q1[4];
       g += ta * q1[5];
       b += ta * q1[6];
@@ -881,16 +881,15 @@ scale_line_22_33 (int *weights, int n_x, int n_y,
       g += w3 * q1[1];
       b += w3 * q1[2];
 
-      r += w4 * q1[4];
-      g += w4 * q1[5];
-      b += w4 * q1[6];
+      r += w4 * q1[3];
+      g += w4 * q1[4];
+      b += w4 * q1[5];
 
       dest[0] = (r + 0x8000) >> 16;
       dest[1] = (g + 0x8000) >> 16;
       dest[2] = (b + 0x8000) >> 16;
       
       dest += 3;
-      
       x += x_step;
     }
   

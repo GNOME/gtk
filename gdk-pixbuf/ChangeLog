@@ -1,3 +1,8 @@
+Thu May 16 15:17:30 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* pixops/pixops.c: Patch from Matthias Clasen to fix some typos 
+	(#77246)
+
 Thu May 16 15:02:46 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk-pixdata.c (gdk_pixdata_to_csource): Fix 64-bit warning.
