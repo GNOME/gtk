@@ -1,3 +1,15 @@
+Mon May 11 21:04:51 1998  Owen Taylor  <otaylor@gtk.org>
+
+	* gtk/gtkwindow.c (gtk_real_window_move_resize): Use the
+	previously unused window->need_resize flag to mark if a window's
+	descendents changed size while the window was not visible. In this
+	case, when the window becomes visible, we reallocate everything,
+	since we didn't keep track of what actually changed.
+
+	(Fixes bug where changing the popdown strings of a
+	combo to something of the same length caused them to
+	blank out, as reported by Todd Dukes <tdukes@ibmoto.com>)
+
 Tue May 12 02:31:57 1998  Tim Janik  <timj@gtk.org>
 
 	[security audit by Alan Cox]
