@@ -805,6 +805,9 @@ void gtk_paint_handle  (GtkStyle      *style,
 			gint           width,
 			gint           height,
 			GtkOrientation orientation);
+
+void gtk_reset_widget_shapes(GtkWidget *widget);
+      
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */

@@ -137,29 +137,20 @@ gtk_check_button_draw (GtkWidget    *widget,
 
       if (check_button->toggle_button.draw_indicator)
 	{
+	  gint border_width;
 	  button = GTK_BUTTON (widget);
 
 	  gtk_check_button_draw_indicator (check_button, area);
-
-	   if (check_button->toggle_button.draw_indicator)
-	     {
-		gint border_width;
-		
-		border_width = GTK_CONTAINER (widget)->border_width;
-		if (GTK_WIDGET_HAS_FOCUS (widget))
-		  gtk_paint_focus (widget->style, widget->window,
-				   NULL, widget, "checkbutton",
-				   border_width + widget->allocation.x,
-				   border_width + widget->allocation.y,
-				   widget->allocation.width - 2 * border_width - 1,
-				   widget->allocation.height - 2 * border_width - 1);
-	     }
-	   else
-	     {
-		if (GTK_WIDGET_CLASS (parent_class)->draw_focus)
-		  (* GTK_WIDGET_CLASS (parent_class)->draw_focus) (widget);
-	     }
-	   
+	  	  
+	  border_width = GTK_CONTAINER (widget)->border_width;
+	  if (GTK_WIDGET_HAS_FOCUS (widget))
+	    gtk_paint_focus (widget->style, widget->window,
+			     NULL, widget, "checkbutton",
+			     border_width + widget->allocation.x,
+			     border_width + widget->allocation.y,
+			     widget->allocation.width - 2 * border_width - 1,
+			     widget->allocation.height - 2 * border_width - 1);
+	  
 	  if (GTK_BIN (button)->child && GTK_WIDGET_NO_WINDOW (GTK_BIN (button)->child) &&
 	      gtk_widget_intersect (GTK_BIN (button)->child, area, &child_area))
 	    gtk_widget_draw (GTK_BIN (button)->child, &child_area);
@@ -175,11 +166,16 @@ gtk_check_button_draw (GtkWidget    *widget,
 static void
 gtk_check_button_draw_focus (GtkWidget *widget)
 {
+  gint border_width;
   
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_CHECK_BUTTON (widget));
-  
-   gtk_widget_draw(widget, NULL);
+
+  gtk_widget_queue_draw_area(widget->parent, 
+                             border_width + widget->allocation.x,
+			     border_width + widget->allocation.y,
+			     widget->allocation.width - 2 * border_width - 1,
+			     widget->allocation.height - 2 * border_width - 1);
 }
 
 static void

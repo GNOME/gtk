@@ -3110,6 +3110,8 @@ gtk_widget_set_style_internal (GtkWidget *widget,
       GtkStyle *previous_style;
 
       if (GTK_WIDGET_REALIZED (widget))
+	gtk_reset_widget_shapes(widget);
+      if (GTK_WIDGET_REALIZED (widget))
 	gtk_style_detach (widget->style);
       
       previous_style = widget->style;

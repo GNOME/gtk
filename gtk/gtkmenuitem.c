@@ -423,8 +423,10 @@ gtk_menu_item_paint (GtkWidget    *widget,
 			area, widget, "menuitem",
 			x, y, width, height);
        else
-	 gdk_window_clear_area (widget->window, area->x, area->y, area->width, area->height);
-	 
+	{
+	  gdk_window_set_back_pixmap (widget->window, NULL, TRUE);
+	  gdk_window_clear_area (widget->window, area->x, area->y, area->width, area->height);
+	}
       if (menu_item->submenu && menu_item->show_submenu_indicator)
 	{
 	  shadow_type = GTK_SHADOW_OUT;
