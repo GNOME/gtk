@@ -29,6 +29,7 @@ libgtk_la_SOURCES = \
 	gtkframe.c		\
 	gtkgamma.c		\
 	gtkgc.c			\
+	gtkhandlebox.c          \
 	gtkhbbox.c		\
 	gtkhbox.c		\
 	gtkhpaned.c		\

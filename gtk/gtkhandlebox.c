@@ -270,6 +270,7 @@ static gint gtk_handle_box_motion        (GtkWidget *widget,
 
   hb = GTK_HANDLE_BOX(widget);
   if(hb->is_being_dragged) {
-    
+    gdk_window_move(widget->window, event->x_root - event->x,
+		    event->y_root - event->y);
   }
 }
