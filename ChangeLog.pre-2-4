@@ -1,3 +1,8 @@
+2000-01-27  Shirasaki Yasuhiro  <yasuhiro@gnome.gr.jp>
+
+	* acinclude.m4 (AM_GTK_WITH_NLS): check dcgettext
+	with libintl, if it's specified.
+
 Wed Jan 26 18:06:07 2000  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkwidget.c (gtk_widget_queue_clear_area): Ignore

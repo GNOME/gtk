@@ -487,6 +487,10 @@ AC_DEFUN(AM_GTK_WITH_NLS,
 		 gt_cv_func_dgettext_libintl=no)])
 	   fi
 
+           if test "$gt_cv_func_dgettext_libintl" = "yes"; then
+	     LIBS="$LIBS -lintl";
+           fi
+
 	   if test "$gt_cv_func_dgettext_libc" = "yes" \
 	      || test "$gt_cv_func_dgettext_libintl" = "yes"; then
 	      AC_DEFINE(HAVE_GETTEXT)
