@@ -421,7 +421,7 @@ gtk_drag_get_event_action (GdkEvent *event, gint button, GdkDragAction actions)
 	break;
       }
       
-      if (button == 3)
+      if (((button == 2) || (button == 3)) && (actions & GDK_ACTION_ASK))
 	return GDK_ACTION_ASK;
       
       if (state & (GDK_SHIFT_MASK | GDK_CONTROL_MASK))
@@ -435,7 +435,7 @@ gtk_drag_get_event_action (GdkEvent *event, gint button, GdkDragAction actions)
 	}
       else
 	{
-	  if (state & (GDK_MOD1_MASK))
+	  if ((state & (GDK_MOD1_MASK)) && (actions & GDK_ACTION_ASK))
 	    return GDK_ACTION_ASK;
 
 	  if (actions & GDK_ACTION_COPY)

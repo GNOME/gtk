@@ -1,3 +1,9 @@
+1999-01-20  Federico Mena Quintero  <federico@nuclecu.unam.mx>
+
+	* gtk/gtkdnd.c (gtk_drag_get_event_action): Allow button 2 to act
+	as GDK_ACTION_ASK.  Also, allow MOD1 to specify GDK_ACTION_ASK
+	only if that action is enabled in the actions argument.
+
 1999-01-20  Raja R Harinath  <harinath@cs.umn.edu>
 
 	* configure.in (gtklocaledir): New variable.  Define to

@@ -1009,6 +1009,7 @@ static const GtkEnumValue _gdk_drag_protocol_values[] = {
   { GDK_DRAG_PROTO_MOTIF, "GDK_DRAG_PROTO_MOTIF", "motif" },
   { GDK_DRAG_PROTO_XDND, "GDK_DRAG_PROTO_XDND", "xdnd" },
   { GDK_DRAG_PROTO_ROOTWIN, "GDK_DRAG_PROTO_ROOTWIN", "rootwin" },
+  { GDK_DRAG_PROTO_NONE, "GDK_DRAG_PROTO_NONE", "none" },
   { 0, NULL, NULL }
 };
 static const GtkEnumValue _gdk_rgb_dither_values[] = {
