@@ -73,11 +73,11 @@ struct _GdkWindowImplX11
   
   GdkXPositionInfo position_info;
 
-  /* Set if the window, or any descendent of it, is the focus window
+  /* Set if the window, or any descendent of it, is the server's focus window
    */
   guint has_focus_window : 1;
 
-  /* Set if has_focus_window and the focus isn't grabbed elsewhere.
+  /* Set if window->has_focus_window and the focus isn't grabbed elsewhere.
    */
   guint has_focus : 1;
 

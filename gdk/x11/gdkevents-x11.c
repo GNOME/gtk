@@ -1242,11 +1242,11 @@ gdk_event_translate (GdkDisplay *display,
 	    case NotifyNonlinear:
 	    case NotifyVirtual:
 	    case NotifyNonlinearVirtual:
+	      window_impl->has_focus_window = TRUE;
 	      /* We pretend that the focus moves to the grab
 	       * window, so we pay attention to NotifyGrab
 	       * NotifyUngrab, and ignore NotifyWhileGrabbed
 	       */
-	      window_impl->has_focus_window = TRUE;
 	      if (xevent->xfocus.mode != NotifyWhileGrabbed)
 		window_impl->has_focus = TRUE;
 	      break;

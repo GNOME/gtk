@@ -1,3 +1,11 @@
+Tue Dec 10 14:37:41 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/x11/gdkevents-x11.c (gdk_event_translate)
+	  gdk/x11/gdkwindow-x11.h: Separate out tracking of the X server
+	  focus window from tracking our idea of what the focus window is,
+	  because the PointerRoot code needs to know the real pointer
+	  window. (Mostly accidentally committed a bit earlier.)
+
 Tue Dec 10 12:57:00 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkclist.c (adjust_adjustments): Fix typo with
