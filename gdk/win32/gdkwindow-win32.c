@@ -253,10 +253,8 @@ static const gchar *
 get_default_title (void)
 {
   const char *title;
-#if 0 /* So that we can build with GLib 2.0... */
   title = g_get_application_name ();
   if (!title)
-#endif
     title = g_get_prgname ();
 
   return title;

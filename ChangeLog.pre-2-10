@@ -1,3 +1,15 @@
+2002-12-11  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/win32/gdkpixmap-win32.c (gdk_pixmap_new,
+	gdk_bitmap_create_from_data, gdk_pixmap_create_from_data)
+	* gdk/win32/gdkprivate-win32.h
+	* gdk/win32/gdkimage-win32.c (_gdk_win32_setup_pixmap_image):
+	Functions now take a GdkDrawable instead of GdkWindow parameter,
+	like in X11 and linux-fb backends (#100780)
+
+	* gdk/win32/gdkwindow-win32.c (get_default_title): Do use
+	g_get_application_name() (I now have a fresh enough GLib).
+
 Wed Dec 11 14:04:23 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* configure.in: version 2.1.4, interface age 1.

@@ -105,19 +105,19 @@ _gdk_image_exit (void)
 }
 
 GdkImage *
-_gdk_win32_setup_pixmap_image (GdkPixmap *pixmap,
-			       GdkWindow *window,
-			       gint       width,
-			       gint       height,
-			       gint       depth,
-			       guchar    *bits)
+_gdk_win32_setup_pixmap_image (GdkPixmap   *pixmap,
+			       GdkDrawable *drawable,
+			       gint         width,
+			       gint         height,
+			       gint         depth,
+			       guchar      *bits)
 {
   GdkImage *image;
 
   image = g_object_new (gdk_image_get_type (), NULL);
   image->windowing_data = pixmap;
   image->type = GDK_IMAGE_SHARED;
-  image->visual = gdk_drawable_get_visual (window);
+  image->visual = gdk_drawable_get_visual (drawable);
   image->byte_order = GDK_LSB_FIRST;
   image->width = width;
   image->height = height;

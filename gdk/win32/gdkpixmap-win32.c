@@ -129,10 +129,10 @@ gdk_pixmap_impl_win32_get_size (GdkDrawable *drawable,
 }
 
 GdkPixmap*
-gdk_pixmap_new (GdkWindow *window,
-		gint       width,
-		gint       height,
-		gint       depth)
+gdk_pixmap_new (GdkDrawable *drawable,
+		gint         width,
+		gint         height,
+		gint         depth)
 {
   struct {
     BITMAPINFOHEADER bmiHeader;
@@ -155,22 +155,22 @@ gdk_pixmap_new (GdkWindow *window,
   gint i;
   gint window_depth;
 
-  g_return_val_if_fail (window == NULL || GDK_IS_DRAWABLE (window), NULL);
-  g_return_val_if_fail ((window != NULL) || (depth != -1), NULL);
+  g_return_val_if_fail (drawable == NULL || GDK_IS_DRAWABLE (drawable), NULL);
+  g_return_val_if_fail ((drawable != NULL) || (depth != -1), NULL);
   g_return_val_if_fail ((width != 0) && (height != 0), NULL);
 
-  if (!window)
-    window = _gdk_parent_root;
+  if (!drawable)
+    drawable = _gdk_parent_root;
 
-  if (GDK_IS_WINDOW (window) && GDK_WINDOW_DESTROYED (window))
+  if (GDK_IS_WINDOW (drawable) && GDK_WINDOW_DESTROYED (drawable))
     return NULL;
 
-  window_depth = gdk_drawable_get_depth (GDK_DRAWABLE (window));
+  window_depth = gdk_drawable_get_depth (GDK_DRAWABLE (drawable));
   if (depth == -1)
     depth = window_depth;
 
-  GDK_NOTE (PIXMAP, g_print ("gdk_pixmap_new: %dx%dx%d window=%p\n",
-			     width, height, depth, window));
+  GDK_NOTE (PIXMAP, g_print ("gdk_pixmap_new: %dx%dx%d drawable=%p\n",
+			     width, height, depth, drawable));
 
   pixmap = g_object_new (gdk_pixmap_get_type (), NULL);
   drawable_impl = GDK_DRAWABLE_IMPL_WIN32 (GDK_PIXMAP_OBJECT (pixmap)->impl);
@@ -184,13 +184,13 @@ gdk_pixmap_new (GdkWindow *window,
 
   if (depth == window_depth)
     {
-      cmap = gdk_drawable_get_colormap (window);
+      cmap = gdk_drawable_get_colormap (drawable);
       if (cmap)
         gdk_drawable_set_colormap (pixmap, cmap);
     }
   
-  if (GDK_IS_WINDOW (window))
-    hwnd = GDK_WINDOW_HWND (window);
+  if (GDK_IS_WINDOW (drawable))
+    hwnd = GDK_WINDOW_HWND (drawable);
   else
     hwnd = GDK_WINDOW_HWND (_gdk_parent_root);
   if ((hdc = GetDC (hwnd)) == NULL)
@@ -305,7 +305,7 @@ gdk_pixmap_new (GdkWindow *window,
     }
 
   drawable_impl->handle = hbitmap;
-  pixmap_impl->image = _gdk_win32_setup_pixmap_image (pixmap, window,
+  pixmap_impl->image = _gdk_win32_setup_pixmap_image (pixmap, drawable,
 						      width, height,
 						      depth, bits);
 
@@ -350,7 +350,7 @@ static unsigned char mirror[256] = {
 };
 
 GdkPixmap *
-gdk_bitmap_create_from_data (GdkWindow   *window,
+gdk_bitmap_create_from_data (GdkDrawable *drawable,
 			     const gchar *data,
 			     gint         width,
 			     gint         height)
@@ -362,15 +362,15 @@ gdk_bitmap_create_from_data (GdkWindow   *window,
 
   g_return_val_if_fail (data != NULL, NULL);
   g_return_val_if_fail ((width != 0) && (height != 0), NULL);
-  g_return_val_if_fail (window == NULL || GDK_IS_WINDOW (window), NULL);
+  g_return_val_if_fail (drawable == NULL || GDK_IS_DRAWABLE (drawable), NULL);
 
-  if (!window)
-    window = _gdk_parent_root;
+  if (!drawable)
+    drawable = _gdk_parent_root;
 
-  if (GDK_WINDOW_DESTROYED (window))
+  if (GDK_IS_WINDOW (drawable) && GDK_WINDOW_DESTROYED (drawable))
     return NULL;
 
-  pixmap = gdk_pixmap_new (window, width, height, 1);
+  pixmap = gdk_pixmap_new (drawable, width, height, 1);
 
   if (pixmap == NULL)
     return NULL;
@@ -391,7 +391,7 @@ gdk_bitmap_create_from_data (GdkWindow   *window,
 }
 
 GdkPixmap*
-gdk_pixmap_create_from_data (GdkWindow   *window,
+gdk_pixmap_create_from_data (GdkDrawable *drawable,
 			     const gchar *data,
 			     gint         width,
 			     gint         height,
@@ -410,11 +410,18 @@ gdk_pixmap_create_from_data (GdkWindow   *window,
   GdkPixmap *source;
   GdkGC *gc;
 
-  if (GDK_WINDOW_DESTROYED (window))
+  g_return_val_if_fail (drawable == NULL || GDK_IS_DRAWABLE (drawable), NULL);
+  g_return_val_if_fail (data != NULL, NULL);
+  g_return_val_if_fail (fg != NULL, NULL);
+  g_return_val_if_fail (bg != NULL, NULL);
+  g_return_val_if_fail ((drawable != NULL) || (depth != -1), NULL);
+  g_return_val_if_fail ((width != 0) && (height != 0), NULL);
+
+  if (GDK_IS_WINDOW (drawable) && GDK_WINDOW_DESTROYED (drawable))
     return NULL;
 
-  result = gdk_pixmap_new (window, width, height, depth);
-  source = gdk_bitmap_create_from_data (window, data, width, height);
+  result = gdk_pixmap_new (drawable, width, height, depth);
+  source = gdk_bitmap_create_from_data (drawable, data, width, height);
   gc = gdk_gc_new (result);
 
   gdk_gc_set_foreground (gc, fg);

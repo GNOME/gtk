@@ -337,12 +337,12 @@ GdkImage *_gdk_win32_copy_to_image      (GdkDrawable *drawable,
 					 gint         width,
 					 gint         height);
 
-GdkImage *_gdk_win32_setup_pixmap_image (GdkPixmap *pixmap,
-					 GdkWindow *window,
-					 gint       width,
-					 gint       height,
-					 gint       depth,
-					 guchar    *bits);
+GdkImage *_gdk_win32_setup_pixmap_image (GdkPixmap   *pixmap,
+					 GdkDrawable *drawable,
+					 gint         width,
+					 gint         height,
+					 gint         depth,
+					 guchar      *bits);
 
 void      _gdk_win32_blit               (gboolean              use_fg_bg,
 					 GdkDrawableImplWin32 *drawable,
