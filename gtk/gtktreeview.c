@@ -6895,10 +6895,8 @@ gtk_tree_view_scroll_to_cell (GtkTreeView       *tree_view,
    */
 
   g_return_if_fail (GTK_IS_TREE_VIEW (tree_view));
-  g_return_if_fail (row_align >= 0.0);
-  g_return_if_fail (row_align <= 1.0);
-  g_return_if_fail (col_align >= 0.0);
-  g_return_if_fail (col_align <= 1.0);
+  g_return_if_fail (row_align >= 0.0 && row_align <= 1.0);
+  g_return_if_fail (col_align >= 0.0 && col_align <= 1.0);
   g_return_if_fail (path != NULL || column != NULL);
 
   row_align = CLAMP (row_align, 0.0, 1.0);

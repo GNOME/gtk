@@ -242,6 +242,18 @@ gtk_tree_store_init (GtkTreeStore *tree_store)
   tree_store->sort_column_id = -1;
 }
 
+/**
+ * gtk_tree_store_new:
+ * @n_columns: number of columns in the tree store
+ * @Varargs: all #GType types for the columns, from first to last
+ *
+ * Creates a new tree store as with @n_columns columns each of the types passed
+ * in.  As an example, gtk_tree_store_new (3, G_TYPE_INT, G_TYPE_STRING,
+ * GDK_TYPE_PIXBUF); will create a new GtkTreeStore with three columns, of type
+ * int, string and GDkPixbuf respectively.
+ *
+ * Return value: a new #GtkTreeStore
+ **/
 GtkTreeStore *
 gtk_tree_store_new (gint n_columns,
 			       ...)
@@ -272,6 +284,40 @@ gtk_tree_store_new (gint n_columns,
 
   return retval;
 }
+/**
+ * gtk_tree_store_newv:
+ * @n_columns: number of columns in the tree store
+ * @types: an array of #GType types for the columns, from first to last
+ *
+ * Non vararg creation function.  Used primarily by language bindings.
+ *
+ * Return value: a new #GtkTreeStore
+ **/
+GtkTreeStore *
+gtk_tree_store_newv (gint   n_columns,
+		     GType *types)
+{
+  GtkTreeStore *retval;
+  gint i;
+
+  g_return_val_if_fail (n_columns > 0, NULL);
+
+  retval = GTK_TREE_STORE (g_object_new (GTK_TYPE_TREE_STORE, NULL));
+  gtk_tree_store_set_n_columns (retval, n_columns);
+
+   for (i = 0; i < n_columns; i++)
+    {
+      if (! _gtk_tree_data_list_check_type (types[i]))
+	{
+	  g_warning ("%s: Invalid type %s passed to gtk_tree_store_new_with_types\n", G_STRLOC, g_type_name (types[i]));
+	  g_object_unref (G_OBJECT (retval));
+	  return NULL;
+	}
+      gtk_tree_store_set_column_type (retval, i, types[i]);
+    }
+
+  return retval;
+}
 
 /**
  * gtk_tree_store_set_n_columns:
@@ -281,7 +327,7 @@ gtk_tree_store_new (gint n_columns,
  * As a side effect of calling this function, all sort columns that overlap with
  * the current number of columns will be removed.
  **/
-void
+static void
 gtk_tree_store_set_n_columns (GtkTreeStore *tree_store,
 			      gint          n_columns)
 {
@@ -326,7 +372,7 @@ gtk_tree_store_set_n_columns (GtkTreeStore *tree_store,
  * subclasses of those types such as %GDK_TYPE_PIXBUF.
  *
  **/
-void
+static void
 gtk_tree_store_set_column_type (GtkTreeStore *tree_store,
 				gint          column,
 				GType         type)

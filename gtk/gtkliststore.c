@@ -285,6 +285,43 @@ gtk_list_store_new (gint n_columns,
   return retval;
 }
 
+
+/**
+ * gtk_list_store_newv:
+ * @n_columns: number of columns in the list store
+ * @types: an array of #GType types for the columns, from first to last
+ *
+ * Non vararg creation function.  Used primarily by language bindings.
+ *
+ * Return value: a new #GtkListStore
+ **/
+GtkListStore *
+gtk_list_store_newv (gint   n_columns,
+		     GType *types)
+{
+  GtkListStore *retval;
+  gint i;
+
+  g_return_val_if_fail (n_columns > 0, NULL);
+
+  retval = GTK_LIST_STORE (g_object_new (gtk_list_store_get_type (), NULL));
+  gtk_list_store_set_n_columns (retval, n_columns);
+
+  for (i = 0; i < n_columns; i++)
+    {
+      if (! _gtk_tree_data_list_check_type (types[i]))
+	{
+	  g_warning ("%s: Invalid type %s passed to gtk_list_store_new_with_types\n", G_STRLOC, g_type_name (types[i]));
+	  g_object_unref (G_OBJECT (retval));
+	  return NULL;
+	}
+
+      gtk_list_store_set_column_type (retval, i, types[i]);
+    }
+
+  return retval;
+}
+
 static void
 gtk_list_store_set_n_columns (GtkListStore *list_store,
 			      gint          n_columns)
