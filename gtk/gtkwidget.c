@@ -1703,6 +1703,7 @@ gtk_widget_event (GtkWidget *widget,
   gint signal_num;
 
   g_return_val_if_fail (widget != NULL, TRUE);
+
   gtk_widget_ref (widget);
   return_val = FALSE;
   gtk_signal_emit (GTK_OBJECT (widget), widget_signals[EVENT], event,
