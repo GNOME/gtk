@@ -588,7 +588,7 @@ gtk_spin_button_size_request (GtkWidget      *widget,
       w = MIN (string_len, 10) * digit_width;
       width = MAX (width, w);
       string_len = compute_double_length (spin_button->adjustment->lower,
-					  spin_button->adjustment->step_increment);
+					  spin_button->digits);
       w = MIN (string_len, 10) * digit_width;
       width = MAX (width, w);
       

@@ -552,6 +552,8 @@ gtk_cell_renderer_text_get_property (GObject        *object,
       {
 	PangoFontMask mask = get_property_font_set_mask (param_id);
 	g_value_set_boolean (value, (pango_font_description_get_set_fields (celltext->font) & mask) != 0);
+	
+	break;
       }
 
     case PROP_SCALE_SET:
@@ -875,6 +877,8 @@ gtk_cell_renderer_text_set_property (GObject      *object,
 	notify_set_changed (object, old_set_mask & pango_font_description_get_set_fields (celltext->font));
 	g_object_notify (object, "font_desc");
 	g_object_notify (object, "font");
+
+	break;
       }
       
     case PROP_SCALE:

@@ -125,7 +125,7 @@ typedef enum
   GDK_BUTTON5_MASK  = 1 << 12,
   /* The next few modifiers are used by XKB, so we skip to the end
    */
-  GDK_RELEASE_MASK  = 1 << 31,
+  GDK_RELEASE_MASK  = 1u << 31,
   GDK_MODIFIER_MASK = GDK_RELEASE_MASK | 0x1fff
 } GdkModifierType;
 

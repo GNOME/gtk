@@ -1,3 +1,19 @@
+Tue Sep 18 20:47:16 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkspinbutton.c (gtk_spin_button_size_request): Fix 
+	incorrect parameter to compute_double_length
+	(#58680, patch from Matthias Clasen)
+
+	Fixes for compilation with Forte cc. (#59734, Derek Rafter)
+
+	* gtk/gtkwindow.h gtk/gtksizegroup.h: Remove extra ;.
+
+	* gdk/gdktypes.h (GdkModifierType): Write 1u << 31
+	for GDK_RELEASE_MASK to avoid warnings with Forte.
+
+	* gtk/gtktexttag.c gtk/gtkcellrendertext.c: Add some missing
+	break; statements.
+
 2001-09-18  Alex Larsson  <alexl@redhat.com>
 
         * gtk/gtkcheckbutton.c:

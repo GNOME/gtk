@@ -1008,6 +1008,8 @@ gtk_text_tag_set_property (GObject      *object,
 	notify_set_changed (object, old_set_mask & pango_font_description_get_set_fields (text_tag->values->font));
 	g_object_notify (object, "font_desc");
 	g_object_notify (object, "font");
+
+	break;
       }
       
     case PROP_SCALE:
@@ -1483,6 +1485,8 @@ gtk_text_tag_get_property (GObject      *object,
 	PangoFontMask set_mask = tag->values->font ? pango_font_description_get_set_fields (tag->values->font) : 0;
 	PangoFontMask test_mask = get_property_font_set_mask (prop_id);
 	g_value_set_boolean (value, (set_mask & test_mask) != 0);
+
+	break;
       }
 
     case PROP_SCALE_SET:
