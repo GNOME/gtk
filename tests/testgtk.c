@@ -3019,7 +3019,7 @@ unselect_clist (GtkWidget *widget,
   clist_selected_row = row;
 }
 
-void
+static void
 insert_row_clist (GtkWidget *widget, gpointer data)
 {
   static char *text[] =
@@ -3037,7 +3037,27 @@ insert_row_clist (GtkWidget *widget, gpointer data)
   clist_rows++;
 }
 
-void
+static void
+clist_warning_test (GtkWidget *button,
+		    GtkWidget *clist)
+{
+  GtkWidget *child;
+  static gboolean add_remove = FALSE;
+
+  add_remove = !add_remove;
+  child = gtk_label_new ("Test");
+  if (add_remove)
+    gtk_container_add (GTK_CONTAINER (clist), child);
+  else
+    {
+      child->parent = clist;
+      gtk_container_remove (GTK_CONTAINER (clist), child);
+      child->parent = NULL;
+    }
+  gtk_widget_destroy (child);
+}
+
+static void
 create_clist ()
 {
   gint i;
@@ -3165,6 +3185,16 @@ create_clist ()
       gtk_signal_connect (GTK_OBJECT (button),
                           "clicked",
                           (GtkSignalFunc) hide_titles_clist,
+                          (gpointer) clist);
+
+      gtk_widget_show (button);
+
+      button = gtk_button_new_with_label ("Warning Test");
+      gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
+
+      gtk_signal_connect (GTK_OBJECT (button),
+                          "clicked",
+                          (GtkSignalFunc) clist_warning_test,
                           (gpointer) clist);
 
       gtk_widget_show (button);

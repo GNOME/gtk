@@ -9,11 +9,6 @@ Bugs:
    GtkLabels sometimes redraw without clearing up the underlying background on
    window resizes.
  
- * GtkCList is derived from GtkContainer but doesn't implement the
-   need_resize, focus, add and remove methods from containers.
-   it should at least issue a warning upon invokation of not supported
-   member functions.
-
  * GtkTree and GtkList should express in their *_add implementations,
    that they expect GtkListItems/GtkTreeItems as children. Similar
    things might apply to other containers.

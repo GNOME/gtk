@@ -79,6 +79,10 @@ static void gtk_container_get_arg           (GtkContainer      *container,
 static void gtk_container_set_arg           (GtkContainer      *container,
 					     GtkArg            *arg,
 					     guint		arg_id);
+static void gtk_container_add_unimplemented (GtkContainer      *container,
+					     GtkWidget         *widget);
+static void gtk_container_remove_unimplemented (GtkContainer   *container,
+						GtkWidget      *widget);
 static gint gtk_real_container_need_resize  (GtkContainer      *container);
 static gint gtk_real_container_focus        (GtkContainer      *container,
 					     GtkDirectionType   direction);
@@ -193,10 +197,27 @@ gtk_container_class_init (GtkContainerClass *class)
    * accessable through gtk_container_foreach.
   */
   widget_class->show_all = gtk_container_show_all;
-  widget_class->hide_all = gtk_container_hide_all;  
-  
+  widget_class->hide_all = gtk_container_hide_all;
+
+  class->add = gtk_container_add_unimplemented;
+  class->remove = gtk_container_remove_unimplemented;
   class->need_resize = gtk_real_container_need_resize;
+  class->foreach = NULL;
   class->focus = gtk_real_container_focus;
+}
+
+static void
+gtk_container_add_unimplemented (GtkContainer     *container,
+				 GtkWidget        *widget)
+{
+  g_warning ("GtkContainerClass::add not implemented for `%s'", gtk_type_name (GTK_OBJECT_TYPE (container)));
+}
+
+static void
+gtk_container_remove_unimplemented (GtkContainer     *container,
+				    GtkWidget        *widget)
+{
+  g_warning ("GtkContainerClass::remove not implemented for `%s'", gtk_type_name (GTK_OBJECT_TYPE (container)));
 }
 
 static void
@@ -325,12 +346,12 @@ gtk_container_remove (GtkContainer *container,
   g_return_if_fail (GTK_IS_CONTAINER (container));
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_WIDGET (widget));
-  g_return_if_fail (GTK_CONTAINER (widget->parent) == container);
+  g_return_if_fail (widget->parent == GTK_WIDGET (container));
   
+  gtk_signal_emit (GTK_OBJECT (container), container_signals[REMOVE], widget);
+
   if (container->focus_child == widget)
     container->focus_child = NULL;
-
-  gtk_signal_emit (GTK_OBJECT (container), container_signals[REMOVE], widget);
 }
 
 void

@@ -1,3 +1,12 @@
+Mon Mar 23 01:08:30 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkclist.c (gtk_clist_class_init): leave container_class->add and
+	container_class->remove untouched if we don't implement them.
+
+	* gtk/gtkcontainer.c (gtk_container_class_init): add missing NULL
+	initialization for the class method (*foreach). implement a default
+	handler to output a warning for (*add) and (*remove).
+
 Sun Mar 22 19:01:36 1998  Owen Taylor  <owt1@cornell.edu>
 
 	* gdk/gdkcolor.c: Fixes to allow GTK to work with colormaps

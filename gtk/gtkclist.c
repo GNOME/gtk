@@ -355,8 +355,8 @@ gtk_clist_class_init (GtkCListClass * klass)
   widget_class->size_request = gtk_clist_size_request;
   widget_class->size_allocate = gtk_clist_size_allocate;
 
-  container_class->add = NULL;
-  container_class->remove = NULL;
+  /* container_class->add = NULL; use the default GtkContainerClass warning */
+  /* container_class->remove = NULL; use the default GtkContainerClass warning */
   container_class->foreach = gtk_clist_foreach;
 
   klass->select_row = real_select_row;
