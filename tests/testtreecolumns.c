@@ -13,19 +13,26 @@ GtkWidget *sample_tree_view_bottom;
 static void
 add_clicked (GtkWidget *button, gpointer data)
 {
+  static gint i = 0;
+
   GtkTreeIter iter;
   GtkTreeViewColumn *column;
+  GtkTreeSelection *selection;
   GtkCellRenderer *cell;
-  static gint i = 0;
   gchar *label = g_strdup_printf ("Column %d", i);
 
   cell = gtk_cell_renderer_text_new ();
   column = gtk_tree_view_column_new_with_attributes (label, cell, "text", 0, NULL);
+  gtk_tree_view_column_set_reorderable (column, TRUE);
   gtk_tree_view_column_set_sizing (column, GTK_TREE_VIEW_COLUMN_RESIZEABLE);
+  gtk_tree_view_column_set_clickable (column, FALSE);
   gtk_list_store_append (GTK_LIST_STORE (left_tree_model), &iter);
   gtk_list_store_set (GTK_LIST_STORE (left_tree_model), &iter, 0, label, 1, column, -1);
   g_free (label);
   i++;
+
+  selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (left_tree_view));
+  gtk_tree_selection_select_iter (selection, &iter);
 }
 
 static void
@@ -89,8 +96,11 @@ add_left_clicked (GtkWidget *button, gpointer data)
 
   gtk_list_store_remove (GTK_LIST_STORE (gtk_tree_view_get_model (GTK_TREE_VIEW (data))), &iter);
 
+  /* Put it back on the left */
   gtk_list_store_append (GTK_LIST_STORE (left_tree_model), &iter);
   gtk_list_store_set (GTK_LIST_STORE (left_tree_model), &iter, 0, label, 1, column, -1);
+  selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (left_tree_view));
+  gtk_tree_selection_select_iter (selection, &iter);
   g_free (label);
 }
 
@@ -113,6 +123,9 @@ add_right_clicked (GtkWidget *button, gpointer data)
   gtk_list_store_append (GTK_LIST_STORE (gtk_tree_view_get_model (GTK_TREE_VIEW (data))), &iter);
   gtk_list_store_set (GTK_LIST_STORE (gtk_tree_view_get_model (GTK_TREE_VIEW (data))), &iter, 0, label, 1, column, -1);
 
+  selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (data));
+  gtk_tree_selection_select_iter (selection, &iter);
+
   if (GTK_WIDGET (data) == top_right_tree_view)
     gtk_tree_view_append_column (GTK_TREE_VIEW (sample_tree_view_top), column);
   else
@@ -128,6 +141,11 @@ selection_changed (GtkTreeSelection *selection, GtkWidget *button)
   else
     gtk_widget_set_sensitive (button, FALSE);
 }
+
+
+static GtkTargetEntry row_targets[] = {
+  { "GTK_TREE_MODEL_ROW", GTK_TARGET_SAME_APP, 0}
+};
 
 int
 main (int argc, char *argv[])
@@ -198,7 +216,7 @@ main (int argc, char *argv[])
   gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (left_tree_view), -1,
 					       "Unattached Columns", cell, "text", 0, NULL);
   cell = gtk_cell_renderer_toggle_new ();
-  g_signal_connect_data (G_OBJECT (cell), "toggled", set_visible, left_tree_view, NULL, FALSE, FALSE);
+  g_signal_connect_data (G_OBJECT (cell), "toggled", (GCallback) set_visible, left_tree_view, NULL, FALSE, FALSE);
   column = gtk_tree_view_column_new_with_attributes ("Visible", cell, NULL);
   gtk_tree_view_append_column (GTK_TREE_VIEW (left_tree_view), column);
   g_object_unref (G_OBJECT (column));
@@ -259,7 +277,7 @@ main (int argc, char *argv[])
   gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (top_right_tree_view), -1,
 					       NULL, cell, "text", 0, NULL);
   cell = gtk_cell_renderer_toggle_new ();
-  g_signal_connect_data (G_OBJECT (cell), "toggled", set_visible, top_right_tree_view, NULL, FALSE, FALSE);
+  g_signal_connect_data (G_OBJECT (cell), "toggled", (GCallback) set_visible, top_right_tree_view, NULL, FALSE, FALSE);
   column = gtk_tree_view_column_new_with_attributes (NULL, cell, NULL);
   gtk_tree_view_column_set_cell_data_func (column, get_visible, NULL, NULL);
   gtk_tree_view_append_column (GTK_TREE_VIEW (top_right_tree_view), column);
@@ -274,7 +292,7 @@ main (int argc, char *argv[])
   gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (bottom_right_tree_view), -1,
 					       NULL, cell, "text", 0, NULL);
   cell = gtk_cell_renderer_toggle_new ();
-  g_signal_connect_data (G_OBJECT (cell), "toggled", set_visible, bottom_right_tree_view, NULL, FALSE, FALSE);
+  g_signal_connect_data (G_OBJECT (cell), "toggled", (GCallback) set_visible, bottom_right_tree_view, NULL, FALSE, FALSE);
   column = gtk_tree_view_column_new_with_attributes (NULL, cell, NULL);
   gtk_tree_view_column_set_cell_data_func (column, get_visible, NULL, NULL);
   gtk_tree_view_append_column (GTK_TREE_VIEW (bottom_right_tree_view), column);
@@ -282,6 +300,44 @@ main (int argc, char *argv[])
   gtk_box_pack_start (GTK_BOX (vbox2), swindow, TRUE, TRUE, 0);
 
   
+  /* Drag and Drop */
+  gtk_tree_view_set_rows_drag_source (GTK_TREE_VIEW (left_tree_view),
+                                      GDK_BUTTON1_MASK,
+                                      row_targets,
+                                      G_N_ELEMENTS (row_targets),
+                                      GDK_ACTION_MOVE,
+                                      NULL, NULL);
+  gtk_tree_view_set_rows_drag_dest (GTK_TREE_VIEW (left_tree_view),
+                                    row_targets,
+                                    G_N_ELEMENTS (row_targets),
+                                    GDK_ACTION_MOVE,
+                                    NULL, NULL);
+
+  gtk_tree_view_set_rows_drag_source (GTK_TREE_VIEW (top_right_tree_view),
+                                      GDK_BUTTON1_MASK,
+                                      row_targets,
+                                      G_N_ELEMENTS (row_targets),
+                                      GDK_ACTION_MOVE,
+                                      NULL, NULL);
+  gtk_tree_view_set_rows_drag_dest (GTK_TREE_VIEW (top_right_tree_view),
+				    row_targets,
+				    G_N_ELEMENTS (row_targets),
+				    GDK_ACTION_MOVE,
+				      NULL, NULL);
+
+  gtk_tree_view_set_rows_drag_source (GTK_TREE_VIEW (bottom_right_tree_view),
+                                      GDK_BUTTON1_MASK,
+                                      row_targets,
+                                      G_N_ELEMENTS (row_targets),
+                                      GDK_ACTION_MOVE,
+                                      NULL, NULL);
+  gtk_tree_view_set_rows_drag_dest (GTK_TREE_VIEW (bottom_right_tree_view),
+				    row_targets,
+				    G_N_ELEMENTS (row_targets),
+				    GDK_ACTION_MOVE,
+				    NULL, NULL);
+
+
   gtk_box_pack_start (GTK_BOX (vbox), gtk_hseparator_new (), FALSE, FALSE, 0);
 
   hbox = gtk_hbox_new (FALSE, 8);

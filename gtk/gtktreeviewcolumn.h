@@ -63,9 +63,11 @@ struct _GtkTreeViewColumn
   GtkWidget *alignment;
   GdkWindow *window;
   gfloat xalign;
-  guint model_changed_signal;
+  guint property_changed_signal;
+  guint clickable_signal;
 
   gint width;
+  gint requested_width;
   gint min_width;
   gint max_width;
   gint displayed_width;
@@ -88,12 +90,12 @@ struct _GtkTreeViewColumn
   gint sort_column_id;
   GtkTreeSortOrder sort_order;
 
-  guint visible       : 1;
-  guint button_active : 1;
-  guint dirty         : 1;
+  guint visible             : 1;
+  guint clickable           : 1;
+  guint dirty               : 1;
   guint show_sort_indicator : 1;
   guint maybe_reordered     : 1;
-  guint reorderable   : 1;
+  guint reorderable         : 1;
 };
 
 struct _GtkTreeViewColumnClass
@@ -150,7 +152,7 @@ void                  gtk_tree_view_column_set_title          (GtkTreeViewColumn
                                                                const gchar       *title);
 G_CONST_RETURN gchar *gtk_tree_view_column_get_title          (GtkTreeViewColumn *tree_column);
 void                  gtk_tree_view_column_set_clickable      (GtkTreeViewColumn *tree_column,
-                                                               gboolean           active);
+                                                               gboolean           clickable);
 gboolean              gtk_tree_view_column_get_clickable      (GtkTreeViewColumn *tree_column);
 void                  gtk_tree_view_column_set_widget         (GtkTreeViewColumn *tree_column,
                                                                GtkWidget         *widget);
@@ -158,7 +160,9 @@ GtkWidget            *gtk_tree_view_column_get_widget         (GtkTreeViewColumn
 void                  gtk_tree_view_column_set_alignment      (GtkTreeViewColumn *tree_column,
                                                                gfloat             xalign);
 gfloat                gtk_tree_view_column_get_alignment      (GtkTreeViewColumn *tree_column);
-
+void                  gtk_tree_view_column_set_reorderable    (GtkTreeViewColumn *tree_column,
+							       gboolean           reorderable);
+gboolean              gtk_tree_view_column_get_reorderable    (GtkTreeViewColumn *tree_column);
 
 /* You probably only want to use gtk_tree_view_column_set_sort_column_id.  The
  * other sorting functions exist primarily to let others do their own custom sorting.

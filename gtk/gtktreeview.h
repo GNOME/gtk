@@ -173,6 +173,9 @@ gboolean               gtk_tree_view_collapse_row                  (GtkTreeView 
 void                   gtk_tree_view_map_expanded_rows             (GtkTreeView               *tree_view,
 								    GtkTreeViewMappingFunc     func,
 								    gpointer                   data);
+void                   gtk_tree_view_set_reorderable               (GtkTreeView               *tree_view,
+								    gboolean                   reorderable);
+
 
 /* Layout information */
 gboolean               gtk_tree_view_get_path_at_pos               (GtkTreeView               *tree_view,
@@ -220,6 +223,7 @@ void                   gtk_tree_view_set_rows_drag_dest            (GtkTreeView 
 								    gpointer                   user_data);
 void                   gtk_tree_view_unset_rows_drag_source        (GtkTreeView               *tree_view);
 void                   gtk_tree_view_unset_rows_drag_dest          (GtkTreeView               *tree_view);
+
 
 /* These are useful to implement your own custom stuff. */
 void                   gtk_tree_view_set_drag_dest_row             (GtkTreeView               *tree_view,

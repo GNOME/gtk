@@ -153,6 +153,7 @@ struct _GtkTreeViewPrivate
   gfloat scroll_to_row_align;
   gfloat scroll_to_col_align;
 
+  guint reorderable : 1;
   guint header_has_focus : 1;
   guint drag_column_window_state : 3;
   /* hint to display rows in alternating colors */
@@ -246,12 +247,13 @@ GtkTreePath *_gtk_tree_view_find_path                 (GtkTreeView       *tree_v
 void         _gtk_tree_view_update_size               (GtkTreeView       *tree_view);
 
 
-void _gtk_tree_view_column_create_button    (GtkTreeViewColumn *column);
 void _gtk_tree_view_column_realize_button   (GtkTreeViewColumn *column);
 void _gtk_tree_view_column_unrealize_button (GtkTreeViewColumn *column);
 void _gtk_tree_view_column_set_tree_view    (GtkTreeViewColumn *column,
 					     GtkTreeView       *tree_view);
 void _gtk_tree_view_column_unset_tree_view  (GtkTreeViewColumn *column);
+void _gtk_tree_view_column_set_width        (GtkTreeViewColumn *column,
+					     gint               width);
 void _gtk_tree_view_column_start_drag       (GtkTreeView       *tree_view,
 					     GtkTreeViewColumn *column);
 
