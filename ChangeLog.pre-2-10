@@ -1,5 +1,8 @@
 2005-01-19  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkobject.c (gtk_object_add_arg_type): Use GLib limit 
+	macros to avoid sparse warnings. Pointed out by Kjartan Maraas.
+
 	* gdk/x11/gdkdisplay-x11.c: Precache the _NET_VIRTUAL_ROOTS
 	atom.
 
