@@ -322,10 +322,10 @@ static GtkWindowClass *parent_class = NULL;
 /* Saves errno when something cmpl does fails. */
 static gint cmpl_errno;
 
-guint
+GtkType
 gtk_file_selection_get_type (void)
 {
-  static guint file_selection_type = 0;
+  static GtkType file_selection_type = 0;
 
   if (!file_selection_type)
     {
@@ -341,7 +341,7 @@ gtk_file_selection_get_type (void)
         (GtkClassInitFunc) NULL,
       };
 
-      file_selection_type = gtk_type_unique (gtk_window_get_type (), &filesel_info);
+      file_selection_type = gtk_type_unique (GTK_TYPE_WINDOW, &filesel_info);
     }
 
   return file_selection_type;
@@ -354,7 +354,7 @@ gtk_file_selection_class_init (GtkFileSelectionClass *class)
 
   object_class = (GtkObjectClass*) class;
 
-  parent_class = gtk_type_class (gtk_window_get_type ());
+  parent_class = gtk_type_class (GTK_TYPE_WINDOW);
 
   object_class->destroy = gtk_file_selection_destroy;
 }
@@ -497,7 +497,7 @@ gtk_file_selection_new (const gchar *title)
 {
   GtkFileSelection *filesel;
 
-  filesel = gtk_type_new (gtk_file_selection_get_type ());
+  filesel = gtk_type_new (GTK_TYPE_FILE_SELECTION);
   gtk_window_set_title (GTK_WINDOW (filesel), title);
 
   return GTK_WIDGET (filesel);
@@ -625,6 +625,19 @@ gtk_file_selection_get_filename (GtkFileSelection *filesel)
     }
 
   return nothing;
+}
+
+void
+gtk_file_selection_complete (GtkFileSelection *filesel,
+			     const gchar      *pattern)
+{
+  g_return_if_fail (filesel != NULL);
+  g_return_if_fail (GTK_IS_FILE_SELECTION (filesel));
+  g_return_if_fail (pattern != NULL);
+
+  if (filesel->selection_entry)
+    gtk_entry_set_text (GTK_ENTRY (filesel->selection_entry), pattern);
+  gtk_file_selection_populate (filesel, (gchar*) pattern, TRUE);
 }
 
 static void
@@ -1696,7 +1709,7 @@ cmpl_completion_matches (gchar* text_to_complete,
 
   prune_memory_usage(cmpl_state);
 
-  g_assert(text_to_complete);
+  g_assert (text_to_complete != NULL);
 
   cmpl_state->user_completion_index = -1;
   cmpl_state->last_completion_text = text_to_complete;
@@ -1706,14 +1719,14 @@ cmpl_completion_matches (gchar* text_to_complete,
   cmpl_state->updated_text[0] = 0;
   cmpl_state->re_complete = FALSE;
 
-  first_slash = strchr(text_to_complete, '/');
+  first_slash = strchr (text_to_complete, '/');
 
-  if(text_to_complete[0] == '~' && !first_slash)
+  if (text_to_complete[0] == '~' && !first_slash)
     {
       /* Text starts with ~ and there is no slash, show all the
        * home directory completions.
        */
-      poss = attempt_homedir_completion(text_to_complete, cmpl_state);
+      poss = attempt_homedir_completion (text_to_complete, cmpl_state);
 
       update_cmpl(poss, cmpl_state);
 
@@ -1721,13 +1734,13 @@ cmpl_completion_matches (gchar* text_to_complete,
     }
 
   cmpl_state->reference_dir =
-    open_ref_dir(text_to_complete, remaining_text, cmpl_state);
+    open_ref_dir (text_to_complete, remaining_text, cmpl_state);
 
   if(!cmpl_state->reference_dir)
     return NULL;
 
   cmpl_state->completion_dir =
-    find_completion_dir(*remaining_text, remaining_text, cmpl_state);
+    find_completion_dir (*remaining_text, remaining_text, cmpl_state);
 
   cmpl_state->last_valid_char = *remaining_text - text_to_complete;
 
