@@ -87,6 +87,11 @@ typedef gboolean (*GtkCTreeGNodeFunc) (GtkCTree     *ctree,
 				       GtkCTreeNode *cnode,
                                        gpointer      data);
 
+typedef gboolean (*GtkCTreeCompareDragFunc) (GtkCTree     *ctree,
+                                             GtkCTreeNode *source_node,
+                                             GtkCTreeNode *new_parent,
+                                             GtkCTreeNode *new_sibling);
+
 struct _GtkCTree
 {
   GtkCList clist;
@@ -109,6 +114,8 @@ struct _GtkCTree
   guint in_drag     : 1;
   guint drag_rect   : 1;
   guint line_style  : 2;
+
+  GtkCTreeCompareDragFunc drag_compare;
 };
 
 struct _GtkCTreeClass
@@ -372,6 +379,8 @@ void       gtk_ctree_set_use_drag_icons     (GtkCTree     *ctree,
 					     gboolean      use_icons);
 void       gtk_ctree_set_line_style         (GtkCTree     *ctree, 
 					     GtkCTreeLineStyle line_style);
+void       gtk_ctree_set_drag_compare_func  (GtkCTree     		*ctree,
+					     GtkCTreeCompareDragFunc	cmp_func);            
 
 /***********************************************************
  *             Tree sorting functions                      *

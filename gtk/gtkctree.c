@@ -191,8 +191,9 @@ static void real_undo_selection         (GtkCList      *clist);
 static void select_row_recursive        (GtkCTree      *ctree, 
 					 GtkCTreeNode  *node, 
 					 gpointer       data);
-
-
+static void set_mouse_cursor		(GtkCTree	*ctree,
+					 gboolean	enable);
+static void check_cursor		(GtkCTree	*ctree);
 
 
 enum
@@ -409,6 +410,7 @@ gtk_ctree_init (GtkCTree *ctree)
   ctree->in_drag        = FALSE;
   ctree->drag_rect      = FALSE;
   ctree->line_style     = GTK_CTREE_LINES_SOLID;
+  ctree->drag_compare   = NULL;
 }
 
 static void
@@ -741,6 +743,7 @@ gtk_ctree_button_motion (GtkWidget      *widget,
 		GTK_CTREE_NODE (g_list_nth (clist->row_list, row));
 	      ctree->drag_row = row;
 	      draw_xor_line (ctree);
+	      check_cursor(ctree);
 	    }
 	  else if (ctree->drag_target &&
 		   !GTK_CTREE_ROW (ctree->drag_target)->is_leaf)
@@ -758,6 +761,7 @@ gtk_ctree_button_motion (GtkWidget      *widget,
 		GTK_CTREE_NODE (g_list_nth (clist->row_list, row));
 	      ctree->drag_row = row;
 	      draw_xor_rect (ctree);
+	      check_cursor(ctree);
 	    }
 	}
     }
@@ -784,6 +788,8 @@ gtk_ctree_button_release (GtkWidget      *widget,
       gdk_pointer_ungrab (event->time);
 
       ctree->in_drag = FALSE;
+
+      set_mouse_cursor(ctree, TRUE);
 
       if (ctree->use_icons && ctree->drag_icon)
 	{
@@ -820,31 +826,46 @@ gtk_ctree_button_release (GtkWidget      *widget,
 	    {
 	      if (GTK_CTREE_ROW (ctree->drag_target)->sibling != 
 		  ctree->drag_source)
-		gtk_signal_emit (GTK_OBJECT (ctree), 
-				 ctree_signals[TREE_MOVE],
-				 ctree->drag_source,
-				 GTK_CTREE_ROW (ctree->drag_target)->parent,
-				 GTK_CTREE_ROW (ctree->drag_target)->sibling);
+		if (!ctree->drag_compare ||
+		    ctree->drag_compare (ctree,
+					 ctree->drag_source,
+					 GTK_CTREE_ROW (ctree->drag_target)->parent,
+					 GTK_CTREE_ROW (ctree->drag_target)->sibling))
+		  gtk_signal_emit (GTK_OBJECT (ctree), 
+				   ctree_signals[TREE_MOVE],
+				   ctree->drag_source,
+				   GTK_CTREE_ROW (ctree->drag_target)->parent,
+				   GTK_CTREE_ROW (ctree->drag_target)->sibling);
 	    }
 	  else if (ctree->insert_pos == GTK_CTREE_POS_BEFORE)
 	    {
 	      if (GTK_CTREE_ROW (ctree->drag_source)->sibling != 
 		  ctree->drag_target)
-		gtk_signal_emit (GTK_OBJECT (ctree), 
-				 ctree_signals[TREE_MOVE],
-				 ctree->drag_source,
-				 GTK_CTREE_ROW (ctree->drag_target)->parent,
-				 ctree->drag_target);
+		if (!ctree->drag_compare ||
+		    ctree->drag_compare (ctree,
+					 ctree->drag_source,
+					 GTK_CTREE_ROW (ctree->drag_target)->parent,
+					 ctree->drag_target))
+		  gtk_signal_emit (GTK_OBJECT (ctree), 
+				   ctree_signals[TREE_MOVE],
+				   ctree->drag_source,
+				   GTK_CTREE_ROW (ctree->drag_target)->parent,
+				   ctree->drag_target);
 	    }
 	  else if (!GTK_CTREE_ROW (ctree->drag_target)->is_leaf)
 	    {
 	      if (GTK_CTREE_ROW (ctree->drag_target)->children !=
 		  ctree->drag_source)
-		gtk_signal_emit (GTK_OBJECT (ctree), 
-				 ctree_signals[TREE_MOVE],
-				 ctree->drag_source,
-				 ctree->drag_target,
-				 GTK_CTREE_ROW (ctree->drag_target)->children);
+		if (!ctree->drag_compare ||
+		    ctree->drag_compare (ctree,
+					 ctree->drag_source,
+					 ctree->drag_target,
+					 GTK_CTREE_ROW (ctree->drag_target)->children))
+		  gtk_signal_emit (GTK_OBJECT (ctree), 
+				   ctree_signals[TREE_MOVE],
+				   ctree->drag_source,
+				   ctree->drag_target,
+				   GTK_CTREE_ROW (ctree->drag_target)->children);
 	    }
 	}
       ctree->drag_source = NULL;
@@ -5304,4 +5325,72 @@ real_undo_selection (GtkCList *clist)
   else if (ROW_TOP_YPIXEL (clist, clist->focus_row) < 0)
     gtk_clist_moveto (clist, clist->focus_row, -1, 0, 0);
 
+}
+
+void
+gtk_ctree_set_drag_compare_func (GtkCTree *ctree, GtkCTreeCompareDragFunc cmp_func)
+{
+  g_return_if_fail (ctree != NULL);
+  g_return_if_fail (GTK_IS_CTREE (ctree));
+
+  ctree->drag_compare = cmp_func;
+}
+
+static void
+set_mouse_cursor(GtkCTree *ctree, gboolean enable)
+{
+  GdkCursor *cursor;
+
+  g_return_if_fail (ctree != NULL);
+  g_return_if_fail (GTK_IS_CTREE (ctree));
+
+  if (enable)
+    cursor = gdk_cursor_new (GDK_LEFT_PTR);
+  else
+    cursor = gdk_cursor_new (GDK_CIRCLE);
+
+  gdk_window_set_cursor (GTK_CLIST(ctree)->clist_window, cursor);
+  gdk_cursor_destroy (cursor);
+}
+
+static void
+check_cursor(GtkCTree *ctree)
+{
+  g_return_if_fail (ctree != NULL);
+  g_return_if_fail (GTK_IS_CTREE (ctree));
+
+
+  if (!GTK_CTREE_ROW (ctree->drag_source)->children ||
+      !gtk_ctree_is_ancestor (ctree, ctree->drag_source, ctree->drag_target))
+    {
+    if (ctree->insert_pos == GTK_CTREE_POS_AFTER)
+      {
+      if (GTK_CTREE_ROW (ctree->drag_target)->sibling != ctree->drag_source)
+        set_mouse_cursor( ctree, (!ctree->drag_compare ||
+                                  ctree->drag_compare (ctree,
+                                  ctree->drag_source,
+                                  GTK_CTREE_ROW (ctree->drag_target)->parent,
+                                  GTK_CTREE_ROW (ctree->drag_target)->sibling)));
+      }
+    else if (ctree->insert_pos == GTK_CTREE_POS_BEFORE)
+      {
+      if (GTK_CTREE_ROW (ctree->drag_source)->sibling != ctree->drag_target)
+        set_mouse_cursor( ctree, (!ctree->drag_compare ||
+                                  ctree->drag_compare (ctree,
+                                  ctree->drag_source,
+                                  GTK_CTREE_ROW (ctree->drag_target)->parent,
+                                  ctree->drag_target)));
+      }
+    else if (!GTK_CTREE_ROW (ctree->drag_target)->is_leaf)
+      {
+      if (GTK_CTREE_ROW (ctree->drag_target)->children != ctree->drag_source)
+        set_mouse_cursor( ctree, (!ctree->drag_compare ||
+                                  ctree->drag_compare (ctree,
+                                  ctree->drag_source,
+                                  ctree->drag_target,
+                                  GTK_CTREE_ROW (ctree->drag_target)->children)));
+      }
+    }
+  else
+    set_mouse_cursor(ctree, FALSE);
 }
