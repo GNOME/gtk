@@ -1,3 +1,11 @@
+Mon Jul  2 01:09:37 2001  Owen Taylor  <otaylor@redhat.com>
+ 
+ 	* gdk/gdkwindow.[ch] gdk/gdkinternals.h gdk/x11/gdkwindow-x11.c
+ 	gdk/linux-fb/gdkwindow-fb.c gdk/x11/gdkwindow-x11.c gdk/gdk:
+ 	Add gdk_set_pointer_hooks() to allow pointer-querying to
+ 	be hooked by an event record/playback system like GERD.
+	(#56914)
+ 	
 Thu Jul  5 08:57:07 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkwidget.c (gtk_widget_reset_rc_style): Pass

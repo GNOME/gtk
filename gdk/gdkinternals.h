@@ -159,6 +159,13 @@ void     _gdk_windowing_window_clear_area_e     (GdkWindow  *window,
 						 gint        width,
 						 gint        height);
 
+GdkWindow* _gdk_windowing_window_at_pointer  (gint            *win_x,
+					      gint            *win_y);
+GdkWindow* _gdk_windowing_window_get_pointer (GdkWindow       *window,
+					      gint            *x,
+					      gint            *y,
+					      GdkModifierType *mask);
+
 #define GDK_WINDOW_IS_MAPPED(window) ((((GdkWindowObject*)window)->state & GDK_WINDOW_STATE_WITHDRAWN) == 0)
 
 /* Called before processing updates for a window. This gives the windowing

@@ -1602,10 +1602,10 @@ gdk_window_fb_get_visible_region (GdkDrawable *drawable)
 }
 
 GdkWindow *
-gdk_window_get_pointer (GdkWindow       *window,
-			gint            *x,
-			gint            *y,
-			GdkModifierType *mask)
+_gdk_windowing_window_get_pointer (GdkWindow       *window,
+				   gint            *x,
+				   gint            *y,
+				   GdkModifierType *mask)
 {
   GdkWindow *return_val;
   int winx = 0;
@@ -1686,8 +1686,8 @@ gdk_window_get_pointer (GdkWindow       *window,
 }
 
 GdkWindow*
-gdk_window_at_pointer (gint *win_x,
-		       gint *win_y)
+_gdk_windowing_window_at_pointer (gint *win_x,
+				  gint *win_y)
 {
   gint rx, ry;
   GdkWindow *retval = gdk_window_get_pointer (NULL, win_x, win_y, NULL);

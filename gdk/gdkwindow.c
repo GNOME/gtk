@@ -42,6 +42,14 @@ struct _GdkWindowPaint
   gint x_offset;
   gint y_offset;
 };
+
+static const GdkPointerHooks default_pointer_hooks = {
+  _gdk_windowing_window_get_pointer,
+  _gdk_windowing_window_at_pointer
+};
+
+const GdkPointerHooks *current_pointer_hooks = &default_pointer_hooks;
+
 static GdkGC *gdk_window_create_gc      (GdkDrawable     *drawable,
                                          GdkGCValues     *values,
                                          GdkGCValuesMask  mask);
@@ -2278,4 +2286,49 @@ gdk_window_constrain_size (GdkGeometry *geometry,
   
   *new_width = width;
   *new_height = height;
+}
+
+/**
+ * gdk_set_pointer_hooks:
+ * @new_hooks: a table of pointer to functions for getting
+ *   quantities related to the current pointer position,
+ *   or %NULL to restore the default table.
+ * 
+ * This function allows for hooking into the operation
+ * of getting the current location of the pointer. This
+ * is only useful for such low-level tools as an
+ * event recorder. Applications should never have any
+ * reason to use this facility
+ * 
+ * Return value: the previous pointer hook table
+ **/
+GdkPointerHooks *
+gdk_set_pointer_hooks (const GdkPointerHooks *new_hooks)
+{
+  const GdkPointerHooks *result = current_pointer_hooks;
+
+  if (new_hooks)
+    current_pointer_hooks = new_hooks;
+  else
+    current_pointer_hooks = &default_pointer_hooks;
+
+  return (GdkPointerHooks *)result;
+}
+
+GdkWindow*
+gdk_window_get_pointer (GdkWindow	  *window,
+			gint		  *x,
+			gint		  *y,
+			GdkModifierType *mask)
+{
+  g_return_val_if_fail (window == NULL || GDK_IS_WINDOW (window), NULL);
+  
+  return current_pointer_hooks->get_pointer (window, x, y, mask); 
+}
+
+GdkWindow*
+gdk_window_at_pointer (gint *win_x,
+		       gint *win_y)
+{
+  return current_pointer_hooks->window_at_pointer (win_x, win_y);
 }
