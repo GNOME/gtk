@@ -1,3 +1,7 @@
+Thu Mar  3 16:59:44 2005  Manish Singh  <yosh@gimp.org>
+
+	* configure.in: URL escape the '+' in gtk+ in the bugzilla URL.
+
 2005-03-03  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtksettings.c (gtk_settings_get_property): 

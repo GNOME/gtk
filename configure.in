@@ -37,7 +37,7 @@ m4_define([atk_required_version], [1.0.1])
 
 
 AC_INIT([gtk+], [gtk_version],
-        [http://bugzilla.gnome.org/enter_bug.cgi?product=gtk+],
+        [http://bugzilla.gnome.org/enter_bug.cgi?product=gtk%2B],
 	[gtk+])
 
 AC_CONFIG_SRCDIR([gdk/gdktypes.h])
