@@ -30,6 +30,11 @@ LDADDS = @STRIP_BEGIN@ 					\
 	-lm						\
 @STRIP_END@
 
+if USE_X11
+testsocket_programs = testsocket testsocket_child
+endif
+
+
 noinst_PROGRAMS = 		\
 	simple			\
 	testcalendar		\
@@ -38,8 +43,7 @@ noinst_PROGRAMS = 		\
 	testinput		\
 	testrgb			\
 	testselection 		\
-##	testsocket		\
-##	testsocket_child	\
+	$(testsocket_programs)	\
 	testtext		\
         testtextbuffer		\
 	testtreeview		\
@@ -48,8 +52,6 @@ noinst_PROGRAMS = 		\
 	testtreesort		\
 	treestoretest
 
-#testsocket_DEPENDENCIES = $(DEPS)
-#testsocket_child_DEPENDENCIES = $(DEPS)
 simple_DEPENDENCIES = $(TEST_DEPS)
 testcalendar_DEPENDENCIES = $(TEST_DEPS)
 testdnd_DEPENDENCIES = $(TEST_DEPS)
@@ -57,6 +59,8 @@ testgtk_DEPENDENCIES = $(TEST_DEPS)
 testinput_DEPENDENCIES = $(TEST_DEPS)
 testrgb_DEPENDENCIES = $(TEST_DEPS)
 testselection_DEPENDENCIES = $(TEST_DEPS)
+testsocket_DEPENDENCIES = $(DEPS)
+testsocket_child_DEPENDENCIES = $(DEPS)
 testtext_DEPENDENCIES = $(TEST_DEPS)
 testtextbuffer_DEPENDENCIES = $(TEST_DEPS)
 testtreeview_DEPENDENCIES = $(DEPS)
@@ -65,8 +69,6 @@ testtreecolumns_DEPENDENCIES = $(DEPS)
 testtreesort_DEPENDENCIES = $(DEPS)
 treestoretest_DEPENDENCIES = $(TEST_DEPS)
 
-#testsocket_LDADD = $(LDADDS)
-#testsocket_child_LDADD = $(LDADDS)
 simple_LDADD = $(LDADDS)
 testcalendar_LDADD = $(LDADDS)
 testdnd_LDADD = $(LDADDS)
@@ -74,6 +76,8 @@ testgtk_LDADD = $(LDADDS)
 testinput_LDADD = $(LDADDS)
 testrgb_LDADD = $(LDADDS)
 testselection_LDADD = $(LDADDS)
+testsocket_LDADD = $(LDADDS)
+testsocket_child_LDADD = $(LDADDS)
 testtextbuffer_LDADD = $(LDADDS)
 testtreeview_LDADD = $(LDADDS)
 testtreefocus_LDADD = $(LDADDS)

@@ -97,6 +97,7 @@ main (int argc, char *argv[])
   GtkWidget *button;
   GtkWidget *hbox;
   GtkWidget *entry;
+  GtkAccelGroup *accel_group;
   GtkItemFactory *item_factory;
 
   gtk_init (&argc, &argv);
@@ -111,8 +112,11 @@ main (int argc, char *argv[])
   vbox = gtk_vbox_new (FALSE, 0);
   gtk_container_add (GTK_CONTAINER (window), vbox);
 
-  item_factory = gtk_item_factory_new (GTK_TYPE_MENU_BAR, "<main>",
-				       gtk_window_get_default_accel_group (GTK_WINDOW (window)));
+  accel_group = gtk_accel_group_new ();
+  gtk_window_add_accel_group (GTK_WINDOW (window), accel_group);
+  item_factory = gtk_item_factory_new (GTK_TYPE_MENU_BAR, "<main>", accel_group);
+
+  
   gtk_item_factory_create_items (item_factory,
 				 G_N_ELEMENTS (menu_items), menu_items,
 				 NULL);

@@ -256,13 +256,13 @@ gdk_image_new (GdkImageType  type,
 
 	      x_shm_info->shmid = shmget (IPC_PRIVATE,
 					  private->ximage->bytes_per_line * private->ximage->height,
-					  IPC_CREAT | 0777);
+					  IPC_CREAT | 0600);
 
 	      if (x_shm_info->shmid == -1)
 		{
 		  /* EINVAL indicates, most likely, that the segment we asked for
-		   * is bigger than SHMMAX, so we don't treat it as a permanently
-		   * fatal error. ENOSPC and ENOMEM may also indicate this, but
+		   * is bigger than SHMMAX, so we don't treat it as a permanent
+		   * error. ENOSPC and ENOMEM may also indicate this, but
 		   * more likely are permanent errors.
 		   */
 		  if (errno != EINVAL)
@@ -381,7 +381,8 @@ _gdk_x11_get_image (GdkDrawable    *drawable,
   GdkImagePrivateX11 *private;
   GdkDrawableImplX11 *impl;
   GdkVisual *visual;
-  
+  XImage *ximage;
+ 
   g_return_val_if_fail (GDK_IS_DRAWABLE_IMPL_X11 (drawable), NULL);
 
   visual = gdk_drawable_get_visual (drawable);
@@ -398,14 +399,19 @@ _gdk_x11_get_image (GdkDrawable    *drawable,
   
   impl = GDK_DRAWABLE_IMPL_X11 (drawable);
   
+  ximage = XGetImage (impl->xdisplay,
+		      impl->xid,
+		      x, y, width, height,
+		      AllPlanes, ZPixmap);
+
+  if (!ximage)
+    return NULL;
+
   image = g_object_new (gdk_image_get_type (), NULL);
   private = PRIVATE_DATA (image);
 
   private->xdisplay = gdk_display;
-  private->ximage = XGetImage (private->xdisplay,
-                               impl->xid,
-			       x, y, width, height,
-			       AllPlanes, ZPixmap);
+  private->ximage = ximage;
 
   image->type = GDK_IMAGE_NORMAL;
   image->visual = visual;

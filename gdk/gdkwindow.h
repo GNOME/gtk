@@ -180,7 +180,8 @@ struct _GdkWindowAttr
   gboolean override_redirect;
 };
 
-struct _GdkGeometry {
+struct _GdkGeometry
+{
   gint min_width;
   gint min_height;
   gint max_width;

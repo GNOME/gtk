@@ -1,3 +1,29 @@
+Wed Apr 18 14:23:14 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/x11/gdkimage-x11.c (gdk_image_new): Try changing
+	mode on shm segments to 0600. We'll see who complains.
+
+	* gdk/gdkwindow.c (_gdk_window_destroy_hierarchy): Call
+	_gdk_windowing_window_destroy() AFTER recursing through
+	children.
+
+	* tests/Makefile.am (noinst_PROGRAMS): Build testsocket,
+	testsocket_child on X.
+
+	* tests/testsocket[_child].c: Fix uses of
+	gtk_window_get_default_accel_group().
+
+	[ Merge patch from Ramiro Estrugo  <ramiro@eazel.com> from gtk-1-2 ]
+
+	* gdk/gdkimage.c: (gdk_image_get):
+	Deal with the possibility that XGetImage() might return NULL.
+	Allocate the GdkImagePrivate structure only after XGetImage()
+	succeeds in order not to dereference a NULL ximage pointer.  This
+	prevents a core dump when XGetImage() fails - which is unlikely,
+	but can happen due to race conditions accessing the geometries of
+	drawables.  An x error will still be triggered, but the gdk image
+	wrapper at least wont seg fault.
+	
 2001-04-18  Havoc Pennington  <hp@redhat.com>
 
 	* gtk/gtkimage.c: fix to properly queue resizes when the image is

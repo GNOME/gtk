@@ -16,9 +16,8 @@ add_buttons (GtkWidget *widget, GtkWidget *box)
   GtkWidget *add_button;
   GtkWidget *remove_button;
   GtkWidget *toplevel = gtk_widget_get_toplevel (box);
-  GtkAccelGroup *accel_group = gtk_window_get_default_accel_group (GTK_WINDOW (toplevel));
 
-  add_button = gtk_button_new_accel ("_Add", accel_group);
+  add_button = gtk_button_new_with_mnemonic ("_Add");
   gtk_box_pack_start (GTK_BOX (box), add_button, TRUE, TRUE, 0);
   gtk_widget_show (add_button);
 
@@ -26,7 +25,7 @@ add_buttons (GtkWidget *widget, GtkWidget *box)
 		      GTK_SIGNAL_FUNC (add_buttons),
 		      box);
 
-  remove_button = gtk_button_new_accel ("_Remove", accel_group);
+  remove_button = gtk_button_new_with_mnemonic ("_Remove");
   gtk_box_pack_start (GTK_BOX (box), remove_button, TRUE, TRUE, 0);
   gtk_widget_show (remove_button);
 
@@ -44,7 +43,6 @@ main (int argc, char *argv[])
   GtkWidget *hbox;
   GtkWidget *entry;
   GtkWidget *button;
-  GtkAccelGroup *accel_group;
   gtk_init (&argc, &argv);
 
   if (argc < 2)
@@ -73,9 +71,7 @@ main (int argc, char *argv[])
   gtk_box_pack_start (GTK_BOX (hbox), entry, TRUE, TRUE, 0);
   gtk_widget_show (entry);
 
-  accel_group = gtk_window_get_default_accel_group (GTK_WINDOW (window));
-
-  button = gtk_button_new_accel ("_Close", accel_group);
+  button = gtk_button_new_with_mnemonic ("_Close");
   gtk_box_pack_start (GTK_BOX (hbox), button, TRUE, TRUE, 0);
   gtk_widget_show (button);
 

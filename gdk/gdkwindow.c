@@ -295,8 +295,6 @@ _gdk_window_destroy_hierarchy (GdkWindow *window,
 	  private->state |= GDK_WINDOW_STATE_WITHDRAWN;
 	  private->destroyed = TRUE;
 	  
-	  _gdk_windowing_window_destroy (window, recursing, foreign_destroy);
-
 	  if (private->parent)
 	    {
 	      GdkWindowObject *parent_private = (GdkWindowObject *)private->parent;
@@ -333,6 +331,8 @@ _gdk_window_destroy_hierarchy (GdkWindow *window,
 	      g_list_free (children);
 	    }
 	  
+	  _gdk_windowing_window_destroy (window, recursing, foreign_destroy);
+
 	  if (private->filters)
 	    {
 	      tmp = private->filters;
