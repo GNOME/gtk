@@ -539,7 +539,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		    GTK_TYPE_NONE, 0);
   widget_signals[UNREALIZE] =
     gtk_signal_new ("unrealize",
-		    GTK_RUN_FIRST,
+		    GTK_RUN_LAST,
 		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkWidgetClass, unrealize),
 		    gtk_marshal_VOID__VOID,
