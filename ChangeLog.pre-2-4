@@ -1,6 +1,6 @@
 2003-01-04  Tor Lillqvist  <tml@iki.fi>
 
-	* gtk-zip.sh.in (DEVZIP): Add gdk-pixbuf-source.exe and .1.
+	* gtk-zip.sh.in (DEVZIP): Add gdk-pixbuf-csource.exe and .1.
 
 2003-01-02  Matthias Clasen  <maclas@gmx.de>
 
