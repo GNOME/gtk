@@ -12,3 +12,5 @@ simple
 testtree
 gtkfeatures.h
 testthreads
+gtkmarshal.h
+gtkmarshal.c
