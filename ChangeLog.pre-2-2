@@ -1,12 +1,20 @@
+Sun Sep 30 22:15:52 2001  Manish Singh  <yosh@gimp.org>
+
+	* gtk/gtkcheckbutton.c (gtk_check_button_size_allocate): Applied
+	patch from Soeren Sandmann <sandmann@daimi.au.dk>. Vertically
+	centers the child in relation to the to indicator height.
+
 Sun Sep 30 15:11:59 2001  Jonathan Blandford  <jrb@redhat.com>
 
-	* gtk/gtktreestore.c (gtk_tree_store_remove): Make ITERS_PERSIST correct
+	* gtk/gtktreestore.c (gtk_tree_store_remove): Make ITERS_PERSIST
+	correct
 
 Sun Sep 30  07:01:42 2001 CEST <mikeh@bahnhof.se>
 
-    * gtk/gtkcellrenderertext.c I reverted back to old "weight" property code using g_param_spec_int 
-      and changed from g_value_get_enum to g_value_get_int instead. 
-      Probadly a better way to fix the problem :-)
+	* gtk/gtkcellrenderertext.c: I reverted back to old "weight"
+	property code using g_param_spec_int and changed from
+	g_value_get_enum to g_value_get_int instead. Probably a better way
+	to fix the problem :-)
 
 Sun Sep 30  05:31:32 2001 CEST Mikael Hermansson <tyan@linux.se>
 
