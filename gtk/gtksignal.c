@@ -173,8 +173,8 @@ gtk_signal_compat_matched (GtkObject       *object,
     }
   
   if (!n_handlers)
-    g_warning ("unable to find signal handler for object(%p) with func(%p) and data(%p)",
-	       object, func, data);
+    g_warning ("unable to find signal handler for object(%s:%p) with func(%p) and data(%p)",
+	       G_OBJECT_TYPE_NAME (object), object, func, data);
 }
 
 static inline gboolean

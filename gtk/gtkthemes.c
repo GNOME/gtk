@@ -37,7 +37,95 @@
 #include "config.h"
 #include "gtkintl.h"
 
+/*****************************
+ *****************************
+ * temporary compat code, make GtkThemeEnginePlugin a GObject plus GTypePlugin interface
+ */
 typedef struct _GtkThemeEnginePlugin GtkThemeEnginePlugin;
+typedef struct _GObjectClass         GtkThemeEnginePluginClass;
+static void gtk_theme_engine_plugin_use                (GTypePlugin     *plugin);
+static void gtk_theme_engine_plugin_unuse              (GTypePlugin     *plugin);
+static void gtk_theme_engine_plugin_complete_type_info (GTypePlugin     *plugin,
+							GType            g_type,
+							GTypeInfo       *info,
+							GTypeValueTable *value_table);
+GType	    gtk_theme_engine_plugin_get_type	       (void);
+struct _GtkThemeEnginePlugin
+{
+  GObject parent_instance;
+
+  GtkThemeEngine *engine;
+  gchar *engine_name;
+  GTypeInfo info;
+  GType type;
+  GType parent_type;
+};
+#define GTK_TYPE_THEME_ENGINE_PLUGIN              (gtk_theme_engine_plugin_get_type ())
+#define GTK_THEME_ENGINE_PLUGIN(plugin)           (G_TYPE_CHECK_INSTANCE_CAST ((plugin), GTK_TYPE_THEME_ENGINE_PLUGIN, GtkThemeEnginePlugin))
+#define GTK_THEME_ENGINE_PLUGIN_CLASS(class)      (G_TYPE_CHECK_CLASS_CAST ((class), GTK_TYPE_THEME_ENGINE_PLUGIN, GtkThemeEnginePluginClass))
+#define GTK_IS_THEME_ENGINE_PLUGIN(plugin)        (G_TYPE_CHECK_INSTANCE_TYPE ((plugin), GTK_TYPE_THEME_ENGINE_PLUGIN))
+#define GTK_IS_THEME_ENGINE_PLUGIN_CLASS(class)   (G_TYPE_CHECK_CLASS_TYPE ((class), GTK_TYPE_THEME_ENGINE_PLUGIN))
+#define GTK_THEME_ENGINE_PLUGIN_GET_CLASS(plugin) (G_TYPE_INSTANCE_GET_CLASS ((plugin), GTK_TYPE_THEME_ENGINE_PLUGIN, GtkThemeEnginePluginClass))
+static void
+gtk_theme_engine_plugin_shutdown (GObject *object)
+{
+  GtkThemeEnginePlugin *plugin = GTK_THEME_ENGINE_PLUGIN (object);
+
+  g_warning (G_STRLOC ": shutdown should never happen for static type plugins");
+
+  g_object_ref (object);
+
+  /* chain parent class handler */
+  G_OBJECT_CLASS (g_type_class_peek_parent (GTK_THEME_ENGINE_PLUGIN_GET_CLASS (plugin)))->shutdown (object);
+}
+static void
+gtk_theme_engine_plugin_class_init (GtkThemeEnginePluginClass *class)
+{
+  GObjectClass *gobject_class = G_OBJECT_CLASS (class);
+
+  gobject_class->shutdown = gtk_theme_engine_plugin_shutdown;
+}
+static void
+theme_engine_plugin_iface_init (GTypePluginClass *iface)
+{
+  iface->use_plugin = gtk_theme_engine_plugin_use;
+  iface->unuse_plugin = gtk_theme_engine_plugin_unuse;
+  iface->complete_type_info = gtk_theme_engine_plugin_complete_type_info;
+}
+GType
+gtk_theme_engine_plugin_get_type (void)
+{
+  static GType theme_engine_plugin_type = 0;
+
+  if (!theme_engine_plugin_type)
+    {
+      static const GTypeInfo theme_engine_plugin_info = {
+	sizeof (GtkThemeEnginePluginClass),
+	NULL,           /* base_init */
+	NULL,           /* base_finalize */
+	(GClassInitFunc) gtk_theme_engine_plugin_class_init,
+	NULL,           /* class_finalize */
+	NULL,           /* class_data */
+	sizeof (GtkThemeEnginePlugin),
+	0,		/* n_preallocs */
+	NULL,		/* instance_init */
+      };
+      static const GInterfaceInfo iface_info = {
+	(GInterfaceInitFunc) theme_engine_plugin_iface_init,
+	NULL,               /* interface_finalize */
+	NULL,               /* interface_data */
+      };
+
+      theme_engine_plugin_type = g_type_register_static (G_TYPE_OBJECT, "GtkThemeEnginePlugin", &theme_engine_plugin_info, 0);
+
+      g_type_add_interface_static (theme_engine_plugin_type, G_TYPE_TYPE_PLUGIN, &iface_info);
+    }
+
+  return theme_engine_plugin_type;
+}
+/* end of GtkThemeEnginePlugin object implementation stuff
+ *****************************
+ *****************************/
 
 struct _GtkThemeEngine
 {
@@ -52,17 +140,6 @@ struct _GtkThemeEngine
   GSList *plugins;		/* TypePlugins for this engine */
   
   guint refcount;
-};
-
-struct _GtkThemeEnginePlugin
-{
-  GTypePlugin plugin;
-
-  GtkThemeEngine *engine;
-  gchar *engine_name;
-  GTypeInfo info;
-  GType type;
-  GType parent_type;
 };
 
 static GHashTable *engine_hash = NULL;
@@ -217,9 +294,9 @@ gtk_theme_engine_create_rc_style (GtkThemeEngine *engine)
 }
 
 static void
-gtk_theme_engine_plugin_ref (GTypePlugin *plugin)
+gtk_theme_engine_plugin_use (GTypePlugin *plugin)
 {
-  GtkThemeEnginePlugin *theme_plugin = (GtkThemeEnginePlugin *)plugin;
+  GtkThemeEnginePlugin *theme_plugin = GTK_THEME_ENGINE_PLUGIN (plugin);
 
   if (theme_plugin->engine == NULL)
     {
@@ -237,9 +314,9 @@ gtk_theme_engine_plugin_ref (GTypePlugin *plugin)
 }
 
 static void
-gtk_theme_engine_plugin_unref (GTypePlugin *plugin)
+gtk_theme_engine_plugin_unuse (GTypePlugin *plugin)
 {
-  GtkThemeEnginePlugin *theme_plugin = (GtkThemeEnginePlugin *)plugin;
+  GtkThemeEnginePlugin *theme_plugin = GTK_THEME_ENGINE_PLUGIN (plugin);
 
   g_return_if_fail (theme_plugin->engine != NULL);
   
@@ -247,22 +324,15 @@ gtk_theme_engine_plugin_unref (GTypePlugin *plugin)
 }
 			       
 static void
-gtk_theme_engine_complete_type_info (GTypePlugin     *plugin,
-				     GType            g_type,
-				     GTypeInfo       *info,
-				     GTypeValueTable *value_table)
+gtk_theme_engine_plugin_complete_type_info (GTypePlugin     *plugin,
+					    GType            g_type,
+					    GTypeInfo       *info,
+					    GTypeValueTable *value_table)
 {
-  GtkThemeEnginePlugin *theme_plugin = (GtkThemeEnginePlugin *)plugin;
+  GtkThemeEnginePlugin *theme_plugin = GTK_THEME_ENGINE_PLUGIN (plugin);
 
   *info = theme_plugin->info;
 }
-
-static GTypePluginVTable gtk_theme_engine_plugin_vtable = {
-  gtk_theme_engine_plugin_ref,
-  gtk_theme_engine_plugin_unref,
-  gtk_theme_engine_complete_type_info,
-  NULL
-};
 
 /**
  * gtk_theme_engine_register_type:
@@ -296,16 +366,15 @@ gtk_theme_engine_register_type (GtkThemeEngine  *engine,
 
   type = g_type_from_name (type_name);
   if (type)
-    plugin = (GtkThemeEnginePlugin *)g_type_get_plugin (type);
+    plugin = GTK_THEME_ENGINE_PLUGIN (g_type_get_plugin (type));
   else
     {
-      plugin = g_new (GtkThemeEnginePlugin, 1);
+      plugin = g_object_new (GTK_TYPE_THEME_ENGINE_PLUGIN, NULL);
 
-      plugin->plugin.vtable = &gtk_theme_engine_plugin_vtable;
       plugin->engine = NULL;
       plugin->engine_name = NULL;
       plugin->parent_type = parent_type;
-      plugin->type = g_type_register_dynamic (parent_type, type_name, (GTypePlugin *) plugin, 0);
+      plugin->type = g_type_register_dynamic (parent_type, type_name, G_TYPE_PLUGIN (plugin), 0);
     }
   
   if (plugin->engine)

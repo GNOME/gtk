@@ -232,7 +232,7 @@ gtk_object_shutdown (GObject *gobject)
 static void
 gtk_object_real_destroy (GtkObject *object)
 {
-  _g_signal_handlers_destroy (G_OBJECT (object));
+  g_signal_handlers_destroy (G_OBJECT (object));
 }
 
 static void

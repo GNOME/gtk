@@ -1,3 +1,16 @@
+Sun Nov  5 05:32:39 2000  Tim Janik  <timj@gtk.org>
+
+	* gtk/testgtk.c (uposition_stop_configure): provide a toggle
+	button to temporarily disable position recording in the
+	"saved position" test.
+
+Sat Nov  4 05:37:17 2000  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkthemes.c: added compat code that temporarily implements
+	GtkThemeEnginePlugin as a GObject exporting GTypePlugin. this is
+	going to be revamped by owen's upcoming GtkModule patches, but
+	untill then people want gtk to build, right? ;)
+
 2000-11-04  Havoc Pennington  <hp@pobox.com>
 
 	* gtk/gtkenums.h: remove trailing comma from GtkDeleteType member

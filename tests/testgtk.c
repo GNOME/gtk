@@ -2266,6 +2266,16 @@ uposition_configure (GtkWidget *window)
 }
 
 static void
+uposition_stop_configure (GtkToggleButton *toggle,
+			  GtkObject       *window)
+{
+  if (toggle->active)
+    gtk_signal_handler_block_by_func (window, uposition_configure, NULL);
+  else
+    gtk_signal_handler_unblock_by_func (window, uposition_configure, NULL);
+}
+
+static void
 create_saved_position (void)
 {
   static GtkWidget *window = NULL;
@@ -2304,6 +2314,12 @@ create_saved_position (void)
 			"GtkContainer::border_width", 10,
 			"GtkWidget::parent", main_vbox,
 			"GtkWidget::visible", TRUE,
+			"child", gtk_widget_new (GTK_TYPE_TOGGLE_BUTTON,
+						 "label", "Stop Events",
+						 "active", FALSE,
+						 "signal::clicked", uposition_stop_configure, window,
+						 "visible", TRUE,
+						 NULL),
 			NULL);
 
       hbox = gtk_hbox_new (FALSE, 0);
