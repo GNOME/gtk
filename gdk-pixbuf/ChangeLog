@@ -1,3 +1,10 @@
+2005-01-12  Owen Taylor <otaylor@redhat.com>
+
+	* Makefile.am: 	Use grep | head -n 1 instead of grep -m 1 
+	which doesn't work
+	with slightly older versions of GNU grep in 
+	install-libtool-import-lib rule.
+
 2005-01-08  Matthias Clasen  <mclasen@redhat.com>
 
 	* === Released 2.6.1 ===

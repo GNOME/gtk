@@ -207,15 +207,13 @@ AC_ARG_WITH(ie55,
             [AC_HELP_STRING([--with-ie55=DIRECTORY],
                             [IE5.5 libs and headers (for Active IMM)])])
 
-GLIB_AC_DIVERT_BEFORE_HELP([
 if test "$platform_win32" = yes; then
   gdktarget=win32
 else
   gdktarget=x11
 fi
-])
 
-AC_ARG_WITH(gdktarget, [  --with-gdktarget=[[x11/linux-fb/win32]] select GDK target [default=$gdktarget]],
+AC_ARG_WITH(gdktarget, [  --with-gdktarget=[[x11/linux-fb/win32]] select non-default GDK target],
 	gdktarget=$with_gdktarget)
 
 AC_SUBST(gdktarget)

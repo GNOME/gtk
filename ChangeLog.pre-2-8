@@ -1,3 +1,14 @@
+2005-01-12  Owen Taylor <otaylor@redhat.com>
+
+	* configure.in: Remove GLIB_DIVERT_BEFORE_HELP() on
+	initialization of gdktarget, that was causing it to be
+	evaluated before host was set. Simplify --with-gdktarget help
+	message.
+
+	* gtk/Makefile.am: Use grep | head -n 1 instead of grep -m 1 
+	which doesn't work with slightly older versions of GNU grep 
+	in install-libtool-import-lib rule.
+	
 2005-01-12  Tor Lillqvist  <tlillqvist@novell.com>
 
 	Fix for #162790, by Iwan Wong:
