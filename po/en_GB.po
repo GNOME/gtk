@@ -1,13 +1,12 @@
 # British translation
-# Copyright (C) 2000 Free Software Foundation, Inc.
-# Robert Brady <rwb197@zepler.org>
+# Abigail Brady <morwen@evilmagic.org>
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.3\n"
 "POT-Creation-Date: 2002-04-02 13:13+0200\n"
-"PO-Revision-Date: 2000-10-27 01:02+0100\n"
-"Last-Translator: Robert Brady <rwb197@zepler.orgk\n"
+"PO-Revision-Date: 2002-04-14 13:14+0100\n"
+"Last-Translator: Abigail Brady <morwen@evilmagic.org>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -61,11 +60,11 @@ msgstr ""
 #: gdk-pixbuf/gdk-pixbuf-io.c:538
 #, c-format
 msgid "Couldn't recognize the image file format for file '%s'"
-msgstr ""
+msgstr "Couldn't recognise the image file format for file '%s'"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:544
 msgid "Unrecognized image file format"
-msgstr ""
+msgstr "Unrecognised image file format"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:614
 #, c-format
@@ -196,6 +195,8 @@ msgid ""
 "GIF image has no global colormap, and a frame inside it has no local "
 "colormap."
 msgstr ""
+"GIF image has no global colourmap, and a frame inside it has no local "
+"colourmap."
 
 #: gdk-pixbuf/io-gif.c:1437
 msgid "GIF image was truncated or incomplete."
@@ -335,7 +336,7 @@ msgstr ""
 
 #: gdk-pixbuf/io-pnm.c:316
 msgid "PNM file is not in a recognized PNM subformat"
-msgstr ""
+msgstr "PNM file is not in a recognised PNM subformat"
 
 #: gdk-pixbuf/io-pnm.c:341
 msgid "PNM file has an image width of 0"
@@ -347,15 +348,15 @@ msgstr ""
 
 #: gdk-pixbuf/io-pnm.c:385
 msgid "Maximum color value in PNM file is 0"
-msgstr ""
+msgstr "Maximum colour value in PNM file is 0"
 
 #: gdk-pixbuf/io-pnm.c:393
 msgid "Maximum color value in PNM file is too large"
-msgstr ""
+msgstr "Maximum colour value in PNM file is too large"
 
 #: gdk-pixbuf/io-pnm.c:401
 msgid "Can't handle PNM files with maximum color values greater than 255"
-msgstr ""
+msgstr "Can't handle PNM files with maximum colour values greater than 255"
 
 #: gdk-pixbuf/io-pnm.c:440 gdk-pixbuf/io-pnm.c:468 gdk-pixbuf/io-pnm.c:500
 msgid "Raw PNM image type is invalid"
@@ -440,15 +441,15 @@ msgstr ""
 
 #: gdk-pixbuf/io-tga.c:617
 msgid "Can't allocate colormap structure"
-msgstr ""
+msgstr "Can't allocate colourmap structure"
 
 #: gdk-pixbuf/io-tga.c:624
 msgid "Can't allocate colormap entries"
-msgstr ""
+msgstr "Can't allocate colourmap entries"
 
 #: gdk-pixbuf/io-tga.c:646
 msgid "Unexpected bitdepth for colormap entries"
-msgstr ""
+msgstr "Unexpected bitdepth for colourmap entries"
 
 #: gdk-pixbuf/io-tga.c:664
 msgid "Can't allocate TGA header memory"
@@ -489,19 +490,19 @@ msgstr ""
 
 #: gdk-pixbuf/io-tga.c:949
 msgid "Can't allocate memory for TGA colormap struct"
-msgstr ""
+msgstr "Can't allocate memory for TGA colourmap struct"
 
 #: gdk-pixbuf/io-tga.c:958
 msgid "Can't allocate memory for TGA colormap entries"
-msgstr ""
+msgstr "Can't allocate memory for TGA colourmap entries"
 
 #: gdk-pixbuf/io-tga.c:968
 msgid "Unexpected bitdepth for TGA colormap"
-msgstr ""
+msgstr "Unexpected bitdepth for TGA colourmap"
 
 #: gdk-pixbuf/io-tga.c:1010
 msgid "Pseudo-Color image without colormap"
-msgstr ""
+msgstr "Pseudo-Colour image without colourmap"
 
 #: gdk-pixbuf/io-tga.c:1017
 msgid "Can't seek to image offset -- end-of-file probably encountered"
@@ -589,7 +590,7 @@ msgstr ""
 
 #: gdk-pixbuf/io-xpm.c:1259
 msgid "XPM file has invalid number of colors"
-msgstr ""
+msgstr "XPM file has invalid number of colours"
 
 #: gdk-pixbuf/io-xpm.c:1267
 msgid "XPM has invalid number of chars per pixel"
@@ -597,7 +598,7 @@ msgstr ""
 
 #: gdk-pixbuf/io-xpm.c:1285
 msgid "Can't read XPM colormap"
-msgstr ""
+msgstr "Can't read XPM colourmap"
 
 #: gdk-pixbuf/io-xpm.c:1326
 msgid "Can't allocate memory for loading XPM image"
@@ -1009,35 +1010,35 @@ msgstr ""
 
 #: gtk/gtkcellrenderertext.c:198 gtk/gtktexttag.c:209
 msgid "Background color name"
-msgstr ""
+msgstr "Background colour name"
 
 #: gtk/gtkcellrenderertext.c:199 gtk/gtktexttag.c:210
 msgid "Background color as a string"
-msgstr ""
+msgstr "Background colour as a string"
 
 #: gtk/gtkcellrenderertext.c:206 gtk/gtktexttag.c:217
 msgid "Background color"
-msgstr ""
+msgstr "Background colour"
 
 #: gtk/gtkcellrenderertext.c:207 gtk/gtktexttag.c:218
 msgid "Background color as a GdkColor"
-msgstr ""
+msgstr "Background colour as a GdkColor"
 
 #: gtk/gtkcellrenderertext.c:214 gtk/gtktexttag.c:243
 msgid "Foreground color name"
-msgstr ""
+msgstr "Foreground colour name"
 
 #: gtk/gtkcellrenderertext.c:215 gtk/gtktexttag.c:244
 msgid "Foreground color as a string"
-msgstr ""
+msgstr "Foreground colour as a string"
 
 #: gtk/gtkcellrenderertext.c:222 gtk/gtktexttag.c:251
 msgid "Foreground color"
-msgstr ""
+msgstr "Foreground colour"
 
 #: gtk/gtkcellrenderertext.c:223 gtk/gtktexttag.c:252
 msgid "Foreground color as a GdkColor"
-msgstr ""
+msgstr "Foreground colour as a GdkColor"
 
 #: gtk/gtkcellrenderertext.c:231 gtk/gtkentry.c:455 gtk/gtktexttag.c:277
 #: gtk/gtktextview.c:568
@@ -1141,7 +1142,7 @@ msgstr ""
 
 #: gtk/gtkcellrenderertext.c:362 gtk/gtktexttag.c:513
 msgid "Whether this tag affects the background color"
-msgstr ""
+msgstr "Whether this tag affects the background colour"
 
 #: gtk/gtkcellrenderertext.c:365 gtk/gtktexttag.c:524
 msgid "Foreground set"
@@ -1149,7 +1150,7 @@ msgstr ""
 
 #: gtk/gtkcellrenderertext.c:366 gtk/gtktexttag.c:525
 msgid "Whether this tag affects the foreground color"
-msgstr ""
+msgstr "Whether this tag affects the foreground colour"
 
 #: gtk/gtkcellrenderertext.c:369 gtk/gtktexttag.c:532
 msgid "Editability set"
@@ -1301,22 +1302,29 @@ msgid ""
 "now. You can drag this color to a palette entry, or select this color as "
 "current by dragging it to the other color swatch alongside."
 msgstr ""
+"The previously-selected colour, for comparison to the colour you're selecting "
+"now. You can drag this colour to a palette entry, or select this colour as "
+"current by dragging it to the other colour swatch alongside."
 
 #: gtk/gtkcolorsel.c:587
 msgid ""
 "The color you've chosen. You can drag this color to a palette entry to save "
 "it for use in the future."
 msgstr ""
+"The colour you've chosen. You can drag this colour to a palette entry to save "
+"it for use in the future."
 
 #: gtk/gtkcolorsel.c:910
 msgid "_Save color here"
-msgstr ""
+msgstr "_Save colour here"
 
 #: gtk/gtkcolorsel.c:1079
 msgid ""
 "Click this palette entry to make it the current color. To change this entry, "
 "drag a color swatch here or right-click it and select \"Save color here.\""
 msgstr ""
+"Click this palette entry to make it the current colour. To change this entry, "
+"drag a colour swatch here or right-click it and select \"Save colour here.\""
 
 #: gtk/gtkcolorsel.c:1704
 msgid "Has Opacity Control"
@@ -1324,7 +1332,7 @@ msgstr ""
 
 #: gtk/gtkcolorsel.c:1705
 msgid "Whether the color selector should allow setting opacity"
-msgstr ""
+msgstr "Whether the colour selector should allow setting opacity"
 
 #: gtk/gtkcolorsel.c:1711
 msgid "Has palette"
@@ -1335,13 +1343,12 @@ msgid "Whether a palette should be used"
 msgstr ""
 
 #: gtk/gtkcolorsel.c:1718
-#, fuzzy
 msgid "Current Color"
-msgstr "Set Colour"
+msgstr "Current Colour"
 
 #: gtk/gtkcolorsel.c:1719
 msgid "The current color"
-msgstr ""
+msgstr "The current colour"
 
 #: gtk/gtkcolorsel.c:1725
 msgid "Current Alpha"
@@ -1357,19 +1364,23 @@ msgstr ""
 
 #: gtk/gtkcolorsel.c:1740
 msgid "Palette to use in the color selector"
-msgstr ""
+msgstr "Palette to use in the colour selector"
 
 #: gtk/gtkcolorsel.c:1784
 msgid ""
 "Select the color you want from the outer ring. Select the darkness or "
 "lightness of that color using the inner triangle."
 msgstr ""
+"Select the colour you want from the outer ring. Select the darkness or "
+"lightness of that colour using the inner triangle."
 
 #: gtk/gtkcolorsel.c:1812
 msgid ""
 "Click the eyedropper, then click a color anywhere on your screen to select "
 "that color."
 msgstr ""
+"Click the eyedropper, then click a colour anywhere on your screen to select "
+"that colour."
 
 #: gtk/gtkcolorsel.c:1821
 msgid "_Hue:"
@@ -1377,7 +1388,7 @@ msgstr ""
 
 #: gtk/gtkcolorsel.c:1822
 msgid "Position on the color wheel."
-msgstr ""
+msgstr "Position on the colour wheel."
 
 #: gtk/gtkcolorsel.c:1823
 msgid "_Saturation:"
@@ -1385,7 +1396,7 @@ msgstr ""
 
 #: gtk/gtkcolorsel.c:1824
 msgid "\"Deepness\" of the color."
-msgstr ""
+msgstr "\"Deepness\" of the colour."
 
 #: gtk/gtkcolorsel.c:1825
 msgid "_Value:"
@@ -1393,7 +1404,7 @@ msgstr ""
 
 #: gtk/gtkcolorsel.c:1826
 msgid "Brightness of the color."
-msgstr ""
+msgstr "Brightness of the colour."
 
 #: gtk/gtkcolorsel.c:1827
 msgid "_Red:"
@@ -1401,7 +1412,7 @@ msgstr ""
 
 #: gtk/gtkcolorsel.c:1828
 msgid "Amount of red light in the color."
-msgstr ""
+msgstr "Amount of red light in the colour."
 
 #: gtk/gtkcolorsel.c:1829
 msgid "_Green:"
@@ -1409,7 +1420,7 @@ msgstr ""
 
 #: gtk/gtkcolorsel.c:1830
 msgid "Amount of green light in the color."
-msgstr ""
+msgstr "Amount of green light in the colour."
 
 #: gtk/gtkcolorsel.c:1831
 msgid "_Blue:"
@@ -1417,7 +1428,7 @@ msgstr ""
 
 #: gtk/gtkcolorsel.c:1832
 msgid "Amount of blue light in the color."
-msgstr ""
+msgstr "Amount of blue light in the colour."
 
 #: gtk/gtkcolorsel.c:1835
 msgid "_Opacity:"
@@ -1425,17 +1436,19 @@ msgstr ""
 
 #: gtk/gtkcolorsel.c:1843
 msgid "Transparency of the currently-selected color."
-msgstr ""
+msgstr "Transparency of the currently-selected colour."
 
 #: gtk/gtkcolorsel.c:1858
 msgid "Color _Name:"
-msgstr ""
+msgstr "Colour _Name:"
 
 #: gtk/gtkcolorsel.c:1870
 msgid ""
 "You can enter an HTML-style hexadecimal color value, or simply a color name "
 "such as 'orange' in this entry."
 msgstr ""
+"You can enter an HTML-style hexadecimal colour value, or simply a colour name "
+"such as 'orange' in this entry."
 
 #: gtk/gtkcolorsel.c:1889
 msgid "_Palette"
@@ -3153,7 +3166,7 @@ msgstr ""
 
 #: gtk/gtkstock.c:303
 msgid "_Center"
-msgstr ""
+msgstr "_Centre"
 
 #: gtk/gtkstock.c:304
 msgid "_Fill"
@@ -3233,7 +3246,7 @@ msgstr ""
 
 #: gtk/gtkstock.c:323
 msgid "_Color"
-msgstr ""
+msgstr "_Colour"
 
 #: gtk/gtkstock.c:324
 msgid "_Font"
@@ -3373,6 +3386,8 @@ msgid ""
 "Whether the background color fills the entire line height or only the height "
 "of the tagged characters"
 msgstr ""
+"Whether the background colour fills the entire line height or only the height "
+"of the tagged characters"
 
 #: gtk/gtktexttag.c:234
 msgid "Background stipple mask"
@@ -3400,7 +3415,7 @@ msgstr ""
 
 #: gtk/gtktexttag.c:379 gtk/gtktextview.c:586
 msgid "Left, right, or center justification"
-msgstr ""
+msgstr "Left, right, or centre justification"
 
 #: gtk/gtktexttag.c:387
 msgid "Language"
@@ -3815,7 +3830,7 @@ msgstr ""
 
 #: gtk/gtktreeview.c:571
 msgid "Set a hint to the theme engine to draw rows in alternating colors"
-msgstr ""
+msgstr "Set a hint to the theme engine to draw rows in alternating colours"
 
 #: gtk/gtktreeview.c:578
 msgid "Enable Search"
@@ -3863,7 +3878,7 @@ msgstr ""
 
 #: gtk/gtktreeview.c:628
 msgid "Allow drawing of alternating color rows."
-msgstr ""
+msgstr "Allow drawing of alternating colour rows."
 
 #: gtk/gtktreeview.c:634
 msgid "Indent Expanders"
@@ -4102,6 +4117,8 @@ msgid ""
 "The style of the widget, which contains information about how it will look "
 "(colors etc)."
 msgstr ""
+"The style of the widget, which contains information about how it will look "
+"(colours etc)."
 
 #: gtk/gtkwidget.c:493
 msgid "Events"
@@ -4153,21 +4170,23 @@ msgstr ""
 
 #: gtk/gtkwidget.c:1077
 msgid "Cursor color"
-msgstr ""
+msgstr "Cursor colour"
 
 #: gtk/gtkwidget.c:1078
 msgid "Color with which to draw insertion cursor"
-msgstr ""
+msgstr "Colour with which to draw insertion cursor"
 
 #: gtk/gtkwidget.c:1083
 msgid "Secondary cursor color"
-msgstr ""
+msgstr "Secondary cursor colour"
 
 #: gtk/gtkwidget.c:1084
 msgid ""
 "Color with which to draw the secondary insertion cursor when editing mixed "
 "right-to-left and left-to-right text."
 msgstr ""
+"Colour with which to draw the secondary insertion cursor when editing mixed "
+"right-to-left and left-to-right text."
 
 #: gtk/gtkwidget.c:1089
 msgid "Cursor line aspect ratio"

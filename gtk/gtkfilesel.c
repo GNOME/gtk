@@ -943,7 +943,7 @@ filenames_dropped (GtkWidget        *widget,
 				       GTK_DIALOG_DESTROY_WITH_PARENT,
 				       GTK_MESSAGE_QUESTION,
 				       GTK_BUTTONS_YES_NO,
-				       _("The file \"%s\" resides on another machine (called %s) and may not be availible to this program.\n"
+				       _("The file \"%s\" resides on another machine (called %s) and may not be available to this program.\n"
 					 "Are you sure that you want to select it?"), filename, hostname);
 
       g_object_set_data_full (G_OBJECT (dialog), "gtk-fs-dnd-filename", g_strdup (filename), g_free);

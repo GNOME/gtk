@@ -1,3 +1,7 @@
+2002-04-14  Abigail Brady  <morwen@evilmagic.org>
+
+	* gtk/gtkfilesel.c: Fix typo in message.
+
 2002-04-13  Havoc Pennington  <hp@pobox.com>
 
 	* gdk/gdkpixbuf-drawable.c (gdk_pixbuf_get_from_drawable): create
