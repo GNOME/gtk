@@ -73,7 +73,7 @@ static gint gtk_window_focus_in_event     (GtkWidget         *widget,
 static gint gtk_window_focus_out_event    (GtkWidget         *widget,
 					   GdkEventFocus     *event);
 static gint gtk_window_client_event	  (GtkWidget	     *widget,
-					   GdkEvent	     *event);
+					   GdkEventClient    *event);
 static gint gtk_window_need_resize        (GtkContainer      *container);
 static gint gtk_real_window_move_resize   (GtkWindow         *window,
 					   gint              *x,
@@ -847,7 +847,7 @@ gtk_window_style_set_event (GtkWidget *widget,
 		       &realtype,
 		       &retfmt,
 		       &retlen,
-		       (guchar *)&data) != TRUE
+		       (guchar **)&data) != TRUE
      || retfmt != sizeof(gushort)) {
     g_warning("gdk_property_get() failed in _GTK_STYLE_CHANGED\n");
     return;
@@ -873,7 +873,7 @@ gtk_window_style_set_event (GtkWidget *widget,
 
 static gint
 gtk_window_client_event (GtkWidget	*widget,
-			 GdkEvent	*event)
+			 GdkEventClient	*event)
 {
   GdkAtom atom_styleset;
   g_return_val_if_fail (widget != NULL, FALSE);
@@ -882,7 +882,7 @@ gtk_window_client_event (GtkWidget	*widget,
 
   atom_styleset = gdk_atom_intern("_GTK_STYLE_CHANGED", FALSE);
 
-  if(event->client.message_type == atom_styleset) {
+  if(event->message_type == atom_styleset) {
     gtk_window_style_set_event(widget, event);    
   }
   return FALSE;

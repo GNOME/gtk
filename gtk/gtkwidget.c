@@ -2483,15 +2483,15 @@ gtk_widget_propagate_default_style(void)
   /* Set the property on the root window */
   gdk_property_change(GDK_ROOT_PARENT(),
 		      gdk_atom_intern("_GTK_DEFAULT_COLORS", FALSE),
-		      GDK_NONE, sizeof(gushort),
+		      GDK_NONE, 8*sizeof(gushort),
 		      GDK_PROP_MODE_REPLACE,
-		      gtk_widget_get_default_style(),
+		      (guchar *)gtk_widget_get_default_style(),
 		      GTK_STYLE_NUM_STYLECOLORS() * sizeof(GdkColor));
 
   for(i = 0; i < 5; i++) sev.data.l[i] = 0;
   sev.data_format = 32;
   sev.message_type = gdk_atom_intern("_GTK_STYLE_CHANGED", FALSE);
-  gdk_event_send_clientmessage_toall(&sev);
+  gdk_event_send_clientmessage_toall((GdkEvent *)&sev);
 }
 
 /*****************************************

@@ -58,6 +58,7 @@ POST_UNINSTALL = true
 host_alias = @host_alias@
 host_triplet = @host@
 CC = @CC@
+CPP = @CPP@
 LD = @LD@
 LIBTOOL = @LIBTOOL@
 LN_S = @LN_S@

@@ -22,7 +22,7 @@
 
 
 #define GDK_ROOT_WINDOW()             gdk_root_window
-#define GDK_ROOT_PARENT()             &gdk_root_parent
+#define GDK_ROOT_PARENT()             ((GdkWindow *)&gdk_root_parent)
 #define GDK_DISPLAY()                 gdk_display
 #define GDK_WINDOW_XDISPLAY(win)      (((GdkWindowPrivate*) win)->xdisplay)
 #define GDK_WINDOW_XWINDOW(win)       (((GdkWindowPrivate*) win)->xwindow)
