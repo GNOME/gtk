@@ -168,6 +168,12 @@ gdk_fontset_load (const gchar *fontset_name)
 }
 #endif
 
+GdkFont*
+gdk_fontset_load (const gchar *fontset_name)
+{
+  return NULL;
+}
+
 GdkFont *
 gdk_font_load (const gchar *font_name)
 {

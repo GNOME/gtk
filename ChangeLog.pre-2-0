@@ -1,3 +1,8 @@
+2000-12-08  Alexander Larsson  <alla@lysator.liu.se>
+
+	* gdk/linux-fb/gdkfont-fb.c (gdk_fontset_load):
+	Added dummy gdk_fontset_load.
+
 2000-12-08  Alexander Larsson  <alexl@redhat.com>
 
 	* docs/README.linux-fb:
