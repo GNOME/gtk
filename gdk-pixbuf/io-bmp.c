@@ -80,7 +80,7 @@ debugging purposes.
 */
 #if DUMPBIH
 static void DumpBIH(unsigned char *BIH)
-{				
+{
 	printf("biSize      = %i \n",
 	       (int) (BIH[3] << 24) + (BIH[2] << 16) + (BIH[1] << 8) +
 	       (BIH[0]));
@@ -175,11 +175,12 @@ gpointer
 gdk_pixbuf__bmp_image_begin_load(ModulePreparedNotifyFunc prepared_func,
 				 ModuleUpdatedNotifyFunc updated_func,
 				 ModuleFrameDoneNotifyFunc frame_done_func,
-				 ModuleAnimationDoneNotifyFunc anim_done_func,
-				 gpointer user_data);
+				 ModuleAnimationDoneNotifyFunc
+				 anim_done_func, gpointer user_data);
 
 void gdk_pixbuf__bmp_image_stop_load(gpointer data);
-gboolean gdk_pixbuf__bmp_image_load_increment(gpointer data, guchar * buf, guint size);
+gboolean gdk_pixbuf__bmp_image_load_increment(gpointer data, guchar * buf,
+					      guint size);
 
 
 
@@ -193,7 +194,8 @@ GdkPixbuf *gdk_pixbuf__bmp_image_load(FILE * f)
 
 	GdkPixbuf *pb;
 
-	State = gdk_pixbuf__bmp_image_begin_load(NULL, NULL, NULL, NULL, NULL);
+	State =
+	    gdk_pixbuf__bmp_image_begin_load(NULL, NULL, NULL, NULL, NULL);
 	membuf = g_malloc(4096);
 
 	g_assert(membuf != NULL);
@@ -202,7 +204,11 @@ GdkPixbuf *gdk_pixbuf__bmp_image_load(FILE * f)
 	while (feof(f) == 0) {
 		length = fread(membuf, 1, 4096, f);
 		if (length > 0)
-			(void) gdk_pixbuf__bmp_image_load_increment(State, membuf, length);
+
+			(void)
+			    gdk_pixbuf__bmp_image_load_increment(State,
+								 membuf,
+								 length);
 
 	}
 	g_free(membuf);
@@ -292,8 +298,7 @@ static void DecodeHeader(unsigned char *BFH, unsigned char *BIH,
 
 		if (State->prepared_func != NULL)
 			/* Notify the client that we are ready to go */
-			(*State->prepared_func) (State->pixbuf,
-						 State->user_data);
+			(*State->prepared_func) (State->pixbuf, State->user_data);
 
 	}
 
@@ -309,8 +314,8 @@ gpointer
 gdk_pixbuf__bmp_image_begin_load(ModulePreparedNotifyFunc prepared_func,
 				 ModuleUpdatedNotifyFunc updated_func,
 				 ModuleFrameDoneNotifyFunc frame_done_func,
-				 ModuleAnimationDoneNotifyFunc anim_done_func,
-				 gpointer user_data)
+				 ModuleAnimationDoneNotifyFunc
+				 anim_done_func, gpointer user_data)
 {
 	struct bmp_progressive_state *context;
 
@@ -386,7 +391,8 @@ static void OneLine32(struct bmp_progressive_state *context)
 		    gdk_pixbuf_get_rowstride(context->pixbuf) *
 		    (context->Header.height - context->Lines - 1);
 	else
-		Pixels = context->pixbuf->art_pixbuf->pixels +
+		Pixels =
+		    context->pixbuf->art_pixbuf->pixels +
 		    gdk_pixbuf_get_rowstride(context->pixbuf) *
 		    context->Lines;
 	while (X < context->Header.width) {
@@ -410,7 +416,8 @@ static void OneLine24(struct bmp_progressive_state *context)
 		    gdk_pixbuf_get_rowstride(context->pixbuf) *
 		    (context->Header.height - context->Lines - 1);
 	else
-		Pixels = context->pixbuf->art_pixbuf->pixels +
+		Pixels =
+		    context->pixbuf->art_pixbuf->pixels +
 		    gdk_pixbuf_get_rowstride(context->pixbuf) *
 		    context->Lines;
 	while (X < context->Header.width) {
@@ -433,7 +440,8 @@ static void OneLine8(struct bmp_progressive_state *context)
 		    gdk_pixbuf_get_rowstride(context->pixbuf) *
 		    (context->Header.height - context->Lines - 1);
 	else
-		Pixels = context->pixbuf->art_pixbuf->pixels +
+		Pixels =
+		    context->pixbuf->art_pixbuf->pixels +
 		    gdk_pixbuf_get_rowstride(context->pixbuf) *
 		    context->Lines;
 	while (X < context->Header.width) {
@@ -458,7 +466,8 @@ static void OneLine4(struct bmp_progressive_state *context)
 		    gdk_pixbuf_get_rowstride(context->pixbuf) *
 		    (context->Header.height - context->Lines - 1);
 	else
-		Pixels = context->pixbuf->art_pixbuf->pixels +
+		Pixels =
+		    context->pixbuf->art_pixbuf->pixels +
 		    gdk_pixbuf_get_rowstride(context->pixbuf) *
 		    context->Lines;
 
@@ -499,7 +508,8 @@ static void OneLine1(struct bmp_progressive_state *context)
 		    gdk_pixbuf_get_rowstride(context->pixbuf) *
 		    (context->Header.height - context->Lines - 1);
 	else
-		Pixels = context->pixbuf->art_pixbuf->pixels +
+		Pixels =
+		    context->pixbuf->art_pixbuf->pixels +
 		    gdk_pixbuf_get_rowstride(context->pixbuf) *
 		    context->Lines;
 	while (X < context->Header.width) {
@@ -507,9 +517,9 @@ static void OneLine1(struct bmp_progressive_state *context)
 
 		Bit = (context->LineBuf[X / 8]) >> (7 - (X & 7));
 		Bit = Bit & 1;
-		Pixels[X * 3 + 0] = Bit*255;
-		Pixels[X * 3 + 1] = Bit*255;
-		Pixels[X * 3 + 2] = Bit*255;
+		Pixels[X * 3 + 0] = Bit * 255;
+		Pixels[X * 3 + 1] = Bit * 255;
+		Pixels[X * 3 + 2] = Bit * 255;
 		X++;
 	}
 }
@@ -552,9 +562,10 @@ void DoCompressedByte(struct bmp_progressive_state *context, guchar ** buf,
 	gint BytesToCopy;
 	switch (context->compr.phase) {
 	case 0:		/* Neutral state */
-		if (buf[0] != 0) {	/* run count */
+		if ((*buf)[0] != 0) {	/* run count */
 			context->compr.phase = 1;
 			context->compr.RunCount = (*buf)[0];
+
 		} else {	/* Escape */
 			context->compr.phase = 2;
 		}
@@ -569,8 +580,8 @@ void DoCompressedByte(struct bmp_progressive_state *context, guchar ** buf,
 				BytesToCopy = context->compr.RunCount;
 			if (BytesToCopy > 0) {
 				memset(context->LineBuf +
-				       context->LineDone,
-				       (*buf)[0], BytesToCopy);
+				       context->LineDone, (*buf)[0],
+				       BytesToCopy);
 
 				context->compr.RunCount -= BytesToCopy;
 				context->LineDone += BytesToCopy;
@@ -599,6 +610,9 @@ void DoCompressedByte(struct bmp_progressive_state *context, guchar ** buf,
 		} else {
 			context->compr.phase = 3;
 			context->compr.RunCount = (*buf)[0];
+			if (context->compr.RunCount & 1)
+				context->compr.phase = 7;
+
 		}
 		(*buf)++;
 		(*size)--;
@@ -606,7 +620,7 @@ void DoCompressedByte(struct bmp_progressive_state *context, guchar ** buf,
 		break;
 	case 3:
 		while ((context->compr.RunCount > 0)
-		       && (size > 0)) {
+		       && (*size > 0)) {
 			BytesToCopy =
 			    context->LineWidth - context->LineDone;
 			if (BytesToCopy > context->compr.RunCount)
@@ -616,8 +630,8 @@ void DoCompressedByte(struct bmp_progressive_state *context, guchar ** buf,
 
 			if (BytesToCopy > 0) {
 				memcpy(context->LineBuf +
-				       context->LineDone,
-				       *buf, BytesToCopy);
+				       context->LineDone, *buf,
+				       BytesToCopy);
 
 				context->compr.RunCount -= BytesToCopy;
 				(*buf) += BytesToCopy;
@@ -649,6 +663,39 @@ void DoCompressedByte(struct bmp_progressive_state *context, guchar ** buf,
 		break;
 	case 6:
 		(*size) = 0;
+		break;
+	case 7:		/* Odd raw run */
+		while ((context->compr.RunCount > 0) && (*size > 0)) {
+			BytesToCopy =
+			    context->LineWidth - context->LineDone;
+			if (BytesToCopy > context->compr.RunCount)
+				BytesToCopy = context->compr.RunCount;
+			if (BytesToCopy > *size)
+				BytesToCopy = *size;
+
+			if (BytesToCopy > 0) {
+				memcpy(context->LineBuf +
+				       context->LineDone, *buf,
+				       BytesToCopy);
+
+				context->compr.RunCount -= BytesToCopy;
+				(*buf) += BytesToCopy;
+				(*size) -= BytesToCopy;
+				context->LineDone += BytesToCopy;
+			}
+			if ((context->LineDone >= context->LineWidth)
+			    && (context->LineWidth > 0))
+				OneLine(context);
+		}
+		if (context->compr.RunCount <= 0)
+			context->compr.phase = 8;
+
+		break;
+	case 8:		/* Eat dummy byte; */
+		(*buf)++;
+		(*size)--;
+		context->compr.phase = 0;
+		break;
 	}
 }
 
@@ -659,7 +706,8 @@ void DoCompressedByte(struct bmp_progressive_state *context, guchar ** buf,
  *
  * append image data onto inrecrementally built output image
  */
-gboolean gdk_pixbuf__bmp_image_load_increment(gpointer data, guchar * buf, guint size)
+gboolean gdk_pixbuf__bmp_image_load_increment(gpointer data, guchar * buf,
+					      guint size)
 {
 	struct bmp_progressive_state *context =
 	    (struct bmp_progressive_state *) data;
@@ -676,7 +724,7 @@ gboolean gdk_pixbuf__bmp_image_load_increment(gpointer data, guchar * buf, guint
 				BytesToCopy = size;
 
 			memmove(context->HeaderBuf + context->HeaderDone,
-			       buf, BytesToCopy);
+				buf, BytesToCopy);
 
 			size -= BytesToCopy;
 			buf += BytesToCopy;
@@ -695,15 +743,15 @@ gboolean gdk_pixbuf__bmp_image_load_increment(gpointer data, guchar * buf, guint
 
 			if (BytesToCopy > 0) {
 				memmove(context->LineBuf +
-				       context->LineDone, buf,
-				       BytesToCopy);
+					context->LineDone, buf,
+					BytesToCopy);
 
 				size -= BytesToCopy;
 				buf += BytesToCopy;
 				context->LineDone += BytesToCopy;
 			}
-			if ((context->LineDone >= context->LineWidth) &&
-			    (context->LineWidth > 0))
+			if ((context->LineDone >= context->LineWidth)
+			    && (context->LineWidth > 0))
 				OneLine(context);
 
 
