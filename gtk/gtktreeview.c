@@ -6728,6 +6728,12 @@ gtk_tree_view_set_model (GtkTreeView  *tree_view,
 	  _gtk_rbtree_free (tree_view->priv->tree);
 	  tree_view->priv->tree = NULL;
 	}
+
+      tree_view->priv->prelight_node = NULL;
+      tree_view->priv->prelight_tree = NULL;
+      tree_view->priv->button_pressed_node = NULL;
+      tree_view->priv->button_pressed_tree = NULL;
+
       gtk_tree_row_reference_free (tree_view->priv->drag_dest_row);
       tree_view->priv->drag_dest_row = NULL;
       gtk_tree_row_reference_free (tree_view->priv->cursor);

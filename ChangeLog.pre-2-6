@@ -1,3 +1,9 @@
+2002-01-28  Jon Trowbridge  <trow@gnu.org>
+
+	* gtk/gtktreeview.c (gtk_tree_view_set_model): When setting the
+	GtkTreeView's model, set prelight_node, prelight_tree,
+	button_pressed_node and button_pressed_tree to NULL. (#69603)
+
 2002-01-28 Bill Haneman <bill.haneman@sun.com>
 
 	* gtk/gtkstyle.c:
