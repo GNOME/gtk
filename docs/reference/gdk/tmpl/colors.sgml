@@ -127,20 +127,19 @@ Create a new colormap for the given visual.
 
 <!-- ##### FUNCTION gdk_colormap_ref ##### -->
 <para>
-Increase the reference count of a colormap.
+
 </para>
 
-@cmap: a #GdkColormap.
-@Returns: @cmap
+@cmap: 
+@Returns:
 
 
 <!-- ##### FUNCTION gdk_colormap_unref ##### -->
 <para>
-Decrease the reference count of a colormap. If the
-resulting reference count is zero, destroys the colormap.
+
 </para>
 
-@cmap: a #GdkColormap.
+@cmap: 
 
 
 <!-- ##### FUNCTION gdk_colormap_get_system ##### -->

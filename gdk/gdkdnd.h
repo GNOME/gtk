@@ -78,8 +78,11 @@ struct _GdkDragContextClass {
 
 GType            gdk_drag_context_get_type   (void) G_GNUC_CONST;
 GdkDragContext * gdk_drag_context_new        (void);
+
+#ifndef GDK_DISABLE_DEPRECATED
 void             gdk_drag_context_ref        (GdkDragContext *context);
 void             gdk_drag_context_unref      (GdkDragContext *context);
+#endif
 
 /* Destination side */
 

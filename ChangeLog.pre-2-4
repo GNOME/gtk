@@ -1,3 +1,16 @@
+2001-11-30  Matthias Clasen  <matthiasc@poet.de>
+
+	* gdk/gdkdrawable.h (gdk_drawable_ref, gdk_drawable_unref),
+	gdk/gdkcolor.h (gdk_colormap_ref, gdk_colormap_unref),
+	gdk/gdkdnd.h (gdk_drag_context_ref, gdk_drag_context_unref),
+	gdk/gdkgc.h (gdk_gc_ref, gdk_gc_unref):	 Deprecate.
+
+	* gdk/gdkvisual.h: Use GDK_DISABLE_DEPRECATED, not 
+	GTK_DISABLE_DEPRECATED.
+
+	* gdk/gdkcolor.c (gdk_colormap_ref, gdk_colormap_unref),
+	gdk/gdkgc.c (gdk_gc_ref, gdk_gc_unref): Document.
+
 Fri Nov 30 16:37:01 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkcombo.c (gtk_combo_popup_list): Sanitize

@@ -161,8 +161,11 @@ void	        gdk_drawable_set_colormap (GdkDrawable	  *drawable,
 GdkColormap*    gdk_drawable_get_colormap (GdkDrawable	  *drawable);
 GdkVisual*      gdk_drawable_get_visual   (GdkDrawable	  *drawable);
 gint            gdk_drawable_get_depth    (GdkDrawable	  *drawable);
+
+#ifndef GDK_DISABLE_DEPRECATED
 GdkDrawable*    gdk_drawable_ref          (GdkDrawable    *drawable);
 void            gdk_drawable_unref        (GdkDrawable    *drawable);
+#endif /* GDK_DISABLE_DEPRECATED */
 
 /* Drawing
  */

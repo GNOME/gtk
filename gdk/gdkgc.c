@@ -122,12 +122,28 @@ gdk_gc_finalize (GObject *object)
   parent_class->finalize (object);
 }
 
+/**
+ * gdk_gc_ref:
+ * @gc: a #GdkGC
+ *
+ * Deprecated function; use g_object_ref() instead.
+ *
+ * Return value: the gc.
+ **/
 GdkGC *
 gdk_gc_ref (GdkGC *gc)
 {
   return (GdkGC *) g_object_ref (G_OBJECT (gc));
 }
 
+/**
+ * gdk_gc_unref:
+ * @gc: a #GdkGC
+ *
+ * Deprecated function; use g_object_unref() instead.
+ *
+ * Return value: the gc.
+ **/
 void
 gdk_gc_unref (GdkGC *gc)
 {

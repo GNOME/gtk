@@ -1,3 +1,8 @@
+2001-11-30  Matthias Clasen  <matthiasc@poet.de>
+
+	* gdk/tmpl/colors.sgml, gdk/tmpl/pixmaps.sgml, gdk/tmpl/dnd.sgml,
+	gdk/tmpl/gcs.sgml: Document ref and unref functions as deprecated.
+
 2001-11-29  Matthias Clasen  <matthiasc@poet.de>
 
 	* gtk/gtk-sections.sgml: Add GtkTextChildAnchor.

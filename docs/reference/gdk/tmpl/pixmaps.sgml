@@ -149,7 +149,7 @@ in which case a default color will be used.
 
 <!-- ##### MACRO gdk_pixmap_ref ##### -->
 <para>
-Increase the reference count of a pixmap.
+Deprecated equivalent of g_object_ref().
 </para>
 
 @pixmap: a #GdkPixmap
@@ -158,8 +158,7 @@ Increase the reference count of a pixmap.
 
 <!-- ##### MACRO gdk_pixmap_unref ##### -->
 <para>
-Decrease the reference count of a pixmap. If the resulting
-reference count is zero, destroy the pixmap.
+Deprecated equivalent of g_object_unref().
 </para>
 
 @pixmap: a #GdkPixmap
@@ -177,8 +176,7 @@ refers generically to any of these types.
 
 <!-- ##### MACRO gdk_bitmap_ref ##### -->
 <para>
-Increase the reference count of a bitmap. An alias
-for gdk_pixmap_ref().
+Deprecated equivalent of g_object_ref().
 </para>
 
 @Returns: @pixmap
@@ -187,8 +185,7 @@ for gdk_pixmap_ref().
 
 <!-- ##### MACRO gdk_bitmap_unref ##### -->
 <para>
-Decrease the reference count of a bitmap. An alias
-for gdk_pixmap_unref().
+Deprecated equivalent of g_object_unref().
 </para>
 
 @pixmap: a #GdkBitmap

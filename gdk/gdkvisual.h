@@ -80,7 +80,7 @@ GdkVisual*    gdk_visual_get_best_with_type  (GdkVisualType  visual_type);
 GdkVisual*    gdk_visual_get_best_with_both  (gint	     depth,
 					      GdkVisualType  visual_type);
 
-#ifndef GTK_DISABLE_DEPRECATED
+#ifndef GDK_DISABLE_DEPRECATED
 #define gdk_visual_ref(v) g_object_ref(v)
 #define gdk_visual_unref(v) g_object_unref(v)
 #endif
