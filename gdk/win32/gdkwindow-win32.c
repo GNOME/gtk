@@ -1041,11 +1041,16 @@ show_window_internal (GdkWindow *window,
     ShowWindow (GDK_WINDOW_HWND (window), SW_SHOWNORMAL);
 
   if (raise)
-    if (GDK_WINDOW_TYPE (window) == GDK_WINDOW_TEMP)
-      SetWindowPos (GDK_WINDOW_HWND (window), HWND_TOPMOST, 0, 0, 0, 0,
-		    SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOSIZE);
-    else
-      BringWindowToTop (GDK_WINDOW_HWND (window));
+    {
+      if (GDK_WINDOW_TYPE (window) == GDK_WINDOW_TEMP)
+        SetWindowPos (GDK_WINDOW_HWND (window), HWND_TOPMOST, 0, 0, 0, 0,
+	  	    SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOSIZE);
+      else if (GDK_WINDOW_TYPE (window) == GDK_WINDOW_TOPLEVEL
+	       || GDK_WINDOW_TYPE (window) == GDK_WINDOW_DIALOG)
+        SetForegroundWindow (GDK_WINDOW_HWND (window));
+      else
+        BringWindowToTop (GDK_WINDOW_HWND (window));
+    }
   else if (old_active_window != GDK_WINDOW_HWND (window))
     SetActiveWindow (old_active_window);
 }

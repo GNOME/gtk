@@ -1179,13 +1179,17 @@ draw_segments (GdkGCWin32 *gcwin32,
   nsegs = va_arg (args, gint);
 
   if (x_offset != 0 || y_offset != 0)
-    for (i = 0; i < nsegs; i++)
-      {
-	segs[i].x1 -= x_offset;
-	segs[i].y1 -= y_offset;
-	segs[i].x2 -= x_offset;
-	segs[i].y2 -= y_offset;
-      }
+    {
+      /* must not modify in place, but could splice in the offset all below */
+      segs = g_memdup (segs, nsegs * sizeof (GdkSegment));
+      for (i = 0; i < nsegs; i++)
+        {
+          segs[i].x1 -= x_offset;
+          segs[i].y1 -= y_offset;
+          segs[i].x2 -= x_offset;
+          segs[i].y2 -= y_offset;
+        }
+    }
 
   if (gcwin32->pen_dashes && !IS_WIN_NT ())
     {
@@ -1237,18 +1241,32 @@ draw_segments (GdkGCWin32 *gcwin32,
        * e.g. at xpm icons produced with gdk_pixbuf_new_from_xpm_data trough
        * gdk_pixbuf_render_threshold_alpha (testgtk folder icon or
        * Dia's toolbox icons) but only on win9x ... --hb
+       *
+       * Update : see bug #81895 and bug #126710 why this is finally
+       *          needed on any win32 platform ;-)
        */
-      if (gcwin32->pen_width <= 1 && !IS_WIN_NT())
+      if (gcwin32->pen_width <= 1)
         {
           GdkSegment *ps = &segs[nsegs-1];
-          int xc = (ps->y2 == ps->y1) ? 0 : ((ps->x1 < ps->x2) ? 1 : -1);
-          int yc = (ps->x2 == ps->x1) ? 0 : ((ps->y1 < ps->y2) ? 1 : -1);
-	/* don't forget single point lines */
-	xc = (0 == xc && 0 == yc) ? 1 : xc;
+          int xc = 0, yc = 0;
+
+          if (ps->y2 == ps->y1 && ps->x2 == ps->x1)
+            xc = 1; /* just a point */
+          else if (ps->y2 == ps->y1)
+            xc = (ps->x1 < ps->x2) ? 1 : -1; /* advance x only */
+          else if (ps->x2 == ps->x1)
+            yc = (ps->y1 < ps->y2) ? 1 : -1; /* advance y only */
+          else
+            {
+              xc = (ps->x1 < ps->x2) ? 1 : -1;
+              yc = (ps->y1 < ps->y2) ? 1 : -1;
+            }
 
           GDI_CALL (LineTo, (hdc, ps->x2 + xc, ps->y2 + yc));
         }
     }
+  if (x_offset != 0 || y_offset != 0)
+    g_free (segs);
 }
 
 static void

@@ -1,3 +1,18 @@
+2004-05-02  Hans Breuer  <hans@breuer.org>
+
+	* gdk/win32/gdkdrawable-win32.c (draw_segments) : don't
+	modify the passed in GdkSegment(s) in place, we may get
+	them again to draw at the same place. Fixes bug #129095, 
+	bug #137177, ...
+	(draw_segments) draw the end pixel again to get the 
+	pixmap mask right, fixes bug #126710, #130202
+
+	* gdk/win32/gdkwindow-win32.c : use SetForegroundWindow,
+	fixes bug #106013, John Ehresman
+
+	* gtk/makefile.msc.in : don't try to link gtk.res but
+	use gtk-win32.res (as supposed to be fixed below :)
+
 2004-05-01  Hans Breuer  <hans@breuer.org>
 
 	* tests/Makefile.am : tests/makefile.msc is in CVS for
