@@ -147,16 +147,20 @@ _gtk_file_chooser_embed_get_default_size (GtkFileChooserEmbed *chooser_embed,
 					 gint                *default_height)
 {
   g_return_if_fail (GTK_IS_FILE_CHOOSER_EMBED (chooser_embed));
+  g_return_if_fail (default_width != NULL);
+  g_return_if_fail (default_height != NULL);
 
   GTK_FILE_CHOOSER_EMBED_GET_IFACE (chooser_embed)->get_default_size (chooser_embed, default_width, default_height);
 }
 
 void
 _gtk_file_chooser_embed_get_resizable_hints (GtkFileChooserEmbed *chooser_embed,
-					    gboolean            *resize_horizontally,
-					    gboolean            *resize_vertically)
+					     gboolean            *resize_horizontally,
+					     gboolean            *resize_vertically)
 {
   g_return_if_fail (GTK_IS_FILE_CHOOSER_EMBED (chooser_embed));
+  g_return_if_fail (resize_horizontally != NULL);
+  g_return_if_fail (resize_vertically != NULL);
 
   GTK_FILE_CHOOSER_EMBED_GET_IFACE (chooser_embed)->get_resizable_hints (chooser_embed, resize_horizontally, resize_vertically);
 }

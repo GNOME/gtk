@@ -37,7 +37,6 @@ should be accessed using the functions below.
 
 @Deprecated: Use #GtkComboBox instead.
 
-
 <!-- ##### SIGNAL GtkOptionMenu::changed ##### -->
 <para>
 

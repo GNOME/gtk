@@ -72,7 +72,6 @@ typedef struct _GtkFileChooserDefaultClass GtkFileChooserDefaultClass;
 #define GTK_IS_FILE_CHOOSER_DEFAULT_CLASS(klass)  (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_FILE_CHOOSER_DEFAULT))
 #define GTK_FILE_CHOOSER_DEFAULT_GET_CLASS(obj)   (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_FILE_CHOOSER_DEFAULT, GtkFileChooserDefaultClass))
 
-#define PREVIEW_HBOX_SPACING 12
 
 struct _GtkFileChooserDefaultClass
 {
@@ -207,6 +206,9 @@ typedef enum {
 /* Standard icon size */
 /* FIXME: maybe this should correspond to the font size in the tree views... */
 #define ICON_SIZE 20
+#define PREVIEW_HBOX_SPACING 12
+#define NUM_LINES 40
+#define NUM_CHARS 60
 
 static void gtk_file_chooser_default_class_init       (GtkFileChooserDefaultClass *class);
 static void gtk_file_chooser_default_iface_init       (GtkFileChooserIface        *iface);
@@ -639,7 +641,10 @@ update_preview_widget_visibility (GtkFileChooserDefault *impl)
   else
     {
       if (impl->preview_label)
-	gtk_widget_destroy (impl->preview_label);
+	{
+	  gtk_widget_destroy (impl->preview_label);
+	  impl->preview_label = NULL;
+	}
     }
 
   if (impl->preview_widget_active && impl->preview_widget)
@@ -2186,6 +2191,7 @@ update_appearance (GtkFileChooserDefault *impl)
       gtk_widget_hide (impl->save_extra_align);
       gtk_widget_hide (impl->browse_extra_align);
     }
+
   g_signal_emit_by_name (impl, "default-size-changed");
 }
 
@@ -2342,7 +2348,7 @@ static void
 gtk_file_chooser_default_style_set      (GtkWidget *widget,
 					 GtkStyle  *previous_style)
 {
-    if (GTK_WIDGET_CLASS (parent_class)->style_set)
+  if (GTK_WIDGET_CLASS (parent_class)->style_set)
     GTK_WIDGET_CLASS (parent_class)->style_set (widget, previous_style);
 
   g_signal_emit_by_name (widget, "default-size-changed");
@@ -3094,9 +3100,6 @@ gtk_file_chooser_default_list_shortcut_folders (GtkFileChooser *chooser)
   return g_slist_reverse (list);
 }
 
-#define NUM_LINES 40
-#define NUM_CHARS 50
-
 /* Guesses a size based upon font sizes */
 static void
 find_good_size_from_style (GtkWidget *widget,
@@ -3145,7 +3148,7 @@ gtk_file_chooser_default_get_default_size (GtkFileChooserEmbed *chooser_embed,
   find_good_size_from_style (GTK_WIDGET (chooser_embed), default_width, default_height);
 
   if (impl->preview_widget_active && impl->preview_widget)
-    *default_width += impl->preview_widget->requisition.width + PREVIEW_HBOX_SPACING;
+    *default_width += impl->preview_box->requisition.width + PREVIEW_HBOX_SPACING;
 }
 
 static void

@@ -27,9 +27,6 @@
 
 #include <stdarg.h>
 
-#define NUM_LINES 40
-#define NUM_CHARS 50
-
 struct _GtkFileChooserDialogPrivate
 {
   GtkWidget *widget;
@@ -59,8 +56,8 @@ static void     gtk_file_chooser_dialog_get_property (GObject               *obj
 						      GValue                *value,
 						      GParamSpec            *pspec);
 
-static void gtk_file_chooser_dialog_style_set      (GtkWidget *widget,
-						    GtkStyle  *previous_style);
+static void     gtk_file_chooser_dialog_style_set    (GtkWidget             *widget,
+						      GtkStyle              *previous_style);
 
 static GObjectClass *parent_class;
 
@@ -160,8 +157,13 @@ file_chooser_widget_default_size_changed (GtkWidget            *widget,
   gint extra_width;
   gint extra_height;
   gint width, height;
+  GtkRequisition req;
 
   priv = GTK_FILE_CHOOSER_DIALOG_GET_PRIVATE (dialog);
+
+  /* Force a size request of everything before we start.  This will make sure
+   * that widget->requisition is meaningful. */
+  gtk_widget_size_request (GTK_WIDGET (dialog), &req);
 
   /* Determine how much space the rest of the dialog uses compared to priv->widget */
   extra_width = GTK_WIDGET (dialog)->requisition.width - priv->widget->requisition.width;
@@ -173,7 +175,6 @@ file_chooser_widget_default_size_changed (GtkWidget            *widget,
   width = extra_width + width;
   height = extra_height + height;
 
-  /*  g_print ("file_chooser_widget_default_size_changed: %d %d\n", width, height);*/
   /* FIXME: We should make sure that we arent' bigger than the current screen */
   if (GTK_WIDGET_REALIZED (dialog) &&
       priv->default_width > 0 &&
@@ -183,6 +184,7 @@ file_chooser_widget_default_size_changed (GtkWidget            *widget,
       gint dx, dy;
 
       gtk_window_get_size (GTK_WINDOW (dialog), &cur_width, &cur_height);
+
       dx = width - priv->default_width;
       dy = height - priv->default_height;
       gtk_window_resize (GTK_WINDOW (dialog),
@@ -191,7 +193,7 @@ file_chooser_widget_default_size_changed (GtkWidget            *widget,
     }
   else
     {
-      gtk_window_set_default_size (GTK_WINDOW (dialog), width, height);
+      gtk_window_resize (GTK_WINDOW (dialog), width, height);
     }
   priv->default_width = width;
   priv->default_height = height;
@@ -268,6 +270,7 @@ gtk_file_chooser_dialog_get_property (GObject         *object,
   g_object_get_property (G_OBJECT (priv->widget), pspec->name, value);
 }
 
+#if 0
 static void
 set_default_size (GtkFileChooserDialog *dialog)
 {
@@ -316,6 +319,7 @@ set_default_size (GtkFileChooserDialog *dialog)
 			       (default_width == -1) ? width : default_width,
 			       (default_height == -1) ? height : default_height);
 }
+#endif
 
 static void
 gtk_file_chooser_dialog_style_set (GtkWidget *widget,

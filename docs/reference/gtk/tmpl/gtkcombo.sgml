@@ -94,7 +94,6 @@ an application.)
 @list: the list shown in the drop-down window.
 @Deprecated: Use #GtkComboBox instead.
 
-
 <!-- ##### ARG GtkCombo:allow-empty ##### -->
 <para>
 

@@ -200,6 +200,11 @@ update_preview_cb (GtkFileChooser *file_chooser, gpointer data)
 
 </para>
 
+<!-- ##### ARG GtkFileChooser:use-preview-label ##### -->
+<para>
+
+</para>
+
 <!-- ##### ENUM GtkFileChooserAction ##### -->
     <para>
       Describes whether a #GtkFileChooser is being used to open

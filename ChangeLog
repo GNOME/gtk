@@ -1,3 +1,20 @@
+Sun Feb 29 01:51:27 2004  Jonathan Blandford  <jrb@gnome.org>
+
+	* gtk/gtkfilechooserembed.c
+	(_gtk_file_chooser_embed_get_default_size):  Add g_return_if_fail()
+	(_gtk_file_chooser_embed_get_resizable_hints): Add g_return_if_fail()
+
+	* gtk/gtkfilechooserdialog.c
+	(file_chooser_widget_default_size_changed): Get the correct
+	initial size for the dialog.  Also, don't bother with
+	gtk_window_set_default_size().  It's not really meaningful.
+
+	* gtk/gtkfilechooserdefault.c
+	(gtk_file_chooser_default_get_default_size): Get the correct
+	spacing for the preview_widget
+	(update_preview_widget_visibility): Clear widget field after we
+	destroy it.
+
 2004-02-29  Federico Mena Quintero  <federico@ximian.com>
 
 	* gtk/gtkfilechooserdefault.c
