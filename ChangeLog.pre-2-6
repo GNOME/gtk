@@ -1,3 +1,13 @@
+2002-12-23  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtktextiter.c (gtk_text_iter_backward_sentence_starts):
+	Don't call gtk_text_iter_backward_sentence_start() if
+	count is zero.  (#99115)
+
+	* gtk/gtktextview.c (gtk_text_view_move_cursor_internal): Call
+	move_cursor() even if the cursor hasn't moved, since it has the
+	side effect of canceling the selection.  (#81395, #98537, #9833)
+
 2002-12-22  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtktextlayout.c (add_preedit_attrs): Don't add attributes

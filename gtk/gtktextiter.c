@@ -3302,6 +3302,9 @@ gtk_text_iter_backward_sentence_starts (GtkTextIter      *iter,
 {
   g_return_val_if_fail (iter != NULL, FALSE);
 
+  if (count == 0)
+    return FALSE;
+
   if (count < 0)
     return gtk_text_iter_forward_sentence_ends (iter, -count);
 
