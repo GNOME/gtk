@@ -394,13 +394,11 @@ static void OneLine(struct ras_progressive_state *context)
 }
 
 static gboolean
-DoCompressed (gpointer data,
+DoCompressed (struct ras_progressive_state *context,
 	      const guchar * buf, guint size,
 	      GError **error)
 {
 	int i;
-	struct ras_progressive_state *context =
-	    (struct ras_progressive_state *) data;
 
 	for (i = 0; i < size; i++) {
 		switch (context->DecoderState) {
