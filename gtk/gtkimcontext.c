@@ -235,7 +235,7 @@ gtk_im_context_focus_in (GtkIMContext   *context)
 }
 
 /**
- * gtk_im_context_focus_in:
+ * gtk_im_context_focus_out:
  * @context: a #GtkIMContext
  *
  * Notify the input method that the widget to which this
@@ -254,6 +254,27 @@ gtk_im_context_focus_out (GtkIMContext   *context)
   klass = GTK_IM_CONTEXT_GET_CLASS (context);
   if (klass->focus_out)
     klass->focus_out (context);
+}
+
+/**
+ * gtk_im_context_reset:
+ * @context: a #GtkIMContext
+ *
+ * Notify the input method that a change such as a change in cursor
+ * position has been made. This will typically cause the input
+ * method to clear the preedit state.
+ **/
+void
+gtk_im_context_reset (GtkIMContext   *context)
+{
+  GtkIMContextClass *klass;
+  
+  g_return_if_fail (context != NULL);
+  g_return_if_fail (GTK_IS_IM_CONTEXT (context));
+
+  klass = GTK_IM_CONTEXT_GET_CLASS (context);
+  if (klass->reset)
+    klass->reset (context);
 }
 
 

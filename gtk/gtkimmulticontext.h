@@ -21,6 +21,7 @@
 #define __GTK_IM_MULTICONTEXT_H__
 
 #include <gtk/gtkimcontext.h>
+#include <gtk/gtkmenushell.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -43,6 +44,10 @@ struct _GtkIMMulticontext
   GtkIMContext object;
 
   GtkIMContext *slave;
+
+  GdkWindow *client_window;
+
+  const gchar *context_id;
 };
 
 struct _GtkIMMulticontextClass
@@ -52,6 +57,9 @@ struct _GtkIMMulticontextClass
 
 GtkType       gtk_im_multicontext_get_type (void) G_GNUC_CONST;
 GtkIMContext *gtk_im_multicontext_new      (void);
+
+void          gtk_im_multicontext_append_menuitems (GtkIMMulticontext *context,
+						    GtkMenuShell      *menushell);
 
 #ifdef __cplusplus
 }
