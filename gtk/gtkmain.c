@@ -526,12 +526,10 @@ gtk_events_pending (void)
 gint 
 gtk_main_iteration (void)
 {
-  if (main_loops)
-    {
-      g_main_iteration (TRUE);
+  g_main_iteration (TRUE);
 
-      return !g_main_is_running (main_loops->data);
-    }
+  if (main_loops)
+    return !g_main_is_running (main_loops->data);
   else
     return TRUE;
 }
@@ -539,12 +537,10 @@ gtk_main_iteration (void)
 gint 
 gtk_main_iteration_do (gboolean blocking)
 {
-  if (main_loops)
-    {
-      g_main_iteration (blocking);
+  g_main_iteration (blocking);
 
-      return !g_main_is_running (main_loops->data);
-    }
+  if (main_loops)
+    return !g_main_is_running (main_loops->data);
   else
     return TRUE;
 }

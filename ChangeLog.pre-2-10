@@ -1,3 +1,9 @@
+Sat Dec 19 03:44:29 PST 1998 Manish Singh <yosh@gimp.org>
+
+	* gtk/gtkmain.c: always run a g_main_iteration, even if
+	there are no active main loops. This fixes the gimp splash
+	screen.
+
 Sat Dec 19 05:37:51 1998  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtklabel.c (gtk_label_expose): removed return_if_fail
