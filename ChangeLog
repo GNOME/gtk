@@ -1,3 +1,8 @@
+2002-01-14  Hasbullah Bin Pit  <sebol@ikhlas.com>
+
+        * configure.in: Added ms at ALL_LINGUAS.
+	* po/ms.po: Added Malay Translation.
+
 2002-01-14  Matthias Clasen  <matthiasc@poet.de>
 
 	* gtk/gtkitemfactory.c: Documentation.
