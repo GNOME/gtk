@@ -9,3 +9,7 @@ Incompatible Changes from GTK+-1.2 to GTK+-1.4:
   match what we do for glib, and other similar cases.
 
 - The detail arguments in the GtkStyleClass structure are now 'const gchar *'.
+
+- gtk_paned_set_gutter_size() has been removed, since the small handle tab
+  has been changed to include the entire area previously occupied by
+  the gutter.

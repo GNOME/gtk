@@ -25,24 +25,22 @@
  */
 
 #include "gtkvpaned.h"
-#include "gtkmain.h"
-#include "gtksignal.h"
 
-static void gtk_vpaned_class_init       (GtkVPanedClass *klass);
-static void gtk_vpaned_init             (GtkVPaned      *vpaned);
-static void gtk_vpaned_size_request     (GtkWidget      *widget,
-					 GtkRequisition *requisition);
-static void gtk_vpaned_size_allocate    (GtkWidget          *widget,
-					 GtkAllocation      *allocation);
-static void gtk_vpaned_draw             (GtkWidget    *widget,
-					 GdkRectangle *area);
-static void gtk_vpaned_xor_line         (GtkPaned *paned);
-static gint gtk_vpaned_button_press     (GtkWidget *widget,
-					 GdkEventButton *event);
-static gint gtk_vpaned_button_release   (GtkWidget *widget,
-					 GdkEventButton *event);
-static gint gtk_vpaned_motion           (GtkWidget *widget,
-					 GdkEventMotion *event);
+static void     gtk_vpaned_class_init     (GtkVPanedClass *klass);
+static void     gtk_vpaned_init           (GtkVPaned      *vpaned);
+static void     gtk_vpaned_size_request   (GtkWidget      *widget,
+					   GtkRequisition *requisition);
+static void     gtk_vpaned_size_allocate  (GtkWidget      *widget,
+					   GtkAllocation  *allocation);
+static void     gtk_vpaned_draw           (GtkWidget      *widget,
+					   GdkRectangle   *area);
+static void     gtk_vpaned_xor_line       (GtkPaned       *paned);
+static gboolean gtk_vpaned_button_press   (GtkWidget      *widget,
+					   GdkEventButton *event);
+static gboolean gtk_vpaned_button_release (GtkWidget      *widget,
+					   GdkEventButton *event);
+static gboolean gtk_vpaned_motion         (GtkWidget      *widget,
+					   GdkEventMotion *event);
 
 GtkType
 gtk_vpaned_get_type (void)
@@ -59,11 +57,11 @@ gtk_vpaned_get_type (void)
 	(GtkClassInitFunc) gtk_vpaned_class_init,
 	(GtkObjectInitFunc) gtk_vpaned_init,
 	/* reserved_1 */ NULL,
-        /* reserved_2 */ NULL,
-        (GtkClassInitFunc) NULL,
+	/* reserved_2 */ NULL,
+	(GtkClassInitFunc) NULL,
       };
 
-      vpaned_type = gtk_type_unique (GTK_TYPE_PANED, &vpaned_info);
+      vpaned_type = gtk_type_unique(gtk_paned_get_type(), &vpaned_info);
     }
 
   return vpaned_type;
@@ -74,7 +72,7 @@ gtk_vpaned_class_init (GtkVPanedClass *class)
 {
   GtkWidgetClass *widget_class;
 
-  widget_class = (GtkWidgetClass*) class;
+  widget_class = (GtkWidgetClass *) class;
 
   widget_class->size_request = gtk_vpaned_size_request;
   widget_class->size_allocate = gtk_vpaned_size_allocate;
@@ -87,9 +85,17 @@ gtk_vpaned_class_init (GtkVPanedClass *class)
 static void
 gtk_vpaned_init (GtkVPaned *vpaned)
 {
+  GtkPaned *paned;
+
+  g_return_if_fail (vpaned != NULL);
+  g_return_if_fail (GTK_IS_PANED (vpaned));
+
+  paned = GTK_PANED (vpaned);
+
+  paned->cursor_type = GDK_SB_V_DOUBLE_ARROW;
 }
 
-GtkWidget*
+GtkWidget *
 gtk_vpaned_new (void)
 {
   GtkVPaned *vpaned;
@@ -130,7 +136,7 @@ gtk_vpaned_size_request (GtkWidget      *widget,
       requisition->height += child_requisition.height;
     }
 
-  requisition->height += GTK_CONTAINER (paned)->border_width * 2 + paned->gutter_size;
+  requisition->height += GTK_CONTAINER (paned)->border_width * 2 + paned->handle_size;
   requisition->width += GTK_CONTAINER (paned)->border_width * 2;
 }
 
@@ -143,7 +149,6 @@ gtk_vpaned_size_allocate (GtkWidget     *widget,
   GtkRequisition child2_requisition;
   GtkAllocation child1_allocation;
   GtkAllocation child2_allocation;
-  GdkRectangle old_groove_rectangle;
   guint16 border_width;
 
   g_return_if_fail (widget != NULL);
@@ -164,85 +169,65 @@ gtk_vpaned_size_allocate (GtkWidget     *widget,
     gtk_widget_get_child_requisition (paned->child2, &child2_requisition);
   else
     child2_requisition.height = 0;
-    
-  gtk_paned_compute_position (paned,
-			      widget->allocation.height
-			        - paned->gutter_size
-			        - 2 * border_width,
-			      child1_requisition.height,
-			      child2_requisition.height);
+
+  gtk_paned_compute_position(paned,
+			     widget->allocation.height
+			       - paned->handle_size
+			       - 2 * border_width,
+			     child1_requisition.height,
+			     child2_requisition.height);
 
   /* Move the handle before the children so we don't get extra expose events */
 
-  paned->handle_xpos = allocation->width - border_width - 2 * paned->handle_size;
-  paned->handle_ypos = paned->child1_size + border_width + paned->gutter_size / 2 - paned->handle_size / 2;
+  paned->handle_xpos = 0;
+  paned->handle_ypos = paned->child1_size + border_width;
+  paned->handle_width = widget->allocation.width;
+  paned->handle_height = paned->handle_size;
 
-  if (GTK_WIDGET_REALIZED (widget))
+  if (GTK_WIDGET_REALIZED(widget))
     {
       gdk_window_move_resize (widget->window,
 			      allocation->x, allocation->y,
-			      allocation->width, allocation->height);
-      
-      gdk_window_move (paned->handle, paned->handle_xpos, paned->handle_ypos);
+			      allocation->width,
+			      allocation->height);
+
+      gdk_window_move_resize (paned->handle,
+			      paned->handle_xpos,
+			      paned->handle_ypos,
+			      paned->handle_width,
+			      paned->handle_size);
     }
 
-  child1_allocation.width = child2_allocation.width = MAX (1, (gint)allocation->width - border_width * 2);
+  child1_allocation.width = child2_allocation.width =  MAX(1, (gint) allocation->width - border_width * 2);
   child1_allocation.height = paned->child1_size;
   child1_allocation.x = child2_allocation.x = border_width;
   child1_allocation.y = border_width;
-  
-  old_groove_rectangle = paned->groove_rectangle;
 
-  paned->groove_rectangle.y = child1_allocation.y 
-    + child1_allocation.height + paned->gutter_size / 2 - 1;
-  paned->groove_rectangle.x = 0;
-  paned->groove_rectangle.height = 2;
-  paned->groove_rectangle.width = allocation->width;
-  
-  if (GTK_WIDGET_DRAWABLE (widget) &&
-      ((paned->groove_rectangle.x != old_groove_rectangle.x) ||
-       (paned->groove_rectangle.y != old_groove_rectangle.y) ||
-       (paned->groove_rectangle.width != old_groove_rectangle.width) ||
-       (paned->groove_rectangle.height != old_groove_rectangle.height)))
-    {
-      gtk_widget_queue_clear_area (widget,
-				   old_groove_rectangle.x,
-				   old_groove_rectangle.y,
-				   old_groove_rectangle.width,
-				   old_groove_rectangle.height);
-      gtk_widget_queue_draw_area (widget,
-				  paned->groove_rectangle.x,
-				  paned->groove_rectangle.y,
-				  paned->groove_rectangle.width,
-				  paned->groove_rectangle.height);
-    }
-  
-  child2_allocation.y = paned->groove_rectangle.y + paned->gutter_size / 2 + 1;
-  child2_allocation.height = MAX (1, (gint)allocation->height 
-    - child2_allocation.y - border_width);
-  
+  child2_allocation.y = child1_allocation.y + child1_allocation.height + paned->handle_height;
+  child2_allocation.height = MAX(1, (gint) allocation->height - child2_allocation.y - border_width);
+
   /* Now allocate the childen, making sure, when resizing not to
    * overlap the windows */
-  if (GTK_WIDGET_MAPPED(widget) &&
+  if (GTK_WIDGET_MAPPED (widget) &&
       paned->child1 && GTK_WIDGET_VISIBLE (paned->child1) &&
       paned->child1->allocation.height < child1_allocation.height)
     {
       if (paned->child2 && GTK_WIDGET_VISIBLE (paned->child2))
-	gtk_widget_size_allocate (paned->child2, &child2_allocation);
-      gtk_widget_size_allocate (paned->child1, &child1_allocation);      
+	gtk_widget_size_allocate(paned->child2, &child2_allocation);
+      gtk_widget_size_allocate(paned->child1, &child1_allocation);
     }
   else
     {
       if (paned->child1 && GTK_WIDGET_VISIBLE (paned->child1))
-	gtk_widget_size_allocate (paned->child1, &child1_allocation);
+	gtk_widget_size_allocate(paned->child1, &child1_allocation);
       if (paned->child2 && GTK_WIDGET_VISIBLE (paned->child2))
-	gtk_widget_size_allocate (paned->child2, &child2_allocation);
+	gtk_widget_size_allocate(paned->child2, &child2_allocation);
     }
 }
 
 static void
 gtk_vpaned_draw (GtkWidget    *widget,
-		GdkRectangle *area)
+		 GdkRectangle *area)
 {
   GtkPaned *paned;
   GdkRectangle handle_area, child_area;
@@ -253,51 +238,95 @@ gtk_vpaned_draw (GtkWidget    *widget,
 
   if (GTK_WIDGET_VISIBLE (widget) && GTK_WIDGET_MAPPED (widget))
     {
-      gint width, height;
-      
       paned = GTK_PANED (widget);
       border_width = GTK_CONTAINER (paned)->border_width;
 
       gdk_window_clear_area (widget->window,
-			     area->x, area->y, area->width, area->height);
+			     area->x, area->y, area->width,
+			     area->height);
 
-      /* Redraw the handle
-       */
-      gdk_window_get_size (paned->handle, &width, &height);
-      
       handle_area.x = paned->handle_xpos;
       handle_area.y = paned->handle_ypos;
-      handle_area.width = width;
-      handle_area.height = height;
+      handle_area.width = paned->handle_height;
+      handle_area.height = paned->handle_size;
 
       if (gdk_rectangle_intersect (&handle_area, area, &child_area))
 	{
-	  child_area.x -= handle_area.x;
-	  child_area.y -= handle_area.y;
-	  gtk_paint_box (widget->style, paned->handle,
-			 GTK_WIDGET_STATE(widget),
-			 GTK_SHADOW_OUT, 
-			 &child_area, widget, "paned",
-			 0, 0,
-			 width, height);
+	  if (widget->allocation.height > 2)
+	    {
+	      gdk_draw_point (paned->handle,
+			      widget->style->fg_gc[GTK_STATE_NORMAL],
+			      paned->handle_width/2,
+			      paned->handle_size/2);
+	      gdk_draw_point (paned->handle,
+			      widget->style->bg_gc[GTK_STATE_PRELIGHT],
+			      paned->handle_width/2 - 1,
+			      paned->handle_size/2 - 1);
+	    }
+	  if (widget->allocation.height > 11)
+	    {
+	      gdk_draw_point (paned->handle,
+			      widget->style->fg_gc[GTK_STATE_NORMAL],
+			      paned->handle_width/2 + 5,
+			      paned->handle_size/2);
+	      gdk_draw_point (paned->handle,
+			      widget->style->bg_gc[GTK_STATE_PRELIGHT],
+			      paned->handle_width/2 + 4,
+			      paned->handle_size/2 - 1);
+	      gdk_draw_point (paned->handle,
+			      widget->style->fg_gc[GTK_STATE_NORMAL],
+			      paned->handle_width/2 - 5,
+			      paned->handle_size/2);
+	      gdk_draw_point (paned->handle,
+			      widget->style->bg_gc[GTK_STATE_PRELIGHT],
+			      paned->handle_width/2 - 6,
+			      paned->handle_size/2 - 1);
+	    }
+	  if (widget->allocation.height > 20)
+	    {
+	      gdk_draw_point (paned->handle,
+			      widget->style->fg_gc[GTK_STATE_NORMAL],
+			      paned->handle_width/2 - 10,
+			      paned->handle_size/2);
+	      gdk_draw_point (paned->handle,
+			      widget->style->bg_gc[GTK_STATE_PRELIGHT],
+			      paned->handle_width/2 - 11,
+			      paned->handle_size/2 - 1);
+	      gdk_draw_point (paned->handle,
+			      widget->style->fg_gc[GTK_STATE_NORMAL],
+			      paned->handle_width/2 + 10,
+			      paned->handle_size/2);
+	      gdk_draw_point (paned->handle,
+			      widget->style->bg_gc[GTK_STATE_PRELIGHT],
+			      paned->handle_width/2 + 9,
+			      paned->handle_size/2 - 1);
+	    }
+	  if (widget->allocation.height > 30)
+	    {
+	      gdk_draw_point (paned->handle,
+			      widget->style->fg_gc[GTK_STATE_NORMAL],
+			      paned->handle_width/2 - 15,
+			      paned->handle_size/2);
+	      gdk_draw_point (paned->handle,
+			      widget->style->bg_gc[GTK_STATE_PRELIGHT],
+			      paned->handle_width/2 - 16,
+			      paned->handle_size/2 - 1);
+	      gdk_draw_point (paned->handle,
+			      widget->style->fg_gc[GTK_STATE_NORMAL],
+			      paned->handle_width/2 + 15,
+			      paned->handle_size/2);
+	      gdk_draw_point (paned->handle,
+			      widget->style->bg_gc[GTK_STATE_PRELIGHT],
+			      paned->handle_width/2 + 14,
+			      paned->handle_size/2 - 1);
+	    }
 	}
-
-      /* Redraw the groove
-       */
-      gtk_paint_hline(widget->style, widget->window, GTK_STATE_NORMAL,
-		      area, widget, "vpaned",
-		      0, widget->allocation.width - 1,
-		      border_width + paned->child1_size + paned->gutter_size / 2 - 1);
-
       /* Redraw the children
        */
-      if (paned->child1 &&
-	  gtk_widget_intersect (paned->child1, area, &child_area))
-        gtk_widget_draw (paned->child1, &child_area);
-      if (paned->child2 &&
-	  gtk_widget_intersect (paned->child2, area, &child_area))
-        gtk_widget_draw (paned->child2, &child_area);
-
+      if (paned->child1 && gtk_widget_intersect (paned->child1, area, &child_area))
+	gtk_widget_draw (paned->child1, &child_area);
+      if (paned->child2 && gtk_widget_intersect (paned->child2, area, &child_area))
+	gtk_widget_draw (paned->child2, &child_area);
     }
 }
 
@@ -308,7 +337,7 @@ gtk_vpaned_xor_line (GtkPaned *paned)
   GdkGCValues values;
   guint16 ypos;
 
-  widget = GTK_WIDGET(paned);
+  widget = GTK_WIDGET (paned);
 
   if (!paned->xor_gc)
     {
@@ -316,12 +345,14 @@ gtk_vpaned_xor_line (GtkPaned *paned)
       values.subwindow_mode = GDK_INCLUDE_INFERIORS;
       paned->xor_gc = gdk_gc_new_with_values (widget->window,
 					      &values,
-					      GDK_GC_FUNCTION |
-					      GDK_GC_SUBWINDOW);
+					      GDK_GC_FUNCTION | GDK_GC_SUBWINDOW);
     }
 
+  gdk_gc_set_line_attributes (paned->xor_gc, 2, GDK_LINE_SOLID,
+			      GDK_CAP_NOT_LAST, GDK_JOIN_BEVEL);
+
   ypos = paned->child1_size
-    + GTK_CONTAINER (paned)->border_width + paned->gutter_size / 2;
+    + GTK_CONTAINER (paned)->border_width + paned->handle_size / 2;
 
   gdk_draw_line (widget->window, paned->xor_gc,
 		 0,
@@ -330,13 +361,14 @@ gtk_vpaned_xor_line (GtkPaned *paned)
 		 ypos);
 }
 
-static gint
-gtk_vpaned_button_press (GtkWidget *widget, GdkEventButton *event)
+static gboolean
+gtk_vpaned_button_press (GtkWidget      *widget,
+			 GdkEventButton *event)
 {
   GtkPaned *paned;
 
-  g_return_val_if_fail (widget != NULL,FALSE);
-  g_return_val_if_fail (GTK_IS_PANED (widget),FALSE);
+  g_return_val_if_fail (widget != NULL, FALSE);
+  g_return_val_if_fail (GTK_IS_PANED (widget), FALSE);
 
   paned = GTK_PANED (widget);
 
@@ -347,22 +379,26 @@ gtk_vpaned_button_press (GtkWidget *widget, GdkEventButton *event)
       /* We need a server grab here, not gtk_grab_add(), since
        * we don't want to pass events on to the widget's children */
       gdk_pointer_grab (paned->handle, FALSE,
-			GDK_POINTER_MOTION_HINT_MASK 
-			| GDK_BUTTON1_MOTION_MASK 
-			| GDK_BUTTON_RELEASE_MASK,
-			NULL, NULL, event->time);
+			GDK_POINTER_MOTION_HINT_MASK
+			| GDK_BUTTON1_MOTION_MASK
+			| GDK_BUTTON_RELEASE_MASK, NULL, NULL,
+			event->time);
       paned->child1_size += event->y - paned->handle_size / 2;
       paned->child1_size = CLAMP (paned->child1_size, 0,
-                                  widget->allocation.height - paned->gutter_size
-                                  - 2 * GTK_CONTAINER (paned)->border_width);
-      gtk_vpaned_xor_line (paned);
+				  widget->allocation.height -
+				  paned->handle_size -
+				  2 * GTK_CONTAINER (paned)->border_width);
+      gtk_vpaned_xor_line(paned);
+
+      return TRUE;
     }
 
-  return TRUE;
+  return FALSE;
 }
 
-static gint
-gtk_vpaned_button_release (GtkWidget *widget, GdkEventButton *event)
+static gboolean
+gtk_vpaned_button_release (GtkWidget      *widget,
+			   GdkEventButton *event)
 {
   GtkPaned *paned;
 
@@ -378,13 +414,16 @@ gtk_vpaned_button_release (GtkWidget *widget, GdkEventButton *event)
       paned->position_set = TRUE;
       gdk_pointer_ungrab (event->time);
       gtk_widget_queue_resize (GTK_WIDGET (paned));
+
+      return TRUE;
     }
 
-  return TRUE;
+  return FALSE;
 }
 
-static gint
-gtk_vpaned_motion (GtkWidget *widget, GdkEventMotion *event)
+static gboolean
+gtk_vpaned_motion (GtkWidget      *widget,
+		   GdkEventMotion *event)
 {
   GtkPaned *paned;
   gint y;
@@ -393,21 +432,19 @@ gtk_vpaned_motion (GtkWidget *widget, GdkEventMotion *event)
   g_return_val_if_fail (GTK_IS_PANED (widget), FALSE);
 
   if (event->is_hint || event->window != widget->window)
-      gtk_widget_get_pointer(widget, NULL, &y);
+    gtk_widget_get_pointer (widget, NULL, &y);
   else
-      y = event->y;
+    y = event->y;
 
   paned = GTK_PANED (widget);
 
   if (paned->in_drag)
     {
-      gint size = y - GTK_CONTAINER (paned)->border_width - paned->gutter_size/2;
-      
+      gint size = y - GTK_CONTAINER(paned)->border_width - paned->handle_size / 2;
+
       gtk_vpaned_xor_line (paned);
-      paned->child1_size = CLAMP (size,
-				  paned->min_position,
-				  paned->max_position);
-      gtk_vpaned_xor_line (paned);
+      paned->child1_size = CLAMP (size, paned->min_position, paned->max_position);
+      gtk_vpaned_xor_line(paned);
     }
 
   return TRUE;

@@ -1,3 +1,14 @@
+Thu Feb 17 17:10:12 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gt{h,k,}vpaned.[ch]: Add patch from Jonathan Blandford
+	and Anders Carlsson to change the Paned widgets so that they
+	can be dragged from anywhere along the length. Also change
+	the way that this is drawn to make this apparent.
+
+	* gtk/gtkoptionmenu.c (gtk_option_menu_get_history): Apply patch
+	from George Lebl to check that option_menu->menu is present
+	before getting history.
+
 2000-02-14  Tor Lillqvist  <tml@iki.fi>
 
 	* gdk/gdkdraw.c (gdk_draw_segments): Move the test for no segments

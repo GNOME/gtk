@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the GTK+ Team and others 1997-1999.  See the AUTHORS
+ * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
  * file for a list of people on the GTK+ Team.  See the ChangeLog
  * files for a list of changes.  These files are distributed with
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
@@ -27,15 +27,11 @@
 #ifndef __GTK_HPANED_H__
 #define __GTK_HPANED_H__
 
-
-#include <gdk/gdk.h>
 #include <gtk/gtkpaned.h>
-
 
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */
-
 
 #define GTK_TYPE_HPANED		   (gtk_hpaned_get_type ())
 #define GTK_HPANED(obj)            (GTK_CHECK_CAST ((obj), GTK_TYPE_HPANED, GtkHPaned))
@@ -45,8 +41,8 @@ extern "C" {
 #define GTK_HPANED_GET_CLASS(obj)  (GTK_CHECK_GET_CLASS ((obj), GTK_TYPE_HPANED, GtkHPanedClass))
 
 
-typedef struct _GtkHPaned       GtkHPaned;
-typedef struct _GtkHPanedClass  GtkHPanedClass;
+typedef struct _GtkHPaned      GtkHPaned;
+typedef struct _GtkHPanedClass GtkHPanedClass;
 
 struct _GtkHPaned
 {
@@ -58,14 +54,11 @@ struct _GtkHPanedClass
   GtkPanedClass parent_class;
 };
 
-
 GtkType    gtk_hpaned_get_type (void);
-GtkWidget* gtk_hpaned_new      (void);
-
+GtkWidget *gtk_hpaned_new      (void);
 
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */
-
 
 #endif /* __GTK_HPANED_H__ */

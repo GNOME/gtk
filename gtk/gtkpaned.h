@@ -1,3 +1,4 @@
+/* -*- Mode: C; tab-width: 8; indent-tabs-mode: t; c-basic-offset: 8 -*- */
 /* GTK - The GIMP Toolkit
  * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
  *
@@ -18,7 +19,7 @@
  */
 
 /*
- * Modified by the GTK+ Team and others 1997-1999.  See the AUTHORS
+ * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
  * file for a list of people on the GTK+ Team.  See the ChangeLog
  * files for a list of changes.  These files are distributed with
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
@@ -27,10 +28,7 @@
 #ifndef __GTK_PANED_H__
 #define __GTK_PANED_H__
 
-
-#include <gdk/gdk.h>
 #include <gtk/gtkcontainer.h>
-
 
 #ifdef __cplusplus
 extern "C" {
@@ -45,8 +43,8 @@ extern "C" {
 #define GTK_PANED_GET_CLASS(obj)        (GTK_CHECK_GET_CLASS ((obj), GTK_TYPE_PANED, GtkPanedClass))
 
 
-typedef struct _GtkPaned       GtkPaned;
-typedef struct _GtkPanedClass  GtkPanedClass;
+typedef struct _GtkPaned      GtkPaned;
+typedef struct _GtkPanedClass GtkPanedClass;
 
 struct _GtkPaned
 {
@@ -56,26 +54,28 @@ struct _GtkPaned
   GtkWidget *child2;
   
   GdkWindow *handle;
-  GdkRectangle groove_rectangle;
   GdkGC *xor_gc;
-
+  GdkCursorType cursor_type;
+  
   /*< public >*/
   guint16 handle_size;
-  guint16 gutter_size;
-
+  
   /*< private >*/
+  guint16 handle_width;
+  guint16 handle_height;
+
   gint child1_size;
   gint last_allocation;
   gint min_position;
   gint max_position;
-  
+
   guint position_set : 1;
   guint in_drag : 1;
   guint child1_shrink : 1;
   guint child1_resize : 1;
   guint child2_shrink : 1;
   guint child2_resize : 1;
-  
+
   gint16 handle_xpos;
   gint16 handle_ypos;
 };
@@ -101,20 +101,16 @@ void    gtk_paned_pack2           (GtkPaned  *paned,
 				   gboolean   shrink);
 void    gtk_paned_set_position    (GtkPaned  *paned,
 				   gint       position);
-void    gtk_paned_set_handle_size (GtkPaned *paned,
-				   guint16   size);
-void    gtk_paned_set_gutter_size (GtkPaned *paned,
-				   guint16   size);
+void    gtk_paned_set_handle_size (GtkPaned  *paned,
+				   guint16    size);
 
 /* Internal function */
-void    gtk_paned_compute_position (GtkPaned *paned,
-				    gint      allocation,
-				    gint      child1_req,
-				    gint      child2_req);
-
+void    gtk_paned_compute_position (GtkPaned  *paned,
+				    gint       allocation,
+				    gint       child1_req,
+				    gint       child2_req);
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */
-
 
 #endif /* __GTK_PANED_H__ */
