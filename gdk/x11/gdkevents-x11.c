@@ -802,7 +802,7 @@ static const char notify_details[][22] = {
 };
 #endif
 
-void
+static void
 set_user_time (GdkWindow *window,
 	       GdkEvent  *event)
 {

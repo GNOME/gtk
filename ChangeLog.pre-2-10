@@ -1,3 +1,10 @@
+2004-04-23  Matthias Clasen  <mclasen@redhat.com>
+
+	* gdk/x11/gdkevents-x11.c (set_user_time): Make set_user_time()
+	static.
+	* gdk/x11/gdkinput-x11.c (_gdk_input_common_other_event): 
+	_-prefix calls of gdk_x11_window_set_user_time().
+
 2004-04-22  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkuimanager.c (update_node): Make sure the separators 
