@@ -43,8 +43,11 @@ struct _GtkPathBar
   GtkFileSystem *file_system;
   GtkFilePath *root_path;
   GtkFilePath *home_path;
-  GdkPixbuf *home_icon;
+  GtkFilePath *desktop_path;
+
   GdkPixbuf *root_icon;
+  GdkPixbuf *home_icon;
+  GdkPixbuf *desktop_icon;
 
   GList *button_list;
   GList *first_scrolled_button;

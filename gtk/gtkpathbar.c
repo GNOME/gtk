@@ -38,6 +38,7 @@ typedef enum {
   NORMAL_BUTTON,
   ROOT_BUTTON,
   HOME_BUTTON,
+  DESKTOP_BUTTON
 } ButtonType;
 
 #define BUTTON_DATA(x) ((ButtonData *)(x))
@@ -157,14 +158,20 @@ gtk_path_bar_finalize (GObject *object)
 
   path_bar = GTK_PATH_BAR (object);
   g_list_free (path_bar->button_list);
-  if (path_bar->home_path)
-    gtk_file_path_free (path_bar->home_path);
   if (path_bar->root_path)
     gtk_file_path_free (path_bar->root_path);
-  if (path_bar->home_icon)
-    g_object_unref (path_bar->home_icon);
+  if (path_bar->home_path)
+    gtk_file_path_free (path_bar->home_path);
+  if (path_bar->desktop_path)
+    gtk_file_path_free (path_bar->desktop_path);
+
   if (path_bar->root_icon)
     g_object_unref (path_bar->root_icon);
+  if (path_bar->home_icon)
+    g_object_unref (path_bar->home_icon);
+  if (path_bar->desktop_icon)
+    g_object_unref (path_bar->desktop_icon);
+
   if (path_bar->file_system)
     g_object_unref (path_bar->file_system);
 
@@ -619,9 +626,11 @@ static GdkPixbuf *
 get_button_image (GtkPathBar *path_bar,
 		  ButtonType  button_type)
 {
-  if (button_type == ROOT_BUTTON)
+  GtkFileSystemVolume *volume;
+
+  switch (button_type)
     {
-      GtkFileSystemVolume *volume;
+    case ROOT_BUTTON:
 
       if (path_bar->root_icon != NULL)
 	return path_bar->root_icon;
@@ -638,9 +647,7 @@ get_button_image (GtkPathBar *path_bar,
       gtk_file_system_volume_free (path_bar->file_system, volume);
 
       return path_bar->root_icon;
-    }
-  else if (button_type == HOME_BUTTON)
-    {
+    case HOME_BUTTON:
       if (path_bar->home_icon != NULL)
 	return path_bar->home_icon;
 
@@ -649,6 +656,17 @@ get_button_image (GtkPathBar *path_bar,
 							 GTK_WIDGET (path_bar),
 							 ICON_SIZE, NULL);
       return path_bar->home_icon;
+    case DESKTOP_BUTTON:
+      if (path_bar->desktop_icon != NULL)
+	return path_bar->desktop_icon;
+
+      path_bar->desktop_icon = gtk_file_system_render_icon (path_bar->file_system,
+							    path_bar->desktop_path,
+							    GTK_WIDGET (path_bar),
+							    ICON_SIZE, NULL);
+      return path_bar->desktop_icon;
+    default:
+      return NULL;
     }
   
   return NULL;
@@ -671,6 +689,8 @@ update_button_appearance (GtkPathBar *path_bar,
 
   if (button_data->type == HOME_BUTTON)
     dir_name = _("Home");
+  else if (button_data->type == DESKTOP_BUTTON)
+    dir_name = _("Desktop");
   else
     dir_name = button_data->dir_name;
 
@@ -705,6 +725,20 @@ update_button_appearance (GtkPathBar *path_bar,
     }
 }
 
+static ButtonType
+find_button_type (GtkPathBar  *path_bar,
+		  GtkFilePath *path)
+{
+  if (! gtk_file_path_compare (path, path_bar->root_path))
+    return ROOT_BUTTON;
+  if (! gtk_file_path_compare (path, path_bar->home_path))
+    return HOME_BUTTON;
+  if (! gtk_file_path_compare (path, path_bar->desktop_path))
+    return DESKTOP_BUTTON;
+
+ return NORMAL_BUTTON;
+}
+
 static ButtonData *
 make_directory_button (GtkPathBar  *path_bar,
 		       const char  *dir_name,
@@ -717,12 +751,7 @@ make_directory_button (GtkPathBar  *path_bar,
   /* Is it a special button? */
   button_data = g_new0 (ButtonData, 1);
 
-  button_data->type = NORMAL_BUTTON;
-  if (! gtk_file_path_compare (path, path_bar->root_path))
-    button_data->type = ROOT_BUTTON;
-  if (! gtk_file_path_compare (path, path_bar->home_path))
-    button_data->type = HOME_BUTTON;
-
+  button_data->type = find_button_type (path_bar, path);
   button_data->button = gtk_toggle_button_new ();
 
   switch (button_data->type)
@@ -733,6 +762,7 @@ make_directory_button (GtkPathBar  *path_bar,
       button_data->label = NULL;
       break;
     case HOME_BUTTON:
+    case DESKTOP_BUTTON:
       button_data->image = gtk_image_new ();
       button_data->label = gtk_label_new (NULL);
       child = gtk_hbox_new (FALSE, 2);
@@ -740,12 +770,10 @@ make_directory_button (GtkPathBar  *path_bar,
       gtk_box_pack_start (GTK_BOX (child), button_data->label, FALSE, FALSE, 0);
       break;
     case NORMAL_BUTTON:
+    default:
       button_data->label = gtk_label_new (NULL);
       child = button_data->label;
       button_data->image = NULL;
-      break;
-    default:
-      g_assert_not_reached ();
     }
 
   button_data->dir_name = g_strdup (dir_name);
@@ -759,9 +787,8 @@ make_directory_button (GtkPathBar  *path_bar,
   g_signal_connect (button_data->button, "clicked",
 		    G_CALLBACK (button_clicked_cb),
 		    button_data);
-  g_object_set_data_full (G_OBJECT (button_data->button),
-			  "gtk-path-bar-button-data",
-			  button_data, button_data_free);
+  g_object_weak_ref (G_OBJECT (button_data->button),
+		     (GWeakNotify) button_data_free, button_data);
 
   return button_data;
 }
@@ -917,6 +944,8 @@ _gtk_path_bar_set_file_system (GtkPathBar    *path_bar,
 			       GtkFileSystem *file_system)
 {
   const char *home;
+  char *desktop;
+
   g_return_if_fail (GTK_IS_PATH_BAR (path_bar));
 
   g_assert (path_bar->file_system == NULL);
@@ -924,6 +953,8 @@ _gtk_path_bar_set_file_system (GtkPathBar    *path_bar,
   path_bar->file_system = g_object_ref (file_system);
 
   home = g_get_home_dir ();
+  desktop = g_build_filename (home, "Desktop", NULL);
   path_bar->home_path = gtk_file_system_filename_to_path (path_bar->file_system, home);
+  path_bar->desktop_path = gtk_file_system_filename_to_path (path_bar->file_system, desktop);
   path_bar->root_path = gtk_file_system_filename_to_path (path_bar->file_system, "/");
 }

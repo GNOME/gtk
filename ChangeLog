@@ -1,3 +1,8 @@
+Wed Mar 10 01:17:40 2004  Jonathan Blandford  <jrb@gnome.org>
+
+	* gtk/gtkpathbar.c: added 'Desktop' to the list of volumes.  We
+	don't have any more untranlated strings in the dialog.
+
 Wed Mar 10 00:24:24 2004  Jonathan Blandford  <jrb@gnome.org>
 
 	* gtk/gtkfilechooserdefault.c (error_dialog): use uri instead of
