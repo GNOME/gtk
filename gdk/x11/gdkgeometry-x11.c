@@ -331,8 +331,8 @@ gdk_window_guffaw_scroll (GdkWindow    *window,
 
   gdk_window_tmp_unset_bg (window);
 
-  if (d_xoffset < 0 || d_yoffset < 0)
-    gdk_window_queue_translation (window, MIN (d_xoffset, 0), MIN (d_yoffset, 0));
+  if (dx > 0 || dy > 0)
+    gdk_window_queue_translation (window, MAX (dx, 0), MAX (dy, 0));
 	
   gdk_window_set_static_gravities (window, TRUE);
 
@@ -357,8 +357,8 @@ gdk_window_guffaw_scroll (GdkWindow    *window,
 	       GDK_WINDOW_XID (window),
 	       new_position.x - d_xoffset, new_position.y - d_yoffset);
   
-  if (d_xoffset > 0 || d_yoffset > 0)
-    gdk_window_queue_translation (window, MAX (d_xoffset, 0), MAX (d_yoffset, 0));
+  if (dx < 0 || dy < 0)
+    gdk_window_queue_translation (window, MIN (dx, 0), MIN (dy, 0));
   
   XMoveResizeWindow (GDK_WINDOW_XDISPLAY (window),
 		     GDK_WINDOW_XID (window),

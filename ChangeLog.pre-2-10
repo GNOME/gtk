@@ -1,3 +1,9 @@
+Tue Dec  3 17:47:24 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/x11/gdkgeometry-x11.c (gdk_window_guffaw_scroll): Fix wrong 
+	sign for queued translation. (Found by Chris Blizzard,
+	#100274)
+
 2002-12-03  Matthias Clasen  <maclas@gmx.de>
 
 	Moveresize emulation for all edges.  (#52833)
