@@ -76,13 +76,13 @@ struct _GtkToolbarChild
   GtkWidget *label;
 };
 
+#endif /* GTK_DISABLE_DEPRECATED */
+
 typedef enum
 {
   GTK_TOOLBAR_SPACE_EMPTY,
   GTK_TOOLBAR_SPACE_LINE
 } GtkToolbarSpaceStyle;
-
-#endif /* GTK_DISABLE_DEPRECATED */
 
 typedef struct _GtkToolbar           GtkToolbar;
 typedef struct _GtkToolbarClass      GtkToolbarClass;
@@ -92,7 +92,7 @@ struct _GtkToolbar
 {
   GtkContainer container;
 
-  /*< private >*/
+  /*< public >*/
   gint             num_children;
   GList           *children;
   GtkOrientation   orientation;
@@ -101,6 +101,7 @@ struct _GtkToolbar
   
   GtkTooltips     *tooltips;
   
+  /*< private >*/
   gint             button_maxw;		/* maximum width of homogeneous children */
   gint             button_maxh;		/* maximum height of homogeneous children */
   
@@ -164,8 +165,13 @@ void            gtk_toolbar_set_drop_highlight_item   (GtkToolbar      *toolbar,
 						       gint		index);
 
 
-/* internal function */
-gchar *	_gtk_toolbar_elide_underscores (const gchar *original);
+/* internal functions */
+gchar *	             _gtk_toolbar_elide_underscores (const gchar *original);
+/* these two functions actually accept NULL for the toolbar, in which case
+ * you'll get a default value
+ */
+int	             _gtk_toolbar_get_space_size    (GtkToolbar *toolbar);
+GtkToolbarSpaceStyle _gtk_toolbar_get_space_style   (GtkToolbar *toolbar);
 
 #ifndef GTK_DISABLE_DEPRECATED
 void       gtk_toolbar_set_icon_size   (GtkToolbar      *toolbar,

@@ -3602,7 +3602,7 @@ gtk_toolbar_finalize (GObject *object)
   GList *list;
   GtkToolbar *toolbar = GTK_TOOLBAR (object);
   GtkToolbarPrivate *priv = GTK_TOOLBAR_GET_PRIVATE (toolbar);
-  
+
   if (toolbar->tooltips)
     g_object_unref (toolbar->tooltips);
 
@@ -3618,6 +3618,9 @@ gtk_toolbar_finalize (GObject *object)
 
   g_timer_destroy (priv->timer);
 
+  if (priv->menu)
+    gtk_widget_destroy (priv->menu);
+  
   if (priv->idle_id)
     g_source_remove (priv->idle_id);
   
