@@ -745,8 +745,8 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   klass->add_accelerator = (gint (*) (GtkWidget *, guint, GtkAccelGroup *,
 				      guint, GdkModifierType,
 				      GtkAccelFlags)) gtk_accel_group_handle_add;
-  klass->add_accelerator = (void (*) (GtkWidget *, GtkAccelGroup *,
-				      guint, GdkModifierType)) gtk_accel_group_handle_remove;
+  klass->remove_accelerator = (void (*) (GtkWidget *, GtkAccelGroup *,
+					 guint, GdkModifierType)) gtk_accel_group_handle_remove;
   klass->grab_focus = gtk_widget_real_grab_focus;
   klass->event = NULL;
   klass->button_press_event = NULL;
