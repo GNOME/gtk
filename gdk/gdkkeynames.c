@@ -1136,6 +1136,8 @@ static struct gdk_key {
   { 0x00fe5e, "dead_voiced_sound" },
   { 0x00fe5f, "dead_semivoiced_sound" },
   { 0x00fe60, "dead_belowdot" },
+  { 0x00fe61, "dead_hook" },
+  { 0x00fe62, "dead_horn" },
   { 0x00fe70, "AccessX_Enable" },
   { 0x00fe71, "AccessX_Feedback_Enable" },
   { 0x00fe72, "RepeatKeys_Enable" },

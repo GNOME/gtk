@@ -254,6 +254,8 @@
 #define GDK_dead_voiced_sound 0xFE5E
 #define GDK_dead_semivoiced_sound 0xFE5F
 #define GDK_dead_belowdot 0xFE60
+#define GDK_dead_hook 0xFE61
+#define GDK_dead_horn 0xFE62
 #define GDK_First_Virtual_Screen 0xFED0
 #define GDK_Prev_Virtual_Screen 0xFED1
 #define GDK_Next_Virtual_Screen 0xFED2
