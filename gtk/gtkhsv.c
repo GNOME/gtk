@@ -1265,8 +1265,8 @@ paint_triangle (GtkHSV      *hsv,
   
   /* Draw value marker */
   
-  xx = floor (sx + (vx - sx) * priv->v + (hx - vx) * priv->s * priv->v + 0.5);
-  yy = floor (sy + (vy - sy) * priv->v + (hy - vy) * priv->s * priv->v + 0.5);
+  xx = floor (sx + (vx - sx) * priv->v + (hx - vx) * priv->s * priv->v + 0.5) - x;
+  yy = floor (sy + (vy - sy) * priv->v + (hy - vy) * priv->s * priv->v + 0.5) - y;
   
   r = priv->h;
   g = priv->s;

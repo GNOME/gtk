@@ -1,5 +1,9 @@
 2001-05-11  Alexander Larsson  <alexl@redhat.com>
 
+	* gtk/gtkhsv.c (paint_triangle):
+	Expose the ring in the triangle at the correct place when
+	exposing just a part of the triangle.
+
 	* gtk/gtkwindow-decorate.c (gtk_decorated_window_focus_change):
 	Return FALSE, or window focusing will not work.
 
