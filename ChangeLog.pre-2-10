@@ -1,3 +1,7 @@
+Wed Feb 25 12:44:49 2004  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkstyle.[ch]: Make realize and unrealize signals. (#73310)
+
 Wed Feb 25 12:21:32 2004  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkwidget.[ch] gtk/gtklabel.c: Patch from

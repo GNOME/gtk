@@ -28,6 +28,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "gtkgc.h"
+#include "gtkmarshalers.h"
 #include "gtkrc.h"
 #include "gtkspinbutton.h"
 #include "gtkstyle.h"
@@ -462,6 +463,9 @@ static const GdkColor gtk_default_active_base =    { 0, 0x8080, 0x7d7d, 0x7474 }
 
 static gpointer parent_class = NULL;
 
+/* --- signals --- */
+static guint realize_signal = 0;
+static guint unrealize_signal = 0;
 
 /* --- functions --- */
 GType
@@ -640,6 +644,40 @@ gtk_style_class_init (GtkStyleClass *klass)
   klass->draw_expander = gtk_default_draw_expander;
   klass->draw_layout = gtk_default_draw_layout;
   klass->draw_resize_grip = gtk_default_draw_resize_grip;
+
+  
+  /**
+   * GtkStyle::realize:
+   * @style: the object which received the signal
+   *
+   * Emitted when the style has been initialized for a particular
+   * colormap and depth. Connecting to this signal is probably seldom
+   * useful since most of the time applications and widgets only
+   * deal with styles that have been already realized.
+   */
+  realize_signal = g_signal_new ("realize",
+				 G_TYPE_FROM_CLASS (object_class),
+				 G_SIGNAL_RUN_FIRST,
+				 G_STRUCT_OFFSET (GtkStyleClass, realize),
+				 NULL, NULL,
+				 _gtk_marshal_VOID__VOID,
+				 G_TYPE_NONE, 0);
+  /**
+   * GtkStyle::unrealize:
+   * @style: the object which received the signal
+   *
+   * Emitted when the aspects of the style specific to a particular colormap
+   * and depth are being cleaned up. A connection to this signal can be useful
+   * if a widget wants to cache objects like a #GdkGC as object data on #GtkStyle.
+   * This signal provides a convenient place to free such cached objects.
+   */
+  unrealize_signal = g_signal_new ("unrealize",
+				   G_TYPE_FROM_CLASS (object_class),
+				   G_SIGNAL_RUN_FIRST,
+				   G_STRUCT_OFFSET (GtkStyleClass, unrealize),
+				   NULL, NULL,
+				   _gtk_marshal_VOID__VOID,
+				   G_TYPE_NONE, 0);
 }
 
 static void
@@ -859,7 +897,7 @@ gtk_style_detach (GtkStyle *style)
   style->attach_count -= 1;
   if (style->attach_count == 0)
     {
-      GTK_STYLE_GET_CLASS (style)->unrealize (style);
+      g_signal_emit (style, unrealize_signal, 0);
       
       g_object_unref (style->colormap);
       style->colormap = NULL;
@@ -915,7 +953,7 @@ gtk_style_realize (GtkStyle    *style,
   style->colormap = g_object_ref (colormap);
   style->depth = gdk_colormap_get_visual (colormap)->depth;
 
-  GTK_STYLE_GET_CLASS (style)->realize (style);
+  g_signal_emit (style, realize_signal, 0);
 }
 
 GtkIconSet*
