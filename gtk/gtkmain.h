@@ -47,6 +47,9 @@ extern const guint gtk_minor_version;
 extern const guint gtk_micro_version;
 extern const guint gtk_binary_age;
 extern const guint gtk_interface_age;
+gchar* gtk_check_version (guint	required_major,
+			  guint	required_minor,
+			  guint	required_micro);
 
 
 /* Initialization, exit, mainloop and miscellaneous routines

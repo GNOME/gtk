@@ -135,6 +135,7 @@ static gint  gtk_idle_compare		 (gconstpointer      a,
 static gint  gtk_timeout_compare	 (gconstpointer      a, 
 					  gconstpointer      b);
 
+
 const guint gtk_major_version = GTK_MAJOR_VERSION;
 const guint gtk_minor_version = GTK_MINOR_VERSION;
 const guint gtk_micro_version = GTK_MICRO_VERSION;
@@ -227,6 +228,27 @@ static GDebugKey gtk_debug_keys[] = {
 static const guint gtk_ndebug_keys = sizeof (gtk_debug_keys) / sizeof (GDebugKey);
 
 #endif /* G_ENABLE_DEBUG */
+
+gchar*
+gtk_check_version (guint required_major,
+		   guint required_minor,
+		   guint required_micro)
+{
+  if (required_major > GTK_MAJOR_VERSION)
+    return "Gtk+ version to old (major mismatch)";
+  if (required_major < GTK_MAJOR_VERSION)
+    return "Gtk+ version to new (major mismatch)";
+  if (required_minor > GTK_MINOR_VERSION)
+    return "Gtk+ version to old (minor mismatch)";
+  if (required_minor < GTK_MINOR_VERSION)
+    return "Gtk+ version to new (minor mismatch)";
+  if (required_micro < GTK_MICRO_VERSION - GTK_BINARY_AGE)
+    return "Gtk+ version to new (micro mismatch)";
+  if (required_micro > GTK_MICRO_VERSION)
+    return "Gtk+ version to old (micro mismatch)";
+  return NULL;
+}
+
 
 gint gtk_use_mb = -1;
 

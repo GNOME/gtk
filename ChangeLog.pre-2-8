@@ -1,9 +1,16 @@
+Fri Aug 21 02:31:26 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkmain.h:
+	* gtk/gtkmain.c (gtk_check_version): added a function to perform a
+	binary version check, returning a static string for error descriptions,
+	or NULL on success.
+
 Thu Aug 20 20:08:15 1998  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtktext.c ([un]draw_cursor): Check to see if we've
 	computed our geometry yet, and if not, ignore the request.
 
-	  gtk/gtktext.c (correct_cache_insert): Fiddled around]
+	* gtk/gtktext.c (correct_cache_insert): Fiddled around
 	some more. All the bug-test codes seem to work at once
 	now. (fingers crossed...)
 
