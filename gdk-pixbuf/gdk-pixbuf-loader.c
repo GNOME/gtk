@@ -332,7 +332,7 @@ gdk_pixbuf_loader_write (GdkPixbufLoader *loader, guchar *buf, size_t count)
 	if (count > 0 && priv->image_module->load_increment)
 		return (* priv->image_module->load_increment) (priv->context, buf, count);
 
-	return (FALSE);
+	return TRUE;
 }
 
 /**
