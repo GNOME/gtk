@@ -281,9 +281,8 @@ elements are:
     <term><literal>font = <replaceable>font</replaceable></literal></term>
      <listitem>
        <para>
-         Sets the font for a widget. <replaceable>font</replaceable> must be
-         a XLFD font description, e.g. 
-         <literal>"-*-helvetica-medium-r-normal--10-*-*-*-*-*-*-*"</literal>.
+         Starting with GTK+ 2.0, the "font" and "fontset"
+         declarations are ignored; use "font_name" declarations instead.
        </para>
      </listitem>
   </varlistentry>
@@ -291,13 +290,8 @@ elements are:
     <term><literal>fontset = <replaceable>font</replaceable></literal></term>
      <listitem>
        <para>
-         Sets the fontset for a widget. Overrides any
-         <literal>font</literal> declarations. <replaceable>font</replaceable> 
-         must be a comma-separated list of XLFD font descriptions, e.g.
-         <literal>"-JIS-Fixed-Medium-R-Normal--26-180-100-100-C-240,
-                   -JIS-Fixed-Medium-R-Normal--26-180-100-100-C-120,
-                   -GB-Fixed-Medium-R-Normal--26-180-100-100-C-240,
-                   -Adobe-Courier-Bold-R-Normal--25-180-100-100-M-150"</literal>.
+         Starting with GTK+ 2.0, the "font" and "fontset"
+         declarations are ignored; use "font_name" declarations instead.
        </para>
      </listitem>
   </varlistentry>
@@ -305,10 +299,10 @@ elements are:
     <term><literal>font_name = <replaceable>font</replaceable></literal></term>
      <listitem>
        <para>
-         Sets the font for a widget. Overrides any
-         <literal>font</literal> or <literal>fontset</literal> declarations. 
-         <replaceable>font</replaceable> must be a Pango font name, e.g.
-         <literal>"Sans Italic 10"</literal>.
+         Sets the font for a widget. <replaceable>font</replaceable> must be 
+         a Pango font name, e.g. <literal>"Sans Italic 10"</literal>. 
+         For details about Pango font names, see 
+         pango_font_description_from_string().
        </para>
      </listitem>   
   </varlistentry>

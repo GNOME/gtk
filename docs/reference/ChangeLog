@@ -1,3 +1,8 @@
+2003-02-11  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/tmpl/gtkrc.sgml: Document that font and fontset declarations
+	are ignored.
+
 2003-02-02  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtk-docs.sgml: 
