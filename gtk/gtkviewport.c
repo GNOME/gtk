@@ -621,7 +621,7 @@ gtk_viewport_realize (GtkWidget *widget)
   attributes.y = view_allocation.y;
   attributes.width = view_allocation.width;
   attributes.height = view_allocation.height;
-  attributes.event_mask = 0;
+  attributes.event_mask = GDK_EXPOSURE_MASK;
 
   viewport->view_window = gdk_window_new (widget->window, &attributes, attributes_mask);
   gdk_window_set_user_data (viewport->view_window, viewport);
