@@ -1856,11 +1856,15 @@ gtk_combo_box_model_rows_reordered (GtkTreeModel    *model,
   gint items = gtk_tree_model_iter_n_children (model, NULL);
   gint i;
 
-  combo_box->priv->active_item = new_order[combo_box->priv->active_item];
+  for (i = 0; i < items; i++)
+    if (new_order[i] == combo_box->priv->active_item)
+      {
+	combo_box->priv->active_item = i;
+	break;
+      }
 
   if (!combo_box->priv->tree_view)
     gtk_combo_box_menu_rows_reordered (model, path, iter, new_order, user_data);
-  
 }
 						    
 static void

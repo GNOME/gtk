@@ -1,3 +1,19 @@
+Tue Mar  2 16:18:43 2004  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtktreestore.c (gtk_tree_store_reorder)
+	* gtk/gtkliststore.c (gtk_list_store_reorder): Fix
+	up the interpretation of new_order to match what
+	it means elsewhere, document the meaning of new_order.
+
+	* gtk/gtkcombobox.c (gtk_combo_box_model_rows_reordered):
+	Fix interpretation of new_order.
+
+	* tests/testcombochange.c (on_reorder): Fix interpretation
+	of new_order.
+
+	* tests/testcombochange.c (on_reorder): Fix hitting
+	"reorder" with an empty list.
+
 Tue Mar  2 21:23:30 2004  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 	Patch from Frederic Crozat, test code from Jean-Philippe

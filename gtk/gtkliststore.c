@@ -1638,7 +1638,9 @@ gtk_list_store_reorder_func (gconstpointer a,
 /**
  * gtk_list_store_reorder:
  * @store: A #GtkListStore.
- * @new_order: An integer array indicating the new order for the list.
+ * @new_order: an array of integers mapping the new position of each child
+ *      to its old position before the re-ordering,
+ *      i.e. @new_order<literal>[newpos] = oldpos</literal>.
  *
  * Reorders @store to follow the order indicated by @new_order. Note that
  * this function only works with unsorted stores.
@@ -1664,7 +1666,7 @@ gtk_list_store_reorder (GtkListStore *store,
 
   for (i = 0; i < store->length; i++)
     {
-      sort_array[i].offset = new_order[i];
+      sort_array[new_order[i]].offset = i;
       sort_array[i].el = current_list;
 
       current_list = current_list->next;

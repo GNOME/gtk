@@ -1891,7 +1891,9 @@ gtk_tree_store_reorder_func (gconstpointer a,
  * gtk_tree_store_reorder:
  * @tree_store: A #GtkTreeStore.
  * @parent: A #GtkTreeIter.
- * @new_order: An integer array indication the new order for the list.
+ * @new_order: an array of integers mapping the new position of each child
+ *      to its old position before the re-ordering,
+ *      i.e. @new_order<literal>[newpos] = oldpos</literal>.
  *
  * Reorders the children of @parent in @tree_store to follow the order
  * indicated by @new_order. Note that this function only works with
@@ -1933,7 +1935,7 @@ gtk_tree_store_reorder (GtkTreeStore *tree_store,
   node = level;
   for (i = 0; i < length; i++)
     {
-      sort_array[i].offset = new_order[i];
+      sort_array[new_order[i]].offset = i;
       sort_array[i].node = node;
 
       node = node->next;

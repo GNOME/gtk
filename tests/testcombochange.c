@@ -146,11 +146,12 @@ on_delete (void)
 static void
 on_reorder (void)
 {
-  GArray *new_contents = g_array_new (FALSE, FALSE, sizeof (char));
-  gint *shuffle_array = g_new (int, contents->len);
-  gint *shuffle_array_inverse = g_new (int, contents->len);
+  GArray *new_contents;
+  gint *shuffle_array;
   gint i;
 
+  shuffle_array = g_new (int, contents->len);
+  
   for (i = 0; i < contents->len; i++)
     shuffle_array[i] = i;
 
@@ -166,19 +167,16 @@ on_reorder (void)
 
   gtk_list_store_reorder (model, shuffle_array);
 
-  for (i = 0; i < contents->len; i++)
-    shuffle_array_inverse[shuffle_array[i]] = i;
-  
+  new_contents = g_array_new (FALSE, FALSE, sizeof (char));
   for (i = 0; i < contents->len; i++)
     g_array_append_val (new_contents,
-			g_array_index (contents, char, shuffle_array_inverse[i]));
+			g_array_index (contents, char, shuffle_array[i]));
   g_array_free (contents, TRUE);
   contents = new_contents;
 
   log ("Reordered array");
     
   g_free (shuffle_array);
-  g_free (shuffle_array_inverse);
 }
 
 int
