@@ -2948,7 +2948,8 @@ open_new_dir (gchar       *dir_name,
 	}
 
       sent->entries[n_entries].entry_name = g_filename_to_utf8 (dirent, -1, NULL, NULL, NULL);
-      if (!g_utf8_validate (sent->entries[n_entries].entry_name, -1, NULL))
+      if (sent->entries[n_entries].entry_name == NULL
+	  || !g_utf8_validate (sent->entries[n_entries].entry_name, -1, NULL))
 	{
 	  g_warning (_("The filename %s couldn't be converted to UTF-8. Try setting the environment variable G_BROKEN_FILENAMES."), dirent);
 	  continue;
