@@ -158,6 +158,31 @@ static GSList *unattached_styles = NULL;
 
 static GMemChunk *key_mem_chunk = NULL;
 
+GtkStyle*
+gtk_style_copy (GtkStyle     *style)
+{
+  GtkStyle *new_style;
+  guint i;
+
+  g_return_val_if_fail (style != NULL, NULL);
+
+  new_style = gtk_style_new ();
+
+  for (i = 0; i < 5; i++)
+    {
+      new_style->fg[i] = style->fg[i];
+      new_style->bg[i] = style->bg[i];
+      new_style->text[i] = style->text[i];
+      new_style->base[i] = style->base[i];
+
+      new_style->bg_pixmap[i] = style->bg_pixmap[i];
+    }
+
+  new_style->font = style->font;
+  gdk_font_ref (new_style->font);
+
+  return new_style;
+}
 
 GtkStyle*
 gtk_style_new ()

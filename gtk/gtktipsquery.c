@@ -82,7 +82,6 @@ static void	gtk_tips_query_widget_entered	(GtkTipsQuery		*tips_query,
 /* --- variables --- */
 static GtkLabelClass	*parent_class = NULL;
 static gint		 tips_query_signals[SIGNAL_LAST] = { 0 };
-static const gchar	*key_event_mask = "gtk-tips-query-saved-event-mask";
 
 
 /* --- functions --- */
@@ -215,7 +214,7 @@ gtk_tips_query_init (GtkTipsQuery *tips_query)
   tips_query->label_no_tip = g_strdup ("--- No Tip ---");
   tips_query->caller = NULL;
   tips_query->last_crossed = NULL;
-  tips_query->event_restore_list = NULL;
+  tips_query->query_cursor = NULL;
 
   gtk_label_set (GTK_LABEL (tips_query), tips_query->label_inactive);
 }
@@ -344,6 +343,7 @@ gtk_tips_query_start_query (GtkTipsQuery *tips_query)
   g_return_if_fail (tips_query != NULL);
   g_return_if_fail (GTK_IS_TIPS_QUERY (tips_query));
   g_return_if_fail (tips_query->in_query == FALSE);
+  g_return_if_fail (GTK_WIDGET_REALIZED (tips_query));
 
   tips_query->in_query = TRUE;
   gtk_signal_emit (GTK_OBJECT (tips_query), tips_query_signals[SIGNAL_START_QUERY]);
@@ -360,51 +360,49 @@ gtk_tips_query_stop_query (GtkTipsQuery *tips_query)
   tips_query->in_query = FALSE;
 }
 
-void
+static void
 gtk_tips_query_real_start_query (GtkTipsQuery *tips_query)
 {
+  gint failure;
+  
   g_return_if_fail (tips_query != NULL);
   g_return_if_fail (GTK_IS_TIPS_QUERY (tips_query));
-
+  
+  tips_query->query_cursor = gdk_cursor_new (GDK_QUESTION_ARROW);
+  failure = gdk_pointer_grab (GTK_WIDGET (tips_query)->window,
+			      TRUE,
+			      GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK |
+			      GDK_ENTER_NOTIFY_MASK | GDK_LEAVE_NOTIFY_MASK,
+			      NULL,
+			      tips_query->query_cursor,
+			      GDK_CURRENT_TIME);
+  if (failure)
+    {
+      gdk_cursor_destroy (tips_query->query_cursor);
+      tips_query->query_cursor = NULL;
+    }
   gtk_grab_add (GTK_WIDGET (tips_query));
 }
 
-void
+static void
 gtk_tips_query_real_stop_query (GtkTipsQuery *tips_query)
 {
-  GSList *list;
-
   g_return_if_fail (tips_query != NULL);
   g_return_if_fail (GTK_IS_TIPS_QUERY (tips_query));
   
   gtk_grab_remove (GTK_WIDGET (tips_query));
+  if (tips_query->query_cursor)
+    {
+      gdk_pointer_ungrab (GDK_CURRENT_TIME);
+      gdk_cursor_destroy (tips_query->query_cursor);
+      tips_query->query_cursor = NULL;
+    }
   if (tips_query->last_crossed)
     {
       gtk_widget_unref (tips_query->last_crossed);
       tips_query->last_crossed = NULL;
     }
   
-  list = tips_query->event_restore_list;
-  while (list)
-    {
-      GtkWidget *win_widget;
-      GdkEventMask *event_mask;
-      
-      win_widget = list->data;
-      event_mask = gtk_object_get_data (GTK_OBJECT (win_widget), key_event_mask);
-      if (event_mask)
-	{
-	  gtk_object_remove_data (GTK_OBJECT (win_widget), key_event_mask);
-	  if (GTK_WIDGET_REALIZED (win_widget))
-	    gdk_window_set_events (win_widget->window, *event_mask);
-	  g_free (event_mask);
-	}
-      gtk_widget_unref (win_widget);
-      list = list->next;
-    }
-  g_slist_free (tips_query->event_restore_list);
-  tips_query->event_restore_list = NULL;
-
   gtk_label_set (GTK_LABEL (tips_query), tips_query->label_inactive);
 }
 
@@ -488,7 +486,6 @@ gtk_tips_query_event (GtkWidget	       *widget,
   event_handled = FALSE;
   switch (event->type)
     {
-      GdkEventMask *event_mask;
       GdkWindow *pointer_window;
       
     case  GDK_LEAVE_NOTIFY:
@@ -499,27 +496,11 @@ gtk_tips_query_event (GtkWidget	       *widget,
       event_widget = NULL;
       if (pointer_window)
 	gdk_window_get_user_data (pointer_window, (gpointer*) &event_widget);
-      /* fall through */
+      gtk_tips_query_emit_widget_entered (tips_query, event_widget);
+      event_handled = TRUE;
+      break;
+
     case  GDK_ENTER_NOTIFY:
-      if (event_widget)
-	{
-	  event_mask = gtk_object_get_data (GTK_OBJECT (event_widget), key_event_mask);
-	  if (!event_mask)
-	    {
-	      event_mask = g_new (GdkEventMask, 1);
-	      *event_mask = gdk_window_get_events (event_widget->window);
-	      gtk_object_set_data (GTK_OBJECT (event_widget), key_event_mask, event_mask);
-	      gdk_window_set_events (event_widget->window,
-				     *event_mask |
-				     GDK_BUTTON_PRESS_MASK |
-				     GDK_BUTTON_RELEASE_MASK |
-				     GDK_ENTER_NOTIFY_MASK |
-				     GDK_LEAVE_NOTIFY_MASK);
-	      tips_query->event_restore_list =
-		g_slist_prepend (tips_query->event_restore_list, event_widget);
-	      gtk_widget_ref (event_widget);
-	    }
-	}
       gtk_tips_query_emit_widget_entered (tips_query, event_widget);
       event_handled = TRUE;
       break;

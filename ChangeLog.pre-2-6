@@ -1,3 +1,21 @@
+Fri Feb 27 15:31:55 1998  Tim Janik  <timj@gimp.org>
+
+	* gtk/gtktipsquery.c: we make an active server grab now, this way we
+	can change the cursor globally and don't need to tweak event masks
+	of other windows.
+
+	* gtk/gtkframe.c (gtk_frame_style_set): recompute label size.
+
+	* gtk/gtkwidget.h:
+	* gtk/gtkwidget.c:
+	New signal GtkWidget::style_set to be emitted when a widget's style
+ 	changed. New flag GTK_RC_STYLE to indicate whether an rc lookup has
+	been perfomed for the widget.
+	(gtk_widget_ensure_style): New function.
+	(gtk_widget_set_rc_style): New function.
+
+	* docs/styles.txt: new file.
+
 Fri Feb 27 01:11:55 1998  Owen Taylor  <owt1@cornell.edu>
 
 	* gtk/gtktext.c

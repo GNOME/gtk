@@ -67,6 +67,8 @@
 #define LAST_INDEX(t, m)            ((m).index == TEXT_LENGTH(t))
 #define CACHE_DATA(c)               (*(LineParams*)(c)->data)
 
+#define GTK_TEXT_INDEX(t, index)        ((index) < (t)->gap_position ? (t)->text[index] : \
+                                     (t)->text[(index) + (t)->gap_size])
 
 typedef struct _TextFont              TextFont;
 typedef struct _TextProperty          TextProperty;

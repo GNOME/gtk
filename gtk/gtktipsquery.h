@@ -54,7 +54,8 @@ struct	_GtkTipsQuery
 
   GtkWidget	*caller;
   GtkWidget	*last_crossed;
-  GSList	*event_restore_list;
+
+  GdkCursor	*query_cursor;
 };
 
 struct	_GtkTipsQueryClass

@@ -11,6 +11,7 @@ EXTRA_DIST =	\
 	debugging.txt	\
 	developers.txt	\
 	refcounting.txt	\
+	styles.txt	\
 	text_widget.txt	\
 	widget_system.txt
 	

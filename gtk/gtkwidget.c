@@ -123,6 +123,9 @@ typedef void (*GtkWidgetSignal5) (GtkObject *object,
 typedef void (*GtkWidgetSignal6) (GtkObject *object,
 				  GtkObject *arg1,
 				  gpointer   data);
+typedef void (*GtkWidgetSignal7) (GtkObject *object,
+				  gpointer  *arg1,
+				  gpointer   data);
 
 typedef	struct	_GtkStateData	 GtkStateData;
 
@@ -157,6 +160,10 @@ static void gtk_widget_marshal_signal_6 (GtkObject	*object,
 					 GtkSignalFunc	 func,
 					 gpointer	 func_data,
 					 GtkArg		*args);
+static void gtk_widget_marshal_signal_7 (GtkObject	*object,
+					 GtkSignalFunc	 func,
+					 gpointer	 func_data,
+					 GtkArg		*args);
 
 static void gtk_widget_class_init		 (GtkWidgetClass    *klass);
 static void gtk_widget_init			 (GtkWidget	    *widget);
@@ -179,7 +186,9 @@ static void gtk_widget_real_draw		 (GtkWidget	    *widget,
 static gint gtk_widget_real_queue_draw		 (GtkWidget	    *widget);
 static void gtk_widget_real_size_allocate	 (GtkWidget	    *widget,
 						  GtkAllocation	    *allocation);
-
+static void gtk_widget_style_set		 (GtkWidget	    *widget,
+						  GtkStyle          *previous_style);
+     
 static GdkColormap* gtk_widget_peek_colormap (void);
 static GdkVisual*   gtk_widget_peek_visual   (void);
 static GtkStyle*    gtk_widget_peek_style    (void);
@@ -225,6 +234,7 @@ static const gchar *event_key = "gtk-event-mask";
 static const gchar *extension_event_key = "gtk-extension-event-mode";
 static const gchar *parent_window_key = "gtk-parent-window";
 static const gchar *shape_info_key = "gtk-shape-info";
+static const gchar *saved_default_style = "gtk-saved-default-style";
 
 
 
@@ -394,7 +404,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		    GTK_RUN_FIRST,
 		    object_class->type,
 		    GTK_SIGNAL_OFFSET (GtkWidgetClass, style_set),
-		    gtk_widget_marshal_signal_4,
+		    gtk_widget_marshal_signal_7,
 		    GTK_TYPE_NONE, 1,
 		    GTK_TYPE_BOXED);
   widget_signals[INSTALL_ACCELERATOR] =
@@ -685,7 +695,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   klass->size_allocate = gtk_widget_real_size_allocate;
   klass->state_changed = NULL;
   klass->parent_set = NULL;
-  klass->style_set = NULL;
+  klass->style_set = gtk_widget_style_set;
   klass->install_accelerator = NULL;
   klass->remove_accelerator = NULL;
   klass->event = NULL;
@@ -1330,7 +1340,6 @@ gtk_widget_unmap (GtkWidget *widget)
 void
 gtk_widget_realize (GtkWidget *widget)
 {
-  GtkStyle *new_style;
   gint events;
   GdkExtensionMode mode;
   GtkWidgetShapeInfo *shape_info;
@@ -1346,13 +1355,8 @@ gtk_widget_realize (GtkWidget *widget)
       
       if (widget->parent && !GTK_WIDGET_REALIZED (widget->parent))
 	gtk_widget_realize (widget->parent);
-      
-      if (!GTK_WIDGET_USER_STYLE (widget))
-	{
-	  new_style = gtk_rc_get_style (widget);
-	  if (new_style != widget->style)
-	    gtk_widget_set_style_internal (widget, new_style);
-	}
+
+      gtk_widget_ensure_style (widget);
       
       gtk_signal_emit (GTK_OBJECT (widget), widget_signals[REALIZE]);
       
@@ -2162,19 +2166,14 @@ void
 gtk_widget_set_name (GtkWidget	 *widget,
 		     const gchar *name)
 {
-  GtkStyle *new_style;
-  
   g_return_if_fail (widget != NULL);
   
   if (widget->name)
     g_free (widget->name);
   widget->name = g_strdup (name);
-  
+
   if (!GTK_WIDGET_USER_STYLE (widget))
-    {
-      new_style = gtk_rc_get_style (widget);
-      gtk_widget_set_style_internal (widget, new_style);
-    }
+    gtk_widget_set_rc_style (widget);
 }
 
 /*****************************************
@@ -2291,7 +2290,6 @@ void
 gtk_widget_set_parent (GtkWidget *widget,
 		       GtkWidget *parent)
 {
-  GtkStyle *style;
   GtkStateData data;
   
   g_return_if_fail (widget != NULL);
@@ -2319,13 +2317,8 @@ gtk_widget_set_parent (GtkWidget *widget,
   
   if (GTK_WIDGET_TOPLEVEL (parent))
     {
-      if (!GTK_WIDGET_USER_STYLE (widget))
-	{
-	  style = gtk_rc_get_style (widget);
-	  if (style != widget->style)
-	    gtk_widget_set_style_internal (widget, style);
-	}
-      
+      gtk_widget_ensure_style (widget);
+
       if (GTK_IS_CONTAINER (widget))
 	gtk_container_foreach (GTK_CONTAINER (widget),
 			       gtk_widget_set_style_recurse,
@@ -2333,6 +2326,226 @@ gtk_widget_set_parent (GtkWidget *widget,
     }
 
   gtk_signal_emit (GTK_OBJECT (widget), widget_signals[PARENT_SET], NULL);
+}
+
+/*****************************************
+ * Widget styles
+ * see docs/styles.txt
+ *****************************************/
+void
+gtk_widget_set_style (GtkWidget *widget,
+		      GtkStyle	*style)
+{
+  GtkStyle *default_style;
+
+  g_return_if_fail (widget != NULL);
+  g_return_if_fail (style != NULL);
+
+  GTK_WIDGET_UNSET_FLAGS (widget, GTK_RC_STYLE);
+  GTK_PRIVATE_SET_FLAG (widget, GTK_USER_STYLE);
+
+  default_style = gtk_object_get_data (GTK_OBJECT (widget), saved_default_style);
+  if (!default_style)
+    {
+      gtk_style_ref (widget->style);
+      gtk_object_set_data (GTK_OBJECT (widget), saved_default_style, widget->style);
+    }
+
+  gtk_widget_set_style_internal (widget, style);
+}
+
+void
+gtk_widget_ensure_style (GtkWidget *widget)
+{
+  if (!GTK_WIDGET_USER_STYLE (widget) &&
+      !GTK_WIDGET_RC_STYLE (widget))
+    gtk_widget_set_rc_style (widget);
+}
+
+void
+gtk_widget_set_rc_style (GtkWidget *widget)
+{
+  GtkStyle *saved_style;
+  GtkStyle *new_style;
+  
+  g_return_if_fail (widget != NULL);
+
+  GTK_PRIVATE_UNSET_FLAG (widget, GTK_USER_STYLE);
+  GTK_WIDGET_SET_FLAGS (widget, GTK_RC_STYLE);
+
+  saved_style = gtk_object_get_data (GTK_OBJECT (widget), saved_default_style);
+  new_style = gtk_rc_get_style (widget);
+  if (new_style)
+    {
+      if (!saved_style)
+	{
+	  gtk_style_ref (widget->style);
+	  gtk_object_set_data (GTK_OBJECT (widget), saved_default_style, widget->style);
+	}
+      gtk_widget_set_style_internal (widget, new_style);
+    }
+  else
+    {
+      if (saved_style)
+	{
+	  gtk_object_remove_data (GTK_OBJECT (widget), saved_default_style);
+	  gtk_widget_set_style_internal (widget, saved_style);
+	  gtk_style_unref (saved_style);
+	}
+    }
+}
+
+GtkStyle*
+gtk_widget_get_style (GtkWidget *widget)
+{
+  g_return_val_if_fail (widget != NULL, NULL);
+  
+  return widget->style;
+}
+
+static void
+gtk_widget_style_set (GtkWidget *widget,
+		      GtkStyle  *previous_style)
+{
+  if (GTK_WIDGET_REALIZED (widget) &&
+      !GTK_WIDGET_NO_WINDOW (widget))
+    gtk_style_set_background (widget->style, widget->window, widget->state);
+}
+
+static void
+gtk_widget_set_style_internal (GtkWidget *widget,
+			       GtkStyle	 *style)
+{
+  g_return_if_fail (widget != NULL);
+  g_return_if_fail (style != NULL);
+  
+  if (widget->style != style)
+    {
+      GtkStyle *previous_style;
+
+      if (GTK_WIDGET_REALIZED (widget))
+	gtk_style_detach (widget->style);
+      
+      previous_style = widget->style;
+      widget->style = style;
+      gtk_style_ref (widget->style);
+      
+      if (GTK_WIDGET_REALIZED (widget))
+	widget->style = gtk_style_attach (widget->style, widget->window);
+
+      gtk_signal_emit (GTK_OBJECT (widget), widget_signals[STYLE_SET], previous_style);
+      gtk_style_unref (previous_style);
+
+      if (widget->parent)
+	{
+	  GtkRequisition old_requisition;
+	  
+	  old_requisition = widget->requisition;
+	  gtk_widget_size_request (widget, &widget->requisition);
+	  
+	  if ((old_requisition.width != widget->requisition.width) ||
+	      (old_requisition.height != widget->requisition.height))
+	    gtk_widget_queue_resize (widget);
+	  else if (GTK_WIDGET_DRAWABLE (widget))
+	    gtk_widget_queue_draw (widget);
+	}
+    }
+}
+
+static void
+gtk_widget_set_style_recurse (GtkWidget *widget,
+			      gpointer	 client_data)
+{
+  if (!GTK_WIDGET_USER_STYLE (widget))
+    gtk_widget_set_rc_style (widget);
+  
+  if (GTK_IS_CONTAINER (widget))
+    gtk_container_foreach (GTK_CONTAINER (widget),
+			   gtk_widget_set_style_recurse,
+			   NULL);
+}
+
+void
+gtk_widget_set_default_style (GtkStyle *style)
+{
+   if (style != default_style)
+     {
+       if (default_style)
+	 gtk_style_unref (default_style);
+       default_style = style;
+       if (default_style)
+	 gtk_style_ref (default_style);
+     }
+}
+
+GtkStyle*
+gtk_widget_get_default_style ()
+{
+  if (!default_style)
+    {
+      default_style = gtk_style_new ();
+      gtk_style_ref (default_style);
+    }
+  
+  return default_style;
+}
+
+void
+gtk_widget_push_style (GtkStyle *style)
+{
+  g_return_if_fail (style != NULL);
+
+  gtk_style_ref (style);
+  style_stack = g_slist_prepend (style_stack, style);
+}
+
+static GtkStyle*
+gtk_widget_peek_style ()
+{
+  if (style_stack)
+    return (GtkStyle*) style_stack->data;
+  else
+    return gtk_widget_get_default_style ();
+}
+
+void
+gtk_widget_pop_style ()
+{
+  GSList *tmp;
+  
+  if (style_stack)
+    {
+      tmp = style_stack;
+      style_stack = style_stack->next;
+      gtk_style_unref ((GtkStyle*) tmp->data);
+      g_slist_free_1 (tmp);
+    }
+}
+
+/* Basically, send a message to all toplevel windows telling them
+ * that a new _GTK_STYLE_COLORS property is available on the root
+ * window
+ */
+void
+gtk_widget_propagate_default_style (void)
+{
+  GdkEventClient sev;
+  int i;
+  
+  /* Set the property on the root window */
+  gdk_property_change(GDK_ROOT_PARENT(),
+		      gdk_atom_intern("_GTK_DEFAULT_COLORS", FALSE),
+		      gdk_atom_intern("STRING", FALSE),
+		      8*sizeof(gushort),
+		      GDK_PROP_MODE_REPLACE,
+		      (guchar *)gtk_widget_get_default_style(),
+		      GTK_STYLE_NUM_STYLECOLORS() * sizeof(GdkColor));
+
+  for(i = 0; i < 5; i++)
+    sev.data.l[i] = 0;
+  sev.data_format = 32;
+  sev.message_type = gdk_atom_intern ("_GTK_STYLE_CHANGED", FALSE);
+  gdk_event_send_clientmessage_toall ((GdkEvent *) &sev);
 }
 
 /*************************************************************
@@ -2392,25 +2605,6 @@ gtk_widget_get_parent_window   (GtkWidget           *widget)
 				       parent_window_key);
 
   return (parent_window != NULL) ? parent_window : widget->parent->window;
-}
-
-
-/*****************************************
- * gtk_widget_set_style:
- *
- *   arguments:
- *
- *   results:
- *****************************************/
-
-void
-gtk_widget_set_style (GtkWidget *widget,
-		      GtkStyle	*style)
-{
-  g_return_if_fail (widget != NULL);
-  
-  GTK_PRIVATE_SET_FLAG (widget, GTK_USER_STYLE);
-  gtk_widget_set_style_internal (widget, style);
 }
 
 /*****************************************
@@ -2644,22 +2838,6 @@ gtk_widget_get_visual (GtkWidget *widget)
 }
 
 /*****************************************
- * gtk_widget_get_style:
- *
- *   arguments:
- *
- *   results:
- *****************************************/
-
-GtkStyle*
-gtk_widget_get_style (GtkWidget *widget)
-{
-  g_return_val_if_fail (widget != NULL, NULL);
-  
-  return widget->style;
-}
-
-/*****************************************
  * gtk_widget_get_events:
  *
  *   arguments:
@@ -2813,23 +2991,6 @@ gtk_widget_push_visual (GdkVisual *visual)
 }
 
 /*****************************************
- * gtk_widget_push_style:
- *
- *   arguments:
- *
- *   results:
- *****************************************/
-
-void
-gtk_widget_push_style (GtkStyle *style)
-{
-  g_return_if_fail (style != NULL);
-
-  gtk_style_ref (style);
-  style_stack = g_slist_prepend (style_stack, style);
-}
-
-/*****************************************
  * gtk_widget_pop_colormap:
  *
  *   arguments:
@@ -2872,28 +3033,6 @@ gtk_widget_pop_visual ()
 }
 
 /*****************************************
- * gtk_widget_pop_style:
- *
- *   arguments:
- *
- *   results:
- *****************************************/
-
-void
-gtk_widget_pop_style ()
-{
-  GSList *tmp;
-  
-  if (style_stack)
-    {
-      tmp = style_stack;
-      style_stack = style_stack->next;
-      gtk_style_unref ((GtkStyle*) tmp->data);
-      g_slist_free_1 (tmp);
-    }
-}
-
-/*****************************************
  * gtk_widget_set_default_colormap:
  *
  *   arguments:
@@ -2929,53 +3068,6 @@ gtk_widget_set_default_visual (GdkVisual *visual)
 }
 
 /*****************************************
- * gtk_widget_set_default_style:
- *
- *   arguments:
- *
- *   results:
- *****************************************/
-
-void
-gtk_widget_set_default_style (GtkStyle *style)
-{
-   if (style != default_style)
-     {
-       if (default_style)
-	 gtk_style_unref (default_style);
-       default_style = style;
-       if (default_style)
-	 gtk_style_ref (default_style);
-     }
-}
-
-/* Basically, send a message to all toplevel windows telling them
- * that a new _GTK_STYLE_COLORS property is available on the root
- * window
- */
-void
-gtk_widget_propagate_default_style (void)
-{
-  GdkEventClient sev;
-  int i;
-  
-  /* Set the property on the root window */
-  gdk_property_change(GDK_ROOT_PARENT(),
-		      gdk_atom_intern("_GTK_DEFAULT_COLORS", FALSE),
-		      gdk_atom_intern("STRING", FALSE),
-		      8*sizeof(gushort),
-		      GDK_PROP_MODE_REPLACE,
-		      (guchar *)gtk_widget_get_default_style(),
-		      GTK_STYLE_NUM_STYLECOLORS() * sizeof(GdkColor));
-
-  for(i = 0; i < 5; i++)
-    sev.data.l[i] = 0;
-  sev.data_format = 32;
-  sev.message_type = gdk_atom_intern ("_GTK_STYLE_CHANGED", FALSE);
-  gdk_event_send_clientmessage_toall ((GdkEvent *) &sev);
-}
-
-/*****************************************
  * gtk_widget_get_default_colormap:
  *
  *   arguments:
@@ -3008,27 +3100,6 @@ gtk_widget_get_default_visual ()
   
   return default_visual;
 }
-
-/*****************************************
- * gtk_widget_get_default_style:
- *
- *   arguments:
- *
- *   results:
- *****************************************/
-
-GtkStyle*
-gtk_widget_get_default_style ()
-{
-  if (!default_style)
-    {
-      default_style = gtk_style_new ();
-      gtk_style_ref (default_style);
-    }
-  
-  return default_style;
-}
-
 
 /*****************************************
  * gtk_widget_marshal_signal_1:
@@ -3171,6 +3242,29 @@ gtk_widget_marshal_signal_6 (GtkObject	    *object,
   
   (* rfunc) (object,
 	     GTK_VALUE_OBJECT (args[0]),
+	     func_data);
+}
+
+/*****************************************
+ * gtk_widget_marshal_signal_7:
+ *
+ *   arguments:
+ *
+ *   results:
+ *****************************************/
+
+static void
+gtk_widget_marshal_signal_7 (GtkObject	    *object,
+			     GtkSignalFunc   func,
+			     gpointer	     func_data,
+			     GtkArg	    *args)
+{
+  GtkWidgetSignal7 rfunc;
+  
+  rfunc = (GtkWidgetSignal7) func;
+  
+  (* rfunc) (object,
+	     GTK_VALUE_BOXED (args[0]),
 	     func_data);
 }
 
@@ -3548,22 +3642,6 @@ gtk_widget_peek_visual ()
   return gtk_widget_get_default_visual ();
 }
 
-/*****************************************
- * gtk_widget_peek_style:
- *
- *   arguments:
- *
- *   results:
- *****************************************/
-
-static GtkStyle*
-gtk_widget_peek_style ()
-{
-  if (style_stack)
-    return (GtkStyle*) style_stack->data;
-  return gtk_widget_get_default_style ();
-}
-
 /*************************************************************
  * gtk_widget_propagate_state:
  *     Propagate a change in the widgets state down the tree
@@ -3576,7 +3654,7 @@ gtk_widget_peek_style ()
  *   results:
  *************************************************************/
 
-void
+static void
 gtk_widget_propagate_state (GtkWidget           *widget,
 			    GtkStateData        *data)
 {
@@ -3649,72 +3727,6 @@ gtk_widget_draw_children_recurse (GtkWidget *widget,
 {
   gtk_widget_draw (widget, NULL);
   gtk_widget_draw_children (widget);
-}
-
-/*****************************************
- * gtk_widget_set_style_internal:
- *
- *   arguments:
- *
- *   results:
- *****************************************/
-
-static void
-gtk_widget_set_style_internal (GtkWidget *widget,
-			       GtkStyle	 *style)
-{
-  GtkRequisition old_requisition;
-  
-  g_return_if_fail (widget != NULL);
-  
-  if (widget->style != style)
-    {
-      if (GTK_WIDGET_REALIZED (widget))
-	gtk_style_detach (widget->style);
-      
-      gtk_style_unref (widget->style);
-      widget->style = style;
-      gtk_style_ref (widget->style);
-      
-      if (GTK_WIDGET_REALIZED (widget))
-	widget->style = gtk_style_attach (widget->style, widget->window);
-      
-      if (widget->parent)
-	{
-	  old_requisition = widget->requisition;
-	  gtk_widget_size_request (widget, &widget->requisition);
-	  
-	  if ((old_requisition.width != widget->requisition.width) ||
-	      (old_requisition.height != widget->requisition.height))
-	    gtk_widget_queue_resize (widget);
-	  else if (GTK_WIDGET_DRAWABLE (widget))
-	    gtk_widget_queue_draw (widget);
-	}
-    }
-}
-
-/*****************************************
- * gtk_widget_set_style_recurse:
- *
- *   arguments:
- *
- *   results:
- *****************************************/
-
-static void
-gtk_widget_set_style_recurse (GtkWidget *widget,
-			      gpointer	 client_data)
-{
-  GtkStyle *style;
-  
-  style = gtk_rc_get_style (widget);
-  if (style != widget->style)
-    gtk_widget_set_style_internal (widget, style);
-  
-  if (GTK_IS_CONTAINER (widget))
-    gtk_container_foreach (GTK_CONTAINER (widget),
-			   gtk_widget_set_style_recurse,
-			   NULL);
 }
 
 /*****************************************

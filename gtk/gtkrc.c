@@ -153,7 +153,7 @@ static	GScannerConfig	gtk_rc_scanner_config =
   TRUE			/* scan_float */,
   TRUE			/* scan_hex */,
   TRUE			/* scan_hex_dollar */,
-  FALSE			/* scan_string_sq */,
+  TRUE			/* scan_string_sq */,
   TRUE			/* scan_string_dq */,
   TRUE			/* numbers_2_int */,
   FALSE			/* int_2_float */,
@@ -266,7 +266,7 @@ gtk_rc_get_style (GtkWidget *widget)
 	}
     }
   
-  return widget->style;
+  return NULL;
 }
 
 void

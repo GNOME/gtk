@@ -8,7 +8,7 @@
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	 See the GNU
  * Library General Public License for more details.
  *
  * You should have received a copy of the GNU Library General Public
@@ -34,6 +34,8 @@ typedef struct _GtkStyleClass  GtkStyleClass;
 /* This is used for having dynamic style changing stuff */
 /* fg, bg, light, dark, mid, text, base */
 #define GTK_STYLE_NUM_STYLECOLORS() 7*5
+
+#define	GTK_STYLE_ATTACHED(style)	(((GtkStyle*)(style))->attach_count > 0)
 
 struct _GtkStyle
 {
@@ -78,134 +80,135 @@ struct _GtkStyleClass
   void (*draw_hline)   (GtkStyle      *style,
 			GdkWindow     *window,
 			GtkStateType   state_type,
-			gint           x1,
-			gint           x2,
-			gint           y);
+			gint	       x1,
+			gint	       x2,
+			gint	       y);
   void (*draw_vline)   (GtkStyle      *style,
 			GdkWindow     *window,
 			GtkStateType   state_type,
-			gint           y1,
-			gint           y2,
-			gint           x);
+			gint	       y1,
+			gint	       y2,
+			gint	       x);
   void (*draw_shadow)  (GtkStyle      *style,
 			GdkWindow     *window,
 			GtkStateType   state_type,
 			GtkShadowType  shadow_type,
-			gint           x,
-			gint           y,
-			gint           width,
-			gint           height);
+			gint	       x,
+			gint	       y,
+			gint	       width,
+			gint	       height);
   void (*draw_polygon) (GtkStyle      *style,
 			GdkWindow     *window,
 			GtkStateType   state_type,
 			GtkShadowType  shadow_type,
 			GdkPoint      *point,
-			gint           npoints,
-			gint           fill);
+			gint	       npoints,
+			gint	       fill);
   void (*draw_arrow)   (GtkStyle      *style,
 			GdkWindow     *window,
 			GtkStateType   state_type,
 			GtkShadowType  shadow_type,
 			GtkArrowType   arrow_type,
-			gint           fill,
-			gint           x,
-			gint           y,
-			gint           width,
-			gint           height);
+			gint	       fill,
+			gint	       x,
+			gint	       y,
+			gint	       width,
+			gint	       height);
   void (*draw_diamond) (GtkStyle      *style,
 			GdkWindow     *window,
 			GtkStateType   state_type,
 			GtkShadowType  shadow_type,
-			gint           x,
-			gint           y,
-			gint           width,
-			gint           height);
+			gint	       x,
+			gint	       y,
+			gint	       width,
+			gint	       height);
   void (*draw_oval)    (GtkStyle      *style,
 			GdkWindow     *window,
 			GtkStateType   state_type,
 			GtkShadowType  shadow_type,
-			gint           x,
-			gint           y,
-			gint           width,
-			gint           height);
+			gint	       x,
+			gint	       y,
+			gint	       width,
+			gint	       height);
   void (*draw_string)  (GtkStyle      *style,
 			GdkWindow     *window,
 			GtkStateType   state_type,
-			gint           x,
-			gint           y,
+			gint	       x,
+			gint	       y,
 			const gchar   *string);
 };
 
 
-GtkStyle* gtk_style_new            (void);
-GtkStyle* gtk_style_attach         (GtkStyle     *style,
-				    GdkWindow    *window);
-void      gtk_style_detach         (GtkStyle     *style);
-GtkStyle *gtk_style_ref            (GtkStyle     *style);
-void      gtk_style_unref          (GtkStyle     *style);
-void      gtk_style_set_background (GtkStyle     *style,
-				    GdkWindow    *window,
+GtkStyle* gtk_style_new		   (void);
+GtkStyle* gtk_style_copy	   (GtkStyle	 *style);
+GtkStyle* gtk_style_attach	   (GtkStyle	 *style,
+				    GdkWindow	 *window);
+void	  gtk_style_detach	   (GtkStyle	 *style);
+GtkStyle* gtk_style_ref		   (GtkStyle	 *style);
+void	  gtk_style_unref	   (GtkStyle	 *style);
+void	  gtk_style_set_background (GtkStyle	 *style,
+				    GdkWindow	 *window,
 				    GtkStateType  state_type);
 
 
-void gtk_draw_hline   (GtkStyle      *style,
+void gtk_draw_hline   (GtkStyle	     *style,
 		       GdkWindow     *window,
 		       GtkStateType   state_type,
-		       gint           x1,
-		       gint           x2,
-		       gint           y);
-void gtk_draw_vline   (GtkStyle      *style,
+		       gint	      x1,
+		       gint	      x2,
+		       gint	      y);
+void gtk_draw_vline   (GtkStyle	     *style,
 		       GdkWindow     *window,
 		       GtkStateType   state_type,
-		       gint           y1,
-		       gint           y2,
-		       gint           x);
-void gtk_draw_shadow  (GtkStyle      *style,
-		       GdkWindow     *window,
-		       GtkStateType   state_type,
-		       GtkShadowType  shadow_type,
-		       gint           x,
-		       gint           y,
-		       gint           width,
-		       gint           height);
-void gtk_draw_polygon (GtkStyle      *style,
+		       gint	      y1,
+		       gint	      y2,
+		       gint	      x);
+void gtk_draw_shadow  (GtkStyle	     *style,
 		       GdkWindow     *window,
 		       GtkStateType   state_type,
 		       GtkShadowType  shadow_type,
-		       GdkPoint      *points,
-		       gint           npoints,
-		       gint           fill);
-void gtk_draw_arrow   (GtkStyle      *style,
+		       gint	      x,
+		       gint	      y,
+		       gint	      width,
+		       gint	      height);
+void gtk_draw_polygon (GtkStyle	     *style,
+		       GdkWindow     *window,
+		       GtkStateType   state_type,
+		       GtkShadowType  shadow_type,
+		       GdkPoint	     *points,
+		       gint	      npoints,
+		       gint	      fill);
+void gtk_draw_arrow   (GtkStyle	     *style,
 		       GdkWindow     *window,
 		       GtkStateType   state_type,
 		       GtkShadowType  shadow_type,
 		       GtkArrowType   arrow_type,
-		       gint           fill,
-		       gint           x,
-		       gint           y,
-		       gint           width,
-		       gint           height);
-void gtk_draw_diamond (GtkStyle      *style,
+		       gint	      fill,
+		       gint	      x,
+		       gint	      y,
+		       gint	      width,
+		       gint	      height);
+void gtk_draw_diamond (GtkStyle	     *style,
 		       GdkWindow     *window,
 		       GtkStateType   state_type,
 		       GtkShadowType  shadow_type,
-		       gint           x,
-		       gint           y,
-		       gint           width,
-		       gint           height);
-void gtk_draw_oval    (GtkStyle      *style,
+		       gint	      x,
+		       gint	      y,
+		       gint	      width,
+		       gint	      height);
+void gtk_draw_oval    (GtkStyle	     *style,
 		       GdkWindow     *window,
 		       GtkStateType   state_type,
 		       GtkShadowType  shadow_type,
-		       gint           x,
-		       gint           y,
-		       gint           width,
-		       gint           height);
-void gtk_draw_string  (GtkStyle      *style,
+		       gint	      x,
+		       gint	      y,
+		       gint	      width,
+		       gint	      height);
+void gtk_draw_string  (GtkStyle	     *style,
 		       GdkWindow     *window,
 		       GtkStateType   state_type,
-		       gint           x,
-		       gint           y,
+		       gint	      x,
+		       gint	      y,
 		       const gchar   *string);
 
 

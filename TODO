@@ -4,6 +4,8 @@ TODO BEFORE GTK 1.0
 Bugs:
  * gtk_list_clear_items: free start_list
  
+ * GtkComboBox: need to destroy gdk cursor
+ 
  * Vertical scrollbar: the expose event looks hosed and is causing 
    quite a bit of flickering
 
@@ -60,6 +62,12 @@ Bugs:
     -timj
 
 Additions:
+ * it might be good to ues stdio and getch() instead of 1-character reads.
+   so one can take advantage of buffering. Currently each read() takes a separate
+   syscall.
+   
+ * implement gtk_default_draw_oval
+ 
  * Lists should scroll to center the recently selected item if it isn't
    visible.
 
@@ -74,7 +82,9 @@ Additions:
                           
  * Make widget attributes configurable after the widget is created (timj).
 
- * Implementation of owens widget style proposal.
+ * Change gtk_widget_propagate_default_style() mechanism to
+   void gtk_rc_string_export (const gchar *rc_additions,
+                              gboolean     override_rc_styles);
  
 
 TODO AFTER GTK 1.0

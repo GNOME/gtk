@@ -46,6 +46,8 @@ static void gtk_frame_size_request  (GtkWidget      *widget,
 				     GtkRequisition *requisition);
 static void gtk_frame_size_allocate (GtkWidget      *widget,
 				     GtkAllocation  *allocation);
+static void gtk_frame_style_set     (GtkWidget      *widget,
+				     GtkStyle	    *previous_style);
 
 
 static GtkBinClass *parent_class = NULL;
@@ -97,6 +99,7 @@ gtk_frame_class_init (GtkFrameClass *class)
   widget_class->expose_event = gtk_frame_expose;
   widget_class->size_request = gtk_frame_size_request;
   widget_class->size_allocate = gtk_frame_size_allocate;
+  widget_class->style_set = gtk_frame_style_set;
 }
 
 static void
@@ -172,6 +175,25 @@ gtk_frame_new (const gchar *label)
   gtk_frame_set_label (frame, label);
 
   return GTK_WIDGET (frame);
+}
+
+static void
+gtk_frame_style_set (GtkWidget      *widget,
+		     GtkStyle	    *previous_style)
+{
+  GtkFrame *frame;
+
+  frame = GTK_FRAME (widget);
+
+  if (frame->label)
+    {
+      frame->label_width = gdk_string_measure (GTK_WIDGET (frame)->style->font, frame->label) + 7;
+      frame->label_height = (GTK_WIDGET (frame)->style->font->ascent +
+			     GTK_WIDGET (frame)->style->font->descent + 1);
+    }
+
+  if (GTK_WIDGET_CLASS (parent_class)->style_set)
+    GTK_WIDGET_CLASS (parent_class)->style_set (widget, previous_style);
 }
 
 void

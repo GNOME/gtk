@@ -1298,7 +1298,7 @@ create_tooltips ()
       gtk_box_set_child_packing (GTK_BOX (box3), button, FALSE, FALSE, 0, GTK_PACK_START);
       gtk_tooltips_set_tip (tooltips,
 			    button,
-			    "Push this button to start the Tooltips Inspector",
+			    "Start the Tooltips Inspector",
 			    "ContextHelp/buttons/?");
       
       

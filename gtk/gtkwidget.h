@@ -49,7 +49,7 @@ enum
   GTK_HAS_GRAB		= 1 << 15,
   GTK_BASIC		= 1 << 16,
   GTK_RESERVED_3	= 1 << 17,
-  GTK_STYLE_SET		= 1 << 18
+  GTK_RC_STYLE		= 1 << 18
 };
 
 
@@ -86,7 +86,7 @@ enum
 #define GTK_WIDGET_HAS_DEFAULT(wid)	  (GTK_WIDGET_FLAGS (wid) & GTK_HAS_DEFAULT)
 #define GTK_WIDGET_HAS_GRAB(wid)	  (GTK_WIDGET_FLAGS (wid) & GTK_HAS_GRAB)
 #define GTK_WIDGET_BASIC(wid)		  (GTK_WIDGET_FLAGS (wid) & GTK_BASIC)
-#define GTK_WIDGET_STYLE_SET(wid)	  (GTK_WIDGET_FLAGS (wid) & GTK_STYLE_SET)
+#define GTK_WIDGET_RC_STYLE(wid)	  (GTK_WIDGET_FLAGS (wid) & GTK_RC_STYLE)
   
 /* Macros for setting and clearing widget flags.
  */
@@ -189,8 +189,8 @@ struct _GtkWidget
   /* The widgets name. If the widget does not have a name
    *  (the name is NULL), then its name (as returned by
    *  "gtk_widget_get_name") is its classes name.
-   * The widget name is used to determine the style to
-   *  use for a widget.
+   * Among other things, the widget name is used to determine
+   *  the style to use for a widget.
    */
   gchar *name;
   
@@ -430,8 +430,6 @@ void	   gtk_widget_set_parent	  (GtkWidget	       *widget,
 void	   gtk_widget_set_parent_window	  (GtkWidget	       *widget,
 					   GdkWindow	       *parent_window);
 GdkWindow *gtk_widget_get_parent_window	  (GtkWidget	       *widget);
-void	   gtk_widget_set_style		  (GtkWidget	       *widget,
-					   GtkStyle	       *style);
 void	   gtk_widget_set_uposition	  (GtkWidget	       *widget,
 					   gint			x,
 					   gint			y);
@@ -443,58 +441,69 @@ void	   gtk_widget_set_events	  (GtkWidget	       *widget,
 void	   gtk_widget_set_extension_events (GtkWidget		*widget,
 					    GdkExtensionMode	mode);
 
-GtkWidget*   gtk_widget_get_toplevel  (GtkWidget *widget);
-GtkWidget*   gtk_widget_get_ancestor  (GtkWidget *widget,
-				       gint	  type);
-GdkColormap* gtk_widget_get_colormap  (GtkWidget *widget);
-GdkVisual*   gtk_widget_get_visual    (GtkWidget *widget);
-GtkStyle*    gtk_widget_get_style     (GtkWidget *widget);
-gint	     gtk_widget_get_events    (GtkWidget *widget);
-GdkExtensionMode gtk_widget_get_extension_events    (GtkWidget *widget);
-void	     gtk_widget_get_pointer   (GtkWidget *widget,
-				       gint	 *x,
-				       gint	 *y);
+GdkExtensionMode gtk_widget_get_extension_events (GtkWidget	*widget);
+GtkWidget*   gtk_widget_get_toplevel	(GtkWidget	*widget);
+GtkWidget*   gtk_widget_get_ancestor	(GtkWidget	*widget,
+					 gint		type);
+GdkColormap* gtk_widget_get_colormap	(GtkWidget	*widget);
+GdkVisual*   gtk_widget_get_visual	(GtkWidget	*widget);
+gint	     gtk_widget_get_events	(GtkWidget	*widget);
+void	     gtk_widget_get_pointer	(GtkWidget	*widget,
+					 gint		*x,
+					 gint		*y);
 
-gint	     gtk_widget_is_ancestor (GtkWidget *widget,
-				     GtkWidget *ancestor);
-gint	     gtk_widget_is_child    (GtkWidget *widget,
-				     GtkWidget *child);
+gint	     gtk_widget_is_ancestor	(GtkWidget	*widget,
+					 GtkWidget	*ancestor);
+gint	     gtk_widget_is_child	(GtkWidget	*widget,
+					 GtkWidget	*child);
 
+/* Widget styles.
+ */
+void	   gtk_widget_set_style		(GtkWidget	*widget,
+					 GtkStyle	*style);
+void	   gtk_widget_set_rc_style	(GtkWidget	*widget);
+void	   gtk_widget_ensure_style	(GtkWidget	*widget);
+GtkStyle*  gtk_widget_get_style		(GtkWidget	*widget);
+
+/* Tell other Gtk applications to use the same default colors.
+ */
+void	   gtk_widget_propagate_default_style	(void);
+
+/* Push/pop pairs, to change default values upon a widget's creation.
+ * This will override the values that got set by the
+ * gtk_widget_set_default_* () functions.
+ */
+void	     gtk_widget_push_style	 (GtkStyle	*style);
 void	     gtk_widget_push_colormap	 (GdkColormap	*cmap);
 void	     gtk_widget_push_visual	 (GdkVisual	*visual);
-void	     gtk_widget_push_style	 (GtkStyle	*style);
-
+void	     gtk_widget_pop_style	 (void);
 void	     gtk_widget_pop_colormap	 (void);
 void	     gtk_widget_pop_visual	 (void);
-void	     gtk_widget_pop_style	 (void);
 
+/* Set certain default values to be used at widget creation time.
+ */
+void	     gtk_widget_set_default_style    (GtkStyle	  *style);
 void	     gtk_widget_set_default_colormap (GdkColormap *colormap);
 void	     gtk_widget_set_default_visual   (GdkVisual	  *visual);
-void	     gtk_widget_set_default_style    (GtkStyle	  *style);
-/* Tells other Gtk applications to use the same default style */
-void	     gtk_widget_propagate_default_style(void);
+GtkStyle*    gtk_widget_get_default_style    (void);
 GdkColormap* gtk_widget_get_default_colormap (void);
 GdkVisual*   gtk_widget_get_default_visual   (void);
-GtkStyle*    gtk_widget_get_default_style    (void);
 
-/* 
- * see gdk_window_shape_combine_mask
+/* Counterpart to gdk_window_shape_combine_mask.
  */
 void	     gtk_widget_shape_combine_mask (GtkWidget *widget,
 					    GdkBitmap *shape_mask,
 					    gint       offset_x,
 					    gint       offset_y);
 
-/* 
- * When you get a drag_enter event, you can use this to tell Gtk of other
+/* When you get a drag_enter event, you can use this to tell Gtk of other
  *  items that are to be dragged as well...
  */
 void	     gtk_widget_dnd_drag_add (GtkWidget *widget);
 
-/* 
- * These two functions enable drag and/or drop on a widget,
- * and also let Gtk know what data types will be accepted (use MIME type
- *  naming, plus tacking "URL:" on the front for link dragging)
+/* These two functions enable drag and/or drop on a widget,
+ *  and also let Gtk know what data types will be accepted (use MIME
+ *  type naming, plus tacking "URL:" on the front for link dragging)
  */
 void	     gtk_widget_dnd_drag_set (GtkWidget	    *widget,
 				      guint8	     drag_enable,
@@ -506,8 +515,7 @@ void	     gtk_widget_dnd_drop_set (GtkWidget	    *widget,
 				      guint	     numtypes,
 				      guint8	     is_destructive_operation);
 
-/* 
- * used to reply to a DRAG_REQUEST event - if you don't want to 
+/* Used to reply to a DRAG_REQUEST event - if you don't want to 
  * give the data then pass in NULL for it 
  */
 void	     gtk_widget_dnd_data_set (GtkWidget	    *widget,

@@ -33,10 +33,10 @@ style "button"
 #  bg[PRELIGHT] = { 0, 0, 0.75 }
 }
 
-style "main_button" = "button"
+style 'main_button' = 'button'
 {
   font = "-adobe-helvetica-medium-r-normal--*-100-*-*-*-*-*-*"
-  bg[PRELIGHT] = { 0.75, 0, 0 }
+  bg[PRELIGHT] = { 0, 0x00, 0.75 }
 }
 
 style "toggle_button" = "button"
@@ -54,7 +54,7 @@ style "text"
 
 style "ruler"
 {
-  font = "-adobe-helvetica-medium-r-normal--*-80-*-*-*-*-*-*"
+  font = '-adobe-helvetica-medium-r-normal--*-80-*-*-*-*-*-*'
 }
 
 style "curve"
