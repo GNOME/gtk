@@ -3872,6 +3872,9 @@ validate_visible_area (GtkTreeView *tree_view)
       tree_view->priv->scroll_to_path = NULL;
     }
 
+  if (above_path)
+    gtk_tree_path_free (above_path);
+
   if (tree_view->priv->scroll_to_column)
     {
       tree_view->priv->scroll_to_column = NULL;
@@ -4444,6 +4447,9 @@ set_destination_row (GtkTreeView    *tree_view,
                                        NULL,
                                        GTK_TREE_VIEW_DROP_BEFORE);
 
+      if (path)
+	gtk_tree_path_free (path);
+
       /* don't propagate to parent though */
       return TRUE;
     }
@@ -4495,6 +4501,9 @@ set_destination_row (GtkTreeView    *tree_view,
                                        NULL,
                                        GTK_TREE_VIEW_DROP_BEFORE);
     }
+
+  if (path)
+    gtk_tree_path_free (path);
 
   return TRUE;
 }
@@ -9538,6 +9547,7 @@ gtk_tree_view_set_drag_dest_row (GtkTreeView            *tree_view,
 	  if (new_tree && new_node)
 	    _gtk_tree_view_queue_draw_node (tree_view, new_tree, new_node, NULL);
 	}
+      gtk_tree_path_free (current_dest);
     }
 }
 

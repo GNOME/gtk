@@ -1,3 +1,12 @@
+Mon Feb 25 01:14:26 2002  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtktextlayout.c (find_display_line_above): free iter before
+	going to done
+
+	* gtk/gtktreeview.c (validate_visible_area): free above_path,
+	(set_destination_row): free path before returning,
+	(gtk_tree_view_set_drag_dest_row): free current_dest
+
 Sun Feb 24 14:15:45 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtktextview.c (widget_to_buffer): Take border
