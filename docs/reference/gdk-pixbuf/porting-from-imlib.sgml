@@ -62,11 +62,6 @@
 
 	<para>
 	  The &gdk-pixbuf; library does not need to be initialized.
-	  However, if you intend to use the rendering functions or
-	  anything else from the <application>GdkRGB</application>
-	  library, you should call <function>gdk_rgb_init()</function>
-	  after calling <function>gtk_init()</function> or
-	  <function>gnome_init()</function> in your program.
 	</para>
 
 	<note>
@@ -101,14 +96,13 @@
 	  a new <link linkend="GdkPixbuf">GdkPixbuf</link> structure,
 	  it is created with an initial reference count of 1.  When
 	  another part of the program wants to keep a reference to the
-	  pixbuf, it should call <link
-	  linkend="gdk-pixbuf-ref">gdk_pixbuf_ref()</link>; this will
-	  increase the reference count by 1.  When some part of the
-	  program does not need to keep a reference to a pixbuf
+	  pixbuf, it should call <function>g_object_ref()</function>;
+	  this will increase the reference count by 1.  When some part
+	  of the program does not need to keep a reference to a pixbuf
 	  anymore and wants to release the pixbuf, it should call
-	  <link linkend="gdk-pixbuf-unref">gdk_pixbuf_unref()</link>;
-	  this will decrease the reference count by 1.  When the
-	  reference count drops to zero, the pixbuf gets destroyed or
+	  <function>g_object_unref()</function>; this will decrease
+	  the reference count by 1.  When the reference count drops to
+	  zero, the pixbuf gets destroyed or
 	  <emphasis>finalized</emphasis> and its memory is freed.
 	</para>
 
@@ -131,9 +125,9 @@
 
 	<para>
 	  Most applications will simply need to call
-	  <function>gdk_pixbuf_ref()</function> when they want to keep
+	  <function>g_object_ref()</function> when they want to keep
 	  an extra reference to a pixbuf, and then
-	  <function>gdk_pixbuf_unref()</function> when they are done
+	  <function>g_object_unref()</function> when they are done
 	  with it.
 	</para>
       </sect2>
@@ -232,7 +226,7 @@
 	<para>
 	  After you have created a pixbuf, you can manipulate it in
 	  any way you please and then finally call
-	  <function>gdk_pixbuf_unref()</function> when you are done
+	  <function>g_object_unref()</function> when you are done
 	  with it.  This can be thought of as a replacement for
 	  <function>gdk_imlib_destroy_image()</function> but with much
 	  cleaner semantics.

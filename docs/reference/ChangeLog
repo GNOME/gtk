@@ -1,3 +1,15 @@
+2001-11-03  Sebastian Wilhelmi  <wilhelmi@ira.uka.de>
+
+	* gdk-pixbuf/tmpl/refcounting.sgml,
+	gdk-pixbuf/porting-from-imlib.sgml, tmpl/creating.sgml:
+	gdk_rgb_init() doesn't need to be called anymore. Use
+	g_object_(un)_ref instead of gdk_pixbuf_(un)ref.
+
+	* tmpl/module_interface.sgml: Typo fix.
+
+	* gdk-pixbuf/gdk-pixbuf.sgml: Fixed jade complaining about '_' by
+	replacing it with '-'. Now builds again.
+
 2001-10-31  Matthias Clasen  <matthiasc@poet.de>
 
 	* gdk-pixbuf/gdk-pixbuf.sgml: include initialization_versions.sgml,

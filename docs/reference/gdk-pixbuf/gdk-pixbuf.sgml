@@ -10,8 +10,8 @@
 <!entity gdk-pixbuf-util SYSTEM "sgml/util.sgml">
 <!entity gdk-pixbuf-animation SYSTEM "sgml/animation.sgml">
 <!entity GdkPixbufLoader SYSTEM "sgml/gdk-pixbuf-loader.sgml">
-<!entity module_interface SYSTEM "sgml/module_interface.sgml">
-<!entity initialization_versions SYSTEM "sgml/initialization_versions.sgml">
+<!entity module-interface SYSTEM "sgml/module_interface.sgml">
+<!entity initialization-versions SYSTEM "sgml/initialization_versions.sgml">
 <!entity gdk-pixbuf-gdk-pixbuf-xlib-init SYSTEM "sgml/gdk-pixbuf-xlib-init.sgml">
 <!entity gdk-pixbuf-gdk-pixbuf-xlib-rendering SYSTEM "sgml/gdk-pixbuf-xlib-rendering.sgml">
 <!entity gdk-pixbuf-gdk-pixbuf-xlib-from-drawables SYSTEM "sgml/gdk-pixbuf-xlib-from-drawables.sgml">
@@ -87,7 +87,7 @@
       </para>
     </partintro>
 
-    &initialization_versions;
+    &initialization-versions;
 
     &gdk-pixbuf-gdk-pixbuf;
     &gdk-pixbuf-refcounting;
@@ -100,7 +100,7 @@
     &gdk-pixbuf-animation;
 
     &GdkPixbufLoader;
-    &module_interface;
+    &module-interface;
 
     &gdk-pixbuf-gdk-pixbuf-xlib-init;
     &gdk-pixbuf-gdk-pixbuf-xlib-rendering;

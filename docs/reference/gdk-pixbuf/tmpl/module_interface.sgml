@@ -66,7 +66,7 @@ images in a certain file format.
 <para>
 A #GdkPixbufModule can be loaded dynamically from a #GModule.
 Each loadable module must contain a #ModuleFillVtableFunc function named 
-<funcion>gdk_pixbuf__<replaceable>module_name</replaceable>_fill_vtable</function>.
+<function>gdk_pixbuf__<replaceable>module_name</replaceable>_fill_vtable</function>.
 It will get called when the module is loaded and must set the function
 pointers of the #GdkPixbufModule.
 </para>

@@ -438,13 +438,13 @@ gdk_pixbuf_loader_new_with_type (const char *image_type,
  * @loader: A pixbuf loader.
  *
  * Queries the GdkPixbuf that a pixbuf loader is currently creating.
- * In general it only makes sense to call this function afer the
+ * In general it only makes sense to call this function after the
  * "area_prepared" signal has been emitted by the loader; this means
  * that enough data has been read to know the size of the image that
  * will be allocated.  If the loader has not received enough data via
  * gdk_pixbuf_loader_write(), then this function returns %NULL.  The
  * returned pixbuf will be the same in all future calls to the loader,
- * so simply calling gdk_pixbuf_ref() should be sufficient to continue
+ * so simply calling g_object_ref() should be sufficient to continue
  * using it.  Additionally, if the loader is an animation, it will
  * return the "static image" of the animation
  * (see gdk_pixbuf_animation_get_static_image()).
