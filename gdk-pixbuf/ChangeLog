@@ -1,3 +1,14 @@
+Wed Oct 10 11:52:17 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk-pixdata.c gdk-pixbuf.h: Get rid of 
+	GDK_PIXBUF_ERROR_HEADER/PIXEL_CORRUPT and use CORRUPT_IMAGE.
+	Get rid fo GD_PIXBUF_ERROR_UNKNOWN_FORMAT and use the
+	existing UKNOWN_TYPE error. (#58308)
+
+	* gdk-pixbuf.h, gdk-pixdata.c: Rename gdk_pixbuf_new_from_stream()
+	back to gdk_pixbuf_new_from_inline(). Rework docs to try
+	and be helpful for the common case. (#58308)
+
 2001-10-05  Sven Neumann  <sven@gimp.org>
 
 	* gdk-pixbuf/gdk-pixbuf-io.c

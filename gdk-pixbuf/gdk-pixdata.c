@@ -143,17 +143,17 @@ gdk_pixdata_serialize (const GdkPixdata *pixdata,
 
 #define	return_header_corrupt(error)	{ \
   g_set_error (error, GDK_PIXBUF_ERROR, \
-	       GDK_PIXBUF_ERROR_HEADER_CORRUPT, _("Image header corrupt")); \
+	       GDK_PIXBUF_ERROR_CORRUPT_IMAGE, _("Image header corrupt")); \
   return FALSE; \
 }
 #define	return_invalid_format(error)	{ \
   g_set_error (error, GDK_PIXBUF_ERROR, \
-	       GDK_PIXBUF_ERROR_UNKNOWN_FORMAT, _("Image format unknown")); \
+	       GDK_PIXBUF_ERROR_UNKNOWN_TYPE, _("Image format unknown")); \
   return FALSE; \
 }
 #define	return_pixel_corrupt(error)	{ \
   g_set_error (error, GDK_PIXBUF_ERROR, \
-	       GDK_PIXBUF_ERROR_PIXEL_CORRUPT, _("Image pixel data corrupt")); \
+	       GDK_PIXBUF_ERROR_CORRUPT_IMAGE, _("Image pixel data corrupt")); \
   return FALSE; \
 }
 
@@ -169,12 +169,11 @@ gdk_pixdata_serialize (const GdkPixdata *pixdata,
  * #GdkPixdata fields in network byte order, plus the pixel_data
  * bytes the structure points to.
  * The pixdata contents are reconstructed byte by byte and are checked
- * for validity, due to the checks, this function may prematurely abort
- * with errors, such as #GDK_PIXBUF_ERROR_HEADER_CORRUPT,
- * #GDK_PIXBUF_ERROR_PIXEL_CORRUPT or #GDK_PIXBUF_ERROR_UNKNOWN_FORMAT.
+ * for validity. This function may fail with %GDK_PIXBUF_CORRUPT_IMAGE
+ * or %GDK_PIXBUF_ERROR_UNKNOWN_TYPE
  *
- * Return value: Upon successfull deserialization #TRUE is returned,
- * #FALSE otherwise
+ * Return value: Upon successfull deserialization %TRUE is returned,
+ * %FALSE otherwise
  **/
 gboolean
 gdk_pixdata_deserialize (GdkPixdata   *pixdata,
@@ -429,7 +428,7 @@ gdk_pixbuf_from_pixdata (const GdkPixdata *pixdata,
 	{
 	  g_free (data);
 	  g_set_error (error, GDK_PIXBUF_ERROR,
-		       GDK_PIXBUF_ERROR_PIXEL_CORRUPT,
+		       GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
 		       _("Image pixel data corrupt"));
 	  return NULL;
 	}
@@ -779,23 +778,30 @@ gdk_pixdata_to_csource (GdkPixdata        *pixdata,
 }
 
 /**
- * gdk_pixbuf_new_from_stream:
- * @stream_length: Length in bytes of the @stream argument
- * @stream: Byte stream containing a serialized GdkPixdata structure
- * @copy_pixels: Whether to copy the pixels data, or keep direct pointers into the
- *               stream data for the resulting pixbuf
- * @error: GError return location, may be NULL to ignore errors
+ * gdk_pixbuf_new_from_inline:
+ * @data_length: Length in bytes of the @data argument
+ * @data: Byte data containing a serialized GdkPixdata structure
+ * @copy_pixels: Whether to copy the pixel data, or use direct pointers
+ *               @data for the resulting pixbuf
+ * @error: GError return location, may be %NULL to ignore errors
  *
- * Create a #GdkPixbuf from a serialized GdkPixdata structure.
+ * Create a #GdkPixbuf from a flat representation that is suitable for
+ * storing as inline data in a program. This is useful if you want to
+ * ship a program with images, but don't want to depend on any
+ * external files.
+ *
  * Gtk+ ships with a program called gdk-pixbuf-csource which allowes
- * for conversion of #GdkPixbufs into various kinds of C sources.
- * This is useful if you want to ship a program with images, but
- * don't want to depend on any external files.
+ * for conversion of #GdkPixbufs into such a inline reprentation.
+ * In almost all cases, you should pass the --raw flag to
+ * gdk-pixbuf-csource. A sample invocation would be:
  *
- * Since the inline pixbuf is read-only static data, you
- * don't need to copy it unless you intend to write to it.
- * For deserialization of streams that are run length encoded, the
- * decoded data is always a copy of the input stream.
+ *  gdk-pixbuf-csource --raw --name=myimage_inline myimage.png
+ * 
+ * For the typical case where the inline pixbuf is read-only static data,
+ * you don't need to copy the pixel data unless you intend to write to
+ * it, so you can pass %FALSE for @copy_pixels.  (If you pass --rle to
+ * gdk-pixbuf-csource, a copy will be made even if @copy_pixels is
+ * %FALSE, so using this option is generally a bad idea.)
  *
  * If you create a pixbuf from const inline data compiled into your
  * program, it's probably safe to ignore errors, since things will
@@ -803,22 +809,22 @@ gdk_pixdata_to_csource (GdkPixdata        *pixdata,
  * memory. For untrusted inline data located at runtime, you could
  * have corrupt inline data in addition.
  *
- * Return value: A newly-created #GdkPixbuf structure with a reference count of
- * 1, or NULL If error is set.
+ * Return value: A newly-created #GdkPixbuf structure with a reference,
+ *   count of 1, or %NULL if error is set.
  **/
 GdkPixbuf*
-gdk_pixbuf_new_from_stream (gint          stream_length,
-			    const guint8 *stream,
+gdk_pixbuf_new_from_inline (gint          data_length,
+			    const guint8 *data,
 			    gboolean      copy_pixels,
 			    GError      **error)
 {
   GdkPixdata pixdata;
 
-  if (stream_length != -1)
-    g_return_val_if_fail (stream_length > GDK_PIXDATA_HEADER_LENGTH, NULL);
-  g_return_val_if_fail (stream != NULL, NULL);
+  if (data_length != -1)
+    g_return_val_if_fail (data_length > GDK_PIXDATA_HEADER_LENGTH, NULL);
+  g_return_val_if_fail (data != NULL, NULL);
 
-  if (!gdk_pixdata_deserialize (&pixdata, stream_length, stream, error))
+  if (!gdk_pixdata_deserialize (&pixdata, data_length, data, error))
     return NULL;
 
   return gdk_pixbuf_from_pixdata (&pixdata, copy_pixels, error);
