@@ -1898,8 +1898,13 @@ gtk_widget_unparent (GtkWidget *widget)
   widget->allocation.width = 1;
   widget->allocation.height = 1;
   
-  if (GTK_WIDGET_REALIZED (widget) && !GTK_WIDGET_IN_REPARENT (widget))
-    gtk_widget_unrealize (widget);
+  if (GTK_WIDGET_REALIZED (widget)) 
+    {
+      if (GTK_WIDGET_IN_REPARENT (widget))
+	gtk_widget_unmap (widget);
+      else
+	gtk_widget_unrealize (widget);
+    }
 
   /* Removing a widget from a container restores the child visible
    * flag to the default state, so it doesn't affect the child
@@ -3724,7 +3729,23 @@ gtk_widget_reparent_subwindows (GtkWidget *widget,
       g_list_free (children);
     }
   else
-    gdk_window_reparent (widget->window, new_window, 0, 0);
+   {
+     GdkWindow *parent = gdk_window_get_parent (widget->window);
+
+     GList *children = gdk_window_get_children (parent);
+     GList *tmp_list;
+     for (tmp_list = children; tmp_list; tmp_list = tmp_list->next)
+       {
+	 GtkWidget *child;
+	 GdkWindow *window = tmp_list->data;
+
+	 gdk_window_get_user_data (window, (void **)&child);
+	 if (child == widget)
+	   gdk_window_reparent (window, new_window, 0, 0);
+       }
+
+      g_list_free (children);
+   }
 }
 
 static void

@@ -1,5 +1,15 @@
 2005-02-24  Matthias Clasen  <mclasen@redhat.com>
 
+        Fix #167259, reported by  Christian Persch:
+	
+	* gtk/gtkwidget.c (gtk_widget_unparent): Unmap the reparented 
+	widget, even if we avoid the unrealizing. 
+	(gtk_widget_reparent_subwindows): Make reparenting work for
+	!NO_WINDOW widgets which have other windows which are siblings
+	of widget->window (as e.g. GtkSpinButton).
+
+2005-02-24  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtktreemodelfilter.c (gtk_tree_model_filter_row_changed): 
 	Don't emit a warning if a parent node is filtered out. (#164726,
 	Olivier Sessink)
