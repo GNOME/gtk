@@ -416,13 +416,23 @@ gtk_handle_box_size_allocate (GtkWidget     *widget,
   hb = GTK_HANDLE_BOX (widget);
   
   widget->allocation.x = allocation->x;
-  if (allocation->height > widget->requisition.height)
-    widget->allocation.y = allocation->y + (allocation->height - widget->requisition.height) / 2;
+
+  if (hb->child_detached)
+    {
+      if (allocation->height > widget->requisition.height)
+	widget->allocation.y = allocation->y +
+	  (allocation->height - widget->requisition.height) / 2;
+      else
+	widget->allocation.y = allocation->y;
+      
+      widget->allocation.height = MIN (allocation->height, widget->requisition.height);
+      widget->allocation.width = MIN (allocation->width, widget->requisition.width);
+    }
   else
-    widget->allocation.y = allocation->y;
-  widget->allocation.height = MIN (allocation->height, widget->requisition.height);
-  widget->allocation.width = MIN (allocation->width, widget->requisition.width);
-  
+    {
+      widget->allocation = *allocation;
+    }  
+
   if (GTK_WIDGET_REALIZED (hb))
     gdk_window_move_resize (widget->window,
 			    widget->allocation.x,
