@@ -1,3 +1,7 @@
+2004-11-20  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtk-sections.txt: Add gtk_dialog_set_alternative_button_order_from_array
+
 2004-11-18  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtk.types: Sort alphabetically, add gtk_clipboard_get_type

@@ -974,6 +974,7 @@ gtk_dialog_set_response_sensitive
 <SUBSECTION>
 gtk_alternative_dialog_button_order
 gtk_dialog_set_alternative_button_order
+gtk_dialog_set_alternative_button_order_from_array
 
 <SUBSECTION Standard>
 GTK_DIALOG
