@@ -1,3 +1,9 @@
+Thu Aug  3 09:17:06 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdkrectangle.c (gdk_rectangle_intersect): Applied patch from
+	Peter Osterlund to simplify the code while keeping the
+	functionality the same.
+
 Wed Aug  2 14:57:38 2000  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/gdkwindow.c (gdk_window_process_updates_internal): Move

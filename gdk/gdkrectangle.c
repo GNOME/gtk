@@ -50,9 +50,8 @@ gdk_rectangle_intersect (GdkRectangle *src1,
 			 GdkRectangle *src2,
 			 GdkRectangle *dest)
 {
-  GdkRectangle *temp;
-  gint src1_x2, src1_y2;
-  gint src2_x2, src2_y2;
+  gint dest_x, dest_y;
+  gint dest_w, dest_h;
   gint return_val;
 
   g_return_val_if_fail (src1 != NULL, FALSE);
@@ -61,52 +60,20 @@ gdk_rectangle_intersect (GdkRectangle *src1,
 
   return_val = FALSE;
 
-  if (src2->x < src1->x)
+  dest_x = MAX (src1->x, src2->x);
+  dest_y = MAX (src1->y, src2->y);
+  dest_w = MIN (src1->x + src1->width, src2->x + src2->width) - dest_x;
+  dest_h = MIN (src1->y + src1->height, src2->y + src2->height) - dest_y;
+
+  if (dest_w > 0 && dest_h > 0)
     {
-      temp = src1;
-      src1 = src2;
-      src2 = temp;
+      dest->x = dest_x;
+      dest->y = dest_y;
+      dest->width = dest_w;
+      dest->height = dest_h;
+      return_val = TRUE;
     }
-  src1_x2 = src1->x + src1->width;
-  src2_x2 = src2->x + src2->width;
-
-  if (src2->x < src1_x2)
-    {
-      dest->x = src2->x;
-
-      if (src1_x2 < src2_x2)
-	dest->width = src1_x2 - dest->x;
-      else
-	dest->width = src2_x2 - dest->x;
-
-      if (src2->y < src1->y)
-	{
-	  temp = src1;
-	  src1 = src2;
-	  src2 = temp;
-	}
-      src1_y2 = src1->y + src1->height;
-      src2_y2 = src2->y + src2->height;
-
-      if (src2->y < src1_y2)
-	{
-	  return_val = TRUE;
-
-	  dest->y = src2->y;
-
-	  if (src1_y2 < src2_y2)
-	    dest->height = src1_y2 - dest->y;
-	  else
-	    dest->height = src2_y2 - dest->y;
-
-	  if (dest->height == 0)
-	    return_val = FALSE;
-	  if (dest->width == 0)
-	    return_val = FALSE;
-	}
-    }
-
-  if (!return_val)
+  else
     {
       dest->width = 0;
       dest->height = 0;
