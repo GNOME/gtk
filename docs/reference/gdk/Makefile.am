@@ -39,7 +39,7 @@ EXTRA_HFILES=			\
 	../../../gdk/x11/gdkx.h 
 
 # Images to copy into HTML directory
-HTML_IMAGES =				\ 
+HTML_IMAGES =				\
 	images/X_cursor.png 		\
 	images/arrow.png 		\
 	images/based_arrow_down.png 	\

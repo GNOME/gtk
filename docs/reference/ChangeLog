@@ -1,3 +1,10 @@
+Fri Nov 23 15:12:07 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/Makefile.am (content_files): Add windows.sgml
+
+	* gdk/tmpl/cursors.sgml: Revert last diff to get things to
+	build.
+
 2001-11-22  Matthias Clasen  <matthiasc@poet.de>
 
 	* gdk/tmpl/event_structs.sgml: Add better explanation of proximity

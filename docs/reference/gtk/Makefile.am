@@ -128,7 +128,8 @@ content_files = 		\
 	objects_grouped.sgml	\
 	resources.sgml		\
 	text_widget.sgml	\
-	tree_widget.sgml
+	tree_widget.sgml	\
+	windows.sgml
 
 # Other files to distribute
 extra_files =
