@@ -39,7 +39,8 @@
 enum {
   PROP_0,
   PROP_UPDATE_POLICY,
-  PROP_ADJUSTMENT
+  PROP_ADJUSTMENT,
+  PROP_INVERTED
 };
 
 enum {
@@ -261,6 +262,14 @@ gtk_range_class_init (GtkRangeClass *class)
                                                         GTK_TYPE_ADJUSTMENT,
                                                         G_PARAM_READWRITE));
 
+  g_object_class_install_property (gobject_class,
+                                   PROP_INVERTED,
+                                   g_param_spec_boolean ("inverted",
+							_("Inverted"),
+							_("Invert direction slider moves to increase range value"),
+                                                         FALSE,
+                                                         G_PARAM_READWRITE));
+  
   gtk_widget_class_install_style_property (widget_class,
 					   g_param_spec_int ("slider_width",
 							     _("Slider Width"),
@@ -313,6 +322,9 @@ gtk_range_set_property (GObject      *object,
     case PROP_ADJUSTMENT:
       gtk_range_set_adjustment (range, g_value_get_object (value));
       break;
+    case PROP_INVERTED:
+      gtk_range_set_inverted (range, g_value_get_boolean (value));
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -336,6 +348,9 @@ gtk_range_get_property (GObject      *object,
       break;
     case PROP_ADJUSTMENT:
       g_value_set_object (value, G_OBJECT (range->adjustment));
+      break;
+    case PROP_INVERTED:
+      g_value_set_boolean (value, range->inverted);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -492,6 +507,7 @@ gtk_range_set_inverted (GtkRange *range,
   if (setting != range->inverted)
     {
       range->inverted = setting;
+      g_object_notify (G_OBJECT (range), "inverted");
       gtk_widget_queue_resize (GTK_WIDGET (range));
     }
 }

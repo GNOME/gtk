@@ -1,3 +1,11 @@
+2001-06-06  Havoc Pennington  <hp@redhat.com>
+
+	* gtk/gtkrange.c (gtk_range_class_init): add "inverted" property
+
+	* gtk/gtkscale.c (gtk_scale_class_init): Change Page Up and Page
+	Down to move visually rather than logically, since it confuses 
+	people. Add -/+ and Ctrl--/+ bindings for logical movement.
+
 Wed Jun  6 10:34:42 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtktooltips.h: Include gtkwidget.h 
