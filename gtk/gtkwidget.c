@@ -2040,10 +2040,11 @@ gtk_widget_hide (GtkWidget *widget)
   if (GTK_WIDGET_VISIBLE (widget))
     {
       GtkWidget *toplevel = gtk_widget_get_toplevel (widget);
+      
+      g_object_ref (widget);
       if (toplevel != widget && GTK_WIDGET_TOPLEVEL (toplevel))
 	_gtk_window_unset_focus_and_default (GTK_WINDOW (toplevel), widget);
 
-      g_object_ref (widget);
       g_signal_emit (widget, widget_signals[HIDE], 0);
       if (!GTK_WIDGET_TOPLEVEL (widget))
 	gtk_widget_queue_resize (widget);
@@ -2613,6 +2614,9 @@ static void
 gtk_widget_invalidate_widget_windows (GtkWidget *widget,
 				      GdkRegion *region)
 {
+  if (!GTK_WIDGET_REALIZED (widget))
+    return;
+  
   if (!GTK_WIDGET_NO_WINDOW (widget) && widget->parent)
     {
       int x, y;
@@ -5114,6 +5118,8 @@ gtk_widget_set_child_visible (GtkWidget *widget,
   g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (!GTK_WIDGET_TOPLEVEL (widget));
 
+  g_object_ref (widget);
+
   if (is_visible)
     GTK_PRIVATE_SET_FLAG (widget, GTK_CHILD_VISIBLE);
   else
@@ -5136,6 +5142,8 @@ gtk_widget_set_child_visible (GtkWidget *widget,
       else
 	gtk_widget_unmap (widget);
     }
+
+  g_object_unref (widget);
 }
 
 /**

@@ -4562,6 +4562,9 @@ _gtk_window_unset_focus_and_default (GtkWindow *window,
 
 {
   GtkWidget *child;
+
+  g_object_ref (window);
+  g_object_ref (widget);
       
   if (GTK_CONTAINER (widget->parent)->focus_child == widget)
     {
@@ -4581,6 +4584,9 @@ _gtk_window_unset_focus_and_default (GtkWindow *window,
       
   if (child == widget)
     gtk_window_set_default (window, NULL);
+  
+  g_object_unref (widget);
+  g_object_unref (window);
 }
 
 /*********************************

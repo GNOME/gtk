@@ -1,3 +1,19 @@
+Thu Feb 12 21:58:20 2004  Owen Taylor  <otaylor@redhat.com>
+
+        Various reentrancy fixes for widgets being destroyed
+	out of focus-out-event. (#128821, Grant Gayed)
+
+	* gtk/gtkwindow.c (_gtk_window_unset_focus_and_default): 
+	Ref window and widget over callbacks.
+
+	* gtk/gtkwidget.c (gtk_widget_hide)
+	  gtk/gtkwidget.c (gtk_widget_set_child_visible):
+	Ref the widget before calling _gtk_window_unset_focus_and_default(),
+	since that can call user callbacks.
+
+	* gtk/gtkwidget.c (gtk_widget_invalidate_widget_windows):
+	Do nothing if the widget isn't realized.
+
 Fri Feb 13 01:31:44 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkbutton.c (_gtk_button_paint): Don't draw bevels around
