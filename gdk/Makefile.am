@@ -2,10 +2,10 @@
 
 gdkincludedir = $(includedir)/gdk
 
-lib_LTLIBRARIES = libgdk-1.1.la
+lib_LTLIBRARIES = libgdk.la
 DEFS += -DG_LOG_DOMAIN=\"Gdk\"
 
-libgdk_1_1_la_SOURCES = \
+libgdk_la_SOURCES = \
 	gdk.c		\
 	gdkcc.c		\
 	gdkcolor.c	\
@@ -50,9 +50,9 @@ gdkinclude_HEADERS = \
 	gdktypes.h	\
 	gdkx.h
 
-libgdk_1_1_la_LDFLAGS = \
-	-version-info $(LT_CURRENT):$(LT_REVISION):$(LT_AGE) \
-	@x_ldflags@ @x_libs@
+libgdk_la_LDFLAGS = \
+	-version-info $(LT_CURRENT):$(LT_REVISION):$(LT_AGE) -release $(LT_RELEASE) \
+         @x_ldflags@ @x_libs@
 
 INCLUDES = -I$(top_srcdir) @GLIB_CFLAGS@ @x_cflags@ 
 
