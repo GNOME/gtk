@@ -583,6 +583,7 @@ gtk_spin_button_size_request (GtkWidget      *widget,
       gint width;
       gint w;
       gint string_len;
+      gint max_string_len;
       gint digit_width;
 
       context = gtk_widget_get_pango_context (widget);
@@ -598,14 +599,16 @@ gtk_spin_button_size_request (GtkWidget      *widget,
       /* Get max of MIN_SPIN_BUTTON_WIDTH, size of upper, size of lower */
       
       width = MIN_SPIN_BUTTON_WIDTH;
+      max_string_len = MAX (10, compute_double_length (1e9 * spin_button->adjustment->step_increment,
+                                                       spin_button->digits));
 
       string_len = compute_double_length (spin_button->adjustment->upper,
                                           spin_button->digits);
-      w = MIN (string_len, 10) * digit_width;
+      w = MIN (string_len, max_string_len) * digit_width;
       width = MAX (width, w);
       string_len = compute_double_length (spin_button->adjustment->lower,
 					  spin_button->digits);
-      w = MIN (string_len, 10) * digit_width;
+      w = MIN (string_len, max_string_len) * digit_width;
       width = MAX (width, w);
       
       requisition->width = width + ARROW_SIZE + 2 * widget->style->xthickness;
