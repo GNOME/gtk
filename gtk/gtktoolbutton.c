@@ -347,7 +347,7 @@ gtk_tool_button_construct_contents (GtkToolItem *tool_item)
 	  
 	  if (GTK_IS_IMAGE (icon))
 	    {
-	      g_object_set (G_OBJECT (button->priv->icon_widget),
+	      g_object_set (button->priv->icon_widget,
 			    "icon-size", icon_size,
 			    NULL);
 	    }
@@ -482,10 +482,10 @@ gtk_tool_button_finalize (GObject *object)
     g_free (button->priv->label_text);
 
   if (button->priv->label_widget)
-    g_object_unref (G_OBJECT (button->priv->label_widget));
+    g_object_unref (button->priv->label_widget);
 
   if (button->priv->icon_widget)
-    g_object_unref (G_OBJECT (button->priv->icon_widget));
+    g_object_unref (button->priv->icon_widget);
   
   parent_class->finalize (object);
 }
@@ -839,7 +839,7 @@ gtk_tool_button_set_icon_widget (GtkToolButton *button,
 				    button->priv->icon_widget);
 	    }
 
-	  g_object_unref (G_OBJECT (button->priv->icon_widget));
+	  g_object_unref (button->priv->icon_widget);
 	}
       
       if (icon_widget)

@@ -689,7 +689,7 @@ gdk_gc_copy (GdkGC *dst_gc,
   GDK_NOTE (GC, g_print ("gdk_gc_copy: %p := %p\n", dst_win32_gc, src_win32_gc));
 
   if (dst_gc->colormap)
-    g_object_unref (G_OBJECT (dst_gc->colormap));
+    g_object_unref (dst_gc->colormap);
 
   if (dst_win32_gc->hcliprgn != NULL)
     DeleteObject (dst_win32_gc->hcliprgn);
@@ -712,7 +712,7 @@ gdk_gc_copy (GdkGC *dst_gc,
   dst_gc->ts_y_origin = src_gc->ts_y_origin;
   dst_gc->colormap = src_gc->colormap;
   if (dst_gc->colormap)
-    g_object_ref (G_OBJECT (dst_gc->colormap));
+    g_object_ref (dst_gc->colormap);
 
   dst_win32_gc->hcliprgn = src_win32_gc->hcliprgn;
   if (dst_win32_gc->hcliprgn)

@@ -3708,7 +3708,7 @@ gtk_file_chooser_default_set_property (GObject      *object,
 
 	if (action != impl->action)
 	  {
-	    gtk_file_chooser_default_unselect_all (impl);
+	    gtk_file_chooser_default_unselect_all (GTK_FILE_CHOOSER (impl));
 	    
 	    if (action == GTK_FILE_CHOOSER_ACTION_SAVE && impl->select_multiple)
 	      {

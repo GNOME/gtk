@@ -1104,7 +1104,7 @@ gtk_tool_item_set_proxy_menu_item (GtkToolItem *tool_item,
   if (tool_item->priv->menu_item != menu_item)
     {
       if (tool_item->priv->menu_item)
-	g_object_unref (G_OBJECT (tool_item->priv->menu_item));
+	g_object_unref (tool_item->priv->menu_item);
       
       if (menu_item)
 	{

@@ -2380,7 +2380,7 @@ update_node (GtkUIManager *self,
 	{
 	  /* don't show accels in popups */
 	  GtkWidget *label = GTK_BIN (info->proxy)->child;
-	  g_object_set (G_OBJECT (label),
+	  g_object_set (label,
 			"accel_closure", NULL,
 			NULL);
 	}
@@ -2420,8 +2420,8 @@ update_node (GtkUIManager *self,
 	       * tooltips on toolitems can't be set before the toolitem 
 	       * is added to the toolbar.
 	       */
-	      g_object_get (G_OBJECT (action), "tooltip", &tooltip, NULL);
-	      g_object_set (G_OBJECT (action), "tooltip", tooltip, NULL);
+	      g_object_get (action, "tooltip", &tooltip, NULL);
+	      g_object_set (action, "tooltip", tooltip, NULL);
 	      g_free (tooltip);
 	    }
 	}

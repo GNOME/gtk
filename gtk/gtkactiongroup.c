@@ -546,7 +546,7 @@ gtk_action_group_add_action (GtkActionGroup *action_group,
   g_hash_table_insert (action_group->private_data->actions, 
 		       g_strdup (gtk_action_get_name (action)),
                        g_object_ref (action));
-  g_object_set (G_OBJECT (action), "action_group", action_group, NULL);
+  g_object_set (action, "action_group", action_group, NULL);
 }
 
 /**

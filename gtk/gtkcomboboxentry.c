@@ -262,7 +262,7 @@ gtk_combo_box_entry_contents_changed (GtkEntry *entry,
 GtkWidget *
 gtk_combo_box_entry_new (void)
 {
-  return GTK_WIDGET (g_object_new (gtk_combo_box_entry_get_type (), NULL));
+  return g_object_new (gtk_combo_box_entry_get_type (), NULL);
 }
 
 /**

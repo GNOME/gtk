@@ -2432,9 +2432,9 @@ pixbuf_to_hicon_normal (GdkWindow *window,
 #endif
 
   if (pixmap)
-    g_object_unref (G_OBJECT (pixmap));
+    g_object_unref (pixmap);
   if (mask)
-    g_object_unref (G_OBJECT (mask));
+    g_object_unref (mask);
 
   return hIcon;
 }

@@ -1076,7 +1076,7 @@ gtk_combo_box_set_popup_widget (GtkComboBox *combo_box,
     {
       gtk_container_remove (GTK_CONTAINER (combo_box->priv->popup_frame),
                             combo_box->priv->popup_widget);
-      g_object_unref (G_OBJECT (combo_box->priv->popup_widget));
+      g_object_unref (combo_box->priv->popup_widget);
       combo_box->priv->popup_widget = NULL;
     }
 
@@ -1140,7 +1140,7 @@ gtk_combo_box_set_popup_widget (GtkComboBox *combo_box,
                          popup);
 
       gtk_widget_show (popup);
-      g_object_ref (G_OBJECT (popup));
+      g_object_ref (popup);
       combo_box->priv->popup_widget = popup;
     }
 }
@@ -1396,7 +1396,7 @@ cell_view_is_sensitive (GtkCellView *cell_view)
   list = cells;
   while (list)
     {
-      g_object_get (G_OBJECT (list->data), "sensitive", &sensitive, NULL);
+      g_object_get (list->data, "sensitive", &sensitive, NULL);
       
       if (sensitive)
 	break;
@@ -1435,7 +1435,7 @@ tree_column_row_is_sensitive (GtkComboBox *combo_box,
   list = cells;
   while (list)
     {
-      g_object_get (G_OBJECT (list->data), "sensitive", &sensitive, NULL);
+      g_object_get (list->data, "sensitive", &sensitive, NULL);
       
       if (sensitive)
 	break;
@@ -1482,8 +1482,8 @@ update_menu_sensitivity (GtkComboBox *combo_box,
 	  if (menu != combo_box->priv->popup_widget && child == children)
 	    {
 	      separator = GTK_WIDGET (child->next->data);
-	      g_object_set (G_OBJECT (item), "visible", sensitive, NULL);
-	      g_object_set (G_OBJECT (separator), "visible", sensitive, NULL);
+	      g_object_set (item, "visible", sensitive, NULL);
+	      g_object_set (separator, "visible", sensitive, NULL);
 	    }
 	  else
 	    gtk_widget_set_sensitive (item, sensitive);
@@ -1984,7 +1984,7 @@ gtk_combo_box_unset_model (GtkComboBox *combo_box)
 
   if (combo_box->priv->model)
     {
-      g_object_unref (G_OBJECT (combo_box->priv->model));
+      g_object_unref (combo_box->priv->model);
       combo_box->priv->model = NULL;
     }
 
@@ -3225,7 +3225,7 @@ gtk_combo_box_list_destroy (GtkComboBox *combo_box)
 
   if (combo_box->priv->cell_view)
     {
-      g_object_set (G_OBJECT (combo_box->priv->cell_view),
+      g_object_set (combo_box->priv->cell_view,
                     "background_set", FALSE,
                     NULL);
     }
@@ -3634,7 +3634,7 @@ gtk_combo_box_cell_layout_pack_start (GtkCellLayout   *layout,
 
   combo_box = GTK_COMBO_BOX (layout);
 
-  g_object_ref (G_OBJECT (cell));
+  g_object_ref (cell);
   gtk_object_sink (GTK_OBJECT (cell));
 
   info = g_new0 (ComboCellInfo, 1);
@@ -3691,7 +3691,7 @@ gtk_combo_box_cell_layout_pack_end (GtkCellLayout   *layout,
 
   combo_box = GTK_COMBO_BOX (layout);
 
-  g_object_ref (G_OBJECT (cell));
+  g_object_ref (cell);
   gtk_object_sink (GTK_OBJECT (cell));
 
   info = g_new0 (ComboCellInfo, 1);
@@ -3753,7 +3753,7 @@ gtk_combo_box_cell_layout_clear (GtkCellLayout *layout)
      ComboCellInfo *info = (ComboCellInfo *)i->data;
 
       gtk_combo_box_cell_layout_clear_attributes (layout, info->cell);
-      g_object_unref (G_OBJECT (info->cell));
+      g_object_unref (info->cell);
       g_free (info);
       i->data = NULL;
     }
@@ -3842,7 +3842,7 @@ combo_cell_data_func (GtkCellLayout   *cell_layout,
   
   if (GTK_IS_MENU_ITEM (parent) && 
       gtk_menu_item_get_submenu (GTK_MENU_ITEM (parent)))
-    g_object_set (G_OBJECT (cell), "sensitive", TRUE, NULL);
+    g_object_set (cell, "sensitive", TRUE, NULL);
 }
 
 
@@ -4057,7 +4057,7 @@ gtk_combo_box_cell_layout_reorder (GtkCellLayout   *layout,
 GtkWidget *
 gtk_combo_box_new (void)
 {
-  return GTK_WIDGET (g_object_new (GTK_TYPE_COMBO_BOX, NULL));
+  return g_object_new (GTK_TYPE_COMBO_BOX, NULL);
 }
 
 /**
@@ -4077,9 +4077,7 @@ gtk_combo_box_new_with_model (GtkTreeModel *model)
 
   g_return_val_if_fail (GTK_IS_TREE_MODEL (model), NULL);
 
-  combo_box = GTK_COMBO_BOX (g_object_new (GTK_TYPE_COMBO_BOX,
-                                           "model", model,
-                                           NULL));
+  combo_box = g_object_new (GTK_TYPE_COMBO_BOX, "model", model, NULL);
 
   return GTK_WIDGET (combo_box);
 }
@@ -4454,7 +4452,7 @@ gtk_combo_box_set_model (GtkComboBox  *combo_box,
     gtk_combo_box_unset_model (combo_box);
 
   combo_box->priv->model = model;
-  g_object_ref (G_OBJECT (combo_box->priv->model));
+  g_object_ref (combo_box->priv->model);
 
   combo_box->priv->inserted_id =
     g_signal_connect (combo_box->priv->model, "row_inserted",
@@ -4766,7 +4764,7 @@ gtk_combo_box_finalize (GObject *object)
 	}
       g_slist_free (info->attributes);
 
-      g_object_unref (G_OBJECT (info->cell));
+      g_object_unref (info->cell);
       g_free (info);
     }
    g_slist_free (combo_box->priv->cells);

@@ -218,7 +218,7 @@ menu_item_activated (GtkWidget           *menu_item,
       gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (_gtk_tool_button_get_button (tool_button)),
 				    toggle_tool_button->priv->active);
 
-      g_signal_emit (G_OBJECT (toggle_tool_button), toggle_signals[TOGGLED], 0);
+      g_signal_emit (toggle_tool_button, toggle_signals[TOGGLED], 0);
     }
 }
 
@@ -241,7 +241,7 @@ button_toggled (GtkWidget           *widget,
 					  toggle_tool_button->priv->active);
 	}
 
-      g_signal_emit (G_OBJECT (toggle_tool_button), toggle_signals[TOGGLED], 0);
+      g_signal_emit (toggle_tool_button, toggle_signals[TOGGLED], 0);
     }
 }
 

@@ -442,7 +442,7 @@ gtk_cell_view_expose (GtkWidget      *widget,
                           widget->allocation.width,
                           widget->allocation.height);
 
-      g_object_unref (G_OBJECT (gc));
+      g_object_unref (gc);
     }
 
   /* set cell data (if available) */
@@ -594,7 +594,7 @@ gtk_cell_view_cell_layout_pack_start (GtkCellLayout   *layout,
   g_return_if_fail (GTK_IS_CELL_RENDERER (renderer));
   g_return_if_fail (!gtk_cell_view_get_cell_info (cellview, renderer));
 
-  g_object_ref (G_OBJECT (renderer));
+  g_object_ref (renderer);
   gtk_object_sink (GTK_OBJECT (renderer));
 
   info = g_new0 (GtkCellViewCellInfo, 1);
@@ -617,7 +617,7 @@ gtk_cell_view_cell_layout_pack_end (GtkCellLayout   *layout,
   g_return_if_fail (GTK_IS_CELL_RENDERER (renderer));
   g_return_if_fail (!gtk_cell_view_get_cell_info (cellview, renderer));
 
-  g_object_ref (G_OBJECT (renderer));
+  g_object_ref (renderer);
   gtk_object_sink (GTK_OBJECT (renderer));
 
   info = g_new0 (GtkCellViewCellInfo, 1);
@@ -659,7 +659,7 @@ gtk_cell_view_cell_layout_clear (GtkCellLayout *layout)
       GtkCellViewCellInfo *info = (GtkCellViewCellInfo *)cellview->priv->cell_list->data;
 
       gtk_cell_view_cell_layout_clear_attributes (layout, info->cell);
-      g_object_unref (G_OBJECT (info->cell));
+      g_object_unref (info->cell);
       g_free (info);
       cellview->priv->cell_list = g_list_delete_link (cellview->priv->cell_list, 
 						      cellview->priv->cell_list);
@@ -763,7 +763,7 @@ gtk_cell_view_new (void)
 {
   GtkCellView *cellview;
 
-  cellview = GTK_CELL_VIEW (g_object_new (gtk_cell_view_get_type (), NULL));
+  cellview = g_object_new (gtk_cell_view_get_type (), NULL);
 
   return GTK_WIDGET (cellview);
 }
@@ -964,14 +964,14 @@ gtk_cell_view_set_model (GtkCellView  *cell_view,
         gtk_tree_row_reference_free (cell_view->priv->displayed_row);
       cell_view->priv->displayed_row = NULL;
 
-      g_object_unref (G_OBJECT (cell_view->priv->model));
+      g_object_unref (cell_view->priv->model);
       cell_view->priv->model = NULL;
     }
 
   cell_view->priv->model = model;
 
   if (cell_view->priv->model)
-    g_object_ref (G_OBJECT (cell_view->priv->model));
+    g_object_ref (cell_view->priv->model);
 }
 
 /**

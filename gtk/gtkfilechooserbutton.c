@@ -512,14 +512,14 @@ gtk_file_chooser_button_set_property (GObject      *object,
 	    g_warning ("%s: Choosers of type `%s` do not support `%s'.",
 		       G_STRFUNC, G_OBJECT_TYPE_NAME (object), eval->value_name);
 
-	    g_value_set_enum (value, GTK_FILE_CHOOSER_ACTION_OPEN);
+	    g_value_set_enum ((GValue *) value, GTK_FILE_CHOOSER_ACTION_OPEN);
 	  }
 	  break;
 	}
       
       g_object_set_property (G_OBJECT (priv->dialog), pspec->name, value);
       _gtk_file_chooser_entry_set_action (GTK_FILE_CHOOSER_ENTRY (priv->entry),
-					  (GtkFileChooserAction) g_value_get_enum (value));
+					  g_value_get_enum (value));
       update_icons (GTK_FILE_CHOOSER_BUTTON (object));
 
       switch (g_value_get_enum (value))

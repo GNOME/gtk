@@ -1117,7 +1117,7 @@ gtk_rc_style_unref (GtkRcStyle *rc_style)
 static GtkRcStyle *
 gtk_rc_style_real_create_rc_style (GtkRcStyle *style)
 {
-  return GTK_RC_STYLE (g_object_new (G_OBJECT_TYPE (style), NULL));
+  return g_object_new (G_OBJECT_TYPE (style), NULL);
 }
 
 static gint

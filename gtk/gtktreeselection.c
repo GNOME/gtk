@@ -1304,8 +1304,8 @@ tree_column_is_sensitive (GtkTreeViewColumn *column,
   list = cells;
   while (list)
     {
-      g_object_get (G_OBJECT (list->data), 
-		    "sensitive", &sensitive, 
+      g_object_get (list->data,
+		    "sensitive", &sensitive,
 		    "visible", &visible,
 		    NULL);
       

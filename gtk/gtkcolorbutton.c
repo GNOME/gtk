@@ -613,7 +613,7 @@ gtk_color_button_finalize (GObject *object)
   GtkColorButton *color_button = GTK_COLOR_BUTTON (object);
 
   if (color_button->priv->gc != NULL)
-    g_object_unref (G_OBJECT (color_button->priv->gc));
+    g_object_unref (color_button->priv->gc);
   color_button->priv->gc = NULL;
 
   if (color_button->priv->cs_dialog != NULL)

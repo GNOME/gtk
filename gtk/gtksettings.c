@@ -146,7 +146,7 @@ gtk_default_substitute (FcPattern *pattern,
   gint dpi;
   FcValue v;
   
-  g_object_get (G_OBJECT (settings),
+  g_object_get (settings,
 		"gtk-xft-antialias", &antialias,
 		"gtk-xft-hinting", &hinting,
 		"gtk-xft-hintstyle", &hintstyle,

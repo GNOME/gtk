@@ -1547,7 +1547,7 @@ create_link_button (GtkWidget *about,
   g_object_set_data_full (G_OBJECT (button), "url", g_strdup (url), g_free);
   set_link_button_text (about, button, text);
   
-  g_signal_connect (G_OBJECT (button), "clicked", callback, data);
+  g_signal_connect (button, "clicked", callback, data);
 
   return button;
 }
@@ -1766,13 +1766,13 @@ add_credits_page (GtkAboutDialog *about,
   gtk_text_view_set_left_margin (GTK_TEXT_VIEW (view), 8);
   gtk_text_view_set_right_margin (GTK_TEXT_VIEW (view), 8);
 
-  g_signal_connect (G_OBJECT (view), "key-press-event",
+  g_signal_connect (view, "key-press-event",
                     G_CALLBACK (credits_key_press_event), about);
-  g_signal_connect (G_OBJECT (view), "event-after",
+  g_signal_connect (view, "event-after",
                     G_CALLBACK (credits_event_after), about);
-  g_signal_connect (G_OBJECT (view), "motion-notify-event", 
+  g_signal_connect (view, "motion-notify-event", 
                     G_CALLBACK (credits_motion_notify_event), about);
-  g_signal_connect (G_OBJECT (view), "visibility-notify-event", 
+  g_signal_connect (view, "visibility-notify-event", 
                     G_CALLBACK (credits_visibility_notify_event), about);
 
   sw = gtk_scrolled_window_new (NULL, NULL);
@@ -2010,14 +2010,14 @@ close_cb (GtkAboutDialog *about)
 GtkWidget *
 gtk_about_dialog_new (void)
 {
-  GtkAboutDialog *dialog = GTK_ABOUT_DIALOG (g_object_new (GTK_TYPE_ABOUT_DIALOG, NULL));
+  GtkAboutDialog *dialog = g_object_new (GTK_TYPE_ABOUT_DIALOG, NULL);
 
   /* force defaults */
   gtk_about_dialog_set_name (dialog, NULL);
   gtk_about_dialog_set_logo (dialog, NULL);
 
   /* Close dialog on user response */
-  g_signal_connect (G_OBJECT (dialog),
+  g_signal_connect (dialog,
                     "response",
                     G_CALLBACK (close_cb),
                     NULL);
@@ -2119,7 +2119,7 @@ gtk_show_about_dialog (GtkWindow   *parent,
     {
       dialog = gtk_about_dialog_new ();
 
-      g_object_ref (G_OBJECT (dialog));
+      g_object_ref (dialog);
       gtk_object_sink (GTK_OBJECT (dialog));
 
       g_signal_connect (dialog, "delete_event", G_CALLBACK (gtk_widget_hide_on_delete), NULL);

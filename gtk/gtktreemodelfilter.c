@@ -2331,15 +2331,15 @@ gtk_tree_model_filter_set_model (GtkTreeModelFilter *filter,
 
   if (filter->priv->child_model)
     {
-      g_signal_handler_disconnect (G_OBJECT (filter->priv->child_model),
+      g_signal_handler_disconnect (filter->priv->child_model,
                                    filter->priv->changed_id);
-      g_signal_handler_disconnect (G_OBJECT (filter->priv->child_model),
+      g_signal_handler_disconnect (filter->priv->child_model,
                                    filter->priv->inserted_id);
-      g_signal_handler_disconnect (G_OBJECT (filter->priv->child_model),
+      g_signal_handler_disconnect (filter->priv->child_model,
                                    filter->priv->has_child_toggled_id);
-      g_signal_handler_disconnect (G_OBJECT (filter->priv->child_model),
+      g_signal_handler_disconnect (filter->priv->child_model,
                                    filter->priv->deleted_id);
-      g_signal_handler_disconnect (G_OBJECT (filter->priv->child_model),
+      g_signal_handler_disconnect (filter->priv->child_model,
                                    filter->priv->reordered_id);
 
       /* reset our state */
@@ -2347,7 +2347,7 @@ gtk_tree_model_filter_set_model (GtkTreeModelFilter *filter,
         gtk_tree_model_filter_free_level (filter, filter->priv->root);
 
       filter->priv->root = NULL;
-      g_object_unref (G_OBJECT (filter->priv->child_model));
+      g_object_unref (filter->priv->child_model);
       filter->priv->visible_column = -1;
       /* FIXME: destroy more crack here? the funcs? */
     }
@@ -2356,7 +2356,7 @@ gtk_tree_model_filter_set_model (GtkTreeModelFilter *filter,
 
   if (child_model)
     {
-      g_object_ref (G_OBJECT (filter->priv->child_model));
+      g_object_ref (filter->priv->child_model);
       filter->priv->changed_id =
         g_signal_connect (child_model, "row_changed",
                           G_CALLBACK (gtk_tree_model_filter_row_changed),
@@ -2417,10 +2417,10 @@ gtk_tree_model_filter_new (GtkTreeModel *child_model,
 
   g_return_val_if_fail (GTK_IS_TREE_MODEL (child_model), NULL);
 
-  retval = GTK_TREE_MODEL (g_object_new (GTK_TYPE_TREE_MODEL_FILTER, 
-					 "child_model", child_model,
-					 "virtual_root", root,
-					 NULL));
+  retval = g_object_new (GTK_TYPE_TREE_MODEL_FILTER, 
+			 "child_model", child_model,
+			 "virtual_root", root,
+			 NULL);
 
   return retval;
 }

@@ -163,7 +163,7 @@ gtk_cell_renderer_progress_init (GtkCellRendererProgress *cellprogress)
 GtkCellRenderer*
 gtk_cell_renderer_progress_new (void)
 {
-  return GTK_CELL_RENDERER (g_object_new (GTK_TYPE_CELL_RENDERER_PROGRESS, NULL));
+  return g_object_new (GTK_TYPE_CELL_RENDERER_PROGRESS, NULL);
 }
 
 static void
@@ -272,7 +272,7 @@ compute_dimensions (GtkCellRenderer *cell,
   if (height)
     *height = logical_rect.height + cell->ypad * 2 + widget->style->ythickness * 2;
   
-  g_object_unref (G_OBJECT (layout));
+  g_object_unref (layout);
 }
 
 static void
@@ -372,7 +372,7 @@ gtk_cell_renderer_progress_render (GtkCellRenderer *cell,
 		    x + pos, y + (h - logical_rect.height)/2,
 		    layout);
   
-  g_object_unref (G_OBJECT (layout));
-  g_object_unref (G_OBJECT (gc));
+  g_object_unref (layout);
+  g_object_unref (gc);
 }
 

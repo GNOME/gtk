@@ -692,7 +692,7 @@ gtk_tree_view_column_cell_layout_clear (GtkCellLayout *cell_layout)
       GtkTreeViewColumnCellInfo *info = (GtkTreeViewColumnCellInfo *)column->cell_list->data;
 
       gtk_tree_view_column_cell_layout_clear_attributes (cell_layout, info->cell);
-      g_object_unref (G_OBJECT (info->cell));
+      g_object_unref (info->cell);
       g_free (info);
       column->cell_list = g_list_delete_link (column->cell_list, 
 					      column->cell_list);

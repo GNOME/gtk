@@ -836,7 +836,7 @@ connect_proxy (GtkAction     *action,
 			      NULL);
       
       if (GTK_IS_ACCEL_LABEL (label) && action->private_data->accel_quark)
-	g_object_set (G_OBJECT (label),
+	g_object_set (label,
 		      "accel_closure", action->private_data->accel_closure,
 		      NULL);
 
@@ -879,7 +879,7 @@ connect_proxy (GtkAction     *action,
     {
       /* toolbar item specific synchronisers ... */
 
-      g_object_set (G_OBJECT (proxy),
+      g_object_set (proxy,
 		    "visible_horizontal", action->private_data->visible_horizontal,
 		    "visible_vertical",	  action->private_data->visible_vertical,
 		    "is_important", action->private_data->is_important,
@@ -909,7 +909,7 @@ connect_proxy (GtkAction     *action,
       /* toolbar button specific synchronisers ... */
       if (GTK_IS_TOOL_BUTTON (proxy))
 	{
-	  g_object_set (G_OBJECT (proxy),
+	  g_object_set (proxy,
 			"label", action->private_data->short_label,
 			"use_underline", TRUE,
 			"stock_id", action->private_data->stock_id,
@@ -933,7 +933,7 @@ connect_proxy (GtkAction     *action,
       /* button specific synchronisers ... */
 
       /* synchronise the label */
-      g_object_set (G_OBJECT (proxy),
+      g_object_set (proxy,
 		    "label", action->private_data->short_label,
 		    "use_underline", TRUE,
 		    NULL);

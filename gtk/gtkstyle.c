@@ -1668,7 +1668,7 @@ gtk_style_set_background (GtkStyle    *style,
 static GtkStyle *
 gtk_style_real_clone (GtkStyle *style)
 {
-  return GTK_STYLE (g_object_new (G_OBJECT_TYPE (style), NULL));
+  return g_object_new (G_OBJECT_TYPE (style), NULL);
 }
 
 static void
@@ -4950,7 +4950,7 @@ gtk_default_draw_handle (GtkStyle      *style,
 
  out:
   if (free_me)
-    g_object_unref (G_OBJECT (free_me));
+    g_object_unref (free_me);
 }
 
 static void

@@ -1,3 +1,37 @@
+Fri Nov 19 14:54:09 2004  Manish Singh  <yosh@gimp.org>
+
+	* gdk/linux-fb/gdkgc-fb.c
+	* gdk/win32/gdkgc-win32.c
+	* gdk/win32/gdkwindow-win32.c
+	* gtk/gtkaboutdialog.c
+	* gtk/gtkaction.c
+	* gtk/gtkactiongroup.c
+	* gtk/gtkcellrendererprogress.c
+	* gtk/gtkcellview.c
+	* gtk/gtkcolorbutton.c
+	* gtk/gtkcombobox.c
+	* gtk/gtkcomboboxentry.c
+	* gtk/gtkentrycompletion.c
+	* gtk/gtkfilechooserbutton.c
+	* gtk/gtkmenutoolbutton.c
+	* gtk/gtkrc.c
+	* gtk/gtksettings.c
+	* gtk/gtkstyle.c
+	* gtk/gtktoggletoolbutton.c
+	* gtk/gtktoolbutton.c
+	* gtk/gtktoolitem.c
+	* gtk/gtktreemodelfilter.c
+	* gtk/gtktreeselection.c
+	* gtk/gtktreeviewcolumn.c
+	* gtk/gtkuimanager.c: get rid of unnecessary casts.
+
+	* gtk/gtkfilechooserbutton.c (gtk_file_chooser_button_set_property):
+	cast away the const for g_value_set_enum. This is after the g_warning,
+	so this is a hack to begin with.
+
+	* gtk/gtkfilechooserdefault.c (gtk_file_chooser_default_set_property):
+	add a cast to GTK_FILE_CHOOSER for impl here.
+
 Fri Nov 19 14:52:42 2004  Manish Singh  <yosh@gimp.org>
 
 	* autogen.sh: rm autom4te.cache, since it might interfere with

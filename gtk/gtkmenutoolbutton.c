@@ -265,7 +265,7 @@ button_state_changed_cb (GtkWidget         *widget,
 
   other = (widget == priv->arrow_button) ? priv->button : priv->arrow_button;
 
-  g_signal_handlers_block_by_func (G_OBJECT (other),
+  g_signal_handlers_block_by_func (other,
                                    G_CALLBACK (button_state_changed_cb),
                                    button);
 
@@ -282,7 +282,7 @@ button_state_changed_cb (GtkWidget         *widget,
       gtk_widget_set_state (other, GTK_STATE_NORMAL);
     }
 
-  g_signal_handlers_unblock_by_func (G_OBJECT (other),
+  g_signal_handlers_unblock_by_func (other,
                                      G_CALLBACK (button_state_changed_cb),
                                      button);
 }
