@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.3.0\n"
 "POT-Creation-Date: 2003-02-10 11:47+0200\n"
-"PO-Revision-Date: 2003-02-10 05:18--500\n"
+"PO-Revision-Date: 2003-02-10 06:20--500\n"
 "Last-Translator: Yuriy Syrota <yuri@renome.rovno.ua>\n"
 "Language-Team: Ukrainian <uk@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -478,9 +478,8 @@ msgid "Can't realloc IOBuffer data"
 msgstr ""
 
 #: gdk-pixbuf/io-tga.c:219
-#, fuzzy
 msgid "Can't allocate temporary IOBuffer data"
-msgstr "Неможливо виділити пам'ять для завантаження зображення XPM"
+msgstr "Неможливо виділити пам'ять для тимчасових даних структури IOBuffer"
 
 #: gdk-pixbuf/io-tga.c:283
 msgid "fread() failed -- premature end-of-file probably encountered"
@@ -496,11 +495,11 @@ msgstr "Неможливо виділити новий об'єкт Pixbuf"
 
 #: gdk-pixbuf/io-tga.c:639
 msgid "Can't allocate colormap structure"
-msgstr ""
+msgstr "Неможливо виділити пам'ять для структу мапи кольорів"
 
 #: gdk-pixbuf/io-tga.c:646
 msgid "Can't allocate colormap entries"
-msgstr ""
+msgstr "Неможливо виділити пам'ять для елементів мапи кольорів"
 
 #: gdk-pixbuf/io-tga.c:668
 msgid "Unexpected bitdepth for colormap entries"
@@ -508,7 +507,7 @@ msgstr "Несподівана бітова глибина для елемент
 
 #: gdk-pixbuf/io-tga.c:686
 msgid "Can't allocate TGA header memory"
-msgstr ""
+msgstr "Неможливо виділити пам'ять для заголовка формату TGA"
 
 #: gdk-pixbuf/io-tga.c:719
 msgid "TGA image has invalid dimensions"
@@ -527,9 +526,8 @@ msgid "TGA image type not supported"
 msgstr "Тип зображення TGA не підтримується"
 
 #: gdk-pixbuf/io-tga.c:816
-#, fuzzy
 msgid "Can't allocate memory for TGA context struct"
-msgstr "Неможливо виділити пам'ять для завантаження зображення XPM"
+msgstr "Неможливо виділити пам'ять для структури вмісту формату TGA"
 
 #: gdk-pixbuf/io-tga.c:880
 msgid "Excess data in file"
@@ -544,19 +542,16 @@ msgid "Too big value in the infolen field of TGA header."
 msgstr "Надто велике значення в полі \"infolen\" заголовка формату TGA."
 
 #: gdk-pixbuf/io-tga.c:960
-#, fuzzy
 msgid "Can't allocate memory for TGA cmap temporary buffer"
-msgstr "Неможливо виділити пам'ять для завантаження зображення XPM"
+msgstr "Неможливо виділити пам'ять для тимчасового буфера cmap формату TGA"
 
 #: gdk-pixbuf/io-tga.c:972
-#, fuzzy
 msgid "Can't allocate memory for TGA colormap struct"
-msgstr "Неможливо виділити пам'ять для завантаження зображення XPM"
+msgstr "Неможливо виділити пам'ять для структури мапи кольорів формату TGA"
 
 #: gdk-pixbuf/io-tga.c:981
-#, fuzzy
 msgid "Can't allocate memory for TGA colormap entries"
-msgstr "Неможливо виділити пам'ять для завантаження зображення XPM"
+msgstr "Неможливо виділити пам'ять для елементів мапи кольорів формату TGA"
 
 #: gdk-pixbuf/io-tga.c:991
 msgid "Unexpected bitdepth for TGA colormap"
@@ -564,11 +559,11 @@ msgstr "Несподівана бітова глибина для мапи ко�
 
 #: gdk-pixbuf/io-tga.c:1032
 msgid "Pseudo-Color image without colormap"
-msgstr ""
+msgstr "Псевдоколірне зображення без мапи кольорів"
 
 #: gdk-pixbuf/io-tga.c:1039
 msgid "Can't seek to image offset -- end-of-file probably encountered"
-msgstr ""
+msgstr "Неможливо перейти за зміщенням зображення — очевидно, досягнуто кінця файла"
 
 #: gdk-pixbuf/io-tga.c:1053
 #: gdk-pixbuf/io-tga.c:1155
@@ -706,13 +701,12 @@ msgid "The XPM image format"
 msgstr "Формат XPM для зображень"
 
 #: gdk/gdkdisplaymanager.c:117
-#, fuzzy
 msgid "Default Display"
-msgstr "Типовий проміжок"
+msgstr "Типовий дисплей"
 
 #: gdk/gdkdisplaymanager.c:118
 msgid "The default display for GDK"
-msgstr ""
+msgstr "Типовий дисплей для підсистеми GDK"
 
 #. This is the text that should appear next to menu accelerators
 #. * that use the shift key. If the text on this key isn't typically
