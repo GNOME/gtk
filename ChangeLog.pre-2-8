@@ -1,5 +1,8 @@
 2004-11-11  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkfilefilter.c: Don't try to use xdgmime on 
+	Windows where we don't build it.   (#157944, J. Ali Harlow)
+
 	* gtk/gtkstatusbar.c (gtk_statusbar_size_allocate): Also
 	reserve space for the resize grip if the grip_window is not
 	realized yet.  (#158010, Christian Persch)

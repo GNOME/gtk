@@ -26,8 +26,10 @@
 #include "gtkobject.h"
 #include "gtkprivate.h"
 
+#ifdef G_OS_UNIX
 #define XDG_PREFIX _gtk_xdg
 #include "xdgmime/xdgmime.h"
+#endif
 
 typedef struct _GtkFileFilterClass GtkFileFilterClass;
 typedef struct _FilterRule FilterRule;
@@ -406,7 +408,11 @@ gtk_file_filter_filter (GtkFileFilter           *filter,
 	{
 	case FILTER_RULE_MIME_TYPE:
 	  if (filter_info->mime_type != NULL
+#ifdef G_OS_UNIX
 	      && xdg_mime_mime_type_subclass (filter_info->mime_type, rule->u.mime_type))
+#else
+	      && strcmp (rule->u.mime_type, filter_info->mime_type) == 0)
+#endif
 	    return TRUE;
 	  break;
 	case FILTER_RULE_PATTERN:
