@@ -2288,7 +2288,6 @@ gtk_text_iter_equal
 gtk_text_iter_compare
 gtk_text_iter_in_range
 gtk_text_iter_order
-gtk_text_iter_spew
 </SECTION>
 
 <SECTION>

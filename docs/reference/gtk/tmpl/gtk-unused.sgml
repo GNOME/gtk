@@ -1705,13 +1705,6 @@ arrow.
 @show_toggle_indicator: unused
 @show_submenu_indicator: whether to show the arrow or not
 
-<!-- ##### MACRO gtk_notebook_set_page ##### -->
-<para>
-</para>
-
-@notebook: 
-@page_num: 
-
 <!-- ##### FUNCTION gtk_object_arg_get ##### -->
 <para>
 Private function to get an argument and argument info from an object.
@@ -2159,6 +2152,14 @@ Creates a border around the arrows of a #GtkSpinButton. The type of border is de
 
 @first: 
 @second: 
+
+<!-- ##### FUNCTION gtk_text_iter_spew ##### -->
+<para>
+
+</para>
+
+@iter: 
+@desc: 
 
 <!-- ##### FUNCTION gtk_text_view_set_text_window_size ##### -->
 <para>

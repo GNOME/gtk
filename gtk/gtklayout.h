@@ -64,9 +64,11 @@ struct _GtkLayout {
 
   GtkAdjustment *hadjustment;
   GtkAdjustment *vadjustment;
-  
+
+  /*< public >*/
   GdkWindow *bin_window;
 
+  /*< private >*/
   GdkVisibilityState visibility;
   gint scroll_x;
   gint scroll_y;
@@ -86,12 +88,12 @@ GtkType        gtk_layout_get_type        (void) G_GNUC_CONST;
 GtkWidget*     gtk_layout_new             (GtkAdjustment *hadjustment,
 				           GtkAdjustment *vadjustment);
 void           gtk_layout_put             (GtkLayout     *layout, 
-		                           GtkWidget     *widget, 
+		                           GtkWidget     *child_widget, 
 		                           gint           x, 
 		                           gint           y);
   
 void           gtk_layout_move            (GtkLayout     *layout, 
-		                           GtkWidget     *widget, 
+		                           GtkWidget     *child_widget, 
 		                           gint           x, 
 		                           gint           y);
   

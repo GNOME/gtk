@@ -106,6 +106,17 @@ static GtkWidgetClass *parent_class = NULL;
 
 /* Public interface
  */
+/**
+ * gtk_layout_new:
+ * @hadjustment: horizontal scroll adjustment, or %NULL
+ * @vadjustment: vertical scroll adjustment, or %NULL
+ * 
+ * Creates a new #GtkLayout. Unless you have a specific adjustment
+ * you'd like the layout to use for scrolling, pass %NULL for
+ * @hadjustment and @vadjustment.
+ * 
+ * Return value: a new #GtkLayout
+ **/
   
 GtkWidget*    
 gtk_layout_new (GtkAdjustment *hadjustment,
@@ -120,6 +131,19 @@ gtk_layout_new (GtkAdjustment *hadjustment,
   return GTK_WIDGET (layout);
 }
 
+/**
+ * gtk_layout_get_hadjustment:
+ * @layout: a #GtkLayout
+ * 
+ * This function should only be called after the layout has been
+ * placed in a #GtkScrolledWindow or otherwise configured for
+ * scrolling. It returns the #GtkAdjustment used for communication
+ * between the horizontal scrollbar and @layout.
+ *
+ * See #GtkScrolledWindow, #GtkScrollbar, #GtkAdjustment for details.
+ * 
+ * Return value: horizontal scroll adjustment
+ **/
 GtkAdjustment* 
 gtk_layout_get_hadjustment (GtkLayout     *layout)
 {
@@ -127,6 +151,19 @@ gtk_layout_get_hadjustment (GtkLayout     *layout)
 
   return layout->hadjustment;
 }
+/**
+ * gtk_layout_get_vadjustment:
+ * @layout: a #GtkLayout
+ * 
+ * This function should only be called after the layout has been
+ * placed in a #GtkScrolledWindow or otherwise configured for
+ * scrolling. It returns the #GtkAdjustment used for communication
+ * between the vertical scrollbar and @layout.
+ *
+ * See #GtkScrolledWindow, #GtkScrollbar, #GtkAdjustment for details.
+ * 
+ * Return value: vertical scroll adjustment
+ **/
 GtkAdjustment* 
 gtk_layout_get_vadjustment (GtkLayout     *layout)
 {
@@ -204,6 +241,16 @@ gtk_layout_finalize (GObject *object)
   G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
+/**
+ * gtk_layout_set_hadjustment:
+ * @layout: a #GtkLayout
+ * @adjustment: new scroll adjustment
+ *
+ * Sets the horizontal scroll adjustment for the layout.
+ *
+ * See #GtkScrolledWindow, #GtkScrollbar, #GtkAdjustment for details.
+ * 
+ **/
 void           
 gtk_layout_set_hadjustment (GtkLayout     *layout,
 			    GtkAdjustment *adjustment)
@@ -214,7 +261,16 @@ gtk_layout_set_hadjustment (GtkLayout     *layout,
   g_object_notify (G_OBJECT (layout), "hadjustment");
 }
  
-
+/**
+ * gtk_layout_set_vadjustment:
+ * @layout: a #GtkLayout
+ * @adjustment: new scroll adjustment
+ *
+ * Sets the vertical scroll adjustment for the layout.
+ *
+ * See #GtkScrolledWindow, #GtkScrollbar, #GtkAdjustment for details.
+ * 
+ **/
 void           
 gtk_layout_set_vadjustment (GtkLayout     *layout,
 			    GtkAdjustment *adjustment)
@@ -246,6 +302,17 @@ get_child (GtkLayout  *layout,
   return NULL;
 }
 
+/**
+ * gtk_layout_put:
+ * @layout: a #GtkLayout
+ * @child_widget: child widget
+ * @x: X position of child widget
+ * @y: Y position of child widget
+ *
+ * Adds @child_widget to @layout, at position (@x,@y).
+ * @layout becomes the new parent container of @child_widget.
+ * 
+ **/
 void           
 gtk_layout_put (GtkLayout     *layout, 
 		GtkWidget     *child_widget, 
@@ -309,6 +376,16 @@ gtk_layout_move_internal (GtkLayout       *layout,
     gtk_widget_queue_resize (GTK_WIDGET (layout));
 }
 
+/**
+ * gtk_layout_move:
+ * @layout: a #GtkLayout
+ * @child_widget: a current child of @layout
+ * @x: X position to move to
+ * @y: Y position to move to
+ *
+ * Moves a current child of @layout to a new position.
+ * 
+ **/
 void           
 gtk_layout_move (GtkLayout     *layout, 
 		 GtkWidget     *child_widget, 
@@ -345,6 +422,15 @@ gtk_layout_set_adjustment_upper (GtkAdjustment *adj,
     }
 }
 
+/**
+ * gtk_layout_set_size:
+ * @layout: a #GtkLayout
+ * @width: width of entire scrollable area
+ * @height: height of entire scrollable area
+ *
+ * Sets the size of the scrollable area of the layout.
+ * 
+ **/
 void
 gtk_layout_set_size (GtkLayout     *layout, 
 		     guint          width,
@@ -403,6 +489,12 @@ gtk_layout_get_size (GtkLayout *layout,
     *height = layout->height;
 }
 
+/**
+ * gtk_layout_freeze:
+ * @layout: a #GtkLayout
+ * 
+ * This is a deprecated function, it doesn't do anything useful.
+ **/
 void
 gtk_layout_freeze (GtkLayout *layout)
 {
@@ -411,6 +503,12 @@ gtk_layout_freeze (GtkLayout *layout)
   layout->freeze_count++;
 }
 
+/**
+ * gtk_layout_thaw:
+ * @layout: a #GtkLayout
+ * 
+ * This is a deprecated function, it doesn't do anything useful.
+ **/
 void
 gtk_layout_thaw (GtkLayout *layout)
 {

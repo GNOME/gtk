@@ -689,6 +689,15 @@ gtk_dialog_set_default_response (GtkDialog *dialog,
   g_list_free (children);
 }
 
+/**
+ * gtk_dialog_set_has_separator:
+ * @dialog: a #GtkDialog
+ * @setting: %TRUE to have a separator
+ *
+ * Sets whether the dialog has a separator above the buttons.
+ * %TRUE by default.
+ * 
+ **/
 void
 gtk_dialog_set_has_separator (GtkDialog *dialog,
                               gboolean   setting)
@@ -718,6 +727,14 @@ gtk_dialog_set_has_separator (GtkDialog *dialog,
   g_object_notify (G_OBJECT (dialog), "has_separator");
 }
 
+/**
+ * gtk_dialog_get_has_separator:
+ * @dialog: a #GtkDialog
+ * 
+ * Accessor for whether the dialog has a separator.
+ * 
+ * Return value: %TRUE if the dialog has a separator
+ **/
 gboolean
 gtk_dialog_get_has_separator (GtkDialog *dialog)
 {

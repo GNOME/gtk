@@ -122,7 +122,7 @@ gtk_alignment_class_init (GtkAlignmentClass *class)
                                                       _("Value between 0.0 and 1.0 to indicate X scale"),
                                                       0.0,
                                                       1.0,
-                                                      0.5,
+                                                      0.0,
                                                       G_PARAM_READABLE | G_PARAM_WRITABLE));
   g_object_class_install_property (gobject_class,
                                    PROP_YSCALE,
@@ -131,7 +131,7 @@ gtk_alignment_class_init (GtkAlignmentClass *class)
                                                       _("Value between 0.0 and 1.0 to indicate Y scale"),
                                                       0.0,
                                                       1.0,
-                                                      0.5,
+                                                      0.0,
                                                       G_PARAM_READABLE | G_PARAM_WRITABLE));
 }
 
@@ -142,8 +142,8 @@ gtk_alignment_init (GtkAlignment *alignment)
 
   alignment->xalign = 0.5;
   alignment->yalign = 0.5;
-  alignment->xscale = 1.0;
-  alignment->yscale = 1.0;
+  alignment->xscale = 0.0;
+  alignment->yscale = 0.0;
 }
 
 GtkWidget*
@@ -178,7 +178,7 @@ gtk_alignment_set_property (GObject         *object,
     {
     case PROP_XALIGN:
       gtk_alignment_set (alignment,
-			 g_value_get_float(value),
+			 g_value_get_float (value),
 			 alignment->yalign,
 			 alignment->xscale,
 			 alignment->yscale);
@@ -186,7 +186,7 @@ gtk_alignment_set_property (GObject         *object,
     case PROP_YALIGN:
       gtk_alignment_set (alignment,
 			 alignment->xalign,
-			 g_value_get_float(value),
+			 g_value_get_float (value),
 			 alignment->xscale,
 			 alignment->yscale);
       break;
@@ -194,7 +194,7 @@ gtk_alignment_set_property (GObject         *object,
       gtk_alignment_set (alignment,
 			 alignment->xalign,
 			 alignment->yalign,
-			 g_value_get_float(value),
+			 g_value_get_float (value),
 			 alignment->yscale);
       break;
     case PROP_YSCALE:
@@ -202,7 +202,7 @@ gtk_alignment_set_property (GObject         *object,
 			 alignment->xalign,
 			 alignment->yalign,
 			 alignment->xscale,
-			 g_value_get_float(value));
+			 g_value_get_float (value));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);

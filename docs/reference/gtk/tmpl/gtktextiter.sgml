@@ -790,12 +790,3 @@ types related to the text widget and how they work together.
 @second: 
 
 
-<!-- ##### FUNCTION gtk_text_iter_spew ##### -->
-<para>
-
-</para>
-
-@iter: 
-@desc: 
-
-

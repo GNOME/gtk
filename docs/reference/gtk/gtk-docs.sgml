@@ -139,6 +139,7 @@
 <!entity gtk-TextWidget SYSTEM "text_widget.sgml">
 <!entity gtk-TreeWidget SYSTEM "tree_widget.sgml">
 <!entity gtk-Compiling SYSTEM "compiling.sgml">
+<!entity gtk-Building SYSTEM "building.sgml">
 <!entity gtk-Resources SYSTEM "resources.sgml">
 <!entity gtk-Windows SYSTEM "windows.sgml">
 <!entity gtk-Framebuffer SYSTEM "framebuffer.sgml">
@@ -229,6 +230,7 @@ that is, GUI components such as #GtkButton or #GtkTextView.
 </variablelist>
     </para>
 
+    &gtk-Building;
     &gtk-Compiling;
     &gtk-Resources;
     &gtk-Windows;

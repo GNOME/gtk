@@ -5,16 +5,18 @@ GtkHScrollbar
 A horizontal scrollbar
 
 <!-- ##### SECTION Long_Description ##### -->
+
 <para>
-The HScrollbar widget is a widget arranged horizontally creating a scroll
-bar. See #GtkScrollbar for details on scrollbars. #GtkAdjustment pointers may be
-added to handle the adjustment of the scrollbars or it may be left NULL in which
-case one will be created you. See #GtkAdjustment for details.
+The HScrollbar widget is a widget arranged horizontally creating a
+scroll bar. See #GtkScrollbar for details on
+scrollbars. #GtkAdjustment pointers may be added to handle the
+adjustment of the scrollbars or it may be left NULL in which case one
+will be created you. See #GtkAdjustment for details.
 </para>
 
 <!-- ##### SECTION See_Also ##### -->
 <para>
-
+#GtkScrollbar, #GtkScrolledWindow
 </para>
 
 <!-- ##### STRUCT GtkHScrollbar ##### -->

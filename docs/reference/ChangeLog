@@ -1,5 +1,14 @@
 2001-09-08  Havoc Pennington  <hp@pobox.com>
 
+	* gtk/tmpl/gtklayout.sgml: docs
+
+	* gdk-pixbuf/gdk-pixbuf.sgml: remove the section on compiling
+	gdk-pixbuf since it isn't a standalone package anymore
+
+	* gtk/building.sgml: section on compiling GTK itself
+
+2001-09-08  Havoc Pennington  <hp@pobox.com>
+
 	* gtk/gtk-sections.txt: put GtkPacker back in here so it won't be
 	in gtk-unused.txt, but don't put it back in gtk-docs.sgml. 
 

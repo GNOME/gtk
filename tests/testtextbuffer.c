@@ -6,6 +6,17 @@
 #include <gtk/gtk.h>
 #include "../gtk/gtktexttypes.h" /* Private header, for UNKNOWN_CHAR */
 
+static void
+gtk_text_iter_spew (const GtkTextIter *iter, const gchar *desc)
+{
+  g_print (" %20s: line %d / char %d / line char %d / line byte %d\n",
+           desc,
+           gtk_text_iter_get_line (iter),
+           gtk_text_iter_get_offset (iter),
+           gtk_text_iter_get_line_offset (iter),
+           gtk_text_iter_get_line_index (iter));
+}
+
 static void fill_buffer (GtkTextBuffer *buffer);
 
 static void run_tests (GtkTextBuffer *buffer);

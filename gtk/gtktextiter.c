@@ -699,6 +699,17 @@ gtk_text_iter_get_line_index (const GtkTextIter *iter)
   return real->line_byte_offset;
 }
 
+/**
+ * gtk_text_iter_get_visible_line_offset:
+ * @iter: a #GtkTextIter
+ * 
+ * Returns the offset in characters from the start of the
+ * line to the given @iter, not counting characters that
+ * are invisible due to tags with the "invisible" flag
+ * toggled on.
+ * 
+ * Return value: offset in visible characters from the start of the line 
+ **/
 gint
 gtk_text_iter_get_visible_line_offset (const GtkTextIter *iter)
 {
@@ -750,6 +761,18 @@ gtk_text_iter_get_visible_line_offset (const GtkTextIter *iter)
   return vis_offset;
 }
 
+
+/**
+ * gtk_text_iter_get_visible_line_index:
+ * @iter: a #GtkTextIter
+ * 
+ * Returns the number of bytes from the start of the
+ * line to the given @iter, not counting bytes that
+ * are invisible due to tags with the "invisible" flag
+ * toggled on.
+ * 
+ * Return value: byte index of @iter with respect to the start of the line
+ **/
 gint
 gtk_text_iter_get_visible_line_index (const GtkTextIter *iter)
 {
@@ -2499,6 +2522,22 @@ gtk_text_iter_backward_line (GtkTextIter *iter)
   return TRUE;
 }
 
+
+/**
+ * gtk_text_iter_forward_lines:
+ * @iter: a #GtkTextIter
+ * @count: number of lines to move forward
+ *
+ * Moves @count lines forward, if possible (if @count would move
+ * past the start or end of the buffer, moves to the start or end of
+ * the buffer).  The return value indicates whether the iterator moved
+ * onto a dereferenceable position; if the iterator didn't move, or
+ * moved onto the end iterator, then FALSE is returned. If @count is 0,
+ * the function does nothing and returns FALSE. If @count is negative,
+ * moves backward by 0 - @count lines.
+ *
+ * Return value: whether @iter moved and is dereferenceable
+ **/
 gboolean
 gtk_text_iter_forward_lines (GtkTextIter *iter, gint count)
 {
@@ -2530,6 +2569,21 @@ gtk_text_iter_forward_lines (GtkTextIter *iter, gint count)
     }
 }
 
+/**
+ * gtk_text_iter_backward_lines:
+ * @iter: a #GtkTextIter
+ * @count: number of lines to move backward
+ *
+ * Moves @count lines backward, if possible (if @count would move
+ * past the start or end of the buffer, moves to the start or end of
+ * the buffer).  The return value indicates whether the iterator moved
+ * onto a dereferenceable position; if the iterator didn't move, or
+ * moved onto the end iterator, then FALSE is returned. If @count is 0,
+ * the function does nothing and returns FALSE. If @count is negative,
+ * moves forward by 0 - @count lines.
+ *
+ * Return value: whether @iter moved and is dereferenceable
+ **/
 gboolean
 gtk_text_iter_backward_lines (GtkTextIter *iter, gint count)
 {
@@ -2838,7 +2892,7 @@ gtk_text_iter_forward_word_end (GtkTextIter *iter)
 }
 
 /**
- * gtk_text_iter_forward_word_end:
+ * gtk_text_iter_backward_word_start:
  * @iter: a #GtkTextIter
  * 
  * Moves backward to the next word start. (If @iter is currently on a
@@ -3075,7 +3129,9 @@ gtk_text_iter_backward_sentence_start (GtkTextIter      *iter)
  * @iter: a #GtkTextIter
  * @count: number of sentences to move
  * 
- * Calls gtk_text_iter_forward_sentence_end() up to @count times.
+ * Calls gtk_text_iter_forward_sentence_end() @count times (or until
+ * gtk_text_iter_forward_sentence_end() returns %FALSE). If @count is
+ * negative, moves backward instead of forward.
  * 
  * Return value: %TRUE if @iter moved and is not the end iterator
  **/
@@ -3105,11 +3161,13 @@ gtk_text_iter_forward_sentence_ends (GtkTextIter      *iter,
 }
 
 /**
- * gtk_text_iter_forward_sentence_ends:
+ * gtk_text_iter_backward_sentence_starts:
  * @iter: a #GtkTextIter
  * @count: number of sentences to move
  * 
- * Calls gtk_text_iter_backward_sentence_start() up to @count times.
+ * Calls gtk_text_iter_backward_sentence_start() up to @count times,
+ * or until it returns %FALSE. If @count is negative, moves forward
+ * instead of backward.
  * 
  * Return value: %TRUE if @iter moved and is not the end iterator
  **/
@@ -4933,28 +4991,6 @@ _gtk_text_btree_get_end_iter         (GtkTextBTree   *tree,
                                    iter,
                                    _gtk_text_btree_char_count (tree));
   check_invariants (iter);
-}
-
-void
-gtk_text_iter_spew (const GtkTextIter *iter, const gchar *desc)
-{
-  GtkTextRealIter *real = (GtkTextRealIter*)iter;
-
-  g_return_if_fail (iter != NULL);
-
-  if (real->chars_changed_stamp != _gtk_text_btree_get_chars_changed_stamp (real->tree))
-    g_print (" %20s: <invalidated iterator>\n", desc);
-  else
-    {
-      check_invariants (iter);
-      g_print (" %20s: line %d / char %d / line char %d / line byte %d\n",
-               desc,
-               gtk_text_iter_get_line (iter),
-               gtk_text_iter_get_offset (iter),
-               gtk_text_iter_get_line_offset (iter),
-               gtk_text_iter_get_line_index (iter));
-      check_invariants (iter);
-    }
 }
 
 void

@@ -1,3 +1,21 @@
+2001-09-08  Havoc Pennington  <hp@pobox.com>
+
+	* gtk/gtkalignment.c (gtk_alignment_class_init): default
+	xscale/yscale to 0.0, not 0.5, 0.5 isn't useful
+
+	* tests/testtextbuffer.c: fix usage of gtk_text_iter_spew
+
+	* gtk/gtktextiter.c: fix docs
+	(gtk_text_iter_spew): get rid of this
+
+	* gtk/gtklayout.c: docs
+
+	* gtk/gtkbutton.c (gtk_button_construct_child): add an alignment
+	to center image and label together, instead of having image on
+	left and label centered, patch/suggestion from Jacob
+
+	* gtk/gtkdialog.c: docs
+
 Sat Sep  8 14:19:49 2001  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtkliststore.c: Write documentation

@@ -259,10 +259,6 @@ gboolean gtk_text_iter_in_range        (const GtkTextIter *iter,
 void     gtk_text_iter_order           (GtkTextIter *first,
                                         GtkTextIter *second);
 
-/* Debug */
-void     gtk_text_iter_spew            (const GtkTextIter *iter,
-                                        const gchar *desc);
-
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */
