@@ -1,3 +1,7 @@
+Sat Jan  3 10:15:08 1998  Scott Goehring  <scott@poverty.bloomington.in.us>
+
+	* configure.in: fixed a typo (no_xext_lib, not no_ext_lib).
+
 Sat Jan  3 00:41:28 PST 1998 Manish Singh <yosh@gimp.org>
 
 	* gtk/gtkentry.c:

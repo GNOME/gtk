@@ -170,7 +170,7 @@ if test "x$enable_shm" = "xyes"; then
 
   # Check for the X shared memory extension header file
   AC_MSG_CHECKING(X11/extensions/XShm.h)
-  if test "x$no_ext_lib" = "xyes"; then
+  if test "x$no_xext_lib" = "xyes"; then
     AC_MSG_RESULT(no)
     no_xshm=yes
   else
