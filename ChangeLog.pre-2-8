@@ -1,3 +1,16 @@
+2001-01-15  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/win32/gdkevents-win32.c (synthesize_crossing_events): New
+	implementaion that more closely mimics the events that an X server
+	would generate. Especially, properly generate GDK_NOTIFY_VIRTUAL and
+	GDK_NOTIFY_NONLINEAR_VIRTUAL crossing events. This makes buttons
+	with nested preview widgets, for instance, more responsive when
+	you move the mouse quickly into them.
+	(find_window_for_pointer_event): Make it actually compile.
+	(gdk_event_translate): Set send_event to the value of
+	InSendMessage (). This doesn't really mean the same as X11's
+	send_event flag, but is close enough, says jpe@archaeopteryx.com
+
 2001-01-15  Alexander Larsson  <alexl@redhat.com>
 
 	* gdk/linux-fb/gdkdnd-fb.c:
