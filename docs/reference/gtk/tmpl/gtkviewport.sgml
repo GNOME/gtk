@@ -98,12 +98,12 @@ GtkViewport
 
 </para>
 
-<!-- ##### ARG GtkViewport:vadjustment ##### -->
+<!-- ##### ARG GtkViewport:shadow-type ##### -->
 <para>
 
 </para>
 
-<!-- ##### ARG GtkViewport:shadow-type ##### -->
+<!-- ##### ARG GtkViewport:vadjustment ##### -->
 <para>
 
 </para>

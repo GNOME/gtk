@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.0\n"
-"POT-Creation-Date: 2002-10-19 05:05+0200\n"
+"POT-Creation-Date: 2002-11-04 17:01-0500\n"
 "PO-Revision-Date: 2002-10-29 10:41+0200\n"
 "Last-Translator: \n"
 "Language-Team:  <ru@li.org>\n"
@@ -31,8 +31,10 @@ msgstr "Невядома, як загрузіць анімацыю з файла
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:205 gdk-pixbuf/gdk-pixbuf-io.c:640
 #, c-format
-msgid "Failed to load image '%s': reason not known, probably a corrupt image file"
-msgstr "Памылка загрузкі малюнка %s': прычына невядома, хутчэй за ўсё файл пашкоджан"
+msgid ""
+"Failed to load image '%s': reason not known, probably a corrupt image file"
+msgstr ""
+"Памылка загрузкі малюнка %s': прычына невядома, хутчэй за ўсё файл пашкоджан"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:233
 #, c-format
@@ -54,8 +56,8 @@ msgid ""
 "Image-loading module %s does not export the proper interface; perhaps it's "
 "from a different GTK version?"
 msgstr ""
-"Модуль загрузкі малюнкаў %s не экспартуе суадноснае спалучэньне; "
-"магчыма, гэты модуль ад іншае вэрсіі GTK?"
+"Модуль загрузкі малюнкаў %s не экспартуе суадноснае спалучэньне; магчыма, "
+"гэты модуль ад іншае вэрсіі GTK?"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:494 gdk-pixbuf/gdk-pixbuf-io.c:520
 #, c-format
@@ -84,7 +86,8 @@ msgstr "Памылка загрузкі малюнка '%s': %s"
 #: gdk-pixbuf/gdk-pixbuf-io.c:756
 #, c-format
 msgid "This build of gdk-pixbuf does not support saving the image format: %s"
-msgstr "Гэта пабудова gdk-pixbuf не падтрымлівае захаваньні малюнкаў у фармаце %s"
+msgstr ""
+"Гэта пабудова gdk-pixbuf не падтрымлівае захаваньні малюнкаў у фармаце %s"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:863
 #, c-format
@@ -96,7 +99,9 @@ msgstr "Памылка адчыненьня '%s' для запісу: %s"
 msgid ""
 "Failed to close '%s' while writing image, all data may not have been saved: %"
 "s"
-msgstr "Невыправімая памылка пры зачыненьні '%s' пад час захаваньня малюнку; усе даньні могуць быць не захаваны: %s"
+msgstr ""
+"Невыправімая памылка пры зачыненьні '%s' пад час захаваньня малюнку; усе "
+"даньні могуць быць не захаваны: %s"
 
 #: gdk-pixbuf/gdk-pixbuf-loader.c:250
 #, c-format
@@ -109,8 +114,8 @@ msgid ""
 "Internal error: Image loader module '%s' failed to begin loading an image, "
 "but didn't give a reason for the failure"
 msgstr ""
-"Унутраная памылка. Невыправімая памылка на пачатку загрузкі ў "
-"модулі загрузкі малюнку '%s', але няма зьветак аб прычыне памылкі."
+"Унутраная памылка. Невыправімая памылка на пачатку загрузкі ў модулі "
+"загрузкі малюнку '%s', але няма зьветак аб прычыне памылкі."
 
 #: gdk-pixbuf/gdk-pixdata.c:146
 msgid "Image header corrupt"
@@ -137,7 +142,7 @@ msgstr "Нехапае памяці каб загрузіць растравы �
 msgid "BMP image has unsupported header size"
 msgstr "BMP малюнак мае непадтрымліваемы памер загалоўка"
 
-#: gdk-pixbuf/io-bmp.c:325 gdk-pixbuf/io-bmp.c:348 gdk-pixbuf/io-bmp.c:409
+#: gdk-pixbuf/io-bmp.c:325 gdk-pixbuf/io-bmp.c:348 gdk-pixbuf/io-bmp.c:407
 msgid "BMP image has bogus header data"
 msgstr "BMP малюнак мае падробленыя дадзеныя загалоўка"
 
@@ -146,68 +151,73 @@ msgstr "BMP малюнак мае падробленыя дадзеныя заг
 msgid "Failure reading GIF: %s"
 msgstr "Памылка чытаньня GIF: %s"
 
-#: gdk-pixbuf/io-gif.c:460 gdk-pixbuf/io-gif.c:1382 gdk-pixbuf/io-gif.c:1542
+#: gdk-pixbuf/io-gif.c:460 gdk-pixbuf/io-gif.c:1392 gdk-pixbuf/io-gif.c:1552
 msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
-msgstr "У GIF файле былі прапушчаны некаторыя дадзеныя (магчыма ён быў абрэзан?)"
+msgstr ""
+"У GIF файле былі прапушчаны некаторыя дадзеныя (магчыма ён быў абрэзан?)"
 
 #: gdk-pixbuf/io-gif.c:469
 #, c-format
 msgid "Internal error in the GIF loader (%s)"
 msgstr "Унутраная памылка ў загрузчыку GIF (%s)"
 
-#: gdk-pixbuf/io-gif.c:592
+#: gdk-pixbuf/io-gif.c:541
+msgid "Stack overflow"
+msgstr ""
+
+#: gdk-pixbuf/io-gif.c:600
 msgid "GIF image loader can't understand this image."
 msgstr "Загрузчык GIF не можа зразумець гэты малюнак."
 
-#: gdk-pixbuf/io-gif.c:621
+#: gdk-pixbuf/io-gif.c:629
 msgid "Bad code encountered"
 msgstr "Сустрэўся дрэнны код"
 
-#: gdk-pixbuf/io-gif.c:630
+#: gdk-pixbuf/io-gif.c:639
 msgid "Circular table entry in GIF file"
 msgstr "Колавы заблічны запіс у GIF файле"
 
-#: gdk-pixbuf/io-gif.c:762 gdk-pixbuf/io-gif.c:1370 gdk-pixbuf/io-gif.c:1415
-#: gdk-pixbuf/io-gif.c:1530
+#: gdk-pixbuf/io-gif.c:772 gdk-pixbuf/io-gif.c:1380 gdk-pixbuf/io-gif.c:1425
+#: gdk-pixbuf/io-gif.c:1540
 msgid "Not enough memory to load GIF file"
 msgstr "Нехапае памяці для загрузкі GIF файла"
 
-#: gdk-pixbuf/io-gif.c:1009
+#: gdk-pixbuf/io-gif.c:1019
 msgid "GIF image is corrupt (incorrect LZW compression)"
 msgstr "GIF малюнак пашкожданы (недакладнае LZW-сьцісканьне)"
 
-#: gdk-pixbuf/io-gif.c:1059
+#: gdk-pixbuf/io-gif.c:1069
 msgid "File does not appear to be a GIF file"
 msgstr "Файл не выглядае як GIF файл"
 
-#: gdk-pixbuf/io-gif.c:1071
+#: gdk-pixbuf/io-gif.c:1081
 #, c-format
 msgid "Version %s of the GIF file format is not supported"
 msgstr "Вэрсія %s фармата GIF не падтрымліваецца"
 
-#: gdk-pixbuf/io-gif.c:1144
+#: gdk-pixbuf/io-gif.c:1154
 msgid "GIF image contained a frame with height or width 0."
 msgstr "GIF малюнак зьмяшчае кадр з вышынёй (шырынёй) роўнай 0."
 
-#: gdk-pixbuf/io-gif.c:1157
+#: gdk-pixbuf/io-gif.c:1167
 msgid "GIF image contained a frame appearing outside the image bounds."
 msgstr "GIF малюнак зьмяшчае кадр, які выходзіць па за межы малюнка."
 
-#: gdk-pixbuf/io-gif.c:1173
+#: gdk-pixbuf/io-gif.c:1183
 msgid "First frame of GIF image had 'revert to previous' as its disposal mode."
 msgstr ""
 "Першы кадр малюнка GIF меў рэжым 'вяртаньне да папярэдняга' ('revert to "
 "previous')"
 
-#: gdk-pixbuf/io-gif.c:1208
+#: gdk-pixbuf/io-gif.c:1218
 msgid ""
 "GIF image has no global colormap, and a frame inside it has no local "
 "colormap."
 msgstr ""
-"GIF малюнак ня мае агульнае мапы колераў, а кадр у нутры яго "
-"ня мае мясцовай мапы колераў."
+"GIF малюнак ня мае агульнае мапы колераў, а кадр у нутры яго ня мае мясцовай "
+"мапы колераў."
 
-#: gdk-pixbuf/io-gif.c:1437
+#: gdk-pixbuf/io-gif.c:1447
 msgid "GIF image was truncated or incomplete."
 msgstr "GIF малюнак быў абрэзаны ці незавершаны."
 
@@ -218,7 +228,8 @@ msgstr "Памылка чытаньня ICO: %s"
 
 #: gdk-pixbuf/io-ico.c:224
 msgid "ICO file was missing some data (perhaps it was truncated somehow?)"
-msgstr "У ICO файле былі прапушчаны некаторыя дадзеныя (магчыма ён быў абрэзан?)"
+msgstr ""
+"У ICO файле былі прапушчаны некаторыя дадзеныя (магчыма ён быў абрэзан?)"
 
 #: gdk-pixbuf/io-ico.c:262 gdk-pixbuf/io-ico.c:318 gdk-pixbuf/io-ico.c:381
 #: gdk-pixbuf/io-ico.c:443 gdk-pixbuf/io-ico.c:460
@@ -282,7 +293,8 @@ msgstr ""
 
 #: gdk-pixbuf/io-jpeg.c:813
 #, c-format
-msgid "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
+msgid ""
+"JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
 msgstr ""
 "Якасьць JPEG павінна мець значэньне паміж 0 і 100; значэньне '%d' "
 "недапушчальна"
@@ -337,7 +349,8 @@ msgid "Fatal error reading PNG image file: %s"
 msgstr "Невыправімая памылка чытаньня PNG файла: %s"
 
 #: gdk-pixbuf/io-png.c:765
-msgid "Keys for PNG tEXt chunks must have at least 1 and at most 79 characters."
+msgid ""
+"Keys for PNG tEXt chunks must have at least 1 and at most 79 characters."
 msgstr "Ключы для PNG tEXt кавалкаў павінны быць ад 1 да 79 сымбаляў."
 
 #: gdk-pixbuf/io-png.c:773
@@ -346,7 +359,9 @@ msgstr "Ключы для PNG tEXt кавалкаў павінны быць ASCI
 
 #: gdk-pixbuf/io-png.c:794
 msgid "Value for PNG tEXt chunk can not be converted to ISO-8859-1 encoding."
-msgstr "Значэньне для PNG tEXt chunk ня можа быць пераўтворана ў кадзіроўку ISO-8859-1"
+msgstr ""
+"Значэньне для PNG tEXt chunk ня можа быць пераўтворана ў кадзіроўку ISO-8859-"
+"1"
 
 #: gdk-pixbuf/io-pnm.c:247
 msgid "PNM loader expected to find an integer, but didn't"
@@ -378,7 +393,9 @@ msgstr "Найбольшае значэньне колеру ў PNM файле �
 
 #: gdk-pixbuf/io-pnm.c:394
 msgid "Can't handle PNM files with maximum color values greater than 255"
-msgstr "Немагчыма працаваць з PNM файламі ў якіх найбольшае значэньне колеру больш за 255"
+msgstr ""
+"Немагчыма працаваць з PNM файламі ў якіх найбольшае значэньне колеру больш "
+"за 255"
 
 #: gdk-pixbuf/io-pnm.c:433 gdk-pixbuf/io-pnm.c:461 gdk-pixbuf/io-pnm.c:493
 msgid "Raw PNM image type is invalid"
@@ -507,7 +524,8 @@ msgstr "Вельмі вялікае значэньне ў поле infolen у з
 
 #: gdk-pixbuf/io-tga.c:958
 msgid "Can't allocate memory for TGA cmap temporary buffer"
-msgstr "Немагчыма разьмеркаваць памяць для часовага буфэру для мапы колераў TGA"
+msgstr ""
+"Немагчыма разьмеркаваць памяць для часовага буфэру для мапы колераў TGA"
 
 #: gdk-pixbuf/io-tga.c:970
 msgid "Can't allocate memory for TGA colormap struct"
@@ -527,7 +545,8 @@ msgstr "Падманліва-каляровы малюнак бяз мапы к�
 
 #: gdk-pixbuf/io-tga.c:1037
 msgid "Can't seek to image offset -- end-of-file probably encountered"
-msgstr "Немагчыма пасунуцца на адлегласьць малюнку -- магчыма дайшлі да канца файлу"
+msgstr ""
+"Немагчыма пасунуцца на адлегласьць малюнку -- магчыма дайшлі да канца файлу"
 
 #: gdk-pixbuf/io-tga.c:1051 gdk-pixbuf/io-tga.c:1153 gdk-pixbuf/io-tga.c:1223
 msgid "Can't allocate pixbuf"
@@ -867,18 +886,19 @@ msgid ""
 "If set, an underline in the text indicates the next character should be used "
 "for the mnemonic accelerator key"
 msgstr ""
-"Калі ўключана, сымбаль падкрэсьліваньня ў тэксьце азначае, што "
-"наступны сымбаль павінен выкарыстоўвывацца як \"гарачая клявіша\"."
+"Калі ўключана, сымбаль падкрэсьліваньня ў тэксьце азначае, што наступны "
+"сымбаль павінен выкарыстоўвывацца як \"гарачая клявіша\"."
 
 #: gtk/gtkbutton.c:205
 msgid "Use stock"
 msgstr "Выкарыстоўваць убудаванае"
 
 #: gtk/gtkbutton.c:206
-msgid "If set, the label is used to pick a stock item instead of being displayed"
+msgid ""
+"If set, the label is used to pick a stock item instead of being displayed"
 msgstr ""
-"Калі ўключана, адмеціна будзе выкарыставана для выбару ўбудаваных "
-"кнопачак замест адлюстраваньня."
+"Калі ўключана, адмеціна будзе выкарыставана для выбару ўбудаваных кнопачак "
+"замест адлюстраваньня."
 
 #: gtk/gtkbutton.c:213
 msgid "Border relief"
@@ -905,15 +925,16 @@ msgid ""
 "Extra space to add for CAN_DEFAULT buttons that is always drawn outside the "
 "border"
 msgstr ""
-"Дадатковая прастора для CAN_DEFAULT кнопачак, якая заўсёды дадаецца "
-"да зьнешніх межаў кнопачак"
+"Дадатковая прастора для CAN_DEFAULT кнопачак, якая заўсёды дадаецца да "
+"зьнешніх межаў кнопачак"
 
 #: gtk/gtkbutton.c:278
 msgid "Child X Displacement"
 msgstr "Перамяшчэньне нашчадку па X"
 
 #: gtk/gtkbutton.c:279
-msgid "How far in the x direction to move the child when the button is depressed"
+msgid ""
+"How far in the x direction to move the child when the button is depressed"
 msgstr "Як далёка перамясьціць нашчадак па X, калі націснута гэтая кнопачка"
 
 #: gtk/gtkbutton.c:286
@@ -921,7 +942,8 @@ msgid "Child Y Displacement"
 msgstr "Перамяшчэньне нашчадку па Y"
 
 #: gtk/gtkbutton.c:287
-msgid "How far in the y direction to move the child when the button is depressed"
+msgid ""
+"How far in the y direction to move the child when the button is depressed"
 msgstr "Як далёка перамясьціць нашчадак па Y, калі націснута гэтая кнопачка"
 
 #: gtk/gtkcellrenderer.c:103
@@ -1160,7 +1182,8 @@ msgid "Rise"
 msgstr "Узьняць"
 
 #: gtk/gtkcellrenderertext.c:331 gtk/gtktexttag.c:428
-msgid "Offset of text above the baseline (below the baseline if rise is negative)"
+msgid ""
+"Offset of text above the baseline (below the baseline if rise is negative)"
 msgstr "Зьмясьціць тэкст вышэй асноўнай ліні (ніжэй для адмоўных значэньняў)"
 
 #: gtk/gtkcellrenderertext.c:341 gtk/gtktexttag.c:467
@@ -1497,7 +1520,8 @@ msgid "Always enable arrows"
 msgstr ""
 
 #: gtk/gtkcombo.c:147
-msgid "Whether the arrow keys work, even if the entry contents are not in the list"
+msgid ""
+"Whether the arrow keys work, even if the entry contents are not in the list"
 msgstr ""
 
 #: gtk/gtkcombo.c:153
@@ -1633,7 +1657,8 @@ msgid "Selection Bound"
 msgstr ""
 
 #: gtk/gtkentry.c:446 gtk/gtklabel.c:369
-msgid "The position of the opposite end of the selection from the cursor in chars."
+msgid ""
+"The position of the opposite end of the selection from the cursor in chars."
 msgstr ""
 
 #: gtk/gtkentry.c:456
@@ -1712,15 +1737,15 @@ msgstr ""
 msgid "Whether to select the contents of an entry when it is focused."
 msgstr ""
 
-#: gtk/gtkentry.c:3877 gtk/gtklabel.c:3179
+#: gtk/gtkentry.c:3902 gtk/gtklabel.c:3179
 msgid "Select All"
 msgstr "Абраць усе"
 
-#: gtk/gtkentry.c:3887 gtk/gtklabel.c:3189
+#: gtk/gtkentry.c:3912 gtk/gtklabel.c:3189
 msgid "Input Methods"
 msgstr "Мэтады ўводу"
 
-#: gtk/gtkentry.c:3897 gtk/gtktextview.c:6426
+#: gtk/gtkentry.c:3922 gtk/gtktextview.c:6426
 msgid "_Insert Unicode control character"
 msgstr ""
 
@@ -1791,7 +1816,8 @@ msgstr "_Перайменаваць файл"
 
 #: gtk/gtkfilesel.c:1363
 #, c-format
-msgid "The folder name \"%s\" contains symbols that are not allowed in filenames"
+msgid ""
+"The folder name \"%s\" contains symbols that are not allowed in filenames"
 msgstr ""
 
 #: gtk/gtkfilesel.c:1365
@@ -2417,7 +2443,8 @@ msgid "X pad"
 msgstr ""
 
 #: gtk/gtkmisc.c:118
-msgid "The amount of space to add on the left and right of the widget, in pixels"
+msgid ""
+"The amount of space to add on the left and right of the widget, in pixels"
 msgstr ""
 
 #: gtk/gtkmisc.c:127
@@ -2425,7 +2452,8 @@ msgid "Y pad"
 msgstr ""
 
 #: gtk/gtkmisc.c:128
-msgid "The amount of space to add on the top and bottom of the widget, in pixels"
+msgid ""
+"The amount of space to add on the top and bottom of the widget, in pixels"
 msgstr ""
 
 #: gtk/gtknotebook.c:362
@@ -2532,7 +2560,8 @@ msgid "Position"
 msgstr "Пазіцыя"
 
 #: gtk/gtkpaned.c:209
-msgid "Position of paned separator in pixels (0 means all the way to the left/top)"
+msgid ""
+"Position of paned separator in pixels (0 means all the way to the left/top)"
 msgstr ""
 
 #: gtk/gtkpaned.c:217
@@ -2556,7 +2585,8 @@ msgid "Expand"
 msgstr ""
 
 #: gtk/gtkpreview.c:130
-msgid "Whether the preview widget should take up the entire space it is allocated"
+msgid ""
+"Whether the preview widget should take up the entire space it is allocated"
 msgstr ""
 
 #: gtk/gtkprogress.c:122
@@ -2728,7 +2758,8 @@ msgid "Arrow X Displacement"
 msgstr ""
 
 #: gtk/gtkrange.c:330
-msgid "How far in the x direction to move the arrow when the button is depressed"
+msgid ""
+"How far in the x direction to move the arrow when the button is depressed"
 msgstr ""
 
 #: gtk/gtkrange.c:337
@@ -2736,7 +2767,8 @@ msgid "Arrow Y Displacement"
 msgstr ""
 
 #: gtk/gtkrange.c:338
-msgid "How far in the y direction to move the arrow when the button is depressed"
+msgid ""
+"How far in the y direction to move the arrow when the button is depressed"
 msgstr ""
 
 #: gtk/gtkrc.c:2282
@@ -2859,7 +2891,8 @@ msgid "Secondary backward stepper"
 msgstr ""
 
 #: gtk/gtkscrollbar.c:110
-msgid "Display a second backward arrow button on the opposite end of the scrollbar"
+msgid ""
+"Display a second backward arrow button on the opposite end of the scrollbar"
 msgstr ""
 
 #: gtk/gtkscrollbar.c:117
@@ -2867,7 +2900,8 @@ msgid "Secondary forward stepper"
 msgstr ""
 
 #: gtk/gtkscrollbar.c:118
-msgid "Display a secondary forward arrow button on the opposite end of the scrollbar"
+msgid ""
+"Display a secondary forward arrow button on the opposite end of the scrollbar"
 msgstr ""
 
 #: gtk/gtkscrolledwindow.c:232 gtk/gtktext.c:598 gtk/gtktreeview.c:523
@@ -3043,7 +3077,8 @@ msgid "Update Policy"
 msgstr ""
 
 #: gtk/gtkspinbutton.c:290
-msgid "Whether the spin button should update always, or only when the value is legal"
+msgid ""
+"Whether the spin button should update always, or only when the value is legal"
 msgstr ""
 
 #: gtk/gtkspinbutton.c:298
@@ -3503,7 +3538,8 @@ msgid "Wrap mode"
 msgstr "Рэжым пераносу"
 
 #: gtk/gtktexttag.c:485 gtk/gtktextview.c:577
-msgid "Whether to wrap lines never, at word boundaries, or at character boundaries"
+msgid ""
+"Whether to wrap lines never, at word boundaries, or at character boundaries"
 msgstr ""
 
 #: gtk/gtktexttag.c:494 gtk/gtktextview.c:624
@@ -3780,7 +3816,8 @@ msgid "Toolbar style"
 msgstr "Стыль панэлі прылад"
 
 #: gtk/gtktoolbar.c:285
-msgid "Whether default toolbars have text only, text and icons, icons only, etc."
+msgid ""
+"Whether default toolbars have text only, text and icons, icons only, etc."
 msgstr ""
 
 #: gtk/gtktoolbar.c:291
@@ -4208,8 +4245,8 @@ msgid ""
 "Color with which to draw the secondary insertion cursor when editing mixed "
 "right-to-left and left-to-right text."
 msgstr ""
-"Колер для адлюстраваньня другога курсору, калі выкарыстоўвываецца "
-"зьмешаны (зьлева направа й справа налева) ўвод сэксту."
+"Колер для адлюстраваньня другога курсору, калі выкарыстоўвываецца зьмешаны "
+"(зьлева направа й справа налева) ўвод сэксту."
 
 #: gtk/gtkwidget.c:1089
 msgid "Cursor line aspect ratio"
@@ -4245,8 +4282,8 @@ msgid ""
 "If TRUE, the window has no mimimum size. Setting this to TRUE is 99% of the "
 "time a bad idea."
 msgstr ""
-"Калі ІСЬЦІНА (TRUE), акно ня мае найменьшага памеру. Усталяваньне "
-"гэтага значэньня ў ІСЬЦІНА ў 99% выпадках вельмі дрэнная ідэя."
+"Калі ІСЬЦІНА (TRUE), акно ня мае найменьшага памеру. Усталяваньне гэтага "
+"значэньня ў ІСЬЦІНА ў 99% выпадках вельмі дрэнная ідэя."
 
 #: gtk/gtkwindow.c:438
 msgid "Allow Grow"
@@ -4255,8 +4292,8 @@ msgstr "Дазваляць рост"
 #: gtk/gtkwindow.c:439
 msgid "If TRUE, users can expand the window beyond its minimum size."
 msgstr ""
-"Калі ІСЬЦІНА (TRUE), карыстальнікі могуць разьвярнуць акно "
-"замест яго найменьшага памеру."
+"Калі ІСЬЦІНА (TRUE), карыстальнікі могуць разьвярнуць акно замест яго "
+"найменьшага памеру."
 
 #: gtk/gtkwindow.c:447
 msgid "If TRUE, users can resize the window."
@@ -4271,8 +4308,8 @@ msgid ""
 "If TRUE, the window is modal (other windows are not usable while this one is "
 "up)."
 msgstr ""
-"Калі ІСЬЦІНА (TRUE) - акно зьяўляецца мадальным (іншыя вокны ня могуць "
-"быць выкарыстаны, покуль гэтае акно ня будзе зачынена)."
+"Калі ІСЬЦІНА (TRUE) - акно зьяўляецца мадальным (іншыя вокны ня могуць быць "
+"выкарыстаны, покуль гэтае акно ня будзе зачынена)."
 
 #: gtk/gtkwindow.c:462
 msgid "Window Position"
@@ -4287,20 +4324,22 @@ msgid "Default Width"
 msgstr "Першапачатковая шырыня"
 
 #: gtk/gtkwindow.c:472
-msgid "The default width of the window, used when initially showing the window."
+msgid ""
+"The default width of the window, used when initially showing the window."
 msgstr ""
-"Пачатковая шырыня акна; выкарыстоўвываецца пры "
-"першапачатковым адлюстраваньні акна."
+"Пачатковая шырыня акна; выкарыстоўвываецца пры першапачатковым "
+"адлюстраваньні акна."
 
 #: gtk/gtkwindow.c:481
 msgid "Default Height"
 msgstr "Першапачатковая вышыня"
 
 #: gtk/gtkwindow.c:482
-msgid "The default height of the window, used when initially showing the window."
+msgid ""
+"The default height of the window, used when initially showing the window."
 msgstr ""
-"Пачатковая вышыня акна; выкарыстоўвываецца пры "
-"першапачатковым адлюстраваньні акна."
+"Пачатковая вышыня акна; выкарыстоўвываецца пры першапачатковым "
+"адлюстраваньні акна."
 
 #: gtk/gtkwindow.c:491
 msgid "Destroy with Parent"
@@ -4365,4 +4404,3 @@ msgstr "X мэтад уводу (X Input Method)"
 
 #~ msgid "Insufficient memory to load TGA image"
 #~ msgstr "Недастаткова памяці для загрузкі TGA малюнка"
-

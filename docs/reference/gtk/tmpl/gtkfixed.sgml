@@ -166,3 +166,13 @@ Moves a child of a #GtkFixed container to the given position.
 @has_window: 
 
 
+<!-- ##### ARG GtkFixed:x ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkFixed:y ##### -->
+<para>
+
+</para>
+

@@ -1,3 +1,11 @@
+Mon Nov  4 16:55:37 2002  Owen Taylor  <otaylor@redhat.com>
+
+        * ==== Released 2.0.7 ====
+
+	* configure.in: Version 2.0.7, interface, binary 7.
+
+	* NEWS: Updates.
+
 2002-11-03  Tor Lillqvist  <tml@iki.fi>
 
 	Lots of changes to the Win32 backend:

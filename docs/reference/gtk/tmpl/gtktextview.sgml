@@ -689,6 +689,31 @@ in an idle job in the background.
 
 @textview: the object which received the signal.
 
+<!-- ##### ARG GtkTextView:cursor-visible ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTextView:editable ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTextView:indent ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTextView:justification ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTextView:left-margin ##### -->
+<para>
+
+</para>
+
 <!-- ##### ARG GtkTextView:pixels-above-lines ##### -->
 <para>
 
@@ -704,32 +729,7 @@ in an idle job in the background.
 
 </para>
 
-<!-- ##### ARG GtkTextView:editable ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkTextView:wrap-mode ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkTextView:justification ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkTextView:left-margin ##### -->
-<para>
-
-</para>
-
 <!-- ##### ARG GtkTextView:right-margin ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkTextView:indent ##### -->
 <para>
 
 </para>
@@ -739,7 +739,7 @@ in an idle job in the background.
 
 </para>
 
-<!-- ##### ARG GtkTextView:cursor-visible ##### -->
+<!-- ##### ARG GtkTextView:wrap-mode ##### -->
 <para>
 
 </para>

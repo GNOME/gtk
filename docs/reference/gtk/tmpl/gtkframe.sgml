@@ -120,6 +120,11 @@ Set the shadow type for the Frame widget.
 
 </para>
 
+<!-- ##### ARG GtkFrame:label-widget ##### -->
+<para>
+
+</para>
+
 <!-- ##### ARG GtkFrame:label-xalign ##### -->
 <para>
 
@@ -136,11 +141,6 @@ Set the shadow type for the Frame widget.
 </para>
 
 <!-- ##### ARG GtkFrame:shadow-type ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkFrame:label-widget ##### -->
 <para>
 
 </para>

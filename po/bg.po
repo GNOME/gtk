@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Gtk+\n"
-"POT-Creation-Date: 2002-10-27 13:18+0200\n"
+"POT-Creation-Date: 2002-11-04 17:01-0500\n"
 "PO-Revision-Date: 2002-10-27 13:25+0300\n"
 "Last-Translator: Borislav Aleksandrov <B.Aleksandrov@cnsys.bg>\n"
 "Language-Team: Bulgarian <dict@linux.zonebg.com>\n"
@@ -144,7 +144,7 @@ msgstr "Няма достатъчно памет за да зареди 'bitmap'
 msgid "BMP image has unsupported header size"
 msgstr "BMP картинка има неподдържан размер на заглавната част"
 
-#: gdk-pixbuf/io-bmp.c:325 gdk-pixbuf/io-bmp.c:348 gdk-pixbuf/io-bmp.c:409
+#: gdk-pixbuf/io-bmp.c:325 gdk-pixbuf/io-bmp.c:348 gdk-pixbuf/io-bmp.c:407
 msgid "BMP image has bogus header data"
 msgstr "BMP картинка има 'фалшива' заглавна част"
 
@@ -3423,7 +3423,6 @@ msgid "_Yes"
 msgstr "_Да"
 
 #: gtk/gtkstock.c:334
-#, c-format
 msgid "Zoom _100%"
 msgstr "Мащаб _100%"
 

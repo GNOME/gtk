@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2002-08-26 05:07+0200\n"
+"POT-Creation-Date: 2002-11-04 17:01-0500\n"
 "PO-Revision-Date: 2002-06-08 14:30+0530\n"
 "Last-Translator: Anurag Seetha <anuragseetha@yahoo.com>\n"
 "Language-Team: Hindi <indlinux-hindi-gnome@lists.sourceforge.net>\n"
@@ -159,7 +159,7 @@ msgid "BMP image has unsupported header size"
 msgstr "BMP इमेज में गलत का हैडर आकार"
 
 # gdk-pixbuf/io-bmp.c:300 gdk-pixbuf/io-bmp.c:323 gdk-pixbuf/io-bmp.c:382
-#: gdk-pixbuf/io-bmp.c:325 gdk-pixbuf/io-bmp.c:348 gdk-pixbuf/io-bmp.c:409
+#: gdk-pixbuf/io-bmp.c:325 gdk-pixbuf/io-bmp.c:348 gdk-pixbuf/io-bmp.c:407
 msgid "BMP image has bogus header data"
 msgstr "BMP इमेज में बेकार हैडर डाटा"
 
@@ -170,7 +170,7 @@ msgid "Failure reading GIF: %s"
 msgstr "GIF %s को पढ़ने में असफल"
 
 # gdk-pixbuf/io-gif.c:460 gdk-pixbuf/io-gif.c:1382 gdk-pixbuf/io-gif.c:1542
-#: gdk-pixbuf/io-gif.c:460 gdk-pixbuf/io-gif.c:1382 gdk-pixbuf/io-gif.c:1542
+#: gdk-pixbuf/io-gif.c:460 gdk-pixbuf/io-gif.c:1392 gdk-pixbuf/io-gif.c:1552
 msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
 msgstr "GIF लोडर (%s) में आंतरिक त्रुटि"
 
@@ -180,68 +180,72 @@ msgstr "GIF लोडर (%s) में आंतरिक त्रुटि"
 msgid "Internal error in the GIF loader (%s)"
 msgstr "GIF इमेज लोडर इस इमेज को समझ नहीं पा रहा है"
 
+#: gdk-pixbuf/io-gif.c:541
+msgid "Stack overflow"
+msgstr ""
+
 # gdk-pixbuf/io-gif.c:592
-#: gdk-pixbuf/io-gif.c:592
+#: gdk-pixbuf/io-gif.c:600
 msgid "GIF image loader can't understand this image."
 msgstr "खराब लोड कोड आया है"
 
 # gdk-pixbuf/io-gif.c:621
-#: gdk-pixbuf/io-gif.c:621
+#: gdk-pixbuf/io-gif.c:629
 msgid "Bad code encountered"
 msgstr "GIF फाइल में चक्राकार टेबल प्रविष्टि"
 
 # gdk-pixbuf/io-gif.c:630
-#: gdk-pixbuf/io-gif.c:630
+#: gdk-pixbuf/io-gif.c:639
 msgid "Circular table entry in GIF file"
 msgstr "GIF फाइल को लोड करने के लिए पर्याप्त मेमोरी नहीं है"
 
 # gdk-pixbuf/io-gif.c:762 gdk-pixbuf/io-gif.c:1370 gdk-pixbuf/io-gif.c:1415
 # gdk-pixbuf/io-gif.c:1530
-#: gdk-pixbuf/io-gif.c:762 gdk-pixbuf/io-gif.c:1370 gdk-pixbuf/io-gif.c:1415
-#: gdk-pixbuf/io-gif.c:1530
+#: gdk-pixbuf/io-gif.c:772 gdk-pixbuf/io-gif.c:1380 gdk-pixbuf/io-gif.c:1425
+#: gdk-pixbuf/io-gif.c:1540
 msgid "Not enough memory to load GIF file"
 msgstr "GIF फाइल को लोड करने के लिए पर्याप्त मेमोरी नहीं है"
 
 # gdk-pixbuf/io-gif.c:1009
-#: gdk-pixbuf/io-gif.c:1009
+#: gdk-pixbuf/io-gif.c:1019
 msgid "GIF image is corrupt (incorrect LZW compression)"
 msgstr "GIF इमेज खराब है (गलत LZW संघीकरण)"
 
 # gdk-pixbuf/io-gif.c:1059
-#: gdk-pixbuf/io-gif.c:1059
+#: gdk-pixbuf/io-gif.c:1069
 msgid "File does not appear to be a GIF file"
 msgstr "यह फाइल GIF फाइल नहीं है"
 
 # gdk-pixbuf/io-gif.c:1071
-#: gdk-pixbuf/io-gif.c:1071
+#: gdk-pixbuf/io-gif.c:1081
 #, c-format
 msgid "Version %s of the GIF file format is not supported"
 msgstr "GIF फाइल प्रारूप का यह संस्करण %s का प्रयोग संभव नहीं है"
 
 # gdk-pixbuf/io-gif.c:1144
-#: gdk-pixbuf/io-gif.c:1144
+#: gdk-pixbuf/io-gif.c:1154
 msgid "GIF image contained a frame with height or width 0."
 msgstr "GIF इमेज में शून्य ऊंचाई या चौड़ाई की एक फ्रेम शामिल है"
 
 # gdk-pixbuf/io-gif.c:1157
-#: gdk-pixbuf/io-gif.c:1157
+#: gdk-pixbuf/io-gif.c:1167
 msgid "GIF image contained a frame appearing outside the image bounds."
 msgstr "GIF इमेज में एक फ्रेम ऐसा है जो इमेज की सीमाओं से बाहर है"
 
 # gdk-pixbuf/io-gif.c:1173
-#: gdk-pixbuf/io-gif.c:1173
+#: gdk-pixbuf/io-gif.c:1183
 msgid "First frame of GIF image had 'revert to previous' as its disposal mode."
 msgstr ""
 
 # gdk-pixbuf/io-gif.c:1208
-#: gdk-pixbuf/io-gif.c:1208
+#: gdk-pixbuf/io-gif.c:1218
 msgid ""
 "GIF image has no global colormap, and a frame inside it has no local "
 "colormap."
 msgstr "GIF इमेज में व्यापक रंगमैप नहीं है तथा एक फ्रेम के अंदर स्थानीय रंगमैप भी नहीं है"
 
 # gdk-pixbuf/io-gif.c:1437
-#: gdk-pixbuf/io-gif.c:1437
+#: gdk-pixbuf/io-gif.c:1447
 msgid "GIF image was truncated or incomplete."
 msgstr "GIF इमेज अधूरी या खरीब है"
 
@@ -289,30 +293,36 @@ msgid "Unsupported icon type"
 msgstr "इस प्रकार के आइकान का प्रयोग नहीं किया जा सकता"
 
 # gdk-pixbuf/io-ico.c:499
-#: gdk-pixbuf/io-ico.c:499
+#: gdk-pixbuf/io-ico.c:500
 msgid "Not enough memory to load ICO file"
 msgstr "ICO फाइल को लोड करने के लिए पर्याप्त मेमोरी नहीं"
 
 # gdk-pixbuf/io-jpeg.c:125
-#: gdk-pixbuf/io-jpeg.c:126
+#: gdk-pixbuf/io-jpeg.c:111
 #, c-format
 msgid "Error interpreting JPEG image file (%s)"
 msgstr "JPEG इमेज फाइल (%s) को समझने में त्रुटि"
 
 # gdk-pixbuf/io-jpeg.c:234
-#: gdk-pixbuf/io-jpeg.c:307
+#: gdk-pixbuf/io-jpeg.c:346
 msgid ""
 "Insufficient memory to load image, try exiting some applications to free "
 "memory"
 msgstr "इमेज को लोड करने के लिए अपर्याप्त मेमोरी कुछ अनुप्रयोगों से मेमोरी को मुक्त करें"
 
+# gdk-pixbuf/io-ico.c:428
+#: gdk-pixbuf/io-jpeg.c:380 gdk-pixbuf/io-jpeg.c:730
+#, fuzzy, c-format
+msgid "Unsupported JPEG color space (%s)"
+msgstr "इस प्रकार के आइकान का प्रयोग नहीं किया जा सकता"
+
 # gdk-pixbuf/io-jpeg.c:345 gdk-pixbuf/io-jpeg.c:538 gdk-pixbuf/io-jpeg.c:710
-#: gdk-pixbuf/io-jpeg.c:417 gdk-pixbuf/io-jpeg.c:600 gdk-pixbuf/io-jpeg.c:767
+#: gdk-pixbuf/io-jpeg.c:476 gdk-pixbuf/io-jpeg.c:668 gdk-pixbuf/io-jpeg.c:844
 msgid "Couldn't allocate memory for loading JPEG file"
 msgstr "लोड की जा रही JPEG फाइल को मेमोरी प्रदान नहीं की जा सकती"
 
 # gdk-pixbuf/io-jpeg.c:664
-#: gdk-pixbuf/io-jpeg.c:721
+#: gdk-pixbuf/io-jpeg.c:798
 #, c-format
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%s' could not be "
@@ -322,7 +332,7 @@ msgstr ""
 "सकता"
 
 # gdk-pixbuf/io-jpeg.c:679
-#: gdk-pixbuf/io-jpeg.c:736
+#: gdk-pixbuf/io-jpeg.c:813
 #, c-format
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
@@ -2096,103 +2106,104 @@ msgid "Whether to select the contents of an entry when it is focused."
 msgstr "जब कोई प्रविष्टि फोकस हो तब क्या उसके Contents को चयनित किया जाना है?"
 
 # gtk/gtkentry.c:3850 gtk/gtklabel.c:3164
-#: gtk/gtkentry.c:3877 gtk/gtklabel.c:3177
+#: gtk/gtkentry.c:3902 gtk/gtklabel.c:3179
 msgid "Select All"
 msgstr "सभी का चयन करें"
 
 # gtk/gtkentry.c:3860 gtk/gtklabel.c:3174
-#: gtk/gtkentry.c:3887 gtk/gtklabel.c:3187
+#: gtk/gtkentry.c:3912 gtk/gtklabel.c:3189
 msgid "Input Methods"
 msgstr "इनपुट पद्धति"
 
 # gtk/gtkentry.c:3870 gtk/gtktextview.c:6375
-#: gtk/gtkentry.c:3897 gtk/gtktextview.c:6425
+#: gtk/gtkentry.c:3922 gtk/gtktextview.c:6426
 msgid "_Insert Unicode control character"
 msgstr "यूनिकोड कन्ट्रोल कैरेक्टर प्रविष्ट करें"
 
 # gtk/gtkfilesel.c:536 gtk/gtkimage.c:161
-#: gtk/gtkfilesel.c:536 gtk/gtkimage.c:161
+#: gtk/gtkfilesel.c:513 gtk/gtkimage.c:163
 msgid "Filename"
 msgstr "फाइलनाम"
 
 # gtk/gtkfilesel.c:537
-#: gtk/gtkfilesel.c:537
+#: gtk/gtkfilesel.c:514
 msgid "The currently selected filename."
 msgstr "वर्तमान में चयनित फाइलनाम"
 
 # gtk/gtkfilesel.c:543
-#: gtk/gtkfilesel.c:543
+#: gtk/gtkfilesel.c:520
 msgid "Show file operations"
 msgstr "फाइल प्रक्रियाओं को दर्शाए"
 
 # gtk/gtkfilesel.c:544
-#: gtk/gtkfilesel.c:544
+#: gtk/gtkfilesel.c:521
 msgid "Whether buttons for creating/manipulating files should be displayed."
 msgstr "क्या फाइलों के निर्माण/हस्तांतरण करने हेतु बटन प्रदर्शित किए जाएं"
 
 # gtk/gtkfilesel.c:551
-#: gtk/gtkfilesel.c:551
+#: gtk/gtkfilesel.c:528
 msgid "Select multiple"
 msgstr "एक से अधिक का चयन करें"
 
 # gtk/gtkfilesel.c:552
-#: gtk/gtkfilesel.c:552
+#: gtk/gtkfilesel.c:529
 msgid "Whether to allow multiple files to be selected."
 msgstr "क्या एक से अधिक फाइलों के चयन की अनुमति देना है?"
 
 # gtk/gtkfilesel.c:707
-#: gtk/gtkfilesel.c:707
+#: gtk/gtkfilesel.c:684
 msgid "Folders"
 msgstr "फोल्डर्स"
 
 # gtk/gtkfilesel.c:711
-#: gtk/gtkfilesel.c:711
+#: gtk/gtkfilesel.c:688
 msgid "Fol_ders"
 msgstr "फोल्डर्स"
 
 # gtk/gtkfilesel.c:742
-#: gtk/gtkfilesel.c:742
+#: gtk/gtkfilesel.c:719
 msgid "Files"
 msgstr "फाइलें"
 
 # gtk/gtkfilesel.c:746
-#: gtk/gtkfilesel.c:746
+#: gtk/gtkfilesel.c:723
 msgid "_Files"
 msgstr "फाइलें"
 
 # gtk/gtkfilesel.c:822 gtk/gtkfilesel.c:2124
-#: gtk/gtkfilesel.c:822 gtk/gtkfilesel.c:2152
+#: gtk/gtkfilesel.c:799 gtk/gtkfilesel.c:2138
 #, c-format
 msgid "Folder unreadable: %s"
 msgstr "फोल्डर %s को पढ़ा नहीं जा सकता"
 
 # gtk/gtkfilesel.c:946
-#: gtk/gtkfilesel.c:953
+#: gtk/gtkfilesel.c:930
+#, c-format
 msgid ""
 "The file \"%s\" resides on another machine (called %s) and may not be "
 "available to this program.\n"
 "Are you sure that you want to select it?"
 msgstr ""
-"फाइल %s अन्य मशीन पर स्थित है (मशीन %s) तथा इस प्रोग्राम के लिए उपलब्ध नहीं है।\n" 
+"फाइल %s अन्य मशीन पर स्थित है (मशीन %s) तथा इस प्रोग्राम के लिए उपलब्ध नहीं है।\n"
 "क्या आप निश्चित है कि इसे ही चयन करना है?"
 
 # gtk/gtkfilesel.c:1076
-#: gtk/gtkfilesel.c:1086
+#: gtk/gtkfilesel.c:1063
 msgid "_New Folder"
 msgstr "नया फोल्डर"
 
 # gtk/gtkfilesel.c:1087
-#: gtk/gtkfilesel.c:1097
+#: gtk/gtkfilesel.c:1074
 msgid "De_lete File"
 msgstr "फाइल हटाएं"
 
 # gtk/gtkfilesel.c:1098
-#: gtk/gtkfilesel.c:1108
+#: gtk/gtkfilesel.c:1085
 msgid "_Rename File"
 msgstr "फाइल का नाम बदलें"
 
 # gtk/gtkfilesel.c:1358
-#: gtk/gtkfilesel.c:1386
+#: gtk/gtkfilesel.c:1363
 #, c-format
 msgid ""
 "The folder name \"%s\" contains symbols that are not allowed in filenames"
@@ -2200,7 +2211,7 @@ msgstr ""
 "इस फोल्डर के नाम %s में Symbols मौजूद है जिन्हें फाइलनाम में प्रयुक्त नहीं किया जा सकता"
 
 # gtk/gtkfilesel.c:1360
-#: gtk/gtkfilesel.c:1388
+#: gtk/gtkfilesel.c:1365
 #, c-format
 msgid ""
 "Error creating folder \"%s\": %s\n"
@@ -2208,39 +2219,39 @@ msgid ""
 msgstr "फोल्डर %s के निर्माण में त्रुटि %s"
 
 # gtk/gtkfilesel.c:1361 gtk/gtkfilesel.c:1597
-#: gtk/gtkfilesel.c:1389 gtk/gtkfilesel.c:1625
+#: gtk/gtkfilesel.c:1366 gtk/gtkfilesel.c:1602
 msgid "You probably used symbols not allowed in filenames."
 msgstr "आपने शायद Symbols का प्रयोग किया है जो फाइलनाम में प्रयुक्त नहीं किए जा सकते"
 
 # gtk/gtkfilesel.c:1369
-#: gtk/gtkfilesel.c:1397
+#: gtk/gtkfilesel.c:1374
 #, c-format
 msgid "Error creating folder \"%s\": %s\n"
 msgstr "फोल्डर %s के निर्माण में त्रुटि\n"
 
 # gtk/gtkfilesel.c:1403
-#: gtk/gtkfilesel.c:1431
+#: gtk/gtkfilesel.c:1408
 msgid "New Folder"
 msgstr "नया फोल्डर"
 
 # gtk/gtkfilesel.c:1418
-#: gtk/gtkfilesel.c:1446
+#: gtk/gtkfilesel.c:1423
 msgid "_Folder name:"
 msgstr "फोल्डर का नाम"
 
 # gtk/gtkfilesel.c:1444
-#: gtk/gtkfilesel.c:1472
+#: gtk/gtkfilesel.c:1449
 msgid "Create"
 msgstr "निर्माण करें"
 
 # gtk/gtkfilesel.c:1485
-#: gtk/gtkfilesel.c:1513
+#: gtk/gtkfilesel.c:1490
 #, c-format
 msgid "The filename \"%s\" contains symbols that are not allowed in filenames"
 msgstr "फाइलनाम \"%s\" में Symbols है जिनको फाइलनाम में प्रयुक्त नहीं किया जा सकता"
 
 # gtk/gtkfilesel.c:1488
-#: gtk/gtkfilesel.c:1516
+#: gtk/gtkfilesel.c:1493
 #, c-format
 msgid ""
 "Error deleting file \"%s\": %s\n"
@@ -2248,35 +2259,35 @@ msgid ""
 msgstr "फाइल %s को नष्ट करने में त्रुटि : %s"
 
 # gtk/gtkfilesel.c:1490 gtk/gtkfilesel.c:1611
-#: gtk/gtkfilesel.c:1518 gtk/gtkfilesel.c:1639
+#: gtk/gtkfilesel.c:1495 gtk/gtkfilesel.c:1616
 msgid "It probably contains symbols not allowed in filenames."
 msgstr "शायद इसमें Symbols है जिन्हें फाइलनाम में प्रयुक्त नहीं किया जा सकता"
 
 # gtk/gtkfilesel.c:1499
-#: gtk/gtkfilesel.c:1527
+#: gtk/gtkfilesel.c:1504
 #, c-format
 msgid "Error deleting file \"%s\": %s"
 msgstr "फाइल \"%s\" को नष्ट करने में त्रुटि : %s"
 
 # gtk/gtkfilesel.c:1542
-#: gtk/gtkfilesel.c:1570
+#: gtk/gtkfilesel.c:1547
 #, c-format
 msgid "Really delete file \"%s\" ?"
 msgstr "क्या वास्तव में %s फाइल को नष्ट करना है?"
 
 # gtk/gtkfilesel.c:1547
-#: gtk/gtkfilesel.c:1575
+#: gtk/gtkfilesel.c:1552
 msgid "Delete File"
 msgstr "फाइल नष्ट करें"
 
 # gtk/gtkfilesel.c:1593 gtk/gtkfilesel.c:1607
-#: gtk/gtkfilesel.c:1621 gtk/gtkfilesel.c:1635
+#: gtk/gtkfilesel.c:1598 gtk/gtkfilesel.c:1612
 #, c-format
 msgid "The file name \"%s\" contains symbols that are not allowed in filenames"
 msgstr "इस फाइल नाम %s में Symbols है जिन्हें फाइलनाम में प्रयुक्त नहीं किया जा सकता"
 
 # gtk/gtkfilesel.c:1595
-#: gtk/gtkfilesel.c:1623
+#: gtk/gtkfilesel.c:1600
 #, c-format
 msgid ""
 "Error renaming file to \"%s\": %s\n"
@@ -2284,7 +2295,7 @@ msgid ""
 msgstr "फाइलनाम को %s में बदलने में त्रुटि %s"
 
 # gtk/gtkfilesel.c:1609
-#: gtk/gtkfilesel.c:1637
+#: gtk/gtkfilesel.c:1614
 #, c-format
 msgid ""
 "Error renaming file \"%s\": %s\n"
@@ -2292,34 +2303,34 @@ msgid ""
 msgstr "फाइलनाम %s को बदलने में त्रुटि"
 
 # gtk/gtkfilesel.c:1619
-#: gtk/gtkfilesel.c:1647
+#: gtk/gtkfilesel.c:1624
 #, c-format
 msgid "Error renaming file \"%s\" to \"%s\": %s"
 msgstr "फाइलनाम %s को %s में बदलने में त्रुटि %s"
 
 # gtk/gtkfilesel.c:1666
-#: gtk/gtkfilesel.c:1694
+#: gtk/gtkfilesel.c:1671
 msgid "Rename File"
 msgstr "फाइलनाम बदलें"
 
 # gtk/gtkfilesel.c:1681
-#: gtk/gtkfilesel.c:1709
+#: gtk/gtkfilesel.c:1686
 #, c-format
 msgid "Rename file \"%s\" to:"
 msgstr "फाइलनाम %s को बदलें"
 
 # gtk/gtkfilesel.c:1712
-#: gtk/gtkfilesel.c:1740
+#: gtk/gtkfilesel.c:1717
 msgid "Rename"
 msgstr "नाम बदलें"
 
 # gtk/gtkfilesel.c:2103
-#: gtk/gtkfilesel.c:2131
+#: gtk/gtkfilesel.c:2117
 msgid "Selection: "
 msgstr "चयनित"
 
 # gtk/gtkfilesel.c:2983
-#: gtk/gtkfilesel.c:3011
+#: gtk/gtkfilesel.c:3004
 #, c-format
 msgid ""
 "The filename \"%s\" couldn't be converted to UTF-8 (try setting the "
@@ -2329,17 +2340,17 @@ msgstr ""
 "Filenames के समायोजन की जांच करें)"
 
 # gtk/gtkfilesel.c:2986
-#: gtk/gtkfilesel.c:3014
+#: gtk/gtkfilesel.c:3007
 msgid "Invalid Utf-8"
 msgstr "अवैध UTF-8"
 
 # gtk/gtkfilesel.c:3852
-#: gtk/gtkfilesel.c:3880
+#: gtk/gtkfilesel.c:3873
 msgid "Name too long"
 msgstr "नाम अत्यधिक लम्बा है"
 
 # gtk/gtkfilesel.c:3854
-#: gtk/gtkfilesel.c:3882
+#: gtk/gtkfilesel.c:3875
 msgid "Couldn't convert filename"
 msgstr "फाइलनाम परिवर्तित नहीं किया जा सकता"
 
@@ -2525,97 +2536,97 @@ msgid "Error loading icon: %s"
 msgstr "आइकान को लोड करने में त्रुटि %s"
 
 # gtk/gtkimage.c:129
-#: gtk/gtkimage.c:129
+#: gtk/gtkimage.c:131
 msgid "Pixbuf"
 msgstr "Pixbuf"
 
 # gtk/gtkimage.c:130
-#: gtk/gtkimage.c:130
+#: gtk/gtkimage.c:132
 msgid "A GdkPixbuf to display."
 msgstr "प्रदर्शित की जाने वाली GdkPixbuf"
 
 # gtk/gtkimage.c:137
-#: gtk/gtkimage.c:137
+#: gtk/gtkimage.c:139
 msgid "Pixmap"
 msgstr "Pixmap"
 
 # gtk/gtkimage.c:138
-#: gtk/gtkimage.c:138
+#: gtk/gtkimage.c:140
 msgid "A GdkPixmap to display."
 msgstr "प्रदर्शित की जाने वाली GdkPixmap"
 
 # gtk/gtkimage.c:145
-#: gtk/gtkimage.c:145
+#: gtk/gtkimage.c:147
 msgid "Image"
 msgstr "इमेज"
 
 # gtk/gtkimage.c:146
-#: gtk/gtkimage.c:146
+#: gtk/gtkimage.c:148
 msgid "A GdkImage to display."
 msgstr "प्रदर्शित की जाने वाली GdkImage"
 
 # gtk/gtkimage.c:153
-#: gtk/gtkimage.c:153
+#: gtk/gtkimage.c:155
 msgid "Mask"
 msgstr "मास्क"
 
 # gtk/gtkimage.c:154
-#: gtk/gtkimage.c:154
+#: gtk/gtkimage.c:156
 msgid "Mask bitmap to use with GdkImage or GdkPixmap"
 msgstr "GdkImage या Gdk pixmap के साथ प्रयुक्त होने वाला बिटमैप मास्क"
 
 # gtk/gtkimage.c:162
-#: gtk/gtkimage.c:162
+#: gtk/gtkimage.c:164
 msgid "Filename to load and display."
 msgstr "लोड एवं प्रदर्शित की जाने वाली फाइल का नाम"
 
 # gtk/gtkimage.c:170
-#: gtk/gtkimage.c:170
+#: gtk/gtkimage.c:172
 msgid "Stock ID"
 msgstr "Stock ID"
 
 # gtk/gtkimage.c:171
-#: gtk/gtkimage.c:171
+#: gtk/gtkimage.c:173
 msgid "Stock ID for a stock image to display."
 msgstr "प्रदर्शित की जाने वाली भंडार इमेज का stock ID"
 
 # gtk/gtkimage.c:178
-#: gtk/gtkimage.c:178
+#: gtk/gtkimage.c:180
 msgid "Icon set"
 msgstr "आइकान समूह"
 
 # gtk/gtkimage.c:179
-#: gtk/gtkimage.c:179
+#: gtk/gtkimage.c:181
 msgid "Icon set to display."
 msgstr "प्रदर्शित किया जाने वाला आइकान समूह"
 
 # gtk/gtkimage.c:186
-#: gtk/gtkimage.c:186
+#: gtk/gtkimage.c:188
 msgid "Icon size"
 msgstr "आइकान आकार"
 
 # gtk/gtkimage.c:187
-#: gtk/gtkimage.c:187
+#: gtk/gtkimage.c:189
 msgid "Size to use for stock icon or icon set."
 msgstr "भंडार आइकान या आइकान समूह को प्रयोग करने का आकार"
 
 # gtk/gtkimage.c:195
-#: gtk/gtkimage.c:195
+#: gtk/gtkimage.c:197
 msgid "Animation"
 msgstr "एनीमेशन"
 
 # gtk/gtkimage.c:196
-#: gtk/gtkimage.c:196
+#: gtk/gtkimage.c:198
 msgid "GdkPixbufAnimation to display."
 msgstr "प्रदर्शित किए जाने वाला Gdk Pixbuf Animation"
 
 # gtk/gtkimage.c:203
-#: gtk/gtkimage.c:203
+#: gtk/gtkimage.c:205
 msgid "Storage type"
 msgstr "संग्रहण प्रकार"
 
 # gtk/gtkimage.c:204
-#: gtk/gtkimage.c:204
+#: gtk/gtkimage.c:206
 msgid "The representation being used for image data."
 msgstr "इमेज डाटा के लिए प्रयुक्त प्रस्तुतिकरण"
 
@@ -2819,7 +2830,7 @@ msgid "Horizontal adjustment"
 msgstr "छैतिज समायोजन"
 
 # gtk/gtklayout.c:618 gtk/gtkscrolledwindow.c:237
-#: gtk/gtklayout.c:624 gtk/gtkscrolledwindow.c:237
+#: gtk/gtklayout.c:624 gtk/gtkscrolledwindow.c:233
 msgid "The GtkAdjustment for the horizontal position."
 msgstr ""
 
@@ -2829,7 +2840,7 @@ msgid "Vertical adjustment"
 msgstr "उर्ध्वाधर समायोजन"
 
 # gtk/gtklayout.c:626 gtk/gtkscrolledwindow.c:244
-#: gtk/gtklayout.c:632 gtk/gtkscrolledwindow.c:244
+#: gtk/gtklayout.c:632 gtk/gtkscrolledwindow.c:240
 msgid "The GtkAdjustment for the vertical position."
 msgstr ""
 
@@ -3075,7 +3086,7 @@ msgid "Whether tabs should have homogeneous sizes"
 msgstr "क्या सभी टैब का आकार एक समान हो"
 
 # gtk/gtknotebook.c:2439 gtk/gtknotebook.c:4695
-#: gtk/gtknotebook.c:2440 gtk/gtknotebook.c:4696
+#: gtk/gtknotebook.c:2450 gtk/gtknotebook.c:4706
 #, c-format
 msgid "Page %u"
 msgstr "पेज %u"
@@ -3538,52 +3549,52 @@ msgstr ""
 "स्क्रोलबार पर विपरीत सिरे पर एक द्वितीय आगे की ओर तीर निशान वाली बटन प्रदर्शित करें"
 
 # gtk/gtkscrolledwindow.c:236 gtk/gtktext.c:598 gtk/gtktreeview.c:522
-#: gtk/gtkscrolledwindow.c:236 gtk/gtktext.c:598 gtk/gtktreeview.c:523
+#: gtk/gtkscrolledwindow.c:232 gtk/gtktext.c:598 gtk/gtktreeview.c:523
 msgid "Horizontal Adjustment"
 msgstr "छैतिज समायोजन"
 
 # gtk/gtkscrolledwindow.c:243 gtk/gtktext.c:606 gtk/gtktreeview.c:530
-#: gtk/gtkscrolledwindow.c:243 gtk/gtktext.c:606 gtk/gtktreeview.c:531
+#: gtk/gtkscrolledwindow.c:239 gtk/gtktext.c:606 gtk/gtktreeview.c:531
 msgid "Vertical Adjustment"
 msgstr "उर्ध्वाधर समायोजन"
 
 # gtk/gtkscrolledwindow.c:250
-#: gtk/gtkscrolledwindow.c:250
+#: gtk/gtkscrolledwindow.c:246
 msgid "Horizontal Scrollbar Policy"
 msgstr "छैतिज स्क्रोलबार नीति"
 
 # gtk/gtkscrolledwindow.c:251
-#: gtk/gtkscrolledwindow.c:251
+#: gtk/gtkscrolledwindow.c:247
 msgid "When the horizontal scrollbar is displayed"
 msgstr "छैतिज स्क्रोलबार को कब प्रदर्शित किया जाना है"
 
 # gtk/gtkscrolledwindow.c:258
-#: gtk/gtkscrolledwindow.c:258
+#: gtk/gtkscrolledwindow.c:254
 msgid "Vertical Scrollbar Policy"
 msgstr "उर्ध्वाधर स्क्रोलबार नीति"
 
 # gtk/gtkscrolledwindow.c:259
-#: gtk/gtkscrolledwindow.c:259
+#: gtk/gtkscrolledwindow.c:255
 msgid "When the vertical scrollbar is displayed"
 msgstr "उर्ध्वाधर स्क्रोलबार को कब प्रदर्शित किया जाना है"
 
 # gtk/gtkscrolledwindow.c:267
-#: gtk/gtkscrolledwindow.c:267
+#: gtk/gtkscrolledwindow.c:263
 msgid "Window Placement"
 msgstr "विन्डो स्थान निर्धारण"
 
 # gtk/gtkscrolledwindow.c:268
-#: gtk/gtkscrolledwindow.c:268
+#: gtk/gtkscrolledwindow.c:264
 msgid "Where the contents are located with respect to the scrollbars"
 msgstr "स्क्रोलबार के सापेछ विषयवस्तु को कहां रखा जाना है"
 
 # gtk/gtkscrolledwindow.c:275
-#: gtk/gtkscrolledwindow.c:275
+#: gtk/gtkscrolledwindow.c:271
 msgid "Shadow Type"
 msgstr "छाया प्रकार"
 
 # gtk/gtkscrolledwindow.c:276
-#: gtk/gtkscrolledwindow.c:276
+#: gtk/gtkscrolledwindow.c:272
 msgid "Style of bevel around the contents"
 msgstr "विषय वस्तु के चारों ओर के उठाव का प्रकार"
 
@@ -3845,7 +3856,8 @@ msgstr "कापी"
 
 # gtk/gtkstock.c:284
 #: gtk/gtkstock.c:284
-msgid "C_ut"
+#, fuzzy
+msgid "Cu_t"
 msgstr "हटाएं"
 
 # gtk/gtkstock.c:285
@@ -4583,7 +4595,7 @@ msgid "If the insertion cursor is shown"
 msgstr "यदि प्रविष्टि कर्सर दिखाया गया है"
 
 # gtk/gtktextview.c:6366
-#: gtk/gtktextview.c:6416
+#: gtk/gtktextview.c:6417
 msgid "Input _Methods"
 msgstr "इनपुट विधियां"
 

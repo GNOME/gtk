@@ -1,3 +1,39 @@
+Overview of Changes in GTK+ 2.0.7
+=================================
+* Fix some memory leaks in gdk-pixbuf [Sven Neumann]
+* Pixbuf loader fixes  [Federico Mena Quintero, Elliot Lee]
+* Support depth 8 StaticColor in GdkRGB [Matthias Clasen]
+* Win32 fixes and improvements [Tor Lillqvist]
+ - Keyboard handling fixes [Florian Dugent]
+ - Fixes for building and running on Cygwin [Masahiro Sakai]
+ - Fix gdk_window_scroll(), other GdkWindow fixes
+ - Misc bug and build fixes [Soren Andersen, Florent, Tim Evans,
+   J. Ali Harlow, Andreas Holzmann, Iwasa Kazmi]
+* Improve tracking of toplevel focus state [Owen]
+* XIM input method fixes [Takuro Ashie, HideToshi Tajima]
+* Fix the longstanding problem with <,> keys and XIM [Owen Taylor]
+* Fix GtkIMContextSimple for us-intl keyboards [Alexandre Oliva]
+* GtkIMContextSimple updates for Eastern Europe [Stanislav Brabec]
+* Fix the "key bindings randomly stop working" problem [Sebastian Ritau]
+* GtkTextView fixes [Gustavo Giraldez, Padraig O'Briain, Shivaram Upadhyayula]
+* GtkTreeView bugfixes [Jonathan Blandford, Kristian Rietveld]
+  - Various memleak, ref counting fixes [Jonathan, Jorn Baayen, Daniel 
+    Elstner, Morten Welinder]
+  - gtk_tree_selection_selected_foreach now immediately returns if 
+    the model is being changed [Havoc Pennington]
+  - Fix evil bug with insertions to GtkTreeModelSort [Hans Petter Jansson]
+* GtkCombo fixes [Marco Pesenti Gritti, Zimler Attila, Matthias, Owen]
+* Fix 64-bit problem with GtkFundamentalType [Ross Alexander, Manish Singh] 
+* New and updated translations (am,be,bg,ca,cs,da,de,el,es,el,fa,fr,hi,hu,
+  ja,ko,lv,ms,nl,no,pl,pt,pt_BR,ru,sk,sv,vi,zh_TW)
+* Many miscellaneous bug fixes
+
+Other contributors: Jacob Berkman, Alvert Chin, Chema Celorio,
+   David L. Cooper II, Brent Fox, Tim Janik, Marco Pesenti Gritti, 
+   Alex Larsson, Zenith Lau, Thomas Leonard, Gaute Lindkvist, 
+   Paolo Maggi, Andy Wingo, Jami Pekannen, Joshua N Pritikin, 
+   Soeren Sandmann, Vitaly Tishkov, Morten Welinder
+
 Overview of Changes in GTK+ 2.0.6
 =================================
 

@@ -585,42 +585,6 @@ Define a function pointer.  Deprecated.
 @arg: 
 @arg_id: 
 
-<!-- ##### ARG GtkBox:expand ##### -->
-<para>
-
-</para>
-
-
-<!-- ##### ARG GtkBox:fill ##### -->
-<para>
-
-</para>
-
-
-<!-- ##### ARG GtkBox:pack-type ##### -->
-<para>
-
-</para>
-
-
-<!-- ##### ARG GtkBox:padding ##### -->
-<para>
-
-</para>
-
-
-<!-- ##### ARG GtkBox:position ##### -->
-<para>
-
-</para>
-
-
-<!-- ##### ARG GtkButtonBox:secondary ##### -->
-<para>
-
-</para>
-
-
 <!-- ##### STRUCT GtkCellRendererTextPixbuf ##### -->
 <para>
 
@@ -853,18 +817,6 @@ You may not attach these to signals created with the
 </para>
 
 
-<!-- ##### ARG GtkFixed:x ##### -->
-<para>
-
-</para>
-
-
-<!-- ##### ARG GtkFixed:y ##### -->
-<para>
-
-</para>
-
-
 <!-- ##### ENUM GtkFontFilterType ##### -->
 <para>
 A set of bit flags used to specify the filter being set
@@ -925,18 +877,6 @@ a RC file.
 </para>
 
 
-<!-- ##### ARG GtkLayout:x ##### -->
-<para>
-
-</para>
-
-
-<!-- ##### ARG GtkLayout:y ##### -->
-<para>
-
-</para>
-
-
 <!-- ##### SIGNAL GtkMenuBar::cycle-focus ##### -->
 <para>
 
@@ -944,42 +884,6 @@ a RC file.
 
 @menubar: the object which received the signal.
 @arg1: 
-
-<!-- ##### ARG GtkNotebook:menu-label ##### -->
-<para>
-
-</para>
-
-
-<!-- ##### ARG GtkNotebook:position ##### -->
-<para>
-
-</para>
-
-
-<!-- ##### ARG GtkNotebook:tab-expand ##### -->
-<para>
-
-</para>
-
-
-<!-- ##### ARG GtkNotebook:tab-fill ##### -->
-<para>
-
-</para>
-
-
-<!-- ##### ARG GtkNotebook:tab-label ##### -->
-<para>
-
-</para>
-
-
-<!-- ##### ARG GtkNotebook:tab-pack ##### -->
-<para>
-
-</para>
-
 
 <!-- ##### ARG GtkObject:object-signal ##### -->
 <para>
@@ -1285,54 +1189,6 @@ Holds the data for a statusbar message. <structfield>text</structfield> holds th
 @_gtk_reserved10: 
 @_gtk_reserved11: 
 @_gtk_reserved12: 
-
-<!-- ##### ARG GtkTable:bottom-attach ##### -->
-<para>
-
-</para>
-
-
-<!-- ##### ARG GtkTable:left-attach ##### -->
-<para>
-
-</para>
-
-
-<!-- ##### ARG GtkTable:right-attach ##### -->
-<para>
-
-</para>
-
-
-<!-- ##### ARG GtkTable:top-attach ##### -->
-<para>
-
-</para>
-
-
-<!-- ##### ARG GtkTable:x-options ##### -->
-<para>
-
-</para>
-
-
-<!-- ##### ARG GtkTable:x-padding ##### -->
-<para>
-
-</para>
-
-
-<!-- ##### ARG GtkTable:y-options ##### -->
-<para>
-
-</para>
-
-
-<!-- ##### ARG GtkTable:y-padding ##### -->
-<para>
-
-</para>
-
 
 <!-- ##### STRUCT GtkTextBTreeNode ##### -->
 <para>

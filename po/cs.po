@@ -8,7 +8,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.0.0\n"
-"POT-Creation-Date: 2002-10-25 05:13+0200\n"
+"POT-Creation-Date: 2002-11-04 17:01-0500\n"
 "PO-Revision-Date: 2002-10-25 10:59GMT\n"
 "Last-Translator: Michal Bukovjan <bukm@centrum.cz>\n"
 "Language-Team: Czech <cs@li.org>\n"
@@ -34,7 +34,8 @@ msgstr "Není znám způsob, jak nahrát animaci ze souboru '%s'"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:205 gdk-pixbuf/gdk-pixbuf-io.c:640
 #, c-format
-msgid "Failed to load image '%s': reason not known, probably a corrupt image file"
+msgid ""
+"Failed to load image '%s': reason not known, probably a corrupt image file"
 msgstr ""
 "Selhalo načtení obrázku '%s': důvod není znám, pravděpodobně poškozený "
 "soubor s obrázkem"
@@ -89,7 +90,8 @@ msgstr "Nelze načíst obrázek '%s': %s"
 #: gdk-pixbuf/gdk-pixbuf-io.c:756
 #, c-format
 msgid "This build of gdk-pixbuf does not support saving the image format: %s"
-msgstr "Tato verze programu gdk-pixbuf nepodporuje ukládání obrázku ve formátu: %s"
+msgstr ""
+"Tato verze programu gdk-pixbuf nepodporuje ukládání obrázku ve formátu: %s"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:863
 #, c-format
@@ -144,7 +146,7 @@ msgstr "Nedostatek paměti pro načtení bitmapového obrázku"
 msgid "BMP image has unsupported header size"
 msgstr "Obrázek BMP má nepodporovanou velikost hlavičky"
 
-#: gdk-pixbuf/io-bmp.c:325 gdk-pixbuf/io-bmp.c:348 gdk-pixbuf/io-bmp.c:409
+#: gdk-pixbuf/io-bmp.c:325 gdk-pixbuf/io-bmp.c:348 gdk-pixbuf/io-bmp.c:407
 msgid "BMP image has bogus header data"
 msgstr "Obrázek formátu BMP má neplatná data v hlavičce"
 
@@ -297,7 +299,8 @@ msgstr ""
 
 #: gdk-pixbuf/io-jpeg.c:813
 #, c-format
-msgid "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
+msgid ""
+"JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
 msgstr ""
 "Kvalita obrázku ve formátu JPEG musí ležet mezi 0 a 100, hodnota '%d' není "
 "povolená."
@@ -352,7 +355,8 @@ msgid "Fatal error reading PNG image file: %s"
 msgstr "Fatální chyba při čtení souboru ve formátu PNG: %s"
 
 #: gdk-pixbuf/io-png.c:765
-msgid "Keys for PNG tEXt chunks must have at least 1 and at most 79 characters."
+msgid ""
+"Keys for PNG tEXt chunks must have at least 1 and at most 79 characters."
 msgstr "Klíče pro kusy PNG tEXt musí mít alespoň 1 znak a maximálně 79 znaků."
 
 #: gdk-pixbuf/io-png.c:773
@@ -407,7 +411,8 @@ msgstr "Formát obrázku PNM není platný"
 
 #: gdk-pixbuf/io-pnm.c:654
 msgid "PNM image loader does not support this PNM subformat"
-msgstr "Modul pro načítání obrázků ve formátu PNM nepodporuje tento podformát PNM"
+msgstr ""
+"Modul pro načítání obrázků ve formátu PNM nepodporuje tento podformát PNM"
 
 #: gdk-pixbuf/io-pnm.c:709
 msgid "Premature end-of-file encountered"
@@ -624,7 +629,8 @@ msgstr "Nedostatek paměti pro načtení souboru s obrázkem ve formátu XBM"
 
 #: gdk-pixbuf/io-xbm.c:429
 msgid "Failed to write to temporary file when loading XBM image"
-msgstr "Nepodařilo se zapsat dočasný soubor při načítání obrázku ve formátu XBM"
+msgstr ""
+"Nepodařilo se zapsat dočasný soubor při načítání obrázku ve formátu XBM"
 
 #: gdk-pixbuf/io-xpm.c:1229
 msgid "No XPM header found"
@@ -656,7 +662,8 @@ msgstr "Nepodařilo se alokovat paměť pro načtení obrázku ve formátu XPM"
 
 #: gdk-pixbuf/io-xpm.c:1498
 msgid "Failed to write to temporary file when loading XPM image"
-msgstr "Nepodařilo se zapsat dočasný soubor při načítání obrázku ve formátu XPM"
+msgstr ""
+"Nepodařilo se zapsat dočasný soubor při načítání obrázku ve formátu XPM"
 
 #. This is the text that should appear next to menu accelerators
 #. * that use the shift key. If the text on this key isn't typically
@@ -897,7 +904,8 @@ msgid "Use stock"
 msgstr "Použít standardní"
 
 #: gtk/gtkbutton.c:206
-msgid "If set, the label is used to pick a stock item instead of being displayed"
+msgid ""
+"If set, the label is used to pick a stock item instead of being displayed"
 msgstr ""
 "Pokud je nastaveno, text se použije pro výběr standardní položky místo jeho "
 "zobrazení"
@@ -935,7 +943,8 @@ msgid "Child X Displacement"
 msgstr "Posun potomka podle X"
 
 #: gtk/gtkbutton.c:279
-msgid "How far in the x direction to move the child when the button is depressed"
+msgid ""
+"How far in the x direction to move the child when the button is depressed"
 msgstr "O kolik se má posunout potomek ve směru osy X při stisku tlačítka"
 
 #: gtk/gtkbutton.c:286
@@ -943,7 +952,8 @@ msgid "Child Y Displacement"
 msgstr "Posun potomka podle Y"
 
 #: gtk/gtkbutton.c:287
-msgid "How far in the y direction to move the child when the button is depressed"
+msgid ""
+"How far in the y direction to move the child when the button is depressed"
 msgstr "O kolik se má posunout potomek ve směru osy Y při stisku tlačítka"
 
 #: gtk/gtkcellrenderer.c:103
@@ -1182,8 +1192,10 @@ msgid "Rise"
 msgstr "Zvýšení"
 
 #: gtk/gtkcellrenderertext.c:331 gtk/gtktexttag.c:428
-msgid "Offset of text above the baseline (below the baseline if rise is negative)"
-msgstr "Posun textu nad základní čáru (pod základní čáru, pokud je hodnota záporná)"
+msgid ""
+"Offset of text above the baseline (below the baseline if rise is negative)"
+msgstr ""
+"Posun textu nad základní čáru (pod základní čáru, pokud je hodnota záporná)"
 
 #: gtk/gtkcellrenderertext.c:341 gtk/gtktexttag.c:467
 msgid "Strikethrough"
@@ -1422,7 +1434,8 @@ msgstr "Aktuální hodnota Alfa"
 
 #: gtk/gtkcolorsel.c:1726
 msgid "The current opacity value (0 fully transparent, 65535 fully opaque)"
-msgstr "Aktuální hodnota stupně krytí (0 zcela průhledné, 65535 zcela neprůhledné)"
+msgstr ""
+"Aktuální hodnota stupně krytí (0 zcela průhledné, 65535 zcela neprůhledné)"
 
 #: gtk/gtkcolorsel.c:1739
 msgid "Custom palette"
@@ -1533,7 +1546,8 @@ msgid "Always enable arrows"
 msgstr "Vždy povolit šipky"
 
 #: gtk/gtkcombo.c:147
-msgid "Whether the arrow keys work, even if the entry contents are not in the list"
+msgid ""
+"Whether the arrow keys work, even if the entry contents are not in the list"
 msgstr "Zda mají šipky fungovat, i když obsah položky není v seznamu"
 
 #: gtk/gtkcombo.c:153
@@ -1669,7 +1683,8 @@ msgid "Selection Bound"
 msgstr "Okraje výběru"
 
 #: gtk/gtkentry.c:446 gtk/gtklabel.c:369
-msgid "The position of the opposite end of the selection from the cursor in chars."
+msgid ""
+"The position of the opposite end of the selection from the cursor in chars."
 msgstr "Pozice druhého konce výběru od kurzoru ve znacích."
 
 #: gtk/gtkentry.c:456
@@ -1692,7 +1707,8 @@ msgstr "Viditelnost"
 msgid ""
 "FALSE displays the \"invisible char\" instead of the actual text (password "
 "mode)"
-msgstr "FALSE zobrazí místo zadaného textu \"neviditelný znak\" (režim pro hesla)"
+msgstr ""
+"FALSE zobrazí místo zadaného textu \"neviditelný znak\" (režim pro hesla)"
 
 #: gtk/gtkentry.c:480
 msgid "Has Frame"
@@ -1832,7 +1848,8 @@ msgstr "_Přejmenovat soubor"
 
 #: gtk/gtkfilesel.c:1363
 #, c-format
-msgid "The folder name \"%s\" contains symbols that are not allowed in filenames"
+msgid ""
+"The folder name \"%s\" contains symbols that are not allowed in filenames"
 msgstr ""
 "Název adresáře \"%s\" obsahuje znaky, které nejsou v názvech souborů "
 "povoleny."
@@ -1870,7 +1887,8 @@ msgstr "Vytvořit"
 #: gtk/gtkfilesel.c:1490
 #, c-format
 msgid "The filename \"%s\" contains symbols that are not allowed in filenames"
-msgstr "Název souboru \"%s\" obsahuje znaky, které nejsou povoleny pro název souboru."
+msgstr ""
+"Název souboru \"%s\" obsahuje znaky, které nejsou povoleny pro název souboru."
 
 #: gtk/gtkfilesel.c:1493
 #, c-format
@@ -1902,7 +1920,8 @@ msgstr "Smazat soubor"
 #: gtk/gtkfilesel.c:1598 gtk/gtkfilesel.c:1612
 #, c-format
 msgid "The file name \"%s\" contains symbols that are not allowed in filenames"
-msgstr "Název souboru \"%s\" obsahuje znaky, které nejsou povoleny pro název souboru."
+msgstr ""
+"Název souboru \"%s\" obsahuje znaky, které nejsou povoleny pro název souboru."
 
 #: gtk/gtkfilesel.c:1600
 #, c-format
@@ -2412,7 +2431,8 @@ msgstr "Lze měnit akcelerátory"
 msgid ""
 "Whether menu accelerators can be changed by pressing a key over the menu "
 "item."
-msgstr "Zda je možno měnit akcelerátory menu stiskem klávesy nad položkou menu."
+msgstr ""
+"Zda je možno měnit akcelerátory menu stiskem klávesy nad položkou menu."
 
 #: gtk/gtkmenubar.c:152
 msgid "Style of bevel around the menubar"
@@ -2471,7 +2491,8 @@ msgid "X pad"
 msgstr "Mezera X"
 
 #: gtk/gtkmisc.c:118
-msgid "The amount of space to add on the left and right of the widget, in pixels"
+msgid ""
+"The amount of space to add on the left and right of the widget, in pixels"
 msgstr "Množství místa přidaného vlevo a vpravo od prvku, v bodech"
 
 #: gtk/gtkmisc.c:127
@@ -2479,7 +2500,8 @@ msgid "Y pad"
 msgstr "Mezera Y"
 
 #: gtk/gtkmisc.c:128
-msgid "The amount of space to add on the top and bottom of the widget, in pixels"
+msgid ""
+"The amount of space to add on the top and bottom of the widget, in pixels"
 msgstr "Množství místa přidaného nahoře a dole od prvku, v bodech"
 
 #: gtk/gtknotebook.c:362
@@ -2590,7 +2612,8 @@ msgid "Position"
 msgstr "Pozice"
 
 #: gtk/gtkpaned.c:209
-msgid "Position of paned separator in pixels (0 means all the way to the left/top)"
+msgid ""
+"Position of paned separator in pixels (0 means all the way to the left/top)"
 msgstr "Pozice oddělovače v bodech (0 znamená až doleva/nahoru)"
 
 #: gtk/gtkpaned.c:217
@@ -2614,7 +2637,8 @@ msgid "Expand"
 msgstr "Expandovat"
 
 #: gtk/gtkpreview.c:130
-msgid "Whether the preview widget should take up the entire space it is allocated"
+msgid ""
+"Whether the preview widget should take up the entire space it is allocated"
 msgstr "Zda má prvek náhledu zabrat celý prostor, který je mu vyhrazen"
 
 #: gtk/gtkprogress.c:122
@@ -2649,7 +2673,8 @@ msgstr "Zarovnání textu X"
 msgid ""
 "A number between 0.0 and 1.0 specifying the horizontal alignment of the text "
 "in the progresswidget"
-msgstr "Číslo mezi 0.0 a 1.0 udávající horizontální zarovnání textu v prvku průběhu"
+msgstr ""
+"Číslo mezi 0.0 a 1.0 udávající horizontální zarovnání textu v prvku průběhu"
 
 #: gtk/gtkprogress.c:147
 msgid "Text y alignment"
@@ -2659,7 +2684,8 @@ msgstr "Zarovnání textu Y"
 msgid ""
 "A number between 0.0 and 1.0 specifying the vertical alignment of the text "
 "in the progress widget"
-msgstr "Číslo mezi 0.0 a 1.0 udávající vertikální zarovnání textu v prvku průběhu"
+msgstr ""
+"Číslo mezi 0.0 a 1.0 udávající vertikální zarovnání textu v prvku průběhu"
 
 #: gtk/gtkprogressbar.c:131 gtk/gtkrange.c:282 gtk/gtkspinbutton.c:237
 msgid "Adjustment"
@@ -2701,7 +2727,8 @@ msgstr "Bloky aktivity"
 msgid ""
 "The number of blocks which can fit in the progress bar area in activity mode "
 "(Deprecated)"
-msgstr "Počet bloků, které se vejdou do pruhu průběhu v aktivním režimu (zastaralé)"
+msgstr ""
+"Počet bloků, které se vejdou do pruhu průběhu v aktivním režimu (zastaralé)"
 
 #: gtk/gtkprogressbar.c:177
 msgid "Discrete Blocks"
@@ -2711,7 +2738,8 @@ msgstr "Oddělené bloky"
 msgid ""
 "The number of discrete blocks in a progress bar (when shown in the discrete "
 "style)"
-msgstr "Počet oddělených bloků v pruhu průběhu (při zobrazení v odděleném stylu)"
+msgstr ""
+"Počet oddělených bloků v pruhu průběhu (při zobrazení v odděleném stylu)"
 
 #: gtk/gtkprogressbar.c:187
 msgid "Fraction"
@@ -2743,7 +2771,8 @@ msgstr "Jakým způsobem má být prvek pro rozsah aktualizován"
 
 #: gtk/gtkrange.c:283
 msgid "The GtkAdjustment that contains the current value of this range object"
-msgstr "Prvek GtkAdjustment, který obsahuje aktuální hodnotu tohoto prvku pro rozsah"
+msgstr ""
+"Prvek GtkAdjustment, který obsahuje aktuální hodnotu tohoto prvku pro rozsah"
 
 #: gtk/gtkrange.c:290
 msgid "Inverted"
@@ -2790,7 +2819,8 @@ msgid "Arrow X Displacement"
 msgstr "Posun šipky X"
 
 #: gtk/gtkrange.c:330
-msgid "How far in the x direction to move the arrow when the button is depressed"
+msgid ""
+"How far in the x direction to move the arrow when the button is depressed"
 msgstr "O kolik se má posunout šipka ve směru osy X při stisku tlačítka"
 
 #: gtk/gtkrange.c:337
@@ -2798,7 +2828,8 @@ msgid "Arrow Y Displacement"
 msgstr "Posun šipky Y"
 
 #: gtk/gtkrange.c:338
-msgid "How far in the y direction to move the arrow when the button is depressed"
+msgid ""
+"How far in the y direction to move the arrow when the button is depressed"
 msgstr "O kolik se má posunout šipka ve směru osy Y při stisku tlačítka"
 
 #: gtk/gtkrc.c:2282
@@ -2921,16 +2952,20 @@ msgid "Secondary backward stepper"
 msgstr "Druhá šipka pro krok dozadu"
 
 #: gtk/gtkscrollbar.c:110
-msgid "Display a second backward arrow button on the opposite end of the scrollbar"
-msgstr "Zobrazit tlačítko s druhou šipkou pro krok dozadu na opačném konci posuvníku"
+msgid ""
+"Display a second backward arrow button on the opposite end of the scrollbar"
+msgstr ""
+"Zobrazit tlačítko s druhou šipkou pro krok dozadu na opačném konci posuvníku"
 
 #: gtk/gtkscrollbar.c:117
 msgid "Secondary forward stepper"
 msgstr "Druhotná šipka pro krok dopředu"
 
 #: gtk/gtkscrollbar.c:118
-msgid "Display a secondary forward arrow button on the opposite end of the scrollbar"
-msgstr "Zobrazit tlačítko s druhou šipkou pro krok dopředu na opačném konci posuvníku"
+msgid ""
+"Display a secondary forward arrow button on the opposite end of the scrollbar"
+msgstr ""
+"Zobrazit tlačítko s druhou šipkou pro krok dopředu na opačném konci posuvníku"
 
 #: gtk/gtkscrolledwindow.c:232 gtk/gtktext.c:598 gtk/gtktreeview.c:523
 msgid "Horizontal Adjustment"
@@ -3090,7 +3125,8 @@ msgstr "Držet se kroků"
 msgid ""
 "Whether erroneous values are automatically changed to a spin button's "
 "nearest step increment"
-msgstr "Zda jsou chybné hodnoty automaticky změněny na nejbližší správný přírůstek."
+msgstr ""
+"Zda jsou chybné hodnoty automaticky změněny na nejbližší správný přírůstek."
 
 #: gtk/gtkspinbutton.c:273
 msgid "Numeric"
@@ -3113,7 +3149,8 @@ msgid "Update Policy"
 msgstr "Politika aktualizace"
 
 #: gtk/gtkspinbutton.c:290
-msgid "Whether the spin button should update always, or only when the value is legal"
+msgid ""
+"Whether the spin button should update always, or only when the value is legal"
 msgstr ""
 "Zda má být točivé tlačítko vždy aktualizováno, nebo pouze pokud je hodnota "
 "přípustná"
@@ -3440,7 +3477,8 @@ msgstr "Rovnoměrně"
 
 #: gtk/gtktable.c:193
 msgid "If TRUE this means the table cells are all the same width/height"
-msgstr "Pokud má hodnotu TRUE, budou mít všechny buňky tabulky stejnou šířku/výšku"
+msgstr ""
+"Pokud má hodnotu TRUE, budou mít všechny buňky tabulky stejnou šířku/výšku"
 
 #: gtk/gtktext.c:599
 msgid "Horizontal adjustment for the text widget"
@@ -3575,7 +3613,8 @@ msgid "Wrap mode"
 msgstr "Režim zalamování"
 
 #: gtk/gtktexttag.c:485 gtk/gtktextview.c:577
-msgid "Whether to wrap lines never, at word boundaries, or at character boundaries"
+msgid ""
+"Whether to wrap lines never, at word boundaries, or at character boundaries"
 msgstr ""
 "Zda jsou řádky zalamované na hranicích slov, znaků, nebo nejsou zalamované "
 "vůbec"
@@ -3835,7 +3874,8 @@ msgstr "Styl prostoru"
 
 #: gtk/gtktoolbar.c:261
 msgid "Whether spacers are vertical lines or just blank"
-msgstr "Zda jsou oddělovače kresleny jako vertikální čáry nebo pouze prázdný prostor"
+msgstr ""
+"Zda jsou oddělovače kresleny jako vertikální čáry nebo pouze prázdný prostor"
 
 #: gtk/gtktoolbar.c:269
 msgid "Button relief"
@@ -3854,7 +3894,8 @@ msgid "Toolbar style"
 msgstr "Styl nástrojové lišty"
 
 #: gtk/gtktoolbar.c:285
-msgid "Whether default toolbars have text only, text and icons, icons only, etc."
+msgid ""
+"Whether default toolbars have text only, text and icons, icons only, etc."
 msgstr ""
 "Zda mají výchozí nástrojové lišty pouze text, text a ikony, pouze ikony, "
 "apod."
@@ -3929,7 +3970,8 @@ msgstr "Rada o pravidlech"
 
 #: gtk/gtktreeview.c:572
 msgid "Set a hint to the theme engine to draw rows in alternating colors"
-msgstr "Nastaví radu pro podporu témat pro kreslení řádek ve střídavých barvách"
+msgstr ""
+"Nastaví radu pro podporu témat pro kreslení řádek ve střídavých barvách"
 
 #: gtk/gtktreeview.c:579
 msgid "Enable Search"
@@ -4099,7 +4141,8 @@ msgstr ""
 msgid ""
 "The GtkAdjustment that determines the values of the vertical position for "
 "this viewport."
-msgstr "Prvek GtkAdjustment, který určuje hodnoty vertikální polohy pro tento pohled."
+msgstr ""
+"Prvek GtkAdjustment, který určuje hodnoty vertikální polohy pro tento pohled."
 
 #: gtk/gtkviewport.c:149
 msgid "Determines how the shadowed box around the viewport is drawn."
@@ -4203,7 +4246,8 @@ msgstr "Přijímá jako výchozí"
 
 #: gtk/gtkwidget.c:473
 msgid "If TRUE, the widget will receive the default action when it is focused."
-msgstr "Pokud má hodnotu TRUE, přijímá prvek výchozí akci v případě, že má fokus."
+msgstr ""
+"Pokud má hodnotu TRUE, přijímá prvek výchozí akci v případě, že má fokus."
 
 #: gtk/gtkwidget.c:479
 msgid "Composite child"
@@ -4239,7 +4283,8 @@ msgstr "Rozšířené události"
 
 #: gtk/gtkwidget.c:502
 msgid "The mask that decides what kind of extension events this widget gets."
-msgstr "Maska určující, které typy rozšířených událostí bude tento prvek dostávat."
+msgstr ""
+"Maska určující, které typy rozšířených událostí bude tento prvek dostávat."
 
 #: gtk/gtkwidget.c:1051
 msgid "Interior Focus"
@@ -4369,7 +4414,8 @@ msgid "Default Width"
 msgstr "Výchozí šířka"
 
 #: gtk/gtkwindow.c:472
-msgid "The default width of the window, used when initially showing the window."
+msgid ""
+"The default width of the window, used when initially showing the window."
 msgstr "Výchozí šířka okna použitá při počátečním zobrazení okna."
 
 #: gtk/gtkwindow.c:481
@@ -4377,7 +4423,8 @@ msgid "Default Height"
 msgstr "Výchozí výška"
 
 #: gtk/gtkwindow.c:482
-msgid "The default height of the window, used when initially showing the window."
+msgid ""
+"The default height of the window, used when initially showing the window."
 msgstr "Výchozí výška okna použitá při počátečním zobrazení okna."
 
 #: gtk/gtkwindow.c:491
@@ -4440,4 +4487,3 @@ msgstr "Vietnamsky (VIQR)"
 #: modules/input/imxim.c:27
 msgid "X Input Method"
 msgstr "Metoda vstupu X"
-

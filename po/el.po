@@ -12,7 +12,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.0.66\n"
-"POT-Creation-Date: 2002-10-16 13:19+0100\n"
+"POT-Creation-Date: 2002-11-04 17:01-0500\n"
 "PO-Revision-Date: 2002-10-16 11:49+0200\n"
 "Last-Translator: Kostas Papadimas <pkst@gmx.net>\n"
 "Language-Team: Greek <nls@hellug.gr>\n"
@@ -151,7 +151,7 @@ msgstr "Ανεπάρκεια μνήμης για τη φόρτωση εικόν�
 msgid "BMP image has unsupported header size"
 msgstr "Δεν υποστηρίζεται η κεφαλίδα της εικόνας BMP"
 
-#: gdk-pixbuf/io-bmp.c:325 gdk-pixbuf/io-bmp.c:348 gdk-pixbuf/io-bmp.c:409
+#: gdk-pixbuf/io-bmp.c:325 gdk-pixbuf/io-bmp.c:348 gdk-pixbuf/io-bmp.c:407
 msgid "BMP image has bogus header data"
 msgstr "Τα δεδομένα κεφαλίδας της εικόνας BMP είναι πλαστά"
 
@@ -160,7 +160,7 @@ msgstr "Τα δεδομένα κεφαλίδας της εικόνας BMP εί�
 msgid "Failure reading GIF: %s"
 msgstr "Αδυναμία ανάγνωσης GIF: %s"
 
-#: gdk-pixbuf/io-gif.c:460 gdk-pixbuf/io-gif.c:1382 gdk-pixbuf/io-gif.c:1542
+#: gdk-pixbuf/io-gif.c:460 gdk-pixbuf/io-gif.c:1392 gdk-pixbuf/io-gif.c:1552
 msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
 msgstr ""
 "Λείπουν κάποια δεδομένα από το αρχείο GIF (ίσως να αποκόπηκε με κάποιο "
@@ -171,51 +171,55 @@ msgstr ""
 msgid "Internal error in the GIF loader (%s)"
 msgstr "Εσωτερικό σφάλμα στη μονάδα φόρτωσης GIF (%s)"
 
-#: gdk-pixbuf/io-gif.c:592
+#: gdk-pixbuf/io-gif.c:541
+msgid "Stack overflow"
+msgstr ""
+
+#: gdk-pixbuf/io-gif.c:600
 msgid "GIF image loader can't understand this image."
 msgstr "Η μονάδα φόρτωσης GIF δεν αναγνωρίζει αυτήν την εικόνα"
 
-#: gdk-pixbuf/io-gif.c:621
+#: gdk-pixbuf/io-gif.c:629
 msgid "Bad code encountered"
 msgstr "Εντοπίστηκε εσφαλμένος κώδικας"
 
-#: gdk-pixbuf/io-gif.c:630
+#: gdk-pixbuf/io-gif.c:639
 msgid "Circular table entry in GIF file"
 msgstr "Κυκλική καταχώρηση πίνακα στο αρχείο GIF"
 
-#: gdk-pixbuf/io-gif.c:762 gdk-pixbuf/io-gif.c:1370 gdk-pixbuf/io-gif.c:1415
-#: gdk-pixbuf/io-gif.c:1530
+#: gdk-pixbuf/io-gif.c:772 gdk-pixbuf/io-gif.c:1380 gdk-pixbuf/io-gif.c:1425
+#: gdk-pixbuf/io-gif.c:1540
 msgid "Not enough memory to load GIF file"
 msgstr "Ανεπάρκεια μνήμης για τη φόρτωση του αρχείου GIF"
 
-#: gdk-pixbuf/io-gif.c:1009
+#: gdk-pixbuf/io-gif.c:1019
 msgid "GIF image is corrupt (incorrect LZW compression)"
 msgstr "Η  εικόνα GIF είναι κατεστραμμένη (εσφαλμένη συμπίεση LZW)"
 
-#: gdk-pixbuf/io-gif.c:1059
+#: gdk-pixbuf/io-gif.c:1069
 msgid "File does not appear to be a GIF file"
 msgstr "Το αρχείο δεν φαίνεται να είναι αρχείο GIF"
 
-#: gdk-pixbuf/io-gif.c:1071
+#: gdk-pixbuf/io-gif.c:1081
 #, c-format
 msgid "Version %s of the GIF file format is not supported"
 msgstr "Οι εκδόσεις %s του τύπου αρχείων GIF δεν υποστηρίζονται"
 
-#: gdk-pixbuf/io-gif.c:1144
+#: gdk-pixbuf/io-gif.c:1154
 msgid "GIF image contained a frame with height or width 0."
 msgstr "Η εικόνα GIF περιέχει ένα πλαίσιο με ύψος ή πλάτος 0"
 
-#: gdk-pixbuf/io-gif.c:1157
+#: gdk-pixbuf/io-gif.c:1167
 msgid "GIF image contained a frame appearing outside the image bounds."
 msgstr "Η εικόνα GIF περιέχει ένα πλαίσιο έξω από τα περιθώρια εικόνας"
 
-#: gdk-pixbuf/io-gif.c:1173
+#: gdk-pixbuf/io-gif.c:1183
 msgid "First frame of GIF image had 'revert to previous' as its disposal mode."
 msgstr ""
 "Το πρώτο πλαίσιο της εικόνας GIF έχει 'revert to previous' as its disposal "
 "mode"
 
-#: gdk-pixbuf/io-gif.c:1208
+#: gdk-pixbuf/io-gif.c:1218
 msgid ""
 "GIF image has no global colormap, and a frame inside it has no local "
 "colormap."
@@ -223,7 +227,7 @@ msgstr ""
 "Η εικόνα GIF περιέχει δεν έχει γενικό colormap, και ένα εσωτερικό πλαίσιο "
 "δεν έχειτοπικό colormap."
 
-#: gdk-pixbuf/io-gif.c:1437
+#: gdk-pixbuf/io-gif.c:1447
 msgid "GIF image was truncated or incomplete."
 msgstr "Η εικόνα GIF ήταν είτε κατεστραμμένη ή ημιτελής"
 
@@ -277,8 +281,8 @@ msgid ""
 "Insufficient memory to load image, try exiting some applications to free "
 "memory"
 msgstr ""
-"Ανεπάρκεια μνήμης για τη φόρτωση εικόνας, βγείτε από ορισμένες εφαρμογές "
-"για ναελευθερώσετε μνήμη"
+"Ανεπάρκεια μνήμης για τη φόρτωση εικόνας, βγείτε από ορισμένες εφαρμογές για "
+"ναελευθερώσετε μνήμη"
 
 #: gdk-pixbuf/io-jpeg.c:380 gdk-pixbuf/io-jpeg.c:730
 #, c-format
@@ -740,9 +744,9 @@ msgid ""
 "If available horizontal space is bigger than needed for the child, how much "
 "of it to use for the child. 0.0 means none, 1.0 means all"
 msgstr ""
-"Αν υπάρχει διάθεσιμος οριζόντιος χώρος μεγαλύτερος από όσο χρειάζεται, "
-"πόσο από αυτό το χώρο να χρησιμοποιηθεί για το θυγατρικό. 0.0 σημαίνει "
-"καθόλου, 1.0 σημαίνει όλο το χώρο"
+"Αν υπάρχει διάθεσιμος οριζόντιος χώρος μεγαλύτερος από όσο χρειάζεται, πόσο "
+"από αυτό το χώρο να χρησιμοποιηθεί για το θυγατρικό. 0.0 σημαίνει καθόλου, "
+"1.0 σημαίνει όλο το χώρο"
 
 #: gtk/gtkalignment.c:130
 msgid "Vertical scale"
@@ -1467,8 +1471,8 @@ msgid ""
 "Click the eyedropper, then click a color anywhere on your screen to select "
 "that color."
 msgstr ""
-"Πατήστε στο eyedropper, και μετά πατήστε σε ένα χρώμα οπουδήποτε στην "
-"οθόνη για να επιλέξετε αυτό το χρώμα."
+"Πατήστε στο eyedropper, και μετά πατήστε σε ένα χρώμα οπουδήποτε στην οθόνη "
+"για να επιλέξετε αυτό το χρώμα."
 
 #: gtk/gtkcolorsel.c:1821
 msgid "_Hue:"
@@ -1784,15 +1788,15 @@ msgstr "Επιλογή σε εστίαση"
 msgid "Whether to select the contents of an entry when it is focused."
 msgstr "Αν θα επιλέγονατι τα περιεχόμενα μιας καταχώρισης όταν γίνεται εστίαση"
 
-#: gtk/gtkentry.c:3877 gtk/gtklabel.c:3179
+#: gtk/gtkentry.c:3902 gtk/gtklabel.c:3179
 msgid "Select All"
 msgstr "Επιλογή όλων"
 
-#: gtk/gtkentry.c:3887 gtk/gtklabel.c:3189
+#: gtk/gtkentry.c:3912 gtk/gtklabel.c:3189
 msgid "Input Methods"
 msgstr "Μέθοδοι εισαγωγής"
 
-#: gtk/gtkentry.c:3897 gtk/gtktextview.c:6426
+#: gtk/gtkentry.c:3922 gtk/gtktextview.c:6426
 msgid "_Insert Unicode control character"
 msgstr "_Εισαγωγή χαρακτήρα Unicode control"
 
@@ -2768,8 +2772,8 @@ msgid ""
 "The number of blocks which can fit in the progress bar area in activity mode "
 "(Deprecated)"
 msgstr ""
-"Ο αριθμός των μπλόκ που μπορούν να χωρέσουν στη μπάρα προόδου στην "
-"κατάσταση δραστηριότητας(Deprecated)"
+"Ο αριθμός των μπλόκ που μπορούν να χωρέσουν στη μπάρα προόδου στην κατάσταση "
+"δραστηριότητας(Deprecated)"
 
 #: gtk/gtkprogressbar.c:177
 msgid "Discrete Blocks"
@@ -4368,8 +4372,7 @@ msgstr "Μοτίβο γραμμής εστίασης"
 
 #: gtk/gtkwidget.c:1066
 msgid "Dash pattern used to draw the focus indicator."
-msgstr ""
-"Μοτίβο που θα χρησιμοποιείται για τη σχεδίαση της επισήμανσης εστίασης"
+msgstr "Μοτίβο που θα χρησιμοποιείται για τη σχεδίαση της επισήμανσης εστίασης"
 
 #: gtk/gtkwidget.c:1071
 msgid "Focus padding"

@@ -23,29 +23,13 @@ information about the type is held in a private struct named
 </para>
 
 
-<!-- ##### ENUM GtkFundamentalType ##### -->
+<!-- ##### TYPEDEF GtkFundamentalType ##### -->
 <para>
 #GtkFundamentalType is an enumerated type which lists all the possible
 fundamental types (e.g. <type>char</type>, <type>uchar</type>, <type>int</type>,
 <type>long</type>, <type>float</type>, etc).
 </para>
 
-@GTK_TYPE_INVALID: 
-@GTK_TYPE_NONE: 
-@GTK_TYPE_ENUM: 
-@GTK_TYPE_FLAGS: 
-@GTK_TYPE_CHAR: 
-@GTK_TYPE_UCHAR: 
-@GTK_TYPE_BOOL: 
-@GTK_TYPE_INT: 
-@GTK_TYPE_UINT: 
-@GTK_TYPE_LONG: 
-@GTK_TYPE_ULONG: 
-@GTK_TYPE_FLOAT: 
-@GTK_TYPE_DOUBLE: 
-@GTK_TYPE_STRING: 
-@GTK_TYPE_BOXED: 
-@GTK_TYPE_POINTER: 
 
 <!-- ##### MACRO GTK_CLASS_NAME ##### -->
 <para>

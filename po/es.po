@@ -11,7 +11,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.gtk-2-0.es\n"
-"POT-Creation-Date: 2002-10-30 22:18-0300\n"
+"POT-Creation-Date: 2002-11-04 17:01-0500\n"
 "PO-Revision-Date: 2002-10-29 14:46+0100\n"
 "Last-Translator: Juan Manuel García Molina <juanma_gm@wanadoo.es>\n"
 "Language-Team: Spanish <traductores@es.gnome.org>\n"
@@ -150,7 +150,7 @@ msgstr "No existe memoria suficiente para cargar el mapa de bits"
 msgid "BMP image has unsupported header size"
 msgstr "La imagen BMP tiene un tamaño de cabecera no implementado"
 
-#: gdk-pixbuf/io-bmp.c:325 gdk-pixbuf/io-bmp.c:348 gdk-pixbuf/io-bmp.c:409
+#: gdk-pixbuf/io-bmp.c:325 gdk-pixbuf/io-bmp.c:348 gdk-pixbuf/io-bmp.c:407
 msgid "BMP image has bogus header data"
 msgstr "La imagen BMP tiene datos de cabecera erróneos"
 

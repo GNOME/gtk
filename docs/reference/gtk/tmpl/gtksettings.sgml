@@ -155,7 +155,12 @@ GtkSettings
 @origin: 
 
 
-<!-- ##### ARG GtkSettings:gtk-double-click-time ##### -->
+<!-- ##### ARG GtkSettings:gtk-can-change-accels ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkSettings:gtk-color-palette ##### -->
 <para>
 
 </para>
@@ -170,12 +175,22 @@ GtkSettings
 
 </para>
 
-<!-- ##### ARG GtkSettings:gtk-split-cursor ##### -->
+<!-- ##### ARG GtkSettings:gtk-dnd-drag-threshold ##### -->
 <para>
 
 </para>
 
-<!-- ##### ARG GtkSettings:gtk-theme-name ##### -->
+<!-- ##### ARG GtkSettings:gtk-double-click-time ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkSettings:gtk-entry-select-on-focus ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkSettings:gtk-font-name ##### -->
 <para>
 
 </para>
@@ -190,37 +205,22 @@ GtkSettings
 
 </para>
 
-<!-- ##### ARG GtkSettings:gtk-dnd-drag-threshold ##### -->
+<!-- ##### ARG GtkSettings:gtk-split-cursor ##### -->
 <para>
 
 </para>
 
-<!-- ##### ARG GtkSettings:gtk-font-name ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkSettings:gtk-color-palette ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkSettings:gtk-entry-select-on-focus ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkSettings:gtk-can-change-accels ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkSettings:gtk-toolbar-style ##### -->
+<!-- ##### ARG GtkSettings:gtk-theme-name ##### -->
 <para>
 
 </para>
 
 <!-- ##### ARG GtkSettings:gtk-toolbar-icon-size ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkSettings:gtk-toolbar-style ##### -->
 <para>
 
 </para>

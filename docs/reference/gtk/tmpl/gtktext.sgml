@@ -217,15 +217,15 @@ Used by the #GtkText widget to keep track of the size of it's horizontal
 text.
 </para>
 
+<!-- ##### ARG GtkText:line-wrap ##### -->
+<para>
+Boolean value indicating whether line wrap is enabled or not.
+</para>
+
 <!-- ##### ARG GtkText:vadjustment ##### -->
 <para>
 Used by the #GtkText widget to keep track of the size of it's vertical
 text.
-</para>
-
-<!-- ##### ARG GtkText:line-wrap ##### -->
-<para>
-Boolean value indicating whether line wrap is enabled or not.
 </para>
 
 <!-- ##### ARG GtkText:word-wrap ##### -->

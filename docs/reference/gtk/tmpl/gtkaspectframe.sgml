@@ -63,12 +63,7 @@ to 1.0 (right aligned)
     ratio is taken from the requistion of the child.
 
 
-<!-- ##### ARG GtkAspectFrame:xalign ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkAspectFrame:yalign ##### -->
+<!-- ##### ARG GtkAspectFrame:obey-child ##### -->
 <para>
 
 </para>
@@ -78,7 +73,12 @@ to 1.0 (right aligned)
 
 </para>
 
-<!-- ##### ARG GtkAspectFrame:obey-child ##### -->
+<!-- ##### ARG GtkAspectFrame:xalign ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkAspectFrame:yalign ##### -->
 <para>
 
 </para>

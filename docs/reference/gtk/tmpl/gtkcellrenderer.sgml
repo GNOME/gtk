@@ -117,6 +117,21 @@ GtkCellRenderer
 @height: 
 
 
+<!-- ##### ARG GtkCellRenderer:height ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkCellRenderer:is-expanded ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkCellRenderer:is-expander ##### -->
+<para>
+
+</para>
+
 <!-- ##### ARG GtkCellRenderer:mode ##### -->
 <para>
 
@@ -127,12 +142,12 @@ GtkCellRenderer
 
 </para>
 
-<!-- ##### ARG GtkCellRenderer:xalign ##### -->
+<!-- ##### ARG GtkCellRenderer:width ##### -->
 <para>
 
 </para>
 
-<!-- ##### ARG GtkCellRenderer:yalign ##### -->
+<!-- ##### ARG GtkCellRenderer:xalign ##### -->
 <para>
 
 </para>
@@ -142,27 +157,12 @@ GtkCellRenderer
 
 </para>
 
+<!-- ##### ARG GtkCellRenderer:yalign ##### -->
+<para>
+
+</para>
+
 <!-- ##### ARG GtkCellRenderer:ypad ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkCellRenderer:width ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkCellRenderer:height ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkCellRenderer:is-expander ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkCellRenderer:is-expanded ##### -->
 <para>
 
 </para>

@@ -46,16 +46,6 @@ GtkCellRendererText
 @arg1: 
 @arg2: 
 
-<!-- ##### ARG GtkCellRendererText:text ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkCellRendererText:markup ##### -->
-<para>
-
-</para>
-
 <!-- ##### ARG GtkCellRendererText:attributes ##### -->
 <para>
 
@@ -66,17 +56,32 @@ GtkCellRendererText
 
 </para>
 
-<!-- ##### ARG GtkCellRendererText:foreground ##### -->
-<para>
-
-</para>
-
 <!-- ##### ARG GtkCellRendererText:background-gdk ##### -->
 <para>
 
 </para>
 
-<!-- ##### ARG GtkCellRendererText:foreground-gdk ##### -->
+<!-- ##### ARG GtkCellRendererText:background-set ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkCellRendererText:editable ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkCellRendererText:editable-set ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkCellRendererText:family ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkCellRendererText:family-set ##### -->
 <para>
 
 </para>
@@ -91,27 +96,42 @@ GtkCellRendererText
 
 </para>
 
-<!-- ##### ARG GtkCellRendererText:family ##### -->
+<!-- ##### ARG GtkCellRendererText:foreground ##### -->
 <para>
 
 </para>
 
-<!-- ##### ARG GtkCellRendererText:style ##### -->
+<!-- ##### ARG GtkCellRendererText:foreground-gdk ##### -->
 <para>
 
 </para>
 
-<!-- ##### ARG GtkCellRendererText:variant ##### -->
+<!-- ##### ARG GtkCellRendererText:foreground-set ##### -->
 <para>
 
 </para>
 
-<!-- ##### ARG GtkCellRendererText:weight ##### -->
+<!-- ##### ARG GtkCellRendererText:markup ##### -->
 <para>
 
 </para>
 
-<!-- ##### ARG GtkCellRendererText:stretch ##### -->
+<!-- ##### ARG GtkCellRendererText:rise ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkCellRendererText:rise-set ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkCellRendererText:scale ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkCellRendererText:scale-set ##### -->
 <para>
 
 </para>
@@ -126,57 +146,12 @@ GtkCellRendererText
 
 </para>
 
-<!-- ##### ARG GtkCellRendererText:scale ##### -->
+<!-- ##### ARG GtkCellRendererText:size-set ##### -->
 <para>
 
 </para>
 
-<!-- ##### ARG GtkCellRendererText:editable ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkCellRendererText:strikethrough ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkCellRendererText:underline ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkCellRendererText:rise ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkCellRendererText:background-set ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkCellRendererText:foreground-set ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkCellRendererText:family-set ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkCellRendererText:style-set ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkCellRendererText:variant-set ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkCellRendererText:weight-set ##### -->
+<!-- ##### ARG GtkCellRendererText:stretch ##### -->
 <para>
 
 </para>
@@ -186,17 +161,7 @@ GtkCellRendererText
 
 </para>
 
-<!-- ##### ARG GtkCellRendererText:size-set ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkCellRendererText:scale-set ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkCellRendererText:editable-set ##### -->
+<!-- ##### ARG GtkCellRendererText:strikethrough ##### -->
 <para>
 
 </para>
@@ -206,12 +171,47 @@ GtkCellRendererText
 
 </para>
 
+<!-- ##### ARG GtkCellRendererText:style ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkCellRendererText:style-set ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkCellRendererText:text ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkCellRendererText:underline ##### -->
+<para>
+
+</para>
+
 <!-- ##### ARG GtkCellRendererText:underline-set ##### -->
 <para>
 
 </para>
 
-<!-- ##### ARG GtkCellRendererText:rise-set ##### -->
+<!-- ##### ARG GtkCellRendererText:variant ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkCellRendererText:variant-set ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkCellRendererText:weight ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkCellRendererText:weight-set ##### -->
 <para>
 
 </para>
