@@ -1,3 +1,8 @@
+2002-08-24  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/win32/gdkevents-win32.c (gdk_event_translate): Let the
+	system handle Alt-Space, too. Thanks to Tim Evans (#91477).
+
 Sat Aug 24 12:46:37 BST 2002  Tony Gale <gale@gtk.org>
 
 	* docs/tutorial/gtk-tut.sgml, examples/*:
