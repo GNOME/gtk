@@ -1,3 +1,9 @@
+Tue Feb 10 01:58:55 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkcontainer.c (gtk_container_set_focus_hadjustment): 
+	* gtk/gtkcontainer.c (gtk_container_set_focus_vadjustment): Document 
+	these functions.
+
 2004-02-09  Federico Mena Quintero  <federico@ximian.com>
 
 	* gtk/gtkfilechooserdefault.c (set_list_model): Request

@@ -2190,6 +2190,21 @@ gtk_container_unset_focus_chain (GtkContainer  *container)
     }
 }
 
+/**
+ * gtk_container_set_focus_vadjustment:
+ * @container: a #GtkContainer
+ * @adjustment: an adjustment which should be adjusted when the focus is moved among the
+ *   descendents of @container
+ * 
+ * Hooks up an adjustment to focus handling in a container, so when a child of the 
+ * container is focused, the adjustment is scrolled to show that widget. This function
+ * sets the vertical alignment. See gtk_scrolled_window_get_vadjustment() for a typical
+ * way of obtaining the adjustment and gtk_container_set_focus_hadjustment() for setting
+ * the horizontal adjustment.
+ *
+ * The adjustments have to be in pixel units and in the same coordinate system as the 
+ * allocation for immediate children of the container. 
+ */
 void
 gtk_container_set_focus_vadjustment (GtkContainer  *container,
 				     GtkAdjustment *adjustment)
@@ -2229,6 +2244,21 @@ gtk_container_get_focus_vadjustment (GtkContainer *container)
   return vadjustment;
 }
 
+/**
+ * gtk_container_set_focus_hadjustment:
+ * @container: a #GtkContainer
+ * @adjustment: an adjustment which should be adjusted when the focus is moved among the
+ *   descendents of @container
+ * 
+ * Hooks up an adjustment to focus handling in a container, so when a child of the 
+ * container is focused, the adjustment is scrolled to show that widget. This function
+ * sets the horizontal alignment. See gtk_scrolled_window_get_hadjustment() for a typical
+ * way of obtaining the adjustment and gtk_container_set_focus_vadjustment() for setting
+ * the vertical adjustment.
+ *
+ * The adjustments have to be in pixel units and in the same coordinate system as the 
+ * allocation for immediate children of the container. 
+ */
 void
 gtk_container_set_focus_hadjustment (GtkContainer  *container,
 				     GtkAdjustment *adjustment)
