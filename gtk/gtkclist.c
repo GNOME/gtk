@@ -1023,7 +1023,7 @@ gtk_clist_get_pixmap (GtkCList * clist,
   if (pixmap)
   {
     *pixmap = GTK_CELL_PIXMAP (clist_row->cell[column])->pixmap;
-    // mask can be NULL
+    /* mask can be NULL */
     *mask = GTK_CELL_PIXMAP (clist_row->cell[column])->mask;
   }
 
@@ -1092,7 +1092,7 @@ gtk_clist_get_pixtext (GtkCList * clist,
   if (pixmap)
     *pixmap = GTK_CELL_PIXTEXT (clist_row->cell[column])->pixmap;
 
-  // mask can be NULL
+  /* mask can be NULL */
   *mask = GTK_CELL_PIXTEXT (clist_row->cell[column])->mask;
 
   return 1;
@@ -3558,7 +3558,7 @@ cell_set_pixmap (GtkCList * clist,
     {
       clist_row->cell[column].type = GTK_CELL_PIXMAP;
       GTK_CELL_PIXMAP (clist_row->cell[column])->pixmap = pixmap;
-      // We set the mask even if it is NULL
+      /* We set the mask even if it is NULL */
       GTK_CELL_PIXMAP (clist_row->cell[column])->mask = mask;
     }
 }
