@@ -4,8 +4,8 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: gtk+ 1.2.6\n"
-"POT-Creation-Date: 2000-02-03 23:51+0100\n"
+"Project-Id-Version: gtk+ 1.3.0\n"
+"POT-Creation-Date: 2000-02-04 16:50+0100\n"
 "PO-Revision-Date: 2000-01-28 15:19+0100\n"
 "Last-Translator: Kæstutis Kruþikas <DrKestas@takas.lt>\n"
 "Language-Team: Lithuanian\n"
@@ -15,11 +15,11 @@ msgstr ""
 
 #: gtk/gtkcolorsel.c:221
 msgid "Hue:"
-msgstr ""
+msgstr "Atspalvis:"
 
 #: gtk/gtkcolorsel.c:222
 msgid "Saturation:"
-msgstr ""
+msgstr "Tirðtumas:"
 
 #: gtk/gtkcolorsel.c:223
 msgid "Value:"
@@ -39,17 +39,17 @@ msgstr "Mëlyna"
 
 #: gtk/gtkcolorsel.c:227
 msgid "Opacity:"
-msgstr ""
+msgstr "Permatomumas:"
 
 #. The OK button
-#: gtk/gtkcolorsel.c:1727 gtk/gtkfilesel.c:571 gtk/gtkfontsel.c:3763
+#: gtk/gtkcolorsel.c:1727 gtk/gtkfilesel.c:565 gtk/gtkfontsel.c:3763
 #: gtk/gtkgamma.c:416
 msgid "OK"
 msgstr "Gerai"
 
 #. The Cancel button
-#: gtk/gtkcolorsel.c:1733 gtk/gtkfilesel.c:578 gtk/gtkfilesel.c:961
-#: gtk/gtkfilesel.c:1065 gtk/gtkfilesel.c:1180 gtk/gtkfontsel.c:3776
+#: gtk/gtkcolorsel.c:1733 gtk/gtkfilesel.c:572 gtk/gtkfilesel.c:956
+#: gtk/gtkfilesel.c:1060 gtk/gtkfilesel.c:1175 gtk/gtkfontsel.c:3776
 #: gtk/gtkgamma.c:424
 msgid "Cancel"
 msgstr "Nutraukti"
@@ -59,29 +59,29 @@ msgid "Help"
 msgstr "Pagalba"
 
 #. The directories clist
-#: gtk/gtkfilesel.c:520
+#: gtk/gtkfilesel.c:514
 msgid "Directories"
 msgstr "Direktorijos"
 
 #. The files clist
-#: gtk/gtkfilesel.c:539
+#: gtk/gtkfilesel.c:533
 msgid "Files"
 msgstr "Bylos"
 
-#: gtk/gtkfilesel.c:609 gtk/gtkfilesel.c:1644
+#: gtk/gtkfilesel.c:603 gtk/gtkfilesel.c:1639
 #, c-format
 msgid "Directory unreadable: %s"
 msgstr "Direktorija neprieinama: %s"
 
-#: gtk/gtkfilesel.c:641
+#: gtk/gtkfilesel.c:635
 msgid "Create Dir"
 msgstr "Sukurti Dir"
 
-#: gtk/gtkfilesel.c:652 gtk/gtkfilesel.c:1034
+#: gtk/gtkfilesel.c:646 gtk/gtkfilesel.c:1029
 msgid "Delete File"
 msgstr "Iðtrinti bylà"
 
-#: gtk/gtkfilesel.c:663 gtk/gtkfilesel.c:1138
+#: gtk/gtkfilesel.c:657 gtk/gtkfilesel.c:1133
 msgid "Rename File"
 msgstr "Pervardinti bylà"
 
@@ -90,45 +90,45 @@ msgstr "Pervardinti bylà"
 #. (GtkSignalFunc) gtk_file_selection_fileop_destroy,
 #. (gpointer) fs);
 #.
-#: gtk/gtkfilesel.c:827
+#: gtk/gtkfilesel.c:822
 msgid "Error"
 msgstr "Klaida"
 
 #. close button
-#: gtk/gtkfilesel.c:850 gtk/gtkinputdialog.c:354
+#: gtk/gtkfilesel.c:845 gtk/gtkinputdialog.c:354
 msgid "Close"
 msgstr "Uþdaryti"
 
-#: gtk/gtkfilesel.c:925
+#: gtk/gtkfilesel.c:920
 msgid "Create Directory"
 msgstr "Sukurti direktorijà"
 
-#: gtk/gtkfilesel.c:939
+#: gtk/gtkfilesel.c:934
 msgid "Directory name:"
 msgstr "Direktorijos pav.:"
 
 #. buttons
-#: gtk/gtkfilesel.c:952
+#: gtk/gtkfilesel.c:947
 msgid "Create"
 msgstr "Sukurti"
 
 #. buttons
-#: gtk/gtkfilesel.c:1056
+#: gtk/gtkfilesel.c:1051
 msgid "Delete"
 msgstr "Iðtrinti"
 
 #. buttons
-#: gtk/gtkfilesel.c:1171
+#: gtk/gtkfilesel.c:1166
 msgid "Rename"
 msgstr "Pervardinti"
 
-#: gtk/gtkfilesel.c:1623
+#: gtk/gtkfilesel.c:1618
 msgid "Selection: "
 msgstr "Pasirinkimas:"
 
 #: gtk/gtkfontsel.c:216
 msgid "Foundry:"
-msgstr ""
+msgstr "Iðlietas:"
 
 #: gtk/gtkfontsel.c:217
 msgid "Family:"
@@ -140,7 +140,7 @@ msgstr "Plotis"
 
 #: gtk/gtkfontsel.c:219
 msgid "Slant:"
-msgstr ""
+msgstr "Nuoþulnumas:"
 
 #: gtk/gtkfontsel.c:220
 msgid "Set Width:"
@@ -172,7 +172,7 @@ msgstr "Tarpai:"
 
 #: gtk/gtkfontsel.c:227
 msgid "Average Width:"
-msgstr ""
+msgstr "Vidurkio plotis:"
 
 #: gtk/gtkfontsel.c:228
 msgid "Charset:"
@@ -285,7 +285,7 @@ msgstr "italiðkas"
 
 #: gtk/gtkfontsel.c:1234 gtk/gtkfontsel.c:2002
 msgid "oblique"
-msgstr ""
+msgstr "áþambus"
 
 #: gtk/gtkfontsel.c:1235 gtk/gtkfontsel.c:2003
 msgid "reverse italic"
@@ -293,7 +293,7 @@ msgstr "iðkreiptas italiðkas"
 
 #: gtk/gtkfontsel.c:1236 gtk/gtkfontsel.c:2004
 msgid "reverse oblique"
-msgstr ""
+msgstr "iðkreiptas áþambus"
 
 #: gtk/gtkfontsel.c:1237 gtk/gtkfontsel.c:2005
 msgid "other"
