@@ -1,3 +1,16 @@
+1999-09-21  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/win32/gdk.c (gdk_exit_func): Delete the gdk_DC when exiting,
+	just to be sure.
+
+	* gdk/win32/gdkvisual.c (gdk_visual_init): Remove a couple of
+	unused variables, leftovers from the X11 version.
+
+	* gdk/win32/rc/*.cur: Better cursors provided by Bernd Herd.
+
+	* gtk/gtkfontsel.c (gtk_font_selection_get_xlfd_field): Only
+	downcase fields on X11.
+
 Mon Sep 20 13:17:39 1999  Pablo Saratxaga <pablo@mandrakesoft.com>
         
         * configure.in,po/pt_BR.po: added Portuguese Brazilian file from

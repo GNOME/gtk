@@ -3602,9 +3602,10 @@ gtk_font_selection_get_xlfd_field (const gchar *fontname,
 	return NULL;
       strncpy (buffer, t1, len);
       buffer[len] = 0;
-
+#if GDK_WINDOWING == GDK_WINDOWING_X11
       /* Convert to lower case. */
       g_strdown (buffer);
+#endif
     }
   else
     strcpy(buffer, "(nil)");

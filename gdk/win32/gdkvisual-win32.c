@@ -67,29 +67,13 @@ gdk_visual_init (void)
   } bmi;
   HBITMAP hbm;
 
-  static const gint possible_depths[7] = { 32, 24, 16, 15, 8, 4, 1 };
-  static const GdkVisualType possible_types[6] =
-    {
-      GDK_VISUAL_DIRECT_COLOR,
-      GDK_VISUAL_TRUE_COLOR,
-      GDK_VISUAL_PSEUDO_COLOR,
-      GDK_VISUAL_STATIC_COLOR,
-      GDK_VISUAL_GRAYSCALE,
-      GDK_VISUAL_STATIC_GRAY
-    };
-
-  static const gint npossible_depths = sizeof(possible_depths)/sizeof(gint);
-  static const gint npossible_types = sizeof(possible_types)/sizeof(GdkVisualType);
-
-  int rastercaps, numcolors, sizepalette, colorres, bitspixel;
-  Visual *default_xvisual;
+  int rastercaps, numcolors, sizepalette, bitspixel;
 
   system_visual = g_new (GdkVisualPrivate, 1);
 
   bitspixel = GetDeviceCaps (gdk_DC, BITSPIXEL);
   rastercaps = GetDeviceCaps (gdk_DC, RASTERCAPS);
-  default_xvisual = g_new (Visual, 1);
-  system_visual->xvisual = default_xvisual;
+  system_visual->xvisual = g_new (Visual, 1);
   system_visual->xvisual->visualid = 0;
   system_visual->xvisual->bitspixel = bitspixel;
 
@@ -98,7 +82,6 @@ gdk_visual_init (void)
       system_visual->visual.type = GDK_VISUAL_PSEUDO_COLOR;
       numcolors = GetDeviceCaps (gdk_DC, NUMCOLORS);
       sizepalette = GetDeviceCaps (gdk_DC, SIZEPALETTE);
-      colorres = GetDeviceCaps (gdk_DC, COLORRES);
       system_visual->xvisual->map_entries = sizepalette;
     }
   else if (bitspixel == 1)

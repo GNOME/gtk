@@ -617,6 +617,8 @@ gdk_exit_func (void)
       gdk_input_exit ();
       gdk_key_repeat_restore ();
       gdk_dnd_exit ();
+      DeleteDC (gdk_DC);
+      gdk_DC = NULL;
       gdk_initialized = 0;
     }
 }
