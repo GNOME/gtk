@@ -431,7 +431,7 @@ gtk_tree_selection_selected_foreach (GtkTreeSelection            *selection,
   GtkTreeIter iter;
 
   guint inserted_id, deleted_id, reordered_id;
-  gboolean stop = FALSE, has_next = FALSE, has_parent = FALSE;
+  gboolean stop = FALSE, has_next = TRUE, has_parent = TRUE;
 
   g_return_if_fail (GTK_IS_TREE_SELECTION (selection));
   g_return_if_fail (selection->tree_view != NULL);
@@ -502,7 +502,7 @@ gtk_tree_selection_selected_foreach (GtkTreeSelection            *selection,
 	  gtk_tree_path_append_index (path, 0);
 
 	  /* we do the sanity check at the bottom of this function */
-	  if (has_child)
+	  if (!has_child)
 	    goto out;
 	}
       else
@@ -519,8 +519,9 @@ gtk_tree_selection_selected_foreach (GtkTreeSelection            *selection,
 		  done = TRUE;
 		  gtk_tree_path_next (path);
 
-		  /* Sanity Check! */
-		  TREE_VIEW_INTERNAL_ASSERT_VOID (has_next);
+		  /* we do the sanity check at the bottom of this function */
+		  if (!has_next)
+		    goto out;
 		}
 	      else
 		{
@@ -541,7 +542,7 @@ gtk_tree_selection_selected_foreach (GtkTreeSelection            *selection,
 		  gtk_tree_path_up (path);
 
 		  /* we do the sanity check at the bottom of this function */
-		  if (has_parent)
+		  if (!has_parent)
 		    goto out;
 		}
 	    }
@@ -562,9 +563,9 @@ out:
                                reordered_id);
 
   /* check if we have to spew a scary message */
-  if (has_next)
+  if (!has_next)
     TREE_VIEW_INTERNAL_ASSERT_VOID (has_next);
-  if (has_parent)
+  if (!has_parent)
     TREE_VIEW_INTERNAL_ASSERT_VOID (has_parent);
   if (stop)
     g_warning
