@@ -6,6 +6,13 @@
 
 2005-02-04  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkpaned.c (gtk_paned_compute_position): Work better
+	when there is not enough space. This avoids a nasty size
+	allocation loop in the file chooser.  (#154007, reported 
+	by Milosz Derezynski, patch by Robert Ögren)
+
+2005-02-04  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtkentry.c (gtk_entry_create_layout): Avoid spurious
 	selection of RTL direction if the widget does not have 
 	focus.  (#164125, Frederic Crozat)

@@ -1172,6 +1172,7 @@ gtk_paned_compute_position (GtkPaned *paned,
   paned->max_position = allocation;
   if (!paned->child2_shrink)
     paned->max_position = MAX (1, paned->max_position - child2_req);
+  paned->max_position = MAX (paned->min_position, paned->max_position);
 
   if (!paned->position_set)
     {
