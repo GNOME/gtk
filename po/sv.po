@@ -1,17 +1,20 @@
 # Swedish translation of GTK+
-# Copyright (C) 1999 Free Software Foundation, Inc.
+# Copyright (C) 1999-2001 Free Software Foundation, Inc.
 # Tomas Ögren <stric@ing.umu.se>, 1999.
+# Christian Rose <menthos@menthos.com>, 2001.
+#
+# $Id$
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: gtk+ 1.2.3\n"
-"POT-Creation-Date: 2001-02-28 19:20-0500\n"
-"PO-Revision-Date: 1999-01-12 22:50+0100\n"
-"Last-Translator: Tomas Ögren <stric@ing.umu.se>\n"
+"Project-Id-Version: gtk+\n"
+"POT-Creation-Date: 2001-03-01 11:34+0100\n"
+"PO-Revision-Date: 2001-03-01 11:48+0100\n"
+"Last-Translator: Christian Rose <menthos@menthos.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=iso-8859-1\n"
-"Content-Transfer-Encoding: 8-bit\n"
+"Content-Transfer-Encoding: 8bit\n"
 
 #: gtk/gtkcolorsel.c:221
 msgid "Hue:"
@@ -71,7 +74,7 @@ msgstr "Filer"
 #: gtk/gtkfilesel.c:519 gtk/gtkfilesel.c:1478
 #, c-format
 msgid "Directory unreadable: %s"
-msgstr "Katalog oläsbar: %s"
+msgstr "Katalogen oläsbar: %s"
 
 #: gtk/gtkfilesel.c:551
 msgid "Create Dir"
@@ -83,7 +86,7 @@ msgstr "Ta bort fil"
 
 #: gtk/gtkfilesel.c:573 gtk/gtkfilesel.c:1041
 msgid "Rename File"
-msgstr "Ändra filnamn"
+msgstr "Byt namn på fil"
 
 #.
 #. gtk_signal_connect (GTK_OBJECT (dialog), "destroy",
@@ -105,7 +108,7 @@ msgstr "Skapa katalog"
 
 #: gtk/gtkfilesel.c:846
 msgid "Directory name:"
-msgstr "Katalogens namn:"
+msgstr "Katalognamn:"
 
 #. buttons
 #: gtk/gtkfilesel.c:859
@@ -120,7 +123,7 @@ msgstr "Ta bort"
 #. buttons
 #: gtk/gtkfilesel.c:1074
 msgid "Rename"
-msgstr "Ändra namn"
+msgstr "Byt namn"
 
 #: gtk/gtkfilesel.c:1457
 msgid "Selection: "
@@ -144,7 +147,7 @@ msgstr "Lutning:"
 
 #: gtk/gtkfontsel.c:214
 msgid "Set Width:"
-msgstr "Sätt bredd:"
+msgstr "Ställ in bredd:"
 
 #: gtk/gtkfontsel.c:215
 msgid "Add Style:"
@@ -160,11 +163,11 @@ msgstr "Punktstorlek:"
 
 #: gtk/gtkfontsel.c:218
 msgid "Resolution X:"
-msgstr "Upplösning X:"
+msgstr "X-upplösning:"
 
 #: gtk/gtkfontsel.c:219
 msgid "Resolution Y:"
-msgstr "Upplösning Y:"
+msgstr "Y-upplösning:"
 
 #: gtk/gtkfontsel.c:220
 msgid "Spacing:"
@@ -172,7 +175,7 @@ msgstr "Mellanrum:"
 
 #: gtk/gtkfontsel.c:221
 msgid "Average Width:"
-msgstr "Medelvidd:"
+msgstr "Medelbredd:"
 
 #: gtk/gtkfontsel.c:222
 msgid "Charset:"
@@ -235,11 +238,11 @@ msgstr "Information om typsnittet"
 
 #: gtk/gtkfontsel.c:749
 msgid "Requested Font Name:"
-msgstr "Önskat typsnitt"
+msgstr "Önskat typsnitt:"
 
 #: gtk/gtkfontsel.c:760
 msgid "Actual Font Name:"
-msgstr "Erhållet typsnitt"
+msgstr "Erhållet typsnitt:"
 
 #: gtk/gtkfontsel.c:771
 #, c-format
@@ -309,15 +312,15 @@ msgstr "[C]"
 
 #: gtk/gtkfontsel.c:1792
 msgid "The selected font is not available."
-msgstr "Det valda typsnittet är ej tillgängligt."
+msgstr "Det valda typsnittet är inte tillgängligt."
 
 #: gtk/gtkfontsel.c:1798
 msgid "The selected font is not a valid font."
-msgstr "Det valda typsnittet är ej ett giltigt typsnitt."
+msgstr "Det valda typsnittet är inte ett giltigt typsnitt."
 
 #: gtk/gtkfontsel.c:1856
 msgid "This is a 2-byte font and may not be displayed correctly."
-msgstr "Detta är ett 2-byte typsnitt och kanske inte visas helt korrekt."
+msgstr "Detta är ett 2-byte-typsnitt och kanske inte visas helt korrekt."
 
 #: gtk/gtkfontsel.c:1960 gtk/gtkinputdialog.c:607
 msgid "(unknown)"
@@ -333,7 +336,7 @@ msgstr "proportionell"
 
 #: gtk/gtkfontsel.c:1984
 msgid "monospaced"
-msgstr "singelstorlek"
+msgstr "fast breddsteg"
 
 #: gtk/gtkfontsel.c:1985
 msgid "char cell"
@@ -361,7 +364,7 @@ msgstr "Gamma"
 
 #: gtk/gtkgamma.c:403
 msgid "Gamma value"
-msgstr "Gamma värde"
+msgstr "Gammavärde"
 
 #. shell and main vbox
 #: gtk/gtkinputdialog.c:200
@@ -400,7 +403,7 @@ msgstr "Axlar"
 #. Keys listbox
 #: gtk/gtkinputdialog.c:323
 msgid "Keys"
-msgstr "Knappar"
+msgstr "Tangenter"
 
 #. We create the save button in any case, so that clients can
 #. connect to it, without paying attention to whether it exits
@@ -422,11 +425,11 @@ msgstr "Tryck"
 
 #: gtk/gtkinputdialog.c:503
 msgid "X Tilt"
-msgstr "X lutning"
+msgstr "X-lutning"
 
 #: gtk/gtkinputdialog.c:504
 msgid "Y Tilt"
-msgstr "Y lutning"
+msgstr "Y-lutning"
 
 #: gtk/gtkinputdialog.c:544
 msgid "none"
@@ -439,7 +442,7 @@ msgstr "(avstängd)"
 #. and clear button
 #: gtk/gtkinputdialog.c:692
 msgid "clear"
-msgstr "rensa"
+msgstr "töm"
 
 #: gtk/gtknotebook.c:2059 gtk/gtknotebook.c:4131
 #, c-format
@@ -449,17 +452,17 @@ msgstr "Sida %u"
 #: gtk/gtkrc.c:1702
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\" line %d"
-msgstr "Kunde ej hitta bild i 'pixmap_path': \"%s\" rad %d"
+msgstr "Kunde inte hitta bildfil i \"pixmap_path\": \"%s\" rad %d"
 
 #: gtk/gtkrc.c:1705
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
-msgstr "Kunde ej hitta bild i 'pixmap_path': \"%s\""
+msgstr "Kunde inte hitta bildfil i \"pixmap_path\": \"%s\""
 
 #: gtk/gtkthemes.c:79
 #, c-format
 msgid "Unable to locate loadable module in module_path: \"%s\","
-msgstr "Kunde ej hitta laddningsbar modul i 'module_path': \"%s\","
+msgstr "Kunde inte hitta inläsningsbar modul i \"module_path\": \"%s\","
 
 #: gtk/gtktipsquery.c:180
 msgid "--- No Tip ---"
