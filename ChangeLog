@@ -1,5 +1,11 @@
 2001-06-04  Havoc Pennington  <hp@redhat.com>
 
+	* gtk/gtkseparatormenuitem.h: Fix a search-and-replace screwup
+	(s/CHECK/SEPARATOR/ gone awry). Patch from Jeff Franks, bug
+	#55562
+
+2001-06-04  Havoc Pennington  <hp@redhat.com>
+
 	* gtk/gtktextview.c (gtk_text_view_size_request): handle case
 	where text_view->layout == NULL by assuming its size is 0, 
 	i.e. same as if we haven't done any reflow. Reported by 
