@@ -1,3 +1,15 @@
+Wed Jun  4 19:24:28 2003  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/x11/gdkgc-x11.c gdk/x11/gdkprivate-x11.h: Keep
+	track of when we have a clip mask set for the GC,
+	and when we unset it, or switch to a clip region,
+	immediately call XSetClipMask (..., None) to avoid
+	Xlib caching stale data. (#111806)
+
+	* gtk/gtktextdisplay.c: Don't set a clip mask
+	when drawing alpha pixmaps; it isn't necessary any more.
+	(#111806)
+
 Wed Jun  4 18:27:44 2003  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkcheckbutton.c (gtk_real_check_button_draw_indicator): 

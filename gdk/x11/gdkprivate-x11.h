@@ -64,7 +64,8 @@ struct _GdkGCX11
   GC xgc;
   GdkScreen *screen;
   GdkRegion *clip_region;
-  guint dirty_mask;
+  guint16 dirty_mask;
+  guint have_clip_mask : 1;
 
 #ifdef HAVE_XFT  
   Picture fg_picture;
