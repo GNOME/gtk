@@ -1,3 +1,14 @@
+2002-02-01  Matthias Clasen  <matthiasc@poet.de>
+
+	* io-ico.c: Merge 16- and 32-bit ico support from the stable 
+	branch.  (#61179)
+
+	* io-gif.c: Recomposite all images if the animation size changes
+	while loading.  (#70055)
+
+	* gdk-pixbuf.c (gdk-pixbuf-fill): Make it work for subpixbufs. 
+	(#70055)
+
 Sat Jan 19 20:49:20 2002  Manish Singh  <yosh@gimp.org>
 
 	* io-jpeg.c, io-png.c: Made sure all the error cases involving

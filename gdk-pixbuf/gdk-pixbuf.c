@@ -428,7 +428,9 @@ gdk_pixbuf_fill (GdkPixbuf *pixbuf,
         guchar *pixels;
         gboolean all_the_same = FALSE;
         guint r, g, b, a;
-        
+        guchar *p;
+        gint n;
+
         g_return_if_fail (GDK_IS_PIXBUF (pixbuf));
 
         if (pixbuf->width == 0 || pixbuf->height == 0)
@@ -449,12 +451,13 @@ gdk_pixbuf_fill (GdkPixbuf *pixbuf,
         }
         
         if (all_the_same) {
-                memset (pixels, r,
-                        pixbuf->rowstride * pixbuf->height);
+                if (pixbuf->has_alpha)
+                        memset (pixels, r, pixbuf->width * 4);
+                else
+                        memset (pixels, r, pixbuf->width * 3);
+
         } else {
-                guchar *p;
                 guchar  c[4];
-                gint    n;
 
                 c[0] = r; c[1] = g; c[2] = b; c[3] = a;
                 
@@ -472,12 +475,12 @@ gdk_pixbuf_fill (GdkPixbuf *pixbuf,
                         } while (--n);
                 }
 
-                p = pixels;
-                n = pixbuf->height - 1;
-                while (n--) {
-                        p += pixbuf->rowstride;
-                        memcpy (p, pixels, pixbuf->width * pixbuf->n_channels);
-                }
+        }
+        p = pixels;
+        n = pixbuf->height - 1;
+        while (n--) {
+                p += pixbuf->rowstride;
+                memcpy (p, pixels, pixbuf->width * pixbuf->n_channels);
         }
 }
 
