@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2004-02-25 20:24+0100\n"
-"PO-Revision-Date: 2004-02-25 22:14-0600\n"
+"PO-Revision-Date: 2004-02-27 15:35-0600\n"
 "Last-Translator: Paisa Seeluangsawat <paisa@users.sf.net>\n"
 "Language-Team: Thai <L10n@opentle.net>\n"
 "MIME-Version: 1.0\n"
@@ -82,7 +82,7 @@ msgstr "เกิดข้อผิดพลาด ขณะเขียนแ�
 #: gdk-pixbuf/gdk-pixbuf-io.c:1138 gdk-pixbuf/gdk-pixbuf-io.c:1254
 #, c-format
 msgid "This build of gdk-pixbuf does not support saving the image format: %s"
-msgstr ""
+msgstr "คนคอมไพล์ gdk-pixbuf ไม่ได้เลือกรองรับการบันทึกแฟ้มชนิด: %s"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:1167
 msgid "Insufficient memory to save image to callback"
@@ -145,7 +145,7 @@ msgstr[1] "ไม่สามารถจัดสรรบัฟเฟอร์
 
 #: gdk-pixbuf/io-ani.c:244
 msgid "Unexpected icon chunk in animation"
-msgstr ""
+msgstr "พบชิ้นไอคอนเกินมาในภาพเคลื่อนไหว"
 
 #: gdk-pixbuf/io-ani.c:337
 msgid "Unsupported animation type"
@@ -162,11 +162,11 @@ msgstr "หน่วยความจำไม่พอที่จะอ่า
 
 #: gdk-pixbuf/io-ani.c:400 gdk-pixbuf/io-ani.c:417 gdk-pixbuf/io-ani.c:428
 msgid "Malformed chunk in animation"
-msgstr ""
+msgstr "ส่วนของภาพเคลื่อนไหวเสีย"
 
 #: gdk-pixbuf/io-ani.c:676
 msgid "The ANI image format"
-msgstr ""
+msgstr "แฟ้มรูปชนิด ANI"
 
 #: gdk-pixbuf/io-bmp.c:225 gdk-pixbuf/io-bmp.c:370
 msgid "Not enough memory to load bitmap image"
@@ -183,7 +183,7 @@ msgstr "รูป BMP นี้มีหัวข้อมูลที่ใช�
 
 #: gdk-pixbuf/io-bmp.c:1118
 msgid "The BMP image format"
-msgstr "รูปแบบรูป BMP"
+msgstr "แฟ้มรูปชนิด BMP"
 
 #: gdk-pixbuf/io-gif.c:220
 #, c-format
@@ -201,7 +201,7 @@ msgstr "เกิดข้อผิดพลาดในตัวโหลดร
 
 #: gdk-pixbuf/io-gif.c:575
 msgid "Stack overflow"
-msgstr ""
+msgstr "Stack overflow"
 
 #: gdk-pixbuf/io-gif.c:635
 msgid "GIF image loader can't understand this image."
@@ -209,11 +209,11 @@ msgstr "ตัวโหลดรูป GIF ไม่เข้าใจรูป�
 
 #: gdk-pixbuf/io-gif.c:664
 msgid "Bad code encountered"
-msgstr ""
+msgstr "พบโค้ดเสีย"
 
 #: gdk-pixbuf/io-gif.c:674
 msgid "Circular table entry in GIF file"
-msgstr ""
+msgstr "ตารางในแฟ้ม GIF มีรายการที่อ้างวกหลับมาถึงตัวเอง"
 
 #: gdk-pixbuf/io-gif.c:869 gdk-pixbuf/io-gif.c:1430 gdk-pixbuf/io-gif.c:1476
 #: gdk-pixbuf/io-gif.c:1591
@@ -222,30 +222,30 @@ msgstr "หน่วยความจำไม่พอที่จะอ่า
 
 #: gdk-pixbuf/io-gif.c:1095
 msgid "GIF image is corrupt (incorrect LZW compression)"
-msgstr ""
+msgstr "แฟ้ม GIF เสียหาย (การบีบอัดแบบ LZW ไม่ถูกต้อง)"
 
 #: gdk-pixbuf/io-gif.c:1145
 msgid "File does not appear to be a GIF file"
-msgstr ""
+msgstr "ดูเหมือนว่านี่ไม่ใช่แฟ้ม GIF"
 
 #: gdk-pixbuf/io-gif.c:1157
 #, c-format
 msgid "Version %s of the GIF file format is not supported"
-msgstr ""
+msgstr "ไม่รองรับแฟ้ม GIF รุ่น %s"
 
 #: gdk-pixbuf/io-gif.c:1266
 msgid ""
 "GIF image has no global colormap, and a frame inside it has no local "
 "colormap."
-msgstr ""
+msgstr "รูป GIF ไม่มีตารางสีส่วนกลาง และเฟรมข้างในไม่มีตารางสีเฉพาะเฟรม"
 
 #: gdk-pixbuf/io-gif.c:1498
 msgid "GIF image was truncated or incomplete."
-msgstr ""
+msgstr "แฟ้ม GIF ไม่สมบูรณ์"
 
 #: gdk-pixbuf/io-gif.c:1650
 msgid "The GIF image format"
-msgstr ""
+msgstr "แฟ้มรูปชนิด GIF"
 
 #: gdk-pixbuf/io-ico.c:219 gdk-pixbuf/io-ico.c:271 gdk-pixbuf/io-ico.c:332
 #: gdk-pixbuf/io-ico.c:395 gdk-pixbuf/io-ico.c:425
@@ -254,7 +254,7 @@ msgstr "หน่วยความจำไม่พอที่จะอ่า
 
 #: gdk-pixbuf/io-ico.c:256
 msgid "Invalid header in icon"
-msgstr ""
+msgstr "หัวข้อมูลไอคอนเสีย"
 
 #: gdk-pixbuf/io-ico.c:293
 msgid "Icon has zero width"
@@ -287,7 +287,7 @@ msgstr "จุดเล็งของเคอร์เซอร์อยู่
 #: gdk-pixbuf/io-ico.c:973
 #, c-format
 msgid "Unsupported depth for ICO file: %d"
-msgstr ""
+msgstr "ความลึกที่ไม่รองรับสำหรับแฟ้ม ICO: %d"
 
 #: gdk-pixbuf/io-ico.c:1202
 msgid "The ICO image format"
@@ -296,7 +296,7 @@ msgstr "แฟ้มรูปชนิด ICO"
 #: gdk-pixbuf/io-jpeg.c:114
 #, c-format
 msgid "Error interpreting JPEG image file (%s)"
-msgstr ""
+msgstr "ไม่เข้าใจแฟ้ม JPEG นี้ (%s)"
 
 #: gdk-pixbuf/io-jpeg.c:349
 msgid ""
@@ -307,7 +307,7 @@ msgstr "หน่วยความจำไม่พอสำหรับอ่
 #: gdk-pixbuf/io-jpeg.c:383 gdk-pixbuf/io-jpeg.c:749
 #, c-format
 msgid "Unsupported JPEG color space (%s)"
-msgstr ""
+msgstr "ไม่รองรับห้วงสีนี้สำหรับ JPEG (%s)"
 
 #: gdk-pixbuf/io-jpeg.c:481 gdk-pixbuf/io-jpeg.c:678 gdk-pixbuf/io-jpeg.c:941
 #: gdk-pixbuf/io-jpeg.c:950
@@ -346,12 +346,12 @@ msgstr "รูปมีค่าความสูงหรือกว้าง
 
 #: gdk-pixbuf/io-pcx.c:618 gdk-pixbuf/io-pcx.c:679
 msgid "Image has unsupported bpp"
-msgstr ""
+msgstr "รูปมีค่าบิตต่อพิกเซลที่ไม่รองรับ"
 
 #: gdk-pixbuf/io-pcx.c:623 gdk-pixbuf/io-pcx.c:631
 #, c-format
 msgid "Image has unsupported number of %d-bit planes"
-msgstr ""
+msgstr "ไม่รองรับจำนวนของระนาบ %d บิตนี้"
 
 #: gdk-pixbuf/io-pcx.c:647
 msgid "Couldn't create new pixbuf"
@@ -369,11 +369,11 @@ msgstr "หน่วยความจำไม่พอสำหรับ..."
 
 #: gdk-pixbuf/io-pcx.c:709
 msgid "Didn't get all lines of PCX image"
-msgstr ""
+msgstr "ไม่ได้รับแนวเส้นของรูป PCX"
 
 #: gdk-pixbuf/io-pcx.c:716
 msgid "No palette found at end of PCX data"
-msgstr ""
+msgstr "ไม่พบจานสีตรงท้ายข้อมูล PCX"
 
 #: gdk-pixbuf/io-pcx.c:757
 msgid "The PCX image format"
@@ -385,19 +385,19 @@ msgstr "รูป PNG มีค่าบิตต่อช่องที่ใ�
 
 #: gdk-pixbuf/io-png.c:136
 msgid "Transformed PNG has zero width or height."
-msgstr ""
+msgstr "รูป PNG ที่แปลงมามีความสูงหรือกว้างเป็นศูนย์"
 
 #: gdk-pixbuf/io-png.c:144
 msgid "Bits per channel of transformed PNG is not 8."
-msgstr ""
+msgstr "ค่าบิตต่อช่องของ PNG ที่แปลงมาไม่ใช่ 8"
 
 #: gdk-pixbuf/io-png.c:153
 msgid "Transformed PNG not RGB or RGBA."
-msgstr ""
+msgstr "PNG ที่แปลงมาไม่ใช่ RGP หรือ RGBA"
 
 #: gdk-pixbuf/io-png.c:162
 msgid "Transformed PNG has unsupported number of channels, must be 3 or 4."
-msgstr ""
+msgstr "PNG ที่แปลงมามีจำนวนช่องที่ไม่รองรับ มันควรจะเป็น 3 หรือ 4"
 
 #: gdk-pixbuf/io-png.c:183
 #, c-format
@@ -429,17 +429,17 @@ msgstr "มีข้อผิดพลาดขณะอ่านแฟ้มร
 #: gdk-pixbuf/io-png.c:813
 msgid ""
 "Keys for PNG text chunks must have at least 1 and at most 79 characters."
-msgstr ""
+msgstr "คีย์ของชิ้นข้อความใน PNG ต้องมีระหว่าง 1 ถึง 79 ตัวอักษร"
 
 #: gdk-pixbuf/io-png.c:821
 msgid "Keys for PNG text chunks must be ASCII characters."
-msgstr ""
+msgstr "คีย์ของชิ้นข้อความใน PNG ต้องใช้ตัวอักษร ASCII"
 
 #: gdk-pixbuf/io-png.c:854
 #, c-format
 msgid ""
 "Value for PNG text chunk %s can not be converted to ISO-8859-1 encoding."
-msgstr ""
+msgstr "แปลงค่าของชิ้นข้อความใน PNG (%s) ไปเป็น ISO-8859-1 ไม่สำเร็จ"
 
 #: gdk-pixbuf/io-png.c:994
 msgid "The PNG image format"
@@ -447,15 +447,15 @@ msgstr "แฟ้มรูปชนิด PNG"
 
 #: gdk-pixbuf/io-pnm.c:249
 msgid "PNM loader expected to find an integer, but didn't"
-msgstr ""
+msgstr "ตัวโหลด PNM ควรจะเจอเลขจำนวนเต็มตัวหนึ่ง แต่ไม่เจอ"
 
 #: gdk-pixbuf/io-pnm.c:281
 msgid "PNM file has an incorrect initial byte"
-msgstr ""
+msgstr "แฟ้ม PNM มีไบต์แรกที่ไม่ถูกต้อง"
 
 #: gdk-pixbuf/io-pnm.c:311
 msgid "PNM file is not in a recognized PNM subformat"
-msgstr ""
+msgstr "แฟ้ม PNM นี้ไม่ตรงกับรูปแบบ PNM ย่อยใดๆ ที่รองรับ"
 
 #: gdk-pixbuf/io-pnm.c:336
 msgid "PNM file has an image width of 0"
@@ -467,35 +467,35 @@ msgstr "แฟ้มรูป PNM มีความสูงศูนย์"
 
 #: gdk-pixbuf/io-pnm.c:380
 msgid "Maximum color value in PNM file is 0"
-msgstr ""
+msgstr "แฟ้ม PNM มีค่าจำนวนสีมากสุดเป็น 0"
 
 #: gdk-pixbuf/io-pnm.c:388
 msgid "Maximum color value in PNM file is too large"
-msgstr ""
+msgstr "แฟ้ม PNM มีค่าจำนวนสีมากสุดที่ใหญ่เกินไป"
 
 #: gdk-pixbuf/io-pnm.c:396
 msgid "Can't handle PNM files with maximum color values greater than 255"
-msgstr ""
+msgstr "ไม่รองรับแฟ้ม PNM มีค่าจำนวนสีมากสุดเกิน 255"
 
 #: gdk-pixbuf/io-pnm.c:435 gdk-pixbuf/io-pnm.c:463 gdk-pixbuf/io-pnm.c:495
 msgid "Raw PNM image type is invalid"
-msgstr ""
+msgstr "รูป Raw PNM เสีย"
 
 #: gdk-pixbuf/io-pnm.c:555 gdk-pixbuf/io-pnm.c:597
 msgid "PNM image format is invalid"
-msgstr ""
+msgstr "รูป PNM ที่ได้รับมีรูปแบบที่ไม่ถูกต้อง"
 
 #: gdk-pixbuf/io-pnm.c:656
 msgid "PNM image loader does not support this PNM subformat"
-msgstr ""
+msgstr "ตัวโหลดรูป PNM ไม่รองรับรูปแบบ PNM ย่อยนี้"
 
 #: gdk-pixbuf/io-pnm.c:711
 msgid "Premature end-of-file encountered"
-msgstr ""
+msgstr "เจอ end-of-file ก่อนที่ควร"
 
 #: gdk-pixbuf/io-pnm.c:743 gdk-pixbuf/io-pnm.c:974
 msgid "Raw PNM formats require exactly one whitespace before sample data"
-msgstr ""
+msgstr "รูปแบบ Raw PNM บังคับว่าต้อมีช่องว่างหนึ่งตัวเป๊ะก่อนข้อมูลตัวอย่าง"
 
 #: gdk-pixbuf/io-pnm.c:770
 msgid "Can't allocate memory for loading PNM image"
@@ -507,11 +507,11 @@ msgstr "หน่วยความจำไม่พอสำหรับโค
 
 #: gdk-pixbuf/io-pnm.c:871
 msgid "Unexpected end of PNM image data"
-msgstr ""
+msgstr "ข้อมูล PNM จบก่อนที่ควร"
 
 #: gdk-pixbuf/io-pnm.c:1003
 msgid "Insufficient memory to load PNM file"
-msgstr ""
+msgstr "หน่วยความจำไม่พอที่จะอ่านแฟ้ม PNM"
 
 #: gdk-pixbuf/io-pnm.c:1082
 msgid "The PNM/PBM/PGM/PPM image format family"
@@ -519,15 +519,15 @@ msgstr "แฟ้มรูปชนิด PNM/PBM/PGM/PPM"
 
 #: gdk-pixbuf/io-ras.c:126
 msgid "RAS image has bogus header data"
-msgstr ""
+msgstr "รูป RAS มีหัวข้อมูลไม่ถูกต้อง"
 
 #: gdk-pixbuf/io-ras.c:148
 msgid "RAS image has unknown type"
-msgstr ""
+msgstr "รูป RAS มีชนิดที่ไม่รู้จัก"
 
 #: gdk-pixbuf/io-ras.c:156
 msgid "unsupported RAS image variation"
-msgstr ""
+msgstr "ไม่รองรับรูป RAS ชนิดย่อยนี้"
 
 #: gdk-pixbuf/io-ras.c:171 gdk-pixbuf/io-ras.c:200
 msgid "Not enough memory to load RAS image"
@@ -547,11 +547,12 @@ msgstr "หน่วยความจำไม่พอสำหรับข้
 
 #: gdk-pixbuf/io-tga.c:188
 msgid "Can't realloc IOBuffer data"
-msgstr ""
+msgstr "realloc ข้อมูล IOBuffer ไม่สำเร็จ"
 
+# FIXME: What does this really mean?
 #: gdk-pixbuf/io-tga.c:218
 msgid "Can't allocate temporary IOBuffer data"
-msgstr ""
+msgstr "จัดสรรข้อมูลชั่วคราวของ IOBuffer ไม่สำเร็จ"
 
 #: gdk-pixbuf/io-tga.c:352
 msgid "Can't allocate new pixbuf"
@@ -559,28 +560,28 @@ msgstr "หน่วยความจำไม่พอสำหรับพิ
 
 #: gdk-pixbuf/io-tga.c:691
 msgid "Can't allocate colormap structure"
-msgstr ""
+msgstr "จัดสรรโครงสร้างข้อมูลตารางสีไม่สำเร็จ"
 
 #: gdk-pixbuf/io-tga.c:698
 msgid "Can't allocate colormap entries"
-msgstr ""
+msgstr "จัดสรรรายการในตารางสีไม่สำเร็จ"
 
 #: gdk-pixbuf/io-tga.c:720
 msgid "Unexpected bitdepth for colormap entries"
-msgstr ""
+msgstr "รายการในตารางสีมีความลึกสีที่ไม่รองรับ"
 
 #: gdk-pixbuf/io-tga.c:738
 msgid "Can't allocate TGA header memory"
-msgstr ""
+msgstr "หน่วยความจำไม่พอสำหรับหัวข้อมูล TGA"
 
 #: gdk-pixbuf/io-tga.c:771
 msgid "TGA image has invalid dimensions"
-msgstr ""
+msgstr "รูป TGA มีมิติที่ไม่ถูกต้อง"
 
 #: gdk-pixbuf/io-tga.c:777 gdk-pixbuf/io-tga.c:786 gdk-pixbuf/io-tga.c:796
 #: gdk-pixbuf/io-tga.c:806 gdk-pixbuf/io-tga.c:813
 msgid "TGA image type not supported"
-msgstr ""
+msgstr "ไม่รองรับรูปชนิด TGA"
 
 #: gdk-pixbuf/io-tga.c:860
 msgid "Can't allocate memory for TGA context struct"
@@ -588,7 +589,7 @@ msgstr "หน่วยความจำไม่พอสำหรับโค
 
 #: gdk-pixbuf/io-tga.c:925
 msgid "Excess data in file"
-msgstr ""
+msgstr "แฟ้มมีข้อมูลเกิน"
 
 #: gdk-pixbuf/io-tga.c:994
 msgid "The Targa image format"
@@ -596,11 +597,11 @@ msgstr "แฟ้มรูปชนิด Targa"
 
 #: gdk-pixbuf/io-tiff.c:192
 msgid "Could not get image width (bad TIFF file)"
-msgstr ""
+msgstr "อ่านค่าความกว้างรูปไม่สำเร็จ (แฟ้ม TIFF เสีย)"
 
 #: gdk-pixbuf/io-tiff.c:199
 msgid "Could not get image height (bad TIFF file)"
-msgstr ""
+msgstr "อ่านค่าความสูงรูปไม่สำเร็จ (แฟ้ม TIFF เสีย)"
 
 #: gdk-pixbuf/io-tiff.c:207
 msgid "Width or height of TIFF image is zero"
@@ -608,31 +609,31 @@ msgstr "ความกว้างหรือสูงของรูปชน
 
 #: gdk-pixbuf/io-tiff.c:216 gdk-pixbuf/io-tiff.c:225
 msgid "Dimensions of TIFF image too large"
-msgstr ""
+msgstr "รูป TIFF มีค่ามิติที่ใหญ่เกิน"
 
 #: gdk-pixbuf/io-tiff.c:244 gdk-pixbuf/io-tiff.c:256 gdk-pixbuf/io-tiff.c:564
 msgid "Insufficient memory to open TIFF file"
-msgstr ""
+msgstr "หน่วยความจำไม่พอจะเปิดแฟ้ม TIFF"
 
 #: gdk-pixbuf/io-tiff.c:268
 msgid "Failed to load RGB data from TIFF file"
-msgstr ""
+msgstr "อ่านค่า RGB จากแฟ้ม TIFF ไม่สำเร็จ"
 
 #: gdk-pixbuf/io-tiff.c:276
 msgid "Unsupported TIFF variant"
-msgstr ""
+msgstr "ไม่รองรับชนิดย่อยนี้ของ TIFF"
 
 #: gdk-pixbuf/io-tiff.c:346
 msgid "Failed to open TIFF image"
-msgstr ""
+msgstr "เปิดรูป TIFF ไม่สำเร็จ"
 
 #: gdk-pixbuf/io-tiff.c:359
 msgid "TIFFClose operation failed"
-msgstr ""
+msgstr "คำสั่ง TIFFClose ทำงานไม่สำเร็จ"
 
 #: gdk-pixbuf/io-tiff.c:494 gdk-pixbuf/io-tiff.c:507
 msgid "Failed to load TIFF image"
-msgstr ""
+msgstr "โหลดรูป TIFF ไม่สำเร็จ"
 
 #: gdk-pixbuf/io-tiff.c:602
 msgid "The TIFF image format"
@@ -652,7 +653,7 @@ msgstr "หน่วยความจำไม่พอที่จะโหล
 
 #: gdk-pixbuf/io-wbmp.c:334
 msgid "Couldn't save the rest"
-msgstr ""
+msgstr "บันทึกที่เหลือไม่สำเร็จ"
 
 #: gdk-pixbuf/io-wbmp.c:368
 msgid "The WBMP image format"
@@ -664,11 +665,11 @@ msgstr "แฟ้ม XBM ที่ใช้ไม่ได้"
 
 #: gdk-pixbuf/io-xbm.c:295
 msgid "Insufficient memory to load XBM image file"
-msgstr ""
+msgstr "หน่วยความจำไม่พอจะอ่านแฟ้มรูป XBM"
 
 #: gdk-pixbuf/io-xbm.c:439
 msgid "Failed to write to temporary file when loading XBM image"
-msgstr ""
+msgstr "เขียนลงแฟ้มชั่วคราวไม่สำเร็จ ขณะอ่านรูป XBM"
 
 #: gdk-pixbuf/io-xbm.c:474
 msgid "The XBM image format"
@@ -704,7 +705,7 @@ msgstr "หน่วยความจำไม่พอสำหรับอ่
 
 #: gdk-pixbuf/io-xpm.c:1508
 msgid "Failed to write to temporary file when loading XPM image"
-msgstr ""
+msgstr "เขียนลงแฟ้มชั่วคราวไม่สำเร็จ ขณะอ่านรูป XBM"
 
 #: gdk-pixbuf/io-xpm.c:1543
 msgid "The XPM image format"
@@ -883,11 +884,11 @@ msgstr "เลือกทั้ง_หมด"
 
 #: gtk/gtkentry.c:4089 gtk/gtktextview.c:6885
 msgid "Input _Methods"
-msgstr ""
+msgstr "Input _Methods"
 
 #: gtk/gtkentry.c:4099 gtk/gtktextview.c:6896
 msgid "_Insert Unicode Control Character"
-msgstr ""
+msgstr "แ_ทรกตัวอักษรควบคุมของยูนิโค้ด"
 
 #: gtk/gtkfilechooser.c:1452 gtk/gtkfilechooser.c:1496
 #: gtk/gtkfilechooser.c:1571 gtk/gtkfilechooser.c:1615
@@ -1265,7 +1266,7 @@ msgstr "เกิดข้อผิดพลาดขณะสร้างโฟ
 
 #: gtk/gtkfilesystemunix.c:443 gtk/gtkfilesystemwin32.c:414
 msgid "This file system does not support mounting"
-msgstr ""
+msgstr "ระบบแฟ้มนี้ไม่รองรับการเมานท์"
 
 #: gtk/gtkfilesystemunix.c:451
 msgid "Filesystem"
@@ -1328,11 +1329,11 @@ msgstr "เลือกแบบอักษร"
 
 #: gtk/gtkgamma.c:399
 msgid "Gamma"
-msgstr ""
+msgstr "แกมมา"
 
 #: gtk/gtkgamma.c:409
 msgid "_Gamma value"
-msgstr ""
+msgstr "ค่าแ_กมมา"
 
 #. Remove this icon source so we don't keep trying to
 #. * load it.
@@ -1340,7 +1341,7 @@ msgstr ""
 #: gtk/gtkiconfactory.c:1563
 #, c-format
 msgid "Error loading icon: %s"
-msgstr ""
+msgstr "ไม่สามารถโหลดไอคอน: %s"
 
 #: gtk/gtkicontheme.c:1186
 #, c-format
@@ -1350,6 +1351,9 @@ msgid ""
 "You can get a copy from:\n"
 "\t%s"
 msgstr ""
+"ไม่เจอไอคอน '%s'  และชุดตกแต่ง '%s'\n"
+"คุณอาจจะต้องติดตั้งมัน คุณสามารถคัดลอกมันมาจาก\n"
+"\t%s"
 
 #: gtk/gtkicontheme.c:1251
 #, c-format
@@ -1378,25 +1382,25 @@ msgstr "ไม่ใช้"
 
 #: gtk/gtkinputdialog.c:278
 msgid "Screen"
-msgstr ""
+msgstr "จอ"
 
 #: gtk/gtkinputdialog.c:285
 msgid "Window"
-msgstr ""
+msgstr "หน้าต่าง"
 
 #: gtk/gtkinputdialog.c:292
 msgid "_Mode: "
-msgstr ""
+msgstr "โ_หมด: "
 
 #. The axis listbox
 #: gtk/gtkinputdialog.c:323
 msgid "_Axes"
-msgstr ""
+msgstr "แ_กน"
 
 #. Keys listbox
 #: gtk/gtkinputdialog.c:340
 msgid "_Keys"
-msgstr ""
+msgstr "ปุ่_ม"
 
 #: gtk/gtkinputdialog.c:560
 msgid "X"
@@ -1412,11 +1416,11 @@ msgstr "แรง"
 
 #: gtk/gtkinputdialog.c:563
 msgid "X Tilt"
-msgstr ""
+msgstr "เอียง X"
 
 #: gtk/gtkinputdialog.c:564
 msgid "Y Tilt"
-msgstr ""
+msgstr "เอียง Y"
 
 #: gtk/gtkinputdialog.c:565
 msgid "Wheel"
@@ -1445,7 +1449,7 @@ msgstr "เลือกทั้งหมด"
 
 #: gtk/gtklabel.c:3227
 msgid "Input Methods"
-msgstr ""
+msgstr "Input Methods"
 
 #. Translate to default:RTL if you want your widgets
 #. * to be RTL, otherwise translate to default:LTR.
@@ -1472,17 +1476,17 @@ msgstr "กลุ่มที่ปุ่มวิทยุนี้อยู่
 #: gtk/gtkrc.c:2380
 #, c-format
 msgid "Unable to find include file: \"%s\""
-msgstr ""
+msgstr "ไม่เจอแฟ้ม include: \"%s\""
 
 #: gtk/gtkrc.c:3023 gtk/gtkrc.c:3026
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
-msgstr ""
+msgstr "ไม่เจอแฟ้มรูปใน pixmap_path: \"%s\""
 
 #: gtk/gtkrc.c:3461
 #, c-format
 msgid "Pixmap path element: \"%s\" must be absolute, %s, line %d"
-msgstr ""
+msgstr "รายการในพาธของพิกแมป: \"%s\" ต้องเป็นที่อยู่เต็ม, %s บรรทัด %d"
 
 #. KEEP IN SYNC with gtkiconfactory.c stock icons, when appropriate
 #: gtk/gtkstock.c:267
@@ -1763,67 +1767,68 @@ msgstr "_ย่อ"
 
 #: gtk/gtktextutil.c:46
 msgid "LRM _Left-to-right mark"
-msgstr ""
+msgstr "LRM _Left-to-right mark"
 
 #: gtk/gtktextutil.c:47
 msgid "RLM _Right-to-left mark"
-msgstr ""
+msgstr "RLM _Right-to-left mark"
 
 #: gtk/gtktextutil.c:48
 msgid "LRE Left-to-right _embedding"
-msgstr ""
+msgstr "LRE Left-to-right _embedding"
 
 #: gtk/gtktextutil.c:49
 msgid "RLE Right-to-left e_mbedding"
-msgstr ""
+msgstr "RLE Right-to-left e_mbedding"
 
 #: gtk/gtktextutil.c:50
 msgid "LRO Left-to-right _override"
-msgstr ""
+msgstr "LRO Left-to-right _override"
 
 #: gtk/gtktextutil.c:51
 msgid "RLO Right-to-left o_verride"
-msgstr ""
+msgstr "RLO Right-to-left o_verride"
 
 #: gtk/gtktextutil.c:52
 msgid "PDF _Pop directional formatting"
-msgstr ""
+msgstr "PDF _Pop directional formatting"
 
 #: gtk/gtktextutil.c:53
 msgid "ZWS _Zero width space"
-msgstr ""
+msgstr "ZWS _Zero width space"
 
 #: gtk/gtktextutil.c:54
 msgid "ZWJ Zero width _joiner"
-msgstr ""
+msgstr "ZWJ Zero width _joiner"
 
 #: gtk/gtktextutil.c:55
 msgid "ZWNJ Zero width _non-joiner"
-msgstr ""
+msgstr "ZWNJ Zero width _non-joiner"
 
+# เครื่องยนต์ means "motor engine"
 #: gtk/gtkthemes.c:69
 #, c-format
 msgid "Unable to locate theme engine in module_path: \"%s\","
-msgstr ""
+msgstr "ไม่เจอเครื่องจัดการชุดตกแต่งใน module_path: \"%s\""
 
 #: gtk/gtktipsquery.c:184
 msgid "--- No Tip ---"
-msgstr ""
+msgstr "--- ไม่มีข้อแนะนำ ---"
 
 #: gtk/gtkuimanager.c:1075
 #, c-format
 msgid "Unknown attribute '%s' on line %d char %d"
-msgstr ""
+msgstr "ไม่รู้จักแอตทริบิวต์ '%s' บนบรรทัด %d ตัวอักษร %d"
 
 #: gtk/gtkuimanager.c:1284
 #, c-format
 msgid "Unexpected start tag '%s' on line %d char %d"
-msgstr ""
+msgstr "ไม่ควรจะเจอแท็กเริ่มต้น '%s' บนบรรทัด %d ตัวอักษร %d"
 
 #: gtk/gtkuimanager.c:1369
 #, c-format
 msgid "Unexpected character data on line %d char %d"
-msgstr ""
+msgstr "ไม่ควรจะเจอข้อมูลตัวอักษร บนบรรทัด %d ตัวอักษร %d"
 
 #: gtk/gtkuimanager.c:2146
 msgid "Empty"
@@ -1832,27 +1837,27 @@ msgstr "ว่าง"
 #. ID
 #: modules/input/imam-et.c:453
 msgid "Amharic (EZ+)"
-msgstr ""
+msgstr "Amharic (EZ+)"
 
 #. ID
 #: modules/input/imcedilla.c:90
 msgid "Cedilla"
-msgstr ""
+msgstr "Cedilla"
 
 #. ID
 #: modules/input/imcyrillic-translit.c:216
 msgid "Cyrillic (Transliterated)"
-msgstr ""
+msgstr "Cyrillic (Transliterated)"
 
 #. ID
 #: modules/input/iminuktitut.c:126
 msgid "Inukitut (Transliterated)"
-msgstr ""
+msgstr "Inukitut (Transliterated)"
 
 #. ID
 #: modules/input/imipa.c:144
 msgid "IPA"
-msgstr ""
+msgstr "IPA"
 
 #. ID
 #: modules/input/imthai-broken.c:177
@@ -1862,12 +1867,12 @@ msgstr "ไทย (เสียอยู่)"
 #. ID
 #: modules/input/imti-er.c:452
 msgid "Tigrigna-Eritrean (EZ+)"
-msgstr ""
+msgstr "Tigrigna-Eritrean (EZ+)"
 
 #. ID
 #: modules/input/imti-et.c:452
 msgid "Tigrigna-Ethiopian (EZ+)"
-msgstr ""
+msgstr "Tigrigna-Ethiopian (EZ+)"
 
 #. ID
 #: modules/input/imviqr.c:243
