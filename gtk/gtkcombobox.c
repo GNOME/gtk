@@ -1751,12 +1751,6 @@ gtk_combo_box_forall (GtkContainer *container,
     {
       if (combo_box->priv->button)
 	(* callback) (combo_box->priv->button, callback_data);
-      if (combo_box->priv->box)
-	(* callback) (combo_box->priv->box, callback_data);
-      if (combo_box->priv->separator)
-	(* callback) (combo_box->priv->separator, callback_data);
-      if (combo_box->priv->arrow)
-	(* callback) (combo_box->priv->arrow, callback_data);
       if (combo_box->priv->cell_view_frame)
 	(* callback) (combo_box->priv->cell_view_frame, callback_data);
     }

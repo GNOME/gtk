@@ -1,3 +1,8 @@
+2004-07-16  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkcombobox.c (gtk_combo_box_forall): Don't iterate
+	multiple times over some of the children. 
+
 Thu Jul 15 22:19:40 2004  Matthias Clasen  <maclas@gmx.de>
 
 	Fix #60128, #58307, #144706:
