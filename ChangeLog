@@ -1,3 +1,7 @@
+Tue Jun 10 00:58:23 2003  Soeren Sandmann  <sandmann@daimi.au.dk>
+
+	* tests/testgtk.c: Make it compile with C89 compilers
+
 2003-06-10  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtktextview.c (gtk_text_view_class_init): Install boolean

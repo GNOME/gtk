@@ -8559,9 +8559,9 @@ create_notebook (GtkWidget *widget)
 void
 toggle_resize (GtkWidget *widget, GtkWidget *child)
 {
+  GtkContainer *container = GTK_CONTAINER (gtk_widget_get_parent (child));
   GValue value = { 0, };
   g_value_init (&value, G_TYPE_BOOLEAN);
-  GtkContainer *container = GTK_CONTAINER (gtk_widget_get_parent (child));
   gtk_container_child_get_property (container, child, "resize", &value);
   g_value_set_boolean (&value, !g_value_get_boolean (&value));
   gtk_container_child_set_property (container, child, "resize", &value);
@@ -8570,9 +8570,9 @@ toggle_resize (GtkWidget *widget, GtkWidget *child)
 void
 toggle_shrink (GtkWidget *widget, GtkWidget *child)
 {
+  GtkContainer *container = GTK_CONTAINER (gtk_widget_get_parent (child));
   GValue value = { 0, };
   g_value_init (&value, G_TYPE_BOOLEAN);
-  GtkContainer *container = GTK_CONTAINER (gtk_widget_get_parent (child));
   gtk_container_child_get_property (container, child, "shrink", &value);
   g_value_set_boolean (&value, !g_value_get_boolean (&value));
   gtk_container_child_set_property (container, child, "shrink", &value);
