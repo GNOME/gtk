@@ -45,17 +45,29 @@ static void     gtk_im_multicontext_focus_out          (GtkIMContext            
 static void     gtk_im_multicontext_reset              (GtkIMContext            *context);
 static void     gtk_im_multicontext_set_cursor_location (GtkIMContext            *context,
 							GdkRectangle		*area);
+static gboolean gtk_im_multicontext_get_surrounding    (GtkIMContext            *context,
+							gchar                  **text,
+							gint                    *cursor_index);
+static void     gtk_im_multicontext_set_surrounding    (GtkIMContext            *context,
+							const char              *text,
+							gint                     len,
+							gint                     cursor_index);
 
-static void     gtk_im_multicontext_preedit_start_cb   (GtkIMContext            *slave,
-							GtkIMMulticontext       *multicontext);
-static void     gtk_im_multicontext_preedit_end_cb     (GtkIMContext            *slave,
-							GtkIMMulticontext       *multicontext);
-static void     gtk_im_multicontext_preedit_changed_cb (GtkIMContext            *slave,
-							GtkIMMulticontext       *multicontext);
-void            gtk_im_multicontext_commit_cb          (GtkIMContext            *slave,
-							const gchar             *str,
-							GtkIMMulticontext       *multicontext);
-
+static void     gtk_im_multicontext_preedit_start_cb        (GtkIMContext      *slave,
+							     GtkIMMulticontext *multicontext);
+static void     gtk_im_multicontext_preedit_end_cb          (GtkIMContext      *slave,
+							     GtkIMMulticontext *multicontext);
+static void     gtk_im_multicontext_preedit_changed_cb      (GtkIMContext      *slave,
+							     GtkIMMulticontext *multicontext);
+static void     gtk_im_multicontext_commit_cb               (GtkIMContext      *slave,
+							     const gchar       *str,
+							     GtkIMMulticontext *multicontext);
+static gboolean gtk_im_multicontext_retrieve_surrounding_cb (GtkIMContext      *slave,
+							     GtkIMMulticontext *multicontext);
+static gboolean gtk_im_multicontext_delete_surrounding_cb   (GtkIMContext      *slave,
+							     gint               offset,
+							     gint               n_chars,
+							     GtkIMMulticontext *multicontext);
 static GtkIMContextClass *parent_class;
 
 static const gchar *global_context_id = NULL;
@@ -103,6 +115,8 @@ gtk_im_multicontext_class_init (GtkIMMulticontextClass *class)
   im_context_class->focus_out = gtk_im_multicontext_focus_out;
   im_context_class->reset = gtk_im_multicontext_reset;
   im_context_class->set_cursor_location = gtk_im_multicontext_set_cursor_location;
+  im_context_class->set_surrounding = gtk_im_multicontext_set_surrounding;
+  im_context_class->get_surrounding = gtk_im_multicontext_get_surrounding;
 
   gobject_class->finalize = gtk_im_multicontext_finalize;
 }
@@ -173,6 +187,12 @@ gtk_im_multicontext_set_slave (GtkIMMulticontext *multicontext,
 			multicontext);
       g_signal_connect (multicontext->slave, "commit",
 			G_CALLBACK (gtk_im_multicontext_commit_cb),
+			multicontext);
+      g_signal_connect (multicontext->slave, "retrieve_surrounding",
+			G_CALLBACK (gtk_im_multicontext_retrieve_surrounding_cb),
+			multicontext);
+      g_signal_connect (multicontext->slave, "delete_surrounding",
+			G_CALLBACK (gtk_im_multicontext_delete_surrounding_cb),
 			multicontext);
       
       if (multicontext->client_window)
@@ -301,6 +321,40 @@ gtk_im_multicontext_set_cursor_location (GtkIMContext   *context,
     gtk_im_context_set_cursor_location (slave, area);
 }
 
+static gboolean
+gtk_im_multicontext_get_surrounding (GtkIMContext  *context,
+				     gchar        **text,
+				     gint          *cursor_index)
+{
+  GtkIMMulticontext *multicontext = GTK_IM_MULTICONTEXT (context);
+  GtkIMContext *slave = gtk_im_multicontext_get_slave (multicontext);
+
+  if (slave)
+    return gtk_im_context_get_surrounding (context, text, cursor_index);
+  else
+    {
+      if (text)
+	*text = NULL;
+      if (cursor_index)
+	*cursor_index = 0;
+
+      return FALSE;
+    }
+}
+
+static void
+gtk_im_multicontext_set_surrounding (GtkIMContext *context,
+				     const char   *text,
+				     gint          len,
+				     gint          cursor_index)
+{
+  GtkIMMulticontext *multicontext = GTK_IM_MULTICONTEXT (context);
+  GtkIMContext *slave = gtk_im_multicontext_get_slave (multicontext);
+
+  if (slave)
+    gtk_im_context_set_surrounding (slave, text, len, cursor_index);
+}
+
 static void
 gtk_im_multicontext_preedit_start_cb   (GtkIMContext      *slave,
 					GtkIMMulticontext *multicontext)
@@ -322,12 +376,37 @@ gtk_im_multicontext_preedit_changed_cb (GtkIMContext      *slave,
   g_signal_emit_by_name (multicontext, "preedit_changed");
 }
 
-void
+static void
 gtk_im_multicontext_commit_cb (GtkIMContext      *slave,
 			       const gchar       *str,
 			       GtkIMMulticontext *multicontext)
 {
   g_signal_emit_by_name (multicontext, "commit", str);;
+}
+
+static gboolean
+gtk_im_multicontext_retrieve_surrounding_cb (GtkIMContext      *slave,
+					     GtkIMMulticontext *multicontext)
+{
+  gboolean result;
+  
+  g_signal_emit_by_name (multicontext, "retrieve_surrounding", &result);
+
+  return result;
+}
+
+static gboolean
+gtk_im_multicontext_delete_surrounding_cb (GtkIMContext      *slave,
+					   gint               offset,
+					   gint               n_chars,
+					   GtkIMMulticontext *multicontext)
+{
+  gboolean result;
+  
+  g_signal_emit_by_name (multicontext, "delete_surrounding",
+			 offset, n_chars, &result);
+
+  return result;
 }
 
 static void

@@ -257,13 +257,19 @@ static void     gtk_text_view_check_cursor_blink     (GtkTextView        *text_v
 static void     gtk_text_view_pend_cursor_blink      (GtkTextView        *text_view);
 static void     gtk_text_view_stop_cursor_blink      (GtkTextView        *text_view);
 
-static void gtk_text_view_value_changed           (GtkAdjustment *adj,
-						   GtkTextView   *view);
-static void gtk_text_view_commit_handler          (GtkIMContext  *context,
-						   const gchar   *str,
-						   GtkTextView   *text_view);
-static void gtk_text_view_preedit_changed_handler (GtkIMContext  *context,
-						   GtkTextView   *text_view);
+static void     gtk_text_view_value_changed                (GtkAdjustment *adj,
+							    GtkTextView   *view);
+static void     gtk_text_view_commit_handler               (GtkIMContext  *context,
+							    const gchar   *str,
+							    GtkTextView   *text_view);
+static void     gtk_text_view_preedit_changed_handler      (GtkIMContext  *context,
+							    GtkTextView   *text_view);
+static gboolean gtk_text_view_retrieve_surrounding_handler (GtkIMContext  *context,
+							    GtkTextView   *text_view);
+static gboolean gtk_text_view_delete_surrounding_handler   (GtkIMContext  *context,
+							    gint           offset,
+							    gint           n_chars,
+							    GtkTextView   *text_view);
 
 static void gtk_text_view_mark_set_handler       (GtkTextBuffer     *buffer,
                                                   const GtkTextIter *location,
@@ -956,9 +962,12 @@ gtk_text_view_init (GtkTextView *text_view)
 
   g_signal_connect (G_OBJECT (text_view->im_context), "commit",
                     G_CALLBACK (gtk_text_view_commit_handler), text_view);
-
   g_signal_connect (G_OBJECT (text_view->im_context), "preedit_changed",
  		    G_CALLBACK (gtk_text_view_preedit_changed_handler), text_view);
+  g_signal_connect (G_OBJECT (text_view->im_context), "retrieve_surrounding",
+ 		    G_CALLBACK (gtk_text_view_retrieve_surrounding_handler), text_view);
+  g_signal_connect (G_OBJECT (text_view->im_context), "delete_surrounding",
+ 		    G_CALLBACK (gtk_text_view_delete_surrounding_handler), text_view);
 
   text_view->cursor_visible = TRUE;
 
@@ -5307,6 +5316,51 @@ gtk_text_view_preedit_changed_handler (GtkIMContext *context,
 
   pango_attr_list_unref (attrs);
   g_free (str);
+}
+
+static gboolean
+gtk_text_view_retrieve_surrounding_handler (GtkIMContext  *context,
+					    GtkTextView   *text_view)
+{
+  GtkTextIter start;
+  GtkTextIter end;
+  gint pos;
+  gchar *text;
+
+  gtk_text_buffer_get_iter_at_mark (text_view->buffer, &start,  
+				    gtk_text_buffer_get_insert (text_view->buffer));
+  end = start;
+
+  pos = gtk_text_iter_get_line_index (&start);
+  gtk_text_iter_set_line_offset (&start, 0);
+  gtk_text_iter_forward_to_line_end (&end);
+
+  text = gtk_text_iter_get_slice (&start, &end);
+  gtk_im_context_set_surrounding (context, text, -1, pos);
+  g_free (text);
+
+  return TRUE;
+}
+
+static gboolean
+gtk_text_view_delete_surrounding_handler (GtkIMContext  *context,
+					  gint           offset,
+					  gint           n_chars,
+					  GtkTextView   *text_view)
+{
+  GtkTextIter start;
+  GtkTextIter end;
+
+  gtk_text_buffer_get_iter_at_mark (text_view->buffer, &start,  
+				    gtk_text_buffer_get_insert (text_view->buffer));
+  end = start;
+
+  gtk_text_iter_forward_chars (&start, offset);
+  gtk_text_iter_forward_chars (&end, offset + n_chars);
+
+  gtk_text_buffer_delete (text_view->buffer, &start, &end);
+
+  return TRUE;
 }
 
 static void

@@ -232,11 +232,18 @@ static void gtk_entry_keymap_direction_changed (GdkKeymap *keymap,
 						GtkEntry  *entry);
 /* IM Context Callbacks
  */
-static void gtk_entry_commit_cb           (GtkIMContext      *context,
-					   const gchar       *str,
-					   GtkEntry          *entry);
-static void gtk_entry_preedit_changed_cb  (GtkIMContext      *context,
-					   GtkEntry          *entry);
+static void     gtk_entry_commit_cb               (GtkIMContext *context,
+						   const gchar  *str,
+						   GtkEntry     *entry);
+static void     gtk_entry_preedit_changed_cb      (GtkIMContext *context,
+						   GtkEntry     *entry);
+static gboolean gtk_entry_retrieve_surrounding_cb (GtkIMContext *context,
+						   GtkEntry     *entry);
+static gboolean gtk_entry_delete_surrounding_cb   (GtkIMContext *context,
+						   gint          offset,
+						   gint          n_chars,
+						   GtkEntry     *entry);
+
 /* Internal routines
  */
 static void         gtk_entry_set_positions            (GtkEntry       *entry,
@@ -919,6 +926,10 @@ gtk_entry_init (GtkEntry *entry)
 		    G_CALLBACK (gtk_entry_commit_cb), entry);
   g_signal_connect (G_OBJECT (entry->im_context), "preedit_changed",
 		    G_CALLBACK (gtk_entry_preedit_changed_cb), entry);
+  g_signal_connect (G_OBJECT (entry->im_context), "retrieve_surrounding",
+		    G_CALLBACK (gtk_entry_retrieve_surrounding_cb), entry);
+  g_signal_connect (G_OBJECT (entry->im_context), "delete_surrounding",
+		    G_CALLBACK (gtk_entry_delete_surrounding_cb), entry);
 }
 
 static void
@@ -2270,6 +2281,31 @@ gtk_entry_preedit_changed_cb (GtkIMContext *context,
   g_free (preedit_string);
 
   gtk_entry_recompute (entry);
+}
+
+static gboolean
+gtk_entry_retrieve_surrounding_cb (GtkIMContext *context,
+			       GtkEntry     *entry)
+{
+  gtk_im_context_set_surrounding (context,
+				  entry->text,
+				  entry->n_bytes,
+				  g_utf8_offset_to_pointer (entry->text, entry->current_pos) - entry->text);
+
+  return TRUE;
+}
+
+static gboolean
+gtk_entry_delete_surrounding_cb (GtkIMContext *slave,
+				 gint          offset,
+				 gint          n_chars,
+				 GtkEntry     *entry)
+{
+  gtk_editable_delete_text (GTK_EDITABLE (entry),
+			    entry->current_pos + offset,
+			    entry->current_pos + offset + n_chars);
+
+  return TRUE;
 }
 
 /* Internal functions
