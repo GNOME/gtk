@@ -1,3 +1,16 @@
+Wed Jan 27 18:40:50 1999  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkmain.c (gtk_main_do_event): Hack scrollwheel
+	support into the eventloop, by treating button 4-5
+	presses on scrolled windows and scrollbars specially. 
+	Put it here to keep the ugliness small and confined.
+	(We need to intercept the normal propagation in any case
+	to have this work reliably right now, since some
+	subwidgets will trap the button presses)
+	
+	* gtk/gtkviewport.c (gtk_viewport_realize): Select for 
+	BUTTON_PRESS to	support the above hack.
+	
 Tue Jan 26 14:02:50 1999  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/gdkwindow.c (gdk_window_show/hide): Remove TimJ's
