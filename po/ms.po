@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Gtk+ 1.2.x\n"
-"POT-Creation-Date: 2002-01-14 18:17+0800\n"
+"POT-Creation-Date: 2002-03-30 13:42+0800\n"
 "PO-Revision-Date: 2002-01-14 09:22+0800\n"
 "Last-Translator: Hasbullah Bin Pit (sebol) <sebol@ikhlas.com>\n"
 "Language-Team: Projek Gabai <gabai-penyumbang@list.sourceforge.net>\n"
@@ -217,7 +217,7 @@ msgstr "Metrik:"
 
 #: gtk/gtkfontsel.c:664
 msgid "Points"
-msgstr "Mata"
+msgstr "Titik"
 
 #: gtk/gtkfontsel.c:671
 msgid "Pixels"
@@ -226,7 +226,7 @@ msgstr "Piksel"
 #. create the text entry widget
 #: gtk/gtkfontsel.c:687
 msgid "Preview:"
-msgstr "Pralihat"
+msgstr "Prebiu:"
 
 #: gtk/gtkfontsel.c:716
 msgid "Font Information"
@@ -276,7 +276,7 @@ msgstr "(nil)"
 
 #: gtk/gtkfontsel.c:1215
 msgid "regular"
-msgstr "Biasa"
+msgstr "regular"
 
 #: gtk/gtkfontsel.c:1220 gtk/gtkfontsel.c:1972
 msgid "italic"
@@ -296,7 +296,7 @@ msgstr "oblik songsang"
 
 #: gtk/gtkfontsel.c:1224 gtk/gtkfontsel.c:1976
 msgid "other"
-msgstr "Lain-lain"
+msgstr "lain-lain"
 
 #: gtk/gtkfontsel.c:1231
 msgid "[M]"
@@ -340,7 +340,7 @@ msgstr "sel aksara"
 
 #: gtk/gtkfontsel.c:2185
 msgid "Font: (Filter Applied)"
-msgstr "Font : (tapisan dikenakan)"
+msgstr "Font : (tapisan diterapkan)"
 
 #: gtk/gtkfontsel.c:2661
 msgid "MAX_FONTS exceeded. Some fonts may be missing."
@@ -348,7 +348,7 @@ msgstr "melebihi MAX_FONTS. Sesuatu font mungkin hilang"
 
 #: gtk/gtkfontsel.c:3508
 msgid "Apply"
-msgstr "Kenakan"
+msgstr "Terap"
 
 #: gtk/gtkfontsel.c:3530
 msgid "Font Selection"
