@@ -5,8 +5,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.3.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-01-31 07:38+0900\n"
-"PO-Revision-Date: 2004-01-31 07:38+0900\n"
+"POT-Creation-Date: 2004-02-08 20:03+0900\n"
+"PO-Revision-Date: 2004-02-08 20:05+0900\n"
 "Last-Translator: Changwoo Ryu <cwryu@debian.org>\n"
 "Language-Team: Gnome Korea <gnome-kr-hackers@lists.kldp.net>\n"
 "MIME-Version: 1.0\n"
@@ -75,34 +75,34 @@ msgstr "알 수 없는 그림 파일 형식"
 msgid "Failed to load image '%s': %s"
 msgstr "그림 '%s' 읽기 실패: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1095
+#: gdk-pixbuf/gdk-pixbuf-io.c:1094
 #, c-format
 msgid "Error writing to image file: %s"
 msgstr "그림 파일을 쓰는 중 오류가 발생했습니다: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1139 gdk-pixbuf/gdk-pixbuf-io.c:1255
+#: gdk-pixbuf/gdk-pixbuf-io.c:1138 gdk-pixbuf/gdk-pixbuf-io.c:1254
 #, c-format
 msgid "This build of gdk-pixbuf does not support saving the image format: %s"
 msgstr "gtk-pixbuf의 이 빌드에서는 그림 형식 저장을 지원하지 않습니다: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1168
+#: gdk-pixbuf/gdk-pixbuf-io.c:1167
 msgid "Insufficient memory to save image to callback"
 msgstr "콜백에 그림을 저장하기에는 메모리가 부족합니다"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1180
+#: gdk-pixbuf/gdk-pixbuf-io.c:1179
 msgid "Failed to open temporary file"
 msgstr "임시 파일을 여는 데 실패했습니다"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1199
+#: gdk-pixbuf/gdk-pixbuf-io.c:1198
 msgid "Failed to read from temporary file"
 msgstr "임시 파일을 읽는 데 실패했습니다"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1379
+#: gdk-pixbuf/gdk-pixbuf-io.c:1378
 #, c-format
 msgid "Failed to open '%s' for writing: %s"
 msgstr "쓰기용 '%s' 열기 실패: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1400
+#: gdk-pixbuf/gdk-pixbuf-io.c:1399
 #, c-format
 msgid ""
 "Failed to close '%s' while writing image, all data may not have been saved: %"
@@ -111,7 +111,7 @@ msgstr ""
 "그림을 저장하는 동안 '%s'을(를) 닫는데 실패하였습니다, 모든 데이타가 저장되"
 "지 않았을 것입니다: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1586 gdk-pixbuf/gdk-pixbuf-io.c:1636
+#: gdk-pixbuf/gdk-pixbuf-io.c:1585 gdk-pixbuf/gdk-pixbuf-io.c:1635
 msgid "Insufficient memory to save image into a buffer"
 msgstr "버퍼에 그림을 저장하기에는 메모리가 부족합니다"
 
@@ -931,7 +931,7 @@ msgstr ""
 "%s에 대한 책갈피를 더하지 못했습니다:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:465 gtk/gtkfilechooserdefault.c:2937
+#: gtk/gtkfilechooserdefault.c:465 gtk/gtkfilechooserdefault.c:2940
 #, c-format
 msgid ""
 "Could not build file name from '%s' and '%s':\n"
@@ -949,7 +949,7 @@ msgstr "홈"
 msgid "Desktop"
 msgstr "바탕 화면"
 
-#: gtk/gtkfilechooserdefault.c:876
+#: gtk/gtkfilechooserdefault.c:878
 #, c-format
 msgid ""
 "Could not go to the parent folder of %s:\n"
@@ -958,7 +958,7 @@ msgstr ""
 "%s의 상위 폴더로 이동할 수 없습니다:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:925
+#: gtk/gtkfilechooserdefault.c:927
 #, c-format
 msgid ""
 "Could not create folder %s:\n"
@@ -967,28 +967,28 @@ msgstr ""
 "%s 폴더를 만들 수 없습니다:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:1001
+#: gtk/gtkfilechooserdefault.c:1003
 msgid "Add"
 msgstr "더하기"
 
-#: gtk/gtkfilechooserdefault.c:1011
+#: gtk/gtkfilechooserdefault.c:1013
 msgid "Remove"
 msgstr "지우기"
 
-#: gtk/gtkfilechooserdefault.c:1021
+#: gtk/gtkfilechooserdefault.c:1023
 msgid "Up"
 msgstr "위로"
 
-#: gtk/gtkfilechooserdefault.c:1101 gtk/gtkfilechooserdefault.c:1456
+#: gtk/gtkfilechooserdefault.c:1103 gtk/gtkfilechooserdefault.c:1459
 msgid "File name"
 msgstr "파일 이름"
 
-#: gtk/gtkfilechooserdefault.c:1127
+#: gtk/gtkfilechooserdefault.c:1129
 #, c-format
 msgid "Could not add bookmark for %s because it is not a folder."
 msgstr "%s에 대한 책갈피를 더할 수 없습니다 - 폴더가 아닙니다."
 
-#: gtk/gtkfilechooserdefault.c:1175
+#: gtk/gtkfilechooserdefault.c:1177
 #, c-format
 msgid ""
 "Could not remove bookmark for %s:\n"
@@ -997,82 +997,82 @@ msgstr ""
 "%s에 대한 책갈피를 지울 수 없습니다:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:1330
+#: gtk/gtkfilechooserdefault.c:1332
 #, c-format
 msgid "Could not add a bookmark for %s because it is an invalid path name."
 msgstr "%s에 대한 책갈피를 더할 수 없습니다 - 경로 이름이 잘못되었습니다."
 
-#: gtk/gtkfilechooserdefault.c:1403
+#: gtk/gtkfilechooserdefault.c:1405
 msgid "Folder"
 msgstr "폴더"
 
-#: gtk/gtkfilechooserdefault.c:1478
+#: gtk/gtkfilechooserdefault.c:1481
 msgid "Size"
 msgstr "크기"
 
-#: gtk/gtkfilechooserdefault.c:1490
+#: gtk/gtkfilechooserdefault.c:1493
 msgid "Modified"
 msgstr "고쳐짐"
 
 #. Label and entry
-#: gtk/gtkfilechooserdefault.c:1513
+#: gtk/gtkfilechooserdefault.c:1516
 msgid "_Filename:"
 msgstr "파일 이름(_F):"
 
 #. Preview
-#: gtk/gtkfilechooserdefault.c:1598
+#: gtk/gtkfilechooserdefault.c:1601
 msgid "Preview"
 msgstr "미리 보기"
 
 #. Change the current folder label
-#: gtk/gtkfilechooserdefault.c:2130
+#: gtk/gtkfilechooserdefault.c:2133
 #, c-format
 msgid "Current folder: %s"
 msgstr "현재 폴더: %s"
 
-#: gtk/gtkfilechooserdefault.c:2533
+#: gtk/gtkfilechooserdefault.c:2536
 #, c-format
 msgid "shortcut %s does not exist"
 msgstr "%s 바로 가기가 없습니다"
 
-#: gtk/gtkfilechooserdefault.c:3083
+#: gtk/gtkfilechooserdefault.c:3086
 msgid "Type name of new folder"
 msgstr "새 폴더의 이름을 넣으십시오"
 
-#: gtk/gtkfilechooserdefault.c:3110
+#: gtk/gtkfilechooserdefault.c:3113
 #, c-format
 msgid "%d byte"
 msgid_plural "%d bytes"
 msgstr[0] "%d바이트"
 
-#: gtk/gtkfilechooserdefault.c:3112
+#: gtk/gtkfilechooserdefault.c:3115
 #, c-format
 msgid "%.1f K"
 msgstr "%.1f K"
 
-#: gtk/gtkfilechooserdefault.c:3114
+#: gtk/gtkfilechooserdefault.c:3117
 #, c-format
 msgid "%.1f M"
 msgstr "%.1f M"
 
-#: gtk/gtkfilechooserdefault.c:3116
+#: gtk/gtkfilechooserdefault.c:3119
 #, c-format
 msgid "%.1f G"
 msgstr "%.1f G"
 
-#: gtk/gtkfilechooserdefault.c:3161
+#: gtk/gtkfilechooserdefault.c:3164
 msgid "Today"
 msgstr "오늘"
 
-#: gtk/gtkfilechooserdefault.c:3163
+#: gtk/gtkfilechooserdefault.c:3166
 msgid "Yesterday"
 msgstr "어제"
 
-#: gtk/gtkfilechooserdefault.c:3171
+#: gtk/gtkfilechooserdefault.c:3174
 msgid "%d/%b/%Y"
 msgstr "%Y/%b/%d"
 
-#: gtk/gtkfilechooserdefault.c:3174
+#: gtk/gtkfilechooserdefault.c:3177
 msgid "Unknown"
 msgstr "모름"
 
@@ -1261,26 +1261,26 @@ msgstr "파일이름 변환할 수 없음"
 msgid "(Empty)"
 msgstr "(빈 파일)"
 
-#: gtk/gtkfilesystemunix.c:351 gtk/gtkfilesystemwin32.c:373
+#: gtk/gtkfilesystemunix.c:379 gtk/gtkfilesystemwin32.c:373
 #, c-format
 msgid "error creating directory '%s': %s"
 msgstr "폴더 \"%s\"을(를) 만드는 데 오류가 발생했습니다: %s"
 
-#: gtk/gtkfilesystemunix.c:392 gtk/gtkfilesystemwin32.c:414
+#: gtk/gtkfilesystemunix.c:440 gtk/gtkfilesystemwin32.c:414
 msgid "This file system does not support mounting"
 msgstr "이 파일 시스템은 마운트를 지원하지 않습니다"
 
-#: gtk/gtkfilesystemunix.c:400
+#: gtk/gtkfilesystemunix.c:448
 msgid "Filesystem"
 msgstr "파일시스템"
 
-#: gtk/gtkfilesystemunix.c:419 gtk/gtkfilesystemunix.c:1295
+#: gtk/gtkfilesystemunix.c:467 gtk/gtkfilesystemunix.c:1345
 #: gtk/gtkfilesystemwin32.c:1154
 #, c-format
 msgid "error getting information for '%s': %s"
 msgstr "'%s'에 대한 정보를 가져오는 데 오류가 발생했습니다: %s"
 
-#: gtk/gtkfilesystemunix.c:1005 gtk/gtkfilesystemwin32.c:777
+#: gtk/gtkfilesystemunix.c:1053 gtk/gtkfilesystemwin32.c:777
 #, c-format
 msgid "Bookmark saving failed (%s)"
 msgstr "책갈피 저장이 실패했습니다 (%s)"
@@ -1447,11 +1447,11 @@ msgstr "(모름)"
 msgid "clear"
 msgstr "지움"
 
-#: gtk/gtklabel.c:3225
+#: gtk/gtklabel.c:3217
 msgid "Select All"
 msgstr "모두 선택"
 
-#: gtk/gtklabel.c:3235
+#: gtk/gtklabel.c:3227
 msgid "Input Methods"
 msgstr "입력기"
 
@@ -1468,6 +1468,14 @@ msgstr "default:LTR"
 #, c-format
 msgid "Page %u"
 msgstr "%u페이지"
+
+#: gtk/gtkradiotoolbutton.c:89
+msgid "Group"
+msgstr "그룹"
+
+#: gtk/gtkradiotoolbutton.c:90
+msgid "The radio tool button whose group this button belongs to."
+msgstr "이 단추가 속한 그룹의 라디오 도구 단추."
 
 #: gtk/gtkrc.c:2380
 #, c-format
@@ -1500,7 +1508,7 @@ msgstr "오류"
 
 #: gtk/gtkstock.c:270
 msgid "Question"
-msgstr "질문"
+msgstr "물음"
 
 #. FIXME these need accelerators when appropriate, and
 #. * need the mnemonics to be rationalized
@@ -1607,7 +1615,7 @@ msgstr "도움말(_H)"
 
 #: gtk/gtkstock.c:300
 msgid "_Home"
-msgstr "홈(_H)"
+msgstr "내 폴더(_H)"
 
 #: gtk/gtkstock.c:301
 msgid "Increase Indent"
@@ -1692,7 +1700,7 @@ msgstr "끝내기(_Q)"
 
 #: gtk/gtkstock.c:321
 msgid "_Redo"
-msgstr "입력 다시 실행(_R)"
+msgstr "다시 실행(_R)"
 
 #: gtk/gtkstock.c:322
 msgid "_Refresh"
@@ -1704,7 +1712,7 @@ msgstr "지우기(_R)"
 
 #: gtk/gtkstock.c:324
 msgid "_Revert"
-msgstr "되돌림(_R)"
+msgstr "되돌리기(_R)"
 
 #: gtk/gtkstock.c:325
 msgid "_Save"
@@ -1759,12 +1767,12 @@ msgid "_Yes"
 msgstr "예(_Y)"
 
 #: gtk/gtkstock.c:338
-msgid "Zoom _100%"
-msgstr "확대/축소 _100%"
+msgid "_Normal Size"
+msgstr "보통 크기(_N)"
 
 #: gtk/gtkstock.c:339
-msgid "Zoom to _Fit"
-msgstr "크기에 맞게(_F)"
+msgid "Best _Fit"
+msgstr "화면에 맞추기(_F)"
 
 #: gtk/gtkstock.c:340
 msgid "Zoom _In"
@@ -1896,9 +1904,3 @@ msgstr "X 입력기"
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "파일 '%s'의 정보를 가져올 수 없습니다: %s"
-
-#~ msgid "This file system does not support icons"
-#~ msgstr "이 파일 시스템은 아이콘을 지원하지 않습니다"
-
-#~ msgid "This file system does not support bookmarks"
-#~ msgstr "이 파일 시스템은 책갈피를 지원하지 않습니다"
