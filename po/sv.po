@@ -8,8 +8,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
-"POT-Creation-Date: 2002-08-05 00:57+0200\n"
-"PO-Revision-Date: 2002-08-05 00:57+0200\n"
+"POT-Creation-Date: 2002-08-07 01:43+0200\n"
+"PO-Revision-Date: 2002-08-07 01:45+0200\n"
 "Last-Translator: Christian Rose <menthos@menthos.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -405,7 +405,7 @@ msgstr "För tidigt filslut påträffades"
 
 #: gdk-pixbuf/io-pnm.c:741 gdk-pixbuf/io-pnm.c:960
 msgid "Raw PNM formats require exactly one whitespace before sample data"
-msgstr "Råa PNM-format kräver precis ett blanktecken innan provdata"
+msgstr "Råa PNM-format kräver precis ett blanktecken före provdata"
 
 #: gdk-pixbuf/io-pnm.c:768
 msgid "Can't allocate memory for loading PNM image"
@@ -945,7 +945,7 @@ msgstr "läge"
 
 #: gtk/gtkcellrenderer.c:104
 msgid "Editable mode of the CellRenderer"
-msgstr "Redigerbart läge av CellRenderer"
+msgstr "Redigerbart läge för CellRenderer"
 
 #: gtk/gtkcellrenderer.c:113
 msgid "visible"
@@ -1772,7 +1772,7 @@ msgstr "Markera allt"
 msgid "Input Methods"
 msgstr "Inmatningsmetoder"
 
-#: gtk/gtkentry.c:3890 gtk/gtktextview.c:6395
+#: gtk/gtkentry.c:3890 gtk/gtktextview.c:6407
 msgid "_Insert Unicode control character"
 msgstr "_Infoga Unicode-styrtecken"
 
@@ -3820,7 +3820,7 @@ msgstr "Synlig markör"
 msgid "If the insertion cursor is shown"
 msgstr "Huruvida insättningsmarkören visas"
 
-#: gtk/gtktextview.c:6386
+#: gtk/gtktextview.c:6398
 msgid "Input _Methods"
 msgstr "Inmatnings_metoder"
 
