@@ -1,3 +1,9 @@
+Fri Feb  4 15:09:12 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkstyle.c (gtk_style_new): Set the charset explicitely for
+	the default font to avoid problems with XFree86-4.0 where the
+	default charset is iso10646-1, not iso8859-1.
+
 Thu Feb  3 14:58:48 PST 2000 Manish Singh <yosh@gimp.org>
 
 	* acinclude.m4
