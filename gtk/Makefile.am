@@ -370,7 +370,6 @@ gdk_headers = @STRIP_BEGIN@ 	\
 	../gdk/gdkevents.h	\
 	../gdk/gdkfont.h	\
 	../gdk/gdkgc.h		\
-	../gdk/gdkim.h		\
 	../gdk/gdkimage.h	\
 	../gdk/gdkinput.h	\
 	../gdk/gdkpixmap.h	\

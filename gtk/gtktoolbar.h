@@ -87,6 +87,7 @@ struct _GtkToolbar
   GtkToolbarStyle  style;
   gint             space_size; /* big optional space between buttons */
   GtkToolbarSpaceStyle space_style;
+  GtkIconSize      icon_size;
 
   GtkTooltips     *tooltips;
 
@@ -133,6 +134,19 @@ GtkWidget* gtk_toolbar_insert_item     (GtkToolbar      *toolbar,
 					GtkSignalFunc    callback,
 					gpointer         user_data,
 					gint             position);
+
+/* Stock Items */
+void       gtk_toolbar_set_icon_size   (GtkToolbar      *toolbar,
+					GtkIconSize      stock_size);
+GtkWidget* gtk_toolbar_insert_stock    (GtkToolbar      *toolbar,
+					const gchar     *stock_id,
+					const char      *tooltip_text,
+					const char      *tooltip_private_text,
+					GtkSignalFunc    callback,
+					gpointer         user_data,
+					gint             position);
+
+
 
 /* Space Items */
 void       gtk_toolbar_append_space    (GtkToolbar      *toolbar);

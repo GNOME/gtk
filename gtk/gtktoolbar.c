@@ -32,10 +32,15 @@
 #include "gtkvbox.h"
 #include "gtkhbox.h"
 #include "gtktoolbar.h"
+#include "gtkstock.h"
+#include "gtkiconfactory.h"
+#include "gtkimage.h"
 
 
 #define DEFAULT_SPACE_SIZE  5
 #define DEFAULT_SPACE_STYLE GTK_TOOLBAR_SPACE_EMPTY
+
+#define DEFAULT_ICON_SIZE GTK_ICON_SIZE_LARGE_TOOLBAR
 
 #define SPACE_LINE_DIVISION 10
 #define SPACE_LINE_START    3
@@ -198,6 +203,7 @@ gtk_toolbar_init (GtkToolbar *toolbar)
   toolbar->relief       = GTK_RELIEF_NORMAL;
   toolbar->space_size   = DEFAULT_SPACE_SIZE;
   toolbar->space_style  = DEFAULT_SPACE_STYLE;
+  toolbar->icon_size    = DEFAULT_ICON_SIZE;
   toolbar->tooltips     = gtk_tooltips_new ();
   toolbar->button_maxw  = 0;
   toolbar->button_maxh  = 0;
@@ -750,6 +756,105 @@ gtk_toolbar_insert_item (GtkToolbar    *toolbar,
 				     icon, callback, user_data,
 				     position);
 }
+
+/**
+ * gtk_toolbar_set_icon_size:
+ * @toolbar: A #GtkToolbar
+ * @icon_size: The #GtkIconSize that stock icons in the toolbar shall have.
+ *
+ * This function sets the size of stock icons in the toolbar. You
+ * can call it both before you add the icons and after they've been
+ * added.
+ **/
+void
+gtk_toolbar_set_icon_size (GtkToolbar  *toolbar,
+			   GtkIconSize  icon_size)
+{
+  GList *children;
+  GtkToolbarChild *child;
+  GtkImage *image;
+  gchar *stock_id;
+
+  g_return_if_fail (toolbar != NULL);
+  g_return_if_fail (GTK_IS_TOOLBAR (toolbar));
+
+  if (toolbar->icon_size == icon_size)
+    return;
+  
+  toolbar->icon_size = icon_size;
+
+  for (children = toolbar->children; children; children = children->next)
+    {
+      child = children->data;
+      if (child->type == GTK_TOOLBAR_CHILD_BUTTON &&
+	  GTK_IS_IMAGE (child->icon))
+	{
+	  image = GTK_IMAGE (child->icon);
+	  if (gtk_image_get_storage_type (image) == GTK_IMAGE_STOCK)
+	    {
+	      gtk_image_get_stock (image, &stock_id, NULL);
+	      stock_id = g_strdup (stock_id);
+	      gtk_image_set_from_stock (image,
+					stock_id,
+					icon_size);
+	      g_free (stock_id);
+	    }
+	}
+    }
+  
+  gtk_widget_queue_resize (GTK_WIDGET (toolbar));
+}
+
+/**
+ * gtk_toolbar_insert_stock:
+ * @toolbar: A #GtkToolbar
+ * @stock_id: The id of the stock item you want to insert
+ * @tooltip_text: The text in the tooltip of the toolbar button
+ * @tooltip_private_text: The private text of the tooltip
+ * @callback: The callback called when the toolbar button is clicked.
+ * @user_data: user data passed to callback
+ * @position: The position the button shall be inserted at.
+ *            -1 means at the end.
+ *
+ * Inserts a stock item at the specified position of the toolbar.
+ */
+GtkWidget*
+gtk_toolbar_insert_stock (GtkToolbar      *toolbar,
+			  const gchar     *stock_id,
+			  const char      *tooltip_text,
+			  const char      *tooltip_private_text,
+			  GtkSignalFunc    callback,
+			  gpointer         user_data,
+			  gint             position)
+{
+  GtkStockItem item;
+  GtkWidget *image;
+
+  if (gtk_stock_lookup (stock_id, &item))
+    {
+      image = gtk_image_new_from_stock (stock_id, toolbar->icon_size);
+
+      return gtk_toolbar_insert_item (toolbar,
+				      item.label,
+				      tooltip_text,
+				      tooltip_private_text,
+				      image,
+				      callback,
+				      user_data,
+				      position);
+    }
+  else
+    return gtk_toolbar_insert_item (toolbar,
+				    stock_id,
+				    tooltip_text,
+				    tooltip_private_text,
+				    NULL,
+				    callback,
+				    user_data,
+				    position);
+}
+
+
 
 void
 gtk_toolbar_append_space (GtkToolbar *toolbar)
