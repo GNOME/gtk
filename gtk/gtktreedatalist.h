@@ -35,15 +35,18 @@ struct _GtkTreeDataList
     guint8         v_uchar;
     guint	   v_uint;
     gfloat	   v_float;
+    gdouble        v_double;
     gpointer	   v_pointer;
   } data;
 };
+
 
 void             _gtk_tree_data_list_push_allocator (GAllocator      *allocator);
 void             _gtk_tree_data_list_pop_allocator  (void);
 GtkTreeDataList *_gtk_tree_data_list_alloc          (void);
 void             _gtk_tree_data_list_free           (GtkTreeDataList *list,
 						     GType           *column_headers);
+gboolean         _gtk_tree_data_list_check_type     (GType            type);
 void             _gtk_tree_data_list_node_to_value  (GtkTreeDataList *list,
 						     GType            type,
 						     GValue          *value);

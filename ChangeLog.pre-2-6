@@ -1,3 +1,20 @@
+Fri Mar  9 20:36:21 2001  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtktreeselection.c (gtk_tree_selection_select_all): Make
+	select_all not work if you're in SINGLE mode (it doesn't make that
+	much sense, anyway.)
+
+	* gtk/gtktreedatalist.c (_gtk_tree_data_list_node_to_value):
+	handle types more sanely.
+	(_gtk_tree_data_list_value_to_node): handle types more sanely.
+	(_gtk_tree_data_list_node_copy): handle types more sanely.
+
+	* gtk/gtkliststore.c (gtk_list_store_set_cell): fix to work with
+	GValue better. Converts the type as well.
+
+	* gtk/gtktreestore.c (gtk_tree_store_set_cell): fix to work with
+	GValue better. Converts the type as well.
+
 Wed Mar  7 20:47:41 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtktext.c gtk/gtkoldeditable.[ch] gdk/gdk.[ch]

@@ -602,68 +602,35 @@ static gint
 gtk_tree_selection_real_select_all (GtkTreeSelection *selection)
 {
   struct _TempTuple *tuple;
+
   if (selection->tree_view->priv->tree == NULL)
     return FALSE;
 
-  if (selection->type == GTK_TREE_SELECTION_SINGLE)
+  /* Mark all nodes selected */
+  tuple = g_new (struct _TempTuple, 1);
+  tuple->selection = selection;
+  tuple->dirty = FALSE;
+
+  _gtk_rbtree_traverse (selection->tree_view->priv->tree,
+			selection->tree_view->priv->tree->root,
+			G_PRE_ORDER,
+			select_all_helper,
+			tuple);
+  if (tuple->dirty)
     {
-      GtkRBTree *tree;
-      GtkRBNode *node;
-      gint dirty;
-
-      /* Just select the last row */
-
-      dirty = gtk_tree_selection_real_unselect_all (selection);
-
-      tree = selection->tree_view->priv->tree;
-      node = tree->root;
-      do
-	{
-	  while (node->right != selection->tree_view->priv->tree->nil)
-	    node = node->right;
-
-	  if (node->children)
-	    {
-	      tree = node->children;
-	      node = tree->root;
-	    }
-	  else
-	    break;
-	} while (TRUE);
-
-      dirty |= gtk_tree_selection_real_select_node (selection, tree, node, TRUE);
-
-      return dirty;
-    }
-  else
-    {
-      /* Mark all nodes selected */
-
-      tuple = g_new (struct _TempTuple, 1);
-      tuple->selection = selection;
-      tuple->dirty = FALSE;
-
-      _gtk_rbtree_traverse (selection->tree_view->priv->tree,
-                            selection->tree_view->priv->tree->root,
-                            G_PRE_ORDER,
-                            select_all_helper,
-                            tuple);
-      if (tuple->dirty)
-        {
-          g_free (tuple);
-          return TRUE;
-        }
       g_free (tuple);
-      return FALSE;
+      return TRUE;
     }
+  g_free (tuple);
+  return FALSE;
 }
 
 /**
  * gtk_tree_selection_select_all:
  * @selection: A #GtkTreeSelection.
  *
- * Selects all the nodes.  If the type of @selection is
- * #GTK_TREE_SELECTION_SINGLE, then the last row is selected.
+ * Selects all the nodes.  @selection is must be set to
+ * #GTK_TREE_SELECTION_MULTI mode.
  **/
 void
 gtk_tree_selection_select_all (GtkTreeSelection *selection)
@@ -672,6 +639,7 @@ gtk_tree_selection_select_all (GtkTreeSelection *selection)
   g_return_if_fail (GTK_IS_TREE_SELECTION (selection));
   g_return_if_fail (selection->tree_view != NULL);
   g_return_if_fail (selection->tree_view->priv->tree != NULL);
+  g_return_if_fail (selection->type != GTK_TREE_SELECTION_MULTI);
 
   if (gtk_tree_selection_real_select_all (selection))
     gtk_signal_emit (GTK_OBJECT (selection), tree_selection_signals[SELECTION_CHANGED]);

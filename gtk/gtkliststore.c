@@ -236,7 +236,17 @@ gtk_list_store_new_with_types (gint n_columns,
   va_start (args, n_columns);
 
   for (i = 0; i < n_columns; i++)
-    gtk_list_store_set_column_type (retval, i, va_arg (args, GType));
+    {
+      GType type = va_arg (args, GType);
+      if (! _gtk_tree_data_list_check_type (type))
+	{
+	  g_warning ("%s: Invalid type %s passed to gtk_list_store_new_with_types\n", G_STRLOC, g_type_name (type));
+	  g_object_unref (G_OBJECT (retval));
+	  return NULL;
+	}
+
+      gtk_list_store_set_column_type (retval, i, type);
+    }
 
   va_end (args);
 
@@ -287,9 +297,9 @@ gtk_list_store_set_n_columns (GtkListStore *list_store,
  * @type: type of the data stored in @column
  *
  * Supported types include: %G_TYPE_UINT, %G_TYPE_INT, %G_TYPE_UCHAR,
- * %G_TYPE_CHAR, %G_TYPE_BOOLEAN, %G_TYPE_POINTER, %G_TYPE_FLOAT, %G_TYPE_STRING,
- * %G_TYPE_OBJECT, and %G_TYPE_BOXED, along with subclasses of those types such
- * as %GDK_TYPE_PIXBUF.
+ * %G_TYPE_CHAR, %G_TYPE_BOOLEAN, %G_TYPE_POINTER, %G_TYPE_FLOAT,
+ * %G_TYPE_DOUBLE, %G_TYPE_STRING, %G_TYPE_OBJECT, and %G_TYPE_BOXED, along with
+ * subclasses of those types such as %GDK_TYPE_PIXBUF.
  * 
  **/
 void
@@ -300,6 +310,11 @@ gtk_list_store_set_column_type (GtkListStore *list_store,
   g_return_if_fail (list_store != NULL);
   g_return_if_fail (GTK_IS_LIST_STORE (list_store));
   g_return_if_fail (column >=0 && column < list_store->n_columns);
+  if (!_gtk_tree_data_list_check_type (type))
+    {
+      g_warning ("%s: Invalid type %s passed to gtk_list_store_new_with_types\n", G_STRLOC, g_type_name (type));
+      return;
+    }
 
   list_store->column_headers[column] = type;
 }
@@ -525,11 +540,37 @@ gtk_list_store_set_cell (GtkListStore *list_store,
   GtkTreeDataList *list;
   GtkTreeDataList *prev;
   GtkTreePath *path;
+  GValue real_value = {0, };
+  gboolean converted = FALSE;
 
   g_return_if_fail (list_store != NULL);
   g_return_if_fail (GTK_IS_LIST_STORE (list_store));
   g_return_if_fail (iter != NULL);
   g_return_if_fail (column >= 0 && column < list_store->n_columns);
+  g_return_if_fail (value != NULL);
+
+  if (! g_type_is_a (G_VALUE_TYPE (value), column->type))
+    {
+      if (! (g_value_type_compatible (G_VALUE_TYPE (value), column->type) &&
+	     g_value_type_compatible (column->type, G_VALUE_TYPE (value))))
+	{
+	  g_warning ("%s: Unable to convert from %s to %s\n",
+		     G_STRLOC,
+		     g_type_name (G_VALUE_TYPE (value)),
+		     g_type_name (column->type));
+	  return;
+	}
+      if (!g_value_transform (value, &real_value))
+	{
+	  g_warning ("%s: Unable to make conversion from %s to %s\n",
+		     G_STRLOC,
+		     g_type_name (G_VALUE_TYPE (value)),
+		     g_type_name (column->type));
+	  g_value_unset (&real_value);
+	  return;
+	}
+      converted = TRUE;
+    }
 
   prev = list = G_SLIST (iter->user_data)->data;
 
@@ -538,9 +579,14 @@ gtk_list_store_set_cell (GtkListStore *list_store,
       if (column == 0)
 	{
 	  path = gtk_list_store_get_path (GTK_TREE_MODEL (list_store), iter);
-	  _gtk_tree_data_list_value_to_node (list, value);
+	  if (converted)
+	    _gtk_tree_data_list_value_to_node (list, &real_value);
+	  else
+	    _gtk_tree_data_list_value_to_node (list, value);
 	  gtk_tree_model_changed (GTK_TREE_MODEL (list_store), path, iter);
 	  gtk_tree_path_free (path);
+	  if (converted)
+	    g_value_unset (&real_value);
 	  return;
 	}
 
@@ -569,9 +615,14 @@ gtk_list_store_set_cell (GtkListStore *list_store,
     }
 
   path = gtk_list_store_get_path (GTK_TREE_MODEL (list_store), iter);
-  _gtk_tree_data_list_value_to_node (list, value);
+  if (converted)
+    _gtk_tree_data_list_value_to_node (list, real_value);
+  else
+    _gtk_tree_data_list_value_to_node (list, value);
   gtk_tree_model_changed (GTK_TREE_MODEL (list_store), path, iter);
   gtk_tree_path_free (path);
+  if (converted)
+    g_value_unset (&real_value);
 }
 
 /**

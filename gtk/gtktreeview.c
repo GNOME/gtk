@@ -35,7 +35,6 @@
 #include <gdk/gdkkeysyms.h>
 
 
-
 /* The "background" areas of all rows/cells add up to cover the entire tree.
  * The background includes all inter-row and inter-cell spacing.
  * The "cell" areas are the cell_area passed in to gtk_cell_renderer_render(),
