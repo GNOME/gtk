@@ -194,7 +194,7 @@ if test "x$enable_rebuilds" = "xyes" && \
 fi
 AC_SUBST(REBUILD)
 
-AC_CHECK_FUNCS(lstat)
+AC_CHECK_FUNCS(lstat mkstemp sigsetjmp)
 
 AC_MSG_CHECKING(whether make is GNU Make)
 STRIP_BEGIN=
@@ -1000,8 +1000,10 @@ docs/reference/gdk-pixbuf/Makefile
 docs/faq/Makefile
 docs/tutorial/Makefile
 gdk-pixbuf/Makefile
+gdk-pixbuf/makefile.mingw
 gdk-pixbuf/gdk-pixbuf-features.h
 gdk-pixbuf/pixops/Makefile
+gdk-pixbuf/pixops/makefile.mingw
 gdk/Makefile
 gdk/x11/Makefile
 gdk/win32/Makefile

@@ -1,3 +1,8 @@
+2000-07-23  Tor Lillqvist  <tml@iki.fi>
+
+	* configure.in: Check for mkstemp and sigsetjmp. Output
+	gdk-pixbuf/makefile.mingw and gdk-pixbuf/pixops/makefile.mingw.
+
 Sat Jul 22 17:41:26 2000  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkentry.[ch]: Fix some problems with vertical
