@@ -325,6 +325,7 @@ gtk_entry_init (GtkEntry *entry)
   entry->have_selection = FALSE;
   entry->timer = 0;
   entry->visible = 1;
+  entry->editable = 1;
   entry->clipboard_text = NULL;
 
 #ifdef USE_XIM
@@ -452,12 +453,22 @@ gtk_entry_set_position (GtkEntry *entry,
 
 void
 gtk_entry_set_visibility (GtkEntry *entry,
-        gint      visible)
+			  gboolean visible)
 {
   g_return_if_fail (entry != NULL);
   g_return_if_fail (GTK_IS_ENTRY (entry));
 
   entry->visible = visible;
+}
+
+void
+gtk_entry_set_editable(GtkEntry *entry,
+		       gboolean editable)
+{
+  g_return_if_fail (entry != NULL);
+  g_return_if_fail (GTK_IS_ENTRY (entry));
+  entry->editable = editable;
+  gtk_entry_queue_draw(entry);
 }
 
 gchar*
@@ -966,6 +977,9 @@ gtk_entry_key_press (GtkWidget   *widget,
   entry = GTK_ENTRY (widget);
   return_val = FALSE;
 
+  if(entry->editable == FALSE)
+    return FALSE;
+
   extend_selection = event->state & GDK_SHIFT_MASK;
   extend_start = FALSE;
 
@@ -1020,7 +1034,9 @@ gtk_entry_key_press (GtkWidget   *widget,
 	  if (event->state & GDK_CONTROL_MASK)
 	    gtk_delete_line (entry);
 	  else if (event->state & GDK_SHIFT_MASK)
-	    gtk_entry_cut_clipboard (entry, event);
+	    {
+	      gtk_entry_cut_clipboard (entry, event);
+	    }
 	  else
 	    gtk_delete_forward_character (entry);
 	}
@@ -1449,7 +1465,8 @@ gtk_entry_draw_text (GtkEntry *entry)
             }
 	}
 
-      gtk_entry_draw_cursor (entry);
+      if(entry->editable)
+	gtk_entry_draw_cursor (entry);
     }
 }
 

@@ -1331,12 +1331,21 @@ create_scrolled_windows ()
 /*
  * GtkEntry
  */
+
+void entry_toggle_editable (GtkWidget *checkbutton,
+			    GtkWidget *entry)
+{
+   gtk_entry_set_editable(GTK_ENTRY(entry),
+			  GTK_TOGGLE_BUTTON(checkbutton)->active);
+}
+
 void
 create_entry ()
 {
   static GtkWidget *window = NULL;
   GtkWidget *box1;
   GtkWidget *box2;
+  GtkWidget *editable_check;
   GtkWidget *entry;
   GtkWidget *button;
   GtkWidget *separator;
@@ -1366,7 +1375,6 @@ create_entry ()
       gtk_box_pack_start (GTK_BOX (box1), box2, TRUE, TRUE, 0);
       gtk_widget_show (box2);
 
-
       entry = gtk_entry_new ();
       /* gtk_widget_set_usize (entry, 0, 25); */
       gtk_entry_set_text (GTK_ENTRY (entry), "hello world");
@@ -1375,6 +1383,12 @@ create_entry ()
       gtk_box_pack_start (GTK_BOX (box2), entry, TRUE, TRUE, 0);
       gtk_widget_show (entry);
 
+      editable_check = gtk_check_button_new_with_label("Editable");
+      gtk_box_pack_start (GTK_BOX (box2), editable_check, TRUE, TRUE, 0);
+      gtk_signal_connect (GTK_OBJECT(editable_check), "toggled",
+			  GTK_SIGNAL_FUNC(entry_toggle_editable), entry);
+      gtk_toggle_button_set_state(GTK_TOGGLE_BUTTON(editable_check), TRUE);
+      gtk_widget_show (editable_check);
 
       separator = gtk_hseparator_new ();
       gtk_box_pack_start (GTK_BOX (box1), separator, FALSE, TRUE, 0);

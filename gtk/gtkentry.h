@@ -52,6 +52,7 @@ struct _GtkEntry
   gint16  scroll_offset;
   guint   have_selection : 1;
   guint   visible : 1;
+  guint   editable : 1;
   guint32 timer;
   GdkIC   ic;
 
@@ -74,7 +75,6 @@ struct _GtkEntryClass
   void (* activate)     (GtkEntry    *entry);
 };
 
-
 guint      gtk_entry_get_type       (void);
 GtkWidget* gtk_entry_new            (void);
 GtkWidget* gtk_entry_new_with_max_length (guint16   max);
@@ -91,7 +91,9 @@ void       gtk_entry_select_region  (GtkEntry      *entry,
 				     gint           start,
 				     gint           end);
 void       gtk_entry_set_visibility (GtkEntry      *entry,
-				     gint           visible);
+				     gboolean       visible);
+void       gtk_entry_set_editable   (GtkEntry      *entry,
+				     gboolean       editable);
 
 
 #ifdef __cplusplus
