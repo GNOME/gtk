@@ -1943,22 +1943,29 @@ gtk_entry_real_delete_text (GtkEditable *editable,
     {
       gint start_index = g_utf8_offset_to_pointer (entry->text, start_pos) - entry->text;
       gint end_index = g_utf8_offset_to_pointer (entry->text, end_pos) - entry->text;
+      gint current_pos;
+      gint selection_bound;
 
       g_memmove (entry->text + start_index, entry->text + end_index, entry->n_bytes + 1 - end_index);
       entry->text_length -= (end_pos - start_pos);
       entry->n_bytes -= (end_index - start_index);
       
-      if (entry->current_pos > start_pos)
-	entry->current_pos -= MIN (entry->current_pos, end_pos) - start_pos;
+      current_pos = entry->current_pos;
+      if (current_pos > start_pos)
+	current_pos -= MIN (current_pos, end_pos) - start_pos;
 
-      if (entry->selection_bound > start_pos)
-	entry->selection_bound -= MIN (entry->selection_bound, end_pos) - start_pos;
+      selection_bound = entry->selection_bound;
+      if (selection_bound > start_pos)
+        selection_bound -= MIN (selection_bound, end_pos) - start_pos;
+
+      gtk_entry_set_positions (entry, current_pos, selection_bound);
+
       /* We might have deleted the selection
        */
       gtk_entry_update_primary_selection (entry);
       
       gtk_entry_recompute (entry);
-      
+
       g_signal_emit_by_name (editable, "changed");
       g_object_notify (G_OBJECT (editable), "text");
     }

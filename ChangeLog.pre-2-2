@@ -1,3 +1,9 @@
+2002-08-19  Padraig O'Briain <padraig.obriain@sun.com>
+
+	* gtk/gtkentry.c (gtk_entry_real_delete_text): Use 
+	gtk_entry_set_positions() to update current_pos and selection_bound
+	so notifications are emitted (#90548)
+
 2002-08-16  jacob berkman  <jacob@ximian.com>
 
 	* gtk/gtkdialog.h (struct _GtkDialog): switch vbox and action_area
