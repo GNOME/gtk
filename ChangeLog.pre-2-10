@@ -1,3 +1,10 @@
+2004-03-10  Mark McLoughlin  <mark@skynet.ie>
+
+	* gtk/gtkexpander.c: (gtk_expander_expose): don't propagate
+	the expose to the label. The expose handler for GtkContainer
+	already does that. Fixes bug #136719. Reported by Dennis
+	Cranston, exact cause nailed down by Owen.
+
 2004-03-10  Federico Mena Quintero  <federico@ximian.com>
 
 	* gtk/gtkfilechooserdefault.c (list_mtime_data_func): Use an

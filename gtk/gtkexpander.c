@@ -848,11 +848,6 @@ gtk_expander_expose (GtkWidget      *widget,
       if (GTK_WIDGET_HAS_FOCUS (expander))
 	gtk_expander_paint_focus (expander, &event->area);
 
-      if (expander->priv->label_widget)
-	gtk_container_propagate_expose (GTK_CONTAINER (widget),
-					expander->priv->label_widget,
-					event);
-
       GTK_WIDGET_CLASS (parent_class)->expose_event (widget, event);
     }
 
