@@ -1,3 +1,8 @@
+2003-06-03  Abel Cheung  <maddog@linux.org.hk>
+
+	* POTFILES.in: Added gdk-pixbuf/io-pcx.c and
+	  gtk/gtkcalendar.c
+
 2003-06-02  Noah Levitt  <nlevitt@columbia.edu>
 
 	* ta.po: Converted from broken-TSCII to UTF-8.

@@ -10,6 +10,7 @@ gdk-pixbuf/io-bmp.c
 gdk-pixbuf/io-gif.c
 gdk-pixbuf/io-ico.c
 gdk-pixbuf/io-jpeg.c
+gdk-pixbuf/io-pcx.c
 gdk-pixbuf/io-png.c
 gdk-pixbuf/io-pnm.c
 gdk-pixbuf/io-ras.c
@@ -26,6 +27,7 @@ gtk/gtkaspectframe.c
 gtk/gtkbbox.c
 gtk/gtkbox.c
 gtk/gtkbutton.c
+gtk/gtkcalendar.c
 gtk/gtkcellrenderer.c
 gtk/gtkcellrendererpixbuf.c
 gtk/gtkcellrenderertext.c
@@ -92,6 +94,7 @@ gtk/gtktreeviewcolumn.c
 gtk/gtkviewport.c
 gtk/gtkwidget.c
 gtk/gtkwindow.c
+modules/input/gtkimcontextxim.c
 modules/input/imam-et.c
 modules/input/imcyrillic-translit.c
 modules/input/imhangul.c
@@ -102,4 +105,3 @@ modules/input/imti-er.c
 modules/input/imti-et.c
 modules/input/imviqr.c
 modules/input/imxim.c
-modules/input/gtkimcontextxim.c
