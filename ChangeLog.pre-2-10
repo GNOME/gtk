@@ -13,7 +13,7 @@ Tue Jul  8 20:11:04 2003  Owen Taylor  <otaylor@redhat.com>
 	Check to see if the result of gdk_window_lookup_for_display()
 	is actually a window.
 	
-d Jul  9 19:25:15 2003  Kristian Rietveld  <kris@gtk.org>
+Wed Jul  9 19:25:15 2003  Kristian Rietveld  <kris@gtk.org>
 
 	* gdk/gdkdisplay.c (gdk_display_get_window_at_pointer): don't
 	directly return from ->window_at_pointer, but set win_x and win_y
