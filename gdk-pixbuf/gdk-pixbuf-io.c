@@ -166,6 +166,7 @@ image_handler_load (int idx)
 	g_free (module_name);
 
 	module = g_module_open (path, G_MODULE_BIND_LAZY);
+	g_free (path);
 	if (!module) {
 		g_warning ("Unable to load module: %s", path);
 		return;

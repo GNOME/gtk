@@ -1,5 +1,9 @@
 1999-10-20  Federico Mena Quintero  <federico@redhat.com>
 
+	* src/gdk-pixbuf-io.c (image_handler_load): Free path.
+
+1999-10-20  Federico Mena Quintero  <federico@redhat.com>
+
 	* configure.in: Bumped version number to 0.3.
 
 	* src/Makefile.am (lbgdk_pixbuf_la_LDFLAGS): Added a libtool
