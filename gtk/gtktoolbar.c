@@ -53,6 +53,7 @@
 #include "gtkvbox.h"
 #include "gtkimage.h"
 #include "gtkseparatormenuitem.h"
+#include <math.h>
 
 typedef struct _ToolbarContent ToolbarContent;
 
@@ -71,7 +72,8 @@ typedef struct _ToolbarContent ToolbarContent;
 				    * in the homogeneous game. In units of
 				    * pango_font_get_estimated_char_width().
 				    */
-#define SLIDE_SPEED 600	   /* How fast the items slide, in pixels per second */
+#define SLIDE_SPEED 600.0	   /* How fast the items slide, in pixels per second */
+#define ACCEL_THRESHOLD 0.18	   /* After how much time in seconds will items start speeding up */
 
 #define MIXED_API_WARNING						\
     "Mixing deprecated and non-deprecated GtkToolbar API is not allowed"
@@ -959,10 +961,27 @@ gtk_toolbar_size_request (GtkWidget      *widget,
 static gint
 position (gint from, gint to, gdouble elapsed)
 {
-  if (to > from)
-    return MIN (from + SLIDE_SPEED * elapsed, to);
+  gint n_pixels;
+
+  if (elapsed <= ACCEL_THRESHOLD)
+    {
+      n_pixels = SLIDE_SPEED * elapsed;
+    }
   else
-    return MAX (from - SLIDE_SPEED * elapsed, to);
+    {
+      /* The formula is a second degree polynomial in
+       * @elapsed that has the line SLIDE_SPEED * @elapsed
+       * as tangent for @elapsed == ACCEL_THRESHOLD.
+       * This makes @n_pixels a smooth function of elapsed time.
+       */
+      n_pixels = (SLIDE_SPEED / ACCEL_THRESHOLD) * elapsed * elapsed -
+	SLIDE_SPEED * elapsed + SLIDE_SPEED * ACCEL_THRESHOLD;
+    }
+  
+  if (to > from)
+    return MIN (from + n_pixels, to);
+  else
+    return MAX (from - n_pixels, to);
 }
 
 static void
@@ -1459,7 +1478,7 @@ gtk_toolbar_size_allocate (GtkWidget     *widget,
   else
     size = available_size;
   
-  /* calculate widths of items */
+  /* calculate widths and states of items */
   overflowing = FALSE;
   for (list = priv->content, i = 0; list != NULL; list = list->next, ++i)
     {

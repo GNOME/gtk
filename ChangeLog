@@ -1,3 +1,8 @@
+Sat Sep  4 02:38:57 2004  Søren Sandmann  <sandmann@redhat.com>
+
+	* gtk/gtktoolbar.c (position): Accelerate the animation when it
+	has been running for a while. (#143647).
+
 2004-09-03  Tor Lillqvist  <tml@iki.fi>
 
 	* gtk-zip.sh.in: List the three theme gtkrc files separately, zip
