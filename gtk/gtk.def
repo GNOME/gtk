@@ -24,62 +24,11 @@ EXPORTS
 	GTK_TYPE_DIALOG_FLAGS
 	GTK_TYPE_DIRECTION_TYPE
 	GTK_TYPE_FUNDAMENTAL_TYPE
-	GTK_TYPE_GDK_AXIS_USE
-	GTK_TYPE_GDK_BYTE_ORDER
-	GTK_TYPE_GDK_CAP_STYLE
-;	GTK_TYPE_GDK_COLOR
-	GTK_TYPE_GDK_CROSSING_MODE
-	GTK_TYPE_GDK_CURSOR_TYPE
-	GTK_TYPE_GDK_DRAG_ACTION
-	GTK_TYPE_GDK_DRAG_PROTOCOL
-;	GTK_TYPE_GDK_EVENT
-	GTK_TYPE_GDK_EVENT_MASK
-	GTK_TYPE_GDK_EVENT_TYPE
-	GTK_TYPE_GDK_EXTENSION_MODE
-	GTK_TYPE_GDK_FILL
-	GTK_TYPE_GDK_FILL_RULE
-	GTK_TYPE_GDK_FILTER_RETURN
-;	GTK_TYPE_GDK_FONT
-	GTK_TYPE_GDK_FONT_TYPE
-	GTK_TYPE_GDK_FUNCTION
-	GTK_TYPE_GDK_GC_VALUES_MASK
-	GTK_TYPE_GDK_GRAB_STATUS
-	GTK_TYPE_GDK_GRAVITY
-	GTK_TYPE_GDK_IMAGE_TYPE
-	GTK_TYPE_GDK_INPUT_CONDITION
-	GTK_TYPE_GDK_INPUT_MODE
-	GTK_TYPE_GDK_INPUT_SOURCE
-	GTK_TYPE_GDK_JOIN_STYLE
-	GTK_TYPE_GDK_LINE_STYLE
-	GTK_TYPE_GDK_MODIFIER_TYPE
-	GTK_TYPE_GDK_NOTIFY_TYPE
-	GTK_TYPE_GDK_OVERLAP_TYPE
-	GTK_TYPE_GDK_PROPERTY_STATE
-	GTK_TYPE_GDK_PROP_MODE
-	GTK_TYPE_GDK_RGB_DITHER
-	GTK_TYPE_GDK_SCROLL_DIRECTION
-	GTK_TYPE_GDK_SELECTION
-	GTK_TYPE_GDK_SELECTION_TYPE
-	GTK_TYPE_GDK_STATUS
-	GTK_TYPE_GDK_SUBWINDOW_MODE
-	GTK_TYPE_GDK_TARGET
-	GTK_TYPE_GDK_VISIBILITY_STATE
-;	GTK_TYPE_GDK_VISUAL
-	GTK_TYPE_GDK_VISUAL_TYPE
-	GTK_TYPE_GDK_WINDOW_ATTRIBUTES_TYPE
-	GTK_TYPE_GDK_WINDOW_CLASS
-	GTK_TYPE_GDK_WINDOW_HINTS
-	GTK_TYPE_GDK_WINDOW_STATE
-	GTK_TYPE_GDK_WINDOW_TYPE
-	GTK_TYPE_GDK_WINDOW_TYPE_HINT
-	GTK_TYPE_GDK_WM_DECORATION
-	GTK_TYPE_GDK_WM_FUNCTION
 	GTK_TYPE_ICON_SIZE
 	GTK_TYPE_IMAGE_TYPE
 	GTK_TYPE_JUSTIFICATION
 	GTK_TYPE_MATCH_TYPE
 	GTK_TYPE_MENU_DIRECTION_TYPE
-	GTK_TYPE_MENU_FACTORY_TYPE
 	GTK_TYPE_MESSAGE_TYPE
 	GTK_TYPE_METRIC_TYPE
 	GTK_TYPE_MOVEMENT_STEP
@@ -345,15 +294,15 @@ EXPORTS
 	gtk_color_selection_dialog_new
 	gtk_color_selection_get_color
 	gtk_color_selection_get_type
-	gtk_color_selection_get_use_opacity
-	gtk_color_selection_get_use_palette
+	gtk_color_selection_get_has_opacity_control
+	gtk_color_selection_get_has_palette
 	gtk_color_selection_is_adjusting
 	gtk_color_selection_new
 	gtk_color_selection_set_color
 	gtk_color_selection_set_update_policy
-	gtk_color_selection_set_use_opacity
-	gtk_color_selection_set_use_palette
-	gtk_color_selection_unset_palette_color
+	gtk_color_selection_set_has_opacity_control
+	gtk_color_selection_set_has_palette
+;s?	gtk_color_selection_unset_palette_color
 	gtk_combo_disable_activate
 	gtk_combo_get_type
 	gtk_combo_new
@@ -775,8 +724,10 @@ EXPORTS
 	gtk_list_store_insert_after
 	gtk_list_store_insert_before
 	gtk_list_store_new
+	gtk_list_store_new_with_types
 	gtk_list_store_prepend
 	gtk_list_store_remove
+	gtk_list_store_set
 	gtk_list_store_set_column_type
 	gtk_list_store_set_n_columns
 	gtk_list_store_set_value
@@ -835,7 +786,6 @@ EXPORTS
 	gtk_menu_bar_insert
 	gtk_menu_bar_new
 	gtk_menu_bar_prepend
-	gtk_menu_bar_set_shadow_type
 	gtk_menu_detach
 	gtk_menu_get_accel_group
 	gtk_menu_get_active
@@ -1414,7 +1364,6 @@ EXPORTS
 	gtk_toolbar_append_item
 	gtk_toolbar_append_space
 	gtk_toolbar_append_widget
-	gtk_toolbar_get_button_relief
 	gtk_toolbar_get_type
 	gtk_toolbar_insert_element
 	gtk_toolbar_insert_item
@@ -1426,11 +1375,8 @@ EXPORTS
 	gtk_toolbar_prepend_item
 	gtk_toolbar_prepend_space
 	gtk_toolbar_prepend_widget
-	gtk_toolbar_set_button_relief
 	gtk_toolbar_set_icon_size
 	gtk_toolbar_set_orientation
-	gtk_toolbar_set_space_size
-	gtk_toolbar_set_space_style
 	gtk_toolbar_set_style
 	gtk_toolbar_set_tooltips
 	gtk_tooltips_data_get
@@ -1464,6 +1410,7 @@ EXPORTS
 	gtk_tree_item_set_subtree
 	gtk_tree_model_deleted
 	gtk_tree_model_get_column_type
+	gtk_tree_model_get
 	gtk_tree_model_get_first
 	gtk_tree_model_get_flags
 	gtk_tree_model_get_iter
@@ -1494,6 +1441,10 @@ EXPORTS
 	gtk_tree_path_get_depth
 	gtk_tree_path_get_indices
 	gtk_tree_path_new
+	gtk_tree_path_new_from_string
+	gtk_tree_path_prepend_index
+	gtk_tree_view_set_rows_drag_dest
+	gtk_tree_view_set_rows_drag_source
 	gtk_tree_prepend
 	gtk_tree_remove_item
 	gtk_tree_remove_items
@@ -1561,6 +1512,7 @@ EXPORTS
 	gtk_tree_view_column_set_alignment
 	gtk_tree_view_column_set_attributes
 	gtk_tree_view_column_set_cell_data
+	gtk_tree_view_column_set_cell_data_func
 	gtk_tree_view_column_set_cell_renderer
 	gtk_tree_view_column_set_clickable
 	gtk_tree_view_column_set_max_width
@@ -1588,6 +1540,7 @@ EXPORTS
 	gtk_tree_view_get_type
 	gtk_tree_view_get_vadjustment
 	gtk_tree_view_insert_column
+	gtk_tree_view_insert_column_with_attributes
 	gtk_tree_view_new
 	gtk_tree_view_new_with_model
 	gtk_tree_view_remove_column
@@ -1786,4 +1739,5 @@ EXPORTS
 	gtk_window_stick
 	gtk_window_unmaximize
 	gtk_window_unstick
+
 

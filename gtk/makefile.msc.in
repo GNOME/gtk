@@ -23,12 +23,12 @@ GDK_PIXBUF_LIBS = ../gdk-pixbuf/gdk_pixbuf-$(GDK_PIXBUF_VER).lib
 PERL = perl
 AWK = gawk
 
-INCLUDES = -I . -I .. -I ../gdk -I ../gdk-pixbuf
-DEPCFLAGS = $(PANGO_CFLAGS) $(GLIB_CFLAGS) $(LIBICONV_CFLAGS) $(INTL_CFLAGS)
-LDFLAGS = /link /machine:ix86 $(LINKDEBUG)
+INCLUDES = -I . -I .. -I ../gdk -I ../gdk-pixbuf 
+DEPCFLAGS = $(PANGO_CFLAGS) $(GLIB_CFLAGS) $(LIBICONV_CFLAGS) $(INTL_CFLAGS) $(ATK_CFLAGS)
+LDFLAGS = $(ATK_LIBS) /link /machine:ix86 $(LINKDEBUG)
 # Some files use near as an identifier
 # Don't define GTK_COMPILATION here, because it's for gtk-x.x.dll only
-DEFINES = -DGTK_DISABLE_COMPAT_H -DG_LOG_DOMAIN=\"Gtk\" -Dnear=xxnear -DGTK_VERSION=\"$(GTK_VER)\"
+DEFINES = -DG_ENABLE_DEBUG -DGTK_DISABLE_COMPAT_H -DG_LOG_DOMAIN=\"Gtk\" -Dnear=xxnear -DGTK_VERSION=\"$(GTK_VER)\"
 
 TOUCH = copy makefile.msc+nul
 
@@ -38,15 +38,6 @@ all :						\
 	..\config.h				\
 	generated				\
 	gtk-win32-$(GTK_VER).dll		\
-	testcalendar.exe			\
-	testdnd.exe				\
-	testgtk.exe				\
-	testinput.exe				\
-	testrgb.exe				\
-	testselection.exe			\
-	testtext.exe				\
-	testtextbuffer.exe			\
-	simple.exe
 
 gtk_OBJECTS = 					\
 	fnmatch.obj				\
@@ -393,70 +384,6 @@ gtk-win32-$(GTK_VER).dll : $(gtk_OBJECTS) gtk.def
 # General rule for compiling the objects into the DLL
 .c.obj :
 	$(CC) $(CFLAGS) -GD -c -DGTK_COMPILATION -DG_LOG_DOMAIN=\"Gtk\" $<
-
-#
-# Test programs:
-#
-testcalendar.exe : gtk-win32-$(GTK_VER).dll testcalendar.obj
-	$(CC) $(CFLAGS) testcalendar.obj $(GTK_LIBS) $(GDK_LIBS) $(PANGO_LIBS) $(GLIB_LIBS) $(LDFLAGS)
-
-# Must have separate rules for these objects that don't go in the DLL
-testcalendar.obj : testcalendar.c
-	$(CC) $(CFLAGS) -c -DG_LOG_DOMAIN=\"testcalendar\" testcalendar.c
-
-testdnd.exe : gtk-win32-$(GTK_VER).dll testdnd.obj
-	$(CC) $(CFLAGS) testdnd.obj $(GTK_LIBS) $(GDK_LIBS) $(GLIB_LIBS) $(LDFLAGS)
-
-testdnd.obj : testdnd.c
-	$(CC) $(CFLAGS) -c -DG_LOG_DOMAIN=\"testdnd\" testdnd.c
-
-testgtk.exe : gtk-win32-$(GTK_VER).dll testgtk.obj
-	$(CC) $(CFLAGS) testgtk.obj $(GTK_LIBS) $(GDK_LIBS) $(GLIB_LIBS) $(PANGO_LIBS) $(LDFLAGS)
-
-testgtk.obj : testgtk.c
-	$(CC) $(CFLAGS) -c -DG_LOG_DOMAIN=\"testgtk\" testgtk.c
-
-testinput.exe : gtk-win32-$(GTK_VER).dll testinput.obj
-	$(CC) $(CFLAGS) testinput.obj $(GTK_LIBS) $(GDK_LIBS) $(GLIB_LIBS) $(LDFLAGS)
-
-testinput.obj : testinput.c
-	$(CC) $(CFLAGS) -c -DG_LOG_DOMAIN=\"testinput\" testinput.c
-
-testrgb.exe : gtk-win32-$(GTK_VER).dll testrgb.obj
-	$(CC) $(CFLAGS) testrgb.obj $(GTK_LIBS) $(GDK_LIBS) $(GLIB_LIBS) $(LDFLAGS)
-
-testrgb.obj : testrgb.c
-	$(CC) $(CFLAGS) -c -DG_LOG_DOMAIN=\"testrgb\" testrgb.c
-
-testselection.exe : gtk-win32-$(GTK_VER).dll testselection.obj
-	$(CC) $(CFLAGS) testselection.obj $(GTK_LIBS) $(GDK_LIBS) $(GLIB_LIBS) $(LDFLAGS)
-
-testselection.obj : testselection.c
-	$(CC) $(CFLAGS) -c -DG_LOG_DOMAIN=\"testselection\" testselection.c
-
-testtext.exe : gtk-win32-$(GTK_VER).dll testtext.obj
-	$(CC) $(CFLAGS) testtext.obj $(PANGO_LIBS) $(GDK_PIXBUF_LIBS) $(GTK_LIBS) $(GDK_LIBS) $(GLIB_LIBS) $(LDFLAGS)
-
-testtext.obj : testtext.c
-	$(CC) $(CFLAGS) -c -DG_LOG_DOMAIN=\"testtext\" testtext.c
-
-testtextbuffer.exe : gtk-win32-$(GTK_VER).dll testtextbuffer.obj
-	$(CC) $(CFLAGS) testtextbuffer.obj $(GDK_PIXBUF_LIBS) $(GTK_LIBS) $(GDK_LIBS) $(GLIB_LIBS) $(LDFLAGS)
-
-testtextbuffer.obj : testtextbuffer.c
-	$(CC) $(CFLAGS) -c -DG_LOG_DOMAIN=\"testtextbuffer\" testtextbuffer.c
-
-testthreads.exe : gtk-win32-$(GTK_VER).dll testthreads.obj
-	$(CC) $(CFLAGS) testthreads.obj $(GTK_LIBS) $(GDK_LIBS) $(GLIB_LIBS) $(PTHREAD_LIBS) $(LDFLAGS)
-
-testthreads.obj : testthreads.c
-	$(CC) $(CFLAGS) $(PTHREAD_CFLAGS) -c -DG_LOG_DOMAIN=\"testthreads\" -DUSE_PTHREADS=1 testthreads.c
-
-simple.exe : gtk-win32-$(GTK_VER).dll simple.obj
-	$(CC) $(CFLAGS) simple.obj $(GTK_LIBS) $(GDK_LIBS) $(GLIB_LIBS) $(LDFLAGS)
-
-simple.obj : simple.c
-	$(CC) $(CFLAGS) -c -DG_LOG_DOMAIN=\"simple\" simple.c
 
 $(EXAMPLE).obj : ..\examples\$(EXAMPLE)\$(EXAMPLE).c
 	$(CC) $(CFLAGS) -c -DG_LOG_DOMAIN=\"$(EXAMPLE)\" ..\examples\$(EXAMPLE)\$(EXAMPLE).c

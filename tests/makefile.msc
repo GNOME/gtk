@@ -1,0 +1,70 @@
+## Makefile for building the gtk test apps with Microsoft C
+## Use: nmake -f makefile.msc
+
+## There is no install target, you have to decide where and 
+## how to install for yourself.
+
+TOP = ..\..
+!INCLUDE $(TOP)/build/win32/make.msc
+
+################################################################
+
+# Possibly override versions from build/win32/module.defs
+GTK_VER = 1.3
+GDK_PIXBUF_VER = 1.3
+GTK_VER=1.3
+
+GDK_LIBS = ../gdk/gdk-win32-$(GTK_VER).lib
+GTK_LIBS = ../gtk/gtk-win32-$(GTK_VER).lib
+GDK_PIXBUF_LIBS = ../gdk-pixbuf/gdk_pixbuf-$(GDK_PIXBUF_VER).lib
+
+INCLUDES = -I . -I .. -I ../gdk -I ../gdk-pixbuf -I ../gtk
+DEPCFLAGS = $(PANGO_CFLAGS) $(GLIB_CFLAGS) $(LIBICONV_CFLAGS) $(INTL_CFLAGS) $(ATK_CFLAGS)
+LDFLAGS = /link /machine:ix86 $(LINKDEBUG)
+DEFINES = -DGTK_DISABLE_COMPAT_H -DG_LOG_DOMAIN=\"GtkTest\" -DGTK_VERSION=\"$(GTK_VER)\"
+
+TOUCH = copy makefile.msc+nul
+
+!IFNDEF TESTAPP
+
+all :	\
+	..\config.h	\
+	prop-editor.obj \
+	all-test-apps
+
+..\config.h : ..\config.h.win32
+	copy ..\config.h.win32 ..\config.h
+
+
+#
+# Test programs:
+#
+TESTAPPS = testcalendar testdnd testgtk testinput testrgb testselection \
+		testtext testtextbuffer testsocket testsocket_child \
+		testtreecolumns testtreefocus testtreesort testtreeview treestoretest \
+		testthreads simple
+
+
+all-test-apps: 
+	for %d in ($(TESTAPPS)) do nmake -nologo -f makefile.msc one-test-app THIS=%d
+
+one-test-app:
+	@nmake -nologo -f makefile.msc $(THIS).exe TESTAPP=$(THIS) EXTRA_$(THIS)=1
+
+!ELSE
+
+!IFDEF EXTRA_testgtk
+EXTRA_OBJETCS = prop-editor.obj
+!ENDIF
+
+!IFDEF EXTRA_testtreeview
+EXTRA_OBJETCS = prop-editor.obj
+!ENDIF
+
+$(TESTAPP).exe : ../gtk/gtk-win32-$(GTK_VER).dll $(TESTAPP).obj
+	$(CC) $(CFLAGS) $(TESTAPP).obj $(EXTRA_OBJETCS) $(GTK_LIBS) $(GDK_LIBS) $(GDK_PIXBUF_LIBS) $(PANGO_LIBS) $(GLIB_LIBS) $(LDFLAGS)
+
+$(TESTAPP).obj : $(TESTAPP).c
+	$(CC) $(CFLAGS) -c -DG_LOG_DOMAIN=\"$(TESTAPP)\" $(TESTAPP).c
+
+!ENDIF
