@@ -1590,7 +1590,7 @@ gtk_tree_view_size_allocate (GtkWidget     *widget,
 			      MAX (tree_view->priv->width, allocation->width),
 			      tree_view->priv->header_height);
       gdk_window_move_resize (tree_view->priv->bin_window,
-			      0, tree_view->priv->header_height,
+			      0, TREE_VIEW_HEADER_HEIGHT (tree_view),
 			      MAX (tree_view->priv->width, allocation->width),
 			      allocation->height - TREE_VIEW_HEADER_HEIGHT (tree_view));
     }
