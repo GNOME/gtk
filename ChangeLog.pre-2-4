@@ -1,3 +1,10 @@
+Sat Oct 11 15:37:19 2003  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtkcombobox.c (gtk_combo_box_size_allocate): for the custom
+	child list mode, allocate the height allocation->height to the
+	button instead of the height requested by the button. (Tiny
+	size allocation screwup noticed by Macro Pesenti Gritti).
+
 Sat Oct 11 15:23:27 2003  Kristian Rietveld  <kris@gtk.org>
 
 	Fixes based on comments from Marco Pesenti Gritti.

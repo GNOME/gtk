@@ -995,7 +995,7 @@ gtk_combo_box_size_allocate (GtkWidget     *widget,
           child.x = allocation->x + allocation->width - req.width;
           child.y = allocation->y;
           child.width = req.width;
-          child.height = req.height;
+          child.height = allocation->height;
           gtk_widget_size_allocate (combo_box->priv->button, &child);
 
           child.x = allocation->x;
