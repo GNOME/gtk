@@ -1,3 +1,12 @@
+2002-07-02  Matthias Clasen  <maclas@gmx.de>
+
+	Better colorspace support for the jpeg loader (#61211):
+	
+	* io-jpeg.c (convert_cmyk_to_rgb): New function.
+	(gdk_pixbuf__jpeg_image_load,
+	gdk_pixbuf__jpeg_image_load_increment): Allocate a pixbuf with
+	alpha for 4-channel jpegs and call convert_cmyk_to_rgb for these.
+
 2002-06-28  Sven Neumann  <sven@gimp.org>
 
 	* gdk-pixbuf-csource.c (print_blurb): converted a Tab to spaces.

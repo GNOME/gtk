@@ -135,6 +135,7 @@ explode_gray_into_buf (struct jpeg_decompress_struct *cinfo,
 
 	g_return_if_fail (cinfo != NULL);
 	g_return_if_fail (cinfo->output_components == 1);
+	g_return_if_fail (cinfo->out_color_space == JCS_GRAYSCALE);
 
 	/* Expand grey->colour.  Expand from the end of the
 	 * memory down, so we can use the same buffer.
@@ -151,6 +152,43 @@ explode_gray_into_buf (struct jpeg_decompress_struct *cinfo,
 			to[2] = from[0];
 			to -= 3;
 			from--;
+		}
+	}
+}
+
+
+static void
+convert_cmyk_to_rgb (struct jpeg_decompress_struct *cinfo,
+		     guchar **lines) 
+{
+	gint i, j;
+
+	g_return_if_fail (cinfo != NULL);
+	g_return_if_fail (cinfo->output_components == 4);
+	g_return_if_fail (cinfo->out_color_space == JCS_CMYK);
+
+	for (i = cinfo->rec_outbuf_height - 1; i >= 0; i--) {
+		guchar *p;
+		
+		p = lines[i];
+		for (j = 0; j < cinfo->image_width; j++) {
+			int c, m, y, k;
+			c = p[0];
+			m = p[1];
+			y = p[2];
+			k = p[3];
+			if (cinfo->saw_Adobe_marker) {
+				p[0] = k*c / 255;
+				p[1] = k*m / 255;
+				p[2] = k*y / 255;
+			}
+			else {
+				p[0] = (255 - k)*(255 - c) / 255;
+				p[1] = (255 - k)*(255 - m) / 255;
+				p[2] = (255 - k)*(255 - y) / 255;
+			}
+			p[3] = 255;
+			p += 4;
 		}
 	}
 }
@@ -219,6 +257,20 @@ stdio_term_source (j_decompress_ptr cinfo)
 {
 }
 
+static gchar *
+colorspace_name (const J_COLOR_SPACE jpeg_color_space) 
+{
+	switch (jpeg_color_space) {
+	    case JCS_UNKNOWN: return "UNKNOWN"; 
+	    case JCS_GRAYSCALE: return "GRAYSCALE"; 
+	    case JCS_RGB: return "RGB"; 
+	    case JCS_YCbCr: return "YCbCr"; 
+	    case JCS_CMYK: return "CMYK"; 
+	    case JCS_YCCK: return "YCCK";
+	    default: return "invalid";
+	}
+}
+
 /* Shared library entry point */
 static GdkPixbuf *
 gdk_pixbuf__jpeg_image_load (FILE *f, GError **error)
@@ -277,8 +329,10 @@ gdk_pixbuf__jpeg_image_load (FILE *f, GError **error)
 	cinfo.do_fancy_upsampling = FALSE;
 	cinfo.do_block_smoothing = FALSE;
 
-	pixbuf = gdk_pixbuf_new (GDK_COLORSPACE_RGB, FALSE, 8, cinfo.output_width, cinfo.output_height);
- 
+	pixbuf = gdk_pixbuf_new (GDK_COLORSPACE_RGB, 
+				 cinfo.out_color_components == 4 ? TRUE : FALSE, 
+				 8, cinfo.output_width, cinfo.output_height);
+	      
 	if (!pixbuf) {
 		jpeg_destroy_decompress (&cinfo);
 
@@ -298,7 +352,6 @@ gdk_pixbuf__jpeg_image_load (FILE *f, GError **error)
 	dptr = pixbuf->pixels;
 
 	/* decompress all the lines, a few at a time */
-
 	while (cinfo.output_scanline < cinfo.output_height) {
 		lptr = lines;
 		for (i = 0; i < cinfo.rec_outbuf_height; i++) {
@@ -308,8 +361,28 @@ gdk_pixbuf__jpeg_image_load (FILE *f, GError **error)
 
 		jpeg_read_scanlines (&cinfo, lines, cinfo.rec_outbuf_height);
 
-		if (cinfo.output_components == 1)
-			explode_gray_into_buf (&cinfo, lines);
+		switch (cinfo.out_color_space) {
+		    case JCS_GRAYSCALE:
+		      explode_gray_into_buf (&cinfo, lines);
+		      break;
+		    case JCS_RGB:
+		      /* do nothing */
+		      break;
+		    case JCS_CMYK:
+		      convert_cmyk_to_rgb (&cinfo, lines);
+		      break;
+		    default:
+		      if (error && *error == NULL) {
+                        g_set_error (error,
+                                     GDK_PIXBUF_ERROR,
+				     GDK_PIXBUF_ERROR_UNKNOWN_TYPE,
+				     _("Unsupported JPEG color space (%s)"),
+				     colorspace_name (cinfo.out_color_space)); 
+		      }
+                
+		      jpeg_destroy_decompress (&cinfo);
+		      return NULL;
+		}
 	}
 
 	jpeg_finish_decompress (&cinfo);
@@ -572,8 +645,17 @@ gdk_pixbuf__jpeg_image_load_increment (gpointer data,
 
 			context->got_header = TRUE;
 
+		} else if (!context->did_prescan) {
+			int rc;
+			
+			/* start decompression */
+			cinfo->buffered_image = TRUE;
+			rc = jpeg_start_decompress (cinfo);
+			cinfo->do_fancy_upsampling = FALSE;
+			cinfo->do_block_smoothing = FALSE;
+
 			context->pixbuf = gdk_pixbuf_new(GDK_COLORSPACE_RGB, 
-							 FALSE,
+							 cinfo->output_components == 4 ? TRUE : FALSE,
 							 8, 
 							 cinfo->image_width,
 							 cinfo->image_height);
@@ -594,14 +676,6 @@ gdk_pixbuf__jpeg_image_load_increment (gpointer data,
                                                     NULL,
 						    context->user_data);
 
-		} else if (!context->did_prescan) {
-			int rc;
-			
-			/* start decompression */
-			cinfo->buffered_image = TRUE;
-			rc = jpeg_start_decompress (cinfo);
-			cinfo->do_fancy_upsampling = FALSE;
-			cinfo->do_block_smoothing = FALSE;
 			
 			if (rc == JPEG_SUSPENDED)
 				continue;
@@ -638,10 +712,28 @@ gdk_pixbuf__jpeg_image_load_increment (gpointer data,
 					if (nlines == 0)
 						break;
 
-				        /* handle gray */
-					if (cinfo->output_components == 1)
-						explode_gray_into_buf (cinfo, lines);
-					
+					switch (cinfo->out_color_space) {
+					    case JCS_GRAYSCALE:
+						    explode_gray_into_buf (cinfo, lines);
+						    break;
+					    case JCS_RGB:
+						    /* do nothing */
+						    break;
+					    case JCS_CMYK:
+						    convert_cmyk_to_rgb (cinfo, lines);
+						    break;
+					    default:
+						    if (error && *error == NULL) {
+							    g_set_error (error,
+									 GDK_PIXBUF_ERROR,
+									 GDK_PIXBUF_ERROR_UNKNOWN_TYPE,
+									 _("Unsupported JPEG color space (%s)"),
+									 colorspace_name (cinfo->out_color_space)); 
+						    }
+						    
+						    return FALSE;
+					}
+
 					context->dptr += nlines * context->pixbuf->rowstride;
 					
 				        /* send updated signal */
