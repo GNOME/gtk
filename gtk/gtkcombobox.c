@@ -1629,6 +1629,8 @@ gtk_combo_box_size_request (GtkWidget      *widget,
 
   GtkComboBox *combo_box = GTK_COMBO_BOX (widget);
 
+  gtk_combo_box_check_appearance (combo_box);
+
   /* common */
   gtk_widget_size_request (GTK_BIN (widget)->child, &bin_req);
   gtk_combo_box_remeasure (combo_box);
@@ -1721,6 +1723,8 @@ gtk_combo_box_size_allocate (GtkWidget     *widget,
   GtkRequisition req;
   gboolean is_rtl = gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL;
 
+  gtk_combo_box_check_appearance (combo_box);
+
   widget->allocation = *allocation;
 
   gtk_widget_style_get (GTK_WIDGET (widget),
@@ -1762,6 +1766,8 @@ gtk_combo_box_size_allocate (GtkWidget     *widget,
           child.width = req.width;
           if (!is_rtl)
             child.x += width - req.width;
+	  child.width = MAX (1, child.width);
+	  child.height = MAX (1, child.height);
           gtk_widget_size_allocate (combo_box->priv->arrow, &child);
           if (is_rtl)
             child.x += req.width;
@@ -1769,6 +1775,8 @@ gtk_combo_box_size_allocate (GtkWidget     *widget,
           child.width = req.width;
           if (!is_rtl)
             child.x -= req.width;
+	  child.width = MAX (1, child.width);
+	  child.height = MAX (1, child.height);
           gtk_widget_size_allocate (combo_box->priv->separator, &child);
 
           if (is_rtl)
@@ -1786,6 +1794,8 @@ gtk_combo_box_size_allocate (GtkWidget     *widget,
               child.width -= child.x;
             }
 
+	  child.width = MAX (1, child.width);
+	  child.height = MAX (1, child.height);
           gtk_widget_size_allocate (GTK_BIN (widget)->child, &child);
         }
       else
@@ -1798,6 +1808,8 @@ gtk_combo_box_size_allocate (GtkWidget     *widget,
           child.y = allocation->y;
           child.width = req.width;
           child.height = allocation->height;
+	  child.width = MAX (1, child.width);
+	  child.height = MAX (1, child.height);
           gtk_widget_size_allocate (combo_box->priv->button, &child);
 
           if (is_rtl)
@@ -1806,6 +1818,8 @@ gtk_combo_box_size_allocate (GtkWidget     *widget,
             child.x = allocation->x;
           child.y = allocation->y;
           child.width = allocation->width - req.width;
+	  child.width = MAX (1, child.width);
+	  child.height = MAX (1, child.height);
           gtk_widget_size_allocate (GTK_BIN (widget)->child, &child);
         }
     }
@@ -1822,6 +1836,8 @@ gtk_combo_box_size_allocate (GtkWidget     *widget,
       child.y = allocation->y;
       child.width = req.width;
       child.height = allocation->height;
+      child.width = MAX (1, child.width);
+      child.height = MAX (1, child.height);
       gtk_widget_size_allocate (combo_box->priv->button, &child);
 
       /* frame */
@@ -1835,6 +1851,8 @@ gtk_combo_box_size_allocate (GtkWidget     *widget,
 
       if (combo_box->priv->cell_view_frame)
         {
+	  child.width = MAX (1, child.width);
+	  child.height = MAX (1, child.height);
           gtk_widget_size_allocate (combo_box->priv->cell_view_frame, &child);
 
           /* the sample */
@@ -1855,6 +1873,8 @@ gtk_combo_box_size_allocate (GtkWidget     *widget,
 	    }
         }
       
+      child.width = MAX (1, child.width);
+      child.height = MAX (1, child.height);
       gtk_widget_size_allocate (GTK_BIN (combo_box)->child, &child);
     }
 }

@@ -1,6 +1,18 @@
+Thu Aug 12 23:52:12 2004  Matthias Clasen  <maclas@gmx.de>
+
+	Fix #149547, Markus Lausser:
+	
+	* gtk/gtkcombobox.c (gtk_combo_box_size_allocate): 
+	* gtk/gtkcombobox.c (gtk_combo_box_size_request): Don't 
+	crash if size_request or size_allocate are called early.
+
+	* gtk/gtkcombobox.c (gtk_combo_box_size_allocate): Protect
+	against being allocated too small.
+
 Thu Aug 12 21:02:57 2004  Matthias Clasen  <maclas@gmx.de>
 
-	* demos/gtk-demo/appwindow.c (about_cb): Adjust to GtkAboutDialog API changes.
+	* demos/gtk-demo/appwindow.c (about_cb): Adjust to GtkAboutDialog 
+	API changes.
 
 	* gtk/gtkaboutdialog.h: 
 	* gtk/gtkaboutdialog.c (gtk_about_dialog_set_email_hook): 
