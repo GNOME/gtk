@@ -512,7 +512,7 @@ xsettings_client_process_event (XSettingsClient *client,
     {
       if (xev->xany.type == ClientMessage &&
 	  xev->xclient.message_type == client->manager_atom &&
-	  xev->xclient.data.l[1] == client->xsettings_atom)
+	  xev->xclient.data.l[1] == client->selection_atom)
 	{
 	  check_manager_window (client);
 	  return True;
