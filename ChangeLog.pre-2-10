@@ -1,3 +1,13 @@
+2004-06-04  Matthias Clasen  <mclasen@redhat.com>
+
+	* docs/widget_geometry.txt: Add a note about the !CAN_FOCUS
+	quirk in the button size allocation code.
+
+	* gtk/gtkbutton.c (gtk_button_size_allocate): Give the space
+	requested for drawing the focus indicator to the child in the
+	!CAN_FOCUS case. This should fix issues which the Gimp has with 
+	the button allocation changes in 2.4.2.
+
 Thu Jun  3 21:17:29 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkentry.c (gtk_entry_completion_timeout): Calculate the

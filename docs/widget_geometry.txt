@@ -271,6 +271,11 @@ GtkButton
 
 =====================
 
+NOTE: Due to a bug that is basically unfixable in a sufficiently compatible
+NOTE: way, the button gives the space requested for focus_width and 
+NOTE: focus_padding to the child (in addition to the space requested by
+NOTE: the child), if the button is !CAN_FOCUS.
+
  Style properties
 
    GtkWidget::interior_focus = TRUE
