@@ -228,10 +228,10 @@ void		gtk_type_init	(GTypeDebugFlags debug_flags);
 
 
 /* --- compatibility defines --- */
-#define	gtk_type_name			 g_type_name
-#define	gtk_type_from_name		 g_type_from_name
-#define	gtk_type_parent			 g_type_parent
-#define	gtk_type_is_a			 g_type_is_a
+#define	gtk_type_name(type)		 g_type_name (type)
+#define	gtk_type_from_name(name)	 g_type_from_name (name)
+#define	gtk_type_parent(type)		 g_type_parent (type)
+#define	gtk_type_is_a(type, is_a_type)	 g_type_is_a ((type), (is_a_type))
 
 
 /* enum/flags compatibility functions, we strongly

@@ -3518,6 +3518,7 @@ gtk_window_begin_resize_drag  (GtkWindow    *window,
 
 /**
  * gtk_window_begin_move_drag:
+ * @window: a #GtkWindow
  * @button: mouse button that initiated the drag
  * @root_x: X position where the user clicked to initiate the drag, in root window coordinates
  * @root_y: Y position where the user clicked to initiate the drag

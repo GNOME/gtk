@@ -142,13 +142,6 @@ typedef enum
 
 typedef enum
 {
-  GTK_MENU_FACTORY_MENU,
-  GTK_MENU_FACTORY_MENU_BAR,
-  GTK_MENU_FACTORY_OPTION_MENU
-} GtkMenuFactoryType;
-
-typedef enum
-{
   GTK_PIXELS,
   GTK_INCHES,
   GTK_CENTIMETERS

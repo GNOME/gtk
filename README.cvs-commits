@@ -4,7 +4,7 @@ GTK+. This is a good thing, in that it encourages many people to work
 on GTK+, and progress can be made quickly. However, GTK+ is a fairly
 large and complicated package that many other things depend on, so to
 avoid unnecessary breakage, and to take advantage of the knowledge
-about GTK+ that has been built up over the last 18 months, we'd like
+about GTK+ that has been built up over the last 4 years, we'd like
 to ask people commiting to GTK+ to follow a few rules:
 
 0) Ask first. If your changes are major, or could possibly break existing
@@ -14,14 +14,9 @@ to ask people commiting to GTK+ to follow a few rules:
    somebody may know a better way to do things.
 
    If you are making changes to GTK+, you should be subscribed
-   to gtk-devel-list@redhat.com. (Subscription address:  
-   gtk-devel-list-request@redhat.com.) This is a good place to ask
+   to gtk-devel-list@gnome.org. (Subscription address:  
+   gtk-devel-list-request@gnome.org.) This is a good place to ask
    about intended changes. 
-
-   If you just want to make a trivial change, and don't want to subscribe, 
-   you can also mail gtk-bugs@gtk.org. Or, alternatively, you can look in 
-   the ChangeLog for somebody who has been making changes to the file 
-   you want to change and email them.
 
    #gimp on byxnet (irc.gimp.org, irc2.gimp.org, irc3.gimp.org, 
    irc.germany.gimp.org...)s also a good place to find GTK+ developers to
@@ -56,8 +51,4 @@ Notes:
 
 Owen Taylor
 13 Aug 1998
-
-
-
-
-
+17 Apr 2001

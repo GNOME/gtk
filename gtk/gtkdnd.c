@@ -1095,7 +1095,7 @@ gtk_drag_dest_handle_event (GtkWidget *toplevel,
  * gtk_drag_dest_find_target:
  * @widget: drag destination widget
  * @context: drag context
- * @dest_target_list: list of droppable targets
+ * @target_list: list of droppable targets
  * 
  * Looks for a match between @context->targets and the
  * @dest_target_list, returning the first matching target, otherwise
@@ -1110,16 +1110,16 @@ gtk_drag_dest_handle_event (GtkWidget *toplevel,
 GdkAtom
 gtk_drag_dest_find_target (GtkWidget      *widget,
                            GdkDragContext *context,
-                           GtkTargetList  *dest_target_list)
+                           GtkTargetList  *target_list)
 {
   GList *tmp_target;
   GList *tmp_source = NULL;
   GtkWidget *source_widget = gtk_drag_get_source_widget (context);
 
-  if (dest_target_list == NULL)
+  if (target_list == NULL)
     return GDK_NONE;
   
-  tmp_target = dest_target_list->list;
+  tmp_target = target_list->list;
   while (tmp_target)
     {
       GtkTargetPair *pair = tmp_target->data;

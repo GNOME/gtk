@@ -1,3 +1,36 @@
+Tue Apr 17 13:47:12 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* configure.in: Don't put -lgthread in GLIB_LIBS, GLIB_DEPLIBS
+
+	* gtk/gtktypeutils.h gtk/gtksignals.h: Restore proper parameter
+	names to compatibility #defines so docs work.
+
+	* gtk/gtkenums.h: Remove GtkMenuFactoryType
+
+	* gtk/gtkwindow.c gtk/gtkdnd.c: Docs cleanups.
+
+	* configure.in: Don't include -lgthread in GLIB_LIBS, GLIB_DEPLIBS
+
+	* tests/testgtkrc: No magenta cursors, please.
+
+	* README.in INSTALL.in HACKING README.cvs-commits: Updated.
+
+	* gtk/gtkenums.h (enum): Remove left over GtkMenuFactoryType.
+	
+Mon Apr 16 14:38:41 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtklist.c gtk/gtklistitem.c: Remove explicit pointer
+	grabs, since they are no longer necessary.
+
+	* gtk/gtkcombo.c (gtk_combo_popup_button_press): Fix #52926
+	by signal_connect() and call gtk_button_pressed() rather
+	than signal_connect_after().
+
+	* tests/testgtk.c: Restore radio menu items to combos 
+	since they'll look OK with Raleigh, and it is easier
+	than finishing the process of removing them that was
+	started earlier.
+
 2001-04-16  Hans Breuer  <hans@breuer.org>
 
 	* gdk/gdk.def :
