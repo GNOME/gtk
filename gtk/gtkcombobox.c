@@ -4019,7 +4019,11 @@ gtk_combo_box_finalize (GObject *object)
   GSList *i;
   
   if (GTK_IS_MENU (combo_box->priv->popup_widget))
-    gtk_combo_box_menu_destroy (combo_box);
+    {
+      gtk_combo_box_menu_destroy (combo_box);
+      gtk_menu_detach (GTK_MENU (combo_box->priv->popup_widget));
+      combo_box->priv->popup_widget = NULL;
+    }
   
   if (GTK_IS_TREE_VIEW (combo_box->priv->tree_view))
     gtk_combo_box_list_destroy (combo_box);
@@ -4028,9 +4032,6 @@ gtk_combo_box_finalize (GObject *object)
     gtk_widget_destroy (combo_box->priv->popup_window);
 
   gtk_combo_box_unset_model (combo_box);
-
-  if (combo_box->priv->model)
-    g_object_unref (combo_box->priv->model);
 
   for (i = combo_box->priv->cells; i; i = i->next)
     {

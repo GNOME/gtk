@@ -1,3 +1,8 @@
+Wed Jul 21 22:35:47 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkcellview.c (gtk_cell_view_finalize): Don't leak the
+	menu.  (#148110, Tommi Komulainen)
+
 Wed Jul 21 22:24:10 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkcellview.c (gtk_cell_view_finalize): Don't leak
