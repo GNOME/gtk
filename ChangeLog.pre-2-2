@@ -1,3 +1,16 @@
+Mon Feb 15 23:55:27 1999  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/testgtk.c (create_text): Use a ScrolledWindow
+	 test how Text widgets work within ScrolledWindow.
+	 (POLICY_AUTOMATIC drew very badly, so it uses
+	  POLICY_ALWAYS for the vscrollbar)
+
+	* gtk/gtktext.c (gtk_text_unrealize): Free the cache
+	 in the unrealize handler. Some code in gtktext.c
+	 assumes that if text->line_start_cache is non-NULL,
+	 the widget is realized. We'll recompute it again
+	 anyways if we later re-realize.
+
 Fri Feb 12 15:47:20 1999  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkcalender.c gtk/gtkentry.c gtk/gtkhandlebox.c

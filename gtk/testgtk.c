@@ -5528,9 +5528,7 @@ create_text (void)
   GtkWidget *button;
   GtkWidget *check;
   GtkWidget *separator;
-  GtkWidget *table;
-  GtkWidget *hscrollbar;
-  GtkWidget *vscrollbar;
+  GtkWidget *scrolled_window;
   GtkWidget *text;
   GdkFont *font;
 
@@ -5562,29 +5560,19 @@ create_text (void)
       gtk_widget_show (box2);
 
 
-      table = gtk_table_new (2, 2, FALSE);
-      gtk_table_set_row_spacing (GTK_TABLE (table), 0, 2);
-      gtk_table_set_col_spacing (GTK_TABLE (table), 0, 2);
-      gtk_box_pack_start (GTK_BOX (box2), table, TRUE, TRUE, 0);
-      gtk_widget_show (table);
+      scrolled_window = gtk_scrolled_window_new (NULL, NULL);
+      gtk_box_pack_start (GTK_BOX (box2), scrolled_window, TRUE, TRUE, 0);
+      gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled_window),
+				      GTK_POLICY_NEVER,
+				      GTK_POLICY_ALWAYS);
+      gtk_widget_show (scrolled_window);
 
       text = gtk_text_new (NULL, NULL);
       gtk_text_set_editable (GTK_TEXT (text), TRUE);
-      gtk_table_attach (GTK_TABLE (table), text, 0, 1, 0, 1,
-			GTK_EXPAND | GTK_SHRINK | GTK_FILL,
-			GTK_EXPAND | GTK_SHRINK | GTK_FILL, 0, 0);
+      gtk_container_add (GTK_CONTAINER (scrolled_window), text);
       gtk_widget_grab_focus (text);
       gtk_widget_show (text);
 
-      hscrollbar = gtk_hscrollbar_new (GTK_TEXT (text)->hadj);
-      gtk_table_attach (GTK_TABLE (table), hscrollbar, 0, 1, 1, 2,
-			GTK_EXPAND | GTK_FILL | GTK_SHRINK, GTK_FILL, 0, 0);
-      gtk_widget_show (hscrollbar);
-
-      vscrollbar = gtk_vscrollbar_new (GTK_TEXT (text)->vadj);
-      gtk_table_attach (GTK_TABLE (table), vscrollbar, 1, 2, 0, 1,
-			GTK_FILL, GTK_EXPAND | GTK_SHRINK | GTK_FILL, 0, 0);
-      gtk_widget_show (vscrollbar);
 
       gtk_text_freeze (GTK_TEXT (text));
 

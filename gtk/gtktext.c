@@ -1225,7 +1225,6 @@ gtk_text_finalize (GtkObject *object)
     g_free (text->text.wc);
   else
     g_free (text->text.ch);
-  free_cache (text);
   
   tmp_list = text->text_properties;
   while (tmp_list)
@@ -1469,6 +1468,8 @@ gtk_text_unrealize (GtkWidget *widget)
   gdk_pixmap_unref (text->line_arrow_bitmap);
 
   unrealize_properties (text);
+
+  free_cache (text);
 
   if (GTK_WIDGET_CLASS (parent_class)->unrealize)
     (* GTK_WIDGET_CLASS (parent_class)->unrealize) (widget);
