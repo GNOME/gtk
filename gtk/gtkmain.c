@@ -437,8 +437,7 @@ gtk_init_check (int	 *argc,
   gtk_visual = gdk_visual_get_system ();
   gtk_colormap = gdk_colormap_get_system ();
 
-  gtk_type_init ();
-  gtk_signal_init ();
+  gtk_type_init (0);
   gtk_rc_init ();
   
   
