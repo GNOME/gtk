@@ -208,3 +208,10 @@ void
 gdk_event_send_clientmessage_toall (GdkEvent *sev)
 {
 }
+
+gboolean
+gdk_setting_get (const gchar *name,
+		 GValue      *value)
+{
+  return FALSE;
+}
