@@ -35,14 +35,14 @@ noinst_PROGRAMS = 		\
 if CROSS_COMPILING
 pixbuf_csource=$(GDK_PIXBUF_CSOURCE)
 else
-pixbuf_csource=GDK_PIXBUF_MODULEDIR=$$topdir/gdk-pixbuf/.libs $$topdir/gdk-pixbuf/gdk-pixbuf-csource
+pixbuf_csource=GDK_PIXBUF_MODULE_FILE=$$topdir/gdk-pixbuf/gdk-pixbuf.loaders $$topdir/gdk-pixbuf/gdk-pixbuf-csource
 endif
 
 test-inline-pixbufs.h: $(top_builddir)/gdk-pixbuf/gdk-pixbuf-csource apple-red.png gnome-foot.png
 	(topdir=`cd $(top_builddir) && pwd` ; curdir=`pwd` ; \
 	  cd $(srcdir) &&				     \
 	      $(pixbuf_csource) --build-list \
-	        apple_red apple-red.png gnome_foot gnome-foot.png >$$curdir/test-inline-pixbufs.h)
+	        apple_red apple-red.png gnome_foot gnome-foot.png >$$curdir/test-inline-pixbufs.h || (rm -f $$curdir/test-inline-pixbufs.h && false))
 
 testpixbuf_DEPENDENCIES = $(DEPS)
 testpixbuf_drawable_DEPENDENCIES = $(DEPS)

@@ -1,3 +1,11 @@
+Fri Oct  4 12:05:27 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* demos/Makefile.am (pixbuf_csource): Fix envars
+	for uninstalled operation of gdk-pixbuf
+
+	* demos/Makefile.am (test-inline-pixbufs.h): Remove
+	output on failure.
+
 Fri Oct  4 12:00:10 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/gdkscreen.c (gdk_screen_class_init): Get the
