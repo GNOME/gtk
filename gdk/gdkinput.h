@@ -125,7 +125,7 @@ void gdk_input_set_extension_events (GdkWindow        *window,
 				     gint              mask,
 				     GdkExtensionMode  mode);
 
-extern GdkDevice *gdk_core_pointer;
+GDKVAR GdkDevice *gdk_core_pointer;
  
 #ifdef __cplusplus
 }

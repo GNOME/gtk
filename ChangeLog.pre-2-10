@@ -2,12 +2,20 @@
 
 	* Makefile.am: Include the build directory.
 
-	* configure.in: Generate build/Makefile and build/win32/Makefile.
+	* configure.in: Generate build/Makefile, build/win32/Makefile
+	and gtk/makefile.mingw.
 
 	* config.h.win32: Add USE_GMODULE and USE_MMX for gdk-pixbuf.
-
+	Add GETTEXT_PACKAGE.
+	
 	* gdk/gdk.def
 	* gtk/gtk.def: Updates.
+
+	* gdk/gdkfont.h
+	* gdk/gdkpixmap.h: Remove temporary Win32-only functions, we don't
+	need them any longer.
+
+	* gdk/gdkinput.h: Mark gdk_core_pointer for export/import.
 
 	* gdk/makefile.mingw.in: Define GDK_COMPILATION. Link with
 	PANGOWIN32_LIBS and gdk_pixbuf.
@@ -22,8 +30,23 @@
 
 	* gdk/win32/gdkinputprivate.h: Remove.
 
+	* gdk/win32/gdkpango-win32.c: New file.
+
+	* gtk/makefile.mingw.in: New file
+
+	* gtk/makefile.cygwin: Removed
+	
+	* gtk/Makefile.am: Update accordingly.
+
 	* gtk/gtkrc.[ch] (gtk_win32_get_installation_directory): Renamed and
 	made externally visible.
+
+	* gtk/gtkmain.c: Use it.
+	
+	* gtk/gtktextdisplay.c: No need to include pangox.h, pango.h
+	is enough.
+
+	* gtk/gtktypeutils.c: Mark glib_debug_objects for import.
 
 2000-07-24 Elliot Lee <sopwith@redhat.com>
 	* gdk/gdkprivate.h: Remove gdk_*_lookup() defines, since they are defined by the

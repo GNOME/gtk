@@ -51,9 +51,6 @@
 
 #include "gdk.h"
 #include "gdkinternals.h"
-#include "gdkdrawable-win32.h"
-#include "gdkwindow-win32.h"
-#include "gdkpixmap-win32.h"
 #include "gdkinput-win32.h"
 
 #include "gdkkeysyms.h"
@@ -1366,7 +1363,7 @@ gdk_event_translate (GdkEvent *event,
   GdkWindowImplWin32 *window_impl;
 #define ASSIGN_WINDOW(rhs)						   \
   (window = rhs,							   \
-   window_impl = GDK_WINDOW_IMPL_WIN32 (GDK_WINDOW_OBJECT (window)->impl))
+   window_impl = (window ? GDK_WINDOW_IMPL_WIN32 (GDK_WINDOW_OBJECT (window)->impl) : NULL))
 
   GdkWindow *orig_window, *new_window;
   GdkColormapPrivateWin32 *colormap_private;
@@ -1387,15 +1384,13 @@ gdk_event_translate (GdkEvent *event,
   if (ret_val_flagp)
     *ret_val_flagp = FALSE;
 
-  ASSIGN_WINDOW (gdk_win32_handle_table_lookup (msg->hwnd));
+  ASSIGN_WINDOW (gdk_win32_handle_table_lookup ((GdkNativeWindow) msg->hwnd));
   orig_window = window;
   
   event->any.window = window;
   event->any.send_event = FALSE;
 
-  if (window != NULL)
-    gdk_drawable_ref (window);
-  else
+  if (window == NULL)
     {
       /* Handle WM_QUIT here ? */
       if (msg->message == WM_QUIT)
@@ -1423,6 +1418,8 @@ gdk_event_translate (GdkEvent *event,
       return FALSE;
     }
   
+  gdk_drawable_ref (window);
+
   if (!GDK_WINDOW_DESTROYED (window))
     {
       /* Check for filters for this window */
@@ -2124,7 +2121,7 @@ gdk_event_translate (GdkEvent *event,
       if ((hwnd = WindowFromPoint (pt)) == NULL)
 	break;
       msg->hwnd = hwnd;
-      if ((new_window = gdk_win32_handle_table_lookup (msg->hwnd)) == NULL)
+      if ((new_window = gdk_win32_handle_table_lookup ((GdkNativeWindow) msg->hwnd)) == NULL)
 	break;
       if (new_window != window)
 	{

@@ -25,13 +25,6 @@ struct _GdkFont
   gint descent;
 };
 
-#ifdef GDK_WINDOWING_WIN32
-/* Temporary functions, will be replaced by something else for all backends
- * eventually. Don't use!
- */
-gchar**  gdk_font_list_new  (const gchar    *font_pattern, gint *n_returned);
-void     gdk_font_list_free (gchar **font_list);
-#endif
 GdkFont* gdk_font_load	    (const gchar    *font_name);
 GdkFont* gdk_fontset_load   (const gchar    *fontset_name);
 

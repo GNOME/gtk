@@ -195,3 +195,5 @@
 #define USE_MMX 1
 
 /* #undef HAVE_SIGSETJMP */
+
+#define GETTEXT_PACKAGE "gtk20"

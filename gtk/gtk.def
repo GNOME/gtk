@@ -20,22 +20,16 @@ EXPORTS
 	GTK_TYPE_DEBUG_FLAG
 	GTK_TYPE_DEST_DEFAULTS
 	GTK_TYPE_DIRECTION_TYPE
-	GTK_TYPE_FONT_FILTER_TYPE
-	GTK_TYPE_FONT_METRIC_TYPE
-	GTK_TYPE_FONT_TYPE
 	GTK_TYPE_FUNDAMENTAL_TYPE
 	GTK_TYPE_GDK_AXIS_USE
 	GTK_TYPE_GDK_BYTE_ORDER
 	GTK_TYPE_GDK_CAP_STYLE
 	GTK_TYPE_GDK_COLOR
-	GTK_TYPE_GDK_COLORMAP
 	GTK_TYPE_GDK_COLOR_CONTEXT_MODE
 	GTK_TYPE_GDK_CROSSING_MODE
 	GTK_TYPE_GDK_CURSOR_TYPE
 	GTK_TYPE_GDK_DRAG_ACTION
-	GTK_TYPE_GDK_DRAG_CONTEXT
 	GTK_TYPE_GDK_DRAG_PROTOCOL
-	GTK_TYPE_GDK_DRAWABLE_TYPE
 	GTK_TYPE_GDK_EVENT
 	GTK_TYPE_GDK_EVENT_MASK
 	GTK_TYPE_GDK_EVENT_TYPE
@@ -47,6 +41,7 @@ EXPORTS
 	GTK_TYPE_GDK_FONT_TYPE
 	GTK_TYPE_GDK_FUNCTION
 	GTK_TYPE_GDK_GC_VALUES_MASK
+	GTK_TYPE_GDK_GRAB_STATUS
 	GTK_TYPE_GDK_IC_ATTRIBUTES_TYPE
 	GTK_TYPE_GDK_IMAGE_TYPE
 	GTK_TYPE_GDK_IM_STYLE
@@ -61,6 +56,7 @@ EXPORTS
 	GTK_TYPE_GDK_PROPERTY_STATE
 	GTK_TYPE_GDK_PROP_MODE
 	GTK_TYPE_GDK_RGB_DITHER
+	GTK_TYPE_GDK_SCROLL_DIRECTION
 	GTK_TYPE_GDK_SELECTION
 	GTK_TYPE_GDK_SELECTION_TYPE
 	GTK_TYPE_GDK_STATUS
@@ -69,13 +65,12 @@ EXPORTS
 	GTK_TYPE_GDK_VISIBILITY_STATE
 	GTK_TYPE_GDK_VISUAL
 	GTK_TYPE_GDK_VISUAL_TYPE
-	GTK_TYPE_GDK_WINDOW
 	GTK_TYPE_GDK_WINDOW_ATTRIBUTES_TYPE
 	GTK_TYPE_GDK_WINDOW_CLASS
 	GTK_TYPE_GDK_WINDOW_HINTS
+	GTK_TYPE_GDK_WINDOW_TYPE
 	GTK_TYPE_GDK_WM_DECORATION
 	GTK_TYPE_GDK_WM_FUNCTION
-	GTK_TYPE_IDENTIFIER
 	GTK_TYPE_JUSTIFICATION
 	GTK_TYPE_MATCH_TYPE
 	GTK_TYPE_MENU_DIRECTION_TYPE
@@ -107,10 +102,13 @@ EXPORTS
 	GTK_TYPE_SPIN_BUTTON_UPDATE_POLICY
 	GTK_TYPE_SPIN_TYPE
 	GTK_TYPE_STATE_TYPE
-	GTK_TYPE_STYLE
 	GTK_TYPE_SUBMENU_DIRECTION
 	GTK_TYPE_SUBMENU_PLACEMENT
 	GTK_TYPE_TARGET_FLAGS
+	GTK_TYPE_TEXT_DIRECTION
+	GTK_TYPE_TEXT_VIEW_DELETE_TYPE
+	GTK_TYPE_TEXT_VIEW_MOVEMENT_STEP
+	GTK_TYPE_TEXT_VIEW_SCROLL_TYPE
 	GTK_TYPE_TOOLBAR_CHILD_TYPE
 	GTK_TYPE_TOOLBAR_SPACE_STYLE
 	GTK_TYPE_TOOLBAR_STYLE
@@ -121,6 +119,7 @@ EXPORTS
 	GTK_TYPE_WIDGET_FLAGS
 	GTK_TYPE_WINDOW_POSITION
 	GTK_TYPE_WINDOW_TYPE
+	GTK_TYPE_WRAP_MODE
 	gtk_accel_group_activate
 	gtk_accel_group_add
 	gtk_accel_group_attach
@@ -513,7 +512,6 @@ EXPORTS
 	gtk_font_selection_dialog_get_preview_text
 	gtk_font_selection_dialog_get_type
 	gtk_font_selection_dialog_new
-	gtk_font_selection_dialog_set_filter
 	gtk_font_selection_dialog_set_font_name
 	gtk_font_selection_dialog_set_preview_text
 	gtk_font_selection_get_font
@@ -521,7 +519,6 @@ EXPORTS
 	gtk_font_selection_get_preview_text
 	gtk_font_selection_get_type
 	gtk_font_selection_new
-	gtk_font_selection_set_filter
 	gtk_font_selection_set_font_name
 	gtk_font_selection_set_preview_text
 	gtk_frame_get_type
@@ -1002,6 +999,7 @@ EXPORTS
 	gtk_scrolled_window_set_hadjustment
 	gtk_scrolled_window_set_placement
 	gtk_scrolled_window_set_policy
+	gtk_scrolled_window_set_shadow_type
 	gtk_scrolled_window_set_vadjustment
 	gtk_selection_add_target
 	gtk_selection_add_targets
@@ -1241,6 +1239,7 @@ EXPORTS
 	gtk_widget_get_colormap
 	gtk_widget_get_composite_name
 	gtk_widget_get_default_colormap
+	gtk_widget_get_default_direction
 	gtk_widget_get_default_style
 	gtk_widget_get_default_visual
 	gtk_widget_get_events
@@ -1269,12 +1268,10 @@ EXPORTS
 	gtk_widget_pop_colormap
 	gtk_widget_pop_composite_child
 	gtk_widget_pop_style
-	gtk_widget_pop_visual
 	gtk_widget_popup
 	gtk_widget_push_colormap
 	gtk_widget_push_composite_child
 	gtk_widget_push_style
-	gtk_widget_push_visual
 	gtk_widget_queue_clear
 	gtk_widget_queue_clear_area
 	gtk_widget_queue_draw
@@ -1293,8 +1290,9 @@ EXPORTS
 	gtk_widget_set_colormap
 	gtk_widget_set_composite_name
 	gtk_widget_set_default_colormap
+	gtk_widget_set_default_direction
 	gtk_widget_set_default_style
-	gtk_widget_set_default_visual
+	gtk_widget_set_direction
 	gtk_widget_set_events
 	gtk_widget_set_extension_events
 	gtk_widget_set_name
@@ -1307,7 +1305,6 @@ EXPORTS
 	gtk_widget_set_style
 	gtk_widget_set_uposition
 	gtk_widget_set_usize
-	gtk_widget_set_visual
 	gtk_widget_setv
 	gtk_widget_shape_combine_mask
 	gtk_widget_show

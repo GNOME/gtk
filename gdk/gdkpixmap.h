@@ -42,15 +42,6 @@ GdkPixmap* gdk_pixmap_new		(GdkWindow  *window,
 					 gint	     width,
 					 gint	     height,
 					 gint	     depth);
-#ifdef GDK_WINDOWING_WIN32
-GdkPixmap* gdk_pixmap_create_on_shared_image
-					(GdkImage  **image_return,
-					 GdkWindow  *window,
-					 GdkVisual  *visual,
-					 gint        width,
-					 gint        height,
-					 gint        depth);
-#endif
 GdkBitmap* gdk_bitmap_create_from_data	(GdkWindow   *window,
 					 const gchar *data,
 					 gint	      width,

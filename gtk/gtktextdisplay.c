@@ -50,8 +50,8 @@
 
 #include "gtktextdisplay.h"
 #include "gtktextiterprivate.h"
-#include <pango/pangox.h>
-#include "x11/gdkx.h"
+
+#include <pango/pango.h>
 
 typedef struct _GtkTextRenderState GtkTextRenderState;
 

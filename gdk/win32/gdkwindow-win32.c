@@ -32,8 +32,6 @@
 #include "gdkwindow.h"
 #include "gdkinternals.h"
 #include "gdkprivate-win32.h"
-#include "gdkwindow-win32.h"
-#include "gdkpixmap-win32.h"
 
 static gboolean gdk_window_gravity_works (void);
 static void     gdk_window_set_static_win_gravity (GdkWindow *window, 
@@ -157,7 +155,7 @@ gdk_window_impl_win32_get_colormap (GdkDrawable *drawable)
   if (!((GdkWindowObject *) drawable_impl->wrapper)->input_only && 
       drawable_impl->colormap == NULL)
     {
-      g_assert_not_reached ();
+      drawable_impl->colormap = gdk_colormap_get_system ();
     }
   
   return drawable_impl->colormap;
@@ -637,7 +635,7 @@ gdk_window_foreign_new (GdkNativeWindow anid)
   draw_impl = GDK_DRAWABLE_IMPL_WIN32 (private->impl);
   draw_impl->wrapper = GDK_DRAWABLE (window);
   
-  private->parent = gdk_win32_handle_table_lookup (parent);
+  private->parent = gdk_win32_handle_table_lookup ((GdkNativeWindow) parent);
   
   parent_private = (GdkWindowObject *)private->parent;
   
@@ -1638,7 +1636,7 @@ gdk_window_get_pointer (GdkWindow       *window,
     ScreenToClient (hwndc, &point);
   } while (hwndc != hwnd && (hwnd = hwndc, 1));	/* Ouch! */
 
-  return_val = gdk_win32_handle_table_lookup (hwnd);
+  return_val = gdk_win32_handle_table_lookup ((GdkNativeWindow) hwnd);
 
   if (mask)
     {
@@ -1696,7 +1694,7 @@ gdk_window_at_pointer (gint *win_x,
     ScreenToClient (hwndc, &point);
   } while (hwndc != hwnd && (hwnd = hwndc, 1));
 
-  window = gdk_win32_handle_table_lookup (hwnd);
+  window = gdk_win32_handle_table_lookup ((GdkNativeWindow) hwnd);
 
   if (window && (win_x || win_y))
     {

@@ -34,7 +34,6 @@
 #include "gdkinput.h"
 #include "gdkinternals.h"
 #include "gdkprivate-win32.h"
-#include "gdkwindow-win32.h"
 #include "gdkinput-win32.h"
 
 #ifdef HAVE_WINTAB

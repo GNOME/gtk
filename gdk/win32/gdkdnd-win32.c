@@ -37,7 +37,6 @@
 #include "gdkproperty.h"
 #include "gdkinternals.h"
 #include "gdkprivate-win32.h"
-#include "gdkdrawable-win32.h"
 
 #ifdef OLE2_DND
 #include <ole2.h>
@@ -50,7 +49,7 @@
 
 #include <gdk/gdk.h>
 
-typedef struct _GdkDragContextPrivate GdkDragContextPrivate;
+typedef struct _GdkDragContextPrivateWin32 GdkDragContextPrivateWin32;
 
 typedef enum {
   GDK_DRAG_STATUS_DRAG,
@@ -89,10 +88,8 @@ static int nformats;
 /* Structure that holds information about a drag in progress.
  * this is used on both source and destination sides.
  */
-struct _GdkDragContextPrivate {
-  GdkDragContext context;
-
-  guint   ref_count;
+struct _GdkDragContextPrivateWin32 {
+  gint ref_count;
 
   guint16 last_x;		/* Coordinates from last event */
   guint16 last_y;
@@ -100,65 +97,111 @@ struct _GdkDragContextPrivate {
   guint drag_status;		/* Current status of drag */
 };
 
+#define PRIVATE_DATA(context) ((GdkDragContextPrivateWin32 *) GDK_DRAG_CONTEXT (context)->windowing_data)
+
 GdkDragContext *current_dest_drag = NULL;
 
-/* Drag Contexts */
+static void gdk_drag_context_init       (GdkDragContext      *dragcontext);
+static void gdk_drag_context_class_init (GdkDragContextClass *klass);
+static void gdk_drag_context_finalize   (GObject              *object);
 
+static gpointer parent_class = NULL;
 static GList *contexts;
+
+GType
+gdk_drag_context_get_type (void)
+{
+  static GType object_type = 0;
+
+  if (!object_type)
+    {
+      static const GTypeInfo object_info =
+      {
+        sizeof (GdkDragContextClass),
+        (GBaseInitFunc) NULL,
+        (GBaseFinalizeFunc) NULL,
+        (GClassInitFunc) gdk_drag_context_class_init,
+        NULL,           /* class_finalize */
+        NULL,           /* class_data */
+        sizeof (GdkDragContext),
+        0,              /* n_preallocs */
+        (GInstanceInitFunc) gdk_drag_context_init,
+      };
+      
+      object_type = g_type_register_static (G_TYPE_OBJECT,
+                                            "GdkDragContext",
+                                            &object_info);
+    }
+  
+  return object_type;
+}
+
+static void
+gdk_drag_context_init (GdkDragContext *dragcontext)
+{
+  GdkDragContextPrivateWin32 *private = g_new0 (GdkDragContextPrivateWin32, 1);
+
+  dragcontext->windowing_data = private;
+  private->ref_count = 1;
+
+  contexts = g_list_prepend (contexts, dragcontext);
+}
+
+static void
+gdk_drag_context_class_init (GdkDragContextClass *klass)
+{
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
+
+  parent_class = g_type_class_peek_parent (klass);
+
+  object_class->finalize = gdk_drag_context_finalize;
+}
+
+static void
+gdk_drag_context_finalize (GObject *object)
+{
+  GdkDragContext *context = GDK_DRAG_CONTEXT (object);
+  GdkDragContextPrivateWin32 *private = PRIVATE_DATA (context);
+  
+  g_list_free (context->targets);
+
+  if (context->source_window)
+    {
+      gdk_window_unref (context->source_window);
+    }
+  
+  if (context->dest_window)
+    gdk_window_unref (context->dest_window);
+  
+  contexts = g_list_remove (contexts, context);
+
+  g_free (private);
+  
+  G_OBJECT_CLASS (parent_class)->finalize (object);
+}
+
+/* Drag Contexts */
 
 GdkDragContext *
 gdk_drag_context_new (void)
 {
-  GdkDragContextPrivate *result;
-
-  result = g_new0 (GdkDragContextPrivate, 1);
-
-  result->ref_count = 1;
-
-  contexts = g_list_prepend (contexts, result);
-
-  return (GdkDragContext *) result;
+  return g_object_new (gdk_drag_context_get_type (), NULL);
 }
 
 void
 gdk_drag_context_ref (GdkDragContext *context)
 {
-  g_return_if_fail (context != NULL);
+  g_return_if_fail (GDK_IS_DRAG_CONTEXT (context));
 
-  ((GdkDragContextPrivate *)context)->ref_count++;
+  g_object_ref (G_OBJECT (context));
 }
 
 void
 gdk_drag_context_unref (GdkDragContext *context)
 {
-  GdkDragContextPrivate *private = (GdkDragContextPrivate *)context;
-  
-  g_return_if_fail (context != NULL);
+  g_return_if_fail (GDK_IS_DRAG_CONTEXT (context));
 
-  if (private->ref_count <= 0)
-    abort ();
-
-  private->ref_count--;
-
-  GDK_NOTE (DND, g_print ("gdk_drag_context_unref: %d%s\n",
-			  private->ref_count,
-			  (private->ref_count == 0 ? " freeing" : "")));
-
-  if (private->ref_count == 0)
-    {
-      g_dataset_destroy (private);
-      
-      g_list_free (context->targets);
-
-      if (context->source_window)
-	gdk_drawable_unref (context->source_window);
-
-      if (context->dest_window)
-	gdk_drawable_unref (context->dest_window);
-
-      contexts = g_list_remove (contexts, private);
-      g_free (private);
-    }
+  g_object_unref (G_OBJECT (context));
 }
 
 #if 0
@@ -223,13 +266,13 @@ static ULONG STDMETHODCALLTYPE
 idroptarget_addref (LPDROPTARGET This)
 {
   target_drag_context *ctx = (target_drag_context *) This;
-  GdkDragContextPrivate *private = (GdkDragContextPrivate *) ctx->context;
+  GdkDragContextPrivateWin32 *private = PRIVATE_DATA (ctx->context);
+  int ref_count = ++private->ref_count;
 
   gdk_drag_context_ref (ctx->context);
-  GDK_NOTE (DND, g_print ("idroptarget_addref %#x %d\n",
-			  This, private->ref_count));
+  GDK_NOTE (DND, g_print ("idroptarget_addref %#x %d\n", This, ref_count));
   
-  return private->ref_count;
+  return ref_count;
 }
 
 static HRESULT STDMETHODCALLTYPE
@@ -268,12 +311,11 @@ static ULONG STDMETHODCALLTYPE
 idroptarget_release (LPDROPTARGET This)
 {
   target_drag_context *ctx = (target_drag_context *) This;
-  GdkDragContextPrivate *private = (GdkDragContextPrivate *) ctx->context;
-  int ref_count = private->ref_count - 1;
+  GdkDragContextPrivateWin32 *private = PRIVATE_DATA (ctx->context);
+  int ref_count = --private->ref_count;
 
   gdk_drag_context_unref (ctx->context);
-  GDK_NOTE (DND, g_print ("idroptarget_release %#x %d\n",
-			  This, ref_count));
+  GDK_NOTE (DND, g_print ("idroptarget_release %#x %d\n", This, ref_count));
 
   if (ref_count == 0)
     g_free (This);
@@ -328,7 +370,7 @@ static ULONG STDMETHODCALLTYPE
 idropsource_addref (LPDROPSOURCE This)
 {
   source_drag_context *ctx = (source_drag_context *) This;
-  GdkDragContextPrivate *private = (GdkDragContextPrivate *) ctx->context;
+  GdkDragContextPrivateWin32 *private = PRIVATE_DATA (ctx->context);
 
   gdk_drag_context_ref (ctx->context);
   GDK_NOTE (DND, g_print ("idropsource_addref %#x %d\n",
@@ -372,12 +414,11 @@ static ULONG STDMETHODCALLTYPE
 idropsource_release (LPDROPSOURCE This)
 {
   source_drag_context *ctx = (source_drag_context *) This;
-  GdkDragContextPrivate *private = (GdkDragContextPrivate *) ctx->context;
-  int ref_count = private->ref_count - 1;
+  GdkDragContextPrivateWin32 *private = PRIVATE_DATA (ctx->context);
+  int ref_count = --private->ref_count;
 
   gdk_drag_context_unref (ctx->context);
-  GDK_NOTE (DND, g_print ("idropsource_release %#x %d\n",
-			  This, ref_count));
+  GDK_NOTE (DND, g_print ("idropsource_release %#x %d\n", This, ref_count));
 
   if (ref_count == 0)
     g_free (This);
@@ -904,7 +945,7 @@ gdk_dropfiles_filter (GdkXEvent *xev,
 		      gpointer   data)
 {
   GdkDragContext *context;
-  GdkDragContextPrivate *private;
+  GdkDragContextPrivateWin32 *private;
   static GdkAtom text_uri_list_atom = GDK_NONE;
   GString *result;
   MSG *msg = (MSG *) xev;
@@ -921,7 +962,7 @@ gdk_dropfiles_filter (GdkXEvent *xev,
       GDK_NOTE (DND, g_print ("WM_DROPFILES: %#x\n", msg->hwnd));
 
       context = gdk_drag_context_new ();
-      private = (GdkDragContextPrivate *) context;
+      private = PRIVATE_DATA (context);
       context->protocol = GDK_DRAG_PROTO_WIN32_DROPFILES;
       context->is_source = FALSE;
       context->source_window = gdk_parent_root;
@@ -1108,7 +1149,7 @@ gdk_drag_find_window (GdkDragContext  *context,
 		      GdkWindow      **dest_window,
 		      GdkDragProtocol *protocol)
 {
-  GdkDragContextPrivate *private = (GdkDragContextPrivate *)context;
+  GdkDragContextPrivateWin32 *private = PRIVATE_DATA (context);
   HWND recipient;
   POINT pt;
 

@@ -36,6 +36,9 @@
 #include <windows.h>
 #include <commctrl.h>
 
+#include <gdk/win32/gdkwindow-win32.h>
+#include <gdk/win32/gdkpixmap-win32.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */
@@ -306,11 +309,14 @@ GDKVAR gchar		*gdk_progclass;
 GDKVAR ATOM		 gdk_selection_property;
 
 /* Functions to create GDK pixmaps and windows from their native equivalents */
-GdkPixmap    *gdk_pixmap_foreign_new (guint32     anid);
-GdkWindow    *gdk_window_foreign_new (guint32     anid);
+GdkPixmap    *gdk_pixmap_foreign_new (GdkNativeWindow anid);
+GdkWindow    *gdk_window_foreign_new (GdkNativeWindow anid);
 
 /* Return the Gdk* for a particular HANDLE */
-gpointer      gdk_win32_handle_table_lookup (HANDLE      handle);
+gpointer      gdk_win32_handle_table_lookup (GdkNativeWindow handle);
+
+#define gdk_window_lookup(hwnd) (GdkWindow*) gdk_win32_handle_table_lookup (hwnd)
+#define gdk_pixmap_lookup(hbm)	(GdkPixmap*) gdk_win32_handle_table_lookup (hbm)
 
 /* Return a device context to draw in a drawable, given a GDK GC,
  * and a mask indicating which GC values might be used (for efficiency,

@@ -34,9 +34,6 @@
 #include "gdkpixmap.h"
 #include "gdkinternals.h"
 #include "gdkprivate-win32.h"
-#include "gdkdrawable-win32.h"
-#include "gdkwindow-win32.h"
-#include "gdkpixmap-win32.h"
 
 static void gdk_pixmap_impl_win32_get_size   (GdkDrawable        *drawable,
 					      gint               *width,

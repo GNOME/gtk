@@ -39,7 +39,7 @@ GdkGC *  _gdk_win32_gc_new       (GdkDrawable        *drawable,
 				  GdkGCValuesMask     values_mask);
 COLORREF gdk_colormap_color      (GdkColormap        *colormap,
 				  gulong              pixel);
-HRGN	BitmapToRegion           (HBITMAP hBmp);
+HRGN	 BitmapToRegion          (HBITMAP hBmp);
 
 gchar  *gdk_font_full_name_get   (GdkFont *font);
 

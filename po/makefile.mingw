@@ -12,7 +12,7 @@
 # and LOCALEDIR macros
 
 ifndef PACKAGE
-PACKAGE = gtk+
+PACKAGE = gtk20
 endif
 ifndef INSTALLSUBDIR
 INSTALLSUBDIR = $(PACKAGE)

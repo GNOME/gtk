@@ -552,6 +552,9 @@ testdnd_LDADD = $(LDADDS)
 simple_LDADD = $(LDADDS)
 #testthreads_LDADD = $(LDADDS)
 
+makefile.mingw: $(top_builddir)/config.status $(top_srcdir)/gtk/makefile.mingw.in
+	cd $(top_builddir) && CONFIG_FILES=gtk/$@ CONFIG_HEADERS= $(SHELL) ./config.status
+
 .PHONY: files test test-debug
 
 files:
@@ -595,7 +598,8 @@ EXTRA_DIST += @STRIP_BEGIN@ 	\
 	gtk.def			\
 	gtk.rc			\
 	makefile.msc		\
-	makefile.cygwin		\
+	makefile.mingw		\
+	makefile.mingw.in	\
 	$(gtkconf_DATA)		\
 @STRIP_END@
 

@@ -405,11 +405,11 @@ gtk_init_check (int	 *argc,
 #else
   {
     /* GTk+ locale dir is %WinDir%\gtk+\locale */
-    extern char *get_gtk_sysconf_directory ();
-    bindtextdomain (GETTEXT_PACKAGE, g_strconcat (get_gtk_sysconf_directory (),
-						  G_DIR_SEPARATOR_S,
-						  "locale",
-						  NULL));
+    bindtextdomain (GETTEXT_PACKAGE,
+		    g_strconcat (gtk_win32_get_installation_directory (),
+				 G_DIR_SEPARATOR_S,
+				 "locale",
+				 NULL));
   }
 #endif
 #endif  

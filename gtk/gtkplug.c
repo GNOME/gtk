@@ -317,7 +317,7 @@ gtk_plug_key_press_event (GtkWidget   *widget,
 			      GDK_WINDOW_XWINDOW (plug->socket_window),
 			      RevertToParent, event->time);
 #elif defined (GDK_WINDOWING_WIN32)
-	      SetFocus (GDK_WINDOW_XWINDOW (plug->socket_window));
+	      SetFocus (GDK_WINDOW_HWND (plug->socket_window));
 #endif
 	      gdk_flush ();
 	      gdk_error_trap_pop ();
@@ -495,12 +495,12 @@ gtk_plug_forward_key_press (GtkPlug *plug, GdkEventKey *event)
       break;
     }
   
-  PostMessage (GDK_WINDOW_XWINDOW (plug->socket_window),
+  PostMessage (GDK_WINDOW_HWND (plug->socket_window),
 	       WM_KEYDOWN, wParam, lParam);
   if (!no_WM_CHAR)
-    PostMessage (GDK_WINDOW_XWINDOW (plug->socket_window),
+    PostMessage (GDK_WINDOW_HWND (plug->socket_window),
 		 WM_CHAR, wParam, lParam);
-  PostMessage (GDK_WINDOW_XWINDOW (plug->socket_window),
+  PostMessage (GDK_WINDOW_HWND (plug->socket_window),
 	       WM_KEYUP, wParam, lParam);
 #endif
 }

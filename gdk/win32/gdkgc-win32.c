@@ -34,9 +34,6 @@
 #include "gdkregion-generic.h"
 #include "gdkinternals.h"
 #include "gdkprivate-win32.h"
-#include "gdkdrawable-win32.h"
-#include "gdkwindow-win32.h"
-#include "gdkpixmap-win32.h"
 
 static void gdk_win32_gc_destroy    (GdkGC           *gc);
 static void gdk_win32_gc_get_values (GdkGC           *gc,

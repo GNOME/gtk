@@ -111,7 +111,12 @@ GType GTK_TYPE_IDENTIFIER = 0;
 
 /* Hack to communicate with GLib object debugging for now
  */
-extern gboolean glib_debug_objects;
+#ifdef G_OS_WIN32
+#define IMPORT __declspec(dllimport)
+#else
+#define IMPORT
+#endif
+extern IMPORT gboolean glib_debug_objects;
 
 void
 gtk_type_init (void)
