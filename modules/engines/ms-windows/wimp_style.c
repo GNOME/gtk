@@ -371,7 +371,7 @@ setup_system_styles(GtkStyle *style)
   /* enable coloring for text on buttons
      TODO: use GetThemeMetric for the border and outside border */
   sprintf(buf, "style \"wimp-button\" = \"wimp-default\"\n"
-	  "fg[NORMAL] = { %d, %d, %d }\n"
+	  "{fg[NORMAL] = { %d, %d, %d }\n"
 	  "default_border = { 1, 1, 1, 1 }\n"
 	  "default_outside_border = { 0, 0, 0, 0 }\n"
 	  "child_displacement_x = 1\n"
