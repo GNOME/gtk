@@ -1,3 +1,8 @@
+Mon Jun  5 11:17:25 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/tmpl/general.sgml: Fix gdk_pointer_grab description
+	as pointed out by Dave Morse.
+
 Sun May 28 12:16:01 2000  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/tmpl/gtkaspectframe.sgml: Fix typo
