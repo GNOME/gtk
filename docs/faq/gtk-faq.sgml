@@ -2,7 +2,7 @@
 <book>
 
 <bookinfo>
-  <date>April 22nd 2003</date>
+  <date>April 30th 2003</date>
   <title>GTK+ FAQ</title>
   <authorgroup>
     <author>
@@ -456,26 +456,24 @@ generated Makefiles.</para>
 
 <sect1>
 <title>I've compiled and installed GTK+, but I can't get any
-programs to link with it!</title>
+programs to link with it! <emphasis>[GTK 2.x]</emphasis></title>
 
 <para>This problem is most often encountered when the GTK+
 libraries can't be  found or are the wrong version. Generally,
-the compiler will complain about an 'unresolved symbol'.
-There are two things you need to check:</para>
+the compiler will complain about an 'unresolved symbol'.</para>
 
-<itemizedlist>
-<listitem><simpara>Make sure that the libraries can be
+<para>Make sure that the libraries can be
 found. You want to edit <filename>/etc/ld.so.conf</filename> to
 include the directories which contain the GTK libraries,
-so it looks something like:</simpara>
+so it looks something like:</para>
 
 <para><literallayout><literal>/usr/X11R6/lib</literal>
 <literal>/usr/local/lib</literal></literallayout></para>
 
 <para>Then you need to run /sbin/ldconfig as root. You can
-find what directory GTK is in using</para>
+find what libraries GTK requires using</para>
 
-<para><literallayout><literal>gtk-config --libs</literal>
+<para><literallayout><literal>pkg-config gtk+-2.0 --libs</literal>
 </literallayout></para>
 
 <para>If your system doesn't use ld.so to find libraries
@@ -494,91 +492,29 @@ your GTK libraries are in /usr/local/lib):</para>
 <literal>setenv LD_LIBRARY_PATH /usr/local/lib</literal>
 </literallayout></para>
 
-</listitem>
-<listitem><simpara>Make sure the linker is finding the
-correct set of libraries. If you have a Linux distribution that
-installs GTK+ (e.g. RedHat 5.0) then this  older version may be
-used. Now (assuming you have a RedHat system), issue the
-command</simpara>
-
-<para><literallayout>
-<literal>rpm -e gtk gtk-devel</literal>
-</literallayout></para>
-
-<para>You may also want to remove the packages that depend
-on gtk (rpm will tell you which ones they are).  If you don't have a
-RedHat Linux system, check to make sure that neither
-<filename>/usr/lib</filename> or <filename>/usr/local/lib</filename>
-contain any of the libraries libgtk, libgdk, libglib, or libgck. If
-they do exist, remove them (and any gtk include files, such as
-<filename>/usr/include/gtk</filename> and
-<filename>/usr/include/gdk</filename>) and reinstall gtk+.</para>
-</listitem>
-</itemizedlist>
-
-</sect1>
-
-<!-- ----------------------------------------------------------------- -->
-
-<sect1>
-<title>When compiling programs with GTK+, I get compiler error
-messages about not being able to find
-<literal>glibconfig.h</literal>.</title>
-
-<para>The header file "glibconfig.h" was moved to the
-directory $exec_prefix/lib/glib/include/. $exec_prefix is the
-directory that was specified by giving the --exec-prefix flags
-to ./configure when compiling GTK+. It defaults to  $prefix,
-(specified with --prefix), which in turn defaults to /usr/local/.</para>
-
-<para>This was done because "glibconfig.h" includes
-architecture dependent information, and the rest of the
-include files are put in $prefix/include, which can be shared
-between different architectures.</para>
-
-<para>GTK+ includes a shell script, <literal>/gtk-config/</literal>,
-that makes it easy to find out the correct include paths. The GTK+
-Tutorial includes an example of using <literal>/gtk-config/</literal>
-for simple compilation from the command line. For information about more
-complicated configuration, see the file docs/gtk-config.txt in the GTK+
-distribution.</para>
-
-<para>If you are trying to compile an old program, you may be
-able to work around the problem by configuring it with a
-command line like:</para>
-
-<para><literallayout>
-<literal>setenv CPPFLAGS "-I/usr/local/include/glib/include"</literal>
-<literal>./configure</literal>
-</literallayout></para>
-
-<para>(Substitute the appropriate value of $exec_prefix for
-/usr/local.)</para>
-
 </sect1>
 
 <!-- ----------------------------------------------------------------- -->
 
 <sect1>
 <title>When installing a GTK+ application, configure reports
-that it can't find GTK.</title>
+that it can't find GTK. <emphasis>[GTK 2.x]</emphasis></title>
 
 <para>There are several common reasons for this:</para>
 
 <itemizedlist>
 <listitem><simpara>You have an old version of GTK installed
-somewhere. RedHat 5.0, for example, installs an older copy of GTK that
-may not work with the latest applications. You should remove this old
-copy, but note that in the case of RedHat 5.0 this will
-break the <literal>control-panel</literal> applications.</simpara>
+somewhere. You should remove this old copy, but note that
+this may break applications that have been compiled against
+the old version.</simpara>
 </listitem>
 
-<listitem><simpara><literal>gtk-config</literal> (or another
+<listitem><simpara><literal>pkg-config</literal> (or another
 component of GTK) isn't in your path, or there is an old
 version on your system. Type:</simpara>
 
 <para><literallayout>
-<literal>gtk-config --version</literal>
+<literal>pkg-config gtk+-2.0 --version</literal>
 </literallayout></para>
 
 <para>to check for both of these. If it returns a value
@@ -912,26 +848,26 @@ url="http://www.gtk.org/setuid.html">http://www.gtk.org/setuid.html</ulink>.</pa
 
 <sect1>
 <title>I tried to compile a small <command>Hello World</command> of mine,
-but it failed. Any clue?</title>
+but it failed. Any clue? <emphasis>[GTK 2.x]</emphasis></title>
 
 <para>Since you are good at coding, we will not deal with
 compile time error here :)</para>
 
 <para>The classic command line to compile a GTK+ based program is</para>
 <para><literallayout>
-<literal>gcc -o myprog [c files] `gtk-config --cflags --libs`</literal>
+<literal>gcc -o myprog [c files] `pkg-config gtk+-2.0 --cflags --libs`</literal>
 </literallayout></para>
 
 <para>You should notice the backquote character which is used
 in this command line. A common mistake when you start a GTK+
 based development is to use quote instead of backquotes. If
 you do so, the compiler will complain about an unknown file
-called <filename>gtk-config --cflags --libs</filename>. The
+called <filename>pkg-config gtk+-2.0 --cflags --libs</filename>. The
 text in backquotes is an instruction to your shell to
-substitute the output of executing this text into the
+substitute the output of executing this command into the
 commandline.</para>
 
-<para>The command line above ensure that:</para>
+<para>The command line above ensures that:</para>
 
 <itemizedlist>
 <listitem><simpara>the correct C compiler flags will be used
@@ -950,7 +886,7 @@ needed libraries.</simpara>
 
 <sect1>
 <title>What about using the <command>make</command>
-utility?</title>
+utility? <emphasis>[GTK 2.x]</emphasis></title>
 
 <para>This is a sample makefile which compile a GTK+ based
 program:</para>
@@ -959,8 +895,8 @@ program:</para>
 # basic GTK+ app makefile
 SOURCES = myprg.c foo.c bar.c
 OBJS    = ${SOURCES:.c=.o}
-CFLAGS  = `gtk-config --cflags`
-LDADD   = `gtk-config --libs`
+CFLAGS  = `pkg-config gtk+-2.0 --cflags`
+LDADD   = `pkg-config gtk+-2.0 --libs`
 CC      = gcc
 PACKAGE = myprg
 
@@ -1269,7 +1205,7 @@ illustrate how to use threads within GTK+ programs.</para>
 /*
  * Compile with:
  *
- * cc -o gtk-thread gtk-thread.c `gtk-config --cflags --libs gthread`
+ * cc -o gtk-thread gtk-thread.c `pkg-config gtk+-2.0 --cflags --libs gthread`
  *
  * Thanks to Sebastian Wilhelmi and Owen Taylor for pointing out some
  * bugs.
@@ -1432,7 +1368,7 @@ illustrate handling fork() and exit().</para>
 /*
  * Compile with:
  *
- * cc -o gtk-fork gtk-fork.c `gtk-config --cflags --libs`
+ * cc -o gtk-fork gtk-fork.c `pkg-config gtk+-2.0 --cflags --libs`
  *
  */
 
