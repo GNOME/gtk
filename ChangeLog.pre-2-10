@@ -1,3 +1,7 @@
+Sat Jun 27 23:23:27 PDT 1998 Manish Singh <yosh@gimp.org>
+
+	* gtk/testgtk.c: use rand() instead of random() for portability
+
 Sat Jun 27 22:42:28 PDT 1998 Manish Singh <yosh@gimp.org>
 
 	* configure.in
