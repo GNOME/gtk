@@ -1,3 +1,9 @@
+2002-11-07  Matthias Clasen  <maclas@gmx.de>
+
+	* gdk/gdk.c (gdk_display_open_default_libgtk_only): Use
+	g_return_val_if_fail in this non-void function.
+	(gdk_init_check): Remove unused variable.
+
 Thu Nov  7 15:42:12 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkfontsel.c (gtk_font_selection_get_font_description):

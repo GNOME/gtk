@@ -389,7 +389,7 @@ gdk_display_open_default_libgtk_only (void)
 {
   GdkDisplay *display;
 
-  g_return_if_fail (gdk_initialized);
+  g_return_val_if_fail (gdk_initialized, NULL);
   
   display = gdk_display_get_default ();
   if (display)
@@ -438,8 +438,6 @@ gboolean
 gdk_init_check (int    *argc,
 		char ***argv)
 {
-  GdkDisplay *display;
-  
   gdk_parse_args (argc, argv);
 
   return gdk_display_open_default_libgtk_only () != NULL;
