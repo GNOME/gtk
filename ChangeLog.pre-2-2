@@ -1,3 +1,14 @@
+Mon Mar 15 01:03:27 1999  Lars Hamann  <lars@gtk.org>
+
+	* gtk/gtkclist.h (struct _GtkCListColumn): added button_passive flag.
+
+	* gtk/gtkclist.c (gtk_clist_column_title_passive):
+	Leave button sensitive, trap  button_press, button_release,
+	motion_notify, enter_notify and leave_notify events instead.
+	(gtk_clist_column_title_active): disconnect event handler.
+	(gtk_clist_drag_data_get): fixed memory leak. Reported by
+	Guillaume Laurent <glaurent@worldnet.fr>	
+
 Mon Mar 15 03:39:47 1999  George Lebl  <jirka@5z.com>
 
 	* gtk/gtkdnd.c: (gtk_drag_highlight) swap the

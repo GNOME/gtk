@@ -330,10 +330,11 @@ struct _GtkCListColumn
   gint max_width;
   GtkJustification justification;
   
-  guint visible     : 1;  
-  guint width_set   : 1;
-  guint resizeable  : 1;
-  guint auto_resize : 1;
+  guint visible        : 1;  
+  guint width_set      : 1;
+  guint resizeable     : 1;
+  guint auto_resize    : 1;
+  guint button_passive : 1;
 };
 
 struct _GtkCListRow
