@@ -1,3 +1,9 @@
+Thu Mar  4 21:45:43 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkcombobox.c: In list mode, set the background color 
+	of the cell view to the base color of the style, instead of
+	hardwiring white. (#136158)
+
 Thu Mar  4 01:32:19 2004  Jonathan Blandford  <jrb@gnome.org>
 
 	* gtk/gtkpathbar.c (gtk_path_bar_set_path): Modified patch from

@@ -190,6 +190,8 @@ static void     gtk_combo_box_get_property         (GObject         *object,
                                                     GValue          *value,
                                                     GParamSpec      *spec);
 
+static void     gtk_combo_box_state_changed        (GtkWidget        *widget,
+			                            GtkStateType      previous);
 static void     gtk_combo_box_style_set            (GtkWidget       *widget,
                                                     GtkStyle        *previous);
 static void     gtk_combo_box_button_toggled       (GtkWidget       *widget,
@@ -414,6 +416,7 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
   widget_class->scroll_event = gtk_combo_box_scroll_event;
   widget_class->mnemonic_activate = gtk_combo_box_mnemonic_activate;
   widget_class->style_set = gtk_combo_box_style_set;
+  widget_class->state_changed = gtk_combo_box_state_changed;
 
   gtk_object_class = (GtkObjectClass *)klass;
   gtk_object_class->destroy = gtk_combo_box_destroy;
@@ -595,6 +598,22 @@ gtk_combo_box_get_property (GObject    *object,
 }
 
 static void
+gtk_combo_box_state_changed (GtkWidget    *widget,
+			     GtkStateType  previous)
+{
+  GtkComboBox *combo_box = GTK_COMBO_BOX (widget);
+
+  if (GTK_WIDGET_REALIZED (widget))
+    {
+      if (combo_box->priv->tree_view && combo_box->priv->cell_view)
+	gtk_cell_view_set_background_color (GTK_CELL_VIEW (combo_box->priv->cell_view), 
+					    &widget->style->base[GTK_WIDGET_STATE (widget)]);
+    }
+
+  gtk_widget_queue_draw (widget);
+}
+
+static void
 gtk_combo_box_style_set (GtkWidget *widget,
                          GtkStyle  *previous)
 {
@@ -602,7 +621,7 @@ gtk_combo_box_style_set (GtkWidget *widget,
   GtkComboBox *combo_box = GTK_COMBO_BOX (widget);
 
   gtk_widget_queue_resize (widget);
-
+  
   /* if wrap_width > 0, then we are in grid-mode and forced to use
    * unix style
    */
@@ -634,6 +653,11 @@ gtk_combo_box_style_set (GtkWidget *widget,
       if (!GTK_IS_MENU (combo_box->priv->popup_widget))
 	gtk_combo_box_menu_setup (combo_box, TRUE);
     }
+
+  if (combo_box->priv->tree_view && combo_box->priv->cell_view)
+    gtk_cell_view_set_background_color (GTK_CELL_VIEW (combo_box->priv->cell_view), 
+					&widget->style->base[GTK_WIDGET_STATE (widget)]);
+
 }
 
 static void
@@ -2113,10 +2137,8 @@ gtk_combo_box_list_setup (GtkComboBox *combo_box)
       gtk_frame_set_shadow_type (GTK_FRAME (combo_box->priv->cell_view_frame),
                                  GTK_SHADOW_IN);
 
-      g_object_set (G_OBJECT (combo_box->priv->cell_view),
-                    "background", "white",
-                    "background_set", TRUE,
-                    NULL);
+      gtk_cell_view_set_background_color (GTK_CELL_VIEW (combo_box->priv->cell_view), 
+					  &GTK_WIDGET (combo_box)->style->base[GTK_WIDGET_STATE (combo_box)]);
 
       gtk_widget_show (combo_box->priv->cell_view_frame);
     }
