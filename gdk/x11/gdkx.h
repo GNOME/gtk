@@ -169,6 +169,9 @@ Atom                  gdk_x11_get_xatom_by_name (const gchar *atom_name);
 G_CONST_RETURN gchar *gdk_x11_get_xatom_name    (Atom         xatom);
 #endif
 
+void	    gdk_x11_display_grab	      (GdkDisplay *display);
+void	    gdk_x11_display_ungrab	      (GdkDisplay *display);
+
 #ifndef GDK_DISABLE_DEPRECATED
 
 Display *            gdk_x11_font_get_xdisplay (GdkFont *font);
@@ -184,9 +187,6 @@ G_CONST_RETURN char *gdk_x11_font_get_name     (GdkFont *font);
 
 #endif /* GDK_MULTIHEAD_SAFE */
 #define gdk_font_lookup_for_display(display, xid) ((GdkFont*) gdk_xid_table_lookup_for_display (display, xid))
-
-void	    gdk_x11_display_grab	      (GdkDisplay *display);
-void	    gdk_x11_display_ungrab	      (GdkDisplay *display);
 
 #endif /* GDK_DISABLE_DEPRECATED */
 
