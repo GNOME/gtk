@@ -316,7 +316,7 @@ gtkconf_DATA = gtkrc gtkrc.ja gtkrc.ko gtkrc.ru
 
 gtkrc:
 	:
-	
+
 # We create a dummy theme for the default GTK+ theme
 
 install-data-local:
@@ -369,7 +369,7 @@ INCLUDES = \
 	-DGTK_DATA_PREFIX=\"$(prefix)\"			\
 	-DGTK_SYSCONFDIR=\"$(sysconfdir)\"		\
 	-DGTK_LOCALEDIR=\"$(gtklocaledir)\"		\
-	-I$(top_srcdir)					\
+	-I$(top_srcdir) -I../gdk			\
 	@GTK_DEBUG_FLAGS@				\
 	@GTK_XIM_FLAGS@					\
 	@GTK_LOCALE_FLAGS@				\

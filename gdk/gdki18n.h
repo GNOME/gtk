@@ -30,16 +30,17 @@
 /* GDK uses "glib". (And so does GTK).
  */
 #include <glib.h>
+#include <gdkconfig.h>
 
 /* international string support */
 
 #include <stdlib.h>
 
-#if !defined(G_HAVE_BROKEN_WCTYPE) && (defined(G_HAVE_WCTYPE_H) || defined(G_HAVE_WCHAR_H)) && !defined(X_LOCALE)
-#  ifdef G_HAVE_WCTYPE_H
+#if !defined(GDK_HAVE_BROKEN_WCTYPE) && (defined(GDK_HAVE_WCTYPE_H) || defined(GDK_HAVE_WCHAR_H)) && !defined(X_LOCALE)
+#  ifdef GDK_HAVE_WCTYPE_H
 #    include <wctype.h>
 #  else
-#    ifdef G_HAVE_WCHAR_H
+#    ifdef GDK_HAVE_WCHAR_H
 #      include <wchar.h>
 #    endif
 #  endif

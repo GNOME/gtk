@@ -1,3 +1,11 @@
+1999-03-13  Raja R Harinath  <harinath@cs.umn.edu>
+
+	* configure.in (gdk_wc): Move widechar tests from `glib' to here,
+	since those were meant only for gdki18n.h.  
+	* gdk/gdki18n.h: Include gdkconfig.h and use GDK_* instead of G_*
+	for widechar tests.
+	* gtk/Makefile.am (INCLUDES): Add -I../gdk for gdkconfig.h.
+
 1999-03-13  Tor Lillqvist  <tml@iki.fi>
 
 	* configure.in acconfig.h: Check for dirent.h and pwd.h. Generate
