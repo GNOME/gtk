@@ -63,7 +63,7 @@ xdg_mime_init (void)
 
   if (initted == 0)
     {
-      const char *xdg_config_home;
+      const char *xdg_data_home;
       const char *xdg_data_dirs;
       const char *ptr;
 
@@ -73,10 +73,10 @@ xdg_mime_init (void)
       /* We look for globs and magic files based upon the XDG Base Directory
        * Specification
        */
-      xdg_config_home = getenv ("XDG_CONFIG_HOME");
-      if (xdg_config_home)
+      xdg_data_home = getenv ("XDG_DATA_HOME");
+      if (xdg_data_home)
 	{
-	  _xdg_mime_init_from_directory (xdg_config_home);
+	  _xdg_mime_init_from_directory (xdg_data_home);
 	}
       else
 	{
