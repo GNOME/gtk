@@ -39,7 +39,7 @@ and GTK is a widget set for creating user interfaces.
 
 * Sun Mar 15 1998 Marc Ewing <marc@redhat.com>
 
-- Added aclocal stuff to file list.
+- Added aclocal and bin stuff to file list.
 
 * Fri Mar 14 1998 Shawn T. Amundson <amundson@gimp.org>
 
@@ -114,3 +114,4 @@ fi
 %{prefix}/include/*
 %{prefix}/info/*
 %{prefix}/share/aclocal/*
+%{prefix}/bin/*
