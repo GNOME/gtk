@@ -314,6 +314,64 @@ g_string_prepend_c (GString *fstring, char c)
   return fstring;
 }
 
+GString *
+g_string_insert (GString *fstring, gint pos, gchar *val)
+{
+  GRealString *string = (GRealString*)fstring;
+  gint len = strlen (val);
+
+  g_return_val_if_fail (pos <= string->len, fstring);
+
+  g_string_maybe_expand (string, len);
+
+  g_memmove (string->str + pos + len, string->str + pos, string->len);
+
+  strncpy (string->str + pos, val, len);
+
+  string->len += len;
+
+  string->str[string->len] = 0;
+
+  return fstring;
+}
+
+GString *
+g_string_insert_c (GString *fstring, gint pos, gchar c)
+{
+  GRealString *string = (GRealString*)fstring;
+
+  g_return_val_if_fail (pos <= string->len, fstring);
+
+  g_string_maybe_expand (string, 1);
+
+  g_memmove (string->str + pos + 1, string->str + pos, string->len);
+
+  string->str[pos] = c;
+
+  string->len += 1;
+
+  string->str[string->len] = 0;
+
+  return fstring;
+}
+
+GString *
+g_string_erase (GString *fstring, gint pos, gint len)
+{
+  GRealString *string = (GRealString*)fstring;
+
+  g_return_val_if_fail (pos <= string->len, fstring);
+  g_return_val_if_fail (pos + len <= string->len, fstring);
+
+  g_memmove (string->str + pos, string->str + pos + len, string->len - (pos + len));
+
+  string->len -= len;
+  
+  string->str[string->len] = 0;
+
+  return fstring;
+}
+
 static int
 get_length_upper_bound (const gchar* fmt, va_list *args)
 {

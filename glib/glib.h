@@ -715,6 +715,15 @@ GString* g_string_prepend   (GString *string,
 			     gchar   *val);
 GString* g_string_prepend_c (GString *string,
 			     gchar    c);
+GString* g_string_insert    (GString *fstring, 
+			     gint pos, 
+			     gchar *val);
+GString* g_string_insert_c  (GString *fstring, 
+			     gint pos, 
+			     gchar c);
+GString* g_string_erase    (GString *fstring, 
+			     gint pos, 
+			     gint len);
 void	 g_string_sprintf   (GString *string,
 			     gchar   *fmt,
 			     ...);

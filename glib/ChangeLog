@@ -1,3 +1,10 @@
+Sun Mar  1 19:04:40 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* glib.h gstring.c: Added g_string_insert[_c]()
+	  and g_string_erase().
+
+	  From: Stefan Wille  <1wille@vsys1.informatik.uni-hamburg.de>
+
 Mon Feb 16 23:05:06 1998  Owen Taylor  <owt1@cornell.edu>
 
 	* glist.c (g_list_insert_sorted): Changed function
