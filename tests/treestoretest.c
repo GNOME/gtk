@@ -260,6 +260,7 @@ make_window (gint view_type)
       break;
     }
 
+  gtk_tree_view_set_rules_hint (tree_view, TRUE);
   selection = G_OBJECT (gtk_tree_view_get_selection (GTK_TREE_VIEW (tree_view)));
   gtk_tree_selection_set_mode (GTK_TREE_SELECTION (selection), GTK_TREE_SELECTION_SINGLE);
 
@@ -342,9 +343,9 @@ make_window (gint view_type)
       iter_append (NULL, GTK_TREE_VIEW (tree_view));
       iter_append (NULL, GTK_TREE_VIEW (tree_view));
       iter_append (NULL, GTK_TREE_VIEW (tree_view));
-      gtk_widget_show_all (window);
     }
   /* Show it all */
+  gtk_widget_show_all (window);
 }
 
 int
@@ -356,7 +357,7 @@ main (int argc, char *argv[])
 
   /* FIXME: reverse this */
   make_window (0);
-  //  make_window (1);
+  make_window (1);
 
   gtk_main ();
 

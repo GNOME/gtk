@@ -1443,6 +1443,14 @@ gtk_tree_row_reference_new_proxy (GObject      *proxy,
   return reference;
 }
 
+/**
+ * gtk_tree_row_reference_get_path:
+ * @reference: A #GtkTreeRowReference
+ * 
+ * Returns a path that the row reference currently points to, or NULL if 
+ * 
+ * Return value: A current path, or NULL.
+ **/
 GtkTreePath *
 gtk_tree_row_reference_get_path (GtkTreeRowReference *reference)
 {
@@ -1457,12 +1465,37 @@ gtk_tree_row_reference_get_path (GtkTreeRowReference *reference)
   return gtk_tree_path_copy (reference->path);
 }
 
+/**
+ * gtk_tree_row_reference_valid:
+ * @reference: A #GtkTreeRowReference, or NULL
+ * 
+ * Returns TRUE if the %reference is non-NULL and refers to a current valid
+ * path.
+ * 
+ * Return value: TRUE if %reference points to a valid path.
+ **/
+gboolean
+gtk_tree_row_reference_valid (GtkTreeRowReference *reference)
+{
+  if (reference == NULL || reference->path == NULL)
+    return FALSE;
+
+  return TRUE;
+}
+
+/**
+ * gtk_tree_row_reference_free:
+ * @reference: A #GtkTreeRowReference, or NULL
+ * 
+ * Free's %reference.  %reference may be NULL.
+ **/
 void
 gtk_tree_row_reference_free (GtkTreeRowReference *reference)
 {
   RowRefList *refs;
 
-  g_return_if_fail (reference != NULL);
+  if (reference == NULL)
+    return;
 
   refs = g_object_get_data (G_OBJECT (reference->proxy), ROW_REF_DATA_STRING);
 

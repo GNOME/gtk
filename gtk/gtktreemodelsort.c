@@ -247,7 +247,7 @@ gtk_tree_model_sort_new_with_model (GtkTreeModel      *child_model)
  * gtk_tree_model_sort_set_model:
  * @tree_model_sort: The #GtkTreeModelSort.
  * @child_model: A #GtkTreeModel, or NULL.
- * 
+ *
  * Sets the model of @tree_model_sort to be @model.  If @model is NULL, then the
  * old model is unset.
  **/
@@ -299,13 +299,13 @@ gtk_tree_model_sort_set_model (GtkTreeModelSort *tree_model_sort,
 			   G_CALLBACK (gtk_tree_model_sort_range_changed),
 			   tree_model_sort,
 			   FALSE);
-      tree_model_sort->inserted_id = 
+      tree_model_sort->inserted_id =
 	g_signal_connectc (child_model,
 			   "inserted",
 			   G_CALLBACK (gtk_tree_model_sort_inserted),
 			   tree_model_sort,
 			   FALSE);
-      tree_model_sort->has_child_toggled_id = 
+      tree_model_sort->has_child_toggled_id =
 	g_signal_connectc (child_model,
 			   "has_child_toggled",
 			   G_CALLBACK (gtk_tree_model_sort_has_child_toggled),
@@ -331,9 +331,9 @@ gtk_tree_model_sort_set_model (GtkTreeModelSort *tree_model_sort,
 /**
  * gtk_tree_model_sort_get_model:
  * @tree_model: a #GtkTreeModelSort
- * 
+ *
  * Returns the model the #GtkTreeModelSort is sorting.
- * 
+ *
  * Return value: the "child model" being sorted
  **/
 GtkTreeModel*
@@ -348,11 +348,11 @@ gtk_tree_model_sort_get_model (GtkTreeModelSort  *tree_model)
  * gtk_tree_model_sort_convert_path:
  * @tree_model_sort: The #GtkTreeModelSort.
  * @child_path: A #GtkTreePath, relative to the child model.
- * 
+ *
  * Converts the @child_path to a new path, relative to the sorted position.  In other
  * words, the value found in the @tree_model_sort ->child_model at the @child_path, is
  * identical to that found in the @tree_model_sort and the return value.
- * 
+ *
  * Return value: A new path, or NULL if @child_path does not exist in @tree_model_sort
  * ->child_model.
  **/
@@ -427,7 +427,7 @@ gtk_tree_model_sort_range_changed (GtkTreeModel *s_model,
    * sorting is changed, we can check the prev and next element to see if
    * they're different.
    */
-  
+
   /* Now we need to resort things. */
   index = gtk_tree_model_sort_array_find_insert (tree_model_sort,
 						 array,
@@ -913,7 +913,7 @@ gtk_tree_model_sort_unref_node (GtkTreeModel *tree_model,
 				GtkTreeIter  *iter)
 {
 
- 
+
 }
 
 static gboolean
@@ -1123,7 +1123,7 @@ gtk_tree_model_sort_convert_path_real (GtkTreeModelSort *tree_model_sort,
 
   return retval;
 }
-  
+
 static void
 gtk_tree_model_sort_build_level (GtkTreeModelSort *tree_model_sort,
 				 SortElt          *place)
@@ -1138,7 +1138,7 @@ gtk_tree_model_sort_build_level (GtkTreeModelSort *tree_model_sort,
   if (place)
     parent_iter = & (place->iter);
 
-      
+
   n = gtk_tree_model_iter_n_children (tree_model_sort->child_model, parent_iter);
 
   if (n == 0)

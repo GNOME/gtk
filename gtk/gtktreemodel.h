@@ -149,8 +149,8 @@ GtkTreeRowReference *gtk_tree_row_reference_new_proxy (GObject             *prox
 						       GtkTreeModel        *model,
 						       GtkTreePath         *path);
 GtkTreePath         *gtk_tree_row_reference_get_path  (GtkTreeRowReference *reference);
+gboolean             gtk_tree_row_reference_valid     (GtkTreeRowReference *reference);
 void                 gtk_tree_row_reference_free      (GtkTreeRowReference *reference);
-
 /* These two functions are only needed if you created the row reference with a
  * proxy object */
 void                 gtk_tree_row_reference_inserted  (GObject     *proxy,

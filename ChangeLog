@@ -1,3 +1,9 @@
+Mon Jun 18 19:41:38 2001  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtktreeview.c (gtk_tree_view_real_collapse_row): Fix bug
+	where collapsing a selected row would result in the cursor/anchor
+	getting screwed up.
+
 Fri Jun 15 18:53:48 2001  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtktreesortable.c (gtk_tree_sortable_set_sort_func): Rename
