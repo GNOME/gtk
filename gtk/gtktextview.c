@@ -6016,7 +6016,16 @@ gtk_text_view_commit_text (GtkTextView   *text_view,
   else
     {
       if (!had_selection && text_view->overwrite_mode)
-        gtk_text_view_delete_from_cursor (text_view, GTK_DELETE_CHARS, 1);
+	{
+	  GtkTextIter insert;
+	  
+	  gtk_text_buffer_get_iter_at_mark (get_buffer (text_view),
+					    &insert,
+					    gtk_text_buffer_get_mark (get_buffer (text_view),
+								      "insert"));
+	  if (!gtk_text_iter_ends_line (&insert))
+	    gtk_text_view_delete_from_cursor (text_view, GTK_DELETE_CHARS, 1);
+	}
       gtk_text_buffer_insert_interactive_at_cursor (get_buffer (text_view), str, -1,
                                                     text_view->editable);
     }
