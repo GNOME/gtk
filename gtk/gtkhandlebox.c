@@ -127,6 +127,15 @@ gtk_handle_box_realize (GtkWidget *widget)
 
   widget->window = gdk_window_new (widget->parent->window, &attributes, attributes_mask);
   gdk_window_set_user_data (widget->window, widget);
+  /* A nod to kwm... need to get a convention among various wm's on how to
+     do this. */
+  {
+    long newval = 2;
+    gdk_property_change(widget->window,
+		gdk_atom_intern("KWM_WIN_DECORATION", FALSE),
+		gdk_atom_intern("KWM_WIN_DECORATION", FALSE),
+		sizeof(newval) * 8, GDK_PROP_MODE_REPLACE, &newval, 1);
+  }
 
   widget->style = gtk_style_attach (widget->style, widget->window);
   gtk_style_set_background (widget->style, widget->window, GTK_STATE_NORMAL);
@@ -232,6 +241,7 @@ static void gtk_handle_box_paint(GtkWidget *widget,
 		   area->y, line_y2,
 		   x);
 
+#if 0
   if(GTK_BIN(widget)->child)
     gtk_draw_shadow(widget->style,
 		    widget->window,
@@ -240,6 +250,7 @@ static void gtk_handle_box_paint(GtkWidget *widget,
 		    0, 0,
 		    GTK_BIN(widget)->child->requisition.width + DRAG_HANDLE_SIZE,
 		    GTK_BIN(widget)->child->requisition.height);
+#endif
 
   if(hb->is_onroot)
     gtk_draw_hline(widget->style,
@@ -364,7 +375,7 @@ gtk_handle_box_set_location  (GtkWidget *widget,
       GTK_HANDLE_BOX(widget)->is_onroot = TRUE;
       if(x < 0) x = parentx;
       if(y < 0) y = parenty;
-      gdk_window_set_override_redirect(widget->window, TRUE);
+/*    gdk_window_set_override_redirect(widget->window, TRUE); */
       gdk_window_reparent(widget->window, GDK_ROOT_PARENT(),
 			  x, y);
       gdk_window_raise(widget->window);
@@ -382,8 +393,10 @@ gtk_handle_box_set_location  (GtkWidget *widget,
   else
     {
       GTK_HANDLE_BOX(widget)->is_onroot = FALSE;
+      gdk_window_withdraw(widget->window);
       gdk_window_reparent(widget->window, widget->parent->window,
 			  widget->allocation.x, widget->allocation.y);
+      gdk_window_show(widget->window);
       widget->requisition.height = 3;
       gtk_widget_queue_resize(widget->parent);
     }
