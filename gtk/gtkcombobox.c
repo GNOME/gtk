@@ -4166,18 +4166,17 @@ void
 gtk_combo_box_set_active (GtkComboBox *combo_box,
                           gint         index_)
 {
-  GtkTreePath *path;
+  GtkTreePath *path = NULL;
   g_return_if_fail (GTK_IS_COMBO_BOX (combo_box));
   g_return_if_fail (index_ >= -1);
 
   if (index_ != -1)
     path = gtk_tree_path_new_from_indices (index_, -1);
-  else
-    path = NULL;
   
   gtk_combo_box_set_active_internal (combo_box, path);
 
-  gtk_tree_path_free (path);
+  if (path)
+    gtk_tree_path_free (path);
 }
 
 static void
