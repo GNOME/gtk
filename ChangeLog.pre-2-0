@@ -1,3 +1,9 @@
+Wed Aug 25 19:01:36 1999  Lars Hamann  <lars@gtk.org>
+
+	* gtk/Makefile.am (gtk_built_sources): reordered stamp-gtk.defs
+ 	in gtk_built_sources, so gtk.defs gets built prior to all other
+ 	sources.
+
 Wed Aug 25 15:45:46 1999  Tim Janik  <timj@gtk.org>
 
 	* configure.in: evaluate $PERL for the perl version check. added

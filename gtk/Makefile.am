@@ -273,13 +273,13 @@ gtk_c_sources = @STRIP_BEGIN@ \
 #
 # built sources that don't get installed
 gtk_built_sources = @STRIP_BEGIN@ \
+	stamp-gtk.defs		\
 	stamp-gtktypebuiltins.h	\
 	stamp-gtkmarshal.h	\
 	gtktypebuiltins_vars.c	\
 	gtktypebuiltins_ids.c	\
 	gtktypebuiltins_evals.c	\
 	gtkmarshal.c		\
-	stamp-gtk.defs		\
 	gtk.defs		\
 @STRIP_END@
 # built sources that get installed with the header files
