@@ -45,7 +45,7 @@
 				       (obj)->priv->text_column != -1 || \
 				       (obj)->priv->markup_column != -1))
 
-struct _GtkIconViewItem
+typedef struct 
 {
   gint ref_count;
 
@@ -66,7 +66,7 @@ struct _GtkIconViewItem
 
   guint selected : 1;
   guint selected_before_rubberbanding : 1;
-};
+} GtkIconViewItem;
 
 struct _GtkIconViewPrivate
 {
