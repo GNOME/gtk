@@ -8815,8 +8815,13 @@ gtk_tree_view_real_select_cursor_parent (GtkTreeView *tree_view)
 static gboolean
 gtk_tree_view_search_entry_flush_timeout (GtkTreeView *tree_view)
 {
+  GDK_THREADS_ENTER ();
+
   gtk_tree_view_search_dialog_hide (tree_view->priv->search_window, tree_view);
   tree_view->priv->typeselect_flush_timeout = 0;
+
+  GDK_THREADS_LEAVE ();
+
   return TRUE;
 }
 

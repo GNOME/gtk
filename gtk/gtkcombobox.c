@@ -2706,8 +2706,12 @@ gtk_combo_box_model_row_changed (GtkTreeModel     *model,
 static gboolean
 list_popup_resize_idle (gpointer user_data)
 {
-  GtkComboBox *combo_box = GTK_COMBO_BOX (user_data);
+  GtkComboBox *combo_box;
   gint x, y, width, height;
+
+  GDK_THREADS_ENTER ();
+
+  combo_box = GTK_COMBO_BOX (user_data);
 
   if (combo_box->priv->tree_view &&
       GTK_WIDGET_MAPPED (combo_box->priv->popup_window))
@@ -2717,6 +2721,8 @@ list_popup_resize_idle (gpointer user_data)
       gtk_widget_set_size_request (combo_box->priv->popup_window, width, height);
       gtk_window_move (GTK_WINDOW (combo_box->priv->popup_window), x, y);
     }
+
+  GDK_THREADS_LEAVE ();
 
   return FALSE;
 }
@@ -4718,12 +4724,18 @@ gtk_cell_editable_key_press (GtkWidget   *widget,
 static gboolean
 popdown_idle (gpointer data)
 {
-  GtkComboBox *combo_box = GTK_COMBO_BOX (data);
+  GtkComboBox *combo_box;
+
+  GDK_THREADS_ENTER ();
+
+  combo_box = GTK_COMBO_BOX (data);
   
   gtk_cell_editable_editing_done (GTK_CELL_EDITABLE (combo_box));
   gtk_cell_editable_remove_widget (GTK_CELL_EDITABLE (combo_box));
 
   g_object_unref (combo_box);
+
+  GDK_THREADS_LEAVE ();
 
   return FALSE;
 }
@@ -4738,7 +4750,11 @@ popdown_handler (GtkWidget *widget,
 static gboolean
 popup_idle (gpointer data)
 {
-  GtkComboBox *combo_box = GTK_COMBO_BOX (data);
+  GtkComboBox *combo_box;
+
+  GDK_THREADS_ENTER ();
+
+  combo_box = GTK_COMBO_BOX (data);
 
   if (GTK_IS_MENU (combo_box->priv->popup_widget) &&
       combo_box->priv->cell_view)
@@ -4750,6 +4766,8 @@ popup_idle (gpointer data)
   combo_box->priv->editing_canceled = TRUE;
   gtk_combo_box_popup (combo_box);
   
+  GDK_THREADS_LEAVE ();
+
   return FALSE;
 }
 

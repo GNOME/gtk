@@ -1,3 +1,21 @@
+2004-08-30  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtktextview.c (gtk_text_view_delete_surrounding_handler): Make it compile.
+
+2004-08-27  Matthias Clasen  <mclasen@redhat.com>
+
+	Fix #151112, Olexiy Avramchenko:
+	
+	* gtk/gtktreeview.c (gtk_tree_view_search_entry_flush_timeout): 
+	* gtk/gtkiconview.c (scroll_timeout, layout_callback) 
+	(gtk_icon_view_item_accessible_idle_do_action): 
+	* gtk/gtkcombobox.c (list_popup_resize_idle, popdown_idle) 
+	(popup_idle): Protect idle callbacks and timeouts with 
+	GDK_THREADS_ENTER/_LEAVE.
+
+	* gtk/gtkfilechooserbutton.c (update_dialog_idle): New function to
+	call update_dialog() from an idle with the necessary protection.
+
 Mon Aug 30 01:34:42 2004  Matthias Clasen  <maclas@gmx.de>
 
 	Changes to make sure input methods respect the editability
@@ -61,6 +79,7 @@ Thu Aug 26 22:44:12 2004  Matthias Clasen  <maclas@gmx.de>
 	* gtk/gtkrange.h (struct _GtkRangeClass): Declare change_value
 	function.
 
+>>>>>>> 1.5765
 2004-08-26  Matthias Clasen  <mclasen@redhat.com>
 
 	* modules/input/Makefile.am: Build imime.la on Windows.

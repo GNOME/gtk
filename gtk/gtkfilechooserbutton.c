@@ -172,6 +172,7 @@ static void     gtk_file_chooser_button_set_dialog         (GObject          *ob
 							    GtkWidget        *dialog);
 
 static gboolean update_dialog                              (gpointer          user_data);
+static gboolean update_dialog_idle                         (gpointer          user_data);
 static void     update_entry                               (GtkFileChooserButton *button);
 
 
@@ -949,6 +950,19 @@ update_dialog (gpointer user_data)
   return FALSE;
 }
 
+static gboolean
+update_dialog_idle (gpointer user_data)
+{
+  gboolean result;
+
+  GDK_THREADS_ENTER ();
+  result = update_dialog (user_data);
+  GDK_THREADS_LEAVE ();
+
+  return result;
+
+}
+
 /* ************************ *
  *  Child-Widget Callbacks  *
  * ************************ */
@@ -1117,5 +1131,5 @@ entry_changed_cb (GtkEditable *chooser_entry,
   /* We do this in an idle handler to avoid totally screwing up chooser_entry's
    * completion */
   if (priv->update_id != 0)
-    priv->update_id = g_idle_add (update_dialog, user_data);
+    priv->update_id = g_idle_add (update_dialog_idle, user_data);
 }

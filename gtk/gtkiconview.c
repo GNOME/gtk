@@ -872,6 +872,8 @@ scroll_timeout (gpointer data)
 {
   GtkIconView *icon_view;
   gdouble value;
+
+  GDK_THREADS_ENTER ();
   
   icon_view = data;
 
@@ -885,6 +887,8 @@ scroll_timeout (gpointer data)
 
   gtk_icon_view_update_rubberband (icon_view);
   
+  GDK_THREADS_LEAVE ();
+
   return TRUE;
 }
 
@@ -1936,12 +1940,16 @@ layout_callback (gpointer user_data)
 {
   GtkIconView *icon_view;
 
+  GDK_THREADS_ENTER ();
+
   icon_view = GTK_ICON_VIEW (user_data);
   
   icon_view->priv->layout_idle_id = 0;
 
   gtk_icon_view_layout (icon_view);
   
+  GDK_THREADS_LEAVE();
+
   return FALSE;
 }
 
@@ -3530,17 +3538,20 @@ gtk_icon_view_item_accessible_idle_do_action (gpointer data)
   GtkIconView *icon_view;
   GtkTreePath *path;
 
+  GDK_THREADS_ENTER ();
+
   item = GTK_ICON_VIEW_ITEM_ACCESSIBLE (data);
   item->action_idle_handler = 0;
 
-  if (item->widget == NULL)
-    return FALSE;
+  if (item->widget != NULL)
+    {
+      icon_view = GTK_ICON_VIEW (item->widget);
+      path = gtk_tree_path_new_from_indices (item->item->index, -1);
+      gtk_icon_view_item_activated (icon_view, path);
+      gtk_tree_path_free (path);
+    }
 
-  icon_view = GTK_ICON_VIEW (item->widget);
-
-  path = gtk_tree_path_new_from_indices (item->item->index, -1);
-  gtk_icon_view_item_activated (icon_view, path);
-  gtk_tree_path_free (path);
+  GDK_THREADS_LEAVE ();
 
   return FALSE;
 }
