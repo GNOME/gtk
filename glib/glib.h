@@ -295,7 +295,8 @@ typedef char   gchar;
 typedef short  gshort;
 typedef long   glong;
 typedef int    gint;
-typedef int    gboolean; /* Josh says. */
+typedef unsigned char gboolean; /* Josh says. */
+			/* #gimp says, and common sense says. Where's Josh? */
 
 typedef unsigned char	guchar;
 typedef unsigned short	gushort;
@@ -751,7 +752,7 @@ void	 g_string_sprintfa  (GString *string,
  */                                                                           
 #define g_array_index(array,index) (array->data)[index]
 
-GArray* g_array_new	     ();
+GArray* g_array_new	     (gboolean zero_terminated);
 void	g_array_free	     (GArray   *array,
 			      gboolean free_seg);
 void    g_array_set_size     (GArray   *array,
