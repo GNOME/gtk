@@ -152,6 +152,7 @@ gtk_combo_box_entry_new (GtkTreeModel *model,
   GTK_COMBO_BOX_ENTRY (ret)->priv->entry = gtk_entry_new ();
   gtk_container_add (GTK_CONTAINER (ret),
                      GTK_COMBO_BOX_ENTRY (ret)->priv->entry);
+  gtk_widget_show (GTK_COMBO_BOX_ENTRY (ret)->priv->entry);
 
   GTK_COMBO_BOX_ENTRY (ret)->priv->text_column = text_column;
   renderer = gtk_cell_renderer_text_new ();

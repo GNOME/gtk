@@ -358,6 +358,7 @@ gtk_combo_box_init (GtkComboBox *combo_box)
 
   combo_box->priv->cell_view = gtk_cell_view_new ();
   gtk_container_add (GTK_CONTAINER (combo_box), combo_box->priv->cell_view);
+  gtk_widget_show (combo_box->priv->cell_view);
 
   combo_box->priv->measurer = gtk_cell_view_new ();
 

@@ -1,3 +1,10 @@
+Tue Sep 30 21:08:43 2003  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtkcombobox.c (gtk_combo_box_init): actually show the child.
+
+	* gtk/gtkcomboboxentry.c (gtk_combo_box_entry_init): ditto. (#123543,
+	Marco Pesenti Gritti).
+
 2003-09-30  Murray Cumming  <murrayc@usa.net>
  
  	* gtk/gtkcellrenderer.h: The render vfunc takes a GdkDrawable*
