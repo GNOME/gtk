@@ -1,3 +1,7 @@
+Sat Dec 13 Jay Painter <jpaint@serv.net>
+	* gtk/gtkvscrollbar.c: added focus flag so vertical scrollbars
+	can get keyboard focus
+
 Fri Dec 12 Owen Taylor <owt1@cornell.edu>
 	* Removed warning when XGetWindowProperty fails - this can
 	  be the desired behavior.
