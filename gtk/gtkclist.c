@@ -4153,7 +4153,7 @@ gtk_clist_realize (GtkWidget *widget)
   gdk_window_set_user_data (clist->title_window, clist);
 
   gtk_style_set_background (widget->style, clist->title_window,
-			    GTK_STATE_SELECTED);
+			    GTK_STATE_NORMAL);
   gdk_window_show (clist->title_window);
 
   /* set things up so column buttons are drawn in title window */

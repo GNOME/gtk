@@ -1,3 +1,9 @@
+Sat Nov  7 16:31:56 1998  Stefan Jeske  <stefan@gtk.org>
+
+	* gtk/gtkclist.c (gtk_clist_realize): Set background of
+	title button window to GTK_STATE_NORMAL instead of
+	GTK_STATE_SELECTED to avoid ugly flicker.
+
 Fri Nov  6 23:29:40 1998  Lars Hamann  <lars@gtk.org>
 
 	* gtk/gtkclist.c (real_clear) (adjust_adjustments): resize clist
