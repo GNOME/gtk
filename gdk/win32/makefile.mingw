@@ -9,7 +9,7 @@ OPTIMIZE = -O
 
 TOP = ../../..
 
-include $(TOP)/build/win32/make.mingw
+include $(TOP)/glib/build/win32/make.mingw
 
 ################################################################
 

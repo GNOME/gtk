@@ -2151,7 +2151,7 @@ gtk_drag_source_handle_event (GtkWidget *widget,
 				  GDK_POINTER_MOTION_HINT_MASK |
 				  GDK_BUTTON_RELEASE_MASK,
 				  NULL,
-				  info->cursor, event->dnd.time);
+				  cursor, event->dnd.time);
 #endif
 		info->cursor = cursor;
 	      }

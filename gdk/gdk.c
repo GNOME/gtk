@@ -219,6 +219,8 @@ gdk_arg_context_parse (GdkArgContext *context, gint *argc, gchar ***argv)
     }
 }
 
+#ifdef G_ENABLE_DEBUG
+
 static void
 gdk_arg_debug_cb (const char *key, const char *value, gpointer user_data)
 {
@@ -234,6 +236,8 @@ gdk_arg_no_debug_cb (const char *key, const char *value, gpointer user_data)
 					    (GDebugKey *) gdk_debug_keys,
 					    gdk_ndebug_keys);
 }
+
+#endif /* G_ENABLE_DEBUG */
 
 static void
 gdk_arg_name_cb (const char *key, const char *value, gpointer user_data)
