@@ -1,3 +1,7 @@
+Fri Sep 10 21:31:00 1999 Pablo Saratxaga <pablo@mandrakesoft.com>
+
+	* po/et.po,configure.in: aded Estonian language file
+
 Fri Sep 10 15:22:50 1999  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkwindow.c (gtk_window_size_allocate): Fix typo
