@@ -1,3 +1,7 @@
+2001-01-11  Havoc Pennington  <hp@redhat.com>
+
+	* gtk/gtktreemodelsimple.h: Oops, broke some macros
+
 2001-01-10  Havoc Pennington  <hp@redhat.com>
 
 	* gtk/gtktreeviewcolumn.c (gtk_tree_view_column_clear_attributes):

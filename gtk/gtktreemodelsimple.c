@@ -122,7 +122,7 @@ gtk_tree_model_simple_new (void)
 {
   GtkTreeModelSimple *retval;
 
-  retval = GTK_TREE_MODEL_SIMPLE (gtk_type_new (GTK_TYPE_MODEL_SIMPLE));
+  retval = GTK_TREE_MODEL_SIMPLE (gtk_type_new (GTK_TYPE_TREE_MODEL_SIMPLE));
 
   return retval;
 }
