@@ -1,5 +1,16 @@
 2004-05-17  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkentrycompletion.c (_gtk_entry_completion_resize_popup):
+	Restrict the width of the popup to be no larger than the
+	monitor.  (#142678, DmD Ljungmark)
+
+	* gtk/gtkbutton.c: Go back to the initial fix for the
+	focus-overdrawing problem, which was actually correct
+	according to docs/widget_geometry.txt.
+
+	* gtk/gtkarrow.c (gtk_arrow_class_init): Bump the initial
+	arrow size from 11 to 15 to compensate for that.
+
 	* gtk/gtkbutton.c (gtk_button_size_request) 
 	(gtk_button_size_allocate, _gtk_button_paint): Allocate
 	space for the focus rectangle only if necessary.  (#142668,
