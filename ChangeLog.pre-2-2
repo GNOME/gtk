@@ -25,8 +25,11 @@ Tue Feb 27 02:29:20 2001  Owen Taylor  <otaylor@redhat.com>
 Tue Feb 27 02:16:14 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkmain.c (gtk_propagate_event): Only do special
-	key handling for grabs on subwidgets, if the key press
-	actually occurs within 
+        special key-press grab handling for widgets within
+        GtkWindows. Otherwise, fall through to normal case.
+
+        This prevents key events being sent twice to GtkInvisible
+        widgets, which can cause all sorts of mischief.
 
 Tue Feb 27 01:29:34 2001  Owen Taylor  <otaylor@redhat.com>
 
