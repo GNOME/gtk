@@ -1,3 +1,8 @@
+Wed Oct 15 22:39:23 2003  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtkcomboboxentry.c (gtk_combo_box_entry_init): it's
+	_set_active, not _set_active_item.
+
 Wed Oct 15 22:31:09 2003  Kristian Rietveld  <kris@gtk.org>
 
 	* gtk/gtkcombobox.h: add padding to the class structure.
