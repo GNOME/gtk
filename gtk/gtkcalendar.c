@@ -599,13 +599,13 @@ gtk_calendar_class_init (GtkCalendarClass *class)
 
 enum
 {
-  TARGET_TEXT,
+  TARGET_TEXT
 };
 
 static const GtkTargetEntry target_table[] = {
   { "TEXT",               0, TARGET_TEXT },
   { "STRING",             0, TARGET_TEXT },
-  { "UTF8_STRING",        0, TARGET_TEXT },
+  { "UTF8_STRING",        0, TARGET_TEXT }
 };
 
 static void

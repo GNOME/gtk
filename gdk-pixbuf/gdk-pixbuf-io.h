@@ -123,7 +123,7 @@ gboolean gdk_pixbuf_set_option  (GdkPixbuf   *pixbuf,
 
 typedef enum /*< skip >*/
 {
-  GDK_PIXBUF_FORMAT_WRITABLE = 1 << 0,
+  GDK_PIXBUF_FORMAT_WRITABLE = 1 << 0
 } GdkPixbufFormatFlags;
 
 struct _GdkPixbufFormat {

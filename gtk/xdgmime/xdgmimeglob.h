@@ -36,7 +36,7 @@ typedef enum
 {
   XDG_GLOB_LITERAL, /* Makefile */
   XDG_GLOB_SIMPLE,  /* *.gif */
-  XDG_GLOB_FULL,    /* x*.[ch] */
+  XDG_GLOB_FULL     /* x*.[ch] */
 } XdgGlobType;
 
   

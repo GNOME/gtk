@@ -49,7 +49,7 @@ enum {
   PROP_USE_UNDERLINE,
   PROP_LABEL_WIDGET,
   PROP_STOCK_ID,
-  PROP_ICON_WIDGET,
+  PROP_ICON_WIDGET
 };
 
 static void gtk_tool_button_init          (GtkToolButton      *button,

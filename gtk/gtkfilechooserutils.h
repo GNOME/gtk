@@ -38,7 +38,7 @@ typedef enum {
   GTK_FILE_CHOOSER_PROP_EXTRA_WIDGET,
   GTK_FILE_CHOOSER_PROP_SELECT_MULTIPLE,
   GTK_FILE_CHOOSER_PROP_SHOW_HIDDEN,
-  GTK_FILE_CHOOSER_PROP_LAST                   = GTK_FILE_CHOOSER_PROP_SHOW_HIDDEN,
+  GTK_FILE_CHOOSER_PROP_LAST                   = GTK_FILE_CHOOSER_PROP_SHOW_HIDDEN
 } GtkFileChooserProp;
 
 void _gtk_file_chooser_install_properties (GObjectClass *klass);

@@ -1,3 +1,8 @@
+Tue Jul 20 22:24:35 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* xdgmimeglob.h: Remove trailing commas from 
+	enumerations. (#148035)
+
 Thu May 27 15:30:07 2004  Jonathan Blandford  <jrb@gnome.org>
 
 	* Sync from upstream
