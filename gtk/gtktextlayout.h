@@ -163,7 +163,7 @@ struct _GtkTextLayout
   /* For what GtkTextDirection to draw cursor GTK_TEXT_DIR_NONE -
    * means draw both cursors.
    */
-  gint cursor_direction : 2;
+  guint cursor_direction : 2;
 
   /* The preedit string and attributes, if any */
 

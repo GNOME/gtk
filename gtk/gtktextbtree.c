@@ -100,7 +100,7 @@ struct _NodeData {
 
   /* Height and width of this node */
   gint height;
-  gint width : 24;
+  signed int width : 24;
 
   /* boolean indicating whether the lines below this node are in need of validation.
    * However, width/height should always represent the current total width and
@@ -108,7 +108,7 @@ struct _NodeData {
    * width/height on the lines needs recomputing, not whether the totals
    * need recomputing.
    */
-  gint valid : 8;
+  guint valid : 8;		/* Actually a boolean */
 };
 
 

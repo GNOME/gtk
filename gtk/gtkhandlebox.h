@@ -67,7 +67,7 @@ struct _GtkHandleBox
   guint		  in_drag : 1;
   guint		  shrink_on_detach : 1;
 
-  gint            snap_edge : 3; /* -1 == unset */
+  signed int      snap_edge : 3; /* -1 == unset */
   
   /* Variables used during a drag
    */
