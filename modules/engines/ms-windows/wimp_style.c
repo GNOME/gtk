@@ -1237,8 +1237,8 @@ draw_extension(GtkStyle *style,
       GtkNotebook *notebook = GTK_NOTEBOOK(widget);
       GtkPositionType pos_type = gtk_notebook_get_tab_pos(notebook);
 
-      if (pos_type == GTK_POS_TOP)
-	height += XP_EDGE_SIZE;
+      if (pos_type == GTK_POS_TOP && state_type == GTK_STATE_NORMAL)
+          height += XP_EDGE_SIZE;
 
 #if 0
 	/* FIXME: pos != TOP to be implemented */
