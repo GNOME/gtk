@@ -26,7 +26,7 @@
 
 #include "config.h"
 
-#include <stdio.h>
+#include <glib/gprintf.h>
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
@@ -531,9 +531,9 @@ gdk_x_error (Display	 *display,
 #ifdef G_ENABLE_DEBUG	  
 	  g_error ("%s", msg);
 #else /* !G_ENABLE_DEBUG */
-	  fprintf (stderr, "%s\n", msg);
+	  g_fprintf (stderr, "%s\n", msg);
 
-	  exit(1);
+	  exit (1);
 #endif /* G_ENABLE_DEBUG */
 	}
       _gdk_error_code = error->error_code;
@@ -572,7 +572,7 @@ gdk_x_io_error (Display *display)
    */
   if (errno == EPIPE)
     {
-      fprintf (stderr,
+      g_fprintf (stderr,
                "The application '%s' lost its connection to the display %s;\n"
                "most likely the X server was shut down or you killed/destroyed\n"
                "the application.\n",
@@ -581,7 +581,7 @@ gdk_x_io_error (Display *display)
     }
   else
     {
-      fprintf (stderr, "%s: Fatal IO error %d (%s) on X server %s.\n",
+      g_fprintf (stderr, "%s: Fatal IO error %d (%s) on X server %s.\n",
                g_get_prgname (),
 	       errno, g_strerror (errno),
 	       display ? DisplayString (display) : gdk_get_display_arg_name ());

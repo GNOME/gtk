@@ -24,7 +24,7 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
-#include <stdio.h>
+#include <glib/gprintf.h>
 #include <stdlib.h>
 
 #include "gdkkeysyms.h"
@@ -1360,7 +1360,7 @@ gdk_keyval_name (guint keyval)
   /* Check for directly encoded 24-bit UCS characters: */
   if ((keyval & 0xff000000) == 0x01000000)
     {
-      sprintf (buf, "U+%.04X", (keyval & 0x00ffffff));
+      g_sprintf (buf, "U+%.04X", (keyval & 0x00ffffff));
       return buf;
     }
 
@@ -1378,7 +1378,7 @@ gdk_keyval_name (guint keyval)
     }
   else if (keyval != 0)
     {
-      sprintf (buf, "%#x", keyval);
+      g_sprintf (buf, "%#x", keyval);
       return buf;
     }
 

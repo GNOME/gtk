@@ -25,9 +25,10 @@
  */
 
 #include <math.h>
-#include <stdio.h>
 #include <string.h>
 #include "gtkvruler.h"
+
+#include <glib/gprintf.h>
 
 
 #define RULER_WIDTH           14
@@ -198,7 +199,7 @@ gtk_vruler_draw_ticks (GtkRuler *ruler)
    *   leaves sufficient room for drawing the ruler.  
    */
   scale = ceil (ruler->max_size / ruler->metric->pixels_per_unit);
-  sprintf (unit_str, "%d", scale);
+  g_snprintf (unit_str, sizeof (unit_str), "%d", scale);
   text_height = strlen (unit_str) * digit_height + 1;
 
   for (scale = 0; scale < MAXIMUM_SCALES; scale++)
@@ -246,7 +247,7 @@ gtk_vruler_draw_ticks (GtkRuler *ruler)
 	  /* draw label */
 	  if (i == 0)
 	    {
-	      sprintf (unit_str, "%d", (int) cur);
+	      g_snprintf (unit_str, sizeof (unit_str), "%d", (int) cur);
 	      
 	      for (j = 0; j < (int) strlen (unit_str); j++)
 		{

@@ -52,6 +52,7 @@
 
 #include "gdkrgb.h"
 #include "gdkscreen.h"
+#include <glib/gprintf.h>
 
 typedef struct _GdkRgbInfo     GdkRgbInfo;
 typedef struct _GdkRgbCmapInfo GdkRgbCmapInfo;
@@ -283,7 +284,7 @@ gdk_rgb_try_colormap (GdkRgbInfo *image_info, gboolean force,
 	{
 	  char tmp_str[80];
 	  
-	  sprintf (tmp_str,
+	  g_snprintf (tmp_str, 80,
 		   "%d %d %d colormap failed (in gdk_colors_alloc)\n",
 		   nr, ng, nb);
 	  return gdk_rgb_cmap_fail (tmp_str, cmap, pixels);
@@ -312,7 +313,7 @@ gdk_rgb_try_colormap (GdkRgbInfo *image_info, gboolean force,
 		{
 		  char tmp_str[80];
 
-		  sprintf (tmp_str, "%d %d %d colormap failed\n",
+		  g_snprintf (tmp_str, 80, "%d %d %d colormap failed\n",
 			   nr, ng, nb);
 		  return gdk_rgb_cmap_fail (tmp_str,
 					    cmap, pixels);

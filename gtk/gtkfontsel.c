@@ -30,7 +30,7 @@
  */
 
 #include <stdlib.h>
-#include <stdio.h>
+#include <glib/gprintf.h>
 #include <string.h>
 
 #include "gdk/gdk.h"
@@ -907,7 +907,7 @@ gtk_font_selection_show_available_sizes (GtkFontSelection *fontsel,
   /* Set the entry to the new size, rounding to 1 digit,
    * trimming of trailing 0's and a trailing period
    */
-  sprintf (buffer, "%.1f", fontsel->size / (1.0 * PANGO_SCALE));
+  g_snprintf (buffer, sizeof (buffer), "%.1f", fontsel->size / (1.0 * PANGO_SCALE));
   if (strchr (buffer, '.'))
     {
       p = buffer + strlen (buffer) - 1;

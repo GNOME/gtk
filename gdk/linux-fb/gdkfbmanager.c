@@ -1,4 +1,5 @@
 #include <glib.h>
+#include <glib/gprintf.h>
 
 #include <sys/types.h>
 #include <sys/socket.h>
@@ -9,7 +10,6 @@
 #include <errno.h>
 #include <unistd.h>
 #include <fcntl.h>
-#include <stdio.h>
 
 #include "gdkfbmanager.h"
 
@@ -33,7 +33,7 @@ int create_master_socket (void)
 
   if (fd < 0) 
     {
-      printf ("Error creating socket: %s\n", strerror(errno));
+      g_fprintf (stderr, "Error creating socket: %s\n", strerror(errno));
       return -1;
     }
 
@@ -44,7 +44,7 @@ int create_master_socket (void)
 
   if (bind(fd, (struct sockaddr *)&addr, sizeof (addr)) < 0)
     {
-      printf ("Unable to bind socket: %s\n", strerror(errno));
+      g_fprintf (stderr, "Unable to bind socket: %s\n", strerror (errno));
       close (fd);
       return -1;
     }
@@ -52,7 +52,7 @@ int create_master_socket (void)
 
   if (listen (fd, 10) < 0)
     {
-      printf ("Unable to listen on socket: %s\n", strerror(errno));
+      g_fprintf (stderr, "Unable to listen on socket: %s\n", strerror (errno));
       close (fd);
       return -1;
     }

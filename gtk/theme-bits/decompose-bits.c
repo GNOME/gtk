@@ -1,5 +1,5 @@
 #include <gdk-pixbuf/gdk-pixbuf.h>
-#include <stdio.h>
+#include <glib/gprintf.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -11,15 +11,15 @@ output_byte (guchar byte,
 {
   if (online == BYTES_PER_OUTPUT_LINE)
     {
-      printf (",\n  ");
+      g_printf (",\n  ");
       online = 0;
     }
   else if (online)
     {
-      printf (",");
+      g_printf (",");
     }
 
-  printf ("0x%02x", byte);
+  g_printf ("0x%02x", byte);
   return online + 1;
 }
 
@@ -46,8 +46,8 @@ do_part (GdkPixbuf  *pixbuf,
   color3 = pixels + part3_index * n_channels;
   pixels += rowstride;
   
-  printf ("static const guchar %s_%s_bits[] = {\n", base_name, part_name);
-  printf ("  ");
+  g_printf ("static const guchar %s_%s_bits[] = {\n", base_name, part_name);
+  g_printf ("  ");
 
   while (height--)
     {
@@ -81,7 +81,7 @@ do_part (GdkPixbuf  *pixbuf,
       pixels += rowstride;
     }
   
-  printf ("};\n");
+  g_printf ("};\n");
 }
 
 typedef enum {
@@ -114,7 +114,7 @@ int main (int argc, char **argv)
 
   if (argc != 3)
     {
-      fprintf (stderr, "%s: Usage: %s FILE BASE\n", progname, progname);
+      g_fprintf (stderr, "%s: Usage: %s FILE BASE\n", progname, progname);
       exit (1);
     }
 
@@ -123,23 +123,23 @@ int main (int argc, char **argv)
   pixbuf = gdk_pixbuf_new_from_file (argv[1], &error);
   if (!pixbuf)
     {
-      fprintf (stderr, "%s: cannot open file '%s': %s\n", progname, argv[1], error->message);
+      g_fprintf (stderr, "%s: cannot open file '%s': %s\n", progname, argv[1], error->message);
       exit (1);
     }
   
   if (gdk_pixbuf_get_width (pixbuf) < PART_LAST)
     {
-      fprintf (stderr, "%s: source image must be at least %d pixels wide\n", progname, PART_LAST);
+      g_fprintf (stderr, "%s: source image must be at least %d pixels wide\n", progname, PART_LAST);
       exit (1);
     }
 
   if (gdk_pixbuf_get_height (pixbuf) < 1)
     {
-      fprintf (stderr, "%s: source image must be at least 1 pixel height\n", progname);
+      g_fprintf (stderr, "%s: source image must be at least 1 pixel height\n", progname);
       exit (1);
     }
 
-  printf ("/*\n * Extracted from %s, width=%d, height=%d\n */\n", argv[1],
+  g_printf ("/*\n * Extracted from %s, width=%d, height=%d\n */\n", argv[1],
 	  gdk_pixbuf_get_width (pixbuf), gdk_pixbuf_get_height (pixbuf) - 1);
 
   for (i = 0; i < PART_LAST; i++)

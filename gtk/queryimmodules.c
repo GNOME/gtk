@@ -22,6 +22,7 @@
 #include "config.h"
 
 #include <glib.h>
+#include <glib/gprintf.h>
 #include <gmodule.h>
 
 #include <errno.h>
@@ -29,7 +30,6 @@
 #ifdef HAVE_UNISTD_H
 #include <unistd.h>
 #endif
-#include <stdio.h>
 
 #ifdef G_OS_WIN32
 #define SOEXT ".dll"
@@ -73,7 +73,7 @@ static void
 print_escaped (const char *str)
 {
   char *tmp = escape_string (str);
-  printf ("\"%s\" ", tmp);
+  g_printf ("\"%s\" ", tmp);
   g_free (tmp);
 }
 
@@ -99,7 +99,7 @@ query_module (const char *dir, const char *name)
 
   if (!module)
     {
-      fprintf(stderr, "Cannot load module %s: %s\n", path, g_module_error());
+      g_fprintf (stderr, "Cannot load module %s: %s\n", path, g_module_error());
       error = TRUE;
     }
 	  
@@ -131,8 +131,8 @@ query_module (const char *dir, const char *name)
     }
   else
     {
-      fprintf (stderr, "%s does not export GTK+ IM module API: %s\n", path,
-	       g_module_error());
+      g_fprintf (stderr, "%s does not export GTK+ IM module API: %s\n", path,
+		 g_module_error ());
       error = TRUE;
     }
 
@@ -150,7 +150,7 @@ int main (int argc, char **argv)
   char *path;
   gboolean error = FALSE;
 
-  printf ("# GTK+ Input Method Modules file\n"
+  g_printf ("# GTK+ Input Method Modules file\n"
 	  "# Automatically generated file, do not edit\n"
 	  "#\n");
 
@@ -161,7 +161,7 @@ int main (int argc, char **argv)
 
       path = gtk_rc_get_im_module_path ();
 
-      printf ("# ModulesPath = %s\n#\n", path);
+      g_printf ("# ModulesPath = %s\n#\n", path);
 
       dirs = pango_split_file_list (path);
 

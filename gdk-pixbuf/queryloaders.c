@@ -25,6 +25,7 @@
 #include <config.h>
 
 #include <glib.h>
+#include <glib/gprintf.h>
 #include <gmodule.h>
 
 #include <errno.h>
@@ -32,7 +33,6 @@
 #ifdef HAVE_UNISTD_H
 #include <unistd.h>
 #endif
-#include <stdio.h>
 
 #include "gdk-pixbuf/gdk-pixbuf.h"
 #include "gdk-pixbuf/gdk-pixbuf-private.h"
@@ -49,7 +49,7 @@ static void
 print_escaped (const char *str)
 {
 	gchar *tmp = g_strescape (str, "");
-	printf ("\"%s\" ", tmp);
+	g_printf ("\"%s\" ", tmp);
 	g_free (tmp);
 }
 
@@ -78,30 +78,30 @@ query_module (const char *dir, const char *file)
 	    g_module_symbol (module, "fill_info", (gpointer *) &fill_info) &&
 	    g_module_symbol (module, "fill_vtable", (gpointer *) &fill_vtable)) {
 		GdkPixbufFormat *info;
-		printf("\"%s\"\n", path);
+		g_printf("\"%s\"\n", path);
 		info = g_new0 (GdkPixbufFormat, 1);
 		(*fill_info) (info);
-		printf("\"%s\" %d \"%s\" \"%s\"\n", 
+		g_printf ("\"%s\" %d \"%s\" \"%s\"\n", 
 		       info->name, info->flags, 
 		       info->domain ? info->domain : GETTEXT_PACKAGE, info->description);
 		for (mime = info->mime_types; *mime; mime++) {
-			printf("\"%s\" ", *mime);
+			g_printf ("\"%s\" ", *mime);
 		}
-		printf("\"\"\n");
+		g_printf ("\"\"\n");
 		for (ext = info->extensions; *ext; ext++) {
-			printf("\"%s\" ", *ext);
+			g_printf ("\"%s\" ", *ext);
 		}
-		printf("\"\"\n");
+		g_printf ("\"\"\n");
 		for (pattern = info->signature; pattern->prefix; pattern++) {
 			print_escaped (pattern->prefix);
 			print_escaped (pattern->mask ? (const char *)pattern->mask : "");
-			printf ("%d\n", pattern->relevance);
+			g_printf ("%d\n", pattern->relevance);
 		}
-		printf ("\n");
+		g_printf ("\n");
 		g_free (info);
 	}
 	else {
-		fprintf (stderr, "Cannot load loader %s\n", path);
+		g_fprintf (stderr, "Cannot load loader %s\n", path);
 	}
 	if (module)
 		g_module_close (module);
@@ -112,7 +112,7 @@ int main (int argc, char **argv)
 {
 	gint i;
 
-	printf ("# GdkPixbuf Image Loader Modules file\n"
+	g_printf ("# GdkPixbuf Image Loader Modules file\n"
 		"# Automatically generated file, do not edit\n"
 		"#\n");
   
@@ -125,7 +125,7 @@ int main (int argc, char **argv)
 		if (path == NULL || *path == '\0')
 			path = PIXBUF_LIBDIR;
 
-		printf ("# LoaderDir = %s\n#\n", path);
+		g_printf ("# LoaderDir = %s\n#\n", path);
 
 		dir = g_dir_open (path, 0, NULL);
 		if (dir) {
@@ -141,7 +141,7 @@ int main (int argc, char **argv)
 			g_dir_close (dir);
 		}
 #else
-		printf ("# dynamic loading of modules not supported\n");
+		g_printf ("# dynamic loading of modules not supported\n");
 #endif
 	}
 	else {

@@ -25,7 +25,7 @@
  */
 
 #include <math.h>
-#include <stdio.h>
+#include <glib/gprintf.h>
 #include <string.h>
 #include "gtkhruler.h"
 
@@ -201,7 +201,7 @@ gtk_hruler_draw_ticks (GtkRuler *ruler)
    *  for the scale looks consistent with an accompanying vruler
    */
   scale = ceil (ruler->max_size / ruler->metric->pixels_per_unit);
-  sprintf (unit_str, "%d", scale);
+  g_snprintf (unit_str, sizeof (unit_str), "%d", scale);
   text_width = strlen (unit_str) * digit_height + 1;
 
   for (scale = 0; scale < MAXIMUM_SCALES; scale++)
@@ -250,7 +250,7 @@ gtk_hruler_draw_ticks (GtkRuler *ruler)
 	  /* draw label */
 	  if (i == 0)
 	    {
-	      sprintf (unit_str, "%d", (int) cur);
+	      g_snprintf (unit_str, sizeof (unit_str), "%d", (int) cur);
 	      
 	      pango_layout_set_text (layout, unit_str, -1);
 	      pango_layout_get_extents (layout, &logical_rect, NULL);

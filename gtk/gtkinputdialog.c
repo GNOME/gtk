@@ -32,7 +32,7 @@
  */
 
 
-#include <stdio.h>
+#include <glib/gprintf.h>
 #include <stdlib.h>
 #include "gdk/gdkkeysyms.h"
 #include "gtkbutton.h"
@@ -602,7 +602,7 @@ gtk_input_dialog_fill_axes(GtkInputDialog *inputd, GdkDevice *info)
 	    menu_item = gtk_menu_item_new_with_label (_("none"));
 	  else
 	    {
-	      sprintf (buffer,"%d",j+1);
+	      g_snprintf (buffer, sizeof (buffer), "%d", j+1);
 	      menu_item = gtk_menu_item_new_with_label (buffer);
 	    }
 	  g_signal_connect (menu_item, "activate",
@@ -731,7 +731,7 @@ gtk_input_dialog_fill_keys(GtkInputDialog *inputd, GdkDevice *info)
 
       /* create the label */
 
-      sprintf (buffer, "%d", i+1);
+      g_snprintf (buffer, sizeof (buffer), "%d", i+1);
       label = gtk_label_new (buffer);
       gtk_table_attach (GTK_TABLE (inputd->keys_list), label, 0, 1, i, i+1, 
 			0, 0, 2, 2);

@@ -24,7 +24,7 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
-#include <stdio.h>
+#include <glib/gprintf.h>
 #include <math.h>
 #include <string.h>
 #include "gtkprogress.h" 
@@ -429,11 +429,11 @@ gtk_progress_build_string (GtkProgress *progress,
 	    case 'P':
 	      if (digits)
 		{
-		  sprintf (fmt, "%%.%df", digits);
-		  sprintf (tmp, fmt, 100 * percentage);
+		  g_snprintf (fmt, sizeof (fmt), "%%.%df", digits);
+		  g_snprintf (tmp, sizeof (tmp), fmt, 100 * percentage);
 		}
 	      else
-		sprintf (tmp, "%.0f", 100 * percentage);
+		g_snprintf (tmp, sizeof (tmp), "%.0f", 100 * percentage);
 	      strcat (buf, tmp);
 	      dest = &(buf[strlen (buf)]);
 	      src++;
@@ -442,11 +442,11 @@ gtk_progress_build_string (GtkProgress *progress,
 	    case 'V':
 	      if (digits)
 		{
-		  sprintf (fmt, "%%.%df", digits);
-		  sprintf (tmp, fmt, value);
+		  g_snprintf (fmt, sizeof (fmt), "%%.%df", digits);
+		  g_snprintf (tmp, sizeof (tmp), fmt, value);
 		}
 	      else
-		sprintf (tmp, "%.0f", value);
+		g_snprintf (tmp, sizeof (tmp), "%.0f", value);
 	      strcat (buf, tmp);
 	      dest = &(buf[strlen (buf)]);
 	      src++;
@@ -455,11 +455,11 @@ gtk_progress_build_string (GtkProgress *progress,
 	    case 'L':
 	      if (digits)
 		{
-		  sprintf (fmt, "%%.%df", digits);
-		  sprintf (tmp, fmt, progress->adjustment->lower);
+		  g_snprintf (fmt, sizeof (fmt), "%%.%df", digits);
+		  g_snprintf (tmp, sizeof (tmp), fmt, progress->adjustment->lower);
 		}
 	      else
-		sprintf (tmp, "%.0f", progress->adjustment->lower);
+		g_snprintf (tmp, sizeof (tmp), "%.0f", progress->adjustment->lower);
 	      strcat (buf, tmp);
 	      dest = &(buf[strlen (buf)]);
 	      src++;
@@ -468,11 +468,11 @@ gtk_progress_build_string (GtkProgress *progress,
 	    case 'U':
 	      if (digits)
 		{
-		  sprintf (fmt, "%%.%df", digits);
-		  sprintf (tmp, fmt, progress->adjustment->upper);
+		  g_snprintf (fmt, sizeof (fmt), "%%.%df", digits);
+		  g_snprintf (tmp, sizeof (tmp), fmt, progress->adjustment->upper);
 		}
 	      else
-		sprintf (tmp, "%.0f", progress->adjustment->upper);
+		g_snprintf (tmp, sizeof (tmp), "%.0f", progress->adjustment->upper);
 	      strcat (buf, tmp);
 	      dest = &(buf[strlen (buf)]);
 	      src++;

@@ -21,7 +21,7 @@
 #include "../gtk/gtkversion.h"	/* versioning */
 #include "gdk-pixbuf.h"
 #include "gdk-pixdata.h"
-#include <stdio.h>
+#include <glib/gprintf.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -64,7 +64,7 @@ print_csource (FILE *f_out,
 				    gen_type | gen_ctype |
 				    (with_decoder ? GDK_PIXDATA_DUMP_RLE_DECODER : 0));
 
-  fprintf (f_out, "%s\n", gstring->str);
+  g_fprintf (f_out, "%s\n", gstring->str);
 
   g_free (free_me);
 }
@@ -93,7 +93,7 @@ main (int   argc,
       pixbuf = gdk_pixbuf_new_from_file (argv[1], &error);
       if (!pixbuf)
 	{
-	  fprintf (stderr, "failed to load \"%s\": %s\n",
+	  g_fprintf (stderr, "failed to load \"%s\": %s\n",
 		   argv[1],
 		   error->message);
 	  g_error_free (error);
@@ -118,7 +118,7 @@ main (int   argc,
 	      pixbuf = gdk_pixbuf_new_from_file (*p, &error);
 	      if (!pixbuf)
 		{
-		  fprintf (stderr, "failed to load \"%s\": %s\n",
+		  g_fprintf (stderr, "failed to load \"%s\": %s\n",
 			   *p,
 			   error->message);
 		  g_error_free (error);
@@ -255,32 +255,32 @@ print_blurb (FILE    *bout,
 {
   if (!print_help)
     {
-      fprintf (bout, "%s version ", PRG_NAME);
-      fprintf (bout, "%u.%u.%u", GTK_MAJOR_VERSION, GTK_MINOR_VERSION, GTK_MICRO_VERSION);
-      fprintf (bout, "\n");
-      fprintf (bout, "%s comes with ABSOLUTELY NO WARRANTY.\n", PRG_NAME);
-      fprintf (bout, "You may redistribute copies of %s under the terms of\n", PRG_NAME);
-      fprintf (bout, "the GNU Lesser General Public License which can be found in the\n");
-      fprintf (bout, "%s source package. Sources, examples and contact\n", PKG_NAME);
-      fprintf (bout, "information are available at %s\n", PKG_HTTP_HOME);
+      g_fprintf (bout, "%s version ", PRG_NAME);
+      g_fprintf (bout, "%u.%u.%u", GTK_MAJOR_VERSION, GTK_MINOR_VERSION, GTK_MICRO_VERSION);
+      g_fprintf (bout, "\n");
+      g_fprintf (bout, "%s comes with ABSOLUTELY NO WARRANTY.\n", PRG_NAME);
+      g_fprintf (bout, "You may redistribute copies of %s under the terms of\n", PRG_NAME);
+      g_fprintf (bout, "the GNU Lesser General Public License which can be found in the\n");
+      g_fprintf (bout, "%s source package. Sources, examples and contact\n", PKG_NAME);
+      g_fprintf (bout, "information are available at %s\n", PKG_HTTP_HOME);
     }
   else
     {
-      fprintf (bout, "Usage: %s [options] [image]\n", PRG_NAME);
-      fprintf (bout, "       %s [options] --build-list [[name image]...]\n", PRG_NAME);
-      fprintf (bout, "  --stream                   generate pixbuf data stream\n");
-      fprintf (bout, "  --struct                   generate GdkPixdata structure\n");
-      fprintf (bout, "  --macros                   generate image size/pixel macros\n");
-      fprintf (bout, "  --rle                      use one byte run-length-encoding\n");
-      fprintf (bout, "  --raw                      provide raw image data copy\n");
-      fprintf (bout, "  --extern                   generate extern symbols\n");
-      fprintf (bout, "  --static                   generate static symbols\n");
-      fprintf (bout, "  --decoder                  provide rle decoder\n");
-      fprintf (bout, "  --name=identifier          C macro/variable name\n");
-      fprintf (bout, "  --build-list               parse (name, image) pairs\n");
-      fprintf (bout, "  -h, --help                 show this help message\n");
-      fprintf (bout, "  -v, --version              print version informations\n");
-      fprintf (bout, "  --g-fatal-warnings         make warnings fatal (abort)\n");
+      g_fprintf (bout, "Usage: %s [options] [image]\n", PRG_NAME);
+      g_fprintf (bout, "       %s [options] --build-list [[name image]...]\n", PRG_NAME);
+      g_fprintf (bout, "  --stream                   generate pixbuf data stream\n");
+      g_fprintf (bout, "  --struct                   generate GdkPixdata structure\n");
+      g_fprintf (bout, "  --macros                   generate image size/pixel macros\n");
+      g_fprintf (bout, "  --rle                      use one byte run-length-encoding\n");
+      g_fprintf (bout, "  --raw                      provide raw image data copy\n");
+      g_fprintf (bout, "  --extern                   generate extern symbols\n");
+      g_fprintf (bout, "  --static                   generate static symbols\n");
+      g_fprintf (bout, "  --decoder                  provide rle decoder\n");
+      g_fprintf (bout, "  --name=identifier          C macro/variable name\n");
+      g_fprintf (bout, "  --build-list               parse (name, image) pairs\n");
+      g_fprintf (bout, "  -h, --help                 show this help message\n");
+      g_fprintf (bout, "  -v, --version              print version informations\n");
+      g_fprintf (bout, "  --g-fatal-warnings         make warnings fatal (abort)\n");
     }
 }
 

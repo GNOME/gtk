@@ -1,5 +1,27 @@
 2002-12-15  Matthias Clasen  <maclas@gmx.de>
 
+	* gtk/gtkcalendar.c:
+	* gtk/gtkfilesel.c:
+	* gtk/gtkfontsel.c:
+	* gtk/gtkhruler.c:
+	* gtk/gtkinputdialog.c:
+	* gtk/gtkprogress.c:
+	* gtk/gtktreemodel.c:
+	* gtk/gtkvruler.c:
+	* gtk/queryimmodules.c:
+	* gtk/theme-bits/decompose-bits.c:
+	* gdk-pixbuf/gdk-pixbuf-csource.c:
+	* gdk-pixbuf/make-inline-pixbuf.c:
+	* gdk-pixbuf/queryloaders.c:
+	* gdk/gdkkeynames.c:
+	* gdk/gdkrgb.c:
+	* gdk/linux-fb/gdkfbmanager.c:
+	* gdk/win32/gdkevents-win32.c:
+	* gdk/win32/gdkmain-win32.c:
+	* gdk/win32/gdkproperty-win32.c:
+	* gdk/x11/gdkmain-x11.c: Use g_printf instead of system 
+	printf.  (#99327)  
+
 	* gtk/gtkcontainer.c (gtk_container_class_install_child_property): 
 	(gtk_container_child_get_valist): 
 	(gtk_container_child_get_property): 

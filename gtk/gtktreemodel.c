@@ -18,9 +18,9 @@
  */
 
 #include <stdlib.h>
-#include <stdio.h>
 #include <string.h>
 #include <glib.h>
+#include <glib/gprintf.h>
 #include <gobject/gvaluecollector.h>
 #include "gtktreemodel.h"
 #include "gtktreeview.h"
@@ -274,13 +274,13 @@ gtk_tree_path_to_string (GtkTreePath *path)
     return NULL;
 
   ptr = retval = (gchar *) g_new0 (char *, path->depth*8);
-  sprintf (retval, "%d", path->indices[0]);
+  g_sprintf (retval, "%d", path->indices[0]);
   while (*ptr != '\000')
     ptr++;
 
   for (i = 1; i < path->depth; i++)
     {
-      sprintf (ptr, ":%d", path->indices[i]);
+      g_sprintf (ptr, ":%d", path->indices[i]);
       while (*ptr != '\000')
 	ptr++;
     }

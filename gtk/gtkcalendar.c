@@ -37,7 +37,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <time.h>
-#include <stdio.h>
+#include <glib/gprintf.h>
 
 #include "gtkcalendar.h"
 #include "gtkmarshalers.h"
@@ -1211,7 +1211,7 @@ gtk_calendar_size_request (GtkWidget	  *widget,
       private_data->max_year_width = 0;
       for (i=0; i<10; i++)
 	{
-	  sprintf (buffer, "%d%d%d%d", i,i,i,i);
+	  g_snprintf (buffer, sizeof (buffer), "%d%d%d%d", i,i,i,i);
 	  pango_layout_set_text (layout, buffer, -1);	  
 	  pango_layout_get_pixel_extents (layout, NULL, &logical_rect);
 	  private_data->max_year_width = MAX (private_data->max_year_width,
@@ -1243,7 +1243,7 @@ gtk_calendar_size_request (GtkWidget	  *widget,
 
   for (i = 0; i < 9; i++)
     {
-      sprintf (buffer, "%d%d", i, i);
+      g_snprintf (buffer, sizeof (buffer), "%d%d", i, i);
       pango_layout_set_text (layout, buffer, -1);	  
       pango_layout_get_pixel_extents (layout, NULL, &logical_rect);
       private_data->min_day_width = MAX (private_data->min_day_width,
@@ -1274,7 +1274,7 @@ gtk_calendar_size_request (GtkWidget	  *widget,
   if (calendar->display_flags & GTK_CALENDAR_SHOW_WEEK_NUMBERS)
     for (i = 0; i < 9; i++)
       {
-	sprintf (buffer, "%d%d", i, i);
+	g_snprintf (buffer, sizeof (buffer), "%d%d", i, i);
 	pango_layout_set_text (layout, buffer, -1);	  
 	pango_layout_get_pixel_extents (layout, NULL, &logical_rect);
 	private_data->max_week_char_width = MAX (private_data->max_week_char_width,
@@ -1496,7 +1496,7 @@ gtk_calendar_paint_header (GtkWidget *widget)
 		    0, 0, header_width, private_data->header_h);
   
   
-  sprintf (buffer, "%d", calendar->year);
+  g_snprintf (buffer, sizeof (buffer), "%d", calendar->year);
   layout = gtk_widget_create_pango_layout (widget, buffer);
   pango_layout_get_pixel_extents (layout, NULL, &logical_rect);
   
@@ -1517,7 +1517,7 @@ gtk_calendar_paint_header (GtkWidget *widget)
   gdk_draw_layout (private_data->header_win, gc, x, y, layout);
   
   /* Draw month */
-  sprintf (buffer, "%s", default_monthname[calendar->month]);
+  g_snprintf (buffer, sizeof (buffer), "%s", default_monthname[calendar->month]);
   pango_layout_set_text (layout, buffer, -1);
   pango_layout_get_pixel_extents (layout, NULL, &logical_rect);
 
@@ -1617,7 +1617,7 @@ gtk_calendar_paint_day_names (GtkWidget *widget)
 	day = i;
       if (calendar->display_flags & GTK_CALENDAR_WEEK_START_MONDAY)
 	day= (day+1)%7;
-      sprintf (buffer, "%s", default_abbreviated_dayname[day]);
+      g_snprintf (buffer, sizeof (buffer), "%s", default_abbreviated_dayname[day]);
 
       pango_layout_set_text (layout, buffer, -1);
       pango_layout_get_pixel_extents (layout, NULL, &logical_rect);
@@ -1714,7 +1714,7 @@ gtk_calendar_paint_week_numbers (GtkWidget *widget)
 				      ((calendar->day[row][6] < 15 && row > 3 ? 1 : 0)
 				       + calendar->month) % 12 + 1, calendar->day[row][6]));
 
-      sprintf (buffer, "%d", week);
+      g_snprintf (buffer, sizeof (buffer), "%d", week);
       pango_layout_set_text (layout, buffer, -1);
       pango_layout_get_pixel_extents (layout, NULL, &logical_rect);
 
@@ -1850,7 +1850,7 @@ gtk_calendar_paint_day (GtkWidget *widget,
     }
     
 
-  sprintf (buffer, "%d", day);
+  g_snprintf (buffer, sizeof (buffer), "%d", day);
   layout = gtk_widget_create_pango_layout (widget, buffer);
   pango_layout_get_pixel_extents (layout, NULL, &logical_rect);
   

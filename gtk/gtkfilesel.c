@@ -803,7 +803,7 @@ gtk_file_selection_init (GtkFileSelection *filesel)
     {
       gchar err_buf[256];
 
-      sprintf (err_buf, _("Folder unreadable: %s"), cmpl_strerror (cmpl_errno));
+      g_snprintf (err_buf, sizeof (err_buf), _("Folder unreadable: %s"), cmpl_strerror (cmpl_errno));
 
       gtk_label_set_text (GTK_LABEL (filesel->selection_text), err_buf);
     }
@@ -2023,7 +2023,7 @@ win32_gtk_add_drives_to_dir_list (GtkListStore *model)
       if ((tolower (textPtr[0]) != 'a') && (tolower (textPtr[0]) != 'b'))
 	{
 	  /* Build the actual displayable string */
-	  sprintf (formatBuffer, "%c:\\", toupper (textPtr[0]));
+	  g_snprintf (formatBuffer, sizeof (formatBuffer), "%c:\\", toupper (textPtr[0]));
 
 	  /* Add to the list */
 	  gtk_list_store_append (model, &iter);
@@ -2201,7 +2201,7 @@ gtk_file_selection_abort (GtkFileSelection *fs)
 {
   gchar err_buf[256];
 
-  sprintf (err_buf, _("Folder unreadable: %s"), cmpl_strerror (cmpl_errno));
+  g_snprintf (err_buf, sizeof (err_buf), _("Folder unreadable: %s"), cmpl_strerror (cmpl_errno));
 
   /*  BEEP gdk_beep();  */
 
@@ -2835,7 +2835,7 @@ open_ref_dir (gchar           *text_to_complete,
   if (text_to_complete[0] == '/' && text_to_complete[1] == '/')
     {
       char root_dir[5];
-      sprintf (root_dir, "//%c", text_to_complete[2]);
+      g_snprintf (root_dir, sizeof (root_dir), "//%c", text_to_complete[2]);
 
       new_dir = open_dir (root_dir, cmpl_state);
 

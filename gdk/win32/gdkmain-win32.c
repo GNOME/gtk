@@ -27,7 +27,7 @@
 
 #include "config.h"
 
-#include <stdio.h>
+#include <glib/gprintf.h>
 #include <stdlib.h>
 #include <string.h>
 #include <limits.h>
@@ -294,7 +294,7 @@ _gdk_win32_print_paletteentries (const PALETTEENTRY *pep,
 	      (pep[i].peFlags == PC_EXPLICIT ? " PC_EXPLICIT" :
 	       (pep[i].peFlags == PC_NOCOLLAPSE ? " PC_NOCOLLAPSE" :
 		(pep[i].peFlags == PC_RESERVED ? " PC_RESERVED" :
-		 (sprintf (buf, " %d", pep[i].peFlags), buf))))));
+		 (g_sprintf (buf, " %d", pep[i].peFlags), buf))))));
 }
 
 void
@@ -497,7 +497,7 @@ _gdk_win32_gcvalues_mask_to_string (GdkGCValuesMask mask)
 
 #define BIT(x) 						\
   if (mask & GDK_GC_##x) 				\
-    (bufp += sprintf (bufp, "%s" #x, s), s = "|")
+    (bufp += g_sprintf (bufp, "%s" #x, s), s = "|")
 
   BIT (FOREGROUND);
   BIT (BACKGROUND);

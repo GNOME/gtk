@@ -27,7 +27,7 @@
 
 #include <string.h>
 #include <stdlib.h>
-#include <stdio.h>
+#include <glib/gprintf.h>
 
 #include "gdkscreen.h"
 #include "gdkproperty.h"
@@ -359,7 +359,7 @@ gdk_property_change (GdkWindow    *window,
 		  rtf = g_string_append (rtf, "\\uNNNNN ");
 		  rtf->len -= 6; /* five digits and a space */
 		  q = rtf->str + rtf->len;
-		  n = sprintf (q, "%d ", g_utf8_get_char (p));
+		  n = g_sprintf (q, "%d ", g_utf8_get_char (p));
 		  g_assert (n <= 6);
 		  rtf->len += n;
 		  

@@ -36,7 +36,7 @@
 /* Do use SetCapture, it works now. Thanks to jpe@archaeopteryx.com */
 #define USE_SETCAPTURE 1
 
-#include <stdio.h>
+#include <glib/gprintf.h>
 
 #include "gdk.h"
 #include "gdkprivate-win32.h"
@@ -318,7 +318,7 @@ _gdk_events_init (void)
       while (latin_locale == NULL && i < G_N_ELEMENTS (latin_languages))
 	{
 	  char id[9];
-	  sprintf (id, "%08x", MAKELANGID (latin_languages[i++], SUBLANG_DEFAULT));
+	  g_sprintf (id, "%08x", MAKELANGID (latin_languages[i++], SUBLANG_DEFAULT));
 	  latin_locale = LoadKeyboardLayout (id, KLF_NOTELLSHELL|KLF_SUBSTITUTE_OK);
 	}
     }
@@ -451,7 +451,7 @@ event_mask_string (GdkEventMask mask)
   *p = '\0';
 #define BIT(x) \
   if (mask & GDK_##x##_MASK) \
-    p += sprintf (p, "%s" #x, (p > bfr ? " " : ""))
+    p += g_sprintf (p, "%s" #x, (p > bfr ? " " : ""))
   BIT (EXPOSURE);
   BIT (POINTER_MOTION);
   BIT (POINTER_MOTION_HINT);
@@ -1613,14 +1613,14 @@ decode_key_lparam (LPARAM lParam)
   char *p = buf;
 
   if (HIWORD (lParam) & KF_UP)
-    p += sprintf (p, "KF_UP ");
+    p += g_sprintf (p, "KF_UP ");
   if (HIWORD (lParam) & KF_REPEAT)
-    p += sprintf (p, "KF_REPEAT ");
+    p += g_sprintf (p, "KF_REPEAT ");
   if (HIWORD (lParam) & KF_ALTDOWN)
-    p += sprintf (p, "KF_ALTDOWN ");
+    p += g_sprintf (p, "KF_ALTDOWN ");
   if (HIWORD (lParam) & KF_EXTENDED)
-    p += sprintf (p, "KF_EXTENDED ");
-  p += sprintf (p, "sc:%d rep:%d", LOBYTE (HIWORD (lParam)), LOWORD (lParam));
+    p += g_sprintf (p, "KF_EXTENDED ");
+  p += g_sprintf (p, "sc:%d rep:%d", LOBYTE (HIWORD (lParam)), LOWORD (lParam));
 
   return buf;
 }

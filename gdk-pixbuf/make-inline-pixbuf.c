@@ -22,7 +22,7 @@
 
 #include <config.h>
 #include "gdk-pixbuf-private.h"
-#include <stdio.h>
+#include <glib/gprintf.h>
 #include <errno.h>
 #include <string.h>
 #include <stdlib.h>
@@ -38,7 +38,7 @@ output_int (FILE *outfile, guint32 num, const char *comment)
   bytes[2] = num >> 8;
   bytes[3] = num;
 
-  fprintf(outfile, "  /* %s (%u) */\n  0x%.2x, 0x%.2x, 0x%.2x, 0x%.2x,\n",
+  g_fprintf (outfile, "  /* %s (%u) */\n  0x%.2x, 0x%.2x, 0x%.2x, 0x%.2x,\n",
           comment, num,
           bytes[0], bytes[1], bytes[2], bytes[3]);  
 }
@@ -46,7 +46,7 @@ output_int (FILE *outfile, guint32 num, const char *comment)
 void
 output_bool (FILE *outfile, gboolean val, const char *comment)
 {
-  fprintf(outfile, "  /* %s (%s) */\n  0x%.2x,\n",
+  g_fprintf (outfile, "  /* %s (%s) */\n  0x%.2x,\n",
           comment,
           val ? "TRUE" : "FALSE",
           val ? 1 : 0);
@@ -67,7 +67,7 @@ output_pixbuf (FILE *outfile, gboolean ext_symbols,
   if (ext_symbols)
     modifier = "";
   
-  fprintf (outfile, "%sconst guchar ", modifier);
+  g_fprintf (outfile, "%sconst guchar ", modifier);
   fputs (varname, outfile);
   fputs ("[] =\n", outfile);
   fputs ("{\n", outfile);
@@ -117,9 +117,9 @@ output_pixbuf (FILE *outfile, gboolean ext_symbols,
 
       
       if (has_alpha)
-        fprintf(outfile, "  0x%.2x, 0x%.2x, 0x%.2x, 0x%.2x", r, g, b, a);
+        g_fprintf (outfile, "  0x%.2x, 0x%.2x, 0x%.2x, 0x%.2x", r, g, b, a);
       else
-        fprintf(outfile, "  0x%.2x, 0x%.2x, 0x%.2x", r, g, b);
+        g_fprintf (outfile, "  0x%.2x, 0x%.2x, 0x%.2x", r, g, b);
 
       if (p != end)
         fputs (",", outfile);
@@ -141,7 +141,7 @@ output_pixbuf (FILE *outfile, gboolean ext_symbols,
 void
 usage (void)
 {
-  fprintf (stderr, "Usage: make-inline-pixbuf [--extern-symbols] OUTFILE varname1 imagefile1 varname2 imagefile2 ...\n");
+  g_fprintf (stderr, "Usage: make-inline-pixbuf [--extern-symbols] OUTFILE varname1 imagefile1 varname2 imagefile2 ...\n");
   exit (1);
 }
 
@@ -171,7 +171,7 @@ main (int argc, char **argv)
   outfile = fopen (argv[i], "w");
   if (outfile == NULL)
     {
-      fprintf (stderr, "Failed to open output file `%s': %s\n",
+      g_fprintf (stderr, "Failed to open output file `%s': %s\n",
                argv[i], strerror (errno));
       exit (1);
     }
@@ -199,7 +199,7 @@ main (int argc, char **argv)
 
       if (pixbuf == NULL)
         {
-          fprintf (stderr, "%s\n", error->message);
+          g_fprintf (stderr, "%s\n", error->message);
           fclose (outfile);
           remove (outfilename);
           exit (1);
