@@ -1,3 +1,8 @@
+Wed Dec 3 1997 Jay Painter <jpaint@serv.net>
+	* gtk/gtkoptionmenu.c: fixed a old bug where if you set a new 
+	menu for a optionmenu the widget would not get positioned correctly
+	inside of the optionmenu.
+
 Tue Dec 1 1997 Owen Taylor <owt1@cornell.edu>
 	* glib/glib.h, glib/configure.in. Disabled gldouble, since
 	it wasn't used anywhere and caused portability problems

@@ -446,6 +446,7 @@ gtk_option_menu_update_contents (GtkOptionMenu *option_menu)
 	      gtk_container_unblock_resize (GTK_CONTAINER (option_menu));
 	    }
 
+	  gtk_widget_size_request (child, &child->requisition);
 	  gtk_widget_size_allocate (GTK_WIDGET (option_menu),
 				    &(GTK_WIDGET (option_menu)->allocation));
 
