@@ -720,10 +720,9 @@ gdk_pixbuf__png_image_save (FILE          *f,
        png_textp text_ptr = NULL;
        guchar *ptr;
        guchar *pixels;
-       int x, y;
-       int i, j;
+       int y;
+       int i;
        png_bytep row_ptr;
-       png_bytep data;
        png_color_8 sig_bit;
        int w, h, rowstride;
        int has_alpha;
@@ -787,8 +786,6 @@ gdk_pixbuf__png_image_save (FILE          *f,
                }
        }
 
-       data = NULL;
-       
        bpc = gdk_pixbuf_get_bits_per_sample (pixbuf);
        w = gdk_pixbuf_get_width (pixbuf);
        h = gdk_pixbuf_get_height (pixbuf);
@@ -823,30 +820,10 @@ gdk_pixbuf__png_image_save (FILE          *f,
                png_set_IHDR (png_ptr, info_ptr, w, h, bpc,
                              PNG_COLOR_TYPE_RGB_ALPHA, PNG_INTERLACE_NONE,
                              PNG_COMPRESSION_TYPE_BASE, PNG_FILTER_TYPE_BASE);
-#ifdef WORDS_BIGENDIAN
-               png_set_swap_alpha (png_ptr);
-#else
-               png_set_bgr (png_ptr);
-#endif
        } else {
                png_set_IHDR (png_ptr, info_ptr, w, h, bpc,
                              PNG_COLOR_TYPE_RGB, PNG_INTERLACE_NONE,
                              PNG_COMPRESSION_TYPE_BASE, PNG_FILTER_TYPE_BASE);
-               data = g_try_malloc (w * 3 * sizeof (char));
-
-               if (data == NULL) {
-                       /* Check error NULL, normally this would be broken,
-                        * but libpng makes me want to code defensively.
-                        */
-                       if (error && *error == NULL) {
-                               g_set_error (error,
-                                            GDK_PIXBUF_ERROR,
-                                            GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY,
-                                            _("Insufficient memory to save PNG file"));
-                       }
-                       png_destroy_write_struct (&png_ptr, (png_infopp) NULL);
-                       return FALSE;
-               }
        }
        sig_bit.red = bpc;
        sig_bit.green = bpc;
@@ -859,20 +836,10 @@ gdk_pixbuf__png_image_save (FILE          *f,
 
        ptr = pixels;
        for (y = 0; y < h; y++) {
-               if (has_alpha)
-                       row_ptr = (png_bytep)ptr;
-               else {
-                       for (j = 0, x = 0; x < w; x++)
-                               memcpy (&(data[x*3]), &(ptr[x*3]), 3);
-
-                       row_ptr = (png_bytep)data;
-               }
+               row_ptr = (png_bytep)ptr;
                png_write_rows (png_ptr, &row_ptr, 1);
                ptr += rowstride;
        }
-
-       if (data)
-               g_free (data);
 
        png_write_end (png_ptr, info_ptr);
        png_destroy_write_struct (&png_ptr, (png_infopp) NULL);
