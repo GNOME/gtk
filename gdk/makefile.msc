@@ -32,7 +32,7 @@ GLIB_VER=1.3
 GTK_VER=1.3
 
 GLIB = ..\..\glib
-CFLAGS = -I . -I .. -I $(GLIB) -DG_ENABLE_DEBUG -DHAVE_CONFIG_H -DGDK_VERSION=\"$(GTK_VER)\"
+CFLAGS = -I . -I .. -I $(GLIB) -I$(GLIB)\glib -DG_ENABLE_DEBUG -DHAVE_CONFIG_H -DGDK_VERSION=\"$(GTK_VER)\"
 
 all: \
 	..\config.h \
@@ -60,7 +60,7 @@ gdkconfig.h : gdkconfig.h.win32
 	copy gdkconfig.h.win32 gdkconfig.h
 
 gdk-$(GTK_VER).dll : $(gdk_OBJECTS) gdk.def win32\gdk-win32.lib
-	$(CC) $(CFLAGS) -LD -Fegdk-$(GTK_VER).dll $(gdk_OBJECTS) win32\gdk-win32.lib $(WTKIT)\lib\i386\wntab32x.lib $(GLIB)\glib-$(GLIB_VER).lib gdi32.lib user32.lib imm32.lib shell32.lib ole32.lib uuid.lib win32\gdk.res $(LDFLAGS) /def:gdk.def
+	$(CC) $(CFLAGS) -LD -Fegdk-$(GTK_VER).dll $(gdk_OBJECTS) win32\gdk-win32.lib $(WTKIT)\lib\i386\wntab32x.lib $(GLIB)\glib\glib-$(GLIB_VER).lib gdi32.lib user32.lib imm32.lib shell32.lib ole32.lib uuid.lib win32\gdk.res $(LDFLAGS) /def:gdk.def
 
 .c.obj :
 	$(CC) $(CFLAGS) -GD -c -DGDK_COMPILATION -DG_LOG_DOMAIN=\"Gdk\" $<

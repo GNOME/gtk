@@ -1131,7 +1131,6 @@ set_hdc_pen (HDC          hdc,
 	     GdkLineStyle style,
 	     gint         width)
 {
-  LOGBRUSH logbrush;
   HPEN hpen, old_hpen;
   GdkHDCCacheEntry* entry;
 
@@ -1454,7 +1453,6 @@ BitmapToRegion (HBITMAP hBmp)
   HDC hDC;
 
   BITMAP bm8;
-  HBITMAP holdBmp2;
   DWORD maxRects;
   RGNDATA *pData;
   BYTE *p8;

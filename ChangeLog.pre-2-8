@@ -1,6 +1,29 @@
+2001-09-28  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/makefile.{mingw,msc}
+	* gdk/win32/makefile.{mingw,msc}
+	* gtk/makefile.mingw: Update for current GLib and
+	build/win32. Remove pthreads reference (and don't try to build
+	testthreads.exe).
+
+	* gdk/win32/gdkcolor-win32.c
+	* gdk/win32/gdkfont-win32.c
+	* gdk/win32/gdkgc-win32.c
+	* gdk/win32/gdkevents-win32.c
+	* gdk/win32/gdkinput-win32.c
+	* gdk/win32/gdkmain-win32.c
+	* gdk/win32/gdkpixmap-win32.c: Remove some unused variables to
+	silence compilers.
+
+	* gdk/win32/gdkevents-win32.c (print_event_mask): New debug print
+	function.
+
+	* gtk/gtkitemfactory.c (gtk_item_factory_parse_rc): Remove call to
+	deprecated g_scanner_stat_mode().
+
 2001-03-08  Tor Lillqvist  <tml@iki.fi>
 
-	* gdk\win32\Makefile.am (EXTRA_DIST): Remove the rc/*.cur files
+	* gdk/win32/Makefile.am (EXTRA_DIST): Remove the rc/*.cur files
 	that have been removed; add the new xcursors.h and bdfcursor.c
 	files.
 

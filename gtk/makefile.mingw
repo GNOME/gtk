@@ -4,12 +4,6 @@
 ## There is no install target, you have to decide where and 
 ## how to install for yourself.
 
-# This is the location of pthreads for Win32, 
-# see http://sourceware.cygnus.com/pthreads-win32/
-PTHREADS = ../../pthreads-snap-1999-05-30
-PTHREAD_LIB = -L $(PTHREADS) -lpthread
-PTHREAD_INC = -I $(PTHREADS)
-
 OPTIMIZE = -O
 
 TOP = ../..
@@ -18,15 +12,14 @@ include $(TOP)/build/win32/make.mingw
 
 ################################################################
 
-# Nothing much configurable below
-
 # Perl and awk are needed to generate some source files.
 # These generated source files are distributed with the Win32 GTk+ source
 # distributions, so don't worry if you don't have perl and awk.
 PERL = perl
 AWK = awk
 
-INCLUDES = -I . -I .. -I ../gdk -I $(GLIB) -I $(GLIB)/gmodule -I $(INTL)
+INCLUDES = -I . -I .. -I ../gdk
+DEPCFLAGS = $(GLIB_CFLAGS) $(INTL_CFLAGS)
 DEFINES = -DGTK_DISABLE_COMPAT_H -DGTK_COMPILATION -DG_LOG_DOMAIN=\"Gtk\"
 
 all : \
@@ -327,7 +320,7 @@ gtkmarshal.h gtkmarshal.c : gtkmarshal.list genmarshal.pl
 # Linking:
 #
 gtk-$(GTK_VER).dll : generated $(gtk_OBJECTS) gtk.def
-	$(GLIB)/build-dll gtk $(GTK_VER) gtk.def $(gtk_OBJECTS) -L ../gdk -lgdk-$(GTK_VER) $(INTL_LIBS) $(GLIB_LIBS) -lgdi32 -luser32
+	$(BUILD_DLL) gtk-1.3 - gtk.def $(gtk_OBJECTS) -L ../gdk -lgdk-$(GTK_VER) $(INTL_LIBS) $(GLIB_LIBS) -lgdi32 -luser32
 
 #
 # Test programs:
@@ -362,12 +355,6 @@ testselection.exe : testselection.o
 
 testselection.o : testselection.c
 	$(CC) $(CFLAGS) -c -DG_LOG_DOMAIN=\"testselection\" testselection.c
-
-testthreads.exe : testthreads.o
-	$(CC) $(CFLAGS) -o $@  testthreads.o -L . -lgtk-$(GTK_VER) -L ../gdk -lgdk-$(GTK_VER) $(GLIB_LIBS) $(PTHREAD_LIB) $(LDFLAGS)
-
-testthreads.o : testthreads.c
-	$(CC) $(CFLAGS) -I$(PTHREAD_INC) -c -DG_LOG_DOMAIN=\"testthreads\" -DUSE_PTHREADS=1 testthreads.c
 
 simple.exe : simple.o
 	$(CC) $(CFLAGS) -o $@  simple.o -L . -lgtk-$(GTK_VER) -L ../gdk -lgdk-$(GTK_VER) $(GLIB_LIBS) $(LDFLAGS)

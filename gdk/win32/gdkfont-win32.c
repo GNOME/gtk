@@ -1503,7 +1503,6 @@ gdk_font_load (const gchar *font_name)
   GdkFontPrivateWin32 *private;
   GdkWin32SingleFont *singlefont;
   HGDIOBJ oldfont;
-  HANDLE *f;
   TEXTMETRIC textmetric;
 
   g_return_val_if_fail (font_name != NULL, NULL);
@@ -1547,7 +1546,6 @@ gdk_fontset_load (const gchar *fontset_name)
   GdkFontPrivateWin32 *private;
   GdkWin32SingleFont *singlefont;
   HGDIOBJ oldfont;
-  HANDLE *f;
   TEXTMETRIC textmetric;
   GSList *base_font_list = NULL;
   gchar *fs;
@@ -1768,7 +1766,7 @@ gdk_wchar_text_handle (GdkFont       *font,
 {
   GdkFontPrivateWin32 *private;
   GdkWin32SingleFont *singlefont;
-  int i, block;
+  int block;
   const wchar_t *start, *end, *wcp;
 
   wcp = wcstr;
@@ -1809,7 +1807,6 @@ gdk_text_size_handler (GdkWin32SingleFont *singlefont,
 		       void		  *argp)
 {
   SIZE this_size;
-  HGDIOBJ oldfont;
   gdk_text_size_arg *arg = (gdk_text_size_arg *) argp;
 
   if (!singlefont)

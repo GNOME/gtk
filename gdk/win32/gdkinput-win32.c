@@ -991,7 +991,6 @@ gdk_input_win32_other_event (GdkEvent  *event,
   GdkEventMask masktest;
   POINT pt;
   PACKET packet;
-  gint return_val;
   gint k;
   gint x, y;
 
@@ -1278,7 +1277,6 @@ gdk_input_win32_grab_pointer (GdkWindow    *window,
   gboolean need_ungrab;
   GdkDevicePrivate *gdkdev;
   GList *tmp_list;
-  gint result;
 
   tmp_list = gdk_input_windows;
   new_window = NULL;

@@ -301,8 +301,10 @@ gdk_events_init (void)
 {
   GSource *source;
   HRESULT hres;
-  HMODULE user32, imm32;
+#ifdef USE_TRACKMOUSEEVENT
+  HMODULE user32;
   HINSTANCE commctrl32;
+#endif
 
   gdk_ping_msg = RegisterWindowMessage ("gdk-ping");
   GDK_NOTE (EVENTS, g_print ("gdk-ping = %#x\n",
@@ -2658,6 +2660,53 @@ build_keyrelease_event (GdkWindowWin32Data *windata,
 }
 
 static void
+print_event_mask (gint mask)
+{
+  if (mask & GDK_EXPOSURE_MASK)
+    g_print ("EXPOSURE ");
+  if (mask & GDK_POINTER_MOTION_MASK)
+    g_print ("POINTER_MOTION ");
+  if (mask & GDK_POINTER_MOTION_HINT_MASK)
+    g_print ("POINTER_MOTION_HINT ");
+  if (mask & GDK_BUTTON_MOTION_MASK)
+    g_print ("BUTTON_MOTION ");
+  if (mask & GDK_BUTTON1_MOTION_MASK)
+    g_print ("BUTTON1_MOTION ");
+  if (mask & GDK_BUTTON2_MOTION_MASK)
+    g_print ("BUTTON2_MOTION ");
+  if (mask & GDK_BUTTON3_MOTION_MASK)
+    g_print ("BUTTON3_MOTION ");
+  if (mask & GDK_BUTTON_PRESS_MASK)
+    g_print ("BUTTON_PRESS ");
+  if (mask & GDK_BUTTON_RELEASE_MASK)
+    g_print ("BUTTON_RELEASE ");
+  if (mask & GDK_KEY_PRESS_MASK)
+    g_print ("KEY_PRESS ");
+  if (mask & GDK_KEY_RELEASE_MASK)
+    g_print ("KEY_RELEASE ");
+  if (mask & GDK_ENTER_NOTIFY_MASK)
+    g_print ("ENTER_NOTIFY ");
+  if (mask & GDK_LEAVE_NOTIFY_MASK)
+    g_print ("LEAVE_NOTIFY ");
+  if (mask & GDK_FOCUS_CHANGE_MASK)
+    g_print ("FOCUS_CHANGE ");
+  if (mask & GDK_STRUCTURE_MASK)
+    g_print ("STRUCTURE ");
+  if (mask & GDK_PROPERTY_CHANGE_MASK)
+    g_print ("PROPERTY_CHANGE ");
+  if (mask & GDK_VISIBILITY_NOTIFY_MASK)
+    g_print ("VISIBILITY_NOTIFY ");
+  if (mask & GDK_PROXIMITY_IN_MASK)
+    g_print ("PROXIMITY_IN ");
+  if (mask & GDK_PROXIMITY_OUT_MASK)
+    g_print ("PROXIMITY_OUT ");
+  if (mask & GDK_SUBSTRUCTURE_MASK)
+    g_print ("SUBSTRUCTURE ");
+  if (mask & GDK_SCROLL_MASK)
+    g_print ("SCROLL ");
+}
+
+static void
 print_event_state (gint state)
 {
   if (state & GDK_SHIFT_MASK)
@@ -3322,11 +3371,8 @@ gdk_event_translate (GdkEvent *event,
 {
   DWORD pidActWin;
   DWORD pidThis;
-  DWORD dwStyle;
   PAINTSTRUCT paintstruct;
   HDC hdc;
-  HBRUSH hbr;
-  COLORREF bg;
   RECT rect;
   POINT pt;
   MINMAXINFO *lpmmi;
@@ -3334,12 +3380,8 @@ gdk_event_translate (GdkEvent *event,
   HCURSOR xcursor;
   GdkWindow *window, *orig_window, *newwindow;
   GdkEventMask mask;
-  GdkPixmap *pixmap;
-  GdkDrawablePrivate *pixmap_private;
   int button;
-  int i, j, n, k;
   gchar buf[256];
-  gchar *msgname;
   gboolean return_val;
   gboolean flag;
   
@@ -3900,6 +3942,7 @@ gdk_event_translate (GdkEvent *event,
 
       event->key.window = window;
       return_val = !GDK_DRAWABLE_DESTROYED (window);
+      GDK_NOTE (EVENTS, (g_print (G_STRLOC ":event_mask: "), print_event_mask (GDK_WINDOW_WIN32DATA (window)->event_mask), g_print ("\n")));
       if (return_val && (event->key.window == k_grab_window
 			 || (GDK_WINDOW_WIN32DATA (window)->event_mask & GDK_KEY_RELEASE_MASK)))
 	{

@@ -1646,9 +1646,6 @@ gtk_item_factory_parse_rc (const gchar	  *file_name)
 
   g_return_if_fail (file_name != NULL);
 
-  if (!S_ISREG (g_scanner_stat_mode (file_name)))
-    return;
-
   fd = open (file_name, O_RDONLY);
   if (fd < 0)
     return;

@@ -15,7 +15,8 @@ include $(TOP)/build/win32/make.mingw
 
 # Nothing much configurable below
 
-INCLUDES = -I . -I .. -I ../.. -I $(WTKIT)/include -I $(GLIB)
+INCLUDES = -I . -I .. -I ../.. -I $(WTKIT)/include
+DEPCFLAGS = $(GLIB_CFLAGS)
 DEFINES = -DG_ENABLE_DEBUG -DHAVE_CONFIG_H -DGDK_VERSION=\"$(GTK_VER)\" -DGDK_COMPILATION -DG_LOG_DOMAIN=\"Gdk\"
 
 all: \
