@@ -1,3 +1,7 @@
+2003-03-02  Tor Lillqvist  <tml@iki.fi>
+
+	* Makefile.am: Use -no-undefined on Windows.
+
 Fri Sep  6 20:32:45 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* pixbuf-draw.c: Account for the possibility of detail == NULL

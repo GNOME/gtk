@@ -1,3 +1,7 @@
+if OS_WIN32
+no_undefined = -no-undefined
+endif
+
 INCLUDES = $(GTK_CFLAGS)
 
 enginedir = $(libdir)/gtk-2.0/$(GTK_VERSION)/engines
@@ -13,7 +17,7 @@ libpixmap_la_SOURCES = 		\
 	pixbuf-style.h		\
 	pixbuf.h
 
-libpixmap_la_LDFLAGS =  -avoid-version -module
+libpixmap_la_LDFLAGS =  -avoid-version -module $(no_undefined)
 libpixmap_la_LIBADD = $(GTK_LIBS)
 
 dist-hook:
