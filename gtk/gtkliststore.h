@@ -50,7 +50,7 @@ struct _GtkListStore
   gint sort_column_id;
   GtkSortType order;
   GType *column_headers;
-  gint _gtk_reserved2;
+  gint length;
   GtkTreeIterCompareFunc default_sort_func;
   gpointer default_sort_data;
   GtkDestroyNotify default_sort_destroy;

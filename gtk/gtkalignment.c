@@ -37,10 +37,10 @@ enum {
   PROP_XSCALE,
   PROP_YSCALE,
 
-  PROP_PADDING_TOP,
-  PROP_PADDING_BOTTOM,
-  PROP_PADDING_LEFT,
-  PROP_PADDING_RIGHT,
+  PROP_TOP_PADDING,
+  PROP_BOTTOM_PADDING,
+  PROP_LEFT_PADDING,
+  PROP_RIGHT_PADDING,
   
   PROP_LAST
 };
@@ -159,7 +159,7 @@ gtk_alignment_class_init (GtkAlignmentClass *class)
  * Since: 2.4
  */
   g_object_class_install_property (gobject_class,
-                                   PROP_PADDING_TOP,
+                                   PROP_TOP_PADDING,
                                    g_param_spec_uint("top_padding",
                                                       P_("Top Padding"),
                                                       P_("The padding to insert at the top of the widget."),
@@ -176,7 +176,7 @@ gtk_alignment_class_init (GtkAlignmentClass *class)
  * Since: 2.4
  */
   g_object_class_install_property (gobject_class,
-                                   PROP_PADDING_BOTTOM,
+                                   PROP_BOTTOM_PADDING,
                                    g_param_spec_uint("bottom_padding",
                                                       P_("Bottom Padding"),
                                                       P_("The padding to insert at the bottom of the widget."),
@@ -193,7 +193,7 @@ gtk_alignment_class_init (GtkAlignmentClass *class)
  * Since: 2.4
  */
   g_object_class_install_property (gobject_class,
-                                   PROP_PADDING_LEFT,
+                                   PROP_LEFT_PADDING,
                                    g_param_spec_uint("left_padding",
                                                       P_("Left Padding"),
                                                       P_("The padding to insert at the left of the widget."),
@@ -210,7 +210,7 @@ gtk_alignment_class_init (GtkAlignmentClass *class)
  * Since: 2.4
  */
   g_object_class_install_property (gobject_class,
-                                   PROP_PADDING_RIGHT,
+                                   PROP_RIGHT_PADDING,
                                    g_param_spec_uint("right_padding",
                                                       P_("Right Padding"),
                                                       P_("The padding to insert at the right of the widget."),
@@ -305,28 +305,28 @@ gtk_alignment_set_property (GObject         *object,
       break;
       
     /* Padding: */
-    case PROP_PADDING_TOP:
+    case PROP_TOP_PADDING:
       gtk_alignment_set_padding (alignment,
 			 g_value_get_uint (value),
 			 priv->padding_bottom,
 			 priv->padding_left,
 			 priv->padding_right);
       break;
-    case PROP_PADDING_BOTTOM:
+    case PROP_BOTTOM_PADDING:
       gtk_alignment_set_padding (alignment,
 			 priv->padding_top,
 			 g_value_get_uint (value),
 			 priv->padding_left,
 			 priv->padding_right);
       break;
-    case PROP_PADDING_LEFT:
+    case PROP_LEFT_PADDING:
       gtk_alignment_set_padding (alignment,
 			 priv->padding_top,
 			 priv->padding_bottom,
 			 g_value_get_uint (value),
 			 priv->padding_right);
       break;
-    case PROP_PADDING_RIGHT:
+    case PROP_RIGHT_PADDING:
       gtk_alignment_set_padding (alignment,
 			 priv->padding_top,
 			 priv->padding_bottom,
@@ -368,16 +368,16 @@ gtk_alignment_get_property (GObject         *object,
       break;
 
     /* Padding: */
-    case PROP_PADDING_TOP:
+    case PROP_TOP_PADDING:
       g_value_set_uint (value, priv->padding_top);
       break;
-    case PROP_PADDING_BOTTOM:
+    case PROP_BOTTOM_PADDING:
       g_value_set_uint (value, priv->padding_bottom);
       break;
-    case PROP_PADDING_LEFT:
+    case PROP_LEFT_PADDING:
       g_value_set_uint (value, priv->padding_left);
       break;
-    case PROP_PADDING_RIGHT:
+    case PROP_RIGHT_PADDING:
       g_value_set_uint (value, priv->padding_right);
       break;
       

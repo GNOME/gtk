@@ -100,7 +100,7 @@ enum {
   PROP_RIGHT_MARGIN,
   PROP_UNDERLINE,
   PROP_RISE,
-  PROP_BG_FULL_HEIGHT,
+  PROP_BACKGROUND_FULL_HEIGHT,
   PROP_LANGUAGE,
   PROP_TABS,
   PROP_INVISIBLE,
@@ -129,7 +129,7 @@ enum {
   PROP_RIGHT_MARGIN_SET,
   PROP_UNDERLINE_SET,
   PROP_RISE_SET,
-  PROP_BG_FULL_HEIGHT_SET,
+  PROP_BACKGROUND_FULL_HEIGHT_SET,
   PROP_LANGUAGE_SET,
   PROP_TABS_SET,
   PROP_INVISIBLE_SET,
@@ -218,7 +218,7 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
                                                        G_PARAM_READABLE | G_PARAM_WRITABLE));
 
   g_object_class_install_property (object_class,
-                                   PROP_BG_FULL_HEIGHT,
+                                   PROP_BACKGROUND_FULL_HEIGHT,
                                    g_param_spec_boolean ("background_full_height",
                                                          P_("Background full height"),
                                                          P_("Whether the background color fills the entire line height or only the height of the tagged characters"),
@@ -510,7 +510,7 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
                 P_("Background set"),
                 P_("Whether this tag affects the background color"));
   
-  ADD_SET_PROP ("background_full_height_set", PROP_BG_FULL_HEIGHT_SET,
+  ADD_SET_PROP ("background_full_height_set", PROP_BACKGROUND_FULL_HEIGHT_SET,
                 P_("Background full height set"),
                 P_("Whether this tag affects background height"));
 
@@ -1161,7 +1161,7 @@ gtk_text_tag_set_property (GObject      *object,
       size_changed = TRUE;      
       break;
 
-    case PROP_BG_FULL_HEIGHT:
+    case PROP_BACKGROUND_FULL_HEIGHT:
       text_tag->bg_full_height_set = TRUE;
       text_tag->values->bg_full_height = g_value_get_boolean (value);
       g_object_notify (object, "background_full_height_set");
@@ -1311,7 +1311,7 @@ gtk_text_tag_set_property (GObject      *object,
       size_changed = TRUE;
       break;
 
-    case PROP_BG_FULL_HEIGHT_SET:
+    case PROP_BACKGROUND_FULL_HEIGHT_SET:
       text_tag->bg_full_height_set = g_value_get_boolean (value);
       break;
 
@@ -1501,7 +1501,7 @@ gtk_text_tag_get_property (GObject      *object,
       g_value_set_int (value, tag->values->appearance.rise);
       break;
 
-    case PROP_BG_FULL_HEIGHT:
+    case PROP_BACKGROUND_FULL_HEIGHT:
       g_value_set_boolean (value, tag->values->bg_full_height);
       break;
 
@@ -1600,7 +1600,7 @@ gtk_text_tag_get_property (GObject      *object,
       g_value_set_boolean (value, tag->rise_set);
       break;
 
-    case PROP_BG_FULL_HEIGHT_SET:
+    case PROP_BACKGROUND_FULL_HEIGHT_SET:
       g_value_set_boolean (value, tag->bg_full_height_set);
       break;
 

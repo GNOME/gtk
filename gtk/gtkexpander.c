@@ -46,7 +46,7 @@ enum
   PROP_LABEL,
   PROP_USE_UNDERLINE,
   PROP_USE_MARKUP,
-  PROP_PADDING,
+  PROP_SPACING,
   PROP_LABEL_WIDGET
 };
 
@@ -225,7 +225,7 @@ gtk_expander_class_init (GtkExpanderClass *klass)
 							 G_PARAM_READWRITE | G_PARAM_CONSTRUCT));
 
   g_object_class_install_property (gobject_class,
-				   PROP_PADDING,
+				   PROP_SPACING,
 				   g_param_spec_int ("spacing",
 						     P_("Spacing"),
 						     P_("Space to put between the label and the child"),
@@ -316,7 +316,7 @@ gtk_expander_set_property (GObject      *object,
     case PROP_USE_MARKUP:
       gtk_expander_set_use_markup (expander, g_value_get_boolean (value));
       break;
-    case PROP_PADDING:
+    case PROP_SPACING:
       gtk_expander_set_spacing (expander, g_value_get_int (value));
       break;
     case PROP_LABEL_WIDGET:
@@ -351,7 +351,7 @@ gtk_expander_get_property (GObject    *object,
     case PROP_USE_MARKUP:
       g_value_set_boolean (value, priv->use_markup);
       break;
-    case PROP_PADDING:
+    case PROP_SPACING:
       g_value_set_int (value, priv->spacing);
       break;
     case PROP_LABEL_WIDGET:

@@ -1,3 +1,13 @@
+Sun Aug 22 16:55:15 2004  Soeren Sandmann  <sandmann@daimi.au.dk>
+
+	* gtk/gtkexpander.c
+	* gtk/gtkalignment.c: 
+	* gtk/gtktexttag.c
+	Make enums match property names. Found by a script by Tommi
+	Komulainen.
+
+	* gtk/gtkpaned.c (gtk_paned_class_init): fix min/max mixup.
+
 Sun Aug 22 16:09:49 2004  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 	* gtk/gtkliststore.h (struct _GtkListStore): 
