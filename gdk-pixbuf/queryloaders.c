@@ -45,6 +45,10 @@
 #endif
 #define SOEXT_LEN (strlen (SOEXT))
 
+#ifdef G_OS_WIN32
+#include <windows.h>
+#endif
+
 static void
 print_escaped (const char *str)
 {
@@ -202,6 +206,45 @@ query_module (const char *dir, const char *file)
 int main (int argc, char **argv)
 {
 	gint i;
+
+#ifdef G_OS_WIN32
+	gchar libdir[sizeof (PIXBUF_LIBDIR) + 100];
+	gchar runtime_prefix[1000];
+	gchar *slash;
+
+	strcpy (libdir, PIXBUF_LIBDIR);
+
+	if (g_ascii_strncasecmp (PIXBUF_LIBDIR, GTK_PREFIX, strlen (GTK_PREFIX)) == 0 &&
+	    (PIXBUF_LIBDIR[strlen (GTK_PREFIX)] == '/' ||
+	     PIXBUF_LIBDIR[strlen (GTK_PREFIX)] == '\\')) {
+		/* GTK_PREFIX is a prefix of PIXBUF_LIBDIR, as it
+		 * normally is. Replace that prefix in PIXBUF_LIBDIR
+		 * with the installation directory on this machine.
+		 * We assume this invokation of
+		 * gdk-pixbuf-query-loaders is run from either a "bin"
+		 * subdirectory of the installation directory, or in
+		 * the insallation directory itself.
+		 */
+		GetModuleFileName (NULL, runtime_prefix, sizeof (runtime_prefix));
+
+		slash = strrchr (runtime_prefix, '\\');
+		*slash = '\0';
+		slash = strrchr (runtime_prefix, '\\');
+		if (slash != NULL && g_ascii_strcasecmp (slash + 1, "bin") == 0) {
+			*slash = '\0';
+		}
+		
+		if (strlen (runtime_prefix) + 1 + strlen (PIXBUF_LIBDIR) - strlen (GTK_PREFIX) < sizeof (libdir)) {
+			strcpy (libdir, runtime_prefix);
+			strcat (libdir, "/");
+			strcat (libdir, PIXBUF_LIBDIR + strlen (GTK_PREFIX) + 1);
+		}
+	}
+
+#undef PIXBUF_LIBDIR
+#define PIXBUF_LIBDIR libdir
+
+#endif
 
 	g_printf ("# GdkPixbuf Image Loader Modules file\n"
 		"# Automatically generated file, do not edit\n"
