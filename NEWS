@@ -1,3 +1,23 @@
+Overview of Changes in GTK+ 1.2.2:
+
+* Improved Dnd behaviour with Motif applications.
+* Bug fixes for the Gtk selection code.
+* Minor bug fixes to the Gdk Atom cache and Dnd code (with --display option).
+* Bug fixes and leak plugs for the Gdk IM code.
+* Added gtk_object_get() facility to retrive object arguments easily.
+  The var args list expects ("arg-name", &value) pairs.
+* Fixed mapping for GdkInputCondition<->GIOCondition, this should fix
+  problems where closed pipes were no longer signalling GDK_INPUT_READ on
+  systems with a native poll().
+* Some cleanups to GtkLabel's memory allocation code (shouldn't leak memory
+  anymore).
+* We don't attempt to lookup xpm color "None" anymore, this should prevent
+  eXodus (commercial X windows server) from popping up a color dialog every
+  time a transparent pixmap is created.
+* Fixed bug where Gtk timout/idle handlers would execute without the global
+  Gdk lock being held.
+* Other minor bug fixes.
+
 Overview of Changes in GTK+ 1.2.1:
 
 * Many Bug fixes have been applied to the menu and accelerator code.

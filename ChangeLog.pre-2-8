@@ -1,3 +1,15 @@
+Sun Apr 11 15:08:27 1999  Tim Janik  <timj@gtk.org>
+
+	* configure.in: bumped version number to Gtk+ 1.2.2, interface 0,
+	binary 2.
+	
+	* NEWS: updates.
+
+Sun Apr 11 14:38:03 1999  Tim Janik  <timj@gtk.org>
+
+	* gdk/gdkpixmap.c (_gdk_pixmap_create_from_xpm): check for color
+	"None" case insensitive.
+
 Fri Apr  9 19:22:19 1999  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkcolorsel.c gtk/gtkdnd.c gtk/gtkmenuitem.c:
