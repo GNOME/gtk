@@ -1,3 +1,8 @@
+Mon Oct 19 08:31:36 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkdnd.c (gtk_drag_selection_received): Fixed
+	typo - look for right atom on transfer failures.
+
 Sun Oct 18 20:52:22 1998  Owen Taylor  <otaylor@gtk.org>
 
 	* gtk/gtkwidget.c gtkmarshal.list: Change signal 

@@ -932,7 +932,7 @@ gtk_drag_selection_received (GtkWidget          *widget,
       gtk_drag_finish (context, TRUE, FALSE, time);
     }
   else if ((selection_data->target == gdk_atom_intern ("XmTRANSFER_SUCCESS", FALSE)) ||
-	   (selection_data->target == gdk_atom_intern ("XmTRANSFER_SUCCESS", FALSE)))
+	   (selection_data->target == gdk_atom_intern ("XmTRANSFER_FAILURE", FALSE)))
     {
       /* Do nothing */
     }
