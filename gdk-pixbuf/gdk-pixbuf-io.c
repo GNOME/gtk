@@ -825,6 +825,7 @@ gdk_pixbuf_new_from_file_at_size (const char *filename,
 		length = fread (buffer, 1, sizeof (buffer), f);
 		if (length > 0)
 			if (!gdk_pixbuf_loader_write (loader, buffer, length, error)) {
+				gdk_pixbuf_loader_close (loader, NULL);
 				fclose (f);
 				g_object_unref (G_OBJECT (loader));
 				return NULL;
