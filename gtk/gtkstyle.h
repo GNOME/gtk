@@ -51,7 +51,16 @@ typedef struct _GtkStyleClass  GtkStyleClass;
  */
 typedef struct _GtkThemeEngine GtkThemeEngine;
 typedef struct _GtkRcStyle     GtkRcStyle;
+typedef struct _GtkIconSet     GtkIconSet;
+typedef struct _GtkIconSource  GtkIconSource;
 
+typedef enum
+{
+  GTK_ICON_MENU,
+  GTK_ICON_BUTTON,
+  GTK_ICON_SMALL_TOOLBAR,
+  GTK_ICON_LARGE_TOOLBAR
+} GtkIconSizeType;
 
 /* We make this forward declaration here, since we pass
  * GtkWidgt's to the draw functions.
@@ -114,11 +123,21 @@ struct _GtkStyle
 				 * was created
 				 */
   GSList	 *styles;
+
+  GSList         *icon_factories;
 };
 
 struct _GtkStyleClass
 {
   GObjectClass parent_class;
+
+  GdkPixbuf * (* render_icon)   (GtkStyle               *style,
+                                 const GtkIconSource    *source,
+                                 GtkTextDirection        direction,
+                                 GtkStateType            state,
+                                 GtkIconSizeType         size,
+                                 GtkWidget              *widget,
+                                 const gchar            *detail);
   
   void (*draw_hline)		(GtkStyle		*style,
 				 GdkWindow		*window,
@@ -376,6 +395,16 @@ void	  gtk_style_apply_default_background (GtkStyle	   *style,
 					      gint	    y, 
 					      gint	    width, 
 					      gint	    height);
+
+GtkIconSet* gtk_style_lookup_icon (GtkStyle            *style,
+                                   const char          *stock_id);
+GdkPixbuf * gtk_style_render_icon (GtkStyle            *style,
+                                   const GtkIconSource *source,
+                                   GtkTextDirection     direction,
+                                   GtkStateType         state,
+                                   GtkIconSizeType      size,
+                                   GtkWidget           *widget,
+                                   const gchar         *detail);
 
 void gtk_draw_hline      (GtkStyle        *style,
 			  GdkWindow       *window,
@@ -783,6 +812,17 @@ void gtk_paint_handle     (GtkStyle        *style,
 			   gint             width,
 			   gint             height,
 			   GtkOrientation   orientation);
+
+/* Internal */
+
+GdkPixbuf * _gtk_default_render_icon (GtkStyle            *style,
+                                      const GtkIconSource *source,
+                                      GtkTextDirection     direction,
+                                      GtkStateType         state,
+                                      GtkIconSizeType      size,
+                                      GtkWidget           *widget,
+                                      const gchar         *detail);
+
 
 #ifdef __cplusplus
 }

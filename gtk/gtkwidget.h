@@ -576,6 +576,11 @@ void	   gtk_widget_restore_default_style (GtkWidget	*widget);
 void       gtk_widget_modify_style      (GtkWidget      *widget,
 					 GtkRcStyle     *style);
 
+GdkPixbuf* gtk_widget_get_icon          (GtkWidget      *widget,
+                                         const gchar    *stock_id,
+                                         GtkIconSizeType size,
+                                         const gchar    *detail);
+
 PangoContext *gtk_widget_create_pango_context (GtkWidget *widget);
 PangoLayout  *gtk_widget_create_pango_layout  (GtkWidget *widget);
 

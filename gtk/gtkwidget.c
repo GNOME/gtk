@@ -28,6 +28,7 @@
 #include <string.h>
 #include <locale.h>
 #include "gtkcontainer.h"
+#include "gtkiconfactory.h"
 #include "gtkmain.h"
 #include "gtkrc.h"
 #include "gtkselection.h"
@@ -3188,6 +3189,35 @@ gtk_widget_pop_style (void)
       gtk_style_unref ((GtkStyle*) tmp->data);
       g_slist_free_1 (tmp);
     }
+}
+
+GdkPixbuf*
+gtk_widget_get_icon (GtkWidget      *widget,
+                     const gchar    *stock_id,
+                     GtkIconSizeType size,
+                     const gchar    *detail)
+{
+  GtkIconSet *icon_set;
+  GdkPixbuf *retval;
+  
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
+  
+  gtk_widget_ensure_style (widget);
+  
+  icon_set = gtk_style_lookup_icon (widget->style, stock_id);
+
+  if (icon_set == NULL)
+    return NULL;
+
+  retval = gtk_icon_set_get_icon (icon_set,
+                                  widget->style,
+                                  gtk_widget_get_direction (widget),
+                                  GTK_WIDGET_STATE (widget),
+                                  size,
+                                  widget,
+                                  detail);
+
+  return retval;
 }
 
 /**

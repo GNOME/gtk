@@ -95,6 +95,7 @@ gtk_public_h_sources = @STRIP_BEGIN@ \
 	gtkhscrollbar.h		\
 	gtkhseparator.h		\
 	gtkhsv.h		\
+	gtkiconfactory.h	\
 	gtkimage.h		\
 	gtkimcontext.h		\
 	gtkimmulticontext.h	\
@@ -140,6 +141,7 @@ gtk_public_h_sources = @STRIP_BEGIN@ \
 	gtkspinbutton.h		\
 	gtkstyle.h		\
 	gtkstatusbar.h		\
+	gtkstock.h		\
 	gtktable.h		\
 	gtktearoffmenuitem.h    \
 	gtktextbuffer.h		\
@@ -234,6 +236,7 @@ gtk_c_sources = @STRIP_BEGIN@ \
 	gtkhscrollbar.c		\
 	gtkhseparator.c		\
 	gtkhsv.c		\
+	gtkiconfactory.c	\
 	gtkimage.c		\
 	gtkimcontext.c		\
 	gtkimcontextsimple.c	\
@@ -279,6 +282,7 @@ gtk_c_sources = @STRIP_BEGIN@ \
 	gtksignal.c		\
 	gtksocket.c             \
 	gtkspinbutton.c		\
+	gtkstock.c		\
 	gtkstyle.c		\
 	gtkstatusbar.c		\
 	gtktable.c		\

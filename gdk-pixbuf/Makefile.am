@@ -138,6 +138,12 @@ LDADDS = libgdk_pixbuf.la $(GLIB_LIBS) $(STATIC_LIB_DEPS)
 
 test_gdk_pixbuf_LDADD = $(LDADDS) -lgmodule
 
+bin_PROGRAMS=make-inline-pixbuf
+
+make_inline_pixbuf_SOURCES=make-inline-pixbuf.c
+
+make_inline_pixbuf_LDADD = $(LDADDS) -lgmodule
+
 GDK_PIXBUF_LIBS = $(GLIB_LIBS)
 
 #

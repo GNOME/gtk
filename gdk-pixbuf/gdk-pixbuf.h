@@ -103,6 +103,10 @@ GdkPixbuf *gdk_pixbuf_new_from_data (const guchar *data,
 
 GdkPixbuf *gdk_pixbuf_new_from_xpm_data (const char **data);
 
+/* Read an inline pixbuf */
+GdkPixbuf *gdk_pixbuf_new_from_inline   (const guchar *inline_pixbuf,
+                                         gboolean      copy_pixels);
+
 /* Adding an alpha channel */
 GdkPixbuf *gdk_pixbuf_add_alpha (const GdkPixbuf *pixbuf, gboolean substitute_color,
 				 guchar r, guchar g, guchar b);

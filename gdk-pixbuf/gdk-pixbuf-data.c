@@ -75,3 +75,98 @@ gdk_pixbuf_new_from_data (const guchar *data, GdkColorspace colorspace, gboolean
 
 	return pixbuf;
 }
+
+int
+read_int (const guchar **p)
+{
+        guint32 num;
+        
+        num = g_ntohl (* (guint32*) *p);
+        
+        *p += 4;
+        
+        return num;
+}
+
+gboolean
+read_bool (const guchar **p)
+{
+        gboolean val = **p != 0;
+        
+        ++(*p);
+        
+        return val;
+}
+
+/* sync with image-to-inline.c */
+#define MAGIC_NUMBER 1804289383
+
+static void
+free_buffer (guchar *pixels, gpointer data)
+{
+	free (pixels);
+}
+
+/**
+ * gdk_pixbuf_new_from_inline:
+ * @data: An inlined GdkPixbuf
+ * @copy_pixels: whether to copy the pixels out of the inline data, or to use them in-place
+ *
+ * Create a #GdkPixbuf from a custom format invented to store pixbuf
+ * data in C program code. This library comes with a program called "image-to-inline"
+ * that can write out a variable definition containing an inlined pixbuf.
+ * This is useful if you want to ship a program with images, but
+ * don't want to depend on any external files.
+ * 
+ * The inline data format contains the pixels in #GdkPixbuf's native format.
+ * Since the inline pixbuf is static data, you don't really need to copy it.
+ * However it's typically in read-only memory, so if you plan to modify
+ * it you must copy it.
+ * 
+ * Return value: A newly-created #GdkPixbuf structure with a reference count of
+ * 1.
+ **/
+GdkPixbuf*
+gdk_pixbuf_new_from_inline   (const guchar *inline_pixbuf,
+                              gboolean      copy_pixels)
+{
+        const guchar *p;
+        GdkPixbuf *pixbuf;
+  
+        p = inline_pixbuf;
+
+        if (read_int (&p) != MAGIC_NUMBER) {
+                g_warning ("Bad inline data; wrong magic number");
+                return NULL;
+        }
+
+        pixbuf = GDK_PIXBUF (g_type_create_instance (GDK_TYPE_PIXBUF));
+
+        pixbuf->rowstride = read_int (&p);
+        pixbuf->width = read_int (&p);
+        pixbuf->height = read_int (&p);
+        pixbuf->has_alpha = read_bool (&p);
+        pixbuf->colorspace = read_int (&p);
+        pixbuf->n_channels = read_int (&p);
+        pixbuf->bits_per_sample = read_int (&p);
+  
+        if (copy_pixels) {
+                pixbuf->pixels = malloc (pixbuf->height * pixbuf->rowstride);
+
+                if (pixbuf->pixels == NULL) {                        
+                        g_object_unref (G_OBJECT (pixbuf));
+                        return NULL;
+                }
+
+                pixbuf->destroy_fn = free_buffer;
+                pixbuf->destroy_fn_data = NULL;
+
+                memcpy (pixbuf->pixels, p, pixbuf->height * pixbuf->rowstride);
+        } else {
+                pixbuf->pixels = (guchar *) p;
+        }
+        
+
+        return pixbuf;
+}
+

@@ -31,7 +31,7 @@
 #include "gtkstyle.h"
 #include "gtkwidget.h"
 #include "gtkthemes.h"
-
+#include "gtkiconfactory.h"
 
 #define LIGHTNESS_MULT  1.3
 #define DARKNESS_MULT   0.7
@@ -432,6 +432,7 @@ gtk_style_class_init (GtkStyleClass *klass)
 
   object_class->finalize = gtk_style_finalize;
 
+  klass->render_icon = _gtk_default_render_icon;
   klass->draw_hline = gtk_default_draw_hline;
   klass->draw_vline = gtk_default_draw_vline;
   klass->draw_shadow = gtk_default_draw_shadow;
@@ -793,6 +794,28 @@ gtk_style_realize (GtkStyle    *style,
   
   if (style->engine)
     style->engine->realize_style (style);
+}
+
+GtkIconSet*
+gtk_style_lookup_icon (GtkStyle   *style,
+                       const char *stock_id)
+{
+  GSList *iter;
+
+  iter = style->icon_factories;
+  while (iter != NULL)
+    {
+      GtkIconSet *icon_set =
+        gtk_icon_factory_lookup (GTK_ICON_FACTORY (iter->data),
+                                 stock_id);
+
+      if (icon_set)
+        return icon_set;
+      
+      iter = g_slist_next (iter);
+    }
+
+  return gtk_default_icon_lookup (stock_id);
 }
 
 void
@@ -1176,6 +1199,22 @@ gtk_style_set_background (GtkStyle    *style,
 }
 
 
+GdkPixbuf *
+gtk_style_render_icon (GtkStyle            *style,
+                       const GtkIconSource *source,
+                       GtkTextDirection     direction,
+                       GtkStateType         state,
+                       GtkIconSizeType      size,
+                       GtkWidget           *widget,
+                       const gchar         *detail)
+{
+  g_return_val_if_fail (style != NULL, NULL);
+  g_return_val_if_fail (GTK_STYLE_GET_CLASS (style)->render_icon != NULL, NULL);
+  
+  return GTK_STYLE_GET_CLASS (style)->render_icon (style, source, direction, state,
+                                                   size, widget, detail);
+}
+
 /* Default functions */
 void
 gtk_style_apply_default_background (GtkStyle     *style,
@@ -1239,6 +1278,157 @@ gtk_style_apply_default_background (GtkStyle     *style,
                              new_rect.x, new_rect.y, 
                              new_rect.width, new_rect.height);
     }
+}
+
+#define INTENSITY(r, g, b) ((r) * 0.30 + (g) * 0.59 + (b) * 0.11)
+
+static void
+gdk_pixbuf_saturate_and_pixelate(const GdkPixbuf *src,
+                                 GdkPixbuf *dest,
+                                 gfloat saturation,
+                                 gboolean pixelate)
+{
+  /* NOTE that src and dest MAY be the same pixbuf! */
+  
+  g_return_if_fail (src != NULL);
+  g_return_if_fail (dest != NULL);
+  g_return_if_fail (gdk_pixbuf_get_height (src) == gdk_pixbuf_get_height (dest));
+  g_return_if_fail (gdk_pixbuf_get_width (src) == gdk_pixbuf_get_width (dest));
+  g_return_if_fail (gdk_pixbuf_get_rowstride (src) == gdk_pixbuf_get_rowstride (dest));
+  g_return_if_fail (gdk_pixbuf_get_colorspace (src) == gdk_pixbuf_get_colorspace (dest));
+  
+  if (saturation == 1.0 && !pixelate)
+    {
+      if (dest != src)
+        memcpy (gdk_pixbuf_get_pixels (dest),
+                gdk_pixbuf_get_pixels (src),
+                gdk_pixbuf_get_height (src) * gdk_pixbuf_get_rowstride (src));
+
+      return;
+    }
+  else
+    {
+      gint i, j;
+      gint width, height, has_alpha, rowstride;
+      guchar *target_pixels;
+      guchar *original_pixels;
+      guchar *current_pixel;
+      guchar intensity;
+
+      has_alpha = gdk_pixbuf_get_has_alpha (src);
+      width = gdk_pixbuf_get_width (src);
+      height = gdk_pixbuf_get_height (src);
+      rowstride = gdk_pixbuf_get_rowstride (src);
+                
+      target_pixels = gdk_pixbuf_get_pixels (dest);
+      original_pixels = gdk_pixbuf_get_pixels (src);
+
+      for (i = 0; i < height; i++)
+        {
+          for (j = 0; j < width; j++)
+            {
+              current_pixel = original_pixels + i*rowstride + j*(has_alpha?4:3);
+              intensity = INTENSITY (*(current_pixel), *(current_pixel + 1), *(current_pixel + 2));
+              if (pixelate && (i+j)%2 == 0)
+                {
+                  *(target_pixels + i*rowstride + j*(has_alpha?4:3)) = intensity/2 + 127;
+                  *(target_pixels + i*rowstride + j*(has_alpha?4:3) + 1) = intensity/2 + 127;
+                  *(target_pixels + i*rowstride + j*(has_alpha?4:3) + 2) = intensity/2 + 127;
+                }
+              else if (pixelate)
+                {
+#define DARK_FACTOR 0.7
+                  *(target_pixels + i*rowstride + j*(has_alpha?4:3)) =
+                    (guchar) (((1.0 - saturation) * intensity
+                               + saturation * (*(current_pixel)))) * DARK_FACTOR;
+                  *(target_pixels + i*rowstride + j*(has_alpha?4:3) + 1) =
+                    (guchar) (((1.0 - saturation) * intensity
+                               + saturation * (*(current_pixel + 1)))) * DARK_FACTOR;
+                  *(target_pixels + i*rowstride + j*(has_alpha?4:3) + 2) =
+                    (guchar) (((1.0 - saturation) * intensity
+                               + saturation * (*(current_pixel + 2)))) * DARK_FACTOR;
+                }
+              else
+                {
+                  *(target_pixels + i*rowstride + j*(has_alpha?4:3)) =
+                    (guchar) ((1.0 - saturation) * intensity
+                              + saturation * (*(current_pixel)));
+                  *(target_pixels + i*rowstride + j*(has_alpha?4:3) + 1) =
+                    (guchar) ((1.0 - saturation) * intensity
+                              + saturation * (*(current_pixel + 1)));
+                  *(target_pixels + i*rowstride + j*(has_alpha?4:3) + 2) =
+                    (guchar) ((1.0 - saturation) * intensity
+                              + saturation * (*(current_pixel + 2)));
+                }
+              
+              if (has_alpha)
+                *(target_pixels + i*rowstride + j*(has_alpha?4:3) + 3) = *(current_pixel + 3);
+            }
+        }
+
+      return;
+    }
+}
+
+static GdkPixbuf*
+scale_or_ref (GdkPixbuf *src,
+              gint width,
+              gint height)
+{
+  if (width == gdk_pixbuf_get_width (src) &&
+      height == gdk_pixbuf_get_height (src))
+    {
+      gdk_pixbuf_ref (src);
+      return src;
+    }
+  else
+    {
+      return gdk_pixbuf_scale_simple (src,
+                                      width, height,
+                                      GDK_INTERP_BILINEAR);
+    }
+}
+
+GdkPixbuf *
+_gtk_default_render_icon (GtkStyle            *style,
+                          const GtkIconSource *source,
+                          GtkTextDirection     direction,
+                          GtkStateType         state,
+                          GtkIconSizeType      size,
+                          GtkWidget           *widget,
+                          const gchar         *detail)
+{
+  gint width = 1;
+  gint height = 1;
+  GdkPixbuf *scaled;
+  GdkPixbuf *stated;
+
+  /* Oddly, style can be NULL in this function, because
+   * GtkIconSet can be used without a style and if so
+   * it uses this function.
+   */
+  
+  g_return_val_if_fail (source->pixbuf != NULL, NULL);
+  
+  gtk_get_icon_size (size, &width, &height);
+  
+  scaled = scale_or_ref (source->pixbuf, width, height);
+
+  if (state == GTK_STATE_INSENSITIVE)
+    {
+      stated = gdk_pixbuf_copy (scaled);      
+
+      gdk_pixbuf_saturate_and_pixelate (scaled, stated,
+                                        0.8, TRUE);
+
+      gdk_pixbuf_unref (scaled);
+    }
+  else
+    {
+      stated = scaled;
+    }
+  
+  return stated;
 }
 
 static void
