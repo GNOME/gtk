@@ -6,8 +6,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.3.15\n"
-"POT-Creation-Date: 2002-02-28 09:38+0100\n"
-"PO-Revision-Date: 2002-02-28 09:26+0100\n"
+"POT-Creation-Date: 2002-02-28 16:42+0100\n"
+"PO-Revision-Date: 2002-02-28 16:42+0100\n"
 "Last-Translator: Christophe Merlet (RedFox) <redfox@eikonex.org>\n"
 "Language-Team: GNOME French Team <gnomefr@traduc.org>\n"
 "MIME-Version: 1.0\n"
@@ -1701,9 +1701,8 @@ msgid "Number of pixels of the entry scrolled off the screen to the left"
 msgstr ""
 
 #: gtk/gtkentry.c:524
-#, fuzzy
 msgid "The contents of the entry"
-msgstr "Le texte du rendeur."
+msgstr "Le contenu de l'entrée"
 
 #: gtk/gtkentry.c:728
 #, fuzzy
@@ -1720,16 +1719,15 @@ msgstr "Sélectionner tout"
 
 #: gtk/gtkentry.c:3844 gtk/gtklabel.c:3221
 msgid "Input Methods"
-msgstr ""
+msgstr "Méthodes de saisie"
 
 #: gtk/gtkentry.c:3854 gtk/gtktextview.c:6360
 msgid "_Insert Unicode control character"
-msgstr ""
+msgstr "_Insérer un caractère de contrôle Unicode"
 
 #: gtk/gtkfilesel.c:534 gtk/gtkimage.c:161
-#, fuzzy
 msgid "Filename"
-msgstr "Renommer"
+msgstr "Nom de fichier"
 
 #: gtk/gtkfilesel.c:535
 msgid "The currently selected filename."
@@ -3123,7 +3121,7 @@ msgstr "Question"
 #.
 #: gtk/gtkstock.c:275
 msgid "_Add"
-msgstr ""
+msgstr "_Ajouter"
 
 #: gtk/gtkstock.c:276
 msgid "_Apply"
@@ -3163,73 +3161,68 @@ msgid "C_ut"
 msgstr "Co_uper"
 
 #: gtk/gtkstock.c:285
-#, fuzzy
 msgid "_Delete"
-msgstr "Effacer"
+msgstr "_Supprimer"
 
 #: gtk/gtkstock.c:286
 msgid "_Execute"
-msgstr ""
+msgstr "_Exécuter"
 
 #: gtk/gtkstock.c:287
 msgid "_Find"
-msgstr ""
+msgstr "_Rechercher"
 
 #: gtk/gtkstock.c:288
 msgid "Find and _Replace"
-msgstr ""
+msgstr "Rechercher et rem_placer"
 
 #: gtk/gtkstock.c:289
-#, fuzzy
 msgid "_Floppy"
-msgstr "_Copier"
+msgstr "_Disquette"
 
 #: gtk/gtkstock.c:290
 msgid "_Bottom"
-msgstr ""
+msgstr "_Bas"
 
 #: gtk/gtkstock.c:291
 msgid "_First"
-msgstr ""
+msgstr "_Premier"
 
 #: gtk/gtkstock.c:292
-#, fuzzy
 msgid "_Last"
-msgstr "Palette personnelle"
+msgstr "_Dernier"
 
 #: gtk/gtkstock.c:293
-#, fuzzy
 msgid "_Top"
-msgstr "_Copier"
+msgstr "_Haut"
 
 #: gtk/gtkstock.c:294
 msgid "_Back"
-msgstr ""
+msgstr "_Reculer"
 
 #: gtk/gtkstock.c:295
 msgid "_Down"
-msgstr ""
+msgstr "_Descendre"
 
 #: gtk/gtkstock.c:296
 msgid "_Forward"
-msgstr ""
+msgstr "_Avancer"
 
 #: gtk/gtkstock.c:297
 msgid "_Up"
-msgstr ""
+msgstr "_Monter"
 
 #: gtk/gtkstock.c:298
 msgid "_Help"
 msgstr "_Aide"
 
 #: gtk/gtkstock.c:299
-#, fuzzy
 msgid "_Home"
-msgstr "Aide"
+msgstr "_Maison"
 
 #: gtk/gtkstock.c:300
 msgid "_Index"
-msgstr ""
+msgstr "_Index"
 
 #: gtk/gtkstock.c:301
 msgid "_Italic"
@@ -3237,25 +3230,23 @@ msgstr "_Italique"
 
 #: gtk/gtkstock.c:302
 msgid "_Jump to"
-msgstr ""
+msgstr "_Aller à"
 
 #: gtk/gtkstock.c:303
 msgid "_Center"
 msgstr "_Centre"
 
 #: gtk/gtkstock.c:304
-#, fuzzy
 msgid "_Fill"
-msgstr "Famille :"
+msgstr "_Remplir"
 
 #: gtk/gtkstock.c:305
 msgid "_Left"
-msgstr ""
+msgstr "_Gauche"
 
 #: gtk/gtkstock.c:306
-#, fuzzy
 msgid "_Right"
-msgstr "léger"
+msgstr "_Droite"
 
 #: gtk/gtkstock.c:307
 msgid "_New"
@@ -3274,9 +3265,8 @@ msgid "_Open"
 msgstr "_Ouvrir"
 
 #: gtk/gtkstock.c:311
-#, fuzzy
 msgid "_Paste"
-msgstr "Palette personnelle"
+msgstr "C_oller"
 
 #: gtk/gtkstock.c:312
 msgid "_Preferences"
@@ -3287,9 +3277,8 @@ msgid "_Print"
 msgstr "_Imprimer"
 
 #: gtk/gtkstock.c:314
-#, fuzzy
 msgid "Print Pre_view"
-msgstr "Aperçu :"
+msgstr "_Aperçu de l'impression"
 
 #: gtk/gtkstock.c:315
 msgid "_Properties"
@@ -3304,18 +3293,16 @@ msgid "_Redo"
 msgstr "_Refaire"
 
 #: gtk/gtkstock.c:318
-#, fuzzy
 msgid "_Refresh"
-msgstr "_Préférences"
+msgstr "_Rafraîchir"
 
 #: gtk/gtkstock.c:319
-#, fuzzy
 msgid "_Remove"
-msgstr "_Refaire"
+msgstr "_Enlever"
 
 #: gtk/gtkstock.c:320
 msgid "_Revert"
-msgstr ""
+msgstr "_Revenir"
 
 #: gtk/gtkstock.c:321
 msgid "_Save"
@@ -3326,39 +3313,36 @@ msgid "Save _As"
 msgstr "Enregistrer _sous"
 
 #: gtk/gtkstock.c:323
-#, fuzzy
 msgid "_Color"
-msgstr "_Fermer"
+msgstr "_Couleur"
 
 #: gtk/gtkstock.c:324
-#, fuzzy
 msgid "_Font"
-msgstr "Police"
+msgstr "_Police"
 
 #: gtk/gtkstock.c:325
 msgid "_Ascending"
-msgstr ""
+msgstr "_Ascendant"
 
 #: gtk/gtkstock.c:326
 msgid "_Descending"
-msgstr ""
+msgstr "_Descendant"
 
 #: gtk/gtkstock.c:327
 msgid "_Spell Check"
-msgstr ""
+msgstr "Vérification _orthographique"
 
 #: gtk/gtkstock.c:328
 msgid "_Stop"
-msgstr ""
+msgstr "_Stop"
 
 #: gtk/gtkstock.c:329
 msgid "_Strikethrough"
 msgstr "_Barré"
 
 #: gtk/gtkstock.c:330
-#, fuzzy
 msgid "_Undelete"
-msgstr "_Souligné"
+msgstr "_Récupérer"
 
 #: gtk/gtkstock.c:331
 msgid "_Underline"
@@ -3375,27 +3359,27 @@ msgstr "_Oui"
 #: gtk/gtkstock.c:334
 #, c-format
 msgid "Zoom _100%"
-msgstr ""
+msgstr "Zoom _100%"
 
 #: gtk/gtkstock.c:335
 msgid "Zoom to _Fit"
-msgstr ""
+msgstr "Zoom pour _remplir"
 
 #: gtk/gtkstock.c:336
 msgid "Zoom _In"
-msgstr ""
+msgstr "Zoom a_vant"
 
 #: gtk/gtkstock.c:337
 msgid "Zoom _Out"
-msgstr ""
+msgstr "Zoom a_rrière"
 
 #: gtk/gtktable.c:156
 msgid "Rows"
-msgstr ""
+msgstr "Lignes"
 
 #: gtk/gtktable.c:157
 msgid "The number of rows in the table"
-msgstr ""
+msgstr "Le nombre de lignes dans la table"
 
 #: gtk/gtktable.c:165
 msgid "Columns"
@@ -3403,12 +3387,11 @@ msgstr "Colonnes"
 
 #: gtk/gtktable.c:166
 msgid "The number of columns in the table"
-msgstr ""
+msgstr "Le nombre de colonnes dans la table"
 
 #: gtk/gtktable.c:174
-#, fuzzy
 msgid "Row spacing"
-msgstr "Espacement :"
+msgstr "Espacement des lignes"
 
 #: gtk/gtktable.c:175
 msgid "The amount of space between two consecutive rows"
@@ -3416,7 +3399,7 @@ msgstr ""
 
 #: gtk/gtktable.c:183
 msgid "Column spacing"
-msgstr ""
+msgstr "Espacement des colonnes"
 
 #: gtk/gtktable.c:184
 msgid "The amount of space between two consecutive columns"
