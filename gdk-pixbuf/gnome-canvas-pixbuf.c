@@ -558,8 +558,6 @@ recompute_bounding_box (GnomeCanvasPixbuf *gcp)
 	GnomeCanvasItem *item;
 	PixbufPrivate *priv;
 	double i2c[6], render_affine[6];
-	double w, h;
-	double x, y;
 	ArtDRect rect;
 
 

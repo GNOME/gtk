@@ -1,3 +1,11 @@
+1999-11-03  Jonathan Blandford  <jrb@redhat.com>
+
+	* src/io-gif.c (set_gif_lzw_clear_code): new state.  Fixes
+	un-compressed gifs.
+
+	* src/gnome-canvas-pixbuf.c (recompute_bounding_box): remove
+	unneeded x,y,h,w vars.
+
 1999-11-03  Larry Ewing  <lewing@gimp.org>
 
 	* src/gnome-canvas-pixbuf.c (compute_render_affine): adjust 
