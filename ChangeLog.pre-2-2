@@ -1,3 +1,14 @@
+Thu Oct 26 02:10:32 2000  Tim Janik  <timj@gtk.org>
+
+	* gtk/Makefile.am: invoke maketypes.awk with LC_ALL=C to avoid
+	localization misbehaviour.
+
+	* gtk/gtk-boxed.defs: nuked "boxed" type GtkCTreeNode, since it's
+	a useless type without copy/free.
+
+	* gtk/gtkctree.c (gtk_ctree_class_init): use GTK_TYPE_POINTER instead
+	of GTK_TYPE_CTREE_NODE.
+
 Thu Oct 26 00:51:52 2000  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtksignal.c:

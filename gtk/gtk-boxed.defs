@@ -17,8 +17,6 @@
   gtk_selection_data_copy
   gtk_selection_data_free)
 
-(define-boxed GtkCTreeNode
-)
 
 ;;; Gdk boxed types
 

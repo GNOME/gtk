@@ -392,36 +392,36 @@ gtk_ctree_class_init (GtkCTreeClass *klass)
 		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkCTreeClass, tree_select_row),
 		    gtk_marshal_VOID__POINTER_INT,
-		    GTK_TYPE_NONE, 2, GTK_TYPE_CTREE_NODE, GTK_TYPE_INT);
+		    GTK_TYPE_NONE, 2, GTK_TYPE_POINTER, GTK_TYPE_INT);
   ctree_signals[TREE_UNSELECT_ROW] =
     gtk_signal_new ("tree_unselect_row",
 		    GTK_RUN_FIRST,
 		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkCTreeClass, tree_unselect_row),
 		    gtk_marshal_VOID__POINTER_INT,
-		    GTK_TYPE_NONE, 2, GTK_TYPE_CTREE_NODE, GTK_TYPE_INT);
+		    GTK_TYPE_NONE, 2, GTK_TYPE_POINTER, GTK_TYPE_INT);
   ctree_signals[TREE_EXPAND] =
     gtk_signal_new ("tree_expand",
 		    GTK_RUN_LAST,
 		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkCTreeClass, tree_expand),
 		    gtk_marshal_VOID__POINTER,
-		    GTK_TYPE_NONE, 1, GTK_TYPE_CTREE_NODE);
+		    GTK_TYPE_NONE, 1, GTK_TYPE_POINTER);
   ctree_signals[TREE_COLLAPSE] =
     gtk_signal_new ("tree_collapse",
 		    GTK_RUN_LAST,
 		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkCTreeClass, tree_collapse),
 		    gtk_marshal_VOID__POINTER,
-		    GTK_TYPE_NONE, 1, GTK_TYPE_CTREE_NODE);
+		    GTK_TYPE_NONE, 1, GTK_TYPE_POINTER);
   ctree_signals[TREE_MOVE] =
     gtk_signal_new ("tree_move",
 		    GTK_RUN_LAST,
 		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkCTreeClass, tree_move),
 		    gtk_marshal_VOID__POINTER_POINTER_POINTER,
-		    GTK_TYPE_NONE, 3, GTK_TYPE_CTREE_NODE,
-		    GTK_TYPE_CTREE_NODE, GTK_TYPE_CTREE_NODE);
+		    GTK_TYPE_NONE, 3, GTK_TYPE_POINTER,
+		    GTK_TYPE_POINTER, GTK_TYPE_POINTER);
   ctree_signals[CHANGE_FOCUS_ROW_EXPANSION] =
     gtk_signal_new ("change_focus_row_expansion",
 		    GTK_RUN_LAST | GTK_RUN_ACTION,

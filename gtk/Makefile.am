@@ -495,18 +495,18 @@ $(srcdir)/gtkmarshal.c $(srcdir)/stamp-gtkmarshal.h: @REBUILD@ gtkmarshal.list g
 	&& echo timestamp > stamp-gtkmarshal.h
 $(srcdir)/stamp-gtktypebuiltins.h: @REBUILD@ maketypes.awk stamp-gtk.defs gtktypebuiltins.h
 	cd $(srcdir) \
-	&& $(AWK) -f maketypes.awk gtk.defs macros > xgen-gtbh \
+	&& LC_ALL=C $(AWK) -f maketypes.awk gtk.defs macros > xgen-gtbh \
 	&& (cmp -s xgen-gtbh gtktypebuiltins.h || cp xgen-gtbh gtktypebuiltins.h) \
 	&& rm -f xgen-gtbh \
 	&& echo timestamp > $(@F)
 $(srcdir)/gtktypebuiltins_vars.c: @REBUILD@ maketypes.awk stamp-gtk.defs
 	cd $(srcdir) \
-	&& $(AWK) -f maketypes.awk gtk.defs variables > xgen-gtbvc \
+	&& LC_ALL=C $(AWK) -f maketypes.awk gtk.defs variables > xgen-gtbvc \
 	&& cp xgen-gtbvc $(@F) \
 	&& rm -f xgen-gtbvc
 $(srcdir)/gtktypebuiltins_ids.c: @REBUILD@ maketypes.awk stamp-gtk.defs
 	cd $(srcdir) \
-	&& $(AWK) -f maketypes.awk gtk.defs entries > xgen-gtbic \
+	&& LC_ALL=C $(AWK) -f maketypes.awk gtk.defs entries > xgen-gtbic \
 	&& cp xgen-gtbic $(@F) \
 	&& rm -f xgen-gtbic
 $(srcdir)/gtktypebuiltins_evals.c: @REBUILD@ makeenums.pl $(gtk_public_h_sources) $(gdk_headers)
