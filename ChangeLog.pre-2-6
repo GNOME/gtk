@@ -1,3 +1,10 @@
+2003-05-30  Murray Cumming  <murrayc@usa.net>
+  
+  	* gtk/gtkalignment.[h|c]: Added 4-sided padding as properties with
+  	gtk_alignment_get_padding() and gtk_aligment_set_padding(). This
+  	uses the new private data system - see g_type_class_add_private() in
+  	gtk_alignment_class_init() and the use of GTK_ALIGNMENT_GET_PRIVATE().
+
 2003-05-30  Matthias Clasen  <maclas@gmx.de>
 	
 	* gtk/gtknotebook.c: Changed guint to GtkNotebookArrow in the

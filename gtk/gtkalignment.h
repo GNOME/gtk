@@ -43,10 +43,12 @@ extern "C" {
 #define GTK_IS_ALIGNMENT(obj)               (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_ALIGNMENT))
 #define GTK_IS_ALIGNMENT_CLASS(klass)       (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_ALIGNMENT))
 #define GTK_ALIGNMENT_GET_CLASS(obj)        (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_ALIGNMENT, GtkAlignmentClass))
+#define GTK_ALIGNMENT_GET_PRIVATE(o)  (G_TYPE_INSTANCE_GET_PRIVATE ((o), GTK_TYPE_ALIGNMENT, GtkAlignmentPrivate))
 
 
 typedef struct _GtkAlignment       GtkAlignment;
 typedef struct _GtkAlignmentClass  GtkAlignmentClass;
+typedef struct _GtkAlignmentPrivate GtkAlignmentPrivate;
 
 struct _GtkAlignment
 {
@@ -75,6 +77,17 @@ void       gtk_alignment_set        (GtkAlignment      *alignment,
 				     gfloat             xscale,
 				     gfloat             yscale);
 
+void       gtk_alignment_set_padding (GtkAlignment      *alignment,
+				      guint              padding_top,
+				      guint              padding_bottom,
+				      guint              padding_left,
+				      guint              padding_right);
+
+void       gtk_alignment_get_padding (GtkAlignment      *alignment,
+				      guint             *padding_top,
+				      guint             *padding_bottom,
+				      guint             *padding_left,
+				      guint             *padding_right);
 
 #ifdef __cplusplus
 }
