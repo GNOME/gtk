@@ -49,6 +49,67 @@ typedef struct
   gulong pixels[1];
 } _GdkPixmapInfo;
 
+
+static void gdk_pixmap_impl_init       (GdkPixmapImpl      *pixmap);
+static void gdk_pixmap_impl_class_init (GdkPixmapImplClass *klass);
+static void gdk_pixmap_impl_finalize   (GObject            *object);
+
+static gpointer parent_class = NULL;
+
+GType
+gdk_pixmap_impl_get_type (void)
+{
+  static GType object_type = 0;
+
+  if (!object_type)
+    {
+      static const GTypeInfo object_info =
+      {
+        sizeof (GdkPixmapImplClass),
+        (GBaseInitFunc) NULL,
+        (GBaseFinalizeFunc) NULL,
+        (GClassInitFunc) gdk_pixmap_impl_class_init,
+        NULL,           /* class_finalize */
+        NULL,           /* class_data */
+        sizeof (GdkPixmapImpl),
+        0,              /* n_preallocs */
+        (GInstanceInitFunc) gdk_pixmap_impl_init,
+      };
+      
+      object_type = g_type_register_static (G_TYPE_DRAWABLE_IMPL,
+                                            "GdkPixmapImpl",
+                                            &object_info);
+    }
+  
+  return object_type;
+}
+
+static void
+gdk_pixmap_impl_init (GdkPixmapImpl *impl)
+{
+
+
+}
+
+static void
+gdk_pixmap_impl_class_init (GdkPixmapImplClass *klass)
+{
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
+
+  parent_class = g_type_class_peek (GDK_TYPE_DRAWABLE_IMPL);
+
+  object_class->finalize = gdk_pixmap_impl_finalize;
+}
+
+static void
+gdk_pixmap_impl_finalize (GObject *object)
+{
+  GdkPixmapImpl *impl = GDK_PIXMAP_IMPL (object);
+
+
+  G_OBJECT_CLASS (parent_class)->finalize (object);
+}
+
 GdkDrawableClass _gdk_x11_pixmap_class;
 
 static void

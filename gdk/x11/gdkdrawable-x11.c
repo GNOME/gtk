@@ -85,6 +85,66 @@ static void gdk_x11_draw_lines     (GdkDrawable    *drawable,
 				    GdkPoint       *points,
 				    gint            npoints);
 
+static void gdk_drawable_impl_init       (GdkDrawableImpl      *drawable);
+static void gdk_drawable_impl_class_init (GdkDrawableImplClass *klass);
+static void gdk_drawable_impl_finalize   (GObject              *object);
+
+static gpointer parent_class = NULL;
+
+GType
+gdk_drawable_impl_get_type (void)
+{
+  static GType object_type = 0;
+
+  if (!object_type)
+    {
+      static const GTypeInfo object_info =
+      {
+        sizeof (GdkDrawableImplClass),
+        (GBaseInitFunc) NULL,
+        (GBaseFinalizeFunc) NULL,
+        (GClassInitFunc) gdk_drawable_impl_class_init,
+        NULL,           /* class_finalize */
+        NULL,           /* class_data */
+        sizeof (GdkDrawableImpl),
+        0,              /* n_preallocs */
+        (GInstanceInitFunc) gdk_drawable_impl_init,
+      };
+      
+      object_type = g_type_register_static (G_TYPE_DRAWABLE,
+                                            "GdkDrawableImpl",
+                                            &object_info);
+    }
+  
+  return object_type;
+}
+
+static void
+gdk_drawable_impl_init (GdkDrawableImpl *impl)
+{
+
+
+}
+
+static void
+gdk_drawable_impl_class_init (GdkDrawableImplClass *klass)
+{
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
+
+  parent_class = g_type_class_peek (GDK_TYPE_DRAWABLE);
+
+  object_class->finalize = gdk_drawable_impl_finalize;
+}
+
+static void
+gdk_drawable_impl_finalize (GObject *object)
+{
+  GdkDrawableImpl *impl = GDK_DRAWABLE_IMPL (object);
+
+
+  G_OBJECT_CLASS (parent_class)->finalize (object);
+}
+
 
 GdkDrawableClass _gdk_x11_drawable_class = {
   gdk_x11_drawable_destroy,

@@ -79,6 +79,67 @@ static void     gdk_window_set_static_win_gravity (GdkWindow *window,
 						   gboolean   on);
 static gboolean gdk_window_have_shape_ext (void);
 
+
+static void gdk_window_impl_init       (GdkWindowImpl      *window);
+static void gdk_window_impl_class_init (GdkWindowImplClass *klass);
+static void gdk_window_impl_finalize   (GObject            *object);
+
+static gpointer parent_class = NULL;
+
+GType
+gdk_window_impl_get_type (void)
+{
+  static GType object_type = 0;
+
+  if (!object_type)
+    {
+      static const GTypeInfo object_info =
+      {
+        sizeof (GdkWindowImplClass),
+        (GBaseInitFunc) NULL,
+        (GBaseFinalizeFunc) NULL,
+        (GClassInitFunc) gdk_window_impl_class_init,
+        NULL,           /* class_finalize */
+        NULL,           /* class_data */
+        sizeof (GdkWindowImpl),
+        0,              /* n_preallocs */
+        (GInstanceInitFunc) gdk_window_impl_init,
+      };
+      
+      object_type = g_type_register_static (G_TYPE_DRAWABLE_IMPL,
+                                            "GdkWindowImpl",
+                                            &object_info);
+    }
+  
+  return object_type;
+}
+
+static void
+gdk_window_impl_init (GdkWindowImpl *impl)
+{
+
+
+}
+
+static void
+gdk_window_impl_class_init (GdkWindowImplClass *klass)
+{
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
+
+  parent_class = g_type_class_peek (GDK_TYPE_DRAWABLE_IMPL);
+
+  object_class->finalize = gdk_window_impl_finalize;
+}
+
+static void
+gdk_window_impl_finalize (GObject *object)
+{
+  GdkWindowImpl *impl = GDK_WINDOW_IMPL (object);
+
+
+  G_OBJECT_CLASS (parent_class)->finalize (object);
+}
+
 GdkDrawableClass _gdk_windowing_window_class;
 
 static void
