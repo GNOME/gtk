@@ -1,3 +1,8 @@
+Tue Oct 22 15:13:59 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkimmulticontext.c: Include config.h
+	(#96441, Morten Welinder)
+
 Tue Oct 22 15:03:41 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/fnmatch.h: When compiling our on fnmatch.c, 
