@@ -1,3 +1,13 @@
+Sun May 20 13:59:20 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* configure.in: Start checks for X from pangox/pangoxft
+	CFLAGS to avoid duplicate libraries.
+
+	* gdk/Makefile.am (LDFLAGS): Remove extra -lm.
+
+	* configure.in (GDK_PIXBUF_PACKAGES): Fix GDK_PIXBUF_PACKAGES
+	to include gobject.
+	
 2001-05-18  Alexander Larsson  <alexl@redhat.com>
 
 	* gtk/gtkspinbutton.c:
