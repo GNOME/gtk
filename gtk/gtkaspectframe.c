@@ -238,9 +238,6 @@ gtk_aspect_frame_set (GtkAspectFrame *aspect_frame,
       aspect_frame->ratio = ratio;
       aspect_frame->obey_child = obey_child;
       
-      if (GTK_WIDGET_DRAWABLE(widget))
-	gtk_widget_queue_clear (widget);
-      
       gtk_widget_queue_resize (widget);
     }
 }

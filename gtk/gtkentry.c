@@ -824,14 +824,25 @@ static void
 gtk_entry_draw (GtkWidget    *widget,
 		GdkRectangle *area)
 {
+  GtkEntry *entry;
+  
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_ENTRY (widget));
   g_return_if_fail (area != NULL);
 
+  entry = GTK_ENTRY (widget);
+  
   if (GTK_WIDGET_DRAWABLE (widget))
     {
+      GdkRectangle tmp_area = *area;
+
+      tmp_area.x -= widget->style->klass->xthickness;
+      tmp_area.y -= widget->style->klass->xthickness;
+      
+      gdk_window_begin_paint_rect (entry->text_area, &tmp_area);
       gtk_widget_draw_focus (widget);
       gtk_entry_draw_text (GTK_ENTRY (widget));
+      gdk_window_end_paint (entry->text_area);
     }
 }
 
@@ -1285,7 +1296,6 @@ gtk_entry_draw_text (GtkEntry *entry)
   gint width, height;
   gint y;
   GdkDrawable *drawable;
-  gint use_backing_pixmap;
   GdkWChar *stars;
   GdkWChar *toprint;
 
@@ -1317,25 +1327,10 @@ gtk_entry_draw_text (GtkEntry *entry)
 
       gdk_window_get_size (entry->text_area, &width, &height);
 
-      /*
-	If the widget has focus, draw on a backing pixmap to avoid flickering
-	and copy it to the text_area.
-	Otherwise draw to text_area directly for better speed.
-      */
-      use_backing_pixmap = GTK_WIDGET_HAS_FOCUS (widget) && (entry->text != NULL);
-      if (use_backing_pixmap)
-	{
-	   gtk_entry_make_backing_pixmap (entry, width, height);
-	   drawable = entry->backing_pixmap;
-	}
-       else
-	 {
-	    drawable = entry->text_area;
-	 }
-       gtk_paint_flat_box (widget->style, drawable, 
-			   GTK_WIDGET_STATE(widget), GTK_SHADOW_NONE,
-			   NULL, widget, "entry_bg", 
-			   0, 0, width, height);
+      gtk_paint_flat_box (widget->style, entry->text_area, 
+			  GTK_WIDGET_STATE(widget), GTK_SHADOW_NONE,
+			  NULL, widget, "entry_bg", 
+			  0, 0, width, height);
 
       y = (height - (widget->style->font->ascent + widget->style->font->descent)) / 2;
       y += widget->style->font->ascent;
@@ -1378,7 +1373,7 @@ gtk_entry_draw_text (GtkEntry *entry)
 	}
       
       if (selection_start_pos > start_pos)
-	gdk_draw_text_wc (drawable, widget->style->font,
+	gdk_draw_text_wc (entry->text_area, widget->style->font,
 			  widget->style->fg_gc[GTK_WIDGET_STATE (widget)],
 			  INNER_BORDER + start_xoffset, y,
 			  toprint,
@@ -1388,14 +1383,14 @@ gtk_entry_draw_text (GtkEntry *entry)
 	  (selection_start_pos < end_pos) &&
 	  (selection_start_pos != selection_end_pos))
 	 {
-	    gtk_paint_flat_box (widget->style, drawable, 
+	    gtk_paint_flat_box (widget->style, entry->text_area, 
 				selected_state, GTK_SHADOW_NONE,
 				NULL, widget, "text",
 				INNER_BORDER + selection_start_xoffset,
 				INNER_BORDER,
 				selection_end_xoffset - selection_start_xoffset,
 				height - 2*INNER_BORDER);
-	    gdk_draw_text_wc (drawable, widget->style->font,
+	    gdk_draw_text_wc (entry->text_area, widget->style->font,
 			      widget->style->fg_gc[selected_state],
 			      INNER_BORDER + selection_start_xoffset, y,
 			      toprint + selection_start_pos - start_pos,
@@ -1403,7 +1398,7 @@ gtk_entry_draw_text (GtkEntry *entry)
 	 }	    
        
        if (selection_end_pos < end_pos)
-	 gdk_draw_text_wc (drawable, widget->style->font,
+	 gdk_draw_text_wc (entry->text_area, widget->style->font,
 			   widget->style->fg_gc[GTK_WIDGET_STATE (widget)],
 			   INNER_BORDER + selection_end_xoffset, y,
 			   toprint + selection_end_pos - start_pos,
@@ -1413,13 +1408,7 @@ gtk_entry_draw_text (GtkEntry *entry)
 	g_free (toprint);
 
       if (editable->editable)
-	gtk_entry_draw_cursor_on_drawable (entry, drawable);
-
-      if (use_backing_pixmap)
-	gdk_draw_pixmap(entry->text_area,
-			widget->style->fg_gc[GTK_STATE_NORMAL],
-			entry->backing_pixmap,
-			0, 0, 0, 0, width, height);	  
+	gtk_entry_draw_cursor_on_drawable (entry, entry->text_area);
     }
 }
 

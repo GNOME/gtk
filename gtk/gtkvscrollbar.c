@@ -289,9 +289,6 @@ gtk_vscrollbar_size_allocate (GtkWidget     *widget,
                               RANGE_CLASS (widget)->stepper_size,
                               widget->requisition.width - widget->style->klass->xthickness * 2,
                               RANGE_CLASS (widget)->stepper_size);
-      gdk_window_resize (range->slider,
-                         widget->requisition.width - widget->style->klass->xthickness * 2,
-                         RANGE_CLASS (range)->min_slider_size);
       
       gtk_range_slider_update (GTK_RANGE (widget));
     }

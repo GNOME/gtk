@@ -147,9 +147,7 @@ gtk_bin_unmap (GtkWidget *widget)
   GTK_WIDGET_UNSET_FLAGS (widget, GTK_MAPPED);
   bin = GTK_BIN (widget);
 
-  if (GTK_WIDGET_NO_WINDOW (widget))
-     gtk_widget_queue_clear (widget);
-  else
+  if (!GTK_WIDGET_NO_WINDOW (widget))
     gdk_window_hide (widget->window);
 
   if (bin->child && GTK_WIDGET_MAPPED (bin->child))

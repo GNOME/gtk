@@ -289,9 +289,6 @@ gtk_hscrollbar_size_allocate (GtkWidget     *widget,
                               widget->style->klass->ythickness,
                               RANGE_CLASS (widget)->stepper_size,
                               widget->requisition.height - widget->style->klass->ythickness * 2);
-      gdk_window_resize (range->slider,
-                         RANGE_CLASS (widget)->min_slider_size,
-                         widget->requisition.height - widget->style->klass->ythickness * 2);
       
       gtk_range_slider_update (GTK_RANGE (widget));
     }

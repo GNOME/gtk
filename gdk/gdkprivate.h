@@ -41,6 +41,8 @@
 extern "C" {
 #endif /* __cplusplus */
 
+#define GDK_PARENT_RELATIVE_BG ((GdkPixmap *)1L)
+
 #define GDK_DRAWABLE_TYPE(d) (((GdkDrawablePrivate *)d)->window_type)
 #define GDK_IS_WINDOW(d) (GDK_DRAWABLE_TYPE(d) <= GDK_WINDOW_TEMP || \
                           GDK_DRAWABLE_TYPE(d) == GDK_WINDOW_FOREIGN)
@@ -95,6 +97,14 @@ struct _GdkWindowPrivate
 
   GList *filters;
   GList *children;
+
+  GdkColor bg_color;
+  GdkPixmap *bg_pixmap;
+  
+  GSList *paint_stack;
+  
+  GdkRegion *update_area;
+  guint update_freeze_count;
 };
 
 struct _GdkImageClass 
@@ -130,6 +140,9 @@ struct _GdkGCPrivate
   guint ref_count;
   GdkGCClass *klass;
   gpointer klass_data;
+
+  gint clip_x_origin;
+  gint clip_y_origin;
 };
 
 typedef enum {
@@ -267,12 +280,32 @@ void _gdk_colormap_real_destroy (GdkColormap *colormap);
 extern GdkArgDesc _gdk_windowing_args[];
 gboolean _gdk_windowing_init_check (int argc, char **argv);
 
+void _gdk_windowing_window_clear_area   (GdkWindow *window,
+					 gint       x,
+					 gint       y,
+					 gint       width,
+					 gint       height);
+void _gdk_windowing_window_clear_area_e (GdkWindow *window,
+					 gint       x,
+					 gint       y,
+					 gint       width,
+					 gint       height);
+
 #ifdef USE_XIM
 /* XIM support */
 gint   gdk_im_open		 (void);
 void   gdk_im_close		 (void);
 void   gdk_ic_cleanup		 (void);
 #endif /* USE_XIM */
+
+/* Class supplied by windowing-system-dependent code for GdkWindow.
+ */
+extern GdkDrawableClass _gdk_windowing_window_class;
+
+/* Class for covering over windowing-system-dependent and backing-store
+ * code for GdkWindow
+ */
+extern GdkDrawableClass _gdk_window_class;
 
 /* Debugging support */
 

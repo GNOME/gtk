@@ -340,6 +340,17 @@ gdk_draw_drawable (GdkDrawable *drawable,
 							  width, height);
 }
 
+extern void
+_gdk_window_draw_image (GdkDrawable *drawable,
+			GdkGC       *gc,
+			GdkImage    *image,
+			gint         xsrc,
+			gint         ysrc,
+			gint         xdest,
+			gint         ydest,
+			gint         width,
+			gint         height);
+
 void
 gdk_draw_image (GdkDrawable *drawable,
 		GdkGC       *gc,
@@ -364,9 +375,12 @@ gdk_draw_image (GdkDrawable *drawable,
   if (height == -1)
     height = image->height;
 
-
-  image_private->klass->image_put (image, drawable, gc, xsrc, ysrc,
-				   xdest, ydest, width, height);
+  if (GDK_IS_WINDOW (drawable))
+    _gdk_window_draw_image (drawable, gc, image, xsrc, ysrc,
+			    xdest, ydest, width, height);
+  else
+    image_private->klass->image_put (image, drawable, gc, xsrc, ysrc,
+				     xdest, ydest, width, height);
 }
 
 void

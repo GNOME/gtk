@@ -30,7 +30,7 @@
 #include <gdk/x11/gdkprivate-x11.h>
 
 #define GDK_ROOT_WINDOW()             gdk_root_window
-#define GDK_ROOT_PARENT()             ((GdkWindow *)&gdk_parent_root)
+#define GDK_ROOT_PARENT()             ((GdkWindow *)gdk_parent_root)
 #define GDK_DISPLAY()                 gdk_display
 #define GDK_DRAWABLE_XDISPLAY(win)    (GDK_DRAWABLE_XDATA(win)->xdisplay)
 #define GDK_DRAWABLE_XID(win)         (GDK_DRAWABLE_XDATA(win)->xid)
