@@ -337,7 +337,7 @@ gdk_init_check (int	 *argc,
 		option = get_option (argv, *argc, &i);
 
 		if (option)
-		  gdk_input_gxid_port = atoi (equal_pos + 1);
+		  gdk_input_gxid_port = atoi (option);
 	      }
 #endif
 #ifdef USE_XIM

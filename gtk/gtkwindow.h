@@ -81,6 +81,12 @@ struct _GtkWindow
   /* Set if the window, or any descendent of it, has the focus
    */
   guint window_has_focus : 1;
+  
+  /* Set if !window_has_focus, but events are being sent to the
+   * window because the pointer is in it. (Typically, no window
+   * manager is running.
+   */
+  guint window_has_pointer_focus : 1;
 };
 
 struct _GtkWindowClass

@@ -77,6 +77,9 @@ typedef struct {
   GtkWindowLastGeometryInfo last;
 } GtkWindowGeometryInfo;
 
+#define GTK_WINDOW_HAS_FOCUS(window)                           \
+  ((window)->window_has_focus || (window)->window_has_pointer_focus)
+
 static void gtk_window_class_init         (GtkWindowClass    *klass);
 static void gtk_window_init               (GtkWindow         *window);
 static void gtk_window_set_arg            (GtkObject         *object,
@@ -926,6 +929,9 @@ gtk_window_hide (GtkWidget *widget)
     gtk_grab_remove (widget);
 }
 
+/* The algorithm used for window_has_pointer_focus is taken
+ * from the XTerm code.
+ */
 static GdkFilterReturn
 gtk_window_focus_filter (GdkXEvent *xevent,
 			 GdkEvent  *event,
@@ -933,40 +939,65 @@ gtk_window_focus_filter (GdkXEvent *xevent,
 {
   GtkWindow *window = GTK_WINDOW (data);
   XEvent *xev = (XEvent *)xevent;
-  
-  if (xev->xany.type == FocusIn)
+  GdkEvent extra_event;
+
+  switch (xev->xany.type)
     {
-      switch (xev->xfocus.detail)
+    case FocusIn:
+      {
+	switch (xev->xfocus.detail)
+	  {
+	  case NotifyAncestor:
+	  case NotifyNonlinear:
+	  case NotifyVirtual:
+	  case NotifyNonlinearVirtual:
+	    window->window_has_focus = TRUE;
+	    break;
+	  case NotifyPointer:
+	    window->window_has_pointer_focus = TRUE;
+	    break;
+	  case NotifyInferior:
+	  case NotifyPointerRoot:
+	  case NotifyDetailNone:
+	    break;
+	  }
+      }
+      break;
+    case FocusOut:
+      {
+	switch (xev->xfocus.detail)
+	  {
+	  case NotifyAncestor:
+	  case NotifyNonlinear:
+	  case NotifyVirtual:
+	  case NotifyNonlinearVirtual:
+	    window->window_has_focus = FALSE;
+	    break;
+	  case NotifyPointer:
+	    window->window_has_pointer_focus = FALSE;
+	    break;
+	  case NotifyInferior:
+	  case NotifyPointerRoot:
+	  case NotifyDetailNone:
+	    break;
+	  }
+      }
+      break;
+    case EnterNotify:
+    case LeaveNotify:
+      if (xev->xcrossing.detail != NotifyInferior &&
+	  xev->xcrossing.focus && !window->window_has_focus)
 	{
-	case NotifyAncestor:
-	case NotifyNonlinear:
-	case NotifyVirtual:
-	case NotifyNonlinearVirtual:
-	  window->window_has_focus = TRUE;
-	  break;
-	case NotifyInferior:
-	case NotifyPointer:
-	case NotifyPointerRoot:
-	case NotifyDetailNone:
-	  break;
+	  window->window_has_pointer_focus = (xev->xany.type == EnterNotify) ? TRUE : FALSE;
+
+	  extra_event.type = GDK_FOCUS_CHANGE;
+	  extra_event.focus_change.window = GTK_WIDGET (window)->window;
+	  extra_event.focus_change.send_event = FALSE;
+	  extra_event.focus_change.in = window->window_has_pointer_focus;
+
+	  gdk_event_put (&extra_event);
 	}
-    }
-  else if (xev->xany.type == FocusOut)
-    {
-      switch (xev->xfocus.detail)
-	{
-	case NotifyAncestor:
-	case NotifyNonlinear:
-	case NotifyVirtual:
-	case NotifyNonlinearVirtual:
-	  window->window_has_focus = FALSE;
-	  break;
-	case NotifyInferior:
-	case NotifyPointer:
-	case NotifyPointerRoot:
-	case NotifyDetailNone:
-	  break;
-	}
+      break;
     }
 
   return GDK_FILTER_CONTINUE;
@@ -1517,7 +1548,7 @@ gtk_window_real_set_focus (GtkWindow *window,
 	    GTK_WIDGET_SET_FLAGS (window->default_widget, GTK_HAS_DEFAULT);
         }
 
-      if (window->window_has_focus)
+      if (GTK_WINDOW_HAS_FOCUS (window))
 	{
 	  event.type = GDK_FOCUS_CHANGE;
 	  event.window = window->focus_widget->window;
@@ -1541,7 +1572,7 @@ gtk_window_real_set_focus (GtkWindow *window,
 	    GTK_WIDGET_UNSET_FLAGS (window->default_widget, GTK_HAS_DEFAULT);
 	}
       
-      if (window->window_has_focus)
+      if (GTK_WINDOW_HAS_FOCUS (window))
 	{
 	  event.type = GDK_FOCUS_CHANGE;
 	  event.window = window->focus_widget->window;

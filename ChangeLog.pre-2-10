@@ -1,4 +1,17 @@
-Mon Mar  5 16:38:15 2001  Owen Taylor  <otaylor@redhat.com>
+Wed Mar 14 23:38:23 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdk.c (gdk_init_check): Fix missed equal_pos => option
+	for --with-xinput=gxi. (Which is broken anyways, but
+	oh well...)
+
+	* gtk/gtkeditable.c (gtk_editable_get_event_time): Fix excess free
+	in case where there is no current event.
+
+	* gtk/gtkwindow.[ch]: Handle focus for the case of 
+	PointerRoot (no window manager) by using algorithm taken 
+	from xterm.
+
+Fri Mar  9 22:32:32 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkmenushell.c (gtk_menu_shell_enter_notify): Only
 	check the ignore_enter flag for the menu shell that

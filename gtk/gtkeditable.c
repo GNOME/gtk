@@ -831,34 +831,37 @@ gtk_editable_get_event_time (GtkEditable *editable)
   event = gtk_get_current_event();
   
   if (event)
-    switch (event->type)
-      {
-      case GDK_MOTION_NOTIFY:
-	tm = event->motion.time; break;
-      case GDK_BUTTON_PRESS:
-      case GDK_2BUTTON_PRESS:
-      case GDK_3BUTTON_PRESS:
-      case GDK_BUTTON_RELEASE:
-	tm = event->button.time; break;
-      case GDK_KEY_PRESS:
-      case GDK_KEY_RELEASE:
-	tm = event->key.time; break;
-      case GDK_ENTER_NOTIFY:
-      case GDK_LEAVE_NOTIFY:
-	tm = event->crossing.time; break;
-      case GDK_PROPERTY_NOTIFY:
-	tm = event->property.time; break;
-      case GDK_SELECTION_CLEAR:
-      case GDK_SELECTION_REQUEST:
-      case GDK_SELECTION_NOTIFY:
-	tm = event->selection.time; break;
-      case GDK_PROXIMITY_IN:
-      case GDK_PROXIMITY_OUT:
-	tm = event->proximity.time; break;
-      default:			/* use current time */
-	break;
-      }
-  gdk_event_free(event);
+    {
+      switch (event->type)
+	{
+	case GDK_MOTION_NOTIFY:
+	  tm = event->motion.time; break;
+	case GDK_BUTTON_PRESS:
+	case GDK_2BUTTON_PRESS:
+	case GDK_3BUTTON_PRESS:
+	case GDK_BUTTON_RELEASE:
+	  tm = event->button.time; break;
+	case GDK_KEY_PRESS:
+	case GDK_KEY_RELEASE:
+	  tm = event->key.time; break;
+	case GDK_ENTER_NOTIFY:
+	case GDK_LEAVE_NOTIFY:
+	  tm = event->crossing.time; break;
+	case GDK_PROPERTY_NOTIFY:
+	  tm = event->property.time; break;
+	case GDK_SELECTION_CLEAR:
+	case GDK_SELECTION_REQUEST:
+	case GDK_SELECTION_NOTIFY:
+	  tm = event->selection.time; break;
+	case GDK_PROXIMITY_IN:
+	case GDK_PROXIMITY_OUT:
+	  tm = event->proximity.time; break;
+	default:			/* use current time */
+	  break;
+	}
+      
+      gdk_event_free(event);
+    }
   
   return tm;
 }
