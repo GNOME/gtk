@@ -1,3 +1,8 @@
+2004-11-15  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtktreemodel.c (gtk_tree_path_prev): Return FALSE
+	if depth is 0 (noticed by Tim Janik)
+
 Thu Nov 11 17:22:45 2004  Manish Singh  <yosh@gimp.org>
 
 	* gtk/gtkuimanager.c: gtkalias.h doesn't exist on this branch. Remove
