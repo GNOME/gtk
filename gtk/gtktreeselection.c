@@ -634,7 +634,7 @@ gtk_tree_selection_unselect_iter (GtkTreeSelection *selection,
   if (path == NULL)
     return;
 
-  gtk_tree_selection_select_path (selection, path);
+  gtk_tree_selection_unselect_path (selection, path);
   gtk_tree_path_free (path);
 }
 

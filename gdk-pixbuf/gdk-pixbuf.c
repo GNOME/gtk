@@ -130,16 +130,19 @@ free_buffer (guchar *pixels, gpointer data)
  * @width: Width of image in pixels.
  * @height: Height of image in pixels.
  *
- * Creates a new #GdkPixbuf structure and allocates a buffer for it.  The buffer
- * has an optimal rowstride.  Note that the buffer is not cleared; you will have
- * to fill it completely yourself.
+ * Creates a new #GdkPixbuf structure and allocates a buffer for it.  The 
+ * buffer has an optimal rowstride.  Note that the buffer is not cleared;
+ * you will have to fill it completely yourself.
  *
  * Return value: A newly-created #GdkPixbuf with a reference count of 1, or 
  * %NULL if not enough memory could be allocated for the image buffer.
  **/
 GdkPixbuf *
-gdk_pixbuf_new (GdkColorspace colorspace, gboolean has_alpha, int bits_per_sample,
-		int width, int height)
+gdk_pixbuf_new (GdkColorspace colorspace, 
+                gboolean      has_alpha,
+                int           bits_per_sample,
+                int           width,
+                int           height)
 {
 	guchar *buf;
 	int channels;
@@ -425,7 +428,8 @@ gdk_pixbuf_error_quark (void)
 /**
  * gdk_pixbuf_fill:
  * @pixbuf: a #GdkPixbuf
- * @pixel: RGBA pixel to clear to (0xffffffff is opaque white, 0x00000000 transparent black)
+ * @pixel: RGBA pixel to clear to
+ *         (0xffffffff is opaque white, 0x00000000 transparent black)
  *
  * Clears a pixbuf to the given RGBA value, converting the RGBA value into
  * the pixbuf's pixel format. The alpha will be ignored if the pixbuf
@@ -437,15 +441,14 @@ gdk_pixbuf_fill (GdkPixbuf *pixbuf,
                  guint32    pixel)
 {
         guchar *pixels;
-        gboolean all_the_same = FALSE;
         guint r, g, b, a;
         guchar *p;
-        gint n;
+        guint w, h;
 
         g_return_if_fail (GDK_IS_PIXBUF (pixbuf));
 
         if (pixbuf->width == 0 || pixbuf->height == 0)
-          return;
+                return;
 
         pixels = pixbuf->pixels;
 
@@ -454,44 +457,35 @@ gdk_pixbuf_fill (GdkPixbuf *pixbuf,
         b = (pixel & 0x0000ff00) >> 8;
         a = (pixel & 0x000000ff);
 
-        if (r == g && g == b) {
-                if (!pixbuf->has_alpha)
-                        all_the_same = TRUE;
-                else
-                        all_the_same = (r == a);
-        }
+        h = pixbuf->height;
         
-        if (all_the_same) {
-                if (pixbuf->has_alpha)
-                        memset (pixels, r, pixbuf->width * 4);
-                else
-                        memset (pixels, r, pixbuf->width * 3);
-
-        } else {
-                guchar  c[4];
-
-                c[0] = r; c[1] = g; c[2] = b; c[3] = a;
-                
+        while (h--) {
+                w = pixbuf->width;
                 p = pixels;
-                n = pixbuf->width;
-                if (pixbuf->has_alpha) {
-                        do {
-                                memcpy (p, c, 4);
-                                p += 4;
-                        } while (--n);
-                } else {
-                        do {
-                                memcpy (p, c, 3);
-                                p += 3;
-                        } while (--n);
-                }
 
-        }
-        p = pixels;
-        n = pixbuf->height - 1;
-        while (n--) {
-                p += pixbuf->rowstride;
-                memcpy (p, pixels, pixbuf->width * pixbuf->n_channels);
+                switch (pixbuf->n_channels) {
+                case 3:
+                        while (w--) {
+                                p[0] = r;
+                                p[1] = g;
+                                p[2] = b;
+                                p += 3;
+                        }
+                        break;
+                case 4:
+                        while (w--) {
+                                p[0] = r;
+                                p[1] = g;
+                                p[2] = b;
+                                p[3] = a;
+                                p += 4;
+                        }
+                        break;
+                default:
+                        break;
+                }
+                
+                pixels += pixbuf->rowstride;
         }
 }
 

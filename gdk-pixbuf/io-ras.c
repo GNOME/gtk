@@ -138,8 +138,9 @@ static GdkPixbuf *gdk_pixbuf__ras_image_load(FILE * f, GError **error)
 	return pb;
 }
 
-static void RAS2State(struct rasterfile *RAS,
-		      struct ras_progressive_state *State)
+static gboolean RAS2State(struct rasterfile *RAS,
+			  struct ras_progressive_state *State,
+			  GError **error)
 {
 	State->Header.width = GUINT32_FROM_BE(RAS->width);
 	State->Header.height = GUINT32_FROM_BE(RAS->height);
@@ -148,47 +149,73 @@ static void RAS2State(struct rasterfile *RAS,
 	State->Header.maptype = GUINT32_FROM_BE(RAS->maptype);
 	State->Header.maplength = GUINT32_FROM_BE(RAS->maplength);
 
-	g_assert(State->Header.maplength <= 768);	/* Otherwise, we are in trouble */
+	if ((gint)State->Header.width <= 0 ||
+	    (gint)State->Header.height <= 0 || 
+	    State->Header.maplength > 768) {
+		g_set_error (error,
+			     GDK_PIXBUF_ERROR,
+			     GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
+			     _("RAS image has bogus header data")); 
+		return FALSE;
+	}
 
 	State->RasType = State->Header.depth;	/* This may be less trivial someday */
 	State->HeaderSize = 32 + State->Header.maplength;
 
 	if (State->RasType == 32)
 		State->LineWidth = State->Header.width * 4;
-	if (State->RasType == 24)
+	else if (State->RasType == 24)
 		State->LineWidth = State->Header.width * 3;
-	if (State->RasType == 8)
+	else if (State->RasType == 8)
 		State->LineWidth = State->Header.width * 1;
-	if (State->RasType == 1) {
+	else if (State->RasType == 1) {
 		State->LineWidth = State->Header.width / 8;
 		if ((State->Header.width & 7) != 0)
 			State->LineWidth++;
 	}
+	else {
+		g_set_error (error,
+			     GDK_PIXBUF_ERROR,
+			     GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
+			     _("RAS image has unknown type")); 
+		return FALSE;
+	}
 
-	/* Now padd the line to be a multiple of 16 bits */
+	/* Now pad the line to be a multiple of 16 bits */
 	if ((State->LineWidth & 1) != 0)
 		State->LineWidth++;
 
-	if (State->LineBuf == NULL)
-		State->LineBuf = g_malloc(State->LineWidth);
+	if (!State->LineBuf) {
+		State->LineBuf = g_try_malloc (State->LineWidth);
 
-	g_assert(State->LineBuf != NULL);
+		if (!State->LineBuf) {
+			g_set_error (error,
+				     GDK_PIXBUF_ERROR,
+				     GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY,
+				     _("Not enough memory to load RAS image")); 
+			return FALSE;
+		}
+	}
 
 
-	if (State->pixbuf == NULL) {
+	if (!State->pixbuf) {
 		if (State->RasType == 32)
-			State->pixbuf = gdk_pixbuf_new(GDK_COLORSPACE_RGB, TRUE,
-						       8,
-						       (gint)
-						       State->Header.width,
-						       (gint)
-						       State->Header.
-						       height);
+			State->pixbuf = gdk_pixbuf_new (GDK_COLORSPACE_RGB, TRUE, 8,
+							(gint) State->Header.width,
+							(gint) State->Header.height);
 		else
-			State->pixbuf =
-			    gdk_pixbuf_new(GDK_COLORSPACE_RGB, FALSE, 8,
-					   (gint) State->Header.width,
-					   (gint) State->Header.height);
+			State->pixbuf = gdk_pixbuf_new (GDK_COLORSPACE_RGB, FALSE, 8,
+							(gint) State->Header.width,
+							(gint) State->Header.height);
+		
+                if (!State->pixbuf) {
+                        g_set_error (error,
+                                     GDK_PIXBUF_ERROR,
+                                     GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY,
+                                     _("Not enough memory to load RAS image"));
+                        return FALSE;
+                }
+
 		if (State->prepared_func != NULL)
 			/* Notify the client that we are ready to go */
 			(*State->prepared_func) (State->pixbuf,
@@ -197,7 +224,7 @@ static void RAS2State(struct rasterfile *RAS,
 
 	}
 	
-	if ((State->Header.maplength==0)&&(State->RasType==1)) {
+	if ((State->Header.maplength == 0) && (State->RasType == 1)) {
 		State->HeaderBuf[32] = 255;
 		State->HeaderBuf[33] = 0;
 		State->HeaderBuf[34] = 255;
@@ -206,6 +233,7 @@ static void RAS2State(struct rasterfile *RAS,
 		State->HeaderBuf[37] = 0;
 	}
 
+	return TRUE;
 }
 
 /* 
@@ -362,6 +390,9 @@ static void OneLine1(struct ras_progressive_state *context)
 
 static void OneLine(struct ras_progressive_state *context)
 {
+	context->LineDone = 0;
+	if (context->Lines >= context->Header.height)
+		return;
 	if (context->RasType == 32)
 		OneLine32(context);
 	if (context->RasType == 24)
@@ -372,8 +403,6 @@ static void OneLine(struct ras_progressive_state *context)
 		OneLine1(context);
 
 	context->LineDone = 0;
-	if (context->Lines > context->Header.height)
-		return;
 	context->Lines++;
 
 	if (context->updated_func != NULL) {
@@ -392,7 +421,7 @@ static void OneLine(struct ras_progressive_state *context)
  * buf - new image data
  * size - length of new image data
  *
- * append image data onto inrecrementally built output image
+ * append image data onto incrementally built output image
  */
 static gboolean
 gdk_pixbuf__ras_image_load_increment(gpointer data,
@@ -443,8 +472,10 @@ gdk_pixbuf__ras_image_load_increment(gpointer data,
 		}
 
 		if (context->HeaderDone >= 32)
-			RAS2State((struct rasterfile *) context->HeaderBuf,
-				  context);
+			if (!RAS2State((struct rasterfile *) context->HeaderBuf,
+				       context, error)) {
+				return FALSE;
+			}
 
 
 	}
@@ -460,3 +491,4 @@ gdk_pixbuf__ras_fill_vtable (GdkPixbufModule *module)
   module->stop_load = gdk_pixbuf__ras_image_stop_load;
   module->load_increment = gdk_pixbuf__ras_image_load_increment;
 }
+
