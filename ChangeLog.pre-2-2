@@ -1,3 +1,7 @@
+2001-06-11  Havoc Pennington  <hp@redhat.com>
+
+	* Release 1.3.6
+	 
 2001-06-13  Alexander Larsson  <alla@lysator.liu.se>
 
 	* gdk/linux-fb/gdkwindow-fb.c:
