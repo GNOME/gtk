@@ -1,3 +1,9 @@
+2001-11-17  Murray Cumming  <murrayc@usa.net>
+
+	* gtk/gtktexttagtable.c (gtk_text_tag_table_class_init):
+	The first parameters of the signals are now registered as
+	GTK_TYPE_TEXT_TAG instead of G_TYPE_OBJECT.
+	
 2001-11-17  Tor Lillqvist  <tml@iki.fi>
 
 	* gtk-zip.sh.in: Build separate runtime and developer

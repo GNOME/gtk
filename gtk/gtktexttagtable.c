@@ -80,7 +80,7 @@ gtk_text_tag_table_class_init (GtkTextTagTableClass *klass)
                   gtk_marshal_VOID__OBJECT_BOOLEAN,
                   G_TYPE_NONE,
                   2,
-                  G_TYPE_OBJECT,
+                  GTK_TYPE_TEXT_TAG,
                   G_TYPE_BOOLEAN);  
 
   signals[TAG_ADDED] =
@@ -92,7 +92,7 @@ gtk_text_tag_table_class_init (GtkTextTagTableClass *klass)
                   gtk_marshal_VOID__OBJECT,
                   GTK_TYPE_NONE,
                   1,
-                  G_TYPE_OBJECT);
+                  GTK_TYPE_TEXT_TAG);
 
   signals[TAG_REMOVED] =
     g_signal_new ("tag_removed",                   
@@ -103,7 +103,7 @@ gtk_text_tag_table_class_init (GtkTextTagTableClass *klass)
                   gtk_marshal_VOID__OBJECT,
                   GTK_TYPE_NONE,
                   1,
-                  G_TYPE_OBJECT);
+                  GTK_TYPE_TEXT_TAG);
 }
 
 static void
