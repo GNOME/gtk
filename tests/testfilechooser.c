@@ -522,7 +522,7 @@ main (int argc, char **argv)
   gtk_container_add (GTK_CONTAINER (vbbox), button);
   g_signal_connect_swapped (button, "clicked",
 			    G_CALLBACK (gtk_file_chooser_select_all), dialog);
-  g_signal_connect (dialog, "notify::multiple", 
+  g_signal_connect (dialog, "notify::select-multiple", 
 		    G_CALLBACK (notify_multiple_cb), button);
   
   button = gtk_button_new_with_mnemonic ("_Unselect all");
