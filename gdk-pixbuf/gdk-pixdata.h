@@ -21,9 +21,7 @@
 
 #include        <gdk-pixbuf/gdk-pixbuf.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
+G_BEGIN_DECLS
 
 /**
  * GDK_PIXBUF_MAGIC_NUMBER:
@@ -167,9 +165,6 @@ GString*	gdk_pixdata_to_csource	(GdkPixdata		*pixdata,
 					 GdkPixdataDumpType	 dump_type);
 
 
-
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
+G_END_DECLS
 
 #endif /* __GDK_PIXDATA_H__ */

@@ -1,3 +1,11 @@
+Wed Jan  9 11:29:44 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* Makefile.am (s-enum-types-h): Include glib-object.h,
+	Add G_BEGIN_DECLS/END_DECLS to gdk-pixbuf-enum-types.h. (#68325,
+	Mikael Hermansson)
+
+	* *.h: G_BEGIN_DECLS cleanups.
+
 Tue Jan  8 10:58:04 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk-pixbuf-util.c (gdk_pixbuf_saturate_and_pixelate): 

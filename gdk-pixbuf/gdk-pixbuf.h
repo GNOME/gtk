@@ -30,9 +30,7 @@
 #include <gdk-pixbuf/gdk-pixbuf-features.h>
 #include <glib-object.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+G_BEGIN_DECLS
 
 
 
@@ -291,13 +289,11 @@ G_CONST_RETURN gchar * gdk_pixbuf_get_option (GdkPixbuf   *pixbuf,
 
 
  
+G_END_DECLS
+
 #include <gdk-pixbuf/gdk-pixbuf-loader.h>
 #include <gdk-pixbuf/gdk-pixbuf-enum-types.h>
 
 
-
-#ifdef __cplusplus
-}
-#endif
 
 #endif
