@@ -1,3 +1,9 @@
+2000-12-20  Alexander Larsson  <alexl@redhat.com>
+
+        * gtk/gtkinvisible.c (gtk_invisible_realize):
+        Attach the style to the window so that the style it is not
+        leaked when unrealizing the window.
+
 2000-12-19  Ramiro Estrugo  <ramiro@eazel.com>
 
 	* gdk/gdkimage.c: (gdk_image_get):
