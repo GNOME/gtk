@@ -4694,8 +4694,8 @@ apply_affine_on_point (double affine[6], GdkPoint *point)
   x = point->x * affine[0] + point->y * affine[2] + affine[4];
   y = point->x * affine[1] + point->y * affine[3] + affine[5];
 
-  point->x = x;
-  point->y = y;
+  point->x = floor (x);
+  point->y = floor (y);
 }
 
 static void

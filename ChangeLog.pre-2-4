@@ -1,3 +1,24 @@
+Thu Jan 30 23:48:30 2003  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtktreeviewcolumn.c (_gtk_tree_view_column_count_special_cell):
+	only count the special cell if it is also visible,
+	(_gtk_tree_view_column_get_neighbor_sizes): only take the width into
+	account from visible cells,
+	(gtk_tree_view_column_cell_get_position): likewise, (Reported and
+	testcase provided by Vasco Alexandre da Silva Costa, via IRC,
+	tracking bug was #104563).
+	
+Thu Jan 30 23:46:15 2003  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtktreeviewcolumn.c (gtk_tree_view_column_cell_process_action):
+	subtract expander space and focus line space from the extra space
+	we are about the allocate. (Fixes #104635).
+
+Thu Jan 30 23:42:03 2003  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtkstyle.c (apply_affine_on_point): fix rouding error
+	(Fixes #96252, patch from Soeren Sandmann).
+
 Thu Jan 30 16:54:29 2003  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtknotebook.c: Patch from Soeren Sandmann
