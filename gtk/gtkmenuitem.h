@@ -81,9 +81,9 @@ struct _GtkMenuItemClass
   void (* activate)             (GtkMenuItem *menu_item);
   void (* activate_item)        (GtkMenuItem *menu_item);
   void (* toggle_size_request)  (GtkMenuItem *menu_item,
-				 guint16     *requisition);
+				 gint        *requisition);
   void (* toggle_size_allocate) (GtkMenuItem *menu_item,
-				 guint16      allocation);
+				 gint         allocation);
 };
 
 
@@ -102,9 +102,9 @@ void       gtk_menu_item_select               (GtkMenuItem         *menu_item);
 void       gtk_menu_item_deselect             (GtkMenuItem         *menu_item);
 void       gtk_menu_item_activate             (GtkMenuItem         *menu_item);
 void       gtk_menu_item_toggle_size_request  (GtkMenuItem         *menu_item,
-					       guint16             *requisition);
+					       gint                *requisition);
 void       gtk_menu_item_toggle_size_allocate (GtkMenuItem         *menu_item,
-					       guint16              allocation);
+					       gint                 allocation);
 void       gtk_menu_item_right_justify        (GtkMenuItem         *menu_item);
 
 

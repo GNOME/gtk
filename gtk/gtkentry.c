@@ -781,6 +781,8 @@ gtk_entry_realize (GtkWidget *widget)
   entry->text_area = gdk_window_new (widget->window, &attributes, attributes_mask);
   gdk_window_set_user_data (entry->text_area, entry);
 
+  gdk_cursor_destroy (attributes.cursor);
+  
   widget->style = gtk_style_attach (widget->style, widget->window);
 
   gdk_window_set_background (widget->window, &widget->style->base[GTK_WIDGET_STATE (widget)]);

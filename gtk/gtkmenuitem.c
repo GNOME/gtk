@@ -64,9 +64,9 @@ static void gtk_real_menu_item_select               (GtkItem     *item);
 static void gtk_real_menu_item_deselect             (GtkItem     *item);
 static void gtk_real_menu_item_activate_item        (GtkMenuItem *item);
 static void gtk_real_menu_item_toggle_size_request  (GtkMenuItem *menu_item,
-						     guint16     *requisition);
+						     gint        *requisition);
 static void gtk_real_menu_item_toggle_size_allocate (GtkMenuItem *menu_item,
-						     guint16      allocation);
+						     gint         allocation);
 
 static gint gtk_menu_item_select_timeout (gpointer          data);
 static void gtk_menu_item_popup_submenu  (gpointer     data);
@@ -181,9 +181,9 @@ gtk_menu_item_class_init (GtkMenuItemClass *klass)
                     GTK_RUN_FIRST,
                     GTK_CLASS_TYPE (object_class),
                     GTK_SIGNAL_OFFSET (GtkMenuItemClass, toggle_size_allocate),
-                    gtk_marshal_NONE__UINT,
+                    gtk_marshal_NONE__INT,
 		    GTK_TYPE_NONE, 1,
-		    GTK_TYPE_UINT);
+		    GTK_TYPE_INT);
 }
 
 static void
@@ -339,7 +339,7 @@ gtk_menu_item_activate (GtkMenuItem *menu_item)
 
 void
 gtk_menu_item_toggle_size_request (GtkMenuItem *menu_item,
-				   guint16     *requisition)
+				   gint        *requisition)
 {
   g_return_if_fail (menu_item != NULL);
   g_return_if_fail (GTK_IS_MENU_ITEM (menu_item));
@@ -349,7 +349,7 @@ gtk_menu_item_toggle_size_request (GtkMenuItem *menu_item,
 
 void
 gtk_menu_item_toggle_size_allocate (GtkMenuItem *menu_item,
-				    guint16      allocation)
+				    gint         allocation)
 {
   g_return_if_fail (menu_item != NULL);
   g_return_if_fail (GTK_IS_MENU_ITEM (menu_item));
@@ -652,7 +652,7 @@ gtk_real_menu_item_activate_item (GtkMenuItem *menu_item)
 }
 static void
 gtk_real_menu_item_toggle_size_request (GtkMenuItem *menu_item,
-					guint16     *requisition)
+					gint        *requisition)
 {
   g_return_if_fail (menu_item != NULL);
   g_return_if_fail (GTK_IS_MENU_ITEM (menu_item));
@@ -662,7 +662,7 @@ gtk_real_menu_item_toggle_size_request (GtkMenuItem *menu_item,
 
 static void
 gtk_real_menu_item_toggle_size_allocate (GtkMenuItem *menu_item,
-					 guint16      allocation)
+					 gint         allocation)
 {
   g_return_if_fail (menu_item != NULL);
   g_return_if_fail (GTK_IS_MENU_ITEM (menu_item));

@@ -1,3 +1,59 @@
+2001-02-12  Havoc Pennington  <hp@pobox.com>
+
+	* gdk/gdkpango.c (gdk_pango_get_gc): fix bug where 
+	it always set the foreground, even if we were only using
+	a stipple.
+	(gdk_draw_layout_line_with_colors): new function, allow
+	override colors
+	(gdk_draw_layout_with_colors): new function, allow override
+	colors
+	(gdk_pango_layout_line_get_clip_region): function to get the clip
+	region for a logical text range
+	(gdk_pango_layout_get_clip_region): get the clip region for a
+	logical text range
+
+	* gdk/x11/gdkcolor-x11.c: forward declare gdk_colormap_sync(),
+	(gdk_colormap_new): fix call to gdk_colormap_sync() so it has 
+	the right number of arguments.
+
+	* gtk/gtktextbtree.c (gtk_text_btree_node_check_consistency):
+	enhance the function to check that node data corresponds to a 
+	view still belonging to the tree.
+
+	* gtk/gtktreeview.c (gtk_tree_view_changed): we were leaking the 
+	GtkTreePath
+	(gtk_tree_view_inserted): ditto
+	(gtk_tree_view_child_toggled): ditto
+
+	* gtk/gtktreemodel.c (gtk_tree_path_append_index): use realloc to
+	simplify this code.
+
+	* gtk/gtkcellrenderertext.c (get_layout): fix leak of 
+	a PangoAttrList
+
+	* demos/gtk-demo/main.c (load_file): Fix leak of a GString
+
+	* gtk/gtkentry.c (gtk_entry_realize): Fix leak of a GdkCursor
+
+	* gtk/gtkmenubar.c (gtk_menu_bar_size_request): consider toggle
+	size in the size request 
+	(gtk_menu_bar_size_allocate): consider toggle size here
+
+	* gtk/gtkimagemenuitem.h, gtkimagemenuitem.c: Menu item
+	that displays a widget in the toggle slot
+
+	* gtk/testgtk.c: test GtkImageMenuItem
+
+	* gtk/Makefile.am, gtk/gtk.h: Add GtkImageMenuItem
+	
+	* gtk/gtkmenuitem.h: Use "gint" not "guint16" for toggle size
+	request and allocation
+
+	* gtk/gtkmenu.c (gtk_menu_size_request): use gint not guint16
+
+	* gtk/gtkcheckmenuitem.c
+	(gtk_check_menu_item_toggle_size_request): ditto
+	
 Mon Feb 12 23:43:30 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/Makefile.am (gdk_headers): Remove gdkcc.h 

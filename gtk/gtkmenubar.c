@@ -237,10 +237,16 @@ gtk_menu_bar_size_request (GtkWidget      *widget,
 
 	  if (GTK_WIDGET_VISIBLE (child))
 	    {
+              gint toggle_size;
+              
 	      GTK_MENU_ITEM (child)->show_submenu_indicator = FALSE;
 	      gtk_widget_size_request (child, &child_requisition);
-
+              gtk_menu_item_toggle_size_request (GTK_MENU_ITEM (child),
+                                                 &toggle_size);
+              
 	      requisition->width += child_requisition.width;
+              requisition->width += toggle_size;
+              
 	      requisition->height = MAX (requisition->height, child_requisition.height);
 	      /* Support for the right justified help menu */
 	      if ((children == NULL) && GTK_IS_MENU_ITEM(child) &&
@@ -305,11 +311,17 @@ gtk_menu_bar_size_allocate (GtkWidget     *widget,
       children = menu_shell->children;
       while (children)
 	{
+          gint toggle_size;          
+
 	  child = children->data;
 	  children = children->next;
 
+          gtk_menu_item_toggle_size_request (GTK_MENU_ITEM (child),
+                                             &toggle_size);
 	  gtk_widget_get_child_requisition (child, &child_requisition);
-	  
+
+          child_requisition.width += toggle_size;
+          
 	  /* Support for the right justified help menu */
 	  if ( (children == NULL) && (GTK_IS_MENU_ITEM(child))
 	      && (GTK_MENU_ITEM(child)->right_justify)) 
@@ -321,6 +333,8 @@ gtk_menu_bar_size_allocate (GtkWidget     *widget,
 	    {
 	      child_allocation.width = child_requisition.width;
 
+              gtk_menu_item_toggle_size_allocate (GTK_MENU_ITEM (child),
+                                                  toggle_size);
 	      gtk_widget_size_allocate (child, &child_allocation);
 
 	      child_allocation.x += child_allocation.width + CHILD_SPACING * 2;

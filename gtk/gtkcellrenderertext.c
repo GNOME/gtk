@@ -970,6 +970,8 @@ get_layout (GtkCellRendererText *celltext,
   pango_layout_set_attributes (layout, attr_list);
   pango_layout_set_width (layout, -1);
 
+  pango_attr_list_unref (attr_list);
+  
   return layout;
 }
 

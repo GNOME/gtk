@@ -103,7 +103,10 @@ load_file (const gchar *filename)
   gboolean in_para = 0;
 
   if (current_file && !strcmp (current_file, filename))
-    return;
+    {
+      g_string_free (buffer, TRUE);
+      return;
+    }
 
   g_free (current_file);
   current_file = g_strdup (filename);
@@ -229,6 +232,8 @@ load_file (const gchar *filename)
 
   gtk_text_buffer_get_bounds (source_buffer, &start, &end);
   gtk_text_buffer_apply_tag_by_name (info_buffer, "source", &start, &end);
+
+  g_string_free (buffer, TRUE);
 }
 
 gboolean

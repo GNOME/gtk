@@ -2703,6 +2703,7 @@ create_menu (gint depth, gint length, gboolean tearoff)
 {
   GtkWidget *menu;
   GtkWidget *menuitem;
+  GtkWidget *image;
   GSList *group;
   char buf[32];
   int i, j;
@@ -2720,6 +2721,13 @@ create_menu (gint depth, gint length, gboolean tearoff)
       gtk_widget_show (menuitem);
     }
 
+  image = gtk_image_new_from_stock (GTK_STOCK_OPEN,
+                                    GTK_ICON_SIZE_MENU);
+  gtk_widget_show (image);
+  menuitem = gtk_image_menu_item_new (image, "Image item");
+  gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
+  gtk_widget_show (menuitem);
+  
   for (i = 0, j = 1; i < length; i++, j++)
     {
       sprintf (buf, "item %2d - %d", depth, j);
@@ -2755,6 +2763,7 @@ create_menus (void)
       GtkWidget *menu;
       GtkWidget *menuitem;
       GtkAccelGroup *accel_group;
+      GtkWidget *image;
       
       window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
       
@@ -2792,7 +2801,10 @@ create_menus (void)
       gtk_menu_bar_append (GTK_MENU_BAR (menubar), menuitem);
       gtk_widget_show (menuitem);
 
-      menuitem = gtk_menu_item_new_with_label ("bar");
+      image = gtk_image_new_from_stock (GTK_STOCK_HELP,
+                                        GTK_ICON_SIZE_MENU);
+      gtk_widget_show (image);
+      menuitem = gtk_image_menu_item_new (image, "Help");
       gtk_menu_item_set_submenu (GTK_MENU_ITEM (menuitem), create_menu (4, 5, TRUE));
       gtk_menu_item_right_justify (GTK_MENU_ITEM (menuitem));
       gtk_menu_bar_append (GTK_MENU_BAR (menubar), menuitem);

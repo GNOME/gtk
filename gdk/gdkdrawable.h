@@ -257,6 +257,21 @@ void gdk_draw_layout      (GdkDrawable      *drawable,
 			   gint              y,
 			   PangoLayout      *layout);
 
+void gdk_draw_layout_line_with_colors (GdkDrawable     *drawable,
+                                       GdkGC           *gc,
+                                       gint             x,
+                                       gint             y,
+                                       PangoLayoutLine *line,
+                                       GdkColor        *foreground,
+                                       GdkColor        *background);
+void gdk_draw_layout_with_colors      (GdkDrawable     *drawable,
+                                       GdkGC           *gc,
+                                       gint             x,
+                                       gint             y,
+                                       PangoLayout     *layout,
+                                       GdkColor        *foreground,
+                                       GdkColor        *background);
+
 GdkImage* gdk_drawable_get_image (GdkDrawable *drawable,
                                   gint         x,
                                   gint         y,

@@ -104,6 +104,7 @@ gtk_public_h_sources = @STRIP_BEGIN@ \
 	gtkhsv.h		\
 	gtkiconfactory.h	\
 	gtkimage.h		\
+	gtkimagemenuitem.h	\
 	gtkimcontext.h		\
 	gtkimmodule.h		\
 	gtkimmulticontext.h	\
@@ -260,6 +261,7 @@ gtk_c_sources = @STRIP_BEGIN@   \
 	gtkhsv.c		\
 	gtkiconfactory.c	\
 	gtkimage.c		\
+	gtkimagemenuitem.c	\
 	gtkimcontext.c		\
 	gtkimcontextsimple.c	\
 	gtkimcontextsimple.h	\

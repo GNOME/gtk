@@ -39,6 +39,8 @@ static void     gdk_colormap_remove      (GdkColormap *cmap);
 static guint    gdk_colormap_hash        (Colormap    *cmap);
 static gboolean gdk_colormap_equal       (Colormap    *a,
 					  Colormap    *b);
+static void     gdk_colormap_sync        (GdkColormap *colormap,
+                                          gboolean     force);
 
 static void gdk_colormap_init       (GdkColormap      *colormap);
 static void gdk_colormap_class_init (GdkColormapClass *klass);
@@ -217,7 +219,7 @@ gdk_colormap_new (GdkVisual *visual,
 					    xvisual, AllocNone);
       
       colormap->colors = g_new (GdkColor, colormap->size);
-      gdk_colormap_sync (colormap);
+      gdk_colormap_sync (colormap, TRUE);
       break;
       
     case GDK_VISUAL_TRUE_COLOR:

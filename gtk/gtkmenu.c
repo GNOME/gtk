@@ -1089,8 +1089,14 @@ gtk_menu_size_request (GtkWidget      *widget,
       
       if (GTK_WIDGET_VISIBLE (child))
 	{
-	  guint16 toggle_size;
+	  gint toggle_size;
 
+          /* It's important to size_request the child
+           * before doing the toggle size request, in
+           * case the toggle size request depends on the size
+           * request of a child of the child (e.g. for ImageMenuItem)
+           */
+          
 	  GTK_MENU_ITEM (child)->show_submenu_indicator = TRUE;
 	  gtk_widget_size_request (child, &child_requisition);
 	  

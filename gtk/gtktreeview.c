@@ -2472,11 +2472,15 @@ gtk_tree_view_changed (GtkTreeModel *model,
   GtkRBNode *node;
   gint height;
   gboolean dirty_marked;
+  gboolean free_path = FALSE;
 
   g_return_if_fail (path != NULL || iter != NULL);
 
   if (path == NULL)
-    path = gtk_tree_model_get_path (model, iter);
+    {
+      path = gtk_tree_model_get_path (model, iter);
+      free_path = TRUE;
+    }
   else if (iter == NULL)
     gtk_tree_model_get_iter (model, iter, path);
 
@@ -2485,10 +2489,10 @@ gtk_tree_view_changed (GtkTreeModel *model,
 				&tree,
 				&node))
     /* We aren't actually showing the node */
-    return;
+    goto done;
 
   if (tree == NULL)
-    return;
+    goto done;
   
   dirty_marked = gtk_tree_view_discover_dirty_iter (tree_view,
 						    iter,
@@ -2499,7 +2503,7 @@ gtk_tree_view_changed (GtkTreeModel *model,
     {
       _gtk_rbtree_node_set_height (tree, node, height + TREE_VIEW_VERTICAL_SEPARATOR);
       gtk_widget_queue_resize (GTK_WIDGET (data));
-      return;
+      goto done;
     }
   if (dirty_marked)
     gtk_widget_queue_resize (GTK_WIDGET (data));
@@ -2507,6 +2511,10 @@ gtk_tree_view_changed (GtkTreeModel *model,
     {
       gtk_tree_view_queue_draw_node (tree_view, tree, node, NULL);
     }
+
+ done:
+  if (free_path)
+    gtk_tree_path_free (path);
 }
 
 static void
@@ -2522,12 +2530,16 @@ gtk_tree_view_inserted (GtkTreeModel *model,
   gint max_height;
   gint depth;
   gint i = 0;
+  gboolean free_path = FALSE;
 
   tmptree = tree = tree_view->priv->tree;
   g_return_if_fail (path != NULL || iter != NULL);
 
   if (path == NULL)
-    path = gtk_tree_model_get_path (model, iter);
+    {
+      path = gtk_tree_model_get_path (model, iter);
+      free_path = TRUE;
+    }
   else if (iter == NULL)
     gtk_tree_model_get_iter (model, iter, path);
 
@@ -2540,7 +2552,7 @@ gtk_tree_view_inserted (GtkTreeModel *model,
       if (tmptree == NULL)
 	{
 	  /* We aren't showing the node */
-	  return;
+          goto done;
 	}
 
       tmpnode = _gtk_rbtree_find_count (tmptree, indices[i] + 1);
@@ -2549,7 +2561,7 @@ gtk_tree_view_inserted (GtkTreeModel *model,
 	  g_warning ("A node was inserted with a parent that's not in the tree.\n" \
 		     "This possibly means that a GtkTreeModel inserted a child node\n" \
 		     "before the parent was inserted.");
-	  return;
+          goto done;
 	}
       else if (!GTK_RBNODE_FLAG_SET (tmpnode, GTK_RBNODE_IS_PARENT))
 	{
@@ -2562,7 +2574,7 @@ gtk_tree_view_inserted (GtkTreeModel *model,
 							   tmpnode);
 	  gtk_tree_view_child_toggled (model, tmppath, NULL, data);
 	  gtk_tree_path_free (tmppath);
-	  return;
+          goto done;
 	}
 
       tmptree = tmpnode->children;
@@ -2571,7 +2583,7 @@ gtk_tree_view_inserted (GtkTreeModel *model,
     }
 
   if (tree == NULL)
-    return;
+    goto done;
 
   /* ref the node */
   gtk_tree_model_ref_iter (tree_view->priv->model, iter);
@@ -2591,6 +2603,10 @@ gtk_tree_view_inserted (GtkTreeModel *model,
     }
 
   _gtk_tree_view_set_size (tree_view, -1, tree_view->priv->height + max_height);
+
+ done:
+  if (free_path)
+    gtk_tree_path_free (path);
 }
 
 static void
@@ -2604,6 +2620,7 @@ gtk_tree_view_child_toggled (GtkTreeModel *model,
   gboolean has_child;
   GtkRBTree *tree;
   GtkRBNode *node;
+  gboolean free_path = FALSE;
 
   g_return_if_fail (path != NULL || iter != NULL);
 
@@ -2611,7 +2628,10 @@ gtk_tree_view_child_toggled (GtkTreeModel *model,
     real_iter = *iter;
 
   if (path == NULL)
-    path = gtk_tree_model_get_path (model, iter);
+    {
+      path = gtk_tree_model_get_path (model, iter);
+      free_path = TRUE;
+    }
   else if (iter == NULL)
     gtk_tree_model_get_iter (model, &real_iter, path);
 
@@ -2620,16 +2640,16 @@ gtk_tree_view_child_toggled (GtkTreeModel *model,
 				&tree,
 				&node))
     /* We aren't actually showing the node */
-    return;
+    goto done;
 
   if (tree == NULL)
-    return;
+    goto done;
   
   has_child = gtk_tree_model_iter_has_child (model, &real_iter);
   /* Sanity check.
    */
   if (GTK_RBNODE_FLAG_SET (node, GTK_RBNODE_IS_PARENT) == has_child)
-    return;
+    goto done;
 
   if (has_child)
     GTK_RBNODE_SET_FLAG (node, GTK_RBNODE_IS_PARENT);
@@ -2656,6 +2676,10 @@ gtk_tree_view_child_toggled (GtkTreeModel *model,
       /* FIXME: Just redraw the node */
       gtk_widget_queue_draw (GTK_WIDGET (tree_view));
     }
+
+ done:
+  if (free_path)
+    gtk_tree_path_free (path);
 }
 
 static void

@@ -20,6 +20,7 @@
 #include "gdkcolor.h"
 #include "gdkgc.h"
 #include "gdkpango.h"
+#include "gdkrgb.h"
 #include "gdkprivate.h"
 
 #define GDK_INFO_KEY "gdk-info"
@@ -79,7 +80,6 @@ gdk_pango_get_gc (PangoContext   *context,
                   GdkBitmap      *stipple,
 		  GdkGC          *base_gc)
 {
-  GdkColor color;
   GdkGC *result;
   GdkPangoContextInfo *info;
   
@@ -92,15 +92,21 @@ gdk_pango_get_gc (PangoContext   *context,
       g_warning ("you must set the colormap on a PangoContext before using it to draw a layout");
       return NULL;
     }
-  
-  color.red = fg_color->red;
-  color.green = fg_color->green;
-  color.blue = fg_color->blue;
-  
+
   result = gdk_gc_new (gdk_parent_root);
   gdk_gc_copy (result, base_gc);
-  gdk_rgb_find_color (info->colormap, &color);
-  gdk_gc_set_foreground (result, &color);
+  
+  if (fg_color)
+    {
+      GdkColor color;
+      
+      color.red = fg_color->red;
+      color.green = fg_color->green;
+      color.blue = fg_color->blue;
+
+      gdk_rgb_find_color (info->colormap, &color);
+      gdk_gc_set_foreground (result, &color);
+    }
 
   if (stipple)
     {
@@ -142,21 +148,27 @@ gdk_pango_context_set_colormap (PangoContext *context,
 }
 
 /**
- * gdk_draw_layout_line:
+ * gdk_draw_layout_line_with_colors:
  * @drawable:  the drawable on which to draw the line
  * @gc:        base graphics to use
  * @x:         the x position of start of string (in pixels)
  * @y:         the y position of baseline (in pixels)
  * @line:      a #PangoLayoutLine
+ * @foreground: foreground override color, or %NULL for none
+ * @background: background override color, or %NULL for none
  *
- * Render a #PangoLayoutLine onto an GDK drawable
+ * Render a #PangoLayoutLine onto a #GdkDrawable, overriding the
+ * layout's normal colors with @foreground and/or @background.
+ * @foreground and @background need not be allocated.
  */
 void 
-gdk_draw_layout_line (GdkDrawable      *drawable,
-		      GdkGC            *gc,
-		      gint              x, 
-		      gint              y,
-		      PangoLayoutLine  *line)
+gdk_draw_layout_line_with_colors (GdkDrawable      *drawable,
+                                  GdkGC            *gc,
+                                  gint              x, 
+                                  gint              y,
+                                  PangoLayoutLine  *line,
+                                  GdkColor         *foreground,
+                                  GdkColor         *background)
 {
   GSList *tmp_list = line->runs;
   PangoRectangle overall_rect;
@@ -167,9 +179,9 @@ gdk_draw_layout_line (GdkDrawable      *drawable,
   gint rise = 0;
   gboolean embossed;
   GdkBitmap *stipple;
-  
-  g_return_if_fail (drawable != NULL);
-  g_return_if_fail (gc != NULL);
+
+  g_return_if_fail (GDK_IS_DRAWABLE (drawable));
+  g_return_if_fail (GDK_IS_GC (gc));
   g_return_if_fail (line != NULL);
 
   context = pango_layout_get_context (line->layout);
@@ -210,9 +222,19 @@ gdk_draw_layout_line (GdkDrawable      *drawable,
 					&ink_rect, &logical_rect);
 	}
 
-      if (bg_set)
+      if (bg_set || background)
 	{
-	  GdkGC *bg_gc = gdk_pango_get_gc (context, &bg_color, stipple, gc);
+	  GdkGC *bg_gc;
+          PangoColor tmp = bg_color;
+          
+          if (background)
+            {
+              tmp.red = background->red;
+              tmp.blue = background->blue;
+              tmp.green = background->green;
+            }
+          
+          bg_gc = gdk_pango_get_gc (context, &tmp, stipple, gc);
           
 	  gdk_draw_rectangle (drawable, bg_gc, TRUE,
 			      x + (x_off + logical_rect.x) / PANGO_SCALE,
@@ -226,8 +248,20 @@ gdk_draw_layout_line (GdkDrawable      *drawable,
 	  gdk_pango_free_gc (context, bg_gc);
 	}
 
-      if (fg_set || stipple)
-	fg_gc = gdk_pango_get_gc (context, &fg_color, stipple, gc);
+      if (fg_set || stipple || foreground)
+        {
+          PangoColor tmp = fg_color;
+          
+          if (foreground)
+            {
+              tmp.red = foreground->red;
+              tmp.blue = foreground->blue;
+              tmp.green = foreground->green;
+            }
+          
+          fg_gc = gdk_pango_get_gc (context, fg_set ? &fg_color : NULL,
+                                    stipple, gc);
+        }
       else
 	fg_gc = gc;
       
@@ -295,21 +329,27 @@ gdk_draw_layout_line (GdkDrawable      *drawable,
  * @x:         the X position of the left of the layout (in pixels)
  * @y:         the Y position of the top of the layout (in pixels)
  * @layout:    a #PangoLayout
+ * @foreground: foreground override color, or %NULL for none
+ * @background: background override color, or %NULL for none
  *
- * Render a #PangoLayout onto a GDK drawable
+ * Render a #PangoLayout onto a #GdkDrawable, overriding the
+ * layout's normal colors with @foreground and/or @background.
+ * @foreground and @background need not be allocated.
  */
 void 
-gdk_draw_layout (GdkDrawable     *drawable,
-		 GdkGC           *gc,
-		 int              x, 
-		 int              y,
-		 PangoLayout     *layout)
+gdk_draw_layout_with_colors (GdkDrawable     *drawable,
+                             GdkGC           *gc,
+                             int              x, 
+                             int              y,
+                             PangoLayout     *layout,
+                             GdkColor        *foreground,
+                             GdkColor        *background)
 {
   PangoLayoutIter *iter;
   
-  g_return_if_fail (drawable != NULL);
-  g_return_if_fail (gc != NULL);
-  g_return_if_fail (layout != NULL);
+  g_return_if_fail (GDK_IS_DRAWABLE (drawable));
+  g_return_if_fail (GDK_IS_GC (gc));
+  g_return_if_fail (PANGO_IS_LAYOUT (layout));
 
   iter = pango_layout_get_iter (layout);
   
@@ -324,14 +364,64 @@ gdk_draw_layout (GdkDrawable     *drawable,
       pango_layout_iter_get_line_extents (iter, NULL, &logical_rect);
       baseline = pango_layout_iter_get_baseline (iter);
       
-      gdk_draw_layout_line (drawable, gc,
-			    x + logical_rect.x / PANGO_SCALE,
-                            y + baseline / PANGO_SCALE,
-			    line);
+      gdk_draw_layout_line_with_colors (drawable, gc,
+                                        x + logical_rect.x / PANGO_SCALE,
+                                        y + baseline / PANGO_SCALE,
+                                        line,
+                                        foreground,
+                                        background);
     }
   while (pango_layout_iter_next_line (iter));
 
   pango_layout_iter_free (iter);
+}
+
+/**
+ * gdk_draw_layout_line:
+ * @drawable:  the drawable on which to draw the line
+ * @gc:        base graphics to use
+ * @x:         the x position of start of string (in pixels)
+ * @y:         the y position of baseline (in pixels)
+ * @line:      a #PangoLayoutLine
+ *
+ * Render a #PangoLayoutLine onto an GDK drawable
+ */
+void 
+gdk_draw_layout_line (GdkDrawable      *drawable,
+		      GdkGC            *gc,
+		      gint              x, 
+		      gint              y,
+		      PangoLayoutLine  *line)
+{
+  g_return_if_fail (GDK_IS_DRAWABLE (drawable));
+  g_return_if_fail (GDK_IS_GC (gc));
+  g_return_if_fail (line != NULL);
+  
+  gdk_draw_layout_line_with_colors (drawable, gc, x, y, line, NULL, NULL);
+}
+
+/**
+ * gdk_draw_layout:
+ * @drawable:  the drawable on which to draw string
+ * @gc:        base graphics context to use
+ * @x:         the X position of the left of the layout (in pixels)
+ * @y:         the Y position of the top of the layout (in pixels)
+ * @layout:    a #PangoLayout
+ *
+ * Render a #PangoLayout onto a GDK drawable
+ */
+void 
+gdk_draw_layout (GdkDrawable     *drawable,
+		 GdkGC           *gc,
+		 int              x, 
+		 int              y,
+		 PangoLayout     *layout)
+{
+  g_return_if_fail (GDK_IS_DRAWABLE (drawable));
+  g_return_if_fail (GDK_IS_GC (gc));
+  g_return_if_fail (PANGO_IS_LAYOUT (layout));
+
+  gdk_draw_layout_with_colors (drawable, gc, x, y, layout, NULL, NULL);
 }
 
 static void
@@ -420,7 +510,7 @@ gdk_pango_get_item_properties (PangoItem      *item,
             }
           else if (embossed && attr->klass->type == gdk_pango_attr_embossed_type)
             {
-              *embossed = ((GdkPangoAttrEmbossed*)attr);
+              *embossed = ((GdkPangoAttrEmbossed*)attr)->embossed;
             }
 	  break;
 	}
@@ -550,4 +640,133 @@ gdk_pango_attr_embossed_new (gboolean embossed)
   result->embossed = embossed;
   
   return (PangoAttribute *)result;
+}
+
+/* Get a clip region to draw only part of a layout. index_ranges
+ * contains alternating range starts/stops. The region is the
+ * region which contains the given ranges, i.e. if you draw with the
+ * region as clip, only the given ranges are drawn.
+ */
+
+/**
+ * gdk_pango_layout_line_get_clip_region:
+ * @line: a #PangoLayoutLine 
+ * @x_origin: X pixel where you intend to draw the layout line with this clip
+ * @y_origin: baseline pixel where you intend to draw the layout line with this clip
+ * @index_ranges: array of byte indexes into the layout, where even members of array are start indexes and odd elements are end indexes
+ * @n_ranges: number of ranges in @index_ranges, i.e. half the size of @index_ranges
+ * 
+ * Obtains a clip region which contains the areas where the given ranges
+ * of text would be drawn. @x_origin and @y_origin are the same position
+ * you would pass to gdk_draw_layout_line(). @index_ranges should contain
+ * ranges of bytes in the layout's text.
+ * 
+ * Return value: a clip region containing the given ranges
+ **/
+GdkRegion*
+gdk_pango_layout_line_get_clip_region (PangoLayoutLine *line,
+                                       gint             x_origin,
+                                       gint             y_origin,
+                                       gint            *index_ranges,
+                                       gint             n_ranges)
+{
+  GdkRegion *clip_region;
+  gint i;
+  PangoRectangle logical_rect;
+  
+  g_return_val_if_fail (line != NULL, NULL);
+  g_return_val_if_fail (index_ranges != NULL, NULL);
+  
+  clip_region = gdk_region_new ();
+
+  pango_layout_line_get_extents (line, NULL, &logical_rect);
+  
+  i = 0;
+  while (i < n_ranges)
+    {  
+      gint *pixel_ranges = NULL;
+      gint n_pixel_ranges = 0;
+      gint j;
+      
+      pango_layout_line_get_x_ranges (line,
+                                      index_ranges[i*2],
+                                      index_ranges[i*2+1],
+                                      &pixel_ranges, &n_pixel_ranges);
+  
+      for (j=0; j < n_pixel_ranges; j++)
+        {
+          GdkRectangle rect;
+      
+          rect.x = x_origin + pixel_ranges[2*j] / PANGO_SCALE;
+          rect.y = y_origin - logical_rect.y / PANGO_SCALE;
+          rect.width = (pixel_ranges[2*j + 1] - pixel_ranges[2*j]) / PANGO_SCALE;
+          rect.height = logical_rect.height / PANGO_SCALE;      
+      
+          gdk_region_union_with_rect (clip_region, &rect);
+        }
+
+      g_free (pixel_ranges);
+    }
+
+  return clip_region;
+}
+
+/**
+ * gdk_pango_layout_get_clip_region:
+ * @layout: a #PangoLayout 
+ * @x_origin: X pixel where you intend to draw the layout with this clip
+ * @y_origin: Y pixel where you intend to draw the layout with this clip
+ * @index_ranges: array of byte indexes into the layout, where even members of array are start indexes and odd elements are end indexes
+ * @n_ranges: number of ranges in @index_ranges, i.e. half the size of @index_ranges
+ * 
+ * Obtains a clip region which contains the areas where the given ranges
+ * of text would be drawn. @x_origin and @y_origin are the same position
+ * you would pass to gdk_draw_layout_line(). @index_ranges should contain
+ * ranges of bytes in the layout's text.
+ * 
+ * Return value: a clip region containing the given ranges
+ **/
+GdkRegion*
+gdk_pango_layout_get_clip_region (PangoLayout *layout,
+                                  gint         x_origin,
+                                  gint         y_origin,
+                                  gint        *index_ranges,
+                                  gint         n_ranges)
+{
+  PangoLayoutIter *iter;  
+  GdkRegion *clip_region;
+  
+  g_return_val_if_fail (PANGO_IS_LAYOUT (layout), NULL);
+  g_return_val_if_fail (index_ranges != NULL, NULL);
+  
+  clip_region = gdk_region_new ();
+  
+  iter = pango_layout_get_iter (layout);
+  
+  do
+    {
+      PangoRectangle logical_rect;
+      PangoLayoutLine *line;
+      GdkRegion *line_region;
+      gint baseline;
+      
+      line = pango_layout_iter_get_line (iter);
+      
+      pango_layout_iter_get_line_extents (iter, NULL, &logical_rect);
+      baseline = pango_layout_iter_get_baseline (iter);      
+
+      line_region = gdk_pango_layout_line_get_clip_region (line,
+                                                           x_origin + logical_rect.x / PANGO_SCALE,
+                                                           y_origin + baseline / PANGO_SCALE,
+                                                           index_ranges,
+                                                           n_ranges);
+
+      gdk_region_union (clip_region, line_region);
+      gdk_region_destroy (line_region);
+    }
+  while (pango_layout_iter_next_line (iter));
+
+  pango_layout_iter_free (iter);
+
+  return clip_region;
 }

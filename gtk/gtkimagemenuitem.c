@@ -1,0 +1,383 @@
+/* GTK - The GIMP Toolkit
+ * Copyright (C) 2001 Red Hat, Inc.
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the
+ * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+ * Boston, MA 02111-1307, USA.
+ */
+
+/*
+ * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
+ * file for a list of people on the GTK+ Team.  See the ChangeLog
+ * files for a list of changes.  These files are distributed with
+ * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
+ */
+
+#include "gtkimagemenuitem.h"
+#include "gtkaccellabel.h"
+#include "gtksignal.h"
+
+static void gtk_image_menu_item_class_init           (GtkImageMenuItemClass *klass);
+static void gtk_image_menu_item_init                 (GtkImageMenuItem      *image_menu_item);
+
+static void gtk_image_menu_item_destroy              (GtkObject        *object);
+static void gtk_image_menu_item_size_request         (GtkWidget        *widget,
+                                                      GtkRequisition   *requisition);
+static void gtk_image_menu_item_size_allocate        (GtkWidget        *widget,
+                                                      GtkAllocation    *allocation);
+static gint gtk_image_menu_item_expose               (GtkWidget             *widget,
+						      GdkEventExpose        *event);
+static void gtk_image_menu_item_remove               (GtkContainer          *container,
+                                                      GtkWidget             *child);
+static void gtk_image_menu_item_toggle_size_request  (GtkMenuItem           *menu_item,
+						      gint                  *requisition);
+
+static void gtk_image_menu_item_map        (GtkWidget      *widget);
+static void gtk_image_menu_item_unmap      (GtkWidget      *widget);
+static void gtk_image_menu_item_forall     (GtkContainer   *container,
+                                            gboolean	    include_internals,
+                                            GtkCallback     callback,
+                                            gpointer        callback_data);
+
+static GtkMenuItemClass *parent_class = NULL;
+
+GtkType
+gtk_image_menu_item_get_type (void)
+{
+  static GtkType image_menu_item_type = 0;
+
+  if (!image_menu_item_type)
+    {
+      static const GtkTypeInfo image_menu_item_info =
+      {
+        "GtkImageMenuItem",
+        sizeof (GtkImageMenuItem),
+        sizeof (GtkImageMenuItemClass),
+        (GtkClassInitFunc) gtk_image_menu_item_class_init,
+        (GtkObjectInitFunc) gtk_image_menu_item_init,
+        /* reserved_1 */ NULL,
+        /* reserved_2 */ NULL,
+        (GtkClassInitFunc) NULL,
+      };
+
+      image_menu_item_type = gtk_type_unique (GTK_TYPE_MENU_ITEM, &image_menu_item_info);
+    }
+
+  return image_menu_item_type;
+}
+
+static void
+gtk_image_menu_item_class_init (GtkImageMenuItemClass *klass)
+{
+  GtkObjectClass *object_class;
+  GtkWidgetClass *widget_class;
+  GtkMenuItemClass *menu_item_class;
+  GtkContainerClass *container_class;
+  
+  object_class = (GtkObjectClass*) klass;
+  widget_class = (GtkWidgetClass*) klass;
+  menu_item_class = (GtkMenuItemClass*) klass;
+  container_class = (GtkContainerClass*) klass;
+  
+  parent_class = gtk_type_class (GTK_TYPE_MENU_ITEM);
+
+  object_class->destroy = gtk_image_menu_item_destroy;
+  
+  widget_class->expose_event = gtk_image_menu_item_expose;
+  widget_class->size_request = gtk_image_menu_item_size_request;
+  widget_class->size_allocate = gtk_image_menu_item_size_allocate;
+  widget_class->map = gtk_image_menu_item_map;
+  widget_class->unmap = gtk_image_menu_item_unmap;
+
+  container_class->forall = gtk_image_menu_item_forall;
+  container_class->remove = gtk_image_menu_item_remove;
+  
+  menu_item_class->toggle_size_request = gtk_image_menu_item_toggle_size_request;
+}
+
+static void
+gtk_image_menu_item_init (GtkImageMenuItem *image_menu_item)
+{
+  image_menu_item->image = NULL;
+}
+
+static void
+gtk_image_menu_item_destroy (GtkObject *object)
+{
+  GtkImageMenuItem *image_menu_item;
+
+  image_menu_item = GTK_IMAGE_MENU_ITEM (object);  
+
+  /* If you change forall to treat the image widget as
+   * an internal, then you have to destroy the image widget
+   * here.
+   */
+  
+  (* GTK_OBJECT_CLASS (parent_class)->destroy) (object);
+}
+
+static void
+gtk_image_menu_item_toggle_size_request (GtkMenuItem *menu_item,
+					 gint        *requisition)
+{
+  GtkImageMenuItem *image_menu_item;
+  
+  g_return_if_fail (menu_item != NULL);
+  g_return_if_fail (GTK_IS_IMAGE_MENU_ITEM (menu_item));
+
+  image_menu_item = GTK_IMAGE_MENU_ITEM (menu_item);
+
+  if (image_menu_item->image)
+    *requisition = image_menu_item->image->requisition.width;
+  else
+    *requisition = 0;
+}
+
+
+static void
+gtk_image_menu_item_size_request (GtkWidget      *widget,
+                                  GtkRequisition *requisition)
+{
+  GtkImageMenuItem *image_menu_item;
+  gint child_height = 0;
+  
+  image_menu_item = GTK_IMAGE_MENU_ITEM (widget);
+  
+  if (image_menu_item->image && GTK_WIDGET_VISIBLE (image_menu_item->image))
+    {
+      GtkRequisition child_requisition;
+      
+      gtk_widget_size_request (image_menu_item->image,
+                               &child_requisition);
+
+      child_height = child_requisition.height;
+    }
+  
+  (* GTK_WIDGET_CLASS (parent_class)->size_request) (widget, requisition);
+
+  /* not done with height since that happens via the
+   * toggle_size_request
+   */
+  requisition->height = MAX (requisition->height, child_height);
+  
+  /* Note that GtkMenuShell always size requests before
+   * toggle_size_request, so toggle_size_request will be able to use
+   * image_menu_item->image->requisition
+   */
+}
+
+static void
+gtk_image_menu_item_size_allocate (GtkWidget     *widget,
+                                   GtkAllocation *allocation)
+{
+  GtkImageMenuItem *image_menu_item;
+  
+  image_menu_item = GTK_IMAGE_MENU_ITEM (widget);  
+  
+  (* GTK_WIDGET_CLASS (parent_class)->size_allocate) (widget, allocation);
+
+  if (image_menu_item->image)
+    {
+      gint width, height, x, y;
+      GtkAllocation child_allocation;
+      
+      /* Man this is lame hardcoding action, but I can't
+       * come up with a solution that's really better.
+       */
+      
+      width = image_menu_item->image->requisition.width;
+      height = image_menu_item->image->requisition.height;
+
+      x = (GTK_CONTAINER (image_menu_item)->border_width +
+	   widget->style->xthickness) +
+        (GTK_MENU_ITEM (image_menu_item)->toggle_size - width) / 2;
+      y = (widget->allocation.height - height) / 2;
+
+      child_allocation.width = width;
+      child_allocation.height = height;
+      child_allocation.x = MAX (x, 0);
+      child_allocation.y = MAX (y, 0);
+
+      gtk_widget_size_allocate (image_menu_item->image, &child_allocation);
+    }
+}
+
+static gint
+gtk_image_menu_item_expose (GtkWidget      *widget,
+			    GdkEventExpose *event)
+{
+  GdkEventExpose child_event;
+  GtkImageMenuItem *image_menu_item;
+  
+  g_return_val_if_fail (widget != NULL, FALSE);
+  g_return_val_if_fail (GTK_IS_IMAGE_MENU_ITEM (widget), FALSE);
+  g_return_val_if_fail (event != NULL, FALSE);
+
+  image_menu_item = GTK_IMAGE_MENU_ITEM (widget);
+  
+  if (GTK_WIDGET_CLASS (parent_class)->expose_event)
+    (* GTK_WIDGET_CLASS (parent_class)->expose_event) (widget, event);
+
+  child_event = *event;
+  if (image_menu_item->image && GTK_WIDGET_DRAWABLE (image_menu_item->image) &&
+      GTK_WIDGET_NO_WINDOW (image_menu_item->image) &&
+      gtk_widget_intersect (image_menu_item->image, &event->area, &child_event.area))
+    gtk_widget_event (image_menu_item->image, (GdkEvent*) &child_event);
+  
+  return FALSE;
+}
+
+static void
+gtk_image_menu_item_map (GtkWidget *widget)
+{
+  GtkImageMenuItem *image_menu_item;
+
+  g_return_if_fail (GTK_IS_IMAGE_MENU_ITEM (widget));
+
+  image_menu_item = GTK_IMAGE_MENU_ITEM (widget);
+  
+  (* GTK_WIDGET_CLASS (parent_class)->map) (widget);
+
+  if (image_menu_item->image &&
+      GTK_WIDGET_VISIBLE (image_menu_item->image) &&
+      !GTK_WIDGET_MAPPED (image_menu_item->image))
+    gtk_widget_map (image_menu_item->image);
+
+  if (!GTK_WIDGET_NO_WINDOW (widget))
+    gdk_window_show (widget->window);  
+}
+
+static void
+gtk_image_menu_item_unmap (GtkWidget *widget)
+{
+  GtkImageMenuItem *image_menu_item;
+
+  g_return_if_fail (GTK_IS_IMAGE_MENU_ITEM (widget));
+
+  image_menu_item = GTK_IMAGE_MENU_ITEM (widget);
+  
+  (* GTK_WIDGET_CLASS (parent_class)->unmap) (widget);
+  
+  if (!GTK_WIDGET_NO_WINDOW (widget))
+    gdk_window_hide (widget->window);
+  
+  if (image_menu_item->image && GTK_WIDGET_MAPPED (image_menu_item->image))
+    gtk_widget_unmap (image_menu_item->image);  
+}
+
+static void
+gtk_image_menu_item_forall (GtkContainer   *container,
+                            gboolean	    include_internals,
+                            GtkCallback     callback,
+                            gpointer        callback_data)
+{
+  GtkImageMenuItem *image_menu_item;
+
+  g_return_if_fail (GTK_IS_IMAGE_MENU_ITEM (container));
+
+  image_menu_item = GTK_IMAGE_MENU_ITEM (container);
+  
+  (* GTK_CONTAINER_CLASS (parent_class)->forall) (container,
+                                                  include_internals,
+                                                  callback,
+                                                  callback_data);
+
+  if (image_menu_item->image)
+    (* callback) (image_menu_item->image, callback_data);
+}
+
+GtkWidget*
+gtk_image_menu_item_new (GtkWidget   *widget,
+                         const gchar *label)
+{
+  GtkImageMenuItem *image_menu_item;
+  GtkWidget *accel_label;
+  
+  image_menu_item = GTK_IMAGE_MENU_ITEM (g_object_new (GTK_TYPE_IMAGE_MENU_ITEM,
+                                                       NULL));
+
+  accel_label = gtk_accel_label_new (label);
+  gtk_misc_set_alignment (GTK_MISC (accel_label), 0.0, 0.5);
+
+  gtk_container_add (GTK_CONTAINER (image_menu_item), accel_label);
+  gtk_accel_label_set_accel_widget (GTK_ACCEL_LABEL (accel_label),
+                                    GTK_WIDGET (image_menu_item));
+  gtk_widget_show (accel_label);
+
+  if (widget)
+    gtk_image_menu_item_add_image (image_menu_item, widget);
+  
+  return GTK_WIDGET(image_menu_item);
+}
+
+void
+gtk_image_menu_item_add_image (GtkImageMenuItem *image_menu_item,
+                               GtkWidget        *child)
+{
+  g_return_if_fail (GTK_IS_IMAGE_MENU_ITEM (image_menu_item));
+  g_return_if_fail (image_menu_item->image == NULL);
+  
+  gtk_widget_set_parent (child, GTK_WIDGET (image_menu_item));
+  image_menu_item->image = child;
+
+  if (GTK_WIDGET_REALIZED (child->parent))
+    gtk_widget_realize (child);
+
+  if (GTK_WIDGET_VISIBLE (child->parent) && GTK_WIDGET_VISIBLE (child))
+    {
+      if (GTK_WIDGET_MAPPED (child->parent))
+	gtk_widget_map (child);
+
+      gtk_widget_queue_resize (child);
+    }
+}
+
+GtkWidget*
+gtk_image_menu_item_get_image (GtkImageMenuItem *image_menu_item)
+{
+  g_return_val_if_fail (GTK_IS_IMAGE_MENU_ITEM (image_menu_item), NULL);
+
+  return image_menu_item->image;
+}
+
+void
+gtk_image_menu_item_remove (GtkContainer *container,
+                            GtkWidget    *child)
+{
+  GtkImageMenuItem *image_menu_item;
+
+  image_menu_item = GTK_IMAGE_MENU_ITEM (container);
+
+  if (child == image_menu_item->image)
+    {
+      gboolean widget_was_visible;
+      
+      widget_was_visible = GTK_WIDGET_VISIBLE (child);
+      
+      gtk_widget_unparent (child);
+      image_menu_item->image = NULL;
+      
+      /* queue resize regardless of GTK_WIDGET_VISIBLE (container),
+       * since that's what is needed by toplevels, which derive from GtkBin.
+       */
+      if (widget_was_visible)
+        gtk_widget_queue_resize (GTK_WIDGET (container));
+    }
+  else
+    {
+      (* GTK_CONTAINER_CLASS (parent_class)->remove) (container, child);
+    }
+}
+
+

@@ -34,9 +34,29 @@ extern "C" {
  * in it to create new GC's and to set the colors on those GC's.
  * A colormap is not sufficient.
  */
-PangoContext *gdk_pango_context_get          (void);
-void          gdk_pango_context_set_colormap (PangoContext *context,
-					      GdkColormap  *colormap);
+PangoContext *gdk_pango_context_get            (void);
+void          gdk_pango_context_set_colormap   (PangoContext *context,
+                                                GdkColormap  *colormap);
+
+
+/* Get a clip region to draw only part of a layout or
+ * line. index_ranges contains alternating range starts/stops. The
+ * region is the region which contains the given ranges, i.e. if you
+ * draw with the region as clip, only the given ranges are drawn.
+ */
+
+GdkRegion    *gdk_pango_layout_line_get_clip_region (PangoLayoutLine *line,
+                                                     gint             x_origin,
+                                                     gint             y_origin,
+                                                     gint            *index_ranges,
+                                                     gint             n_ranges);
+GdkRegion    *gdk_pango_layout_get_clip_region      (PangoLayout     *layout,
+                                                     gint             x_origin,
+                                                     gint             y_origin,
+                                                     gint            *index_ranges,
+                                                     gint             n_ranges);
+
+
 
 /* Attributes use to render insensitive text in GTK+. */
 

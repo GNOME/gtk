@@ -82,6 +82,7 @@
 #include <gtk/gtkhseparator.h>
 #include <gtk/gtkiconfactory.h>
 #include <gtk/gtkimage.h>
+#include <gtk/gtkimagemenuitem.h>
 #include <gtk/gtkimcontext.h>
 #include <gtk/gtkimmulticontext.h>
 #include <gtk/gtkinputdialog.h>

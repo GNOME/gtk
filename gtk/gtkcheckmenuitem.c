@@ -42,7 +42,7 @@ static gint gtk_check_menu_item_expose               (GtkWidget             *wid
 						      GdkEventExpose        *event);
 static void gtk_check_menu_item_activate             (GtkMenuItem           *menu_item);
 static void gtk_check_menu_item_toggle_size_request  (GtkMenuItem           *menu_item,
-						      guint16               *requisition);
+						      gint                  *requisition);
 static void gtk_check_menu_item_draw_indicator       (GtkCheckMenuItem      *check_menu_item,
 						      GdkRectangle          *area);
 static void gtk_real_check_menu_item_draw_indicator  (GtkCheckMenuItem      *check_menu_item,
@@ -147,7 +147,7 @@ gtk_check_menu_item_set_active (GtkCheckMenuItem *check_menu_item,
 
 static void
 gtk_check_menu_item_toggle_size_request (GtkMenuItem *menu_item,
-					 guint16     *requisition)
+					 gint        *requisition)
 {
   g_return_if_fail (menu_item != NULL);
   g_return_if_fail (GTK_IS_CHECK_MENU_ITEM (menu_item));

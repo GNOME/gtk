@@ -5129,14 +5129,15 @@ gtk_text_btree_node_ensure_data (GtkTextBTreeNode *node, gpointer view_id)
       nd = nd->next;
     }
 
-  if (nd == NULL)    {
-    nd = node_data_new (view_id);
-
-    if (node->node_data)
-      nd->next = node->node_data;
-
-    node->node_data = nd;
-  }
+  if (nd == NULL)
+    {
+      nd = node_data_new (view_id);
+      
+      if (node->node_data)
+        nd->next = node->node_data;
+      
+      node->node_data = nd;
+    }
 
   return nd;
 }
@@ -5798,7 +5799,7 @@ recompute_node_counts (GtkTextBTree *tree, GtkTextBTreeNode *node)
       gtk_text_btree_node_check_valid (node, view->view_id);
       view = view->next;
     }
-
+  
   /*
    * Scan through the GtkTextBTreeNode's tag records again and delete any Summary
    * records that still have a zero count, or that have all the toggles.
@@ -6221,13 +6222,29 @@ _gtk_toggle_segment_check_func (GtkTextLineSegment *segPtr,
  */
 
 static void
-gtk_text_btree_node_view_check_consistency (GtkTextBTreeNode *node,
+gtk_text_btree_node_view_check_consistency (GtkTextBTree     *tree,
+                                            GtkTextBTreeNode *node,
                                             NodeData         *nd)
 {
   gint width;
   gint height;
   gboolean valid;
+  BTreeView *view;
+  
+  view = tree->views;
 
+  while (view != NULL)
+    {
+      if (view->view_id == nd->view_id)
+        break;
+
+      view = view->next;
+    }
+
+  if (view == NULL)
+    g_error ("Node has data for a view %p no longer attached to the tree",
+             nd->view_id);
+  
   gtk_text_btree_node_compute_view_aggregates (node, nd->view_id,
                                                &width, &height, &valid);
   if (nd->width != width ||
@@ -6243,7 +6260,8 @@ gtk_text_btree_node_view_check_consistency (GtkTextBTreeNode *node,
 }
 
 static void
-gtk_text_btree_node_check_consistency (GtkTextBTreeNode *node)
+gtk_text_btree_node_check_consistency (GtkTextBTree     *tree,
+                                       GtkTextBTreeNode *node)
 {
   GtkTextBTreeNode *childnode;
   Summary *summary, *summary2;
@@ -6274,7 +6292,7 @@ gtk_text_btree_node_check_consistency (GtkTextBTreeNode *node)
   nd = node->node_data;
   while (nd != NULL)
     {
-      gtk_text_btree_node_view_check_consistency (node, nd);
+      gtk_text_btree_node_view_check_consistency (tree, node, nd);
       nd = nd->next;
     }
 
@@ -6343,7 +6361,7 @@ gtk_text_btree_node_check_consistency (GtkTextBTreeNode *node)
               g_error ("gtk_text_btree_node_check_consistency: level mismatch (%d %d)",
                        node->level, childnode->level);
             }
-          gtk_text_btree_node_check_consistency (childnode);
+          gtk_text_btree_node_check_consistency (tree, childnode);
           for (summary = childnode->summary; summary != NULL;
                summary = summary->next)
             {
@@ -6579,7 +6597,7 @@ _gtk_text_btree_check (GtkTextBTree *tree)
    */
 
   node = tree->root_node;
-  gtk_text_btree_node_check_consistency (tree->root_node);
+  gtk_text_btree_node_check_consistency (tree, tree->root_node);
 
   /*
    * Make sure that there are at least two lines in the text and

@@ -179,17 +179,8 @@ gtk_tree_path_append_index (GtkTreePath *path,
   g_return_if_fail (path != NULL);
   g_return_if_fail (index >= 0);
 
-  new_indices = g_new (gint, ++path->depth);
-  if (path->indices == NULL)
-    {
-      path->indices = new_indices;
-      path->indices[0] = index;
-      return;
-    }
-
-  memcpy (new_indices, path->indices, (path->depth - 1)*sizeof (gint));
-  g_free (path->indices);
-  path->indices = new_indices;
+  path->depth += 1;
+  path->indices = g_realloc (path->indices, path->depth * sizeof(gint));
   path->indices[path->depth - 1] = index;
 }
 
