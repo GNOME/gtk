@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.3.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-02-07 00:07+0100\n"
-"PO-Revision-Date: 2004-02-07 00:08+0100\n"
+"POT-Creation-Date: 2004-02-13 16:03+0100\n"
+"PO-Revision-Date: 2004-02-13 16:07+0100\n"
 "Last-Translator: Kjartan Maraas <kmaraas@gnome.org>\n"
 "Language-Team: Norwegian (bokmål) <i18n-nb@lister.ping.uio.no>\n"
 "MIME-Version: 1.0\n"
@@ -232,6 +232,54 @@ msgstr "Om handlingsgruppen er aktivert."
 #: gtk/gtkactiongroup.c:149
 msgid "Whether the action group is visible."
 msgstr "Om handlingsgruppen er synlig"
+
+#: gtk/gtkadjustment.c:106 gtk/gtkspinbutton.c:301
+msgid "Value"
+msgstr "Verdi"
+
+#: gtk/gtkadjustment.c:107
+msgid "The value of the adjustment"
+msgstr "Verdien for justeringen"
+
+#: gtk/gtkadjustment.c:116
+msgid "Minimum Value"
+msgstr "Minimumsverdi"
+
+#: gtk/gtkadjustment.c:117
+msgid "The minimum value of the adjustment"
+msgstr "Minimumsverdi for justeringen"
+
+#: gtk/gtkadjustment.c:126
+msgid "Maximum Value"
+msgstr "Maksimumsverdi"
+
+#: gtk/gtkadjustment.c:127
+msgid "The maximum value of the adjustment"
+msgstr "Maksimumsverdi for justeringen"
+
+#: gtk/gtkadjustment.c:136
+msgid "Step Increment"
+msgstr "Størrelse på steg"
+
+#: gtk/gtkadjustment.c:137
+msgid "The step increment of the adjustment"
+msgstr "Størrelse på steg for justeringen"
+
+#: gtk/gtkadjustment.c:146
+msgid "Page Increment"
+msgstr "Størrelse på side"
+
+#: gtk/gtkadjustment.c:147
+msgid "The page increment of the adjustment"
+msgstr "Sidestørrelse for justeringen"
+
+#: gtk/gtkadjustment.c:156
+msgid "Page Size"
+msgstr "Sidestørrelse"
+
+#: gtk/gtkadjustment.c:157
+msgid "The page size of the adjustment"
+msgstr "Sidestørrelse for justeringen"
 
 #: gtk/gtkalignment.c:116
 msgid "Horizontal alignment"
@@ -2154,36 +2202,36 @@ msgstr "Pause før nedtrekksmenyer vises"
 msgid "Delay before the submenus of a menu bar appear"
 msgstr "Pause før undermenyene i en menylinje vises"
 
-#: gtk/gtkmessagedialog.c:106
+#: gtk/gtkmessagedialog.c:109
 msgid "Image/label border"
 msgstr "Kant for bilde/etikett"
 
-#: gtk/gtkmessagedialog.c:107
+#: gtk/gtkmessagedialog.c:110
 msgid "Width of border around the label and image in the message dialog"
 msgstr "Bredde på kanten rundt etikett og bilde i meldingsdialogen"
 
-#: gtk/gtkmessagedialog.c:122
+#: gtk/gtkmessagedialog.c:125
 msgid "Use separator"
 msgstr "Bruk skillelinje"
 
-#: gtk/gtkmessagedialog.c:123
+#: gtk/gtkmessagedialog.c:126
 msgid ""
 "Whether to put a separator between the message dialog's text and the buttons"
 msgstr "Om en skillelinje skal plasseres mellom dialogens tekst og knapper"
 
-#: gtk/gtkmessagedialog.c:129
+#: gtk/gtkmessagedialog.c:132
 msgid "Message Type"
 msgstr "Meldingstype"
 
-#: gtk/gtkmessagedialog.c:130
+#: gtk/gtkmessagedialog.c:133
 msgid "The type of message"
 msgstr "Type melding"
 
-#: gtk/gtkmessagedialog.c:137
+#: gtk/gtkmessagedialog.c:140
 msgid "Message Buttons"
 msgstr "Meldingsknapper"
 
-#: gtk/gtkmessagedialog.c:138
+#: gtk/gtkmessagedialog.c:141
 msgid "The buttons shown in the message dialog"
 msgstr "Knappene som vises i meldingsdialogen"
 
@@ -2692,43 +2740,43 @@ msgstr "Maks størrelse"
 msgid "Maximum size of the ruler"
 msgstr "Maksimum størrelse på linjal"
 
-#: gtk/gtkscale.c:156 gtk/gtkspinbutton.c:258
+#: gtk/gtkscale.c:170 gtk/gtkspinbutton.c:258
 msgid "Digits"
 msgstr "Tall"
 
-#: gtk/gtkscale.c:157
+#: gtk/gtkscale.c:171
 msgid "The number of decimal places that are displayed in the value"
 msgstr "Antall desimalplasser som vises i verdien"
 
-#: gtk/gtkscale.c:166
+#: gtk/gtkscale.c:180
 msgid "Draw Value"
 msgstr "Tegn verdi"
 
-#: gtk/gtkscale.c:167
+#: gtk/gtkscale.c:181
 msgid "Whether the current value is displayed as a string next to the slider"
 msgstr "Om aktiv verdi vises som en streng ved siden av rullelisten"
 
-#: gtk/gtkscale.c:174
+#: gtk/gtkscale.c:188
 msgid "Value Position"
 msgstr "Plassering av verdi"
 
-#: gtk/gtkscale.c:175
+#: gtk/gtkscale.c:189
 msgid "The position in which the current value is displayed"
 msgstr "Posisjon hvor aktiv verdi vises"
 
-#: gtk/gtkscale.c:182
+#: gtk/gtkscale.c:196
 msgid "Slider Length"
 msgstr "Lengde på rulleliste"
 
-#: gtk/gtkscale.c:183
+#: gtk/gtkscale.c:197
 msgid "Length of scale's slider"
 msgstr "Lendge på skaleringslisten"
 
-#: gtk/gtkscale.c:191
+#: gtk/gtkscale.c:205
 msgid "Value spacing"
 msgstr "Mellomrom for verdier"
 
-#: gtk/gtkscale.c:192
+#: gtk/gtkscale.c:206
 msgid "Space between value text and the slider/trough area"
 msgstr "Mellomrom mellom verditekst og område for glider/«through»"
 
@@ -2986,10 +3034,6 @@ msgid ""
 "Whether the spin button should update always, or only when the value is legal"
 msgstr ""
 "Om «spin button» alltid skal oppdatere, eller kun når verdien er gyldig"
-
-#: gtk/gtkspinbutton.c:301
-msgid "Value"
-msgstr "Verdi"
 
 #: gtk/gtkspinbutton.c:302
 msgid "Reads the current value, or sets a new value"
