@@ -1830,7 +1830,6 @@ gtk_tree_model_sort_set_model (GtkTreeModelSort *tree_model_sort,
       GType *types;
       gint i, n_columns;
 
-      g_object_ref (tree_model_sort->child_model);
       tree_model_sort->changed_id =
         g_signal_connect (child_model, "row_changed",
                           G_CALLBACK (gtk_tree_model_sort_row_changed),

@@ -1,3 +1,9 @@
+Sat Nov  2 23:48:52 2002  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtktreemodelsort.c (gtk_tree_model_sort_set_model): remove
+	the second ref command on the child_model, we only have to ref it
+	once here. (#96851, reported by Jorn Baayen).
+
 2002-11-02  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkhandlebox.c (effective_handle_position): 
