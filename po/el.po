@@ -1,15 +1,16 @@
 # gtk+ Greek PO file
-# Copyright (C) 1999 Free Software Foundation, Inc.
+# Copyright (C) 1999, 2000, 2001, 2002 Free Software Foundation, Inc.
 # Spiros Papadimitriou <spapadim+@cs.cmu.edu>, 1999.
 # Simos Xenitellis <simos@hellug.gr>, 1999, 2001, 2002.
 # 
 # simos: 186 messages, 20Apr2002, first log entry.
+# simos: 214 messages, 16Aug2002, updated and converted to UTF-8.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: gtk+ 2.0.0\n"
-"POT-Creation-Date: 2002-07-31 16:57-0400\n"
-"PO-Revision-Date: 2002-04-20 21:06+0100\n"
+"Project-Id-Version: gtk+ 2.0.6\n"
+"POT-Creation-Date: 2002-08-17 17:47+0100\n"
+"PO-Revision-Date: 2002-08-17 18:00+0100\n"
 "Last-Translator: Simos Xenitellis <simos@hellug.gr>\n"
 "Language-Team: Greek <nls@tux.hellug.gr>\n"
 "MIME-Version: 1.0\n"
@@ -636,8 +637,6 @@ msgstr "Shift"
 msgid "Ctrl"
 msgstr "Ctrl"
 
-# #-#-#-#-#  nautilus-el.po (nautilus 0.8.3)  #-#-#-#-#
-#
 #. This is the text that should appear next to menu accelerators
 #. * that use the alt key. If the text on this key isn't typically
 #. * translated on keyboards used for your language, don't translate
@@ -675,7 +674,7 @@ msgstr ""
 
 #: gtk/gtkalignment.c:112
 msgid "Vertical alignment"
-msgstr ""
+msgstr "Κάθετη ευθυγράμμιση"
 
 #: gtk/gtkalignment.c:113
 msgid ""
@@ -788,9 +787,8 @@ msgstr ""
 
 #
 #: gtk/gtkbbox.c:151
-#, fuzzy
 msgid "Layout style"
-msgstr "Στυλ Γραμματοσειράς:"
+msgstr "Στυλ διάταξης"
 
 #: gtk/gtkbbox.c:152
 msgid ""
@@ -836,7 +834,7 @@ msgstr ""
 
 #: gtk/gtkbutton.c:197 gtk/gtklabel.c:301
 msgid "Use underline"
-msgstr ""
+msgstr "Χρήση υπογράμμισης"
 
 #: gtk/gtkbutton.c:198 gtk/gtklabel.c:302
 msgid ""
@@ -1007,29 +1005,13 @@ msgstr ""
 msgid "Pixbuf for closed expander."
 msgstr ""
 
-# #-#-#-#-#  balsa-el.po (balsa 0.9.3.1)  #-#-#-#-#
+# #-#-#-#-#  bonobo.HEAD.el.po (bonobo 0.34)  #-#-#-#-#
 #
-# #-#-#-#-#  bonobo-el.po (bonobo 0.34)  #-#-#-#-#
+# #-#-#-#-#  gtkhtml.gtkhtml-1-0-branch.el.po (gtkhtml 0.8.1)  #-#-#-#-#
 #
-# #-#-#-#-#  gimp-script-fu-el.po (gimp-script-fu 1.0)  #-#-#-#-#
+# #-#-#-#-#  gtop.HEAD.el.po (gtop 1.0.9)  #-#-#-#-#
 #
-# #-#-#-#-#  gtkhtml-el.po (gtkhtml 0.8.1)  #-#-#-#-#
-#
-# #-#-#-#-#  gtop-el.po (gtop 1.0.9)  #-#-#-#-#
-#
-# #-#-#-#-#  guppi3-el.po (guppi3 1.0)  #-#-#-#-#
-#
-# #-#-#-#-#  nautilus-el.po (nautilus 0.8.3)  #-#-#-#-#
-#
-# #-#-#-#-#  sodipodi-el.po (sodipodi 0.25)  #-#-#-#-#
-#
-# #-#-#-#-#  toutdoux-el.po (toutdoux 1.0)  #-#-#-#-#
-#
-# #-#-#-#-#  achtung-el.po (achtung 0.99.0)  #-#-#-#-#
-#
-# #-#-#-#-#  gaim-el.po (gaim 0.48)  #-#-#-#-#
-#
-# #-#-#-#-#  screem-el.po (screem 1.0)  #-#-#-#-#
+# #-#-#-#-#  nautilus.nautilus-gnome-1.el.po (nautilus 0.8.3)  #-#-#-#-#
 #
 #: gtk/gtkcellrenderertext.c:173 gtk/gtkentry.c:523 gtk/gtkprogressbar.c:207
 msgid "Text"
@@ -1098,21 +1080,9 @@ msgstr "(ανενεργό)"
 msgid "Whether the text can be modified by the user"
 msgstr ""
 
-# #-#-#-#-#  gimp-script-fu-el.po (gimp-script-fu 1.0)  #-#-#-#-#
+# #-#-#-#-#  gnome-libs.gnome-libs-1-0.el.po (gnome-libs 1.2.12)  #-#-#-#-#
 #
-# #-#-#-#-#  gnome-libs-el.po (gnome-libs 1.2.12)  #-#-#-#-#
-#
-# #-#-#-#-#  gtk+-el.po (gtk+ 1.2.9)  #-#-#-#-#
-#
-# #-#-#-#-#  guppi3-el.po (guppi3 1.0)  #-#-#-#-#
-#
-# #-#-#-#-#  toutdoux-el.po (toutdoux 1.0)  #-#-#-#-#
-#
-# #-#-#-#-#  achtung-el.po (achtung 0.99.0)  #-#-#-#-#
-#
-# #-#-#-#-#  gaim-el.po (gaim 0.48)  #-#-#-#-#
-#
-# #-#-#-#-#  screem-el.po (screem 1.0)  #-#-#-#-#
+# #-#-#-#-#  gtk+.gtk-1-2.el.po (gtk+ 1.2.9)  #-#-#-#-#
 #
 #: gtk/gtkcellrenderertext.c:238 gtk/gtkcellrenderertext.c:246
 #: gtk/gtkfontsel.c:212 gtk/gtktexttag.c:285 gtk/gtktexttag.c:293
@@ -1161,7 +1131,7 @@ msgstr "Ιδιότητες γραμ/σειράς:"
 #: gtk/gtkcellrenderertext.c:300 gtk/gtkcellrenderertext.c:301
 #: gtk/gtktexttag.c:348 gtk/gtktexttag.c:349
 msgid "Font size"
-msgstr "Μέγ. γραμματοσειράς"
+msgstr "Μέγεθος γραμματοσειράς"
 
 #
 #: gtk/gtkcellrenderertext.c:310 gtk/gtktexttag.c:368
@@ -1200,17 +1170,11 @@ msgstr ""
 msgid "Whether to strike through the text"
 msgstr ""
 
-# #-#-#-#-#  gtkhtml-el.po (gtkhtml 0.8.1)  #-#-#-#-#
-#
-# #-#-#-#-#  achtung-el.po (achtung 0.99.0)  #-#-#-#-#
-#
-# #-#-#-#-#  gaim-el.po (gaim 0.48)  #-#-#-#-#
-#
-# #-#-#-#-#  screem-el.po (screem 1.0)  #-#-#-#-#
+# #-#-#-#-#  gtkhtml.gtkhtml-1-0-branch.el.po (gtkhtml 0.8.1)  #-#-#-#-#
 #
 #: gtk/gtkcellrenderertext.c:349 gtk/gtktexttag.c:475
 msgid "Underline"
-msgstr "Υπογράμμιση"
+msgstr "Υπογραμμισμένα"
 
 #: gtk/gtkcellrenderertext.c:350 gtk/gtktexttag.c:476
 msgid "Style of underline for this text"
@@ -1365,12 +1329,6 @@ msgstr ""
 msgid "Spacing around check or radio indicator"
 msgstr ""
 
-# #-#-#-#-#  sodipodi-el.po (sodipodi 0.25)  #-#-#-#-#
-#
-# #-#-#-#-#  gaim-el.po (gaim 0.48)  #-#-#-#-#
-#
-# #-#-#-#-#  ximian-setup-tools-el.po (ximian-setup-tools 0.7.0)  #-#-#-#-#
-#
 #: gtk/gtkcheckmenuitem.c:115 gtk/gtktogglebutton.c:133
 msgid "Active"
 msgstr "Ενεργό"
@@ -1402,7 +1360,7 @@ msgstr ""
 
 #: gtk/gtkcolorsel.c:910
 msgid "_Save color here"
-msgstr ""
+msgstr "Απο_θήκευση χρώματος εδώ"
 
 #: gtk/gtkcolorsel.c:1079
 msgid ""
@@ -1473,9 +1431,8 @@ msgstr ""
 
 #
 #: gtk/gtkcolorsel.c:1823
-#, fuzzy
 msgid "_Saturation:"
-msgstr "Κορεσμός:"
+msgstr "_Κορεσμός:"
 
 #: gtk/gtkcolorsel.c:1824
 msgid "\"Deepness\" of the color."
@@ -1538,7 +1495,7 @@ msgstr ""
 
 #: gtk/gtkcolorsel.c:1889
 msgid "_Palette"
-msgstr ""
+msgstr "_Παλέττα"
 
 #: gtk/gtkcombo.c:139
 msgid "Enable arrow keys"
@@ -1590,9 +1547,8 @@ msgid "Specify how resize events are handled"
 msgstr ""
 
 #: gtk/gtkcontainer.c:208
-#, fuzzy
 msgid "Border width"
-msgstr "Πλαίσιο"
+msgstr "Πλάτος πλαισίου"
 
 #: gtk/gtkcontainer.c:209
 msgid "The width of the empty border outside the containers children."
@@ -1787,13 +1743,11 @@ msgstr "Επιλογή Όλων"
 msgid "Input Methods"
 msgstr ""
 
-#: gtk/gtkentry.c:3890 gtk/gtktextview.c:6395
+#: gtk/gtkentry.c:3890 gtk/gtktextview.c:6425
 msgid "_Insert Unicode control character"
 msgstr ""
 
-# #-#-#-#-#  gimp-script-fu-el.po (gimp-script-fu 1.0)  #-#-#-#-#
-#
-# #-#-#-#-#  gtop-el.po (gtop 1.0.9)  #-#-#-#-#
+# #-#-#-#-#  gtop.HEAD.el.po (gtop 1.0.9)  #-#-#-#-#
 #
 #: gtk/gtkfilesel.c:536 gtk/gtkimage.c:161
 msgid "Filename"
@@ -1830,11 +1784,7 @@ msgstr "Φάκελοι"
 msgid "Fol_ders"
 msgstr "_Φάκελοι"
 
-# #-#-#-#-#  anjuta-el.po (anjuta 0.1.9)  #-#-#-#-#
-#
-# #-#-#-#-#  gnome-libs-el.po (gnome-libs 1.2.12)  #-#-#-#-#
-#
-# #-#-#-#-#  gtk+-el.po (gtk+ 1.2.9)  #-#-#-#-#
+# #-#-#-#-#  gnome-1.4-core-compendium.po (bonobo 0.34)  #-#-#-#-#
 #
 #: gtk/gtkfilesel.c:742
 msgid "Files"
@@ -1904,9 +1854,7 @@ msgstr "Νέος Φάκελος"
 msgid "_Folder name:"
 msgstr "Όνομα _Φακέλου:"
 
-# #-#-#-#-#  gtk+-el.po (gtk+ 1.2.9)  #-#-#-#-#
-#
-# #-#-#-#-#  toutdoux-el.po (toutdoux 1.0)  #-#-#-#-#
+# #-#-#-#-#  gnome-1.4-core-compendium.po (bonobo 0.34)  #-#-#-#-#
 #
 #: gtk/gtkfilesel.c:1472
 msgid "Create"
@@ -1974,9 +1922,9 @@ msgstr "Μετονομασία Aρχείου"
 
 #
 #: gtk/gtkfilesel.c:1709
-#, fuzzy, c-format
+#, c-format
 msgid "Rename file \"%s\" to:"
-msgstr "Μετονομασία Aρχείου"
+msgstr "Μετονομασία αρχείου \"%s\" σε:"
 
 #
 #: gtk/gtkfilesel.c:1740
@@ -2027,7 +1975,7 @@ msgstr ""
 #. can set it. Remember that some fonts only have capital letters.
 #: gtk/gtkfontsel.c:69
 msgid "abcdefghijk ABCDEFGHIJK"
-msgstr ""
+msgstr "αβγδεζηθικλμν ΑΒΓΔΕΖΗΘΙΚΛΜΝ"
 
 #
 #: gtk/gtkfontsel.c:205
@@ -2054,14 +2002,13 @@ msgstr ""
 
 #: gtk/gtkfontsel.c:327
 msgid "_Family:"
-msgstr ""
+msgstr "_Οικογένεια:"
 
 # # FIX? State = Politeia normally, but in Greece we have
 # #      different subdivisions, so...?
 #: gtk/gtkfontsel.c:333
-#, fuzzy
 msgid "_Style:"
-msgstr "Κατάσταση:"
+msgstr "_Στυλ:"
 
 #
 #: gtk/gtkfontsel.c:339
@@ -2121,7 +2068,6 @@ msgstr ""
 msgid "A widget to display in place of the usual frame label."
 msgstr ""
 
-# #-#-#-#-#  gtk+-el.po (gtk+ 1.2.9)  #-#-#-#-#
 #
 #: gtk/gtkgamma.c:396
 msgid "Gamma"
@@ -2129,9 +2075,8 @@ msgstr "Γάμμα"
 
 #
 #: gtk/gtkgamma.c:406
-#, fuzzy
 msgid "_Gamma value"
-msgstr "Τιμή γάμμα"
+msgstr "Τιμή _γάμμα"
 
 #: gtk/gtkhandlebox.c:192 gtk/gtkmenubar.c:151 gtk/gtkstatusbar.c:158
 #: gtk/gtktoolbar.c:277 gtk/gtkviewport.c:148
@@ -2271,7 +2216,8 @@ msgstr ""
 msgid "Child widget to appear next to the menu text"
 msgstr ""
 
-# #-#-#-#-#  gtk+-el.po (gtk+ 1.2.9)  #-#-#-#-#
+# #-#-#-#-#  gnome-1.4-core-compendium.po (bonobo 0.34)  #-#-#-#-#
+# #-#-#-#-#  gtk+.gtk-1-2.el.po (gtk+ 1.2.9)  #-#-#-#-#
 #
 #. shell and main vbox
 #: gtk/gtkinputdialog.c:184
@@ -2287,22 +2233,15 @@ msgstr "Δεν υπάρχουν συσκευές εισόδου"
 msgid "_Device:"
 msgstr "_Συσκευή:"
 
-#
 #: gtk/gtkinputdialog.c:238
 msgid "Disabled"
-msgstr "Ανενεργό"
+msgstr "Απενεργοποιημένο"
 
-# #-#-#-#-#  gtk+-el.po (gtk+ 1.2.9)  #-#-#-#-#
 #
 #: gtk/gtkinputdialog.c:246
 msgid "Screen"
 msgstr "Οθόνη"
 
-# #-#-#-#-#  gtk+-el.po (gtk+ 1.2.9)  #-#-#-#-#
-#
-# #-#-#-#-#  libgda-el.po (gnome-db 0.0.91)  #-#-#-#-#
-#
-# #-#-#-#-#  toutdoux-el.po (toutdoux 1.0)  #-#-#-#-#
 #
 #: gtk/gtkinputdialog.c:254
 msgid "Window"
@@ -2324,11 +2263,13 @@ msgstr "Ά_ξονες"
 msgid "_Keys"
 msgstr "_Πλήκτρα"
 
+# #-#-#-#-#  gtk+.gtk-1-2.el.po (gtk+ 1.2.9)  #-#-#-#-#
 #
 #: gtk/gtkinputdialog.c:474
 msgid "X"
 msgstr "Χ"
 
+# #-#-#-#-#  gtk+.gtk-1-2.el.po (gtk+ 1.2.9)  #-#-#-#-#
 #
 #: gtk/gtkinputdialog.c:475
 msgid "Y"
@@ -2342,18 +2283,17 @@ msgstr "Πίεση"
 #
 #: gtk/gtkinputdialog.c:477
 msgid "X Tilt"
-msgstr "Χ Κλίση"
+msgstr "Χ-κλίση"
 
 #
 #: gtk/gtkinputdialog.c:478
 msgid "Y Tilt"
-msgstr "Ψ Κλίση"
+msgstr "Ψ-κλίση"
 
 #: gtk/gtkinputdialog.c:479
 msgid "Wheel"
 msgstr "Τροχός"
 
-#
 #: gtk/gtkinputdialog.c:519
 msgid "none"
 msgstr "κανένα"
@@ -2363,7 +2303,7 @@ msgstr "κανένα"
 msgid "(disabled)"
 msgstr "(ανενεργό)"
 
-# #-#-#-#-#  gtk+-el.po (gtk+ 1.2.9)  #-#-#-#-#
+# #-#-#-#-#  gnome-1.4-core-compendium.po (bonobo 0.34)  #-#-#-#-#
 #
 #: gtk/gtkinputdialog.c:582
 msgid "(unknown)"
@@ -2404,7 +2344,7 @@ msgstr ""
 
 #: gtk/gtklabel.c:318
 msgid "Pattern"
-msgstr "Σχέδιο"
+msgstr "Κανονική έκφραση"
 
 #: gtk/gtklabel.c:319
 msgid ""
@@ -2592,7 +2532,7 @@ msgstr ""
 #
 #: gtk/gtknotebook.c:371
 msgid "Tab Position"
-msgstr "Θέση Στηλοθέτη"
+msgstr "Θέση Καρτέλας"
 
 #: gtk/gtknotebook.c:372
 msgid "Which side of the notebook holds the tabs"
@@ -2713,7 +2653,7 @@ msgstr ""
 
 #: gtk/gtkpreview.c:129
 msgid "Expand"
-msgstr "Ανάπτυξη"
+msgstr "Ξεδίπλωμα"
 
 #: gtk/gtkpreview.c:130
 msgid ""
@@ -2782,9 +2722,8 @@ msgstr ""
 
 #
 #: gtk/gtkprogressbar.c:148
-#, fuzzy
 msgid "Bar style"
-msgstr "Στυλ γραμματοσειράς:"
+msgstr "Στυλ μπάρας"
 
 #: gtk/gtkprogressbar.c:149
 msgid "Specifies the visual style of the bar in percentage mode (Deprecated)"
@@ -2934,7 +2873,7 @@ msgstr ""
 
 #: gtk/gtkruler.c:118
 msgid "Lower"
-msgstr "Χαμηλά"
+msgstr "Βύθιση"
 
 #: gtk/gtkruler.c:119
 msgid "Lower limit of ruler"
@@ -2955,7 +2894,7 @@ msgstr ""
 #
 #: gtk/gtkruler.c:148
 msgid "Max Size"
-msgstr "Μεγ Μέγεθος"
+msgstr "Μεγ. Μέγεθος"
 
 #: gtk/gtkruler.c:149
 msgid "Maximum size of the ruler"
@@ -3141,7 +3080,7 @@ msgstr ""
 
 #: gtk/gtksettings.c:180
 msgid "Theme Name"
-msgstr "Όνομα θέματος"
+msgstr "Όνομα Θέματος"
 
 #: gtk/gtksettings.c:181
 msgid "Name of theme RC file to load"
@@ -3171,7 +3110,6 @@ msgstr ""
 msgid "Number of pixels the cursor can move before dragging"
 msgstr ""
 
-#
 #: gtk/gtksettings.c:215
 msgid "Font Name"
 msgstr "Όνομα Γραμματοσειράς"
@@ -3241,23 +3179,7 @@ msgid ""
 "Whether the spin button should update always, or only when the value is legal"
 msgstr ""
 
-# #-#-#-#-#  anjuta-el.po (anjuta 0.1.9)  #-#-#-#-#
-#
-# #-#-#-#-#  gimp-el.po (gimp 1.3.2)  #-#-#-#-#
-#
-# #-#-#-#-#  gnome-db-el.po (gnome-db 0.0.91)  #-#-#-#-#
-#
-# #-#-#-#-#  gnucash-el.po (abiword 1.0)  #-#-#-#-#
-#
-# #-#-#-#-#  gtop-el.po (gtop 1.0.9)  #-#-#-#-#
-#
-# #-#-#-#-#  libgda-el.po (gnome-db 0.0.91)  #-#-#-#-#
-#
-# #-#-#-#-#  sodipodi-el.po (sodipodi 0.25)  #-#-#-#-#
-#
-# #-#-#-#-#  pong-el.po (pong 0.7)  #-#-#-#-#
-#
-# #-#-#-#-#  screem-el.po (screem 1.0)  #-#-#-#-#
+# #-#-#-#-#  gtop.HEAD.el.po (gtop 1.0.9)  #-#-#-#-#
 #
 #: gtk/gtkspinbutton.c:298
 msgid "Value"
@@ -3271,54 +3193,34 @@ msgstr ""
 msgid "Style of bevel around the statusbar text"
 msgstr ""
 
-# #-#-#-#-#  anjuta-el.po (anjuta 0.1.9)  #-#-#-#-#
-#
-# #-#-#-#-#  atomix-el.po (atomix 1.0)  #-#-#-#-#
-#
-# #-#-#-#-#  glimmer-el.po (glimmer 1.0)  #-#-#-#-#
-#
-# #-#-#-#-#  gnome-libs-el.po (gnome-libs 1.2.12)  #-#-#-#-#
-#
-# #-#-#-#-#  guppi3-el.po (guppi3 1.0)  #-#-#-#-#
-#
-# #-#-#-#-#  screem-el.po (screem 1.0)  #-#-#-#-#
+# #-#-#-#-#  gnome-1.4-core-compendium.po (bonobo 0.34)  #-#-#-#-#
 #
 #. KEEP IN SYNC with gtkiconfactory.c stock icons, when appropriate
 #: gtk/gtkstock.c:267
 msgid "Information"
-msgstr "Πληροφορία"
+msgstr "Πληροφορίες"
 
+# #-#-#-#-#  gnome-1.4-core-compendium.po (bonobo 0.34)  #-#-#-#-#
+# #-#-#-#-#  gnome-libs.gnome-libs-1-0.el.po (gnome-libs 1.2.12)  #-#-#-#-#
+#
 #: gtk/gtkstock.c:268
 msgid "Warning"
 msgstr "Προειδοποίηση"
 
-# #-#-#-#-#  eel-el.po (eel 1.0.0.1)  #-#-#-#-#
+# #-#-#-#-#  gnome-1.4-core-compendium.po (bonobo 0.34)  #-#-#-#-#
+# #-#-#-#-#  eel.eel-1-0.el.po (eel 1.0.0.1)  #-#-#-#-#
 #
-# #-#-#-#-#  gabber-el.po (gabber 1.0)  #-#-#-#-#
+# #-#-#-#-#  gnome-libs.gnome-libs-1-0.el.po (gnome-libs 1.2.12)  #-#-#-#-#
 #
-# #-#-#-#-#  galeon-el.po (galeon 1.0)  #-#-#-#-#
+# #-#-#-#-#  gtk+.gtk-1-2.el.po (gtk+ 1.2.9)  #-#-#-#-#
 #
-# #-#-#-#-#  gnome-libs-el.po (gnome-libs 1.2.12)  #-#-#-#-#
-#
-# #-#-#-#-#  gnucash-el.po (abiword 1.0)  #-#-#-#-#
-#
-# #-#-#-#-#  gtk+-el.po (gtk+ 1.2.9)  #-#-#-#-#
-#
-# #-#-#-#-#  nautilus-el.po (nautilus 0.8.3)  #-#-#-#-#
-#
-# #-#-#-#-#  pan-el.po (pan 0.11.1.90)  #-#-#-#-#
-#
-# #-#-#-#-#  gaim-el.po (gaim 0.48)  #-#-#-#-#
+# #-#-#-#-#  nautilus.nautilus-gnome-1.el.po (nautilus 0.8.3)  #-#-#-#-#
 #
 #: gtk/gtkstock.c:269
 msgid "Error"
 msgstr "Σφάλμα"
 
-# #-#-#-#-#  gnome-libs-el.po (gnome-libs 1.2.12)  #-#-#-#-#
-#
-# #-#-#-#-#  libgda-el.po (gnome-db 0.0.91)  #-#-#-#-#
-#
-# #-#-#-#-#  toutdoux-el.po (toutdoux 1.0)  #-#-#-#-#
+# #-#-#-#-#  gnome-libs.gnome-libs-1-0.el.po (gnome-libs 1.2.12)  #-#-#-#-#
 #
 #: gtk/gtkstock.c:270
 msgid "Question"
@@ -3358,17 +3260,7 @@ msgstr "_CD-Rom"
 msgid "_Clear"
 msgstr "Καθαρισ_μός"
 
-# #-#-#-#-#  balsa-el.po (balsa 0.9.3.1)  #-#-#-#-#
-#
-# #-#-#-#-#  galeon-el.po (galeon 1.0)  #-#-#-#-#
-#
-# #-#-#-#-#  glimmer-el.po (glimmer 1.0)  #-#-#-#-#
-#
-# #-#-#-#-#  gnome-libs-el.po (gnome-libs 1.2.12)  #-#-#-#-#
-#
-# #-#-#-#-#  mrproject-el.po (mrproject 0.5)  #-#-#-#-#
-#
-# #-#-#-#-#  screem-el.po (screem 1.0)  #-#-#-#-#
+# #-#-#-#-#  gnome-libs.gnome-libs-1-0.el.po (gnome-libs 1.2.12)  #-#-#-#-#
 #
 #: gtk/gtkstock.c:281
 msgid "_Close"
@@ -3379,15 +3271,11 @@ msgstr "_Κλείσιμο"
 msgid "_Convert"
 msgstr "Μετατρο_πή"
 
-# #-#-#-#-#  anjuta-el.po (anjuta 0.1.9)  #-#-#-#-#
-#
-# #-#-#-#-#  galeon-el.po (galeon 1.0)  #-#-#-#-#
-#
-# #-#-#-#-#  gnome-libs-el.po (gnome-libs 1.2.12)  #-#-#-#-#
+# #-#-#-#-#  gnome-libs.gnome-libs-1-0.el.po (gnome-libs 1.2.12)  #-#-#-#-#
 #
 #: gtk/gtkstock.c:283
 msgid "_Copy"
-msgstr "Αντιγρα_φή"
+msgstr "_Αντιγραφή"
 
 # #-#-#-#-#  anjuta-el.po (anjuta 0.1.9)  #-#-#-#-#
 #
@@ -3399,17 +3287,9 @@ msgstr "Αντιγρα_φή"
 msgid "C_ut"
 msgstr "Αποκο_πή"
 
-# #-#-#-#-#  balsa-el.po (balsa 0.9.3.1)  #-#-#-#-#
-#
-# #-#-#-#-#  galeon-el.po (galeon 1.0)  #-#-#-#-#
-#
-# #-#-#-#-#  gnucash-el.po (abiword 1.0)  #-#-#-#-#
-#
-# #-#-#-#-#  pan-el.po (pan 0.11.1.90)  #-#-#-#-#
-#
 #: gtk/gtkstock.c:285
 msgid "_Delete"
-msgstr "Διαγρα_φή"
+msgstr "_Διαγραφή"
 
 #: gtk/gtkstock.c:286
 msgid "_Execute"
@@ -3417,7 +3297,7 @@ msgstr "Εκ_τέλεση"
 
 #: gtk/gtkstock.c:287
 msgid "_Find"
-msgstr "_Εύρεση"
+msgstr "_Αναζήτηση"
 
 #: gtk/gtkstock.c:288
 msgid "Find and _Replace"
@@ -3464,19 +3344,7 @@ msgstr "_Μπροστά"
 msgid "_Up"
 msgstr "Ε_πάνω"
 
-# #-#-#-#-#  galeon-el.po (galeon 1.0)  #-#-#-#-#
-#
-# #-#-#-#-#  glimmer-el.po (glimmer 1.0)  #-#-#-#-#
-#
-# #-#-#-#-#  gnome-libs-el.po (gnome-libs 1.2.12)  #-#-#-#-#
-#
-# #-#-#-#-#  gnucash-el.po (abiword 1.0)  #-#-#-#-#
-#
-# #-#-#-#-#  mrproject-el.po (mrproject 0.5)  #-#-#-#-#
-#
-# #-#-#-#-#  sodipodi-el.po (sodipodi 0.25)  #-#-#-#-#
-#
-# #-#-#-#-#  gnomemeeting-el.po (gnomemeeting 0.12.2)  #-#-#-#-#
+# #-#-#-#-#  gnome-libs.gnome-libs-1-0.el.po (gnome-libs 1.2.12)  #-#-#-#-#
 #
 #: gtk/gtkstock.c:298
 msgid "_Help"
@@ -3497,7 +3365,7 @@ msgstr "_Πλάγια"
 
 #: gtk/gtkstock.c:302
 msgid "_Jump to"
-msgstr ""
+msgstr "_Μεταπήδηση στο"
 
 #: gtk/gtkstock.c:303
 msgid "_Center"
@@ -3515,21 +3383,7 @@ msgstr "Α_ριστερά"
 msgid "_Right"
 msgstr "_Δεξιά"
 
-# #-#-#-#-#  anjuta-el.po (anjuta 0.1.9)  #-#-#-#-#
-#
-# #-#-#-#-#  balsa-el.po (balsa 0.9.3.1)  #-#-#-#-#
-#
-# #-#-#-#-#  galeon-el.po (galeon 1.0)  #-#-#-#-#
-#
-# #-#-#-#-#  glimmer-el.po (glimmer 1.0)  #-#-#-#-#
-#
-# #-#-#-#-#  gnome-libs-el.po (gnome-libs 1.2.12)  #-#-#-#-#
-#
-# #-#-#-#-#  gnucash-el.po (abiword 1.0)  #-#-#-#-#
-#
-# #-#-#-#-#  sodipodi-el.po (sodipodi 0.25)  #-#-#-#-#
-#
-# #-#-#-#-#  screem-el.po (screem 1.0)  #-#-#-#-#
+# #-#-#-#-#  gnome-libs.gnome-libs-1-0.el.po (gnome-libs 1.2.12)  #-#-#-#-#
 #
 #: gtk/gtkstock.c:307
 msgid "_New"
@@ -3544,6 +3398,7 @@ msgstr "_Όχι"
 msgid "_OK"
 msgstr "_Εντάξει"
 
+#
 #: gtk/gtkstock.c:310
 msgid "_Open"
 msgstr "Ά_νοιγμα"
@@ -3558,9 +3413,6 @@ msgstr "Ά_νοιγμα"
 msgid "_Paste"
 msgstr "Επι_κόλληση"
 
-# #-#-#-#-#  mrproject-el.po (mrproject 0.5)  #-#-#-#-#
-#
-# #-#-#-#-#  nautilus-el.po (nautilus 0.8.3)  #-#-#-#-#
 #
 #: gtk/gtkstock.c:312
 msgid "_Preferences"
@@ -3583,11 +3435,7 @@ msgstr "_Ιδιότητες"
 msgid "_Quit"
 msgstr "_Τέλος"
 
-# #-#-#-#-#  anjuta-el.po (anjuta 0.1.9)  #-#-#-#-#
-#
-# #-#-#-#-#  gnome-libs-el.po (gnome-libs 1.2.12)  #-#-#-#-#
-#
-# #-#-#-#-#  mrproject-el.po (mrproject 0.5)  #-#-#-#-#
+# #-#-#-#-#  gnome-libs.gnome-libs-1-0.el.po (gnome-libs 1.2.12)  #-#-#-#-#
 #
 #: gtk/gtkstock.c:317
 msgid "_Redo"
@@ -3606,21 +3454,11 @@ msgstr "Διαγρα_φή"
 msgid "_Revert"
 msgstr "Επανα_φορά"
 
-# #-#-#-#-#  anjuta-el.po (anjuta 0.1.9)  #-#-#-#-#
-#
-# #-#-#-#-#  galeon-el.po (galeon 1.0)  #-#-#-#-#
-#
-# #-#-#-#-#  glimmer-el.po (glimmer 1.0)  #-#-#-#-#
-#
-# #-#-#-#-#  gnome-libs-el.po (gnome-libs 1.2.12)  #-#-#-#-#
-#
-# #-#-#-#-#  mrproject-el.po (mrproject 0.5)  #-#-#-#-#
-#
-# #-#-#-#-#  screem-el.po (screem 1.0)  #-#-#-#-#
+# #-#-#-#-#  gnome-libs.gnome-libs-1-0.el.po (gnome-libs 1.2.12)  #-#-#-#-#
 #
 #: gtk/gtkstock.c:321
 msgid "_Save"
-msgstr "Απο_θήκευση"
+msgstr "_Αποθήκευση"
 
 #
 #: gtk/gtkstock.c:322
@@ -3639,15 +3477,15 @@ msgstr "_Γραμματοσειρά"
 
 #: gtk/gtkstock.c:325
 msgid "_Ascending"
-msgstr ""
+msgstr "Σε _αύξουσα σειρά"
 
 #: gtk/gtkstock.c:326
 msgid "_Descending"
-msgstr ""
+msgstr "Σε _φθίνουσα σειρά"
 
 #: gtk/gtkstock.c:327
 msgid "_Spell Check"
-msgstr ""
+msgstr "Έλεγχος Ορθογρα_φίας"
 
 #: gtk/gtkstock.c:328
 msgid "_Stop"
@@ -3665,9 +3503,8 @@ msgstr "Α_ναίρεση Διαγραφής"
 
 #
 #: gtk/gtkstock.c:331
-#, fuzzy
 msgid "_Underline"
-msgstr "Υπογραμμισμένα"
+msgstr "_Υπογράμμιση"
 
 # #-#-#-#-#  gnome-libs-el.po (gnome-libs 1.2.12)  #-#-#-#-#
 #
@@ -3683,7 +3520,7 @@ msgstr "_Ναι"
 
 #: gtk/gtkstock.c:334
 msgid "Zoom _100%"
-msgstr ""
+msgstr "Εστίαση _100%"
 
 #: gtk/gtkstock.c:335
 msgid "Zoom to _Fit"
@@ -3813,13 +3650,11 @@ msgstr ""
 msgid "Left, right, or center justification"
 msgstr ""
 
-# #-#-#-#-#  gdm2-el.po (gdm2 2.0.99)  #-#-#-#-#
+# #-#-#-#-#  gdm2.gdm-2-2.el.po (gdm2 2.0.99)  #-#-#-#-#
 #
-# #-#-#-#-#  gnome-libs-el.po (gnome-libs 1.2.12)  #-#-#-#-#
+# #-#-#-#-#  gnome-libs.gnome-libs-1-0.el.po (gnome-libs 1.2.12)  #-#-#-#-#
 #
-# #-#-#-#-#  gtkhtml-el.po (gtkhtml 0.8.1)  #-#-#-#-#
-#
-# #-#-#-#-#  libgda-el.po (gnome-db 0.0.91)  #-#-#-#-#
+# #-#-#-#-#  gtkhtml.gtkhtml-1-0-branch.el.po (gtkhtml 0.8.1)  #-#-#-#-#
 #
 #: gtk/gtktexttag.c:387
 msgid "Language"
@@ -3830,9 +3665,8 @@ msgid "Language engine code to use for rendering the text"
 msgstr ""
 
 #: gtk/gtktexttag.c:395
-#, fuzzy
 msgid "Left margin"
-msgstr "Αριστερή στοίχιση"
+msgstr "Αριστερό περιθώριο"
 
 #: gtk/gtktexttag.c:396 gtk/gtktextview.c:595
 msgid "Width of the left margin in pixels"
@@ -3846,15 +3680,11 @@ msgstr ""
 msgid "Width of the right margin in pixels"
 msgstr ""
 
-# #-#-#-#-#  gnome-libs-el.po (gnome-libs 1.2.12)  #-#-#-#-#
-#
-# #-#-#-#-#  mrproject-el.po (mrproject 0.5)  #-#-#-#-#
-#
-# #-#-#-#-#  toutdoux-el.po (toutdoux 1.0)  #-#-#-#-#
+# #-#-#-#-#  gnome-libs.gnome-libs-1-0.el.po (gnome-libs 1.2.12)  #-#-#-#-#
 #
 #: gtk/gtktexttag.c:416 gtk/gtktextview.c:614
 msgid "Indent"
-msgstr "Εσοχή"
+msgstr "Στοίχιση"
 
 #: gtk/gtktexttag.c:417 gtk/gtktextview.c:615
 msgid "Amount to indent the paragraph, in pixels"
@@ -3886,16 +3716,17 @@ msgstr ""
 
 #: gtk/gtktexttag.c:484
 msgid "Wrap mode"
-msgstr ""
+msgstr "Κατάσταση αναδίπλωσης"
 
 #: gtk/gtktexttag.c:485 gtk/gtktextview.c:577
 msgid ""
 "Whether to wrap lines never, at word boundaries, or at character boundaries"
 msgstr ""
 
+#
 #: gtk/gtktexttag.c:494 gtk/gtktextview.c:624
 msgid "Tabs"
-msgstr "Στηλοθέτες"
+msgstr "Καρτέλες"
 
 #: gtk/gtktexttag.c:495 gtk/gtktextview.c:625
 msgid "Custom tabs for this text"
@@ -4071,7 +3902,7 @@ msgstr ""
 
 #: gtk/gtktextview.c:576
 msgid "Wrap Mode"
-msgstr ""
+msgstr "Κατάσταση Αναδίπλωσης"
 
 #: gtk/gtktextview.c:594
 msgid "Left Margin"
@@ -4091,7 +3922,7 @@ msgstr "Ανενεργό"
 msgid "If the insertion cursor is shown"
 msgstr ""
 
-#: gtk/gtktextview.c:6386
+#: gtk/gtktextview.c:6416
 msgid "Input _Methods"
 msgstr ""
 
@@ -4104,7 +3935,7 @@ msgstr "Το module δε βρέθηκε στο module_path: \"%s\","
 #
 #: gtk/gtktipsquery.c:182
 msgid "--- No Tip ---"
-msgstr "--- Καμία Συμβουλή ---"
+msgstr "--- Καμία Υπόδειξη ---"
 
 #: gtk/gtktogglebutton.c:134
 msgid "If the toggle button should be pressed in or not"
@@ -4168,9 +3999,8 @@ msgstr ""
 
 #
 #: gtk/gtktoolbar.c:284
-#, fuzzy
 msgid "Toolbar style"
-msgstr "Στυλ γραμματοσειράς:"
+msgstr "Στυλ εργαλειοθήκης"
 
 #: gtk/gtktoolbar.c:285
 msgid ""
@@ -4333,9 +4163,8 @@ msgstr ""
 
 #
 #: gtk/gtktreeviewcolumn.c:210
-#, fuzzy
 msgid "Fixed Width"
-msgstr "Καθορισμός Πλάτους:"
+msgstr "Σταθερό Πλάτος"
 
 #: gtk/gtktreeviewcolumn.c:211
 msgid "Current fixed width of the column"
@@ -4375,7 +4204,7 @@ msgstr ""
 
 #: gtk/gtktreeviewcolumn.c:257
 msgid "Widget"
-msgstr "Μαραφέτι"
+msgstr "Γραφικό συστατικό"
 
 #: gtk/gtktreeviewcolumn.c:258
 msgid "Widget to put in column header button instead of column title"
@@ -4427,9 +4256,8 @@ msgstr ""
 
 #
 #: gtk/gtkwidget.c:390
-#, fuzzy
 msgid "Widget name"
-msgstr "Όνομα φίλτρου:"
+msgstr "Όνομα γραφικού συστατικού"
 
 #: gtk/gtkwidget.c:391
 msgid "The name of the widget"
@@ -4617,9 +4445,8 @@ msgstr ""
 
 #
 #: gtk/gtkwindow.c:411
-#, fuzzy
 msgid "Window Type"
-msgstr "Παράθυρο"
+msgstr "Τύπος Παραθύρου"
 
 #: gtk/gtkwindow.c:412
 msgid "The type of the window"
@@ -4679,7 +4506,7 @@ msgstr ""
 
 #: gtk/gtkwindow.c:471
 msgid "Default Width"
-msgstr "Εξ' ορισμού Πλάτος"
+msgstr "Εξ ορισμού Πλάτος"
 
 #: gtk/gtkwindow.c:472
 msgid ""
@@ -4688,7 +4515,7 @@ msgstr ""
 
 #: gtk/gtkwindow.c:481
 msgid "Default Height"
-msgstr "Εξ' ορισμού Ύψος"
+msgstr "Εξ ορισμού Ύψος"
 
 #: gtk/gtkwindow.c:482
 msgid ""
@@ -4749,26 +4576,9 @@ msgstr ""
 #. ID
 #: modules/input/imviqr.c:243
 msgid "Vietnamese (VIQR)"
-msgstr ""
+msgstr "Βιετναμέζικα (VIQR)"
 
 #. ID
 #: modules/input/imxim.c:27
 msgid "X Input Method"
-msgstr ""
-
-#, fuzzy
-#~ msgid "Cell background color name"
-#~ msgstr "Χρώμα παρασκηνίου"
-
-#, fuzzy
-#~ msgid "Cell background color as a string"
-#~ msgstr "Χρώμα παρασκηνίου"
-
-#, fuzzy
-#~ msgid "Cell background color"
-#~ msgstr "Χρώμα παρασκηνίου"
-
-#
-#, fuzzy
-#~ msgid "Size"
-#~ msgstr "_Μέγεθος:"
+msgstr "Μέθοδος Εισόδου X"
