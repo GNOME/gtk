@@ -1,3 +1,8 @@
+1999-07-20  Mark Crichton  <crichton@gimp.org>
+
+	* src/gdk-pixbuf.c (gdk_pixbuf_rotate): Added translation to recenter
+	the pixbuf.  Unfortunately, it doesn't work right yet.
+
 1999-07-18  Larry Ewing  <lewing@gimp.org>
 
 	* src/io-xpm.c:

@@ -1,8 +1,9 @@
 /*
  * gdk-pixbuf.c: Resource management.
  *
- * Author:
+ * Authors:
  *    Miguel de Icaza (miguel@gnu.org)
+ *    Mark Crichton (crichton@gimp.org)
  */
 #include <config.h>
 #include <glib.h>
@@ -84,20 +85,30 @@ gdk_pixbuf_rotate (GdkPixBuf *pixbuf, gdouble angle)
      art_u8 *pixels;
      gint rowstride, w, h;
      gdouble rad;
-     double affine[6];
+     double rot[6], trans[6], affine[6];
      ArtAlphaGamma *alphagamma = NULL;
      ArtPixBuf *art_pixbuf = NULL;
 
      w = pixbuf->art_pixbuf->width;
      h = pixbuf->art_pixbuf->height;
 
-     rad = M_PI * angle / 180.0;
+     rad = (M_PI * angle / 180.0);
 
-     affine[0] = cos(rad);
-     affine[1] = sin(rad);
-     affine[2] = -sin(rad);
-     affine[3] = cos(rad);
-     affine[4] = affine[5] = 0;
+     rot[0] = cos(rad);
+     rot[1] = sin(rad);
+     rot[2] = -sin(rad);
+     rot[3] = cos(rad);
+     rot[4] = rot[5] = 0;
+
+     trans[0] = trans[3] = 1;
+     trans[1] = trans[2] = 0;
+     trans[4] = (double)w / 2.0;
+     trans[5] = 0;
+
+     art_affine_multiply(affine, rot, trans);
+
+     g_print("Affine: %e %e %e %e %e %e\n", affine[0], affine[1], affine[2],
+	     affine[3], affine[4], affine[5]);
 
      /* rowstride = w * pixbuf->art_pixbuf->n_channels; */
      rowstride = w * 3;
@@ -106,14 +117,14 @@ gdk_pixbuf_rotate (GdkPixBuf *pixbuf, gdouble angle)
      art_rgb_pixbuf_affine (pixels, 0, 0, w, h, rowstride,
 			    pixbuf->art_pixbuf,
 			    affine, ART_FILTER_NEAREST, alphagamma);
-      if (pixbuf->art_pixbuf->has_alpha)
-      /* should be rgba */
-      art_pixbuf = art_pixbuf_new_rgb(pixels, w, h, rowstride); 
-    else 
-      art_pixbuf = art_pixbuf_new_rgb(pixels, w, h, rowstride); 
+     if (pixbuf->art_pixbuf->has_alpha)
+	  /* should be rgba */
+	  art_pixbuf = art_pixbuf_new_rgb(pixels, w, h, rowstride); 
+     else 
+	  art_pixbuf = art_pixbuf_new_rgb(pixels, w, h, rowstride); 
 
-    art_pixbuf_free (pixbuf->art_pixbuf);
-    pixbuf->art_pixbuf = art_pixbuf;
+     art_pixbuf_free (pixbuf->art_pixbuf);
+     pixbuf->art_pixbuf = art_pixbuf;
 
-    return pixbuf;
+     return pixbuf;
 }

@@ -149,7 +149,7 @@ main (int argc, char **argv)
   for (i = 1; i < argc; i++)
     {
       pixbuf = gdk_pixbuf_load_image (argv[i]);
-      pixbuf = gdk_pixbuf_rotate(pixbuf, 42.0);
+      pixbuf = gdk_pixbuf_rotate(pixbuf, 10.0);
       
       if (pixbuf)
 	{
