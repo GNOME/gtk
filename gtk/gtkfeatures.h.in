@@ -62,6 +62,11 @@ extern "C" {
  */
 #define GTK_HAVE_FEATURES_1_1_2				1-1-2
 
+/* Gtk+ 1.1.4 version tag
+ * - clist v/hscrollbar -> v/hadjustment changes
+ */
+#define GTK_HAVE_FEATURES_1_1_4				1-1-4
+
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */

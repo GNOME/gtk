@@ -1,3 +1,8 @@
+1998-11-10  Martin Baulig  <baulig@merkur.uni-trier.de>
+
+	* gtk/gtkfeatures.h.in (GTK_HAVE_FEATURES_1_1_4): Define this so
+	we can check for latest GTK features.
+
 Mon Nov  9 00:39:20 1998  Lars Hamann  <lars@gtk.org>
 
 	* gtk/gtkenums.h : new enum GtkCornerType 
