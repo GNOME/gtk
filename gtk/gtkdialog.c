@@ -912,10 +912,10 @@ gtk_dialog_run (GtkDialog *dialog)
 {
   RunInfo ri = { NULL, GTK_RESPONSE_NONE, NULL };
   gboolean was_modal;
-  guint response_handler;
-  guint unmap_handler;
-  guint destroy_handler;
-  guint delete_handler;
+  gulong response_handler;
+  gulong unmap_handler;
+  gulong destroy_handler;
+  gulong delete_handler;
   
   g_return_val_if_fail (GTK_IS_DIALOG (dialog), -1);
 

@@ -44,8 +44,8 @@ struct _StatusWindow
   GtkWidget *toplevel;
   
   /* Signal connection ids; we connect to the toplevel */
-  guint destroy_handler_id;
-  guint configure_handler_id;
+  gulong destroy_handler_id;
+  gulong configure_handler_id;
 };
 
 static void     gtk_im_context_xim_class_init         (GtkIMContextXIMClass  *class);
