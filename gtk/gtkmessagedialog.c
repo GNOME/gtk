@@ -174,7 +174,8 @@ gtk_message_dialog_init (GtkMessageDialog *dialog)
   priv->has_primary_markup = FALSE;
   priv->has_secondary_text = FALSE;
   priv->secondary_label = gtk_label_new (NULL);
-
+  gtk_widget_set_no_show_all (priv->secondary_label, TRUE);
+  
   dialog->label = gtk_label_new (NULL);
   dialog->image = gtk_image_new_from_stock (NULL, GTK_ICON_SIZE_DIALOG);
   gtk_misc_set_alignment (GTK_MISC (dialog->image), 0.5, 0.0);

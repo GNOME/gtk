@@ -1,3 +1,8 @@
+2004-12-20  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkmessagedialog.c (setup_primary_label_font): Don't show
+	the secondary label on show_all().  (#161707, Christian Persch)
+
 2004-12-19  Tor Lillqvist  <tml@iki.fi>
 
 	* gdk/win32/gdkdnd-win32.c (resolve_link, gdk_dropfiles_filter):
