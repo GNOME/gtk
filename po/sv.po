@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-07-16 07:58+0200\n"
-"PO-Revision-Date: 2004-07-16 07:58+0200\n"
+"POT-Creation-Date: 2004-07-26 08:05+0200\n"
+"PO-Revision-Date: 2004-07-26 08:05+0200\n"
 "Last-Translator: Christian Rose <menthos@menthos.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -1386,28 +1386,28 @@ msgstr "Typsnitt"
 
 #. This is the default text shown in the preview entry, though the user
 #. can set it. Remember that some fonts only have capital letters.
-#: gtk/gtkfontsel.c:69
+#: gtk/gtkfontsel.c:72
 msgid "abcdefghijk ABCDEFGHIJK"
 msgstr "abcdefghijk ABCDEFGHIJK"
 
-#: gtk/gtkfontsel.c:355
+#: gtk/gtkfontsel.c:359
 msgid "_Family:"
 msgstr "_Familj:"
 
-#: gtk/gtkfontsel.c:361
+#: gtk/gtkfontsel.c:365
 msgid "_Style:"
 msgstr "_Stil:"
 
-#: gtk/gtkfontsel.c:367
+#: gtk/gtkfontsel.c:371
 msgid "Si_ze:"
 msgstr "S_torlek:"
 
 #. create the text entry widget
-#: gtk/gtkfontsel.c:499
+#: gtk/gtkfontsel.c:547
 msgid "_Preview:"
 msgstr "_Förhandsvisning:"
 
-#: gtk/gtkfontsel.c:1327
+#: gtk/gtkfontsel.c:1375
 msgid "Font Selection"
 msgstr "Typsnittsval"
 
@@ -1465,9 +1465,11 @@ msgstr "_Enhet:"
 msgid "Disabled"
 msgstr "Avstängd"
 
+# Se http://bugzilla.gnome.org/show_bug.cgi?id=148437 -- ska vara 
+# "skärm"
 #: gtk/gtkinputdialog.c:279
 msgid "Screen"
-msgstr "Mask"
+msgstr "Skärm"
 
 #: gtk/gtkinputdialog.c:286
 msgid "Window"
@@ -1899,22 +1901,22 @@ msgstr "Kan inte hitta temamotorn i \"module_path\": \"%s\","
 msgid "--- No Tip ---"
 msgstr "--- Inget tips ---"
 
-#: gtk/gtkuimanager.c:1095
+#: gtk/gtkuimanager.c:1099
 #, c-format
 msgid "Unknown attribute '%s' on line %d char %d"
 msgstr "Okänt attribut \"%s\" på rad %d tecken %d"
 
-#: gtk/gtkuimanager.c:1313
+#: gtk/gtkuimanager.c:1317
 #, c-format
 msgid "Unexpected start tag '%s' on line %d char %d"
 msgstr "Oväntad starttagg \"%s\" på rad %d tecken %d"
 
-#: gtk/gtkuimanager.c:1398
+#: gtk/gtkuimanager.c:1402
 #, c-format
 msgid "Unexpected character data on line %d char %d"
 msgstr "Oväntade teckendata på rad %d tecken %d"
 
-#: gtk/gtkuimanager.c:2175
+#: gtk/gtkuimanager.c:2188
 msgid "Empty"
 msgstr "Tom"
 
