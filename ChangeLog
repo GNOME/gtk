@@ -1,3 +1,9 @@
+Wed Oct 10 21:13:46 2001  Kristian Rietveld  <kristian@planet.nl>
+
+	* gtk/gtktreemodel.[ch]: added gtk_tree_model_get_iter_from_string().
+
+	Fixes bug #61904
+
 Wed Oct 10 01:19:04 2001  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtktreeselection.c (gtk_tree_selection_iter_is_selected):
