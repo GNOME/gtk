@@ -120,7 +120,7 @@ Tells about the state of the object.
 </para>
 
 @GTK_IN_DESTRUCTION: the object is currently being destroyed. This is used 
-  internally by GTK+ to prevent reinvokations during destruction. 
+  internally by GTK+ to prevent reinvokations during destruction.
 @GTK_FLOATING: the object is orphaned.  Objects that take strong hold of an 
   object may gtk_object_sink() it, after obtaining their own references, if 
   they believe they are nearly primary ownership of the object.

@@ -164,7 +164,7 @@ The type macros <function>GTK_TYPE_MAKE()</function> and <function>GTK_TYPE_SEQN
 <para>
 The following type functions vanished/were replaced:
 <informaltable>
-<tgroup>
+<tgroup cols="2">
 <thead>
 <row><entry>Old Function</entry><entry>Replacement</entry></row>
 </thead>
@@ -181,7 +181,7 @@ The following type functions vanished/were replaced:
 <row><entry><function>gtk_type_set_chunk_alloc()</function></entry><entry><structfield>GTypeInfo.n_preallocs</structfield></entry></row>
 <row><entry><function>gtk_type_register_enum()</function></entry><entry><function>g_enum_register_static()</function></entry></row>
 <row><entry><function>gtk_type_register_flags()</function></entry><entry><function>g_flags_register_static()</function></entry></row>
-<row><entry><function>gtk_type_parent_class()</function></entry><entry><functiono>g_type_parent()</function>/<function>g_type_class_peek_parent()</function></entry></row>
+<row><entry><function>gtk_type_parent_class()</function></entry><entry><function>g_type_parent()</function>/<function>g_type_class_peek_parent()</function></entry></row>
 </tbody>
 </tgroup>
 </informaltable>
@@ -285,7 +285,7 @@ Signal system changes:
   <structname>GSignal</structname> API is recommended,
   this avoids significant performance hits where <structname>GtkArg</structname>
   structures have to be converted into <structname>GValue</structname>s. For 
-  language bindings, <structname>GSignal</structname>+</structname>GClosure</structname>
+  language bindings, <structname>GSignal</structname>+<structname>GClosure</structname>
   provide a much more flexible and convenient mechanism to hook into signal 
   emissions or install class default handlers, so the old 
   <structname>GtkSignal</structname> API for language bindings is not
@@ -424,7 +424,7 @@ A number of functions in GDK have been renamed for consistency and
   included, but can be disabled by defining <literal>GDK_DISABLE_DEPRECATED</literal>.
 
 <informaltable>
-<tgroup>
+<tgroup cols="2">
 <thead>
 <row><entry>Old function</entry><entry>Defined As</entry></row>
 </thead>
@@ -683,7 +683,7 @@ In GTK+ 1.2, if an event handler returned <literal>TRUE</literal> it prevented
 
 <listitem>
 <para>
-<structname>GtkRange</structname>/</structname>GtkScrollbar</structname>/<structname>GtkScale</structname> were rewritten; this means that most
+<structname>GtkRange</structname>/<structname>GtkScrollbar</structname>/<structname>GtkScale</structname> were rewritten; this means that most
   theme engines won't draw them properly, and any custom subclasses of
   these widgets will need a rewrite (though if you could figure out
   how to subclass the old version of <structname>GtkRange</structname>, you 
@@ -748,7 +748,7 @@ The <function>set_child_arg()</function> and <function>get_child_arg()</function
 Other removed <structname>GtkContainer</structname> functions with the replacements:
 
 <informaltable>
-<tgroup>
+<tgroup cols="2">
 <thead>
 <row><entry>Old function</entry><entry>Replacement</entry></row>
 </thead>
@@ -851,7 +851,7 @@ If a container depended on its children not being mapped
 For <literal>!NO_WINDOW</literal> widgets, if you create children of 
      <literal>widget-&gt;window</literal>
      and don't map them in <function>realize()</function> then you must map them
-     in <function>map()</function. [ In almost all cases, you can simply map the
+     in <function>map()</function>. [ In almost all cases, you can simply map the
      windows in <function>realize()</function>. ]
 </para>
 </listitem>
@@ -909,7 +909,7 @@ The following variables are no longer exported from GDK. (Other variables
   externally in a large sample of GTK+ code.)
 
 <informaltable>
-<tgroup>
+<tgroup cols="2">
 <thead>
 <row><entry>Variable</entry><entry>Replacement</entry></row>
 </thead>
@@ -919,7 +919,7 @@ The following variables are no longer exported from GDK. (Other variables
 <row><entry><literal>gdk_screen</literal></entry><entry><function>gdk_x11_get_default_screen ()</function></entry></row>
 <row><entry><literal>gdk_root_window</literal></entry><entry><function>gdk_x11_get_default_root_xwindow ()</function></entry></row>
 <row><entry><literal>gdk_root_parent</literal></entry><entry><function>gdk_get_default_root_window ()</function></entry></row>
-<row><entry><literal>gdk_error_code</literal></entry><entry><function>gdk_error_trap_push ()/pop ()</function>/entry></row>
+<row><entry><literal>gdk_error_code</literal></entry><entry><function>gdk_error_trap_push ()/pop ()</function></entry></row>
 <row><entry><literal>gdk_error_warnings</literal></entry><entry><function>gdk_error_trap_push ()/pop ()</function></entry></row>
 <row><entry><literal>gdk_display_name</literal></entry><entry><function>gdk_get_display ()</function></entry></row>
 <row><entry><literal>gdk_wm_delete_window</literal></entry><entry><literal>gdk_atom_intern ("WM_DELETE_WINDOW", FALSE)</literal></entry></row>
@@ -990,7 +990,7 @@ GDK is no longer put into threaded mode automatically when
 <para>
 The <structname>GtkPreviewInfo</structname> struct has had its visual and 
   colormap fields removed.  Also, <function>gtk_preview_get_cmap()</function> 
-  and <function>gtk_preview_get_visual()<function> are deprecated, as 
+  and <function>gtk_preview_get_visual()</function> are deprecated, as 
   <structname>GdkRGB</structname> works on any colormap and visual.  You no
   longer need to 
   <literal>gtk_widget_push_cmap (gtk_preview_get_cmap ())</literal> in

@@ -89,7 +89,7 @@ A number of GTK+ functions were renamed. For compatibility,
   Here is the list of the old names and replacements:
 
 <informaltable>
-<tgroup>
+<tgroup cols="2">
 <thead>
 <row><entry>Old</entry><entry>Replacement</entry></row>
 </thead>
@@ -122,7 +122,7 @@ During the development phase of the 1.1.x line of GTK+ certain functions
   were deprecated and later removed. Functions affected are:
 
 <informaltable>
-<tgroup>
+<tgroup cols="2">
 <thead>
 <row><entry>Removed</entry><entry>Replacement</entry></row>
 </thead>
@@ -149,7 +149,6 @@ During the development phase of the 1.1.x line of GTK+ certain functions
 Note that <function>gtk_entry_adjust_scroll()</function> is no longer needed 
     as <structname>GtkEntry</structname> should automatically keep the scroll 
     adjusted properly.
-</programlisting>
 </para>
 </listitem>
 

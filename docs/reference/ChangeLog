@@ -1,3 +1,17 @@
+2002-01-06  Havoc Pennington  <hp@pobox.com>
+
+	* gtk/gtk-docs.sgml: remove gtk- prefix from TreeView and a few
+	other entities, more consistent anyway (I thought this would make
+	links to "GtkTreeView" etc. go to the ref page, not the struct,
+	but it wasn't the problem, the issue is the way gtkdoc-mkdb
+	decides what's an object, see CheckIsObject() routine)
+
+	* gtk/changes-1.2.sgml: sgml fixes to get rid of warnings
+
+	* gtk/changes-2.0.sgml: ditto
+	
+	* gtk/question_index.sgml: add some questions
+
 2002-01-04  Matthias Clasen  <matthiasc@poet.de>
 
 	* gtk/tmpl/gtkwidget.sgml: Additions.

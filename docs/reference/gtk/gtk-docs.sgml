@@ -24,7 +24,7 @@
 <!entity GtkCurve SYSTEM "sgml/gtkcurve.sgml">
 <!entity GtkDialog SYSTEM "sgml/gtkdialog.sgml">
 <!entity GtkDrawingArea SYSTEM "sgml/gtkdrawingarea.sgml">
-<!entity gtk-GtkEditable SYSTEM "sgml/gtkeditable.sgml">
+<!entity GtkEditable SYSTEM "sgml/gtkeditable.sgml">
 <!entity GtkOldEditable SYSTEM "sgml/gtkoldeditable.sgml">
 <!entity GtkEntry SYSTEM "sgml/gtkentry.sgml">
 <!entity GtkEventBox SYSTEM "sgml/gtkeventbox.sgml">
@@ -87,8 +87,8 @@
 <!entity GtkTearoffMenuItem SYSTEM "sgml/gtktearoffmenuitem.sgml">
 <!entity GtkText SYSTEM "sgml/gtktext.sgml">
 <!entity GtkTextBuffer SYSTEM "sgml/gtktextbuffer.sgml">
-<!entity gtk-GtkTextIter SYSTEM "sgml/gtktextiter.sgml">
-<!entity gtk-GtkTextMark SYSTEM "sgml/gtktextmark.sgml">
+<!entity GtkTextIter SYSTEM "sgml/gtktextiter.sgml">
+<!entity GtkTextMark SYSTEM "sgml/gtktextmark.sgml">
 <!entity GtkTextTag SYSTEM "sgml/gtktexttag.sgml">
 <!entity GtkTextTagTable SYSTEM "sgml/gtktexttagtable.sgml">
 <!entity GtkTextView SYSTEM "sgml/gtktextview.sgml">
@@ -98,20 +98,20 @@
 <!entity GtkTooltips SYSTEM "sgml/gtktooltips.sgml">
 <!entity GtkTree SYSTEM "sgml/gtktree.sgml">
 <!entity GtkTreeItem SYSTEM "sgml/gtktreeitem.sgml">
-<!entity gtk-GtkTreeModel SYSTEM "sgml/gtktreemodel.sgml">
-<!entity gtk-GtkTreeSortable SYSTEM "sgml/gtktreesortable.sgml">
-<!entity gtk-GtkTreeModelSort SYSTEM "sgml/gtktreemodelsort.sgml">
-<!entity gtk-GtkTreeSelection SYSTEM "sgml/gtktreeselection.sgml">
-<!entity gtk-GtkTreeStore SYSTEM "sgml/gtktreestore.sgml">
-<!entity gtk-GtkTreeViewColumn SYSTEM "sgml/gtktreeviewcolumn.sgml">
-<!entity gtk-GtkTreeView SYSTEM "sgml/gtktreeview.sgml">
-<!entity gtk-GtkCellRenderer SYSTEM "sgml/gtkcellrenderer.sgml">
-<!entity gtk-GtkCellEditable SYSTEM "sgml/gtkcelleditable.sgml">
-<!entity gtk-GtkCellRendererPixbuf SYSTEM "sgml/gtkcellrendererpixbuf.sgml">
-<!entity gtk-GtkCellRendererText SYSTEM "sgml/gtkcellrenderertext.sgml">
-<!entity gtk-GtkCellRendererToggle SYSTEM "sgml/gtkcellrenderertoggle.sgml">
-<!entity gtk-GtkListStore SYSTEM "sgml/gtkliststore.sgml">
-<!entity gtk-GtkTreeDND SYSTEM "sgml/gtktreednd.sgml">
+<!entity GtkTreeModel SYSTEM "sgml/gtktreemodel.sgml">
+<!entity GtkTreeSortable SYSTEM "sgml/gtktreesortable.sgml">
+<!entity GtkTreeModelSort SYSTEM "sgml/gtktreemodelsort.sgml">
+<!entity GtkTreeSelection SYSTEM "sgml/gtktreeselection.sgml">
+<!entity GtkTreeStore SYSTEM "sgml/gtktreestore.sgml">
+<!entity GtkTreeViewColumn SYSTEM "sgml/gtktreeviewcolumn.sgml">
+<!entity GtkTreeView SYSTEM "sgml/gtktreeview.sgml">
+<!entity GtkCellRenderer SYSTEM "sgml/gtkcellrenderer.sgml">
+<!entity GtkCellEditable SYSTEM "sgml/gtkcelleditable.sgml">
+<!entity GtkCellRendererPixbuf SYSTEM "sgml/gtkcellrendererpixbuf.sgml">
+<!entity GtkCellRendererText SYSTEM "sgml/gtkcellrenderertext.sgml">
+<!entity GtkCellRendererToggle SYSTEM "sgml/gtkcellrenderertoggle.sgml">
+<!entity GtkListStore SYSTEM "sgml/gtkliststore.sgml">
+<!entity GtkTreeDND SYSTEM "sgml/gtktreednd.sgml">
 <!entity GtkVButtonBox SYSTEM "sgml/gtkvbbox.sgml">
 <!entity GtkVBox SYSTEM "sgml/gtkvbox.sgml">
 <!entity GtkViewport SYSTEM "sgml/gtkviewport.sgml">
@@ -325,8 +325,8 @@ that is, GUI components such as #GtkButton or #GtkTextView.
     <sect1 id="TextWidgetObjects">
       <title>Multiline Text Editor</title>
         &gtk-TextWidget;
-        &gtk-GtkTextIter;
-        &gtk-GtkTextMark;
+        &GtkTextIter;
+        &GtkTextMark;
         &GtkTextBuffer;
         &GtkTextTag;
         &GtkTextTagTable;
@@ -336,20 +336,20 @@ that is, GUI components such as #GtkButton or #GtkTextView.
     <sect1 id="TreeWidgetObjects">
       <title>Tree and List Widget</title>
         &gtk-TreeWidget;
-        &gtk-GtkTreeModel;
-        &gtk-GtkTreeSelection;
-        &gtk-GtkTreeViewColumn;
-        &gtk-GtkTreeView;
-        &gtk-GtkTreeDND;
-	&gtk-GtkTreeSortable;
-        &gtk-GtkTreeModelSort;
-        &gtk-GtkCellRenderer;
-        &gtk-GtkCellEditable;
-        &gtk-GtkCellRendererPixbuf;
-        &gtk-GtkCellRendererText;
-        &gtk-GtkCellRendererToggle;
-        &gtk-GtkListStore;
-        &gtk-GtkTreeStore;
+        &GtkTreeModel;
+        &GtkTreeSelection;
+        &GtkTreeViewColumn;
+        &GtkTreeView;
+        &GtkTreeDND;
+	&GtkTreeSortable;
+        &GtkTreeModelSort;
+        &GtkCellRenderer;
+        &GtkCellEditable;
+        &GtkCellRendererPixbuf;
+        &GtkCellRendererText;
+        &GtkCellRendererToggle;
+        &GtkListStore;
+        &GtkTreeStore;
     </sect1>
     <sect1 id="MenusAndCombos">
       <title>Menus, Combo Box, Toolbar</title>
@@ -430,7 +430,7 @@ that is, GUI components such as #GtkButton or #GtkTextView.
         &GtkBox;
         &GtkButtonBox;
         &GtkContainer;
-        &gtk-GtkEditable;
+        &GtkEditable;
         &GtkOldEditable;
         &GtkItem;
         &GtkMisc;

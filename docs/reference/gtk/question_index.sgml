@@ -122,8 +122,138 @@ threading primitives.
 
 </qandaentry>
 
+
+<qandaentry>
+<question><para>
+How do I load an image or animation from a file?
+</para></question>
+
+<answer>
+
+<para>
+To load an image file straight into a display widget, use <link
+linkend="gtk-image-new-from-file">gtk_image_new_from_file()</link>
+<footnote><para> If the file load fails, <link
+linkend="gtk-image-new-from-file">gtk_image_new_from_file()</link>
+will display a "broken image" graphic &mdash to detect a failed load
+yourself, use <link
+linkend="gdk-pixbuf-new-from-file">gdk_pixbuf_new_from_file()</link>
+directly then <link
+linkend="gtk-image-new-from-pixbuf">gtk_image_new_from_pixbuf()</link>.
+</para></footnote>. To load an image for another purpose, use <link
+linkend="gdk-pixbuf-new-from-file">gdk_pixbuf_new_from_file()</link>.
+To load an animation, use <link
+linkend="gdk-pixbuf-animation-new-from-file">gdk_pixbuf_animation_new_from_file()</link>.
+<link
+linkend="gdk-pixbuf-animation-new-from-file">gdk_pixbuf_animation_new_from_file()</link>
+can also load non-animated images, so use it in combination with 
+<link
+      linkend="gdk-pixbuf-animation-is-static-image">gdk_pixbuf_animation_is_static_image()</link> to load a file of unknown type. 
+</para>
+<para>
+To load an image or animation file asynchronously (without blocking), use 
+<link linkend="GdkPixbufLoader">GdkPixbufLoader</link>.
+</para>
+</answer>
+
+</qandaentry>
+
+
 </qandadiv>
 
+<qandadiv><title>Which widget should I use...</title>
+
+<qandaentry>
+<question><para>
+...for lists and trees?
+</para></question>
+
+<answer>
+<para>
+See <link linkend="TreeWidget">tree widget overview</link> &mdash you
+should use the <link linkend="GtkTreeView">GtkTreeView</link> widget.
+(A list is just a tree with no branches, so the tree widget is used
+for lists as well.) Do not use the deprecated widgets <link
+linkend="GtkTree">GtkTree</link> or <link
+linkend="GtkCList">GtkCList</link>/<link
+linkend="GtkCTree">GtkCTree</link> in newly-written code, they are
+less flexible and result in an inferior user interface.
+</para>
+</answer>
+</qandaentry>
+
+<qandaentry>
+<question><para>
+...for multi-line text display or editing?
+</para></question>
+
+<answer>
+<para>
+See <link linkend="TextWidget">text widget overview</link> &mdash you
+should use the <link linkend="GtkTextView">GtkTextView</link> widget.
+Do not use the deprecated widget <link
+linkend="GtkText">GtkText</link> in newly-written code, it has a
+number of problems that are best avoided.
+</para>
+<para>
+If you only have a small amount of text, <link
+linkend="GtkLabel">GtkLabel</link> may also be appropriate of course.
+It can be made selectable with <link
+                                     linkend="gtk-label-set-selectable">
+gtk_label_set_selectable()</link>. For a single-line text entry, 
+see <link linkend="GtkEntry">GtkEntry</link>.
+</para>
+</answer>
+</qandaentry>
+
+
+<qandaentry>
+<question><para>
+...to display an image or animation?
+</para></question>
+
+<answer>
+<para>
+<link linkend="GtkImage">GtkImage</link> can display images
+in just about any format GTK+ understands. You can also 
+use <link linkend="GtkDrawingArea">GtkDrawingArea</link> if you need 
+to do something more complex, such as draw text or graphics over the
+top of the image.
+</para>
+</answer>
+</qandaentry>
+
+<qandaentry>
+<question><para>
+...for presenting a set of mutually-exclusive choices, where Windows
+would use a combo box?
+</para></question>
+
+<answer>
+<para>
+With GTK+, a <link linkend="GtkOptionMenu">GtkOptionMenu</link> is
+recommended instead of a combo box, if the user is selecting from a
+fixed set of options. That is, non-editable combo boxes are not
+encouraged. <link linkend="GtkOptionMenu">GtkOptionMenu</link> is
+much easier to use than <link linkend="GtkCombo">GtkCombo</link>
+as well. Use <link linkend="GtkCombo">GtkCombo</link> only when you 
+need the editable text entry.
+</para>
+<para>
+(As a future enhancement to GTK+, a new widget to replace <link
+linkend="GtkOptionMenu">GtkOptionMenu</link> and <link
+linkend="GtkCombo">GtkCombo</link> is planned.  This widget will be
+themeable to look like either a combo box or the current option menu,
+and will address some shortcomings in the <link
+linkend="GtkCombo">GtkCombo</link> API.  <ulink
+url="http://bugzilla.gnome.org/show_bug.cgi?id=50554">Bug
+50554</ulink> tracks this issue, if you want to check status or post
+comments.)
+</para>
+</answer>
+</qandaentry>
+
+</qandadiv>
 
 <qandadiv><title><link linkend="GtkWidget">GtkWidget</link></title>
 
@@ -199,6 +329,50 @@ or <link
 </qandaentry>
 
 </qandadiv>
+
+
+
+<qandadiv><title><link linkend="GtkTreeView">GtkTreeView</link></title>
+
+<qandaentry>
+<question><para>
+How do I associate some data with a row in the tree?
+</para></question>
+
+<answer>
+<para>
+Remember that the <link linkend="GtkTreeModel">GtkTreeModel</link>
+columns don't necessarily have to be displayed. So you can put
+non-user-visible data in your model just like any other data, and
+retrieve it with <link
+linkend="gtk-tree-model-get">gtk_tree_model_get()</link>.
+See the <link linkend="TreeWidget">tree widget overview</link>.
+</para>
+</answer>
+</qandaentry>
+
+<qandaentry>
+<question><para>
+How do I put an image and some text in the same column?
+</para></question>
+
+<answer>
+<para>
+You can pack more than one <link
+linkend="GtkCellRenderer">GtkCellRenderer</link> into a single
+<link linkend="GtkTreeViewColumn">GtkTreeViewColumn</link> using
+<link
+      linkend="gtk-tree-view-column-pack-start">gtk_tree_view_column_pack_start()</link> or <link linkend="gtk-tree-view-column-pack-end">gtk_tree_view_column_pack_end()</link>. So pack both a <link
+linkend="GtkCellRendererPixbuf">GtkCellRendererPixbuf</link>
+and a <link
+linkend="GtkCellRendererText">GtkCellRendererText</link> into the
+column.
+</para>
+</answer>
+</qandaentry>
+
+</qandadiv>
+
 
 
 </qandaset>
