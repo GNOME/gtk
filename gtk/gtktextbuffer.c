@@ -1383,8 +1383,9 @@ GtkTextChildAnchor*
 gtk_text_buffer_create_child_anchor (GtkTextBuffer      *buffer,
                                      const GtkTextIter  *where)
 {
-  
+  /* FIXME: Implement? */
 
+  return NULL;
 }
 
 void

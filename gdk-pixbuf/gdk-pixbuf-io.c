@@ -360,6 +360,12 @@ gdk_pixbuf_load_module (GdkPixbufModule *image_module,
 #define m_stop_load(type)  extern void mname(type,stop_load) (gpointer context);
 #define m_load_increment(type)  extern gboolean mname(type,load_increment) (gpointer context, const guchar *buf, guint size);
 #define m_load_animation(type)  extern GdkPixbufAnimation * mname(type,load_animation) (FILE *f);
+#define m_save(type) \
+   extern gboolean mname(type,save) (FILE          *f, \
+				     GdkPixbuf     *pixbuf, \
+                                     gchar        **keys, \
+				     gchar        **values, \
+				     GError       **error);
 
 /* PNG */
 m_load (png);

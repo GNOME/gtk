@@ -3417,6 +3417,8 @@ gtk_text_line_char_to_byte (GtkTextLine *line,
                             gint         char_offset)
 {
   g_warning("FIXME not implemented");
+
+  return 0;
 }
 
 /* FIXME sync with char_locate (or figure out a clean

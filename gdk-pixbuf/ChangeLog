@@ -1,3 +1,7 @@
+2000-10-16  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk-pixbuf-io.c: Define also m_save (for the non-gmodule case).
+
 2000-10-16  Havoc Pennington  <hp@redhat.com>
 
 	* gdk-pixbuf-io.c (gdk_pixbuf_get_module)

@@ -209,6 +209,8 @@ EXPORTS
 	gtk_button_get_type
 	gtk_button_leave
 	gtk_button_new
+	gtk_button_new_accel
+	gtk_button_new_stock
 	gtk_button_new_with_label
 	gtk_button_pressed
 	gtk_button_released
@@ -566,9 +568,27 @@ EXPORTS
 	gtk_idle_remove
 	gtk_idle_remove_by_data
 	gtk_image_get
+	gtk_image_get_icon_set
+	gtk_image_get_image
+	gtk_image_get_pixbuf
+	gtk_image_get_pixmap
+	gtk_image_get_stock
+	gtk_image_get_storage_type
 	gtk_image_get_type
 	gtk_image_new
+	gtk_image_new_from_file
+	gtk_image_new_from_icon_set
+	gtk_image_new_from_image
+	gtk_image_new_from_pixbuf
+	gtk_image_new_from_pixmap
+	gtk_image_new_from_stock
 	gtk_image_set
+	gtk_image_set_from_file
+	gtk_image_set_from_icon_set
+	gtk_image_set_from_image
+	gtk_image_set_from_pixbuf
+	gtk_image_set_from_pixmap
+	gtk_image_set_from_stock
 	gtk_init
 	gtk_init_abi_check
 	gtk_init_add
@@ -754,6 +774,8 @@ EXPORTS
 	gtk_menu_shell_insert
 	gtk_menu_shell_prepend
 	gtk_menu_shell_select_item
+	gtk_message_dialog_get_type
+	gtk_message_dialog_new
 	gtk_micro_version
 	gtk_minor_version
 	gtk_misc_get_type
@@ -828,6 +850,7 @@ EXPORTS
 	gtk_object_unref
 	gtk_object_weakref
 	gtk_object_weakunref
+	gtk_option_menu_get_history
 	gtk_option_menu_get_menu
 	gtk_option_menu_get_type
 	gtk_option_menu_new
@@ -1401,6 +1424,7 @@ EXPORTS
 	gtk_window_activate_focus
 	gtk_window_add_accel_group
 	gtk_window_add_embedded_xid
+	gtk_window_get_default_accel_group
 	gtk_window_get_type
 	gtk_window_new
 	gtk_window_remove_accel_group

@@ -1042,6 +1042,7 @@ gdk/nanox/Makefile
 gdk/linux-fb/Makefile
 gtk/Makefile
 gtk/makefile.mingw
+gtk/makefile.msc
 gtk/gtkcompat.h
 gtk/stock-icons/Makefile
 modules/Makefile

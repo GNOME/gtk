@@ -602,6 +602,9 @@ simple_LDADD = $(LDADDS)
 makefile.mingw: $(top_builddir)/config.status $(top_srcdir)/gtk/makefile.mingw.in
 	cd $(top_builddir) && CONFIG_FILES=gtk/$@ CONFIG_HEADERS= $(SHELL) ./config.status
 
+makefile.msc: $(top_builddir)/config.status $(top_srcdir)/gtk/makefile.msc.in
+	cd $(top_builddir) && CONFIG_FILES=gtk/$@ CONFIG_HEADERS= $(SHELL) ./config.status
+
 .PHONY: files test test-debug
 
 files:
@@ -644,9 +647,10 @@ EXTRA_DIST += @STRIP_BEGIN@ 	\
 	gtkcompat.h.win32	\
 	gtk.def			\
 	gtk.rc			\
-	makefile.msc		\
 	makefile.mingw		\
 	makefile.mingw.in	\
+	makefile.msc		\
+	makefile.msc.in		\
 	$(gtkconf_DATA)		\
 @STRIP_END@
 

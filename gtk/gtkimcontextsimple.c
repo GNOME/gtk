@@ -17,6 +17,8 @@
  * Boston, MA 02111-1307, USA.
  */
 
+#include <stdlib.h>
+
 #include <gdk/gdkkeysyms.h>
 #include "gtksignal.h"
 #include "gtkimcontextsimple.h"

@@ -1,3 +1,25 @@
+2000-10-22  Tor Lillqvist  <tml@iki.fi>
+
+	* gtk/makefile.mingw.in
+	* gtk/gtk.def: Updates.
+
+	* gtk/testgtk.c: sleep() is called _sleep in MS's C
+	library.
+
+	* gtk/gtkimcontextsimple.c: Include <stdlib.h> for bsearch().
+
+	* gtk/makefile.msc: Remove
+
+	* gtk/makefile.msc.in: New file, like makefile.mingw.in.
+
+	* gtk/Makefile.am: Add it.
+
+	* configure.in: Generate it.
+
+	* gtk/gtktextbuffer.c (gtk_text_buffer_create_child_anchor)
+	* gtk/gtktextbtree.c (gtk_text_line_char_to_byte): Return
+	something even if not implemented, to satisfy picky MSVC.
+
 2000-10-22  Robert Brady  <robert@suse.co.uk>
 
 	* configure.in: Check for bind_textdomain_codeset

@@ -42,6 +42,10 @@
 #include "gdk/gdk.h"
 #include "gdk/gdkkeysyms.h"
 
+#ifdef G_OS_WIN32
+#define sleep(n) _sleep(n)
+#endif
+
 #include "circles.xbm"
 #include "test.xpm"
 
