@@ -348,6 +348,8 @@ static void     gtk_tree_view_real_set_cursor                (GtkTreeView       
 							      gboolean           clamp_node);
 static gboolean gtk_tree_view_has_special_cell               (GtkTreeView       *tree_view);
 
+static gboolean expand_collapse_timeout                      (gpointer           data);
+
 /* interactive search */
 static void     gtk_tree_view_search_dialog_destroy     (GtkWidget        *search_dialog,
 							 GtkTreeView      *tree_view);
