@@ -1893,7 +1893,7 @@ gtk_color_selection_init (GtkColorSelection *colorsel)
   priv->opacity_slider = gtk_hscale_new (adjust);
   gtk_tooltips_set_tip (priv->tooltips,
                         priv->opacity_slider,
-                        _("Transparency of the currently-selected color."), NULL);
+                        _("Transparency of the color."), NULL);
   gtk_label_set_mnemonic_widget (GTK_LABEL (priv->opacity_label),
                                  priv->opacity_slider);
   gtk_scale_set_draw_value (GTK_SCALE (priv->opacity_slider), FALSE);
@@ -1902,6 +1902,9 @@ gtk_color_selection_init (GtkColorSelection *colorsel)
                     GINT_TO_POINTER (COLORSEL_OPACITY));
   gtk_table_attach_defaults (GTK_TABLE (table), priv->opacity_slider, 1, 7, 4, 5); 
   priv->opacity_entry = gtk_entry_new (); 
+  gtk_tooltips_set_tip (priv->tooltips,
+                        priv->opacity_entry,
+                        _("Transparency of the color."), NULL);
   gtk_widget_set_size_request (priv->opacity_entry, 40, -1); 
 
   g_signal_connect (priv->opacity_entry, "activate",

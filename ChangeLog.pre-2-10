@@ -1,5 +1,10 @@
 2003-11-12  Padraig O'Briain  <padraig.obriain@sun.com>
 
+	*gtk/gtkcolorsel.c (gtk_color_selection_init): Add tooltip for
+	opacity entry widget. Change tooltip for opacity widgets. (#126426)
+
+2003-11-12  Padraig O'Briain  <padraig.obriain@sun.com>
+
 	* gtk/gtkmenu.c (gtk_menu_popup): Do not let pointer position
 	affect window menu position when popped from keyboard. (#102660)
 
