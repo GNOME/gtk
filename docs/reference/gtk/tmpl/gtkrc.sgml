@@ -238,13 +238,16 @@ elements are:
      </listitem>
   </varlistentry>
   <varlistentry>
-    <term><literal>bg_text[<replaceable>state</replaceable>] =
-      <replaceable>color</replaceable></literal></term>
+    <term><literal>bg_pixmap[<replaceable>state</replaceable>] =
+      <replaceable>pixmap</replaceable></literal></term>
      <listitem>
        <para>
          Set a background pixmap to be used in place of
          the <literal>bg</literal> color (or for #GtkText,
-         in place of the <literal>base</literal> color.
+         in place of the <literal>base</literal> color. The special
+         value "<parent>" may be used to indicate that the widget should
+         use the same background pixmap as its parent. The special value
+         "<none>" may be used to indicate no background pixmap.
        </para>
      </listitem>
   </varlistentry>

@@ -27,7 +27,7 @@ a cursor itself, it can ask only to get extension events
 from devices that will display a cursor, by passing the
 %GDK_EXTENSION_EVENTS_CURSOR value to
 gdk_input_set_extension_events(). Otherwise, the application
-must retrieve the device information using gdk_input_list_devices(),
+must retrieve the device information using gdk_devices_list(),
 check the <structfield>has_cursor</structfield> field, and, 
 if it is %FALSE, draw a cursor itself when it receives 
 motion events.
@@ -43,7 +43,7 @@ information reported as additional <firstterm>valuators</firstterm>
 from the device. The <structfield>pressure</structfield> field is a 
 a double value ranging from 0.0 to 1.0, while the tilt fields are
 double values ranging from -1.0 to 1.0. (With -1.0 representing the
-maximum title to the left or up, and 1.0 representing the maximum
+maximum tilt to the left or up, and 1.0 representing the maximum
 tilt to the right or down.)
 </para>
 <para>
@@ -61,24 +61,24 @@ settings.
 </para>
 <para>
 Various aspects of each device may be configured. The easiest way of
-creating a GUI to allow the user to conifigure such a device
-is to use to use the #GtkInputDialog widget in GTK+. 
+creating a GUI to allow the user to configure such a device
+is to use the #GtkInputDialog widget in GTK+. 
 However, even when using this widget, application writers
 will need to directly query and set the configuration parameters
 in order to save the state between invocations of the application.
-The configuration of devices is queried using gdk_input_list_devices.
-Each device must is activated using gdk_input_set_mode(), which
+The configuration of devices is queried using gdk_devices_list().
+Each device must be activated using gdk_device_set_mode(), which
 also controls whether the device's range is mapped to the
 entire screen or to a single window. The mapping of the valuators of
 the device onto the predefined valuator types is set using
-gdk_input_set_axes. And the source type for each device
-can be set with gdk_input_set_source().
+gdk_device_set_axis_use(). And the source type for each device
+can be set with gdk_device_set_source().
 </para>
 <para>
 Devices may also have associated <firstterm>keys</firstterm>
 or macro buttons. Such keys can be globally set to map
 into normal X keyboard events. The mapping is set using
-gdk_input_set_key().
+gdk_device_set_key().
 </para>
 <para>
 The interfaces in this section will most likely be considerably
@@ -171,74 +171,80 @@ types that GTK+ understands.
 @GDK_AXIS_PRESSURE: the axis is used for pressure information.
 @GDK_AXIS_XTILT: the axis is used for x tilt information.
 @GDK_AXIS_YTILT: the axis is used for x tilt information.
-@GDK_AXIS_WHEEL: 
+@GDK_AXIS_WHEEL: the axis is used for wheel information. 
 @GDK_AXIS_LAST: a constant equal to the numerically highest axis value.
 
 <!-- ##### FUNCTION gdk_devices_list ##### -->
 <para>
-
+Returns the list of available input devices. The list is statically
+allocated and should not be freed.
 </para>
 
-@Returns: 
+@Returns: a list of #GdkDevice*. 
 
 
 <!-- ##### FUNCTION gdk_device_set_source ##### -->
 <para>
-
+Sets the source type for an input device.
 </para>
 
-@device: 
-@source: 
+@device: a #GdkDevice.
+@source: the source type.
 
 
 <!-- ##### FUNCTION gdk_device_set_mode ##### -->
 <para>
-
+Sets a the mode of an input device. The mode controls if the 
+device is active and whether the device's range is mapped to the
+entire screen or to a single window.
 </para>
 
-@device: 
-@mode: 
-@Returns: 
+@device: a #GdkDevice. 
+@mode: the input mode.
+@Returns: %TRUE if the mode was successfully changed.
 
 
 <!-- ##### FUNCTION gdk_device_set_key ##### -->
 <para>
-
+Specifies the X key event to generate when a macro button of a device
+is pressed.
 </para>
 
-@device: 
-@index: 
-@keyval: 
-@modifiers: 
+@device: a #GdkDevice.
+@index: the index of the macro button to set. 
+@keyval: the keyval to generate.
+@modifiers: the modifiers to set.
 
 
 <!-- ##### FUNCTION gdk_device_set_axis_use ##### -->
 <para>
-
+Specifies how an axis of a device is used.
 </para>
 
-@device: 
-@index: 
-@use: 
+@device: a #GdkDevice. 
+@index: the index of the axis.
+@use: specifies how the axis is used.
 
 
 <!-- ##### FUNCTION gdk_device_get_core_pointer ##### -->
 <para>
-
+Returns the device for the core pointer. The device is statically
+allocated and should not be freed.
 </para>
 
-@Returns: 
+@Returns: a #GdkDevice.
 
 
 <!-- ##### FUNCTION gdk_device_get_state ##### -->
 <para>
-
+Gets the current state of a device.
 </para>
 
-@device: 
-@window: 
-@axes: 
-@mask: 
+@device: a #GdkDevice.
+@window: a #GdkWindow.
+@axes: an array of doubles to store the values of the axes of @device in, 
+  or %NULL.
+@mask: location to store the modifiers, or %NULL.
 
 
 <!-- ##### FUNCTION gdk_device_get_history ##### -->
@@ -257,11 +263,11 @@ types that GTK+ understands.
 
 <!-- ##### FUNCTION gdk_device_free_history ##### -->
 <para>
-
+Frees an array of #GdkTimeCoord that was returned by gdk_device_get_history().
 </para>
 
-@events: 
-@n_events: 
+@events: an array of #GdkTimeCoord.
+@n_events: the length of the array.
 
 
 <!-- ##### STRUCT GdkTimeCoord ##### -->

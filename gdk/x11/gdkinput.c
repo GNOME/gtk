@@ -364,7 +364,7 @@ _gdk_input_exit (void)
  * Interprets an array of double as axis values for a given device,
  * and locates the value in the array for a given axis use.
  * 
- * Return value: %TRUE if the given axis use was found, otherwies %FALSE
+ * Return value: %TRUE if the given axis use was found, otherwise %FALSE
  **/
 gboolean
 gdk_device_get_axis (GdkDevice  *device,

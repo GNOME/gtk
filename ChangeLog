@@ -1,3 +1,7 @@
+2001-10-27  Matthias Clasen  <matthiasc@poet.de>
+
+	* gdk/x11/gdkinput.c: Typo fix.
+
 2001-10-26  Havoc Pennington  <hp@pobox.com>
 
 	* gtk/gtktextview.c (gtk_text_view_mark_set_handler): Call
