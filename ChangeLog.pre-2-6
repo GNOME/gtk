@@ -1,3 +1,12 @@
+Thu Dec 18 01:41:50 2003  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtkcellrenderertext.c (gtk_cell_renderer_text_class_init),
+	(gtk_cell_renderer_text_finalize),
+	(gtk_cell_renderer_text_get_property),
+	(gtk_cell_renderer_text_set_property), (get_layout): added language
+	and language_set properties like GtkTextTag has. (#103800, reported
+	by Owen Taylor).
+
 Thu Dec 18 01:37:59 2003  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkwidget.c (gtk_widget_activate): Correct misleading docs.

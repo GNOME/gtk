@@ -92,6 +92,7 @@ enum {
   PROP_STRIKETHROUGH,
   PROP_UNDERLINE,
   PROP_RISE,
+  PROP_LANGUAGE,
   
   /* Whether-a-style-arg-is-set args */
   PROP_BACKGROUND_SET,
@@ -106,7 +107,8 @@ enum {
   PROP_EDITABLE_SET,
   PROP_STRIKETHROUGH_SET,
   PROP_UNDERLINE_SET,
-  PROP_RISE_SET
+  PROP_RISE_SET,
+  PROP_LANGUAGE_SET
 };
 
 static gpointer parent_class;
@@ -120,7 +122,10 @@ typedef struct _GtkCellRendererTextPrivate GtkCellRendererTextPrivate;
 struct _GtkCellRendererTextPrivate
 {
   guint single_paragraph : 1;
+  guint language_set : 1;
+
   gulong focus_out_id;
+  PangoLanguage *language;
 };
 
 
@@ -374,6 +379,15 @@ gtk_cell_renderer_text_class_init (GtkCellRendererTextClass *class)
                                                       PANGO_UNDERLINE_NONE,
                                                       G_PARAM_READABLE | G_PARAM_WRITABLE));
 
+  g_object_class_install_property (object_class,
+                                   PROP_LANGUAGE,
+                                   g_param_spec_string ("language",
+                                                        _("Language"),
+                                                        _("The language this text is in, as an ISO code. Pango can use this as a hint when rendering the text. If you don't understand this parameter, you probably don't need it"),
+                                                        NULL,
+                                                        G_PARAM_READWRITE));
+
+
   /* Style props are set or not */
 
 #define ADD_SET_PROP(propname, propval, nick, blurb) g_object_class_install_property (object_class, propval, g_param_spec_boolean (propname, nick, blurb, FALSE, G_PARAM_READABLE | G_PARAM_WRITABLE))
@@ -430,6 +444,10 @@ gtk_cell_renderer_text_class_init (GtkCellRendererTextClass *class)
                 _("Underline set"),
                 _("Whether this tag affects underlining"));
 
+  ADD_SET_PROP ("language_set", PROP_LANGUAGE_SET,
+                _("Language set"),
+                _("Whether this tag affects the language the text is renderer as"));
+
   text_cell_renderer_signals [EDITED] =
     g_signal_new ("edited",
 		  G_OBJECT_CLASS_TYPE (object_class),
@@ -448,6 +466,9 @@ static void
 gtk_cell_renderer_text_finalize (GObject *object)
 {
   GtkCellRendererText *celltext = GTK_CELL_RENDERER_TEXT (object);
+  GtkCellRendererTextPrivate *priv;
+
+  priv = GTK_CELL_RENDERER_TEXT_GET_PRIVATE (object);
 
   pango_font_description_free (celltext->font);
 
@@ -456,6 +477,9 @@ gtk_cell_renderer_text_finalize (GObject *object)
 
   if (celltext->extra_attrs)
     pango_attr_list_unref (celltext->extra_attrs);
+
+  if (priv->language)
+    g_object_unref (priv->language);
 
   (* G_OBJECT_CLASS (parent_class)->finalize) (object);
 }
@@ -594,6 +618,10 @@ gtk_cell_renderer_text_get_property (GObject        *object,
       g_value_set_int (value, celltext->rise);
       break;  
 
+    case PROP_LANGUAGE:
+      g_value_set_string (value, pango_language_to_string (priv->language));
+      break;
+
     case PROP_BACKGROUND_SET:
       g_value_set_boolean (value, celltext->background_set);
       break;
@@ -633,6 +661,10 @@ gtk_cell_renderer_text_get_property (GObject        *object,
 
     case  PROP_RISE_SET:
       g_value_set_boolean (value, celltext->rise_set);
+      break;
+
+    case PROP_LANGUAGE_SET:
+      g_value_set_boolean (value, priv->language_set);
       break;
       
     case PROP_BACKGROUND:
@@ -1044,6 +1076,14 @@ gtk_cell_renderer_text_set_property (GObject      *object,
 	celltext->calc_fixed_height = TRUE;
       break;  
 
+    case PROP_LANGUAGE:
+      priv->language_set = TRUE;
+      if (priv->language)
+        g_object_unref (priv->language);
+      priv->language = pango_language_from_string (g_value_get_string (value));
+      g_object_notify (object, "language_set");
+      break;
+
     case PROP_BACKGROUND_SET:
       celltext->background_set = g_value_get_boolean (value);
       break;
@@ -1091,6 +1131,10 @@ gtk_cell_renderer_text_set_property (GObject      *object,
 
     case PROP_RISE_SET:
       celltext->rise_set = g_value_get_boolean (value);
+      break;
+
+    case PROP_LANGUAGE_SET:
+      priv->language_set = g_value_get_boolean (value);
       break;
 
     default:
@@ -1183,6 +1227,9 @@ get_layout (GtkCellRendererText *celltext,
     uline = celltext->underline_style;
   else
     uline = PANGO_UNDERLINE_NONE;
+
+  if (priv->language_set)
+    add_attr (attr_list, pango_attr_language_new (priv->language));
   
   if ((flags & GTK_CELL_RENDERER_PRELIT) == GTK_CELL_RENDERER_PRELIT)
     {
