@@ -1,3 +1,10 @@
+Mon Feb 23 15:23:23 2004  Jonathan Blandford  <jrb@gnome.org>
+
+	* gtk/gtkpathbar.c (gtk_path_bar_set_path): Display the root a bit
+	more cleanly.
+
+	* gtk/gtkpathbar.h (struct _GtkPathBarClass): fix the signal.
+
 2004-02-23  Federico Mena Quintero  <federico@ximian.com>
 
 	Rework the user interface of the file chooser, as per 

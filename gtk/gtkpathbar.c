@@ -17,6 +17,7 @@
  * Boston, MA 02111-1307, USA.
  */
 
+#include <string.h>
 #include "gtkpathbar.h"
 #include "gtktogglebutton.h"
 #include "gtkarrow.h"
@@ -113,9 +114,9 @@ gtk_path_bar_class_init (GtkPathBarClass *path_bar_class)
 		  G_SIGNAL_RUN_FIRST,
 		  G_STRUCT_OFFSET (GtkPathBarClass, path_clicked),
 		  NULL, NULL,
-		  _gtk_marshal_VOID__STRING,
+		  _gtk_marshal_VOID__POINTER,
 		  G_TYPE_NONE, 1,
-		  G_TYPE_STRING);
+		  G_TYPE_POINTER);
 }
 
 
@@ -562,11 +563,14 @@ button_clicked_cb (GtkWidget *button,
 		   gpointer   data)
 {
   GtkWidget *path_bar;
+  GtkFilePath *file_path;
 
   path_bar = button->parent;
   g_assert (path_bar);
 
-  g_signal_emit (path_bar, path_bar_signals [PATH_CLICKED], 0, (const char *) data);
+  file_path = gtk_file_path_new_dup ((char *)data);
+  g_signal_emit (path_bar, path_bar_signals [PATH_CLICKED], 0, file_path);
+  gtk_file_path_free (file_path);
 }
 
 static GtkWidget *
@@ -588,8 +592,12 @@ make_directory_button (const char  *dir_name,
     {
       gchar *str;
 
+      /* FIXME: gtk_file_path_free is not be a function!! I have to
+       * copy it to a string in order to manage this correctly */
       str = g_strdup (gtk_file_path_get_string (path));
-      g_signal_connect (button, "clicked", G_CALLBACK (button_clicked_cb), str);
+      g_signal_connect (button, "clicked",
+			G_CALLBACK (button_clicked_cb),
+			str);
       g_object_weak_ref (G_OBJECT (button), (GWeakNotify) g_free, str);
     }
 
@@ -623,9 +631,12 @@ gtk_path_bar_set_path (GtkPathBar         *path_bar,
 		       GtkFileSystem      *file_system,
 		       GError            **error)
 {
-  gboolean valid = TRUE;
   GtkFilePath *path;
   gboolean first_directory = TRUE;
+  
+  g_return_if_fail (GTK_IS_PATH_BAR (path_bar));
+  g_return_if_fail (file_path != NULL);
+  g_return_if_fail (file_system != NULL);
 
   gtk_path_bar_clear_buttons (path_bar);
   path = gtk_file_path_copy (file_path);
@@ -636,6 +647,9 @@ gtk_path_bar_set_path (GtkPathBar         *path_bar,
       GtkWidget *button;
       const gchar *display_name;
       GError *err = NULL;
+      GtkFileFolder *file_folder;
+      GtkFileInfo *file_info;
+      gboolean valid;
 
       valid = gtk_file_system_get_parent (file_system,
 					  path,
@@ -650,29 +664,23 @@ gtk_path_bar_set_path (GtkPathBar         *path_bar,
 	}
 
       if (parent_path)
-	{
-	  GtkFileFolder *file_folder;
-	  GtkFileInfo *file_info;
-
-	  file_folder = gtk_file_system_get_folder (file_system, parent_path,
-						    GTK_FILE_INFO_DISPLAY_NAME, NULL);
-	  file_info = gtk_file_folder_get_info (file_folder, path, NULL);
-	  display_name = gtk_file_info_get_display_name (file_info);
-	  button = make_directory_button (display_name, path, first_directory);
-	  gtk_file_info_free (file_info);
-	  /* FIXME: ask owen about mem management. gtk_file_folder_free (file_folder); */
-	}
+	file_folder = gtk_file_system_get_folder (file_system, parent_path,
+						  GTK_FILE_INFO_DISPLAY_NAME, NULL);
       else
-	{
-	  /* We've reached the root node */
-	  /* FIXME: gtk_file_system_get_root_display_name() or something */
-	  button = make_directory_button (gtk_file_path_get_string (path),
-					  path, first_directory);
-	}
+	file_folder = gtk_file_system_get_folder (file_system, path,
+						  GTK_FILE_INFO_DISPLAY_NAME, NULL);
+
+      file_info = gtk_file_folder_get_info (file_folder, path, NULL);
+      display_name = gtk_file_info_get_display_name (file_info);
+      if (! strcmp ("/", display_name))
+	display_name = " / ";
+      button = make_directory_button (display_name, path, first_directory);
+      gtk_file_info_free (file_info);
+      gtk_file_path_free (path);
+      g_object_unref (file_folder);
 
       gtk_container_add (GTK_CONTAINER (path_bar), button);
       path_bar->button_list = g_list_prepend (path_bar->button_list, button);
-      gtk_file_path_free (path);
 
       path = parent_path;
       first_directory = FALSE;

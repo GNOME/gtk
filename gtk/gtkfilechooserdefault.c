@@ -18,8 +18,6 @@
  * Boston, MA 02111-1307, USA.
  */
 
-#define USE_PATH_BAR
-
 #include "gdk/gdkkeysyms.h"
 #include "gtkalignment.h"
 #include "gtkbindings.h"
@@ -268,7 +266,7 @@ static void     shortcuts_row_activated_cb (GtkTreeView           *tree_view,
 static gboolean shortcuts_select_func   (GtkTreeSelection      *selection,
 					 GtkTreeModel          *model,
 					 GtkTreePath           *path,
-					 gboolean               path_currentlny_selected,
+					 gboolean               path_currently_selected,
 					 gpointer               data);
 
 static void list_selection_changed     (GtkTreeSelection      *tree_selection,
@@ -279,7 +277,7 @@ static void list_row_activated         (GtkTreeView           *tree_view,
 					GtkFileChooserDefault *impl);
 
 static void path_bar_clicked           (GtkPathBar            *path_bar,
-					const char            *file_path,
+					GtkFilePath           *file_path,
 					GtkFileChooserDefault *impl);
 
 static void add_bookmark_button_clicked_cb    (GtkButton             *button,
@@ -3101,14 +3099,10 @@ list_row_activated (GtkTreeView           *tree_view,
 
 static void
 path_bar_clicked (GtkPathBar            *path_bar,
-		  const char            *file_path,
+		  GtkFilePath           *file_path,
 		  GtkFileChooserDefault *impl)
 {
-  GtkFilePath *new_folder = NULL;
-
-  new_folder = gtk_file_path_new_dup (file_path);
-  _gtk_file_chooser_set_current_folder_path (GTK_FILE_CHOOSER (impl), new_folder);
-  gtk_file_path_free (new_folder);
+  _gtk_file_chooser_set_current_folder_path (GTK_FILE_CHOOSER (impl), file_path);
 }
 
 static const GtkFileInfo *
