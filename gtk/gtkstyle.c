@@ -2774,109 +2774,112 @@ gtk_default_draw_polygon (GtkStyle      *style,
 }
 
 static void
-draw_varrow (GdkWindow     *window,
-	     GdkGC         *gc,
-	     GtkShadowType  shadow_type,
-	     GdkRectangle  *area,
-	     GtkArrowType   arrow_type,
-	     gint           x,
-	     gint           y,
-	     gint           width,
-	     gint           height)
+draw_arrow (GdkWindow     *window,
+	    GdkGC         *gc,
+	    GdkRectangle  *area,
+	    GtkArrowType   arrow_type,
+	    gint           x,
+	    gint           y,
+	    gint           width,
+	    gint           height)
 {
-  gint steps, extra;
-  gint y_start, y_increment;
-  gint i;
+  gint i, j;
 
   if (area)
     gdk_gc_set_clip_rectangle (gc, area);
-  
-  width = width + width % 2 - 1;	/* Force odd */
-  
-  steps = 1 + width / 2;
-
-  extra = height - steps;
 
   if (arrow_type == GTK_ARROW_DOWN)
     {
-      y_start = y;
-      y_increment = 1;
+      for (i = 0, j = 0; i < height; i++, j++)
+	gdk_draw_line (window, gc, x + j, y + i, x + width - j - 1, y + i);
     }
-  else
+  else if (arrow_type == GTK_ARROW_UP)
     {
-      y_start = y + height - 1;
-      y_increment = -1;
+      for (i = height - 1, j = 0; i >= 0; i--, j++)
+	gdk_draw_line (window, gc, x + j, y + i, x + width - j - 1, y + i);
     }
-
-  for (i = 0; i < extra; i++)
+  else if (arrow_type == GTK_ARROW_LEFT)
     {
-      gdk_draw_line (window, gc,
-		     x,              y_start + i * y_increment,
-		     x + width - 1,  y_start + i * y_increment);
+      for (i = width - 1, j = 0; i >= 0; i--, j++)
+	gdk_draw_line (window, gc, x + i, y + j, x + i, y + height - j - 1);
     }
-  for (; i < height; i++)
+  else if (arrow_type == GTK_ARROW_RIGHT)
     {
-      gdk_draw_line (window, gc,
-		     x + (i - extra),              y_start + i * y_increment,
-		     x + width - (i - extra) - 1,  y_start + i * y_increment);
+      for (i = 0, j = 0; i < width; i++, j++)
+	gdk_draw_line (window, gc, x + i, y + j, x + i, y + height - j - 1);
     }
-  
 
   if (area)
     gdk_gc_set_clip_rectangle (gc, NULL);
 }
 
 static void
-draw_harrow (GdkWindow     *window,
-	     GdkGC         *gc,
-	     GtkShadowType  shadow_type,
-	     GdkRectangle  *area,
-	     GtkArrowType   arrow_type,
-	     gint           x,
-	     gint           y,
-	     gint           width,
-	     gint           height)
+calculate_arrow_geometry (GtkArrowType  arrow_type,
+			  gint         *x,
+			  gint         *y,
+			  gint         *width,
+			  gint         *height)
 {
-  gint steps, extra;
-  gint x_start, x_increment;
-  gint i;
-
-  if (area)
-    gdk_gc_set_clip_rectangle (gc, area);
+  gint w = *width;
+  gint h = *height;
   
-  height = height + height % 2 - 1;	/* Force odd */
-  
-  steps = 1 + height / 2;
-
-  extra = width - steps;
-
-  if (arrow_type == GTK_ARROW_RIGHT)
+  switch (arrow_type)
     {
-      x_start = x;
-      x_increment = 1;
-    }
-  else
-    {
-      x_start = x + width - 1;
-      x_increment = -1;
+    case GTK_ARROW_UP:
+    case GTK_ARROW_DOWN:
+      w += (w % 2) - 1;
+      h = (w / 2 + 1);
+      
+      if (h > *height)
+	{
+	  h = *height;
+	  w = 2 * h - 1;
+	}
+      
+      if (arrow_type == GTK_ARROW_DOWN)
+	{
+	  if (*height % 2 == 1 || h % 2 == 0)
+	    *height += 1;
+	}
+      else
+	{
+	  if (*height % 2 == 0 || h % 2 == 0)
+	    *height -= 1;
+	}
+      break;
+
+    case GTK_ARROW_RIGHT:
+    case GTK_ARROW_LEFT:
+      h += (h % 2) - 1;
+      w = (h / 2 + 1);
+      
+      if (w > *width)
+	{
+	  w = *width;
+	  h = 2 * w - 1;
+	}
+      
+      if (arrow_type == GTK_ARROW_RIGHT)
+	{
+	  if (*width % 2 == 1 || w % 2 == 0)
+	    *width += 1;
+	}
+      else
+	{
+	  if (*width % 2 == 0 || w % 2 == 0)
+	    *width -= 1;
+	}
+      break;
+      
+    default:
+      /* should not be reached */
+      break;
     }
 
-  for (i = 0; i < extra; i++)
-    {
-      gdk_draw_line (window, gc,
-		     x_start + i * x_increment, y,
-		     x_start + i * x_increment, y + height - 1);
-    }
-  for (; i < width; i++)
-    {
-      gdk_draw_line (window, gc,
-		     x_start + i * x_increment, y + (i - extra),
-		     x_start + i * x_increment, y + height - (i - extra) - 1);
-    }
-  
-
-  if (area)
-    gdk_gc_set_clip_rectangle (gc, NULL);
+  *x += (*width - w) / 2;
+  *y += (*height - h) / 2;
+  *height = h;
+  *width = w;
 }
 
 static void
@@ -2894,77 +2897,23 @@ gtk_default_draw_arrow (GtkStyle      *style,
 			gint           width,
 			gint           height)
 {
-  sanitize_size (window, &width, &height);
+  gint original_width, original_x;
   
-  if (detail && strcmp (detail, "spinbutton") == 0)
-    {
-      int hpad, vpad;
-      int my_height = height;
-      int my_width = width;
-      int vpad_add = 0;
+  sanitize_size (window, &width, &height);
 
-      if (my_height > my_width)
-	{
-	  vpad_add = (my_height - my_width) / 2;
-	  my_height = my_width;
-	}
+  original_width = width;
+  original_x = x;
 
-      hpad = my_width / 4;
+  calculate_arrow_geometry (arrow_type, &x, &y, &width, &height);
+  
+  if (detail && strcmp (detail, "menuitem") == 0)
+    x = original_x + original_width - width;
 
-      if (hpad < 4)
-	hpad = 4;
-
-      vpad = 2 * hpad - 1;
-
-      x += hpad / 2;
-      y += vpad / 2;
-
-      y += vpad_add;
-
-      draw_varrow (window, style->fg_gc[state], shadow, area, arrow_type,
-		   x, y, my_width - hpad, my_height - vpad);
-    }
-  else if (detail && strcmp (detail, "vscrollbar") == 0)
-    {
-      gtk_paint_box (style, window, state, shadow, area,
-		     widget, detail, x, y, width, height);
-      
-      x += (width - 7) / 2;
-      y += (height - 5) / 2;
-      
-      draw_varrow (window, style->fg_gc[state], shadow, area, arrow_type,
-		   x, y, 7, 5);
-    }
-  else if (detail && strcmp (detail, "hscrollbar") == 0)
-    {
-      gtk_paint_box (style, window, state, shadow, area,
-		     widget, detail, x, y, width, height);
-      
-      y += (height - 7) / 2;
-      x += (width - 5) / 2;
-
-      draw_harrow (window, style->fg_gc[state], shadow, area, arrow_type,
-		   x, y, 5, 7);
-    }
-  else
-    {
-      if (arrow_type == GTK_ARROW_UP || arrow_type == GTK_ARROW_DOWN)
-	{
-	  x += (width - 7) / 2;
-	  y += (height - 5) / 2;
-	  
-	  draw_varrow (window, style->fg_gc[state], shadow, area, arrow_type,
-		       x, y, 7, 5);
-	}
-      else
-	{
-	  x += (width - 5) / 2;
-	  y += (height - 7) / 2;
-	  
-	  draw_harrow (window, style->fg_gc[state], shadow, area, arrow_type,
-		       x, y, 5, 7);
-	}
-    }
+  if (state == GTK_STATE_INSENSITIVE)
+    draw_arrow (window, style->white_gc, area, arrow_type,
+		x + 1, y + 1, width, height);
+  draw_arrow (window, style->fg_gc[state], area, arrow_type,
+	      x, y, width, height);
 }
 
 static void
@@ -3468,7 +3417,7 @@ gtk_default_draw_check (GtkStyle      *style,
 	  GdkGC *base_gc = style->base_gc[state_type];
 
 	  if (state_type == GTK_STATE_ACTIVE)
-	    base_gc = style->bg_gc[state_type];
+	    base_gc = style->bg_gc[GTK_STATE_ACTIVE];
 	  
 	  draw_part (window, base_gc, area, x, y, CHECK_BASE);
 	  draw_part (window, style->black_gc, area, x, y, CHECK_BLACK);
@@ -3548,7 +3497,7 @@ gtk_default_draw_option (GtkStyle      *style,
 	  GdkGC *base_gc = style->base_gc[state_type];
 
 	  if (state_type == GTK_STATE_ACTIVE)
-	    base_gc = style->bg_gc[state_type];
+	    base_gc = style->bg_gc[GTK_STATE_ACTIVE];
 
 	  draw_part (window, base_gc, area, x, y, RADIO_BASE);
 	  draw_part (window, style->black_gc, area, x, y, RADIO_BLACK);
@@ -3582,18 +3531,39 @@ gtk_default_draw_tab (GtkStyle      *style,
 		      gint           width,
 		      gint           height)
 {
+#define ARROW_SPACE 4
+
   GtkRequisition indicator_size;
   GtkBorder indicator_spacing;
+  gint arrow_height;
   
   option_menu_get_props (widget, &indicator_size, &indicator_spacing);
 
-  x += (width - indicator_size.width) / 2;
-  y += (height - indicator_size.height) / 2 - 1;
+  indicator_size.width += (indicator_size.width % 2) - 1;
+  arrow_height = indicator_size.width / 2 + 1;
 
-  draw_varrow (window, style->black_gc, shadow_type, area, GTK_ARROW_UP,
-	       x, y, indicator_size.width, 5);
-  draw_varrow (window, style->black_gc, shadow_type, area, GTK_ARROW_DOWN,
-	       x, y + 8, indicator_size.width, 5);
+  x += (width - indicator_size.width) / 2;
+  y += (height - (2 * arrow_height + ARROW_SPACE)) / 2;
+
+  if (state_type == GTK_STATE_INSENSITIVE)
+    {
+      draw_arrow (window, style->white_gc, area,
+		  GTK_ARROW_UP, x + 1, y + 1,
+		  indicator_size.width, arrow_height);
+      
+      draw_arrow (window, style->white_gc, area,
+		  GTK_ARROW_DOWN, x + 1, y + arrow_height + ARROW_SPACE + 1,
+		  indicator_size.width, arrow_height);
+    }
+  
+  draw_arrow (window, style->fg_gc[state_type], area,
+	      GTK_ARROW_UP, x, y,
+	      indicator_size.width, arrow_height);
+  
+  
+  draw_arrow (window, style->fg_gc[state_type], area,
+	      GTK_ARROW_DOWN, x, y + arrow_height + ARROW_SPACE,
+	      indicator_size.width, arrow_height);
 }
 
 static void 

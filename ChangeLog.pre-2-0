@@ -1,3 +1,9 @@
+Wed Feb 27 00:45:39 2002  Soeren Sandmann  <sandmann@daimi.au.dk>
+
+	* gtk/gtkarrow.c, gtk/gtkmenuitem.c, gtk/gtkrange.c
+	gtk/gtkspinbutton.c gtk/gtkstyle.c: Draw arrows better (without
+	extra baseline)
+
 Tue Feb 26 18:38:17 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkaccellabel.c (gtk_accel_label_refetch): 

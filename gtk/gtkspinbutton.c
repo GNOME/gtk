@@ -111,7 +111,7 @@ static void gtk_spin_button_grab_notify    (GtkWidget          *widget,
 static void gtk_spin_button_state_changed  (GtkWidget          *widget,
 					    GtkStateType        previous_state);
 static void gtk_spin_button_draw_arrow     (GtkSpinButton      *spin_button, 
-					    guint               arrow);
+					    GtkArrowType        arrow_type);
 static gint gtk_spin_button_timer          (GtkSpinButton      *spin_button);
 static void gtk_spin_button_stop_spinning  (GtkSpinButton      *spin);
 static void gtk_spin_button_value_changed  (GtkAdjustment      *adjustment,
@@ -783,17 +783,17 @@ spin_button_at_limit (GtkSpinButton *spin_button,
   if (arrow == GTK_ARROW_UP &&
       (spin_button->adjustment->upper - spin_button->adjustment->value <= EPSILON))
     return TRUE;
-
+  
   if (arrow == GTK_ARROW_DOWN &&
       (spin_button->adjustment->value - spin_button->adjustment->lower <= EPSILON))
     return TRUE;
-
+  
   return FALSE;
 }
 
 static void
 gtk_spin_button_draw_arrow (GtkSpinButton *spin_button, 
-			    guint          arrow)
+			    GtkArrowType   arrow_type)
 {
   GtkStateType state_type;
   GtkShadowType shadow_type;
@@ -802,9 +802,10 @@ gtk_spin_button_draw_arrow (GtkSpinButton *spin_button,
   gint y;
   gint height;
   gint width;
+  gint h, w;
 
   g_return_if_fail (GTK_IS_SPIN_BUTTON (spin_button));
-  g_return_if_fail (arrow == GTK_ARROW_UP || arrow == GTK_ARROW_DOWN);
+  g_return_if_fail (arrow_type == GTK_ARROW_UP || arrow_type == GTK_ARROW_DOWN);
   
   widget = GTK_WIDGET (spin_button);
 
@@ -812,7 +813,7 @@ gtk_spin_button_draw_arrow (GtkSpinButton *spin_button,
     {
       width = spin_button_get_arrow_size (spin_button) + 2 * widget->style->xthickness;
 
-      if (arrow == GTK_ARROW_UP)
+      if (arrow_type == GTK_ARROW_UP)
 	{
 	  x = 0;
 	  y = 0;
@@ -827,21 +828,21 @@ gtk_spin_button_draw_arrow (GtkSpinButton *spin_button,
 	  height = (widget->requisition.height + 1) / 2;
 	}
 
-      if (spin_button_at_limit (spin_button, arrow))
+      if (spin_button_at_limit (spin_button, arrow_type))
 	{
 	  shadow_type = GTK_SHADOW_OUT;
 	  state_type = GTK_STATE_INSENSITIVE;
 	}
       else
 	{
-	  if (spin_button->click_child == arrow)
+	  if (spin_button->click_child == arrow_type)
 	    {
 	      state_type = GTK_STATE_ACTIVE;
 	      shadow_type = GTK_SHADOW_IN;
 	    }
 	  else
 	    {
-	      if (spin_button->in_child == arrow &&
+	      if (spin_button->in_child == arrow_type &&
 		  spin_button->click_child == NO_ARROW)
 		{
 		  state_type = GTK_STATE_PRELIGHT;
@@ -858,17 +859,44 @@ gtk_spin_button_draw_arrow (GtkSpinButton *spin_button,
       gtk_paint_box (widget->style, spin_button->panel,
 		     state_type, shadow_type,
 		     NULL, widget,
-		     (arrow == GTK_ARROW_UP)? "spinbutton_up" : "spinbutton_down",
+		     (arrow_type == GTK_ARROW_UP)? "spinbutton_up" : "spinbutton_down",
 		     x, y, width, height);
+
+      height = widget->requisition.height;
+
+      if (arrow_type == GTK_ARROW_DOWN)
+	{
+	  y = height / 2;
+	  height = height - y - 2;
+	}
+      else
+	{
+	  y = 2;
+	  height = height / 2 - 2;
+	}
+
+      width -= 3;
+
+      if (widget && gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL)
+	x = 2;
+      else
+	x = 1;
+
+      w = width / 2;
+      w -= w % 2 - 1; /* force odd */
+      h = (w + 1) / 2;
+      
+      x += (width - w) / 2;
+      y += (height - h) / 2;
+      
+      height = h;
+      width = w;
 
       gtk_paint_arrow (widget->style, spin_button->panel,
 		       state_type, shadow_type, 
 		       NULL, widget, "spinbutton",
-		       arrow, TRUE, 
-		       x + widget->style->xthickness,
-		       y + widget->style->ythickness,
-		       width - 2 * widget->style->xthickness,
-		       (widget->requisition.height + 1) / 2 - 2 * widget->style->ythickness);
+		       arrow_type, TRUE, 
+		       x, y, width, height);
     }
 }
 
@@ -1290,7 +1318,7 @@ gtk_spin_button_snap (GtkSpinButton *spin_button,
 {
   gdouble inc;
   gdouble tmp;
-  
+
   inc = spin_button->adjustment->step_increment;
   tmp = (val - spin_button->adjustment->lower) / inc;
   if (tmp - floor (tmp) < ceil (tmp) - tmp)

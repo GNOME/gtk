@@ -143,7 +143,9 @@ static void          gtk_range_get_props                (GtkRange      *range,
                                                          gint          *slider_width,
                                                          gint          *stepper_size,
                                                          gint          *trough_border,
-                                                         gint          *stepper_spacing);
+                                                         gint          *stepper_spacing,
+							 gint          *arrow_displacement_x,
+							 gint	       *arrow_displacement_y);
 static void          gtk_range_calc_request             (GtkRange      *range,
                                                          gint           slider_width,
                                                          gint           stepper_size,
@@ -319,6 +321,22 @@ gtk_range_class_init (GtkRangeClass *class)
 							     _("Stepper Spacing"),
 							     _("Spacing between step buttons and thumb"),
                                                              0,
+							     G_MAXINT,
+							     0,
+							     G_PARAM_READABLE));
+  gtk_widget_class_install_style_property (widget_class,
+					   g_param_spec_int ("arrow_displacement_x",
+							     _("Arrow X Displacement"),
+							     _("How far in the x direction to move the arrow when the button is depressed"),
+							     G_MININT,
+							     G_MAXINT,
+							     0,
+							     G_PARAM_READABLE));
+  gtk_widget_class_install_style_property (widget_class,
+					   g_param_spec_int ("arrow_displacement_y",
+							     _("Arrow Y Displacement"),
+							     _("How far in the y direction to move the arrow when the button is depressed"),
+							     G_MININT,
 							     G_MAXINT,
 							     0,
 							     G_PARAM_READABLE));
@@ -710,7 +728,8 @@ gtk_range_size_request (GtkWidget      *widget,
   range = GTK_RANGE (widget);
   
   gtk_range_get_props (range,
-                       &slider_width, &stepper_size, &trough_border, &stepper_spacing);
+                       &slider_width, &stepper_size, &trough_border, &stepper_spacing,
+		       NULL, NULL);
 
   gtk_range_calc_request (range, 
                           slider_width, stepper_size, trough_border, stepper_spacing,
@@ -834,6 +853,11 @@ draw_stepper (GtkRange     *range,
   GdkRectangle intersection;
   GtkWidget *widget = GTK_WIDGET (range);
 
+  gint arrow_x;
+  gint arrow_y;
+  gint arrow_width;
+  gint arrow_height;
+
   /* More to get the right clip region than for efficiency */
   if (!gdk_rectangle_intersect (area, rect, &intersection))
     return;
@@ -854,17 +878,42 @@ draw_stepper (GtkRange     *range,
     shadow_type = GTK_SHADOW_IN;
   else
     shadow_type = GTK_SHADOW_OUT;
+
+  gtk_paint_box (widget->style,
+		 widget->window,
+		 state_type, shadow_type,
+		 &intersection, widget,
+		 GTK_RANGE_GET_CLASS (range)->stepper_detail,
+		 widget->allocation.x + rect->x,
+		 widget->allocation.y + rect->y,
+		 rect->width,
+		 rect->height);
+
+  arrow_width = rect->width / 2;
+  arrow_height = rect->height / 2;
+  arrow_x = widget->allocation.x + rect->x + (rect->width - arrow_width) / 2;
+  arrow_y = widget->allocation.y + rect->y + (rect->height - arrow_height) / 2;
   
-  gtk_paint_arrow (GTK_WIDGET (range)->style,
-                   GTK_WIDGET (range)->window,
+  if (clicked)
+    {
+      gint arrow_displacement_x;
+      gint arrow_displacement_y;
+
+      gtk_range_get_props (GTK_RANGE (widget), NULL, NULL, NULL, NULL,
+			   &arrow_displacement_x, &arrow_displacement_y);
+      
+      arrow_x += arrow_displacement_x;
+      arrow_y += arrow_displacement_y;
+    }
+  
+  gtk_paint_arrow (widget->style,
+                   widget->window,
                    state_type, shadow_type, 
-                   &intersection, GTK_WIDGET (range),
+                   &intersection, widget,
                    GTK_RANGE_GET_CLASS (range)->stepper_detail,
                    arrow_type,
                    TRUE,
-		   widget->allocation.x + rect->x,
-		   widget->allocation.y + rect->y,
-		   rect->width, rect->height);
+		   arrow_x, arrow_y, arrow_width, arrow_height);
 }
 
 static gint
@@ -1562,16 +1611,21 @@ gtk_range_get_props (GtkRange  *range,
                      gint      *slider_width,
                      gint      *stepper_size,
                      gint      *trough_border,
-                     gint      *stepper_spacing)
+                     gint      *stepper_spacing,
+		     gint      *arrow_displacement_x,
+		     gint      *arrow_displacement_y)
 {
   GtkWidget *widget =  GTK_WIDGET (range);
   gint tmp_slider_width, tmp_stepper_size, tmp_trough_border, tmp_stepper_spacing;
+  gint tmp_arrow_displacement_x, tmp_arrow_displacement_y;
   
   gtk_widget_style_get (widget,
                         "slider_width", &tmp_slider_width,
                         "trough_border", &tmp_trough_border,
                         "stepper_size", &tmp_stepper_size,
                         "stepper_spacing", &tmp_stepper_spacing,
+			"arrow_displacement_x", &tmp_arrow_displacement_x,
+			"arrow_displacement_y", &tmp_arrow_displacement_y,
                         NULL);
   
   if (slider_width)
@@ -1585,6 +1639,12 @@ gtk_range_get_props (GtkRange  *range,
 
   if (stepper_spacing)
     *stepper_spacing = tmp_stepper_spacing;
+
+  if (arrow_displacement_x)
+    *arrow_displacement_x = tmp_arrow_displacement_x;
+
+  if (arrow_displacement_y)
+    *arrow_displacement_y = tmp_arrow_displacement_y;
 }
 
 #define POINT_IN_RECT(xcoord, ycoord, rect) \
@@ -1812,7 +1872,8 @@ gtk_range_calc_layout (GtkRange *range,
   layout = range->layout;
   
   gtk_range_get_props (range,
-                       &slider_width, &stepper_size, &trough_border, &stepper_spacing);
+                       &slider_width, &stepper_size, &trough_border, &stepper_spacing,
+		       NULL, NULL);
 
   gtk_range_calc_request (range, 
                           slider_width, stepper_size, trough_border, stepper_spacing,

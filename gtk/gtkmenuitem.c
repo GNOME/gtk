@@ -458,10 +458,10 @@ gtk_menu_item_size_request (GtkWidget      *widget,
 
       requisition->width += child_requisition.width;
       requisition->height += child_requisition.height;
-    }
 
-  if (menu_item->submenu && menu_item->show_submenu_indicator)
-    requisition->width += 21;
+      if (menu_item->submenu && menu_item->show_submenu_indicator)
+	requisition->width += child_requisition.height;
+    }
 
   accel_width = 0;
   gtk_container_foreach (GTK_CONTAINER (menu_item),
@@ -501,8 +501,8 @@ gtk_menu_item_size_allocate (GtkWidget     *widget,
       child_allocation.y += widget->allocation.y;
       
       if (menu_item->submenu && menu_item->show_submenu_indicator)
-	child_allocation.width -= 21;
-      
+	child_allocation.width -= child_allocation.height;
+
       gtk_widget_size_allocate (bin->child, &child_allocation);
     }
 
@@ -614,22 +614,30 @@ gtk_menu_item_paint (GtkWidget    *widget,
 
       if (menu_item->submenu && menu_item->show_submenu_indicator)
 	{
+	  gint arrow_x, arrow_y;
+	  gint arrow_size = height - 2 * widget->style->ythickness;
+	  gint arrow_extent = arrow_size / 2;
+	  
 	  shadow_type = GTK_SHADOW_OUT;
 	  if (state_type == GTK_STATE_PRELIGHT)
 	    shadow_type = GTK_SHADOW_IN;
+
+	  arrow_x = x + width - 1 - arrow_size + (arrow_size - arrow_extent) / 2;
+	  arrow_y = y + (height - arrow_extent) / 2;
 
 	  gtk_paint_arrow (widget->style, widget->window,
 			   state_type, shadow_type, 
 			   area, widget, "menuitem", 
 			   GTK_ARROW_RIGHT, TRUE,
-			   x + width - 15, y + height / 2 - 5, 10, 10);
+			   arrow_x, arrow_y,
+			   arrow_extent, arrow_extent);
 	}
       else if (!GTK_BIN (menu_item)->child)
 	{
-	   gtk_paint_hline (widget->style, widget->window, GTK_STATE_NORMAL,
-			    area, widget, "menuitem",
-			    widget->allocation.x, widget->allocation.width,
-			    widget->allocation.y);
+	  gtk_paint_hline (widget->style, widget->window, GTK_STATE_NORMAL,
+			   area, widget, "menuitem",
+			   widget->allocation.x, widget->allocation.width,
+			   widget->allocation.y);
 	}
     }
 }
