@@ -1,5 +1,9 @@
 2004-07-27  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtktreeview.c (gtk_tree_view_ensure_interactive_directory): 
+	Add a frame around the C-f popup to stop it from merging visually
+	in whatever is underneath.
+
 	* gtk/gtkcombobox.h: 
 	* gtk/gtkcombobox.c (gtk_combo_box_get_popup_accessible): New 
 	function necessary to make GtkComboBox accessible.  (#132847, 

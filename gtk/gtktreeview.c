@@ -38,6 +38,7 @@
 #include "gtkbindings.h"
 #include "gtkcontainer.h"
 #include "gtkentry.h"
+#include "gtkframe.h"
 #include "gtktreemodelsort.h"
 
 #define GTK_TREE_VIEW_PRIORITY_VALIDATE (GDK_PRIORITY_REDRAW + 5)
@@ -8678,11 +8679,13 @@ send_focus_change (GtkWidget *widget,
 static void
 gtk_tree_view_ensure_interactive_directory (GtkTreeView *tree_view)
 {
+  GtkWidget *frame, *vbox;
+
   if (tree_view->priv->search_window != NULL)
     return;
 
   tree_view->priv->search_window = gtk_window_new (GTK_WINDOW_POPUP);
-  gtk_container_set_border_width (GTK_CONTAINER (tree_view->priv->search_window), 3);
+
   gtk_window_set_modal (GTK_WINDOW (tree_view->priv->search_window), TRUE);
   g_signal_connect (tree_view->priv->search_window, "delete_event",
 		    G_CALLBACK (gtk_tree_view_search_delete_event),
@@ -8694,6 +8697,16 @@ gtk_tree_view_ensure_interactive_directory (GtkTreeView *tree_view)
 		    G_CALLBACK (gtk_tree_view_search_button_press_event),
 		    tree_view);
 
+  frame = gtk_frame_new (NULL);
+  gtk_frame_set_shadow_type (GTK_FRAME (frame), GTK_SHADOW_ETCHED_IN);
+  gtk_widget_show (frame);
+  gtk_container_add (GTK_CONTAINER (tree_view->priv->search_window), frame);
+
+  vbox = gtk_vbox_new (FALSE, 0);
+  gtk_widget_show (vbox);
+  gtk_container_add (GTK_CONTAINER (frame), vbox);
+  gtk_container_set_border_width (GTK_CONTAINER (vbox), 3);
+
   /* add entry */
   tree_view->priv->search_entry = gtk_entry_new ();
   gtk_widget_show (tree_view->priv->search_entry);
@@ -8703,7 +8716,7 @@ gtk_tree_view_ensure_interactive_directory (GtkTreeView *tree_view)
   g_signal_connect (tree_view->priv->search_entry, "populate_popup",
 		    G_CALLBACK (gtk_tree_view_search_disable_popdown),
 		    tree_view);
-  gtk_container_add (GTK_CONTAINER (tree_view->priv->search_window),
+  gtk_container_add (GTK_CONTAINER (vbox),
 		     tree_view->priv->search_entry);
 }
 
