@@ -9,7 +9,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.3.15\n"
-"POT-Creation-Date: 2002-12-11 14:39-0500\n"
+"POT-Creation-Date: 2002-12-16 22:22-0500\n"
 "PO-Revision-Date: 2002-12-10 13:51-0300\n"
 "Last-Translator: Pablo Gonzalo del Campo <pablodc@bigfoot.com>\n"
 "Language-Team: Spanish <traductores@es.gnome.org>\n"
@@ -1830,35 +1830,35 @@ msgstr "Y máximo"
 msgid "Maximum possible value for Y"
 msgstr "Máximo valor posible para Y"
 
-#: gtk/gtkdialog.c:127
+#: gtk/gtkdialog.c:136
 msgid "Has separator"
 msgstr "Tiene separador"
 
-#: gtk/gtkdialog.c:128
+#: gtk/gtkdialog.c:137
 msgid "The dialog has a separator bar above its buttons"
 msgstr "La ventana tiene un barra separadora sobre sus botones"
 
-#: gtk/gtkdialog.c:153
+#: gtk/gtkdialog.c:162
 msgid "Content area border"
 msgstr "Borde del área de contenidos"
 
-#: gtk/gtkdialog.c:154
+#: gtk/gtkdialog.c:163
 msgid "Width of border around the main dialog area"
 msgstr "Ancho del borde alrededor del área principal de la ventana"
 
-#: gtk/gtkdialog.c:161
+#: gtk/gtkdialog.c:170
 msgid "Button spacing"
 msgstr "Espaciado de los botones"
 
-#: gtk/gtkdialog.c:162
+#: gtk/gtkdialog.c:171
 msgid "Spacing between buttons"
 msgstr "Espaciado entre los botones"
 
-#: gtk/gtkdialog.c:170
+#: gtk/gtkdialog.c:179
 msgid "Action area border"
 msgstr "Borde del área de acción"
 
-#: gtk/gtkdialog.c:171
+#: gtk/gtkdialog.c:180
 msgid "Width of border around the button area at the bottom of the dialog"
 msgstr ""
 "Ancho del borde alrededor del área del botón en la parte inferior de la "
@@ -1967,65 +1967,65 @@ msgid "Whether to select the contents of an entry when it is focused"
 msgstr ""
 "Debería seleccionar los contenidos de una entrada cuando obtiene el foco"
 
-#: gtk/gtkentry.c:3950 gtk/gtklabel.c:3222
+#: gtk/gtkentry.c:3957 gtk/gtklabel.c:3222
 msgid "Select All"
 msgstr "Seleccionar todo"
 
-#: gtk/gtkentry.c:3960 gtk/gtklabel.c:3232
+#: gtk/gtkentry.c:3967 gtk/gtklabel.c:3232
 msgid "Input Methods"
 msgstr "Métodos de entrada"
 
-#: gtk/gtkentry.c:3970 gtk/gtktextview.c:6483
+#: gtk/gtkentry.c:3977 gtk/gtktextview.c:6484
 msgid "_Insert Unicode control character"
 msgstr "_Insertar caracter de control unicode"
 
-#: gtk/gtkfilesel.c:516 gtk/gtkimage.c:167
+#: gtk/gtkfilesel.c:512 gtk/gtkimage.c:167
 msgid "Filename"
 msgstr "Nombre de archivo"
 
-#: gtk/gtkfilesel.c:517
+#: gtk/gtkfilesel.c:513
 msgid "The currently selected filename"
 msgstr "El nombre del archivo actualmente seleccionado"
 
-#: gtk/gtkfilesel.c:523
+#: gtk/gtkfilesel.c:519
 msgid "Show file operations"
 msgstr "Mostrar operaciones de archivo"
 
-#: gtk/gtkfilesel.c:524
+#: gtk/gtkfilesel.c:520
 msgid "Whether buttons for creating/manipulating files should be displayed"
 msgstr ""
 "Deberían los botones de creación/manipulación de archivos ser mostrados"
 
-#: gtk/gtkfilesel.c:531
+#: gtk/gtkfilesel.c:527
 msgid "Select multiple"
 msgstr "Selección múltiple"
 
-#: gtk/gtkfilesel.c:532
+#: gtk/gtkfilesel.c:528
 msgid "Whether to allow multiple files to be selected"
 msgstr "Debería permitirse seleccionar múltiples archivos"
 
-#: gtk/gtkfilesel.c:687
+#: gtk/gtkfilesel.c:683
 msgid "Folders"
 msgstr "Carpetas"
 
-#: gtk/gtkfilesel.c:691
+#: gtk/gtkfilesel.c:687
 msgid "Fol_ders"
 msgstr "_Carpetas"
 
-#: gtk/gtkfilesel.c:723
+#: gtk/gtkfilesel.c:719
 msgid "Files"
 msgstr "Archivos"
 
-#: gtk/gtkfilesel.c:727
+#: gtk/gtkfilesel.c:723
 msgid "_Files"
 msgstr "_Archivos"
 
-#: gtk/gtkfilesel.c:810 gtk/gtkfilesel.c:2208
+#: gtk/gtkfilesel.c:806 gtk/gtkfilesel.c:2204
 #, c-format
 msgid "Folder unreadable: %s"
 msgstr "Directorio ilegible: %s"
 
-#: gtk/gtkfilesel.c:941
+#: gtk/gtkfilesel.c:937
 #, c-format
 msgid ""
 "The file \"%s\" resides on another machine (called %s) and may not be "
@@ -2036,19 +2036,19 @@ msgstr ""
 "disponible para este programa.\n"
 "¿Está seguro que desea seleccionarlo?"
 
-#: gtk/gtkfilesel.c:1072
+#: gtk/gtkfilesel.c:1068
 msgid "_New Folder"
 msgstr "_Nueva carpeta"
 
-#: gtk/gtkfilesel.c:1083
+#: gtk/gtkfilesel.c:1079
 msgid "De_lete File"
 msgstr "_Borrar Archivo"
 
-#: gtk/gtkfilesel.c:1094
+#: gtk/gtkfilesel.c:1090
 msgid "_Rename File"
 msgstr "_Renombrar archivo"
 
-#: gtk/gtkfilesel.c:1390
+#: gtk/gtkfilesel.c:1386
 #, c-format
 msgid ""
 "The folder name \"%s\" contains symbols that are not allowed in filenames"
@@ -2056,7 +2056,7 @@ msgstr ""
 "El nombre de la carpeta «%s» contiene símbolos que no están permitidos en "
 "los nombres de archivos"
 
-#: gtk/gtkfilesel.c:1392
+#: gtk/gtkfilesel.c:1388
 #, c-format
 msgid ""
 "Error creating folder \"%s\": %s\n"
@@ -2065,36 +2065,36 @@ msgstr ""
 "Ha ocurrido un error al crear la carpeta «%s» : %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1393 gtk/gtkfilesel.c:1634
+#: gtk/gtkfilesel.c:1389 gtk/gtkfilesel.c:1630
 msgid "You probably used symbols not allowed in filenames."
 msgstr ""
 "Probablemente ha empleado símbolos no permitidos en nombres de archivo."
 
-#: gtk/gtkfilesel.c:1401
+#: gtk/gtkfilesel.c:1397
 #, c-format
 msgid "Error creating folder \"%s\": %s\n"
 msgstr "Error al crear la carpeta «%s» : %s\n"
 
-#: gtk/gtkfilesel.c:1435
+#: gtk/gtkfilesel.c:1431
 msgid "New Folder"
 msgstr "Nueva carpeta"
 
-#: gtk/gtkfilesel.c:1450
+#: gtk/gtkfilesel.c:1446
 msgid "_Folder name:"
 msgstr "_Nombre del la carpeta:"
 
-#: gtk/gtkfilesel.c:1476
+#: gtk/gtkfilesel.c:1472
 msgid "C_reate"
 msgstr "C_rear"
 
-#: gtk/gtkfilesel.c:1522
+#: gtk/gtkfilesel.c:1518
 #, c-format
 msgid "The filename \"%s\" contains symbols that are not allowed in filenames"
 msgstr ""
 "El nombre «%s» contiene símbolos que no están permitidos en nombres de "
 "archivos."
 
-#: gtk/gtkfilesel.c:1525
+#: gtk/gtkfilesel.c:1521
 #, c-format
 msgid ""
 "Error deleting file \"%s\": %s\n"
@@ -2103,34 +2103,34 @@ msgstr ""
 "Error al borrar el archivo «%s»: %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1527 gtk/gtkfilesel.c:1648
+#: gtk/gtkfilesel.c:1523 gtk/gtkfilesel.c:1644
 msgid "It probably contains symbols not allowed in filenames."
 msgstr ""
 "Probablemente contenga símbolos que no están permitidos en los nombres de "
 "archivo."
 
-#: gtk/gtkfilesel.c:1536
+#: gtk/gtkfilesel.c:1532
 #, c-format
 msgid "Error deleting file \"%s\": %s"
 msgstr "Error al borrar el archivo «%s»: %s"
 
-#: gtk/gtkfilesel.c:1579
+#: gtk/gtkfilesel.c:1575
 #, c-format
 msgid "Really delete file \"%s\" ?"
 msgstr "¿Realmente desea eliminar el archivo «%s»?"
 
-#: gtk/gtkfilesel.c:1584
+#: gtk/gtkfilesel.c:1580
 msgid "Delete File"
 msgstr "Borrar Archivo"
 
-#: gtk/gtkfilesel.c:1630 gtk/gtkfilesel.c:1644
+#: gtk/gtkfilesel.c:1626 gtk/gtkfilesel.c:1640
 #, c-format
 msgid "The file name \"%s\" contains symbols that are not allowed in filenames"
 msgstr ""
 "El nombre «%s» contiene símbolos que no están permitidos en nombres de "
 "archivos"
 
-#: gtk/gtkfilesel.c:1632
+#: gtk/gtkfilesel.c:1628
 #, c-format
 msgid ""
 "Error renaming file to \"%s\": %s\n"
@@ -2139,7 +2139,7 @@ msgstr ""
 "Error al renombrar el archivo como «%s»: %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1646
+#: gtk/gtkfilesel.c:1642
 #, c-format
 msgid ""
 "Error renaming file \"%s\": %s\n"
@@ -2148,29 +2148,29 @@ msgstr ""
 "Error al renombrar el archivo «%s»: %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1656
+#: gtk/gtkfilesel.c:1652
 #, c-format
 msgid "Error renaming file \"%s\" to \"%s\": %s"
 msgstr "Error al renombrar el archivo «%s» como «%s»: %s"
 
-#: gtk/gtkfilesel.c:1703
+#: gtk/gtkfilesel.c:1699
 msgid "Rename File"
 msgstr "Renombrar Archivo"
 
-#: gtk/gtkfilesel.c:1718
+#: gtk/gtkfilesel.c:1714
 #, c-format
 msgid "Rename file \"%s\" to:"
 msgstr "Renombrar archivo «%s» como:"
 
-#: gtk/gtkfilesel.c:1749
+#: gtk/gtkfilesel.c:1745
 msgid "_Rename"
 msgstr "_Renombrar"
 
-#: gtk/gtkfilesel.c:2188
+#: gtk/gtkfilesel.c:2184
 msgid "_Selection: "
 msgstr "_Selección: "
 
-#: gtk/gtkfilesel.c:3075
+#: gtk/gtkfilesel.c:3077
 #, c-format
 msgid ""
 "The filename \"%s\" couldn't be converted to UTF-8 (try setting the "
@@ -2179,15 +2179,15 @@ msgstr ""
 "El nombre de archivo «%s» no ha podido ser convertido en UTF-8 (intente "
 "definir la variable de entorno G_BROKEN_FILENAMES): %s"
 
-#: gtk/gtkfilesel.c:3078
+#: gtk/gtkfilesel.c:3080
 msgid "Invalid Utf-8"
 msgstr "UTF-8 inválido"
 
-#: gtk/gtkfilesel.c:3945
+#: gtk/gtkfilesel.c:3948
 msgid "Name too long"
 msgstr "El nombre es muy largo"
 
-#: gtk/gtkfilesel.c:3947
+#: gtk/gtkfilesel.c:3950
 msgid "Couldn't convert filename"
 msgstr "No se ha podido convertir el nombre del archivo"
 
@@ -2275,7 +2275,7 @@ msgstr "yalign de la etiqueta"
 msgid "The vertical alignment of the label"
 msgstr "La alineación vertical de la etiqueta"
 
-#: gtk/gtkframe.c:153 gtk/gtkhandlebox.c:187
+#: gtk/gtkframe.c:153 gtk/gtkhandlebox.c:195
 msgid "Deprecated property, use shadow_type instead"
 msgstr "Propiedad obsoleta, use shadow_type en reemplazo"
 
@@ -2303,28 +2303,28 @@ msgstr "Gamma"
 msgid "_Gamma value"
 msgstr "Valor _Gamma"
 
-#: gtk/gtkhandlebox.c:194 gtk/gtkmenubar.c:156 gtk/gtkstatusbar.c:161
+#: gtk/gtkhandlebox.c:202 gtk/gtkmenubar.c:156 gtk/gtkstatusbar.c:161
 #: gtk/gtktoolbar.c:282 gtk/gtkviewport.c:150
 msgid "Shadow type"
 msgstr "Tipo de sombra"
 
-#: gtk/gtkhandlebox.c:195
+#: gtk/gtkhandlebox.c:203
 msgid "Appearance of the shadow that surrounds the container"
 msgstr "Apariencia de la sombra que rodea al contenedor"
 
-#: gtk/gtkhandlebox.c:203
+#: gtk/gtkhandlebox.c:211
 msgid "Handle position"
 msgstr "Manejador de posición"
 
-#: gtk/gtkhandlebox.c:204
+#: gtk/gtkhandlebox.c:212
 msgid "Position of the handle relative to the child widget"
 msgstr "Posición del manejador relativa al widget hijo"
 
-#: gtk/gtkhandlebox.c:212
+#: gtk/gtkhandlebox.c:220
 msgid "Snap edge"
 msgstr "Quiebre del borde"
 
-#: gtk/gtkhandlebox.c:213
+#: gtk/gtkhandlebox.c:221
 msgid ""
 "Side of the handlebox that's lined up with the docking point to dock the "
 "handlebox"
@@ -2332,11 +2332,11 @@ msgstr ""
 "Lado de la caja manejadora que esta alineada con el punto de anclaje para "
 "bloquear la caja manejadora"
 
-#: gtk/gtkhandlebox.c:221
+#: gtk/gtkhandlebox.c:229
 msgid "Snap edge set"
 msgstr "Definir el quiebre del borde"
 
-#: gtk/gtkhandlebox.c:222
+#: gtk/gtkhandlebox.c:230
 msgid ""
 "Whether to use the value from the snap_edge property or a value derived from "
 "handle_position"
@@ -2634,11 +2634,11 @@ msgstr "La altura de la disposición"
 msgid "default:LTR"
 msgstr "por omisión: LTR"
 
-#: gtk/gtkmenu.c:243
+#: gtk/gtkmenu.c:263
 msgid "Tearoff Title"
 msgstr "Título descolgado"
 
-#: gtk/gtkmenu.c:244
+#: gtk/gtkmenu.c:264
 msgid ""
 "A title that may be displayed by the window manager when this menu is torn-"
 "off"
@@ -2646,33 +2646,33 @@ msgstr ""
 "Un título que debe ser mostrado por el administrador de ventanas cuando este "
 "menú este descolgado"
 
-#: gtk/gtkmenu.c:319
+#: gtk/gtkmenu.c:379
 msgid "Can change accelerators"
 msgstr "Puede cambiar combinaciones"
 
-#: gtk/gtkmenu.c:320
+#: gtk/gtkmenu.c:380
 msgid ""
 "Whether menu accelerators can be changed by pressing a key over the menu item"
 msgstr ""
 "Debería los aceleradores de menú poder ser cambiados presionando una tecla "
 "sobre el elemento de menú"
 
-#: gtk/gtkmenu.c:325
+#: gtk/gtkmenu.c:385
 msgid "Delay before submenus appear"
 msgstr "Retraso antes de que el submenú aparezca"
 
-#: gtk/gtkmenu.c:326
+#: gtk/gtkmenu.c:386
 msgid ""
 "Minimum time the pointer must stay over a menu item before the submenu appear"
 msgstr ""
 "Tiempo mínimo en que el puntero debe permanecer sobre un elemento de menú "
 "antes de que el submenú aparezca"
 
-#: gtk/gtkmenu.c:333
+#: gtk/gtkmenu.c:393
 msgid "Delay before hiding a submenu"
 msgstr "Retraso antes de ocultar un submenú"
 
-#: gtk/gtkmenu.c:334
+#: gtk/gtkmenu.c:394
 msgid ""
 "The time before hiding a submenu when the pointer is moving towards the "
 "submenu"
@@ -4313,7 +4313,7 @@ msgstr "Cursor visible"
 msgid "If the insertion cursor is shown"
 msgstr "Si se muestra el cursor de inserción"
 
-#: gtk/gtktextview.c:6474
+#: gtk/gtktextview.c:6475
 msgid "Input _Methods"
 msgstr "Métodos de entrada"
 

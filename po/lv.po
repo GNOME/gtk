@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
-"POT-Creation-Date: 2002-12-11 14:39-0500\n"
+"POT-Creation-Date: 2002-12-16 22:22-0500\n"
 "PO-Revision-Date: 2002-10-27 00:04+0200\n"
 "Last-Translator: Artis Trops <hornet@navigator.lv>\n"
 "Language-Team: Latvian <ll10nt@os.lv>\n"
@@ -1833,35 +1833,35 @@ msgstr "Maksimālais Y"
 msgid "Maximum possible value for Y"
 msgstr "Maksimālā iespējamā Y vērtība"
 
-#: gtk/gtkdialog.c:127
+#: gtk/gtkdialog.c:136
 msgid "Has separator"
 msgstr "Ir atdalītājs"
 
-#: gtk/gtkdialog.c:128
+#: gtk/gtkdialog.c:137
 msgid "The dialog has a separator bar above its buttons"
 msgstr "Dialogam ir atdalītāja josla virs tā pogām"
 
-#: gtk/gtkdialog.c:153
+#: gtk/gtkdialog.c:162
 msgid "Content area border"
 msgstr "Satura laukuma robeža"
 
-#: gtk/gtkdialog.c:154
+#: gtk/gtkdialog.c:163
 msgid "Width of border around the main dialog area"
 msgstr "Robežas platums ap galveno dialoga laukumu"
 
-#: gtk/gtkdialog.c:161
+#: gtk/gtkdialog.c:170
 msgid "Button spacing"
 msgstr "Pogu atstarpe"
 
-#: gtk/gtkdialog.c:162
+#: gtk/gtkdialog.c:171
 msgid "Spacing between buttons"
 msgstr "Atstarpe starp pogām"
 
-#: gtk/gtkdialog.c:170
+#: gtk/gtkdialog.c:179
 msgid "Action area border"
 msgstr "Darbības laukuma robeža"
 
-#: gtk/gtkdialog.c:171
+#: gtk/gtkdialog.c:180
 msgid "Width of border around the button area at the bottom of the dialog"
 msgstr "Robežas platums ap pogu laukumu dialoga apakšā"
 
@@ -1970,67 +1970,67 @@ msgstr "Izvēlēties pie fokusēšanas"
 msgid "Whether to select the contents of an entry when it is focused"
 msgstr "Vai izvēlēties ieraksta saturu, kad tas tiek fokusēts."
 
-#: gtk/gtkentry.c:3950 gtk/gtklabel.c:3222
+#: gtk/gtkentry.c:3957 gtk/gtklabel.c:3222
 msgid "Select All"
 msgstr "Izvēlēties Visu"
 
-#: gtk/gtkentry.c:3960 gtk/gtklabel.c:3232
+#: gtk/gtkentry.c:3967 gtk/gtklabel.c:3232
 msgid "Input Methods"
 msgstr "Ievades Metodes"
 
-#: gtk/gtkentry.c:3970 gtk/gtktextview.c:6483
+#: gtk/gtkentry.c:3977 gtk/gtktextview.c:6484
 msgid "_Insert Unicode control character"
 msgstr "_Ievietot Unicdoe kontroles rakstzīmi"
 
-#: gtk/gtkfilesel.c:516 gtk/gtkimage.c:167
+#: gtk/gtkfilesel.c:512 gtk/gtkimage.c:167
 msgid "Filename"
 msgstr "Faila nosaukums"
 
-#: gtk/gtkfilesel.c:517
+#: gtk/gtkfilesel.c:513
 #, fuzzy
 msgid "The currently selected filename"
 msgstr "Pašreiz izvēlētais faila nosaukums."
 
-#: gtk/gtkfilesel.c:523
+#: gtk/gtkfilesel.c:519
 msgid "Show file operations"
 msgstr "Parādīt operācijas ar failiem"
 
-#: gtk/gtkfilesel.c:524
+#: gtk/gtkfilesel.c:520
 #, fuzzy
 msgid "Whether buttons for creating/manipulating files should be displayed"
 msgstr "Vai pogas failu izveidošanai/manipulācijai būtu jāparāda."
 
-#: gtk/gtkfilesel.c:531
+#: gtk/gtkfilesel.c:527
 msgid "Select multiple"
 msgstr "Izvēlēties vairākus"
 
-#: gtk/gtkfilesel.c:532
+#: gtk/gtkfilesel.c:528
 #, fuzzy
 msgid "Whether to allow multiple files to be selected"
 msgstr "Vai ļaut izvēlēties vairākus failus."
 
-#: gtk/gtkfilesel.c:687
+#: gtk/gtkfilesel.c:683
 msgid "Folders"
 msgstr "Mapes"
 
-#: gtk/gtkfilesel.c:691
+#: gtk/gtkfilesel.c:687
 msgid "Fol_ders"
 msgstr "Ma_pes"
 
-#: gtk/gtkfilesel.c:723
+#: gtk/gtkfilesel.c:719
 msgid "Files"
 msgstr "Faili"
 
-#: gtk/gtkfilesel.c:727
+#: gtk/gtkfilesel.c:723
 msgid "_Files"
 msgstr "_Faili"
 
-#: gtk/gtkfilesel.c:810 gtk/gtkfilesel.c:2208
+#: gtk/gtkfilesel.c:806 gtk/gtkfilesel.c:2204
 #, c-format
 msgid "Folder unreadable: %s"
 msgstr "Mape neaizsniedzama: %s"
 
-#: gtk/gtkfilesel.c:941
+#: gtk/gtkfilesel.c:937
 #, c-format
 msgid ""
 "The file \"%s\" resides on another machine (called %s) and may not be "
@@ -2041,26 +2041,26 @@ msgstr ""
 "šai programmai.\n"
 "Vai jūs esat pārliecināts, ka vēlaties izvēlēties to?"
 
-#: gtk/gtkfilesel.c:1072
+#: gtk/gtkfilesel.c:1068
 msgid "_New Folder"
 msgstr "_Jauna Mape"
 
-#: gtk/gtkfilesel.c:1083
+#: gtk/gtkfilesel.c:1079
 msgid "De_lete File"
 msgstr "Dzēs_t Failu"
 
-#: gtk/gtkfilesel.c:1094
+#: gtk/gtkfilesel.c:1090
 msgid "_Rename File"
 msgstr "_Pārsaukt Failu"
 
-#: gtk/gtkfilesel.c:1390
+#: gtk/gtkfilesel.c:1386
 #, c-format
 msgid ""
 "The folder name \"%s\" contains symbols that are not allowed in filenames"
 msgstr ""
 "Mapes nosaukums \"%s\" satur simbolus, kas nav atļauti failu nosaukumos"
 
-#: gtk/gtkfilesel.c:1392
+#: gtk/gtkfilesel.c:1388
 #, c-format
 msgid ""
 "Error creating folder \"%s\": %s\n"
@@ -2069,35 +2069,35 @@ msgstr ""
 "Kļūda veidojot mapi \"%s\" : %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1393 gtk/gtkfilesel.c:1634
+#: gtk/gtkfilesel.c:1389 gtk/gtkfilesel.c:1630
 msgid "You probably used symbols not allowed in filenames."
 msgstr "Jūs, iespējams, izmantojāt neatļautus simbolus failu nosaukumos."
 
-#: gtk/gtkfilesel.c:1401
+#: gtk/gtkfilesel.c:1397
 #, c-format
 msgid "Error creating folder \"%s\": %s\n"
 msgstr "Kļūda veidojot mapi \"%s\": %s\n"
 
-#: gtk/gtkfilesel.c:1435
+#: gtk/gtkfilesel.c:1431
 msgid "New Folder"
 msgstr "Jauna Mape"
 
-#: gtk/gtkfilesel.c:1450
+#: gtk/gtkfilesel.c:1446
 msgid "_Folder name:"
 msgstr "_Mapes nosaukums:"
 
-#: gtk/gtkfilesel.c:1476
+#: gtk/gtkfilesel.c:1472
 #, fuzzy
 msgid "C_reate"
 msgstr "Izveidot"
 
-#: gtk/gtkfilesel.c:1522
+#: gtk/gtkfilesel.c:1518
 #, c-format
 msgid "The filename \"%s\" contains symbols that are not allowed in filenames"
 msgstr ""
 "Faila nosaukums \"%s\" satur simbolus, kas nav atļauti failu nosaukumos"
 
-#: gtk/gtkfilesel.c:1525
+#: gtk/gtkfilesel.c:1521
 #, c-format
 msgid ""
 "Error deleting file \"%s\": %s\n"
@@ -2106,31 +2106,31 @@ msgstr ""
 "Kļūda dzēšot failu \"%s\": %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1527 gtk/gtkfilesel.c:1648
+#: gtk/gtkfilesel.c:1523 gtk/gtkfilesel.c:1644
 msgid "It probably contains symbols not allowed in filenames."
 msgstr "Tas, iespējams, satur simbolus, kas nav atļauti failu nosaukumos."
 
-#: gtk/gtkfilesel.c:1536
+#: gtk/gtkfilesel.c:1532
 #, c-format
 msgid "Error deleting file \"%s\": %s"
 msgstr "Kļūda dzēšot failu \"%s\": %s"
 
-#: gtk/gtkfilesel.c:1579
+#: gtk/gtkfilesel.c:1575
 #, c-format
 msgid "Really delete file \"%s\" ?"
 msgstr "Patiešām dzēst failu \"%s\" ?"
 
-#: gtk/gtkfilesel.c:1584
+#: gtk/gtkfilesel.c:1580
 msgid "Delete File"
 msgstr "Dzēst Failu"
 
-#: gtk/gtkfilesel.c:1630 gtk/gtkfilesel.c:1644
+#: gtk/gtkfilesel.c:1626 gtk/gtkfilesel.c:1640
 #, c-format
 msgid "The file name \"%s\" contains symbols that are not allowed in filenames"
 msgstr ""
 "Faila nosaukums \"%s\" satur simbolus, kas nav atļauti failu nosaukumos"
 
-#: gtk/gtkfilesel.c:1632
+#: gtk/gtkfilesel.c:1628
 #, c-format
 msgid ""
 "Error renaming file to \"%s\": %s\n"
@@ -2139,7 +2139,7 @@ msgstr ""
 "Kļūda pārsaucot failu \"%s\": %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1646
+#: gtk/gtkfilesel.c:1642
 #, c-format
 msgid ""
 "Error renaming file \"%s\": %s\n"
@@ -2148,31 +2148,31 @@ msgstr ""
 "Kļūda pārsaucot failu \"%s\": %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1656
+#: gtk/gtkfilesel.c:1652
 #, c-format
 msgid "Error renaming file \"%s\" to \"%s\": %s"
 msgstr "Kļūda pārsaucot failu \"%s\" uz \"%s\": %s"
 
-#: gtk/gtkfilesel.c:1703
+#: gtk/gtkfilesel.c:1699
 msgid "Rename File"
 msgstr "Pārsaukt Failu"
 
-#: gtk/gtkfilesel.c:1718
+#: gtk/gtkfilesel.c:1714
 #, c-format
 msgid "Rename file \"%s\" to:"
 msgstr "Pārsaukt failu \"%s\" par:"
 
-#: gtk/gtkfilesel.c:1749
+#: gtk/gtkfilesel.c:1745
 #, fuzzy
 msgid "_Rename"
 msgstr "Pārsaukt"
 
-#: gtk/gtkfilesel.c:2188
+#: gtk/gtkfilesel.c:2184
 #, fuzzy
 msgid "_Selection: "
 msgstr "Izvēle: "
 
-#: gtk/gtkfilesel.c:3075
+#: gtk/gtkfilesel.c:3077
 #, c-format
 msgid ""
 "The filename \"%s\" couldn't be converted to UTF-8 (try setting the "
@@ -2181,15 +2181,15 @@ msgstr ""
 "Faila nosaukums \"%s\" nevarēja tikt pārveidots uz UTF-8 (izmēģiniet "
 "uzstādīt vides mainīgo G_BROKEN_FILENAMES): %s"
 
-#: gtk/gtkfilesel.c:3078
+#: gtk/gtkfilesel.c:3080
 msgid "Invalid Utf-8"
 msgstr "Nepareizs Utf-8"
 
-#: gtk/gtkfilesel.c:3945
+#: gtk/gtkfilesel.c:3948
 msgid "Name too long"
 msgstr "Nosaukums par garu"
 
-#: gtk/gtkfilesel.c:3947
+#: gtk/gtkfilesel.c:3950
 msgid "Couldn't convert filename"
 msgstr "Nevarēju pārveidot faila nosaukumu"
 
@@ -2282,7 +2282,7 @@ msgstr "Iezīmes y centrēšana"
 msgid "The vertical alignment of the label"
 msgstr "Iezīmes vertikālā centrēšana."
 
-#: gtk/gtkframe.c:153 gtk/gtkhandlebox.c:187
+#: gtk/gtkframe.c:153 gtk/gtkhandlebox.c:195
 #, fuzzy
 msgid "Deprecated property, use shadow_type instead"
 msgstr "Nosodīts rekvizīts, tā vietā lietojiet shadow_type."
@@ -2313,30 +2313,30 @@ msgstr "Gamma"
 msgid "_Gamma value"
 msgstr "_Gamma vērtība"
 
-#: gtk/gtkhandlebox.c:194 gtk/gtkmenubar.c:156 gtk/gtkstatusbar.c:161
+#: gtk/gtkhandlebox.c:202 gtk/gtkmenubar.c:156 gtk/gtkstatusbar.c:161
 #: gtk/gtktoolbar.c:282 gtk/gtkviewport.c:150
 msgid "Shadow type"
 msgstr "Ēnas tips"
 
-#: gtk/gtkhandlebox.c:195
+#: gtk/gtkhandlebox.c:203
 #, fuzzy
 msgid "Appearance of the shadow that surrounds the container"
 msgstr "Ēnas izskas, kas aptver saturētāju."
 
-#: gtk/gtkhandlebox.c:203
+#: gtk/gtkhandlebox.c:211
 msgid "Handle position"
 msgstr "Roktura pozīcija"
 
-#: gtk/gtkhandlebox.c:204
+#: gtk/gtkhandlebox.c:212
 #, fuzzy
 msgid "Position of the handle relative to the child widget"
 msgstr "Roktura pozīcija attiecībā pret bērna logdaļu."
 
-#: gtk/gtkhandlebox.c:212
+#: gtk/gtkhandlebox.c:220
 msgid "Snap edge"
 msgstr "Aplauzt malas"
 
-#: gtk/gtkhandlebox.c:213
+#: gtk/gtkhandlebox.c:221
 #, fuzzy
 msgid ""
 "Side of the handlebox that's lined up with the docking point to dock the "
@@ -2345,12 +2345,12 @@ msgstr ""
 "Rokturkastes puse, kas nostādīta rindā ar noenkurošanās punktu doka "
 "rokturkastei."
 
-#: gtk/gtkhandlebox.c:221
+#: gtk/gtkhandlebox.c:229
 #, fuzzy
 msgid "Snap edge set"
 msgstr "Aplauzt malas"
 
-#: gtk/gtkhandlebox.c:222
+#: gtk/gtkhandlebox.c:230
 msgid ""
 "Whether to use the value from the snap_edge property or a value derived from "
 "handle_position"
@@ -2664,11 +2664,11 @@ msgstr "Izkārtojuma augstums."
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: gtk/gtkmenu.c:243
+#: gtk/gtkmenu.c:263
 msgid "Tearoff Title"
 msgstr "Izslēgšanas Virsraksts"
 
-#: gtk/gtkmenu.c:244
+#: gtk/gtkmenu.c:264
 #, fuzzy
 msgid ""
 "A title that may be displayed by the window manager when this menu is torn-"
@@ -2676,11 +2676,11 @@ msgid ""
 msgstr ""
 "Virsraksts, ko var parādīt logu pārvaldnieks, kad šī izvēlne ir izslēgta."
 
-#: gtk/gtkmenu.c:319
+#: gtk/gtkmenu.c:379
 msgid "Can change accelerators"
 msgstr "Var mainīt paātrinātājus"
 
-#: gtk/gtkmenu.c:320
+#: gtk/gtkmenu.c:380
 #, fuzzy
 msgid ""
 "Whether menu accelerators can be changed by pressing a key over the menu item"
@@ -2688,20 +2688,20 @@ msgstr ""
 "Vai izvēlņu paātrinātāji var tikt mainīti, nospiežot taustiņu virs izvēlnes "
 "priekšmeta."
 
-#: gtk/gtkmenu.c:325
+#: gtk/gtkmenu.c:385
 msgid "Delay before submenus appear"
 msgstr ""
 
-#: gtk/gtkmenu.c:326
+#: gtk/gtkmenu.c:386
 msgid ""
 "Minimum time the pointer must stay over a menu item before the submenu appear"
 msgstr ""
 
-#: gtk/gtkmenu.c:333
+#: gtk/gtkmenu.c:393
 msgid "Delay before hiding a submenu"
 msgstr ""
 
-#: gtk/gtkmenu.c:334
+#: gtk/gtkmenu.c:394
 msgid ""
 "The time before hiding a submenu when the pointer is moving towards the "
 "submenu"
@@ -4298,7 +4298,7 @@ msgstr "Kursors Redzams"
 msgid "If the insertion cursor is shown"
 msgstr "Vai ievietošanas kursors tiek parādīts"
 
-#: gtk/gtktextview.c:6474
+#: gtk/gtktextview.c:6475
 msgid "Input _Methods"
 msgstr "Ievades _Metodes"
 

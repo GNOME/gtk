@@ -9,7 +9,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.3.x\n"
-"POT-Creation-Date: 2002-12-11 14:39-0500\n"
+"POT-Creation-Date: 2002-12-16 22:22-0500\n"
 "PO-Revision-Date: 2002-06-23 02:30+0800\n"
 "Last-Translator: He Qiangqiang <carton@263.net>\n"
 "Language-Team: zh_CN <i18n-translation@lists.linux.net.cn>\n"
@@ -1808,35 +1808,35 @@ msgstr "Y 最大值"
 msgid "Maximum possible value for Y"
 msgstr "Y 可能的最大值"
 
-#: gtk/gtkdialog.c:127
+#: gtk/gtkdialog.c:136
 msgid "Has separator"
 msgstr "有分隔线"
 
-#: gtk/gtkdialog.c:128
+#: gtk/gtkdialog.c:137
 msgid "The dialog has a separator bar above its buttons"
 msgstr "此对话框的按钮上有一条分隔线"
 
-#: gtk/gtkdialog.c:153
+#: gtk/gtkdialog.c:162
 msgid "Content area border"
 msgstr "内容区边界"
 
-#: gtk/gtkdialog.c:154
+#: gtk/gtkdialog.c:163
 msgid "Width of border around the main dialog area"
 msgstr "主对话框区域周围的边界宽度"
 
-#: gtk/gtkdialog.c:161
+#: gtk/gtkdialog.c:170
 msgid "Button spacing"
 msgstr "按钮间距"
 
-#: gtk/gtkdialog.c:162
+#: gtk/gtkdialog.c:171
 msgid "Spacing between buttons"
 msgstr "按钮之间的间距"
 
-#: gtk/gtkdialog.c:170
+#: gtk/gtkdialog.c:179
 msgid "Action area border"
 msgstr "动作区边界"
 
-#: gtk/gtkdialog.c:171
+#: gtk/gtkdialog.c:180
 msgid "Width of border around the button area at the bottom of the dialog"
 msgstr "对话框底部按钮区域周围的边界宽度"
 
@@ -1940,71 +1940,71 @@ msgstr "选中内容的边界"
 msgid "Whether to select the contents of an entry when it is focused"
 msgstr "是否可以编辑栏位的内容"
 
-#: gtk/gtkentry.c:3950 gtk/gtklabel.c:3222
+#: gtk/gtkentry.c:3957 gtk/gtklabel.c:3222
 msgid "Select All"
 msgstr "选择全部"
 
-#: gtk/gtkentry.c:3960 gtk/gtklabel.c:3232
+#: gtk/gtkentry.c:3967 gtk/gtklabel.c:3232
 msgid "Input Methods"
 msgstr "输入法"
 
-#: gtk/gtkentry.c:3970 gtk/gtktextview.c:6483
+#: gtk/gtkentry.c:3977 gtk/gtktextview.c:6484
 msgid "_Insert Unicode control character"
 msgstr ""
 
-#: gtk/gtkfilesel.c:516 gtk/gtkimage.c:167
+#: gtk/gtkfilesel.c:512 gtk/gtkimage.c:167
 msgid "Filename"
 msgstr "文件名"
 
-#: gtk/gtkfilesel.c:517
+#: gtk/gtkfilesel.c:513
 #, fuzzy
 msgid "The currently selected filename"
 msgstr "当前选择的文件名。"
 
-#: gtk/gtkfilesel.c:523
+#: gtk/gtkfilesel.c:519
 msgid "Show file operations"
 msgstr "显示文件操作"
 
-#: gtk/gtkfilesel.c:524
+#: gtk/gtkfilesel.c:520
 #, fuzzy
 msgid "Whether buttons for creating/manipulating files should be displayed"
 msgstr "是否显示创建或处理文件的按钮。"
 
-#: gtk/gtkfilesel.c:531
+#: gtk/gtkfilesel.c:527
 #, fuzzy
 msgid "Select multiple"
 msgstr "选择全部"
 
-#: gtk/gtkfilesel.c:532
+#: gtk/gtkfilesel.c:528
 #, fuzzy
 msgid "Whether to allow multiple files to be selected"
 msgstr "是否显示创建或处理文件的按钮。"
 
-#: gtk/gtkfilesel.c:687
+#: gtk/gtkfilesel.c:683
 #, fuzzy
 msgid "Folders"
 msgstr "文件"
 
-#: gtk/gtkfilesel.c:691
+#: gtk/gtkfilesel.c:687
 #, fuzzy
 msgid "Fol_ders"
 msgstr "文件"
 
-#: gtk/gtkfilesel.c:723
+#: gtk/gtkfilesel.c:719
 msgid "Files"
 msgstr "文件"
 
-#: gtk/gtkfilesel.c:727
+#: gtk/gtkfilesel.c:723
 #, fuzzy
 msgid "_Files"
 msgstr "文件"
 
-#: gtk/gtkfilesel.c:810 gtk/gtkfilesel.c:2208
+#: gtk/gtkfilesel.c:806 gtk/gtkfilesel.c:2204
 #, fuzzy, c-format
 msgid "Folder unreadable: %s"
 msgstr "目录不可读：%s"
 
-#: gtk/gtkfilesel.c:941
+#: gtk/gtkfilesel.c:937
 #, fuzzy, c-format
 msgid ""
 "The file \"%s\" resides on another machine (called %s) and may not be "
@@ -2014,27 +2014,27 @@ msgstr ""
 "文件“%s”位于另一台(名为 %s 的)机器上，可能无法被本程序访问。\n"
 "您确信要选择它？"
 
-#: gtk/gtkfilesel.c:1072
+#: gtk/gtkfilesel.c:1068
 msgid "_New Folder"
 msgstr ""
 
-#: gtk/gtkfilesel.c:1083
+#: gtk/gtkfilesel.c:1079
 #, fuzzy
 msgid "De_lete File"
 msgstr "删除文件"
 
-#: gtk/gtkfilesel.c:1094
+#: gtk/gtkfilesel.c:1090
 #, fuzzy
 msgid "_Rename File"
 msgstr "重命名文件"
 
-#: gtk/gtkfilesel.c:1390
+#: gtk/gtkfilesel.c:1386
 #, fuzzy, c-format
 msgid ""
 "The folder name \"%s\" contains symbols that are not allowed in filenames"
 msgstr "文件名“%s”含有不允许存在于文件名中的符号"
 
-#: gtk/gtkfilesel.c:1392
+#: gtk/gtkfilesel.c:1388
 #, fuzzy, c-format
 msgid ""
 "Error creating folder \"%s\": %s\n"
@@ -2043,35 +2043,35 @@ msgstr ""
 "重命名文件“%s”时出错：%s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1393 gtk/gtkfilesel.c:1634
+#: gtk/gtkfilesel.c:1389 gtk/gtkfilesel.c:1630
 msgid "You probably used symbols not allowed in filenames."
 msgstr "您可能使用了不允许存在于文件名中的符号。"
 
-#: gtk/gtkfilesel.c:1401
+#: gtk/gtkfilesel.c:1397
 #, fuzzy, c-format
 msgid "Error creating folder \"%s\": %s\n"
 msgstr "创建目录“%s”时出错：%s\n"
 
-#: gtk/gtkfilesel.c:1435
+#: gtk/gtkfilesel.c:1431
 msgid "New Folder"
 msgstr ""
 
-#: gtk/gtkfilesel.c:1450
+#: gtk/gtkfilesel.c:1446
 #, fuzzy
 msgid "_Folder name:"
 msgstr "文件名"
 
-#: gtk/gtkfilesel.c:1476
+#: gtk/gtkfilesel.c:1472
 #, fuzzy
 msgid "C_reate"
 msgstr "创建"
 
-#: gtk/gtkfilesel.c:1522
+#: gtk/gtkfilesel.c:1518
 #, c-format
 msgid "The filename \"%s\" contains symbols that are not allowed in filenames"
 msgstr "文件名“%s”中含有不允许存在于文件名中的符号"
 
-#: gtk/gtkfilesel.c:1525
+#: gtk/gtkfilesel.c:1521
 #, c-format
 msgid ""
 "Error deleting file \"%s\": %s\n"
@@ -2080,30 +2080,30 @@ msgstr ""
 "删除文件“%s”时出错：%s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1527 gtk/gtkfilesel.c:1648
+#: gtk/gtkfilesel.c:1523 gtk/gtkfilesel.c:1644
 msgid "It probably contains symbols not allowed in filenames."
 msgstr "它可能含有不允许存在于文件名中的符号。"
 
-#: gtk/gtkfilesel.c:1536
+#: gtk/gtkfilesel.c:1532
 #, c-format
 msgid "Error deleting file \"%s\": %s"
 msgstr "删除文件“%s”时出错：%s"
 
-#: gtk/gtkfilesel.c:1579
+#: gtk/gtkfilesel.c:1575
 #, fuzzy, c-format
 msgid "Really delete file \"%s\" ?"
 msgstr "删除文件“%s”时出错：%s"
 
-#: gtk/gtkfilesel.c:1584
+#: gtk/gtkfilesel.c:1580
 msgid "Delete File"
 msgstr "删除文件"
 
-#: gtk/gtkfilesel.c:1630 gtk/gtkfilesel.c:1644
+#: gtk/gtkfilesel.c:1626 gtk/gtkfilesel.c:1640
 #, c-format
 msgid "The file name \"%s\" contains symbols that are not allowed in filenames"
 msgstr "文件名“%s”含有不允许存在于文件名中的符号"
 
-#: gtk/gtkfilesel.c:1632
+#: gtk/gtkfilesel.c:1628
 #, c-format
 msgid ""
 "Error renaming file to \"%s\": %s\n"
@@ -2112,7 +2112,7 @@ msgstr ""
 "文件重命名为“%s”时出错：%s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1646
+#: gtk/gtkfilesel.c:1642
 #, c-format
 msgid ""
 "Error renaming file \"%s\": %s\n"
@@ -2121,47 +2121,47 @@ msgstr ""
 "重命名文件“%s”时出错：%s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1656
+#: gtk/gtkfilesel.c:1652
 #, c-format
 msgid "Error renaming file \"%s\" to \"%s\": %s"
 msgstr "重命名文件“%s”为“%s”时出错：%s"
 
-#: gtk/gtkfilesel.c:1703
+#: gtk/gtkfilesel.c:1699
 msgid "Rename File"
 msgstr "重命名文件"
 
-#: gtk/gtkfilesel.c:1718
+#: gtk/gtkfilesel.c:1714
 #, fuzzy, c-format
 msgid "Rename file \"%s\" to:"
 msgstr "重命名文件"
 
-#: gtk/gtkfilesel.c:1749
+#: gtk/gtkfilesel.c:1745
 #, fuzzy
 msgid "_Rename"
 msgstr "重命名"
 
-#: gtk/gtkfilesel.c:2188
+#: gtk/gtkfilesel.c:2184
 #, fuzzy
 msgid "_Selection: "
 msgstr "选中："
 
-#: gtk/gtkfilesel.c:3075
+#: gtk/gtkfilesel.c:3077
 #, fuzzy, c-format
 msgid ""
 "The filename \"%s\" couldn't be converted to UTF-8 (try setting the "
 "environment variable G_BROKEN_FILENAMES): %s"
 msgstr "文件名 %s 无法转换到 UTF-8。请尝试设置环境变量 G_BROKEN_FILENAMES。"
 
-#: gtk/gtkfilesel.c:3078
+#: gtk/gtkfilesel.c:3080
 #, fuzzy
 msgid "Invalid Utf-8"
 msgstr "XBM 文件无效"
 
-#: gtk/gtkfilesel.c:3945
+#: gtk/gtkfilesel.c:3948
 msgid "Name too long"
 msgstr "名称过长"
 
-#: gtk/gtkfilesel.c:3947
+#: gtk/gtkfilesel.c:3950
 msgid "Couldn't convert filename"
 msgstr "无法转换文件名"
 
@@ -2255,7 +2255,7 @@ msgstr "标签垂直偏移量"
 msgid "The vertical alignment of the label"
 msgstr "标签在垂直方向的偏移量。"
 
-#: gtk/gtkframe.c:153 gtk/gtkhandlebox.c:187
+#: gtk/gtkframe.c:153 gtk/gtkhandlebox.c:195
 #, fuzzy
 msgid "Deprecated property, use shadow_type instead"
 msgstr "过时的属性，请改为使用 shadow_type"
@@ -2286,40 +2286,40 @@ msgstr "Gamma"
 msgid "_Gamma value"
 msgstr "Gamma 值(_G)"
 
-#: gtk/gtkhandlebox.c:194 gtk/gtkmenubar.c:156 gtk/gtkstatusbar.c:161
+#: gtk/gtkhandlebox.c:202 gtk/gtkmenubar.c:156 gtk/gtkstatusbar.c:161
 #: gtk/gtktoolbar.c:282 gtk/gtkviewport.c:150
 msgid "Shadow type"
 msgstr "阴影类型"
 
-#: gtk/gtkhandlebox.c:195
+#: gtk/gtkhandlebox.c:203
 #, fuzzy
 msgid "Appearance of the shadow that surrounds the container"
 msgstr "容器外的阴影的外观。"
 
-#: gtk/gtkhandlebox.c:203
+#: gtk/gtkhandlebox.c:211
 msgid "Handle position"
 msgstr ""
 
-#: gtk/gtkhandlebox.c:204
+#: gtk/gtkhandlebox.c:212
 msgid "Position of the handle relative to the child widget"
 msgstr ""
 
-#: gtk/gtkhandlebox.c:212
+#: gtk/gtkhandlebox.c:220
 msgid "Snap edge"
 msgstr ""
 
-#: gtk/gtkhandlebox.c:213
+#: gtk/gtkhandlebox.c:221
 msgid ""
 "Side of the handlebox that's lined up with the docking point to dock the "
 "handlebox"
 msgstr ""
 
-#: gtk/gtkhandlebox.c:221
+#: gtk/gtkhandlebox.c:229
 #, fuzzy
 msgid "Snap edge set"
 msgstr "设置换行模式"
 
-#: gtk/gtkhandlebox.c:222
+#: gtk/gtkhandlebox.c:230
 msgid ""
 "Whether to use the value from the snap_edge property or a value derived from "
 "handle_position"
@@ -2624,40 +2624,40 @@ msgstr "布局的高度。"
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: gtk/gtkmenu.c:243
+#: gtk/gtkmenu.c:263
 msgid "Tearoff Title"
 msgstr ""
 
-#: gtk/gtkmenu.c:244
+#: gtk/gtkmenu.c:264
 msgid ""
 "A title that may be displayed by the window manager when this menu is torn-"
 "off"
 msgstr ""
 
-#: gtk/gtkmenu.c:319
+#: gtk/gtkmenu.c:379
 #, fuzzy
 msgid "Can change accelerators"
 msgstr "菜单条快捷键"
 
-#: gtk/gtkmenu.c:320
+#: gtk/gtkmenu.c:380
 msgid ""
 "Whether menu accelerators can be changed by pressing a key over the menu item"
 msgstr ""
 
-#: gtk/gtkmenu.c:325
+#: gtk/gtkmenu.c:385
 msgid "Delay before submenus appear"
 msgstr ""
 
-#: gtk/gtkmenu.c:326
+#: gtk/gtkmenu.c:386
 msgid ""
 "Minimum time the pointer must stay over a menu item before the submenu appear"
 msgstr ""
 
-#: gtk/gtkmenu.c:333
+#: gtk/gtkmenu.c:393
 msgid "Delay before hiding a submenu"
 msgstr ""
 
-#: gtk/gtkmenu.c:334
+#: gtk/gtkmenu.c:394
 msgid ""
 "The time before hiding a submenu when the pointer is moving towards the "
 "submenu"
@@ -4240,7 +4240,7 @@ msgstr "光标可见"
 msgid "If the insertion cursor is shown"
 msgstr "是否显示插入光标"
 
-#: gtk/gtktextview.c:6474
+#: gtk/gtktextview.c:6475
 #, fuzzy
 msgid "Input _Methods"
 msgstr "输入法"

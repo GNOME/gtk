@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.0\n"
-"POT-Creation-Date: 2002-12-11 14:39-0500\n"
+"POT-Creation-Date: 2002-12-16 22:22-0500\n"
 "PO-Revision-Date: 2002-11-20 09:48+0200\n"
 "Last-Translator: Ales Nyakhaychyk <i18n@infonet.by>\n"
 "Language-Team: Belarusian <i18n@mova.org>\n"
@@ -1839,35 +1839,35 @@ msgstr "Найбольшы Y"
 msgid "Maximum possible value for Y"
 msgstr "Найбольшае магчымае значэньне для Y"
 
-#: gtk/gtkdialog.c:127
+#: gtk/gtkdialog.c:136
 msgid "Has separator"
 msgstr "Мае падзяляльнік"
 
-#: gtk/gtkdialog.c:128
+#: gtk/gtkdialog.c:137
 msgid "The dialog has a separator bar above its buttons"
 msgstr "Дыялёг мае падзяляльную мяжу над яго кнопкамі"
 
-#: gtk/gtkdialog.c:153
+#: gtk/gtkdialog.c:162
 msgid "Content area border"
 msgstr "Мяжа вобласьці зьместу"
 
-#: gtk/gtkdialog.c:154
+#: gtk/gtkdialog.c:163
 msgid "Width of border around the main dialog area"
 msgstr "Шырыня мяжы вакол асноўнай плошчы дыялёгу"
 
-#: gtk/gtkdialog.c:161
+#: gtk/gtkdialog.c:170
 msgid "Button spacing"
 msgstr "Міжкнопачная прастора"
 
-#: gtk/gtkdialog.c:162
+#: gtk/gtkdialog.c:171
 msgid "Spacing between buttons"
 msgstr "Прастора між кнопачак"
 
-#: gtk/gtkdialog.c:170
+#: gtk/gtkdialog.c:179
 msgid "Action area border"
 msgstr "Мяжы обласьці дзеяньня"
 
-#: gtk/gtkdialog.c:171
+#: gtk/gtkdialog.c:180
 msgid "Width of border around the button area at the bottom of the dialog"
 msgstr "Шырыня мяжы вакол кнопкі ўнізе дыялёгу"
 
@@ -1978,67 +1978,67 @@ msgstr "Адзначэньне пры засяроджваньні"
 msgid "Whether to select the contents of an entry when it is focused"
 msgstr "Ці будзе зьмест запісу адзначацца пры засяроджваньні"
 
-#: gtk/gtkentry.c:3950 gtk/gtklabel.c:3222
+#: gtk/gtkentry.c:3957 gtk/gtklabel.c:3222
 msgid "Select All"
 msgstr "Адзначыць усё"
 
-#: gtk/gtkentry.c:3960 gtk/gtklabel.c:3232
+#: gtk/gtkentry.c:3967 gtk/gtklabel.c:3232
 msgid "Input Methods"
 msgstr "Мэтады ўводу"
 
-#: gtk/gtkentry.c:3970 gtk/gtktextview.c:6483
+#: gtk/gtkentry.c:3977 gtk/gtktextview.c:6484
 msgid "_Insert Unicode control character"
 msgstr "Уставіць кіруючы знак Unicode"
 
-#: gtk/gtkfilesel.c:516 gtk/gtkimage.c:167
+#: gtk/gtkfilesel.c:512 gtk/gtkimage.c:167
 msgid "Filename"
 msgstr "Назоў файлу"
 
-#: gtk/gtkfilesel.c:517
+#: gtk/gtkfilesel.c:513
 #, fuzzy
 msgid "The currently selected filename"
 msgstr "Назоў файлу, адзначанага зараз."
 
-#: gtk/gtkfilesel.c:523
+#: gtk/gtkfilesel.c:519
 msgid "Show file operations"
 msgstr "Паказаць дзеяньні з файлам"
 
-#: gtk/gtkfilesel.c:524
+#: gtk/gtkfilesel.c:520
 #, fuzzy
 msgid "Whether buttons for creating/manipulating files should be displayed"
 msgstr "Ці павінны адлюстроўвацца кнопкі для стварэньня/зьмяненьня файлу."
 
-#: gtk/gtkfilesel.c:531
+#: gtk/gtkfilesel.c:527
 msgid "Select multiple"
 msgstr "Адзначыць некалькі"
 
-#: gtk/gtkfilesel.c:532
+#: gtk/gtkfilesel.c:528
 #, fuzzy
 msgid "Whether to allow multiple files to be selected"
 msgstr "Ці могуць быць адзначаны некалькі файлаў."
 
-#: gtk/gtkfilesel.c:687
+#: gtk/gtkfilesel.c:683
 msgid "Folders"
 msgstr "Каталёгі"
 
-#: gtk/gtkfilesel.c:691
+#: gtk/gtkfilesel.c:687
 msgid "Fol_ders"
 msgstr "Каталёгі"
 
-#: gtk/gtkfilesel.c:723
+#: gtk/gtkfilesel.c:719
 msgid "Files"
 msgstr "Файлы"
 
-#: gtk/gtkfilesel.c:727
+#: gtk/gtkfilesel.c:723
 msgid "_Files"
 msgstr "_Файлы"
 
-#: gtk/gtkfilesel.c:810 gtk/gtkfilesel.c:2208
+#: gtk/gtkfilesel.c:806 gtk/gtkfilesel.c:2204
 #, c-format
 msgid "Folder unreadable: %s"
 msgstr "Каталёг нячытаем: %s"
 
-#: gtk/gtkfilesel.c:941
+#: gtk/gtkfilesel.c:937
 #, c-format
 msgid ""
 "The file \"%s\" resides on another machine (called %s) and may not be "
@@ -2049,25 +2049,25 @@ msgstr ""
 "гэтае праграмы\n"
 "Вы сапраўды жадаеце адзначыць яго?"
 
-#: gtk/gtkfilesel.c:1072
+#: gtk/gtkfilesel.c:1068
 msgid "_New Folder"
 msgstr "Новы каталёг"
 
-#: gtk/gtkfilesel.c:1083
+#: gtk/gtkfilesel.c:1079
 msgid "De_lete File"
 msgstr "Зьнішчыць файл"
 
-#: gtk/gtkfilesel.c:1094
+#: gtk/gtkfilesel.c:1090
 msgid "_Rename File"
 msgstr "Перайменаваць файл"
 
-#: gtk/gtkfilesel.c:1390
+#: gtk/gtkfilesel.c:1386
 #, c-format
 msgid ""
 "The folder name \"%s\" contains symbols that are not allowed in filenames"
 msgstr "Назоў каталёгу \"%s\" зьмяшчае знакі, недазв�лялныя ў назовах файлаў"
 
-#: gtk/gtkfilesel.c:1392
+#: gtk/gtkfilesel.c:1388
 #, c-format
 msgid ""
 "Error creating folder \"%s\": %s\n"
@@ -2076,34 +2076,34 @@ msgstr ""
 "Памылка стварэньня каталёгу \"%s\": %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1393 gtk/gtkfilesel.c:1634
+#: gtk/gtkfilesel.c:1389 gtk/gtkfilesel.c:1630
 msgid "You probably used symbols not allowed in filenames."
 msgstr "Магчыма вы выкарыстоўвываеце знакі, недазваляльныя ў назовах файлаў."
 
-#: gtk/gtkfilesel.c:1401
+#: gtk/gtkfilesel.c:1397
 #, c-format
 msgid "Error creating folder \"%s\": %s\n"
 msgstr "Памылка стварэньня каталёгу \"%s\": %s\n"
 
-#: gtk/gtkfilesel.c:1435
+#: gtk/gtkfilesel.c:1431
 msgid "New Folder"
 msgstr "Новы каталёг"
 
-#: gtk/gtkfilesel.c:1450
+#: gtk/gtkfilesel.c:1446
 msgid "_Folder name:"
 msgstr "Назоў каталёгу:"
 
-#: gtk/gtkfilesel.c:1476
+#: gtk/gtkfilesel.c:1472
 #, fuzzy
 msgid "C_reate"
 msgstr "Стварыць"
 
-#: gtk/gtkfilesel.c:1522
+#: gtk/gtkfilesel.c:1518
 #, c-format
 msgid "The filename \"%s\" contains symbols that are not allowed in filenames"
 msgstr "Назва файла \"%s\" зьмяшчае нядапушчальныя сымбалі"
 
-#: gtk/gtkfilesel.c:1525
+#: gtk/gtkfilesel.c:1521
 #, c-format
 msgid ""
 "Error deleting file \"%s\": %s\n"
@@ -2112,30 +2112,30 @@ msgstr ""
 "Памылка зьнішчэньня файла \"%s\": %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1527 gtk/gtkfilesel.c:1648
+#: gtk/gtkfilesel.c:1523 gtk/gtkfilesel.c:1644
 msgid "It probably contains symbols not allowed in filenames."
 msgstr "Магчыма зьмяшчае сымбалі, недапушчальныя ў назвах файлаў."
 
-#: gtk/gtkfilesel.c:1536
+#: gtk/gtkfilesel.c:1532
 #, c-format
 msgid "Error deleting file \"%s\": %s"
 msgstr "Памылка зьнішчэньня файла \"%s\": %s"
 
-#: gtk/gtkfilesel.c:1579
+#: gtk/gtkfilesel.c:1575
 #, c-format
 msgid "Really delete file \"%s\" ?"
 msgstr "Сапраўды зьнішчыць файл \"%s\" ?"
 
-#: gtk/gtkfilesel.c:1584
+#: gtk/gtkfilesel.c:1580
 msgid "Delete File"
 msgstr "Зьнішчыць файл"
 
-#: gtk/gtkfilesel.c:1630 gtk/gtkfilesel.c:1644
+#: gtk/gtkfilesel.c:1626 gtk/gtkfilesel.c:1640
 #, c-format
 msgid "The file name \"%s\" contains symbols that are not allowed in filenames"
 msgstr "Назва файла \"%s\" зьмяшчае сымбалі, недапу�чальныя ў назвах файлаў"
 
-#: gtk/gtkfilesel.c:1632
+#: gtk/gtkfilesel.c:1628
 #, c-format
 msgid ""
 "Error renaming file to \"%s\": %s\n"
@@ -2144,7 +2144,7 @@ msgstr ""
 "Памылка перайменаваньня \"%s\": %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1646
+#: gtk/gtkfilesel.c:1642
 #, c-format
 msgid ""
 "Error renaming file \"%s\": %s\n"
@@ -2153,31 +2153,31 @@ msgstr ""
 "Памылка перайменаваньня \"%s\": %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1656
+#: gtk/gtkfilesel.c:1652
 #, c-format
 msgid "Error renaming file \"%s\" to \"%s\": %s"
 msgstr "Памылка перайменаваньня \"%s\" у \"%s\": %s"
 
-#: gtk/gtkfilesel.c:1703
+#: gtk/gtkfilesel.c:1699
 msgid "Rename File"
 msgstr "Перайменаваць файл"
 
-#: gtk/gtkfilesel.c:1718
+#: gtk/gtkfilesel.c:1714
 #, c-format
 msgid "Rename file \"%s\" to:"
 msgstr "Перайменаваць файл \"%s\" у:"
 
-#: gtk/gtkfilesel.c:1749
+#: gtk/gtkfilesel.c:1745
 #, fuzzy
 msgid "_Rename"
 msgstr "Перайменаваць"
 
-#: gtk/gtkfilesel.c:2188
+#: gtk/gtkfilesel.c:2184
 #, fuzzy
 msgid "_Selection: "
 msgstr "Выбар: "
 
-#: gtk/gtkfilesel.c:3075
+#: gtk/gtkfilesel.c:3077
 #, c-format
 msgid ""
 "The filename \"%s\" couldn't be converted to UTF-8 (try setting the "
@@ -2186,15 +2186,15 @@ msgstr ""
 "Назоў файлу \"%s\" няможа быць пераўтвораны ў UTF-8 (паспрабуйцеўсталяваць "
 "пераменную асяродзьдзя G_BROKEN_FILENAMES): %s"
 
-#: gtk/gtkfilesel.c:3078
+#: gtk/gtkfilesel.c:3080
 msgid "Invalid Utf-8"
 msgstr "Нерэчаісны UTF-8"
 
-#: gtk/gtkfilesel.c:3945
+#: gtk/gtkfilesel.c:3948
 msgid "Name too long"
 msgstr "Назва вельмі доўгая"
 
-#: gtk/gtkfilesel.c:3947
+#: gtk/gtkfilesel.c:3950
 msgid "Couldn't convert filename"
 msgstr "Немагчыма пераўтварыць назву файла"
 
@@ -2287,7 +2287,7 @@ msgstr "Выроўніваньне адмеціны па Y"
 msgid "The vertical alignment of the label"
 msgstr "Вэртыкальнае выроўніваньне адмеціны."
 
-#: gtk/gtkframe.c:153 gtk/gtkhandlebox.c:187
+#: gtk/gtkframe.c:153 gtk/gtkhandlebox.c:195
 #, fuzzy
 msgid "Deprecated property, use shadow_type instead"
 msgstr "Забароненая уласьцівасьць; выкарысто замест яго shadow_type."
@@ -2318,42 +2318,42 @@ msgstr "Гама"
 msgid "_Gamma value"
 msgstr "Гама значэньне"
 
-#: gtk/gtkhandlebox.c:194 gtk/gtkmenubar.c:156 gtk/gtkstatusbar.c:161
+#: gtk/gtkhandlebox.c:202 gtk/gtkmenubar.c:156 gtk/gtkstatusbar.c:161
 #: gtk/gtktoolbar.c:282 gtk/gtkviewport.c:150
 msgid "Shadow type"
 msgstr "Тып ценю"
 
-#: gtk/gtkhandlebox.c:195
+#: gtk/gtkhandlebox.c:203
 #, fuzzy
 msgid "Appearance of the shadow that surrounds the container"
 msgstr "Зьнешні выгляд ценю, які акружае ўмяшчальнік."
 
-#: gtk/gtkhandlebox.c:203
+#: gtk/gtkhandlebox.c:211
 msgid "Handle position"
 msgstr "Становішча рэгулятару"
 
-#: gtk/gtkhandlebox.c:204
+#: gtk/gtkhandlebox.c:212
 #, fuzzy
 msgid "Position of the handle relative to the child widget"
 msgstr "Становішча рэгулятару адносна віджэту-нашчадку."
 
-#: gtk/gtkhandlebox.c:212
+#: gtk/gtkhandlebox.c:220
 msgid "Snap edge"
 msgstr "Выроўніваць бакі"
 
-#: gtk/gtkhandlebox.c:213
+#: gtk/gtkhandlebox.c:221
 #, fuzzy
 msgid ""
 "Side of the handlebox that's lined up with the docking point to dock the "
 "handlebox"
 msgstr "Бок зачэпкі, які выроўнены па кропцы стыкоўкі для стыкоўкі зачэпкі."
 
-#: gtk/gtkhandlebox.c:221
+#: gtk/gtkhandlebox.c:229
 #, fuzzy
 msgid "Snap edge set"
 msgstr "Выроўніваць бакі"
 
-#: gtk/gtkhandlebox.c:222
+#: gtk/gtkhandlebox.c:230
 msgid ""
 "Whether to use the value from the snap_edge property or a value derived from "
 "handle_position"
@@ -2670,11 +2670,11 @@ msgstr "Вышыня разьмеркаваньня."
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: gtk/gtkmenu.c:243
+#: gtk/gtkmenu.c:263
 msgid "Tearoff Title"
 msgstr "Загаловак аддзеленага мэню"
 
-#: gtk/gtkmenu.c:244
+#: gtk/gtkmenu.c:264
 #, fuzzy
 msgid ""
 "A title that may be displayed by the window manager when this menu is torn-"
@@ -2683,11 +2683,11 @@ msgstr ""
 "Загаловак, які можа адлюстроўвацца аконным кіраўніком, пасля таго як мэню "
 "�удзе аддзелена."
 
-#: gtk/gtkmenu.c:319
+#: gtk/gtkmenu.c:379
 msgid "Can change accelerators"
 msgstr "Можа зьмяняць \"гарычыя\" клявішы"
 
-#: gtk/gtkmenu.c:320
+#: gtk/gtkmenu.c:380
 #, fuzzy
 msgid ""
 "Whether menu accelerators can be changed by pressing a key over the menu item"
@@ -2695,20 +2695,20 @@ msgstr ""
 "Ці могуць быць зьменены \"гарачыя\" кляві�ы мэню, калі націснуць спалучэньне "
 "на пунктам мэню."
 
-#: gtk/gtkmenu.c:325
+#: gtk/gtkmenu.c:385
 msgid "Delay before submenus appear"
 msgstr ""
 
-#: gtk/gtkmenu.c:326
+#: gtk/gtkmenu.c:386
 msgid ""
 "Minimum time the pointer must stay over a menu item before the submenu appear"
 msgstr ""
 
-#: gtk/gtkmenu.c:333
+#: gtk/gtkmenu.c:393
 msgid "Delay before hiding a submenu"
 msgstr ""
 
-#: gtk/gtkmenu.c:334
+#: gtk/gtkmenu.c:394
 msgid ""
 "The time before hiding a submenu when the pointer is moving towards the "
 "submenu"
@@ -4326,7 +4326,7 @@ msgstr "Бачны курсор"
 msgid "If the insertion cursor is shown"
 msgstr "Ці будзе бачны курсор устаўкі"
 
-#: gtk/gtktextview.c:6474
+#: gtk/gtktextview.c:6475
 msgid "Input _Methods"
 msgstr "Мэтады _ўводу"
 

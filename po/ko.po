@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.1.4\n"
-"POT-Creation-Date: 2002-12-13 11:03+0900\n"
+"POT-Creation-Date: 2002-12-16 22:22-0500\n"
 "PO-Revision-Date: 2002-12-13 15:06+0900\n"
 "Last-Translator: Nam SungHyun <namsh@kldp.org>\n"
 "Language-Team: Korean <gnome-kr-translation@lists.sourceforge.net>\n"
@@ -958,8 +958,8 @@ msgid ""
 "A GtkPackType indicating whether the child is packed with reference to the "
 "start or end of the parent"
 msgstr ""
-"하위 위젯을 상위 위젯의 시작 혹은 끝을 기준으로 묶을 것인 "
-"지를 나타내는 GtkPackType"
+"하위 위젯을 상위 위젯의 시작 혹은 끝을 기준으로 묶을 것인 지를 나타내는 "
+"GtkPackType"
 
 #: gtk/gtkbox.c:174 gtk/gtknotebook.c:466 gtk/gtkpaned.c:218
 #: gtk/gtkruler.c:138
@@ -1782,35 +1782,35 @@ msgstr "최대 Y"
 msgid "Maximum possible value for Y"
 msgstr "최대 Y 값"
 
-#: gtk/gtkdialog.c:127
+#: gtk/gtkdialog.c:136
 msgid "Has separator"
 msgstr "구분선 사용"
 
-#: gtk/gtkdialog.c:128
+#: gtk/gtkdialog.c:137
 msgid "The dialog has a separator bar above its buttons"
 msgstr "대화 상자의 단추 위에 구분선이 있는지"
 
-#: gtk/gtkdialog.c:153
+#: gtk/gtkdialog.c:162
 msgid "Content area border"
 msgstr "내용 영역 테두리"
 
-#: gtk/gtkdialog.c:154
+#: gtk/gtkdialog.c:163
 msgid "Width of border around the main dialog area"
 msgstr "주 대화 상자 영역 주위 테두리의 두께"
 
-#: gtk/gtkdialog.c:161
+#: gtk/gtkdialog.c:170
 msgid "Button spacing"
 msgstr "단추 간격"
 
-#: gtk/gtkdialog.c:162
+#: gtk/gtkdialog.c:171
 msgid "Spacing between buttons"
 msgstr "단추 사이의 간격"
 
-#: gtk/gtkdialog.c:170
+#: gtk/gtkdialog.c:179
 msgid "Action area border"
 msgstr "동작 영역 테두리"
 
-#: gtk/gtkdialog.c:171
+#: gtk/gtkdialog.c:180
 msgid "Width of border around the button area at the bottom of the dialog"
 msgstr "대화 상자 아래의 단추 영역 주위의 테두리 두께"
 
@@ -1910,64 +1910,64 @@ msgstr "포커스시 선택"
 msgid "Whether to select the contents of an entry when it is focused"
 msgstr "포커스될 때 항목의 내용을 선택할 것인지 여부"
 
-#: gtk/gtkentry.c:3950 gtk/gtklabel.c:3222
+#: gtk/gtkentry.c:3957 gtk/gtklabel.c:3222
 msgid "Select All"
 msgstr "모두 선택"
 
-#: gtk/gtkentry.c:3960 gtk/gtklabel.c:3232
+#: gtk/gtkentry.c:3967 gtk/gtklabel.c:3232
 msgid "Input Methods"
 msgstr "입력기"
 
-#: gtk/gtkentry.c:3970 gtk/gtktextview.c:6484
+#: gtk/gtkentry.c:3977 gtk/gtktextview.c:6484
 msgid "_Insert Unicode control character"
 msgstr "유니코드 제어문자 삽입(_I)"
 
-#: gtk/gtkfilesel.c:516 gtk/gtkimage.c:167
+#: gtk/gtkfilesel.c:512 gtk/gtkimage.c:167
 msgid "Filename"
 msgstr "파일 이름"
 
-#: gtk/gtkfilesel.c:517
+#: gtk/gtkfilesel.c:513
 msgid "The currently selected filename"
 msgstr "현재 선택된 파일이름"
 
-#: gtk/gtkfilesel.c:523
+#: gtk/gtkfilesel.c:519
 msgid "Show file operations"
 msgstr "파일 작업 보여주기"
 
-#: gtk/gtkfilesel.c:524
+#: gtk/gtkfilesel.c:520
 msgid "Whether buttons for creating/manipulating files should be displayed"
 msgstr "파일 생성/조작 단추를 표시할 것인지 여부"
 
-#: gtk/gtkfilesel.c:531
+#: gtk/gtkfilesel.c:527
 msgid "Select multiple"
 msgstr "여러 개 선택"
 
-#: gtk/gtkfilesel.c:532
+#: gtk/gtkfilesel.c:528
 msgid "Whether to allow multiple files to be selected"
 msgstr "여러 개 파일을 선택할 수 있도록 허용할 지 여부"
 
-#: gtk/gtkfilesel.c:687
+#: gtk/gtkfilesel.c:683
 msgid "Folders"
 msgstr "폴더"
 
-#: gtk/gtkfilesel.c:691
+#: gtk/gtkfilesel.c:687
 msgid "Fol_ders"
 msgstr "폴더(_D)"
 
-#: gtk/gtkfilesel.c:723
+#: gtk/gtkfilesel.c:719
 msgid "Files"
 msgstr "파일"
 
-#: gtk/gtkfilesel.c:727
+#: gtk/gtkfilesel.c:723
 msgid "_Files"
 msgstr "파일(_F)"
 
-#: gtk/gtkfilesel.c:810 gtk/gtkfilesel.c:2208
+#: gtk/gtkfilesel.c:806 gtk/gtkfilesel.c:2204
 #, c-format
 msgid "Folder unreadable: %s"
 msgstr "폴더를 읽을 수 없음: %s"
 
-#: gtk/gtkfilesel.c:941
+#: gtk/gtkfilesel.c:937
 #, c-format
 msgid ""
 "The file \"%s\" resides on another machine (called %s) and may not be "
@@ -1978,26 +1978,26 @@ msgstr ""
 "다.\n"
 "정말로 이 파일을 선택할까요?"
 
-#: gtk/gtkfilesel.c:1072
+#: gtk/gtkfilesel.c:1068
 msgid "_New Folder"
 msgstr "새 폴더(_N)"
 
-#: gtk/gtkfilesel.c:1083
+#: gtk/gtkfilesel.c:1079
 msgid "De_lete File"
 msgstr "파일 삭제(_L)"
 
-#: gtk/gtkfilesel.c:1094
+#: gtk/gtkfilesel.c:1090
 msgid "_Rename File"
 msgstr "파일 이름 바꾸기(_R)"
 
-#: gtk/gtkfilesel.c:1390
+#: gtk/gtkfilesel.c:1386
 #, c-format
 msgid ""
 "The folder name \"%s\" contains symbols that are not allowed in filenames"
 msgstr ""
 "폴더 이름 \"%s\"에는 파일 이름으로 허용되지 않는 문자가 포함되어 있습니다"
 
-#: gtk/gtkfilesel.c:1392
+#: gtk/gtkfilesel.c:1388
 #, c-format
 msgid ""
 "Error creating folder \"%s\": %s\n"
@@ -2006,34 +2006,34 @@ msgstr ""
 "폴더 \"%s\"을(를) 만드는 데 오류: %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1393 gtk/gtkfilesel.c:1634
+#: gtk/gtkfilesel.c:1389 gtk/gtkfilesel.c:1630
 msgid "You probably used symbols not allowed in filenames."
 msgstr "파일 이름에 허용되지 않는 문자가 사용됩니다."
 
-#: gtk/gtkfilesel.c:1401
+#: gtk/gtkfilesel.c:1397
 #, c-format
 msgid "Error creating folder \"%s\": %s\n"
 msgstr "폴더 \"%s\"을(를) 만드는 중 오류: %s\n"
 
-#: gtk/gtkfilesel.c:1435
+#: gtk/gtkfilesel.c:1431
 msgid "New Folder"
 msgstr "새 폴더"
 
-#: gtk/gtkfilesel.c:1450
+#: gtk/gtkfilesel.c:1446
 msgid "_Folder name:"
 msgstr "폴더 이름(_F):"
 
-#: gtk/gtkfilesel.c:1476
+#: gtk/gtkfilesel.c:1472
 msgid "C_reate"
 msgstr "만들기(_r)"
 
-#: gtk/gtkfilesel.c:1522
+#: gtk/gtkfilesel.c:1518
 #, c-format
 msgid "The filename \"%s\" contains symbols that are not allowed in filenames"
 msgstr ""
 "파일 이름 \"%s\"에 파일 이름으로 허용되지 않는 문자가 포함되어 있습니다"
 
-#: gtk/gtkfilesel.c:1525
+#: gtk/gtkfilesel.c:1521
 #, c-format
 msgid ""
 "Error deleting file \"%s\": %s\n"
@@ -2042,31 +2042,31 @@ msgstr ""
 "파일 \"%s\" 지우는중 오류: %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1527 gtk/gtkfilesel.c:1648
+#: gtk/gtkfilesel.c:1523 gtk/gtkfilesel.c:1644
 msgid "It probably contains symbols not allowed in filenames."
 msgstr "파일 이름에 허용되지 않은 문자가 포함되어 있습니다."
 
-#: gtk/gtkfilesel.c:1536
+#: gtk/gtkfilesel.c:1532
 #, c-format
 msgid "Error deleting file \"%s\": %s"
 msgstr "파일 \"%s\" 지우는중 오류: %s"
 
-#: gtk/gtkfilesel.c:1579
+#: gtk/gtkfilesel.c:1575
 #, c-format
 msgid "Really delete file \"%s\" ?"
 msgstr "정말로 \"%s\" 파일을 지울까요?"
 
-#: gtk/gtkfilesel.c:1584
+#: gtk/gtkfilesel.c:1580
 msgid "Delete File"
 msgstr "파일 지우기"
 
-#: gtk/gtkfilesel.c:1630 gtk/gtkfilesel.c:1644
+#: gtk/gtkfilesel.c:1626 gtk/gtkfilesel.c:1640
 #, c-format
 msgid "The file name \"%s\" contains symbols that are not allowed in filenames"
 msgstr ""
 "파일 이름 \"%s\"에는 파일 이름으로 허용되지 않는 문자가 포함되어 있습니다"
 
-#: gtk/gtkfilesel.c:1632
+#: gtk/gtkfilesel.c:1628
 #, c-format
 msgid ""
 "Error renaming file to \"%s\": %s\n"
@@ -2075,7 +2075,7 @@ msgstr ""
 "\"%s\"(으)로 파일 이름 바꾸는중 오류: %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1646
+#: gtk/gtkfilesel.c:1642
 #, c-format
 msgid ""
 "Error renaming file \"%s\": %s\n"
@@ -2084,29 +2084,29 @@ msgstr ""
 "\"%s\" 파일을 이름 바꾸는중 오류: %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1656
+#: gtk/gtkfilesel.c:1652
 #, c-format
 msgid "Error renaming file \"%s\" to \"%s\": %s"
 msgstr "파일 \"%s\"를 \"%s\"로 이름바꾸는 중 오류: %s"
 
-#: gtk/gtkfilesel.c:1703
+#: gtk/gtkfilesel.c:1699
 msgid "Rename File"
 msgstr "파일이름 바꿈"
 
-#: gtk/gtkfilesel.c:1718
+#: gtk/gtkfilesel.c:1714
 #, c-format
 msgid "Rename file \"%s\" to:"
 msgstr "\"%s\" 파일을 다음으로 바꾸기:"
 
-#: gtk/gtkfilesel.c:1749
+#: gtk/gtkfilesel.c:1745
 msgid "_Rename"
 msgstr "이름 바꿈(_R)"
 
-#: gtk/gtkfilesel.c:2188
+#: gtk/gtkfilesel.c:2184
 msgid "_Selection: "
 msgstr "선택(_S): "
 
-#: gtk/gtkfilesel.c:3075
+#: gtk/gtkfilesel.c:3077
 #, c-format
 msgid ""
 "The filename \"%s\" couldn't be converted to UTF-8 (try setting the "
@@ -2115,15 +2115,15 @@ msgstr ""
 "파일이름 %s을(를) UTF-8으로 바꿀 수 없습니다 (G_BROKEN_FILENAMES 환경변수를 "
 "세팅해 보십시오): %s"
 
-#: gtk/gtkfilesel.c:3078
+#: gtk/gtkfilesel.c:3080
 msgid "Invalid Utf-8"
 msgstr "잘못된 UTF-8"
 
-#: gtk/gtkfilesel.c:3945
+#: gtk/gtkfilesel.c:3948
 msgid "Name too long"
 msgstr "너무 긴 이름"
 
-#: gtk/gtkfilesel.c:3947
+#: gtk/gtkfilesel.c:3950
 msgid "Couldn't convert filename"
 msgstr "파일이름 변환할 수 없음"
 
@@ -2210,7 +2210,7 @@ msgstr "레이블 세로 맞춤"
 msgid "The vertical alignment of the label"
 msgstr "레이블의 세로 맞춤"
 
-#: gtk/gtkframe.c:153 gtk/gtkhandlebox.c:187
+#: gtk/gtkframe.c:153 gtk/gtkhandlebox.c:195
 msgid "Deprecated property, use shadow_type instead"
 msgstr ""
 "낡아서 권장되지 않는 등록 정보입니다. 대신에 shadow_type을 사용하십시오."
@@ -2239,44 +2239,44 @@ msgstr "감마"
 msgid "_Gamma value"
 msgstr "감마 값(_G)"
 
-#: gtk/gtkhandlebox.c:194 gtk/gtkmenubar.c:156 gtk/gtkstatusbar.c:161
+#: gtk/gtkhandlebox.c:202 gtk/gtkmenubar.c:156 gtk/gtkstatusbar.c:161
 #: gtk/gtktoolbar.c:282 gtk/gtkviewport.c:150
 msgid "Shadow type"
 msgstr "그림자 형식"
 
-#: gtk/gtkhandlebox.c:195
+#: gtk/gtkhandlebox.c:203
 msgid "Appearance of the shadow that surrounds the container"
 msgstr "컨테이너를 둘러싼 그림자 모양"
 
-#: gtk/gtkhandlebox.c:203
+#: gtk/gtkhandlebox.c:211
 msgid "Handle position"
 msgstr "핸들 위치"
 
-#: gtk/gtkhandlebox.c:204
+#: gtk/gtkhandlebox.c:212
 msgid "Position of the handle relative to the child widget"
 msgstr "하위 위젯에 대한 핸들의 상대 위치"
 
-#: gtk/gtkhandlebox.c:212
+#: gtk/gtkhandlebox.c:220
 msgid "Snap edge"
 msgstr "스냅 가장자리"
 
-#: gtk/gtkhandlebox.c:213
+#: gtk/gtkhandlebox.c:221
 msgid ""
 "Side of the handlebox that's lined up with the docking point to dock the "
 "handlebox"
 msgstr "핸들 상자와 도킹하는 도킹 위치에 줄 맞춰진 핸들 상자의 변"
 
-#: gtk/gtkhandlebox.c:221
+#: gtk/gtkhandlebox.c:229
 msgid "Snap edge set"
 msgstr "스냅 가장자리 설정"
 
-#: gtk/gtkhandlebox.c:222
+#: gtk/gtkhandlebox.c:230
 msgid ""
 "Whether to use the value from the snap_edge property or a value derived from "
 "handle_position"
 msgstr ""
-"snap_edge 등록정보의 값을 사용할 것인 지 handle_position에서 얻은 값을 "
-"사용할 것인 지 여부"
+"snap_edge 등록정보의 값을 사용할 것인 지 handle_position에서 얻은 값을 사용"
+"할 것인 지 여부"
 
 #. Remove this icon source so we don't keep trying to
 #. * load it.
@@ -2562,45 +2562,43 @@ msgstr "레이아웃의 높이"
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: gtk/gtkmenu.c:243
+#: gtk/gtkmenu.c:263
 msgid "Tearoff Title"
 msgstr "떼어내기 제목"
 
-#: gtk/gtkmenu.c:244
+#: gtk/gtkmenu.c:264
 msgid ""
 "A title that may be displayed by the window manager when this menu is torn-"
 "off"
 msgstr "이 메뉴를 떼어냈을 때 윈도우매니저에 의해 표시될 제목"
 
-#: gtk/gtkmenu.c:319
+#: gtk/gtkmenu.c:379
 msgid "Can change accelerators"
 msgstr "단축키 변경 가능"
 
-#: gtk/gtkmenu.c:320
+#: gtk/gtkmenu.c:380
 msgid ""
 "Whether menu accelerators can be changed by pressing a key over the menu item"
 msgstr "메뉴 항목 위에서 키를 눌러 메뉴 단축키를 변경할 수 있는지 여부"
 
-#: gtk/gtkmenu.c:325
+#: gtk/gtkmenu.c:385
 msgid "Delay before submenus appear"
 msgstr "하위 메뉴가 보이기 전까지의 지연 시간"
 
-#: gtk/gtkmenu.c:326
+#: gtk/gtkmenu.c:386
 msgid ""
 "Minimum time the pointer must stay over a menu item before the submenu appear"
-msgstr ""
-"하위 메뉴가 보이기 전까지 포인터가 메뉴 항목 위에서 기다릴 최소 시간"
+msgstr "하위 메뉴가 보이기 전까지 포인터가 메뉴 항목 위에서 기다릴 최소 시간"
 
-#: gtk/gtkmenu.c:333
+#: gtk/gtkmenu.c:393
 msgid "Delay before hiding a submenu"
 msgstr "하위 메뉴를 감추기 전까지의 지연 시간"
 
-#: gtk/gtkmenu.c:334
+#: gtk/gtkmenu.c:394
 msgid ""
 "The time before hiding a submenu when the pointer is moving towards the "
 "submenu"
-msgstr ""
-"포인터가 하위 메뉴로 움직일 때까지 하위 메뉴를 숨기기 전의 시간"
+msgstr "포인터가 하위 메뉴로 움직일 때까지 하위 메뉴를 숨기기 전의 시간"
 
 #: gtk/gtkmenubar.c:157
 msgid "Style of bevel around the menubar"
@@ -3880,9 +3878,9 @@ msgid ""
 "adapts to theme changes etc. so is recommended. Pango predefines some scales "
 "such as PANGO_SCALE_X_LARGE"
 msgstr ""
-"기본 글꼴 크기에 대한 비율로서의 글꼴 크기. 테마가 바뀐다거나 할 경우 "
-"적절하게 적용되게 됩니다. 그러므로 추천합니다. 판고는 PANGO_SCALE_X_LARGE과 "
-"같은 몇몇 비율을 미리 정의하고 있습니다."
+"기본 글꼴 크기에 대한 비율로서의 글꼴 크기. 테마가 바뀐다거나 할 경우 적절하"
+"게 적용되게 됩니다. 그러므로 추천합니다. 판고는 PANGO_SCALE_X_LARGE과 같은 몇"
+"몇 비율을 미리 정의하고 있습니다."
 
 #: gtk/gtktexttag.c:375 gtk/gtktextview.c:584
 msgid "Left, right, or center justification"
@@ -3898,8 +3896,8 @@ msgid ""
 "when rendering the text. If you don't understand this parameter, you "
 "probably don't need it"
 msgstr ""
-"ISO 코드로서의 이 텍스트 언어. 판고는 텍스트를 표시할 때 이 값에서 힌트를 "
-"얻습니다. 이해하지 못하신다면 아마도 당신에게는 필요없을 것입니다."
+"ISO 코드로서의 이 텍스트 언어. 판고는 텍스트를 표시할 때 이 값에서 힌트를 얻"
+"습니다. 이해하지 못하신다면 아마도 당신에게는 필요없을 것입니다."
 
 #: gtk/gtktexttag.c:391
 msgid "Left margin"
@@ -4828,8 +4826,8 @@ msgid ""
 "Hint to help the desktop environment understand what kind of window this is "
 "and how to treat it."
 msgstr ""
-"이 창이 어떤 종류이고 어떻게 처리되는 지 등의 데스크탑 환경을 이해할 수 "
-"있도록 도움을 주는 힌트"
+"이 창이 어떤 종류이고 어떻게 처리되는 지 등의 데스크탑 환경을 이해할 수 있도"
+"록 도움을 주는 힌트"
 
 #: gtk/gtkwindow.c:585
 msgid "Skip taskbar"

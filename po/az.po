@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk20 1.3.2\n"
-"POT-Creation-Date: 2002-12-11 14:39-0500\n"
+"POT-Creation-Date: 2002-12-16 22:22-0500\n"
 "PO-Revision-Date: 2002-01-06 02:20GMT+0200\n"
 "Last-Translator: Vasif İsmayıloğlu MD <azerb_linux@hotmail.com>\n"
 "Language-Team: Azerbaijani Turkic <linuxaz@azerimail.net>\n"
@@ -1843,35 +1843,35 @@ msgstr "Maksimal Y"
 msgid "Maximum possible value for Y"
 msgstr "Y üçün maksimal mümkün qiymət"
 
-#: gtk/gtkdialog.c:127
+#: gtk/gtkdialog.c:136
 msgid "Has separator"
 msgstr "Ayırıcısı var"
 
-#: gtk/gtkdialog.c:128
+#: gtk/gtkdialog.c:137
 msgid "The dialog has a separator bar above its buttons"
 msgstr ""
 
-#: gtk/gtkdialog.c:153
+#: gtk/gtkdialog.c:162
 msgid "Content area border"
 msgstr "Məzmun sahəsi kənarı"
 
-#: gtk/gtkdialog.c:154
+#: gtk/gtkdialog.c:163
 msgid "Width of border around the main dialog area"
 msgstr "Ana dialoq sahələri ətrafındakı kənar eni"
 
-#: gtk/gtkdialog.c:161
+#: gtk/gtkdialog.c:170
 msgid "Button spacing"
 msgstr "Düymə boşluğu"
 
-#: gtk/gtkdialog.c:162
+#: gtk/gtkdialog.c:171
 msgid "Spacing between buttons"
 msgstr "Düymələr arasında boşluq"
 
-#: gtk/gtkdialog.c:170
+#: gtk/gtkdialog.c:179
 msgid "Action area border"
 msgstr "Gediş sahəsi kənarı"
 
-#: gtk/gtkdialog.c:171
+#: gtk/gtkdialog.c:180
 msgid "Width of border around the button area at the bottom of the dialog"
 msgstr "Dialoq təpəsindəki düymə sahəsi ətrafındakı kənar eni"
 
@@ -1977,71 +1977,71 @@ msgstr "Seçki Sahəsi"
 msgid "Whether to select the contents of an entry when it is focused"
 msgstr "Daxəl edilən xülasənin harda düzəldilə biləcəyi"
 
-#: gtk/gtkentry.c:3950 gtk/gtklabel.c:3222
+#: gtk/gtkentry.c:3957 gtk/gtklabel.c:3222
 msgid "Select All"
 msgstr "Hamısını Seç"
 
-#: gtk/gtkentry.c:3960 gtk/gtklabel.c:3232
+#: gtk/gtkentry.c:3967 gtk/gtklabel.c:3232
 msgid "Input Methods"
 msgstr "Giriş Metodları"
 
-#: gtk/gtkentry.c:3970 gtk/gtktextview.c:6483
+#: gtk/gtkentry.c:3977 gtk/gtktextview.c:6484
 msgid "_Insert Unicode control character"
 msgstr ""
 
-#: gtk/gtkfilesel.c:516 gtk/gtkimage.c:167
+#: gtk/gtkfilesel.c:512 gtk/gtkimage.c:167
 msgid "Filename"
 msgstr "Fayl adı"
 
-#: gtk/gtkfilesel.c:517
+#: gtk/gtkfilesel.c:513
 #, fuzzy
 msgid "The currently selected filename"
 msgstr "Hazırda seçili fayl adı."
 
-#: gtk/gtkfilesel.c:523
+#: gtk/gtkfilesel.c:519
 msgid "Show file operations"
 msgstr "Fayl əməliyyatlarını göstər."
 
-#: gtk/gtkfilesel.c:524
+#: gtk/gtkfilesel.c:520
 #, fuzzy
 msgid "Whether buttons for creating/manipulating files should be displayed"
 msgstr "Fayl yaradılması/manipulyasiyası üçün düymələri harda göstərək."
 
-#: gtk/gtkfilesel.c:531
+#: gtk/gtkfilesel.c:527
 #, fuzzy
 msgid "Select multiple"
 msgstr "Hamısını Seç"
 
-#: gtk/gtkfilesel.c:532
+#: gtk/gtkfilesel.c:528
 #, fuzzy
 msgid "Whether to allow multiple files to be selected"
 msgstr "Fayl yaradılması/manipulyasiyası üçün düymələri harda göstərək."
 
-#: gtk/gtkfilesel.c:687
+#: gtk/gtkfilesel.c:683
 #, fuzzy
 msgid "Folders"
 msgstr "Fayllar"
 
-#: gtk/gtkfilesel.c:691
+#: gtk/gtkfilesel.c:687
 #, fuzzy
 msgid "Fol_ders"
 msgstr "Fayllar"
 
-#: gtk/gtkfilesel.c:723
+#: gtk/gtkfilesel.c:719
 msgid "Files"
 msgstr "Fayllar"
 
-#: gtk/gtkfilesel.c:727
+#: gtk/gtkfilesel.c:723
 #, fuzzy
 msgid "_Files"
 msgstr "Fayllar"
 
-#: gtk/gtkfilesel.c:810 gtk/gtkfilesel.c:2208
+#: gtk/gtkfilesel.c:806 gtk/gtkfilesel.c:2204
 #, fuzzy, c-format
 msgid "Folder unreadable: %s"
 msgstr "Qovluq oxuna bilmir: %s"
 
-#: gtk/gtkfilesel.c:941
+#: gtk/gtkfilesel.c:937
 #, c-format
 msgid ""
 "The file \"%s\" resides on another machine (called %s) and may not be "
@@ -2049,27 +2049,27 @@ msgid ""
 "Are you sure that you want to select it?"
 msgstr ""
 
-#: gtk/gtkfilesel.c:1072
+#: gtk/gtkfilesel.c:1068
 msgid "_New Folder"
 msgstr ""
 
-#: gtk/gtkfilesel.c:1083
+#: gtk/gtkfilesel.c:1079
 #, fuzzy
 msgid "De_lete File"
 msgstr "Faylı Sil"
 
-#: gtk/gtkfilesel.c:1094
+#: gtk/gtkfilesel.c:1090
 #, fuzzy
 msgid "_Rename File"
 msgstr "Fayl Adını Dəyişdir"
 
-#: gtk/gtkfilesel.c:1390
+#: gtk/gtkfilesel.c:1386
 #, fuzzy, c-format
 msgid ""
 "The folder name \"%s\" contains symbols that are not allowed in filenames"
 msgstr "\"%s\" faylı fayl adları üçün icazə verilməyən simvol daxil edir"
 
-#: gtk/gtkfilesel.c:1392
+#: gtk/gtkfilesel.c:1388
 #, fuzzy, c-format
 msgid ""
 "Error creating folder \"%s\": %s\n"
@@ -2078,35 +2078,35 @@ msgstr ""
 "\"%s\" faylının yenidən adlandırma xətası: %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1393 gtk/gtkfilesel.c:1634
+#: gtk/gtkfilesel.c:1389 gtk/gtkfilesel.c:1630
 msgid "You probably used symbols not allowed in filenames."
 msgstr "Dəyəsən fayl adlarında icazə verilməyən simvol daxil etdiniz."
 
-#: gtk/gtkfilesel.c:1401
+#: gtk/gtkfilesel.c:1397
 #, fuzzy, c-format
 msgid "Error creating folder \"%s\": %s\n"
 msgstr "\"%s\" Cərgəsini yaratma xətası: %s\n"
 
-#: gtk/gtkfilesel.c:1435
+#: gtk/gtkfilesel.c:1431
 msgid "New Folder"
 msgstr ""
 
-#: gtk/gtkfilesel.c:1450
+#: gtk/gtkfilesel.c:1446
 #, fuzzy
 msgid "_Folder name:"
 msgstr "Fayl adı"
 
-#: gtk/gtkfilesel.c:1476
+#: gtk/gtkfilesel.c:1472
 #, fuzzy
 msgid "C_reate"
 msgstr "Yarat"
 
-#: gtk/gtkfilesel.c:1522
+#: gtk/gtkfilesel.c:1518
 #, c-format
 msgid "The filename \"%s\" contains symbols that are not allowed in filenames"
 msgstr "\"%s\" fayl adı fayl adları üçün icazə verilməyən simvol daxil edir"
 
-#: gtk/gtkfilesel.c:1525
+#: gtk/gtkfilesel.c:1521
 #, c-format
 msgid ""
 "Error deleting file \"%s\": %s\n"
@@ -2115,30 +2115,30 @@ msgstr ""
 "\"%s\" faylı silmə xətası : %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1527 gtk/gtkfilesel.c:1648
+#: gtk/gtkfilesel.c:1523 gtk/gtkfilesel.c:1644
 msgid "It probably contains symbols not allowed in filenames."
 msgstr "dəyəsən fayl adları üçün icazə verilməyən simvol daxil edir"
 
-#: gtk/gtkfilesel.c:1536
+#: gtk/gtkfilesel.c:1532
 #, c-format
 msgid "Error deleting file \"%s\": %s"
 msgstr "\"%s\" faylı silmə xətası : %s"
 
-#: gtk/gtkfilesel.c:1579
+#: gtk/gtkfilesel.c:1575
 #, fuzzy, c-format
 msgid "Really delete file \"%s\" ?"
 msgstr "\"%s\" faylı silmə xətası : %s"
 
-#: gtk/gtkfilesel.c:1584
+#: gtk/gtkfilesel.c:1580
 msgid "Delete File"
 msgstr "Faylı Sil"
 
-#: gtk/gtkfilesel.c:1630 gtk/gtkfilesel.c:1644
+#: gtk/gtkfilesel.c:1626 gtk/gtkfilesel.c:1640
 #, c-format
 msgid "The file name \"%s\" contains symbols that are not allowed in filenames"
 msgstr "\"%s\" faylı fayl adları üçün icazə verilməyən simvol daxil edir"
 
-#: gtk/gtkfilesel.c:1632
+#: gtk/gtkfilesel.c:1628
 #, c-format
 msgid ""
 "Error renaming file to \"%s\": %s\n"
@@ -2147,7 +2147,7 @@ msgstr ""
 "\"%s\" faylına yenidən adlandırma xətası: %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1646
+#: gtk/gtkfilesel.c:1642
 #, c-format
 msgid ""
 "Error renaming file \"%s\": %s\n"
@@ -2156,31 +2156,31 @@ msgstr ""
 "\"%s\" faylının yenidən adlandırma xətası: %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1656
+#: gtk/gtkfilesel.c:1652
 #, c-format
 msgid "Error renaming file \"%s\" to \"%s\": %s"
 msgstr "\"%s\" faylının \"%s\" olaraq yenidən adlandırma xətası: %s"
 
-#: gtk/gtkfilesel.c:1703
+#: gtk/gtkfilesel.c:1699
 msgid "Rename File"
 msgstr "Fayl Adını Dəyişdir"
 
-#: gtk/gtkfilesel.c:1718
+#: gtk/gtkfilesel.c:1714
 #, fuzzy, c-format
 msgid "Rename file \"%s\" to:"
 msgstr "Fayl Adını Dəyişdir"
 
-#: gtk/gtkfilesel.c:1749
+#: gtk/gtkfilesel.c:1745
 #, fuzzy
 msgid "_Rename"
 msgstr "Təzədən Adlandır"
 
-#: gtk/gtkfilesel.c:2188
+#: gtk/gtkfilesel.c:2184
 #, fuzzy
 msgid "_Selection: "
 msgstr "Seçki:"
 
-#: gtk/gtkfilesel.c:3075
+#: gtk/gtkfilesel.c:3077
 #, fuzzy, c-format
 msgid ""
 "The filename \"%s\" couldn't be converted to UTF-8 (try setting the "
@@ -2189,16 +2189,16 @@ msgstr ""
 "%s fayl adı UTF-8 olaraq dəyişdirilə bilmir. Bə'zi "
 "parametrləriG_BROKEN_FAYLNAME olaraq dəyişdirməyə çalışın."
 
-#: gtk/gtkfilesel.c:3078
+#: gtk/gtkfilesel.c:3080
 #, fuzzy
 msgid "Invalid Utf-8"
 msgstr "Hökmsüz XBM faylı"
 
-#: gtk/gtkfilesel.c:3945
+#: gtk/gtkfilesel.c:3948
 msgid "Name too long"
 msgstr "Ad çox uzundur"
 
-#: gtk/gtkfilesel.c:3947
+#: gtk/gtkfilesel.c:3950
 msgid "Couldn't convert filename"
 msgstr "Fayl adını dönüşdürə bilmədim"
 
@@ -2292,7 +2292,7 @@ msgstr "Etiket y tərəfləməsi."
 msgid "The vertical alignment of the label"
 msgstr "Etiketin şaquli tərəfləməsi."
 
-#: gtk/gtkframe.c:153 gtk/gtkhandlebox.c:187
+#: gtk/gtkframe.c:153 gtk/gtkhandlebox.c:195
 msgid "Deprecated property, use shadow_type instead"
 msgstr ""
 
@@ -2321,40 +2321,40 @@ msgstr "Qamma"
 msgid "_Gamma value"
 msgstr "_Qamma qiyməti"
 
-#: gtk/gtkhandlebox.c:194 gtk/gtkmenubar.c:156 gtk/gtkstatusbar.c:161
+#: gtk/gtkhandlebox.c:202 gtk/gtkmenubar.c:156 gtk/gtkstatusbar.c:161
 #: gtk/gtktoolbar.c:282 gtk/gtkviewport.c:150
 msgid "Shadow type"
 msgstr "Kölgələmə növü"
 
-#: gtk/gtkhandlebox.c:195
+#: gtk/gtkhandlebox.c:203
 #, fuzzy
 msgid "Appearance of the shadow that surrounds the container"
 msgstr "Ox ətrafındakı kölgə görünüşü"
 
-#: gtk/gtkhandlebox.c:203
+#: gtk/gtkhandlebox.c:211
 msgid "Handle position"
 msgstr "Qulp yeri"
 
-#: gtk/gtkhandlebox.c:204
+#: gtk/gtkhandlebox.c:212
 msgid "Position of the handle relative to the child widget"
 msgstr ""
 
-#: gtk/gtkhandlebox.c:212
+#: gtk/gtkhandlebox.c:220
 msgid "Snap edge"
 msgstr "Kənarı çaxnaşdır"
 
-#: gtk/gtkhandlebox.c:213
+#: gtk/gtkhandlebox.c:221
 msgid ""
 "Side of the handlebox that's lined up with the docking point to dock the "
 "handlebox"
 msgstr ""
 
-#: gtk/gtkhandlebox.c:221
+#: gtk/gtkhandlebox.c:229
 #, fuzzy
 msgid "Snap edge set"
 msgstr "Kənarı çaxnaşdır"
 
-#: gtk/gtkhandlebox.c:222
+#: gtk/gtkhandlebox.c:230
 msgid ""
 "Whether to use the value from the snap_edge property or a value derived from "
 "handle_position"
@@ -2655,40 +2655,40 @@ msgstr "Düzülüş hündürlüyü."
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: gtk/gtkmenu.c:243
+#: gtk/gtkmenu.c:263
 msgid "Tearoff Title"
 msgstr ""
 
-#: gtk/gtkmenu.c:244
+#: gtk/gtkmenu.c:264
 msgid ""
 "A title that may be displayed by the window manager when this menu is torn-"
 "off"
 msgstr ""
 
-#: gtk/gtkmenu.c:319
+#: gtk/gtkmenu.c:379
 #, fuzzy
 msgid "Can change accelerators"
 msgstr "Menü çubuğu yüksəldicisi"
 
-#: gtk/gtkmenu.c:320
+#: gtk/gtkmenu.c:380
 msgid ""
 "Whether menu accelerators can be changed by pressing a key over the menu item"
 msgstr ""
 
-#: gtk/gtkmenu.c:325
+#: gtk/gtkmenu.c:385
 msgid "Delay before submenus appear"
 msgstr ""
 
-#: gtk/gtkmenu.c:326
+#: gtk/gtkmenu.c:386
 msgid ""
 "Minimum time the pointer must stay over a menu item before the submenu appear"
 msgstr ""
 
-#: gtk/gtkmenu.c:333
+#: gtk/gtkmenu.c:393
 msgid "Delay before hiding a submenu"
 msgstr ""
 
-#: gtk/gtkmenu.c:334
+#: gtk/gtkmenu.c:394
 msgid ""
 "The time before hiding a submenu when the pointer is moving towards the "
 "submenu"
@@ -4263,7 +4263,7 @@ msgstr "Görünən Ox"
 msgid "If the insertion cursor is shown"
 msgstr "Əgər daxil etmə oxu göstərilibsə"
 
-#: gtk/gtktextview.c:6474
+#: gtk/gtktextview.c:6475
 msgid "Input _Methods"
 msgstr "Giriş _Metodları"
 

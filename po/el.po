@@ -14,7 +14,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.0.77\n"
-"POT-Creation-Date: 2002-12-11 14:39-0500\n"
+"POT-Creation-Date: 2002-12-16 22:22-0500\n"
 "PO-Revision-Date: 2002-12-03 13:32+0200\n"
 "Last-Translator: Kostas Papadimas <pkst@gmx.net>\n"
 "Language-Team: Greek <nls@tux.hellug.gr>\n"
@@ -1829,35 +1829,35 @@ msgstr "Μέγιστο Υ"
 msgid "Maximum possible value for Y"
 msgstr "Μέγιστη δυνατή τιμή για Υ"
 
-#: gtk/gtkdialog.c:127
+#: gtk/gtkdialog.c:136
 msgid "Has separator"
 msgstr "Έχει διαχωριστικό"
 
-#: gtk/gtkdialog.c:128
+#: gtk/gtkdialog.c:137
 msgid "The dialog has a separator bar above its buttons"
 msgstr "Ο διάλογος έχει διαχωριστικό πάνω από τα κουμπιά"
 
-#: gtk/gtkdialog.c:153
+#: gtk/gtkdialog.c:162
 msgid "Content area border"
 msgstr "Πλαίσιο περιοχής περιεχομένου"
 
-#: gtk/gtkdialog.c:154
+#: gtk/gtkdialog.c:163
 msgid "Width of border around the main dialog area"
 msgstr "Πλάτος πλαισίου γύρω από την περιοχή του κυρίως διαλόγου"
 
-#: gtk/gtkdialog.c:161
+#: gtk/gtkdialog.c:170
 msgid "Button spacing"
 msgstr "Διαστήματα κουμπιών"
 
-#: gtk/gtkdialog.c:162
+#: gtk/gtkdialog.c:171
 msgid "Spacing between buttons"
 msgstr "Διαστήματα μεταξύ κουμπιών"
 
-#: gtk/gtkdialog.c:170
+#: gtk/gtkdialog.c:179
 msgid "Action area border"
 msgstr "Πλαίσιο περιοχής δράσης"
 
-#: gtk/gtkdialog.c:171
+#: gtk/gtkdialog.c:180
 msgid "Width of border around the button area at the bottom of the dialog"
 msgstr ""
 "Πλάτος πλαισίου γύρω από την περιοχή του κουμπιού στο κάτω μέρος του διαλόγου"
@@ -1963,64 +1963,64 @@ msgstr "Επιλογή σε εστίαση"
 msgid "Whether to select the contents of an entry when it is focused"
 msgstr "Αν θα επιλέγονται τα περιεχόμενα μιας καταχώρισης όταν γίνεται εστίαση"
 
-#: gtk/gtkentry.c:3950 gtk/gtklabel.c:3222
+#: gtk/gtkentry.c:3957 gtk/gtklabel.c:3222
 msgid "Select All"
 msgstr "Επιλογή όλων"
 
-#: gtk/gtkentry.c:3960 gtk/gtklabel.c:3232
+#: gtk/gtkentry.c:3967 gtk/gtklabel.c:3232
 msgid "Input Methods"
 msgstr "Μέθοδοι εισαγωγής"
 
-#: gtk/gtkentry.c:3970 gtk/gtktextview.c:6483
+#: gtk/gtkentry.c:3977 gtk/gtktextview.c:6484
 msgid "_Insert Unicode control character"
 msgstr "_Εισαγωγή χαρακτήρα Unicode control"
 
-#: gtk/gtkfilesel.c:516 gtk/gtkimage.c:167
+#: gtk/gtkfilesel.c:512 gtk/gtkimage.c:167
 msgid "Filename"
 msgstr "Όνομα αρχείου"
 
-#: gtk/gtkfilesel.c:517
+#: gtk/gtkfilesel.c:513
 msgid "The currently selected filename"
 msgstr "Το τρέχον επιλεγμένο όνομα αρχείου"
 
-#: gtk/gtkfilesel.c:523
+#: gtk/gtkfilesel.c:519
 msgid "Show file operations"
 msgstr "Προβολή εργασιών αρχείου"
 
-#: gtk/gtkfilesel.c:524
+#: gtk/gtkfilesel.c:520
 msgid "Whether buttons for creating/manipulating files should be displayed"
 msgstr "Αν θα εμφανίζονται κουμπιά για τη δημιουργία/χειραγώγηση αρχείων"
 
-#: gtk/gtkfilesel.c:531
+#: gtk/gtkfilesel.c:527
 msgid "Select multiple"
 msgstr "Επιλογή πολλαπλών"
 
-#: gtk/gtkfilesel.c:532
+#: gtk/gtkfilesel.c:528
 msgid "Whether to allow multiple files to be selected"
 msgstr "Αν θα επιτρέπεται η επιλογή πολλαπλών αρχείων"
 
-#: gtk/gtkfilesel.c:687
+#: gtk/gtkfilesel.c:683
 msgid "Folders"
 msgstr "Φάκελοι"
 
-#: gtk/gtkfilesel.c:691
+#: gtk/gtkfilesel.c:687
 msgid "Fol_ders"
 msgstr "Φάκ_ελοι"
 
-#: gtk/gtkfilesel.c:723
+#: gtk/gtkfilesel.c:719
 msgid "Files"
 msgstr "Αρχεία"
 
-#: gtk/gtkfilesel.c:727
+#: gtk/gtkfilesel.c:723
 msgid "_Files"
 msgstr "_Αρχεία"
 
-#: gtk/gtkfilesel.c:810 gtk/gtkfilesel.c:2208
+#: gtk/gtkfilesel.c:806 gtk/gtkfilesel.c:2204
 #, c-format
 msgid "Folder unreadable: %s"
 msgstr "Μη αναγνώσιμος φάκελος: %s"
 
-#: gtk/gtkfilesel.c:941
+#: gtk/gtkfilesel.c:937
 #, c-format
 msgid ""
 "The file \"%s\" resides on another machine (called %s) and may not be "
@@ -2031,19 +2031,19 @@ msgstr ""
 "να μηνείναι διαθέσιμο στο πρόγραμμα.\n"
 "Είστε σίγουροι ότι θέλετε να το επιλέξετε?"
 
-#: gtk/gtkfilesel.c:1072
+#: gtk/gtkfilesel.c:1068
 msgid "_New Folder"
 msgstr "_Νέος φάκελος"
 
-#: gtk/gtkfilesel.c:1083
+#: gtk/gtkfilesel.c:1079
 msgid "De_lete File"
 msgstr "Δια_γραφή αρχείου"
 
-#: gtk/gtkfilesel.c:1094
+#: gtk/gtkfilesel.c:1090
 msgid "_Rename File"
 msgstr "_Μετονομασία αρχείου"
 
-#: gtk/gtkfilesel.c:1390
+#: gtk/gtkfilesel.c:1386
 #, c-format
 msgid ""
 "The folder name \"%s\" contains symbols that are not allowed in filenames"
@@ -2051,7 +2051,7 @@ msgstr ""
 "Το όνομα αρχείου \"%s\" περιέχει σύμβολα που δεν επιτρέπονται σε ονόματα "
 "αρχείου"
 
-#: gtk/gtkfilesel.c:1392
+#: gtk/gtkfilesel.c:1388
 #, c-format
 msgid ""
 "Error creating folder \"%s\": %s\n"
@@ -2060,36 +2060,36 @@ msgstr ""
 "Σφάλμα δημιουργίας φακέλου \"%s\": %s\n"
 "\"\"%s"
 
-#: gtk/gtkfilesel.c:1393 gtk/gtkfilesel.c:1634
+#: gtk/gtkfilesel.c:1389 gtk/gtkfilesel.c:1630
 msgid "You probably used symbols not allowed in filenames."
 msgstr ""
 "Πιθανόν να χρησιμοποιήσατε σύμβολα που δεν επιτρέπονται σε ονόματα αρχείων"
 
-#: gtk/gtkfilesel.c:1401
+#: gtk/gtkfilesel.c:1397
 #, c-format
 msgid "Error creating folder \"%s\": %s\n"
 msgstr "Σφάλμα δημιουργίας φακέλου \"%s\": %s\n"
 
-#: gtk/gtkfilesel.c:1435
+#: gtk/gtkfilesel.c:1431
 msgid "New Folder"
 msgstr "Νέος φάκελος"
 
-#: gtk/gtkfilesel.c:1450
+#: gtk/gtkfilesel.c:1446
 msgid "_Folder name:"
 msgstr "Όνομα _φακέλου"
 
-#: gtk/gtkfilesel.c:1476
+#: gtk/gtkfilesel.c:1472
 msgid "C_reate"
 msgstr "Δη_μιουργία"
 
-#: gtk/gtkfilesel.c:1522
+#: gtk/gtkfilesel.c:1518
 #, c-format
 msgid "The filename \"%s\" contains symbols that are not allowed in filenames"
 msgstr ""
 "Το όνομα αρχείου \"%s\" περιέχει σύμβολα που δεν επιτρέπονται σε ονόματα "
 "αρχείου"
 
-#: gtk/gtkfilesel.c:1525
+#: gtk/gtkfilesel.c:1521
 #, c-format
 msgid ""
 "Error deleting file \"%s\": %s\n"
@@ -2098,34 +2098,34 @@ msgstr ""
 "Σφάλμα διαγραφής αρχείου \"%s\": %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1527 gtk/gtkfilesel.c:1648
+#: gtk/gtkfilesel.c:1523 gtk/gtkfilesel.c:1644
 msgid "It probably contains symbols not allowed in filenames."
 msgstr "Πιθανόν να περιέχει σύμβολα που δεν επιτρέπονται σε ονόματα αρχείων"
 
-#: gtk/gtkfilesel.c:1536
+#: gtk/gtkfilesel.c:1532
 #, c-format
 msgid "Error deleting file \"%s\": %s"
 msgstr ""
 "Σφάλμα διαγραφής αρχείου \"%s\": %s\n"
 "\"\"\""
 
-#: gtk/gtkfilesel.c:1579
+#: gtk/gtkfilesel.c:1575
 #, c-format
 msgid "Really delete file \"%s\" ?"
 msgstr "Είστε σίγουροι για τη διαγραφή αρχείου \"%s\" ?"
 
-#: gtk/gtkfilesel.c:1584
+#: gtk/gtkfilesel.c:1580
 msgid "Delete File"
 msgstr "Διαγραφή αρχείου"
 
-#: gtk/gtkfilesel.c:1630 gtk/gtkfilesel.c:1644
+#: gtk/gtkfilesel.c:1626 gtk/gtkfilesel.c:1640
 #, c-format
 msgid "The file name \"%s\" contains symbols that are not allowed in filenames"
 msgstr ""
 "Το όνομα αρχείου \"%s\"  περιέχει σύμβολα που δεν επιτρέπονται σε ονόματα "
 "αρχείων"
 
-#: gtk/gtkfilesel.c:1632
+#: gtk/gtkfilesel.c:1628
 #, c-format
 msgid ""
 "Error renaming file to \"%s\": %s\n"
@@ -2134,7 +2134,7 @@ msgstr ""
 "Σφάλμα μετονομασίας αρχείου σε \"%s\": %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1646
+#: gtk/gtkfilesel.c:1642
 #, c-format
 msgid ""
 "Error renaming file \"%s\": %s\n"
@@ -2143,29 +2143,29 @@ msgstr ""
 "Σφάλμα μετονομασίας αρχείου \"%s\": %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1656
+#: gtk/gtkfilesel.c:1652
 #, c-format
 msgid "Error renaming file \"%s\" to \"%s\": %s"
 msgstr "Σφάλμα μετονομασίας αρχείου \"%s\" σε \"%s\": %s"
 
-#: gtk/gtkfilesel.c:1703
+#: gtk/gtkfilesel.c:1699
 msgid "Rename File"
 msgstr "Μετονομασία αρχείου"
 
-#: gtk/gtkfilesel.c:1718
+#: gtk/gtkfilesel.c:1714
 #, c-format
 msgid "Rename file \"%s\" to:"
 msgstr "Μετονομασία αρχείου \"%s\" σε"
 
-#: gtk/gtkfilesel.c:1749
+#: gtk/gtkfilesel.c:1745
 msgid "_Rename"
 msgstr "_Μετονομασία"
 
-#: gtk/gtkfilesel.c:2188
+#: gtk/gtkfilesel.c:2184
 msgid "_Selection: "
 msgstr "_Επιλογή:"
 
-#: gtk/gtkfilesel.c:3075
+#: gtk/gtkfilesel.c:3077
 #, c-format
 msgid ""
 "The filename \"%s\" couldn't be converted to UTF-8 (try setting the "
@@ -2174,15 +2174,15 @@ msgstr ""
 "Το όνομα αρχείου \"%s\"  δεν μπορεί να μετατραπεί σε UTF-8 (προσπαθήστε να "
 "ρυθμίσετε το environment variable G_BROKEN_FILENAMES): %s"
 
-#: gtk/gtkfilesel.c:3078
+#: gtk/gtkfilesel.c:3080
 msgid "Invalid Utf-8"
 msgstr "Μή έγκυρο Utf-8"
 
-#: gtk/gtkfilesel.c:3945
+#: gtk/gtkfilesel.c:3948
 msgid "Name too long"
 msgstr "Το όνομα είναι πολύ μεγάλο"
 
-#: gtk/gtkfilesel.c:3947
+#: gtk/gtkfilesel.c:3950
 msgid "Couldn't convert filename"
 msgstr "Αδυναμία μετατροπής ονόματος αρχείου"
 
@@ -2270,7 +2270,7 @@ msgstr "yalign yalign"
 msgid "The vertical alignment of the label"
 msgstr "Η κάθετη στοίχιση της ετικέτας."
 
-#: gtk/gtkframe.c:153 gtk/gtkhandlebox.c:187
+#: gtk/gtkframe.c:153 gtk/gtkhandlebox.c:195
 msgid "Deprecated property, use shadow_type instead"
 msgstr "Η ιδιότητα δεν ισχύει, χρησιμοποιείστε στη θέση της shadow_type"
 
@@ -2300,28 +2300,28 @@ msgstr "Gamma"
 msgid "_Gamma value"
 msgstr "Τιμή _Gamma"
 
-#: gtk/gtkhandlebox.c:194 gtk/gtkmenubar.c:156 gtk/gtkstatusbar.c:161
+#: gtk/gtkhandlebox.c:202 gtk/gtkmenubar.c:156 gtk/gtkstatusbar.c:161
 #: gtk/gtktoolbar.c:282 gtk/gtkviewport.c:150
 msgid "Shadow type"
 msgstr "Είδος σκίασης"
 
-#: gtk/gtkhandlebox.c:195
+#: gtk/gtkhandlebox.c:203
 msgid "Appearance of the shadow that surrounds the container"
 msgstr "Εμφάνιση της σκίασης που περικλείει το container"
 
-#: gtk/gtkhandlebox.c:203
+#: gtk/gtkhandlebox.c:211
 msgid "Handle position"
 msgstr "Θέση χειριστή"
 
-#: gtk/gtkhandlebox.c:204
+#: gtk/gtkhandlebox.c:212
 msgid "Position of the handle relative to the child widget"
 msgstr "Θέση του χειριστή  σχετική με το θυγατρικό γραφικό συστατικό."
 
-#: gtk/gtkhandlebox.c:212
+#: gtk/gtkhandlebox.c:220
 msgid "Snap edge"
 msgstr "Snap edge"
 
-#: gtk/gtkhandlebox.c:213
+#: gtk/gtkhandlebox.c:221
 msgid ""
 "Side of the handlebox that's lined up with the docking point to dock the "
 "handlebox"
@@ -2329,11 +2329,11 @@ msgstr ""
 "Μέγεθος του κουτιού χειρισμού το οποίο ευθυγραμίζεται με το σημείο σύνδεσης "
 "για την σύνδεση με το κουτί χειρισμού."
 
-#: gtk/gtkhandlebox.c:221
+#: gtk/gtkhandlebox.c:229
 msgid "Snap edge set"
 msgstr "Ορισμός Snap edge"
 
-#: gtk/gtkhandlebox.c:222
+#: gtk/gtkhandlebox.c:230
 msgid ""
 "Whether to use the value from the snap_edge property or a value derived from "
 "handle_position"
@@ -2631,11 +2631,11 @@ msgstr "Το ύψος της διάταξης"
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: gtk/gtkmenu.c:243
+#: gtk/gtkmenu.c:263
 msgid "Tearoff Title"
 msgstr "Αποσπώμενος τίτλος"
 
-#: gtk/gtkmenu.c:244
+#: gtk/gtkmenu.c:264
 msgid ""
 "A title that may be displayed by the window manager when this menu is torn-"
 "off"
@@ -2643,33 +2643,33 @@ msgstr ""
 "'Ενας τίτλος που μπορεί να προβάλλεται από το διαχειριστή παραθύρων όταν "
 "αυτό το μενού αποκόπτεται"
 
-#: gtk/gtkmenu.c:319
+#: gtk/gtkmenu.c:379
 msgid "Can change accelerators"
 msgstr "Δυνατότητα αλλαγής συντομεύσεων"
 
-#: gtk/gtkmenu.c:320
+#: gtk/gtkmenu.c:380
 msgid ""
 "Whether menu accelerators can be changed by pressing a key over the menu item"
 msgstr ""
 "Αν θα είναι δυνατή η αλλαγή συντομεύσεων μενού με την πίεση ενός κλειδιού "
 "πανω στο αντικείμενο μενού"
 
-#: gtk/gtkmenu.c:325
+#: gtk/gtkmenu.c:385
 msgid "Delay before submenus appear"
 msgstr "Καθυστέρηση πριν την εμφάνιση των υπομενού"
 
-#: gtk/gtkmenu.c:326
+#: gtk/gtkmenu.c:386
 msgid ""
 "Minimum time the pointer must stay over a menu item before the submenu appear"
 msgstr ""
 "Ελάχιστος χρόνος που θα στέκεται ο δρομέας πάνω σε ένα μενού μέχρι να "
 "εμφανιστεί το υπομενού"
 
-#: gtk/gtkmenu.c:333
+#: gtk/gtkmenu.c:393
 msgid "Delay before hiding a submenu"
 msgstr "Καθυστέρηση πριν την απόκρυψη ενός υπομενού"
 
-#: gtk/gtkmenu.c:334
+#: gtk/gtkmenu.c:394
 msgid ""
 "The time before hiding a submenu when the pointer is moving towards the "
 "submenu"
@@ -4291,7 +4291,7 @@ msgstr "Ορατότητα δρομέα"
 msgid "If the insertion cursor is shown"
 msgstr "Αν θα είναι φανερή η εισαγωγή του δρομέα"
 
-#: gtk/gtktextview.c:6474
+#: gtk/gtktextview.c:6475
 msgid "Input _Methods"
 msgstr "Μέθοδοι εισαγωγής"
 

@@ -49,7 +49,6 @@ handles the emission.
 Implementation of this signal is optional.
 </para>
 
-@parent_class: 
 @activate_signal: 
 @set_scroll_adjustments_signal: 
 

@@ -327,6 +327,14 @@ will be called when the menu is later detached from the widget.
 @menu: the #GtkMenu being detached.
 
 
+<!-- ##### SIGNAL GtkMenu::move-scroll ##### -->
+<para>
+
+</para>
+
+@menu: the object which received the signal.
+@arg1: 
+
 <!-- ##### ARG GtkMenu:tearoff-title ##### -->
 <para>
 

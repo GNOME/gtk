@@ -1,3 +1,22 @@
+Overview of Changes in GTK+ 2.1.5
+=================================
+* GtkFileSel fixes [Owen Taylor]
+  - Fix ..<tab> to go up a dir [Francisco Bustamante]
+  - Fix UTF-8 operation, so that non-ASCII works [Kang Jeong-Hee]
+  - Use g_utf8_collate() not strcmp for sorting [Gregory Merchan]
+* Only close dialogs on Escape if they have a cancel button. [James Willcox]
+* Fix problem with resizing gnome-terminal popup [Soeren Sandmann]
+* Add Home/End/Page_Up/Page_Down keybindings for menus [Owen,
+  Narayana Pattipati, Marius Andreiana]
+* Xinerama fixes for GtkMenu [Matthias Clasen]
+* Fix long-standing problem with Ami and GtkEntry [Owen, Kang Jeong-Hee]
+* Documentation additions and fixes [Matthias]
+* New and updated translations (am,bg,da,fr,fi,de)
+* Miscellaneous bug and build fixes
+
+Other contributors: Johan Dahlin, James Henstridge, Jon Nelson, 
+   Bastien Nocera, Christian Reis, Arvind Samptur, Anand Subra, Simon Wong
+
 Overview of Changes in GTK+ 2.1.4
 =================================
 * Improved default color scheme [Soeren Sandmann, with advise from

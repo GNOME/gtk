@@ -403,7 +403,6 @@ gtk_c_sources = @STRIP_BEGIN@   \
 	gtkwindow.c		\
 	gtkwindow-decorate.c    \
 	fnmatch.c		\
-	fnmatch.h		\
 	xembed.h		\
 @STRIP_END@
 
