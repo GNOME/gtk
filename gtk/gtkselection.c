@@ -44,6 +44,7 @@
    to the TARGETS request, though I don't really think so ... */
 
 #include <stdarg.h>
+#include <string.h>
 #include <gdk/gdkx.h>
 /* we need this for gdk_window_lookup() */
 #include "gtkmain.h"
