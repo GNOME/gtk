@@ -843,9 +843,12 @@ gtk_real_menu_item_select (GtkItem *item)
       gint popup_delay;
 
       if (menu_item->timer)
-	g_source_remove (menu_item->timer);
-
-      popup_delay = get_popup_delay (menu_item);
+	{
+	  g_source_remove (menu_item->timer);
+	  popup_delay = 0;
+	}
+      else
+	popup_delay = get_popup_delay (menu_item);
       
       if (popup_delay > 0)
 	{

@@ -1,3 +1,15 @@
+2004-11-24  Matthias Clasen  <mclasen@redhat.com>
+
+	Open submenus on click.  (#128968, Martin Jeppesen)
+	
+	* gtk/gtkmenushell.c (gtk_menu_shell_button_release): Don't
+	activate items with submenus after the timeout, just select 
+	them.
+
+	* gtk/gtkmenuitem.c (gtk_real_menu_item_select): Make
+	submenus popup immediately on click, regardless of popup 
+	delay.
+
 2004-11-23  Matthias Clasen  <mclasen@redhat.com>
 
 	* configure.in: Rework confusing error message.  (#151742,
