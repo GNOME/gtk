@@ -102,6 +102,8 @@ struct _GtkTreeViewPrivate
   GtkTreeViewColumn *drag_column;
 
   /* bin_window offset */
+  GtkTreeRowReference *top_row;
+  gint top_row_dy;
   gint dy;
   gint drag_column_x;
 

@@ -994,12 +994,30 @@ _gtk_tree_selection_internal_select_node (GtkTreeSelection *selection,
 	}
       else
 	{
-	  /* FIXME: We only want to select the new node if we can unselect the
-	   * old one, and we can select the new one.  We are currently
-	   * unselecting the old one first, then trying the new one. */
 	  if (anchor_path)
 	    {
-	      dirty = gtk_tree_selection_real_unselect_all (selection);
+	      /* We only want to select the new node if we can unselect the old one,
+	       * and we can select the new one. */
+	      if (selection->user_func)
+		{
+		  if ((*selection->user_func) (selection, selection->tree_view->priv->model, path,
+					       GTK_RBNODE_FLAG_SET (node, GTK_RBNODE_IS_SELECTED),
+					       selection->user_data))
+		    dirty = TRUE;
+		}
+	      else
+		{
+		  dirty = TRUE;
+		}
+
+	      /* if dirty is FALSE, we weren't able to select the new one, otherwise, we try to
+	       * unselect the new one
+	       */
+	      if (dirty)
+		dirty = gtk_tree_selection_real_unselect_all (selection);
+
+	      /* if dirty is TRUE at this point, we successfully unselected the
+	       * old one, and can then select the new one */
 	      if (dirty)
 		{
 		  if (selection->tree_view->priv->anchor)
@@ -1092,6 +1110,8 @@ gtk_tree_selection_real_select_node (GtkTreeSelection *selection,
 {
   gboolean selected = FALSE;
   GtkTreePath *path = NULL;
+
+  select = !! select;
 
   if (GTK_RBNODE_FLAG_SET (node, GTK_RBNODE_IS_SELECTED) != select)
     {

@@ -265,10 +265,13 @@ section.
 </para>
 
 
+
 <!-- ##### FUNCTION gdk_threads_leave ##### -->
 <para>
 Leaves a critical region begun with gdk_threads_enter(). 
 </para>
+
+
 
 <!-- ##### VARIABLE gdk_threads_mutex ##### -->
 <para>

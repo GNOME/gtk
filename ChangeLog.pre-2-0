@@ -1,3 +1,10 @@
+Wed Jan  9 19:10:07 2002  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtktreeselection.c
+	(_gtk_tree_selection_internal_select_node): Now we test we can
+	unselect nodes before selecting new ones.
+	(gtk_tree_selection_real_select_node): be careful comparing booleans.
+
 Wed Jan  9 21:31:44 2002  Kristian Rietveld  <kris@gtk.org>
 
 	* gtk/gtkliststore.c (gtk_list_store_sort): pass NULL to
