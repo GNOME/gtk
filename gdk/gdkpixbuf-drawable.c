@@ -34,10 +34,18 @@
 #include "gdk-pixbuf-private.h"
 #include "gdkinternals.h"
 
+/* Some convenient names
+ */
 #if (G_BYTE_ORDER == G_LITTLE_ENDIAN)
 #define LITTLE
+#undef BIG
+#else
+#define BIG
+#undef LITTLE
 #endif
 #define d(x)
+
+#define SWAP16(d) GUINT16_SWAP_LE_BE(d)
 
 
 
@@ -363,6 +371,39 @@ rgb8a (GdkImage    *image,
     }
 }
 
+/* Bit shifting for 565 and 555 conversion routines
+ *
+ * RGB565 == rrrr rggg gggb bbbb, 16 bit native endian
+ * RGB555 == xrrr rrgg gggb bbbb
+ * ABGR8888: ARGB, 32-bit native endian
+ * RGBA8888: RGBA, 32-bit native endian
+ */
+#define R8fromRGB565(d) ((((d) >> 8) & 0xf8) | (((d) >> 13) & 0x7))
+#define B8fromRGB565(d) ((((d) >> 3) & 0xfc) | (((d) >> 9)  & 0x3))
+#define G8fromRGB565(d) ((((d) << 3) & 0xf8) | (((d) >> 2)  & 0x7))
+
+#define ABGR8888fromRGB565(d) (  ((d) & 0xf800) >> 8  | ((d) & 0xe000) >> 13 \
+			       | ((d) & 0x07e0) << 5  | ((d) & 0x0600) >> 1  \
+			       | ((d) & 0x001f) << 19 | ((d) & 0x001c) << 14 \
+			       | 0xff000000)
+#define RGBA8888fromRGB565(d) (  ((d) & 0xf800) << 16 | ((d) & 0xe000) << 11 \
+			       | ((d) & 0x07e0) << 13 | ((d) & 0x0600) << 7  \
+			       | ((d) & 0x001f) << 11 | ((d) & 0x001c) << 6  \
+			       | 0xff)
+
+#define R8fromRGB555(d) (((d) & 0x7c00) >> 7 | ((d) & 0x7000) >> 12)
+#define B8fromRGB555(d) (((d) & 0x03e0) >> 2 | ((d) & 0x0380) >> 7)
+#define G8fromRGB555(d) (((d) & 0x001f) << 3 | ((d) & 0x001c) >> 2)
+
+#define ABGR8888fromRGB555(d) (  ((d) & 0x7c00) >> 7  | ((d) & 0x7000) >> 12 \
+			       | ((d) & 0x03e0) << 6  | ((d) & 0x0380) << 1  \
+			       | ((d) & 0x001f) << 19 | ((d) & 0x001c) << 14 \
+			       | 0xff000000)
+#define RGBA8888fromRGB555(d) (  ((d) & 0x7c00) << 17 | ((d) & 0x7000) << 12 \
+			       | ((d) & 0x03e0) << 14 | ((d) & 0x0380) << 9  \
+			       | ((d) & 0x001f) << 11 | ((d) & 0x001c) << 6  \
+			       | 0xff)
+
 /*
  * convert 16 bits/pixel data
  * no alpha
@@ -372,95 +413,35 @@ static void
 rgb565lsb (GdkImage    *image,
 	   guchar      *pixels,
 	   int          rowstride,
-           int          x1,
-           int          y1,
-           int          x2,
-           int          y2,
+	   int          x1,
+	   int          y1,
+	   int          x2,
+	   int          y2,
 	   GdkColormap *colormap)
 {
   int xx, yy;
   int bpl;
 
-#ifdef LITTLE
-  register guint32 *s;	/* read 2 pixels at once */
-#else
-  register guint8 *s;	/* read 2 pixels at once */
-#endif
-  register guint16 *o;
+  register guint16 *s;
+  register guint8 *o;
+
   guint8 *srow = (guint8*)image->mem + y1 * image->bpl + x1 * image->bpp, *orow = pixels;
-  
+
   bpl = image->bpl;
-  
+
   for (yy = y1; yy < y2; yy++)
     {
-#ifdef LITTLE
-      s = (guint32 *) srow;
-#else
-      s = srow;
-#endif
-      o = (guint16 *) orow;
-
-      /* check for first pixel odd */
-      xx = x1;
-      if (xx & 1)
+      s = (guint16 *) srow;
+      o = (guint8 *) orow;
+      for (xx = x1; xx < x2; xx ++)
 	{
-	  register guint16 data;
-#ifdef LITTLE
-	  data = *((short *) s);
-#else
-	  data = *((short *) s);
-	  data = ((data >> 8) & 0xff) | ((data & 0xff) << 8);
-#endif
-	  ((char *) o)[0] = ((data >> 8) & 0xf8) | ((data >> 13) & 0x7);
-	  ((char *) o)[1] = ((data >> 3) & 0xfc) | ((data >> 9) & 0x3);
-	  ((char *) o)[2] = ((data << 3) & 0xf8) | ((data >> 2) & 0x7);
-	  o = (guint16 *) (((char *) o) + 3);
-          ++xx;
-	}
-
-      g_assert (!(xx & 1));
-
-      /* if x2 is even, then the -1 does nothing to number of
-       * loop iterations, if x2 is odd then the -1 reduces
-       * iterations by one
-       */
-      for (; xx < (x2 - 1); xx += 2)
-	{
-	  register guint32 data;
-#ifdef LITTLE
-	  data = *s++;
-	  *o++ = (data & 0xf800) >> 8 | (data & 0xe000) >> 13
-	    | (data & 0x7e0) << 5 | (data & 0x600) >> 1;
-	  *o++ = (data & 0x1f) << 3 | (data & 0x1c) >> 2
-	    | (data & 0xf8000000) >> 16 | (data & 0xe0000000) >> 21;
-	  *o++ = (data & 0x7e00000) >> 19 | (data & 0x6000000) >> 25
-	    | (data & 0x1f0000) >> 5 | (data & 0x1c0000) >> 10;
-#else
-	  /* swap endianness first */
-	  data = s[1] << 24 | s[0] << 16 | s[3] << 8 | s[2];
-	  s += 4;
-
-	  *o++ = (data & 0xf8000000) >> 16 | (data & 0xe0000000) >> 21
-	    | (data & 0x7e00000) >> 19 | (data & 0x6000000) >> 25;
-	  *o++ = (data & 0x1f0000) >> 5 | (data & 0x1c0000) >> 10
-	    | (data & 0xf800) >> 8 | (data & 0xe000) >> 13;
-	  *o++ = (data & 0x7e0) << 5 | (data & 0x600) >> 1
-	    | (data & 0x1f) << 3 | (data & 0x1c) >> 2;
-#endif
-	}
-      /* check for last remaining pixel */
-      if (x2 & 1)
-	{
-	  register guint16 data;
-#ifdef LITTLE
-	  data = *((short *) s);
-#else
-	  data = *((short *) s);
-	  data = ((data >> 8) & 0xff) | ((data & 0xff) << 8);
-#endif
-	  ((char *) o)[0] = ((data >> 8) & 0xf8) | ((data >> 13) & 0x7);
-	  ((char *) o)[1] = ((data >> 3) & 0xfc) | ((data >> 9) & 0x3);
-	  ((char *) o)[2] = ((data << 3) & 0xf8) | ((data >> 2) & 0x7);
+	  register guint32 data = *s++;
+#ifdef BIG
+	  data = SWAP16 (data);
+#endif	  
+	  *o++ = R8fromRGB565 (data);
+	  *o++ = G8fromRGB565 (data);
+	  *o++ = B8fromRGB565 (data);
 	}
       srow += bpl;
       orow += rowstride;
@@ -485,87 +466,26 @@ rgb565msb (GdkImage    *image,
   int xx, yy;
   int bpl;
 
-#ifdef LITTLE
-  register guint8 *s;	/* need to swap data order */
-#else
-  register guint32 *s;	/* read 2 pixels at once */
-#endif
-  register guint16 *o;
+  register guint16 *s;
+  register guint8 *o;
+
   guint8 *srow = (guint8*)image->mem + y1 * image->bpl + x1 * image->bpp, *orow = pixels;
 
   bpl = image->bpl;
 
   for (yy = y1; yy < y2; yy++)
     {
-#ifdef LITTLE
-      s = srow;
-#else
-      s = (guint32 *) srow;
-#endif
-      o = (guint16 *) orow;
-
-      xx = x1;
-      
-      /* check for first pixel odd */
-      if (xx & 1)
+      s = (guint16 *) srow;
+      o = (guint8 *) orow;
+      for (xx = x1; xx < x2; xx ++)
 	{
-	  register guint16 data;
+	  register guint32 data = *s++;
 #ifdef LITTLE
-	  data = *((short *) s);
-	  data = ((data >> 8) & 0xff) | ((data & 0xff) << 8);
-#else
-	  data = *((short *) s);
-#endif
-	  ((char *) o)[0] = ((data >> 8) & 0xf8) | ((data >> 13) & 0x7);
-	  ((char *) o)[1] = ((data >> 3) & 0xfc) | ((data >> 9) & 0x3);
-	  ((char *) o)[2] = ((data << 3) & 0xf8) | ((data >> 2) & 0x7);
-
-	  o = (guint16 *) (((char *) o) + 3);
-          ++xx;
-	}
-
-      g_assert (!(xx & 1));
-
-      /* if x2 is even, then the -1 does nothing to number of
-       * loop iterations, if x2 is odd then the -1 reduces
-       * iterations by one
-       */
-      for (; xx < (x2 - 1); xx += 2)
-	{
-	  register guint32 data;
-#ifdef LITTLE
-	  /* swap endianness first */
-	  data = s[1] | s[0] << 8 | s[3] << 16 | s[2] << 24;
-	  s += 4;
-	  *o++ = (data & 0xf800) >> 8 | (data & 0xe000) >> 13
-	    | (data & 0x7e0) << 5 | (data & 0x600) >> 1;
-	  *o++ = (data & 0x1f) << 3 | (data & 0x1c) >> 2
-	    | (data & 0xf8000000) >> 16 | (data & 0xe0000000) >> 21;
-	  *o++ = (data & 0x7e00000) >> 19 | (data & 0x6000000) >> 25
-	    | (data & 0x1f0000) >> 5 | (data & 0x1c0000) >> 10;
-#else
-	  data = *s++;
-	  *o++ = (data & 0xf8000000) >> 16 | (data & 0xe0000000) >> 21
-	    | (data & 0x7e00000) >> 19 | (data & 0x6000000) >> 25;
-	  *o++ = (data & 0x1f0000) >> 5 | (data & 0x1c0000) >> 10
-	    | (data & 0xf800) >> 8 | (data & 0xe000) >> 13;
-	  *o++ = (data & 0x7e0) << 5 | (data & 0x600) >> 1
-	    | (data & 0x1f) << 3 | (data & 0x1c) >> 2;
-#endif
-	}
-      /* check for last remaining pixel */
-      if (x2 & 1)
-	{
-	  register guint16 data;
-#ifdef LITTLE
-	  data = *((short *) s);
-	  data = ((data >> 8) & 0xff) | ((data & 0xff) << 8);
-#else
-	  data = *((short *) s);
-#endif
-	  ((char *) o)[0] = ((data >> 8) & 0xf8) | ((data >> 13) & 0x7);
-	  ((char *) o)[1] = ((data >> 3) & 0xfc) | ((data >> 9) & 0x3);
-	  ((char *) o)[2] = ((data << 3) & 0xf8) | ((data >> 2) & 0x7);
+	  data = SWAP16 (data);
+#endif	  
+	  *o++ = R8fromRGB565 (data);
+	  *o++ = G8fromRGB565 (data);
+	  *o++ = B8fromRGB565 (data);
 	}
       srow += bpl;
       orow += rowstride;
@@ -590,11 +510,7 @@ rgb565alsb (GdkImage    *image,
   int xx, yy;
   int bpl;
 
-#ifdef LITTLE
-  register guint16 *s;	/* read 1 pixels at once */
-#else
-  register guint8 *s;
-#endif
+  register guint16 *s;
   register guint32 *o;
 
   guint8 *srow = (guint8*)image->mem + y1 * image->bpl + x1 * image->bpp, *orow = pixels;
@@ -603,31 +519,16 @@ rgb565alsb (GdkImage    *image,
 
   for (yy = y1; yy < y2; yy++)
     {
-#ifdef LITTLE
       s = (guint16 *) srow;
-#else
-      s = (guint8 *) srow;
-#endif
       o = (guint32 *) orow;
       for (xx = x1; xx < x2; xx ++)
 	{
-	  register guint32 data;
-	  /*  rrrrrggg gggbbbbb -> rrrrrRRR ggggggGG bbbbbBBB aaaaaaaa */
-	  /*  little endian: aaaaaaaa bbbbbBBB ggggggGG rrrrrRRR */
+	  register guint32 data = *s++;
 #ifdef LITTLE
-	  data = *s++;
-	  *o++ = (data & 0xf800) >> 8 | (data & 0xe000) >> 13
-	    | (data & 0x7e0) << 5 | (data & 0x600) >> 1
-	    | (data & 0x1f) << 19 | (data & 0x1c) << 14
-	    | 0xff000000;
+	  *o++ = ABGR8888fromRGB565 (data);
 #else
-	  /* swap endianness first */
-	  data = s[0] | s[1] << 8;
-	  s += 2;
-	  *o++ = (data & 0xf800) << 16 | (data & 0xe000) << 11
-	    | (data & 0x7e0) << 13 | (data & 0x600) << 7
-	    | (data & 0x1f) << 11 | (data & 0x1c) << 6
-	    | 0xff;
+	  data = SWAP16 (data);
+	  *o++ = RGBA8888fromRGB565 (data);
 #endif
 	}
       srow += bpl;
@@ -653,11 +554,7 @@ rgb565amsb (GdkImage    *image,
   int xx, yy;
   int bpl;
 
-#ifdef LITTLE
-  register guint8 *s;
-#else
-  register guint16 *s;	/* read 1 pixels at once */
-#endif
+  register guint16 *s;
   register guint32 *o;
 
   guint8 *srow = (guint8*)image->mem + y1 * image->bpl + x1 * image->bpp, *orow = pixels;
@@ -666,27 +563,16 @@ rgb565amsb (GdkImage    *image,
 
   for (yy = y1; yy < y2; yy++)
     {
-      s = srow;
+      s = (guint16 *) srow;
       o = (guint32 *) orow;
       for (xx = x1; xx < x2; xx ++)
 	{
-	  register guint32 data;
-	  /*  rrrrrggg gggbbbbb -> rrrrrRRR gggggg00 bbbbbBBB aaaaaaaa */
-	  /*  little endian: aaaaaaaa bbbbbBBB gggggg00 rrrrrRRR */
+	  register guint32 data = *s++;
 #ifdef LITTLE
-	  /* swap endianness first */
-	  data = s[0] | s[1] << 8;
-	  s += 2;
-	  *o++ = (data & 0xf800) >> 8 | (data & 0xe000) >> 13
-	    | (data & 0x7e0) << 5 | (data & 0x600) >> 1
-	    | (data & 0x1f) << 19 | (data & 0x1c) << 14
-	    | 0xff000000;
+	  data = SWAP16 (data);
+	  *o++ = ABGR8888fromRGB565 (data);
 #else
-	  data = *s++;
-	  *o++ = (data & 0xf800) << 16 | (data & 0xe000) << 11
-	    | (data & 0x7e0) << 13 | (data & 0x600) << 7
-	    | (data & 0x1f) << 11 | (data & 0x1c) << 6
-	    | 0xff;
+	  *o++ = RGBA8888fromRGB565 (data);
 #endif
 	}
       srow += bpl;
@@ -712,86 +598,26 @@ rgb555lsb (GdkImage     *image,
   int xx, yy;
   int bpl;
 
-#ifdef LITTLE
-  register guint32 *s;	/* read 2 pixels at once */
-#else
-  register guint8 *s;	/* read 2 pixels at once */
-#endif
-  register guint16 *o;
+  register guint16 *s;
+  register guint8 *o;
+
   guint8 *srow = (guint8*)image->mem + y1 * image->bpl + x1 * image->bpp, *orow = pixels;
 
   bpl = image->bpl;
 
   for (yy = y1; yy < y2; yy++)
     {
-#ifdef LITTLE
-      s = (guint32 *) srow;
-#else
-      s = srow;
-#endif
-      o = (guint16 *) orow;
-
-      xx = x1;
-      
-      /* check for first odd pixel */
-      if (xx & 1)
+      s = (guint16 *) srow;
+      o = (guint8 *) orow;
+      for (xx = x1; xx < x2; xx ++)
 	{
-	  register guint16 data;
-#ifdef LITTLE
-	  data = *((short *) s);
-#else
-	  data = *((short *) s);
-	  data = ((data >> 8) & 0xff) | ((data & 0xff) << 8);
-#endif
-	  ((char *) o)[0] = (data & 0x7c00) >> 7 | (data & 0x7000) >> 12;
-	  ((char *) o)[1] = (data & 0x3e0) >> 2 | (data & 0x380) >> 7;
-	  ((char *) o)[2] = (data & 0x1f) << 3 | (data & 0x1c) >> 2;
-	  o = (guint16 *) (((char *) o) + 3);
-          ++xx;
-	}
-
-      g_assert (!(xx & 1));
-
-      /* if x2 is even, then the -1 does nothing to number of
-       * loop iterations, if x2 is odd then the -1 reduces
-       * iterations by one
-       */
-      for (; xx < (x2 - 1); xx += 2)
-	{
-	  register guint32 data;
-#ifdef LITTLE
-	  data = *s++;
-	  *o++ = (data & 0x7c00) >> 7 | (data & 0x7000) >> 12
-	    | (data & 0x3e0) << 6 | (data & 0x380) << 1;
-	  *o++ = (data & 0x1f) << 3 | (data & 0x1c) >> 2
-	    | (data & 0x7c000000) >> 15 | (data & 0x70000000) >> 20;
-	  *o++ = (data & 0x3e00000) >> 18 | (data & 0x3800000) >> 23
-	    | (data & 0x1f0000) >> 5 | (data & 0x1c0000) >> 10;
-#else
-	  /* swap endianness first */
-	  data = s[1] | s[0] << 8 | s[3] << 16 | s[2] << 24;
-	  s += 4;
-	  *o++ = (data & 0x7c00) << 1 | (data & 0x7000) >> 4
-	    | (data & 0x3e0) >> 2 | (data & 0x380) >> 7;
-	  *o++ = (data & 0x1f) << 11 | (data & 0x1c) << 6
-	    | (data & 0x7c000000) >> 23 | (data & 0x70000000) >> 28;
-	  *o++ = (data & 0x3e00000) >> 10 | (data & 0x3800000) >> 15
-	    | (data & 0x1f0000) >> 13 | (data & 0x1c0000) >> 18;
-#endif
-	}
-      /* check for last remaining pixel */
-      if (x2 & 1)
-	{
-	  register guint16 data;
-#ifdef LITTLE
-	  data = *((short *) s);
-#else
-	  data = *((short *) s);
-	  data = ((data >> 8) & 0xff) | ((data & 0xff) << 8);
-#endif
-	  ((char *) o)[0] = (data & 0x7c00) >> 7 | (data & 0x7000) >> 12;
-	  ((char *) o)[1] = (data & 0x3e0) >> 2 | (data & 0x380) >> 7;
-	  ((char *) o)[2] = (data & 0x1f) << 3 | (data & 0x1c) >> 2;
+	  register guint32 data = *s++;
+#ifdef BIG
+	  data = SWAP16 (data);
+#endif	  
+	  *o++ = R8fromRGB555 (data);
+	  *o++ = G8fromRGB555 (data);
+	  *o++ = B8fromRGB555 (data);
 	}
       srow += bpl;
       orow += rowstride;
@@ -816,82 +642,26 @@ rgb555msb (GdkImage    *image,
   int xx, yy;
   int bpl;
 
-#ifdef LITTLE
-  register guint8 *s;	/* read 2 pixels at once */
-#else
-  register guint32 *s;	/* read 2 pixels at once */
-#endif
-  register guint16 *o;
+  register guint16 *s;
+  register guint8 *o;
+
   guint8 *srow = (guint8*)image->mem + y1 * image->bpl + x1 * image->bpp, *orow = pixels;
 
   bpl = image->bpl;
 
   for (yy = y1; yy < y2; yy++)
     {
-      s = srow;
-      o = (guint16 *) orow;
-
-      xx = x1;
-      /* See if first pixel is odd */
-      if (xx & 1)
+      s = (guint16 *) srow;
+      o = (guint8 *) orow;
+      for (xx = x1; xx < x2; xx ++)
 	{
-	  register guint16 data;
+	  register guint32 data = *s++;
 #ifdef LITTLE
-	  data = *((short *) s);
-	  data = ((data >> 8) & 0xff) | ((data & 0xff) << 8);
-#else
-	  data = *((short *) s);
-#endif
-	  ((char *) o)[0] = (data & 0x7c00) >> 7 | (data & 0x7000) >> 12;
-	  ((char *) o)[1] = (data & 0x3e0) >> 2 | (data & 0x380) >> 7;
-	  ((char *) o)[2] = (data & 0x1f) << 3 | (data & 0x1c) >> 2;
-
-	  o = (guint16 *) (((char *) o) + 3);
-          ++xx;
-	}
-
-      g_assert (!(xx & 1));
-
-      /* if x2 is even, then the -1 does nothing to number of
-       * loop iterations, if x2 is odd then the -1 reduces
-       * iterations by one
-       */
-      for (; xx < (x2 - 1); xx += 2)
-	{
-	  register guint32 data;
-#ifdef LITTLE
-	  /* swap endianness first */
-	  data = s[1] | s[0] << 8 | s[3] << 16 | s[2] << 24;
-	  s += 4;
-	  *o++ = (data & 0x7c00) >> 7 | (data & 0x7000) >> 12
-	    | (data & 0x3e0) << 6 | (data & 0x380) << 1;
-	  *o++ = (data & 0x1f) << 3 | (data & 0x1c) >> 2
-	    | (data & 0x7c000000) >> 15 | (data & 0x70000000) >> 20;
-	  *o++ = (data & 0x3e00000) >> 18 | (data & 0x3800000) >> 23
-	    | (data & 0x1f0000) >> 5 | (data & 0x1c0000) >> 10;
-#else
-	  data = *s++;
-	  *o++ = (data & 0x7c00) << 1 | (data & 0x7000) >> 4
-	    | (data & 0x3e0) >> 2 | (data & 0x380) >> 7;
-	  *o++ = (data & 0x1f) << 11 | (data & 0x1c) << 6
-	    | (data & 0x7c000000) >> 23 | (data & 0x70000000) >> 28;
-	  *o++ = (data & 0x3e00000) >> 10 | (data & 0x3800000) >> 15
-	    | (data & 0x1f0000) >> 13 | (data & 0x1c0000) >> 18;
-#endif
-	}
-      /* check for last remaining pixel */
-      if (x2 & 1)
-	{
-	  register guint16 data;
-#ifdef LITTLE
-	  data = *((short *) s);
-	  data = ((data >> 8) & 0xff) | ((data & 0xff) << 8);
-#else
-	  data = *((short *) s);
-#endif
-	  ((char *) o)[0] = (data & 0x7c00) >> 7 | (data & 0x7000) >> 12;
-	  ((char *) o)[1] = (data & 0x3e0) >> 2 | (data & 0x380) >> 7;
-	  ((char *) o)[2] = (data & 0x1f) << 3 | (data & 0x1c) >> 2;
+	  data = SWAP16 (data);
+#endif	  
+	  *o++ = R8fromRGB555 (data);
+	  *o++ = G8fromRGB555 (data);
+	  *o++ = B8fromRGB555 (data);
 	}
       srow += bpl;
       orow += rowstride;
@@ -916,11 +686,7 @@ rgb555alsb (GdkImage    *image,
   int xx, yy;
   int bpl;
 
-#ifdef LITTLE
   register guint16 *s;	/* read 1 pixels at once */
-#else
-  register guint8 *s;
-#endif
   register guint32 *o;
 
   guint8 *srow = (guint8*)image->mem + y1 * image->bpl + x1 * image->bpp, *orow = pixels;
@@ -929,31 +695,16 @@ rgb555alsb (GdkImage    *image,
 
   for (yy = y1; yy < y2; yy++)
     {
-#ifdef LITTLE
       s = (guint16 *) srow;
-#else
-      s = srow;
-#endif
       o = (guint32 *) orow;
       for (xx = x1; xx < x2; xx++)
 	{
-	  register guint32 data;
-	  /*  rrrrrggg gggbbbbb -> rrrrrRRR gggggGGG bbbbbBBB aaaaaaaa */
-	  /*  little endian: aaaaaaaa bbbbbBBB gggggGGG rrrrrRRR */
+	  register guint32 data = *s++;
 #ifdef LITTLE
-	  data = *s++;
-	  *o++ = (data & 0x7c00) >> 7 | (data & 0x7000) >> 12
-	    | (data & 0x3e0) << 6 | (data & 0x380) << 1
-	    | (data & 0x1f) << 19 | (data & 0x1c) << 14
-	    | 0xff000000;
+	  *o++ = ABGR8888fromRGB555 (data);
 #else
-	  /* swap endianness first */
-	  data = s[0] | s[1] << 8;
-	  s += 2;
-	  *o++ = (data & 0x7c00) << 17 | (data & 0x7000) << 12
-	    | (data & 0x3e0) << 14 | (data & 0x380) << 9
-	    | (data & 0x1f) << 11 | (data & 0x1c) << 6
-	    | 0xff;
+	  data = SWAP16 (data);
+	  *o++ = RGBA8888fromRGB555 (data);
 #endif
 	}
       srow += bpl;
@@ -979,11 +730,7 @@ rgb555amsb (GdkImage    *image,
   int xx, yy;
   int bpl;
 
-#ifdef LITTLE
-  register guint16 *s;	/* read 1 pixels at once */
-#else
-  register guint8 *s;
-#endif
+  register guint16 *s;
   register guint32 *o;
 
   guint8 *srow = (guint8*)image->mem + y1 * image->bpl + x1 * image->bpp, *orow = pixels;
@@ -992,31 +739,16 @@ rgb555amsb (GdkImage    *image,
 
   for (yy = y1; yy < y2; yy++)
     {
-#ifdef LITTLE
       s = (guint16 *) srow;
-#else
-      s = srow;
-#endif
       o = (guint32 *) orow;
       for (xx = x1; xx < x2; xx++)
 	{
-	  register guint32 data;
-	  /*  rrrrrggg gggbbbbb -> rrrrrRRR gggggGGG bbbbbBBB aaaaaaaa */
-	  /*  little endian: aaaaaaaa bbbbbBBB gggggGGG rrrrrRRR */
+	  register guint32 data = *s++;
 #ifdef LITTLE
-	  /* swap endianness first */
-	  data = s[0] | s[1] << 8;
-	  s += 2;
-	  *o++ = (data & 0x7c00) >> 7 | (data & 0x7000) >> 12
-	    | (data & 0x3e0) << 6 | (data & 0x380) << 1
-	    | (data & 0x1f) << 19 | (data & 0x1c) << 14
-	    | 0xff000000;
+	  data = SWAP16 (data);
+	  *o++ = ABGR8888fromRGB555 (data);
 #else
-	  data = *s++;
-	  *o++ = (data & 0x7c00) << 17 | (data & 0x7000) << 12
-	    | (data & 0x3e0) << 14 | (data & 0x380) << 9
-	    | (data & 0x1f) << 11 | (data & 0x1c) << 6
-	    | 0xff;
+	  *o++ = RGBA8888fromRGB555 (data);
 #endif
 	}
       srow += bpl;
@@ -1114,13 +846,8 @@ rgb888amsb (GdkImage    *image,
   int bpl;
 
   guint8 *srow = (guint8*)image->mem + y1 * image->bpl + x1 * image->bpp, *orow = pixels;
-#ifdef LITTLE
   guint32 *o;
   guint32 *s;
-#else
-  guint8 *s;	/* for byte order swapping */
-  guint8 *o;
-#endif
 
   d (printf ("32 bit, msb, with alpha\n"));
 
@@ -1129,24 +856,14 @@ rgb888amsb (GdkImage    *image,
   /* msb data */
   for (yy = y1; yy < y2; yy++)
     {
-#ifdef LITTLE
       s = (guint32 *) srow;
       o = (guint32 *) orow;
-#else
-      s = srow;
-      o = orow;
-#endif
       for (xx = x1; xx < x2; xx++)
 	{
 #ifdef LITTLE
-	  *o++ = s[1];
-	  *o++ = s[2];
-	  *o++ = s[3];
-	  *o++ = 0xff;
-	  s += 4;
+	  *o++ = (*s++ >> 8) | 0xff000000;
 #else
-	  *o++ = (*s << 8) | 0xff; /* untested */
-	  s++;
+	  *o++ = (*s++ << 8) | 0xff;
 #endif
 	}
       srow += bpl;
