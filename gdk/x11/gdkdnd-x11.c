@@ -711,6 +711,24 @@ card32_to_host (guint32 x, gchar byte_order) {
     return (x << 24) | ((x & 0xff00) << 8) | ((x & 0xff0000) >> 8) | (x >> 24);
 }
 
+/* Motif packs together fields of varying length into the
+ * client message. We can't rely on accessing these
+ * through data.s[], data.l[], etc, because on some architectures
+ * (i.e., Alpha) these won't be valid for format == 8. 
+ */
+
+#define MOTIF_XCLIENT_BYTE(xevent,i) \
+  (xevent)->xclient.data.b[i]
+#define MOTIF_XCLIENT_SHORT(xevent,i) \
+  ((gint16 *)&((xevent)->xclient.data.b[0]))[i]
+#define MOTIF_XCLIENT_LONG(xevent,i) \
+  ((gint32 *)&((xevent)->xclient.data.b[0]))[i]
+
+#define MOTIF_UNPACK_BYTE(xevent,i) MOTIF_XCLIENT_BYTE(xevent,i)
+#define MOTIF_UNPACK_SHORT(xevent,i) \
+  card16_to_host (MOTIF_XCLIENT_SHORT(xevent,i), MOTIF_XCLIENT_BYTE(xevent, 1))
+#define MOTIF_UNPACK_LONG(xevent,i) \
+  card32_to_host (MOTIF_XCLIENT_LONG(xevent,i), MOTIF_XCLIENT_BYTE(xevent, 1))
 
 /***** Dest side ***********/
 
@@ -773,7 +791,7 @@ motif_drag_window_filter (GdkXEvent *xevent,
   return GDK_FILTER_REMOVE;
 }
 
-static GdkAtom motif_drag_window_atom = GDK_NONE;
+static Atom motif_drag_window_atom = GDK_NONE;
 
 static Window
 motif_lookup_drag_window (Display *display)
@@ -785,11 +803,11 @@ motif_lookup_drag_window (Display *display)
   guchar *data;
 
   XGetWindowProperty (gdk_display, gdk_root_window, motif_drag_window_atom,
-		      0, sizeof(Window)/4, FALSE,
+		      0, 1, FALSE,
 		      XA_WINDOW, &type, &format, &nitems, &bytes_after,
 		      &data);
   
-  if ((format == 8*sizeof(Window)) && (nitems == 1) && (bytes_after == 0))
+  if ((format == 32) && (nitems == 1) && (bytes_after == 0))
     {
       retval = *(Window *)data;
       GDK_NOTE(DND, 
@@ -910,7 +928,7 @@ motif_read_target_table (void)
 
       XGetWindowProperty (gdk_display, motif_drag_window, motif_drag_targets_atom,
 			  (sizeof(MotifTargetTableHeader)+3)/4, 
-			  (header->total_size - sizeof(MotifTargetTableHeader) + 3)/4,
+			  (header->total_size + 3)/4 - (sizeof(MotifTargetTableHeader) + 3)/4,
 			  FALSE,
 			  motif_drag_targets_atom, &type, &format, &nitems, 
 			  &bytes_after, &target_bytes);
@@ -1280,16 +1298,16 @@ motif_send_enter (GdkDragContext  *context,
   xev.xclient.format = 8;
   xev.xclient.window = GDK_WINDOW_XWINDOW (context->dest_window);
 
-  xev.xclient.data.b[0] = XmTOP_LEVEL_ENTER;
-  xev.xclient.data.b[1] = local_byte_order;
-  xev.xclient.data.s[1] = 0;
-  xev.xclient.data.l[1] = time;
-  xev.xclient.data.l[2] = GDK_WINDOW_XWINDOW (context->source_window);
+  MOTIF_XCLIENT_BYTE (&xev, 0) = XmTOP_LEVEL_ENTER;
+  MOTIF_XCLIENT_BYTE (&xev, 1) = local_byte_order;
+  MOTIF_XCLIENT_SHORT (&xev, 1) = 0;
+  MOTIF_XCLIENT_LONG (&xev, 1) = time;
+  MOTIF_XCLIENT_LONG (&xev, 2) = GDK_WINDOW_XWINDOW (context->source_window);
 
   if (!private->motif_targets_set)
     motif_set_targets (context);
 
-  xev.xclient.data.l[3] = private->motif_selection;
+  MOTIF_XCLIENT_LONG (&xev, 3) = private->motif_selection;
 
   if (!gdk_send_xevent (GDK_WINDOW_XWINDOW (context->dest_window),
 			FALSE, 0, &xev))
@@ -1309,12 +1327,12 @@ motif_send_leave (GdkDragContext  *context,
   xev.xclient.format = 8;
   xev.xclient.window = GDK_WINDOW_XWINDOW (context->dest_window);
 
-  xev.xclient.data.b[0] = XmTOP_LEVEL_LEAVE;
-  xev.xclient.data.b[1] = local_byte_order;
-  xev.xclient.data.s[1] = 0;
-  xev.xclient.data.l[1] = time;
-  xev.xclient.data.l[2] = GDK_WINDOW_XWINDOW (context->source_window);
-  xev.xclient.data.l[3] = 0;
+  MOTIF_XCLIENT_BYTE (&xev, 0) = XmTOP_LEVEL_LEAVE;
+  MOTIF_XCLIENT_BYTE (&xev, 1) = local_byte_order;
+  MOTIF_XCLIENT_SHORT (&xev, 1) = 0;
+  MOTIF_XCLIENT_LONG (&xev, 1) = time;
+  MOTIF_XCLIENT_LONG (&xev, 2) = GDK_WINDOW_XWINDOW (context->source_window);
+  MOTIF_XCLIENT_LONG (&xev, 3) = 0;
 
   if (!gdk_send_xevent (GDK_WINDOW_XWINDOW (context->dest_window),
 			FALSE, 0, &xev))
@@ -1339,23 +1357,23 @@ motif_send_motion (GdkDragContext  *context,
   xev.xclient.format = 8;
   xev.xclient.window = GDK_WINDOW_XWINDOW (context->dest_window);
 
-  xev.xclient.data.b[1] = local_byte_order;
-  xev.xclient.data.s[1] = motif_dnd_get_flags (context);
-  xev.xclient.data.l[1] = time;
+  MOTIF_XCLIENT_BYTE (&xev, 1) = local_byte_order;
+  MOTIF_XCLIENT_SHORT (&xev, 1) = motif_dnd_get_flags (context);
+  MOTIF_XCLIENT_LONG (&xev, 1) = time;
 
   if (context->suggested_action != private->old_action)
     {
-      xev.xclient.data.b[0] = XmOPERATION_CHANGED;
+      MOTIF_XCLIENT_BYTE (&xev, 0) = XmOPERATION_CHANGED;
 
       private->drag_status = GDK_DRAG_STATUS_ACTION_WAIT;
       retval = TRUE;
     }
   else
     {
-      xev.xclient.data.b[0] = XmDRAG_MOTION;
+      MOTIF_XCLIENT_BYTE (&xev, 0) = XmDRAG_MOTION;
 
-      xev.xclient.data.s[4] = x_root;
-      xev.xclient.data.s[5] = y_root;
+      MOTIF_XCLIENT_SHORT (&xev, 4) = x_root;
+      MOTIF_XCLIENT_SHORT (&xev, 5) = y_root;
       
       private->drag_status = GDK_DRAG_STATUS_MOTION_WAIT;
       retval = FALSE;
@@ -1381,16 +1399,16 @@ motif_send_drop (GdkDragContext *context, guint32 time)
   xev.xclient.format = 8;
   xev.xclient.window = GDK_WINDOW_XWINDOW (context->dest_window);
 
-  xev.xclient.data.b[0] = XmDROP_START;
-  xev.xclient.data.b[1] = local_byte_order;
-  xev.xclient.data.s[1] = motif_dnd_get_flags (context);
-  xev.xclient.data.l[1] = time;
+  MOTIF_XCLIENT_BYTE (&xev, 0) = XmDROP_START;
+  MOTIF_XCLIENT_BYTE (&xev, 1) = local_byte_order;
+  MOTIF_XCLIENT_SHORT (&xev, 1) = motif_dnd_get_flags (context);
+  MOTIF_XCLIENT_LONG (&xev, 1)  = time;
 
-  xev.xclient.data.s[4] = private->last_x;
-  xev.xclient.data.s[5] = private->last_y;
+  MOTIF_XCLIENT_SHORT (&xev, 4) = private->last_x;
+  MOTIF_XCLIENT_SHORT (&xev, 5) = private->last_y;
 
-  xev.xclient.data.l[3] = private->motif_selection;
-  xev.xclient.data.l[4] = GDK_WINDOW_XWINDOW (context->source_window);
+  MOTIF_XCLIENT_LONG (&xev, 3)  = private->motif_selection;
+  MOTIF_XCLIENT_LONG (&xev, 4)  = GDK_WINDOW_XWINDOW (context->source_window);
 
   if (!gdk_send_xevent (GDK_WINDOW_XWINDOW (context->dest_window),
 			FALSE, 0, &xev))
@@ -1440,6 +1458,11 @@ motif_read_initiator_info (Window source_window,
       return GDK_FILTER_REMOVE;
     }
 
+  initiator_info->targets_index = 
+    card16_to_host (initiator_info->targets_index, initiator_info->byte_order);
+  initiator_info->selection_atom = 
+    card32_to_host (initiator_info->selection_atom, initiator_info->byte_order);
+  
   tmp_list = g_list_last (motif_target_lists[initiator_info->targets_index]);
 
   *targets = NULL;
@@ -1743,10 +1766,8 @@ motif_dnd_filter (GdkXEvent *xev,
 		  gpointer data)
 {
   XEvent *xevent = (XEvent *)xev;
-  XClientMessageEvent *xce = &xevent->xclient;
 
   guint8 reason;
-  gchar byte_order;
   guint16 flags;
   guint32 timestamp;
   guint32 source_window;
@@ -1756,25 +1777,24 @@ motif_dnd_filter (GdkXEvent *xev,
   
   /* First read some fields common to all Motif DND messages */
 
-  reason = xce->data.b[0];
-  byte_order = xce->data.b[1];
-  flags = card16_to_host (xce->data.s[1], byte_order);
-  timestamp = card32_to_host (xce->data.l[1], byte_order);
+  reason = MOTIF_UNPACK_BYTE (xevent, 0);
+  flags = MOTIF_UNPACK_SHORT (xevent, 1);
+  timestamp = MOTIF_UNPACK_LONG (xevent, 1);
 
   is_reply = ((reason & 0x80) != 0);
 
   switch (reason & 0x7f)
     {
     case XmTOP_LEVEL_ENTER:
-      source_window = card32_to_host (xce->data.l[2], byte_order);
-      atom = card32_to_host (xce->data.l[3], byte_order);
+      source_window = MOTIF_UNPACK_LONG (xevent, 2);
+      atom = MOTIF_UNPACK_LONG (xevent, 3);
       return motif_top_level_enter (event, flags, timestamp, source_window, atom);
     case XmTOP_LEVEL_LEAVE:
       return motif_top_level_leave (event, flags, timestamp);
 
     case XmDRAG_MOTION:
-      x_root = card16_to_host (xce->data.s[4], byte_order);
-      y_root = card16_to_host (xce->data.s[5], byte_order);
+      x_root = MOTIF_UNPACK_SHORT (xevent, 4);
+      y_root = MOTIF_UNPACK_SHORT (xevent, 5);
       
       if (!is_reply)
 	return motif_motion (event, flags, timestamp, x_root, y_root);
@@ -1789,10 +1809,10 @@ motif_dnd_filter (GdkXEvent *xev,
 				XmNO_DROP_SITE << 8 | XmDROP_NOOP, 
 				timestamp);
     case XmDROP_START:
-      x_root = card16_to_host (xce->data.s[4], byte_order);
-      y_root = card16_to_host (xce->data.s[5], byte_order);
-      atom = card32_to_host (xce->data.l[3], byte_order);
-      source_window = card32_to_host (xce->data.l[4], byte_order);
+      x_root = MOTIF_UNPACK_SHORT (xevent, 4);
+      y_root = MOTIF_UNPACK_SHORT (xevent, 5);
+      atom = MOTIF_UNPACK_LONG (xevent, 3);
+      source_window = MOTIF_UNPACK_LONG (xevent, 4);
 
       if (!is_reply)
 	return motif_drop_start (event, flags, timestamp, source_window, atom, x_root, y_root);
@@ -2878,47 +2898,47 @@ gdk_drag_status (GdkDragContext   *context,
 
       if (private->drag_status == GDK_DRAG_STATUS_ACTION_WAIT)
 	{
-	  xev.xclient.data.b[0] = XmOPERATION_CHANGED | 0x80;
+	  MOTIF_XCLIENT_BYTE (&xev, 0) = XmOPERATION_CHANGED | 0x80;
 	}
       else
 	{
 	  if ((action != 0) != (private->old_action != 0))
 	    {
 	      if (action != 0)
-		xev.xclient.data.b[0] = XmDROP_SITE_ENTER | 0x80;
+		MOTIF_XCLIENT_BYTE (&xev, 0) = XmDROP_SITE_ENTER | 0x80;
 	      else
-		xev.xclient.data.b[0] = XmDROP_SITE_LEAVE | 0x80;
+		MOTIF_XCLIENT_BYTE (&xev, 0) = XmDROP_SITE_LEAVE | 0x80;
 	    }
 	  else
-	    xev.xclient.data.b[0] = XmDRAG_MOTION | 0x80;
+	    MOTIF_XCLIENT_BYTE (&xev, 0) = XmDRAG_MOTION | 0x80;
 	}
 
-      xev.xclient.data.b[1] = local_byte_order;
+      MOTIF_XCLIENT_BYTE (&xev, 1) = local_byte_order;
 
       switch (action)
 	{
 	case GDK_ACTION_MOVE:
-	  xev.xclient.data.s[1] = XmDROP_MOVE;
+	  MOTIF_XCLIENT_SHORT (&xev, 1) = XmDROP_MOVE;
 	  break;
 	case GDK_ACTION_COPY:
-	  xev.xclient.data.s[1] = XmDROP_COPY;
+	  MOTIF_XCLIENT_SHORT (&xev, 1) = XmDROP_COPY;
 	  break;
 	case GDK_ACTION_LINK:
-	  xev.xclient.data.s[1] = XmDROP_LINK;
+	  MOTIF_XCLIENT_SHORT (&xev, 1) = XmDROP_LINK;
 	  break;
 	default:
-	  xev.xclient.data.s[1] = XmDROP_NOOP;
+	  MOTIF_XCLIENT_SHORT (&xev, 1) = XmDROP_NOOP;
 	  break;
 	}
 
       if (action)
-	xev.xclient.data.s[1] |= (XmDROP_SITE_VALID << 4);
+	MOTIF_XCLIENT_SHORT (&xev, 1) |= (XmDROP_SITE_VALID << 4);
       else
-	xev.xclient.data.s[1] |= (XmNO_DROP_SITE << 4);
+	MOTIF_XCLIENT_SHORT (&xev, 1) |= (XmNO_DROP_SITE << 4);
 
-      xev.xclient.data.l[1] = time;
-      xev.xclient.data.s[4] = private->last_x;
-      xev.xclient.data.s[5] = private->last_y;
+      MOTIF_XCLIENT_LONG (&xev, 1) = time;
+      MOTIF_XCLIENT_SHORT (&xev, 4) = private->last_x;
+      MOTIF_XCLIENT_SHORT (&xev, 5) = private->last_y;
 
       if (!gdk_send_xevent (GDK_WINDOW_XWINDOW (context->source_window),
 		       FALSE, 0, &xev))
@@ -2968,20 +2988,20 @@ gdk_drop_reply (GdkDragContext   *context,
       xev.xclient.message_type = gdk_atom_intern ("_MOTIF_DRAG_AND_DROP_MESSAGE", FALSE);
       xev.xclient.format = 8;
 
-      xev.xclient.data.b[0] = XmDROP_START | 0x80;
-      xev.xclient.data.b[1] = local_byte_order;
+      MOTIF_XCLIENT_BYTE (&xev, 0) = XmDROP_START | 0x80;
+      MOTIF_XCLIENT_BYTE (&xev, 1) = local_byte_order;
       if (ok)
-	xev.xclient.data.s[1] = XmDROP_COPY | 
-	                        (XmDROP_SITE_VALID << 4) |
-	                        (XmDROP_NOOP << 8) |
-	                        (XmDROP << 12);
+	MOTIF_XCLIENT_SHORT (&xev, 1) = XmDROP_COPY | 
+	                               (XmDROP_SITE_VALID << 4) |
+	                               (XmDROP_NOOP << 8) |
+	                               (XmDROP << 12);
       else
-	xev.xclient.data.s[1] = XmDROP_NOOP | 
-	                        (XmNO_DROP_SITE << 4) |
-	                        (XmDROP_NOOP << 8) |
-	                        (XmDROP_CANCEL << 12);
-      xev.xclient.data.s[2] = private->last_x;
-      xev.xclient.data.s[3] = private->last_y;
+	MOTIF_XCLIENT_SHORT (&xev, 1) = XmDROP_NOOP | 
+	                               (XmNO_DROP_SITE << 4) |
+	                               (XmDROP_NOOP << 8) |
+	                               (XmDROP_CANCEL << 12);
+      MOTIF_XCLIENT_SHORT (&xev, 2) = private->last_x;
+      MOTIF_XCLIENT_SHORT (&xev, 3) = private->last_y;
       
       gdk_send_xevent (GDK_WINDOW_XWINDOW (context->source_window),
 		       FALSE, 0, &xev);
@@ -3022,7 +3042,7 @@ gdk_drop_finish (GdkDragContext   *context,
 void            
 gdk_window_register_dnd (GdkWindow      *window)
 {
-  static guint32 xdnd_version = 3;
+  static gulong xdnd_version = 3;
   MotifDragReceiverInfo info;
 
   g_return_if_fail (window != NULL);

@@ -332,9 +332,12 @@ target_drag_drop	   (GtkWidget	       *widget,
   gtk_pixmap_set (GTK_PIXMAP (widget), trashcan_closed, trashcan_closed_mask);
 
   if (context->targets)
-    gtk_drag_get_data (widget, context, 
-		       GPOINTER_TO_INT (context->targets->data), 
-		       time);
+    {
+      gtk_drag_get_data (widget, context, 
+			 GPOINTER_TO_INT (context->targets->data), 
+			 time);
+      return TRUE;
+    }
   
   return FALSE;
 }
