@@ -463,7 +463,7 @@ echo > confdefs.h
 
 # A filename unique to this package, relative to the directory that
 # configure is in, which we can look for to find out if srcdir is correct.
-ac_unique_file=glib.h
+ac_unique_file=glist.c
 
 # Find the source files, if location was not specified.
 if test -z "$srcdir"; then
@@ -1509,17 +1509,17 @@ test -z "$INSTALL_PROGRAM" && INSTALL_PROGRAM='${INSTALL}'
 test -z "$INSTALL_DATA" && INSTALL_DATA='${INSTALL} -m 644'
 
 
-if test "x$GCC" = "xyes"; then
-  if test -z "`echo "$CFLAGS" | grep "\-Wall" 2> /dev/null`" ; then
+if eval "test x$GCC = xyes"; then
+  if eval test -z \"`echo "$CFLAGS" | grep "\-Wall" 2> /dev/null`\" ; then
     CFLAGS="$CFLAGS -Wall"
   fi
 
-  if test "x$enable_ansi" = "xyes"; then
-    if test -z "`echo "$CFLAGS" | grep "\-ansi" 2> /dev/null`" ; then
+  if eval "test x$enable_ansi = xyes"; then
+    if eval test -z \"`echo "$CFLAGS" | grep "\-ansi" 2> /dev/null`\" ; then
       CFLAGS="$CFLAGS -ansi"
     fi
 
-    if test -z "`echo "$CFLAGS" | grep "\-pedantic" 2> /dev/null`" ; then
+    if eval test -z \"`echo "$CFLAGS" | grep "\-pedantic" 2> /dev/null`\" ; then
       CFLAGS="$CFLAGS -pedantic"
     fi
   fi
