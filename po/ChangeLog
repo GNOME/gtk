@@ -1,3 +1,7 @@
+2003-04-29  Hasbullah Bin Pit <sebol@ikhlas.com>
+
+	* ms.po: Updated Malay translation.
+
 2003-04-23  Abel Cheung  <maddog@linux.org.hk>
 
 	* az.po: Mark incorrect entry as fuzzy (failed msgfmt check).
