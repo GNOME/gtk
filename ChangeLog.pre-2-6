@@ -1,3 +1,12 @@
+Sun Aug 22 00:08:44 2004  Matthias Clasen  <maclas@gmx.de>
+
+	Fix #150406, reported by Fernando San Martín Woerner, patch
+	by Gustavo Carneiro.
+	
+	* gtk/gtkentrycompletion.c 
+	(gtk_entry_completion_default_completion_func): Check that 
+	column is of type G_TYPE_STRING before proceeding.
+
 Sat Aug 21 23:52:13 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtktreestore.c (gtk_tree_store_swap): Don't use an 

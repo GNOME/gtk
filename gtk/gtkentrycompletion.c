@@ -675,6 +675,9 @@ gtk_entry_completion_default_completion_func (GtkEntryCompletion *completion,
 
   model = gtk_tree_model_filter_get_model (completion->priv->filter_model);
 
+  g_return_val_if_fail (gtk_tree_model_get_column_type (model, completion->priv->text_column) == G_TYPE_STRING, 
+			FALSE);
+
   gtk_tree_model_get (model, iter,
                       completion->priv->text_column, &item,
                       -1);
