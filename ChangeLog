@@ -1,3 +1,8 @@
+Fri May 15 12:31:27 1998  rodo  <doulik@karlin.mff.cuni.cz>
+
+	* gdk/gdk.c: include gdkkeysyms.h always
+	
+
 Fri May 15 09:44:10 1998  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkwidget.h (struct _GtkWidgetClass): corrected returntype of

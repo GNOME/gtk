@@ -51,8 +51,8 @@
 #include "gdkinput.h"
 #ifdef USE_XIM
 #include "gdkx.h"
-#include "gdkkeysyms.h"
 #endif
+#include "gdkkeysyms.h"
 #include "gdki18n.h"
 
 #ifndef X_GETTIMEOFDAY
