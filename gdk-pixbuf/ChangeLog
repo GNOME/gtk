@@ -1,5 +1,17 @@
 2002-07-02  Matthias Clasen  <maclas@gmx.de>
 
+	Miscellaneous bmp loader fixes (#85448, #86286, #86287):
+	
+	* io-bmp.c (grow_buffer): New function to avoid crashes
+	on unchecked reallocs. 
+	(DecodeHeader, DecodeColormap, decode_bitmasks,
+	DoCompressed): Use grow_buffer instead of g_realloc 
+	throughout. Change signatures where necessary to pass the
+	errors up.
+	(OneLine16): Fix loading of 16bpp BI_RGB bmps. 
+	(DoCompressed): Rewritten to properly support BI_RLE4 and
+	skips and jumps.
+
 	Support for compressed ras images (#84994):
 	
 	* io-ras.c (RAS2State): Error on unsupported ras variations.
@@ -16,6 +28,8 @@
 	gdk_pixbuf__jpeg_image_load_increment): Allocate a pixbuf with
 	alpha for 4-channel jpegs and call convert_cmyk_to_rgb for these.
 
+	All of this needs to be merged to GNOME 1.4 gdk-pixbuf.
+	
 2002-06-28  Sven Neumann  <sven@gimp.org>
 
 	* gdk-pixbuf-csource.c (print_blurb): converted a Tab to spaces.
