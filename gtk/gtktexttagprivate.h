@@ -4,35 +4,55 @@
 #include <gtk/gtktexttag.h>
 
 /* values should already have desired defaults; this function will override
-   the defaults with settings in the given tags, which should be sorted in
-   ascending order of priority
+ * the defaults with settings in the given tags, which should be sorted in
+ * ascending order of priority
 */
-void gtk_text_view_style_values_fill_from_tags(GtkTextStyleValues *values,
-                                           GtkTextTag** tags,
-                                           guint n_tags);
-
-
-
-void gtk_text_tag_array_sort   (GtkTextTag **tag_array_p,
-                                 guint         len);
-
-
+void gtk_text_view_style_values_fill_from_tags (GtkTextStyleValues  *values,
+						GtkTextTag         **tags,
+						guint                n_tags);
+void gtk_text_tag_array_sort                   (GtkTextTag         **tag_array_p,
+						guint                len);
 
 /*
  * Style object created by folding a set of tags together
  */
 
-struct _GtkTextStyleValues {
+typedef struct _GtkTextAppearance GtkTextAppearance;
+
+struct _GtkTextAppearance
+{
+  GdkColor bg_color;
+  GdkColor fg_color;
+  GdkBitmap *bg_stipple;
+  GdkBitmap *fg_stipple;
+
+  guint underline : 4;		/* PangoUnderline */
+  guint overstrike : 1;
+
+  /* Whether to use background-related values; this is irrelevant for
+   * the values struct when in a tag, but is used for the composite
+   * values struct; it's true if any of the tags being composited
+   * had background stuff set. */
+  guint draw_bg : 1;
+
+  /* This is only used when we are actually laying out and rendering
+   * a paragraph; not when a GtkTextAppearance is part of a
+   * GtkTextStyleValues.
+   */
+  guint inside_selection : 1;
+};
+
+struct _GtkTextStyleValues
+{
   guint refcount;
 
-  GdkColor bg_color;
+  GtkTextAppearance appearance;
+  
   gint border_width;
   GtkShadowType relief;
-  GdkBitmap *bg_stipple;
-  GdkColor fg_color;
-  GdkFont *font;
-  GdkBitmap *fg_stipple;
   GtkJustification justify;
+  
+  PangoFontDescription *font_desc;
   
   /* lMargin1 */
   gint left_margin;
@@ -58,29 +78,16 @@ struct _GtkTextStyleValues {
 				 * GTK_WRAPMODE_NONE, GTK_WRAPMODE_WORD
                                  */
 
-  gint pad10;
-  gpointer pad11;
-  
-  /* Underline or overstrike */
-  guint underline : 1;
-  guint overstrike : 1;
-  
   /* hide the text */
 
   guint elide : 1;
 
   /* Background is fit to full line height rather than
-     baseline +/- ascent/descent (font height) */
+   * baseline +/- ascent/descent (font height) */
   guint bg_full_height : 1;
   
   /* can edit this text */
   guint editable : 1;
-
-  /* Whether to use background-related values; this is irrelevant for
-     the values struct when in a tag, but is used for the composite
-     values struct; it's true if any of the tags being composited
-     had background stuff set. */
-  guint draw_bg : 1;
 
   /* colors are allocated etc. */
   guint realized : 1;
@@ -91,18 +98,20 @@ struct _GtkTextStyleValues {
   guint pad4 : 1;
 };
 
-GtkTextStyleValues *gtk_text_view_style_values_new   (void);
-void                 gtk_text_view_style_values_copy  (GtkTextStyleValues *src,
-                                                   GtkTextStyleValues *dest);
-void                 gtk_text_view_style_values_unref (GtkTextStyleValues *values);
-void                 gtk_text_view_style_values_ref   (GtkTextStyleValues *values);
+GtkTextStyleValues *gtk_text_view_style_values_new       (void);
+void                gtk_text_view_style_values_copy      (GtkTextStyleValues *src,
+							  GtkTextStyleValues *dest);
+void                gtk_text_view_style_values_unref     (GtkTextStyleValues *values);
+void                gtk_text_view_style_values_ref       (GtkTextStyleValues *values);
+
 /* ensure colors are allocated, etc. for drawing */
-void                 gtk_text_view_style_values_realize(GtkTextStyleValues *values,
-                                                    GdkColormap *cmap,
-                                                    GdkVisual *visual);
+void                gtk_text_view_style_values_realize   (GtkTextStyleValues *values,
+							  GdkColormap        *cmap,
+							  GdkVisual          *visual);
+
 /* free the stuff again */
-void                 gtk_text_view_style_values_unrealize(GtkTextStyleValues *values,
-                                                      GdkColormap *cmap,
-                                                      GdkVisual *visual);
+void                gtk_text_view_style_values_unrealize (GtkTextStyleValues *values,
+							  GdkColormap        *cmap,
+							  GdkVisual          *visual);
 
 #endif

@@ -39,29 +39,30 @@ void gtk_text_btree_insert_pixmap (GtkTextIter *iter,
 
 
 /* View stuff */
-gpointer gtk_text_btree_find_line_data_by_y (GtkTextBTree      *tree,
-                                             gpointer           view_id,
-                                             gint               ypixel,
-                                             gint              *line_top_y);
-gint     gtk_text_btree_find_line_top       (GtkTextBTree      *tree,
-                                             GtkTextLine       *line,
-                                             gpointer           view_id);
-void     gtk_text_btree_add_view            (GtkTextBTree      *tree,
-                                             GtkTextLayout     *layout,
-                                             GDestroyNotify     line_data_destructor);
-void     gtk_text_btree_remove_view         (GtkTextBTree      *tree,
-                                             gpointer           view_id);
-void     gtk_text_btree_invalidate_region   (GtkTextBTree      *tree,
-                                             const GtkTextIter *start,
-                                             const GtkTextIter *end);
-void     gtk_text_btree_get_view_size       (GtkTextBTree      *tree,
-                                             gpointer           view_id,
-                                             gint              *width,
-                                             gint              *height);
-void     gtk_text_btree_get_damage_range    (GtkTextBTree      *tree,
-                                             gpointer           view_id,
-                                             gint              *top_undamaged_size,
-                                             gint              *bottom_undamaged_size);
+GtkTextLine *gtk_text_btree_find_line_by_y    (GtkTextBTree      *tree,
+					       gpointer           view_id,
+					       gint               ypixel,
+					       gint              *line_top_y);
+gint         gtk_text_btree_find_line_top     (GtkTextBTree      *tree,
+					       GtkTextLine       *line,
+					       gpointer           view_id);
+void         gtk_text_btree_add_view          (GtkTextBTree      *tree,
+					       GtkTextLayout     *layout,
+					       GDestroyNotify     line_data_destructor);
+void         gtk_text_btree_remove_view       (GtkTextBTree      *tree,
+					       gpointer           view_id);
+void         gtk_text_btree_invalidate_region (GtkTextBTree      *tree,
+					       const GtkTextIter *start,
+					       const GtkTextIter *end);
+void         gtk_text_btree_get_view_size     (GtkTextBTree      *tree,
+					       gpointer           view_id,
+					       gint              *width,
+					       gint              *height);
+void         gtk_text_btree_get_damage_range  (GtkTextBTree      *tree,
+					       gpointer           view_id,
+					       gint              *top_undamaged_size,
+					       gint              *bottom_undamaged_size);
+
 
 
 /* Tag */

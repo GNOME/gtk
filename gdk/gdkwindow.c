@@ -40,70 +40,76 @@ struct _GdkWindowPaint
 };
 
 static void   gdk_window_draw_destroy   (GdkDrawable     *drawable);
-static GdkGC *gdk_window_draw_create_gc (GdkDrawable     *drawable,
-					 GdkGCValues     *values,
-					 GdkGCValuesMask  mask);
-static void   gdk_window_draw_rectangle (GdkDrawable     *drawable,
-					 GdkGC           *gc,
-					 gint             filled,
-					 gint             x,
-					 gint             y,
-					 gint             width,
-					 gint             height);
-static void   gdk_window_draw_arc       (GdkDrawable     *drawable,
-					 GdkGC           *gc,
-					 gint             filled,
-					 gint             x,
-					 gint             y,
-					 gint             width,
-					 gint             height,
-					 gint             angle1,
-					 gint             angle2);
-static void   gdk_window_draw_polygon   (GdkDrawable     *drawable,
-					 GdkGC           *gc,
-					 gint             filled,
-					 GdkPoint        *points,
-					 gint             npoints);
-static void   gdk_window_draw_text      (GdkDrawable     *drawable,
-					 GdkFont         *font,
-					 GdkGC           *gc,
-					 gint             x,
-					 gint             y,
-					 const gchar     *text,
-					 gint             text_length);
-static void   gdk_window_draw_text_wc   (GdkDrawable     *drawable,
-					 GdkFont         *font,
-					 GdkGC           *gc,
-					 gint             x,
-					 gint             y,
-					 const GdkWChar  *text,
-					 gint             text_length);
-static void   gdk_window_draw_drawable  (GdkDrawable     *drawable,
-					 GdkGC           *gc,
-					 GdkPixmap       *src,
-					 gint             xsrc,
-					 gint             ysrc,
-					 gint             xdest,
-					 gint             ydest,
-					 gint             width,
-					 gint             height);
-static void   gdk_window_draw_points    (GdkDrawable     *drawable,
-					 GdkGC           *gc,
-					 GdkPoint        *points,
-					 gint             npoints);
-static void   gdk_window_draw_segments  (GdkDrawable     *drawable,
-					 GdkGC           *gc,
-					 GdkSegment      *segs,
-					 gint             nsegs);
-static void   gdk_window_draw_lines     (GdkDrawable     *drawable,
-					 GdkGC           *gc,
-					 GdkPoint        *points,
-					 gint             npoints);
-static void   gdk_window_draw_layout    (GdkDrawable     *drawable,
-					 GdkGC           *gc,
-					 gint             x,
-					 gint             y,
-					 PangoLayout     *layout);
+static GdkGC *gdk_window_draw_create_gc (GdkDrawable      *drawable,
+					 GdkGCValues      *values,
+					 GdkGCValuesMask   mask);
+static void   gdk_window_draw_rectangle (GdkDrawable      *drawable,
+					 GdkGC            *gc,
+					 gint              filled,
+					 gint              x,
+					 gint              y,
+					 gint              width,
+					 gint              height);
+static void   gdk_window_draw_arc       (GdkDrawable      *drawable,
+					 GdkGC            *gc,
+					 gint              filled,
+					 gint              x,
+					 gint              y,
+					 gint              width,
+					 gint              height,
+					 gint              angle1,
+					 gint              angle2);
+static void   gdk_window_draw_polygon   (GdkDrawable      *drawable,
+					 GdkGC            *gc,
+					 gint              filled,
+					 GdkPoint         *points,
+					 gint              npoints);
+static void   gdk_window_draw_text      (GdkDrawable      *drawable,
+					 GdkFont          *font,
+					 GdkGC            *gc,
+					 gint              x,
+					 gint              y,
+					 const gchar      *text,
+					 gint              text_length);
+static void   gdk_window_draw_text_wc   (GdkDrawable      *drawable,
+					 GdkFont          *font,
+					 GdkGC            *gc,
+					 gint              x,
+					 gint              y,
+					 const GdkWChar   *text,
+					 gint              text_length);
+static void   gdk_window_draw_drawable  (GdkDrawable      *drawable,
+					 GdkGC            *gc,
+					 GdkPixmap        *src,
+					 gint              xsrc,
+					 gint              ysrc,
+					 gint              xdest,
+					 gint              ydest,
+					 gint              width,
+					 gint              height);
+static void   gdk_window_draw_points    (GdkDrawable      *drawable,
+					 GdkGC            *gc,
+					 GdkPoint         *points,
+					 gint              npoints);
+static void   gdk_window_draw_segments  (GdkDrawable      *drawable,
+					 GdkGC            *gc,
+					 GdkSegment       *segs,
+					 gint              nsegs);
+static void   gdk_window_draw_lines     (GdkDrawable      *drawable,
+					 GdkGC            *gc,
+					 GdkPoint         *points,
+					 gint              npoints);
+static void   gdk_window_draw_glyphs    (GdkDrawable      *drawable,
+					 GdkGC            *gc,
+					 PangoFont        *font,
+					 gint              x,
+					 gint              y,
+					 PangoGlyphString *glyphs);
+static void   gdk_window_draw_layout    (GdkDrawable      *drawable,
+					 GdkGC            *gc,
+					 gint              x,
+					 gint              y,
+					 PangoLayout      *layout);
 
 /* All drawing operations on windows are forwarded through the following
  * class to enable the automatic-backing-store feature.
@@ -120,6 +126,7 @@ GdkDrawableClass _gdk_window_class = {
   gdk_window_draw_points,
   gdk_window_draw_segments,
   gdk_window_draw_lines,
+  gdk_window_draw_glyphs,
   gdk_window_draw_layout
 };
 
@@ -918,6 +925,30 @@ gdk_window_draw_lines (GdkDrawable *drawable,
 
   if (new_points != points)
     g_free (new_points);
+
+  RESTORE_GC (gc);
+}
+
+static void
+gdk_window_draw_glyphs (GdkDrawable      *drawable,
+			GdkGC            *gc,
+			PangoFont        *font,
+			gint              x,
+			gint              y,
+			PangoGlyphString *glyphs)
+{
+  GdkWindowPrivate *private = (GdkWindowPrivate *)drawable;
+
+  OFFSET_GC (gc);
+
+  if (private->paint_stack)
+    {
+      GdkWindowPaint *paint = private->paint_stack->data;
+      gdk_draw_glyphs (paint->pixmap, gc, font, x - x_offset, y - y_offset, glyphs);
+    }
+  else
+    _gdk_windowing_window_class.draw_glyphs (drawable, gc, font,
+					     x - x_offset, y - y_offset, glyphs);
 
   RESTORE_GC (gc);
 }

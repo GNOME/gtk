@@ -72,6 +72,7 @@ enum {
   ARG_BACKGROUND_STIPPLE,
   ARG_FOREGROUND_STIPPLE,
   ARG_FONT,
+  ARG_FONT_DESC,
   ARG_PIXELS_ABOVE_LINES,
   ARG_PIXELS_BELOW_LINES,
   ARG_PIXELS_INSIDE_WRAP,
@@ -181,6 +182,8 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
                            GTK_ARG_READWRITE, ARG_FOREGROUND_STIPPLE);
   gtk_object_add_arg_type ("GtkTextTag::font", GTK_TYPE_STRING,
                            GTK_ARG_READWRITE, ARG_FONT);
+  gtk_object_add_arg_type ("GtkTextTag::font_desc", GTK_TYPE_BOXED,
+                           GTK_ARG_READWRITE, ARG_FONT_DESC);
   gtk_object_add_arg_type ("GtkTextTag::pixels_above_lines", GTK_TYPE_INT,
                            GTK_ARG_READWRITE, ARG_PIXELS_ABOVE_LINES);
   gtk_object_add_arg_type ("GtkTextTag::pixels_below_lines", GTK_TYPE_INT,
@@ -207,7 +210,7 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
                            GTK_ARG_READWRITE, ARG_PIXELS_BELOW_LINES);
   gtk_object_add_arg_type ("GtkTextTag::pixels_inside_wrap", GTK_TYPE_INT,
                            GTK_ARG_READWRITE, ARG_PIXELS_INSIDE_WRAP);
-  gtk_object_add_arg_type ("GtkTextTag::underline", GTK_TYPE_BOOL,
+  gtk_object_add_arg_type ("GtkTextTag::underline", GTK_TYPE_ENUM,
                            GTK_ARG_READWRITE, ARG_UNDERLINE);
   gtk_object_add_arg_type ("GtkTextTag::wrap_mode", GTK_TYPE_ENUM,
                            GTK_ARG_READWRITE, ARG_WRAP_MODE);
@@ -257,7 +260,7 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
                            GTK_ARG_READWRITE, ARG_PIXELS_BELOW_LINES_SET);
   gtk_object_add_arg_type ("GtkTextTag::pixels_inside_wrap_set", GTK_TYPE_BOOL,
                            GTK_ARG_READWRITE, ARG_PIXELS_INSIDE_WRAP_SET);
-  gtk_object_add_arg_type ("GtkTextTag::underline_set", GTK_TYPE_BOOL,
+  gtk_object_add_arg_type ("GtkTextTag::underline_set", GTK_TYPE_ENUM,
                            GTK_ARG_READWRITE, ARG_UNDERLINE_SET);
   gtk_object_add_arg_type ("GtkTextTag::wrap_mode_set", GTK_TYPE_BOOL,
                            GTK_ARG_READWRITE, ARG_WRAP_MODE_SET);
@@ -319,13 +322,7 @@ gtk_text_tag_destroy (GtkObject *object)
   g_assert(!tkxt_tag->values->realized);
   
   if (tkxt_tag->table)
-    {
-      /* FIXME we need some way to notify all the
-         BTree's using the tag table that this has
-         happened. */
-      gtk_text_tag_table_remove(tkxt_tag->table,
-                                 tkxt_tag->name);
-    }
+    gtk_text_tag_table_remove(tkxt_tag->table, tkxt_tag->name);
 
   g_assert(tkxt_tag->table == NULL);
   
@@ -354,7 +351,7 @@ set_bg_color(GtkTextTag *tag, GdkColor *color)
   if (color)
     {
       tag->bg_color_set = TRUE;
-      tag->values->bg_color = *color;
+      tag->values->appearance.bg_color = *color;
     }
   else
     {
@@ -368,7 +365,7 @@ set_fg_color(GtkTextTag *tag, GdkColor *color)
   if (color)
     {
       tag->fg_color_set = TRUE;
-      tag->values->fg_color = *color;
+      tag->values->appearance.fg_color = *color;
     }
   else
     {
@@ -435,15 +432,15 @@ gtk_text_tag_set_arg (GtkObject *object, GtkArg *arg, guint arg_id)
 
         tkxt_tag->bg_stipple_set = TRUE;
         
-        if (tkxt_tag->values->bg_stipple != bitmap)
+        if (tkxt_tag->values->appearance.bg_stipple != bitmap)
           {
             if (bitmap != NULL)
               gdk_bitmap_ref(bitmap);
             
-            if (tkxt_tag->values->bg_stipple)
-              gdk_bitmap_unref(tkxt_tag->values->bg_stipple);
+            if (tkxt_tag->values->appearance.bg_stipple)
+              gdk_bitmap_unref(tkxt_tag->values->appearance.bg_stipple);
             
-            tkxt_tag->values->bg_stipple = bitmap;
+            tkxt_tag->values->appearance.bg_stipple = bitmap;
           }
       }
       break;
@@ -454,49 +451,54 @@ gtk_text_tag_set_arg (GtkObject *object, GtkArg *arg, guint arg_id)
 
         tkxt_tag->fg_stipple_set = TRUE;
         
-        if (tkxt_tag->values->fg_stipple != bitmap)
+        if (tkxt_tag->values->appearance.fg_stipple != bitmap)
           {
             if (bitmap != NULL)
               gdk_bitmap_ref(bitmap);
             
-            if (tkxt_tag->values->fg_stipple)
-              gdk_bitmap_unref(tkxt_tag->values->fg_stipple);
+            if (tkxt_tag->values->appearance.fg_stipple)
+              gdk_bitmap_unref(tkxt_tag->values->appearance.fg_stipple);
             
-            tkxt_tag->values->fg_stipple = bitmap;
+            tkxt_tag->values->appearance.fg_stipple = bitmap;
           }
       }
       break;
 
     case ARG_FONT:
       {
-        GdkFont *font;
+        PangoFontDescription *font_desc = NULL;
         const gchar *name;
 
         name = GTK_VALUE_STRING(*arg);        
 
-        tkxt_tag->font_set = FALSE; /* False if setting to NULL
-                                       or if we fail to load */
-        
         if (name)
-          {
-            font = gdk_font_load(name);
+	  font_desc = pango_font_description_from_string (name);
 
-            if (font != NULL)
-              {
-                tkxt_tag->font_set = TRUE;
-                
-                if (tkxt_tag->values->font)
-                  gdk_font_unref(tkxt_tag->values->font);
-                
-                tkxt_tag->values->font = font;
-              }
-          }
-        else
-          {
-            if (tkxt_tag->values->font)
-              gdk_font_unref(tkxt_tag->values->font);
-            tkxt_tag->values->font = NULL;
-          }
+	if (tkxt_tag->values->font_desc)
+	  pango_font_description_free (tkxt_tag->values->font_desc);
+	
+	tkxt_tag->font_set = (font_desc != NULL);
+	tkxt_tag->values->font_desc = font_desc;
+
+        size_changed = TRUE;
+      }
+      break;
+
+    case ARG_FONT_DESC:
+      {
+        PangoFontDescription *font_desc;
+
+        font_desc = GTK_VALUE_BOXED(*arg);        
+
+	if (tkxt_tag->values->font_desc)
+	  pango_font_description_free (tkxt_tag->values->font_desc);
+
+	if (font_desc)
+	  tkxt_tag->values->font_desc = pango_font_description_copy (font_desc);
+	else
+	  tkxt_tag->values->font_desc = NULL;
+	
+	tkxt_tag->font_set = (font_desc != NULL);
 
         size_changed = TRUE;
       }
@@ -551,7 +553,7 @@ gtk_text_tag_set_arg (GtkObject *object, GtkArg *arg, guint arg_id)
 
     case ARG_OVERSTRIKE:
       tkxt_tag->overstrike_set = TRUE;
-      tkxt_tag->values->overstrike = GTK_VALUE_BOOL(*arg);
+      tkxt_tag->values->appearance.overstrike = GTK_VALUE_BOOL(*arg);
       break;
       
     case ARG_RIGHT_MARGIN:
@@ -562,7 +564,7 @@ gtk_text_tag_set_arg (GtkObject *object, GtkArg *arg, guint arg_id)
       
     case ARG_UNDERLINE:
       tkxt_tag->underline_set = TRUE;
-      tkxt_tag->values->underline = GTK_VALUE_BOOL(*arg);
+      tkxt_tag->values->appearance.underline = GTK_VALUE_ENUM(*arg);
       break;
       
     case ARG_OFFSET:
@@ -708,23 +710,33 @@ gtk_text_tag_get_arg (GtkObject *object, GtkArg *arg, guint arg_id)
       break;
       
     case ARG_BACKGROUND_GDK:
-      get_color_arg(arg, &tag->values->bg_color);
+      get_color_arg(arg, &tag->values->appearance.bg_color);
       break;
 
     case ARG_FOREGROUND_GDK:
-      get_color_arg(arg, &tag->values->fg_color);
+      get_color_arg(arg, &tag->values->appearance.fg_color);
       break;
 
     case ARG_BACKGROUND_STIPPLE:
-      GTK_VALUE_BOXED(*arg) = tag->values->bg_stipple;
+      GTK_VALUE_BOXED(*arg) = tag->values->appearance.bg_stipple;
       break;
 
     case ARG_FOREGROUND_STIPPLE:
-      GTK_VALUE_BOXED(*arg) = tag->values->fg_stipple;
+      GTK_VALUE_BOXED(*arg) = tag->values->appearance.fg_stipple;
       break;
 
     case ARG_FONT:
-      GTK_VALUE_BOXED(*arg) = tag->values->font;
+      if (tag->values->font_desc)
+	GTK_VALUE_STRING(*arg) = pango_font_description_to_string (tag->values->font_desc);
+      else
+	GTK_VALUE_STRING(*arg) = NULL;
+      break;
+
+    case ARG_FONT_DESC:
+      if (tag->values->font_desc)
+	GTK_VALUE_BOXED(*arg) = pango_font_description_copy (tag->values->font_desc);
+      else
+	GTK_VALUE_BOXED(*arg) = NULL;
       break;
 
     case ARG_PIXELS_ABOVE_LINES:
@@ -760,7 +772,7 @@ gtk_text_tag_get_arg (GtkObject *object, GtkArg *arg, guint arg_id)
       break;
 
     case ARG_OVERSTRIKE:
-      GTK_VALUE_BOOL(*arg) = tag->values->overstrike;
+      GTK_VALUE_BOOL(*arg) = tag->values->appearance.overstrike;
       break;
       
     case ARG_RIGHT_MARGIN:
@@ -768,7 +780,7 @@ gtk_text_tag_get_arg (GtkObject *object, GtkArg *arg, guint arg_id)
       break;
       
     case ARG_UNDERLINE:
-      GTK_VALUE_BOOL(*arg) = tag->values->underline;
+      GTK_VALUE_ENUM(*arg) = tag->values->appearance.underline;
       break;
 
     case ARG_OFFSET:
@@ -1044,7 +1056,7 @@ gtk_text_view_style_values_new(void)
 
 void
 gtk_text_view_style_values_copy(GtkTextStyleValues *src,
-                            GtkTextStyleValues *dest)
+				GtkTextStyleValues *dest)
 {
   guint orig_refcount;
 
@@ -1055,28 +1067,22 @@ gtk_text_view_style_values_copy(GtkTextStyleValues *src,
   
   /* Add refs */
   
-  if (src->bg_stipple)
-    gdk_bitmap_ref(src->bg_stipple);
+  if (src->appearance.bg_stipple)
+    gdk_bitmap_ref(src->appearance.bg_stipple);
 
-  if (src->font)
-    gdk_font_ref(src->font);
-
-  if (src->fg_stipple)
-    gdk_bitmap_ref(src->fg_stipple);
+  if (src->appearance.fg_stipple)
+    gdk_bitmap_ref(src->appearance.fg_stipple);
 
   if (src->tab_array)
     gtk_text_view_tab_array_ref(src->tab_array);
 
   /* Remove refs */
   
-  if (dest->bg_stipple)
-    gdk_bitmap_unref(dest->bg_stipple);
+  if (dest->appearance.bg_stipple)
+    gdk_bitmap_unref(dest->appearance.bg_stipple);
 
-  if (dest->font)
-    gdk_font_unref(dest->font);
-
-  if (dest->fg_stipple)
-    gdk_bitmap_unref(dest->fg_stipple);
+  if (dest->appearance.fg_stipple)
+    gdk_bitmap_unref(dest->appearance.fg_stipple);
 
   if (dest->tab_array)
     gtk_text_view_tab_array_unref(dest->tab_array);
@@ -1085,6 +1091,8 @@ gtk_text_view_style_values_copy(GtkTextStyleValues *src,
   orig_refcount = dest->refcount;
   
   *dest = *src;
+
+  dest->font_desc = pango_font_description_copy (src->font_desc);
 
   dest->refcount = orig_refcount;
   dest->realized = FALSE;
@@ -1110,14 +1118,14 @@ gtk_text_view_style_values_unref(GtkTextStyleValues *values)
     {
       g_assert(!values->realized);
       
-      if (values->bg_stipple)
-        gdk_bitmap_unref(values->bg_stipple);
+      if (values->appearance.bg_stipple)
+        gdk_bitmap_unref(values->appearance.bg_stipple);
       
-      if (values->font)
-        gdk_font_unref(values->font);
+      if (values->font_desc)
+        pango_font_description_free (values->font_desc);
       
-      if (values->fg_stipple)
-        gdk_bitmap_unref(values->fg_stipple);
+      if (values->appearance.fg_stipple)
+        gdk_bitmap_unref(values->appearance.fg_stipple);
 
       if (values->tab_array)
         gtk_text_view_tab_array_unref(values->tab_array);
@@ -1128,8 +1136,8 @@ gtk_text_view_style_values_unref(GtkTextStyleValues *values)
 
 void
 gtk_text_view_style_values_realize(GtkTextStyleValues *values,
-                               GdkColormap *cmap,
-                               GdkVisual *visual)
+				   GdkColormap *cmap,
+				   GdkVisual *visual)
 {
   g_return_if_fail(values != NULL);
   g_return_if_fail(values->refcount > 0);
@@ -1137,11 +1145,11 @@ gtk_text_view_style_values_realize(GtkTextStyleValues *values,
   
   /* It is wrong to use this colormap, FIXME */
   gdk_colormap_alloc_color(cmap,
-                           &values->fg_color,
+                           &values->appearance.fg_color,
                            FALSE, TRUE);
 
   gdk_colormap_alloc_color(cmap,
-                           &values->bg_color,
+                           &values->appearance.bg_color,
                            FALSE, TRUE);
 
   values->realized = TRUE;
@@ -1149,30 +1157,30 @@ gtk_text_view_style_values_realize(GtkTextStyleValues *values,
 
 void
 gtk_text_view_style_values_unrealize(GtkTextStyleValues *values,
-                                 GdkColormap *cmap,
-                                 GdkVisual *visual)
+				     GdkColormap *cmap,
+				     GdkVisual *visual)
 {
   g_return_if_fail(values != NULL);
   g_return_if_fail(values->refcount > 0);
   g_return_if_fail(values->realized);
   
   gdk_colormap_free_colors(cmap,
-                           &values->fg_color, 1);
+                           &values->appearance.fg_color, 1);
   
   
   gdk_colormap_free_colors(cmap,
-                           &values->bg_color, 1);
+                           &values->appearance.bg_color, 1);
 
-  values->fg_color.pixel = 0;
-  values->bg_color.pixel = 0;
+  values->appearance.fg_color.pixel = 0;
+  values->appearance.bg_color.pixel = 0;
 
   values->realized = FALSE;
 }
 
 void
 gtk_text_view_style_values_fill_from_tags(GtkTextStyleValues *dest,
-                                      GtkTextTag** tags,
-                                      guint n_tags)
+					  GtkTextTag**        tags,
+					  guint               n_tags)
 {
   guint n = 0;
 
@@ -1188,9 +1196,9 @@ gtk_text_view_style_values_fill_from_tags(GtkTextStyleValues *dest,
       
       if (tag->bg_color_set)
         {
-          dest->bg_color = vals->bg_color;
+          dest->appearance.bg_color = vals->appearance.bg_color;
           
-          dest->draw_bg = TRUE;
+          dest->appearance.draw_bg = TRUE;
         }
       
       if (tag->border_width_set)
@@ -1201,31 +1209,30 @@ gtk_text_view_style_values_fill_from_tags(GtkTextStyleValues *dest,
 
       if (tag->bg_stipple_set)
         {
-          gdk_bitmap_ref(vals->bg_stipple);
-          if (dest->bg_stipple)
-            gdk_bitmap_unref(dest->bg_stipple);
-          dest->bg_stipple = vals->bg_stipple;
+          gdk_bitmap_ref(vals->appearance.bg_stipple);
+          if (dest->appearance.bg_stipple)
+            gdk_bitmap_unref(dest->appearance.bg_stipple);
+          dest->appearance.bg_stipple = vals->appearance.bg_stipple;
 
-          dest->draw_bg = TRUE;
+          dest->appearance.draw_bg = TRUE;
         }
 
       if (tag->fg_color_set)
-        dest->fg_color = vals->fg_color;
-          
+        dest->appearance.fg_color = vals->appearance.fg_color;
+         
       if (tag->font_set)
         {
-          gdk_font_ref(vals->font);
-          if (dest->font)
-            gdk_font_unref(dest->font);
-          dest->font = vals->font;
+          if (dest->font_desc)
+            pango_font_description_free (dest->font_desc);
+          dest->font_desc = pango_font_description_copy (vals->font_desc);
         }
 
       if (tag->fg_stipple_set)
         {
-          gdk_bitmap_ref(vals->fg_stipple);
-          if (dest->fg_stipple)
-            gdk_bitmap_unref(dest->fg_stipple);
-          dest->fg_stipple = vals->fg_stipple;
+          gdk_bitmap_ref(vals->appearance.fg_stipple);
+          if (dest->appearance.fg_stipple)
+            gdk_bitmap_unref(dest->appearance.fg_stipple);
+          dest->appearance.fg_stipple = vals->appearance.fg_stipple;
         }
 
       if (tag->justify_set)
@@ -1264,10 +1271,10 @@ gtk_text_view_style_values_fill_from_tags(GtkTextStyleValues *dest,
         dest->wrap_mode = vals->wrap_mode;
 
       if (tag->underline_set)
-        dest->underline = vals->underline;
+        dest->appearance.underline = vals->appearance.underline;
 
       if (tag->overstrike_set)
-        dest->overstrike = vals->overstrike;
+        dest->appearance.overstrike = vals->appearance.overstrike;
 
       if (tag->elide_set)
         dest->elide = vals->elide;

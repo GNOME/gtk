@@ -54,49 +54,8 @@
 
 #include <stdlib.h>
 
-/* DisplayLineList is our per-btree-line view-specific data.
-   The DisplayLine object for the start of each btree line
-   (counter.byte_index == 0) owns the DisplayLineList for
-   that btree line. */
-typedef struct _DisplayLineList DisplayLineList;
-
-struct _DisplayLineList {
-  /* These fields must be synced with GtkTextLineData in
-     gtktextbtree.h, and are managed by the btree. */
-  GtkTextLayout *layout; /* gpointer view_id */
-  GtkTextLineData *next;
-  /* these are synced, but managed by us */
-  gint width;
-  gint height;
-  /* end of sync-requiring fields */
-  
-  GtkTextDisplayLine *lines;
-};
-
-static GtkTextDisplayChunk *gtk_text_view_display_chunk_new        (GtkTextDisplayChunkType  type);
-static void                 gtk_text_view_display_chunk_destroy    (GtkTextLayout           *layout,
-								    GtkTextDisplayChunk     *chunk);
-static GtkTextDisplayLine * gtk_text_layout_find_display_line      (GtkTextLayout           *layout,
-								    const GtkTextIter       *index);
-static GtkTextDisplayLine * gtk_text_layout_find_display_line_at_y (GtkTextLayout           *layout,
-								    gint                     y,
-								    gint                    *first_line_y);
-static DisplayLineList    * display_line_list_new                  (GtkTextLayout           *layout,
-								    GtkTextLine             *line);
-static void                 display_line_list_destroy              (DisplayLineList         *list);
-static void                 display_line_list_create_lines         (DisplayLineList         *list,
-								    GtkTextLine             *line,
-								    GtkTextLayout           *layout);
-static void                 display_line_list_delete_lines         (DisplayLineList         *list);
-
-
-static guint count_bytes_that_fit (GdkFont *font,
-                                  const gchar *str,
-                                  gint len,
-                                  int start_x, /* first pixel we can use */
-                                  int end_x, /* can't use this pixel */
-                                  int *end_pos); /* last pixel we did use */
-
+static GtkTextLineData    *gtk_text_line_data_new                 (GtkTextLayout     *layout,
+								   GtkTextLine       *line);
 
 static GtkTextLineData *gtk_text_layout_real_wrap (GtkTextLayout *layout,
                                                      GtkTextLine *line,
@@ -111,7 +70,7 @@ static void line_data_destructor (gpointer data);
 
 static void gtk_text_layout_invalidate_all (GtkTextLayout *layout);
 
-static gint utf8_text_width (GdkFont *font, const gchar *text, gint len);
+static PangoAttribute *gtk_text_attr_appearance_new (const GtkTextAppearance *appearance);
 
 enum {
   NEED_REPAINT,
@@ -135,6 +94,8 @@ void gtk_marshal_NONE__INT_INT_INT_INT (GtkObject  *object,
 
 static GtkObjectClass *parent_class = NULL;
 static guint signals[LAST_SIGNAL] = { 0 };
+
+PangoAttrType gtk_text_attr_appearance_type = 0;
 
 GtkType
 gtk_text_layout_get_type (void)
@@ -244,7 +205,7 @@ void
 gtk_text_layout_set_buffer (GtkTextLayout *layout,
                             GtkTextBuffer *buffer)
 {
-  g_return_if_fail (GTK_IS_TEXT_VIEW_LAYOUT (layout));
+  g_return_if_fail (GTK_IS_TEXT_LAYOUT (layout));
   g_return_if_fail (buffer == NULL || GTK_IS_TEXT_VIEW_BUFFER (buffer));
   
   if (layout->buffer == buffer)
@@ -267,15 +228,14 @@ gtk_text_layout_set_buffer (GtkTextLayout *layout,
       gtk_object_sink (GTK_OBJECT (buffer));
       gtk_object_ref (GTK_OBJECT (buffer));
 
-      gtk_text_btree_add_view (buffer->tree, layout,
-                               line_data_destructor);
+      gtk_text_btree_add_view (buffer->tree, layout, line_data_destructor);
     }
 }
 
 void
 gtk_text_layout_default_style_changed (GtkTextLayout *layout)
 {
-  g_return_if_fail (GTK_IS_TEXT_VIEW_LAYOUT (layout));
+  g_return_if_fail (GTK_IS_TEXT_LAYOUT (layout));
   
   gtk_text_layout_invalidate_all (layout);
 }
@@ -284,7 +244,7 @@ void
 gtk_text_layout_set_default_style (GtkTextLayout *layout,
                                    GtkTextStyleValues *values)
 {
-  g_return_if_fail (GTK_IS_TEXT_VIEW_LAYOUT (layout));
+  g_return_if_fail (GTK_IS_TEXT_LAYOUT (layout));
   g_return_if_fail (values != NULL);
 
   if (values == layout->default_style)
@@ -301,9 +261,24 @@ gtk_text_layout_set_default_style (GtkTextLayout *layout,
 }
 
 void
+gtk_text_layout_set_context (GtkTextLayout *layout,
+			     PangoContext  *context)
+{
+  g_return_if_fail (GTK_IS_TEXT_LAYOUT (layout));
+
+  if (layout->context)
+    pango_context_unref (context);
+
+  layout->context = context;
+  pango_context_ref (context);
+  
+  gtk_text_layout_invalidate_all (layout);
+}
+
+void
 gtk_text_layout_set_screen_width (GtkTextLayout *layout, gint width)
 {
-  g_return_if_fail (GTK_IS_TEXT_VIEW_LAYOUT (layout));
+  g_return_if_fail (GTK_IS_TEXT_LAYOUT (layout));
   g_return_if_fail (width >= 0);
   g_return_if_fail (layout->wrap_loop_count == 0);
   
@@ -322,7 +297,7 @@ gtk_text_layout_get_size (GtkTextLayout *layout,
 {
   gint w, h;
   
-  g_return_if_fail (GTK_IS_TEXT_VIEW_LAYOUT (layout));
+  g_return_if_fail (GTK_IS_TEXT_LAYOUT (layout));
   
   gtk_text_btree_get_view_size (layout->buffer->tree, layout,
                                 &w, &h);
@@ -357,87 +332,11 @@ gtk_text_layout_invalidate (GtkTextLayout *layout,
 
 GtkTextLineData*
 gtk_text_layout_wrap (GtkTextLayout *layout,
-                       GtkTextLine *line,
+                       GtkTextLine  *line,
                        /* may be NULL */
                        GtkTextLineData *line_data)
 {
-  return (* GTK_TEXT_LAYOUT_CLASS (GTK_OBJECT (layout)->klass)->wrap)
-    (layout, line, line_data);
-}
-
-static GtkTextDisplayLine*
-gtk_text_layout_find_display_line_at_y (GtkTextLayout *layout,
-                                         gint y, gint *first_line_y)
-{
-  DisplayLineList *dline_list;
-  GtkTextLine *line;
-  GtkTextDisplayLine *iter;
-  gint this_y = 0;
-  
-  dline_list = gtk_text_btree_find_line_data_by_y (layout->buffer->tree,
-                                                   layout, y,
-                                                   &this_y);
-
-  if (dline_list == NULL)
-    return NULL;
-  
-  if (first_line_y)
-    *first_line_y = this_y;
-  
-  iter = dline_list->lines;
-  line = iter->line;
-  while (iter &&
-         iter->line == line)
-    {
-      if (y < (this_y + iter->height))
-        return iter;
-      
-      this_y += iter->height;
-      iter = iter->next;
-    }
-  
-  return NULL;
-}
-
-static GtkTextDisplayLine*
-gtk_text_layout_find_display_line (GtkTextLayout     *layout,
-				   const GtkTextIter *location)
-{
-  DisplayLineList *dline_list;
-  GtkTextDisplayLine *iter;
-  GtkTextLine *line;
-  gint byte_index;
-
-  g_return_val_if_fail (GTK_IS_TEXT_VIEW_LAYOUT (layout), NULL);
-  g_return_val_if_fail (location != NULL, NULL);
-
-  line = gtk_text_iter_get_line (location);
-  byte_index = gtk_text_iter_get_line_byte (location);
-  
-  dline_list = gtk_text_line_get_data (line, layout);
-
-  g_assert (dline_list != NULL);
-
-  /* Make sure we have the display lines computed */
-  display_line_list_create_lines (dline_list, line, layout);
-  
-  iter = dline_list->lines;
-  while (iter != NULL)
-    {
-      g_assert (iter->line == line); /* if fails, probably
-                                                      an invalid byte_index
-                                                      in the index */
-
-      if (byte_index >= iter->byte_offset &&
-          (iter->next == NULL ||
-           byte_index < iter->next->byte_offset))
-        return iter;
-      else
-        iter = iter->next;
-    }
-
-  g_assert_not_reached ();
-  return NULL;
+  return (* GTK_TEXT_LAYOUT_CLASS (GTK_OBJECT (layout)->klass)->wrap) (layout, line, line_data);
 }
 
 GSList*
@@ -447,21 +346,18 @@ gtk_text_layout_get_lines (GtkTextLayout *layout,
                            gint bottom_y,
                            gint *first_line_y)
 {
-  GtkTextDisplayLine *first_line;
-  GtkTextDisplayLine *last_line;
   GtkTextLine *first_btree_line;
   GtkTextLine *last_btree_line;
   GtkTextLine *line;
   GSList *retval;
-  gint ignore;
   
-  g_return_val_if_fail (GTK_IS_TEXT_VIEW_LAYOUT (layout), NULL);
+  g_return_val_if_fail (GTK_IS_TEXT_LAYOUT (layout), NULL);
   g_return_val_if_fail (bottom_y > top_y, NULL);
 
   retval = NULL;
   
-  first_line = gtk_text_layout_find_display_line_at_y (layout, top_y, first_line_y);
-  if (first_line == NULL)
+  first_btree_line = gtk_text_btree_find_line_by_y (layout->buffer->tree, layout, top_y, first_line_y);
+  if (first_btree_line == NULL)
     {
       g_assert (top_y > 0);
       /* off the bottom */
@@ -469,36 +365,18 @@ gtk_text_layout_get_lines (GtkTextLayout *layout,
     }
   
   /* -1 since bottom_y is one past */
-  last_line = gtk_text_layout_find_display_line_at_y (layout, bottom_y-1, NULL);
+  last_btree_line = gtk_text_btree_find_line_by_y (layout->buffer->tree, layout, bottom_y - 1, NULL);
   
-  first_btree_line = first_line->line;
-  if (last_line)
-    last_btree_line = last_line->line;
-  else
+  if (!last_btree_line)
     last_btree_line = gtk_text_btree_get_line (layout->buffer->tree,
-                                               gtk_text_btree_line_count (layout->buffer->tree) - 1, &ignore);
+                                               gtk_text_btree_line_count (layout->buffer->tree) - 1, NULL);
 
   g_assert (last_btree_line != NULL);
 
   line = first_btree_line;
   while (TRUE)
     {
-      DisplayLineList *list;
-      GtkTextDisplayLine *iter;
-
-      list = gtk_text_line_get_data (line, layout);
-
-      g_assert (list != NULL);
-
-      display_line_list_create_lines (list, line, layout);
-      
-      iter = list->lines;
-      while (iter != NULL)
-        {
-          retval = g_slist_prepend (retval, iter);
-          
-          iter = iter->next;
-        }
+      retval = g_slist_prepend (retval, line);
 
       if (line == last_btree_line)
         break;
@@ -518,12 +396,13 @@ invalidate_cached_style (GtkTextLayout *layout)
 }
 
 /* These should be called around a loop which wraps a CONTIGUOUS bunch
-   of display lines. If the lines aren't contiguous you can't call
-   these. */
+ * of display lines. If the lines aren't contiguous you can't call
+ * these.
+ */
 void
 gtk_text_layout_wrap_loop_start (GtkTextLayout *layout)
 {
-  g_return_if_fail (GTK_IS_TEXT_VIEW_LAYOUT (layout));
+  g_return_if_fail (GTK_IS_TEXT_LAYOUT (layout));
   g_return_if_fail (layout->one_style_cache == NULL);
   
   layout->wrap_loop_count += 1;
@@ -539,7 +418,8 @@ gtk_text_layout_wrap_loop_end (GtkTextLayout *layout)
   if (layout->wrap_loop_count == 0)
     {
       /* We cache a some stuff if we're iterating over some lines wrapping
-         them. This cleans it up. */
+       * them. This cleans it up.
+       */
       /* Nuke our cached style */
       invalidate_cached_style (layout);
       g_assert (layout->one_style_cache == NULL);
@@ -560,16 +440,18 @@ gtk_text_layout_invalidate_all (GtkTextLayout *layout)
   gtk_text_layout_invalidate (layout, &start, &end);
 }
 
+/* FIXME: This is now completely generic, and we could probably be
+ * moved into gtktextbtree.c.
+ */
 static void
 gtk_text_layout_real_invalidate (GtkTextLayout *layout,
                                  const GtkTextIter *start,
                                  const GtkTextIter *end)
 {
-  DisplayLineList *dline_list;
   GtkTextLine *line;
   GtkTextLine *last_line;
   
-  g_return_if_fail (GTK_IS_TEXT_VIEW_LAYOUT (layout));
+  g_return_if_fail (GTK_IS_TEXT_LAYOUT (layout));
   g_return_if_fail (layout->wrap_loop_count == 0);
 
 #if 0
@@ -585,16 +467,10 @@ gtk_text_layout_real_invalidate (GtkTextLayout *layout,
 
   while (TRUE)
     {
-      dline_list = gtk_text_line_get_data (line, layout);
+      GtkTextLineData *line_data = gtk_text_line_get_data (line, layout);
 
-      if (dline_list)
-        {
-          display_line_list_delete_lines (dline_list);
-          g_assert (dline_list->lines == NULL);
-
-          gtk_text_line_invalidate_wrap (line,
-                                         (GtkTextLineData*)dline_list);
-        }
+      if (line_data)
+	gtk_text_line_invalidate_wrap (line, line_data);
       
       if (line == last_line)
         break;
@@ -608,30 +484,27 @@ gtk_text_layout_real_invalidate (GtkTextLayout *layout,
 }
 
 static GtkTextLineData*
-gtk_text_layout_real_wrap (GtkTextLayout *layout,
-			   GtkTextLine *line,
+gtk_text_layout_real_wrap (GtkTextLayout   *layout,
+			   GtkTextLine     *line,
                             /* may be NULL */
 			   GtkTextLineData *line_data)
 {
-  DisplayLineList *list;
-
-  g_return_val_if_fail (GTK_IS_TEXT_VIEW_LAYOUT (layout), NULL);
+  GtkTextLineDisplay *display;
   
-  list = (DisplayLineList*)line_data;
+  g_return_val_if_fail (GTK_IS_TEXT_LAYOUT (layout), NULL);
   
-  if (list == NULL)
+  if (line_data == NULL)
     {
-      list = display_line_list_new (layout, line);
-
-      gtk_text_line_add_data (line,
-                              (GtkTextLineData*)list);
+      line_data = gtk_text_line_data_new (layout, line);
+      gtk_text_line_add_data (line, line_data);
     }
 
-  display_line_list_create_lines (list, line, layout);
+  display = gtk_text_layout_get_line_display (layout, line);
+  line_data->width = display->width;
+  line_data->height = display->height;
+  gtk_text_layout_free_line_display (layout, line, display);
 
-  /* FIXME can probably re-delete the lines immediately. */
-  
-  return (GtkTextLineData*)list;
+  return line_data;
 }
 
 /*
@@ -661,8 +534,7 @@ get_style (GtkTextLayout *layout,
   g_assert (layout->one_style_cache == NULL);
   
   /* Get the tags at this spot */
-  tags = gtk_text_btree_get_tags (iter,
-                                  &tag_count);
+  tags = gtk_text_btree_get_tags (iter, &tag_count);
 
   /* No tags, use default style */
   if (tags == NULL || tag_count == 0)
@@ -685,11 +557,11 @@ get_style (GtkTextLayout *layout,
   style = gtk_text_view_style_values_new ();
   
   gtk_text_view_style_values_copy (layout->default_style,
-                              style);
+				   style);
 
   gtk_text_view_style_values_fill_from_tags (style,
-                                        tags,
-                                        tag_count);
+					     tags,
+					     tag_count);
 
   g_free (tags);
 
@@ -706,7 +578,7 @@ get_style (GtkTextLayout *layout,
 
 static void
 release_style (GtkTextLayout *layout,
-              GtkTextStyleValues *style)
+	       GtkTextStyleValues *style)
 {
   g_return_if_fail (style != NULL);
   g_return_if_fail (style->refcount > 0);
@@ -715,72 +587,19 @@ release_style (GtkTextLayout *layout,
 }
 
 /*
- * Chunks
- */
-
-static GtkTextDisplayChunk*
-gtk_text_view_display_chunk_new (GtkTextDisplayChunkType type)
-{
-  GtkTextDisplayChunk *chunk;
-
-  chunk = g_new0(GtkTextDisplayChunk, 1);
-
-  chunk->type = type;
-
-  return chunk;
-}
-
-static void
-gtk_text_view_display_chunk_destroy (GtkTextLayout *layout,
-                                GtkTextDisplayChunk *chunk)
-{
-#if 0
-  /* FIXME we have to see what all these undisplay funcs did and
-     emulate them here */
-  if (chunk->undisplayFunc != NULL) {
-    (*chunk->undisplayFunc)(layout, chunk);
-  }
-#endif
-
-  release_style (layout, chunk->style);
-
-  if (chunk->type == GTK_TEXT_DISPLAY_CHUNK_PIXMAP)
-    {
-      if (chunk->d.pixmap.pixmap)
-        gdk_pixmap_unref (chunk->d.pixmap.pixmap);
-
-      if (chunk->d.pixmap.mask)
-        gdk_bitmap_unref (chunk->d.pixmap.mask);
-    }
-  
-  g_free (chunk);
-}
-
-/*
  * Lines
  */
-
-static GtkTextDisplayLine   *gtk_text_view_display_line_new     (GtkTextLine *line,
-								 gint byte_offset);
-
-static void                  gtk_text_view_display_line_destroy (GtkTextDisplayLine *line);
-
 
 /* This function tries to optimize the case where a line
    is completely invisible */
 static gboolean
 totally_invisible_line (GtkTextLayout *layout,
-                       GtkTextDisplayLine *line,
-                       const GtkTextIter *iter)
+			GtkTextLine   *line,
+			GtkTextIter   *iter)
 {
   GtkTextLineSegment *seg;
   int bytes = 0;
   
-  /* If we aren't at the start of the line, we aren't
-     a totally invisible line */
-  if (!gtk_text_iter_starts_line (iter))
-    return FALSE;
-
   /* If we have a cached style, then we know it does actually apply
      and we can just see if it is elided. */
   if (layout->one_style_cache &&
@@ -790,11 +609,16 @@ totally_invisible_line (GtkTextLayout *layout,
      we are partially visible.  Note that we have to check this since
      we don't know the current elided/nonelided toggle state; this
      function can use the whole btree to get it right. */
-  else if (!gtk_text_btree_char_is_invisible (iter))
-    return FALSE;
+  else
+    {
+      gtk_text_btree_get_iter_at_line(layout->buffer->tree, iter, line, 0);
+      
+      if (!gtk_text_btree_char_is_invisible (iter))
+	return FALSE;
+    }
 
   bytes = 0;
-  seg = gtk_text_iter_get_line (iter)->segments;
+  seg = line->segments;
 
   while (seg != NULL)
     {
@@ -831,754 +655,437 @@ totally_invisible_line (GtkTextLayout *layout,
 
   if (seg != NULL)       /* didn't reach line end */
     return FALSE;
+
+  return TRUE;
+}
+
+static void
+set_para_values (GtkTextLayout      *layout,
+		 GtkTextStyleValues *style,
+		 GtkTextLineDisplay *display,
+		 gint               *total_width,
+		 gdouble            *align)
+{
+  PangoAlignment pango_align;
+  
+  switch (style->justify)
+    {
+    case GTK_JUSTIFY_LEFT:
+      pango_align = PANGO_ALIGN_LEFT;
+      *align = 0.0;
+      break;
+    case GTK_JUSTIFY_RIGHT:
+      pango_align = PANGO_ALIGN_RIGHT;
+      *align = 1.0;
+      break;
+    case GTK_JUSTIFY_CENTER:
+      pango_align = PANGO_ALIGN_CENTER;
+      *align = 0.5;
+      break;
+    case GTK_JUSTIFY_FILL:
+      g_warning ("FIXME we don't support GTK_JUSTIFY_FILL yet");
+      break;
+    default:
+      g_assert_not_reached ();
+      break;
+    }
+
+  pango_layout_set_alignment (display->layout, *align);
+  pango_layout_set_spacing (display->layout, style->pixels_inside_wrap * PANGO_SCALE);
+
+  display->top_margin = style->pixels_above_lines;
+  display->height = style->pixels_above_lines + style->pixels_below_lines;
+  display->bottom_margin = style->pixels_below_lines;
+
+  pango_layout_set_indent (display->layout, style->left_wrapped_line_margin - style->left_margin);
+  display->x_offset = MIN (style->left_margin, style->left_wrapped_line_margin);
+  
+  switch (style->wrap_mode)
+    {
+    case GTK_WRAPMODE_CHAR:
+      /* FIXME: Handle this; for now, fall-through */
+    case GTK_WRAPMODE_WORD:
+      *total_width = layout->width - MIN (style->left_margin, style->left_wrapped_line_margin) - style->right_margin;
+      pango_layout_set_width (display->layout, *total_width * PANGO_SCALE);
+      break;
+    case GTK_WRAPMODE_NONE:
+      *total_width = -1;
+      break;
+    }
+  
+  /* Unhandled:
+   * left_margin
+   * left_wrapped_line_margin
+   * right_margin
+  */
+}
+
+static PangoAttribute *
+gtk_text_attr_appearance_copy (const PangoAttribute *attr)
+{
+  const GtkTextAttrAppearance *appearance_attr = (const GtkTextAttrAppearance *)attr;
+  
+  return gtk_text_attr_appearance_new (&appearance_attr->appearance);
+}
+
+static void
+gtk_text_attr_appearance_destroy (PangoAttribute *attr)
+{
+  GtkTextAppearance *appearance = &((GtkTextAttrAppearance *)attr)->appearance;
+
+  if (appearance->bg_stipple)
+    gdk_drawable_unref (appearance->bg_stipple);
+  if (appearance->fg_stipple)
+    gdk_drawable_unref (appearance->fg_stipple);
+  
+  g_free (attr);
+}
+
+static gboolean
+gtk_text_attr_appearance_compare (const PangoAttribute *attr1,
+				  const PangoAttribute *attr2)
+{
+  const GtkTextAppearance *appearance1 = &((const GtkTextAttrAppearance *)attr1)->appearance;
+  const GtkTextAppearance *appearance2 = &((const GtkTextAttrAppearance *)attr2)->appearance;
+
+  return (gdk_color_equal (&appearance1->fg_color, &appearance2->fg_color) &&
+	  gdk_color_equal (&appearance1->bg_color, &appearance2->bg_color) &&
+	  appearance1->fg_stipple ==  appearance2->fg_stipple &&
+	  appearance1->bg_stipple ==  appearance2->bg_stipple &&
+	  appearance1->underline == appearance2->underline &&
+	  appearance1->overstrike == appearance2->overstrike &&
+	  appearance1->draw_bg == appearance2->draw_bg);
+	  
+}
+
+/**
+ * gtk_text_attr_appearance_new:
+ * @desc: 
+ * 
+ * Create a new font description attribute. (This attribute
+ * allows setting family, style, weight, variant, stretch,
+ * and size simultaneously.)
+ * 
+ * Return value: 
+ **/
+static PangoAttribute *
+gtk_text_attr_appearance_new (const GtkTextAppearance *appearance)
+{
+  static PangoAttrClass klass = {
+    0,
+    gtk_text_attr_appearance_copy,
+    gtk_text_attr_appearance_destroy,
+    gtk_text_attr_appearance_compare
+  };
+
+  GtkTextAttrAppearance *result;
+
+  if (!klass.type)
+    klass.type = gtk_text_attr_appearance_type =
+      pango_attr_type_register ("GtkTextAttrAppearance");
+
+  result = g_new (GtkTextAttrAppearance, 1);
+  result->attr.klass = &klass;
+
+  result->appearance = *appearance;
+    
+  if (appearance->bg_stipple)
+    gdk_drawable_ref (appearance->bg_stipple);
+  if (appearance->fg_stipple)
+    gdk_drawable_ref (appearance->fg_stipple);
+
+  return (PangoAttribute *)result;
+}
+
+static void
+add_text_attrs (GtkTextLayout      *layout,
+		GtkTextStyleValues *style,
+		GtkTextLineSegment *seg,
+		gboolean            inside_selection,
+		PangoAttrList      *attrs,
+		gint                start)
+{
+  PangoAttribute *attr;
+
+  attr = pango_attr_font_desc_new (style->font_desc);
+  attr->start_index = start;
+  attr->end_index = start + seg->byte_count;
+
+  pango_attr_list_insert (attrs, attr);
+
+  attr = gtk_text_attr_appearance_new (&style->appearance);
+  ((GtkTextAttrAppearance *)attr)->appearance.inside_selection = inside_selection;
+  
+  attr->start_index = start;
+  attr->end_index = start + seg->byte_count;
+
+  pango_attr_list_insert (attrs, attr);
+}
+
+static void
+add_pixmap_attrs (GtkTextLayout      *layout,
+		  GtkTextStyleValues *style,
+		  GtkTextLineSegment *seg,
+		  gboolean            inside_selection,
+		  PangoAttrList      *attrs,
+		  gint                start)
+{
+}
+
+static void
+add_cursor (GtkTextLineDisplay *display,
+	    gint                start)
+{
+  PangoRectangle strong_pos, weak_pos;
+  GtkTextCursorDisplay *cursor;
+
+  pango_layout_get_cursor_pos (display->layout, start, &strong_pos, &weak_pos);
+  
+  cursor = g_new (GtkTextCursorDisplay, 1);
+  
+  cursor->x = strong_pos.x / PANGO_SCALE;
+  cursor->y = strong_pos.y / PANGO_SCALE;
+  cursor->height = strong_pos.height / PANGO_SCALE;
+  cursor->is_strong = TRUE;
+  display->cursors = g_slist_prepend (display->cursors, cursor);
+  
+  if (weak_pos.x == strong_pos.x)
+    cursor->is_weak = TRUE;
   else
     {
-      line->byte_count = bytes;
-
-      /* Leave height/length set to 0 */
+      cursor->is_weak = FALSE;
       
-      return TRUE;
-    }
-}
-
-static void
-chunk_self_check (GtkTextDisplayChunk *chunk)
-{
-  if (chunk->type == GTK_TEXT_DISPLAY_CHUNK_TEXT)
-    {
-      gint char_count = 0;
-      gint byte_count = 0;
-
-      while (byte_count < chunk->d.charinfo.byte_count)
-        {
-          GtkTextUniChar ch;
-          
-          byte_count += gtk_text_utf_to_unichar (chunk->d.charinfo.text + byte_count,
-                                                 &ch);
-
-          char_count += 1;
-        }
-
-      if (byte_count != chunk->d.charinfo.byte_count)
-        {
-          g_error ("Byte count for text display chunk incorrect");
-        }
-    }
-
-  if (chunk->type == GTK_TEXT_DISPLAY_CHUNK_PIXMAP)
-    {
-      g_assert (chunk->byte_count == 2);
-    }
-}
-
-typedef enum {
-  GTK_TEXT_LAYOUT_OK,
-  GTK_TEXT_LAYOUT_NOTHING_FITS
-} GtkTextLayoutResult;
-
-static GtkTextLayoutResult
-layout_pixmap_segment (GtkTextLayout *layout,
-                      GtkTextLineSegment *seg,
-                      GtkTextDisplayLine *line,
-                      GtkTextDisplayChunk *chunk,
-                      gboolean seen_chars, /* seen some chars already */
-                      gint offset, /* offset into the segment */
-                      gint x,      /* first X position we can use */
-                      gint max_x,  /* first X position that's off-limits,
-                                      or -1 if none */
-                      gint max_bytes) /* max chars we can put in the chunk */
-{
-  gint width, height;
-  GdkPixmap *pixmap;
-  
-  g_return_val_if_fail (max_x < 0 || x < max_x,
-                       GTK_TEXT_LAYOUT_NOTHING_FITS);
-  g_assert (chunk->type == GTK_TEXT_DISPLAY_CHUNK_PIXMAP);  
-
-  pixmap = seg->body.pixmap.pixmap;
-
-
-  width = 0;
-  height = 0;
-  if (pixmap)
-    {
-      gdk_window_get_size (pixmap, &width, &height);
-    }
-
-  if ((seen_chars &&
-       ((x + width) >= max_x)) ||
-      max_bytes == 0)
-    {
-      return GTK_TEXT_LAYOUT_NOTHING_FITS;
-    }
-  
-  /* Fill in the display chunk */
-
-  chunk->byte_count = seg->byte_count;
-  chunk->x = x;
-  chunk->width = width;
-  chunk->height = height;
-
-  /* Shift the baseline if we have super/subscript.
-     Note that this means ascent or descent can be negative,
-     but their sum remains positive and constant.
-     ( ascent + descent == height == ascent + offset + descent - offset )
-  */
-  chunk->ascent = height + chunk->style->offset;
-  chunk->descent = - chunk->style->offset;
-
-  chunk->d.pixmap.pixmap = seg->body.pixmap.pixmap;
-  chunk->d.pixmap.mask = seg->body.pixmap.mask;
-
-  if (chunk->d.pixmap.pixmap)
-    gdk_pixmap_ref (chunk->d.pixmap.pixmap);
-
-  if (chunk->d.pixmap.mask)
-    gdk_bitmap_ref (chunk->d.pixmap.mask);
-  
-  return GTK_TEXT_LAYOUT_OK;
-}
-
-static GtkTextLayoutResult
-layout_char_segment (GtkTextLayout *layout,
-                    GtkTextLineSegment *seg,
-                    GtkTextDisplayLine *line,
-                    GtkTextDisplayChunk *chunk,
-                    gboolean seen_chars, /* seen some chars already */
-                    gint offset, /* offset into the segment */
-                    gint x,      /* first X position we can use */
-                    gint max_x,  /* first X position that's off-limits,
-                                    or -1 if none */
-                    gint max_bytes) /* max chars we can put in the chunk */
-{
-  const gchar *p;
-  GdkFont *font;
-  guint bytes_that_fit;
-  gint end_x = 0;
-
-  g_return_val_if_fail (max_x < 0 || x < max_x,
-                       GTK_TEXT_LAYOUT_NOTHING_FITS);
-  g_assert (chunk->type == GTK_TEXT_DISPLAY_CHUNK_TEXT);
-  
-  /* Figure out how many characters we can fit.
-
-     We include partial characters in some cases:
-      a) If the line has no chars yet, i.e. all lines must have at
-         least one char
-      b) trailing whitespace at the end of the line can be chopped
-         off if at least one pixel is left to put it in
-
-     Also, newlines take up no space so always get included
-     at the end of lines.
-  */
-
-  font = chunk->style->font;
-  p = seg->body.chars + offset;
-  
-  bytes_that_fit = count_bytes_that_fit (font, p, max_bytes,
-                                        x, max_x, &end_x);
-
-
-  g_assert (bytes_that_fit <= max_bytes);
-  
-  if (bytes_that_fit < max_bytes)
-    {
-      g_assert (max_x >= 0); /* we had a limit on space */
+      cursor = g_new (GtkTextCursorDisplay, 1);
       
-      if (bytes_that_fit == 0 &&
-          !seen_chars)
-        {
-          /*  Partial character case a) */
-          GtkTextUniChar ch;
-
-          bytes_that_fit = gtk_text_utf_to_unichar (p, &ch);
-          
-          end_x = x + utf8_text_width (font, p, bytes_that_fit);
-        }
-      else if ( (end_x < (max_x - 1) ) &&
-                (p[bytes_that_fit] == ' ' ||
-                 p[bytes_that_fit] == '\t') )
-        {
-          /*  Partial character case b) */
-          bytes_that_fit += 1;
-          end_x = max_x - 1; /* take up remaining space */
-        }
-
-      /* grab one trailing newline */
-      if (p[bytes_that_fit] == '\n')
-        bytes_that_fit += 1;
-
-      if (bytes_that_fit == 0)
-        return GTK_TEXT_LAYOUT_NOTHING_FITS;
-    }
-
-  g_assert (end_x >= x);
-  
-  /* Fill in the display chunk */
-
-  chunk->byte_count = bytes_that_fit;
-  chunk->x = x;
-  chunk->width = end_x - x;
-  /* Shift the baseline if we have super/subscript.
-     Note that this means ascent or descent can be negative,
-     but their sum remains positive and constant.
-     ( ascent + descent == height == ascent + offset + descent - offset )
-  */
-  chunk->ascent = font->ascent + chunk->style->offset;
-  chunk->descent = font->descent - chunk->style->offset;
-
-  /*
-    The Tk widget copies the character data out of the btree
-    here. I'm going to try not copying it and see if I get bitten,
-    just to chill out the RAM a little bit.
-  */
-  
-  /*
-    FIXME if we do end up copying this, note that we should be
-    able to demand-copy it only for the stuff that's actually on-screen,
-    since we already have the layout information.
-  */
-
-  chunk->d.charinfo.byte_count = bytes_that_fit;
-  chunk->d.charinfo.text = p;
-
-  g_assert (gtk_text_byte_begins_utf8_char (p));
-  
-  /* we don't want to draw the newline, remember this is
-     text for display */
-  if (p[bytes_that_fit] == '\n')
-    chunk->d.charinfo.byte_count -= 1;
-
-  /* FIXME do the line break stuff */
-
-#if 0
-  chunk_self_check (chunk); /* DEBUG only - FIXME */
-#endif
-  
-  return GTK_TEXT_LAYOUT_OK;
-}
-
-static void
-merge_adjacent_elided_chunks (GtkTextLayout *layout,
-			      GtkTextDisplayLineWrapInfo *wrapinfo)
-{
-  GtkTextDisplayChunk *iter;
-  GtkTextDisplayChunk *prev;
-
-  prev = wrapinfo->chunks;
-  iter = wrapinfo->chunks->next;
-
-  g_assert (prev != NULL);
-
-  while (iter != NULL)
-    {
-      if (prev->type == GTK_TEXT_DISPLAY_CHUNK_TEXT &&
-          iter->type == GTK_TEXT_DISPLAY_CHUNK_TEXT && 
-          prev->style->elide &&
-          iter->style->elide)
-        {
-          prev->byte_count += iter->byte_count;
-          prev->next = iter->next;
-          
-          gtk_text_view_display_chunk_destroy (layout, iter);
-
-          iter = prev->next;
-        }
-      else
-        {
-          prev = iter;
-          iter = iter->next;
-        }
+      cursor->x = weak_pos.x / PANGO_SCALE;
+      cursor->y = weak_pos.y / PANGO_SCALE;
+      cursor->height = weak_pos.height / PANGO_SCALE;
+      cursor->is_strong = FALSE;
+      cursor->is_weak = TRUE;
+      display->cursors = g_slist_prepend (display->cursors, cursor);
     }
 }
 
-static void
-get_margins (GtkTextLayout      *layout,
-	     GtkTextStyleValues *style,
-	     const GtkTextIter  *iter,
-	     gint               *left,
-	     gint               *right)
+
+GtkTextLineDisplay *
+gtk_text_layout_get_line_display (GtkTextLayout *layout,
+				  GtkTextLine   *line)
 {
-
-  if (left)
-    {
-      if (gtk_text_iter_starts_line (iter)) /* start of line */
-        *left = style->left_margin;
-      else
-        *left = style->left_wrapped_line_margin;
-    }
-
-  if (right)
-    {
-      g_assert (left);
-      
-      if (style->wrap_mode == GTK_WRAPMODE_NONE)
-        *right = -1; /* no max X pixel */
-      else
-        {
-          /* Remember that the right margin pixel should be the first
-             off-limits one, so add 1 to these */
-          
-          *right = layout->screen_width - style->right_margin + 1;
-          
-          /* Ensure the display width isn't negative */
-          if (*right <= *left)
-            *right = *left + 1;
-        }
-    }
-}
-
-/* FIXME the loop in here can likely get a little simpler by taking
-   advantage of the new iterator instead of looping over segments
-   manually */
-GtkTextDisplayLineWrapInfo*
-gtk_text_view_display_line_wrap (GtkTextLayout      *layout,
-				 GtkTextDisplayLine *line)
-{
-  GtkTextDisplayLineWrapInfo *wrapinfo;
+  GtkTextLineDisplay *display;
   GtkTextLineSegment *seg;
-  GtkTextDisplayChunk *last_chunk;
-  gint x = 0;
-  gint max_x = 1; /* this is an off-limits pixel, so 1 is the minimum */
-  gboolean seen_chars = FALSE;
-  gboolean got_margins = FALSE;
-  gint max_bytes;
-  gboolean fit_whole_line;
-  gint segment_offset = 0;
   GtkTextIter iter;
+  GtkTextStyleValues *style;
+  gchar *text;
+  PangoAttrList *attrs;
+  gint byte_count, byte_offset;
+  gint total_width;
+  gdouble align;
+  PangoRectangle extents;
+  gboolean inside_selection = FALSE;
+  gboolean have_selection = FALSE;
+  GSList *cursor_byte_offsets = NULL;
+  GSList *tmp_list;
+
+  GtkTextIter selection_start;
+  GtkTextIter selection_end;
   
   g_return_val_if_fail (line != NULL, NULL);
-  
-  wrapinfo = g_new0(GtkTextDisplayLineWrapInfo, 1);
-  
-  /* Reset the line variables that are computed
-     from the wrap */
-  line->byte_count = 0;
-  line->height = 0;
-  line->length = 0;
 
-  gtk_text_btree_get_iter_at_line (layout->buffer->tree,
-                                   &iter, line->line, line->byte_offset);
+  display = g_new0 (GtkTextLineDisplay, 1);
   
-  /*
-   * Special-case optimization for completely
+  gtk_text_btree_get_iter_at_line (layout->buffer->tree, &iter, line, 0);
+  
+  /* Special-case optimization for completely
    * invisible lines; makes it faster to deal
    * with sequences of invisible lines.
    */
   if (totally_invisible_line (layout, line, &iter))
-    return wrapinfo;
+    return display;
 
-  /* Iterate over segments, creating display chunks for them. */
-  seg = gtk_text_iter_get_any_segment (&iter);
-  segment_offset = gtk_text_iter_get_segment_byte (&iter);
-  last_chunk = NULL;
+  /* Allocate space for flat text for buffer
+   */
+  byte_count = gtk_text_line_byte_count (line);
+  text = g_malloc (byte_count);
+
+  attrs = pango_attr_list_new ();
+
+  display->layout = pango_layout_new (layout->context);
+
+  style = get_style (layout, &iter);
+  set_para_values (layout, style, display, &total_width, &align);
   
+  /* Selection handling */
+  if (gtk_text_buffer_get_selection_bounds (layout->buffer,
+                                            &selection_start,
+                                            &selection_end))
+    {
+      if (gtk_text_iter_compare (&iter, &selection_start) >= 0 &&
+          gtk_text_iter_compare (&iter, &selection_end) < 0)
+	{
+	  inside_selection = TRUE;
+	}
+
+      have_selection = TRUE;
+    }
+  
+  /* Iterate over segments, creating display chunks for them. */
+  byte_offset = 0;
+  seg = gtk_text_iter_get_any_segment (&iter);
   while (seg != NULL)
     {
-      GtkTextDisplayChunk *chunk = NULL;
-
-      gtk_text_btree_get_iter_at_line (layout->buffer->tree,
-                                       &iter, line->line,
-                                       line->byte_offset + line->byte_count);
-      
-      /* Character segments */
-      if (seg->type == &gtk_text_view_char_type)
+      /* Displayable segments */
+      if (seg->type == &gtk_text_view_char_type ||
+	  seg->type == &gtk_text_pixmap_type)
         {
-          if (seen_chars && (max_x >= 0 && x >= max_x))
-            {
-              /* There is no way we can fit on this line,
-                 there's no space left. */
-              
-              goto done_with_line;
-            }
-          
-          chunk =
-            gtk_text_view_display_chunk_new (GTK_TEXT_DISPLAY_CHUNK_TEXT);
+          if (!style)
+	    {
+	      gtk_text_btree_get_iter_at_line (layout->buffer->tree,
+					       &iter, line,
+					       byte_offset);
+	      style = get_style (layout, &iter);
+	    }
 
-          if (wrapinfo->chunks == NULL) /* We are the first chunk */
-            wrapinfo->chunks = chunk;
-
-          if (last_chunk)          /* Link to the previous chunk */
-            last_chunk->next = chunk;
-
-          chunk->style = get_style (layout, &iter);
-          
           /* First see if the chunk is elided, and ignore it if so. Tk
-             looked at tabs, wrap mode, etc. before doing this, but
-             that made no sense to me, so I am just skipping the
-             elided chunks */
-          if (chunk->style->elide)
+	   * looked at tabs, wrap mode, etc. before doing this, but
+	   * that made no sense to me, so I am just skipping the
+	   * elided chunks
+	   */
+          if (!style->elide)
             {
-              line->byte_count += seg->byte_count - segment_offset;
-              
-              goto finished_with_segment;
-            }
-          else
-            {
-              GtkTextLayoutResult result;
+	      const char *chars;
+	      
+	      if (seg->type == &gtk_text_view_char_type)
+		{
+		  chars = seg->body.chars;
+		  add_text_attrs (layout, style, seg, inside_selection, attrs, byte_offset);
+		}
+	      else
+		{
+		  chars = gtk_text_unknown_char_utf8;
+		  add_pixmap_attrs (layout, style, seg, inside_selection, attrs, byte_offset);
+		}
+		
+              memcpy (text + byte_offset, chars, seg->byte_count);
+	      byte_offset += seg->byte_count;
+	    }
 
-              if (!got_margins)
-                {
-                  get_margins (layout, chunk->style, &iter,
-                              &x, &max_x);
-                  got_margins = TRUE;
-                }
+        }
 
-              g_assert (max_x < 0 || max_x <= layout->screen_width+1);
-              
-              max_bytes = seg->byte_count - segment_offset;
-              
-              result = layout_char_segment (layout, seg, line, chunk,
-                                           seen_chars,
-                                           segment_offset, x, max_x, max_bytes);
-              
-              if (result == GTK_TEXT_LAYOUT_OK)
-                {
-                  line->byte_count += chunk->byte_count;
-                  seen_chars = TRUE;                  
-                  goto finished_with_segment;
-                }
-              else if (result == GTK_TEXT_LAYOUT_NOTHING_FITS)
-                {
-                  /* The char layout function is guaranteed to put
-                     at least one char on the line if the line has no
-                     chars yet */
-                  g_assert (wrapinfo->chunks != NULL &&
-                           wrapinfo->chunks != chunk);
-                  g_assert (seen_chars);
-                  
-                  /* Nothing more on this display line,
-                     nuke our tentative chunk */
-                  if (last_chunk)
-                    last_chunk->next = NULL;
-                  if (wrapinfo->chunks == chunk) /* This should never happen though */
-                    wrapinfo->chunks = NULL;
-                  gtk_text_view_display_chunk_destroy (layout, chunk);
-                  chunk = NULL;
-
-                  goto done_with_line;
-                }
-              else
-                g_assert_not_reached ();
-            } /* if (non-elided character segment) */
-          
-        } /* if (character segment) */
-
-      /* Pixmaps */
-
-
-      /* Some cut-and-paste between here and char segment, but
-         very inconvenient to put in a function; need to think
-         of a plan. */
-      else if (seg->type == &gtk_text_pixmap_type)
-        {
-          if (seen_chars && (max_x >= 0 && x >= max_x))
-            {
-              /* There is no way we can fit on this line,
-                 there's no space left. */
-              
-              goto done_with_line;
-            }
-          
-          chunk =
-            gtk_text_view_display_chunk_new (GTK_TEXT_DISPLAY_CHUNK_PIXMAP);
-
-          if (wrapinfo->chunks == NULL) /* We are the first chunk */
-            wrapinfo->chunks = chunk;
-
-          if (last_chunk)          /* Link to the previous chunk */
-            last_chunk->next = chunk;
-
-          chunk->style = get_style (layout, &iter);
-          
-          /* First see if the chunk is elided, and ignore it if so. Tk
-             looked at tabs, wrap mode, etc. before doing this, but
-             that made no sense to me, so I am just skipping the
-             elided chunks */
-          if (chunk->style->elide)
-            {
-              line->byte_count += seg->byte_count - segment_offset;
-              
-              goto finished_with_segment;
-            }
-          else
-            {
-              GtkTextLayoutResult result;
-
-              if (!got_margins)
-                {
-                  get_margins (layout, chunk->style, &iter,
-                              &x, &max_x);
-                  got_margins = TRUE;
-                }
-              
-              g_assert (max_x < 0 || max_x <= layout->screen_width+1);
-              
-              max_bytes = seg->byte_count - segment_offset;
-              
-              result = layout_pixmap_segment (layout, seg, line, chunk,
-                                             seen_chars,
-                                             segment_offset, x, max_x, max_bytes);
-              
-              if (result == GTK_TEXT_LAYOUT_OK)
-                {
-                  line->byte_count += chunk->byte_count;
-                  goto finished_with_segment;
-                }
-              else if (result == GTK_TEXT_LAYOUT_NOTHING_FITS)
-                {                  
-                  /* Nothing more on this display line,
-                     nuke our tentative chunk */
-                  if (last_chunk)
-                    last_chunk->next = NULL;
-                  if (wrapinfo->chunks == chunk) /* This should never happen though */
-                    wrapinfo->chunks = NULL;
-                  gtk_text_view_display_chunk_destroy (layout, chunk);
-                  chunk = NULL;
-
-                  goto done_with_line;
-                }
-              else
-                g_assert_not_reached ();
-            } /* if pixmap not elided */
-        } /* end of if (pixmap segment) */
-      
-      
       /* Toggles */
-
-
       else if (seg->type == &gtk_text_view_toggle_on_type ||
                seg->type == &gtk_text_view_toggle_off_type)
         {
           /* Style may have changed, drop our
              current cached style */
           invalidate_cached_style (layout);
-          
-          /* semi-bogus temporary hack */
-          line->byte_count += seg->byte_count - segment_offset;
-          segment_offset += seg->byte_count - segment_offset;
-          /* end semi-bogus temporary hack */
-          
-          goto finished_with_segment;
-        } /* if (toggle segment) */
-      
+        }
       
       /* Marks */
-
-      
       else if (seg->type == &gtk_text_view_right_mark_type ||
                seg->type == &gtk_text_view_left_mark_type)
         {
+	  /* Handle selection start/end */
+
+	  if (inside_selection || have_selection)
+	    {
+	      gtk_text_btree_get_iter_at_line (layout->buffer->tree,
+					       &iter, line,
+					       byte_offset);
+	      if (inside_selection)
+		{
+		  if (gtk_text_iter_equal (&iter, &selection_end))
+		    {
+		      inside_selection = FALSE;
+		      have_selection = FALSE;
+		    }
+		}
+	      else if (have_selection)
+		{
+		  if (gtk_text_iter_equal (&iter, &selection_start))
+		    inside_selection = TRUE;
+		}
+	    }
+	  
           /* Display visible marks */
 
           if (seg->body.mark.visible)
-            {
-              chunk =
-                gtk_text_view_display_chunk_new (GTK_TEXT_DISPLAY_CHUNK_CURSOR);
-              
-              if (wrapinfo->chunks == NULL) /* We are the first chunk */
-                wrapinfo->chunks = chunk;
-
-              if (last_chunk)          /* Link to the previous chunk */
-                last_chunk->next = chunk;
-              
-              chunk->style = get_style (layout, &iter);
-
-              line->byte_count += chunk->byte_count;
-
-              if (got_margins)
-                {
-                  chunk->x = x;
-                }
-              else
-                {
-                  /* get x from our left margin, since there are
-                     no char segments yet to use the margin from.
-                     This is probably wrong; probably we want
-                     to just fill in our X after we see a char
-                     segment so we snap to the front of the
-                     first char segment. */
-                  get_margins (layout, chunk->style, &iter,
-                              &chunk->x, NULL);
-                }
-              
-              chunk->width = 0;
-              chunk->ascent = chunk->style->font->ascent;
-              chunk->descent = chunk->style->font->descent;
-            }
-          else
-            {
-              /* semi-bogus temporary hack */
-              line->byte_count += seg->byte_count - segment_offset;
-              segment_offset += seg->byte_count - segment_offset;
-              /* end semi-bogus temporary hack */
-            }
-          
-          goto finished_with_segment;
-        } /* if (mark segment) */
+	    cursor_byte_offsets = g_slist_prepend (cursor_byte_offsets, GINT_TO_POINTER (byte_offset));
+        }
 
       else
         g_error ("Unknown segment type: %s", seg->type->name);
 
-    finished_with_segment:
-      if (chunk)
-        {
-          /* We added a chunk based on this segment */
-          last_chunk = chunk;
-          segment_offset += chunk->byte_count;
-          x += chunk->width;
-        }
-
-      /* Move to the next segment if we finished this segment */
-      if (segment_offset >= seg->byte_count)
-        {
-          seg = seg->next;
-          segment_offset = 0;
-        }
+      if (style)
+	{
+	  release_style (layout, style);
+	  style = NULL;
+	}
+      
+      seg = seg->next;
     }
 
- done_with_line:
-
-  g_assert (seen_chars); /* Each line should at least have a single newline in it */
-  g_assert (last_chunk != NULL); /* have at least one chunk */
-
-  fit_whole_line = (seg == NULL);
+  /* Pango doesn't want the trailing new line */
+  if (byte_offset > 0 && text[byte_offset - 1] == '\n')
+    byte_offset--;
   
-  merge_adjacent_elided_chunks (layout, wrapinfo);
+  pango_layout_set_text (display->layout, text, byte_offset);
+  pango_layout_set_attributes (display->layout, attrs);
 
-  /* Now we need to calculate the attributes of the
-     line as a whole. This could probably stand
-     to be a separate function. */
-  {
-    gint justify_indent = 0;
-    gint max_ascent = 0;
-    gint max_descent = 0;
-    gint max_height = 0;
-    GtkTextDisplayChunk *iter;
-    
-    line->length = last_chunk->x + last_chunk->width;
-    
-    switch (wrapinfo->chunks->style->justify)
-      {
-      case GTK_JUSTIFY_LEFT:
-        justify_indent = 0;
-        break;
-      case GTK_JUSTIFY_RIGHT:
-        /* -1 since max_x isn't a valid pixel to use */
-        justify_indent = max_x - line->length - 1;
-        break;
-      case GTK_JUSTIFY_CENTER:
-        justify_indent = (max_x - line->length - 1) / 2;
-        break;
-      case GTK_JUSTIFY_FILL:
-        g_warning ("FIXME we don't support GTK_JUSTIFY_FILL yet");
-        break;
-      default:
-        g_assert_not_reached ();
-        break;
-      }
+  tmp_list = cursor_byte_offsets;
+  while (tmp_list)
+    {
+      add_cursor (display, GPOINTER_TO_INT (tmp_list->data));
+      tmp_list = tmp_list->next;
+    }
+  g_slist_free (tmp_list);
 
-    iter = wrapinfo->chunks;
-    while (iter != NULL)
-      {
-        /* move all the chunks over */
-        iter->x += justify_indent;
+  pango_layout_get_extents (display->layout, NULL, &extents);
 
-        /* Compute some maximums */
-        max_ascent = MAX (max_ascent, iter->ascent);
-        max_descent = MAX (max_descent, iter->descent);
-        max_height = MAX (max_height, iter->height);
+  if (total_width >= 0)
+    display->x_offset += (total_width - extents.width / PANGO_SCALE) * align;
 
-        iter = iter->next;
-      }
-
-    /* Justification may have changed this value */
-    line->length = last_chunk->x + last_chunk->width;
-
-    if (max_height < (max_ascent + max_descent))
-      {
-        /* All the non-text segments were shorter than the text;
-           increase the total height to fit the text */
-        max_height = max_ascent + max_descent;
-        wrapinfo->baseline = max_ascent;
-      }
-    else
-      {
-        /* Some non-text segments were taller; center the text
-           baseline in the total height */
-        wrapinfo->baseline = max_ascent + (max_height - (max_ascent + max_descent))/2;
-      }
-
-    line->height = max_height;
-
-    /* Spacing above/below the line */
-    
-    if (line->byte_offset == 0)
-      wrapinfo->space_above = wrapinfo->chunks->style->pixels_above_lines;
-    else
-      wrapinfo->space_above =
-        wrapinfo->chunks->style->pixels_inside_wrap / 2 +
-        wrapinfo->chunks->style->pixels_inside_wrap % 2; /* put remainder here */
-
-    if (fit_whole_line)
-      wrapinfo->space_below = wrapinfo->chunks->style->pixels_below_lines;
-    else
-      wrapinfo->space_below =
-        wrapinfo->chunks->style->pixels_inside_wrap/2; /* could have put
-                                                      remainder here */
-
-
-    /* Consider spacing in the total line height, and the offset of
-       the baseline from the top of the line. */
-    line->height += wrapinfo->space_below + wrapinfo->space_above;
-    wrapinfo->baseline += wrapinfo->space_above;
-  }
-
+  display->width = extents.width / PANGO_SCALE;
+  display->height += extents.height / PANGO_SCALE;
+ 
   /* Free this if we aren't in a loop */
   if (layout->wrap_loop_count == 0)
-    {
-      invalidate_cached_style (layout);
-    }
-  
-  return wrapinfo;
+    invalidate_cached_style (layout);
+
+  g_free (text);
+  pango_attr_list_unref (attrs);
+
+  return display;
 }
 
 void
-gtk_text_view_display_line_unwrap (GtkTextLayout              *layout,
-				   GtkTextDisplayLine         *line,
-				   GtkTextDisplayLineWrapInfo *wrapinfo)
+gtk_text_layout_free_line_display (GtkTextLayout      *layout,
+				   GtkTextLine        *line,
+				   GtkTextLineDisplay *display)
 {
-  GtkTextDisplayChunk *chunk;
-  GtkTextDisplayChunk *next;
+  pango_layout_unref (display->layout);
 
-  g_return_if_fail (line != NULL);
-  g_return_if_fail (line->height >= 0);
-  g_return_if_fail (line->length >= 0);
-  g_return_if_fail (wrapinfo != NULL);
-  
-  for (chunk = wrapinfo->chunks; chunk != NULL; chunk = next)
+  if (display->cursors)
     {
-      next = chunk->next;
-      gtk_text_view_display_chunk_destroy (layout, chunk);
+      g_slist_foreach (display->cursors, (GFunc)g_free, NULL);
+      g_slist_free (display->cursors);
     }
-
-  g_free (wrapinfo);
+    
+  g_free (display);
 }
 
-static DisplayLineList*
-display_line_list_new (GtkTextLayout *layout,
-                      GtkTextLine *line)
+/* FIXME: This really doesn't belong in this file ... */
+static GtkTextLineData*
+gtk_text_line_data_new (GtkTextLayout *layout,
+			GtkTextLine   *line)
 {
-  DisplayLineList *list;
+  GtkTextLineData *list;
 
-  list = g_new (DisplayLineList, 1);
+  list = g_new (GtkTextLineData, 1);
 
-  list->layout = layout;
+  list->view_id = layout;
   list->next = NULL;
   list->width = -1;
   list->height = -1;
-
-  list->lines = NULL;
   
   return list;
 }
@@ -1586,217 +1093,21 @@ display_line_list_new (GtkTextLayout *layout,
 static void
 line_data_destructor (gpointer data)
 {
-  display_line_list_destroy (data);
+  g_free (data);
 }
 
-static void
-display_line_list_destroy (DisplayLineList *list)
-{
-  g_return_if_fail (list != NULL);
-  
-  if (list->lines)
-    display_line_list_delete_lines (list);
-
-  g_assert (list->lines == NULL);
-  
-  g_free (list);
-}
-
-static void
-display_line_list_create_lines (DisplayLineList *list,
-                               GtkTextLine *line,
-                               GtkTextLayout *layout)
-{
-  GtkTextDisplayLine *last;
-  GtkTextDisplayLine *new_line;
-  GtkTextDisplayLineWrapInfo *wrapinfo;
-  GtkTextLineSegment *seg;
-  gint byte;
-  gint max_bytes;
-  
-  g_return_if_fail (GTK_IS_TEXT_VIEW_LAYOUT (layout));
-  
-  if (list->lines != NULL)
-    {
-      g_return_if_fail (list->height >= 0);
-      return;
-    }
-
-  list->width = 0;
-  list->height = 0;
-  
-  max_bytes = 0;
-  seg = line->segments;
-  while (seg != NULL)
-    {
-      max_bytes += seg->byte_count;
-      seg = seg->next;
-    }
-
-  gtk_text_layout_wrap_loop_start (layout);
-
-  byte = 0;
-  
-  last = NULL;
-  while (byte < max_bytes)
-    {
-      new_line = gtk_text_view_display_line_new (line, byte);
-      
-      g_assert (new_line != NULL);
-
-      /* We need to wrap the line to
-         fill in the height/length/byte_count fields */
-      wrapinfo = gtk_text_view_display_line_wrap (layout, new_line);
-      /* But we don't actually care about the display info,
-         so just free it immediately */
-      gtk_text_view_display_line_unwrap (layout, new_line, wrapinfo);
-
-      list->height += new_line->height;
-      list->width = MAX ( list->width, new_line->length);
-      
-      if (last)
-        last->next = new_line;
-      else
-        list->lines = new_line;
-      
-      last = new_line;
-
-      byte += new_line->byte_count;
-    }
-
-  gtk_text_layout_wrap_loop_end (layout);
-}
-
-static void
-display_line_list_delete_lines (DisplayLineList *list)
-{
-  GtkTextDisplayLine *iter;
-  GtkTextDisplayLine *next;
-
-  iter = list->lines;
-  while (iter != NULL)
-    {
-      next = iter->next;
-
-      gtk_text_view_display_line_destroy (iter);
-      
-      iter = next;
-    }
-  
-  list->lines = NULL;
-}
-
-/* Create a new layout line for the line starting at the given index. */   
-static GtkTextDisplayLine*
-gtk_text_view_display_line_new (GtkTextLine *btree_line, gint byte_offset)
-{
-  GtkTextDisplayLine *line;
-  
-  /* Init struct values to 0/NULL */
-  line = g_new0(GtkTextDisplayLine, 1);
-
-  line->line = btree_line;
-  line->byte_offset = byte_offset;
-  
-  return line;
-}
-
-static void
-gtk_text_view_display_line_destroy (GtkTextDisplayLine *line)
-{
-  g_free (line);
-}
-
-static gint
-get_byte_at_x (GtkTextDisplayChunk *chunk, gint x)
-{
-  g_return_val_if_fail (x >= chunk->x, 0);
-  g_return_val_if_fail (chunk->type == GTK_TEXT_DISPLAY_CHUNK_TEXT ||
-                       chunk->type == GTK_TEXT_DISPLAY_CHUNK_PIXMAP, 0);
-  
-  switch (chunk->type)
-    {
-    case GTK_TEXT_DISPLAY_CHUNK_TEXT:
-      {
-        /* We want to "round down" i.e.
-           we are trying to return the byte index
-           where the cursor would be placed _before_
-           the indexed character. */
-        gint ignored;
-        gint bytes;
-        const gchar *text = chunk->d.charinfo.text;
-        gint len = chunk->d.charinfo.byte_count;
-        
-        bytes = count_bytes_that_fit (chunk->style->font,
-                                     text,
-                                     len,
-                                     chunk->x,
-                                     x + 1,
-                                     &ignored);
-
-        /* Bytes has to be less than chunk->byte_count
-           because if it were equal the X value
-           would be into the next chunk */
-        g_assert (bytes < chunk->byte_count);
-        return bytes;
-      }
-      break;
-
-    case GTK_TEXT_DISPLAY_CHUNK_PIXMAP:
-      return 0;
-      break;
-      
-    case GTK_TEXT_DISPLAY_CHUNK_CURSOR:
-    default:
-      g_assert_not_reached ();
-      break;
-    }
-  g_assert_not_reached ();
-  return 0;
-}
-
-
-static gint
-get_x_at_byte (GtkTextDisplayChunk *chunk, gint offset)
-{
-  g_return_val_if_fail (chunk->type == GTK_TEXT_DISPLAY_CHUNK_TEXT, 0);
-  g_return_val_if_fail (offset <= chunk->d.charinfo.byte_count, 0);
-  
-  switch (chunk->type)
-    {
-    case GTK_TEXT_DISPLAY_CHUNK_TEXT:
-      {
-        return chunk->x + utf8_text_width (chunk->style->font,
-                                          chunk->d.charinfo.text,
-                                          offset);
-      }
-      break;
-
-    case GTK_TEXT_DISPLAY_CHUNK_PIXMAP:
-    case GTK_TEXT_DISPLAY_CHUNK_CURSOR:
-    default:
-      g_assert_not_reached ();
-      break;
-    }
-  g_assert_not_reached ();
-  return 0;
-}
-
-/* FIXME the new iterators should allow a nice cleanup of this
-   function too... */
 void
 gtk_text_layout_get_iter_at_pixel (GtkTextLayout *layout,
                                    GtkTextIter *target_iter,
                                    gint x, gint y)
 {
-  GtkTextIter counter;
-  GtkTextDisplayLine *prev;
-  GtkTextDisplayChunk *chunk;
-  GtkTextDisplayLineWrapInfo *wrapinfo;
-  gint ignore;
-  gint byte_index;
+  GtkTextLine *line;
+  gint byte_index, trailing;
+  gint line_top;
+  GtkTextLineDisplay *display;
   
-  g_return_if_fail (GTK_IS_TEXT_VIEW_LAYOUT (layout));
+  g_return_if_fail (GTK_IS_TEXT_LAYOUT (layout));
+  g_return_if_fail (target_iter != NULL);
   
   /* Adjust pixels to be on-screen. This gives nice
      behavior if the user is dragging with a pointer grab.
@@ -1809,93 +1120,35 @@ gtk_text_layout_get_iter_at_pixel (GtkTextLayout *layout,
     x = layout->width;
   if (y > layout->height)
     y = layout->height;
-
-  prev = gtk_text_layout_find_display_line_at_y (layout, y, NULL);
-  if (prev == NULL)
-    {
-      /* Use last line */
-      gint last_line_index = gtk_text_btree_line_count (layout->buffer->tree) - 1;
-      GtkTextLine *last_line = gtk_text_btree_get_line (layout->buffer->tree,
-                                                         last_line_index, &ignore);
-      DisplayLineList *display_lines;
-      GtkTextDisplayLine *iter;
-      g_assert (last_line);
-      display_lines = gtk_text_line_get_data (last_line,
-                                              layout);
-
-      iter = display_lines->lines;
-      while (iter != NULL)
-        {
-          prev = iter;
-          iter = iter->next;
-        }
-      g_assert (prev != NULL);
-    }
   
-  wrapinfo = gtk_text_view_display_line_wrap (layout, prev);
-
-  gtk_text_btree_get_iter_at_line (layout->buffer->tree,
-                                   &counter,
-                                   prev->line, prev->byte_offset);
-  byte_index = gtk_text_iter_get_line_byte (&counter);
+  line = gtk_text_btree_find_line_by_y (layout->buffer->tree, layout, y, &line_top);
+  if (line == NULL)
+    line = gtk_text_btree_get_line (layout->buffer->tree,
+				    gtk_text_btree_line_count (layout->buffer->tree) - 1, NULL);
   
-  chunk = wrapinfo->chunks;
-  g_assert (chunk != NULL); /* one chunk is required */
-  while (x >= (chunk->x + chunk->width))
+  display = gtk_text_layout_get_line_display (layout, line);
+
+  /* We clamp y to the area of the actual layout so that the layouts
+   * hit testing works OK on the space above and below the layout
+   */
+  y -= line_top + display->top_margin;
+  y = CLAMP (y, display->top_margin, display->height - display->top_margin - display->bottom_margin - 1);
+  
+  if (!pango_layout_xy_to_index (display->layout, x * PANGO_SCALE, y * PANGO_SCALE,
+				 &byte_index, &trailing))
     {
-      if (chunk->next == NULL)
-        {
-          /* We're off the end, just go to end of display line;
-             but make sure we don't go off the end of the btree
-             line. */
-          byte_index += chunk->byte_count;
-          {
-            GtkTextLine *line;
-            gint max_index = 0;
-
-            line = gtk_text_iter_get_line (&counter);
-
-            max_index = gtk_text_line_byte_count (line);
-            
-            if (byte_index >= max_index)
-              {
-                byte_index = 0;
-                gtk_text_btree_get_iter_at_line (layout->buffer->tree,
-                                                 &counter,
-                                                 gtk_text_line_next (line),
-                                                 byte_index);
-              }
-          }
-
-          gtk_text_iter_backward_char (&counter);
-
-#if 0
-          gtk_text_view_counter_get_char (&counter); /* DEBUG only, FIXME */
-#endif     
-          gtk_text_view_display_line_unwrap (layout, prev, wrapinfo);
-
-          *target_iter = counter;
-          return;
-        }
-      byte_index += chunk->byte_count;
-      chunk = chunk->next;
+      byte_index = gtk_text_line_byte_count (line);
+      trailing = 0;
     }
 
-  if (chunk->byte_count > 1)
-    byte_index += get_byte_at_x (chunk, x);
-
   gtk_text_btree_get_iter_at_line (layout->buffer->tree,
-                                   &counter,
-                                   gtk_text_iter_get_line (&counter),
-                                   byte_index);
-  
-#if 0
-  gtk_text_view_counter_get_char (&counter); /* DEBUG only, FIXME */
-#endif
-  
-  gtk_text_view_display_line_unwrap (layout, prev, wrapinfo);
+                                   target_iter,
+                                   line, byte_index);
 
-  *target_iter = counter;
+  while (trailing--)
+    gtk_text_iter_forward_char (target_iter);
+  
+  gtk_text_layout_free_line_display (layout, line, display);
 }
 
 void
@@ -1903,193 +1156,51 @@ gtk_text_layout_get_iter_location (GtkTextLayout     *layout,
                                    const GtkTextIter *iter,
                                    GdkRectangle      *rect)
 {
-  DisplayLineList *dline_list;
-  GtkTextDisplayChunk *chunk;
-  GtkTextDisplayLineWrapInfo *wrapinfo;
-  gint offset;
-  gint chunk_offset;
-  gint x;
-  GtkTextDisplayLine *dline;
+  PangoRectangle pango_rect;
   GtkTextLine *line;
   GtkTextBTree *tree;
+  GtkTextLineDisplay *display;
   gint byte_index;
   
-  g_return_if_fail (GTK_IS_TEXT_VIEW_LAYOUT (layout));
+  g_return_if_fail (GTK_IS_TEXT_LAYOUT (layout));
   g_return_if_fail (gtk_text_iter_get_btree (iter) == layout->buffer->tree);
   g_return_if_fail (rect != NULL);
   
   tree = gtk_text_iter_get_btree (iter);
   line = gtk_text_iter_get_line (iter);
-  byte_index = gtk_text_iter_get_line_byte (iter);
-  
-  rect->y = gtk_text_btree_find_line_top (tree,
-                                          line,
-                                          layout);
 
-  dline_list = gtk_text_line_get_data (line,
-                                       layout);
-  if (dline_list == NULL)
-    dline_list = (DisplayLineList*)gtk_text_layout_wrap (layout,
-                                                         line, NULL);
+  display = gtk_text_layout_get_line_display (layout, line);
 
-  g_assert (dline_list != NULL);
+  rect->y = gtk_text_btree_find_line_top (tree, line, layout);
 
-  /* Make sure we have the display lines computed */
-  display_line_list_create_lines (dline_list, line, layout);
-  
-  dline = dline_list->lines;
-  while (dline != NULL)
+  /* pango_layout_index_to_pos() expects the index of a character within the layout,
+   * so we have to special case the last character. FIXME: This should be moved
+   * to Pango.
+   */
+  if (gtk_text_iter_ends_line (iter))
     {
-      if (byte_index >= dline->byte_offset &&
-          (dline->next == NULL ||
-           byte_index < dline->next->byte_offset))
-        break;
-      else
-        {
-          rect->y += dline->height;
-          dline = dline->next;
-        }
-    }
-  g_assert (dline != NULL);
+      PangoLayoutLine *last_line = g_slist_last (pango_layout_get_lines (display->layout))->data;
 
-  wrapinfo = gtk_text_view_display_line_wrap (layout, dline);
-
-  offset = dline->byte_offset;
-  chunk = wrapinfo->chunks;
-  g_assert (chunk != NULL); /* one chunk is required */
-  while (chunk != NULL)
-    {
-      if (byte_index >= offset &&
-          (byte_index < (offset + chunk->byte_count)))
-        break;
+      pango_layout_line_get_extents (last_line, NULL, &pango_rect);
       
-      offset += chunk->byte_count;
-      chunk = chunk->next;
-    }
-
-  g_assert (chunk != NULL);
-
-  chunk_offset = byte_index - offset;
-
-  x = -1;
-  if (chunk->type == GTK_TEXT_DISPLAY_CHUNK_TEXT)
-    {
-      rect->x = get_x_at_byte (chunk, chunk_offset);
-
-      if (chunk_offset < chunk->byte_count)
-        {
-          /* Width is distance to the next character. */
-          GtkTextUniChar ch;
-          gint bytes;
-          bytes = gtk_text_utf_to_unichar (chunk->d.charinfo.text + chunk_offset,
-                                           &ch);
-          x = get_x_at_byte (chunk, chunk_offset + bytes);
-        }
+      rect->x = display->x_offset + (pango_rect.x + pango_rect.width) / PANGO_SCALE;
+      rect->y += display->top_margin + pango_rect.y / PANGO_SCALE;
+      rect->width = 0;
+      rect->height = pango_rect.height / PANGO_SCALE;
     }
   else
     {
-      rect->x = chunk->x;
-    }
-
-  if (x < 0)
-    {
-      /* Use distance to next chunk if any */
-      if (chunk->next)
-        x = chunk->next->x;
-      else
-        x = rect->x; /* no width, we're at the end of a line */
-    }
-
-  rect->width = x - rect->x;
-  rect->height = dline->height;
+      byte_index = gtk_text_iter_get_line_byte (iter);
   
-  gtk_text_view_display_line_unwrap (layout, dline, wrapinfo);
-
-#if 0
-  printf ("iter at (%d,%d) %dx%d\n",
-         rect->x, rect->y, rect->width, rect->height);
-#endif
-}
-
-/* This one is clearly not unicode-friendly.
-
-   Also the algorithm is stupid, it could be a lot smarter by assuming
-   that bytes are roughly equal in width in order to do a clever
-   binary search for the proper length (selecting the next length to
-   try by assuming average an average glyph width in pixels)
-*/
-static guint
-count_bytes_that_fit (GdkFont    *font,
-                     const gchar *utf8_str,
-                     gint         utf8_len,
-                     int          start_x, /* first pixel we can use */
-                     int          end_x, /* can't use this pixel, or -1 for no limit */
-                     int         *end_pos) /* last pixel we did use */ 
-{
-  gint width;
-  gint i;
-  
-  g_return_val_if_fail (end_x < 0 || end_x > start_x, 0);
-  g_return_val_if_fail (utf8_str != NULL, 0);
-  g_return_val_if_fail (font != NULL, 0);
-  g_return_val_if_fail (utf8_len > 0, 0);
-  g_return_val_if_fail (end_pos != NULL, 0);
-  
-  if (end_x < 0)
-    {
-      /* We can definitely fit them all */      
-      width = utf8_text_width (font, utf8_str, utf8_len);
-      *end_pos = start_x + width;
+      pango_layout_index_to_pos (display->layout, byte_index, &pango_rect);
       
-      return utf8_len;
+      rect->x = display->x_offset + pango_rect.x / PANGO_SCALE;
+      rect->y += display->top_margin + pango_rect.y / PANGO_SCALE;
+      rect->width = pango_rect.width / PANGO_SCALE;
+      rect->height = pango_rect.height / PANGO_SCALE;
     }
-
-  width = 0;
-  i = 0;
-  while (i < utf8_len)
-    {
-      gint ch_w;
-      guchar l1_char;
-      gint bytes;
-      
-      bytes = gtk_text_utf_to_latin1_char (utf8_str + i, &l1_char);
-      
-      /* FIXME the final char in the string should have its rbearing
-         used rather than the width, to avoid chopping off italics */
-      ch_w = gdk_char_width (font, l1_char);
-      
-      if ( (start_x + width + ch_w) >= end_x )
-        break;
-      else
-        {
-          width += ch_w;
-          i += bytes; /* note that i is incremented whenever a character fits,
-                         so i is the number of bytes that fit. */
-        }
-    }
-
-  g_assert (i <= utf8_len);
   
-  *end_pos = start_x + width;
-  
-  return i;
-}
-
-static gint
-utf8_text_width (GdkFont *font, const gchar *utf8_str, gint utf8_len)
-{
-  gchar *str;
-  gint len;
-  gint width;
-  
-  str = gtk_text_utf_to_latin1(utf8_str, utf8_len);
-  len = strlen (str);
-
-  width = gdk_text_width (font, str, len);
-  
-  g_free (str);
-
-  return width;
+  gtk_text_layout_free_line_display (layout, line, display);
 }
 
 
@@ -2125,7 +1236,7 @@ gtk_text_layout_spew (GtkTextLayout *layout)
   GtkTextLine *last_line = NULL;
   
   iter = layout->line_list;
-  while (iter != NULL)
+   while (iter != NULL)
     {
       if (iter->line != last_line)
         {
@@ -2150,4 +1261,6 @@ gtk_text_layout_spew (GtkTextLayout *layout)
          layout->height, layout->screen_width);
 #endif
 }
+
+
 

@@ -208,7 +208,7 @@ main(int argc, char** argv)
       gtk_object_set(GTK_OBJECT(tag),
                      "foreground_gdk", &color,
                      "background_gdk", &color2,
-                     "font", "-*-courier-bold-r-*-*-30-*-*-*-*-*-*-*",
+                     "font", "Sans 24",
                      NULL);
 
       tag = gtk_text_buffer_create_tag(buffer, "fg_red");
@@ -230,7 +230,7 @@ main(int argc, char** argv)
       color.green = 0xffff;
       gtk_object_set(GTK_OBJECT(tag),
                      "background_gdk", &color,
-                     "font", "-*-courier-bold-r-*-*-10-*-*-*-*-*-*-*",
+                     "font", "Sans 10",
                      NULL);
 
       tag = gtk_text_buffer_create_tag(buffer, "overstrike");
@@ -247,7 +247,7 @@ main(int argc, char** argv)
       setup_tag(tag);
       
       gtk_object_set(GTK_OBJECT(tag),
-                     "underline", TRUE,
+                     "underline", PANGO_UNDERLINE_SINGLE,
                      NULL);
 
 
@@ -259,7 +259,7 @@ main(int argc, char** argv)
       g_assert(pixmap != NULL);
       
       i = 0;
-      while (i < 1000)
+      while (i < 100)
         {
           gtk_text_buffer_get_iter_at_char(buffer, &iter, 0);
           
@@ -278,7 +278,7 @@ main(int argc, char** argv)
                                   "(Hello World!)\nfoo foo Hello this is some text we are using to text word wrap. It has punctuation! gee; blah - hmm, great.\nnew line with a significant quantity of text on it. This line really does contain some text. More text! More text! More text!\n"
                                   /* This is UTF8 stuff, Emacs doesn't
                                      really know how to display it */
-                                  "Spanish (Español) ¡Hola! / French (Français) Bonjour, Salut / German (Deutsch Süd) Grüß Gott (testing Latin-1 chars encoded in UTF8)\nThai (we can't display this, just making sure we don't crash)  (ภาษาไทย)  สวัสดีครับ, สวัสดีค่ะ\n", -1);
+                                  "German (Deutsch Süd) Grüß Gott Greek (Ελληνικά) Γειά σας Hebrew   שלום Japanese (日本語)\n", -1);
           
 #if 1
           gtk_text_buffer_get_iter_at_line_char(buffer, &iter, 0, 6);

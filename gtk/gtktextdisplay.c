@@ -50,284 +50,284 @@
 
 #include "gtktextdisplay.h"
 #include "gtktextiterprivate.h"
+#include <pango/pangox.h>
+#include "x11/gdkx.h"
 
-/*
- *
- * I consider this file to be Sucky (tm) so if you want to rewrite it...
- *
- *
- */
+typedef struct _GtkTextRenderState GtkTextRenderState;
 
-
-static void
-set_gc_from_values (GdkGC* gc,
-		    gboolean foreground,
-		    GtkTextStyleValues *values)
+struct _GtkTextRenderState
 {
-  if (foreground)
-    {
-      gdk_gc_set_foreground (gc, &values->fg_color);
-
-      if (values->fg_stipple)
-        {
-          gdk_gc_set_fill (gc, GDK_STIPPLED);
-          gdk_gc_set_stipple (gc, values->fg_stipple);
-        }
-      else
-        {
-          gdk_gc_set_fill (gc, GDK_SOLID);
-        }
-    }
-  else
-    {
-      gdk_gc_set_foreground (gc, &values->bg_color);
-
-      if (values->bg_stipple)
-        {
-          gdk_gc_set_fill (gc, GDK_STIPPLED);
-          gdk_gc_set_stipple (gc, values->bg_stipple);
-        }
-      else
-        {
-          gdk_gc_set_fill (gc, GDK_SOLID);
-        }
-    }
-}
-
-static void
-draw_text (GdkDrawable *drawable,
-	   GdkGC* gc,
-	   gint x, 
-	   gint baseline,
-	   GtkTextDisplayChunk *chunk)
-{
-  const gchar *str = chunk->d.charinfo.text;
-  guint bytes = chunk->d.charinfo.byte_count;
-  gchar *latin1;
-
-  latin1 = gtk_text_utf_to_latin1(str, bytes);
+  GtkWidget *widget;
   
-  gdk_draw_text (drawable,
-		 chunk->style->font,
-		 gc,
-		 x,
-		 baseline,
-		 latin1,
-		 strlen (latin1));
+  GtkTextAppearance *last_appearance;
+  GdkGC *fg_gc;
+  GdkGC *bg_gc;
+};
 
-  g_free (latin1);
+void get_item_properties (PangoItem          *item,
+			  GtkTextAppearance **appearance);
 
-  if (chunk->style->underline)
-    {
-      gint where = baseline + 1;
-      gdk_draw_line (drawable,
-		     gc,
-		     x, where,
-		     x + chunk->width, where);
-    }
 
-  if (chunk->style->overstrike)
-    {
-      gint where = baseline - chunk->ascent/2;
-      gdk_draw_line (drawable,
-		     gc,
-		     x, where,
-		     x + chunk->width, where);
-    }
+static GtkTextRenderState *
+gtk_text_render_state_new (GtkWidget   *widget,
+			   GdkDrawable *drawable)
+{
+  GtkTextRenderState *state = g_new0 (GtkTextRenderState, 1);
+
+  state->widget = widget;
+  state->fg_gc = gdk_gc_new (drawable);
+  state->bg_gc = gdk_gc_new (drawable);
+
+  return state;
 }
 
 static void
-draw_chunk_background (GdkDrawable *drawable,
-		       GdkGC* gc,
-		       gint x, gint y,
-		       gint width, gint height,
-		       GtkTextDisplayChunk *chunk)
+gtk_text_render_state_destroy (GtkTextRenderState *state)
 {
-  gdk_draw_rectangle (drawable, gc, TRUE, x, y, width, height);
+  gdk_gc_unref (state->fg_gc);
+  gdk_gc_unref (state->bg_gc);
   
-  switch (chunk->type)
-    {
-    case GTK_TEXT_DISPLAY_CHUNK_TEXT:
-      break;
-    case GTK_TEXT_DISPLAY_CHUNK_CURSOR:
-      break;
-    case GTK_TEXT_DISPLAY_CHUNK_PIXMAP:
-      break;
-    default:
-      break;
-    }
+  g_free (state);
 }
 
 static void
-draw_chunk_foreground (GdkDrawable *drawable,
-		       GdkGC* gc,
-		       gint x, gint y, gint baseline,
-		       GtkTextDisplayChunk *chunk)
+gtk_text_render_state_set_color (GtkTextRenderState *state,
+				 GdkGC              *gc,
+				 GdkColor           *color)
 {
-  switch (chunk->type)
-    {
-    case GTK_TEXT_DISPLAY_CHUNK_TEXT:
-      draw_text (drawable, gc, x, y + baseline, chunk);
-      break;
-    case GTK_TEXT_DISPLAY_CHUNK_CURSOR:
-      gdk_draw_line (drawable, gc,
-		     x, y + baseline - chunk->ascent,
-		     x, y + baseline + chunk->descent);
-      break;
-    case GTK_TEXT_DISPLAY_CHUNK_PIXMAP:
-      {
-        gint ypos;
-
-        /* We want the bottom of the pixmap on the baseline */
-        ypos = y + baseline - chunk->ascent;
-      
-        if (chunk->d.pixmap.mask)
-          {
-            /* FIXME we are hosing the GC here, it is supposed
-               to have a different clip */
-            gdk_gc_set_clip_mask (gc, chunk->d.pixmap.mask);
-            gdk_gc_set_clip_origin (gc, x, ypos);
-          }
-        
-        gdk_draw_pixmap (drawable, gc,
-			 chunk->d.pixmap.pixmap,
-			 0, 0,
-			 x,
-			 ypos,
-			 -1, -1);
-        
-        if (chunk->d.pixmap.mask)
-          {
-            gdk_gc_set_clip_mask (gc, NULL);
-            gdk_gc_set_clip_origin (gc, 0, 0);
-          }
-      }
-      break;
-    default:
-      break;
-    }
-}
-
-/* do_chunk is the insides of the loop in the
-   display function; it's here because we want
-   to do the cursor chunk out-of-order so this
-   avoids cut and paste or loop cruft */
-static void
-release_last_style (GtkTextStyleValues** last_style,
-		    GtkWidget *widget)
-{
-  if (*last_style)
-    {
-      gtk_text_view_style_values_unrealize (*last_style,
-					    gtk_widget_get_colormap (widget),
-					    gtk_widget_get_visual (widget));
-      gtk_text_view_style_values_unref (*last_style);
-      *last_style = NULL;
-    }
+  gdk_colormap_alloc_color (gtk_widget_get_colormap (state->widget), color, FALSE, TRUE);
+  gdk_gc_set_foreground (gc, color);
 }
 
 static void
-do_chunk (GtkTextLayout *layout,
-	  GtkTextDisplayChunk *chunk,
-	  GtkWidget *widget,
-	  GdkDrawable *drawable,
-	  GtkTextDisplayLineWrapInfo *wrapinfo,
-	  gboolean inside_selection,
-	  GdkGC* fg_gc,
-	  GdkGC* bg_gc,
-	  gint line_y,
-	  gint line_height,
-	  gint x_offset,
-	  GtkTextStyleValues** last_style,
-	  GtkTextDisplayChunk** cursor_chunk)
+gtk_text_render_state_update (GtkTextRenderState *state,
+			      GtkTextAppearance  *new_appearance)
 {
-  gint chunk_x;
-
-  /* if cursor_chunk is NULL, then we are drawing the cursor;
-     otherwise we are supposed to return the cursor */
-  g_assert (cursor_chunk != NULL || chunk->type == GTK_TEXT_DISPLAY_CHUNK_CURSOR);
-  if (cursor_chunk &&
-      chunk->type == GTK_TEXT_DISPLAY_CHUNK_CURSOR)
+  /* If the new_appearance is inside the selection, we actually modify its
+   * foreground, background, and stipples accordingly. This is pretty
+   * gross, but we own the appearance attribute, safe, and its simpler than
+   * the alternatives
+   */
+  if (new_appearance->inside_selection)
     {
-      *cursor_chunk = chunk;
-      return;
+      if (new_appearance->bg_stipple)
+	{
+	  gdk_drawable_unref (new_appearance->bg_stipple);
+	  new_appearance->bg_stipple = NULL;
+	}
+
+      new_appearance->fg_color = state->widget->style->fg[GTK_STATE_SELECTED];
+      new_appearance->bg_color = state->widget->style->bg[GTK_STATE_SELECTED];
+      new_appearance->draw_bg = TRUE;
     }
   
-  chunk_x = chunk->x - x_offset;
-
-  if (chunk->style != *last_style)
+  if (!state->last_appearance ||
+      !gdk_color_equal (&new_appearance->fg_color, &state->last_appearance->fg_color))
+    gtk_text_render_state_set_color (state, state->fg_gc, &new_appearance->fg_color);
+  
+  if (!state->last_appearance ||
+      new_appearance->fg_stipple != state->last_appearance->fg_stipple)
     {
-      release_last_style (last_style, widget);
-      
-      if (inside_selection)
-        {
-          *last_style = gtk_text_view_style_values_new ();
-          gtk_text_view_style_values_copy (chunk->style, *last_style);
-
-          (*last_style)->fg_color = widget->style->fg[GTK_STATE_SELECTED];
-          (*last_style)->bg_color = widget->style->bg[GTK_STATE_SELECTED];
-          (*last_style)->bg_full_height = TRUE;
-          (*last_style)->draw_bg = TRUE;
-        }
+      if (new_appearance->fg_stipple)
+	{
+	  gdk_gc_set_fill(state->fg_gc, GDK_STIPPLED);
+	  gdk_gc_set_stipple(state->fg_gc, new_appearance->fg_stipple);
+	}
       else
-        {
-          *last_style = chunk->style;
-          gtk_text_view_style_values_ref (*last_style);
-        }
-      
-      gtk_text_view_style_values_realize (*last_style,
-					  gtk_widget_get_colormap (widget),
-					  gtk_widget_get_visual (widget));
+	{
+	  gdk_gc_set_fill(state->fg_gc, GDK_SOLID);
+	}
     }
-          
-  if ((*last_style)->draw_bg)
+  
+  if (new_appearance->draw_bg)
     {
-      gint bg_height, bg_y;
-      gint bg_width;
-      
-      set_gc_from_values (bg_gc,
-			  FALSE,
-			  *last_style);
-
-      if ((*last_style)->bg_full_height)
-        {
-          bg_height = line_height;
-          bg_y = line_y;
-        }
-      else
-        {
-          bg_height = chunk->ascent + chunk->descent;
-          bg_y = line_y + wrapinfo->baseline - chunk->ascent;
-        }
-
-      bg_width = chunk->width;
-
-      /* Draw blue selection background all the way
-         to the end of the line */
-      if (chunk->next == NULL && inside_selection)
-        bg_width = layout->width - chunk_x;
-      
-      /* FIXME pass in last_style not chunk */
-      draw_chunk_background (drawable,
-			     bg_gc,
-			     chunk_x,
-			     bg_y,
-			     bg_width,
-			     bg_height,
-			     chunk);
+      if (!state->last_appearance ||
+	  !gdk_color_equal (&new_appearance->bg_color, &state->last_appearance->bg_color))
+	gtk_text_render_state_set_color (state, state->bg_gc, &new_appearance->bg_color);
+  
+      if (!state->last_appearance ||
+	  new_appearance->bg_stipple != state->last_appearance->bg_stipple)
+	{
+	  if (new_appearance->bg_stipple)
+	    {
+	      gdk_gc_set_fill(state->bg_gc, GDK_STIPPLED);
+	      gdk_gc_set_stipple(state->bg_gc, new_appearance->bg_stipple);
+	    }
+	  else
+	    {
+	      gdk_gc_set_fill(state->bg_gc, GDK_SOLID);
+	    }
+	}
     }
 
-  set_gc_from_values (fg_gc,
-		      TRUE,
-		      *last_style);
+  state->last_appearance = new_appearance;
+}
 
-  /* FIXME pass in last_style not chunk */
-  draw_chunk_foreground (drawable,
-			 fg_gc,
-			 chunk_x,
-			 line_y,
-			 wrapinfo->baseline - (*last_style)->offset,
-			 chunk);
+static void 
+render_layout_line (GdkDrawable        *drawable,
+		    GtkTextRenderState *render_state,
+		    PangoLayoutLine    *line,
+		    int                 x, 
+		    int                 y)
+{
+  GSList *tmp_list = line->runs;
+  PangoRectangle overall_rect;
+  PangoRectangle logical_rect;
+  PangoRectangle ink_rect;
+  
+  int x_off = 0;
+
+  pango_layout_line_get_extents (line,NULL, &overall_rect);
+  
+  while (tmp_list)
+    {
+      PangoLayoutRun *run = tmp_list->data;
+      GtkTextAppearance *appearance;
+      
+      tmp_list = tmp_list->next;
+
+      get_item_properties (run->item, &appearance);
+
+      if (appearance)		/* A text segment */
+	{
+	  gtk_text_render_state_update (render_state, appearance);
+	  
+	  if (appearance->underline == PANGO_UNDERLINE_NONE)
+	    pango_glyph_string_extents (run->glyphs, run->item->analysis.font,
+					NULL, &logical_rect);
+	  else
+	    pango_glyph_string_extents (run->glyphs, run->item->analysis.font,
+					&ink_rect, &logical_rect);
+
+	  if (appearance->draw_bg)
+	    gdk_draw_rectangle (drawable, render_state->bg_gc, TRUE,
+				x + (x_off + logical_rect.x) / PANGO_SCALE,
+				y + overall_rect.y / PANGO_SCALE,
+				logical_rect.width / PANGO_SCALE,
+				overall_rect.height / PANGO_SCALE);
+
+	  gdk_draw_glyphs (drawable, render_state->fg_gc,
+			   run->item->analysis.font, 
+			   x + x_off / PANGO_SCALE, y, run->glyphs);
+
+	  switch (appearance->underline)
+	    {
+	    case PANGO_UNDERLINE_NONE:
+	      break;
+	    case PANGO_UNDERLINE_DOUBLE:
+	      gdk_draw_line (drawable, render_state->fg_gc,
+			 x + (x_off + ink_rect.x) / PANGO_SCALE - 1, y + 4,
+			 x + (x_off + ink_rect.x + ink_rect.width) / PANGO_SCALE, y + 4);
+	      /* Fall through */
+	    case PANGO_UNDERLINE_SINGLE:
+	      gdk_draw_line (drawable, render_state->fg_gc,
+			 x + (x_off + ink_rect.x) -1, y + 2,
+			 x + (x_off + ink_rect.x + ink_rect.width) / PANGO_SCALE, y + 2);
+	      break;
+	    case PANGO_UNDERLINE_LOW:
+	      gdk_draw_line (drawable, render_state->fg_gc,
+			 x + (x_off + ink_rect.x) / PANGO_SCALE - 1, y + (ink_rect.y + ink_rect.height) / PANGO_SCALE + 2,
+			 x + (x_off + ink_rect.x + ink_rect.width) / PANGO_SCALE, y + (ink_rect.y + ink_rect.height) / PANGO_SCALE + 2);
+	      break;
+	    }
+
+	  x_off += logical_rect.width;
+	}
+    }
+}
+
+static void 
+render_layout (GdkDrawable        *drawable,
+	       GtkTextRenderState *render_state,
+	       PangoLayout        *layout,
+	       int                 x, 
+	       int                 y)
+{
+  PangoRectangle logical_rect;
+  GSList *tmp_list;
+  PangoAlignment align;
+  int indent;
+  int width;
+  int y_offset = 0;
+
+  gboolean first = FALSE;
+  
+  g_return_if_fail (layout != NULL);
+
+  indent = pango_layout_get_indent (layout);
+  width = pango_layout_get_width (layout);
+  align = pango_layout_get_alignment (layout);
+
+  if (width == -1 && align != PANGO_ALIGN_LEFT)
+    {
+      pango_layout_get_extents (layout, NULL, &logical_rect);
+      width = logical_rect.width;
+    }
+  
+  tmp_list = pango_layout_get_lines (layout);
+  while (tmp_list)
+    {
+      PangoLayoutLine *line = tmp_list->data;
+      int x_offset;
+      
+      pango_layout_line_get_extents (line, NULL, &logical_rect);
+
+      if (width != 1 && align == PANGO_ALIGN_RIGHT)
+	x_offset = width - logical_rect.width;
+      else if (width != 1 && align == PANGO_ALIGN_CENTER)
+	x_offset = (width - logical_rect.width) / 2;
+      else
+	x_offset = 0;
+
+      if (first)
+	{
+	  if (indent > 0)
+	    {
+	      if (align == PANGO_ALIGN_LEFT)
+		x_offset += indent;
+	      else
+		x_offset -= indent;
+	    }
+
+	  first = FALSE;
+	}
+      else
+	{
+	  if (indent < 0)
+	    {
+	      if (align == PANGO_ALIGN_LEFT)
+		x_offset -= indent;
+	      else
+		x_offset += indent;
+	    }
+	}
+	  
+      render_layout_line (drawable, render_state,
+			  line, x + x_offset / PANGO_SCALE, y + (y_offset - logical_rect.y) / PANGO_SCALE);
+
+      y_offset += logical_rect.height;
+      tmp_list = tmp_list->next;
+    }
+}
+
+void
+get_item_properties (PangoItem          *item,
+		     GtkTextAppearance **appearance)
+{
+  GSList *tmp_list = item->extra_attrs;
+  
+  *appearance = NULL;
+  
+  while (tmp_list)
+    {
+      PangoAttribute *attr = tmp_list->data;
+
+      if (attr->klass->type == gtk_text_attr_appearance_type)
+	{
+	  *appearance = &((GtkTextAttrAppearance *)attr)->appearance;
+	  return;
+	}
+    }
 }
 
 void
@@ -345,21 +345,14 @@ gtk_text_layout_draw (GtkTextLayout *layout,
 		      gint width,
 		      gint height)
 {
-  GtkTextStyleValues *last_style;
   GdkRectangle clip;
-  GdkGC* fg_gc;
-  GdkGC* bg_gc;
-  gint buffer_x, buffer_y;
-  gboolean inside_selection;
-  GtkTextIter selection_start;
-  GtkTextIter selection_end;
+  gint buffer_x, buffer_y, current_y;
   GSList *line_list;
-  GSList *list;
-  GtkTextDisplayLine *start_line;
-  gint current_y;
-  gboolean have_selection = FALSE;
+  GSList *tmp_list;
+  GSList *cursor_list;
+  GtkTextRenderState *render_state;
   
-  g_return_if_fail (GTK_IS_TEXT_VIEW_LAYOUT (layout));
+  g_return_if_fail (GTK_IS_TEXT_LAYOUT (layout));
   g_return_if_fail (layout->default_style != NULL);
   g_return_if_fail (layout->buffer != NULL);
   g_return_if_fail (drawable != NULL);
@@ -370,52 +363,18 @@ gtk_text_layout_draw (GtkTextLayout *layout,
   g_return_if_fail (width >= 0);
   g_return_if_fail (height >= 0);
 
-  if (width == 0 ||
-      height == 0)
+  if (width == 0 || height == 0)
     return;
 
   line_list =  gtk_text_layout_get_lines (layout,
 					  y,
 					  y + height + 1, /* one past what we draw */
 					  &current_y);
+  current_y -= y_offset;
   
   if (line_list == NULL)
     return; /* nothing on the screen */
 
-  /* Selection-drawing is handled here rather than when we wrap the lines
-     for several reasons:
-     - it doesn't affect line wrapping or widget size
-     - it requires information from widget->style
-     - it is more efficient to deal with it here
-     - this code is less complicated than the layout code and
-     can better withstand funky special cases
-     - this code sucks anyway so may as well get crufted :-)
-  */
-
-  start_line = line_list->data;
-
-  inside_selection = FALSE;
-  
-  if (gtk_text_buffer_get_selection_bounds (layout->buffer,
-                                            &selection_start,
-                                            &selection_end))
-    {
-      /* See if first line is inside the selection. */
-      GtkTextIter first_line;
-      gtk_text_btree_get_iter_at_line (layout->buffer->tree,
-                                       &first_line,
-                                       start_line->line,
-                                       start_line->byte_offset);
-      
-      if (gtk_text_iter_compare (&first_line, &selection_start) >= 0)
-        {
-          if (gtk_text_iter_compare (&first_line, &selection_end) < 0)
-            inside_selection = TRUE;
-        }
-
-      have_selection = TRUE;
-    }
-  
   /* Convert to buffer coordinates */
   buffer_x = x - x_offset;
   buffer_y = y - y_offset;
@@ -425,139 +384,62 @@ gtk_text_layout_draw (GtkTextLayout *layout,
     buffer_x = 0;
   if (buffer_y < 0)
     buffer_y = 0;
-  
-  /* This is slower than it needs to be,
-     should store a GC on the widget and pass it
-     in here. */
-  fg_gc = gdk_gc_new (drawable);
-  bg_gc = gdk_gc_new (drawable);
 
   clip.x = buffer_x;
   clip.y = buffer_y;
   clip.width = width;
   clip.height = height;
 
-  gdk_gc_set_clip_rectangle (fg_gc, &clip);
-  gdk_gc_set_clip_rectangle (bg_gc, &clip);
+  render_state = gtk_text_render_state_new (widget, drawable);
+
+  gdk_gc_set_clip_rectangle (render_state->fg_gc, &clip);
+  gdk_gc_set_clip_rectangle (render_state->bg_gc, &clip);
 
   gtk_text_layout_wrap_loop_start (layout);
   
-  last_style = NULL;
-  
-  list = line_list;
-  
-  while (list != NULL)
+  tmp_list = line_list;
+  while (tmp_list != NULL)
     {
-      GSList *cursor_list = NULL;
-      GSList *cursors_selected_list = NULL;
-      GSList *tmp1, *tmp2;
-      GtkTextDisplayChunk *chunk;
-      GtkTextDisplayChunk *cursor = NULL;
-      GtkTextDisplayLineWrapInfo *wrapinfo;
-      gint line_y;
-      GtkTextDisplayLine *display_line;
-      GtkTextIter iter;
+      GtkTextLineDisplay *line_display;
       
-      display_line = list->data;
+      line_display = gtk_text_layout_get_line_display (layout, tmp_list->data);
+
+      render_layout (drawable, render_state, line_display->layout,
+		     line_display->x_offset,
+		     current_y + line_display->top_margin);
+
       
-      gtk_text_btree_get_iter_at_line (layout->buffer->tree,
-                                       &iter,
-                                       display_line->line,
-                                       display_line->byte_offset);
-      
-      line_y = current_y - y_offset;
-
-      wrapinfo = gtk_text_view_display_line_wrap (layout, display_line);
-      
-      chunk = wrapinfo->chunks;
-      while (chunk != NULL)
-        {
-          if (have_selection)
-            {
-              /* We assume that the selection starts at a display
-                 chunk boundary, since marks break up the char
-                 segments in the btree - logically though, the checks
-                 are for >= and <= rather than plain equal.
-                 Just using equal for speed  */
-              if (inside_selection &&
-                  gtk_text_iter_equal (&iter,
-                                       &selection_end))
-                {
-                  inside_selection = FALSE;
-                  /* make sure we don't use a cached style */
-                  release_last_style (&last_style, widget);
-                }
-              else if (!inside_selection &&
-                       gtk_text_iter_equal (&iter,
-                                            &selection_start))
-                {
-                  inside_selection = TRUE;
-                  /* make sure we don't use a cached style */
-                  release_last_style (&last_style, widget);
-                }
-            }
-
-          do_chunk (layout, chunk, widget,
-		    drawable, wrapinfo, inside_selection,                   
-		    fg_gc, bg_gc, line_y, display_line->height,
-		    x_offset, &last_style, &cursor);
-
-          /* save cursors for later */
-          if (cursor != NULL)
-            {
-              cursors_selected_list =
-                g_slist_prepend (cursors_selected_list,
-				 GINT_TO_POINTER (inside_selection));
-
-              cursor_list = g_slist_prepend (cursor_list, cursor);
-              cursor = NULL;
-            }
-              
-          gtk_text_btree_get_iter_at_line (layout->buffer->tree,
-                                           &iter,
-                                           display_line->line,
-                                           gtk_text_iter_get_line_byte (&iter) + chunk->byte_count);
-          
-          chunk = chunk->next;
-        }
-
       /* We paint the cursors last, because they overlap another chunk
          and need to appear on top. */
 
-      tmp1 = cursor_list;
-      tmp2 = cursors_selected_list;
-      while (tmp1 != NULL)
-        {
-          GtkTextDisplayChunk *cursor;
-          gboolean cursor_inside_selection;
+      cursor_list = line_display->cursors;
+      while (cursor_list)
+	{
+	  GtkTextCursorDisplay *cursor = cursor_list->data;
+	  GdkGC *gc;
 
-          g_assert (tmp2 != NULL);
+	  if (cursor->is_strong)
+	    gc = widget->style->bg_gc[GTK_STATE_SELECTED];
+	  else
+	    gc = widget->style->fg_gc[GTK_STATE_NORMAL];
 
-          cursor = tmp1->data;
-          cursor_inside_selection = GPOINTER_TO_INT (tmp2->data);
+	  gdk_draw_line (drawable, gc,
+			 line_display->x_offset + cursor->x,
+			 current_y + line_display->top_margin + cursor->y,
+			 line_display->x_offset + cursor->x,
+			 current_y + line_display->top_margin + cursor->height);
+	  
+	  cursor_list = cursor_list->next;
+	}
 
-          do_chunk (layout, cursor, widget,
-		    drawable, wrapinfo, cursor_inside_selection,
-		    fg_gc, bg_gc, line_y, display_line->height,
-		    x_offset, &last_style, NULL);
-          
-          tmp1 = g_slist_next (tmp1);
-          tmp2 = g_slist_next (tmp2);
-        }
+      current_y += line_display->height;
+      gtk_text_layout_free_line_display (layout, tmp_list->data, line_display);
       
-      gtk_text_view_display_line_unwrap (layout, display_line, wrapinfo);
-
-      release_last_style (&last_style, widget);
-
-      current_y += display_line->height;
-      
-      list = g_slist_next (list);
+      tmp_list = g_slist_next (tmp_list);
     }
 
   gtk_text_layout_wrap_loop_end (layout);
+  gtk_text_render_state_destroy (render_state);
 
   g_slist_free (line_list);
-  
-  gdk_gc_unref (fg_gc);
-  gdk_gc_unref (bg_gc);
 }

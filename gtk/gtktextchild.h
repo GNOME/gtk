@@ -16,7 +16,7 @@ struct _GtkTextPixmap {
   GdkBitmap *mask;
 };
 
-GtkTextLineSegment *pixmap_segment_new(GdkPixmap *pixmap, GdkBitmap *mask);
+GtkTextLineSegment *gtk_text_pixmap_segment_new(GdkPixmap *pixmap, GdkBitmap *mask);
 
 
 #ifdef __cplusplus

@@ -117,7 +117,7 @@ GtkTextLineSegmentClass gtk_text_view_child_type = {
 	+ sizeof(GtkTextPixmap)))
 
 GtkTextLineSegment *
-pixmap_segment_new(GdkPixmap *pixmap, GdkBitmap *mask)
+gtk_text_pixmap_segment_new(GdkPixmap *pixmap, GdkBitmap *mask)
 {
   GtkTextLineSegment *seg;
 

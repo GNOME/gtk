@@ -1,3 +1,58 @@
+Fri Apr 14 09:26:22 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdkdrawable.h gdk/gdkdraw.c gdk/gdkwindow.c gdk/x11/gdkdrawable-x11.c:
+	Add a draw_glyphs() operation to the drawable vtable and gdk_draw_glyphs().
+	If we wrote GTK+-specific layout-render function this could just replace
+	the draw_layout() operation in the vtable.
+
+	* gtk/gtkentry.c: Move guts of gtk_entry_get_cursor_locations to 
+	pango_layout_get_cursor_pos() and use that function.
+
+	* gtk/gtktextchild.[ch]: add gtk_ onto pixmap_segment_new(), since it
+	is a non-static symbol.
+
+	* gtk/gtktextbtree.[ch]: Replace gtk_text_btree_find_line_data_by_y()
+	with gtk_text_btree_find_line_by_y()
+
+	* gtk/gtktextdisplay.c: Rewrote for Pango - uses a custom layout
+	renderer that handles GtkTextAppearance attributes.
+
+	* gtk/gtktexttag.[ch] gtk/gtktexttagprivate.h: 
+
+	  - Move the values in the style that don't affect geometry into a
+	    GtkTextAppearance structure.
+	  - Change underline to take a PangoUnderline and "font" a string
+	    representation of a font description
+	  - Add a "font_desc" attribute which takes a FontDescription structure.
+
+	* gtk/gtktextlayout.[ch]:
+
+	  - Get rid of the display-line list per each line. Instead, we
+	    generate, on demand, a GtkTextLineDisplay structure which]
+	    contains a PangoLayout * and other necesary information
+	    (offsets, cursor locations) for displaying a paragraph.
+	  - Get rid of the code to wrap lines, create display chunks,
+	    etc. Instead, we just go through a paragraph and convert
+	    it into the necessary inputs to a PangoLayout.
+	  - Implement a new attribute type, GtkTextAttrAppearance. This
+	    holds a GtkTextAppearance, and is used to pass colors, 
+	    stipple, etc, through from the layout to the display without
+	    having to use lots and lots of individual attributes.
+	  - Reimplement gtk_layout_get_iter_at_pixel() gtk_layout_get_iter_pos()
+	    in terms of PangoLayout functions.
+	
+	* gtk/gtktextview.c: 
+	 
+	  - Handle passing the necessary PangoContext to the layout
+	  - Some fixups in painting to deal with the automatic backing store
+	    and offsetting of GTK+-1.4
+	  - Add a style_set handler so that the default style reacts
+	    properly to theme changes.
+	
+	* gtk/gtktext?*.[ch]: Random code-style fixes.
+
+	* gtk/testtext.c: Substitute in languages that Pango handles now for Thai
+
 Mon Apr 10 10:33:45 2000  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtktext?*.[ch]: Check in Havoc's port of the Tk text widget,

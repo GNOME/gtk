@@ -1367,69 +1367,20 @@ gtk_entry_get_cursor_locations (GtkEntry *entry,
 				gint     *weak_x)
 {
   GtkEditable *editable = GTK_EDITABLE (entry);
-  PangoLayoutLine *line;
+  int index;
 
-  GtkTextDirection widget_dir = gtk_widget_get_direction (GTK_WIDGET (entry));
-  GtkTextDirection dir1, dir2;
-  gint x1, x1_trailing;
-  gint x2, x2_trailing;
-
-  gint index;
+  PangoRectangle strong_pos, weak_pos;
 
   gtk_entry_ensure_layout (entry);
-  line = pango_layout_get_lines (entry->layout)->data;
-
-  if (editable->current_pos == 0)
-    {
-      PangoRectangle logical_rect;
-      pango_layout_line_get_extents (line, NULL, &logical_rect);
-      
-      dir1 = widget_dir;
-      x1_trailing = (widget_dir == GTK_TEXT_DIR_LTR) ? 0 : logical_rect.width;
-    }
-  else
-    {
-      index = unicode_offset_to_index (entry->text, editable->current_pos - 1);
-      pango_layout_line_index_to_x (line, index, FALSE, &x1);
-      pango_layout_line_index_to_x (line, index, TRUE, &x1_trailing);
-
-      dir1 = x1 < x1_trailing ? GTK_TEXT_DIR_LTR : GTK_TEXT_DIR_RTL;
-    }
-
-
-  if (editable->current_pos == entry->text_length)
-    {
-      PangoRectangle logical_rect;
-      pango_layout_line_get_extents (line, NULL, &logical_rect);
-      
-      dir2 = widget_dir;
-      x2 = (widget_dir == GTK_TEXT_DIR_LTR) ? logical_rect.width : 0;
-    }
-  else
-    {
-      index = unicode_offset_to_index (entry->text, editable->current_pos);
-      pango_layout_line_index_to_x (line, index, FALSE, &x2);
-      pango_layout_line_index_to_x (line, index, TRUE, &x2_trailing);
-
-      dir2 = x2 < x2_trailing ? GTK_TEXT_DIR_LTR : GTK_TEXT_DIR_RTL;
-    }
+  
+  index = unicode_index_to_offset (entry->text, editable->current_pos);
+  pango_layout_get_cursor_pos (entry->layout, index, &strong_pos, &weak_pos);
 
   if (strong_x)
-    {
-      if (dir1 == widget_dir)
-	*strong_x = x1_trailing / PANGO_SCALE;
-      else
-	*strong_x = x2 / PANGO_SCALE;
-    }
+    *strong_x = strong_pos.x / PANGO_SCALE;
 
   if (weak_x)
-    {
-      if (dir1 == widget_dir)
-	*weak_x = x2 / PANGO_SCALE;
-      else
-	*weak_x = x1_trailing / PANGO_SCALE;
-    }
-
+    *strong_x = weak_pos.x / PANGO_SCALE;
 }
 
 static void

@@ -2044,9 +2044,9 @@ gtk_text_btree_get_iter_at_line_char (GtkTextBTree *tree,
 
 void
 gtk_text_btree_get_iter_at_line_byte (GtkTextBTree   *tree,
-                                       GtkTextIter    *iter,
-                                       gint             line_number,
-                                       gint             byte_index)
+				      GtkTextIter    *iter,
+				      gint            line_number,
+				      gint            byte_index)
 {
   GtkTextRealIter *real = (GtkTextRealIter*)iter;
   GtkTextLine *line;

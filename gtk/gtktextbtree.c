@@ -979,7 +979,7 @@ gtk_text_btree_insert_pixmap (GtkTextIter *iter,
   tree = gtk_text_iter_get_btree(iter);
   start_byte_offset = gtk_text_iter_get_line_byte(iter);
   
-  seg = pixmap_segment_new(pixmap, mask);
+  seg = gtk_text_pixmap_segment_new (pixmap, mask);
 
   prevPtr = gtk_text_line_segment_split(iter);
   if (prevPtr == NULL)
@@ -1078,30 +1078,29 @@ find_line_by_y(GtkTextBTree *tree, BTreeView *view,
     }
 }
 
-gpointer
-gtk_text_btree_find_line_data_by_y (GtkTextBTree *tree,
-                                    gpointer view_id,
-                                    gint ypixel,
-                                    gint *line_top)
+GtkTextLine *
+gtk_text_btree_find_line_by_y (GtkTextBTree *tree,
+			       gpointer      view_id,
+			       gint          ypixel,
+			       gint         *line_top_out)
 {
   GtkTextLine *line;
   BTreeView *view;
   GtkTextLine *last_line;
+  gint line_top = 0;
   
-  g_return_val_if_fail(line_top != NULL, NULL);
-  
-  view = gtk_text_btree_get_view(tree, view_id);
+  view = gtk_text_btree_get_view (tree, view_id);
+  g_return_val_if_fail (view != NULL, NULL);
 
-  *line_top = 0;
+  last_line = get_last_line (tree);
   
-  g_return_val_if_fail(view != NULL, NULL);
+  line = find_line_by_y (tree, view, tree->root_node, ypixel, &line_top,
+			 last_line);
 
-  last_line = get_last_line(tree);
-  
-  line = find_line_by_y(tree, view, tree->root_node, ypixel, line_top,
-                        last_line);
+  if (line_top_out)
+    *line_top_out = line_top;
 
-  return line ? gtk_text_line_get_data(line, view_id) : NULL;
+  return line;
 }
 
 static gint
@@ -1804,7 +1803,8 @@ gtk_text_btree_get_line (GtkTextBTree *tree,
       line_number = line_count;
     }
 
-  *real_line_number = line_number;
+  if (real_line_number)
+    *real_line_number = line_number;
   
   node = tree->root_node;
   lines_left = line_number;
