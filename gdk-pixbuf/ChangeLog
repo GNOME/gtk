@@ -1,3 +1,9 @@
+2001-09-20  James Henstridge  <james@daa.com.au>
+
+	* Makefile.am (gdk-pixbuf-enum-types.c): same change as in pango,
+	so that flags types are registered as flags rather than enums (not
+	that there are any flags here at the moment).
+
 Wed Sep 19 00:28:24 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* Makefile.am (gdk_pixbuf_headers): Don't include
