@@ -380,6 +380,71 @@ gtk_container_child_get_valist (GtkContainer *container,
 }
 
 void
+gtk_container_child_get_property (GtkContainer *container,
+				  GtkWidget    *child,
+				  const gchar  *property_name,
+				  GValue       *value)
+{
+  GParamSpec *pspec;
+
+  g_return_if_fail (GTK_IS_CONTAINER (container));
+  g_return_if_fail (GTK_IS_WIDGET (child));
+  g_return_if_fail (child->parent == GTK_WIDGET (container));
+  g_return_if_fail (property_name != NULL);
+  g_return_if_fail (G_IS_VALUE (value));
+  
+  g_object_ref (container);
+  g_object_ref (child);
+  pspec = g_param_spec_pool_lookup (_gtk_widget_child_property_pool, property_name,
+				    G_OBJECT_TYPE (container), TRUE);
+  if (!pspec)
+    g_warning ("%s: container class `%s' has no child property named `%s'",
+	       G_STRLOC,
+	       G_OBJECT_TYPE_NAME (container),
+	       property_name);
+  else if (!(pspec->flags & G_PARAM_READABLE))
+    g_warning ("%s: child property `%s' of container class `%s' is not readable",
+	       G_STRLOC,
+	       pspec->name,
+	       G_OBJECT_TYPE_NAME (container));
+  else
+    {
+      GValue *prop_value, tmp_value = { 0, };
+
+      /* auto-conversion of the callers value type
+       */
+      if (G_VALUE_TYPE (value) == G_PARAM_SPEC_VALUE_TYPE (pspec))
+	{
+	  g_value_reset (value);
+	  prop_value = value;
+	}
+      else if (!g_value_type_transformable (G_PARAM_SPEC_VALUE_TYPE (pspec), G_VALUE_TYPE (value)))
+	{
+	  g_warning ("can't retrive child property `%s' of type `%s' as value of type `%s'",
+		     pspec->name,
+		     g_type_name (G_PARAM_SPEC_VALUE_TYPE (pspec)),
+		     G_VALUE_TYPE_NAME (value));
+	  g_object_unref (child);
+	  g_object_unref (container);
+	  return;
+	}
+      else
+	{
+	  g_value_init (&tmp_value, G_PARAM_SPEC_VALUE_TYPE (pspec));
+	  prop_value = &tmp_value;
+	}
+      container_get_child_property (container, child, pspec, prop_value);
+      if (prop_value != value)
+	{
+	  g_value_transform (prop_value, value);
+	  g_value_unset (&tmp_value);
+	}
+    }
+  g_object_unref (child);
+  g_object_unref (container);
+}
+
+void
 gtk_container_child_set_valist (GtkContainer *container,
 				GtkWidget    *child,
 				const gchar  *first_property_name,
@@ -441,6 +506,48 @@ gtk_container_child_set_valist (GtkContainer *container,
     }
   g_object_notify_queue_thaw (G_OBJECT (child), nqueue);
 
+  g_object_unref (container);
+  g_object_unref (child);
+}
+
+void
+gtk_container_child_set_property (GtkContainer *container,
+				  GtkWidget    *child,
+				  const gchar  *property_name,
+				  const GValue *value)
+{
+  GObject *object;
+  GObjectNotifyQueue *nqueue;
+  GParamSpec *pspec;
+
+  g_return_if_fail (GTK_IS_CONTAINER (container));
+  g_return_if_fail (GTK_IS_WIDGET (child));
+  g_return_if_fail (child->parent == GTK_WIDGET (container));
+  g_return_if_fail (property_name != NULL);
+  g_return_if_fail (G_IS_VALUE (value));
+  
+  g_object_ref (container);
+  g_object_ref (child);
+
+  object = G_OBJECT (container);
+  nqueue = g_object_notify_queue_freeze (G_OBJECT (child), _gtk_widget_child_property_notify_context);
+  pspec = g_param_spec_pool_lookup (_gtk_widget_child_property_pool, property_name,
+				    G_OBJECT_TYPE (container), TRUE);
+  if (!pspec)
+    g_warning ("%s: container class `%s' has no child property named `%s'",
+	       G_STRLOC,
+	       G_OBJECT_TYPE_NAME (container),
+	       property_name);
+  else if (!(pspec->flags & G_PARAM_WRITABLE))
+    g_warning ("%s: child property `%s' of container class `%s' is not writable",
+	       G_STRLOC,
+	       pspec->name,
+	       G_OBJECT_TYPE_NAME (container));
+  else
+    {
+      container_set_child_property (container, child, pspec, value, nqueue);
+    }
+  g_object_notify_queue_thaw (G_OBJECT (child), nqueue);
   g_object_unref (container);
   g_object_unref (child);
 }
