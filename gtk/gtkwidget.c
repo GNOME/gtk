@@ -82,6 +82,7 @@ enum {
   OTHER_EVENT,
   CLIENT_EVENT,
   NO_EXPOSE_EVENT,
+  VISIBILITY_NOTIFY_EVENT,
   LAST_SIGNAL
 };
 
@@ -690,6 +691,14 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		    GTK_SIGNAL_OFFSET (GtkWidgetClass, no_expose_event),
 		    gtk_widget_marshal_signal_4,
 		    GTK_TYPE_BOOL, 1,
+		    GTK_TYPE_GDK_EVENT);
+  widget_signals[VISIBILITY_NOTIFY_EVENT] =
+    gtk_signal_new ("visibility_notify_event",
+		    GTK_RUN_LAST,
+		    object_class->type,
+		    GTK_SIGNAL_OFFSET (GtkWidgetClass, visibility_notify_event),
+		    gtk_widget_marshal_signal_1,
+		    GTK_TYPE_NONE, 1,
 		    GTK_TYPE_GDK_EVENT);
 
   gtk_object_class_add_signals (object_class, widget_signals, LAST_SIGNAL);
@@ -2026,6 +2035,9 @@ gtk_widget_event (GtkWidget *widget,
 	  return TRUE;
 	}
       signal_num = EXPOSE_EVENT;
+      break;
+    case GDK_VISIBILITY_NOTIFY:
+      signal_num = VISIBILITY_NOTIFY_EVENT;
       break;
     default:
       g_warning ("could not determine signal number for event: %d", event->type);

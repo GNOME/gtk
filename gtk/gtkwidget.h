@@ -334,6 +334,8 @@ struct _GtkWidgetClass
 				    GdkEventClient     *event);
   gint (* no_expose_event)	   (GtkWidget	       *widget,
 				    GdkEventAny	       *event);
+  void (* visibility_notify_event) (GtkWidget	       *widget,
+				    GdkEventVisibility *event);
 };
 
 struct _GtkWidgetAuxInfo
