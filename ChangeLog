@@ -1,3 +1,11 @@
+2004-07-14  Federico Mena Quintero  <federico@ximian.com>
+
+	Fix #144405, patch by Padraig O'Briain <padraig.obriain@sun.com>:
+
+	* gtk/gtkfilechooserdefault.c (shortcuts_list_create): Set the
+	accessible object name for the tree view.
+	(create_file_list): Likewise.
+
 Tue Jul 13 21:53:08 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkicontheme.c (free_unthemed_icon): Don't leak

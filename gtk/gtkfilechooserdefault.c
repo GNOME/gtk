@@ -2522,6 +2522,7 @@ shortcuts_list_create (GtkFileChooserDefault *impl)
   /* Tree */
 
   impl->browse_shortcuts_tree_view = gtk_tree_view_new ();
+  atk_object_set_name (gtk_widget_get_accessible (impl->browse_shortcuts_tree_view), _("Shortcuts"));
   gtk_tree_view_set_headers_visible (GTK_TREE_VIEW (impl->browse_shortcuts_tree_view), FALSE);
 
   gtk_tree_view_set_model (GTK_TREE_VIEW (impl->browse_shortcuts_tree_view), impl->shortcuts_filter_model);
@@ -2826,6 +2827,7 @@ create_file_list (GtkFileChooserDefault *impl)
 
   impl->browse_files_tree_view = gtk_tree_view_new ();
   g_object_set_data (G_OBJECT (impl->browse_files_tree_view), "GtkFileChooserDefault", impl);
+  atk_object_set_name (gtk_widget_get_accessible (impl->browse_files_tree_view), _("Files"));
 
   gtk_tree_view_set_rules_hint (GTK_TREE_VIEW (impl->browse_files_tree_view), TRUE);
   gtk_container_add (GTK_CONTAINER (swin), impl->browse_files_tree_view);
