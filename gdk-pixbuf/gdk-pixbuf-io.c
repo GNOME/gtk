@@ -263,7 +263,7 @@ gdk_pixbuf_load_module (GdkPixbufModule *image_module,
 	gpointer sym;
 	char *name;
         gboolean retval;
-        char *dir;
+        const char *dir;
 	
         g_return_val_if_fail (image_module->module == NULL, FALSE);
 

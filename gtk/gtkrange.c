@@ -329,7 +329,7 @@ gtk_range_get_inverted (GtkRange *range)
 }
 
 void
-gtk_range_draw_background (GtkRange *range)
+_gtk_range_draw_background (GtkRange *range)
 {
   g_return_if_fail (range != NULL);
   g_return_if_fail (GTK_IS_RANGE (range));
@@ -339,7 +339,7 @@ gtk_range_draw_background (GtkRange *range)
 }
 
 void
-gtk_range_clear_background (GtkRange *range)
+_gtk_range_clear_background (GtkRange *range)
 {
   g_return_if_fail (range != NULL);
   g_return_if_fail (GTK_IS_RANGE (range));
@@ -349,7 +349,7 @@ gtk_range_clear_background (GtkRange *range)
 }
 
 void
-gtk_range_draw_trough (GtkRange *range)
+_gtk_range_draw_trough (GtkRange *range)
 {
   g_return_if_fail (range != NULL);
   g_return_if_fail (GTK_IS_RANGE (range));
@@ -359,7 +359,7 @@ gtk_range_draw_trough (GtkRange *range)
 }
 
 void
-gtk_range_draw_slider (GtkRange *range)
+_gtk_range_draw_slider (GtkRange *range)
 {
   g_return_if_fail (range != NULL);
   g_return_if_fail (GTK_IS_RANGE (range));
@@ -369,7 +369,7 @@ gtk_range_draw_slider (GtkRange *range)
 }
 
 void
-gtk_range_draw_step_forw (GtkRange *range)
+_gtk_range_draw_step_forw (GtkRange *range)
 {
   g_return_if_fail (range != NULL);
   g_return_if_fail (GTK_IS_RANGE (range));
@@ -379,7 +379,7 @@ gtk_range_draw_step_forw (GtkRange *range)
 }
 
 void
-gtk_range_draw_step_back (GtkRange *range)
+_gtk_range_draw_step_back (GtkRange *range)
 {
   g_return_if_fail (range != NULL);
   g_return_if_fail (GTK_IS_RANGE (range));
@@ -389,7 +389,7 @@ gtk_range_draw_step_back (GtkRange *range)
 }
 
 void
-gtk_range_slider_update (GtkRange *range)
+_gtk_range_slider_update (GtkRange *range)
 {
   g_return_if_fail (range != NULL);
   g_return_if_fail (GTK_IS_RANGE (range));
@@ -399,10 +399,10 @@ gtk_range_slider_update (GtkRange *range)
 }
 
 gint
-gtk_range_trough_click (GtkRange *range,
-			gint      x,
-			gint      y,
-			gfloat   *jump_perc)
+_gtk_range_trough_click (GtkRange *range,
+                         gint      x,
+                         gint      y,
+                         gfloat   *jump_perc)
 {
   g_return_val_if_fail (range != NULL, GTK_TROUGH_NONE);
   g_return_val_if_fail (GTK_IS_RANGE (range), GTK_TROUGH_NONE);
@@ -457,7 +457,7 @@ should_invert (GtkRange *range,
 }
 
 void
-gtk_range_default_hslider_update (GtkRange *range)
+_gtk_range_default_hslider_update (GtkRange *range)
 {
   gint left;
   gint right;
@@ -499,7 +499,7 @@ gtk_range_default_hslider_update (GtkRange *range)
 }
 
 void
-gtk_range_default_vslider_update (GtkRange *range)
+_gtk_range_default_vslider_update (GtkRange *range)
 {
   gint top;
   gint bottom;
@@ -541,10 +541,10 @@ gtk_range_default_vslider_update (GtkRange *range)
 }
 
 gint
-gtk_range_default_htrough_click (GtkRange *range,
-				 gint      x,
-				 gint      y,
-				 gfloat	  *jump_perc)
+_gtk_range_default_htrough_click (GtkRange *range,
+                                  gint      x,
+                                  gint      y,
+                                  gfloat   *jump_perc)
 {
   gint ythickness;
   gint trough_width;
@@ -590,10 +590,10 @@ gtk_range_default_htrough_click (GtkRange *range,
 }
 
 gint
-gtk_range_default_vtrough_click (GtkRange *range,
-				 gint      x,
-				 gint      y,
-				 gfloat   *jump_perc)
+_gtk_range_default_vtrough_click (GtkRange *range,
+                                  gint      x,
+                                  gint      y,
+                                  gfloat   *jump_perc)
 {
   gint xthickness;
   gint trough_width;
@@ -640,9 +640,9 @@ gtk_range_default_vtrough_click (GtkRange *range,
 }
 
 void
-gtk_range_default_hmotion (GtkRange *range,
-			   gint      xdelta,
-			   gint      ydelta)
+_gtk_range_default_hmotion (GtkRange *range,
+                            gint      xdelta,
+                            gint      ydelta)
 {
   gdouble old_value;
   gint left, right;
@@ -691,8 +691,8 @@ gtk_range_default_hmotion (GtkRange *range,
 	}
       else
 	{
-	  gtk_range_slider_update (range);
-	  gtk_range_clear_background (range);
+	  _gtk_range_slider_update (range);
+	  _gtk_range_clear_background (range);
 
 	  if (range->policy == GTK_UPDATE_DELAYED)
 	    {
@@ -706,9 +706,9 @@ gtk_range_default_hmotion (GtkRange *range,
 }
 
 void
-gtk_range_default_vmotion (GtkRange *range,
-			   gint      xdelta,
-			   gint      ydelta)
+_gtk_range_default_vmotion (GtkRange *range,
+                            gint      xdelta,
+                            gint      ydelta)
 {
   gdouble old_value;
   gint top, bottom;
@@ -759,8 +759,8 @@ gtk_range_default_vmotion (GtkRange *range,
 	}
       else
 	{
-	  gtk_range_slider_update (range);
-	  gtk_range_clear_background (range);
+	  _gtk_range_slider_update (range);
+	  _gtk_range_clear_background (range);
 
 	  if (range->policy == GTK_UPDATE_DELAYED)
 	    {
@@ -804,7 +804,7 @@ gtk_range_draw_focus (GtkWidget *widget)
   g_return_if_fail (GTK_IS_RANGE (widget));
 
   if (GTK_WIDGET_DRAWABLE (widget))
-    gtk_range_draw_trough (GTK_RANGE (widget));
+    _gtk_range_draw_trough (GTK_RANGE (widget));
 }
 
 static void
@@ -863,23 +863,23 @@ gtk_range_expose (GtkWidget      *widget,
    */
   if (event->window == range->trough)
     {
-      gtk_range_draw_trough (range);
+      _gtk_range_draw_trough (range);
     }
   else if (event->window == widget->window)
     {
-      gtk_range_draw_background (range); 
+      _gtk_range_draw_background (range); 
     }
   else if (event->window == range->slider)
     {
-      gtk_range_draw_slider (range);
+      _gtk_range_draw_slider (range);
     }
   else if (event->window == range->step_forw)
     {
-      gtk_range_draw_step_forw (range);
+      _gtk_range_draw_step_forw (range);
     }
   else if (event->window == range->step_back)
     {
-      gtk_range_draw_step_back (range);
+      _gtk_range_draw_step_back (range);
     }
   return FALSE;
 }
@@ -913,9 +913,9 @@ gtk_range_button_press (GtkWidget      *widget,
 	  range->click_child = RANGE_CLASS (range)->trough;
 	  
 	  if (range->button == 2)
-	    trough_part = gtk_range_trough_click (range, event->x, event->y, &jump_perc);
+	    trough_part = _gtk_range_trough_click (range, event->x, event->y, &jump_perc);
 	  else
-	    trough_part = gtk_range_trough_click (range, event->x, event->y, NULL);
+	    trough_part = _gtk_range_trough_click (range, event->x, event->y, NULL);
 	  
 	  range->scroll_type = GTK_SCROLL_NONE;
 	  if (trough_part == GTK_TROUGH_START)
@@ -964,9 +964,9 @@ gtk_range_button_press (GtkWidget      *widget,
 	      gtk_range_add_timer (range);
 	      
 	      if (back)
-		gtk_range_draw_step_back (range);
+		_gtk_range_draw_step_back (range);
 	      else
-		gtk_range_draw_step_forw (range);
+		_gtk_range_draw_step_forw (range);
 	    }
 	}
     }
@@ -1015,12 +1015,12 @@ gtk_range_button_release (GtkWidget      *widget,
 	  if (range->click_child == RANGE_CLASS (range)->step_forw)
 	    {
 	      range->click_child = 0;
-	      gtk_range_draw_step_forw (range);
+	      _gtk_range_draw_step_forw (range);
 	    }
 	  else if (range->click_child == RANGE_CLASS (range)->step_back)
 	    {
 	      range->click_child = 0;
-	      gtk_range_draw_step_back (range);
+	      _gtk_range_draw_step_back (range);
 	    }
 	}
 
@@ -1134,38 +1134,38 @@ gtk_range_key_press (GtkWidget   *widget,
 		{
                 case GTK_SCROLL_STEP_LEFT:
                   if (should_invert (range, TRUE))
-                    gtk_range_draw_step_forw (range);
+                    _gtk_range_draw_step_forw (range);
                   else
-                    gtk_range_draw_step_back (range);
+                    _gtk_range_draw_step_back (range);
                   break;
                     
                 case GTK_SCROLL_STEP_UP:
                   if (should_invert (range, FALSE))
-                    gtk_range_draw_step_forw (range);
+                    _gtk_range_draw_step_forw (range);
                   else
-                    gtk_range_draw_step_back (range);
+                    _gtk_range_draw_step_back (range);
                   break;
 
                 case GTK_SCROLL_STEP_RIGHT:
                   if (should_invert (range, TRUE))
-                    gtk_range_draw_step_back (range);
+                    _gtk_range_draw_step_back (range);
                   else
-                    gtk_range_draw_step_forw (range);
+                    _gtk_range_draw_step_forw (range);
                   break;
                     
                 case GTK_SCROLL_STEP_DOWN:
                   if (should_invert (range, FALSE))
-                    gtk_range_draw_step_back (range);
+                    _gtk_range_draw_step_back (range);
                   else
-                    gtk_range_draw_step_forw (range);
+                    _gtk_range_draw_step_forw (range);
                   break;
                   
 		case GTK_SCROLL_STEP_BACKWARD:
-		  gtk_range_draw_step_back (range);
+		  _gtk_range_draw_step_back (range);
 		  break;
                   
 		case GTK_SCROLL_STEP_FORWARD:
-		  gtk_range_draw_step_forw (range);
+		  _gtk_range_draw_step_forw (range);
 		  break;
 		}
 	    }
@@ -1183,8 +1183,8 @@ gtk_range_key_press (GtkWidget   *widget,
 	      gtk_signal_emit_by_name (GTK_OBJECT (range->adjustment),
 				       "value_changed");
 
-	      gtk_range_slider_update (range);
-	      gtk_range_clear_background (range);
+	      _gtk_range_slider_update (range);
+	      _gtk_range_clear_background (range);
 	    }
 	}
     }
@@ -1212,7 +1212,7 @@ gtk_range_enter_notify (GtkWidget        *widget,
 
       if ((range->click_child == 0) ||
 	  (range->click_child == RANGE_CLASS (range)->trough))
-	gtk_range_draw_slider (range);
+	_gtk_range_draw_slider (range);
     }
   else if (event->window == range->step_forw)
     {
@@ -1220,7 +1220,7 @@ gtk_range_enter_notify (GtkWidget        *widget,
 
       if ((range->click_child == 0) ||
 	  (range->click_child == RANGE_CLASS (range)->trough))
-	gtk_range_draw_step_forw (range);
+	_gtk_range_draw_step_forw (range);
     }
   else if (event->window == range->step_back)
     {
@@ -1228,7 +1228,7 @@ gtk_range_enter_notify (GtkWidget        *widget,
 
       if ((range->click_child == 0) ||
 	  (range->click_child == RANGE_CLASS (range)->trough))
-	gtk_range_draw_step_back (range);
+	_gtk_range_draw_step_back (range);
     }
 
   return TRUE;
@@ -1254,19 +1254,19 @@ gtk_range_leave_notify (GtkWidget        *widget,
     {
       if ((range->click_child == 0) ||
 	  (range->click_child == RANGE_CLASS (range)->trough))
-	gtk_range_draw_slider (range);
+	_gtk_range_draw_slider (range);
     }
   else if (event->window == range->step_forw)
     {
       if ((range->click_child == 0) ||
 	  (range->click_child == RANGE_CLASS (range)->trough))
-	gtk_range_draw_step_forw (range);
+	_gtk_range_draw_step_forw (range);
     }
   else if (event->window == range->step_back)
     {
       if ((range->click_child == 0) ||
 	  (range->click_child == RANGE_CLASS (range)->trough))
-	gtk_range_draw_step_back (range);
+	_gtk_range_draw_step_back (range);
     }
 
   return TRUE;
@@ -1554,8 +1554,8 @@ gtk_range_scroll (GtkRange *range,
 	}
       else
 	{
-	  gtk_range_slider_update (range);
-	  gtk_range_clear_background (range);
+	  _gtk_range_slider_update (range);
+	  _gtk_range_clear_background (range);
 	}
     }
 
@@ -1619,8 +1619,8 @@ gtk_range_adjustment_changed (GtkAdjustment *adjustment,
       (range->old_upper != adjustment->upper) ||
       (range->old_page_size != adjustment->page_size))
     {
-      gtk_range_slider_update (range);
-      gtk_range_clear_background (range);
+      _gtk_range_slider_update (range);
+      _gtk_range_clear_background (range);
 
       range->old_value = adjustment->value;
       range->old_lower = adjustment->lower;
@@ -1642,8 +1642,8 @@ gtk_range_adjustment_value_changed (GtkAdjustment *adjustment,
 
   if (range->old_value != adjustment->value)
     {
-      gtk_range_slider_update (range);
-      gtk_range_clear_background (range);
+      _gtk_range_slider_update (range);
+      _gtk_range_clear_background (range);
 
       range->old_value = adjustment->value;
     }

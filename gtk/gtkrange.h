@@ -128,34 +128,34 @@ void           gtk_range_set_inverted           (GtkRange      *range,
                                                  gboolean       setting);
 gboolean       gtk_range_get_inverted           (GtkRange      *range);
 
-void           gtk_range_draw_background        (GtkRange      *range);
-void           gtk_range_clear_background       (GtkRange      *range);
-void           gtk_range_draw_trough            (GtkRange      *range);
-void           gtk_range_draw_slider            (GtkRange      *range);
-void           gtk_range_draw_step_forw         (GtkRange      *range);
-void           gtk_range_draw_step_back         (GtkRange      *range);
-void           gtk_range_slider_update          (GtkRange      *range);
-gint           gtk_range_trough_click           (GtkRange      *range,
-						 gint           x,
-						 gint           y,
-						 gfloat	       *jump_perc);
+void           _gtk_range_draw_background        (GtkRange      *range);
+void           _gtk_range_clear_background       (GtkRange      *range);
+void           _gtk_range_draw_trough            (GtkRange      *range);
+void           _gtk_range_draw_slider            (GtkRange      *range);
+void           _gtk_range_draw_step_forw         (GtkRange      *range);
+void           _gtk_range_draw_step_back         (GtkRange      *range);
+void           _gtk_range_slider_update          (GtkRange      *range);
+gint           _gtk_range_trough_click           (GtkRange      *range,
+                                                  gint           x,
+                                                  gint           y,
+                                                  gfloat        *jump_perc);
 
-void           gtk_range_default_hslider_update (GtkRange      *range);
-void           gtk_range_default_vslider_update (GtkRange      *range);
-gint           gtk_range_default_htrough_click  (GtkRange      *range,
-						 gint           x,
-						 gint           y,
-						 gfloat	       *jump_perc);
-gint           gtk_range_default_vtrough_click  (GtkRange      *range,
-						 gint           x,
-						 gint           y,
-						 gfloat	       *jump_perc);
-void           gtk_range_default_hmotion        (GtkRange      *range,
-						 gint           xdelta,
-						 gint           ydelta);
-void           gtk_range_default_vmotion        (GtkRange      *range,
-						 gint           xdelta,
-						 gint           ydelta);
+void           _gtk_range_default_hslider_update (GtkRange      *range);
+void           _gtk_range_default_vslider_update (GtkRange      *range);
+gint           _gtk_range_default_htrough_click  (GtkRange      *range,
+                                                  gint           x,
+                                                  gint           y,
+                                                  gfloat        *jump_perc);
+gint           _gtk_range_default_vtrough_click  (GtkRange      *range,
+                                                  gint           x,
+                                                  gint           y,
+                                                  gfloat        *jump_perc);
+void           _gtk_range_default_hmotion        (GtkRange      *range,
+                                                  gint           xdelta,
+                                                  gint           ydelta);
+void           _gtk_range_default_vmotion        (GtkRange      *range,
+                                                  gint           xdelta,
+                                                  gint           ydelta);
 
 
 #ifdef __cplusplus

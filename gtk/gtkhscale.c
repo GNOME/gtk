@@ -118,9 +118,9 @@ gtk_hscale_class_init (GtkHScaleClass *class)
   widget_class->size_request = gtk_hscale_size_request;
   widget_class->size_allocate = gtk_hscale_size_allocate;
   
-  range_class->slider_update = gtk_range_default_hslider_update;
-  range_class->trough_click = gtk_range_default_htrough_click;
-  range_class->motion = gtk_range_default_hmotion;
+  range_class->slider_update = _gtk_range_default_hslider_update;
+  range_class->trough_click = _gtk_range_default_htrough_click;
+  range_class->motion = _gtk_range_default_hmotion;
   range_class->draw_slider = gtk_hscale_draw_slider;
   range_class->trough_keys = gtk_hscale_trough_keys;
   range_class->clear_background = gtk_hscale_clear_background;
@@ -242,7 +242,7 @@ gtk_hscale_realize (GtkWidget *widget)
   gtk_style_set_background (widget->style, range->trough, GTK_STATE_ACTIVE);
   gtk_style_set_background (widget->style, range->slider, GTK_STATE_NORMAL);
   
-  gtk_range_slider_update (GTK_RANGE (widget));
+  _gtk_range_slider_update (GTK_RANGE (widget));
   
   gdk_window_show (range->slider);
 }
@@ -325,7 +325,7 @@ gtk_hscale_size_allocate (GtkWidget     *widget,
       
       gdk_window_move_resize (range->trough, 
                               x, y, width, height);
-      gtk_range_slider_update (GTK_RANGE (widget));
+      _gtk_range_slider_update (GTK_RANGE (widget));
     }
 }
 

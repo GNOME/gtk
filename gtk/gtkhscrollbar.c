@@ -109,9 +109,9 @@ gtk_hscrollbar_class_init (GtkHScrollbarClass *class)
   range_class->draw_step_forw = gtk_hscrollbar_draw_step_forw;
   range_class->draw_step_back = gtk_hscrollbar_draw_step_back;
   range_class->slider_update = gtk_hscrollbar_slider_update;
-  range_class->trough_click = gtk_range_default_htrough_click;
+  range_class->trough_click = _gtk_range_default_htrough_click;
   range_class->trough_keys = gtk_hscrollbar_trough_keys;
-  range_class->motion = gtk_range_default_hmotion;
+  range_class->motion = _gtk_range_default_hmotion;
 }
 
 static void
@@ -240,7 +240,7 @@ gtk_hscrollbar_realize (GtkWidget *widget)
   range->slider = gdk_window_new (range->trough, &attributes, attributes_mask);
   
   gtk_hscrollbar_calc_slider_size (GTK_HSCROLLBAR (widget));
-  gtk_range_slider_update (GTK_RANGE (widget));
+  _gtk_range_slider_update (GTK_RANGE (widget));
   
   widget->style = gtk_style_attach (widget->style, widget->window);
   
@@ -290,7 +290,7 @@ gtk_hscrollbar_size_allocate (GtkWidget     *widget,
                               RANGE_CLASS (widget)->stepper_size,
                               widget->requisition.height - widget->style->ythickness * 2);
       
-      gtk_range_slider_update (GTK_RANGE (widget));
+      _gtk_range_slider_update (GTK_RANGE (widget));
     }
 }
 
@@ -369,7 +369,7 @@ gtk_hscrollbar_slider_update (GtkRange *range)
   g_return_if_fail (GTK_IS_HSCROLLBAR (range));
   
   gtk_hscrollbar_calc_slider_size (GTK_HSCROLLBAR (range));
-  gtk_range_default_hslider_update (range);
+  _gtk_range_default_hslider_update (range);
 }
 
 static void

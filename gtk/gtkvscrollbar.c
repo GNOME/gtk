@@ -109,9 +109,9 @@ gtk_vscrollbar_class_init (GtkVScrollbarClass *class)
   range_class->draw_step_forw = gtk_vscrollbar_draw_step_forw;
   range_class->draw_step_back = gtk_vscrollbar_draw_step_back;
   range_class->slider_update = gtk_vscrollbar_slider_update;
-  range_class->trough_click = gtk_range_default_vtrough_click;
+  range_class->trough_click = _gtk_range_default_vtrough_click;
   range_class->trough_keys = gtk_vscrollbar_trough_keys;
-  range_class->motion = gtk_range_default_vmotion;
+  range_class->motion = _gtk_range_default_vmotion;
 }
 
 static void
@@ -240,7 +240,7 @@ gtk_vscrollbar_realize (GtkWidget *widget)
   range->slider = gdk_window_new (range->trough, &attributes, attributes_mask);
   
   gtk_vscrollbar_calc_slider_size (GTK_VSCROLLBAR (widget));
-  gtk_range_slider_update (GTK_RANGE (widget));
+  _gtk_range_slider_update (GTK_RANGE (widget));
   
   widget->style = gtk_style_attach (widget->style, widget->window);
   
@@ -290,7 +290,7 @@ gtk_vscrollbar_size_allocate (GtkWidget     *widget,
                               widget->requisition.width - widget->style->xthickness * 2,
                               RANGE_CLASS (widget)->stepper_size);
       
-      gtk_range_slider_update (GTK_RANGE (widget));
+      _gtk_range_slider_update (GTK_RANGE (widget));
     }
 }
 
@@ -369,7 +369,7 @@ gtk_vscrollbar_slider_update (GtkRange *range)
   g_return_if_fail (GTK_IS_VSCROLLBAR (range));
   
   gtk_vscrollbar_calc_slider_size (GTK_VSCROLLBAR (range));
-  gtk_range_default_vslider_update (range);
+  _gtk_range_default_vslider_update (range);
 }
 
 static void

@@ -1,5 +1,15 @@
 2001-02-19  Havoc Pennington  <hp@redhat.com>
 
+	* gtk/gtktreemodel.c (gtk_tree_model_get_valist): hmm, someone
+	changed GLib without fixing GTK
+
+	* gtk/gtkrange.h: Rename all the stupid implementation detail 
+	functions to have an underscore in front. Most of them should 
+	probably just go away, but for starters don't export them.
+	Bug #50482
+
+2001-02-19  Havoc Pennington  <hp@redhat.com>
+
 	* gdk/gdkcolor.h: test was backward, so deprecated functions were
 	excluded by default
 

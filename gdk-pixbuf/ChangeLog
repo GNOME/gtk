@@ -1,3 +1,7 @@
+2001-02-19  Havoc Pennington  <hp@redhat.com>
+
+	* gdk-pixbuf-io.c (gdk_pixbuf_load_module): const fix
+
 2001-02-17  Havoc Pennington  <hp@pobox.com>
 
 	* gdk-pixbuf-loader.c (gdk_pixbuf_loader_new_with_type): docs
