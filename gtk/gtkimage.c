@@ -1207,6 +1207,44 @@ animation_timeout (gpointer data)
   return FALSE;
 }
 
+/*
+ * Like gdk_rectangle_intersect (dest, src, dest), but make 
+ * sure that the origin of dest is moved by an "even" offset. 
+ * If necessary grow the intersection by one row or column 
+ * to achieve this.
+ *
+ * This is necessary since we can't pass alignment information
+ * for the pixelation pattern down to gdk_pixbuf_saturate_and_pixelate(), 
+ * thus we have to makesure that the subimages are properly aligned.
+ */
+static gboolean
+rectangle_intersect_even (GdkRectangle *src, 
+			  GdkRectangle *dest)
+{
+  gboolean isect;
+  gint x, y;
+
+  x = dest->x;
+  y = dest->y;
+  isect = gdk_rectangle_intersect (dest, src, dest);
+
+  if ((dest->x - x + dest->y - y) % 2 != 0)
+    {
+      if (dest->x > x)
+	{
+	  dest->x--;
+	  dest->width++;
+	}
+      else
+	{
+	  dest->y--;
+	  dest->height++;
+	}
+    }
+  
+  return isect;
+}
+
 static gint
 gtk_image_expose (GtkWidget      *widget,
 		  GdkEventExpose *event)
@@ -1272,8 +1310,7 @@ gtk_image_expose (GtkWidget      *widget,
           gdk_drawable_get_size (image->data.pixmap.pixmap,
                                  &image_bound.width,
                                  &image_bound.height);
-
-	  if (gdk_rectangle_intersect (&image_bound, &area, &image_bound) &&
+	  if (rectangle_intersect_even (&area, &image_bound) &&
 	      needs_state_transform)
             {
               pixbuf = gdk_pixbuf_get_from_drawable (NULL,
@@ -1295,7 +1332,7 @@ gtk_image_expose (GtkWidget      *widget,
           image_bound.width = image->data.image.image->width;
           image_bound.height = image->data.image.image->height;
 
-	  if (gdk_rectangle_intersect (&image_bound, &area, &image_bound) &&
+	  if (rectangle_intersect_even (&area, &image_bound) &&
 	      needs_state_transform)
             {
               pixbuf = gdk_pixbuf_get_from_image (NULL,
@@ -1314,8 +1351,9 @@ gtk_image_expose (GtkWidget      *widget,
         case GTK_IMAGE_PIXBUF:
           image_bound.width = gdk_pixbuf_get_width (image->data.pixbuf.pixbuf);
           image_bound.height = gdk_pixbuf_get_height (image->data.pixbuf.pixbuf);          
+	  
 
-	  if (gdk_rectangle_intersect (&image_bound, &area, &image_bound) &&
+	  if (rectangle_intersect_even (&area, &image_bound) &&
 	      needs_state_transform)
 	    {
 	      pixbuf = gdk_pixbuf_new_subpixbuf (image->data.pixbuf.pixbuf,
@@ -1403,7 +1441,7 @@ gtk_image_expose (GtkWidget      *widget,
 	  gdk_gc_set_clip_origin (widget->style->black_gc, mask_x, mask_y);
 	}
 
-      if (gdk_rectangle_intersect (&image_bound, &area, &image_bound))
+      if (rectangle_intersect_even (&area, &image_bound))
         {
           if (pixbuf)
             {
