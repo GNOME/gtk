@@ -1,3 +1,10 @@
+2003-06-21  Matthias Clasen  <maclas@gmx.de>
+
+	* io-gif.c (gif_get_lzw): Correct the calls to update_func() to
+	consistently specify animation-relative data.
+	(gif_get_frame_info): When debugging, also dump whether the
+	frame is interlaced.
+
 2003-06-03  Matthias Clasen  <maclas@gmx.de>
 
 	* gdk-pixdata.c (gdk_pixbuf_new_from_inline): Document

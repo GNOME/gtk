@@ -63,7 +63,7 @@
 
 
 
-#undef DUMP_IMAGE_DETAILS
+#undef DUMP_IMAGE_DETAILS 
 
 #define MAXCOLORMAPSIZE  256
 #define MAX_LZW_BITS     12
@@ -987,7 +987,8 @@ gif_get_lzw (GifContext *context)
 		if (lower_bound <= upper_bound && first_pass == context->draw_pass) {
 			(* context->update_func)
 				(context->frame->pixbuf,
-				 0, lower_bound,
+                                 context->frame->x_offset,
+                                 context->frame->y_offset + lower_bound,
 				 gdk_pixbuf_get_width (context->frame->pixbuf),
 				 upper_bound - lower_bound,
 				 context->user_data);
@@ -1011,9 +1012,9 @@ gif_get_lzw (GifContext *context)
 				(* context->update_func)
 					(context->frame->pixbuf,
 					 context->frame->x_offset,
-                                         lower_bound + context->frame->y_offset,
+                                         context->frame->y_offset + lower_bound,
 					 gdk_pixbuf_get_width (context->frame->pixbuf),
-					 gdk_pixbuf_get_height (context->frame->pixbuf),
+					 gdk_pixbuf_get_height (context->frame->pixbuf) - lower_bound,
 					 context->user_data);
 			}
 		}
@@ -1219,13 +1220,14 @@ gif_get_frame_info (GifContext *context)
 		return -2;
 	}
 
+	context->frame_interlace = BitSet (buf[8], INTERLACE);
+
 #ifdef DUMP_IMAGE_DETAILS
-        g_print (">width: %d height: %d xoffset: %d yoffset: %d disposal: %d delay: %d transparent: %d\n",
+        g_print (">width: %d height: %d xoffset: %d yoffset: %d disposal: %d delay: %d transparent: %d interlace: %d\n",
                  context->frame_len, context->frame_height, context->x_offset, context->y_offset,
-                 context->gif89.disposal, context->gif89.delay_time, context->gif89.transparent);
+                 context->gif89.disposal, context->gif89.delay_time, context->gif89.transparent, context->frame_interlace);
 #endif
         
-	context->frame_interlace = BitSet (buf[8], INTERLACE);
 	if (BitSet (buf[8], LOCALCOLORMAP)) {
 
 #ifdef DUMP_IMAGE_DETAILS
