@@ -1,3 +1,74 @@
+Tue Nov 26 22:26:04 2002  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtk{tree,list}store.c (gtk_{tree,list}_store_real_set_value):
+	add a gtk_list_store_sort_iter_changed line for some special
+	case ... (#96647 (issue 1), testcases from Soeren Sandmann and
+	Daniel Elstner).
+
+Tue Nov 26 22:18:06 2002  Kristian Rietveld  <kris@gtk.org>
+
+	Inconsistent state for toggle renderers, requested by Paolo Bacchilega
+	in #88130.
+
+	* gtk/gtktreeprivate.h: move GtkCellRendererInfo here.
+
+	* gtk/gtkcellrenderer.c: moved GtkCellRendererInfo away,
+	fix some indentation issues.
+
+	* gtk/gtkcellrenderertoggle.c (gtk_cell_renderer_toggle_class_init),
+	(gtk_cell_renderer_toggle_set_property),
+	(gtk_cell_renderer_toggle_get_property),
+	(gtk_cell_renderer_toggle_render): add an inconsistent property.
+
+	* gtk/gtkstyle.c (gtk_default_draw_check),
+	(gtk_default_draw_option): support drawing inconsistent
+	options/checks for cells.
+
+Tue Nov 26 22:14:14 2002  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtkcellrenderertext.c (gtk_cell_renderer_text_editing_done),
+	(gtk_cell_renderer_text_start_editing): add a focus_out_id to avoid
+	calling _editing_done twice (which has nasty side-effects). (#96647,
+	(issue 2) testcase from Soeren Sandmann).
+
+Tue Nov 26 22:12:21 2002  Kristian Rietveld  <kris@gtk.org>
+
+	#82739, patch from Padraig O'Briain.
+
+	* gtk/gtktreeviewcolumn.[ch]: add
+	gtk_tree_view_column_cell_get_position()
+
+Tue Nov 26 22:06:29 2002  Kristian Rietveld  <kris@gtk.org>
+
+	Yes, this chunk breaks ABI compatibility. Owen knows about it and
+	agreed with it. It doesn't break ABI that bad though, things will
+	still work. Please keep it silent :P.
+
+	This patch fixes some keynav issues reported by Narayana Pattipati
+	in #81633. (Also mentioned in #92037 (Sun tracking bug)).
+
+	* gtk/gtkmarshalers.list: add two silly marshalers
+
+	* gtk/gtktreeview.[ch] (gtk_tree_view_real_select_all),
+	(gtk_tree_view_real_unselect_all),
+	(gtk_tree_view_real_select_cursor_row),
+	(gtk_tree_view_real_toggle_cursor_row),
+	(gtk_tree_view_real_expand_collapse_cursor_row),
+	(gtk_tree_view_real_start_interactive_search): change the return
+	type from void to gboolean, update prototypes, functions, signals and
+	entries in GtkTreeViewClass,
+	(gtk_tree_view_class_init): add select_cursor_row binding for
+	enter key,
+	(gtk_tree_view_key_press): only navigate the header button if the
+	header is also visible ...
+
+Tue Nov 26 22:05:48 2002  Kristian Rietveld  <kris@gtk.org>
+
+	API bit of #75745, reported by Richard Hult.
+
+	* gtk/gtkcellrenderer.h (GtkCellRendererState): add
+	GTK_CELL_RENDERER_FOCUSED, rest of this bug fix will follow later.
+
 Tue Nov 26 18:28:58 GMT 2002  Tony Gale <gale@gtk.org>
 
 	* docs/tutorial/package-db-tutorial.sh:

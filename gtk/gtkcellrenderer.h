@@ -32,7 +32,8 @@ typedef enum
   GTK_CELL_RENDERER_PRELIT      = 1 << 1,
   GTK_CELL_RENDERER_INSENSITIVE = 1 << 2,
   /* this flag means the cell is in the sort column/row */
-  GTK_CELL_RENDERER_SORTED      = 1 << 3
+  GTK_CELL_RENDERER_SORTED      = 1 << 3,
+  GTK_CELL_RENDERER_FOCUSED     = 1 << 4
 } GtkCellRendererState;
 
 typedef enum

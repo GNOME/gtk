@@ -90,17 +90,17 @@ struct _GtkTreeViewClass
   gboolean (* move_cursor)                (GtkTreeView       *tree_view,
 				           GtkMovementStep    step,
 				           gint               count);
-  void     (* select_all)                 (GtkTreeView       *tree_view);
-  void     (* unselect_all)               (GtkTreeView       *tree_view);
-  void     (* select_cursor_row)          (GtkTreeView       *tree_view,
+  gboolean (* select_all)                 (GtkTreeView       *tree_view);
+  gboolean (* unselect_all)               (GtkTreeView       *tree_view);
+  gboolean (* select_cursor_row)          (GtkTreeView       *tree_view,
 					   gboolean           start_editing);
-  void     (* toggle_cursor_row)          (GtkTreeView       *tree_view);
-  void     (* expand_collapse_cursor_row) (GtkTreeView       *tree_view,
+  gboolean (* toggle_cursor_row)          (GtkTreeView       *tree_view);
+  gboolean (* expand_collapse_cursor_row) (GtkTreeView       *tree_view,
 					   gboolean           logical,
 					   gboolean           expand,
 					   gboolean           open_all);
-  void     (* select_cursor_parent)       (GtkTreeView       *tree_view);
-  void     (* start_interactive_search)   (GtkTreeView       *tree_view);
+  gboolean (* select_cursor_parent)       (GtkTreeView       *tree_view);
+  gboolean (* start_interactive_search)   (GtkTreeView       *tree_view);
 
   /* Padding for future expansion */
   void (*_gtk_reserved0) (void);

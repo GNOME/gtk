@@ -195,6 +195,21 @@ struct _GtkTreeViewPrivate
   GtkDestroyNotify search_destroy;
 };
 
+/* cool ABI compat hack */
+#define GTK_CELL_RENDERER_INFO_KEY "gtk-cell-renderer-info"
+
+typedef struct _GtkCellRendererInfo GtkCellRendererInfo;
+struct _GtkCellRendererInfo
+{
+  GdkColor cell_background;
+
+  /* text renderer */
+  gulong focus_out_id;
+
+  /* toggle renderer */
+  gboolean inconsistent :1;
+};
+
 #ifdef __GNUC__
 
 #define TREE_VIEW_INTERNAL_ASSERT(expr, ret)     G_STMT_START{          \

@@ -3623,6 +3623,10 @@ gtk_default_draw_check (GtkStyle      *style,
 	  draw_part (window, style->text_gc[state_type], area, x, y, CHECK_TEXT);
 	  draw_part (window, style->text_aa_gc[state_type], area, x, y, CHECK_AA);
 	}
+      else if (shadow_type == GTK_SHADOW_ETCHED_IN) /* inconsistent */
+	{
+	  draw_part (window, style->text_gc[state_type], area, x, y, CHECK_INCONSISTENT_TEXT);
+	}
     }
   else
     {
@@ -3711,6 +3715,11 @@ gtk_default_draw_option (GtkStyle      *style,
 			width - 4,
 			height - 4,
 			0, 360*64);
+	}
+      else if (shadow_type == GTK_SHADOW_ETCHED_IN) /* inconsistent */
+        {
+          draw_part (window, widget->style->fg_gc[state_type],
+	             area, x, y, CHECK_INCONSISTENT_TEXT);
 	}
     }
   else

@@ -19,6 +19,7 @@
 
 #include "gtkcellrenderer.h"
 #include "gtkintl.h"
+#include "gtktreeprivate.h"
 
 static void gtk_cell_renderer_init       (GtkCellRenderer      *cell);
 static void gtk_cell_renderer_class_init (GtkCellRendererClass *class);
@@ -49,14 +50,6 @@ enum {
   PROP_CELL_BACKGROUND,
   PROP_CELL_BACKGROUND_GDK,
   PROP_CELL_BACKGROUND_SET
-};
-
-#define CELLINFO_KEY "gtk-cell-renderer-info"
-
-typedef struct _GtkCellRendererInfo GtkCellRendererInfo;
-struct _GtkCellRendererInfo
-{
-  GdkColor cell_background;
 };
 
 GType
@@ -102,7 +95,8 @@ gtk_cell_renderer_init (GtkCellRenderer *cell)
   cell->ypad = 0;
 
   cellinfo = g_new0 (GtkCellRendererInfo, 1);
-  g_object_set_data_full (G_OBJECT (cell), CELLINFO_KEY, cellinfo, g_free);
+  g_object_set_data_full (G_OBJECT (cell),
+		          GTK_CELL_RENDERER_INFO_KEY, cellinfo, g_free);
 }
 
 static void
@@ -251,7 +245,10 @@ gtk_cell_renderer_get_property (GObject     *object,
 				GParamSpec  *pspec)
 {
   GtkCellRenderer *cell = GTK_CELL_RENDERER (object);
-  GtkCellRendererInfo *cellinfo = g_object_get_data (object, CELLINFO_KEY);
+  GtkCellRendererInfo *cellinfo;
+
+  cellinfo = g_object_get_data (object,
+		                GTK_CELL_RENDERER_INFO_KEY);
 
   switch (param_id)
     {
@@ -377,7 +374,10 @@ static void
 set_cell_bg_color (GtkCellRenderer *cell,
 		   GdkColor        *color)
 {
-  GtkCellRendererInfo *cellinfo = g_object_get_data (G_OBJECT (cell), CELLINFO_KEY);
+  GtkCellRendererInfo *cellinfo;
+
+  cellinfo = g_object_get_data (G_OBJECT (cell),
+		                GTK_CELL_RENDERER_INFO_KEY);
 
   if (color)
     {
@@ -482,7 +482,10 @@ gtk_cell_renderer_render (GtkCellRenderer     *cell,
 			  GtkCellRendererState flags)
 {
   gboolean selected = FALSE;
-  GtkCellRendererInfo *cellinfo = g_object_get_data (G_OBJECT (cell), CELLINFO_KEY);
+  GtkCellRendererInfo *cellinfo;
+
+  cellinfo = g_object_get_data (G_OBJECT (cell),
+		                GTK_CELL_RENDERER_INFO_KEY);
 
   g_return_if_fail (GTK_IS_CELL_RENDERER (cell));
   g_return_if_fail (GTK_CELL_RENDERER_GET_CLASS (cell)->render != NULL);

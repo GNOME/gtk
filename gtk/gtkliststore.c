@@ -717,6 +717,8 @@ gtk_list_store_real_set_value (GtkListStore *list_store,
 	  retval = TRUE;
 	  if (converted)
 	    g_value_unset (&real_value);
+         if (sort && GTK_LIST_STORE_IS_SORTED (list_store))
+            gtk_list_store_sort_iter_changed (list_store, iter, old_column);
 	  return retval;
 	}
 
@@ -2266,7 +2268,6 @@ gtk_list_store_sort_iter_changed (GtkListStore *list_store,
   gtk_tree_model_rows_reordered (GTK_TREE_MODEL (list_store),
 				 tmp_path, NULL,
 				 new_order);
-
   gtk_tree_path_free (tmp_path);
   g_free (new_order);
 }

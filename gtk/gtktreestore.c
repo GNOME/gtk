@@ -839,6 +839,8 @@ gtk_tree_store_real_set_value (GtkTreeStore *tree_store,
 	  retval = TRUE;
 	  if (converted)
 	    g_value_unset (&real_value);
+          if (sort && GTK_TREE_STORE_IS_SORTED (tree_store))
+            gtk_tree_store_sort_iter_changed (tree_store, iter, old_column);
 	  return retval;
 	}
 

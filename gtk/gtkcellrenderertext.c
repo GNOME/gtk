@@ -23,6 +23,7 @@
 #include "gtkentry.h"
 #include "gtkmarshalers.h"
 #include "gtkintl.h"
+#include "gtktreeprivate.h"
 
 static void gtk_cell_renderer_text_init       (GtkCellRendererText      *celltext);
 static void gtk_cell_renderer_text_class_init (GtkCellRendererTextClass *class);
@@ -1328,6 +1329,16 @@ gtk_cell_renderer_text_editing_done (GtkCellEditable *entry,
 {
   const gchar *path;
   const gchar *new_text;
+  GtkCellRendererInfo *info;
+
+  info = g_object_get_data (G_OBJECT (data),
+		            GTK_CELL_RENDERER_INFO_KEY);
+
+  if (info->focus_out_id > 0)
+    {
+      g_signal_handler_disconnect (entry, info->focus_out_id);
+      info->focus_out_id = 0;
+    }
 
   if (GTK_ENTRY (entry)->editing_canceled)
     return;
@@ -1360,6 +1371,7 @@ gtk_cell_renderer_text_start_editing (GtkCellRenderer      *cell,
 {
   GtkCellRendererText *celltext;
   GtkWidget *entry;
+  GtkCellRendererInfo *info;
   
   celltext = GTK_CELL_RENDERER_TEXT (cell);
 
@@ -1377,14 +1389,17 @@ gtk_cell_renderer_text_start_editing (GtkCellRenderer      *cell,
   
   gtk_editable_select_region (GTK_EDITABLE (entry), 0, -1);
   
+  info = g_object_get_data (G_OBJECT (cell),
+		            GTK_CELL_RENDERER_INFO_KEY);
+  
   gtk_widget_show (entry);
   g_signal_connect (entry,
 		    "editing_done",
 		    G_CALLBACK (gtk_cell_renderer_text_editing_done),
 		    celltext);
-  g_signal_connect (entry, "focus_out_event",
-		    G_CALLBACK (gtk_cell_renderer_text_focus_out_event),
-		    celltext);
+  info->focus_out_id = g_signal_connect (entry, "focus_out_event",
+		         G_CALLBACK (gtk_cell_renderer_text_focus_out_event),
+		         celltext);
 
   return GTK_CELL_EDITABLE (entry);
 

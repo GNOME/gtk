@@ -3267,3 +3267,37 @@ _gtk_tree_view_column_get_neighbor_sizes (GtkTreeViewColumn *column,
 	}
     }
 }
+
+gboolean
+gtk_tree_view_column_cell_get_position (GtkTreeViewColumn *tree_column,
+					GtkCellRenderer   *cell_renderer,
+					gint              *start_pos,
+					gint              *width)
+{
+  GList *list;
+  gint current_x = 0;
+  gboolean found_cell = FALSE;
+  GtkTreeViewColumnCellInfo *cellinfo;
+
+  list = gtk_tree_view_column_cell_first (tree_column);
+  for (; list; list = gtk_tree_view_column_cell_next (tree_column, list))
+    {
+      cellinfo = list->data;
+      if (cellinfo->cell == cell_renderer)
+        {
+          found_cell = TRUE;
+          break;
+        }
+      current_x += cellinfo->real_width;
+    }
+
+  if (found_cell)
+    {
+      if (start_pos)
+        *start_pos = current_x;
+      if (width)
+        *width = cellinfo->real_width;
+    }
+
+  return found_cell;
+}
