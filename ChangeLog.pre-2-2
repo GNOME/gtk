@@ -1,3 +1,10 @@
+1998-03-09  Federico Mena Quintero  <federico@nuclecu.unam.mx>
+
+	* gtk/gtkclist.c (gtk_clist_set_foreground): We now accept the
+	color parameter to be NULL.  If it is NULL, it will mark the row
+	with "color not set", so it will be repainted with the default color.
+	(gtk_clist_set_background): Likewise.
+
 Mon Mar  9 15:48:10 1998  Tim Janik  <timj@gimp.org>
 
 	* Signal signedness and naming corrections, plus GtkType fixes:

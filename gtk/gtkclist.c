@@ -1131,34 +1131,45 @@ gtk_clist_set_foreground (GtkCList * clist,
   GtkCListRow *clist_row;
 
   g_return_if_fail (clist != NULL);
-  g_return_if_fail (color != NULL);
 
   if (row < 0 || row >= clist->rows)
     return;
 
   clist_row = (g_list_nth (clist->row_list, row))->data;
-  clist_row->foreground = *color;
-  clist_row->fg_set = TRUE;
+
+  if (color)
+    {
+      clist_row->foreground = *color;
+      clist_row->fg_set = TRUE;
+    }
+  else
+    clist_row->fg_set = FALSE;
 
   if (!GTK_CLIST_FROZEN (clist) && gtk_clist_row_is_visible (clist, row))
     draw_row (clist, NULL, row, clist_row);
 }
 
-void gtk_clist_set_background (GtkCList * clist,
-			       gint row,
-			       GdkColor * color)
+void
+gtk_clist_set_background (GtkCList * clist,
+			  gint row,
+			  GdkColor * color)
 {
   GtkCListRow *clist_row;
 
   g_return_if_fail (clist != NULL);
-  g_return_if_fail (color != NULL);
 
   if (row < 0 || row >= clist->rows)
     return;
 
   clist_row = (g_list_nth (clist->row_list, row))->data;
-  clist_row->background = *color;
-  clist_row->bg_set = TRUE;
+
+  if (color)
+    {
+      clist_row->background = *color;
+      clist_row->bg_set = TRUE;
+    }
+  else
+    clist_row->bg_set = FALSE;
 
   if (!GTK_CLIST_FROZEN (clist) && gtk_clist_row_is_visible (clist, row))
     draw_row (clist, NULL, row, clist_row);
