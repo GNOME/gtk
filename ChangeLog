@@ -1,3 +1,9 @@
+2002-03-16  Sven Neumann  <sven@gimp.org>
+
+	* configure.in (GDK_PIXBUF_DEP_CFLAGS) (GDK_PIXBUF_XLIB_DEP_CFLAGS) 
+	(GDK_DEP_CFLAGS) (GTK_DEP_CFLAGS): include CFLAGS from gthread-2.0
+	so that the libs work correctly in a threaded environment.
+
 Fri Mar 15 12:51:42 2002  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtktreeviewcolumn.c
