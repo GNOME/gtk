@@ -44,7 +44,6 @@ Fri Feb 27 18:46:27 2004  Jonathan Blandford  <jrb@redhat.com>
 	For now, use gtk_file_system_insert_bookmark() with -1 for the
 	position.  DnD will come next.
 
->>>>>>> 1.5045
 Fri Feb 27 21:42:28 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkcombobox.c (gtk_combo_box_relayout): 
