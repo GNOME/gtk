@@ -42,43 +42,35 @@ quit_func (GtkWidget *widget, gpointer dummy)
   gtk_main_quit ();
 }
 
-static void
-testrgb_rgb_test (GtkWidget *drawing_area, GdkPixBuf *pixbuf)
+expose_func (GtkWidget *drawing_area, GdkEventExpose *event, gpointer data)
 {
-  guchar *buf;
-  gint i, j;
-  gint offset;
-  guchar val;
-  gdouble start_time, total_time;
-  gint x, y;
-  gboolean dither;
-  int dith_max;
+  GdkPixBuf *pixbuf = (GdkPixBuf *)data;
+  gint x1, y1, x2, y2;
 
-  buf = pixbuf->art_pixbuf->pixels;
-  x = pixbuf->art_pixbuf->width;
-  y = pixbuf->art_pixbuf->height;
-
-  g_print("X: %d Y: %d\n", x, y);
-while (TRUE) {
   if (pixbuf->art_pixbuf->has_alpha){
-g_print("32\n");
- gdk_draw_rgb_32_image (drawing_area->window,
-                      drawing_area->style->black_gc,
-                      0, 0, x, y,
-                      GDK_RGB_DITHER_MAX,
-                      pixbuf->art_pixbuf->pixels,
-		      pixbuf->art_pixbuf->rowstride);
-}else{
-g_print("24\n");
-  gdk_draw_rgb_image (drawing_area->window,
-		      drawing_area->style->white_gc,
-		      0, 0, x, y,
-		      GDK_RGB_DITHER_NORMAL,
-		      buf,
-                      pixbuf->art_pixbuf->rowstride);
-}}
-
-}
+    gdk_draw_rgb_32_image (drawing_area->window,
+			   drawing_area->style->black_gc,
+			   event->area.x, event->area.y, 
+			   event->area.width, 
+			   event->area.height,
+			   GDK_RGB_DITHER_MAX, 
+			   pixbuf->art_pixbuf->pixels 
+			   + (event->area.y * pixbuf->art_pixbuf->rowstride) 
+			   + (event->area.x * pixbuf->art_pixbuf->n_channels),
+			   pixbuf->art_pixbuf->rowstride);
+  }else{
+    gdk_draw_rgb_image (drawing_area->window,
+			drawing_area->style->white_gc,
+			event->area.x, event->area.y, 
+			event->area.width, 
+			event->area.height,
+			GDK_RGB_DITHER_NORMAL,
+			pixbuf->art_pixbuf->pixels 
+			+ (event->area.y * pixbuf->art_pixbuf->rowstride) 
+			+ (event->area.x * pixbuf->art_pixbuf->n_channels),
+			pixbuf->art_pixbuf->rowstride);
+  }
+}  
 
 void
 new_testrgb_window (GdkPixBuf *pixbuf)
@@ -107,6 +99,10 @@ new_testrgb_window (GdkPixBuf *pixbuf)
 
   gtk_widget_set_usize (drawing_area, w, h);
   gtk_box_pack_start (GTK_BOX (vbox), drawing_area, FALSE, FALSE, 0);
+
+  gtk_signal_connect (GTK_OBJECT(drawing_area), "expose_event",
+		      GTK_SIGNAL_FUNC (expose_func), pixbuf);
+
   gtk_widget_show (drawing_area);
 
   button = gtk_button_new_with_label ("Quit");
@@ -121,9 +117,6 @@ new_testrgb_window (GdkPixBuf *pixbuf)
   gtk_widget_show (vbox);
 
   gtk_widget_show (window);
-
-
-  testrgb_rgb_test (drawing_area, pixbuf);
 }
 
 int
@@ -140,6 +133,7 @@ main (int argc, char **argv)
   gtk_widget_set_default_colormap (gdk_rgb_get_cmap ());
   gtk_widget_set_default_visual (gdk_rgb_get_visual ());
   pixbuf = gdk_pixbuf_load_image ("test.gif");
+
   new_testrgb_window (pixbuf);
 
   gtk_main ();

@@ -1,3 +1,8 @@
+1999-07-14  Larry Ewing  <lewing@gimp.org>
+
+	* src/testpixbuf.c (expose_func): added an almost proper expose 
+	handler for testpixbuf
+
 1999-07-13    <crichton@gimp.org>
 
 	* configure.in: Fixed GIF check.  Replaced " with '
@@ -6,5 +11,3 @@
 1999-07-13    <crichton@gimp.org>
 
 	* configure.in: I am a bonehead.  Added gif-lib check.
-	
-

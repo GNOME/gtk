@@ -166,8 +166,11 @@ GdkPixBuf *image_load(FILE * f)
 	pixbuf->art_pixbuf = art_pixbuf_new_rgb(pixels, w, h, (w * 3));
 
     /* Ok, I'm anal...shoot me */
-    if (!(pixbuf->art_pixbuf))
+    if (!(pixbuf->art_pixbuf)) {
+        g_free(pixbuf);
 	return NULL;
+    }
+
     pixbuf->ref_count = 0;
     pixbuf->unref_func = NULL;
 
