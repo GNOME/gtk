@@ -1294,8 +1294,6 @@ void
 gtk_clist_column_title_active (GtkCList *clist,
 			       gint      column)
 {
-  GtkObject *object;
-
   g_return_if_fail (clist != NULL);
   g_return_if_fail (GTK_IS_CLIST (clist));
 
@@ -1304,35 +1302,11 @@ gtk_clist_column_title_active (GtkCList *clist,
   if (!clist->column[column].button || !clist->column[column].button_passive)
     return;
 
-  object = GTK_OBJECT (clist->column[column].button);
-
   clist->column[column].button_passive = FALSE;
 
-  gtk_signal_disconnect_by_func (object,
+  gtk_signal_disconnect_by_func (GTK_OBJECT (clist->column[column].button),
 				 (GtkSignalFunc) column_title_passive_func,
-				 GINT_TO_POINTER (gtk_signal_lookup
-						  ("button_press_event",
-						   GTK_TYPE_WIDGET)));
-  gtk_signal_disconnect_by_func (object,
-				 (GtkSignalFunc) column_title_passive_func,
-				 GINT_TO_POINTER (gtk_signal_lookup
-						  ("button_release_event",
-						   GTK_TYPE_WIDGET)));
-  gtk_signal_disconnect_by_func (object,
-				 (GtkSignalFunc) column_title_passive_func,
-				 GINT_TO_POINTER (gtk_signal_lookup
-						  ("motion_notify_event",
-						   GTK_TYPE_WIDGET)));
-  gtk_signal_disconnect_by_func (object,
-				 (GtkSignalFunc) column_title_passive_func,
-				 GINT_TO_POINTER (gtk_signal_lookup
-						  ("enter_notify_event",
-						   GTK_TYPE_WIDGET)));
-  gtk_signal_disconnect_by_func (object,
-				 (GtkSignalFunc) column_title_passive_func,
-				 GINT_TO_POINTER (gtk_signal_lookup
-						  ("leave_notify_event",
-						   GTK_TYPE_WIDGET)));
+				 NULL);
 
   GTK_WIDGET_SET_FLAGS (clist->column[column].button, GTK_CAN_FOCUS);
   if (GTK_WIDGET_VISIBLE (clist))
@@ -1343,7 +1317,6 @@ void
 gtk_clist_column_title_passive (GtkCList *clist,
 				gint      column)
 {
-  GtkObject *object;
   GtkButton *button;
 
   g_return_if_fail (clist != NULL);
@@ -1354,46 +1327,17 @@ gtk_clist_column_title_passive (GtkCList *clist,
   if (!clist->column[column].button || clist->column[column].button_passive)
     return;
 
-  object = GTK_OBJECT (clist->column[column].button);
   button = GTK_BUTTON (clist->column[column].button);
 
   clist->column[column].button_passive = TRUE;
 
-    
-
-  gtk_signal_connect (object, "button_press_event",
-		      (GtkSignalFunc) column_title_passive_func,
-		      GINT_TO_POINTER (gtk_signal_lookup
-				       ("button_press_event",
-					GTK_TYPE_WIDGET)));
-
   if (button->button_down)
     gtk_button_released (button);
-
-  gtk_signal_connect (object, "button_release_event",
-		      (GtkSignalFunc) column_title_passive_func,
-		      GINT_TO_POINTER (gtk_signal_lookup
-				       ("button_release_event",
-					GTK_TYPE_WIDGET)));
-  gtk_signal_connect (object, "motion_notify_event",
-		      (GtkSignalFunc) column_title_passive_func,
-		      GINT_TO_POINTER (gtk_signal_lookup
-				       ("motion_notify_event",
-					GTK_TYPE_WIDGET)));
-  gtk_signal_connect (object, "enter_notify_event",
-		      (GtkSignalFunc) column_title_passive_func,
-		      GINT_TO_POINTER (gtk_signal_lookup
-				       ("enter_notify_event",
-					GTK_TYPE_WIDGET)));
-
   if (button->in_button)
     gtk_button_leave (button);
 
-  gtk_signal_connect (object, "leave_notify_event",
-		      (GtkSignalFunc) column_title_passive_func,
-		      GINT_TO_POINTER (gtk_signal_lookup
-				       ("leave_notify_event",
-					GTK_TYPE_WIDGET)));
+  gtk_signal_connect (GTK_OBJECT (clist->column[column].button), "event",
+		      (GtkSignalFunc) column_title_passive_func, NULL);
 
   GTK_WIDGET_UNSET_FLAGS (clist->column[column].button, GTK_CAN_FOCUS);
   if (GTK_WIDGET_VISIBLE (clist))
@@ -2178,7 +2122,21 @@ column_title_passive_func (GtkWidget *widget,
 			   GdkEvent  *event,
 			   gpointer   data)
 {
-  gtk_signal_emit_stop (GTK_OBJECT (widget), GPOINTER_TO_INT (data));
+  g_return_val_if_fail (event != NULL, FALSE);
+  
+  switch (event->type)
+    {
+    case GDK_MOTION_NOTIFY:
+    case GDK_BUTTON_PRESS:
+    case GDK_2BUTTON_PRESS:
+    case GDK_3BUTTON_PRESS:
+    case GDK_BUTTON_RELEASE:
+    case GDK_ENTER_NOTIFY:
+    case GDK_LEAVE_NOTIFY:
+      return TRUE;
+    default:
+      break;
+    }
   return FALSE;
 }
 
@@ -7121,19 +7079,14 @@ move_vertical (GtkCList *clist,
 static gint
 horizontal_timeout (GtkCList *clist)
 {
-  gint x, y;
-  GdkEventMotion event;
-  GdkModifierType mask;
+  GdkEventMotion event = { 0 };
 
   GDK_THREADS_ENTER ();
 
   clist->htimer = 0;
-  gdk_window_get_pointer (clist->clist_window, &x, &y, &mask);
 
-  event.is_hint = 0;
-  event.x = x;
-  event.y = y;
-  event.state = mask;
+  event.type = GDK_MOTION_NOTIFY;
+  event.send_event = TRUE;
 
   gtk_clist_motion (GTK_WIDGET (clist), &event);
 
@@ -7145,19 +7098,14 @@ horizontal_timeout (GtkCList *clist)
 static gint
 vertical_timeout (GtkCList *clist)
 {
-  gint x, y;
-  GdkEventMotion event;
-  GdkModifierType mask;
+  GdkEventMotion event = { 0 };
 
   GDK_THREADS_ENTER ();
 
   clist->vtimer = 0;
-  gdk_window_get_pointer (clist->clist_window, &x, &y, &mask);
 
-  event.is_hint = 0;
-  event.x = x;
-  event.y = y;
-  event.state = mask;
+  event.type = GDK_MOTION_NOTIFY;
+  event.send_event = TRUE;
 
   gtk_clist_motion (GTK_WIDGET (clist), &event);
 

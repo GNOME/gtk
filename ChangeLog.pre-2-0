@@ -1,3 +1,16 @@
+Fri Mar 19 00:00:22 1999  Lars Hamann  <lars@gtk.org>
+
+	* gtk/gtkclist.c (gtk_clist_column_title_passive)
+	(gtk_clist_column_title_active): 
+	only connect/disconnect to GtkWidgetClass::event to block mouse events.
+
+	* gtk/gtkclist.c (vertical_timeout) (horizontal_timeout): 
+	zero initialize event, removed superfluous gdk_window_get_pointer call
+
+	* gtk/gtklist.c (gtk_list_vertical_timeout)
+	(gtk_list_horizontal_timeout): removed superfluous
+ 	gdk_window_get_pointer call
+
 Wed Mar 17 09:00:00 1999  Tim Janik  <timj@gtk.org>
 
 	* plugging problems reported by "Bruce Mitchener, Jr."
