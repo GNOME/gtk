@@ -1,3 +1,7 @@
+2004-03-11  Morten Welinder  <terra@gnome.org>
+
+	* gtk/gtkpathbar.c (_gtk_path_bar_set_file_system): Plug leak.
+
 Thu Mar 11 16:28:15 2004  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkmenu.c (gtk_menu_get_toplevel): Fix attach/attach->parent

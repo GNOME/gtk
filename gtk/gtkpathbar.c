@@ -1106,4 +1106,5 @@ _gtk_path_bar_set_file_system (GtkPathBar    *path_bar,
   path_bar->home_path = gtk_file_system_filename_to_path (path_bar->file_system, home);
   path_bar->desktop_path = gtk_file_system_filename_to_path (path_bar->file_system, desktop);
   path_bar->root_path = gtk_file_system_filename_to_path (path_bar->file_system, "/");
+  g_free (desktop);
 }
