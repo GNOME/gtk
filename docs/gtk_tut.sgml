@@ -8896,7 +8896,7 @@ disadvantages to each approach.
 The itemfactory is much easier to use, and to add new menus to,
 although writing a few wrapper functions to create menus using the
 manual method could go a long way towards usability. With the
-menufactory, it is not possible to add images or the character '/' to
+itemfactory, it is not possible to add images or the character '/' to
 the menus.
 
 <!-- ----------------------------------------------------------------- -->
