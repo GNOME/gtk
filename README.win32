@@ -86,7 +86,7 @@ Manager for non-EastAsia locales that can be used on Win9x/NT4), you
 need the dimm.h header file. That is somewhat difficult to find, but
 http://msdn.microsoft.com/downloads/samples/internet/wizard/ seems to
 be a good place to look nowadays. If you use "autoconfiscated" build,
-pass the --with-ie55 flag to configure specifyin the location of the
+pass the --with-ie55 flag to configure specifying the location of the
 ie55_lib directory created by downloading the IE5.5 headers and libs
 from the above URL.
 

@@ -28,63 +28,53 @@ See the file 'INSTALL'
 Release notes
 =============
 
+* GTK+ 2.6 supports clipboard persistency. To make use of this feature,
+  a clipboard manager following the specification at
+  http://www.freedesktop.org/wiki/Standards_2fclipboard_2dmanager_2dspec
+  must be running. A sample implementation of such a clipboard manager
+  is available at 
+  http://people.imendio.com/andersca/archives/clipboard-manager-0.3.tar.gz
+
+* The icon theme code in GTK+ 2.6 follows the icon theme specification.
+  Therefore, icon themes are looked for in $HOME/.icons, $XDG_DATA_HOME/icons, 
+  $XDG_DATA_DIRS/icons and /usr/share/pixmaps.
+
+* The icon theme code in GTK+ 2.6 can make use of mmap()able cache files
+  to avoid a lot of disk searching overhead. GTK+ includes a utility named
+  gtk-update-icon-cache to generate these cache files. For further details,
+  see the gtk-update-icon-cache man page or the GTK+ documentation.
+
+* GTK+ uses a technique involving macros for reducing the amount of PLT
+  redirections which has the side effect that the names of internally used
+  GLib functions are prefixed with IA__. The g_return_if_fail() macros
+  strip this prefix away, but it will show up e.g. in a debugger.
+
+* The linux framebuffer GDK backend included in the gdk/linux-fb of GTK+
+  is provided on a as-is basis and has not been tested at all. No
+  guarantees about the degree of workingness or about future
+  compatibility are provided.
+
+* The following functions have been deprecated in GTK+ 2.6:
+  gdk_pango_context_set_colormap
+  gtk_cell_renderer_editing_canceled
+
 * The new GtkFileChooser widget emphasizes simplicity and thus does 
   not provide a navigation entry by default when opening files. 
   Experienced command line users will likely want to make heavy use of
   the location dialog brought up by the Control-L key shortcut.
 
-* As compared to GTK+-1.2, the default configuration of GTK+-2 has been 
-  stream-lined to reduce confusion on the part of new users or users 
-  coming from other environments.  Users used to older versions of 
-  GTK+ may want to make some adjustments to the default configuration.
-
-   - Emacs keybindings such as Control-A and Control-E to move to the
-     ends of lines are not enabled by default in the editing widgets. To
-     turn on Emacs keybindings, add the line:
-
-      gtk-key-theme-name = "Emacs"
-   
-     To your ~/.gtkrc-2.0
-
-   - Editing of menu accelerators by pressing an accelerator over the
-     menu item is disabled by default. To enable, it, add:
-
-      gtk-can-change-accels = 1
-
-     to your ~/.gtkrc-2.0
-
-   - To improve useability for keyboard operation, GTK+ now selects the
-     contents of an entry when tabbing into it or when it is focused on
-     initial window map. To disable this behavior, add:
-
-      gtk-entry-select-on-focus = 0
- 
-     to your ~/.gtkrc-2.0
-
 * The GTK+ libraries use an '_' prefix to indicate private symbols that
   must not be used by applications. On some platforms, symbols beginning 
   with prefixes such as _gtk, _gdk, and _pango will be exported
   from the library, on others not. In no case can applications
-  use these private symbols.
-
-* GTK+-2.4 now requires version 2 of Xft; old fashioned core X
-  fonts are no longer supported.
-
-* There is a bug in the Xft library in XFree86-4.1 and possibly previous
-  versions that causes random crashes when using the Pango Xft
-  backend. If you want to use Xft fonts, you should upgrade to
-  at least XFree86-4.2.
+  use these private symbols. In addition to that, GTK+ 2.6 makes several
+  symbols private which were not in any installed header files and
+  were never intended to be exported.
 
 * The gdk_pixbuf_xlib library included in the contrib/ directory of GTK+
   is provided on a as-is basis and has not been tested at all. No
   guarantees about the degree of workingness or about future
   compatibility are provided.
-
-* While efforts have been made to make gdk-pixbuf robust against
-  invalid images, using gdk-pixbuf to load untrusted data 
-  is not recommended, due to the likelyhood that there are
-  additional problems where an invalid image could cause
-  gdk-pixbuf to crash or worse.
 
 * The assumption of GLib and GTK+ by default is that filenames on the
   filesystem are encoded in UTF-8 rather than the encoding of the locale;
@@ -97,10 +87,10 @@ Release notes
    G_FILENAME_ENCODING=@local
    export G_FILENAME_ENCODING
 
-  (Earlier versions of GLib-2.x required a different environment variable
+  (Earlier versions of GLib 2.x required a different environment variable
   setting; G_BROKEN_FILENAMES=1 to achieve the same effect; this 
   is still supported, but G_FILENAME_ENCODING is preferred.)
-  Best integration of GTK+-2.4 with the environment is achieved by 
+  Best integration of GTK+ 2.6 with the environment is achieved by 
   using a UTF-8 locale.
 
 How to report bugs

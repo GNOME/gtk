@@ -1,5 +1,9 @@
 2004-12-14  Matthias Clasen  <mclasen@redhat.com>
 
+	* README.win32: Fix a typo
+
+	* README.in: Updates
+
 	* tests/testcombo.c (main): Don't use gtk_cell_renderer_set_values().
 
 	* gtk/gtk.symbols: 
