@@ -6,12 +6,12 @@
 # You can find links for georgian-ps True Type fonts following the
 # links at my page on georgian local
 #
-# 1999, Pablo Saratxaga <srtxg@chanae.alphanet.ch>
+# 1999, Pablo Saratxaga <pablo@mandrakesoft.com>
 #
 
 style "gtk-default-georgianps" {
-       fontset = "-adobe-helvetica-medium-r-normal--14-*-*-*-*-*-iso8859-*,\
-		  -*-*-medium-r-normal--14-*-*-*-*-*-georgian-ps"
+       fontset = "-adobe-helvetica-medium-r-normal--14-*-*-*-*-*-iso8859-1,\
+		  -*-*-medium-r-normal--14-*-*-*-*-*-georgian-ps,*-r-*"
 }
 class "GtkWidget" style "gtk-default-georgianps"
 

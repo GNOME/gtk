@@ -5,14 +5,14 @@
 #
 # You can find links for georgian-academy True Type fonts following the
 # links at my page on georgian localisation at 
-# http://www.ping.be/linux/georgian/
+# http://www.linuxi18n.org/locales/georgian/
 #
-# 1999, Pablo Saratxaga <srtxg@chanae.alphanet.ch>
+# 1999, Pablo Saratxaga <pablo@mandrakesoft.com>
 #
 
 style "gtk-default-georgianacademy" {
-       fontset = "-adobe-helvetica-medium-r-normal--14-*-*-*-*-*-iso8859-*,\
-		  -*-*-medium-r-normal--14-*-*-*-*-*-georgian-academy"
+       fontset = "-adobe-helvetica-medium-r-normal--14-*-*-*-*-*-iso8859-1,\
+		  -*-*-medium-r-normal--14-*-*-*-*-*-georgian-academy,*-r-*"
 }
 class "GtkWidget" style "gtk-default-georgianacademy"
 

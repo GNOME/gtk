@@ -1,3 +1,8 @@
+Mon May  8 16:16:53 1999  Pablo Saratxaga <pablo@mandrakesoft.com>
+
+        * gtk/gtkrc.*: added "*-r-*" to all fontsets; that works quite well,
+	always finding a font (maybe not very nice, but at least readable)
+
 Thu May  4 02:04:46 2000  Tim Janik  <timj@gtk.org>
 
         * configure.in (STRIP_DUMMY): some Make 3.79 $(strip ) versions are
