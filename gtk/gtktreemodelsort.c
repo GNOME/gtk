@@ -510,6 +510,8 @@ gtk_tree_model_sort_row_inserted (GtkTreeModel          *s_model,
   /* find the parent level */
   while (i < gtk_tree_path_get_depth (s_path) - 1)
     {
+      gint j;
+
       if (!level)
 	{
 	  /* level not yet build, we won't cover this signal */
@@ -523,8 +525,17 @@ gtk_tree_model_sort_row_inserted (GtkTreeModel          *s_model,
 		     "before the parent was inserted.");
 	  goto done;
 	}
+      
+      elt = NULL;
+      for (j = 0; j < level->array->len; j++)
+	if (g_array_index (level->array, SortElt, j).offset == gtk_tree_path_get_indices (s_path)[i])
+	  {
+	    elt = &g_array_index (level->array, SortElt, j);
+	    break;
+	  }
 
-      elt = SORT_ELT (&g_array_index (level->array, SortElt, gtk_tree_path_get_indices (s_path)[i]));
+      g_return_if_fail (elt != NULL);
+
       if (!elt->children)
 	{
 	  /* FIXME: emit has_child_toggled here? like the treeview? */

@@ -1,3 +1,8 @@
+Wed Oct 24 22:54:07 2001  Kristian Rietveld  <kristian@planet.nl>
+
+	* gtk/gtktreemodelsort.c (gtk_tree_model_sort_row_inserted): treat
+	s_path as a child path
+
 Wed Oct 24 20:29:47 2001  Kristian Rietveld  <kristian@planet.nl>
 
 	* gtk/gtktreemodelsort.c: more changes in an attempt to get
