@@ -145,6 +145,22 @@ gdk_check_xpending (GdkDisplay *display)
  * Functions for maintaining the event queue *
  *********************************************/
 
+static void
+refcounted_grab_server (Display *xdisplay)
+{
+  GdkDisplay *display = gdk_x11_lookup_xdisplay (xdisplay);
+
+  gdk_x11_display_grab (display);
+}
+
+static void
+refcounted_ungrab_server (Display *xdisplay)
+{
+  GdkDisplay *display = gdk_x11_lookup_xdisplay (xdisplay);
+  
+  gdk_x11_display_ungrab (display);
+}
+
 void
 _gdk_x11_events_init_screen (GdkScreen *screen)
 {
@@ -158,6 +174,10 @@ _gdk_x11_events_init_screen (GdkScreen *screen)
 						       gdk_xsettings_notify_cb,
 						       gdk_xsettings_watch_cb,
 						       screen);
+  xsettings_client_set_grab_func (screen_x11->xsettings_client,
+				  refcounted_grab_server);
+  xsettings_client_set_ungrab_func (screen_x11->xsettings_client,
+				    refcounted_ungrab_server);
   screen_x11->xsettings_in_init = FALSE;
 }
 
@@ -2628,7 +2648,6 @@ gdk_xsettings_notify_cb (const char       *name,
 	new_event.setting.name = (char *)settings_map[i].gdk_name;
 	break;
       }
-
   
   if (!new_event.setting.name)
     return;

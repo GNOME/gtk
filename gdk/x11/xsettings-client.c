@@ -38,6 +38,9 @@ struct _XSettingsClient
   XSettingsWatchFunc watch;
   void *cb_data;
 
+  XSettingsGrabFunc grab;
+  XSettingsGrabFunc ungrab;
+
   Window manager_window;
   Atom manager_atom;
   Atom selection_atom;
@@ -410,8 +413,11 @@ check_manager_window (XSettingsClient *client)
 {
   if (client->manager_window && client->watch)
     client->watch (client->manager_window, False, 0, client->cb_data);
-  
-  XGrabServer (client->display);
+
+  if (client->grab)
+    client->grab (client->display);
+  else
+    XGrabServer (client->display);
 
   client->manager_window = XGetSelectionOwner (client->display,
 					       client->selection_atom);
@@ -419,7 +425,11 @@ check_manager_window (XSettingsClient *client)
     XSelectInput (client->display, client->manager_window,
 		  PropertyChangeMask | StructureNotifyMask);
 
-  XUngrabServer (client->display);
+  if (client->ungrab)
+    client->ungrab (client->display);
+  else
+    XUngrabServer (client->display);
+  
   XFlush (client->display);
 
   if (client->manager_window && client->watch)
@@ -451,6 +461,8 @@ xsettings_client_new (Display             *display,
   client->notify = notify;
   client->watch = watch;
   client->cb_data = cb_data;
+  client->grab = NULL;
+  client->ungrab = NULL;
   
   client->manager_window = None;
   client->settings = NULL;
@@ -477,6 +489,20 @@ xsettings_client_new (Display             *display,
   check_manager_window (client);
 
   return client;
+}
+
+void
+xsettings_client_set_grab_func   (XSettingsClient      *client,
+				  XSettingsGrabFunc     grab)
+{
+  client->grab = grab;
+}
+
+void
+xsettings_client_set_ungrab_func (XSettingsClient      *client,
+				  XSettingsGrabFunc     ungrab)
+{
+  client->ungrab = ungrab;
 }
 
 void

@@ -47,19 +47,23 @@ typedef void (*XSettingsWatchFunc)  (Window            window,
 				     Bool              is_start,
 				     long              mask,
 				     void             *cb_data);
+typedef void (*XSettingsGrabFunc)   (Display          *display);
 
-XSettingsClient *xsettings_client_new           (Display             *display,
-						 int                  screen,
-						 XSettingsNotifyFunc  notify,
-						 XSettingsWatchFunc   watch,
-						 void                *cb_data);
-void             xsettings_client_destroy       (XSettingsClient     *client);
-Bool             xsettings_client_process_event (XSettingsClient     *client,
-						 XEvent              *xev);
-
-XSettingsResult xsettings_client_get_setting (XSettingsClient   *client,
-					      const char        *name,
-					      XSettingsSetting **setting);
+XSettingsClient *xsettings_client_new             (Display             *display,
+						   int                  screen,
+						   XSettingsNotifyFunc  notify,
+						   XSettingsWatchFunc   watch,
+						   void                *cb_data);
+void             xsettings_client_set_grab_func   (XSettingsClient     *client,
+						   XSettingsGrabFunc    grab);
+void             xsettings_client_set_ungrab_func (XSettingsClient     *client,
+						   XSettingsGrabFunc    ungrab);
+void             xsettings_client_destroy         (XSettingsClient     *client);
+Bool             xsettings_client_process_event   (XSettingsClient     *client,
+						   XEvent              *xev);
+XSettingsResult  xsettings_client_get_setting     (XSettingsClient     *client,
+						   const char          *name,
+						   XSettingsSetting   **setting);
 
 #ifdef __cplusplus
 }

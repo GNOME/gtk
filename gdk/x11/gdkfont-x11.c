@@ -283,8 +283,6 @@ GdkFont *
 gdk_font_from_description_for_display (GdkDisplay           *display,
 				       PangoFontDescription *font_desc)
 {
-  GdkFont *result;
-
   g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
   g_return_val_if_fail (font_desc != NULL, NULL);
 
