@@ -398,7 +398,7 @@ according the the tab continuation of the previous line.
 Exposure and drawing:
 
 Exposure is handled from the EXPOSE_TEXT function.  It assumes that
-the LINE_START_CACHE and all it's parameters are accurate and simply
+the LINE_START_CACHE and all its parameters are accurate and simply
 exposes any line which is in the exposure region.  It calls the
 CLEAR_AREA function to clear the background and/or lay down a pixmap
 background.  The text widget has a scrollable pixmap background, which

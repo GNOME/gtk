@@ -320,7 +320,7 @@ inherit these rules from their fundamental type.  For example,
 derive from @samp{GtkObject} and so the rules for @samp{GtkObject} apply
 to all widgets as well.
 
-This derivation defines a type hierarchy, but this hierachy is not
+This derivation defines a type hierarchy, but this hierarchy is not
 completely general.  You can't derive from @samp{int} for example, and
 you can only have one level of derivation from @samp{enum}.  The
 fundamental type @samp{GtkObject}, however, is the basis for the large
