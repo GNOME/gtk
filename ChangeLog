@@ -1,4 +1,17 @@
+Thu Feb 24 23:58:44 1999  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtksignal.c (gtk_signal_handler_pending_by_id): added function
+	to check if a specific signal handler connection exists (similar to
+	gtk_signal_handler_pending_by_func). and yes, this is a neccessary
+	addition, since without this function, signal handlers can not be
+	(un)blocked or disconnected in a generic fashion without producing
+	g_warnings().
+	made gtk_signal_get_handlers() an inline function since it's used in
+	a lot of places, especially within signal emission.
+
 Wed Feb 24 19:35:15 1999  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtksignal.c (gtk_signal_handler_pending_by_id): 
 
 	* gtk/gtktext.c (gtk_text_key_press): if the widget is not editable,
 	don't silently eat up GDK_Return, GDK_Home and GDK_End, return FALSE

@@ -145,6 +145,9 @@ guint  gtk_signal_handler_pending_by_func (GtkObject	       *object,
 					   gboolean		may_be_blocked,
 					   GtkSignalFunc	func,
 					   gpointer		data);
+gint   gtk_signal_handler_pending_by_id   (GtkObject	       *object,
+					   guint		handler_id,
+					   gboolean		may_be_blocked);
 guint  gtk_signal_add_emission_hook	  (guint		signal_id,
 					   GtkEmissionHook	hook_func,
 					   gpointer       	data);
@@ -196,7 +199,7 @@ void   gtk_signal_emitv_by_name		  (GtkObject           *object,
 void   gtk_signal_handlers_destroy	  (GtkObject	       *object);
 void   gtk_signal_set_funcs		  (GtkSignalMarshal	marshal_func,
 					   GtkSignalDestroy	destroy_func);
-
+       
 
 
 #ifdef __cplusplus
