@@ -1326,10 +1326,24 @@ void
 gtk_item_factory_delete_entry (GtkItemFactory         *ifactory,
 			       GtkItemFactoryEntry    *entry)
 {
+  gchar *path;
+  gchar *parent_path;
+  gchar *name;
+
   g_return_if_fail (GTK_IS_ITEM_FACTORY (ifactory));
   g_return_if_fail (entry != NULL);
+  g_return_if_fail (entry->path != NULL);
+  g_return_if_fail (entry->path[0] == '/');
 
-  gtk_item_factory_delete_item (ifactory, entry->path);
+  if (!gtk_item_factory_parse_path (ifactory, entry->path, 
+				    &path, &parent_path, &name))
+    return;
+  
+  gtk_item_factory_delete_item (ifactory, path);
+
+  g_free (path);
+  g_free (parent_path);
+  g_free (name);
 }
 
 /**
@@ -1429,7 +1443,7 @@ ifactory_delete_popup_data (GtkObject	   *object,
 
 /**
  * gtk_item_factory_popup:
- * @ifactory: a #GtkItemFactory
+ * @ifactory: a #GtkItemFactory of type #GTK_TYPE_MENU (see gtk_item_factory_new())
  * @x: the x position 
  * @y: the y position
  * @mouse_button: the mouse button which was pressed to initiate this action
@@ -1449,7 +1463,7 @@ gtk_item_factory_popup (GtkItemFactory		*ifactory,
 
 /**
  * gtk_item_factory_popup_with_data:
- * @ifactory: a #GtkItemFactory
+ * @ifactory: a #GtkItemFactory of type #GTK_TYPE_MENU (see gtk_item_factory_new())
  * @popup_data: data available for callbacks while the menu is posted
  * @destroy: a #GtkDestroyNotify function to be called on @popup_data when
  *  the menu is unposted
