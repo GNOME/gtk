@@ -2,7 +2,7 @@
 GtkVBox
 
 <!-- ##### SECTION Short_Description ##### -->
-vertical container box
+A vertical container box
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>

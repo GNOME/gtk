@@ -2,7 +2,7 @@
 GtkScrollbar
 
 <!-- ##### SECTION Short_Description ##### -->
-base class for #GtkHScrollbar and GtkVScrollbar.
+Base class for GtkHScrollbar and GtkVScrollbar
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>

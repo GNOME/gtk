@@ -2,7 +2,7 @@
 GtkHButtonBox
 
 <!-- ##### SECTION Short_Description ##### -->
-a container for arranging buttons horizontally
+A container for arranging buttons horizontally
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>

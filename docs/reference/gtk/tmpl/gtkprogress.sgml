@@ -2,7 +2,7 @@
 GtkProgress
 
 <!-- ##### SECTION Short_Description ##### -->
-the base class for #GtkProgressBar.
+Base class for GtkProgressBar
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>

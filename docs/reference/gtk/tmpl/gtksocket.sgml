@@ -2,7 +2,7 @@
 GtkSocket
 
 <!-- ##### SECTION Short_Description ##### -->
-Container for widgets from other processes.
+Container for widgets from other processes
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>

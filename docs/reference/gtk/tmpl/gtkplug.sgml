@@ -2,7 +2,7 @@
 GtkPlug
 
 <!-- ##### SECTION Short_Description ##### -->
-Toplevel for embedding into other processes.
+Toplevel for embedding into other processes
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>

@@ -2,7 +2,7 @@
 GtkTreeItem
 
 <!-- ##### SECTION Short_Description ##### -->
-The widget used for items in a #GtkTree.
+The widget used for items in a GtkTree
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>

@@ -2,7 +2,7 @@
 GtkMisc
 
 <!-- ##### SECTION Short_Description ##### -->
-a base class for widgets with alignments and padding.
+Base class for widgets with alignments and padding
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>

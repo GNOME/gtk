@@ -2,7 +2,7 @@
 GtkListItem
 
 <!-- ##### SECTION Short_Description ##### -->
-an item in a #GtkList.
+An item in a GtkList
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>

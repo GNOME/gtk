@@ -2,7 +2,7 @@
 GtkList
 
 <!-- ##### SECTION Short_Description ##### -->
-Widget for packing a list of selectable items.
+Widget for packing a list of selectable items
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>

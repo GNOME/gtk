@@ -2,7 +2,7 @@
 GtkFixed
 
 <!-- ##### SECTION Short_Description ##### -->
-a container which allows you to position widgets at fixed coordinates
+A container which allows you to position widgets at fixed coordinates
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>

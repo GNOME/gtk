@@ -2,7 +2,7 @@
 GtkObject
 
 <!-- ##### SECTION Short_Description ##### -->
-The base class of the GTK+ type hierarchy.
+The base class of the GTK+ type hierarchy
 
 <!-- ##### SECTION Long_Description ##### -->
 <refsect2>

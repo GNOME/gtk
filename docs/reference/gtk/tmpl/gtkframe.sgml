@@ -2,7 +2,7 @@
 GtkFrame
 
 <!-- ##### SECTION Short_Description ##### -->
-A bin with a decorative frame and optional label.
+A bin with a decorative frame and optional label
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>

@@ -2,7 +2,7 @@
 GtkAspectFrame
 
 <!-- ##### SECTION Short_Description ##### -->
-A frame that constrains its child to a particular aspect ratio.
+A frame that constrains its child to a particular aspect ratio
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>

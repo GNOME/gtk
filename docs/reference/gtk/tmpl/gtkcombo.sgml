@@ -2,7 +2,7 @@
 GtkCombo
 
 <!-- ##### SECTION Short_Description ##### -->
-a text entry field with a dropdown list.
+A text entry field with a dropdown list
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>

@@ -2,7 +2,7 @@
 GtkVButtonBox
 
 <!-- ##### SECTION Short_Description ##### -->
-a container for arranging buttons vertically
+A container for arranging buttons vertically
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>

@@ -2,7 +2,7 @@
 GtkItem
 
 <!-- ##### SECTION Short_Description ##### -->
-abstract base class for #GtkMenuItem, #GtkListItem and #GtkTreeItem.
+Abstract base class for GtkMenuItem, GtkListItem and GtkTreeItem
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>

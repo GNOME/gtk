@@ -2,7 +2,7 @@
 GtkPixmap
 
 <!-- ##### SECTION Short_Description ##### -->
-a widget displaying a graphical image or icon.
+A widget displaying a graphical image or icon
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>

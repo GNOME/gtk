@@ -2,7 +2,7 @@
 GtkCalendar
 
 <!-- ##### SECTION Short_Description ##### -->
-display a calendar and/or allow the user to select a date.
+Displays a calendar and allows the user to select a date
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>

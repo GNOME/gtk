@@ -2,7 +2,7 @@
 GtkHBox
 
 <!-- ##### SECTION Short_Description ##### -->
-horizontal container box
+A horizontal container box
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>

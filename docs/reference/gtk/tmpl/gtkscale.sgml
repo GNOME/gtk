@@ -2,7 +2,7 @@
 GtkScale
 
 <!-- ##### SECTION Short_Description ##### -->
-a base class for #GtkHScale and #GtkVScale.
+Base class for GtkHScale and GtkVScale
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>

@@ -2,7 +2,7 @@
 GtkHSeparator
 
 <!-- ##### SECTION Short_Description ##### -->
-a horizontal separator.
+A horizontal separator
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>

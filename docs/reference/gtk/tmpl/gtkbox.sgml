@@ -2,7 +2,7 @@
 GtkBox
 
 <!-- ##### SECTION Short_Description ##### -->
-a base class for box containers
+Base class for box containers
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>

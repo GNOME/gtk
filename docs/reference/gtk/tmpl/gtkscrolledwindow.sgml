@@ -2,8 +2,7 @@
 GtkScrolledWindow
 
 <!-- ##### SECTION Short_Description ##### -->
-
-Adds scrollbars to its child widget.
+Adds scrollbars to its child widget
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>

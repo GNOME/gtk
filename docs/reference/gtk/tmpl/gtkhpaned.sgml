@@ -2,7 +2,7 @@
 GtkHPaned
 
 <!-- ##### SECTION Short_Description ##### -->
-A container with two panes arranged horizontally.
+A container with two panes arranged horizontally
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>

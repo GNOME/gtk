@@ -2,7 +2,7 @@
 GtkArrow
 
 <!-- ##### SECTION Short_Description ##### -->
-produces an arrow pointing in one of the four cardinal directions.
+Displays an arrow
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>

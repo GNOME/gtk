@@ -2,7 +2,7 @@
 GtkVSeparator
 
 <!-- ##### SECTION Short_Description ##### -->
-a vertical separator.
+A vertical separator
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>

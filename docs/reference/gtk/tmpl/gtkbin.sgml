@@ -2,7 +2,7 @@
 GtkBin
 
 <!-- ##### SECTION Short_Description ##### -->
-a container with just one child.
+A container with just one child
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>

@@ -2,7 +2,7 @@
 GtkEventBox
 
 <!-- ##### SECTION Short_Description ##### -->
-a widget used to catch events for widgets which do not have their own window.
+A widget used to catch events for widgets which do not have their own window
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>

@@ -2,7 +2,7 @@
 GtkVPaned
 
 <!-- ##### SECTION Short_Description ##### -->
-A container with two panes arranged vertically.
+A container with two panes arranged vertically
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>
