@@ -194,12 +194,12 @@ typedef enum
 /* signal run types */
 typedef enum			/*< flags >*/
 {
-  GTK_RUN_FIRST      = 0x1,
-  GTK_RUN_LAST       = 0x2,
-  GTK_RUN_BOTH       = 0x3,
-  GTK_RUN_MASK       = 0xF,
+  GTK_RUN_FIRST      = 0x01,
+  GTK_RUN_LAST       = 0x02,
+  GTK_RUN_BOTH       = (GTK_RUN_FIRST | GTK_RUN_LAST),
   GTK_RUN_NO_RECURSE = 0x10,
-  GTK_RUN_ACTION  = 0x20
+  GTK_RUN_ACTION     = 0x20,
+  GTK_RUN_NO_HOOKS   = 0x30
 } GtkSignalRunType;
 
 /* scrolling types */

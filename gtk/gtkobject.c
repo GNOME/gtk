@@ -166,7 +166,7 @@ gtk_object_class_init (GtkObjectClass *class)
 
   object_signals[DESTROY] =
     gtk_signal_new ("destroy",
-                    GTK_RUN_LAST,
+                    GTK_RUN_LAST | GTK_RUN_NO_HOOKS,
                     class->type,
                     GTK_SIGNAL_OFFSET (GtkObjectClass, destroy),
                     gtk_marshal_NONE__NONE,

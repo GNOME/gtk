@@ -5261,7 +5261,7 @@ create_font_selection (void)
 
 static GtkWidget *dialog_window = NULL;
 
-void
+static void
 label_toggle (GtkWidget  *widget,
 	      GtkWidget **label)
 {
@@ -5281,7 +5281,7 @@ label_toggle (GtkWidget  *widget,
     gtk_widget_destroy (*label);
 }
 
-void
+static void
 create_dialog (void)
 {
   static GtkWidget *label;
@@ -5324,11 +5324,107 @@ create_dialog (void)
     gtk_widget_destroy (dialog_window);
 }
 
+/* Event Watcher
+ */
+static gboolean event_watcher_enter_id = 0;
+static gboolean event_watcher_leave_id = 0;
+
+static gboolean
+event_watcher (GtkObject      *object,
+	       guint           signal_id,
+	       gpointer        data)
+{
+  g_print ("Watch: \"%s\" emitted for %s\n",
+	   gtk_signal_name (signal_id),
+	   gtk_type_name (GTK_OBJECT_TYPE (object)));
+
+  return TRUE;
+}
+
+static void
+event_watcher_down (void)
+{
+  if (event_watcher_enter_id)
+    {
+      guint signal_id;
+
+      signal_id = gtk_signal_lookup ("enter_notify_event", GTK_TYPE_WIDGET);
+      gtk_signal_remove_emission_hook (signal_id, event_watcher_enter_id);
+      event_watcher_enter_id = 0;
+      signal_id = gtk_signal_lookup ("leave_notify_event", GTK_TYPE_WIDGET);
+      gtk_signal_remove_emission_hook (signal_id, event_watcher_leave_id);
+      event_watcher_leave_id = 0;
+    }
+}
+
+static void
+event_watcher_toggle (void)
+{
+  if (event_watcher_enter_id)
+    event_watcher_down ();
+  else
+    {
+      guint signal_id;
+
+      signal_id = gtk_signal_lookup ("enter_notify_event", GTK_TYPE_WIDGET);
+      event_watcher_enter_id = gtk_signal_add_emission_hook (signal_id, event_watcher, NULL);
+      signal_id = gtk_signal_lookup ("leave_notify_event", GTK_TYPE_WIDGET);
+      event_watcher_leave_id = gtk_signal_add_emission_hook (signal_id, event_watcher, NULL);
+    }
+}
+
+static void
+create_event_watcher (void)
+{
+  GtkWidget *button;
+
+  if (!dialog_window)
+    {
+      dialog_window = gtk_dialog_new ();
+
+      gtk_signal_connect (GTK_OBJECT (dialog_window), "destroy",
+			  GTK_SIGNAL_FUNC (gtk_widget_destroyed),
+			  &dialog_window);
+      gtk_signal_connect (GTK_OBJECT (dialog_window),
+			  "destroy",
+			  GTK_SIGNAL_FUNC (event_watcher_down),
+			  NULL);
+
+      gtk_window_set_title (GTK_WINDOW (dialog_window), "Event Watcher");
+      gtk_container_set_border_width (GTK_CONTAINER (dialog_window), 0);
+      gtk_widget_set_usize (dialog_window, 200, 110);
+
+      button = gtk_toggle_button_new_with_label ("Activate Watch");
+      gtk_signal_connect (GTK_OBJECT (button), "clicked",
+			  GTK_SIGNAL_FUNC (event_watcher_toggle),
+			  NULL);
+      gtk_container_set_border_width (GTK_CONTAINER (button), 10);
+      gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog_window)->vbox), 
+			  button, TRUE, TRUE, 0);
+      gtk_widget_show (button);
+
+      button = gtk_button_new_with_label ("Close");
+      gtk_signal_connect (GTK_OBJECT (button), "clicked",
+			  GTK_SIGNAL_FUNC (gtk_widget_destroy),
+			  dialog_window);
+      GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
+      gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog_window)->action_area),
+			  button, TRUE, TRUE, 0);
+      gtk_widget_grab_default (button);
+      gtk_widget_show (button);
+    }
+
+  if (!GTK_WIDGET_VISIBLE (dialog_window))
+    gtk_widget_show (dialog_window);
+  else
+    gtk_widget_destroy (dialog_window);
+}
+
 /*
  * GtkRange
  */
 
-void
+static void
 create_range_controls (void)
 {
   static GtkWidget *window = NULL;
@@ -8067,6 +8163,7 @@ create_main_window (void)
       { "dialog", create_dialog },
       /*      { "dnd", create_dnd }, */
       { "entry", create_entry },
+      { "event watcher", create_event_watcher },
       { "file selection", create_file_selection },
       { "font selection", create_font_selection },
       { "gamma curve", create_gamma_curve },

@@ -33,13 +33,17 @@ extern "C" {
 #define GTK_SIGNAL_OFFSET(struct, field)	(GTK_STRUCT_OFFSET (struct, field))
   
   
-typedef void (*GtkSignalMarshal)    (GtkObject	    *object,
+typedef void    (*GtkSignalMarshal) (GtkObject	    *object,
 				     gpointer	     data,
 				     guint	     nparams,
 				     GtkArg	    *args,
 				     GtkType	    *arg_types,
 				     GtkType	     return_type);
-typedef void (*GtkSignalDestroy)    (gpointer	     data);
+typedef void    (*GtkSignalDestroy) (gpointer	     data);
+typedef gboolean (*GtkEmissionHook) (GtkObject	    *object,
+				     guint           signal_id,
+				     gpointer        data);
+
 
 typedef struct _GtkSignalQuery		GtkSignalQuery;
 
@@ -166,6 +170,16 @@ guint  gtk_signal_handler_pending_by_func (GtkObject	       *object,
 					   GtkSignalFunc	func,
 					   gpointer		data);
 void   gtk_signal_handlers_destroy	  (GtkObject	       *object);
+guint  gtk_signal_add_emission_hook	  (guint		signal_id,
+					   GtkEmissionHook	hook_func,
+					   gpointer       	data);
+guint  gtk_signal_add_emission_hook_full  (guint		signal_id,
+					   GtkEmissionHook	hook_func,
+					   gpointer       	data,
+					   GDestroyNotify	destroy);
+void   gtk_signal_remove_emission_hook	  (guint		signal_id,
+					   guint		hook_id);
+
 void   gtk_signal_set_funcs		  (GtkSignalMarshal	marshal_func,
 					   GtkSignalDestroy	destroy_func);
 

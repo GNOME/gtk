@@ -36,7 +36,7 @@ enum
   EMISSION_DONE
 };
 
-#define GTK_RUN_TYPE(x)	 ((x) & GTK_RUN_MASK)
+#define GTK_RUN_TYPE(x)	 ((x) & GTK_RUN_BOTH)
 
 
 typedef struct _GtkSignal		GtkSignal;
@@ -55,11 +55,12 @@ struct _GtkSignal
   GtkType	      object_type;
   gchar		     *name;
   guint		      function_offset;
-  GtkSignalRunType    signal_flags;
   GtkSignalMarshaller marshaller;
   GtkType	      return_val;
+  GtkSignalRunType    signal_flags : 16;
+  guint		      nparams : 16;
   GtkType	     *params;
-  guint		      nparams;
+  GHookList	     *hook_list;
 };
 
 struct _GtkSignalHash
@@ -145,7 +146,9 @@ static gint	    gtk_handlers_run	       (GtkHandler     *handlers,
 						GtkObject      *object,
 						GtkArg         *params,
 						gint		after);
-static gboolean	    gtk_signal_collect_params  (GtkArg	       *params,
+static gboolean gtk_emission_hook_marshaller   (GHook          *hook,
+						gpointer        data);
+static gboolean	gtk_signal_collect_params      (GtkArg	       *params,
 						guint		nparams,
 						GtkType	       *param_types,
 						GtkType		return_type,
@@ -303,10 +306,11 @@ gtk_signal_newv (const gchar	     *r_name,
   signal->object_type = object_type;
   signal->name = name;
   signal->function_offset = function_offset;
-  signal->signal_flags = signal_flags;
   signal->marshaller = marshaller;
   signal->return_val = return_val;
+  signal->signal_flags = signal_flags;
   signal->nparams = nparams;
+  signal->hook_list = NULL;
   
   if (nparams > 0)
     {
@@ -1419,7 +1423,17 @@ gtk_signal_real_emit (GtkObject *object,
 	    }
 	}
     }
-  
+
+  /* do *not* reorder this call! */
+  if (signal.hook_list)
+    {
+      gpointer data[2];
+
+      data[0] = &signal;
+      data[1] = object;
+      g_hook_list_marshal_check (signal.hook_list, TRUE, gtk_emission_hook_marshaller, &data);
+    }
+
  emission_done:
   
   gtk_emission_remove (&current_emissions, object, signal_id);
@@ -1515,6 +1529,90 @@ gtk_signal_handler_pending_by_func (GtkObject           *object,
     }
   
   return handler_id;
+}
+
+guint
+gtk_signal_add_emission_hook (guint           signal_id,
+			      GtkEmissionHook hook_func,
+			      gpointer        data)
+{
+  return gtk_signal_add_emission_hook_full (signal_id, hook_func, data, NULL);
+}
+
+guint
+gtk_signal_add_emission_hook_full (guint           signal_id,
+				   GtkEmissionHook hook_func,
+				   gpointer        data,
+				   GDestroyNotify  destroy)
+{
+  static guint seq_hook_id = 1;
+  GtkSignal *signal;
+  GHook *hook;
+
+  g_return_val_if_fail (signal_id > 0, 0);
+  g_return_val_if_fail (hook_func != NULL, 0);
+  
+  signal = LOOKUP_SIGNAL_ID (signal_id);
+  g_return_val_if_fail (signal != NULL, 0);
+  if (signal->signal_flags & GTK_RUN_NO_HOOKS)
+    {
+      g_warning ("gtk_signal_add_emission_hook_full(): signal \"%s\" does not support emission hooks",
+		 signal->name);
+      return 0;
+    }
+
+  if (!signal->hook_list)
+    {
+      signal->hook_list = g_new (GHookList, 1);
+      g_hook_list_init (signal->hook_list, sizeof (GHook));
+    }
+
+  hook = g_hook_alloc (signal->hook_list);
+  hook->data = data;
+  hook->func = hook_func;
+  hook->destroy = destroy;
+
+  signal->hook_list->seq_id = seq_hook_id;
+  g_hook_prepend (signal->hook_list, hook);
+  seq_hook_id = signal->hook_list->seq_id;
+
+  return hook->hook_id;
+}
+
+void
+gtk_signal_remove_emission_hook (guint signal_id,
+				 guint hook_id)
+{
+  GtkSignal *signal;
+
+  g_return_if_fail (signal_id > 0);
+  g_return_if_fail (hook_id > 0);
+
+  signal = LOOKUP_SIGNAL_ID (signal_id);
+  g_return_if_fail (signal != NULL);
+
+  if (!signal->hook_list || !g_hook_destroy (signal->hook_list, hook_id))
+    g_warning ("gtk_signal_remove_emission_hook(): could not find hook (%u)", hook_id);
+  if (signal->hook_list && !signal->hook_list->hooks)
+    {
+      g_hook_list_clear (signal->hook_list);
+      g_free (signal->hook_list);
+      signal->hook_list = NULL;
+    }
+}
+
+static gboolean
+gtk_emission_hook_marshaller (GHook   *hook,
+			      gpointer data_p)
+{
+  gpointer *data = data_p;
+  GtkSignal *signal;
+  GtkEmissionHook func;
+
+  signal = data[0];
+  func = hook->func;
+
+  return func (data[1], signal->signal_id, hook->data);
 }
 
 static guint

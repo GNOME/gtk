@@ -1,3 +1,22 @@
+Mon Nov 30 06:20:36 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/testgtk.c: added an event watcher for enter/leave based on
+	signal emission hooks.
+
+	* gtk/gtkobject.c (gtk_object_class_init): made GtkObject::destroy a
+	GTK_RUN_NO_HOOKS signal.
+
+	* gtk/gtksignal.h: 
+	* gtk/gtksignal.c: implemented emission hooks, new hooks can be added
+	to a signal with gtk_signal_add_emission_hook or
+	gtk_signal_add_emission_hook_full, and can be removed again with
+	gtk_signal_remove_emission_hook.
+
+	* gtk/gtkenums.h: remove GTK_RUN_MASK, since it doesn't represent
+	an appropriate mask for signal runtypes for a long time now.
+	added GTK_RUN_NO_HOOKS value, which is used to flag signals
+	that do not allow the running of signal hooks.
+
 1998-11-26  Michael Krause  <m.krause@tu-harburg.de>
 
         * gtk/gtknotebook.c (gtk_notebook_switch_page): made 'page_num'
