@@ -148,6 +148,9 @@ static gint gtk_widget_real_key_release_event    (GtkWidget         *widget,
 						  GdkEventKey       *event);
 static void gtk_widget_style_set		 (GtkWidget	    *widget,
 						  GtkStyle          *previous_style);
+
+static void  gtk_widget_redraw_queue_remove       (GtkWidget         *widget);
+
      
 static GdkColormap* gtk_widget_peek_colormap (void);
 static GdkVisual*   gtk_widget_peek_visual   (void);
@@ -1165,6 +1168,7 @@ gtk_widget_unparent (GtkWidget *widget)
    * should eventually move into some gtk_window_unparent_branch() or
    * similar function.
    */
+  
   toplevel = gtk_widget_get_toplevel (widget);
   if (GTK_CONTAINER (widget->parent)->focus_child == widget)
     {
@@ -1195,6 +1199,9 @@ gtk_widget_unparent (GtkWidget *widget)
       if (child == widget)
 	gtk_window_set_default (GTK_WINDOW (toplevel), NULL);
     }
+
+  if (GTK_WIDGET_REDRAW_PENDING (widget))
+    gtk_widget_redraw_queue_remove (widget);
 
   if (GTK_IS_RESIZE_CONTAINER (widget))
     gtk_container_clear_resize_widgets (GTK_CONTAINER (widget));
@@ -1547,12 +1554,9 @@ void
 gtk_widget_unrealize (GtkWidget *widget)
 {
   g_return_if_fail (widget != NULL);
-  
+
   if (GTK_WIDGET_REDRAW_PENDING (widget))
-    {
-      gtk_widget_redraw_queue = g_slist_remove (gtk_widget_redraw_queue, widget);
-      GTK_PRIVATE_UNSET_FLAG (widget, GTK_REDRAW_PENDING);
-    }
+    gtk_widget_redraw_queue_remove (widget);
   
   if (GTK_WIDGET_HAS_SHAPE_MASK (widget))
     gtk_widget_shape_combine_mask (widget, NULL, -1, -1);
@@ -1735,6 +1739,28 @@ gtk_widget_queue_clear_area (GtkWidget *widget,
     }
 }
 
+static void
+gtk_widget_redraw_queue_remove (GtkWidget *widget)
+{
+  GSList *draw_data_list;
+  GSList *tmp_list;
+
+  g_return_if_fail (!GTK_WIDGET_REDRAW_PENDING (widget));
+
+  gtk_widget_redraw_queue = g_slist_remove (gtk_widget_redraw_queue, widget);
+
+  draw_data_list = gtk_object_get_data_by_id (GTK_OBJECT (widget),
+					      draw_data_key_id);
+  tmp_list = g_slist_last (draw_data_list);
+  if (tmp_list)
+    {
+      tmp_list->next = draw_data_free_list;
+      draw_data_free_list = draw_data_list;
+    }
+  
+  GTK_PRIVATE_UNSET_FLAG (widget, GTK_REDRAW_PENDING);
+}
+
 void	   
 gtk_widget_queue_clear	  (GtkWidget *widget)
 {
@@ -1781,9 +1807,11 @@ gtk_widget_draw_data_combine (GtkDrawData *parent, GtkDrawData *child)
 
 /* Take a rectangle with respect to window, and translate it
  * to coordinates relative to widget's allocation, clipping through
- * intermediate windows.
+ * intermediate windows. Returns whether translation failed. If the
+ * translation failed, we have something like a handlebox, where
+ * the child widget's GdkWindow is not a child of the parents GdkWindow.
  */
-static void
+static gboolean
 gtk_widget_clip_rect (GtkWidget *widget,
 		      GdkWindow *window,
 		      GdkRectangle *rect,
@@ -1792,7 +1820,7 @@ gtk_widget_clip_rect (GtkWidget *widget,
 {
   gint x,y, width, height;
 
-  while (window != widget->window)
+  while (window && (window != widget->window))
     {
       gdk_window_get_position (window, &x, &y);
       rect->x += x;
@@ -1803,7 +1831,9 @@ gtk_widget_clip_rect (GtkWidget *widget,
 	*y_offset += y;
       
       window = gdk_window_get_parent (window);
-      
+      if (!window)
+	return FALSE;
+
       gdk_window_get_size (window, &width, &height);
       
       if (rect->x < 0)
@@ -1822,6 +1852,9 @@ gtk_widget_clip_rect (GtkWidget *widget,
 	rect->height = height - rect->y;
     }
 
+  if (!window)
+    return FALSE;
+
   if (!GTK_WIDGET_NO_WINDOW (widget))
     {
       if (gdk_window_get_toplevel (window) != window)
@@ -1835,6 +1868,8 @@ gtk_widget_clip_rect (GtkWidget *widget,
 	    *y_offset += y - widget->allocation.y;
 	}
     }
+
+  return TRUE;
 }
 
 static gint
@@ -1854,12 +1889,18 @@ gtk_widget_idle_draw (gpointer data)
 
       while (draw_data_list)
 	{
+	  gboolean full_allocation = FALSE;
 	  GtkDrawData *data = draw_data_list->data;
 
 	  if (data->window)
 	    {
-	      gtk_widget_clip_rect (widget, data->window, &data->rect,
-				    NULL, NULL);
+	      /* If the translation fails, we have a handlebox,
+	       * so redraw the whole widget. Could be done better?
+	       */
+	      full_allocation = !gtk_widget_clip_rect (widget, 
+						       data->window, 
+						       &data->rect,
+						       NULL, NULL);
 	      data->window = NULL;
 	    }
 	  else
@@ -1887,7 +1928,7 @@ gtk_widget_idle_draw (gpointer data)
       widget_list = widget_list->next;
     }
 
-  /* Now, coalesce redraws
+  /* Coalesce redraws
    */
   widget_list = gtk_widget_redraw_queue;
   while (widget_list)
@@ -1947,11 +1988,16 @@ gtk_widget_idle_draw (gpointer data)
 		      data->rect.y -= y - parent->allocation.y;
 		      y_offset -=  y - parent->allocation.y;
 		    }
-		  gtk_widget_clip_rect (parent->parent, window, &data->rect,
-					&x_offset, &y_offset);
+		  /* If we can't translate the rectangle, stop trying to
+		   * merge. (This occurs for a handlebox)
+		   */
+		  if (!gtk_widget_clip_rect (parent->parent, window, &data->rect,
+					     &x_offset, &y_offset))
+		    parent = NULL;
 		}
 
-	      parent = parent->parent;
+	      if (parent)
+		parent = parent->parent;
 	      
 	      if (parent && GTK_WIDGET_REDRAW_PENDING (parent))
 		parent_list = gtk_object_get_data_by_id (GTK_OBJECT (parent),
@@ -1977,7 +2023,7 @@ gtk_widget_idle_draw (gpointer data)
       widget_list = widget_list->next;
     }
 
-  /* Now process the draws */
+  /* Process the draws */
   
   widget_list = gtk_widget_redraw_queue;
 

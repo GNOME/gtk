@@ -1,3 +1,14 @@
+Thu Oct  1 14:25:43 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkwidget.c: When handling queued resizes, account
+	for handleboxes, where the widget heirarchy is different
+	than the window heirarchy by just queueing a resize on
+	the entire handlebox if the detached child is changed.
+
+	- Remove widgets from the redraw queue when reparenting,
+	even if not unrealizing. We queue a resize/redraw in
+	any case.
+
 Mon Sep 28 21:07:01 EDT 1998 The Rasterman <raster@redhat.com>
 	* gtk/gtkstyle.c: added check to see if the widget has been shaped
 	byt the app via gtk_widget_shape_combine_mask and if it has does
