@@ -502,6 +502,8 @@ gtk_alignment_size_allocate (GtkWidget     *widget,
  * The padding adds blank space to the sides of the widget. For instance,
  * this can be used to indent the child widget towards the right by adding
  * padding on the left.
+ *
+ * Since: 2.4
  */
 void
 gtk_alignment_set_padding (GtkAlignment    *alignment,
@@ -558,6 +560,8 @@ gtk_alignment_set_padding (GtkAlignment    *alignment,
  *
  * Gets the padding on the different sides of the widget.
  * See gtk_alignment_set_padding ().
+ *
+ * Since: 2.4
  */
 void
 gtk_alignment_get_padding (GtkAlignment    *alignment,

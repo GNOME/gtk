@@ -1,5 +1,8 @@
 2003-06-01  Matthias Clasen  <maclas@gmx.de>
 
+	* gtk/gtkalignment.c (gtk_alignment_[gs]et_padding): Add 
+	Since: 2.4 to the docs.
+
 	* gtk/gtkwindow.c (gtk_window_parse_geometry): Add some hints and
 	an example to the docs.  (#98427)
 

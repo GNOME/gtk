@@ -125,6 +125,8 @@ gtk_adjustment_get_type
 GtkAlignment
 gtk_alignment_new
 gtk_alignment_set
+gtk_alignment_get_padding
+gtk_alignment_set_padding
 <SUBSECTION Standard>
 GTK_ALIGNMENT
 GTK_IS_ALIGNMENT

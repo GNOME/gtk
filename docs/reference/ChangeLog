@@ -1,3 +1,7 @@
+2003-06-01  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtk-sections.txt: Add gtk_alignment_[gs]et_padding().
+
 2003-05-27  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/tmpl/gtkadjustment.sgml: Document allowed values for
