@@ -96,6 +96,15 @@ used for right-to-left locales.
 @Returns: 
 
 
+<!-- ##### MACRO GTK_STOCK_ABOUT ##### -->
+<para>
+The "About" item.
+<inlinegraphic fileref="stock_about_24.png" format="PNG"></inlinegraphic>
+</para>
+
+@Since: 2.6
+
+
 <!-- ##### MACRO GTK_STOCK_ADD ##### -->
 <para>
 The "Add" item.
@@ -169,6 +178,15 @@ The "Convert" item.
 
 
 
+<!-- ##### MACRO GTK_STOCK_CONNECT ##### -->
+<para>
+The "Connect" icon.
+<inlinegraphic fileref="stock_connect_24.png" format="PNG"></inlinegraphic>
+</para>
+
+@Since: 2.6
+
+
 <!-- ##### MACRO GTK_STOCK_COPY ##### -->
 <para>
 The "Copy" item.
@@ -240,6 +258,16 @@ The "Directory" icon.
 <inlinegraphic fileref="stock_directory_24.png" format="PNG"></inlinegraphic>
 </para>
 
+@Since: 2.6
+
+
+<!-- ##### MACRO GTK_STOCK_DISCONNECT ##### -->
+<para>
+The "Disconnect" icon.
+<inlinegraphic fileref="stock_disconnect_24.png" format="PNG"></inlinegraphic>
+</para>
+
+@Since: 2.6
 
 
 <!-- ##### MACRO GTK_STOCK_DND ##### -->
@@ -258,6 +286,15 @@ The "Drag-And-Drop multiple" icon.
 
 
 
+<!-- ##### MACRO GTK_STOCK_EDIT ##### -->
+<para>
+The "Edit" item.
+<inlinegraphic fileref="stock_edit_24.png" format="PNG"></inlinegraphic>
+</para>
+
+@Since: 2.6
+
+
 <!-- ##### MACRO GTK_STOCK_EXECUTE ##### -->
 <para>
 The "Execute" item.
@@ -274,6 +311,7 @@ The "File" icon.
 </para>
 </para>
 
+@Since: 2.6
 
 
 <!-- ##### MACRO GTK_STOCK_FIND ##### -->
@@ -374,9 +412,11 @@ The "Up" item.
 
 <!-- ##### MACRO GTK_STOCK_HARDDISK ##### -->
 <para>
-
+The "Harddisk" item.
+<inlinegraphic fileref="stock_harddisk_24.png" format="PNG"></inlinegraphic>
 </para>
 
+@Since: 2.4
 
 
 <!-- ##### MACRO GTK_STOCK_HELP ##### -->
@@ -397,9 +437,11 @@ The "Home" item.
 
 <!-- ##### MACRO GTK_STOCK_INDENT ##### -->
 <para>
-
+The "Indent" item.
+<inlinegraphic fileref="stock_indent_24.png" format="PNG"></inlinegraphic>
 </para>
 
+@Since: 2.4
 
 
 <!-- ##### MACRO GTK_STOCK_INDEX ##### -->
@@ -460,6 +502,78 @@ The "Right" item.
 
 
 
+<!-- ##### MACRO GTK_STOCK_MEDIA_FORWARD ##### -->
+<para>
+The "Media Forward" item.
+<inlinegraphic fileref="stock_media_forward_24.png" format="PNG"></inlinegraphic>
+</para>
+
+@Since: 2.6
+
+
+<!-- ##### MACRO GTK_STOCK_MEDIA_NEXT ##### -->
+<para>
+The "Media Next" item.
+<inlinegraphic fileref="stock_media_next_24.png" format="PNG"></inlinegraphic>
+</para>
+
+@Since: 2.6
+
+
+<!-- ##### MACRO GTK_STOCK_MEDIA_PAUSE ##### -->
+<para>
+The "Media Pause" item.
+<inlinegraphic fileref="stock_media_pause_24.png" format="PNG"></inlinegraphic>
+</para>
+
+@Since: 2.6
+
+
+<!-- ##### MACRO GTK_STOCK_MEDIA_PLAY ##### -->
+<para>
+The "Media Play" item.
+<inlinegraphic fileref="stock_media_play_24.png" format="PNG"></inlinegraphic>
+</para>
+
+@Since: 2.6
+
+
+<!-- ##### MACRO GTK_STOCK_MEDIA_PREVIOUS ##### -->
+<para>
+The "Media Previous" item.
+<inlinegraphic fileref="stock_media_previous_24.png" format="PNG"></inlinegraphic>
+</para>
+
+@Since: 2.6
+
+
+<!-- ##### MACRO GTK_STOCK_MEDIA_RECORD ##### -->
+<para>
+The "Media Record" item.
+<inlinegraphic fileref="stock_media_record_24.png" format="PNG"></inlinegraphic>
+</para>
+
+@Since: 2.6
+
+
+<!-- ##### MACRO GTK_STOCK_MEDIA_REWIND ##### -->
+<para>
+The "Media Rewind" item.
+<inlinegraphic fileref="stock_media_rewind_24.png" format="PNG"></inlinegraphic>
+</para>
+
+@Since: 2.6
+
+
+<!-- ##### MACRO GTK_STOCK_MEDIA_STOP ##### -->
+<para>
+The "Media Stop" item.
+<inlinegraphic fileref="stock_media_stop_24.png" format="PNG"></inlinegraphic>
+</para>
+
+@Since: 2.6
+
+
 <!-- ##### MACRO GTK_STOCK_MISSING_IMAGE ##### -->
 <para>
 The "Missing image" icon.
@@ -470,9 +584,11 @@ The "Missing image" icon.
 
 <!-- ##### MACRO GTK_STOCK_NETWORK ##### -->
 <para>
-
+The "Network" item.
+<inlinegraphic fileref="stock_network_24.png" format="PNG"></inlinegraphic>
 </para>
 
+@Since: 2.4
 
 
 <!-- ##### MACRO GTK_STOCK_NEW ##### -->
@@ -693,9 +809,11 @@ RTL variant
 
 <!-- ##### MACRO GTK_STOCK_UNINDENT ##### -->
 <para>
-
+The "Unindent" item.
+<inlinegraphic fileref="stock_unindent_24.png" format="PNG"></inlinegraphic>
 </para>
 
+@Since: 2.4
 
 
 <!-- ##### MACRO GTK_STOCK_YES ##### -->

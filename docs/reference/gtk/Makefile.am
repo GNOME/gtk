@@ -108,6 +108,7 @@ content_files =					\
 
 # Images to copy into HTML directory
 HTML_IMAGES = \
+	$(top_srcdir)/gtk/stock-icons/stock_about_24.png		\
 	$(top_srcdir)/gtk/stock-icons/stock_add_24.png			\
 	$(top_srcdir)/gtk/stock-icons/stock_apply_20.png		\
 	$(top_srcdir)/gtk/stock-icons/stock_text_bold_24.png		\
@@ -115,6 +116,7 @@ HTML_IMAGES = \
 	$(top_srcdir)/gtk/stock-icons/stock_cdrom_24.png		\
 	$(top_srcdir)/gtk/stock-icons/stock_clear_24.png		\
 	$(top_srcdir)/gtk/stock-icons/stock_close_24.png		\
+	$(top_srcdir)/gtk/stock-icons/stock_connect_24.png		\
 	$(top_srcdir)/gtk/stock-icons/stock_convert_24.png		\
 	$(top_srcdir)/gtk/stock-icons/stock_copy_24.png			\
 	$(top_srcdir)/gtk/stock-icons/stock_cut_24.png			\
@@ -125,8 +127,10 @@ HTML_IMAGES = \
 	$(top_srcdir)/gtk/stock-icons/stock_dialog_question_48.png	\
 	$(top_srcdir)/gtk/stock-icons/stock_dialog_warning_48.png	\
 	$(top_srcdir)/gtk/stock-icons/stock_directory_24.png		\
+	$(top_srcdir)/gtk/stock-icons/stock_disconnect_24.png		\
 	$(top_srcdir)/gtk/stock-icons/stock_dnd_32.png			\
 	$(top_srcdir)/gtk/stock-icons/stock_dnd_multiple_32.png		\
+	$(top_srcdir)/gtk/stock-icons/stock_edit_24.png			\
 	$(top_srcdir)/gtk/stock-icons/stock_exec_24.png			\
 	$(top_srcdir)/gtk/stock-icons/stock_file_24.png			\
 	$(top_srcdir)/gtk/stock-icons/stock_search_24.png		\
@@ -139,9 +143,13 @@ HTML_IMAGES = \
 	$(top_srcdir)/gtk/stock-icons/stock_down_arrow_24.png		\
 	$(top_srcdir)/gtk/stock-icons/stock_right_arrow_24.png		\
 	$(top_srcdir)/gtk/stock-icons/stock_up_arrow_24.png		\
+	$(top_srcdir)/gtk/stock-icons/stock_harddisk_24.png		\
+	$(top_srcdir)/gtk/stock-icons/stock_network_24.png		\
 	$(top_srcdir)/gtk/stock-icons/stock_help_24.png			\
 	$(top_srcdir)/gtk/stock-icons/stock_home_24.png			\
 	$(top_srcdir)/gtk/stock-icons/stock_index_24.png		\
+	$(top_srcdir)/gtk/stock-icons/stock_text_indent_24.png		\
+	$(top_srcdir)/gtk/stock-icons/stock_text_unindent_24.png	\
 	$(top_srcdir)/gtk/stock-icons/stock_text_italic_24.png		\
 	$(top_srcdir)/gtk/stock-icons/stock_jump_to_24.png		\
 	$(top_srcdir)/gtk/stock-icons/stock_jump_to_rtl_24.png		\
@@ -185,7 +193,15 @@ HTML_IMAGES = \
 	$(top_srcdir)/gtk/stock-icons/stock_zoom_1_24.png		\
 	$(top_srcdir)/gtk/stock-icons/stock_zoom_fit_24.png		\
 	$(top_srcdir)/gtk/stock-icons/stock_zoom_in_24.png		\
-	$(top_srcdir)/gtk/stock-icons/stock_zoom_out_24.png
+	$(top_srcdir)/gtk/stock-icons/stock_zoom_out_24.png		\
+	$(top_srcdir)/gtk/stock-icons/stock_media_forward_24.png	\
+	$(top_srcdir)/gtk/stock-icons/stock_media_next_24.png		\
+	$(top_srcdir)/gtk/stock-icons/stock_media_pause_24.png		\
+	$(top_srcdir)/gtk/stock-icons/stock_media_play_24.png		\
+	$(top_srcdir)/gtk/stock-icons/stock_media_previous_24.png	\
+	$(top_srcdir)/gtk/stock-icons/stock_media_record_24.png		\
+	$(top_srcdir)/gtk/stock-icons/stock_media_rewind_24.png		\
+	$(top_srcdir)/gtk/stock-icons/stock_media_stop_24.png
 
 # Extra options to supply to gtkdoc-fixref
 FIXXREF_OPTIONS=--extra-dir=../gdk-pixbuf/html --extra-dir=../gdk/html

@@ -1,3 +1,9 @@
+Mon Jul 12 00:57:32 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/tmpl/gtkstock.sgml: 
+	* gtk/Makefile.am (HTML_IMAGES): 
+	* gtk/gtk-sections.txt: Add new stock items.
+
 Thu Jul  8 00:00:20 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gdk-pixbuf/tmpl/module_interface.sgml: Add new functions.
