@@ -506,7 +506,8 @@ gtk_input_dialog_fill_axes(GtkInputDialog *inputd, GdkDeviceInfo *info)
       gtk_widget_destroy (inputd->axis_list);
     }
   inputd->axis_list = gtk_table_new (GDK_AXIS_LAST, 2, 0);
-  gtk_container_add (GTK_CONTAINER (inputd->axis_listbox), inputd->axis_list);
+  gtk_scrolled_window_add_with_viewport (GTK_SCROLLED_WINDOW (inputd->axis_listbox), 
+					 inputd->axis_list);
   gtk_widget_show (inputd->axis_list);
 
   gtk_widget_realize (inputd->axis_list);
@@ -641,7 +642,8 @@ gtk_input_dialog_fill_keys(GtkInputDialog *inputd, GdkDeviceInfo *info)
     }
 
   inputd->keys_list = gtk_table_new (info->num_keys, 3, FALSE);
-  gtk_container_add (GTK_CONTAINER (inputd->keys_listbox), inputd->keys_list);
+  gtk_scrolled_window_add_with_viewport (GTK_SCROLLED_WINDOW (inputd->keys_listbox), 
+					 inputd->keys_list);
   gtk_widget_show (inputd->keys_list);
 
   gtk_widget_realize (inputd->keys_list);

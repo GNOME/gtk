@@ -235,11 +235,6 @@ gdk_image_new (GdkImageType  type,
 		  return NULL;
 		}
 
-#ifdef	IPC_RMID_DEFERRED_RELEASE
-	      if (x_shm_info->shmaddr != (char*) -1)
-		shmctl (x_shm_info->shmid, IPC_RMID, 0);		      
-#endif
-
 	      gdk_error_code = 0;
 	      gdk_error_warnings = 0;
 
@@ -260,6 +255,14 @@ gdk_image_new (GdkImageType  type,
 		  gdk_use_xshm = False;
 		  return NULL;
 		}
+	      
+	      /* We mark the segment as destroyed so that when
+	       * the last process detaches, it will be deleted.
+	       * There is a small possibility of leaking if
+	       * we die in XShmAttach. In theory, a signal handler
+	       * could be set up.
+	       */
+	      shmctl (x_shm_info->shmid, IPC_RMID, 0);		      
 
 	      if (image)
 		image_list = g_list_prepend (image_list, image);
@@ -417,7 +420,6 @@ gdk_image_destroy (GdkImage *image)
 
       x_shm_info = private->x_shm_info;
       shmdt (x_shm_info->shmaddr);
-      shmctl (x_shm_info->shmid, IPC_RMID, 0);
       
       g_free (private->x_shm_info);
 

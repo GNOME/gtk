@@ -1,3 +1,15 @@
+Mon Dec  7 13:38:06 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdkimage.c (gdk_image_new): Use IPC_RMID
+	_after_ doing XShmAttach. This should work everywhere,
+	and avoid the need for signal handlers or configure
+	checks.
+
+Thu Dec  3 19:58:45 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkinputdialog.c: Use _add_with_viewport() for
+	scrolled window contents.
+
 1998-12-07  Federico Mena Quintero  <federico@nuclecu.unam.mx>
 
 	* gtk/gtkpaned.h (struct _GtkPaned): Removed the unused cursor
