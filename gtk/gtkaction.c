@@ -31,6 +31,7 @@
 #include <config.h>
 
 #include "gtkaction.h"
+#include "gtkactiongroup.h"
 #include "gtkaccellabel.h"
 #include "gtkbutton.h"
 #include "gtkimage.h"
@@ -70,14 +71,14 @@ struct _GtkActionPrivate
   GClosure      *accel_closure;
   GQuark         accel_quark;
 
+  GtkActionGroup *action_group;
+
   /* list of proxy widgets */
   GSList *proxies;
 };
 
 enum 
 {
-  CONNECT_PROXY,
-  DISCONNECT_PROXY,
   ACTIVATE,
   LAST_SIGNAL
 };
@@ -95,7 +96,8 @@ enum
   PROP_IS_IMPORTANT,
   PROP_HIDE_IF_EMPTY,
   PROP_SENSITIVE,
-  PROP_VISIBLE
+  PROP_VISIBLE,
+  PROP_ACTION_GROUP
 };
 
 static void gtk_action_init       (GtkAction *action);
@@ -141,6 +143,8 @@ static void gtk_action_get_property (GObject         *object,
 				     guint            prop_id,
 				     GValue          *value,
 				     GParamSpec      *pspec);
+static void gtk_action_set_action_group (GtkAction	    *action,
+					 GtkActionGroup *action_group);
 
 static GtkWidget *create_menu_item    (GtkAction *action);
 static GtkWidget *create_tool_item    (GtkAction *action);
@@ -261,6 +265,13 @@ gtk_action_class_init (GtkActionClass *klass)
 							 _("Whether the action is visible."),
 							 TRUE,
 							 G_PARAM_READWRITE));
+  g_object_class_install_property (gobject_class,
+				   PROP_ACTION_GROUP,
+				   g_param_spec_object ("action_group",
+							 _("Action Group"),
+							 _("The GtkActionGroup this GtkAction is associated with, or NULL (for internal use)."),
+							 GTK_TYPE_ACTION_GROUP,
+							 G_PARAM_READWRITE));
 
   /**
    * GtkAction::activate:
@@ -277,47 +288,6 @@ gtk_action_class_init (GtkActionClass *klass)
 		  G_STRUCT_OFFSET (GtkActionClass, activate),  NULL, NULL,
 		  g_cclosure_marshal_VOID__VOID,
 		  G_TYPE_NONE, 0);
-
-  /**
-   * GtkAction::connect-proxy:
-   * @action: the action
-   * @proxy: the proxy
-   *
-   * The connect_proxy signal is emitted after connecting a proxy to 
-   * an action. Note that the proxy may have been connected to a different
-   * action before.
-   *
-   * This is intended for simple customizations for which a custom action
-   * class would be too clumsy, e.g. showing tooltips for menuitems in the
-   * statusbar.
-   *
-   * Since: 2.4
-   */
-  action_signals[CONNECT_PROXY] =
-    g_signal_new ("connect_proxy",
-		  G_OBJECT_CLASS_TYPE (klass),
-		  0, 0, NULL, NULL,
-		  _gtk_marshal_VOID__OBJECT,
-		  G_TYPE_NONE, 1, 
-		  GTK_TYPE_WIDGET);
-
-  /**
-   * GtkAction::disconnect-proxy:
-   * @action: the action
-   * @proxy: the proxy
-   *
-   * The disconnect_proxy signal is emitted after disconnecting a proxy 
-   * from an action. 
-   *
-   * Since: 2.4
-   */
-  action_signals[DISCONNECT_PROXY] =
-    g_signal_new ("disconnect_proxy",
-		  G_OBJECT_CLASS_TYPE (klass),
-		  0, 0, NULL, NULL,
-		  _gtk_marshal_VOID__OBJECT,
-		  G_TYPE_NONE, 1, 
-		  GTK_TYPE_WIDGET);
 
   g_type_class_add_private (gobject_class, sizeof (GtkActionPrivate));
 }
@@ -355,6 +325,8 @@ gtk_action_init (GtkAction *action)
   action->private_data->accel_quark = 0;
   action->private_data->accel_count = 0;
   action->private_data->accel_group = NULL;
+
+  action->private_data->action_group = NULL;
 
   action->private_data->proxies = NULL;
 }
@@ -507,6 +479,9 @@ gtk_action_set_property (GObject         *object,
     case PROP_VISIBLE:
       action->private_data->visible = g_value_get_boolean (value);
       break;
+    case PROP_ACTION_GROUP:
+      gtk_action_set_action_group (action, g_value_get_object (value));
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -558,6 +533,9 @@ gtk_action_get_property (GObject    *object,
     case PROP_VISIBLE:
       g_value_set_boolean (value, action->private_data->visible);
       break;
+    case PROP_ACTION_GROUP:
+      g_value_set_object (value, action->private_data->action_group);
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -592,6 +570,14 @@ remove_proxy (GtkWidget *proxy,
     gtk_action_disconnect_accelerator (action);
 
   action->private_data->proxies = g_slist_remove (action->private_data->proxies, proxy);
+}
+
+static void
+gtk_action_sync_sensitivity (GtkAction  *action, 
+			     GParamSpec *pspec,
+			     GtkWidget  *proxy)
+{
+  gtk_widget_set_sensitive (proxy, gtk_action_is_sensitive (action));
 }
 
 static void
@@ -642,7 +628,7 @@ _gtk_action_sync_menu_visible (GtkAction *action,
   if (action == NULL)
     action = g_object_get_data (G_OBJECT (proxy), "gtk-action");
 
-  visible = action->private_data->visible;
+  visible = gtk_action_is_visible (action);
   hide_if_empty = action->private_data->hide_if_empty;
 
   g_object_set (G_OBJECT (proxy),
@@ -664,7 +650,12 @@ gtk_action_sync_visible (GtkAction  *action,
       _gtk_action_sync_menu_visible (action, proxy, _gtk_menu_is_empty (menu));
     }
   else
-    gtk_action_sync_property (action, pspec, proxy);
+    {
+      if (gtk_action_is_visible (action))
+	gtk_widget_show (proxy);
+      else
+	gtk_widget_hide (proxy);
+    }
 }
 
 static void
@@ -750,6 +741,8 @@ static void
 connect_proxy (GtkAction     *action, 
 	       GtkWidget     *proxy)
 {
+  GtkActionGroup *group = action->private_data->action_group;
+
   g_object_ref (action);
   g_object_set_data_full (G_OBJECT (proxy), "gtk-action", action,
 			  g_object_unref);
@@ -760,12 +753,12 @@ connect_proxy (GtkAction     *action,
 		    G_CALLBACK (remove_proxy), action);
 
   g_signal_connect_object (action, "notify::sensitive",
-			   G_CALLBACK (gtk_action_sync_property), proxy, 0);
-  gtk_widget_set_sensitive (proxy, action->private_data->sensitive);
+			   G_CALLBACK (gtk_action_sync_sensitivity), proxy, 0);
+  gtk_widget_set_sensitive (proxy, gtk_action_is_sensitive (action));
 
   g_signal_connect_object (action, "notify::visible",
 			   G_CALLBACK (gtk_action_sync_visible), proxy, 0);
-  if (action->private_data->visible)
+  if (gtk_action_is_visible (action))
     gtk_widget_show (proxy);
   else
     gtk_widget_hide (proxy);
@@ -834,19 +827,17 @@ connect_proxy (GtkAction     *action,
 				   proxy, 0);
 	}
 
+      if (gtk_menu_item_get_submenu (GTK_MENU_ITEM (proxy)) == NULL)
       g_signal_connect_object (proxy, "activate",
 			       G_CALLBACK (gtk_action_activate), action,
 			       G_CONNECT_SWAPPED);
 
     }
-  else if (GTK_IS_TOOL_BUTTON (proxy))
+  else if (GTK_IS_TOOL_ITEM (proxy))
     {
-      /* toolbar button specific synchronisers ... */
+      /* toolbar item specific synchronisers ... */
 
       g_object_set (G_OBJECT (proxy),
-		    "label", action->private_data->short_label,
-		    "use_underline", TRUE,
-		    "stock_id", action->private_data->stock_id,
 		    "visible_horizontal", action->private_data->visible_horizontal,
 		    "visible_vertical",	  action->private_data->visible_vertical,
 		    "is_important", action->private_data->is_important,
@@ -854,12 +845,6 @@ connect_proxy (GtkAction     *action,
       /* FIXME: we should set the tooltip here, but the current api
        * doesn't allow it before the item is added to a toolbar. 
        */
-      g_signal_connect_object (action, "notify::short_label",
-			       G_CALLBACK (gtk_action_sync_short_label),
-			       proxy, 0);      
-      g_signal_connect_object (action, "notify::stock_id",
-			       G_CALLBACK (gtk_action_sync_property), 
-			       proxy, 0);
       g_signal_connect_object (action, "notify::visible_horizontal",
 			       G_CALLBACK (gtk_action_sync_property), 
 			       proxy, 0);
@@ -877,9 +862,27 @@ connect_proxy (GtkAction     *action,
 			       G_CALLBACK (gtk_action_create_menu_proxy),
 			       action, 0);
 
+      /* toolbar button specific synchronisers ... */
+      if (GTK_IS_TOOL_BUTTON (proxy))
+	{
+	  g_object_set (G_OBJECT (proxy),
+			"label", action->private_data->short_label,
+			"use_underline", TRUE,
+			"stock_id", action->private_data->stock_id,
+			NULL);
+	  /* FIXME: we should set the tooltip here, but the current api
+	   * doesn't allow it before the item is added to a toolbar. 
+	   */
+	  g_signal_connect_object (action, "notify::short_label",
+				   G_CALLBACK (gtk_action_sync_short_label),
+				   proxy, 0);      
+	  g_signal_connect_object (action, "notify::stock_id",
+				   G_CALLBACK (gtk_action_sync_property), 
+				   proxy, 0);
       g_signal_connect_object (proxy, "clicked",
 			       G_CALLBACK (gtk_action_activate), action,
 			       G_CONNECT_SWAPPED);
+    }
     }
   else if (GTK_IS_BUTTON (proxy))
     {
@@ -899,13 +902,15 @@ connect_proxy (GtkAction     *action,
 			       G_CONNECT_SWAPPED);
     }
 
-  g_signal_emit (action, action_signals[CONNECT_PROXY], 0, proxy);
+  _gtk_action_group_emit_connect_proxy (group, action, proxy);
 }
 
 static void
 disconnect_proxy (GtkAction *action, 
 		  GtkWidget *proxy)
 {
+  GtkActionGroup *group = action->private_data->action_group;
+
   g_object_set_data (G_OBJECT (proxy), "gtk-action", NULL);
 
   /* remove proxy from list of proxies */
@@ -920,6 +925,9 @@ disconnect_proxy (GtkAction *action,
 					action);
 
   /* disconnect handlers for notify::* signals */
+  g_signal_handlers_disconnect_by_func (proxy,
+					G_CALLBACK (gtk_action_sync_sensitivity),
+					action);
   g_signal_handlers_disconnect_by_func (proxy,
 					G_CALLBACK (gtk_action_sync_property),
 					action);
@@ -941,13 +949,21 @@ disconnect_proxy (GtkAction *action,
 					G_CALLBACK (gtk_action_create_menu_proxy),
 					action);
 
-  g_signal_emit (action, action_signals[DISCONNECT_PROXY], 0, proxy);
+  _gtk_action_group_emit_disconnect_proxy (group, action, proxy);
 }
 
 void
 _gtk_action_emit_activate (GtkAction *action)
 {
+  GtkActionGroup *group = action->private_data->action_group;
+
+  if (group != NULL)
+    _gtk_action_group_emit_pre_activate (group, action);
+
     g_signal_emit (action, action_signals[ACTIVATE], 0);
+
+  if (group != NULL)
+    _gtk_action_group_emit_post_activate (group, action);
 }
 
 /**
@@ -967,7 +983,7 @@ gtk_action_activate (GtkAction *action)
 {
   g_return_if_fail (GTK_IS_ACTION (action));
   
-  if (action->private_data->sensitive)
+  if (gtk_action_is_sensitive (action))
     _gtk_action_emit_activate (action);
 }
 
@@ -1136,6 +1152,92 @@ gtk_action_get_name (GtkAction *action)
 }
 
 /**
+ * gtk_action_is_sensitive:
+ * @action: the action object
+ * 
+ * Returns whether the action is effectively sensitive.
+ *
+ * Return value: %TRUE if the action and its associated action group 
+ * are both sensitive.
+ *
+ * Since: 2.4
+ **/
+gboolean
+gtk_action_is_sensitive (GtkAction *action)
+{
+  GtkActionPrivate *priv;
+  g_return_val_if_fail (GTK_IS_ACTION (action), FALSE);
+
+  priv = action->private_data;
+  return priv->sensitive &&
+    (priv->action_group == NULL ||
+     gtk_action_group_get_sensitive (priv->action_group));
+}
+
+/**
+ * gtk_action_get_sensitive:
+ * @action: the action object
+ * 
+ * Returns whether the action itself is sensitive. Note that this doesn't 
+ * necessarily mean effective sensitivity. See gtk_action_is_sensitive() 
+ * for that.
+ *
+ * Return value: %TRUE if the action itself is sensitive.
+ *
+ * Since: 2.4
+ **/
+gboolean
+gtk_action_get_sensitive (GtkAction *action)
+{
+  g_return_val_if_fail (GTK_IS_ACTION (action), FALSE);
+
+  return action->private_data->sensitive;
+}
+
+/**
+ * gtk_action_is_visible:
+ * @action: the action object
+ * 
+ * Returns whether the action is effectively visible.
+ *
+ * Return value: %TRUE if the action and its associated action group 
+ * are both visible.
+ *
+ * Since: 2.4
+ **/
+gboolean
+gtk_action_is_visible (GtkAction *action)
+{
+  GtkActionPrivate *priv;
+  g_return_val_if_fail (GTK_IS_ACTION (action), FALSE);
+
+  priv = action->private_data;
+  return priv->visible &&
+    (priv->action_group == NULL ||
+     gtk_action_group_get_visible (priv->action_group));
+}
+
+/**
+ * gtk_action_get_visible:
+ * @action: the action object
+ * 
+ * Returns whether the action itself is visible. Note that this doesn't 
+ * necessarily mean effective visibility. See gtk_action_is_sensitive() 
+ * for that.
+ *
+ * Return value: %TRUE if the action itself is visible.
+ *
+ * Since: 2.4
+ **/
+gboolean
+gtk_action_get_visible (GtkAction *action)
+{
+  g_return_val_if_fail (GTK_IS_ACTION (action), FALSE);
+
+  return action->private_data->visible;
+}
+
+/**
  * gtk_action_block_activate_from:
  * @action: the action object
  * @proxy: a proxy widget
@@ -1189,11 +1291,25 @@ closure_accel_activate (GClosure     *closure,
                         gpointer      invocation_hint,
                         gpointer      marshal_data)
 {
-  if (GTK_ACTION (closure->data)->private_data->sensitive)
+  if (gtk_action_is_sensitive (GTK_ACTION (closure->data)))
     g_signal_emit (closure->data, action_signals[ACTIVATE], 0);
 
   /* we handled the accelerator */
   g_value_set_boolean (return_value, TRUE);
+}
+
+static void
+gtk_action_set_action_group (GtkAction	    *action,
+			     GtkActionGroup *action_group)
+{
+  g_return_if_fail (GTK_IS_ACTION (action));
+
+  if (action->private_data->action_group == NULL)
+    g_return_if_fail (GTK_IS_ACTION_GROUP (action_group));
+  else
+    g_return_if_fail (action_group == NULL);
+
+  action->private_data->action_group = action_group;
 }
 
 /**

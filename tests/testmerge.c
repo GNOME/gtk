@@ -51,7 +51,7 @@ dump_toplevels (GtkWidget    *button,
 					    GTK_UI_MANAGER_TOOLBAR |
 					    GTK_UI_MANAGER_POPUP);
 
-  g_slist_foreach (toplevels, print_toplevel, NULL);
+  g_slist_foreach (toplevels, (GFunc)print_toplevel, NULL);
   g_slist_free (toplevels);
 }
 
@@ -522,7 +522,8 @@ unset_tip (GtkWidget *widget)
 }
 		    
 static void
-connect_proxy (GtkAction    *action,
+connect_proxy (GtkUIManager *merge,
+	       GtkAction    *action,
 	       GtkWidget    *proxy,
 	       GtkWidget    *statusbar)
 {
@@ -560,7 +561,6 @@ main (int argc, char **argv)
 {
   GtkActionGroup *action_group;
   GtkAction *action;
-  GList *tmp;
   GtkUIManager *merge;
   GtkWidget *window, *table, *frame, *menu_box, *vbox, *view;
   GtkWidget *button, *area, *statusbar;
@@ -623,15 +623,9 @@ main (int argc, char **argv)
 			    button);
   gtk_widget_show (button);
 
-  for (tmp = gtk_action_group_list_actions (action_group);
-       tmp != NULL;
-       tmp = tmp->next)
-    {
-      action = tmp->data;
-      g_signal_connect (action, "connect-proxy", 
-			G_CALLBACK (connect_proxy), statusbar);
-    }
   merge = gtk_ui_manager_new ();
+
+  g_signal_connect (merge, "connect-proxy", G_CALLBACK (connect_proxy), statusbar);
   g_signal_connect (area, "button_press_event", G_CALLBACK (area_press), merge);
 
   gtk_ui_manager_insert_action_group (merge, action_group, 0);

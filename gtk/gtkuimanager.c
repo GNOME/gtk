@@ -139,6 +139,10 @@ enum
 {
   ADD_WIDGET,
   ACTIONS_CHANGED,
+  CONNECT_PROXY,
+  DISCONNECT_PROXY,
+  PRE_ACTIVATE,
+  POST_ACTIVATE,
   LAST_SIGNAL
 };
 
@@ -149,7 +153,7 @@ enum
   PROP_UI
 };
 
-static guint merge_signals[LAST_SIGNAL] = { 0 };
+static guint ui_manager_signals[LAST_SIGNAL] = { 0 };
 
 static GMemChunk *merge_node_chunk = NULL;
 
@@ -235,7 +239,7 @@ gtk_ui_manager_class_init (GtkUIManagerClass *klass)
    *
    * Since: 2.4
    */
-  merge_signals[ADD_WIDGET] =
+  ui_manager_signals[ADD_WIDGET] =
     g_signal_new ("add_widget",
 		  G_OBJECT_CLASS_TYPE (klass),
 		  G_SIGNAL_RUN_FIRST | G_SIGNAL_NO_RECURSE,
@@ -253,7 +257,7 @@ gtk_ui_manager_class_init (GtkUIManagerClass *klass)
    *
    * Since: 2.4
    */
-  merge_signals[ACTIONS_CHANGED] =
+  ui_manager_signals[ACTIONS_CHANGED] =
     g_signal_new ("actions_changed",
 		  G_OBJECT_CLASS_TYPE (klass),
 		  G_SIGNAL_RUN_FIRST | G_SIGNAL_NO_RECURSE,
@@ -262,6 +266,90 @@ gtk_ui_manager_class_init (GtkUIManagerClass *klass)
 		  g_cclosure_marshal_VOID__VOID,
 		  G_TYPE_NONE, 0);
   
+  /**
+   * GtkUIManager::connect_proxy:
+   * @uimanager: the ui manager
+   * @action: the action
+   * @proxy: the proxy
+   *
+   * The connect_proxy signal is emitted after connecting a proxy to 
+   * an action in the group. 
+   *
+   * This is intended for simple customizations for which a custom action
+   * class would be too clumsy, e.g. showing tooltips for menuitems in the
+   * statusbar.
+   *
+   * Since: 2.4
+   */
+  ui_manager_signals[CONNECT_PROXY] =
+    g_signal_new ("connect_proxy",
+		  G_OBJECT_CLASS_TYPE (klass),
+		  0, 0, NULL, NULL,
+		  _gtk_marshal_VOID__OBJECT_OBJECT,
+		  G_TYPE_NONE, 2, 
+		  GTK_TYPE_ACTION, GTK_TYPE_WIDGET);
+
+  /**
+   * GtkUIManager::disconnect_proxy:
+   * @uimanager: the ui manager
+   * @action: the action
+   * @proxy: the proxy
+   *
+   * The disconnect_proxy signal is emitted after disconnecting a proxy 
+   * from an action in the group. 
+   *
+   * Since: 2.4
+   */
+  ui_manager_signals[DISCONNECT_PROXY] =
+    g_signal_new ("disconnect_proxy",
+		  G_OBJECT_CLASS_TYPE (klass),
+		  0, 0, NULL, NULL,
+		  _gtk_marshal_VOID__OBJECT_OBJECT,
+		  G_TYPE_NONE, 2, 
+		  GTK_TYPE_ACTION, GTK_TYPE_WIDGET);
+
+  /**
+   * GtkUIManager::pre_activate:
+   * @uimanager: the ui manager
+   * @action: the action
+   *
+   * The pre_activate signal is emitted just before the @action
+   * is activated.
+   *
+   * This is intended for applications to get notification
+   * just before any action is activated.
+   *
+   * Since: 2.4
+   */
+  ui_manager_signals[PRE_ACTIVATE] =
+    g_signal_new ("pre_activate",
+		  G_OBJECT_CLASS_TYPE (klass),
+		  0, 0, NULL, NULL,
+		  _gtk_marshal_VOID__OBJECT,
+		  G_TYPE_NONE, 1, 
+		  GTK_TYPE_ACTION);
+
+  /**
+   * GtkUIManager::post_activate:
+   * @uimanager: the ui manager
+   * @action: the action
+   *
+   * The post_activate signal is emitted just after the @action
+   * is activated.
+   *
+   * This is intended for applications to get notification
+   * just after any action is activated.
+   *
+   * Since: 2.4
+   */
+  ui_manager_signals[POST_ACTIVATE] =
+    g_signal_new ("post_activate",
+		  G_OBJECT_CLASS_TYPE (klass),
+		  0, 0, NULL, NULL,
+		  _gtk_marshal_VOID__OBJECT,
+		  G_TYPE_NONE, 1, 
+		  GTK_TYPE_ACTION);
+
   g_type_class_add_private (gobject_class, sizeof (GtkUIManagerPrivate));
 }
 
@@ -423,6 +511,40 @@ gtk_ui_manager_set_add_tearoffs (GtkUIManager *self,
     }
 }
 
+static void
+cb_proxy_connect_proxy (GtkActionGroup *group, 
+                        GtkAction      *action,
+                        GtkWidget      *proxy, 
+                        GtkUIManager *self)
+{
+  g_signal_emit (self, ui_manager_signals[CONNECT_PROXY], 0, action, proxy);
+}
+
+static void
+cb_proxy_disconnect_proxy (GtkActionGroup *group, 
+                           GtkAction      *action,
+                           GtkWidget      *proxy, 
+                           GtkUIManager *self)
+{
+  g_signal_emit (self, ui_manager_signals[DISCONNECT_PROXY], 0, action, proxy);
+}
+
+static void
+cb_proxy_pre_activate (GtkActionGroup *group, 
+                       GtkAction      *action,
+                       GtkUIManager   *self)
+{
+  g_signal_emit (self, ui_manager_signals[PRE_ACTIVATE], 0, action);
+}
+
+static void
+cb_proxy_post_activate (GtkActionGroup *group, 
+                        GtkAction      *action,
+                        GtkUIManager   *self)
+{
+  g_signal_emit (self, ui_manager_signals[POST_ACTIVATE], 0, action);
+}
+
 /**
  * gtk_ui_manager_insert_action_group:
  * @self: a #GtkUIManager object
@@ -448,11 +570,16 @@ gtk_ui_manager_insert_action_group (GtkUIManager   *self,
   g_object_ref (action_group);
   self->private_data->action_groups = 
     g_list_insert (self->private_data->action_groups, action_group, pos);
+  g_object_connect (action_group,
+		    "object_signal::connect_proxy", G_CALLBACK (cb_proxy_connect_proxy), self,
+		    "object_signal::disconnect_proxy", G_CALLBACK (cb_proxy_disconnect_proxy), self,
+		    "object_signal::pre_activate", G_CALLBACK (cb_proxy_pre_activate), self,
+		    "object_signal::post_activate", G_CALLBACK (cb_proxy_post_activate), self, 0);
 
   /* dirty all nodes, as action bindings may change */
   dirty_all_nodes (self);
 
-  g_signal_emit (self, merge_signals[ACTIONS_CHANGED], 0);
+  g_signal_emit (self, ui_manager_signals[ACTIONS_CHANGED], 0);
 }
 
 /**
@@ -476,12 +603,19 @@ gtk_ui_manager_remove_action_group (GtkUIManager   *self,
 
   self->private_data->action_groups =
     g_list_remove (self->private_data->action_groups, action_group);
+
+  g_object_disconnect (action_group,
+                       "any_signal::connect_proxy", G_CALLBACK (cb_proxy_connect_proxy), self,
+                       "any_signal::disconnect_proxy", G_CALLBACK (cb_proxy_disconnect_proxy), self,
+                       "any_signal::pre_activate", G_CALLBACK (cb_proxy_pre_activate), self,
+                       "any_signal::post_activate", G_CALLBACK (cb_proxy_post_activate), self, 
+                       0);
   g_object_unref (action_group);
 
   /* dirty all nodes, as action bindings may change */
   dirty_all_nodes (self);
 
-  g_signal_emit (self, merge_signals[ACTIONS_CHANGED], 0);
+  g_signal_emit (self, ui_manager_signals[ACTIONS_CHANGED], 0);
 }
 
 /**
@@ -1952,7 +2086,7 @@ update_node (GtkUIManager *self,
 	      info->proxy = gtk_menu_bar_new ();
 	      gtk_widget_set_name (info->proxy, info->name);
 	      gtk_widget_show (info->proxy);
-	      g_signal_emit (self, merge_signals[ADD_WIDGET], 0, info->proxy);
+	      g_signal_emit (self, ui_manager_signals[ADD_WIDGET], 0, info->proxy);
 	    }
 	  break;
 	case NODE_TYPE_POPUP:
@@ -2038,7 +2172,7 @@ update_node (GtkUIManager *self,
 	      info->proxy = gtk_toolbar_new ();
 	      gtk_widget_set_name (info->proxy, info->name);
 	      gtk_widget_show (info->proxy);
-	      g_signal_emit (self, merge_signals[ADD_WIDGET], 0, info->proxy);
+	      g_signal_emit (self, ui_manager_signals[ADD_WIDGET], 0, info->proxy);
 	    }
 	  break;
 	case NODE_TYPE_MENU_PLACEHOLDER:

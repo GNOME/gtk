@@ -35,6 +35,7 @@
 #include "gtktoggleaction.h"
 #include "gtkradioaction.h"
 #include "gtkaccelmap.h"
+#include "gtkmarshalers.h"
 #include "gtkintl.h"
 
 #define GTK_ACTION_GROUP_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), GTK_TYPE_ACTION_GROUP, GtkActionGroupPrivate))
@@ -42,6 +43,8 @@
 struct _GtkActionGroupPrivate 
 {
   gchar           *name;
+  gboolean	   sensitive;
+  gboolean	   visible;
   GHashTable      *actions;
 
   GtkTranslateFunc translate_func;
@@ -51,8 +54,19 @@ struct _GtkActionGroupPrivate
 
 enum 
 {
+  CONNECT_PROXY,
+  DISCONNECT_PROXY,
+  PRE_ACTIVATE,
+  POST_ACTIVATE,
+  LAST_SIGNAL
+};
+
+enum 
+{
   PROP_0,
-  PROP_NAME
+  PROP_NAME,
+  PROP_SENSITIVE,
+  PROP_VISIBLE
 };
 
 static void       gtk_action_group_init            (GtkActionGroup      *self);
@@ -98,6 +112,7 @@ gtk_action_group_get_type (void)
 }
 
 static GObjectClass *parent_class = NULL;
+static guint         action_group_signals[LAST_SIGNAL] = { 0 };
 
 static void
 gtk_action_group_class_init (GtkActionGroupClass *klass)
@@ -120,6 +135,114 @@ gtk_action_group_class_init (GtkActionGroupClass *klass)
 							NULL,
 							G_PARAM_READWRITE |
 							G_PARAM_CONSTRUCT_ONLY));
+  g_object_class_install_property (gobject_class,
+				   PROP_SENSITIVE,
+				   g_param_spec_boolean ("sensitive",
+							 _("Sensitive"),
+							 _("Whether the action group is enabled."),
+							 TRUE,
+							 G_PARAM_READWRITE));
+  g_object_class_install_property (gobject_class,
+				   PROP_VISIBLE,
+				   g_param_spec_boolean ("visible",
+							 _("Visible"),
+							 _("Whether the action group is visible."),
+							 TRUE,
+							 G_PARAM_READWRITE));
+
+  /**
+   * GtkGroupAction::connect-proxy:
+   * @action_group: the group
+   * @action: the action
+   * @proxy: the proxy
+   *
+   * The connect_proxy signal is emitted after connecting a proxy to 
+   * an action in the group. Note that the proxy may have been connected 
+   * to a different action before.
+   *
+   * This is intended for simple customizations for which a custom action
+   * class would be too clumsy, e.g. showing tooltips for menuitems in the
+   * statusbar.
+   *
+   * #GtkUIManager proxies the signal and provides global notification 
+   * just before any action is connected to a proxy, which is probably more
+   * convenient to use.
+   *
+   * Since: 2.4
+   */
+  action_group_signals[CONNECT_PROXY] =
+    g_signal_new ("connect_proxy",
+		  G_OBJECT_CLASS_TYPE (klass),
+		  0, 0, NULL, NULL,
+		  _gtk_marshal_VOID__OBJECT_OBJECT,
+		  G_TYPE_NONE, 2,
+		  GTK_TYPE_ACTION, GTK_TYPE_WIDGET);
+
+  /**
+   * GtkAction::disconnect-proxy:
+   * @action_group: the group
+   * @action: the action
+   * @proxy: the proxy
+   *
+   * The disconnect_proxy signal is emitted after disconnecting a proxy 
+   * from an action in the group. 
+   *
+   * #GtkUIManager proxies the signal and provides global notification 
+   * just before any action is connected to a proxy, which is probably more
+   * convenient to use.
+   *
+   * Since: 2.4
+   */
+  action_group_signals[DISCONNECT_PROXY] =
+    g_signal_new ("disconnect_proxy",
+		  G_OBJECT_CLASS_TYPE (klass),
+		  0, 0, NULL, NULL,
+		  _gtk_marshal_VOID__OBJECT_OBJECT,
+		  G_TYPE_NONE, 2, 
+		  GTK_TYPE_ACTION, GTK_TYPE_WIDGET);
+
+  /**
+   * GtkActionGroup::pre_activate:
+   * @action_group: the group
+   * @action: the action
+   *
+   * The pre_activate signal is emitted just before the @action in the
+   * @action_group is activated
+   *
+   * This is intended for #GtkUIManager to proxy the signal and provide global
+   * notification just before any action is activated.
+   *
+   * Since: 2.4
+   */
+  action_group_signals[PRE_ACTIVATE] =
+    g_signal_new ("pre_activate",
+		  G_OBJECT_CLASS_TYPE (klass),
+		  0, 0, NULL, NULL,
+		  _gtk_marshal_VOID__OBJECT,
+		  G_TYPE_NONE, 1, 
+		  GTK_TYPE_ACTION);
+
+  /**
+   * GtkActionGroup::post_activate:
+   * @action_group: the group
+   * @action: the action
+   *
+   * The post_activate signal is emitted just after the @action in the
+   * @action_group is activated
+   *
+   * This is intended for #GtkUIManager to proxy the signal and provide global
+   * notification just after any action is activated.
+   *
+   * Since: 2.4
+   */
+  action_group_signals[POST_ACTIVATE] =
+    g_signal_new ("post_activate",
+		  G_OBJECT_CLASS_TYPE (klass),
+		  0, 0, NULL, NULL,
+		  _gtk_marshal_VOID__OBJECT,
+		  G_TYPE_NONE, 1, 
+		  GTK_TYPE_ACTION);
+
   g_type_class_add_private (gobject_class, sizeof (GtkActionGroupPrivate));
 }
 
@@ -128,6 +251,8 @@ gtk_action_group_init (GtkActionGroup *self)
 {
   self->private_data = GTK_ACTION_GROUP_GET_PRIVATE (self);
   self->private_data->name = NULL;
+  self->private_data->sensitive = TRUE;
+  self->private_data->visible = TRUE;
   self->private_data->actions = g_hash_table_new_full (g_str_hash, g_str_equal,
 						       (GDestroyNotify) g_free,
 						       (GDestroyNotify) g_object_unref);
@@ -197,6 +322,12 @@ gtk_action_group_set_property (GObject         *object,
       self->private_data->name = g_value_dup_string (value);
       g_free (tmp);
       break;
+    case PROP_SENSITIVE:
+      gtk_action_group_set_sensitive (self, g_value_get_boolean (value));
+      break;
+    case PROP_VISIBLE:
+      gtk_action_group_set_visible (self, g_value_get_boolean (value));
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -217,6 +348,12 @@ gtk_action_group_get_property (GObject    *object,
     {
     case PROP_NAME:
       g_value_set_string (value, self->private_data->name);
+      break;
+    case PROP_SENSITIVE:
+      g_value_set_boolean (value, self->private_data->sensitive);
+      break;
+    case PROP_VISIBLE:
+      g_value_set_boolean (value, self->private_data->visible);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -247,6 +384,110 @@ gtk_action_group_get_name (GtkActionGroup *action_group)
   g_return_val_if_fail (GTK_IS_ACTION_GROUP (action_group), NULL);
 
   return action_group->private_data->name;
+}
+
+/**
+ * gtk_action_group_get_sensitive:
+ * @action_group: the action group
+ *
+ * Returns %TRUE if the group is sensitive.  The constituent actions
+ * can only be logically sensitive (see gtk_action_is_sensitive()) if
+ * they are sensitive (see gtk_action_get_sensitive()) and their group
+ * is sensitive.
+ * 
+ * Return value: %TRUE if the group is sensitive.
+ *
+ * Since: 2.4
+ */
+gboolean
+gtk_action_group_get_sensitive (GtkActionGroup *action_group)
+{
+  g_return_val_if_fail (GTK_IS_ACTION_GROUP (action_group), FALSE);
+
+  return action_group->private_data->sensitive;
+}
+
+static void
+cb_set_action_sensitivity (const gchar *name, GtkAction *action)
+{
+  /* Minor optimization, the action_groups state only effects actions that are
+   * themselves sensitive */
+  if (gtk_action_get_sensitive (action))
+    g_object_notify (G_OBJECT (action), "sensitive");
+}
+
+/**
+ * gtk_action_group_set_sensitive:
+ * @action_group: the action group
+ * @sensitive: new sensitivity
+ *
+ * Changes the sensitivity of @action_group
+ * 
+ * Since: 2.4
+ */
+void
+gtk_action_group_set_sensitive (GtkActionGroup *action_group, gboolean sensitive)
+{
+  g_return_if_fail (GTK_IS_ACTION_GROUP (action_group));
+
+  if (action_group->private_data->sensitive ^ sensitive)
+    {
+      action_group->private_data->sensitive = sensitive;
+      g_hash_table_foreach (action_group->private_data->actions, 
+			    (GHFunc) cb_set_action_sensitivity, NULL);
+    }
+}
+
+/**
+ * gtk_action_group_get_visible:
+ * @action_group: the action group
+ *
+ * Returns %TRUE if the group is visible.  The constituent actions
+ * can only be logically visible (see gtk_action_is_visible()) if
+ * they are visible (see gtk_action_get_visible()) and their group
+ * is visible.
+ * 
+ * Return value: %TRUE if the group is sensitive.
+ * 
+ * Since: 2.4
+ */
+gboolean
+gtk_action_group_get_visible (GtkActionGroup *action_group)
+{
+  g_return_val_if_fail (GTK_IS_ACTION_GROUP (action_group), FALSE);
+
+  return action_group->private_data->visible;
+}
+
+static void
+cb_set_action_visiblity (const gchar *name, GtkAction *action)
+{
+  /* Minor optimization, the action_groups state only effects actions that are
+   * themselves sensitive */
+  if (gtk_action_get_visible (action))
+    g_object_notify (G_OBJECT (action), "visible");
+}
+
+/**
+ * gtk_action_group_set_visible:
+ * @action_group: the action group
+ * @visible: new visiblity
+ *
+ * Changes the visible of @action_group.
+ * 
+ * Since: 2.4
+ */
+void
+gtk_action_group_set_visible (GtkActionGroup *action_group, gboolean visible)
+{
+  g_return_if_fail (GTK_IS_ACTION_GROUP (action_group));
+
+  if (action_group->private_data->visible ^ visible)
+    {
+      action_group->private_data->visible = visible;
+      g_hash_table_foreach (action_group->private_data->actions, 
+			    (GHFunc) cb_set_action_visiblity, NULL);
+    }
 }
 
 /**
@@ -291,6 +532,7 @@ gtk_action_group_add_action (GtkActionGroup *action_group,
   g_hash_table_insert (action_group->private_data->actions, 
 		       g_strdup (gtk_action_get_name (action)),
                        g_object_ref (action));
+  g_object_set (G_OBJECT (action), "action_group", action_group, NULL);
 }
 
 /**
@@ -365,6 +607,7 @@ gtk_action_group_remove_action (GtkActionGroup *action_group,
   /* extra protection to make sure action->name is valid */
   g_object_ref (action);
   g_hash_table_remove (action_group->private_data->actions, gtk_action_get_name (action));
+  g_object_set (G_OBJECT (action), "action_group", NULL, NULL);
   g_object_unref (action);
 }
 
@@ -585,7 +828,7 @@ gtk_action_group_add_toggle_actions_full (GtkActionGroup       *action_group,
 			       user_data, (GClosureNotify)destroy, 0);
 
       gtk_action_group_add_action_with_accel (action_group, 
-					      action,
+					      GTK_ACTION (action),
 					      entries[i].accelerator);
       g_object_unref (action);
     }
@@ -656,7 +899,7 @@ gtk_action_group_add_radio_actions_full (GtkActionGroup      *action_group,
   GtkTranslateFunc translate_func;
   gpointer translate_data;
   GSList *group = NULL;
-  GtkAction *first_action = NULL;
+  GtkRadioAction *first_action = NULL;
 
   g_return_if_fail (GTK_IS_ACTION_GROUP (action_group));
 
@@ -693,10 +936,10 @@ gtk_action_group_add_radio_actions_full (GtkActionGroup      *action_group,
       group = gtk_radio_action_get_group (action);
 
       if (value == entries[i].value)
-	gtk_toggle_action_set_active (action, TRUE);
+	gtk_toggle_action_set_active (GTK_TOGGLE_ACTION (action), TRUE);
 
       gtk_action_group_add_action_with_accel (action_group, 
-					      action,
+					      GTK_ACTION (action),
 					      entries[i].accelerator);
       g_object_unref (action);
     }
@@ -771,3 +1014,36 @@ gtk_action_group_set_translation_domain (GtkActionGroup *action_group,
 				       g_strdup (domain),
 				       g_free);
 } 
+
+/* Protected for use by GtkAction */
+void
+_gtk_action_group_emit_connect_proxy  (GtkActionGroup *action_group,
+                                       GtkAction      *action,
+                                       GtkWidget      *proxy)
+{
+  g_signal_emit (action_group, action_group_signals[CONNECT_PROXY], 0, 
+                 action, proxy);
+}
+
+void
+_gtk_action_group_emit_disconnect_proxy  (GtkActionGroup *action_group,
+                                          GtkAction      *action,
+                                          GtkWidget      *proxy)
+{
+  g_signal_emit (action_group, action_group_signals[DISCONNECT_PROXY], 0, 
+                 action, proxy);
+}
+
+void
+_gtk_action_group_emit_pre_activate  (GtkActionGroup *action_group,
+				      GtkAction      *action)
+{
+  g_signal_emit (action_group, action_group_signals[PRE_ACTIVATE], 0, action);
+}
+
+void
+_gtk_action_group_emit_post_activate (GtkActionGroup *action_group,
+				      GtkAction *action)
+{
+  g_signal_emit (action_group, action_group_signals[POST_ACTIVATE], 0, action);
+}

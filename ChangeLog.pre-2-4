@@ -1,4 +1,22 @@
-Mon Jan 12 00:10:20 2004  Matthias Clasen  <maclas@gmx.de>
+Mon Jan 12 23:40:34 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* tests/testmerge.c: Adjust to the new connect_proxy signals.
+
+	* gtk/gtkuimanager.c
+	* gtk/gtkactiongroup.c
+	* gtk/gtkaction.c: Move the connect_proxy and disconnect_proxy signals
+	from GtkAction to GtkActionGroup and proxy it on GtkUIManager. This
+	removes the confusion between the disconnect_/connect_proxy signals 
+	and the (unrelated) virtual functions of the same name and aligns
+	the setup with the pre_/post_activate signals.
+
+2004-01-12  Jody Goldberg <jody@gnome.org>
+
+	* gtk/gtkaction.c (connect_proxy) : only connect activate for menus
+	  with no submenus otherwise it looks like we activate every time a
+	  submenu opens.
+
+2004-01-12  Jody Goldberg <jody@gnome.org>
 
 	* gtk/gtkuimanager.c: Remove accidentially committed debug spew.
 
@@ -9,6 +27,67 @@ Sun Jan 11 01:55:07 2004  Matthias Clasen  <maclas@gmx.de>
 	(gtk_accel_map_unlock_path): Path locking can now be nested, a missing
 	entry is silently created during lock_path(), and treated as an error 
 	during unlock_path(). These changes have been requested by Tim Janik.
+
+2004-01-10  Jody Goldberg <jody@gnome.org>
+
+	* gtk/gtkuimanager.c (d) : Add a debug macro to quiet the spew.
+	s/merge_signals/ui_manager_signals/ for readability.
+	(gtk_ui_manager_class_init) : add pre_activate and post_activate
+	  signals.
+	(cb_proxy_pre_activate) : new.
+	(cb_proxy_post_activate) : new.
+	(gtk_ui_manager_insert_action_group) : connect the proxies for
+	  GtkActionGroup::pre/post_activate
+	(gtk_ui_manager_remove_action_group) : disconnect them.
+
+	* gtk/gtkactiongroup.c (gtk_action_group_class_init) : add
+	  'sensitive', and 'visible' properties.  Also add pre_activate and
+	  post_activate signals to help deal with activations at a higher
+	  level (eg GtkUIManager)
+	(gtk_action_group_init) : init sensitive and visible
+	(gtk_action_group_set_property) : add sensitive and visible
+	(gtk_action_group_get_property) : add sensitive and visible
+	(gtk_action_group_get_sensitive) : new.
+	(gtk_action_group_get_visible) : new.
+	(cb_set_action_sensitivity) : new with minor optimization that only
+	  signals sensitivity changes if the action could possibly change.
+	(cb_set_action_visiblility) : ditto.
+	(gtk_action_group_set_sensitive) : new.  walk the actions directly
+	  rather than using notify::sensitive because that is simpler, easier
+	  to read, and more efficient.
+	(gtk_action_group_set_visible) : ditto.
+	(gtk_action_group_add_action) : Each action can only be in 1 group,
+	  set GtkAction::action_group.
+	(gtk_action_group_remove_action) : clear it.
+	(gtk_action_group_add_toggle_actions_full) : warning suppression.
+	(gtk_action_group_add_radio_actions_full) : warning suppression.
+	(_gtk_action_group_emit_pre_activate) : new protected routine for use
+	  by GtkAction.
+	(_gtk_action_group_emit_post_activate) : ditto.
+
+	* gtk/gtkaction.c (gtk_action_class_init) : add 'action_group' property.
+	(gtk_action_init) : initialize it.
+	(gtk_action_get_property) : get.
+	(gtk_action_set_property) : set it via
+	(gtk_action_set_action_group) : new function.
+	(gtk_action_sync_sensitivity) : new routine to sync proxy sensitivity
+	  with the logical sensitivity (action & group) rather than the simple
+	  action::sensitivity.
+	(gtk_action_sync_visible) : use gtk_action_is_visible to handle
+	  logical visibility (action & group) rather than the simple
+	  action::visible.  Use widget show/hide directly.
+	(connect_proxy) : handle the custom sensitivity handler.
+	  Make the TOOL_BUTTON signals more general and support TOOL_ITEM
+	  directly, with special cases for TOOL_BUTTON.  Still not especially
+	  good it might be useful to handle label/use_underline by parmspec
+	  lookup.  Those are likely to be implemented by custom types, and are
+	  assumed to exist in GtkToolItem.
+	(disconnect_proxy) : disconnect the new sensitivity handler.
+	(_gtk_action_emit_activate) : add pre/post signals.
+	(gtk_action_activate) : use logical sensitivity.
+	(gtk_action_is_sensitive) : logical sensitivity.
+	(gtk_action_get_sensitive) : actual sensitivity.
+	(closure_accel_activate) : use logical sensitivity.
 
 Fri Jan  9 22:23:45 2004  Matthias Clasen  <maclas@gmx.de>
 

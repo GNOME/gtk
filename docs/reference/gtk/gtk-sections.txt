@@ -104,6 +104,10 @@ gtk_accessible_get_type
 GtkAction
 gtk_action_new
 gtk_action_get_name
+gtk_action_is_sensitive
+gtk_action_get_sensitive
+gtk_action_is_visible
+gtk_action_get_visible
 gtk_action_activate
 gtk_action_create_icon
 gtk_action_create_menu_item
@@ -136,6 +140,10 @@ GtkActionPrivate
 GtkActionGroup
 gtk_action_group_new
 gtk_action_group_get_name
+gtk_action_group_get_sensitive
+gtk_action_group_set_sensitive
+gtk_action_group_get_visible
+gtk_action_group_set_visible
 gtk_action_group_get_action
 gtk_action_group_list_actions
 gtk_action_group_add_action
