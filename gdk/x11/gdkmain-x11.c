@@ -45,11 +45,16 @@
 #include <X11/Xutil.h>
 #include <X11/cursorfont.h>
 
+#ifdef HAVE_XKB
+#include <X11/XKBlib.h>
+#endif
+
 #include "gdk.h"
 
 #include "gdkprivate-x11.h"
 #include "gdkinternals.h"
 #include "gdkinputprivate.h"
+
 #include <pango/pangox.h>
 
 typedef struct _GdkPredicate  GdkPredicate;
@@ -196,6 +201,28 @@ _gdk_windowing_init_check (int argc, char **argv)
   
   XGetKeyboardControl (gdk_display, &keyboard_state);
   autorepeat = keyboard_state.global_auto_repeat;
+
+#ifdef HAVE_XKB
+  {
+    gint xkb_major = XkbMajorVersion;
+    gint xkb_minor = XkbMinorVersion;
+    if (XkbLibraryVersion (&xkb_major, &xkb_minor))
+      {
+        xkb_major = XkbMajorVersion;
+        xkb_minor = XkbMinorVersion;
+        if (XkbQueryExtension (gdk_display, NULL, NULL, NULL,
+                               &xkb_major, &xkb_minor))
+          {
+            _gdk_use_xkb = TRUE;
+
+            XkbSelectEvents (gdk_display,
+                             XkbUseCoreKbd,
+                             XkbMapNotifyMask,
+                             XkbMapNotifyMask);
+          }
+      }
+  }
+#endif
   
   return TRUE;
 }
@@ -725,35 +752,3 @@ gdk_send_xevent (Window window, gboolean propagate, glong event_mask,
   return result && !gdk_error_code;
 }
 
-gchar*
-gdk_keyval_name (guint	      keyval)
-{
-  return XKeysymToString (keyval);
-}
-
-guint
-gdk_keyval_from_name (const gchar *keyval_name)
-{
-  g_return_val_if_fail (keyval_name != NULL, 0);
-  
-  return XStringToKeysym (keyval_name);
-}
-
-#ifdef HAVE_XCONVERTCASE
-void
-gdk_keyval_convert_case (guint symbol,
-			 guint *lower,
-			 guint *upper)
-{
-  KeySym xlower = 0;
-  KeySym xupper = 0;
-
-  if (symbol)
-    XConvertCase (symbol, &xlower, &xupper);
-
-  if (lower)
-    *lower = xlower;
-  if (upper)
-    *upper = xupper;
-}  
-#endif HAVE_XCONVERTCASE

@@ -794,7 +794,7 @@ gtk_im_context_simple_class_init (GtkIMContextSimpleClass *class)
 
 static void
 gtk_im_context_simple_init (GtkIMContextSimple *im_context_simple)
-{
+{  
 }
 
 static void
@@ -823,6 +823,8 @@ gtk_im_context_simple_commit_char (GtkIMContext *context,
   len = g_unichar_to_utf8 (ch, buf);
   buf[len] = '\0';
 
+  context_simple->in_hex_sequence = FALSE;
+  
   if (context_simple->tentative_match)
     {
       context_simple->tentative_match = 0;
@@ -916,45 +918,86 @@ check_table (GtkIMContextSimple    *context_simple,
   return FALSE;
 }
 
+/* In addition to the table-driven sequences, we allow Unicode hex
+ * codes entered with Ctrl-Shift held down as specified in ISO
+ * 14755. 14755 actually allows a different set of modifiers to be
+ * used at our discretion, but for now using Ctrl-Shift as in their
+ * examples. While holding Ctrl-Shift, pressing space commits the
+ * character, and pressing a non-hex-digit is an error.
+ */
+
+#define ISO_14755_MOD_MASK (GDK_CONTROL_MASK | GDK_SHIFT_MASK)
+
 static gboolean
-gtk_im_context_simple_filter_keypress (GtkIMContext *context,
-				       GdkEventKey  *event)
+check_hex (GtkIMContextSimple *context_simple,
+           gint                n_compose)
 {
-  GtkIMContextSimple *context_simple = GTK_IM_CONTEXT_SIMPLE (context);
-  GSList *tmp_list;
+  /* See if this is a hex sequence, return TRUE if so */
+  gint i;
+  GString *str;
+  gulong n;
+  gchar *nptr = NULL;
   
-  gunichar ch;
-  int n_compose = 0;
-  int i;
-
-  /* Ignore modifier key presses, and any presses with modifiers set
-   */
-  for (i=0; i < G_N_ELEMENTS (gtk_compose_ignore); i++)
-    if (event->keyval == gtk_compose_ignore[i])
-      return FALSE;
-
-  if (event->state &
-      (gtk_accelerator_get_default_mod_mask () & ~GDK_SHIFT_MASK))
-    return FALSE;
+  str = g_string_new (NULL);
   
-  /* Then, check for compose sequences
-   */
-  while (context_simple->compose_buffer[n_compose] != 0)
-    n_compose++;
-
-  context_simple->compose_buffer[n_compose++] = event->keyval;
-  context_simple->compose_buffer[n_compose] = 0;
-
-  tmp_list = context_simple->tables;
-  while (tmp_list)
+  i = 0;
+  while (i < n_compose)
     {
-      if (check_table (context_simple, tmp_list->data, n_compose))
-	return TRUE;
-      tmp_list = tmp_list->next;
+      gunichar ch;
+      gchar buf[7];
+      
+      ch = gdk_keyval_to_unicode (context_simple->compose_buffer[i]);
+      
+      if (ch == 0)
+        return FALSE;
+
+      if (!g_unichar_isxdigit (ch))
+        return FALSE;
+
+      buf[g_unichar_to_utf8 (ch, buf)] = '\0';
+
+      g_string_append (str, buf);
+      
+      ++i;
     }
+
+  n = strtoul (str->str, &nptr, 16);
+
+  /* if strtoul fails it probably means non-latin digits were used;
+   * we should in principle handle that, but we probably don't.
+   */
+  if (str->str == nptr)
+    {
+      g_string_free (str, TRUE);
+      return FALSE;
+    }
+  else
+    g_string_free (str, TRUE);
   
-  if (check_table (context_simple, &gtk_compose_table, n_compose))
-    return TRUE;
+  if (n > 0xFFFF)
+    return FALSE; /* too many digits */
+
+  if (n == 0)
+    return FALSE; /* don't insert nul bytes */
+  
+  context_simple->tentative_match = n;
+  context_simple->tentative_match_len = n_compose;
+  
+  gtk_signal_emit_by_name (GTK_OBJECT (context_simple),
+                           "preedit-changed");
+  
+  return TRUE;
+}
+
+static gboolean
+no_sequence_matches (GtkIMContextSimple *context_simple,
+                     gint                n_compose,
+                     GdkEventKey        *event)
+{
+  GtkIMContext *context;
+  gunichar ch;
+  
+  context = GTK_IM_CONTEXT (context_simple);
   
   /* No compose sequences found, check first if we have a partial
    * match pending.
@@ -997,6 +1040,139 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
     }
 }
 
+static gboolean
+is_hex_keyval (guint keyval)
+{
+  gunichar ch = gdk_keyval_to_unicode (keyval);
+
+  return g_unichar_isxdigit (ch);
+}
+
+static guint
+canonical_hex_keyval (GdkEventKey *event)
+{
+  guint keyval;
+  guint *keyvals = NULL;
+  gint n_vals = 0;
+  gint i;
+  
+  /* See if the keyval is already a hex digit */
+  if (is_hex_keyval (event->keyval))
+    return event->keyval;
+
+  /* See if this key would have generated a hex keyval in
+   * any other state, and return that hex keyval if so
+   */
+  gdk_keymap_get_entries_for_keycode (NULL,
+                                      event->hardware_keycode, NULL,
+                                      &keyvals, &n_vals);
+
+  keyval = 0;
+  i = 0;
+  while (i < n_vals)
+    {
+      if (is_hex_keyval (keyvals[i]))
+        {
+          keyval = keyvals[i];
+          break;
+        }
+
+      ++i;
+    }
+
+  g_free (keyvals);
+  
+  if (keyval)
+    return keyval;
+  else
+    /* just return the keyval unchanged, we couldn't figure
+     * out a way to make it a hex digit
+     */
+    return event->keyval;
+}
+
+static gboolean
+gtk_im_context_simple_filter_keypress (GtkIMContext *context,
+				       GdkEventKey  *event)
+{
+  GtkIMContextSimple *context_simple = GTK_IM_CONTEXT_SIMPLE (context);
+  GSList *tmp_list;  
+  int n_compose = 0;
+  int i;
+
+  /* FIXME? 14755 says you have to commit the char on release of the shift/control
+   * keys. But instead we wait for the user to type another char, or to lose focus.
+   */
+  
+  /* Ignore modifier key presses
+   */
+  for (i=0; i < G_N_ELEMENTS (gtk_compose_ignore); i++)
+    if (event->keyval == gtk_compose_ignore[i])
+      return FALSE;
+
+  while (context_simple->compose_buffer[n_compose] != 0)
+    n_compose++;
+
+  /* First key in sequence; decide if it's a 14755 hex sequence */
+  if (n_compose == 0)
+    context_simple->in_hex_sequence =
+      ((event->state & (ISO_14755_MOD_MASK)) == ISO_14755_MOD_MASK);
+  
+  /* If we are already in a non-hex sequence, or
+   * the 14755 modifiers are not held down, filter all
+   * key events with accelerator modifiers held down.
+   */
+  if (!context_simple->in_hex_sequence ||
+      ((event->state & (ISO_14755_MOD_MASK)) != ISO_14755_MOD_MASK))
+    {
+      if (event->state &
+          (gtk_accelerator_get_default_mod_mask () & ~GDK_SHIFT_MASK))
+        return FALSE;
+    }
+  
+  /* Then, check for compose sequences
+   */
+  if (context_simple->in_hex_sequence)
+    context_simple->compose_buffer[n_compose++] = canonical_hex_keyval (event);
+  else
+    context_simple->compose_buffer[n_compose++] = event->keyval;
+
+  context_simple->compose_buffer[n_compose] = 0;
+
+  if (context_simple->in_hex_sequence)
+    {
+      /* If the modifiers are still held down, consider the sequence again */
+      if ((event->state & (ISO_14755_MOD_MASK)) == ISO_14755_MOD_MASK)
+        {
+          /* space ends the sequence, and we eat the space */
+          if (n_compose > 1 && event->keyval == GDK_space)
+            {
+              gtk_im_context_simple_commit_char (context, context_simple->tentative_match);
+              context_simple->compose_buffer[0] = 0;
+              return TRUE;
+            }
+          else if (check_hex (context_simple, n_compose))
+            return TRUE;
+        }
+    }
+  else
+    {
+      tmp_list = context_simple->tables;
+      while (tmp_list)
+        {
+          if (check_table (context_simple, tmp_list->data, n_compose))
+            return TRUE;
+          tmp_list = tmp_list->next;
+        }
+  
+      if (check_table (context_simple, &gtk_compose_table, n_compose))
+        return TRUE;
+    }
+  
+  /* The current compose_buffer doesn't match anything */
+  return no_sequence_matches (context_simple, n_compose, event);
+}
+
 static void
 gtk_im_context_simple_reset (GtkIMContext *context)
 {
@@ -1006,6 +1182,8 @@ gtk_im_context_simple_reset (GtkIMContext *context)
 
   if (context_simple->tentative_match)
     gtk_im_context_simple_commit_char (context, context_simple->tentative_match);
+
+  context_simple->in_hex_sequence = FALSE;
 }
 
 static void     
@@ -1014,32 +1192,51 @@ gtk_im_context_simple_get_preedit_string (GtkIMContext   *context,
 					  PangoAttrList **attrs,
 					  gint           *cursor_pos)
 {
-  char outbuf[7];
+  char outbuf[25]; /* up to 4 hex digits */
   int len = 0;
-
+  
   GtkIMContextSimple *context_simple = GTK_IM_CONTEXT_SIMPLE (context);
 
   if (context_simple->tentative_match)
-    len = g_unichar_to_utf8 (context_simple->tentative_match, outbuf);
-
+    {
+      if (context_simple->in_hex_sequence)
+        {
+          int hexchars = 0;
+          
+          while (context_simple->compose_buffer[hexchars] != 0)
+            {
+              len += g_unichar_to_utf8 (gdk_keyval_to_unicode (context_simple->compose_buffer[hexchars]),
+                                        outbuf + len);
+              ++hexchars;
+            }
+        }
+      else
+        {
+          len = g_unichar_to_utf8 (context_simple->tentative_match, outbuf);
+        }
+      
+      g_assert (len <= 25);
+      outbuf[len] = '\0';      
+    }
+  
   if (str)
-    *str = g_strndup (outbuf, len);
+    *str = g_strdup (outbuf);
 
   if (attrs)
     {
       *attrs = pango_attr_list_new();
-
+      
       if (len)
 	{
 	  PangoAttribute *attr = pango_attr_underline_new (PANGO_UNDERLINE_SINGLE);
 	  attr->start_index = 0;
-	  attr->end_index = len;
+          attr->end_index = len;
 	  pango_attr_list_insert (*attrs, attr);
 	}
     }
 
   if (cursor_pos)
-    *cursor_pos = context_simple->tentative_match ? 1 : 0;
+    *cursor_pos = (context_simple->tentative_match ? len : 0);
 }
 
 /**

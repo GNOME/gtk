@@ -280,7 +280,7 @@ struct _GdkEventKey
   gint length;
   gchar *string;
   guint16 hardware_keycode;
-  guint8 keyboard_group;
+  guint8 group;
 };
 
 struct _GdkEventCrossing

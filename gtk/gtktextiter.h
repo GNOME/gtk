@@ -84,12 +84,13 @@ gint gtk_text_iter_get_line_index  (const GtkTextIter *iter);
  */
 gunichar gtk_text_iter_get_char          (const GtkTextIter  *iter);
 
-/* includes the 0xFFFD char for pixmaps/widgets, so char offsets
-   into the returned string map properly into buffer char offsets */
+/* includes the 0xFFFC char for pixmaps/widgets, so char offsets
+ * into the returned string map properly into buffer char offsets
+ */
 gchar   *gtk_text_iter_get_slice         (const GtkTextIter  *start,
                                           const GtkTextIter  *end);
 
-/* includes only text, no 0xFFFD */
+/* includes only text, no 0xFFFC */
 gchar   *gtk_text_iter_get_text          (const GtkTextIter  *start,
                                           const GtkTextIter  *end);
 /* exclude invisible chars */

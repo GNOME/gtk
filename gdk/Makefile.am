@@ -65,6 +65,7 @@ gdk_public_h_sources = @STRIP_BEGIN@ \
 	gdkim.h		\
 	gdkimage.h	\
 	gdkinput.h	\
+	gdkkeys.h	\
 	gdkpango.h	\
 	gdkpixbuf.h	\
 	gdkpixmap.h	\
@@ -87,6 +88,7 @@ gdk_c_sources = @STRIP_BEGIN@ 	\
 	gdkfont.c		\
 	gdkgc.c			\
 	gdkglobals.c		\
+	gdkkeys.c		\
 	gdkkeyuni.c		\
 	gdkimage.c		\
 	gdkinternals.h  	\

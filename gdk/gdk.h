@@ -38,6 +38,7 @@
 #include <gdk/gdkim.h>
 #include <gdk/gdkimage.h>
 #include <gdk/gdkinput.h>
+#include <gdk/gdkkeys.h>
 #include <gdk/gdkpango.h>
 #include <gdk/gdkpixbuf.h>
 #include <gdk/gdkpixmap.h>
@@ -133,21 +134,6 @@ gint       gdk_mbstowcs          (GdkWChar         *dest,
 void     gdk_event_send_clientmessage_toall (GdkEvent    *event);
 gboolean gdk_event_send_client_message (GdkEvent    *event,
 					guint32      xid);
-
-/* Key values
- */
-gchar*   gdk_keyval_name         (guint        keyval) G_GNUC_CONST;
-guint    gdk_keyval_from_name    (const gchar *keyval_name);
-void     gdk_keyval_convert_case (guint        symbol,
-				  guint       *lower,
-				  guint       *upper);
-guint    gdk_keyval_to_upper     (guint        keyval) G_GNUC_CONST;
-guint    gdk_keyval_to_lower     (guint        keyval) G_GNUC_CONST;
-gboolean gdk_keyval_is_upper     (guint        keyval) G_GNUC_CONST;
-gboolean gdk_keyval_is_lower     (guint        keyval) G_GNUC_CONST;
-
-guint32  gdk_keyval_to_unicode   (guint        keyval) G_GNUC_CONST;
-guint    gdk_unicode_to_keyval   (guint32      wc) G_GNUC_CONST;
 
 /* Threading
  */

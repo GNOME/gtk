@@ -55,6 +55,7 @@ libgdk_x11_la_SOURCES =    	\
 	gdkim-x11.c	   	\
 	gdkimage-x11.c	   	\
 	gdkinput.c	   	\
+	gdkkeys-x11.c		\
 	gdkmain-x11.c	   	\
 	gdkpango-x11.c		\
 	gdkpixmap-x11.c	   	\

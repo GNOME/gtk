@@ -40,6 +40,10 @@
 
 #include "gdkinputprivate.h"
 
+#ifdef HAVE_XKB
+#include <X11/XKBlib.h>
+#endif
+
 typedef struct _GdkIOClosure GdkIOClosure;
 typedef struct _GdkEventPrivate GdkEventPrivate;
 
@@ -432,6 +436,7 @@ gdk_event_translate (GdkEvent *event,
 				 &keysym, &compose);
 #endif
       event->key.keyval = keysym;
+      event->key.hardware_keycode = xevent->xkey.keycode;
       
       if (charcount > 0 && buf[charcount-1] == '\0')
 	charcount --;
@@ -450,6 +455,9 @@ gdk_event_translate (GdkEvent *event,
 		       charcount, buf);
 	}
 #endif /* G_ENABLE_DEBUG */
+
+      /* bits 13 and 14 in the "state" field are the keyboard group */
+#define KEYBOARD_GROUP_MASK ((1 << 13) | (1 << 14))
       
       event->key.type = GDK_KEY_PRESS;
       event->key.window = window;
@@ -457,6 +465,8 @@ gdk_event_translate (GdkEvent *event,
       event->key.state = (GdkModifierType) xevent->xkey.state;
       event->key.string = g_strdup (buf);
       event->key.length = charcount;
+
+      event->key.group = xevent->xkey.state & KEYBOARD_GROUP_MASK;
       
       break;
       
@@ -1163,8 +1173,16 @@ gdk_event_translate (GdkEvent *event,
       /* Let XLib know that there is a new keyboard mapping.
        */
       XRefreshKeyboardMapping (&xevent->xmapping);
+      ++_gdk_keymap_serial;
       return_val = FALSE;
       break;
+
+#ifdef HAVE_XKB
+    case XkbMapNotify:
+      ++_gdk_keymap_serial;
+      return_val = FALSE;
+      break;
+#endif
       
     default:
       /* something else - (e.g., a Xinput event) */

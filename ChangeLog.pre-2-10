@@ -1,3 +1,31 @@
+2000-12-03  Havoc Pennington  <hp@pobox.com>
+
+	* gdk/Makefile.am: add gdkkeys.[hc]
+
+	* gdk/gdkkeys.h, gdk/gdkkeys.c: Move all the keyval stuff to these
+	files from gdk.h, gdk.c; add GdkKeymap type and operations on it.
+
+	* acconfig.h, configure.in: add checks and command line options
+	for XKB
+
+	* gdk/x11/gdkkeys-x11.c: Implement the above functions
+	
+	* gdk/x11/gdkevents-x11.c (gdk_event_translate): Put the keycode
+	and group in the key event
+
+	* gdk/gdkevents.h (struct _GdkEventKey): Add a hardware_keycode
+	field with the low-level hardware key code, and a group
+	field with the keyboard group
+
+	* gdk/x11/gdkprivate-x11.h: include config.h for HAVE_XKB,
+	and declare a couple globals used for keymap handling
+	
+	* gtk/gtkimcontextsimple.c: Implement ISO 14755 input method,
+	hold down Shift-Control and type a hex number to get a Unicode 
+	character corresponding to the hex number
+	(gtk_im_context_simple_get_preedit_string): Fix cursor position
+	(return bytes not chars)
+
 2000-12-05  Elliot Lee  <sopwith@redhat.com>
 	* gdk/gdkcolor.h: Make GdkColor specify element sizes
 	to avoid waste on 64-bit platforms.
@@ -219,8 +247,8 @@ Tue Dec  5 13:17:53 GMT 2000  Tony Gale <gale@gtk.org>
 	a GtkToggleButton is both insensitive and active, it was being
 	drawn by the GtkButton draw handler which doesn't check the
 	state. Now it's calling gtk_toggle_button_paint instead.
-
-2000-11-30  Havoc Pennington  <hp@pobox.com>
+	
+2000-12-01  Havoc Pennington  <hp@redhat.com>
 
 	* gtk/gtktextdisplay.c (gtk_text_layout_draw): don't create
 	dangling pointers to the appearance attributes from the 

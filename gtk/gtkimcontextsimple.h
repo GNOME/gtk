@@ -49,6 +49,8 @@ struct _GtkIMContextSimple
   guint compose_buffer[GTK_MAX_COMPOSE_LEN + 1];
   gunichar tentative_match;
   gint tentative_match_len;
+
+  guint in_hex_sequence : 1;
 };
 
 struct _GtkIMContextSimpleClass
