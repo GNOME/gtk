@@ -1,3 +1,11 @@
+2004-12-03  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk-pixbuf/Makefile.am (gdk_pixbuf.def)
+	* gdk/Makefile.am (gdk.def)
+	* gtk/Makefile.am (gtk.def): Work around gcc misfeature. At least
+	gcc 3.3.1 doesn't like to do -E on files that it thinks aren't
+	source files. Use redirection and '-' instead.
+
 2004-12-02  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkfilechooserdefault.c (gtk_file_chooser_default_should_respond): 	Reinstate the previous behavior for clicking Ok after
