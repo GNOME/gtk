@@ -1,3 +1,8 @@
+2003-09-07  Pablo Saratxaga  <pablo@mandrakesoft.com>
+
+	* configure.in: Added Uzbek latin (uz) and cyrillic (uz@Cyrl) to
+	ALL_LINGUAS
+
 2003-09-07  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkaction.c (disconnect_proxy): Make disconnect work
