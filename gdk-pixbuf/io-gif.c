@@ -44,7 +44,6 @@
 #define INTERLACE          0x40
 #define LOCALCOLORMAP      0x80
 #define BitSet(byte, bit)  (((byte) & (bit)) == (bit))
-#define ReadOK(file,buffer,len) (fread(buffer, len, 1, file) != 0)
 #define LM_to_uint(a,b)         (((b)<<8)|(a))
 
 #define GRAYSCALE        1
@@ -74,30 +73,60 @@ struct _GifContext
 	int gray_scale;
 	GdkPixbuf *pixbuf;
 	Gif89 gif89;
+	gint stage;
+
+	/* stuff per frame.  As we only support the first one, not so
+	 * relevant.  But still needed */
+	int frame_len;
+	int frame_height;
+	int frame_interlace;
+
+	/* Static read only */
+	FILE *file;
+
+	/* progressive read, only. */
+	ModulePreparedNotifyFunc func;
+	gpointer user_data;
+	guchar *buf;
+	guint ptr;
+	guint size;
+
+	/* our lwz context */
+	int lwz_fresh;
+	int lwz_code_size;
+	int lwz_set_code_size;
+	int lwz_max_code;
+	int lwz_max_code_size;
+	int lwz_firstcode;
+	int lwz_oldcode;
+	int lwz_clear_code;
+	int lwz_end_code;
+	int lwz_table[2][(1 << MAX_LWZ_BITS)];
+	int lwz_stack[(1 << (MAX_LWZ_BITS)) * 2];
+	int *lwz_sp;
+
 };
 
 
 
-static int ReadColorMap (FILE *, int, CMap, int *);
-static int DoExtension (FILE *file, GifContext *context, int label);
-static int GetDataBlock (FILE *, unsigned char *);
-static int GetCode (FILE *, int, int);
-static int LWZReadByte (FILE *, int, int);
+static int ReadColorMap (GifContext *, int, CMap, int *);
+static int DoExtension (GifContext *, int label);
+static int GetDataBlock (GifContext *, unsigned char *);
+static int GetCode (GifContext *, int, int);
+static int LWZReadByte (GifContext *, int, int);
 
-static void ReadImage (FILE *file,
-		       GifContext *context, 
-		       int   len,
-		       int   height,
-		       CMap  cmap,
-		       int   ncols,
-		       int   format,
-		       int   interlace,
-		       int   number,
-		       guint   leftpos,
-		       guint   toppos);
+static void ReadImage (GifContext *context);
 
 static int
-ReadColorMap (FILE *file,
+ReadOK (GifContext *context, guchar *buffer, size_t len)
+{
+	if (context->file)
+		return fread(buffer, len, 1, context->file) != 0;
+	return 0;
+}
+
+static int
+ReadColorMap (GifContext *context,
 	      int   number,
 	      CMap  buffer,
 	      int  *format)
@@ -109,7 +138,7 @@ ReadColorMap (FILE *file,
 	flag = TRUE;
 
 	for (i = 0; i < number; ++i) {
-		if (!ReadOK (file, rgb, sizeof (rgb))) {
+		if (!ReadOK (context, rgb, sizeof (rgb))) {
 			/*g_message (_("GIF: bad colormap\n"));*/
 			return TRUE;
 		}
@@ -127,13 +156,13 @@ ReadColorMap (FILE *file,
 }
 
 static int
-DoExtension (FILE *file, GifContext *context, int label)
+DoExtension (GifContext *context, int label)
 {
 	static guchar buf[256];
 
 	switch (label) {
 	case 0xf9:			/* Graphic Control Extension */
-		(void) GetDataBlock (file, (unsigned char *) buf);
+		(void) GetDataBlock (context, (unsigned char *) buf);
 		context->gif89.disposal = (buf[0] >> 2) & 0x7;
 		context->gif89.input_flag = (buf[0] >> 1) & 0x1;
 		context->gif89.delay_time = LM_to_uint (buf[1], buf[2]);
@@ -145,7 +174,7 @@ DoExtension (FILE *file, GifContext *context, int label)
 			else
 				context->gif89.transparent = -1;
 		}
-		while (GetDataBlock (file, (unsigned char *) buf) != 0)
+		while (GetDataBlock (context, (unsigned char *) buf) != 0)
 			;
 		return FALSE;
 		break;
@@ -154,7 +183,7 @@ DoExtension (FILE *file, GifContext *context, int label)
 		break;
 	}
 
-	while (GetDataBlock (file, (unsigned char *) buf) != 0)
+	while (GetDataBlock (context, (unsigned char *) buf) != 0)
 		;
 
 	return FALSE;
@@ -163,19 +192,19 @@ DoExtension (FILE *file, GifContext *context, int label)
 static int ZeroDataBlock = FALSE;
 
 static int
-GetDataBlock (FILE          *file,
+GetDataBlock (GifContext    *context,
 	      unsigned char *buf)
 {
 	unsigned char count;
 
-	if (!ReadOK (file, &count, 1)) {
+	if (!ReadOK (context, &count, 1)) {
 		/*g_message (_("GIF: error in getting DataBlock size\n"));*/
 		return -1;
 	}
 
 	ZeroDataBlock = count == 0;
 
-	if ((count != 0) && (!ReadOK (file, buf, count))) {
+	if ((count != 0) && (!ReadOK (context, buf, count))) {
 		/*g_message (_("GIF: error in reading DataBlock\n"));*/
 		return -1;
 	}
@@ -184,7 +213,7 @@ GetDataBlock (FILE          *file,
 }
 
 static int
-GetCode (FILE *file,
+GetCode (GifContext *context,
 	 int   code_size,
 	 int   flag)
 {
@@ -211,7 +240,7 @@ GetCode (FILE *file,
 		buf[0] = buf[last_byte - 2];
 		buf[1] = buf[last_byte - 1];
 
-		if ((count = GetDataBlock (file, &buf[2])) == 0)
+		if ((count = GetDataBlock (context, &buf[2])) == 0)
 			done = TRUE;
 
 		last_byte = 2 + count;
@@ -229,76 +258,69 @@ GetCode (FILE *file,
 }
 
 static int
-LWZReadByte (FILE *file,
+LWZReadByte (GifContext *context,
 	     int   flag,
 	     int   input_code_size)
 {
-	static int fresh = FALSE;
 	int code, incode;
-	static int code_size, set_code_size;
-	static int max_code, max_code_size;
-	static int firstcode, oldcode;
-	static int clear_code, end_code;
-	static int table[2][(1 << MAX_LWZ_BITS)];
-	static int stack[(1 << (MAX_LWZ_BITS)) * 2], *sp;
 	register int i;
 
 	if (flag) {
-		set_code_size = input_code_size;
-		code_size = set_code_size + 1;
-		clear_code = 1 << set_code_size;
-		end_code = clear_code + 1;
-		max_code_size = 2 * clear_code;
-		max_code = clear_code + 2;
+		context->lwz_set_code_size = input_code_size;
+		context->lwz_code_size = context->lwz_set_code_size + 1;
+		context->lwz_clear_code = 1 << context->lwz_set_code_size;
+		context->lwz_end_code = context->lwz_clear_code + 1;
+		context->lwz_max_code_size = 2 * context->lwz_clear_code;
+		context->lwz_max_code = context->lwz_clear_code + 2;
 
-		GetCode (file, 0, TRUE);
+		GetCode (context, 0, TRUE);
 
-		fresh = TRUE;
+		context->lwz_fresh = TRUE;
 
-		for (i = 0; i < clear_code; ++i) {
-			table[0][i] = 0;
-			table[1][i] = i;
+		for (i = 0; i < context->lwz_clear_code; ++i) {
+			context->lwz_table[0][i] = 0;
+			context->lwz_table[1][i] = i;
 		}
 		for (; i < (1 << MAX_LWZ_BITS); ++i)
-			table[0][i] = table[1][0] = 0;
+			context->lwz_table[0][i] = context->lwz_table[1][0] = 0;
 
-		sp = stack;
+		context->lwz_sp = context->lwz_stack;
 
 		return 0;
-	} else if (fresh) {
-		fresh = FALSE;
+	} else if (context->lwz_fresh) {
+		context->lwz_fresh = FALSE;
 		do {
-			firstcode = oldcode = GetCode (file, code_size, FALSE);
-		} while (firstcode == clear_code);
-		return firstcode;
+			context->lwz_firstcode = context->lwz_oldcode = GetCode (context, context->lwz_code_size, FALSE);
+		} while (context->lwz_firstcode == context->lwz_clear_code);
+		return context->lwz_firstcode;
 	}
 
-	if (sp > stack)
-		return *--sp;
+	if (context->lwz_sp > context->lwz_stack)
+		return *--(context->lwz_sp);
 
-	while ((code = GetCode (file, code_size, FALSE)) >= 0) {
-		if (code == clear_code) {
-			for (i = 0; i < clear_code; ++i) {
-				table[0][i] = 0;
-				table[1][i] = i;
+	while ((code = GetCode (context, context->lwz_code_size, FALSE)) >= 0) {
+		if (code == context->lwz_clear_code) {
+			for (i = 0; i < context->lwz_clear_code; ++i) {
+				context->lwz_table[0][i] = 0;
+				context->lwz_table[1][i] = i;
 			}
 			for (; i < (1 << MAX_LWZ_BITS); ++i)
-				table[0][i] = table[1][i] = 0;
-			code_size = set_code_size + 1;
-			max_code_size = 2 * clear_code;
-			max_code = clear_code + 2;
-			sp = stack;
-			firstcode = oldcode =
-				GetCode (file, code_size, FALSE);
-			return firstcode;
-		} else if (code == end_code) {
+				context->lwz_table[0][i] = context->lwz_table[1][i] = 0;
+			context->lwz_code_size = context->lwz_set_code_size + 1;
+			context->lwz_max_code_size = 2 * context->lwz_clear_code;
+			context->lwz_max_code = context->lwz_clear_code + 2;
+			context->lwz_sp = context->lwz_stack;
+			context->lwz_firstcode = context->lwz_oldcode =
+				GetCode (context, context->lwz_code_size, FALSE);
+			return context->lwz_firstcode;
+		} else if (code == context->lwz_end_code) {
 			int count;
 			unsigned char buf[260];
 
 			if (ZeroDataBlock)
 				return -2;
 
-			while ((count = GetDataBlock (file, buf)) > 0)
+			while ((count = GetDataBlock (context, buf)) > 0)
 				;
 
 			if (count != 0)
@@ -308,54 +330,44 @@ LWZReadByte (FILE *file,
 
 		incode = code;
 
-		if (code >= max_code) {
-			*sp++ = firstcode;
-			code = oldcode;
+		if (code >= context->lwz_max_code) {
+			*(context->lwz_sp)++ = context->lwz_firstcode;
+			code = context->lwz_oldcode;
 		}
 
-		while (code >= clear_code) {
-			*sp++ = table[1][code];
-			if (code == table[0][code]) {
+		while (code >= context->lwz_clear_code) {
+			*(context->lwz_sp)++ = context->lwz_table[1][code];
+			if (code == context->lwz_table[0][code]) {
 				/*g_message (_("GIF: circular table entry BIG ERROR\n"));*/
 				/*gimp_quit ();*/
 				return -1;
 			}
-			code = table[0][code];
+			code = context->lwz_table[0][code];
 		}
 
-		*sp++ = firstcode = table[1][code];
+		*(context->lwz_sp)++ = context->lwz_firstcode = context->lwz_table[1][code];
 
-		if ((code = max_code) < (1 << MAX_LWZ_BITS)) {
-			table[0][code] = oldcode;
-			table[1][code] = firstcode;
-			++max_code;
-			if ((max_code >= max_code_size) &&
-			    (max_code_size < (1 << MAX_LWZ_BITS))) {
-				max_code_size *= 2;
-				++code_size;
+		if ((code = context->lwz_max_code) < (1 << MAX_LWZ_BITS)) {
+			context->lwz_table[0][code] = context->lwz_oldcode;
+			context->lwz_table[1][code] = context->lwz_firstcode;
+			++context->lwz_max_code;
+			if ((context->lwz_max_code >= context->lwz_max_code_size) &&
+			    (context->lwz_max_code_size < (1 << MAX_LWZ_BITS))) {
+				context->lwz_max_code_size *= 2;
+				++context->lwz_code_size;
 			}
 		}
 
-		oldcode = incode;
+		context->lwz_oldcode = incode;
 
-		if (sp > stack)
-			return *--sp;
+		if (context->lwz_sp > context->lwz_stack)
+			return *--(context->lwz_sp);
 	}
 	return code;
 }
 
 static void
-ReadImage (FILE *file,
-	   GifContext *context, 
-	   int   len,
-	   int   height,
-	   CMap  cmap,
-	   int   ncols,
-	   int   format,
-	   int   interlace,
-	   int   number,
-	   guint   leftpos,
-	   guint   toppos)
+ReadImage (GifContext *context)
 {
 	guchar *dest, *temp;
 	guchar c;
@@ -365,12 +377,12 @@ ReadImage (FILE *file,
 	/*
 	**  Initialize the Compression routines
 	*/
-	if (!ReadOK (file, &c, 1)) {
+	if (!ReadOK (context, &c, 1)) {
 		/*g_message (_("GIF: EOF / read error on image data\n"));*/
 		return;
 	}
 
-	if (LWZReadByte (file, TRUE, c) < 0) {
+	if (LWZReadByte (context, TRUE, c) < 0) {
 		/*g_message (_("GIF: error while reading\n"));*/
 		return;
 	}
@@ -382,24 +394,24 @@ ReadImage (FILE *file,
 					  context->height);
 
 	dest = gdk_pixbuf_get_pixels (context->pixbuf);
-	while ((v = LWZReadByte (file, FALSE, c)) >= 0) {
+	while ((v = LWZReadByte ( context, FALSE, c)) >= 0) {
 		if (context->gif89.transparent) {
 			temp = dest + ypos * gdk_pixbuf_get_rowstride (context->pixbuf) + xpos * 4;
-			*temp = cmap [0][(guchar) v];
-			*(temp+1) = cmap [1][(guchar) v];
-			*(temp+2) = cmap [2][(guchar) v];
+			*temp = context->color_map [0][(guchar) v];
+			*(temp+1) = context->color_map [1][(guchar) v];
+			*(temp+2) = context->color_map [2][(guchar) v];
 			*(temp+3) = (guchar) ((v == context->gif89.transparent) ? 0 : 65535);
 		} else {
 			temp = dest + ypos * gdk_pixbuf_get_rowstride (context->pixbuf) + xpos * 3;
-			*temp = cmap [0][(guchar) v];
-			*(temp+1) = cmap [1][(guchar) v];
-			*(temp+2) = cmap [2][(guchar) v];
+			*temp = context->color_map [0][(guchar) v];
+			*(temp+1) = context->color_map [1][(guchar) v];
+			*(temp+2) = context->color_map [2][(guchar) v];
 		}
 
 		xpos++;
-		if (xpos == len) {
+		if (xpos == context->frame_len) {
 			xpos = 0;
-			if (interlace) {
+			if (context->frame_interlace) {
 				switch (pass) {
 				case 0:
 				case 1:
@@ -413,7 +425,7 @@ ReadImage (FILE *file,
 					break;
 				}
 
-				if (ypos >= height) {
+				if (ypos >= context->frame_height) {
 					pass++;
 					switch (pass) {
 					case 1:
@@ -433,42 +445,38 @@ ReadImage (FILE *file,
 				ypos++;
 			}
 		}
-		if (ypos >= height)
+		if (ypos >= context->frame_height)
 			break;
 	}
 
  fini:
 	ypos = 0;
 
-	if (LWZReadByte (file, FALSE, c) >= 0)
+	if (LWZReadByte (context, FALSE, c) >= 0)
 		g_print ("GIF: too much input data, ignoring extra...\n");
 }
 
-/* Shared library entry point */
-GdkPixbuf *
-image_load (FILE *file)
+/* called until 1 is returned.
+ * if -1 is returned, then there was an error, and we must stop loading the image
+ * if 0 is returned, we need more bytes.  However, this isn't handled correctly currently,
+ * so we assume that the initial 128 bytes is enough to get us started.
+ * If 1 is returned, then we are ready to start loading the image. */
+
+static gint
+prepare_iter_loop (GifContext *context)
 {
 	unsigned char buf[16];
 	unsigned char c;
-	CMap localColorMap;
-	int useGlobalColormap;
-	int bitPixel;
-	int imageCount = 0;
 	char version[4];
-	GifContext *context;
 
-	g_return_val_if_fail (file != NULL, NULL);
-
-	context = g_new (GifContext, 1);
-
-	if (!ReadOK (file, buf, 6)) {
+	if (!ReadOK (context, buf, 6)) {
 		/* Unable to read magic number */
-		return NULL;
+		return 0;
 	}
 
 	if (strncmp ((char *) buf, "GIF", 3) != 0) {
 		/* Not a GIF file */
-		return NULL;
+		return -1;
 	}
 
 	strncpy (version, (char *) buf + 3, 3);
@@ -476,13 +484,13 @@ image_load (FILE *file)
 
 	if ((strcmp (version, "87a") != 0) && (strcmp (version, "89a") != 0)) {
 		/* bad version number, not '87a' or '89a' */
-		return NULL;
+		return -1;
 	}
 
 	/* read the screen descriptor */
-	if (!ReadOK (file, buf, 7)) {
+	if (!ReadOK (context, buf, 7)) {
 		/* Failed to read screen descriptor */
-		return NULL;
+		return 0;
 	}
 
 	context->width = LM_to_uint (buf[0], buf[1]);
@@ -495,81 +503,116 @@ image_load (FILE *file)
 
 	if (BitSet (buf[4], LOCALCOLORMAP)) {
 		/* Global Colormap */
-		if (ReadColorMap (file, context->bit_pixel,
+		if (ReadColorMap (context, context->bit_pixel,
 				  context->color_map,
 				  &context->gray_scale)) {
-			g_free (context);
-			return NULL;
+			return -1;
 		}
 	}
 
-	if (context->aspect_ratio != 0 && context->aspect_ratio != 49) {
-		/*g_message (_("GIF: warning - non-square pixels\n"));*/
-	}
-
+	context->stage = 1;
 	for (;;) {
-		if (!ReadOK (file, &c, 1)) {
-			/*g_message (_("GIF: EOF / read error on image data\n"));*/
-			return context->pixbuf;
+		if (!ReadOK (context, &c, 1)) {
+			return 0;
 		}
-
+		
 		if (c == ';') {
 			/* GIF terminator */
-			return context->pixbuf;
+			/* hmm.  Not 100% sure what to do about this.  Should
+			 * i try to return a blank image instead? */
+			return -1;
 		}
 
 		if (c == '!') {
-			/* Extension */
-			if (!ReadOK (file, &c, 1)) {
-				/*g_message (_("GIF: EOF / read error on extension function code\n"));*/
-				return context->pixbuf; /* will be -1 if failed on first image! */
+				/* Check the extention */
+			if (!ReadOK (context, &c, 1)) {
+				return 0;
 			}
-			DoExtension (file, context, c);
+			DoExtension (context, c);
 			continue;
 		}
-
 		if (c != ',') {
-			/* Not a valid start character */
-			/*g_message (_("GIF: bogus character 0x%02x, ignoring\n"), (int) c);*/
+				/* Not a valid start character */
 			continue;
 		}
 
-		++imageCount;
-
-		if (!ReadOK (file, buf, 9)) {
-			/*g_message (_("GIF: couldn't read left/top/width/height\n"));*/
-			return context->pixbuf; /* will be -1 if failed on first image! */
+		if (!ReadOK (context, buf, 9)) {
+			return 0;
 		}
 
-		useGlobalColormap = !BitSet (buf[8], LOCALCOLORMAP);
+		/* Okay, we got all the info we need.  Lets record it */
+		context->frame_len = LM_to_uint (buf[4], buf[5]);
+		context->frame_height = LM_to_uint (buf[6], buf[7]);
+		if (context->frame_height >context->height)
+			return -1;
 
-		bitPixel = 1 << ((buf[8] & 0x07) + 1);
-
-		if (!useGlobalColormap) {
-			if (ReadColorMap (file, bitPixel, localColorMap, &context->gray_scale)) {
-				/*g_message (_("GIF: error reading local colormap\n"));*/
-				return context->pixbuf; /* will be -1 if failed on first image! */
+		context->frame_interlace = BitSet (buf[8], INTERLACE);
+		if (!BitSet (buf[8], LOCALCOLORMAP)) {
+			/* Does this frame have it's own colormap. */
+			/* really only relevant when looking at the first frame
+			 * of an animated gif. */
+			/* if it does, we need to re-read in the colormap,
+			 * the gray_scale, and the bit_pixel */
+			context->bit_pixel = 1 << ((buf[8] & 0x07) + 1);
+			if (ReadColorMap (context, context->bit_pixel, context->color_map, &context->gray_scale)) {
+				return -1;
 			}
-			ReadImage (file, context, LM_to_uint (buf[4], buf[5]),
-				   LM_to_uint (buf[6], buf[7]),
-				   localColorMap, bitPixel,
-				   context->gray_scale,
-				   BitSet (buf[8], INTERLACE), imageCount,
-				   (guint) LM_to_uint (buf[0], buf[1]),
-				   (guint) LM_to_uint (buf[2], buf[3]));
-		} else {
-			ReadImage (file, context, LM_to_uint (buf[4], buf[5]),
-				   LM_to_uint (buf[6], buf[7]),
-				   context->color_map, context->bit_pixel,
-				   context->gray_scale,
-				   BitSet (buf[8], INTERLACE), imageCount,
-				   (guint) LM_to_uint (buf[0], buf[1]),
-				   (guint) LM_to_uint (buf[2], buf[3]));
 		}
+		return 1;
 	}
+	g_assert_not_reached ();
+	return -1;
+}
 
+/* Shared library entry point */
+GdkPixbuf *
+image_load (FILE *file)
+{
+	GifContext *context;
+
+	g_return_val_if_fail (file != NULL, NULL);
+
+	context = g_new (GifContext, 1);
+	context->lwz_fresh = FALSE;
+	context->file = file;
+	context->pixbuf = NULL;
+	context->stage = 0;
+
+	prepare_iter_loop (context);
+	ReadImage (context);
 	return context->pixbuf;
 }
 
+gpointer
+image_begin_load (ModulePreparedNotifyFunc func, gpointer user_data)
+{
+	GifContext *context;
 
+	context = g_new (GifContext, 1);
+	context->func = func;
+	context->user_data = user_data;
+	context->lwz_fresh = FALSE;
+	context->file = NULL;
+	context->pixbuf = NULL;
+	context->stage = 0;
 
+	return (gpointer) context;
+}
+
+void
+image_stop_load (gpointer data)
+{
+	GifContext *context = (GifContext *) data;
+
+	if (context->pixbuf)
+		gdk_pixbuf_unref (context->pixbuf);
+	g_free (context);
+}
+
+gboolean
+image_load_increment (gpointer data, guchar *buf, guint size)
+{
+	GifContext *context = (GifContext *) data;
+
+	return FALSE;
+}
