@@ -830,6 +830,7 @@ EXPORTS
 	gtk_object_unref
 	gtk_object_weakref
 	gtk_object_weakunref
+	gtk_option_menu_get_history
 	gtk_option_menu_get_menu
 	gtk_option_menu_get_type
 	gtk_option_menu_new

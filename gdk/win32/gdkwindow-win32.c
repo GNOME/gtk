@@ -1055,6 +1055,8 @@ gdk_window_clear_area (GdkWindow *window,
 	GDK_THREADS_LEAVE();
 #endif
 #if 1
+      SendMessage (GDK_DRAWABLE_XID (window), WM_ERASEBKGND, (WPARAM) hdc, 0);
+#elif 0
       SendNotifyMessage (GDK_DRAWABLE_XID (window), WM_ERASEBKGND, (WPARAM) hdc, 0);
 #else
       gdk_WindowProc (GDK_DRAWABLE_XID (window), WM_ERASEBKGND, (WPARAM) hdc, 0);

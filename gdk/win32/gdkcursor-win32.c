@@ -138,6 +138,14 @@ gdk_cursor_new (GdkCursorType cursor_type)
   return cursor;
 }
 
+static gboolean
+color_is_white (GdkColor *color)
+{
+  return (color->red == 0xFFFF
+	  && color->green == 0xFFFF
+	  && color->blue == 0xFFFF);
+}
+
 GdkCursor*
 gdk_cursor_new_from_pixmap (GdkPixmap *source,
 			    GdkPixmap *mask,
@@ -155,6 +163,7 @@ gdk_cursor_new_from_pixmap (GdkPixmap *source,
   gint width, height, cursor_width, cursor_height;
   guchar residue;
   gint ix, iy;
+  gboolean bg_is_white = color_is_white (bg);
   
   g_return_val_if_fail (source != NULL, NULL);
   g_return_val_if_fail (mask != NULL, NULL);
@@ -189,7 +198,12 @@ gdk_cursor_new_from_pixmap (GdkPixmap *source,
   /* Such complex bit manipulation for this simple task, sigh.
    * The X cursor and Windows cursor concepts are quite different.
    * We assume here that we are always called with fg == black and
-   * bg == white.
+   * bg == white, *or* the other way around. Random colours won't work.
+   * (Well, you will get a cursor, but not in those colours.)
+   */
+
+  /* Note: The comments below refer to the case fg==black and
+   * bg==white.
    */
 
   /* First set masked-out source bits, as all source bits matter on Windoze.
@@ -201,7 +215,10 @@ gdk_cursor_new_from_pixmap (GdkPixmap *source,
       q = (guchar *) mask_image->mem + iy*mask_image->bpl;
       
       for (ix = 0; ix < ((width-1)/8+1); ix++)
-	*p++ |= ~(*q++);
+	if (bg_is_white)
+	  *p++ |= ~(*q++);
+	else
+	  *p++ &= *q++;
     }
 
   /* XOR mask is initialized to zero */
@@ -213,7 +230,10 @@ gdk_cursor_new_from_pixmap (GdkPixmap *source,
       q = XORmask + iy*cursor_width/8;
 
       for (ix = 0; ix < ((width-1)/8+1); ix++)
-	*q++ = ~(*p++);
+	if (bg_is_white)
+	  *q++ = ~(*p++);
+	else
+	  *q++ = *p++;
       q[-1] &= ~residue;	/* Clear left-over bits */
     }
       
