@@ -1,3 +1,9 @@
+2004-03-11  Mark McLoughlin  <mark@skynet.ie>
+
+	* gtk/gtkstyle.c: (gtk_default_draw_expander): Use the PRELIGHT
+	fg color for drawing the expander when prelit. Fixes problem
+	with the HighContrast theme: bug #136789.
+
 2004-03-11  Federico Mena Quintero  <federico@ximian.com>
 
 	Fix #135912 and #135913.

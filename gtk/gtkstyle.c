@@ -5015,7 +5015,7 @@ gtk_default_draw_expander (GtkStyle        *style,
 
   if (state_type == GTK_STATE_PRELIGHT)
     {
-      gtk_style_draw_polygon_with_gc (window, style->fg_gc[GTK_STATE_NORMAL],
+      gtk_style_draw_polygon_with_gc (window, style->fg_gc[GTK_STATE_PRELIGHT],
 				      1, TRUE, points, 3);
     }
   else if (state_type == GTK_STATE_ACTIVE)
