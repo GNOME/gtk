@@ -299,7 +299,7 @@ gtk_action_group_add_actions (GtkActionGroup      *action_group,
   g_return_if_fail (GTK_IS_ACTION_GROUP (action_group));
 
   translate_func = action_group->private_data->translate_func;
-  gpointer translate_data = action_group->private_data->translate_data;
+  translate_data = action_group->private_data->translate_data;
 
   for (i = 0; i < n_entries; i++)
     {
@@ -446,7 +446,7 @@ gtk_action_group_set_translation_domain (GtkActionGroup *action_group,
   g_return_if_fail (GTK_IS_ACTION_GROUP (action_group));
 
   gtk_action_group_set_translate_func (action_group, 
-				       dgettext_swapped,
+				       (GtkTranslateFunc)dgettext_swapped,
 				       g_strdup (domain),
 				       g_free);
 } 
