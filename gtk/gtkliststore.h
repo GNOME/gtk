@@ -55,20 +55,6 @@ struct _GtkListStore
 struct _GtkListStoreClass
 {
   GObjectClass parent_class;
-
-  /* signals */
-  /* Will be moved into the GtkTreeModelIface eventually */
-  void (* changed)           (GtkTreeModel *tree_model,
-			      GtkTreePath  *path,
-			      GtkTreeIter  *iter);
-  void (* inserted)          (GtkTreeModel *tree_model,
-			      GtkTreePath  *path,
-			      GtkTreeIter  *iter);
-  void (* has_child_toggled) (GtkTreeModel *tree_model,
-			      GtkTreePath  *path,
-			      GtkTreeIter  *iter);
-  void (* deleted)           (GtkTreeModel *tree_model,
-			      GtkTreePath  *path);
 };
 
 
@@ -81,7 +67,7 @@ void          gtk_list_store_set_n_columns   (GtkListStore *store,
 void          gtk_list_store_set_column_type (GtkListStore *store,
 					      gint          column,
 					      GType         type);
-void          gtk_list_store_set_cell        (GtkListStore *store,
+void          gtk_list_store_set_value       (GtkListStore *store,
 					      GtkTreeIter  *iter,
 					      gint          column,
 					      GValue       *value);

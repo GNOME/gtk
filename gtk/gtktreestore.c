@@ -597,10 +597,10 @@ gtk_tree_store_iter_parent (GtkTreeModel *tree_model,
  * manipulations on it's own.
  */
 void
-gtk_tree_store_set_cell (GtkTreeStore *tree_store,
-			 GtkTreeIter  *iter,
-			 gint          column,
-			 GValue       *value)
+gtk_tree_store_set_value (GtkTreeStore *tree_store,
+			  GtkTreeIter  *iter,
+			  gint          column,
+			  GValue       *value)
 {
   GtkTreeDataList *list;
   GtkTreeDataList *prev;
@@ -733,10 +733,10 @@ gtk_tree_store_set_valist (GtkTreeStore *tree_store,
 	  break;
 	}
 
-      gtk_tree_store_set_cell (tree_store,
-			       iter,
-			       column,
-			       &value);
+      gtk_tree_store_set_value (tree_store,
+				iter,
+				column,
+				&value);
 
       g_value_unset (&value);
 

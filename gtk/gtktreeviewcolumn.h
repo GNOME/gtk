@@ -45,11 +45,11 @@ typedef enum
 typedef struct _GtkTreeViewColumn      GtkTreeViewColumn;
 typedef struct _GtkTreeViewColumnClass GtkTreeViewColumnClass;
 
-typedef void (* CellDataFunc) (GtkTreeViewColumn *tree_column,
-			       GtkCellRenderer   *cell,
-			       GtkTreeModel      *tree_model,
-			       GtkTreeIter       *iter,
-			       gpointer           data);
+typedef void (* GtkCellDataFunc) (GtkTreeViewColumn *tree_column,
+				  GtkCellRenderer   *cell,
+				  GtkTreeModel      *tree_model,
+				  GtkTreeIter       *iter,
+				  gpointer           data);
 
   
 struct _GtkTreeViewColumn
@@ -71,7 +71,7 @@ struct _GtkTreeViewColumn
   gint max_width;
   gint displayed_width;
 
-  CellDataFunc func;
+  GtkCellDataFunc func;
   gpointer func_data;
   GtkDestroyNotify destroy;
   gchar *title;
@@ -107,7 +107,7 @@ void               gtk_tree_view_column_add_attribute       (GtkTreeViewColumn  
 void               gtk_tree_view_column_set_attributes      (GtkTreeViewColumn     *tree_column,
 							     ...);
 void               gtk_tree_view_column_set_cell_data_func  (GtkTreeViewColumn     *tree_column,
-							     CellDataFunc           func,
+							     GtkCellDataFunc        func,
 							     gpointer               func_data,
 							     GtkDestroyNotify       destroy);
 void               gtk_tree_view_column_clear_attributes    (GtkTreeViewColumn     *tree_column);

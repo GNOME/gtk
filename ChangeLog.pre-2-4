@@ -1,3 +1,14 @@
+Fri Mar 23 16:13:43 2001  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtktreeviewcolumn.h (GtkCellDataFunc): Forgot to namespace
+	this.
+
+	* gtk/gtktreestore.c (gtk_tree_store_set_value): change from
+	set_cell to set_value
+
+	* gtk/gtkliststore.c (gtk_list_store_set_value): change from
+	set_cell to set_value
+
 Thu Mar 22 19:27:34 2001  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtkcellrenderertoggle.c (gtk_cell_renderer_toggle_render):

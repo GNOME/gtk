@@ -225,6 +225,7 @@ gtk_list_store_init (GtkListStore *list_store)
   list_store->sort_list = NULL;
   list_store->stamp = g_random_int ();
   list_store->length = 0;
+  list_store->sort_column_id = -1;
 }
 
 /**
@@ -563,7 +564,7 @@ gtk_list_store_iter_parent (GtkTreeModel *tree_model,
  */
 
 /**
- * gtk_list_store_set_cell:
+ * gtk_list_store_set_value:
  * @store: a #GtkListStore
  * @iter: iterator for the row you're modifying
  * @column: column number to modify
@@ -575,10 +576,10 @@ gtk_list_store_iter_parent (GtkTreeModel *tree_model,
  * 
  **/
 void
-gtk_list_store_set_cell (GtkListStore *list_store,
-			 GtkTreeIter  *iter,
-			 gint          column,
-			 GValue       *value)
+gtk_list_store_set_value (GtkListStore *list_store,
+			  GtkTreeIter  *iter,
+			  gint          column,
+			  GValue       *value)
 {
   GtkTreeDataList *list;
   GtkTreeDataList *prev;
@@ -713,10 +714,10 @@ gtk_list_store_set_valist (GtkListStore *list_store,
 	  break;
 	}
 
-      gtk_list_store_set_cell (list_store,
-			       iter,
-			       column,
-			       &value);
+      gtk_list_store_set_value (list_store,
+				iter,
+				column,
+				&value);
 
       g_value_unset (&value);
 

@@ -64,7 +64,7 @@ void          gtk_tree_store_set_n_columns   (GtkTreeStore *tree_store,
 void          gtk_tree_store_set_column_type (GtkTreeStore *store,
 					      gint          column,
 					      GType         type);
-void          gtk_tree_store_set_cell        (GtkTreeStore *tree_store,
+void          gtk_tree_store_set_value       (GtkTreeStore *tree_store,
 					      GtkTreeIter  *iter,
 					      gint          column,
 					      GValue       *value);
