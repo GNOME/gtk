@@ -1,3 +1,9 @@
+Sat Jul  3 02:09:51 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtksocket.c (gtk_socket_end_embedding): Reset current_width
+	and current_height to 0 when ending the embedding.  (#143675,
+	Nickolay V. Shmyrev)
+
 Sat Jul  3 01:48:19 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkentry.c (gtk_entry_move_visually): Let the cursor move
