@@ -13,7 +13,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.0\n"
-"POT-Creation-Date: 2003-08-25 22:08-0400\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2003-08-26 12:53+0200\n"
 "PO-Revision-Date: 2003-08-20 20:18+0100\n"
 "Last-Translator: Vincent van Adrighem <V.vanAdrighem@dirck.mine.nu>\n"
 "Language-Team: Dutch <vertaling@nl.linux.org>\n"
@@ -1332,7 +1333,7 @@ msgstr "Lettertypestrekking"
 #: gtk/gtkcellrenderertext.c:302 gtk/gtkcellrenderertext.c:303
 #: gtk/gtktexttag.c:344
 msgid "Font size"
-msgstr "Lettertypegrootte"
+msgstr "Lettergrootte"
 
 #: gtk/gtkcellrenderertext.c:312 gtk/gtktexttag.c:364
 msgid "Font points"
@@ -1363,7 +1364,7 @@ msgstr ""
 
 #: gtk/gtkcellrenderertext.c:343 gtk/gtktexttag.c:463
 msgid "Strikethrough"
-msgstr "Doorstreping"
+msgstr "Doorhalen"
 
 #: gtk/gtkcellrenderertext.c:344 gtk/gtktexttag.c:464
 msgid "Whether to strike through the text"
@@ -1371,7 +1372,7 @@ msgstr "Of de tekst doorstreept moet worden"
 
 #: gtk/gtkcellrenderertext.c:351 gtk/gtktexttag.c:471
 msgid "Underline"
-msgstr "Onderstreep"
+msgstr "Onderstrepen"
 
 #: gtk/gtkcellrenderertext.c:352 gtk/gtktexttag.c:472
 msgid "Style of underline for this text"
@@ -3576,7 +3577,7 @@ msgstr "Om_laag"
 
 #: gtk/gtkstock.c:296
 msgid "_Forward"
-msgstr "_Volgende"
+msgstr "_Vooruit"
 
 #: gtk/gtkstock.c:297
 msgid "_Up"
