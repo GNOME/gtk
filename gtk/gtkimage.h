@@ -198,10 +198,10 @@ void       gtk_image_get_icon_set (GtkImage         *image,
                                    GtkIconSet      **icon_set,
                                    GtkIconSize      *size);
 GdkPixbufAnimation* gtk_image_get_animation (GtkImage *image);
-void       gtk_image_get_icon_name (GtkImage        *image,
-				    gchar          **icon_name,
-				    GtkIconSize     *size);
-gint       gtk_image_get_pixel_size (GtkImage        *image);
+void       gtk_image_get_icon_name (GtkImage              *image,
+				    G_CONST_RETURN gchar **icon_name,
+				    GtkIconSize           *size);
+gint       gtk_image_get_pixel_size (GtkImage             *image);
 
 #ifndef GTK_DISABLE_DEPRECATED
 /* These three are deprecated */

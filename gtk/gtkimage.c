@@ -57,6 +57,8 @@ static void gtk_image_size_request (GtkWidget      *widget,
                                     GtkRequisition *requisition);
 static void gtk_image_style_set    (GtkWidget      *widget,
 				    GtkStyle       *prev_style);
+static void gtk_image_screen_changed (GtkWidget    *widget,
+				      GdkScreen    *prev_screen);
 static void gtk_image_destroy      (GtkObject      *object);
 static void gtk_image_clear        (GtkImage       *image);
 static void gtk_image_reset        (GtkImage       *image);
@@ -74,6 +76,8 @@ static void gtk_image_get_property      (GObject          *object,
 					 guint             prop_id,
 					 GValue           *value,
 					 GParamSpec       *pspec);
+
+static void icon_theme_changed          (GtkImage         *image);
 
 static gpointer parent_class;
 
@@ -146,6 +150,7 @@ gtk_image_class_init (GtkImageClass *class)
   widget_class->unmap = gtk_image_unmap;
   widget_class->unrealize = gtk_image_unrealize;
   widget_class->style_set = gtk_image_style_set;
+  widget_class->screen_changed = gtk_image_screen_changed;
   
   g_object_class_install_property (gobject_class,
                                    PROP_PIXBUF,
@@ -371,7 +376,7 @@ gtk_image_set_property (GObject      *object,
         image->icon_size = g_value_get_int (value);
       break;
     case PROP_PIXEL_SIZE:
-      priv->pixel_size = g_value_get_int (value);
+      gtk_image_set_pixel_size (image, g_value_get_int (value));
       break;
     case PROP_PIXBUF_ANIMATION:
       gtk_image_set_from_animation (image,
@@ -1049,7 +1054,7 @@ gtk_image_set_from_icon_name  (GtkImage       *image,
 
   g_object_freeze_notify (G_OBJECT (image));
 
-  /* in case stock_id == image->data.stock.stock_id */
+  /* in case icon_name == image->data.name.icon_name */
   new_name = g_strdup (icon_name);
   
   gtk_image_reset (image);
@@ -1275,9 +1280,9 @@ gtk_image_get_animation (GtkImage *image)
  * Since: 2.6
  **/
 void
-gtk_image_get_icon_name  (GtkImage        *image,
-			  gchar          **icon_name,
-			  GtkIconSize     *size)
+gtk_image_get_icon_name  (GtkImage              *image,
+			  G_CONST_RETURN gchar **icon_name,
+			  GtkIconSize           *size)
 {
   g_return_if_fail (GTK_IS_IMAGE (image));
   g_return_if_fail (image->storage_type == GTK_IMAGE_ICON_NAME ||
@@ -1348,29 +1353,9 @@ gtk_image_reset_anim_iter (GtkImage *image)
 }
 
 static void
-gtk_image_reset_icon_theme_change_cb (GtkImage *image)
-{
-  GdkScreen *screen;
-  GtkIconTheme *icon_theme;
-
-  if (image->storage_type == GTK_IMAGE_ICON_NAME)
-    {
-      if (image->data.name.theme_change_id)
-	{
-	  screen = gtk_widget_get_screen (GTK_WIDGET (image));
-	  icon_theme = gtk_icon_theme_get_for_screen (screen);
-	  g_signal_handler_disconnect (icon_theme,
-				       image->data.name.theme_change_id);
-	}
-      image->data.name.theme_change_id = 0;
-    }
-}
-
-static void
 gtk_image_unmap (GtkWidget *widget)
 {
   gtk_image_reset_anim_iter (GTK_IMAGE (widget));
-  gtk_image_reset_icon_theme_change_cb (GTK_IMAGE (widget));
 
   if (GTK_WIDGET_CLASS (parent_class)->unmap)
     GTK_WIDGET_CLASS (parent_class)->unmap (widget);
@@ -1380,7 +1365,6 @@ static void
 gtk_image_unrealize (GtkWidget *widget)
 {
   gtk_image_reset_anim_iter (GTK_IMAGE (widget));
-  gtk_image_reset_icon_theme_change_cb (GTK_IMAGE (widget));
 
   if (GTK_WIDGET_CLASS (parent_class)->unrealize)
     GTK_WIDGET_CLASS (parent_class)->unrealize (widget);
@@ -1413,8 +1397,7 @@ animation_timeout (gpointer data)
 }
 
 static void
-icon_theme_changed (GtkIconTheme *icon_theme,
-		    GtkImage     *image)
+icon_theme_changed (GtkImage *image)
 {
   if (image->data.name.pixbuf)
     g_object_unref (image->data.name.pixbuf);
@@ -1560,8 +1543,6 @@ gtk_image_expose (GtkWidget      *widget,
       GdkBitmap *mask;
       GdkPixbuf *pixbuf;
       gboolean needs_state_transform;
-      GdkScreen *screen;
-      GtkIconTheme *icon_theme;
       
       image = GTK_IMAGE (widget);
       misc = GTK_MISC (widget);
@@ -1730,15 +1711,6 @@ gtk_image_expose (GtkWidget      *widget,
           break;
 
 	case GTK_IMAGE_ICON_NAME:
-	  if (image->data.name.theme_change_id == 0)
-	    {
-	      screen = gtk_widget_get_screen (widget);
-	      icon_theme = gtk_icon_theme_get_for_screen (screen);
-	      image->data.name.theme_change_id =
-		g_signal_connect_object (icon_theme, "changed",
-					 G_CALLBACK (icon_theme_changed),
-					 image, 0);
-	    }
 	  ensure_pixbuf_for_icon_name (image);
 	  pixbuf = image->data.name.pixbuf;
 	  if (pixbuf)
@@ -1938,8 +1910,6 @@ gtk_image_clear (GtkImage *image)
       break;
 
     case GTK_IMAGE_ICON_NAME:
-      gtk_image_reset_icon_theme_change_cb (image);
-
       if (image->data.name.icon_name)
 	g_free (image->data.name.icon_name);
       image->data.name.icon_name = NULL;
@@ -2041,30 +2011,26 @@ gtk_image_style_set (GtkWidget      *widget,
 
   image = GTK_IMAGE (widget);
 
-  /* If the GTK style changes, the pixel values corresponding to
-   * particular GtkIconSize values can change.  So if the image's
-   * storage type makes use of the icon size, queue a resize.
-   */
-  switch (image->storage_type)
-    {
-    case GTK_IMAGE_ICON_NAME:
-      /* release the cached pixbuf */
-      if (image->data.name.pixbuf != NULL)
-	{
-	  g_object_unref (image->data.name.pixbuf);
-	  image->data.name.pixbuf = NULL;
-	}
-      /* fall through */
-    case GTK_IMAGE_STOCK:
-    case GTK_IMAGE_ICON_SET:
-      gtk_widget_queue_resize (widget);
-      break;
-    default:
-      break;
-    }
-
-  GTK_WIDGET_CLASS (parent_class)->style_set (widget, prev_style);
+  if (GTK_WIDGET_CLASS (parent_class)->style_set)
+    GTK_WIDGET_CLASS (parent_class)->style_set (widget, prev_style);
+  
+  icon_theme_changed (image);
 }
+
+static void
+gtk_image_screen_changed (GtkWidget *widget,
+			  GdkScreen *prev_screen)
+{
+  GtkImage *image;
+
+  image = GTK_IMAGE (widget);
+
+  if (GTK_WIDGET_CLASS (parent_class)->screen_changed)
+    GTK_WIDGET_CLASS (parent_class)->screen_changed (widget, prev_screen);
+
+  icon_theme_changed (image);
+}
+
 
 static void
 gtk_image_update_size (GtkImage *image,
@@ -2085,8 +2051,8 @@ gtk_image_update_size (GtkImage *image,
  * @pixel_size: the new pixel size
  * 
  * Sets the pixel size to use for named icons. If the pixel size is set
- * to a value != -1, it is used instead of the ::icon-size property for 
- * images of type %GTK_IMAGE_ICON_NAME.
+ * to a value != -1, it is used instead of the icon size set by
+ * gtk_image_set_from_icon_name().
  *
  * Since: 2.6
  */
@@ -2125,7 +2091,7 @@ gtk_image_set_pixel_size (GtkImage *image,
  * 
  * Gets the pixel size used for named icons.
  *
- * Returns: the value of the :pixel-size property.
+ * Returns: the pixel size used for named icons.
  *
  * Since: 2.6
  */

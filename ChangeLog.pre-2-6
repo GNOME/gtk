@@ -1,5 +1,14 @@
 2004-10-26  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkimage.h: 
+	* gtk/gtkimage.c (gtk_image_get_icon_name): Make the icon_name parameter
+	G_CONST_RETURN.
+	
+	* gtk/gtkimage.c: It is enough to listen for screen changes and style-set
+	to catch all icon theme changes.
+	(gtk_image_set_property): Reset the image size if the pixel size property
+	is changed.
+
 	* gtk/gtk.symbols: Add new symbols.
 
 	* gdk/x11/gdkdisplay-x11.c (gdk_display_store_clipboard): Fix the 
