@@ -77,35 +77,102 @@ Windows
 
 <!-- ##### ENUM GdkWindowHints ##### -->
 <para>
-
+Used to indicate which fields of a #GdkGeometry struct should be paid attention
+to. Also, the presence/absence of @GDK_HINT_POS, @GDK_HINT_USER_POS, and
+@GDK_HINT_USER_SIZE is significant, though they don't directly refer to
+#GdkGeometry fields.  @GDK_HINT_USER_POS will be set automatically by #GtkWindow
+if you call gtk_window_move(). @GDK_HINT_USER_POS and @GDK_HINT_USER_SIZE 
+should be set if the user specified a size/position using a --geometry 
+command-line argument; gtk_window_parse_geometry() automatically sets these
+flags.
 </para>
 
-@GDK_HINT_POS: 
-@GDK_HINT_MIN_SIZE: 
-@GDK_HINT_MAX_SIZE: 
-@GDK_HINT_BASE_SIZE: 
-@GDK_HINT_ASPECT: 
-@GDK_HINT_RESIZE_INC: 
-@GDK_HINT_WIN_GRAVITY: 
-@GDK_HINT_USER_POS: 
-@GDK_HINT_USER_SIZE: 
+@GDK_HINT_POS: indicates that the program has positioned the window
+@GDK_HINT_MIN_SIZE: min size fields are set
+@GDK_HINT_MAX_SIZE: max size fields are set
+@GDK_HINT_BASE_SIZE: base size fields are set
+@GDK_HINT_ASPECT: aspect ratio fields are set
+@GDK_HINT_RESIZE_INC: resize increment fields are set
+@GDK_HINT_WIN_GRAVITY: window gravity field is set
+@GDK_HINT_USER_POS: indicates that the window's position was explicitly set by the user
+@GDK_HINT_USER_SIZE: indicates that the window's size was explicitly set by the user
 
 <!-- ##### STRUCT GdkGeometry ##### -->
 <para>
-
+The #GdkGeometry struct gives the window manager information about 
+a window's geometry constraints. Normally you would set these on 
+the GTK+ level using gtk_window_set_geometry_hints(). #GtkWindow 
+then sets the hints on the #GdkWindow it creates.
 </para>
 
-@min_width: 
-@min_height: 
-@max_width: 
-@max_height: 
-@base_width: 
-@base_height: 
-@width_inc: 
-@height_inc: 
-@min_aspect: 
-@max_aspect: 
-@win_gravity: 
+<para>
+gdk_window_set_geometry_hints() expects the hints to be fully valid already and
+simply passes them to the window manager; in contrast,
+gtk_window_set_geometry_hints() performs some interpretation. For example,
+#GtkWindow will apply the hints to the geometry widget instead of the toplevel
+window, if you set a geometry widget. Also, the
+min_width/min_height/max_width/max_height fields may be set to -1, and
+#GtkWindow will substitute the size request of the window or geometry widget. If
+the minimum size hint is not provided, #GtkWindow will use its requisition as
+the minimum size.  If the minimum size is provided and a geometry widget is set,
+#GtkWindow will take the minimum size as the minimum size of the geometry widget
+rather than the entire window. The base size is treated similarly.
+</para>
+
+<para>
+The canonical use-case for gtk_window_set_geometry_hints() is to get a terminal
+widget to resize properly. Here, the terminal text area should be the geometry
+widget; #GtkWindow will then automatically set the base size to the size of
+other widgets in the terminal window, such as the menubar and scrollbar.  Then,
+the width_inc and height_inc fields should be set to the size of one character
+in the terminal. Finally, the base size should be set to the size of one
+character. The net effect is that the minimum size of the terminal 
+will have a 1x1 character terminal area, and only terminal sizes on 
+the "character grid" will be allowed.
+</para>
+
+<para>
+Here's an example of how the terminal example would be implemented, assuming 
+a terminal area widget called "terminal" and a toplevel window "toplevel":
+<programlisting>
+	GdkGeometry hints;
+
+	hints.base_width = terminal->char_width;
+        hints.base_height = terminal->char_height;
+        hints.min_width = terminal->char_width;
+        hints.min_height = terminal->char_height;
+        hints.width_inc = terminal->char_width;
+        hints.height_inc = terminal->char_height;
+
+	gtk_window_set_geometry_hints (GTK_WINDOW (toplevel),
+				       GTK_WIDGET (terminal),
+ 				       &hints,
+				       GDK_HINT_RESIZE_INC |
+                                       GDK_HINT_MIN_SIZE |
+                                       GDK_HINT_BASE_SIZE);
+</programlisting>
+</para>
+
+<para>
+The other useful fields are the @min_aspect and @max_aspect fields; these
+contain a width/height ratio as a floating point number. If a geometry widget is
+set, the aspect applies to the geometry widget rather than the entire window.
+The most common use of these hints is probably to set @min_aspect and
+@max_aspect to the same value, thus forcing the window to keep a constant aspect
+ratio.
+</para>
+
+@min_width: minimum width of window (or -1 to use requisition, with #GtkWindow only)
+@min_height minimum height of window (or -1 to use requisition, with #GtkWindow only)
+@max_width: maximum width of window (or -1 to use requisition, with #GtkWindow only)
+@max_height: maximum height of window (or -1 to use requisition, with #GtkWindow only)
+@base_width: allowed window widths are base_width + width_inc * N where N is any integer (-1 allowed with #GtkWindow)
+@base_height: allowed window widths are base_height + height_inc * N where N is any integer (-1 allowed with #GtkWindow)
+@width_inc: width resize increment
+@height_inc: height resize increment
+@min_aspect: minimum width/height ratio
+@max_aspect: maximum width/height ratio
+@win_gravity: window gravity, see gtk_window_set_gravity()
 
 <!-- ##### ENUM GdkGravity ##### -->
 <para>

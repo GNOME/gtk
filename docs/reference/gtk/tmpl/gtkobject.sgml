@@ -8,168 +8,87 @@ The base class of the Gtk type hierarchy.
 <refsect2>
 <title>Description</title>
 <para>
-GtkObject is the root of the gtk+ type hierarchy.  It serves
-a similar roles as java's Object class.  It is used 
-by the type-casting system to represent the base composite type.
+#GtkObject is the base class for all widgets, and for a few 
+non-widget objects such as #GtkAdjustment. #GtkObject predates 
+#GObject; non-widgets that derive from #GtkObject rather than 
+#GObject do so for backward compatibility reasons.
 </para>
 <para>
-Objects have <wordasword>arguments</wordasword> that are
-name/typed-value pairs.  
-They may be readable or writable (or both or neither).
-The special handlers in every object are responsible for
-setting and getting these parameters.
-If the handler for a given argument <emphasis>must</emphasis>
-be called before the object may be used, be sure the
-#GTK_ARG_CONSTRUCT or #GTK_ARG_CONSTRUCT_ONLY flags
-are set;  otherwise they are set only when the user does so.
+The most interesting difference between #GtkObject and #GObject is the
+"floating" reference count. A #GObject is created with a reference count of 1,
+owned by the creator of the #GObject. (The owner of a reference is the code
+section that has the right to call g_object_unref() in order to remove that
+reference.)  A #GtkObject is created with a reference count of 1 also, but it
+isn't owned by anyone; calling g_object_unref() on the newly-created #GtkObject
+is incorrect. Instead, the initial reference count of a #GtkObject is "floating." 
+The floating reference can be removed by anyone at any time, by calling
+gtk_object_sink(). gtk_object_sink() does nothing if an object is already 
+sunk (has no floating reference).
 </para>
 <para>
-Object also store a simpler association table, sometimes
-called the object_data.  This is just an efficient mapping from
-a fixed set of strings to a gpointer.  This can be used as
-arbitrary extra members.  Notice that each new field name
-allocates a new quark, so it is probably best only to use
-this for fields with fixed names.
-</para>
-<para>
-The primary difference between object_data and arguments is that
-the object defines two functions which set and get each type of argument.
-The object just has a table to store its object data in:  it does not
-receive notice when data changes.
-</para>
-<para>
-Objects are reference counted;  this means that we maintain
-a count of how many references (usually in the form of a pointer)
-are being held to this object.
-To indicate that you reference an object, call gtk_object_ref().
-The object will not be freed until everyone calls 
-gtk_object_unref().
-</para>
-<para>
-In order to reduce the chances of a memory leak, gtk+ defines
-"floating objects".  All objects created with gtk_object_new()
-start out floating with a reference count of 1.
-In order to reduce that initial reference count you should gtk_object_sink()
-them, but usually the parent widget you add the child to will
-sink the object.  
-</para>
-<para>So, because gtk_widget_set_parent() sinks the object from
-gtk_container_add(), there are no memory leaks in this code:
-<informalexample>
+When you add a widget to its parent container, the parent container
+will do this:
 <programlisting>
-	button = gtk_button_new_with_label("Hi Mom!");
-	gtk_container_add(GTK_CONTAINER(window), button);
-	/* Button may not be used anymore since we don't retain a reference
-	 * to it. */
+  g_object_ref (G_OBJECT (child_widget));
+  gtk_object_sink (GTK_OBJECT (child_widget));
 </programlisting>
-</informalexample>
-Likewise, the following code attaches the same adjustment to two
-ranges:
-<informalexample>
-<programlisting>
-	adjustment = (GtkAdjustment*) gtk_adjustment_new(0,10,0,0,0,0);
-	gtk_range_set_adjustment(range1, adjustment);
-	gtk_range_set_adjustment(range2, adjustment);
-</programlisting>
-</informalexample>
-Note that we could put as many set_adjustments as we like:  cleanup is easy
-because they all retain a reference but only one sinks the initial reference
-count.  If it is possible for "range1" to stop retaining its reference
-then we need to enclose the lines using "adjustment" with ref/unref
-to guarantee the the object won't be deleted:
-<informalexample>
-<programlisting>
-	adjustment = (GtkAdjustment*) gtk_adjustment_new(0,10,0,0,0,0);
-	gtk_object_ref(GTK_OBJECT(adjustment));
-	gtk_range_set_adjustment(range1, adjustment);
-	gtk_range_set_adjustment(range1, another_adjustment);
-	/* With the initial reference, `adjustment' would have
-	 * been deleted as `range1' lost its reference to it. */
-	gtk_range_set_adjustment(range2, adjustment);
-	gtk_object_unref(GTK_OBJECT(adjustment));
-</programlisting>
-</informalexample>
+This means that the container now owns a reference to the child widget (since 
+it called g_object_ref()), and the child widget has no floating reference.
 </para>
 <para>
-Be careful with reference counting:  if two objects reference eachother
-then they will always have at least reference count 1, even if
-there are no other pointers to them.  This means that they
-will never be freed.  More precisely, you must be certain that
-your references <emphasis>never</emphasis> can form cycles.
+The purpose of the floating reference is to keep the child widget alive 
+until you add it to a parent container:
+<programlisting>
+   button = gtk_button_new ();
+   /* button has one floating reference to keep it alive */
+   gtk_container_add (GTK_CONTAINER (container), button);
+   /* button has one non-floating reference owned by the container */
+</programlisting>
 </para>
 <para>
-If you find yourself forming cyclic references, perhaps you
-can convert some of them to <wordasword>weak-references</wordasword>.
-A weak-reference is one that holds a pointer to an object,
-but doesn't increase the reference count.  To insure
-the object is valid when the referer tries to use it,
-the referer registers a callback that will be invoked
-after the object has been destroyed (but before its memory is actually
-deallocated).  This callback must prevent the weak-reference from
-being used again.
+#GtkWindow is a special case, because GTK+ itself will ref/sink it on creation. 
+That is, after calling gtk_window_new(), the #GtkWindow will have one 
+reference which is owned by GTK+, and no floating references.
 </para>
-</refsect2>
-<refsect2>
-<title>Brief Glossary</title>
-<variablelist>
 
-<varlistentry>
-<term>argument</term>
+<para>
+One more factor comes into play: the "destroy" signal, emitted by the
+gtk_object_destroy() method. The "destroy" signal asks all code owning a
+reference to an object to release said reference. So, for example, if you call
+gtk_object_destroy() on a #GtkWindow, GTK+ will release the reference count that
+it owns; if you call gtk_object_destroy() on a #GtkButton, then the button will
+be removed from its parent container and the parent container will release its
+reference to the button.  Because these references are released, calling
+gtk_object_destroy() should result in freeing all memory associated with an
+object, unless some buggy code fails to release its references in response to
+the "destroy" signal. Freeing memory (referred to as
+<firstterm>finalization</firstterm> only happens if the reference count reaches
+zero.
+</para>
+
+<para>
+Some simple rules for handling #GtkObject:
+<itemizedlist>
 <listitem><para>
-A typed-variable identified by ObjectType::argument_name.  It may be
-readable, writable, both or none.  For example,
-"GtkButton::label" is a read/write string-valued argument.
+Never call g_object_unref() unless you have previously called g_object_ref(), 
+even if you created the #GtkObject. (Note: this is <emphasis>not</emphasis>
+true for #GObject; for #GObject, the creator of the object owns a reference.)
 </para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term>constructed</term>
 <listitem><para>
+Call gtk_object_destroy() to get rid of most objects in most cases. 
+In particular, widgets are almost always destroyed in this way.
 </para></listitem>
-</varlistentry>
+<listitem><para> Because of the floating reference count, you don't need to
+worry about reference counting for widgets and toplevel windows, unless you
+explicitly call g_object_ref() yourself.  </para></listitem>
+</itemizedlist>
+</para>
 
-<varlistentry>
-<term>destroyed</term>
-<listitem><para>
-</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term>finalization</term>
-<listitem><para>
-</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term>floating</term>
-<listitem><para>
-</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term>object data</term>
-<listitem><para>
-</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term>reference count</term>
-<listitem><para>
-</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term>weak-reference</term>
-<listitem><para>
-</para></listitem>
-</varlistentry>
-
-</variablelist>
 </refsect2>
 
 <!-- ##### SECTION See_Also ##### -->
 <para>
-GtkType, GtkArg, gtk-signals.
+#GObject
 </para>
 
 <!-- ##### STRUCT GtkObject ##### -->
@@ -210,8 +129,8 @@ there own references, if they believe they are nearly primary
 ownership of the object.
 GTK_CONNECTED: refers to whether are signals are connected to this
 object.
-@GTK_RESERVED_1: 
-@GTK_RESERVED_2: 
+@GTK_RESERVED_1: reserved for future use
+@GTK_RESERVED_2: reserved for future use
 
 <!-- ##### MACRO GTK_OBJECT_FLAGS ##### -->
 <para>
@@ -224,7 +143,7 @@ accessing its members.
 
 <!-- ##### MACRO GTK_OBJECT_DESTROYED ##### -->
 <para>
-Test whether a GtkObject has had gtk_object_destroyed() invoked on it.
+Test whether a GtkObject has had gtk_object_destroy() invoked on it.
 </para>
 
 @obj: the object to examine.
@@ -232,9 +151,8 @@ Test whether a GtkObject has had gtk_object_destroyed() invoked on it.
 
 <!-- ##### MACRO GTK_OBJECT_FLOATING ##### -->
 <para>
-When an object is created, it has an initial reference count
-of 1 and is floating.  <wordasword>Sinking</wordasword> the object 
-refers to decrementing that original reference count.
+Evaluates to %TRUE if the object still has its floating reference count.
+See the overview documentation for #GtkObject.
 </para>
 
 @obj: the object to examine.
@@ -269,6 +187,7 @@ Turn off certain object flags.  (Private)
 <!-- ##### ENUM GtkArgFlags ##### -->
 <para>
 Possible flags indicating how an argument should be treated.
+Deprecated in favor of #GParamSpec features.
 </para>
 
 @GTK_ARG_READABLE: the argument is readable. (i.e. can be queried)
@@ -284,7 +203,7 @@ each child.  Used by #GtkContainer.
 <!-- ##### FUNCTION gtk_object_new ##### -->
 <para>
 Construct an object given its arguments, enumerated in the call to the
-function.
+function. Deprecated in favor of g_object_new().
 </para>
 
 @type: the type identifying this object.  Returned by gtk_type_unique()
@@ -301,23 +220,9 @@ the object.
 
 <!-- ##### FUNCTION gtk_object_sink ##### -->
 <para>
-Decrement the initial count given to the object.
-Additional invocations have no effect.
-</para>
-<para>
-This is designed to free the user from worrying about
-dereferencing an object that they have just created.
-So long as the object is sunk at some point, the reference count
-will be set properly.
-</para>
-<para>
-furthermore it may be sunk multiple times.
-Only the first time will actually dereference.
-</para>
-<para>
-The basic outline is: when you create an object it is floating.
-Setting its parent causes it to be sunk, however its parent
-has obtained a reference, so its reference count is one.
+Removes the floating reference from a #GtkObject, if it exists; 
+otherwise does nothing. See the #GtkObject overview documentation at 
+the top of the page.
 </para>
 
 @object: the object to sink.
@@ -325,22 +230,20 @@ has obtained a reference, so its reference count is one.
 
 <!-- ##### FUNCTION gtk_object_ref ##### -->
 <para>
-Increase the reference count of the object.
+Increase the reference count of the object, simply calls 
+g_object_ref() internally.
+Deprecated in favor of g_object_ref().
 </para>
 
 @object: the object to reference.
-@Returns: 
+@Returns: the object which was referenced
 
 
 <!-- ##### FUNCTION gtk_object_unref ##### -->
 <para>
-Decrease the reference count of an object.  When its reference
-count drops to 0, the object is deleted.
-</para>
-<para>
-If it was not already destroyed, it will be, with gtk_object_destroy(),
-then weak links are notified, then the object-data is freed
-and the memory for the object itself is freed using gtk_type_free().
+Decrease the reference count of an object.  When its reference count drops to 0,
+the object is finalized (i.e. its memory is freed).  Deprecated in favor of
+g_object_unref(). Simply calls g_object_unref() internally.
 </para>
 
 @object: the object to dereference.
@@ -348,15 +251,11 @@ and the memory for the object itself is freed using gtk_type_free().
 
 <!-- ##### FUNCTION gtk_object_weakref ##### -->
 <para>
-Adds a weak reference callback to an object.
-</para>
-<para>
-Weak references are a mechanism to safely keep a pointer to
-an object without using the reference counting
-mechansim.  They use a callback function to receive
-notice that the object is about to be freed (aka finalized).
-This happens <emphasis>after</emphasis> the destroy
-callback has been run.
+Adds a weak reference callback to an object. Deprecated in favor of
+g_object_weak_ref(). Weak references are used for notification when an object is
+finalized. They are called "weak references" because they allow you to safely
+hold a pointer to an object without calling g_object_ref() (g_object_ref() adds
+a strong reference, that is, forces the object to stay alive).
 </para>
 
 @object: object to weakly reference.
@@ -376,12 +275,14 @@ Removes a weak reference callback to an object.
 
 <!-- ##### FUNCTION gtk_object_destroy ##### -->
 <para>
-Calls the object's shutdown handler.
+Emits the "destroy" signal notifying all reference holders that they should
+release the #GtkObject. See the overview documentation at the top of the 
+page for more details.
 </para>
 <para>
 The memory for the object itself won't be deleted until
-its reference count drops to 0, though.
-See gtk_object_unref().
+its reference count actually drops to 0; gtk_object_destroy() merely asks 
+reference holders to release their references, it does not free the object.
 </para>
 
 @object: the object to destroy.
@@ -389,19 +290,18 @@ See gtk_object_unref().
 
 <!-- ##### FUNCTION gtk_object_get ##### -->
 <para>
-
+Get properties of an object. Deprecated in favor of g_object_get().  It takes an
+object, then a list of name/return location pairs in a list, followed by NULL.
 </para>
 
-@object: 
-@first_property_name: 
-@Varargs: 
-<!-- # Unused Parameters # -->
-@first_arg_name: 
+@object: a #GtkObject
+@first_property_name: name of first property to get the value for 
+@Varargs: list of name-return location pairs.
 
 
 <!-- ##### FUNCTION gtk_object_set ##### -->
 <para>
-This function sets multiple arguments of an object.
+Set properties on an object. Deprecated in favor of g_object_set().
 </para>
 <para>
 It takes an object, then a list of name/value pairs
@@ -421,15 +321,14 @@ void set_box_properties(GtkBox* box)
 </para>
 
 @object: the object whose arguments should be set.
-@first_property_name: 
+@first_property_name: name of the first property to set
 @Varargs: the value of the first argument, followed optionally
 by more name/value pairs, followed by NULL.
-<!-- # Unused Parameters # -->
-@first_arg_name: the name of the first argument to set.
 
 
 <!-- ##### FUNCTION gtk_object_set_data ##### -->
 <para>
+Deprecated in favor of g_object_set_data().
 Each object carries around a table of associations from
 strings to pointers.  This function lets you set an association.
 </para>
@@ -445,6 +344,7 @@ the old association will be destroyed.
 
 <!-- ##### FUNCTION gtk_object_set_data_full ##### -->
 <para>
+Deprecated in favor of g_object_set_data_full().
 Like gtk_object_set_data() except it adds notification
 for when the association is destroyed, either by
 gtk_object_remove_data() or when the object is destroyed.
@@ -458,7 +358,8 @@ gtk_object_remove_data() or when the object is destroyed.
 
 <!-- ##### FUNCTION gtk_object_remove_data ##### -->
 <para>
-Remove a specified datum from the object's data associations (the object_data).
+Deprecated in favor of setting object data to %NULL using g_object_set_data().
+Removes a specified datum from the object's data associations (the object_data).
 Subsequent calls to gtk_object_get_data() will return NULL.
 </para>
 <para>
@@ -472,6 +373,7 @@ it will be invoked.
 
 <!-- ##### FUNCTION gtk_object_get_data ##### -->
 <para>
+Deprecated in favor of g_object_get_data().
 Get a named field from the object's table of associations (the object_data).
 </para>
 
@@ -482,6 +384,7 @@ Get a named field from the object's table of associations (the object_data).
 
 <!-- ##### FUNCTION gtk_object_remove_no_notify ##### -->
 <para>
+Deprecated in favor of g_object_steal_data().
 Remove a specified datum from the object's data associations (the object_data),
 without invoking the association's destroy handler.
 </para>
@@ -497,6 +400,7 @@ Therefore this only affects data set using gtk_object_set_data_full().
 
 <!-- ##### FUNCTION gtk_object_set_user_data ##### -->
 <para>
+Deprecated in favor of g_object_set_data().
 For convenience, every object offers a generic user data
 pointer.  The function set it.
 </para>
@@ -515,6 +419,7 @@ This function is equivalent to:
 
 <!-- ##### FUNCTION gtk_object_get_user_data ##### -->
 <para>
+Deprecated in favor of g_object_get_data().
 Get the object's user data pointer.
 </para>
 <para>
@@ -528,6 +433,7 @@ writing applications.
 
 <!-- ##### FUNCTION gtk_object_add_arg_type ##### -->
 <para>
+Deprecated in favor of the #GObject property system including #GParamSpec.
 Add a new type of argument to an object class.
 Usually this is called when registering a new type of object.
 </para>
@@ -542,6 +448,7 @@ settable or gettable, whether it is set when the object is constructed.)
 
 <!-- ##### FUNCTION gtk_object_set_data_by_id ##### -->
 <para>
+Deprecated in favor of g_object_set_qdata().
 Just like gtk_object_set_data() except that it takes
 a #GQuark instead of a string, so it is slightly faster.
 </para>
@@ -557,6 +464,7 @@ to get an id from a string.
 
 <!-- ##### FUNCTION gtk_object_set_data_by_id_full ##### -->
 <para>
+Deprecated in favor of g_object_set_qdata_full().
 Just like gtk_object_set_data_full() except that it takes
 a #GQuark instead of a string, so it is slightly faster.
 </para>
@@ -573,6 +481,7 @@ to get an id from a string.
 
 <!-- ##### FUNCTION gtk_object_get_data_by_id ##### -->
 <para>
+Deprecated in favor of g_object_get_qdata().
 Just like gtk_object_get_data() except that it takes
 a #GQuark instead of a string, so it is slightly faster.
 </para>
@@ -588,6 +497,7 @@ to get an id from a string.
 
 <!-- ##### FUNCTION gtk_object_remove_data_by_id ##### -->
 <para>
+Deprecated in favor of g_object_set_qdata() called with data of %NULL.
 Just like gtk_object_remove_data() except that it takes
 a #GQuark instead of a string, so it is slightly faster.
 </para>
@@ -606,6 +516,7 @@ to get an id from a string.
 
 <!-- ##### FUNCTION gtk_object_remove_no_notify_by_id ##### -->
 <para>
+Deprecated in favor of g_object_steal_qdata().
 Just like gtk_object_remove_no_notify() except that it takes
 a #GQuark instead of a string, so it is slightly faster.
 </para>
@@ -622,34 +533,19 @@ to get an id from a string.
 
 <!-- ##### MACRO gtk_object_data_try_key ##### -->
 <para>
-Sees whether a certain quark exists.
-Returns that quark if so.
+Useless deprecated macro. Ignore it.
 </para>
-<para>
-Although this is currently the same as g_quark_try_string(),
-it might someday be different, for example, if GQuarks
-and object data are converted to separate mechanisms,
-so it is good to use this macro.
-</para>
-
-
 
 <!-- ##### MACRO gtk_object_data_force_id ##### -->
 <para>
-Makes a quark from a string, possibly allocating a new quark.
+Useless deprecated macro. Ignore it. 
 </para>
-<para>
-Although this is currently the same as g_quark_from_string(),
-it might someday be different, for example, if GQuarks
-and object data are converted to separate mechanisms,
-so it is good to use this macro.
-</para>
-
-
 
 <!-- ##### SIGNAL GtkObject::destroy ##### -->
 <para>
-Indicates that an object is being destroyed.
+Signals that all holders of a reference to the #GtkObject should release
+the reference that they hold. May result in finalization of the object
+if all references are released.
 </para>
 
 @object: the object which received the signal.
@@ -657,5 +553,6 @@ Indicates that an object is being destroyed.
 <!-- ##### ARG GtkObject:user-data ##### -->
 <para>
 A pointer for convenience when programming applications.
+Deprecated.
 </para>
 

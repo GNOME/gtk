@@ -1374,6 +1374,17 @@ gdk_window_set_modal_hint (GdkWindow *window,
 			     0);
 }
 
+/**
+ * gdk_window_set_geometry_hints:
+ * @window: a #GdkWindow
+ * @geometry: geometry hints
+ * @geom_mask: bitmask indicating fields of @geometry to pay attention to
+ *
+ * Sets the geometry hints for @window. Hints flagged in @geom_mask
+ * are set, hints not flagged in @geom_mask are unset.
+ * To unset all hints, use a @geom_mask of 0 and a @geometry of %NULL.
+ * 
+ **/
 void 
 gdk_window_set_geometry_hints (GdkWindow      *window,
 			       GdkGeometry    *geometry,

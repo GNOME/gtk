@@ -934,7 +934,7 @@ logical_motion_tests (void)
   expected[8] = 11;   /* before 'x' */
   expected[9] = 12;   /* before 'y' */
   expected[10] = 13;  /* before 'z' */
-  expected[11] = 14;  /* after 'z' */
+  expected[11] = 14;  /* after 'z' (only matters going backward) */
   expected_steps = 11;
   
   gtk_text_buffer_get_start_iter (buffer, &iter);
@@ -951,17 +951,15 @@ logical_motion_tests (void)
                    pos, expected[i]);
         }
 
-      /* g_print ("%d = %d\n", pos, expected[i]); */
-
       ++i;      
     }
   while (gtk_text_iter_forward_cursor_position (&iter));
 
-  if (i != expected_steps)
-    g_error ("Expected %d steps, there were actually %d\n", expected_steps, i);
-
   if (!gtk_text_iter_is_end (&iter))
     g_error ("Expected to stop at the end iterator\n");
+  
+  if (i != expected_steps)
+    g_error ("Expected %d steps, there were actually %d\n", expected_steps, i);
 
   i = expected_steps;
   do
@@ -986,6 +984,84 @@ logical_motion_tests (void)
     g_error ("Expected %d steps, there were actually %d\n", expected_steps - i, i);
 
   if (!gtk_text_iter_is_start (&iter))
+    g_error ("Expected to stop at the start iterator\n");
+
+
+  /* Check sentence boundaries */
+  
+  gtk_text_buffer_set_text (buffer, "Hi.\nHi. \nHi! Hi. Hi? Hi.", -1);
+
+  memset (expected, 0, sizeof (expected));
+
+  expected[0] = 0;    /* before first Hi */
+  expected[1] = 3;    /* After first . */
+  expected[2] = 7;    /* After second . */
+  expected[3] = 12;   /* After ! */
+  expected[4] = 16;   /* After third . */
+  expected[5] = 20;   /* After ? */
+  
+  expected_steps = 6;
+  
+  gtk_text_buffer_get_start_iter (buffer, &iter);
+  i = 0;
+  do
+    {
+      int pos;
+
+      pos = gtk_text_iter_get_offset (&iter);
+
+      if (pos != expected[i])
+        {
+          g_error ("Sentence position %d, expected %d",
+                   pos, expected[i]);
+        }
+
+      ++i;
+    }
+  while (gtk_text_iter_forward_sentence_end (&iter));
+
+  if (i != expected_steps)
+    g_error ("Expected %d steps, there were actually %d\n", expected_steps, i);
+
+  if (!gtk_text_iter_is_end (&iter))
+    g_error ("Expected to stop at the end iterator\n");
+  
+  gtk_text_buffer_set_text (buffer, "Hi.\nHi. \nHi! Hi. Hi? Hi.", -1);
+
+  memset (expected, 0, sizeof (expected));
+
+  expected[0] = 24;
+  expected[1] = 22;
+  expected[2] = 17;
+  expected[3] = 14;
+  expected[4] = 9;
+  expected[5] = 4;
+  expected[6] = 0;
+  
+  expected_steps = 7;
+  
+  gtk_text_buffer_get_end_iter (buffer, &iter);
+  i = 0;
+  do
+    {
+      int pos;
+
+      pos = gtk_text_iter_get_offset (&iter);
+
+      if (pos != expected[i])
+        {
+          g_error ("Sentence position %d, expected %d",
+                   pos, expected[i]);
+        }
+
+      ++i;
+    }
+  while (gtk_text_iter_backward_sentence_start (&iter));
+
+  if (i != expected_steps)
+    g_error ("Expected %d steps, there were actually %d\n", expected_steps, i);
+
+  if (gtk_text_iter_get_offset (&iter) != 0)
     g_error ("Expected to stop at the start iterator\n");
   
   g_print ("Logical motion tests passed\n");

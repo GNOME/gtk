@@ -36,12 +36,6 @@ GtkTreeView
 </para>
 
 
-<!-- ##### STRUCT GtkTreeSelectionClass ##### -->
-<para>
-
-</para>
-
-
 <!-- ##### USER_FUNCTION GtkTreeViewColumnDropFunc ##### -->
 <para>
 

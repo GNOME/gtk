@@ -1,3 +1,10 @@
+2001-10-02  Havoc Pennington  <hp@redhat.com>
+
+	* gdk/x11/gdkwindow-x11.c: docs
+
+	* tests/testtextbuffer.c (logical_motion_tests): add sentence
+	boundary tests
+
 Tue Oct  2 20:18:32 2001  Kristian Rietveld  <kristian@planet.nl>
 
 	* demos/gtk-demo/Makefile.am: add editable_cells.c,

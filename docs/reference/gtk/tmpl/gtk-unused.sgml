@@ -376,6 +376,12 @@ The last structured enumerated type value.
 </para>
 
 
+<!-- ##### MACRO GTK_TYPE_TREE_VIEW_COLUMN ##### -->
+<para>
+
+</para>
+
+
 <!-- ##### MACRO GTK_VALUE_ARGS ##### -->
 <para>
 Use to get the value of a GtkArg whose GtkType is GTK_TYPE_ARGS
@@ -990,6 +996,12 @@ produce superscript and subscript.
 
 
 <!-- ##### ARG GtkTextView:justify ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### STRUCT GtkTreeSelectionClass ##### -->
 <para>
 
 </para>
