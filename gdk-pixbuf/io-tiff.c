@@ -255,6 +255,13 @@ gdk_pixbuf__tiff_image_load (FILE *f, GError **error)
         tiff_push_handlers ();
         
         fd = fileno (f);
+
+        /* On OSF, apparently fseek() works in some on-demand way, so
+         * the fseek gdk_pixbuf_new_from_file() doesn't work here
+         * since we are using the raw file descriptor. So, we call lseek() on the fd
+         * before using it. (#60840)
+         */
+        lseek (fd, 0, SEEK_SET);
         tiff = TIFFFdOpen (fd, "libpixbuf-tiff", "r");
         
         if (!tiff || global_error) {

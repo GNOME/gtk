@@ -1,3 +1,10 @@
+Thu Sep 20 17:22:48 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* io-tiff.c (gdk_pixbuf__tiff_image_load): On OSF, apparently fseek()
+	works in some on-demand way, so the fseek gdk_pixbuf_new_from_file() doesn't 
+	work here since we are using the raw file descriptor. So, we call lseek()
+	on the fileno(f) before using it. (#60840).
+
 2001-09-20  James Henstridge  <james@daa.com.au>
 
 	* Makefile.am (gdk-pixbuf-enum-types.c): same change as in pango,
