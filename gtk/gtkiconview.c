@@ -36,6 +36,8 @@
 #include "gtkwindow.h"
 #include "gtktextbuffer.h"
 
+#define DEBUG_ICON_VIEW
+
 #define ICON_TEXT_PADDING 3
 
 #define GTK_ICON_VIEW_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), GTK_TYPE_ICON_VIEW, GtkIconViewPrivate))
@@ -1005,7 +1007,7 @@ gtk_icon_view_expose (GtkWidget *widget,
     if (gdk_region_rect_in (expose->region, &item_rectangle) == GDK_OVERLAP_RECTANGLE_OUT)
       continue;
 
-#if 0
+#ifdef DEBUG_ICON_VIEW
     gdk_draw_rectangle (icon_view->priv->bin_window,
 			GTK_WIDGET (icon_view)->style->black_gc,
 			FALSE,
@@ -1665,7 +1667,6 @@ gtk_icon_view_layout_single_row (GtkIconView *icon_view,
 
       gtk_icon_view_calculate_item_size (icon_view, item, item_width);
 
-      
       colspan = 1 + (item->width - 1) / (item_width + icon_view->priv->column_spacing);
       current_width += colspan * (item_width + icon_view->priv->column_spacing);
 	
@@ -1684,12 +1685,19 @@ gtk_icon_view_layout_single_row (GtkIconView *icon_view,
 	  if (rtl)
 	    {
 	      item->layout_x = item->x + ICON_TEXT_PADDING + focus_width + focus_pad;
-	      item->pixbuf_x = item->x + 2 * (ICON_TEXT_PADDING + focus_width + focus_pad) + icon_view->priv->spacing + item->layout_width;
+	      if (icon_view->priv->text_column != -1 ||
+		  icon_view->priv->markup_column != -1)
+		item->pixbuf_x = item->x + 2 * (ICON_TEXT_PADDING + focus_width + focus_pad) + icon_view->priv->spacing + item->layout_width;
+	      else
+		item->pixbuf_x = item->x;
 	    }
 	  else 
 	    {
 	      item->pixbuf_x = item->x;
-	      item->layout_x = item->x + item->pixbuf_width + icon_view->priv->spacing + ICON_TEXT_PADDING + focus_width + focus_pad;
+	      if (icon_view->priv->pixbuf_column != -1)
+		item->layout_x = item->x + item->pixbuf_width + icon_view->priv->spacing + ICON_TEXT_PADDING + focus_width + focus_pad;
+	      else
+		item->layout_x = item->x + ICON_TEXT_PADDING + focus_width + focus_pad;
 	    }
 	}
       else
@@ -1733,7 +1741,10 @@ gtk_icon_view_layout_single_row (GtkIconView *icon_view,
       else 
 	{
 	  item->pixbuf_y = item->y + (max_pixbuf_height - item->pixbuf_height);
-	  item->layout_y = item->pixbuf_y + item->pixbuf_height + icon_view->priv->spacing + ICON_TEXT_PADDING + focus_width + focus_pad;
+	  if (icon_view->priv->pixbuf_column != -1)
+	    item->layout_y = item->pixbuf_y + item->pixbuf_height + icon_view->priv->spacing + ICON_TEXT_PADDING + focus_width + focus_pad;
+	  else
+	    item->layout_y = item->y + ICON_TEXT_PADDING + focus_width + focus_pad;
       }
       /* Update the bounding box */
       item->y = item->pixbuf_y;
@@ -1852,6 +1863,7 @@ gtk_icon_view_calculate_item_size (GtkIconView     *icon_view,
   gint focus_width, focus_pad;
   gint layout_width, layout_height;
   gint maximum_layout_width;
+  gint spacing, padding;
   gint colspan;
   GdkPixbuf *pixbuf;
   
@@ -1862,6 +1874,8 @@ gtk_icon_view_calculate_item_size (GtkIconView     *icon_view,
 			"focus-line-width", &focus_width,
 			"focus-padding", &focus_pad,
 			NULL);
+
+  spacing = icon_view->priv->spacing;
 
   if (icon_view->priv->pixbuf_column != -1)
     {
@@ -1874,6 +1888,7 @@ gtk_icon_view_calculate_item_size (GtkIconView     *icon_view,
     {
       item->pixbuf_width = 0;
       item->pixbuf_height = 0;
+      spacing = 0;
     }
   
   if (icon_view->priv->orientation == GTK_ORIENTATION_HORIZONTAL &&
@@ -1885,7 +1900,7 @@ gtk_icon_view_calculate_item_size (GtkIconView     *icon_view,
   else
     maximum_layout_width = MAX (item_width, item->pixbuf_width);
     
-  if (icon_view->priv->markup_column != 1 ||
+  if (icon_view->priv->markup_column != -1 ||
       icon_view->priv->text_column != -1)
     {
       gtk_icon_view_update_item_text (icon_view, item);
@@ -1897,22 +1912,25 @@ gtk_icon_view_calculate_item_size (GtkIconView     *icon_view,
       
       item->layout_width = layout_width;
       item->layout_height = layout_height;
+      padding = 2 * (ICON_TEXT_PADDING + focus_width + focus_pad);
     }
   else
     {
       item->layout_width = 0;
       item->layout_height = 0;
+      spacing = 0;
+      padding = 0;
     }
 
   if (icon_view->priv->orientation == GTK_ORIENTATION_HORIZONTAL)
     {
-      item->width = layout_width + 2 * (ICON_TEXT_PADDING + focus_width + focus_pad) + icon_view->priv->spacing + item->pixbuf_width;
-      item->height = MAX (layout_height + 2 * (ICON_TEXT_PADDING + focus_width + focus_pad), item->pixbuf_height);
+      item->width = item->layout_width + padding + spacing + item->pixbuf_width;
+      item->height = MAX (item->layout_height + padding, item->pixbuf_height);
     }
   else
     {
-      item->width = MAX (layout_width + 2 * (ICON_TEXT_PADDING + focus_width + focus_pad), item->pixbuf_width);
-      item->height = layout_height + 2 * (ICON_TEXT_PADDING + focus_width + focus_pad) + icon_view->priv->spacing + item->pixbuf_height;
+      item->width = MAX (item->layout_width + padding, item->pixbuf_width);
+      item->height = item->layout_height + padding + spacing + item->pixbuf_height;
     }
 }
 
@@ -2019,7 +2037,8 @@ gtk_icon_view_paint_item (GtkIconView     *icon_view,
       g_object_unref (pixbuf);
     }
 
-  if (icon_view->priv->text_column != -1)
+  if (icon_view->priv->text_column != -1 ||
+      icon_view->priv->markup_column != -1)
     {
       if (item->selected)
 	{
@@ -2244,16 +2263,18 @@ gtk_icon_view_update_item_text (GtkIconView     *icon_view,
 			  icon_view->priv->markup_column, &text,
 			  -1);
       pango_layout_set_markup (icon_view->priv->layout, text, -1);
+      g_free (text);        
     }
-  else
+  else if (icon_view->priv->text_column != -1)
     {
       gtk_tree_model_get (icon_view->priv->model, &iter,
 			  icon_view->priv->text_column, &text,
 			  -1);
       pango_layout_set_text (icon_view->priv->layout, text, -1);
+      g_free (text);        
     }
-
-  g_free (text);        
+  else
+      pango_layout_set_text (icon_view->priv->layout, "", -1);
 }
 
 static GdkPixbuf *
