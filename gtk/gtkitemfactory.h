@@ -199,7 +199,6 @@ void	gtk_item_factories_path_delete	   (const gchar		*ifactory_path,
 
 
 #ifdef __cplusplus
-#pragma {
 }
 #endif /* __cplusplus */
 
