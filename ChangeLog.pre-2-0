@@ -1,3 +1,8 @@
+Fri Feb  8 14:30:14 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkclist.c (title_focus_in): Return FALSE if
+	not shoing the titles. (#70959, Thomas Leonard)
+
 2002-02-08  Darin Adler  <darin@bentspoon.com>
 
 	* demos/gtk-demo/main.c: (load_file): isspace -> g_ascii_isspace

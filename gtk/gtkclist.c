@@ -6614,6 +6614,9 @@ title_focus_in (GtkCList *clist, gint dir)
   gint i;
   gint left, right;
 
+  if (!GTK_CLIST_SHOW_TITLES (clist))
+    return FALSE;
+
   /* Check last focused column */
   if (clist->focus_header_column != -1)
     {
