@@ -2013,16 +2013,13 @@ gtk_tree_view_button_press (GtkWidget      *widget,
 			"horizontal_separator", &horizontal_separator,
 			NULL);
 
-  /* put this separate, because the user might remove the latest
-   * treeview node in the focus-in-event callback. If so, the code
-   * flow won't enter the second if.
+
+  /* Because grab_focus can cause reentrancy, we delay grab_focus until after
+   * we're done handling the button press.
    */
   if (event->window == tree_view->priv->bin_window &&
       tree_view->priv->tree != NULL)
     {
-      if (!GTK_WIDGET_HAS_FOCUS (widget))
-	gtk_widget_grab_focus (widget);
-      GTK_TREE_VIEW_UNSET_FLAG (tree_view, GTK_TREE_VIEW_DRAW_KEYFOCUS);
     }
 
   if (event->window == tree_view->priv->bin_window &&
@@ -2059,6 +2056,9 @@ gtk_tree_view_button_press (GtkWidget      *widget,
 					event->x,
 					event->y);
 	    }
+	  if (!GTK_WIDGET_HAS_FOCUS (widget))
+	    gtk_widget_grab_focus (widget);
+	  GTK_TREE_VIEW_UNSET_FLAG (tree_view, GTK_TREE_VIEW_DRAW_KEYFOCUS);
 	  return TRUE;
 	}
 
@@ -2069,8 +2069,13 @@ gtk_tree_view_button_press (GtkWidget      *widget,
       y_offset = -_gtk_rbtree_find_offset (tree_view->priv->tree, new_y, &tree, &node);
 
       if (node == NULL)
-	/* We clicked in dead space */
-	return TRUE;
+	{
+	  /* We clicked in dead space */
+	  if (!GTK_WIDGET_HAS_FOCUS (widget))
+	    gtk_widget_grab_focus (widget);
+	  GTK_TREE_VIEW_UNSET_FLAG (tree_view, GTK_TREE_VIEW_DRAW_KEYFOCUS);
+	  return TRUE;
+	}
 
       /* Get the path and the node */
       path = _gtk_tree_view_find_path (tree_view, tree, node);
@@ -2117,7 +2122,9 @@ gtk_tree_view_button_press (GtkWidget      *widget,
       if (column == NULL)
 	{
 	  gtk_tree_path_free (path);
-
+	  if (!GTK_WIDGET_HAS_FOCUS (widget))
+	    gtk_widget_grab_focus (widget);
+	  GTK_TREE_VIEW_UNSET_FLAG (tree_view, GTK_TREE_VIEW_DRAW_KEYFOCUS);
 	  return FALSE;
 	}
 
@@ -2287,8 +2294,6 @@ gtk_tree_view_button_press (GtkWidget      *widget,
             }
         }
 
-      GTK_TREE_VIEW_UNSET_FLAG (tree_view, GTK_TREE_VIEW_DRAW_KEYFOCUS);
-
       if (row_double_click)
 	{
 	  gtk_grab_remove (widget);
@@ -2299,6 +2304,10 @@ gtk_tree_view_button_press (GtkWidget      *widget,
 	}
 
       gtk_tree_path_free (path);
+
+      if (!GTK_WIDGET_HAS_FOCUS (widget))
+	gtk_widget_grab_focus (widget);
+      GTK_TREE_VIEW_UNSET_FLAG (tree_view, GTK_TREE_VIEW_DRAW_KEYFOCUS);
 
       return TRUE;
     }

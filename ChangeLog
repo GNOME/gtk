@@ -1,3 +1,9 @@
+Wed Jan 14 18:01:52 2004  Jonathan Blandford  <jrb@gnome.org>
+
+	* gtk/gtktreeview.c (gtk_tree_view_button_press): move grab_focus
+	to after handling the button presses in the TreeView to avoid
+	getting multiple selection_changes()
+
 Wed Jan 14 21:16:20 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkimcontext.c: Documentation fix.  (#131335, Theppitak 
