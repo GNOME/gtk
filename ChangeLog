@@ -1,3 +1,9 @@
+Tue Oct 12 17:11:02 2004    <timj@birnet.org>                                                                                                                 
+                                                                                                                                                              
+        * gtk/gtkwidget.c (gtk_widget_set_usize_internal): don't queue the                                                                                    
+        widget for resize or emit change notification if the usize didn't                                                                                     
+        change. this works around a buggy signal connection in #155139.                                                                                       
+                                                                                                                                                              
 2004-10-08  Matthias Clasen  <mclasen@redhat.com>
 
 	* configure.in: Bump version.
