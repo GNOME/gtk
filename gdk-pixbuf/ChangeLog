@@ -1,3 +1,8 @@
+2000-01-14  Jonathan Blandford  <jrb@redhat.com>
+
+	* gdk-pixbuf/gdk-pixbuf-render.c (gdk_pixbuf_render_pixmap): new
+	function to let you create a gdk_pixmap from a gdk_pixbuf.
+
 2000-01-11  Jacob Berkman  <jacob@helixcode.com>
 
 	* gdk-pixbuf/pixops/Makefile.am (INCLUDES): added

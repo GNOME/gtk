@@ -147,6 +147,11 @@ void gdk_pixbuf_render_to_drawable (GdkPixbuf *pixbuf,
 				    GdkRgbDither dither,
 				    int x_dither, int y_dither);
 
+void gdk_pixbuf_render_pixmap (GdkPixbuf        *pixbuf,
+			       GdkPixmap       **pixmap,
+			       GdkBitmap       **mask,
+			       gint              alpha_threshold);
+
 void gdk_pixbuf_render_to_drawable_alpha (GdkPixbuf *pixbuf, GdkDrawable *drawable,
 					  int src_x, int src_y,
 					  int dest_x, int dest_y,
