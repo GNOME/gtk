@@ -376,7 +376,7 @@ gtk_main_iteration_do (gboolean blocking)
 	{
 	  grab_widget = event_widget;
 	}
-      
+
       /* Not all events get sent to the grabbing widget.
        * The delete, destroy, expose, focus change and resize
        *  events still get sent to the event widget because

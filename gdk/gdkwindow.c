@@ -1349,7 +1349,7 @@ gdk_window_dnd_drag_set (GdkWindow   *window,
     }
   else
     {
-      free (window_private->dnd_drag_data_typesavail);
+      g_free (window_private->dnd_drag_data_typesavail);
       window_private->dnd_drag_data_typesavail = NULL;
       window_private->dnd_drag_data_numtypesavail = 0;
     }
@@ -1410,9 +1410,6 @@ gdk_window_dnd_data_set (GdkWindow       *window,
   g_return_if_fail (data_numbytes > 0);
   g_return_if_fail (event->type == GDK_DRAG_REQUEST);
 
-  g_free (event->dragrequest.data_type);
-  event->dragrequest.data_type = NULL;
-  
   window_private = (GdkWindowPrivate *) window;
   g_return_if_fail (window_private->dnd_drag_accepted != 0);    
   if (window_private->destroyed)

@@ -916,6 +916,10 @@ gdk_event_free (GdkEvent *event)
       g_free (event->dropdataavailable.data);
       break;
 
+    case GDK_DRAG_REQUEST:
+      g_free (event->dragrequest.data_type);
+      break;
+
     default:
       break;
     }
@@ -2069,16 +2073,16 @@ gdk_event_translate (GdkEvent *event,
 					x, y, &x, &y, &twin);
 		}
 	    }
-#ifdef DEBUG_DND
-	  g_print("Drag is now in window %#x, lastwin was %#x\n",
-		curwin, lastwin);
+#if defined(DEBUG_DND) /* && defined(DEBUG_DND_MORE_DETAILS) */
+	  g_print("Drag is now in window %#x, lastwin was %#x, ddc = %#x\n",
+		curwin, lastwin, dnd_drag_curwin);
 #endif
 	  if(curwin != dnd_drag_curwin && curwin != lastwin)
 	    {
 	      /* We have left one window and entered another
 		 (do leave & enter bits) */
-	      if(dnd_drag_curwin != real_sw->xwindow && dnd_drag_curwin != None)
-		gdk_dnd_drag_leave(dnd_drag_curwin);
+	      if(dnd_drag_curwin != None)
+		  gdk_dnd_drag_leave(dnd_drag_curwin);
 	      dnd_drag_curwin = curwin;
 	      gdk_dnd_drag_enter(dnd_drag_curwin);
 	      dnd_drag_dropzone.x = dnd_drag_dropzone.y = 0;
@@ -2122,8 +2126,8 @@ gdk_event_translate (GdkEvent *event,
 		      dnd_drag_target = None;
 		    }
 		}
-	    } else
-	      dnd_drag_curwin = None;
+	    } /* else
+	      dnd_drag_curwin = None; */
 	  return_val = FALSE;
 	}
       else
@@ -2133,7 +2137,7 @@ gdk_event_translate (GdkEvent *event,
     case EnterNotify:
       /* Print debugging info.
        */
-#ifndef DEBUG_DND
+#if !(defined(DEBUG_DND) && defined(DEBUG_DND_MORE_DETAILS))
       if (gdk_show_events)
 #endif
 	g_print ("enter notify:\t\twindow: %ld  detail: %d subwin: %ld\n",
@@ -2211,7 +2215,7 @@ gdk_event_translate (GdkEvent *event,
     case LeaveNotify:
       /* Print debugging info.
        */
-#ifndef DEBUG_DND
+#if !(defined(DEBUG_DND) && defined(DEBUG_DND_MORE_DETAILS))
       if (gdk_show_events)
 #endif
 	g_print ("leave notify:\t\twindow: %ld  detail: %d subwin: %ld\n",
@@ -2650,7 +2654,8 @@ gdk_event_translate (GdkEvent *event,
 #ifndef DEBUG_DND
 	  if (gdk_show_events)
 #endif
-	    g_print ("GDK_DROP_ENTER\n");
+	    g_print ("GDK_DROP_ENTER [%d][%d]\n",
+		window_private->dnd_drop_enabled, event->dropenter.u.flags.sendreply);
 	  return_val = FALSE;
 
 	  /* Now figure out if we really want this drop...
@@ -2684,8 +2689,13 @@ gdk_event_translate (GdkEvent *event,
 			  False, NoEventMask, &replyev);
 
 	      event->any.type = GDK_DROP_ENTER;
+	      event->any.window = window;
 	      event->dropenter.requestor = replyev.xclient.window;
 	      event->dropenter.u.allflags = xevent->xclient.data.l[1];
+#ifdef DEBUG_DND
+	      g_print("We sent a GDK_DROP_ENTER on to Gtk\n");
+#endif
+	      return_val = TRUE;
 	    }
 	}
       else if (xevent->xclient.message_type == gdk_dnd.gdk_XdeLeave)
