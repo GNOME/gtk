@@ -20,6 +20,7 @@
 
 #include "gtkfilesystem.h"
 #include "gtkfilesystemunix.h"
+#include "gtkintl.h"
 
 #define XDG_PREFIX _gtk_xdg
 #include "xdgmime/xdgmime.h"
@@ -295,7 +296,7 @@ gtk_file_system_unix_create_folder (GtkFileSystem     *file_system,
       g_set_error (error,
 		   GTK_FILE_SYSTEM_ERROR,
 		   GTK_FILE_SYSTEM_ERROR_NONEXISTENT,
-		   "error creating directory '%s': %s",
+		   _("error creating directory '%s': %s"),
 		   filename_utf8 ? filename_utf8 : "???",
 		   g_strerror (errno));
       g_free (filename_utf8);
@@ -553,7 +554,7 @@ gtk_file_system_unix_add_bookmark (GtkFileSystem     *file_system,
   g_set_error (error,
 	       GTK_FILE_SYSTEM_ERROR,
 	       GTK_FILE_SYSTEM_ERROR_FAILED,
-	       "This file system does not support bookmarks");
+	       _("This file system does not support bookmarks"));
   return FALSE;
 }
 
@@ -566,7 +567,7 @@ gtk_file_system_unix_remove_bookmark (GtkFileSystem     *file_system,
   g_set_error (error,
 	       GTK_FILE_SYSTEM_ERROR,
 	       GTK_FILE_SYSTEM_ERROR_FAILED,
-	       "This file system does not support bookmarks");
+	       _("This file system does not support bookmarks"));
   return FALSE;
 }
 
@@ -737,7 +738,7 @@ filename_get_info (const gchar     *filename,
       g_set_error (error,
 		   GTK_FILE_SYSTEM_ERROR,
 		   GTK_FILE_SYSTEM_ERROR_NONEXISTENT,
-		   "error getting information for '%s': %s",
+		   _("error getting information for '%s': %s"),
 		   filename_utf8 ? filename_utf8 : "???",
 		   g_strerror (errno));
       g_free (filename_utf8);

@@ -1,3 +1,13 @@
+2003-11-03  Federico Mena Quintero  <federico@ximian.com>
+
+	* gtk/gtkfilechooserdefault.c (create_shortcuts_tree): Add a stock
+	icon to the "Add bookmark" button.
+
+	* gtk/gtkfilesystemunix.c: Mark missing strings for translation.
+	* gtk/gtkfilesystemmodel.c: Likewise.
+	* gtk/gtkfilechooser.c: Likewise.
+	* gtk/gtkfilechooserdefault.c: Likewise.
+
 Mon Nov  3 20:56:28 2003  Matthias Clasen  <maclas@gmx.de>
 
 	* gdk/gdk.c: 

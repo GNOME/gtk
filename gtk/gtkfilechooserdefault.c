@@ -35,6 +35,7 @@
 #include "gtkhpaned.h"
 #include "gtkicontheme.h"
 #include "gtkimage.h"
+#include "gtkintl.h"
 #include "gtklabel.h"
 #include "gtkmenuitem.h"
 #include "gtkmessagedialog.h"
@@ -494,7 +495,7 @@ shortcuts_append_home (GtkFileChooserDefault *impl)
   char *label;
 
   name = g_get_user_name ();
-  label = g_strdup_printf ("%s's Home", name);
+  label = g_strdup_printf (_("%s's Home"), name);
 
   home = g_get_home_dir ();
   home_path = gtk_file_system_filename_to_path (impl->file_system, home);
@@ -514,7 +515,7 @@ shortcuts_append_desktop (GtkFileChooserDefault *impl)
 
   /* FIXME: What is the Right Way of finding the desktop directory? */
 
-  name = g_build_filename (g_get_home_dir (), "Desktop", NULL);
+  name = g_build_filename (g_get_home_dir (), _("Desktop"), NULL);
   path = gtk_file_system_filename_to_path (impl->file_system, name);
   g_free (name);
 
@@ -640,7 +641,7 @@ toolbar_up_cb (GtkToolButton         *button,
   else
     {
       error_dialog (impl,
-		    "Could not go to the parent folder:\n%s",
+		    _("Could not go to the parent folder:\n%s"),
 		    error);
       g_error_free (error);
     }
@@ -709,7 +710,7 @@ create_filter (GtkFileChooserDefault *impl)
   gtk_container_add (GTK_CONTAINER (impl->filter_alignment), hbox);
   gtk_widget_show (hbox);
 
-  label = gtk_label_new_with_mnemonic ("Files of _type:");
+  label = gtk_label_new_with_mnemonic (_("Files of _type:"));
   gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, FALSE, 0);
   gtk_widget_show (label);
 
@@ -765,7 +766,7 @@ create_folder_tree (GtkFileChooserDefault *impl)
   /* Column */
 
   gtk_tree_view_insert_column_with_data_func (GTK_TREE_VIEW (impl->tree), 0,
-					      "File name",
+					      _("File name"),
 					      gtk_cell_renderer_text_new (),
 					      tree_name_data_func, impl, NULL);
   gtk_tree_view_set_search_column (GTK_TREE_VIEW (impl->tree),
@@ -868,6 +869,8 @@ create_shortcuts_tree (GtkFileChooserDefault *impl)
 {
   GtkWidget *vbox;
   GtkWidget *hbox;
+  GtkWidget *hbox2;
+  GtkWidget *widget;
   GtkTreeSelection *selection;
   GtkTreeViewColumn *column;
   GtkCellRenderer *renderer;
@@ -910,7 +913,7 @@ create_shortcuts_tree (GtkFileChooserDefault *impl)
   /* Column */
 
   column = gtk_tree_view_column_new ();
-  gtk_tree_view_column_set_title (column, "Folder");
+  gtk_tree_view_column_set_title (column, _("Folder"));
 
   renderer = gtk_cell_renderer_pixbuf_new ();
   gtk_tree_view_column_pack_start (column, renderer, FALSE);
@@ -932,22 +935,34 @@ create_shortcuts_tree (GtkFileChooserDefault *impl)
   gtk_box_pack_end (GTK_BOX (vbox), hbox, FALSE, FALSE, 0);
   gtk_widget_show (hbox);
 
-  impl->add_bookmark_button = gtk_button_new_with_label ("Add bookmark");
+  /* "Add bookmark" */
+
+  impl->add_bookmark_button = gtk_button_new ();
+
+  hbox2 = gtk_hbox_new (FALSE, 2);
+  gtk_container_add (GTK_CONTAINER (impl->add_bookmark_button), hbox2);
+  widget = gtk_image_new_from_stock (GTK_STOCK_ADD, GTK_ICON_SIZE_BUTTON);
+  gtk_box_pack_start (GTK_BOX (hbox2), widget, FALSE, FALSE, 0);
+  widget = gtk_label_new (_("Add bookmark"));
+  gtk_box_pack_start (GTK_BOX (hbox2), widget, FALSE, FALSE, 0);
+  gtk_widget_show_all (impl->add_bookmark_button);
+
   g_signal_connect (impl->add_bookmark_button, "clicked",
 		    G_CALLBACK (add_bookmark_button_clicked_cb), impl);
-  gtk_box_pack_start (GTK_BOX (hbox), impl->add_bookmark_button, TRUE, TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (hbox), impl->add_bookmark_button, FALSE, FALSE, 0);
   gtk_widget_set_sensitive (impl->add_bookmark_button, FALSE);
   gtk_widget_show (impl->add_bookmark_button);
+
+  /* "Remove bookmark" */
 
   impl->remove_bookmark_button = gtk_button_new ();
   g_signal_connect (impl->remove_bookmark_button, "clicked",
 		    G_CALLBACK (remove_bookmark_button_clicked_cb), impl);
   image = gtk_image_new_from_stock (GTK_STOCK_DELETE, GTK_ICON_SIZE_BUTTON);
   gtk_container_add (GTK_CONTAINER (impl->remove_bookmark_button), image);
-  gtk_widget_show (image);
   gtk_widget_set_sensitive (impl->remove_bookmark_button, FALSE);
   gtk_box_pack_start (GTK_BOX (hbox), impl->remove_bookmark_button, FALSE, FALSE, 0);
-  gtk_widget_show (impl->remove_bookmark_button);
+  gtk_widget_show_all (impl->remove_bookmark_button);
 
   return vbox;
 }
@@ -986,7 +1001,7 @@ create_file_list (GtkFileChooserDefault *impl)
   /* Filename column */
 
   column = gtk_tree_view_column_new ();
-  gtk_tree_view_column_set_title (column, "File name");
+  gtk_tree_view_column_set_title (column, _("File name"));
   gtk_tree_view_column_set_sort_column_id (column, FILE_LIST_COL_NAME);
 
   renderer = gtk_cell_renderer_pixbuf_new ();
@@ -1004,7 +1019,7 @@ create_file_list (GtkFileChooserDefault *impl)
   /* Size column */
 
   column = gtk_tree_view_column_new ();
-  gtk_tree_view_column_set_title (column, "Size");
+  gtk_tree_view_column_set_title (column, _("Size"));
 
   renderer = gtk_cell_renderer_text_new ();
   gtk_tree_view_column_pack_start (column, renderer, TRUE);
@@ -1016,7 +1031,7 @@ create_file_list (GtkFileChooserDefault *impl)
   /* Modification time column */
 
   column = gtk_tree_view_column_new ();
-  gtk_tree_view_column_set_title (column, "Modified");
+  gtk_tree_view_column_set_title (column, _("Modified"));
 
   renderer = gtk_cell_renderer_text_new ();
   gtk_tree_view_column_pack_start (column, renderer, TRUE);
@@ -1037,7 +1052,7 @@ create_filename_entry (GtkFileChooserDefault *impl)
   hbox = gtk_hbox_new (FALSE, 6);
   gtk_widget_show (hbox);
 
-  label = gtk_label_new_with_mnemonic ("_Location:");
+  label = gtk_label_new_with_mnemonic (_("_Location:"));
   gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, FALSE, 0);
   gtk_widget_show (label);
 
@@ -1140,7 +1155,7 @@ gtk_file_chooser_default_constructor (GType                  type,
 
   /* Preview */
 
-  impl->preview_frame = gtk_frame_new ("Preview");
+  impl->preview_frame = gtk_frame_new (_("Preview"));
   gtk_table_attach (GTK_TABLE (table), impl->preview_frame,
 		    1, 2,                   0, 2,
 		    0,                      GTK_EXPAND | GTK_FILL,
@@ -1886,7 +1901,7 @@ gtk_file_chooser_default_remove_shortcut_folder (GtkFileChooser    *chooser,
   g_set_error (error,
 	       GTK_FILE_CHOOSER_ERROR,
 	       GTK_FILE_CHOOSER_ERROR_NONEXISTENT,
-	       "shortcut %s does not exist",
+	       _("shortcut %s does not exist"),
 	       gtk_file_path_get_string (path));
 
   return FALSE;
@@ -2357,13 +2372,13 @@ list_size_data_func (GtkTreeViewColumn *tree_column,
     return;
 
   if (size < (gint64)1024)
-    str = g_strdup_printf ("%d bytes", (gint)size);
+    str = g_strdup_printf (_("%d bytes"), (gint)size);
   else if (size < (gint64)1024*1024)
-    str = g_strdup_printf ("%.1f K", size / (1024.));
+    str = g_strdup_printf (_("%.1f K"), size / (1024.));
   else if (size < (gint64)1024*1024*1024)
-    str = g_strdup_printf ("%.1f M", size / (1024.*1024.));
+    str = g_strdup_printf (_("%.1f M"), size / (1024.*1024.));
   else
-    str = g_strdup_printf ("%.1f G", size / (1024.*1024.*1024.));
+    str = g_strdup_printf (_("%.1f G"), size / (1024.*1024.*1024.));
 
   g_object_set (cell,
 		"text", str,
@@ -2403,7 +2418,7 @@ list_mtime_data_func (GtkTreeViewColumn *tree_column,
   if (tm.tm_mday == now_tm.tm_mday
       && tm.tm_mon == now_tm.tm_mon
       && tm.tm_year == now_tm.tm_year)
-    strcpy (buf, "Today");
+    strcpy (buf, _("Today"));
   else
     {
       int i;
@@ -2423,10 +2438,10 @@ list_mtime_data_func (GtkTreeViewColumn *tree_column,
 	      && tm.tm_year == then_tm.tm_year)
 	    {
 	      if (i == 1)
-		strcpy (buf, "Yesterday");
+		strcpy (buf, _("Yesterday"));
 	      else
 		if (strftime (buf, sizeof (buf), "%A", &tm) == 0)
-		  strcpy (buf, "Unknown");
+		  strcpy (buf, _("Unknown"));
 
 	      break;
 	    }
@@ -2436,8 +2451,8 @@ list_mtime_data_func (GtkTreeViewColumn *tree_column,
 
       if (i == 7)
 	{
-	  if (strftime (buf, sizeof (buf), "%d/%b/%Y", &tm) == 0)
-	    strcpy (buf, "Unknown");
+	  if (strftime (buf, sizeof (buf), _("%d/%b/%Y"), &tm) == 0)
+	    strcpy (buf, _("Unknown"));
 	}
     }
 

@@ -21,9 +21,8 @@
 #include "gtkfilechooser.h"
 #include "gtkfilechooserprivate.h"
 #include "gtkfilesystem.h"
+#include "gtkintl.h"
 #include "gtktypebuiltins.h"
-
-#define _(str) (str)
 
 static void gtk_file_chooser_class_init (gpointer g_iface);
 
@@ -1440,7 +1439,7 @@ gtk_file_chooser_add_shortcut_folder (GtkFileChooser    *chooser,
       g_set_error (error,
 		   GTK_FILE_CHOOSER_ERROR,
 		   GTK_FILE_CHOOSER_ERROR_BAD_FILENAME,
-		   "Invalid filename: %s",
+		   _("Invalid filename: %s"),
 		   folder);
       return FALSE;
     }
@@ -1484,7 +1483,7 @@ gtk_file_chooser_remove_shortcut_folder (GtkFileChooser    *chooser,
       g_set_error (error,
 		   GTK_FILE_CHOOSER_ERROR,
 		   GTK_FILE_CHOOSER_ERROR_BAD_FILENAME,
-		   "Invalid filename: %s",
+		   _("Invalid filename: %s"),
 		   folder);
       return FALSE;
     }
@@ -1559,7 +1558,7 @@ gtk_file_chooser_add_shortcut_folder_uri (GtkFileChooser    *chooser,
       g_set_error (error,
 		   GTK_FILE_CHOOSER_ERROR,
 		   GTK_FILE_CHOOSER_ERROR_BAD_FILENAME,
-		   "Invalid filename: %s",
+		   _("Invalid filename: %s"),
 		   uri);
       return FALSE;
     }
@@ -1603,7 +1602,7 @@ gtk_file_chooser_remove_shortcut_folder_uri (GtkFileChooser    *chooser,
       g_set_error (error,
 		   GTK_FILE_CHOOSER_ERROR,
 		   GTK_FILE_CHOOSER_ERROR_BAD_FILENAME,
-		   "Invalid filename: %s",
+		   _("Invalid filename: %s"),
 		   uri);
       return FALSE;
     }

@@ -22,6 +22,7 @@
 
 #include "gtkfilesystemmodel.h"
 #include "gtkfilesystem.h"
+#include "gtkintl.h"
 #include "gtktreemodel.h"
 
 typedef struct _GtkFileSystemModelClass GtkFileSystemModelClass;
@@ -1013,7 +1014,7 @@ file_model_node_get_info (GtkFileSystemModel *model,
       if (node->is_dummy)
 	{
 	  node->info = gtk_file_info_new ();
-	  gtk_file_info_set_display_name (node->info, "(Empty)");
+	  gtk_file_info_set_display_name (node->info, _("(Empty)"));
 	}
       else if (node->parent || model->root_folder)
 	{
