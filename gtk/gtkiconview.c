@@ -905,7 +905,6 @@ rubberbanding (gpointer data)
   GdkRectangle old_area;
   GdkRectangle new_area;
   GdkRectangle common;
-  GdkRegion *common_region;
   GdkRegion *invalid_region;
   
   icon_list = EGG_ICON_LIST (data);
@@ -929,30 +928,28 @@ rubberbanding (gpointer data)
   new_area.width = ABS (x - icon_list->priv->rubberband_x1) + 1;
   new_area.height = ABS (y - icon_list->priv->rubberband_y1) + 1;
 
-  gdk_rectangle_intersect (&old_area, &new_area, &common);
-  
-  /* always invalidate border */
-  if (common.width > 2)
-    {
-      common.width -= 2;
-      common.x += 1;
-    }
-  
-  if (common.height > 2)
-    {
-      common.y += 1;
-      common.height -= 2;
-    }
-
-  common_region = gdk_region_rectangle (&common);
-  
   invalid_region = gdk_region_rectangle (&old_area);
   gdk_region_union_with_rect (invalid_region, &new_area);
-  gdk_region_subtract (invalid_region, common_region);
+
+  gdk_rectangle_intersect (&old_area, &new_area, &common);
+  if (common.width > 2 && common.height > 2)
+    {
+      GdkRegion *common_region;
+
+      /* make sure the border is invalidated */
+      common.x += 1;
+      common.y += 1;
+      common.width -= 2;
+      common.height -= 2;
+      
+      common_region = gdk_region_rectangle (&common);
+
+      gdk_region_subtract (invalid_region, common_region);
+      gdk_region_destroy (common_region);
+    }
   
   gdk_window_invalidate_region (icon_list->priv->bin_window, invalid_region, TRUE);
     
-  gdk_region_destroy (common_region);
   gdk_region_destroy (invalid_region);
 
   icon_list->priv->rubberband_x2 = x;
