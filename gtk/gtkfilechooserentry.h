@@ -22,6 +22,7 @@
 #define __GTK_FILE_CHOOSER_ENTRY_H__
 
 #include "gtkfilesystem.h"
+#include "gtkfilechooser.h"
 #include <gtk/gtkwidget.h>
 
 G_BEGIN_DECLS
@@ -34,6 +35,9 @@ typedef struct _GtkFileChooserEntry      GtkFileChooserEntry;
 
 GType              _gtk_file_chooser_entry_get_type           (void);
 GtkWidget *        _gtk_file_chooser_entry_new                (gboolean eat_tab);
+void               _gtk_file_chooser_entry_set_action         (GtkFileChooserEntry *chooser_entry,
+							       GtkFileChooserAction action);
+GtkFileChooserAction _gtk_file_chooser_entry_get_action       (GtkFileChooserEntry *chooser_entry);
 void               _gtk_file_chooser_entry_set_file_system    (GtkFileChooserEntry *chooser_entry,
 							       GtkFileSystem       *file_system);
 void               _gtk_file_chooser_entry_set_base_folder    (GtkFileChooserEntry *chooser_entry,

@@ -3644,6 +3644,10 @@ gtk_file_chooser_default_set_property (GObject      *object,
 	    impl->action = action;
 	    update_appearance (impl);
 	  }
+	
+	if (impl->save_file_name_entry)
+	  _gtk_file_chooser_entry_set_action (GTK_FILE_CHOOSER_ENTRY (impl->save_file_name_entry),
+					      action);
       }
       break;
     case GTK_FILE_CHOOSER_PROP_FILE_SYSTEM_BACKEND:
@@ -4933,20 +4937,26 @@ gtk_file_chooser_default_should_respond (GtkFileChooserEmbed *chooser_embed)
       gboolean is_valid, is_empty;
       gboolean is_folder;
       gboolean retval;
+      GtkFileChooserEntry *entry;  
 
     save_entry:
 
       g_assert (impl->action == GTK_FILE_CHOOSER_ACTION_SAVE
 		|| impl->action == GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER);
 
+      entry = GTK_FILE_CHOOSER_ENTRY (impl->save_file_name_entry);
       path = check_save_entry (impl, &is_valid, &is_empty);
 
-      if (!is_valid)
+      if (!is_empty && !is_valid)
 	return FALSE;
 
+      if (is_empty)
+	path = gtk_file_path_copy (_gtk_file_chooser_entry_get_current_folder (entry));
+      
       is_folder = check_is_folder (impl->file_system, path, NULL);
       if (is_folder)
 	{
+	  _gtk_file_chooser_entry_set_file_part (entry, "");
 	  change_folder_and_display_error (impl, path);
 	  retval = FALSE;
 	}
@@ -4965,15 +4975,31 @@ gtk_file_chooser_default_should_respond (GtkFileChooserEmbed *chooser_embed)
       GtkTreeIter iter;
 
       if (shortcuts_get_selected (impl, &iter))
-	shortcuts_activate_iter (impl, &iter);
+	{
+	  shortcuts_activate_iter (impl, &iter);
+	  
+	  gtk_widget_grab_focus (impl->browse_files_tree_view);
+	}
       else
 	goto file_list;
 
       return FALSE;
     }
+  else if (impl->toplevel_last_focus_widget == impl->browse_files_tree_view)
+    {
+      /* The focus is on a dialog's action area button, *and* the widget that
+       * was focused immediately before it is the file list.  
+       */
+      goto file_list;
+    }
   else
-    goto file_list; /* The focus is on a dialog's action area button or something else */
-
+    /* The focus is on a dialog's action area button or something else */
+    if (impl->action == GTK_FILE_CHOOSER_ACTION_SAVE
+	|| impl->action == GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER)
+      goto save_entry;
+    else
+      goto file_list; 
+  
   g_assert_not_reached ();
   return FALSE;
 }
@@ -5174,13 +5200,14 @@ shortcuts_activate_iter (GtkFileChooserDefault *impl,
 		      -1);
 
   if (!col_data)
-    return; /* We are on a separator */
+    return FALSE; /* We are on a separator */
 
   if (is_volume)
     {
       GtkFileSystemVolume *volume;
 
       volume = col_data;
+
       shortcuts_activate_volume (impl, volume);
     }
   else
@@ -5209,6 +5236,8 @@ shortcuts_row_activated_cb (GtkTreeView           *tree_view,
 						    &child_iter,
 						    &iter);
   shortcuts_activate_iter (impl, &child_iter);
+
+  gtk_widget_grab_focus (impl->browse_files_tree_view);
 }
 
 /* Handler for GtkWidget::key-press-event on the shortcuts list */
@@ -5500,7 +5529,7 @@ location_entry_create (GtkFileChooserDefault *impl)
   gtk_entry_set_activates_default (GTK_ENTRY (entry), TRUE);
   _gtk_file_chooser_entry_set_file_system (GTK_FILE_CHOOSER_ENTRY (entry), impl->file_system);
   _gtk_file_chooser_entry_set_base_folder (GTK_FILE_CHOOSER_ENTRY (entry), impl->current_folder);
-
+  _gtk_file_chooser_entry_set_action (GTK_FILE_CHOOSER_ENTRY (entry), impl->action);
   if (impl->action == GTK_FILE_CHOOSER_ACTION_OPEN
       || impl->action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER)
     _gtk_file_chooser_entry_set_file_part (GTK_FILE_CHOOSER_ENTRY (entry), "");

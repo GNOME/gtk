@@ -340,6 +340,7 @@ gtk_file_chooser_button_set_property (GObject      *object,
 
     case GTK_FILE_CHOOSER_PROP_ACTION:
       g_object_set_property (G_OBJECT (priv->dialog), pspec->name, value);
+      _gtk_file_chooser_entry_set_action (priv->entry, g_value_get_enum (value));
 
       switch (g_value_get_enum (value))
 	{

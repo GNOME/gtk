@@ -1,3 +1,34 @@
+2004-09-17  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkcellrenderertext.c (gtk_cell_renderer_text_render): Remove
+	leftover debug code.
+
+	Improve the behaviour of the file chooser in save mode. Fixes bugs
+	#151031, #151608, #151994 reported by Owen Taylor and Alexander 
+	Larsson.
+	
+	* gtk/gtkfilechooserdefault.c (gtk_file_chooser_default_set_property): 
+	(location_entry_create): Propagate the action to the file 
+	chooser entries.
+	(gtk_file_chooser_default_should_respond): Switch folders if 
+	the user enters a directory name in the entry and clear the entry
+	after switching folders.
+	(gtk_file_chooser_default_should_respond, shortcuts_row_activated_cb): 
+	Move focus to the file list when activating a shortcut.
+	(gtk_file_chooser_default_should_respond): Handle the case where the
+	user clicks on "Save" after selecting a folder in the file list.
+
+	* gtk/gtkfilechooserbutton.c (gtk_file_chooser_button_set_property): 
+	Propagate the action to the file chooser entries.
+	
+	* gtk/gtkfilechooserentry.h: 
+	* gtk/gtkfilechooserentry.c (_gtk_file_chooser_entry_set_action): 
+	(_gtk_file_chooser_entry_get_action): New functions to propagate
+	the GtkFileChooserAction of the file chooser to the file chooser 
+	entry.
+	(check_completion_callback): If we are in save mode, only do 
+	inline completion for directories. 
+
 Fri Sep 17 11:20:03 2004  Jonathan Blandford  <jrb@gnome.org>
 
 	* gtk/gtklabel.c (gtk_label_set_markup): Add an example to the

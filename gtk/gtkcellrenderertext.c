@@ -1416,8 +1416,6 @@ gtk_cell_renderer_text_get_size (GtkCellRenderer *cell,
 		       (1.0 - cell->xalign) : cell->xalign) * (cell_area->width - rect.width - (2 * cell->xpad));
 	  if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL)
 	    *x_offset -= rect.width;
-	  if (celltext->text && !strcmp ("Makefile", celltext->text))
-	    g_print ("x_offset: %d %d %d\n", cell_area->width, *x_offset, rect.width);
 	  *x_offset = MAX (*x_offset, 0);
 	}
       if (y_offset)
@@ -1509,8 +1507,6 @@ gtk_cell_renderer_text_render (GtkCellRenderer      *cell,
   else
     pango_layout_set_width (layout, -1);
   
-  if (celltext->text && !strcmp ("Makefile", celltext->text))
-    g_print ("render: %d %d %d\n", cell_area->x, cell_area->width, cell_area->x + x_offset + cell->xpad);
   gtk_paint_layout (widget->style,
                     window,
                     state,
@@ -1521,12 +1517,6 @@ gtk_cell_renderer_text_render (GtkCellRenderer      *cell,
                     cell_area->x + x_offset + cell->xpad,
                     cell_area->y + y_offset + cell->ypad,
                     layout);
-  gdk_draw_line (window, widget->style->black_gc,
-		 cell_area->x + x_offset + cell->xpad,
-		 cell_area->y + y_offset + cell->ypad,
-		 cell_area->x + x_offset + cell->xpad,
-		 cell_area->y + y_offset + cell->ypad + 20);
-
 
   g_object_unref (layout);
 }
