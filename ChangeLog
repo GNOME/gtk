@@ -1,5 +1,8 @@
 2004-09-26  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkpathbar.c (gtk_path_bar_check_parent_path): Scroll
+	to make the current folder visible.  (#152921)
+
 	* gtk/gtkbutton.c: Revert the button state to !button_down,
 	if we're missing the release event due to grab shadowing
 	or insensitivation.

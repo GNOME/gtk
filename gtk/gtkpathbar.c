@@ -1165,13 +1165,13 @@ gtk_path_bar_check_parent_path (GtkPathBar         *path_bar,
 						 BUTTON_DATA (list->data),
 						 (list == current_path) ? TRUE : FALSE);
 	}
-#if 1
+
       if (!gtk_widget_get_child_visible (BUTTON_DATA (current_path->data)->button))
 	{
 	  path_bar->first_scrolled_button = current_path;
 	  gtk_widget_queue_resize (GTK_WIDGET (path_bar));
 	}
-#endif
+
       return TRUE;
     }
   return FALSE;
