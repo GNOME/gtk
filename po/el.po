@@ -8,7 +8,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.0.0\n"
-"POT-Creation-Date: 2002-04-20 20:37+0100\n"
+"POT-Creation-Date: 2002-04-27 14:26+0100\n"
 "PO-Revision-Date: 2002-04-20 21:06+0100\n"
 "Last-Translator: Simos Xenitellis <simos@hellug.gr>\n"
 "Language-Team: Greek <nls@tux.hellug.gr>\n"
@@ -40,8 +40,8 @@ msgstr ""
 #: gdk-pixbuf/gdk-pixbuf-animation.c:233
 #, c-format
 msgid ""
-"Failed to load animation '%s': reason not known, probably a corrupt animation "
-"file"
+"Failed to load animation '%s': reason not known, probably a corrupt "
+"animation file"
 msgstr ""
 
 #
@@ -86,16 +86,16 @@ msgstr ""
 msgid "This build of gdk-pixbuf does not support saving the image format: %s"
 msgstr ""
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:859
+#: gdk-pixbuf/gdk-pixbuf-io.c:857
 #, c-format
 msgid "Failed to open '%s' for writing: %s"
 msgstr ""
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:880
+#: gdk-pixbuf/gdk-pixbuf-io.c:878
 #, c-format
 msgid ""
-"Failed to close '%s' while writing image, all data may not have been saved: "
-"%s"
+"Failed to close '%s' while writing image, all data may not have been saved: %"
+"s"
 msgstr ""
 
 #: gdk-pixbuf/gdk-pixbuf-loader.c:250
@@ -192,8 +192,7 @@ msgid "GIF image contained a frame appearing outside the image bounds."
 msgstr ""
 
 #: gdk-pixbuf/io-gif.c:1173
-msgid ""
-"First frame of GIF image had 'revert to previous' as its disposal mode."
+msgid "First frame of GIF image had 'revert to previous' as its disposal mode."
 msgstr ""
 
 #: gdk-pixbuf/io-gif.c:1208
@@ -297,37 +296,39 @@ msgstr ""
 msgid "Fatal error in PNG image file: %s"
 msgstr ""
 
-#: gdk-pixbuf/io-png.c:296
+#: gdk-pixbuf/io-png.c:301
 msgid "Insufficient memory to load PNG file"
 msgstr ""
 
-#: gdk-pixbuf/io-png.c:599
+#: gdk-pixbuf/io-png.c:604
 #, c-format
 msgid ""
 "Insufficient memory to store a %ld by %ld image; try exiting some "
 "applications to reduce memory usage"
 msgstr ""
 
-#: gdk-pixbuf/io-png.c:650
+#: gdk-pixbuf/io-png.c:655
 msgid "Fatal error reading PNG image file"
 msgstr ""
 
-#: gdk-pixbuf/io-png.c:699
+#: gdk-pixbuf/io-png.c:704
 #, c-format
 msgid "Fatal error reading PNG image file: %s"
 msgstr ""
 
-#: gdk-pixbuf/io-png.c:765
+#: gdk-pixbuf/io-png.c:770
 msgid ""
-"Keys for PNG tEXt chunks must have at least 1 and at most 79 characters."
+"Keys for PNG text chunks must have at least 1 and at most 79 characters."
 msgstr ""
 
-#: gdk-pixbuf/io-png.c:773
-msgid "Keys for PNG tEXt chunks must be ASCII characters."
+#: gdk-pixbuf/io-png.c:778
+msgid "Keys for PNG text chunks must be ASCII characters."
 msgstr ""
 
-#: gdk-pixbuf/io-png.c:794
-msgid "Value for PNG tEXt chunk can not be converted to ISO-8859-1 encoding."
+#: gdk-pixbuf/io-png.c:811
+#, c-format
+msgid ""
+"Value for PNG text chunk %s can not be converted to ISO-8859-1 encoding."
 msgstr ""
 
 #: gdk-pixbuf/io-pnm.c:247
@@ -797,8 +798,8 @@ msgstr "Δευτερεύων"
 
 #: gtk/gtkbbox.c:161
 msgid ""
-"If TRUE, the child appears in a secondary group of children, suitable for, "
-"e.g., help buttons."
+"If TRUE, the child appears in a secondary group of children, suitable for, e."
+"g., help buttons."
 msgstr ""
 
 #: gtk/gtkbox.c:125
@@ -893,111 +894,164 @@ msgid ""
 msgstr ""
 
 #
-#: gtk/gtkcellrenderer.c:103
+#: gtk/gtkcellrenderer.c:120
 msgid "mode"
 msgstr "κατάσταση"
 
-#: gtk/gtkcellrenderer.c:104
+#: gtk/gtkcellrenderer.c:121
 msgid "Editable mode of the CellRenderer"
 msgstr ""
 
 #
-#: gtk/gtkcellrenderer.c:113
+#: gtk/gtkcellrenderer.c:130
 msgid "visible"
 msgstr "ορατό"
 
-#: gtk/gtkcellrenderer.c:114
+#: gtk/gtkcellrenderer.c:131
 msgid "Display the cell"
 msgstr ""
 
 #
-#: gtk/gtkcellrenderer.c:122
+#: gtk/gtkcellrenderer.c:139
 #, fuzzy
 msgid "xalign"
 msgstr "υπερ-ελαφρύ"
 
-#: gtk/gtkcellrenderer.c:123
+#: gtk/gtkcellrenderer.c:140
 msgid "The x-align."
 msgstr ""
 
-#: gtk/gtkcellrenderer.c:133
+#: gtk/gtkcellrenderer.c:150
 msgid "yalign"
 msgstr ""
 
-#: gtk/gtkcellrenderer.c:134
+#: gtk/gtkcellrenderer.c:151
 msgid "The y-align."
 msgstr ""
 
-#: gtk/gtkcellrenderer.c:144
+#: gtk/gtkcellrenderer.c:161
 msgid "xpad"
 msgstr ""
 
-#: gtk/gtkcellrenderer.c:145
+#: gtk/gtkcellrenderer.c:162
 msgid "The xpad."
 msgstr ""
 
-#: gtk/gtkcellrenderer.c:155
+#: gtk/gtkcellrenderer.c:172
 msgid "ypad"
 msgstr ""
 
-#: gtk/gtkcellrenderer.c:156
+#: gtk/gtkcellrenderer.c:173
 msgid "The ypad."
 msgstr ""
 
-#: gtk/gtkcellrenderer.c:166
+#: gtk/gtkcellrenderer.c:183
 msgid "width"
 msgstr "πλάτος"
 
-#: gtk/gtkcellrenderer.c:167
+#: gtk/gtkcellrenderer.c:184
 msgid "The fixed width."
 msgstr ""
 
-#: gtk/gtkcellrenderer.c:177
+#: gtk/gtkcellrenderer.c:194
 msgid "height"
 msgstr "ύψος"
 
-#: gtk/gtkcellrenderer.c:178
+#: gtk/gtkcellrenderer.c:195
 msgid "The fixed height."
 msgstr ""
 
-#: gtk/gtkcellrenderer.c:188
+#: gtk/gtkcellrenderer.c:205
 msgid "Is Expander"
 msgstr ""
 
-#: gtk/gtkcellrenderer.c:189
+#: gtk/gtkcellrenderer.c:206
 msgid "Row has children."
 msgstr ""
 
-#: gtk/gtkcellrenderer.c:198
+#: gtk/gtkcellrenderer.c:215
 msgid "Is Expanded"
 msgstr ""
 
-#: gtk/gtkcellrenderer.c:199
+#: gtk/gtkcellrenderer.c:216
 msgid "Row is an expander row, and is expanded"
 msgstr ""
 
-#: gtk/gtkcellrendererpixbuf.c:104
+#: gtk/gtkcellrenderer.c:224
+#, fuzzy
+msgid "Cell background color name"
+msgstr "Χρώμα παρασκηνίου"
+
+#: gtk/gtkcellrenderer.c:225
+#, fuzzy
+msgid "Cell background color as a string"
+msgstr "Χρώμα παρασκηνίου"
+
+#: gtk/gtkcellrenderer.c:232
+#, fuzzy
+msgid "Cell background color"
+msgstr "Χρώμα παρασκηνίου"
+
+#: gtk/gtkcellrenderer.c:233
+msgid "Cell background color as a GdkColor"
+msgstr ""
+
+#: gtk/gtkcellrenderer.c:241
+msgid "Cell background set"
+msgstr ""
+
+#: gtk/gtkcellrenderer.c:242
+msgid "Whether this tag affects the cell background color"
+msgstr ""
+
+#: gtk/gtkcellrendererpixbuf.c:130
 msgid "Pixbuf Object"
 msgstr ""
 
-#: gtk/gtkcellrendererpixbuf.c:105
+#: gtk/gtkcellrendererpixbuf.c:131
 msgid "The pixbuf to render."
 msgstr ""
 
-#: gtk/gtkcellrendererpixbuf.c:113
+#: gtk/gtkcellrendererpixbuf.c:139
 msgid "Pixbuf Expander Open"
 msgstr ""
 
-#: gtk/gtkcellrendererpixbuf.c:114
+#: gtk/gtkcellrendererpixbuf.c:140
 msgid "Pixbuf for open expander."
 msgstr ""
 
-#: gtk/gtkcellrendererpixbuf.c:122
+#: gtk/gtkcellrendererpixbuf.c:148
 msgid "Pixbuf Expander Closed"
 msgstr ""
 
-#: gtk/gtkcellrendererpixbuf.c:123
+#: gtk/gtkcellrendererpixbuf.c:149
 msgid "Pixbuf for closed expander."
+msgstr ""
+
+#: gtk/gtkcellrendererpixbuf.c:157 gtk/gtkimage.c:170
+msgid "Stock ID"
+msgstr ""
+
+#: gtk/gtkcellrendererpixbuf.c:158
+msgid "The stock ID of the stock icon to render"
+msgstr ""
+
+#
+#: gtk/gtkcellrendererpixbuf.c:165
+#, fuzzy
+msgid "Size"
+msgstr "_Μέγεθος:"
+
+#: gtk/gtkcellrendererpixbuf.c:166
+msgid "The size of the rendered icon"
+msgstr ""
+
+#: gtk/gtkcellrendererpixbuf.c:174
+msgid "Detail"
+msgstr ""
+
+#: gtk/gtkcellrendererpixbuf.c:175
+msgid "Render detail to pass to the theme engine"
 msgstr ""
 
 # #-#-#-#-#  balsa-el.po (balsa 0.9.3.1)  #-#-#-#-#
@@ -1729,8 +1783,7 @@ msgid "Invisible character"
 msgstr ""
 
 #: gtk/gtkentry.c:489
-msgid ""
-"The character to use when masking entry contents (in \"password mode\")"
+msgid "The character to use when masking entry contents (in \"password mode\")"
 msgstr ""
 
 #: gtk/gtkentry.c:496
@@ -1939,8 +1992,7 @@ msgstr "Διαγραφή Aρχείου"
 
 #: gtk/gtkfilesel.c:1593 gtk/gtkfilesel.c:1607
 #, c-format
-msgid ""
-"The file name \"%s\" contains symbols that are not allowed in filenames"
+msgid "The file name \"%s\" contains symbols that are not allowed in filenames"
 msgstr ""
 
 #: gtk/gtkfilesel.c:1595
@@ -2211,10 +2263,6 @@ msgstr ""
 
 #: gtk/gtkimage.c:162
 msgid "Filename to load and display."
-msgstr ""
-
-#: gtk/gtkimage.c:170
-msgid "Stock ID"
 msgstr ""
 
 #: gtk/gtkimage.c:171
@@ -2488,8 +2536,8 @@ msgstr ""
 
 #: gtk/gtkmenu.c:192
 msgid ""
-"A title that may be displayed by the window manager when this menu is "
-"torn-off."
+"A title that may be displayed by the window manager when this menu is torn-"
+"off."
 msgstr ""
 
 #: gtk/gtkmenu.c:260
@@ -2722,8 +2770,9 @@ msgstr ""
 #: gtk/gtkprogress.c:123
 msgid ""
 "If true the GtkProgress is in activity mode, meaning that is signals "
-"something is happening, but not how much of the activity is finished. This is "
-"used when you're doing something that you don't know how long it will take."
+"something is happening, but not how much of the activity is finished. This "
+"is used when you're doing something that you don't know how long it will "
+"take."
 msgstr ""
 
 #: gtk/gtkprogress.c:130
@@ -2754,8 +2803,8 @@ msgstr "υπερ-ελαφρύ"
 
 #: gtk/gtkprogress.c:148
 msgid ""
-"A number between 0.0 and 1.0 specifying the vertical alignment of the text in "
-"the progress widget"
+"A number between 0.0 and 1.0 specifying the vertical alignment of the text "
+"in the progress widget"
 msgstr ""
 
 #: gtk/gtkprogressbar.c:131 gtk/gtkrange.c:282 gtk/gtkspinbutton.c:237
@@ -3129,8 +3178,8 @@ msgstr ""
 
 #: gtk/gtksettings.c:173
 msgid ""
-"Whether two cursors should be displayed for mixed left-to-right and "
-"right-to-left text"
+"Whether two cursors should be displayed for mixed left-to-right and right-to-"
+"left text"
 msgstr ""
 
 #: gtk/gtksettings.c:180
@@ -3206,8 +3255,8 @@ msgstr ""
 
 #: gtk/gtkspinbutton.c:266
 msgid ""
-"Whether erroneous values are automatically changed to a spin button's nearest "
-"step increment"
+"Whether erroneous values are automatically changed to a spin button's "
+"nearest step increment"
 msgstr ""
 
 #: gtk/gtkspinbutton.c:273
@@ -4453,8 +4502,8 @@ msgstr ""
 
 #: gtk/gtkwidget.c:415
 msgid ""
-"Override for height request of the widget, or -1 if natural request should be "
-"used."
+"Override for height request of the widget, or -1 if natural request should "
+"be used."
 msgstr ""
 
 #: gtk/gtkwidget.c:424
@@ -4514,8 +4563,7 @@ msgid "Receives default"
 msgstr ""
 
 #: gtk/gtkwidget.c:473
-msgid ""
-"If TRUE, the widget will receive the default action when it is focused."
+msgid "If TRUE, the widget will receive the default action when it is focused."
 msgstr ""
 
 #: gtk/gtkwidget.c:479
@@ -4750,4 +4798,3 @@ msgstr ""
 #: modules/input/imxim.c:27
 msgid "X Input Method"
 msgstr ""
-
