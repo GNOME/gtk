@@ -7174,7 +7174,7 @@ text_window_realize (GtkTextWindow *win,
   attributes.wclass = GDK_INPUT_OUTPUT;
   attributes.visual = gtk_widget_get_visual (win->widget);
   attributes.colormap = gtk_widget_get_colormap (win->widget);
-  attributes.event_mask = GDK_VISIBILITY_NOTIFY_MASK | GDK_EXPOSURE_MASK;
+  attributes.event_mask = GDK_VISIBILITY_NOTIFY_MASK;
 
   attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_VISUAL | GDK_WA_COLORMAP;
 
@@ -7182,6 +7182,8 @@ text_window_realize (GtkTextWindow *win,
                                 &attributes,
                                 attributes_mask);
 
+  gdk_window_set_back_pixmap (win->window, NULL, FALSE);
+  
   gdk_window_show (win->window);
   gdk_window_set_user_data (win->window, win->widget);
 
