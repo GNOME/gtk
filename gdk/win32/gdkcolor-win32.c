@@ -454,8 +454,11 @@ free_colors (GdkColormap *cmap,
   GdkColormapPrivateWin32 *cmapp = GDK_WIN32_COLORMAP_DATA (cmap);
   gint i;
 #ifdef G_ENABLE_DEBUG
-  gint set_explicit = 0;
+  gint set_black_count = 0;
 #endif
+  gboolean *cleared_entries;
+
+  cleared_entries = g_new0 (gboolean, cmap->size);
 
   /* We don't have to do anything for non-palette devices. */
   
@@ -470,7 +473,10 @@ free_colors (GdkColormap *cmap,
 	  else if (cmapp->use[pixels[i]] == GDK_WIN32_PE_STATIC)
 	    ; /* Nothing either*/
 	  else
-	    cmapp->use[pixels[i]] = GDK_WIN32_PE_AVAILABLE;
+	    {
+	      cmapp->use[pixels[i]] = GDK_WIN32_PE_AVAILABLE;
+	      cleared_entries[pixels[i]] = TRUE;
+	    }
 	}
       for (i = cmapp->current_size - 1; i >= 0; i--)
 	if (cmapp->use[i] != GDK_WIN32_PE_AVAILABLE)
@@ -484,25 +490,26 @@ free_colors (GdkColormap *cmap,
 	  else
 	    cmapp->current_size = i + 1;
 	}
+      pe.peRed = pe.peGreen = pe.peBlue = pe.peFlags = 0;
       for (i = 0; i < cmapp->current_size; i++)
 	{
-	  if (cmapp->use[i] == GDK_WIN32_PE_AVAILABLE)
+	  if (cleared_entries[i])
 	    {
-	      *(WORD*)&pe = i;
-	      pe.peFlags = PC_EXPLICIT;
 	      if (!SetPaletteEntries (cmapp->hpal, i, 1, &pe))
 		WIN32_GDI_FAILED ("SetPaletteEntries");
-	      GDK_NOTE (COLORMAP, set_explicit++);
+	      GDK_NOTE (COLORMAP, set_black_count++);
 	    }
 	}
 #if 0
       GDK_NOTE (COLORMAP, gdk_win32_print_hpalette (cmapp->hpal));
 #else
-      GDK_NOTE (COLORMAP, (set_explicit > 0 ?
-			   g_print ("free_colors: %d (%d) PC_EXPLICIT\n",
-				    set_explicit, cmapp->current_size)
+      GDK_NOTE (COLORMAP, (set_black_count > 0 ?
+			   g_print ("free_colors: %d (%d) set to black\n",
+				    set_black_count, cmapp->current_size)
 			   : (void) 0));
 #endif
+      g_free (cleared_entries);
+
       break;
 
     default:

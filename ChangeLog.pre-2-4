@@ -1,3 +1,22 @@
+2002-02-17  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/win32/gdkcolor-win32.c (free_colors): Don't set the
+	PC_EXPLICIT flag for unused palette entries, that might have
+	undesired side effects. Just set them to black. Black is always
+	present in a palette, so having superfluous black entries won't
+	cause any extra allocations from the system palette either when
+	realized.
+
+	* gdk/win32/gdkevents-win32.c
+	(gdk_event_translate:WM_QUERYNEWPALETTE): Don't do anything if the
+	system visual is static color, i.e. the user has told GDK to use
+	just the 16 static colors. In that case no need to redraw
+	anything, as the colors are static and by definition always
+	correctly mapped in the system palette.
+	(WM_PALETTECHANGED): Ditto, no need to call UpdateColors() either.
+	
+	* gtk/gtk.def: Add new gtkfilesel entry points.
+
 2002-02-17  Matthias Clasen  <maclas@gmx.de>
 
 	* docs/tutorial/gtk-tut.sgml, examples/paned/paned.c, 

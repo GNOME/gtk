@@ -2732,8 +2732,11 @@ gdk_event_translate (GdkEvent *event,
     case WM_QUERYNEWPALETTE:
       GDK_NOTE (EVENTS_OR_COLORMAP, g_print ("WM_QUERYNEWPALETTE: %p\n",
 					     msg->hwnd));
-      synthesize_expose_events (window);
-      update_colors_counter = 0;
+      if (gdk_visual_get_system ()->type == GDK_VISUAL_PSEUDO_COLOR)
+	{
+	  synthesize_expose_events (window);
+	  update_colors_counter = 0;
+	}
       *ret_val_flagp = TRUE;
       *ret_valp = FALSE;
       break;
@@ -2743,6 +2746,9 @@ gdk_event_translate (GdkEvent *event,
 					     msg->hwnd, (HWND) msg->wParam));
       *ret_val_flagp = TRUE;
       *ret_valp = FALSE;
+
+      if (gdk_visual_get_system ()->type != GDK_VISUAL_PSEUDO_COLOR)
+	break;
 
       if (msg->hwnd == (HWND) msg->wParam)
 	break;
