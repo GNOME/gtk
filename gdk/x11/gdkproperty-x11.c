@@ -184,11 +184,23 @@ gdk_x11_get_virtual_atom (GdkDisplay *display,
   
   if (!virtual_atom)
     {
-      char *name = XGetAtomName (GDK_DISPLAY_XDISPLAY (display), xatom);
-      virtual_atom = gdk_atom_intern (name, FALSE);
-      XFree (name);
+      /* If this atom doesn't exist, we'll die with an X error unless
+       * we take precautions
+       */
+      char *name;
+      gdk_error_trap_push ();
+      name = XGetAtomName (GDK_DISPLAY_XDISPLAY (display), xatom);
+      if (gdk_error_trap_pop ())
+	{
+	  g_warning (G_STRLOC " invalid X atom: %d", xatom);
+	}
+      else
+	{
+	  virtual_atom = gdk_atom_intern (name, FALSE);
+	  XFree (name);
 
-      insert_atom_pair (display, virtual_atom, xatom);
+	  insert_atom_pair (display, virtual_atom, xatom);
+	}
     }
 
   return virtual_atom;

@@ -1,3 +1,10 @@
+Fri Oct 19 16:29:54 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/x11/gdkproperty-x11.c (gdk_x11_get_virtual_atom):
+	Put gdk_error_trap_push/pop() around call to
+	XGetAtomName(), to avoid dying with an X error if
+	someone feeds us (say through DND) a bad atom.
+
 2001-09-25  Darin Adler  <darin@bentspoon.com>
 
 	* tests/.cvsignore: Ignore new test program.
