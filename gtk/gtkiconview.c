@@ -377,6 +377,21 @@ egg_icon_list_class_init (EggIconListClass *klass)
 							     _ICON_LIST_RIGHT_MARGIN,
 							     G_PARAM_READABLE));
 
+  gtk_widget_class_install_style_property (widget_class,
+                                           g_param_spec_boxed ("selection_box_color",
+                                                               _("Selection Box Color"),
+                                                               _("Color of the selection box"),
+                                                               GDK_TYPE_COLOR,
+                                                               G_PARAM_READABLE));
+
+  gtk_widget_class_install_style_property (widget_class,
+                                           g_param_spec_uchar ("selection_box_alpha",
+                                                               _("Selection Box Alpha"),
+                                                               _("Opacity of the selection box"),
+                                                               0, 0xff,
+                                                               0x40,
+                                                               G_PARAM_READABLE));
+
   /* Signals */
   widget_class->set_scroll_adjustments_signal =
     g_signal_new ("set_scroll_adjustments",
@@ -1673,6 +1688,16 @@ egg_icon_list_paint_item (EggIconList     *icon_list,
 		     item->layout_height + 2 * ICON_TEXT_PADDING);
 }
 
+static guint32
+egg_gdk_color_to_rgb (const GdkColor *color)
+{
+  guint32 result;
+  result = (0xff0000 | (color->red & 0xff00));
+  result <<= 8;
+  result |= ((color->green & 0xff00) | (color->blue >> 8));
+  return result;
+}
+
 static void
 egg_icon_list_paint_rubberband (EggIconList     *icon_list,
 				GdkRectangle    *area)
@@ -1680,9 +1705,11 @@ egg_icon_list_paint_rubberband (EggIconList     *icon_list,
   GdkRectangle rect;
   GdkPixbuf *pixbuf;
   GdkGC *gc;
-  GdkColor color;
   GdkRectangle rubber_rect;
-  
+  GdkColor *fill_color_gdk;
+  guint fill_color;
+  guchar fill_color_alpha;
+
   rubber_rect.x = MIN (icon_list->priv->rubberband_x1, icon_list->priv->rubberband_x2);
   rubber_rect.y = MIN (icon_list->priv->rubberband_y1, icon_list->priv->rubberband_y2);
   rubber_rect.width = ABS (icon_list->priv->rubberband_x1 - icon_list->priv->rubberband_x2) + 1;
@@ -1691,8 +1718,19 @@ egg_icon_list_paint_rubberband (EggIconList     *icon_list,
   if (!gdk_rectangle_intersect (&rubber_rect, area, &rect))
     return;
 
+  gtk_widget_style_get (GTK_WIDGET (icon_list),
+                        "selection_box_color", &fill_color_gdk,
+                        "selection_box_alpha", &fill_color_alpha,
+                        NULL);
+
+  if (!fill_color_gdk) {
+    fill_color_gdk = gdk_color_copy (&GTK_WIDGET (icon_list)->style->base[GTK_STATE_SELECTED]);
+  }
+
+  fill_color = egg_gdk_color_to_rgb (fill_color_gdk) << 8 | fill_color_alpha;
+
   pixbuf = gdk_pixbuf_new (GDK_COLORSPACE_RGB, TRUE, 8, rect.width, rect.height);
-  gdk_pixbuf_fill (pixbuf, 0x9db8d27F);
+  gdk_pixbuf_fill (pixbuf, fill_color);
 
   gdk_pixbuf_render_to_drawable_alpha (pixbuf,
 				       icon_list->priv->bin_window,
@@ -1705,15 +1743,13 @@ egg_icon_list_paint_rubberband (EggIconList     *icon_list,
 				       0, 0);
   g_object_unref (pixbuf);
   gc = gdk_gc_new (icon_list->priv->bin_window);
-  color.red = 0x72 * 255;
-  color.green = 0x7d * 255;
-  color.blue = 0x97 * 255;
-  gdk_gc_set_rgb_fg_color (gc, &color);
+  gdk_gc_set_rgb_fg_color (gc, fill_color_gdk);
   gdk_gc_set_clip_rectangle (gc, &rect);
   gdk_draw_rectangle (icon_list->priv->bin_window,
 		      gc, FALSE,
 		      rubber_rect.x, rubber_rect.y,
 		      rubber_rect.width - 1, rubber_rect.height - 1);
+  gdk_color_free (fill_color_gdk);
   g_object_unref (gc);
 }
 
