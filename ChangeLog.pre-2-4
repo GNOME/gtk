@@ -1,3 +1,8 @@
+Fri Oct 27 20:15:00 2000  Tim Janik  <timj@gtk.org>
+
+	* gtk/Makefile.am: added dependancies for testtextbuffer which broke
+	parallel builds.
+
 Fri Oct 27 18:51:44 2000  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtksignal.[hc]: adapt to GSignal signature changes.

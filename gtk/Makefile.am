@@ -557,12 +557,14 @@ LDADDS = @STRIP_BEGIN@ \
 	@GTK_LIBS_EXTRA@				\
 	-lm						\
 @STRIP_END@
+
 testgtk_DEPENDENCIES = $(DEPS)
 testcalendar_DEPENDENCIES = $(DEPS)
 testinput_DEPENDENCIES = $(DEPS)
 testselection_DEPENDENCIES = $(DEPS)
 testrgb_DEPENDENCIES = $(DEPS)
 testtext_DEPENDENCIES = $(DEPS)
+testtextbuffer_DEPENDENCIES = $(DEPS)
 treestoretest_DEPENDENCIES = $(DEPS)
 testdnd_DEPENDENCIES = $(DEPS)
 simple_DEPENDENCIES = $(DEPS)
