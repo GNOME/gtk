@@ -1945,24 +1945,17 @@ gtk_default_render_icon (GtkStyle            *style,
   return stated;
 }
 
-static gboolean
+static void
 sanitize_size (GdkWindow *window,
 	       gint      *width,
 	       gint      *height)
 {
-  gboolean set_bg = FALSE;
-
   if ((*width == -1) && (*height == -1))
-    {
-      set_bg = GDK_IS_WINDOW (window);
-      gdk_window_get_size (window, width, height);
-    }
+    gdk_window_get_size (window, width, height);
   else if (*width == -1)
     gdk_window_get_size (window, width, NULL);
   else if (*height == -1)
     gdk_window_get_size (window, NULL, height);
-
-  return set_bg;
 }
 
 static void

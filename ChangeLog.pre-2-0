@@ -1,3 +1,7 @@
+2002-01-27  Sven Neumann  <sven@gimp.org>
+
+	* gtk/gtkstyle.c (sanitize_size): removed unused return value.
+
 Sat Jan 26 19:27:23 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtksocket.c (gtk_socket_grab_notify): Don't
