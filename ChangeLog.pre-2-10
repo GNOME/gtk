@@ -1,3 +1,11 @@
+Sun Nov 16 22:50:58 2003  Matthias Clasen  <maclas@gmx.de>
+
+	Reinstate fixes for (#124212, Marco Pesenti Gritti):
+	
+	* gtk/gtkuimanager.c (update_smart_separators): Don't spit 
+	warnings for popups.
+	(_gtk_menu_is_empty): Return FALSE for non-menus.
+
 Sun Nov 16 21:48:40 2003  Kristian Rietveld  <kris@gtk.org>
 
 	* gtk/gtkcellview.c (gtk_cell_view_finalize): just call
