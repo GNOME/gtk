@@ -242,8 +242,7 @@ gtk_accel_label_size_request (GtkWidget	     *widget,
   if (GTK_WIDGET_CLASS (parent_class)->size_request)
     GTK_WIDGET_CLASS (parent_class)->size_request (widget, requisition);
 
-  layout = gtk_widget_create_pango_layout (widget);
-  pango_layout_set_text (layout, accel_label->accel_string, -1);
+  layout = gtk_widget_create_pango_layout (widget, accel_label->accel_string);
   pango_layout_get_pixel_size (layout, &width, NULL);
   accel_label->accel_string_width = width;
   
@@ -288,8 +287,7 @@ gtk_accel_label_expose_event (GtkWidget      *widget,
 		(widget->requisition.height - misc->ypad * 2)) *
 	       misc->yalign) + 1.5;
 	  
-	  layout = gtk_widget_create_pango_layout (widget);
-	  pango_layout_set_text (layout, accel_label->accel_string, -1);
+	  layout = gtk_widget_create_pango_layout (widget, accel_label->accel_string);
 	  
 	  if (GTK_WIDGET_STATE (accel_label) == GTK_STATE_INSENSITIVE)
 	    gdk_draw_layout (widget->window,

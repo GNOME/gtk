@@ -575,9 +575,10 @@ void	   gtk_widget_restore_default_style (GtkWidget	*widget);
 void       gtk_widget_modify_style      (GtkWidget      *widget,
 					 GtkRcStyle     *style);
 
-PangoContext *gtk_widget_create_pango_context (GtkWidget *widget);
-PangoContext *gtk_widget_get_pango_context    (GtkWidget *widget);
-PangoLayout  *gtk_widget_create_pango_layout  (GtkWidget *widget);
+PangoContext *gtk_widget_create_pango_context (GtkWidget   *widget);
+PangoContext *gtk_widget_get_pango_context    (GtkWidget   *widget);
+PangoLayout  *gtk_widget_create_pango_layout  (GtkWidget   *widget,
+					       const gchar *text);
 
 /* handle composite names for GTK_COMPOSITE_CHILD widgets,
  * the returned name is newly allocated.

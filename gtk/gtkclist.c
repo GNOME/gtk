@@ -2500,7 +2500,6 @@ _gtk_clist_create_cell_layout (GtkCList       *clist,
 			       GtkCListRow    *clist_row,
 			       gint            column)
 {
-  PangoContext *context;
   PangoLayout *layout;
   GtkStyle *style;
   GtkCell *cell;
@@ -2522,11 +2521,11 @@ _gtk_clist_create_cell_layout (GtkCList       *clist,
       if (!text)
 	return NULL;
       
-      layout = gtk_widget_create_pango_layout (GTK_WIDGET (clist));
+      layout = gtk_widget_create_pango_layout (GTK_WIDGET (clist),
+					       ((cell->type == GTK_CELL_PIXTEXT) ?
+						GTK_CELL_PIXTEXT (*cell)->text :
+						GTK_CELL_TEXT (*cell)->text));
       pango_layout_set_font_description (layout, style->font_desc);
-      pango_layout_set_text (layout, ((cell->type == GTK_CELL_PIXTEXT) ?
-				      GTK_CELL_PIXTEXT (*cell)->text :
-				      GTK_CELL_TEXT (*cell)->text), -1);
       
       return layout;
       

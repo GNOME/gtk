@@ -167,8 +167,7 @@ gtk_vruler_draw_ticks (GtkRuler *ruler)
   xthickness = widget->style->xthickness;
   ythickness = widget->style->ythickness;
 
-  layout = gtk_widget_create_pango_layout (widget);
-  pango_layout_set_text (layout, "012456789", -1);
+  layout = gtk_widget_create_pango_layout (widget, "012456789");
   pango_layout_get_extents (layout, &ink_rect, &logical_rect);
   
   digit_height = PANGO_PIXELS (ink_rect.height) + 2;

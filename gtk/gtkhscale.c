@@ -525,9 +525,7 @@ gtk_hscale_draw_value (GtkScale *scale)
       PangoRectangle logical_rect;
       
       sprintf (buffer, "%0.*f", GTK_RANGE (scale)->digits, GTK_RANGE (scale)->adjustment->value);
-
-      layout = gtk_widget_create_pango_layout (widget);
-      pango_layout_set_text (layout, buffer, -1);
+      layout = gtk_widget_create_pango_layout (widget, buffer);
       pango_layout_get_pixel_extents (layout, NULL, &logical_rect);
 
       switch (scale->value_pos)

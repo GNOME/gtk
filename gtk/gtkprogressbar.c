@@ -363,8 +363,7 @@ gtk_progress_bar_size_request (GtkWidget      *widget,
     {
       buf = gtk_progress_get_text_from_value (progress, progress->adjustment->upper);
 
-      layout = gtk_widget_create_pango_layout (widget);
-      pango_layout_set_text (layout, buf, -1);
+      layout = gtk_widget_create_pango_layout (widget, buf);
       pango_layout_get_pixel_extents (layout, NULL, &logical_rect);
 	  
       g_object_unref (G_OBJECT (layout));
@@ -710,8 +709,7 @@ gtk_progress_bar_paint (GtkProgress *progress)
 
 	  buf = gtk_progress_get_current_text (progress);
 
-	  layout = gtk_widget_create_pango_layout (widget);
-	  pango_layout_set_text (layout, buf, -1);
+	  layout = gtk_widget_create_pango_layout (widget, buf);
 	  pango_layout_get_pixel_extents (layout, NULL, &logical_rect);
 	  
 	  x = widget->style->xthickness + 1 + 

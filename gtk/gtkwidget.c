@@ -3293,6 +3293,7 @@ gtk_widget_create_pango_context (GtkWidget *widget)
 /**
  * gtk_widget_create_pango_layout:
  * @widget: a #PangoWidget
+ * @text:   text to set on the layout (can be %NULL)
  * 
  * Create a new #PangoLayout with the appropriate colormap,
  * font description, and base direction for drawing text for
@@ -3306,7 +3307,8 @@ gtk_widget_create_pango_context (GtkWidget *widget)
  * Return value: the new #PangoLayout
  **/
 PangoLayout *
-gtk_widget_create_pango_layout (GtkWidget *widget)
+gtk_widget_create_pango_layout (GtkWidget   *widget,
+				const gchar *text)
 {
   PangoLayout *layout;
   PangoContext *context;
@@ -3315,6 +3317,9 @@ gtk_widget_create_pango_layout (GtkWidget *widget)
 
   context = gtk_widget_get_pango_context (widget);
   layout = pango_layout_new (context);
+
+  if (text)
+    pango_layout_set_text (layout, text, -1);
 
   return layout;
 }

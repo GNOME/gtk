@@ -280,7 +280,7 @@ gtk_scale_get_value_size (GtkScale *scale,
       
       range = GTK_RANGE (scale);
 
-      layout = gtk_widget_create_pango_layout (GTK_WIDGET (scale));
+      layout = gtk_widget_create_pango_layout (GTK_WIDGET (scale), NULL);
 
       value = ABS (range->adjustment->lower);
       if (value == 0) value = 1;

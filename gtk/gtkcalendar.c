@@ -1168,7 +1168,7 @@ gtk_calendar_size_request (GtkWidget	  *widget,
   calendar = GTK_CALENDAR (widget);
   private_data = GTK_CALENDAR_PRIVATE_DATA (widget);
 
-  layout = gtk_widget_create_pango_layout (widget);
+  layout = gtk_widget_create_pango_layout (widget, NULL);
   
   /*
    * Calculate the requisition	width for the widget.
@@ -1561,10 +1561,8 @@ gtk_calendar_paint_header (GtkWidget *widget)
 		   0, 0, header_width, private_data->header_h);
   
   
-  layout = gtk_widget_create_pango_layout (widget);
-
   sprintf (buffer, "%d", calendar->year);
-  pango_layout_set_text (layout, buffer, -1);
+  layout = gtk_widget_create_pango_layout (widget, buffer);
   pango_layout_get_pixel_extents (layout, NULL, &logical_rect);
   
   /* Draw title */
@@ -1668,7 +1666,7 @@ gtk_calendar_paint_day_names (GtkWidget *widget)
    * Write the labels
    */
 
-  layout = gtk_widget_create_pango_layout (widget);
+  layout = gtk_widget_create_pango_layout (widget, NULL);
   
   gdk_gc_set_foreground (gc, &widget->style->fg[GTK_STATE_SELECTED]);
   for (i = 0; i < 7; i++)
@@ -1752,7 +1750,7 @@ gtk_calendar_paint_week_numbers (GtkWidget *widget)
    * Write the labels
    */
   
-  layout = gtk_widget_create_pango_layout (widget);
+  layout = gtk_widget_create_pango_layout (widget, NULL);
   
   gdk_gc_set_foreground (gc, &widget->style->fg[GTK_STATE_SELECTED]);
   day_height = row_height (calendar);
@@ -1900,10 +1898,8 @@ gtk_calendar_paint_day (GtkWidget *widget,
     }
     
 
-  layout = gtk_widget_create_pango_layout (widget);
-  
   sprintf (buffer, "%d", day);
-  pango_layout_set_text (layout, buffer, -1);
+  layout = gtk_widget_create_pango_layout (widget, buffer);
   pango_layout_get_pixel_extents (layout, NULL, &logical_rect);
   
   x_loc -= logical_rect.width;

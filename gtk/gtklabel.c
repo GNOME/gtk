@@ -400,11 +400,10 @@ gtk_label_size_request (GtkWidget      *widget,
       PangoAlignment align = PANGO_ALIGN_LEFT; /* Quiet gcc */
       PangoAttrList *attrs = gtk_label_pattern_to_attrs (label);
 
-      label->layout = gtk_widget_create_pango_layout (widget);
+      label->layout = gtk_widget_create_pango_layout (widget, label->label);
+
       pango_layout_set_attributes (label->layout, attrs);
       pango_attr_list_unref (attrs);
-
-      pango_layout_set_text (label->layout, label->label, -1);
 
       switch (label->jtype)
 	{

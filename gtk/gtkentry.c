@@ -1165,7 +1165,7 @@ gtk_entry_ensure_layout (GtkEntry *entry)
   
   if (!entry->layout)
     {
-      entry->layout = gtk_widget_create_pango_layout (widget);
+      entry->layout = gtk_widget_create_pango_layout (widget, NULL);
       pango_layout_set_text (entry->layout, entry->text, entry->n_bytes);
     }
 }
