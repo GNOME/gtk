@@ -1,3 +1,10 @@
+Sat Nov 29 00:55:28 2003  Jonathan Blandford  <jrb@gnome.org>
+
+	* gtk/gtktreeview.c (gtk_tree_view_new_column_width): 
+	* gtk/gtktreeviewcolumn.c (_gtk_tree_view_column_realize_button):
+	Patch from <chinen@jp.ibm.com> to handle RTL support for column
+	resizers, #127874
+
 Fri Nov 28 00:26:24 2003  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkfilesystemmodel.c (gtk_file_system_model_finalize): 

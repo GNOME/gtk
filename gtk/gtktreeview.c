@@ -1825,7 +1825,7 @@ gtk_tree_view_size_allocate_columns (GtkWidget *widget)
 
       if (column->window)
 	gdk_window_move_resize (column->window,
-                                allocation.x + allocation.width - TREE_VIEW_DRAG_WIDTH/2,
+                                allocation.x + (rtl ? 0 : allocation.width) - TREE_VIEW_DRAG_WIDTH/2,
 				allocation.y,
                                 TREE_VIEW_DRAG_WIDTH, allocation.height);
     }
@@ -1951,11 +1951,13 @@ gtk_tree_view_button_press (GtkWidget      *widget,
   GdkRectangle cell_area;
   gint vertical_separator;
   gint horizontal_separator;
+  gboolean rtl;
 
   g_return_val_if_fail (GTK_IS_TREE_VIEW (widget), FALSE);
   g_return_val_if_fail (event != NULL, FALSE);
 
   tree_view = GTK_TREE_VIEW (widget);
+  rtl = (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL);
   gtk_tree_view_stop_editing (tree_view, FALSE);
   gtk_widget_style_get (widget,
 			"vertical_separator", &vertical_separator,
@@ -2294,7 +2296,7 @@ gtk_tree_view_button_press (GtkWidget      *widget,
 	    gtk_widget_grab_focus (widget);
 
 	  tree_view->priv->drag_pos = i;
-	  tree_view->priv->x_drag = (column->button->allocation.x + column->button->allocation.width);
+	  tree_view->priv->x_drag = column->button->allocation.x + (rtl ? 0 : column->button->allocation.width);
 	  break;
 	}
     }
@@ -8253,14 +8255,15 @@ gtk_tree_view_new_column_width (GtkTreeView *tree_view,
 {
   GtkTreeViewColumn *column;
   gint width;
+  gboolean rtl;
 
   /* first translate the x position from widget->window
    * to clist->clist_window
    */
-
+  rtl = (gtk_widget_get_direction (GTK_WIDGET (tree_view)) == GTK_TEXT_DIR_RTL);
   column = g_list_nth (tree_view->priv->columns, i)->data;
-  width = *x - column->button->allocation.x;
-
+  width = rtl ? (column->button->allocation.x + column->button->allocation.width - *x) : (*x - column->button->allocation.x);
+ 
   /* Clamp down the value */
   if (column->min_width == -1)
     width = MAX (column->button->requisition.width,
@@ -8270,8 +8273,9 @@ gtk_tree_view_new_column_width (GtkTreeView *tree_view,
 		 width);
   if (column->max_width != -1)
     width = MIN (width, column->max_width != -1);
-  *x = column->button->allocation.x + width;
 
+  *x = rtl ? (column->button->allocation.x + column->button->allocation.width - width) : (column->button->allocation.x + width);
+ 
   return width;
 }
 

@@ -1187,8 +1187,10 @@ _gtk_tree_view_column_realize_button (GtkTreeViewColumn *column)
   GtkTreeView *tree_view;
   GdkWindowAttr attr;
   guint attributes_mask;
+  gboolean rtl;
 
   tree_view = (GtkTreeView *)column->tree_view;
+  rtl = (gtk_widget_get_direction (GTK_WIDGET (tree_view)) == GTK_TEXT_DIR_RTL);
 
   g_return_if_fail (GTK_IS_TREE_VIEW (tree_view));
   g_return_if_fail (GTK_WIDGET_REALIZED (tree_view));
@@ -1217,8 +1219,7 @@ _gtk_tree_view_column_realize_button (GtkTreeViewColumn *column)
   attr.width = TREE_VIEW_DRAG_WIDTH;
   attr.height = tree_view->priv->header_height;
 
-  attr.x = (column->button->allocation.x + column->button->allocation.width) - 3;
-          
+  attr.x = (column->button->allocation.x + (rtl ? 0 : column->button->allocation.width)) - 3;
   column->window = gdk_window_new (tree_view->priv->header_window,
 				   &attr, attributes_mask);
   gdk_window_set_user_data (column->window, tree_view);
