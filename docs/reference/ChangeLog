@@ -1,3 +1,8 @@
+2000-01-08  Damon Chaplin  <damon@karuna.freeserve.co.uk>
+
+	* gtk/tmpl/gtkclist.sgml: update from Paul Schifferer
+	<isengard@geocities.com>
+
 Wed Jan  5 10:23:41 2000  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/tmpl/gtkprogress.sgml: Missing </listitem>, remove extra <para>
