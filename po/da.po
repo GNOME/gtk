@@ -171,7 +171,7 @@ msgstr "Størrelse:"
 msgid "Preview:"
 msgstr "Udseende:"
 
-#: gtk/gtkfontsel.c:966
+#: gtk/gtkfontsel.c:971
 msgid "Font Selection"
 msgstr "Skrifttypevalg"
 
@@ -374,7 +374,7 @@ msgstr ""
 "Kunne ikke indlæse billed '%s': årsag ukendt, formentlig en ødelagt "
 "billedfil"
 
-#: gdk-pixbuf/gdk-pixbuf-animation.c:225
+#: gdk-pixbuf/gdk-pixbuf-animation.c:226
 #, c-format
 msgid ""
 "Failed to load animation '%s': reason not known, probably a corrupt "
@@ -598,12 +598,12 @@ msgstr "PNM billedformat er ugyldigt"
 msgid "PNM image loader does not support this PNM subformat"
 msgstr "PNM billedindlæser understøtter ikke dette PNM-underformat"
 
-#: gtk/gdk-pixbuf-loader.c:356
+#: gtk/gdk-pixbuf-loader.c:348
 #, c-format
 msgid "Incremental loading of image type '%s' is not supported"
 msgstr "Stykvis indlæsning af billedtype '%s' er ikke understøttet"
 
-#: gtk/gdk-pixbuf-loader.c:381 gtk/gdk-pixbuf-loader.c:482
+#: gtk/gdk-pixbuf-loader.c:373 gtk/gdk-pixbuf-loader.c:474
 #, c-format
 msgid ""
 "Internal error: Image loader module '%s' failed to begin loading an image, "
@@ -776,15 +776,15 @@ msgstr "Radio status"
 msgid "Draw the toggle button as a radio button."
 msgstr "Tegn skifteknappen som en radioknap."
 
-#: gtk/gtkentry.c:2469 gtk/gtktextview.c:4493
+#: gtk/gtkentry.c:2469 gtk/gtktextview.c:4507
 msgid "Cut"
 msgstr "Klip"
 
-#: gtk/gtkentry.c:2470 gtk/gtktextview.c:4494
+#: gtk/gtkentry.c:2470 gtk/gtktextview.c:4508
 msgid "Copy"
 msgstr "Kopiér"
 
-#: gtk/gtkentry.c:2471 gtk/gtktextview.c:4495
+#: gtk/gtkentry.c:2471 gtk/gtktextview.c:4509
 msgid "Paste"
 msgstr "Indsæt"
 
