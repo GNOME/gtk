@@ -284,7 +284,7 @@ gtk_cell_renderer_toggle_render (GtkCellRenderer *cell,
     state = GTK_STATE_INSENSITIVE;
   else
     state = GTK_STATE_NORMAL;
-  
+
   if (celltoggle->radio)
     {
       gtk_paint_option (widget->style,

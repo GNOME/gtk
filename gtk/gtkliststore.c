@@ -412,8 +412,7 @@ gtk_list_store_get_iter (GtkTreeModel *tree_model,
   if (i >= GTK_LIST_STORE (tree_model)->length)
     return FALSE;
 
-  list = g_slist_nth (G_SLIST (GTK_LIST_STORE (tree_model)->root),
-                      i);
+  list = g_slist_nth (G_SLIST (GTK_LIST_STORE (tree_model)->root), i);
 
   /* If this fails, list_store->length has gotten mangled. */
   g_assert (list);
@@ -524,7 +523,9 @@ static gint
 gtk_list_store_iter_n_children (GtkTreeModel *tree_model,
 				GtkTreeIter  *iter)
 {
-  if (iter == NULL)
+  g_return_val_if_fail (GTK_LIST_STORE (tree_model)->stamp == iter->stamp, -1);
+
+  if (iter->user_data == NULL)
     return GTK_LIST_STORE (tree_model)->length;
   else
     return 0;
@@ -547,8 +548,8 @@ gtk_list_store_iter_nth_child (GtkTreeModel *tree_model,
 
   if (child)
     {
-      iter->user_data = child;
       iter->stamp = GTK_LIST_STORE (tree_model)->stamp;
+      iter->user_data = child;
       return TRUE;
     }
   else
@@ -849,8 +850,8 @@ gtk_list_store_remove (GtkListStore *list_store,
 
   validate_list_store (list_store);
 
+  list_store->stamp ++;
   gtk_tree_model_deleted (GTK_TREE_MODEL (list_store), path);
-
   gtk_tree_path_free (path);
 }
 
@@ -1290,6 +1291,7 @@ gtk_list_store_drag_data_received (GtkTreeDragDest   *drag_dest,
               ++col;
             }
 
+	  dest_iter.stamp = GTK_LIST_STORE (tree_model)->stamp;
           G_SLIST (dest_iter.user_data)->data = copy_head;
 
 	  path = gtk_list_store_get_path (GTK_TREE_MODEL (tree_model), &dest_iter);
@@ -1391,6 +1393,7 @@ static void
 gtk_list_store_sort (GtkListStore *list_store)
 {
   GtkTreeDataSortHeader *header = NULL;
+  GtkTreeIter iter;
   GArray *sort_array;
   gint i;
   GList *header_list;
@@ -1447,8 +1450,10 @@ gtk_list_store_sort (GtkListStore *list_store)
   for (i = 0; i < list_store->length; i++)
     new_order[i] = g_array_index (sort_array, SortTuple, i).offset;
   path = gtk_tree_path_new ();
+  iter.stamp = list_store->stamp;
+  iter.user_data = NULL;
   gtk_tree_model_reordered (GTK_TREE_MODEL (list_store),
-			    path, new_order);
+			    path, &iter, new_order);
   gtk_tree_path_free (path);
   g_free (new_order);
   g_array_free (sort_array, TRUE);

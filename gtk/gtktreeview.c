@@ -188,7 +188,9 @@ static void     gtk_tree_view_deleted              (GtkTreeModel     *model,
 						    gpointer          data);
 static void     gtk_tree_view_reordered            (GtkTreeModel     *model,
 						    GtkTreePath      *parent,
-						    gint             *new_order);
+						    GtkTreeIter      *iter,
+						    gint             *new_order,
+						    gpointer          data);
 /* Internal functions */
 static void     gtk_tree_view_unref_tree           (GtkTreeView      *tree_view,
 						    GtkRBTree        *tree);
@@ -3009,20 +3011,20 @@ gtk_tree_view_deleted (GtkTreeModel *model,
 static void
 gtk_tree_view_reordered (GtkTreeModel *model,
 			 GtkTreePath  *parent,
-			 gint         *new_order)
+			 GtkTreeIter  *iter,
+			 gint         *new_order,
+			 gpointer      data)
 {
-  GtkTreeView *tree_view = GTK_TREE_VIEW (model);
-  GtkTreeIter iter;
+  GtkTreeView *tree_view = GTK_TREE_VIEW (data);
   GArray *array;
   gint len;
 
-  gtk_tree_model_get_iter (model, parent, &iter);
-  len = gtk_tree_model_iter_n_children (model, &iter);
+  len = gtk_tree_model_iter_n_children (model, iter);
 
   if (len < 2)
     return;
 
-  
+  gtk_widget_queue_draw (GTK_WIDGET (data));
 }
 
 /* Internal tree functions */
@@ -3170,7 +3172,9 @@ gtk_tree_view_calc_size (GtkTreeView *tree_view,
 	  else
             gtk_tree_view_column_set_width (column, MAX (column->width, width));
 	}
+
       _gtk_rbtree_node_set_height (tree, temp, max_height);
+
       if (temp->children != NULL &&
 	  gtk_tree_model_iter_children (tree_view->priv->model, &child, iter))
 	gtk_tree_view_calc_size (tree_view, temp->children, &child, depth + 1);

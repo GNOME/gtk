@@ -15,8 +15,8 @@ static ListSort data[] =
   { "Apples", "Transmorgrify", "Exculpatory", "Gesundheit"},
   { "Oranges", "Wicker", "Adamantine", "Convivial" },
   { "Bovine Spongiform Encephilopathy", "Sleazebucket", "Mountaineer", "Pander" },
-  { "Foot and Mouth", "Lampshade", "Skim Milk\nFull Milk", "Viewless" },
-  { "Blood,\nsweat,\ntears", "The Man", "Horses", "Muckety-Muck" },
+  { "Foot and Mouth", "Lampshade", "Skim Milk Full Milk", "Viewless" },
+  { "Blood, sweat, tears", "The Man", "Horses", "Muckety-Muck" },
   { "Rare Steak", "Siam", "Watchdog", "Xantippe" },
   { "SIGINT", "Rabbit Breath", "Alligator", "Bloodstained" },
   { "Google", "Chrysanthemums", "Hobnob", "Leapfrog"},
@@ -56,7 +56,7 @@ main (int argc, char *argv[])
   gtk_signal_connect (GTK_OBJECT (window), "destroy", gtk_main_quit, NULL);
   vbox = gtk_vbox_new (FALSE, 8);
   gtk_container_set_border_width (GTK_CONTAINER (vbox), 8);
-  gtk_box_pack_start (GTK_BOX (vbox), gtk_label_new ("My List of cool words"), FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (vbox), gtk_label_new ("My list of cool words"), FALSE, FALSE, 0);
   gtk_container_add (GTK_CONTAINER (window), vbox);
 
   scrolled_window = gtk_scrolled_window_new (NULL, NULL);

@@ -1070,13 +1070,14 @@ gtk_tree_model_deleted (GtkTreeModel *tree_model,
 void
 gtk_tree_model_reordered (GtkTreeModel *tree_model,
 			  GtkTreePath  *path,
+			  GtkTreeIter  *iter,
 			  gint         *new_order)
 {
   g_return_if_fail (tree_model != NULL);
   g_return_if_fail (GTK_IS_TREE_MODEL (tree_model));
   g_return_if_fail (new_order != NULL);
 
-  g_signal_emit_by_name (tree_model, "reordered", path, new_order);
+  g_signal_emit_by_name (tree_model, "reordered", path, iter, new_order);
 }
 
 

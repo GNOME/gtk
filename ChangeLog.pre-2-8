@@ -1,3 +1,10 @@
+Tue Mar 27 22:07:44 2001  Jonathan Blandford  <jrb@webwynk.net>
+
+	* gtk/gtkliststore.c (gtk_list_store_sort): Fix arguments to
+	reordered signal.
+
+	* tests/testtreesort.c (main): fix spelling.
+
 Tue Mar 27 20:55:29 2001  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtkliststore.c: More work on implementing sortable
