@@ -1029,7 +1029,10 @@ dgettext_swapped (const gchar *msgid,
  * 
  * Sets the translation domain and uses dgettext() for translating the 
  * @label and @tooltip of #GtkActionEntry<!-- -->s added by 
- * gtk_action_group_add_actions().
+ * gtk_action_group_add_actions(). Note that GTK+ expects all strings
+ * to be encoded in UTF-8, therefore the translation domain must have
+ * its codeset set to UTF-8, see bind_textdomain_codeset() in the 
+ * gettext() documentation. 
  *
  * If you're not using gettext() for localization, see 
  * gtk_action_group_set_translate_func().
