@@ -1348,7 +1348,11 @@ _gtk_tree_selection_internal_select_node (GtkTreeSelection *selection,
 	      if (dirty)
 		{
 		  if (selection->tree_view->priv->anchor)
-		    gtk_tree_row_reference_free (selection->tree_view->priv->anchor);
+                    {
+                      gtk_tree_row_reference_free (selection->tree_view->priv->anchor);
+                      selection->tree_view->priv->anchor = NULL;
+                    }
+
 		  if (gtk_tree_selection_real_select_node (selection, tree, node, TRUE))
 		    {
 		      selection->tree_view->priv->anchor =
