@@ -41,7 +41,7 @@ typedef struct _RequestTextInfo RequestTextInfo;
 
 struct _GtkClipboard 
 {
-  GObjectClass parent_instance;
+  GObject parent_instance;
 
   GdkAtom selection;
 

@@ -1,3 +1,12 @@
+Tue Sep 24 23:33:48 2002  Manish Singh  <yosh@gimp.org>
+
+        * gtk/gtkfilesel.c: preserve ordering from gtk_tree_selection_foreach
+	when returning filenames for gtk_file_selection_get_selections
+	(#86567)
+
+	* gtk/gtkclipboard.c: GtkClipboard struct should have a GObject
+	in it, not a GObjectClass
+
 Tue Sep 24 18:18:36 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkclipboard.[ch]: Make a GObject (#75970, James
