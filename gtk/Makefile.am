@@ -204,6 +204,7 @@ gtk_private_h_sources = @STRIP_BEGIN@ \
 	gtkthemes.h		\
 	gtktreedatalist.h	\
 	gtktreeprivate.h	\
+	gtkwindow-decorate.h    \
 @STRIP_END@
 # GTK+ C sources to build the library from
 gtk_c_sources = @STRIP_BEGIN@   \
@@ -353,6 +354,7 @@ gtk_c_sources = @STRIP_BEGIN@   \
 	gtkvseparator.c		\
 	gtkwidget.c		\
 	gtkwindow.c		\
+	gtkwindow-decorate.c    \
 	fnmatch.c		\
 	fnmatch.h		\
 	gdk-pixbuf-loader.c	\

@@ -47,8 +47,8 @@ extern "C" {
 #define GTK_WINDOW_GET_CLASS(obj)       (GTK_CHECK_GET_CLASS ((obj), GTK_TYPE_WINDOW, GtkWindowClass))
 
 
-typedef struct _GtkWindow       GtkWindow;
-typedef struct _GtkWindowClass  GtkWindowClass;
+typedef struct _GtkWindow      GtkWindow;
+typedef struct _GtkWindowClass GtkWindowClass;
 
 struct _GtkWindow
 {
@@ -59,6 +59,8 @@ struct _GtkWindow
   gchar *wmclass_class;
   GtkWindowType type;
 
+  GdkWindow *frame;
+  
   GtkWidget *focus_widget;
   GtkWidget *default_widget;
   GtkWindow *transient_parent;
@@ -80,14 +82,23 @@ struct _GtkWindow
   guint use_uposition : 1;
   guint modal : 1;
   guint destroy_with_parent : 1;
+  
+  guint has_frame : 1;
+
+  guint frame_left;
+  guint frame_top;
+  guint frame_right;
+  guint frame_bottom;
 };
 
 struct _GtkWindowClass
 {
   GtkBinClass parent_class;
 
-  void (* set_focus)   (GtkWindow *window,
-			GtkWidget *focus);
+  void     (* set_focus)   (GtkWindow *window,
+			    GtkWidget *focus);
+  gboolean (* frame_event) (GtkWidget *widget,
+			    GdkEvent  *event);
 };
 
 
@@ -126,6 +137,13 @@ void       gtk_window_set_geometry_hints       (GtkWindow           *window,
 void       gtk_window_set_default_size         (GtkWindow           *window,
 						gint                 width,
 						gint                 height);
+/* gtk_window_set_has_frame () must be called before realizing the window_*/
+void       gtk_window_set_has_frame            (GtkWindow *window);
+void       gtk_window_set_frame_dimensions     (GtkWindow *window, 
+						gint       left,
+						gint       top,
+						gint       right,
+						gint       bottom);
 
 /* If window is set modal, input will be grabbed when show and released when hide */
 void       gtk_window_set_modal                (GtkWindow           *window,
@@ -134,6 +152,7 @@ GList*	   gtk_window_list_toplevels	       (void);
 
 /* Get the "built-in" accel group (convenience thing) */
 GtkAccelGroup* gtk_window_get_default_accel_group (GtkWindow *window);
+
 
 /* --- internal functions --- */
 void       gtk_window_set_focus                (GtkWindow           *window,
@@ -147,6 +166,11 @@ void       gtk_window_add_embedded_xid         (GtkWindow           *window,
 void       gtk_window_reposition               (GtkWindow           *window,
 						gint                 x,
 						gint                 y);
+void       _gtk_window_constrain_size          (GtkWindow           *window,
+						gint                 width,
+						gint                 height,
+						gint                *new_width,
+						gint                *new_height);
 
 #ifdef __cplusplus
 }

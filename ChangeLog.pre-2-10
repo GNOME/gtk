@@ -1,5 +1,25 @@
 2001-01-08  Alexander Larsson  <alexl@redhat.com>
 
+	* gtk/gtkwindow-decorate.[hc]:
+	* gtk/Makefile.am:
+	New files. Contains an implementation of a minimal WM for
+	linux-fb.
+
+	* gtk/gtkwindow.h:
+	Add the possibility for GtkWindows to specify a frame. This
+	is used for the window decoration code, but could concievably
+	be used for X programs too (xmms style windows).
+	GtkWindow->frame is the toplevel window if the window is framed.
+	The signal frame_event gets all events that are targeted to
+	GtkWindow->frame.
+	(_gtk_window_constrain_size): Exported for usage by gtkwindow-decorate.c.
+	
+	* gtk/gtkwindow.c:
+	Implement gtk_window_set_has_frame and gtk_window_set_frame_dimensions.
+	Call out to gtkwindow-decorate.c for WM support in linx-fb.
+
+2001-01-08  Alexander Larsson  <alexl@redhat.com>
+
 	* docs/README.linux-fb:
 	Correct filename ~/.pangoft2_aliases
 
