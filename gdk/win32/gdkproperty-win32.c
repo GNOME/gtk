@@ -120,7 +120,7 @@ gdk_property_get (GdkWindow   *window,
 		  guchar     **data)
 {
   g_return_val_if_fail (window != NULL, FALSE);
-  g_return_val_if_fail (!GDK_IS_WINDOW (window), FALSE);
+  g_return_val_if_fail (GDK_IS_WINDOW (window), FALSE);
 
   if (GDK_DRAWABLE_DESTROYED (window))
     return FALSE;
@@ -145,7 +145,7 @@ gdk_property_change (GdkWindow   *window,
   guchar *ptr;
 
   g_return_if_fail (window != NULL);
-  g_return_if_fail (!GDK_IS_WINDOW (window));
+  g_return_if_fail (GDK_IS_WINDOW (window));
 
   if (GDK_DRAWABLE_DESTROYED (window))
     return;
@@ -221,7 +221,7 @@ gdk_property_delete (GdkWindow *window,
   extern void gdk_selection_property_delete (GdkWindow *);
 
   g_return_if_fail (window != NULL);
-  g_return_if_fail (!GDK_IS_WINDOW (window));
+  g_return_if_fail (GDK_IS_WINDOW (window));
 
   GDK_NOTE (MISC,
 	    (prop_name = gdk_atom_name (property),

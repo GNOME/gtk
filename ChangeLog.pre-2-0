@@ -1,3 +1,9 @@
+2000-02-09  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/win32/gdkproperty-win32.c
+	* gdk/x11/gdkproperty-x11.c: The assertions for GDK_IS_WINDOW
+	were reversed.
+
 2000-02-04  Tor Lillqvist  <tml@iki.fi>
 
 	* gdk/win32/gdkfont-win32.c (logfont_to_xlfd): Use
