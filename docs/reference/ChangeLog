@@ -1,3 +1,7 @@
+1999-09-20  David C. Mason  <dcm@redhat.com>
+
+	* gtk/tmpl/gtkimage.sgml: first pass at gtkimage... not complete
+
 1999-08-28  Damon Chaplin  <damon@karuna.freeserve.co.uk>
 
 	* gtk/tmpl/gtkbbox.sgml: new section from Lee Mallabone.
