@@ -1,3 +1,13 @@
+Tue Jun  5 11:04:06 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdkpixmap.h (GDK_PIXMAP_GET_CLASS): 
+	s/GdkPixmapClass/GdkPixmapObjectClass/. (#51890, Jeff Franks)
+
+Mon Jun  4 12:50:11 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkctree.c (gtk_ctree_insert_gnode): Add a missing
+	gtk_clist_thaw().
+
 2001-06-04  Havoc Pennington  <hp@pobox.com>
 
 	* gdk/x11/gdkevents-x11.c (gdk_event_translate): Ignore 
