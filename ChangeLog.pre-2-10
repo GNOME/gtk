@@ -1,3 +1,9 @@
+Sat May  2 23:14:34 1998  Owen Taylor  <otaylor@gtk.org>
+
+	* gtk/gtkcurve.c (gtk_curve_graph_events): Ignore
+	Configure events that would result in a negative
+	size.
+
 Sun May  3 14:55:34 1998  Owen Taylor  <otaylor@gtk.org>
 
 	* docs/gtkfaq.sgml (CPPFLAGS): Added a FAQ entry about
