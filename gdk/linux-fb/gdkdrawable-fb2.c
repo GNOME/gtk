@@ -2,6 +2,7 @@
 #include "gdkprivate-fb.h"
 #include "mi.h"
 #include <string.h>
+#include <gdkregion-generic.h>
 
 #include <pango/pangoft2.h>
 #include <freetype/ftglyph.h>
@@ -398,6 +399,14 @@ gdk_fb_clip_region (GdkDrawable *drawable,
 		continue;
 
 	      impl_private = GDK_DRAWABLE_IMPL_FBDATA(cur->data);
+
+	      /* This shortcut is really necessary for performance when there are a lot of windows */
+	      if (impl_private->llim_x >= real_clip_region->extents.x2 ||
+		  impl_private->lim_x <= real_clip_region->extents.x1 ||
+		  impl_private->llim_y >= real_clip_region->extents.y2 ||
+		  impl_private->lim_y <= real_clip_region->extents.y1)
+		continue;
+	      
 	      draw_rect.x = impl_private->llim_x;
 	      draw_rect.y = impl_private->llim_y;
 	      draw_rect.width = impl_private->lim_x - draw_rect.x;

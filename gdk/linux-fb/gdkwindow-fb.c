@@ -1041,7 +1041,6 @@ gdk_fb_window_move_resize (GdkWindow *window,
 	send_expose_events = FALSE;
 
       if (private->mapped && send_expose_events)
-
 	old_region = gdk_fb_clip_region (GDK_DRAWABLE_IMPL(window), NULL, TRUE, FALSE, FALSE);
 
       dx = x - private->x;

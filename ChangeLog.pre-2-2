@@ -1,3 +1,13 @@
+2001-02-13  Alexander Larsson  <alla@lysator.liu.se>
+
+	* gdk/linux-fb/gdkdrawable-fb2.c (gdk_fb_clip_region):
+	Add a shortcut if the window and the current clip_region doesn't
+	overlap. This is needed when there are a lot of windows in a
+	window. The layout test in testgtk is a good test.
+
+	* gdk/linux-fb/gdkwindow-fb.c:
+	Whitespace fix.
+
 2001-02-13  Sven Neumann  <sven@convergence.de>
 
 	* demos/testanimation.c: replaced deprecated gtk_drawing_area_size
