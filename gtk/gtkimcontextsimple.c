@@ -1167,7 +1167,7 @@ check_hex (GtkIMContextSimple *context_simple,
   /* if strtoul fails it probably means non-latin digits were used;
    * we should in principle handle that, but we probably don't.
    */
-  if (str->str == nptr)
+  if (nptr - str->str < str->len)
     {
       g_string_free (str, TRUE);
       return FALSE;

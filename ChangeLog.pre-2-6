@@ -1,5 +1,8 @@
 2004-10-26  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkimcontextsimple.c (check_hex): Stop preediting if strtoul couldn't 
+	parse the complete preedit string.  (#156434)
+
 	* gtk/gtkmessagedialog.c: 
 	* gtk/gtkfilechooserbutton.c: Add missing includes.  (#156503, Kazuki IWAMOTO)
 
