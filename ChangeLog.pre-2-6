@@ -1,3 +1,7 @@
+Tue Oct 19 12:15:13 KST 1999  Changwoo Ryu  <cwryu@adam.kaist.ac.kr>
+
+	* gtk/gtkrc.ko: Changed the Korean default fontset.
+
 Fri Oct  8 10:55:51 CDT 1999 Shawn T. Amundson <amundson@gtk.org>
 
 	* Released GTK+ 1.2.6
