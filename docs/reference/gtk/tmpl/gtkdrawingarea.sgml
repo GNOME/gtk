@@ -60,9 +60,10 @@ expose_event (GdkWidget *widget, GdkEventExpose *event, gpointer data)
   gdk_draw_arc (widget->window,
                 widget->style->fg_gc[widget->state],
                 TRUE,
-                0, 0, widget->allocation->width, widget->allocation.height,
+                0, 0, widget->allocation.width, widget->allocation.height,
                 0, 64 * 360);
-  gdk_gc_set_clip_rectangle (widget->style->fg_gc[widget->state]);
+  gdk_gc_set_clip_rectangle (widget->style->fg_gc[widget->state],
+                             NULL);
 
   return TRUE;
 }

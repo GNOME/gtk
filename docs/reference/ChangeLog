@@ -1,3 +1,19 @@
+Thu Aug 19 14:43:08 1999  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/tmpl/gcs.sgml gdk/gdk-sections.txt: Added section. 
+	  (Written a while ago but fell through the cracks)
+
+	* gtk/gtk-docs.sgml: Add a &hash; entity here as a
+	  temporary hack. (There is no standard entity
+	  for '#', and no way of escaping '#' in gtk-doc)
+
+	* gtk/tmpl/gtkrc.sgml: Use the above to fix up #rrggbb
+	  string literals.
+
+	* gtk/tmpl/gtkdrawingarea.sgml: Fixed a couple
+	  of errors in the example. (pointed out by
+	  Nick Lamb)
+
 Mon Aug 16 6:60:53 1999  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/tmpl/properties.sgml

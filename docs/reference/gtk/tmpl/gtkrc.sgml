@@ -269,9 +269,9 @@ state of the widget. The states are:
 </para>
 
 <para>
-Colors can be specified as a string <literal>"#rrrrggggbbbb"</literal>,
-<literal>"#rrrgggbbb"</literal>, <literal>"#rrggbb"</literal>,
-or <literal>"#rgb"</literal>, where <literal>r</literal>
+Colors can be specified as a string <literal>"&hash;rrrrggggbbbb"</literal>,
+<literal>"&hash;rrrgggbbb"</literal>, <literal>"&hash;rrggbb"</literal>,
+or <literal>"&hash;rgb"</literal>, where <literal>r</literal>
 <literal>g</literal>, and <literal>b</literal> are
 hex digits, or they can be specified as a triplet of floats
 <literal>{ <replaceable>r</replaceable>, <replaceable>g</replaceable>,
