@@ -69,6 +69,7 @@ static const GDebugKey gdk_debug_keys[] = {
   {"input",	    GDK_DEBUG_INPUT},
   {"cursor",	    GDK_DEBUG_CURSOR},
   {"multihead",	    GDK_DEBUG_MULTIHEAD},
+  {"xinerama",	    GDK_DEBUG_XINERAMA}
 };
 
 static const int gdk_ndebug_keys = G_N_ELEMENTS (gdk_debug_keys);

@@ -537,12 +537,39 @@ init_xinerama_support (GdkScreen * screen)
 
   /* No Xinerama
    */
-  screen_x11->num_monitors = 1;
-  screen_x11->monitors = g_new0 (GdkRectangle, 1);
-  screen_x11->monitors[0].x = 0;
-  screen_x11->monitors[0].y = 0;
-  screen_x11->monitors[0].width = WidthOfScreen (screen_x11->xscreen);
-  screen_x11->monitors[0].height = HeightOfScreen (screen_x11->xscreen);
+#ifdef G_ENABLE_DEBUG
+  if (_gdk_debug_flags & GDK_DEBUG_XINERAMA)
+    {
+      /* Fake Xinerama mode by splitting the screen into 4 monitors */
+      screen_x11->num_monitors = 4;
+      screen_x11->monitors = g_new0 (GdkRectangle, 4);
+      screen_x11->monitors[0].x = 0;
+      screen_x11->monitors[0].y = 0;
+      screen_x11->monitors[0].width = WidthOfScreen (screen_x11->xscreen) / 2;
+      screen_x11->monitors[0].height = HeightOfScreen (screen_x11->xscreen) / 2;
+      screen_x11->monitors[1].x = WidthOfScreen (screen_x11->xscreen) / 2;
+      screen_x11->monitors[1].y = 0;
+      screen_x11->monitors[1].width = WidthOfScreen (screen_x11->xscreen) / 2;
+      screen_x11->monitors[1].height = HeightOfScreen (screen_x11->xscreen) / 2;
+      screen_x11->monitors[2].x = 0;
+      screen_x11->monitors[2].y = HeightOfScreen (screen_x11->xscreen) / 2;
+      screen_x11->monitors[2].width = WidthOfScreen (screen_x11->xscreen) / 2;
+      screen_x11->monitors[2].height = HeightOfScreen (screen_x11->xscreen) / 2;
+      screen_x11->monitors[3].x = WidthOfScreen (screen_x11->xscreen) / 2;
+      screen_x11->monitors[3].y = HeightOfScreen (screen_x11->xscreen) / 2;
+      screen_x11->monitors[3].width = WidthOfScreen (screen_x11->xscreen) / 2;
+      screen_x11->monitors[3].height = HeightOfScreen (screen_x11->xscreen) / 2;
+    }
+  else
+#endif
+    {
+       screen_x11->num_monitors = 1;
+       screen_x11->monitors = g_new0 (GdkRectangle, 1);
+       screen_x11->monitors[0].x = 0;
+       screen_x11->monitors[0].y = 0;
+       screen_x11->monitors[0].width = WidthOfScreen (screen_x11->xscreen);
+       screen_x11->monitors[0].height = HeightOfScreen (screen_x11->xscreen);
+    }
 }
 
 static void

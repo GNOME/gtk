@@ -1,3 +1,11 @@
+Mon Nov  3 20:56:28 2003  Matthias Clasen  <maclas@gmx.de>
+
+	* gdk/gdk.c: 
+	* gdk/gdkinternals.h: 
+	* gdk/x11/gdkscreen-x11.c (init_xinerama_support): Introduce a
+	GDK_DEBUG_XINERAMA debug flag, and make it trigger a fake 2x2
+	Xinerama mode when no actual Xinerama setup is found. 
+
 2003-11-03  Federico Mena Quintero  <federico@ximian.com>
 
 	* gtk/gtkfilechooserdefault.c (shortcuts_select_folder): Removed.
