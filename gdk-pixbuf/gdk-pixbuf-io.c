@@ -182,7 +182,7 @@ gdk_pixbuf_load_module (GdkPixbufModule *image_module)
 
 	module_name = g_strconcat ("pixbuf-", image_module->module_name, NULL);
 	path = g_module_build_path (PIXBUF_LIBDIR, module_name);
-        
+
 	module = g_module_open (path, G_MODULE_BIND_LAZY);
 	if (!module) {
                 /* Debug feature, check in present working directory */
@@ -241,14 +241,14 @@ gdk_pixbuf_get_module (gchar *buffer, gint size)
 /**
  * gdk_pixbuf_new_from_file:
  * @filename: Name of file to load.
- * 
+ *
  * Creates a new pixbuf by loading an image from a file.  The file format is
  * detected automatically.
- * 
- * Return value: A newly-created pixbuf, or NULL if any of several error
- * conditions occurred:  the file could not be opened, there was no loader for
- * the file's format, there was not enough memory to allocate the image buffer,
- * or the image file contained invalid data.
+ *
+ * Return value: A newly-created pixbuf with a reference count of 1, or NULL if
+ * any of several error conditions occurred:  the file could not be opened,
+ * there was no loader for the file's format, there was not enough memory to
+ * allocate the image buffer, or the image file contained invalid data.
  **/
 GdkPixbuf *
 gdk_pixbuf_new_from_file (const char *filename)
@@ -296,6 +296,15 @@ gdk_pixbuf_new_from_file (const char *filename)
 	return NULL;
 }
 
+/**
+ * gdk_pixbuf_new_from_xpm_data:
+ * @data: 
+ * 
+ * Creates a new pixbuf by parsing XPM data in memory.  This data is commonly
+ * the result of including an XPM file into a program's C source.
+ * 
+ * Return value: A newly-created pixbuf with a reference count of 1.
+ **/
 GdkPixbuf *
 gdk_pixbuf_new_from_xpm_data (const gchar **data)
 {
@@ -320,4 +329,3 @@ gdk_pixbuf_new_from_xpm_data (const gchar **data)
 
         return pixbuf;
 }
-
