@@ -1292,8 +1292,9 @@ gtk_toolbar_prepend_element (GtkToolbar          *toolbar,
  * @user_data: any data you wish to pass to the callback.
  * @position: the number of widgets to insert this element after.
  *
- * Inserts a new element in the toolbar at the given position. If 
- * @type == %GTK_TOOLBAR_CHILD_WIDGET, @widget is used as the new element.
+ * Inserts a new element in the toolbar at the given position. 
+ *
+ * If @type == %GTK_TOOLBAR_CHILD_WIDGET, @widget is used as the new element.
  * If @type == %GTK_TOOLBAR_CHILD_RADIOBUTTON, @widget is used to determine
  * the radio group for the new element. In all other cases, @widget must
  * be %NULL.
