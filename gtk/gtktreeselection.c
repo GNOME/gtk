@@ -893,6 +893,7 @@ gtk_tree_selection_real_select_node (GtkTreeSelection *selection,
 	}
       else
 	selected = TRUE;
+      gtk_tree_path_free (path);
     }
   if (selected == TRUE)
     {

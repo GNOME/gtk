@@ -113,7 +113,7 @@ create_pane_options (GtkPaned *paned,
   return frame;
 }
 
-void
+GtkWidget *
 do_panes (void)
 {
   static GtkWidget *window = NULL;
@@ -182,7 +182,14 @@ do_panes (void)
     }
 
   if (!GTK_WIDGET_VISIBLE (window))
-    gtk_widget_show (window);
+    {
+      gtk_widget_show (window);
+    }
   else
-    gtk_widget_destroy (window);
+    {
+      gtk_widget_destroy (window);
+      window = NULL;
+    }
+
+  return window;
 }

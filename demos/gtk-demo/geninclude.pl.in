@@ -1,13 +1,15 @@
 #!/usr/bin/perl -w
 
 print <<EOT;
+typedef	GtkWidget *(*GDoDemoFunc) (void);
+
 typedef struct _Demo Demo;
 
 struct _Demo 
 {
   gchar *title;
   gchar *filename;
-  void (*func) (void);
+  GDoDemoFunc func;
 };
 
 EOT
@@ -31,7 +33,7 @@ for $file (@ARGV) {
 
     close INFO_FILE;
 
-    print "void do_$basename (void);\n";
+    print "GtkWidget *do_$basename (void);\n";
     $array .= qq(  { "$title", "$file", do_$basename });
 }
 

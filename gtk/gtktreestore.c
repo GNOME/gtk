@@ -502,6 +502,9 @@ gtk_tree_store_set_cell (GtkTreeStore *tree_store,
       if (column == 0)
 	{
 	  _gtk_tree_data_list_value_to_node (list, value);
+	  gtk_signal_emit_by_name (GTK_OBJECT (tree_store),
+				   "changed",
+				   NULL, iter);
 	  return;
 	}
 

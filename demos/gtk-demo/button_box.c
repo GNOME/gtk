@@ -43,7 +43,7 @@ create_bbox (gint  horizontal,
   return frame;
 }
 
-void
+GtkWidget *
 do_button_box (void)
 {
   static GtkWidget* window = NULL;
@@ -115,8 +115,15 @@ do_button_box (void)
   }
 
   if (!GTK_WIDGET_VISIBLE (window))
-    gtk_widget_show_all (window);
+    {
+      gtk_widget_show_all (window);
+    }
   else
-    gtk_widget_destroy (window);
+    {    
+      gtk_widget_destroy (window);
+      window = NULL;
+    }
+
+  return window;
 }
 

@@ -20,6 +20,33 @@ enum {
   NUM_COLUMNS
 };
 
+typedef struct _CallbackData CallbackData;
+struct _CallbackData
+{
+  GtkTreeModel *model;
+  GtkTreePath *path;
+};
+
+static void
+window_closed_cb (GtkWidget *window, gpointer data)
+{
+  CallbackData *cbdata = data;
+  GtkTreeIter iter;
+  gboolean italic;
+
+  gtk_tree_model_get_iter (cbdata->model, &iter, cbdata->path);
+  gtk_tree_store_get (GTK_TREE_STORE (cbdata->model), &iter,
+		      ITALIC_COLUMN, &italic,
+		      -1);
+  if (italic)
+    gtk_tree_store_set (GTK_TREE_STORE (cbdata->model), &iter,
+			ITALIC_COLUMN, !italic,
+			-1);
+
+  gtk_tree_path_free (cbdata->path);
+  g_free (cbdata);
+}
+
 gboolean
 read_line (FILE *stream, GString *str)
 {
@@ -224,7 +251,8 @@ button_press_event_cb (GtkTreeView    *tree_view,
 	{
 	  GtkTreeIter iter;
 	  gboolean italic;
-	  GVoidFunc func;
+	  GDoDemoFunc func;
+	  GtkWidget *window;
 
 	  gtk_tree_model_get_iter (model, &iter, path);
 	  gtk_tree_store_get (GTK_TREE_STORE (model),
@@ -232,12 +260,28 @@ button_press_event_cb (GtkTreeView    *tree_view,
 			      FUNC_COLUMN, &func,
 			      ITALIC_COLUMN, &italic,
 			      -1);
-	  (func) ();
 	  gtk_tree_store_set (GTK_TREE_STORE (model),
 			      &iter,
 			      ITALIC_COLUMN, !italic,
 			      -1);
-	  gtk_tree_path_free (path);
+	  window = (func) ();
+	  if (window != NULL)
+	    {
+	      CallbackData *cbdata;
+
+	      cbdata = g_new (CallbackData, 1);
+	      cbdata->model = model;
+	      cbdata->path = path;
+
+	      gtk_signal_connect (GTK_OBJECT (window),
+				"destroy",
+				window_closed_cb,
+				cbdata);
+	    }
+	  else
+	    {
+	      gtk_tree_path_free (path);
+	    }
 	}
 
       gtk_signal_emit_stop_by_name (GTK_OBJECT (tree_view),

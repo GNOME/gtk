@@ -41,7 +41,7 @@ static GtkItemFactoryEntry menu_items[] =
 
 static int nmenu_items = sizeof (menu_items) / sizeof (menu_items[0]);
 
-void
+GtkWidget *
 do_item_factory (void)
 {
   static GtkWidget *window = NULL;
@@ -114,5 +114,10 @@ do_item_factory (void)
       gtk_widget_show_all (window);
     }
   else
-    gtk_widget_destroy (window);
+    {
+      gtk_widget_destroy (window);
+      window = NULL;
+    }
+
+  return window;
 }

@@ -1,3 +1,20 @@
+Sat Nov 18 18:00:17 2000  Jonathan Blandford  <jrb@redhat.com>
+
+	* demos/gtk-demo/main.c: Changed to have the list become
+	non-italic when the demo window is destroyed through an external
+	event (like a close button).  Doing so found three bugs in the
+	widget.
+
+	* demos/gtk-demo/*.c (do_*): Changed to return the toplevel window.
+
+	* gtk/gtkliststore.c (gtk_list_store_set_cell): emit "change" when
+	we actually set the cell.
+
+	* gtk/gtktreestore.c (gtk_tree_store_set_cell): ditto
+
+	* gtk/gtktreeselection.c (gtk_tree_selection_real_select_node):
+	free a leaked path.  Thanks memprof.
+
 Sat Nov 18 11:58:17 2000  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/gdkrgb.c (gdk_rgb_allocate_images): Fix 

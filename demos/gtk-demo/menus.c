@@ -52,7 +52,7 @@ create_menu (gint depth, gboolean tearoff)
   return menu;
 }
 
-void
+GtkWidget *
 do_menus (void)
 {
   static GtkWidget *window = NULL;
@@ -180,8 +180,15 @@ do_menus (void)
     }
 
   if (!GTK_WIDGET_VISIBLE (window))
-    gtk_widget_show (window);
+    {
+      gtk_widget_show (window);
+    }
   else
-    gtk_widget_destroy (window);
+    {
+      gtk_widget_destroy (window);
+      window = NULL;
+    }
+
+  return window;
 }
 

@@ -163,7 +163,7 @@ insert_text (GtkTextBuffer *buffer)
   GtkTextIter start, end;
   GdkPixbuf *pixbuf;
 
-  pixbuf = gdk_pixbuf_new_from_xpm_data (book_closed_xpm);
+  pixbuf = gdk_pixbuf_new_from_xpm_data ((const char **) book_closed_xpm);
   
   /* get start of buffer; each insertion will revalidate the
    * iterator to point to just after the inserted text.
@@ -282,7 +282,7 @@ insert_text (GtkTextBuffer *buffer)
   g_object_unref (G_OBJECT (pixbuf));
 }
 
-void
+GtkWidget *
 do_textview (void)
 {
   static GtkWidget *window = NULL;
@@ -342,8 +342,15 @@ do_textview (void)
     }
 
   if (!GTK_WIDGET_VISIBLE (window))
-    gtk_widget_show (window);
+    {
+      gtk_widget_show (window);
+    }
   else
-    gtk_widget_destroy (window);
+    {
+      gtk_widget_destroy (window);
+      window = NULL;
+    }
+
+  return window;
 }
 

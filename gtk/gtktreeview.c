@@ -1947,7 +1947,7 @@ gtk_tree_view_changed (GtkTreeModel *model,
   else
     {
       /* FIXME: just redraw the node */
-      gtk_widget_queue_resize (GTK_WIDGET (data));
+      gtk_widget_queue_draw (GTK_WIDGET (data));
     }
 }
 
