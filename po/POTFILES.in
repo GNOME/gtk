@@ -20,8 +20,12 @@ gdk-pixbuf/io-tiff.c
 gdk-pixbuf/io-wbmp.c
 gdk-pixbuf/io-xbm.c
 gdk-pixbuf/io-xpm.c
+gdk/gdk.c
 gdk/gdkdisplaymanager.c
+gdk/win32/gdkmain-win32.c
+gdk/x11/gdkmain-x11.c
 gtk/gtkaboutdialog.c
+gtk/gtkaccellabel.c
 gtk/gtkaction.c
 gtk/gtkactiongroup.c
 gtk/gtkadjustment.c
@@ -34,6 +38,7 @@ gtk/gtkbutton.c
 gtk/gtkcalendar.c
 gtk/gtkcelllayout.c
 gtk/gtkcellrenderer.c
+gtk/gtkcellrenderercombo.c
 gtk/gtkcellrendererpixbuf.c
 gtk/gtkcellrendererprogress.c
 gtk/gtkcellrenderertext.c
@@ -55,6 +60,7 @@ gtk/gtkentrycompletion.c
 gtk/gtkeventbox.c
 gtk/gtkexpander.c
 gtk/gtkfilechooser.c
+gtk/gtkfilechooserbutton.c
 gtk/gtkfilechooserdefault.c
 gtk/gtkfilesel.c
 gtk/gtkfilesystemmodel.c
@@ -79,6 +85,7 @@ gtk/gtklayout.c
 gtk/gtkmain.c
 gtk/gtkmenu.c
 gtk/gtkmenubar.c
+gtk/gtkmenutoolbutton.c
 gtk/gtkmessagedialog.c
 gtk/gtkmisc.c
 gtk/gtknotebook.c

@@ -2,6 +2,12 @@
 
 	* sr.po, sr@Latn.po: Updated Serbian translation.
 
+	* POTFILES.in: Added missing files.
+
+2004-10-15  Danilo Šegan  <dsegan@gmx.net>
+
+	* sr.po, sr@Latn.po: Updated Serbian translation.
+
 2004-10-09  Tor Lillqvist  <tml@iki.fi>
 
 	* makefile.mingw: Remove, had been left here by mistake.

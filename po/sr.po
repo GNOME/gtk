@@ -10,14 +10,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.6\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-10-15 22:28+0200\n"
-"PO-Revision-Date: 2004-10-15 22:36+0200\n"
+"POT-Creation-Date: 2004-10-15 22:40+0200\n"
+"PO-Revision-Date: 2004-10-15 22:43+0200\n"
 "Last-Translator: Данило Шеган <danilo@prevod.org>\n"
 "Language-Team: Serbian (sr) <gnom@prevod.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3;    plural=n%10==1 && n%100!=11 ? 0 :    n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"Plural-Forms: nplurals=3;    plural=n%10==1 && n%100!=11 ? 0 :    n%10>=2 && "
+"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:151 gdk-pixbuf/gdk-pixbuf-io.c:788
 #: gdk-pixbuf/gdk-pixbuf-io.c:946 tests/testfilechooser.c:192
@@ -503,7 +504,8 @@ msgstr "Највећа вредност боје у PNM датотеци је п
 
 #: gdk-pixbuf/io-pnm.c:396
 msgid "Cannot handle PNM files with maximum color values greater than 255"
-msgstr "Не могу да баратам PNM датотекама чије су највеће вредности боје веће од 255"
+msgstr ""
+"Не могу да баратам PNM датотекама чије су највеће вредности боје веће од 255"
 
 #: gdk-pixbuf/io-pnm.c:435 gdk-pixbuf/io-pnm.c:463 gdk-pixbuf/io-pnm.c:495
 msgid "Raw PNM image type is invalid"
@@ -745,6 +747,99 @@ msgstr "Неуспео упис у привремену датотеку при 
 msgid "The XPM image format"
 msgstr "XPM запис слике"
 
+#. Description of --class=CLASS in --help output
+#: gdk/gdk.c:115
+msgid "Program class as used by the window manager"
+msgstr "Класа програма коју користи управник прозорима"
+
+#. Placeholder in --class=CLASS in --help output
+#: gdk/gdk.c:116
+msgid "CLASS"
+msgstr "КЛАСА"
+
+#. Description of --name=NAME in --help output
+#: gdk/gdk.c:118
+msgid "Program name as used by the window manager"
+msgstr "Име програма како га приказује управник прозорима"
+
+#. Placeholder in --name=NAME in --help output
+#: gdk/gdk.c:119
+msgid "NAME"
+msgstr "ИМЕ"
+
+#. Description of --display=DISPLAY in --help output
+#: gdk/gdk.c:121
+msgid "X display to use"
+msgstr "Икс приказ који да користи"
+
+#. Placeholder in --display=DISPLAY in --help output
+#: gdk/gdk.c:122
+msgid "DISPLAY"
+msgstr "ПРИКАЗ"
+
+#. Description of --screen=SCREEN in --help output
+#: gdk/gdk.c:124
+msgid "X screen to use"
+msgstr "Икс екран који да користи"
+
+#. Placeholder in --screen=SCREEN in --help output
+#: gdk/gdk.c:125
+msgid "SCREEN"
+msgstr "ЕКРАН"
+
+#. Description of --gdk-debug=FLAGS in --help output
+#: gdk/gdk.c:128
+msgid "Gdk debugging flags to set"
+msgstr "Које Гдк опције за налажење грешака укључити"
+
+#. Placeholder in --gdk-debug=FLAGS in --help output
+#. Placeholder in --gdk-no-debug=FLAGS in --help output
+#. Placeholder in --gtk-debug=FLAGS in --help output
+#. Placeholder in --gtk-no-debug=FLAGS in --help output
+#: gdk/gdk.c:129 gdk/gdk.c:132 gtk/gtkmain.c:403 gtk/gtkmain.c:406
+msgid "FLAGS"
+msgstr "ОПЦИЈЕ"
+
+#. Description of --gdk-no-debug=FLAGS in --help output
+#: gdk/gdk.c:131
+msgid "Gdk debugging flags to unset"
+msgstr "Које Гдк опције за налажење грешака искључити"
+
+#. Description of --sync in --help output
+#: gdk/win32/gdkmain-win32.c:60
+msgid "Don't batch GDI requests"
+msgstr "Не спајај ГДИ захтеве"
+
+#. Description of --no-wintab in --help output
+#: gdk/win32/gdkmain-win32.c:62
+msgid "Don't use the Wintab API for tablet support"
+msgstr "Не користи Wintab АПИ за подршку таблета"
+
+#. Description of --ignore-wintab in --help output
+#: gdk/win32/gdkmain-win32.c:64
+msgid "Same as --no-wintab"
+msgstr "Исто што и --no-wintab"
+
+#. Description of --use-wintab in --help output
+#: gdk/win32/gdkmain-win32.c:66
+msgid "Do use the Wintab API [default]"
+msgstr "Не користи Wintab АПИ [подразумевано]"
+
+#. Description of --max-colors=COLORS in --help output
+#: gdk/win32/gdkmain-win32.c:68
+msgid "Size of the palette in 8 bit mode"
+msgstr "Величина палете у 8-битном режиму"
+
+#. Placeholder in --max-colors=COLORS in --help output
+#: gdk/win32/gdkmain-win32.c:69
+msgid "COLORS"
+msgstr "БОЈЕ"
+
+#. Description of --sync in --help output
+#: gdk/x11/gdkmain-x11.c:92
+msgid "Make X calls synchronous"
+msgstr "Учини Икс позиве синхроним"
+
 #: gtk/gtkaboutdialog.c:216 gtk/gtkaboutdialog.c:1725
 msgid "License"
 msgstr "Лиценца"
@@ -787,6 +882,33 @@ msgstr "Превод"
 #: gtk/gtkaboutdialog.c:1706
 msgid "Artwork by"
 msgstr "Графика"
+
+#. This is the text that should appear next to menu accelerators
+#. * that use the shift key. If the text on this key isn't typically
+#. * translated on keyboards used for your language, don't translate
+#. * this.
+#.
+#: gtk/gtkaccellabel.c:119
+msgid "Shift"
+msgstr "Shift"
+
+#. This is the text that should appear next to menu accelerators
+#. * that use the control key. If the text on this key isn't typically
+#. * translated on keyboards used for your language, don't translate
+#. * this.
+#.
+#: gtk/gtkaccellabel.c:125
+msgid "Ctrl"
+msgstr "Ctrl"
+
+#. This is the text that should appear next to menu accelerators
+#. * that use the alt key. If the text on this key isn't typically
+#. * translated on keyboards used for your language, don't translate
+#. * this.
+#.
+#: gtk/gtkaccellabel.c:131
+msgid "Alt"
+msgstr "Alt"
 
 #. Translate to calendar:YM if you want years to be displayed
 #. * before months; otherwise translate to calendar:MY.
@@ -968,6 +1090,14 @@ msgstr "_Убаци контролни Уникод знак"
 #, c-format
 msgid "Invalid filename: %s"
 msgstr "Неисправно име датотеке: %s"
+
+#: gtk/gtkfilechooserbutton.c:58
+msgid "(None)"
+msgstr "(ништа)"
+
+#: gtk/gtkfilechooserbutton.c:228
+msgid "Select a File"
+msgstr "Изабери датотеку"
 
 #: gtk/gtkfilechooserdefault.c:815
 #, c-format
@@ -1631,12 +1761,6 @@ msgstr "Учини сва упозорења кобним"
 msgid "GTK+ debugging flags to set"
 msgstr "Које Гтк+ опције за налажење грешака укључити"
 
-#. Placeholder in --gtk-debug=FLAGS in --help output
-#. Placeholder in --gtk-no-debug=FLAGS in --help output
-#: gtk/gtkmain.c:403 gtk/gtkmain.c:406
-msgid "FLAGS"
-msgstr "ОПЦИЈЕ"
-
 #. Description of --gtk-no-debug=FLAGS in --help output
 #: gtk/gtkmain.c:405
 msgid "GTK+ debugging flags to unset"
@@ -2129,15 +2253,6 @@ msgstr "Не могу да сазнам податке о датотеци „%s
 
 #~ msgid "Unsupported TIFF variant"
 #~ msgstr "Неподржана TIFF врста"
-
-#~ msgid "Shift"
-#~ msgstr "Shift"
-
-#~ msgid "Ctrl"
-#~ msgstr "Ctrl"
-
-#~ msgid "Alt"
-#~ msgstr "Alt"
 
 #~ msgid "%d/%b/%Y"
 #~ msgstr "%d.%b.%Y."
