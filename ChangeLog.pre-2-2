@@ -1,3 +1,60 @@
+2002-01-09  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/win32/gdkevents-win32.c (event_mask_string, print_event,
+	print_event_state): Use nifty macros.
+	(print_event_mask): Remove, use event_mask_string().
+
+	* gdk/win32/gdkselection-win32.c (gdk_text_property_to_text_list,
+	gdk_free_text_list, gdk_string_to_compound_text,
+	gdk_free_compound_text): Implement trivially, always as
+	single-element text list or single-component compound text.
+
+2002-01-09  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/win32/gdkselection-win32.c (gdk_selection_convert): Fix
+	non-ASCII paste from the clipboard: Try getting the same formats
+	from the Windows clipboard that gdk_property_change() puts there:
+	CF_UNICODETEXT, UTF8_STRING or CF_TEXT+CF_LOCALE.
+
+2002-01-09  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/win32/gdkselection-win32.c (gdk_selection_owner_set) 
+	* gdk/win32/gdkselection-win32.c (gdk_selection_owner_get): Do
+	support PRIMARY. Seems to work fine after all (intra-app).
+
+2002-01-09  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/win32/gdkglobals-win32.c: New global variables
+	compound_text_atom, cf_rtf and cf_utf8_string.
+
+	* gdk/win32/gdkprivate-win32.h: Declare them.
+
+	* gdk/win32/gdkmain-win32.c: Initialise them.
+
+	* gdk/win32/gdkproperty-win32.c
+	* gdk/win32/gdkselection-win32.c: Use them.
+
+2002-01-09  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/win32/gdkselection-win32.c (gdk_selection_owner_set,
+	gdk_selection_send_notify, generate_selection_notify): Don't use
+	SendMessage to generate events for the same app, instead use
+	gdk_event_put().
+
+	* gdk/win32/gdkevents-win32.c (gdk_event_translate):
+	Correspondingly, for the messages that shouldn't come in any
+	longer, assert if one does. Will remove the gdk_selection_*_msg
+	variables and handling code completely after a while.
+
+2002-01-09  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/win32/gdkim-win32.c (gdk_nwchar_ts_to_mbs): New function,
+	converts from a wchar_t string to UTF-8.
+
+	* gdk/win32/gdkprivate-win32.h: Declare it.
+	
+	* gdk/win32/gdkevents-win32.c (build_keypress_event): Use it.
+
 2002-01-08  Tor Lillqvist  <tml@iki.fi>
 
 	Solve the Unicode issue with copying text to the Windows

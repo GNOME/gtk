@@ -2467,9 +2467,9 @@ build_keypress_event (GdkWindowWin32Data *windata,
 		      MSG                *xevent)
 {
   HIMC hIMC;
-  gint i, bytecount, ucount, ucleft, len;
-  guchar buf[100], *bp;
-  wchar_t wbuf[100], *wcp;
+  gint i, bytecount, ucount;
+  guchar buf[100];
+  wchar_t wbuf[100];
 
   event->key.type = GDK_KEY_PRESS;
   event->key.time = xevent->time;
@@ -2516,8 +2516,7 @@ build_keypress_event (GdkWindowWin32Data *windata,
        */
       ucount = MultiByteToWideChar (windata->charset_info.ciACP,
 				    0, buf, bytecount,
-				    wbuf, sizeof (wbuf) / sizeof (wbuf[0]));
-      
+				    wbuf, G_N_ELEMENTS (wbuf));
     }
   if (ucount == 0)
     event->key.keyval = GDK_VoidSymbol;
@@ -2538,68 +2537,18 @@ build_keypress_event (GdkWindowWin32Data *windata,
   build_key_event_state (event);
 
   /* Build UTF-8 string */
-  ucleft = ucount;
-  len = 0;
-  wcp = wbuf;
-  while (ucleft-- > 0)
+  if (ucount == 1 && wbuf[0] < 0200)
     {
-      wchar_t c = *wcp++;
-
-      if (c < 0x80)
-	len += 1;
-      else if (c < 0x800)
-	len += 2;
-      else
-	len += 3;
+      event->key.string = g_malloc (2);
+      event->key.string[0] = wbuf[0];
+      event->key.string[1] = '\0';
+      event->key.length = 1;
     }
-
-  event->key.string = g_malloc (len + 1);
-  event->key.length = len;
-  
-  ucleft = ucount;
-  wcp = wbuf;
-  bp = event->key.string;
-  while (ucleft-- > 0)
+  else
     {
-      int first;
-      wchar_t c = *wcp++;
-
-      if (c < 0x80)
-	{
-	  first = 0;
-	  len = 1;
-	}
-      else if (c < 0x800)
-	{
-	  first = 0xc0;
-	  len = 2;
-	}
-      else
-	{
-	  first = 0xe0;
-	  len = 3;
-	}
-
-#if 1      
-      /* Woo-hoo! */
-      switch (len)
-	{
-	case 3: bp[2] = (c & 0x3f) | 0x80; c >>= 6; /* Fall through */
-	case 2: bp[1] = (c & 0x3f) | 0x80; c >>= 6; /* Fall through */
-	case 1: bp[0] = c | first;
-	}
-#else
-      for (i = len - 1; i > 0; --i)
-	{
-	  bp[i] = (c & 0x3f) | 0x80;
-	  c >>= 6;
-	}
-      bp[0] = c | first;
-#endif
-
-      bp += len;
+      event->key.string = gdk_nwchar_ts_to_mbs (wbuf, ucount);
+      event->key.length = strlen (event->key.string);
     }
-  *bp = 0;
 }
 
 static void
@@ -2633,69 +2582,20 @@ build_keyrelease_event (GdkWindowWin32Data *windata,
 }
 
 static void
-print_event_mask (gint mask)
-{
-  if (mask & GDK_EXPOSURE_MASK)
-    g_print ("EXPOSURE ");
-  if (mask & GDK_POINTER_MOTION_MASK)
-    g_print ("POINTER_MOTION ");
-  if (mask & GDK_POINTER_MOTION_HINT_MASK)
-    g_print ("POINTER_MOTION_HINT ");
-  if (mask & GDK_BUTTON_MOTION_MASK)
-    g_print ("BUTTON_MOTION ");
-  if (mask & GDK_BUTTON1_MOTION_MASK)
-    g_print ("BUTTON1_MOTION ");
-  if (mask & GDK_BUTTON2_MOTION_MASK)
-    g_print ("BUTTON2_MOTION ");
-  if (mask & GDK_BUTTON3_MOTION_MASK)
-    g_print ("BUTTON3_MOTION ");
-  if (mask & GDK_BUTTON_PRESS_MASK)
-    g_print ("BUTTON_PRESS ");
-  if (mask & GDK_BUTTON_RELEASE_MASK)
-    g_print ("BUTTON_RELEASE ");
-  if (mask & GDK_KEY_PRESS_MASK)
-    g_print ("KEY_PRESS ");
-  if (mask & GDK_KEY_RELEASE_MASK)
-    g_print ("KEY_RELEASE ");
-  if (mask & GDK_ENTER_NOTIFY_MASK)
-    g_print ("ENTER_NOTIFY ");
-  if (mask & GDK_LEAVE_NOTIFY_MASK)
-    g_print ("LEAVE_NOTIFY ");
-  if (mask & GDK_FOCUS_CHANGE_MASK)
-    g_print ("FOCUS_CHANGE ");
-  if (mask & GDK_STRUCTURE_MASK)
-    g_print ("STRUCTURE ");
-  if (mask & GDK_PROPERTY_CHANGE_MASK)
-    g_print ("PROPERTY_CHANGE ");
-  if (mask & GDK_VISIBILITY_NOTIFY_MASK)
-    g_print ("VISIBILITY_NOTIFY ");
-  if (mask & GDK_PROXIMITY_IN_MASK)
-    g_print ("PROXIMITY_IN ");
-  if (mask & GDK_PROXIMITY_OUT_MASK)
-    g_print ("PROXIMITY_OUT ");
-  if (mask & GDK_SUBSTRUCTURE_MASK)
-    g_print ("SUBSTRUCTURE ");
-  if (mask & GDK_SCROLL_MASK)
-    g_print ("SCROLL ");
-}
-
-static void
 print_event_state (gint state)
 {
-  if (state & GDK_SHIFT_MASK)
-    g_print ("SHIFT ");
-  if (state & GDK_LOCK_MASK)
-    g_print ("LOCK ");
-  if (state & GDK_CONTROL_MASK)
-    g_print ("CONTROL ");
-  if (state & GDK_MOD1_MASK)
-    g_print ("MOD1 ");
-  if (state & GDK_BUTTON1_MASK)
-    g_print ("BUTTON1 ");
-  if (state & GDK_BUTTON2_MASK)
-    g_print ("BUTTON2 ");
-  if (state & GDK_BUTTON3_MASK)
-    g_print ("BUTTON3 ");
+#define BIT(x) \
+  if (state & GDK_##x##_MASK) \
+    g_print (#x " ");
+
+  BIT (SHIFT);
+  BIT (LOCK);
+  BIT (CONTROL);
+  BIT (MOD1);
+  BIT (BUTTON1);
+  BIT (BUTTON2);
+  BIT (BUTTON3);
+#undef BIT
 }
 
 static void
@@ -2705,39 +2605,41 @@ print_event (GdkEvent *event)
 
   switch (event->any.type)
     {
-    case GDK_NOTHING: g_print ("GDK_NOTHING "); break;
-    case GDK_DELETE: g_print ("GDK_DELETE "); break;
-    case GDK_DESTROY: g_print ("GDK_DESTROY "); break;
-    case GDK_EXPOSE: g_print ("GDK_EXPOSE "); break;
-    case GDK_MOTION_NOTIFY: g_print ("GDK_MOTION_NOTIFY "); break;
-    case GDK_BUTTON_PRESS: g_print ("GDK_BUTTON_PRESS "); break;
-    case GDK_2BUTTON_PRESS: g_print ("GDK_2BUTTON_PRESS "); break;
-    case GDK_3BUTTON_PRESS: g_print ("GDK_3BUTTON_PRESS "); break;
-    case GDK_BUTTON_RELEASE: g_print ("GDK_BUTTON_RELEASE "); break;
-    case GDK_KEY_PRESS: g_print ("GDK_KEY_PRESS "); break;
-    case GDK_KEY_RELEASE: g_print ("GDK_KEY_RELEASE "); break;
-    case GDK_ENTER_NOTIFY: g_print ("GDK_ENTER_NOTIFY "); break;
-    case GDK_LEAVE_NOTIFY: g_print ("GDK_LEAVE_NOTIFY "); break;
-    case GDK_FOCUS_CHANGE: g_print ("GDK_FOCUS_CHANGE "); break;
-    case GDK_CONFIGURE: g_print ("GDK_CONFIGURE "); break;
-    case GDK_MAP: g_print ("GDK_MAP "); break;
-    case GDK_UNMAP: g_print ("GDK_UNMAP "); break;
-    case GDK_PROPERTY_NOTIFY: g_print ("GDK_PROPERTY_NOTIFY "); break;
-    case GDK_SELECTION_CLEAR: g_print ("GDK_SELECTION_CLEAR "); break;
-    case GDK_SELECTION_REQUEST: g_print ("GDK_SELECTION_REQUEST "); break;
-    case GDK_SELECTION_NOTIFY: g_print ("GDK_SELECTION_NOTIFY "); break;
-    case GDK_PROXIMITY_IN: g_print ("GDK_PROXIMITY_IN "); break;
-    case GDK_PROXIMITY_OUT: g_print ("GDK_PROXIMITY_OUT "); break;
-    case GDK_DRAG_ENTER: g_print ("GDK_DRAG_ENTER "); break;
-    case GDK_DRAG_LEAVE: g_print ("GDK_DRAG_LEAVE "); break;
-    case GDK_DRAG_MOTION: g_print ("GDK_DRAG_MOTION "); break;
-    case GDK_DRAG_STATUS: g_print ("GDK_DRAG_STATUS "); break;
-    case GDK_DROP_START: g_print ("GDK_DROP_START "); break;
-    case GDK_DROP_FINISHED: g_print ("GDK_DROP_FINISHED "); break;
-    case GDK_CLIENT_EVENT: g_print ("GDK_CLIENT_EVENT "); break;
-    case GDK_VISIBILITY_NOTIFY: g_print ("GDK_VISIBILITY_NOTIFY "); break;
-    case GDK_NO_EXPOSE: g_print ("GDK_NO_EXPOSE "); break;
-    case GDK_SCROLL: g_print ("GDK_SCROLL "); break;
+#define CASE(x) case GDK_##x: g_print (#x " "); break;
+    CASE (NOTHING);
+    CASE (DELETE);
+    CASE (DESTROY);
+    CASE (EXPOSE);
+    CASE (MOTION_NOTIFY);
+    CASE (BUTTON_PRESS);
+    CASE (2BUTTON_PRESS);
+    CASE (3BUTTON_PRESS);
+    CASE (BUTTON_RELEASE);
+    CASE (KEY_PRESS);
+    CASE (KEY_RELEASE);
+    CASE (ENTER_NOTIFY);
+    CASE (LEAVE_NOTIFY);
+    CASE (FOCUS_CHANGE);
+    CASE (CONFIGURE);
+    CASE (MAP);
+    CASE (UNMAP);
+    CASE (PROPERTY_NOTIFY);
+    CASE (SELECTION_CLEAR);
+    CASE (SELECTION_REQUEST);
+    CASE (SELECTION_NOTIFY);
+    CASE (PROXIMITY_IN);
+    CASE (PROXIMITY_OUT);
+    CASE (DRAG_ENTER);
+    CASE (DRAG_LEAVE);
+    CASE (DRAG_MOTION);
+    CASE (DRAG_STATUS);
+    CASE (DROP_START);
+    CASE (DROP_FINISHED);
+    CASE (CLIENT_EVENT);
+    CASE (VISIBILITY_NOTIFY);
+    CASE (NO_EXPOSE);
+    CASE (SCROLL);
+#undef CASE
     }
   g_print ("%#x ", (guint) GDK_DRAWABLE_XID (event->any.window));
 
@@ -3429,8 +3331,10 @@ gdk_event_translate (GdkEvent *event,
 
   if (xevent->message == gdk_selection_notify_msg)
     {
-      GDK_NOTE (EVENTS, g_print ("gdk_selection_notify_msg: %#x\n",
-				 (guint) xevent->hwnd));
+      g_print ("gdk_selection_notify_msg: %#x\n",
+	       (guint) xevent->hwnd);
+
+      g_assert_not_reached ();	/* Isn't sent any longer */
 
       event->selection.type = GDK_SELECTION_NOTIFY;
       event->selection.window = window;
@@ -3445,8 +3349,10 @@ gdk_event_translate (GdkEvent *event,
     }
   else if (xevent->message == gdk_selection_request_msg)
     {
-      GDK_NOTE (EVENTS, g_print ("gdk_selection_request_msg: %#x\n",
-				 (guint) xevent->hwnd));
+      g_print ("gdk_selection_request_msg: %#x\n",
+	       (guint) xevent->hwnd);
+
+      g_assert_not_reached ();
 
       event->selection.type = GDK_SELECTION_REQUEST;
       event->selection.window = window;
@@ -3462,9 +3368,10 @@ gdk_event_translate (GdkEvent *event,
     }
   else if (xevent->message == gdk_selection_clear_msg)
     {
-      GDK_NOTE (EVENTS, g_print ("gdk_selection_clear_msg: %#x\n",
-				 (guint) xevent->hwnd));
+      g_print ("gdk_selection_clear_msg: %#x\n",
+	       (guint) xevent->hwnd);
 
+      g_assert_not_reached ();
       event->selection.type = GDK_SELECTION_CLEAR;
       event->selection.window = window;
       event->selection.selection = xevent->wParam;
@@ -3932,7 +3839,7 @@ gdk_event_translate (GdkEvent *event,
 
       event->key.window = window;
       return_val = !GDK_DRAWABLE_DESTROYED (window);
-      GDK_NOTE (EVENTS, (g_print (G_STRLOC ":event_mask: "), print_event_mask (GDK_WINDOW_WIN32DATA (window)->event_mask), g_print ("\n")));
+      GDK_NOTE (EVENTS, g_print (G_STRLOC ":event_mask: %s\n", event_mask_string (GDK_WINDOW_WIN32DATA (window)->event_mask)));
       if (return_val && (event->key.window == k_grab_window
 			 || (GDK_WINDOW_WIN32DATA (window)->event_mask & GDK_KEY_RELEASE_MASK)))
 	{

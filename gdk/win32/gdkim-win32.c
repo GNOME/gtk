@@ -237,6 +237,69 @@ gdk_wcstombs (const GdkWChar *src)
   return mbstr;
 }
 
+/* A vesion that converts from wchar_t wide char strings to UTF-8 */
+
+gchar *
+gdk_nwchar_ts_to_mbs (const wchar_t *src,
+		      gint           src_len)
+{
+  gint len;
+  const wchar_t *wcp;
+  guchar *mbstr, *bp;
+
+  wcp = src;
+  len = 0;
+  while (wcp < src + src_len)
+    {
+      const wchar_t c = *wcp++;
+
+      if (c < 0x80)
+	len += 1;
+      else if (c < 0x800)
+	len += 2;
+      else
+	len += 3;
+    }
+
+  mbstr = g_malloc (len + 1);
+  
+  wcp = src;
+  bp = mbstr;
+  while (wcp < src + src_len)
+    {
+      int first;
+      wchar_t c = *wcp++;
+
+      if (c < 0x80)
+	{
+	  first = 0;
+	  len = 1;
+	}
+      else if (c < 0x800)
+	{
+	  first = 0xc0;
+	  len = 2;
+	}
+      else
+	{
+	  first = 0xe0;
+	  len = 3;
+	}
+      
+      /* Woo-hoo! */
+      switch (len)
+	{
+	case 3: bp[2] = (c & 0x3f) | 0x80; c >>= 6; /* Fall through */
+	case 2: bp[1] = (c & 0x3f) | 0x80; c >>= 6; /* Fall through */
+	case 1: bp[0] = c | first;
+	}
+
+      bp += len;
+    }
+  *bp = 0;
+
+  return mbstr;
+}
   
 /*
  * gdk_mbstowcs

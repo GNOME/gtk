@@ -241,7 +241,6 @@ gdk_property_change (GdkWindow    *window,
 		     const guchar *data,
 		     gint          nelements)
 {
-  static WORD cf_rtf = 0, cf_utf8_string = 0;
   HGLOBAL hdata, hlcid, hutf8;
   UINT cf = 0;
   LCID lcid;
@@ -422,8 +421,6 @@ gdk_property_change (GdkWindow    *window,
 	  break;
 
 	case RICH_TEXT:
-	  if (!cf_rtf)
-	    cf_rtf = RegisterClipboardFormat ("Rich Text Format");
 	  cf = cf_rtf;
 	  memmove (ucptr, rtf->str, size);
 	  g_string_free (rtf, TRUE);
@@ -431,8 +428,6 @@ gdk_property_change (GdkWindow    *window,
 	  /* Set the UTF8_STRING clipboard data, too, for other
 	   * GTK+ apps to use (won't bother reading RTF).
 	   */
-	  if (cf_utf8_string == 0)
-	    cf_utf8_string = RegisterClipboardFormat ("UTF8_STRING");
 	  if (!(hutf8 = GlobalAlloc (GMEM_MOVEABLE, nelements)))
 	    WIN32_API_FAILED ("GlobalAlloc");
 	  else

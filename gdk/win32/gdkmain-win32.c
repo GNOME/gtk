@@ -90,9 +90,13 @@ _gdk_windowing_init_check (int    argc,
 
   gdk_selection_property = gdk_atom_intern ("GDK_SELECTION", FALSE);
   text_uri_list_atom = gdk_atom_intern ("text/uri-list", FALSE);
+  compound_text_atom = gdk_atom_intern ("COMPOUND_TEXT", FALSE);
   gdk_clipboard_atom = gdk_atom_intern ("CLIPBOARD", FALSE);
   gdk_win32_dropfiles_atom = gdk_atom_intern ("DROPFILES_DND", FALSE);
   gdk_ole2_dnd_atom = gdk_atom_intern ("OLE2_DND", FALSE);
+
+  cf_rtf = RegisterClipboardFormat ("Rich Text Format");
+  cf_utf8_string = RegisterClipboardFormat ("UTF8_STRING");
 
   gdk_win32_selection_init ();
 

@@ -430,6 +430,9 @@ gint gdk_nmbstowchar_ts          (wchar_t     *dest,
 				  gint         src_len,
 				  gint         dest_max);
 
+gchar *gdk_nwchar_ts_to_mbs      (const wchar_t *src,
+				  gint           src_len);
+
 void gdk_wchar_text_handle       (GdkFont       *font,
 				  const wchar_t *wcstr,
 				  int            wclen,
@@ -484,9 +487,12 @@ extern UINT		 gdk_selection_request_msg;
 extern UINT		 gdk_selection_clear_msg;
 GDKVAR GdkAtom		 gdk_selection_property;
 extern GdkAtom		 text_uri_list_atom;
+extern GdkAtom		 compound_text_atom;
 extern GdkAtom		 gdk_clipboard_atom;
 extern GdkAtom		 gdk_win32_dropfiles_atom;
 extern GdkAtom		 gdk_ole2_dnd_atom;
+extern WORD		 cf_rtf;
+extern WORD		 cf_utf8_string;
 
 typedef enum {
   GDK_WIN32_DND_NONE = 0,

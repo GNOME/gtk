@@ -40,6 +40,9 @@ GdkAtom		  gdk_win32_dropfiles_atom;
 GdkAtom		  gdk_ole2_dnd_atom;
 GdkAtom           gdk_selection_property;
 GdkAtom		  text_uri_list_atom;
+GdkAtom		  compound_text_atom;
 gint              gdk_null_window_warnings = TRUE;
+WORD		  cf_rtf;
+WORD		  cf_utf8_string;
 
 DWORD		  windows_version = 0;
