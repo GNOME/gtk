@@ -1,3 +1,18 @@
+Tue Apr 28 22:13:54 1998  Owen Taylor  <otaylor@gtk.org>
+
+	* gtk/gtkselection.c (gtk_selection_clear): Only return
+	FALSE when the clear event is been rejected, not when
+	widget has already lost the selection. (Which should
+	only happen when we are setting the selection to another
+	widget ourself.)
+	
+Fri Apr 24 19:07:32 1998  Owen Taylor  <otaylor@gtk.org>
+
+	* gtk/gtkfixed.c gtk/gtkpaned.c gtk/gtktable.c:
+
+	Removed the "check visibility after gtk_widget_unparent" bug 
+	in hopefully the last three places.
+
 Tue Apr 28 15:46:41 1998  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkrc.c (gtk_rc_parse_statement): allow the inclusion of other
