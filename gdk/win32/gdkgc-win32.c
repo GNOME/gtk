@@ -58,6 +58,7 @@ gdk_win32_gc_values_to_win32values (GdkGCValues    *values,
 				    GdkGCWin32Data *data)
 {				    
   char *s = "";
+  gint sw, sh;
 
   GDK_NOTE (MISC, g_print ("{"));
 
@@ -208,7 +209,36 @@ gdk_win32_gc_values_to_win32values (GdkGCValues    *values,
       data->stipple = values->stipple;
       if (data->stipple != NULL)
 	{
-	  gdk_drawable_ref (data->stipple);
+	  gdk_drawable_get_size (data->stipple, &sw, &sh);
+
+	  if (sw != 8 || sh != 8)
+	    {
+	      /* It seems that it *must* be 8x8, at least on my machine. 
+	       * Thus, tile an 8x8 bitmap with the stipple in case it is
+	       * smaller, or simply use just the top left 8x8 in case it is
+	       * larger.
+	       */
+	      gchar dummy[8];
+	      GdkPixmap *bm = gdk_bitmap_create_from_data (NULL, dummy, 8, 8);
+	      GdkGC *gc = gdk_gc_new (bm);
+	      gint i, j;
+
+	      i = 0;
+	      while (i < 8)
+		{
+		  j = 0;
+		  while (j < 8)
+		    {
+		      gdk_draw_drawable (bm, gc, data->stipple, 0, 0, i, j, sw, sh);
+		      j += sh;
+		    }
+		  i += sw;
+		}
+	      data->stipple = bm;
+	      gdk_gc_unref (gc);
+	    }
+	  else
+	    gdk_drawable_ref (data->stipple);
 	  data->values_mask |= GDK_GC_STIPPLE;
 	  GDK_NOTE (MISC, (g_print ("%sstipple=%#x", s,
 				    GDK_DRAWABLE_XID (data->stipple)),
@@ -776,15 +806,14 @@ predraw_set_foreground (GdkGCWin32Data          *data,
 
   switch (data->fill_style)
     {
-#if 1
     case GDK_OPAQUE_STIPPLED:
       if ((hbr = CreatePatternBrush (GDK_DRAWABLE_XID (data->stipple))) == NULL)
 	WIN32_API_FAILED ("CreatePatternBrush");
 	
       SetBrushOrgEx(data->xgc, data->ts_x_origin,
 		    data->ts_y_origin, NULL);
+
       break;
-#endif
 
     case GDK_SOLID:
     default:
@@ -792,7 +821,6 @@ predraw_set_foreground (GdkGCWin32Data          *data,
 	WIN32_API_FAILED ("CreateSolidBrush");
       break;
   }
-
   if (SelectObject (data->xgc, hbr) == NULL)
     WIN32_API_FAILED ("SelectObject #3");
 }  

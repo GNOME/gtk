@@ -396,12 +396,13 @@ gdk_draw_segments (GdkDrawable *drawable,
 		   gint         nsegs)
 {
   g_return_if_fail (drawable != NULL);
-  g_return_if_fail (segs != NULL);
-  g_return_if_fail (gc != NULL);
-  g_return_if_fail (nsegs >= 0);
 
   if (nsegs == 0)
     return;
+
+  g_return_if_fail (segs != NULL);
+  g_return_if_fail (gc != NULL);
+  g_return_if_fail (nsegs >= 0);
 
   if (GDK_DRAWABLE_DESTROYED (drawable))
     return;

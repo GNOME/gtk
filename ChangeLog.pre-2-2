@@ -1,3 +1,16 @@
+2000-02-14  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/gdkdraw.c (gdk_draw_segments): Move the test for no segments
+	before the assertion for non-NULL segment list.
+
+	* gdk/win32/gdkgc-win32.c: (gdk_win32_gc_values_to_win32values):
+	Seems that pattern brushes *must* be 8x8 pixels! At least on my
+	machine, but it might be display driver dependent. Sigh, so make
+	sure the stipple is that size. Does Windows suck or what?
+
+	* gdk/win32/gdkdrawable-win32.c: Improve error handling in a few
+	places.
+
 2000-02-13  Havoc Pennington  <hp@pobox.com>
 
 	* gdk/x11/gdkcursor-x11.c (gdk_cursor_new_from_pixmap): init
@@ -23,12 +36,16 @@
 
 	* gdk/win32/gdkgc-win32.c: Factor out common code from
 	_gdk_win32_gc_new and gdk_win32_gc_set_values into
-	gdk_win32_gc_values_to_win32values.
+	gdk_win32_gc_values_to_win32values. Use correct colour for
+	SetBkColor() (Until now the code actually used a random colour in
+	the call to SetBkColor()... but that didn't show up as not many
+	GDI APIs use the background colour. Pattern (opaque stippled)
+	brushes do.)
 
 	* gdk/win32/gdkmain-win32.c (gdk_win32_last_error_string,
 	gdk_win32_api_failed): New functions for error logging.
 
-	* gdk/win32/gdkprivate-win32.h: Declare them, and a macro
+	* gdk/win32/gdkprivate-win32.h: Declare them, and define a macro
 	WIN32_API_FAILED to call them, passing function or file name and
 	line number.
 

@@ -153,8 +153,8 @@ struct _GdkGCWin32Data
    */
   HDC xgc;
   GdkGCValuesMask values_mask;
-  gulong foreground;
-  gulong background;
+  gulong foreground;		/* Pixel values from GdkColor, */
+  gulong background;		/* not Win32 COLORREFs */
   GdkFont *font;
   gint rop2;
   GdkFill fill_style;
