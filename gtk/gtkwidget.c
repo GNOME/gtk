@@ -1002,12 +1002,13 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		  G_TYPE_BOOLEAN, 1,
 		  GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE);
   widget_signals[POPUP_MENU] =
-    gtk_signal_new ("popup_menu",
-		    GTK_RUN_LAST | GTK_RUN_ACTION,
-		    GTK_CLASS_TYPE (object_class),
-		    GTK_SIGNAL_OFFSET (GtkWidgetClass, popup_menu),
-                    _gtk_marshal_NONE__NONE,
-		    GTK_TYPE_NONE, 0);
+    g_signal_new ("popup_menu",
+		  G_TYPE_FROM_CLASS (object_class),
+		  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+		  GTK_SIGNAL_OFFSET (GtkWidgetClass, popup_menu),
+		  _gtk_boolean_handled_accumulator, NULL,
+                  _gtk_marshal_BOOLEAN__VOID,
+		  G_TYPE_BOOLEAN, 0);
   widget_signals[SHOW_HELP] =
     gtk_signal_new ("show_help",
 		    GTK_RUN_LAST | GTK_RUN_ACTION,

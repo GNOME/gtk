@@ -1,3 +1,14 @@
+2002-02-07 Padraig O'Briain <padraig.obriain@sun.com>
+
+	* gtk/gtkwidget.[ch]:
+	Change popup_menu signal to return gboolean instead of void. This
+	allows the keypress which invokes the signal to be propagated to the
+	focus widgets ancestors if not handled by the focus widget.
+
+	* gtk/gtkcolorsel.c gtk/gtkentry.c gtk/gtktextview.c:
+	Change signature of popup_menu signal handler to return gboolean
+	instead of void and return TRUE in the signal handler
+
 2002-02-07  Anders Carlsson  <andersca@gnu.org>
 
 	* gdk/x11/xsettings-common.c (xsettings_setting_free): Free 

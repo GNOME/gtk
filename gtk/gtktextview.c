@@ -222,7 +222,7 @@ static void     gtk_text_view_drag_data_received (GtkWidget        *widget,
 static void gtk_text_view_set_scroll_adjustments (GtkTextView   *text_view,
                                                   GtkAdjustment *hadj,
                                                   GtkAdjustment *vadj);
-static void gtk_text_view_popup_menu             (GtkWidget     *widget);
+static gboolean gtk_text_view_popup_menu         (GtkWidget     *widget);
 
 static void gtk_text_view_move_cursor       (GtkTextView           *text_view,
                                              GtkMovementStep        step,
@@ -6395,10 +6395,11 @@ gtk_text_view_do_popup (GtkTextView    *text_view,
 				  info);
 }
 
-static void
+static gboolean
 gtk_text_view_popup_menu (GtkWidget *widget)
 {
   gtk_text_view_do_popup (GTK_TEXT_VIEW (widget), NULL);  
+  return TRUE;
 }
 
 /* Child GdkWindows */

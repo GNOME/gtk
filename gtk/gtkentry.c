@@ -230,7 +230,7 @@ static void gtk_entry_paste_clipboard    (GtkEntry        *entry);
 static void gtk_entry_toggle_overwrite   (GtkEntry        *entry);
 static void gtk_entry_select_all         (GtkEntry        *entry);
 static void gtk_entry_real_activate      (GtkEntry        *entry);
-static void gtk_entry_popup_menu         (GtkWidget      *widget);
+static gboolean gtk_entry_popup_menu     (GtkWidget      *widget);
 
 static void gtk_entry_keymap_direction_changed (GdkKeymap *keymap,
 						GtkEntry  *entry);
@@ -3946,10 +3946,11 @@ gtk_entry_do_popup (GtkEntry       *entry,
 				  info);
 }
 
-static void
+static gboolean
 gtk_entry_popup_menu (GtkWidget *widget)
 {
   gtk_entry_do_popup (GTK_ENTRY (widget), NULL);
+  return TRUE;
 }
 
 static void
