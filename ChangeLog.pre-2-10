@@ -1,3 +1,10 @@
+Mon Oct 20 23:24:27 2003  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtkentry.c (gtk_entry_key_press): remove the completion
+	timeout when the user pressed on Enter/ESC. Fixes the bug where the
+	completion popup popped up after the user pressed on Enter (which is
+	just weird). Reported by the Epiphany people (all of them).
+
 Mon Oct 20 20:27:22 2003  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 	Add support for OS X like sliding of toolbar items during drag and
