@@ -3244,7 +3244,15 @@ row_delete (GtkCTree    *ctree,
     }
 
   if (ctree_row->row.destroy)
-    ctree_row->row.destroy (ctree_row->row.data);
+    {
+      GtkDestroyNotify dnotify = ctree_row->row.destroy;
+      gpointer ddata = ctree_row->row.data;
+
+      ctree_row->row.destroy = NULL;
+      ctree_row->row.data = NULL;
+
+      dnotify (ddata);
+    }
 
   g_mem_chunk_free (clist->cell_mem_chunk, ctree_row->row.cell);
   g_mem_chunk_free (clist->row_mem_chunk, ctree_row);
@@ -5175,15 +5183,21 @@ gtk_ctree_node_set_row_data_full (GtkCTree         *ctree,
 				  gpointer          data,
 				  GtkDestroyNotify  destroy)
 {
+  GtkDestroyNotify dnotify;
+  gpointer ddata;
+  
   g_return_if_fail (ctree != NULL);
   g_return_if_fail (GTK_IS_CTREE (ctree));
   g_return_if_fail (node != NULL);
 
-  if (GTK_CTREE_ROW (node)->row.destroy)
-    GTK_CTREE_ROW (node)->row.destroy (GTK_CTREE_ROW (node)->row.data);
+  dnotify = GTK_CTREE_ROW (node)->row.destroy;
+  ddata = GTK_CTREE_ROW (node)->row.data;
   
   GTK_CTREE_ROW (node)->row.data = data;
   GTK_CTREE_ROW (node)->row.destroy = destroy;
+
+  if (dnotify)
+    dnotify (ddata);
 }
 
 gpointer
