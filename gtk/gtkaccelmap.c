@@ -24,6 +24,7 @@
 #include "gtkwindow.h"  /* in lack of GtkAcceleratable */
 
 #include <string.h>
+#include <errno.h>
 #include <fcntl.h>
 #ifdef HAVE_UNISTD_H
 #include <unistd.h>
@@ -586,6 +587,29 @@ gtk_accel_map_load (const gchar *file_name)
   close (fd);
 }
 
+static gboolean
+write_all (gint   fd,
+	   gchar *buf,
+	   gsize  to_write)
+{
+  while (to_write > 0)
+    {
+      gssize count = write (fd, buf, to_write);
+      if (count < 0)
+	{
+	  if (errno != EINTR)
+	    return FALSE;
+	}
+      else
+	{
+	  to_write -= count;
+	  buf += count;
+	}
+    }
+
+  return TRUE;
+}
+
 static void
 accel_map_print (gpointer        data,
 		 const gchar    *accel_path,
@@ -594,7 +618,7 @@ accel_map_print (gpointer        data,
 		 gboolean        changed)
 {
   GString *gstring = g_string_new (changed ? NULL : "; ");
-  gint err, fd = GPOINTER_TO_INT (data);
+  gint fd = GPOINTER_TO_INT (data);
   gchar *tmp, *name;
 
   g_string_append (gstring, "(gtk_accel_path \"");
@@ -613,9 +637,7 @@ accel_map_print (gpointer        data,
 
   g_string_append (gstring, "\")\n");
 
-  do
-    err = write (fd, gstring->str, gstring->len);
-  while (err < 0 && errno == EINTR);
+  write_all (fd, gstring->str, gstring->len);
 
   g_string_free (gstring, TRUE);
 }
@@ -632,7 +654,6 @@ void
 gtk_accel_map_save_fd (gint fd)
 {
   GString *gstring;
-  gint err;
 
   g_return_if_fail (fd >= 0);
 
@@ -643,9 +664,9 @@ gtk_accel_map_save_fd (gint fd)
   g_string_append (gstring, "; this file is an automated accelerator map dump\n");
   g_string_append (gstring, ";\n");
 
-  do
-    err = write (fd, gstring->str, gstring->len);
-  while (err < 0 && errno == EINTR);
+  write_all (fd, gstring->str, gstring->len);
+  
+  g_string_free (gstring, TRUE);
 
   gtk_accel_map_foreach (GINT_TO_POINTER (fd), accel_map_print);
 }

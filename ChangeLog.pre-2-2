@@ -1,3 +1,16 @@
+Fri Mar 22 10:56:19 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkaccelmap.c (gtk_accel_map_save_fd): Fix memory
+	leak. (#74400, Morten Welinder.)
+
+	* gtk/gtkaccelmap.c: Properly handle short returns from
+	write() calls. (Handling EINTR isn't enough... that only
+	handles the case where you were interrupted before you
+	wrote a single byte.)
+	
+	* gdk/linux-fb/gdkmouse-fb.c gdk/linux-fb/gdkkeyboard-fb.c:
+	Robustify against short returns from write() calls.
+
 Fri Mar 22 10:12:10 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtktextview.c (gtk_text_view_paint): Change
