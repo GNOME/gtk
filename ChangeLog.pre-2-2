@@ -1,3 +1,26 @@
+Fri Jul 26 17:11:25 2002  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtktreeview.c (gtk_tree_view_unref_tree_helper): _iter_children
+	check shouldn't be in g_return_return_val_if_fail (pointed out by
+	Josh Green, #88997),
+	(gtk_tree_view_set_model): call _gtk_tree_view_column_unset_model
+	for each column when we unset the model (part of #82484),
+	(gtk_tree_view_get_cell_area): return if we ran out of tree or
+	if we got an invalid path (#82376).
+
+	* gtk/gtktreeprivate.h: add _gtk_tree_view_column_unset_model.
+
+	* gtk/gtktreeviewcolumn.c: implement _gtk_tree_view_column_unset_model
+	which disconnects the sort_column_changed_signal (part of #82484).
+
+	* gtk/gtkliststore.c (gtk_list_store_insert): append row if the
+	given postion is off the end of the tree (#85813).
+
+	* gtk/gtkentry.c (gtk_cell_editable_key_press_event): let's use
+	2-space indent, commit changes if up/down keys has been pressed,
+	this overrides the focus key foo so the user won't be surprised
+	(#84665).
+
 2002-07-25  Matthias Clasen  <maclas@gmx.de>
 
 	* gdk/gdkrgb.c (gdk_rgb_select_conv): Use gdk_rgb_convert_4,

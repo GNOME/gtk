@@ -1071,7 +1071,9 @@ gtk_list_store_insert (GtkListStore *list_store,
 
   if (list == NULL)
     {
-      g_warning ("%s: position %d is off the end of the list\n", G_STRLOC, position);
+      /* position if off the end of the list, append it */
+      gtk_list_store_append (list_store, iter);
+
       return;
     }
 
