@@ -45,7 +45,7 @@ SOFTWARE.
 
 typedef struct {
     int         count;		/* number of spans		    */
-    GdkRectangle* points;		/* pointer to list of start points  */
+    GdkSpan* points;		/* pointer to list of start points  */
 } Spans;
 
 typedef struct {

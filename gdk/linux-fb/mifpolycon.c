@@ -93,7 +93,7 @@ miFillSppPoly(GdkDrawable *dst, GdkGC *pgc, int count, SppPointPtr ptsIn, int xT
     register int	left, right,	/* indices to first endpoints */
     			nextleft,
                  	nextright;	/* indices to second endpoints */
-    GdkRectangle* 	ptsOut,
+    GdkSpan*    	ptsOut,
       *FirstPoint;	/* output buffer */
 
     imin = GetFPolyYBounds(ptsIn, count, yFtrans, &ymin, &ymax);
@@ -101,7 +101,7 @@ miFillSppPoly(GdkDrawable *dst, GdkGC *pgc, int count, SppPointPtr ptsIn, int xT
     y = ymax - ymin + 1;
     if ((count < 3) || (y <= 0))
 	return;
-    ptsOut = FirstPoint = (GdkRectangle*)ALLOCATE_LOCAL(sizeof(GdkRectangle) * y);
+    ptsOut = FirstPoint = (GdkSpan*)ALLOCATE_LOCAL(sizeof(GdkSpan) * y);
     Marked = (int *) ALLOCATE_LOCAL(sizeof(int) * count);
 
     if(!ptsOut || !Marked)
@@ -198,7 +198,6 @@ miFillSppPoly(GdkDrawable *dst, GdkGC *pgc, int count, SppPointPtr ptsIn, int xT
 
 	    cxl = ICEIL(xl);
 	    cxr = ICEIL(xr);
-	    ptsOut->height = 1;
             /* reverse the edges if necessary */
             if (xl < xr) 
             {
@@ -220,7 +219,7 @@ miFillSppPoly(GdkDrawable *dst, GdkGC *pgc, int count, SppPointPtr ptsIn, int xT
     }  while (y <= ymax);
 
     /* Finally, fill the spans we've collected */
-    gdk_fb_fill_spans(dst, pgc, FirstPoint, ptsOut-FirstPoint);
+    gdk_fb_fill_spans(dst, pgc, FirstPoint, ptsOut-FirstPoint, TRUE);
     DEALLOCATE_LOCAL(Marked);
     DEALLOCATE_LOCAL(FirstPoint);
 }

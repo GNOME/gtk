@@ -67,6 +67,7 @@ extern "C" {
 typedef struct _GdkPoint	      GdkPoint;
 typedef struct _GdkRectangle	      GdkRectangle;
 typedef struct _GdkSegment	      GdkSegment;
+typedef struct _GdkSpan	              GdkSpan;
 
 /*
  * Note that on some platforms the wchar_t type
@@ -182,6 +183,13 @@ struct _GdkSegment
   gint y1;
   gint x2;
   gint y2;
+};
+
+struct _GdkSpan
+{
+  gint x;
+  gint y;
+  gint width;
 };
 
 #ifdef __cplusplus

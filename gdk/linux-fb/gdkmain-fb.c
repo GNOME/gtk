@@ -991,10 +991,9 @@ gdk_event_make (GdkWindow *window,
       guint32 the_time = g_latest_time.tv_sec * 1000 + g_latest_time.tv_usec / 1000;
 #else
       guint32 the_time;
-      GTimeVal gcurtime;
 
-	g_get_current_time (&gcurtime);
-	the_time = gcurtime.tv_sec * 1000 + gcurtime.tv_usec / 1000;
+      
+      the_time = gdk_fb_get_time ();
 #endif
 
       event->any.type = type;

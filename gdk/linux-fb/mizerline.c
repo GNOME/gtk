@@ -79,7 +79,6 @@ SOFTWARE.
 	spans->x = xx;\
 	spans->y = yy;\
         spans->width = 1; \
-        spans->height = 1; \
 	current_y = yy;\
         new_span = FALSE;\
     }\
@@ -95,7 +94,7 @@ miZeroLine(pDraw, pGC, mode, npt, pptInit)
 {
     int Nspans, current_y;
     GdkPoint* ppt; 
-    GdkRectangle* pspanInit, *spans;
+    GdkSpan* pspanInit, *spans;
     int list_len;
     int xleft, ytop, xright, ybottom;
     int new_x1, new_y1, new_x2, new_y2;
@@ -130,7 +129,7 @@ miZeroLine(pDraw, pGC, mode, npt, pptInit)
     width = xright - xleft + 1;
     height = ybottom - ytop + 1;
     list_len = (height >= width) ? height : width;
-    pspanInit = (GdkRectangle*)ALLOCATE_LOCAL(list_len * sizeof(GdkRectangle));
+    pspanInit = (GdkSpan*)ALLOCATE_LOCAL(list_len * sizeof(GdkSpan));
     if (!pspanInit)
 	return;
 
@@ -153,7 +152,7 @@ miZeroLine(pDraw, pGC, mode, npt, pptInit)
     while (--npt > 0)
     {
 	if (Nspans > 0)
-	  gdk_fb_fill_spans(pDraw, pGC, pspanInit, Nspans);
+	  gdk_fb_fill_spans(pDraw, pGC, pspanInit, Nspans, FALSE);
 	Nspans = 0;
 	new_span = TRUE;
 	spans  = pspanInit - 1;
@@ -312,7 +311,7 @@ miZeroLine(pDraw, pGC, mode, npt, pptInit)
     }    
 
     if (Nspans > 0)
-      gdk_fb_fill_spans(pDraw, pGC, pspanInit, Nspans);
+      gdk_fb_fill_spans(pDraw, pGC, pspanInit, Nspans, FALSE);
 
     DEALLOCATE_LOCAL(pspanInit);
 }

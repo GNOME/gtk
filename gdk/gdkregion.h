@@ -29,6 +29,9 @@ typedef enum
   GDK_OVERLAP_RECTANGLE_PART
 } GdkOverlapType;
 
+typedef void (*GdkSpanFunc) (GdkSpan *span,
+			     gpointer data);
+
 GdkRegion *gdk_region_new       (void);
 GdkRegion *gdk_region_polygon   (GdkPoint     *points,
 				 gint          npoints,
@@ -66,8 +69,16 @@ void gdk_region_subtract        (GdkRegion    *source1,
 void gdk_region_xor             (GdkRegion    *source1,
 				 GdkRegion    *source2);
 
+void gdk_region_spans_intersect_foreach (GdkRegion   *region,
+					 GdkSpan     *spans,
+					 int          n_spans,
+					 gboolean     sorted,
+					 GdkSpanFunc  function,
+					 gpointer     data);
+
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */
 
 #endif /* __GDK_REGION_H__ */
+

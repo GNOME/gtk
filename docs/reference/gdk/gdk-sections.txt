@@ -620,6 +620,12 @@ gdk_region_intersect
 gdk_region_union
 gdk_region_subtract
 gdk_region_xor
+
+<SUBSECTION>
+GdkSpan
+GdkSpanFunc
+gdk_region_spans_intersect_foreach
+
 </SECTION>
 
 <SECTION>

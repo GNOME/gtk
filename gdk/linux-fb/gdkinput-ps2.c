@@ -76,9 +76,6 @@ static Keyboard * tty_keyboard_open(void);
 static MouseDevice *gdk_fb_mouse = NULL;
 static Keyboard *keyboard = NULL;
 
-static guint multiclick_tag;
-static GdkEvent *multiclick_event = NULL;
-
 #ifndef VESA_NO_BLANKING
 #define VESA_NO_BLANKING        0
 #define VESA_VSYNC_SUSPEND      1
@@ -110,33 +107,11 @@ input_activity (void)
 #endif
 }
 
-static gboolean
-click_event_timeout (gpointer x)
-{
-  switch (multiclick_event->type)
-    {
-    case GDK_BUTTON_RELEASE:
-      gdk_event_free (multiclick_event);
-      break;
-    case GDK_2BUTTON_PRESS:
-    case GDK_3BUTTON_PRESS:
-      gdk_event_queue_append (multiclick_event);
-      break;
-    default:
-      break;
-    }
-
-  multiclick_event = NULL;
-  multiclick_tag = 0;
-
-  return FALSE;
-}
-
 static void
 send_button_event (MouseDevice *mouse,
 		   guint button,
 		   gboolean press_event,
-		   time_t the_time)
+		   guint32 the_time)
 {
   GdkEvent *event;
   gint x, y;
@@ -151,35 +126,6 @@ send_button_event (MouseDevice *mouse,
   gdk_window_get_origin (window, &x, &y);
   x = mouse->x - x;
   y = mouse->y - y;
-
-  if (!press_event &&
-      multiclick_event &&
-      multiclick_event->button.button == button &&
-      multiclick_event->button.window == window &&
-      ABS(multiclick_event->button.x - x) < 3 &&
-      ABS(multiclick_event->button.y - y) < 3)
-    {
-      multiclick_event->button.time = the_time;
-
-      /* Just change multiclick_event into a different event */
-      switch (multiclick_event->button.type)
-	{
-	default:
-	  g_assert_not_reached ();
-
-	case GDK_BUTTON_RELEASE:
-	  multiclick_event->button.type = GDK_2BUTTON_PRESS;
-	  return;
-
-	case GDK_2BUTTON_PRESS:
-	  multiclick_event->button.type = GDK_3BUTTON_PRESS;
-	  return;
-
-	case GDK_3BUTTON_PRESS:
-	  gdk_event_queue_append (multiclick_event); multiclick_event = NULL;
-	  g_source_remove (multiclick_tag); multiclick_tag = 0;
-	}
-    }
 
   event = gdk_event_make (window, press_event ? GDK_BUTTON_PRESS : GDK_BUTTON_RELEASE, FALSE);
 
@@ -219,6 +165,8 @@ send_button_event (MouseDevice *mouse,
       mouse->click_grab = FALSE;
     }
 
+  event->button.time = the_time;
+  
 #if 0
   g_message ("Button #%d %s [%d, %d] in %p",
 	     button, press_event?"pressed":"released",
@@ -237,11 +185,9 @@ send_button_event (MouseDevice *mouse,
     }
 #endif
 
-  if (!press_event && !multiclick_tag)
-    {
-      multiclick_tag = g_timeout_add (250, click_event_timeout, NULL);
-      multiclick_event = gdk_event_copy (event);
-    }
+  /* For double-clicks */
+  if (press_event)
+    gdk_event_button_generate (event);
 
   gdk_event_queue_append (event);
 }
@@ -598,6 +544,7 @@ handle_mouse_input(MouseDevice *mouse,
       event->motion.device = gdk_core_pointer;
       event->motion.x_root = mouse->x;
       event->motion.y_root = mouse->y;
+      event->motion.time = gdk_fb_get_time ();
     }
 
   if (win != mouse->prev_window)
@@ -732,11 +679,10 @@ handle_input_fidmour (GIOChannel *gioc,
   gdouble x, y, oldx, oldy;
   gboolean got_motion = FALSE;
   gboolean btn_down;
-  time_t the_time;
-  GTimeVal tv;
+  guint32 the_time;
 
-  g_get_current_time (&tv);
-  the_time = tv.tv_sec;
+  the_time = gdk_fb_get_time ();
+  
   oldx = mouse->x;
   oldy = mouse->y;
   while (pull_fidmour_packet (mouse, &btn_down, &x, &y))
@@ -775,13 +721,11 @@ handle_input_ps2 (GIOChannel *gioc,
   MouseDevice *mouse = data;
   int n, dx=0, dy=0;
   gboolean new_button1, new_button2, new_button3;
-  time_t the_time;
-  GTimeVal curtime;
+  guint32 the_time;
   gboolean got_motion = FALSE;
   guchar *buf;
 
-  g_get_current_time (&curtime);
-  the_time = curtime.tv_usec;
+  the_time = gdk_fb_get_time ();
 
   while (1) /* Go through as many mouse events as we can */
     {
@@ -862,11 +806,9 @@ handle_input_ms (GIOChannel *gioc,
   guchar byte1, byte2, byte3;
   int n, dx=0, dy=0;
   gboolean new_button1, new_button2, new_button3;
-  time_t the_time;
-  GTimeVal curtime;
+  guint32 the_time;
 
-  g_get_current_time (&curtime);
-  the_time = curtime.tv_usec;
+  the_time = gdk_fb_get_time ();
 
   n = read (mouse->fd, &byte1, 1);
   if ( (n!=1) || (byte1 & 0x40) != 0x40)
@@ -1405,16 +1347,14 @@ handle_mediumraw_keyboard_input (GIOChannel *gioc,
   guchar buf[128];
   int i, n;
   Keyboard *k = data;
-  time_t now;
-  GTimeVal curtime;
+  guint32 now;
 
   n = read (k->fd, buf, sizeof(buf));
   if (n <= 0)
     g_error("Nothing from keyboard!");
 
   /* Now turn this into a keyboard event */
-  g_get_current_time (&curtime);
-  now = curtime.tv_sec;
+  now = gdk_fb_get_time ();
 
   for (i = 0; i < n; i++)
     {
@@ -1556,16 +1496,14 @@ handle_xlate_keyboard_input (GIOChannel *gioc,
   guchar buf[128];
   int i, n;
   Keyboard *k = data;
-  time_t now;
-  GTimeVal curtime;
+  guint32 now;
 
   n = read (k->fd, buf, sizeof(buf));
   if (n <= 0)
     g_error ("Nothing from keyboard!");
 
   /* Now turn this into a keyboard event */
-  g_get_current_time (&curtime);
-  now = curtime.tv_sec;
+  now = gdk_fb_get_time ();
 
   for (i = 0; i < n; i++)
     {

@@ -521,14 +521,12 @@ miFillArcSliceSetup(arc, slice, pGC)
     pts->x = xorg - x; \
     pts->y = yorg - y; \
     pts->width = slw; \
-    pts->height = 1; \
     pts++; \
     if (miFillArcLower(slw)) \
     { \
 	pts->x = xorg - x; \
 	pts->y = yorg + y + dy; \
         pts->width = slw; \
-        pts->height = 1; \
 	pts++; \
     }
 
@@ -542,10 +540,10 @@ miFillEllipseI(pDraw, pGC, arc)
     int yk, xk, ym, xm, dx, dy, xorg, yorg;
     int slw;
     miFillArcRec info;
-    GdkRectangle* points;
-    register GdkRectangle* pts;
+    GdkSpan* points;
+    register GdkSpan* pts;
 
-    points = (GdkRectangle*)ALLOCATE_LOCAL(sizeof(GdkRectangle) * arc->height);
+    points = (GdkSpan*)ALLOCATE_LOCAL(sizeof(GdkSpan) * arc->height);
     if (!points)
 	return;
     miFillArcSetup(arc, &info);
@@ -556,7 +554,7 @@ miFillEllipseI(pDraw, pGC, arc)
 	MIFILLARCSTEP(slw);
 	ADDSPANS();
     }
-    gdk_fb_fill_spans(pDraw, pGC, points, pts - points);
+    gdk_fb_fill_spans(pDraw, pGC, points, pts - points, FALSE);
 
     DEALLOCATE_LOCAL(points);
 }
@@ -571,10 +569,10 @@ miFillEllipseD(pDraw, pGC, arc)
     int xorg, yorg, dx, dy, slw;
     double e, yk, xk, ym, xm;
     miFillArcDRec info;
-    GdkRectangle* points;
-    register GdkRectangle* pts;
+    GdkSpan* points;
+    register GdkSpan* pts;
 
-    points = (GdkRectangle*)ALLOCATE_LOCAL(sizeof(GdkRectangle) * arc->height);
+    points = (GdkSpan*)ALLOCATE_LOCAL(sizeof(GdkSpan) * arc->height);
     if (!points)
 	return;
     miFillArcDSetup(arc, &info);
@@ -585,7 +583,7 @@ miFillEllipseD(pDraw, pGC, arc)
 	MIFILLARCSTEP(slw);
 	ADDSPANS();
     }
-    gdk_fb_fill_spans(pDraw, pGC, points, pts - points);
+    gdk_fb_fill_spans(pDraw, pGC, points, pts - points, FALSE);
     DEALLOCATE_LOCAL(points);
 }
 
@@ -595,7 +593,6 @@ miFillEllipseD(pDraw, pGC, arc)
 	pts->x = l; \
 	pts->y = ya; \
         pts->width = r - l + 1; \
-        pts->height = 1; \
 	pts++; \
     }
 
@@ -623,8 +620,8 @@ miFillArcSliceI(pDraw, pGC, arc)
     miFillArcRec info;
     miArcSliceRec slice;
     int ya, xl, xr, xc;
-    GdkRectangle* points;
-    register GdkRectangle* pts;
+    GdkSpan* points;
+    register GdkSpan* pts;
 
     miFillArcSetup(arc, &info);
     miFillArcSliceSetup(arc, &slice, pGC);
@@ -632,7 +629,7 @@ miFillArcSliceI(pDraw, pGC, arc)
     slw = arc->height;
     if (slice.flip_top || slice.flip_bot)
 	slw += (arc->height >> 1) + 1;
-    points = (GdkRectangle*)ALLOCATE_LOCAL(sizeof(GdkRectangle) * slw);
+    points = (GdkSpan*)ALLOCATE_LOCAL(sizeof(GdkSpan) * slw);
     if (!points)
 	return;
     pts = points;
@@ -655,7 +652,7 @@ miFillArcSliceI(pDraw, pGC, arc)
 	}
     }
     
-    gdk_fb_fill_spans(pDraw, pGC, points, pts - points);
+    gdk_fb_fill_spans(pDraw, pGC, points, pts - points, FALSE);
     DEALLOCATE_LOCAL(points);
 }
 
@@ -671,8 +668,8 @@ miFillArcSliceD(pDraw, pGC, arc)
     miFillArcDRec info;
     miArcSliceRec slice;
     int ya, xl, xr, xc;
-    GdkRectangle* points;
-    register GdkRectangle* pts;
+    GdkSpan* points;
+    register GdkSpan* pts;
 
     miFillArcDSetup(arc, &info);
     miFillArcSliceSetup(arc, &slice, pGC);
@@ -680,7 +677,7 @@ miFillArcSliceD(pDraw, pGC, arc)
     slw = arc->height;
     if (slice.flip_top || slice.flip_bot)
 	slw += (arc->height >> 1) + 1;
-    points = (GdkRectangle*)ALLOCATE_LOCAL(sizeof(GdkRectangle) * slw);
+    points = (GdkSpan*)ALLOCATE_LOCAL(sizeof(GdkSpan) * slw);
     if (!points)
 	return;
     pts = points;
@@ -702,7 +699,7 @@ miFillArcSliceD(pDraw, pGC, arc)
 	    ADDSLICESPANS(slice.flip_bot);
 	}
     }
-    gdk_fb_fill_spans(pDraw, pGC, points, pts - points);
+    gdk_fb_fill_spans(pDraw, pGC, points, pts - points, FALSE);
 
     DEALLOCATE_LOCAL(points);
 }

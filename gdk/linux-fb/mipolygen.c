@@ -66,8 +66,8 @@ miFillGeneralPoly(dst, pgc, count, ptsIn)
     register int nPts = 0;          /* number of pts in buffer */
     register EdgeTableEntry *pWETE; /* Winding Edge Table      */
     register ScanLineList *pSLL;    /* Current ScanLineList    */
-    register GdkRectangle* ptsOut;      /* ptr to output buffers   */
-    GdkRectangle FirstPoint[NUMPTSTOBUFFER]; /* the output buffers */
+    register GdkSpan* ptsOut;      /* ptr to output buffers   */
+    GdkSpan FirstPoint[NUMPTSTOBUFFER]; /* the output buffers */
     EdgeTableEntry *pPrevAET;       /* previous AET entry      */
     EdgeTable ET;                   /* Edge Table header node  */
     EdgeTableEntry AET;             /* Active ET header node   */
@@ -115,7 +115,6 @@ miFillGeneralPoly(dst, pgc, count, ptsIn)
             {
                 ptsOut->x = pAET->bres.minor;
 		ptsOut->width = pAET->next->bres.minor - pAET->bres.minor;
-		ptsOut->height = 1;
 		ptsOut++->y = y;
                 nPts++;
 
@@ -124,7 +123,7 @@ miFillGeneralPoly(dst, pgc, count, ptsIn)
                  */
                 if (nPts == NUMPTSTOBUFFER) 
 		{
-		  gdk_fb_fill_spans(dst, pgc, FirstPoint, nPts);
+		  gdk_fb_fill_spans(dst, pgc, FirstPoint, nPts, TRUE);
 		  ptsOut = FirstPoint;
 		  nPts = 0;
                 }
@@ -169,7 +168,6 @@ miFillGeneralPoly(dst, pgc, count, ptsIn)
                 {
                     ptsOut->x = pAET->bres.minor;
 		    ptsOut->width = pAET->nextWETE->bres.minor - pAET->bres.minor;
-		    ptsOut->height = 1;
 		    ptsOut++->y = y;
                     nPts++;
 
@@ -178,7 +176,7 @@ miFillGeneralPoly(dst, pgc, count, ptsIn)
                      */
                     if (nPts == NUMPTSTOBUFFER) 
                     {
-		      gdk_fb_fill_spans(dst, pgc, FirstPoint, nPts);
+		      gdk_fb_fill_spans(dst, pgc, FirstPoint, nPts, TRUE);
 		      ptsOut = FirstPoint;
 		      nPts = 0;
                     }
@@ -207,7 +205,7 @@ miFillGeneralPoly(dst, pgc, count, ptsIn)
      *     Get any spans that we missed by buffering
      */
     if(nPts > 0)
-      gdk_fb_fill_spans(dst, pgc, FirstPoint, nPts);
+      gdk_fb_fill_spans(dst, pgc, FirstPoint, nPts, TRUE);
     DEALLOCATE_LOCAL(pETEs);
     miFreeStorage(SLLBlock.next);
     return(TRUE);

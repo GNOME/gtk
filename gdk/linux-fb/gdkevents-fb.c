@@ -29,63 +29,6 @@
 #include "gdkinternals.h"
 #include "gdkfb.h"
 
-#include "gdkkeysyms.h"
-
-#if HAVE_CONFIG_H
-#  include <config.h>
-#  if STDC_HEADERS
-#    include <string.h>
-#  endif
-#endif
-
-typedef struct _GdkIOClosure GdkIOClosure;
-typedef struct _GdkEventPrivate GdkEventPrivate;
-
-#define DOUBLE_CLICK_TIME      250
-#define TRIPLE_CLICK_TIME      500
-#define DOUBLE_CLICK_DIST      5
-#define TRIPLE_CLICK_DIST      5
-
-typedef enum
-{
-  /* Following flag is set for events on the event queue during
-   * translation and cleared afterwards.
-   */
-  GDK_EVENT_PENDING = 1 << 0
-} GdkEventFlags;
-
-struct _GdkIOClosure
-{
-  GdkInputFunction function;
-  GdkInputCondition condition;
-  GdkDestroyNotify notify;
-  gpointer data;
-};
-
-struct _GdkEventPrivate
-{
-  GdkEvent event;
-  guint    flags;
-};
-
-/* 
- * Private function declarations
- */
-
-/* Private variable declarations
- */
-
-#if 0
-static GList *client_filters;	            /* Filters for client messages */
-
-static GSourceFuncs event_funcs = {
-  gdk_event_prepare,
-  gdk_event_check,
-  gdk_event_dispatch,
-  (GDestroyNotify)g_free
-};
-#endif
-
 /*********************************************
  * Functions for maintaining the event queue *
  *********************************************/
@@ -100,6 +43,15 @@ static gboolean fb_events_check    (gpointer  source_data,
 static gboolean fb_events_dispatch (gpointer  source_data,
 				    GTimeVal *dispatch_time,
 				    gpointer  user_data);
+
+guint32
+gdk_fb_get_time(void)
+{
+  GTimeVal tv;
+
+  g_get_current_time (&tv);
+  return (guint32) tv.tv_sec * 1000 + tv.tv_usec / 1000;
+}
 
 void 
 gdk_events_init (void)

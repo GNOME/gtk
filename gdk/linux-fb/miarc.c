@@ -866,8 +866,8 @@ miComputeWideEllipse(int lw, miArc *parc, gboolean *mustFree)
 static void
 miFillWideEllipse(GdkDrawable *pDraw, GdkGC *pGC, miArc *parc)
 {
-    GdkRectangle* points;
-    register GdkRectangle* pts;
+    GdkSpan* points;
+    register GdkSpan* pts;
     miArcSpanData *spdata;
     gboolean mustFree;
     register miArcSpan *span;
@@ -875,7 +875,7 @@ miFillWideEllipse(GdkDrawable *pDraw, GdkGC *pGC, miArc *parc)
     register int n;
 
     yorgu = parc->height + GDK_GC_FBDATA(pGC)->values.line_width;
-    points = ALLOCATE_LOCAL(sizeof(GdkRectangle) * yorgu * 2);
+    points = ALLOCATE_LOCAL(sizeof(GdkSpan) * yorgu * 2);
     spdata = miComputeWideEllipse(GDK_GC_FBDATA(pGC)->values.line_width, parc, &mustFree);
     if (!spdata)
     {
@@ -893,7 +893,7 @@ miFillWideEllipse(GdkDrawable *pDraw, GdkGC *pGC, miArc *parc)
     {
 	pts->x = xorg;
 	pts->y = yorgu - 1;
-	pts->width = pts->height = 1;
+	pts->width = 1;
 	pts++;
 	span++;
     }
@@ -901,7 +901,6 @@ miFillWideEllipse(GdkDrawable *pDraw, GdkGC *pGC, miArc *parc)
     {
 	pts[0].x = xorg + span->lx;
 	pts[0].y = yorgu;
-	pts[0].height = 1;
 	pts[0].width = span->lw;
 	pts[1] = pts[0];
 	pts[1].y = yorgl;
@@ -914,7 +913,7 @@ miFillWideEllipse(GdkDrawable *pDraw, GdkGC *pGC, miArc *parc)
     {
 	pts[0].x = xorg;
 	pts[0].y = yorgl;
-	pts[0].width = pts[0].height = 1;
+	pts[0].width = 1;
 	pts++;
     }
     for (n = spdata->count2; --n >= 0; )
@@ -922,22 +921,18 @@ miFillWideEllipse(GdkDrawable *pDraw, GdkGC *pGC, miArc *parc)
 	pts[0].x = xorg + span->lx;
 	pts[0].y = yorgu;
 	pts[0].width = span->lw;
-	pts[0].height = 1;
 
 	pts[1].x = xorg + span->rx;
 	pts[1].y = pts[0].y;
 	pts[1].width = span->rw;
-	pts[1].height = 1;
 
 	pts[2].x = pts[0].x;
 	pts[2].y = yorgl;
-	pts[2].height = 1;
 	pts[2].width = pts[0].width;
 
 	pts[3].x = pts[1].x;
 	pts[3].y = pts[2].y;
 	pts[3].width = pts[1].width;
-	pts[3].height = 1;
 
 	yorgu++;
 	yorgl--;
@@ -951,7 +946,6 @@ miFillWideEllipse(GdkDrawable *pDraw, GdkGC *pGC, miArc *parc)
 	    pts[0].x = xorg + span->lx;
 	    pts[0].y = yorgu;
 	    pts[0].width = span->lw;
-	    pts[0].height = 1;
 	    pts++;
 	}
 	else
@@ -959,18 +953,16 @@ miFillWideEllipse(GdkDrawable *pDraw, GdkGC *pGC, miArc *parc)
 	    pts[0].x = xorg + span->lx;
 	    pts[0].y = yorgu;
 	    pts[0].width = span->lw;
-	    pts[0].height = 1;
 	    pts[1].x = xorg + span->rx;
 	    pts[1].y = pts[0].y;
 	    pts[1].width = span->rw;
-	    pts[1].height = 1;
 	    pts += 2;
 	}
     }
     if (mustFree)
 	g_free(spdata);
 
-    gdk_fb_fill_spans(pDraw, pGC, points, pts - points);
+    gdk_fb_fill_spans(pDraw, pGC, points, pts - points, FALSE);
 
     DEALLOCATE_LOCAL(points);
 }
@@ -3039,15 +3031,15 @@ fillSpans (pDrawable, pGC)
     GdkGC*	pGC;
 {
 	register struct finalSpan	*span;
-	register GdkRectangle*		xSpan;
+	register GdkSpan*		xSpan;
 	register int			i;
 	register struct finalSpan	**f;
 	register int			spany;
-	GdkRectangle*			xSpans;
+	GdkSpan*			xSpans;
 
 	if (nspans == 0)
 		return;
-	xSpan = xSpans = (GdkRectangle*) ALLOCATE_LOCAL (nspans * sizeof (GdkRectangle));
+	xSpan = xSpans = (GdkSpan*) ALLOCATE_LOCAL (nspans * sizeof (GdkSpan));
 	if (xSpans)
 	{
 	    i = 0;
@@ -3059,13 +3051,12 @@ fillSpans (pDrawable, pGC)
 			    xSpan->x = span->min;
 			    xSpan->y = spany;
 			    xSpan->width = span->max - span->min;
-			    xSpan->height = 1;
 			    ++xSpan;
 			    ++i;
 		    }
 	    }
 
-	    gdk_fb_fill_spans(pDrawable, pGC, xSpans, i);
+	    gdk_fb_fill_spans(pDrawable, pGC, xSpans, i, TRUE);
 	}
 	disposeFinalSpans ();
 	if (xSpans)

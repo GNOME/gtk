@@ -6,8 +6,8 @@ simple graphical data types.
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>
-GDK provides the #GdkPoint, #GdkRectangle and #GdkRegion data types for
-representing pixels and sets of pixels on the screen.
+GDK provides the #GdkPoint, #GdkRectangle, #GdkRegion and #GdkSpan data types
+for representing pixels and sets of pixels on the screen.
 </para>
 <para>
 #GdkPoint is a simple structure containing an x and y coordinate of a point.
@@ -21,6 +21,11 @@ gdk_rectangle_union().
 <para>
 #GdkRegion is an opaque data type holding a set of arbitrary pixels, and is
 usually used for clipping graphical operations (see gdk_gc_set_clip_region()).
+</para>
+<para>
+#GdkSpan is a structure holding a spanline. A spanline is a horizontal line that
+is one pixel wide. It is mainly used when rasterizing other graphics primitives.
+It can be intersected to regions by using gdk_region_spans_intersect_foreach().
 </para>
 
 <!-- ##### SECTION See_Also ##### -->
@@ -259,5 +264,38 @@ Returns the union of a region and a rectangle.
 
 @source1: 
 @source2: 
+
+
+<!-- ##### STRUCT GdkSpan ##### -->
+<para>
+
+</para>
+
+@x: 
+@y: 
+@width: 
+
+<!-- ##### USER_FUNCTION GdkSpanFunc ##### -->
+<para>
+
+</para>
+
+@span: The intersected part of the span.
+@data: Opaque data passed by user.
+
+
+<!-- ##### FUNCTION gdk_region_spans_intersect_foreach ##### -->
+<para>
+Intersects a set of spans with a region and call a user specified
+function for each resulting spanline. This function is a lot more effective
+if the spans are sorted.
+</para>
+
+@region: The region to intersect against.
+@spans: Array of spans to intersect.
+@n_spans: Number of spans.
+@sorted: True if the spans are sorted in increasing y order.
+@function: The function to call for each intersected spanline.
+@data: Opaque user data passed to function.
 
 

@@ -1505,3 +1505,153 @@ gdk_region_rect_in (GdkRegion    *region,
 	      GDK_OVERLAP_RECTANGLE_PART : GDK_OVERLAP_RECTANGLE_IN) : 
 	  GDK_OVERLAP_RECTANGLE_OUT);
 }
+
+
+static void
+gdk_region_unsorted_spans_intersect_foreach (GdkRegion *region,
+					     GdkSpan   *spans,
+					     int        n_spans,
+					     GdkSpanFunc function,
+					     gpointer data)
+{
+  gint i, left, right, y;
+  gint clipped_left, clipped_right;
+  GdkRegionBox *pbox;
+  GdkRegionBox *pboxEnd;
+  GdkSpan out_span;
+
+  if (!region->numRects)
+    return;
+
+  for (i=0;i<n_spans;i++)
+    {
+      y = spans[i].y;
+      left = spans[i].x;
+      right = left + spans[i].width; /* right is not in the span! */
+    
+      if (! ((region->extents.y1 <= y) &&
+	     (region->extents.y2 > y) &&
+	     (region->extents.x1 < right) &&
+	     (region->extents.x2 > left)) ) 
+	continue;
+
+      /* can stop when we passed y */
+      for (pbox = region->rects, pboxEnd = pbox + region->numRects;
+	   pbox < pboxEnd;
+	   pbox++)
+	{
+	  if (pbox->y2 <= y)
+	    continue; /* Not quite there yet */
+	  
+	  if (pbox->y1 > y)
+	    break; /* passed the spanline */
+	  
+	  if ((right > pbox->x1) && (left < pbox->x2)) 
+	    {
+	      clipped_left = MAX (left, pbox->x1);
+	      clipped_right = MIN (right, pbox->x2);
+	      
+	      out_span.y = y;
+	      out_span.x = clipped_left;
+	      out_span.width = clipped_right - clipped_left;
+	      (*function) (&out_span, data);
+	    }
+	}
+    }
+}
+
+
+void
+gdk_region_spans_intersect_foreach (GdkRegion  *region,
+				    GdkSpan    *spans,
+				    int         n_spans,
+				    gboolean    sorted,
+				    GdkSpanFunc function,
+				    gpointer    data)
+{
+  gint left, right, y;
+  gint clipped_left, clipped_right;
+  GdkRegionBox *pbox;
+  GdkRegionBox *pboxEnd;
+  GdkSpan *span, *tmpspan;
+  GdkSpan *end_span;
+  GdkSpan out_span;
+
+  if (!sorted)
+    {
+      gdk_region_unsorted_spans_intersect_foreach (region,
+						   spans,
+						   n_spans,
+						   function,
+						   data);
+      return;
+    }
+  
+  if ((!region->numRects) || (n_spans == 0))
+    return;
+
+  y = span->y;
+  left = span->x;
+  right = span->x + span->width; /* right is not in the span! */
+
+  /* The main method here is to step along the
+   * sorted rectangles and spans in lock step, and
+   * clipping the spans that are in the current
+   * rectangle before going on to the next rectangle.
+   */
+
+  span = spans;
+  end_span = spans + n_spans;
+  pbox = region->rects;
+  pboxEnd = pbox + region->numRects;
+  while (pbox < pboxEnd)
+    {
+      while ((pbox->y2 < span->y) || (span->y < pbox->y1))
+	{
+	  /* Skip any rectangles that are above the current span */
+	  if (pbox->y2 < span->y)
+	    {
+	      pbox++;
+	      if (pbox == pboxEnd)
+		return;
+	    }
+	  /* Skip any spans that are above the current rectangle */
+	  if (span->y < pbox->y1)
+	    {
+	      span++;
+	      if (span == end_span)
+		return;
+	    }
+	}
+      
+      /* Ok, we got at least one span that might intersect this rectangle. */
+      tmpspan = span;
+      while ((tmpspan < end_span) &&
+	     (tmpspan->y < pbox->y2))
+	{
+	  y = tmpspan->y;
+	  left = tmpspan->x;
+	  right = left + tmpspan->width; /* right is not in the span! */
+	  
+	  if ((right > pbox->x1) && (left < pbox->x2))
+	    {
+	      clipped_left = MAX (left, pbox->x1);
+	      clipped_right = MIN (right, pbox->x2);
+	      
+	      out_span.y = y;
+	      out_span.x = clipped_left;
+	      out_span.width = clipped_right - clipped_left;
+	      (*function) (&out_span, data);
+	    }
+	  
+	  tmpspan++;
+	}
+
+      /* Finished this rectangle.
+       * The spans could still intersect the next one
+       */
+      pbox++;
+    }
+  
+  return spans;
+}

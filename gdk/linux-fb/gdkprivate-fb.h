@@ -215,7 +215,7 @@ typedef struct {
   /* These functions can only be called for drawables
    * that have the same depth as the gc. 
    */
-  void        (*set_pixel) (GdkDrawable    *drawable,
+  void (*set_pixel)        (GdkDrawable    *drawable,
 			    GdkGC          *gc,
 			    int             x,
 			    int             y,
@@ -227,11 +227,16 @@ typedef struct {
 			    int               y,
 			    GdkColor         *color);
   
-  void        (*fill_span) (GdkDrawable *drawable,
-			    GdkGC       *gc,
-			    GdkSegment  *cur,
-			    GdkColor    *color);
+  void (*fill_span)        (GdkDrawable  *drawable,
+			    GdkGC        *gc,
+			    GdkSpan      *span,
+			    GdkColor     *color);
 
+  void (*fill_rectangle)   (GdkDrawable  *drawable,
+			    GdkGC	 *gc,
+			    GdkRectangle *rect,
+			    GdkColor     *color);
+  
   gdk_fb_draw_drawable_func *draw_drawable[GDK_NUM_FB_SRCBPP];
 } GdkGCFBData;
 
@@ -301,51 +306,67 @@ struct _GdkFBDrawingContext {
   gboolean handle_cursor : 1;
 };
 
-void gdk_fb_drawing_context_init(GdkFBDrawingContext *dc, GdkDrawable *drawable,
-				 GdkGC *gc, gboolean draw_bg, gboolean do_clipping);
-void gdk_fb_drawing_context_finalize(GdkFBDrawingContext *dc);
+void       gdk_fb_drawing_context_init     (GdkFBDrawingContext *dc,
+					    GdkDrawable         *drawable,
+					    GdkGC               *gc,
+					    gboolean             draw_bg,
+					    gboolean             do_clipping);
+void       gdk_fb_drawing_context_finalize (GdkFBDrawingContext *dc);
+void       gdk_fb_draw_drawable_3          (GdkDrawable         *drawable,
+					    GdkGC               *gc,
+					    GdkPixmap           *src,
+					    GdkFBDrawingContext *dc,
+					    gint                 xsrc,
+					    gint                 ysrc,
+					    gint                 xdest,
+					    gint                 ydest,
+					    gint                 width,
+					    gint                 height);
+void       gdk_fb_draw_drawable_2          (GdkDrawable         *drawable,
+					    GdkGC               *gc,
+					    GdkPixmap           *src,
+					    gint                 xsrc,
+					    gint                 ysrc,
+					    gint                 xdest,
+					    gint                 ydest,
+					    gint                 width,
+					    gint                 height,
+					    gboolean             draw_bg,
+					    gboolean             do_clipping);
+void       gdk_fb_draw_rectangle           (GdkDrawable         *drawable,
+					    GdkGC               *gc,
+					    gint                 filled,
+					    gint                 x,
+					    gint                 y,
+					    gint                 width,
+					    gint                 height);
+void       gdk_fb_draw_lines               (GdkDrawable         *drawable,
+					    GdkGC               *gc,
+					    GdkPoint            *points,
+					    gint                 npoints);
+void       gdk_fb_fill_spans               (GdkDrawable         *real_drawable,
+					    GdkGC               *gc,
+					    GdkSpan             *spans,
+					    int                  nspans,
+					    gboolean             sorted);
+GdkRegion *gdk_fb_clip_region              (GdkDrawable         *drawable,
+					    GdkGC               *gc,
+					    gboolean             do_clipping,
+					    gboolean             do_children);
 
-void gdk_fb_draw_drawable_3 (GdkDrawable *drawable,
-			     GdkGC *gc,
-			     GdkPixmap *src,
-			     GdkFBDrawingContext *dc,
-			     gint xsrc,
-			     gint ysrc,
-			     gint xdest,
-			     gint ydest,
-			     gint width,
-			     gint height);
 
-void gdk_fb_draw_drawable_2 (GdkDrawable *drawable,
-			     GdkGC       *gc,
-			     GdkPixmap   *src,
-			     gint         xsrc,
-			     gint         ysrc,
-			     gint         xdest,
-			     gint         ydest,
-			     gint         width,
-			     gint         height,
-			     gboolean     draw_bg,
-			     gboolean     do_clipping);
-void gdk_fb_draw_rectangle (GdkDrawable    *drawable,
-			    GdkGC          *gc,
-			    gint            filled,
-			    gint            x,
-			    gint            y,
-			    gint            width,
-			    gint            height);
-void gdk_fb_fill_spans(GdkDrawable *real_drawable, GdkGC *gc, GdkRectangle *rects, int nrects);
-GdkRegion *gdk_fb_clip_region(GdkDrawable *drawable, GdkGC *gc, gboolean do_clipping, gboolean do_children);
+GdkGrabStatus gdk_fb_pointer_grab          (GdkWindow           *window,
+					    gint		 owner_events,
+					    GdkEventMask	 event_mask,
+					    GdkWindow           *confine_to,
+					    GdkCursor           *cursor,
+					    guint32              time,
+					    gboolean             implicit_grab);
+void gdk_fb_pointer_ungrab                 (guint32 time,
+					    gboolean implicit_grab);
 
-GdkGrabStatus
-gdk_fb_pointer_grab (GdkWindow *	  window,
-		     gint		  owner_events,
-		     GdkEventMask	  event_mask,
-		     GdkWindow *	  confine_to,
-		     GdkCursor *	  cursor,
-		     guint32  time,
-		     gboolean implicit_grab);
-void gdk_fb_pointer_ungrab (guint32 time, gboolean implicit_grab);
+guint32 gdk_fb_get_time                    (void);
+
 
 extern GdkWindow *_gdk_fb_pointer_grab_window, *_gdk_fb_pointer_grab_window_events, *_gdk_fb_keyboard_grab_window, *_gdk_fb_pointer_grab_confine;
 extern GdkEventMask _gdk_fb_pointer_grab_events, _gdk_fb_keyboard_grab_events;

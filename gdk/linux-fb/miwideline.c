@@ -80,8 +80,8 @@ miFillPolyHelper (pDrawable, pGC, pixel, spanData, y, overall_height,
     int	height = 0;
     int	left_height = 0, right_height = 0;
 
-    register GdkRectangle* ppt;
-    GdkRectangle* pptInit;
+    register GdkSpan* ppt;
+    GdkSpan* pptInit;
     GdkColor		oldPixel;
     int		xorg;
     Spans	spanRec;
@@ -91,7 +91,7 @@ miFillPolyHelper (pDrawable, pGC, pixel, spanData, y, overall_height,
     
     if (!spanData)
     {
-    	pptInit = (GdkRectangle*) ALLOCATE_LOCAL (overall_height * sizeof(*ppt));
+    	pptInit = (GdkSpan*) ALLOCATE_LOCAL (overall_height * sizeof(*ppt));
     	if (!pptInit)
 	    return;
 	ppt = pptInit;
@@ -103,7 +103,7 @@ miFillPolyHelper (pDrawable, pGC, pixel, spanData, y, overall_height,
     }
     else
     {
-	spanRec.points = (GdkRectangle*) g_malloc (overall_height * sizeof (*ppt));
+	spanRec.points = (GdkSpan*) g_malloc (overall_height * sizeof (*ppt));
 	if (!spanRec.points)
 	    return;
 	ppt = spanRec.points;
@@ -130,7 +130,6 @@ miFillPolyHelper (pDrawable, pGC, pixel, spanData, y, overall_height,
 		ppt->y = y;
 		ppt->x = left_x + xorg;
 		ppt->width = right_x - left_x + 1;
-		ppt->height = 1;
 		ppt++;
 	    }
     	    y++;
@@ -142,7 +141,7 @@ miFillPolyHelper (pDrawable, pGC, pixel, spanData, y, overall_height,
     }
     if (!spanData)
     {
-      gdk_fb_fill_spans(pDrawable, pGC, pptInit, ppt - pptInit);
+      gdk_fb_fill_spans(pDrawable, pGC, pptInit, ppt - pptInit, TRUE);
       DEALLOCATE_LOCAL (pptInit);
       if (pixel->pixel != oldPixel.pixel)
     	{
@@ -164,23 +163,18 @@ miFillRectPolyHelper (pDrawable, pGC, pixel, spanData, x, y, w, h)
     SpanDataPtr	spanData;
     int		x, y, w, h;
 {
-    register GdkRectangle* ppt;
-    GdkColor		oldPixel;
+    register GdkSpan* ppt;
+    GdkColor	oldPixel;
     Spans	spanRec;
-    GdkRectangle  rect;
 
     if (!spanData)
     {
-	rect.x = x;
-	rect.y = y;
-	rect.width = w;
-	rect.height = h;
     	oldPixel = GDK_GC_FBDATA(pGC)->values.foreground;
     	if (pixel->pixel != oldPixel.pixel)
     	{
 	  gdk_gc_set_foreground(pGC, pixel);
     	}
-	gdk_fb_fill_spans(pDrawable, pGC, &rect, 1);
+        gdk_fb_draw_rectangle(pDrawable, pGC, TRUE, x, y, w, h);
     	if (pixel->pixel != oldPixel.pixel)
     	{
 	  gdk_gc_set_foreground(pGC, &oldPixel);
@@ -188,7 +182,7 @@ miFillRectPolyHelper (pDrawable, pGC, pixel, spanData, x, y, w, h)
     }
     else
     {
-	spanRec.points = (GdkRectangle*) g_malloc (h * sizeof (*ppt));
+	spanRec.points = (GdkSpan*) g_malloc (h * sizeof (*ppt));
 	if (!spanRec.points)
 	    return;
 	ppt = spanRec.points;
@@ -198,7 +192,6 @@ miFillRectPolyHelper (pDrawable, pGC, pixel, spanData, x, y, w, h)
 	    ppt->x = x;
 	    ppt->y = y;
 	    ppt->width = w;
-	    ppt->height = 1;
 	    ppt++;
 	    y++;
 	}
@@ -384,14 +377,15 @@ miLineOnePoint (pDrawable, pGC, pixel, spanData, x, y)
     SpanDataPtr	    spanData;
     int		    x, y;
 {
-    GdkColor	oldPixel;
-    GdkRectangle rect;
+    GdkColor oldPixel;
+    GdkSpan  span;
 
     MILINESETPIXEL (pDrawable, pGC, pixel, oldPixel);
-    rect.width = 1;
-    rect.height = 1;
+    span.x = x;
+    span.y = y;
+    span.width = 1;
 
-    gdk_fb_fill_spans(pDrawable, pGC, &rect, 1);
+    gdk_fb_fill_spans(pDrawable, pGC, &span, 1, TRUE);
     MILINERESETPIXEL (pDrawable, pGC, pixel, oldPixel);
 }
 
@@ -542,9 +536,9 @@ miLineArcI (pDraw, pGC, xorg, yorg, points, widths)
     GdkDrawable*	    pDraw;
     GdkGC*	    pGC;
     int		    xorg, yorg;
-    GdkRectangle*	    points;
+    GdkSpan*	    points;
 {
-    register GdkRectangle* tpts, *bpts;
+    register GdkSpan* tpts, *bpts;
     register int x, y, e, ex, slw;
 
     tpts = points;
@@ -554,7 +548,6 @@ miLineArcI (pDraw, pGC, xorg, yorg, points, widths)
 	tpts->x = xorg;
 	tpts->y = yorg;
 	tpts->width = 1;
-	tpts->height = 1;
 	return 1;
     }
     bpts = tpts + slw;
@@ -580,14 +573,12 @@ miLineArcI (pDraw, pGC, xorg, yorg, points, widths)
 	tpts->x = xorg - x;
 	tpts->y = yorg - y;
 	tpts->width = slw;
-	tpts->height = 1;
 	tpts++;
 	if ((y != 0) && ((slw > 1) || (e != ex)))
 	{
 	    bpts--;
 	    bpts->x = xorg - x;
 	    bpts->y = yorg + y;
-	    bpts->height = 1;
 	    bpts->width = slw;
 	}
     }
@@ -623,12 +614,12 @@ miLineArcD (pDraw, pGC, xorg, yorg, points, widths,
     GdkDrawable*	    pDraw;
     GdkGC*	    pGC;
     double	    xorg, yorg;
-    GdkRectangle*   points;
+    GdkSpan*        points;
     PolyEdgePtr	    edge1, edge2;
     int		    edgey1, edgey2;
     gboolean	    edgeleft1, edgeleft2;
 {
-    register GdkRectangle* pts;
+    register GdkSpan* pts;
     double radius, x0, y0, el, er, yk, xlk, xrk, k;
     int xbase, ybase, y, boty, xl, xr, xcl, xcr;
     int ymin, ymax;
@@ -731,7 +722,6 @@ miLineArcD (pDraw, pGC, xorg, yorg, points, widths,
 	    pts->x = xcl;
 	    pts->y = ybase;
 	    pts->width = xcr - xcl + 1;
-	    pts->height = 1;
 	    pts++;
 	}
     }
@@ -768,7 +758,6 @@ miLineArcD (pDraw, pGC, xorg, yorg, points, widths,
 	    pts->x = xcl;
 	    pts->y = ybase;
 	    pts->width = xcr - xcl + 1;
-	    pts->height = 1;
 	    pts++;
 	}
     }
@@ -909,7 +898,7 @@ miLineArc (pDraw, pGC, pixel, spanData, leftFace, rightFace, xorg, yorg, isInt)
     double	    xorg, yorg;
     gboolean	    isInt;
 {
-    GdkRectangle* points;
+    GdkSpan* points;
     int xorgi = 0, yorgi = 0;
     GdkColor		oldPixel;
     Spans spanRec;
@@ -957,7 +946,7 @@ miLineArc (pDraw, pGC, pixel, spanData, leftFace, rightFace, xorg, yorg, isInt)
     }
     if (!spanData)
     {
-    	points = (GdkRectangle*)ALLOCATE_LOCAL(sizeof(GdkRectangle) * GDK_GC_FBDATA(pGC)->values.line_width);
+    	points = (GdkSpan*)ALLOCATE_LOCAL(sizeof(GdkSpan) * GDK_GC_FBDATA(pGC)->values.line_width);
     	if (!points)
 	    return;
     	oldPixel = GDK_GC_FBDATA(pGC)->values.foreground;
@@ -968,7 +957,7 @@ miLineArc (pDraw, pGC, pixel, spanData, leftFace, rightFace, xorg, yorg, isInt)
     }
     else
     {
-	points = (GdkRectangle*) g_malloc (GDK_GC_FBDATA(pGC)->values.line_width * sizeof (GdkRectangle));
+	points = (GdkSpan*) g_malloc (GDK_GC_FBDATA(pGC)->values.line_width * sizeof (GdkSpan));
 	if (!points)
 	    return;
 	spanRec.points = points;
@@ -982,7 +971,7 @@ miLineArc (pDraw, pGC, pixel, spanData, leftFace, rightFace, xorg, yorg, isInt)
 
     if (!spanData)
     {
-      gdk_fb_fill_spans(pDraw, pGC, points, n);
+      gdk_fb_fill_spans(pDraw, pGC, points, n, TRUE);
       DEALLOCATE_LOCAL(points);
       if (pixel->pixel != oldPixel.pixel)
     	{

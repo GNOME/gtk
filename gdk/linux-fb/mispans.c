@@ -78,7 +78,7 @@ void miSubtractSpans (spanGroup, sub)
     int		i, subCount, spansCount;
     int		ymin, ymax, xmin, xmax;
     Spans	*spans;
-    GdkRectangle*	subPt, *spansPt;
+    GdkSpan*	subPt, *spansPt;
     int		extra;
 
     ymin = YMIN(sub);
@@ -137,10 +137,10 @@ void miSubtractSpans (spanGroup, sub)
 			else
 			{
 			    if (!extra) {
-				GdkRectangle* newPt;
+				GdkSpan* newPt;
 
 #define EXTRA 8
-				newPt = (GdkRectangle*) g_realloc (spans->points, (spans->count + EXTRA) * sizeof (GdkRectangle));
+				newPt = (GdkSpan*) g_realloc (spans->points, (spans->count + EXTRA) * sizeof (GdkSpan));
 				if (!newPt)
 				    break;
 				spansPt = newPt + (spansPt - spans->points);
@@ -151,10 +151,8 @@ void miSubtractSpans (spanGroup, sub)
 			    spans->count++;
 			    extra--;
 			    spansPt->width = xmin - spansPt->x;
-			    spansPt->height = 1;
 			    spansPt++;
 			    spansPt->width -= xmax - spansPt->x;
-			    spansPt->height = 1;
 			    spansPt->x = xmax;
 			}
 		    }
@@ -207,19 +205,19 @@ void miFreeSpanGroup(spanGroup)
 }
 
 static void QuickSortSpansX(points, numSpans)
-    register GdkRectangle    points[];
+    register GdkSpan        points[];
     register int	    numSpans;
 {
     register int	    x;
     register int	    i, j, m;
-    register GdkRectangle*    r;
+    register GdkSpan*    r;
 
 /* Always called with numSpans > 1 */
 /* Sorts only by x, as all y should be the same */
 
 #define ExchangeSpans(a, b)				    \
 {							    \
-    GdkRectangle     tpt;				    \
+    GdkSpan     tpt;				    \
 							    \
     tpt = points[a]; points[a] = points[b]; points[b] = tpt;    \
 }
@@ -235,7 +233,7 @@ static void QuickSortSpansX(points, numSpans)
 		x = points[i].x;
 		if (xprev > x) {
 		    /* points[i] is out of order.  Move into proper location. */
-		    GdkRectangle tpt;
+		    GdkSpan tpt;
 		    int	    k;
 
 		    for (j = 0; x >= points[j].x; j++) {}
@@ -289,10 +287,10 @@ static void QuickSortSpansX(points, numSpans)
 
 static int UniquifySpansX(spans, newPoints, newWidths)
     Spans		    *spans;
-    register GdkRectangle    *newPoints;
+    register GdkSpan    *newPoints;
 {
     register int newx1, newx2, oldpt, i, y;
-    GdkRectangle    *oldPoints, *startNewPoints = newPoints;
+    GdkSpan    *oldPoints, *startNewPoints = newPoints;
 
 /* Always called with numSpans > 1 */
 /* Uniquify the spans, and stash them into newPoints and newWidths.  Return the
@@ -313,7 +311,6 @@ static int UniquifySpansX(spans, newPoints, newWidths)
 	    newPoints->x = newx1;
 	    newPoints->y = y;
 	    newPoints->width = newx2 - newx1;
-	    newPoints->height = 1;
 	    newPoints++;
 	    newx1 = oldpt;
 	    newx2 = oldpt + oldPoints->width;
@@ -327,7 +324,6 @@ static int UniquifySpansX(spans, newPoints, newWidths)
     /* Write final span */
     newPoints->x = newx1;
     newPoints->width = newx2 - newx1;
-    newPoints->height = 1;
     newPoints->y = y;
 
     return (newPoints - startNewPoints) + 1;
@@ -359,7 +355,7 @@ void miFillUniqueSpanGroup(pDraw, pGC, spanGroup)
     register int    ymin, ylength;
 
     /* Outgoing spans for one big call to FillSpans */
-    register GdkRectangle*    points;
+    register GdkSpan*    points;
     register int	    count;
 
     if (spanGroup->count == 0) return;
@@ -367,7 +363,7 @@ void miFillUniqueSpanGroup(pDraw, pGC, spanGroup)
     if (spanGroup->count == 1) {
 	/* Already should be sorted, unique */
 	spans = spanGroup->group;
-	gdk_fb_fill_spans(pDraw, pGC, spans->points, spans->count);
+	gdk_fb_fill_spans(pDraw, pGC, spans->points, spans->count, TRUE);
 	g_free(spans->points);
     }
     else
@@ -415,11 +411,11 @@ void miFillUniqueSpanGroup(pDraw, pGC, spanGroup)
 		if (index >= 0 && index < ylength) {
 		    Spans *newspans = &(yspans[index]);
 		    if (newspans->count == ysizes[index]) {
-			GdkRectangle* newpoints;
+			GdkSpan* newpoints;
 			ysizes[index] = (ysizes[index] + 8) * 2;
-			newpoints = (GdkRectangle*) g_realloc(
+			newpoints = (GdkSpan*) g_realloc(
 			    newspans->points,
-			    ysizes[index] * sizeof(GdkRectangle));
+			    ysizes[index] * sizeof(GdkSpan));
 			if (!newpoints)
 			{
 			    int	i;
@@ -445,7 +441,7 @@ void miFillUniqueSpanGroup(pDraw, pGC, spanGroup)
 	} /* for i thorough Spans */
 
 	/* Now sort by x and uniquify each bucket into the final array */
-	points = (GdkRectangle*) g_malloc(count * sizeof(GdkRectangle));
+	points = (GdkSpan*) g_malloc(count * sizeof(GdkSpan));
 	if (!points)
 	{
 	    int	i;
@@ -476,7 +472,7 @@ void miFillUniqueSpanGroup(pDraw, pGC, spanGroup)
 	    }
 	}
 
-	gdk_fb_fill_spans(pDraw, pGC, points, count);
+	gdk_fb_fill_spans(pDraw, pGC, points, count, TRUE);
 	g_free(points);
 	g_free(yspans);
 	g_free(ysizes);		/* use (DE)ALLOCATE_LOCAL for these? */
@@ -497,7 +493,7 @@ void miFillSpanGroup(pDraw, pGC, spanGroup)
     register Spans  *spans;
 
     for (i = 0, spans = spanGroup->group; i != spanGroup->count; i++, spans++) {
-      gdk_fb_fill_spans(pDraw, pGC, spans->points, spans->count);
+      gdk_fb_fill_spans(pDraw, pGC, spans->points, spans->count, TRUE);
       g_free(spans->points);
     }
 
