@@ -253,9 +253,12 @@ void gtk_text_buffer_delete_mark_by_name (GtkTextBuffer     *buffer,
 GtkTextMark* gtk_text_buffer_get_insert          (GtkTextBuffer *buffer);
 GtkTextMark* gtk_text_buffer_get_selection_bound (GtkTextBuffer *buffer);
 
-/* efficiently move insert and selection_bound to same location */
+/* efficiently move insert and selection_bound at the same time */
 void gtk_text_buffer_place_cursor (GtkTextBuffer     *buffer,
                                    const GtkTextIter *where);
+void gtk_text_buffer_select_range (GtkTextBuffer     *buffer,
+                                   const GtkTextIter *ins,
+				   const GtkTextIter *bound);
 
 
 

@@ -173,6 +173,10 @@ gboolean            _gtk_text_btree_get_selection_bounds    (GtkTextBTree       
                                                              GtkTextIter        *end);
 void                _gtk_text_btree_place_cursor            (GtkTextBTree       *tree,
                                                              const GtkTextIter  *where);
+void                _gtk_text_btree_select_range            (GtkTextBTree       *tree,
+                                                             const GtkTextIter  *ins,
+							     const GtkTextIter 
+*bound);
 gboolean            _gtk_text_btree_mark_is_insert          (GtkTextBTree       *tree,
                                                              GtkTextMark        *segment);
 gboolean            _gtk_text_btree_mark_is_selection_bound (GtkTextBTree       *tree,

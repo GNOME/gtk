@@ -1,3 +1,17 @@
+2003-01-06  Matthias Clasen  <maclas@gmx.de>
+
+	Implement a utility function proposed in #102534:
+	
+	* gtk/gtktextbtree.h: 
+	* gtk/gtktextbtree.c (_gtk_text_btree_select_range): New function.
+	(_gtk_text_btree_place_cursor): Now a simple wrapper around
+	_gtk_text_btree_select_range().   
+
+	* gtk/gtktextbuffer.h: 
+	* gtk/gtktextbuffer.c (gtk_text_buffer_select_range): New function.
+	(gtk_text_buffer_place_cursor): Now a simple wrapper around
+	gtk_text_buffer_select_range(). 
+
 2003-01-05  Havoc Pennington  <hp@pobox.com>
 
 	* configure.in: fix a stray bracket that was breaking the build

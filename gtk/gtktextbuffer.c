@@ -2009,17 +2009,42 @@ void
 gtk_text_buffer_place_cursor (GtkTextBuffer     *buffer,
                               const GtkTextIter *where)
 {
-  GtkTextIter real;
+  gtk_text_buffer_select_range (buffer, where, where);
+}
+
+
+/**
+ * gtk_text_buffer_select_range:
+ * @buffer: a #GtkTextBuffer
+ * @ins: where to put the "insert" mark
+ * @bound: where to put the "selection_bound" mark
+ *
+ * This function moves the "insert" and "selection_bound" marks
+ * simultaneously.  If you move them in two steps
+ * with gtk_text_buffer_move_mark(), you will temporarily select a
+ * region in between their old and new locations, which can be pretty
+ * inefficient since the temporarily-selected region will force stuff
+ * to be recalculated. This function moves them as a unit, which can
+ * be optimized.
+ **/
+void
+gtk_text_buffer_select_range (GtkTextBuffer     *buffer,
+			      const GtkTextIter *ins,
+                              const GtkTextIter *bound)
+{
+  GtkTextIter real_ins;
+  GtkTextIter real_bound;
 
   g_return_if_fail (GTK_IS_TEXT_BUFFER (buffer));
 
-  real = *where;
+  real_ins = *ins;
+  real_bound = *bound;
 
-  _gtk_text_btree_place_cursor (get_btree (buffer), &real);
-  gtk_text_buffer_mark_set (buffer, &real,
+  _gtk_text_btree_select_range (get_btree (buffer), &real_ins, &real_bound);
+  gtk_text_buffer_mark_set (buffer, &real_ins,
                             gtk_text_buffer_get_mark (buffer,
                                                       "insert"));
-  gtk_text_buffer_mark_set (buffer, &real,
+  gtk_text_buffer_mark_set (buffer, &real_bound,
                             gtk_text_buffer_get_mark (buffer,
                                                       "selection_bound"));
 }

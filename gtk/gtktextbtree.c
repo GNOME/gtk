@@ -2656,6 +2656,14 @@ void
 _gtk_text_btree_place_cursor (GtkTextBTree      *tree,
                              const GtkTextIter *iter)
 {
+  _gtk_text_btree_select_range (tree, iter, iter);
+}
+
+void
+_gtk_text_btree_select_range (GtkTextBTree      *tree,
+			      const GtkTextIter *ins,
+                              const GtkTextIter *bound)
+{
   GtkTextIter start, end;
 
   if (_gtk_text_btree_get_selection_bounds (tree, &start, &end))
@@ -2663,10 +2671,11 @@ _gtk_text_btree_place_cursor (GtkTextBTree      *tree,
 
   /* Move insert AND selection_bound before we redisplay */
   real_set_mark (tree, tree->insert_mark,
-                 "insert", FALSE, iter, TRUE, FALSE);
+                 "insert", FALSE, ins, TRUE, FALSE);
   real_set_mark (tree, tree->selection_bound_mark,
-                 "selection_bound", FALSE, iter, TRUE, FALSE);
+                 "selection_bound", FALSE, bound, TRUE, FALSE);
 }
+
 
 void
 _gtk_text_btree_remove_mark_by_name (GtkTextBTree *tree,
