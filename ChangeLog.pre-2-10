@@ -1,3 +1,21 @@
+Sat Dec  6 00:23:46 2003  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkviewport.c: Implement RTL flipping for 
+	GtkViewport: Adjust the "gravity" when resizing
+	This is a bit flickery in RTL mode.  (#107526)
+
+Sat Dec  6 00:22:14 2003  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkscrolledwindow.c: Implement RTL flipping for 
+	GtkScrolledWindow: the vertical scrollbar shows up on the left
+	side in RTL mode.  (#107526)
+
+Fri Dec  5 01:58:33 2003  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtknotebook.c: Implement RTL flipping for GtkNotebook:
+	tabs displayed at the top/bottom are rearranged, and tabs on
+	the left/right are displayed at the opposite edge.  (#96630)
+
 2003-12-04  Mark McLoughlin  <mark@skynet.ie>
 
 	* gtk/gtklabel.c: (gtk_label_set_attributes_internal): Allow
