@@ -6066,8 +6066,8 @@ opacity_toggled_cb (GtkWidget *w,
   GtkColorSelection *colorsel;
 
   colorsel = GTK_COLOR_SELECTION (cs->colorsel);
-  gtk_color_selection_set_use_opacity (colorsel,
-				       gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (w)));
+  gtk_color_selection_set_has_opacity_control (colorsel,
+					       gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (w)));
 }
 
 static void
@@ -6077,7 +6077,7 @@ palette_toggled_cb (GtkWidget *w,
   GtkColorSelection *colorsel;
 
   colorsel = GTK_COLOR_SELECTION (cs->colorsel);
-  gtk_color_selection_set_use_palette (colorsel,
+  gtk_color_selection_set_has_palette (colorsel,
 				       gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (w)));
 }
 

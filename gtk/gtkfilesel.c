@@ -572,7 +572,13 @@ static void gtk_file_selection_get_property (GObject         *object,
     }
 }
 
-
+static gboolean
+grab_default (GtkWidget *widget)
+{
+  gtk_widget_grab_default (widget);
+  return FALSE;
+}
+     
 static void
 gtk_file_selection_init (GtkFileSelection *filesel)
 {
@@ -698,7 +704,7 @@ gtk_file_selection_init (GtkFileSelection *filesel)
   gtk_signal_connect (GTK_OBJECT (filesel->selection_entry), "insert_text",
 		      (GtkSignalFunc) gtk_file_selection_insert_text, NULL);
   gtk_signal_connect_object (GTK_OBJECT (filesel->selection_entry), "focus_in_event",
-			     (GtkSignalFunc) gtk_widget_grab_default,
+			     (GtkSignalFunc) grab_default,
 			     GTK_OBJECT (filesel->ok_button));
   gtk_signal_connect_object (GTK_OBJECT (filesel->selection_entry), "activate",
                              (GtkSignalFunc) gtk_button_clicked,

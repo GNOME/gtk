@@ -65,44 +65,51 @@ struct _GtkColorSelectionClass
 
 /* ColorSelection */ 
 
-GtkType     gtk_color_selection_get_type          (void) G_GNUC_CONST;
-GtkWidget * gtk_color_selection_new               (void);
-void        gtk_color_selection_set_update_policy (GtkColorSelection *colorsel,
-						   GtkUpdateType      policy);
-gboolean    gtk_color_selection_get_use_opacity   (GtkColorSelection *colorsel);
-void        gtk_color_selection_set_use_opacity   (GtkColorSelection *colorsel,
-						   gboolean           use_opacity);
-gboolean    gtk_color_selection_get_use_palette   (GtkColorSelection *colorsel);
-void        gtk_color_selection_set_use_palette   (GtkColorSelection *colorsel,
-						   gboolean           use_palette);
+GtkType    gtk_color_selection_get_type                (void) G_GNUC_CONST;
+GtkWidget *gtk_color_selection_new                     (void);
+void       gtk_color_selection_set_update_policy       (GtkColorSelection *colorsel,
+							GtkUpdateType      policy);
+gboolean   gtk_color_selection_get_has_opacity_control (GtkColorSelection *colorsel);
+void       gtk_color_selection_set_has_opacity_control (GtkColorSelection *colorsel,
+							gboolean           use_opacity);
+gboolean   gtk_color_selection_get_has_palette         (GtkColorSelection *colorsel);
+void       gtk_color_selection_set_has_palette         (GtkColorSelection *colorsel,
+							gboolean           use_palette);
 
-/* The Color set is an array of doubles, of the following format:
- * color[0] = red_channel;
- * color[1] = green_channel;
- * color[2] = blue_channel;
- * color[3] = alpha_channel;
- */
-void       gtk_color_selection_set_color           (GtkColorSelection    *colorsel,
-						    gdouble               *color);
-void       gtk_color_selection_get_color           (GtkColorSelection    *colorsel,
-						    gdouble               *color);
-void       gtk_color_selection_set_old_color       (GtkColorSelection    *colorsel,
-						    gdouble               *color);
-void       gtk_color_selection_get_old_color       (GtkColorSelection    *colorsel,
-						    gdouble               *color);
-void       gtk_color_selection_set_palette_color   (GtkColorSelection   *colorsel,
-						    gint                  x,
-						    gint                  y,
-						    gdouble              *color);
-gboolean   gtk_color_selection_get_palette_color   (GtkColorSelection   *colorsel,
-						    gint                  x,
-						    gint                  y,
-						    gdouble              *color);
-void       gtk_color_selection_unset_palette_color (GtkColorSelection   *colorsel,
-						    gint                  x,
-						    gint                  y);
-gboolean   gtk_color_selection_is_adjusting        (GtkColorSelection    *colorsel);
 
+void     gtk_color_selection_set_current_color   (GtkColorSelection *colorsel,
+						  GdkColor          *color);
+void     gtk_color_selection_set_current_alpha   (GtkColorSelection *colorsel,
+						  guint16            alpha);
+void     gtk_color_selection_get_current_color   (GtkColorSelection *colorsel,
+						  GdkColor          *color);
+guint16  gtk_color_selection_get_current_alpha   (GtkColorSelection *colorsel);
+void     gtk_color_selection_set_previous_color  (GtkColorSelection *colorsel,
+						  GdkColor          *color);
+void     gtk_color_selection_set_previous_alpha  (GtkColorSelection *colorsel,
+						  guint16            alpha);
+void     gtk_color_selection_get_previous_color  (GtkColorSelection *colorsel,
+						  GdkColor          *color);
+guint16  gtk_color_selection_get_previous_alpha  (GtkColorSelection *colorsel);
+gint     gtk_color_selection_get_palette_size    (GtkColorSelection *colorsel);
+gboolean gtk_color_selection_get_palette_color   (GtkColorSelection *colorsel,
+						  gint               index,
+						  GdkColor          *color);
+void     gtk_color_selection_set_palette_color   (GtkColorSelection *colorsel,
+						  gint               index,
+						  GdkColor          *color);
+void     gtk_color_selection_unset_palette_color (GtkColorSelection *colorsel,
+						  gint               index);
+gboolean gtk_color_selection_is_adjusting        (GtkColorSelection *colorsel);
+
+
+#ifndef GTK_DISABLE_DEPRECATED
+/* Deprecated calls: */
+void       gtk_color_selection_set_color        (GtkColorSelection    *colorsel,
+						 gdouble               *color);
+void       gtk_color_selection_get_color        (GtkColorSelection    *colorsel,
+						 gdouble              *color);
+#endif /* GTK_DISABLE_DEPRECATED */
 
 #ifdef __cplusplus
 }

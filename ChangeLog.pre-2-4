@@ -1,3 +1,22 @@
+2001-04-20  Alexander Larsson  <alexl@redhat.com>
+
+	* gtk/gtkcolorsel.[ch]:
+	API Change. Take GdkColor arguments instead of gdouble *.
+	Leave the old gtk_color_selection_set_color for compatibility,
+	but marked deprecated.
+	Do correct rounding when converting RGB <-> HSV.
+	
+	* gtk/gtkcolorseldialog.c:
+	* tests/testgtk.c:
+	Use new GtkColorSelection API.
+
+	* gtk/gtkhsv.c:
+	Fix problem selecting colors in triangle when Hue is 330.
+	Fix some black dots around the HSB triangle.
+	
+	* gtk/gtkfilesel.c:
+	return FALSE from the focus_in_event handler to fix focus problems.
+
 2001-04-18  Havoc Pennington  <hp@redhat.com>
 
 	* gtk/gtkwindow.c (gtk_window_class_init): add signals and binding

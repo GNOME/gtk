@@ -89,8 +89,8 @@ gtk_color_selection_dialog_init (GtkColorSelectionDialog *colorseldiag)
   gtk_widget_show (frame); 
   
   colorseldiag->colorsel = gtk_color_selection_new ();
-  gtk_color_selection_set_use_palette (GTK_COLOR_SELECTION(colorseldiag->colorsel), FALSE); 
-  gtk_color_selection_set_use_opacity (GTK_COLOR_SELECTION(colorseldiag->colorsel), FALSE);
+  gtk_color_selection_set_has_palette (GTK_COLOR_SELECTION(colorseldiag->colorsel), FALSE); 
+  gtk_color_selection_set_has_opacity_control (GTK_COLOR_SELECTION(colorseldiag->colorsel), FALSE);
   gtk_container_add (GTK_CONTAINER (frame), colorseldiag->colorsel);
   gtk_widget_show (colorseldiag->colorsel);
   

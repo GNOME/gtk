@@ -686,8 +686,12 @@ compute_sv (GtkHSV  *hsv,
 	{
 	  if (*v > 1.0)
 	    *v = 1.0;
-	  
-	  *s = (y - sy - *v * (vy - sy)) / (*v * (hy - vy));
+
+	  if (fabs (hy - vy) < fabs (hx - vx))
+	    *s = (x - sx - *v * (vx - sx)) / (*v * (hx - vx));
+	  else
+	    *s = (y - sy - *v * (vy - sy)) / (*v * (hy - vy));
+	    
 	  if (*s < 0.0)
 	    *s = 0.0;
 	  else if (*s > 1.0)
@@ -949,7 +953,7 @@ paint_ring (GtkHSV      *hsv,
 	  dx = xx + x - center;
 	  
 	  dist = dx * dx + dy * dy;
-	  if (dist < (inner * inner) || dist > (outer * outer))
+	  if (dist < ((inner-1) * (inner-1)) || dist > ((outer+1) * (outer+1)))
 	    {
 	      *p++ = 0;
 	      *p++ = 0;
