@@ -301,7 +301,6 @@ gtk_c_sources = @STRIP_BEGIN@ \
 	gtkwidget.c		\
 	gtkwindow.c		\
 	fnmatch.c		\
-	fnmatch.h		\
 @STRIP_END@
 # we use our own built_sources variable rules to avoid automake's
 # BUILT_SOURCES oddities

@@ -1,3 +1,7 @@
+2003-01-15  Tor Lillqvist  <tml@iki.fi>
+
+	* gtk/Makefile.am (gtk_c_sources): Remove fnmatch.h from here, too.
+
 2002-12-22  Tor Lillqvist  <tml@iki.fi>
 
 	* gtk/fnmatch.c: Use UTF-8-clean version from GTK+ 2.2.0, with
