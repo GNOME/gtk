@@ -610,6 +610,7 @@ translate_key_event (GdkDisplay *display,
 		   event->key.length, buf);
     }
 #endif /* G_ENABLE_DEBUG */  
+  return;
 }
 
 /* Return the window this has to do with, if any, rather
