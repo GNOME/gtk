@@ -4,8 +4,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Gtk+ 1.3.x\n"
-"POT-Creation-Date: 2002-02-24 00:08-0500\n"
-"PO-Revision-Date: 2002-01-25 03:03+0800\n"
+"POT-Creation-Date: 2002-02-24 17:28+0800\n"
+"PO-Revision-Date: 2002-02-24 17:27+0800\n"
 "Last-Translator: Hasbullah Bin Pit <sebol@ikhlas.com>\n"
 "Language-Team: Projek Gabai <gabai-penyumbang@list.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -141,7 +141,7 @@ msgstr "Tak cukup memori untuk memuatkan ikon"
 
 #: gdk-pixbuf/io-ico.c:303
 msgid "Invalid header in icon"
-msgstr ""
+msgstr "Pengepala tidak sah dalam ikon"
 
 #: gdk-pixbuf/io-ico.c:340
 msgid "Icon has zero width"
@@ -509,23 +509,20 @@ msgid "Failed to load TIFF image"
 msgstr "Gagal memuatkan imej TIFF"
 
 #: gdk-pixbuf/io-wbmp.c:278
-#, fuzzy
 msgid "Image has zero width"
-msgstr "Ikon mempunyai kelebaran sifar"
+msgstr "Imej mempunyai kelebaran sifar"
 
 #: gdk-pixbuf/io-wbmp.c:296
-#, fuzzy
 msgid "Image has zero height"
-msgstr "Ikon mempunyai ketinggian sifar"
+msgstr "Imej mempunyai ketinggian sifar"
 
 #: gdk-pixbuf/io-wbmp.c:307
-#, fuzzy
 msgid "Not enough memory to load image"
-msgstr "Tak cukup memori untuk memuatkan imej bitmap"
+msgstr "Tak cukup memori untuk memuatkan imej"
 
 #: gdk-pixbuf/io-wbmp.c:365
 msgid "Couldn't save the rest"
-msgstr ""
+msgstr "Tak dapat menyimpang yang selebihnya"
 
 #: gdk-pixbuf/io-xbm.c:283
 msgid "Invalid XBM file"
@@ -916,15 +913,15 @@ msgstr "Ketinggian tetap."
 
 #: gtk/gtkcellrenderer.c:188
 msgid "Is Expander"
-msgstr ""
+msgstr "Adalah Pengembang"
 
 #: gtk/gtkcellrenderer.c:189
 msgid "Row has children."
-msgstr ""
+msgstr "Baris mempunyai anak."
 
 #: gtk/gtkcellrenderer.c:198
 msgid "Is Expanded"
-msgstr ""
+msgstr "adalah dikembangkan"
 
 #: gtk/gtkcellrenderer.c:199
 msgid "Row is an expander row, and is expanded"
@@ -1229,7 +1226,7 @@ msgstr ""
 
 #: gtk/gtkcellrenderertoggle.c:148
 msgid "Radio state"
-msgstr ""
+msgstr "Keadaan Radio"
 
 #: gtk/gtkcellrenderertoggle.c:149
 msgid "Draw the toggle button as a radio button"
@@ -1689,14 +1686,12 @@ msgid "Whether buttons for creating/manipulating files should be displayed."
 msgstr "Samada butang untuk mencipta/menipulasi fail patut dipapatkan."
 
 #: gtk/gtkfilesel.c:549
-#, fuzzy
 msgid "Select multiple"
-msgstr "Pilih Semua"
+msgstr "Pilih pelbagai"
 
 #: gtk/gtkfilesel.c:550
-#, fuzzy
 msgid "Whether to allow multiple files to be selected."
-msgstr "Samada butang untuk mencipta/menipulasi fail patut dipapatkan."
+msgstr "Samada untuk membernarkan pelbagai fail patut dipihih."
 
 #: gtk/gtkfilesel.c:685
 msgid "Folders"
@@ -1803,9 +1798,9 @@ msgid "Error deleting file \"%s\": %s"
 msgstr "Ralat memadam fail \"%s\": %s"
 
 #: gtk/gtkfilesel.c:1517
-#, fuzzy, c-format
+#, c-format
 msgid "Really delete file \"%s\" ?"
-msgstr "Ralat memadam fail \"%s\": %s"
+msgstr "Benar-benar  memadam fail \"%s\"i ?"
 
 #: gtk/gtkfilesel.c:1522
 msgid "Delete File"
@@ -1844,9 +1839,9 @@ msgid "Rename File"
 msgstr "Tukarnama Fail"
 
 #: gtk/gtkfilesel.c:1656
-#, fuzzy, c-format
+#, c-format
 msgid "Rename file \"%s\" to:"
-msgstr "Tukarnama Fail"
+msgstr "Tukarnama fail \"%s\" ke:"
 
 #: gtk/gtkfilesel.c:1687
 msgid "Rename"
@@ -2939,13 +2934,12 @@ msgid "Number of pixels the cursor can move before dragging"
 msgstr "Bilangan piksel kursor yang boleh digerakkan sebelum diheret"
 
 #: gtk/gtksettings.c:215
-#, fuzzy
 msgid "Font Name"
 msgstr "Nama Font"
 
 #: gtk/gtksettings.c:216
 msgid "Name of default font to use"
-msgstr ""
+msgstr "Nama bagi font default untuk digunakan"
 
 #: gtk/gtkspinbutton.c:238
 msgid "The adjustment that holds the value of the spinbutton"
@@ -3327,7 +3321,7 @@ msgstr "Jika BENAR, ini bermaksud sel jadual mempunyai tinggi/lebar yang sama"
 
 #: gtk/gtktext.c:599
 msgid "Horizontal adjustment for the text widget"
-msgstr ""
+msgstr "Pengubahsuaian Mengufuk bagi widget teks"
 
 #: gtk/gtktext.c:607
 msgid "Vertical adjustment for the text widget"
@@ -3339,7 +3333,7 @@ msgstr "Balut Baris"
 
 #: gtk/gtktext.c:615
 msgid "Whether lines are wrapped at widget edges"
-msgstr ""
+msgstr "Samada baris dibalut pada pinggir widget"
 
 #: gtk/gtktext.c:622
 msgid "Word Wrap"
@@ -3359,7 +3353,7 @@ msgstr ""
 
 #: gtk/gtktexttag.c:225
 msgid "Background full height"
-msgstr ""
+msgstr "Tinggi penuh LatarBelakang"
 
 #: gtk/gtktexttag.c:226
 msgid ""
@@ -3405,11 +3399,11 @@ msgstr ""
 
 #: gtk/gtktexttag.c:395
 msgid "Left margin"
-msgstr ""
+msgstr "Margin kiri"
 
 #: gtk/gtktexttag.c:396 gtk/gtktextview.c:593
 msgid "Width of the left margin in pixels"
-msgstr ""
+msgstr "Lebar bagi margin kiri dalam piksel"
 
 #: gtk/gtktexttag.c:405
 msgid "Right margin"
@@ -3417,7 +3411,7 @@ msgstr "Margin Kanan"
 
 #: gtk/gtktexttag.c:406 gtk/gtktextview.c:603
 msgid "Width of the right margin in pixels"
-msgstr ""
+msgstr "Lebar bagi margin kanan dalam piksel"
 
 #: gtk/gtktexttag.c:416 gtk/gtktextview.c:612
 msgid "Indent"
@@ -3425,23 +3419,23 @@ msgstr "Inden"
 
 #: gtk/gtktexttag.c:417 gtk/gtktextview.c:613
 msgid "Amount to indent the paragraph, in pixels"
-msgstr ""
+msgstr "Jumlah untuk mengindenkan perenggan, dalam piksel"
 
 #: gtk/gtktexttag.c:437
 msgid "Pixels above lines"
-msgstr ""
+msgstr "Piksel di atas garisan"
 
 #: gtk/gtktexttag.c:438 gtk/gtktextview.c:537
 msgid "Pixels of blank space above paragraphs"
-msgstr ""
+msgstr "Piksel ruang kosong diatas perenggan"
 
 #: gtk/gtktexttag.c:447
 msgid "Pixels below lines"
-msgstr ""
+msgstr "Piksel dibawah garisan"
 
 #: gtk/gtktexttag.c:448 gtk/gtktextview.c:547
 msgid "Pixels of blank space below paragraphs"
-msgstr ""
+msgstr "Piksel ruang kosong di bawah perenggan"
 
 #: gtk/gtktexttag.c:457
 msgid "Pixels inside wrap"
@@ -3478,7 +3472,7 @@ msgstr "Samada  teks adalah ghaib"
 
 #: gtk/gtktexttag.c:516
 msgid "Background full height set"
-msgstr ""
+msgstr "Set ketinggian penuh LatarBelakang"
 
 #: gtk/gtktexttag.c:517
 msgid "Whether this tag affects background height"
@@ -3506,7 +3500,7 @@ msgstr "Set Justifikasi"
 
 #: gtk/gtktexttag.c:565
 msgid "Whether this tag affects paragraph justification"
-msgstr ""
+msgstr "Samada tag ini mempengaruhi penjustifikasian perenggan"
 
 #: gtk/gtktexttag.c:568
 msgid "Language set"
@@ -3530,15 +3524,15 @@ msgstr "Set Inden"
 
 #: gtk/gtktexttag.c:577
 msgid "Whether this tag affects indentation"
-msgstr ""
+msgstr "Samada tag ini mempengaruhi keindentasian"
 
 #: gtk/gtktexttag.c:584
 msgid "Pixels above lines set"
-msgstr ""
+msgstr "Piksel ruang kosong diatas perenggan"
 
 #: gtk/gtktexttag.c:585 gtk/gtktexttag.c:589
 msgid "Whether this tag affects the number of pixels above lines"
-msgstr ""
+msgstr "Samada tag ini mempengaruhi bilangan piksel di atas garisan"
 
 #: gtk/gtktexttag.c:588
 msgid "Pixels below lines set"
@@ -3776,7 +3770,7 @@ msgstr "Boleh nampak"
 
 #: gtk/gtktreeview.c:539
 msgid "Show the column header buttons"
-msgstr ""
+msgstr "Papar butang pengepala kolum"
 
 #: gtk/gtktreeview.c:546
 msgid "Headers Clickable"
@@ -3784,11 +3778,11 @@ msgstr "Pengepala boleh diklik"
 
 #: gtk/gtktreeview.c:547
 msgid "Column headers respond to click events"
-msgstr ""
+msgstr "Tindakbalas pengepala kolum untuk acara klik"
 
 #: gtk/gtktreeview.c:554
 msgid "Expander Column"
-msgstr ""
+msgstr "Pengembang Kolum"
 
 #: gtk/gtktreeview.c:555
 msgid "Set the column for the expander column"
@@ -3800,7 +3794,7 @@ msgstr "Boleh disusun semula"
 
 #: gtk/gtktreeview.c:563
 msgid "View is reorderable"
-msgstr ""
+msgstr "Paparan boleh disusun"
 
 #: gtk/gtktreeview.c:570
 msgid "Rules Hint"
@@ -3812,7 +3806,7 @@ msgstr ""
 
 #: gtk/gtktreeview.c:578
 msgid "Enable Search"
-msgstr ""
+msgstr "Hidupkan Carian"
 
 #: gtk/gtktreeview.c:579
 msgid "View allows user to search through columns interactively"
@@ -3820,7 +3814,7 @@ msgstr ""
 
 #: gtk/gtktreeview.c:586
 msgid "Search Column"
-msgstr ""
+msgstr "Carian Kolum"
 
 #: gtk/gtktreeview.c:587
 msgid "Model column to search through when searching through code"
@@ -3828,15 +3822,15 @@ msgstr ""
 
 #: gtk/gtktreeview.c:600
 msgid "Expander Size"
-msgstr ""
+msgstr "Saiz Pengembang"
 
 #: gtk/gtktreeview.c:601
 msgid "Size of the expander arrow."
-msgstr ""
+msgstr "Saiz panah pegembang"
 
 #: gtk/gtktreeview.c:609
 msgid "Vertical Separator Width"
-msgstr ""
+msgstr "Lebar Pemisah Menegak"
 
 #: gtk/gtktreeview.c:610
 msgid "Vertical space between cells.  Must be an even number."
@@ -3844,7 +3838,7 @@ msgstr ""
 
 #: gtk/gtktreeview.c:618
 msgid "Horizontal Separator Width"
-msgstr ""
+msgstr "Lebar Pemisah Mengufuk"
 
 #: gtk/gtktreeview.c:619
 msgid "Horizontal space between cells.  Must be an even number."
@@ -3860,35 +3854,35 @@ msgstr ""
 
 #: gtk/gtktreeview.c:634
 msgid "Indent Expanders"
-msgstr ""
+msgstr "Indenkan Pengembang"
 
 #: gtk/gtktreeview.c:635
 msgid "Make the expanders indented."
-msgstr ""
+msgstr "Jadikan pengembang diindenkan"
 
 #: gtk/gtktreeviewcolumn.c:175
 msgid "Whether to display the column"
-msgstr ""
+msgstr "Samada hendak memapar kolum"
 
 #: gtk/gtktreeviewcolumn.c:182 gtk/gtkwindow.c:434
 msgid "Resizable"
-msgstr ""
+msgstr "Boleh diubahsaiz"
 
 #: gtk/gtktreeviewcolumn.c:183
 msgid "Column is user-resizable"
-msgstr ""
+msgstr "Kolum adalah boleh-diubahsaiz-pengguna"
 
 #: gtk/gtktreeviewcolumn.c:191
 msgid "Current width of the column"
-msgstr ""
+msgstr "Lebar semasa bagi kolum"
 
 #: gtk/gtktreeviewcolumn.c:199
 msgid "Sizing"
-msgstr ""
+msgstr "Pengubahsaizan"
 
 #: gtk/gtktreeviewcolumn.c:200
 msgid "Resize mode of the column"
-msgstr ""
+msgstr "Ubahsaiz mod bagi kolum"
 
 #: gtk/gtktreeviewcolumn.c:208
 msgid "Fixed Width"
@@ -3896,7 +3890,7 @@ msgstr "Lebar tetap"
 
 #: gtk/gtktreeviewcolumn.c:209
 msgid "Current fixed width of the column"
-msgstr ""
+msgstr "Lebar tetap semasa bagi kolum"
 
 #: gtk/gtktreeviewcolumn.c:218
 msgid "Minimum Width"
@@ -3912,7 +3906,7 @@ msgstr "Lebar Maksima"
 
 #: gtk/gtktreeviewcolumn.c:229
 msgid "Maximum allowed width of the column"
-msgstr ""
+msgstr "Lebar maksima diizinkan bagi kolum"
 
 #: gtk/gtktreeviewcolumn.c:238
 msgid "Title"
@@ -3920,15 +3914,15 @@ msgstr "Tajuk"
 
 #: gtk/gtktreeviewcolumn.c:239
 msgid "Title to appear in column header"
-msgstr ""
+msgstr "Tajuk untuk dipaparkan di pengepala kolum"
 
 #: gtk/gtktreeviewcolumn.c:246
 msgid "Clickable"
-msgstr ""
+msgstr "Bolehdiklik"
 
 #: gtk/gtktreeviewcolumn.c:247
 msgid "Whether the header can be clicked"
-msgstr ""
+msgstr "Samada pengepala boleh diklik"
 
 #: gtk/gtktreeviewcolumn.c:255
 msgid "Widget"
@@ -3936,7 +3930,7 @@ msgstr "Widget"
 
 #: gtk/gtktreeviewcolumn.c:256
 msgid "Widget to put in column header button instead of column title"
-msgstr ""
+msgstr "Widget untuk diletakkan oleh pengepala kolum selain dari tajuk kolum"
 
 #: gtk/gtktreeviewcolumn.c:263
 msgid "Alignment"
@@ -3944,19 +3938,19 @@ msgstr "Jajaran"
 
 #: gtk/gtktreeviewcolumn.c:264
 msgid "X Alignment of the column header text or widget"
-msgstr ""
+msgstr "Jajaran X bagi teks pengepala kolum atau widget"
 
 #: gtk/gtktreeviewcolumn.c:274
 msgid "Whether the column can be reordered around the headers"
-msgstr ""
+msgstr "Samada kolum boleh diulangsusun sekeliling pengepala"
 
 #: gtk/gtktreeviewcolumn.c:281
 msgid "Sort indicator"
-msgstr ""
+msgstr "Penunjuk Isihan"
 
 #: gtk/gtktreeviewcolumn.c:282
 msgid "Whether to show a sort indicator"
-msgstr ""
+msgstr "Samada hendak memapar penunjuk isihan"
 
 #: gtk/gtktreeviewcolumn.c:289
 msgid "Sort order"
@@ -4157,16 +4151,15 @@ msgstr "Warna kursor"
 
 #: gtk/gtkwidget.c:1080
 msgid "Color with which to draw insertion cursor"
-msgstr "Warna yang digunakan untuk melikus kursor penyelitan"
+msgstr "Warna yang digunakan untuk melukis kursor penyelitan"
 
 #: gtk/gtkwidget.c:1085
 msgid "Cursor line aspect ratio"
-msgstr ""
+msgstr "Nisbah aspek garis kursor"
 
 #: gtk/gtkwidget.c:1086
-#, fuzzy
 msgid "Aspect ratio with which to draw insertion cursor"
-msgstr "Warna yang digunakan untuk melikus kursor penyelitan"
+msgstr "Nisbah aspek digunakan untuk melukis kursor penyelitan"
 
 #: gtk/gtkwindow.c:399
 msgid "Window Type"
@@ -4277,17 +4270,17 @@ msgstr ""
 #. ID
 #: modules/input/imam-et.c:454
 msgid "Amharic (EZ+)"
-msgstr ""
+msgstr "Amharic (EZ+)"
 
 #. ID
 #: modules/input/imcyrillic-translit.c:216
 msgid "Cyrillic (Transliterated)"
-msgstr ""
+msgstr "Cyrillic (Transliterated)"
 
 #. ID
 #: modules/input/iminuktitut.c:126
 msgid "Inukitut (Transliterated)"
-msgstr ""
+msgstr "Inukitut (Transliterated)"
 
 #. ID
 #: modules/input/imipa.c:144
@@ -4302,12 +4295,12 @@ msgstr "Thai (Rosak)"
 #. ID
 #: modules/input/imti-er.c:453
 msgid "Tigrigna-Eritrean (EZ+)"
-msgstr ""
+msgstr "Tigrigna-Eritrean (EZ+)"
 
 #. ID
 #: modules/input/imti-et.c:453
 msgid "Tigrigna-Ethiopian (EZ+)"
-msgstr ""
+msgstr "Tigrigna-Ethiopian (EZ+)"
 
 #. ID
 #: modules/input/imviqr.c:243
@@ -4318,50 +4311,3 @@ msgstr "Vientam (VIQR)"
 #: modules/input/imxim.c:27
 msgid "X Input Method"
 msgstr "Method input X"
-
-#~ msgid "Cancel"
-#~ msgstr "Batal"
-
-#~ msgid "Delete"
-#~ msgstr "Padam"
-
-#~ msgid "OK"
-#~ msgstr "OK"
-
-#~ msgid "Save"
-#~ msgstr "Simpan"
-
-#~ msgid "Close"
-#~ msgstr "Tutup"
-
-#~ msgid "Directories"
-#~ msgstr "Direktori"
-
-#~ msgid "_Directories"
-#~ msgstr "_Direktori"
-
-#~ msgid "Crea_te Dir"
-#~ msgstr "Cip_ta Dir"
-
-#~ msgid ""
-#~ "The directory name \"%s\" contains symbols that are not allowed in "
-#~ "filenames"
-#~ msgstr ""
-#~ "Nama direktori \"%s\" mengandungi simbol yang tidak diizinkan pada "
-#~ "namafail"
-
-#~ msgid ""
-#~ "Error creating directory \"%s\": %s\n"
-#~ "%s"
-#~ msgstr ""
-#~ "Ralat mencipta direktori \"%s\": %s\n"
-#~ "%s"
-
-#~ msgid "Create Directory"
-#~ msgstr "Cipta Direktori"
-
-#~ msgid "_Directory name:"
-#~ msgstr "Nama _Direktori:"
-
-#~ msgid "Unable to locate image file in pixmap_path: \"%s\" line %d"
-#~ msgstr "Gagal menjumpai fail imej di pixmap_path: \"%s\" baris %d"
