@@ -172,13 +172,7 @@ gtk_arrow_set (GtkArrow      *arrow,
       arrow->shadow_type = shadow_type;
 
       if (GTK_WIDGET_DRAWABLE (arrow))
-	{
-	   gtk_widget_queue_clear_area (GTK_WIDGET (arrow),
-					GTK_WIDGET (arrow)->allocation.x + 1,
-					GTK_WIDGET (arrow)->allocation.y + 1,
-					GTK_WIDGET (arrow)->allocation.width - 2,
-					GTK_WIDGET (arrow)->allocation.height - 2);
-	}
+	gtk_widget_queue_clear_area (GTK_WIDGET (arrow));
     }
 }
 

@@ -22,7 +22,7 @@ style "default"
   font = "-adobe-helvetica-medium-r-normal--8-*-*-*-*-*-*-*"
 #  bg_pixmap[NORMAL] = "marble.xpm"
 
-  engine "motif" 
+  engine "win95" 
   {
   }
   

@@ -1128,9 +1128,18 @@ gtk_style_apply_default_pixmap(GtkStyle     *style,
       (gdk_window_get_type(window) == GDK_WINDOW_PIXMAP))
     {
       gc = style->bg_gc[state_type];
-      if ((area) && (gdk_rectangle_intersect(area, &old_rect, &new_rect)))
-	gdk_draw_rectangle(window, gc, TRUE, 
-			   new_rect.x, new_rect.y, new_rect.width, new_rect.height);
+
+      old_rect.x = x;
+      old_rect.y = y;
+      old_rect.width = width;
+      old_rect.height = height;
+      
+      if (area)
+	{
+	  if (gdk_rectangle_intersect(area, &old_rect, &new_rect))
+	    gdk_draw_rectangle(window, gc, TRUE, 
+			       new_rect.x, new_rect.y, new_rect.width, new_rect.height);
+	}
       else
 	gdk_draw_rectangle(window, gc, TRUE, 
 			   x, y, width, height);

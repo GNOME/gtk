@@ -736,47 +736,15 @@ draw_arrow (GtkStyle      *style,
 	    gint           width,
 	    gint           height)
 {
-  GdkGC *gc1;
-  GdkGC *gc2;
-  GdkGC *gc3;
-  GdkGC *gc4;
+  GdkGC *gc;
   gint half_width;
   gint half_height;
+  gint xthik, ythik;
   GdkPoint points[3];
   
   g_return_if_fail (style != NULL);
   g_return_if_fail (window != NULL);
-  
-  switch (shadow_type)
-    {
-     case GTK_SHADOW_IN:
-      gc1 = style->bg_gc[state_type];
-      gc2 = style->dark_gc[state_type];
-      gc3 = style->light_gc[state_type];
-      gc4 = style->black_gc;
-      break;
-     case GTK_SHADOW_OUT:
-      gc1 = style->dark_gc[state_type];
-      gc2 = style->light_gc[state_type];
-      gc3 = style->black_gc;
-      gc4 = style->bg_gc[state_type];
-      break;
-     case GTK_SHADOW_ETCHED_IN:
-      gc1 = style->light_gc[state_type];
-      gc2 = style->dark_gc[state_type];
-      gc3 = NULL;
-      gc4 = NULL;
-      break;
-     case GTK_SHADOW_ETCHED_OUT:
-      gc1 = style->dark_gc[state_type];
-      gc2 = style->light_gc[state_type];
-      gc3 = NULL;
-      gc4 = NULL;
-      break;
-     default:
-      return;
-    }
-  
+
   if ((width == -1) && (height == -1))
     gdk_window_get_size (window, &width, &height);
   else if (width == -1)
@@ -786,290 +754,67 @@ draw_arrow (GtkStyle      *style,
   
   half_width = width / 2;
   half_height = height / 2;
+
+  xthik = style->klass->xthickness;
+  ythik = style->klass->ythickness;
   
+  if (fill)
+    draw_box (style, window, state_type, shadow_type, area, widget, detail,
+	      x, y, width, height);
+
+  gc = style->black_gc;
+
   if (area)
     {
-      gdk_gc_set_clip_rectangle (gc1, area);
-      gdk_gc_set_clip_rectangle (gc2, area);
-      if ((gc3) && (gc4))
-	{
-	  gdk_gc_set_clip_rectangle (gc3, area);
-	  gdk_gc_set_clip_rectangle (gc4, area);
-	}
+      gdk_gc_set_clip_rectangle (gc, area);
     }
   
   switch (arrow_type)
     {
      case GTK_ARROW_UP:
-      if (fill)
-	{
-	  points[0].x = x + half_width;
-	  points[0].y = y;
-	  points[1].x = x;
-	  points[1].y = y + height - 1;
-	  points[2].x = x + width - 1;
-	  points[2].y = y + height - 1;
-	  
-	  gdk_draw_polygon (window, style->bg_gc[state_type], TRUE, points, 3);
-	}
+      points[0].x = x + half_width;
+      points[0].y = y + ythik;
+      points[1].x = x + xthik;
+      points[1].y = y - ythik + height - 1;
+      points[2].x = x - xthik + width - 1;
+      points[2].y = y - ythik + height - 1;
       
-      switch (shadow_type)
-	{
-	 case GTK_SHADOW_IN:
-	 case GTK_SHADOW_OUT:
-	  
-	  gdk_draw_line (window, gc1,
-			 x + 1, y + height - 2,
-			 x + width - 2, y + height - 2);
-	  gdk_draw_line (window, gc3,
-			 x + 0, y + height - 1,
-			 x + width - 1, y + height - 1);
-	  
-	  gdk_draw_line (window, gc1,
-			 x + width - 2, y + height - 1,
-			 x + half_width, y + 1);
-	  gdk_draw_line (window, gc3,
-			 x + width - 1, y + height - 1,
-			 x + half_width, y);
-	  
-	  gdk_draw_line (window, gc4,
-			 x + half_width, y + 1,
-			 x + 1, y + height - 1);
-	  gdk_draw_line (window, gc2,
-			 x + half_width, y,
-			 x, y + height - 1);
-	  break;
-	  
-	 case GTK_SHADOW_ETCHED_IN:
-	 case GTK_SHADOW_ETCHED_OUT:
-	  gdk_draw_line (window, gc1,
-			 x + half_width, y + 1,
-			 x + 1, y + height - 1);
-	  gdk_draw_line (window, gc1,
-			 x + 1, y + height - 1,
-			 x + width - 1, y + height - 1);
-	  gdk_draw_line (window, gc1,
-			 x + width - 1, y + height - 1,
-			 x + half_width + 1, y + 1);
-	  
-	  points[0].x = x + half_width;
-	  points[0].y = y;
-	  points[1].x = x;
-	  points[1].y = y + height - 2;
-	  points[2].x = x + width - 2;
-	  points[2].y = y + height - 2;
-	  
-	  gdk_draw_polygon (window, gc2, FALSE, points, 3);
-	  break;
-	  
-	 default:
-	  break;
-	}
+      gdk_draw_polygon (window, gc, TRUE, points, 3);
       break;
-      
      case GTK_ARROW_DOWN:
-      if (fill)
-	{
-	  points[0].x = x + width - 1;
-	  points[0].y = y;
-	  points[1].x = x;
-	  points[1].y = y;
-	  points[2].x = x + half_width;
-	  points[2].y = y + height - 1;
-	  
-	  gdk_draw_polygon (window, style->bg_gc[state_type], TRUE, points, 3);
-	}
-      switch (shadow_type)
-	{
-	 case GTK_SHADOW_IN:
-	 case GTK_SHADOW_OUT:
-	  gdk_draw_line (window, gc4,
-			 x + width - 2,
-			 y + 1, x + 1, y + 1);
-	  gdk_draw_line (window, gc2,
-			 x + width - 1, y,
-			 x, y);
-	  
-	  gdk_draw_line (window, gc4,
-			 x + 1, y,
-			 x + half_width, y + height - 2);
-	  gdk_draw_line (window, gc2,
-			 x, y,
-			 x + half_width, y + height - 1);
-	  
-	  gdk_draw_line (window, gc1,
-			 x + half_width, y + height - 2,
-			 x + width - 2, y);
-	  gdk_draw_line (window, gc3,
-			 x + half_width, y + height - 1,
-			 x + width - 1, y);
-	  break;
-	  
-	 case GTK_SHADOW_ETCHED_IN:
-	 case GTK_SHADOW_ETCHED_OUT:
-	  gdk_draw_line (window, gc1,
-			 x + width - 1, y + 1,
-			 x + 1, y + 1);
-	  gdk_draw_line (window, gc1,
-			 x + 1, y + 1,
-			 x + half_width + 1, y + height - 1);
-	  gdk_draw_line (window, gc1,
-			 x + half_width + 1, y + height - 2,
-			 x + width - 1, y);
-	  
-	  points[0].x = x + width - 2;
-	  points[0].y = y;
-	  points[1].x = x;
-	  points[1].y = y;
-	  points[2].x = x + half_width;
-	  points[2].y = y + height - 2;
-	  
-	  gdk_draw_polygon (window, gc2, FALSE, points, 3);
-	  break;
-	  
-	 default:
-	  break;
-	}
+      points[0].x = x + half_width;
+      points[0].y = y - ythik + height - 1;
+      points[1].x = x + xthik;
+      points[1].y = y + ythik;
+      points[2].x = x - xthik + width - 1;
+      points[2].y = y + ythik;
+
+      gdk_draw_polygon (window, gc, TRUE, points, 3);
       break;
      case GTK_ARROW_LEFT:
-      if (fill)
-	{
-	  points[0].x = x;
-	  points[0].y = y + half_height;
-	  points[1].x = x + width - 1;
-	  points[1].y = y + height - 1;
-	  points[2].x = x + width - 1;
-	  points[2].y = y;
-	  
-	  gdk_draw_polygon (window, style->bg_gc[state_type], TRUE, points, 3);
-	}
+      points[0].x = x + xthik;
+      points[0].y = y + half_height;
+      points[1].x = x - xthik + width - 1;
+      points[1].y = y - ythik + height - 1;
+      points[2].x = x - xthik + width - 1;
+      points[2].y = y + ythik;
       
-      switch (shadow_type)
-	{
-	 case GTK_SHADOW_IN:
-	 case GTK_SHADOW_OUT:
-	  gdk_draw_line (window, gc1,
-			 x + 1, y + half_height,
-			 x + width - 1, y + height - 1);
-	  gdk_draw_line (window, gc3,
-			 x, y + half_height,
-			 x + width - 1, y + height - 1);
-	  
-	  gdk_draw_line (window, gc1,
-			 x + width - 2, y + height - 1,
-			 x + width - 2, y + 1);
-	  gdk_draw_line (window, gc3,
-			 x + width - 1, y + height - 1,
-			 x + width - 1, y);
-	  
-	  gdk_draw_line (window, gc4,
-			 x + width - 1, y + 1,
-			 x + 1, y + half_height);
-	  gdk_draw_line (window, gc2,
-			 x + width - 1, y,
-			 x, y + half_height);
-	  break;
-	  
-	 case GTK_SHADOW_ETCHED_IN:
-	 case GTK_SHADOW_ETCHED_OUT:
-	  gdk_draw_line (window, gc1,
-			 x + width - 1, y + 1,
-			 x + 1, y + half_height);
-	  gdk_draw_line (window, gc1,
-			 x + 1, y + half_height + 1,
-			 x + width - 1, y + height - 1);
-	  gdk_draw_line (window, gc1,
-			 x + width - 1, y + height - 1,
-			 x + width - 1, y + 1);
-	  
-	  points[0].x = x + width - 2;
-	  points[0].y = y;
-	  points[1].x = x;
-	  points[1].y = y + half_height;
-	  points[2].x = x + width - 2;
-	  points[2].y = y + height - 2;
-	  
-	  gdk_draw_polygon (window, gc2, FALSE, points, 3);
-	  break;
-	  
-	 default:
-	  break;
-	}
+      gdk_draw_polygon (window, gc, TRUE, points, 3);
       break;
      case GTK_ARROW_RIGHT:
-      if (fill)
-	{
-	  points[0].x = x + width - 1;
-	  points[0].y = y + half_height;
-	  points[1].x = x;
-	  points[1].y = y;
-	  points[2].x = x;
-	  points[2].y = y + height - 1;
-	  
-	  gdk_draw_polygon (window, style->bg_gc[state_type], TRUE, points, 3);
-	}
+      points[0].x = x - xthik + width - 1;
+      points[0].y = y + half_height;
+      points[1].x = x + xthik;
+      points[1].y = y + ythik;
+      points[2].x = x + xthik;
+      points[2].y = y - ythik + height - 1;
       
-      switch (shadow_type)
-	{
-	 case GTK_SHADOW_IN:
-	 case GTK_SHADOW_OUT:
-	  gdk_draw_line (window, gc4,
-			 x + width - 1, y + half_height,
-			 x + 1, y + 1);
-	  gdk_draw_line (window, gc2,
-			 x + width - 1, y + half_height,
-			 x, y);
-	  gdk_draw_line (window, gc4,
-			 x + 1, y + 1,
-			 x + 1, y + height - 2);
-	  gdk_draw_line (window, gc2,
-			 x, y,
-			 x, y + height - 1);
-	  
-	  gdk_draw_line (window, gc1,
-			 x + 1, y + height - 2,
-			 x + width - 1, y + half_height);
-	  gdk_draw_line (window, gc3,
-			 x, y + height - 1,
-			 x + width - 1, y + half_height);
-	  break;
-	  
-	 case GTK_SHADOW_ETCHED_IN:
-	 case GTK_SHADOW_ETCHED_OUT:
-	  gdk_draw_line (window, gc1,
-			 x + width - 1, y + half_height + 1,
-			 x + 1, y + 1);
-	  gdk_draw_line (window, gc1,
-			 x + 1, y + 1,
-			 x + 1, y + height - 1);
-	  gdk_draw_line (window, gc1,
-			 x + 1, y + height - 1,
-			 x + width - 1, y + half_height + 1);
-	  
-	  points[0].x = x + width - 2;
-	  points[0].y = y + half_height;
-	  points[1].x = x;
-	  points[1].y = y;
-	  points[2].x = x;
-	  points[2].y = y + height - 1;
-	  
-	  gdk_draw_polygon (window, gc2, FALSE, points, 3);
-	  break;
-	  
-	 default:
-	  break;
-	}
+      gdk_draw_polygon (window, gc, TRUE, points, 3);
       break;
     }
   if (area)
     {
-      gdk_gc_set_clip_rectangle (gc1, NULL);
-      gdk_gc_set_clip_rectangle (gc2, NULL);
-      if (gc3)
-	{
-	  gdk_gc_set_clip_rectangle (gc3, NULL);
-	  gdk_gc_set_clip_rectangle (gc4, NULL);
-	}
+      gdk_gc_set_clip_rectangle (gc, NULL);
     }
 }
 
@@ -1260,6 +1005,9 @@ draw_box     (GtkStyle      *style,
 	      gint           width,
 	      gint           height)
 {
+  gint xthik;
+  gint ythik;
+  
   g_return_if_fail (style != NULL);
   g_return_if_fail (window != NULL);
   
@@ -1269,25 +1017,83 @@ draw_box     (GtkStyle      *style,
     gdk_window_get_size (window, &width, NULL);
   else if (height == -1)
     gdk_window_get_size (window, NULL, &height);
+
+
+  printf("%p %s %i %i\n", detail, detail, width, height);
   
-  if ((!style->bg_pixmap[state_type]) ||
-      (gdk_window_get_type(window) == GDK_WINDOW_PIXMAP))
+  if ((detail) && (!strcmp("trough", detail)))
     {
-      if (area)
-	{
-	  gdk_gc_set_clip_rectangle (style->bg_gc[state_type], area);
-	}
-      gdk_draw_rectangle(window, style->bg_gc[state_type], TRUE,
-			 x, y, width, height);
-      if (area)
-	{
-	  gdk_gc_set_clip_rectangle (style->bg_gc[state_type], NULL);
-	}
+      GdkPixmap *pm, *bg, *m;
+      gint depth;
+      GdkGC *gc, *mgc;
+      GdkColor col;
+      
+      printf("troff\n");
+
+      xthik = style->klass->xthickness;
+      ythik = style->klass->ythickness;
+     
+      gdk_window_get_geometry(window, NULL, NULL, NULL, NULL, &depth);
+      pm = gdk_pixmap_new(window, 2, 2, depth);
+      bg = gdk_pixmap_new(window, width, height, depth);
+      m = gdk_pixmap_new(window, width, height, 1);
+
+      gc = gdk_gc_new(bg);
+      mgc = gdk_gc_new(m);
+      
+      gdk_draw_point(pm, style->bg_gc[GTK_STATE_NORMAL], 0, 0);
+      gdk_draw_point(pm, style->bg_gc[GTK_STATE_NORMAL], 1, 1);
+      gdk_draw_point(pm, style->light_gc[GTK_STATE_NORMAL], 1, 0);
+      gdk_draw_point(pm, style->light_gc[GTK_STATE_NORMAL], 0, 1);
+      
+      gdk_draw_rectangle(bg, style->bg_gc[GTK_STATE_NORMAL], TRUE, x, y, 
+			 width, height);
+
+      gdk_gc_set_tile(gc, pm);
+      gdk_gc_set_fill(gc, GDK_TILED);
+      gdk_draw_rectangle(bg, gc, TRUE, x + xthik, y + ythik, 
+			 width - xthik * 2, height - ythik * 2);
+      
+      col.pixel = 0;
+      gdk_gc_set_foreground(mgc, &col);
+      gdk_draw_rectangle(m, mgc, TRUE, x, y, 
+			 width, height);
+      col.pixel = 1;
+      gdk_gc_set_foreground(mgc, &col);
+      gdk_draw_rectangle(m, mgc, TRUE, x + xthik, y + ythik, 
+			 width - xthik * 2, height - ythik * 2);
+      
+      gdk_window_shape_combine_mask(window, m, 0, 0);
+      gdk_window_set_back_pixmap(window, bg, FALSE);
+      gdk_window_clear(window);
+      
+      gdk_pixmap_unref(bg);
+      gdk_pixmap_unref(pm);
+      gdk_pixmap_unref(m);
+      gdk_gc_destroy(mgc);
+      gdk_gc_destroy(gc);
     }
   else
-    gtk_style_apply_default_pixmap(style, window, state_type, area, x, y, width, height);
-  gtk_paint_shadow (style, window, state_type, shadow_type, area, widget, detail,
-		    x, y, width, height);
+    {
+      if ((!style->bg_pixmap[state_type]) ||
+	  (gdk_window_get_type(window) == GDK_WINDOW_PIXMAP))
+	{
+	  if (area)
+	    {
+	      gdk_gc_set_clip_rectangle (style->bg_gc[state_type], area);
+	    }
+	  gdk_draw_rectangle(window, style->bg_gc[state_type], TRUE,
+			     x, y, width, height);
+	  if (area)
+	    {
+	      gdk_gc_set_clip_rectangle (style->bg_gc[state_type], NULL);
+	    }
+	}
+      else
+	gtk_style_apply_default_pixmap(style, window, state_type, area, x, y, width, height);
+      gtk_paint_shadow (style, window, state_type, shadow_type, area, widget, detail,
+			x, y, width, height);
+    }
 }
 
 void

@@ -1,3 +1,7 @@
+Thu Jul 30 23:36:46 EDT 1998 The Rasterman <raster@redhat.com>
+	* fixed another drawing buglet in the frame drawing code (actually
+	  in the clearing code but anyway in gtkstyle.c)
+
 Thu Jul 30 19:23:48 EDT 1998 The Rasterman <raster@redhat.com>
 	* Fixed warning from colorsel widget...
 

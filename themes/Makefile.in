@@ -183,8 +183,10 @@ install-libLTLIBRARIES: $(lib_LTLIBRARIES)
 	    l=`echo $$p | sed s/_data$$//g`; \
 	    $(mkinstalldirs) $(exec_prefix)/share/gtk/themes/$$l; \
 	    for f in `ls $$p`; do \
-	      $(INSTALL) $$p/$$f \
-	      $(exec_prefix)/share/gtk/themes/$$l/; \
+	      if test -f $$p/$$f; then \
+  	        $(INSTALL) $$p/$$f \
+	        $(exec_prefix)/share/gtk/themes/$$l/; \
+	      fi; \
 	    done; \
 	done
 
