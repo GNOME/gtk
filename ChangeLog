@@ -1,3 +1,9 @@
+Sun Jan 23 22:27:36 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdki18n.h: Include <ctype.h> when defining
+	  gdk_isw* in terms of is* as a fallback.
+	  (Bug #4106 - Dan Winship <danw@MIT.EDU>)
+
 Sun Jan 23 22:12:36 2000  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkviewport.c (gtk_viewport_size_allocate): Don't
