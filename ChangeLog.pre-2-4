@@ -1,3 +1,8 @@
+Thu Jun 20 12:16:00 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkinvisible.c (gtk_invisible_set_screen): Add
+	notification for screen property. (#80280)
+
 Wed Jun 19 19:30:45 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkrc.c: Keep a global list of strings and

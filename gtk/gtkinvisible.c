@@ -200,7 +200,10 @@ gtk_invisible_set_screen (GtkInvisible *invisible,
 
   if (was_realized)
     gtk_widget_unrealize (GTK_WIDGET (invisible));
+  
   invisible->screen = screen;
+  g_object_notify (G_OBJECT (invisible), "screen");
+  
   if (was_realized)
     gtk_widget_realize (GTK_WIDGET (invisible));
 }
