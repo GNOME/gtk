@@ -5,8 +5,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properrties 2.3.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-03-01 17:11+0900\n"
-"PO-Revision-Date: 2004-03-01 17:16+0900\n"
+"POT-Creation-Date: 2004-03-03 00:55+0900\n"
+"PO-Revision-Date: 2004-03-03 00:56+0900\n"
 "Last-Translator: Changwoo Ryu <cwryu@debian.org>\n"
 "Language-Team: GNOME Korea <gnome-kr-hackers@lists.kldp.net>\n"
 "MIME-Version: 1.0\n"
@@ -1719,6 +1719,14 @@ msgstr "숨겨진 파일 표시"
 msgid "Whether the hidden files and folders should be displayed"
 msgstr "숨겨진 파일과 폴더를 표시할 지 여부"
 
+#: gtk/gtkfilechooserdefault.c:473
+msgid "Default file chooser backend"
+msgstr "기본 파일 선택창 백엔드"
+
+#: gtk/gtkfilechooserdefault.c:474
+msgid "Name of the GtkFileChooser backend to use by default"
+msgstr "기본적으로 사용할 GtkFileChooser 백엔드의 이름"
+
 #: gtk/gtkfilesel.c:559 gtk/gtkimage.c:167
 msgid "Filename"
 msgstr "파일 이름"
@@ -1842,7 +1850,8 @@ msgstr "레이블의 세로 맞춤"
 
 #: gtk/gtkframe.c:153 gtk/gtkhandlebox.c:195
 msgid "Deprecated property, use shadow_type instead"
-msgstr "낡아서 권장하지 않는 등록 정보입니다. 대신에 shadow_type을 사용하십시오."
+msgstr ""
+"낡아서 권장하지 않는 등록 정보입니다. 대신에 shadow_type을 사용하십시오."
 
 #: gtk/gtkframe.c:160
 msgid "Frame shadow"
@@ -2493,7 +2502,10 @@ msgid ""
 "If TRUE the GtkProgress is in activity mode, meaning that it signals "
 "something is happening, but not how much of the activity is finished. This "
 "is used when you're doing something that you don't know how long it will take"
-msgstr "참이면 GtkkProgress가 활동 모드에 들어갑니다. 이 경우 무슨 일인가 일어나고 있는 사실을 시그날로 받지만, 얼마나 많이 진행되었는지는 시그날받지 못합니다. 시간이 얼마나 걸릴 지 모르는 일을 할 때 쓰입니다."
+msgstr ""
+"참이면 GtkkProgress가 활동 모드에 들어갑니다. 이 경우 무슨 일인가 일어나고 있"
+"는 사실을 시그날로 받지만, 얼마나 많이 진행되었는지는 시그날받지 못합니다. 시"
+"간이 얼마나 걸릴 지 모르는 일을 할 때 쓰입니다."
 
 #: gtk/gtkprogress.c:137
 msgid "Show text"
@@ -2563,7 +2575,8 @@ msgstr "활성화 블록"
 msgid ""
 "The number of blocks which can fit in the progress bar area in activity mode "
 "(Deprecated)"
-msgstr "활성화 모드에서 진행률 표시줄 영역에 맞는 블록 개수 (낡아서 권장하지 않음)"
+msgstr ""
+"활성화 모드에서 진행률 표시줄 영역에 맞는 블록 개수 (낡아서 권장하지 않음)"
 
 #: gtk/gtkprogressbar.c:188
 msgid "Discrete Blocks"
@@ -2840,47 +2853,47 @@ msgstr "그리기"
 msgid "Whether the separator is drawn, or just blank"
 msgstr "구분 표시를 그릴 지, 아니면 그냥 비워둘 지 결정합니다"
 
-#: gtk/gtksettings.c:262
+#: gtk/gtksettings.c:261
 msgid "Double Click Time"
 msgstr "두 번 클릭 시간"
 
-#: gtk/gtksettings.c:263
+#: gtk/gtksettings.c:262
 msgid ""
 "Maximum time allowed between two clicks for them to be considered a double "
 "click (in milliseconds)"
 msgstr "두 번 클릭으로 인식하는 두 번의 클릭 사이의 최대 시간 (천분의 일초)"
 
-#: gtk/gtksettings.c:270
+#: gtk/gtksettings.c:269
 msgid "Double Click Distance"
 msgstr "두 번 클릭 거리"
 
-#: gtk/gtksettings.c:271
+#: gtk/gtksettings.c:270
 msgid ""
 "Maximum distance allowed between two clicks for them to be considered a "
 "double click (in pixels)"
 msgstr "두 번 클릭으로 인식하는 두 번의 클릭 사이의 최대 거리 (픽셀 단위)"
 
-#: gtk/gtksettings.c:278
+#: gtk/gtksettings.c:277
 msgid "Cursor Blink"
 msgstr "커서 깜빡이기"
 
-#: gtk/gtksettings.c:279
+#: gtk/gtksettings.c:278
 msgid "Whether the cursor should blink"
 msgstr "커서를 깜박일지 여부"
 
-#: gtk/gtksettings.c:286
+#: gtk/gtksettings.c:285
 msgid "Cursor Blink Time"
 msgstr "커서 깜박임 시간"
 
-#: gtk/gtksettings.c:287
+#: gtk/gtksettings.c:286
 msgid "Length of the cursor blink cycle, in milleseconds"
 msgstr "커서가 깜박이는 주기, 천분의 일초"
 
-#: gtk/gtksettings.c:294
+#: gtk/gtksettings.c:293
 msgid "Split Cursor"
 msgstr "커서 분리"
 
-#: gtk/gtksettings.c:295
+#: gtk/gtksettings.c:294
 msgid ""
 "Whether two cursors should be displayed for mixed left-to-right and right-to-"
 "left text"
@@ -2888,19 +2901,19 @@ msgstr ""
 "왼쪽에서 오른쪽으로 쓰는 텍스트와 오른쪽에서 왼쪽으로 쓰는 텍스트가 섞여 있"
 "는 경우 두 개의 커서를 표시해야 하는 지 여부"
 
-#: gtk/gtksettings.c:302
+#: gtk/gtksettings.c:301
 msgid "Theme Name"
 msgstr "테마 이름"
 
-#: gtk/gtksettings.c:303
+#: gtk/gtksettings.c:302
 msgid "Name of theme RC file to load"
 msgstr "읽어 들일 테마 RC파일의 이름"
 
-#: gtk/gtksettings.c:310
+#: gtk/gtksettings.c:309
 msgid "Icon Theme Name"
 msgstr "아이콘 테마 이름"
 
-#: gtk/gtksettings.c:311
+#: gtk/gtksettings.c:310
 msgid "Name of icon theme to use"
 msgstr "사용할 아이콘 테마의 이름"
 
@@ -3285,7 +3298,10 @@ msgid ""
 "Font size as a scale factor relative to the default font size. This properly "
 "adapts to theme changes etc. so is recommended. Pango predefines some scales "
 "such as PANGO_SCALE_X_LARGE"
-msgstr "기본 글꼴 크기에 대한 비율로서의 글꼴 크기. 테마가 바뀐다거나 할 경우 적절하게 적용하게 됩니다. 그러므로 추천합니다. 판고는 PANGO_SCALE_X_LARGE과 같은 몇몇 비율을 미리 정의하고 있습니다."
+msgstr ""
+"기본 글꼴 크기에 대한 비율로서의 글꼴 크기. 테마가 바뀐다거나 할 경우 적절하"
+"게 적용하게 됩니다. 그러므로 추천합니다. 판고는 PANGO_SCALE_X_LARGE과 같은 몇"
+"몇 비율을 미리 정의하고 있습니다."
 
 #: gtk/gtktexttag.c:375 gtk/gtktextview.c:603
 msgid "Left, right, or center justification"
@@ -4276,7 +4292,9 @@ msgstr "유형 힌트"
 msgid ""
 "Hint to help the desktop environment understand what kind of window this is "
 "and how to treat it."
-msgstr "이 창이 어떤 종류이고 어떻게 처리하는 지 등의 데스크탑 환경을 이해할 수 있도록 도움을 주는 힌트."
+msgstr ""
+"이 창이 어떤 종류이고 어떻게 처리하는 지 등의 데스크탑 환경을 이해할 수 있도"
+"록 도움을 주는 힌트."
 
 #: gtk/gtkwindow.c:575
 msgid "Skip taskbar"
