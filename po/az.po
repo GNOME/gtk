@@ -5,8 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk20 1.3.2\n"
-"POT-Creation-Date: 2001-06-11 17:29-0400\n"
-"PO-Revision-Date: 2001-06-01 17:43GMT +0200\n"
+"POT-Creation-Date: 2001-06-21 22:04+0200\n"
+"PO-Revision-Date: 2000-06-19 20:11GMT +0200\n"
 "Last-Translator: Vasif İsmayıloğlu MD <azerb_linux@hotmail.com>\n"
 "Language-Team: Azerbaijani Turkish <linuxaz@azerimal.net>\n"
 "MIME-Version: 1.0\n"
@@ -183,11 +183,11 @@ msgstr ""
 
 #: gdk-pixbuf/io-bmp.c:255
 msgid "BMP image has unsupported header size"
-msgstr ""
+msgstr "BMP rəsmi dəstəklənməyən başlıq ölçülərinə malikdir"
 
 #: gdk-pixbuf/io-bmp.c:278 gdk-pixbuf/io-bmp.c:300
 msgid "BMP image has bogus header data"
-msgstr ""
+msgstr "BMP rəsmi saxta başlıq mə'lumatına malikdir"
 
 #: gdk-pixbuf/io-bmp.c:325
 msgid "Not enough memory to load bitmap image"
@@ -196,7 +196,7 @@ msgstr "Bitməp rəsm üçün lazımi yaddaş yoxdur"
 #: gdk-pixbuf/io-gif.c:218
 #, c-format
 msgid "Failure reading GIF: %s"
-msgstr ""
+msgstr "GIF oxunması bacarılmadı: %s"
 
 #: gdk-pixbuf/io-gif.c:460 gdk-pixbuf/io-gif.c:1352 gdk-pixbuf/io-gif.c:1511
 msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
@@ -209,7 +209,7 @@ msgstr "GIF yükləyicisində xəta (%s)"
 
 #: gdk-pixbuf/io-gif.c:592
 msgid "GIF image loader can't understand this image."
-msgstr ""
+msgstr "GIF rəsm yükləyicisi bu rəsmdən baş aça bilmədi."
 
 #: gdk-pixbuf/io-gif.c:622
 msgid "Circular table entry in GIF file"
@@ -217,13 +217,12 @@ msgstr "GIF faylında dairəvi cədvəl girişi"
 
 #: gdk-pixbuf/io-gif.c:746 gdk-pixbuf/io-gif.c:1340 gdk-pixbuf/io-gif.c:1385
 #: gdk-pixbuf/io-gif.c:1499
-#, fuzzy
 msgid "Not enough memory to load GIF file"
-msgstr "Bitməp rəsm üçün lazımi yaddaş yoxdur"
+msgstr "GIF rəsm yüklənçməsi üçün lazımi yaddaş yoxdur"
 
 #: gdk-pixbuf/io-gif.c:990
 msgid "GIF image is corrupt (incorrect LZW compression)"
-msgstr ""
+msgstr "GIF rəsmi xəsərlidir (səliqəsiz LZW sıxışdırılması)"
 
 #: gdk-pixbuf/io-gif.c:1040
 msgid "File does not appear to be a GIF file"
@@ -236,21 +235,23 @@ msgstr "GIF faylının %s buraxılışı hələ dəstəklənmir"
 
 #: gdk-pixbuf/io-gif.c:1127
 msgid "GIF image contained a frame appearing outside the image bounds."
-msgstr ""
+msgstr "GIF rəsmi kənarlardan daşan çərçivə daxil edir."
 
 #: gdk-pixbuf/io-gif.c:1143
 msgid "First frame of GIF image had 'revert to previous' as its disposal mode."
-msgstr ""
+msgstr "GIF rəsminin ilk çərçivəsi 'əvvəlkinə çevir' daxil edir."
 
 #: gdk-pixbuf/io-gif.c:1178
 msgid ""
 "GIF image has no global colormap, and a frame inside it has no local "
 "colormap."
 msgstr ""
+"GIF rəsminin qlobal rəng xəritəsi yoxdur və üstünə bir də içindəki "
+"çərçivənin də yerli rəng xəritəsi yoxdur."
 
 #: gdk-pixbuf/io-gif.c:1407
 msgid "GIF image was truncated or incomplete."
-msgstr ""
+msgstr "GIF rəsmi parçalanıb və natamamdır."
 
 #: gdk-pixbuf/io-jpeg.c:125
 #, c-format
@@ -359,25 +360,23 @@ msgstr "PNM faylını yükləmək üçün yaddaş çatmır"
 
 #: gdk-pixbuf/io-tiff.c:152
 msgid "Could not get image width (bad TIFF file)"
-msgstr ""
+msgstr "Rəsm eni öyrənilə bilmir (xəsərli TIFF faylı)"
 
 #: gdk-pixbuf/io-tiff.c:159
 msgid "Could not get image height (bad TIFF file)"
-msgstr ""
+msgstr "Rəsm hündürlüyü öyrənilə bilmir (xəsərli TIFF faylı)"
 
 #: gdk-pixbuf/io-tiff.c:169
-#, fuzzy
 msgid "Width or height of TIFF image is zero"
-msgstr "Piksel olaraq sağ kənar"
+msgstr "TIFF rəsmi hündürlüyü ya da eni sıfırdır"
 
 #: gdk-pixbuf/io-tiff.c:178 gdk-pixbuf/io-tiff.c:194 gdk-pixbuf/io-tiff.c:471
 msgid "Insufficient memory to open TIFF file"
 msgstr "TİFF faylını açmaq üçün yaddaş çatmır"
 
 #: gdk-pixbuf/io-tiff.c:201
-#, fuzzy
 msgid "Failed to load RGB data from TIFF file"
-msgstr "TİFF rəsmi açılması bacarılmadı"
+msgstr "TİFF rəsmində RGB veriləni alınması bacarılmadı"
 
 #: gdk-pixbuf/io-tiff.c:264
 msgid "Failed to open TIFF image"
@@ -385,12 +384,11 @@ msgstr "TİFF rəsmi açılması bacarılmadı"
 
 #: gdk-pixbuf/io-tiff.c:277
 msgid "TIFFClose operation failed"
-msgstr ""
+msgstr "TIFFClose əməliyyatı iflas etdi"
 
 #: gdk-pixbuf/io-tiff.c:411
-#, fuzzy
 msgid "Failed to load TIFF image"
-msgstr "TİFF rəsmi açılması bacarılmadı"
+msgstr "TİFF rəsmi yüklənməsi bacarılmadı"
 
 #: gdk-pixbuf/io-xbm.c:284
 #, c-format
@@ -593,13 +591,12 @@ msgid "Font size in points"
 msgstr "Yazı Növü böyüklüyü nöqtə olaraq"
 
 #: gtk/gtkcellrenderertext.c:291 gtk/gtktexttag.c:357 gtk/gtktexttag.c:358
-#, fuzzy
 msgid "Font scale"
-msgstr "Yazı Növü tərzi"
+msgstr "Yazı növü miqyası"
 
 #: gtk/gtkcellrenderertext.c:292
 msgid "Font scaling factor"
-msgstr ""
+msgstr "Yazı növü miqyasılama faktoru"
 
 #: gtk/gtkcellrenderertext.c:301 gtk/gtktexttag.c:426
 msgid "Rise"
@@ -700,18 +697,16 @@ msgid "Whether this tag affects the font size"
 msgstr "Bu təqin yazı növü böyüklüyünə harda tə'sir edəcəyi"
 
 #: gtk/gtkcellrenderertext.c:367 gtk/gtktexttag.c:559
-#, fuzzy
 msgid "Font scale set"
-msgstr "Yazı Növü dəstəsi"
+msgstr "Yazı növü miqyası dəstəsi"
 
 #: gtk/gtkcellrenderertext.c:368 gtk/gtktexttag.c:560
-#, fuzzy
 msgid "Whether this tag scales the font size by a factor"
-msgstr "Bu təqin yazı növü böyüklüyünə harda tə'sir edəcəyi"
+msgstr "Bu təqin yazı növü böyüklüyünü neşə qat artıracağı"
 
 #: gtk/gtkcellrenderertext.c:371 gtk/gtktexttag.c:579
 msgid "Rise set"
-msgstr "Yüksəklək dəstəsi"
+msgstr "Yüksəklik dəstəsi"
 
 #: gtk/gtkcellrenderertext.c:372 gtk/gtktexttag.c:580
 msgid "Whether this tag affects the rise"
@@ -974,8 +969,9 @@ msgid "Number of characters to leave space for in the entry."
 msgstr "Girişdə hər vahid üçün neçə xarakter boşluq buraxaq."
 
 #: gtk/gtkentry.c:444
+#, fuzzy
 msgid "Scroll offset"
-msgstr ""
+msgstr "Sürüşdürülə bilən"
 
 #: gtk/gtkentry.c:445
 msgid "Number of pixels of the entry scrolled off the screen to the left"
@@ -1173,27 +1169,24 @@ msgid "Couldn't convert filename"
 msgstr "Fayl adını dönüşdürə bilmədim"
 
 #: gtk/gtkfontsel.c:185
-#, fuzzy
 msgid "Font name"
-msgstr "Yazı növü ailəsi"
+msgstr "Yazı növü adı"
 
 #: gtk/gtkfontsel.c:186
 msgid "The X string that represents this font."
-msgstr ""
+msgstr "Bu yazı növünü təsvir edən X qatarı."
 
 #: gtk/gtkfontsel.c:193
-#, fuzzy
 msgid "The GdkFont that is currently selected."
-msgstr "Hazırda seçili fayl adı."
+msgstr "Hazırda seçili olan GdkFont."
 
 #: gtk/gtkfontsel.c:199
-#, fuzzy
 msgid "Preview text"
-msgstr "İlk Baxış:"
+msgstr "Nümayiş mətni"
 
 #: gtk/gtkfontsel.c:200
 msgid "The text to display in order to demonstrate the selected font."
-msgstr ""
+msgstr "Seçili yazı növü nümayişində göstəriəcək nümayiş mətni."
 
 #: gtk/gtkfontsel.c:296
 msgid "_Family:"
@@ -1331,111 +1324,105 @@ msgstr "təmizlə"
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: gtk/gtkmain.c:475
+#: gtk/gtkmain.c:474
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: gtk/gtknotebook.c:331
-#, fuzzy
+#: gtk/gtknotebook.c:328
 msgid "Page"
-msgstr "Səhifə %u"
+msgstr "Səhifə"
 
-#: gtk/gtknotebook.c:332
+#: gtk/gtknotebook.c:329
 msgid "The index of the current page"
-msgstr ""
+msgstr "Hazırkı səhifənin indeksi"
 
-#: gtk/gtknotebook.c:341
-#, fuzzy
+#: gtk/gtknotebook.c:337
 msgid "Tab Position"
-msgstr "Mətn Yeri"
+msgstr "Səkmə Yeri"
 
-#: gtk/gtknotebook.c:342
+#: gtk/gtknotebook.c:338
 msgid "Which side of the notebook holds the tabs"
-msgstr ""
+msgstr "Səkmələrin tutulduğu qeyd dəftərçəsi yeri"
 
-#: gtk/gtknotebook.c:350
-#, fuzzy
+#: gtk/gtknotebook.c:345
 msgid "Tab Border"
-msgstr "Süzmə əmri"
+msgstr "Səkmə Kənarı"
 
-#: gtk/gtknotebook.c:351
-#, fuzzy
+#: gtk/gtknotebook.c:346
 msgid "Width of the border around the tab labels"
-msgstr "Piksel olaraq sol kənar"
+msgstr "Səkmə etiketləri ətrafındakı kənar eni"
 
-#: gtk/gtknotebook.c:360
+#: gtk/gtknotebook.c:354
 msgid "Horizontal Tab Border"
-msgstr ""
+msgstr "Üfüqi Səkmə Kənarı"
 
-#: gtk/gtknotebook.c:361
+#: gtk/gtknotebook.c:355
 msgid "Width of the horizontal border of tab labels"
-msgstr ""
+msgstr "Səkmə etiketlərinin üfüqi kənar eni"
 
-#: gtk/gtknotebook.c:370
+#: gtk/gtknotebook.c:363
 msgid "Vertical Tab Border"
-msgstr ""
+msgstr "Şaquli Səkmə Kənarı"
 
-#: gtk/gtknotebook.c:371
+#: gtk/gtknotebook.c:364
 msgid "Width of the vertical border of tab labels"
-msgstr ""
+msgstr "Səkmə etiketlərinin şaquli kənar eni"
+
+#: gtk/gtknotebook.c:372
+msgid "Show Tabs"
+msgstr "Səkmələri Göstər"
+
+#: gtk/gtknotebook.c:373
+msgid "Whether tabs should be shown or not"
+msgstr "Səkmələrin harda göstərilib göstərilməyəcəyi"
+
+#: gtk/gtknotebook.c:379
+msgid "Show Border"
+msgstr "Kənarı Göstər"
 
 #: gtk/gtknotebook.c:380
-#, fuzzy
-msgid "Show Tabs"
-msgstr "Səkmələr"
-
-#: gtk/gtknotebook.c:381
-#, fuzzy
-msgid "Whether tabs should be shown or not"
-msgstr "Sıralama indikatoru göstərilməsi"
-
-#: gtk/gtknotebook.c:388
-#, fuzzy
-msgid "Show Border"
-msgstr "Süzmə əmri"
-
-#: gtk/gtknotebook.c:389
-#, fuzzy
 msgid "Whether the border should be shown or not"
-msgstr "Sıralama indikatoru göstərilməsi"
+msgstr "Kənarın harda göstərilib göstərilməyəcəyi"
 
-#: gtk/gtknotebook.c:396
+#: gtk/gtknotebook.c:386
 msgid "Scrollable"
-msgstr ""
+msgstr "Sürüşdürülə bilən"
 
-#: gtk/gtknotebook.c:397
+#: gtk/gtknotebook.c:387
 msgid "If TRUE, scroll arrows are added if there are to many tabs to fit"
-msgstr ""
+msgstr "Əgər DÜZdürsə, səkmələr sığışmasa sürüşdürmə çubuqları əlavə ediləcək"
 
-#: gtk/gtknotebook.c:404
+#: gtk/gtknotebook.c:393
 msgid "Enable Popup"
-msgstr ""
+msgstr "Popapı Fəallaşdır"
 
-#: gtk/gtknotebook.c:405
+#: gtk/gtknotebook.c:394
 msgid ""
 "If TRUE, pressing the right mouse button on the notebook pops up a menu that "
 "you can use to go to a page"
 msgstr ""
+"Əgər DÜZdürsə, siçan düyməsinin Qeyd Dəftərçəsində tıqlanması gediləcək "
+"səhifə menyusunu açar"
 
-#: gtk/gtknotebook.c:412
+#: gtk/gtknotebook.c:400
 msgid "Homogeneous"
-msgstr ""
+msgstr "Homojen"
 
-#: gtk/gtknotebook.c:413
+#: gtk/gtknotebook.c:401
 msgid "Whether tabs should have homogeneous sizes"
-msgstr ""
+msgstr "Səkmələrin harda homojen böyüklükləri olacağı"
 
-#: gtk/gtknotebook.c:2145 gtk/gtknotebook.c:4506
+#: gtk/gtknotebook.c:2153 gtk/gtknotebook.c:4524
 #, c-format
 msgid "Page %u"
 msgstr "Səhifə %u"
 
-#: gtk/gtkrc.c:2363
+#: gtk/gtkrc.c:2359
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\" line %d"
 msgstr "Pixmap_path dəki rəsm faylının yeri tapıla bilmir: \"%s\" xətt %d"
 
-#: gtk/gtkrc.c:2366
+#: gtk/gtkrc.c:2362
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "Pixmap_path dəki rəsm faylının yeri tapıla bilmir:  \"%s\""
@@ -1466,77 +1453,71 @@ msgstr "_Əlavə Et"
 
 #: gtk/gtkstock.c:276
 msgid "_Bold"
-msgstr ""
+msgstr "_Qalın"
 
 #: gtk/gtkstock.c:277
 msgid "_Cancel"
 msgstr "_Ləǧv et"
 
 #: gtk/gtkstock.c:278
-#, fuzzy
 msgid "_Clear"
-msgstr "təmizlə"
+msgstr "_Təmizlə"
 
 #: gtk/gtkstock.c:279
 msgid "_Close"
 msgstr "_Qapat"
 
 #: gtk/gtkstock.c:280
-#, fuzzy
 msgid "_Copy"
-msgstr "Köçürt"
+msgstr "_Köçürt"
 
 #: gtk/gtkstock.c:281
-#, fuzzy
 msgid "C_ut"
-msgstr "Kəs"
+msgstr "Kə_s"
 
 #: gtk/gtkstock.c:282
 msgid "_Find"
-msgstr ""
+msgstr "_Axtar"
 
 #: gtk/gtkstock.c:283
 msgid "Find and _Replace"
-msgstr ""
+msgstr "Axtar və _Dəyişdir"
 
 #: gtk/gtkstock.c:284
 msgid "_Back"
-msgstr ""
+msgstr "_Arxaya"
 
 #: gtk/gtkstock.c:285
 msgid "_Forward"
-msgstr ""
+msgstr "_Çatdır"
 
 #: gtk/gtkstock.c:286
 msgid "_Help"
 msgstr "_Yardım"
 
 #: gtk/gtkstock.c:287
-#, fuzzy
 msgid "_Home"
-msgstr "_Yardım"
+msgstr "_Ev"
 
 #: gtk/gtkstock.c:288
 msgid "_Italic"
-msgstr ""
+msgstr "_Əyik"
 
 #: gtk/gtkstock.c:289
-#, fuzzy
 msgid "_Center"
-msgstr "Yarat"
+msgstr "Mərkə_z"
 
 #: gtk/gtkstock.c:290
-#, fuzzy
 msgid "_Fill"
-msgstr "_Ailə:"
+msgstr "_Doldur"
 
 #: gtk/gtkstock.c:291
 msgid "_Left"
-msgstr ""
+msgstr "_Sol"
 
 #: gtk/gtkstock.c:292
 msgid "_Right"
-msgstr ""
+msgstr "S_ağ"
 
 #: gtk/gtkstock.c:293
 msgid "_New"
@@ -1555,70 +1536,64 @@ msgid "_Open"
 msgstr "_Aç"
 
 #: gtk/gtkstock.c:297
-#, fuzzy
 msgid "_Paste"
-msgstr "Yapışdır"
+msgstr "_Yapışdır"
 
 #: gtk/gtkstock.c:298
 msgid "_Preferences"
-msgstr ""
+msgstr "_Tərcihlər"
 
 #: gtk/gtkstock.c:299
 msgid "_Print"
-msgstr ""
+msgstr "_Çap Et"
 
 #: gtk/gtkstock.c:300
-#, fuzzy
 msgid "Print Pre_view"
-msgstr "İlk Baxış:"
+msgstr "_Çap Etmə Nümayişi"
 
 #: gtk/gtkstock.c:301
 msgid "_Properties"
-msgstr ""
+msgstr "Xü_susiyyətlər"
 
 #: gtk/gtkstock.c:302
 msgid "_Quit"
 msgstr "Çı_x"
 
 #: gtk/gtkstock.c:303
-#, fuzzy
 msgid "_Redo"
-msgstr "_Qırmızı:"
+msgstr "_Qaytarma"
 
 #: gtk/gtkstock.c:304
 msgid "_Revert"
-msgstr ""
+msgstr "_Çevir"
 
 #: gtk/gtkstock.c:305
 msgid "_Save"
 msgstr "_Qeyd Et"
 
 #: gtk/gtkstock.c:306
-#, fuzzy
 msgid "Save _As"
-msgstr "Qeyd Et"
+msgstr "_Fərqli Qeyd Et"
 
 #: gtk/gtkstock.c:307
 msgid "_Spell Check"
-msgstr ""
+msgstr "İmla _Yoxlaması"
 
 #: gtk/gtkstock.c:308
 msgid "_Stop"
-msgstr ""
+msgstr "_Dayan"
 
 #: gtk/gtkstock.c:309
-#, fuzzy
 msgid "_Strikethrough"
-msgstr "Qaralanmış"
+msgstr "_Qaralanmış"
 
 #: gtk/gtkstock.c:310
-#, fuzzy
 msgid "_Underline"
-msgstr "Alt cızıqlı"
+msgstr "Alt _Cızıqlı"
 
 #: gtk/gtkstock.c:311
 msgid "_Undo"
-msgstr ""
+msgstr "_Dala Qaytar"
 
 #: gtk/gtkstock.c:312
 msgid "_Yes"
@@ -1627,19 +1602,19 @@ msgstr "_Bəli"
 #: gtk/gtkstock.c:313
 #, c-format
 msgid "Zoom _100%"
-msgstr ""
+msgstr "_100% "
 
 #: gtk/gtkstock.c:314
 msgid "Zoom to _Fit"
-msgstr ""
+msgstr "_Doldumaq üçün Yaxınlaşdır"
 
 #: gtk/gtkstock.c:315
 msgid "Zoom _In"
-msgstr ""
+msgstr "_Yaxınlaş"
 
 #: gtk/gtkstock.c:316
 msgid "Zoom _Out"
-msgstr ""
+msgstr "_Uzaqlaş"
 
 #: gtk/gtktexttag.c:198
 msgid "Tag name"
@@ -1883,62 +1858,52 @@ msgid "Whether this tag affects text visibility"
 msgstr "Bu təqin mətn görünməzliyinə harda tə'sir edəcəyi"
 
 #: gtk/gtktextview.c:503
-#, fuzzy
 msgid "Line Height"
-msgstr "Yazı Növü qalınlığı"
+msgstr "Sətir qalınlığı"
 
 #: gtk/gtktextview.c:504
 msgid "The height of a line"
-msgstr ""
+msgstr "Sətir hündürlüyü"
 
 #: gtk/gtktextview.c:513
-#, fuzzy
 msgid "Column Width"
-msgstr "Minimal En"
+msgstr "Sütün Eni"
 
 #: gtk/gtktextview.c:514
-#, fuzzy
 msgid "The width of a column"
-msgstr "Sütunun hazırkı eni"
+msgstr "Sütunun eni"
 
 #: gtk/gtktextview.c:523
-#, fuzzy
 msgid "Pixels Above Lines"
-msgstr "Sətirlərin üstündəki piksel"
+msgstr "Sətirlərin Üstündəki Piksellər"
 
 #: gtk/gtktextview.c:533
-#, fuzzy
 msgid "Pixels Below Lines"
-msgstr "Sətirlərin altındakı piksel"
+msgstr "Sətirlərin Altındakı Piksellər"
 
 #: gtk/gtktextview.c:543
-#, fuzzy
 msgid "Pixels Inside Wrap"
-msgstr "Qırma içindəki piksel"
+msgstr "Qırma İçindəki Piksellər"
 
 #: gtk/gtktextview.c:561
-#, fuzzy
 msgid "Wrap Mode"
-msgstr "Qırma modu"
+msgstr "Qırma Modu"
 
 #: gtk/gtktextview.c:579
-#, fuzzy
 msgid "Left Margin"
-msgstr "Sol kənar"
+msgstr "Sol Kənar"
 
 #: gtk/gtktextview.c:589
-#, fuzzy
 msgid "Right Margin"
-msgstr "Sağ kənar"
+msgstr "Sağ Kənar"
 
 #: gtk/gtktextview.c:617
-#, fuzzy
 msgid "Cursor Visible"
-msgstr "Görünən"
+msgstr "Görünən Ox"
 
 #: gtk/gtktextview.c:618
 msgid "If the insertion cursor is shown"
-msgstr ""
+msgstr "Əgər daxil etmə oxu göstərilibsə"
 
 #: gtk/gtkthemes.c:71
 #, c-format
@@ -2026,18 +1991,16 @@ msgid "Alignment"
 msgstr "USəviyyələmə"
 
 #: gtk/gtktreeviewcolumn.c:238
-#, fuzzy
 msgid "X Alignment of the column header text or widget"
-msgstr "Sütun başlığı ya da pəncərəciyinin səviyyələməsi"
+msgstr "Sütun başlığı ya da pəncərəciyinin X səviyyələməsi"
 
 #: gtk/gtktreeviewcolumn.c:247
 msgid "Reorderable"
-msgstr ""
+msgstr "Yenidən sıraya qoyula bilən"
 
 #: gtk/gtktreeviewcolumn.c:248
-#, fuzzy
 msgid "Wether the column can be reordered around the headers"
-msgstr "Mətn harada istifadəçi tərəfindən dəyişdirilə bilər"
+msgstr "Sütünün başlıqlar ətrafında yenidən sıralanıb sıralanamayacağı"
 
 #: gtk/gtktreeviewcolumn.c:255
 msgid "Sort indicator"
@@ -2079,9 +2042,3 @@ msgstr "Vyetnamca (VIQR)"
 #: modules/input/imxim.c:27
 msgid "X Input Method"
 msgstr "X Giriş Metodu "
-
-#~ msgid "GIF animation contained a frame with an incorrect size"
-#~ msgstr "GIF animasiyasında xətalı böyüklükdə çərçivə var"
-
-#~ msgid "Failed to write to temporary file when loading TIFF image"
-#~ msgstr "TIFF rəsmini açmaq üçün müvəqqəti fayl yazıla bilmədi"
