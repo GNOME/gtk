@@ -1,5 +1,8 @@
 2004-11-03  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkaccellabel.c (gtk_accel_label_expose_event): Don't
+	access label->layout directly.  (#157080, Adam Hooper)
+
 	* gtk/gtklabel.c (gtk_label_set_pattern_internal): Allow
 	unsetting a pattern by passing NULL.  (#156720, Tristan Van Berkom)
 

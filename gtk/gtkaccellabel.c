@@ -325,12 +325,14 @@ gtk_accel_label_expose_event (GtkWidget      *widget,
 	  gint x;
 	  gint y;
 	  
+	  label_layout = gtk_label_get_layout (GTK_LABEL (accel_label));
+
 	  if (direction == GTK_TEXT_DIR_RTL)
 	    widget->allocation.x += ac_width;
 	  widget->allocation.width -= ac_width;
 	  if (gtk_label_get_ellipsize (label))
-	    pango_layout_set_width (label->layout,
-				    pango_layout_get_width (label->layout) 
+	    pango_layout_set_width (label_layout,
+				    pango_layout_get_width (label_layout) 
 				    - ac_width * PANGO_SCALE);
 	  
 	  if (GTK_WIDGET_CLASS (parent_class)->expose_event)
@@ -339,8 +341,8 @@ gtk_accel_label_expose_event (GtkWidget      *widget,
 	    widget->allocation.x -= ac_width;
 	  widget->allocation.width += ac_width;
 	  if (gtk_label_get_ellipsize (label))
-	    pango_layout_set_width (label->layout,
-				    pango_layout_get_width (label->layout) 
+	    pango_layout_set_width (label_layout,
+				    pango_layout_get_width (label_layout) 
 				    + ac_width * PANGO_SCALE);
 	  
 	  if (direction == GTK_TEXT_DIR_RTL)
@@ -348,7 +350,6 @@ gtk_accel_label_expose_event (GtkWidget      *widget,
 	  else
 	    x = widget->allocation.x + widget->allocation.width - misc->xpad - ac_width;
 
-	  label_layout = gtk_label_get_layout (GTK_LABEL (accel_label));
 	  gtk_label_get_layout_offsets (GTK_LABEL (accel_label), NULL, &y);
 
 	  accel_layout = gtk_widget_create_pango_layout (widget, gtk_accel_label_get_string (accel_label));
