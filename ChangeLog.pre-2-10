@@ -1,3 +1,7 @@
+2003-03-24  Mohammad DAMT  <mdamt@bisnisweb.com>
+
+	* po/id.po: Updated Indonesian translation
+
 2003-06-21  Tor Lillqvist  <tml@iki.fi>
 
 	* gdk/win32/gdkevents-win32.c (gdk_event_translate): When
