@@ -20,6 +20,13 @@
 	Default expose handler that propagates expose events to NO_WINDOW
 	children. New function gtk_container_propagate_expose()
 
+	* gtk/gtkwidget.[ch]:
+	Moved gtk_widget_event implementation to gtk_widget_event_internal.
+	gtk_widget_event calls gtk_widget_event_internal but doesn't allow
+	expose events. New function gtk_widget_send_expose() to send expose
+	events. New function gtk_widget_region_intersect() to calculate
+	window/region intersections.
+	
 	* gtk/gtkmain.c (gtk_main_do_event):
 	Use gdk_window_begin_paint_region() instead of gdk_window_begin_paint_rect().
 	Use gtk_widget_send_expose() to send expose events.
@@ -52,6 +59,7 @@
 	* gtk/gtktogglebutton.c:
 	* gtk/gtktoolbar.c:
 	* gtk/gtktreeitem.c:
+	* gtk/gtkviewport.c:
 	Chain expose handler to parent class handler. Use
 	gtk_container_propagate_expose() to propagate exposes.
 
