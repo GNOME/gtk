@@ -1,5 +1,10 @@
 2004-03-09  Federico Mena Quintero  <federico@ximian.com>
 
+	* gtk/gtkfilechooserdefault.c (get_file_info): Handle the returned
+	parent_path being NULL.  Fixes #136662.
+
+2004-03-09  Federico Mena Quintero  <federico@ximian.com>
+
 	* gtk/gtkfilechooserdefault.c (shortcuts_drag_data_received_cb):
 	Stop the emission so that GtkTreeView's handler won't try to poke
 	the filter model.  Fixes #136127.
