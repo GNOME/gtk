@@ -50,6 +50,8 @@ void             _gtk_tree_data_list_node_to_value  (GtkTreeDataList *list,
 void             _gtk_tree_data_list_value_to_node  (GtkTreeDataList *list,
 						     GValue          *value);
 
+GtkTreeDataList *_gtk_tree_data_list_node_copy      (GtkTreeDataList *list,
+                                                     GType            type);
 
 
 #endif /* __GTK_TREE_DATA_LIST_H__ */

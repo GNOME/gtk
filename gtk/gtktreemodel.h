@@ -179,7 +179,7 @@ gboolean     gtk_tree_model_iter_parent     (GtkTreeModel      *tree_model,
 void         gtk_tree_model_ref_iter        (GtkTreeModel      *tree_model,
 					     GtkTreeIter       *iter);
 void         gtk_tree_model_unref_iter      (GtkTreeModel      *tree_model,
-					     GtkTreeIter       *iter);
+                                             GtkTreeIter       *iter);
 
 #ifdef __cplusplus
 }

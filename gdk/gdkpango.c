@@ -31,13 +31,18 @@ struct _GdkPangoContextInfo
   GdkColormap *colormap;
 };
 
+static PangoAttrType gdk_pango_attr_stipple_type;
+static PangoAttrType gdk_pango_attr_embossed_type;
+
 static void gdk_pango_get_item_properties (PangoItem      *item,
 					   PangoUnderline *uline,
                                            gint           *rise,
-					   PangoAttrColor *fg_color,
+					   PangoColor     *fg_color,
 					   gboolean       *fg_set,
-					   PangoAttrColor *bg_color,
+					   PangoColor     *bg_color,
 					   gboolean       *bg_set,
+                                           gboolean       *embossed,
+                                           GdkBitmap     **stipple,
 					   gboolean       *shape_set,
 					   PangoRectangle *ink_rect,
 					   PangoRectangle *logical_rect);
@@ -70,38 +75,40 @@ gdk_pango_context_get_info (PangoContext *context, gboolean create)
 
 static GdkGC *
 gdk_pango_get_gc (PangoContext   *context,
-		  PangoAttrColor *fg_color,
+		  PangoColor     *fg_color,
+                  GdkBitmap      *stipple,
 		  GdkGC          *base_gc)
 {
-  GdkPangoContextInfo *info;
-  GdkColormap *colormap;
   GdkColor color;
+  GdkGC *result;
+  GdkPangoContextInfo *info;
   
   g_return_val_if_fail (context != NULL, NULL);
 
   info = gdk_pango_context_get_info (context, FALSE);
 
-  if (info && info->colormap)
-    colormap = info->colormap;
-  else
-    colormap = gdk_colormap_get_system();
-
-  /* FIXME. FIXME. FIXME. Only works for true color */
-
+  if (info == NULL || info->colormap == NULL)
+    {
+      g_warning ("you must set the colormap on a PangoContext before using it to draw a layout");
+      return NULL;
+    }
+  
   color.red = fg_color->red;
   color.green = fg_color->green;
   color.blue = fg_color->blue;
   
-  if (gdk_colormap_alloc_color (colormap, &color, FALSE, TRUE))
-    {
-      GdkGC *result = gdk_gc_new (gdk_parent_root);
-      gdk_gc_copy (result, base_gc);
-      gdk_gc_set_foreground (result, &color);
+  result = gdk_gc_new (gdk_parent_root);
+  gdk_gc_copy (result, base_gc);
+  gdk_rgb_find_color (info->colormap, &color);
+  gdk_gc_set_foreground (result, &color);
 
-      return result;
+  if (stipple)
+    {
+      gdk_gc_set_fill (result, GDK_STIPPLED);
+      gdk_gc_set_stipple (result, stipple);
     }
-  else
-    return gdk_gc_ref (base_gc);
+  
+  return result;
 }
 
 static void
@@ -158,6 +165,8 @@ gdk_draw_layout_line (GdkDrawable      *drawable,
   PangoContext *context;
   gint x_off = 0;
   gint rise = 0;
+  gboolean embossed;
+  GdkBitmap *stipple;
   
   g_return_if_fail (drawable != NULL);
   g_return_if_fail (gc != NULL);
@@ -171,7 +180,7 @@ gdk_draw_layout_line (GdkDrawable      *drawable,
     {
       PangoUnderline uline = PANGO_UNDERLINE_NONE;
       PangoLayoutRun *run = tmp_list->data;
-      PangoAttrColor fg_color, bg_color;
+      PangoColor fg_color, bg_color;
       gboolean fg_set, bg_set, shape_set;
       GdkGC *fg_gc;
       gint risen_y;
@@ -182,6 +191,8 @@ gdk_draw_layout_line (GdkDrawable      *drawable,
                                      &rise,
                                      &fg_color, &fg_set,
                                      &bg_color, &bg_set,
+                                     &embossed,
+                                     &stipple,
                                      &shape_set,
                                      &ink_rect,
 				     &logical_rect);
@@ -201,28 +212,48 @@ gdk_draw_layout_line (GdkDrawable      *drawable,
 
       if (bg_set)
 	{
-	  GdkGC *bg_gc = gdk_pango_get_gc (context, &bg_color, gc);
-
+	  GdkGC *bg_gc = gdk_pango_get_gc (context, &bg_color, stipple, gc);
+          
 	  gdk_draw_rectangle (drawable, bg_gc, TRUE,
 			      x + (x_off + logical_rect.x) / PANGO_SCALE,
 			      risen_y + overall_rect.y / PANGO_SCALE,
 			      logical_rect.width / PANGO_SCALE,
 			      overall_rect.height / PANGO_SCALE);
 
+          if (stipple)
+            gdk_gc_set_fill (bg_gc, GDK_SOLID);
+          
 	  gdk_pango_free_gc (context, bg_gc);
 	}
 
-      if (fg_set)
-	fg_gc = gdk_pango_get_gc (context, &fg_color, gc);
+      if (fg_set || stipple)
+	fg_gc = gdk_pango_get_gc (context, &fg_color, stipple, gc);
       else
 	fg_gc = gc;
-
+      
       if (!shape_set)
-	gdk_draw_glyphs (drawable, fg_gc, run->item->analysis.font,
-			 x + x_off / PANGO_SCALE,
-                         risen_y,
-                         run->glyphs);
+        {
+          gint gx, gy;
 
+          gx = x + x_off / PANGO_SCALE;
+          gy = risen_y;
+          
+          if (embossed)
+            {
+              PangoColor color = { 65535, 65535, 65535 };
+              GdkGC *white_gc = gdk_pango_get_gc (context, &color, stipple, fg_gc);
+              gdk_draw_glyphs (drawable, white_gc, run->item->analysis.font,
+                               gx + 1,
+                               gy + 1,
+                               run->glyphs);
+              gdk_pango_free_gc (context, white_gc);
+            }
+          
+          gdk_draw_glyphs (drawable, fg_gc, run->item->analysis.font,
+                           gx, gy,
+                           run->glyphs);
+        }
+      
       switch (uline)
 	{
 	case PANGO_UNDERLINE_NONE:
@@ -249,8 +280,8 @@ gdk_draw_layout_line (GdkDrawable      *drawable,
                          risen_y + (ink_rect.y + ink_rect.height) / PANGO_SCALE + 1);
 	  break;
 	}
-
-      if (fg_set)
+      
+      if (fg_gc != gc)
 	gdk_pango_free_gc (context, fg_gc);
 
       x_off += logical_rect.width;
@@ -307,10 +338,12 @@ static void
 gdk_pango_get_item_properties (PangoItem      *item,
 			       PangoUnderline *uline,
                                gint           *rise,
-			       PangoAttrColor *fg_color,
+			       PangoColor     *fg_color,
 			       gboolean       *fg_set,
-			       PangoAttrColor *bg_color,
+			       PangoColor     *bg_color,
 			       gboolean       *bg_set,
+                               gboolean       *embossed,
+                               GdkBitmap     **stipple,
 			       gboolean       *shape_set,
 			       PangoRectangle *ink_rect,
 			       PangoRectangle *logical_rect)
@@ -328,6 +361,12 @@ gdk_pango_get_item_properties (PangoItem      *item,
 
   if (rise)
     *rise = 0;
+
+  if (embossed)
+    *embossed = FALSE;
+
+  if (stipple)
+    *stipple = NULL;
   
   while (tmp_list)
     {
@@ -342,7 +381,7 @@ gdk_pango_get_item_properties (PangoItem      *item,
 	  
 	case PANGO_ATTR_FOREGROUND:
 	  if (fg_color)
-	    *fg_color = *((PangoAttrColor *)attr);
+	    *fg_color = ((PangoAttrColor *)attr)->color;
 	  if (fg_set)
 	    *fg_set = TRUE;
 	  
@@ -350,7 +389,7 @@ gdk_pango_get_item_properties (PangoItem      *item,
 	  
 	case PANGO_ATTR_BACKGROUND:
 	  if (bg_color)
-	    *bg_color = *((PangoAttrColor *)attr);
+	    *bg_color = ((PangoAttrColor *)attr)->color;
 	  if (bg_set)
 	    *bg_set = TRUE;
 	  
@@ -371,9 +410,144 @@ gdk_pango_get_item_properties (PangoItem      *item,
           break;
           
 	default:
+          /* stipple_type and embossed_type aren't necessarily
+           * initialized, but they are 0, which is an
+           * invalid type so won't occur. 
+           */
+          if (stipple && attr->klass->type == gdk_pango_attr_stipple_type)
+            {
+              *stipple = ((GdkPangoAttrStipple*)attr)->stipple;
+            }
+          else if (embossed && attr->klass->type == gdk_pango_attr_embossed_type)
+            {
+              *embossed = ((GdkPangoAttrEmbossed*)attr);
+            }
 	  break;
 	}
       tmp_list = tmp_list->next;
     }
 }
 
+
+static PangoAttribute *
+gdk_pango_attr_stipple_copy (const PangoAttribute *attr)
+{
+  const GdkPangoAttrStipple *src = (const GdkPangoAttrStipple*) attr;
+
+  return gdk_pango_attr_stipple_new (src->stipple);
+}
+
+static void
+gdk_pango_attr_stipple_destroy (PangoAttribute *attr)
+{
+  GdkPangoAttrStipple *st = (GdkPangoAttrStipple*) attr;
+
+  if (st->stipple)
+    g_object_unref (G_OBJECT (st->stipple));
+  
+  g_free (attr);
+}
+
+static gboolean
+gdk_pango_attr_stipple_compare (const PangoAttribute *attr1,
+                                    const PangoAttribute *attr2)
+{
+  const GdkPangoAttrStipple *a = (const GdkPangoAttrStipple*) attr1;
+  const GdkPangoAttrStipple *b = (const GdkPangoAttrStipple*) attr2;
+
+  return a->stipple == b->stipple;
+}
+
+/**
+ * gdk_pango_attr_stipple_new:
+ * @stipple: a bitmap to be set as stipple
+ *
+ * Creates a new attribute containing a stipple bitmap to be used when
+ * rendering the text.
+ *
+ * Return value: new #PangoAttribute
+ **/
+
+PangoAttribute *
+gdk_pango_attr_stipple_new (GdkBitmap *stipple)
+{
+  GdkPangoAttrStipple *result;
+  
+  static PangoAttrClass klass = {
+    0,
+    gdk_pango_attr_stipple_copy,
+    gdk_pango_attr_stipple_destroy,
+    gdk_pango_attr_stipple_compare
+  };
+
+  if (!klass.type)
+    klass.type = gdk_pango_attr_stipple_type =
+      pango_attr_type_register ("GdkPangoAttrStipple");
+
+  result = g_new (GdkPangoAttrStipple, 1);
+  result->attr.klass = &klass;
+
+  if (stipple)
+    g_object_ref (stipple);
+  
+  result->stipple = stipple;
+
+  return (PangoAttribute *)result;
+}
+
+static PangoAttribute *
+gdk_pango_attr_embossed_copy (const PangoAttribute *attr)
+{
+  const GdkPangoAttrEmbossed *e = (const GdkPangoAttrEmbossed*) attr;
+
+  return gdk_pango_attr_embossed_new (e->embossed);
+}
+
+static void
+gdk_pango_attr_embossed_destroy (PangoAttribute *attr)
+{
+  g_free (attr);
+}
+
+static gboolean
+gdk_pango_attr_embossed_compare (const PangoAttribute *attr1,
+                                 const PangoAttribute *attr2)
+{
+  const GdkPangoAttrEmbossed *e1 = (const GdkPangoAttrEmbossed*) attr1;
+  const GdkPangoAttrEmbossed *e2 = (const GdkPangoAttrEmbossed*) attr2;
+
+  return e1->embossed == e2->embossed;
+}
+
+/**
+ * gdk_pango_attr_embossed_new:
+ * @embossed: a bitmap to be set as embossed
+ *
+ * Creates a new attribute containing a embossed bitmap to be used when
+ * rendering the text.
+ *
+ * Return value: new #PangoAttribute
+ **/
+
+PangoAttribute *
+gdk_pango_attr_embossed_new (gboolean embossed)
+{
+  GdkPangoAttrEmbossed *result;
+  
+  static PangoAttrClass klass = {
+    0,
+    gdk_pango_attr_embossed_copy,
+    gdk_pango_attr_embossed_destroy,
+    gdk_pango_attr_embossed_compare
+  };
+
+  if (!klass.type)
+    klass.type = gdk_pango_attr_embossed_type =
+      pango_attr_type_register ("GdkPangoAttrEmbossed");
+
+  result = g_new (GdkPangoAttrEmbossed, 1);
+  result->attr.klass = &klass;
+  result->embossed = embossed;
+  
+  return (PangoAttribute *)result;
+}

@@ -123,6 +123,7 @@ void       _gtk_rbtree_prev_full        (GtkRBTree              *tree,
 					 GtkRBTree             **new_tree,
 					 GtkRBNode             **new_node);
 
+gint       _gtk_rbtree_get_depth        (GtkRBTree              *tree);
 
 /* This func just checks the integrity of the tree */
 /* It will go away later. */

@@ -2002,6 +2002,34 @@ create_get_image (void)
 /* 
  * Label Demo
  */
+static void
+sensitivity_toggled (GtkWidget *toggle,
+                     GtkWidget *widget)
+{
+  gtk_widget_set_sensitive (widget,  GTK_TOGGLE_BUTTON (toggle)->active);  
+}
+
+static GtkWidget*
+create_sensitivity_control (GtkWidget *widget)
+{
+  GtkWidget *button;
+  GtkWidget *toplevel;
+
+  button = gtk_toggle_button_new_with_label ("Sensitive");  
+
+  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button),
+                                GTK_WIDGET_IS_SENSITIVE (widget));
+  
+  gtk_signal_connect (GTK_OBJECT (button),
+                      "toggled",
+                      GTK_SIGNAL_FUNC (sensitivity_toggled),
+                      widget);
+  
+  gtk_widget_show_all (button);
+
+  return button;
+}
+
 void create_labels (void)
 {
   static GtkWidget *window = NULL;
@@ -2009,7 +2037,8 @@ void create_labels (void)
   GtkWidget *vbox;
   GtkWidget *frame;
   GtkWidget *label;
-
+  GtkWidget *button;
+  
   if (!window)
     {
       guint keyval;
@@ -2020,9 +2049,20 @@ void create_labels (void)
 			  &window);
 
       gtk_window_set_title (GTK_WINDOW (window), "Label");
+
       vbox = gtk_vbox_new (FALSE, 5);
+      
       hbox = gtk_hbox_new (FALSE, 5);
-      gtk_container_add (GTK_CONTAINER (window), hbox);
+      gtk_container_add (GTK_CONTAINER (window), vbox);
+
+      gtk_box_pack_end (GTK_BOX (vbox), hbox, FALSE, FALSE, 0);
+
+      button = create_sensitivity_control (hbox);
+
+      gtk_box_pack_start (GTK_BOX (vbox), button, FALSE, FALSE, 0);
+      
+      vbox = gtk_vbox_new (FALSE, 5);
+      
       gtk_box_pack_start (GTK_BOX (hbox), vbox, FALSE, FALSE, 0);
       gtk_container_set_border_width (GTK_CONTAINER (window), 5);
 
@@ -2127,8 +2167,8 @@ void create_labels (void)
       
       gtk_container_add (GTK_CONTAINER (frame), label);
       gtk_box_pack_start (GTK_BOX (vbox), frame, FALSE, FALSE, 0);
-      
     }
+  
   if (!GTK_WIDGET_VISIBLE (window))
     gtk_widget_show_all (window);
   else
@@ -3275,6 +3315,14 @@ create_scrolled_windows (void)
  */
 
 static void
+entry_toggle_frame (GtkWidget *checkbutton,
+                    GtkWidget *entry)
+{
+   gtk_entry_set_has_frame (GTK_ENTRY(entry),
+                            GTK_TOGGLE_BUTTON(checkbutton)->active);
+}
+
+static void
 entry_toggle_editable (GtkWidget *checkbutton,
 		       GtkWidget *entry)
 {
@@ -3394,6 +3442,13 @@ create_entry (void)
       gtk_signal_connect (GTK_OBJECT(invisible_char_check), "toggled",
 			  GTK_SIGNAL_FUNC(entry_toggle_invisible_char), entry);
       gtk_widget_show (invisible_char_check);
+
+      editable_check = gtk_check_button_new_with_label("Has Frame");
+      gtk_box_pack_start (GTK_BOX (box2), editable_check, FALSE, TRUE, 0);
+      gtk_signal_connect (GTK_OBJECT(editable_check), "toggled",
+			  GTK_SIGNAL_FUNC(entry_toggle_frame), entry);
+      gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(editable_check), TRUE);
+      gtk_widget_show (editable_check);
       
       separator = gtk_hseparator_new ();
       gtk_box_pack_start (GTK_BOX (box1), separator, FALSE, TRUE, 0);

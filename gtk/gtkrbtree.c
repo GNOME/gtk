@@ -641,7 +641,12 @@ _gtk_rbtree_node_find_offset (GtkRBTree *tree,
 			      GtkRBNode *node)
 {
   GtkRBNode *last;
-  gint retval = node->left->offset;
+  gint retval;
+
+  g_assert (node);
+  g_assert (node->left);
+  
+  retval = node->left->offset;
 
   while (tree && node && node != tree->nil)
     {
@@ -902,6 +907,22 @@ _gtk_rbtree_prev_full (GtkRBTree  *tree,
 	    *new_node = (*new_node)->right;
 	}
     }
+}
+
+gint
+_gtk_rbtree_get_depth (GtkRBTree *tree)
+{
+  GtkRBTree *tmp_tree;
+  gint depth = 0;
+
+  tmp_tree = tree->parent_tree;
+  while (tmp_tree)
+    {
+      ++depth;
+      tmp_tree = tmp_tree->parent_tree;
+    }
+
+  return depth;
 }
 
 static void

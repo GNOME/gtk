@@ -675,6 +675,8 @@ gtk_entry_init (GtkEntry *entry)
   entry->visible = TRUE;
   entry->invisible_char = '*';
   entry->dnd_position = -1;
+
+  entry->has_frame = TRUE;
   
   gtk_drag_dest_set (GTK_WIDGET (entry),
                      GTK_DEST_DEFAULT_DROP | GTK_DEST_DEFAULT_HIGHLIGHT,
@@ -760,8 +762,17 @@ gtk_entry_realize (GtkWidget *widget)
   widget->window = gdk_window_new (gtk_widget_get_parent_window (widget), &attributes, attributes_mask);
   gdk_window_set_user_data (widget->window, entry);
 
-  attributes.x = widget->style->xthickness;
-  attributes.y = widget->style->ythickness;
+  if (entry->has_frame)
+    {
+      attributes.x = widget->style->xthickness;
+      attributes.y = widget->style->ythickness;
+    }
+  else
+    {
+      attributes.x = 0;
+      attributes.y = 0;
+    }
+  
   attributes.width = widget->allocation.width - attributes.x * 2;
   attributes.height = requisition.height - attributes.y * 2;
   attributes.cursor = gdk_cursor_new (GDK_XTERM);
@@ -816,6 +827,7 @@ gtk_entry_size_request (GtkWidget      *widget,
   PangoFontMetrics metrics;
   PangoFont *font;
   gchar *lang;
+  gint xborder, yborder;
   
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_ENTRY (widget));
@@ -835,10 +847,25 @@ gtk_entry_size_request (GtkWidget      *widget,
 
   entry->ascent = metrics.ascent;
   entry->descent = metrics.descent;
+
+  xborder = INNER_BORDER;
+  yborder = INNER_BORDER;
   
-  requisition->width = MIN_ENTRY_WIDTH + (widget->style->xthickness + INNER_BORDER) * 2;
+  if (entry->has_frame)
+    {
+      xborder += widget->style->xthickness;
+      yborder += widget->style->ythickness;
+    }
+  else
+    {
+      /* add 1 pixel to draw focus rect in widget->window */
+      xborder += 1;
+      yborder += 1;
+    }
+      
+  requisition->width = MIN_ENTRY_WIDTH + xborder * 2;
   requisition->height = ((metrics.ascent + metrics.descent) / PANGO_SCALE + 
-			 (widget->style->ythickness + INNER_BORDER) * 2);
+                         yborder * 2);
 }
 
 static void
@@ -847,7 +874,8 @@ gtk_entry_size_allocate (GtkWidget     *widget,
 {
   GtkEntry *entry;
   GtkEditable *editable;
-
+  gint xborder, yborder;
+  
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_ENTRY (widget));
   g_return_if_fail (allocation != NULL);
@@ -856,6 +884,18 @@ gtk_entry_size_allocate (GtkWidget     *widget,
   entry = GTK_ENTRY (widget);
   editable = GTK_EDITABLE (widget);
 
+  if (entry->has_frame)
+    {
+      xborder = widget->style->xthickness;
+      yborder = widget->style->ythickness;
+    }
+  else
+    {
+      /* 1 pixel for focus rect */
+      xborder = 1;
+      yborder = 1;
+    }
+  
   if (GTK_WIDGET_REALIZED (widget))
     {
       /* We call gtk_widget_get_child_requisition, since we want (for
@@ -870,10 +910,10 @@ gtk_entry_size_allocate (GtkWidget     *widget,
 			      allocation->y + (allocation->height - requisition.height) / 2,
 			      allocation->width, requisition.height);
       gdk_window_move_resize (entry->text_area,
-			      widget->style->xthickness,
-			      widget->style->ythickness,
-			      allocation->width - widget->style->xthickness * 2,
-			      requisition.height - widget->style->ythickness * 2);
+                              xborder,
+                              yborder,
+			      allocation->width - xborder * 2,
+			      requisition.height - yborder * 2);
 
       gtk_entry_recompute (entry);
     }
@@ -883,37 +923,45 @@ static void
 gtk_entry_draw_focus (GtkWidget *widget)
 {
   gint width, height;
-  gint x, y;
-
+  GtkEntry *entry;
+  
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_ENTRY (widget));
 
+  entry = GTK_ENTRY (widget);
+  
   if (GTK_WIDGET_DRAWABLE (widget))
-    {
-      x = 0;
-      y = 0;
-      gdk_window_get_size (widget->window, &width, &height);
+    {      
+      if (entry->has_frame)
+        {
+          gint x = 0, y = 0;
 
+          gdk_window_get_size (widget->window, &width, &height);
+
+          if (GTK_WIDGET_HAS_FOCUS (widget))
+            {
+              x += 1;
+              y += 1;
+              width -= 2;
+              height -= 2;
+            }
+
+
+          gtk_paint_shadow (widget->style, widget->window,
+                            GTK_STATE_NORMAL, GTK_SHADOW_IN,
+                            NULL, widget, "entry",
+                            x, y, width, height);
+        }
+      else
+        gdk_window_clear (widget->window);
+        
       if (GTK_WIDGET_HAS_FOCUS (widget))
-	{
-	  x += 1;
-	  y += 1;
-	  width -= 2;
-	  height -= 2;
-	}
-
-      gtk_paint_shadow (widget->style, widget->window,
-			GTK_STATE_NORMAL, GTK_SHADOW_IN,
-			NULL, widget, "entry",
-			x, y, width, height);
-
-      if (GTK_WIDGET_HAS_FOCUS (widget))
-	{
-	   gdk_window_get_size (widget->window, &width, &height);
-	   gtk_paint_focus (widget->style, widget->window, 
-			    NULL, widget, "entry",
-			    0, 0, width - 1, height - 1);
-	}
+        {
+          gdk_window_get_size (widget->window, &width, &height);
+          gtk_paint_focus (widget->style, widget->window, 
+                           NULL, widget, "entry",
+                           0, 0, width - 1, height - 1);
+        }
     }
 }
 
@@ -2580,6 +2628,43 @@ gtk_entry_set_max_length (GtkEntry     *entry,
     gtk_editable_delete_text (GTK_EDITABLE(entry), max, -1);
   
   entry->text_max_length = max;
+}
+
+/**
+ * gtk_entry_set_has_frame:
+ * @entry: a #GtkEntry
+ * @setting: new value
+ * 
+ * Sets whether the entry has a beveled frame around it.
+ **/
+void
+gtk_entry_set_has_frame (GtkEntry *entry,
+                         gboolean  setting)
+{
+  g_return_if_fail (GTK_IS_ENTRY (entry));
+
+  setting = (setting != FALSE);
+  
+  if (entry->has_frame != setting)
+    gtk_widget_queue_resize (GTK_WIDGET (entry));
+  
+  entry->has_frame = setting;
+}
+
+/**
+ * gtk_entry_get_has_frame:
+ * @entry: a #GtkEntry
+ * 
+ * 
+ * 
+ * Return value: whether the entry has a beveled frame
+ **/
+gboolean
+gtk_entry_get_has_frame (GtkEntry *entry)
+{
+  g_return_val_if_fail (GTK_IS_ENTRY (entry), FALSE);
+
+  return entry->has_frame;
 }
 
 /* Quick hack of a popup menu

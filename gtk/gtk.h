@@ -138,6 +138,7 @@
 #include <gtk/gtktoolbar.h>
 #include <gtk/gtktooltips.h>
 #include <gtk/gtktree.h>
+#include <gtk/gtktreednd.h>
 #include <gtk/gtktreeitem.h>
 #include <gtk/gtktreemodel.h>
 #include <gtk/gtktreemodelsimple.h>

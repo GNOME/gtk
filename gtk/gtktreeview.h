@@ -125,7 +125,11 @@ gboolean               gtk_tree_view_get_path_at_pos     (GtkTreeView        *tr
 							  GtkTreeViewColumn **column,
                                                           gint               *cell_x,
                                                           gint               *cell_y);
-void                   gtk_tree_view_get_cell_rect       (GtkTreeView        *tree_view,
+void                   gtk_tree_view_get_cell_area       (GtkTreeView        *tree_view,
+                                                          GtkTreePath        *path,
+                                                          GtkTreeViewColumn  *column,
+                                                          GdkRectangle       *rect);
+void                   gtk_tree_view_get_background_area (GtkTreeView        *tree_view,
                                                           GtkTreePath        *path,
                                                           GtkTreeViewColumn  *column,
                                                           GdkRectangle       *rect);
@@ -190,6 +194,9 @@ void     gtk_tree_view_unset_rows_drag_dest   (GtkTreeView *tree_view);
 void       gtk_tree_view_set_drag_dest_row    (GtkTreeView              *tree_view,
                                                GtkTreePath              *path,
                                                GtkTreeViewDropPosition   pos);
+void       gtk_tree_view_get_drag_dest_row   (GtkTreeView              *tree_view,
+                                              GtkTreePath             **path,
+                                              GtkTreeViewDropPosition  *pos);
 gboolean   gtk_tree_view_get_dest_row_at_pos  (GtkTreeView              *tree_view,
                                                gint                      drag_x,
                                                gint                      drag_y,
@@ -197,16 +204,6 @@ gboolean   gtk_tree_view_get_dest_row_at_pos  (GtkTreeView              *tree_vi
                                                GtkTreeViewDropPosition  *pos);
 GdkPixmap* gtk_tree_view_create_row_drag_icon (GtkTreeView              *tree_view,
                                                GtkTreePath              *path);
-
-/* The selection data would normally have target type GTK_TREE_VIEW_ROW in this
- * case. If the target is wrong these functions return FALSE.
- */
-gboolean gtk_selection_data_set_tree_row     (GtkSelectionData         *selection_data,
-                                              GtkTreeView              *tree_view,
-                                              GtkTreePath              *path);
-gboolean gtk_selection_data_get_tree_row     (GtkSelectionData         *selection_data,
-                                              GtkTreeView             **tree_view,
-                                              GtkTreePath             **path);
 
 
 

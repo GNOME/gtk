@@ -234,4 +234,48 @@ _gtk_tree_data_list_value_to_node (GtkTreeDataList *list,
     }
 }
 
+GtkTreeDataList*
+_gtk_tree_data_list_node_copy (GtkTreeDataList *list,
+                               GType            type)
+{
+  GtkTreeDataList *new_list;
+  
+  new_list = _gtk_tree_data_list_alloc ();
 
+  switch (type)
+    {
+    case G_TYPE_UINT:
+    case G_TYPE_INT:
+    case G_TYPE_UCHAR:      
+    case G_TYPE_CHAR:
+    case G_TYPE_BOOLEAN:
+    case G_TYPE_POINTER:
+    case G_TYPE_FLOAT:
+      new_list->data = list->data;
+      break;
+
+    case G_TYPE_STRING:
+      new_list->data.v_pointer = g_strdup (list->data.v_pointer);
+      break;
+      
+    default:
+      if (g_type_is_a (type, G_TYPE_OBJECT))
+        {
+          new_list->data.v_pointer = list->data.v_pointer;
+          if (new_list->data.v_pointer)
+            g_object_ref (G_OBJECT (new_list->data.v_pointer));
+        }
+      else if (g_type_is_a (type, G_TYPE_BOXED))
+        {
+          if (list->data.v_pointer)
+            new_list->data.v_pointer = g_boxed_copy (type, list->data.v_pointer);
+          else
+            new_list->data.v_pointer = NULL;
+        }
+      else
+        g_warning ("Unsupported node type (%s) copied.", g_type_name (type));
+      break;
+    }
+  
+  return new_list;
+}

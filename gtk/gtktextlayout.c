@@ -1499,9 +1499,9 @@ static void
 convert_color (GdkColor       *result,
 	       PangoAttrColor *attr)
 {
-  result->red = attr->red;
-  result->blue = attr->blue;
-  result->green = attr->green;
+  result->red = attr->color.red;
+  result->blue = attr->color.blue;
+  result->green = attr->color.green;
 }
 
 /* This function is used to convert the preedit string attributes, which are

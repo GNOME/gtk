@@ -76,6 +76,8 @@ struct _GtkEntry
 
   guint        need_im_reset : 1;
 
+  guint        has_frame : 1;
+  
   guint   button;
   guint   timer;
   guint   recompute_idle;
@@ -138,6 +140,9 @@ void       gtk_entry_set_invisible_char         (GtkEntry      *entry,
                                                  gunichar       ch);
 void       gtk_entry_set_editable   		(GtkEntry      *entry,
 						 gboolean       editable);
+void       gtk_entry_set_has_frame              (GtkEntry      *entry,
+                                                 gboolean       setting);
+gboolean   gtk_entry_get_has_frame              (GtkEntry      *entry);
 /* text is truncated if needed */
 void       gtk_entry_set_max_length 		(GtkEntry      *entry,
 						 guint16        max);

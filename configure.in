@@ -914,7 +914,7 @@ AC_ARG_WITH(included_loaders, [  --with-included-loaders=LOADER1,LOADER2,... Bui
 all_loaders="png,bmp,wbmp,gif,ico,jpeg,pnm,ras,tiff,xpm"
 included_loaders=""
 # If no loaders specified, include all
-if test "x$with_included_loaders" = x ; then
+if test "x$with_included_loaders" = xyes ; then
   included_loaders="$all_loaders"
 else
   included_loaders="$with_included_loaders"

@@ -212,6 +212,10 @@ gtk_tree_view_column_class_init (GtkTreeViewColumnClass *class)
 static void
 gtk_tree_view_column_init (GtkTreeViewColumn *tree_column)
 {
+  /* FIXME remove on port to GtkObject */
+  gtk_object_ref (GTK_OBJECT (tree_column));
+  gtk_object_sink (GTK_OBJECT (tree_column));
+  
   tree_column->button = NULL;
   tree_column->justification = GTK_JUSTIFY_LEFT;
   tree_column->width = 1;
@@ -919,17 +923,18 @@ update_button_contents (GtkTreeViewColumn *tree_column)
 {
   if (tree_column->button)
     {
-      GtkWidget *current_child = GTK_BIN (GTK_BIN (tree_column->button)->child)->child;
+      GtkWidget *alignment = GTK_BIN (tree_column->button)->child;
+      GtkWidget *current_child = GTK_BIN (alignment)->child;
       
       if (tree_column->child)
         {
           if (current_child != tree_column->child)
             {
-              gtk_container_remove (GTK_CONTAINER (tree_column->button),
+              gtk_container_remove (GTK_CONTAINER (alignment),
                                     current_child);
 
-              gtk_container_add (GTK_CONTAINER (tree_column->button),
-                                                tree_column->child);
+              gtk_container_add (GTK_CONTAINER (alignment),
+                                 tree_column->child);
             }
         }
       else 
@@ -940,7 +945,7 @@ update_button_contents (GtkTreeViewColumn *tree_column)
 
               gtk_widget_show (current_child);
               
-              gtk_container_add (GTK_CONTAINER (tree_column->button),
+              gtk_container_add (GTK_CONTAINER (alignment),
                                  current_child);
             }
 

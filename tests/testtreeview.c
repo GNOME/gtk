@@ -314,11 +314,11 @@ set_columns_type (GtkTreeView *tree_view, ColumnsType type)
 
       image = gtk_image_new_from_pixbuf (pixbuf);
 
+      g_object_unref (G_OBJECT (pixbuf));
+      
       gtk_widget_show (image);
       
       gtk_tree_view_column_set_widget (col, image);
-
-      g_object_unref (G_OBJECT (pixbuf));
       
       g_object_unref (G_OBJECT (rend));
       g_object_unref (G_OBJECT (col));
@@ -346,6 +346,98 @@ set_columns_type (GtkTreeView *tree_view, ColumnsType type)
       g_object_unref (G_OBJECT (rend));
       g_object_unref (G_OBJECT (col));
 
+#if 0
+
+      rend = gtk_cell_renderer_text_new ();
+      
+      col = gtk_tree_view_column_new_with_attributes ("Column 5",
+                                                      rend,
+                                                      "text", 3,
+                                                      NULL);
+
+      setup_column (col);
+      
+      gtk_tree_view_append_column (GTK_TREE_VIEW (tree_view), col);
+      
+      g_object_unref (G_OBJECT (rend));
+      g_object_unref (G_OBJECT (col));
+
+
+      rend = gtk_cell_renderer_text_new ();
+      
+      col = gtk_tree_view_column_new_with_attributes ("Column 6",
+                                                      rend,
+                                                      "text", 4,
+                                                      NULL);
+
+      setup_column (col);
+      
+      gtk_tree_view_append_column (GTK_TREE_VIEW (tree_view), col);
+      
+      g_object_unref (G_OBJECT (rend));
+      g_object_unref (G_OBJECT (col));
+
+
+      rend = gtk_cell_renderer_text_new ();
+      
+      col = gtk_tree_view_column_new_with_attributes ("Column 7",
+                                                      rend,
+                                                      "text", 5,
+                                                      NULL);
+
+      setup_column (col);
+      
+      gtk_tree_view_append_column (GTK_TREE_VIEW (tree_view), col);
+      
+      g_object_unref (G_OBJECT (rend));
+      g_object_unref (G_OBJECT (col));
+
+      rend = gtk_cell_renderer_text_new ();
+      
+      col = gtk_tree_view_column_new_with_attributes ("Column 8",
+                                                      rend,
+                                                      "text", 6,
+                                                      NULL);
+
+      setup_column (col);
+      
+      gtk_tree_view_append_column (GTK_TREE_VIEW (tree_view), col);
+      
+      g_object_unref (G_OBJECT (rend));
+      g_object_unref (G_OBJECT (col));
+
+
+      rend = gtk_cell_renderer_text_new ();
+      
+      col = gtk_tree_view_column_new_with_attributes ("Column 9",
+                                                      rend,
+                                                      "text", 7,
+                                                      NULL);
+
+      setup_column (col);
+      
+      gtk_tree_view_append_column (GTK_TREE_VIEW (tree_view), col);
+      
+      g_object_unref (G_OBJECT (rend));
+      g_object_unref (G_OBJECT (col));
+      
+
+      rend = gtk_cell_renderer_text_new ();
+      
+      col = gtk_tree_view_column_new_with_attributes ("Column 10",
+                                                      rend,
+                                                      "text", 8,
+                                                      NULL);
+
+      setup_column (col);
+      
+      gtk_tree_view_append_column (GTK_TREE_VIEW (tree_view), col);
+      
+      g_object_unref (G_OBJECT (rend));
+      g_object_unref (G_OBJECT (col));
+
+#endif
+      
       gtk_tree_view_set_expander_column (tree_view, 1);
       
       /* FALL THRU */
@@ -544,12 +636,12 @@ columns_selected (GtkOptionMenu *om, gpointer data)
 
 enum
 {
-  TARGET_GTK_TREE_VIEW_ROW
+  TARGET_GTK_TREE_MODEL_ROW
 };
 
 static GtkTargetEntry row_targets[] = {
-  { "GTK_TREE_VIEW_ROW", GTK_TARGET_SAME_APP,
-    TARGET_GTK_TREE_VIEW_ROW }
+  { "GTK_TREE_MODEL_ROW", GTK_TARGET_SAME_APP,
+    TARGET_GTK_TREE_MODEL_ROW }
 };
 
 int

@@ -72,6 +72,10 @@ gtk_cell_renderer_get_type (void)
 static void
 gtk_cell_renderer_init (GtkCellRenderer *cell)
 {
+  /* FIXME remove on port to GtkObject */
+  gtk_object_ref (GTK_OBJECT (cell));
+  gtk_object_sink (GTK_OBJECT (cell));
+  
   cell->xpad = 0;
   cell->ypad = 0;
   cell->xalign = 0.5;
@@ -211,6 +215,27 @@ gtk_cell_renderer_get_size (GtkCellRenderer *cell,
   GTK_CELL_RENDERER_GET_CLASS (cell)->get_size (cell, widget, width, height);
 }
 
+/**
+ * gtk_cell_renderer_render:
+ * @cell: a #GtkCellRenderer
+ * @window: a #GdkDrawable to draw to
+ * @widget: the widget owning @window
+ * @background_area: entire cell area (including tree expanders and maybe padding on the sides)
+ * @cell_area: area normally rendered by a cell renderer
+ * @expose_area: area that actually needs updating
+ * @flags: flags that affect rendering
+ *
+ * Invokes the virtual render function of the #GtkCellRenderer. The
+ * three passed-in rectangles are areas of @window. Most renderers
+ * will draw to @cell_area; the xalign, yalign, xpad, and ypad fields
+ * of the #GtkCellRenderer should be honored with respect to
+ * @cell_area. @background_area includes the blank space around the
+ * cell, and also the area containing the tree expander; so the
+ * @background_area rectangles for all cells tile to cover the entire
+ * @window. Cell renderers can use the @background_area to draw custom expanders, for
+ * example. @expose_area is a clip rectangle.
+ * 
+ **/
 void
 gtk_cell_renderer_render (GtkCellRenderer     *cell,
 			  GdkWindow           *window,

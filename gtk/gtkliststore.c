@@ -22,6 +22,7 @@
 #include "gtkliststore.h"
 #include "gtktreedatalist.h"
 #include "gtksignal.h"
+#include "gtktreednd.h"
 #include <gobject/gvaluecollector.h>
 
 #define G_SLIST(x) ((GSList *) x)
@@ -39,6 +40,8 @@ static guint list_store_signals[LAST_SIGNAL] = { 0 };
 static void         gtk_list_store_init            (GtkListStore      *list_store);
 static void         gtk_list_store_class_init      (GtkListStoreClass *class);
 static void         gtk_list_store_tree_model_init (GtkTreeModelIface *iface);
+static void         gtk_list_store_drag_source_init(GtkTreeDragSourceIface *iface);
+static void         gtk_list_store_drag_dest_init  (GtkTreeDragDestIface   *iface);
 static guint        gtk_list_store_get_flags       (GtkTreeModel      *tree_model);
 static gint         gtk_list_store_get_n_columns   (GtkTreeModel      *tree_model);
 static GType        gtk_list_store_get_column_type (GtkTreeModel      *tree_model,
@@ -69,6 +72,15 @@ static gboolean     gtk_list_store_iter_parent     (GtkTreeModel      *tree_mode
 						    GtkTreeIter       *iter,
 						    GtkTreeIter       *child);
 
+static gboolean gtk_list_store_drag_data_delete   (GtkTreeDragSource *drag_source,
+                                                   GtkTreePath       *path);
+static gboolean gtk_list_store_drag_data_get      (GtkTreeDragSource *drag_source,
+                                                   GtkTreePath       *path,
+                                                   GtkSelectionData  *selection_data);
+static gboolean gtk_list_store_drag_data_received (GtkTreeDragDest   *drag_dest,
+                                                   GtkTreePath       *dest,
+                                                   GtkSelectionData  *selection_data);
+
 
 GtkType
 gtk_list_store_get_type (void)
@@ -97,10 +109,30 @@ gtk_list_store_get_type (void)
 	NULL
       };
 
+      static const GInterfaceInfo drag_source_info =
+      {
+	(GInterfaceInitFunc) gtk_list_store_drag_source_init,
+	NULL,
+	NULL
+      };
+
+      static const GInterfaceInfo drag_dest_info =
+      {
+	(GInterfaceInitFunc) gtk_list_store_drag_dest_init,
+	NULL,
+	NULL
+      };
+      
       list_store_type = g_type_register_static (GTK_TYPE_OBJECT, "GtkListStore", &list_store_info, 0);
       g_type_add_interface_static (list_store_type,
 				   GTK_TYPE_TREE_MODEL,
 				   &tree_model_info);
+      g_type_add_interface_static (list_store_type,
+				   GTK_TYPE_TREE_DRAG_SOURCE,
+				   &drag_source_info);
+      g_type_add_interface_static (list_store_type,
+				   GTK_TYPE_TREE_DRAG_DEST,
+				   &drag_dest_info);
     }
 
   return list_store_type;
@@ -165,6 +197,19 @@ gtk_list_store_tree_model_init (GtkTreeModelIface *iface)
   iface->iter_n_children = gtk_list_store_iter_n_children;
   iface->iter_nth_child = gtk_list_store_iter_nth_child;
   iface->iter_parent = gtk_list_store_iter_parent;
+}
+
+static void
+gtk_list_store_drag_source_init (GtkTreeDragSourceIface *iface)
+{
+  iface->drag_data_delete = gtk_list_store_drag_data_delete;
+  iface->drag_data_get = gtk_list_store_drag_data_get;
+}
+
+static void
+gtk_list_store_drag_dest_init   (GtkTreeDragDestIface   *iface)
+{
+  iface->drag_data_received = gtk_list_store_drag_data_received;
 }
 
 static void
@@ -646,21 +691,17 @@ remove_link_saving_prev (GSList  *list,
   return list;
 }
 
-void
-gtk_list_store_remove (GtkListStore *list_store,
-		       GtkTreeIter  *iter)
+static void
+gtk_list_store_remove_silently (GtkListStore *list_store,
+                                GtkTreeIter  *iter,
+                                GtkTreePath  *path)
 {
-  GtkTreePath *path;
-
-  g_return_if_fail (list_store != NULL);
-  g_return_if_fail (GTK_IS_LIST_STORE (list_store));
-  g_return_if_fail (iter->user_data != NULL);
-  
   if (G_SLIST (iter->user_data)->data)
-    _gtk_tree_data_list_free ((GtkTreeDataList *) G_SLIST (iter->user_data)->data,
-			      list_store->column_headers);
-
-  path = gtk_list_store_get_path (GTK_TREE_MODEL (list_store), iter);
+    {
+      _gtk_tree_data_list_free ((GtkTreeDataList *) G_SLIST (iter->user_data)->data,
+                                list_store->column_headers);
+      G_SLIST (iter->user_data)->data = NULL;
+    }
 
   {
     GSList *prev = NULL;
@@ -674,6 +715,23 @@ gtk_list_store_remove (GtkListStore *list_store,
   }
   
   list_store->stamp ++;
+}
+
+void
+gtk_list_store_remove (GtkListStore *list_store,
+		       GtkTreeIter  *iter)
+{
+  GtkTreePath *path;
+
+  g_return_if_fail (list_store != NULL);
+  g_return_if_fail (GTK_IS_LIST_STORE (list_store));
+  g_return_if_fail (iter->user_data != NULL);
+  
+
+  path = gtk_list_store_get_path (GTK_TREE_MODEL (list_store), iter);
+
+  gtk_list_store_remove_silently (list_store, iter, path);
+
   gtk_signal_emit_by_name (GTK_OBJECT (list_store),
 			   "deleted",
 			   path);
@@ -900,4 +958,165 @@ gtk_list_store_append (GtkListStore *list_store,
 			   "inserted",
 			   path, iter);
   gtk_tree_path_free (path);
+}
+
+static gboolean
+gtk_list_store_drag_data_delete (GtkTreeDragSource *drag_source,
+                                 GtkTreePath       *path)
+{
+  GtkTreeIter iter;
+  g_return_val_if_fail (GTK_IS_LIST_STORE (drag_source), FALSE);
+  
+  if (gtk_tree_model_get_iter (GTK_TREE_MODEL (drag_source),
+                               &iter,
+                               path))
+    {
+      gtk_list_store_remove (GTK_LIST_STORE (drag_source),
+                             &iter);
+      return TRUE;
+    }
+  else
+    {
+      return FALSE;
+    }
+}
+
+static gboolean
+gtk_list_store_drag_data_get (GtkTreeDragSource *drag_source,
+                              GtkTreePath       *path,
+                              GtkSelectionData  *selection_data)
+{
+  g_return_val_if_fail (GTK_IS_LIST_STORE (drag_source), FALSE);
+
+  /* Note that we don't need to handle the GTK_TREE_MODEL_ROW
+   * target, because the default handler does it for us, but
+   * we do anyway for the convenience of someone maybe overriding the
+   * default handler.
+   */
+
+  if (gtk_selection_data_set_tree_row (selection_data,
+                                       GTK_TREE_MODEL (drag_source),
+                                       path))
+    {
+      return TRUE;
+    }
+  else
+    {
+      /* FIXME handle text targets at least. */
+    }
+
+  return FALSE;
+}
+
+static gboolean
+gtk_list_store_drag_data_received (GtkTreeDragDest   *drag_dest,
+                                   GtkTreePath       *dest,
+                                   GtkSelectionData  *selection_data)
+{
+  GtkTreeModel *tree_model;
+  GtkListStore *list_store;
+  GtkTreeModel *src_model = NULL;
+  GtkTreePath *src_path = NULL;
+  gboolean retval = FALSE;
+  
+  g_return_val_if_fail (GTK_IS_LIST_STORE (drag_dest), FALSE);
+
+  tree_model = GTK_TREE_MODEL (drag_dest);
+  list_store = GTK_LIST_STORE (drag_dest);
+  
+  if (gtk_selection_data_get_tree_row (selection_data,
+                                       &src_model,
+                                       &src_path) &&
+      src_model == tree_model)
+    {
+      /* Copy the given row to a new position */
+      GtkTreeIter src_iter;
+      GtkTreeIter dest_iter;
+      GtkTreePath *prev;
+      
+      if (!gtk_tree_model_get_iter (src_model,
+                                    &src_iter,
+                                    src_path))
+        goto out;
+
+      /* Get the path to insert _after_ (dest is the path to insert _before_) */
+      prev = gtk_tree_path_copy (dest);
+
+      if (!gtk_tree_path_prev (prev))
+        {
+          /* dest was the first spot in the list; which means we are supposed
+           * to prepend.
+           */
+          gtk_list_store_prepend (GTK_LIST_STORE (tree_model),
+                                  &dest_iter);
+          
+          retval = TRUE;
+        }
+      else
+        {
+          if (gtk_tree_model_get_iter (GTK_TREE_MODEL (tree_model),
+                                       &dest_iter,
+                                       prev))
+            {
+              GtkTreeIter tmp_iter = dest_iter;
+              gtk_list_store_insert_after (GTK_LIST_STORE (tree_model),
+                                           &dest_iter,
+                                           &tmp_iter);
+              retval = TRUE;
+            }
+        }
+
+      gtk_tree_path_free (prev);
+      
+      /* If we succeeded in creating dest_iter, copy data from src
+       */
+      if (retval)
+        {
+          GtkTreeDataList *dl = G_SLIST (src_iter.user_data)->data;
+          GtkTreeDataList *copy_head = NULL;
+          GtkTreeDataList *copy_prev = NULL;
+          GtkTreeDataList *copy_iter = NULL;
+          gint col;
+
+          col = 0;
+          while (dl)
+            {
+              copy_iter = _gtk_tree_data_list_node_copy (dl,
+                                                         list_store->column_headers[col]);
+
+              g_print ("copied col %d type %s\n", col,
+                       g_type_name (list_store->column_headers[col]));
+              
+              if (copy_head == NULL)
+                copy_head = copy_iter;
+
+              if (copy_prev)
+                copy_prev->next = copy_iter;
+
+              copy_prev = copy_iter;
+
+              dl = dl->next;
+              ++col;
+            }
+          
+          G_SLIST (dest_iter.user_data)->data = copy_head;
+          
+          gtk_signal_emit_by_name (GTK_OBJECT (tree_model),
+                                   "changed",
+                                   NULL, &dest_iter);
+        }
+    }
+  else
+    {
+      /* FIXME maybe add some data targets eventually, or handle text
+       * targets in the simple case.
+       */
+    }
+
+ out:
+  
+  if (src_path)
+    gtk_tree_path_free (src_path);
+  
+  return retval;  
 }

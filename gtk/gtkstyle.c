@@ -2476,8 +2476,34 @@ gtk_default_draw_check (GtkStyle      *style,
 			gint           width,
 			gint           height)
 {
-  gtk_paint_box (style, window, state_type, shadow_type, area, widget, detail,
-                 x, y, width, height);
+  if (detail && strcmp (detail, "cellcheck") == 0)
+    {
+      gdk_draw_rectangle (window,
+			  widget->style->fg_gc[state_type],
+			  FALSE,
+                          x, y,
+			  width, height);
+
+      if (shadow_type == GTK_SHADOW_IN)
+	{
+	  gdk_draw_line (window,
+			 widget->style->fg_gc[state_type],
+                         x, y,
+                         x + width,
+                         y + height);
+	  gdk_draw_line (window,
+			 widget->style->fg_gc[state_type],
+                         x + width,
+                         y,
+                         x,
+                         y + height);
+	}
+    }
+  else
+    {
+      gtk_paint_box (style, window, state_type, shadow_type, area, widget, detail,
+                     x, y, width, height);
+    }
 }
 
 static void 
@@ -2493,8 +2519,33 @@ gtk_default_draw_option (GtkStyle      *style,
 			 gint           width,
 			 gint           height)
 {
-  gtk_paint_diamond (style, window, state_type, shadow_type, area, widget, 
-                     detail, x, y, width, height);
+  if (detail && strcmp (detail, "cellradio") == 0)
+    {
+      gdk_draw_arc (window,
+		    widget->style->fg_gc[state_type],
+		    FALSE,
+                    x, y,
+		    width,
+		    height,
+		    0, 360*64);
+
+      if (shadow_type == GTK_SHADOW_IN)
+	{
+	  gdk_draw_arc (window,
+			widget->style->fg_gc[state_type],
+			TRUE,
+                        x + 2,
+                        y + 2,
+			width - 4,
+			height - 4,
+			0, 360*64);
+	}
+    }
+  else
+    {
+      gtk_paint_diamond (style, window, state_type, shadow_type, area, widget, 
+                         detail, x, y, width, height);
+    }
 }
 
 static void
@@ -3420,6 +3471,155 @@ gtk_default_draw_expander (GtkStyle        *style,
 #undef PM_SIZE
 }
 
+typedef struct _ByteRange ByteRange;
+
+struct _ByteRange
+{
+  guint start;
+  guint end;
+};
+
+static ByteRange*
+range_new (guint start,
+           guint end)
+{
+  ByteRange *br = g_new (ByteRange, 1);
+
+  br->start = start;
+  br->end = end;
+  
+  return br;
+}
+
+static PangoLayout*
+get_insensitive_layout (PangoLayout *layout)
+{
+  GSList *embossed_ranges = NULL;
+  GSList *stippled_ranges = NULL;
+  PangoLayoutIter *iter;
+  GSList *tmp_list = NULL;
+  PangoLayout *new_layout;
+  PangoAttrList *attrs;
+  GdkBitmap *stipple = NULL;
+  
+  iter = pango_layout_get_iter (layout);
+  
+  do
+    {
+      PangoLayoutRun *run;
+      PangoAttribute *attr;
+      gboolean need_stipple = FALSE;
+      ByteRange *br;
+      
+      run = pango_layout_iter_get_run (iter);
+
+      if (run)
+        {
+          tmp_list = run->item->extra_attrs;
+
+          while (tmp_list != NULL)
+            {
+              attr = tmp_list->data;
+              switch (attr->klass->type)
+                {
+                case PANGO_ATTR_FOREGROUND:
+                case PANGO_ATTR_BACKGROUND:
+                  need_stipple = TRUE;
+                  break;
+              
+                default:
+                  break;
+                }
+
+              if (need_stipple)
+                break;
+          
+              tmp_list = g_slist_next (tmp_list);
+            }
+
+          br = range_new (run->item->offset, run->item->offset + run->item->length);
+      
+          if (need_stipple)
+            stippled_ranges = g_slist_prepend (stippled_ranges, br);
+          else
+            embossed_ranges = g_slist_prepend (embossed_ranges, br);
+        }
+    }
+  while (pango_layout_iter_next_run (iter));
+
+  pango_layout_iter_free (iter);
+
+  new_layout = pango_layout_copy (layout);
+
+  attrs = pango_layout_get_attributes (new_layout);
+
+  if (attrs == NULL)
+    {
+      /* Create attr list if there wasn't one */
+      attrs = pango_attr_list_new ();
+      pango_layout_set_attributes (new_layout, attrs);
+      pango_attr_list_unref (attrs);
+    }
+  
+  tmp_list = embossed_ranges;
+  while (tmp_list != NULL)
+    {
+      PangoAttribute *attr;
+      ByteRange *br = tmp_list->data;
+
+      attr = gdk_pango_attr_embossed_new (TRUE);
+
+      attr->start_index = br->start;
+      attr->end_index = br->end;
+      
+      pango_attr_list_change (attrs, attr);
+
+      g_free (br);
+      
+      tmp_list = g_slist_next (tmp_list);
+    }
+
+  g_slist_free (embossed_ranges);
+  
+  tmp_list = stippled_ranges;
+  while (tmp_list != NULL)
+    {
+      PangoAttribute *attr;
+      ByteRange *br = tmp_list->data;
+
+      if (stipple == NULL)
+        {
+#define gray50_width 2
+#define gray50_height 2
+          static char gray50_bits[] = {
+            0x02, 0x01
+          };
+
+          stipple = gdk_bitmap_create_from_data (NULL,
+                                                 gray50_bits, gray50_width,
+                                                 gray50_height);
+        }
+      
+      attr = gdk_pango_attr_stipple_new (stipple);
+
+      attr->start_index = br->start;
+      attr->end_index = br->end;
+      
+      pango_attr_list_change (attrs, attr);
+
+      g_free (br);
+      
+      tmp_list = g_slist_next (tmp_list);
+    }
+
+  g_slist_free (stippled_ranges);
+  
+  if (stipple)
+    g_object_unref (G_OBJECT (stipple));
+
+  return new_layout;
+}
+
 static void
 gtk_default_draw_layout (GtkStyle        *style,
                          GdkWindow       *window,
@@ -3435,24 +3635,25 @@ gtk_default_draw_layout (GtkStyle        *style,
   g_return_if_fail (window != NULL);
   
   if (area)
-    {
-      gdk_gc_set_clip_rectangle (style->white_gc, area);
-      gdk_gc_set_clip_rectangle (style->fg_gc[state_type], area);
-    }
+    gdk_gc_set_clip_rectangle (style->fg_gc[state_type], area);
 
-  /* FIXME this is frickin' ugly with any kind of attributes set on the
-   * text being rendered
-   */
   if (state_type == GTK_STATE_INSENSITIVE)
-    gdk_draw_layout (window, style->white_gc, x + 1, y + 1, layout);
+    {
+      PangoLayout *ins;
 
-  gdk_draw_layout (window, style->fg_gc[state_type], x, y, layout);
+      ins = get_insensitive_layout (layout);
+      
+      gdk_draw_layout (window, style->fg_gc[state_type], x, y, ins);
+
+      g_object_unref (G_OBJECT (ins));
+    }
+  else
+    {
+      gdk_draw_layout (window, style->fg_gc[state_type], x, y, layout);
+    }
 
   if (area)
-    {
-      gdk_gc_set_clip_rectangle (style->white_gc, NULL);
-      gdk_gc_set_clip_rectangle (style->fg_gc[state_type], NULL);
-    }
+    gdk_gc_set_clip_rectangle (style->fg_gc[state_type], NULL);
 }
 
 static void

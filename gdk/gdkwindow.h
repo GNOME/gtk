@@ -413,7 +413,8 @@ void       gdk_window_process_all_updates (void);
 void       gdk_window_process_updates     (GdkWindow    *window,
 					   gboolean      update_children);
 
-
+/* Enable/disable flicker, so you can tell if your code is inefficient. */
+void       gdk_window_set_debug_updates   (gboolean      setting);
 
 #ifdef __cplusplus
 }

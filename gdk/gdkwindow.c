@@ -1637,6 +1637,7 @@ gdk_window_get_image (GdkDrawable *drawable,
 
 static GSList *update_windows = NULL;
 static guint update_idle = 0;
+static gboolean debug_updates = FALSE;
 
 static void
 gdk_window_process_updates_internal (GdkWindow *window)
@@ -1659,6 +1660,13 @@ gdk_window_process_updates_internal (GdkWindow *window)
 	  GdkRectangle window_rect;
           gint width, height;
 
+          if (debug_updates)
+            {
+              /* Make sure we see the red invalid area before redrawing. */
+              gdk_flush ();
+              g_usleep (70000);
+            }
+          
           gdk_drawable_get_size (GDK_DRAWABLE (private), &width, &height);
           
 	  window_rect.x = 0;
@@ -1725,9 +1733,9 @@ gdk_window_process_updates (GdkWindow *window,
 
   g_return_if_fail (window != NULL);
   g_return_if_fail (GDK_IS_WINDOW (window));
-
+  
   if (private->update_area)
-    {
+    {      
       gdk_window_process_updates_internal (window);
       update_windows = g_slist_remove (update_windows, window);
     }
@@ -1798,6 +1806,28 @@ gdk_window_invalidate_region (GdkWindow *window,
 
   if (!gdk_region_empty (visible_region))
     {
+      if (debug_updates)
+        {
+          /* Draw ugly color all over the newly-invalid region */
+          GdkRectangle ugly_rect;
+          GdkGC *ugly_gc;
+          GdkColor ugly_color = { 0, 60000, 10000, 10000 };
+          
+          ugly_gc = gdk_gc_new (window);
+
+          gdk_gc_set_rgb_fg_color (ugly_gc, &ugly_color);
+          
+	  gdk_region_get_clipbox (visible_region, &ugly_rect);
+
+          gdk_draw_rectangle (window,
+                              ugly_gc,
+                              TRUE,
+                              ugly_rect.x, ugly_rect.y,
+                              ugly_rect.width, ugly_rect.height);
+          
+          g_object_unref (G_OBJECT (ugly_gc));
+        }
+      
       if (private->update_area)
 	{
 	  gdk_region_union (private->update_area, visible_region);
@@ -1916,3 +1946,8 @@ gdk_window_thaw_updates (GdkWindow *window)
 				   gdk_window_update_idle, NULL, NULL);
 }
 
+void
+gdk_window_set_debug_updates (gboolean setting)
+{
+  debug_updates = setting;
+}

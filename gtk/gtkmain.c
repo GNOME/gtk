@@ -148,7 +148,8 @@ static const GDebugKey gtk_debug_keys[] = {
   {"dnd", GTK_DEBUG_DND},
   {"plugsocket", GTK_DEBUG_PLUGSOCKET},
   {"text", GTK_DEBUG_TEXT},
-  {"tree", GTK_DEBUG_TREE}
+  {"tree", GTK_DEBUG_TREE},
+  {"updates", GTK_DEBUG_UPDATES}
 };
 
 static const guint gtk_ndebug_keys = sizeof (gtk_debug_keys) / sizeof (GDebugKey);
@@ -346,6 +347,9 @@ gtk_init_check (int	 *argc,
 	    }
 	}
     }
+
+  if (gtk_debug_flags & GTK_DEBUG_UPDATES)
+    gdk_window_set_debug_updates (TRUE);
   
   /* load gtk modules */
   gtk_modules = g_slist_reverse (gtk_modules);

@@ -4373,7 +4373,7 @@ gtk_text_view_drag_motion (GtkWidget        *widget,
     }                                 
   else if (gtk_text_buffer_get_selection_bounds (get_buffer (text_view),
                                             &start, &end) &&
-      gtk_text_iter_in_range (&newplace, &start, &end))
+           gtk_text_iter_in_range (&newplace, &start, &end))
     {
       /* We're inside the selection. */
     }

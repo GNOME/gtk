@@ -226,7 +226,9 @@ gtk_cell_renderer_toggle_render (GtkCellRenderer *cell,
   GtkCellRendererToggle *celltoggle = (GtkCellRendererToggle *) cell;
   gint width, height;
   gint real_xoffset, real_yoffset;
-
+  GtkShadowType shadow;
+  GtkStateType state;
+  
   width = MIN (TOGGLE_WIDTH, cell_area->width - cell->xpad * 2);
   height = MIN (TOGGLE_WIDTH, cell_area->height - cell->ypad * 2);
 
@@ -238,57 +240,33 @@ gtk_cell_renderer_toggle_render (GtkCellRenderer *cell,
   real_yoffset = cell->yalign * (cell_area->height - height - (2 * cell->ypad));
   real_yoffset = MAX (real_yoffset, 0) + cell->ypad;
 
-  gdk_gc_set_clip_rectangle (widget->style->black_gc, cell_area);
+  shadow = celltoggle->active ? GTK_SHADOW_IN : GTK_SHADOW_OUT;
 
-  if (!celltoggle->radio)
+  if ((flags & GTK_CELL_RENDERER_SELECTED) == GTK_CELL_RENDERER_SELECTED)
+    state = GTK_STATE_SELECTED;
+  else
+    state = GTK_STATE_NORMAL;
+  
+  if (celltoggle->radio)
     {
-      gdk_draw_rectangle (window,
-			  widget->style->black_gc,
-			  FALSE,
-			  cell_area->x + real_xoffset,
-			  cell_area->y + real_yoffset,
-			  width, height);
-      if (celltoggle->active)
-	{
-	  gdk_draw_line (window,
-			 widget->style->black_gc,
-			 cell_area->x + real_xoffset,
-			 cell_area->y + real_yoffset,
-			 cell_area->x + real_xoffset + width,
-			 cell_area->y + real_yoffset + height);
-	  gdk_draw_line (window,
-			 widget->style->black_gc,
-			 cell_area->x + real_xoffset + width,
-			 cell_area->y + real_yoffset,
-			 cell_area->x + real_xoffset,
-			 cell_area->y + real_yoffset + height);
-	}
+      gtk_paint_option (widget->style,
+                        window,
+                        state, shadow,
+                        cell_area, widget, "cellradio",
+                        cell_area->x + real_xoffset,
+                        cell_area->y + real_yoffset,
+                        width, height);
     }
   else
     {
-      gdk_draw_arc (window,
-		    widget->style->black_gc,
-		    FALSE,
-		    cell_area->x + real_xoffset,
-		    cell_area->y + real_yoffset,
-		    width,
-		    height,
-		    0, 360*64);
-      if (celltoggle->active)
-	{
-	  gdk_draw_arc (window,
-			widget->style->black_gc,
-			TRUE,
-			cell_area->x + real_xoffset + 2,
-			cell_area->y + real_yoffset + 2,
-			width - 4,
-			height - 4,
-			0, 360*64);
-	}
+      gtk_paint_check (widget->style,
+                       window,
+                       state, shadow,
+                       cell_area, widget, "cellcheck",
+                       cell_area->x + real_xoffset,
+                       cell_area->y + real_yoffset,
+                       width, height);
     }
-
-
-  gdk_gc_set_clip_rectangle (widget->style->black_gc, NULL);
 }
 
 static gint

@@ -1,3 +1,79 @@
+2001-01-26  Havoc Pennington  <hp@redhat.com>
+
+	* gtk/gtktextlayout.c (convert_color): adapt to handle PangoColor
+
+	* gtk/gtktreeview.c (gtk_tree_view_widget_to_tree_coords): fix to
+	not offset by TREE_VIEW_HEADER_HEIGHT
+	(gtk_tree_view_tree_to_widget_coords): fix to not offset by
+	TREE_VIEW_HEADER_HEIGHT
+
+	* configure.in (included_loaders): for me, --with-included-loaders
+	generates the error "the specified loader yes does not exist",
+	i.e. the arg defaults to "yes", so change test for value ""
+	to test for value "yes", and include all loaders in that case.
+
+	* gtk/gtkrbtree.c (_gtk_rbtree_get_depth): new function
+
+	* gtk/gtktreeview.c (gtk_tree_view_get_cell_rect): fix to properly
+	handle TREE_VIEW_VERTICAL_SEPARATOR
+	(gtk_tree_view_bin_expose): fix to consider the row offset as
+	pointing halfway into vertical separator.	
+	(gtk_tree_view_draw_node_focus_rect): ditto
+
+	* gtk/gtkdebug.h, gtk/gtkmain.c (gtk_init_check): Add
+	--gtk-debug=updates, which causes gdk_window_set_debug_updates
+	(TRUE) to be called.
+
+	* gdk/gdkwindow.c (gdk_window_set_debug_updates): Allow enabling a
+	debug mode where the invalid region is colored in on invalidate,
+	so you can see the flicker and know whether your redraw code is 
+	doing a good job.
+
+	* gtk/gtktreeview.c (gtk_tree_view_queue_draw_node): Work in 
+	tree window coordinates (clip rect is in tree window coords)
+
+	* gtk/Makefile.am: add gtktreednd.[hc]
+
+	* gtk/gtkliststore.c: implement gtktreednd interfaces.
+
+	* gtk/gtktreednd.c, gtk/gtktreednd.h: New interface to support
+	drag-and-drop data operations on a model (so we can set up tree
+	drag-and-drop automatically)
+
+	* gtk/testgtk.c: Add a window to change sensitivity in the
+	GtkLabel test; add a way to change the entry frame in GtkEntry
+	test
+
+	* gtk/gtkentry.c (gtk_entry_set_has_frame): 
+	(gtk_entry_get_has_frame): new functions to remove the frame
+	around an entry
+	(gtk_entry_size_request): shrink requisition if no frame
+	(gtk_entry_draw_focus): don't draw frame if no frame
+
+	* gtk/gtkstyle.c (gtk_default_draw_check): draw custom look for
+	checks inside a cell renderer
+	(gtk_default_draw_option): ditto for options
+
+	* gtk/gtktreeviewcolumn.c (update_button_contents): add/remove
+	children from the alignment, not the button
+	(gtk_tree_view_column_init): ref/sink the column, to emulate
+	GObject refcounting.
+
+	* gtk/gtkcellrenderer.c (gtk_cell_renderer_init): ref/sink
+	
+	* gtk/gtkcellrenderertoggle.c (gtk_cell_renderer_toggle_render):
+	Use theme functions to draw the toggles	
+
+	* gdk/gdkpango.c (gdk_pango_get_gc): use GdkRGB to alloc colors
+
+	* gdk/gdkpango.h, gdk/gdkpango.c: Add GdkPangoAttrStipple and
+	GdkPangoAttrEmbossed to use in rendering insensitive text
+
+	* gdk/gdkpango.c (gdk_draw_layout_line): render new properties
+
+	* gtk/gtkstyle.c (gtk_default_draw_layout): handle sensitivity
+	using new GDK features
+	
 2001-01-24    <alexl@redhat.com>
 
 	* gtk/gtkimage.c:

@@ -38,6 +38,26 @@ PangoContext *gdk_pango_context_get          (void);
 void          gdk_pango_context_set_colormap (PangoContext *context,
 					      GdkColormap  *colormap);
 
+/* Attributes use to render insensitive text in GTK+. */
+
+typedef struct _GdkPangoAttrStipple GdkPangoAttrStipple;
+typedef struct _GdkPangoAttrEmbossed GdkPangoAttrEmbossed;
+
+struct _GdkPangoAttrStipple
+{
+  PangoAttribute attr;
+  GdkBitmap *stipple;
+};
+
+struct _GdkPangoAttrEmbossed
+{
+  PangoAttribute attr;
+  gboolean embossed;
+};
+
+PangoAttribute *gdk_pango_attr_stipple_new  (GdkBitmap *bitmap);
+PangoAttribute *gdk_pango_attr_embossed_new (gboolean embossed);
+
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */
