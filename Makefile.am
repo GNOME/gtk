@@ -7,6 +7,7 @@ bin_SCRIPTS = gtk-config
 
 EXTRA_DIST =	\
 	gtk+.prj	\
+        gtk.m4          \
 	makecopyright	\
 	TODO
 
