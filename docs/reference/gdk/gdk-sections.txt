@@ -1057,6 +1057,7 @@ GdkEventClient
 GdkEventNoExpose
 GdkEventWindowState
 GdkEventSetting
+GdkEventOwnerChange
 
 <SUBSECTION>
 GdkScrollDirection
@@ -1066,6 +1067,7 @@ GdkNotifyType
 GdkPropertyState
 GdkWindowState
 GdkSettingAction
+GdkOwnerChange
 
 <SUBSECTION Standard>
 GDK_TYPE_CROSSING_MODE
@@ -1076,9 +1078,11 @@ GDK_TYPE_SCROLL_DIRECTION
 GDK_TYPE_SETTING_ACTION
 GDK_TYPE_VISIBILITY_STATE
 GDK_TYPE_WINDOW_STATE
+GDK_TYPE_OWNER_CHANGE
 
 <SUBSECTION Private>
 gdk_event_get_type
+gdk_owner_change_get_type
 </SECTION>
 
 <SECTION>

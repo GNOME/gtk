@@ -1,7 +1,8 @@
 2004-05-18  Matthias Clasen  <mclasen@redhat.com>
 
 	* gdk/gdk-sections.txt: Add gdk_display_supports_selection_notification
-	and gdk_display_request_selection_notification.
+	and gdk_display_request_selection_notification, GdkEventOwnerChange,
+	and GdkOwnerChange.
 
 2004-05-14  Matthias Clasen  <mclasen@redhat.com>
 
