@@ -6,7 +6,7 @@ DIST_SUBDIRS=linux-fb nanox win32 x11
 EXTRA_DIST =	\
 	gdkconfig.h.win32 \
 	gdk.def \
-	makefile.cygwin \
+	makefile.mingw \
 	makefile.msc
 
 common_includes = @STRIP_BEGIN@ 	\
@@ -178,6 +178,9 @@ gdkconfig.h: stamp-gc-h
 stamp-gc-h: ../config.status
 	cd .. && CONFIG_FILES= CONFIG_HEADERS= CONFIG_OTHER=gdk/gdkconfig.h ./config.status
 	echo timestamp > stamp-gc-h
+
+makefile.mingw: $(top_builddir)/config.status $(top_srcdir)/gdk/makefile.mingw.in
+	cd $(top_builddir) && CONFIG_FILES=gdk/$@ CONFIG_HEADERS= $(SHELL) ./config.status
 
 .PHONY: files
 

@@ -30,23 +30,69 @@
 #include "gdkinternals.h"
 #include "gdkprivate-win32.h"
 
-static void gdk_win32_image_destroy (GdkImage    *image);
-static void gdk_image_put  (GdkImage    *image,
-			    GdkDrawable *drawable,
-			    GdkGC       *gc,
-			    gint         xsrc,
-			    gint         ysrc,
-			    gint         xdest,
-			    gint         ydest,
-			    gint         width,
-			    gint         height);
-
-static GdkImageClass image_class = {
-  gdk_win32_image_destroy,
-  gdk_image_put
-};
-
 static GList *image_list = NULL;
+static gpointer parent_class = NULL;
+
+static void gdk_win32_image_destroy (GdkImage      *image);
+static void gdk_image_init          (GdkImage      *image);
+static void gdk_image_class_init    (GdkImageClass *klass);
+static void gdk_image_finalize      (GObject       *object);
+
+#define PRIVATE_DATA(image) ((GdkImagePrivateWin32 *) GDK_IMAGE (image)->windowing_data)
+
+GType
+gdk_image_get_type (void)
+{
+  static GType object_type = 0;
+
+  if (!object_type)
+    {
+      static const GTypeInfo object_info =
+      {
+        sizeof (GdkImageClass),
+        (GBaseInitFunc) NULL,
+        (GBaseFinalizeFunc) NULL,
+        (GClassInitFunc) gdk_image_class_init,
+        NULL,           /* class_finalize */
+        NULL,           /* class_data */
+        sizeof (GdkImage),
+        0,              /* n_preallocs */
+        (GInstanceInitFunc) gdk_image_init,
+      };
+      
+      object_type = g_type_register_static (G_TYPE_OBJECT,
+                                            "GdkImage",
+                                            &object_info);
+    }
+  
+  return object_type;
+}
+
+static void
+gdk_image_init (GdkImage *image)
+{
+  image->windowing_data = g_new0 (GdkImagePrivateWin32, 1);
+}
+
+static void
+gdk_image_class_init (GdkImageClass *klass)
+{
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
+
+  parent_class = g_type_class_peek_parent (klass);
+
+  object_class->finalize = gdk_image_finalize;
+}
+
+static void
+gdk_image_finalize (GObject *object)
+{
+  GdkImage *image = GDK_IMAGE (object);
+
+  gdk_win32_image_destroy (image);
+  
+  G_OBJECT_CLASS (parent_class)->finalize (object);
+}
 
 void
 gdk_image_exit (void)
@@ -136,8 +182,9 @@ gdk_image_new_bitmap (GdkVisual *visual, gpointer data, gint w, gint h)
 } /* gdk_image_new_bitmap() */
 
 void
-gdk_image_init (void)
+_gdk_windowing_image_init (void)
 {
+  /* Nothing needed AFAIK */
 }
 
 static GdkImage*
@@ -321,7 +368,7 @@ gdk_image_get (GdkWindow *window,
   BITMAP bm;
   int i;
 
-  g_return_val_if_fail (window != NULL, NULL);
+  g_return_val_if_fail (GDK_IS_WINDOW (window), NULL);
 
   if (GDK_DRAWABLE_DESTROYED (window))
     return NULL;
@@ -329,11 +376,8 @@ gdk_image_get (GdkWindow *window,
   GDK_NOTE (MISC, g_print ("gdk_image_get: %#x %dx%d@+%d+%d\n",
 			   GDK_DRAWABLE_XID (window), width, height, x, y));
 
-  private = g_new (GdkImagePrivateWin32, 1);
-  image = (GdkImage*) private;
-
-  private->base.ref_count = 1;
-  private->base.klass = &image_class;
+  image = g_object_new (gdk_image_get_type (), NULL);
+  private = PRIVATE_DATA (image);
 
   image->type = GDK_IMAGE_SHARED;
   image->visual = gdk_drawable_get_visual (window);
@@ -624,8 +668,14 @@ gdk_win32_image_destroy (GdkImage *image)
 
   g_return_if_fail (image != NULL);
 
-  private = (GdkImagePrivateWin32 *) image;
+  private = PRIVATE_DATA (image);
 
+  if (private == NULL) /* This means that gdk_image_exit() destroyed the
+                        * image already, and now we're called a second
+                        * time from _finalize()
+                        */
+    return;
+  
   GDK_NOTE (MISC, g_print ("gdk_win32_image_destroy: %#x%s\n",
 			   private->ximage,
 			   (image->type == GDK_IMAGE_SHARED_PIXMAP ?
@@ -648,7 +698,7 @@ gdk_win32_image_destroy (GdkImage *image)
       g_assert_not_reached ();
     }
 
-  g_free (image);
+  g_free (private);
 }
 
 static void

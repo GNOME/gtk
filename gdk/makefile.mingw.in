@@ -1,0 +1,73 @@
+## Makefile for building the GDK DLL with gcc on Win32
+## Use: make -f makefile.mingw
+
+## There is no install target, you have to decide where and 
+## how to install for yourself.
+
+TOP = ../..
+
+include ../build/win32/make.mingw
+
+# Possibly override GTK+ version from build/win32/module.defs
+GTK_VER = @GTK_MAJOR_VERSION@.@GTK_MINOR_VERSION@
+
+OPTIMIZE = -g
+
+INCLUDES = -I . -I .. -I ../gdk-pixbuf
+DEPCFLAGS = $(GLIB_CFLAGS) $(PANGO_CFLAGS)
+DEFINES = -DG_ENABLE_DEBUG -DHAVE_CONFIG_H -DGDK_VERSION=\"$(GTK_VER)\"
+
+all:						\
+	../config.h				\
+	gdkconfig.h				\
+	win32/libgdk-win32.a			\
+	win32/gdk-win32res.o			\
+	gdk-win32-$(GTK_VER).dll
+
+gdk_OBJECTS =					\
+	gdk.o					\
+	gdkcolor.o				\
+	gdkcursor.o				\
+	gdkdraw.o				\
+	gdkevents.o				\
+	gdkfont.o				\
+	gdkgc.o					\
+	gdkglobals.o				\
+	gdkimage.o				\
+	gdkkeyuni.o				\
+	gdkpango.o				\
+	gdkpixbuf-drawable.o			\
+	gdkpixbuf-render.o			\
+	gdkpixmap.o				\
+	gdkpolyreg-generic.o			\
+	gdkrgb.o				\
+	gdkrectangle.o				\
+	gdkregion-generic.o			\
+	gdkwindow.o
+
+../config.h : ../config.h.win32
+	cp $< $@
+
+gdkconfig.h : gdkconfig.h.win32
+	cp $< $@
+
+win32/libgdk-win32.a : FRC
+	cd win32 && $(MAKE) -f makefile.mingw libgdk-win32.a
+
+win32/gdk-win32res.o : FRC
+	cd win32 && $(MAKE) -f makefile.mingw gdk-win32res.o
+
+gdk-win32-$(GTK_VER).dll : $(gdk_OBJECTS) gdk.def win32/libgdk-win32.a win32/gdk-win32res.o win32/libwntab32x.a
+	$(GLIB)/build-dll gdk-win32 $(GTK_VER) gdk.def $(gdk_OBJECTS) win32/gdk-win32.a win32/wntab32x.a $(GLIB_LIBS) -lgdi32 -luser32 -limm32 -lshell32 -lole32 -luuid $(LDFLAGS) win32/gdk-win32res.o 
+
+win32/libwntab32x.a : FRC
+	cd win32 && $(MAKE) -f makefile.mingw libwntab32x.a
+
+# Hack to get an updated makefile.mingw automatically after updating
+# makefile.mingw.in. Only for developer use.
+makefile.mingw: makefile.mingw.in
+	sed -e 's,@GTK_MAJOR[_]VERSION@,@GTK_MAJOR_VERSION@,' \
+	    -e 's,@GTK_MINOR[_]VERSION@,@GTK_MINOR_VERSION@,' <$< >$@
+
+.PHONY: FRC
+

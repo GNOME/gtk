@@ -3,6 +3,30 @@
 	* configure.in: Check for mkstemp and sigsetjmp. Output
 	gdk-pixbuf/makefile.mingw and gdk-pixbuf/pixops/makefile.mingw.
 
+	More work on GDK for Win32. Still in an intermediate state.
+
+	* gdk/makefile.cygwin
+	* gdk/win32/makefile.cygwin: Removed.
+	
+	* gdk/makefile.mingw.in
+	* gdk/win32/makefile.mingw.in: New files.
+
+	* gdk/Makefile.am
+	* gdk/win32/Makefile.am: Generate and distribute them.
+
+	* gdk/win32/gdkwindow-win32.h
+	* gdk/win32/gdkdrawable-win32.h
+	* gdk/win32/gdkpixmap-win32.h: New files.
+
+	* gdk/win32/gdkcolor-win32.c
+	* gdk/win32/gdkcursor-win32.c
+	* gdk/win32/gdkgc-win32.c
+	* gdk/win32/gdkimage-win32.c
+	* gdk/win32/gdkprivate-win32.h
+	* gdk/win32/gdkwin32.h: Update data structures. Cosmetics:
+	don't use fields and variables called xcursor, xid, etc (leftovers
+	from the X11 backend).
+
 Sat Jul 22 17:41:26 2000  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkentry.[ch]: Fix some problems with vertical

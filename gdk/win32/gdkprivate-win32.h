@@ -99,9 +99,9 @@ extern GdkDrawableClass  _gdk_win32_drawable_class;
 extern HWND		 gdk_root_window;
 extern gboolean		 gdk_event_func_from_window_proc;
 
-extern HDC		 gdk_DC;
-extern HINSTANCE	 gdk_DLLInstance;
-extern HINSTANCE	 gdk_ProgInstance;
+extern HDC		 gdk_display_hdc;
+extern HINSTANCE	 gdk_dll_hinstance;
+extern HINSTANCE	 gdk_app_hinstance;
 
 extern UINT		 gdk_selection_notify_msg;
 extern UINT		 gdk_selection_request_msg;

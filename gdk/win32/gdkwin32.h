@@ -30,9 +30,15 @@
 #include <gdk/gdkprivate.h>
 #include <gdk/gdkcursor.h>
 
+#ifndef STRICT
 #define STRICT			/* We want strict type checks */
+#endif
 #include <windows.h>
 #include <commctrl.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif /* __cplusplus */
 
 /* Make up for some minor w32api header lossage */
 
@@ -182,86 +188,23 @@ typedef struct {
   unsigned long base_pixel;
 } XStandardColormap;
 
-typedef struct _GdkDrawableWin32Data    GdkDrawableWin32Data;
-typedef struct _GdkWindowWin32Data      GdkWindowWin32Data;
-typedef struct _GdkWin32PositionInfo    GdkWin32PositionInfo;
+typedef struct _GdkGCWin32Data          GdkGCWin32Data;
 typedef struct _GdkColormapPrivateWin32 GdkColormapPrivateWin32;
 typedef struct _GdkCursorPrivate        GdkCursorPrivate;
 typedef struct _GdkWin32SingleFont      GdkWin32SingleFont;
 typedef struct _GdkFontPrivateWin32     GdkFontPrivateWin32;
 typedef struct _GdkImagePrivateWin32    GdkImagePrivateWin32;
 typedef struct _GdkVisualPrivate        GdkVisualPrivate;
-typedef struct _GdkRegionPrivate        GdkRegionPrivate;
-typedef struct _GdkICPrivate            GdkICPrivate;
-
-#define GDK_DRAWABLE_WIN32DATA(win) ((GdkDrawableWin32Data *)(((GdkDrawablePrivate*)(win))->klass_data))
-#define GDK_WINDOW_WIN32DATA(win) ((GdkWindowWin32Data *)(((GdkDrawablePrivate*)(win))->klass_data))
-
-struct _GdkDrawableWin32Data
-{
-  HANDLE xid;
-};
-
-struct _GdkWin32PositionInfo
-{
-  gint x;
-  gint y;
-  gint width;
-  gint height;
-  gint x_offset;		/* Offsets to add to Win32 coordinates */
-  gint y_offset;		/* within window to get GDK coodinates */
-  gboolean big : 1;
-  gboolean mapped : 1;
-  gboolean no_bg : 1;	        /* Set when the window background is 
-				 * temporarily unset during resizing
-				 * and scaling */
-  GdkRectangle clip_rect;	/* visible rectangle of window */
-};
-
-struct _GdkWindowWin32Data
-{
-  GdkDrawableWin32Data drawable;
-
-  GdkWin32PositionInfo position_info;
-
-  /* We must keep the event mask here to filter them ourselves */
-  gint event_mask;
-
-  /* Values for bg_type */
-#define GDK_WIN32_BG_NORMAL 0
-#define GDK_WIN32_BG_PIXEL 1
-#define GDK_WIN32_BG_PIXMAP 2
-#define GDK_WIN32_BG_PARENT_RELATIVE 3
-#define GDK_WIN32_BG_TRANSPARENT 4
-
-  /* We draw the background ourselves at WM_ERASEBKGND  */
-  guchar bg_type;
-  gulong bg_pixel;
-  GdkPixmap *bg_pixmap;
-
-  HCURSOR xcursor;
-
-  /* Window size hints */
-  gint hint_flags;
-  gint hint_x, hint_y;
-  gint hint_min_width, hint_min_height;
-  gint hint_max_width, hint_max_height;
-
-  gboolean extension_events_selected;
-
-  HKL input_locale;
-  CHARSETINFO charset_info;
-};
 
 struct _GdkCursorPrivate
 {
   GdkCursor cursor;
-  HCURSOR xcursor;
+  HCURSOR hcursor;
 };
 
 struct _GdkWin32SingleFont
 {
-  HFONT xfont;
+  HFONT hfont;
   UINT charset;
   UINT codepage;
   FONTSIGNATURE fs;
@@ -352,14 +295,12 @@ GType gdk_gc_win32_get_type (void);
 #define GDK_ROOT_WINDOW()             ((guint32) HWND_DESKTOP)
 #define GDK_ROOT_PARENT()             ((GdkWindow *) gdk_parent_root)
 #define GDK_DISPLAY()                 NULL
-#define GDK_DRAWABLE_XID(win)         (GDK_DRAWABLE_WIN32DATA(win)->xid)
-#define GDK_IMAGE_XIMAGE(image)       (((GdkImagePrivate *) image)->ximage)
-#define GDK_COLORMAP_XDISPLAY(cmap)   NULL
-#define GDK_COLORMAP_WIN32COLORMAP(cmap)(((GdkColormapPrivateWin32 *) cmap)->xcolormap)
+#define GDK_WINDOW_HWND(win)          (GDK_DRAWABLE_IMPL_WIN32(((GdkWindowObject *)win)->impl)->handle)
+#define GDK_PIXMAP_HBM(win)           (GDK_DRAWABLE_IMPL_WIN32(((GdkPixmapObject *)win)->impl)->handle)
+#define GDK_DRAWABLE_HANDLE(win)      (GDK_IS_WINDOW (win) ? GDK_WINDOW_HWND (win) : GDK_PIXMAP_HBM (win))
+#define GDK_IMAGE_HBM(image)          (((GdkImagePrivateWin32 *) GDK_IMAGE (image)->windowing_data)->hbm)
+#define GDK_COLORMAP_WIN32COLORMAP(cmap) (((GdkColormapPrivateWin32 *)GDK_COLORMAP (cmap)->windowing_data)->xcolormap)
 #define GDK_VISUAL_XVISUAL(vis)       (((GdkVisualPrivate *) vis)->xvisual)
-
-#define GDK_WINDOW_XWINDOW	      GDK_DRAWABLE_XID
-#define GDK_WINDOW_XDISPLAY	      GDK_DRAWABLE_XDISPLAY
 
 GDKVAR gchar		*gdk_progclass;
 GDKVAR ATOM		 gdk_selection_property;
@@ -386,5 +327,9 @@ HDC           gdk_win32_hdc_get (GdkDrawable    *drawable,
 void          gdk_win32_hdc_release (GdkDrawable    *drawable,
 				     GdkGC          *gc,
 				     GdkGCValuesMask usage);
+
+#ifdef __cplusplus
+}
+#endif /* __cplusplus */
 
 #endif /* __GDK_WIN32_H__ */

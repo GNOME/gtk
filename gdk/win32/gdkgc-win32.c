@@ -167,6 +167,10 @@ gdk_win32_gc_values_to_win32values (GdkGCValues    *values,
 	  data->rop2 = R2_NOTMASKPEN;
 	  GDK_NOTE (MISC, g_print ("NOTMASKPEN"));
 	  break;
+	case GDK_NOR:
+	  data->rop2 = R2_NOTMERGEPEN;
+	  GDK_NOTE (MISC, g_print ("NOTMERGEPEN"));
+	  break;
 	case GDK_SET:
 	  data->rop2 = R2_WHITE;
 	  GDK_NOTE (MISC, g_print ("WHITE"));
@@ -508,6 +512,8 @@ gdk_win32_gc_get_values (GdkGC       *gc,
       values->function = GDK_OR_INVERT; break;
     case R2_NOTMASKPEN:
       values->function = GDK_NAND; break;
+    case R2_NOTMERGEPEN:
+      values->function = GDK_NOR; break;
     case R2_WHITE:
       values->function = GDK_SET; break;
     }

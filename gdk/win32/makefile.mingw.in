@@ -1,0 +1,87 @@
+## Makefile for building the Win32 dependent GDK objects with gcc on Win32
+## Use: make -f makefile.mingw
+
+TOP = ../../..
+
+# Location of the Wintab toolkit. Downloadable from
+# http://www.pointing.com.  We use the wntab32x.lib archive library
+# directly (copying it to libwntab32x.a).
+WTKIT = $(TOP)/wtkit126
+
+include ../../build/win32/make.mingw
+
+# Possibly override GTK+ version from build/win32/module.defs
+GTK_VER = @GTK_MAJOR_VERSION@.@GTK_MINOR_VERSION@
+
+OPTIMIZE = -g
+
+INCLUDES = -I ../.. -I .. -I $(WTKIT)/include
+DEPCFLAGS = $(GLIB_CFLAGS) $(PANGO_CFLAGS)
+DEFINES = -DG_ENABLE_DEBUG -DHAVE_CONFIG_H -DGDK_VERSION=\"$(GTK_VER)\"
+
+all:						\
+	../../config.h				\
+	../gdkconfig.h				\
+	libgdk-win32.a				\
+	gdk-win32res.o				\
+	libwntab32x.a
+
+gdk_win32_OBJECTS =				\
+	gdkcc-win32.o				\
+	gdkcolor-win32.o			\
+	gdkcursor-win32.o			\
+	gdkdnd-win32.o				\
+	gdkdrawable-win32.o			\
+	gdkevents-win32.o			\
+	gdkfont-win32.o				\
+	gdkgc-win32.o				\
+	gdkgeometry-win32.o			\
+	gdkglobals-win32.o			\
+	gdkim-win32.o				\
+	gdkimage-win32.o			\
+	gdkinput-win32.o			\
+	gdkmain-win32.o				\
+	gdkpixmap-win32.o			\
+	gdkproperty-win32.o			\
+	gdkselection-win32.o			\
+	gdkvisual-win32.o			\
+	gdkwin32id.o				\
+	gdkwindow-win32.o
+
+../../config.h : ../../config.h.win32
+	cp $< $@
+
+../gdkconfig.h : ../gdkconfig.h.win32
+	cp $< $@
+
+gdk-win32res.o : rc/gdk.rc gdk-build.tmp
+	m4 -DBUILDNUMBER=`cat gdk-build.tmp` <rc/gdk.rc >gdk-win32res.rc
+	windres --include-dir rc gdk-win32res.rc gdk-win32res.o
+	rm gdk-build.tmp gdk-win32res.rc
+
+# The *.stamp files aren't distributed. Thus, this takes care of only
+# tml building libraries with nonzero build number.
+
+ifeq ($(wildcard gdk-build.stamp),gdk-build.stamp)
+# Magic to bump the build number
+gdk-build.tmp :
+	bash -c "read number && echo $$[number+1]" <gdk-build.stamp >gdk-build.tmp
+	cp gdk-build.tmp gdk-build.stamp
+else
+# Use zero as build number.
+gdk-build.tmp :
+	echo 0 >gdk-build.tmp
+endif
+
+libgdk-win32.a : $(gdk_win32_OBJECTS) 
+	-rm -f $@
+	$(AR) rv $@ $(gdk_win32_OBJECTS)
+
+libwntab32x.a : $(WTKIT)/lib/i386/wntab32x.lib
+	cp $< $@
+
+# Hack to get an updated makefile.mingw automatically after updating
+# makefile.mingw.in. Only for developer use.
+makefile.mingw: makefile.mingw.in
+	sed -e 's,@GTK_MAJOR[_]VERSION@,@GTK_MAJOR_VERSION@,' \
+	    -e 's,@GTK_MINOR[_]VERSION@,@GTK_MINOR_VERSION@,' <$< >$@

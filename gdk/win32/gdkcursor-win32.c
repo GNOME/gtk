@@ -19,8 +19,10 @@
 
 #include "config.h"
 
+#include "gdkwin32.h"
 #include "gdkcursor.h"
 #include "gdkinternals.h"
+#include "gdkpixmap-win32.h"
 #include "gdkprivate-win32.h"
 
 static const struct { const char *name; int type; } cursors[] = {
@@ -109,28 +111,28 @@ gdk_cursor_new (GdkCursorType cursor_type)
 {
   GdkCursorPrivate *private;
   GdkCursor *cursor;
-  HCURSOR xcursor;
+  HCURSOR hcursor;
   int i;
 
   for (i = 0; cursors[i].name != NULL && cursors[i].type != cursor_type; i++)
     ;
   if (cursors[i].name != NULL)
     {
-      xcursor = LoadCursor (gdk_DLLInstance, cursors[i].name);
-      if (xcursor == NULL)
+      hcursor = LoadCursor (gdk_dll_hinstance, cursors[i].name);
+      if (hcursor == NULL)
 	WIN32_API_FAILED ("LoadCursor");
       GDK_NOTE (MISC, g_print ("gdk_cursor_new: %#x %d\n",
-			       xcursor, cursor_type));
+			       hcursor, cursor_type));
     }
   else
     {
       g_warning ("gdk_cursor_new: no cursor %d found",
 		 cursor_type);
-      xcursor = NULL;
+      hcursor = NULL;
     }
 
   private = g_new (GdkCursorPrivate, 1);
-  private->xcursor = xcursor;
+  private->hcursor = hcursor;
   cursor = (GdkCursor*) private;
   cursor->type = cursor_type;
   cursor->ref_count = 1;
@@ -148,10 +150,10 @@ gdk_cursor_new_from_pixmap (GdkPixmap *source,
 {
   GdkCursorPrivate *private;
   GdkCursor *cursor;
-  GdkDrawablePrivate *source_private, *mask_private;
+  GdkPixmapImplWin32 *source_impl, *mask_impl;
   GdkImage *source_image, *mask_image;
-  HCURSOR xcursor;
-  guchar *p, *q, *XORmask, *ANDmask;
+  HCURSOR hcursor;
+  guchar *p, *q, *xor_mask, *and_mask;
   gint width, height, cursor_width, cursor_height;
   guchar residue;
   gint ix, iy;
@@ -161,19 +163,19 @@ gdk_cursor_new_from_pixmap (GdkPixmap *source,
   g_return_val_if_fail (fg != NULL, NULL);
   g_return_val_if_fail (bg != NULL, NULL);
 
-  source_private = (GdkDrawablePrivate *) source;
-  mask_private   = (GdkDrawablePrivate *) mask;
+  source_impl = GDK_PIXMAP_IMPL_WIN32 (source);
+  mask_impl   = GDK_PIXMAP_IMPL_WIN32 (mask);
 
-  g_return_val_if_fail (source_private->width == mask_private->width
-			&& source_private->height == mask_private->height,
+  g_return_val_if_fail (source_impl->width == mask_impl->width
+			&& source_impl->height == mask_impl->height,
 			NULL);
-  width = source_private->width;
-  height = source_private->height;
+  width = source_impl->width;
+  height = source_impl->height;
   cursor_width = GetSystemMetrics (SM_CXCURSOR);
   cursor_height = GetSystemMetrics (SM_CYCURSOR);
 
-  g_return_val_if_fail (width <= cursor_width
-			&& height <= cursor_height, NULL);
+  g_return_val_if_fail (width <= cursor_width && height <= cursor_height,
+			NULL);
 
   residue = (1 << ((8-(width%8))%8)) - 1;
 
@@ -182,10 +184,10 @@ gdk_cursor_new_from_pixmap (GdkPixmap *source,
 
   if (source_image->depth != 1 || mask_image->depth != 1)
     {
-    gdk_image_unref (source_image);
-    gdk_image_unref (mask_image);
-    g_return_val_if_fail (source_image->depth == 1 && mask_image->depth == 1,
-			  NULL);
+      gdk_image_unref (source_image);
+      gdk_image_unref (mask_image);
+      g_return_val_if_fail (source_image->depth == 1 && mask_image->depth == 1,
+			    NULL);
     }
 
   /* Such complex bit manipulation for this simple task, sigh.
@@ -195,7 +197,7 @@ gdk_cursor_new_from_pixmap (GdkPixmap *source,
    */
 
   /* First set masked-out source bits, as all source bits matter on Windoze.
-   * As we invert them below, they will be clear in the final XORmask.
+   * As we invert them below, they will be clear in the final xor_mask.
    */
   for (iy = 0; iy < height; iy++)
     {
@@ -207,12 +209,12 @@ gdk_cursor_new_from_pixmap (GdkPixmap *source,
     }
 
   /* XOR mask is initialized to zero */
-  XORmask = g_malloc0 (cursor_width/8 * cursor_height);
+  xor_mask = g_malloc0 (cursor_width/8 * cursor_height);
 
   for (iy = 0; iy < height; iy++)
     {
       p = (guchar *) source_image->mem + iy*source_image->bpl;
-      q = XORmask + iy*cursor_width/8;
+      q = xor_mask + iy*cursor_width/8;
 
       for (ix = 0; ix < ((width-1)/8+1); ix++)
 	*q++ = ~(*p++);
@@ -220,38 +222,38 @@ gdk_cursor_new_from_pixmap (GdkPixmap *source,
     }
       
   /* AND mask is initialized to ones */
-  ANDmask = g_malloc (cursor_width/8 * cursor_height);
-  memset (ANDmask, 0xFF, cursor_width/8 * cursor_height);
+  and_mask = g_malloc (cursor_width/8 * cursor_height);
+  memset (and_mask, 0xFF, cursor_width/8 * cursor_height);
 
   for (iy = 0; iy < height; iy++)
     {
       p = (guchar *) mask_image->mem + iy*mask_image->bpl;
-      q = ANDmask + iy*cursor_width/8;
+      q = and_mask + iy*cursor_width/8;
 
       for (ix = 0; ix < ((width-1)/8+1); ix++)
 	*q++ = ~(*p++);
       q[-1] |= residue;	/* Set left-over bits */
     }
       
-  xcursor = CreateCursor (gdk_ProgInstance, x, y, cursor_width, cursor_height,
-			  ANDmask, XORmask);
+  hcursor = CreateCursor (gdk_app_hinstance, x, y, cursor_width, cursor_height,
+			  and_mask, xor_mask);
 
   GDK_NOTE (MISC, g_print ("gdk_cursor_new_from_pixmap: "
 			   "%#x (%dx%d) %#x (%dx%d) = %#x (%dx%d)\n",
-			   GDK_DRAWABLE_XID (source),
-			   source_private->width, source_private->height,
-			   GDK_DRAWABLE_XID (mask),
-			   mask_private->width, mask_private->height,
-			   xcursor, cursor_width, cursor_height));
+			   GDK_PIXMAP_HBM (source),
+			   source_impl->width, source_impl->height,
+			   GDK_PIXMAP_HBM (mask),
+			   mask_impl->width, mask_impl->height,
+			   hcursor, cursor_width, cursor_height));
 
-  g_free (XORmask);
-  g_free (ANDmask);
+  g_free (xor_mask);
+  g_free (and_mask);
 
   gdk_image_unref (source_image);
   gdk_image_unref (mask_image);
 
   private = g_new (GdkCursorPrivate, 1);
-  private->xcursor = xcursor;
+  private->hcursor = hcursor;
   cursor = (GdkCursor*) private;
   cursor->type = GDK_CURSOR_IS_PIXMAP;
   cursor->ref_count = 1;
@@ -268,10 +270,10 @@ _gdk_cursor_destroy (GdkCursor *cursor)
   private = (GdkCursorPrivate *) cursor;
 
   GDK_NOTE (MISC, g_print ("_gdk_cursor_destroy: %#x\n",
-			   (cursor->type == GDK_CURSOR_IS_PIXMAP) ? private->xcursor : 0));
+			   (cursor->type == GDK_CURSOR_IS_PIXMAP) ? private->hcursor : 0));
 
   if (cursor->type == GDK_CURSOR_IS_PIXMAP)
-    if (!DestroyCursor (private->xcursor))
+    if (!DestroyCursor (private->hcursor))
       WIN32_API_FAILED ("DestroyCursor");
 
   g_free (private);

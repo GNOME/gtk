@@ -1,5 +1,5 @@
 EXTRA_DIST = \
-	makefile.cygwin \
+	makefile.mingw \
 	makefile.msc \
 	gdkcc-win32.c \
 	gdkcolor-win32.c \
@@ -24,8 +24,6 @@ EXTRA_DIST = \
 	gdkwin32.h \
 	gdkwin32id.c \
 	gdkwindow-win32.c \
-	makefile.cygwin \
-	makefile.msc \
 	surrogate-dimm.h \
 	rc/gdk.rc \
 	rc/gtk.ico \
@@ -106,3 +104,7 @@ EXTRA_DIST = \
 	rc/cursor94.cur \
 	rc/cursor96.cur \
 	rc/cursor98.cur
+
+makefile.mingw: $(top_builddir)/config.status $(top_srcdir)/gdk/win32/makefile.mingw.in
+	cd $(top_builddir) && CONFIG_FILES=gdk/win32/$@ CONFIG_HEADERS= $(SHELL) ./config.status
+

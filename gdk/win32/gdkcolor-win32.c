@@ -347,7 +347,7 @@ alloc_color(Colormap  colormap,
       /*
        * Determine what color will actually be used on non-colormap systems.
        */
-      *pixelp = GetNearestColor (gdk_DC, RGB(entry.peRed, entry.peGreen, entry.peBlue));
+      *pixelp = GetNearestColor (gdk_display_hdc, RGB(entry.peRed, entry.peGreen, entry.peBlue));
       
       color->peRed = GetRValue (*pixelp);
       color->peGreen = GetGValue (*pixelp);
@@ -1562,7 +1562,7 @@ gdk_colormap_get_system_size (void)
 {
   gint bitspixel;
   
-  bitspixel = GetDeviceCaps (gdk_DC, BITSPIXEL);
+  bitspixel = GetDeviceCaps (gdk_display_hdc, BITSPIXEL);
 
   if (bitspixel == 1)
     return 2;
