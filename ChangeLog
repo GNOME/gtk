@@ -1,5 +1,8 @@
 2005-03-17  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkiconview.c (gtk_icon_view_size_allocate): Clamp
+	adjustment values on resize.  (#170567, Tomislav Jonjic)
+
 	* gtk/gtkentrycompletion.c (gtk_entry_completion_real_insert_prefix): 
 	Make inline completion insert the prefix at the
 	right spot.  (#170146, Doug Quale)
