@@ -298,7 +298,7 @@ msgstr ""
 
 #: gdk-pixbuf/io-pnm.c:536 gdk-pixbuf/io-pnm.c:578
 msgid "PNM image format is invalid"
-msgstr ""
+msgstr "Формат зображення PNM не вірний"
 
 #: gdk-pixbuf/io-pnm.c:637
 msgid "PNM image loader does not support this PNM subformat"
@@ -306,7 +306,7 @@ msgstr ""
 
 #: gdk-pixbuf/io-pnm.c:811
 msgid "Unexpected end of PNM image data"
-msgstr ""
+msgstr "Неочікуване завершення даних зображення PNM"
 
 #: gdk-pixbuf/io-pnm.c:913
 msgid "Insufficient memory to load PNM file"
@@ -322,7 +322,7 @@ msgstr "Не достатньо пам'яті для відкривання фа
 
 #: gdk-pixbuf/io-tiff.c:233
 msgid "Failed to write to temporary file when loading TIFF image"
-msgstr ""
+msgstr "Не вдалося записати у тимчасовий файл під час завантаження зображення TIFF"
 
 #: gdk-pixbuf/io-xbm.c:284
 #, c-format
@@ -536,7 +536,7 @@ msgstr ""
 
 #: gtk/gtkcellrenderertext.c:301 gtk/gtktexttag.c:426
 msgid "Rise"
-msgstr ""
+msgstr "Підняти"
 
 #: gtk/gtkcellrenderertext.c:302 gtk/gtktexttag.c:427
 msgid ""
@@ -834,11 +834,11 @@ msgstr "Палітра"
 
 #: gtk/gtkentry.c:372
 msgid "Text Position"
-msgstr ""
+msgstr "Позиція в тексті"
 
 #: gtk/gtkentry.c:373
 msgid "The current position of the insertion point"
-msgstr ""
+msgstr "Поточна позиція точки вставляння"
 
 #: gtk/gtkentry.c:383
 msgid "Whether the entry contents can be edited"
@@ -890,7 +890,7 @@ msgstr ""
 
 #: gtk/gtkentry.c:431
 msgid "Cursor color"
-msgstr ""
+msgstr "Колір курсора"
 
 #: gtk/gtkentry.c:432
 msgid "Color with which to draw insertion cursor"
@@ -1628,11 +1628,11 @@ msgstr ""
 
 #: gtk/gtktreeviewcolumn.c:223
 msgid "Sort indicator"
-msgstr ""
+msgstr "Індикатор сортування"
 
 #: gtk/gtktreeviewcolumn.c:224
 msgid "Whether to show a sort indicator"
-msgstr ""
+msgstr "Стан відображення індикатора сортування"
 
 #: gtk/gtktreeviewcolumn.c:231
 msgid "Sort order"
@@ -1640,12 +1640,12 @@ msgstr "Порядок сортування"
 
 #: gtk/gtktreeviewcolumn.c:232
 msgid "Sort direction the sort indicator should indicate"
-msgstr ""
+msgstr "Напрямок сортування має відображатись індикатором"
 
 #. ID
 #: modules/input/imcyrillic-translit.c:216
 msgid "Cyrillic (Transliterated)"
-msgstr ""
+msgstr "Кирилиця (транслітерація)"
 
 #. ID
 #: modules/input/iminuktitut.c:126
@@ -1665,4 +1665,4 @@ msgstr ""
 #. ID
 #: modules/input/imxim.c:27
 msgid "X Input Method"
-msgstr ""
+msgstr "Метод XInput"
