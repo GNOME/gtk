@@ -1,3 +1,9 @@
+Thu Jan 15 23:17:14 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkuimanager.c (gtk_ui_manager_get_toplevels): Inserting
+	a 'newly-allocated' to hint that the list should be freed after
+	use.
+
 Wed Jan 14 18:01:52 2004  Jonathan Blandford  <jrb@gnome.org>
 
 	* gtk/gtktreeview.c (gtk_tree_view_button_press): move grab_focus
