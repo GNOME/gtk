@@ -540,6 +540,8 @@ gtk_plug_size_allocate (GtkWidget     *widget,
     {
       GtkBin *bin = GTK_BIN (widget);
 
+      widget->allocation = *allocation;
+
       if (GTK_WIDGET_REALIZED (widget))
 	gdk_window_move_resize (widget->window,
 				allocation->x, allocation->y,

@@ -1,3 +1,9 @@
+Wed Dec 26 12:17:06 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkplug.c (gtk_plug_size_allocate): Assign the
+	allocation to widget->allocation. (Fixes #67290,
+	Chris Phelps.)
+
 Wed Dec 26 11:49:01 2001  Owen Taylor  <otaylor@redhat.com>
 
 	(#67542, reported by Anders Carlsson)
