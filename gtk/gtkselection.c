@@ -69,6 +69,9 @@
 #else
 #define GTK_SELECTION_MAX_SIZE 4000
 #endif
+
+#define IDLE_ABORT_TIME 300
+
 enum {
   INCR,
   MULTIPLE,
@@ -684,6 +687,7 @@ gtk_selection_convert (GtkWidget *widget,
   info->widget = widget;
   info->selection = selection;
   info->target = target;
+  info->idle_time = 0;
   info->buffer = NULL;
   info->offset = -1;
   
@@ -1426,9 +1430,9 @@ gtk_selection_incr_timeout (GtkIncrInfo *info)
     }
   
   /* If retrieval is finished */
-  if (!tmp_list || info->idle_time >= 5)
+  if (!tmp_list || info->idle_time >= IDLE_ABORT_TIME)
     {
-      if (tmp_list && info->idle_time >= 5)
+      if (tmp_list && info->idle_time >= IDLE_ABORT_TIME)
 	{
 	  current_incrs = g_list_remove_link (current_incrs, tmp_list);
 	  g_list_free (tmp_list);
@@ -1676,9 +1680,9 @@ gtk_selection_retrieval_timeout (GtkRetrievalInfo *info)
     }
   
   /* If retrieval is finished */
-  if (!tmp_list || info->idle_time >= 5)
+  if (!tmp_list || info->idle_time >= IDLE_ABORT_TIME)
     {
-      if (tmp_list && info->idle_time >= 5)
+      if (tmp_list && info->idle_time >= IDLE_ABORT_TIME)
 	{
 	  current_retrievals = g_list_remove_link (current_retrievals, tmp_list);
 	  g_list_free (tmp_list);
