@@ -1,3 +1,11 @@
+2002-10-04  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/win32/gdkfont-win32.c (gdk_font_load_internal): If the font
+	supports Latin scripts, assume it has the currency symbols, even
+	if the fsUsb doesn't say so. At least for Arial this is true, it
+	contains the Euro sign. This is a gross hack, but better than the
+	Euro not showing up even though the font does contain it.
+
 2002-09-21  Tor Lillqvist  <tml@iki.fi>
 
 	* gtk/gtktext.c (find_char_width): Fix from gtk-1-2: Tue Feb 13

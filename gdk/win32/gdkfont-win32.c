@@ -1502,6 +1502,16 @@ gdk_font_load_internal (GdkFont     *font_set,
   if (check_unicode_subranges (singlefont->charset, &singlefont->fs))
     GDK_NOTE (MISC, (g_print ("... Guesstimated Unicode subranges:"),
 		     print_unicode_subranges (&singlefont->fs)));
+  else if (singlefont->fs.fsCsb[0] & (FS_LATIN1 | FS_LATIN2))
+    {
+      /* If the font supports Latin scripts, assume it has the
+       * currency symbols (for instance the Euro), even if the fsUsb
+       * doesn't say so. At least for Arial this is true. This is a
+       * gross hack, though... but better than the Euro not showing up
+       * even though the font does contain it.
+       */
+      singlefont->fs.fsUsb[U_CURRENCY_SYMBOLS/32] |= (1 << (U_CURRENCY_SYMBOLS % 32));
+    }
 
   return singlefont;
 }
