@@ -1,3 +1,8 @@
+Sun Mar 22 23:33:50 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* gtk/gtkentry.c (gtk_entry_insert_text): Fixed some
+	  problems with !gtk_use_mb introduced in the last change.
+
 Sun Mar 22 21:00:43 1998  Owen Taylor  <owt1@cornell.edu>
 
 	* gtk/gtkpaned.c: Fix so children don't get bogus draws.

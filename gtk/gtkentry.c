@@ -1450,7 +1450,7 @@ gtk_entry_insert_text (GtkEditable *editable,
   gint i;
 
   gint insertion_chars;
-  guint16 *insertion_pos;
+  guint16 *insertion_pos = NULL; /* Quiet the compiler */
   
   GtkEntry *entry;
   
@@ -1501,6 +1501,8 @@ gtk_entry_insert_text (GtkEditable *editable,
 
       new_text_length = i;
     }
+  else
+    insertion_chars = new_text_length;
 
   /* Make sure we are inserting at integral character position */
   start_char = gtk_entry_find_char (entry, *position);
@@ -1545,7 +1547,7 @@ gtk_entry_insert_text (GtkEditable *editable,
       end_char = end_pos;
       last_char = last_pos;
 
-      for (i = end_char ; i <= last_char ; i++)
+      for (i = start_char ; i <= last_char ; i++)
 	entry->char_pos[i] = i;
     }
 
