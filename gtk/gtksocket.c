@@ -785,20 +785,6 @@ static gboolean
 gtk_socket_focus_out_event (GtkWidget *widget, GdkEventFocus *event)
 {
   GtkSocket *socket = GTK_SOCKET (widget);
-
-#if 0
-  GtkWidget *toplevel;
-  toplevel = gtk_widget_get_toplevel (widget);
-  
-  if (toplevel && GTK_IS_WINDOW (toplevel))
-    {
-      XSetInputFocus (GDK_WINDOW_XDISPLAY (toplevel->window),
-		      GDK_WINDOW_XWINDOW (toplevel->window),
-		      RevertToParent, CurrentTime); /* FIXME? */
-    }
-
-#endif      
-
   if (socket->plug_window)
     {
       send_xembed_message (socket, XEMBED_FOCUS_OUT, 0, 0, 0,
@@ -821,20 +807,6 @@ gtk_socket_claim_focus (GtkSocket *socket)
   GTK_WIDGET_SET_FLAGS (socket, GTK_CAN_FOCUS);
   gtk_widget_grab_focus (GTK_WIDGET (socket));
   GTK_WIDGET_UNSET_FLAGS (socket, GTK_CAN_FOCUS);
-  
-  /* FIXME: we might grab the focus even if we don't have
-   * it as an app... (and see _focus_in ()) */
-  if (socket->plug_window)
-    {
-#if 0      
-      gdk_error_trap_push ();
-      XSetInputFocus (GDK_WINDOW_XDISPLAY (socket->plug_window),
-		      GDK_WINDOW_XWINDOW (socket->plug_window),
-		      RevertToParent, GDK_CURRENT_TIME);
-      gdk_display_sync (gdk_drawable_get_display (socket->plug_window));
-      gdk_error_trap_pop ();
-#endif
-    }
 }
 
 static gboolean
@@ -876,67 +848,6 @@ gtk_socket_focus (GtkWidget *widget, GtkDirectionType direction)
     }
   else
     return FALSE;
-
-#if 0
-  if (!socket->focus_in && socket->plug_window)
-    {
-      GdkScreen *screen = gdk_drawable_get_screen (socket->plug_window);
-      Display *xdisplay = GDK_SCREEN_XDISPLAY (screen);
-      XEvent xevent;
-
-      gtk_socket_claim_focus (socket);
-      
-      xevent.xkey.type = KeyPress;
-      xevent.xkey.window = GDK_WINDOW_XWINDOW (socket->plug_window);
-      xevent.xkey.root = GDK_WINDOW_XWINDOW (gdk_screen_get_root_window (socket->plug_window));
-      xevent.xkey.time = GDK_CURRENT_TIME;
-      /* FIXME, the following might cause big problems for
-       * non-GTK apps */
-      xevent.xkey.x = 0;
-      xevent.xkey.y = 0;
-      xevent.xkey.x_root = 0;
-      xevent.xkey.y_root = 0;
-      xevent.xkey.state = 0;
-      xevent.xkey.same_screen = TRUE; /* FIXME ? */
-
-      switch (direction)
-	{
-	case GTK_DIR_UP:
-	  xevent.xkey.keycode =  XKeysymToKeycode(xdisplay, GDK_Up);
-	  break;
-	case GTK_DIR_DOWN:
-	  xevent.xkey.keycode =  XKeysymToKeycode(xdisplay, GDK_Down);
-	  break;
-	case GTK_DIR_LEFT:
-	  xevent.xkey.keycode =  XKeysymToKeycode(xdisplay, GDK_Left);
-	  break;
-	case GTK_DIR_RIGHT:
-	  xevent.xkey.keycode =  XKeysymToKeycode(xdisplay, GDK_Right);
-	  break;
-	case GTK_DIR_TAB_FORWARD:
-	  xevent.xkey.keycode =  XKeysymToKeycode(xdisplay, GDK_Tab);
-	  break;
-	case GTK_DIR_TAB_BACKWARD:
-	  xevent.xkey.keycode =  XKeysymToKeycode(xdisplay, GDK_Tab);
-	  xevent.xkey.state = ShiftMask;
-	  break;
-	}
-
-
-      gdk_error_trap_push ();
-      XSendEvent (GDK_WINDOW_XDISPLAY (socket->plug_window),
-		  GDK_WINDOW_XWINDOW (socket->plug_window),
-		  False, NoEventMask, &xevent);
-      gdk_display_sync (gdk_drawable_get_display (socket->plug_window));
-      gdk_error_trap_pop ();
-      
-      return TRUE;
-    }
-  else
-    {
-      return FALSE;
-    }
-#endif  
 }
 
 static void
@@ -1399,20 +1310,6 @@ gtk_socket_filter_func (GdkXEvent *gdk_xevent, GdkEvent *event, gpointer data)
       if (xevent->xfocus.mode == EMBEDDED_APP_WANTS_FOCUS)
 	{
 	  gtk_socket_claim_focus (socket);
-	}
-      else if (xevent->xfocus.detail == NotifyInferior)
-	{
-#if 0
-	  GtkWidget *toplevel;
-	  toplevel = gtk_widget_get_toplevel (widget);
-	  
-	  if (toplevel && GTK_IS_WINDOW (topelevel))
-	    {
-	      XSetInputFocus (GDK_WINDOW_XDISPLAY (toplevel->window),
-			      GDK_WINDOW_XWINDOW (toplevel->window),
-			      RevertToParent, CurrentTime); /* FIXME? */
-	    }
-#endif
 	}
       return_val = GDK_FILTER_REMOVE;
       break;

@@ -1,3 +1,20 @@
+Thu May 16 19:49:24 2002  Owen Taylor  <otaylor@redhat.com>
+ 
+ 	* gtk/gtkwindow.c (gtk_window_configure_event): Only 
+ 	optimize out the full configure handling if we got
+ 	a gratuitous configure event(configure_request_count == 0)
+ 	and the size didn't change.
+ 
+ 	* gtk/gtkwindow.c (gtk_window_move_resize): Use 
+ 	g_message(), not g_print() for debug spew.b
+ 
+ 	* gtk/gtkwindow.c (gtk_window_real_set_focus): Ref
+ 	the old and new focus widgets for the scope of
+ 	the function.
+ 
+ 	* gtk/gtksocket.c gtkplug.c: Remove various #if 0'd
+ 	bits of old code.
+ 
  Thu May 16 18:47:29 2002  Owen Taylor  <otaylor@redhat.com>
  
  	* gtk/gtkwindow.c (gtk_window_show): Disable the

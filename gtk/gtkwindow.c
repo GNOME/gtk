@@ -3529,6 +3529,7 @@ gtk_window_configure_event (GtkWidget         *widget,
 			    GdkEventConfigure *event)
 {
   GtkWindow *window = GTK_WINDOW (widget);
+  gboolean expected_reply = window->configure_request_count > 0;
 
   /* window->configure_request_count incremented for each 
    * configure request, and decremented to a min of 0 for
@@ -3553,7 +3554,7 @@ gtk_window_configure_event (GtkWidget         *widget,
    *     notifies and can wait to resize when we get them
    */
   
-  if (window->configure_request_count > 0 ||
+  if (!expected_reply &&
       (widget->allocation.width == event->width &&
        widget->allocation.height == event->height))
     return TRUE;
@@ -3897,8 +3898,20 @@ static void
 gtk_window_real_set_focus (GtkWindow *window,
 			   GtkWidget *focus)
 {
+  GtkWidget *old_focus = window->focus_widget;
   gboolean def_flags = 0;
 
+  if (old_focus)
+    {
+      g_object_ref (old_focus);
+      g_object_freeze_notify (G_OBJECT (old_focus));
+    }
+  if (focus)
+    {
+      g_object_ref (focus);
+      g_object_freeze_notify (G_OBJECT (focus));
+    }
+  
   if (window->default_widget)
     def_flags = GTK_WIDGET_HAS_DEFAULT (window->default_widget);
   
@@ -3938,6 +3951,17 @@ gtk_window_real_set_focus (GtkWindow *window,
   if (window->default_widget &&
       (def_flags != GTK_WIDGET_FLAGS (window->default_widget)))
     gtk_widget_queue_draw (window->default_widget);
+
+  if (old_focus)
+    {
+      g_object_thaw_notify (G_OBJECT (old_focus));
+      g_object_unref (old_focus);
+    }
+  if (focus)
+    {
+      g_object_thaw_notify (G_OBJECT (focus));
+      g_object_unref (focus);
+    }
 }
 
 /*********************************
@@ -4337,38 +4361,38 @@ gtk_window_move_resize (GtkWindow *window)
       /* this is the position from the last configure notify */
       gdk_window_get_position (widget->window, &notify_x, &notify_y);
     
-      g_print ("--- %s ---\n"
-               "last  : %d,%d\t%d x %d\n"
-               "this  : %d,%d\t%d x %d\n"
-               "alloc : %d,%d\t%d x %d\n"
-               "req   :      \t%d x %d\n"
-               "resize:      \t%d x %d\n" 
-               "size_changed: %d pos_changed: %d hints_changed: %d\n"
-               "configure_notify_received: %d\n"
-               "configure_request_count: %d\n"
-               "position_constraints_changed: %d\n",
-               window->title ? window->title : "(no title)",
-               info->last.configure_request.x,
-               info->last.configure_request.y,
-               info->last.configure_request.width,
-               info->last.configure_request.height,
-               new_request.x,
-               new_request.y,
-               new_request.width,
-               new_request.height,
-               notify_x, notify_y,
-               widget->allocation.width,
-               widget->allocation.height,
-               widget->requisition.width,
-               widget->requisition.height,
-               info->resize_width,
-               info->resize_height,
-               configure_request_pos_changed,
-               configure_request_size_changed,
-               hints_changed,
-               window->configure_notify_received,
-               window->configure_request_count,
-               info->position_constraints_changed);
+      g_message ("--- %s ---\n"
+		 "last  : %d,%d\t%d x %d\n"
+		 "this  : %d,%d\t%d x %d\n"
+		 "alloc : %d,%d\t%d x %d\n"
+		 "req   :      \t%d x %d\n"
+		 "resize:      \t%d x %d\n" 
+		 "size_changed: %d pos_changed: %d hints_changed: %d\n"
+		 "configure_notify_received: %d\n"
+		 "configure_request_count: %d\n"
+		 "position_constraints_changed: %d\n",
+		 window->title ? window->title : "(no title)",
+		 info->last.configure_request.x,
+		 info->last.configure_request.y,
+		 info->last.configure_request.width,
+		 info->last.configure_request.height,
+		 new_request.x,
+		 new_request.y,
+		 new_request.width,
+		 new_request.height,
+		 notify_x, notify_y,
+		 widget->allocation.width,
+		 widget->allocation.height,
+		 widget->requisition.width,
+		 widget->requisition.height,
+		 info->resize_width,
+		 info->resize_height,
+		 configure_request_pos_changed,
+		 configure_request_size_changed,
+		 hints_changed,
+		 window->configure_notify_received,
+		 window->configure_request_count,
+		 info->position_constraints_changed);
     }
 #endif
   
