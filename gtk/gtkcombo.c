@@ -383,6 +383,8 @@ gtk_combo_entry_focus_out (GtkEntry * entry, GdkEventFocus * event, GtkCombo * c
 
   if (combo->value_in_list && !gtk_combo_find (combo))
     {
+      GSource *focus_idle;
+      
       /* gdk_beep(); *//* this can be annoying */
       if (combo->ok_if_empty && !strcmp (gtk_entry_get_text (entry), ""))
 	return FALSE;
@@ -395,7 +397,12 @@ gtk_combo_entry_focus_out (GtkEntry * entry, GdkEventFocus * event, GtkCombo * c
          so the focus can be lost anyway...
          the signal_emit_stop doesn't seem to work either...
        */
-      gtk_idle_add ((GtkFunction) gtk_combo_focus_idle, combo);
+      focus_idle = g_idle_source_new ();
+      g_source_set_closure (focus_idle,
+			    g_cclosure_new_object (G_CALLBACK (gtk_combo_focus_idle),
+						   G_OBJECT (combo)));
+      g_source_attach (focus_idle, NULL);
+      
       /*gtk_signal_emit_stop_by_name (GTK_OBJECT (entry), "focus_out_event"); */
       return TRUE;
     }

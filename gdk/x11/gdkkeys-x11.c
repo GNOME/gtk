@@ -43,7 +43,14 @@
 
 #ifdef HAVE_XKB
 #include <X11/XKBlib.h>
-#endif
+
+/* OSF-4.0 is apparently missing this macro
+ */
+#  ifndef XkbKeySymEntry
+#    define XkbKeySymEntry(d,k,sl,g) \
+ 	(XkbKeySym(d,k,((XkbKeyGroupsWidth(d,k)*(g))+(sl))))
+#  endif
+#endif /* HAVE_XKB */
 
 typedef struct _GdkKeymapX11 GdkKeymapX11;
 

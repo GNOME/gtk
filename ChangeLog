@@ -1,3 +1,16 @@
+Tue May 14 15:09:33 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/x11/gdkkeys-x11.c: Try adding a #ifndef/#define
+	for XkbKeySymEntry to make up for OSF broken 
+	XKB extension. (#77819, Gareth Pearce)
+
+	* gtk/gtklayout.c: Clamp the upper values in response
+	to ::size-allocate if necessary. (#81290, Christophe Saout)
+	
+	* gtk/gtkcombo.c (gtk_combo_entry_focus_out): Handle
+	combo being destroyed before idle fires.
+	(#81396, Timo Sirainen)
+
 Tue May 14 11:21:19 2002  Owen Taylor  <otaylor@redhat.com>
  
  	* gdk/x11/gdkevents-x11.c (gdk_event_translate): 
