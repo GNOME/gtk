@@ -1,5 +1,9 @@
 2004-12-20  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkliststore.c (gtk_list_store_sort_iter_changed): Pass a
+	root path to gtk_tree_model_rows_reordered().  (#161720,
+	Marcin Krzyzanowski)
+
 	* gtk/gtkactiongroup.c (gtk_action_group_translate_string): Don't 
 	translate NULL messages.  (#161789, Morten Welinder)
 

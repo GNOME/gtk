@@ -1716,10 +1716,11 @@ gtk_list_store_sort_iter_changed (GtkListStore *list_store,
 				  gint          column)
 
 {
-  GtkTreePath *tmp_path;
+  GtkTreePath *path;
 
-  tmp_path = gtk_tree_model_get_path (GTK_TREE_MODEL (list_store), iter);
-  gtk_tree_model_row_changed (GTK_TREE_MODEL (list_store), tmp_path, iter);
+  path = gtk_tree_model_get_path (GTK_TREE_MODEL (list_store), iter);
+  gtk_tree_model_row_changed (GTK_TREE_MODEL (list_store), path, iter);
+  gtk_tree_path_free (path);
 
   if (!iter_is_sorted (list_store, iter))
     {
@@ -1731,12 +1732,12 @@ gtk_list_store_sort_iter_changed (GtkListStore *list_store,
                                   gtk_list_store_compare_func,
                                   list_store);
       order = generate_order (list_store->seq, old_positions);
+      path = gtk_tree_path_new ();
       gtk_tree_model_rows_reordered (GTK_TREE_MODEL (list_store),
-                                     tmp_path, NULL, order);
+                                     path, NULL, order);
+      gtk_tree_path_free (path);
       g_free (order);
     }
-
-  gtk_tree_path_free (tmp_path);
 }
 
 static gboolean
