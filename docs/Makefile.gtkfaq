@@ -1,0 +1,16 @@
+#
+# To use this makefile, do:
+# make -f Makefile.gtkfaq
+#
+# This is not done by default because you might
+# not have sgml2html installed... Perhaps we could
+# detect that in the future and combine it in with
+# the automake stuff...
+#
+
+all: sgml
+
+sgml:
+	sgml2html gtkfaq.sgml
+	cp gtkfaq.html index.html
+	perl gtkfaq_fix *.html

@@ -1,0 +1,456 @@
+<!doctype linuxdoc system>
+
+<article>
+
+<!-- Title information -->
+
+<title>GTK+ FAQ
+<author>Shawn T. Amundson, <tt/amundson@cs.umn.edu/
+<date>July 31, 1997
+<abstract>
+This document is intended to answer questions that are likely to be 
+frequently asked by programmers using GTK+ or people who are just
+looking at using GTK+.  
+</abstract>
+
+<!-- Table of contents -->
+<toc>
+
+<!-- Begin the document -->
+
+<!-- ***************************************************************** -->
+<sect>General Information
+
+<!-- ----------------------------------------------------------------- -->
+<sect1>Authors and Copyright
+<p>
+The authors of GTK+ are:
+
+<verb>
+Peter Mattis    (petm@xcf.berkeley.edu)
+Spencer Kimball (spencer@xcf.berkeley.edu)
+Josh MacDonald  (jmacd@xcf.berkeley.edu)
+</verb>
+
+The copyright notice on the library files is the following:
+
+<tscreen><verb>
+/* GTK - The GIMP Toolkit
+ * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Library General Public
+ * License as published by the Free Software Foundation; either
+ * version 2 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Library General Public License for more details.
+ *
+ * You should have received a copy of the GNU Library General Public
+ * License along with this library; if not, write to the Free
+ * Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ */
+</verb></tscreen>
+
+<!-- ----------------------------------------------------------------- -->
+<sect1>What is GTK?
+<p>
+GTK is a small and efficient widget set designed with the general look 
+and feel of Motif.  In reality, it looks much better than Motif.  It
+contains common widgets and some more complex widgets such as a file
+selection, and color selection widgets.
+
+<!-- ----------------------------------------------------------------- -->
+<sect1>What is the + in GTK+?
+<P>
+Peter Mattis informed the gtk mailing list that:
+<quote>
+"I originally wrote gtk which included the three libraries, libglib,
+libgdk and libgtk. It featured a flat widget hierarchy. That is, you
+couldn't derive a new widget from an existing one. And it contained
+a more standard callback mechanism instead of the signal mechanism now
+present in gtk+. The + was added to distinguish between the original
+version of gtk and the new version. You can think of it as being an
+enhancement to the original gtk that adds object oriented features."
+</quote>
+
+<!-- ----------------------------------------------------------------- -->
+<sect1>What is the policy on incorporating new widgets into the gtk library? 
+<p>
+This is up to the authors, so you will have to ask them once you
+are done with your widget.  As a general guideline, widgets that are 
+generally useful, work, and are not a disgrace to the widget set will 
+gladly be included.
+
+<!-- ----------------------------------------------------------------- -->
+<sect1>Does the G in GTK stand for General, Gimp, or GNU?
+<p>
+Peter Mattis informed the gtk mailing list that:
+<quote>
+"I think the last time Spencer and I talked about it we decided on 
+GTK = Gimp ToolKit. But I don't know for sure. Its definately not
+GNU, though."
+</quote>
+<!-- ----------------------------------------------------------------- -->
+<sect1>Why use g_print, g_malloc, g_strdup and fellow glib functions ?  
+<P>
+Thanks to Tim Janik who wrote to gtk-list: (slightly modified)
+<quote>
+Regarding g_malloc(), g_free() and siblings, these functions are much safer
+than thier libc equivalences.  For example, g_free() just returns if called 
+with NULL.  Also, if USE_DMALLOC is defined, the definition for these 
+functions changes (in glib.h) to use MALLOC(), FREE() etc...  If MEM_PROFILE
+or MEM_CHECK are defined, there are even small statistics made counting
+the used block sizes (shown by g_mem_profile() / g_mem_check()).
+<p>
+Considering the fact that glib provides an interface for memory chunks
+to save space if you have lots of blocks that are always the same size
+and to mark them ALLOC_ONLY if needed, it is just straight forward to
+create a small saver (debug able) wrapper around the normal malloc/free
+stuff as well - just like gdk covers Xlib. ;)
+<p>
+Using g_error() and g_warning() inside of applications like the GIMP
+that fully rely on gtk even gives the opportunity to pop up a window
+showing the messages inside of a gtk window with your own handler
+(by using g_set_error_handler()) along the lines of gtk_print()
+(inside of gtkmain.c).
+</quote>
+
+<!-- ----------------------------------------------------------------- -->
+<sect1>What applications have been written with GTK+?
+<p>
+Some applications which use GTK+ are:
+<itemize>
+<item>GIMP (<url url="http://www.XCF.Berkeley.EDU/~gimp/"> ), 
+      an image manipulation program
+<item>Gsumi (<url url="http://student-www.uchicago.edu/users/otaylor/gsumi/gsumi.html">),
+      a port of xink
+<item>GUBI (<url url="http://www.SoftHome.net/pub/users/timj/gubi/index.htm"> ),
+      a user interface builder
+<item>Gzilla (<url url="http://www.levien.com/gzilla/"> ),
+      a web browser
+<item>SANE (<url url="http://www.azstarnet.com/~axplinux/sane/"> ),
+      a universal scanner interface
+</itemize>
+
+<!-- ----------------------------------------------------------------- -->
+<sect1>Is anyone working on C++ bindings?
+<P>
+Yes!  Elliot Lee has started gtk--, and has released a couple versions
+already.  So far so good!   You can find these bindings at 
+<url url="ftp://ftp.redhat.com/sopwith">.  
+
+<!-- ----------------------------------------------------------------- -->
+<sect1>Is anyone working on Guile bindings?
+<p>
+Yes, Peter Mattis.  Here is what he said:
+
+<quote>
+"Btw, guile-1.1 is on prep.ai.mit.edu if anyone didn't know. Guile is 
+an R4RS scheme interpreter and extension library. I've
+already done scheme bindings for gtk using SIOD, but SIOD isn't R4RS
+(the scheme standard) compatible. And the new bindings will be much
+much better."
+</quote>
+
+
+<!-- ----------------------------------------------------------------- -->
+<sect1>The gtk-list hasn't had any traffic for days, is it dead?
+<p>
+No, everyone's just busy coding.
+
+<!-- ----------------------------------------------------------------- -->
+<sect1>Where is the documentation for GTK+?
+<p>
+Look in the GTK distribution's doc/ directory.  In addition, if you
+are on the web, you cat get it by going to 
+<url url="http://www.cs.umn.edu/~amundson/gtk/docs/">, where they
+are already converted to HTML format.
+
+You can download the HTML to your home machine with your browser.  There
+are only four files in these docs:
+<verb>
+http://www.cs.umn.edu/~amundson/gtk/docs/gtk_toc.html
+http://www.cs.umn.edu/~amundson/gtk/docs/gtk.html
+http://www.cs.umn.edu/~amundson/gtk/docs/gdk_toc.html
+http://www.cs.umn.edu/~amundson/gtk/docs/gdk.html
+</verb>
+
+This is the only place to get them in html that I know of.  I do not have
+time to gzip them, but they are not so huge anyway. (I'm lazy too!)
+
+<!-- ***************************************************************** -->
+<sect>Widgets
+
+<!-- ----------------------------------------------------------------- -->
+<sect1>How can I prevent redrawing and resizing while I change multiple widgets?
+<p> 
+Use gtk_container_disable_resize and gtk_container_enable_resize around the 
+code where you are changing a lot of stuff. This will result in much faster 
+speed since it will prevent resizing of the entire widget hierarchy. 
+
+<!-- ----------------------------------------------------------------- -->
+<sect1>How do I find out about the selection of a GtkList?
+<p>
+
+Get the selection something like this:
+<tscreen><verb>
+GList *sel;
+sel = GTK_LIST(list)->selection;
+</verb></tscreen>
+
+This is how GList is defined (quoting glist.h):
+<tscreen><verb>
+typedef struct _GList GList;
+
+struct _GList
+{
+  gpointer data;
+  GList *next;
+  GList *prev;
+};
+</verb></tscreen>
+
+A GList structure is just a simple structure for doubly linked lists.
+there exist several g_list_*() functions to modify a linked list in
+glib.h.  However the GTK_LIST(MyGtkList)->selection is maintained
+by the gtk_list_*() functions and should not be modified.
+
+The selection_mode of the GtkList determines the selection
+facilities of a GtkList and therefore the contents
+of GTK_LIST(AnyGtkList)->selection:
+
+<verb>
+selection_mode          GTK_LIST()->selection contents
+------------------------------------------------------
+
+GTK_SELECTION_SINGLE)   selection is either NULL
+                        or contains a GList* pointer
+                        for a single selected item.
+
+GTK_SELECTION_BROWSE)   selection is NULL if the list
+                        contains no widgets, otherwise
+                        it contains a GList* pointer
+                        for one GList structure.
+GTK_SELECTION_MULTIPLE) selection is NULL if no listitems
+                        are selected or a a GList* pointer
+                        for the first selected item. that
+                        in turn points to a GList structure
+                        for the second selected item and so
+                        on
+
+GTK_SELECTION_EXTENDED) selection is NULL.
+</verb>
+
+The data field of the GList structure GTK_LIST(MyGtkList)->selection points
+to the first GtkListItem that is selected.  So if you would like to determine 
+which listitems are selected you should go like this:
+
+Upon Initialization:
+<tscreen><verb>
+{
+        gchar           *list_items[]={
+                                "Item0",
+                                "Item1",
+                                "foo",
+                                "last Item",
+                        };
+        guint           nlist_items=sizeof(list_items)/sizeof(list_items[0]);
+        GtkWidget       *list_item;
+        guint           i;
+
+        list=gtk_list_new();
+        gtk_list_set_selection_mode(GTK_LIST(list), GTK_SELECTION_MULTIPLE);
+        gtk_container_add(GTK_CONTAINER(AnyGtkContainer), list);
+        gtk_widget_show (list);
+
+        for (i = 0; i < nlist_items; i++)
+        {
+                list_item=gtk_list_item_new_with_label(list_items[i]);
+                gtk_object_set_user_data(GTK_OBJECT(list_item), (gpointer)i);
+                gtk_container_add(GTK_CONTAINER(list), list_item);
+                gtk_widget_show(list_item);
+        }
+}
+</verb></tscreen>
+
+To get known about the selection:
+<tscreen><verb>
+{
+        GList   *items;
+
+        items=GTK_LIST(list)->selection;
+
+        printf("Selected Items: ");
+        while (items) {
+                if (GTK_IS_LIST_ITEM(items->data))
+                        printf("%d ", (guint) 
+                gtk_object_get_user_data(items->data));
+                items=items->next;
+        }
+        printf("\n");
+}
+</verb></tscreen>
+<!-- ----------------------------------------------------------------- -->
+<sect1>Is it possible to get some text displayed which is truncated to fit inside its allocation? 
+<p>
+GTK's behavior (no clipping) is a consequence of its attempts to
+conserve X resources. Label widgets (among others) don't get their own
+X window - they just draw their contents on their parent's window.
+While it might be possible to have clipping occur by setting the clip
+mask before drawing the text, this would probably cause a substantial
+performance penalty.
+
+Its possible that, in the long term, the best solution to such
+problems might be just to change gtk to give labels X windows.
+A short term workaround is to put the label widget inside another
+widget that does get it's own window - one possible candidate would
+be the viewport widget.
+
+<tscreen><verb>
+viewport = gtk_viewport (NULL, NULL);
+gtk_widget_set_usize (viewport, 50, 25);
+gtk_viewport_set_shadow_type (GTK_VIEWPORT(viewport), GTK_SHADOW_NONE);
+gtk_widget_show(viewport);
+
+label = gtk_label ("a really long label that won't fit");
+gtk_container_add (GTK_CONTAINER(viewport), label);
+gtk_widget_show (label);
+</verb></tscreen>
+
+If you were doing this for a bunch of widgets, you might want to
+copy gtkviewport.c and strip out the adjustment and shadow
+functionality (perhaps you could call it GtkClipper).
+
+<!-- ----------------------------------------------------------------- -->
+<sect1>How do I make menus?
+<p>
+Sascha Ziemann wrote to the gtk-list:  (slightly modified)
+<quote>
+First you have to write a function for every menu: (the translate
+function returns simple strings)
+</quote>
+<tscreen><verb>
+/***********************************************************************
+** Create the File-Menu
+*/
+GtkWidget* create_file_menu (GtkWidget *window)
+{
+  GtkWidget *menu;
+  GtkWidget *submenu;
+  GtkWidget *menuitem;
+  GSList *group;
+
+  menu = gtk_menu_new ();
+  submenu = NULL;
+  group = NULL;
+
+  menuitem = gtk_menu_item_new_with_label(translate("file-new-label"));
+  gtk_menu_append (GTK_MENU (menu), menuitem);
+  gtk_widget_show (menuitem);
+  
+  menuitem = gtk_menu_item_new_with_label(translate("file-open-label"));
+  gtk_menu_append (GTK_MENU (menu), menuitem);
+  gtk_widget_show (menuitem);
+  
+  gtk_menu_line_new(GTK_MENU(menu));
+
+  menuitem = gtk_menu_item_new_with_label(translate("file-save-label"));
+  gtk_menu_append (GTK_MENU (menu), menuitem);
+  gtk_widget_show (menuitem);
+  
+  menuitem = gtk_menu_item_new_with_label(translate("file-saveas-label"));
+  gtk_menu_append (GTK_MENU (menu), menuitem);
+  gtk_widget_show (menuitem);
+  
+  menuitem = gtk_menu_item_new_with_label(translate("file-saveall-label"));
+  gtk_menu_append (GTK_MENU (menu), menuitem);
+  gtk_widget_show (menuitem);
+  
+  gtk_menu_line_new(GTK_MENU(menu));
+
+  menuitem = gtk_menu_item_new_with_label(translate("file-export-label"));
+  gtk_menu_append (GTK_MENU (menu), menuitem);
+  gtk_widget_show (menuitem);
+  
+  return menu;
+}
+</verb></tscreen>
+<quote>
+And in your main window creation function you create a menubar in a box.
+</quote>
+<tscreen><verb>
+  /*
+  ** base frame
+  */
+  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  gtk_signal_connect (GTK_OBJECT (window), "destroy",
+                      (GtkSignalFunc) destroy_program,
+                      &amp
+window);
+  gtk_widget_set_name (window, "EDINI");
+  gtk_widget_set_uposition (window, 20, 20);
+  base_frame_box = gtk_vbox_new (FALSE, 10);
+  gtk_container_add (GTK_CONTAINER (window), base_frame_box);
+  gtk_widget_show (base_frame_box);
+
+  /*
+  ** the menu bar
+  */
+  menubar = gtk_menu_bar_new ();
+  gtk_box_pack_start (GTK_BOX (base_frame_box), menubar, FALSE, TRUE, 0);
+  gtk_widget_show (menubar);
+
+  menu = create_file_menu(window);
+
+  menuitem = gtk_menu_item_new_with_label(translate("file-menu-label"));
+  gtk_menu_item_set_submenu (GTK_MENU_ITEM (menuitem), menu);
+  gtk_menu_bar_append (GTK_MENU_BAR (menubar), menuitem);
+  gtk_widget_show (menuitem);
+
+</verb></tscreen>
+
+<!-- ----------------------------------------------------------------- -->
+<sect1>Is there a better way to do the menus?
+<p>
+Jay Painter wrote to the gtk-list: (slightly modified)
+<quote>
+The best way to make menus is with gtk_menu_factory where you create a
+structure with all your menus in it, feed it to a function, and all your
+menus get created for you without 50 calls to gtk_menuitem_new.  You can
+find a good example in the GZilla code.  I still don't know exaclty what
+all the fields are in the structure, but NULL is always a good choice for
+those.  :)
+</quote>
+
+<!-- ----------------------------------------------------------------- -->
+<sect1>How can I define a separation line in a menu? 
+<p>
+Just insert an empty menu item: 
+
+<tscreen><verb>
+menuitem = gtk_menu_item_new();
+gtk_menu_append(GTK_MENU(menu), menuitem);
+gtk_widget_show(menuitem);
+</verb></tscreen>
+
+
+<!-- ***************************************************************** -->
+<sect>Contributions and Maintainer 
+<p>
+If you would like to make a contribution to the FAQ, send me an e-mail
+message with the exact text you think should be included (question and
+answer).  With your help, this document can grow and become more useful!
+
+This document is maintained by Shawn T. Amundson &lt
+amundson@cs.umn.edu&gt
+.
+
+There is no guarentee that this document lives up to its intended
+purpose.  This is simply provided as a free resource.  As such,
+the authors and maintainer of the information provided within can 
+not make any guarentee that the information is even accurate.
+
+</article>
