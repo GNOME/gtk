@@ -2266,7 +2266,7 @@ gtk_clist_finalize (GtkObject * object)
  *   gtk_clist_expose
  *   gtk_clist_button_press
  *   gtk_clist_button_release
- *   gtk_clist_button_motion
+ *   gtk_clist_motion
  *   gtk_clist_size_request
  *   gtk_clist_size_allocate
  */
@@ -2964,8 +2964,8 @@ gtk_clist_motion (GtkWidget * widget,
 	    x = event->x;
 
 	  new_column_width (clist, i, &x, &visible);
-	  /* Welcome to my hack!  I'm going to use a value of x_drage = -99999 to
-	   * indicate the the xor line is already no visible */
+	  /* Welcome to my hack! I'm going to use a value of x_drag = -99999
+	   * to indicate that the xor line is already invisible */
 	  if (!visible && clist->x_drag != -99999)
 	    {
 	      draw_xor_line (clist);
@@ -3063,25 +3063,12 @@ gtk_clist_motion (GtkWidget * widget,
 	}
     }
   
-  if (y < 0)
+  if (ROW_TOP_YPIXEL(clist, row) < 0)
     move_vertical (clist, row, 0);
-  else if (y >= clist->clist_window_height)
+  else if (ROW_TOP_YPIXEL(clist, row) + clist->row_height >
+	   clist->clist_window_height)
     move_vertical (clist, row, 1);
-  else if (GTK_CLIST_DRAG_SELECTION (clist))
-    {
-      /* dragging inside clist_window */
 
-      if (ROW_TOP_YPIXEL(clist, clist->focus_row) + clist->row_height <= 0)
-	gtk_clist_moveto (clist, clist->focus_row, -1, 0, 0);
-      else if (ROW_TOP_YPIXEL (clist, clist->focus_row) < 0)
-	gtk_clist_moveto (clist, clist->focus_row, -1, 0, 0);
-      else if (ROW_TOP_YPIXEL (clist, clist->focus_row) >=
-	       clist->clist_window_height)
-	gtk_clist_moveto (clist, clist->focus_row, -1, 1, 0);
-      else if (ROW_TOP_YPIXEL (clist, clist->focus_row) + clist->row_height >
-	       clist->clist_window_height)
-	gtk_clist_moveto (clist, clist->focus_row, -1, 1, 0);
-    }
   return FALSE;
 }
 

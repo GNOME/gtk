@@ -1,3 +1,7 @@
+Thu Jul 30 12:39:36 1998  Lars Hamann  <lars@gtk.org>
+
+	* gtk/gtkclist.c (gtk_clist_motion): removed a few unneeded lines
+
 Wed Jul 29 23:31:50 1998  Lars Hamann  <lars@gtk.org>
 
 	* gtk/gtkclist.c (gtk_clist_motion): column resize now works with
