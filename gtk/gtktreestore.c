@@ -25,7 +25,7 @@
 #include <gobject/gvaluecollector.h>
 
 #define G_NODE(node) ((GNode *)node)
-#define GTK_TREE_STORE_IS_SORTED(tree) (GTK_TREE_STORE (tree)->sort_column_id != -1)
+#define GTK_TREE_STORE_IS_SORTED(tree) (GTK_TREE_STORE (tree)->sort_column_id != -2)
 #define VALID_ITER(iter, tree_store) (iter!= NULL && iter->user_data != NULL && tree_store->stamp == iter->stamp)
 
 static void         gtk_tree_store_init            (GtkTreeStore      *tree_store);
@@ -246,7 +246,7 @@ gtk_tree_store_init (GtkTreeStore *tree_store)
   tree_store->root = g_node_new (NULL);
   tree_store->stamp = g_random_int ();
   tree_store->sort_list = NULL;
-  tree_store->sort_column_id = -1;
+  tree_store->sort_column_id = -2;
 }
 
 /**

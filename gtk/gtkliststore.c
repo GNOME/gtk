@@ -26,7 +26,7 @@
 #include <gobject/gvaluecollector.h>
 
 #define G_SLIST(x) ((GSList *) x)
-#define GTK_LIST_STORE_IS_SORTED(list) (GTK_LIST_STORE (list)->sort_column_id != -1)
+#define GTK_LIST_STORE_IS_SORTED(list) (GTK_LIST_STORE (list)->sort_column_id != -2)
 #define VALID_ITER(iter, list_store) (iter!= NULL && iter->user_data != NULL && list_store->stamp == iter->stamp)
 
 static void         gtk_list_store_init            (GtkListStore      *list_store);
@@ -246,7 +246,7 @@ gtk_list_store_init (GtkListStore *list_store)
   list_store->sort_list = NULL;
   list_store->stamp = g_random_int ();
   list_store->length = 0;
-  list_store->sort_column_id = -1;
+  list_store->sort_column_id = -2;
 }
 
 /**
