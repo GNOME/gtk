@@ -602,7 +602,7 @@ GList *
 get_all_widgets (void)
 {
   GList *retval = NULL;
-#if 0
+
   retval = g_list_prepend (retval, create_button ());
   retval = g_list_prepend (retval, create_toggle_button ());
   retval = g_list_prepend (retval, create_check_button ());
@@ -628,7 +628,6 @@ get_all_widgets (void)
   retval = g_list_prepend (retval, create_progressbar ());
   retval = g_list_prepend (retval, create_scrolledwindow ());
   retval = g_list_prepend (retval, create_spinbutton ());
-#endif
   retval = g_list_prepend (retval, create_statusbar ());
 
   return retval;
