@@ -1,3 +1,8 @@
+2000-10-13  Yukihiro Nakai  <nakai@gnome.gr.jp>
+
+	* configure.in: Add zh_CN.GB2312 (Chinese GB2312) to
+	                ALL_LINGUAS
+
 2000-09-30  Martin Baulig  <baulig@suse.de>
 
 	* gtk+.pc.in, gdk.pc.in: Provide pkg-config scripts.
