@@ -37,19 +37,19 @@
 
 #include "keyname-table.h"
 
-#define GDK_NUM_KEYS (sizeof (gdk_keys_by_keyval) / sizeof (gdk_keys_by_keyval[0]))
+#define GDK_NUM_KEYS G_N_ELEMENTS (gdk_keys_by_keyval)
 
 static int
 gdk_keys_keyval_compare (const void *pkey, const void *pbase)
 {
-  return (*(int *) pkey) - ((struct gdk_key *) pbase)->keyval;
+  return (*(int *) pkey) - ((gdk_key *) pbase)->keyval;
 }
 
 gchar*
 gdk_keyval_name (guint keyval)
 {
   static gchar buf[100];
-  struct gdk_key *found;
+  gdk_key *found;
 
   /* Check for directly encoded 24-bit UCS characters: */
   if ((keyval & 0xff000000) == 0x01000000)
@@ -59,7 +59,7 @@ gdk_keyval_name (guint keyval)
     }
 
   found = bsearch (&keyval, gdk_keys_by_keyval,
-		   GDK_NUM_KEYS, sizeof (struct gdk_key),
+		   GDK_NUM_KEYS, sizeof (gdk_key),
 		   gdk_keys_keyval_compare);
 
   if (found != NULL)
@@ -83,18 +83,18 @@ static int
 gdk_keys_name_compare (const void *pkey, const void *pbase)
 {
   return strcmp ((const char *) pkey, 
-		 (const char *) (keynames + ((const struct gdk_key *) pbase)->offset));
+		 (const char *) (keynames + ((const gdk_key *) pbase)->offset));
 }
 
 guint
 gdk_keyval_from_name (const gchar *keyval_name)
 {
-  struct gdk_key *found;
+  gdk_key *found;
 
   g_return_val_if_fail (keyval_name != NULL, 0);
   
   found = bsearch (keyval_name, gdk_keys_by_name,
-		   GDK_NUM_KEYS, sizeof (struct gdk_key),
+		   GDK_NUM_KEYS, sizeof (gdk_key),
 		   gdk_keys_name_compare);
   if (found != NULL)
     return found->keyval;

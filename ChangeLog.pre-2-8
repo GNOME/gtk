@@ -1,3 +1,7 @@
+2005-03-17  Tor Lillqvist  <tml@novell.com>
+
+	* gdk/gdkkeynames.c: gdk_key is a typedef, not a struct tag.
+
 2005-03-16  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkprogressbar.c (gtk_progress_bar_get_ellipsize): 
