@@ -1,3 +1,10 @@
+Sat Nov 21 18:53:13 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdkwindow.c (gdk_window_get_deskrelative_origin): 
+	Fixed so it at least works with window managers other
+	than Enlightenment, though it probably needs to be
+	removed altogether.
+
 1998-11-21  Andrew T. Veliath  <andrewtv@usa.net>
 
 	* gtk/gtkhandlebox.[ch]: Add shadow_type and
