@@ -7100,7 +7100,7 @@ tree, and connects all the signals for the relevant objects, so you
 can see when they are emitted.
 
 <tscreen><verb>
-/* example-start tree tree.h */
+/* example-start tree tree.c */
 
 #include <gtk/gtk.h>
 
