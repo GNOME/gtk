@@ -1625,42 +1625,30 @@ shortcuts_add_bookmark_from_path (GtkFileChooserDefault *impl,
 				  const GtkFilePath     *path,
 				  int                    pos)
 {
-  GtkFileInfo *info;
   GError *error;
-  gboolean result;
 
   if (shortcut_find_position (impl, path) != -1)
     return FALSE;
 
-  result = FALSE;
+  /* FIXME: this check really belongs in gtk_file_system_insert_bookmark.  */
+  error = NULL;
+  if (!check_is_folder (impl->file_system, path, &error))
+    {
+      error_dialog (impl,
+		    _("Could not add bookmark for %s because it is not a folder."),
+		    path,
+		    error);
+      return FALSE;
+    }
 
   error = NULL;
-  info = get_file_info (impl->file_system, path, FALSE, &error);
-
-  if (!info)
-    error_getting_info_dialog (impl, path, error);
-  else if (!gtk_file_info_get_is_folder (info))
+  if (!gtk_file_system_insert_bookmark (impl->file_system, path, pos, &error))
     {
-      char *msg;
-      char *uri;
-
-      uri = gtk_file_system_path_to_uri (impl->file_system, path);
-      msg = g_strdup_printf (_("Could not add bookmark for %s because it is not a folder."),
-			     uri);
-      error_message (impl, msg);
-      g_free (uri);
-      g_free (msg);
-    }
-  else
-    {
-      error = NULL;
-      if (gtk_file_system_insert_bookmark (impl->file_system, path, pos, &error))
-	result = TRUE;
-      else
-	error_could_not_add_bookmark_dialog (impl, path, error);
+      error_could_not_add_bookmark_dialog (impl, path, error);
+      return FALSE;
     }
 
-  return result;
+  return TRUE;
 }
 
 static void
@@ -3427,11 +3415,14 @@ check_icon_theme (GtkFileChooserDefault *impl)
   if (impl->settings_signal_id)
     return;
 
-  settings = gtk_settings_get_for_screen (gtk_widget_get_screen (GTK_WIDGET (impl)));
-  impl->settings_signal_id = g_signal_connect (settings, "notify",
-					       G_CALLBACK (settings_notify_cb), impl);
+  if (gtk_widget_has_screen (GTK_WIDGET (impl)))
+    {
+      settings = gtk_settings_get_for_screen (gtk_widget_get_screen (GTK_WIDGET (impl)));
+      impl->settings_signal_id = g_signal_connect (settings, "notify",
+						   G_CALLBACK (settings_notify_cb), impl);
 
-  change_icon_theme (impl);
+      change_icon_theme (impl);
+    }
 }
 
 static void

@@ -1,9 +1,14 @@
 2004-03-17  Morten Welinder  <terra@gnome.org>
 
+	* gtk/gtkfilechooserdefault.c (check_icon_theme): Do nothing if we
+	have no screen.  Fixes #137260.
+	(shortcuts_add_bookmark_from_path): Simplify using check_is_folder
+	thereby fixing leak.  Fixes #137259.
+
 	* gtk/gtkpathbar.c (gtk_path_bar_forall): Make this work when the
 	slider buttons have been destroyed.
 	(gtk_path_bar_remove): Make this work for slider buttons too.
-	Fixes http://bugzilla.gnome.org/show_bug.cgi?id=137257
+	Fixes #137257
 
 2004-03-15  Morten Welinder  <terra@gnome.org>
 
