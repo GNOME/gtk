@@ -116,6 +116,13 @@ GdkPixbuf *gdk_pixbuf_new_subpixbuf (GdkPixbuf *src_pixbuf,
 
 /* Simple loading */
 
+#ifdef G_OS_WIN32
+/* DLL ABI stability hack. */
+#define gdk_pixbuf_new_from_file gdk_pixbuf_new_from_file_utf8
+#define gdk_pixbuf_new_from_file_at_size gdk_pixbuf_new_from_file_at_size_utf8
+#define gdk_pixbuf_new_from_file_at_scale gdk_pixbuf_new_from_file_at_scale_utf8
+#endif
+
 GdkPixbuf *gdk_pixbuf_new_from_file (const char *filename,
                                      GError    **error);
 GdkPixbuf *gdk_pixbuf_new_from_file_at_size (const char *filename,

@@ -1,3 +1,31 @@
+2004-12-05  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk-pixbuf-animation.c
+	* gdk-pixbuf-io.c
+	* io-xbm.c
+	* io-xpm.c
+	* make-inline-pixbuf.c
+	* queryloaders.c: Use gstdio wrappers. Document that file names
+	are in the GLib file name encoding.
+
+	* gdk-pixbuf-csource.c
+	* queryloaders.c: On Windows, convert command line arguments and
+	environment variable values from locale encoding to UTF-8.
+
+	* queryloaders.c: On Windows, use wide character API when
+	available.
+
+	* Makefile.am
+	* gdk-pixbuf-core.h
+	* gdk-pixbuf-io.c
+	* gdk-pixbuf-animation.h
+	* gdk-pixbuf-animation.c: Like in GLib, for DLL ABI stability on
+	Windows, add binary compatibility versions of functions that take
+	file names as arguments. They use the system codepage, not GLib
+	file name encoding (which is UTF-8 on Windows). Use #defines to
+	make newly compiled code use the "real" functions that use the
+	GLib file name encoding scheme.
+
 2004-12-02  Matthias Clasen  <mclasen@redhat.com>
 
 	* === Released 2.5.6 ===

@@ -15,6 +15,13 @@ gdk_pixbuf-win32res.lo : gdk_pixbuf.rc
 	$(top_srcdir)/build/win32/lt-compile-resource gdk_pixbuf.rc gdk_pixbuf-win32res.lo
 
 install-libtool-import-lib:
+# 	Don't put the binary compatibility entries in the import lib!
+#	(Unfortunately the GNU linker doesn't yet understand the PRIVATE
+#	directive in .def files.)
+	for entry in `grep PRIVATE gdk_pixbuf.def | sed -e 's/PRIVATE//'`; do \
+	  file=`nm -A .libs/libgdk_pixbuf-$(GTK_API_VERSION).dll.a | tr -d '\r' | grep -m 1 -E $$entry'$$' | cut -d: -f2`; \
+	  ar d .libs/libgdk_pixbuf-$(GTK_API_VERSION).dll.a $$file; \
+	done
 	$(INSTALL) .libs/libgdk_pixbuf-$(GTK_API_VERSION).dll.a $(DESTDIR)$(libdir)
 uninstall-libtool-import-lib:
 	-rm $(DESTDIR)$(libdir)/libgdk_pixbuf-$(GTK_API_VERSION).dll.a
@@ -40,7 +47,7 @@ uninstall-ms-lib:
 endif
 
 gdk_pixbuf.def: gdk-pixbuf.symbols
-	(echo -e EXPORTS; $(CPP) -P -DINCLUDE_VARIABLES - <$(srcdir)/gdk-pixbuf.symbols | sed -e '/^$$/d' -e 's/^/	/' -e 's/G_GNUC_[^ ]*//g') > gdk_pixbuf.def
+	(echo -e EXPORTS; $(CPP) -P -DINCLUDE_VARIABLES -DG_OS_WIN32 - <$(srcdir)/gdk-pixbuf.symbols | sed -e '/^$$/d' -e 's/^/	/' -e 's/G_GNUC_[^ ]*//g') > gdk_pixbuf.def
 
 gdk-pixbuf-alias.h: gdk-pixbuf.symbols
 	 $(PERL) $(srcdir)/makegdkpixbufalias.pl < $(srcdir)/gdk-pixbuf.symbols > gdk-pixbuf-alias.h

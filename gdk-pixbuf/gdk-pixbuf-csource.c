@@ -75,6 +75,7 @@ main (int   argc,
 {
   GdkPixbuf *pixbuf;
   GError *error = NULL;
+  gchar *infilename;
 
   /* initialize glib/GdkPixbuf */
   g_type_init ();
@@ -90,7 +91,13 @@ main (int   argc,
 	  return 1;
 	}
       
-      pixbuf = gdk_pixbuf_new_from_file (argv[1], &error);
+#ifdef G_OS_WIN32
+      infilename = g_locale_to_utf8 (argv[1], -1, NULL, NULL, NULL);
+#else
+      infilename = argv[1];
+#endif
+
+      pixbuf = gdk_pixbuf_new_from_file (infilename, &error);
       if (!pixbuf)
 	{
 	  g_fprintf (stderr, "failed to load \"%s\": %s\n",
@@ -111,11 +118,20 @@ main (int   argc,
 
       while (j--)
 	{
+#ifdef G_OS_WIN32
+	  infilename = g_locale_to_utf8 (*p, -1, NULL, NULL, NULL);
+#else
+	  infilename = *p;
+#endif
+
 	  if (!toggle)
-	    image_name = *p++;
+	    {
+	      image_name = infilename;
+	      p++;
+	    }
 	  else
 	    {
-	      pixbuf = gdk_pixbuf_new_from_file (*p, &error);
+	      pixbuf = gdk_pixbuf_new_from_file (infilename, &error);
 	      if (!pixbuf)
 		{
 		  g_fprintf (stderr, "failed to load \"%s\": %s\n",

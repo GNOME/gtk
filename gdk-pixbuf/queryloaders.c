@@ -210,25 +210,30 @@ int main (int argc, char **argv)
 	gint i;
 
 #ifdef G_OS_WIN32
-	gchar libdir[sizeof (PIXBUF_LIBDIR) + 100];
-	gchar runtime_prefix[1000];
+	gchar *libdir;
+	gchar *runtime_prefix;
 	gchar *slash;
 
-	strcpy (libdir, PIXBUF_LIBDIR);
-
 	if (g_ascii_strncasecmp (PIXBUF_LIBDIR, GTK_PREFIX, strlen (GTK_PREFIX)) == 0 &&
-	    (PIXBUF_LIBDIR[strlen (GTK_PREFIX)] == '/' ||
-	     PIXBUF_LIBDIR[strlen (GTK_PREFIX)] == '\\')) {
+	    G_IS_DIR_SEPARATOR (PIXBUF_LIBDIR[strlen (GTK_PREFIX)])) {
 		/* GTK_PREFIX is a prefix of PIXBUF_LIBDIR, as it
 		 * normally is. Replace that prefix in PIXBUF_LIBDIR
 		 * with the installation directory on this machine.
 		 * We assume this invokation of
 		 * gdk-pixbuf-query-loaders is run from either a "bin"
 		 * subdirectory of the installation directory, or in
-		 * the insallation directory itself.
+		 * the installation directory itself.
 		 */
-		GetModuleFileName (NULL, runtime_prefix, sizeof (runtime_prefix));
-
+		if (G_WIN32_HAVE_WIDECHAR_API ()) {
+			wchar_t fn[1000];
+			GetModuleFileNameW (NULL, fn, G_N_ELEMENTS (fn));
+			runtime_prefix = g_utf16_to_utf8 (fn, -1, NULL, NULL, NULL);
+		}
+		else {
+			char fn[1000];
+			GetModuleFileNameA (NULL, fn, G_N_ELEMENTS (fn));
+			runtime_prefix = g_locale_to_utf8 (fn, -1, NULL, NULL, NULL);
+		}
 		slash = strrchr (runtime_prefix, '\\');
 		*slash = '\0';
 		slash = strrchr (runtime_prefix, '\\');
@@ -236,11 +241,13 @@ int main (int argc, char **argv)
 			*slash = '\0';
 		}
 		
-		if (strlen (runtime_prefix) + 1 + strlen (PIXBUF_LIBDIR) - strlen (GTK_PREFIX) < sizeof (libdir)) {
-			strcpy (libdir, runtime_prefix);
-			strcat (libdir, "/");
-			strcat (libdir, PIXBUF_LIBDIR + strlen (GTK_PREFIX) + 1);
-		}
+		libdir = g_strconcat (runtime_prefix,
+				      "/",
+				      PIXBUF_LIBDIR + strlen (GTK_PREFIX) + 1,
+				      NULL);
+	}
+	else {
+		libdir = PIXBUF_LIBDIR;
 	}
 
 #undef PIXBUF_LIBDIR
@@ -258,6 +265,10 @@ int main (int argc, char **argv)
 		GDir *dir;
     
 		path = g_getenv ("GDK_PIXBUF_MODULEDIR");
+#ifdef G_OS_WIN32
+		if (path != NULL && *path != '\0')
+			path = g_locale_to_utf8 (path, -1, NULL, NULL, NULL);
+#endif
 		if (path == NULL || *path == '\0')
 			path = PIXBUF_LIBDIR;
 
@@ -283,9 +294,14 @@ int main (int argc, char **argv)
 	else {
 		char *cwd = g_get_current_dir ();
 
-		for (i = 1; i < argc; i++)
-			query_module (cwd, argv[i]);
-
+		for (i = 1; i < argc; i++) {
+			char *infilename = argv[i];
+#ifdef G_OS_WIN32
+			infilename = g_locale_to_utf8 (infilename,
+						       -1, NULL, NULL, NULL);
+#endif
+			query_module (cwd, infilename);
+		}
 		g_free (cwd);
 	}
 

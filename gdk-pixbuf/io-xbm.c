@@ -39,7 +39,7 @@
 #include <errno.h>
 #include "gdk-pixbuf-private.h"
 #include "gdk-pixbuf-io.h"
-
+#include <glib/gstdio.h>
 
 
 typedef struct _XBMData XBMData;
@@ -416,7 +416,7 @@ gdk_pixbuf__xbm_image_stop_load (gpointer data,
         }
 
 	fclose (context->file);
-	unlink (context->tempname);
+	g_unlink (context->tempname);
 	g_free (context->tempname);
 	g_free ((XBMData *) context);
 

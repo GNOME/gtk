@@ -13,7 +13,10 @@ gdk_pixbuf_animation_iter_get_delay_time
 gdk_pixbuf_animation_iter_get_pixbuf
 gdk_pixbuf_animation_iter_get_type G_GNUC_CONST
 gdk_pixbuf_animation_iter_on_currently_loading_frame
-gdk_pixbuf_animation_new_from_file
+gdk_pixbuf_animation_new_from_file PRIVATE
+#ifdef G_OS_WIN32
+gdk_pixbuf_animation_new_from_file_utf8
+#endif
 gdk_pixbuf_animation_ref
 gdk_pixbuf_animation_unref
 gdk_pixbuf_composite
@@ -59,9 +62,18 @@ gdk_pixbuf_loader_set_size
 gdk_pixbuf_loader_write
 gdk_pixbuf_new
 gdk_pixbuf_new_from_data
-gdk_pixbuf_new_from_file
-gdk_pixbuf_new_from_file_at_size
-gdk_pixbuf_new_from_file_at_scale
+gdk_pixbuf_new_from_file PRIVATE
+#ifdef G_OS_WIN32
+gdk_pixbuf_new_from_file_utf8
+#endif
+gdk_pixbuf_new_from_file_at_size PRIVATE
+#ifdef G_OS_WIN32
+gdk_pixbuf_new_from_file_at_size_utf8
+#endif
+gdk_pixbuf_new_from_file_at_scale PRIVATE
+#ifdef G_OS_WIN32
+gdk_pixbuf_new_from_file_at_scale_utf8
+#endif
 gdk_pixbuf_new_from_inline
 gdk_pixbuf_new_from_xpm_data
 gdk_pixbuf_new_subpixbuf

@@ -34,7 +34,7 @@
 #include <errno.h>
 #include "gdk-pixbuf-private.h"
 #include "gdk-pixbuf-io.h"
-
+#include <glib/gstdio.h>
 
 
 /* I have must have done something to deserve this.
@@ -1499,7 +1499,7 @@ gdk_pixbuf__xpm_image_stop_load (gpointer data,
        }
 
        fclose (context->file);
-       unlink (context->tempname);
+       g_unlink (context->tempname);
        g_free (context->tempname);
        g_free ((XPMContext *) context);
 

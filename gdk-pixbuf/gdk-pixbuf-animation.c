@@ -30,6 +30,8 @@
 #include "gdk-pixbuf-i18n.h"
 #include "gdk-pixbuf-animation.h"
 
+#include <glib/gstdio.h>
+
 typedef struct _GdkPixbufNonAnim GdkPixbufNonAnim;
 typedef struct _GdkPixbufNonAnimClass GdkPixbufNonAnimClass;
 
@@ -114,7 +116,7 @@ gdk_pixbuf_animation_get_type (void)
 
 /**
  * gdk_pixbuf_animation_new_from_file:
- * @filename: Name of file to load.
+ * @filename: Name of file to load, in the GLib file name encoding
  * @error: return location for error
  *
  * Creates a new animation by loading it from a file.  The file format is
@@ -143,7 +145,7 @@ gdk_pixbuf_animation_new_from_file (const char *filename,
         g_return_val_if_fail (error == NULL || *error == NULL, NULL);
 
         display_name = g_filename_display_name (filename);
-	f = fopen (filename, "rb");
+	f = g_fopen (filename, "rb");
 	if (!f) {
                 g_set_error (error,
                              G_FILE_ERROR,
@@ -250,6 +252,30 @@ gdk_pixbuf_animation_new_from_file (const char *filename,
                 _gdk_pixbuf_unlock (image_module);
 	return animation;
 }
+
+#ifdef G_OS_WIN32
+
+#undef gdk_pixbuf_animation_new_from_file
+
+GdkPixbufAnimation *
+gdk_pixbuf_animation_new_from_file (const char *filename,
+                                    GError    **error)
+{
+	gchar *utf8_filename =
+		g_locale_to_utf8 (filename, -1, NULL, NULL, error);
+	GdkPixbufAnimation *retval;
+
+	if (utf8_filename == NULL)
+		return NULL;
+
+	retval = gdk_pixbuf_animation_new_from_file_utf8 (utf8_filename, error);
+
+	g_free (utf8_filename);
+
+	return retval;
+}
+
+#endif
 
 /**
  * gdk_pixbuf_animation_ref:

@@ -37,6 +37,8 @@
 #include "gdk-pixbuf-private.h"
 #include "gdk-pixbuf-io.h"
 
+#include <glib/gstdio.h>
+
 #ifdef G_OS_WIN32
 #define STRICT
 #include <windows.h>
@@ -800,7 +802,7 @@ _gdk_pixbuf_generic_image_load (GdkPixbufModule *module,
 
 /**
  * gdk_pixbuf_new_from_file:
- * @filename: Name of file to load.
+ * @filename: Name of file to load, in the GLib file name encoding
  * @error: Return location for an error
  *
  * Creates a new pixbuf by loading an image from a file.  The file format is
@@ -828,7 +830,7 @@ gdk_pixbuf_new_from_file (const char *filename,
 	
 	display_name = g_filename_display_name (filename);	
 
-	f = fopen (filename, "rb");
+	f = g_fopen (filename, "rb");
 	if (!f) {
                 g_set_error (error,
                              G_FILE_ERROR,
@@ -901,6 +903,29 @@ gdk_pixbuf_new_from_file (const char *filename,
 	return pixbuf;
 }
 
+#ifdef G_OS_WIN32
+
+#undef gdk_pixbuf_new_from_file
+
+GdkPixbuf *
+gdk_pixbuf_new_from_file (const char *filename,
+                          GError    **error)
+{
+	gchar *utf8_filename =
+		g_locale_to_utf8 (filename, -1, NULL, NULL, error);
+	GdkPixbuf *retval;
+
+	if (utf8_filename == NULL)
+		return NULL;
+
+	retval = gdk_pixbuf_new_from_file_utf8 (utf8_filename, error);
+
+	g_free (utf8_filename);
+
+	return retval;
+}
+#endif
+
 static void
 size_prepared_cb (GdkPixbufLoader *loader, 
 		  int              width,
@@ -933,8 +958,67 @@ size_prepared_cb (GdkPixbufLoader *loader,
 }
 
 /**
+ * gdk_pixbuf_new_from_file_at_size:
+ * @filename: Name of file to load, in the GLib file name encoding
+ * @width: The width the image should have
+ * @height: The height the image should have
+ * @error: Return location for an error
+ *
+ * Creates a new pixbuf by loading an image from a file.  The file format is
+ * detected automatically. If %NULL is returned, then @error will be set.
+ * Possible errors are in the #GDK_PIXBUF_ERROR and #G_FILE_ERROR domains.
+ * The image will be scaled to fit in the requested size, preserving
+ * the image's aspect ratio.
+ *
+ * Return value: A newly-created pixbuf with a reference count of 1, or 
+ * %NULL if any of several error conditions occurred:  the file could not 
+ * be opened, there was no loader for the file's format, there was not 
+ * enough memory to allocate the image buffer, or the image file contained 
+ * invalid data.
+ *
+ * Since: 2.4
+ **/
+GdkPixbuf *
+gdk_pixbuf_new_from_file_at_size (const char *filename,
+				  int         width, 
+				  int         height,
+				  GError    **error)
+{
+	return gdk_pixbuf_new_from_file_at_scale (filename, 
+						  width, height, 
+						  TRUE, error);
+}
+
+#ifdef G_OS_WIN32
+
+#undef gdk_pixbuf_new_from_file_at_size
+
+GdkPixbuf *
+gdk_pixbuf_new_from_file_at_size (const char *filename,
+				  int         width, 
+				  int         height,
+				  GError    **error)
+{
+	gchar *utf8_filename =
+		g_locale_to_utf8 (filename, -1, NULL, NULL, error);
+	GdkPixbuf *retval;
+
+	if (utf8_filename == NULL)
+		return NULL;
+
+	retval = gdk_pixbuf_new_from_file_at_size_utf8 (utf8_filename,
+							width, height,
+							error);
+
+	g_free (utf8_filename);
+
+	return retval;
+}
+#endif
+
+/**
  * gdk_pixbuf_new_from_file_at_scale:
- * @filename: Name of file to load.
+ * @filename: Name of file to load, in the GLib file name encoding
  * @width: The width the image should have
  * @height: The height the image should have
  * @preserve_aspect_ratio: %TRUE to preserve the image's aspect ratio
@@ -976,7 +1060,7 @@ gdk_pixbuf_new_from_file_at_scale (const char *filename,
 	g_return_val_if_fail (filename != NULL, NULL);
         g_return_val_if_fail (width > 0 && height > 0, NULL);
 
-	f = fopen (filename, "rb");
+	f = g_fopen (filename, "rb");
 	if (!f) {
                 gchar *display_name = g_filename_display_name (filename);
                 g_set_error (error,
@@ -1036,37 +1120,35 @@ gdk_pixbuf_new_from_file_at_scale (const char *filename,
 	return pixbuf;
 }
 
-/**
- * gdk_pixbuf_new_from_file_at_size:
- * @filename: Name of file to load.
- * @width: The width the image should have
- * @height: The height the image should have
- * @error: Return location for an error
- *
- * Creates a new pixbuf by loading an image from a file.  The file format is
- * detected automatically. If %NULL is returned, then @error will be set.
- * Possible errors are in the #GDK_PIXBUF_ERROR and #G_FILE_ERROR domains.
- * The image will be scaled to fit in the requested size, preserving
- * the image's aspect ratio.
- *
- * Return value: A newly-created pixbuf with a reference count of 1, or 
- * %NULL if any of several error conditions occurred:  the file could not 
- * be opened, there was no loader for the file's format, there was not 
- * enough memory to allocate the image buffer, or the image file contained 
- * invalid data.
- *
- * Since: 2.4
- **/
+#ifdef G_OS_WIN32
+
+#undef gdk_pixbuf_new_from_file_at_scale
+
 GdkPixbuf *
-gdk_pixbuf_new_from_file_at_size (const char *filename,
-				  int         width, 
-				  int         height,
-				  GError    **error)
+gdk_pixbuf_new_from_file_at_scale (const char *filename,
+				   int         width, 
+				   int         height,
+				   gboolean    preserve_aspect_ratio,
+				   GError    **error)
 {
-	return gdk_pixbuf_new_from_file_at_scale (filename, 
-						  width, height, 
-						  TRUE, error);
+	gchar *utf8_filename =
+		g_locale_to_utf8 (filename, -1, NULL, NULL, error);
+	GdkPixbuf *retval;
+
+	if (utf8_filename == NULL)
+		return NULL;
+
+	retval = gdk_pixbuf_new_from_file_at_scale_utf8 (utf8_filename,
+							 width, height,
+							 preserve_aspect_ratio,
+							 error);
+
+	g_free (utf8_filename);
+
+	return retval;
 }
+#endif
+
 
 static void
 info_cb (GdkPixbufLoader *loader, 
@@ -1120,7 +1202,7 @@ gdk_pixbuf_get_file_info (const gchar  *filename,
 
 	g_return_val_if_fail (filename != NULL, NULL);
 
-	f = fopen (filename, "rb");
+	f = g_fopen (filename, "rb");
 	if (!f)
 		return NULL;
 
@@ -1379,7 +1461,7 @@ save_to_callback_with_tmp_file (GdkPixbufModule   *image_module,
 	if (f)
 		fclose (f);
 	if (filename) {
-		unlink (filename);
+		g_unlink (filename);
 		g_free (filename);
 	}
 	g_free (buf);
@@ -1549,7 +1631,7 @@ gdk_pixbuf_savev (GdkPixbuf  *pixbuf,
         g_return_val_if_fail (type != NULL, FALSE);
         g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
        
-        f = fopen (filename, "wb");
+        f = g_fopen (filename, "wb");
         
         if (f == NULL) {
                 gchar *display_name = g_filename_display_name (filename);
