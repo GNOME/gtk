@@ -5,6 +5,7 @@
 	for RTL.
 	(shortcuts_drag_motion_cb): Cancel the idle handler here as well.
 	(shortcuts_drag_leave_cb): Test whether the idle is present.
+	(shortcuts_drag_data_received_cb): Ahem, don't assert here.
 
 Thu Mar 11 17:51:10 2004  Owen Taylor  <otaylor@redhat.com>
 

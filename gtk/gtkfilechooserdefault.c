@@ -2284,7 +2284,6 @@ shortcuts_drag_data_received_cb (GtkWidget          *widget,
   int bookmarks_index;
 
   impl = GTK_FILE_CHOOSER_DEFAULT (data);
-  g_assert (impl->shortcuts_drag_outside_idle == NULL);
 
   /* Compute position */
 
