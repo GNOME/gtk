@@ -1166,7 +1166,7 @@ create_folder_tree (GtkFileChooserDefault *impl)
   /* Column */
 
   gtk_tree_view_insert_column_with_data_func (GTK_TREE_VIEW (impl->browse_directories_tree_view), 0,
-					      _("File name"),
+					      _("Name"),
 					      gtk_cell_renderer_text_new (),
 					      tree_name_data_func, impl, NULL);
   gtk_tree_view_set_search_column (GTK_TREE_VIEW (impl->browse_directories_tree_view),
@@ -1694,7 +1694,7 @@ create_file_list (GtkFileChooserDefault *impl)
 
   impl->list_name_column = gtk_tree_view_column_new ();
   gtk_tree_view_column_set_expand (impl->list_name_column, TRUE);
-  gtk_tree_view_column_set_title (impl->list_name_column, _("File name"));
+  gtk_tree_view_column_set_title (impl->list_name_column, _("Name"));
   gtk_tree_view_column_set_sort_column_id (impl->list_name_column, FILE_LIST_COL_NAME);
 
   renderer = gtk_cell_renderer_pixbuf_new ();

@@ -1,3 +1,9 @@
+2004-02-28  Federico Mena Quintero  <federico@ximian.com>
+
+	* gtk/gtkfilechooserdefault.c (create_folder_tree): Use "Name" for
+	the title of the filename column.
+	(create_file_list): Likewise.
+
 Sun Feb 29 03:31:42 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkentry.c (gtk_entry_completion_key_press): Fix Page_Up 
