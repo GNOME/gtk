@@ -1,7 +1,12 @@
+Wed Nov 29 20:56:38 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkwidget.[ch] (gtk_widget_is_ancestor): Change
+	return type to boolean (Oskar Liljeblad, #18648)
+
 Wed Nov 29 20:44:09 2000  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkclist.c (gtk_clist_get_pixtext): Allow mask to 
-	be NULL.
+	be NULL. (Vladimir Klebanov, #26545)
 
 Thu Oct 26 02:10:32 2000  Tim Janik  <timj@gtk.org>
 
