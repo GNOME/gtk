@@ -1,5 +1,10 @@
 2004-10-03  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtktreeviewcolumn.c 
+	(gtk_tree_view_column_setup_sort_column_id_callback): 
+	Set sort_indicator to FALSE when appropriate.  (#153714, 
+	Reinout van Schouwen)
+
 	* gtk/gtktreeview.c (gtk_tree_view_search_position_func): 
 	Fix positioning near the monitor boundaries.  (#154341,
 	Ken Harris)
