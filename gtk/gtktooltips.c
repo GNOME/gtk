@@ -175,7 +175,6 @@ gtk_tooltips_force_window (GtkTooltips *tooltips)
   if (!tooltips->tip_window)
     {
       tooltips->tip_window = gtk_draw_window_new (GTK_WINDOW_POPUP);
-      gtk_widget_ref (tooltips->tip_window);
       gtk_window_set_policy (GTK_WINDOW (tooltips->tip_window), FALSE, FALSE, TRUE);
 
       gtk_signal_connect_object (GTK_OBJECT (tooltips->tip_window), 

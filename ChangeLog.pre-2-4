@@ -1,3 +1,18 @@
+Mon Nov 23 05:21:50 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkcontainer.c:
+ 	(gtk_container_add_with_args): 
+	(gtk_container_addv): 
+	(gtk_container_add): removed assertements for constructed containers
+	again, since this essentially breaks the "child" arg.
+
+	* gtk/gtktooltips.c (gtk_tooltips_force_window): fixup the draw_window
+	reference count, we don't need to reference toplevels that already have
+	destroy notifiers.
+
+	* gtk/gtkscrolledwindow.c: check for the composites existance in
+	_forall since we might not be already constructed.
+
 Sun Nov 22 14:34:58 CST 1998 Shawn T. Amundson <amundson@gtk.org>
 
 	* Released GTK+ 1.1.5

@@ -547,8 +547,10 @@ gtk_scrolled_window_forall (GtkContainer *container,
     callback (scrolled_window->child, callback_data);
   if (include_internals)
     {
-      callback (scrolled_window->vscrollbar, callback_data);
-      callback (scrolled_window->hscrollbar, callback_data);
+      if (scrolled_window->vscrollbar)
+	callback (scrolled_window->vscrollbar, callback_data);
+      if (scrolled_window->hscrollbar)
+	callback (scrolled_window->hscrollbar, callback_data);
     }
 }
 
