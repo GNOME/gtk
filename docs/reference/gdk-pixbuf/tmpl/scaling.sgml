@@ -202,13 +202,14 @@ End:
 
 <!-- ##### ENUM GdkPixbufRotation ##### -->
 <para>
-
+The possible rotations which can be passed to gdk_pixbuf_rotate_simple().
+To make them easier to use, their numerical values are the actual degrees.
 </para>
 
-@GDK_PIXBUF_ROTATE_NONE: 
-@GDK_PIXBUF_ROTATE_COUNTERCLOCKWISE: 
-@GDK_PIXBUF_ROTATE_UPSIDEDOWN: 
-@GDK_PIXBUF_ROTATE_CLOCKWISE: 
+@GDK_PIXBUF_ROTATE_NONE: No rotation.
+@GDK_PIXBUF_ROTATE_COUNTERCLOCKWISE: Rotate by 90 degrees.
+@GDK_PIXBUF_ROTATE_UPSIDEDOWN: Rotate by 180 degrees.
+@GDK_PIXBUF_ROTATE_CLOCKWISE: Rotate by 270 degrees.
 
 <!-- ##### FUNCTION gdk_pixbuf_rotate_simple ##### -->
 <para>
