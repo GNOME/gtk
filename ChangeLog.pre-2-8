@@ -1,6 +1,12 @@
 2004-11-15  Matthias Clasen  <mclasen@redhat.com>
 
-	* gtk/gtkimagemenuitem.c (gtk_image_menu_item_screen_changed): 
+	* gtk/gtkimagemenuitem.c (gtk_image_menu_item_setting_changed): 
+	* gtk/gtkbutton.c (gtk_button_setting_changed): Really free the
+	list.  (#158422, Morten Welinder)
+
+2004-11-15  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkimagemenuitem.c (gtk_image_menu_item_screen_changed) 
 	* gtk/gtkbutton.c (gtk_button_screen_changed): Use 
 	GPOINTER_TO_UINT()/GUINT_TO_POINTER() for guints.  (#158420,
 	Morten Welinder)

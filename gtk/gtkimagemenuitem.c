@@ -566,12 +566,13 @@ traverse_container (GtkWidget *widget,
 static void
 gtk_image_menu_item_setting_changed (GtkSettings *settings)
 {
-  GList *list;
+  GList *list, *l;
 
   list = gtk_window_list_toplevels ();
 
-  for (; list; list = list->next)
-    gtk_container_forall (GTK_CONTAINER (list->data), traverse_container, NULL);
+  for (l = list; l; l = l->next)
+    gtk_container_forall (GTK_CONTAINER (l->data), 
+			  traverse_container, NULL);
 
   g_list_free (list);  
 }
