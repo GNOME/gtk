@@ -1,3 +1,7 @@
+Sun Jul 30 14:17:43 2000  Pablo Saratxaga <pablo@mandrakesoft.com>
+
+	* configure.in,po/{sp,sr}.po: Added Serbian files
+
 Thu Jul 27 05:06:29 2000  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtktable.c: applied patch from Phil Thompson
