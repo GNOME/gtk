@@ -1272,10 +1272,14 @@ gtk_tree_model_sort_set_sort_func (GtkTreeSortable        *sortable,
 
   for (list = tree_model_sort->sort_list; list; list = list->next)
     {
-      header = (GtkTreeDataSortHeader *) list->data;
+      GtkTreeDataSortHeader *list_header;
 
-      if (header->sort_column_id == sort_column_id)
-	break;
+      list_header = (GtkTreeDataSortHeader*) list->data;
+      if (list_header->sort_column_id == sort_column_id)
+	{
+	  header = list_header;
+	  break;
+	}
     }
 
   if (header == NULL)

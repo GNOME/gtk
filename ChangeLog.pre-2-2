@@ -1,3 +1,8 @@
+Sun Apr 28 22:43:55 2002  Jonathan Blandford  <jrb@gnome.org>
+
+	* gtk/gtktreemodelsort.c (gtk_tree_model_sort_set_sort_func): Fix
+	so that you can set a new sort func.
+
 2002-04-27  Anders Carlsson  <andersca@gnu.org>
 
 	* gdk/x11/gdkpixmap-x11.c (gdk_pixmap_foreign_new_for_display): 
