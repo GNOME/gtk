@@ -328,6 +328,7 @@ gdk_drawable_set_data
 <FILE>selections</FILE>
 GdkSelection
 GdkSelectionType
+GdkTarget
 gdk_selection_owner_set
 gdk_selection_owner_get
 gdk_selection_convert
@@ -339,9 +340,6 @@ gdk_selection_send_notify
 <TITLE>Properties and Atoms</TITLE>
 <FILE>properties</FILE>
 GdkAtom
-GdkPropertyState
-GdkPropMode
-GdkTarget
 gdk_text_property_to_text_list
 gdk_free_text_list
 gdk_string_to_compound_text
@@ -350,6 +348,7 @@ gdk_atom_intern
 gdk_atom_name
 gdk_property_get
 gdk_property_change
+GdkPropMode
 gdk_property_delete
 </SECTION>
 
@@ -463,13 +462,11 @@ gdk_keyval_to_lower
 <TITLE>Input Devices</TITLE>
 <FILE>input_devices</FILE>
 GDK_CORE_POINTER
-GdkExtensionMode
-GdkDeviceKey
-GdkDeviceInfo
-gdk_input_init
-gdk_input_exit
 gdk_input_list_devices
+GdkDeviceInfo
+GdkDeviceKey
 gdk_input_set_extension_events
+GdkExtensionMode
 gdk_input_set_source
 GdkInputSource
 gdk_input_set_mode
@@ -480,6 +477,10 @@ gdk_input_set_key
 gdk_input_window_get_pointer
 gdk_input_motion_events
 GdkTimeCoord
+
+<SUBSECTION Private>
+gdk_input_init
+gdk_input_exit
 </SECTION>
 
 <SECTION>
@@ -521,6 +522,7 @@ GdkNotifyType
 GdkEventFocus
 GdkEventConfigure
 GdkEventProperty
+GdkPropertyState
 GdkEventSelection
 GdkEventProximity
 GdkEventClient

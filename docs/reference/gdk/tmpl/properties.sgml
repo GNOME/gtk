@@ -2,11 +2,39 @@
 Properties and Atoms
 
 <!-- ##### SECTION Short_Description ##### -->
-
+functions to manipulate properties on windows.
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>
-
+Each window under X can have any number of associated
+<firstterm>properties</firstterm> attached to it.
+Properties are arbitrary chunks of data identified by
+<firstterm>atom</firstterm>s. (An <firstterm>atom</firstterm>
+is a numeric index into a string table on the X server. They are used
+to transfer strings efficiently between clients without
+having to transfer the entire string.) A property
+has an associated type, which is also identified
+using an atom.
+</para>
+<para>
+A property has an associated <firstterm>format</firstterm>,
+an integer describing how many bits are in each unit
+of data inside the property. It must be 8, 16, or 32.
+When data is transfered between the server and client,
+if they are of different endianesses it will be byteswapped
+as necessary according to the format of the property.
+Note that on the client side, properties of format 32
+will be stored with one unit per <emphasis>long</emphasis>,
+even if a long integer has more than 32 bits on the platform.
+(This decision was apparently made for Xlib to maintain
+compatibility with programs that assumed longs were 32
+bits, at the expense of programs that knew better.)
+</para>
+<para>
+The functions in this section are used to add, remove
+and change properties on windows, to convert atoms
+to and from strings and to manipulate some types of
+data commonly stored in X window properties.
 </para>
 
 <!-- ##### SECTION See_Also ##### -->
@@ -16,137 +44,175 @@ Properties and Atoms
 
 <!-- ##### TYPEDEF GdkAtom ##### -->
 <para>
-
+A numeric type representing a string as an index into a table
+of strings on the X server.
 </para>
 
-
-<!-- ##### ENUM GdkPropertyState ##### -->
-<para>
-
-</para>
-
-@GDK_PROPERTY_NEW_VALUE: 
-@GDK_PROPERTY_DELETE: 
-
-<!-- ##### ENUM GdkPropMode ##### -->
-<para>
-
-</para>
-
-@GDK_PROP_MODE_REPLACE: 
-@GDK_PROP_MODE_PREPEND: 
-@GDK_PROP_MODE_APPEND: 
-
-<!-- ##### ENUM GdkTarget ##### -->
-<para>
-
-</para>
-
-@GDK_TARGET_BITMAP: 
-@GDK_TARGET_COLORMAP: 
-@GDK_TARGET_DRAWABLE: 
-@GDK_TARGET_PIXMAP: 
-@GDK_TARGET_STRING: 
 
 <!-- ##### FUNCTION gdk_text_property_to_text_list ##### -->
 <para>
-
+Convert a text string from the encoding as it is stored in
+a property into an array of strings in the encoding of
+the current local. (The elements of the array represent
+the null-separated elements of the original text string.)
 </para>
 
-@encoding: 
-@format: 
-@text: 
-@length: 
-@list: 
-@Returns: 
+@encoding: an atom representing the encoding. The most common
+           values for this are <literal>STRING</literal>,
+           or <literal>COMPOUND_TEXT</literal>. This is
+           value used as the type for the property.
+@format: the format of the property.
+@text: the text data.
+@length: the length of the property, in item.s
+@list: location to store a terminated array of strings
+       in the encoding of the current locale. This
+       array should be freed using gdk_free_text_list().
+@Returns: the number of strings stored in @list, or 0,
+          if the conversion failed.
 
 
 <!-- ##### FUNCTION gdk_free_text_list ##### -->
 <para>
-
+Free the array of strings created by
+gdk_text_property_to_text_list().
 </para>
 
-@list: 
+@list: the value stored in the @list parameter by
+       a call to gdk_text_property_to_text_list().
 
 
 <!-- ##### FUNCTION gdk_string_to_compound_text ##### -->
 <para>
-
+Convert a string from the encoding of the current locale 
+into a form suitable for storing in a window property.
 </para>
 
-@str: 
-@encoding: 
-@format: 
-@ctext: 
-@length: 
-@Returns: 
+@str: a null-terminated string.
+@encoding: location to store the encoding atom (to be used as the type for the property).
+@format: location to store the format for the property.
+@ctext: location to store newly allocated data for the property.
+@length: location to store the length of @ctext in items.
+@Returns: 0 upon sucess, non-zero upon failure.
 
 
 <!-- ##### FUNCTION gdk_free_compound_text ##### -->
 <para>
-
+Free the data returned from gdk_string_to_compound_text().
 </para>
 
-@ctext: 
+@ctext: The pointer stored in @ctext from a call to gdk_string_to_compound_text().
 
 
 <!-- ##### FUNCTION gdk_atom_intern ##### -->
 <para>
-
+Find or create an atom corresponding to a given string.
 </para>
 
-@atom_name: 
-@only_if_exists: 
-@Returns: 
+@atom_name: a string.
+@only_if_exists: if %TRUE, do not create a new atom, but
+                 just return the atom if it already exists.
+@Returns: the atom corresponding to @atom_name, or, if
+          @only_if_exists is false, and an atom does not
+          already exists for the string, %GDK_NONE.
 
 
 <!-- ##### FUNCTION gdk_atom_name ##### -->
 <para>
-
+Determine the string corresponding to an atom.
 </para>
 
-@atom: 
-@Returns: 
+@atom: a #GdkAtom.
+@Returns: a newly allocated string containing the string
+          corresponding to @atom. When you are done
+          with the return value, you should free it 
+          using g_free().
 
 
 <!-- ##### FUNCTION gdk_property_get ##### -->
 <para>
+Retrieves a portion of the contents of a property. If the
+property does not exist, then the function returns FALSE,
+and %GDK_NONE will be stored in @actual_property_type.
 
+Note: the <function>XGetWindowProperty()</function>
+function that gdk_property_get()
+uses has a very confusing and complicated set of semantics.
+Unfortunately, gdk_property_get() makes the situation
+worse instead of better (the semantics should be considered
+undefined), and also prints warnings to stderr in cases where it
+should return a useful error to the program. You are advised to use 
+<function>XGetWindowProperty()</function>
+directly until a replacement function for gdk_property_get()
+is provided. 
 </para>
 
-@window: 
-@property: 
-@type: 
-@offset: 
-@length: 
-@pdelete: 
-@actual_property_type: 
-@actual_format: 
-@actual_length: 
-@data: 
-@Returns: 
+@window: a #GdkWindow.
+@property: the property to retrieve.
+@type: the desired property type, or 0, if any type of data
+       is acceptable. If this does not match the actual
+       type, then @actual_format and @actual_length will
+       be filled in, a warning will be printed to stderr
+       and no data will be returned.
+@offset: the offset into the property at which to begin
+         retrieving data. (in 4 byte units!)
+@length: the length of the data to delete. (in bytes, but
+         the actual retrieved length will be the next
+         integer multiple multiple of four greater than 
+         this!)
+@pdelete: if %TRUE, delete the property after retrieving the
+          data.
+@actual_property_type: location to store the actual type of 
+                       the property.
+@actual_format: location to store the actual format of the data.
+@actual_length: location to store the length of the retrieved
+                data, in bytes.
+@data: location to store a pointer to the data. The retrieved
+       data should be freed with g_free() when you are finished
+       using it.
+@Returns: %TRUE if data was sucessfully received and stored
+          in @data, otherwise %FALSE.
 
 
 <!-- ##### FUNCTION gdk_property_change ##### -->
 <para>
-
+Change the contents of a property on a window.
 </para>
 
-@window: 
-@property: 
-@type: 
-@format: 
-@mode: 
-@data: 
-@nelements: 
+@window: a #GdkWindow.
+@property: the property to change.
+@type: the new type for the property. If @mode is
+       %GDK_PROP_MODE_REPLACE or %GDK_PROP_MODE_APPEND, then this 
+       must match the existing type or an error will occur.
+@format: the new format for the property. If @mode is
+         %GDK_PROP_MODE_REPLACE or %GDK_PROP_MODE_APPEND, then this 
+         must match the existing format or an error will occur.
+@mode: a value describing how the new data is to be combined
+       with the current data.
+@data: the data
+       (a <literal>guchar *</literal>
+        <literal>gushort *</literal>, or 
+        <literal>gulong *</literal>, depending on @format), cast to a 
+        <literal>guchar *</literal>.
+@nelements: the number of elements of size determined by the format,
+            contained in @data.
 
+
+<!-- ##### ENUM GdkPropMode ##### -->
+<para>
+Describes how existing data is combined with new data when
+using gdk_property_change().
+</para>
+
+@GDK_PROP_MODE_REPLACE: the new data replaces the existing data.
+@GDK_PROP_MODE_PREPEND: the new data is prepended to the existing data.
+@GDK_PROP_MODE_APPEND: the new data is appended to the existing data.
 
 <!-- ##### FUNCTION gdk_property_delete ##### -->
 <para>
-
+Delete a property from a window.
 </para>
 
-@window: 
-@property: 
+@window: a #GdkWindow.
+@property: the property to delete.
 
 

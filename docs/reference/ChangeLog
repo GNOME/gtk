@@ -1,0 +1,9 @@
+Mon Aug 16 6:60:53 1999  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/tmpl/properties.sgml
+	  gdk/tmpl/selections.sgml
+	  gdk/tmpl/input_devices.sgml: Documented
+
+	* gdk/gdk-sections.txt: Moved around types for
+	  input devices properties and selections, marked
+	  a few functions as private.
