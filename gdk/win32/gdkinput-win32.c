@@ -346,6 +346,20 @@ gdk_input_wintab_init (void)
 	  GDK_NOTE (INPUT, (g_print("context for device %d after WTOpen:\n", devix),
 			   print_lc(&lc)));
 #endif
+	  /* Increase packet queue size to reduce the risk of lost packets */
+	  /* According to the specs, if the function fails we must try again */
+	  /* with a smaller queue size */
+	  GDK_NOTE (INPUT, g_print("Attempting to increase queue size\n"));
+	  for (i = 128; i >= 1; i >>= 1)
+	    {
+	      if (WTQueueSizeSet(*hctx, i))
+		{
+		  GDK_NOTE (INPUT, g_print("Queue size set to %d\n", i));
+		  break;
+		}
+	    }
+	  if (!i)
+	    GDK_NOTE (INPUT, g_print("Whoops, no queue size could be set\n"));
 	  for (cursorix = firstcsr; cursorix < firstcsr + ncsrtypes; cursorix++)
 	    {
 	      active = FALSE;
@@ -399,7 +413,7 @@ gdk_input_wintab_init (void)
 		    gdkdev->axes[k].max_value = axis_x.axMax;
 		  gdkdev->info.axes[k].use = GDK_AXIS_X;
 		  gdkdev->info.axes[k].min = axis_x.axMin;
-		  gdkdev->info.axes[k].min = axis_x.axMax;
+		  gdkdev->info.axes[k].max = axis_x.axMax;
 		  k++;
 		}
 	      if (gdkdev->pktdata & PK_Y)
@@ -412,7 +426,7 @@ gdk_input_wintab_init (void)
 		    gdkdev->axes[k].max_value = axis_y.axMax;
 		  gdkdev->info.axes[k].use = GDK_AXIS_Y;
 		  gdkdev->info.axes[k].min = axis_y.axMin;
-		  gdkdev->info.axes[k].min = axis_y.axMax;
+		  gdkdev->info.axes[k].max = axis_y.axMax;
 		  k++;
 		}
 	      if (gdkdev->pktdata & PK_NORMAL_PRESSURE)
@@ -424,8 +438,9 @@ gdk_input_wintab_init (void)
 		  gdkdev->axes[k].xmax_value =
 		    gdkdev->axes[k].max_value = axis_npressure.axMax;
 		  gdkdev->info.axes[k].use = GDK_AXIS_PRESSURE;
-		  gdkdev->info.axes[k].min = axis_npressure.axMin;
-		  gdkdev->info.axes[k].min = axis_npressure.axMax;
+		  /* GIMP seems to expect values in the range 0-1 */
+		  gdkdev->info.axes[k].min = 0.0; /*axis_npressure.axMin;*/
+		  gdkdev->info.axes[k].max = 1.0; /*axis_npressure.axMax;*/
 		  k++;
 		}
 	      if (gdkdev->pktdata & PK_ORIENTATION)
@@ -447,7 +462,7 @@ gdk_input_wintab_init (void)
 			gdkdev->axes[k].max_value = 1000;
 		      gdkdev->info.axes[k].use = axis;
 		      gdkdev->info.axes[k].min = -1000;
-		      gdkdev->info.axes[k].min = 1000;
+		      gdkdev->info.axes[k].max = 1000;
 		      k++;
 		    }
 		}
@@ -841,6 +856,8 @@ _gdk_input_other_event (GdkEvent  *event,
 	    return FALSE;
 #endif
 #endif
+	  event->button.axes = g_new(gdouble, gdkdev->info.num_axes);
+
 	  gdk_input_translate_coordinates (gdkdev, input_window,
 					   gdkdev->last_axis_data,
 					   event->button.axes,
@@ -864,6 +881,8 @@ _gdk_input_other_event (GdkEvent  *event,
 	  event->motion.is_hint = FALSE;
 	  event->motion.device = &gdkdev->info;
 
+	  event->motion.axes = g_new(gdouble, gdkdev->info.num_axes);
+
 	  gdk_input_translate_coordinates (gdkdev, input_window,
 					   gdkdev->last_axis_data,
 					   event->motion.axes,
@@ -885,7 +904,7 @@ _gdk_input_other_event (GdkEvent  *event,
 	   */
 	  if ((gdkdev->pktdata & PK_NORMAL_PRESSURE
 	       && (event->motion.state & GDK_BUTTON1_MASK)
-	       && packet.pkNormalPressure <= MAX (0, gdkdev->npbtnmarks[0] - 2))
+	       && packet.pkNormalPressure <= MAX (0, (gint) gdkdev->npbtnmarks[0] - 2))
 	      || (gdkdev->pktdata & PK_NORMAL_PRESSURE
 		  && !(event->motion.state & GDK_BUTTON1_MASK)
 		  && packet.pkNormalPressure > gdkdev->npbtnmarks[1] + 2))

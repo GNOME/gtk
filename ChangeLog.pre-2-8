@@ -1,3 +1,14 @@
+2004-05-11  Robert Ögren  <gtk@roboros.com>
+
+	* gdk/win32/gdkevents-win32.c (gdk_event_translate): Add missing
+	call to g_object_ref in Wintab code. (#138341)
+
+	* gdk/win32/gdkinput-win32.c: Fix numerous Wintab problems
+	including unallocated buffers for event->motion.axes and
+	event->button.axes, unsigned wraparound problem in the code for
+	detecting missing press/release events and assigning min instead
+	of max when setting up axes.
+
 2004-05-12  Matthias Clasen  <mclasen@redhat.com>
 
 	* tests/testtreeedit.c: Add a progress column.
