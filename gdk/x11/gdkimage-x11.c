@@ -64,7 +64,7 @@ static GList *image_list = NULL;
 
 
 void
-gdk_image_exit ()
+gdk_image_exit (void)
 {
   GdkImage *image;
 
@@ -131,7 +131,7 @@ gdk_image_check_xshm(Display *display)
 }
 
 void
-gdk_image_init ()
+gdk_image_init (void)
 {
   if (gdk_use_xshm)
     {

@@ -22,7 +22,7 @@
 /* forward declarations */
 
 static gint gdk_input_xfree_set_mode (guint32 deviceid, GdkInputMode mode);
-static void gdk_input_check_proximity();
+static void gdk_input_check_proximity (void);
 static void gdk_input_xfree_configure_event (XConfigureEvent *xevent, 
 					     GdkWindow *window);
 static void gdk_input_xfree_enter_event (XCrossingEvent *xevent, 
@@ -115,7 +115,7 @@ gdk_input_xfree_set_mode (guint32 deviceid, GdkInputMode mode)
 }
 
 static void
-gdk_input_check_proximity()
+gdk_input_check_proximity (void)
 {
   gint new_proximity = 0;
   GList *tmp_list = gdk_input_devices;

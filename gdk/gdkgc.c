@@ -88,6 +88,18 @@ gdk_gc_new_with_values (GdkWindow	*window,
 	case GDK_XOR:
 	  xvalues.function = GXxor;
 	  break;
+	case GDK_OR:
+	  xvalues.function = GXor;
+	  break;
+	case GDK_AND:
+	  xvalues.function = GXand;
+	  break;
+	case GDK_NOR:
+	  xvalues.function = GXnor;
+	  break;
+	case GDK_NAND:
+	  xvalues.function = GXnand;
+	  break;
 	}
       xvalues_mask |= GCFunction;
     }
@@ -700,6 +712,22 @@ gdk_gc_set_line_attributes (GdkGC	*gc,
 
   XSetLineAttributes (private->xdisplay, private->xgc, line_width,
 		      xline_style, xcap_style, xjoin_style);
+}
+
+void
+gdk_gc_set_dashes (GdkGC *gc,
+		   gint	  dash_offset,
+		   gchar  dash_list[],
+		   gint   n)
+{
+  GdkGCPrivate *private;
+
+  g_return_if_fail (gc != NULL);
+  g_return_if_fail (dash_list != NULL);
+
+  private = (GdkGCPrivate*) gc;
+
+  XSetDashes (private->xdisplay, private->xgc, dash_offset, dash_list, n);
 }
 
 void

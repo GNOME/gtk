@@ -47,6 +47,10 @@ button_border (GtkWidget        *widget)
      cf->buttonconfig[def][state][foc].button_padding.top;
    GTK_CONTAINER(widget)->internal_border_bottom=
      cf->buttonconfig[def][state][foc].button_padding.bottom;
+   GTK_CONTAINER(widget)->minimum_width=
+     cf->buttonconfig[def][state][foc].min_w;
+   GTK_CONTAINER(widget)->minimum_height=
+     cf->buttonconfig[def][state][foc].min_h;
 }
 
 void 
@@ -68,7 +72,13 @@ button_draw               (GtkWidget        *widget,
    int state,def,foc;
    ThemeConfig *cf;
    int i,x,y,w,h;
+   GdkPixmap *pmap,*p;
+   GdkPixmap *mask,*m;
+   GdkGC *mgc,*gc;
+   GdkColor cl;
+   char refresh=0;
    
+   if (!widget->window) return;
    cf=(ThemeConfig *)th_dat.data;
    bi=gtk_object_get_data(GTK_OBJECT(widget),"gtk-widget-theme-data");
    def=0;
@@ -81,14 +91,24 @@ button_draw               (GtkWidget        *widget,
    else if (GTK_WIDGET_STATE(widget)==GTK_STATE_PRELIGHT)    state=2;
    else if (GTK_WIDGET_STATE(widget)==GTK_STATE_SELECTED)    state=3;
    else if (GTK_WIDGET_STATE(widget)==GTK_STATE_INSENSITIVE) state=4;
+   pmap=NULL;
+   mask=NULL;
    if ((bi->state!=state)||(bi->foc!=foc)||(bi->def!=def)||
        (bi->w!=widget->allocation.width)||(bi->h!=widget->allocation.height))
+     refresh=1;
+   if (refresh)
      {
 	if (cf->buttonconfig[def][state][foc].background.image)
 	  {
 	     if (cf->buttonconfig[def][state][foc].background.scale_to_fit)
-	       gdk_imlib_apply_image(cf->buttonconfig[def][state][foc].background.image,
-				     widget->window);
+	       {
+		  
+		  gdk_imlib_render(cf->buttonconfig[def][state][foc].background.image,
+				   widget->allocation.width,
+				   widget->allocation.height);
+		  pmap=gdk_imlib_move_image(cf->buttonconfig[def][state][foc].background.image);
+		  mask=gdk_imlib_copy_mask(cf->buttonconfig[def][state][foc].background.image);
+	       }
 	     else
 	       {
 		  GdkPixmap *pmap;
@@ -116,32 +136,81 @@ button_draw               (GtkWidget        *widget,
 	bi->w=widget->allocation.width;bi->h=widget->allocation.height;
 	bi->state=state;bi->foc=foc;bi->def=def;
      }
-   if (cf->buttonconfig[def][state][foc].border.image)
+   if (pmap)
      {
-	gdk_imlib_paste_image_border(cf->buttonconfig[def][state][foc].border.image,
-				     widget->window,
-				     0,0,widget->allocation.width,
-				     widget->allocation.height);
+	gdk_window_set_back_pixmap(widget->window,pmap,0);
+	gdk_window_clear(widget->window);
+	gdk_imlib_free_pixmap(pmap);
      }
-   for(i=0;i<cf->buttonconfig[def][state][foc].number_of_decorations;i++)
+   if (cf->buttonconfig[def][state][foc].border.image)
+     gdk_imlib_paste_image_border(cf->buttonconfig[def][state][foc].border.image,
+				  widget->window,
+				  0,0,widget->allocation.width,
+				  widget->allocation.height);
+   if (cf->buttonconfig[def][state][foc].number_of_decorations>0)
      {
-	if (cf->buttonconfig[def][state][foc].decoration[i].image)
+	mgc=NULL;
+	gc = gdk_gc_new(widget->window);
+	if (mask)
 	  {
-	     x=cf->buttonconfig[def][state][foc].decoration[i].xabs+
-	       ((cf->buttonconfig[def][state][foc].decoration[i].xrel*
-		 widget->allocation.width)>>10);
-	     y=cf->buttonconfig[def][state][foc].decoration[i].yabs+
-	       ((cf->buttonconfig[def][state][foc].decoration[i].yrel*
-		 widget->allocation.height)>>10);
-	     w=cf->buttonconfig[def][state][foc].decoration[i].x2abs+
-	       ((cf->buttonconfig[def][state][foc].decoration[i].x2rel*
-		 widget->allocation.width)>>10)-x;
-	     h=cf->buttonconfig[def][state][foc].decoration[i].y2abs+
-	       ((cf->buttonconfig[def][state][foc].decoration[i].y2rel*
-		 widget->allocation.height)>>10)-y;
-	     gdk_imlib_paste_image(cf->buttonconfig[def][state][foc].decoration[i].image,
-				   widget->window,x,y,w,h);
+	     mgc = gdk_gc_new(mask);
+	     gdk_gc_set_function(mgc, GDK_OR);
+	     cl.pixel=1;
+	     gdk_gc_set_foreground(mgc, &cl);
 	  }
+	for(i=0;i<cf->buttonconfig[def][state][foc].number_of_decorations;i++)
+	  {
+	     if (cf->buttonconfig[def][state][foc].decoration[i].image)
+	       {
+		  x=cf->buttonconfig[def][state][foc].decoration[i].xabs+
+		    ((cf->buttonconfig[def][state][foc].decoration[i].xrel*
+		      widget->allocation.width)>>10);
+		  y=cf->buttonconfig[def][state][foc].decoration[i].yabs+
+		    ((cf->buttonconfig[def][state][foc].decoration[i].yrel*
+		      widget->allocation.height)>>10);
+		  w=cf->buttonconfig[def][state][foc].decoration[i].x2abs+
+		    ((cf->buttonconfig[def][state][foc].decoration[i].x2rel*
+		      widget->allocation.width)>>10)-x+1;
+		  h=cf->buttonconfig[def][state][foc].decoration[i].y2abs+
+		    ((cf->buttonconfig[def][state][foc].decoration[i].y2rel*
+		      widget->allocation.height)>>10)-y+1;
+		  p=NULL;m=NULL;
+		  gdk_imlib_render(cf->buttonconfig[def][state][foc].decoration[i].image,w,h);
+		  p=gdk_imlib_move_image(cf->buttonconfig[def][state][foc].decoration[i].image);
+		  m=gdk_imlib_move_mask(cf->buttonconfig[def][state][foc].decoration[i].image);
+		  if (p)
+		    {
+		       if (m)
+			 {
+			    gdk_gc_set_clip_mask(gc, m);
+			    gdk_gc_set_clip_origin(gc, x, y);
+			 }
+		       else
+			 gdk_gc_set_clip_mask(gc, NULL);
+		       gdk_draw_pixmap(widget->window, gc, p, 0, 0, x, y, w, h);
+		       if (mask)
+			 {
+			    /* temporary until I work out why OR doesnt OR */
+			    gdk_gc_set_clip_mask(mgc, m);
+			    gdk_gc_set_clip_origin(mgc, x, y);
+			    /* end temp */
+			    if (m)
+			      gdk_draw_pixmap(mask, mgc, m, 0, 0, x, y, w, h);
+			    else
+			      gdk_draw_rectangle(mask, mgc, TRUE, x, y, w, h);
+			 }
+		       gdk_imlib_free_pixmap(p);
+		    }
+	       }
+	  }
+	if (mask)
+	  gdk_gc_destroy(mgc);
+	gdk_gc_destroy(gc);
+     }
+   if (mask)
+     {
+	gdk_window_shape_combine_mask(widget->window,mask,0,0);
+	gdk_imlib_free_pixmap(mask);
      }
 }
 

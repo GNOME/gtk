@@ -20,6 +20,7 @@
 #include <X11/Xlib.h>
 #include "gdktypes.h"
 #include "gdkprivate.h"
+#include "../config.h"
 
 guint             gdk_debug_flags = 0;
 gint              gdk_use_xshm = TRUE;
@@ -53,3 +54,13 @@ gint              gdk_error_code;
 gint              gdk_error_warnings = TRUE;
 gint              gdk_null_window_warnings = TRUE;
 GList            *gdk_default_filters = NULL;
+
+gboolean          gdk_using_threads = FALSE;
+
+/* Used to signal the mainloop thread from its select() */
+#ifdef USE_PTHREADS
+gint              gdk_threads_pipe[2];
+gboolean          gdk_select_waiting = FALSE;
+#endif
+
+

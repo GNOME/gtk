@@ -220,9 +220,13 @@ typedef enum
  */
 typedef enum
 {
-  GDK_COPY,
-  GDK_INVERT,
-  GDK_XOR
+   GDK_COPY,
+   GDK_INVERT,
+   GDK_XOR,
+   GDK_OR,
+   GDK_AND,
+   GDK_NOR,
+   GDK_NAND
 } GdkFunction;
 
 /* GC fill types.

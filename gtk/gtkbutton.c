@@ -388,6 +388,8 @@ gtk_button_size_request (GtkWidget      *widget,
      button->border(GTK_WIDGET(widget));
    else
      {
+	GTK_CONTAINER(widget)->minimum_width=0;
+	GTK_CONTAINER(widget)->minimum_height=0;
 	if (GTK_WIDGET_CAN_DEFAULT (widget))
 	  {
 	     GTK_CONTAINER(widget)->internal_border_left=10;
@@ -418,6 +420,14 @@ gtk_button_size_request (GtkWidget      *widget,
 	requisition->width += button->child->requisition.width;
 	requisition->height += button->child->requisition.height;
      }
+   if ((requisition->width-(GTK_CONTAINER (widget)->border_width * 2))<
+       GTK_CONTAINER(widget)->minimum_width)
+     requisition->width=GTK_CONTAINER(widget)->minimum_width+
+     (GTK_CONTAINER (widget)->border_width * 2);
+   if ((requisition->height-(GTK_CONTAINER (widget)->border_width * 2))<
+       GTK_CONTAINER(widget)->minimum_height)
+     requisition->height=GTK_CONTAINER(widget)->minimum_height+
+     (GTK_CONTAINER (widget)->border_width * 2);
 }
 
 static void

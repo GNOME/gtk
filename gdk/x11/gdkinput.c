@@ -70,7 +70,7 @@ static GList            *gdk_input_windows;
 #include "gdkinputgxi.h"
 
 GList *
-gdk_input_list_devices ()
+gdk_input_list_devices (void)
 {
   return gdk_input_devices;
 }

@@ -4,10 +4,35 @@ AC_INIT(gdk/gdktypes.h)
 # Save this value here, since automake will set cflags later
 cflags_set=${CFLAGS+set}
 
+# Making releases:
+#   GTK_MICRO_VERSION += 1;
+#   GTK_INTERFACE_AGE += 1;
+#   GTK_BINARY_AGE += 1;
+# if any functions have been added, set GTK_INTERFACE_AGE to 0.
+# if backwards compatibility has been broken,
+# set GTK_BINARY_AGE and GTK_INTERFACE_AGE to 0.
+#
 GTK_MAJOR_VERSION=1
-GTK_MINOR_VERSION=0
+GTK_MINOR_VERSION=1
 GTK_MICRO_VERSION=0
+GTK_INTERFACE_AGE=0
+GTK_BINARY_AGE=0
 GTK_VERSION=$GTK_MAJOR_VERSION.$GTK_MINOR_VERSION.$GTK_MICRO_VERSION
+AC_SUBST(GTK_MAJOR_VERSION)
+AC_SUBST(GTK_MINOR_VERSION)
+AC_SUBST(GTK_MICRO_VERSION)
+AC_SUBST(GTK_VERSION)
+
+# libtool versioning
+LT_RELEASE=$GTK_MAJOR_VERSION.$GTK_MINOR_VERSION
+LT_CURRENT=`expr $GTK_MICRO_VERSION - $GTK_INTERFACE_AGE`
+LT_REVISION=$GTK_INTERFACE_AGE
+LT_AGE=`expr $GTK_BINARY_AGE - $GTK_INTERFACE_AGE`
+AC_SUBST(LT_RELEASE)
+AC_SUBST(LT_CURRENT)
+AC_SUBST(LT_REVISION)
+AC_SUBST(LT_AGE)
+
 
 # For automake.
 VERSION=$GTK_VERSION
@@ -43,9 +68,10 @@ AC_ARG_ENABLE(xim, [  --enable-xim            support XIM [default=yes]],
 AC_ARG_WITH(locale, [  --with-locale=LOCALE    locale name you want to use ])
 
 AC_ARG_WITH(xinput, [  --with-xinput=[no/gxi/xfree] support XInput ])
+AC_ARG_WITH(threads, [  --with-threads=[posix] support threading ])
 
 if test "x$enable_debug" = "xyes"; then
-  test "$cflags_set" = set || CFLAGS="-g"
+  test "$cflags_set" = set || CFLAGS="$CFLAGS -g"
   CFLAGS="$CFLAGS -DG_ENABLE_DEBUG"
 else
   if test "x$enable_debug" = "xno"; then
@@ -80,14 +106,28 @@ if test "x$GCC" = "xyes"; then
   fi
 fi
 
+AC_MSG_CHECKING([For extra flags to get ANSI library prototypes])
+gtk_save_LDFLAGS=$LDFLAGS
+LIBS="$LIBS -lm"
+AC_TRY_RUN([#include <math.h>
+             int main (void) { return (log(1) != log(1.)); }],
+     AC_MSG_RESULT(none needed),
+     gtk_save_CFLAGS=$CFLAGS
+     CFLAGS="$CFLAGS -std1"
+     AC_TRY_RUN([#include <math.h>
+	         int main (void) { return (log(1) != log(1.)); }],
+         AC_MSG_RESULT(-std1),
+         AC_MSG_RESULT()
+         CFLAGS=$gtk_save_CFLAGS
+         AC_MSG_WARN(
+                [No ANSI prototypes found in library. (-std1 didn't work.)])
+     )
+)
+LIBS=$gtk_save_LIBS
+
 if test "x$enable_xim" = "xyes"; then
   CFLAGS="$CFLAGS -DUSE_XIM"
 fi
-
-AC_DEFINE_UNQUOTED(GTK_MAJOR_VERSION, $GTK_MAJOR_VERSION)
-AC_DEFINE_UNQUOTED(GTK_MINOR_VERSION, $GTK_MINOR_VERSION)
-AC_DEFINE_UNQUOTED(GTK_MICRO_VERSION, $GTK_MICRO_VERSION)
-AC_DEFINE_UNQUOTED(GTK_VERSION, "$GTK_VERSION")
 
 # Find the X11 include and library directories
 AC_PATH_X
@@ -118,6 +158,16 @@ if test "x$enable_shm" = "xyes"; then
       $x_libs)
 fi
 
+# Check for shaped window extension
+
+AC_CHECK_LIB(Xext, XShapeCombineMask,
+      if test -z "`echo $x_libs | grep "\-lXext" 2> /dev/null`"; then
+           $x_libs="-lXext $x_libs"
+      fi
+      AC_DEFINE(HAVE_SHAPE_EXT),
+      ,
+      $x_libs)
+
 x_cflags="$X_CFLAGS"
 x_ldflags="$X_LDFLAGS $X_LIBS"
 
@@ -134,12 +184,20 @@ else
   AC_DEFINE(XINPUT_NONE)
 fi
 
+# Threads
+
+if test "x$with_threads" = "xposix" || test "x$with_threads" = "xyes"; then
+  AC_CHECK_LIB(pthread, pthread_create, 
+    AC_DEFINE(USE_PTHREADS)
+    x_libs="$x_libs -lpthread"
+    CFLAGS="$CFLAGS -D_REENTRANT") 
+fi
+
 AC_SUBST(x_cflags)
 AC_SUBST(x_includes)
 AC_SUBST(x_ldflags)
 AC_SUBST(x_libs)
 AC_SUBST(xinput_progs)
-AC_SUBST(GTK_VERSION)
 
 CFLAGS="$saved_cflags"
 LDFLAGS="$saved_ldflags"
@@ -265,5 +323,11 @@ if test $gtk_ok = no; then
     AC_DEFINE(NO_FD_SET)
 fi
 
-AC_OUTPUT([Makefile gtk-config docs/Makefile gdk/Makefile gtk/Makefile],
-          [chmod +x gtk-config])
+AC_OUTPUT([
+Makefile
+gtk-config
+docs/Makefile
+gdk/Makefile
+gtk/Makefile
+gtk/gtkfeatures.h
+], [chmod +x gtk-config])

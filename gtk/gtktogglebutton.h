@@ -61,7 +61,12 @@ void       gtk_toggle_button_set_state      (GtkToggleButton *toggle_button,
 					     gint             state);
 void       gtk_toggle_button_toggled        (GtkToggleButton *toggle_button);
 
-
+void       gtk_toggle_button_set_theme      (GtkToggleButton *toggle_button,
+					     void (* init)    (GtkWidget *toggle_button),
+					     void (* border)  (GtkWidget *toggle_button),
+					     void (* draw)    (GtkWidget *toggle_button, GdkRectangle *area),
+					     void (* exit)    (GtkWidget *toggle_button));
+											      
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */

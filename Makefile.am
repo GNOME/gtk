@@ -6,10 +6,12 @@ SUBDIRS = $(SRC_SUBDIRS) docs
 bin_SCRIPTS = gtk-config
 
 EXTRA_DIST =	\
-	gtk+.prj	\
+	gtk+.spec	\
         gtk.m4          \
 	makecopyright	\
 	TODO		\
+	NEWS.pre-1-0	\
+	ChangeLog.pre-1-0	\
 	examples/aspectframe/Makefile  \
 	examples/aspectframe/aspectframe.c  \
 	examples/buttons/Makefile  \

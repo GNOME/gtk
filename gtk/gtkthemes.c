@@ -109,6 +109,14 @@ gtk_themes_init (int	 *argc,
 	th_dat.functions.button.init=NULL;
 	th_dat.functions.button.draw=NULL;
 	th_dat.functions.button.exit=NULL;
+	th_dat.functions.window.border=NULL;
+	th_dat.functions.window.init=NULL;
+	th_dat.functions.window.draw=NULL;
+	th_dat.functions.window.exit=NULL;
+	th_dat.functions.check_button.border=NULL;
+	th_dat.functions.check_button.init=NULL;
+	th_dat.functions.check_button.draw=NULL;
+	th_dat.functions.check_button.exit=NULL;
 	return;
      }
    /* extract symbols from the lib */   
@@ -118,7 +126,27 @@ gtk_themes_init (int	 *argc,
    th_dat.functions.button.init=dlsym(th_dat.theme_lib,"button_init");
    th_dat.functions.button.draw=dlsym(th_dat.theme_lib,"button_draw");
    th_dat.functions.button.exit=dlsym(th_dat.theme_lib,"button_exit");
+   th_dat.functions.window.border=dlsym(th_dat.theme_lib,"window_border");
+   th_dat.functions.window.init=dlsym(th_dat.theme_lib,"window_init");
+   th_dat.functions.window.draw=dlsym(th_dat.theme_lib,"window_draw");
+   th_dat.functions.window.exit=dlsym(th_dat.theme_lib,"window_exit");
+   th_dat.functions.check_button.border=dlsym(th_dat.theme_lib,"check_button_border");
+   th_dat.functions.check_button.init=dlsym(th_dat.theme_lib,"check_button_init");
+   th_dat.functions.check_button.draw=dlsym(th_dat.theme_lib,"check_button_draw");
+   th_dat.functions.check_button.exit=dlsym(th_dat.theme_lib,"check_button_exit");
 
+   printf("Found button_border %x\n",th_dat.functions.button.border);
+   printf("Found button_init %x\n",th_dat.functions.button.init);
+   printf("Found button_draw %x\n",th_dat.functions.button.draw);
+   printf("Found button_exit %x\n",th_dat.functions.button.exit);
+   printf("Found window_border %x\n",th_dat.functions.window.border);
+   printf("Found window_init %x\n",th_dat.functions.window.init);
+   printf("Found window_draw %x\n",th_dat.functions.window.draw);
+   printf("Found window_exit %x\n",th_dat.functions.window.exit);
+   printf("Found check_button_border %x\n",th_dat.functions.check_button.border);
+   printf("Found check_button_init %x\n",th_dat.functions.check_button.init);
+   printf("Found check_button_draw %x\n",th_dat.functions.check_button.draw);
+   printf("Found check_button_exit %x\n",th_dat.functions.check_button.exit);
 /* call the theme's init (theme_init) function to let it setup anything */   
    th_dat.init(argc,argv);
 }

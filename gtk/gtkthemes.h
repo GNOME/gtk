@@ -45,6 +45,8 @@ struct _GtkThemesData
    struct
      {
 	struct _GtkWidgetThemeFunction button;
+	struct _GtkWidgetThemeFunction window;
+	struct _GtkWidgetThemeFunction check_button;
      } functions;
    void *data;
 };

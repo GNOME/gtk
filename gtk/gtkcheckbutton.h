@@ -38,7 +38,12 @@ typedef struct _GtkCheckButtonClass  GtkCheckButtonClass;
 
 struct _GtkCheckButton
 {
-  GtkToggleButton toggle_button;
+   GtkToggleButton toggle_button;
+
+   void (* init)    (GtkWidget *button);
+   void (* border)  (GtkWidget *button);
+   void (* draw)    (GtkWidget *button, GdkRectangle *area);
+   void (* exit)    (GtkWidget *button);
 };
 
 struct _GtkCheckButtonClass
@@ -56,7 +61,13 @@ struct _GtkCheckButtonClass
 guint      gtk_check_button_get_type       (void);
 GtkWidget* gtk_check_button_new            (void);
 GtkWidget* gtk_check_button_new_with_label (const gchar *label);
-
+void       gtk_check_button_set_theme      (GtkCheckButton *check_button,
+					    void (* init)    (GtkWidget *check_button),
+					    void (* border)  (GtkWidget *check_button),
+					    void (* draw)    (GtkWidget *check_button, GdkRectangle *area),
+					    void (* exit)    (GtkWidget *check_button));
+   
+   
 
 #ifdef __cplusplus
 }

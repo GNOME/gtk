@@ -55,6 +55,11 @@ struct _GtkWindow
   guint handling_resize : 1;
   guint position : 2;
   guint use_uposition : 1;
+
+   void (* init)    (GtkWidget *window);
+   void (* border)  (GtkWidget *window);
+   void (* draw)    (GtkWidget *window, GdkRectangle *area);
+   void (* exit)    (GtkWidget *window);
 };
 
 struct _GtkWindowClass
@@ -100,6 +105,11 @@ void       gtk_window_position                 (GtkWindow           *window,
 gint	   gtk_window_activate_focus	       (GtkWindow           *window);
 gint	   gtk_window_activate_default	       (GtkWindow           *window);
 
+void       gtk_window_set_theme                (GtkWindow *window,
+						void (* init)    (GtkWidget *window),
+						void (* border)  (GtkWidget *window),
+						void (* draw)    (GtkWidget *window, GdkRectangle *area),
+						void (* exit)    (GtkWidget *window));
 
 #ifdef __cplusplus
 }

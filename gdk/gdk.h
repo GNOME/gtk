@@ -299,6 +299,8 @@ void	      gdk_window_set_decorations (GdkWindow	  *window,
 					  GdkWMDecoration  decorations);
 void	      gdk_window_set_functions	 (GdkWindow	  *window,
 					  GdkWMFunction	   functions);
+GList *       gdk_window_get_toplevels   (void);
+
 
 /* Cursors
  */
@@ -358,6 +360,10 @@ void   gdk_gc_set_line_attributes (GdkGC	    *gc,
 				   GdkLineStyle	     line_style,
 				   GdkCapStyle	     cap_style,
 				   GdkJoinStyle	     join_style);
+void   gdk_gc_set_dashes          (GdkGC            *gc,
+				   gint	             dash_offset,
+				   gchar             dash_list[],
+				   gint              n);
 void   gdk_gc_copy		  (GdkGC	     *dst_gc,
 				   GdkGC	     *src_gc);
 
@@ -795,6 +801,14 @@ GdkRegion*    gdk_regions_subtract	  (GdkRegion	  *source1,
 GdkRegion*    gdk_regions_xor		  (GdkRegion	  *source1,
 					   GdkRegion	  *source2);
 
+gboolean      gdk_threads_init  (void);
+void          gdk_threads_enter (void);
+void          gdk_threads_leave (void);
+
+/* If the mainloop thread is in its select, wake it up. 
+ * For GTK's idle handling 
+ */
+void          gdk_threads_wake (void);
 
 #ifdef __cplusplus
 }

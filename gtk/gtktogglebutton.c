@@ -15,6 +15,9 @@
  * License along with this library; if not, write to the Free
  * Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
+#include <string.h>
+#include "gtkthemes.h"
+#include "gtkprivate.h"
 #include "gtklabel.h"
 #include "gtkmain.h"
 #include "gtksignal.h"
@@ -113,7 +116,19 @@ gtk_toggle_button_init (GtkToggleButton *toggle_button)
 GtkWidget*
 gtk_toggle_button_new ()
 {
-  return GTK_WIDGET (gtk_type_new (gtk_toggle_button_get_type ()));
+   GtkToggleButton *toggle_button;
+   GtkButton *button;
+   
+   toggle_button=GTK_TOGGLE_BUTTON(gtk_type_new(gtk_toggle_button_get_type()));
+   if (toggle_button)
+     {
+	button=GTK_BUTTON(toggle_button);
+	button->init=th_dat.functions.button.init;
+	button->border=th_dat.functions.button.border;
+	button->draw=th_dat.functions.button.draw;
+	button->exit=th_dat.functions.button.exit;
+     }
+   return GTK_WIDGET(toggle_button);
 }
 
 GtkWidget*
@@ -171,75 +186,7 @@ gtk_toggle_button_toggled (GtkToggleButton *toggle_button)
 static void
 gtk_toggle_button_draw_focus (GtkWidget *widget)
 {
-  GtkButton *button;
-  GtkToggleButton *toggle_button;
-  GtkShadowType shadow_type;
-  gint width, height;
-  gint x, y;
-
-  g_return_if_fail (widget != NULL);
-  g_return_if_fail (GTK_IS_TOGGLE_BUTTON (widget));
-
-  if (GTK_WIDGET_DRAWABLE (widget))
-    {
-      button = GTK_BUTTON (widget);
-      toggle_button = GTK_TOGGLE_BUTTON (widget);
-
-      x = 0;
-      y = 0;
-      width = widget->allocation.width - GTK_CONTAINER (widget)->border_width * 2;
-      height = widget->allocation.height - GTK_CONTAINER (widget)->border_width * 2;
-
-      if (GTK_WIDGET_CAN_DEFAULT (widget))
-        {
-          x += widget->style->klass->xthickness;
-          y += widget->style->klass->ythickness;
-          width -= 2 * x + DEFAULT_SPACING;
-          height -= 2 * y + DEFAULT_SPACING;
-          x += DEFAULT_LEFT_POS;
-          y += DEFAULT_TOP_POS;
-        }
-
-      if (GTK_WIDGET_HAS_FOCUS (widget))
-	{
-	  x += 1;
-	  y += 1;
-	  width -= 2;
-	  height -= 2;
-	}
-      else
-	{
-	  if (GTK_WIDGET_STATE (toggle_button) == GTK_STATE_ACTIVE)
-	    gdk_draw_rectangle (widget->window,
-				widget->style->bg_gc[GTK_WIDGET_STATE (widget)], FALSE,
-				x + 1, y + 1, width - 4, height - 4);
-	  else
-	    gdk_draw_rectangle (widget->window,
-				widget->style->bg_gc[GTK_WIDGET_STATE (widget)], FALSE,
-				x + 2, y + 2, width - 5, height - 5);
-	}
-
-      if (toggle_button->active)
-	shadow_type = GTK_SHADOW_IN;
-      else
-	shadow_type = GTK_SHADOW_OUT;
-
-      gtk_draw_shadow (widget->style, widget->window,
-		       GTK_WIDGET_STATE (widget), shadow_type,
-		       x, y, width, height);
-
-      if (GTK_WIDGET_HAS_FOCUS (widget))
-	{
-	  x -= 1;
-	  y -= 1;
-	  width += 2;
-	  height += 2;
-
-	  gdk_draw_rectangle (widget->window,
-			      widget->style->black_gc, FALSE,
-			      x, y, width - 1, height - 1);
-	}
-    }
+   gtk_widget_queue_draw(widget);
 }
 
 static void

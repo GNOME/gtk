@@ -20,7 +20,6 @@
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
 #include <X11/Xatom.h>
-#include <X11/extensions/shape.h>
 #include <netinet/in.h>
 #include "gdk.h"
 #include "../config.h"
@@ -29,6 +28,10 @@
 #include "MwmUtil.h"
 #include <stdlib.h>
 #include <stdio.h>
+
+#ifdef HAVE_SHAPE_EXT
+#include <X11/extensions/shape.h>
+#endif
 
 int nevent_masks = 17;
 int event_mask_table[19] =
@@ -65,18 +68,18 @@ gdk_window_xid_at(Window base, gint bx, gint by, gint x, gint y,
    Display *disp;
    Window *list=NULL;
    Window child=0,parent_win=0,root_win=0;
-   int i;
-   guint num;
-   int wx,wy;
-   guint ww,wh,wb,wd;
 
+   int i;
+   unsigned int ww, wh, wb, wd, num;
+   int wx,wy;
+   
    window=(GdkWindow*)&gdk_root_parent;
    private=(GdkWindowPrivate*)window;
    disp=private->xdisplay;
    if (!XGetGeometry(disp,base,&root_win,&wx,&wy,&ww,&wh,&wb,&wd))
      return 0;
    wx+=bx;wy+=by;
-   if (!((x>=wx)&&(y>=wy)&&(x<(wx+ww))&&(y<(wy+wh))))
+   if (!((x>=wx)&&(y>=wy)&&(x<(int)(wx+ww))&&(y<(int)(wy+wh))))
      return 0;
    if (!XQueryTree(disp,base,&root_win,&parent_win,&list,&num))
      return base;
@@ -172,7 +175,7 @@ gdk_window_xid_at_coords(gint x, gint y, GList *excludes, gboolean excl_child)
 }
 
 void
-gdk_window_init ()
+gdk_window_init (void)
 {
   XWindowAttributes xattributes;
   unsigned int width;
@@ -191,6 +194,8 @@ gdk_window_init ()
   gdk_root_parent.window.user_data = NULL;
   gdk_root_parent.width = width;
   gdk_root_parent.height = height;
+  gdk_root_parent.children = NULL;
+  gdk_root_parent.colormap = NULL;
 }
 
 GdkWindow*
@@ -202,7 +207,6 @@ gdk_window_new (GdkWindow     *parent,
   GdkWindowPrivate *private;
   GdkWindowPrivate *parent_private;
   GdkVisual *visual;
-  GdkColormap *colormap;
   Display *parent_display;
   Window xparent;
   Visual *xvisual;
@@ -232,6 +236,10 @@ gdk_window_new (GdkWindow     *parent,
   window = (GdkWindow*) private;
 
   private->parent = parent;
+
+  if (parent_private)
+    parent_private->children = g_list_prepend (parent_private->children, window);
+
   private->xdisplay = parent_display;
   private->destroyed = FALSE;
   private->resize_count = 0;
@@ -264,6 +272,7 @@ gdk_window_new (GdkWindow     *parent,
   private->dnd_drag_eventmask = private->dnd_drag_savedeventmask = 0;
 
   private->filters = NULL;
+  private->children = NULL;
 
   window->user_data = NULL;
 
@@ -296,9 +305,9 @@ gdk_window_new (GdkWindow     *parent,
       depth = visual->depth;
 
       if (attributes_mask & GDK_WA_COLORMAP)
-	colormap = attributes->colormap;
+	private->colormap = attributes->colormap;
       else
-	colormap = gdk_colormap_get_system ();
+	private->colormap = gdk_colormap_get_system ();
 
       xattributes.background_pixel = BlackPixel (gdk_display, gdk_screen);
       xattributes.border_pixel = BlackPixel (gdk_display, gdk_screen);
@@ -307,26 +316,26 @@ gdk_window_new (GdkWindow     *parent,
       switch (private->window_type)
 	{
 	case GDK_WINDOW_TOPLEVEL:
-	  xattributes.colormap = ((GdkColormapPrivate*) colormap)->xcolormap;
+	  xattributes.colormap = ((GdkColormapPrivate*) private->colormap)->xcolormap;
 	  xattributes_mask |= CWColormap;
 
 	  xparent = gdk_root_window;
 	  break;
 
 	case GDK_WINDOW_CHILD:
-	  xattributes.colormap = ((GdkColormapPrivate*) colormap)->xcolormap;
+	  xattributes.colormap = ((GdkColormapPrivate*) private->colormap)->xcolormap;
 	  xattributes_mask |= CWColormap;
 	  break;
 
 	case GDK_WINDOW_DIALOG:
-	  xattributes.colormap = ((GdkColormapPrivate*) colormap)->xcolormap;
+	  xattributes.colormap = ((GdkColormapPrivate*) private->colormap)->xcolormap;
 	  xattributes_mask |= CWColormap;
 
 	  xparent = gdk_root_window;
 	  break;
 
 	case GDK_WINDOW_TEMP:
-	  xattributes.colormap = ((GdkColormapPrivate*) colormap)->xcolormap;
+	  xattributes.colormap = ((GdkColormapPrivate*) private->colormap)->xcolormap;
 	  xattributes_mask |= CWColormap;
 
 	  xparent = gdk_root_window;
@@ -348,7 +357,7 @@ gdk_window_new (GdkWindow     *parent,
     {
       depth = 0;
       class = InputOnly;
-      colormap = NULL;
+      private->colormap = NULL;
     }
 
   private->xwindow = XCreateWindow (private->xdisplay, xparent,
@@ -357,6 +366,9 @@ gdk_window_new (GdkWindow     *parent,
 				    xattributes_mask, &xattributes);
   gdk_window_ref (window);
   gdk_xid_table_insert (&private->xwindow, window);
+
+  if (private->colormap)
+    gdk_colormap_ref (private->colormap);
 
   gdk_window_set_cursor (window, ((attributes_mask & GDK_WA_CURSOR) ?
 				  (attributes->cursor) :
@@ -372,8 +384,8 @@ gdk_window_new (GdkWindow     *parent,
       break;
     case GDK_WINDOW_CHILD:
       if ((attributes->wclass == GDK_INPUT_OUTPUT) &&
-	  (colormap != gdk_colormap_get_system ()) &&
-	  (colormap != gdk_window_get_colormap (gdk_window_get_toplevel (window))))
+	  (private->colormap != gdk_colormap_get_system ()) &&
+	  (private->colormap != gdk_window_get_colormap (gdk_window_get_toplevel (window))))
 	{
 	  GDK_NOTE (MISC, g_print ("adding colormap window\n"));
 	  gdk_window_add_colormap_windows (window);
@@ -430,6 +442,7 @@ gdk_window_foreign_new (guint32 anid)
 {
   GdkWindow *window;
   GdkWindowPrivate *private;
+  GdkWindowPrivate *parent_private;
   XWindowAttributes attrs;
   Window root, parent;
   Window *children;
@@ -446,6 +459,11 @@ gdk_window_foreign_new (guint32 anid)
   XFree (children);
   private->parent = gdk_xid_table_lookup (parent);
 
+  parent_private = (GdkWindowPrivate *)private->parent;
+  
+  if (parent_private)
+    parent_private->children = g_list_prepend (parent_private->children, window);
+
   private->xwindow = anid;
   private->xdisplay = gdk_display;
   private->x = attrs.x;
@@ -458,6 +476,7 @@ gdk_window_foreign_new (guint32 anid)
   private->destroyed = FALSE;
   private->extension_events = 0;
 
+  private->colormap = NULL;
 
   private->dnd_drag_data_type = None;
   private->dnd_drag_data_typesavail =
@@ -469,6 +488,7 @@ gdk_window_foreign_new (guint32 anid)
   private->dnd_drag_eventmask = private->dnd_drag_savedeventmask = 0;
 
   private->filters = NULL;
+  private->children = NULL;
 
   window->user_data = NULL;
 
@@ -507,10 +527,17 @@ gdk_window_internal_destroy (GdkWindow *window, gboolean xdestroy,
     case GDK_WINDOW_FOREIGN:
       if (!private->destroyed)
 	{
+	  if (private->parent)
+	    {
+	      GdkWindowPrivate *parent_private = (GdkWindowPrivate *)private->parent;
+	      if (parent_private->children)
+		parent_private->children = g_list_remove (parent_private->children, window);
+	    }
+
 	  if (private->window_type != GDK_WINDOW_FOREIGN)
 	    {
-	      children = gdk_window_get_children (window);
-	      tmp = children;
+	      children = tmp = private->children;
+	      private->children = NULL;
 
 	      while (tmp)
 		{
@@ -522,7 +549,7 @@ gdk_window_internal_destroy (GdkWindow *window, gboolean xdestroy,
 		    gdk_window_internal_destroy (temp_window, FALSE,
 						 our_destroy);
 		}
-	      
+
 	      g_list_free (children);
 	    }
 
@@ -580,6 +607,9 @@ gdk_window_internal_destroy (GdkWindow *window, gboolean xdestroy,
 	    }
 	  else if (xdestroy)
 	    XDestroyWindow (private->xdisplay, private->xwindow);
+
+	  if (private->colormap)
+	    gdk_colormap_unref (private->colormap);
 
 	  private->destroyed = TRUE;
 	}
@@ -1059,6 +1089,11 @@ gdk_window_set_colormap (GdkWindow   *window,
       XSetWindowColormap (window_private->xdisplay,
 			  window_private->xwindow,
 			  colormap_private->xcolormap);
+
+      if (window_private->colormap)
+	gdk_colormap_unref (window_private->colormap);
+      window_private->colormap = colormap;
+      gdk_colormap_ref (window_private->colormap);
       
       if (window_private->window_type != GDK_WINDOW_TOPLEVEL)
 	gdk_window_add_colormap_windows (window);
@@ -1153,20 +1188,27 @@ gdk_window_get_visual (GdkWindow *window)
 {
   GdkWindowPrivate *window_private;
   XWindowAttributes window_attributes;
-  
+   
   g_return_val_if_fail (window != NULL, NULL);
-  
+
   window_private = (GdkWindowPrivate*) window;
+  /* Huh? ->parent is never set for a pixmap. We should just return
+   * null immeditately
+   */
   while (window_private && (window_private->window_type == GDK_WINDOW_PIXMAP))
     window_private = (GdkWindowPrivate*) window_private->parent;
   
   if (window_private && !window_private->destroyed)
     {
-      XGetWindowAttributes (window_private->xdisplay,
-			    window_private->xwindow,
-			    &window_attributes);
-      
-      return gdk_visual_lookup (window_attributes.visual);
+       if (window_private->colormap == NULL)
+	 {
+	    XGetWindowAttributes (window_private->xdisplay,
+				  window_private->xwindow,
+				  &window_attributes);
+	    return gdk_visual_lookup (window_attributes.visual);
+	 }
+       else
+	 return ((GdkColormapPrivate *)window_private->colormap)->visual;
     }
   
   return NULL;
@@ -1179,16 +1221,20 @@ gdk_window_get_colormap (GdkWindow *window)
   XWindowAttributes window_attributes;
   
   g_return_val_if_fail (window != NULL, NULL);
-  
   window_private = (GdkWindowPrivate*) window;
-  
+
+  g_return_val_if_fail (window_private->window_type != GDK_WINDOW_PIXMAP, NULL);
   if (!window_private->destroyed)
     {
-      XGetWindowAttributes (window_private->xdisplay,
-			    window_private->xwindow,
-			    &window_attributes);
-      
-      return gdk_colormap_lookup (window_attributes.colormap);
+      if (window_private->colormap == NULL)
+	{
+	  XGetWindowAttributes (window_private->xdisplay,
+				window_private->xwindow,
+				&window_attributes);
+	  return gdk_colormap_lookup (window_attributes.colormap);
+	 }
+       else
+	 return window_private->colormap;
     }
   
   return NULL;
@@ -1436,8 +1482,7 @@ gdk_window_add_colormap_windows (GdkWindow *window)
 
 /*
  * This needs the X11 shape extension.
- * If not available, simply remove the call to
- * XShapeCombineMask. Shaped windows will look
+ * If not available, shaped windows will look
  * ugly, but programs still work.    Stefan Wille
  */
 void
@@ -1445,38 +1490,53 @@ gdk_window_shape_combine_mask (GdkWindow *window,
 			       GdkBitmap *mask,
 			       gint x, gint y)
 {
+  enum { UNKNOWN, NO, YES };
+
+  static gint have_shape = UNKNOWN;
+
   GdkWindowPrivate *window_private;
   Pixmap pixmap;
 
   g_return_if_fail (window != NULL);
 
-  /* This is needed, according to raster */
-  gdk_window_set_override_redirect(window, TRUE);
-
-  window_private = (GdkWindowPrivate*) window;
-  if (window_private->destroyed)
-    return;
-
-  if (mask)
+#ifdef HAVE_SHAPE_EXT
+  if (have_shape == UNKNOWN)
     {
-      GdkWindowPrivate *pixmap_private;
-
-      pixmap_private = (GdkWindowPrivate*) mask;
-      pixmap = (Pixmap) pixmap_private->xwindow;
+      int ignore;
+      if (XQueryExtension(gdk_display, "SHAPE", &ignore, &ignore, &ignore))
+	have_shape = YES;
+      else
+	have_shape = NO;
     }
-  else
+  
+  if (have_shape == YES)
     {
-      x = 0;
-      y = 0;
-      pixmap = None;
+      window_private = (GdkWindowPrivate*) window;
+      if (window_private->destroyed)
+	return;
+      
+      if (mask)
+	{
+	  GdkWindowPrivate *pixmap_private;
+	  
+	  pixmap_private = (GdkWindowPrivate*) mask;
+	  pixmap = (Pixmap) pixmap_private->xwindow;
+	}
+      else
+	{
+	  x = 0;
+	  y = 0;
+	  pixmap = None;
+	}
+      
+      XShapeCombineMask  (window_private->xdisplay,
+			  window_private->xwindow,
+			  ShapeBounding,
+			  x, y,
+			  pixmap,
+			  ShapeSet);
     }
-
-  XShapeCombineMask  (window_private->xdisplay,
-		      window_private->xwindow,
-		      ShapeBounding,
-		      x, y,
-		      pixmap,
-		      ShapeSet);
+#endif /* HAVE_SHAPE_EXT */
 }
 
 void
@@ -1915,3 +1975,20 @@ gdk_window_set_functions (GdkWindow    *window,
 
   gdk_window_set_mwm_hints (window, &hints);
 }
+
+GList *
+gdk_window_get_toplevels (void)
+{
+  GList *new_list = NULL;
+  GList *tmp_list;
+
+  tmp_list = gdk_root_parent.children;
+  while (tmp_list)
+    {
+      new_list = g_list_prepend (new_list, tmp_list->data);
+      tmp_list = tmp_list->next;
+    }
+
+  return new_list;
+}
+

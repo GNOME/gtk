@@ -1,3 +1,152 @@
+Sun May 17 10:48:27 1998  Tim Janik  <timj@gtk.org>
+
+	* gscanner.c (g_scanner_unexp_token): provide usefull default
+ 	specifications for identifier_spec and symbol_spec.
+
+	* glib.h: new functions g_slist_nth_data and g_list_nth_data to return
+ 	the data of the nth element in the list.
+
+Fri May 15 22:31:49 1998  Tim Janik  <timj@gtk.org>
+
+	* gscanner.c (g_scanner_unexp_token): removed spurious va_end(args)
+ 	that for some reason didn't produce a compiler wrning on my machine
+ 	(is va_end undefined for i386?).
+
+Fri May 15 12:32:08 1998  rodo  <doulik@karlin.mff.cuni.cz>
+
+	* gscanner.c: replaced some snprintf with g_snprintf
+
+Fri May 15 00:56:59 1998  Tim Janik  <timj@gtk.org>
+
+	* glib.h: further support for gcc function attributes: G_GNUC_FORMAT,
+	G_GNUC_NORETURN and G_GNUC_CONST.
+
+	* gscanner.c (g_scanner_stat_mode): changed stat() to lstat().
+	(g_scanner_msg_handler): "\n" at end of line!
+	(g_scanner_foreach_symbol): new function to iterate over the symbol
+ 	table (GScanner does value-wrapping).
+
+Thu May 14 04:14:12 1998  Tim Janik  <timj@gtk.org>
+
+	* glib.h: typedef gint gboolean;
+	this is needed to provide portability with big-endian platforms (e.g.
+	try sizeof(bool) for c++ on big-endians - it's 4).
+	this is also needed to maintain some_union.d_gint==some_union.d_gboolean.
+ 	plus, gint to gboolean casts and vice versa need to be possible without
+ 	loss.
+
+Tue May 12 19:22:58 1998  Owen Taylor  <otaylor@gtk.org>
+
+ 	* glib/glib.h: Added macros G[U]INT_TO_POINTER() and
+	GPOINTER_TO_[U]INT for storing small integers integers
+	inside pointers. 
+	
+	* glib/testglib.c: Print sizeof() results
+	as g_print("%ld", (glong)sizeof(foo)), to deal with
+	size_t being long on Alpha's.
+
+Tue May 12 16:54:15 1998  Owen Taylor  <otaylor@gtk.org>
+	(James A <jamesa@demon.net> : gtk-jamesa-980511-4.patch)
+	
+	* glib.h gstring.c gmessages.c: Added some missing
+	const to arguments.
+
+	* gutils.c (g_strsignal.c): Added missing return statements.
+
+Mon May 11 21:11:54 1998  Owen Taylor  <otaylor@gtk.org>
+
+	* gutils.c gmessages.c: Moved g_error, g_warning, g_message and
+	g_print from gutils.c to new file gmessages.c, to avoid having to
+	include <unistd.h> in gutils.c which was causing problems for the
+	g_strsignal implementation on FreeBSD boxes.
+
+Mon May 11 09:53:43 1998  Tim Janik  <timj@gtk.org>
+
+	* configure.in: preserve automake CFLAGS.
+
+	* Makefile.am: fully rename the created library to libglib-1.1.la.
+	this means we need to change certain portions of the Makefile.am on
+	major/minor version bumps.
+
+	* ltmain.sh: the -release option is not required anymore.
+
+        * glib.h: provide G_GNUC_FUNCTION and G_GNUC_PRETTY_FUNCTION to
+	avoid conditionals. unconditionally define NULL, TRUE, FALSE, MAX,
+	MIN, ABS and CLAMP, these macros might be screwed from other headers.
+
+Mon May 11 01:44:10 1998  Tim Janik  <timj@gtk.org>
+
+	* gdataset.c: new file, gdatasets implement the object data
+	mechanism from GtkObject. a generic data pointer is associated with
+	a certain location and a key id.
+
+Sat May  9 20:08:12 1998  Owen Taylor  <otaylor@gtk.org>
+
+        * glib/gmem.c: Experimentally restore GMemChunk
+        to its primeval state - where mem areas are
+        freed incrementally instead of searching the tree
+        every time a mem area is completely empty. Also,
+        always keep one mem chunk around. (Reduced calls
+        to malloc() a lot, but doesn't really improve
+        performance significiantly)
+
+Thu May  7 08:17:28 1998  Tim Janik  <timj@gtk.org>
+
+	* glib.h (G_GNUC_PRINTF):
+	(G_GNUC_SCANF): macros to facilitate the printf/scanf format argument
+	checking of gcc.
+
+	* gstring.c: const corrections, string!=NULL checks at function entry.
+	(g_string_down): new function for tolower(3) conversion.
+	(g_string_up): new function for toupper(3) conversion.
+
+	* gutils.c: const corrections.
+	(g_strdown): g_string_down() counterpart.
+	(g_strup): g_string_up() counterpart.
+
+	* gscanner.c (g_scanner_unexp_token):
+ 	(g_scanner_error):
+	(g_scanner_warn): new functions to let a scanner put out warnings
+ 	or errors, especially to react on unexpected tokens.
+
+	* gslist.c:
+ 	(g_slist_index): find out about about the position of a
+	certain data pointer.
+ 	(g_slist_position): find out about about the position of a
+	certain node.
+
+	* glist.c:
+ 	(g_list_index): find out about about the position of a
+	certain data pointer.
+
+Thu May  7 05:14:19 1998  Tim Janik  <timj@gtk.org>
+
+	* ltmain.sh: added a new commandline flag -postfix similar to -release,
+	but will immediately change the library name.
+
+	* Makefile.am: specify -postfix and -version-info
+
+	* configure.in: version bump to 1.1.0. added GLIB_INTERFACE_AGE and
+	GLIB_BINARY_AGE. calculate LT_* variables for libtool.
+
+Fri May  1 16:36:08 1998  Owen Taylor  <otaylor@gtk.org>
+
+	* gutils.c: (g_strcasecmp). Check for isupper before
+	taking tolower, and account for macroized tolower.
+
+	* gutils.c (g_error): Check for recursion.
+
+1998-04-27  Elliot Lee  <sopwith@cuc.ml.org>
+
+	* glist.c (g_list_position): New function to find the position of
+	a link in a list - should be the inverse of g_list_nth(), but
+	haven't tested it so poof.
+
+Thu Apr 30 21:41:30 1998  Owen Taylor  <otaylor@gtk.org>
+
+	* gstring.c : Check arguments more carefully, 
+	(gtk-draco-980423-1.patch; ramsey@rhrk.uni-kl.de) 
+
 Tue Apr  7 19:36:48 1998  Owen Taylor  <owt1@cornell.edu>
 
 	* gutils.c (g_direct_compare): Removed, because that's what

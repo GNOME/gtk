@@ -108,7 +108,9 @@ static void gtk_window_set_hints          (GtkWidget         *widget,
 static gint gtk_window_check_accelerator  (GtkWindow         *window,
 					   gint               key,
 					   guint              mods);
-
+static void gtk_window_unrealize          (GtkWidget         *widget);
+static void gtk_window_draw               (GtkWidget         *widget, 
+					   GdkRectangle *area);
 
 static GtkBinClass *parent_class = NULL;
 static guint window_signals[LAST_SIGNAL] = { 0 };
@@ -198,6 +200,7 @@ gtk_window_class_init (GtkWindowClass *klass)
   widget_class->focus_in_event = gtk_window_focus_in_event;
   widget_class->focus_out_event = gtk_window_focus_out_event;
   widget_class->client_event = gtk_window_client_event;
+  widget_class->unrealize = gtk_window_unrealize;
 
   container_class->need_resize = gtk_window_need_resize;
 
@@ -303,7 +306,13 @@ gtk_window_new (GtkWindowType type)
   window = gtk_type_new (gtk_window_get_type ());
 
   window->type = type;
-
+   if (window)
+     {
+	window->init=th_dat.functions.window.init;
+	window->border=th_dat.functions.window.border;
+	window->draw=th_dat.functions.window.draw;
+	window->exit=th_dat.functions.window.exit;
+     }
   return GTK_WIDGET (window);
 }
 
@@ -638,6 +647,9 @@ gtk_window_realize (GtkWidget *widget)
 
   widget->style = gtk_style_attach (widget->style, widget->window);
   gtk_style_set_background (widget->style, widget->window, GTK_STATE_NORMAL);
+
+   if (window->init)
+     window->init(GTK_WIDGET(widget));
 }
 
 static void
@@ -652,11 +664,27 @@ gtk_window_size_request (GtkWidget      *widget,
 
   window = GTK_WINDOW (widget);
 
-  if (window->bin.child)
-    {
-      requisition->width = GTK_CONTAINER (window)->border_width * 2;
-      requisition->height = GTK_CONTAINER (window)->border_width * 2;
+   if (window->border)
+     window->border(GTK_WIDGET(widget));
+   else
+     {
+	GTK_CONTAINER(widget)->minimum_width=0;
+	GTK_CONTAINER(widget)->minimum_height=0;
+	GTK_CONTAINER(widget)->internal_border_left=2;
+	GTK_CONTAINER(widget)->internal_border_right=2;
+	GTK_CONTAINER(widget)->internal_border_top=2;
+	GTK_CONTAINER(widget)->internal_border_bottom=2;
+     }
 
+   requisition->width = (GTK_CONTAINER (widget)->border_width * 2) +
+     GTK_CONTAINER(widget)->internal_border_left +
+     GTK_CONTAINER(widget)->internal_border_right;
+   requisition->height = (GTK_CONTAINER (widget)->border_width * 2) +
+     GTK_CONTAINER(widget)->internal_border_top +
+     GTK_CONTAINER(widget)->internal_border_bottom;
+   
+   if (window->bin.child)
+    {
       gtk_widget_size_request (window->bin.child, &window->bin.child->requisition);
 
       requisition->width += window->bin.child->requisition.width;
@@ -667,31 +695,80 @@ gtk_window_size_request (GtkWidget      *widget,
       if (!GTK_WIDGET_VISIBLE (window))
 	window->need_resize = TRUE;
     }
+   if ((requisition->width-(GTK_CONTAINER (widget)->border_width * 2))<
+       GTK_CONTAINER(widget)->minimum_width)
+     requisition->width=GTK_CONTAINER(widget)->minimum_width+
+     (GTK_CONTAINER (widget)->border_width * 2);
+   if ((requisition->height-(GTK_CONTAINER (widget)->border_width * 2))<
+       GTK_CONTAINER(widget)->minimum_height)
+     requisition->height=GTK_CONTAINER(widget)->minimum_height+
+     (GTK_CONTAINER (widget)->border_width * 2);
 }
 
 static void
 gtk_window_size_allocate (GtkWidget     *widget,
 			  GtkAllocation *allocation)
 {
-  GtkWindow *window;
-  GtkAllocation child_allocation;
-
-  g_return_if_fail (widget != NULL);
-  g_return_if_fail (GTK_IS_WINDOW (widget));
-  g_return_if_fail (allocation != NULL);
-
-  window = GTK_WINDOW (widget);
-  widget->allocation = *allocation;
-
-  if (window->bin.child && GTK_WIDGET_VISIBLE (window->bin.child))
+   GtkWindow *window;
+   GtkAllocation child_allocation;
+   gint border_width;
+   
+   g_return_if_fail (widget != NULL);
+   g_return_if_fail (GTK_IS_WINDOW (widget));
+   g_return_if_fail (allocation != NULL);
+   
+   window = GTK_WINDOW (widget);
+   widget->allocation = *allocation;
+   border_width = GTK_CONTAINER (widget)->border_width;
+   
+   if (window->border)
+     window->border(GTK_WIDGET(widget));
+   else
+     {
+	GTK_CONTAINER(widget)->internal_border_left=2;
+	GTK_CONTAINER(widget)->internal_border_right=2;
+	GTK_CONTAINER(widget)->internal_border_top=2;
+	GTK_CONTAINER(widget)->internal_border_bottom=2;
+     }
+   if (window->bin.child && GTK_WIDGET_VISIBLE (window->bin.child))
     {
-      child_allocation.x = GTK_CONTAINER (window)->border_width;
-      child_allocation.y = GTK_CONTAINER (window)->border_width;
-      child_allocation.width = allocation->width - child_allocation.x * 2;
-      child_allocation.height = allocation->height - child_allocation.y * 2;
-
-      gtk_widget_size_allocate (window->bin.child, &child_allocation);
+       child_allocation.x = GTK_CONTAINER(widget)->internal_border_left;
+       child_allocation.y = GTK_CONTAINER(widget)->internal_border_top;
+       
+       child_allocation.width = widget->allocation.width -
+	 child_allocation.x - GTK_CONTAINER(widget)->internal_border_right -
+	 border_width * 2;
+       child_allocation.height = widget->allocation.height -
+	 child_allocation.y - GTK_CONTAINER(widget)->internal_border_bottom -
+	 border_width * 2;
+/*       
+       child_allocation.x = GTK_CONTAINER (window)->border_width;
+       child_allocation.y = GTK_CONTAINER (window)->border_width;
+       child_allocation.width = allocation->width - child_allocation.x * 2;
+       child_allocation.height = allocation->height - child_allocation.y * 2;
+ */      
+       gtk_widget_size_allocate (window->bin.child, &child_allocation);
     }
+}
+
+static void
+gtk_window_draw (GtkWidget *widget, GdkRectangle *area)
+{
+   GtkWindow *window;
+   GdkRectangle new_area;
+   
+   window = GTK_WINDOW (widget);
+   if (window->draw)
+     {
+        if (!area)
+	  {
+	     new_area.x=0;new_area.y=0;
+	     new_area.width=widget->allocation.width;
+	     new_area.height=widget->allocation.height;
+	  }
+	if (area) window->draw(GTK_WIDGET(widget),area);
+	else window->draw(GTK_WIDGET(widget),&new_area);
+     }
 }
 
 static gint
@@ -702,6 +779,7 @@ gtk_window_expose_event (GtkWidget      *widget,
   g_return_val_if_fail (GTK_IS_WINDOW (widget), FALSE);
   g_return_val_if_fail (event != NULL, FALSE);
 
+   gtk_window_draw(widget,&event->area);
   if (GTK_WIDGET_DRAWABLE (widget))
     if (GTK_WIDGET_CLASS (parent_class)->expose_event)
       return (* GTK_WIDGET_CLASS (parent_class)->expose_event) (widget, event);
@@ -1347,4 +1425,61 @@ gtk_window_check_accelerator (GtkWindow *window,
     }
 
   return FALSE;
+}
+
+static void
+gtk_window_unrealize (GtkWidget *widget)
+{
+      GtkWindow *window;
+   
+   g_return_if_fail (widget != NULL);
+   g_return_if_fail (GTK_IS_WIDGET (widget));
+   
+   window=GTK_WINDOW(widget);
+   
+   if (GTK_WIDGET_NO_WINDOW (widget) && GTK_WIDGET_MAPPED (widget))
+     gtk_window_unmap (widget);
+   
+   GTK_WIDGET_UNSET_FLAGS (widget, GTK_REALIZED | GTK_MAPPED);
+   
+   
+   gtk_style_detach (widget->style);
+   if (!GTK_WIDGET_NO_WINDOW (widget))
+     {
+	gdk_window_set_user_data (widget->window, NULL);
+	gdk_window_destroy (widget->window);
+     }
+   else
+     {
+	gdk_window_unref (widget->window);
+     }
+   
+   if (GTK_IS_CONTAINER (widget))
+     gtk_container_foreach (GTK_CONTAINER (widget),
+			    (GtkCallback)gtk_widget_unrealize,
+			    NULL);
+   if (window->exit)
+     window->exit(GTK_WIDGET(widget));
+   
+   widget->window = NULL;
+}
+
+void
+gtk_window_set_theme  (GtkWindow *window,
+		       void (* init)    (GtkWidget *window),
+		       void (* border)  (GtkWidget *window),
+		       void (* draw)    (GtkWidget *window, GdkRectangle *area),
+		       void (* exit)    (GtkWidget *window))
+{
+   if (GTK_WIDGET_REALIZED(GTK_WIDGET(window)))
+     window->exit(GTK_WIDGET(window));
+   window->init=init;
+   window->border=border;
+   window->draw=draw;
+   window->exit=exit;
+   if (GTK_WIDGET_REALIZED(GTK_WIDGET(window)))
+     {
+	window->init(GTK_WIDGET(window));
+	window->draw(GTK_WIDGET(window),NULL);
+     }
 }

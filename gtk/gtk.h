@@ -18,6 +18,9 @@
 #ifndef __GTK_H__
 #define __GTK_H__
 
+#define GTK_MAJOR_VERSION 1
+#define GTK_MINOR_VERSION 0
+#define GTK_MICRO_VERSION 1
 
 #include <gdk/gdk.h>
 #include <gtk/gtkaccelerator.h>

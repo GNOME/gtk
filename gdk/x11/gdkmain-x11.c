@@ -51,8 +51,8 @@
 #include "gdkinput.h"
 #ifdef USE_XIM
 #include "gdkx.h"
-#include "gdkkeysyms.h"
 #endif
+#include "gdkkeysyms.h"
 #include "gdki18n.h"
 
 #ifndef X_GETTIMEOFDAY
@@ -625,7 +625,7 @@ gdk_exit (int errorcode)
  */
 
 gchar*
-gdk_set_locale ()
+gdk_set_locale (void)
 {
   if (!setlocale (LC_ALL,""))
     g_print ("locale not supported by C library\n");
@@ -663,7 +663,7 @@ gdk_set_locale ()
  */
 
 gint
-gdk_events_pending ()
+gdk_events_pending (void)
 {
   gint result;
   GList *tmp_list;
@@ -1023,13 +1023,13 @@ gdk_set_use_xshm (gint use_xshm)
 }
 
 gint
-gdk_get_show_events ()
+gdk_get_show_events (void)
 {
   return gdk_debug_flags & GDK_DEBUG_EVENTS;
 }
 
 gint
-gdk_get_use_xshm ()
+gdk_get_use_xshm (void)
 {
   return gdk_use_xshm;
 }
@@ -1055,7 +1055,7 @@ gdk_get_use_xshm ()
  */
 
 guint32
-gdk_time_get ()
+gdk_time_get (void)
 {
   struct timeval end;
   struct timeval elapsed;
@@ -1094,7 +1094,7 @@ gdk_time_get ()
  */
 
 guint32
-gdk_timer_get ()
+gdk_timer_get (void)
 {
   return timer_val;
 }
@@ -1129,13 +1129,13 @@ gdk_timer_set (guint32 milliseconds)
 }
 
 void
-gdk_timer_enable ()
+gdk_timer_enable (void)
 {
   timerp = &timer;
 }
 
 void
-gdk_timer_disable ()
+gdk_timer_disable (void)
 {
   timerp = NULL;
 }
@@ -1463,7 +1463,7 @@ gdk_keyboard_ungrab (guint32 time)
  */
 
 gint
-gdk_screen_width ()
+gdk_screen_width (void)
 {
   gint return_val;
 
@@ -1488,7 +1488,7 @@ gdk_screen_width ()
  */
 
 gint
-gdk_screen_height ()
+gdk_screen_height (void)
 {
   gint return_val;
 
@@ -1498,13 +1498,13 @@ gdk_screen_height ()
 }
 
 void
-gdk_key_repeat_disable ()
+gdk_key_repeat_disable (void)
 {
   XAutoRepeatOff (gdk_display);
 }
 
 void
-gdk_key_repeat_restore ()
+gdk_key_repeat_restore (void)
 {
   if (autorepeat)
     XAutoRepeatOn (gdk_display);
@@ -1531,14 +1531,14 @@ gdk_key_repeat_restore ()
  *--------------------------------------------------------------
  */
 
-void gdk_flush ()
+void gdk_flush (void)
 {
   XSync (gdk_display, False);
 }
 
 
 void
-gdk_beep ()
+gdk_beep (void)
 {
   XBell(gdk_display, 100);
 }
@@ -1562,7 +1562,7 @@ gdk_beep ()
  */
 
 static gint
-gdk_event_wait ()
+gdk_event_wait (void)
 {
   GList *list;
   GdkInput *input;
@@ -1606,7 +1606,30 @@ gdk_event_wait ()
 	  max_input = MAX (max_input, input->source);
 	}
 
+#ifdef USE_PTHREADS
+      if (gdk_using_threads)
+	{
+	  gdk_select_waiting = TRUE;
+
+	  FD_SET (gdk_threads_pipe[0], &readfds);
+	  max_input = MAX (max_input, gdk_threads_pipe[0]);
+	  gdk_threads_leave ();
+	}
+#endif
+
       nfd = select (max_input+1, &readfds, &writefds, &exceptfds, timerp);
+
+#ifdef USE_PTHREADS
+      if (gdk_using_threads)
+	{
+	  gchar c;
+	  gdk_threads_enter ();
+	  gdk_select_waiting = FALSE;
+	  
+	  if (FD_ISSET (gdk_threads_pipe[0], &readfds))
+	    read (gdk_threads_pipe[0], &c, 1);
+	}
+#endif
 
       timerp = NULL;
       timer_val = 0;
@@ -1685,7 +1708,8 @@ gdk_event_translate (GdkEvent *event,
 
   GdkWindow *window;
   GdkWindowPrivate *window_private;
-  XComposeStatus compose;
+  static XComposeStatus compose;
+  KeySym keysym;
   int charcount;
 #ifdef USE_XIM
   static gchar* buf = NULL;
@@ -1767,16 +1791,16 @@ gdk_event_translate (GdkEvent *event,
 	  buf_len = 128;
 	  buf = g_new (gchar, buf_len);
 	}
+      keysym = GDK_VoidSymbol;
+
       if (xim_using == TRUE && xim_ic)
 	{
 	  Status status;
 	  
 	  /* Clear keyval. Depending on status, may not be set */
-	  event->key.keyval = GDK_VoidSymbol;
 	  charcount = XmbLookupString(xim_ic->xic,
 				      &xevent->xkey, buf, buf_len-1,
-				      (KeySym*) &event->key.keyval,
-				      &status);
+				      &keysym, &status);
 	  if (status == XBufferOverflow)
 	    {                     /* retry */
 	      /* alloc adequate size of buffer */
@@ -1789,8 +1813,7 @@ gdk_event_translate (GdkEvent *event,
 	     
 	      charcount = XmbLookupString (xim_ic->xic,
 					   &xevent->xkey, buf, buf_len-1,
-					   (KeySym*) &event->key.keyval,
-					   &status);
+					   &keysym, &status);
 	    }
 	  if (status == XLookupNone)
 	    {
@@ -1800,13 +1823,13 @@ gdk_event_translate (GdkEvent *event,
 	}
       else
 	charcount = XLookupString (&xevent->xkey, buf, buf_len,
-				   (KeySym*) &event->key.keyval,
-				   &compose);
+				   &keysym, &compose);
 #else
       charcount = XLookupString (&xevent->xkey, buf, 16,
-				 (KeySym*) &event->key.keyval,
-				 &compose);
+				 &keysym, &compose);
 #endif
+      event->key.keyval = keysym;
+
       if (charcount > 0 && buf[charcount-1] == '\0')
 	charcount --;
       else
@@ -1844,9 +1867,10 @@ gdk_event_translate (GdkEvent *event,
     case KeyRelease:
       /* Lookup the string corresponding to the given keysym.
        */
+      keysym = GDK_VoidSymbol;
       charcount = XLookupString (&xevent->xkey, buf, 16,
-				 (KeySym*) &event->key.keyval,
-				 &compose);
+				 &keysym, &compose);
+      event->key.keyval = keysym;      
 
       /* Print debugging info.
        */
@@ -1964,7 +1988,7 @@ gdk_event_translate (GdkEvent *event,
 	    window_private->dnd_drag_savedeventmask = dnd_winattr.your_event_mask;
 	    dnd_setwinattr.event_mask = 
 	      window_private->dnd_drag_eventmask = ButtonMotionMask | ButtonPressMask | ButtonReleaseMask |
-			EnterWindowMask | LeaveWindowMask;
+			EnterWindowMask | LeaveWindowMask | ExposureMask;
 	    XChangeWindowAttributes(gdk_display, window_private->xwindow,
 				    CWEventMask, &dnd_setwinattr);
 	}
@@ -2333,7 +2357,7 @@ gdk_event_translate (GdkEvent *event,
 		       ButtonMotionMask | PointerMotionMask |
 		       /* PointerMotionHintMask | */ /* HINTME */
 		       ButtonPressMask | ButtonReleaseMask,
-		       GrabModeAsync, GrabModeAsync, gdk_root_window,
+		       GrabModeAsync, GrabModeAsync, None,
 		       None, CurrentTime);
 #ifdef G_ENABLE_DEBUG
 	  GDK_NOTE(DND, g_print("xgpret = %d\n", xgpret));
@@ -3028,7 +3052,7 @@ gdk_synthesize_click (GdkEvent *event,
  */
 
 static void
-gdk_exit_func ()
+gdk_exit_func (void)
 {
   static gboolean in_gdk_exit_func = FALSE;
 
@@ -4004,8 +4028,8 @@ gdk_dnd_check_types (GdkWindow   *window,
 
       if (realfmt != (sizeof(Atom) * 8))
 	{
-	  g_warning("XdeTypelist property had format of %d instead of the expected %d, on window %#lx\n",
-		    realfmt, sizeof(Atom) * 8, xevent->xclient.data.l[0]);
+	  g_warning("XdeTypelist property had format of %d instead of the expected %ld, on window %#lx\n",
+		    realfmt, (glong)sizeof(Atom) * 8, xevent->xclient.data.l[0]);
 	  return 0;
 	}
 

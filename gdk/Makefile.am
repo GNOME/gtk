@@ -2,9 +2,9 @@
 
 gdkincludedir = $(includedir)/gdk
 
-lib_LTLIBRARIES = libgdk.la
+lib_LTLIBRARIES = libgdk-1.1.la
 
-libgdk_la_SOURCES = \
+libgdk_1_1_la_SOURCES = \
 	gdk.c		\
 	gdkcc.c		\
 	gdkcolor.c	\
@@ -26,6 +26,7 @@ libgdk_la_SOURCES = \
 	gdkrectangle.c	\
 	gdkregion.c	\
 	gdkselection.c	\
+	gdkthreads.c    \
 	gdkvisual.c	\
 	gdkwindow.c	\
 	gdkxid.c 	\
@@ -46,7 +47,8 @@ gdkinclude_HEADERS = \
 	gdktypes.h	\
 	gdkx.h
 
-libgdk_la_LDFLAGS = -version-info 1:0:0 \
+libgdk_1_1_la_LDFLAGS = \
+	-version-info $(LT_CURRENT):$(LT_REVISION):$(LT_AGE) \
 	@x_ldflags@ @x_libs@
 
 INCLUDES = -I$(top_srcdir) -I../glib -I$(top_srcdir)/glib @x_cflags@ 
@@ -78,5 +80,3 @@ files:
 	@files=`ls $(DISTFILES) 2> /dev/null `; for p in $$files; do \
 	  echo $$p; \
 	done
-
-$(DEP_FILES) : $(BUILT_SOURCES)

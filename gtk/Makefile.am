@@ -2,9 +2,9 @@
 
 gtkincludedir = $(includedir)/gtk
 
-lib_LTLIBRARIES = libgtk.la
+lib_LTLIBRARIES = libgtk-1.1.la
 
-libgtk_la_SOURCES = \
+libgtk_1_1_la_SOURCES = \
 	gtkaccelerator.c	\
 	gtkadjustment.c		\
 	gtkaspectframe.c	\
@@ -76,7 +76,6 @@ libgtk_la_SOURCES = \
 	gtkstatusbar.c		\
 	gtktable.c		\
 	gtktext.c		\
-        gtkthemes.c             \
 	gtktipsquery.c		\
 	gtktogglebutton.c	\
 	gtktoolbar.c		\
@@ -94,6 +93,7 @@ libgtk_la_SOURCES = \
 	gtkvseparator.c		\
 	gtkwidget.c		\
 	gtkwindow.c		\
+	gtkthemes.c		\
 	fnmatch.c		\
 	fnmatch.h
 
@@ -123,6 +123,7 @@ gtkinclude_HEADERS = \
 	gtkentry.h		\
 	gtkenums.h		\
 	gtkeventbox.h		\
+	gtkfeatures.h		\
 	gtkfilesel.h		\
 	gtkfixed.h		\
 	gtkframe.h		\
@@ -173,7 +174,6 @@ gtkinclude_HEADERS = \
 	gtkstatusbar.h		\
 	gtktable.h		\
 	gtktext.h		\
-        gtkthemes.h             \
 	gtktipsquery.h		\
 	gtktogglebutton.h	\
 	gtktoolbar.h		\
@@ -199,13 +199,15 @@ $(srcdir)/gtktypebuiltins.h: @MAINT@ $(srcdir)/gtk.defs $(srcdir)/gentypeinfo.el
 $(srcdir)/gtktypebuiltins.c: @MAINT@ $(srcdir)/gtk.defs $(srcdir)/gentypeinfo.el
 	$(SHELL) $(srcdir)/runelisp $(srcdir)/gentypeinfo.el id $< $@
 
-libgtk_la_LDFLAGS = -lgdk_imlib -ldl -ljpeg -ltiff -lgif -lpng -lz -lm -version-info 1:0:0
+libgtk_1_1_la_LDFLAGS = -version-info $(LT_CURRENT):$(LT_REVISION):$(LT_AGE)
 
 EXTRA_DIST = \
 	line-arrow.xbm 		\
 	line-wrap.xbm 		\
 	testgtkrc 		\
+	testgtkrc2 		\
 	gtk.defs		\
+	gtkfeatures.h.in	\
 	runelisp 		\
 	gentypeinfo.el 		\
 	gtktypebuiltins.c	\
@@ -223,47 +225,31 @@ EXTRA_DIST = \
 INCLUDES = -I$(top_srcdir) -I../glib -I$(top_srcdir)/glib @x_cflags@ 
 
 noinst_PROGRAMS = testgtk testinput testselection simple 
-testgtk_LDADD = \
-	libgtk.la				\
-	$(top_builddir)/gdk/libgdk.la		\
-	@x_ldflags@				\
-	@x_libs@				\
-	$(top_builddir)/glib/libglib.la		\
-	-lm
 
-testinput_LDADD = \
-	libgtk.la				\
-	$(top_builddir)/gdk/libgdk.la		\
-	@x_ldflags@				\
-	@x_libs@				\
-	$(top_builddir)/glib/libglib.la		\
-	-lm
+# FIXME, we currently rely on linking against libglib-1.1
 
-testselection_LDADD = \
-	libgtk.la				\
-	$(top_builddir)/gdk/libgdk.la		\
-	@x_ldflags@				\
-	@x_libs@				\
-	$(top_builddir)/glib/libglib.la		\
-	-lm
-
-simple_LDADD = \
-	libgtk.la				\
-	$(top_builddir)/gdk/libgdk.la		\
-	@x_ldflags@				\
-	@x_libs@				\
-	$(top_builddir)/glib/libglib.la		\
-	-lm
-
-DEPS = \
-	libgtk.la		                \
-	$(top_builddir)/gdk/libgdk.la		\
-	$(top_builddir)/glib/libglib.la
+DEPS =	\
+	libgtk-@LT_RELEASE@.la				\
+	$(top_builddir)/gdk/libgdk-@LT_RELEASE@.la	\
+	$(top_builddir)/glib/libglib-1.1.la
+LDADDS = \
+	libgtk-@LT_RELEASE@.la				\
+	$(top_builddir)/gdk/libgdk-@LT_RELEASE@.la	\
+	@x_ldflags@					\
+	@x_libs@					\
+	$(top_builddir)/glib/libglib-1.1.la		\
+	-lm -ldl -lgdk_imlib -ljpeg -ltiff -lgif -lpng -lz -lm
 
 testgtk_DEPENDENCIES = $(DEPS)
 testinput_DEPENDENCIES = $(DEPS)
 testselection_DEPENDENCIES = $(DEPS)
 simple_DEPENDENCIES = $(DEPS)
+
+testgtk_LDADD = $(LDADDS)
+testinput_LDADD = $(LDADDS)
+testselection_LDADD = $(LDADDS)
+simple_LDADD = $(LDADDS)
+
 
 .PHONY: files test test-debug
 
