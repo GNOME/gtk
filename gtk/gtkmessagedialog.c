@@ -36,8 +36,6 @@
 
 static void gtk_message_dialog_class_init (GtkMessageDialogClass *klass);
 static void gtk_message_dialog_init       (GtkMessageDialog      *dialog);
-
-static void gtk_message_dialog_map        (GtkWidget             *widget);
 static void gtk_message_dialog_style_set  (GtkWidget             *widget,
                                            GtkStyle              *prev_style);
 
@@ -99,7 +97,6 @@ gtk_message_dialog_class_init (GtkMessageDialogClass *class)
 
   parent_class = g_type_class_peek_parent (class);
   
-  widget_class->map = gtk_message_dialog_map;
   widget_class->style_set = gtk_message_dialog_style_set;
 
   gobject_class->set_property = gtk_message_dialog_set_property;
@@ -513,44 +510,6 @@ gtk_message_dialog_add_buttons (GtkMessageDialog* message_dialog,
     } 
 
   g_object_notify (G_OBJECT (message_dialog), "buttons");
-}
-
-static void
-gtk_message_dialog_map (GtkWidget *widget)
-{
-  GtkWindow *window;
-
-  window = GTK_WINDOW (widget);
-
-  /* If a default button has not been chosen, then the selectable label will get
-   * the focus.  This looks bad, so give the focus to a button in this case.
-   */
-
-  if (!gtk_window_get_focus (window))
-    {
-      GtkWidget *focus_widget;
-
-      if (window->default_widget)
-	focus_widget = window->default_widget;
-      else
-	{
-	  GList *children;
-
-	  children = gtk_container_get_children (GTK_CONTAINER (GTK_DIALOG (widget)->action_area));
-
-	  if (children)
-	    focus_widget = GTK_WIDGET (children->data);
-	  else
-	    focus_widget = NULL;
-
-	  g_list_free (children);
-	}
-
-      if (focus_widget)
-	gtk_widget_grab_focus (focus_widget);
-    }
-
-  GTK_WIDGET_CLASS (parent_class)->map (widget);
 }
 
 static void

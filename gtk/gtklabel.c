@@ -147,6 +147,8 @@ static gboolean gtk_label_mnemonic_activate (GtkWidget         *widget,
 					     gboolean           group_cycling);
 static void     gtk_label_setup_mnemonic    (GtkLabel          *label,
 					     guint              last_key);
+static gboolean gtk_label_focus             (GtkWidget         *widget,
+					     GtkDirectionType   direction);
 
 /* For selectable lables: */
 static void gtk_label_move_cursor        (GtkLabel        *label,
@@ -248,6 +250,7 @@ gtk_label_class_init (GtkLabelClass *class)
   widget_class->hierarchy_changed = gtk_label_hierarchy_changed;
   widget_class->screen_changed = gtk_label_screen_changed;
   widget_class->mnemonic_activate = gtk_label_mnemonic_activate;
+  widget_class->focus = gtk_label_focus;
 
   class->move_cursor = gtk_label_move_cursor;
   class->copy_clipboard = gtk_label_copy_clipboard;
@@ -2810,6 +2813,27 @@ gtk_label_get_use_underline (GtkLabel *label)
   g_return_val_if_fail (GTK_IS_LABEL (label), FALSE);
   
   return label->use_underline;
+}
+
+static gboolean
+gtk_label_focus (GtkWidget         *widget,
+		 GtkDirectionType   direction)
+{
+  GtkLabel *label = GTK_LABEL (widget);
+  GdkEvent *event;
+  GdkModifierType state;
+  
+  /* We want to be in the tab chain only if we are selectable
+   * and the Control key is pressed
+   */
+  if (label->select_info == NULL)
+    return FALSE;
+
+  if (!gtk_get_current_event_state (&state))
+    return FALSE;
+
+  if (state & GDK_CONTROL_MASK)
+    return GTK_WIDGET_CLASS (parent_class)->focus (widget, direction);
 }
 
 /* Compute the X position for an offset that corresponds to the "more important
