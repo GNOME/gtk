@@ -1,3 +1,8 @@
+2002-01-28  Anders Carlsson  <andersca@gnu.org>
+
+	* gtk/gtkaccelgroup.c (gtk_accel_groups_activate): & with the
+	default mod mask so accels work when numlock is on.
+
 Sun Jan 27 23:23:23 2002  Kristian Rietveld  <kris@gtk.org>
 
 	* gtk/gtkrbtree.[ch]: add _gtk_rbtree_mark_invalid (my previous
