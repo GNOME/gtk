@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-07-10 00:22-0400\n"
+"POT-Creation-Date: 2004-07-21 13:56+0200\n"
 "PO-Revision-Date: 2004-04-17 22:41+0300\n"
 "Last-Translator: Mətin Əmirov <metin@karegen.com>\n"
 "Language-Team: Azerbaijani <translation-team-az@lists.sourceforge.net>\n"
@@ -910,15 +910,15 @@ msgstr "Rəng Çərxi"
 msgid "Color Selection"
 msgstr "Rəng Seçkisi"
 
-#: gtk/gtkentry.c:4300 gtk/gtktextview.c:6933
+#: gtk/gtkentry.c:4312 gtk/gtktextview.c:6933
 msgid "Select _All"
 msgstr "_Hamısını Seç"
 
-#: gtk/gtkentry.c:4310 gtk/gtktextview.c:6943
+#: gtk/gtkentry.c:4322 gtk/gtktextview.c:6943
 msgid "Input _Methods"
 msgstr "Giriş _Metodları"
 
-#: gtk/gtkentry.c:4320 gtk/gtktextview.c:6954
+#: gtk/gtkentry.c:4332 gtk/gtktextview.c:6954
 msgid "_Insert Unicode Control Character"
 msgstr "_Yunikod İdarə Hərfi Daxil Et"
 
@@ -946,7 +946,7 @@ msgstr ""
 "%s nişanlara əlavə edilə bilmədi:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:760 gtk/gtkfilechooserdefault.c:5332
+#: gtk/gtkfilechooserdefault.c:760 gtk/gtkfilechooserdefault.c:5351
 #, c-format
 msgid ""
 "Could not build file name from '%s' and '%s':\n"
@@ -1000,115 +1000,123 @@ msgstr ""
 msgid "Could not add a bookmark for %s because it is an invalid path name."
 msgstr "%s hökmsüz cığır adı olduğu üçün nişanlara əlavə edilə bilmədi."
 
-#: gtk/gtkfilechooserdefault.c:2578
+#: gtk/gtkfilechooserdefault.c:2525
+msgid "Shortcuts"
+msgstr "Qısa Yollar"
+
+#: gtk/gtkfilechooserdefault.c:2579
 msgid "Folder"
 msgstr "Qovluq"
 
 #. FIXME these need accelerators when appropriate, and
 #. * need the mnemonics to be rationalized
 #.
-#: gtk/gtkfilechooserdefault.c:2625 gtk/gtkstock.c:293
+#: gtk/gtkfilechooserdefault.c:2626 gtk/gtkstock.c:293
 msgid "_Add"
 msgstr "Ə_lavə Et"
 
-#: gtk/gtkfilechooserdefault.c:2635 gtk/gtkstock.c:341
+#: gtk/gtkfilechooserdefault.c:2636 gtk/gtkstock.c:341
 msgid "_Remove"
 msgstr "_Sil"
 
-#: gtk/gtkfilechooserdefault.c:2714
+#: gtk/gtkfilechooserdefault.c:2715
 msgid "Show _Hidden Files"
 msgstr "_Gizli Faylları Göstər"
 
-#: gtk/gtkfilechooserdefault.c:2855
+#: gtk/gtkfilechooserdefault.c:2830 gtk/gtkfilesel.c:766
+msgid "Files"
+msgstr "Fayllar"
+
+#: gtk/gtkfilechooserdefault.c:2857
 msgid "Name"
 msgstr "Ad"
 
-#: gtk/gtkfilechooserdefault.c:2877
+#: gtk/gtkfilechooserdefault.c:2879
 msgid "Size"
 msgstr "Böyüklük"
 
-#: gtk/gtkfilechooserdefault.c:2889
+#: gtk/gtkfilechooserdefault.c:2891
 msgid "Modified"
 msgstr "Təkmilləşdirmə tarixi"
 
 #. Create Folder
-#: gtk/gtkfilechooserdefault.c:2934
+#: gtk/gtkfilechooserdefault.c:2936
 msgid "Create Fo_lder"
 msgstr "_Qovluq Yarat"
 
 #. Name entry
-#: gtk/gtkfilechooserdefault.c:3044
+#: gtk/gtkfilechooserdefault.c:3046
 msgid "_Name:"
 msgstr "_Ad:"
 
-#: gtk/gtkfilechooserdefault.c:3086
+#: gtk/gtkfilechooserdefault.c:3088
 msgid "_Browse for other folders"
 msgstr "_Digər qovluqları gəz"
 
-#: gtk/gtkfilechooserdefault.c:3323
+#: gtk/gtkfilechooserdefault.c:3325
 msgid "Save in _folder:"
 msgstr "_Qovluğa qeyd et:"
 
-#: gtk/gtkfilechooserdefault.c:3325
+#: gtk/gtkfilechooserdefault.c:3327
 msgid "Create in _folder:"
 msgstr "_Qovluqda yarat:"
 
-#: gtk/gtkfilechooserdefault.c:3969
+#: gtk/gtkfilechooserdefault.c:3971
 msgid "Can't change to folder because it isn't local"
 msgstr "Qovluq yerli olmadığına görə açıla bilmədi."
 
-#: gtk/gtkfilechooserdefault.c:4107
+#: gtk/gtkfilechooserdefault.c:4109
 msgid "Could not find the path"
 msgstr "Cığır tapıla bilmədi"
 
-#: gtk/gtkfilechooserdefault.c:4458
+#: gtk/gtkfilechooserdefault.c:4460
 #, c-format
 msgid "shortcut %s does not exist"
 msgstr "%s qısa yolu mövcud deyil"
 
-#: gtk/gtkfilechooserdefault.c:5105
+#: gtk/gtkfilechooserdefault.c:5124
 msgid "Type name of new folder"
 msgstr "Yeni qovluğun adını yazın"
 
-#: gtk/gtkfilechooserdefault.c:5134
+#: gtk/gtkfilechooserdefault.c:5153
 #, c-format
 msgid "%d byte"
 msgid_plural "%d bytes"
 msgstr[0] "%d bayt"
 msgstr[1] "%d bayt"
 
-#: gtk/gtkfilechooserdefault.c:5136
+#: gtk/gtkfilechooserdefault.c:5155
 #, c-format
 msgid "%.1f K"
 msgstr "%.1f K"
 
-#: gtk/gtkfilechooserdefault.c:5138
+#: gtk/gtkfilechooserdefault.c:5157
 #, c-format
 msgid "%.1f M"
 msgstr "%.1f M"
 
-#: gtk/gtkfilechooserdefault.c:5140
+#: gtk/gtkfilechooserdefault.c:5159
 #, c-format
 msgid "%.1f G"
 msgstr "%.1f G"
 
-#: gtk/gtkfilechooserdefault.c:5185
+#: gtk/gtkfilechooserdefault.c:5204
 msgid "Today"
 msgstr "Bugün"
 
-#: gtk/gtkfilechooserdefault.c:5187
+#: gtk/gtkfilechooserdefault.c:5206
 msgid "Yesterday"
 msgstr "Dünən"
 
-#: gtk/gtkfilechooserdefault.c:5198
+#: gtk/gtkfilechooserdefault.c:5217
 msgid "Unknown"
 msgstr "Namə'lum"
 
-#: gtk/gtkfilechooserdefault.c:5293
+#: gtk/gtkfilechooserdefault.c:5312
 msgid "Cannot change to the folder you specified as it is an invalid path."
 msgstr "Bildirdiyiniz qovluq hökmsüz cığırda olduğuna görə açıla bilmədi."
 
-#: gtk/gtkfilechooserdefault.c:5370
+#: gtk/gtkfilechooserdefault.c:5389
 #, c-format
 msgid ""
 "Could not select %s:\n"
@@ -1117,15 +1125,15 @@ msgstr ""
 "%s seçilə bilmədi:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:5409
+#: gtk/gtkfilechooserdefault.c:5428
 msgid "Open Location"
 msgstr "Mövqe Aç"
 
-#: gtk/gtkfilechooserdefault.c:5416
+#: gtk/gtkfilechooserdefault.c:5435
 msgid "Save in Location"
 msgstr "Mövqeyə Qeyd Et"
 
-#: gtk/gtkfilechooserdefault.c:5435
+#: gtk/gtkfilechooserdefault.c:5454
 msgid "_Location:"
 msgstr "_Mövqe:"
 
@@ -1136,10 +1144,6 @@ msgstr "Qovluqlar"
 #: gtk/gtkfilesel.c:734
 msgid "Fol_ders"
 msgstr "Qo_vluqlar"
-
-#: gtk/gtkfilesel.c:766
-msgid "Files"
-msgstr "Fayllar"
 
 #: gtk/gtkfilesel.c:770
 msgid "_Files"
@@ -1336,9 +1340,9 @@ msgid "Filesystem"
 msgstr "Fayl Sistemi"
 
 #: gtk/gtkfilesystemunix.c:731
-#, fuzzy, c-format
+#, c-format
 msgid "Could not get a stock icon for %s"
-msgstr "'%s' faylının mə'lumatı alına bilmədi: %s"
+msgstr "%s üçün timsal alına bilmədi"
 
 #: gtk/gtkfilesystemunix.c:826
 #, c-format
@@ -1550,17 +1554,17 @@ msgstr "Qrup"
 msgid "The radio tool button whose group this button belongs to."
 msgstr "Bu düymənin ait olduğu qərar vasitə düyməsi qrupu."
 
-#: gtk/gtkrc.c:2390
+#: gtk/gtkrc.c:2391
 #, c-format
 msgid "Unable to find include file: \"%s\""
 msgstr "Include faylı tapıla bilmədi: \"%s\""
 
-#: gtk/gtkrc.c:3029 gtk/gtkrc.c:3032
+#: gtk/gtkrc.c:3030 gtk/gtkrc.c:3033
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "Pixmap_path-dəki rəsm faylının yeri tapıla bilmir:  \"%s\""
 
-#: gtk/gtkrc.c:3467
+#: gtk/gtkrc.c:3468
 #, c-format
 msgid "Pixmap path element: \"%s\" must be absolute, %s, line %d"
 msgstr "Piksməp cığır elementi: \"%s\" mütləq olmalıdır, %s, sətir %d"
@@ -1891,22 +1895,22 @@ msgstr "Örtük mühərrikini \"module_path\"da tapa bilmirəm: \"%s\","
 msgid "--- No Tip ---"
 msgstr "--- Qeyd Yoxdur ---"
 
-#: gtk/gtkuimanager.c:1095
+#: gtk/gtkuimanager.c:1099
 #, c-format
 msgid "Unknown attribute '%s' on line %d char %d"
 msgstr "'%s' atributu %d sətirində %d hərfində namə'lumdur"
 
-#: gtk/gtkuimanager.c:1313
+#: gtk/gtkuimanager.c:1317
 #, c-format
 msgid "Unexpected start tag '%s' on line %d char %d"
 msgstr "'%s' taqı %d sətiri %d hərfində gözlənilmir"
 
-#: gtk/gtkuimanager.c:1398
+#: gtk/gtkuimanager.c:1402
 #, c-format
 msgid "Unexpected character data on line %d char %d"
 msgstr "%d sətiri %d hərfində gözlənilməyən hərf"
 
-#: gtk/gtkuimanager.c:2175
+#: gtk/gtkuimanager.c:2188
 msgid "Empty"
 msgstr "Boş"
 
