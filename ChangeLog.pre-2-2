@@ -1,5 +1,11 @@
 2000-11-29  Alexander Larsson  <alexl@redhat.com>
 
+	* gdk/linux-fb/gdkwindow-fb.c (_gdk_windowing_window_clear_area):
+	If you pass width or height == 0 to gdk_window_clear_area they
+	should be calculated from the window size.
+
+2000-11-29  Alexander Larsson  <alexl@redhat.com>
+
 	* gdk/linux-fb/gdkinput-ps2.c (move_pointer): If there is
 	a grab, but no grab-cursor, use the cursor from the grabbed
 	window. (gdk_fb_window_send_crossing_events): Send normal

@@ -1012,6 +1012,12 @@ _gdk_windowing_window_clear_area (GdkWindow *window,
 
   bgpm = GDK_WINDOW_P (window)->bg_pixmap;
 
+  if (width == 0)
+    width = GDK_DRAWABLE_IMPL_FBDATA (window)->width - x;
+  
+  if (height == 0)
+    height = GDK_DRAWABLE_IMPL_FBDATA (window)->height - y;
+  
 #if 0  
   for (relto = window; bgpm == GDK_PARENT_RELATIVE_BG && relto; relto = (GdkWindow *)GDK_WINDOW_P(relto)->parent)
     bgpm = GDK_WINDOW_P (relto)->bg_pixmap;
