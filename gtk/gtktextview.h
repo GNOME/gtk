@@ -59,6 +59,8 @@ struct _GtkTextView {
 
   gboolean overwrite_mode;
 
+  GtkWrapMode wrap_mode;	/* Default wrap mode */
+
   /* The virtual cursor position is normally the same as the
    * actual (strong) cursor position, except in two circumstances:
    *
@@ -117,6 +119,9 @@ gboolean       gtk_text_view_place_cursor_onscreen (GtkTextView   *text_view);
 
 void           gtk_text_view_get_visible_rect      (GtkTextView   *text_view,
 						    GdkRectangle  *visible_rect);
+void           gtk_text_view_set_wrap_mode         (GtkTextView   *text_view,
+						    GtkWrapMode    wrap_mode);
+GtkWrapMode    gtk_text_view_get_wrap_mode         (GtkTextView   *text_view);
 
 #ifdef __cplusplus
 }

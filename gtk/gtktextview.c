@@ -565,6 +565,8 @@ gtk_text_view_init (GtkTextView *text_view)
 
   GTK_WIDGET_SET_FLAGS (widget, GTK_CAN_FOCUS);
 
+  text_view->wrap_mode = GTK_WRAPMODE_NONE;
+
   if (!clipboard_atom)
     clipboard_atom = gdk_atom_intern ("CLIPBOARD", FALSE);
 
@@ -830,7 +832,7 @@ gtk_text_view_scroll_to_mark (GtkTextView *text_view,
   g_return_val_if_fail (mark_within_margin >= 0, FALSE);
   
   return gtk_text_view_scroll_to_mark_adjusted (text_view, mark_name,
-                                           mark_within_margin, 1.0);
+						mark_within_margin, 1.0);
 }
 
 static gboolean
@@ -886,6 +888,34 @@ gtk_text_view_get_visible_rect (GtkTextView  *text_view,
       visible_rect->width = widget->allocation.width;
       visible_rect->height = widget->allocation.height;
     }
+}
+
+void
+gtk_text_view_set_wrap_mode (GtkTextView *text_view,
+			     GtkWrapMode  wrap_mode)
+{
+  g_return_if_fail (text_view != NULL);
+  g_return_if_fail (GTK_IS_TEXT_VIEW (text_view));
+
+  if (text_view->wrap_mode != wrap_mode)
+    {
+      text_view->wrap_mode = wrap_mode;
+
+      if (text_view->layout)
+	{
+	  text_view->layout->default_style->wrap_mode = wrap_mode;
+	  gtk_text_layout_default_style_changed (text_view->layout);
+	}
+    }
+}
+
+GtkWrapMode
+gtk_text_view_get_wrap_mode (GtkTextView   *text_view)
+{
+  g_return_if_fail (text_view != NULL);
+  g_return_if_fail (GTK_IS_TEXT_VIEW (text_view));
+
+  return text_view->wrap_mode;
 }
 
 gboolean
@@ -1004,12 +1034,26 @@ gtk_text_view_get_arg (GtkObject *object, GtkArg *arg, guint arg_id)
 }
 
 static void
-gtk_text_view_size_request (GtkWidget *widget,
-                            GtkRequisition *requisition)
+gtk_text_view_size_request (GtkWidget      *widget,
+			    GtkRequisition *requisition)
 {
+  GtkTextView *text_view = GTK_TEXT_VIEW (widget);
+  
   /* Hrm */
   requisition->width = 1;
   requisition->height = 1;
+
+  /* Check to see if the widget direction has changed */
+
+  if (text_view->layout)
+    {
+      GtkTextDirection direction = gtk_widget_get_direction (widget);
+      if (direction != text_view->layout->default_style->direction)
+	{
+	  text_view->layout->default_style->direction = direction;
+	  gtk_text_layout_default_style_changed (text_view->layout);	  
+	}
+    }
 }
 
 static void
@@ -1036,6 +1080,22 @@ need_repaint_handler (GtkTextLayout *layout,
 		      gpointer data)
 {
   GtkTextView *text_view;
+  GdkRectangle visible_rect;
+  
+  text_view = GTK_TEXT_VIEW (data);
+
+  /* FIXME: Right now, the area is usually far too big, and
+   * sometimes too small, so we just queue the whole visible
+   * rectangle
+   */ 
+  if (GTK_WIDGET_REALIZED (text_view))
+    {
+      gtk_text_view_get_visible_rect (text_view, &visible_rect);
+      gdk_window_invalidate_rect (GTK_LAYOUT (text_view)->bin_window, &visible_rect, FALSE);
+    }
+
+#if 0
+
   GdkRectangle screen;
   GdkRectangle area;
   GdkRectangle intersect;
@@ -1077,6 +1137,7 @@ need_repaint_handler (GtkTextLayout *layout,
                                  intersect.height);
     }
 #endif
+#endif 0  
 }
 
 static void
@@ -1267,7 +1328,8 @@ gtk_text_view_key_press_event (GtkWidget *widget, GdkEventKey *event)
   else if (event->keyval == GDK_Return)
     {
       gtk_text_buffer_insert_at_cursor (text_view->buffer, "\n", 1);
-      return FALSE;
+      gtk_text_view_scroll_to_mark (text_view, "insert", 0);
+      return TRUE;
     }
   else
     return FALSE;
@@ -2098,7 +2160,7 @@ gtk_text_view_ensure_layout (GtkTextView *text_view)
       style->pixels_below_lines = 2;
       style->pixels_inside_wrap = 1;
       
-      style->wrap_mode = GTK_WRAPMODE_NONE;
+      style->wrap_mode = text_view->wrap_mode;
       style->justify = GTK_JUSTIFY_LEFT;
       style->direction = gtk_widget_get_direction (GTK_WIDGET (text_view));
       

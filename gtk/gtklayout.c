@@ -270,6 +270,28 @@ gtk_layout_move (GtkLayout     *layout,
     }
 }
 
+static void
+gtk_layout_set_adjustment_upper (GtkAdjustment *adj, gfloat upper)
+{
+  if (upper != adj->upper)
+    {
+      gfloat min = MAX (0., upper - adj->page_size);
+      gboolean value_changed = FALSE;
+      
+      adj->upper = upper;
+      
+      if (adj->value > min)
+	{
+	  adj->value = min;
+	  value_changed = TRUE;
+	}
+      
+      gtk_signal_emit_by_name (GTK_OBJECT (adj), "changed");
+      if (value_changed)
+	gtk_signal_emit_by_name (GTK_OBJECT (adj), "value_changed");
+    }
+}
+
 void
 gtk_layout_set_size (GtkLayout     *layout, 
 		     guint          width,
@@ -285,11 +307,8 @@ gtk_layout_set_size (GtkLayout     *layout,
   layout->width = width;
   layout->height = height;
 
-  layout->hadjustment->upper = layout->width;
-  gtk_signal_emit_by_name (GTK_OBJECT (layout->hadjustment), "changed");
-
-  layout->vadjustment->upper = layout->height;
-  gtk_signal_emit_by_name (GTK_OBJECT (layout->vadjustment), "changed");
+  gtk_layout_set_adjustment_upper (layout->hadjustment, layout->width);
+  gtk_layout_set_adjustment_upper (layout->vadjustment, layout->height);
 
   if (GTK_WIDGET_REALIZED (layout))
     {

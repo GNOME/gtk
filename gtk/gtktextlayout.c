@@ -495,7 +495,17 @@ gtk_text_layout_real_invalidate (GtkTextLayout *layout,
       line = gtk_text_line_next (line);
     }
   
-  /* FIXME yeah we could probably do a bit better here */
+  /* FIXME yeah we could probably do a bit better here
+   *
+   *                                        -hp
+   *
+   * We could do a lot better. Not only could we queue
+   * only the changed areas, layout->width/height are the
+   * old width and height so may be too small, as well as
+   * too big.
+   *
+   *                                        -owt
+   */
   gtk_text_layout_need_repaint (layout, 0, 0,
                                 layout->width, layout->height);
 }
@@ -532,7 +542,7 @@ gtk_text_layout_real_wrap (GtkTextLayout   *layout,
    release_style () to free it. */
 static GtkTextStyleValues*
 get_style (GtkTextLayout *layout,
-          const GtkTextIter *iter)
+	   const GtkTextIter *iter)
 {
   GtkTextTag** tags;
   gint tag_count = 0;
@@ -741,11 +751,11 @@ set_para_values (GtkTextLayout      *layout,
       /* FIXME: Handle this; for now, fall-through */
     case GTK_WRAPMODE_WORD:
       display->total_width = -1;
-      layout_width = layout->screen_width - display->x_offset - style->right_margin;
+      layout_width = MAX (layout->width, layout->screen_width) - display->x_offset - style->right_margin;
       pango_layout_set_width (display->layout, layout_width * PANGO_SCALE);
       break;
     case GTK_WRAPMODE_NONE:
-      display->total_width = layout->width - display->x_offset - style->right_margin;
+      display->total_width = MAX (layout->screen_width, layout->width) - display->x_offset - style->right_margin;
       break;
     }
 }
@@ -1279,7 +1289,7 @@ gtk_text_layout_get_iter_location (GtkTextLayout     *layout,
       pango_layout_line_get_extents (last_line, NULL, &pango_rect);
       
       rect->x = display->x_offset + (pango_rect.x + pango_rect.width) / PANGO_SCALE;
-      rect->y += display->top_margin + pango_rect.y / PANGO_SCALE;
+      rect->y += display->top_margin;
       rect->width = 0;
       rect->height = pango_rect.height / PANGO_SCALE;
     }
@@ -1290,7 +1300,7 @@ gtk_text_layout_get_iter_location (GtkTextLayout     *layout,
       pango_layout_index_to_pos (display->layout, byte_index, &pango_rect);
       
       rect->x = display->x_offset + pango_rect.x / PANGO_SCALE;
-      rect->y += display->top_margin + pango_rect.y / PANGO_SCALE;
+      rect->y += display->top_margin;
       rect->width = pango_rect.width / PANGO_SCALE;
       rect->height = pango_rect.height / PANGO_SCALE;
     }

@@ -148,4 +148,3 @@ gchar *gtk_text_latin1_to_utf (const gchar *latin1, gint len);
 
 #endif
 
-

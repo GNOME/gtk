@@ -284,7 +284,7 @@ render_para (GdkDrawable        *drawable,
       
       pango_layout_line_get_extents (line, NULL, &logical_rect);
 
-      x_offset = line_display->x_offset * PANGO_SCALE;
+      x_offset = line_display->left_margin * PANGO_SCALE;
 
       switch (align)
 	{

@@ -1,3 +1,37 @@
+Wed Apr 26 00:43:00 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtktextlayout.c (set_para_values): Fix some bugs in
+	alignment.
+
+	* gtk/gtktextview.c (gtk_text_view_ensure_layout): Track
+	the widget text directional dynamically.
+
+	* gtk/gtktextview.[ch]: Added functions to get and set default
+	wrap mode.
+
+Tue Apr 25 23:47:38 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtktextlayout.c (gtk_text_layout_get_iter_location): Fix bug
+	in cursor location computation.
+
+Tue Apr 25 23:22:59 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtklayout.c (gtk_layout_set_size): Clamp hadjustment/
+	vadjusment values properly when layout gets smaller.
+
+	* gtk/gtktextview.c (need_repaint_handler): Areas being
+	passed in are far completely inaccurate, and sometimes
+	too small, so, for now, just queue a redraw on the
+	whole visible region.
+
+Tue Apr 25 22:20:41 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdkwindow.c (gdk_window_process_updates_internal): Fix error
+	with recursion where process_updates() is called from
+	an expose handler. (GtkTextView is highly broken in
+	doing this, but it should work, so it is a nice test
+	case.)
+
 2000-04-25  Havoc Pennington  <hp@redhat.com>
 
 	* gtk/gtktextbtree.c (summary_destroy): new function to 

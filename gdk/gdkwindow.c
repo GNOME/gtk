@@ -1082,6 +1082,9 @@ gdk_window_process_updates_internal (GdkWindow *window)
    */
   if (private->update_area)
     {
+      GdkRegion *update_area = private->update_area;
+      private->update_area = NULL;
+      
       if (gdk_event_func)
 	{
 	  GdkEvent event;
@@ -1092,13 +1095,13 @@ gdk_window_process_updates_internal (GdkWindow *window)
 	  window_rect.width = private->drawable.width;
 	  window_rect.height = private->drawable.height;
 
-	  save_region = _gdk_windowing_window_queue_antiexpose (window, private->update_area);
+	  save_region = _gdk_windowing_window_queue_antiexpose (window, update_area);
       
 	  event.expose.type = GDK_EXPOSE;
 	  event.expose.window = gdk_window_ref ((GdkWindow *)private);
 	  event.expose.count = 0;
       
-	  gdk_region_get_clipbox (private->update_area, &event.expose.area);
+	  gdk_region_get_clipbox (update_area, &event.expose.area);
 	  if (gdk_rectangle_intersect (&event.expose.area, &window_rect, &event.expose.area))
 	    {
 	      (*gdk_event_func) (&event, gdk_event_data);
@@ -1106,9 +1109,7 @@ gdk_window_process_updates_internal (GdkWindow *window)
 	}
       
       if (!save_region)
-	gdk_region_destroy (private->update_area);
-
-      private->update_area = NULL;
+	gdk_region_destroy (update_area);
     }
 }
 
