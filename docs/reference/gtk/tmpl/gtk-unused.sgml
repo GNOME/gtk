@@ -172,6 +172,12 @@ void marshal_INT__POINTER_POINTER_INT_INT(GtkObject*    object,
 </para>
 
 
+<!-- ##### ARG GtkTextTag:font_set ##### -->
+<para>
+
+</para>
+
+
 <!-- ##### MACRO gtk_marshal_NONE__POINTER_UINT_ENUM ##### -->
 <para>
 
@@ -1012,6 +1018,12 @@ will be shown, or NULL to show all charsets.
 
 @Returns: 
 
+<!-- ##### ARG GtkTextTag:offset_set ##### -->
+<para>
+
+</para>
+
+
 <!-- ##### MACRO GTK_TYPE_NUM_BUILTINS ##### -->
 <para>
 No idea.
@@ -1073,6 +1085,13 @@ This function is labeled private.
 </para>
 
 @object: the object whose signal handlers should be destroyed.
+
+<!-- ##### ARG GtkTextTag:left_wrapped_line_margin ##### -->
+<para>
+Pixel width of the left margin of the text for lines after the first
+line in a wrapped paragraph.
+</para>
+
 
 <!-- ##### FUNCTION gtk_text_iter_in_region ##### -->
 <para>
@@ -1544,6 +1563,13 @@ Causes the "changed" signal to be emitted.
 @mark: 
 @Returns: 
 
+<!-- ##### ARG GtkTextTag:offset ##### -->
+<para>
+Pixels to offset the text horizontally or vertically, useful to
+produce superscript and subscript.
+</para>
+
+
 <!-- ##### SIGNAL GtkEditable::insert-text ##### -->
 <para>
 This signal is emitted when text is inserted into
@@ -2012,6 +2038,12 @@ GtkIMContextSimple
 
 
 <!-- ##### MACRO gtk_marshal_NONE__POINTER_INT_INT_POINTER_UINT_UINT ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ARG GtkTextTag:left_wrapped_line_margin_set ##### -->
 <para>
 
 </para>

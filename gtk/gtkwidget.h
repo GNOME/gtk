@@ -491,7 +491,7 @@ void	   gtk_widget_reparent		  (GtkWidget	       *widget,
 void	   gtk_widget_popup		  (GtkWidget	       *widget,
 					   gint			x,
 					   gint			y);
-gint	   gtk_widget_intersect		  (GtkWidget	       *widget,
+gboolean   gtk_widget_intersect		  (GtkWidget	       *widget,
 					   GdkRectangle	       *area,
 					   GdkRectangle	       *intersection);
 

@@ -415,3 +415,28 @@ types related to the text widget and how they work together.
 
 </para>
 
+<!-- ##### ARG GtkTextView:justify ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTextView:left_margin ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTextView:right_margin ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTextView:indent ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTextView:tabs ##### -->
+<para>
+
+</para>
+

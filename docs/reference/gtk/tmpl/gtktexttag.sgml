@@ -57,10 +57,9 @@ Describes a type of line wrapping.
 @appearance: 
 @justify: 
 @direction: 
-@font_desc: 
+@font: 
 @left_margin: 
-@left_wrapped_line_margin: 
-@offset: 
+@indent: 
 @right_margin: 
 @pixels_above_lines: 
 @pixels_below_lines: 
@@ -125,10 +124,12 @@ Describes a type of line wrapping.
 @fg_color: 
 @bg_stipple: 
 @fg_stipple: 
+@rise: 
 @underline: 
 @strikethrough: 
 @draw_bg: 
 @inside_selection: 
+@is_text: 
 
 <!-- ##### FUNCTION gtk_text_attributes_new ##### -->
 <para>
@@ -222,6 +223,41 @@ Font as a Pango font name, e.g. "Sans Italic 12"
 Font as a #PangoFontDescription.
 </para>
 
+<!-- ##### ARG GtkTextTag:family ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTextTag:style ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTextTag:variant ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTextTag:weight ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTextTag:stretch ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTextTag:size ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTextTag:size_points ##### -->
+<para>
+
+</para>
+
 <!-- ##### ARG GtkTextTag:foreground ##### -->
 <para>
 Foreground color as a string such as "red" or "#FFFFFF".
@@ -255,16 +291,14 @@ you probably don't need it.
 Pixel width of left margin of the text.
 </para>
 
-<!-- ##### ARG GtkTextTag:left_wrapped_line_margin ##### -->
+<!-- ##### ARG GtkTextTag:indent ##### -->
 <para>
-Pixel width of the left margin of the text for lines after the first
-line in a wrapped paragraph.
+
 </para>
 
-<!-- ##### ARG GtkTextTag:offset ##### -->
+<!-- ##### ARG GtkTextTag:rise ##### -->
 <para>
-Pixels to offset the text horizontally or vertically, useful to
-produce superscript and subscript.
+
 </para>
 
 <!-- ##### ARG GtkTextTag:pixels_above_lines ##### -->
@@ -340,7 +374,32 @@ applies to the first character in a paragraph.
 
 </para>
 
-<!-- ##### ARG GtkTextTag:font_set ##### -->
+<!-- ##### ARG GtkTextTag:family_set ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTextTag:style_set ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTextTag:variant_set ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTextTag:weight_set ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTextTag:stretch_set ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTextTag:size_set ##### -->
 <para>
 
 </para>
@@ -375,12 +434,12 @@ applies to the first character in a paragraph.
 
 </para>
 
-<!-- ##### ARG GtkTextTag:left_wrapped_line_margin_set ##### -->
+<!-- ##### ARG GtkTextTag:indent_set ##### -->
 <para>
 
 </para>
 
-<!-- ##### ARG GtkTextTag:offset_set ##### -->
+<!-- ##### ARG GtkTextTag:rise_set ##### -->
 <para>
 
 </para>

@@ -1,5 +1,12 @@
 2000-11-20  Havoc Pennington  <hp@redhat.com>
 
+	* gtk/gtkwidget.c: Documented a bunch of functions in here
+	(gtk_widget_realize): Warn if you try to realize
+	a widget with no parent that isn't a toplevel
+	(gtk_widget_intersect): return a gboolean
+
+2000-11-20  Havoc Pennington  <hp@redhat.com>
+
 	* gtk/gtktextview.c, gtk/gtktextlayout.c, gtk/gtktextchild.c,
 	gtk/testtext.c: Semi-finish widget embedding. Need guffaw
 	scrolling to be implemented in GDK to finish. Also, right now

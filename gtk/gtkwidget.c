@@ -1046,16 +1046,24 @@ gtk_widget_init (GtkWidget *widget)
     gtk_widget_set_colormap (widget, colormap);
 }
 
-/*****************************************
- * gtk_widget_new:
- *
- *   arguments:
- *
- *   results:
- *****************************************/
 
+/**
+ * gtk_widget_new:
+ * @type: type ID of the widget to create
+ * @first_arg_name: name of first property to set
+ * @Varargs: value of first property, followed by more properties, NULL-terminated
+ * 
+ * This is a convenience function for creating a widget and setting
+ * its properties in one go. For example you might write:
+ * gtk_widget_new (GTK_TYPE_LABEL, "label", "Hello World", "xalign",
+ * 0.0, NULL) to create a left-aligned label. Equivalent to
+ * gtk_object_new(), but returns a widget so you don't have to
+ * cast the object yourself.
+ * 
+ * Return value: a new #GtkWidget of type @widget_type
+ **/
 GtkWidget*
-gtk_widget_new (GtkType      widget_type,
+gtk_widget_new (GtkType      type,
 		const gchar *first_arg_name,
 		...)
 {
@@ -1065,9 +1073,9 @@ gtk_widget_new (GtkType      widget_type,
   GSList *info_list = NULL;
   gchar *error;
   
-  g_return_val_if_fail (gtk_type_is_a (widget_type, GTK_TYPE_WIDGET), NULL);
+  g_return_val_if_fail (gtk_type_is_a (type, GTK_TYPE_WIDGET), NULL);
   
-  object = gtk_type_new (widget_type);
+  object = gtk_type_new (type);
   
   va_start (var_args, first_arg_name);
   error = gtk_object_args_collect (GTK_OBJECT_TYPE (object),
@@ -1104,14 +1112,19 @@ gtk_widget_new (GtkType      widget_type,
   return GTK_WIDGET (object);
 }
 
-/*****************************************
+/**
  * gtk_widget_newv:
+ * @type: a #GtkType for the widget to create
+ * @nargs: number of args in @args
+ * @args: array of args specifying widget properties
  *
- *   arguments:
- *
- *   results:
- *****************************************/
-
+ * Same as gtk_widget_new(), but takes an array instead of using
+ * varargs. This version is only useful if you need to construct
+ * the args programmatically. Equivalent to gtk_object_newv(), but
+ * returns a #GtkWidget so you don't have to case the object yourself.
+ * 
+ * Return value: a #GtkWidget
+ **/
 GtkWidget*
 gtk_widget_newv (GtkType type,
 		 guint	 nargs,
@@ -1122,14 +1135,13 @@ gtk_widget_newv (GtkType type,
   return GTK_WIDGET (gtk_object_newv (type, nargs, args));
 }
 
-/*****************************************
+/**
  * gtk_widget_get:
- *
- *   arguments:
- *
- *   results:
- *****************************************/
-
+ * @widget: a #GtkWidget
+ * @arg: single #GtkArg with the argument name filled in
+ * 
+ * Queries the value of @arg, storing it in @arg.
+ **/
 void
 gtk_widget_get (GtkWidget	*widget,
 		GtkArg		*arg)
@@ -1141,14 +1153,14 @@ gtk_widget_get (GtkWidget	*widget,
   gtk_object_getv (GTK_OBJECT (widget), 1, arg);
 }
 
-/*****************************************
+/**
  * gtk_widget_getv:
- *
- *   arguments:
- *
- *   results:
- *****************************************/
-
+ * @widget: a #GtkWidget
+ * @nargs: number of args in @args
+ * @args: array of #GtkArg
+ * 
+ * Like calling gtk_widget_get() on each arg in @args.
+ **/
 void
 gtk_widget_getv (GtkWidget	*widget,
 		 guint           nargs,
@@ -1160,14 +1172,15 @@ gtk_widget_getv (GtkWidget	*widget,
   gtk_object_getv (GTK_OBJECT (widget), nargs, args);
 }
 
-/*****************************************
+/**
  * gtk_widget_set:
- *
- *   arguments:
- *
- *   results:
- *****************************************/
-
+ * @widget: a #GtkWidget
+ * @first_arg_name: name of first arg to set
+ * @Varargs: value of first arg, then more name-value pairs, and %NULL-terminated
+ * 
+ * Like gtk_object_set() - there's no reason to use this instead of
+ * gtk_object_set().
+ **/
 void
 gtk_widget_set (GtkWidget   *widget,
 		const gchar *first_arg_name,
@@ -1214,14 +1227,20 @@ gtk_widget_set (GtkWidget   *widget,
     }
 }
 
-/*****************************************
+/**
  * gtk_widget_setv:
- *
- *   arguments:
- *
- *   results:
- *****************************************/
-
+ * @widget: a #GtkWidget
+ * @nargs: args in @args
+ * @args: array of args to set on the widget
+ * 
+ * Each arg in @args should have its name and value filled in. The
+ * corresponding properties will be set on the
+ * widget. gtk_object_set() is a more convenient version of this
+ * function, since it takes varargs in place of the array. You may
+ * need the array version to construct the list of args to set at
+ * runtime.
+ * 
+ **/
 void
 gtk_widget_setv (GtkWidget *widget,
 		 guint	    nargs,
@@ -1247,6 +1266,14 @@ gtk_widget_queue_clear_child (GtkWidget *widget)
 				 widget->allocation.height);
 }
 
+/**
+ * gtk_widget_unparent:
+ * @widget: a #GtkWidget
+ * 
+ * INTERNAL FUNCTION, only for use in widget implementations.
+ * Should be called by implementations of the remove method
+ * on #GtkContainer, to dissociate a child from the container.
+ **/
 void
 gtk_widget_unparent (GtkWidget *widget)
 {
@@ -1376,14 +1403,26 @@ gtk_widget_unparent (GtkWidget *widget)
   gtk_widget_unref (widget);
 }
 
-/*****************************************
+/**
  * gtk_widget_destroy:
+ * @widget: a #GtkWidget
  *
- *   arguments:
+ * Destroys a widget. Equivalent to gtk_object_destroy(), except that
+ * you don't have to cast the widget to #GtkObject. When a widget is
+ * destroyed, it will break any references it holds to other objects.
+ * If the widget is inside a container, the widget will be removed
+ * from the container. If the widget is a toplevel (derived from
+ * #GtkWindow), it will be removed from the list of toplevels, and the
+ * reference GTK+ holds to it will be removed. Removing a
+ * widget from its container or the list of toplevels results in the
+ * widget being finalized, unless you've added additional references
+ * to the widget with gtk_object_ref().
  *
- *   results:
- *****************************************/
-
+ * In most cases, only toplevel widgets (windows) require explicit
+ * destruction, because when you destroy a toplevel its children will
+ * be destroyed as well.
+ * 
+ **/
 void
 gtk_widget_destroy (GtkWidget *widget)
 {
@@ -1394,16 +1433,20 @@ gtk_widget_destroy (GtkWidget *widget)
   gtk_object_destroy ((GtkObject*) widget);
 }
 
-/*****************************************
+/**
  * gtk_widget_destroyed:
- *   Utility function: sets widget_pointer 
- *   to NULL when widget is destroyed.
+ * @widget: a #GtkWidget
+ * @widget_pointer: address of a variable that contains @widget
  *
- *   arguments:
- *
- *   results:
- *****************************************/
-
+ * This function sets *@widget_pointer to NULL if @widget_pointer !=
+ * NULL.  It's intended to be used as a callback connected to the
+ * "destroy" signal of a widget. You connect gtk_widget_destroyed()
+ * as a signal handler, and pass the address of your widget variable
+ * as user data. Then when the widget is destroyed, the variable will
+ * be set to NULL. Useful for example to avoid multiple copies
+ * of the same dialog.
+ * 
+ **/
 void
 gtk_widget_destroyed (GtkWidget      *widget,
 		      GtkWidget      **widget_pointer)
@@ -1416,14 +1459,23 @@ gtk_widget_destroyed (GtkWidget      *widget,
     *widget_pointer = NULL;
 }
 
-/*****************************************
+/**
  * gtk_widget_show:
+ * @widget: a #GtkWidget
+ * 
+ * Flags a widget to be displayed. Any widget that isn't shown will
+ * not appear on the screen. If you want to show all the widgets in a
+ * container, it's easier to call gtk_widget_show_all() on the
+ * container, instead of individually showing the widgets.
  *
- *   arguments:
+ * Remember that you have to show the containers containing a widget,
+ * in addition to the widget itself, before it will appear onscreen.
  *
- *   results:
- *****************************************/
-
+ * When a toplevel container is shown, it is immediately realized and
+ * mapped; other shown widgets are realized and mapped when their
+ * toplevel container is realized and mapped.
+ * 
+ **/
 void
 gtk_widget_show (GtkWidget *widget)
 {
@@ -1455,18 +1507,6 @@ gtk_widget_real_show (GtkWidget *widget)
     }
 }
 
-/*************************************************************
- * gtk_widget_show_now:
- *   Show a widget, and if it is an unmapped toplevel widget
- *   wait for the map_event before returning
- *
- *   Warning: This routine will call the main loop recursively.
- *       
- *   arguments:
- *     
- *   results:
- *************************************************************/
-
 static void
 gtk_widget_show_map_callback (GtkWidget *widget, GdkEvent *event, gint *flag)
 {
@@ -1474,6 +1514,16 @@ gtk_widget_show_map_callback (GtkWidget *widget, GdkEvent *event, gint *flag)
   gtk_signal_disconnect_by_data (GTK_OBJECT (widget), flag);
 }
 
+/**
+ * gtk_widget_show_now:
+ * @widget: a #GtkWidget
+ * 
+ * Shows a widget. If the widget is an unmapped toplevel widget
+ * (i.e. a #GtkWindow that has not yet been shown), enter the main
+ * loop and wait for the window to actually be mapped. Be careful;
+ * because the main loop is running, anything can happen during
+ * this function.
+ **/
 void
 gtk_widget_show_now (GtkWidget *widget)
 {
@@ -1499,14 +1549,13 @@ gtk_widget_show_now (GtkWidget *widget)
     gtk_widget_show (widget);
 }
 
-/*****************************************
+/**
  * gtk_widget_hide:
- *
- *   arguments:
- *
- *   results:
- *****************************************/
-
+ * @widget: a #GtkWidget
+ * 
+ * Reverses the effects of gtk_widget_show(), causing the widget to be
+ * hidden (invisible to the user).
+ **/
 void
 gtk_widget_hide (GtkWidget *widget)
 {
@@ -1538,6 +1587,19 @@ gtk_widget_real_hide (GtkWidget *widget)
     }
 }
 
+/**
+ * gtk_widget_hide_on_delete:
+ * @widget: a #GtkWidget
+ * 
+ * Utility function; intended to be connected to the "delete_event"
+ * signal on a #GtkWindow. The function calls gtk_widget_hide() on its
+ * argument, then returns %TRUE. If connected to "delete_event",
+ * the result is that clicking the window manager close button for
+ * will hide but not destroy the window. By default, GTK+ destroys
+ * windows when "delete_event" is received.
+ * 
+ * Return value: %TRUE
+ **/
 gint
 gtk_widget_hide_on_delete (GtkWidget      *widget)
 {
@@ -1549,6 +1611,13 @@ gtk_widget_hide_on_delete (GtkWidget      *widget)
   return TRUE;
 }
 
+/**
+ * gtk_widget_show_all:
+ * @widget: a #GtkWidget
+ * 
+ * Recursively shows a widget, and any child widgets (if the widget is
+ * a container).
+ **/
 void
 gtk_widget_show_all (GtkWidget *widget)
 {
@@ -1563,6 +1632,12 @@ gtk_widget_show_all (GtkWidget *widget)
     class->show_all (widget);
 }
 
+/**
+ * gtk_widget_hide_all:
+ * @widget: a #GtkWidget
+ * 
+ * Recursively hides a widget and any child widgets.
+ **/
 void
 gtk_widget_hide_all (GtkWidget *widget)
 {
@@ -1577,14 +1652,14 @@ gtk_widget_hide_all (GtkWidget *widget)
     class->hide_all (widget);
 }
 
-/*****************************************
+/**
  * gtk_widget_map:
- *
- *   arguments:
- *
- *   results:
- *****************************************/
-
+ * @widget: a #GtkWidget
+ * 
+ * INTERNAL FUNCTION, only for use in widget implementations. Causes
+ * a widget to be mapped if it isn't already.
+ * 
+ **/
 void
 gtk_widget_map (GtkWidget *widget)
 {
@@ -1603,14 +1678,14 @@ gtk_widget_map (GtkWidget *widget)
     }
 }
 
-/*****************************************
+/**
  * gtk_widget_unmap:
+ * @widget: a #GtkWidget
  *
- *   arguments:
- *
- *   results:
- *****************************************/
-
+ * INTERNAL FUNCTION, only for use in widget implementations. Causes
+ * a widget to be unmapped if it's currently mapped.
+ * 
+ **/
 void
 gtk_widget_unmap (GtkWidget *widget)
 {
@@ -1625,14 +1700,30 @@ gtk_widget_unmap (GtkWidget *widget)
     }
 }
 
-/*****************************************
+/**
  * gtk_widget_realize:
+ * @widget: a #GtkWidget
+ * 
+ * Creates the GDK (windowing system) resources associated with a
+ * widget.  For example, widget->window will be created when a widget
+ * is realized.  Normally realization happens implicitly; if you show
+ * a widget and all its parent containers, then the widget will be
+ * realized and mapped automatically.
+ * 
+ * Realizing a widget requires all
+ * the widget's parent widgets to be realized; calling
+ * gtk_widget_realize() realizes the widget's parents in addition to
+ * @widget itself. If a widget is not yet inside a toplevel window
+ * when you realize it, bad things will happen.
  *
- *   arguments:
- *
- *   results:
- *****************************************/
-
+ * This function is primarily used in widget implementations, and
+ * isn't very useful otherwise. Many times when you think you might
+ * need it, a better approach is to connect to a signal that will be
+ * called after the widget is realized automatically, such as
+ * "expose_event". Or simply gtk_signal_connect_after() to the
+ * "realize" signal.
+ *  
+ **/
 void
 gtk_widget_realize (GtkWidget *widget)
 {
@@ -1649,6 +1740,12 @@ gtk_widget_realize (GtkWidget *widget)
 	if (GTK_IS_CONTAINER (widget) && !GTK_WIDGET_NO_WINDOW (widget))
 	  g_message ("gtk_widget_realize(%s)", gtk_type_name (GTK_WIDGET_TYPE (widget)));
       */
+
+      if (widget->parent == NULL &&
+          !GTK_WIDGET_TOPLEVEL (widget))
+        g_warning ("Calling gtk_widget_realize() on a widget that isn't "
+                   "inside a toplevel window is not going to work very well. "
+                   "Widgets must be inside a toplevel container before realizing them.");
       
       if (widget->parent && !GTK_WIDGET_REALIZED (widget->parent))
 	gtk_widget_realize (widget->parent);
@@ -1680,14 +1777,15 @@ gtk_widget_realize (GtkWidget *widget)
     }
 }
 
-/*****************************************
+/**
  * gtk_widget_unrealize:
+ * @widget: a #GtkWidget
  *
- *   arguments:
- *
- *   results:
- *****************************************/
-
+ * INTERNAL FUNCTION, only useful in widget implementations.
+ * Causes a widget to be unrealized (frees all GDK resources
+ * associated with the widget, such as widget->window).
+ * 
+ **/
 void
 gtk_widget_unrealize (GtkWidget *widget)
 {
@@ -1710,6 +1808,36 @@ gtk_widget_unrealize (GtkWidget *widget)
  * Draw queueing.
  *****************************************/
 
+/**
+ * gtk_widget_queue_draw_area:
+ * @widget: a #GtkWidget
+ * @x: x coordinate of upper-left corner of rectangle to redraw
+ * @y: y coordinate of upper-left corner of rectangle to redraw
+ * @width: width of region to draw
+ * @height: height of region to draw
+ *
+ * Invalidates the rectangular area of @widget defined by @x, @y,
+ * @width and @height by calling gdk_window_invalidate_rect() on the
+ * widget's window and all its child windows.  Once the main loop
+ * becomes idle (after the current batch of events has been processed,
+ * roughly), the window will receive expose events for the union of
+ * all regions that have been invalidated.
+ *
+ * Normally you would only use this function in widget
+ * implementations. You might also use it, or
+ * gdk_window_invalidate_rect() directly, to schedule a redraw of a
+ * #GtkDrawingArea or some portion thereof.
+ *
+ * Frequently you can just call gdk_window_invalidate_rect() or
+ * gdk_window_invalidate_region() instead of this function. Those
+ * functions will invalidate only a single window, instead of the
+ * widget and all its children.
+ *
+ * The advantage of adding to the invalidated region compared to
+ * simply drawing immediately is efficiency; using an invalid region
+ * ensures that you only have to redraw one time.
+ * 
+ **/
 void	   
 gtk_widget_queue_draw_area (GtkWidget *widget,
 			    gint       x,
@@ -1723,6 +1851,14 @@ gtk_widget_queue_draw_area (GtkWidget *widget,
   gtk_widget_queue_clear_area (widget, x, y, width, height);
 }
 
+/**
+ * gtk_widget_queue_draw:
+ * @widget: a #GtkWidget
+ *
+ * Equivalent to calling gtk_widget_queue_draw_area() for the
+ * entire area of a widget.
+ * 
+ **/
 void	   
 gtk_widget_queue_draw (GtkWidget *widget)
 {
@@ -1735,6 +1871,23 @@ gtk_widget_queue_draw (GtkWidget *widget)
 /* Invalidates the given area (allocation-relative-coordinates)
  * in all of the widget's windows
  */
+/**
+ * gtk_widget_queue_clear_area:
+ * @widget: a #GtkWidget
+ * @x: x coordinate of upper-left corner of rectangle to redraw
+ * @y: y coordinate of upper-left corner of rectangle to redraw
+ * @width: width of region to draw
+ * @height: height of region to draw
+ * 
+ * DEPRECATED. This function is no longer different from
+ * gtk_widget_queue_draw_area(), though it once was. Now it just calls
+ * gtk_widget_queue_draw_area(). Originally
+ * gtk_widget_queue_clear_area() would force a redraw of the
+ * background for GTK_NO_WINDOW widgets, and
+ * gtk_widget_queue_draw_area() would not. Now both functions ensure
+ * the background will be redrawn.
+ * 
+ **/
 void	   
 gtk_widget_queue_clear_area (GtkWidget *widget,
 			     gint       x,
@@ -1793,6 +1946,12 @@ gtk_widget_queue_clear_area (GtkWidget *widget,
   gdk_window_invalidate_rect (widget->window, &invalid_rect, TRUE);
 }
 
+/**
+ * gtk_widget_queue_clear:
+ * @widget: a #GtkWidget
+ * 
+ * DEPRECATED. Use gtk_widget_queue_draw() instead.
+ **/
 void	   
 gtk_widget_queue_clear (GtkWidget *widget)
 {
@@ -1813,6 +1972,17 @@ gtk_widget_queue_clear (GtkWidget *widget)
     }
 }
 
+/**
+ * gtk_widget_queue_resize:
+ * @widget: a #GtkWidget
+ *
+ * INTERNAL FUNCTION, for use in widget implementations.
+ * Flags a widget to have its size renegotiated; should
+ * be called when a widget for some reason has a new size request.
+ * For example, when you change the text in a #GtkLabel, #GtkLabel
+ * queues a resize to ensure there's enough space for the new text.
+ * 
+ **/
 void
 gtk_widget_queue_resize (GtkWidget *widget)
 {
@@ -1830,14 +2000,18 @@ gtk_widget_queue_resize (GtkWidget *widget)
     gtk_container_queue_resize (GTK_CONTAINER (widget));
 }
 
-/*****************************************
+/**
  * gtk_widget_draw:
+ * @widget: a #GtkWidget
+ * @area: area to draw
  *
- *   arguments:
- *
- *   results:
- *****************************************/
-
+ * DEPRECATED. In GTK+ 1.2, this function would immediately render the
+ * region @area of a widget, by invoking the virtual draw method of a
+ * widget. In GTK+ 2.0, the draw method is gone, and instead
+ * gtk_widget_draw() simply invalidates the specified region of the
+ * widget, then updates the invalid region of the widget immediately.
+ * 
+ **/
 void
 gtk_widget_draw (GtkWidget    *widget,
 		 GdkRectangle *area)
@@ -1894,14 +2068,17 @@ gtk_widget_draw (GtkWidget    *widget,
     }
 }
 
-/*****************************************
+/**
  * gtk_widget_draw_focus:
+ * @widget: a #GtkWidget
  *
- *   arguments:
- *
- *   results:
- *****************************************/
-
+ * INTERNAL FUNCTION for use in widget implementations. Invokes the
+ * "draw_focus" virtual method/signal on @widget, causing the focus
+ * rectangle to be drawn or undrawn according to the focus state of
+ * the widget. Normally called from widget implementations in the
+ * "focus_in_event" and "focus_out_event" handlers.
+ * 
+ **/
 void
 gtk_widget_draw_focus (GtkWidget *widget)
 {
@@ -1911,14 +2088,16 @@ gtk_widget_draw_focus (GtkWidget *widget)
   gtk_signal_emit (GTK_OBJECT (widget), widget_signals[DRAW_FOCUS]);
 }
 
-/*****************************************
+/**
  * gtk_widget_draw_default:
- *
- *   arguments:
- *
- *   results:
- *****************************************/
-
+ * @widget: a #GtkWidget
+ * 
+ * INTERNAL FUNCTION for use in widget implementations. Invokes the
+ * "draw_default" virtual method/signal on a widget, causing it to
+ * draw the default rectangle (indicating that the widget is
+ * the default widget, i.e. the one that's activated by pressing
+ * the enter key, generally).
+ **/
 void
 gtk_widget_draw_default (GtkWidget *widget)
 {
@@ -1928,14 +2107,16 @@ gtk_widget_draw_default (GtkWidget *widget)
   gtk_signal_emit (GTK_OBJECT (widget), widget_signals[DRAW_DEFAULT]);
 }
 
-/*****************************************
+/**
  * gtk_widget_size_request:
- *
- *   arguments:
- *
- *   results:
- *****************************************/
-
+ * @widget: a #GtkWidget
+ * @requisition: a #GtkRequisition to be filled in
+ * 
+ * INTERNAL FUNCTION used when implementing a #GtkContainer subclass.
+ * Obtains the preferred size of a widget. The container uses this
+ * information to arrange its child widgets and decide what size allocations
+ * to give them with gtk_widget_size_allocate().
+ **/
 void
 gtk_widget_size_request (GtkWidget	*widget,
 			 GtkRequisition *requisition)
@@ -1959,14 +2140,16 @@ gtk_widget_size_request (GtkWidget	*widget,
   gtk_widget_unref (widget);
 }
 
-/*****************************************
- * gtk_widget_get_requesition:
- *
- *   arguments:
- *
- *   results:
- *****************************************/
-
+/**
+ * gtk_widget_get_child_requisition:
+ * @widget: a #GtkWidget
+ * @requisition: a #GtkRequisition to be filled in
+ * 
+ * INTERNAL FUNCTION for use in widget implementations. Obtains
+ * @widget->requisition, unless someone has forced a particular
+ * geometry on the widget (e.g. with gtk_widget_set_usize()), in which
+ * case it returns that geometry instead of the widget's requisition.
+ **/
 void
 gtk_widget_get_child_requisition (GtkWidget	 *widget,
 				  GtkRequisition *requisition)
@@ -1988,14 +2171,15 @@ gtk_widget_get_child_requisition (GtkWidget	 *widget,
     }
 }
 
-/*****************************************
+/**
  * gtk_widget_size_allocate:
+ * @widget: a #GtkWidget
+ * @allocation: position and size to be allocated to @widget
  *
- *   arguments:
- *
- *   results:
- *****************************************/
-
+ * INTERNAL FUNCTION used by containers to assign a size
+ * and position to their child widgets. 
+ * 
+ **/
 void
 gtk_widget_size_allocate (GtkWidget	*widget,
 			  GtkAllocation *allocation)
@@ -2266,14 +2450,22 @@ gtk_widget_real_key_release_event (GtkWidget         *widget,
   return handled;
 }
 
-/*****************************************
+/**
  * gtk_widget_event:
- *
- *   arguments:
- *
- *   results:
- *****************************************/
-
+ * @widget: a #GtkWidget
+ * @event: a #GdkEvent
+ * 
+ * INTERNAL FUNCTION. This function is used to emit
+ * the event signals on a widget (those signals should never
+ * be emitted without using this function to do so).
+ * If you want to synthesize an event though, don't use this function;
+ * instead, use gtk_main_do_event() so the event will behave as if
+ * it were in the event queue. Don't synthesize expose events; instead,
+ * use gdk_window_invalidate_rect() to invalidate a region of the
+ * window.
+ * 
+ * Return value: return from the event signal emission (%TRUE if the event was handled)
+ **/
 gint
 gtk_widget_event (GtkWidget *widget,
 		  GdkEvent  *event)
@@ -2392,14 +2584,18 @@ gtk_widget_event (GtkWidget *widget,
   return return_val;
 }
 
-/*****************************************
+/**
  * gtk_widget_activate:
- *
- *   arguments:
- *
- *   results:
- *****************************************/
-
+ * @widget: a #GtkWidget that's activatable
+ * 
+ * For widgets that can be "activated" (buttons, menu items, etc.)
+ * this function activates them. Activation is what happens when you
+ * press Enter on a widget during key navigation; clicking a button,
+ * selecting a menu item, etc. If @widget isn't activatable,
+ * the function returns %FALSE.
+ * 
+ * Return value: %TRUE if the widget was activatable
+ **/
 gboolean
 gtk_widget_activate (GtkWidget *widget)
 {
@@ -2417,6 +2613,20 @@ gtk_widget_activate (GtkWidget *widget)
     return FALSE;
 }
 
+/**
+ * gtk_widget_set_scroll_adjustments:
+ * @widget: a #GtkWidget
+ * @hadjustment: an adjustment for horizontal scrolling, or %NULL
+ * @vadjustment: an adjustment for vertical scrolling, or %NULL
+ *
+ * For widgets that support scrolling, sets the scroll adjustments and
+ * returns %TRUE.  For widgets that don't support scrolling, does
+ * nothing and returns %FALSE. Widgets that don't support scrolling
+ * can be scrolled by placing them in a #GtkViewport, which does
+ * support scrolling.
+ * 
+ * Return value: %TRUE if the widget supports scrolling
+ **/
 gboolean
 gtk_widget_set_scroll_adjustments (GtkWidget     *widget,
 				   GtkAdjustment *hadjustment,
@@ -2476,14 +2686,15 @@ gtk_widget_reparent_container_child (GtkWidget *widget,
 			 (GdkWindow*) client_data, 0, 0);
 }
 
-/*****************************************
+/**
  * gtk_widget_reparent:
+ * @widget: a #GtkWidget
+ * @new_parent: a #GtkContainer to move the widget into
  *
- *   arguments:
- *
- *   results:
- *****************************************/
-
+ * Moves a widget from one #GtkContainer to another, handling reference
+ * count issues to avoid destroying the widget.
+ * 
+ **/
 void
 gtk_widget_reparent (GtkWidget *widget,
 		     GtkWidget *new_parent)
@@ -2518,14 +2729,16 @@ gtk_widget_reparent (GtkWidget *widget,
     }
 }
 
-/*****************************************
+/**
  * gtk_widget_popup:
+ * @widget: 
+ * @x: 
+ * @y: 
  *
- *   arguments:
- *
- *   results:
- *****************************************/
-
+ * DEPRECATED. Completely useless function as far as we know.
+ * Probably does something bad.
+ * 
+ **/
 void
 gtk_widget_popup (GtkWidget *widget,
 		  gint	     x,
@@ -2544,15 +2757,20 @@ gtk_widget_popup (GtkWidget *widget,
     }
 }
 
-/*****************************************
+/**
  * gtk_widget_intersect:
- *
- *   arguments:
- *
- *   results:
- *****************************************/
-
-gint
+ * @widget: a #GtkWidget
+ * @area: a rectangle
+ * @intersection: rectangle to store intersection of @widget and @area
+ * 
+ * Computes the intersection of a @widget's area and @area, storing
+ * the intersection in @intersection, and returns %TRUE if there was
+ * an intersection.  @intersection may be %NULL if you're only
+ * interested in whether there was an intersection.
+ * 
+ * Return value: %TRUE if there was an intersection
+ **/
+gboolean
 gtk_widget_intersect (GtkWidget	   *widget,
 		      GdkRectangle *area,
 		      GdkRectangle *intersection)
@@ -2581,14 +2799,16 @@ gtk_widget_intersect (GtkWidget	   *widget,
   return return_val;
 }
 
-/*****************************************
+/**
  * gtk_widget_grab_focus:
- *
- *   arguments:
- *
- *   results:
- *****************************************/
-
+ * @widget: a #GtkWidget
+ * 
+ * Causes @widget to have the keyboard focus for the #GtkWindow it's
+ * inside. @widget must be a focusable widget, such as a #GtkEntry;
+ * something like #GtkFrame won't work. (More precisely, it must have the
+ * #GTK_CAN_FOCUS flag set.)
+ * 
+ **/
 void
 gtk_widget_grab_focus (GtkWidget *widget)
 {
@@ -2681,14 +2901,18 @@ gtk_widget_real_grab_focus (GtkWidget *focus_widget)
     }
 }
 
-/*****************************************
+/**
  * gtk_widget_grab_default:
+ * @widget: a #GtkWidget
  *
- *   arguments:
- *
- *   results:
- *****************************************/
-
+ * Causes @widget to become the default widget. @widget must have the
+ * #GTK_CAN_DEFAULT flag set; typically you have to set this flag
+ * yourself by calling GTK_WIDGET_SET_FLAGS (@widget,
+ * GTK_CAN_DEFAULT).  The default widget is activated when the user
+ * presses Enter in a window.  Default widgets must be activatable,
+ * that is, gtk_widget_activate() should affect them.
+ * 
+ **/
 void
 gtk_widget_grab_default (GtkWidget *widget)
 {
@@ -2711,14 +2935,17 @@ gtk_widget_grab_default (GtkWidget *widget)
     g_warning("gtk_widget_grab_default() called on a widget not within a GtkWindow");
 }
 
-/*****************************************
+/**
  * gtk_widget_set_name:
+ * @widget: a #GtkWidget
+ * @name: name for the widget
  *
- *   arguments:
- *
- *   results:
- *****************************************/
-
+ * Widgets can be named, which allows you to refer to them from a
+ * gtkrc file. You can apply a style to widgets with a particular name
+ * in the gtkrc file. See the documentation for gtkrc files (on the
+ * same page as the docs for #GtkRcStyle).
+ * 
+ **/
 void
 gtk_widget_set_name (GtkWidget	 *widget,
 		     const gchar *name)
@@ -2734,14 +2961,16 @@ gtk_widget_set_name (GtkWidget	 *widget,
     gtk_widget_set_rc_style (widget);
 }
 
-/*****************************************
+/**
  * gtk_widget_get_name:
- *
- *   arguments:
- *
- *   results:
- *****************************************/
-
+ * @widget: a #GtkWidget
+ * 
+ * Retrieves the name of a widget. The return value should not be
+ * freed. See gtk_widget_set_name() for the significance of widget
+ * names.
+ * 
+ * Return value: name of the widget
+ **/
 gchar*
 gtk_widget_get_name (GtkWidget *widget)
 {
@@ -2753,16 +2982,16 @@ gtk_widget_get_name (GtkWidget *widget)
   return gtk_type_name (GTK_WIDGET_TYPE (widget));
 }
 
-/*****************************************
+/**
  * gtk_widget_set_state:
+ * @widget: a #GtkWidget
+ * @state: new state for @widget
  *
- *   arguments:
- *     widget
- *     state
- *
- *   results:
- *****************************************/
-
+ * INTERNAL FUNCTION for use in widget implementations. Sets the state
+ * of a widget (insensitive, prelighted, etc.) Usually you should set
+ * the state using wrapper functions such as gtk_widget_set_sensitive().
+ * 
+ **/
 void
 gtk_widget_set_state (GtkWidget           *widget,
 		      GtkStateType         state)
@@ -2815,6 +3044,26 @@ gtk_widget_set_app_paintable (GtkWidget *widget,
     }
 }
 
+/**
+ * gtk_widget_set_double_buffered:
+ * @widget: a #GtkWidget
+ * @double_buffered: %TRUE to double-buffer a widget
+ *
+ * Widgets are double buffered by default; you can use this function
+ * to turn off the buffering. "Double buffered" simply means that
+ * gdk_window_begin_paint() and gdk_window_end_paint() are called
+ * automatically around expose events sent to the
+ * widget. gdk_window_begin_paint() diverts all drawing to a widget's
+ * window to an offscreen buffer, and gdk_window_end_paint() draws the
+ * buffer to the screen. The result is that users see the window
+ * update in one smooth step, and don't see individual graphics
+ * primitives being rendered.
+ *
+ * In very simple terms, double buffered widgets don't flicker,
+ * so you would only use this function to turn off double buffering
+ * if you had special needs and really knew what you were doing.
+ * 
+ **/
 void
 gtk_widget_set_double_buffered (GtkWidget *widget,
 				gboolean   double_buffered)
@@ -2828,16 +3077,17 @@ gtk_widget_set_double_buffered (GtkWidget *widget,
     GTK_WIDGET_UNSET_FLAGS (widget, GTK_DOUBLE_BUFFERED);
 }
 
-/*****************************************
+/**
  * gtk_widget_set_sensitive:
+ * @widget: a @widget
+ * @sensitive: %TRUE to make the widget sensitive
  *
- *   arguments:
- *     widget
- *     boolean value for sensitivity
- *
- *   results:
- *****************************************/
-
+ * Sets the sensitivity of a widget. A widget is sensitive if the user
+ * can interact with it. Insensitive widgets are "grayed out" and the
+ * user can't interact with them. Insensitive widgets are known as
+ * "inactive" in some other toolkits.
+ * 
+ **/
 void
 gtk_widget_set_sensitive (GtkWidget *widget,
 			  gboolean   sensitive)
@@ -2875,14 +3125,18 @@ gtk_widget_set_sensitive (GtkWidget *widget,
     gtk_widget_queue_clear (widget);
 }
 
-/*****************************************
+/**
  * gtk_widget_set_parent:
+ * @widget: a #GtkWidget
+ * @parent: parent container
  *
- *   arguments:
- *
- *   results:
- *****************************************/
-
+ * INTERNAL FUNCTION for use while implementing subclasses of #GtkContainer.
+ * Sets the container as the parent of @widget, and takes care of
+ * some details such as updating the state and style of the child
+ * to reflect its new location. The opposite function is
+ * gtk_widget_unparent().
+ * 
+ **/
 void
 gtk_widget_set_parent (GtkWidget *widget,
 		       GtkWidget *parent)
@@ -2923,6 +3177,18 @@ gtk_widget_set_parent (GtkWidget *widget,
  * Widget styles
  * see docs/styles.txt
  *****************************************/
+
+/**
+ * gtk_widget_set_style:
+ * @widget: a #GtkWidget
+ * @style: a #GtkStyle
+ *
+ * Sets the #GtkStyle for a widget (widget->style). You probably don't
+ * want to use this function; it interacts badly with themes, because
+ * themes work by replacing the #GtkStyle. Instead, use
+ * gtk_widget_modify_style().
+ * 
+ **/
 void
 gtk_widget_set_style (GtkWidget *widget,
 		      GtkStyle	*style)
@@ -2951,6 +3217,16 @@ gtk_widget_set_style (GtkWidget *widget,
   gtk_widget_set_style_internal (widget, style, initial_emission);
 }
 
+/**
+ * gtk_widget_ensure_style:
+ * @widget: a #GtkWidget
+ *
+ * Ensures that @widget has a style (widget->style). Not a very useful
+ * function; most of the time, if you want the style, the widget is
+ * realized, and realized widgets are guaranteed to have a style
+ * already.
+ * 
+ **/
 void
 gtk_widget_ensure_style (GtkWidget *widget)
 {
@@ -2962,6 +3238,12 @@ gtk_widget_ensure_style (GtkWidget *widget)
     gtk_widget_set_rc_style (widget);
 }
 
+/**
+ * gtk_widget_set_rc_style:
+ * @widget: a #GtkWidget
+ * 
+ * 
+ **/
 void
 gtk_widget_set_rc_style (GtkWidget *widget)
 {
@@ -3027,6 +3309,14 @@ gtk_widget_restore_default_style (GtkWidget *widget)
     }
 }
 
+/**
+ * gtk_widget_get_style:
+ * @widget: a #GtkWidget
+ * 
+ * Simply an accessor function that returns widget->style.
+ * 
+ * Return value: the widget's #GtkStyle
+ **/
 GtkStyle*
 gtk_widget_get_style (GtkWidget *widget)
 {
@@ -3542,6 +3832,23 @@ gtk_widget_create_pango_layout (GtkWidget   *widget,
   return layout;
 }
 
+/**
+ * gtk_widget_render_stock_icon:
+ * @widget: a #GtkWidget
+ * @stock_id: a stock ID
+ * @size: a stock size
+ * @detail: render detail to pass to theme engine
+ * 
+ * A convenience function that uses the theme engine and RC file
+ * settings for @widget to look up @stock_id and render it to
+ * a pixbuf. @stock_id should be a stock icon ID such as
+ * #GTK_STOCK_OPEN or #GTK_STOCK_BUTTON_OK. @size should be a size
+ * such as #GTK_ICON_SIZE_MENU. @detail should be a string that
+ * identifies the widget or code doing the rendering, so that
+ * theme engines can special-case rendering for that widget or code.
+ * 
+ * Return value: a new pixbuf, or NULL if the stock ID wasn't known
+ **/
 GdkPixbuf*
 gtk_widget_render_stock_icon (GtkWidget      *widget,
                               const gchar    *stock_id,
