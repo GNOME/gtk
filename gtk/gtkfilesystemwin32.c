@@ -345,6 +345,34 @@ gtk_file_system_win32_get_folder (GtkFileSystem    *file_system,
   filename = filename_from_path (path);
   g_return_val_if_fail (filename != NULL, NULL);
 
+  if (!g_file_test (filename, G_FILE_TEST_IS_DIR))
+    {
+      int save_errno = errno;
+      gchar *filename_utf8 = g_filename_to_utf8 (filename, -1, NULL, NULL, NULL);
+
+      /* If g_file_test() returned FALSE but not due to an error, it means
+       * that the filename is not a directory.
+       */
+      if (save_errno == 0)
+	/* ENOTDIR */
+	g_set_error (error,
+		     GTK_FILE_SYSTEM_ERROR,
+		     GTK_FILE_SYSTEM_ERROR_NOT_FOLDER,
+		     _("%s: %s"),
+		     filename_utf8 ? filename_utf8 : "???",
+		     g_strerror (ENOTDIR));
+      else
+	g_set_error (error,
+		     GTK_FILE_SYSTEM_ERROR,
+		     GTK_FILE_SYSTEM_ERROR_NONEXISTENT,
+		     _("error getting information for '%s': %s"),
+		     filename_utf8 ? filename_utf8 : "???",
+		     g_strerror (save_errno));
+
+      g_free (filename_utf8);
+      return NULL;
+    }
+
   folder_win32 = g_object_new (GTK_TYPE_FILE_FOLDER_WIN32, NULL);
   folder_win32->filename = filename;
   folder_win32->types = types;

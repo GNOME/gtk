@@ -1,3 +1,9 @@
+2004-03-24  J. Ali Harlow  <ali@juiblex.co.uk>
+
+	* gtk/gtkfilesystemwin32.c
+	(gtk_file_system_win32_get_folder): Test that path is actually
+	a directory and throw error if not. Fixed bug #137950
+
 2004-03-22  J. Ali Harlow  <ali@juiblex.co.uk>
 
 	* gtk/gtkfilesystemwin32.c
