@@ -3,6 +3,7 @@
 
 #include <libart_lgpl/art_misc.h>
 #include <libart_lgpl/art_pixbuf.h>
+#include <glib.h>
 
 typedef struct {
 	int ref_count;

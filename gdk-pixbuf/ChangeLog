@@ -1,3 +1,10 @@
+1999-07-23  Richard Hestilow  <hestgray@ionet.net>
+	
+	* src/gdk-pixbuf.h: Include glib.h as it uses g* datatypes
+	* gdk_pixbufConf.sh.in: Added for gnome-config
+	* Makefile.am:
+	* configure.in: Modified to generate gdk_pixbufConf.sh
+
 1999-07-20  Mark Crichton  <crichton@gimp.org>
 
 	* src/gdk-pixbuf.c (gdk_pixbuf_rotate): Fixed rotation.  Now a bbox
