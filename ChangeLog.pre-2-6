@@ -1,3 +1,8 @@
+2004-06-22  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkicontheme.h (GTK_ICON_THEME_GET_CLASS): Typo
+	fix.  (#144750, Jeff Franks) 
+
 2004-06-21  Michael Natterer  <mitch@gimp.org>
 
 	Merge from stable:
