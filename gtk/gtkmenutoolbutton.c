@@ -537,6 +537,9 @@ gtk_menu_tool_button_set_menu (GtkMenuToolButton *button,
 
   if (priv->menu != GTK_MENU (menu))
     {
+      if (priv->menu && GTK_WIDGET_VISIBLE (priv->menu))
+        gtk_menu_shell_deactivate (GTK_MENU_SHELL (priv->menu));
+
       if (priv->menu)
         g_object_unref (priv->menu);
 
