@@ -1,3 +1,16 @@
+2004-08-28  Robert Ögren  <gtk@roboros.com>
+
+	On Win32, do not produce tablet motion or button events while a
+	window is being moved or resized. (#151090, reported by Shaneyfelt)
+
+	* gdk/win32/gdkprivate-win32.h
+	* gdk/win32/gdkglobals-win32.c
+	* gdk/win32/gdkevents-win32.c: Rename the variable resizing to
+	_sizemove_in_progress and make it extern.
+
+	* gdk/win32/gdkinput-win32.c (_gdk_input_other_event): Ignore
+	motion and button events if _sizemove_in_progress is true.
+
 2004-08-30  Tor Lillqvist  <tml@iki.fi>
 
 	Make the ms-windows theme engine build with mingw.

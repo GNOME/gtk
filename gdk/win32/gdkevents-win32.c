@@ -159,7 +159,6 @@ static HKL latin_locale = NULL;
 #endif
 
 static gboolean in_ime_composition = FALSE;
-static gboolean resizing = FALSE;
 static UINT     resize_timer;
 
 static int debug_indent = 0;
@@ -2054,7 +2053,7 @@ resize_timer_proc (HWND     hwnd,
 		   UINT     id,
 		   DWORD    time)
 {
-  if (resizing)
+  if (_sizemove_in_progress)
     handle_stuff_while_moving_or_resizing ();
 }
 
@@ -2966,12 +2965,12 @@ gdk_event_translate (GdkDisplay *display,
       break;
 
     case WM_ENTERSIZEMOVE:
-      resizing = TRUE;
+      _sizemove_in_progress = TRUE;
       resize_timer = SetTimer (NULL, 0, 20, resize_timer_proc);
       break;
 
     case WM_EXITSIZEMOVE:
-      resizing = FALSE;
+      _sizemove_in_progress = FALSE;
       KillTimer (NULL, resize_timer);
       break;
 
@@ -2979,7 +2978,7 @@ gdk_event_translate (GdkDisplay *display,
       /* Once we've entered the moving or sizing modal loop, we won't
        * return to the main loop until we're done sizing or moving.
        */
-      if (resizing &&
+      if (_sizemove_in_progress &&
 	 GDK_WINDOW_TYPE (window) != GDK_WINDOW_CHILD &&
 	 !GDK_WINDOW_DESTROYED (window))
 	{

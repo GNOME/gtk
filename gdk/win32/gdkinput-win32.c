@@ -695,7 +695,7 @@ _gdk_input_enter_event (GdkWindow        *window)
   input_window->root_y = root_y;
 }
 
-/**
+/*
  * Get the currently active keyboard modifiers (ignoring the mouse buttons)
  * We could use gdk_window_get_pointer but that function does a lot of other
  * expensive things besides getting the modifiers. This code is somewhat based
@@ -781,6 +781,13 @@ _gdk_input_other_event (GdkEvent  *event,
   switch (msg->message)
     {
     case WT_PACKET:
+      /* Don't produce any button or motion events while a window is being
+       * moved or resized, see bug #151090. */
+      if (_sizemove_in_progress)
+	{
+	  GDK_NOTE (EVENTS_OR_INPUT, g_print ("...ignored when moving/sizing\n"));
+	  return FALSE;
+	}
       if (window == _gdk_parent_root && x_grab_window == NULL)
 	{
 	  GDK_NOTE (EVENTS_OR_INPUT, g_print ("...is root\n"));
