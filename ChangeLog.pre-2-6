@@ -1,3 +1,14 @@
+Mon Feb 12 20:02:32 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkmain.c: Fix some cases of implicit casting between
+	void * and function pointers.
+
+	* configure.in gtk/gtkmain.c: Add checks for setuid/setgid,
+	and refuse to initialize GTK+ if they fail.
+
+	* configure.in (GTK_INTERFACE_AGE): Reset GTK_INTERFACE_AGE
+	to zero.
+
 Mon Feb 12 15:55:26 2001  Owen Taylor  <otaylor@redhat.com>
 	 
 	[ Enabling patch for better looking theme engines ]
