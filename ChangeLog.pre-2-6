@@ -1,3 +1,10 @@
+2000-20-01  Anders Carlsson  <andersca@gnu.org>
+
+	* gtk/gtktogglebutton.c (gtk_toggle_button_draw): Fix bug when
+	a GtkToggleButton is both insensitive and active, it was being
+	drawn by the GtkButton draw handler which doesn't check the
+	state. Now it's calling gtk_toggle_button_paint instead.
+
 2000-11-30  Havoc Pennington  <hp@pobox.com>
 
 	* gtk/gtktextdisplay.c (gtk_text_layout_draw): don't create

@@ -401,11 +401,22 @@ static gint
 gtk_toggle_button_expose (GtkWidget      *widget,
 			  GdkEventExpose *event)
 {
-  if (!GTK_WIDGET_NO_WINDOW (widget) &&
-      GTK_WIDGET_CLASS (parent_class)->expose_event)
-    return GTK_WIDGET_CLASS (parent_class)->expose_event (widget, event);
-  else
-    return FALSE;
+  GtkBin *bin;
+  GdkEventExpose child_event;
+
+  if (GTK_WIDGET_DRAWABLE (widget))
+    {
+      bin = GTK_BIN (widget);
+
+      gtk_toggle_button_paint (widget, &event->area);
+
+      child_event = *event;
+      if (bin->child && GTK_WIDGET_NO_WINDOW (bin->child) &&
+	  gtk_widget_intersect (bin->child, &event->area, &child_event.area))
+	gtk_widget_event (bin->child, (GdkEvent*) &child_event);
+    }
+  
+  return TRUE;
 }
 
 static void
