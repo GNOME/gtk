@@ -4,15 +4,15 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: gtk+ 1.1.12\n"
-"POT-Creation-Date: 1999-01-28 00:37-0600\n"
-"PO-Revision-Date: 1999-01-10 17:37+0100\n"
+"Project-Id-Version: gtk+ 1.1.14\n"
+"POT-Creation-Date: 1999-01-10 23:24+0100\n"
+"PO-Revision-Date: 1999-02-07 17:37+0100\n"
 "Last-Translator: Pablo Saratxaga <srtxg@chanae.alphanet.ch>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=iso-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Date: 1991-01-10 13:01:00+0100\n"
+"Date: 1991-02-07 13:01:00+0100\n"
 "From: Pablo Saratxaga <srtxg@chanae.alphanet.ch>\n"
 
 #: gtk/gtkcolorsel.c:202
@@ -125,9 +125,8 @@ msgid "Rename"
 msgstr "Renombrar"
 
 #: gtk/gtkfilesel.c:1432
-#, fuzzy
 msgid "Selection: "
-msgstr "Selección de Fuentes"
+msgstr "Selección: "
 
 #: gtk/gtkfontsel.c:203
 msgid "Foundry:"
