@@ -21,6 +21,7 @@
 #include "gdk/gdkx.h"
 #endif
 #include "gdk/gdkkeysyms.h"
+#include "gdk/gdki18n.h"
 #include "gtkentry.h"
 #include "gtkmain.h"
 #include "gtkselection.h"

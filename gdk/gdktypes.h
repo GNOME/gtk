@@ -19,8 +19,6 @@
 #define __GDK_TYPES_H__
 
 
-#include <wchar.h>
-
 /* GDK uses "glib". (And so does GTK).
  */
 #include <glib.h>
@@ -960,15 +958,13 @@ struct _GdkEventClient
   } data;
 };
 
-#ifndef _XLIB_H_
-#define XEvent void
-#endif
+typedef void GdkXEvent;   /* Can be cast to XEvent */
 
 struct _GdkEventOther
 {
   GdkEventType type;
   GdkWindow *window;
-  XEvent *xevent;
+  GdkXEvent *xevent;
 };
 
 union _GdkEvent

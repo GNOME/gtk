@@ -67,3 +67,13 @@
 
 /* Define if you have the <values.h> header file.  */
 #undef HAVE_VALUES_H
+
+/* Define if you have the <wchar.h> header file */
+#undef HAVE_WCHAR_H
+
+/* Define if you have the <wcstr.h> header file */
+#undef HAVE_WCSTR_H
+
+/* Define if you have the <wctype.h> header file */
+#undef HAVE_WCTYPE_H
+

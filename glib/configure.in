@@ -33,19 +33,16 @@ AM_PROG_CC_STDC
 AC_PROG_INSTALL
 
 if eval "test x$GCC = xyes"; then
-  test `echo "$CFLAGS" | grep "\-Wall" > /dev/null 2> /dev/null`
-  if test ! $?; then
+  if test ! `echo "$CFLAGS" | grep "\-Wall" 2> /dev/null` ; then
     CFLAGS="$CFLAGS -Wall"
   fi
 
   if eval "test x$enable_ansi = xyes"; then
-    test `echo "$CFLAGS" | grep "\-ansi" > /dev/null 2> /dev/null`
-    if test ! $?; then
+    if test ! `echo "$CFLAGS" | grep "\-ansi" 2> /dev/null` ; then
       CFLAGS="$CFLAGS -ansi"
     fi
 
-    test `echo "$CFLAGS" | grep "\-pedantic" > /dev/null 2> /dev/null`
-    if test ! $?; then
+    if test ! `echo "$CFLAGS" | grep "\-pedantic" 2> /dev/null` ; then
       CFLAGS="$CFLAGS -pedantic"
     fi
   fi
@@ -113,5 +110,31 @@ AC_MSG_RESULT($gtk_ok)
 if test $gtk_ok = no; then
     AC_DEFINE(NO_FD_SET)
 fi
+
+# This stuff is here, only so that we can define these
+# things in glibconfig.h. If ../config.h was installed
+# (under some other name?) then the definitions would
+# belong there. (They are only used in GDK)
+
+# Look for wide string functions in wchar.h or wcstr.h
+
+AC_MSG_CHECKING(for <wchar.h> or <wcstr.h>)
+AC_TRY_CPP([#include <wchar.h>], gtk_ok=yes, gtk_ok=no)
+if test $gtk_ok = yes; then
+   AC_DEFINE(HAVE_WCHAR_H)
+else
+   AC_TRY_CPP([#include <wcstr.h>], gtk_ok=yes, gtk_ok=no)
+   if test $gtk_ok = yes; then
+       AC_DEFINE(HAVE_WCSTR_H)
+   fi
+fi
+
+# Check for wctype.h (for iswalnum)
+AC_MSG_CHECKING(for <wctype.h>)
+AC_TRY_CPP([#include <wctype.h>], gtk_ok=yes, gtk_ok=no)
+if test $gtk_ok = yes; then
+   AC_DEFINE(HAVE_WCTYPE_H)
+fi
+AC_MSG_RESULT($gtk_ok)
 
 AC_OUTPUT(Makefile)

@@ -20,7 +20,6 @@
 
 
 #include <gdk/gdktypes.h>
-#include <gdk/gdki18n.h>
 
 
 #ifdef __cplusplus

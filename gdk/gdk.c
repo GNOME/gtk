@@ -49,7 +49,7 @@
 #include "gdkx.h"
 #include "gdkkeysyms.h"
 #endif
-
+#include "gdki18n.h"
 
 #ifndef X_GETTIMEOFDAY
 #define X_GETTIMEOFDAY(tv)  gettimeofday (tv, NULL)
@@ -1754,8 +1754,10 @@ gdk_event_translate (GdkEvent *event,
 	{
 	if(gdk_dnd.drag_really)
 	  {
-	  GdkPoint foo = {xevent->xbutton.x_root,
-			  xevent->xbutton.y_root};
+	  GdkPoint foo;
+	  foo.x = xevent->xbutton.x_root;
+	  foo.y = xevent->xbutton.y_root;
+			  
 	  XUngrabPointer(gdk_display, CurrentTime);
 
 	  if(dnd_drag_target != None)
@@ -2522,7 +2524,7 @@ gdk_event_translate (GdkEvent *event,
 	{
 	  event->other.type = GDK_OTHER_EVENT;
 	  event->other.window = window;
-	  event->other.xevent = &other_xevent[other_xevent_i];
+	  event->other.xevent = (GdkXEvent *)&other_xevent[other_xevent_i];
 	  memcpy (&other_xevent[other_xevent_i], xevent, sizeof (XEvent));
 	  other_xevent_i = (other_xevent_i+1) % OTHER_XEVENT_BUFSIZE;
 	  return_val = TRUE;

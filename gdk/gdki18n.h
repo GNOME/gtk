@@ -19,13 +19,32 @@
 #ifndef __GDK_I18N_H__
 #define __GDK_I18N_H__
 
+/* GDK uses "glib". (And so does GTK).
+ */
+#include <glib.h>
+
 /* international string support */
 
 #include <stdlib.h>
+
+#ifdef HAVE_WCTYPE_H
+#include <wctype.h>
+#else 
+#define iswalnum isalnum
+/* Other functions could be added here if necessary */
+#endif /* HAVE_WCTYPE_H */
+
+#ifndef X_LOCALE
+
+#ifdef HAVE_WCHAR_H
 #include <wchar.h>
+#else /* !HAVE_WCHAR_H */
+#ifdef HAVE_WCSTR_H
+#include <wcstr.h>
+#endif /* HAVE_WCSTR_H*/
+#endif /* HAVE_WCHAR_H */
 
-#ifdef X_LOCALE
-
+#else  /* X_LOCALE */
 #include <X11/Xfuncproto.h>
 #include <X11/Xosdefs.h>
 
@@ -38,6 +57,7 @@ extern int _Xmblen (
 #if NeedFunctionPrototypes
   const char *s, size_t n
 #endif
+
 );
 _XFUNCPROTOEND
 
@@ -133,7 +153,7 @@ extern int _g_mbtowc (wchar_t *wstr, const char *str, size_t len);
 #define wcstombs(a,b,c) _Xwcstombs ((a),(b),(c))
 #define wcslen(a)	_Xwcslen ((a))
 #define wcscpy(a,b)	_Xwcscpy ((a),(b))
-#define wcsncpy(a,b,c)	_Xwcsnpy ((a),(b),(c))
+#define wcsncpy(a,b,c)	_Xwcsncpy ((a),(b),(c))
 
 #ifdef  __cplusplus
 }
@@ -141,4 +161,4 @@ extern int _g_mbtowc (wchar_t *wstr, const char *str, size_t len);
 
 #endif /* X_LOCALE */
 
-#endif __GDK_I18N_H__
+#endif /* __GDK_I18N_H__ */

@@ -1,20 +1,42 @@
+Wed Dec 3 1997 Owen Taylor <owt1@cornell.edu>
+	* gdk/Makefile.am: add a dependence for $(DEP_FILES) on
+	$(BUILT_SOURCES) to work around automake problem
+	
+Wed Dec 3 1997 Owen Taylor <owt1@cornell.edu>
+	* configure.in glib/configure.in glib/glibconfig.h.in gdk/gdk.h
+	gdk/gdk18n.h gdk.c gtk/gtkentry.c: Try to handle variations in 
+	<wchar.h> headers gracefully. Do not automatically include 
+	gdk/gdki18n.h.
+	
 Wed Dec 3 1997 Jay Painter <jpaint@serv.net>
 	* gtk/gtkoptionmenu.c: fixed a old bug where if you set a new 
 	menu for a optionmenu the widget would not get positioned correctly
 	inside of the optionmenu.
 
-Tue Dec 1 1997 Owen Taylor <owt1@cornell.edu>
+Tue Dec 2 1997 Owen Taylor <owt1@cornell.edu>
+	* gdk/gdkpixmap.c: Include unistd.h to get SEEK_END
+	for SunOS (john_johns@credence.com)
+	
+Tue Dec 2 1997 Owen Taylor <owt1@cornell.edu>
+	* gtk+/fnmatch.c: Define _GNU_SOURCE before including
+	fnmatch.h to make sure all constants are defined.
+        (Yasuhiro SHIRASAKI <joke@awa.tohoku.ac.jp>)
+	
+Tue Dec 2 1997 Owen Taylor <owt1@cornell.edu>
+	* configure.in, glib/configure.in: Make the logic to add -Wall,
+	-ansi, -pedantic for GCC operational.
+
+Tue Dec 2 1997 Owen Taylor <owt1@cornell.edu>
 	* glib/glib.h, glib/configure.in. Disabled gldouble, since
 	it wasn't used anywhere and caused portability problems
 
-Tue Dec 1 1997 Owen Taylor <owt1@cornell.edu>
+Tue Dec 2 1997 Owen Taylor <owt1@cornell.edu>
 	* glib/glib.h, glib/configure.in, glib/glibconfig.h.in: Added a
 	g_memmove function which is simply memmove if it exists, otherwise
 	bcopy.(Should really check if bcopy has the correct semantics, and
 	create our own memmove is necessary) 
 	* glib/gstring.c, glib/garray.c, gtk/gtktext.c:
 	memmove => g_memmove
-
 	
 Sun Nov 30 1997 Jay Painter <jpaint@serv.net>
 	* gtk/gtknotebook.c: fixed a old bug where all the notebook pages

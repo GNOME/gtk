@@ -48,19 +48,16 @@ AC_PROG_INSTALL
 AC_PROG_MAKE_SET
 
 if eval "test x$GCC = xyes"; then
-  test `echo "$CFLAGS" | grep "\-Wall" > /dev/null 2> /dev/null`
-  if test ! $?; then
+  if test ! `echo "$CFLAGS" | grep "\-Wall" 2> /dev/null` ; then
     CFLAGS="$CFLAGS -Wall"
   fi
 
   if eval "test x$enable_ansi = xyes"; then
-    test `echo "$CFLAGS" | grep "\-ansi" > /dev/null 2> /dev/null`
-    if test ! $?; then
+    if test ! `echo "$CFLAGS" | grep "\-ansi" 2> /dev/null` ; then
       CFLAGS="$CFLAGS -ansi"
     fi
 
-    test `echo "$CFLAGS" | grep "\-pedantic" > /dev/null 2> /dev/null`
-    if test ! $?; then
+    if test ! `echo "$CFLAGS" | grep "\-pedantic" 2> /dev/null` ; then
       CFLAGS="$CFLAGS -pedantic"
     fi
   fi
@@ -193,21 +190,38 @@ gtk_cv_display_resource_base="private3")])
 AC_MSG_RESULT($gtk_cv_display_resource_base)
 AC_DEFINE_UNQUOTED(RESOURCE_BASE, gdk_display->$gtk_cv_display_resource_base)
 
+# Look for wide string functions in wchar.h or wcstr.h
+
+AC_MSG_CHECKING(for <wchar.h> or <wcstr.h>)
+AC_TRY_CPP([#include <wchar.h>], gtk_ok=yes, gtk_ok=no)
+if test $gtk_ok = no; then
+   AC_TRY_CPP([#include <wcstr.h>], gtk_ok=yes, gtk_ok=no)
+   if test $gtk_ok = no; then
+       gtk_cv_x_locale=yes
+   fi
+fi
+   
+AC_MSG_RESULT($gtk_ok)
+
 # Check if X_LOCALE definition is necessary
 
 AC_MSG_CHECKING(need -DX_LOCALE)
-AC_TRY_RUN([
-#include <stdio.h>
-#include <locale.h>
+if test x$gtk_cv_x_locale = xyes; then
+  AC_MSG_RESULT([yes (C library doesn't include wide string functions)])
+else
+  AC_TRY_RUN([
+  #include <stdio.h>
+  #include <locale.h>
 
-int
-main ()
-{
-  return setlocale (LC_ALL, "${with_locale}") == NULL;
-}],
-gtk_cv_x_locale=no,
-gtk_cv_x_locale=yes)
-AC_MSG_RESULT($gtk_cv_x_locale)
+  int
+  main ()
+  {
+    return setlocale (LC_ALL, "${with_locale}") == NULL;
+  }],
+  gtk_cv_x_locale=no,
+  gtk_cv_x_locale=yes)
+  AC_MSG_RESULT($gtk_cv_x_locale)
+fi
 if test $gtk_cv_x_locale = yes; then
   CFLAGS="$CFLAGS -DX_LOCALE"
 fi
