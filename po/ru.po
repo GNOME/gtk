@@ -6,8 +6,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.0.2\n"
-"POT-Creation-Date: 2002-05-23 17:08-0400\n"
-"PO-Revision-Date: 2002-05-10 12:12+0400\n"
+"POT-Creation-Date: 2002-06-05 13:21+0400\n"
+"PO-Revision-Date: 2002-06-05 13:19+0400\n"
 "Last-Translator: Dmitry Mastrukov <dmitry@taurussoft.org>\n"
 "Language-Team: Russian <gnome-cyr@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -15,13 +15,13 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 
 # gdk-pixbuf/gdk-pixbuf-animation.c:144 gdk-pixbuf/gdk-pixbuf-io.c:581
-#: gdk-pixbuf/gdk-pixbuf-animation.c:144 gdk-pixbuf/gdk-pixbuf-io.c:581
+#: gdk-pixbuf/gdk-pixbuf-animation.c:144 gdk-pixbuf/gdk-pixbuf-io.c:585
 #, c-format
 msgid "Failed to open file '%s': %s"
 msgstr "Сбой при открытии файла \"%s\": %s"
 
 # gdk-pixbuf/gdk-pixbuf-animation.c:155 gdk-pixbuf/gdk-pixbuf-io.c:591
-#: gdk-pixbuf/gdk-pixbuf-animation.c:155 gdk-pixbuf/gdk-pixbuf-io.c:591
+#: gdk-pixbuf/gdk-pixbuf-animation.c:155 gdk-pixbuf/gdk-pixbuf-io.c:595
 #, c-format
 msgid "Image file '%s' contains no data"
 msgstr "Файл изображения \"%s\" не содержит данных"
@@ -33,7 +33,7 @@ msgid "Don't know how to load the animation in file '%s'"
 msgstr "Неизвестно, как загрузить анимацию из файла \"%s\""
 
 # gdk-pixbuf/gdk-pixbuf-animation.c:205 gdk-pixbuf/gdk-pixbuf-io.c:636
-#: gdk-pixbuf/gdk-pixbuf-animation.c:205 gdk-pixbuf/gdk-pixbuf-io.c:636
+#: gdk-pixbuf/gdk-pixbuf-animation.c:205 gdk-pixbuf/gdk-pixbuf-io.c:640
 #, c-format
 msgid ""
 "Failed to load image '%s': reason not known, probably a corrupt image file"
@@ -52,13 +52,13 @@ msgstr ""
 "анимации повреждён"
 
 # gdk-pixbuf/gdk-pixbuf-io.c:354
-#: gdk-pixbuf/gdk-pixbuf-io.c:354
+#: gdk-pixbuf/gdk-pixbuf-io.c:358
 #, c-format
 msgid "Unable to load image-loading module: %s: %s"
 msgstr "Невозможно загрузить модуль загрузки изображений: %s: %s"
 
 # gdk-pixbuf/gdk-pixbuf-io.c:373
-#: gdk-pixbuf/gdk-pixbuf-io.c:373
+#: gdk-pixbuf/gdk-pixbuf-io.c:377
 #, c-format
 msgid ""
 "Image-loading module %s does not export the proper interface; perhaps it's "
@@ -68,36 +68,36 @@ msgstr ""
 "может быть, модуль остался от другой версии GTK?"
 
 # gdk-pixbuf/gdk-pixbuf-io.c:490 gdk-pixbuf/gdk-pixbuf-io.c:516
-#: gdk-pixbuf/gdk-pixbuf-io.c:490 gdk-pixbuf/gdk-pixbuf-io.c:516
+#: gdk-pixbuf/gdk-pixbuf-io.c:494 gdk-pixbuf/gdk-pixbuf-io.c:520
 #, c-format
 msgid "Image type '%s' is not supported"
 msgstr "Изображения формата \"%s\" не поддерживаются"
 
 # gdk-pixbuf/gdk-pixbuf-io.c:538
-#: gdk-pixbuf/gdk-pixbuf-io.c:538
+#: gdk-pixbuf/gdk-pixbuf-io.c:542
 #, c-format
 msgid "Couldn't recognize the image file format for file '%s'"
 msgstr "Не удалось распознать формат файла изображения для \"%s\""
 
 # gdk-pixbuf/gdk-pixbuf-io.c:544
-#: gdk-pixbuf/gdk-pixbuf-io.c:544
+#: gdk-pixbuf/gdk-pixbuf-io.c:548
 msgid "Unrecognized image file format"
 msgstr "Нераспознанный формат файла изображения"
 
 # gdk-pixbuf/gdk-pixbuf-io.c:614
-#: gdk-pixbuf/gdk-pixbuf-io.c:614
+#: gdk-pixbuf/gdk-pixbuf-io.c:618
 #, c-format
 msgid "Don't know how to load the image in file '%s'"
 msgstr "Неизвестно, как загрузить изображение из файла \"%s\""
 
 # gdk-pixbuf/gdk-pixbuf-io.c:647
-#: gdk-pixbuf/gdk-pixbuf-io.c:647
+#: gdk-pixbuf/gdk-pixbuf-io.c:651
 #, c-format
 msgid "Failed to load image '%s': %s"
 msgstr "Сбой при загрузке изображения \"%s\": %s"
 
 # gdk-pixbuf/gdk-pixbuf-io.c:752
-#: gdk-pixbuf/gdk-pixbuf-io.c:752
+#: gdk-pixbuf/gdk-pixbuf-io.c:756
 #, c-format
 msgid "This build of gdk-pixbuf does not support saving the image format: %s"
 msgstr ""
@@ -105,13 +105,13 @@ msgstr ""
 "формате: %s"
 
 # gdk-pixbuf/gdk-pixbuf-io.c:859
-#: gdk-pixbuf/gdk-pixbuf-io.c:859
+#: gdk-pixbuf/gdk-pixbuf-io.c:863
 #, c-format
 msgid "Failed to open '%s' for writing: %s"
 msgstr "Сбой при открытии \"%s\" для записи: %s"
 
 # gdk-pixbuf/gdk-pixbuf-io.c:880
-#: gdk-pixbuf/gdk-pixbuf-io.c:880
+#: gdk-pixbuf/gdk-pixbuf-io.c:884
 #, c-format
 msgid ""
 "Failed to close '%s' while writing image, all data may not have been saved: %"
@@ -729,17 +729,17 @@ msgid "Couldn't save the rest"
 msgstr "Не удалось сохранить остальное"
 
 # gdk-pixbuf/io-xbm.c:283
-#: gdk-pixbuf/io-xbm.c:283
+#: gdk-pixbuf/io-xbm.c:284
 msgid "Invalid XBM file"
 msgstr "Недопустимый файл формата XBM"
 
 # gdk-pixbuf/io-xbm.c:293
-#: gdk-pixbuf/io-xbm.c:293
+#: gdk-pixbuf/io-xbm.c:294
 msgid "Insufficient memory to load XBM image file"
 msgstr "Недостаточно памяти для загрузки файла изображения в формате XBM"
 
 # gdk-pixbuf/io-xbm.c:427
-#: gdk-pixbuf/io-xbm.c:427
+#: gdk-pixbuf/io-xbm.c:429
 msgid "Failed to write to temporary file when loading XBM image"
 msgstr ""
 "Сбой при записи временного файла во время загрузки изображения в формате XBM"
@@ -2445,12 +2445,12 @@ msgstr "Выбранное в настоящий момент GdkFont."
 # gtk/gtkfontsel.c:216
 #: gtk/gtkfontsel.c:219
 msgid "Preview text"
-msgstr "Текст для просмотра"
+msgstr "Образец текста"
 
 # gtk/gtkfontsel.c:217
 #: gtk/gtkfontsel.c:220
 msgid "The text to display in order to demonstrate the selected font."
-msgstr "Текст используемый для демонстрации выбранного шрифта."
+msgstr "Текст, используемый для демонстрации выбранного шрифта."
 
 # gtk/gtkfontsel.c:321
 #: gtk/gtkfontsel.c:327
@@ -2471,7 +2471,7 @@ msgstr "_Размер:"
 #. create the text entry widget
 #: gtk/gtkfontsel.c:468
 msgid "_Preview:"
-msgstr "_Просмотр:"
+msgstr "Образе_ц:"
 
 # gtk/gtkfontsel.c:1253
 #: gtk/gtkfontsel.c:1269
@@ -2921,24 +2921,24 @@ msgid "default:LTR"
 msgstr "default:LTR"
 
 # gtk/gtkmenu.c:191
-#: gtk/gtkmenu.c:191
+#: gtk/gtkmenu.c:194
 msgid "Tearoff Title"
 msgstr ""
 
 # gtk/gtkmenu.c:192
-#: gtk/gtkmenu.c:192
+#: gtk/gtkmenu.c:195
 msgid ""
 "A title that may be displayed by the window manager when this menu is torn-"
 "off."
 msgstr ""
 
 # gtk/gtkmenu.c:260
-#: gtk/gtkmenu.c:260
+#: gtk/gtkmenu.c:264
 msgid "Can change accelerators"
 msgstr "Может изменять комбинации клавиш"
 
 # gtk/gtkmenu.c:261
-#: gtk/gtkmenu.c:261
+#: gtk/gtkmenu.c:265
 msgid ""
 "Whether menu accelerators can be changed by pressing a key over the menu "
 "item."
@@ -4050,7 +4050,7 @@ msgstr "На_печатать"
 # gtk/gtkstock.c:314
 #: gtk/gtkstock.c:314
 msgid "Print Pre_view"
-msgstr "Посмотреть _вид на печати"
+msgstr "Посмотреть образе_ц печати"
 
 # gtk/gtkstock.c:315
 #: gtk/gtkstock.c:315
@@ -4150,7 +4150,7 @@ msgstr "_Да"
 # gtk/gtkstock.c:334
 #: gtk/gtkstock.c:334
 msgid "Zoom _100%"
-msgstr "Масштаб _100%"
+msgstr "Масштабировать до _100%"
 
 # gtk/gtkstock.c:335
 #: gtk/gtkstock.c:335
@@ -4160,12 +4160,12 @@ msgstr "Масштабировать до _заполнения"
 # gtk/gtkstock.c:336
 #: gtk/gtkstock.c:336
 msgid "Zoom _In"
-msgstr "Масштаб _+"
+msgstr "У_величить масштаб"
 
 # gtk/gtkstock.c:337
 #: gtk/gtkstock.c:337
 msgid "Zoom _Out"
-msgstr "Масштаб _-"
+msgstr "У_меньшить масштаб"
 
 # gtk/gtktable.c:156
 #: gtk/gtktable.c:156
@@ -4388,7 +4388,7 @@ msgstr ""
 # gtk/gtktexttag.c:494 gtk/gtktextview.c:624
 #: gtk/gtktexttag.c:494 gtk/gtktextview.c:624
 msgid "Tabs"
-msgstr "Ярлыки"
+msgstr "Табуляции"
 
 # gtk/gtktexttag.c:495 gtk/gtktextview.c:625
 #: gtk/gtktexttag.c:495 gtk/gtktextview.c:625
