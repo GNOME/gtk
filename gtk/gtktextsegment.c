@@ -102,6 +102,9 @@ gtk_text_line_segment_split (const GtkTextIter *iter)
 
   count = gtk_text_iter_get_line_index (iter);
 
+  if (gtk_debug_flags & GTK_DEBUG_TEXT)
+    gtk_text_iter_check (iter);
+  
   prev = NULL;
   seg = line->segments;
 

@@ -1,3 +1,39 @@
+2000-11-07  Havoc Pennington  <hp@redhat.com>
+
+	* gtk/gtktextmark.c (gtk_text_mark_is_visible): rename 
+	to gtk_text_mark_get_visible
+
+	* gtk/gtktextlayout.c (gtk_text_layout_move_iter_to_line_end): fix
+	bug that was generating an invalid iterator
+
+	* gtk/gtktextiter.c (gtk_text_iter_get_offset): move call to
+	ensure_char_offsets() in front of code placing the iter in an
+	invalid state.
+
+	* gtk/gtktextbuffer.c (gtk_text_buffer_paste_primary):
+	make override_location arg const
+	(paste): Replace the selection if we paste into the 
+	current selection
+
+	* gtk/gtkselection.h: Remove "GtkSelectioData"
+	(struct _GtkSelectionData): move the definition here.
+
+	* gtk/gtktextbuffer.c (gtk_text_buffer_update_primary_selection):
+	Export the GTK_TEXT_BUFFER_CONTENTS target for in-process copies
+
+	* gtk/gtktextiter.c (gtk_text_iter_get_tags): New function
+
+	* gtk/gtktextbuffer.c (gtk_text_buffer_insert_range): implement
+	(gtk_text_buffer_insert_range_interactive): implement
+	(gtk_text_buffer_get_tags): Remove, replaced by
+	gtk_text_iter_get_tags()
+
+	* gtk/gtktextiter.c (gtk_text_iter_forward_search): Add a search
+	limit parameter, to avoid infinite linear scan.
+	(gtk_text_iter_backward_search): Add search limit
+	(gtk_text_iter_forward_find_char): Add search limit
+	(gtk_text_iter_backward_find_char): Add search limit
+
 2000-11-07  Alexander Larsson  <alla@lysator.liu.se>
 
 	* gdk/linux-fb/gdkcolor-fb.c, gdk/linux-fb/gdkdnd-fb.c,

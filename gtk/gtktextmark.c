@@ -128,7 +128,7 @@ gtk_text_mark_finalize (GObject *obj)
 }
 
 /**
- * gtk_text_mark_is_visible:
+ * gtk_text_mark_get_visible:
  * @mark: a #GtkTextMark
  * 
  * Returns %TRUE if the mark is visible (i.e. a cursor is displayed
@@ -137,7 +137,7 @@ gtk_text_mark_finalize (GObject *obj)
  * Return value: %TRUE if visible
  **/
 gboolean
-gtk_text_mark_is_visible (GtkTextMark *mark)
+gtk_text_mark_get_visible (GtkTextMark *mark)
 {
   GtkTextLineSegment *seg;
 

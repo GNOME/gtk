@@ -36,9 +36,29 @@
 extern "C" {
 #endif /* __cplusplus */
 
-typedef struct _GtkSelectionData GtkSelectioData;
 typedef struct _GtkTargetList    GtkTargetList;
 typedef struct _GtkTargetEntry   GtkTargetEntry;
+
+/* The contents of a selection are returned in a GtkSelectionData
+ * structure. selection/target identify the request.  type specifies
+ * the type of the return; if length < 0, and the data should be
+ * ignored. This structure has object semantics - no fields should be
+ * modified directly, they should not be created directly, and
+ * pointers to them should not be stored beyond the duration of a
+ * callback. (If the last is changed, we'll need to add reference
+ * counting.) The time field gives the timestamp at which the data was
+ * sent.
+ */
+
+struct _GtkSelectionData
+{
+  GdkAtom selection;
+  GdkAtom target;
+  GdkAtom type;
+  gint	  format;
+  guchar *data;  
+  gint	  length;
+};
 
 struct _GtkTargetEntry {
   gchar *target;
@@ -125,8 +145,8 @@ gint gtk_selection_notify          (GtkWidget         *widget,
 				    GdkEventSelection *event);
 gint gtk_selection_property_notify (GtkWidget         *widget,
 				    GdkEventProperty  *event);
-GtkSelectioData *gtk_selection_data_copy (GtkSelectionData *data);
-void		 gtk_selection_data_free (GtkSelectionData *data);
+GtkSelectionData *gtk_selection_data_copy (GtkSelectionData *data);
+void		  gtk_selection_data_free (GtkSelectionData *data);
 
 
 

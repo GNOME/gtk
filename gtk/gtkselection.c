@@ -1720,7 +1720,7 @@ gtk_selection_default_handler (GtkWidget	*widget,
 }
 
 
-GtkSelectioData*
+GtkSelectionData*
 gtk_selection_data_copy (GtkSelectionData *selection_data)
 {
   GtkSelectionData *new_data;

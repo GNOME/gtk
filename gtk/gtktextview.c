@@ -2040,14 +2040,14 @@ emit_event_on_tags (GtkWidget   *widget,
 
   text_view = GTK_TEXT_VIEW (widget);
 
-  tags = gtk_text_buffer_get_tags (get_buffer (text_view), iter);
+  tags = gtk_text_iter_get_tags (iter);
 
   tmp = tags;
   while (tmp != NULL)
     {
       GtkTextTag *tag = tmp->data;
 
-      if (gtk_text_tag_event (tag, GTK_OBJECT (widget), event, iter))
+      if (gtk_text_tag_event (tag, G_OBJECT (widget), event, iter))
         {
           retval = TRUE;
           break;
@@ -2818,10 +2818,10 @@ find_whitepace_region (const GtkTextIter *center,
   *start = *center;
   *end = *center;
 
-  if (gtk_text_iter_backward_find_char (start, not_whitespace, NULL))
+  if (gtk_text_iter_backward_find_char (start, not_whitespace, NULL, NULL))
     gtk_text_iter_next_char (start); /* we want the first whitespace... */
   if (whitespace (gtk_text_iter_get_char (end), NULL))
-    gtk_text_iter_forward_find_char (end, not_whitespace, NULL);
+    gtk_text_iter_forward_find_char (end, not_whitespace, NULL, NULL);
 
   return !gtk_text_iter_equal (start, end);
 }

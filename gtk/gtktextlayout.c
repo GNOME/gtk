@@ -2235,7 +2235,7 @@ gtk_text_layout_move_iter_to_line_end (GtkTextLayout *layout,
         {
           gtk_text_btree_get_iter_at_line (_gtk_text_buffer_get_btree (layout->buffer),
                                            iter, line,
-                                           direction < 0 ? byte_offset : layout_line->length);
+                                           direction < 0 ? byte_offset : byte_offset + layout_line->length);
 
           /* FIXME: Move back one position to avoid going to next line
            */

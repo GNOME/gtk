@@ -119,6 +119,7 @@ gboolean gtk_text_iter_toggles_tag       (const GtkTextIter  *iter,
 
 gboolean gtk_text_iter_has_tag           (const GtkTextIter   *iter,
                                           GtkTextTag          *tag);
+GSList  *gtk_text_iter_get_tags          (const GtkTextIter   *iter);
 
 gboolean gtk_text_iter_editable          (const GtkTextIter   *iter,
                                           gboolean             default_setting);
@@ -170,8 +171,9 @@ gboolean gtk_text_iter_forward_to_newline (GtkTextIter *iter);
 
 
 /* returns TRUE if a toggle was found; NULL for the tag pointer
-   means "any tag toggle", otherwise the next toggle of the
-   specified tag is located. */
+ * means "any tag toggle", otherwise the next toggle of the
+ * specified tag is located.
+ */
 gboolean gtk_text_iter_forward_to_tag_toggle (GtkTextIter *iter,
                                               GtkTextTag  *tag);
 
@@ -180,27 +182,30 @@ gboolean gtk_text_iter_backward_to_tag_toggle (GtkTextIter *iter,
 
 typedef gboolean (* GtkTextCharPredicate) (gunichar ch, gpointer user_data);
 
-gboolean gtk_text_iter_forward_find_char      (GtkTextIter *iter,
-                                               GtkTextCharPredicate pred,
-                                               gpointer user_data);
-
-gboolean gtk_text_iter_backward_find_char     (GtkTextIter *iter,
-                                               GtkTextCharPredicate pred,
-                                               gpointer user_data);
+gboolean gtk_text_iter_forward_find_char  (GtkTextIter          *iter,
+                                           GtkTextCharPredicate  pred,
+                                           gpointer              user_data,
+                                           const GtkTextIter    *limit);
+gboolean gtk_text_iter_backward_find_char (GtkTextIter          *iter,
+                                           GtkTextCharPredicate  pred,
+                                           gpointer              user_data,
+                                           const GtkTextIter    *limit);
 
 gboolean gtk_text_iter_forward_search  (const GtkTextIter *iter,
                                         const gchar       *str,
                                         gboolean           visible_only,
                                         gboolean           slice,
                                         GtkTextIter       *match_start,
-                                        GtkTextIter       *match_end);
+                                        GtkTextIter       *match_end,
+                                        const GtkTextIter *limit);
+
 gboolean gtk_text_iter_backward_search (const GtkTextIter *iter,
                                         const gchar       *str,
                                         gboolean           visible_only,
                                         gboolean           slice,
                                         GtkTextIter       *match_start,
-                                        GtkTextIter       *match_end);
-
+                                        GtkTextIter       *match_end,
+                                        const GtkTextIter *limit);
 
 
 /*

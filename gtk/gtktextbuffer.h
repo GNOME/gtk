@@ -283,10 +283,6 @@ void gtk_text_buffer_get_iter_at_child_anchor (GtkTextBuffer      *buffer,
 /* There's no get_first_iter because you just get the iter for
    line or char 0 */
 
-GSList         *gtk_text_buffer_get_tags (GtkTextBuffer     *buffer,
-                                          const GtkTextIter *iter);
-
-
 /* Used to keep track of whether the buffer needs saving; anytime the
    buffer contents change, the modified flag is turned on. Whenever
    you save, turn it off. Tags and marks do not affect the modified
@@ -297,9 +293,9 @@ gboolean        gtk_text_buffer_modified                (GtkTextBuffer *buffer);
 void            gtk_text_buffer_set_modified            (GtkTextBuffer *buffer,
                                                          gboolean       setting);
 
-void            gtk_text_buffer_paste_primary           (GtkTextBuffer *buffer,
-                                                         GtkTextIter   *override_location,
-                                                         gboolean       default_editable);
+void            gtk_text_buffer_paste_primary           (GtkTextBuffer       *buffer,
+                                                         const GtkTextIter   *override_location,
+                                                         gboolean             default_editable);
 void            gtk_text_buffer_cut_clipboard           (GtkTextBuffer *buffer,
                                                          gboolean       default_editable);
 void            gtk_text_buffer_copy_clipboard          (GtkTextBuffer *buffer);

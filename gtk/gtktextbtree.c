@@ -2435,13 +2435,13 @@ ensure_not_off_end (GtkTextBTree *tree,
 }
 
 static GtkTextLineSegment*
-real_set_mark (GtkTextBTree *tree,
-               GtkTextMark *existing_mark,
-               const gchar *name,
-               gboolean left_gravity,
+real_set_mark (GtkTextBTree      *tree,
+               GtkTextMark       *existing_mark,
+               const gchar       *name,
+               gboolean           left_gravity,
                const GtkTextIter *where,
-               gboolean should_exist,
-               gboolean redraw_selections)
+               gboolean           should_exist,
+               gboolean           redraw_selections)
 {
   GtkTextLineSegment *mark;
   GtkTextIter iter;
@@ -2465,10 +2465,14 @@ real_set_mark (GtkTextBTree *tree,
     }
 
   /* OK if !should_exist and it does already exist, in that case
-     we just move it. */
-
+   * we just move it.
+   */
+  
   iter = *where;
 
+  if (gtk_debug_flags & GTK_DEBUG_TEXT)
+    gtk_text_iter_check (&iter);
+  
   if (mark != NULL)
     {
       if (redraw_selections &&
@@ -2519,6 +2523,9 @@ real_set_mark (GtkTextBTree *tree,
                              mark);
     }
 
+  if (gtk_debug_flags & GTK_DEBUG_TEXT)
+    gtk_text_iter_check (&iter);
+  
   /* Link mark into new location */
   gtk_text_btree_link_segment (mark, &iter);
 
@@ -2531,6 +2538,12 @@ real_set_mark (GtkTextBTree *tree,
 
   redisplay_mark_if_visible (mark);
 
+  if (gtk_debug_flags & GTK_DEBUG_TEXT)
+    gtk_text_iter_check (&iter);
+
+  if (gtk_debug_flags & GTK_DEBUG_TEXT)
+    gtk_text_btree_check (tree);
+  
   return mark;
 }
 
@@ -3716,7 +3729,8 @@ gtk_text_line_byte_to_char_offsets (GtkTextLine *line,
   g_assert (seg->char_count > 0); /* indexable. */
 
   /* offset is now the number of bytes into the current segment we
-     want to go. Count chars into the current segment. */
+   * want to go. Count chars into the current segment.
+   */
 
   if (seg->type == &gtk_text_char_type)
     {

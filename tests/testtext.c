@@ -1351,7 +1351,8 @@ buffer_search (Buffer     *buffer,
       if (forward)
         {
           while (gtk_text_iter_forward_search (&iter, str, TRUE, FALSE,
-                                               &match_start, &match_end))
+                                               &match_start, &match_end,
+                                               NULL))
             {
               ++i;
               gtk_text_buffer_apply_tag (buffer->buffer, buffer->found_text_tag,
@@ -1363,7 +1364,8 @@ buffer_search (Buffer     *buffer,
       else
         {
           while (gtk_text_iter_backward_search (&iter, str, TRUE, FALSE,
-                                                &match_start, &match_end))
+                                                &match_start, &match_end,
+                                                NULL))
             {
               ++i;
               gtk_text_buffer_apply_tag (buffer->buffer, buffer->found_text_tag,

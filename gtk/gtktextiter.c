@@ -580,11 +580,14 @@ gtk_text_iter_get_offset (const GtkTextIter *iter)
   if (real == NULL)
     return 0;
 
+  check_invariants (iter);
+  
   if (real->cached_char_index < 0)
     {
+      ensure_char_offsets (real);
+      
       real->cached_char_index =
         gtk_text_line_char_index (real->line);
-      ensure_char_offsets (real);
       real->cached_char_index += real->line_char_offset;
     }
 
@@ -722,7 +725,7 @@ gtk_text_iter_get_char (const GtkTextIter *iter)
   else if (real->segment->type == &gtk_text_char_type)
     {
       ensure_byte_offsets (real);
-
+      
       return g_utf8_get_char (real->segment->body.chars +
                               real->segment_byte_offset);
     }
@@ -743,7 +746,9 @@ gtk_text_iter_get_char (const GtkTextIter *iter)
  * character 0xFFFD for iterable non-character elements in the buffer,
  * such as images.  Because images are encoded in the slice, byte and
  * character offsets in the returned array will correspond to byte
- * offsets in the text buffer.
+ * offsets in the text buffer. Note that 0xFFFD can occur in normal
+ * text as well, so it is not a reliable indicator that a pixbuf or
+ * widget is in the buffer.
  *
  * Return value: slice of text from the buffer
  **/
@@ -1167,6 +1172,56 @@ gtk_text_iter_has_tag           (const GtkTextIter   *iter,
       return gtk_text_line_char_has_tag (real->line, real->tree,
                                          real->line_char_offset, tag);
     }
+}
+
+/**
+ * gtk_text_iter_get_tags:
+ * @iter: a #GtkTextIter
+ * 
+ * Returns a list of tags that apply to @iter, in ascending order of
+ * priority (highest-priority tags are last). The #GtkTextTag in the
+ * list don't have a reference added, but you have to free the list
+ * itself.
+ * 
+ * Return value: list of #GtkTextTag
+ **/
+GSList*
+gtk_text_iter_get_tags (const GtkTextIter *iter)
+{
+  GtkTextTag** tags;
+  gint tag_count = 0;
+  gint i;
+  GSList *retval;
+  
+  g_return_val_if_fail (iter != NULL, NULL);
+  
+  /* Get the tags at this spot */
+  tags = gtk_text_btree_get_tags (iter, &tag_count);
+
+  /* No tags, use default style */
+  if (tags == NULL || tag_count == 0)
+    {
+      if (tags)
+        g_free (tags);
+
+      return NULL;
+    }
+
+  /* Sort tags in ascending order of priority */
+  gtk_text_tag_array_sort (tags, tag_count);
+
+  retval = NULL;
+  i = 0;
+  while (i < tag_count)
+    {
+      retval = g_slist_prepend (retval, tags[i]);
+      ++i;
+    }
+  
+  g_free (tags);
+
+  /* Return tags in ascending order of priority */
+  return g_slist_reverse (retval);
 }
 
 /**
@@ -2654,7 +2709,9 @@ gtk_text_iter_forward_to_newline (GtkTextIter *iter)
  * #GtkTextTag @tag, or to the next toggle of any tag if
  * @tag is NULL. If no matching tag toggles are found,
  * returns FALSE, otherwise TRUE. Does not return toggles
- * located at @iter, only toggles after @iter.
+ * located at @iter, only toggles after @iter. Sets @iter to
+ * the location of the toggle, or to the end of the buffer
+ * if no toggle is found.
  *
  * Return value: whether we found a tag toggle after @iter
  **/
@@ -2734,7 +2791,9 @@ gtk_text_iter_forward_to_tag_toggle (GtkTextIter *iter,
  * #GtkTextTag @tag, or to the next toggle of any tag if
  * @tag is NULL. If no matching tag toggles are found,
  * returns FALSE, otherwise TRUE. Does not return toggles
- * located at @iter, only toggles before @iter.
+ * located at @iter, only toggles before @iter. Sets @iter
+ * to the location of the toggle, or the start of the buffer
+ * if no toggle is found.
  *
  * Return value: whether we found a tag toggle before @iter
  **/
@@ -2836,16 +2895,37 @@ matches_pred (GtkTextIter *iter,
   return (*pred) (ch, user_data);
 }
 
+/**
+ * gtk_text_iter_forward_find_char:
+ * @iter: a #GtkTextIter
+ * @pred: a function to be called on each character
+ * @user_data: user data for @pred
+ * @limit: search limit, or %NULL for none 
+ * 
+ * Advances @iter, calling @pred on each character. If
+ * @pred returns %TRUE, returns %TRUE and stops scanning.
+ * If @pred never returns %TRUE, @iter is set to @limit if
+ * @limit is non-%NULL, otherwise to the end iterator.
+ * 
+ * Return value: whether a match was found
+ **/
 gboolean
-gtk_text_iter_forward_find_char (GtkTextIter *iter,
+gtk_text_iter_forward_find_char (GtkTextIter         *iter,
                                  GtkTextCharPredicate pred,
-                                 gpointer user_data)
+                                 gpointer             user_data,
+                                 const GtkTextIter   *limit)
 {
   g_return_val_if_fail (iter != NULL, FALSE);
   g_return_val_if_fail (pred != NULL, FALSE);
 
-  while (gtk_text_iter_next_char (iter))
-    {
+  if (limit &&
+      gtk_text_iter_compare (iter, limit) >= 0)
+    return FALSE;
+  
+  while ((limit == NULL ||
+          !gtk_text_iter_equal (limit, iter)) &&
+         gtk_text_iter_next_char (iter))
+    {      
       if (matches_pred (iter, pred, user_data))
         return TRUE;
     }
@@ -2854,14 +2934,21 @@ gtk_text_iter_forward_find_char (GtkTextIter *iter,
 }
 
 gboolean
-gtk_text_iter_backward_find_char (GtkTextIter *iter,
+gtk_text_iter_backward_find_char (GtkTextIter         *iter,
                                   GtkTextCharPredicate pred,
-                                  gpointer user_data)
+                                  gpointer             user_data,
+                                  const GtkTextIter   *limit)
 {
   g_return_val_if_fail (iter != NULL, FALSE);
   g_return_val_if_fail (pred != NULL, FALSE);
 
-  while (gtk_text_iter_prev_char (iter))
+  if (limit &&
+      gtk_text_iter_compare (iter, limit) <= 0)
+    return FALSE;
+  
+  while ((limit == NULL ||
+          !gtk_text_iter_equal (limit, iter)) &&
+         gtk_text_iter_prev_char (iter))
     {
       if (matches_pred (iter, pred, user_data))
         return TRUE;
@@ -3060,13 +3147,28 @@ strbreakup (const char *string,
   return str_array;
 }
 
+/**
+ * gtk_text_iter_forward_search:
+ * @iter: start of search
+ * @str: a search string
+ * @visible_only: if %TRUE, search only visible text
+ * @slice: if %TRUE, @str contains 0xFFFD when we want to match widgets, pixbufs
+ * @match_start: return location for start of match, or %NULL
+ * @match_end: return location for end of match, or %NULL
+ * @limit: bound for the search, or %NULL for the end of the buffer
+ * 
+ * 
+ * 
+ * Return value: whether a match was found
+ **/
 gboolean
 gtk_text_iter_forward_search (const GtkTextIter *iter,
                               const gchar       *str,
                               gboolean           visible_only,
                               gboolean           slice,
                               GtkTextIter       *match_start,
-                              GtkTextIter       *match_end)
+                              GtkTextIter       *match_end,
+                              const GtkTextIter *limit)
 {
   gchar **lines = NULL;
   GtkTextIter match;
@@ -3076,12 +3178,21 @@ gtk_text_iter_forward_search (const GtkTextIter *iter,
   g_return_val_if_fail (iter != NULL, FALSE);
   g_return_val_if_fail (str != NULL, FALSE);
 
+  if (limit &&
+      gtk_text_iter_compare (iter, limit) >= 0)
+    return FALSE;
+  
   if (*str == '\0')
     {
       /* If we can move one char, return the empty string there */
       match = *iter;
+      
       if (gtk_text_iter_next_char (&match))
         {
+          if (limit &&
+              gtk_text_iter_equal (&match, limit))
+            return FALSE;
+          
           if (match_start)
             *match_start = match;
           if (match_end)
@@ -3106,17 +3217,26 @@ gtk_text_iter_forward_search (const GtkTextIter *iter,
        */
       GtkTextIter end;
 
+      if (limit &&
+          gtk_text_iter_compare (&search, limit) >= 0)
+        break;
+      
       if (lines_match (&search, (const gchar**)lines,
                        visible_only, slice, &match, &end))
         {
-          retval = TRUE;
-
-          if (match_start)
-            *match_start = match;
-
-          if (match_end)
-            *match_end = end;
-
+          if (limit == NULL ||
+              (limit &&
+               gtk_text_iter_compare (&end, limit) < 0))
+            {
+              retval = TRUE;
+              
+              if (match_start)
+                *match_start = match;
+              
+              if (match_end)
+                *match_end = end;
+            }
+          
           break;
         }
     }
@@ -3345,13 +3465,28 @@ my_strrstr (const gchar *haystack,
   return NULL;
 }
 
+/**
+ * gtk_text_iter_backward_search:
+ * @iter: a #GtkTextIter where the search begins
+ * @str: search string
+ * @visible_only: if %TRUE search only visible text
+ * @slice: if %TRUE the search string contains 0xFFFD to match pixbufs, widgets
+ * @match_start: return location for start of match, or %NULL
+ * @match_end: return location for end of match, or %NULL
+ * @limit: location of last possible @match_start, or %NULL for start of buffer
+ * 
+ * 
+ * 
+ * Return value: whether a match was found
+ **/
 gboolean
 gtk_text_iter_backward_search (const GtkTextIter *iter,
                                const gchar       *str,
                                gboolean           visible_only,
                                gboolean           slice,
                                GtkTextIter       *match_start,
-                               GtkTextIter       *match_end)
+                               GtkTextIter       *match_end,
+                               const GtkTextIter *limit)
 {
   gchar **lines = NULL;
   gchar **l;
@@ -3362,11 +3497,18 @@ gtk_text_iter_backward_search (const GtkTextIter *iter,
   g_return_val_if_fail (iter != NULL, FALSE);
   g_return_val_if_fail (str != NULL, FALSE);
 
+  if (limit &&
+      gtk_text_iter_compare (limit, iter) > 0)
+    return FALSE;
+  
   if (*str == '\0')
     {
       /* If we can move one char, return the empty string there */
       GtkTextIter match = *iter;
 
+      if (limit && gtk_text_iter_equal (limit, &match))
+        return FALSE;
+      
       if (gtk_text_iter_prev_char (&match))
         {
           if (match_start)
@@ -3404,6 +3546,13 @@ gtk_text_iter_backward_search (const GtkTextIter *iter,
     {
       gchar *first_line_match;
 
+      if (limit &&
+          gtk_text_iter_compare (limit, &win.first_line_end) > 0)
+        {
+          /* We're now before the search limit, abort. */
+          goto out;
+        }
+      
       /* If there are multiple lines, the first line will
        * end in '\n', so this will only match at the
        * end of the first line, which is correct.
@@ -3416,17 +3565,22 @@ gtk_text_iter_backward_search (const GtkTextIter *iter,
           /* Match! */
           gint offset;
           GtkTextIter next;
-
+          GtkTextIter start_tmp;
+          
           /* Offset to start of search string */
           offset = g_utf8_strlen (*win.lines, first_line_match - *win.lines);
 
           next = win.first_line_start;
+          start_tmp = next;
+          forward_chars_with_skipping (&start_tmp, offset,
+                                       visible_only, !slice);
+
+          if (limit &&
+              gtk_text_iter_compare (limit, &start_tmp) > 0)
+            goto out; /* match was bogus */
+          
           if (match_start)
-            {
-              *match_start = next;
-              forward_chars_with_skipping (match_start, offset,
-                                           visible_only, !slice);
-            }
+            *match_start = start_tmp;
 
           /* Go to end of search string */
           l = lines;
@@ -3451,7 +3605,7 @@ gtk_text_iter_backward_search (const GtkTextIter *iter,
  out:
   lines_window_free (&win);
   g_strfreev (lines);
-
+  
   return retval;
 }
 
@@ -3655,7 +3809,7 @@ void
 gtk_text_btree_get_iter_at_line      (GtkTextBTree   *tree,
                                       GtkTextIter    *iter,
                                       GtkTextLine    *line,
-                                      gint             byte_offset)
+                                      gint            byte_offset)
 {
   g_return_if_fail (iter != NULL);
   g_return_if_fail (tree != NULL);
@@ -3822,13 +3976,13 @@ gtk_text_iter_check (const GtkTextIter *iter)
 {
   const GtkTextRealIter *real = (const GtkTextRealIter*)iter;
   gint line_char_offset, line_byte_offset, seg_char_offset, seg_byte_offset;
-  GtkTextLineSegment *byte_segment;
-  GtkTextLineSegment *byte_any_segment;
-  GtkTextLineSegment *char_segment;
-  GtkTextLineSegment *char_any_segment;
+  GtkTextLineSegment *byte_segment = NULL;
+  GtkTextLineSegment *byte_any_segment = NULL;
+  GtkTextLineSegment *char_segment = NULL;
+  GtkTextLineSegment *char_any_segment = NULL;
   gboolean segments_updated;
 
-  /* We are going to check our class invariants for the Iter class. */
+  /* This function checks our class invariants for the Iter class. */
 
   g_assert (sizeof (GtkTextIter) == sizeof (GtkTextRealIter));
 
@@ -3891,6 +4045,15 @@ gtk_text_iter_check (const GtkTextIter *iter)
 
           if (seg_byte_offset != real->segment_byte_offset)
             g_error ("wrong segment byte offset was stored in iterator");
+
+          if (byte_segment->type == &gtk_text_char_type)
+            {
+              const gchar *p;
+              p = byte_segment->body.chars + seg_byte_offset;
+              
+              if (!gtk_text_byte_begins_utf8_char (p))
+                g_error ("broken iterator byte index pointed into the middle of a character");
+            }
         }
     }
 
@@ -3904,7 +4067,7 @@ gtk_text_iter_check (const GtkTextIter *iter)
         g_error ("wrong char offset was stored in iterator");
 
       if (segments_updated)
-        {
+        {          
           if (real->segment != char_segment)
             g_error ("wrong segment was stored in iterator");
 
@@ -3913,6 +4076,17 @@ gtk_text_iter_check (const GtkTextIter *iter)
 
           if (seg_char_offset != real->segment_char_offset)
             g_error ("wrong segment char offset was stored in iterator");
+
+          if (char_segment->type == &gtk_text_char_type)
+            {
+              const gchar *p;
+              p = g_utf8_offset_to_pointer (char_segment->body.chars,
+                                            seg_char_offset);
+
+              /* hmm, not likely to happen eh */
+              if (!gtk_text_byte_begins_utf8_char (p))
+                g_error ("broken iterator char offset pointed into the middle of a character");
+            }
         }
     }
 
@@ -3945,6 +4119,9 @@ gtk_text_iter_check (const GtkTextIter *iter)
 
           if (char_offset != seg_char_offset)
             g_error ("char offset did not correspond to byte offset");
+
+          if (!gtk_text_byte_begins_utf8_char (char_segment->body.chars + seg_byte_offset))
+            g_error ("byte index for iterator does not index the start of a character");
         }
     }
 

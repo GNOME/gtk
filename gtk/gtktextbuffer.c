@@ -43,6 +43,7 @@ struct _ClipboardRequest
   gboolean interactive;
   gboolean default_editable;
   gboolean is_clipboard;
+  gboolean replace_selection;
 };
 
 enum {
@@ -66,7 +67,8 @@ enum {
   TARGET_STRING,
   TARGET_TEXT,
   TARGET_COMPOUND_TEXT,
-  TARGET_UTF8_STRING
+  TARGET_UTF8_STRING,
+  TARGET_TEXT_BUFFER_CONTENTS
 };
 
 static void gtk_text_buffer_init       (GtkTextBuffer      *tkxt_buffer);
@@ -494,6 +496,10 @@ gtk_text_buffer_insert_at_cursor (GtkTextBuffer *buffer,
  * want to prevent insertions at ineditable locations if the insertion
  * results from a user action (is interactive).
  *
+ * @default_editable indicates the editability of text that doesn't
+ * have a tag affecting editability applied to it. Typically the
+ * result of gtk_text_view_get_editable() is appropriate here.
+ *
  * Return value: whether text was actually inserted
  **/
 gboolean
@@ -525,6 +531,10 @@ gtk_text_buffer_insert_interactive (GtkTextBuffer *buffer,
  * Calls gtk_text_buffer_insert_interactive () at the cursor
  * position.
  *
+ * @default_editable indicates the editability of text that doesn't
+ * have a tag affecting editability applied to it. Typically the
+ * result of gtk_text_view_get_editable() is appropriate here.
+ * 
  * Return value: whether text was actually inserted
  **/
 gboolean
@@ -546,6 +556,301 @@ gtk_text_buffer_insert_interactive_at_cursor (GtkTextBuffer *buffer,
                                              default_editable);
 }
 
+static gboolean
+possibly_not_text (gunichar ch,
+                   gpointer user_data)
+{
+  return ch == 0xFFFD;
+}
+
+static void
+insert_text_range (GtkTextBuffer     *buffer,
+                   GtkTextIter       *iter,
+                   const GtkTextIter *orig_start,
+                   const GtkTextIter *orig_end,
+                   gboolean           interactive)
+{
+  gchar *text;
+
+  text = gtk_text_iter_get_text (orig_start, orig_end);
+
+  gtk_text_buffer_emit_insert (buffer, iter, text, -1, interactive);
+
+  g_free (text);
+}
+
+typedef struct _Range Range;
+struct _Range
+{
+  GtkTextBuffer *buffer;
+  GtkTextMark *start_mark;
+  GtkTextMark *end_mark;
+  GtkTextMark *whole_end_mark;
+  GtkTextIter *range_start;
+  GtkTextIter *range_end;
+  GtkTextIter *whole_end;
+};
+
+static Range*
+save_range (GtkTextIter *range_start,
+            GtkTextIter *range_end,
+            GtkTextIter *whole_end)
+{
+  Range *r;
+
+  r = g_new (Range, 1);
+
+  r->buffer = gtk_text_iter_get_buffer (range_start);
+  g_object_ref (G_OBJECT (r->buffer));
+  
+  r->start_mark = 
+    gtk_text_buffer_create_mark (gtk_text_iter_get_buffer (range_start),
+                                 NULL,
+                                 range_start,
+                                 TRUE);
+  r->end_mark = 
+    gtk_text_buffer_create_mark (gtk_text_iter_get_buffer (range_start),
+                                 NULL,
+                                 range_end,
+                                 FALSE);
+
+  r->whole_end_mark = 
+    gtk_text_buffer_create_mark (gtk_text_iter_get_buffer (range_start),
+                                 NULL,
+                                 whole_end,
+                                 FALSE);
+
+  r->range_start = range_start;
+  r->range_end = range_end;
+  r->whole_end = whole_end;
+
+  return r;
+}
+
+static void
+restore_range (Range *r)
+{
+  gtk_text_buffer_get_iter_at_mark (r->buffer,
+                                    r->range_start,
+                                    r->start_mark);
+      
+  gtk_text_buffer_get_iter_at_mark (r->buffer,
+                                    r->range_end,
+                                    r->end_mark);
+      
+  gtk_text_buffer_get_iter_at_mark (r->buffer,
+                                    r->whole_end,
+                                    r->whole_end_mark);
+      
+  gtk_text_buffer_delete_mark (r->buffer, r->start_mark);
+  gtk_text_buffer_delete_mark (r->buffer, r->end_mark);
+  gtk_text_buffer_delete_mark (r->buffer, r->whole_end_mark);
+
+  g_object_unref (G_OBJECT (r->buffer));
+  g_free (r); 
+}
+
+static void
+insert_range_untagged (GtkTextBuffer     *buffer,
+                       GtkTextIter       *iter,
+                       const GtkTextIter *orig_start,
+                       const GtkTextIter *orig_end,
+                       gboolean           interactive)
+{
+  GtkTextIter range_start;
+  GtkTextIter range_end;
+  GtkTextIter start, end;
+  GtkTextBuffer *src_buffer;
+  Range *r;
+  
+  if (gtk_text_iter_equal (orig_start, orig_end))
+    return;
+
+  start = *orig_start;
+  end = *orig_end;
+  
+  src_buffer = gtk_text_iter_get_buffer (&start);
+  
+  range_start = start;
+  range_end = start;
+  
+  while (TRUE)
+    {
+      if (gtk_text_iter_equal (&range_start, &range_end))
+        {
+          /* Figure out how to move forward */
+
+          g_assert (gtk_text_iter_compare (&range_end, &end) <= 0);
+          
+          if (gtk_text_iter_equal (&range_end, &end))
+            {
+              /* nothing left to do */
+              break;
+            }
+          else if (gtk_text_iter_get_char (&range_end) == 0xFFFD)
+            {
+              GdkPixbuf *pixbuf = NULL;
+              GtkTextChildAnchor *anchor = NULL;
+              pixbuf = gtk_text_iter_get_pixbuf (&range_end);
+              anchor = gtk_text_iter_get_child_anchor (&range_end);
+
+              if (pixbuf)
+                {
+                  r = save_range (&range_start,
+                                  &range_end,
+                                  &end);
+
+                  gtk_text_buffer_insert_pixbuf (buffer,
+                                                 iter,
+                                                 pixbuf);
+
+                  restore_range (r);
+                  r = NULL;
+                  
+                  gtk_text_iter_next_char (&range_end);
+                  
+                  range_start = range_end;
+                }
+              else if (anchor)
+                {
+                  /* Just skip anchors */
+
+                  gtk_text_iter_next_char (&range_end);
+                  range_start = range_end;
+                }
+              else
+                {
+                  /* The 0xFFFD was in a text segment, so
+                   * keep going. 
+                   */
+                  gtk_text_iter_forward_find_char (&range_end,
+                                                   possibly_not_text, NULL,
+                                                   &end);
+                  
+                  g_assert (gtk_text_iter_compare (&range_end, &end) <= 0);
+                }
+            }
+          else
+            {
+              /* Text segment starts here, so forward search to
+               * find its possible endpoint
+               */
+              gtk_text_iter_forward_find_char (&range_end,
+                                               possibly_not_text, NULL,
+                                               &end);
+              
+              g_assert (gtk_text_iter_compare (&range_end, &end) <= 0);
+            }
+        }
+      else
+        {
+          r = save_range (&range_start,
+                          &range_end,
+                          &end);
+          
+          insert_text_range (buffer,
+                             iter,
+                             &range_start,
+                             &range_end,
+                             interactive);
+
+          restore_range (r);
+          r = NULL;
+          
+          range_start = range_end;
+        }
+    }
+}
+
+static void
+gtk_text_buffer_real_insert_range (GtkTextBuffer     *buffer,
+                                   GtkTextIter       *iter,
+                                   const GtkTextIter *orig_start,
+                                   const GtkTextIter *orig_end,
+                                   gboolean           interactive)
+{
+  /* Find each range of uniformly-tagged text, insert it,
+   * then apply the tags.
+   */
+  GtkTextIter start = *orig_start;
+  GtkTextIter end = *orig_end;
+  GtkTextIter range_start;
+  GtkTextIter range_end;
+  GtkTextBuffer *src_buffer;
+  Range *r;
+  
+  if (gtk_text_iter_equal (orig_start, orig_end))
+    return;
+
+  src_buffer = gtk_text_iter_get_buffer (orig_start);
+  
+  gtk_text_iter_reorder (&start, &end);
+
+  range_start = start;
+  range_end = start;
+
+  while (TRUE)
+    {
+      gint start_offset;
+      GtkTextIter start_iter;
+      GSList *tags;
+      GSList *tmp_list;
+
+      gtk_text_iter_spew (&range_start, "range_start");
+      gtk_text_iter_spew (&range_end, "range_end");
+      gtk_text_iter_spew (&end, "end");
+      
+      if (gtk_text_iter_equal (&range_start, &end))
+        break; /* All done */
+
+      g_assert (gtk_text_iter_compare (&range_start, &end) < 0);
+      
+      gtk_text_iter_forward_to_tag_toggle (&range_end, NULL);
+
+      g_assert (!gtk_text_iter_equal (&range_start, &range_end));
+
+      /* Clamp to the end iterator */
+      if (gtk_text_iter_compare (&range_end, &end) > 0)
+        range_end = end;
+      
+      /* We have a range with unique tags; insert it, and
+       * apply all tags.
+       */
+      start_offset = gtk_text_iter_get_offset (iter);
+
+      r = save_range (&range_start, &range_end, &end);
+
+      printf ("Source range is %d to %d\n",
+              gtk_text_iter_get_offset (&range_start),
+              gtk_text_iter_get_offset (&range_end));
+      
+      insert_range_untagged (buffer, iter, &range_start, &range_end, interactive);
+
+      restore_range (r);
+      r = NULL;
+      
+      gtk_text_buffer_get_iter_at_offset (buffer, &start_iter, start_offset);
+
+      printf ("Dest range is %d to %d\n",
+              gtk_text_iter_get_offset (&start_iter),
+              gtk_text_iter_get_offset (iter));
+      
+      tags = gtk_text_iter_get_tags (&range_start);
+      tmp_list = tags;
+      while (tmp_list != NULL)
+        {
+          gtk_text_buffer_apply_tag (buffer,
+                                     tmp_list->data,
+                                     &start_iter,
+                                     iter);
+          
+          tmp_list = g_slist_next (tmp_list);
+        }
+      g_slist_free (tags);
+
+      range_start = range_end;
+    }
+}
 
 /**
  * gtk_text_buffer_insert_range:
@@ -576,11 +881,27 @@ gtk_text_buffer_insert_range (GtkTextBuffer     *buffer,
   g_return_if_fail (gtk_text_iter_get_buffer (start) !=
                     gtk_text_iter_get_buffer (end));
   g_return_if_fail (gtk_text_iter_get_buffer (start)->tag_table !=
-                    buffer->tag_table);
+                    buffer->tag_table);  
 
-  /* FIXME */
+  gtk_text_buffer_real_insert_range (buffer, iter, start, end, FALSE);
 }
 
+/**
+ * gtk_text_buffer_insert_range_interactive:
+ * @buffer: a #GtkTextBuffer
+ * @iter: a position in @buffer
+ * @start: a position in a #GtkTextBuffer
+ * @end: another position in the same buffer as @start
+ * @default_editable: default editability of the buffer
+ *
+ * Same as gtk_text_buffer_insert_range(), but does nothing if the
+ * insertion point isn't editable. The @default_editable parameter
+ * indicates whether the text is editable at @iter if no tags
+ * enclosing @iter affect editability. Typically the result of
+ * gtk_text_view_get_editable() is appropriate here.
+ *
+ * Returns: whether an insertion was possible at @iter
+ **/
 gboolean
 gtk_text_buffer_insert_range_interactive (GtkTextBuffer     *buffer,
                                           GtkTextIter       *iter,
@@ -598,9 +919,13 @@ gtk_text_buffer_insert_range_interactive (GtkTextBuffer     *buffer,
                         buffer->tag_table, FALSE);
 
 
-  /* FIXME */
-
-  return FALSE;
+  if (gtk_text_iter_editable (iter, default_editable))
+    {
+      gtk_text_buffer_real_insert_range (buffer, iter, start, end, TRUE);
+      return TRUE;
+    }
+  else
+    return FALSE;
 }
 
 /**
@@ -981,7 +1306,9 @@ gtk_text_buffer_get_text (GtkTextBuffer      *buffer,
  * embedded images, so byte and character indexes into
  * the returned string <emphasis>do</emphasis> correspond to byte
  * and character indexes into the buffer. Contrast with
- * gtk_text_buffer_get_text ().
+ * gtk_text_buffer_get_text (). Note that 0xFFFD can occur in normal
+ * text as well, so it is not a reliable indicator that a pixbuf or
+ * widget is in the buffer.
  *
  * Return value: an allocated UTF-8 string
  **/
@@ -1707,38 +2034,6 @@ gtk_text_buffer_get_char_count (GtkTextBuffer *buffer)
   return gtk_text_btree_char_count (get_btree (buffer));
 }
 
-GSList*
-gtk_text_buffer_get_tags               (GtkTextBuffer      *buffer,
-                                        const GtkTextIter  *iter)
-{
-  GSList *retval = NULL;
-  GtkTextTag** tags;
-  gint count = 0;
-
-  tags = gtk_text_btree_get_tags (iter, &count);
-
-  if (count > 0)
-    {
-      gint i;
-
-      gtk_text_tag_array_sort (tags, count);
-
-      i = 0;
-      while (i < count)
-        {
-          retval = g_slist_prepend (retval, tags[i]);
-          ++i;
-        }
-
-      retval = g_slist_reverse (retval);
-    }
-
-  if (tags)
-    g_free (tags);
-
-  return retval;
-}
-
 /* Called when we lose the primary selection.
  */
 static void
@@ -1771,93 +2066,174 @@ clipboard_get_cb (GtkClipboard     *clipboard,
                   gpointer          data)
 {
   GtkTextBuffer *buffer = GTK_TEXT_BUFFER (data);
-  gchar *str;
   GtkTextIter start, end;
 
   if (gtk_text_buffer_get_selection_bounds (buffer, &start, &end))
     {
-      /* Extract the selected text */
-      str = gtk_text_iter_get_visible_text (&start, &end);
-      gtk_selection_data_set_text (selection_data, str);
-      g_free (str);
+      if (selection_data->target ==
+          gdk_atom_intern ("GTK_TEXT_BUFFER_CONTENTS", FALSE))
+        {
+          /* Provide the address of the buffer; this will only be
+           * used within-process
+           */
+          gtk_selection_data_set (selection_data,
+                                  gdk_atom_intern ("GTK_TEXT_BUFFER_CONTENTS", FALSE),
+                                  8, /* bytes */
+                                  (void*)&buffer,
+                                  sizeof (buffer));
+        }
+      else
+        {
+          gchar *str;
+          
+          str = gtk_text_iter_get_visible_text (&start, &end);
+          gtk_selection_data_set_text (selection_data, str);
+          g_free (str);
+        }
     }
 }
 
-/* Called when we request a paste and receive the data
+static void
+get_paste_point (GtkTextBuffer *buffer,
+                 GtkTextIter   *iter,
+                 gboolean       clear_afterward)
+{
+  GtkTextIter insert_point;
+  GtkTextMark *paste_point_override;
+
+  paste_point_override = gtk_text_buffer_get_mark (buffer,
+                                                   "gtk_paste_point_override");
+
+  if (paste_point_override != NULL)
+    {
+      gtk_text_buffer_get_iter_at_mark (buffer, &insert_point,
+                                        paste_point_override);
+      if (clear_afterward)
+        gtk_text_buffer_delete_mark (buffer,
+                                     gtk_text_buffer_get_mark (buffer,
+                                                               "gtk_paste_point_override"));
+    }
+  else
+    {
+      gtk_text_buffer_get_iter_at_mark (buffer, &insert_point,
+                                        gtk_text_buffer_get_mark (buffer,
+                                                                  "insert"));
+    }
+
+  *iter = insert_point;
+}
+
+static void
+pre_paste_prep (ClipboardRequest *request_data,
+                GtkTextIter      *insert_point)
+{
+  GtkTextBuffer *buffer = request_data->buffer;
+
+  if (request_data->replace_selection)
+    {
+      GtkTextIter start, end;
+      
+      if (gtk_text_buffer_get_selection_bounds (buffer, &start, &end))
+        {
+          if (request_data->interactive)
+            gtk_text_buffer_delete_interactive (buffer,
+                                                &start,
+                                                &end,
+                                                request_data->default_editable);
+          else
+            gtk_text_buffer_delete (buffer, &start, &end);
+        }
+    }
+      
+  get_paste_point (buffer, insert_point, TRUE);
+}
+
+/* Called when we request a paste and receive the text data
  */
 static void
-clipboard_received (GtkClipboard *clipboard,
-                    const gchar  *str,
-                    gpointer      data)
+clipboard_text_received (GtkClipboard *clipboard,
+                         const gchar  *str,
+                         gpointer      data)
 {
   ClipboardRequest *request_data = data;
   GtkTextBuffer *buffer = request_data->buffer;
 
   if (str)
     {
-      gboolean reselect;
       GtkTextIter insert_point;
-      GtkTextMark *paste_point_override;
 
-      paste_point_override = gtk_text_buffer_get_mark (buffer,
-                                                       "gtk_paste_point_override");
-
-      if (paste_point_override != NULL)
-        {
-          gtk_text_buffer_get_iter_at_mark (buffer, &insert_point,
-                                            paste_point_override);
-          gtk_text_buffer_delete_mark (buffer,
-                                       gtk_text_buffer_get_mark (buffer,
-                                                                 "gtk_paste_point_override"));
-        }
-      else
-        {
-          gtk_text_buffer_get_iter_at_mark (buffer, &insert_point,
-                                            gtk_text_buffer_get_mark (buffer,
-                                                                      "insert"));
-        }
-
-      reselect = FALSE;
-
-      /* FIXME ALL OF THIS - I think that the "best method" is that when pasting
-       * with the cursor inside the selection area, you replace the selection
-       * with the new text, otherwise, you simply insert the new text at
-       * the point where the click occured, unselecting any selected text.
-       *
-       * This probably is best implemented as a "replace_selection" flag in
-       * ClipboardRequest.
-       */
-#if 0
-      if ((TRUE/* Text is selected FIXME */) &&
-          (!buffer->have_selection || request_data->is_clipboard))
-        {
-          reselect = TRUE;
-
-          if (buffer->have_selection)
-            {
-              /* FIXME Delete currently-selected chars but don't give up X
-                 selection since we'll use the newly-pasted stuff as
-                 a new X selection */
-
-            }
-          else
-            ; /* FIXME Delete selected chars and give up X selection */
-        }
-#endif
-
+      pre_paste_prep (request_data, &insert_point);
+      
       if (request_data->interactive)
         gtk_text_buffer_insert_interactive (buffer, &insert_point,
                                             str, -1, request_data->default_editable);
       else
         gtk_text_buffer_insert (buffer, &insert_point,
                                 str, -1);
-
-      if (reselect)
-        ; /* FIXME Select the region of text we just inserted */
     }
 
   g_object_unref (G_OBJECT (buffer));
   g_free (request_data);
+}
+
+static void
+clipboard_buffer_received (GtkClipboard     *clipboard,
+                           GtkSelectionData *selection_data,
+                           gpointer          data)
+{
+  ClipboardRequest *request_data = data;
+  GtkTextBuffer *buffer = request_data->buffer;
+  GdkWindow *owner;
+  GtkTextBuffer *src_buffer = NULL;
+  GtkTextIter src_start, src_end;
+  GtkTextIter insert_point;
+  
+  /* If we can get the owner, the selection is in-process */
+  owner = gdk_selection_owner_get (selection_data->selection);
+
+  if (owner == NULL)
+    goto try_another_target;
+  
+  if (selection_data->type != gdk_atom_intern ("GTK_TEXT_BUFFER_CONTENTS", FALSE))
+    goto try_another_target;
+
+  if (selection_data->length != sizeof (src_buffer))
+    return;
+          
+  memcpy (&src_buffer, selection_data->data, sizeof (src_buffer));
+          
+  g_return_if_fail (GTK_IS_TEXT_BUFFER (src_buffer));
+
+  if (gtk_text_buffer_get_tag_table (src_buffer) !=
+      gtk_text_buffer_get_tag_table (buffer))
+    goto try_another_target;
+  
+  /* We're about to emit a bunch of signals, so be safe */
+  g_object_ref (G_OBJECT (src_buffer));
+
+  pre_paste_prep (request_data, &insert_point);
+  
+  if (gtk_text_buffer_get_selection_bounds (src_buffer,
+                                            &src_start,
+                                            &src_end))
+    {
+      gtk_text_buffer_real_insert_range (buffer,
+                                         &insert_point,
+                                         &src_start,
+                                         &src_end,
+                                         request_data->interactive);
+    }
+
+  g_object_unref (G_OBJECT (src_buffer));
+
+  return;
+  
+ try_another_target:
+
+  /* Request the text selection instead */
+  gtk_clipboard_request_text (clipboard,
+                              clipboard_text_received,
+                              data);
 }
 
 static void
@@ -1867,7 +2243,8 @@ gtk_text_buffer_update_primary_selection (GtkTextBuffer *buffer)
     { "STRING", 0, TARGET_STRING },
     { "TEXT",   0, TARGET_TEXT },
     { "COMPOUND_TEXT", 0, TARGET_COMPOUND_TEXT },
-    { "UTF8_STRING", 0, TARGET_UTF8_STRING }
+    { "UTF8_STRING", 0, TARGET_UTF8_STRING },
+    { "GTK_TEXT_BUFFER_CONTENTS", 0, TARGET_TEXT_BUFFER_CONTENTS }
   };
 
   GtkTextIter start;
@@ -1897,25 +2274,42 @@ gtk_text_buffer_update_primary_selection (GtkTextBuffer *buffer)
 
 static void
 paste (GtkTextBuffer *buffer,
-       gboolean is_clipboard,
-       gboolean interactive,
-       gboolean default_editable)
+       gboolean       is_clipboard,
+       gboolean       interactive,
+       gboolean       default_editable)
 {
   ClipboardRequest *data = g_new (ClipboardRequest, 1);
-
+  GtkTextIter paste_point;
+  GtkTextIter start, end;
+  
   data->buffer = buffer;
   g_object_ref (G_OBJECT (buffer));
   data->interactive = interactive;
   data->default_editable = default_editable;
 
-  gtk_clipboard_request_text (gtk_clipboard_get (is_clipboard ? GDK_NONE : GDK_SELECTION_PRIMARY),
-                              clipboard_received, data);
+  /* When pasting with the cursor inside the selection area, you
+   * replace the selection with the new text, otherwise, you
+   * simply insert the new text at the point where the click
+   * occured, unselecting any selected text. The replace_selection
+   * flag toggles this behavior.
+   */
+  data->replace_selection = FALSE;
+  
+  get_paste_point (buffer, &paste_point, FALSE);
+  if (gtk_text_buffer_get_selection_bounds (buffer, &start, &end) &&
+      gtk_text_iter_in_range (&paste_point, &start, &end))
+    data->replace_selection = TRUE;
+  
+  gtk_clipboard_request_contents (gtk_clipboard_get (is_clipboard ? GDK_NONE : GDK_SELECTION_PRIMARY),
+
+                                  gdk_atom_intern ("GTK_TEXT_BUFFER_CONTENTS", FALSE),
+                                  clipboard_buffer_received, data);
 }
 
 void
-gtk_text_buffer_paste_primary (GtkTextBuffer *buffer,
-                               GtkTextIter   *override_location,
-                               gboolean       default_editable)
+gtk_text_buffer_paste_primary (GtkTextBuffer       *buffer,
+                               const GtkTextIter   *override_location,
+                               gboolean             default_editable)
 {
   if (override_location != NULL)
     gtk_text_buffer_create_mark (buffer,
@@ -1962,11 +2356,12 @@ cut_or_copy (GtkTextBuffer *buffer,
              gboolean default_editable)
 {
   /* We prefer to cut the selected region between selection_bound and
-     insertion point. If that region is empty, then we cut the region
-     between the "anchor" and the insertion point (this is for C-space
-     and M-w and other Emacs-style copy/yank keys). Note that insert
-     and selection_bound are guaranteed to exist, but the anchor only
-     exists sometimes. */
+   * insertion point. If that region is empty, then we cut the region
+   * between the "anchor" and the insertion point (this is for
+   * C-space and M-w and other Emacs-style copy/yank keys). Note that
+   * insert and selection_bound are guaranteed to exist, but the
+   * anchor only exists sometimes.
+   */
   GtkTextIter start;
   GtkTextIter end;
 
