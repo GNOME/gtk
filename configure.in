@@ -272,7 +272,7 @@ AC_CHECK_LIB(X11, XConvertCase,
 # Check for XIM support.
 
 AC_CHECK_LIB(X11, XUnregisterIMInstantiateCallback,
-	    ,
+	    : ,
 	    enable_xim=no,
 	    $x_libs)
 

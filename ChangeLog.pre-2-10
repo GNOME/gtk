@@ -1,3 +1,9 @@
+Wed Dec  9 17:39:26 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* configure.in: Add a case for success in 
+	test for XUnregisterIMInstantiate, to prevent
+	screwing up $LIBS.
+
 Wed Dec  9 13:06:31 1998  Sebastian Wilhelmi  <wilhelmi@ira.uka.de>
  
  	* gdk/gdkim.c (gdk_ic_new,gdk_ic_{set,get}_attr): Fixed argument
