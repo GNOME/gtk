@@ -1,3 +1,9 @@
+Wed Jan 23 20:28:59 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtknotebook.c (gtk_notebook_draw_arrow): 
+	Use insensitive state for insensitive arrows, not
+	just an "etched state". (#67172, Adrian Custer)
+
 2002-01-23  Manish Singh  <yosh@gimp.org>
 
 	* gtk/gtkentry.c (gtk_entry_set_text): use a variable that's actually

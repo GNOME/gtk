@@ -2713,7 +2713,7 @@ gtk_notebook_draw_arrow (GtkNotebook *notebook,
 					 STEP_PREV, TRUE))
 	    {
 	      shadow_type = GTK_SHADOW_ETCHED_IN;
-	      state_type = GTK_STATE_NORMAL;
+	      state_type = GTK_STATE_INSENSITIVE;
 	    }
 
 	  if (notebook->tab_pos == GTK_POS_LEFT ||
@@ -2732,7 +2732,7 @@ gtk_notebook_draw_arrow (GtkNotebook *notebook,
 					 STEP_NEXT, TRUE))
 	    {
 	      shadow_type = GTK_SHADOW_ETCHED_IN;
-	      state_type = GTK_STATE_NORMAL;
+	      state_type = GTK_STATE_INSENSITIVE;
 	    }
 
 	  if (notebook->tab_pos == GTK_POS_LEFT ||
