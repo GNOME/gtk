@@ -141,7 +141,7 @@ selection_toggled (GtkWidget *widget)
 {
   if (GTK_TOGGLE_BUTTON(widget)->active)
     {
-      have_selection = gtk_selection_owner_set (widget,
+      have_selection = gtk_selection_owner_set (selection_widget,
 						GDK_SELECTION_PRIMARY,
 						GDK_CURRENT_TIME);
       if (!have_selection)
@@ -197,7 +197,7 @@ gint
 selection_clear (GtkWidget *widget, GdkEventSelection *event)
 {
   have_selection = FALSE;
-  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(widget), FALSE);
+  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(selection_button), FALSE);
 
   return TRUE;
 }

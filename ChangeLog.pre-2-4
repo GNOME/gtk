@@ -1,3 +1,12 @@
+2002-03-04  Matthias Clasen  <maclas@gmx.de>
+
+	* docs/tutorial/gtk-tut.sgml: Make color selection and selection 
+	examples work.
+
+	* tests/testselection.c (selection_toggled, selection_clear):
+	Use selection_widget as selection owner - otherwise clearing the
+	selection doesn't work.
+
 Mon Mar  4 12:43:48 2002  Owen Taylor  <otaylor@redhat.com>
 
         Fixes for non XKB operation. (#73103)

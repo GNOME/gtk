@@ -6062,34 +6062,17 @@ background color.</para>
 
 GtkWidget *colorseldlg = NULL;
 GtkWidget *drawingarea = NULL;
+GdkColor color;
 
 /* Color changed handler */
 
 void color_changed_cb( GtkWidget         *widget,
                        GtkColorSelection *colorsel )
 {
-  GdkColor gdk_color;
-  GdkColormap *colormap;
+  GdkColor ncolor;
 
-  /* Get drawingarea colormap */
-
-  colormap = gdk_window_get_colormap (drawingarea-&gt;window);
-
-  /* Get current color */
-
-  gtk_color_selection_get_current_color (colorsel, &amp;gdk_color);
-
-  /* Allocate color */
-
-  gdk_color_alloc (colormap, &amp;gdk_color);
-
-  /* Set window background color */
-
-  gdk_window_set_background (drawingarea-&gt;window, &amp;gdk_color);
-
-  /* Clear window */
-
-  gdk_window_clear (drawingarea-&gt;window);
+  gtk_color_selection_get_current_color (colorsel, &amp;ncolor);
+  gtk_widget_modify_bg (drawingarea, GTK_STATE_NORMAL, &amp;ncolor);       
 }
 
 /* Drawingarea event handler */
@@ -6099,33 +6082,40 @@ gint area_event( GtkWidget *widget,
                  gpointer   client_data )
 {
   gint handled = FALSE;
-  GtkWidget *colorsel;
+  gint response;
+  GtkColorSelection *colorsel;
 
   /* Check if we've received a button pressed event */
 
-  if (event-&gt;type == GDK_BUTTON_PRESS &amp;&amp; colorseldlg == NULL)
+  if (event-&gt;type == GDK_BUTTON_PRESS)
     {
-      /* Yes, we have an event and there's no colorseldlg yet! */
-
       handled = TRUE;
 
-      /* Create color selection dialog */
-
-      colorseldlg = gtk_color_selection_dialog_new ("Select background color");
+       /* Create color selection dialog */
+      if (colorseldlg == NULL)
+        colorseldlg = gtk_color_selection_dialog_new ("Select background color");
 
       /* Get the ColorSelection widget */
+      colorsel = GTK_COLOR_SELECTION (GTK_COLOR_SELECTION_DIALOG (colorseldlg)-&gt;colorsel);
 
-      colorsel = GTK_COLOR_SELECTION_DIALOG (colorseldlg)-&gt;colorsel;
+      gtk_color_selection_set_previous_color (colorsel, &amp;color);
+      gtk_color_selection_set_current_color (colorsel, &amp;color);
+      gtk_color_selection_set_has_palette (colorsel, TRUE);
 
       /* Connect to the "color_changed" signal, set the client-data
        * to the colorsel widget */
-
       g_signal_connect (G_OBJECT (colorsel), "color_changed",
                         G_CALLBACK (color_changed_cb), (gpointer)colorsel);
 
       /* Show the dialog */
+      response = gtk_dialog_run (GTK_DIALOG (colorseldlg));
 
-      gtk_widget_show (colorseldlg);
+      if (response == GTK_RESPONSE_OK)
+        gtk_color_selection_get_current_color (colorsel, &amp;color);
+      else 
+        gtk_widget_modify_bg (drawingarea, GTK_STATE_NORMAL, &amp;color);
+
+      gtk_widget_hide (colorseldlg);
     }
 
   return handled;
@@ -6166,6 +6156,11 @@ gint main( gint   argc,
   /* Create drawingarea, set size and catch button events */
 
   drawingarea = gtk_drawing_area_new ();
+
+  color.red = 0;
+  color.blue = 65535;
+  color.green = 0;
+  gtk_widget_modify_bg (drawingarea, GTK_STATE_NORMAL, &amp;color);       
 
   gtk_widget_set_size_request (GTK_WIDGET (drawingarea), 200, 200);
 
@@ -9220,10 +9215,10 @@ selections and targets are identified by atoms.</para>
 process, you call:</para>
 
 <programlisting role="C">
-gint gtk_selection_convert( GtkWidget *widget, 
-                            GdkAtom    selection, 
-                            GdkAtom    target,
-                            guint32    time );
+gboolean gtk_selection_convert( GtkWidget *widget, 
+                                GdkAtom    selection, 
+                                GdkAtom    target,
+                                guint32    time );
 </programlisting>
 
 <para>This <emphasis>converts</emphasis> the selection into the form specified by
@@ -9265,7 +9260,7 @@ could not be retrieved. This might happen if no application owned the
 selection, or if you requested a target that the application didn't
 support. The buffer is actually guaranteed to be one byte longer than
 <literal>length</literal>; the extra byte will always be zero, so it isn't
-necessary to make a copy of strings just to null terminate them.</para>
+necessary to make a copy of strings just to nul-terminate them.</para>
 
 <para>In the following example, we retrieve the special target "TARGETS",
 which is a list of all targets into which the selection can be
@@ -9286,13 +9281,14 @@ void get_targets( GtkWidget *widget,
                   gpointer data )
 {
   static GdkAtom targets_atom = GDK_NONE;
+  GtkWidget *window = (GtkWidget *)data;	
 
   /* Get the atom corresponding to the string "TARGETS" */
   if (targets_atom == GDK_NONE)
     targets_atom = gdk_atom_intern ("TARGETS", FALSE);
 
   /* And request the "TARGETS" target for the primary selection */
-  gtk_selection_convert (widget, GDK_SELECTION_PRIMARY, targets_atom,
+  gtk_selection_convert (window, GDK_SELECTION_PRIMARY, targets_atom,
 			 GDK_CURRENT_TIME);
 }
 
@@ -9357,9 +9353,9 @@ int main( int   argc,
   button = gtk_button_new_with_label ("Get Targets");
   gtk_container_add (GTK_CONTAINER (window), button);
 
-  g_signal_connect (G_OBJECT(button), "clicked",
-		    G_CALLBACK (get_targets), NULL);
-  g_signal_connect (G_OBJECT(button), "selection_received",
+  g_signal_connect (G_OBJECT (button), "clicked",
+		    G_CALLBACK (get_targets), window);
+  g_signal_connect (G_OBJECT (window), "selection_received",
 		    G_CALLBACK (selection_received), NULL);
 
   gtk_widget_show (button);
@@ -9407,7 +9403,7 @@ responsible for filling in the fields <literal>type</literal>, <literal>format</
 <literal>data</literal>, and <literal>length</literal>. (The <literal>format</literal> field is actually
 important here - the X server uses it to figure out whether the data
 needs to be byte-swapped or not. Usually it will be 8 - <emphasis>i.e.</emphasis> a
-character - or 32 - <emphasis>i.e.</emphasis> a. integer.) This is done by calling the
+character - or 32 - <emphasis>i.e.</emphasis> an integer.) This is done by calling the
 function:</para>
 
 <programlisting role="C">
@@ -9426,9 +9422,9 @@ in the fields of the GtkSelectionData structure by hand.)</para>
 calling:</para>
 
 <programlisting role="C">
-gint gtk_selection_owner_set( GtkWidget *widget,
-                              GdkAtom    selection,
-                              guint32    time );
+gboolean gtk_selection_owner_set( GtkWidget *widget,
+                                  GdkAtom    selection,
+                                  guint32    time );
 </programlisting>
 
 <para>If another application claims ownership of the selection, you will
@@ -9448,13 +9444,16 @@ string representation of the time is returned.</para>
 #include &lt;gtk/gtk.h&gt;
 #include &lt;time.h&gt;
 
+GtkWidget *selection_button;
+GtkWidget *selection_widget;
+
 /* Callback when the user toggles the selection */
 void selection_toggled( GtkWidget *widget,
                         gint      *have_selection )
 {
   if (GTK_TOGGLE_BUTTON (widget)-&gt;active)
     {
-      *have_selection = gtk_selection_owner_set (widget,
+      *have_selection = gtk_selection_owner_set (selection_widget,
 						 GDK_SELECTION_PRIMARY,
 						 GDK_CURRENT_TIME);
       /* if claiming the selection failed, we return the button to
@@ -9482,7 +9481,7 @@ gint selection_clear( GtkWidget         *widget,
                       gint              *have_selection )
 {
   *have_selection = FALSE;
-  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), FALSE);
+  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (selection_button), FALSE);
 
   return TRUE;
 }
@@ -9510,7 +9509,6 @@ int main( int   argc,
           char *argv[] )
 {
   GtkWidget *window;
-  GtkWidget *selection_button;
 
   static int have_selection = FALSE;
   
@@ -9527,20 +9525,21 @@ int main( int   argc,
 
   /* Create a toggle button to act as the selection */
 
+  selection_widget = gtk_invisible_new ();
   selection_button = gtk_toggle_button_new_with_label ("Claim Selection");
   gtk_container_add (GTK_CONTAINER (window), selection_button);
   gtk_widget_show (selection_button);
 
   g_signal_connect (G_OBJECT (selection_button), "toggled",
 		    G_CALLBACK (selection_toggled), &amp;have_selection);
-  g_signal_connect (G_OBJECT (selection_button), "selection_clear_event",
+  g_signal_connect (G_OBJECT (selection_widget), "selection_clear_event",
 		    G_CALLBACK (selection_clear), &amp;have_selection);
 
-  gtk_selection_add_target (selection_button,
+  gtk_selection_add_target (selection_widget,
 			    GDK_SELECTION_PRIMARY,
 			    GDK_SELECTION_TYPE_STRING,
 		            1);
-  g_signal_connect (G_OBJECT (selection_button), "selection_get",
+  g_signal_connect (G_OBJECT (selection_widget), "selection_get",
 		    G_CALLBACK (selection_handle), &amp;have_selection);
 
   gtk_widget_show (selection_button);
