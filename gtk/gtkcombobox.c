@@ -2656,6 +2656,8 @@ gtk_combo_box_cell_layout_pack_end (GtkCellLayout   *layout,
   info->expand = expand;
   info->pack = GTK_PACK_END;
 
+  combo_box->priv->cells = g_slist_append (combo_box->priv->cells, info);
+
   if (combo_box->priv->cell_view)
     gtk_cell_layout_pack_end (GTK_CELL_LAYOUT (combo_box->priv->cell_view),
                               cell, expand);
@@ -2863,16 +2865,17 @@ gtk_combo_box_cell_layout_clear_attributes (GtkCellLayout   *layout,
   combo_box = GTK_COMBO_BOX (layout);
 
   info = gtk_combo_box_get_cell_info (combo_box, cell);
-  g_return_if_fail (info != NULL);
-
-  list = info->attributes;
-  while (list && list->next)
+  if (info)
     {
-      g_free (list->data);
-      list = list->next->next;
+      list = info->attributes;
+      while (list && list->next)
+	{
+	  g_free (list->data);
+	  list = list->next->next;
+	}
+      g_slist_free (info->attributes);
+      info->attributes = NULL;
     }
-  g_slist_free (info->attributes);
-  info->attributes = NULL;
 
   if (combo_box->priv->cell_view)
     gtk_cell_layout_clear_attributes (GTK_CELL_LAYOUT (combo_box->priv->cell_view), cell);
