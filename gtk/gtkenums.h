@@ -136,6 +136,7 @@ typedef enum
   GTK_ICON_SIZE_DIALOG
 } GtkIconSize;
 
+#ifndef GTK_DISABLE_DEPRECATED
 /* side types */
 typedef enum
 {
@@ -144,6 +145,7 @@ typedef enum
   GTK_SIDE_LEFT,
   GTK_SIDE_RIGHT
 } GtkSideType;
+#endif /* GTK_DISABLE_DEPRECATED */
 
 /* Reading directions for text */
 typedef enum
@@ -262,11 +264,13 @@ typedef enum
   GTK_POS_BOTTOM
 } GtkPositionType;
 
+#ifndef GTK_DISABLE_DEPRECATED
 typedef enum
 {
   GTK_PREVIEW_COLOR,
   GTK_PREVIEW_GRAYSCALE
 } GtkPreviewType;
+#endif /* GTK_DISABLE_DEPRECATED */
 
 /* Style for buttons */
 typedef enum
@@ -284,6 +288,7 @@ typedef enum
   GTK_RESIZE_IMMEDIATE		/* Perform the resizes now */
 } GtkResizeMode;
 
+#ifndef GTK_DISABLE_DEPRECATED
 /* signal run types */
 typedef enum			/*< flags >*/
 {
@@ -294,6 +299,7 @@ typedef enum			/*< flags >*/
   GTK_RUN_ACTION     = G_SIGNAL_ACTION,
   GTK_RUN_NO_HOOKS   = G_SIGNAL_NO_HOOKS
 } GtkSignalRunType;
+#endif /* GTK_DISABLE_DEPRECATED */
 
 /* scrolling types */
 typedef enum
@@ -346,6 +352,7 @@ typedef enum
   GTK_STATE_INSENSITIVE
 } GtkStateType;
 
+#if !defined(GTK_DISABLE_DEPRECATED) || defined (GTK_MENU_INTERNALS)
 /* Directions for submenus */
 typedef enum
 {
@@ -359,6 +366,7 @@ typedef enum
   GTK_TOP_BOTTOM,
   GTK_LEFT_RIGHT
 } GtkSubmenuPlacement;
+#endif /* GTK_DISABLE_DEPRECATED */
 
 /* Style for toolbars */
 typedef enum

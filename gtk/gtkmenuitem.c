@@ -24,6 +24,8 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
+#define GTK_MENU_INTERNALS
+
 #include <string.h>
 #include "gtkaccellabel.h"
 #include "gtkmain.h"
@@ -355,6 +357,9 @@ gtk_menu_item_remove_submenu (GtkMenuItem         *menu_item)
   if (menu_item->submenu)
     gtk_menu_detach (GTK_MENU (menu_item->submenu));
 }
+
+void _gtk_menu_item_set_placement (GtkMenuItem         *menu_item,
+				   GtkSubmenuPlacement  placement);
 
 void
 _gtk_menu_item_set_placement (GtkMenuItem         *menu_item,

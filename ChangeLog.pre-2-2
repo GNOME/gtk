@@ -1,3 +1,17 @@
+Tue Jan 29 19:51:05 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkenums.h: Deprecate GtkPreviewType,
+	GtkSignalRunType, GtkSideType, GtkSubmenuPlacement, GtkSubmenuDirection
+	(#68183, Matthias Clasen)
+
+	* gtk/gtkmenuitem.h: Remove _gtk_menu_item_set_placement() from
+	the public header to avoid having to use GtkSubmenuPlacement.
+
+	* gtk/{gtkmenuitem.c,gtkmenubar.c,gtkmenushell.c}: #define
+	GTK_MENU_INTERNALS to preserve access to GtkSubmenu*.
+
+	* gdk/gdki18n.h: Deprecate contents. (Darin Adler.)
+
 Tue Jan 29 19:32:47 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtktextview.c (gtk_text_view_get/set_property): 

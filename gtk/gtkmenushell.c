@@ -35,6 +35,7 @@
 
 #define MENU_SHELL_TIMEOUT   500
 
+#define GTK_MENU_INTERNALS
 
 enum {
   DEACTIVATE,
@@ -802,6 +803,8 @@ gtk_menu_shell_select_item (GtkMenuShell *menu_shell,
     class->select_item (menu_shell, menu_item);
 }
 
+void _gtk_menu_item_set_placement (GtkMenuItem         *menu_item,
+				   GtkSubmenuPlacement  placement);
 
 static void
 gtk_menu_shell_real_select_item (GtkMenuShell *menu_shell,
