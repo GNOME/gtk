@@ -73,6 +73,7 @@ typedef struct _GtkEntryPrivate GtkEntryPrivate;
 struct _GtkEntryPrivate 
 {
   gfloat xalign;
+  gint insert_pos;
 };
 
 enum {
@@ -1369,6 +1370,7 @@ gtk_entry_button_press (GtkWidget      *widget,
 {
   GtkEntry *entry = GTK_ENTRY (widget);
   GtkEditable *editable = GTK_EDITABLE (widget);
+  GtkEntryPrivate *priv = GTK_ENTRY_GET_PRIVATE (entry);
   gint tmp_pos;
   gint sel_start, sel_end;
 
@@ -1497,7 +1499,7 @@ gtk_entry_button_press (GtkWidget      *widget,
     }
   else if (event->button == 2 && event->type == GDK_BUTTON_PRESS && entry->editable)
     {
-      gtk_editable_select_region (editable, tmp_pos, tmp_pos);
+      priv->insert_pos = tmp_pos;
       gtk_entry_paste (entry, GDK_SELECTION_PRIMARY);
 
       return TRUE;
@@ -3480,6 +3482,16 @@ paste_received (GtkClipboard *clipboard,
 {
   GtkEntry *entry = GTK_ENTRY (data);
   GtkEditable *editable = GTK_EDITABLE (entry);
+  GtkEntryPrivate *priv = GTK_ENTRY_GET_PRIVATE (entry);
+      
+  if (entry->button == 2)
+    {
+      gint pos, start, end;
+      pos = priv->insert_pos;
+      gtk_editable_get_selection_bounds (editable, &start, &end);
+      if (!((start <= pos && pos <= end) || (end <= pos && pos <= start)))
+	gtk_editable_select_region (editable, pos, pos);
+    }
       
   if (text)
     {
@@ -3492,7 +3504,7 @@ paste_received (GtkClipboard *clipboard,
 	  if (GTK_WIDGET_MAPPED (completion->priv->popup_window))
 	    _gtk_entry_completion_popdown (completion);
 	}
-      
+
       if (gtk_editable_get_selection_bounds (editable, &start, &end))
         gtk_editable_delete_text (editable, start, end);
 
