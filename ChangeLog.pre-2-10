@@ -1,3 +1,10 @@
+Sun Aug 16 23:14:20 CDT 1998 Shawn T. Amundson <amundson@gtk.org>
+
+	* Released GTK+ 1.1.2
+		
+	* NEWS: updated for 1.1.2
+	* gtk+.spec: version = 1.1.2
+
 Mon Aug 17 05:10:29 1998  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkmain.c (gtk_init): don't call module initializers multiple
@@ -11,7 +18,7 @@ Mon Aug 17 03:47:55 1998  Tim Janik  <timj@gtk.org>
 
 Mon Aug 17 01:40:00 1998  Tim Janik  <timj@gtk.org>
 
-	* configure.in: version bump to 1.1.1, binary age 0, interface age 0.
+	* configure.in: version bump to 1.1.2, binary age 0, interface age 0.
 	pass "gmodule" to AM_PATH_GLIB, with that we require libgmodule.so now.
 
 	* gtk/gtkmain.c (gtk_init): since glib's g_return*_if_fail macros log
