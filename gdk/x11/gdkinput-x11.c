@@ -383,10 +383,8 @@ gint
 _gdk_input_common_init (GdkDisplay *display,
 			gint        include_core)
 {
-  char **extensions;
   XDeviceInfo   *devices;
-  int num_devices;
-  int num_extensions, loop;
+  int num_devices, loop;
   int ignore, event_base;
   GdkDisplayX11 *display_x11 = GDK_DISPLAY_X11 (display);
 

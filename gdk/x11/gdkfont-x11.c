@@ -228,43 +228,6 @@ gdk_font_load_for_display (GdkDisplay  *display,
   return font;
 }
 
-static char *
-gdk_font_charset_for_locale (void)
-{
-  static char *charset_map[][2] = {
-    { "ANSI_X3.4-1968", "iso8859-1" },
-    { "US-ASCII",   "iso8859-1" },
-    { "ISO-8859-1", "iso8859-1" },
-    { "ISO-8859-2", "iso8859-2" },
-    { "ISO-8859-3", "iso8859-3" },
-    { "ISO-8859-4", "iso8859-4" },
-    { "ISO-8859-5", "iso8859-5" },
-    { "ISO-8859-6", "iso8859-6" },
-    { "ISO-8859-7", "iso8859-7" },
-    { "ISO-8859-8", "iso8859-8" },
-    { "ISO-8859-9", "iso8859-9" },
-    { "UTF-8",      "iso8859-1" }
-  };
-
-  const char *codeset;
-  char *result = NULL;
-  int i;
-
-  g_get_charset (&codeset);
-  
-  for (i=0; i < G_N_ELEMENTS (charset_map); i++)
-    if (strcmp (charset_map[i][0], codeset) == 0)
-      {
-	result = charset_map[i][1];
-	break;
-      }
-
-  if (result)
-    return g_strdup (result);
-  else
-    return g_strdup ("iso8859-1");
-}
-
 /**
  * gdk_font_from_description_for_display:
  * @display: a #GdkDisplay

@@ -110,8 +110,6 @@ static gboolean gtk_hsv_focus          (GtkWidget        *widget,
 					GtkDirectionType  direction);
 static void     gtk_hsv_move           (GtkHSV           *hsv,
 					GtkDirectionType  dir);
-static GdkGC *  gtk_hsv_get_focus_gc   (GtkHSV           *hsv,
-					gint             *line_width);
 
 static guint hsv_signals[LAST_SIGNAL];
 static GtkWidgetClass *parent_class;
@@ -1777,31 +1775,4 @@ gtk_hsv_move (GtkHSV          *hsv,
     hue = 0.0;
   
   gtk_hsv_set_color (hsv, hue, sat, val);
-}
-
-static GdkGC *
-gtk_hsv_get_focus_gc (GtkHSV *hsv,
-		      gint   *line_width)
-{
-  GdkGC *focus_gc;
-  GtkWidget *widget = GTK_WIDGET (hsv);
-  gint8 *dash_list;
-  
-  focus_gc = gdk_gc_new (widget->window);
-  gdk_gc_copy (focus_gc, widget->style->fg_gc[GTK_WIDGET_STATE (widget)]);
-
-  gtk_widget_style_get (widget,
-			"focus-line-width", line_width,
-			"focus-line-pattern", (gchar *)&dash_list,
-			NULL);
-  
-  gdk_gc_set_line_attributes (focus_gc, *line_width,
-			      dash_list[0] ? GDK_LINE_ON_OFF_DASH : GDK_LINE_SOLID,
-			      GDK_CAP_BUTT, GDK_JOIN_MITER);
-  if (dash_list[0])
-    gdk_gc_set_dashes (focus_gc, 0, dash_list, strlen (dash_list));
-
-  g_free (dash_list);
-  
-  return focus_gc;
 }
