@@ -299,8 +299,6 @@ void            gdk_drag_drop        (GdkDragContext *context,
 void            gdk_drag_abort       (GdkDragContext *context,
 				      guint32         time);
 
-GdkAtom       gdk_drag_get_selection (GdkDragContext *context);
-
 /* GdkWindow */
 
 void	      gdk_window_set_hints	 (GdkWindow	  *window,

@@ -1,3 +1,10 @@
+Sun Jan 30 12:29:20 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdk.h gtk/gtkmenu.h: Removed duplicate prototypes for
+	gdk_drag_get_selection() and gtk_menu_detach().
+
+	[ From Jeroen Ruigrok/Asmodai ]
+
 Sat Jan 29 10:11:56 2000  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtknotebook.c (gtk_notebook_size_request): 
