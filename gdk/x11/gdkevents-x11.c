@@ -1387,12 +1387,6 @@ gdk_event_translate (GdkEvent *event,
           break;
         }
       
-      event->property.type = GDK_PROPERTY_NOTIFY;
-      event->property.window = window;
-      event->property.atom = gdk_x11_xatom_to_atom (xevent->xproperty.atom);
-      event->property.time = xevent->xproperty.time;
-      event->property.state = xevent->xproperty.state;
-
       if (wm_state_atom == 0)
         wm_state_atom = gdk_x11_get_xatom_by_name ("_NET_WM_STATE");
 
@@ -1403,9 +1397,20 @@ gdk_event_translate (GdkEvent *event,
 	  xevent->xproperty.atom == wm_desktop_atom)
         {
           /* If window state changed, then synthesize those events. */
-          gdk_check_wm_state_changed (event->property.window);
+          gdk_check_wm_state_changed (window);
         }
-      
+
+      if (window_private->event_mask & GDK_PROPERTY_CHANGE_MASK) 
+	{
+	  event->property.type = GDK_PROPERTY_NOTIFY;
+	  event->property.window = window;
+	  event->property.atom = gdk_x11_xatom_to_atom (xevent->xproperty.atom);
+	  event->property.time = xevent->xproperty.time;
+	  event->property.state = xevent->xproperty.state;
+	}
+      else
+	return_val = FALSE;
+
       break;
       
     case SelectionClear:

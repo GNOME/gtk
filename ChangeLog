@@ -1,3 +1,14 @@
+2002-05-07  Matthias Clasen  <maclas@gmx.de>
+
+	Fix for #79248, merged from HEAD:
+	
+	* gdk/x11/gdkwindow-x11.c (gdk_window_new): 
+	(gdk_window_set_events): Always select for property notify for
+	maintaining window state.
+
+	* gdk/x11/gdkevents-x11.c (gdk_event_translate): Only propagate
+	property notifys if they were selected by gdk_window_set_events.
+
 Mon May  6 11:48:08 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* Makefile.am (EXTRA_DIST): Add ChangeLog.pre-2-0 (#78641)

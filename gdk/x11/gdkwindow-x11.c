@@ -410,7 +410,7 @@ gdk_window_new (GdkWindow     *parent,
     visual = gdk_visual_get_system ();
   xvisual = ((GdkVisualPrivate*) visual)->xvisual;
   
-  xattributes.event_mask = StructureNotifyMask;
+  xattributes.event_mask = StructureNotifyMask | PropertyChangeMask;
   for (i = 0; i < _gdk_nenvent_masks; i++)
     {
       if (attributes->event_mask & (1 << (i + 1)))
@@ -2524,7 +2524,7 @@ gdk_window_set_events (GdkWindow       *window,
   if (!GDK_WINDOW_DESTROYED (window))
     {
       GDK_WINDOW_OBJECT (window)->event_mask = event_mask;
-      xevent_mask = StructureNotifyMask;
+      xevent_mask = StructureNotifyMask | PropertyChangeMask;
       for (i = 0; i < _gdk_nenvent_masks; i++)
 	{
 	  if (event_mask & (1 << (i + 1)))
