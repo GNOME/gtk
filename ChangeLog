@@ -1,19 +1,25 @@
+2004-10-27  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtksettings.c: Make it build on windows. (#156618,
+	Kazuki IWAMOTO)
+
 2004-10-26  Matthias Clasen  <mclasen@redhat.com>
 
-	* gtk/gtkimcontextsimple.c (check_hex): Stop preediting if strtoul couldn't 
-	parse the complete preedit string.  (#156434)
+	* gtk/gtkimcontextsimple.c (check_hex): Stop preediting if strtoul 
+	couldn't parse the complete preedit string.  (#156434)
 
 	* gtk/gtkmessagedialog.c: 
-	* gtk/gtkfilechooserbutton.c: Add missing includes.  (#156503, Kazuki IWAMOTO)
+	* gtk/gtkfilechooserbutton.c: Add missing includes.  (#156503, 
+	Kazuki IWAMOTO)
 
 	* gtk/gtkimage.h: 
-	* gtk/gtkimage.c (gtk_image_get_icon_name): Make the icon_name parameter
-	G_CONST_RETURN.
+	* gtk/gtkimage.c (gtk_image_get_icon_name): Make the icon_name 
+	parameter G_CONST_RETURN.
 	
-	* gtk/gtkimage.c: It is enough to listen for screen changes and style-set
-	to catch all icon theme changes.
-	(gtk_image_set_property): Reset the image size if the pixel size property
-	is changed.
+	* gtk/gtkimage.c: It is enough to listen for screen changes and 
+	style-set to catch all icon theme changes.
+	(gtk_image_set_property): Reset the image size if the pixel size 
+	property is changed.
 
 	* gtk/gtk.symbols: Add new symbols.
 
@@ -25,9 +31,9 @@
 	* gtk/gtktextbuffer.c: (gtk_text_buffer_finalize),
 	(create_clipboard_contents_buffer), (clipboard_get_contents_cb),
 	(clipboard_clear_contents_cb), (cut_or_copy):
-	Rewrite clipboard handling so that the clipboard contents won't be
-	freed when the text buffer is finalized. Also add clipboard manager support.
-	Fixes #95496.
+	Rewrite clipboard handling so that the clipboard contents 
+	won't be freed when the text buffer is finalized. Also add 
+	clipboard manager support. Fixes #95496.
 
 2004-10-25  Anders Carlsson  <andersca@gnome.org>
 
