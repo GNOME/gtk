@@ -1,3 +1,10 @@
+1999-11-03  Federico Mena Quintero  <federico@redhat.com>
+
+	* configure.in: Removed libgif stuff now that we do not depend on it.
+	Added the necessary cruft for gtk-doc.
+
+	* src/Makefile.am: Unconditionally build the GIF loader.
+
 1999-11-03  Jonathan Blandford  <jrb@redhat.com>
 
 	* src/io-gif.c (gif_read): renamed ReadOK to gif_read.

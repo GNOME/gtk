@@ -11,9 +11,7 @@ if HAVE_JPEG
 JPEG_LIB =	libpixbuf-jpeg.la
 endif
 
-if HAVE_GIF
-GIF_LIB =	libpixbuf-gif.la
-endif
+GIF_LIB = libpixbuf-gif.la
 
 if HAVE_TIFF
 TIFF_LIB =	libpixbuf-tiff.la
