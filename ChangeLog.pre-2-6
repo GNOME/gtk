@@ -1,3 +1,9 @@
+Sun Jul 13 15:57:57 2003  Soeren Sandmann  <sandmann@daimi.au.dk>
+
+	* gtk/gtktoolbutton.c (gtk_tool_button_finalize): Fix leaks of
+	label_text, label_widget and icon_widget. (#117312, 
+	Christian Persch)
+	
 Sun Jul 13 01:37:51 2003  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 	* gtk/gtkmenu.c (gtk_menu_class_init): new properties

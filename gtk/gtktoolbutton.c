@@ -501,9 +501,18 @@ gtk_tool_button_finalize (GObject *object)
 {
   GtkToolButton *button = GTK_TOOL_BUTTON (object);
 
-  g_free (button->priv->stock_id);
-  button->priv->stock_id = NULL;
+  if (button->priv->stock_id)
+    g_free (button->priv->stock_id);
 
+  if (button->priv->label_text)
+    g_free (button->priv->label_text);
+
+  if (button->priv->label_widget)
+    g_object_unref (G_OBJECT (button->priv->label_widget));
+
+  if (button->priv->icon_widget)
+    g_object_unref (G_OBJECT (button->priv->icon_widget));
+  
   parent_class->finalize (object);
 }
 
