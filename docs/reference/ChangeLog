@@ -1,3 +1,8 @@
+2005-01-15  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/building.sgml: Some updates.  (#164147, #164108, 
+	Karel Kulhavy)
+
 2005-01-08  Matthias Clasen  <mclasen@redhat.com>
 
 	* === Released 2.6.1 ===
