@@ -1,3 +1,11 @@
+2004-07-12  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtk-docs.sgml: Add GtkAboutDialog to "Display 
+	Widgets" for now.
+
+	* gtk/gtk-sections.txt: Add GtkAboutDialog section.
+	* gtk/tmpl/gtkaboutdialog.sgml: New file.
+
 Mon Jul 12 00:57:32 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/tmpl/gtkstock.sgml: 

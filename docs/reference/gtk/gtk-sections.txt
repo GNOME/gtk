@@ -2,6 +2,48 @@
 <INCLUDE>gtk/gtk.h</INCLUDE>
 
 <SECTION>
+<FILE>gtkaboutdialog</FILE>
+<TITLE>GtkAboutDialog</TITLE>
+GtkAboutDialog
+gtk_about_dialog_new
+gtk_about_dialog_get_name
+gtk_about_dialog_set_name
+gtk_about_dialog_get_version
+gtk_about_dialog_set_version
+gtk_about_dialog_get_copyright
+gtk_about_dialog_set_copyright
+gtk_about_dialog_get_comments
+gtk_about_dialog_set_comments
+gtk_about_dialog_get_license
+gtk_about_dialog_set_license
+gtk_about_dialog_get_website
+gtk_about_dialog_set_website
+gtk_about_dialog_get_website_label
+gtk_about_dialog_set_website_label
+gtk_about_dialog_get_authors
+gtk_about_dialog_set_authors
+gtk_about_dialog_get_documenters
+gtk_about_dialog_set_documenters
+gtk_about_dialog_get_translator_credits
+gtk_about_dialog_set_translator_credits
+gtk_about_dialog_get_logo
+gtk_about_dialog_set_logo
+GtkAboutDialogActivateLinkFunc
+gtk_about_dialog_set_email_hook
+gtk_about_dialog_set_url_hook
+gtk_show_about_dialog
+<SUBSECTION Standard>
+GTK_ABOUT_DIALOG
+GTK_IS_ABOUT_DIALOG
+GTK_TYPE_ABOUT_DIALOG
+GTK_ABOUT_DIALOG_CLASS
+GTK_IS_ABOUT_DIALOG_CLASS
+GTK_ABOUT_DIALOG_GET_CLASS
+<SUBSECTION Private>
+gtk_about_dialog_get_type
+</SECTION>
+
+<SECTION>
 <FILE>gtkaccelgroup</FILE>
 <TITLE>Keyboard Accelerators</TITLE>
 GtkAccelGroup

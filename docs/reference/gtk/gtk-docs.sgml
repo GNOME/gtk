@@ -1,6 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN" 
                "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
+<!ENTITY GtkAboutDialog SYSTEM "xml/gtkaboutdialog.xml">
 <!ENTITY GtkAccelLabel SYSTEM "xml/gtkaccellabel.xml">
 <!ENTITY GtkAction SYSTEM "xml/gtkaction.xml">
 <!ENTITY GtkActionGroup SYSTEM "xml/gtkactiongroup.xml">
@@ -332,6 +333,7 @@ that is, GUI components such as <link linkend="GtkButton">GtkButton</link> or
 
     <chapter id="DisplayWidgets">
       <title>Display Widgets</title>
+        &GtkAboutDialog;
         &GtkAccelLabel;
         &GtkImage;
         &GtkLabel;

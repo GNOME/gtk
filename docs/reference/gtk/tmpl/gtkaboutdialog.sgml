@@ -1,0 +1,268 @@
+<!-- ##### SECTION Title ##### -->
+GtkAboutDialog
+
+<!-- ##### SECTION Short_Description ##### -->
+
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### STRUCT GtkAboutDialog ##### -->
+<para>
+
+</para>
+
+@parent_instance: 
+
+<!-- ##### FUNCTION gtk_about_dialog_new ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_about_dialog_get_name ##### -->
+<para>
+
+</para>
+
+@about: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_about_dialog_set_name ##### -->
+<para>
+
+</para>
+
+@about: 
+@name: 
+
+
+<!-- ##### FUNCTION gtk_about_dialog_get_version ##### -->
+<para>
+
+</para>
+
+@about: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_about_dialog_set_version ##### -->
+<para>
+
+</para>
+
+@about: 
+@version: 
+
+
+<!-- ##### FUNCTION gtk_about_dialog_get_copyright ##### -->
+<para>
+
+</para>
+
+@about: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_about_dialog_set_copyright ##### -->
+<para>
+
+</para>
+
+@about: 
+@copyright: 
+
+
+<!-- ##### FUNCTION gtk_about_dialog_get_comments ##### -->
+<para>
+
+</para>
+
+@about: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_about_dialog_set_comments ##### -->
+<para>
+
+</para>
+
+@about: 
+@comments: 
+
+
+<!-- ##### FUNCTION gtk_about_dialog_get_license ##### -->
+<para>
+
+</para>
+
+@about: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_about_dialog_set_license ##### -->
+<para>
+
+</para>
+
+@about: 
+@license: 
+
+
+<!-- ##### FUNCTION gtk_about_dialog_get_website ##### -->
+<para>
+
+</para>
+
+@about: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_about_dialog_set_website ##### -->
+<para>
+
+</para>
+
+@about: 
+@website: 
+
+
+<!-- ##### FUNCTION gtk_about_dialog_get_website_label ##### -->
+<para>
+
+</para>
+
+@about: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_about_dialog_set_website_label ##### -->
+<para>
+
+</para>
+
+@about: 
+@website_label: 
+
+
+<!-- ##### FUNCTION gtk_about_dialog_get_authors ##### -->
+<para>
+
+</para>
+
+@about: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_about_dialog_set_authors ##### -->
+<para>
+
+</para>
+
+@about: 
+@authors: 
+
+
+<!-- ##### FUNCTION gtk_about_dialog_get_documenters ##### -->
+<para>
+
+</para>
+
+@about: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_about_dialog_set_documenters ##### -->
+<para>
+
+</para>
+
+@about: 
+@documenters: 
+
+
+<!-- ##### FUNCTION gtk_about_dialog_get_translator_credits ##### -->
+<para>
+
+</para>
+
+@about: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_about_dialog_set_translator_credits ##### -->
+<para>
+
+</para>
+
+@about: 
+@translator_credits: 
+
+
+<!-- ##### FUNCTION gtk_about_dialog_get_logo ##### -->
+<para>
+
+</para>
+
+@about: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_about_dialog_set_logo ##### -->
+<para>
+
+</para>
+
+@about: 
+@logo: 
+
+
+<!-- ##### USER_FUNCTION GtkAboutDialogActivateLinkFunc ##### -->
+<para>
+
+</para>
+
+@about: 
+@link: 
+
+
+<!-- ##### FUNCTION gtk_about_dialog_set_email_hook ##### -->
+<para>
+
+</para>
+
+@func: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_about_dialog_set_url_hook ##### -->
+<para>
+
+</para>
+
+@func: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_show_about_dialog ##### -->
+<para>
+
+</para>
+
+@parent: 
+@first_property_name: 
+@Varargs: 
+
+

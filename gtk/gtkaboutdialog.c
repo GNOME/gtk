@@ -1036,7 +1036,7 @@ gtk_about_dialog_get_documenters (GtkAboutDialog *about)
 /**
  * gtk_about_dialog_set_documenters:
  * @about: a #GtkAboutDialog
- * @authors: a %NULL-terminated array of strings 
+ * @documenters: a %NULL-terminated array of strings 
  *
  * Sets the strings which are displayed in the documenters tab
  * of the secondary credits dialog. 
@@ -1092,7 +1092,7 @@ gtk_about_dialog_get_artists (GtkAboutDialog *about)
 /**
  * gtk_about_dialog_set_artists:
  * @about: a #GtkAboutDialog
- * @authors: a %NULL-terminated array of strings 
+ * @artists: a %NULL-terminated array of strings 
  *
  * Sets the strings which are displayed in the artists tab
  * of the secondary credits dialog. 
@@ -1227,7 +1227,7 @@ icon_set_new_from_pixbufs (GList *pixbufs)
 /**
  * gtk_about_dialog_set_logo:
  * @about: a #GtkAboutDialog
- * @pixbuf: a #GdkPixbuf, or %NULL
+ * @logo: a #GdkPixbuf, or %NULL
  * 
  * Sets the pixbuf to be displayed as logo in 
  * the about dialog. If it is %NULL, the default
@@ -1238,7 +1238,7 @@ icon_set_new_from_pixbufs (GList *pixbufs)
  **/
 void
 gtk_about_dialog_set_logo (GtkAboutDialog *about,
-			   GdkPixbuf      *pixbuf)
+			   GdkPixbuf      *logo)
 {
   GtkAboutDialogPrivate *priv;
 
@@ -1246,8 +1246,8 @@ gtk_about_dialog_set_logo (GtkAboutDialog *about,
 
   priv = (GtkAboutDialogPrivate *)about->private_data;
 
-  if (pixbuf != NULL) 
-    gtk_image_set_from_pixbuf (GTK_IMAGE (priv->logo_image), pixbuf);
+  if (logo != NULL) 
+    gtk_image_set_from_pixbuf (GTK_IMAGE (priv->logo_image), logo);
   else 
     {
       GList *pixbufs = gtk_window_get_default_icon_list ();
@@ -1781,7 +1781,7 @@ gtk_about_dialog_set_email_hook (GtkAboutDialogActivateLinkFunc func)
 }
 
 /**
- * gtk_about_dialog_set_email_hook:
+ * gtk_about_dialog_set_url_hook:
  * @func: a function to call when a URL link is activated.
  * 
  * Installs a global function to be called whenever the user activates a
