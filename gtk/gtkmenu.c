@@ -1808,7 +1808,7 @@ gtk_menu_key_press (GtkWidget	*widget,
 	      GtkAccelKey key;
 	      
 	      if (gtk_accel_map_lookup_entry (path, &key) &&
-		  key.accel_key || key.accel_mods)
+		  (key.accel_key || key.accel_mods))
 		{
 		  accel_key = 0;
 		  accel_mods = 0;

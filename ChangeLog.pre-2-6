@@ -1,3 +1,23 @@
+Sat Feb  2 20:16:04 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkmenushell.c (_gtk_menu_shell_select_first): 
+	Non-exported _gtk_menu_select_first() function that
+	selects the first item of the menu in a standard
+	way. (Skipping tearoffs.)
+
+	* gtk/gtkmenushell.c gtk/gtkentry.c gtk/gtktextview.c
+	gtkmenuitem.c: Use _gtk_menu_shell_select_first().
+
+	* gtk/gtkmenuitem.c (gtk_real_menu_item_select): Remember
+	if we are starting the timeout from a keypress so
+	we can set menushell->ignore_enter properly.
+
+	* gtk/gtknotebook.c (focus_child_in): Return something
+	meaningful if there are no children.
+
+	* gtk/gtkmenu.c (gtk_menu_key_press): Fix precendence
+	problem.
+
 Sat Feb  2 19:15:42 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkmenu.c (gtk_menu_popup): Fix some bugs in

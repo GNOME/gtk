@@ -33,6 +33,7 @@
 #include "gtkmenuitem.h"
 #include "gtkmenushell.h"
 #include "gtksignal.h"
+#include "gtktearoffmenuitem.h"
 #include "gtkwindow.h"
 
 #define MENU_SHELL_TIMEOUT   500
@@ -926,6 +927,38 @@ gtk_menu_shell_move_selected (GtkMenuShell  *menu_shell,
     }
 }
 
+/**
+ * _gtk_menu_shell_select_first:
+ * @menu_shell: a #GtkMenuShell
+ * 
+ * Select the first visible child of the menu shell, unless
+ * it's a tearoff item.
+ **/
+void
+_gtk_menu_shell_select_first (GtkMenuShell *menu_shell)
+{
+  GtkWidget *to_select = NULL;
+  GList *tmp_list;
+
+  tmp_list = menu_shell->children;
+  while (tmp_list)
+    {
+      GtkWidget *child = tmp_list->data;
+      
+      if (GTK_WIDGET_VISIBLE (child))
+	{
+	  to_select = child;
+	  if (!GTK_IS_TEAROFF_MENU_ITEM (child))
+	    break;
+	}
+      
+      tmp_list = tmp_list->next;
+    }
+
+  if (to_select)
+    gtk_menu_shell_select_item (menu_shell, to_select);
+}
+
 static void
 gtk_menu_shell_select_submenu_first (GtkMenuShell     *menu_shell)
 {
@@ -934,11 +967,7 @@ gtk_menu_shell_select_submenu_first (GtkMenuShell     *menu_shell)
   menu_item = GTK_MENU_ITEM (menu_shell->active_menu_item); 
   
   if (menu_item->submenu)
-    {
-      GtkMenuShell *submenu = GTK_MENU_SHELL (menu_item->submenu); 
-      if (submenu->children)
-	gtk_menu_shell_select_item (submenu, submenu->children->data); 
-    }
+    _gtk_menu_shell_select_first (GTK_MENU_SHELL (menu_item->submenu));
 }
 
 static void
@@ -974,9 +1003,7 @@ gtk_real_menu_shell_move_current (GtkMenuShell      *menu_shell,
 	  _gtk_menu_item_is_selectable (menu_shell->active_menu_item) &&
 	  GTK_MENU_ITEM (menu_shell->active_menu_item)->submenu)
 	{
-	  menu_shell = GTK_MENU_SHELL (GTK_MENU_ITEM (menu_shell->active_menu_item)->submenu);
-	  if (menu_shell->children)
-	    gtk_menu_shell_select_item (menu_shell, menu_shell->children->data);
+	  gtk_menu_shell_select_submenu_first (menu_shell);
 	}
       else
 	{

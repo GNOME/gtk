@@ -105,6 +105,7 @@ void    gtk_menu_shell_activate_item  (GtkMenuShell      *menu_shell,
 				       GtkWidget         *menu_item,
 				       gboolean           force_deactivate);
 
+void _gtk_menu_shell_select_first (GtkMenuShell *menu_shell);
 
 #ifdef __cplusplus
 }
