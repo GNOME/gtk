@@ -82,8 +82,6 @@ void
 gdk_dnd_display_drag_cursor(gint x, gint y, gboolean drag_ok,
 			    gboolean change_made)
 {
-  int more_debug = 0;
-  
   if(!gdk_dnd.dnd_grabbed)
     return;
 
