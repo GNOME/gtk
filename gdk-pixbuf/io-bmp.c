@@ -624,7 +624,7 @@ static void OneLine32(struct bmp_progressive_state *context)
 			*pixels++ = (r << r_lshift) | (r >> r_rshift);
 			*pixels++ = (g << g_lshift) | (g >> g_rshift);
 			*pixels++ = (b << b_lshift) | (b >> b_rshift);
-			*pixels++ = src[3]; /* alpha */
+			*pixels++ = 0xff;
 
 			src += 4;
 		}
@@ -633,7 +633,7 @@ static void OneLine32(struct bmp_progressive_state *context)
 			*pixels++ = src[2];
 			*pixels++ = src[1];
 			*pixels++ = src[0];
-			*pixels++ = src[3];
+			*pixels++ = 0xff;
 
 			src += 4;
 		}

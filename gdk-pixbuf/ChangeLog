@@ -1,3 +1,9 @@
+Fri Mar  5 22:22:25 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* io-bmp.c (OneLine32): Don't try to load an alpha channel
+	from the BMP, since there is no evidence that even 32bit
+	BMPs have an alpha channel.  (#135502)
+
 Mon Mar  1 19:47:48 2004  Owen Taylor  <otaylor@redhat.com>
 
 	 * === Released 2.3.5 ====
