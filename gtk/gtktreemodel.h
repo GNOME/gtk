@@ -27,27 +27,25 @@ extern "C" {
 #endif /* __cplusplus */
 
 #define GTK_TYPE_TREE_MODEL            (gtk_tree_model_get_type ())
-#define GTK_TREE_MODEL(obj)            (GTK_CHECK_CAST ((obj), GTK_TYPE_TREE_MODEL, GtkTreeModel))
-#define GTK_TREE_MODEL_CLASS(klass)    (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_TREE_MODEL, GtkTreeModelClass))
-#define GTK_IS_TREE_MODEL(obj)	       (GTK_CHECK_TYPE ((obj), GTK_TYPE_TREE_MODEL))
-#define GTK_IS_TREE_MODEL_CLASS(klass) (GTK_CHECK_CLASS_TYPE ((obj), GTK_TYPE_TREE_MODEL))
-#define GTK_TREE_MODEL_GET_CLASS(obj)  (GTK_CHECK_GET_CLASS ((obj), GTK_TYPE_TREE_MODEL, GtkTreeModelClass))
+#define GTK_TREE_MODEL(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_TREE_MODEL, GtkTreeModel))
+#define GTK_IS_TREE_MODEL(obj)	       (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_TREE_MODEL))
+#define GTK_TREE_MODEL_GET_IFACE(obj)  ((GtkTreeModelIface *)g_type_interface_peek (((GTypeInstance *)GTK_TREE_MODEL (obj))->g_class, GTK_TYPE_TREE_MODEL))
+					
 
 typedef gpointer                  GtkTreeNode;
 typedef struct _GtkTreePath       GtkTreePath;
-typedef struct _GtkTreeModel      GtkTreeModel;
-typedef struct _GtkTreeModelClass GtkTreeModelClass;
+typedef struct _GtkTreeModel      GtkTreeModel; /* Dummy typedef */
+typedef struct _GtkTreeModelIface GtkTreeModelIface;
 
-struct _GtkTreeModel
+struct _GtkTreeModelIface
 {
-  GtkObject parent;
-};
+  GTypeInterface g_iface;
 
-struct _GtkTreeModelClass
-{
-  GtkObjectClass parent_class;
-
-  /* signals */
+  /* Signals */
+  /* Currently unimplemented as interfaces do not support signals yet, so
+   * objects implementing this interface need this.  Later, it will be moved
+   * back here.
+   */
   void       (* node_changed)         (GtkTreeModel *tree_model,
 				       GtkTreePath  *path,
 				       GtkTreeNode   node);
@@ -87,7 +85,7 @@ struct _GtkTreeModelClass
 
 
 /* Basic tree_model operations */
-GtkType        gtk_tree_model_get_type        (void);
+GtkType        gtk_tree_model_get_type        (void) G_GNUC_CONST;
 
 /* GtkTreePath Operations */
 GtkTreePath   *gtk_tree_path_new              (void);

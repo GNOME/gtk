@@ -21,6 +21,11 @@
 #include "gtkmarshal.h"
 #include "gtksignal.h"
 enum {
+  NODE_CHANGED,
+  NODE_INSERTED,
+  NODE_CHILD_TOGGLED,
+  NODE_DELETED,
+
   GET_N_COLUMNS,
   GET_NODE,
   GET_PATH,
@@ -37,6 +42,7 @@ enum {
 
 static void         gtk_model_simple_init                 (GtkModelSimple      *model_simple);
 static void         gtk_model_simple_class_init           (GtkModelSimpleClass *class);
+static void         gtk_model_simple_tree_model_init      (GtkTreeModelIface   *iface);
 static gint         gtk_real_model_simple_get_n_columns   (GtkTreeModel        *tree_model);
 static GtkTreeNode  gtk_real_model_simple_get_node        (GtkTreeModel        *tree_model,
 							   GtkTreePath         *path);
@@ -62,7 +68,6 @@ static GtkTreeNode  gtk_real_model_simple_node_parent     (GtkTreeModel        *
 
 
 
-static GtkTreeModelClass *parent_class = NULL;
 static guint model_simple_signals[LAST_SIGNAL] = { 0 };
 
 
@@ -86,7 +91,17 @@ gtk_model_simple_get_type (void)
         (GInstanceInitFunc) gtk_model_simple_init
       };
 
+      static const GInterfaceInfo tree_model_info =
+      {
+	(GInterfaceInitFunc) gtk_model_simple_tree_model_init,
+	NULL,
+	NULL
+      };
+
       model_simple_type = g_type_register_static (GTK_TYPE_TREE_MODEL, "GtkModelSimple", &model_simple_info);
+      g_type_add_interface_static (model_simple_type,
+				   GTK_TYPE_TREE_MODEL,
+				   &tree_model_info);
     }
 
   return model_simple_type;
@@ -98,75 +113,48 @@ gtk_model_simple_new (void)
   return GTK_OBJECT (gtk_type_new (GTK_TYPE_MODEL_SIMPLE));
 }
 
-
-typedef gint (*GtkSignal_INT__NONE) (GtkObject * object,
-				     gpointer user_data);
-void
-gtk_marshal_INT__NONE (GtkObject * object,
-			GtkSignalFunc func, gpointer func_data, GtkArg * args)
-{
-  GtkSignal_INT__NONE rfunc;
-  gint *return_val;
-  return_val = GTK_RETLOC_INT (args[0]);
-  rfunc = (GtkSignal_INT__NONE) func;
-  *return_val = (*rfunc) (object, func_data);
-}
-
-typedef gpointer (*GtkSignal_POINTER__NONE) (GtkObject * object,
-					 gpointer user_data);
-void
-gtk_marshal_POINTER__NONE (GtkObject * object,
-			   GtkSignalFunc func, gpointer func_data, GtkArg * args)
-{
-  GtkSignal_POINTER__NONE rfunc;
-  gpointer *return_val;
-  return_val = GTK_RETLOC_POINTER (args[0]);
-  rfunc = (GtkSignal_POINTER__NONE) func;
-  *return_val = (*rfunc) (object, func_data);
-}
-
-typedef gpointer (*GtkSignal_POINTER__POINTER) (GtkObject * object,
-						gpointer arg1,
-						gpointer user_data);
-void
-gtk_marshal_POINTER__POINTER (GtkObject * object,
-			      GtkSignalFunc func,
-			      gpointer func_data, GtkArg * args)
-{
-  GtkSignal_POINTER__POINTER rfunc;
-  gpointer *return_val;
-  return_val = GTK_RETLOC_POINTER (args[1]);
-  rfunc = (GtkSignal_POINTER__POINTER) func;
-  *return_val = (*rfunc) (object, GTK_VALUE_POINTER (args[0]), func_data);
-}
-
-typedef gpointer (*GtkSignal_POINTER__POINTER_INT) (GtkObject * object,
-						    gpointer arg1,
-						    gint arg2,
-						    gpointer user_data);
-void
-gtk_marshal_POINTER__POINTER_INT (GtkObject * object,
-				  GtkSignalFunc func,
-				  gpointer func_data, GtkArg * args)
-{
-  GtkSignal_POINTER__POINTER_INT rfunc;
-  gpointer *return_val;
-  return_val = GTK_RETLOC_POINTER (args[2]);
-  rfunc = (GtkSignal_POINTER__POINTER_INT) func;
-  *return_val = (*rfunc) (object, GTK_VALUE_POINTER (args[0]), GTK_VALUE_INT (args[1]), func_data);
-}
-
 static void
 gtk_model_simple_class_init (GtkModelSimpleClass *class)
 {
   GtkObjectClass *object_class;
 
-  GtkTreeModelClass *tree_model_class;
-
   object_class = (GtkObjectClass*) class;
-  tree_model_class = (GtkTreeModelClass*) class;
-  parent_class = g_type_class_peek_parent (class);
 
+  model_simple_signals[NODE_CHANGED] =
+    gtk_signal_new ("node_changed",
+                    GTK_RUN_FIRST,
+                    GTK_CLASS_TYPE (object_class),
+                    GTK_SIGNAL_OFFSET (GtkModelSimpleClass, node_changed),
+                    gtk_marshal_NONE__POINTER_POINTER,
+                    GTK_TYPE_NONE, 2,
+		    GTK_TYPE_POINTER,
+		    GTK_TYPE_POINTER);
+  model_simple_signals[NODE_INSERTED] =
+    gtk_signal_new ("node_inserted",
+                    GTK_RUN_FIRST,
+                    GTK_CLASS_TYPE (object_class),
+                    GTK_SIGNAL_OFFSET (GtkModelSimpleClass, node_inserted),
+                    gtk_marshal_NONE__POINTER_POINTER,
+                    GTK_TYPE_NONE, 2,
+		    GTK_TYPE_POINTER,
+		    GTK_TYPE_POINTER);
+  model_simple_signals[NODE_CHILD_TOGGLED] =
+    gtk_signal_new ("node_child_toggled",
+                    GTK_RUN_FIRST,
+                    GTK_CLASS_TYPE (object_class),
+                    GTK_SIGNAL_OFFSET (GtkModelSimpleClass, node_child_toggled),
+                    gtk_marshal_NONE__POINTER_POINTER,
+                    GTK_TYPE_NONE, 2,
+		    GTK_TYPE_POINTER,
+		    GTK_TYPE_POINTER);
+  model_simple_signals[NODE_DELETED] =
+    gtk_signal_new ("node_deleted",
+                    GTK_RUN_FIRST,
+                    GTK_CLASS_TYPE (object_class),
+                    GTK_SIGNAL_OFFSET (GtkModelSimpleClass, node_deleted),
+                    gtk_marshal_NONE__POINTER,
+                    GTK_TYPE_NONE, 1,
+		    GTK_TYPE_POINTER);
 
   model_simple_signals[GET_N_COLUMNS] =
     gtk_signal_new ("get_n_columns",
@@ -251,19 +239,22 @@ gtk_model_simple_class_init (GtkModelSimpleClass *class)
                     GTK_TYPE_POINTER, 1,
 		    GTK_TYPE_POINTER);
 
-
-  tree_model_class->get_n_columns = gtk_real_model_simple_get_n_columns;
-  tree_model_class->get_node = gtk_real_model_simple_get_node;
-  tree_model_class->get_path = gtk_real_model_simple_get_path;
-  tree_model_class->node_get_value = gtk_real_model_simple_node_get_value;
-  tree_model_class->node_next = gtk_real_model_simple_node_next;
-  tree_model_class->node_children = gtk_real_model_simple_node_children;
-  tree_model_class->node_has_child = gtk_real_model_simple_node_has_child;
-  tree_model_class->node_n_children = gtk_real_model_simple_node_n_children;
-  tree_model_class->node_nth_child = gtk_real_model_simple_node_nth_child;
-  tree_model_class->node_parent = gtk_real_model_simple_node_parent;
-
   gtk_object_class_add_signals (object_class, model_simple_signals, LAST_SIGNAL);
+}
+
+static void
+gtk_model_simple_tree_model_init (GtkTreeModelIface *iface)
+{
+  iface->get_n_columns = gtk_real_model_simple_get_n_columns;
+  iface->get_node = gtk_real_model_simple_get_node;
+  iface->get_path = gtk_real_model_simple_get_path;
+  iface->node_get_value = gtk_real_model_simple_node_get_value;
+  iface->node_next = gtk_real_model_simple_node_next;
+  iface->node_children = gtk_real_model_simple_node_children;
+  iface->node_has_child = gtk_real_model_simple_node_has_child;
+  iface->node_n_children = gtk_real_model_simple_node_n_children;
+  iface->node_nth_child = gtk_real_model_simple_node_nth_child;
+  iface->node_parent = gtk_real_model_simple_node_parent;
 }
 
 

@@ -37,7 +37,7 @@ typedef struct _GtkListStoreClass  GtkListStoreClass;
 
 struct _GtkListStore
 {
-  GtkTreeModel parent;
+  GtkObject parent;
 
   /*< private >*/
   GtkTreeNode root;
@@ -47,7 +47,21 @@ struct _GtkListStore
 
 struct _GtkListStoreClass
 {
-  GtkTreeModelClass parent_class;
+  GtkObjectClass parent_class;
+
+  /* signals */
+  /* Will be moved into the GtkTreeModelIface eventually */
+  void       (* node_changed)         (GtkTreeModel *tree_model,
+				       GtkTreePath  *path,
+				       GtkTreeNode   node);
+  void       (* node_inserted)        (GtkTreeModel *tree_model,
+				       GtkTreePath  *path,
+				       GtkTreeNode   node);
+  void       (* node_child_toggled)   (GtkTreeModel *tree_model,
+				       GtkTreePath  *path,
+				       GtkTreeNode   node);
+  void       (* node_deleted)         (GtkTreeModel *tree_model,
+				       GtkTreePath  *path);
 };
 
 GtkType      gtk_list_store_get_type           (void);

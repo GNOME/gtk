@@ -21,28 +21,12 @@
 #include <stdio.h>
 #include <string.h>
 #include "gtktreemodel.h"
-#include "gtksignal.h"
-
-enum {
-  NODE_CHANGED,
-  NODE_INSERTED,
-  NODE_CHILD_TOGGLED,
-  NODE_DELETED,
-  LAST_SIGNAL
-};
 
 struct _GtkTreePath
 {
   gint depth;
   gint *indices;
 };
-
-static void gtk_tree_model_init		        (GtkTreeModel		 *tree_model);
-static void gtk_tree_model_class_init	        (GtkTreeModelClass	 *klass);
-
-static GtkObjectClass *parent_class = NULL;
-static guint tree_model_signals[LAST_SIGNAL] = { 0 };
-
 
 GtkType
 gtk_tree_model_get_type (void)
@@ -53,85 +37,15 @@ gtk_tree_model_get_type (void)
     {
       static const GTypeInfo tree_model_info =
       {
-        sizeof (GtkTreeModelClass),
+        sizeof (GtkTreeModelIface), /* class_size */
 	NULL,		/* base_init */
 	NULL,		/* base_finalize */
-        (GClassInitFunc) gtk_tree_model_class_init,
-	NULL,		/* class_finalize */
-	NULL,		/* class_data */
-	sizeof (GtkTreeModel),
-	0,		/* n_preallocs */
-        (GInstanceInitFunc) gtk_tree_model_init
       };
 
-      tree_model_type = g_type_register_static (GTK_TYPE_OBJECT, "GtkTreeModel", &tree_model_info);
+      tree_model_type = g_type_register_static (G_TYPE_INTERFACE, "GtkTreeModel", &tree_model_info);
     }
 
   return tree_model_type;
-}
-
-static void
-gtk_tree_model_class_init (GtkTreeModelClass *class)
-{
-  GtkObjectClass *object_class;
-
-  object_class = (GtkObjectClass*) class;
-
-  parent_class = g_type_class_peek_parent (class);
-
-  tree_model_signals[NODE_CHANGED] =
-    gtk_signal_new ("node_changed",
-                    GTK_RUN_FIRST,
-                    GTK_CLASS_TYPE (object_class),
-                    GTK_SIGNAL_OFFSET (GtkTreeModelClass, node_changed),
-                    gtk_marshal_NONE__POINTER_POINTER,
-                    GTK_TYPE_NONE, 2,
-		    GTK_TYPE_POINTER,
-		    GTK_TYPE_POINTER);
-  tree_model_signals[NODE_INSERTED] =
-    gtk_signal_new ("node_inserted",
-                    GTK_RUN_FIRST,
-                    GTK_CLASS_TYPE (object_class),
-                    GTK_SIGNAL_OFFSET (GtkTreeModelClass, node_inserted),
-                    gtk_marshal_NONE__POINTER_POINTER,
-                    GTK_TYPE_NONE, 2,
-		    GTK_TYPE_POINTER,
-		    GTK_TYPE_POINTER);
-  tree_model_signals[NODE_CHILD_TOGGLED] =
-    gtk_signal_new ("node_child_toggled",
-                    GTK_RUN_FIRST,
-                    GTK_CLASS_TYPE (object_class),
-                    GTK_SIGNAL_OFFSET (GtkTreeModelClass, node_child_toggled),
-                    gtk_marshal_NONE__POINTER_POINTER,
-                    GTK_TYPE_NONE, 2,
-		    GTK_TYPE_POINTER,
-		    GTK_TYPE_POINTER);
-  tree_model_signals[NODE_DELETED] =
-    gtk_signal_new ("node_deleted",
-                    GTK_RUN_FIRST,
-                    GTK_CLASS_TYPE (object_class),
-                    GTK_SIGNAL_OFFSET (GtkTreeModelClass, node_deleted),
-                    gtk_marshal_NONE__POINTER,
-                    GTK_TYPE_NONE, 1,
-		    GTK_TYPE_POINTER);
-
-
-  gtk_object_class_add_signals (object_class, tree_model_signals, LAST_SIGNAL);
-
-
-  class->get_node = NULL;
-  class->node_next = NULL;
-  class->node_children = NULL;
-  class->node_n_children = NULL;
-  class->node_nth_child = NULL;
-  class->node_parent = NULL;
-}
-
-
-static void
-gtk_tree_model_init (GtkTreeModel *tree_model)
-{
-
 }
 
 /* GtkTreePath Operations */
@@ -339,8 +253,8 @@ gtk_tree_path_down (GtkTreePath *path)
 gint
 gtk_tree_model_get_n_columns (GtkTreeModel *tree_model)
 {
-  g_return_val_if_fail (GTK_TREE_MODEL_GET_CLASS (tree_model)->get_n_columns != NULL, 0);
-  return (* GTK_TREE_MODEL_GET_CLASS (tree_model)->get_n_columns) (tree_model);
+  g_return_val_if_fail (GTK_TREE_MODEL_GET_IFACE (tree_model)->get_n_columns != NULL, 0);
+  return (* GTK_TREE_MODEL_GET_IFACE (tree_model)->get_n_columns) (tree_model);
 }
 
 /* Node options */
@@ -348,16 +262,16 @@ GtkTreeNode
 gtk_tree_model_get_node (GtkTreeModel *tree_model,
 			 GtkTreePath  *path)
 {
-  g_return_val_if_fail (GTK_TREE_MODEL_GET_CLASS (tree_model)->get_node != NULL, NULL);
-  return (* GTK_TREE_MODEL_GET_CLASS (tree_model)->get_node) (tree_model, path);
+  g_return_val_if_fail (GTK_TREE_MODEL_GET_IFACE (tree_model)->get_node != NULL, NULL);
+  return (* GTK_TREE_MODEL_GET_IFACE (tree_model)->get_node) (tree_model, path);
 }
 
 GtkTreePath *
 gtk_tree_model_get_path (GtkTreeModel *tree_model,
 			 GtkTreeNode   node)
 {
-  g_return_val_if_fail (GTK_TREE_MODEL_GET_CLASS (tree_model)->get_path != NULL, NULL);
-  return (* GTK_TREE_MODEL_GET_CLASS (tree_model)->get_path) (tree_model, node);
+  g_return_val_if_fail (GTK_TREE_MODEL_GET_IFACE (tree_model)->get_path != NULL, NULL);
+  return (* GTK_TREE_MODEL_GET_IFACE (tree_model)->get_path) (tree_model, node);
 }
 
 void
@@ -366,40 +280,40 @@ gtk_tree_model_node_get_value (GtkTreeModel *tree_model,
 			       gint        column,
 			       GValue     *value)
 {
-  g_return_if_fail (GTK_TREE_MODEL_GET_CLASS (tree_model)->node_get_value != NULL);
-  (* GTK_TREE_MODEL_GET_CLASS (tree_model)->node_get_value) (tree_model, node, column, value);
+  g_return_if_fail (GTK_TREE_MODEL_GET_IFACE (tree_model)->node_get_value != NULL);
+  (* GTK_TREE_MODEL_GET_IFACE (tree_model)->node_get_value) (tree_model, node, column, value);
 }
 
 gboolean
 gtk_tree_model_node_next (GtkTreeModel  *tree_model,
 			  GtkTreeNode   *node)
 {
-  g_return_val_if_fail (GTK_TREE_MODEL_GET_CLASS (tree_model)->node_next != NULL, FALSE);
-  return (* GTK_TREE_MODEL_GET_CLASS (tree_model)->node_next) (tree_model, node);
+  g_return_val_if_fail (GTK_TREE_MODEL_GET_IFACE (tree_model)->node_next != NULL, FALSE);
+  return (* GTK_TREE_MODEL_GET_IFACE (tree_model)->node_next) (tree_model, node);
 }
 
 GtkTreeNode
 gtk_tree_model_node_children (GtkTreeModel *tree_model,
 			      GtkTreeNode   node)
 {
-  g_return_val_if_fail (GTK_TREE_MODEL_GET_CLASS (tree_model)->node_children != NULL, NULL);
-  return (* GTK_TREE_MODEL_GET_CLASS (tree_model)->node_children) (tree_model, node);
+  g_return_val_if_fail (GTK_TREE_MODEL_GET_IFACE (tree_model)->node_children != NULL, NULL);
+  return (* GTK_TREE_MODEL_GET_IFACE (tree_model)->node_children) (tree_model, node);
 }
 
 gboolean
 gtk_tree_model_node_has_child (GtkTreeModel *tree_model,
 			       GtkTreeNode   node)
 {
-  g_return_val_if_fail (GTK_TREE_MODEL_GET_CLASS (tree_model)->node_has_child != NULL, FALSE);
-  return (* GTK_TREE_MODEL_GET_CLASS (tree_model)->node_has_child) (tree_model, node);
+  g_return_val_if_fail (GTK_TREE_MODEL_GET_IFACE (tree_model)->node_has_child != NULL, FALSE);
+  return (* GTK_TREE_MODEL_GET_IFACE (tree_model)->node_has_child) (tree_model, node);
 }
 
 gint
 gtk_tree_model_node_n_children (GtkTreeModel *tree_model,
 				GtkTreeNode   node)
 {
-  g_return_val_if_fail (GTK_TREE_MODEL_GET_CLASS (tree_model)->node_n_children != NULL, -1);
-  return (* GTK_TREE_MODEL_GET_CLASS (tree_model)->node_n_children) (tree_model, node);
+  g_return_val_if_fail (GTK_TREE_MODEL_GET_IFACE (tree_model)->node_n_children != NULL, -1);
+  return (* GTK_TREE_MODEL_GET_IFACE (tree_model)->node_n_children) (tree_model, node);
 }
 
 GtkTreeNode
@@ -407,15 +321,15 @@ gtk_tree_model_node_nth_child (GtkTreeModel *tree_model,
 			       GtkTreeNode   node,
 			       gint        n)
 {
-  g_return_val_if_fail (GTK_TREE_MODEL_GET_CLASS (tree_model)->node_nth_child != NULL, NULL);
-  return (* GTK_TREE_MODEL_GET_CLASS (tree_model)->node_nth_child) (tree_model, node, n);
+  g_return_val_if_fail (GTK_TREE_MODEL_GET_IFACE (tree_model)->node_nth_child != NULL, NULL);
+  return (* GTK_TREE_MODEL_GET_IFACE (tree_model)->node_nth_child) (tree_model, node, n);
 }
 
 GtkTreeNode
 gtk_tree_model_node_parent (GtkTreeModel *tree_model,
 			    GtkTreeNode   node)
 {
-  g_return_val_if_fail (GTK_TREE_MODEL_GET_CLASS (tree_model)->node_parent != NULL, NULL);
-  return (* GTK_TREE_MODEL_GET_CLASS (tree_model)->node_parent) (tree_model, node);
+  g_return_val_if_fail (GTK_TREE_MODEL_GET_IFACE (tree_model)->node_parent != NULL, NULL);
+  return (* GTK_TREE_MODEL_GET_IFACE (tree_model)->node_parent) (tree_model, node);
 }
 

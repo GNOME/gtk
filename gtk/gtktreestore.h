@@ -37,7 +37,7 @@ typedef struct _GtkTreeStoreClass  GtkTreeStoreClass;
 
 struct _GtkTreeStore
 {
-  GtkTreeModel parent;
+  GtkObject parent;
   GtkTreeNode root;
   gint n_columns;
   GType *column_headers;
@@ -45,7 +45,21 @@ struct _GtkTreeStore
 
 struct _GtkTreeStoreClass
 {
-  GtkTreeModelClass parent_class;
+  GtkObjectClass parent_class;
+
+  /* signals */
+  /* Will be moved into the GtkTreeModelIface eventually */
+  void       (* node_changed)         (GtkTreeModel *tree_model,
+				       GtkTreePath  *path,
+				       GtkTreeNode   node);
+  void       (* node_inserted)        (GtkTreeModel *tree_model,
+				       GtkTreePath  *path,
+				       GtkTreeNode   node);
+  void       (* node_child_toggled)   (GtkTreeModel *tree_model,
+				       GtkTreePath  *path,
+				       GtkTreeNode   node);
+  void       (* node_deleted)         (GtkTreeModel *tree_model,
+				       GtkTreePath  *path);
 };
 
 

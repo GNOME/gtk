@@ -25,8 +25,19 @@
 
 #define G_NODE(node) ((GNode *)node)
 
-static void           gtk_tree_store_init            (GtkTreeStore      *TreeStore);
-static void           gtk_tree_store_class_init      (GtkTreeStoreClass *klass);
+enum {
+  NODE_CHANGED,
+  NODE_INSERTED,
+  NODE_CHILD_TOGGLED,
+  NODE_DELETED,
+  LAST_SIGNAL
+};
+
+static guint tree_store_signals[LAST_SIGNAL] = { 0 };
+
+static void           gtk_tree_store_init            (GtkTreeStore      *tree_store);
+static void           gtk_tree_store_class_init      (GtkTreeStoreClass *tree_store_class);
+static void           gtk_tree_store_tree_model_init (GtkTreeModelIface *iface);
 static gint           gtk_tree_store_get_n_columns   (GtkTreeModel      *tree_model);
 static GtkTreeNode    gtk_tree_store_get_node        (GtkTreeModel      *tree_model,
 						      GtkTreePath       *path);
@@ -51,8 +62,6 @@ static GtkTreeNode    gtk_tree_store_node_parent     (GtkTreeModel      *tree_mo
 						      GtkTreeNode        node);
 
 
-static GtkTreeModelClass *parent_class = NULL;
-
 
 GtkType
 gtk_tree_store_get_type (void)
@@ -74,33 +83,81 @@ gtk_tree_store_get_type (void)
         (GInstanceInitFunc) gtk_tree_store_init
       };
 
+      static const GInterfaceInfo tree_model_info =
+      {
+	(GInterfaceInitFunc) gtk_tree_store_tree_model_init,
+	NULL,
+	NULL
+      };
+
       tree_store_type = g_type_register_static (GTK_TYPE_TREE_MODEL, "GtkTreeStore", &tree_store_info);
+      g_type_add_interface_static (tree_store_type,
+				   GTK_TYPE_TREE_MODEL,
+				   &tree_model_info);
     }
 
   return tree_store_type;
 }
 
 static void
-gtk_tree_store_class_init (GtkTreeStoreClass *klass)
+gtk_tree_store_class_init (GtkTreeStoreClass *tree_store_class)
 {
   GtkObjectClass *object_class;
-  GtkTreeModelClass *tree_model_class;
 
-  object_class = (GtkObjectClass *) klass;
-  tree_model_class = (GtkTreeModelClass *) klass;
+  object_class = (GtkObjectClass *) tree_store_class;
 
-  parent_class = gtk_type_class (gtk_tree_model_get_type ());
+  tree_store_signals[NODE_CHANGED] =
+    gtk_signal_new ("node_changed",
+                    GTK_RUN_FIRST,
+                    GTK_CLASS_TYPE (object_class),
+                    GTK_SIGNAL_OFFSET (GtkTreeStoreClass, node_changed),
+                    gtk_marshal_NONE__POINTER_POINTER,
+                    GTK_TYPE_NONE, 2,
+		    GTK_TYPE_POINTER,
+		    GTK_TYPE_POINTER);
+  tree_store_signals[NODE_INSERTED] =
+    gtk_signal_new ("node_inserted",
+                    GTK_RUN_FIRST,
+                    GTK_CLASS_TYPE (object_class),
+                    GTK_SIGNAL_OFFSET (GtkTreeStoreClass, node_inserted),
+                    gtk_marshal_NONE__POINTER_POINTER,
+                    GTK_TYPE_NONE, 2,
+		    GTK_TYPE_POINTER,
+		    GTK_TYPE_POINTER);
+  tree_store_signals[NODE_CHILD_TOGGLED] =
+    gtk_signal_new ("node_child_toggled",
+                    GTK_RUN_FIRST,
+                    GTK_CLASS_TYPE (object_class),
+                    GTK_SIGNAL_OFFSET (GtkTreeStoreClass, node_child_toggled),
+                    gtk_marshal_NONE__POINTER_POINTER,
+                    GTK_TYPE_NONE, 2,
+		    GTK_TYPE_POINTER,
+		    GTK_TYPE_POINTER);
+  tree_store_signals[NODE_DELETED] =
+    gtk_signal_new ("node_deleted",
+                    GTK_RUN_FIRST,
+                    GTK_CLASS_TYPE (object_class),
+                    GTK_SIGNAL_OFFSET (GtkTreeStoreClass, node_deleted),
+                    gtk_marshal_NONE__POINTER,
+                    GTK_TYPE_NONE, 1,
+		    GTK_TYPE_POINTER);
 
-  tree_model_class->get_n_columns = gtk_tree_store_get_n_columns;
-  tree_model_class->get_node = gtk_tree_store_get_node;
-  tree_model_class->get_path = gtk_tree_store_get_path;
-  tree_model_class->node_get_value = gtk_tree_store_node_get_value;
-  tree_model_class->node_next = gtk_tree_store_node_next;
-  tree_model_class->node_children = gtk_tree_store_node_children;
-  tree_model_class->node_has_child = gtk_tree_store_node_has_child;
-  tree_model_class->node_n_children = gtk_tree_store_node_n_children;
-  tree_model_class->node_nth_child = gtk_tree_store_node_nth_child;
-  tree_model_class->node_parent = gtk_tree_store_node_parent;
+  gtk_object_class_add_signals (object_class, tree_store_signals, LAST_SIGNAL);
+}
+
+static void
+gtk_tree_store_tree_model_init (GtkTreeModelIface *iface)
+{
+  iface->get_n_columns = gtk_tree_store_get_n_columns;
+  iface->get_node = gtk_tree_store_get_node;
+  iface->get_path = gtk_tree_store_get_path;
+  iface->node_get_value = gtk_tree_store_node_get_value;
+  iface->node_next = gtk_tree_store_node_next;
+  iface->node_children = gtk_tree_store_node_children;
+  iface->node_has_child = gtk_tree_store_node_has_child;
+  iface->node_n_children = gtk_tree_store_node_n_children;
+  iface->node_nth_child = gtk_tree_store_node_nth_child;
+  iface->node_parent = gtk_tree_store_node_parent;
 }
 
 static void
