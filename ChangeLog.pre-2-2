@@ -1,3 +1,10 @@
+Mon Sep 14 21:47:35 CDT 1998 Shawn T. Amundson <amundson@gtk.org>
+
+	* gdk/gdkimage.c: changed g_new()s to malloc()s and 
+	  g_free()s to free()s to avoid mixing g_new()s with 
+	  free()s.  X itself uses free() on some of the 
+	  malloced memory.
+
 Sat Sep 12 10:44:06 1998  Owen Taylor  <otaylor@redhat.com>
 
 	* gtkfilesel.c: Maintain a list of directories like
