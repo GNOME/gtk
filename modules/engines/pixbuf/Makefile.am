@@ -2,9 +2,16 @@ if OS_WIN32
 no_undefined = -no-undefined
 endif
 
-INCLUDES = $(GTK_CFLAGS)
+INCLUDES = \
+	-I$(top_srcdir) 				\
+	-I$(top_srcdir)/gdk				\
+	-I$(top_builddir)/gdk				\
+	-DG_DISABLE_DEPRECATED	 			\
+	-DGDK_PIXBUF_DISABLE_DEPRECATED			\
+	-DGDK_DISABLE_DEPRECATED			\
+	$(GTK_DEP_CFLAGS)
 
-enginedir = $(libdir)/gtk-2.0/$(GTK_VERSION)/engines
+enginedir = $(libdir)/gtk-2.0/$(GTK_BINARY_VERSION)/engines
 
 engine_LTLIBRARIES = libpixmap.la
 
@@ -20,6 +27,3 @@ libpixmap_la_SOURCES = 		\
 libpixmap_la_LDFLAGS =  -avoid-version -module $(no_undefined)
 libpixmap_la_LIBADD = $(GTK_LIBS)
 
-dist-hook:
-	cp -pr examples $(distdir);					\
-        find $(distdir)/examples -name 'CVS' -print | xargs rm -rf 
