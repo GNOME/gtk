@@ -144,17 +144,17 @@ gtk_hpaned_size_allocate (GtkWidget     *widget,
   GtkAllocation child1_allocation;
   GtkAllocation child2_allocation;
   GdkRectangle old_groove_rectangle;
-  guint16 border_width;
+  gint border_width, gutter_size;
 
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_HPANED (widget));
   g_return_if_fail (allocation != NULL);
 
   widget->allocation = *allocation;
-
   paned = GTK_PANED (widget);
   border_width = GTK_CONTAINER (paned)->border_width;
-
+  gutter_size = paned->gutter_size;
+  
   if (paned->child1)
     gtk_widget_get_child_requisition (paned->child1, &child1_requisition);
   else
@@ -166,16 +166,16 @@ gtk_hpaned_size_allocate (GtkWidget     *widget,
     child2_requisition.width = 0;
     
   gtk_paned_compute_position (paned,
-			      widget->allocation.width
-			        - paned->gutter_size
-			        - 2 * border_width,
+			      MAX (1, (gint) widget->allocation.width
+				   - gutter_size
+				   - 2 * border_width),
 			      child1_requisition.width,
 			      child2_requisition.width);
   
   /* Move the handle before the children so we don't get extra expose events */
 
-  paned->handle_xpos = paned->child1_size + border_width + paned->gutter_size / 2 - paned->handle_size / 2;
-  paned->handle_ypos = allocation->height - border_width - 2*paned->handle_size;
+  paned->handle_ypos = (gint) allocation->height - border_width - 2 * paned->handle_size;
+  paned->handle_xpos = paned->child1_size + border_width + gutter_size / 2 - paned->handle_size / 2;
 
   if (GTK_WIDGET_REALIZED (widget))
     {
@@ -186,15 +186,15 @@ gtk_hpaned_size_allocate (GtkWidget     *widget,
       gdk_window_move (paned->handle, paned->handle_xpos, paned->handle_ypos);
     }
 
-  child1_allocation.height = child2_allocation.height = MAX (1, (gint)allocation->height - border_width * 2);
+  child1_allocation.height = child2_allocation.height = MAX (1, (gint) allocation->height - border_width * 2);
   child1_allocation.width = paned->child1_size;
-  child1_allocation.x = border_width;
   child1_allocation.y = child2_allocation.y = border_width;
+  child1_allocation.x = border_width;
   
   old_groove_rectangle = paned->groove_rectangle;
 
-  paned->groove_rectangle.x = child1_allocation.x 
-    + child1_allocation.width + paned->gutter_size / 2 - 1;
+  paned->groove_rectangle.x = (child1_allocation.x +
+			       child1_allocation.width + gutter_size / 2 - 1);
   paned->groove_rectangle.y = 0;
   paned->groove_rectangle.width = 2;
   paned->groove_rectangle.height = allocation->height;
@@ -217,9 +217,9 @@ gtk_hpaned_size_allocate (GtkWidget     *widget,
 				  paned->groove_rectangle.height);
     }
   
-  child2_allocation.x = paned->groove_rectangle.x + paned->gutter_size / 2 + 1;
-  child2_allocation.width = MAX (1, (gint)allocation->width
-    - child2_allocation.x - border_width);
+  child2_allocation.x = paned->groove_rectangle.x + gutter_size / 2 + 1;
+  child2_allocation.width = MAX (1, (gint) allocation->width -
+				 child2_allocation.x - border_width);
   
   /* Now allocate the childen, making sure, when resizing not to
    * overlap the windows */
