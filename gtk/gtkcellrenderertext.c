@@ -120,6 +120,7 @@ typedef struct _GtkCellRendererTextPrivate GtkCellRendererTextPrivate;
 struct _GtkCellRendererTextPrivate
 {
   guint single_paragraph : 1;
+  gulong focus_out_id;
 };
 
 
@@ -1369,15 +1370,14 @@ gtk_cell_renderer_text_editing_done (GtkCellEditable *entry,
 {
   const gchar *path;
   const gchar *new_text;
-  GtkCellRendererInfo *info;
+  GtkCellRendererTextPrivate *priv;
 
-  info = g_object_get_data (G_OBJECT (data),
-		            GTK_CELL_RENDERER_INFO_KEY);
+  priv = GTK_CELL_RENDERER_TEXT_GET_PRIVATE (data);
 
-  if (info->focus_out_id > 0)
+  if (priv->focus_out_id > 0)
     {
-      g_signal_handler_disconnect (entry, info->focus_out_id);
-      info->focus_out_id = 0;
+      g_signal_handler_disconnect (entry, priv->focus_out_id);
+      priv->focus_out_id = 0;
     }
 
   if (GTK_ENTRY (entry)->editing_canceled)
@@ -1409,11 +1409,12 @@ gtk_cell_renderer_text_start_editing (GtkCellRenderer      *cell,
 				      GdkRectangle         *cell_area,
 				      GtkCellRendererState  flags)
 {
-  GtkCellRendererText *celltext;
   GtkWidget *entry;
-  GtkCellRendererInfo *info;
-  
+  GtkCellRendererText *celltext;
+  GtkCellRendererTextPrivate *priv;
+
   celltext = GTK_CELL_RENDERER_TEXT (cell);
+  priv = GTK_CELL_RENDERER_TEXT_GET_PRIVATE (cell);
 
   /* If the cell isn't editable we return NULL. */
   if (celltext->editable == FALSE)
@@ -1429,15 +1430,12 @@ gtk_cell_renderer_text_start_editing (GtkCellRenderer      *cell,
   
   gtk_editable_select_region (GTK_EDITABLE (entry), 0, -1);
   
-  info = g_object_get_data (G_OBJECT (cell),
-		            GTK_CELL_RENDERER_INFO_KEY);
-  
   gtk_widget_show (entry);
   g_signal_connect (entry,
 		    "editing_done",
 		    G_CALLBACK (gtk_cell_renderer_text_editing_done),
 		    celltext);
-  info->focus_out_id = g_signal_connect (entry, "focus_out_event",
+  priv->focus_out_id = g_signal_connect (entry, "focus_out_event",
 		         G_CALLBACK (gtk_cell_renderer_text_focus_out_event),
 		         celltext);
 

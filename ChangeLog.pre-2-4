@@ -1,3 +1,34 @@
+Thu Dec 18 00:57:18 2003  Kristian Rietveld  <kris@gtk.org>
+
+	Migrating all cell renderers to use the new instance private data
+	construction.
+
+	* gtk/gtktreeprivate.h: remove GtkCellRendererInfo, as it is no
+	longer being used.
+
+	* gtk/gtkcellrenderer.c (gtk_cell_renderer_init),
+	(gtk_cell_renderer_class_init), (gtk_cell_renderer_get_property),
+	(set_cell_bg_color), (gtk_cell_renderer_render): remove old
+	GtkCellRendererInfo handling, migrate to instance private data.
+
+	* gtk/gtkcellrenderertext.c (gtk_cell_renderer_text_editing_done),
+	(gtk_cell_renderer_text_start_editing): moved focus_out_id
+	from GtkCellRendererInfo to text renderer private data.
+
+	* gtk/gtkcellrendererpixbuf.c (gtk_cell_renderer_pixbuf_init),
+	(gtk_cell_renderer_pixbuf_class_init),
+	(gtk_cell_renderer_pixbuf_finalize),
+	(gtk_cell_renderer_pixbuf_get_property),
+	(gtk_cell_renderer_pixbuf_set_property),
+	(gtk_cell_renderer_pixbuf_create_stock_pixbuf),
+	(gtk_cell_renderer_pixbuf_get_size), (gtk_cell_renderer_pixbuf_render):
+	migrate to instance private data.
+
+	* gtk/gtkcellrenderertoggle.c (gtk_cell_renderer_toggle_class_init),
+	(gtk_cell_renderer_toggle_get_property),
+	(gtk_cell_renderer_toggle_set_property),
+	(gtk_cell_renderer_toggle_render): migrate to instance private data.
+
 Thu Dec 18 00:24:32 2003  Kristian Rietveld  <kris@gtk.org>
 
 	* gtk/gtkcellrenderertext.c (gtk_cell_renderer_text_class_init),

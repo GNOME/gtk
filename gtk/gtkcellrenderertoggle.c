@@ -73,6 +73,14 @@ enum {
 
 static guint toggle_cell_signals[LAST_SIGNAL] = { 0 };
 
+#define GTK_CELL_RENDERER_TOGGLE_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), GTK_TYPE_CELL_RENDERER_TOGGLE, GtkCellRendererTogglePrivate))
+
+typedef struct _GtkCellRendererTogglePrivate GtkCellRendererTogglePrivate;
+struct _GtkCellRendererTogglePrivate
+{
+  guint inconsistent : 1;
+};
+
 
 GType
 gtk_cell_renderer_toggle_get_type (void)
@@ -172,6 +180,8 @@ gtk_cell_renderer_toggle_class_init (GtkCellRendererToggleClass *class)
 		  _gtk_marshal_VOID__STRING,
 		  G_TYPE_NONE, 1,
 		  G_TYPE_STRING);
+
+  g_type_class_add_private (object_class, sizeof (GtkCellRendererTogglePrivate));
 }
 
 static void
@@ -181,6 +191,9 @@ gtk_cell_renderer_toggle_get_property (GObject     *object,
 				       GParamSpec  *pspec)
 {
   GtkCellRendererToggle *celltoggle = GTK_CELL_RENDERER_TOGGLE (object);
+  GtkCellRendererTogglePrivate *priv;
+
+  priv = GTK_CELL_RENDERER_TOGGLE_GET_PRIVATE (object);
   
   switch (param_id)
     {
@@ -188,16 +201,7 @@ gtk_cell_renderer_toggle_get_property (GObject     *object,
       g_value_set_boolean (value, celltoggle->active);
       break;
     case PROP_INCONSISTENT:
-      {
-	/* Move out of here when more properties start to use the info
-	 * thing. I put it here to not affect performance, this property
-	 * is not going to be used much.
-	 */
-	GtkCellRendererInfo *cellinfo;
-	cellinfo = g_object_get_data (object, GTK_CELL_RENDERER_INFO_KEY);
-
-        g_value_set_boolean (value, cellinfo->inconsistent);
-      }
+      g_value_set_boolean (value, priv->inconsistent);
       break;
     case PROP_ACTIVATABLE:
       g_value_set_boolean (value, celltoggle->activatable);
@@ -219,6 +223,9 @@ gtk_cell_renderer_toggle_set_property (GObject      *object,
 				       GParamSpec   *pspec)
 {
   GtkCellRendererToggle *celltoggle = GTK_CELL_RENDERER_TOGGLE (object);
+  GtkCellRendererTogglePrivate *priv;
+
+  priv = GTK_CELL_RENDERER_TOGGLE_GET_PRIVATE (object);
   
   switch (param_id)
     {
@@ -227,14 +234,8 @@ gtk_cell_renderer_toggle_set_property (GObject      *object,
       g_object_notify (G_OBJECT(object), "active");
       break;
     case PROP_INCONSISTENT:
-      {
-	/* read comment in _get_property */
-	GtkCellRendererInfo *cellinfo;
-	cellinfo = g_object_get_data (object, GTK_CELL_RENDERER_INFO_KEY);
-
-	cellinfo->inconsistent = g_value_get_boolean (value);
-	g_object_notify (G_OBJECT (object), "inconsistent");
-      }
+      priv->inconsistent = g_value_get_boolean (value);
+      g_object_notify (G_OBJECT (object), "inconsistent");
       break;
     case PROP_ACTIVATABLE:
       celltoggle->activatable = g_value_get_boolean (value);
@@ -316,11 +317,13 @@ gtk_cell_renderer_toggle_render (GtkCellRenderer      *cell,
 				 GtkCellRendererState  flags)
 {
   GtkCellRendererToggle *celltoggle = (GtkCellRendererToggle *) cell;
-  GtkCellRendererInfo *cellinfo;
+  GtkCellRendererTogglePrivate *priv;
   gint width, height;
   gint x_offset, y_offset;
   GtkShadowType shadow;
   GtkStateType state = 0;
+
+  priv = GTK_CELL_RENDERER_TOGGLE_GET_PRIVATE (cell);
 
   gtk_cell_renderer_toggle_get_size (cell, widget, cell_area,
 				     &x_offset, &y_offset,
@@ -331,9 +334,7 @@ gtk_cell_renderer_toggle_render (GtkCellRenderer      *cell,
   if (width <= 0 || height <= 0)
     return;
 
-  cellinfo = g_object_get_data (G_OBJECT (cell), GTK_CELL_RENDERER_INFO_KEY);
-
-  if (cellinfo->inconsistent)
+  if (priv->inconsistent)
     shadow = GTK_SHADOW_ETCHED_IN;
   else
     shadow = celltoggle->active ? GTK_SHADOW_IN : GTK_SHADOW_OUT;
