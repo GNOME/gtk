@@ -74,7 +74,11 @@
       folders.  Consider a backup program that needs to let the user
       select a folder that will be backed up along with its
       subfolders.  To configure whether #GtkFileChooser is used to
-      select files or folders, use gtk_file_chooser_set_folder_mode().
+      select files or folders, use gtk_file_chooser_set_action().  In
+      addition, this lets you configure whether the file chooser will
+      be used to select existing files or folders (e.g. for
+      "File/Open"), or to type in new filenames (for
+      "File/Save&nbsp;As...").
     </para>
   </section>
 
