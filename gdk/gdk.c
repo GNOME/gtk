@@ -28,9 +28,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include <limits.h>
-#ifdef USE_XIM
-#include <stdarg.h>
-#endif
 
 #ifdef HAVE_SYS_SELECT_H
 #include <sys/select.h>
@@ -42,16 +39,13 @@
 #include <X11/Xos.h>
 #include <X11/Xutil.h>
 #include <X11/Xmu/WinUtil.h>
-#ifdef USE_XIM
-#include <X11/Xresource.h>
-#endif
 #include <X11/cursorfont.h>
 #include "gdk.h"
 #include "gdkprivate.h"
 #include "gdkinput.h"
+#include "gdki18n.h"
 #include "gdkx.h"
 #include "gdkkeysyms.h"
-#include "gdki18n.h"
 
 #ifndef X_GETTIMEOFDAY
 #define X_GETTIMEOFDAY(tv)  gettimeofday (tv, NULL)
@@ -139,21 +133,6 @@ static int	    gdk_x_error			 (Display     *display,
 static int	    gdk_x_io_error		 (Display     *display);
 static RETSIGTYPE   gdk_signal			 (int	       signum);
 
-
-#ifdef USE_XIM
-static guint	     gdk_im_va_count	 (va_list list);
-static XVaNestedList gdk_im_va_to_nested (va_list list, 
-					  guint	  count);
-
-static GdkIM  gdk_im_get		(void);
-static gint   gdk_im_open		(XrmDatabase db,
-					 gchar* res_name,
-					 gchar* rec_class);
-static void   gdk_im_close		(void);
-static void   gdk_ic_cleanup		(void);
-
-#endif /* USE_XIM */
-
 GdkFilterReturn gdk_wm_protocols_filter (GdkXEvent *xev,
 					 GdkEvent  *event,
 					 gpointer   data);
@@ -211,17 +190,6 @@ static GdkWindowPrivate *xgrab_window = NULL;	    /* Window that currently holds
 						     */
 
 static GList *client_filters;	                    /* Filters for client messages */
-
-#ifdef USE_XIM
-static gint xim_using;				/* using XIM Protocol if TRUE */
-static GdkIM xim_im;				/* global IM */
-static XIMStyles* xim_styles;			/* im supports these styles */
-static XIMStyle xim_best_allowed_style;
-static GdkICPrivate *xim_ic;			/* currently using IC */
-static GdkWindow* xim_window;			/* currently using Widow */
-static GList* xim_ic_list;
-
-#endif
 
 static GList *putback_events = NULL;
 
@@ -570,18 +538,7 @@ gdk_init (int	 *argc,
 				 gdk_wm_protocols_filter, NULL);
   
 #ifdef USE_XIM
-  /* initialize XIM Protocol variables */
-  xim_using = FALSE;
-  xim_im = NULL;
-  xim_styles = NULL;
-  if (!(xim_best_allowed_style & GDK_IM_PREEDIT_MASK))
-    gdk_im_set_best_style (GDK_IM_PREEDIT_CALLBACKS);
-  if (!(xim_best_allowed_style & GDK_IM_STATUS_MASK))
-    gdk_im_set_best_style (GDK_IM_STATUS_CALLBACKS);
-  xim_ic = NULL;
-  xim_window = (GdkWindow*)NULL;
-  
-  gdk_im_open (NULL, NULL, NULL);
+  gdk_im_open ();
 #endif
   
   gdk_initialized = 1;
@@ -1005,16 +962,22 @@ gdk_event_get (void)
        *  has occurred. Read it.
        */
 #ifdef USE_XIM
-      gint filter_status;
-      if (xim_using && xim_window)
-	do
-	  {		/* don't dispatch events used by IM */
-	    XNextEvent (gdk_display, &xevent);
-	    filter_status = XFilterEvent (&xevent, 
-					  GDK_WINDOW_XWINDOW (xim_window));
-	  } while (filter_status == True);
-      else
-	XNextEvent (gdk_display, &xevent);
+      Window w = None;
+
+      XNextEvent (gdk_display, &xevent);
+      if (gdk_xim_window)
+	switch (xevent.type)
+	  {
+	  case KeyPress:
+	  case KeyRelease:
+	  case ButtonPress:
+	  case ButtonRelease:
+	    w = GDK_WINDOW_XWINDOW (gdk_xim_window);
+	    break;
+	  }
+
+      if (XFilterEvent (&xevent, w))
+	return NULL;
 #else
       XNextEvent (gdk_display, &xevent);
 #endif
@@ -2067,13 +2030,6 @@ gdk_event_translate (GdkEvent *event,
   
   if (window != NULL)
     gdk_window_ref (window);
-#ifdef USE_XIM
-  else if (XFilterEvent(xevent, None)) /* for xlib XIM handling */
-    return FALSE;
-#endif
-  else
-    GDK_NOTE (EVENTS, 
-      g_message ("Got event for unknown window: %#lx\n", xevent->xany.window));
   
   event->any.window = window;
   event->any.send_event = xevent->xany.send_event;
@@ -2088,16 +2044,45 @@ gdk_event_translate (GdkEvent *event,
       /* Check for filters for this window */
   
       GdkFilterReturn result;
+
+#ifdef USE_XIM
+      if (window == NULL && 
+	  xevent->type == KeyPress &&
+	  gdk_xim_window && 
+	  !((GdkWindowPrivate *) gdk_xim_window)->destroyed)
+	{
+	  /*
+	   * If user presses a key in Preedit or Status window, keypress event
+	   * is sometimes sent to these windows. These windows are not managed
+	   * by GDK, so we redirect KeyPress event to gdk_xim_window.
+	   *
+	   * If someone want to use the window whitch is not managed by GDK
+	   * and want to get KeyPress event, he/she must register the filter
+	   * function to gdk_default_filters to intercept the event.
+	   */
+	  
+	  window = gdk_xim_window;
+	  window_private = (GdkWindowPrivate *) window;
+	  gdk_window_ref (window);
+	  event->any.window = window;
+	  
+	  GDK_NOTE (XIM,
+		    g_message ("KeyPress event is redirected to gdk_xim_window: %#lx",
+			       xevent->xany.window));
+	}
+#endif /* USE_XIM */
+      
       result = gdk_event_apply_filters (xevent, event,
 					window_private
 					?window_private->filters
 					:gdk_default_filters);
       
       if (result != GDK_FILTER_CONTINUE)
-	{
-	  return (result == GDK_FILTER_TRANSLATE) ? TRUE : FALSE;
-	}
+	return (result == GDK_FILTER_TRANSLATE) ? TRUE : FALSE;
     }
+
+  if (window == NULL)
+    g_message ("Got event for unknown window: %#lx\n", xevent->xany.window);
 
   /* We do a "manual" conversion of the XEvent to a
    *  GdkEvent. The structures are mostly the same so
@@ -2121,12 +2106,12 @@ gdk_event_translate (GdkEvent *event,
 	}
       keysym = GDK_VoidSymbol;
       
-      if (xim_using == TRUE && xim_ic)
+      if (gdk_xim_ic && gdk_xim_ic->xic)
 	{
 	  Status status;
 	  
 	  /* Clear keyval. Depending on status, may not be set */
-	  charcount = XmbLookupString(xim_ic->xic,
+	  charcount = XmbLookupString(gdk_xim_ic->xic,
 				      &xevent->xkey, buf, buf_len-1,
 				      &keysym, &status);
 	  if (status == XBufferOverflow)
@@ -2139,7 +2124,7 @@ gdk_event_translate (GdkEvent *event,
 		buf_len *= 2;
 	      buf = (gchar *) g_realloc (buf, buf_len);
 	      
-	      charcount = XmbLookupString (xim_ic->xic,
+	      charcount = XmbLookupString (gdk_xim_ic->xic,
 					   &xevent->xkey, buf, buf_len-1,
 					   &keysym, &status);
 	    }
@@ -2520,6 +2505,13 @@ gdk_event_translate (GdkEvent *event,
 			       (xevent->xany.type == FocusIn) ? "in" : "out",
 			       xevent->xfocus.window - base_id));
 	  
+	  /* gdk_keyboard_grab() causes following events. These events confuse
+	   * the XIM focus, so ignore them.
+	   */
+	  if (xevent->xfocus.mode == NotifyGrab ||
+	      xevent->xfocus.mode == NotifyUngrab)
+	    break;
+
 	  event->focus_change.type = GDK_FOCUS_CHANGE;
 	  event->focus_change.window = window;
 	  event->focus_change.in = (xevent->xany.type == FocusIn);
@@ -3185,652 +3177,6 @@ gdk_signal (int sig_num)
   gdk_exit (1);
 #endif /* !G_ENABLE_DEBUG */
 }
-
-#ifdef USE_XIM
-
-/* The following routines duplicate functionality in Xlib to
- * translate from varargs to X's internal opaque XVaNestedList.
- * 
- * If all vendors have stuck close to the reference implementation,
- * then we should hopefully be OK. 
- */
-
-/* This needs to match XIMArg as defined in Xlcint.h exactly */
-
-typedef struct {
-  gchar	  *name;
-  gpointer value;
-} GdkImArg;
-
-/*************************************************************
- * gdk_im_va_count:
- *    Counts the number of name/value pairs in the vararg list
- *
- *   arguments:
- *     
- *   results:
- *************************************************************/
-
-static guint 
-gdk_im_va_count (va_list list)
-{
-  gint count = 0;
-  gchar *name;
-  
-  name = va_arg (list, gchar *);
-  while (name)
-    {
-      count++;
-      (void)va_arg (list, gpointer);
-      name = va_arg (list, gchar *);
-    }
-  
-  return count;
-}
-
-/*************************************************************
- * gdk_im_va_to_nested:
- *     Given a varargs list and the result of gdk_im_va_count,
- *     create a XVaNestedList.
- *
- *   arguments:
- *     
- *   results:
- *************************************************************/
-
-static XVaNestedList
-gdk_im_va_to_nested (va_list list, guint count)
-{
-  GdkImArg *result;
-  GdkImArg *arg;
-  
-  gchar *name;
-  
-  if (count == 0)
-    return NULL;
-  
-  result = g_new (GdkImArg, count+1);
-  arg = result;
-  
-  name = va_arg (list, gchar *);
-  while (name)
-    {
-      arg->name = name;
-      arg->value = va_arg (list, gpointer);
-      arg++;
-      name = va_arg (list, gchar *);
-    }
-  
-  arg->name = NULL;
-  
-  return (XVaNestedList)result;
-}
-
-/*
- *--------------------------------------------------------------
- * gdk_im_begin
- *
- *   Begin using input method with XIM Protocol(X11R6 standard)
- *
- * Arguments:
- *   "ic" is the "Input Context" which is created by gtk_ic_new.
- *   The input area is specified with "window".
- *
- * Results:
- *   The gdk's event handling routine is switched to XIM based routine.
- *   XIM based routine uses XFilterEvent to get rid of events used by IM,
- *   and uses XmbLookupString instead of XLookupString.
- *
- * Side effects:
- *
- *--------------------------------------------------------------
- */
-
-void 
-gdk_im_begin (GdkIC ic, GdkWindow* window)
-{
-  GdkICPrivate *private;
-  Window xwin;
-  
-  g_return_if_fail (ic != NULL);
-  g_return_if_fail (window);
-  
-  private = (GdkICPrivate *) ic;
-  
-  xim_using = TRUE;
-  xim_ic = private;
-  xim_window = window;
-  if (gdk_im_ready())
-    {
-      XGetICValues (private->xic, XNFocusWindow, &xwin, NULL);
-      if (xwin != GDK_WINDOW_XWINDOW(window))
-	XSetICValues (private->xic, XNFocusWindow, 
-		      GDK_WINDOW_XWINDOW(window), NULL);
-      if (private != xim_ic)
-	XSetICFocus (private->xic);
-    }
-}
-
-/*
- *--------------------------------------------------------------
- * gdk_im_end
- *
- *   End using input method with XIM Protocol(X11R6 standard)
- *
- * Arguments:
- *
- * Results:
- *   The gdk's event handling routine is switched to normal routine.
- *   User should call this function before ic and window will be destroyed.
- *
- * Side effects:
- *
- *--------------------------------------------------------------
- */
-
-void 
-gdk_im_end (void)
-{
-  xim_using = FALSE;
-  xim_ic = NULL;
-  xim_window = NULL;
-}
-
-static GdkIM 
-gdk_im_get (void)
-{
-  return xim_im;
-}
-
-static GdkIMStyle 
-gdk_im_choose_better_style (GdkIMStyle style1, GdkIMStyle style2) 
-{
-  GdkIMStyle s1, s2, u;
-  
-  if (style1 == 0) return style2;
-  if (style2 == 0) return style1;
-  if ((style1 & (GDK_IM_PREEDIT_MASK | GDK_IM_STATUS_MASK))
-    	== (style2 & (GDK_IM_PREEDIT_MASK | GDK_IM_STATUS_MASK)))
-    return style1;
-
-  s1 = style1 & GDK_IM_PREEDIT_MASK;
-  s2 = style2 & GDK_IM_PREEDIT_MASK;
-  u = s1 | s2;
-  if (s1 != s2) {
-    if (u & GDK_IM_PREEDIT_CALLBACKS)
-      return (s1 == GDK_IM_PREEDIT_CALLBACKS)? style1:style2;
-    else if (u & GDK_IM_PREEDIT_POSITION)
-      return (s1 == GDK_IM_PREEDIT_POSITION)? style1:style2;
-    else if (u & GDK_IM_PREEDIT_AREA)
-      return (s1 == GDK_IM_PREEDIT_AREA)? style1:style2;
-    else if (u & GDK_IM_PREEDIT_NOTHING)
-      return (s1 == GDK_IM_PREEDIT_NOTHING)? style1:style2;
-  } else {
-    s1 = style1 & GDK_IM_STATUS_MASK;
-    s2 = style2 & GDK_IM_STATUS_MASK;
-    u = s1 | s2;
-    if ( u & GDK_IM_STATUS_CALLBACKS)
-      return (s1 == GDK_IM_STATUS_CALLBACKS)? style1:style2;
-    else if ( u & GDK_IM_STATUS_AREA)
-      return (s1 == GDK_IM_STATUS_AREA)? style1:style2;
-    else if ( u & GDK_IM_STATUS_NOTHING)
-      return (s1 == GDK_IM_STATUS_NOTHING)? style1:style2;
-    else if ( u & GDK_IM_STATUS_NONE)
-      return (s1 == GDK_IM_STATUS_NONE)? style1:style2;
-  }
-  return 0; /* Get rid of stupid warning */
-}
-
-GdkIMStyle
-gdk_im_decide_style (GdkIMStyle supported_style)
-{
-  gint i;
-  GdkIMStyle style, tmp;
-  
-  g_return_val_if_fail (xim_styles != NULL, 0);
-  
-  style = 0;
-  for (i=0; i<xim_styles->count_styles; i++)
-    {
-      tmp = xim_styles->supported_styles[i];
-      if (tmp == (tmp & supported_style & xim_best_allowed_style))
-	style = gdk_im_choose_better_style (style, tmp);
-    }
-  return style;
-}
-
-GdkIMStyle
-gdk_im_set_best_style (GdkIMStyle style)
-{
-  if (style & GDK_IM_PREEDIT_MASK)
-    {
-      xim_best_allowed_style &= ~GDK_IM_PREEDIT_MASK;
-
-      xim_best_allowed_style |= GDK_IM_PREEDIT_NONE;
-      if (!(style & GDK_IM_PREEDIT_NONE))
-	{
-	  xim_best_allowed_style |= GDK_IM_PREEDIT_NOTHING;
-	  if (!(style & GDK_IM_PREEDIT_NOTHING))
-	    {
-	      xim_best_allowed_style |= GDK_IM_PREEDIT_AREA;
-	      if (!(style & GDK_IM_PREEDIT_AREA))
-		{
-		  xim_best_allowed_style |= GDK_IM_PREEDIT_POSITION;
-		  if (!(style & GDK_IM_PREEDIT_POSITION))
-		    xim_best_allowed_style |= GDK_IM_PREEDIT_CALLBACKS;
-		}
-	    }
-	}
-    }
-  if (style & GDK_IM_STATUS_MASK)
-    {
-      xim_best_allowed_style &= ~GDK_IM_STATUS_MASK;
-
-      xim_best_allowed_style |= GDK_IM_STATUS_NONE;
-      if (!(style & GDK_IM_STATUS_NONE))
-	{
-	  xim_best_allowed_style |= GDK_IM_STATUS_NOTHING;
-	  if (!(style & GDK_IM_STATUS_NOTHING))
-	    {
-	      xim_best_allowed_style |= GDK_IM_STATUS_AREA;
-	      if (!(style & GDK_IM_STATUS_AREA))
-		xim_best_allowed_style |= GDK_IM_STATUS_CALLBACKS;
-	    }
-	}
-    }
-  
-  return xim_best_allowed_style;
-}
-
-static gint 
-gdk_im_open (XrmDatabase db, gchar* res_name, gchar* res_class)
-{
-  xim_im = XOpenIM (GDK_DISPLAY(), db, res_name, res_class);
-  if (xim_im == NULL)
-    {
-      GDK_NOTE (XIM, g_warning ("Unable to open open IM."));
-      return FALSE;
-    }
-  XGetIMValues (xim_im, XNQueryInputStyle, &xim_styles, NULL, NULL);
-  
-  return TRUE;
-}
-
-static void 
-gdk_im_close (void)
-{
-  if (xim_im)
-    {
-      XCloseIM (xim_im);
-      xim_im = NULL;
-    }
-  if (xim_styles)
-    {
-      XFree (xim_styles);
-      xim_styles = NULL;
-    }
-}
-
-gint 
-gdk_im_ready (void)
-{
-  return (xim_im != NULL);
-}
-
-GdkIC 
-gdk_ic_new (GdkWindow* client_window,
-	    GdkWindow* focus_window,
-	    GdkIMStyle style, ...)
-{
-  va_list list;
-  GdkICPrivate *private;
-  XVaNestedList preedit_attr = NULL;
-  guint count;
-  
-  g_return_val_if_fail (client_window != NULL, NULL);
-  g_return_val_if_fail (focus_window != NULL, NULL);
-  g_return_val_if_fail (gdk_im_ready(), NULL);
-  
-  private = g_new (GdkICPrivate, 1);
-  
-  va_start (list, style);
-  count = gdk_im_va_count (list);
-  va_end (list);
-  
-  va_start (list, style);
-  preedit_attr = gdk_im_va_to_nested (list, count);
-  va_end (list);
-  
-  private->style = gdk_im_decide_style (style);
-  if (private->style != style)
-    {
-      g_warning ("can not create input context with specified input style.");
-      g_free (private);
-      return NULL;
-    }
-  
-  private->xic = XCreateIC(gdk_im_get (),
-			   XNInputStyle,   style,
-			   XNClientWindow, GDK_WINDOW_XWINDOW (client_window),
-			   XNFocusWindow,  GDK_WINDOW_XWINDOW (focus_window),
-			   preedit_attr? XNPreeditAttributes : NULL, preedit_attr,
-			   NULL);
-  
-  g_free (preedit_attr);
-  
-  if (!private->xic)
-    {
-      g_free (private);
-      return NULL;
-    }
-  
-  xim_ic_list = g_list_append (xim_ic_list, private);
-  return private;
-}
-
-void 
-gdk_ic_destroy (GdkIC ic)
-{
-  GdkICPrivate *private;
-  
-  g_return_if_fail (ic != NULL);
-  
-  private = (GdkICPrivate *) ic;
-  
-  if (xim_ic == private)
-    gdk_im_end ();
-  
-  XDestroyIC (private->xic);
-  xim_ic_list = g_list_remove (xim_ic_list, private);
-  g_free (private);
-}
-
-GdkIMStyle
-gdk_ic_get_style (GdkIC ic)
-{
-  GdkICPrivate *private;
-  
-  g_return_val_if_fail (ic != NULL, 0);
-  
-  private = (GdkICPrivate *) ic;
-  
-  return private->style;
-}
-
-void 
-gdk_ic_set_values (GdkIC ic, ...)
-{
-  va_list list;
-  XVaNestedList args;
-  GdkICPrivate *private;
-  guint count;
-  
-  g_return_if_fail (ic != NULL);
-  
-  private = (GdkICPrivate *) ic;
-  
-  va_start (list, ic);
-  count = gdk_im_va_count (list);
-  va_end (list);
-  
-  va_start (list, ic);
-  args = gdk_im_va_to_nested (list, count);
-  va_end (list);
-  
-  XSetICValues (private->xic, XNVaNestedList, args, NULL);
-  
-  g_free (args);
-}
-
-void 
-gdk_ic_get_values (GdkIC ic, ...)
-{
-  va_list list;
-  XVaNestedList args;
-  GdkICPrivate *private;
-  guint count;
-  
-  g_return_if_fail (ic != NULL);
-  
-  private = (GdkICPrivate *) ic;
-  
-  va_start (list, ic);
-  count = gdk_im_va_count (list);
-  va_end (list);
-  
-  va_start (list, ic);
-  args = gdk_im_va_to_nested (list, count);
-  va_end (list);
-  
-  XGetICValues (private->xic, XNVaNestedList, args, NULL);
-  
-  g_free (args);
-}
-
-void 
-gdk_ic_set_attr (GdkIC ic, const char *target, ...)
-{
-  va_list list;
-  XVaNestedList attr;
-  GdkICPrivate *private;
-  guint count;
-  
-  g_return_if_fail (ic != NULL);
-  g_return_if_fail (target != NULL);
-  
-  private = (GdkICPrivate *) ic;
-  
-  va_start (list, target);
-  count = gdk_im_va_count (list);
-  va_end (list);
-  
-  va_start (list, target);
-  attr = gdk_im_va_to_nested (list, count);
-  va_end (list);
-  
-  XSetICValues (private->xic, target, attr, NULL);
-  
-  g_free (attr);
-}
-
-void 
-gdk_ic_get_attr (GdkIC ic, const char *target, ...)
-{
-  va_list list;
-  XVaNestedList attr;
-  GdkICPrivate *private;
-  guint count;
-  
-  g_return_if_fail (ic != NULL);
-  g_return_if_fail (target != NULL);
-  
-  private = (GdkICPrivate *) ic;
-  
-  va_start (list, target);
-  count = gdk_im_va_count (list);
-  va_end (list);
-  
-  va_start (list, target);
-  attr = gdk_im_va_to_nested (list, count);
-  va_end (list);
-  
-  XGetICValues (private->xic, target, attr, NULL);
-  
-  g_free (attr);
-}
-
-GdkEventMask 
-gdk_ic_get_events (GdkIC ic)
-{
-  GdkEventMask mask;
-  glong xmask;
-  glong bit;
-  GdkICPrivate *private;
-  gint i;
-  
-  /*  From gdkwindow.c	*/
-  extern int nevent_masks;
-  extern int event_mask_table[];
-  
-  g_return_val_if_fail (ic != NULL, 0);
-  
-  private = (GdkICPrivate *) ic;
-  
-  if (XGetICValues (private->xic, XNFilterEvents, &xmask, NULL) != NULL)
-    {
-      GDK_NOTE (XIM, g_warning ("Call to XGetICValues: %s failed", XNFilterEvents));
-      return 0;
-    }
-  
-  mask = 0;
-  for (i=0, bit=2; i < nevent_masks; i++, bit <<= 1)
-    if (xmask & event_mask_table [i])
-      {
-	mask |= bit;
-	xmask &= ~ event_mask_table [i];
-      }
-  
-  if (xmask)
-    g_warning ("ic requires events not supported by the application (%#04lx)", xmask);
-  
-  return mask;
-}
-
-static void 
-gdk_ic_cleanup (void)
-{
-  GList* node;
-  gint destroyed;
-  GdkICPrivate *private;
-  
-  destroyed = 0;
-  for (node = xim_ic_list; node != NULL; node = node->next)
-    {
-      if (node->data)
-	{
-	  private = (GdkICPrivate *) (node->data);
-	  XDestroyIC (private->xic);
-	  g_free (private);
-	  destroyed++;
-	}
-    }
-#ifdef G_ENABLE_DEBUG
-  if ((gdk_debug_flags & GDK_DEBUG_XIM) && destroyed > 0)
-    {
-      g_warning ("Cleaned up %i IC(s)\n", destroyed);
-    }
-#endif /* G_ENABLE_DEBUG */
-  g_list_free(xim_ic_list);
-  xim_ic_list = NULL;
-}
-
-#else /* !USE_XIM */
-
-void 
-gdk_im_begin (GdkIC ic, GdkWindow* window)
-{
-}
-
-void 
-gdk_im_end (void)
-{
-}
-
-GdkIMStyle
-gdk_im_decide_style (GdkIMStyle supported_style)
-{
-  return GDK_IM_PREEDIT_NONE | GDK_IM_STATUS_NONE;
-}
-
-GdkIMStyle
-gdk_im_set_best_style (GdkIMStyle style)
-{
-  return GDK_IM_PREEDIT_NONE | GDK_IM_STATUS_NONE;
-}
-
-gint 
-gdk_im_ready (void)
-{
-  return FALSE;
-}
-
-GdkIC 
-gdk_ic_new (GdkWindow* client_window,
-	    GdkWindow* focus_window,
-	    GdkIMStyle style, ...)
-{
-  return NULL;
-}
-
-void 
-gdk_ic_destroy (GdkIC ic)
-{
-}
-
-GdkIMStyle
-gdk_ic_get_style (GdkIC ic)
-{
-  return GDK_IM_PREEDIT_NONE | GDK_IM_STATUS_NONE;
-}
-
-void 
-gdk_ic_set_values (GdkIC ic, ...)
-{
-}
-
-void 
-gdk_ic_get_values (GdkIC ic, ...)
-{
-}
-
-void 
-gdk_ic_set_attr (GdkIC ic, const char *target, ...)
-{
-}
-
-void 
-gdk_ic_get_attr (GdkIC ic, const char *target, ...)
-{
-}
-
-GdkEventMask 
-gdk_ic_get_events (GdkIC ic)
-{
-  return 0;
-}
-
-#endif /* USE_XIM */
-
-#ifdef X_LOCALE
-
-gint
-_g_mbtowc (wchar_t *wstr, const char *str, size_t len)
-{
-  static wchar_t wcs[MB_CUR_MAX + 1];
-  static gchar mbs[MB_CUR_MAX + 1];
-  
-  wcs[0] = (wchar_t) NULL;
-  mbs[0] = '\0';
-  
-  /* The last argument isn't a mistake. The X locale code trims
-   *  the input string to the length of the output string!
-   */
-  len = _Xmbstowcs (wcs, str, (len<MB_CUR_MAX)? len:MB_CUR_MAX);
-  if (len < 1)
-    return len;
-  else if (wcs[0] == (wchar_t) NULL)
-    return -1;
-  
-  len = _Xwctomb (mbs, wcs[0]);
-  if (mbs[0] == '\0')
-    return -1;
-  if (wstr)
-    *wstr = wcs[0];
-  
-  return len;
-}
-
-#endif /* X_LOCALE */
 
 /* Sends a ClientMessage to all toplevel client windows */
 gboolean

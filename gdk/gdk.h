@@ -22,7 +22,6 @@
 
 #include <gdk/gdktypes.h>
 
-
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */
@@ -571,8 +570,13 @@ gint	 gdk_string_width   (GdkFont        *font,
 gint	 gdk_text_width	    (GdkFont        *font,
 			     const gchar    *text,
 			     gint            text_length);
+gint	 gdk_text_width_wc  (GdkFont        *font,
+			     const GdkWChar *text,
+			     gint            text_length);
 gint	 gdk_char_width	    (GdkFont        *font,
 			     gchar           character);
+gint	 gdk_char_width_wc  (GdkFont        *font,
+			     GdkWChar        character);
 gint	 gdk_string_measure (GdkFont        *font,
 			     const gchar    *string);
 gint	 gdk_text_measure   (GdkFont        *font,
@@ -642,14 +646,21 @@ void gdk_draw_string	 (GdkDrawable  *drawable,
 			  GdkGC	       *gc,
 			  gint		x,
 			  gint		y,
-			  const gchar	     *string);
+			  const gchar  *string);
 void gdk_draw_text	 (GdkDrawable  *drawable,
 			  GdkFont      *font,
 			  GdkGC	       *gc,
 			  gint		x,
 			  gint		y,
-			  const gchar	     *text,
+			  const gchar  *text,
 			  gint		text_length);
+void gdk_draw_text_wc	 (GdkDrawable	 *drawable,
+			  GdkFont	 *font,
+			  GdkGC		 *gc,
+			  gint		  x,
+			  gint		  y,
+			  const GdkWChar *text,
+			  gint		  text_length);
 void gdk_draw_pixmap	 (GdkDrawable  *drawable,
 			  GdkGC	       *gc,
 			  GdkDrawable  *src,
@@ -798,25 +809,35 @@ GdkTimeCoord *gdk_input_motion_events (GdkWindow *window,
 
 gint         gdk_im_ready	   (void);
 
-void         gdk_im_begin	   (GdkIC      ic, 
-				    GdkWindow* window);
+void         gdk_im_begin	   (GdkIC               *ic, 
+				    GdkWindow           *window);
 void         gdk_im_end		   (void);
-GdkIMStyle   gdk_im_decide_style   (GdkIMStyle supported_style);
-GdkIMStyle   gdk_im_set_best_style (GdkIMStyle best_allowed_style);
-GdkIC        gdk_ic_new		   (GdkWindow* client_window,
-				    GdkWindow* focus_window,
-				    GdkIMStyle style, ...);
-void         gdk_ic_destroy	   (GdkIC      ic);
-GdkIMStyle   gdk_ic_get_style	   (GdkIC      ic);
-void         gdk_ic_set_values	   (GdkIC      ic,  
-				    ...);
-void         gdk_ic_get_values	   (GdkIC      ic, 
-				    ...);
-void         gdk_ic_set_attr	   (GdkIC      ic, 
-				    const char *target, ...);
-void         gdk_ic_get_attr	   (GdkIC       ic, 
-				    const char *target, ...);
-GdkEventMask gdk_ic_get_events	   (GdkIC       ic);
+GdkIMStyle   gdk_im_decide_style   (GdkIMStyle           supported_style);
+GdkIMStyle   gdk_im_set_best_style (GdkIMStyle           best_allowed_style);
+
+GdkIC*       gdk_ic_new		   (GdkICAttr 		*attr,
+				    GdkICAttributesType mask);
+void         gdk_ic_destroy	   (GdkIC               *ic);
+GdkIMStyle   gdk_ic_get_style	   (GdkIC               *ic);
+GdkEventMask gdk_ic_get_events     (GdkIC               *ic);
+
+GdkICAttr*   gdk_ic_attr_new       (void);
+void         gdk_ic_attr_destroy   (GdkICAttr *attr);
+
+GdkICAttributesType  gdk_ic_set_attr (GdkIC              *ic,  
+                                      GdkICAttr          *attr,
+                                      GdkICAttributesType mask);
+GdkICAttributesType  gdk_ic_get_attr (GdkIC              *ic, 
+                                      GdkICAttr          *attr,
+                                      GdkICAttributesType mask);
+
+/* Conversion functions between wide char and multibyte strings. 
+ */
+gchar     *gdk_wcstombs          (const GdkWChar   *src);
+gint       gdk_mbstowcs          (GdkWChar         *dest,
+				  const gchar      *src,
+				  gint              dest_max);
+
 
 /* Color Context */
 

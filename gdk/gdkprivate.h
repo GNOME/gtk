@@ -186,13 +186,14 @@ struct _GdkClientFilter {
 
 #ifdef USE_XIM
 
+typedef struct _GdkICPrivate GdkICPrivate;
+
 struct _GdkICPrivate
 {
   XIC xic;
-  GdkIMStyle style;
+  GdkICAttr *attr;
+  GdkICAttributesType mask;
 };
-
-typedef struct _GdkICPrivate GdkICPrivate;
 
 #endif /* USE_XIM */
 
@@ -281,6 +282,16 @@ extern gboolean          gdk_using_threads;
 extern gint              gdk_threads_pipe[2];
 extern gboolean          gdk_select_waiting;
 #endif
+
+#ifdef USE_XIM
+/* XIM support */
+gint   gdk_im_open		 (void);
+void   gdk_im_close		 (void);
+void   gdk_ic_cleanup		 (void);
+
+extern GdkICPrivate *gdk_xim_ic;		/* currently using IC */
+extern GdkWindow *gdk_xim_window;	        /* currently using Window */
+#endif USE_XIM
 
 /* Debugging support */
 

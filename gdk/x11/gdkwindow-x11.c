@@ -323,7 +323,12 @@ gdk_window_new (GdkWindow     *parent,
       if (attributes_mask & GDK_WA_COLORMAP)
 	private->colormap = attributes->colormap;
       else
-	private->colormap = gdk_colormap_get_system ();
+	{
+	  if ((((GdkVisualPrivate*)gdk_visual_get_system())->xvisual) == xvisual)
+	    private->colormap = gdk_colormap_get_system ();
+	  else
+	    private->colormap = gdk_colormap_new (visual, False);
+	}
 
       xattributes.background_pixel = BlackPixel (gdk_display, gdk_screen);
       xattributes.border_pixel = BlackPixel (gdk_display, gdk_screen);

@@ -62,4 +62,8 @@ gint              gdk_threads_pipe[2];
 gboolean          gdk_select_waiting = FALSE;
 #endif
 
+#ifdef USE_XIM
+GdkICPrivate *gdk_xim_ic;		/* currently using IC */
+GdkWindow *gdk_xim_window;	        /* currently using Window */
+#endif
 

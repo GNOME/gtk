@@ -1,3 +1,80 @@
+Mon Dec  7 10:27:09 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkwidget.c: Destroy widgets _after_ propagating unrealize
+	signals through the widget heirarchy. This is unpleasant, as it
+	causes more X traffic, but is necessary, because we have to clean
+	up our Input Contexts before destroying the X windows.
+	(from matsu-981109-0.patch)
+	
+Mon Dec  7 10:18:18 1998  Owen Taylor  <otaylor@redhat.com>
+
+	Applied gtk-a-higuti-981202-0 : 
+	[ a-higuti@math.sci.hokudai.ac.jp (Akira Higuchi) ]
+	
+	* gdk/gdk.h gdk/gdk.c
+		(gdk_mbstowcs): New function. Nearly equals to mbstowcs, but
+			implemented by a combination of Xlib functions, so
+			it works even with X_LOCALE.
+		(gdk_wcstombs): New function.
+		(g_mbtowc): Removed. No longer needed.
+
+	* gdk/gdk.h gdk/gdkfont.c gdk/gdkdraw.c: 
+	        Added _wc() variants to gdk_text_width(), 
+		gdk_char_width(), gdk_draw_text(),
+		
+	* gdk/gdki18n.h
+		(mblen, mbtowc, wctomb, mbstowcs, wcstombs,
+		 wcslen, wcscpy, wcsncpy):
+			Removed. No longer needed.
+		(iswalnum): Removed.
+		(gdk_iswalnum): New macro.
+		(gdk_iswspace): New macro.
+	* gdk/gdktype.h
+		(GdkWChar): New typedef.
+	
+	* gtk/gtkentry.h, gtk/gtkentry.c
+		There are many changes according to the change of the
+		internal representation of text, from multibyte string
+		to wide characters. 
+	* gtk/gtkprivate.h, gtk/gtkmain.c
+		Removed the variable gtk_use_mb and related codes.
+	* gtk/gtkspinbutton.c
+		Some changes according to the change of type of entry->text.
+	* gtk/gtktext.h, gtk/gtktext.c
+		Changed the internal representation of text. We use GdkWchar
+		if a fontset is supplied. If not, we use guchar to save
+		memory.
+	
+Tue Dec  1 15:20:39 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdkwindow.c (gdk_window_new): When creating
+	a window with a specified non-system visual, use
+	a matching colormap.
+
+Mon Nov 30 11:50:13 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdk.c gdk/gdkim.c gdk/gdkprivate.h gdk/gdk.h
+	  gdk/gdktypes.h gtk/gtkeditable.c gtk/gtkmain.c
+	  gtk/gtkentry.c gtk/gtktext.c:
+
+	 Applied matsu-981109-0
+	 [ matsu@arch.comp.kyutech.ac.jp (Takashi Matsuda) ]
+	
+	 - Change system of setting input method values 
+	   from varargs to a structure, similar to GC's
+	   or window attributes.
+
+	 - Various fixes to event handling.
+
+	 Also:
+
+	 * gdk/gdkim.c: Split of input method stuff into
+	   a separate source file.
+
+	 * Remove GdkIM typedef, change everything from
+	   GdkIC to GdkIC * to be consistent with the
+	   rest of GTK.
+	
 Wed Dec  9 00:41:41 1998  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkrc.c (gtk_rc_add_initial_default_files): Allocate

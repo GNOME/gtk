@@ -24,6 +24,7 @@ libgdk_la_SOURCES = \
 	gdkfont.c	\
 	gdkgc.c		\
 	gdkglobals.c	\
+	gdkim.c		\
 	gdkimage.c	\
 	gdkinput.c	\
 	gdkinput.h	\
@@ -53,7 +54,7 @@ gdkinclude_HEADERS = \
 	gdk.h		\
 	gdkcursors.h	\
 	gdkrgb.h	\
- 	gdki18n.h	\
+	gdki18n.h	\
 	gdkkeysyms.h	\
 	gdkprivate.h	\
 	gdktypes.h	\

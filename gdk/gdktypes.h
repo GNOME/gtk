@@ -89,9 +89,11 @@ typedef struct _GdkRegion	    GdkRegion;
 typedef gint (*GdkEventFunc) (GdkEvent *event,
 			      gpointer	data);
 
-typedef void*			  GdkIC;
-typedef void*			  GdkIM;
+typedef struct _GdkIC               GdkIC;
+typedef struct _GdkICAttr	    GdkICAttr;
 
+typedef guint32			    GdkWChar;
+ 
 
 /* Types of windows.
  *   Root: There is only 1 root window and it is initialized
@@ -616,6 +618,45 @@ typedef enum			/*< flags >*/
   GDK_IM_STATUS_NONE	   = 0x0800,
   GDK_IM_STATUS_MASK	   = 0x0f00 
 } GdkIMStyle;
+
+typedef enum
+{
+  GDK_IC_STYLE			= 1 << 0,
+  GDK_IC_CLIENT_WINDOW		= 1 << 1,
+  GDK_IC_FOCUS_WINDOW		= 1 << 2,
+  GDK_IC_FILTER_EVENTS		= 1 << 3,
+  GDK_IC_SPOT_LOCATION		= 1 << 4,
+  GDK_IC_LINE_SPACING		= 1 << 5,
+  GDK_IC_CURSOR			= 1 << 6,
+
+  GDK_IC_PREEDIT_FONTSET	= 1 << 10,
+  GDK_IC_PREEDIT_AREA		= 1 << 11,
+  GDK_IC_PREEDIT_AREA_NEEDED	= 1 << 12,
+  GDK_IC_PREEDIT_FOREGROUND	= 1 << 13,
+  GDK_IC_PREEDIT_BACKGROUND	= 1 << 14,
+  GDK_IC_PREEDIT_PIXMAP		= 1 << 15,
+  GDK_IC_PREEDIT_COLORMAP	= 1 << 16,
+
+  GDK_IC_STATUS_FONTSET		= 1 << 21,
+  GDK_IC_STATUS_AREA		= 1 << 22,
+  GDK_IC_STATUS_AREA_NEEDED	= 1 << 23,
+  GDK_IC_STATUS_FOREGROUND	= 1 << 24,
+  GDK_IC_STATUS_BACKGROUND	= 1 << 25,
+  GDK_IC_STATUS_PIXMAP		= 1 << 26,
+  GDK_IC_STATUS_COLORMAP	= 1 << 27,
+
+  GDK_IC_ALL_REQ		= GDK_IC_STYLE |
+    				  GDK_IC_CLIENT_WINDOW,
+
+  GDK_IC_PREEDIT_AREA_REQ	= GDK_IC_PREEDIT_AREA | 
+				  GDK_IC_PREEDIT_FONTSET,
+  GDK_IC_PREEDIT_POSITION_REQ	= GDK_IC_PREEDIT_AREA | 
+    				  GDK_IC_SPOT_LOCATION |
+				  GDK_IC_PREEDIT_FONTSET,
+
+  GDK_IC_STATUS_AREA_REQ	= GDK_IC_STATUS_AREA | 
+				  GDK_IC_STATUS_FONTSET,
+} GdkICAttributesType;
 
 /* The next two enumeration values current match the
  * Motif constants. If this is changed, the implementation
@@ -1182,7 +1223,32 @@ struct _GdkRegion
   gpointer user_data;
 };
 
+struct _GdkICAttr
+{
+  GdkIMStyle style;
+  GdkWindow *client_window;
+  GdkWindow *focus_window;
+  GdkEventMask filter_events;
+  GdkPoint spot_location;
+  gint line_spacing;
+  GdkCursor *cursor;
 
+  GdkFont *preedit_fontset;
+  GdkRectangle preedit_area;
+  GdkRectangle preedit_area_needed; 
+  GdkColor preedit_foreground;
+  GdkColor preedit_background;
+  GdkPixmap *preedit_pixmap;
+  GdkColormap *preedit_colormap;
+
+  GdkFont *status_fontset;
+  GdkRectangle status_area;
+  GdkRectangle status_area_needed; 
+  GdkColor status_foreground;
+  GdkColor status_background;
+  GdkPixmap *status_pixmap;
+  GdkColormap *status_colormap;
+};
 
 #ifdef __cplusplus
 }

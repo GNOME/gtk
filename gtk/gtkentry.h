@@ -46,26 +46,27 @@ struct _GtkEntry
   GdkWindow *text_area;
   GdkPixmap *backing_pixmap;
   GdkCursor *cursor;
-  gchar *text;
+  GdkWChar  *text;
 
-  guint16 text_size;
-  guint16 text_length;
+  guint16 text_size;	/* allocated size */
+  guint16 text_length;	/* length in use */
   guint16 text_max_length;
   gint    scroll_offset;
   guint   visible : 1;
   guint32 timer;
   guint   button;
 
-  /* The total number of characters (not bytes) in the entry */
-  guint nchars;
-
-  /* The byte offset of each character 
-   *  (including the last insertion position) */
-  guint16 *char_pos;
-
   /* The x-offset of each character (including the last insertion position)
    * only valid when the widget is realized */
-  gint *char_offset;
+  gint   *char_offset;
+
+  /* Same as 'text', but in multibyte */
+  gchar  *text_mb;
+  /* If true, 'text' and 'text_mb' are not coherent */
+  guint   text_mb_dirty : 1;
+  /* If true, we use the encoding of wchar_t as the encoding of 'text'.
+   * Otherwise we use the encoding of multi-byte characters instead. */
+  guint   use_wchar : 1;
 };
 
 struct _GtkEntryClass
@@ -75,7 +76,7 @@ struct _GtkEntryClass
 
 GtkType    gtk_entry_get_type       		(void);
 GtkWidget* gtk_entry_new            		(void);
-GtkWidget* gtk_entry_new_with_max_length	(guint16   max);
+GtkWidget* gtk_entry_new_with_max_length	(guint16       max);
 void       gtk_entry_set_text       		(GtkEntry      *entry,
 						 const gchar   *text);
 void       gtk_entry_append_text    		(GtkEntry      *entry,
@@ -84,6 +85,7 @@ void       gtk_entry_prepend_text   		(GtkEntry      *entry,
 						 const gchar   *text);
 void       gtk_entry_set_position   		(GtkEntry      *entry,
 						 gint           position);
+/* returns a reference to the text */
 gchar*     gtk_entry_get_text       		(GtkEntry      *entry);
 void       gtk_entry_select_region  		(GtkEntry      *entry,
 						 gint           start,

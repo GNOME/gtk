@@ -4259,13 +4259,24 @@ gtk_widget_real_unrealize (GtkWidget *widget)
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
-  if (GTK_WIDGET_NO_WINDOW (widget) && GTK_WIDGET_MAPPED (widget))
+  if (GTK_WIDGET_MAPPED (widget))
     gtk_widget_real_unmap (widget);
 
-  GTK_WIDGET_UNSET_FLAGS (widget, GTK_REALIZED | GTK_MAPPED);
+  GTK_WIDGET_UNSET_FLAGS (widget, GTK_MAPPED);
 
   /* printf ("unrealizing %s\n", gtk_type_name (GTK_OBJECT(widget)->klass->type));
    */
+
+   /* We must do unrealize child widget BEFORE container widget.
+    * gdk_window_destroy() destroys specified xwindow and it's sub-xwindows.
+    * So, unrealizing container widget bofore it's children causes the problem 
+    * (for example, gdk_ic_destroy () with destroyed window causes crash. )
+    */
+
+  if (GTK_IS_CONTAINER (widget))
+    gtk_container_foreach (GTK_CONTAINER (widget),
+			   (GtkCallback) gtk_widget_unrealize,
+			   NULL);
 
   gtk_style_detach (widget->style);
   if (!GTK_WIDGET_NO_WINDOW (widget))
@@ -4280,12 +4291,7 @@ gtk_widget_real_unrealize (GtkWidget *widget)
       widget->window = NULL;
     }
 
-  /* Unrealize afterwards to improve visual effect */
-
-  if (GTK_IS_CONTAINER (widget))
-    gtk_container_forall (GTK_CONTAINER (widget),
-			  (GtkCallback) gtk_widget_unrealize,
-			  NULL);
+  GTK_WIDGET_UNSET_FLAGS (widget, GTK_REALIZED);
 }
 
 /*****************************************

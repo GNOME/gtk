@@ -60,12 +60,6 @@ typedef enum
 #define GTK_PRIVATE_SET_FLAG(wid,flag)    G_STMT_START{ (GTK_PRIVATE_FLAGS (wid) |= (PRIVATE_ ## flag)); }G_STMT_END
 #define GTK_PRIVATE_UNSET_FLAG(wid,flag)  G_STMT_START{ (GTK_PRIVATE_FLAGS (wid) &= ~(PRIVATE_ ## flag)); }G_STMT_END
 
-/* True if there is a good chance the mb functions will handle things
- * correctly - set if either mblen("\xc0", MB_CUR_MAX) == 1 in the
- * C locale, or were using X's mb functions. (-DX_LOCALE && locale != C)
- */
-extern gint gtk_use_mb;
-
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */

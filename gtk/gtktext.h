@@ -70,7 +70,7 @@ struct _GtkText
 
   /* The text, a single segment of text a'la emacs, with a gap
    * where insertion occurs. */
-  guchar* text;
+  union { GdkWChar *wc; guchar  *ch; } text;
   /* The allocated length of the text segment. */
   guint text_len;
   /* The gap position, index into address where a char
@@ -94,7 +94,7 @@ struct _GtkText
   /* First visible horizontal pixel. */
   guint first_onscreen_hor_pixel;
   /* First visible vertical pixel. */
- guint first_onscreen_ver_pixel;
+  guint first_onscreen_ver_pixel;
 
 			     /* FLAGS */
 
@@ -102,6 +102,9 @@ struct _GtkText
    * horizontal scrollbar. */
   guint line_wrap : 1;
   guint word_wrap : 1;
+ /* If a fontset is supplied for the widget, use_wchar become true,
+   * and we use GdkWchar as the encoding of text. */
+  guint use_wchar : 1;
 
   /* Frozen, don't do updates. @@@ fixme */
   guint freeze_count;
@@ -119,7 +122,7 @@ struct _GtkText
 
 			  /* SCRATCH AREA */
 
-  guchar* scratch_buffer;
+  union { GdkWChar *wc; guchar *ch; } scratch_buffer;
   guint   scratch_buffer_len;
 
 			   /* SCROLLING */
@@ -131,7 +134,7 @@ struct _GtkText
   gint            cursor_pos_x;       /* Position of cursor. */
   gint            cursor_pos_y;       /* Baseline of line cursor is drawn on. */
   GtkPropertyMark cursor_mark;        /* Where it is in the buffer. */
-  gchar           cursor_char;        /* Character to redraw. */
+  GdkWChar        cursor_char;        /* Character to redraw. */
   gchar           cursor_char_offset; /* Distance from baseline of the font. */
   gint            cursor_virtual_x;   /* Where it would be if it could be. */
   gint            cursor_drawn_level; /* How many people have undrawn. */
@@ -192,9 +195,11 @@ gint       gtk_text_backward_delete (GtkText       *text,
 gint       gtk_text_forward_delete  (GtkText       *text,
 				     guint          nchars);
 
-#define GTK_TEXT_INDEX(t, index)  \
-      ((index) < (t)->gap_position ? (t)->text[index] : \
-                                     (t)->text[(index) + (t)->gap_size])
+#define GTK_TEXT_INDEX(t, index)	(((t)->use_wchar) \
+	? ((index) < (t)->gap_position ? (t)->text.wc[index] : \
+					(t)->text.wc[(index)+(t)->gap_size]) \
+	: ((index) < (t)->gap_position ? (t)->text.ch[index] : \
+					(t)->text.ch[(index)+(t)->gap_size]))
 
 #ifdef __cplusplus
 }

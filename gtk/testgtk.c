@@ -5750,19 +5750,29 @@ create_text (void)
       
       if (infile)
 	{
-	  char buffer[1024];
-	  int nchars;
+	  char *buffer;
+	  int nbytes_read, nbytes_alloc;
 	  
+	  nbytes_read = 0;
+	  nbytes_alloc = 1024;
+	  buffer = g_new (char, nbytes_alloc);
 	  while (1)
 	    {
-	      nchars = fread(buffer, 1, 1024, infile);
-	      gtk_text_insert (GTK_TEXT (text), NULL, NULL,
-			       NULL, buffer, nchars);
-	      
-	      if (nchars < 1024)
+	      int len;
+	      if (nbytes_alloc < nbytes_read + 1024)
+		{
+		  nbytes_alloc *= 2;
+		  buffer = g_realloc (buffer, nbytes_alloc);
+		}
+	      len = fread (buffer + nbytes_read, 1, 1024, infile);
+	      nbytes_read += len;
+	      if (len < 1024)
 		break;
 	    }
 	  
+	  gtk_text_insert (GTK_TEXT (text), NULL, NULL,
+			   NULL, buffer, nbytes_read);
+	  g_free(buffer);
 	  fclose (infile);
 	}
       

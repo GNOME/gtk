@@ -45,13 +45,14 @@ struct _GtkEditable
 {
   GtkWidget widget;
 
-  guint   current_pos;
+  guint      current_pos;
 
-  guint   selection_start_pos;
-  guint   selection_end_pos;
-  guint   has_selection : 1;
-  guint   editable : 1;
-  GdkIC   ic;
+  guint      selection_start_pos;
+  guint      selection_end_pos;
+  guint      has_selection : 1;
+  guint      editable : 1;
+  GdkIC     *ic;
+  GdkICAttr *ic_attr;
 
   gchar *clipboard_text;
 };

@@ -75,7 +75,6 @@ static void gtk_editable_set_arg	     (GtkObject        *object,
 static void gtk_editable_get_arg	     (GtkObject        *object,
 					      GtkArg           *arg,
 					      guint             arg_id);
-static void gtk_editable_finalize            (GtkObject        *object);
 static gint gtk_editable_selection_clear     (GtkWidget        *widget,
 					     GdkEventSelection *event);
 static void gtk_editable_selection_get      (GtkWidget         *widget,
@@ -96,7 +95,7 @@ static void gtk_editable_real_copy_clipboard  (GtkEditable     *editable);
 static void gtk_editable_real_paste_clipboard (GtkEditable     *editable);
 static void gtk_editable_real_set_editable    (GtkEditable     *editable,
 					       gboolean         is_editable);
-
+     
 static GtkWidgetClass *parent_class = NULL;
 static guint editable_signals[LAST_SIGNAL] = { 0 };
 
@@ -291,7 +290,6 @@ gtk_editable_class_init (GtkEditableClass *class)
     
   object_class->set_arg = gtk_editable_set_arg;
   object_class->get_arg = gtk_editable_get_arg;
-  object_class->finalize = gtk_editable_finalize;
 
   widget_class->selection_clear_event = gtk_editable_selection_clear;
   widget_class->selection_received = gtk_editable_selection_received;
@@ -397,27 +395,6 @@ gtk_editable_init (GtkEditable *editable)
 			     targets, n_targets);
   gtk_selection_add_targets (GTK_WIDGET (editable), clipboard_atom,
 			     targets, n_targets);
-}
-
-static void
-gtk_editable_finalize (GtkObject *object)
-{
-  GtkEditable *editable;
-
-  g_return_if_fail (object != NULL);
-  g_return_if_fail (GTK_IS_EDITABLE (object));
-
-  editable = GTK_EDITABLE (object);
-
-#ifdef USE_XIM
-  if (editable->ic)
-    {
-      gdk_ic_destroy (editable->ic);
-      editable->ic = NULL;
-    }
-#endif
-
-  (* GTK_OBJECT_CLASS (parent_class)->finalize) (object);
 }
 
 void
@@ -594,7 +571,9 @@ gtk_editable_selection_get (GtkWidget        *widget,
       str = gtk_editable_get_chars(editable, 
 				   selection_start_pos, 
 				   selection_end_pos);
-      length = selection_end_pos - selection_start_pos;
+      if (!str)
+	 return;		/* Refuse */
+      length = strlen (str);
     }
   else				/* CLIPBOARD */
     {
@@ -938,3 +917,32 @@ gtk_editable_changed (GtkEditable *editable)
   
   gtk_signal_emit (GTK_OBJECT (editable), editable_signals[CHANGED]);
 }
+
+#if 0
+static void
+gtk_editable_parent_set (GtkWidget *widget, 
+			 GtkWidget *old_parent, 
+			 GtkWidget *editable)
+{
+  GtkWidget *parent;
+
+  parent = old_parent;
+  while (parent)
+    {
+      gtk_signal_disconnect_by_func (GTK_OBJECT (parent),
+				     GTK_SIGNAL_FUNC (gtk_editable_parent_set),
+				     editable);
+      parent = parent->parent;
+    }
+
+  parent = widget->parent;
+  while (parent)
+    {
+      gtk_signal_connect (GTK_OBJECT (parent), "parent_set",
+			  GTK_SIGNAL_FUNC (gtk_editable_parent_set), 
+			  editable);
+      
+      parent = parent->parent;
+    }
+}
+#endif

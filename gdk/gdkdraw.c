@@ -294,6 +294,66 @@ gdk_draw_text (GdkDrawable *drawable,
 }
 
 void
+gdk_draw_text_wc (GdkDrawable	 *drawable,
+		  GdkFont	 *font,
+		  GdkGC		 *gc,
+		  gint		  x,
+		  gint		  y,
+		  const GdkWChar *text,
+		  gint		  text_length)
+{
+  GdkWindowPrivate *drawable_private;
+  GdkFontPrivate *font_private;
+  GdkGCPrivate *gc_private;
+
+  g_return_if_fail (drawable != NULL);
+  g_return_if_fail (font != NULL);
+  g_return_if_fail (gc != NULL);
+  g_return_if_fail (text != NULL);
+
+  drawable_private = (GdkWindowPrivate*) drawable;
+  if (drawable_private->destroyed)
+    return;
+  gc_private = (GdkGCPrivate*) gc;
+  font_private = (GdkFontPrivate*) font;
+
+  if (font->type == GDK_FONT_FONT)
+    {
+      XFontStruct *xfont = (XFontStruct *) font_private->xfont;
+      gchar *text_8bit;
+      gint i;
+      XSetFont(drawable_private->xdisplay, gc_private->xgc, xfont->fid);
+      text_8bit = g_new (gchar, text_length);
+      for (i=0; i<text_length; i++) text_8bit[i] = text[i];
+      XDrawString (drawable_private->xdisplay, drawable_private->xwindow,
+                   gc_private->xgc, x, y, text_8bit, text_length);
+      g_free (text_8bit);
+    }
+  else if (font->type == GDK_FONT_FONTSET)
+    {
+      if (sizeof(GdkWChar) == sizeof(wchar_t))
+	{
+	  XwcDrawString (drawable_private->xdisplay, drawable_private->xwindow,
+			 (XFontSet) font_private->xfont,
+			 gc_private->xgc, x, y, (wchar_t *)text, text_length);
+	}
+      else
+	{
+	  wchar_t *text_wchar;
+	  gint i;
+	  text_wchar = g_new (wchar_t, text_length);
+	  for (i=0; i<text_length; i++) text_wchar[i] = text[i];
+	  XwcDrawString (drawable_private->xdisplay, drawable_private->xwindow,
+			 (XFontSet) font_private->xfont,
+			 gc_private->xgc, x, y, text_wchar, text_length);
+	  g_free (text_wchar);
+	}
+    }
+  else
+    g_error("undefined font type\n");
+}
+
+void
 gdk_draw_pixmap (GdkDrawable *drawable,
 		 GdkGC       *gc,
 		 GdkPixmap   *src,

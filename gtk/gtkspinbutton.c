@@ -1182,8 +1182,11 @@ gtk_spin_button_insert_text (GtkEditable *editable,
       gboolean sign;
       gint dotpos = -1;
       gint i;
-      gchar pos_sign;
-      gchar neg_sign;
+      GdkWChar pos_sign;
+      GdkWChar neg_sign;
+      guint entry_length;
+
+      entry_length = entry->text_length;
 
       lc = localeconv ();
 
@@ -1197,16 +1200,27 @@ gtk_spin_button_insert_text (GtkEditable *editable,
       else 
 	pos_sign = '+';
 
-      sign = ((strchr (entry->text, neg_sign) != 0) ||
-	      (strchr (entry->text, pos_sign) != 0));
+      for (sign=0, i=0; i<entry_length; i++)
+	if ((entry->text[i] == neg_sign) ||
+	    (entry->text[i] == pos_sign))
+	  {
+	    sign = 1;
+	    break;
+	  }
 
       if (sign && !(*position))
 	return;
 
-      dotpos = strchr (entry->text, *(lc->decimal_point)) - entry->text;
-      
+      for (dotpos=-1, i=0; i<entry_length; i++)
+	if (entry->text[i] == *(lc->decimal_point))
+	  {
+	    dotpos = i;
+	    break;
+	  }
+
       if (dotpos > -1 && *position > dotpos &&
-	  spin->digits - entry->text_length + dotpos - new_text_length + 1 < 0)
+	  spin->digits - entry_length
+	    + dotpos - new_text_length + 1 < 0)
 	return;
 
       for (i = 0; i < new_text_length; i++)
@@ -1220,8 +1234,8 @@ gtk_spin_button_insert_text (GtkEditable *editable,
 	  else if (new_text[i] == *(lc->decimal_point))
 	    {
 	      if (!spin->digits || dotpos > -1 || 
-		  (new_text_length - 1 - i + entry->text_length - *position > 
-		   spin->digits)) 
+ 		  (new_text_length - 1 - i + entry_length
+		    - *position > spin->digits)) 
 		return;
 	      dotpos = *position + i;
 	    }
