@@ -1,3 +1,9 @@
+Fri Aug 18 17:27:46 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkclist.c (gtk_clist_merge): Don't leave dangling
+	->prev fields when merging lists. (Found simultaneously
+	by Pawel Salek and Jakub Jelinek)
+
 Sun Jul 30 14:17:43 2000  Pablo Saratxaga <pablo@mandrakesoft.com>
 
 	* configure.in,po/{sp,sr}.po: Added Serbian files

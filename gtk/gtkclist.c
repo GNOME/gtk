@@ -7384,6 +7384,7 @@ gtk_clist_merge (GtkCList *clist,
 	}
     }
 
+  z.next->prev = NULL;
   return z.next;
 }
 
