@@ -579,7 +579,7 @@ pnm_read_scanline (PnmLoaderContext *context)
 GdkPixbuf *
 image_load (FILE *f)
 {
-	guint  nbytes;
+	gint  nbytes;
 	gint   rc;
 
 	PnmLoaderContext context;
