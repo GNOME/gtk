@@ -772,6 +772,16 @@ void gtk_paint_handle  (GtkStyle      *style,
 			GtkOrientation orientation);
 
 
+/* Temporary GTK+-1.2.9 local patch for use only in theme engines.
+ * Simple integer geometry properties.
+ */
+void gtk_style_set_prop_experimental (GtkStyle    *style,
+				      const gchar *name,
+				      gint         value);
+gint gtk_style_get_prop_experimental (GtkStyle    *style,
+				      const gchar *name,
+				      gint         default_value);
+
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */

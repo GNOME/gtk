@@ -1,3 +1,78 @@
+Mon Feb 12 15:55:26 2001  Owen Taylor  <otaylor@redhat.com>
+	 
+	[ Enabling patch for better looking theme engines ]
+
+	* gtk/gtkstyle.[ch]: Add new API functions for making
+	better looking GTK+-1.2.x themes. THESE FUNCTIONS WILL
+	NOT BE SUPPORTED IN THE FUTURE. ANY THEMES DEPENDING
+	ON THESE FUNCTIONS MUST CHECK FOR GTK+-1.2.x WHERE 
+	x >= 1.2.9.
+
+	The functions:
+	
+	 _gtk_style_set_prop_experimental()
+	 _gtk_style_get_prop_experimental()
+
+	are used to allow configuration of assorted geometry 
+	parameters.
+	
+	* gtk/gtkbutton.c: Make DEFAULT_SPACING configurable as
+	GtkButton::default_spacing. 
+
+	* gtk/gtkcheckbutton.c gtk/gtkradiobutton.c: Make indicator_size
+	and indicator_spacing configurable as GtkCheckButton::indicator_size, 
+	GtkCheckButton::indicator_spacing.
+
+	* gtk/gtkcheckbutton.[ch]: Private function
+	_gtk_check_button_get_props().
+
+	* gtk/gtkcheckmenuitem.c (gtk_check_button_menu_item_set_show_toggle):
+	Make a noop - turning this on is just a bad idea visually, and 
+	changing this from a program is just asking a bad idea.
+
+	* gtk/gtk{h,v,}paned.c: Provide configuration parameters
+	GtkPaned::handle_full_size, which, if true, will turn
+	on GTK+-1.3.2 style full-size paned handles. 
+	GtkPaned::handle_width, which sets the gutter size for
+	paned widgets. (If set, overrides setting via
+	gtk_paned_set_gutter_size())
+
+	* gtk/gtkpaned.[ch]: Add private functions
+	_gtk_paned_is_handle_full_size(), _gtk_paned_get_handle_rect(),
+	_gtk_paned_get_gutter_size().
+
+	* gtk/gtkstyle.c (gtk_default_draw_box): Add handling for details
+	"hpaned", "vpaned", used for drawing full-size grips on horizontal
+	and vertical paned widgets. (In the style of GTK+-1.3.2)
+
+	* gtk/gtkhscale.c gtk/gtkhscrollbar.c:
+
+	* gtk/gtkoptionmenu.c: Add configurable parameters:
+	
+	  GtkOptionMenu::indicator_width
+	  GtkOptionMenu::indicator_height
+	  GtkOptionMenu::indicator_left_spacing
+	  GtkOptionMenu::indicator_right_spacing
+	  GtkOptionMenu::indicator_top_spacing
+	  GtkOptionMenu::indicator_bottom_spacing
+
+        To control where the indicator is drawn and how big it is.
+
+	* gtk/gtkrange.[ch]: Add configurable parameters:
+
+	  GtkRange::slider_width    - width of trough
+	  GtkRange::trough_border   - space to reserve for trough border
+	  GtkRange::stepper_size    - size of arrows
+	  GtkRange::stepper_spacing - spacing between scrollbar and arrows
+
+	and private accessor _gtk_range_get_props().
+	  
+	* gtk/gtkwidget.c (gtk_widget_event): Rewrite a bit to 
+	quiet GCC. 
+
+	* gtk/gtkwidget.c (gtk_widget_propagate_state): Fix typo
+	in last commit.
+
 Mon Feb  5 12:47:09 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkwidget.c (gtk_widget_propagate_state)

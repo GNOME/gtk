@@ -765,7 +765,8 @@ gtk_style_destroy (GtkStyle *style)
   gdk_font_unref (style->font);
   if (style->rc_style)
     gtk_rc_style_unref (style->rc_style);
-  
+
+  g_dataset_destroy (style);
   g_free (style);
 }
 
@@ -2180,6 +2181,68 @@ gtk_default_draw_string (GtkStyle      *style,
     }
 }
 
+static void
+draw_dot (GdkWindow    *window,
+	  GdkGC        *light_gc,
+	  GdkGC        *dark_gc,
+	  gint          x,
+	  gint          y,
+	  gushort       size)
+{
+  
+  size = CLAMP (size, 2, 3);
+
+  if (size == 2)
+    {
+      gdk_draw_point (window, light_gc, x, y);
+      gdk_draw_point (window, light_gc, x+1, y+1);
+    }
+  else if (size == 3);
+    {
+      gdk_draw_point (window, light_gc, x, y);
+      gdk_draw_point (window, light_gc, x+1, y);
+      gdk_draw_point (window, light_gc, x, y+1);
+      gdk_draw_point (window, dark_gc, x+1, y+2);
+      gdk_draw_point (window, dark_gc, x+2, y+1);
+      gdk_draw_point (window, dark_gc, x+2, y+2);
+    }
+}
+
+static void
+draw_paned_grip (GtkStyle      *style,
+		 GdkWindow     *window,
+		 GtkStateType   state_type,
+		 GdkRectangle  *area,
+		 GtkOrientation orientation,		 
+		 gint           x,
+		 gint           y,
+		 gint           width,
+		 gint           height)
+{
+  GdkGC *light_gc = style->light_gc[state_type];
+  GdkGC *dark_gc = style->black_gc;
+
+  gint xx, yy;
+
+  if (area)
+    {
+      gdk_gc_set_clip_rectangle (light_gc, area);
+      gdk_gc_set_clip_rectangle (dark_gc, area);
+    }
+
+  if (orientation == GTK_ORIENTATION_HORIZONTAL)
+    for (xx = width/2 - 15; xx <= width/2 + 15; xx += 5)
+      draw_dot (window, light_gc, dark_gc, xx, height/2 - 1, 3);
+  else
+    for (yy = height/2 - 15; yy <= height/2 + 15; yy += 5)
+      draw_dot (window, light_gc, dark_gc, width/2 - 1, yy, 3);
+
+  if (area)
+    {
+      gdk_gc_set_clip_rectangle (light_gc, NULL);
+      gdk_gc_set_clip_rectangle (dark_gc, NULL);
+    }
+}
 static void 
 gtk_default_draw_box (GtkStyle      *style,
 		      GdkWindow     *window,
@@ -2218,9 +2281,22 @@ gtk_default_draw_box (GtkStyle      *style,
     gtk_style_apply_default_background (style, window,
                                         widget && !GTK_WIDGET_NO_WINDOW (widget),
                                         state_type, area, x, y, width, height);
-  
-  gtk_paint_shadow (style, window, state_type, shadow_type, area, widget, detail,
-                    x, y, width, height);
+
+  if (detail && strcmp (detail, "hpaned") == 0)
+    {
+      draw_paned_grip (style, window, state_type, area,
+		       GTK_ORIENTATION_VERTICAL,
+		       x, y, width, height);
+    } 
+  else if (detail && strcmp (detail, "vpaned") == 0)
+    {
+      draw_paned_grip (style, window, state_type, area,
+		       GTK_ORIENTATION_HORIZONTAL,
+		       x, y, width, height);
+    }
+  else
+    gtk_paint_shadow (style, window, state_type, shadow_type, area, widget, detail,
+		      x, y, width, height);
 }
 
 static void 
@@ -3779,4 +3855,98 @@ gtk_paint_handle (GtkStyle      *style,
   g_return_if_fail (style->klass->draw_handle != NULL);
   
   style->klass->draw_handle (style, window, state_type, shadow_type, area, widget, detail, x, y, width, height, orientation);
+}
+
+/* Temporary GTK+-1.2.9 local patch for use only in theme engines.
+ * Simple integer geometry properties.
+ */
+typedef struct _StylePropPair StylePropPair;
+
+struct _StylePropPair
+{
+  gchar *name;
+  gint value;
+};
+
+static void
+style_prop_hash_destroy_pair (gpointer key, gpointer value, gpointer data)
+{
+  StylePropPair *pair = value;
+
+  g_free (pair->name);
+  g_free (pair);
+}
+
+static void
+style_prop_hash_destroy (gpointer data)
+{
+  GHashTable *prop_hash = data;
+
+  g_hash_table_foreach (prop_hash, style_prop_hash_destroy_pair, NULL);
+  g_hash_table_destroy (prop_hash);
+}
+
+static GHashTable *
+style_get_prop_hash (GtkStyle *style)
+{
+  static GQuark id = 0;
+  GHashTable *prop_hash;
+
+  if (!id)
+    id = g_quark_from_static_string ("gtk-style-prop-hash");
+  
+  prop_hash = g_dataset_id_get_data (style, id);
+  if (!prop_hash)
+    {
+      prop_hash = g_hash_table_new (g_str_hash, g_str_equal);
+      g_dataset_id_set_data_full (style, id, 
+				  prop_hash, style_prop_hash_destroy);
+    }
+
+  return prop_hash;
+}
+
+void 
+gtk_style_set_prop_experimental (GtkStyle    *style,
+				 const gchar *name,
+				 gint         value)
+{
+  GHashTable *prop_hash;
+  StylePropPair *pair;
+
+  g_return_if_fail (style != NULL);
+  g_return_if_fail (name != NULL);
+  
+  prop_hash = style_get_prop_hash (style);
+
+  pair = g_hash_table_lookup (prop_hash, name);
+  if (!pair)
+    {
+      pair = g_new (StylePropPair, 1);
+      pair->name = g_strdup (name);
+
+      g_hash_table_insert (prop_hash, pair->name, pair);
+    }
+  
+  pair->value = value;
+}
+
+gint
+gtk_style_get_prop_experimental (GtkStyle    *style,
+				 const gchar *name,
+				 gint         default_value)
+{
+  GHashTable *prop_hash;
+  StylePropPair *pair;
+
+  g_return_val_if_fail (style != NULL, default_value);
+  g_return_val_if_fail (name != NULL, default_value);
+  
+  prop_hash = style_get_prop_hash (style);
+  pair = g_hash_table_lookup (prop_hash, name);
+
+  if (pair)
+    return pair->value;
+  else
+    return default_value;
 }

@@ -2814,9 +2814,7 @@ gtk_widget_event (GtkWidget *widget,
        * that have a full redraw pending (given that the event is !send_event,
        * otherwise we assume we can trust the event).
        */
-      if (event->any.send_event)
-	parent = NULL;
-      else if (event->any.window)
+      if (!event->any.send_event && event->any.window)
 	{
 	  parent = widget;
 	  while (parent)
@@ -2840,6 +2838,9 @@ gtk_widget_event (GtkWidget *widget,
 	    }
 	  /* </HACK> */
 	}
+      else
+	parent = NULL;
+      
       if (!event->any.window || parent)
 	{
 	  gtk_widget_unref (widget);
@@ -4681,7 +4682,7 @@ gtk_widget_propagate_state (GtkWidget           *widget,
 
   if (old_state != GTK_WIDGET_STATE (widget))
     {
-      if (!GTK_WIDGET_IS_SENSITIVE (widget) && GTK_HAS_GRAB (widget))
+      if (!GTK_WIDGET_IS_SENSITIVE (widget) && GTK_WIDGET_HAS_GRAB (widget))
 	gtk_grab_remove (widget);
       
       gtk_widget_ref (widget);

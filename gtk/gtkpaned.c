@@ -25,6 +25,7 @@
  */
 
 #include "gtkpaned.h"
+#include "gtkhpaned.h"
 
 enum {
   ARG_0,
@@ -189,15 +190,12 @@ gtk_paned_get_arg (GtkObject *object,
 static void
 gtk_paned_realize (GtkWidget *widget)
 {
-  GtkPaned *paned;
+  GtkPaned *paned = GTK_PANED (widget);
   GdkWindowAttr attributes;
   gint attributes_mask;
-  
-  g_return_if_fail (widget != NULL);
-  g_return_if_fail (GTK_IS_PANED (widget));
-  
+  gboolean handle_full_size = _gtk_paned_is_handle_full_size (paned);
+ 
   GTK_WIDGET_SET_FLAGS (widget, GTK_REALIZED);
-  paned = GTK_PANED (widget);
   
   attributes.x = widget->allocation.x;
   attributes.y = widget->allocation.y;
@@ -213,12 +211,30 @@ gtk_paned_realize (GtkWidget *widget)
   widget->window = gdk_window_new (gtk_widget_get_parent_window (widget),
 				   &attributes, attributes_mask);
   gdk_window_set_user_data (widget->window, paned);
-  
-  attributes.x = paned->handle_xpos;
-  attributes.y = paned->handle_ypos;
-  attributes.width = paned->handle_size;
-  attributes.height = paned->handle_size;
-  attributes.cursor = gdk_cursor_new (GDK_CROSS);
+
+  if (handle_full_size)
+    {
+      GdkRectangle rect;
+
+      _gtk_paned_get_handle_rect (paned, &rect);
+
+      attributes.x = rect.x;
+      attributes.y = rect.y;
+      attributes.width = rect.width;
+      attributes.height = rect.height;
+    }
+  else
+    {
+      attributes.x = paned->handle_xpos;
+      attributes.y = paned->handle_ypos;
+      attributes.width = paned->handle_size;
+      attributes.height = paned->handle_size;
+    }
+
+  attributes.cursor = gdk_cursor_new (GTK_IS_HPANED (paned) ?
+				      GDK_SB_H_DOUBLE_ARROW :
+				      GDK_SB_V_DOUBLE_ARROW);
+				      
   attributes.event_mask |= (GDK_BUTTON_PRESS_MASK |
 			    GDK_BUTTON_RELEASE_MASK |
 			    GDK_POINTER_MOTION_MASK |
@@ -305,26 +321,31 @@ static gint
 gtk_paned_expose (GtkWidget      *widget,
 		  GdkEventExpose *event)
 {
-  GtkPaned *paned;
+  GtkPaned *paned = GTK_PANED (widget);
+  gboolean handle_full_size = _gtk_paned_is_handle_full_size (paned);
   GdkEventExpose child_event;
-  
-  g_return_val_if_fail (widget != NULL, FALSE);
-  g_return_val_if_fail (GTK_IS_PANED (widget), FALSE);
-  g_return_val_if_fail (event != NULL, FALSE);
   
   if (GTK_WIDGET_DRAWABLE (widget))
     {
-      paned = GTK_PANED (widget);
-      
       /* An expose event for the handle */
       if (event->window == paned->handle)
 	{
-	   gtk_paint_box (widget->style, paned->handle,
-			  GTK_WIDGET_STATE(widget),
-			  GTK_SHADOW_OUT, 
-			  &event->area, widget, "paned",
-			  0, 0,
-			  paned->handle_size, paned->handle_size);
+	  gint width, height;
+	  gchar *detail;
+	  
+	  gdk_window_get_size (paned->handle, &width, &height);
+
+	  if (handle_full_size)
+	    detail = GTK_IS_HPANED (widget) ? "hpaned" : "vpaned";
+	  else
+	    detail = "paned";
+	  
+	  gtk_paint_box (widget->style, paned->handle,
+			 GTK_WIDGET_STATE(widget),
+			 GTK_SHADOW_OUT, 
+			 &event->area, widget, detail,
+			 0, 0,
+			 width, height);
 	}
       else
 	{
@@ -599,4 +620,46 @@ gtk_paned_compute_position (GtkPaned *paned,
 			      paned->max_position);
 
   paned->last_allocation = allocation;
+}
+
+gboolean
+_gtk_paned_is_handle_full_size (GtkPaned *paned)
+{
+  return gtk_style_get_prop_experimental (GTK_WIDGET (paned)->style,
+					  "GtkPaned::handle_full_size",
+					  FALSE);
+}
+
+void 
+_gtk_paned_get_handle_rect (GtkPaned     *paned,
+			    GdkRectangle *rect)
+{
+  gint border_width = GTK_CONTAINER (paned)->border_width;
+  GtkAllocation *allocation = &GTK_WIDGET (paned)->allocation;
+  gint gutter_size = _gtk_paned_get_gutter_size (paned);
+      
+  if (GTK_IS_HPANED (paned))
+    {
+      rect->x = border_width + paned->child1_size;
+      rect->y = border_width;
+      rect->width = gutter_size;
+      rect->height = MAX (1, (gint)allocation->height - 2 * border_width);
+    }
+  else
+    {
+      rect->x = border_width;
+      rect->y = border_width + paned->child1_size;
+      rect->width = MAX (1, (gint)allocation->width - 2 * border_width);
+      rect->height = gutter_size;
+    }
+}
+
+gint
+_gtk_paned_get_gutter_size (GtkPaned *paned)
+{
+  gint default_size = _gtk_paned_is_handle_full_size (paned) ? 5 : paned->gutter_size;
+
+  return gtk_style_get_prop_experimental (GTK_WIDGET (paned)->style,
+					  "GtkPaned::handle_width",
+					  default_size);
 }

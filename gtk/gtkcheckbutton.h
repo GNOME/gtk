@@ -68,6 +68,9 @@ GtkType    gtk_check_button_get_type       (void);
 GtkWidget* gtk_check_button_new            (void);
 GtkWidget* gtk_check_button_new_with_label (const gchar *label);
 
+void _gtk_check_button_get_props (GtkCheckButton *check_button,
+				  gint           *indicator_size,
+				  gint           *indicator_spacing);
 
 #ifdef __cplusplus
 }

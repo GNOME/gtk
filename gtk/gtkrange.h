@@ -150,6 +150,11 @@ void           gtk_range_default_vmotion        (GtkRange      *range,
 						 gint           xdelta,
 						 gint           ydelta);
 
+void _gtk_range_get_props (GtkRange *range,
+			   gint     *slider_width,
+			   gint     *trough_border,
+			   gint     *stepper_size,
+			   gint     *stepper_spacing);
 
 #ifdef __cplusplus
 }

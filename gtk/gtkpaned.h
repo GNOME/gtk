@@ -111,6 +111,11 @@ void    gtk_paned_compute_position (GtkPaned *paned,
 				    gint      child1_req,
 				    gint      child2_req);
 
+gboolean _gtk_paned_is_handle_full_size (GtkPaned     *paned);
+void     _gtk_paned_get_handle_rect     (GtkPaned     *paned,
+					 GdkRectangle *rectangle);
+gint     _gtk_paned_get_gutter_size     (GtkPaned     *paned);
+
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */

@@ -197,12 +197,15 @@ gtk_vscale_realize (GtkWidget *widget)
   GdkWindowAttr attributes;
   gint attributes_mask;
   gint x, y, w, h;
+  gint slider_width;
   
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_VSCALE (widget));
   
   GTK_WIDGET_SET_FLAGS (widget, GTK_REALIZED);
   range = GTK_RANGE (widget);
+
+  _gtk_range_get_props (range, &slider_width, NULL, NULL, NULL);
   
   widget->window = gtk_widget_get_parent_window (widget);
   gdk_window_ref (widget->window);
@@ -229,7 +232,7 @@ gtk_vscale_realize (GtkWidget *widget)
   
   range->trough = gdk_window_new (widget->window, &attributes, attributes_mask);
   
-  attributes.width = RANGE_CLASS (range)->slider_width;
+  attributes.width = slider_width;
   attributes.height = SCALE_CLASS (range)->slider_length;
   attributes.event_mask |= (GDK_BUTTON_MOTION_MASK |
                             GDK_POINTER_MOTION_HINT_MASK);
@@ -318,6 +321,7 @@ gtk_vscale_size_request (GtkWidget      *widget,
 {
   GtkScale *scale;
   gint value_width;
+  gint slider_width, trough_border;
   
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_VSCALE (widget));
@@ -325,10 +329,12 @@ gtk_vscale_size_request (GtkWidget      *widget,
   
   scale = GTK_SCALE (widget);
   
-  requisition->width = (RANGE_CLASS (scale)->slider_width +
-                        widget->style->klass->ythickness * 2);
+  _gtk_range_get_props (GTK_RANGE (scale),
+			&slider_width, &trough_border, NULL, NULL);
+  
+  requisition->width = (slider_width + trough_border * 2);
   requisition->height = (SCALE_CLASS (scale)->slider_length +
-                         widget->style->klass->xthickness) * 2;
+                         trough_border) * 2;
   
   if (scale->draw_value)
     {
@@ -386,6 +392,7 @@ gtk_vscale_pos_trough (GtkVScale *vscale,
 {
   GtkWidget *widget;
   GtkScale *scale;
+  gint slider_width, trough_border;
   
   g_return_if_fail (vscale != NULL);
   g_return_if_fail (GTK_IS_VSCALE (vscale));
@@ -394,8 +401,10 @@ gtk_vscale_pos_trough (GtkVScale *vscale,
   widget = GTK_WIDGET (vscale);
   scale = GTK_SCALE (vscale);
   
-  *w = (RANGE_CLASS (scale)->slider_width +
-        widget->style->klass->xthickness * 2);
+  _gtk_range_get_props (GTK_RANGE (scale),
+			&slider_width, &trough_border, NULL, NULL);
+  
+  *w = (slider_width + trough_border * 2);
   *h = widget->allocation.height;
   
   if (scale->draw_value)
