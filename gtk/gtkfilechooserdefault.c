@@ -2478,70 +2478,23 @@ shortcuts_drag_drop_cb (GtkWidget             *widget,
   return TRUE;
 }
 
-/* Converts raw selection data from text/uri-list to a list of strings. */
-static GSList *
-split_uris (const char *data)
-{
-  GSList *uris;
-  const char *p, *q;
-
-  uris = NULL;
-
-  p = data;
-
-  /* We don't actually try to validate the URI according to RFC
-   * 2396, or even check for allowed characters - we just ignore
-   * comments and trim whitespace off the ends.  We also
-   * allow LF delimination as well as the specified CRLF.
-   *
-   * We do allow comments like specified in RFC 2483.
-   */
-  while (p)
-    {
-      if (*p != '#')
-	{
-	  while (g_ascii_isspace (*p))
-	    p++;
-
-	  q = p;
-	  while (*q && (*q != '\n') && (*q != '\r'))
-	    q++;
-
-	  if (q > p)
-	    {
-	      q--;
-	      while (q > p && g_ascii_isspace (*q))
-		q--;
-
-	      if (q > p)
-		uris = g_slist_prepend (uris, g_strndup (p, q - p + 1));
-	    }
-	}
-      p = strchr (p, '\n');
-      if (p)
-	p++;
-    }
-
-  uris = g_slist_reverse (uris);
-  return uris;
-}
-
 /* Parses a "text/uri-list" string and inserts its URIs as bookmarks */
 static void
 shortcuts_drop_uris (GtkFileChooserDefault *impl,
 		     const char            *data,
 		     int                    position)
 {
-  GSList *uris, *l;
+  gchar **uris;
+  gint i;
 
-  uris = split_uris (data);
+  uris = g_uri_list_extract_uris (data);
 
-  for (l = uris; l; l = l->next)
+  for (i = 0; uris[i]; i++)
     {
       char *uri;
       GtkFilePath *path;
 
-      uri = l->data;
+      uri = uris[i];
       path = gtk_file_system_uri_to_path (impl->file_system, uri);
 
       if (path)
@@ -2560,11 +2513,9 @@ shortcuts_drop_uris (GtkFileChooserDefault *impl,
 	  error_message (impl, msg);
 	  g_free (msg);
 	}
-
-      g_free (uri);
     }
 
-  g_slist_free (uris);
+  g_strfreev (uris);
 }
 
 /* Reorders the selected bookmark to the specified position */

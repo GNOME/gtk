@@ -58,7 +58,6 @@
 #define DEFAULT_FILENAME	N_("(None)")
 #define DEFAULT_SPACING		0
 
-
 /* ********************** *
  *  Private Enumerations  *
  * ********************** */
@@ -104,11 +103,6 @@ enum
   TEXT_PLAIN,
   TEXT_URI_LIST
 };
-
-static const GtkTargetEntry drop_targets[] = {
-  { "text/uri-list", 0, TEXT_URI_LIST }
-};
-
 
 /* ********************* *
  *  Function Prototypes  *
@@ -291,9 +285,11 @@ gtk_file_chooser_button_init (GtkFileChooserButton *button)
   gtk_drag_dest_unset (priv->entry);
   gtk_drag_dest_set (GTK_WIDGET (button),
                      (GTK_DEST_DEFAULT_ALL),
-		     drop_targets, G_N_ELEMENTS (drop_targets),
+		     NULL, 0,
 		     GDK_ACTION_COPY);
   gtk_drag_dest_add_text_targets (GTK_WIDGET (button));
+  gtk_target_list_add_uri_targets (gtk_drag_dest_get_target_list (GTK_WIDGET (button)), 
+				   TEXT_URI_LIST);
 }
 
 
@@ -343,7 +339,8 @@ gtk_file_chooser_button_set_property (GObject      *object,
 
     case GTK_FILE_CHOOSER_PROP_ACTION:
       g_object_set_property (G_OBJECT (priv->dialog), pspec->name, value);
-      _gtk_file_chooser_entry_set_action (priv->entry, g_value_get_enum (value));
+      _gtk_file_chooser_entry_set_action (priv->entry, 
+					  (GtkFileChooserAction)g_value_get_enum (value));
 
       switch (g_value_get_enum (value))
 	{
@@ -491,7 +488,7 @@ gtk_file_chooser_button_drag_data_received (GtkWidget	     *widget,
 	guint i;
 	gboolean selected;
 
-	uris = g_strsplit (data->data, "\r\n", -1);
+	uris = gtk_selection_data_get_uris (data);
 
 	if (uris == NULL)
 	  break;

@@ -246,6 +246,7 @@ static GdkAtom ctext_atom;
 static GdkAtom text_plain_atom;
 static GdkAtom text_plain_utf8_atom;
 static GdkAtom text_plain_locale_atom;
+static GdkAtom text_uri_list_atom;
 
 static void 
 init_atoms (void)
@@ -264,6 +265,8 @@ init_atoms (void)
       tmp = g_strdup_printf ("text/plain;charset=%s", charset);
       text_plain_locale_atom = gdk_atom_intern (tmp, FALSE);
       g_free (tmp);
+
+      text_uri_list_atom = gdk_atom_intern ("text/uri-list", FALSE);
     }
 }
 
@@ -338,6 +341,27 @@ gtk_target_list_add_image_targets (GtkTargetList *list,
     }
 
   g_slist_free (formats);
+}
+
+/**
+ * gtk_target_list_add_uri_targets:
+ * @list: a #GtkTargetList
+ * @info: an ID that will be passed back to the application
+ * 
+ * Adds the URI targets supported by #GtkSelection to
+ * the target list. All targets are added with the same @info.
+ * 
+ * Since: 2.6
+ **/
+void 
+gtk_target_list_add_uri_targets (GtkTargetList *list,
+				 guint          info)
+{
+  g_return_if_fail (list != NULL);
+  
+  init_atoms ();
+
+  gtk_target_list_add (list, text_uri_list_atom, 0, info);  
 }
 
 void               
@@ -1300,6 +1324,100 @@ gtk_selection_data_get_pixbuf (GtkSelectionData *selection_data)
   gdk_pixbuf_loader_close (loader, NULL);
   g_object_unref (loader);
   
+  return result;
+}
+
+/**
+ * gtk_selection_data_set_uris:
+ * @selection_data: a #GtkSelectionData
+ * @uris: a %NULL-terminated array of strings hilding URIs
+ * 
+ * Sets the contents of the selection from a list of URIs.
+ * The string is converted to the form determined by
+ * @selection_data->target.
+ * 
+ * Return value: %TRUE if the selection was successfully set,
+ *   otherwise %FALSE.
+ *
+ * Since: 2.6
+ **/
+gboolean
+gtk_selection_data_set_uris (GtkSelectionData  *selection_data,
+			     gchar            **uris)
+{
+  init_atoms ();
+
+  if (selection_data->target == text_uri_list_atom)
+    {
+      GString *list;
+      gint i;
+      gchar *result;
+      gsize length;
+      
+      list = g_string_new (0);
+      for (i = 0; uris[i]; i++)
+	{
+	  g_string_append (list, uris[i]);
+	  g_string_append (list, "\r\n");
+	}
+
+      result = g_convert (list->str, list->len,
+			  "ASCII", "UTF-8", 
+			  NULL, &length, NULL);
+      g_string_free (list, TRUE);
+      
+      if (result)
+	{
+	  gtk_selection_data_set (selection_data,
+				  text_uri_list_atom,
+				  8, (guchar *)result, length);
+	  
+	  return TRUE;
+	}
+    }
+
+  return FALSE;
+}
+
+/**
+ * gtk_selection_data_get_uris:
+ * @selection_data: a #GtkSelectionData
+ * 
+ * Gets the contents of the selection data as array of URIs.
+ * 
+ * Return value: if the selection data contains a list of
+ *   URIs, a newly allocated %NULL-terminated string array
+ *   containing the URIs, otherwise %NULL. If the result is 
+ *   non-%NULL it must be freed with g_strfreev().
+ *
+ * Since: 2.6
+ **/
+gchar **
+gtk_selection_data_get_uris (GtkSelectionData *selection_data)
+{
+  gchar **result = NULL;
+
+  init_atoms ();
+  
+  if (selection_data->length >= 0 &&
+      selection_data->type == text_uri_list_atom)
+    {
+      gchar **list;
+      gint i;
+      gint count = gdk_text_property_to_utf8_list_for_display (selection_data->display,
+      							       utf8_atom,
+						   	       selection_data->format, 
+						               selection_data->data,
+						               selection_data->length,
+						               &list);
+      if (count > 0)
+	result = g_uri_list_extract_uris (list[0]);
+      
+      for (i = 1; i < count; i++)
+	g_free (list[i]);
+      g_free (list);
+    }
+
   return result;
 }
 

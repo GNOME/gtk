@@ -85,8 +85,9 @@ GdkAtom        gtk_drag_dest_find_target     (GtkWidget      *widget,
 GtkTargetList* gtk_drag_dest_get_target_list (GtkWidget      *widget);
 void           gtk_drag_dest_set_target_list (GtkWidget      *widget,
                                               GtkTargetList  *target_list);
-void           gtk_drag_dest_add_text_targets (GtkWidget     *widget);
+void           gtk_drag_dest_add_text_targets  (GtkWidget    *widget);
 void           gtk_drag_dest_add_image_targets (GtkWidget    *widget);
+void           gtk_drag_dest_add_uri_targets   (GtkWidget    *widget);
 
 /* Source side */
 
@@ -101,8 +102,9 @@ void gtk_drag_source_unset (GtkWidget        *widget);
 GtkTargetList* gtk_drag_source_get_target_list (GtkWidget     *widget);
 void           gtk_drag_source_set_target_list (GtkWidget     *widget,
                                                 GtkTargetList *target_list);
-void           gtk_drag_source_add_text_targets (GtkWidget     *widget);
+void           gtk_drag_source_add_text_targets  (GtkWidget     *widget);
 void           gtk_drag_source_add_image_targets (GtkWidget    *widget);
+void           gtk_drag_source_add_uri_targets   (GtkWidget    *widget);
 
 void gtk_drag_source_set_icon        (GtkWidget   *widget,
 				      GdkColormap *colormap,

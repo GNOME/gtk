@@ -1,3 +1,23 @@
+2004-10-22  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkfilechooserbutton.c (gtk_file_chooser_button_drag_data_received) 
+	(gtk_file_chooser_button_init): Use the new file DND api.
+
+	* gtk/gtkdnd.h:
+	* gtk/gtkdnd.c (gtk_drag_dest_add_uri_targets) 
+	(gtk_drag_source_add_uri_targets): 
+
+	* gtk/gtkselection.h:
+	* gtk/gtkselection.c (gtk_target_list_add_uri_targets):
+	(gtk_selection_data_set_uris):  
+	(gtk_selection_data_get_uris): New functions to allow
+	handling file DND "without knowing jack shit".
+
+	* configure.in: Bump glib requirement to 2.5.4.
+
+	* gtk/gtkfilechooserdefault.c (shortcuts_drop_uris): Use
+	g_uri_list_extract_uris().
+
 Fri Oct 22 13:25:25 2004  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtktextbuffer.c (gtk_text_buffer_backspace): Fix 

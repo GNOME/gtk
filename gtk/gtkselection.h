@@ -95,11 +95,13 @@ void           gtk_target_list_add       (GtkTargetList  *list,
 				  	  GdkAtom         target,
 					  guint           flags,
 					  guint           info);
-void           gtk_target_list_add_text_targets (GtkTargetList  *list,
-						 guint           info);
+void           gtk_target_list_add_text_targets  (GtkTargetList  *list,
+						  guint           info);
 void           gtk_target_list_add_image_targets (GtkTargetList  *list,
 						  guint           info,
 						  gboolean        writable);
+void           gtk_target_list_add_uri_targets   (GtkTargetList  *list,
+						  guint           info);
 void           gtk_target_list_add_table (GtkTargetList        *list,
 					  const GtkTargetEntry *targets,
 					  guint                 ntargets);
@@ -145,6 +147,9 @@ guchar * gtk_selection_data_get_text (GtkSelectionData     *selection_data);
 gboolean gtk_selection_data_set_pixbuf (GtkSelectionData   *selection_data,
 					GdkPixbuf          *pixbuf);
 GdkPixbuf *gtk_selection_data_get_pixbuf (GtkSelectionData *selection_data);
+gboolean gtk_selection_data_set_uris (GtkSelectionData     *selection_data,
+				      gchar               **uris);
+gchar  **gtk_selection_data_get_uris (GtkSelectionData     *selection_data);
 
 gboolean gtk_selection_data_get_targets          (GtkSelectionData  *selection_data,
 						  GdkAtom          **targets,
