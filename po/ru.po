@@ -45,7 +45,7 @@ msgstr "Плотность:"
 #: gtk/gtkcolorsel.c:1668 gtk/gtkfilesel.c:469 gtk/gtkfontsel.c:3475
 #: gtk/gtkgamma.c:416
 msgid "OK"
-msgstr ""
+msgstr "OK"
 
 #. The Cancel button
 #: gtk/gtkcolorsel.c:1674 gtk/gtkfilesel.c:476 gtk/gtkfilesel.c:851
@@ -289,15 +289,15 @@ msgstr "обратный наклонный"
 
 #: gtk/gtkfontsel.c:1224 gtk/gtkfontsel.c:1952
 msgid "other"
-msgstr ""
+msgstr "другие"
 
 #: gtk/gtkfontsel.c:1231
 msgid "[M]"
-msgstr ""
+msgstr "[M]"
 
 #: gtk/gtkfontsel.c:1232
 msgid "[C]"
-msgstr ""
+msgstr "[C]"
 
 #: gtk/gtkfontsel.c:1780
 msgid "The selected font is not available."
@@ -329,7 +329,7 @@ msgstr "моноширинный"
 
 #: gtk/gtkfontsel.c:1961
 msgid "char cell"
-msgstr ""
+msgstr "char cell"
 
 #: gtk/gtkfontsel.c:2161
 msgid "Font: (Filter Applied)"
@@ -402,11 +402,11 @@ msgstr "Сохранить"
 
 #: gtk/gtkinputdialog.c:500
 msgid "X"
-msgstr ""
+msgstr "X"
 
 #: gtk/gtkinputdialog.c:501
 msgid "Y"
-msgstr ""
+msgstr "Y"
 
 #: gtk/gtkinputdialog.c:502
 msgid "Pressure"
@@ -422,7 +422,7 @@ msgstr "Наклон Y"
 
 #: gtk/gtkinputdialog.c:544
 msgid "none"
-msgstr ""
+msgstr "нет"
 
 #: gtk/gtkinputdialog.c:578 gtk/gtkinputdialog.c:614
 msgid "(disabled)"
