@@ -2529,7 +2529,7 @@ gdk_event_translate (GdkEvent *event,
       
       
       GDK_NOTE (EVENTS,
-		<g_message ("configure notify:\twindow: %ld  x,y: %d %d	w,h: %d %d  b-w: %d  above: %ld	 ovr: %d",
+		g_message ("configure notify:\twindow: %ld  x,y: %d %d	w,h: %d %d  b-w: %d  above: %ld	 ovr: %d",
 			   xevent->xconfigure.window - base_id,
 			   xevent->xconfigure.x,
 			   xevent->xconfigure.y,
