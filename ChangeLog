@@ -1,3 +1,10 @@
+2004-05-17  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkbutton.c (gtk_button_size_request) 
+	(gtk_button_size_allocate, _gtk_button_paint): Allocate
+	space for the focus rectangle only if necessary.  (#142668,
+	Michael Natterer)
+
 Sun May 16 23:14:37 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkhruler.c (gtk_hruler_draw_ticks): Remove two useless 
