@@ -1,3 +1,5 @@
+General Information
+===================
 
 This is GTK+ version 1.0.0.   GTK, which stands for the Gimp ToolKit, 
 is a library for creating graphical user interfaces.  
@@ -8,11 +10,64 @@ The official ftp site is:
 The official web site is:
   http://www.gimp.org/gtk
 
-Patches can be uploaded to:
-  ftp://ftp.gimp.org/incoming
-
 A mailing list is located at:
   gtk-list@redhat.com
 
 To subscribe: mail -s subscribe gtk-list-request@redhat.com < /dev/null
 (Send mail to gtk-list-request@redhat.com with the subject "subscribe")
+
+Installation
+============
+
+See the file 'INSTALL'
+
+How to report bugs
+==================
+
+To report a bug, send mail either to gtk-list, as mentioned
+above, or to gtk-bugs@gtk.org. If you send mail to gtk-list, you
+must be subscribed yourself.
+
+In the mail include:
+
+* The version of GTK
+
+* Information about your system. For instance:
+
+   - What operating system and version
+   - What version of X
+   - For Linux, what version of the C library
+
+  And anything else you think is relevant.
+
+* How to reproduce the bug. 
+
+  If you can reproduce it with the testgtk program that is built 
+  in the gtk/ subdirectory, that will be most convenient.  Otherwise, 
+  please include a short test program that exhibits the behavior. 
+  As a last resort, you can also provide a pointer to a larger piece 
+  of software that can be downloaded.
+
+  (Bugs that can be reproduced within the  GIMP are almost as good 
+  as bugs that can be reproduced in testgtk. If you are reporting a 
+  bug found with the GIMP, please include the version number of the GIMP 
+  you are using)
+
+* If the bug was a crash, the exact text that was printed out
+  when the crash occured.
+
+* Further information such as stack traces may be useful, but
+  is not necessary. If you do send a stack trace, and the error
+  is an X error, it will be more useful if the stacktrace
+  is produced running the test program with the --sync command
+  line option.
+
+Patches
+=======
+
+Patches can be uploaded to the incoming/ directory on
+ftp.gtk.org.  Please follow the instructions there, and include
+your name and email address in the README file.
+
+If the patch fixes a bug, it is usually a good idea to include
+all the information described in "How to Report Bugs".

@@ -1,6 +1,3 @@
-TODO BEFORE GTK 1.0
--------------------
-
 Bugs:
  * Scrolled windows (GtkList?) get cought in an endless reallocation loop
    under certain (rare) circumstances.
@@ -37,7 +34,7 @@ Bugs:
    segfault in malloc
     -timj
 
- * Change bitfields to guints from enums for C++ ?
+ * Change bitfields to guints from enums, or vice versa?
 
  * Expose events aren't being generated correctly for DND demo
 
@@ -69,9 +66,6 @@ Additions:
  * Should release grab before activating menu item (and remove
    menu from screen?)
  
-TODO AFTER GTK 1.0
-------------------
-
  * Make all widget attributes configurable after the widget is created (timj).
  
  * Widgets dervied from GtkButton need to be able to override
@@ -144,11 +138,70 @@ TODO AFTER GTK 1.0
     ( You'd have to extend gdk_window_set_hints to accept the
       window gravity option to get it right. )
 
- * Text/Edit widget: (some of these might be bugs that should be fixed now)
+ ? Allow moving the separator for paned widgets by dragging 
+   it directly instead of using the handle. 
+
+ ? Mark public use of gtk_tree_remove_item as deprecated - it should be used
+   as:
+         gtk_container_remove (GTK_CONTAINER(tree), widget);
+
+ * Standardize that all strings should be passed as gchar *, not 
+   guchar *. But what about non-string data? (gdk_property_change,
+   gtk_selection_data_set) X makes these sort of things guchar...
+
+ * Check into XAddConnectionWatch - is this needed for XIM?
+
+ * Places where a _full variant is needed:
+
+    gtk_clist_set_row_data
+    gtk_init_add
+    gtk_menu_popup
+    gtk_toolbar_prepend_element
+    gtk_toolbar_insert_element
+    gtk_widget_dnd_data_set (should be guchar * with a copy?
+                             shouldn't be there at all...)
+    ??? GtkDrawingarea.draw_data
+ 
+ * gtk_rc_add_[name/class]_style are broken for bg pixmaps, because
+   styles are broken for bg pixmaps, and RC styles only hack around
+   that.
+
+ * Try to rationally deal with someone else deleting one of our
+   windows??? This would mean keeping track of our window heirarchy
+   ourselves, for one thing, and will never be safe, because of
+   race conditions.
+
+ * --g-fatal-warnings flag that does 
+        g_set_warning_handler ((GWarningHandler)g_error);
+
+ * If a window spontaneously resizes itself N times before any
+   ConfigureNotify events are received, then due to the interaction
+   of the ConfigureNotify compression code in GDK and the resize
+   count used for the window, the window will be size_allocated
+   the next N-1 times it is moved.
+
+   Fix: Only send GDK_EVENT_CONFIGURE when the window is resized,
+   create a new event type for toplevel motion. (GDK_EVENT_REPOSITION?)
+   and eliminate the resize count in GtkWindow.
+
+ * Generic ScrolledWindow interface, which provide automatic scrollbar
+   capability to Viewport, Text, and CList widgets.
+
+   GTK_POLICY_NEVER for scrolled windows.
+
+ * Consider caching more state in GdkWindowPrivate. Currently, 
+   every widget realization involves a XGetGeometry and a
+   XGetWindowAttributes. And every GdkWindow destruction
+   involves a XQueryTree.
+
+ * Scrolled windows need to be smarter about when they size-request/allocate
+   their children.
+
+Text/Edit widget:
 
   Bugs:
 
-  - Who knows?
+  - Really big font (150 pt), plus lots of editing caused segfault
 
   Improvements:
 
@@ -213,65 +266,5 @@ TODO AFTER GTK 1.0
     mouse click, some function to get the word/line under the mouse pointer 
     [ From: Stefan Jeske <jeske@braunschweig.netsurf.de> ]
 
-  - Really big font (150 pt), plus lots of editing caused segfault
-
   - "changed" emitted when doing deletes on empty Text widget.
 
- ? Allow moving the separator for paned widgets by dragging 
-   it directly instead of using the handle. 
-
- ? Mark public use of gtk_tree_remove_item as deprecated - it should be used
-   as:
-         gtk_container_remove (GTK_CONTAINER(tree), widget);
-
- * Standardize that all strings should be passed as gchar *, not 
-   guchar *. But what about non-string data? (gdk_property_change,
-   gtk_selection_data_set) X makes these sort of things guchar...
-
- * Check into XAddConnectionWatch - is this needed for XIM?
-
- * Places where a _full variant is needed:
-
-    gtk_clist_set_row_data
-    gtk_init_add
-    gtk_menu_popup
-    gtk_toolbar_prepend_element
-    gtk_toolbar_insert_element
-    gtk_widget_dnd_data_set (should be guchar * with a copy?
-                             shouldn't be there at all...)
-    ??? GtkDrawingarea.draw_data
- 
- * gtk_rc_add_[name/class]_style are broken for bg pixmaps, because
-   styles are broken for bg pixmaps, and RC styles only hack around
-   that.
-
- * Try to rationally deal with someone else deleting one of our
-   windows??? This would mean keeping track of our window heirarchy
-   ourselves, for one thing, and will never be safe, because of
-   race conditions.
-
- * --g-fatal-warnings flag that does 
-        g_set_warning_handler ((GWarningHandler)g_error);
-
- * If a window spontaneously resizes itself N times before any
-   ConfigureNotify events are received, then due to the interaction
-   of the ConfigureNotify compression code in GDK and the resize
-   count used for the window, the window will be size_allocated
-   the next N-1 times it is moved.
-
-   Fix: Only send GDK_EVENT_CONFIGURE when the window is resized,
-   create a new event type for toplevel motion. (GDK_EVENT_REPOSITION?)
-   and eliminate the resize count in GtkWindow.
-
- * Generic ScrolledWindow interface, which provide automatic scrollbar
-   capability to Viewport, Text, and CList widgets.
-
-   GTK_POLICY_NEVER for scrolled windows.
-
- * Consider caching more state in GdkWindowPrivate. Currently, 
-   every widget realization involves a XGetGeometry and a
-   XGetWindowAttributes. And every GdkWindow destruction
-   involves a XQueryTree.
-
- * Scrolled windows need to be smarter about when they size-request/allocate
-   their children.

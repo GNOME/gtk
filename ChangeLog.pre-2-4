@@ -1,3 +1,8 @@
+Fri Apr 10 00:10:16 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* README/INSTALL: Extended for the 1.0 release.
+  	* TODO:           Eliminated the "before 1.0" section
+
 Thu Apr  9 19:31:51 PDT 1998 Shawn T. Amundson <amundson@gtk.org>
 
 	* AUTHORS NEWS README configure.in gtk+.spec glib/configure.in:
