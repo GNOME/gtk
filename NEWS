@@ -1,10 +1,19 @@
 What is new in GTK+ 1.1.6:
 
+* The signal system now features emission hooks whith special semantics,
+  refer to the ChangeLog for this.
+* Minor? speedups and memory reductions to the emission handling of the
+  signal system.
+* _interp() function variants are deprecated now. the corresponding *_full()
+  variants are provided for a long time now.
+* Dnd abort timeout increased to 10 minutes.
 * GtkScrolledWindow inherits from GtkBin now.
+* GTK_POLICY_NEVER is implemented for scrolled windows now.
 * Lots of API clean ups.
 * Incremental freezing abilities.
 * Integrated widgets from the GNOME tree: GtkLayout, GtkPlug and GtkSocket.
 * Read doc/Changes-1.2 to properly adapt your code.
+* Bug Fixes.
 
 What is new in GTK+ 1.1.5:
 
