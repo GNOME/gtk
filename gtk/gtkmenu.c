@@ -37,6 +37,7 @@
 #include "gtkhbox.h"
 #include "gtkvscrollbar.h"
 #include "gtksettings.h"
+#include "gtkintl.h"
 
 
 #define MENU_ITEM_CLASS(w)   GTK_MENU_ITEM_GET_CLASS (w)
@@ -59,9 +60,21 @@ struct _GtkMenuAttachData
   GtkMenuDetachFunc detacher;
 };
 
+enum {
+  PROP_0,
+  PROP_TEAROFF_TITLE
+};
 
 static void     gtk_menu_class_init        (GtkMenuClass     *klass);
 static void     gtk_menu_init              (GtkMenu          *menu);
+static void     gtk_menu_set_property      (GObject      *object,
+					    guint         prop_id,
+					    const GValue *value,
+					    GParamSpec   *pspec);
+static void     gtk_menu_get_property      (GObject     *object,
+					    guint        prop_id,
+					    GValue      *value,
+					    GParamSpec  *pspec);
 static void     gtk_menu_destroy           (GtkObject        *object);
 static void     gtk_menu_realize           (GtkWidget        *widget);
 static void     gtk_menu_unrealize         (GtkWidget        *widget);
@@ -146,6 +159,7 @@ gtk_menu_get_type (void)
 static void
 gtk_menu_class_init (GtkMenuClass *class)
 {
+  GObjectClass *gobject_class;
   GtkObjectClass *object_class;
   GtkWidgetClass *widget_class;
   GtkContainerClass *container_class;
@@ -153,12 +167,23 @@ gtk_menu_class_init (GtkMenuClass *class)
 
   GtkBindingSet *binding_set;
   
+  gobject_class = (GObjectClass*) class;
   object_class = (GtkObjectClass*) class;
   widget_class = (GtkWidgetClass*) class;
   container_class = (GtkContainerClass*) class;
   menu_shell_class = (GtkMenuShellClass*) class;
   parent_class = gtk_type_class (gtk_menu_shell_get_type ());
   
+  gobject_class->set_property = gtk_menu_set_property;
+  gobject_class->get_property = gtk_menu_get_property;
+
+  g_object_class_install_property (gobject_class,
+                                   PROP_TEAROFF_TITLE,
+                                   g_param_spec_string ("tearoff-title",
+                                                        _("Tearoff Title"),
+                                                        _("A title that may be displayed by the window manager when this menu is torn-off."),
+                                                        "",
+                                                        G_PARAM_READABLE | G_PARAM_WRITABLE));
   object_class->destroy = gtk_menu_destroy;
   
   widget_class->realize = gtk_menu_realize;
@@ -221,6 +246,50 @@ gtk_menu_class_init (GtkMenuClass *class)
 				"move_current", 1,
 				GTK_TYPE_MENU_DIRECTION_TYPE,
 				GTK_MENU_DIR_CHILD);
+}
+
+
+static void 
+gtk_menu_set_property (GObject      *object,
+		       guint         prop_id,
+		       const GValue *value,
+		       GParamSpec   *pspec)
+{
+  GtkMenu *menu;
+  
+  menu = GTK_MENU (object);
+  
+  switch (prop_id)
+    {
+    case PROP_TEAROFF_TITLE:
+      gtk_menu_set_title (menu, g_value_get_string (value));
+      break;	  
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+    }
+}
+
+static void 
+gtk_menu_get_property (GObject     *object,
+		       guint        prop_id,
+		       GValue      *value,
+		       GParamSpec  *pspec)
+{
+  GtkMenu *menu;
+  
+  menu = GTK_MENU (object);
+  
+  switch (prop_id)
+    {
+    case PROP_TEAROFF_TITLE:
+      g_value_set_string (value, gtk_object_get_data (GTK_OBJECT (menu), 
+						      "gtk-menu-title"));
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+    }
 }
 
 static gboolean
@@ -945,6 +1014,7 @@ gtk_menu_set_title (GtkMenu     *menu,
 
   gtk_object_set_data_full (GTK_OBJECT (menu), "gtk-menu-title",
 			    g_strdup (title), (GtkDestroyNotify) g_free);
+  g_object_notify (G_OBJECT (menu), "tearoff_title");
 }
 
 /**

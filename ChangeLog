@@ -1,3 +1,13 @@
+Fri Aug 24 23:09:05 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkimage.[ch] docs/Changes-2.0.txt: Break compatibility 
+	and make gtk_image_new() take no arguments. The compiler will
+	catch it, and it is vastly more useful than having
+	gtk_image_new() be a deprecated alias for gtk_image_new_from_image().  
+
+	* gtk/gtkmenu.c (gtk_menu_set_property): Apply patch
+	to add tearoff-title property (#51319, Lee Mallabone)
+
 Fri Aug 24 22:12:32 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkmenuitem.[ch]: Remove unused and useless function

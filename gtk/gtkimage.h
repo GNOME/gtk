@@ -125,6 +125,7 @@ struct _GtkImageClass
 
 GtkType    gtk_image_get_type (void) G_GNUC_CONST;
 
+GtkWidget* gtk_image_new                (void);
 GtkWidget* gtk_image_new_from_pixmap    (GdkPixmap       *pixmap,
                                          GdkBitmap       *mask);
 GtkWidget* gtk_image_new_from_image     (GdkImage        *image,
@@ -177,8 +178,6 @@ GdkPixbufAnimation* gtk_image_get_animation (GtkImage *image);
 #ifndef GTK_DISABLE_DEPRECATED
 /* These three are deprecated */
 
-GtkWidget* gtk_image_new      (GdkImage   *val,
-			       GdkBitmap  *mask);
 void       gtk_image_set      (GtkImage   *image,
 			       GdkImage   *val,
 			       GdkBitmap  *mask);

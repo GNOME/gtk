@@ -776,19 +776,18 @@ gtk_image_get_animation (GtkImage *image)
   return image->data.anim.anim;
 }
 
+/**
+ * gtk_image_new:
+ * @void: a #GtkImage
+ * 
+ * Creates a new empty #GtkImage widget.
+ * 
+ * Return value: a newly created #GtkImage widget. 
+ **/
 GtkWidget*
-gtk_image_new (GdkImage  *val,
-	       GdkBitmap *mask)
+gtk_image_new (void)
 {
-  GtkImage *image;
-
-  g_return_val_if_fail (val != NULL, NULL);
-
-  image = gtk_type_new (GTK_TYPE_IMAGE);
-
-  gtk_image_set (image, val, mask);
-
-  return GTK_WIDGET (image);
+  return g_object_new (GTK_TYPE_IMAGE, NULL);
 }
 
 void

@@ -442,3 +442,7 @@ Incompatible Changes from GTK+-1.2 to GTK+-2.0:
 
    - For NO_WINDOW widgets, if you create windows in your realize()
      method, you must map then in map() and unmap them in unmap().
+
+* gtk_image_new() now takes no arguments and creates an empty GtkImage
+  widget. To create a GtkImage widget from a GdkImage (the least
+  common usage of GdkImage), use gtk_image_new_from_image.
