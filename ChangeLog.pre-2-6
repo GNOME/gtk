@@ -1,3 +1,14 @@
+Wed Jul 22 15:21:08 PDT 1998 Manish Singh <yosh@gimp.org>
+
+	* gdk/gdkrgb.c: actually builds and runs properly on big
+	endian machines now, because we #include config.h. Also
+	fixed up a compile error in the WORDS_BIGENDIAN case in
+	gdk_rgb_convert_565_gray. I made the fix by looking at
+	patterns in the other code; Raph can you verify this?
+
+	* gdk/gdkthreads.c: #include <unistd.h> to quell compiler
+	warnings
+
 Wed Jul 22 23:00:44 1998  Lars Hamann  <lars@gtk.org>
 
 	* gtk/gtkctree.c (tree_select/unselect) (tree_expand/collapse) 
@@ -232,7 +243,6 @@ Tue Jul 14 19:12:12 1998  Tim Janik  <timj@gtk.org>
 	* gtk/gtkbutton.c (gtk_button_set_arg): don't destroy a buttons
 	child if it isn't a label.
 
->>>>>>> 1.520
 Tue Jul 14 11:41:38 1998  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkdialog.h: 

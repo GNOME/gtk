@@ -21,6 +21,7 @@
 #include "gdkprivate.h"
 
 #ifdef USE_PTHREADS
+#include <unistd.h>
 #include <pthread.h>
 
 pthread_mutex_t gdk_threads_mutex = PTHREAD_MUTEX_INITIALIZER;

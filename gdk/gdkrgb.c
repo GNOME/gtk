@@ -27,8 +27,9 @@
 
 #define ENABLE_GRAYSCALE
 
-#include <gdk/gdk.h>
-#include <gdk/gdkprivate.h>
+#include "../config.h"
+#include "gdk/gdk.h"
+#include "gdk/gdkprivate.h"
 #include "gdkrgb.h"
 
 typedef struct _GdkRgbInfo   GdkRgbInfo;
@@ -491,10 +492,10 @@ gdk_rgb_init (void)
   /* check endian sanity */
 #ifdef WORDS_BIGENDIAN
   if (((char *)byte_order)[0] == 1)
-    g_error ("gtk_rgb_init: WORDS_BIGENDIAN is defined, but this is a little endian machine.\n\n");
+    g_error ("gdk_rgb_init: WORDS_BIGENDIAN is defined, but this is a little endian machine.\n\n");
 #else
   if (((char *)byte_order)[0] != 1)
-    g_error ("gtk_rgb_init: WORDS_BIGENDIAN is not defined, but this is a little endian machine.\n\n");
+    g_error ("gdk_rgb_init: WORDS_BIGENDIAN is not defined, but this is a little endian machine.\n\n");
 #endif
 
   if (image_info == NULL)
@@ -1307,7 +1308,7 @@ gdk_rgb_convert_565_gray (GdkImage *image,
       for (x = 0; x < width; x++)
 	{
 	  g = *bp2++;
-	  ((guint16 *)obptr)[0] = ((g & 0xf8) << 8) |
+	  ((guint16 *)obuf)[x] = ((g & 0xf8) << 8) |
 	    ((g & 0xfc) << 3) |
 	    (g >> 3);
 	}
