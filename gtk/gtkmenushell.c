@@ -30,6 +30,7 @@
 #include "gtkbindings.h"
 #include "gtkmain.h"
 #include "gtkmarshalers.h"
+#include "gtkmenubar.h"
 #include "gtkmenuitem.h"
 #include "gtkmenushell.h"
 #include "gtksignal.h"
@@ -44,6 +45,7 @@ enum {
   MOVE_CURRENT,
   ACTIVATE_CURRENT,
   CANCEL,
+  CYCLE_FOCUS,
   LAST_SIGNAL
 };
 
@@ -148,6 +150,8 @@ static void gtk_real_menu_shell_move_current (GtkMenuShell      *menu_shell,
 static void gtk_real_menu_shell_activate_current (GtkMenuShell      *menu_shell,
 						  gboolean           force_hide);
 static void gtk_real_menu_shell_cancel           (GtkMenuShell      *menu_shell);
+static void gtk_real_menu_shell_cycle_focus      (GtkMenuShell      *menu_shell,
+						  GtkDirectionType   dir);
 
 static GtkContainerClass *parent_class = NULL;
 static guint menu_shell_signals[LAST_SIGNAL] = { 0 };
@@ -176,6 +180,35 @@ gtk_menu_shell_get_type (void)
     }
 
   return menu_shell_type;
+}
+
+static guint
+binding_signal_new (const gchar	       *signal_name,
+		    GType		itype,
+		    GSignalFlags	signal_flags,
+		    GCallback           handler,
+		    GSignalAccumulator  accumulator,
+		    gpointer		accu_data,
+		    GSignalCMarshaller  c_marshaller,
+		    GType		return_type,
+		    guint		n_params,
+		    ...)
+{
+  va_list args;
+  guint signal_id;
+
+  g_return_val_if_fail (signal_name != NULL, 0);
+  
+  va_start (args, n_params);
+
+  signal_id = g_signal_new_valist (signal_name, itype, signal_flags,
+                                   g_cclosure_new (handler, NULL, NULL),
+				   accumulator, accu_data, c_marshaller,
+                                   return_type, n_params, args);
+
+  va_end (args);
+ 
+  return signal_id;
 }
 
 static void
@@ -251,6 +284,16 @@ gtk_menu_shell_class_init (GtkMenuShellClass *klass)
                     GTK_SIGNAL_OFFSET (GtkMenuShellClass, cancel),
                     _gtk_marshal_VOID__VOID,
 		    GTK_TYPE_NONE, 0);
+  menu_shell_signals[CYCLE_FOCUS] =
+    binding_signal_new ("cycle_focus",
+			G_OBJECT_CLASS_TYPE (object_class),
+			G_SIGNAL_RUN_LAST | GTK_RUN_ACTION,
+			G_CALLBACK (gtk_real_menu_shell_cycle_focus),
+			NULL, NULL,
+			_gtk_marshal_VOID__ENUM,
+			GTK_TYPE_NONE, 1,
+			GTK_TYPE_DIRECTION_TYPE);
+
 
   binding_set = gtk_binding_set_by_class (klass);
   gtk_binding_entry_add_signal (binding_set,
@@ -276,6 +319,22 @@ gtk_menu_shell_class_init (GtkMenuShellClass *klass)
 				"activate_current", 1,
 				GTK_TYPE_BOOL,
 				FALSE);
+  gtk_binding_entry_add_signal (binding_set,
+				GDK_Tab, GDK_CONTROL_MASK,
+				"cycle_focus", 1,
+                                GTK_TYPE_DIRECTION_TYPE, GTK_DIR_TAB_FORWARD);
+  gtk_binding_entry_add_signal (binding_set,
+				GDK_KP_Tab, GDK_CONTROL_MASK,
+				"cycle_focus", 1,
+                                GTK_TYPE_DIRECTION_TYPE, GTK_DIR_TAB_FORWARD);
+  gtk_binding_entry_add_signal (binding_set,
+				GDK_Tab, GDK_CONTROL_MASK | GDK_SHIFT_MASK,
+				"cycle_focus", 1,
+                                GTK_TYPE_DIRECTION_TYPE, GTK_DIR_TAB_BACKWARD);
+  gtk_binding_entry_add_signal (binding_set,
+				GDK_KP_Tab, GDK_CONTROL_MASK | GDK_SHIFT_MASK,
+				"cycle_focus", 1,
+                                GTK_TYPE_DIRECTION_TYPE, GTK_DIR_TAB_BACKWARD);
 }
 
 static GtkType
@@ -559,9 +618,6 @@ gtk_menu_shell_key_press (GtkWidget	*widget,
       _gtk_window_activate_key (GTK_WINDOW (toplevel), event))
     return TRUE;
 
-  if (menu_shell->parent_menu_shell)
-    return gtk_widget_event (menu_shell->parent_menu_shell, (GdkEvent *)event);
-  
   return FALSE;
 }
 
@@ -1065,4 +1121,15 @@ gtk_real_menu_shell_cancel (GtkMenuShell      *menu_shell)
   
   gtk_menu_shell_deactivate (menu_shell);
   gtk_signal_emit (GTK_OBJECT (menu_shell), menu_shell_signals[SELECTION_DONE]);
+}
+
+static void
+gtk_real_menu_shell_cycle_focus (GtkMenuShell      *menu_shell,
+				 GtkDirectionType   dir)
+{
+  while (menu_shell && !GTK_IS_MENU_BAR (menu_shell))
+    menu_shell = GTK_MENU_SHELL (menu_shell->parent_menu_shell);
+
+  if (menu_shell)
+    _gtk_menu_bar_cycle_focus (GTK_MENU_BAR (menu_shell), dir);
 }

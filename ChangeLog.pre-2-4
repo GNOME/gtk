@@ -1,3 +1,14 @@
+Sun Mar  3 17:03:30 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkmenushell.c gtk/gtkmenubar.[ch]: Back out
+	changes to propagate keys to parent menu shells, since
+	that broke stuff; rather implement ::cycle-focus as
+	a key binding on GtkMenuShell rather than on GtkMenuBar.
+
+	* gtk/gtkmenushell.c (gtk_menu_shell_class_init): Add
+	add bindings for ::cycle-focus. (In gtkmenubar.c, were 
+	mistakently bound to ::move-focus.)
+
 2002-03-03  Tor Lillqvist  <tml@iki.fi>
 
 	* README.win32: Minor edits.
