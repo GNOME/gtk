@@ -816,6 +816,7 @@ gdk_window_reparent (GdkWindow *window,
 {
   GdkWindowPrivate *window_private;
   GdkWindowPrivate *parent_private;
+  GdkWindowPrivate *old_parent_private;
 
   g_return_if_fail (window != NULL);
 
@@ -823,6 +824,7 @@ gdk_window_reparent (GdkWindow *window,
     new_parent = (GdkWindow*) &gdk_root_parent;
 
   window_private = (GdkWindowPrivate*) window;
+  old_parent_private = (GdkWindowPrivate*)window_private->parent;
   parent_private = (GdkWindowPrivate*) new_parent;
 
   if (!window_private->destroyed && !parent_private->destroyed)
@@ -830,6 +832,10 @@ gdk_window_reparent (GdkWindow *window,
 		     window_private->xwindow,
 		     parent_private->xwindow,
 		     x, y);
+
+  old_parent_private->children = g_list_remove (old_parent_private->children, window);
+  parent_private->children = g_list_prepend (parent_private->children, window);
+  
 }
 
 void

@@ -1,3 +1,19 @@
+Fri Jun 12 21:20:42 1998  Owen Taylor  <otaylor@gtk.org>
+
+	* gtk/gtkoptionmenu.c (gtk_option_menu_expose): Removed
+	code for drawing the child in two places at once. Unfortunately,
+	not only does it not work anymore (because reparenting has
+	been fixed), but it also triggers reparent/expose loops
+	in some cases.
+
+	* gtk/gtkoptionmenu.c (gtk_option_menu_remove_contents): Removed
+	an unecessary unrealize.
+
+Fri Jun 12 21:18:56 1998  Owen Taylor  <otaylor@gtk.org>
+
+	* gdk/gdkwindow.c (gdk_window_reparent): Update the
+	  old and new parents' child window lists properly.
+
 Fri Jun 12 09:24:47 1998  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkpacker.h:
