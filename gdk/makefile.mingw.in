@@ -8,8 +8,11 @@ TOP = ../..
 
 include ../build/win32/make.mingw
 
-# Possibly override GTK+ version from build/win32/module.defs
+# Possibly override versions from build/win32/module.defs
 GTK_VER = @GTK_MAJOR_VERSION@.@GTK_MINOR_VERSION@
+GDK_PIXBUF_VER = @GDK_PIXBUF_MAJOR@.@GDK_PIXBUF_MINOR@
+
+GDK_PIXBUF_LIBS = -L ../gdk-pixbuf -lgdk_pixbuf-$(GDK_PIXBUF_VER)
 
 OPTIMIZE = -g
 
@@ -58,7 +61,7 @@ win32/gdk-win32res.o : FRC
 	cd win32 && $(MAKE) -f makefile.mingw gdk-win32res.o
 
 gdk-win32-$(GTK_VER).dll : $(gdk_OBJECTS) gdk.def win32/libgdk-win32.a win32/gdk-win32res.o win32/libwntab32x.a
-	$(GLIB)/build-dll gdk-win32 $(GTK_VER) gdk.def $(gdk_OBJECTS) win32/libgdk-win32.a win32/libwntab32x.a -L ../gdk-pixbuf -lgdk_pixbuf-$(GTK_VER) $(GLIB_LIBS) $(PANGOWIN32_LIBS) -lgdi32 -luser32 -limm32 -lshell32 -lole32 -luuid $(LDFLAGS) win32/gdk-win32res.o
+	$(GLIB)/build-dll gdk-win32 $(GTK_VER) gdk.def $(gdk_OBJECTS) win32/libgdk-win32.a win32/libwntab32x.a $(GDK_PIXBUF_LIBS) $(GLIB_LIBS) $(PANGOWIN32_LIBS) -lgdi32 -luser32 -limm32 -lshell32 -lole32 -luuid $(LDFLAGS) win32/gdk-win32res.o
 
 win32/libwntab32x.a : FRC
 	cd win32 && $(MAKE) -f makefile.mingw libwntab32x.a
@@ -67,7 +70,8 @@ win32/libwntab32x.a : FRC
 # makefile.mingw.in. Only for developer use.
 makefile.mingw: makefile.mingw.in
 	sed -e 's,@GTK_MAJOR[_]VERSION@,@GTK_MAJOR_VERSION@,' \
-	    -e 's,@GTK_MINOR[_]VERSION@,@GTK_MINOR_VERSION@,' <$< >$@
+	    -e 's,@GTK_MINOR[_]VERSION@,@GTK_MINOR_VERSION@,' \
+	    -e 's,@GDK_PIXBUF[_]MAJOR@,@GDK_PIXBUF_MAJOR@,'   \
+	    -e 's,@GDK_PIXBUF[_]MINOR@,@GDK_PIXBUF_MINOR@,'   <$< >$@
 
 .PHONY: FRC
-

@@ -18,6 +18,7 @@ EXPORTS
 	GTK_TYPE_CTREE_POS
 	GTK_TYPE_CURVE_TYPE
 	GTK_TYPE_DEBUG_FLAG
+	GTK_TYPE_DELETE_TYPE
 	GTK_TYPE_DEST_DEFAULTS
 	GTK_TYPE_DIRECTION_TYPE
 	GTK_TYPE_FUNDAMENTAL_TYPE
@@ -71,11 +72,13 @@ EXPORTS
 	GTK_TYPE_GDK_WINDOW_TYPE
 	GTK_TYPE_GDK_WM_DECORATION
 	GTK_TYPE_GDK_WM_FUNCTION
+	GTK_TYPE_IMAGE_TYPE
 	GTK_TYPE_JUSTIFICATION
 	GTK_TYPE_MATCH_TYPE
 	GTK_TYPE_MENU_DIRECTION_TYPE
 	GTK_TYPE_MENU_FACTORY_TYPE
 	GTK_TYPE_METRIC_TYPE
+	GTK_TYPE_MOVEMENT_STEP
 	GTK_TYPE_OBJECT_FLAGS
 	GTK_TYPE_ORIENTATION
 	GTK_TYPE_PACKER_OPTIONS
@@ -106,9 +109,7 @@ EXPORTS
 	GTK_TYPE_SUBMENU_PLACEMENT
 	GTK_TYPE_TARGET_FLAGS
 	GTK_TYPE_TEXT_DIRECTION
-	GTK_TYPE_TEXT_VIEW_DELETE_TYPE
-	GTK_TYPE_TEXT_VIEW_MOVEMENT_STEP
-	GTK_TYPE_TEXT_VIEW_SCROLL_TYPE
+	GTK_TYPE_TEXT_WINDOW_TYPE
 	GTK_TYPE_TOOLBAR_CHILD_TYPE
 	GTK_TYPE_TOOLBAR_SPACE_STYLE
 	GTK_TYPE_TOOLBAR_STYLE
@@ -1104,6 +1105,8 @@ EXPORTS
 	gtk_target_list_unref
 	gtk_tearoff_menu_item_get_type
 	gtk_tearoff_menu_item_new
+	gtk_text_attributes_new
+	gtk_text_attributes_unref
 	gtk_text_backward_delete
 	gtk_text_buffer_apply_tag
 	gtk_text_buffer_apply_tag_by_name
@@ -1118,12 +1121,13 @@ EXPORTS
 	gtk_text_buffer_create_tag
 	gtk_text_buffer_delete_mark
 	gtk_text_buffer_get_bounds
+	gtk_text_buffer_get_insert
 	gtk_text_buffer_get_last_iter
 	gtk_text_buffer_get_mark
 	gtk_text_buffer_get_selection_bounds
 	gtk_text_buffer_get_slice
 	gtk_text_buffer_insert
-	gtk_text_buffer_insert_pixmap
+	gtk_text_buffer_insert_pixbuf
 	gtk_text_buffer_modified
 	gtk_text_buffer_move_mark
 	gtk_text_buffer_new
@@ -1141,6 +1145,8 @@ EXPORTS
 	gtk_text_iter_forward_line
 	gtk_text_iter_forward_search
 	gtk_text_iter_equal
+	gtk_text_iter_get_attributes
+	gtk_text_iter_get_line
 	gtk_text_iter_get_offset
 	gtk_text_iter_get_text
 	gtk_text_iter_is_last
@@ -1157,12 +1163,19 @@ EXPORTS
 	gtk_text_thaw
 	gtk_text_unknown_char
 	gtk_text_unknown_char_utf8
+	gtk_text_view_buffer_to_window_coords
+	gtk_text_view_get_buffer
+	gtk_text_view_get_line_at_y
+	gtk_text_view_get_line_yrange
 	gtk_text_view_get_type
+	gtk_text_view_get_window
 	gtk_text_view_get_wrap_mode
 	gtk_text_view_new_with_buffer
+	gtk_text_view_set_border_window_size
 	gtk_text_view_set_cursor_visible
 	gtk_text_view_set_editable
 	gtk_text_view_set_wrap_mode
+	gtk_text_view_window_to_buffer_coords
 	gtk_timeout_add
 	gtk_timeout_add_full
 	gtk_timeout_remove

@@ -30,6 +30,10 @@
 #include "x11/gdkx.h"
 #endif
 
+#ifdef GDK_WINDOWING_WIN32
+#include "win32/gdkwin32.h"
+#endif
+
 typedef struct _RequestContentsInfo RequestContentsInfo;
 typedef struct _RequestTextInfo RequestTextInfo;
 
@@ -207,7 +211,11 @@ clipboard_get_timestamp (GtkClipboard *clipboard)
   
   if (timestamp == GDK_CURRENT_TIME)
     {
+#ifdef GDK_WINDOWING_X11
       timestamp = gdk_x11_get_server_time (clipboard_widget->window);
+#elif defined GDK_WINDOWING_WIN32
+      timestamp = GetMessageTime ();
+#endif
     }
   else
     {

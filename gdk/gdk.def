@@ -145,11 +145,11 @@ EXPORTS
 	gdk_gc_new_with_values
 	gdk_gc_ref
 	gdk_gc_set_background
-	gdk_gc_set_colormap
 	gdk_gc_set_clip_mask
 	gdk_gc_set_clip_origin
 	gdk_gc_set_clip_rectangle
 	gdk_gc_set_clip_region
+	gdk_gc_set_colormap
 	gdk_gc_set_dashes
 	gdk_gc_set_exposures
 	gdk_gc_set_fill
@@ -180,6 +180,7 @@ EXPORTS
 	gdk_im_set_best_style
 	gdk_image_get
 	gdk_image_get_pixel
+	gdk_image_get_type
 	gdk_image_new
 	gdk_image_new_bitmap
 	gdk_image_put_pixel
@@ -212,6 +213,10 @@ EXPORTS
 	gdk_pango_context_get
 	gdk_pango_context_set_colormap
 	gdk_parent_root
+	gdk_pixbuf_render_pixmap_and_mask
+	gdk_pixbuf_render_threshold_alpha
+	gdk_pixbuf_render_to_drawable
+	gdk_pixbuf_render_to_drawable_alpha
 	gdk_pixmap_colormap_create_from_xpm
 	gdk_pixmap_colormap_create_from_xpm_d
 	gdk_pixmap_create_from_data
@@ -284,12 +289,15 @@ EXPORTS
 	gdk_text_height
 	gdk_text_measure
 	gdk_text_property_to_text_list
+	gdk_text_property_to_utf8_list
 	gdk_text_width
 	gdk_text_width_wc
 	gdk_threads_enter
 	gdk_threads_leave
 	gdk_threads_mutex
 	gdk_unicode_to_keyval
+	gdk_utf8_to_compound_text
+	gdk_utf8_to_string_target
 	gdk_visual_get_best
 	gdk_visual_get_best_depth
 	gdk_visual_get_best_type

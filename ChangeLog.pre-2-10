@@ -1,3 +1,25 @@
+2000-10-03  Tor Lillqvist  <tml@iki.fi>
+
+	* config.h.win32: Guard definition of alloca(). glib.h now handles
+	that.
+
+	* gdk/gdk.def
+	* gtk/gtk.def: Add new entry points.
+
+	Changes just to make GTK+ build without errors on Win32. No hope
+	of it working in its current state, though...:
+	
+	* gdk/win32/gdkselection-win32.c: Remove gcc -Wall warnings.  Add
+	some functions from the X11 backend, just to make GTK+ build.
+
+	* gdk/makefile.mingw.in
+	* gtk/makefile.mingw.in: Use correct gdk_pixbuf version
+	number. Add new object files.
+
+	* gtk/gtkclipboard.c: Include gdkwin32.h on Win32. Use
+	GetMessageTime to get timestamp (where on X11 uses
+	gdk_x11_get_server_time()).
+
 2000-10-02  Havoc Pennington  <hp@pobox.com>
 
 	* gtk/gtktextview.c: text_window_* weren't static and should have

@@ -90,8 +90,8 @@ gdk_selection_owner_set (GdkWindow *owner,
   GDK_NOTE (MISC,
 	    (sel_name = gdk_atom_name (selection),
 	     g_print ("gdk_selection_owner_set: %#x %#x (%s)\n",
-		      (owner ? GDK_WINDOW_HWND (owner) : 0),
-		      selection, sel_name),
+		      (owner ? (guint) GDK_WINDOW_HWND (owner) : 0),
+		      (guint) selection, sel_name),
 	     g_free (sel_name)));
 
   if (selection != gdk_clipboard_atom)
@@ -102,7 +102,7 @@ gdk_selection_owner_set (GdkWindow *owner,
   else
     xwindow = NULL;
 
-  GDK_NOTE (MISC, g_print ("...OpenClipboard(%#x)\n", xwindow));
+  GDK_NOTE (MISC, g_print ("...OpenClipboard(%#x)\n", (guint) xwindow));
   if (!OpenClipboard (xwindow))
     {
       WIN32_API_FAILED ("OpenClipboard");
@@ -161,8 +161,8 @@ gdk_selection_owner_get (GdkAtom selection)
   GDK_NOTE (MISC,
 	    (sel_name = gdk_atom_name (selection),
 	     g_print ("gdk_selection_owner_get: %#x (%s) = %#x\n",
-		      selection, sel_name,
-		      (window ? GDK_WINDOW_HWND (window) : 0)),
+		      (guint) selection, sel_name,
+		      (window ? (guint) GDK_WINDOW_HWND (window) : 0)),
 	     g_free (sel_name)));
 
   return window;
@@ -175,7 +175,6 @@ gdk_selection_convert (GdkWindow *requestor,
 		       guint32    time)
 {
   HGLOBAL hdata;
-  GdkSelProp *prop;
   guchar *ptr, *data, *datap, *p;
   guint i, length, slength;
   gchar *sel_name, *tgt_name;
@@ -188,7 +187,9 @@ gdk_selection_convert (GdkWindow *requestor,
 	    (sel_name = gdk_atom_name (selection),
 	     tgt_name = gdk_atom_name (target),
 	     g_print ("gdk_selection_convert: %#x %#x (%s) %#x (%s)\n",
-		      GDK_WINDOW_HWND (requestor), selection, sel_name, target, tgt_name),
+		      (guint) GDK_WINDOW_HWND (requestor),
+		      (guint) selection, sel_name,
+		      (guint) target, tgt_name),
 	     g_free (sel_name),
 	     g_free (tgt_name)));
 
@@ -199,7 +200,7 @@ gdk_selection_convert (GdkWindow *requestor,
        * and store it for later.
        */
       GDK_NOTE (MISC, g_print ("...OpenClipboard(%#x)\n",
-				    GDK_WINDOW_HWND (requestor)));
+			       (guint) GDK_WINDOW_HWND (requestor)));
       if (!OpenClipboard (GDK_WINDOW_HWND (requestor)))
 	{
 	  WIN32_API_FAILED ("OpenClipboard");
@@ -295,7 +296,7 @@ gdk_selection_property_get (GdkWindow  *requestor,
     return 0;
   
   GDK_NOTE (MISC, g_print ("gdk_selection_property_get: %#x\n",
-			   GDK_WINDOW_HWND (requestor)));
+			   (guint) GDK_WINDOW_HWND (requestor)));
 
   prop = g_hash_table_lookup (sel_prop_table, &GDK_WINDOW_HWND (requestor));
 
@@ -345,9 +346,9 @@ gdk_selection_send_notify (guint32  requestor,
 	     prop_name = gdk_atom_name (property),
 	     g_print ("gdk_selection_send_notify: %#x %#x (%s) %#x (%s) %#x (%s)\n",
 		      requestor,
-		      selection, sel_name,
-		      target, tgt_name,
-		      property, prop_name),
+		      (guint) selection, sel_name,
+		      (guint) target, tgt_name,
+		      (guint) property, prop_name),
 	     g_free (sel_name),
 	     g_free (tgt_name),
 	     g_free (prop_name)));
@@ -406,4 +407,315 @@ void
 gdk_free_compound_text (guchar *ctext)
 {
   g_warning ("gdk_free_compound_text: Not implemented");
+}
+
+/* These are lifted from gdkselection-x11.c, just to get GTK+ to build.
+ * These functions probably don't make much sense at all in Windows.
+ */
+
+/* FIXME */
+
+static gint
+make_list (const gchar  *text,
+	   gint          length,
+	   gboolean      latin1,
+	   gchar      ***list)
+{
+  GSList *strings = NULL;
+  gint n_strings = 0;
+  gint i;
+  const gchar *p = text;
+  const gchar *q;
+  GSList *tmp_list;
+  GError *error = NULL;
+
+  while (p < text + length)
+    {
+      gchar *str;
+      
+      q = p;
+      while (*q && q < text + length)
+	q++;
+
+      if (latin1)
+	{
+	  str = g_convert (p, q - p,
+			   "UTF-8", "ISO-8859-1",
+			   NULL, NULL, &error);
+
+	  if (!str)
+	    {
+	      g_warning ("Error converting selection from STRING: %s",
+			 error->message);
+	      g_error_free (error);
+	    }
+	}
+      else
+	str = g_strndup (p, q - p);
+
+      if (str)
+	{
+	  strings = g_slist_prepend (strings, str);
+	  n_strings++;
+	}
+
+      p = q + 1;
+    }
+
+  if (list)
+    *list = g_new (gchar *, n_strings + 1);
+
+  (*list)[n_strings] = NULL;
+  
+  i = n_strings;
+  tmp_list = strings;
+  while (tmp_list)
+    {
+      if (list)
+	(*list)[--i] = tmp_list->data;
+      else
+	g_free (tmp_list->data);
+
+      tmp_list = tmp_list->next;
+    }
+
+  g_slist_free (strings);
+
+  return n_strings;
+}
+
+/**
+ * gdk_text_property_to_utf8_list:
+ * @encoding: an atom representing the encoding of the text
+ * @format:   the format of the property
+ * @text:     the text to convert
+ * @length:   the length of @text, in bytes
+ * @list:     location to store the list of strings or %NULL. The
+ *            list should be freed with g_strfreev().
+ * 
+ * Convert a text property in the giving encoding to
+ * a list of UTF-8 strings. 
+ * 
+ * Return value: the number of strings in the resulting
+ *               list.
+ **/
+gint 
+gdk_text_property_to_utf8_list (GdkAtom        encoding,
+				gint           format,
+				const guchar  *text,
+				gint           length,
+				gchar       ***list)
+{
+  g_return_val_if_fail (text != NULL, 0);
+  g_return_val_if_fail (length >= 0, 0);
+  
+  if (encoding == GDK_TARGET_STRING)
+    {
+      return make_list ((gchar *)text, length, TRUE, list);
+    }
+  else if (encoding == gdk_atom_intern ("UTF8_STRING", FALSE))
+    {
+      return make_list ((gchar *)text, length, FALSE, list);
+    }
+  else
+    {
+      gchar **local_list;
+      gint local_count;
+      gint i;
+      gchar *charset = NULL;
+      gboolean need_conversion= g_get_charset (&charset);
+      gint count = 0;
+      GError *error = NULL;
+      
+      /* Probably COMPOUND text, we fall back to Xlib routines
+       */
+      local_count = gdk_text_property_to_text_list (encoding,
+						    format, 
+						    text,
+						    length,
+						    &local_list);
+      if (list)
+	*list = g_new (gchar *, local_count + 1);
+      
+      for (i=0; i<local_count; i++)
+	{
+	  /* list contains stuff in our default encoding
+	   */
+	  if (need_conversion)
+	    {
+	      gchar *utf = g_convert (local_list[i], -1,
+				      "UTF-8", charset,
+				      NULL, NULL, &error);
+	      if (utf)
+		{
+		  if (list)
+		    (*list)[count++] = utf;
+		  else
+		    g_free (utf);
+		}
+	      else
+		{
+		  g_warning ("Error converting to UTF-8 from '%s': %s",
+			     charset, error->message);
+		  g_error_free (error);
+		  error = NULL;
+		}
+	    }
+	  else
+	    {
+	      if (list)
+		(*list)[count++] = g_strdup (local_list[i]);
+	    }
+	}
+      
+      gdk_free_text_list (local_list);
+      (*list)[count] = NULL;
+
+      return count;
+    }
+}
+
+/* The specifications for COMPOUND_TEXT and STRING specify that C0 and
+ * C1 are not allowed except for \n and \t, however the X conversions
+ * routines for COMPOUND_TEXT only enforce this in one direction,
+ * causing cut-and-paste of \r and \r\n separated text to fail.
+ * This routine strips out all non-allowed C0 and C1 characters
+ * from the input string and also canonicalizes \r, \r\n, and \n\r to \n
+ */
+static gchar * 
+sanitize_utf8 (const gchar *src)
+{
+  gint len = strlen (src);
+  GString *result = g_string_sized_new (len);
+  const gchar *p = src;
+
+  while (*p)
+    {
+      if (*p == '\r' || *p == '\n')
+	{
+	  p++;
+	  if (*p == '\r' || *p == '\n')
+	    p++;
+
+	  g_string_append_c (result, '\n');
+	}
+      else
+	{
+	  gunichar ch = g_utf8_get_char (p);
+	  char buf[7];
+	  gint buflen;
+	  
+	  if (!((ch < 0x20 && ch != '\t') || (ch >= 0x7f && ch < 0xa0)))
+	    {
+	      buflen = g_unichar_to_utf8 (ch, buf);
+	      g_string_append_len (result, buf, buflen);
+	    }
+
+	  p = g_utf8_next_char (p);
+	}
+    }
+
+  return g_string_free (result, FALSE);
+}
+
+/**
+ * gdk_utf8_to_string_target:
+ * @str: a UTF-8 string
+ * 
+ * Convert an UTF-8 string into the best possible representation
+ * as a STRING. The representation of characters not in STRING
+ * is not specified; it may be as pseudo-escape sequences
+ * \x{ABCD}, or it may be in some other form of approximation.
+ * 
+ * Return value: the newly allocated string, or %NULL if the
+ *               conversion failed. (It should not fail for
+ *               any properly formed UTF-8 string.)
+ **/
+gchar *
+gdk_utf8_to_string_target (const gchar *str)
+{
+  GError *error = NULL;
+  
+  gchar *tmp_str = sanitize_utf8 (str);
+  gchar *result =  g_convert_with_fallback (tmp_str, -1,
+					    "ISO-8859-1", "UTF-8",
+					    NULL, NULL, NULL, &error);
+  if (!result)
+    {
+      g_warning ("Error converting from UTF-8 to STRING: %s",
+		 error->message);
+      g_error_free (error);
+    }
+  
+  g_free (tmp_str);
+  return result;
+}
+
+/**
+ * gdk_utf8_to_compound_text:
+ * @str:      a UTF-8 string
+ * @encoding: location to store resulting encoding
+ * @format:   location to store format of the result
+ * @ctext:    location to store the data of the result
+ * @length:   location to store the length of the data
+ *            stored in @ctext
+ * 
+ * Convert from UTF-8 to compound text. 
+ * 
+ * Return value: %TRUE if the conversion succeeded, otherwise
+ *               false.
+ **/
+gboolean
+gdk_utf8_to_compound_text (const gchar *str,
+			   GdkAtom     *encoding,
+			   gint        *format,
+			   guchar     **ctext,
+			   gint        *length)
+{
+  gboolean need_conversion;
+  gchar *charset;
+  gchar *locale_str, *tmp_str;
+  GError *error = NULL;
+  gboolean result;
+
+  g_return_val_if_fail (str != NULL, FALSE);
+
+  need_conversion = g_get_charset (&charset);
+
+  tmp_str = sanitize_utf8 (str);
+
+  if (need_conversion)
+    {
+      locale_str = g_convert_with_fallback (tmp_str, -1,
+					    charset, "UTF-8",
+					    NULL, NULL, NULL, &error);
+      g_free (tmp_str);
+
+      if (!locale_str)
+	{
+	  g_warning ("Error converting from UTF-8 to '%s': %s",
+		     charset, error->message);
+	  g_error_free (error);
+
+	  if (encoding)
+	    *encoding = GDK_NONE;
+	  if (format)
+	    *format = GDK_NONE;
+	  if (ctext)
+	    *ctext = NULL;
+	  if (length)
+	    *length = 0;
+
+	  return FALSE;
+	}
+    }
+  else
+    locale_str = tmp_str;
+    
+  result = gdk_string_to_compound_text (locale_str,
+					encoding, format, ctext, length);
+  
+  g_free (locale_str);
+
+  return result;
 }

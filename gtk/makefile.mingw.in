@@ -18,12 +18,13 @@ include ../build/win32/make.mingw
 
 ################################################################
 
-# Possibly override GTK+ version from build/win32/module.defs
+# Possibly override versions from build/win32/module.defs
 GTK_VER = @GTK_MAJOR_VERSION@.@GTK_MINOR_VERSION@
+GDK_PIXBUF_VER = @GDK_PIXBUF_MAJOR@.@GDK_PIXBUF_MINOR@
 
 GDK_LIBS = -L ../gdk -lgdk-win32-$(GTK_VER)
 GTK_LIBS = -L . -lgtk-win32-$(GTK_VER)
-GDK_PIXBUF_LIBS = -L ../gdk-pixbuf -lgdk_pixbuf-$(GTK_VER)
+GDK_PIXBUF_LIBS = -L ../gdk-pixbuf -lgdk_pixbuf-$(GDK_PIXBUF_VER)
 
 # Perl and awk are needed to generate some source files.
 # These generated source files are distributed with the Win32 GTk+ source
@@ -68,6 +69,7 @@ gtk_OBJECTS =					\
 	gtkcalendar.o				\
 	gtkcheckbutton.o			\
 	gtkcheckmenuitem.o			\
+	gtkclipboard.o				\
 	gtkclist.o				\
 	gtkcolorsel.o				\
 	gtkcolorseldialog.o			\
@@ -97,6 +99,7 @@ gtk_OBJECTS =					\
 	gtkhscrollbar.o				\
 	gtkhseparator.o				\
 	gtkhsv.o				\
+	gtkiconfactory.o			\
 	gtkimage.o				\
 	gtkimcontext.o				\
 	gtkimcontextsimple.o			\
@@ -142,6 +145,7 @@ gtk_OBJECTS =					\
 	gtkspinbutton.o				\
 	gtkstyle.o				\
 	gtkstatusbar.o				\
+	gtkstock.o				\
 	gtktable.o				\
 	gtktearoffmenuitem.o			\
 	gtktext.o				\
@@ -409,13 +413,13 @@ testselection.o : testselection.c
 	$(CC) $(CFLAGS) -UGTK_COMPILATION -c -DG_LOG_DOMAIN=\"testselection\" testselection.c
 
 testtext.exe : testtext.o
-	$(CC) $(CFLAGS) -o $@  testtext.o $(GTK_LIBS) $(GDK_LIBS) $(GLIB_LIBS) $(LDFLAGS)
+	$(CC) $(CFLAGS) -o $@  testtext.o $(PANGO_LIBS) $(GDK_PIXBUF_LIBS) $(GTK_LIBS) $(GDK_LIBS) $(GLIB_LIBS) $(LDFLAGS)
 
 testtext.o : testtext.c
 	$(CC) $(CFLAGS) -UGTK_COMPILATION -c -DG_LOG_DOMAIN=\"testtext\" testtext.c
 
 testtextbuffer.exe : testtextbuffer.o
-	$(CC) $(CFLAGS) -o $@  testtextbuffer.o $(GTK_LIBS) $(GDK_LIBS) $(GLIB_LIBS) $(LDFLAGS)
+	$(CC) $(CFLAGS) -o $@  testtextbuffer.o $(GDK_PIXBUF_LIBS) $(GTK_LIBS) $(GDK_LIBS) $(GLIB_LIBS) $(LDFLAGS)
 
 testtextbuffer.o : testtextbuffer.c
 	$(CC) $(CFLAGS) -UGTK_COMPILATION -c -DG_LOG_DOMAIN=\"testtextbuffer\" testtextbuffer.c
@@ -440,4 +444,6 @@ rmgen:
 # makefile.mingw.in. Only for developer use.
 makefile.mingw: makefile.mingw.in
 	sed -e 's,@GTK_MAJOR[_]VERSION@,@GTK_MAJOR_VERSION@,' \
-	    -e 's,@GTK_MINOR[_]VERSION@,@GTK_MINOR_VERSION@,' <$< >$@
+	    -e 's,@GTK_MINOR[_]VERSION@,@GTK_MINOR_VERSION@,' \
+	    -e 's,@GDK_PIXBUF[_]MAJOR@,@GDK_PIXBUF_MAJOR@,'   \
+	    -e 's,@GDK_PIXBUF[_]MINOR@,@GDK_PIXBUF_MINOR@,'     <$< >$@

@@ -16,10 +16,12 @@
 
 /* Define if you have alloca, as a function or macro.  */
 #define HAVE_ALLOCA 1
-#ifdef _MSC_VER
-#define alloca _alloca
-#elif defined (__GNUC__)
-#define alloca __builtin_alloca
+#ifndef alloca
+  #ifdef _MSC_VER
+    #define alloca _alloca
+  #elif defined (__GNUC__)
+    #define alloca __builtin_alloca
+  #endif
 #endif
 
 /* Define if you have <alloca.h> and it should be used (not on Ultrix).  */
