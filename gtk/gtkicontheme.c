@@ -2370,7 +2370,7 @@ gtk_icon_info_get_embedded_rect (GtkIconInfo  *icon_info,
 				 icon_info->data->x0, icon_info->data->y0,
 				 &scaled_x0, &scaled_y0);
 	  icon_info_scale_point (icon_info,
-				 icon_info->data->x0, icon_info->data->y0,
+				 icon_info->data->x1, icon_info->data->y1,
 				 &scaled_x1, &scaled_y1);
 	  
 	  rectangle->x = scaled_x0;

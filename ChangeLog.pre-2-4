@@ -1,3 +1,8 @@
+2003-12-18  Alexander Larsson  <alexl@redhat.com>
+
+	* gtk/gtkicontheme.c (gtk_icon_info_get_embedded_rect):
+	Fix typo that used the wrong x/y values for the x1, y1 point
+
 Thu Dec 18 01:41:50 2003  Kristian Rietveld  <kris@gtk.org>
 
 	* gtk/gtkcellrenderertext.c (gtk_cell_renderer_text_class_init),
