@@ -1,3 +1,59 @@
+Tue Oct 15 00:53:14 2002  Kristian Rietveld  <kris@gtk.org>
+
+	Behaviour change, apply changes if the entry of the editable gets
+	a focus out event (#82405).
+
+	* gtk/gtkcellrenderertext.c (gtk_cell_renderer_text_focus_out_event):
+	new function,
+	(gtk_cell_renderer_text_start_editing): stop editing and apply
+	changes on focus-out.
+
+Tue Oct 15 00:47:35 2002  Kristian Rietveld  <kris@gtk.org>
+
+	Fixes an *evil* GtkTreeModelSort bug, #93629.
+
+	* gtk/gtktreemodel.c (release_row_references): return if the
+	refs->list is NULL.
+
+	* gtk/gtktreemodelsort.c (gtk_tree_model_sort_row_changed): if we
+	are swapping two rows (re-insertion on row_changed), also *emit*
+	a rows_reordered signal. oops.
+
+Tue Oct 15 00:45:03 2002  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtkliststore.c (gtk_list_store_remove_silently): free
+	the actual link after the node has been removed (#92014).
+
+	* gtk/gtktreeviewcolumn.c (gtk_tree_view_column_column_finalize):
+	free the cell_list and the child if the exists (#92014).
+
+Tue Oct 15 00:40:25 2002  Kristian Rietveld  <kris@gtk.org>
+
+	Don't accept drops if the model has been sorted, #93758)
+
+	* gtk/gtkliststore.c (gtk_list_store_row_drop_possible): return
+	FALSE if the list has been sorted.
+
+	* gtk/gtktreestore.c (gtk_tree_store_row_drop_possible): check
+	if drag_dest is a TreeStore, return FALSE if the tree has been
+	sorted.
+
+Tue Oct 15 00:33:59 2002  Kristian Rietveld  <kris@gtk.org>
+
+	Compiler warning fixage, (#85858, #85859, #85860, #85872)
+
+	* gtk/gtkcellrendererpixbuf (gtk_cell_renderer_pixbuf_render):
+	s/guint/GtkCellRendererState/.
+	
+	* gtk/gtkcellrenderertext.c (gtk_cell_renderer_text_render):
+	ditto.
+
+	* gtk/gtkcellrenderertoggle.c (gtk_cell_renderer_toggle_render),
+	(gtk_cell_renderer_toggle_activate): ditto.
+
+	* gtk/gtkliststore.c (gtk_list_store_get_flags): a
+	s/guint/GtkTreeModelFlags/ on the return type.
+
 Mon Oct 14 15:10:34 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* modules/input/gtkimcontextxim.c:

@@ -45,14 +45,14 @@ static void gtk_cell_renderer_toggle_render     (GtkCellRenderer            *cel
 						 GdkRectangle               *background_area,
 						 GdkRectangle               *cell_area,
 						 GdkRectangle               *expose_area,
-						 guint                       flags);
+						 GtkCellRendererState        flags);
 static gboolean gtk_cell_renderer_toggle_activate  (GtkCellRenderer            *cell,
 						    GdkEvent                   *event,
 						    GtkWidget                  *widget,
 						    const gchar                *path,
 						    GdkRectangle               *background_area,
 						    GdkRectangle               *cell_area,
-						    guint                       flags);
+						    GtkCellRendererState        flags);
 
 
 enum {
@@ -274,19 +274,19 @@ gtk_cell_renderer_toggle_get_size (GtkCellRenderer *cell,
 }
 
 static void
-gtk_cell_renderer_toggle_render (GtkCellRenderer *cell,
-				 GdkWindow       *window,
-				 GtkWidget       *widget,
-				 GdkRectangle    *background_area,
-				 GdkRectangle    *cell_area,
-				 GdkRectangle    *expose_area,
-				 guint            flags)
+gtk_cell_renderer_toggle_render (GtkCellRenderer      *cell,
+				 GdkWindow            *window,
+				 GtkWidget            *widget,
+				 GdkRectangle         *background_area,
+				 GdkRectangle         *cell_area,
+				 GdkRectangle         *expose_area,
+				 GtkCellRendererState  flags)
 {
   GtkCellRendererToggle *celltoggle = (GtkCellRendererToggle *) cell;
   gint width, height;
   gint x_offset, y_offset;
   GtkShadowType shadow;
-  GtkStateType state;
+  GtkStateType state = 0;
   
   gtk_cell_renderer_toggle_get_size (cell, widget, cell_area,
 				     &x_offset, &y_offset,
@@ -337,13 +337,13 @@ gtk_cell_renderer_toggle_render (GtkCellRenderer *cell,
 }
 
 static gint
-gtk_cell_renderer_toggle_activate (GtkCellRenderer *cell,
-				   GdkEvent        *event,
-				   GtkWidget       *widget,
-				   const gchar     *path,
-				   GdkRectangle    *background_area,
-				   GdkRectangle    *cell_area,
-				   guint            flags)
+gtk_cell_renderer_toggle_activate (GtkCellRenderer      *cell,
+				   GdkEvent             *event,
+				   GtkWidget            *widget,
+				   const gchar          *path,
+				   GdkRectangle         *background_area,
+				   GdkRectangle         *cell_area,
+				   GtkCellRendererState  flags)
 {
   GtkCellRendererToggle *celltoggle;
   

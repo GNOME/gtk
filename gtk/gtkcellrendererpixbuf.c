@@ -47,7 +47,7 @@ static void gtk_cell_renderer_pixbuf_render     (GtkCellRenderer            *cel
 						 GdkRectangle               *background_area,
 						 GdkRectangle               *cell_area,
 						 GdkRectangle               *expose_area,
-						 guint                       flags);
+						 GtkCellRendererState        flags);
 
 
 enum {
@@ -400,13 +400,13 @@ gtk_cell_renderer_pixbuf_get_size (GtkCellRenderer *cell,
 }
 
 static void
-gtk_cell_renderer_pixbuf_render (GtkCellRenderer    *cell,
-				 GdkWindow          *window,
-				 GtkWidget          *widget,
-				 GdkRectangle       *background_area,
-				 GdkRectangle       *cell_area,
-				 GdkRectangle       *expose_area,
-				 guint               flags)
+gtk_cell_renderer_pixbuf_render (GtkCellRenderer      *cell,
+				 GdkWindow            *window,
+				 GtkWidget            *widget,
+				 GdkRectangle         *background_area,
+				 GdkRectangle         *cell_area,
+				 GdkRectangle         *expose_area,
+				 GtkCellRendererState  flags)
 
 {
   GtkCellRendererPixbuf *cellpixbuf = (GtkCellRendererPixbuf *) cell;

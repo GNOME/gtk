@@ -1359,6 +1359,9 @@ release_row_references (gpointer data)
   RowRefList *refs = data;
   GSList *tmp_list = NULL;
 
+  if (!refs->list)
+    return;
+
   tmp_list = refs->list;
   while (tmp_list != NULL)
     {

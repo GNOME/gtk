@@ -49,7 +49,7 @@ static void gtk_cell_renderer_text_render     (GtkCellRenderer          *cell,
 					       GdkRectangle             *background_area,
 					       GdkRectangle             *cell_area,
 					       GdkRectangle             *expose_area,
-					       guint                     flags);
+					       GtkCellRendererState      flags);
 
 static GtkCellEditable *gtk_cell_renderer_text_start_editing (GtkCellRenderer      *cell,
 							      GdkEvent             *event,
@@ -1250,13 +1250,13 @@ gtk_cell_renderer_text_get_size (GtkCellRenderer *cell,
 }
 
 static void
-gtk_cell_renderer_text_render (GtkCellRenderer    *cell,
-			       GdkWindow          *window,
-			       GtkWidget          *widget,
-			       GdkRectangle       *background_area,
-			       GdkRectangle       *cell_area,
-			       GdkRectangle       *expose_area,
-			       guint               flags)
+gtk_cell_renderer_text_render (GtkCellRenderer      *cell,
+			       GdkWindow            *window,
+			       GtkWidget            *widget,
+			       GdkRectangle         *background_area,
+			       GdkRectangle         *cell_area,
+			       GdkRectangle         *expose_area,
+			       GtkCellRendererState  flags)
 
 {
   GtkCellRendererText *celltext = (GtkCellRendererText *) cell;
@@ -1321,6 +1321,7 @@ gtk_cell_renderer_text_render (GtkCellRenderer    *cell,
 
   g_object_unref (layout);
 }
+
 static void
 gtk_cell_renderer_text_editing_done (GtkCellEditable *entry,
 				     gpointer         data)
@@ -1335,6 +1336,17 @@ gtk_cell_renderer_text_editing_done (GtkCellEditable *entry,
   new_text = gtk_entry_get_text (GTK_ENTRY (entry));
 
   g_signal_emit (data, text_cell_renderer_signals[EDITED], 0, path, new_text);
+}
+
+static gboolean
+gtk_cell_renderer_text_focus_out_event (GtkWidget *entry,
+		                        GdkEvent  *event,
+					gpointer   data)
+{
+  gtk_cell_renderer_text_editing_done (GTK_CELL_EDITABLE (entry), data);
+
+  /* entry needs focus-out-event */
+  return FALSE;
 }
 
 static GtkCellEditable *
@@ -1369,6 +1381,10 @@ gtk_cell_renderer_text_start_editing (GtkCellRenderer      *cell,
 		    "editing_done",
 		    G_CALLBACK (gtk_cell_renderer_text_editing_done),
 		    celltext);
+  g_signal_connect (entry, "focus_out_event",
+		    G_CALLBACK (gtk_cell_renderer_text_focus_out_event),
+		    celltext);
+
   return GTK_CELL_EDITABLE (entry);
 
 }

@@ -1807,6 +1807,12 @@ gtk_tree_store_row_drop_possible (GtkTreeDragDest  *drag_dest,
   GtkTreePath *tmp = NULL;
   gboolean retval = FALSE;
   
+  g_return_val_if_fail (GTK_IS_TREE_STORE (drag_dest), FALSE);
+
+  /* don't accept drops if the tree has been sorted */
+  if (GTK_TREE_STORE_IS_SORTED (drag_dest))
+    return FALSE;
+
   if (!gtk_tree_get_row_drag_data (selection_data,
 				   &src_model,
 				   &src_path))

@@ -354,6 +354,10 @@ gtk_tree_view_column_finalize (GObject *object)
     }
 
   g_free (tree_column->title);
+  g_list_free (tree_column->cell_list);
+
+  if (tree_column->child)
+    g_object_unref (G_OBJECT (tree_column->child));
 
   G_OBJECT_CLASS (parent_class)->finalize (object);
 }
