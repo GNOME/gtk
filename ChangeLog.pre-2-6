@@ -1,3 +1,20 @@
+Tue Aug 24 02:06:37 2004  Jonathan Blandford  <jrb@gnome.org>
+
+	* gtk/gtktreeview.c
+	(gtk_tree_view_real_expand_collapse_cursor_row): Don't handle the
+	event if we have no children.
+
+	* gtk/gtkfilechooserdefault.c (trap_activate_cb):
+	(tree_view_keybinding_cb):Since GtkTreeView has a keybinding
+	 attached to '/', we need to catch keypresses before the TreeView
+	 gets them.
+	(gtk_file_chooser_default_class_init): add '/' to be a keybinding
+	to the C-l dialog.
+	(location_entry_create): Clear the text to "" when loading a file.
+	This has a much better feel than putting the currently selected
+	in.
+	* #include <errno.h>
+
 2004-08-25  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkfilechooserdefault.c (check_is_folder): Use get_file_info() rather 

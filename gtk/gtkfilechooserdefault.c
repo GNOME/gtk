@@ -72,6 +72,7 @@
 #include "gtkfilesystemwin32.h"
 #endif
 
+#include <errno.h>
 #include <string.h>
 #include <time.h>
 
@@ -539,6 +540,11 @@ gtk_file_chooser_default_class_init (GtkFileChooserDefaultClass *class)
 
   gtk_binding_entry_add_signal (binding_set,
 				GDK_l, GDK_CONTROL_MASK,
+				"location-popup",
+				0);
+
+  gtk_binding_entry_add_signal (binding_set,
+				GDK_slash, 0,
 				"location-popup",
 				0);
 
@@ -2603,6 +2609,25 @@ shortcuts_row_separator_func (GtkTreeModel *model,
   return FALSE;
 }
 
+/* Since GtkTreeView has a keybinding attached to '/', we need to catch
+ * keypresses before the TreeView gets them.
+ */
+static gboolean
+tree_view_keybinding_cb (GtkWidget             *tree_view,
+			 GdkEventKey           *event,
+			 GtkFileChooserDefault *impl)
+{
+  if (event->keyval == GDK_slash &&
+      ! (event->state & gtk_accelerator_get_default_mod_mask ()))
+    {
+      location_popup_handler (impl);
+      return TRUE;
+    }
+  
+  return FALSE;
+}
+
+
 /* Creates the widgets for the shortcuts and bookmarks tree */
 static GtkWidget *
 shortcuts_list_create (GtkFileChooserDefault *impl)
@@ -2624,6 +2649,9 @@ shortcuts_list_create (GtkFileChooserDefault *impl)
   /* Tree */
 
   impl->browse_shortcuts_tree_view = gtk_tree_view_new ();
+  g_signal_connect (impl->browse_shortcuts_tree_view,
+		    "key-press-event", tree_view_keybinding_cb,
+		    impl);
   atk_object_set_name (gtk_widget_get_accessible (impl->browse_shortcuts_tree_view), _("Shortcuts"));
   gtk_tree_view_set_headers_visible (GTK_TREE_VIEW (impl->browse_shortcuts_tree_view), FALSE);
 
@@ -2751,7 +2779,8 @@ shortcuts_pane_create (GtkFileChooserDefault *impl,
 }
 
 /* Handles key press events on the file list, so that we can trap Enter to
- * activate the default button on our own.
+ * activate the default button on our own.  Also, checks to see if '/' has been
+ * pressed.  See comment by tree_view_keybinding_cb() for more details.
  */
 static gboolean
 trap_activate_cb (GtkWidget   *widget,
@@ -2761,6 +2790,13 @@ trap_activate_cb (GtkWidget   *widget,
   GtkFileChooserDefault *impl;
 
   impl = (GtkFileChooserDefault *) data;
+  
+  if (event->keyval == GDK_slash &&
+      ! (event->state & gtk_accelerator_get_default_mod_mask ()))
+    {
+      location_popup_handler (impl);
+      return TRUE;
+    }
 
   if (event->keyval == GDK_Return
       || event->keyval == GDK_ISO_Enter
@@ -5454,47 +5490,6 @@ _gtk_file_chooser_default_new (const char *file_system)
 			NULL);
 }
 
-/* Sets the file part of a file chooser entry from the file under the cursor */
-static void
-location_entry_set_from_list (GtkFileChooserDefault *impl,
-			      GtkFileChooserEntry   *entry)
-{
-  GtkTreePath *tree_path;
-  GtkTreeIter iter, child_iter;
-  const GtkFileInfo *info;
-  const char *name;
-
-  g_assert (impl->action == GTK_FILE_CHOOSER_ACTION_OPEN
-	    || impl->action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER);
-
-  gtk_tree_view_get_cursor (GTK_TREE_VIEW (impl->browse_files_tree_view), &tree_path, NULL);
-  if (!tree_path)
-    return;
-
-  gtk_tree_model_get_iter (GTK_TREE_MODEL (impl->sort_model), &iter, tree_path);
-  gtk_tree_path_free (tree_path);
-
-  gtk_tree_model_sort_convert_iter_to_child_iter (impl->sort_model, &child_iter, &iter);
-
-  info = _gtk_file_system_model_get_info (impl->browse_files_model, &child_iter);
-  if (!info)
-    return;
-
-  name = gtk_file_info_get_display_name (info);
-  _gtk_file_chooser_entry_set_file_part (entry, name);
-}
-
-/* Sets the file part of a file chooser entry from the Name entry in save mode */
-static void
-location_entry_set_from_save_name (GtkFileChooserDefault *impl,
-				   GtkFileChooserEntry   *entry)
-{
-  g_assert (impl->action == GTK_FILE_CHOOSER_ACTION_SAVE
-	    || impl->action == GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER);
-
-  _gtk_file_chooser_entry_set_file_part (entry, gtk_entry_get_text (GTK_ENTRY (impl->save_file_name_entry)));
-}
-
 static GtkWidget *
 location_entry_create (GtkFileChooserDefault *impl)
 {
@@ -5509,10 +5504,11 @@ location_entry_create (GtkFileChooserDefault *impl)
 
   if (impl->action == GTK_FILE_CHOOSER_ACTION_OPEN
       || impl->action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER)
-    location_entry_set_from_list (impl, GTK_FILE_CHOOSER_ENTRY (entry));
+    _gtk_file_chooser_entry_set_file_part (entry, "");
   else if (impl->action == GTK_FILE_CHOOSER_ACTION_SAVE
 	   || impl->action == GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER)
-    location_entry_set_from_save_name (impl, GTK_FILE_CHOOSER_ENTRY (entry));
+    _gtk_file_chooser_entry_set_file_part (entry,
+					   gtk_entry_get_text (GTK_ENTRY (impl->save_file_name_entry)));
   else
     g_assert_not_reached ();
 
