@@ -1,3 +1,7 @@
+2003-07-08  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/tmpl/gtkfilesel.sgml: Fix the example.  (#116575)
+
 2003-06-22  Matthias Clasen  <matthias@localhost.localdomain>
 
 	* gdk-pixbuf/tmpl/gdk-pixbuf.sgml: Fix a typo.
