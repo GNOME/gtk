@@ -1,6 +1,12 @@
+Thu Jul 15 20:31:28 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkspinbutton.c (start_spinning): Install the timeout
+	before changing the value, so that a ::value_changed handler
+	has a chance to remove it.  (#122427, Elke Meier)
+
 Thu Jul 15 19:20:05 2004  Matthias Clasen  <maclas@gmx.de>
 
-	* gdk/x11/gdkim-x11.c (_gdk_x11_initialize_locale): 
+	* gdk/x11/gdkgtk+/im-x11.c (_gdk_x11_initialize_locale): 
 	* gtk/gtkcalendar.c (gtk_calendar_class_init): Use 'cannot'
 	instead of 'can not' in messages.  (#144226, Morten Welinder)
 
