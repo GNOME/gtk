@@ -1,3 +1,9 @@
+Sat Nov 15 00:26:19 2003  Matthias Clasen  <maclas@gmx.de>
+
+	* queryloaders.c (loader_sanity_check): Check that the mask
+	is NULL or a string of the same length consisting entirely of
+	' ', '!', 'x', 'z', 'n'. 
+
 Mon Nov 10 00:17:52 2003  Matthias Clasen  <maclas@gmx.de>
 
 	* Makefile.am (install-data-local): Typo fix in warning.

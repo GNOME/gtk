@@ -1,3 +1,8 @@
+Sat Nov 15 00:25:39 2003  Matthias Clasen  <maclas@gmx.de>
+
+	* gdk-pixbuf/tmpl/module_interface.sgml: Add an example
+	for GdkPixbufModulePattern.
+
 Wed Nov 12 21:52:35 2003  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtk-sections.txt: Add gtk_menu_set_monitor.

@@ -18,8 +18,8 @@ a #GdkPixbufModuleFillVtableFunc function named
 In order to make format-checking work before actually loading the modules
 (which may require dlopening image libraries), modules export their 
 signatures (and other information) via the <function>fill_info</function>
-function. An external utility, <command>gdk-pixbuf-query-loaders</command>, uses
-this to create a text file containing a list of all available loaders and 
+function. An external utility, <command>gdk-pixbuf-query-loaders</command>, 
+uses this to create a text file containing a list of all available loaders and 
 their signatures. This file is then read at runtime by &gdk-pixbuf; to obtain
 the list of available loaders and their signatures. 
 </para>
@@ -158,17 +158,29 @@ operations.
 <!-- ##### STRUCT GdkPixbufModulePattern ##### -->
 <para>
 The signature of a module is a set of prefixes. Prefixes are encoded as
-pairs of ordinary strings, where the second string, if not %NULL,
-may contain ' ', '!', 'x', 'z', and 'n' to indicate bytes that must be 
-matched, not matched, "don't-care"-bytes, zeros and non-zeros.
+pairs of ordinary strings, where the second string, if not %NULL, must be
+of the same length as the first one and may contain ' ', '!', 'x', 'z', 
+and 'n' to indicate bytes that must be matched, not matched, 
+"don't-care"-bytes, zeros and non-zeros.
 Each prefix has an associated integer that describes the relevance of 
 the prefix, with 0 meaning a mismatch and 100 a "perfect match".
 </para>
 
 <para>
 The signature of a module is stored as an array of 
-#GdkPixbufModulePattern<!-- -->s. 
+#GdkPixbufModulePattern<!-- -->s. The array is terminated by a pattern
+where the @prefix is %NULL.
 </para>
+
+<informalexample><programlisting>
+GdkPixbufModulePattern *signature[] = {
+  { "abcdx", " !x z", 100 },
+  { "bla", NULL,  90 },
+  { NULL, NULL, 0 }
+};
+</programlisting>
+The example matches e.g. "auud\0" with relevance 100, and "blau" with 
+relevance 90.</informalexample>
 
 @prefix: the prefix for this pattern
 @mask: mask containing bytes which modify how the prefix is matched against

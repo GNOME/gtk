@@ -59,13 +59,32 @@ loader_sanity_check (const char *path, GdkPixbufFormat *info, GdkPixbufModule *v
 	const GdkPixbufModulePattern *pattern;
 	const char *error = "";
 
-	for (pattern = info->signature; pattern->prefix; pattern++)
-		if (strlen (pattern->prefix) == 0) 
+	for (pattern = info->signature; pattern->prefix; pattern++) 
+	{
+		int prefix_len = strlen (pattern->prefix);
+		if (prefix_len == 0) 
 		{
 			error = "empty pattern";
 
 			goto error;
 		}
+		if (pattern->mask)
+		{
+			int mask_len = strlen (pattern->mask);
+			if (mask_len != prefix_len)
+			{
+				error = "mask length mismatch";
+				
+				goto error;
+			}
+			if (strspn (pattern->mask, " !xzn") < mask_len) 
+			{
+				error = "bad char in mask";
+				
+				goto error;
+			}
+		}
+	}
 
 	if (!vtable->load && !vtable->begin_load && !vtable->load_animation)
 	{
