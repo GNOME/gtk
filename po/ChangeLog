@@ -1,3 +1,7 @@
+Tue Dec  3 20:40:56 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* Makefile.in.in: Use datadir, not $(prefix)/share. (#89339)
+
 2002-12-01  Gustavo Maciel Dias Vieira  <gdvieira@zaz.com.br>
 
 	* pt_BR.po: Updated Brazilian Portuguese translation by Alexandre
