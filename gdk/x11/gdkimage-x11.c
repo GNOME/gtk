@@ -55,12 +55,14 @@
 static GList *image_list = NULL;
 static gpointer parent_class = NULL;
 
-static void gdk_x11_image_destroy    (GdkImage      *image);
-static void gdk_image_init       (GdkImage      *image);
-static void gdk_image_class_init (GdkImageClass *klass);
-static void gdk_image_finalize   (GObject       *object);
+static void gdk_x11_image_destroy (GdkImage      *image);
+static void gdk_image_init        (GdkImage      *image);
+static void gdk_image_class_init  (GdkImageClass *klass);
+static void gdk_image_finalize    (GObject       *object);
 
 #define PRIVATE_DATA(image) ((GdkImagePrivateX11 *) GDK_IMAGE (image)->windowing_data)
+
+#define	LEAK_IMAGE(image)		/* FIXME!! this should be g_object_unref */
 
 GType
 gdk_image_get_type (void)
@@ -94,7 +96,6 @@ static void
 gdk_image_init (GdkImage *image)
 {
   image->windowing_data = g_new0 (GdkImagePrivateX11, 1);
-  
 }
 
 static void
@@ -249,7 +250,7 @@ gdk_image_new (GdkImageType  type,
 		{
 		  g_warning ("XShmCreateImage failed");
 		  
-		  g_free (image);
+		  LEAK_IMAGE (image);
 		  gdk_use_xshm = False;
 		  return NULL;
 		}
@@ -273,7 +274,7 @@ gdk_image_new (GdkImageType  type,
 
 		  XDestroyImage (private->ximage);
 		  g_free (private->x_shm_info);
-		  g_free (image);
+		  LEAK_IMAGE (image);
 
 		  return NULL;
 		}
@@ -290,7 +291,7 @@ gdk_image_new (GdkImageType  type,
 		  shmctl (x_shm_info->shmid, IPC_RMID, 0);
 		  
 		  g_free (private->x_shm_info);
-		  g_free (image);
+		  LEAK_IMAGE (image);
 
 		  /* Failure in shmat is almost certainly permanent. Most likely error is
 		   * EMFILE, which would mean that we've exceeded the per-process
@@ -314,7 +315,7 @@ gdk_image_new (GdkImageType  type,
 		  shmctl (x_shm_info->shmid, IPC_RMID, 0);
                   
 		  g_free (private->x_shm_info);
-		  g_free (image);
+		  LEAK_IMAGE (image);
 
 		  gdk_use_xshm = False;
 
@@ -334,12 +335,12 @@ gdk_image_new (GdkImageType  type,
 	    }
 	  else
 	    {
-	      g_free (image);
+	      LEAK_IMAGE (image);
 	      return NULL;
 	    }
 	  break;
 #else /* USE_SHM */
-	  g_free (image);
+	  LEAK_IMAGE (image);
 	  return NULL;
 #endif /* USE_SHM */
 	case GDK_IMAGE_NORMAL:

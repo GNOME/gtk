@@ -1,3 +1,11 @@
+Sat Jun 23 22:03:20 2001  Tim Janik  <timj@gtk.org>
+
+	* gdk/x11/gdkimage-x11.c (gdk_image_init): disabled g_free (image)
+	calls, as GdkImage is an object. these should be g_obejct_unref()
+	instead but that won't work because of the g_error() statement
+	in gdk_x11_image_destroy(). so for now, i did s/g_free/LEAK_IMAGE/
+	to spot these places.
+
 Sat Jun 23 10:27:53 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* modules/input/gtkimcontextxim.c: Fixup some problems with 
