@@ -916,11 +916,14 @@ static ButtonType
 find_button_type (GtkPathBar  *path_bar,
 		  GtkFilePath *path)
 {
-  if (! gtk_file_path_compare (path, path_bar->root_path))
+  if (path_bar->root_path != NULL &&
+      ! gtk_file_path_compare (path, path_bar->root_path))
     return ROOT_BUTTON;
-  if (! gtk_file_path_compare (path, path_bar->home_path))
+  if (path_bar->home_path != NULL &&
+      ! gtk_file_path_compare (path, path_bar->home_path))
     return HOME_BUTTON;
-  if (! gtk_file_path_compare (path, path_bar->desktop_path))
+  if (path_bar->desktop_path != NULL &&
+      ! gtk_file_path_compare (path, path_bar->desktop_path))
     return DESKTOP_BUTTON;
 
  return NORMAL_BUTTON;
@@ -1170,11 +1173,22 @@ _gtk_path_bar_set_file_system (GtkPathBar    *path_bar,
   path_bar->file_system = g_object_ref (file_system);
 
   home = g_get_home_dir ();
-  desktop = g_build_filename (home, "Desktop", NULL);
-  path_bar->home_path = gtk_file_system_filename_to_path (path_bar->file_system, home);
-  path_bar->desktop_path = gtk_file_system_filename_to_path (path_bar->file_system, desktop);
+  if (home != NULL)
+    {
+      path_bar->home_path = gtk_file_system_filename_to_path (path_bar->file_system, home);
+      /* FIXME: Need file system backend specific way of getting the
+       * Desktop path.
+       */
+      desktop = g_build_filename (home, "Desktop", NULL);
+      path_bar->desktop_path = gtk_file_system_filename_to_path (path_bar->file_system, desktop);
+      g_free (desktop);
+    }
+  else
+    {
+      path_bar->home_path = NULL;
+      path_bar->desktop_path = NULL;
+    }
   path_bar->root_path = gtk_file_system_filename_to_path (path_bar->file_system, "/");
-  g_free (desktop);
 }
 
 /**

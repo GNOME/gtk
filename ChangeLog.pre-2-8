@@ -1,3 +1,11 @@
+2004-08-14  Tor Lillqvist  <tml@iki.fi>
+
+	* gtk/gtkfilechooserdefault.c (shortcuts_append_home,
+	shortcuts_append_desktop, set_local_only)
+	* gtk/gtkfilesystemwin32.c (gtk_file_system_win32_render_icon)
+	* gtk/gtkpathbar.c (find_button_type, _gtk_path_bar_set_file_system): 
+	Guard against g_get_home_dir() returning NULL. (#150007)
+
 Sat Aug 14 17:56:33 2004  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 	* gtk/gtkentry.c (gtk_entry_get_pixel_ranges): New function. 

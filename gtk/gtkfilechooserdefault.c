@@ -1079,6 +1079,9 @@ shortcuts_append_home (GtkFileChooserDefault *impl)
   GError *error;
 
   home = g_get_home_dir ();
+  if (home == NULL)
+    return;
+
   home_path = gtk_file_system_filename_to_path (impl->file_system, home);
 
   error = NULL;
@@ -1093,10 +1096,15 @@ shortcuts_append_home (GtkFileChooserDefault *impl)
 static void
 shortcuts_append_desktop (GtkFileChooserDefault *impl)
 {
+  const char *home;
   char *name;
   GtkFilePath *path;
 
-  name = g_build_filename (g_get_home_dir (), "Desktop", NULL);
+  home = g_get_home_dir ();
+  if (home == NULL)
+    return;
+
+  name = g_build_filename (home, "Desktop", NULL);
   path = gtk_file_system_filename_to_path (impl->file_system, name);
   g_free (name);
 
@@ -3318,7 +3326,12 @@ set_local_only (GtkFileChooserDefault *impl,
 	   * such a situation, so we ignore errors.
 	   */
 	  const gchar *home = g_get_home_dir ();
-	  GtkFilePath *home_path = gtk_file_system_filename_to_path (impl->file_system, home);
+	  GtkFilePath *home_path;
+
+	  if (home == NULL)
+	    return;
+
+	  home_path = gtk_file_system_filename_to_path (impl->file_system, home);
 
 	  _gtk_file_chooser_set_current_folder_path (GTK_FILE_CHOOSER (impl), home_path, NULL);
 
