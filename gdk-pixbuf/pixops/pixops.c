@@ -818,6 +818,7 @@ scale_line_22_33_mmx_stub (int *weights, int n_x, int n_y,
 }
 #endif /* USE_MMX */
 
+#ifdef SCALE_LINE_22_33_USED /* This dead code would need changes if we wanted to use it */
 static guchar *
 scale_line_22_33 (int *weights, int n_x, int n_y,
 		  guchar *dest, guchar *dest_end, int dest_channels, int dest_has_alpha,
@@ -874,6 +875,7 @@ scale_line_22_33 (int *weights, int n_x, int n_y,
   
   return dest;
 }
+#endif /* SCALE_LINE_22_33_USED */
 
 static void
 process_pixel (int *weights, int n_x, int n_y,

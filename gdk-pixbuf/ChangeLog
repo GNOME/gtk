@@ -1,3 +1,16 @@
+2001-07-17  Darin Adler  <darin@bentspoon.com>
+
+	* gdk-pixbuf-csource.c: Add missing <stdlib.h> include.
+	* io-png.c: (setup_png_transformations): Add ifdef so we compile
+	without warnings with G_DISABLE_CHECKS on.
+	* io-pnm.c: (gdk_pixbuf__pnm_image_load_increment): Add a missing
+	const.
+	* io-wbmp.c: (getin), (get_mbi): Add a missing const.
+	* io-xbm.c: (gdk_pixbuf__xbm_image_load_real): Get rid of some
+	unused locals and add an initial value to quiet the compiler's
+	unintialized variable warning.
+	* pixops/pixops.c: Put an ifdef around some dead code.
+
 Thu Jul  5 10:17:15 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* pixops/Makefile.am (noinst_LTLIBRARIES): Switch

@@ -22,6 +22,7 @@
 #include "gdk-pixbuf.h"
 #include "gdk-pixdata.h"
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
 
