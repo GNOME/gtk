@@ -1,3 +1,8 @@
+2003-07-19  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkbbox.h: 
+	* gtk/gtkbbox.c (gtk_button_box_get_child_secondary): New function. (#64562)
+
 Sat Jul 19 00:18:40 2003  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 	* gtk/gtkwindow.c (gtk_window_set_default_icon): Fix C99

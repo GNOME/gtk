@@ -239,25 +239,12 @@ gtk_button_box_get_child_property (GtkContainer *container,
 				   GValue       *value,
 				   GParamSpec   *pspec)
 {
-  GList *list;
-  GtkBoxChild *child_info = NULL;
-
-  list = GTK_BOX (container)->children;
-  while (list)
-    {
-      child_info = list->data;
-      if (child_info->widget == child)
-	break;
-
-      list = list->next;
-    }
-
-  g_assert (list != NULL);
-  
   switch (property_id)
     {
     case CHILD_PROP_SECONDARY:
-      g_value_set_boolean (value, child_info->is_secondary);
+      g_value_set_boolean (value, 
+			   gtk_button_box_get_child_secondary (GTK_BUTTON_BOX (container), 
+							       child));
       break;
     default:
       GTK_CONTAINER_WARN_INVALID_CHILD_PROPERTY_ID (container, property_id, pspec);
@@ -336,6 +323,43 @@ gtk_button_box_get_layout (GtkButtonBox *widget)
   g_return_val_if_fail (GTK_IS_BUTTON_BOX (widget), GTK_BUTTONBOX_SPREAD);
   
   return widget->layout_style;
+}
+
+/**
+ * gtk_button_box_get_child_secondary:
+ * @widget: a #GtkButtonBox
+ * @child: a child of @widget 
+ * 
+ * Returns whether @child should appear in a secondary group of children.
+ *
+ * Return value: whether @child should appear in a secondary group of children.
+ *
+ * Since: 2.4
+ **/
+gboolean 
+gtk_button_box_get_child_secondary (GtkButtonBox *widget,
+				    GtkWidget    *child)
+{
+  GList *list;
+  GtkBoxChild *child_info;
+
+  g_return_if_fail (GTK_IS_BUTTON_BOX (widget));
+  g_return_if_fail (GTK_IS_WIDGET (child));
+
+  child_info = NULL;
+  list = GTK_BOX (widget)->children;
+  while (list)
+    {
+      child_info = list->data;
+      if (child_info->widget == child)
+	break;
+
+      list = list->next;
+    }
+
+  g_return_val_if_fail (list != NULL, FALSE);
+
+  return child_info->is_secondary;
 }
 
 /**

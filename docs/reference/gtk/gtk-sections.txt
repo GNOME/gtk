@@ -181,6 +181,7 @@ gtk_button_box_get_spacing
 gtk_button_box_get_layout
 gtk_button_box_get_child_size
 gtk_button_box_get_child_ipadding
+gtk_button_box_get_child_secondary
 gtk_button_box_set_spacing
 gtk_button_box_set_layout
 gtk_button_box_set_child_size
