@@ -412,8 +412,6 @@ gdk_window_cache_new (void)
   unsigned int nchildren;
   int i;
   
-  gint old_warnings = _gdk_error_warnings;
-  
   GdkWindowCache *result = g_new (GdkWindowCache, 1);
 
   result->children = NULL;
@@ -425,35 +423,26 @@ gdk_window_cache_new (void)
 		result->old_event_mask | SubstructureNotifyMask);
   gdk_window_add_filter (_gdk_parent_root, 
 			 gdk_window_cache_filter, result);
-  
-  _gdk_error_code = 0;
-  _gdk_error_warnings = 0;
 
-  if (XQueryTree(gdk_display, _gdk_root_window, 
-		 &root, &parent, &children, &nchildren) == 0)
-    return result;
+  gdk_error_trap_push ();
+
+  if (!XQueryTree(gdk_display, _gdk_root_window, 
+		  &root, &parent, &children, &nchildren))
+    {
+      gdk_error_trap_pop ();
+      return result;
+    }
   
   for (i = 0; i < nchildren ; i++)
     {
-      XGetWindowAttributes (gdk_display, children[i], &xwa);
-
-      gdk_window_cache_add (result, children[i],
-			    xwa.x, xwa.y, xwa.width, xwa.height,
-			    xwa.map_state != IsUnmapped);
-
-      if (_gdk_error_code)
-	_gdk_error_code = 0;
-      else
-	{
-	  gdk_window_cache_add (result, children[i],
-				xwa.x, xwa.y, xwa.width, xwa.height,
-				(xwa.map_state != IsUnmapped));
-	}
+      if (XGetWindowAttributes (gdk_display, children[i], &xwa))
+	gdk_window_cache_add (result, children[i],
+			      xwa.x, xwa.y, xwa.width, xwa.height,
+			      xwa.map_state != IsUnmapped);
     }
 
   XFree (children);
-
-  _gdk_error_warnings = old_warnings;
+  gdk_error_trap_pop ();
 
   return result;
 }
@@ -491,16 +480,10 @@ get_client_window_at_coords_recurse (Window  win,
   if (!wm_state_atom)
     wm_state_atom = gdk_x11_get_xatom_by_name ("WM_STATE");
     
-  XGetWindowProperty (gdk_display, win, 
-		      wm_state_atom, 0, 0, False, AnyPropertyType,
-		      &type, &format, &nitems, &after, &data);
-  
-  if (_gdk_error_code)
-    {
-      _gdk_error_code = 0;
-
-      return None;
-    }
+  if (XGetWindowProperty (gdk_display, win, 
+			  wm_state_atom, 0, 0, False, AnyPropertyType,
+			  &type, &format, &nitems, &after, &data) != Success)
+    return None;
 
   if (type != None)
     {
@@ -510,45 +493,33 @@ get_client_window_at_coords_recurse (Window  win,
 
 #if 0
   /* This is beautiful! Damn Enlightenment and click-to-focus */
-  XTranslateCoordinates (gdk_display, _gdk_root_window, win,
-			 x_root, y_root, &dest_x, &dest_y, &child);
-
-  if (_gdk_error_code)
-    {
-      _gdk_error_code = 0;
-
-      return None;
-    }
+  if (!XTranslateCoordinates (gdk_display, _gdk_root_window, win,
+			      x_root, y_root, &dest_x, &dest_y, &child))
+    return None;
   
 #else
-  if (XQueryTree(gdk_display, win,
-		 &root, &tmp_parent, &children, &nchildren) == 0)
+  if (!XQueryTree(gdk_display, win,
+		  &root, &tmp_parent, &children, &nchildren))
     return 0;
-
-  if (!_gdk_error_code)
+  
+  for (i = nchildren - 1; (i >= 0) && (child == None); i--)
     {
-      for (i = nchildren - 1; (i >= 0) && (child == None); i--)
+      XWindowAttributes xwa;
+      
+      if (XGetWindowAttributes (gdk_display, children[i], &xwa))
 	{
-	  XWindowAttributes xwa;
-	  
-	  XGetWindowAttributes (gdk_display, children[i], &xwa);
-	  
-	  if (_gdk_error_code)
-	    _gdk_error_code = 0;
-	  else if ((xwa.map_state == IsViewable) && (xwa.class == InputOutput) &&
-		   (x >= xwa.x) && (x < xwa.x + (gint)xwa.width) &&
-		   (y >= xwa.y) && (y < xwa.y + (gint)xwa.height))
+	  if ((xwa.map_state == IsViewable) && (xwa.class == InputOutput) &&
+	      (x >= xwa.x) && (x < xwa.x + (gint)xwa.width) &&
+	      (y >= xwa.y) && (y < xwa.y + (gint)xwa.height))
 	    {
 	      x -= xwa.x;
 	      y -= xwa.y;
 	      child = children[i];
 	    }
 	}
-      
-      XFree (children);
     }
-  else
-    _gdk_error_code = 0;
+  
+  XFree (children);
 #endif  
 
   if (child)
@@ -566,11 +537,8 @@ get_client_window_at_coords (GdkWindowCache *cache,
   GList *tmp_list;
   Window retval = None;
 
-  gint old_warnings = _gdk_error_warnings;
+  gdk_error_trap_push ();
   
-  _gdk_error_code = 0;
-  _gdk_error_warnings = 0;
-
   tmp_list = cache->children;
 
   while (tmp_list && !retval)
@@ -593,114 +561,13 @@ get_client_window_at_coords (GdkWindowCache *cache,
       tmp_list = tmp_list->next;
     }
 
-  _gdk_error_warnings = old_warnings;
+  gdk_error_trap_pop ();
+  
   if (retval)
     return retval;
   else
     return _gdk_root_window;
 }
-
-#if 0
-static Window
-get_client_window_at_coords_recurse (Window  win,
-				     gint    x_root,
-				     gint    y_root)
-{
-  Window child;
-  Atom type = None;
-  int format;
-  unsigned long nitems, after;
-  unsigned char *data;
-  int dest_x, dest_y;
-  
-  static Atom wm_state_atom = None;
-
-  if (!wm_state_atom)
-    wm_state_atom = gdk_x11_get_xatom_by_name ("WM_STATE");
-    
-  XGetWindowProperty (gdk_display, win, 
-		      wm_state_atom, 0, 0, False, AnyPropertyType,
-		      &type, &format, &nitems, &after, &data);
-  
-  if (_gdk_error_code)
-    {
-      _gdk_error_code = 0;
-
-      return None;
-    }
-
-  if (type != None)
-    {
-      XFree (data);
-      return win;
-    }
-
-  XTranslateCoordinates (gdk_display, _gdk_root_window, win,
-			 x_root, y_root, &dest_x, &dest_y, &child);
-
-  if (_gdk_error_code)
-    {
-      _gdk_error_code = 0;
-
-      return None;
-    }
-
-  if (child)
-    return get_client_window_at_coords_recurse (child, x_root, y_root);
-  else
-    return None;
-}
-
-static Window 
-get_client_window_at_coords (Window  ignore,
-			     gint    x_root,
-			     gint    y_root)
-{
-  Window root, parent, *children;
-  unsigned int nchildren;
-  int i;
-  Window retval = None;
-  
-  gint old_warnings = _gdk_error_warnings;
-  
-  _gdk_error_code = 0;
-  _gdk_error_warnings = 0;
-
-  if (XQueryTree(gdk_display, _gdk_root_window, 
-		 &root, &parent, &children, &nchildren) == 0)
-    return 0;
-
-  for (i = nchildren - 1; (i >= 0) && (retval == None); i--)
-    {
-      if (children[i] != ignore)
-	{
-	  XWindowAttributes xwa;
-
-	  XGetWindowAttributes (gdk_display, children[i], &xwa);
-
-	  if (_gdk_error_code)
-	    _gdk_error_code = 0;
-	  else if ((xwa.map_state == IsViewable) &&
-		   (x_root >= xwa.x) && (x_root < xwa.x + (gint)xwa.width) &&
-		   (y_root >= xwa.y) && (y_root < xwa.y + (gint)xwa.height))
-	    {
-	      retval = get_client_window_at_coords_recurse (children[i],
-							    x_root, y_root);
-	      if (!retval)
-		retval = children[i];
-	    }
-	}
-    }
-
-  XFree (children);
-
-  _gdk_error_warnings = old_warnings;
-  if (retval)
-    return retval;
-  else
-    return _gdk_root_window;
-}
-#endif
 
 /*************************************************************
  ***************************** MOTIF *************************
@@ -2322,8 +2189,6 @@ xdnd_check_dest (Window win)
   Window proxy;
   static Atom xdnd_proxy_atom = None;
 
-  gint old_warnings = _gdk_error_warnings;
-
   if (!xdnd_proxy_atom)
     xdnd_proxy_atom = gdk_x11_get_xatom_by_name ("XdndProxy");
 
@@ -2331,17 +2196,14 @@ xdnd_check_dest (Window win)
     xdnd_aware_atom = gdk_x11_get_xatom_by_name ("XdndAware");
 
   proxy = None;
+
+  gdk_error_trap_push ();
   
-  _gdk_error_code = 0;
-  _gdk_error_warnings = 0;
-
-  XGetWindowProperty (gdk_display, win, 
-		      xdnd_proxy_atom, 0, 
-		      1, False, AnyPropertyType,
-		      &type, &format, &nitems, &after, 
-		      (guchar **)&proxy_data);
-
-  if (!_gdk_error_code)
+  if (XGetWindowProperty (gdk_display, win, 
+			  xdnd_proxy_atom, 0, 
+			  1, False, AnyPropertyType,
+			  &type, &format, &nitems, &after, 
+			  (guchar **)&proxy_data) == Success)
     {
       if (type != None)
 	{
@@ -2356,13 +2218,12 @@ xdnd_check_dest (Window win)
 	  XFree (proxy_data);
 	}
       
-      XGetWindowProperty (gdk_display, proxy ? proxy : win,
-			  xdnd_aware_atom, 0, 
-			  1, False, AnyPropertyType,
-			  &type, &format, &nitems, &after, 
-			  (guchar **)&version);
-      
-      if (!_gdk_error_code && type != None)
+      if ((XGetWindowProperty (gdk_display, proxy ? proxy : win,
+			       xdnd_aware_atom, 0, 
+			       1, False, AnyPropertyType,
+			       &type, &format, &nitems, &after, 
+			       (guchar **)&version) == Success) &&
+	  type != None)
 	{
 	  if ((format == 32) && (nitems == 1))
 	    {
@@ -2375,11 +2236,9 @@ xdnd_check_dest (Window win)
 	  
 	  XFree (version);
 	}
-      
     }
 
-  _gdk_error_warnings = old_warnings;
-  _gdk_error_code = 0;
+  gdk_error_trap_pop ();
   
   return retval ? (proxy ? proxy : win) : None;
 }
@@ -2396,20 +2255,16 @@ xdnd_read_actions (GdkDragContext *context)
 
   gint i;
 
-  gint old_warnings = _gdk_error_warnings;
-
-  _gdk_error_code = 0;
-  _gdk_error_warnings = 0;
-
   /* Get the XdndActionList, if set */
 
-  XGetWindowProperty (GDK_DRAWABLE_XDISPLAY (context->source_window),
-		      GDK_DRAWABLE_XID (context->source_window),
-		      gdk_x11_get_xatom_by_name ("XdndActionList"), 0, 65536,
-		      False, XA_ATOM, &type, &format, &nitems,
-		      &after, (guchar **)&data);
+  gdk_error_trap_push ();
   
-  if (!_gdk_error_code && (format == 32) && (type == XA_ATOM))
+  if (XGetWindowProperty (GDK_DRAWABLE_XDISPLAY (context->source_window),
+			  GDK_DRAWABLE_XID (context->source_window),
+			  gdk_x11_get_xatom_by_name ("XdndActionList"), 0, 65536,
+			  False, XA_ATOM, &type, &format, &nitems,
+			  &after, (guchar **)&data) == Success &&
+      type == XA_ATOM)
     {
       context->actions = 0;
 
@@ -2439,8 +2294,7 @@ xdnd_read_actions (GdkDragContext *context)
       XFree(data);
     }
 
-  _gdk_error_warnings = old_warnings;
-  _gdk_error_code = 0;
+  gdk_error_trap_pop ();
 }
 
 /* We have to make sure that the XdndActionList we keep internally
@@ -2810,7 +2664,6 @@ gdk_drag_get_protocol (guint32          xid,
       /* Check if this is a root window */
 
       gboolean rootwin = FALSE;
-      gint old_warnings = _gdk_error_warnings;
       Atom type = None;
       int format;
       unsigned long nitems, after;
@@ -2819,17 +2672,15 @@ gdk_drag_get_protocol (guint32          xid,
       if (xid == _gdk_root_window)
 	rootwin = TRUE;
 
-      _gdk_error_warnings = 0;
+      gdk_error_trap_push ();
       
       if (!rootwin)
 	{
-	  _gdk_error_code = 0;
-
-	  XGetWindowProperty (gdk_display, xid,
-			      gdk_x11_get_xatom_by_name ("ENLIGHTENMENT_DESKTOP"),
-			      0, 0, False, AnyPropertyType,
-			      &type, &format, &nitems, &after, &data);
-	  if ((_gdk_error_code == 0) && type != None)
+	  if (XGetWindowProperty (gdk_display, xid,
+				  gdk_x11_get_xatom_by_name ("ENLIGHTENMENT_DESKTOP"),
+				  0, 0, False, AnyPropertyType,
+				  &type, &format, &nitems, &after, &data) == Success &&
+	      type != None)
 	    {
 	      XFree (data);
 	      rootwin = TRUE;
@@ -2843,18 +2694,16 @@ gdk_drag_get_protocol (guint32          xid,
 #if 0
       if (!rootwin)
 	{
-	  _gdk_error_code = 0;
-	  
-	  XGetWindowProperty (gdk_display, win,
-			      gdk_x11_get_xatom_by_name ("__SWM_VROOT"),
-			      0, 0, False, AnyPropertyType,
-			      &type, &format, &nitems, &data);
-	  if ((_gdk_error_code == 0) && type != None)
+	  if (XGetWindowProperty (gdk_display, win,
+				  gdk_x11_get_xatom_by_name ("__SWM_VROOT"),
+				  0, 0, False, AnyPropertyType,
+				  &type, &format, &nitems, &data) &&
+	      type != None)
 	    rootwin = TRUE;
 	}
 #endif      
 
-      _gdk_error_warnings = old_warnings;
+      gdk_error_trap_pop ();
 
       if (rootwin)
 	{

@@ -1533,3 +1533,13 @@ gdk_fb_set_rotation (GdkFBAngle angle)
 #endif
 }
 
+void
+gdk_error_trap_push (void)
+{
+}
+
+gint
+gdk_error_trap_pop (void)
+{
+  return 0;
+}

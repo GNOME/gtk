@@ -1790,25 +1790,19 @@ gdk_event_send_client_message_to_all_recurse (XEvent  *xev,
   unsigned char *data;
   Window *ret_children, ret_root, ret_parent;
   unsigned int ret_nchildren;
-  gint old_warnings = _gdk_error_warnings;
   gboolean send = FALSE;
   gboolean found = FALSE;
+  gboolean result = FALSE;
   int i;
 
   if (!wm_state_atom)
     wm_state_atom = gdk_x11_get_xatom_by_name ("WM_STATE");
 
-  _gdk_error_warnings = FALSE;
-  _gdk_error_code = 0;
-  XGetWindowProperty (gdk_display, xid, wm_state_atom, 0, 0, False, AnyPropertyType,
-		      &type, &format, &nitems, &after, &data);
-
-  if (_gdk_error_code)
-    {
-      _gdk_error_warnings = old_warnings;
-
-      return FALSE;
-    }
+  gdk_error_trap_push ();
+  
+  if (XGetWindowProperty (gdk_display, xid, wm_state_atom, 0, 0, False, AnyPropertyType,
+			  &type, &format, &nitems, &after, &data) != Success)
+    goto out;
 
   if (type)
     {
@@ -1818,14 +1812,9 @@ gdk_event_send_client_message_to_all_recurse (XEvent  *xev,
   else
     {
       /* OK, we're all set, now let's find some windows to send this to */
-      if (XQueryTree (gdk_display, xid, &ret_root, &ret_parent,
-		      &ret_children, &ret_nchildren) != True ||
-	  _gdk_error_code)
-	{
-	  _gdk_error_warnings = old_warnings;
-
-	  return FALSE;
-	}
+      if (!XQueryTree (gdk_display, xid, &ret_root, &ret_parent,
+		       &ret_children, &ret_nchildren))
+	goto out;
 
       for(i = 0; i < ret_nchildren; i++)
 	if (gdk_event_send_client_message_to_all_recurse (xev, ret_children[i], level + 1))
@@ -1840,16 +1829,18 @@ gdk_event_send_client_message_to_all_recurse (XEvent  *xev,
       gdk_send_xevent (xid, False, NoEventMask, xev);
     }
 
-  _gdk_error_warnings = old_warnings;
+  result = send || found;
 
-  return (send || found);
+ out:
+  gdk_error_trap_pop ();
+
+  return result;
 }
 
 void
 gdk_event_send_clientmessage_toall (GdkEvent *event)
 {
   XEvent sev;
-  gint old_warnings = _gdk_error_warnings;
 
   g_return_if_fail(event != NULL);
   
@@ -1861,8 +1852,6 @@ gdk_event_send_clientmessage_toall (GdkEvent *event)
   sev.xclient.message_type = gdk_x11_atom_to_xatom (event->client.message_type);
 
   gdk_event_send_client_message_to_all_recurse(&sev, _gdk_root_window, 0);
-
-  _gdk_error_warnings = old_warnings;
 }
 
 /*

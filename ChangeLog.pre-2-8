@@ -1,3 +1,25 @@
+Thu Jan 17 13:08:34 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/x11/gdkmain-x11.c (gdk_error_trap_push): Move
+	here, and save/restore the X error handler to allow
+	people using GTK+ to set the X error handler to something
+	custom without disturbing the operation of GDK.
+
+	* gdk/linux-fb/gdkmain-fb.c (gdk_error_trap_push) 
+	* gdk/win32/gdkmain-win32.c (gdk_error_trap_pop): Add
+	dummy implementations.
+
+	* gdk/x11/gdkmain-x11.c gdk/x11/gdkevents-x11.c 
+	gdk/x11/gdkdnd-x11.c: Use gdk_error_trap_push()/pop()
+	for all error trapping.
+
+	* gdk/x11/gdkdnd-x11.c: Remove '#if 0' code.
+
+	* gdk/x11/gdkdnd-x11.c (gdk_window_cache_new): Fix
+	problem where we would add the results anyways,
+	and then add it again if no error occurred, and problem
+	where we could leave _gdk_error_warnings() unset.
+
 Wed Jan 16 20:28:38 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkfilesel.c: Fix "deleting" filename by adding

@@ -258,3 +258,14 @@ gdk_get_display (void)
 {
   return "Win32";
 }
+
+void
+gdk_error_trap_push (void)
+{
+}
+
+gint
+gdk_error_trap_pop (void)
+{
+  return 0;
+}

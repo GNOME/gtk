@@ -37,18 +37,11 @@
 #endif
 
 typedef struct _GdkPredicate  GdkPredicate;
-typedef struct _GdkErrorTrap  GdkErrorTrap;
 
 struct _GdkPredicate
 {
   GdkEventFunc func;
   gpointer data;
-};
-
-struct _GdkErrorTrap
-{
-  gint error_warnings;
-  gint error_code;
 };
 
 /* Private variable declarations
@@ -57,7 +50,6 @@ static int gdk_initialized = 0;			    /* 1 if the library is initialized,
 						     * 0 otherwise.
 						     */
 
-static GSList *gdk_error_traps = NULL;               /* List of error traps */
 static GSList *gdk_error_trap_free_list = NULL;      /* Free list */
 
 static gchar  *gdk_progclass = NULL;
@@ -431,77 +423,6 @@ gdk_exit_func (void)
 }
 
 #endif
-
-/*************************************************************
- * gdk_error_trap_push:
- *     Push an error trap. X errors will be trapped until
- *     the corresponding gdk_error_pop(), which will return
- *     the error code, if any.
- *   arguments:
- *     
- *   results:
- *************************************************************/
-
-void
-gdk_error_trap_push (void)
-{
-  GSList *node;
-  GdkErrorTrap *trap;
-
-  if (gdk_error_trap_free_list)
-    {
-      node = gdk_error_trap_free_list;
-      gdk_error_trap_free_list = gdk_error_trap_free_list->next;
-    }
-  else
-    {
-      node = g_slist_alloc ();
-      node->data = g_new (GdkErrorTrap, 1);
-    }
-
-  node->next = gdk_error_traps;
-  gdk_error_traps = node;
-  
-  trap = node->data;
-  trap->error_code = _gdk_error_code;
-  trap->error_warnings = _gdk_error_warnings;
-
-  _gdk_error_code = 0;
-  _gdk_error_warnings = 0;
-}
-
-/*************************************************************
- * gdk_error_trap_pop:
- *     Pop an error trap added with gdk_error_push()
- *   arguments:
- *     
- *   results:
- *     0, if no error occured, otherwise the error code.
- *************************************************************/
-
-gint
-gdk_error_trap_pop (void)
-{
-  GSList *node;
-  GdkErrorTrap *trap;
-  gint result;
-
-  g_return_val_if_fail (gdk_error_traps != NULL, 0);
-
-  node = gdk_error_traps;
-  gdk_error_traps = gdk_error_traps->next;
-
-  node->next = gdk_error_trap_free_list;
-  gdk_error_trap_free_list = node;
-  
-  result = _gdk_error_code;
-  
-  trap = node->data;
-  _gdk_error_code = trap->error_code;
-  _gdk_error_warnings = trap->error_warnings;
-  
-  return result;
-}
 
 void
 gdk_threads_enter ()

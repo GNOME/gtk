@@ -62,6 +62,7 @@ struct _GdkPredicate
 
 struct _GdkErrorTrap
 {
+  int (*old_handler) (Display *, XErrorEvent *);
   gint error_warnings;
   gint error_code;
 };
@@ -89,6 +90,8 @@ static int gdk_initialized = 0;			    /* 1 if the library is initialized,
 
 static gint autorepeat;
 static gboolean gdk_synchronize = FALSE;
+static GSList *gdk_error_traps = NULL;               /* List of error traps */
+static GSList *gdk_error_trap_free_list = NULL;      /* Free list */
 
 GdkArgDesc _gdk_windowing_args[] = {
   { "display",     GDK_ARG_STRING,   &_gdk_display_name,    (GdkArgFunc)NULL   },
@@ -694,6 +697,79 @@ gdk_x_io_error (Display *display)
   exit(1);
 }
 
+/*************************************************************
+ * gdk_error_trap_push:
+ *     Push an error trap. X errors will be trapped until
+ *     the corresponding gdk_error_pop(), which will return
+ *     the error code, if any.
+ *   arguments:
+ *     
+ *   results:
+ *************************************************************/
+
+void
+gdk_error_trap_push (void)
+{
+  GSList *node;
+  GdkErrorTrap *trap;
+
+  if (gdk_error_trap_free_list)
+    {
+      node = gdk_error_trap_free_list;
+      gdk_error_trap_free_list = gdk_error_trap_free_list->next;
+    }
+  else
+    {
+      node = g_slist_alloc ();
+      node->data = g_new (GdkErrorTrap, 1);
+    }
+
+  node->next = gdk_error_traps;
+  gdk_error_traps = node;
+  
+  trap = node->data;
+  trap->old_handler = XSetErrorHandler (gdk_x_error);
+  trap->error_code = _gdk_error_code;
+  trap->error_warnings = _gdk_error_warnings;
+
+  _gdk_error_code = 0;
+  _gdk_error_warnings = 0;
+}
+
+/*************************************************************
+ * gdk_error_trap_pop:
+ *     Pop an error trap added with gdk_error_push()
+ *   arguments:
+ *     
+ *   results:
+ *     0, if no error occured, otherwise the error code.
+ *************************************************************/
+
+gint
+gdk_error_trap_pop (void)
+{
+  GSList *node;
+  GdkErrorTrap *trap;
+  gint result;
+
+  g_return_val_if_fail (gdk_error_traps != NULL, 0);
+
+  node = gdk_error_traps;
+  gdk_error_traps = gdk_error_traps->next;
+
+  node->next = gdk_error_trap_free_list;
+  gdk_error_trap_free_list = node;
+  
+  result = _gdk_error_code;
+  
+  trap = node->data;
+  _gdk_error_code = trap->error_code;
+  _gdk_error_warnings = trap->error_warnings;
+  XSetErrorHandler (trap->old_handler);
+  
+  return result;
+}
+
 gchar *
 gdk_get_display (void)
 {
@@ -704,17 +780,13 @@ gint
 gdk_send_xevent (Window window, gboolean propagate, glong event_mask,
 		 XEvent *event_send)
 {
-  Status result;
-  gint old_warnings = _gdk_error_warnings;
+  gboolean result;
   
-  _gdk_error_code = 0;
-  
-  _gdk_error_warnings = 0;
+  gdk_error_trap_push ();
   result = XSendEvent (gdk_display, window, propagate, event_mask, event_send);
   XSync (gdk_display, False);
-  _gdk_error_warnings = old_warnings;
   
-  return result && !_gdk_error_code;
+  return result && gdk_error_trap_pop() == Success;
 }
 
 void
