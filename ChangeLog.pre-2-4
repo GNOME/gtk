@@ -1,3 +1,9 @@
+Fri Dec 11 08:59:12 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtklistitem.c (gtk_list_item_style_set):
+	* gtk/gtklist.c     (gtk_list_style_set):
+	Added "style_set" handlers.
+
 Fri Dec 11 05:49:30 1998  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkclist.c (gtk_clist_style_set): Add in a "style_set"

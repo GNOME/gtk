@@ -46,6 +46,8 @@ static void gtk_list_size_allocate   (GtkWidget	     *widget,
 static void gtk_list_realize	     (GtkWidget	     *widget);
 static void gtk_list_map	     (GtkWidget	     *widget);
 static void gtk_list_unmap	     (GtkWidget	     *widget);
+static void gtk_list_style_set	     (GtkWidget      *widget,
+				      GtkStyle       *previous_style);
 static void gtk_list_draw	     (GtkWidget	     *widget,
 				      GdkRectangle   *area);
 static gint gtk_list_expose	     (GtkWidget	     *widget,
@@ -218,6 +220,7 @@ gtk_list_class_init (GtkListClass *class)
 
   widget_class->map = gtk_list_map;
   widget_class->unmap = gtk_list_unmap;
+  widget_class->style_set = gtk_list_style_set;
   widget_class->realize = gtk_list_realize;
   widget_class->draw = gtk_list_draw;
   widget_class->expose_event = gtk_list_expose;
@@ -806,6 +809,15 @@ gtk_list_expose (GtkWidget	*widget,
   return FALSE;
 }
 
+static void 
+gtk_list_style_set	(GtkWidget      *widget,
+			 GtkStyle       *previous_style)
+{
+  g_return_if_fail (widget != NULL);
+
+  if (previous_style && GTK_WIDGET_REALIZED (widget))
+    gdk_window_set_background (widget->window, &widget->style->base[GTK_WIDGET_STATE (widget)]);
+}
 
 /* GtkContainer Methods :
  * gtk_list_add

@@ -47,6 +47,8 @@ static void gtk_list_item_size_request      (GtkWidget        *widget,
 					     GtkRequisition   *requisition);
 static void gtk_list_item_size_allocate     (GtkWidget        *widget,
 					     GtkAllocation    *allocation);
+static void gtk_list_item_style_set         (GtkWidget        *widget,
+					     GtkStyle         *previous_style);
 static void gtk_list_item_draw              (GtkWidget        *widget,
 					     GdkRectangle     *area);
 static void gtk_list_item_draw_focus        (GtkWidget        *widget);
@@ -182,6 +184,7 @@ gtk_list_item_class_init (GtkListItemClass *class)
   widget_class->realize = gtk_list_item_realize;
   widget_class->size_request = gtk_list_item_size_request;
   widget_class->size_allocate = gtk_list_item_size_allocate;
+  widget_class->style_set = gtk_list_item_style_set;
   widget_class->draw = gtk_list_item_draw;
   widget_class->draw_focus = gtk_list_item_draw_focus;
   widget_class->button_press_event = gtk_list_item_button_press;
@@ -438,6 +441,16 @@ gtk_list_item_size_allocate (GtkWidget     *widget,
 
       gtk_widget_size_allocate (bin->child, &child_allocation);
     }
+}
+
+static void 
+gtk_list_item_style_set	(GtkWidget      *widget,
+			 GtkStyle       *previous_style)
+{
+  g_return_if_fail (widget != NULL);
+
+  if (previous_style && GTK_WIDGET_REALIZED (widget))
+    gdk_window_set_background (widget->window, &widget->style->base[GTK_WIDGET_STATE (widget)]);
 }
 
 static void
