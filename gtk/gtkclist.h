@@ -135,7 +135,7 @@ struct _GtkCList
   guint8 vscrollbar_policy;
   guint8 hscrollbar_policy;
 
-  /* xor GC for the verticle drag line */
+  /* xor GC for the vertical drag line */
   GdkGC *xor_gc;
 
   /* gc for drawing unselected cells */
@@ -177,6 +177,8 @@ struct _GtkCListColumn
 
   gint width;
   GtkJustification justification;
+
+  gint width_set : 1;
 };
 
 struct _GtkCListRow
@@ -188,6 +190,9 @@ struct _GtkCListRow
   GdkColor background;
 
   gpointer data;
+
+  gint fg_set : 1;
+  gint bg_set : 1;
 };
 
 /* Cell Structures */
@@ -195,7 +200,7 @@ struct _GtkCellText
 {
   GtkCellType type;
   
-  gint verticle;
+  gint vertical;
   gint horizontal;
   
   gchar *text;
@@ -205,7 +210,7 @@ struct _GtkCellPixmap
 {
   GtkCellType type;
   
-  gint verticle;
+  gint vertical;
   gint horizontal;
   
   GdkPixmap *pixmap;
@@ -216,7 +221,7 @@ struct _GtkCellPixText
 {
   GtkCellType type;
   
-  gint verticle;
+  gint vertical;
   gint horizontal;
   
   gchar *text;
@@ -229,7 +234,7 @@ struct _GtkCellWidget
 {
   GtkCellType type;
   
-  gint verticle;
+  gint vertical;
   gint horizontal;
   
   GtkWidget *widget;
@@ -239,7 +244,7 @@ struct _GtkCell
 {
   GtkCellType type;
 
-  gint verticle;
+  gint vertical;
   gint horizontal;
 
   union {
@@ -379,13 +384,13 @@ void gtk_clist_set_background (GtkCList * clist,
 			       gint row,
 			       GdkColor * color);
 
-/* this sets a horizontal and verticle shift for drawing
+/* this sets a horizontal and vertical shift for drawing
  * the contents of a cell; it can be positive or negitive; this is
  * partuculary useful for indenting items in a column */
 void gtk_clist_set_shift (GtkCList * clist,
 			  gint row,
 			  gint column,
-			  gint verticle,
+			  gint vertical,
 			  gint horizontal);
 
 /* append returns the index of the row you just added, making

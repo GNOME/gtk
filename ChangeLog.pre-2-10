@@ -1,3 +1,21 @@
+Fri Jan 30 22:28:09 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* gtk/gtkclist.{c,h}:
+	   - Conformity to new reference counting schemes
+	   - Font and color information is no-longer taken from
+	     the (possibly unitialized) style before the widget
+	     is realized, but is obtained when needed. (Fixes
+	     problems with non-default styles)
+	   - white_gc => base_gc where appropriate
+	   - Handle graphics expose events correctly (or as
+	     correctly as anywhere else) so that scrolling when
+	     overlapped works.
+
+Fri Jan 30 21:32:11 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* gtk/gtkwidget.c (gtk_widget_init): Don't replace the object
+	flags, augment them. (Otherwise we'll clear the FLOATING flag)
+
 Fri Jan 30 17:41:06 1998  George Lebl  <jirka@5z.com>
 
 	* gtk/gtktable.c: fixed round-off error in calculation
