@@ -3489,7 +3489,7 @@ static GtkItemFactoryEntry menu_items[] =
   { "/File/_Save",             NULL,         gtk_ifactory_cb,       0, "<StockItem>", GTK_STOCK_SAVE },
   { "/File/Save _As...",       "<control>A", gtk_ifactory_cb,       0, "<StockItem>", GTK_STOCK_SAVE },
   { "/File/_Dump \"_Accels\"",  NULL,        dump_accels,           0 },
-  { "/File/\\/Test__Escaping/And\\/\n\tWei\\\\rdly/and more",
+  { "/File/\\/Test__Escaping/And\\/\n\tWei\\\\rdly",
                                 NULL,        gtk_ifactory_cb,       0 },
   { "/File/sep1",        NULL,               gtk_ifactory_cb,       0, "<Separator>" },
   { "/File/_Quit",       NULL,               gtk_ifactory_cb,       0, "<StockItem>", GTK_STOCK_QUIT },

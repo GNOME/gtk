@@ -1,3 +1,8 @@
+Thu Apr  4 22:35:42 2002  Soeren Sandmann  <sandmann@daimi.au.dk>
+
+	* tests/testgtk.c (menu_items): revert accidentally commited
+	change to testgtk.c
+
 Thu Apr  4 22:28:08 2002  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 	* gtk/gtkmenuitem.c (gtk_menu_item_paint): Fix problem with menu
