@@ -1,8 +1,9 @@
-What is new in GTK+ 1.1.10:
+What is new in GTK+ 1.1.11:
 
 * Dutch, Japanese, Swedish, Polish, and Norwegian translations
 * Removed deprecated _interp variants: gtk_container_foreach_interp, 
   gtk_idle_add_interp, gtk_timeout_add_interp, gtk_signal_connect_interp
+* Lots of cast corrections
 * Many fixes 
 
 What is new in GTK+ 1.1.9:

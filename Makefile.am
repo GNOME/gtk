@@ -15,6 +15,7 @@ EXTRA_DIST =	\
 	ChangeLog.pre-1-0	\
 	README.cvs-commits	\
 	intl/libgettext.h	\
+	intl/po2tbl.sed.in	\
 	examples/Makefile	\
 	examples/README.1ST	\
 	examples/extract.awk	\

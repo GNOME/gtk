@@ -132,7 +132,7 @@ EXTRA_DIST =	\
 	$(TUTORIAL_IT_FILES)		\
 	$(FAQ_FILES)
 
-.PHONY: html htmldir gdk.html gtk.html faq tutorial tutorial_it tutorial_fr files
+.PHONY: html htmldir faq tutorial tutorial_it tutorial_fr files
 
 distdocs: gdk.html gtk.html faq tutorial tutorial_it tutorial_fr
 
@@ -142,11 +142,19 @@ htmldir:
 textdir:
 	mkdir -p $(srcdir)/text
 
-html/gdk.html html/gdk_toc.html: htmldir
-	(cd $(srcdir); texi2html gdk.texi; mv gdk.html gdk_toc.html html)
+gdk.html gdk_toc.html: gdk.texi
+	(cd $(srcdir); texi2html gdk.texi)
 
-html/gtk.html html/gtk_toc.html: htmldir
-	(cd $(srcdir); texi2html gtk.texi; mv gtk.html gtk_toc.html html)
+gtk.html gtk_toc.html: gtk.texi
+	(cd $(srcdir); texi2html gtk.texi)
+
+html/gdk.html html/gdk_toc.html: htmldir gdk.html gdk_toc.html
+	(cd $(srcdir); cp gdk.html gdk_toc.html html/)
+
+html/gtk.html html/gtk_toc.html: htmldir gtk.html gtk_toc.html
+	(cd $(srcdir); cp gtk.html gtk_toc.html html/)
+
+$(FAQ_FILES): faq
 
 faq: htmldir textdir
 	(cd $(srcdir); sgml2html gtkfaq.sgml; \
@@ -169,17 +177,17 @@ tutorial: htmldir textdir
 	mv gtk_tut.txt text/)
 
 tutorial_it: htmldir textdir
-	(cd $(srcdir); sgml2html gtk_tut_it.sgml; \
+	(cd $(srcdir); sgml2html --language=it gtk_tut_it.sgml; \
 	perl gtkdocs_fix gtk_tut_it*html; \
 	mv gtk_tut_it*html html/; \
-	sgml2txt gtk_tut_it.sgml; \
+	sgml2txt --language=it gtk_tut_it.sgml; \
 	mv gtk_tut_it.txt text/)
 
 tutorial_fr: htmldir textdir
-	(cd $(srcdir); sgml2html gtk_tut_fr.sgml; \
+	(cd $(srcdir); sgml2html --language=fr gtk_tut_fr.sgml; \
 	perl gtkdocs_fix gtk_tut_fr*html; \
 	mv gtk_tut_fr*html html/; \
-	sgml2txt gtk_tut_fr.sgml; \
+	sgml2txt --language=fr gtk_tut_fr.sgml; \
 	mv gtk_tut_fr.txt text/)
 
 

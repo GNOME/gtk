@@ -1,3 +1,15 @@
+Wed Dec 30 18:39:21 CST 1998 Shawn T. Amundson <amundson@gtk.org>
+
+	* Released GTK+ 1.1.11
+
+	* INSTALL:
+	  NEWS:
+	  README:
+	  configure.in:
+	  gtk+.spec:
+	  docs/gtk-config.1:
+	  gtk/gtkfeatures.h.in: version=1.1.11
+
 1998-12-29  Owen Taylor  <otaylor@srv-19-29.roc.ny.frontiernet.net>
 
 	* gdk/gdkim.c (gdk_wcstombs): Fixed off-by-one
@@ -24,8 +36,6 @@ Thu Dec 24 12:40:45 1998  Jeff Garzik  <jgarzik@pobox.com>
 	* gtk/testgtk.c: 64-bit cast
 
 Thu Dec 24 03:16:52 CST 1998 Shawn T. Amundson <amundson@gtk.org>
-
-	* Released GTK+ 1.1.10
 
 	* INSTALL:
 	  NEWS:
