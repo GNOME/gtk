@@ -362,6 +362,7 @@ gtk_style_copy (GtkStyle *style)
       new_style->bg_pixmap[i] = style->bg_pixmap[i];
     }
   
+  gdk_font_unref (new_style->font);
   new_style->font = style->font;
   gdk_font_ref (new_style->font);
   

@@ -1,3 +1,13 @@
+Tue Mar  9 01:01:28 1999  Tim Janik  <timj@gtk.org>
+
+        * gdk/gdkfont.c (gdk_font_load): first lookup the xfont ID in our
+        font hash table, if we have a GdkFontPrivate entry for this font
+        already, simply increment its reference count, provided by Olaf Dietsche
+        <olaf.dietsche+list.gtk@netcologne.de>.
+
+        * gtk/gtkstyle.c (gtk_style_copy): plug a GdkFont reference leak, fix
+        provided by Olaf Dietsche <olaf.dietsche+list.gtk@netcologne.de>.
+
 1999-03-09  Federico Mena Quintero  <federico@nuclecu.unam.mx>
 
 	* gtk/gtkstyle.c (gtk_default_draw_handle): Significantly reduced
