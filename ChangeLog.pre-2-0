@@ -1,10 +1,15 @@
+2002-03-06  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk-pixbuf/gdk_pixbuf.rc.in
+	* gdk/win32/rc/gdk.rc.in
+	* gtk/gtk-win32.rc.in: Use GTK_API_VERSION.
+
 2002-03-05  Manish Singh  <yosh@gimp.org>
 
 	* configure.in: Fix up the freetype checking logic. Suppress
 	suprious "no" with --disable-modules.
 
 2002-03-06  Tor Lillqvist  <tml@iki.fi>
-
 	* gdk/win32/gdkevents-win32.c (gdk_pointer_grab,
 	gdk_pointer_ungrab): Bypass calls to the grab/ungrab functions in
 	gdkinput-win32.c, as they don't effectively do anything anyway.
