@@ -1,3 +1,10 @@
+2003-07-01  Matthias Clasen  <maclas@gmx.de>
+
+	* gdk/gdk-sections.txt: Add
+	gdk_cursor_new_from_pixbuf(), gdk_display_supports_cursor_alpha(), 
+	gdk_display_supports_cursor_color(), gdk_display_get_default_cursor_size() and
+	gdk_display_get_maximal_cursor_size(). 
+
 2003-06-30  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/tmpl/gtkcontainer.sgml: Write a bit about size negotiation.

@@ -138,6 +138,10 @@ gdk_display_get_pointer
 gdk_display_get_window_at_pointer
 GdkDisplayPointerHooks
 gdk_display_set_pointer_hooks
+gdk_display_supports_cursor_color
+gdk_display_supports_cursor_alpha
+gdk_display_get_default_cursor_size
+gdk_display_get_maximal_cursor_size
 
 <SUBSECTION Standard>
 GDK_DISPLAY_OBJECT
@@ -1060,6 +1064,7 @@ GdkCursor
 GdkCursorType
 gdk_cursor_new
 gdk_cursor_new_from_pixmap
+gdk_cursor_new_from_pixbuf
 gdk_cursor_new_for_display
 gdk_cursor_get_display
 gdk_cursor_ref
