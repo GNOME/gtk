@@ -4165,18 +4165,7 @@ gtk_widget_set_style_internal (GtkWidget *widget,
       g_object_unref (previous_style);
 
       if (widget->parent && !initial_emission)
-	{
-	  GtkRequisition old_requisition;
-	  
-	  old_requisition = widget->requisition;
-	  gtk_widget_size_request (widget, NULL);
-	  
-	  if ((old_requisition.width != widget->requisition.width) ||
-	      (old_requisition.height != widget->requisition.height))
-	    gtk_widget_queue_resize (widget);
-	  else if (GTK_WIDGET_DRAWABLE (widget))
-	    gtk_widget_queue_clear (widget);
-	}
+	gtk_widget_queue_resize (widget);
     }
   else if (initial_emission)
     gtk_signal_emit (GTK_OBJECT (widget),

@@ -1,3 +1,13 @@
+Thu Dec 27 15:45:41 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkwidget.c (gtk_widget_set_style_internal):
+	Remove optimization that was causing problems because
+	we called gtk_widget_size_request() before we called
+	gtk_widget_queue_resize() so RESIZE_NEEDED was not
+	set. Optimization shouldn't mattter now that we
+	are smart about needlessly size requesting or allocating
+	widgets. (#67598, reported by Jacob Berkman)
+
 Thu Dec 27 15:38:20 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkmenu.c (gtk_menu_stop_navigating_submenu_cb):
