@@ -196,6 +196,8 @@ void       gtk_menu_attach                (GtkMenu             *menu,
                                            guint                top_attach,
                                            guint                bottom_attach);
 
+void       gtk_menu_set_monitor           (GtkMenu             *menu,
+                                           gint                 monitor_num);
 
 #ifndef GTK_DISABLE_DEPRECATED
 #define gtk_menu_append(menu,child)	gtk_menu_shell_append  ((GtkMenuShell *)(menu),(child))

@@ -1865,6 +1865,7 @@ gtk_menu_detach
 gtk_menu_get_attach_widget
 GtkMenuPositionFunc
 GtkMenuDetachFunc
+gtk_menu_set_monitor
 <SUBSECTION Standard>
 GTK_MENU
 GTK_IS_MENU

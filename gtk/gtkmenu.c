@@ -84,6 +84,8 @@ struct _GtkMenuPrivate
 
   guint *heights;
   gint heights_length;
+
+  gint monitor_num;
 };
 
 typedef struct
@@ -3064,7 +3066,6 @@ gtk_menu_position (GtkMenu *menu)
   GdkScreen *screen;
   GdkScreen *pointer_screen;
   GdkRectangle monitor;
-  gint monitor_num;
 
   g_return_if_fail (GTK_IS_MENU (menu));
 
@@ -3092,13 +3093,16 @@ gtk_menu_position (GtkMenu *menu)
       y = MAX (0, (gdk_screen_get_height (screen) - requisition.height) / 2);
     }
 
-  monitor_num = gdk_screen_get_monitor_at_point (screen, x, y);
-  gdk_screen_get_monitor_geometry (screen, monitor_num, &monitor);
+  private = gtk_menu_get_private (menu);
+  private->monitor_num = gdk_screen_get_monitor_at_point (screen, x, y);
 
   push_in = FALSE;
   
   if (menu->position_func)
-    (* menu->position_func) (menu, &x, &y, &push_in, menu->position_func_data);
+    {
+      (* menu->position_func) (menu, &x, &y, &push_in, menu->position_func_data);
+      gdk_screen_get_monitor_geometry (screen, private->monitor_num, &monitor);
+    }
   else
     {
       gint space_left, space_right, space_above, space_below;
@@ -3126,6 +3130,8 @@ gtk_menu_position (GtkMenu *menu)
        * Positioning in the vertical direction is similar: first try below
        * mouse cursor, then above.
        */
+      gdk_screen_get_monitor_geometry (screen, private->monitor_num, &monitor);
+
       space_left = x - monitor.x;
       space_right = monitor.x + monitor.width - x - 1;
       space_above = y - monitor.y;
@@ -3239,7 +3245,6 @@ gtk_menu_position (GtkMenu *menu)
  
   if (GTK_MENU_SHELL (menu)->active)
     {
-      private = gtk_menu_get_private (menu);
       private->have_position = TRUE;
       private->x = x;
       private->y = y;
@@ -3956,4 +3961,33 @@ gtk_menu_real_move_scroll (GtkMenu       *menu,
     default:
       break;
     }
+}
+
+
+/**
+ * gtk_menu_set_monitor:
+ * @menu: a #GtkMenu
+ * @monitor_num: the number of the monitor on which the menu should
+ *    be popped up
+ * 
+ * Informs GTK+ on which monitor a menu should be popped up. 
+ * See gdk_screen_get_monitor_geometry().
+ *
+ * This function should be called from a #GtkMenuPositionFunc if the
+ * menu should not appear on the same monitor as the pointer. This 
+ * information can't be reliably inferred from the coordinates returned
+ * by a #GtkMenuPositionFunc, since, for very long menus, these coordinates 
+ * may extend beyond the monitor boundaries or even the screen boundaries. 
+ *
+ * Since: 2.4
+ **/
+void gtk_menu_set_monitor (GtkMenu *menu,
+			   gint     monitor_num)
+{
+  GtkMenuPrivate *priv;
+  g_return_if_fail (GTK_IS_MENU (menu));
+
+  priv = gtk_menu_get_private (menu);
+  
+  priv->monitor_num = monitor_num;
 }

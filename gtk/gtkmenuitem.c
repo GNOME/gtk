@@ -1108,6 +1108,8 @@ gtk_menu_item_position_menu (GtkMenu  *menu,
    */
   *x = CLAMP (tx, monitor.x, MAX (monitor.x, monitor.x + monitor.width - twidth));
   *y = ty;
+
+  gtk_menu_set_monitor (menu, monitor_num);
 }
 
 /**
