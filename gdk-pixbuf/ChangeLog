@@ -1,3 +1,20 @@
+2003-06-22  Matthias Clasen  <matthias@localhost.localdomain>
+
+	* io-gif.c (gif_get_extension): Reset block_count to 0 for all application extensions, otherwise the data blocks 
+	of unknown extensions are not propertly skipped. 
+
+	Second half of the fix for #106962, handle frames extending beyond the logical screen:
+	
+	* io-gif.c (clip_frame): New helper function to clip a rectangle to the logical screen size of the gif.
+	(maybe_update): New helper function to call update_func only if the rectangle is not completely off-bounds.
+	(gif_get_lzw): Read frames extending outside the logical screen size, but be careful clip to the logical screen size
+	when operating on the composite pixbuf and when calling update_func.
+	(gif_init): Set the animation size to the logical screen size.
+	(gif_get_frame_info): Don't refuse to load images with frames extending beyond the logical screen size.
+
+	* io-gif-animation.c (gdk_pixbuf_gif_anim_frame_composite): Be careful to clip all rectangles to the logical screen 
+	size, also handle the fact that frames may be completely off-bounds.
+
 2003-06-21  Matthias Clasen  <maclas@gmx.de>
 
 	* io-gif.c: Merge from 2.2: Fix update_func() arguments and accept empty 
