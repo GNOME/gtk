@@ -1,15 +1,16 @@
-# GTK+ fordansket.
-# Copyright (C) 1999 Free Software Foundation, Inc.
+# Danish translation of GTK+.
+# Copyright (C) 1999, 2000, 2001 Free Software Foundation, Inc.
 # Birger Langkjer <birger.langkjer@image.dk>, 1999.
-# Kenneth Christiansen <kenneth@ripen.dk>, 1999
+# Kenneth Christiansen <kenneth@ripen.dk>, 1999.
+# Ole Laursen <olau@hardworking.dk>, 2001.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: gtk+ 1.2.6\n"
-"POT-Creation-Date: 2001-03-15 10:09+0100\n"
-"PO-Revision-Date: 1999-11-11 00:11+01:00\n"
-"Last-Translator: Birger Langkjer <birger.langkjer@image.dk>\n"
-"Language-Team: Danish <dltp@lists.wiktor.dk>\n"
+"Project-Id-Version: gtk+ 1.2.10\n"
+"POT-Creation-Date: 2001-03-22 10:12+0100\n"
+"PO-Revision-Date: 2001-03-22 12:05+01:00\n"
+"Last-Translator: Ole Laursen <olau@hardworking.dk>\n"
+"Language-Team: Danish <dansk@klid.dk>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=iso-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -40,13 +41,13 @@ msgstr "Blå:"
 
 #: gtk/gtkcolorsel.c:227
 msgid "Opacity:"
-msgstr "Gennemsigtighed:"
+msgstr "Uigennemsigtighed:"
 
 #. The OK button
 #: gtk/gtkcolorsel.c:1727 gtk/gtkfilesel.c:481 gtk/gtkfontsel.c:3501
 #: gtk/gtkgamma.c:416
 msgid "OK"
-msgstr "OK"
+msgstr "O.k."
 
 #. The Cancel button
 #: gtk/gtkcolorsel.c:1733 gtk/gtkfilesel.c:488 gtk/gtkfilesel.c:868
@@ -72,7 +73,7 @@ msgstr "Filer"
 #: gtk/gtkfilesel.c:519 gtk/gtkfilesel.c:1478
 #, c-format
 msgid "Directory unreadable: %s"
-msgstr "Mappen er ulæselig: %s"
+msgstr "Mappen kan ikke læses: %s"
 
 #: gtk/gtkfilesel.c:551
 msgid "Create Dir"
@@ -153,19 +154,19 @@ msgstr "Tilføj stil:"
 
 #: gtk/gtkfontsel.c:216
 msgid "Pixel Size:"
-msgstr "Pixelstørrelse:"
+msgstr "Skærmpunktstørrelse:"
 
 #: gtk/gtkfontsel.c:217
 msgid "Point Size:"
-msgstr "Punktstørrelse:"
+msgstr "Papirpunktstørrelse:"
 
 #: gtk/gtkfontsel.c:218
 msgid "Resolution X:"
-msgstr "Opløsning X:"
+msgstr "Vandret opløsning:"
 
 #: gtk/gtkfontsel.c:219
 msgid "Resolution Y:"
-msgstr "Opløsning Y:"
+msgstr "Lodret opløsning:"
 
 #: gtk/gtkfontsel.c:220
 msgid "Spacing:"
@@ -179,11 +180,12 @@ msgstr "Middelbredde:"
 msgid "Charset:"
 msgstr "Tegnsæt:"
 
+# Skrifttype- overflødigt, se gfontsel
 #. Number of internationalized titles here must match number
 #. of NULL initializers above
 #: gtk/gtkfontsel.c:459
 msgid "Font Property"
-msgstr "Skrifttypeegenskab"
+msgstr "Egenskab"
 
 #: gtk/gtkfontsel.c:460
 msgid "Requested Value"
@@ -215,15 +217,15 @@ msgstr "Nulstil filter"
 
 #: gtk/gtkfontsel.c:660
 msgid "Metric:"
-msgstr "Metrisk:"
+msgstr "Måleenhed:"
 
 #: gtk/gtkfontsel.c:664
 msgid "Points"
-msgstr "Punkter"
+msgstr "Papirpunkter"
 
 #: gtk/gtkfontsel.c:671
 msgid "Pixels"
-msgstr "Pixler"
+msgstr "Skærmpunkter"
 
 #. create the text entry widget
 #: gtk/gtkfontsel.c:687
@@ -232,7 +234,7 @@ msgstr "Udseende:"
 
 #: gtk/gtkfontsel.c:716
 msgid "Font Information"
-msgstr "Skrifttypeinformation"
+msgstr "Info om skrift"
 
 #: gtk/gtkfontsel.c:749
 msgid "Requested Font Name:"
@@ -245,7 +247,7 @@ msgstr "Egentligt skrifttypenavn:"
 #: gtk/gtkfontsel.c:771
 #, c-format
 msgid "%i fonts available with a total of %i styles."
-msgstr "%i skrifttyper tilstede med ialt %i stilvarianter."
+msgstr "%i skrifttyper til stede med ialt %i stilvarianter."
 
 #: gtk/gtkfontsel.c:786
 msgid "Filter"
@@ -310,7 +312,7 @@ msgstr "[C]"
 
 #: gtk/gtkfontsel.c:1792
 msgid "The selected font is not available."
-msgstr "Den valgte skrifttype er ikke tilstede."
+msgstr "Den valgte skrifttype er ikke til stede."
 
 #: gtk/gtkfontsel.c:1798
 msgid "The selected font is not a valid font."
@@ -318,7 +320,7 @@ msgstr "Du har valgt en ugyldig skrifttype."
 
 #: gtk/gtkfontsel.c:1856
 msgid "This is a 2-byte font and may not be displayed correctly."
-msgstr "Dette er en 2-byte skrifttype, muligvis ser den ikke sådan ud."
+msgstr "Dette er en 2-byte-skrifttype - muligvis bliver den ikke vist korrekt."
 
 #: gtk/gtkfontsel.c:1960 gtk/gtkinputdialog.c:607
 msgid "(unknown)"
@@ -326,15 +328,15 @@ msgstr "(ukendt)"
 
 #: gtk/gtkfontsel.c:1971
 msgid "roman"
-msgstr "rundbuet"
+msgstr "opret"
 
 #: gtk/gtkfontsel.c:1983
 msgid "proportional"
-msgstr "symmetrisk"
+msgstr "varierende"
 
 #: gtk/gtkfontsel.c:1984
 msgid "monospaced"
-msgstr "fast bredde"
+msgstr "fast"
 
 #: gtk/gtkfontsel.c:1985
 msgid "char cell"
@@ -342,7 +344,7 @@ msgstr "konsolskrifttype"
 
 #: gtk/gtkfontsel.c:2185
 msgid "Font: (Filter Applied)"
-msgstr "Skrifttype: (Filtreret)"
+msgstr "Skrifttype: (filtreret)"
 
 #: gtk/gtkfontsel.c:2661
 msgid "MAX_FONTS exceeded. Some fonts may be missing."
@@ -379,7 +381,7 @@ msgstr "Enhed:"
 
 #: gtk/gtkinputdialog.c:253
 msgid "Disabled"
-msgstr "Slået fra"
+msgstr "Deaktiveret"
 
 #: gtk/gtkinputdialog.c:261
 msgid "Screen"
@@ -391,7 +393,7 @@ msgstr "Vindue"
 
 #: gtk/gtkinputdialog.c:277
 msgid "Mode: "
-msgstr "Modus: "
+msgstr "Tilstand: "
 
 #. The axis listbox
 #: gtk/gtkinputdialog.c:307
@@ -470,7 +472,7 @@ msgstr "--- Ingen hjælp ---"
 #~ msgstr "tung"
 
 #~ msgid "extrabold"
-#~ msgstr "ekstrafed"
+#~ msgstr "ekstra fed"
 
 #~ msgid "bold"
 #~ msgstr "fed"
@@ -488,7 +490,7 @@ msgstr "--- Ingen hjælp ---"
 #~ msgstr "let"
 
 #~ msgid "extralight"
-#~ msgstr "ekstralet"
+#~ msgstr "ekstra let"
 
 #~ msgid "thin"
 #~ msgstr "tynd"
