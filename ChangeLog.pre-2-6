@@ -1,5 +1,11 @@
 2004-09-29  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkiconview.c (gtk_icon_view_move_cursor_left_right) 
+	(gtk_icon_view_move_cursor_start_end) 
+	(gtk_icon_view_move_cursor_page_up_down) 
+	(gtk_icon_view_move_cursor_up_down): Handle an empty icon
+	view gracefully.  (#152486)
+
 	Allow keynav to selectable labels (#138085, David Hawthorne):
 	
 	* gtk/gtkdialog.c (gtk_dialog_map): Skip selectable labels when

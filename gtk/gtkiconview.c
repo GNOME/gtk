@@ -2584,7 +2584,7 @@ gtk_icon_view_move_cursor_up_down (GtkIconView *icon_view,
       else
 	list = g_list_last (icon_view->priv->items);
 
-      item = list->data;
+      item = list ? list->data : NULL;
     }
   else
     item = find_item (icon_view, 
@@ -2636,7 +2636,7 @@ gtk_icon_view_move_cursor_page_up_down (GtkIconView *icon_view,
       else
 	list = g_list_last (icon_view->priv->items);
 
-      item = list->data;
+      item = list ? list->data : NULL;
     }
   else
     item = find_item_page_up_down (icon_view, 
@@ -2688,7 +2688,7 @@ gtk_icon_view_move_cursor_left_right (GtkIconView *icon_view,
       else
 	list = g_list_last (icon_view->priv->items);
 
-      item = list->data;
+      item = list ? list->data : NULL;
     }
   else
     item = find_item (icon_view, 
@@ -2737,7 +2737,7 @@ gtk_icon_view_move_cursor_start_end (GtkIconView *icon_view,
   else
     list = g_list_last (icon_view->priv->items);
   
-  item = list->data;
+  item = list ? list->data : NULL;
 
   if (!item)
     return;
