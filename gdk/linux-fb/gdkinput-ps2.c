@@ -31,6 +31,7 @@
 #include <sys/vt.h>
 #include <sys/kd.h>
 #include <ctype.h>
+#include <stdlib.h>
 
 /*
  * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS

@@ -27,8 +27,9 @@ noinst_LTLIBRARIES = libgdk-linux-fb.la
 libgdkinclude_HEADERS= \
 	gdkfb.h
 
-libgdk_linux_fb_la_SOURCES =    	\
+libgdk_linux_fb_la_SOURCES =    \
 	gdkcolor-fb.c	   	\
+	gdkcc-fb.c		\
 	gdkcursor-fb.c	   	\
 	gdkdnd-fb.c	   	\
 	gdkdrawable-fb2.c  	\
