@@ -284,13 +284,8 @@ _gdk_x11_window_tmp_unset_bg (GdkWindow *window,
       return;
     }
 
-  /* Don't unset the background of windows that don't select for expose
-   * events. Such windows don't get drawn, so we need the X server
-   * drawing them to prevent them from containing garbage
-   */
   if (private->window_type != GDK_WINDOW_ROOT &&
-      private->window_type != GDK_WINDOW_FOREIGN &&
-      (private->event_mask & GDK_EXPOSURE_MASK))
+      private->window_type != GDK_WINDOW_FOREIGN)
     {
       tmp_unset_bg (window);
     }
@@ -322,8 +317,7 @@ _gdk_x11_window_tmp_reset_bg (GdkWindow *window,
     }
 
   if (private->window_type != GDK_WINDOW_ROOT &&
-      private->window_type != GDK_WINDOW_FOREIGN &&
-      (private->event_mask & GDK_EXPOSURE_MASK))
+      private->window_type != GDK_WINDOW_FOREIGN)
     {
       tmp_reset_bg (window);
     }

@@ -2006,10 +2006,8 @@ gdk_window_process_updates_internal (GdkWindow *window)
       GdkRegion *update_area = private->update_area;
       private->update_area = NULL;
       
-      if (_gdk_event_func && gdk_window_is_viewable (window) &&
-	  (private->event_mask & GDK_EXPOSURE_MASK))
+      if (_gdk_event_func && gdk_window_is_viewable (window))
 	{
-	  GdkEvent event;
 	  GdkRectangle window_rect;
 	  GdkRegion *expose_region;
 	  GdkRegion *window_region;
@@ -2022,39 +2020,55 @@ gdk_window_process_updates_internal (GdkWindow *window)
               g_usleep (70000);
             }
           
-          gdk_drawable_get_size (GDK_DRAWABLE (private), &width, &height);
-          
-	  window_rect.x = 0;
-	  window_rect.y = 0;
-	  window_rect.width = width;
-	  window_rect.height = height;
-
 	  save_region = _gdk_windowing_window_queue_antiexpose (window, update_area);
-      
-	  event.expose.type = GDK_EXPOSE;
-	  event.expose.window = g_object_ref (window);
-	  event.expose.count = 0;
 
 	  if (save_region)
 	    expose_region = gdk_region_copy (update_area);
 	  else
 	    expose_region = update_area;
+	  
+          gdk_drawable_get_size (GDK_DRAWABLE (private), &width, &height);
+
+	  window_rect.x = 0;
+	  window_rect.y = 0;
+	  window_rect.width = width;
+	  window_rect.height = height;
+
 	  window_region = gdk_region_rectangle (&window_rect);
 	  gdk_region_intersect (expose_region,
 				window_region);
 	  gdk_region_destroy (window_region);
 	  
-	  event.expose.region = expose_region;
-	  gdk_region_get_clipbox (expose_region, &event.expose.area);
-	  
 	  if (!gdk_region_empty (expose_region))
 	    {
-	      (*_gdk_event_func) (&event, _gdk_event_data);
+	      if (private->event_mask & GDK_EXPOSURE_MASK)
+		{
+		  GdkEvent event;
+	      
+		  event.expose.type = GDK_EXPOSE;
+		  event.expose.window = g_object_ref (window);
+		  event.expose.count = 0;
+		  event.expose.region = expose_region;
+		  gdk_region_get_clipbox (expose_region, &event.expose.area);
+		  
+		  (*_gdk_event_func) (&event, _gdk_event_data);
+
+		  g_object_unref (window);
+		}
+	      else
+		{
+		  /* Windows without GDK_EXPOSURE_MASK still need to
+		   * get their backgrounds painted, because it
+		   * may have been temporarily set to None when
+		   * the expose was generated
+		   */
+		  gdk_window_begin_paint_region (window, expose_region);
+		  gdk_window_end_paint (window);
+		}
 	    }
 
 	  if (expose_region != update_area)
 	    gdk_region_destroy (expose_region);
-	  g_object_unref (window);
 	}
       if (!save_region)
 	gdk_region_destroy (update_area);

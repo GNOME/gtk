@@ -1,3 +1,12 @@
+Tue Jul 13 00:40:29 2004  Soeren Sandmann  <sandmann@daimi.au.dk>
+
+	* gdk/gdkwindow.c (gdk_window_process_updates_internal): Do an
+	empty begin_paint_region()/end_paint() for windows without
+	EXPOSURE_MASK.
+
+	* gdk/x11/gdkwindow-x11.c (_gdk_x11_window_tmp_unset_bg,
+	_gdk_x11_window_tmp_reset_bg): Remove checks for EXPOSURE_MASK.
+
 2004-07-12  Matthias Clasen  <mclasen@redhat.com>
 
 	* demos/gtk-demo/appwindow.c: Use a GtkAboutDialog.
