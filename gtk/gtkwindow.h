@@ -114,16 +114,18 @@ void       gtk_window_set_geometry_hints       (GtkWindow           *window,
  * gtk_widget_set_usize() overrides the requisition, so sets a minimum
  * size, while this only sets the size requested from the WM.
  */
-void       gtk_window_set_default_size         (GtkWindow            *window,
-						gint                  width,
-						gint                  height);
+void       gtk_window_set_default_size         (GtkWindow           *window,
+						gint                 width,
+						gint                 height);
 
 /* If window is set modal, input will be grabbed when show and released when hide */
 void       gtk_window_set_modal                (GtkWindow           *window,
-                                                gboolean modal);
+                                                gboolean             modal);
 
-void gtk_window_remove_embedded_xid (GtkWindow *window, guint xid);
-void gtk_window_add_embedded_xid    (GtkWindow *window, guint xid);
+void       gtk_window_remove_embedded_xid      (GtkWindow           *window,
+				                guint                xid);
+void       gtk_window_add_embedded_xid         (GtkWindow           *window,
+						guint                xid);
 
 #ifdef __cplusplus
 }

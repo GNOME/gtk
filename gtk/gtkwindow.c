@@ -39,6 +39,7 @@ enum {
   ARG_AUTO_SHRINK,
   ARG_ALLOW_SHRINK,
   ARG_ALLOW_GROW,
+  ARG_MODAL,
   ARG_WIN_POS
 };
 
@@ -160,6 +161,7 @@ gtk_window_class_init (GtkWindowClass *klass)
   gtk_object_add_arg_type ("GtkWindow::auto_shrink", GTK_TYPE_BOOL, GTK_ARG_READWRITE, ARG_AUTO_SHRINK);
   gtk_object_add_arg_type ("GtkWindow::allow_shrink", GTK_TYPE_BOOL, GTK_ARG_READWRITE, ARG_ALLOW_SHRINK);
   gtk_object_add_arg_type ("GtkWindow::allow_grow", GTK_TYPE_BOOL, GTK_ARG_READWRITE, ARG_ALLOW_GROW);
+  gtk_object_add_arg_type ("GtkWindow::modal", GTK_TYPE_BOOL, GTK_ARG_READWRITE, ARG_MODAL);
   gtk_object_add_arg_type ("GtkWindow::window_position", GTK_TYPE_WINDOW_POSITION, GTK_ARG_READWRITE, ARG_WIN_POS);
 
   window_signals[SET_FOCUS] =
@@ -258,6 +260,9 @@ gtk_window_set_arg (GtkObject  *object,
       window->allow_grow = (GTK_VALUE_BOOL (*arg) != FALSE);
       gtk_window_set_hints (GTK_WIDGET (window), &GTK_WIDGET (window)->requisition);
       break;
+    case ARG_MODAL:
+      gtk_window_set_modal (window, GTK_VALUE_BOOL (*arg));
+      break;
     case ARG_WIN_POS:
       gtk_window_set_position (window, GTK_VALUE_ENUM (*arg));
       break;
@@ -291,6 +296,9 @@ gtk_window_get_arg (GtkObject  *object,
       break;
     case ARG_ALLOW_GROW:
       GTK_VALUE_BOOL (*arg) = window->allow_grow;
+      break;
+    case ARG_MODAL:
+      GTK_VALUE_BOOL (*arg) = window->modal;
       break;
     case ARG_WIN_POS:
       GTK_VALUE_ENUM (*arg) = window->position;
@@ -470,18 +478,21 @@ gtk_window_activate_default (GtkWindow      *window)
 }
 
 void
-gtk_window_set_modal (GtkWindow *window, gboolean modal)
+gtk_window_set_modal (GtkWindow *window,
+		      gboolean   modal)
 {
   g_return_if_fail (window != NULL);
   g_return_if_fail (GTK_IS_WINDOW (window));
 
+  modal = modal != FALSE;
+
   /* If the widget was showed already, adjust it's grab state */
-  if (GTK_WIDGET_VISIBLE(GTK_WIDGET(window)))
+  if (GTK_WIDGET_VISIBLE (window) && window->modal != modal)
     {
-      if (window->modal && !modal)
-	gtk_grab_remove (GTK_WIDGET(window));
-      else if (!window->modal && modal)
-	gtk_grab_add (GTK_WIDGET(window));
+      if (modal)
+	gtk_grab_add (GTK_WIDGET (window));
+      else
+	gtk_grab_remove (GTK_WIDGET (window));
     }
   
   window->modal = modal;
@@ -494,8 +505,10 @@ gtk_window_add_embedded_xid (GtkWindow *window, guint xid)
 
   g_return_if_fail (window != NULL);
   g_return_if_fail (GTK_IS_WINDOW (window));
-  
-  g_print ("add %#x\n", xid);
+
+#ifdef G_ENABLE_DEBUG
+  g_message ("add embedded xid %#x\n", xid);
+#endif
 
   embedded_windows = gtk_object_get_data (GTK_OBJECT (window), "gtk-embedded");
   if (embedded_windows)
@@ -519,8 +532,10 @@ gtk_window_remove_embedded_xid (GtkWindow *window, guint xid)
   g_return_if_fail (window != NULL);
   g_return_if_fail (GTK_IS_WINDOW (window));
   
-  g_print ("remove %#x\n", xid);
-
+#ifdef G_ENABLE_DEBUG
+  g_message ("remove embedded xid %#x\n", xid);
+#endif
+  
   embedded_windows = gtk_object_get_data (GTK_OBJECT (window), "gtk-embedded");
   if (embedded_windows)
     gtk_object_remove_no_notify_by_id (GTK_OBJECT (window), 
@@ -755,23 +770,27 @@ gtk_window_show (GtkWidget *widget)
   gtk_container_check_resize (GTK_CONTAINER (widget));
   gtk_widget_map (widget);
 
-  if (GTK_WINDOW(widget)->modal)
-      gtk_grab_add(widget);
-      
+  if (GTK_WINDOW (widget)->modal)
+    gtk_grab_add (widget);
 }
 
 static void
 gtk_window_hide (GtkWidget *widget)
 {
+  GtkWindow *window;
+
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_WINDOW (widget));
+
+  window = GTK_WINDOW (widget);
 
   GTK_WIDGET_UNSET_FLAGS (widget, GTK_VISIBLE);
   gtk_widget_unmap (widget);
 
-  if (GTK_WINDOW(widget)->modal)
-      gtk_grab_remove(widget);
+  window->modal = GTK_WIDGET_HAS_GRAB (window);
 
+  if (window->modal)
+    gtk_grab_remove (widget);
 }
 
 static void

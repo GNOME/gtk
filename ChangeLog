@@ -1,3 +1,14 @@
+Sat Feb 20 19:44:36 1999  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkwindow.c: added ::modal argument.
+	(gtk_window_hide): reset window->modal from the current grab state
+	(this is only relevant when grab_add/grab_remove is called on the
+	window by bypassing gtk_window_set_modal).
+	(gtk_window_remove_embedded_xid): 
+	(gtk_window_add_embedded_xid): don't use g_print() but g_message()
+	within #ifdef G_ENABLE_DEBUG. when the hack got these functions
+	added (ChangeLog doesn't know them)?
+
 Fri Feb 19 14:59:45 EST 1999 Sergey Panov  <sipan@mit.edu>
 
         * gtk/gtkrc,gtk/gtkrc.ja, gtk/gtkrc.ko,
