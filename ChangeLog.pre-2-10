@@ -1,3 +1,8 @@
+1998-05-06  Federico Mena Quintero  <federico@nuclecu.unam.mx>
+
+	* gtk/gtkclist.c (draw_row): Fixed incorrect painting of row
+	background (fg_set -> bg_set confusion).
+
 1998-05-06  Stefan Jeske  <stefan@gtk.org>
 
 	* gtk/testgtk.c (unselect_all): Removed code that caused an
