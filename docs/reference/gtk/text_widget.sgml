@@ -17,8 +17,8 @@ GTK+ has an extremely powerful framework for multiline text editing.  The
 primary objects involved in the process are <link
 linkend="GtkTextBuffer">GtkTextBuffer</link>, which represents the text being
 edited, and <link linkend="GtkTextView">GtkTextView</link>, a widget which can
-display a <link linkend="GtkTextBuffer">GtkTextBuffer</link>. Each buffer can be
-displayed by any number of views.
+display a <link linkend="GtkTextBuffer">GtkTextBuffer</link>. Each buffer can
+be displayed by any number of views.
 </para>
 
 <para>
@@ -27,17 +27,18 @@ UTF-8 encoding. This means that one character can be encoded as multiple
 bytes. Character counts are usually referred to as
 <firstterm>offsets</firstterm>, while byte counts are called
 <firstterm>indexes</firstterm>. If you confuse these two, things will work fine
-with ASCII, but as soon as your buffer contains multibyte characters, bad things
-will happen.
+with ASCII, but as soon as your buffer contains multibyte characters, bad 
+things will happen.
 </para>
 
 <para>
 Text in a buffer can be marked with <firstterm>tags</firstterm>. A tag is an
-attribute that can be applied to some range of text. For example, a tag might be
-called "bold" and make the text inside the tag bold. However, the tag concept is
-more general than that; tags don't have to affect appearance. They can instead
-affect the behavior of mouse and key presses, "lock" a range of text so
-the user can't edit it, or countless other things. A tag is represented by a
+attribute that can be applied to some range of text. For example, a tag might 
+be called "bold" and make the text inside the tag bold. However, the tag
+concept is more general than that; tags don't have to affect appearance. They 
+can instead affect the behavior of mouse and key presses, "lock" a range of 
+text so the user can't edit it, or countless other things. A tag is 
+represented by a
 <link linkend="GtkTextTag">GtkTextTag</link> object. One <link
 linkend="GtkTextTag">GtkTextTag</link> can be applied to any number of text
 ranges in any number of buffers.
@@ -61,8 +62,8 @@ is convenient if you're creating tags on-the-fly).
 Most text manipulation is accomplished with <firstterm>iterators</firstterm>,
 represented by a <link linkend="GtkTextIter">GtkTextIter</link>. An iterator
 represents a position between two characters in the text buffer. <link
-linkend="GtkTextIter">GtkTextIter</link> is a struct designed to be allocated on
-the stack; it's guaranteed to be copiable by value and never contain any
+linkend="GtkTextIter">GtkTextIter</link> is a struct designed to be allocated 
+on the stack; it's guaranteed to be copiable by value and never contain any
 heap-allocated data. Iterators are not valid indefinitely; whenever the buffer
 is modified in a way that affects the number of characters in the buffer, all
 outstanding iterators become invalid. (Note that deleting 5 characters and then
@@ -75,10 +76,10 @@ Because of this, iterators can't be used to preserve positions across buffer
 modifications. To preserve a position, the <link
 linkend="GtkTextMark">GtkTextMark</link> object is ideal. You can think of a
 mark as an invisible cursor or insertion point; it floats in the buffer, saving
-a position. If the text surrounding the mark is deleted, the mark remains in the
-position the text once occupied; if text is inserted at the mark, the mark ends
-up either to the left or to the right of the new text, depending on its
-<firstterm>gravity</firstterm>. The standard text cursor in left-to-right
+a position. If the text surrounding the mark is deleted, the mark remains in 
+the position the text once occupied; if text is inserted at the mark, the 
+mark ends up either to the left or to the right of the new text, depending on 
+its <firstterm>gravity</firstterm>. The standard text cursor in left-to-right
 languages is a mark with right gravity, because it stays to the right of
 inserted text.
 </para>
@@ -95,7 +96,9 @@ appears by moving these marks around.
 <footnote>
 <para>
 If you want to place the cursor in response to a user action, be sure to use
-<function>gtk_text_buffer_place_cursor()</function>, which moves both at once 
+<link 
+linkend="gtk-text-buffer-place-cursor">gtk_text_buffer_place_cursor()</link>, 
+which moves both at once  
 without causing a temporary selection (moving one then the other temporarily 
 selects the range in between the old and new positions).
 </para>
@@ -137,11 +140,11 @@ might look like this:
    * will be emitted, such as "changed", "insert_text", and so on.
    */
 </programlisting></informalexample>
-In many cases it's also convenient to first create the buffer with
-<function>gtk_text_buffer_new()</function>, then create a widget for that 
-buffer with <function>gtk_text_view_new_with_buffer()</function>. Or you can 
-change the buffer the widget displays after the widget is created with
-<function>gtk_text_view_set_buffer()</function>.
+In many cases it's also convenient to first create the buffer with <link 
+linkend="gtk-text-buffer-new">gtk_text_buffer_new()</link>, then create a 
+widget for that buffer with <link linkend="gtk-text-view-new-with-buffer">gtk_text_view_new_with_buffer()</link>. 
+Or you can change the buffer the widget displays after the widget is created
+with <link linkend="gtk-text-view-set-buffer">gtk_text_view_set_buffer()</link>.
 </para>
 
 </refsect1>

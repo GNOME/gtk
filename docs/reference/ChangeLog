@@ -1,5 +1,7 @@
 2002-12-11  Matthias Clasen  <maclas@gmx.de>
 
+	* gtk/text_widget.sgml: Fix some links.
+
 	* gdk/tmpl/pixmaps.sgml: Make "GdkPixmap" a valid id to reduce
 	dangling links.
 
