@@ -1,3 +1,9 @@
+2005-01-15  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtktextview.c (gtk_text_view_check_keymap_direction): 
+	* gtk/gtkentry.c (gtk_entry_create_layout): Prefer LTR over RTL 
+	if the keymap is neutral.  (#164125, Phil Blundell)
+
 2005-01-14  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtktreeview.c (gtk_tree_view_set_search_column): Allow to

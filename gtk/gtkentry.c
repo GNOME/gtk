@@ -2972,10 +2972,10 @@ gtk_entry_create_layout (GtkEntry *entry,
 	    }
           else
 	    {
-	      if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_LTR)
-		pango_dir = PANGO_DIRECTION_LTR;
-	      else
+	      if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL)
 		pango_dir = PANGO_DIRECTION_RTL;
+	      else
+		pango_dir = PANGO_DIRECTION_LTR;
 	    }
         }
 
