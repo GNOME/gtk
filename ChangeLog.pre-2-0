@@ -1,3 +1,8 @@
+Wed Dec 16 16:04:41 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtklabel.c (gtk_label_expose): Do nothing
+	on empty string, quietly.
+
 Wed Dec 16 15:36:19 1998  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkentry.c (gtk_entry_draw_cursor_on_drawable):

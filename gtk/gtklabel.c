@@ -878,14 +878,13 @@ gtk_label_expose (GtkWidget      *widget,
   g_return_val_if_fail (GTK_IS_LABEL (widget), FALSE);
   g_return_val_if_fail (event != NULL, FALSE);
   
-
-  if (GTK_WIDGET_VISIBLE (widget) && GTK_WIDGET_MAPPED (widget))
+  if (GTK_WIDGET_VISIBLE (widget) && GTK_WIDGET_MAPPED (widget) &&
+      label->label && (*label->label != '\0'))
     {
       label = GTK_LABEL (widget);
       misc = GTK_MISC (widget);
 
-      g_return_val_if_fail (label->words != 0 || label->label == 0, FALSE);
-
+      g_return_val_if_fail ((label->words != NULL), FALSE);
 
       /*
        * GC Clipping
