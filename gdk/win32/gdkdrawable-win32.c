@@ -802,12 +802,9 @@ draw_arc (GdkGCWin32 *gcwin32,
 {
   HGDIOBJ old_pen;
   gboolean filled;
-  gint x;
-  gint y;
-  gint width;
-  gint height;
-  gint angle1;
-  gint angle2;
+  gint x, y;
+  gint width, height;
+  gint angle1, angle2;
   int nXStartArc, nYStartArc, nXEndArc, nYEndArc;
 
   filled = va_arg (args, gboolean);
@@ -827,18 +824,17 @@ draw_arc (GdkGCWin32 *gcwin32,
     }
   else if (angle2 > 0)
     {
-      /* The 100. is just an arbitrary value */
-      nXStartArc = x + width/2 + 100. * cos(angle1/64.*2.*G_PI/360.);
-      nYStartArc = y + height/2 + -100. * sin(angle1/64.*2.*G_PI/360.);
-      nXEndArc = x + width/2 + 100. * cos((angle1+angle2)/64.*2.*G_PI/360.);
-      nYEndArc = y + height/2 + -100. * sin((angle1+angle2)/64.*2.*G_PI/360.);
+      nXStartArc = x + width/2 + width * cos(angle1/64.*2.*G_PI/360.);
+      nYStartArc = y + height/2 + -height * sin(angle1/64.*2.*G_PI/360.);
+      nXEndArc = x + width/2 + width * cos((angle1+angle2)/64.*2.*G_PI/360.);
+      nYEndArc = y + height/2 + -height * sin((angle1+angle2)/64.*2.*G_PI/360.);
     }
   else
     {
-      nXEndArc = x + width/2 + 100. * cos(angle1/64.*2.*G_PI/360.);
-      nYEndArc = y + height/2 + -100. * sin(angle1/64.*2.*G_PI/360.);
-      nXStartArc = x + width/2 + 100. * cos((angle1+angle2)/64.*2.*G_PI/360.);
-      nYStartArc = y + height/2 + -100. * sin((angle1+angle2)/64.*2.*G_PI/360.);
+      nXEndArc = x + width/2 + width * cos(angle1/64.*2.*G_PI/360.);
+      nYEndArc = y + height/2 + -height * sin(angle1/64.*2.*G_PI/360.);
+      nXStartArc = x + width/2 + width * cos((angle1+angle2)/64.*2.*G_PI/360.);
+      nYStartArc = y + height/2 + -height * sin((angle1+angle2)/64.*2.*G_PI/360.);
     }
   
   if (filled)
