@@ -927,7 +927,7 @@ _gdk_win32_key_to_string (LONG lParam)
 gchar *
 _gdk_win32_rect_to_string (const RECT *rect)
 {
-  return static_printf ("%ldx%ld@+%ld+%ld",
+  return static_printf ("%ldx%ld@%+ld%+ld",
 			(rect->right - rect->left), (rect->bottom - rect->top),
 			rect->left, rect->top);
 }
@@ -935,7 +935,7 @@ _gdk_win32_rect_to_string (const RECT *rect)
 gchar *
 _gdk_win32_gdkrectangle_to_string (const GdkRectangle *rect)
 {
-  return static_printf ("%dx%d@+%d+%d",
+  return static_printf ("%dx%d@%+d%+d",
 			rect->width, rect->height,
 			rect->x, rect->y);
 }
@@ -943,7 +943,7 @@ _gdk_win32_gdkrectangle_to_string (const GdkRectangle *rect)
 gchar *
 _gdk_win32_gdkregion_to_string (const GdkRegion *rgn)
 {
-  return static_printf ("%dx%d@+%d+%d",
+  return static_printf ("%dx%d@%+d%+d",
 			(rgn->extents.x2 - rgn->extents.x1),
 			(rgn->extents.y2 - rgn->extents.y1),
 			rgn->extents.x1, rgn->extents.y1);

@@ -108,8 +108,7 @@ gdk_pixmap_impl_win32_finalize (GObject *object)
   GDK_NOTE (PIXMAP, g_print ("gdk_pixmap_impl_win32_finalize: %p\n",
 			     GDK_PIXMAP_HBITMAP (wrapper)));
 
-  if (!DeleteObject (GDK_PIXMAP_HBITMAP (wrapper)))
-    WIN32_GDI_FAILED ("DeleteObject");
+  GDI_CALL (DeleteObject, (GDK_PIXMAP_HBITMAP (wrapper)));
 
   gdk_win32_handle_table_remove (GDK_PIXMAP_HBITMAP (wrapper));
 
@@ -291,10 +290,9 @@ gdk_pixmap_new (GdkDrawable *drawable,
   if (holdpal != NULL)
     SelectPalette (hdc, holdpal, FALSE);
 
-  if (!ReleaseDC (hwnd, hdc))
-    WIN32_GDI_FAILED ("ReleaseDC");
+  GDI_CALL (ReleaseDC, (hwnd, hdc));
 
-  GDK_NOTE (PIXMAP, g_print ("...=%p bits=%p pixmap=%p\n", hbitmap, bits, pixmap));
+  GDK_NOTE (PIXMAP, g_print ("... =%p bits=%p pixmap=%p\n", hbitmap, bits, pixmap));
 
   if (hbitmap == NULL)
     {
@@ -311,7 +309,7 @@ gdk_pixmap_new (GdkDrawable *drawable,
   return pixmap;
 }
 
-static unsigned char mirror[256] = {
+static const unsigned char mirror[256] = {
   0x00, 0x80, 0x40, 0xc0, 0x20, 0xa0, 0x60, 0xe0,
   0x10, 0x90, 0x50, 0xd0, 0x30, 0xb0, 0x70, 0xf0,
   0x08, 0x88, 0x48, 0xc8, 0x28, 0xa8, 0x68, 0xe8,

@@ -253,7 +253,7 @@ gdk_selection_owner_set_for_display (GdkDisplay *display,
        * gdk_property_change will be called to store the clipboard
        * data.
        */
-      GDK_NOTE (DND, g_print ("...sending GDK_SELECTION_REQUEST to ourselves\n"));
+      GDK_NOTE (DND, g_print ("... sending GDK_SELECTION_REQUEST to ourselves\n"));
       tmp_event.selection.type = GDK_SELECTION_REQUEST;
       tmp_event.selection.window = owner;
       tmp_event.selection.send_event = FALSE;
@@ -423,7 +423,7 @@ gdk_selection_convert (GdkWindow *requestor,
 	    {
 	      length = GlobalSize (hdata);
 	      
-	      GDK_NOTE (DND, g_print ("...CF_UNICODETEXT: %ld bytes\n",
+	      GDK_NOTE (DND, g_print ("... CF_UNICODETEXT: %ld bytes\n",
 				      length));
 
 	      /* Strip out \r */
@@ -464,7 +464,7 @@ gdk_selection_convert (GdkWindow *requestor,
 	    {
 	      length = GlobalSize (hdata);
 	      
-	      GDK_NOTE (DND, g_print ("...UTF8_STRING: %d bytes: %.10s\n",
+	      GDK_NOTE (DND, g_print ("... UTF8_STRING: %d bytes: %.10s\n",
 				      length, ptr));
 	      
 	      _gdk_selection_property_store (requestor, target, 8,
@@ -488,7 +488,7 @@ gdk_selection_convert (GdkWindow *requestor,
 	    {
 	      length = GlobalSize (hdata);
 	      
-	      GDK_NOTE (DND, g_print ("...CF_TEXT: %ld bytes: %.10s\n",
+	      GDK_NOTE (DND, g_print ("... CF_TEXT: %ld bytes: %.10s\n",
 				       length, ptr));
 	      
 	      if ((hlcid = GetClipboardData (CF_LOCALE)) != NULL)
@@ -499,7 +499,7 @@ gdk_selection_convert (GdkWindow *requestor,
 				     buf, sizeof (buf)))
 		    {
 		      cp = atoi (buf);
-		      GDK_NOTE (DND, g_print ("...CF_LOCALE: %#lx cp:%d\n",
+		      GDK_NOTE (DND, g_print ("... CF_LOCALE: %#lx cp:%d\n",
 					      *lcidptr, cp));
 		    }
 		  GlobalUnlock (hlcid);
@@ -556,7 +556,7 @@ gdk_selection_convert (GdkWindow *requestor,
               BITMAPFILEHEADER *hdr; /* need to add a file header so gdk-pixbuf can load it */
 	      gint length = GlobalSize (hdata) + sizeof(BITMAPFILEHEADER);
 	      
-	      GDK_NOTE (DND, g_print ("...BITMAP: %d bytes\n", length));
+	      GDK_NOTE (DND, g_print ("... BITMAP: %d bytes\n", length));
 	      
               data = g_try_malloc (length);
               if (data)

@@ -490,7 +490,7 @@ _gdk_input_wintab_init_check (void)
 				 gdkdev->info.num_axes));
 	      for (i = 0; i < gdkdev->info.num_axes; i++)
 		GDK_NOTE (INPUT,
-			  g_print ("...axis %d: %d--%d@%d (%d--%d@%d)\n",
+			  g_print ("... axis %d: %d--%d@%d (%d--%d@%d)\n",
 				   i,
 				   gdkdev->axes[i].xmin_value, 
 				   gdkdev->axes[i].xmax_value, 
@@ -762,7 +762,7 @@ _gdk_input_other_event (GdkEvent  *event,
   display = gdk_drawable_get_display (window);
 
   GDK_NOTE (EVENTS_OR_INPUT,
-	    g_print ("gdk_input_win32_other_event: window=%p (%d,%d)\n",
+	    g_print ("gdk_input_win32_other_event: window=%p %+d%+d\n",
 		     GDK_WINDOW_HWND (window), x, y));
   
 #else
@@ -791,12 +791,12 @@ _gdk_input_other_event (GdkEvent  *event,
        * moved or resized, see bug #151090. */
       if (_sizemove_in_progress)
 	{
-	  GDK_NOTE (EVENTS_OR_INPUT, g_print ("...ignored when moving/sizing\n"));
+	  GDK_NOTE (EVENTS_OR_INPUT, g_print ("... ignored when moving/sizing\n"));
 	  return FALSE;
 	}
       if (window == _gdk_parent_root && x_grab_window == NULL)
 	{
-	  GDK_NOTE (EVENTS_OR_INPUT, g_print ("...is root\n"));
+	  GDK_NOTE (EVENTS_OR_INPUT, g_print ("... is root\n"));
 	  return FALSE;
 	}
 
@@ -863,10 +863,10 @@ _gdk_input_other_event (GdkEvent  *event,
 	      || !(x_grab_mask && masktest))
 	    {
 	      GDK_NOTE (EVENTS_OR_INPUT, 
-			g_print ("...grabber doesn't want it\n"));
+			g_print ("... grabber doesn't want it\n"));
 	      return FALSE;
 	    }
-	  GDK_NOTE (EVENTS_OR_INPUT, g_print ("...to grabber\n"));
+	  GDK_NOTE (EVENTS_OR_INPUT, g_print ("... to grabber\n"));
 
 	  g_object_ref(x_grab_window);
 	  g_object_unref(window);
@@ -880,7 +880,7 @@ _gdk_input_other_event (GdkEvent  *event,
       if (!GDK_WINDOW_IMPL_WIN32 (obj->impl)->extension_events_selected
 	  || !(obj->extension_events & masktest))
 	{
-	  GDK_NOTE (EVENTS_OR_INPUT, g_print ("...not selected\n"));
+	  GDK_NOTE (EVENTS_OR_INPUT, g_print ("... not selected\n"));
 
 	  if (obj->parent == GDK_WINDOW_OBJECT (_gdk_parent_root))
 	    return FALSE;
@@ -890,7 +890,7 @@ _gdk_input_other_event (GdkEvent  *event,
 	  if (obj->event_mask & masktest)
 	    {
 	      GDK_NOTE (EVENTS_OR_INPUT, 
-			g_print ("...wants ordinary event, ignoring this\n"));
+			g_print ("... wants ordinary event, ignoring this\n"));
 	      return FALSE;
 	    }
 	  
@@ -904,7 +904,7 @@ _gdk_input_other_event (GdkEvent  *event,
 	  ScreenToClient (GDK_WINDOW_HWND (window), &pt);
 	  x = pt.x;
 	  y = pt.y;
-	  GDK_NOTE (EVENTS_OR_INPUT, g_print ("...propagating to %p (%d,%d)\n",
+	  GDK_NOTE (EVENTS_OR_INPUT, g_print ("... propagating to %p %+d%+d\n",
 					      GDK_WINDOW_HWND (window), x, y));
 	  goto dijkstra;
 	}

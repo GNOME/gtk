@@ -892,7 +892,7 @@ gdk_keymap_translate_keyboard_state (GdkKeymap       *keymap,
     }
 				
 #if 0
-  GDK_NOTE (EVENTS, g_print ("...group=%d level=%d cmods=%#x keyval=%s\n",
+  GDK_NOTE (EVENTS, g_print ("... group=%d level=%d cmods=%#x keyval=%s\n",
 			     group, shift_level, tmp_modifiers, gdk_keyval_name (tmp_keyval)));
 #endif
 

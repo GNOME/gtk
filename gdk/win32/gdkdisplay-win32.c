@@ -148,7 +148,7 @@ _gdk_monitor_init (void)
 	{
 	  _gdk_monitors[i].x += _gdk_offset_x;
 	  _gdk_monitors[i].y += _gdk_offset_y;
-	  GDK_NOTE (MISC, g_print ("Monitor %d: %dx%d@+%d+%d\n",
+	  GDK_NOTE (MISC, g_print ("Monitor %d: %dx%d@%+d%+d\n",
 				   i, _gdk_monitors[i].width,
 				   _gdk_monitors[i].height,
 				   _gdk_monitors[i].x, _gdk_monitors[i].y));
@@ -271,25 +271,26 @@ _win32_on_clipboard_change (HWND   hwnd,
       }
     case WM_DRAWCLIPBOARD :
       {
-        /* create the appropriate gdk events */
-        HWND hwndOwner = GetClipboardOwner ();
-        UINT nFormat = 0;
-        int n = 0;
+        /* Create the appropriate gdk events */
 
-        if (OpenClipboard (hwnd))
-          { 
-            for (; 0 != (nFormat = EnumClipboardFormats (nFormat)); )
-              {
-                char sFormat[80];
-                if (GetClipboardFormatName (nFormat, sFormat, 80) > 0)
-                  g_print ("%s ", sFormat);
-                n++; /* do something useful ? */
-              }
-            GDK_NOTE (DND, 
-                      g_print ("WM_DRAWCLIPBOARD :  formats %d owner %#lx\n", n, hwndOwner));
-
-            CloseClipboard ();
+#ifdef G_ENABLE_DEBUG
+	if ((_gdk_debug_flags & GDK_DEBUG_DND) &&
+	    OpenClipboard (hwnd))
+	  {
+	    HWND hwndOwner = GetClipboardOwner ();
+	    UINT nFormat = 0;
+	    
+	    g_print ("WM_DRAWCLIPBOARD: owner:%p formats: ", hwndOwner);
+	    for (; 0 != (nFormat = EnumClipboardFormats (nFormat));)
+	      {
+		char sFormat[80];
+		if (GetClipboardFormatName (nFormat, sFormat, G_N_ELEMENTS (sFormat)) > 0)
+		  g_print ("%s ", sFormat);
+	      }
+	    g_print ("\n");
+	    CloseClipboard ();
           }
+#endif
         /* XXX: generate the apropriate GdkEventOwnerChange ... */
 
         /* don't break the chain */

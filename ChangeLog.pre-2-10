@@ -1,3 +1,20 @@
+2005-03-16  Tor Lillqvist  <tml@novell.com>
+
+	* gdk/win32/gdkdisplay-win32.c (_win32_on_clipboard_change): Print
+	debugging output only if asked for, not always.
+
+	* gdk/win32/*.c: Use the %+d%+d format for coordinate pairs in
+	debugging printout instead of +%d+%d. Misc other additions and
+	cosmetic improvements to debugging printouts. Use API_CALL() and
+	GDI_CALL() macros in more places.
+
+	* gdk/win32/gdkwindow-win32.c (gdk_window_move, gdk_window_resize,
+	gdk_window_move_resize): To detect child windows, check whether
+	the real parent is not the desktop window, instead of relying on
+	the GDK window type being GDK_WINDOW_CHILD. Foreign GtkPlug
+	windows have a GDK window type GDK_WINDOW_FOREIGN, but are still
+	de facto child windows.
+
 2005-03-15  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkradioaction.c (gtk_radio_action_get_group): Add an

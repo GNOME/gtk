@@ -319,7 +319,7 @@ gdk_property_change (GdkWindow    *window,
 	    if (data[i] == '\n')
 	      size++;
 	  size++;
-	  GDK_NOTE (DND, g_print ("...as text: %.40s\n", data));
+	  GDK_NOTE (DND, g_print ("... as text: %.40s\n", data));
 	}
       else if (G_WIN32_IS_NT_BASED ())
 	{
@@ -332,7 +332,7 @@ gdk_property_change (GdkWindow    *window,
 
 	  wclen++;		/* Terminating 0 */
 	  size = wclen * 2;
-	  GDK_NOTE (DND, g_print ("...as Unicode\n"));
+	  GDK_NOTE (DND, g_print ("... as Unicode\n"));
 	}
       else if (find_common_locale (data, nelements, nchars, &lcid, &buf, &size))
 	{
@@ -340,7 +340,7 @@ gdk_property_change (GdkWindow    *window,
 	   * some installed locale, use CF_TEXT and CF_LOCALE.
 	   */
 	  method = SINGLE_LOCALE;
-	  GDK_NOTE (DND, g_print ("...as text in locale %#lx %d bytes\n",
+	  GDK_NOTE (DND, g_print ("... as text in locale %#lx %d bytes\n",
 				  (gulong) lcid, size));
 	}
       else
@@ -384,7 +384,7 @@ gdk_property_change (GdkWindow    *window,
 	    }
 	  rtf = g_string_append (rtf, "}");
 	  size = rtf->len + 1;
-	  GDK_NOTE (DND, g_print ("...as RTF: %.40s\n", rtf->str));
+	  GDK_NOTE (DND, g_print ("... as RTF: %.40s\n", rtf->str));
 	}
 	  
       if (!(hdata = GlobalAlloc (GMEM_MOVEABLE, size)))

@@ -1553,8 +1553,7 @@ synthesize_expose_events (GdkWindow *window)
   
 	  append_event (gdk_drawable_get_display (window), event);
 	}
-      if (!ReleaseDC (impl->handle, hdc))
-	WIN32_GDI_FAILED ("ReleaseDC");
+      GDI_CALL (ReleaseDC, (impl->handle, hdc));
     }
 }
 
@@ -1601,13 +1600,11 @@ update_colors (GdkWindow *window,
 			      impl->handle, cmapp->hpal, k) :
 		     (void) 0,
 		     g_print (" %p", impl->handle)));
-	  if (!UpdateColors (hdc))
-	    WIN32_GDI_FAILED ("UpdateColors");
+	  GDI_CALL (UpdateColors, (hdc));
 	  SelectPalette (hdc, holdpal, TRUE);
 	  RealizePalette (hdc);
 	}
-      if (!ReleaseDC (impl->handle, hdc))
-	WIN32_GDI_FAILED ("ReleaseDC");
+      GDI_CALL (ReleaseDC, (impl->handle, hdc));
     }
   GDK_NOTE (COLORMAP, (top ? g_print ("\n") : (void) 0));
 }
@@ -2148,7 +2145,6 @@ gdk_event_translate (GdkDisplay *display,
   MINMAXINFO *mmi;
   HWND hwnd;
   HCURSOR hcursor;
-  CHARSETINFO charset_info;
   BYTE key_state[256];
   HIMC himc;
 
@@ -3246,7 +3242,7 @@ gdk_event_translate (GdkDisplay *display,
       impl = GDK_WINDOW_IMPL_WIN32 (((GdkWindowObject *) window)->impl);
       mmi = (MINMAXINFO*) msg->lParam;
       GDK_NOTE (EVENTS, g_print (" (mintrack:%ldx%ld maxtrack:%ldx%ld "
-				 "maxpos:+%ld+%ld maxsize:%ldx%ld)",
+				 "maxpos:%+ld%+ld maxsize:%ldx%ld)",
 				 mmi->ptMinTrackSize.x, mmi->ptMinTrackSize.y,
 				 mmi->ptMaxTrackSize.x, mmi->ptMaxTrackSize.y,
 				 mmi->ptMaxPosition.x, mmi->ptMaxPosition.y,
@@ -3285,7 +3281,7 @@ gdk_event_translate (GdkDisplay *display,
 	{
 	  /* Don't call DefWindowProc() */
 	  GDK_NOTE (EVENTS, g_print (" (handled, mintrack:%ldx%ld maxtrack:%ldx%ld "
-				     "maxpos:+%ld+%ld maxsize:%ldx%ld)",
+				     "maxpos:%+ld%+ld maxsize:%ldx%ld)",
 				     mmi->ptMinTrackSize.x, mmi->ptMinTrackSize.y,
 				     mmi->ptMaxTrackSize.x, mmi->ptMaxTrackSize.y,
 				     mmi->ptMaxPosition.x, mmi->ptMaxPosition.y,

@@ -1021,7 +1021,7 @@ gdk_dropfiles_filter (GdkXEvent *xev,
 	      if (uri != NULL)
 		{
 		  g_string_append (result, uri);
-		  GDK_NOTE (DND, g_print ("...%s link to %s: %s\n",
+		  GDK_NOTE (DND, g_print ("... %s link to %s: %s\n",
 					  fileName, linkedFile, uri));
 		  g_free (uri);
 		}
@@ -1032,7 +1032,7 @@ gdk_dropfiles_filter (GdkXEvent *xev,
 	      if (uri != NULL)
 		{
 		  g_string_append (result, uri);
-		  GDK_NOTE (DND, g_print ("...%s: %s\n", fileName, uri));
+		  GDK_NOTE (DND, g_print ("... %s: %s\n", fileName, uri));
 		  g_free (uri);
 		}
 	    }
@@ -1419,7 +1419,7 @@ gdk_drag_find_window_for_screen (GdkDragContext  *context,
     }
 
   GDK_NOTE (DND,
-	    g_print ("gdk_drag_find_window: %p +%d+%d: %p: %p %d\n",
+	    g_print ("gdk_drag_find_window: %p %+d%+d: %p: %p %d\n",
 		     (drag_window ? GDK_WINDOW_HWND (drag_window) : NULL),
 		     x_root, y_root,
 		     a.result,

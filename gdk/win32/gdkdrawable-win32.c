@@ -397,7 +397,7 @@ draw_tiles_lowlevel (HDC  dest,
 {
   gint x, y;
 
-  GDK_NOTE (MISC, g_print ("draw_tiles_lowlevel: %p +%d+%d tile=%p:%dx%d@+%d+%d %dx%d\n",
+  GDK_NOTE (MISC, g_print ("draw_tiles_lowlevel: %p %+d%+d tile=%p:%dx%d@%+d%+d %dx%d\n",
 			   dest,
 			   dest_x, dest_y,
 			   tile, tile_width, tile_height,
@@ -855,7 +855,7 @@ gdk_win32_draw_rectangle (GdkDrawable *drawable,
   GdkRectangle bounds;
   GdkRegion *region;
 
-  GDK_NOTE (MISC, g_print ("gdk_win32_draw_rectangle: %s (%p) %s%dx%d@+%d+%d\n",
+  GDK_NOTE (MISC, g_print ("gdk_win32_draw_rectangle: %s (%p) %s%dx%d@%+d%+d\n",
 			   _gdk_win32_drawable_description (drawable),
 			   gc,
 			   (filled ? "fill " : ""),
@@ -922,20 +922,18 @@ draw_arc (GdkGCWin32 *gcwin32,
   if (filled)
     {
       old_pen = SelectObject (hdc, GetStockObject (NULL_PEN));
-      GDK_NOTE (MISC, g_print ("...Pie(hdc,%d,%d,%d,%d,%d,%d,%d,%d)\n",
-			       x, y, x+width, y+height,
-			       nXStartArc, nYStartArc,
-			       nXEndArc, nYEndArc));
+      GDK_NOTE (MISC, g_print ("... Pie(%p,%d,%d,%d,%d,%d,%d,%d,%d)\n",
+			       hdc, x, y, x+width, y+height,
+			       nXStartArc, nYStartArc, nXEndArc, nYEndArc));
       GDI_CALL (Pie, (hdc, x, y, x+width, y+height,
 		      nXStartArc, nYStartArc, nXEndArc, nYEndArc));
       GDI_CALL (SelectObject, (hdc, old_pen));
     }
   else
     {
-      GDK_NOTE (MISC, g_print ("...Arc(hdc,%d,%d,%d,%d,%d,%d,%d,%d)\n",
-			       x, y, x+width, y+height,
-			       nXStartArc, nYStartArc,
-			       nXEndArc, nYEndArc));
+      GDK_NOTE (MISC, g_print ("... Arc(%p,%d,%d,%d,%d,%d,%d,%d,%d)\n",
+			       hdc, x, y, x+width, y+height,
+			       nXStartArc, nYStartArc, nXEndArc, nYEndArc));
       GDI_CALL (Arc, (hdc, x, y, x+width, y+height,
 		      nXStartArc, nYStartArc, nXEndArc, nYEndArc));
     }
@@ -1823,8 +1821,8 @@ _gdk_win32_blit (gboolean              use_fg_bg,
   GdkDrawableImplWin32 *src_impl = NULL;
   gint src_width, src_height;
   
-  GDK_NOTE (MISC, g_print ("_gdk_win32_blit: src:%s %dx%d@+%d+%d\n"
-			   "                 dst:%s @+%d+%d use_fg_bg=%d\n",
+  GDK_NOTE (MISC, g_print ("_gdk_win32_blit: src:%s %dx%d@%+d%+d\n"
+			   "                 dst:%s @%+d%+d use_fg_bg=%d\n",
 			   _gdk_win32_drawable_description (src),
 			   width, height, xsrc, ysrc,
 			   _gdk_win32_drawable_description ((GdkDrawable *) drawable),
@@ -1873,8 +1871,8 @@ _gdk_win32_blit (gboolean              use_fg_bg,
 	    {
 	      OffsetRgn (outside_rgn, xdest, ydest);
 	      GDK_NOTE (MISC, (GetRgnBox (outside_rgn, &r),
-			       g_print ("...calling InvalidateRgn, "
-					"bbox: %ldx%ld@+%ld+%ld\n",
+			       g_print ("... InvalidateRgn "
+					"bbox: %ldx%ld@%+ld%+ld\n",
 					r.right - r.left - 1, r.bottom - r.top - 1,
 					r.left, r.top)));
 	      InvalidateRgn (draw_impl->handle, outside_rgn, TRUE);
@@ -1897,8 +1895,8 @@ _gdk_win32_blit (gboolean              use_fg_bg,
 	  width = r.right - xsrc - 1;
 	  height = r.bottom - ysrc - 1;
 	  
-	  GDK_NOTE (MISC, g_print ("... restricted to src: %dx%d@+%d+%d, "
-				   "dest: @+%d+%d\n",
+	  GDK_NOTE (MISC, g_print ("... restricted to src: %dx%d@%+d%+d, "
+				   "dest: @%+d%+d\n",
 				   width, height, xsrc, ysrc,
 				   xdest, ydest));
 	}
