@@ -1,0 +1,219 @@
+Dir structure for ports
+=======================
+
+The directory structure here is:
+
+ gdk/
+ gdk/x11
+ gdk/win32
+ ...
+ 
+The gdk/ directory directly contains all public
+header files (that are not specific to one 
+windowing system).
+
+There, in general should be no system dependency 
+
+For each set of functionality, there are the following
+files:
+
+ gdkwindow.h:        public header file
+ gdkwindow.c:        common implementation
+ x11/gdkwindow.i:    functionality specific to X11
+ win32/gdkwindow.i: functionality specific to win32
+
+The gdkwindow.c file looks like:
+
+====
+#include "gdkwindow.h"
+
+#ifdef GDK_WINDOWING_X11
+#include "x11/gdkwindow.i"
+#elif defined(GDK_WINDOW_WIN32)
+#include "win32/gdkwindow.i"
+ fo#endif
+
+[ generic implementation bits ]
+====
+
+x11/gdkwindow.i should only assume that gdkwindow.h has been
+included and included all other dependencies explicitely.
+
+The x11/ directory will contain:
+
+ .i files
+ .c files specific to X
+ .h files specific to X
+
+And a Makefile.am that takes care of distributing the
+files in the directory, and also for building any
+X-specific utilities. (Such as the gxid daemon).
+
+
+Virtualization
+==============
+
+The concept of virtualization is that calls to draw
+on a drawable are dispatched through a function table.
+This potentially allows for:
+
+ Postscript drawables
+ metafiles
+
+It also provides a nice clean framework for multi-windowing
+support - instead of reimplementing a whole bunch of function
+calls, one provides an implementaiton for the vtables.
+
+X works in this way internally - per-screen functions are
+virtualized inside a screen structure, and drawing functions 
+are virtualized inside the GC structure.
+
+For the virtualization of drawing, clearly GdkDrawable needs
+to be virtualized. Beyond that, one has to decide on
+a case-by-case basis whether a particular structure is
+drawing-mode independent (like GdkRectangle) or not.
+
+The most important GDK structures that are involved drawing are:
+
+ GdkColor
+ GdkGC
+ GdkFont
+ GdkRegion
+
+The whole font aspect of Gdk is going to get heavily
+reworked with the introduction of "Pango".
+GdkRegion almost certainly needs to be virtualized,
+if you, way, want to do postscript drawables.
+
+While doing so, the API of GdkRegion should be
+changed so that the region operations take 3 parameters
+instead of returning a newly created region.
+
+
+Drawable operations:
+  destroy
+  create_gc
+  get_values
+  set_values
+  set_dashes
+  copy
+
+GC Operations:
+  draw_point
+  draw_line
+  draw_rectangle
+  draw_arc
+  draw_polygon
+  draw_string
+  draw_text
+  draw_text_wc
+  draw_pixmap
+  draw_bitmap
+  draw_image
+  draw_points
+  draw_segments
+  draw_lines
+
+
+Adding multi-screen, display support.
+=====================================
+
+ The following functions need to have per-display variants:
+
+void gdk_pointer_ungrab (guint32	 time);
+void gdk_keyboard_ungrab (guint32	  time);
+gint gdk_pointer_is_grabbed (void);
+
+gint gdk_screen_width  (void);
+gint gdk_screen_height (void);
+
+gint gdk_screen_width_mm  (void);
+gint gdk_screen_height_mm (void);
+
+void gdk_beep (void);
+
+void gdk_key_repeat_disable (void);
+void gdk_key_repeat_restore (void);
+
+gint	      gdk_visual_get_best_depth	     (void);
+GdkVisualType gdk_visual_get_best_type	     (void);
+GdkVisual*    gdk_visual_get_system	     (void);
+GdkVisual*    gdk_visual_get_best	     (void);
+GdkVisual*    gdk_visual_get_best_with_depth (gint	     depth);
+GdkVisual*    gdk_visual_get_best_with_type  (GdkVisualType  visual_type);
+GdkVisual*    gdk_visual_get_best_with_both  (gint	     depth,
+					      GdkVisualType  visual_type);
+
+void gdk_query_depths	    (gint	    **depths,
+			     gint	     *count);
+void gdk_query_visual_types (GdkVisualType  **visual_types,
+			     gint	     *count);
+
+GList* gdk_list_visuals (void);
+
+void gdk_add_client_message_filter (GdkAtom       message_type,
+				    GdkFilterFunc func,
+				    gpointer      data);
+
+guint32         gdk_drag_get_protocol (guint32          xid,
+				       GdkDragProtocol *protocol);
+
+GdkCursor* gdk_cursor_new		 (GdkCursorType	  cursor_type);
+GdkCursor* gdk_cursor_new_from_pixmap	 (GdkPixmap	  *source,
+					  GdkPixmap	  *mask,
+					  GdkColor	  *fg,
+					  GdkColor	  *bg,
+					  gint		   x,
+					  gint		   y);
+GdkColormap* gdk_colormap_get_system	   (void);
+gint	     gdk_colormap_get_system_size  (void);
+
+GdkFont* gdk_font_load	    (const gchar    *font_name);
+GdkFont* gdk_fontset_load   (gchar          *fontset_name);
+
+gint	   gdk_selection_owner_set (GdkWindow	 *owner,
+				    GdkAtom	  selection,
+				    guint32	  time,
+				    gint	  send_event);
+GdkWindow* gdk_selection_owner_get (GdkAtom	  selection);
+
+void	   gdk_selection_send_notify (guint32	    requestor,
+				      GdkAtom	    selection,
+				      GdkAtom	    target,
+				      GdkAtom	    property,
+				      guint32	    time);
+gint	   gdk_text_property_to_text_list (GdkAtom encoding, gint format,
+					   guchar *text, gint length,
+					   gchar ***list);
+void	   gdk_free_text_list		  (gchar **list);
+gint	   gdk_string_to_compound_text	  (gchar *str,
+					   GdkAtom *encoding, gint *format,
+					   guchar **ctext, gint *length);
+void	   gdk_free_compound_text	  (guchar *ctext);
+GdkAtom gdk_atom_intern	    (const gchar *atom_name,
+			     gint	  only_if_exists);
+gchar*	gdk_atom_name	    (GdkAtom atom);
+GList *gdk_input_list_devices		    (void);
+void gdk_input_set_source		    (guint32 deviceid,
+					     GdkInputSource source);
+gint gdk_input_set_mode			    (guint32 deviceid,
+					     GdkInputMode mode);
+void gdk_input_set_axes			    (guint32 deviceid,
+					     GdkAxisUse *axes);
+void gdk_input_set_key			    (guint32 deviceid,
+					     guint   index,
+					     guint   keyval,
+					     GdkModifierType modifiers);
+gint         gdk_im_ready	   (void);
+void         gdk_im_end		   (void);
+GdkIC*       gdk_ic_new		   (GdkICAttr 		*attr,
+				    GdkICAttributesType mask);
+GdkRegion*     gdk_region_new	    (void);
+void     gdk_event_send_clientmessage_toall (GdkEvent    *event);
+gboolean gdk_event_send_client_message (GdkEvent    *event,
+					guint32      xid);
+
+ And maybe:
+
+void      gdk_error_trap_push           (void);
+gint      gdk_error_trap_pop            (void);
