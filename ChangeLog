@@ -1,3 +1,12 @@
+2004-05-15  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/win32/gdkdnd-win32.c: Put back the ref_count field in the
+	GdkDragContextPrivateWin32 struct (but inside ifdef OLE2_DND this
+	time). It is used by the OLE2_DND code, which is unfinished and
+	presumably horribly broken, but still, let's not make it not
+	compile on purpose. Silence some gcc warnings in the OLE2_DND
+	code.
+
 2004-05-14  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtktreeview.c (gtk_tree_view_tree_window_to_tree_coords): 
