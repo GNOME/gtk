@@ -76,7 +76,7 @@ tests_button_clicked_cb (GtkWidget *button,
 
   if (tests == NULL)
     {
-      GtkWidget *box, *button;
+      GtkWidget *box, *button1;
 
       tests = gtk_window_new (GTK_WINDOW_TOPLEVEL);
       gtk_window_set_title (GTK_WINDOW (tests),
@@ -89,11 +89,11 @@ tests_button_clicked_cb (GtkWidget *button,
       gtk_container_add (GTK_CONTAINER (tests), box);
       gtk_widget_show (box);
 
-      button = gtk_button_new_with_label ("Print Selected Path");
-      g_signal_connect (button, "clicked",
+      button1 = gtk_button_new_with_label ("Print Selected Path");
+      g_signal_connect (button1, "clicked",
 			G_CALLBACK (print_selected_path_clicked_cb), user_data);
-      gtk_box_pack_start (GTK_BOX (box), button, FALSE, FALSE, 0);
-      gtk_widget_show (button);
+      gtk_box_pack_start (GTK_BOX (box), button1, FALSE, FALSE, 0);
+      gtk_widget_show (button1);
 
       g_signal_connect (tests, "delete-event", G_CALLBACK (delete_event_cb), NULL);
       g_object_set_data (user_data, "tests-dialog", tests);

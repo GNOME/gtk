@@ -1,3 +1,8 @@
+2004-12-12  Matthias Clasen  <mclasen@redhat.com>
+
+	* tests/testfilechooserbutton.c (tests_button_clicked_cb): Rename
+	a local variable to avoid a conflict.  (#161109, Robert Ögren)
+
 2004-12-12  Tor Lillqvist  <tml@iki.fi>
 
 	* gtk/gtkaccelmap.[ch]
