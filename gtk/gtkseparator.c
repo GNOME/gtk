@@ -38,19 +38,22 @@ gtk_separator_get_type (void)
 
   if (!separator_type)
     {
-      static const GtkTypeInfo separator_info =
+      static const GTypeInfo separator_info =
       {
-	"GtkSeparator",
-	sizeof (GtkSeparator),
 	sizeof (GtkSeparatorClass),
-	(GtkClassInitFunc) gtk_separator_class_init,
-	(GtkObjectInitFunc) gtk_separator_init,
-	/* reserved_1 */ NULL,
-        /* reserved_2 */ NULL,
-        (GtkClassInitFunc) NULL,
+	NULL,            /* base_init */
+	NULL,            /* base_finalize */
+	(GClassInitFunc) gtk_separator_class_init,
+	NULL,            /* class_finalize */
+	NULL,            /* class_data */
+	sizeof (GtkSeparator),
+	0,               /* n_preallocs */
+	(GInstanceInitFunc) gtk_separator_init,
+	NULL,            /* value_table */
       };
 
-      separator_type = gtk_type_unique (GTK_TYPE_WIDGET, &separator_info);
+      separator_type = g_type_register_static (GTK_TYPE_WIDGET, "GtkSeparator",
+					       &separator_info, G_TYPE_FLAG_ABSTRACT);
     }
 
   return separator_type;

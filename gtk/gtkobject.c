@@ -90,9 +90,11 @@ gtk_object_get_type (void)
 	sizeof (GtkObject),
 	16,			/* n_preallocs */
 	(GInstanceInitFunc) gtk_object_init,
+	NULL,            /* value_table */
       };
       
-      object_type = g_type_register_static (G_TYPE_OBJECT, "GtkObject", &object_info, 0);
+      object_type = g_type_register_static (G_TYPE_OBJECT, "GtkObject", 
+					    &object_info, G_TYPE_FLAG_ABSTRACT);
     }
 
   return object_type;

@@ -83,19 +83,22 @@ gtk_box_get_type (void)
 
   if (!box_type)
     {
-      static const GtkTypeInfo box_info =
+      static const GTypeInfo box_info =
       {
-	"GtkBox",
-	sizeof (GtkBox),
 	sizeof (GtkBoxClass),
-	(GtkClassInitFunc) gtk_box_class_init,
-	(GtkObjectInitFunc) gtk_box_init,
-        /* reserved_1 */ NULL,
-	/* reserved_2 */ NULL,
-	(GtkClassInitFunc) NULL,
+	NULL,            /* base_init */
+	NULL,            /* base_finalize */
+	(GClassInitFunc) gtk_box_class_init,
+	NULL,            /* class_finalize */
+	NULL,            /* class_data */
+	sizeof (GtkBox),
+	0,               /* n_preallocs */
+	(GInstanceInitFunc) gtk_box_init,
+	NULL,            /* value_table */
       };
 
-      box_type = gtk_type_unique (GTK_TYPE_CONTAINER, &box_info);
+      box_type = g_type_register_static (GTK_TYPE_CONTAINER, "GtkBox", 
+					 &box_info, G_TYPE_FLAG_ABSTRACT);
     }
 
   return box_type;

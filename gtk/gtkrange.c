@@ -182,19 +182,22 @@ gtk_range_get_type (void)
 
   if (!range_type)
     {
-      static const GtkTypeInfo range_info =
+      static const GTypeInfo range_info =
       {
-	"GtkRange",
-	sizeof (GtkRange),
 	sizeof (GtkRangeClass),
-	(GtkClassInitFunc) gtk_range_class_init,
-	(GtkObjectInitFunc) gtk_range_init,
-	/* reserved_1 */ NULL,
-        /* reserved_2 */ NULL,
-        (GtkClassInitFunc) NULL,
+	NULL,            /* base_init */
+	NULL,            /* base_finalize */
+	(GClassInitFunc) gtk_range_class_init,
+	NULL,            /* class_finalize */
+	NULL,            /* class_data */
+	sizeof (GtkRange),
+	0,               /* n_preallocs */
+	(GInstanceInitFunc) gtk_range_init,
+	NULL,            /* value_table */
       };
 
-      range_type = gtk_type_unique (GTK_TYPE_WIDGET, &range_info);
+      range_type = g_type_register_static (GTK_TYPE_WIDGET, "GtkRange",
+					   &range_info, G_TYPE_FLAG_ABSTRACT);
     }
 
   return range_type;

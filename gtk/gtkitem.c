@@ -56,19 +56,22 @@ gtk_item_get_type (void)
 
   if (!item_type)
     {
-      static const GtkTypeInfo item_info =
+      static const GTypeInfo item_info =
       {
-	"GtkItem",
-	sizeof (GtkItem),
 	sizeof (GtkItemClass),
-	(GtkClassInitFunc) gtk_item_class_init,
-	(GtkObjectInitFunc) gtk_item_init,
-	/* reserved_1 */ NULL,
-        /* reserved_2 */ NULL,
-        (GtkClassInitFunc) NULL,
+	NULL,            /* base_init */
+	NULL,            /* base_finalize */
+	(GClassInitFunc) gtk_item_class_init,
+	NULL,            /* class_finalize */
+	NULL,            /* class_data */
+	sizeof (GtkItem),
+	0,               /* n_preallocs */
+	(GInstanceInitFunc) gtk_item_init,
+	NULL,            /* value_table */
       };
 
-      item_type = gtk_type_unique (GTK_TYPE_BIN, &item_info);
+      item_type = g_type_register_static (GTK_TYPE_BIN, "GtkItem",
+					  &item_info, G_TYPE_FLAG_ABSTRACT);
     }
 
   return item_type;

@@ -75,11 +75,13 @@ gtk_cell_renderer_get_type (void)
 	NULL,		/* class_finalize */
 	NULL,		/* class_data */
         sizeof (GtkCellRenderer),
-	0,
+	0,              /* n_preallocs */
         (GInstanceInitFunc) gtk_cell_renderer_init,
+	NULL,           /* value_table */
       };
 
-      cell_type = g_type_register_static (GTK_TYPE_OBJECT, "GtkCellRenderer", &cell_info, 0);
+      cell_type = g_type_register_static (GTK_TYPE_OBJECT, "GtkCellRenderer", 
+					  &cell_info, G_TYPE_FLAG_ABSTRACT);
     }
 
   return cell_type;

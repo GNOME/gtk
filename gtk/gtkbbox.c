@@ -71,19 +71,22 @@ gtk_button_box_get_type (void)
 
   if (!button_box_type)
     {
-      static const GtkTypeInfo button_box_info =
+      static const GTypeInfo button_box_info =
       {
-	"GtkButtonBox",
-	sizeof (GtkButtonBox),
 	sizeof (GtkButtonBoxClass),
-	(GtkClassInitFunc) gtk_button_box_class_init,
-	(GtkObjectInitFunc) gtk_button_box_init,
-	/* reserved_1 */ NULL,
-        /* reserved_2 */ NULL,
-        (GtkClassInitFunc) NULL,
+	NULL,            /* base_init */
+	NULL,            /* base_finalize */
+	(GClassInitFunc) gtk_button_box_class_init,
+	NULL,            /* class_finalize */
+	NULL,            /* class_data */
+	sizeof (GtkButtonBox),
+	0,               /* n_preallocs */
+	(GInstanceInitFunc) gtk_button_box_init,
+	NULL,            /* value_table */
       };
 
-      button_box_type = gtk_type_unique (gtk_box_get_type (), &button_box_info);
+      button_box_type = g_type_register_static (GTK_TYPE_BOX, "GtkButtonBox",
+						&button_box_info, G_TYPE_FLAG_ABSTRACT);
     }
 
   return button_box_type;

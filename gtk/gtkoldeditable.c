@@ -133,16 +133,18 @@ gtk_old_editable_get_type (void)
 
   if (!old_editable_type)
     {
-      static const GtkTypeInfo old_editable_info =
+      static const GTypeInfo old_editable_info =
       {
-	"GtkOldEditable",
-	sizeof (GtkOldEditable),
 	sizeof (GtkOldEditableClass),
-	(GtkClassInitFunc) gtk_old_editable_class_init,
-	(GtkObjectInitFunc) gtk_old_editable_init,
-	/* reserved_1 */ NULL,
-	/* reserved_2 */ NULL,
-        (GtkClassInitFunc) NULL,
+	NULL,		/* base_init */
+	NULL,		/* base_finalize */
+        (GClassInitFunc) gtk_old_editable_class_init,
+	NULL,		/* class_finalize */
+	NULL,		/* class_data */
+	sizeof (GtkOldEditable),
+	0,              /* n_preallocs */
+        (GInstanceInitFunc) gtk_old_editable_init,
+	NULL            /* value_table */
       };
 
       static const GInterfaceInfo editable_info =
@@ -152,7 +154,8 @@ gtk_old_editable_get_type (void)
 	NULL			                                 /* interface_data */
       };
 
-      old_editable_type = gtk_type_unique (GTK_TYPE_WIDGET, &old_editable_info);
+      old_editable_type = g_type_register_static (GTK_TYPE_WIDGET, "GtkOldEditable",
+						  &old_editable_info, G_TYPE_FLAG_ABSTRACT);
       g_type_add_interface_static (old_editable_type,
 				   GTK_TYPE_EDITABLE,
 				   &editable_info);

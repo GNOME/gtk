@@ -1,3 +1,27 @@
+2002-09-22  Matthias Clasen  <maclas@gmx.de>
+
+	* gdk/gdkdraw.c (gdk_drawable_get_type): 
+	* gdk/gdkgc.c (gdk_gc_get_type): 
+	* gtk/gtkmenushell.c (gtk_menu_shell_get_type): 
+	* gtk/gtkimcontext.c (gtk_im_context_get_type): 
+	* gtk/gtkprogress.c (gtk_progress_get_type): 
+	* gtk/gtkoldeditable.c (gtk_old_editable_get_type): 
+	* gtk/gtkcellrenderer.c (gtk_cell_renderer_get_type): 
+	* gtk/gtkwidget.c (gtk_widget_get_type): 
+	* gtk/gtkseparator.c (gtk_separator_get_type): 
+	* gtk/gtkscrollbar.c (gtk_scrollbar_get_type): 
+	* gtk/gtkscale.c (gtk_scale_get_type): 
+	* gtk/gtkrange.c (gtk_range_get_type): 
+	* gtk/gtkpaned.c (gtk_paned_get_type): 
+	* gtk/gtkmisc.c (gtk_misc_get_type): 
+	* gtk/gtkitem.c (gtk_item_get_type): 
+	* gtk/gtkcontainer.c (gtk_container_get_type): 
+	* gtk/gtkbbox.c (gtk_button_box_get_type): 
+	* gtk/gtkbox.c (gtk_box_get_type): 
+	* gtk/gtkbin.c (gtk_bin_get_type): 
+	* gtk/gtkobject.c (gtk_object_get_type): Mark abstract types as
+	G_TYPE_FLAG_ABSTRACT.  (#72383)
+
 2002-09-21  Tor Lillqvist  <tml@iki.fi>
 
 	* gdk/win32/gdkselection-win32.c (sanitize_utf8): Copy from X11

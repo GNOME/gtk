@@ -57,7 +57,8 @@ gdk_gc_get_type (void)
       
       object_type = g_type_register_static (G_TYPE_OBJECT,
                                             "GdkGC",
-                                            &object_info, 0);
+                                            &object_info, 
+					    G_TYPE_FLAG_ABSTRACT);
     }
   
   return object_type;

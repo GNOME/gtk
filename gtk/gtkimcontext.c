@@ -72,11 +72,11 @@ gtk_im_context_get_type (void)
         sizeof (GtkIMContext),
         0,              /* n_preallocs */
         (GInstanceInitFunc) gtk_im_context_init,
+        NULL            /* value_table */
       };
       
-      im_context_type = g_type_register_static (G_TYPE_OBJECT,
-						"GtkIMContext",
-						&im_context_info, 0);
+      im_context_type = g_type_register_static (G_TYPE_OBJECT, "GtkIMContext",
+						&im_context_info, G_TYPE_FLAG_ABSTRACT);
     }
 
   return im_context_type;

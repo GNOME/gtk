@@ -250,16 +250,18 @@ gtk_widget_get_type (void)
   
   if (!widget_type)
     {
-      static const GtkTypeInfo widget_info =
+      static const GTypeInfo widget_info =
       {
-	"GtkWidget",
-	sizeof (GtkWidget),
 	sizeof (GtkWidgetClass),
-	(GtkClassInitFunc) gtk_widget_class_init,
-	(GtkObjectInitFunc) gtk_widget_init,
-        /* reserved_1 */ NULL,
-	/* reserved_2 */ NULL,
-	(GtkClassInitFunc) NULL,
+	NULL,            /* base_init */
+	NULL,            /* base_finalize */
+	(GClassInitFunc) gtk_widget_class_init,
+	NULL,            /* class_finalize */
+	NULL,            /* class_data */
+	sizeof (GtkWidget),
+	0,               /* n_preallocs */
+	(GInstanceInitFunc) gtk_widget_init,
+	NULL,            /* value_table */
       };
       
       static const GInterfaceInfo accessibility_info =
@@ -269,8 +271,8 @@ gtk_widget_get_type (void)
         NULL /* interface data */
       };
 
- 
-      widget_type = gtk_type_unique (GTK_TYPE_OBJECT, &widget_info);
+      widget_type = g_type_register_static (GTK_TYPE_OBJECT, "GtkWidget", 
+					    &widget_info, G_TYPE_FLAG_ABSTRACT);
 
       g_type_add_interface_static (widget_type, ATK_TYPE_IMPLEMENTOR,
                                    &accessibility_info) ;

@@ -76,19 +76,22 @@ gtk_scale_get_type (void)
 
   if (!scale_type)
     {
-      static const GtkTypeInfo scale_info =
+      static const GTypeInfo scale_info =
       {
-	"GtkScale",
-	sizeof (GtkScale),
 	sizeof (GtkScaleClass),
-	(GtkClassInitFunc) gtk_scale_class_init,
-	(GtkObjectInitFunc) gtk_scale_init,
-	/* reserved_1 */ NULL,
-        /* reserved_2 */ NULL,
-        (GtkClassInitFunc) NULL,
+	NULL,            /* base_init */
+	NULL,            /* base_finalize */
+	(GClassInitFunc) gtk_scale_class_init,
+	NULL,            /* class_finalize */
+	NULL,            /* class_data */
+	sizeof (GtkScale),
+	0,               /* n_preallocs */
+	(GInstanceInitFunc) gtk_scale_init,
+	NULL,            /* value_table */
       };
 
-      scale_type = gtk_type_unique (GTK_TYPE_RANGE, &scale_info);
+      scale_type = g_type_register_static (GTK_TYPE_RANGE, "GtkScale",
+					   &scale_info, G_TYPE_FLAG_ABSTRACT);
     }
 
   return scale_type;

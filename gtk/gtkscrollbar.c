@@ -42,19 +42,22 @@ gtk_scrollbar_get_type (void)
 
   if (!scrollbar_type)
     {
-      static const GtkTypeInfo scrollbar_info =
+      static const GTypeInfo scrollbar_info =
       {
-	"GtkScrollbar",
-	sizeof (GtkScrollbar),
 	sizeof (GtkScrollbarClass),
-	(GtkClassInitFunc) gtk_scrollbar_class_init,
-	(GtkObjectInitFunc) gtk_scrollbar_init,
-	/* reserved_1 */ NULL,
-        /* reserved_2 */ NULL,
-        (GtkClassInitFunc) NULL,
+	NULL,            /* base_init */
+	NULL,            /* base_finalize */
+	(GClassInitFunc) gtk_scrollbar_class_init,
+	NULL,            /* class_finalize */
+	NULL,            /* class_data */
+	sizeof (GtkScrollbar),
+	0,               /* n_preallocs */
+	(GInstanceInitFunc) gtk_scrollbar_init,
+	NULL,            /* value_table */
       };
 
-      scrollbar_type = gtk_type_unique (GTK_TYPE_RANGE, &scrollbar_info);
+      scrollbar_type = g_type_register_static (GTK_TYPE_RANGE, "GtkScrollbar",
+					       &scrollbar_info, G_TYPE_FLAG_ABSTRACT);
     }
 
   return scrollbar_type;

@@ -114,19 +114,22 @@ gtk_paned_get_type (void)
   
   if (!paned_type)
     {
-      static const GtkTypeInfo paned_info =
+      static const GTypeInfo paned_info =
       {
-	"GtkPaned",
-	sizeof (GtkPaned),
 	sizeof (GtkPanedClass),
-	(GtkClassInitFunc) gtk_paned_class_init,
-	(GtkObjectInitFunc) gtk_paned_init,
-	/* reserved_1 */ NULL,
-	/* reserved_2 */ NULL,
-	(GtkClassInitFunc) NULL,
+	NULL,            /* base_init */
+	NULL,            /* base_finalize */
+	(GClassInitFunc) gtk_paned_class_init,
+	NULL,            /* class_finalize */
+	NULL,            /* class_data */
+	sizeof (GtkPaned),
+	0,               /* n_preallocs */
+	(GInstanceInitFunc) gtk_paned_init,
+	NULL,            /* value_table */
       };
 
-      paned_type = gtk_type_unique (GTK_TYPE_CONTAINER, &paned_info);
+      paned_type = g_type_register_static (GTK_TYPE_CONTAINER, "GtkPaned",
+					   &paned_info, G_TYPE_FLAG_ABSTRACT);
     }
   
   return paned_type;

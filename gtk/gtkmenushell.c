@@ -164,19 +164,22 @@ gtk_menu_shell_get_type (void)
 
   if (!menu_shell_type)
     {
-      static const GtkTypeInfo menu_shell_info =
+      static const GTypeInfo menu_shell_info =
       {
-	"GtkMenuShell",
-	sizeof (GtkMenuShell),
 	sizeof (GtkMenuShellClass),
-	(GtkClassInitFunc) gtk_menu_shell_class_init,
-	(GtkObjectInitFunc) gtk_menu_shell_init,
-	/* reserved_1 */ NULL,
-        /* reserved_2 */ NULL,
-        (GtkClassInitFunc) NULL,
+	NULL,		/* base_init */
+	NULL,		/* base_finalize */
+        (GClassInitFunc) gtk_menu_shell_class_init,
+	NULL,		/* class_finalize */
+	NULL,		/* class_data */
+	sizeof (GtkMenuShell),
+	0,              /* n_preallocs */
+        (GInstanceInitFunc) gtk_menu_shell_init,
+	NULL            /* value_table */
       };
 
-      menu_shell_type = gtk_type_unique (gtk_container_get_type (), &menu_shell_info);
+      menu_shell_type = g_type_register_static (GTK_TYPE_CONTAINER, "GtkMenuShell",
+						&menu_shell_info, G_TYPE_FLAG_ABSTRACT);
     }
 
   return menu_shell_type;

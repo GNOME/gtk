@@ -57,19 +57,22 @@ gtk_misc_get_type (void)
 
   if (!misc_type)
     {
-      static const GtkTypeInfo misc_info =
+      static const GTypeInfo misc_info =
       {
-	"GtkMisc",
-	sizeof (GtkMisc),
 	sizeof (GtkMiscClass),
-	(GtkClassInitFunc) gtk_misc_class_init,
-	(GtkObjectInitFunc) gtk_misc_init,
-        /* reserved_1 */ NULL,
-	/* reserved_2 */ NULL,
-	(GtkClassInitFunc) NULL,
+	NULL,            /* base_init */
+	NULL,            /* base_finalize */
+	(GClassInitFunc) gtk_misc_class_init,
+	NULL,            /* class_finalize */
+	NULL,            /* class_data */
+	sizeof (GtkMisc),
+	0,               /* n_preallocs */
+	(GInstanceInitFunc) gtk_misc_init,
+	NULL,            /* value_table */
       };
 
-      misc_type = gtk_type_unique (GTK_TYPE_WIDGET, &misc_info);
+      misc_type = g_type_register_static (GTK_TYPE_WIDGET, "GtkMisc",
+					  &misc_info, G_TYPE_FLAG_ABSTRACT);
     }
 
   return misc_type;

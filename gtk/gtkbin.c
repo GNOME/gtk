@@ -50,19 +50,22 @@ gtk_bin_get_type (void)
 
   if (!bin_type)
     {
-      static const GtkTypeInfo bin_info =
+      static const GTypeInfo bin_info =
       {
-	"GtkBin",
-	sizeof (GtkBin),
 	sizeof (GtkBinClass),
-	(GtkClassInitFunc) gtk_bin_class_init,
-	(GtkObjectInitFunc) gtk_bin_init,
-	/* reserved_1 */ NULL,
-        /* reserved_2 */ NULL,
-        (GtkClassInitFunc) NULL,
+	NULL,            /* base_init */
+        NULL,            /* base_finalize */
+	(GClassInitFunc) gtk_bin_class_init,
+	NULL,            /* class_finalize */
+        NULL,            /* class_data */
+	sizeof (GtkBin),
+	0,               /* n_preallocs */
+	(GInstanceInitFunc) gtk_bin_init,
+	NULL,            /* value_table */
       };
 
-      bin_type = gtk_type_unique (GTK_TYPE_CONTAINER, &bin_info);
+      bin_type = g_type_register_static (GTK_TYPE_CONTAINER, "GtkBin", 
+					 &bin_info, G_TYPE_FLAG_ABSTRACT);
     }
 
   return bin_type;
