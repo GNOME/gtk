@@ -1,5 +1,3 @@
-Wed May 19 01:09:34 1999  Tor Lillqvist  <tml@iki.fi>
-
 1999-05-18  Tor Lillqvist  <tml@iki.fi>
 
 	* gdk/win32/makefile.{cygwin,msc}: Copy our gdkprivate.h and
