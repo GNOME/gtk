@@ -231,12 +231,9 @@ gtk_statusbar_init (GtkStatusbar *statusbar)
   statusbar->label = gtk_label_new ("");
   gtk_label_set_single_line_mode (GTK_LABEL (statusbar->label), TRUE);
   gtk_misc_set_alignment (GTK_MISC (statusbar->label), 0.0, 0.5);
-  /* don't expand the size request for the label; if we
-   * do that then toplevels weirdly resize
-   */
   g_signal_connect (statusbar->label, "notify::selectable",
 		    G_CALLBACK (label_selectable_changed), statusbar);
-  gtk_widget_set_size_request (statusbar->label, 1, -1);
+  gtk_label_set_ellipsize (GTK_LABEL (statusbar->label), PANGO_ELLIPSIZE_END);
   gtk_container_add (GTK_CONTAINER (statusbar->frame), statusbar->label);
   gtk_widget_show (statusbar->label);
 
@@ -416,6 +413,7 @@ gtk_statusbar_set_has_resize_grip (GtkStatusbar *statusbar,
   if (setting != statusbar->has_resize_grip)
     {
       statusbar->has_resize_grip = setting;
+      gtk_widget_queue_resize (statusbar->label);
       gtk_widget_queue_draw (GTK_WIDGET (statusbar));
 
       if (GTK_WIDGET_REALIZED (statusbar))
@@ -429,7 +427,7 @@ gtk_statusbar_set_has_resize_grip (GtkStatusbar *statusbar,
           else if (!statusbar->has_resize_grip && statusbar->grip_window != NULL)
             gtk_statusbar_destroy_window (statusbar);
         }
-
+      
       g_object_notify (G_OBJECT (statusbar), "has_resize_grip");
     }
 }
@@ -779,6 +777,7 @@ gtk_statusbar_size_allocate  (GtkWidget     *widget,
   if (statusbar->has_resize_grip && statusbar->grip_window)
     {
       GdkRectangle rect;
+      GtkAllocation allocation;
       
       get_grip_rect (statusbar, &rect);
       
@@ -786,6 +785,13 @@ gtk_statusbar_size_allocate  (GtkWidget     *widget,
       gdk_window_move_resize (statusbar->grip_window,
 			      rect.x, rect.y,
 			      rect.width, rect.height);
+      
+      allocation = statusbar->label->allocation;
+      allocation.width -= rect.width;
+      if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL) 
+	allocation.x += rect.width;
+
+      gtk_widget_size_allocate (statusbar->label, &allocation);
     }
 }
 
