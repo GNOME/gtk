@@ -1,3 +1,7 @@
+1999-01-11  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkmain.c (gtk_propagate_event): added an assertement.
+
 Sun Jan 10 14:45:37 1999  Owen Taylor  <otaylor@gtk.org>
 
 	* gtk/gtktext.c (text_properties_equal): Fixed

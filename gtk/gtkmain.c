@@ -1201,6 +1201,7 @@ gtk_propagate_event (GtkWidget *widget,
   gint handled_event;
   
   g_return_if_fail (widget != NULL);
+  g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (event != NULL);
   
   handled_event = FALSE;
@@ -1215,7 +1216,7 @@ gtk_propagate_event (GtkWidget *widget,
        */
       GtkWidget *window;
 
-      window = gtk_widget_get_ancestor (widget, gtk_window_get_type ());
+      window = gtk_widget_get_ancestor (widget, GTK_TYPE_WINDOW);
       if (window)
         {
 	  if (GTK_WIDGET_IS_SENSITIVE (window))
