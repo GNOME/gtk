@@ -1,3 +1,9 @@
+Sun Nov 10 22:55:39 2002  Soeren Sandmann  <sandmann@daimi.au.dk>
+
+	* gtk/gtkmenu.c (gtk_menu_enter_notify): Don't return after
+	calling gtk_menu_handle_scrolling() when
+	!menu_shell->ignore_enter.
+
 Sun Nov 10 21:29:03 2002  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 	* gtk/gtkcheckbutton.c (gtk_real_check_button_draw_indicator): 
