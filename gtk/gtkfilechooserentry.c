@@ -391,15 +391,17 @@ check_completion_callback (GtkFileChooserEntry *chooser_entry)
   GtkFilePath *unique_path = NULL;
   gboolean valid;
 
+  GDK_THREADS_ENTER ();
+
   g_assert (chooser_entry->file_part);
 
   chooser_entry->check_completion_idle = NULL;
 
   if (strcmp (chooser_entry->file_part, "") == 0)
-    return FALSE;
+    goto done;
 
   if (chooser_entry->completion_store == NULL)
-    return FALSE;
+    goto done;
 
   valid = gtk_tree_model_get_iter_first (GTK_TREE_MODEL (chooser_entry->completion_store),
 					 &iter);
@@ -497,6 +499,10 @@ check_completion_callback (GtkFileChooserEntry *chooser_entry)
       g_free (common_prefix);
     }
 
+ done:
+
+  GDK_THREADS_LEAVE ();
+
   return FALSE;
 }
 
@@ -578,17 +584,19 @@ load_directory_callback (GtkFileChooserEntry *chooser_entry)
 {
   GSList *child_paths = NULL;
 
+  GDK_THREADS_ENTER ();
+
   chooser_entry->load_directory_idle = NULL;
 
   /* guard against bogus settings*/
   if (chooser_entry->current_folder_path == NULL ||
       chooser_entry->file_system == NULL)
-    return FALSE;
+    goto done;
 
   if (chooser_entry->current_folder != NULL)
     {
       g_warning ("idle activate multiple times without clearing the folder object first.");
-      return FALSE;
+      goto done;
     }
   g_assert (chooser_entry->completion_store == NULL);
 
@@ -600,7 +608,7 @@ load_directory_callback (GtkFileChooserEntry *chooser_entry)
 
   /* There is no folder by that name */
   if (!chooser_entry->current_folder)
-    return FALSE;
+    goto done;
   g_signal_connect (chooser_entry->current_folder, "files-added",
 		    G_CALLBACK (files_added_cb), chooser_entry);
   g_signal_connect (chooser_entry->current_folder, "files-removed",
@@ -625,6 +633,11 @@ load_directory_callback (GtkFileChooserEntry *chooser_entry)
 
   gtk_entry_completion_set_model (gtk_entry_get_completion (GTK_ENTRY (chooser_entry)),
 				  GTK_TREE_MODEL (chooser_entry->completion_store));
+
+ done:
+  
+  GDK_THREADS_LEAVE ();
+
   return FALSE;
 }
 

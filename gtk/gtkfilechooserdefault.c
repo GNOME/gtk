@@ -1617,6 +1617,8 @@ new_folder_button_clicked (GtkButton             *button,
 static gboolean
 edited_idle_cb (GtkFileChooserDefault *impl)
 {
+  GDK_THREADS_ENTER ();
+  
   g_source_destroy (impl->edited_idle);
   impl->edited_idle = NULL;
 
@@ -1651,6 +1653,8 @@ edited_idle_cb (GtkFileChooserDefault *impl)
       g_free (impl->edited_new_text);
       impl->edited_new_text = NULL;
     }
+
+  GDK_THREADS_LEAVE ();
 
   return FALSE;
 }
@@ -1977,7 +1981,7 @@ selection_check_foreach_cb (GtkTreeModel *model,
   gtk_tree_model_sort_convert_iter_to_child_iter (closure->impl->sort_model, &child_iter, iter);
 
   info = _gtk_file_system_model_get_info (closure->impl->browse_files_model, &child_iter);
-  is_folder = gtk_file_info_get_is_folder (info);
+  is_folder = info ? gtk_file_info_get_is_folder (info) : FALSE;
 
   closure->all_folders = closure->all_folders && is_folder;
   closure->all_files = closure->all_files && !is_folder;
@@ -2367,10 +2371,15 @@ shortcuts_drag_set_delete_cursor (GtkFileChooserDefault *impl,
 static gboolean
 shortcuts_drag_outside_idle_cb (GtkFileChooserDefault *impl)
 {
+  GDK_THREADS_ENTER ();
+  
   shortcuts_drag_set_delete_cursor (impl, TRUE);
   impl->shortcuts_drag_outside = TRUE;
 
   shortcuts_cancel_drag_outside_idle (impl);
+
+  GDK_THREADS_LEAVE ();
+
   return FALSE;
 }
 #endif
@@ -4232,6 +4241,8 @@ load_timeout_cb (gpointer data)
 {
   GtkFileChooserDefault *impl;
 
+  GDK_THREADS_ENTER ();
+
   impl = GTK_FILE_CHOOSER_DEFAULT (data);
   g_assert (impl->load_state == LOAD_LOADING);
   g_assert (impl->load_timeout_id != 0);
@@ -4241,6 +4252,8 @@ load_timeout_cb (gpointer data)
   impl->load_state = LOAD_FINISHED;
 
   load_set_model (impl);
+
+  GDK_THREADS_LEAVE ();
 
   return FALSE;
 }
@@ -5584,7 +5597,7 @@ list_select_func  (GtkTreeSelection  *selection,
 
       info = _gtk_file_system_model_get_info (impl->browse_files_model, &child_iter);
 
-      if (!gtk_file_info_get_is_folder (info))
+      if (info && !gtk_file_info_get_is_folder (info))
 	return FALSE;
     }
     

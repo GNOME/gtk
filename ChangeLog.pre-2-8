@@ -1,5 +1,16 @@
 2004-12-18  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkfilechooserentry.c (check_completion_callback) 
+	(load_directory_callback): Add missing GDK_THREADS_ENTER/LEAVE.
+
+	* gtk/gtkfilechooserdefault.c (edited_idle_cb) 
+	(shortcuts_drag_outside_idle_cb): Add missing 
+	GDK_THREADS_ENTER/LEAVE.  (#161604)
+	
+	* gtk/gtkfilechooserdefault.c (selection_check_foreach_cb): 
+	(list_select_func): Don't call gtk_file_info_get_is_folder()
+	on NULL. 
+
 	* gtk/gtkaboutdialog.c (gtk_about_dialog_get_logo_icon_name): 
 	(gtk_about_dialog_init): Add missing initializations.  (#161646,
 	Torsten Schoenfeld)
