@@ -1,0 +1,182 @@
+
+From timj@gimp.org Sat Jan 24 19:15:15 1998
+Date: Wed, 21 Jan 1998 00:37:31 +0100 (CET)
+From: Tim Janik <timj@gimp.org>
+To: Owen Taylor <owt1@cornell.edu>
+Cc: Gtk+ Devils <gtkdev@gimp.org>
+Subject: Crossing events (was: Re: sensitivity and states...)
+
+On Tue, 20 Jan 1998, Owen Taylor wrote:
+
+> 
+> > @@ -439,16 +445,27 @@ gtk_main_iteration_do (gboolean blocking
+> >            break;
+> > 
+> >          case GDK_ENTER_NOTIFY:
+> > -        case GDK_LEAVE_NOTIFY:
+> >            if (grab_widget && GTK_WIDGET_IS_SENSITIVE (grab_widget))
+> > -            gtk_widget_event (grab_widget, event);
+> > +            slist_cross_notify = g_slist_prepend (slist_cross_notify, grab_widget);
+> > +          else
+> > +            slist_cross_notify = g_slist_prepend (slist_cross_notify, NULL);
+> > +          if (slist_cross_notify->data)
+> > +            gtk_widget_event (slist_cross_notify->data, event);
+> > +          break;
+> > +
+> > +        case GDK_LEAVE_NOTIFY:
+> > +          if (slist_cross_notify->data)
+> > +            gtk_widget_event (slist_cross_notify->data, event);
+> > +          slist = slist_cross_notify;
+> > +          slist_cross_notify = slist->next;
+> > +          g_slist_free_1 (slist);
+> 
+> Hmmm, this does have the disadvantage that events can be sent
+> to a grab window after it has lost its grab, and in fact,
+not events (in the sense of *any*) but leave_notify.
+
+> after it has been destroyed! I'll have to think about this 
+
+yep, i just figured it also segfaults if we get leave_notify for
+sub windows. it was late last night, and i just tested an idea ;)
+
+> some more ... I'm not sure this is the right approach.
+> 
+> > for now the patch just disables the compression of leave/notify
+> > events and can therefore create a stack.
+> 
+> Why should that be necessary? An enter/leave pair on the same
+> window shouldn't affect a stack, if you want one.
+
+this is correct, but the old compression code just removed one event
+and would the other appear "spurious", and it didn't take subwindows
+into account which has the same effect.
+
+> > regarding the compression, owen/jay could you take a look at it?
+> > it seems to me next_event needs to be freed as well.
+> > in general i would just say it should look similar to:
+> > 
+> > if ((event->type == GDK_ENTER_NOTIFY) &&
+> >     (next_event->type == GDK_ENTER_NOTIFY) &&
+> >     (next_event->any.window == event->any.window))
+> > {
+> >   [throw away *both* events]
+> > }
+> > 
+> > or am wrong here.. ?
+> 
+> I think your right. In fact, the lines there:
+> 
+> 	    tmp_list = current_events;
+> 	    current_events = g_list_remove_link (current_events, tmp_list);
+> 	    g_list_free_1 (tmp_list);
+> 
+> Look useless and wrong since the event hasn't even been added
+> to current_events yet.
+
+agreed.
+
+now, i just rewrote the code with widget referencing and subwindows in mind
+and still got it to crash, because enterin/leaving is more complex than one
+would think at the first glance:
+
+(this is the grab example from my last mail)
+
+[window creation]
+configure notify:       window: 58720262  x,y: 826 23  w,h: 200 200
+reparent notify:        window: 58720262
+map notify:             window: 58720262
+expose:         window: 58720262  0  x,y: 0 0  w,h: 200 200
+map notify:             window: 58720279
+configure notify:       window: 58720279  x,y: 0 0  w,h: 200 200
+expose:         window: 58720279  0  x,y: 0 0  w,h: 200 200
+
+[move the pointer in]
+focus in:               window: 58720262
+client message: window: 58720262
+client message: window: 58720262
+
+[enter the main window, which is totaly obscured
+by the buttons window, therefore we only get it's enter event
+including the subwindow]
+enter notify:           window: 58720262  detail: 4 subwin: 58720279
+enter notify:           window: 58720279  detail: 3 subwin: 0
+client message: window: 58720262
+client message: window: 58720262
+
+[press button 1]
+button press[0]:                window: 58720279  x,y: 102 148  button: 1
+
+[move pointer out of the window]
+leave notify:           window: 58720279  detail: 3 subwin: 0
+leave notify:           window: 58720262  detail: 4 subwin: 58720279
+
+[release the button]
+button release[0]:      window: 58720279  x,y: 99 223  button: 1
+
+[now we get "spurious" leave events, because of the button release,
+and i had a nice stack-uderflow ;)]
+leave notify:           window: 58720279  detail: 0 subwin: 0
+leave notify:           window: 58720262  detail: 1 subwin: 58720279
+
+
+hm, with this in mind, i'm ready to drop the stack approach, and
+spend another widget flag GTK_IS_ENTERED or so, which determines
+wether to send a leave event (if the widget is insensitive) or not...
+
+
+> 
+>                                         Owen
+> 
+
+---
+ciaoTJ
+
+From timj@gimp.org Sat Jan 24 19:15:22 1998
+Date: Sat, 24 Jan 1998 18:25:10 +0100 (CET)
+From: Tim Janik <timj@gimp.org>
+To: Peter Mattis <petm@xcf.berkeley.edu>
+Cc: Gtk+ Devils <gtkdev@gimp.org>
+Subject: widget destruction while in call
+
+hi peter and gtk+ devils ;)
+
+
+i've got the following problem, when double clicking on a list item
+it's window should be destroyed, because the selection is made.
+now this doesn't work 'cause the program is aborted with a
+BadWindow error (from X).
+
+this happens because the function that is connected to the lists
+button_press_event calls gtk_widget_destroy () on the main window.
+then the widget destruction is propagated through the tree until
+the list widget should be destroyed. but since the list widget is
+still GTK_IN_CALL (from the button_press_event) it isn't destroyed
+but only flagged as GTK_NEED_DESTROY. at this point the propagation
+stops, and nothing happends to the list widgets children.
+after the return of the button_press_event handler, the clicked
+list item is now selected/unselected (depends on the previous state).
+it therefore updates its GdkWindow (XWindow) by setting the new
+backgroundcolor (selected->blue/unselected->white). since it's
+parent XWindows are destroyed already the window which the list item
+wants to draw on is also destroyed. at this point the BadWindow error
+occours cause the XWindow handle has become invalid (the application
+already received a destroy notify).
+
+now, solutions might be:
+1) check for private->destroyed on *all* gdk call as it's done
+   it a lot of places already, or
+2) propagate a widget unrealize signal through the tree before
+   destroying a widget, or
+3) propagate GTK_NEED_DESTROY down the tree (not only flag the
+   list container), this would require gtk_object_destroy() to
+   return wether the object got actually destroyed or flagged
+   only. then prohibit gdk operations on widgets flagged as
+   GTK_NEED_DESTROY.
+
+i'm not sure what the best solution might be, but i tend to favour
+1) or 3).
+
+
+---
+ciaoTJ
+

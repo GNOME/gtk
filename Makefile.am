@@ -3,7 +3,7 @@
 SRC_SUBDIRS = glib gdk gtk
 SUBDIRS = $(SRC_SUBDIRS) docs
 
-EXTRA_DIST = gtk+.prj makecopyright TODO REFCOUNTING
+EXTRA_DIST = gtk+.prj makecopyright TODO REFCOUNTING BUGS
 
 .PHONY: files populate checkin release
 

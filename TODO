@@ -15,6 +15,34 @@ BUGS
  * Vertical scrollbar: the expose event looks hosed and is causing 
    quite a bit of flickering
 
+ * Make sure a widget added to a list is a list item and a widget added
+   to a menu is a menu item, etc. GTK_BASIC was a first attempt at this,
+   but it fails with subsequent container_add()s. maybe have another
+   GTK_PARENT_BASIC (similar to GTK_PARENT_SENSITIVE) flag, to prevent
+   tree iterations upon every container addition.
+ 
+ * Make gtk_menu_item_set_submenu() and gtk_option_menu_set_menu() fit into
+   the normal tree manner (e.g. make propagation possible).
+ 
+ * GtkOptionMenu needs to reference its curent GtkMenuItem.
+ 
+ * Right after creation of an option menu, the first selected menu item is
+   placed too low (is this still true?).
+   
+ * GtkMenu needs to properly unref() accelerator tables upon destroy.
+ 
+ * Display of GtkToggleButton is messed up if GtkContainer::container_width
+   is greate than 0. GtkCheckButton and GtkRadioButton are only messed up
+   if draw_indicator is FALSE.
+
+ * Using gtk_container_add() on an option menu to add a label works, but then
+   gtk_option_menu_button_press() segfaults. This is supposed to fail while
+   adding due to a g_return_if_fail (GTK_IS_MENU_ITEM (child));
+                        
+ * Look also at ./BUGS (i added it, because it describes some bugs in
+   a more specific way -timj).
+   
+
 NEW FEATURES
 ------------
  * gdk_expose_compress: ala-Xt, this would really help for opaque moves and
@@ -55,9 +83,6 @@ PLANNED FOR GTK AFTER 1.0
 Other stuff todo, as of yet not categorized into the above:
 
 -Widget redrawing when the window resizes sometimes messes up.
-
--Make sure a widget added to a list is a list item and a widget added
- to a menu is a menu item, etc...
 
 -More dialogs? Print, font, etc?
 
