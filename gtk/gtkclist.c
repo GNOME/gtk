@@ -940,9 +940,10 @@ gtk_clist_append (GtkCList * clist,
     clist->row_list_end = (g_list_append (clist->row_list_end, clist_row))->next;
 
   /* set the text in the row's columns */
-  for (i = 0; i < clist->columns; i++)
-    if (text[i])
-      gtk_clist_cell_set_text (clist, clist_row, i, text[i]);
+  if(text)
+    for (i = 0; i < clist->columns; i++)
+      if (text[i])
+        gtk_clist_cell_set_text (clist, clist_row, i, text[i]);
 
   /* redraw the list if it's not frozen */
   if (!GTK_CLIST_FROZEN (clist))
