@@ -843,7 +843,7 @@ gtk_toolbar_prepend_widget (GtkToolbar  *toolbar,
 			      widget, NULL,
 			      tooltip_text, tooltip_private_text,
 			      NULL, NULL, NULL,
-			      toolbar->num_children);
+			      0);
 }
 
 void

@@ -1,3 +1,8 @@
+Tue Jun  6 10:53:59 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtktoolbar.c (gtk_toolbar_prepend_widget): Fix to
+	prepend not append. (Pointed out by Brett Hall.)
+
 Tue Jun  6 01:59:57 2000  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkentry.c (gtk_entry_finalize): Unref the entry's layout.
