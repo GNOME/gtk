@@ -26,6 +26,7 @@
 
 #ifdef __cplusplus
 extern "C" {
+#pragma }
 #endif /* __cplusplus */
 
 
@@ -34,7 +35,7 @@ typedef struct _GtkAcceleratorTable GtkAcceleratorTable;
 struct _GtkAcceleratorTable
 {
   GList *entries[256];
-  gint ref_count;
+  guint  ref_count;
   guint8 modifier_mask;
 };
 
@@ -60,6 +61,8 @@ void gtk_accelerator_table_remove  (GtkAcceleratorTable *table,
 gint gtk_accelerator_table_check   (GtkAcceleratorTable *table,
 				    const guchar         accelerator_key,
 				    guint8               accelerator_mods);
+void gtk_accelerator_tables_delete (GtkObject		*object);
+
 
 void gtk_accelerator_table_set_mod_mask (GtkAcceleratorTable *table,
 				         guint8               modifier_mask);

@@ -1,3 +1,24 @@
+Fri Apr 24 01:29:04 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkaccelerator.h (struct _GtkAcceleratorTable): changed ref_count
+	field to be of type guint.
+	* gtk/gtkaccelerator.c (gtk_accelerator_table_unref): added check for
+	ref_count>0;
+	(gtk_accelerator_table_install): keep a per object list of accelerator
+	tables that refer to this object.
+	(gtk_accelerator_table_remove): remove the accelerator table from the
+	per object list.
+	(gtk_accelerator_table_clean): warn if there are any object references
+ 	left in an accelerator table upon destruction.
+	(gtk_accelerator_tables_delete): new function to delete object
+	references from the accelerator tables associated with this object.
+
+	* gtk/gtkwidget.c (gtk_widget_class_init): changed emission of
+	GtkWidget::install_accelerator to GTK_RUN_LAST so the installation
+	of an accelerator can be prevented by gtk_signal_emit_stop().
+	(gtk_widget_real_destroy): call gtk_accelerator_tables_delete (),
+	so there are no stale pointers in accelerator tables left.
+
 1998-04-22  Federico Mena Quintero  <federico@nuclecu.unam.mx>
 
 	* gtk/gtkbin.c (gtk_bin_remove): Remember whether the widget was
