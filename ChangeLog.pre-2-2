@@ -1,3 +1,13 @@
+Mon Mar 29 17:45:47 1999  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkaccelgroup.c gtk/gtkgtkbindings.c:
+	Include <string.h> instead of <strings.h>.
+
+	* gtk/gtkstyle.c: Fix double include of gtkthemes.h
+	(actually, a lot more duplicate includes occur if
+	 you trace through the sequence of #include's)
+	gtk-jbb-990320-0: John Bley, jbb6@acpub.duke.edu
+	
 Mon Mar 29 17:31:52 1999  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/gdkim.c (gdk_mbstowcs): Free the value of the

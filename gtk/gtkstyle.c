@@ -28,7 +28,6 @@
 #include "gtkgc.h"
 #include "gtkrc.h"
 #include "gtkstyle.h"
-#include "gtkthemes.h"
 #include "gtkwidget.h"
 #include "gtkthemes.h"
 #include "gdk/gdkprivate.h"

@@ -28,7 +28,7 @@
  */
 
 #include <ctype.h>
-#include <strings.h>
+#include <string.h>
 #include <stdarg.h>
 #include "gtkbindings.h"
 #include "gtksignal.h"
