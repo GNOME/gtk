@@ -1,3 +1,10 @@
+2003-10-06  Dom Lachowicz <cinamod@hotmail.com>
+
+	* src/wimp_style_main.c: Catch system settings changes, disable theme and color changes as they're too experimental
+	* src/wimp_style.[ch]: Export some things, make them accept 0 args
+	* src/xp_theme_dfns.h: New file. WinXP's UXTHEME constants, for building on platforms without them
+	* src/xp_theme.c: Should be able to build on Win32 != [WinXP,2k3] now
+	
 2003-10-03  Dom Lachowicz <cinamod@hotmail.com>
 
 	* src/wimp_style.c wimp_style_main.c: Refactor how we're doing styles. Much faster, lower memory consumption

@@ -31,6 +31,12 @@
 #define WM_THEMECHANGED 0x031A /* winxp only */
 #endif
 
+/* TODO - look into whether we need to handle these:
+ *
+ * WM_STYLECHANGED
+ * WM_PALETTECHANGED
+ */
+
 static GdkFilterReturn
 global_filter_func (void     *xevent,
 		    GdkEvent *event,
@@ -40,15 +46,25 @@ global_filter_func (void     *xevent,
 
   switch (msg->message)
     {
+#if ENABLE_THEME_CHANGING
+      /* catch theme changes */
     case WM_THEMECHANGED:
-	case WM_SYSCOLORCHANGE:
-		xp_theme_exit();
-		wimp_init ();
-		gtk_rc_reparse_all_for_settings (gtk_settings_get_default(), TRUE);
-		return GDK_FILTER_REMOVE;
-	default:
-		return GDK_FILTER_CONTINUE;
-	}
+    case WM_SYSCOLORCHANGE:
+      xp_theme_exit();
+      wimp_init ();
+
+      /* force all gtkwidgets to redraw */
+      gtk_rc_reparse_all_for_settings (gtk_settings_get_default(), TRUE);
+      return GDK_FILTER_REMOVE;
+#endif
+
+    case WM_SETTINGCHANGE:
+      setup_system_settings (); /* catch cursor blink, etc... changes */
+      return GDK_FILTER_REMOVE;
+
+    default:
+      return GDK_FILTER_CONTINUE;
+    }
 }
 
 G_MODULE_EXPORT void
@@ -64,7 +80,7 @@ theme_init (GTypeModule *module)
 G_MODULE_EXPORT void
 theme_exit (void)
 {
-	gdk_window_remove_filter (NULL, global_filter_func, NULL);
+  gdk_window_remove_filter (NULL, global_filter_func, NULL);
 }
 
 G_MODULE_EXPORT GtkRcStyle *
@@ -85,4 +101,3 @@ g_module_check_init (GModule *module)
 			    GTK_MINOR_VERSION,
 			    GTK_MICRO_VERSION - GTK_INTERFACE_AGE);
 }
-

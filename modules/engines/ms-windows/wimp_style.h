@@ -49,5 +49,6 @@ struct _WimpStyleClass
 
 void wimp_style_register_type (GTypeModule *module);
 void wimp_style_init (void);
+void setup_system_settings (void);
 
 #endif /* WIMP_TYPE_STYLE */

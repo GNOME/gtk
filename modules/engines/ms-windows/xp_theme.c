@@ -29,6 +29,11 @@
 
 #include <stdio.h>
 
+/* MS defines this when it includes its schema definitions */
+#ifndef TMSCHEMA_H
+#include "xp_theme_dfns.h"
+#endif
+
 static const LPCWSTR class_descriptors[] =
 {
   L"Scrollbar",
@@ -112,7 +117,7 @@ static DrawThemeBackgroundFunc draw_theme_background_func = NULL;
 static EnableThemeDialogTextureFunc enable_theme_dialog_texture_func = NULL;
 
 void
-xp_theme_init()
+xp_theme_init(void)
 {
   if (uxtheme_dll)
     return;
@@ -128,7 +133,7 @@ xp_theme_init()
 }
 
 void
-xp_theme_exit()
+xp_theme_exit(void)
 {
   int i;
 

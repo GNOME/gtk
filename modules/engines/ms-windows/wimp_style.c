@@ -221,49 +221,49 @@ sys_font_to_pango_font (SystemFontType type, char * buf)
 static void
 setup_menu_settings (void)
 {
-	int menu_delay;
-	gboolean win95 = FALSE;
-
-	GtkSettings * settings;
-    OSVERSIONINFOEX osvi;
-
-	settings = gtk_settings_get_default ();
-	if (!settings)
-	    return;
-
-    ZeroMemory(&osvi, sizeof(OSVERSIONINFOEX));
-    osvi.dwOSVersionInfoSize = sizeof(OSVERSIONINFOEX);
-
-    if (!GetVersionEx ( (OSVERSIONINFO *) &osvi))
-      win95 = TRUE; /* assume the worst */
-
-    if (osvi.dwPlatformId == VER_PLATFORM_WIN32_WINDOWS)
-      if (osvi.dwMajorVersion == 4 && osvi.dwMinorVersion == 0)
-		win95 = TRUE;
-
-	if (!win95) {
-	    if (SystemParametersInfo (SPI_GETMENUSHOWDELAY, 0, &menu_delay, 0)) {
-		  GObjectClass * klazz = G_OBJECT_GET_CLASS(G_OBJECT(settings));
-
-		  if (klazz) {
-			if (g_object_class_find_property (klazz, "gtk-menu-bar-popup-delay")) {
-		      g_object_set (G_OBJECT (settings), "gtk-menu-bar-popup-delay",
-						    0, NULL);
-			}
-			if (g_object_class_find_property (klazz, "gtk-menu-popup-delay")) {
-		      g_object_set (G_OBJECT (settings), "gtk-menu-popup-delay",
-						    menu_delay, NULL);
-			}
-			if (g_object_class_find_property (klazz, "gtk-menu-popdown-delay")) {
-		      g_object_set (G_OBJECT (settings), "gtk-menu-popdown-delay",
-						    menu_delay, NULL);
-			}
-	  	  }
-	    }
+  int menu_delay;
+  gboolean win95 = FALSE;
+  
+  GtkSettings * settings;
+  OSVERSIONINFOEX osvi;
+  
+  settings = gtk_settings_get_default ();
+  if (!settings)
+    return;
+  
+  ZeroMemory(&osvi, sizeof(OSVERSIONINFOEX));
+  osvi.dwOSVersionInfoSize = sizeof(OSVERSIONINFOEX);
+  
+  if (!GetVersionEx ( (OSVERSIONINFO *) &osvi))
+    win95 = TRUE; /* assume the worst */
+  
+  if (osvi.dwPlatformId == VER_PLATFORM_WIN32_WINDOWS)
+    if (osvi.dwMajorVersion == 4 && osvi.dwMinorVersion == 0)
+      win95 = TRUE;
+  
+  if (!win95) {
+    if (SystemParametersInfo (SPI_GETMENUSHOWDELAY, 0, &menu_delay, 0)) {
+      GObjectClass * klazz = G_OBJECT_GET_CLASS(G_OBJECT(settings));
+      
+      if (klazz) {
+	if (g_object_class_find_property (klazz, "gtk-menu-bar-popup-delay")) {
+	  g_object_set (G_OBJECT (settings), "gtk-menu-bar-popup-delay",
+			0, NULL);
 	}
+	if (g_object_class_find_property (klazz, "gtk-menu-popup-delay")) {
+	  g_object_set (G_OBJECT (settings), "gtk-menu-popup-delay",
+			menu_delay, NULL);
+	}
+	if (g_object_class_find_property (klazz, "gtk-menu-popdown-delay")) {
+	  g_object_set (G_OBJECT (settings), "gtk-menu-popdown-delay",
+			menu_delay, NULL);
+	}
+      }
+    }
+  }
 }
 
-static void
+void
 setup_system_settings (void)
 {
   GtkSettings * settings;
