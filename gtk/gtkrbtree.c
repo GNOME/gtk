@@ -1055,6 +1055,8 @@ _gtk_rbtree_remove_node (GtkRBTree *tree,
   GtkRBNode *x, *y;
   GtkRBTree *tmp_tree;
   GtkRBNode *tmp_node;
+  gint node_height;
+  gint y_height;
   
   g_return_if_fail (tree != NULL);
   g_return_if_fail (node != NULL);
@@ -1066,7 +1068,8 @@ _gtk_rbtree_remove_node (GtkRBTree *tree,
 
   if (gtk_debug_flags & GTK_DEBUG_TREE)
     _gtk_rbtree_test (G_STRLOC, tree);
-  
+
+
   if (node->left == tree->nil || node->right == tree->nil)
     {
       y = node;
@@ -1086,15 +1089,17 @@ _gtk_rbtree_remove_node (GtkRBTree *tree,
   /*   y->count = node->count; */
 
   /* offsets and parity adjust all the way up through parent trees */
-  
+  y_height = GTK_RBNODE_GET_HEIGHT (y);
+  node_height = GTK_RBNODE_GET_HEIGHT (node) + (node->children?node->children->root->offset:0);
+
+  /* Do this twice for code clarities sake. */
   tmp_tree = tree;
   tmp_node = y;
-
   while (tmp_tree && tmp_node && tmp_node != tmp_tree->nil)
     {
-      /*       tmp_node->offset -= y->offset; */
-      tmp_node->parity -= (guint) 1; /* parity of y is always 1 */
-      
+      tmp_node->offset -= (y_height + (y->children?y->children->root->offset:0));
+      tmp_node->parity -= (1 + (y->children?y->children->root->parity:0));
+
       tmp_node = tmp_node->parent;
       if (tmp_node == tmp_tree->nil)
 	{
@@ -1102,7 +1107,7 @@ _gtk_rbtree_remove_node (GtkRBTree *tree,
 	  tmp_tree = tmp_tree->parent_tree;
 	}
     }
-  
+
   /* x is y's only child */
   if (y->left != tree->nil)
     x = y->left;
@@ -1121,12 +1126,35 @@ _gtk_rbtree_remove_node (GtkRBTree *tree,
 
   if (y != node)
     {
+      gint diff;
+
       /* Copy the node over */
       if (GTK_RBNODE_GET_COLOR (node) == GTK_RBNODE_BLACK)
 	node->flags = ((y->flags & (GTK_RBNODE_NON_COLORS)) | GTK_RBNODE_BLACK);
       else
 	node->flags = ((y->flags & (GTK_RBNODE_NON_COLORS)) | GTK_RBNODE_RED);
       node->children = y->children;
+
+      /* We want to see how different our height is from the previous node.
+       * To do this, we compare our current height with our supposed height.
+       */
+      diff = y_height - GTK_RBNODE_GET_HEIGHT (node);
+      if (diff != 0)
+	{
+	  tmp_tree = tree;
+	  tmp_node = node;
+
+	  while (tmp_tree && tmp_node && tmp_node != tmp_tree->nil)
+	    {
+	      tmp_node->offset += diff;
+	      tmp_node = tmp_node->parent;
+	      if (tmp_node == tmp_tree->nil)
+		{
+		  tmp_node = tmp_tree->parent_node;
+		  tmp_tree = tmp_tree->parent_tree;
+		}
+	    }
+	}
     }
 
   if (GTK_RBNODE_GET_COLOR (y) == GTK_RBNODE_BLACK)

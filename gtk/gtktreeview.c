@@ -3012,7 +3012,7 @@ gtk_tree_view_focus_out (GtkWidget     *widget,
 }
 
 /* Incremental Reflow */
-#if 0
+
 static void
 validate_visible_area (GtkTreeView *tree_view)
 {
@@ -3045,7 +3045,7 @@ install_presize_handler (GtkTreeView *tree_view)
 {
 
 }
-#endif
+
 /* Drag-and-drop */
 
 static void

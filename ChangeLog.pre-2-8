@@ -1,3 +1,9 @@
+Fri Nov  2 16:45:17 2001  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtkrbtree.c (_gtk_rbtree_remove_node): Clean up height code
+	a bit.  I don't think it's completely correct yet, but it's
+	getting there.
+
 Fri Nov  2 16:14:15 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkviewport.c (gtk_viewport_size_request): Remove
