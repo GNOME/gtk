@@ -563,7 +563,7 @@ gtk_rc_get_default_files (void)
  
    if (only_digit)
      {
-       strcpy (retval, "iso");
+       memcpy (retval, "iso", 4);
        wp = retval + 3;
      }
    else

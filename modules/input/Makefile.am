@@ -33,8 +33,15 @@ LDADDS = @STRIP_BEGIN@ 					\
 @STRIP_END@
 
 moduledir = $(libdir)/gtk-2.0/$(GTK_VERSION)/immodules
-module_LTLIBRARIES = im-cyrillic-translit.la im-xim.la im-viqr.la im-thai-broken.la \
-                     im-inuktitut.la
+
+im_xim_la_LDFLAGS = -rpath $(moduledir) -avoid-version -module
+im_xim_la_SOURCES = 		\
+	gtkimcontextxim.c 	\
+	gtkimcontextxim.h	\
+	imxim.c
+if USE_X11
+IM_XIM_MODULE=im-xim.la 
+endif
 
 im_cyrillic_translit_la_LDFLAGS = -rpath $(moduledir) -avoid-version -module
 im_cyrillic_translit_la_SOURCES = imcyrillic-translit.c
@@ -48,10 +55,5 @@ im_viqr_la_SOURCES = imviqr.c
 im_inuktitut_la_LDFLAGS = -rpath $(moduledir) -avoid-version -module
 im_inuktitut_la_SOURCES = iminuktitut.c
 
-im_xim_la_LDFLAGS = -rpath $(moduledir) -avoid-version -module
-im_xim_la_SOURCES = 		\
-	gtkimcontextxim.c 	\
-	gtkimcontextxim.h	\
-	imxim.c
-
-
+module_LTLIBRARIES = im-cyrillic-translit.la $(IM_XIM_MODULE) im-viqr.la im-thai-broken.la \
+                     im-inuktitut.la

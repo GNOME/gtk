@@ -1,6 +1,8 @@
 2000-11-28  Elliot Lee  <sopwith@redhat.com>
 
 	* gdk/gdkregion-generic.c: Zap warning.
+	* modules/input/Makefile.am: Only build im-xim if USE_X11 is enabled
+	* gtk/gtkrc.c: s/strcpy/memcpy/ to save a few nanoseconds.
 
 2000-11-28  Alexander Larsson  <alla@lysator.liu.se>
 
