@@ -1,7 +1,7 @@
 Tue Jul 21 12:42:01 1998  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/gdk.h gdk/gdkfont.c: Added gdk_text/string_extents() - 
-	  too calculate all the metrics at once of a string, including
+	  to calculate all the metrics at once of a string, including
 	  things which weren't calculated before.
 
 	* gtk/Makefile.am gtk/gtk.h gtk/gtktearoffmenu.[ch]: New
@@ -16,10 +16,11 @@ Tue Jul 21 12:42:01 1998  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkitemfactory.c: 
 	  - Create a AccelGroup for each MenuShell we create.
-	  - If an '&' appears before a  character 'c' in the path,
+	  - If an '_' appears before a  character 'c' in the path,
 	    then make 'c' an accelerator in the menu's accel group,
 	    and if the menuitem is menubar <alt>C an accelerator 
-	    in the itemfactory's accel group.
+	    in the itemfactory's accel group. Double '__' inserts
+	    a literal '_'
 
 	* gtk/gtklabel.[ch]: Add support for a pattern arg - 
           which is a string. If an '_' appears in this string,
@@ -118,7 +119,6 @@ Thu Aug  6 22:37:21 1998  Stefan Jeske  <stefan@gtk.org>
 	* gtk/gtkclist.c: Renamed my_merge and my_mergesort to
  	gtk_clist_merge and gtk_clist_mergesort. :)
 
->>>>>>> 1.579
 1998-08-06  Martin Baulig  <martin@home-of-linux.org>
 
 	* gtk/gtkclist.c: Renamed `merge' -> `my_merge' and
