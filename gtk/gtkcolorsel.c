@@ -17,6 +17,7 @@
  */
 #include <math.h>
 #include "gtkcolorsel.h"
+#include "gtkhbbox.h"
 
 /*
  * If you change the way the color values are stored,
@@ -1447,7 +1448,9 @@ gtk_color_selection_dialog_init (GtkColorSelectionDialog *colorseldiag)
   gtk_container_add (GTK_CONTAINER (frame), colorseldiag->colorsel);
   gtk_widget_show (colorseldiag->colorsel);
 
-  action_area = gtk_hbox_new (TRUE, 10);
+  action_area = gtk_hbutton_box_new ();
+  gtk_button_box_set_layout(GTK_BUTTON_BOX(action_area), GTK_BUTTONBOX_END);
+  gtk_button_box_set_spacing(GTK_BUTTON_BOX(action_area), 5);
   gtk_box_pack_end (GTK_BOX (colorseldiag->main_vbox), action_area, FALSE, FALSE, 0);
   gtk_widget_show (action_area);
 

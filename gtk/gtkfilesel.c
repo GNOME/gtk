@@ -32,6 +32,7 @@
 #include "gtkentry.h"
 #include "gtkfilesel.h"
 #include "gtkhbox.h"
+#include "gtkhbbox.h"
 #include "gtklabel.h"
 #include "gtklist.h"
 #include "gtklistitem.h"
@@ -370,7 +371,9 @@ gtk_file_selection_init (GtkFileSelection *filesel)
   gtk_widget_show (filesel->main_vbox);
 
   /* The horizontal box containing create, rename etc. buttons */
-  filesel->button_area = gtk_hbox_new (TRUE, 0);
+  filesel->button_area = gtk_hbutton_box_new ();
+  gtk_button_box_set_layout(GTK_BUTTON_BOX(filesel->button_area), GTK_BUTTONBOX_START);
+  gtk_button_box_set_spacing(GTK_BUTTON_BOX(filesel->button_area), 0);
   gtk_box_pack_start (GTK_BOX (filesel->main_vbox), filesel->button_area, 
 		      FALSE, FALSE, 0);
   gtk_widget_show (filesel->button_area);
@@ -424,7 +427,9 @@ gtk_file_selection_init (GtkFileSelection *filesel)
   gtk_widget_show (filesel->action_area);
   
   /*  The OK/Cancel button area */
-  confirm_area = gtk_hbox_new (TRUE, 10);
+  confirm_area = gtk_hbutton_box_new ();
+  gtk_button_box_set_layout(GTK_BUTTON_BOX(confirm_area), GTK_BUTTONBOX_END);
+  gtk_button_box_set_spacing(GTK_BUTTON_BOX(confirm_area), 5);
   gtk_box_pack_end (GTK_BOX (filesel->main_vbox), confirm_area, FALSE, FALSE, 0);
   gtk_widget_show (confirm_area);
 
@@ -529,6 +534,8 @@ gtk_file_selection_show_fileop_buttons (GtkFileSelection *filesel)
 			  filesel->fileop_ren_file, TRUE, TRUE, 0);
       gtk_widget_show (filesel->fileop_ren_file);
     }
+
+  gtk_widget_queue_resize(filesel);
 }
 
 void       

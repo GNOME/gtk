@@ -1,3 +1,8 @@
+Sun Mar 22 11:37:51 CST 1998 Shawn T. Amundson <amundson@gtk.org>
+
+	* gtk/gtkcolorsel.c: 
+	* gtk/gtkfilesel.c: use button_box for buttons
+
 Sat Mar 21 19:07:01 1998  Owen Taylor  <owt1@cornell.edu>
 
 	* gtk/testgtk.c (dnd_drop): Don't respond to drops when
