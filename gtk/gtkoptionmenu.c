@@ -55,6 +55,14 @@ static GtkOptionMenuProps default_props = {
 static void gtk_option_menu_class_init      (GtkOptionMenuClass *klass);
 static void gtk_option_menu_init            (GtkOptionMenu      *option_menu);
 static void gtk_option_menu_destroy         (GtkObject          *object);
+static void gtk_option_menu_set_property    (GObject            *object,
+					     guint               prop_id,
+					     const GValue       *value,
+					     GParamSpec         *pspec);
+static void gtk_option_menu_get_property    (GObject            *object,
+					     guint               prop_id,
+					     GValue             *value,
+					     GParamSpec         *pspec);
 static void gtk_option_menu_size_request    (GtkWidget          *widget,
 					     GtkRequisition     *requisition);
 static void gtk_option_menu_size_allocate   (GtkWidget          *widget,
@@ -91,6 +99,13 @@ enum
   LAST_SIGNAL
 };
 
+enum
+{
+  PROP_0,
+  PROP_MENU,
+  LAST_PROP
+};
+
 static GtkButtonClass *parent_class = NULL;
 static guint           signals[LAST_SIGNAL] = { 0 };
 
@@ -123,11 +138,13 @@ gtk_option_menu_get_type (void)
 static void
 gtk_option_menu_class_init (GtkOptionMenuClass *class)
 {
+  GObjectClass *gobject_class;
   GtkObjectClass *object_class;
   GtkWidgetClass *widget_class;
   GtkButtonClass *button_class;
   GtkContainerClass *container_class;
 
+  gobject_class = (GObjectClass*) class;
   object_class = (GtkObjectClass*) class;
   widget_class = (GtkWidgetClass*) class;
   button_class = (GtkButtonClass*) class;
@@ -143,7 +160,9 @@ gtk_option_menu_class_init (GtkOptionMenuClass *class)
                   NULL, NULL,
                   gtk_marshal_VOID__VOID,
                   G_TYPE_NONE, 0);
-  
+
+  gobject_class->set_property = gtk_option_menu_set_property;
+  gobject_class->get_property = gtk_option_menu_get_property;
   object_class->destroy = gtk_option_menu_destroy;
   
   widget_class->size_request = gtk_option_menu_size_request;
@@ -158,6 +177,14 @@ gtk_option_menu_class_init (GtkOptionMenuClass *class)
 
   container_class->child_type = gtk_option_menu_child_type;
 
+  g_object_class_install_property (gobject_class,
+                                   PROP_MENU,
+                                   g_param_spec_object ("menu",
+                                                        _("Menu"),
+                                                        _("The menu of options"),
+                                                        GTK_TYPE_MENU,
+                                                        G_PARAM_READABLE | G_PARAM_WRITABLE));
+  
   gtk_widget_class_install_style_property (widget_class,
 					   g_param_spec_boxed ("indicator_size",
 							       _("Indicator Size"),
@@ -220,6 +247,7 @@ gtk_option_menu_detacher (GtkWidget     *widget,
 				 option_menu);
   
   option_menu->menu = NULL;
+  g_object_notify (G_OBJECT (option_menu), "menu");
 }
 
 void
@@ -251,6 +279,8 @@ gtk_option_menu_set_menu (GtkOptionMenu *option_menu,
 	gtk_widget_queue_resize (GTK_WIDGET (option_menu));
 
       gtk_option_menu_update_contents (option_menu);
+      
+      g_object_notify (G_OBJECT (option_menu), "menu");
     }
 }
 
@@ -309,6 +339,46 @@ gtk_option_menu_get_history (GtkOptionMenu *option_menu)
     }
   else
     return -1;
+}
+
+static void
+gtk_option_menu_set_property (GObject            *object,
+			      guint               prop_id,
+			      const GValue       *value,
+			      GParamSpec         *pspec)
+{
+  GtkOptionMenu *option_menu = GTK_OPTION_MENU (object);
+
+  switch (prop_id)
+    {
+    case PROP_MENU:
+      gtk_option_menu_set_menu (option_menu, g_value_get_object (value));
+      break;
+      
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+    }
+}
+
+static void
+gtk_option_menu_get_property (GObject            *object,
+			      guint               prop_id,
+			      GValue             *value,
+			      GParamSpec         *pspec)
+{
+  GtkOptionMenu *option_menu = GTK_OPTION_MENU (object);
+
+  switch (prop_id)
+    {
+    case PROP_MENU:
+      g_value_set_object (value, option_menu->menu);
+      break;
+      
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+    }
 }
 
 static void

@@ -498,7 +498,7 @@ text_get_func (GtkClipboard     *clipboard,
 	       guint             info,
 	       gpointer          data)
 {
-  gtk_selection_data_set_text (selection_data, data);
+  gtk_selection_data_set_text (selection_data, data, -1);
 }
 
 static void 

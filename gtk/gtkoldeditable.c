@@ -584,7 +584,7 @@ gtk_old_editable_selection_get (GtkWidget        *widget,
 
   if (str)
     {
-      gtk_selection_data_set_text (selection_data, str);
+      gtk_selection_data_set_text (selection_data, str, -1);
       g_free (str);
     }
 }

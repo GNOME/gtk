@@ -915,7 +915,7 @@ filenames_drag_get (GtkWidget        *widget,
       else
 	{
 	  g_print ("Setting text: '%s'\n", file);
-	  gtk_selection_data_set_text (selection_data, file);
+	  gtk_selection_data_set_text (selection_data, file, -1);
 	}
     }
 }

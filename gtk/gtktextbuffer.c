@@ -2560,7 +2560,7 @@ clipboard_get_selection_cb (GtkClipboard     *clipboard,
           gchar *str;
           
           str = gtk_text_iter_get_visible_text (&start, &end);
-          gtk_selection_data_set_text (selection_data, str);
+          gtk_selection_data_set_text (selection_data, str, -1);
           g_free (str);
         }
     }
@@ -2679,7 +2679,7 @@ clipboard_get_contents_cb (GtkClipboard     *clipboard,
       gtk_text_buffer_get_bounds (contents, &start, &end);
       
       str = gtk_text_iter_get_visible_text (&start, &end);
-      gtk_selection_data_set_text (selection_data, str);
+      gtk_selection_data_set_text (selection_data, str, -1);
       g_free (str);
     }
 }

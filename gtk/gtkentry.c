@@ -3172,7 +3172,7 @@ primary_get_cb (GtkClipboard     *clipboard,
   if (gtk_editable_get_selection_bounds (GTK_EDITABLE (entry), &start, &end))
     {
       gchar *str = gtk_entry_get_public_chars (entry, start, end);
-      gtk_selection_data_set_text (selection_data, str);
+      gtk_selection_data_set_text (selection_data, str, -1);
       g_free (str);
     }
 }
@@ -4025,7 +4025,7 @@ gtk_entry_drag_data_get (GtkWidget        *widget,
     {
       gchar *str = gtk_editable_get_chars (editable, sel_start, sel_end);
 
-      gtk_selection_data_set_text (selection_data, str);
+      gtk_selection_data_set_text (selection_data, str, -1);
       
       g_free (str);
     }

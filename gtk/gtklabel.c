@@ -2406,7 +2406,6 @@ get_text_callback (GtkClipboard     *clipboard,
                    gpointer          user_data_or_owner)
 {
   GtkLabel *label;
-  gchar *str;
   
   label = GTK_LABEL (user_data_or_owner);
   
@@ -2430,13 +2429,9 @@ get_text_callback (GtkClipboard     *clipboard,
       if (start > len)
         start = len;
 
-      str = g_strndup (label->text + start,
-                       end - start);
-      
-      gtk_selection_data_set_text (selection_data, 
-                                   str);
-
-      g_free (str);
+      gtk_selection_data_set_text (selection_data,
+				   label->text + start,
+				   end - start);
     }
 }
 

@@ -1,3 +1,14 @@
+Wed Oct 31 18:23:47 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkoptionmenu.c (gtk_option_menu_detacher): 
+	Add a "menu" property and notify on it. (#62798,
+	Padraig O'Briain)
+
+	* gtk/gtkselection.[ch] gtk/{gtkentry.c, gtkfilesel.c,
+	gtkoldeditable.c, gtktextbuffer.c, gtktextview.c}: 
+	Fix set_text to take a gchar, not a guchar, and to have 
+	a len argument.
+
 Wed Oct 31 15:31:13 2001  Manish Singh  <yosh@gimp.org>
 
 	* gtk/gtkstock.c: fix typo to make it compile

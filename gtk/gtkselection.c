@@ -769,6 +769,7 @@ init_atoms (void)
  * gtk_selection_data_set_text:
  * @selection_data: a #GtkSelectionData
  * @str: a UTF-8 string
+ * @len: the length of @str, or -1 if @str is nul-terminated.
  * 
  * Sets the contents of the selection from a UTF-8 encoded string.
  * The string is converted to the form determined by
@@ -779,50 +780,62 @@ init_atoms (void)
  **/
 gboolean
 gtk_selection_data_set_text (GtkSelectionData     *selection_data,
-			     const guchar         *str)
+			     const gchar          *str,
+			     gint                  len)
 {
+  gboolean result = FALSE;
+  
+  if (len < 0)
+    len = strlen (str);
+  
   init_atoms ();
 
   if (selection_data->target == utf8_atom)
     {
       gtk_selection_data_set (selection_data,
 			      utf8_atom,
-			      8, (guchar *)str, strlen (str));
-      return TRUE;
+			      8, (guchar *)str, len);
+      result = TRUE;
     }
   else if (selection_data->target == GDK_TARGET_STRING)
     {
-      gchar *latin1 = gdk_utf8_to_string_target (str);
+      gchar *tmp = g_strndup (str, len);
+      gchar *latin1 = gdk_utf8_to_string_target (tmp);
+      g_free (tmp);
 
       if (latin1)
 	{
 	  gtk_selection_data_set (selection_data,
 				  GDK_SELECTION_TYPE_STRING,
 				  8, latin1, strlen (latin1));
-	  g_free(latin1);
+	  g_free (latin1);
 	  
-	  return TRUE;
+	  result = TRUE;
 	}
 
     }
   else if (selection_data->target == ctext_atom ||
 	   selection_data->target == text_atom)
     {
+      gchar *tmp;
       guchar *text;
       GdkAtom encoding;
       gint format;
       gint new_length;
-      
-      if (gdk_utf8_to_compound_text (str, &encoding, &format, &text, &new_length))
+
+      tmp = g_strndup (str, len);
+      if (gdk_utf8_to_compound_text (tmp, &encoding, &format, &text, &new_length))
 	{
 	  gtk_selection_data_set (selection_data, encoding, format, text, new_length);
 	  gdk_free_compound_text (text);
-      
-	  return TRUE;
+
+	  result = TRUE;
 	}
+
+      g_free (tmp);
     }
   
-  return FALSE;
+  return result;
 }
 
 /**
