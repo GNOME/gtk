@@ -1,3 +1,16 @@
+2004-03-22  J. Ali Harlow  <ali@juiblex.co.uk>
+
+	* gtk/gtkfilesystemwin32.c
+	(gtk_file_system_win32_volume_get_display_name): Ignore empty
+	volume labels; assume that GetVolumeInformation would fail if
+	GetVolumeInformationW does; catches a small memory leak;
+	pass the buffer size to GetVolumeInformationW in wide
+	characters instead of bytes. Fixes bug #137543
+	(list_volumes): Cope with the theoretical possibility of
+	more than 26 logical drives. Fixes bug #137940
+	(bookmarks_serialize): Now actually removes bookmarks.
+	Fixes bug #137943
+
 2004-03-22  Guntupalli Karunakar  <karunakar@freedomink.org>
 
         * configure.in: Added "pa" (Punjabi) to ALL_LINGUAS.

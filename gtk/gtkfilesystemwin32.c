@@ -288,32 +288,30 @@ gtk_file_system_win32_finalize (GObject *object)
 static GSList *
 gtk_file_system_win32_list_volumes (GtkFileSystem *file_system)
 {
-  gchar   drives[26*4];
-  guint   len;
-  gchar  *p;
+  DWORD   drives;
+  gchar   drive[4] = "A:\\";
   GSList *list = NULL;
 
-  len = GetLogicalDriveStrings(sizeof(drives), drives);
+  drives = GetLogicalDrives();
 
-  if (len < 3)
-    g_warning("No drive strings available!");
+  if (!drives)
+    g_warning ("GetLogicalDrives failed.");
 
-  p = drives;
-  while ((len = strlen(p)) != 0)
+  while (drives && drive[0] <= 'Z')
     {
-      GtkFileSystemVolume *vol = g_new0 (GtkFileSystemVolume, 1);
-      if (p[0] == 'a' || p[0] == 'b')
-        vol->is_mounted = FALSE; /* skip floppy */
-      else
-        vol->is_mounted = TRUE; /* handle other removable drives special, too? */
+      if (drives & 1)
+      {
+	GtkFileSystemVolume *vol = g_new0 (GtkFileSystemVolume, 1);
+	if (drive[0] == 'A' || drive[0] == 'B')
+	  vol->is_mounted = FALSE; /* skip floppy */
+	else
+	  vol->is_mounted = TRUE; /* handle other removable drives special, too? */
 
-      /*FIXME: gtk_file_path_compare() is case sensitive, we are not*/
-      p[0] = g_ascii_toupper (p[0]);
-      vol->drive = g_strdup (p);
-
-      list = g_slist_append (list, vol);
-
-      p += len + 1;
+	vol->drive = g_strdup (drive);
+	list = g_slist_append (list, vol);
+      }
+      drives >>= 1;
+      drive[0]++;
     }
   return list;
 }
@@ -422,41 +420,30 @@ static gchar *
 gtk_file_system_win32_volume_get_display_name (GtkFileSystem       *file_system,
 					      GtkFileSystemVolume *volume)
 {
-  gchar display_name[80];
+  gchar *real_display_name;
   gunichar2 *wdrive = g_utf8_to_utf16 (volume->drive, -1, NULL, NULL, NULL);
   gunichar2  wname[80];
 
   g_return_val_if_fail (wdrive != NULL, NULL);
 
-  if (GetVolumeInformationW (wdrive, wname, sizeof(wname), 
-                             NULL, NULL, NULL, NULL, 0))
-    {
-      gchar *name = g_utf16_to_utf8 (wname, -1, NULL, NULL, NULL);
-      gchar *real_display_name = g_strconcat (name, " (", volume->drive, ")", NULL);
-
-      g_free (name);
-      g_free (wdrive);
-      GTK_NOTE (MISC, g_print ("Wide volume display name: %s\n", real_display_name));
-
-      return real_display_name;
-    }
-  else if (GetVolumeInformation (volume->drive, 
-                            display_name, sizeof(display_name),
+  if (GetVolumeInformationW (wdrive,
+			    wname, G_N_ELEMENTS(wname), 
                             NULL, /* serial number */
                             NULL, /* max. component length */
                             NULL, /* fs flags */
-                            NULL, 0)) /* fs type like FAT, NTFS */
+                            NULL, 0) /* fs type like FAT, NTFS */
+			    && wname[0])
     {
-      gchar *name = g_locale_to_utf8 (display_name, -1, NULL, NULL, NULL);
-      gchar *real_display_name = g_strconcat (name, " (", volume->drive, ")", NULL);
-
+      gchar *name = g_utf16_to_utf8 (wname, -1, NULL, NULL, NULL);
+      real_display_name = g_strconcat (name, " (", volume->drive, ")", NULL);
       g_free (name);
-      GTK_NOTE (MISC, g_print ("Locale volume display name: %s\n", real_display_name));
-
-      return real_display_name;
     }
   else
-    return g_strdup (volume->drive);
+    real_display_name = g_strdup (volume->drive);
+
+  g_free (wdrive);
+
+  return real_display_name;
 }
 
 static GdkPixbuf *
@@ -774,6 +761,7 @@ bookmarks_serialize (GSList  **bookmarks,
 	}
       if (ok && (f = fopen (filename, "wb")) != NULL)
         {
+	  entry = g_slist_find_custom (list, uri, (GCompareFunc) strcmp);
 	  if (add)
 	    {
 	      /* g_slist_insert() and our insert semantics are 
@@ -781,7 +769,7 @@ bookmarks_serialize (GSList  **bookmarks,
 	       * positon > length ?
 	       * 
 	       */
-	      if (!g_slist_find_custom (list, uri, (GCompareFunc) strcmp))
+	      if (!entry)
                 list = g_slist_insert (list, g_strdup (uri), position);
 	      else
 	        {
@@ -793,14 +781,14 @@ bookmarks_serialize (GSList  **bookmarks,
 		  ok = FALSE;
 		}
 	    }
-	  for (entry = list; entry != NULL; entry = entry->next)
+	  else
 	    {
-	      gchar *line = entry->data;
-
-              /* to remove the given uri */
-	      if (!add && strcmp (line, uri) != 0)
-	        {
-	          fputs (line, f);
+	      /* to remove the given uri */
+	      if (entry)
+		list = g_slist_delete_link(list, entry);
+	      for (entry = list; entry != NULL; entry = entry->next)
+		{
+		  fputs (entry->data, f);
 		  fputs ("\n", f);
 		}
 	    }
