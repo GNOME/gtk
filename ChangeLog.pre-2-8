@@ -1,3 +1,7 @@
+Sun Aug  5 10:29:42 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtklist.c: ref/unref, not ref/ref.
+
 Sun Aug  5 09:48:08 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtklist.c (gtk_list_clear_items): Fix

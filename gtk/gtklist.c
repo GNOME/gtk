@@ -1325,7 +1325,7 @@ gtk_list_clear_items (GtkList *list,
       if (widget == list->last_focus_child)
 	list->last_focus_child = NULL;
 
-      gtk_widget_ref (widget);
+      gtk_widget_unref (widget);
     }
 
   g_list_free (start_list);
