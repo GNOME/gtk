@@ -28,7 +28,6 @@ extern "C" {
 
 #include <gtk/gtkselection.h>
 
-typedef struct _GtkClipboard GtkClipboard;
 
 typedef void (* GtkClipboardReceivedFunc)        (GtkClipboard     *clipboard,
 					          GtkSelectionData *selection_data,
@@ -47,8 +46,15 @@ typedef void (* GtkClipboardGetFunc)          (GtkClipboard     *clipboard,
 					       gpointer          user_data_or_owner);
 typedef void (* GtkClipboardClearFunc)        (GtkClipboard     *clipboard,
 					       gpointer          user_data_or_owner);
-  
-GtkClipboard *gtk_clipboard_get (GdkAtom selection);
+
+GtkClipboard *gtk_clipboard_get_for_display (GdkDisplay   *display,
+					     GdkAtom       selection);
+#ifndef GDK_MULTIHEAD_SAFE
+GtkClipboard *gtk_clipboard_get             (GdkAtom       selection);
+#endif
+
+GdkDisplay   *gtk_clipboard_get_display     (GtkClipboard *clipboard);
+
 
 gboolean gtk_clipboard_set_with_data  (GtkClipboard          *clipboard,
 				       const GtkTargetEntry  *targets,

@@ -68,6 +68,7 @@ enum {
   PROP_DEFAULT_HEIGHT,
   PROP_DESTROY_WITH_PARENT,
   PROP_ICON,
+  PROP_SCREEN,
   
   LAST_ARG
 };
@@ -241,9 +242,7 @@ static GHashTable  *mnemonic_hash_table = NULL;
 static GtkBinClass *parent_class = NULL;
 static guint        window_signals[LAST_SIGNAL] = { 0 };
 static GList       *default_icon_list = NULL;
-/* FIXME need to be per-screen */
-static GdkPixmap   *default_icon_pixmap = NULL;
-static GdkPixmap   *default_icon_mask = NULL;
+static guint        default_icon_serial = 0;
 
 static void gtk_window_set_property (GObject         *object,
 				     guint            prop_id,
@@ -496,6 +495,14 @@ gtk_window_class_init (GtkWindowClass *klass)
                                                         GDK_TYPE_PIXBUF,
                                                         G_PARAM_READWRITE));
   
+  g_object_class_install_property (gobject_class,
+				   PROP_SCREEN,
+				   g_param_spec_object ("screen",
+ 							_("Screen"),
+ 							_("The screen where this window will be displayed."),
+							GDK_TYPE_SCREEN,
+ 							G_PARAM_READWRITE));
+
   window_signals[SET_FOCUS] =
     g_signal_new ("set_focus",
                   G_TYPE_FROM_CLASS (object_class),
@@ -623,6 +630,7 @@ gtk_window_init (GtkWindow *window)
   window->gravity = GDK_GRAVITY_NORTH_WEST;
   window->decorated = TRUE;
   window->mnemonic_modifier = GDK_MOD1_MASK;
+  window->screen = gdk_get_default_screen ();
   
   colormap = _gtk_widget_peek_colormap ();
   if (colormap)
@@ -696,7 +704,9 @@ gtk_window_set_property (GObject      *object,
       gtk_window_set_icon (window,
                            g_value_get_object (value));
       break;
-
+    case PROP_SCREEN:
+      gtk_window_set_screen (window, g_value_get_object (value));
+      break;
     default:
       break;
     }
@@ -755,6 +765,9 @@ gtk_window_get_property (GObject      *object,
       break;
     case PROP_ICON:
       g_value_set_object (value, gtk_window_get_icon (window));
+      break;
+    case PROP_SCREEN:
+      g_value_set_object (value, window->screen);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -1665,6 +1678,8 @@ gtk_window_set_transient_for  (GtkWindow *window,
       gtk_signal_connect (GTK_OBJECT (parent), "unrealize",
 			  GTK_SIGNAL_FUNC (gtk_window_transient_parent_unrealized),
 			  window);
+      
+      window->screen = parent->screen;
 
       if (window->destroy_with_parent)
         connect_parent_destroyed (window);
@@ -1950,33 +1965,72 @@ ensure_icon_info (GtkWindow *window)
   return info;
 }
 
+typedef struct {
+  guint serial;
+  GdkPixmap *pixmap;
+  GdkPixmap *mask;
+} ScreenIconInfo;
+
+ScreenIconInfo *
+get_screen_icon_info (GdkScreen *screen)
+{
+  ScreenIconInfo *info = g_object_get_data (G_OBJECT (screen), 
+					    "gtk-window-default-icon-pixmap");
+  if (!info)
+    {
+      info = g_new0 (ScreenIconInfo, 1);
+      g_object_set_data (G_OBJECT (screen), "gtk-window-default-icon-pixmap", info);
+    }
+
+  if (info->serial != default_icon_serial)
+    {
+      if (info->pixmap)
+	{
+	  g_object_remove_weak_pointer (G_OBJECT (info->pixmap), (gpointer*)&info->pixmap);
+	  info->pixmap = NULL;
+	}
+	  
+      if (info->mask)
+	{
+	  g_object_remove_weak_pointer (G_OBJECT (info->mask), (gpointer*)&info->mask);
+	  info->mask = NULL;
+	}
+
+      info->serial = default_icon_serial;
+    }
+  
+  return info;
+}
+
 static void
-get_pixmap_and_mask (GtkWindowIconInfo  *parent_info,
+get_pixmap_and_mask (GdkWindow		*window,
+		     GtkWindowIconInfo  *parent_info,
                      gboolean            is_default_list,
                      GList              *icon_list,
                      GdkPixmap         **pmap_return,
                      GdkBitmap         **mask_return)
 {
+  GdkScreen *screen = gdk_drawable_get_screen (window);
+  ScreenIconInfo *default_icon_info = get_screen_icon_info (screen);
   GdkPixbuf *best_icon;
   GList *tmp_list;
   int best_size;
-
+  
   *pmap_return = NULL;
   *mask_return = NULL;
   
   if (is_default_list &&
-      default_icon_pixmap != NULL)
+      default_icon_info->pixmap != NULL)
     {
-      /* Use shared icon pixmap (eventually will be stored on the
-       * GdkScreen)
+      /* Use shared icon pixmap for all windows on this screen.
        */
-      if (default_icon_pixmap)
-        g_object_ref (G_OBJECT (default_icon_pixmap));
-      if (default_icon_mask)
-        g_object_ref (G_OBJECT (default_icon_mask));
-      
-      *pmap_return = default_icon_pixmap;
-      *mask_return = default_icon_mask;
+      if (default_icon_info->pixmap)
+        g_object_ref (G_OBJECT (default_icon_info->pixmap));
+      if (default_icon_info->mask)
+        g_object_ref (G_OBJECT (default_icon_info->mask));
+
+      *pmap_return = default_icon_info->pixmap;
+      *mask_return = default_icon_info->mask;
     }
   else if (parent_info && parent_info->icon_pixmap)
     {
@@ -2030,7 +2084,7 @@ get_pixmap_and_mask (GtkWindowIconInfo  *parent_info,
 
       if (best_icon)
         gdk_pixbuf_render_pixmap_and_mask_for_colormap (best_icon,
-							gdk_colormap_get_system (),
+							gdk_screen_get_system_colormap (screen),
 							pmap_return,
 							mask_return,
 							128);
@@ -2048,15 +2102,15 @@ get_pixmap_and_mask (GtkWindowIconInfo  *parent_info,
         }
       else if (is_default_list)
         {
-          default_icon_pixmap = *pmap_return;
-          default_icon_mask = *mask_return;
+          default_icon_info->pixmap = *pmap_return;
+          default_icon_info->mask = *mask_return;
 
-          if (default_icon_pixmap)
-            g_object_add_weak_pointer (G_OBJECT (default_icon_pixmap),
-                                       (gpointer*)&default_icon_pixmap);
-          if (default_icon_mask)
-            g_object_add_weak_pointer (G_OBJECT (default_icon_mask),
-                                       (gpointer*)&default_icon_mask);
+          if (default_icon_info->pixmap)
+	    g_object_add_weak_pointer (G_OBJECT (default_icon_info->pixmap),
+				       (gpointer*)&default_icon_info->pixmap);
+          if (default_icon_info->mask) 
+	    g_object_add_weak_pointer (G_OBJECT (default_icon_info->mask),
+				       (gpointer*)&default_icon_info->mask);
         }
     }
 }
@@ -2109,8 +2163,8 @@ gtk_window_realize_icon (GtkWindow *window)
   
   gdk_window_set_icon_list (widget->window, icon_list);
 
-  get_pixmap_and_mask (info->using_parent_icon ?
-                       ensure_icon_info (window->transient_parent) : NULL,
+  get_pixmap_and_mask (widget->window,
+		       info->using_parent_icon ? ensure_icon_info (window->transient_parent) : NULL,
                        info->using_default_icon,
                        icon_list,
                        &info->icon_pixmap,
@@ -2329,13 +2383,9 @@ gtk_window_set_default_icon_list (GList *list)
   if (list == default_icon_list)
     return;
 
-  if (default_icon_pixmap)
-    g_object_unref (G_OBJECT (default_icon_pixmap));
-  if (default_icon_mask)
-    g_object_unref (G_OBJECT (default_icon_mask));
-
-  default_icon_pixmap = NULL;
-  default_icon_mask = NULL;
+  /* Update serial so we don't used cached pixmaps/masks
+   */
+  default_icon_serial++;
   
   g_list_foreach (default_icon_list,
                   (GFunc) g_object_unref, NULL);
@@ -3250,7 +3300,9 @@ gtk_window_realize (GtkWidget *widget)
       
       attributes_mask = GDK_WA_VISUAL | GDK_WA_COLORMAP;
       
-      window->frame = gdk_window_new (NULL, &attributes, attributes_mask);
+      window->frame = gdk_window_new (gtk_widget_get_root_window (widget),
+				      &attributes, attributes_mask);
+						 
       gdk_window_set_user_data (window->frame, widget);
       
       attributes.window_type = GDK_WINDOW_CHILD;
@@ -3264,7 +3316,7 @@ gtk_window_realize (GtkWidget *widget)
   else
     {
       attributes_mask = 0;
-      parent_window = NULL;
+      parent_window = gtk_widget_get_root_window (widget);
     }
   
   attributes.width = widget->allocation.width;
@@ -3281,7 +3333,9 @@ gtk_window_realize (GtkWidget *widget)
   attributes_mask |= GDK_WA_VISUAL | GDK_WA_COLORMAP;
   attributes_mask |= (window->title ? GDK_WA_TITLE : 0);
   attributes_mask |= (window->wmclass_name ? GDK_WA_WMCLASS : 0);
+  
   widget->window = gdk_window_new (parent_window, &attributes, attributes_mask);
+    
   gdk_window_set_user_data (widget->window, window);
       
   widget->style = gtk_style_attach (widget->style, widget->window);
@@ -3759,12 +3813,12 @@ gtk_window_read_rcfiles (GtkWidget *widget,
       while (embedded_windows)
 	{
 	  guint xid = GPOINTER_TO_UINT (embedded_windows->data);
-	  gdk_event_send_client_message ((GdkEvent *) &sev, xid);
+	  gdk_event_send_client_message_for_display (gtk_widget_get_display (widget), (GdkEvent *) &sev, xid);
 	  embedded_windows = embedded_windows->next;
 	}
     }
 
-  gtk_rc_reparse_all ();
+  gtk_rc_reparse_all_for_settings (gtk_widget_get_settings (widget), FALSE);
 }
 
 static gint
@@ -4039,11 +4093,20 @@ gtk_window_compute_configure_request (GtkWindow    *window,
         case GTK_WIN_POS_CENTER_ALWAYS:
         case GTK_WIN_POS_CENTER:
           {
-            gint screen_width = gdk_screen_width ();
-            gint screen_height = gdk_screen_height ();
-            
-            x = (screen_width - w) / 2;
-            y = (screen_height - h) / 2;
+	    gint px, py, monitor_num;
+	    GdkRectangle *monitor;
+
+	    gdk_window_get_pointer (gdk_screen_get_root_window (window->screen),
+				    &px, &py, NULL);
+	    
+	    monitor_num = gdk_screen_get_monitor_at_point (window->screen, px, py);
+	    if (monitor_num == -1)
+	      monitor_num = 0;
+	    
+	    monitor = gdk_screen_get_monitor_geometry (window->screen, monitor_num);
+	    
+	    x = (monitor->width - w) / 2 + monitor->x;
+	    y = (monitor->height - h) / 2 + monitor->y;
           }
           break;
       
@@ -4063,8 +4126,8 @@ gtk_window_compute_configure_request (GtkWindow    *window,
 
         case GTK_WIN_POS_MOUSE:
           {
-            gint screen_width = gdk_screen_width ();
-            gint screen_height = gdk_screen_height ();
+            gint screen_width = gdk_screen_get_width (window->screen);
+            gint screen_height = gdk_screen_get_height (window->screen);
             int px, py;
             
             gdk_window_get_pointer (NULL, &px, &py, NULL);
@@ -4112,8 +4175,8 @@ gtk_window_constrain_position (GtkWindow    *window,
   if (window->position == GTK_WIN_POS_CENTER_ALWAYS)
     {
       gint center_x, center_y;
-      gint screen_width = gdk_screen_width ();
-      gint screen_height = gdk_screen_height ();
+      gint screen_width = gdk_screen_get_width (window->screen);
+      gint screen_height = gdk_screen_get_height (window->screen);
       
       center_x = (screen_width - new_width) / 2;
       center_y = (screen_height - new_height) / 2;
@@ -4344,7 +4407,7 @@ gtk_window_move_resize (GtkWindow *window)
     gdk_window_set_geometry_hints (widget->window,
 				   &new_geometry,
 				   new_flags);
-
+  
   /* handle resizing/moving and widget tree allocation
    */
   if (window->configure_notify_received)
@@ -4437,13 +4500,14 @@ gtk_window_move_resize (GtkWindow *window)
                                       new_request.y - window->frame_top,
 				      new_request.width + window->frame_left + window->frame_right,
 				      new_request.height + window->frame_top + window->frame_bottom);
-	      gdk_window_resize (GTK_WIDGET (window)->window,
+	      gdk_window_resize (widget->window,
                                  new_request.width, new_request.height);
 	    }
 	  else
-	    gdk_window_move_resize (widget->window,
-                                    new_request.x, new_request.y,
-                                    new_request.width, new_request.height);
+	    if (widget->window)
+	      gdk_window_move_resize (widget->window,
+				      new_request.x, new_request.y,
+				      new_request.width, new_request.height);
 	}
       else  /* only size changed */
 	{
@@ -4451,8 +4515,9 @@ gtk_window_move_resize (GtkWindow *window)
 	    gdk_window_resize (window->frame,
 			       new_request.width + window->frame_left + window->frame_right,
 			       new_request.height + window->frame_top + window->frame_bottom);
-	  gdk_window_resize (widget->window,
-                             new_request.width, new_request.height);
+	  if (widget->window)
+	    gdk_window_resize (widget->window,
+			       new_request.width, new_request.height);
 	}
       
       /* Increment the number of have-not-yet-received-notify requests */
@@ -5316,6 +5381,47 @@ gtk_window_begin_move_drag  (GtkWindow *window,
                               timestamp);
 }
 
+/** 
+ * gtk_window_set_screen:
+ * @window: a #GtkWindow.
+ * @screen: a #GtkScreen.
+ *
+ * Sets the #GdkScreen where the @window will be displayed.
+ * This function has to be called before the @window
+ * object is realized otherwise it will fail.
+ */
+void
+gtk_window_set_screen (GtkWindow *window,
+		       GdkScreen *screen)
+{
+  g_return_if_fail (GTK_IS_WINDOW (window));
+  g_return_if_fail (GDK_IS_SCREEN (screen));
+
+  if (GTK_WIDGET_REALIZED (window))
+    {
+      g_warning ("Trying to change the window's screen while widget is visible");
+      return;
+    }
+  
+  gtk_window_free_key_hash (window);
+  window->screen = screen;
+}
+/** 
+ * gtk_window_get_screen:
+ * @window: a #GtkWindow.
+ *
+ * Returns the #GdkScreen associated with @window.
+ *
+ * Return value: a #GdkScreen.
+ */
+GdkScreen*
+gtk_window_get_screen (GtkWindow *window)
+{
+   g_return_val_if_fail (GTK_IS_WINDOW (window), NULL);
+   
+   return window->screen;
+}
+
 
 static void
 gtk_window_group_class_init (GtkWindowGroupClass *klass)
@@ -5710,11 +5816,11 @@ gtk_window_parse_geometry (GtkWindow   *window,
 
   if (grav == GDK_GRAVITY_SOUTH_WEST ||
       grav == GDK_GRAVITY_SOUTH_EAST)
-    y = gdk_screen_height () - h + y;
+    y = gdk_screen_get_height (window->screen) - h + y;
 
   if (grav == GDK_GRAVITY_SOUTH_EAST ||
       grav == GDK_GRAVITY_NORTH_EAST)
-    x = gdk_screen_width () - w + x;
+    x = gdk_screen_get_width (window->screen) - w + x;
 
   /* we don't let you put a window offscreen; maybe some people would
    * prefer to be able to, but it's kind of a bogus thing to do.
@@ -5857,7 +5963,8 @@ gtk_window_get_key_hash (GtkWindow *window)
   if (key_hash)
     return key_hash;
   
-  key_hash = _gtk_key_hash_new (gdk_keymap_get_default(), (GDestroyNotify)g_free);
+  key_hash = _gtk_key_hash_new (gdk_keymap_get_for_display (gdk_screen_get_display (window->screen)),
+				(GDestroyNotify)g_free);
   _gtk_window_keys_foreach (window, add_to_key_hash, key_hash);
   g_object_set_data (G_OBJECT (window), "gtk-window-key-hash", key_hash);
 

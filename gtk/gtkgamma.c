@@ -393,6 +393,8 @@ button_clicked_callback (GtkWidget *w, gpointer data)
 	  gchar buf[64];
 	  
 	  c->gamma_dialog = gtk_dialog_new ();
+	  gtk_window_set_screen (GTK_WINDOW (c->gamma_dialog),
+				 gtk_widget_get_screen (w));
 	  gtk_window_set_title (GTK_WINDOW (c->gamma_dialog), _("Gamma"));
 	  g_object_add_weak_pointer (G_OBJECT (c->gamma_dialog),
 				     (gpointer *)&c->gamma_dialog);

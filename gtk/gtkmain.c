@@ -141,13 +141,6 @@ static GMemChunk *quit_mem_chunk = NULL;
 
 static GSList *key_snoopers = NULL;
 
-static GdkVisual *gtk_visual;		   /* The visual to be used in creating new
-					    *  widgets.
-					    */
-static GdkColormap *gtk_colormap;	   /* The colormap to be used in creating new
-					    *  widgets.
-					    */
-
 guint gtk_debug_flags = 0;		   /* Global GTK debug flag */
 
 #ifdef G_ENABLE_DEBUG
@@ -737,13 +730,6 @@ gtk_init_check (int	 *argc,
     }
   }
 
-  /* Initialize the default visual and colormap to be
-   *  used in creating widgets. (We want to use the system
-   *  defaults so as to be nice to the colormap).
-   */
-  gtk_visual = gdk_visual_get_system ();
-  gtk_colormap = gdk_colormap_get_system ();
-
   gtk_type_init (0);
   _gtk_accel_map_init ();  
   _gtk_rc_init ();
@@ -776,7 +762,8 @@ gtk_init (int *argc, char ***argv)
 {
   if (!gtk_init_check (argc, argv))
     {
-      g_warning ("cannot open display: %s", gdk_get_display ());
+      char *display_name_arg = gdk_get_display_arg_name ();
+      g_warning ("cannot open display: %s", display_name_arg ? display_name_arg : " ");
       exit (1);
     }
 }
@@ -1114,6 +1101,7 @@ rewrite_event_for_grabs (GdkEvent *event)
   GdkWindow *grab_window;
   GtkWidget *event_widget, *grab_widget;
   gboolean owner_events;
+  GdkDisplay *display;
 
   switch (event->type)
     {
@@ -1125,14 +1113,16 @@ rewrite_event_for_grabs (GdkEvent *event)
     case GDK_MOTION_NOTIFY:
     case GDK_PROXIMITY_IN:
     case GDK_PROXIMITY_OUT:
-      if (!gdk_pointer_grab_info_libgtk_only (gdk_get_default_display(), &grab_window, &owner_events) ||
+      display = gdk_drawable_get_display (event->proximity.window);
+      if (!gdk_pointer_grab_info_libgtk_only (display, &grab_window, &owner_events) ||
 	  !owner_events)
 	return NULL;
       break;
 
     case GDK_KEY_PRESS:
     case GDK_KEY_RELEASE:
-      if (!gdk_keyboard_grab_info_libgtk_only (gdk_get_default_display(), &grab_window, &owner_events) ||
+      display = gdk_drawable_get_display (event->key.window);
+      if (!gdk_keyboard_grab_info_libgtk_only (display, &grab_window, &owner_events) ||
 	  !owner_events)
 	return NULL;
       break;

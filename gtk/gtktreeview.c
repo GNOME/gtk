@@ -1989,8 +1989,8 @@ gtk_tree_view_button_release_drag_column (GtkWidget      *widget,
 
   tree_view = GTK_TREE_VIEW (widget);
 
-  gdk_pointer_ungrab (GDK_CURRENT_TIME);
-  gdk_keyboard_ungrab (GDK_CURRENT_TIME);
+  gdk_display_pointer_ungrab (gtk_widget_get_display (widget), GDK_CURRENT_TIME);
+  gdk_display_keyboard_ungrab (gtk_widget_get_display (widget), GDK_CURRENT_TIME);
 
   /* Move the button back */
   g_object_ref (tree_view->priv->drag_column->button);
@@ -2052,8 +2052,8 @@ gtk_tree_view_button_release_column_resize (GtkWidget      *widget,
   GTK_TREE_VIEW_UNSET_FLAG (tree_view, GTK_TREE_VIEW_IN_COLUMN_RESIZE);
   gtk_widget_get_pointer (widget, &x, NULL);
   gtk_grab_remove (widget);
-  gdk_pointer_ungrab (event->time);
-
+  gdk_display_pointer_ungrab (gdk_drawable_get_display (event->window),
+			      event->time);
   return TRUE;
 }
 
@@ -2345,7 +2345,8 @@ gtk_tree_view_motion_draw_column_motion_arrow (GtkTreeView *tree_view)
 	  attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_VISUAL | GDK_WA_COLORMAP;
 	  attributes.width = width;
 	  attributes.height = height;
-	  tree_view->priv->drag_highlight_window = gdk_window_new (NULL, &attributes, attributes_mask);
+	  tree_view->priv->drag_highlight_window = gdk_window_new (gtk_widget_get_root_window (widget),
+								   &attributes, attributes_mask);
 	  gdk_window_set_user_data (tree_view->priv->drag_highlight_window, GTK_WIDGET (tree_view));
 
 	  mask = gdk_pixmap_new (tree_view->priv->drag_highlight_window, width, height, 1);
@@ -6639,6 +6640,7 @@ _gtk_tree_view_column_start_drag (GtkTreeView       *tree_view,
   GdkEvent send_event;
   GtkAllocation allocation;
   gint x, y, width, height;
+  GdkScreen *screen = gtk_widget_get_screen (GTK_WIDGET (tree_view));
 
   g_return_if_fail (tree_view->priv->column_drag_info == NULL);
 
@@ -6665,8 +6667,8 @@ _gtk_tree_view_column_start_drag (GtkTreeView       *tree_view,
       gdk_window_set_user_data (tree_view->priv->drag_window, GTK_WIDGET (tree_view));
     }
 
-  gdk_pointer_ungrab (GDK_CURRENT_TIME);
-  gdk_keyboard_ungrab (GDK_CURRENT_TIME);
+  gdk_display_pointer_ungrab (gdk_screen_get_display (screen), GDK_CURRENT_TIME);
+  gdk_display_keyboard_ungrab (gdk_screen_get_display (screen), GDK_CURRENT_TIME);
 
   gtk_grab_remove (column->button);
 
@@ -6680,7 +6682,7 @@ _gtk_tree_view_column_start_drag (GtkTreeView       *tree_view,
   gtk_propagate_event (column->button, &send_event);
 
   send_event.button.type = GDK_BUTTON_RELEASE;
-  send_event.button.window = GDK_ROOT_PARENT ();
+  send_event.button.window = gdk_screen_get_root_window (screen);
   send_event.button.send_event = TRUE;
   send_event.button.time = GDK_CURRENT_TIME;
   send_event.button.x = -1;
@@ -8800,6 +8802,7 @@ gtk_tree_view_real_collapse_row (GtkTreeView *tree_view,
   gboolean collapse;
   gint x, y;
   GList *list;
+  GdkScreen *screen;
 
   if (node->children == NULL)
     return FALSE;
@@ -8945,7 +8948,8 @@ gtk_tree_view_real_collapse_row (GtkTreeView *tree_view,
   /* now that we've collapsed all rows, we want to try to set the prelight
    * again. To do this, we fake a motion event and send it to ourselves. */
 
-  if (gdk_window_at_pointer (&x, &y) == tree_view->priv->bin_window)
+  screen = gdk_drawable_get_screen (tree_view->priv->bin_window);
+  if (gdk_screen_get_window_at_pointer (screen, &x, &y) == tree_view->priv->bin_window)
     {
       GdkEventMotion event;
       event.window = tree_view->priv->bin_window;
@@ -10194,6 +10198,7 @@ gtk_tree_view_search_position_func (GtkTreeView *tree_view,
   gint tree_x, tree_y;
   gint tree_width, tree_height;
   GdkWindow *tree_window = GTK_WIDGET (tree_view)->window;
+  GdkScreen *screen = gdk_drawable_get_screen (tree_window);
   GtkRequisition requisition;
 
   gtk_widget_realize (search_dialog);
@@ -10204,15 +10209,15 @@ gtk_tree_view_search_position_func (GtkTreeView *tree_view,
 		       &tree_height);
   gtk_widget_size_request (search_dialog, &requisition);
 
-  if (tree_x + tree_width - requisition.width > gdk_screen_width ())
-    x = gdk_screen_width () - requisition.width;
+  if (tree_x + tree_width - requisition.width > gdk_screen_get_width (screen))
+    x = gdk_screen_get_width (screen) - requisition.width;
   else if (tree_x + tree_width - requisition.width < 0)
     x = 0;
   else
     x = tree_x + tree_width - requisition.width;
 
-  if (tree_y + tree_height > gdk_screen_height ())
-    y = gdk_screen_height () - requisition.height;
+  if (tree_y + tree_height > gdk_screen_get_height (screen))
+    y = gdk_screen_get_height (screen) - requisition.height;
   else if (tree_y + tree_height < 0) /* isn't really possible ... */
     y = 0;
   else

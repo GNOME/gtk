@@ -62,6 +62,8 @@ enum {
 
 static void         gtk_combo_class_init         (GtkComboClass    *klass);
 static void         gtk_combo_init               (GtkCombo         *combo);
+static void         gtk_combo_realize		 (GtkWidget	   *widget);
+static void         gtk_combo_unrealize		 (GtkWidget	   *widget);
 static void         gtk_combo_destroy            (GtkObject        *combo);
 static GtkListItem *gtk_combo_find               (GtkCombo         *combo);
 static gchar *      gtk_combo_func               (GtkListItem      *li);
@@ -175,6 +177,8 @@ gtk_combo_class_init (GtkComboClass * klass)
   oclass->destroy = gtk_combo_destroy;
   
   widget_class->size_allocate = gtk_combo_size_allocate;
+  widget_class->realize = gtk_combo_realize;
+  widget_class->unrealize = gtk_combo_unrealize;
 }
 
 static void
@@ -292,7 +296,8 @@ gtk_combo_window_key_press (GtkWidget   *window,
 	  if (GTK_WIDGET_HAS_GRAB (combo->popwin))
 	    {
 	      gtk_grab_remove (combo->popwin);
-	      gdk_pointer_ungrab (event->time);
+	      gdk_display_pointer_ungrab (gtk_widget_get_display (window),
+					  event->time);
 	    }
 	}
 
@@ -423,7 +428,7 @@ gtk_combo_get_pos (GtkCombo * combo, gint * x, gint * y, gint * height, gint * w
   real_height = MIN (combo->entry->requisition.height, 
 		     combo->entry->allocation.height);
   *y += real_height;
-  avail_height = gdk_screen_height () - *y;
+  avail_height = gdk_screen_get_height (gtk_widget_get_screen (widget)) - *y;
   
   gtk_widget_size_request (combo->list, &list_requisition);
   min_height = MIN (list_requisition.height, 
@@ -520,7 +525,8 @@ gtk_combo_popdown_list (GtkCombo *combo)
   if (GTK_WIDGET_HAS_GRAB (combo->popwin))
     {
       gtk_grab_remove (combo->popwin);
-      gdk_pointer_ungrab (GDK_CURRENT_TIME);
+      gdk_display_pointer_ungrab (gtk_widget_get_display (GTK_WIDGET (combo)),
+				  GDK_CURRENT_TIME);
     }
   
   gtk_widget_hide (combo->popwin);
@@ -742,12 +748,20 @@ gtk_combo_list_key_press (GtkWidget * widget, GdkEventKey * event, GtkCombo * co
 }
 
 static void
+combo_event_box_realize (GtkWidget *widget)
+{
+  GdkCursor *cursor = gdk_cursor_new_for_screen (gtk_widget_get_screen (widget),
+						 GDK_TOP_LEFT_ARROW);
+  gdk_window_set_cursor (widget->window, cursor);
+  gdk_cursor_destroy (cursor);
+}
+
+static void
 gtk_combo_init (GtkCombo * combo)
 {
   GtkWidget *arrow;
   GtkWidget *frame;
   GtkWidget *event_box;
-  GdkCursor *cursor;
 
   combo->case_sensitive = FALSE;
   combo->value_in_list = FALSE;
@@ -789,12 +803,10 @@ gtk_combo_init (GtkCombo * combo)
 
   event_box = gtk_event_box_new ();
   gtk_container_add (GTK_CONTAINER (combo->popwin), event_box);
+  g_signal_connect (event_box, "realize",
+		    G_CALLBACK (combo_event_box_realize), NULL);
   gtk_widget_show (event_box);
 
-  gtk_widget_realize (event_box);
-  cursor = gdk_cursor_new (GDK_TOP_LEFT_ARROW);
-  gdk_window_set_cursor (event_box->window, cursor);
-  gdk_cursor_destroy (cursor);
 
   frame = gtk_frame_new (NULL);
   gtk_container_add (GTK_CONTAINER (event_box), frame);
@@ -838,6 +850,28 @@ gtk_combo_init (GtkCombo * combo)
    */
   gtk_signal_connect (GTK_OBJECT (combo->button), "enter_notify_event",
 		      GTK_SIGNAL_FUNC (gtk_combo_list_enter), combo);
+}
+
+static void
+gtk_combo_realize (GtkWidget *widget)
+{
+  GtkCombo *combo = GTK_COMBO (widget);
+
+  gtk_window_set_screen (GTK_WINDOW (combo->popwin), 
+			 gtk_widget_get_screen (widget));
+  
+  GTK_WIDGET_CLASS( parent_class )->realize (widget);  
+}
+
+static void        
+gtk_combo_unrealize (GtkWidget *widget)
+{
+  GtkCombo *combo = GTK_COMBO (widget);
+
+  gtk_combo_popdown_list (combo);
+  gtk_widget_unrealize (combo->popwin);
+  
+  GTK_WIDGET_CLASS (parent_class)->unrealize (widget);
 }
 
 GtkType

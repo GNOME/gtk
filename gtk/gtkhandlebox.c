@@ -432,7 +432,8 @@ gtk_handle_box_realize (GtkWidget *widget)
 			   GDK_FOCUS_CHANGE_MASK |
 			   GDK_STRUCTURE_MASK);
   attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_VISUAL | GDK_WA_COLORMAP;
-  hb->float_window = gdk_window_new (NULL, &attributes, attributes_mask);
+  hb->float_window = gdk_window_new (gtk_widget_get_root_window (widget),
+				     &attributes, attributes_mask);
   gdk_window_set_user_data (hb->float_window, widget);
   gdk_window_set_decorations (hb->float_window, 0);
   gdk_window_set_type_hint (hb->float_window, GDK_WINDOW_TYPE_HINT_TOOLBAR);
@@ -989,7 +990,8 @@ gtk_handle_box_button_changed (GtkWidget      *widget,
 	      hb->attach_allocation.height = height;
 
 	      hb->in_drag = TRUE;
-	      fleur = gdk_cursor_new (GDK_FLEUR);
+	      fleur = gdk_cursor_new_for_screen (gdk_drawable_get_screen (widget->window),
+						 GDK_FLEUR);
 	      if (gdk_pointer_grab (widget->window,
 				    FALSE,
 				    (GDK_BUTTON1_MOTION_MASK |
@@ -1017,7 +1019,8 @@ gtk_handle_box_button_changed (GtkWidget      *widget,
       if (event->window != widget->window)
 	return FALSE;
       
-      gdk_pointer_ungrab (GDK_CURRENT_TIME);
+      gdk_display_pointer_ungrab (gtk_widget_get_display (widget),
+				  GDK_CURRENT_TIME);
       hb->in_drag = FALSE;
       event_handled = TRUE;
     }
@@ -1046,7 +1049,8 @@ gtk_handle_box_motion (GtkWidget      *widget,
    */
   new_x = 0;
   new_y = 0;
-  gdk_window_get_pointer (NULL, &new_x, &new_y, NULL);
+  gdk_window_get_pointer (gtk_widget_get_root_window (widget), 
+			  &new_x, &new_y, NULL);
   new_x += hb->float_allocation.x;
   new_y += hb->float_allocation.y;
 
@@ -1189,9 +1193,9 @@ gtk_handle_box_motion (GtkWidget      *widget,
 	  /* this extra move is neccessary if we use decorations, or our
 	   * window manager insists on decorations.
 	   */
-	  gdk_flush ();
+	  gdk_display_sync (gtk_widget_get_display (widget));
 	  gdk_window_move (hb->float_window, new_x, new_y);
-	  gdk_flush ();
+	  gdk_display_sync (gtk_widget_get_display (widget));
 #endif	/* 0 */
 	  gtk_signal_emit (GTK_OBJECT (hb),
 			   handle_box_signals[SIGNAL_CHILD_DETACHED],
@@ -1241,13 +1245,15 @@ gtk_handle_box_delete_event (GtkWidget *widget,
 static void
 gtk_handle_box_reattach (GtkHandleBox *hb)
 {
+  GtkWidget *widget = GTK_WIDGET (hb);
+  
   if (hb->child_detached)
     {
       hb->child_detached = FALSE;
       if (GTK_WIDGET_REALIZED (hb))
 	{
 	  gdk_window_hide (hb->float_window);
-	  gdk_window_reparent (hb->bin_window, GTK_WIDGET (hb)->window, 0, 0);
+	  gdk_window_reparent (hb->bin_window, widget->window, 0, 0);
 
 	  if (GTK_BIN (hb)->child)
 	    gtk_signal_emit (GTK_OBJECT (hb),
@@ -1259,7 +1265,8 @@ gtk_handle_box_reattach (GtkHandleBox *hb)
     }
   if (hb->in_drag)
     {
-      gdk_pointer_ungrab (GDK_CURRENT_TIME);
+      gdk_display_pointer_ungrab (gtk_widget_get_display (GTK_WIDGET (hb)),
+				  GDK_CURRENT_TIME);
       hb->in_drag = FALSE;
     }
 

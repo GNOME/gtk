@@ -2888,7 +2888,8 @@ selection_data_get_buffer (GtkSelectionData *selection_data,
   GtkTextBuffer *src_buffer = NULL;
 
   /* If we can get the owner, the selection is in-process */
-  owner = gdk_selection_owner_get (selection_data->selection);
+  owner = gdk_selection_owner_get_for_display (selection_data->display,
+					       selection_data->selection);
 
   if (owner == NULL)
     return NULL;

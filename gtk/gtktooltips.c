@@ -174,6 +174,8 @@ gtk_tooltips_force_window (GtkTooltips *tooltips)
   if (!tooltips->tip_window)
     {
       tooltips->tip_window = gtk_window_new (GTK_WINDOW_POPUP);
+      gtk_window_set_screen (GTK_WINDOW (tooltips->tip_window),
+			     gtk_widget_get_screen (tooltips->active_tips_data->widget));
       gtk_widget_set_app_paintable (tooltips->tip_window, TRUE);
       gtk_window_set_policy (GTK_WINDOW (tooltips->tip_window), FALSE, FALSE, TRUE);
       gtk_widget_set_name (tooltips->tip_window, "gtk-tooltips");
@@ -323,6 +325,7 @@ gtk_tooltips_draw_tips (GtkTooltips *tooltips)
   gint x, y, w, h, scr_w, scr_h;
   GtkTooltipsData *data;
   gboolean keyboard_mode;
+  GdkScreen *screen;
 
   if (!tooltips->tip_window)
     gtk_tooltips_force_window (tooltips);
@@ -335,9 +338,10 @@ gtk_tooltips_draw_tips (GtkTooltips *tooltips)
   widget = tooltips->active_tips_data->widget;
 
   keyboard_mode = get_keyboard_mode (widget);
-
-  scr_w = gdk_screen_width ();
-  scr_h = gdk_screen_height ();
+  
+  screen = gtk_widget_get_screen (widget);
+  scr_w = gdk_screen_get_width (screen);
+  scr_h = gdk_screen_get_height (screen);
 
   data = tooltips->active_tips_data;
 
@@ -357,7 +361,8 @@ gtk_tooltips_draw_tips (GtkTooltips *tooltips)
   x += widget->allocation.width / 2;
     
   if (!keyboard_mode)
-    gdk_window_get_pointer (NULL, &x, NULL, NULL);
+    gdk_window_get_pointer (gdk_screen_get_root_window (screen),
+			    &x, NULL, NULL);
 
   x -= (w / 2 + 4);
 

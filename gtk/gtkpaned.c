@@ -459,7 +459,8 @@ gtk_paned_realize (GtkWidget *widget)
   attributes.y = paned->handle_pos.y;
   attributes.width = paned->handle_pos.width;
   attributes.height = paned->handle_pos.height;
-  attributes.cursor = gdk_cursor_new (paned->cursor_type);
+  attributes.cursor = gdk_cursor_new_for_screen (gtk_widget_get_screen (widget),
+						 paned->cursor_type);
   attributes.event_mask = gtk_widget_get_events (widget);
   attributes.event_mask |= (GDK_BUTTON_PRESS_MASK |
 			    GDK_BUTTON_RELEASE_MASK |
@@ -698,8 +699,8 @@ gtk_paned_button_release (GtkWidget      *widget,
       paned->in_drag = FALSE;
       paned->drag_pos = -1;
       paned->position_set = TRUE;
-      gdk_pointer_ungrab (event->time);
-
+      gdk_display_pointer_ungrab (gtk_widget_get_display (widget),
+				  event->time);
       return TRUE;
     }
 

@@ -416,13 +416,13 @@ gtk_preview_set_dither (GtkPreview      *preview,
 GdkVisual*
 gtk_preview_get_visual (void)
 {
-  return gdk_rgb_get_visual ();
+  return gdk_screen_get_rgb_visual (gdk_get_default_screen ());
 }
 
 GdkColormap*
 gtk_preview_get_cmap (void)
 {
-  return gdk_rgb_get_colormap ();
+  return gdk_screen_get_rgb_colormap (gdk_get_default_screen ());
 }
 
 GtkPreviewInfo*

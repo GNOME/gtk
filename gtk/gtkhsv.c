@@ -753,7 +753,8 @@ set_cross_grab (GtkHSV *hsv,
   
   priv = hsv->priv;
   
-  cursor = gdk_cursor_new (GDK_CROSSHAIR);
+  cursor = gdk_cursor_new_for_screen (gtk_widget_get_screen (GTK_WIDGET (hsv)),
+				      GDK_CROSSHAIR);
   gdk_pointer_grab (priv->window, FALSE,
 		    (GDK_POINTER_MOTION_MASK
 		     | GDK_POINTER_MOTION_HINT_MASK
@@ -853,8 +854,8 @@ gtk_hsv_button_release (GtkWidget      *widget,
   } else
     g_assert_not_reached ();
   
-  gdk_pointer_ungrab (event->time);
-  
+  gdk_display_pointer_ungrab (gdk_drawable_get_display (event->window),
+			      event->time);
   return TRUE;
 }
 
@@ -979,7 +980,8 @@ paint_ring (GtkHSV      *hsv,
   
   /* Create clipping mask */
   
-  mask = gdk_pixmap_new (NULL, width, height, 1);
+  mask = gdk_pixmap_new (GTK_WIDGET (hsv)->window, width, height, 1);
+
   gc = gdk_gc_new (mask);
   
   color.pixel = 0;
@@ -1219,7 +1221,8 @@ paint_triangle (GtkHSV      *hsv,
   
   /* Create clipping mask */
   
-  mask = gdk_pixmap_new (NULL, width, height, 1);
+  mask = gdk_pixmap_new (GTK_WIDGET (hsv)->window, width, height, 1);
+
   gc = gdk_gc_new (mask);
   
   color.pixel = 0;

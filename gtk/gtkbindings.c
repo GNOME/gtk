@@ -1076,6 +1076,7 @@ gtk_bindings_activate (GtkObject      *object,
 		       GdkModifierType modifiers)
 {
   GSList *entries = NULL;
+  GdkDisplay *display;
   GtkKeyHash *key_hash;
   gboolean handled = FALSE;
   gboolean is_release;
@@ -1088,7 +1089,9 @@ gtk_bindings_activate (GtkObject      *object,
   is_release = (modifiers & GDK_RELEASE_MASK) != 0;
   modifiers = modifiers & BINDING_MOD_MASK () & ~GDK_RELEASE_MASK;
 
-  key_hash = binding_key_hash_for_keymap (gdk_keymap_get_default ());
+  display = gtk_widget_get_display (GTK_WIDGET (object));
+  key_hash = binding_key_hash_for_keymap (gdk_keymap_get_for_display (display));
+  
   entries = _gtk_key_hash_lookup_keyval (key_hash, keyval, modifiers);
 
   handled = gtk_bindings_activate_list (object, entries, is_release);
@@ -1113,6 +1116,7 @@ _gtk_bindings_activate_event (GtkObject      *object,
 			      GdkEventKey    *event)
 {
   GSList *entries = NULL;
+  GdkDisplay *display;
   GtkKeyHash *key_hash;
   gboolean handled = FALSE;
 
@@ -1121,7 +1125,9 @@ _gtk_bindings_activate_event (GtkObject      *object,
   if (!GTK_IS_WIDGET (object))
     return FALSE;
 
-  key_hash = binding_key_hash_for_keymap (gdk_keymap_get_default ());
+  display = gtk_widget_get_display (GTK_WIDGET (object));
+  key_hash = binding_key_hash_for_keymap (gdk_keymap_get_for_display (display));
+
   entries = _gtk_key_hash_lookup (key_hash,
 				  event->hardware_keycode,
 				  event->state & BINDING_MOD_MASK () & ~GDK_RELEASE_MASK,

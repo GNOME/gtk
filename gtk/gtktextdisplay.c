@@ -143,6 +143,8 @@ static void
 gtk_text_render_state_update (GtkTextRenderState *state,
                               GtkTextAppearance  *new_appearance)
 {
+  GdkScreen *screen = gtk_widget_get_screen (state->widget);
+  
   if (!state->last_appearance ||
       !gdk_color_equal (&new_appearance->fg_color, &state->last_appearance->fg_color))
     gtk_text_render_state_set_color (state, state->fg_gc, &new_appearance->fg_color);
@@ -152,8 +154,15 @@ gtk_text_render_state_update (GtkTextRenderState *state,
     {
       if (new_appearance->fg_stipple)
         {
-          gdk_gc_set_fill (state->fg_gc, GDK_STIPPLED);
-          gdk_gc_set_stipple (state->fg_gc, new_appearance->fg_stipple);
+	  if (screen == gdk_drawable_get_screen (new_appearance->fg_stipple))
+	    {
+	      gdk_gc_set_fill (state->fg_gc, GDK_STIPPLED);
+	      gdk_gc_set_stipple (state->fg_gc, new_appearance->fg_stipple);
+	    }
+	  else
+	    g_warning ("gtk_text_render_state_update:\n"
+		       "The foreground stipple bitmap has been created on the wrong screen.\n"
+		       "Ignoring the stipple bitmap information.");
         }
       else
         {
@@ -172,8 +181,16 @@ gtk_text_render_state_update (GtkTextRenderState *state,
         {
           if (new_appearance->bg_stipple)
             {
-              gdk_gc_set_fill (state->bg_gc, GDK_STIPPLED);
-              gdk_gc_set_stipple (state->bg_gc, new_appearance->bg_stipple);
+	      if (screen == gdk_drawable_get_screen (new_appearance->bg_stipple))
+		{
+		  gdk_gc_set_fill (state->bg_gc, GDK_STIPPLED);
+		  gdk_gc_set_stipple (state->bg_gc, new_appearance->bg_stipple);
+		}
+	      else
+		g_warning ("gtk_text_render_state_update:\n"
+			   "The background stipple bitmap has been created on the wrong screen.\n"
+			   "Ignoring the stipple bitmap information.");
+
             }
           else
             {

@@ -29,6 +29,7 @@
 #include <locale.h>
 #include "gtkcontainer.h"
 #include "gtkaccelmap.h"
+#include "gtkclipboard.h"
 #include "gtkiconfactory.h"
 #include "gtkintl.h"
 #include "gtkmain.h"
@@ -50,6 +51,7 @@
 #include "gtkintl.h"
 #include "gtkaccessible.h"
 #include "gtktooltips.h"
+#include "gtkinvisible.h"
 
 #define WIDGET_CLASS(w)	 GTK_WIDGET_GET_CLASS (w)
 #define	INIT_PATH_SIZE	(512)
@@ -218,7 +220,6 @@ static void             gtk_widget_invalidate_widget_windows    (GtkWidget      
 static gpointer         parent_class = NULL;
 static guint            widget_signals[LAST_SIGNAL] = { 0 };
 static GMemChunk       *aux_info_mem_chunk = NULL;
-static GdkColormap     *default_colormap = NULL;
 static GtkStyle        *gtk_default_style = NULL;
 static GSList          *colormap_stack = NULL;
 static guint            composite_child_stack = 0;
@@ -2872,7 +2873,7 @@ gtk_widget_real_mnemonic_activate (GtkWidget *widget,
     {
       g_warning ("widget `%s' isn't suitable for mnemonic activation",
 		 G_OBJECT_TYPE_NAME (widget));
-      gdk_beep ();
+      gdk_display_beep (gtk_widget_get_display (widget));
     }
   return TRUE;
 }
@@ -3884,7 +3885,7 @@ gtk_widget_ensure_style (GtkWidget *widget)
 static void
 gtk_widget_reset_rc_style (GtkWidget *widget)
 {
-  GtkStyle *new_style;
+  GtkStyle *new_style = NULL;
   gboolean initial_emission;
   
   g_return_if_fail (GTK_IS_WIDGET (widget));
@@ -3893,8 +3894,9 @@ gtk_widget_reset_rc_style (GtkWidget *widget)
 
   GTK_PRIVATE_UNSET_FLAG (widget, GTK_USER_STYLE);
   GTK_WIDGET_SET_FLAGS (widget, GTK_RC_STYLE);
-
-  new_style = gtk_rc_get_style (widget);
+  
+  if (gtk_widget_has_screen (widget))
+    new_style = gtk_rc_get_style (widget);
   if (!new_style)
     new_style = gtk_widget_get_default_style ();
 
@@ -4360,10 +4362,18 @@ PangoContext *
 gtk_widget_get_pango_context (GtkWidget *widget)
 {
   PangoContext *context;
+  GdkScreen *screen;
 
   g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
   
   context = gtk_object_get_data_by_id (GTK_OBJECT (widget), quark_pango_context);
+  if (context)
+    {
+      screen = g_object_get_data (G_OBJECT (context), "gdk-pango-screen");
+      if (screen && (screen != gtk_widget_get_screen (widget)))
+	  context = NULL;
+    }
+  
   if (!context)
     {
       context = gtk_widget_create_pango_context (GTK_WIDGET (widget));
@@ -4391,7 +4401,7 @@ gtk_widget_create_pango_context (GtkWidget *widget)
 
   g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
 
-  context = gdk_pango_context_get ();
+  context = gdk_pango_context_get_for_screen (gtk_widget_get_screen (widget));
 
   gdk_pango_context_set_colormap (context, gtk_widget_get_colormap (widget));
   pango_context_set_base_dir (context,
@@ -4579,6 +4589,128 @@ gtk_widget_get_child_visible (GtkWidget *widget)
   g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
   
   return GTK_WIDGET_CHILD_VISIBLE (widget);
+}
+
+static GdkScreen *
+gtk_widget_get_screen_unchecked (GtkWidget *widget)
+{
+  GtkWidget *toplevel;
+  
+  toplevel = gtk_widget_get_toplevel (widget);
+
+  if (GTK_WIDGET_TOPLEVEL (toplevel))
+    {
+      if (GTK_IS_WINDOW (toplevel))
+	return GTK_WINDOW (toplevel)->screen;
+      else if (GTK_IS_INVISIBLE (toplevel))
+	return GTK_INVISIBLE (widget)->screen;
+    }
+
+  return NULL;
+}
+
+/**
+ * gtk_widget_get_screen:
+ * @widget: a #GtkWidget
+ * 
+ * Get the #GdkScreen from the toplevel window associated with
+ * this widget. This function can only be called after the widget
+ * has been added to a widget heirarchy with a #GtkWindow
+ * at the top.
+ *
+ * In general, you should only create screen specific
+ * resources when a widget has been realized, and you should
+ * free those resources when the widget is unrealized.
+ * 
+ * Return value: the #GdkScreen for the toplevel for this widget.
+ **/
+GdkScreen*
+gtk_widget_get_screen (GtkWidget *widget)
+{
+  GdkScreen *screen;
+  
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
+
+  screen = gtk_widget_get_screen_unchecked (widget);
+
+  if (screen)
+    return screen;
+  else
+    {
+#if 0
+      g_warning (G_STRLOC ": Can't get associated screen"
+		 " for a widget unless it is inside a toplevel GtkWindow\n"
+		 " widget type is %s associated top level type is %s",
+		 g_type_name (G_OBJECT_TYPE(G_OBJECT (widget))),
+		 g_type_name (G_OBJECT_TYPE(G_OBJECT (toplevel))));
+#endif
+      return gdk_get_default_screen ();
+    }
+}
+
+/**
+ * gtk_widget_has_screen:
+ * @widget: a #GtkWidget
+ * 
+ * Checks whether there is a #GdkScreen is associated with
+ * this widget. All toplevel widgets have an associated
+ * screen, and all widgets added into a heirarchy with a toplevel
+ * window at the top.
+ * 
+ * Return value: %TRUE if there is a #GdkScreen assoicated
+ *   with the widget.
+ **/
+gboolean
+gtk_widget_has_screen (GtkWidget *widget)
+{
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
+
+  return (gtk_widget_get_screen_unchecked (widget) != NULL);
+}
+
+/**
+ * gtk_widget_get_display:
+ * @widget: a #GtkWidget
+ * 
+ * Get the #GdkDisplay for the toplevel window associated with
+ * this widget. This function can only be called after the widget
+ * has been added to a widget hierarchy with a #GtkWindow at the top.
+ *
+ * In general, you should only create display specific
+ * resources when a widget has been realized, and you should
+ * free those resources when the widget is unrealized.
+ * 
+ * Return value: the #GdkDisplay for the toplevel for this widget.
+ **/
+GdkDisplay*
+gtk_widget_get_display (GtkWidget *widget)
+{
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
+  
+  return gdk_screen_get_display (gtk_widget_get_screen (widget));
+}
+
+/**
+ * gtk_widget_get_root_window:
+ * @widget: a #GtkWidget
+ * 
+ * Get the root window where this widget is located. This function can
+ * only be called after the widget has been added to a widget
+ * heirarchy with #GtkWindow at the top.
+ *
+ * The root window is useful for such purposes as creating a popup
+ * #GdkWindow associated with the window. In general, you should only
+ * create display specific resources when a widget has been realized,
+ * and you should free those resources when the widget is unrealized.
+ * 
+ * Return value: the #GdkWindow root window for the toplevel for this widget.
+ **/
+GdkWindow*
+gtk_widget_get_root_window (GtkWidget *widget)
+{
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
+
+  return gdk_screen_get_root_window (gtk_widget_get_screen (widget));
 }
 
 /**
@@ -5097,6 +5229,7 @@ GdkColormap*
 gtk_widget_get_colormap (GtkWidget *widget)
 {
   GdkColormap *colormap;
+  GtkWidget *tmp_widget;
   
   g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
   
@@ -5108,16 +5241,17 @@ gtk_widget_get_colormap (GtkWidget *widget)
 	return colormap;
     }
 
-  while (widget)
+  tmp_widget = widget;
+  while (tmp_widget)
     {
-      colormap = gtk_object_get_data_by_id (GTK_OBJECT (widget), quark_colormap);
+      colormap = gtk_object_get_data_by_id (GTK_OBJECT (tmp_widget), quark_colormap);
       if (colormap)
 	return colormap;
 
-      widget = widget->parent;
+      tmp_widget= tmp_widget->parent;
     }
 
-  return gtk_widget_get_default_colormap ();
+  return gdk_screen_get_default_colormap (gtk_widget_get_screen (widget));
 }
 
 /**
@@ -5142,13 +5276,19 @@ gtk_widget_get_visual (GtkWidget *widget)
  * 
  * Gets the settings object holding the settings (global property
  * settings, RC file information, etc) used for this widget.
+ *
+ * Note that this function can only be called when the #GtkWidget
+ * is attached to a toplevel, since the settings object is specific
+ * to a particular #GdkScreen.
  * 
  * Return value: the relevant #GtkSettings object
  **/
 GtkSettings*
 gtk_widget_get_settings (GtkWidget *widget)
 {
-  return gtk_settings_get_default ();
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
+  
+  return gtk_settings_get_for_screen (gtk_widget_get_screen (widget));
 }
 
 /**
@@ -5425,14 +5565,7 @@ gtk_widget_set_default_colormap (GdkColormap *colormap)
 {
   g_return_if_fail (GDK_IS_COLORMAP (colormap));
 
-  if (default_colormap != colormap)
-    {
-      if (default_colormap)
-	gdk_colormap_unref (default_colormap);
-      default_colormap = colormap;
-      if (default_colormap)
-	gdk_colormap_ref (default_colormap);
-    }
+  gdk_screen_set_default_colormap (colormap->screen, colormap);
 }
 
 /**
@@ -5445,10 +5578,7 @@ gtk_widget_set_default_colormap (GdkColormap *colormap)
 GdkColormap*
 gtk_widget_get_default_colormap (void)
 {
-  if (!default_colormap)
-    gtk_widget_set_default_colormap (gdk_rgb_get_colormap ());
-  
-  return default_colormap;
+  return gdk_screen_get_default_colormap (gdk_get_default_screen ());
 }
 
 /**
@@ -6486,4 +6616,33 @@ gtk_widget_ref_accessible (AtkImplementor *implementor)
   if (accessible)
     g_object_ref (G_OBJECT (accessible));
   return accessible;
+}
+
+/**
+ * gtk_widget_get_clipboard:
+ * @widget: a #GtkWidget
+ * @selection: a #GdkAtom which identifies the clipboard
+ *             to use. %GDK_SELECTION_CLIPBOARD gives the
+ *             default clipboard. Another common value
+ *             is %GDK_SELECTION_PRIMARY, which gives
+ *             the primary X selection. 
+ * 
+ * Returns the clipboard object for the given selection to
+ * be used with @widget. @widget must have a #GdkDisplay
+ * associated with it, so must be attached to a toplevel
+ * window.
+ * 
+ * Return value: the appropriate clipboard object. If no
+ *             clipboard already exists, a new one will
+ *             be created. Once a clipboard object has
+ *             been created, it is persistent for all time.
+ **/
+GtkClipboard *
+gtk_widget_get_clipboard (GtkWidget *widget, GdkAtom selection)
+{
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
+  g_return_val_if_fail (gtk_widget_has_screen (widget), NULL);
+  
+  return gtk_clipboard_get_for_display (gtk_widget_get_display (widget),
+					selection);
 }

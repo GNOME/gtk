@@ -27,9 +27,8 @@ The #GtkInvisible-struct struct contains no public fields.
 
 <!-- ##### FUNCTION gtk_invisible_new ##### -->
 <para>
-Creates a new #GtkInvisible.
 </para>
 
-@Returns: a new #GtkInvisible.
+@Returns: 
 
 

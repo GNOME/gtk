@@ -652,7 +652,8 @@ gtk_curve_graph_events (GtkWidget *widget, GdkEvent *event, GtkCurve *c)
 
 	  c->cursor_type = new_type;
 
-	  cursor = gdk_cursor_new (c->cursor_type);
+	  cursor = gdk_cursor_new_for_screen (gtk_widget_get_screen (w),
+					      c->cursor_type);
 	  gdk_window_set_cursor (w->window, cursor);
 	  gdk_cursor_destroy (cursor);
 	}
@@ -722,14 +723,15 @@ gtk_curve_size_graph (GtkCurve *curve)
 {
   gint width, height;
   gfloat aspect;
+  GdkScreen *screen = gtk_widget_get_screen (GTK_WIDGET (curve)); 
 
   width  = (curve->max_x - curve->min_x) + 1;
   height = (curve->max_y - curve->min_y) + 1;
   aspect = width / (gfloat) height;
-  if (width > gdk_screen_width () / 4)
-    width  = gdk_screen_width () / 4;
-  if (height > gdk_screen_height () / 4)
-    height = gdk_screen_height () / 4;
+  if (width > gdk_screen_get_width (screen) / 4)
+    width  = gdk_screen_get_width (screen) / 4;
+  if (height > gdk_screen_get_height (screen) / 4)
+    height = gdk_screen_get_height (screen) / 4;
 
   if (aspect < 1.0)
     width  = height * aspect;
@@ -857,6 +859,7 @@ gtk_curve_set_vector (GtkCurve *c, int veclen, gfloat vector[])
   GtkCurveType old_type;
   gfloat rx, dx, ry;
   gint i, height;
+  GdkScreen *screen = gtk_widget_get_screen (GTK_WIDGET (c));
 
   old_type = c->curve_type;
   c->curve_type = GTK_CURVE_TYPE_FREE;
@@ -866,8 +869,8 @@ gtk_curve_set_vector (GtkCurve *c, int veclen, gfloat vector[])
   else
     {
       height = (c->max_y - c->min_y);
-      if (height > gdk_screen_height () / 4)
-	height = gdk_screen_height () / 4;
+      if (height > gdk_screen_get_height (screen) / 4)
+	height = gdk_screen_get_height (screen) / 4;
 
       c->height = height;
       c->num_points = veclen;

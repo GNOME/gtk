@@ -27,6 +27,13 @@
 #include <gdk/gdk.h>
 #include "gtksignal.h"
 #include "gtkinvisible.h"
+#include "gtkintl.h"
+
+enum {
+  PROP_0,
+  PROP_SCREEN,
+  LAST_ARG
+};
 
 static void gtk_invisible_class_init    (GtkInvisibleClass *klass);
 static void gtk_invisible_init          (GtkInvisible      *invisible);
@@ -37,6 +44,20 @@ static void gtk_invisible_style_set     (GtkWidget         *widget,
 static void gtk_invisible_show          (GtkWidget         *widget);
 static void gtk_invisible_size_allocate (GtkWidget         *widget,
 					 GtkAllocation     *allocation);
+static void gtk_invisible_set_property  (GObject           *object,
+					 guint              prop_id,
+					 const GValue      *value,
+					 GParamSpec        *pspec);
+static void gtk_invisible_get_property  (GObject           *object,
+					 guint              prop_id,
+					 GValue		   *value,
+					 GParamSpec        *pspec);
+
+static GObject *gtk_invisible_constructor (GType                  type,
+					   guint                  n_construct_properties,
+					   GObjectConstructParam *construct_params);
+
+GObjectClass *parent_class;
 
 GtkType
 gtk_invisible_get_type (void)
@@ -66,11 +87,15 @@ gtk_invisible_get_type (void)
 static void
 gtk_invisible_class_init (GtkInvisibleClass *class)
 {
+  GObjectClass	 *gobject_class;
   GtkObjectClass *object_class;
   GtkWidgetClass *widget_class;
 
   widget_class = (GtkWidgetClass*) class;
   object_class = (GtkObjectClass*) class;
+  gobject_class = (GObjectClass*) class;
+
+  parent_class = g_type_class_peek_parent (class);
 
   widget_class->realize = gtk_invisible_realize;
   widget_class->style_set = gtk_invisible_style_set;
@@ -78,6 +103,17 @@ gtk_invisible_class_init (GtkInvisibleClass *class)
   widget_class->size_allocate = gtk_invisible_size_allocate;
 
   object_class->destroy = gtk_invisible_destroy;
+  gobject_class->set_property = gtk_invisible_set_property;
+  gobject_class->get_property = gtk_invisible_get_property;
+  gobject_class->constructor = gtk_invisible_constructor;
+
+  g_object_class_install_property (gobject_class,
+				   PROP_SCREEN,
+				   g_param_spec_object ("screen",
+ 							_("Screen"),
+ 							_("The screen where this window will be displayed."),
+							GDK_TYPE_SCREEN,
+ 							G_PARAM_READWRITE));
 }
 
 static void
@@ -92,6 +128,7 @@ gtk_invisible_init (GtkInvisible *invisible)
   gtk_object_sink (GTK_OBJECT (invisible));
 
   invisible->has_user_ref_count = TRUE;
+  invisible->screen = gdk_get_default_screen ();
   
   colormap = _gtk_widget_peek_colormap ();
   if (colormap)
@@ -110,13 +147,78 @@ gtk_invisible_destroy (GtkObject *object)
     }
 }
 
+/**
+ * gtk_invisible_new_for_screen:
+ * @screen: a #GdkScreen which identifies on which
+ *	    the new #GtkInvisible will be created.
+ *
+ * Creates a new #GtkInvisible object for a specified screen
+ *
+ * Return value: a newly created #GtkInvisible object
+ **/
+GtkWidget* 
+gtk_invisible_new_for_screen (GdkScreen *screen)
+{
+  g_return_val_if_fail (GDK_IS_SCREEN (screen), NULL);
+  
+  return g_object_new (GTK_TYPE_INVISIBLE, "screen", screen, NULL);
+}
+
+/**
+ * gtk_invisible_new:
+ * 
+ * Creates a new #GtkInvisible.
+ * 
+ * Return value: a new #GtkInvisible.
+ **/
 GtkWidget*
 gtk_invisible_new (void)
 {
-  GtkWidget *result = GTK_WIDGET (gtk_type_new (GTK_TYPE_INVISIBLE));
-  gtk_widget_realize (result);
+  return g_object_new (GTK_TYPE_INVISIBLE, NULL);
+}
 
-  return result;
+/**
+ * gtk_invisible_set_screen:
+ * @invisible: a #GtkInvisible.
+ * @screen: a #GdkScreen.
+ *
+ * Sets the #GdkScreen where the #GtkInvisible object will be displayed.
+ **/ 
+void
+gtk_invisible_set_screen (GtkInvisible *invisible,
+			  GdkScreen    *screen)
+{
+  gboolean was_realized;
+  
+  g_return_if_fail (GTK_IS_INVISIBLE (invisible));
+  g_return_if_fail (GDK_IS_SCREEN (screen));
+
+  if (screen == invisible->screen)
+    return;
+
+  was_realized = GTK_WIDGET_REALIZED (invisible);
+
+  if (was_realized)
+    gtk_widget_unrealize (GTK_WIDGET (invisible));
+  invisible->screen = screen;
+  if (was_realized)
+    gtk_widget_realize (GTK_WIDGET (invisible));
+}
+
+/**
+ * gtk_invisible_get_screen:
+ * @invisible: a #GtkInvisible.
+ *
+ * Returns the #GdkScreen object associated with @invisible
+ *
+ * Return value : the associated #GdkScreen.
+ **/
+GdkScreen *
+gtk_invisible_get_screen (GtkInvisible *invisible)
+{
+  g_return_val_if_fail (GTK_IS_INVISIBLE (invisible), NULL);
+  
+  return invisible->screen;
 }
 
 static void
@@ -138,7 +240,9 @@ gtk_invisible_realize (GtkWidget *widget)
 
   attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_NOREDIR;
 
-  widget->window = gdk_window_new (NULL, &attributes, attributes_mask);
+  widget->window = gdk_window_new (gtk_widget_get_root_window (widget),
+				   &attributes, attributes_mask);
+					      
   gdk_window_set_user_data (widget->window, widget);
   
   widget->style = gtk_style_attach (widget->style, widget->window);
@@ -163,4 +267,63 @@ gtk_invisible_size_allocate (GtkWidget     *widget,
 			    GtkAllocation *allocation)
 {
   widget->allocation = *allocation;
+} 
+
+
+static void 
+gtk_invisible_set_property  (GObject      *object,
+			     guint         prop_id,
+			     const GValue *value,
+			     GParamSpec   *pspec)
+{
+  GtkInvisible *invisible = GTK_INVISIBLE (object);
+  
+  switch (prop_id)
+    {
+    case PROP_SCREEN:
+      gtk_invisible_set_screen (invisible, g_value_get_object (value));
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+    }
 }
+
+static void 
+gtk_invisible_get_property  (GObject      *object,
+			     guint         prop_id,
+			     GValue	  *value,
+			     GParamSpec   *pspec)
+{
+  GtkInvisible *invisible = GTK_INVISIBLE (object);
+
+  switch (prop_id)
+    {
+    case PROP_SCREEN:
+      g_value_set_object (value, invisible->screen);
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+    }
+}
+
+/* We use a constructor here so that we can realize the invisible on
+ * the correct screen after the "screen" property has been set
+ */
+static GObject*
+gtk_invisible_constructor (GType                  type,
+			   guint                  n_construct_properties,
+			   GObjectConstructParam *construct_params)
+{
+  GObject *object;
+
+  object = (* G_OBJECT_CLASS (parent_class)->constructor) (type,
+							   n_construct_properties,
+							   construct_params);
+
+  gtk_widget_realize (GTK_WIDGET (object));
+
+  return object;
+}
+

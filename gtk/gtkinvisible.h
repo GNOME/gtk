@@ -29,10 +29,7 @@
 
 #include <gtk/gtkwidget.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
-
+G_BEGIN_DECLS
 
 #define GTK_TYPE_INVISIBLE		(gtk_invisible_get_type ())
 #define GTK_INVISIBLE(obj)		(GTK_CHECK_CAST ((obj), GTK_TYPE_INVISIBLE, GtkInvisible))
@@ -49,7 +46,7 @@ struct _GtkInvisible
 {
   GtkWidget widget;
   gboolean has_user_ref_count;
-  gpointer gtk_reserved1;	/* For future GdkScreen * */
+  GdkScreen *screen;
 };
 
 struct _GtkInvisibleClass
@@ -63,12 +60,14 @@ struct _GtkInvisibleClass
   void (*_gtk_reserved4) (void);
 };
 
-GtkType	       gtk_invisible_get_type	     (void) G_GNUC_CONST;
-GtkWidget*     gtk_invisible_new	     (void);
+GtkType gtk_invisible_get_type (void) G_GNUC_CONST;
 
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
+GtkWidget* gtk_invisible_new            (void);
+GtkWidget* gtk_invisible_new_for_screen (GdkScreen *screen);
+void	   gtk_invisible_set_screen	(GtkInvisible *invisible,
+					 GdkScreen    *screen);
+GdkScreen* gtk_invisible_get_screen	(GtkInvisible *invisible);
 
+G_END_DECLS
 
 #endif /* __GTK_INVISIBLE_H__ */

@@ -108,7 +108,7 @@ struct _GtkWindow
   guint keys_changed_handler;
   
   GdkModifierType mnemonic_modifier;
-  gpointer gtk_reserved1;	/* For future GdkScreen * */
+  GdkScreen      *screen;
 };
 
 struct _GtkWindowClass
@@ -209,6 +209,10 @@ void       gtk_window_set_geometry_hints       (GtkWindow           *window,
 						GtkWidget           *geometry_widget,
 						GdkGeometry         *geometry,
 						GdkWindowHints       geom_mask);
+
+void	   gtk_window_set_screen	       (GtkWindow	    *window,
+						GdkScreen	    *screen);
+GdkScreen* gtk_window_get_screen	       (GtkWindow	    *window);
 
 /* gtk_window_set_has_frame () must be called before realizing the window_*/
 void       gtk_window_set_has_frame            (GtkWindow *window, 

@@ -48,6 +48,7 @@ struct _GtkSettings
   GValue *property_values;
 
   GtkRcContext *rc_context;
+  GdkScreen    *screen;
 };
 struct _GtkSettingsClass
 {
@@ -70,7 +71,11 @@ struct _GtkSettingsValue
 
 /* --- functions --- */
 GType		gtk_settings_get_type		     (void);
+#ifndef GDK_MULTIHEAD_SAFE
 GtkSettings*	gtk_settings_get_default	     (void);
+#endif
+GtkSettings*	gtk_settings_get_for_screen	     (GdkScreen *screen);
+  
 void		gtk_settings_install_property	     (GParamSpec         *pspec);
 void		gtk_settings_install_property_parser (GParamSpec         *pspec,
 						      GtkRcPropertyParser parser);

@@ -1928,7 +1928,8 @@ abort_column_resize (GtkCList *clist)
 
   GTK_CLIST_UNSET_FLAG (clist, CLIST_IN_DRAG);
   gtk_grab_remove (GTK_WIDGET (clist));
-  gdk_pointer_ungrab (GDK_CURRENT_TIME);
+  gdk_display_pointer_ungrab (gtk_widget_get_display (GTK_WIDGET (clist)),
+			      GDK_CURRENT_TIME);
   clist->drag_pos = -1;
 
   if (clist->x_drag >= 0 && clist->x_drag <= clist->clist_window_width - 1)
@@ -3626,13 +3627,20 @@ fake_toggle_row (GtkCList *clist,
 					  GTK_CLIST_ROW (work));
 }
 
+static gboolean
+clist_has_grab (GtkCList *clist)
+{
+  return (GTK_WIDGET_HAS_GRAB (clist) &&
+	  gdk_display_pointer_is_grabbed (gtk_widget_get_display (GTK_WIDGET (clist))));
+}
+
 static void
 toggle_focus_row (GtkCList *clist)
 {
   g_return_if_fail (clist != 0);
   g_return_if_fail (GTK_IS_CLIST (clist));
 
-  if ((gdk_pointer_is_grabbed () && GTK_WIDGET_HAS_GRAB (clist)) ||
+  if (clist_has_grab (clist) ||
       clist->focus_row < 0 || clist->focus_row >= clist->rows)
     return;
 
@@ -3669,7 +3677,7 @@ toggle_add_mode (GtkCList *clist)
   g_return_if_fail (clist != 0);
   g_return_if_fail (GTK_IS_CLIST (clist));
   
-  if ((gdk_pointer_is_grabbed () && GTK_WIDGET_HAS_GRAB (clist)) ||
+  if (clist_has_grab (clist) ||
       clist->selection_mode != GTK_SELECTION_MULTIPLE)
     return;
 
@@ -3791,7 +3799,7 @@ real_select_all (GtkCList *clist)
 {
   g_return_if_fail (GTK_IS_CLIST (clist));
 
-  if (gdk_pointer_is_grabbed () && GTK_WIDGET_HAS_GRAB (clist))
+  if (clist_has_grab (clist))
     return;
 
   switch (clist->selection_mode)
@@ -3831,7 +3839,7 @@ real_unselect_all (GtkCList *clist)
  
   g_return_if_fail (GTK_IS_CLIST (clist));
 
-  if (gdk_pointer_is_grabbed () && GTK_WIDGET_HAS_GRAB (clist))
+  if (clist_has_grab (clist))
     return;
 
   switch (clist->selection_mode)
@@ -3916,7 +3924,7 @@ real_undo_selection (GtkCList *clist)
 
   g_return_if_fail (GTK_IS_CLIST (clist));
 
-  if ((gdk_pointer_is_grabbed () && GTK_WIDGET_HAS_GRAB (clist)) ||
+  if (clist_has_grab (clist) ||
       clist->selection_mode != GTK_SELECTION_MULTIPLE)
     return;
 
@@ -4268,7 +4276,7 @@ start_selection (GtkCList *clist)
 {
   g_return_if_fail (GTK_IS_CLIST (clist));
 
-  if (gdk_pointer_is_grabbed () && GTK_WIDGET_HAS_GRAB (clist))
+  if (clist_has_grab (clist))
     return;
 
   set_anchor (clist, GTK_CLIST_ADD_MODE(clist), clist->focus_row,
@@ -4280,7 +4288,8 @@ end_selection (GtkCList *clist)
 {
   g_return_if_fail (GTK_IS_CLIST (clist));
 
-  if (gdk_pointer_is_grabbed () && GTK_WIDGET_HAS_FOCUS(clist))
+  if (gdk_display_pointer_is_grabbed (gtk_widget_get_display (GTK_WIDGET (clist))) &&
+      GTK_WIDGET_HAS_FOCUS (clist))
     return;
 
   GTK_CLIST_GET_CLASS (clist)->resync_selection (clist, NULL);
@@ -4294,7 +4303,7 @@ extend_selection (GtkCList      *clist,
 {
   g_return_if_fail (GTK_IS_CLIST (clist));
 
-  if ((gdk_pointer_is_grabbed () && GTK_WIDGET_HAS_GRAB (clist)) ||
+  if (clist_has_grab (clist) ||
       clist->selection_mode != GTK_SELECTION_MULTIPLE)
     return;
 
@@ -4536,7 +4545,8 @@ gtk_clist_realize (GtkWidget *widget)
 			   GDK_POINTER_MOTION_MASK |
 			   GDK_POINTER_MOTION_HINT_MASK);
   attributes_mask = GDK_WA_CURSOR;
-  attributes.cursor = gdk_cursor_new (GDK_SB_H_DOUBLE_ARROW);
+  attributes.cursor = gdk_cursor_new_for_screen (gtk_widget_get_screen (widget),
+						 GDK_SB_H_DOUBLE_ARROW);
   clist->cursor_drag = attributes.cursor;
 
   attributes.x =  LIST_WIDTH (clist) + 1;
@@ -4728,7 +4738,7 @@ gtk_clist_unmap (GtkWidget *widget)
     {
       GTK_WIDGET_UNSET_FLAGS (widget, GTK_MAPPED);
 
-      if (gdk_pointer_is_grabbed () && GTK_WIDGET_HAS_GRAB (clist))
+      if (clist_has_grab (clist))
 	{
 	  remove_grab (clist);
 
@@ -5116,7 +5126,7 @@ gtk_clist_button_release (GtkWidget      *widget,
       GTK_CLIST_UNSET_FLAG (clist, CLIST_IN_DRAG);
       gtk_widget_get_pointer (widget, &x, NULL);
       gtk_grab_remove (widget);
-      gdk_pointer_ungrab (event->time);
+      gdk_display_pointer_ungrab (gtk_widget_get_display (widget), event->time);
 
       if (clist->x_drag >= 0)
 	draw_xor_line (clist);
@@ -5191,7 +5201,7 @@ gtk_clist_motion (GtkWidget      *widget,
   g_return_val_if_fail (GTK_IS_CLIST (widget), FALSE);
 
   clist = GTK_CLIST (widget);
-  if (!(gdk_pointer_is_grabbed () && GTK_WIDGET_HAS_GRAB (clist)))
+  if (!clist_has_grab (clist))
     return FALSE;
 
   if (clist->drag_button > 0)
@@ -6837,7 +6847,7 @@ scroll_horizontal (GtkCList      *clist,
   g_return_if_fail (clist != 0);
   g_return_if_fail (GTK_IS_CLIST (clist));
 
-  if (gdk_pointer_is_grabbed () && GTK_WIDGET_HAS_GRAB (clist))
+  if (clist_has_grab (clist))
     return;
 
   for (last_column = clist->columns - 1;
@@ -6911,7 +6921,7 @@ scroll_vertical (GtkCList      *clist,
 
   g_return_if_fail (GTK_IS_CLIST (clist));
 
-  if (gdk_pointer_is_grabbed () && GTK_WIDGET_HAS_GRAB (clist))
+  if (clist_has_grab (clist))
     return;
 
   switch (clist->selection_mode)
@@ -7082,11 +7092,15 @@ vertical_timeout (GtkCList *clist)
 static void
 remove_grab (GtkCList *clist)
 {
+  GtkWidget *widget = GTK_WIDGET (clist);
+  
   if (GTK_WIDGET_HAS_GRAB (clist))
     {
-      gtk_grab_remove (GTK_WIDGET (clist));
-      if (gdk_pointer_is_grabbed ())
-	gdk_pointer_ungrab (GDK_CURRENT_TIME);
+      GdkDisplay *display = gtk_widget_get_display (widget);
+      
+      gtk_grab_remove (widget);
+      if (gdk_display_pointer_is_grabbed (display))
+	gdk_display_pointer_ungrab (display, GDK_CURRENT_TIME);
     }
 
   if (clist->htimer)
@@ -7224,7 +7238,7 @@ real_sort_list (GtkCList *clist)
   if (clist->rows <= 1)
     return;
 
-  if (gdk_pointer_is_grabbed () && GTK_WIDGET_HAS_GRAB (clist))
+  if (clist_has_grab (clist))
     return;
 
   gtk_clist_freeze (clist);
@@ -7803,7 +7817,8 @@ gtk_clist_set_button_actions (GtkCList *clist,
   
   if (button < MAX_BUTTON)
     {
-      if (gdk_pointer_is_grabbed () || GTK_WIDGET_HAS_GRAB (clist))
+      if (gdk_display_pointer_is_grabbed (gtk_widget_get_display (GTK_WIDGET (clist))) || 
+	  GTK_WIDGET_HAS_GRAB (clist))
 	{
 	  remove_grab (clist);
 	  clist->drag_button = 0;

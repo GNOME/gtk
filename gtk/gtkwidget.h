@@ -141,6 +141,7 @@ typedef struct _GtkSelectionData   GtkSelectionData;
 typedef struct _GtkWidgetClass	   GtkWidgetClass;
 typedef struct _GtkWidgetAuxInfo   GtkWidgetAuxInfo;
 typedef struct _GtkWidgetShapeInfo GtkWidgetShapeInfo;
+typedef struct _GtkClipboard	   GtkClipboard;
 typedef void     (*GtkCallback)        (GtkWidget        *widget,
 					gpointer	  data);
 
@@ -551,6 +552,7 @@ gboolean              gtk_widget_get_child_visible      (GtkWidget    *widget);
 
 GtkWidget *gtk_widget_get_parent          (GtkWidget           *widget);
 GdkWindow *gtk_widget_get_parent_window	  (GtkWidget	       *widget);
+
 gboolean   gtk_widget_child_focus         (GtkWidget           *widget,
                                            GtkDirectionType     direction);
 
@@ -583,7 +585,13 @@ GtkWidget*   gtk_widget_get_ancestor	(GtkWidget	*widget,
 GdkColormap* gtk_widget_get_colormap	(GtkWidget	*widget);
 GdkVisual*   gtk_widget_get_visual	(GtkWidget	*widget);
 
-GtkSettings* gtk_widget_get_settings    (GtkWidget      *widget);
+GdkScreen *   gtk_widget_get_screen      (GtkWidget *widget);
+gboolean      gtk_widget_has_screen      (GtkWidget *widget);
+GdkDisplay *  gtk_widget_get_display     (GtkWidget *widget);
+GdkWindow *   gtk_widget_get_root_window (GtkWidget *widget);
+GtkSettings*  gtk_widget_get_settings    (GtkWidget *widget);
+GtkClipboard *gtk_widget_get_clipboard   (GtkWidget *widget,
+					  GdkAtom    selection);
 
 #ifndef GTK_DISABLE_DEPRECATED
 #define gtk_widget_set_visual(widget,visual)  ((void) 0)
@@ -704,8 +712,10 @@ void gtk_widget_style_get          (GtkWidget	     *widget,
  */
 void	     gtk_widget_set_default_colormap (GdkColormap *colormap);
 GtkStyle*    gtk_widget_get_default_style    (void);
+#ifndef GDK_MULTIHEAD_SAFE
 GdkColormap* gtk_widget_get_default_colormap (void);
 GdkVisual*   gtk_widget_get_default_visual   (void);
+#endif
 
 /* Functions for setting directionality for widgets
  */
@@ -754,6 +764,7 @@ void              _gtk_widget_propagate_hierarchy_changed (GtkWidget    *widget,
 							   GtkWidget    *previous_toplevel);
 
 GdkColormap* _gtk_widget_peek_colormap (void);
+
 
 #ifdef __cplusplus
 }

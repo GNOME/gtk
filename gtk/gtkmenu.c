@@ -617,7 +617,8 @@ popup_grab_on_window (GdkWindow *window,
 	return TRUE;
       else
 	{
-	  gdk_pointer_ungrab (activate_time);
+	  gdk_display_pointer_ungrab (gdk_drawable_get_display (window),
+				      activate_time);
 	  return FALSE;
 	}
     }
@@ -639,6 +640,7 @@ gtk_menu_popup (GtkMenu		    *menu,
   GtkWidget *parent;
   GdkEvent *current_event;
   GtkMenuShell *menu_shell;
+  GtkMenuAttachData *attach_data;
 
   g_return_if_fail (GTK_IS_MENU (menu));
   
@@ -646,6 +648,21 @@ gtk_menu_popup (GtkMenu		    *menu,
   menu_shell = GTK_MENU_SHELL (menu);
   
   menu_shell->parent_menu_shell = parent_menu_shell;
+  
+  if (!g_object_get_data (G_OBJECT (menu), "gtk-menu-explicit-screen"))
+    {
+      /* The screen was not set explicitly, if the menu is
+       * attached to a widget, try to get screen from its 
+       * toplevel window else go with the default
+       */
+      attach_data = gtk_object_get_data (GTK_OBJECT (menu), attach_data_key);
+      if (attach_data)
+	{
+	  if (!GTK_WIDGET_REALIZED (menu))
+	  gtk_window_set_screen (GTK_WINDOW (menu->toplevel),
+				 gtk_widget_get_screen (attach_data->attach_widget));
+	}
+    }
 
   /* Find the last viewable ancestor, and make an X grab on it
    */
@@ -832,8 +849,10 @@ gtk_menu_popdown (GtkMenu *menu)
 	   */
 	  if (menu_shell->have_xgrab)
 	    {
-	      gdk_pointer_ungrab (GDK_CURRENT_TIME);
-	      gdk_keyboard_ungrab (GDK_CURRENT_TIME);
+	      GdkDisplay *display = gtk_widget_get_display (GTK_WIDGET (menu));
+	      
+	      gdk_display_pointer_ungrab (display, GDK_CURRENT_TIME);
+	      gdk_display_keyboard_ungrab (display, GDK_CURRENT_TIME);
 	    }
 	}
 
@@ -1094,19 +1113,19 @@ gtk_menu_set_tearoff_state (GtkMenu  *menu,
 
 	  if (!menu->tearoff_window)
 	    {
-	      menu->tearoff_window = g_object_connect (gtk_widget_new (GTK_TYPE_WINDOW,
-								       "type", GTK_WINDOW_TOPLEVEL,
-								       NULL),
-						       "signal::destroy", gtk_widget_destroyed, &menu->tearoff_window,
-						       NULL);
+	      menu->tearoff_window = gtk_widget_new (GTK_TYPE_WINDOW,
+						     "type", GTK_WINDOW_TOPLEVEL,
+						     "screen", gtk_widget_get_screen (menu->toplevel),
+						     "app_paintable", TRUE,
+						     NULL);
+
 	      gtk_window_set_type_hint (GTK_WINDOW (menu->tearoff_window),
 					GDK_WINDOW_TYPE_HINT_MENU);
 	      gtk_window_set_mnemonic_modifier (GTK_WINDOW (menu->tearoff_window), 0);
-	      gtk_widget_set_app_paintable (menu->tearoff_window, TRUE);
-	      gtk_signal_connect (GTK_OBJECT (menu->tearoff_window),  
-				  "event",
-				  GTK_SIGNAL_FUNC (gtk_menu_window_event), 
-				  GTK_OBJECT (menu));
+	      g_signal_connect (menu->tearoff_window, "destroy",
+				G_CALLBACK (gtk_widget_destroyed), &menu->tearoff_window);
+	      g_signal_connect (menu->tearoff_window, "event",
+				G_CALLBACK (gtk_menu_window_event), menu);
 
 	      gtk_menu_update_title (menu);
 
@@ -1350,7 +1369,8 @@ menu_grab_transfer_window_get (GtkMenu *menu)
 
       attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_NOREDIR;
       
-      window = gdk_window_new (NULL, &attributes, attributes_mask);
+      window = gdk_window_new (gtk_widget_get_root_window (GTK_WIDGET (menu)),
+			       &attributes, attributes_mask);
       gdk_window_set_user_data (window, menu);
 
       gdk_window_show (window);
@@ -1736,6 +1756,7 @@ gtk_menu_key_press (GtkWidget	*widget,
   gchar *accel = NULL;
   guint accel_key, accel_mods;
   GdkModifierType consumed_modifiers;
+  GdkDisplay *display;
   
   g_return_val_if_fail (GTK_IS_MENU (widget), FALSE);
   g_return_val_if_fail (event != NULL, FALSE);
@@ -1747,10 +1768,12 @@ gtk_menu_key_press (GtkWidget	*widget,
 
   if (GTK_WIDGET_CLASS (parent_class)->key_press_event (widget, event))
     return TRUE;
+
+  display = gtk_widget_get_display (widget);
     
-  g_object_get (G_OBJECT (gtk_settings_get_default ()),
-                "gtk-menu-bar-accel",
-                &accel,
+  g_object_get (G_OBJECT (gtk_widget_get_settings (widget)),
+                "gtk-menu-bar-accel", &accel,
+		"gtk-can-change-accels", &can_change_accels,
                 NULL);
 
   if (accel)
@@ -1791,12 +1814,8 @@ gtk_menu_key_press (GtkWidget	*widget,
       break;
     }
 
-  g_object_get (G_OBJECT (gtk_settings_get_default ()),
-		"gtk-can-change-accels", &can_change_accels,
-		NULL);
-
   /* Figure out what modifiers went into determining the key symbol */
-  gdk_keymap_translate_keyboard_state (gdk_keymap_get_default (),
+  gdk_keymap_translate_keyboard_state (gdk_keymap_get_for_display (display),
 				       event->hardware_keycode, event->state, event->group,
 				       NULL, NULL, NULL, &consumed_modifiers);
 
@@ -1827,7 +1846,7 @@ gtk_menu_key_press (GtkWidget	*widget,
 	   * (basically, those items are accelerator-locked).
 	   */
 	  /* g_print("item has no path or is locked, menu prefix: %s\n", menu->accel_path); */
-	  gdk_beep ();
+	  gdk_display_beep (display);
 	}
       else
 	{
@@ -1856,7 +1875,7 @@ gtk_menu_key_press (GtkWidget	*widget,
 	       * locked already
 	       */
 	      /* g_print("failed to change\n"); */
-	      gdk_beep ();
+	      gdk_display_beep (display);
 	    }
 	}
     }
@@ -2310,20 +2329,23 @@ gtk_menu_position (GtkMenu *menu)
   GtkWidget *widget;
   GtkRequisition requisition;
   gint x, y;
-  gint screen_width;
-  gint screen_height;
   gint scroll_offset;
   gint menu_height;
   gboolean push_in;
-  
+  GdkScreen *screen;
+  GdkRectangle *monitor;
+  gint monitor_num;
+
   g_return_if_fail (GTK_IS_MENU (menu));
 
   widget = GTK_WIDGET (menu);
 
-  screen_width = gdk_screen_width ();
-  screen_height = gdk_screen_height ();
+  gdk_window_get_pointer (gtk_widget_get_root_window (widget),
+  			  &x, &y, NULL);
 
-  gdk_window_get_pointer (NULL, &x, &y, NULL);
+  screen = gtk_widget_get_screen (widget);
+  monitor_num = gdk_screen_get_monitor_at_point (screen, x, y);
+  monitor = gdk_screen_get_monitor_geometry (screen, monitor_num);
 
   /* We need the requisition to figure out the right place to
    * popup the menu. In fact, we always need to ask here, since
@@ -2338,8 +2360,8 @@ gtk_menu_position (GtkMenu *menu)
     (* menu->position_func) (menu, &x, &y, &push_in, menu->position_func_data);
   else
     {
-      x = CLAMP (x - 2, 0, MAX (0, screen_width - requisition.width));
-      y = CLAMP (y - 2, 0, MAX (0, screen_height - requisition.height));
+      x = CLAMP (x - 2, monitor->x, MAX (monitor->x, monitor->x + monitor->width - requisition.width));
+      y = CLAMP (y - 2, monitor->y, MAX (monitor->y, monitor->y + monitor->height - requisition.height));      
     }
 
   scroll_offset = 0;
@@ -2348,27 +2370,30 @@ gtk_menu_position (GtkMenu *menu)
     {
       menu_height = GTK_WIDGET (menu)->requisition.height;
 
-      if (y + menu_height > screen_height)
+      if (y + menu_height > monitor->y + monitor->height)
 	{
-	  scroll_offset -= y + menu_height - screen_height;
-	  y = screen_height - menu_height;
+	  scroll_offset -= y + menu_height - (monitor->y + monitor->height);
+	  y = (monitor->y + monitor->height) - menu_height;
 	}
   
-      if (y < 0)
+      if (y < monitor->y)
 	{
 	  scroll_offset -= y;
-	  y = 0;
+	  y = monitor->y;
 	}
     }
 
-  if (y + requisition.height > screen_height)
-    requisition.height = screen_height - y;
+  /* FIXME: should this be done in the various position_funcs ? */
+  x = CLAMP (x, monitor->x, MAX (monitor->x, monitor->x + monitor->width - requisition.width));
+ 
+  if (y + requisition.height > monitor->y + monitor->height)
+    requisition.height = (monitor->y + monitor->height) - y;
   
-  if (y < 0)
+  if (y < monitor->y)
     {
       scroll_offset -= y;
       requisition.height -= -y;
-      y = 0;
+      y = monitor->y;
     }
 
   if (scroll_offset > 0)
@@ -2654,4 +2679,21 @@ gtk_menu_hide_all (GtkWidget *widget)
   gtk_container_foreach (GTK_CONTAINER (widget), (GtkCallback) gtk_widget_hide_all, NULL);
 }
 
+/**
+ * gtk_menu_set_screen:
+ * @menu: a #GtkMenu.
+ * @screen: a #GtkScreen.
+ *
+ * Sets the #GtkScreen on which the GtkMenu will be displayed.
+ * This function can only be called before @menu is realized.
+ **/
+void
+gtk_menu_set_screen (GtkMenu *menu, 
+		     GdkScreen *screen)
+{
+  g_return_if_fail (GTK_IS_MENU (menu));
+  gtk_window_set_screen (GTK_WINDOW (menu->toplevel), 
+			 screen);
+  g_object_set_data (G_OBJECT (menu), "gtk-menu-explicit-screen", screen);
+}
 

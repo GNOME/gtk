@@ -961,7 +961,7 @@ gtk_entry_realize (GtkWidget *widget)
 
   get_text_area_size (entry, &attributes.x, &attributes.y, &attributes.width, &attributes.height);
 
-  attributes.cursor = gdk_cursor_new (GDK_XTERM);
+  attributes.cursor = gdk_cursor_new_for_screen (gtk_widget_get_screen (widget), GDK_XTERM);
   attributes_mask |= GDK_WA_CURSOR;
 
   entry->text_area = gdk_window_new (widget->window, &attributes, attributes_mask);
@@ -979,14 +979,20 @@ gtk_entry_realize (GtkWidget *widget)
   gtk_im_context_set_client_window (entry->im_context, entry->text_area);
 
   gtk_entry_adjust_scroll (entry);
+  gtk_entry_update_primary_selection (entry);
 }
 
 static void
 gtk_entry_unrealize (GtkWidget *widget)
 {
   GtkEntry *entry = GTK_ENTRY (widget);
+  GtkClipboard *clipboard;
 
   gtk_im_context_set_client_window (entry->im_context, entry->text_area);
+
+  clipboard = gtk_widget_get_clipboard (widget, GDK_SELECTION_PRIMARY);
+  if (gtk_clipboard_get_owner (clipboard) == G_OBJECT (entry))
+    gtk_clipboard_clear (clipboard);
   
   if (entry->text_area)
     {
@@ -1418,7 +1424,7 @@ gtk_entry_motion_notify (GtkWidget      *widget,
     {
       GdkCursor *cursor;
       
-      cursor = gdk_cursor_new (GDK_XTERM);
+      cursor = gdk_cursor_new_for_screen (gtk_widget_get_screen (widget), GDK_XTERM);
       gdk_window_set_cursor (entry->text_area, cursor);
       gdk_cursor_unref (cursor);
       entry->mouse_cursor_obscured = FALSE;
@@ -1562,7 +1568,7 @@ gtk_entry_focus_in (GtkWidget     *widget,
   entry->need_im_reset = TRUE;
   gtk_im_context_focus_in (entry->im_context);
 
-  g_signal_connect (gdk_keymap_get_default (),
+  g_signal_connect (gdk_keymap_get_for_display (gtk_widget_get_display (widget)),
 		    "direction_changed",
 		    G_CALLBACK (gtk_entry_keymap_direction_changed), entry);
 
@@ -1584,7 +1590,7 @@ gtk_entry_focus_out (GtkWidget     *widget,
 
   gtk_entry_check_cursor_blink (entry);
   
-  g_signal_handlers_disconnect_by_func (gdk_keymap_get_default (),
+  g_signal_handlers_disconnect_by_func (gdk_keymap_get_for_display (gtk_widget_get_display (widget)),
                                         (gpointer) gtk_entry_keymap_direction_changed,
                                         entry);
   
@@ -1599,7 +1605,7 @@ gtk_entry_grab_focus (GtkWidget        *widget)
   
   GTK_WIDGET_CLASS (parent_class)->grab_focus (widget);
 
-  g_object_get (G_OBJECT (gtk_settings_get_default ()),
+  g_object_get (G_OBJECT (gtk_widget_get_settings (widget)),
 		"gtk-entry-select-on-focus",
 		&select_on_focus,
 		NULL);
@@ -1843,7 +1849,7 @@ gtk_entry_real_insert_text (GtkEditable *editable,
   n_chars = g_utf8_strlen (new_text, new_text_length);
   if (entry->text_max_length > 0 && n_chars + entry->text_length > entry->text_max_length)
     {
-      gdk_beep ();
+      gdk_display_beep (gtk_widget_get_display (GTK_WIDGET (entry)));
       n_chars = entry->text_max_length - entry->text_length;
       new_text_length = g_utf8_offset_to_pointer (new_text, n_chars) - new_text;
     }
@@ -1947,8 +1953,9 @@ static gint
 get_better_cursor_x (GtkEntry *entry,
 		     gint      offset)
 {
+  GdkKeymap *keymap = gdk_keymap_get_for_display (gtk_widget_get_display (GTK_WIDGET (entry)));
   GtkTextDirection keymap_direction =
-    (gdk_keymap_get_direction (gdk_keymap_get_default ()) == PANGO_DIRECTION_LTR) ?
+    (gdk_keymap_get_direction (keymap) == PANGO_DIRECTION_LTR) ?
     GTK_TEXT_DIR_LTR : GTK_TEXT_DIR_RTL;
   GtkTextDirection widget_direction = gtk_widget_get_direction (GTK_WIDGET (entry));
   gboolean split_cursor;
@@ -2157,7 +2164,9 @@ gtk_entry_copy_clipboard (GtkEntry *entry)
   if (gtk_editable_get_selection_bounds (editable, &start, &end))
     {
       gchar *str = gtk_entry_get_public_chars (entry, start, end);
-      gtk_clipboard_set_text (gtk_clipboard_get (GDK_SELECTION_CLIPBOARD), str, -1);
+      gtk_clipboard_set_text (gtk_widget_get_clipboard (GTK_WIDGET (entry),
+							GDK_SELECTION_CLIPBOARD),
+			      str, -1);
       g_free (str);
     }
 }
@@ -2676,8 +2685,9 @@ static void
 gtk_entry_draw_cursor (GtkEntry  *entry,
 		       CursorType type)
 {
+  GdkKeymap *keymap = gdk_keymap_get_for_display (gtk_widget_get_display (GTK_WIDGET (entry)));
   GtkTextDirection keymap_direction =
-    (gdk_keymap_get_direction (gdk_keymap_get_default ()) == PANGO_DIRECTION_LTR) ?
+    (gdk_keymap_get_direction (keymap) == PANGO_DIRECTION_LTR) ?
     GTK_TEXT_DIR_LTR : GTK_TEXT_DIR_RTL;
   GtkTextDirection widget_direction = gtk_widget_get_direction (GTK_WIDGET (entry));
   
@@ -2937,8 +2947,9 @@ gtk_entry_move_visually (GtkEntry *entry,
 	strong = TRUE;
       else
 	{
+	  GdkKeymap *keymap = gdk_keymap_get_for_display (gtk_widget_get_display (GTK_WIDGET (entry)));
 	  GtkTextDirection keymap_direction =
-	    (gdk_keymap_get_direction (gdk_keymap_get_default ()) == PANGO_DIRECTION_LTR) ?
+	    (gdk_keymap_get_direction (keymap) == PANGO_DIRECTION_LTR) ?
 	    GTK_TEXT_DIR_LTR : GTK_TEXT_DIR_RTL;
 
 	  strong = keymap_direction == gtk_widget_get_direction (GTK_WIDGET (entry));
@@ -3170,7 +3181,7 @@ gtk_entry_paste (GtkEntry *entry,
 		 GdkAtom   selection)
 {
   g_object_ref (G_OBJECT (entry));
-  gtk_clipboard_request_text (gtk_clipboard_get (selection),
+  gtk_clipboard_request_text (gtk_widget_get_clipboard (GTK_WIDGET (entry), selection),
 			      paste_received, entry);
 }
 
@@ -3210,8 +3221,13 @@ gtk_entry_update_primary_selection (GtkEntry *entry)
     { "COMPOUND_TEXT", 0, 0 }
   };
   
-  GtkClipboard *clipboard = gtk_clipboard_get (GDK_SELECTION_PRIMARY);
+  GtkClipboard *clipboard;
   gint start, end;
+
+  if (!GTK_WIDGET_REALIZED (entry))
+    return;
+
+  clipboard = gtk_widget_get_clipboard (GTK_WIDGET (entry), GDK_SELECTION_PRIMARY);
   
   if (gtk_editable_get_selection_bounds (GTK_EDITABLE (entry), &start, &end))
     {
@@ -3784,6 +3800,7 @@ popup_position_func (GtkMenu   *menu,
 {
   GtkEntry *entry = GTK_ENTRY (user_data);
   GtkWidget *widget = GTK_WIDGET (entry);
+  GdkScreen *screen = gtk_widget_get_screen (widget);
   GtkRequisition req;
   
   g_return_if_fail (GTK_WIDGET_REALIZED (entry));
@@ -3795,8 +3812,8 @@ popup_position_func (GtkMenu   *menu,
   *x += widget->allocation.width / 2;
   *y += widget->allocation.height;
 
-  *x = CLAMP (*x, 0, MAX (0, gdk_screen_width () - req.width));
-  *y = CLAMP (*y, 0, MAX (0, gdk_screen_height () - req.height));
+  *x = CLAMP (*x, 0, MAX (0, gdk_screen_get_width (screen) - req.width));
+  *y = CLAMP (*y, 0, MAX (0, gdk_screen_get_height (screen) - req.height));
 }
 
 
@@ -3925,7 +3942,7 @@ gtk_entry_do_popup (GtkEntry       *entry,
       info->time = gtk_get_current_event_time ();
     }
 
-  gtk_clipboard_request_contents (gtk_clipboard_get (GDK_SELECTION_CLIPBOARD),
+  gtk_clipboard_request_contents (gtk_widget_get_clipboard (GTK_WIDGET (entry), GDK_SELECTION_CLIPBOARD),
 				  gdk_atom_intern ("TARGETS", FALSE),
 				  popup_targets_received,
 				  info);

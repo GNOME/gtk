@@ -674,7 +674,7 @@ gtk_label_mnemonic_activate (GtkWidget *widget,
 
   /* barf if there was nothing to activate */
   g_warning ("Couldn't find a target for a mnemonic activation.");
-  gdk_beep ();
+  gdk_display_beep (gtk_widget_get_display (widget));
   
   return FALSE;
 }
@@ -711,6 +711,9 @@ gtk_label_hierarchy_changed (GtkWidget *widget,
 			     GtkWidget *old_toplevel)
 {
   GtkLabel *label = GTK_LABEL (widget);
+
+  /* in case the label has been reparented to another screen */
+  gtk_label_clear_layout (label);
   
   gtk_label_setup_mnemonic (label, label->mnemonic_keyval);
 }
@@ -1426,6 +1429,7 @@ gtk_label_ensure_layout (GtkLabel *label)
 	    pango_layout_set_width (label->layout, aux_info->width * PANGO_SCALE);
 	  else
 	    {
+	      GdkScreen *screen = gtk_widget_get_screen (GTK_WIDGET (label));
 	      gint wrap_width;
 	      
 	      pango_layout_set_width (label->layout, -1);
@@ -1439,7 +1443,7 @@ gtk_label_ensure_layout (GtkLabel *label)
 	      wrap_width = get_label_wrap_width (label);
 	      width = MIN (width, wrap_width);
 	      width = MIN (width,
-			   PANGO_SCALE * (gdk_screen_width () + 1) / 2);
+			   PANGO_SCALE * (gdk_screen_get_width (screen) + 1) / 2);
 	      
 	      pango_layout_set_width (label->layout, width);
 	      pango_layout_get_extents (label->layout, NULL, &logical_rect);
@@ -1682,7 +1686,7 @@ gtk_label_draw_cursor (GtkLabel  *label, gint xoffset, gint yoffset)
       GdkGC *gc;
 
       keymap_direction =
-	(gdk_keymap_get_direction (gdk_keymap_get_default ()) == PANGO_DIRECTION_LTR) ?
+	(gdk_keymap_get_direction (gdk_keymap_get_for_display (gtk_widget_get_display (widget))) == PANGO_DIRECTION_LTR) ?
 	GTK_TEXT_DIR_LTR : GTK_TEXT_DIR_RTL;
 
       widget_direction = gtk_widget_get_direction (widget);
@@ -2287,7 +2291,8 @@ gtk_label_create_window (GtkLabel *label)
   attributes.window_type = GDK_WINDOW_TEMP;
   attributes.wclass = GDK_INPUT_ONLY;
   attributes.override_redirect = TRUE;
-  attributes.cursor = gdk_cursor_new (GDK_XTERM);
+  attributes.cursor = gdk_cursor_new_for_screen (gtk_widget_get_screen (widget),
+						 GDK_XTERM);
   attributes.event_mask = gtk_widget_get_events (widget) |
     GDK_BUTTON_PRESS_MASK        |
     GDK_BUTTON_RELEASE_MASK      |
@@ -2473,7 +2478,8 @@ gtk_label_select_region_index (GtkLabel *label,
       label->select_info->selection_anchor = anchor_index;
       label->select_info->selection_end = end_index;
 
-      clipboard = gtk_clipboard_get (GDK_SELECTION_PRIMARY);      
+      clipboard = gtk_widget_get_clipboard (GTK_WIDGET (label),
+					    GDK_SELECTION_PRIMARY);      
       
       if (anchor_index != end_index)
         {
@@ -2742,8 +2748,9 @@ get_better_cursor (GtkLabel *label,
 		   gint      *x,
 		   gint      *y)
 {
+  GdkKeymap *keymap = gdk_keymap_get_for_display (gtk_widget_get_display (GTK_WIDGET (label)));
   GtkTextDirection keymap_direction =
-    (gdk_keymap_get_direction (gdk_keymap_get_default ()) == PANGO_DIRECTION_LTR) ?
+    (gdk_keymap_get_direction (keymap) == PANGO_DIRECTION_LTR) ?
     GTK_TEXT_DIR_LTR : GTK_TEXT_DIR_RTL;
   GtkTextDirection widget_direction = gtk_widget_get_direction (GTK_WIDGET (label));
   gboolean split_cursor;
@@ -2847,8 +2854,9 @@ gtk_label_move_visually (GtkLabel *label,
 	strong = TRUE;
       else
 	{
+	  GdkKeymap *keymap = gdk_keymap_get_for_display (gtk_widget_get_display (GTK_WIDGET (label)));
 	  GtkTextDirection keymap_direction =
-	    (gdk_keymap_get_direction (gdk_keymap_get_default ()) == PANGO_DIRECTION_LTR) ?
+	    (gdk_keymap_get_direction (keymap) == PANGO_DIRECTION_LTR) ?
 	    GTK_TEXT_DIR_LTR : GTK_TEXT_DIR_RTL;
 
 	  strong = keymap_direction == gtk_widget_get_direction (GTK_WIDGET (label));
@@ -3061,7 +3069,8 @@ gtk_label_copy_clipboard (GtkLabel *label)
         start = len;
 
       if (start != end)
-	gtk_clipboard_set_text (gtk_clipboard_get (GDK_SELECTION_CLIPBOARD),
+	gtk_clipboard_set_text (gtk_widget_get_clipboard (GTK_WIDGET (label),
+							  GDK_SELECTION_CLIPBOARD),
 				label->text + start, end - start);
     }
 }
@@ -3122,6 +3131,7 @@ popup_position_func (GtkMenu   *menu,
   GtkLabel *label;
   GtkWidget *widget;
   GtkRequisition req;
+  GdkScreen *screen;
   
   label = GTK_LABEL (user_data);  
   widget = GTK_WIDGET (label);
@@ -3130,7 +3140,8 @@ popup_position_func (GtkMenu   *menu,
     return;
   
   g_return_if_fail (GTK_WIDGET_REALIZED (label));
-
+  
+  screen = gtk_widget_get_screen (widget);
   gdk_window_get_origin (widget->window, x, y);      
 
   gtk_widget_size_request (label->select_info->popup_menu, &req);
@@ -3138,8 +3149,8 @@ popup_position_func (GtkMenu   *menu,
   *x += widget->allocation.width / 2;
   *y += widget->allocation.height;
 
-  *x = CLAMP (*x, 0, MAX (0, gdk_screen_width () - req.width));
-  *y = CLAMP (*y, 0, MAX (0, gdk_screen_height () - req.height));
+  *x = CLAMP (*x, 0, MAX (0, gdk_screen_get_width (screen) - req.width));
+  *y = CLAMP (*y, 0, MAX (0, gdk_screen_get_height (screen) - req.height));
 }
 
 

@@ -61,7 +61,6 @@ static gint      gtk_gc_drawable_equal   (GtkGCDrawable *a,
 
 static gint initialize = TRUE;
 static GCache *gc_cache = NULL;
-static GHashTable *gc_drawable_ht = NULL;
 
 static GMemChunk *key_mem_chunk = NULL;
 
@@ -97,6 +96,30 @@ gtk_gc_release (GdkGC *gc)
   g_cache_remove (gc_cache, gc);
 }
 
+static void 
+free_gc_drawable (gpointer data)
+{
+  GtkGCDrawable *drawable = data;
+  g_object_unref (G_OBJECT (drawable->drawable));
+  g_free (drawable);
+}
+
+static GHashTable*
+gtk_gc_get_drawable_ht (GdkScreen *screen)
+{
+  GHashTable *ht = g_object_get_data (G_OBJECT (screen), "gtk-gc-drawable-ht");
+  if (!ht)
+    {
+      ht = g_hash_table_new_full ((GHashFunc) gtk_gc_drawable_hash,
+				  (GEqualFunc) gtk_gc_drawable_equal,
+				  NULL, free_gc_drawable);
+      g_object_set_data_full (G_OBJECT (screen), 
+			      "gtk-gc-drawable-ht", ht, 
+			      (GDestroyNotify)g_hash_table_destroy);
+    }
+  
+  return ht;
+}
 
 static void
 gtk_gc_init (void)
@@ -110,9 +133,6 @@ gtk_gc_init (void)
 			  (GHashFunc) gtk_gc_key_hash,
 			  (GHashFunc) gtk_gc_value_hash,
 			  (GEqualFunc) gtk_gc_key_equal);
-
-  gc_drawable_ht = g_hash_table_new ((GHashFunc) gtk_gc_drawable_hash,
-				     (GEqualFunc) gtk_gc_drawable_equal);
 }
 
 static GtkGCKey*
@@ -143,17 +163,18 @@ gtk_gc_new (gpointer key)
   GtkGCKey *keyval;
   GtkGCDrawable *drawable;
   GdkGC *gc;
+  GHashTable *ht;
 
   keyval = key;
-
-  drawable = g_hash_table_lookup (gc_drawable_ht, &keyval->depth);
+  ht = gtk_gc_get_drawable_ht (keyval->colormap->screen);
+  drawable = g_hash_table_lookup (ht, &keyval->depth);
   if (!drawable)
     {
       drawable = g_new (GtkGCDrawable, 1);
       drawable->depth = keyval->depth;
-      drawable->drawable = gdk_pixmap_new (NULL, 1, 1, drawable->depth);
-
-      g_hash_table_insert (gc_drawable_ht, &drawable->depth, drawable);
+      drawable->drawable = gdk_pixmap_new (gdk_screen_get_root_window (keyval->colormap->screen), 
+					   1, 1, drawable->depth);
+      g_hash_table_insert (ht, &drawable->depth, drawable);
     }
 
   gc = gdk_gc_new_with_values (drawable->drawable, &keyval->values, keyval->mask);
@@ -376,7 +397,6 @@ gtk_gc_key_equal (gpointer a,
 
   return TRUE;
 }
-
 
 static guint
 gtk_gc_drawable_hash (GtkGCDrawable *d)

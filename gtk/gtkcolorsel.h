@@ -49,6 +49,9 @@ typedef struct _GtkColorSelectionClass  GtkColorSelectionClass;
 
 typedef void (* GtkColorSelectionChangePaletteFunc) (const GdkColor    *colors,
                                                      gint               n_colors);
+typedef void (* GtkColorSelectionChangePaletteWithScreenFunc) (GdkScreen         *screen,
+							       const GdkColor    *colors,
+							       gint               n_colors);
 
 struct _GtkColorSelection
 {
@@ -107,7 +110,11 @@ gboolean gtk_color_selection_palette_from_string (const gchar       *str,
 gchar*   gtk_color_selection_palette_to_string   (const GdkColor    *colors,
                                                   gint               n_colors);
 
-GtkColorSelectionChangePaletteFunc gtk_color_selection_set_change_palette_hook (GtkColorSelectionChangePaletteFunc func);
+#ifndef GDK_MULTIHEAD_SAFE
+GtkColorSelectionChangePaletteFunc           gtk_color_selection_set_change_palette_hook             (GtkColorSelectionChangePaletteFunc           func);
+#endif
+
+GtkColorSelectionChangePaletteWithScreenFunc gtk_color_selection_set_change_palette_with_screen_hook (GtkColorSelectionChangePaletteWithScreenFunc func);
 
 #ifndef GTK_DISABLE_DEPRECATED
 /* Deprecated calls: */

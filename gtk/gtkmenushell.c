@@ -802,9 +802,11 @@ gtk_real_menu_shell_deactivate (GtkMenuShell *menu_shell)
 	}
       if (menu_shell->have_xgrab)
 	{
+	  GdkDisplay *display = gtk_widget_get_display (GTK_WIDGET (menu_shell));
+	  
 	  menu_shell->have_xgrab = FALSE;
-	  gdk_pointer_ungrab (GDK_CURRENT_TIME);
-	  gdk_keyboard_ungrab (GDK_CURRENT_TIME);
+	  gdk_display_pointer_ungrab (display, GDK_CURRENT_TIME);
+	  gdk_display_keyboard_ungrab (display, GDK_CURRENT_TIME);
 	}
     }
 }
@@ -930,7 +932,7 @@ gtk_menu_shell_activate_item (GtkMenuShell      *menu_shell,
       /* flush the x-queue, so any grabs are removed and
        * the menu is actually taken down
        */
-      gdk_flush ();
+      gdk_display_sync (gtk_widget_get_display (menu_item));
     }
 
   gtk_widget_activate (menu_item);

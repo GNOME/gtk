@@ -73,7 +73,8 @@
 #define MARK_CURRENT_FONT(text, mark) \
   ((MARK_CURRENT_PROPERTY(mark)->flags & PROPERTY_FONT) ? \
          MARK_CURRENT_PROPERTY(mark)->font->gdk_font : \
-         gtk_style_get_font (GTK_WIDGET (text)->style))
+         gtk_style_get_font_for_display (gtk_widget_get_display (GTK_WIDGET (text)), \
+					 GTK_WIDGET (text)->style))
 #define MARK_CURRENT_FORE(text, mark) \
   ((MARK_CURRENT_PROPERTY(mark)->flags & PROPERTY_FOREGROUND) ? \
          &MARK_CURRENT_PROPERTY(mark)->fore_color : \
@@ -995,10 +996,11 @@ gtk_text_insert (GtkText    *text,
   
   if ((TEXT_LENGTH (text) == 0) && (text->use_wchar == FALSE))
     {
-      GtkWidget *widget;
-      widget = GTK_WIDGET (text);
+      GtkWidget *widget = GTK_WIDGET (text);
+      
       gtk_widget_ensure_style (widget);
-      if ((widget->style) && (gtk_style_get_font (widget->style)->type == GDK_FONT_FONTSET))
+      if ((widget->style) &&
+	  (gtk_style_get_font_for_display (gtk_widget_get_display (widget), widget->style)->type == GDK_FONT_FONTSET))
  	{
  	  text->use_wchar = TRUE;
  	  g_free (text->text.ch);
@@ -1342,7 +1344,7 @@ gtk_text_realize (GtkWidget *widget)
   attributes.width = MAX (1, (gint)widget->allocation.width - (gint)attributes.x * 2);
   attributes.height = MAX (1, (gint)widget->allocation.height - (gint)attributes.y * 2);
 
-  attributes.cursor = gdk_cursor_new (GDK_XTERM);
+  attributes.cursor = gdk_cursor_new_for_screen (gtk_widget_get_screen (widget), GDK_XTERM);
   attributes_mask |= GDK_WA_CURSOR;
   
   text->text_area = gdk_window_new (widget->window, &attributes, attributes_mask);
@@ -1405,10 +1407,10 @@ gtk_text_style_set (GtkWidget *widget,
 
       recompute_geometry (text);
     }
-
+  
   if (text->current_font)
     text_font_unref (text->current_font);
-  text->current_font = get_text_font (gtk_style_get_font (widget->style));
+  text->current_font = get_text_font (gtk_style_get_font_for_display (gtk_widget_get_display (widget), widget->style));
 }
 
 static void
@@ -1572,7 +1574,8 @@ gtk_text_size_request (GtkWidget      *widget,
   xthickness = widget->style->xthickness + TEXT_BORDER_ROOM;
   ythickness = widget->style->ythickness + TEXT_BORDER_ROOM;
 
-  font = gtk_style_get_font (widget->style);
+  font = gtk_style_get_font_for_display (gtk_widget_get_display (widget),
+					 widget->style);
   
   char_height = MIN_TEXT_HEIGHT_LINES * (font->ascent +
 					 font->descent);
@@ -1741,6 +1744,8 @@ gtk_text_button_press (GtkWidget      *widget,
 	}
       else
 	{
+	  GdkDisplay *display = gtk_widget_get_display (widget);
+	  
 	  gtk_grab_add (widget);
 	  
 	  undraw_cursor (text, FALSE);
@@ -1752,8 +1757,12 @@ gtk_text_button_press (GtkWidget      *widget,
 				  text->cursor_mark.index);
 	  
 	  old_editable->has_selection = FALSE;
-	  if (gdk_selection_owner_get (GDK_SELECTION_PRIMARY) == widget->window)
-	    gtk_selection_owner_set (NULL, GDK_SELECTION_PRIMARY, event->time);
+	  if (gdk_selection_owner_get_for_display (display,
+						   GDK_SELECTION_PRIMARY) == widget->window)
+	    gtk_selection_owner_set_for_display (display,
+						 NULL, 
+						 GDK_SELECTION_PRIMARY,
+						 event->time);
 	}
     }
   
@@ -1766,6 +1775,8 @@ gtk_text_button_release (GtkWidget      *widget,
 {
   GtkText *text;
   GtkOldEditable *old_editable;
+  GdkDisplay *display;
+
   g_return_val_if_fail (GTK_IS_TEXT (widget), FALSE);
   g_return_val_if_fail (event != NULL, FALSE);
   
@@ -1788,15 +1799,17 @@ gtk_text_button_release (GtkWidget      *widget,
     {
       text = GTK_TEXT (widget);
       old_editable = GTK_OLD_EDITABLE (widget);
+      display = gtk_widget_get_display (widget);
       
       gtk_grab_remove (widget);
       
       old_editable->has_selection = FALSE;
       if (old_editable->selection_start_pos != old_editable->selection_end_pos)
 	{
-	  if (gtk_selection_owner_set (widget,
-				       GDK_SELECTION_PRIMARY,
-				       event->time))
+	  if (gtk_selection_owner_set_for_display (display,
+						   widget,
+						   GDK_SELECTION_PRIMARY,
+						   event->time))
 	    old_editable->has_selection = TRUE;
 	  else
 	    gtk_text_update_text (old_editable, old_editable->selection_start_pos,
@@ -1804,8 +1817,12 @@ gtk_text_button_release (GtkWidget      *widget,
 	}
       else
 	{
-	  if (gdk_selection_owner_get (GDK_SELECTION_PRIMARY) == widget->window)
-	    gtk_selection_owner_set (NULL, GDK_SELECTION_PRIMARY, event->time);
+	  if (gdk_selection_owner_get_for_display (display,
+						   GDK_SELECTION_PRIMARY) == widget->window)
+	    gtk_selection_owner_set_for_display (display, 
+						 NULL,
+						 GDK_SELECTION_PRIMARY, 
+						 event->time);
 	}
     }
   else if (event->button == 3)

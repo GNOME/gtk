@@ -878,6 +878,7 @@ gtk_menu_item_position_menu (GtkMenu  *menu,
   GtkMenuItem *menu_item;
   GtkWidget *widget;
   GtkWidget *parent_menu_item;
+  GdkScreen *screen;
   gint screen_width;
   gint screen_height;
   gint twidth, theight;
@@ -893,8 +894,9 @@ gtk_menu_item_position_menu (GtkMenu  *menu,
   twidth = GTK_WIDGET (menu)->requisition.width;
   theight = GTK_WIDGET (menu)->requisition.height;
 
-  screen_width = gdk_screen_width ();
-  screen_height = gdk_screen_height ();
+  screen = gtk_widget_get_screen (widget);
+  screen_width = gdk_screen_get_width (screen);
+  screen_height = gdk_screen_get_height (screen);
 
   if (!gdk_window_get_origin (widget->window, &tx, &ty))
     {

@@ -49,6 +49,7 @@ struct _GtkClipboard
   guint32 timestamp;
 
   gboolean have_selection;
+  GdkDisplay *display;
 };
 
 struct _RequestContentsInfo
@@ -68,9 +69,6 @@ static void selection_received (GtkWidget        *widget,
 				GtkSelectionData *selection_data,
 				guint             time);
 
-static GSList *clipboards;
-static GtkWidget *clipboard_widget;
-
 enum {
   TARGET_STRING,
   TARGET_TEXT,
@@ -84,15 +82,17 @@ static GQuark request_contents_key_id = 0;
 static const gchar *clipboards_owned_key = "gtk-clipboards-owned";
 static GQuark clipboards_owned_key_id = 0;
   
-
 /**
- * gtk_clipboard_get:
+ * gtk_clipboard_get_for_display:
+ * @display: the display for which the clipboard is to be retrieved or created
  * @selection: a #GdkAtom which identifies the clipboard
  *             to use.
  * 
  * Returns the clipboard object for the given selection.
  * Cut/copy/paste menu items and keyboard shortcuts should use
- * the default clipboard, returned by passing #GDK_NONE for @selection.
+ * the default clipboard, returned by passing %GDK_SELECTION_CLIPBOARD for @selection.
+ * (%GDK_NONE is supported as a synonym for GDK_SELECTION_CLIPBOARD
+ * for backwards compatibility reasons.)
  * The currently-selected object or text should be provided on the clipboard
  * identified by #GDK_SELECTION_PRIMARY. Cut/copy/paste menu items
  * conceptually copy the contents of the #GDK_SELECTION_PRIMARY clipboard
@@ -121,13 +121,18 @@ static GQuark clipboards_owned_key_id = 0;
  *             cannot be freed.
  **/
 GtkClipboard *
-gtk_clipboard_get (GdkAtom selection)
+gtk_clipboard_get_for_display (GdkDisplay *display, GdkAtom selection)
 {
   GtkClipboard *clipboard = NULL;
+  GSList *clipboards;
   GSList *tmp_list;
 
+  g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
+
   if (selection == GDK_NONE)
-    selection = gdk_atom_intern ("CLIPBOARD", FALSE);
+    selection = GDK_SELECTION_CLIPBOARD;
+
+  clipboards = g_object_get_data (G_OBJECT (display), "gtk-clipboard-list");
 
   tmp_list = clipboards;
   while (tmp_list)
@@ -143,10 +148,32 @@ gtk_clipboard_get (GdkAtom selection)
     {
       clipboard = g_new0 (GtkClipboard, 1);
       clipboard->selection = selection;
+      clipboard->display = display;
       clipboards = g_slist_prepend (clipboards, clipboard);
+      g_object_set_data (G_OBJECT (display), "gtk-clipboard-list", clipboards);
     }
   
   return clipboard;
+}
+
+/**
+ * gtk_clipboard_get():
+ * @selection: a #GdkAtom which identifies the clipboard
+ *             to use.
+ * 
+ * Returns the clipboard object for the given selection.
+ * See gtk_clipboard_get_for_display() for complete details.
+ * 
+ * Return value: the appropriate clipboard object. If no
+ *             clipboard already exists, a new one will
+ *             be created. Once a clipboard object has
+ *             been created, it is persistent for all time and
+ *             cannot be freed.
+ **/
+GtkClipboard *
+gtk_clipboard_get (GdkAtom selection)
+{
+  return gtk_clipboard_get_for_display (gdk_get_default_display (), selection);
 }
 
 static void 
@@ -155,7 +182,7 @@ selection_get_cb (GtkWidget          *widget,
 		  guint               time,
 		  guint               info)
 {
-  GtkClipboard *clipboard = gtk_clipboard_get (selection_data->selection);
+  GtkClipboard *clipboard = gtk_widget_get_clipboard (widget, selection_data->selection);
 
   if (clipboard && clipboard->get_func)
     clipboard->get_func (clipboard, selection_data, info, clipboard->user_data);
@@ -165,7 +192,7 @@ static gboolean
 selection_clear_event_cb (GtkWidget	    *widget,
 			  GdkEventSelection *event)
 {
-  GtkClipboard *clipboard = gtk_clipboard_get (event->selection);
+  GtkClipboard *clipboard = gtk_widget_get_clipboard (widget, event->selection);
 
   if (clipboard)
     {
@@ -177,9 +204,10 @@ selection_clear_event_cb (GtkWidget	    *widget,
 }
 
 static GtkWidget *
-make_clipboard_widget (gboolean provider)
+make_clipboard_widget (GdkDisplay *display, 
+		       gboolean    provider)
 {
-  GtkWidget *widget = gtk_invisible_new ();
+  GtkWidget *widget = gtk_invisible_new_for_screen (gdk_display_get_default_screen (display));
 
   gtk_signal_connect (GTK_OBJECT (widget), "selection_received",
 		      GTK_SIGNAL_FUNC (selection_received), NULL);
@@ -198,12 +226,17 @@ make_clipboard_widget (gboolean provider)
   return widget;
 }
 
-
-static void
-ensure_clipboard_widget ()
+static GtkWidget *
+get_clipboard_widget (GdkDisplay *display)
 {
-  if (!clipboard_widget)
-    clipboard_widget = make_clipboard_widget (TRUE);
+  GtkWidget *clip_widget = g_object_get_data (G_OBJECT (display), "gtk-clipboard-widget");
+  if (!clip_widget)
+    {
+      clip_widget = make_clipboard_widget (display, TRUE);
+      g_object_set_data (G_OBJECT (display), "gtk-clipboard-widget", clip_widget);
+    }
+
+  return clip_widget;
 }
 
 /* This function makes a very good guess at what the correct
@@ -224,10 +257,9 @@ ensure_clipboard_widget ()
 static guint32
 clipboard_get_timestamp (GtkClipboard *clipboard)
 {
+  GtkWidget *clipboard_widget = get_clipboard_widget (clipboard->display);
   guint32 timestamp = gtk_get_current_event_time ();
 
-  ensure_clipboard_widget ();
-  
   if (timestamp == GDK_CURRENT_TIME)
     {
 #ifdef GDK_WINDOWING_X11
@@ -321,10 +353,12 @@ gtk_clipboard_set_contents (GtkClipboard         *clipboard,
 			    gpointer              user_data,
 			    gboolean              have_owner)
 {
-  ensure_clipboard_widget ();
+  GtkWidget *clipboard_widget = get_clipboard_widget (clipboard->display);
 
-  if (gtk_selection_owner_set (clipboard_widget, clipboard->selection,
-			       clipboard_get_timestamp (clipboard)))
+  if (gtk_selection_owner_set_for_display (clipboard->display,
+					   clipboard_widget,
+					   clipboard->selection,
+					   clipboard_get_timestamp (clipboard)))
     {
       clipboard->have_selection = TRUE;
 
@@ -509,8 +543,10 @@ gtk_clipboard_clear (GtkClipboard *clipboard)
   g_return_if_fail (clipboard != NULL);
 
   if (clipboard->have_selection)
-    gtk_selection_owner_set (NULL, clipboard->selection,
-			     clipboard_get_timestamp (clipboard));
+    gtk_selection_owner_set_for_display (clipboard->display, 
+					 NULL,
+					 clipboard->selection,
+					 clipboard_get_timestamp (clipboard));
 }
 
 static void 
@@ -595,13 +631,13 @@ selection_received (GtkWidget            *widget,
   RequestContentsInfo *request_info = get_request_contents_info (widget);
   set_request_contents_info (widget, NULL);
   
-  request_info->callback (gtk_clipboard_get (selection_data->selection), 
+  request_info->callback (gtk_widget_get_clipboard (widget, selection_data->selection), 
 			  selection_data,
 			  request_info->user_data);
 
   g_free (request_info);
 
-  if (widget != clipboard_widget)
+  if (widget != get_clipboard_widget (gtk_widget_get_display (widget)))
     gtk_widget_destroy (widget);
 }
 
@@ -628,15 +664,16 @@ gtk_clipboard_request_contents (GtkClipboard            *clipboard,
 {
   RequestContentsInfo *info;
   GtkWidget *widget;
+  GtkWidget *clipboard_widget;
 
   g_return_if_fail (clipboard != NULL);
   g_return_if_fail (target != GDK_NONE);
   g_return_if_fail (callback != NULL);
   
-  ensure_clipboard_widget ();
+  clipboard_widget = get_clipboard_widget (clipboard->display);
 
   if (get_request_contents_info (clipboard_widget))
-    widget = make_clipboard_widget (FALSE);
+    widget = make_clipboard_widget (clipboard->display, FALSE);
   else
     widget = clipboard_widget;
 
@@ -839,6 +876,21 @@ gtk_clipboard_wait_for_text (GtkClipboard *clipboard)
   g_main_destroy (results.loop);
 
   return results.data;
+}
+/**
+ * gtk_clipboard_get_display:
+ * @clipboard: a #GtkClipboard
+ *
+ * Gets the #GdkDisplay associated with @clipboard
+ *
+ * Return value: the #GdkDisplay associated with @clipboard
+ **/
+GdkDisplay *
+gtk_clipboard_get_display (GtkClipboard *clipboard)
+{
+  g_return_val_if_fail (clipboard != NULL, NULL);
+
+  return clipboard->display;
 }
 
 /**

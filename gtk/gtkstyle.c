@@ -46,7 +46,6 @@ typedef struct {
   GValue      value;
 } PropertyValue;
 
-
 /* --- prototypes --- */
 static void	 gtk_style_init			(GtkStyle	*style);
 static void	 gtk_style_class_init		(GtkStyleClass	*klass);
@@ -414,7 +413,7 @@ static char radio_inconsistent_aa_bits[] = {
 
 static struct {
   char      *bits;
-  GdkBitmap *bmap;
+  GList	    *bmap_list; /* list of GdkBitmap */
 } indicator_parts[] = {
   { check_aa_bits, NULL },
   { check_base_bits, NULL },
@@ -775,6 +774,12 @@ gtk_style_attach (GtkStyle  *style,
   if (!new_style)
     {
       new_style = gtk_style_duplicate (style);
+      if (style->colormap->screen != colormap->screen &&
+	  new_style->private_font)
+	{
+	  gdk_font_unref (new_style->private_font);
+	  new_style->private_font = NULL;
+	}
       gtk_style_realize (new_style, colormap);
     }
 
@@ -2011,6 +2016,34 @@ sanitize_size (GdkWindow *window,
     gdk_window_get_size (window, NULL, height);
 }
 
+static GdkBitmap * 
+get_indicator_for_screen (GdkDrawable   *drawable,
+			  IndicatorPart  part)
+			  
+{
+  GdkScreen *screen = gdk_drawable_get_screen (drawable);
+  GdkBitmap *bitmap;
+  GList *tmp_list;
+  
+  tmp_list = indicator_parts[part].bmap_list;
+  while (tmp_list)
+    {
+      bitmap = tmp_list->data;
+      
+      if (gdk_drawable_get_screen (bitmap) == screen)
+	return bitmap;
+      
+      tmp_list = tmp_list->next;
+    }
+  
+  bitmap = gdk_bitmap_create_from_data (drawable,
+					indicator_parts[part].bits,
+					INDICATOR_PART_SIZE, INDICATOR_PART_SIZE);
+  indicator_parts[part].bmap_list = g_list_prepend (indicator_parts[part].bmap_list, bitmap);
+
+  return bitmap;
+}
+
 static void
 draw_part (GdkDrawable  *drawable,
 	   GdkGC        *gc,
@@ -2022,13 +2055,8 @@ draw_part (GdkDrawable  *drawable,
   if (area)
     gdk_gc_set_clip_rectangle (gc, area);
   
-  if (!indicator_parts[part].bmap)
-    indicator_parts[part].bmap = gdk_bitmap_create_from_data (drawable,
-							      indicator_parts[part].bits,
-							      INDICATOR_PART_SIZE, INDICATOR_PART_SIZE);
-
   gdk_gc_set_ts_origin (gc, x, y);
-  gdk_gc_set_stipple (gc, indicator_parts[part].bmap);
+  gdk_gc_set_stipple (gc, get_indicator_for_screen (drawable, part));
   gdk_gc_set_fill (gc, GDK_STIPPLED);
 
   gdk_draw_rectangle (drawable, gc, TRUE, x, y, INDICATOR_PART_SIZE, INDICATOR_PART_SIZE);
@@ -3067,8 +3095,12 @@ gtk_default_draw_string (GtkStyle      *style,
                          gint           y,
                          const gchar   *string)
 {
+  GdkDisplay *display;
+  
   g_return_if_fail (GTK_IS_STYLE (style));
   g_return_if_fail (window != NULL);
+  
+  display = gdk_drawable_get_display (window);
   
   if (area)
     {
@@ -3077,9 +3109,13 @@ gtk_default_draw_string (GtkStyle      *style,
     }
 
   if (state_type == GTK_STATE_INSENSITIVE)
-    gdk_draw_string (window, gtk_style_get_font (style), style->white_gc, x + 1, y + 1, string);
+    gdk_draw_string (window,
+		     gtk_style_get_font_for_display (display, style),
+		     style->white_gc, x + 1, y + 1, string);
 
-  gdk_draw_string (window, gtk_style_get_font (style), style->fg_gc[state_type], x, y, string);
+  gdk_draw_string (window,
+		   gtk_style_get_font_for_display (display, style),
+		   style->fg_gc[state_type], x, y, string);
 
   if (area)
     {
@@ -4628,7 +4664,8 @@ range_new (guint start,
 }
 
 static PangoLayout*
-get_insensitive_layout (PangoLayout *layout)
+get_insensitive_layout (GdkDrawable *drawable,
+			PangoLayout *layout)
 {
   GSList *embossed_ranges = NULL;
   GSList *stippled_ranges = NULL;
@@ -4731,7 +4768,7 @@ get_insensitive_layout (PangoLayout *layout)
             0x02, 0x01
           };
 
-          stipple = gdk_bitmap_create_from_data (NULL,
+          stipple = gdk_bitmap_create_from_data (drawable,
                                                  gray50_bits, gray50_width,
                                                  gray50_height);
         }
@@ -4782,7 +4819,7 @@ gtk_default_draw_layout (GtkStyle        *style,
     {
       PangoLayout *ins;
 
-      ins = get_insensitive_layout (layout);
+      ins = get_insensitive_layout (window, layout);
       
       gdk_draw_layout (window, gc, x, y, ins);
 
@@ -5562,21 +5599,24 @@ gtk_border_get_type (void)
 }
 
 /**
- * gtk_style_get_font:
+ * gtk_style_get_font_for_display:
+ * @display : a #GdkDisplay
  * @style: a #GtkStyle
  * 
  * Gets the #GdkFont to use for the given style. This is
- * meant only as a replacement for direct access to @style->font
+ * meant only as a replacement for direct access to style->font
  * and should not be used in new code. New code should
- * use @style->font_desc instead.
+ * use style->font_desc instead.
  * 
  * Return value: the #GdkFont for the style. This font is owned
  *   by the style; if you want to keep around a copy, you must
  *   call gdk_font_ref().
  **/
 GdkFont *
-gtk_style_get_font (GtkStyle *style)
+gtk_style_get_font_for_display (GdkDisplay *display,
+				GtkStyle   *style)
 {
+  g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
   g_return_val_if_fail (GTK_IS_STYLE (style), NULL);
 
   if (style->private_font && style->private_font_desc)
@@ -5599,18 +5639,40 @@ gtk_style_get_font (GtkStyle *style)
     {
       if (style->font_desc)
 	{
-	  style->private_font = gdk_font_from_description (style->font_desc);
+	  /* no colormap, no screen */
+	  style->private_font = gdk_font_from_description_for_display (display, style->font_desc);
 	  style->private_font_desc = pango_font_description_copy (style->font_desc);
 	}
 
       if (!style->private_font)
-	style->private_font = gdk_font_load ("fixed");
-
+	style->private_font = gdk_font_load_for_display (display, "fixed");
+      
       if (!style->private_font) 
 	g_error ("Unable to load \"fixed\" font");
     }
 
   return style->private_font;
+}
+
+/**
+ * gtk_style_get_font:
+ * @style: a #GtkStyle
+ * 
+ * Gets the #GdkFont to use for the given style. This is
+ * meant only as a replacement for direct access to @style->font
+ * and should not be used in new code. New code should
+ * use @style->font_desc instead.
+ * 
+ * Return value: the #GdkFont for the style. This font is owned
+ *   by the style; if you want to keep around a copy, you must
+ *   call gdk_font_ref().
+ **/
+GdkFont *
+gtk_style_get_font (GtkStyle *style)
+{
+  g_return_val_if_fail (GTK_IS_STYLE (style), NULL);
+
+  return gtk_style_get_font_for_display (gdk_get_default_display (), style);
 }
 
 /**

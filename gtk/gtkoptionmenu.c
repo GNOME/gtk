@@ -927,7 +927,7 @@ gtk_option_menu_position (GtkMenu  *menu,
       children = children->next;
     }
 
-  screen_width = gdk_screen_width ();
+  screen_width = gdk_screen_get_width (gtk_widget_get_screen (widget));
   
   if (menu_xpos < 0)
     menu_xpos = 0;

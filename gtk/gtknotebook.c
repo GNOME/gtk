@@ -647,7 +647,7 @@ gtk_notebook_change_current_page (GtkNotebook *notebook,
   if (current)
     gtk_notebook_switch_page (notebook, current->data, -1);
   else
-    gdk_beep ();
+    gdk_display_beep (gtk_widget_get_display (GTK_WIDGET (notebook)));
 }
 
 static GtkDirectionType
@@ -1964,7 +1964,7 @@ focus_tabs_move (GtkNotebook     *notebook,
   if (new_page)
     gtk_notebook_switch_focus_tab (notebook, new_page);
   else
-    gdk_beep ();
+    gdk_display_beep (gtk_widget_get_display (GTK_WIDGET (notebook)));
   
   return TRUE;
 }
