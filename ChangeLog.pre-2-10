@@ -1,3 +1,8 @@
+Tue Mar 22 14:16:31 2005  Manish Singh  <yosh@gimp.org>
+
+	* gtk/gtkfilesystem.c (gtk_file_system_set_bookmark_label):
+	Use g_return_if_fail, not g_return_val_if_fail.
+
 2005-03-22  Matthias Clasen  <mclasen@redhat.com>
 
 	Implement bookmark renaming  (#136216, Sean Middleditch)
