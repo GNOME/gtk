@@ -1,3 +1,9 @@
+Fri Jan 18 23:01:37 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkrc.c (gtk_rc_parse_style): Fix problems when
+	an engine declaration occurs in a reopened style, and
+	g_free() of objects when errors occur.
+
 2002-01-18  Matthias Clasen  <matthiasc@poet.de>
 
 	* gtk/gtkitemfactory.c (gtk_item_factory_get_widget_by_action):

@@ -2216,14 +2216,38 @@ gtk_rc_parse_statement (GtkRcContext *context,
     }
 }
 
+static void
+fixup_rc_set (GSList     *list,
+	      GtkRcStyle *orig,
+	      GtkRcStyle *new)
+{
+  while (list)
+    {
+      GtkRcSet *set = list->data;
+      if (set->rc_style == orig)
+	set->rc_style = new;
+      list = list->next;
+    }
+}
+
+static void
+fixup_rc_sets (GtkRcContext *context,
+	       GtkRcStyle   *orig,
+	       GtkRcStyle   *new)
+{
+  fixup_rc_set (context->rc_sets_widget, orig, new);
+  fixup_rc_set (context->rc_sets_widget_class, orig, new);
+  fixup_rc_set (context->rc_sets_class, orig, new);
+}
+
 static guint
 gtk_rc_parse_style (GtkRcContext *context,
 		    GScanner     *scanner)
 {
   GtkRcStyle *rc_style;
+  GtkRcStyle *orig_style;
   GtkRcStyle *parent_style;
   guint token;
-  gint insert;
   gint i;
   GtkIconFactory *our_factory = NULL;
   
@@ -2235,8 +2259,11 @@ gtk_rc_parse_style (GtkRcContext *context,
   if (token != G_TOKEN_STRING)
     return G_TOKEN_STRING;
   
-  insert = FALSE;
   rc_style = gtk_rc_style_find (context, scanner->value.v_string);
+  if (rc_style)
+    orig_style = g_object_ref (rc_style);
+  else
+    orig_style = NULL;
 
   /* If there's a list, its first member is always the factory belonging
    * to this RcStyle
@@ -2246,7 +2273,6 @@ gtk_rc_parse_style (GtkRcContext *context,
   
   if (!rc_style)
     {
-      insert = TRUE;
       rc_style = gtk_rc_style_new ();
       rc_style->name = g_strdup (scanner->value.v_string);
       
@@ -2265,10 +2291,8 @@ gtk_rc_parse_style (GtkRcContext *context,
       token = g_scanner_get_next_token (scanner);
       if (token != G_TOKEN_STRING)
 	{
-	  if (insert)
-	    g_free (rc_style);
-
-	  return G_TOKEN_STRING;
+	  token = G_TOKEN_STRING;
+	  goto err;
 	}
       
       parent_style = gtk_rc_style_find (context, scanner->value.v_string);
@@ -2346,10 +2370,8 @@ gtk_rc_parse_style (GtkRcContext *context,
   token = g_scanner_get_next_token (scanner);
   if (token != G_TOKEN_LEFT_CURLY)
     {
-      if (insert)
-	g_free (rc_style);
-
-      return G_TOKEN_LEFT_CURLY;
+      token = G_TOKEN_LEFT_CURLY;
+      goto err;
     }
   
   token = g_scanner_peek_next_token (scanner);
@@ -2449,42 +2471,46 @@ gtk_rc_parse_style (GtkRcContext *context,
 	}
 
       if (token != G_TOKEN_NONE)
-	{
-	  if (insert)
-	    gtk_rc_style_unref (rc_style);
+	goto err;
 
-	  return token;
-	}
       token = g_scanner_peek_next_token (scanner);
     } /* while (token != G_TOKEN_RIGHT_CURLY) */
   
   token = g_scanner_get_next_token (scanner);
   if (token != G_TOKEN_RIGHT_CURLY)
     {
-      if (insert)
-	{
-	  if (rc_style->font_desc)
-	    pango_font_description_free (rc_style->font_desc);
-	  
-	  for (i = 0; i < 5; i++)
-	    if (rc_style->bg_pixmap_name[i])
-	      g_free (rc_style->bg_pixmap_name[i]);
-	  
-	  g_free (rc_style);
-	}
-      return G_TOKEN_RIGHT_CURLY;
+      token = G_TOKEN_RIGHT_CURLY;
+      goto err;
     }
   
-  if (insert)
+  if (rc_style != orig_style)
     {
       if (!context->rc_style_ht)
 	context->rc_style_ht = g_hash_table_new ((GHashFunc) gtk_rc_style_hash,
 						 (GEqualFunc) gtk_rc_style_equal);
       
-      g_hash_table_insert (context->rc_style_ht, rc_style->name, rc_style);
+      g_hash_table_replace (context->rc_style_ht, rc_style->name, rc_style);
+
+      /* If we copied the data into a new rc style, fix up references to the old rc style
+       * in bindings that we have.
+       */
+      if (orig_style)
+	fixup_rc_sets (context, orig_style, rc_style);
     }
+
+  if (orig_style)
+    g_object_unref (orig_style);
   
   return G_TOKEN_NONE;
+
+ err:
+  if (rc_style != orig_style)
+    gtk_rc_style_unref (rc_style);
+
+  if (orig_style)
+    g_object_unref (orig_style);
+  
+  return token;
 }
 
 const GtkRcProperty*
