@@ -97,6 +97,9 @@ gtk_tree_drag_source_row_draggable (GtkTreeDragSource *drag_source,
     return (* iface->row_draggable) (drag_source, path);
   else
     return TRUE;
+    /* Returning TRUE if row_draggable is not implemented is a fallback.
+       Interface implementations such as GtkTreeStore and GtkListStore really should
+       implement row_draggable. */
 }
 
 
