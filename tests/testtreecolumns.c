@@ -64,7 +64,7 @@ set_visible (GtkCellRendererToggle *cell,
   if (column)
     {
       gtk_tree_view_column_set_visible (column, ! gtk_tree_view_column_get_visible (column));
-      gtk_tree_model_changed (model, path, &iter);
+      gtk_tree_model_range_changed (model, path, &iter, path, &iter);
     }
   gtk_tree_path_free (path);
 }

@@ -1,3 +1,17 @@
+Mon Apr  2 19:36:57 2001  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtktreestore.c (gtk_tree_store_init):  Bug fix to make trees
+	work again when not sorted.
+
+	* gtk/gtktreeview.c (gtk_tree_view_class_init): Add "collapse_row"
+	and "expand_row" signal, closing bug 52578.
+
+	* gtk/gtktreeview.c (gtk_tree_view_expand_row): Add signal
+	support.
+
+	* gtk/gtktreeview.c (gtk_tree_view_collapse_row): Add signal
+	support.
+
 Mon Apr  2 18:18:07 2001  Owen Taylor  <otaylor@redhat.com>
 
         * gdk/gdkevents.h: Add GdkEventSetting event for notification

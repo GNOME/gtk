@@ -62,6 +62,8 @@ struct _GtkTreeViewChild
 enum
 {
   ROW_ACTIVATED,
+  EXPAND_ROW,
+  COLLAPSE_ROW,
   LAST_SIGNAL
 };
 
@@ -401,15 +403,35 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
 		    GTK_TYPE_NONE, 2,
 		    GTK_TYPE_ADJUSTMENT, GTK_TYPE_ADJUSTMENT);
 
-  tree_view_signals[ROW_ACTIVATED] = gtk_signal_new ("row_activated",
-						     GTK_RUN_LAST | GTK_RUN_ACTION,
-						     GTK_CLASS_TYPE (object_class),
-						     GTK_SIGNAL_OFFSET (GtkTreeViewClass, row_activated),
-						     gtk_marshal_VOID__BOXED_OBJECT,
-						     GTK_TYPE_NONE, 2,
-						     GTK_TYPE_TREE_PATH,
-						     GTK_TYPE_TREE_VIEW_COLUMN);
-
+  tree_view_signals[ROW_ACTIVATED] =
+    gtk_signal_new ("row_activated",
+		    GTK_RUN_LAST | GTK_RUN_ACTION,
+		    GTK_CLASS_TYPE (object_class),
+		    GTK_SIGNAL_OFFSET (GtkTreeViewClass, row_activated),
+		    gtk_marshal_VOID__BOXED_OBJECT,
+		    GTK_TYPE_NONE, 2,
+		    GTK_TYPE_TREE_PATH,
+		    GTK_TYPE_TREE_VIEW_COLUMN);
+  tree_view_signals[EXPAND_ROW] =
+    g_signal_newc ("expand_row",
+		   G_TYPE_FROM_CLASS (object_class),
+		   G_SIGNAL_RUN_LAST,
+		   G_STRUCT_OFFSET (GtkTreeViewClass, expand_row),
+		   _gtk_boolean_handled_accumulator, NULL,
+		    gtk_marshal_BOOLEAN__BOXED_BOXED,
+		   G_TYPE_BOOLEAN, 2,
+		   GTK_TYPE_TREE_ITER,
+		   GTK_TYPE_TREE_PATH);
+  tree_view_signals[COLLAPSE_ROW] =
+    g_signal_newc ("collapse_row",
+		   G_TYPE_FROM_CLASS (object_class),
+		   G_SIGNAL_RUN_LAST,
+		   G_STRUCT_OFFSET (GtkTreeViewClass, collapse_row),
+		   _gtk_boolean_handled_accumulator, NULL,
+		    gtk_marshal_BOOLEAN__BOXED_BOXED,
+		   G_TYPE_BOOLEAN, 2,
+		   GTK_TYPE_TREE_ITER,
+		   GTK_TYPE_TREE_PATH);
 }
 
 static void
@@ -1992,47 +2014,67 @@ gtk_tree_view_button_release (GtkWidget      *widget,
       if (tree_view->priv->button_pressed_node == tree_view->priv->prelight_node &&
           GTK_TREE_VIEW_FLAG_SET (tree_view, GTK_TREE_VIEW_ARROW_PRELIT))
 	{
-	  GtkTreePath *path;
+	  GtkTreePath *path = NULL;
 	  GtkTreeIter iter;
 
 	  /* Actually activate the node */
 	  if (tree_view->priv->button_pressed_node->children == NULL)
 	    {
 	      GtkTreeIter child;
-	      path = _gtk_tree_view_find_path (GTK_TREE_VIEW (widget),
+	      path = _gtk_tree_view_find_path (tree_view,
 					       tree_view->priv->button_pressed_tree,
 					       tree_view->priv->button_pressed_node);
-	      tree_view->priv->button_pressed_node->children = _gtk_rbtree_new ();
-	      tree_view->priv->button_pressed_node->children->parent_tree = tree_view->priv->button_pressed_tree;
-	      tree_view->priv->button_pressed_node->children->parent_node = tree_view->priv->button_pressed_node;
 	      gtk_tree_model_get_iter (tree_view->priv->model, &iter, path);
 
 	      if (gtk_tree_model_iter_children (tree_view->priv->model, &child, &iter))
-                gtk_tree_view_build_tree (tree_view,
-                                          tree_view->priv->button_pressed_node->children,
-                                          &child,
-                                          gtk_tree_path_get_depth (path) + 1,
-                                          FALSE,
-                                          GTK_WIDGET_REALIZED (widget));
+		{
+		  gboolean expand;
+		  g_signal_emit (G_OBJECT (tree_view), tree_view_signals[EXPAND_ROW], 0, &iter, path, &expand);
+		  if (! expand)
+		    {
+		      tree_view->priv->button_pressed_node->children = _gtk_rbtree_new ();
+		      tree_view->priv->button_pressed_node->children->parent_tree = tree_view->priv->button_pressed_tree;
+		      tree_view->priv->button_pressed_node->children->parent_node = tree_view->priv->button_pressed_node;
+		      gtk_tree_view_build_tree (tree_view,
+						tree_view->priv->button_pressed_node->children,
+						&child,
+						gtk_tree_path_get_depth (path) + 1,
+						FALSE,
+						GTK_WIDGET_REALIZED (widget));
+
+		    }
+		}
 	    }
 	  else
 	    {
+	      gboolean collapse;
+
 	      path = _gtk_tree_view_find_path (GTK_TREE_VIEW (widget),
-					       tree_view->priv->button_pressed_node->children,
-					       tree_view->priv->button_pressed_node->children->root);
+					       tree_view->priv->button_pressed_tree,
+					       tree_view->priv->button_pressed_node);
 	      gtk_tree_model_get_iter (tree_view->priv->model,
 				       &iter,
 				       path);
+	      g_signal_emit (G_OBJECT (tree_view), tree_view_signals[COLLAPSE_ROW], 0, &iter, path, &collapse);
 
-	      gtk_tree_view_discover_dirty (GTK_TREE_VIEW (widget),
-					    tree_view->priv->button_pressed_node->children,
-					    &iter,
-					    gtk_tree_path_get_depth (path));
-	      gtk_tree_view_unref_tree (GTK_TREE_VIEW (widget),
-					tree_view->priv->button_pressed_node->children);
-	      _gtk_rbtree_remove (tree_view->priv->button_pressed_node->children);
+	      if (! collapse)
+		{
+		  GtkTreeIter child_iter;
+		  gtk_tree_path_append_index (path, 0);
+		  gtk_tree_model_iter_children (tree_view->priv->model,
+						&child_iter,
+						&iter);
+		  gtk_tree_view_discover_dirty (GTK_TREE_VIEW (widget),
+						tree_view->priv->button_pressed_node->children,
+						&child_iter,
+						gtk_tree_path_get_depth (path));
+		  gtk_tree_view_unref_tree (GTK_TREE_VIEW (widget),
+					    tree_view->priv->button_pressed_node->children);
+		  _gtk_rbtree_remove (tree_view->priv->button_pressed_node->children);
+		}
 	    }
-	  gtk_tree_path_free (path);
+	  if (path)
+	    gtk_tree_path_free (path);
 
 	  _gtk_tree_view_update_size (GTK_TREE_VIEW (widget));
 	}
@@ -5181,6 +5223,7 @@ gtk_tree_view_expand_row (GtkTreeView *tree_view,
   GtkTreeIter child;
   GtkRBTree *tree;
   GtkRBNode *node;
+  gboolean expand;
 
   g_return_val_if_fail (GTK_IS_TREE_VIEW (tree_view), FALSE);
   g_return_val_if_fail (tree_view->priv->model != NULL, FALSE);
@@ -5197,6 +5240,11 @@ gtk_tree_view_expand_row (GtkTreeView *tree_view,
 
   gtk_tree_model_get_iter (tree_view->priv->model, &iter, path);
   if (! gtk_tree_model_iter_has_child (tree_view->priv->model, &iter))
+    return FALSE;
+
+  g_signal_emit (G_OBJECT (tree_view), tree_view_signals[EXPAND_ROW], 0, &iter, path, &expand);
+
+  if (expand)
     return FALSE;
 
   node->children = _gtk_rbtree_new ();
@@ -5222,9 +5270,9 @@ gtk_tree_view_expand_row (GtkTreeView *tree_view,
  * @tree_view: a #GtkTreeView
  * @path: path to a row in the @tree_view
  *
- * Collapses a row (hides its child rows).
+ * Collapses a row (hides its child rows, if they exist.)
  *
- * Return value: %TRUE if the row was expanded
+ * Return value: %TRUE if the row was collapsed.
  **/
 gboolean
 gtk_tree_view_collapse_row (GtkTreeView *tree_view,
@@ -5233,6 +5281,7 @@ gtk_tree_view_collapse_row (GtkTreeView *tree_view,
   GtkRBTree *tree;
   GtkRBNode *node;
   GtkTreeIter iter;
+  gboolean collapse;
 
   g_return_val_if_fail (GTK_IS_TREE_VIEW (tree_view), FALSE);
   g_return_val_if_fail (tree_view->priv->tree != NULL, FALSE);
@@ -5248,6 +5297,12 @@ gtk_tree_view_collapse_row (GtkTreeView *tree_view,
     return FALSE;
 
   gtk_tree_model_get_iter (tree_view->priv->model, &iter, path);
+
+  g_signal_emit (G_OBJECT (tree_view), tree_view_signals[COLLAPSE_ROW], 0, &iter, path, &collapse);
+  
+  if (collapse)
+    return FALSE;
+
   gtk_tree_view_discover_dirty (tree_view,
 				node->children,
 				&iter,
@@ -6133,9 +6188,7 @@ open_row_timeout (gpointer data)
       (pos == GTK_TREE_VIEW_DROP_INTO_OR_AFTER ||
        pos == GTK_TREE_VIEW_DROP_INTO_OR_BEFORE))
     {
-      gtk_tree_view_expand_row (tree_view,
-                                dest_path,
-                                FALSE);
+      gtk_tree_view_expand_row (tree_view, dest_path, FALSE);
       tree_view->priv->open_dest_timeout = 0;
 
       gtk_tree_path_free (dest_path);
