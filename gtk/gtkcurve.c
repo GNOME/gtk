@@ -652,7 +652,7 @@ gtk_curve_graph_events (GtkWidget *widget, GdkEvent *event, GtkCurve *c)
 
 	  c->cursor_type = new_type;
 
-	  cursor = gdk_cursor_new_for_screen (gtk_widget_get_screen (w),
+	  cursor = gdk_cursor_new_for_display (gtk_widget_get_display (w),
 					      c->cursor_type);
 	  gdk_window_set_cursor (w->window, cursor);
 	  gdk_cursor_destroy (cursor);

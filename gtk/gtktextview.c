@@ -3987,8 +3987,8 @@ gtk_text_view_motion_event (GtkWidget *widget, GdkEventMotion *event)
     {
       GdkCursor *cursor;
       
-      cursor = gdk_cursor_new_for_screen (gtk_widget_get_screen (widget),
-					  GDK_XTERM);
+      cursor = gdk_cursor_new_for_display (gtk_widget_get_display (widget),
+					   GDK_XTERM);
       gdk_window_set_cursor (text_view->text_window->bin_window, cursor);
       gdk_cursor_unref (cursor);
       text_view->mouse_cursor_obscured = FALSE;
@@ -6581,8 +6581,8 @@ text_window_realize (GtkTextWindow *win,
   if (win->type == GTK_TEXT_WINDOW_TEXT)
     {
       /* I-beam cursor */
-      cursor = gdk_cursor_new_for_screen (gdk_drawable_get_screen (parent),
-					  GDK_XTERM);
+      cursor = gdk_cursor_new_for_display (gdk_drawable_get_display (parent),
+					   GDK_XTERM);
       gdk_window_set_cursor (win->bin_window, cursor);
       gdk_cursor_unref (cursor);
 

@@ -757,8 +757,8 @@ gtk_combo_list_key_press (GtkWidget * widget, GdkEventKey * event, GtkCombo * co
 static void
 combo_event_box_realize (GtkWidget *widget)
 {
-  GdkCursor *cursor = gdk_cursor_new_for_screen (gtk_widget_get_screen (widget),
-						 GDK_TOP_LEFT_ARROW);
+  GdkCursor *cursor = gdk_cursor_new_for_display (gtk_widget_get_display (widget),
+						  GDK_TOP_LEFT_ARROW);
   gdk_window_set_cursor (widget->window, cursor);
   gdk_cursor_destroy (cursor);
 }

@@ -18,7 +18,7 @@
  * Boston, MA 02111-1307, USA.
  */
 
-#include "gdkscreen.h"
+#include "gdkdisplay.h"
 #include "gdkcursor.h"
 #include "gdkprivate-win32.h"
 
@@ -84,14 +84,14 @@ _gdk_win32_data_to_wcursor (GdkCursorType cursor_type)
 }
 
 GdkCursor*
-gdk_cursor_new_for_screen (GdkScreen    *screen,
-			   GdkCursorType cursor_type)
+gdk_cursor_new_for_display (GdkDisplay   *display,
+			    GdkCursorType cursor_type)
 {
   GdkCursorPrivate *private;
   GdkCursor *cursor;
   HCURSOR hcursor;
 
-  g_return_val_if_fail (screen == gdk_get_default_screen (), NULL);
+  g_return_val_if_fail (display == gdk_get_default_display (), NULL);
 
   hcursor = _gdk_win32_data_to_wcursor (cursor_type);
 
@@ -307,8 +307,8 @@ _gdk_cursor_destroy (GdkCursor *cursor)
   g_free (private);
 }
 
-GdkScreen *
-gdk_cursor_get_screen (GdkCursor *cursor)
+GdkDisplay *
+gdk_cursor_get_display (GdkCursor *cursor)
 {
-  return gdk_get_default_screen ();
+  return gdk_get_default_display ();
 }

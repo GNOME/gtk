@@ -4545,8 +4545,8 @@ gtk_clist_realize (GtkWidget *widget)
 			   GDK_POINTER_MOTION_MASK |
 			   GDK_POINTER_MOTION_HINT_MASK);
   attributes_mask = GDK_WA_CURSOR;
-  attributes.cursor = gdk_cursor_new_for_screen (gtk_widget_get_screen (widget),
-						 GDK_SB_H_DOUBLE_ARROW);
+  attributes.cursor = gdk_cursor_new_for_display (gtk_widget_get_display (widget),
+						  GDK_SB_H_DOUBLE_ARROW);
   clist->cursor_drag = attributes.cursor;
 
   attributes.x =  LIST_WIDTH (clist) + 1;

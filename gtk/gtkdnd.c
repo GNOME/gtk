@@ -182,7 +182,7 @@ static void          gtk_drag_get_event_actions (GdkEvent        *event,
 					         GdkDragAction    actions,
 					         GdkDragAction   *suggested_action,
 					         GdkDragAction   *possible_actions);
-static GdkCursor *   gtk_drag_get_cursor         (GdkScreen      *screen,
+static GdkCursor *   gtk_drag_get_cursor         (GdkDisplay     *display,
 						  GdkDragAction   action);
 static GtkWidget    *gtk_drag_get_ipc_widget     (GdkScreen	 *screen);
 static void          gtk_drag_release_ipc_widget (GtkWidget      *widget);
@@ -552,7 +552,7 @@ gtk_drag_get_event_actions (GdkEvent *event,
 }
 
 static GdkCursor *
-gtk_drag_get_cursor (GdkScreen    *screen,
+gtk_drag_get_cursor (GdkDisplay   *display,
 		     GdkDragAction action)
 {
   gint i;
@@ -562,7 +562,7 @@ gtk_drag_get_cursor (GdkScreen    *screen,
       break;
   if (drag_cursors[i].cursor != NULL)
     {
-      if (screen != gdk_cursor_get_screen (drag_cursors[i].cursor))
+      if (display != gdk_cursor_get_display (drag_cursors[i].cursor))
 	{
 	  gdk_cursor_unref (drag_cursors[i].cursor);
 	  drag_cursors[i].cursor = NULL;
@@ -571,21 +571,17 @@ gtk_drag_get_cursor (GdkScreen    *screen,
 
   if (drag_cursors[i].cursor == NULL)
     {
-      GdkColormap *colormap;
-      GdkColor fg, bg;
+      GdkColor bg = { 0, 0xffff, 0xffff, 0xffff };
+      GdkColor fg = { 0, 0x0000, 0x0000, 0x0000 };
+      GdkScreen *screen = gdk_display_get_default_screen (display);
+      GdkWindow *window = gdk_screen_get_root_window (screen);
 
       GdkPixmap *pixmap = 
-	gdk_bitmap_create_from_data (gdk_screen_get_root_window (screen),
-				     drag_cursors[i].bits, CURSOR_WIDTH, CURSOR_HEIGHT);
+	gdk_bitmap_create_from_data (window, drag_cursors[i].bits, CURSOR_WIDTH, CURSOR_HEIGHT);
 
       GdkPixmap *mask = 
-	gdk_bitmap_create_from_data (gdk_screen_get_root_window (screen),
-				     drag_cursors[i].mask, CURSOR_WIDTH, CURSOR_HEIGHT);
+	gdk_bitmap_create_from_data (window, drag_cursors[i].mask, CURSOR_WIDTH, CURSOR_HEIGHT);
 
-      colormap = gdk_screen_get_system_colormap (screen);
-      gdk_color_white (colormap, &bg);
-      gdk_color_black (colormap, &fg);
-      
       drag_cursors[i].cursor = gdk_cursor_new_from_pixmap (pixmap, mask, &fg, &bg, 0, 0);
 
       gdk_pixmap_unref (pixmap);
@@ -1843,7 +1839,7 @@ gtk_drag_begin (GtkWidget         *widget,
   gtk_drag_get_event_actions (event, info->button, actions,
 			      &suggested_action, &possible_actions);
 
-  info->cursor = gtk_drag_get_cursor (gtk_widget_get_screen (widget), suggested_action);
+  info->cursor = gtk_drag_get_cursor (gtk_widget_get_display (widget), suggested_action);
 
   /* Set cur_x, cur_y here so if the "drag_begin" signal shows
    * the drag icon, it will be in the right place
@@ -2467,7 +2463,7 @@ _gtk_drag_source_handle_event (GtkWidget *widget,
 	  }
 	else if (info->have_grab)
 	  {
-	    cursor = gtk_drag_get_cursor (gtk_widget_get_screen (widget),
+	    cursor = gtk_drag_get_cursor (gtk_widget_get_display (widget),
 					  event->dnd.context->action);
 	    if (info->cursor != cursor)
 	      {

@@ -342,8 +342,8 @@ gtk_tips_query_real_start_query (GtkTipsQuery *tips_query)
   
   g_return_if_fail (GTK_IS_TIPS_QUERY (tips_query));
   
-  tips_query->query_cursor = gdk_cursor_new_for_screen (gtk_widget_get_screen (GTK_WIDGET (tips_query)),
-							GDK_QUESTION_ARROW);
+  tips_query->query_cursor = gdk_cursor_new_for_display (gtk_widget_get_display (GTK_WIDGET (tips_query)),
+							 GDK_QUESTION_ARROW);
   failure = gdk_pointer_grab (GTK_WIDGET (tips_query)->window,
 			      TRUE,
 			      GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK |

@@ -1,3 +1,16 @@
+Tue Jun 18 14:41:48 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdkcursor.[ch] gdk/x11/gdkcursor-x11.c
+	gdk/x11/gdkprivate-x11.h gdk/win32/gdkcursor-win32.c: Replace
+	gdk_cursor_new_for_screen() with gdk_cursor_new_for_display().
+	(#85671)
+
+	* gtk/gtkclist.c gtk/gtkcombo.c gtk/gtkcurve.c gtk/gtkdnd.c
+	gtk/gtkentry.c gtk/gtkhandlebox.c gtk/gtkhsv.c gtk/gtklabel.c 
+	gtk/gtkpaned.c gtk/gtktext.c gtk/gtktextview.c 
+	gtk/gtktipsquery.c gtk/gtktreeviewcolumn.c: 
+	Adapt to above change.
+
 Tue Jun 18 12:04:10 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/gdk.c (gdk_init_check): Change handling 

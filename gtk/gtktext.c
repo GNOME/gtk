@@ -1344,7 +1344,7 @@ gtk_text_realize (GtkWidget *widget)
   attributes.width = MAX (1, (gint)widget->allocation.width - (gint)attributes.x * 2);
   attributes.height = MAX (1, (gint)widget->allocation.height - (gint)attributes.y * 2);
 
-  attributes.cursor = gdk_cursor_new_for_screen (gtk_widget_get_screen (widget), GDK_XTERM);
+  attributes.cursor = gdk_cursor_new_for_display (gtk_widget_get_display (widget), GDK_XTERM);
   attributes_mask |= GDK_WA_CURSOR;
   
   text->text_area = gdk_window_new (widget->window, &attributes, attributes_mask);

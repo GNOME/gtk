@@ -35,6 +35,7 @@
 #include <gdk/gdkprivate.h>
 #include <gdk/x11/gdkwindow-x11.h>
 #include <gdk/x11/gdkpixmap-x11.h>
+#include <gdk/x11/gdkdisplay-x11.h>
 
 #include "gdkinternals.h"
 
@@ -81,7 +82,7 @@ struct _GdkCursorPrivate
 {
   GdkCursor cursor;
   Cursor xcursor;
-  GdkScreen *screen;
+  GdkDisplay *display;
 };
 
 struct _GdkVisualPrivate

@@ -4846,7 +4846,7 @@ set_cursor (GtkWidget *spinner,
   else
     gtk_label_set_text (GTK_LABEL (label), "<unknown>");
 
-  cursor = gdk_cursor_new_for_screen (gtk_widget_get_screen (widget), c);
+  cursor = gdk_cursor_new_for_display (gtk_widget_get_display (widget), c);
   gdk_window_set_cursor (widget->window, cursor);
   gdk_cursor_unref (cursor);
 }
@@ -10727,8 +10727,8 @@ query_properties (GtkButton *button,
 
 
   if (!data->cursor)
-    data->cursor = gdk_cursor_new_for_screen (gtk_widget_get_screen (GTK_WIDGET (button)),
-					      GDK_TARGET);
+    data->cursor = gdk_cursor_new_for_display (gtk_widget_get_display (GTK_WIDGET (button)),
+					       GDK_TARGET);
   
   failure = gdk_pointer_grab (GTK_WIDGET (button)->window,
 			      TRUE,

@@ -972,7 +972,7 @@ gtk_entry_realize (GtkWidget *widget)
 
   get_text_area_size (entry, &attributes.x, &attributes.y, &attributes.width, &attributes.height);
 
-  attributes.cursor = gdk_cursor_new_for_screen (gtk_widget_get_screen (widget), GDK_XTERM);
+  attributes.cursor = gdk_cursor_new_for_display (gtk_widget_get_display (widget), GDK_XTERM);
   attributes_mask |= GDK_WA_CURSOR;
 
   entry->text_area = gdk_window_new (widget->window, &attributes, attributes_mask);
@@ -1435,7 +1435,7 @@ gtk_entry_motion_notify (GtkWidget      *widget,
     {
       GdkCursor *cursor;
       
-      cursor = gdk_cursor_new_for_screen (gtk_widget_get_screen (widget), GDK_XTERM);
+      cursor = gdk_cursor_new_for_display (gtk_widget_get_display (widget), GDK_XTERM);
       gdk_window_set_cursor (entry->text_area, cursor);
       gdk_cursor_unref (cursor);
       entry->mouse_cursor_obscured = FALSE;

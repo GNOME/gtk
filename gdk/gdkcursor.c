@@ -25,7 +25,7 @@
  */
 
 #include "gdkcursor.h"
-#include "gdkscreen.h"
+#include "gdkdisplay.h"
 #include "gdkinternals.h"
 
 GType
@@ -83,8 +83,8 @@ gdk_cursor_unref (GdkCursor *cursor)
  * gdk_cursor_new:
  * @cursor_type: cursor to create
  * 
- * Creates a new cursor from the set of builtin cursors for the default screen.
- * See gdk_cursor_new_for_screen().
+ * Creates a new cursor from the set of builtin cursors for the default display.
+ * See gdk_cursor_new_for_display().
  *
  * To make the cursor invisible, use gdk_cursor_new_from_pixmap() to create
  * a cursor with no pixels in it.
@@ -94,5 +94,5 @@ gdk_cursor_unref (GdkCursor *cursor)
 GdkCursor*
 gdk_cursor_new (GdkCursorType cursor_type)
 {
-  return gdk_cursor_new_for_screen (gdk_get_default_screen(), cursor_type);
+  return gdk_cursor_new_for_display (gdk_get_default_display(), cursor_type);
 }

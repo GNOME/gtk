@@ -105,7 +105,7 @@ struct _GdkCursor
 
 GType      gdk_cursor_get_type           (void);
 
-GdkCursor* gdk_cursor_new_for_screen	 (GdkScreen       *screen,
+GdkCursor* gdk_cursor_new_for_display	 (GdkDisplay      *display,
 					  GdkCursorType    cursor_type);
 #ifndef GDK_MULTIHEAD_SAFE
 GdkCursor* gdk_cursor_new		 (GdkCursorType	   cursor_type);
@@ -116,9 +116,9 @@ GdkCursor* gdk_cursor_new_from_pixmap	 (GdkPixmap	  *source,
 					  GdkColor	  *bg,
 					  gint		   x,
 					  gint		   y);
-GdkScreen* gdk_cursor_get_screen	 (GdkCursor	 *cursor);
-GdkCursor* gdk_cursor_ref                (GdkCursor      *cursor);
-void       gdk_cursor_unref              (GdkCursor      *cursor);
+GdkDisplay* gdk_cursor_get_display	 (GdkCursor	  *cursor);
+GdkCursor*  gdk_cursor_ref               (GdkCursor       *cursor);
+void        gdk_cursor_unref             (GdkCursor       *cursor);
 
 #ifndef GDK_DISABLE_DEPRECATED
 #define gdk_cursor_destroy             gdk_cursor_unref
