@@ -1,7 +1,8 @@
 2004-08-24  Matthias Clasen  <mclasen@redhat.com>
 
 	* gdk-pixbuf-loader.c (gdk_pixbuf_loader_new_with_mime_type): Use
-	the correct index, reported by Tommi Komulainen.
+	the correct index and compare correctly, reported by Tommi Komulainen.
+	(gdk_pixbuf_loader_new_with_mime_type): 
 
 	* gdk-pixdata.c (gdk_pixdata_from_pixbuf): Work around bugs in
 	the runlength encoder by forcing rowstride * height to be 
