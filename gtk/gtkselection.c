@@ -886,7 +886,7 @@ gtk_selection_data_get_text (GtkSelectionData *selection_data)
  *           stored here must be freed with g_free().
  * @n_atoms: location to store number of items in @targets.
  * 
- * Get the contents of @selection_data as an array of targets.
+ * Gets the contents of @selection_data as an array of targets.
  * This can be used to interpret the results of getting
  * the standard TARGETS target that is always supplied for
  * any selection.
@@ -926,7 +926,7 @@ gtk_selection_data_get_targets (GtkSelectionData  *selection_data,
  * @selection_data: a #GtkSelectionData object
  * 
  * Given a #GtkSelectionData object holding a list of targets,
- * Determines if any of the targets in @targets can be used to
+ * determines if any of the targets in @targets can be used to
  * provide text.
  * 
  * Return value: %TRUE if @selection_data holds a list of targets,

@@ -8,7 +8,7 @@ Functions for handling inter-process communication via selections.
 
 <para>
 The selection mechanism provides the basis for different types
-of IPC between processes. In particular, drag and drop and
+of communication between processes. In particular, drag and drop and
 #GtkClipboard work via selections. You will very seldom or
 never need to use most of the functions in this section directly;
 #GtkClipboard provides a nicer interface to the same functionality.
@@ -211,7 +211,7 @@ a "selection_received" signal will be generated.
 
 <!-- ##### FUNCTION gtk_selection_data_set ##### -->
 <para>
-Stores new data into a GtkSelectionData object. Should
+Stores new data into a #GtkSelectionData object. Should
 <emphasis>only</emphasis> by called from a selection handler callback.
 zero-terminates the stored data.
 </para>
@@ -276,8 +276,7 @@ called by applications.
 
 <!-- ##### FUNCTION gtk_selection_data_copy ##### -->
 <para>
-Makes a copy of a #GtkSelection data structure and its
-data.
+Makes a copy of a #GtkSelectionData structure and its data.
 </para>
 
 @data: a pointer to a #GtkSelectionData structure.

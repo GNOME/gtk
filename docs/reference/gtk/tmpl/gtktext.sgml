@@ -2,7 +2,7 @@
 GtkText
 
 <!-- ##### SECTION Short_Description ##### -->
-Deprecated text widget, use #GtkTextView instead.
+a text widget.
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>

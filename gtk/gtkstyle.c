@@ -822,6 +822,20 @@ gtk_style_lookup_icon_set (GtkStyle   *style,
   return gtk_icon_factory_lookup_default (stock_id);
 }
 
+/**
+ * gtk_draw_hline:
+ * @style: a #GtkStyle
+ * @window: a #GdkWindow
+ * @state_type: a state
+ * @x1: the starting x coordinate
+ * @x2: the ending x coordinate
+ * @y: the y coordinate
+ * 
+ * Draws a horizontal line from (@x1, @y) to (@x2, @y) in @window
+ * using the given style and state.
+ * 
+ * This function is deprecated, use gtk_paint_hline() instead.
+ **/
 void
 gtk_draw_hline (GtkStyle     *style,
                 GdkWindow    *window,
@@ -837,6 +851,20 @@ gtk_draw_hline (GtkStyle     *style,
 }
 
 
+/**
+ * gtk_draw_vline:
+ * @style: a #GtkStyle
+ * @window: a #GdkWindow
+ * @state_type: a state
+ * @y1: the starting y coordinate
+ * @y2: the ending y coordinate
+ * @x: the x coordinate
+ * 
+ * Draws a vertical line from (@x, @y1) to (@x, @y2) in @window
+ * using the given style and state.
+ * 
+ * This function is deprecated, use gtk_paint_vline() instead.
+ **/
 void
 gtk_draw_vline (GtkStyle     *style,
                 GdkWindow    *window,
@@ -4666,6 +4694,22 @@ hls_to_rgb (gdouble *h,
     }
 }
 
+
+/**
+ * gtk_paint_hline:
+ * @style: a #GtkStyle
+ * @window: a #GdkWindow
+ * @state_type: a state
+ * @area: rectangle to which the output is clipped
+ * @widget:
+ * @detail: 
+ * @x1: the starting x coordinate
+ * @x2: the ending x coordinate
+ * @y: the y coordinate
+ * 
+ * Draws a horizontal line from (@x1, @y) to (@x2, @y) in @window
+ * using the given style and state.
+ **/ 
 void 
 gtk_paint_hline (GtkStyle      *style,
                  GdkWindow     *window,
@@ -4683,6 +4727,20 @@ gtk_paint_hline (GtkStyle      *style,
   GTK_STYLE_GET_CLASS (style)->draw_hline (style, window, state_type, area, widget, detail, x1, x2, y);
 }
 
+/**
+ * gtk_paint_vline:
+ * @style: a #GtkStyle
+ * @window: a #GdkWindow
+ * @state_type: a state
+ * @area: rectangle to which the output is clipped
+ * @widget:
+ * @detail: 
+ * @y1: the starting y coordinate
+ * @y2: the ending y coordinate
+ * @x: the x coordinate
+ * 
+ * Draws a vertical line from (@x, @y1) to (@x, @y1) in @window
+ * using the given style and state.
 void
 gtk_paint_vline (GtkStyle      *style,
                  GdkWindow     *window,
@@ -5101,9 +5159,9 @@ gtk_border_free (GtkBorder *border)
  * @style: a #GtkStyle
  * 
  * Gets the #GdkFont to use for the given style. This is
- * meant only as a replacement for direct access to style->font
+ * meant only as a replacement for direct access to @style->font
  * and should not be used in new code. New code should
- * use style->font_desc instead.
+ * use @style->font_desc instead.
  * 
  * Return value: the #GdkFont for the style. This font is owned
  *   by the style; if you want to keep around a copy, you must

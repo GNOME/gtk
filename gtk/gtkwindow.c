@@ -1091,9 +1091,9 @@ gtk_window_add_accel_group (GtkWindow     *window,
 }
 
 /**
- * gtk_accel_group_detach:
+ * gtk_window_remove_accel_group:
+ * @window: a #GtkWindow
  * @accel_group: a #GtkAccelGroup
- * @object: a #GObject
  *
  * Reverses the effects of gtk_window_add_accel_group().
  **/

@@ -4974,11 +4974,11 @@ gtk_widget_set_extension_events (GtkWidget *widget,
  * gtk_widget_get_toplevel() and check if the %TOPLEVEL flags
  * is set on the result.
  *  <informalexample><programlisting>
- *  GtkWidget *toplevel = gtk_widget_get_toplevel (widget);
- *  if (GTK_WIDGET_TOPLEVEL (toplevel))
- *   {
- *     [ Perform action on toplevel. ]
- *   }
+ *  <!>GtkWidget *toplevel = gtk_widget_get_toplevel (widget);
+ *  <!>if (GTK_WIDGET_TOPLEVEL (toplevel))
+ *  <!> {
+ *  <!>   [ Perform action on toplevel. ]
+ *  <!> }
  *  </programlisting></informalexample>
  *
  * Return value: the topmost ancestor of @widget, or @widget itself if there's no ancestor.
@@ -5286,13 +5286,13 @@ gtk_widget_get_composite_name (GtkWidget *widget)
  * 
  * Here is a simple example:
  * <informalexample><programlisting>
- *   gtk_widget_push_composite_child (<!>);
- *   scrolled_window->hscrollbar = gtk_hscrollbar_new (hadjustment);
- *   gtk_widget_set_composite_name (scrolled_window->hscrollbar, "hscrollbar");
- *   gtk_widget_pop_composite_child (<!>);
- *   gtk_widget_set_parent (scrolled_window->hscrollbar, 
- *                          GTK_WIDGET (scrolled_window));
- *   gtk_widget_ref (scrolled_window->hscrollbar);
+ * <!>  gtk_widget_push_composite_child (<!>);
+ * <!>  scrolled_window->hscrollbar = gtk_hscrollbar_new (hadjustment);
+ * <!>  gtk_widget_set_composite_name (scrolled_window->hscrollbar, "hscrollbar");
+ * <!>  gtk_widget_pop_composite_child (<!>);
+ * <!>  gtk_widget_set_parent (scrolled_window->hscrollbar, 
+ * <!>                         GTK_WIDGET (scrolled_window));
+ * <!>  gtk_widget_ref (scrolled_window->hscrollbar);
  * </programlisting></informalexample>
  **/
 void

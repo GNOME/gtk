@@ -1688,8 +1688,6 @@ GtkObjectFlags
 GTK_OBJECT_FLAGS
 GTK_OBJECT_FLOATING
 GTK_OBJECT_CONNECTED
-GTK_OBJECT_SET_FLAGS
-GTK_OBJECT_UNSET_FLAGS
 GtkArgFlags
 gtk_object_new
 gtk_object_sink
@@ -1726,6 +1724,8 @@ GTK_OBJECT_GET_CLASS
 <SUBSECTION Private>
 gtk_object_get_type
 GTK_ARG_READWRITE
+GTK_OBJECT_SET_FLAGS
+GTK_OBJECT_UNSET_FLAGS
 </SECTION>
 
 <SECTION>
@@ -3990,7 +3990,7 @@ gtk_selection_data_targets_include_text
 gtk_selection_remove_all
 gtk_selection_data_copy
 gtk_selection_data_free
-<SUBSECTION Internals>
+<SUBSECTION Private>
 gtk_selection_clear
 gtk_selection_incr_event
 gtk_selection_notify

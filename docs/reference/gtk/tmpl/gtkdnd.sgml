@@ -26,35 +26,21 @@ in the #GtkWidget class.
 
 <!-- ##### ENUM GtkDestDefaults ##### -->
 <para>
-The #GtkDestfaults enumeration specifies the various
+The #GtkDestDefaults enumeration specifies the various
 types of action that will be taken on behalf
 of the user for a drag destination site.
 </para>
-<informaltable pgwide=1 frame="none" role="enum">
-<tgroup cols="2"><colspec colwidth="2*"><colspec colwidth="8*">
-<tbody>
 
-<row>
-<entry><symbol>GTK_DEST_DEFAULT_MOTION</symbol></entry>
-<entry>
+@GTK_DEST_DEFAULT_MOTION:
    If set for a widget, GTK+, during a drag over this
    widget will check if the drag matches this widget's
    list of possible targets and actions.
    GTK+ will then call gtk_drag_status() as appropriate.
-</entry>
-</row>
-
-<row>
-<entry><symbol>GTK_DEST_DEFAULT_HIGHLIGHT</symbol></entry>
-<entry>
+@GTK_DEST_DEFAULT_HIGHLIGHT:
    If set for a widget, GTK+ will draw a highlight on
    this widget as long as a drag is over this widget
-   and the widget drag format and action are acceptable.</entry>
-</row>
-
-<row>
-<entry><symbol>GTK_DEST_DEFAULT_DROP</symbol></entry>
-<entry>
+   and the widget drag format and action are acceptable.
+@GTK_DEST_DEFAULT_DROP:
    If set for a widget, when a drop occurs, GTK+ will
    will check if the drag matches this widget's
    list of possible targets and actions. If so, 
@@ -64,50 +50,23 @@ of the user for a drag destination site.
    was a move, then if the drag was successful, then
    %TRUE will be passed for the @delete parameter
    to gtk_drag_finish().
-</entry>
-</row>
-
-<row>
-<entry><symbol>GTK_DEST_DEFAULT_ALL</symbol></entry>
-<entry>
+@GTK_DEST_DEFAULT_ALL:
    If set, specifies that all default actions should
    be taken.
-</entry>
-</row>
-
-</tbody></tgroup></informaltable>
-
-@GTK_DEST_DEFAULT_MOTION: 
-@GTK_DEST_DEFAULT_HIGHLIGHT: 
-@GTK_DEST_DEFAULT_DROP: 
-@GTK_DEST_DEFAULT_ALL: 
 
 <!-- ##### ENUM GtkTargetFlags ##### -->
 <para>
 The #GtkTargetFlags enumeration is used to specify
 constraints on an entry in a #GtkTargetTable. 
 </para>
-<variablelist>
- <varlistentry><term> %GTK_TARGET_SAME_APP </term>
- <listitem>
-   <para>
+
+@GTK_TARGET_SAME_APP:
    If this is set, the target will only be selected
    for drags within a single application.
-   </para>
- </listitem>
- </varlistentry>
- <varlistentry><term> %GTK_TARGET_SAME_WIDGET </term>
- <listitem>
-   <para>
+ @GTK_TARGET_SAME_WIDGET:
    If this is set, the target will only be selected
    for drags within a single widget.
-   </para>
- </listitem>
- </varlistentry>
-</variablelist>
 
-@GTK_TARGET_SAME_APP: 
-@GTK_TARGET_SAME_WIDGET: 
 
 <!-- ##### FUNCTION gtk_drag_dest_set ##### -->
 <para>
@@ -119,7 +78,7 @@ Sets a widget as a potential drop destination.
  on behalf of a widget for drops onto that widget. The @targets
  and @actions fields only are used if %GTK_DEST_DEFAULT_MOTION
  or %GTK_DEST_DEFAULT_DROP are given.
-@targets: a pointer to an array of #GtkTargetEntry indicating
+@targets: a pointer to an array of #GtkTargetEntry<!>s indicating
  the drop types that this widget will accept.
 @n_targets: the number of entries in @targets.
 @actions: a bitmask of possible actions for a drop onto this
@@ -194,7 +153,7 @@ that the data of the drag will no longer be required.
 
 <!-- ##### FUNCTION gtk_drag_get_data ##### -->
 <para>
-Get the data associated with a drag. When the data
+Gets the data associated with a drag. When the data
 is received or the retrieval fails, GTK+ will emit a 
 "drag_data_received" signal. Failure of the retrieval
 is indicated by the length field of the @selection_data

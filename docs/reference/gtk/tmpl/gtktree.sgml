@@ -2,7 +2,7 @@
 GtkTree
 
 <!-- ##### SECTION Short_Description ##### -->
-Deprecated tree widget, use #GtkTreeView instead.
+a tree widget.
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>

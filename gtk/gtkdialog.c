@@ -386,14 +386,14 @@ gtk_dialog_new_empty (const gchar     *title,
  *
  * Here's a simple example:
  * <informalexample><programlisting>
- *  GtkWidget *dialog = gtk_dialog_new_with_buttons ("My dialog",
- *                                                   main_app_window,
- *                                                   GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
- *                                                   GTK_STOCK_OK,
- *                                                   GTK_RESPONSE_ACCEPT,
- *                                                   GTK_STOCK_CANCEL,
- *                                                   GTK_RESPONSE_REJECT,
- *                                                   NULL);
+ *  <!>GtkWidget *dialog = gtk_dialog_new_with_buttons ("My dialog",
+ *  <!>                                                 main_app_window,
+ *  <!>                                                 GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
+ *  <!>                                                 GTK_STOCK_OK,
+ *  <!>                                                 GTK_RESPONSE_ACCEPT,
+ *  <!>                                                 GTK_STOCK_CANCEL,
+ *  <!>                                                 GTK_RESPONSE_REJECT,
+ *  <!>                                                 NULL);
  * </programlisting></informalexample>
  * 
  * Return value: a new #GtkDialog
@@ -851,17 +851,17 @@ run_destroy_handler (GtkDialog *dialog, gpointer data)
  *
  * Typical usage of this function might be:
  * <informalexample><programlisting>
- *   gint result = gtk_dialog_run (GTK_DIALOG (dialog));
- *   switch (result)
- *     {
- *       case GTK_RESPONSE_ACCEPT:
- *          do_application_specific_something (<!-- -->);
- *          break;
- *       default:
- *          do_nothing_since_dialog_was_cancelled (<!-- -->);
- *          break;
- *     }
- *   gtk_widget_destroy (dialog);
+ * <!>  gint result = gtk_dialog_run (GTK_DIALOG (dialog));
+ * <!>  switch (result)
+ * <!>    {
+ * <!>      case GTK_RESPONSE_ACCEPT:
+ * <!>         do_application_specific_something (<!-- -->);
+ * <!>         break;
+ * <!>      default:
+ * <!>         do_nothing_since_dialog_was_cancelled (<!-- -->);
+ * <!>         break;
+ * <!>    }
+ * <!>  gtk_widget_destroy (dialog);
  * </programlisting></informalexample>
  * 
  * Return value: response ID

@@ -80,7 +80,7 @@ In particular, widgets are almost always destroyed in this way.
 </para></listitem>
 <listitem><para> Because of the floating reference count, you don't need to
 worry about reference counting for widgets and toplevel windows, unless you
-explicitly call g_object_ref() yourself.  </para></listitem>
+explicitly call g_object_ref() yourself.</para></listitem>
 </itemizedlist>
 </para>
 

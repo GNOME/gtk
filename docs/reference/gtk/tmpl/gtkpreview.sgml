@@ -2,7 +2,7 @@
 GtkPreview
 
 <!-- ##### SECTION Short_Description ##### -->
-deprecated widget to display RGB or grayscale data.
+widget to display RGB or grayscale data.
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>

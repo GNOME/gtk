@@ -26,8 +26,8 @@ Tells about certain properties of the widget.
 </para>
 
 @GTK_TOPLEVEL: 
-        widgets without a real parent, as there are #GtkWindows and
-        #GtkMenus have this flag set throughout their lifetime.
+        widgets without a real parent, as there are #GtkWindow<!>s and
+        #GtkMenu<!>s have this flag set throughout their lifetime.
         Toplevel widgets always contain their own #GdkWindow.
 @GTK_NO_WINDOW: 
         Indicative for a widget that does not provide its own #GdkWindow. 

@@ -264,8 +264,8 @@ gtk_accel_groups_from_object (GObject *object)
  * @returns: the key of the first entry passing @find_func. The key is 
  * owned by GTK+ and must not be freed.
  *
- * Finds the first entry in an accelerator group for which @find_func
- * returns %TRUE and returns its #GtkAccelKey.
+ * Finds the first entry in an accelerator group for which 
+ * @find_func returns %TRUE and returns its #GtkAccelKey.
  *
  */
 GtkAccelKey*

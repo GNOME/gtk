@@ -1,3 +1,24 @@
+2002-01-07  Matthias Clasen  <matthiasc@poet.de>
+ 	
+	* gtk/tmpl/gtksocket.sgml: Mention gtk_socket_get_id()
+	instead of GTK_WINDOW_XWINDOW().  (#68172)
+
+	* gtk/gtk-sections.txt: Move functions which are documented
+	as "private" or "internal" into Private subsections.
+
+	* gtk/tmpl/gtkdnd.sgml, gtk/tmpl/gtkobject.sgml, 
+	gtk/tmpl/gtkrc.sgml, gtk/tmpl/gtktooltips.sgml,
+	gtk/tmpl/gtkwidget.sgml, gtk/tmpl/gtkclipboard.sgml,
+	gtk/tmpl/gtkstyle.sgml, gtk/tmpl/gtkselection.sgml,
+	gtk/tmpl/gtkfeatures.sgml: Minor markup fixes.
+
+	* gtk/tmpl/gtksignal.sgml: Add link to GLib signal docs.
+
+	* gtk/tmpl/gtkpreview.sgml, gtk/tmpl/gtktext.sgml,
+	gtk/tmpl/gtktree.sgml: Remove "deprecated" from short desc.
+
+	* gtk/tmpl/gtkrc.sgml: Correct names of default RC files. 
+
 2002-01-06  Matthias Clasen  <matthiasc@poet.de>
 
 	* gtk/tmpl/gtktypeutils.sgml: Replace GTK_NO_CHECK_CASTS by 

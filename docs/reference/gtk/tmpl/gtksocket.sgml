@@ -18,16 +18,13 @@ inside the first applications window.
 
 <para>
 The XID of the socket's window is obtained by using
-the GTK_WINDOW_XWINDOW() macro from the header
-file &lt;gdk/gdkx.h&gt;. Before using this macro,
+gtk_socket_get_id(). Before using this function,
 the socket must have been realized, and for hence,
 have been added to its parent.
 
 <example>
 <title>Obtaining the XID of a socket.</title>
 <programlisting>
-#include &lt;gdk/gdkx.h&gt;
-
 GtkWidget *socket = gtk_socket_new (<!>);
 gtk_widget_show (socket);
 gtk_container_add (GTK_CONTAINER (parent), socket);
@@ -37,7 +34,7 @@ gtk_container_add (GTK_CONTAINER (parent), socket);
  */
 gtk_widget_realize (socket);
 g_print ("The XID of the sockets window is %#x\n",
-         GDK_WINDOW_XWINDOW (socket->window));
+         gtk_socket_get_id (socket));
 </programlisting>
 </example>
 </para>
@@ -85,21 +82,13 @@ as between a #GtkPlug and a #GtkSocket.</para>
 
 <!-- ##### STRUCT GtkSocket ##### -->
 <para>
-The #GtkEditable structure contains the following field.
+The #GtkSocket structure contains the following field.
 (This field should be considered read-only. It should
 never be set by an application.)
-
-<informaltable pgwide=1 frame="none" role="struct">
-<tgroup cols="2"><colspec colwidth="2*"><colspec colwidth="8*">
-<tbody>
-
-<row>
-<entry>#GdkWindow *plug_window;</entry>
-<entry>the window embedded inside this #GtkSocket.</entry>
-</row>
-
-</tbody></tgroup></informaltable>
 </para>
+
+@plug_window:
+the window embedded inside this #GtkSocket.
 
 
 <!-- ##### FUNCTION gtk_socket_new ##### -->

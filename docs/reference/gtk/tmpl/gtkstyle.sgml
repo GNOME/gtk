@@ -16,7 +16,7 @@ Styles
 
 <!-- ##### MACRO GTK_STYLE_ATTACHED ##### -->
 <para>
-Returns whether the styleis attached to a window.
+Returns whether the style is attached to a window.
 </para>
 
 @style: a #GtkStyle.

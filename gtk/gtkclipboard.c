@@ -454,7 +454,7 @@ gtk_clipboard_set_with_owner (GtkClipboard          *clipboard,
  * 
  * If the clipboard contents callbacks were set with 
  * gtk_clipboard_set_with_owner(), and the gtk_clipboard_set_with_data() or 
- * gtk_clipboard_clear() has not subsequently called, returns the @owner set 
+ * gtk_clipboard_clear() has not subsequently called, returns the owner set 
  * by gtk_clipboard_set_with_owner().
  * 
  * Return value: the owner of the clipboard, if any; otherwise %NULL.

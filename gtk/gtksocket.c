@@ -265,9 +265,10 @@ gtk_socket_add_id (GtkSocket *socket, GdkNativeWindow window_id)
  * 
  * Gets the window ID of a #GtkSocket widget, which can then
  * be used to create a client embedded inside the socket, for
- * instance with gtk_socket_new (id). The #GtkSocket must
- * have already be added into a toplevel window before you
- * can make this call.
+ * instance with gtk_plug_new (). 
+ *
+ * The #GtkSocket must have already be added into a toplevel window 
+ * before you can make this call.
  * 
  * Return value: the window ID for the socket
  **/

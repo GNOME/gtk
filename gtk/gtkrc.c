@@ -301,7 +301,7 @@ gtk_rc_make_default_dir (const gchar *type)
 {
   gchar *var, *path;
 
-  var = getenv("GTK_EXE_PREFIX");
+  var = g_getenv ("GTK_EXE_PREFIX");
   if (var)
     path = g_build_filename (var, "lib", "gtk-2.0", type, GTK_BINARY_VERSION, NULL);
   else
@@ -347,7 +347,7 @@ gtk_rc_get_theme_dir (void)
 {
   gchar *var, *path;
 
-  var = getenv("GTK_DATA_PREFIX");
+  var = g_getenv ("GTK_DATA_PREFIX");
   if (var)
     path = g_build_filename (var, "share", "themes", NULL);
   else
@@ -363,7 +363,7 @@ gtk_rc_get_module_dir (void)
 }
 
 static void
-gtk_rc_append_default_module_path(void)
+gtk_rc_append_default_module_path (void)
 {
   const gchar *var;
   gchar *path;
@@ -373,7 +373,7 @@ gtk_rc_append_default_module_path(void)
   if (n >= GTK_RC_MAX_MODULE_PATHS - 1)
     return;
   
-  var = getenv("GTK_EXE_PREFIX");
+  var = g_getenv ("GTK_EXE_PREFIX");
   if (var)
     path = g_build_filename (var, "lib", "gtk-2.0", GTK_VERSION, "engines", NULL);
   else
@@ -404,7 +404,7 @@ gtk_rc_add_initial_default_files (void)
   gtk_rc_default_files[0] = NULL;
   init = TRUE;
 
-  var = g_getenv("GTK_RC_FILES");
+  var = g_getenv ("GTK_RC_FILES");
   if (var)
     {
       files = g_strsplit (var, G_SEARCHPATH_SEPARATOR_S, 128);
@@ -692,7 +692,7 @@ gtk_rc_parse_default_files (GtkRcContext *context)
       gchar *normalized_locale;
       
       p = strchr (locale, '@');
-      length = p ? (p -locale) : strlen (locale);
+      length = p ? (p - locale) : strlen (locale);
       
       p = strchr (locale, '.');
       if (p)
@@ -1029,7 +1029,7 @@ gtk_rc_style_new (void)
  * @orig: the style to copy
  * 
  * Makes a copy of the specified #GtkRcStyle. This function
- * will correctly copy an rc style that is a member of a class
+ * will correctly copy an RC style that is a member of a class
  * derived from #GtkRcStyle.
  * 
  * Return value: the resulting #GtkRcStyle
@@ -1510,10 +1510,10 @@ gtk_rc_get_style (GtkWidget *widget)
  *
  * The action of gtk_rc_get_style() is similar to:
  * <informalexample><programlisting>
- *  gtk_widget_path (widget, NULL, &amp;path, NULL);
- *  gtk_widget_class_path (widget, NULL, &amp;class_path, NULL);
- *  gtk_rc_get_style_by_paths (gtk_widget_get_settings (widget), path, class_path,
- *                             G_OBJECT_TYPE (widget));
+ * <!> gtk_widget_path (widget, NULL, &amp;path, NULL);
+ * <!> gtk_widget_class_path (widget, NULL, &amp;class_path, NULL);
+ * <!> gtk_rc_get_style_by_paths (gtk_widget_get_settings (widget), path, class_path,
+ * <!>                            G_OBJECT_TYPE (widget));
  * </programlisting></informalexample>
  * 
  * Return value: A style created by matching with the supplied paths,
@@ -1714,7 +1714,7 @@ gtk_rc_parse_any (GtkRcContext *context,
 	      if (scanner->scope_id == 0)
 		{
 		  /* if we are in scope 0, we know the symbol names
-		   * that are associated with certaintoken values.
+		   * that are associated with certain token values.
 		   * so we look them up to make the error messages
 		   * more readable.
 		   */
@@ -2683,7 +2683,7 @@ gtk_rc_check_pixmap_dir (const gchar *dir, const gchar *pixmap_file)
 
 /**
  * gtk_rc_find_pixmap_in_path:
- * @settings: a #GtkSettinsg
+ * @settings: a #GtkSettings
  * @scanner: Scanner used to get line number information for the
  *   warning message, or %NULL
  * @pixmap_file: name of the pixmap file to locate.

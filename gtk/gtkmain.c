@@ -284,7 +284,7 @@ static gchar **
 get_module_path (void)
 {
   const gchar *module_path_env = g_getenv ("GTK_MODULE_PATH");
-  const gchar *exe_prefix = g_getenv("GTK_EXE_PREFIX");
+  const gchar *exe_prefix = g_getenv ("GTK_EXE_PREFIX");
   gchar **result;
   gchar *module_path;
   gchar *default_dir;
@@ -470,7 +470,7 @@ gtk_init_check (int	 *argc,
   gdk_event_handler_set ((GdkEventFunc)gtk_main_do_event, NULL, NULL);
   
 #ifdef G_ENABLE_DEBUG
-  env_string = getenv ("GTK_DEBUG");
+  env_string = g_getenv ("GTK_DEBUG");
   if (env_string != NULL)
     {
       gtk_debug_flags = g_parse_debug_string (env_string,
@@ -480,7 +480,7 @@ gtk_init_check (int	 *argc,
     }
 #endif	/* G_ENABLE_DEBUG */
 
-  env_string = getenv ("GTK_MODULES");
+  env_string = g_getenv ("GTK_MODULES");
   if (env_string)
     gtk_modules_string = g_string_new (env_string);
 

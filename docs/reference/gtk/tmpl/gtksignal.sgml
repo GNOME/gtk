@@ -7,8 +7,8 @@ Object methods and callbacks.
 <!-- ##### SECTION Long_Description ##### -->
 <para>
 The GTK+ signal system merely proxies the GLib signal system now. For future 
-usage, direct use of the #GSignal API is recommended, this avoids significant 
-performance hits where #GtkArg structures have to be converted into #GValues.
+usage, direct use of the <link linkend="gobject-Signals">GSignal</linkend> API is recommended, this avoids significant 
+performance hits where #GtkArg structures have to be converted into #GValue<!>s.
 </para>
 
 <refsect2>
@@ -49,7 +49,7 @@ methods.
 <title>How are signals used?</title>
 <para>
 There are two basic actions in the signal handling game.
-If you want notification of an event, you must <Emphasis>connect</Emphasis>
+If you want notification of an event, you must <emphasis>connect</emphasis>
 a function pointer and a data pointer to that signal;  the data pointer
 will be passed as the last argument to the function (so long as you
 are using the default marshalling functions).
@@ -150,6 +150,10 @@ you might have to write a marshaller.
 <listitem><para>The base class for things which emit signals.</para></listitem>
 </varlistentry>
 
+<varlistentry>
+<term><link linkend="gobject-Signals">GSignal</link></term>
+<listitem><para>The GLib signal system.</para></listitem>
+</varlistentry>
 </variablelist>
 </para>
 

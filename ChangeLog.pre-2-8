@@ -1,3 +1,30 @@
+2002-01-07  Matthias Clasen  <matthiasc@poet.de>
+
+	* gtk/gtksocket.c (gtk_socket_get_id): Doc typo fix. (#68172)
+
+	* gtk/gtktreemodel.c (gtk_tree_path_is_descendant): Fix docs.
+
+	* gtk/gtktreemodel.c (gtk_tree_model_rows_reordered): Document.
+
+	* gtk/gtkwindow.c (gtk_window_remove_accel_group): Fix docs.
+
+	* gtk/gtkrc.c (gtk_rc_get_style_by_paths),
+	gtk/gtkwidget.c (gtk_widget_get_toplevel, 
+	gtk_widget_push_composite_child), gtk/gtkdialog.c 
+	(gtk_dialog_new_with_buttons, gtk_dialog_run): Keep gtk-doc
+	from messing up the indentation of inline examples.	
+
+	* gtk/gtkmain.c, gtk/gtkrc.c: Consistently call g_getenv() 
+	instead of getenv().
+
+	* gtk/gtktreemodel.c, gtk/gtkaccelgroup.c, gtk/gtkclipboard.c,
+	gtk/gtkdnd.c, gtk/gtkiconfactory.c, gtk/gtkrc.c,
+	gtk/gtkstyle.c, gtk/gtkselection.c: Doc fixes.
+
+	* gtk/gtkaccelmap.c (gtk_accel_map_add_filter,
+	gtk_accel_map_foreach_unfiltered, gtk_accel_map_load_scanner):
+	Document.
+
 2002-01-07  Anders Carlsson  <andersca@gnu.org>
 
 	* gtk/gtkcellrendererpixbuf.c (gtk_cell_renderer_pixbuf_render): Remove

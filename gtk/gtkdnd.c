@@ -2342,7 +2342,7 @@ gtk_drag_set_icon_default (GdkDragContext    *context)
  * Changes the default drag icon. GTK+ retains references for the
  * arguments, and will release them when they are no longer needed.
  * This function is obsolete. The default icon should now be changed
- * via the stock system by changing the stock pixbuf for %GTK_STOCK_DND.
+ * via the stock system by changing the stock pixbuf for #GTK_STOCK_DND.
  **/
 void 
 gtk_drag_set_default_icon (GdkColormap   *colormap,
@@ -3154,11 +3154,11 @@ gtk_drag_abort_timeout (gpointer data)
  * @current_x: current X coordinate
  * @current_y: current Y coordinate
  * 
- * Checks to see if a mouse drag starting at (start_x, start_y) and ending
- * at (current_x, current_y) has passed the GTK drag threshhold, and thus
+ * Checks to see if a mouse drag starting at (@start_x, @start_y) and ending
+ * at (@current_x, @current_y) has passed the GTK+ drag threshhold, and thus
  * should trigger the beginning of a drag-and-drop operation.
  *
- * Return Value: If the drag threshold has been passed.
+ * Return Value: %TRUE if the drag threshold has been passed.
  **/
 gboolean
 gtk_drag_check_threshold (GtkWidget *widget,

@@ -104,18 +104,18 @@ _gtk_accel_path_is_valid (const gchar *accel_path)
 }
 
 /**
- * gtk_accel_map_add_entry
+ * gtk_accel_map_add_entry:
  * @accel_path: valid accelerator path
  * @accel_key:  the accelerator key
  * @accel_mods: the accelerator modifiers
  *
- * Register a new accelerator with the global accelerator map.
+ * Registers a new accelerator with the global accelerator map.
  * This function should only be called once per @accel_path
  * with the canonical @accel_key and @accel_mods for this path.
  * To change the accelerator during runtime programatically, use
  * gtk_accel_map_change_entry().
  * The accelerator path must consist of "&lt;WINDOWTYPE&gt;/Category1/Category2/.../Action",
- * where WINDOWTYPE should be a unique application-specific identifier, that
+ * where &lt;WINDOWTYPE&gt; should be a unique application-specific identifier, that
  * corresponds to the kind of window the accelerator is being used in, e.g. "Gimp-Image",
  * "Abiword-Document" or "Gnumeric-Settings".
  * The Category1/.../Action portion is most appropriately chosen by the action the
@@ -164,9 +164,9 @@ gtk_accel_map_add_entry (const gchar *accel_path,
 }
 
 /**
- * gtk_accel_map_lookup_entry
- * @accel_path:  valid accelerator path
- * @key:         accelerator key to be filled in (optional)
+ * gtk_accel_map_lookup_entry:
+ * @accel_path:  a valid accelerator path
+ * @key:         the accelerator key to be filled in (optional)
  * @returns:     %TRUE if @accel_path is known, %FALSE otherwise
  *
  * Looks up the accelerator entry for @accel_path and fills in @key.
@@ -378,14 +378,14 @@ internal_change_entry (const gchar    *accel_path,
 }
 
 /**
- * gtk_accel_map_change_entry
- * @accel_path:  valid accelerator path
- * @accel_key:   new accelerator key
- * @accel_mods:  new accelerator modifiers
+ * gtk_accel_map_change_entry:
+ * @accel_path:  a valid accelerator path
+ * @accel_key:   the new accelerator key
+ * @accel_mods:  the new accelerator modifiers
  * @replace:     %TRUE if other accelerators may be deleted upon conflicts
  * @returns:     %TRUE if the accelerator could be changed, %FALSE otherwise
  *
- * Change the @accel_key and @accel_mods currently associated with @accel_path.
+ * Changes the @accel_key and @accel_mods currently associated with @accel_path.
  * Due to conflicts with other accelerators, a change may not always be possible,
  * @replace indicates whether other accelerators may be deleted to resolve such
  * conflicts. A change will only occur if all conflicts could be resolved (which
@@ -488,6 +488,12 @@ accel_map_parse_statement (GScanner *scanner)
     }
 }
 
+/**
+ * gtk_accel_map_load_scanner:
+ * @scanner: a #GScanner which has already been provided with an input file
+ *
+ * #GScanner variant of gtk_accel_map_load().
+ */
 void
 gtk_accel_map_load_scanner (GScanner *scanner)
 {
@@ -530,10 +536,11 @@ gtk_accel_map_load_scanner (GScanner *scanner)
 }
 
 /**
- * gtk_accel_map_load_fd
- * @fd: valid readable file descriptor
+ * gtk_accel_map_load_fd:
+ * @fd: a valid readable file descriptor
  *
  * Filedescriptor variant of gtk_accel_map_load().
+ *
  * Note that the file descriptor will not be closed by this function.
  */
 void
@@ -553,7 +560,7 @@ gtk_accel_map_load_fd (gint fd)
 }
 
 /**
- * gtk_accel_map_load
+ * gtk_accel_map_load:
  * @file_name: a file containing accelerator specifications
  *
  * Parses a file previously saved with gtk_accel_map_save() for
@@ -613,10 +620,11 @@ accel_map_print (gpointer        data,
 }
 
 /**
- * gtk_accel_map_save_fd
- * @fd: valid writable file descriptor
+ * gtk_accel_map_save_fd:
+ * @fd: a valid writable file descriptor
  *
  * Filedescriptor variant of gtk_accel_map_save().
+ *
  * Note that the file descriptor will not be closed by this function.
  */
 void
@@ -642,7 +650,7 @@ gtk_accel_map_save_fd (gint fd)
 }
 
 /**
- * gtk_accel_map_save
+ * gtk_accel_map_save:
  * @file_name: the file to contain accelerator specifications
  *
  * Saves current accelerator specifications (accelerator path, key
@@ -667,13 +675,15 @@ gtk_accel_map_save (const gchar *file_name)
 }
 
 /**
- * gtk_accel_map_foreach
+ * gtk_accel_map_foreach:
  * @data:         data to be passed into @foreach_func
- * @foreach_func: function to be executed for each accel map entry
+ * @foreach_func: function to be executed for each accel map entry which
+ *                is not filtered out
  *
- * Loop over the entries in the accelerator map, and execute
- * @foreach_func on each. The signature of @foreach_func is that of
- * #GtkAccelMapForeach, the @changed parameter indicates whether
+ * Loops over the entries in the accelerator map whose accel path 
+ * doesn't match any of the filters added with gtk_accel_map_add_filter(), 
+ * and execute @foreach_func on each. The signature of @foreach_func is 
+ * that of #GtkAccelMapForeach, the @changed parameter indicates whether
  * this accelerator was changed during runtime (thus, would need
  * saving during an accelerator map dump).
  */
@@ -701,6 +711,17 @@ gtk_accel_map_foreach (gpointer           data,
   g_slist_free (entries);
 }
 
+/**
+ * gtk_accel_map_foreach_unfiltered:
+ * @data:         data to be passed into @foreach_func
+ * @foreach_func: function to be executed for each accel map entry
+ *
+ * Loops over all entries in the accelerator map, and execute
+ * @foreach_func on each. The signature of @foreach_func is that of
+ * #GtkAccelMapForeach, the @changed parameter indicates whether
+ * this accelerator was changed during runtime (thus, would need
+ * saving during an accelerator map dump).
+ */
 void
 gtk_accel_map_foreach_unfiltered (gpointer           data,
 				  GtkAccelMapForeach foreach_func)
@@ -720,6 +741,15 @@ gtk_accel_map_foreach_unfiltered (gpointer           data,
   g_slist_free (entries);
 }
 
+/**
+ * gtk_accel_map_add_filter:
+ * @filter_pattern: a pattern (see #GPatternSpec)
+ *
+ * Adds a filter to the global list of accel path filters.
+ *
+ * Accel map entries whose accel path matches one of the filters
+ * are skipped by gtk_accel_map_foreach().
+ */
 void
 gtk_accel_map_add_filter (const gchar *filter_pattern)
 {
