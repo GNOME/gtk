@@ -1094,9 +1094,7 @@
 
 ;; Tooltips
 
-(define-object GtkTooltips
-  gtk_tooltips_ref
-  gtk_tooltips_unref)
+(define-object GtkTooltips (GtkData))
 
 (define-func gtk_tooltips_new
   GtkTooltips

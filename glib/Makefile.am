@@ -25,7 +25,7 @@ include_HEADERS = \
 configinclude_DATA = \
 		glibconfig.h
 
-libglib_la_LDFLAGS = -version-info 1:0:0
+libglib_la_LDFLAGS = -postfix $(LT_RELEASE) -version-info $(LT_CURRENT):$(LT_REVISION):$(LT_AGE)
 
 INCLUDES = -I$(top_srcdir)
 

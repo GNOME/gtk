@@ -1,3 +1,13 @@
+Thu May  7 05:14:19 1998  Tim Janik  <timj@gtk.org>
+
+	* ltmain.sh: added a new commandline flag -postfix similar to -release,
+	but will immediately change the library name.
+
+	* Makefile.am: specify -postfix and -version-info
+
+	* configure.in: version bump to 1.1.0. added GLIB_INTERFACE_AGE and
+	GLIB_BINARY_AGE. calculate LT_* variables for libtool.
+
 Fri May  1 16:36:08 1998  Owen Taylor  <otaylor@gtk.org>
 
 	* gutils.c: (g_strcasecmp). Check for isupper before

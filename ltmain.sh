@@ -386,6 +386,7 @@ if test -z "$show_help"; then
     prev=
     prevarg=
     release=
+    postfix=
     rpath=
     perm_rpath=
     temp_rpath=
@@ -434,6 +435,11 @@ if test -z "$show_help"; then
           ;;
 	release)
 	  release="-$arg"
+	  prev=
+	  continue
+	  ;;
+	postfix)
+	  postfix="-$arg"
 	  prev=
 	  continue
 	  ;;
@@ -517,6 +523,11 @@ if test -z "$show_help"; then
 
       -release)
 	prev=release
+	continue
+	;;
+
+      -postfix)
+	prev=postfix
 	continue
 	;;
 
@@ -842,7 +853,7 @@ if test -z "$show_help"; then
 	;;
       esac
 
-      name=`$echo "X$output" | $Xsed -e 's/\.la$//' -e 's/^lib//'`
+      name=`$echo "X$output" | $Xsed -e 's/\.la$//' -e 's/^lib//'`$postfix
       eval libname=\"$libname_spec\"
 
       # All the library-specific variables (install_libdir is set above).

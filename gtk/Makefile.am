@@ -199,7 +199,7 @@ $(srcdir)/gtktypebuiltins.h: @MAINT@ $(srcdir)/gtk.defs $(srcdir)/gentypeinfo.el
 $(srcdir)/gtktypebuiltins.c: @MAINT@ $(srcdir)/gtk.defs $(srcdir)/gentypeinfo.el
 	$(SHELL) $(srcdir)/runelisp $(srcdir)/gentypeinfo.el id $< $@
 
-libgtk_la_LDFLAGS = -version-info 1:0:0
+libgtk_la_LDFLAGS = -postfix $(LT_RELEASE) -version-info $(LT_CURRENT):$(LT_REVISION):$(LT_AGE)
 
 EXTRA_DIST = \
 	line-arrow.xbm 		\
@@ -224,6 +224,7 @@ EXTRA_DIST = \
 INCLUDES = -I$(top_srcdir) -I../glib -I$(top_srcdir)/glib @x_cflags@ 
 
 noinst_PROGRAMS = testgtk testinput testselection simple 
+
 testgtk_LDADD = \
 	libgtk.la				\
 	$(top_builddir)/gdk/libgdk.la		\

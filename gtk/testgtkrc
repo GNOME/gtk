@@ -38,7 +38,7 @@ style "button"
 #  bg[PRELIGHT] = { 0, 0, 0.75 }
 }
 
-# we set want buttons in the main window to be blue by default
+# we set all the buttons in the main window to be blue by default
 style 'main_buttons' = 'button'
 {
   font = "-adobe-helvetica-medium-r-normal--*-100-*-*-*-*-*-*"

@@ -1,8 +1,8 @@
 Simple install procedure
 ========================
 
-  % gzip -cd gtk+-1.0.0.tar.gz | tar xvf - # unpack the sources
-  % cd gtk+-1.0.0                          # change to the toplevel directory
+  % gzip -cd gtk+-1.1.0.tar.gz | tar xvf - # unpack the sources
+  % cd gtk+-1.1.0                          # change to the toplevel directory
   % ./configure                            # run the `configure' script
   % make                                   # build GTK
   [ Become root if necessary ]

@@ -4,8 +4,36 @@ AC_INIT(glist.c)
 # Save this value here, since automake will set cflags later
 cflags_set=${CFLAGS+set}
 
-dnl Initialize automake stuff
-AM_INIT_AUTOMAKE(glib, 1.0.0)
+# Making releases:
+#   GLIB_MICRO_VERSION += 1;
+#   GLIB_INTERFACE_AGE += 1;
+#   GLIB_BINARY_AGE += 1;
+# if any functions have been added, set GLIB_INTERFACE_AGE to 0.
+# if backwards compatibility has been broken,
+# set GLIB_BINARY_AGE and GLIB_INTERFACE_AGE to 0.
+#
+GLIB_MAJOR_VERSION=1
+GLIB_MINOR_VERSION=1
+GLIB_MICRO_VERSION=0
+GLIB_INTERFACE_AGE=0
+GLIB_BINARY_AGE=0
+GLIB_VERSION=$GLIB_MAJOR_VERSION.$GLIB_MINOR_VERSION.$GLIB_MICRO_VERSION
+AC_SUBST(GLIB_VERSION)
+
+# libtool versioning
+LT_RELEASE=$GLIB_MAJOR_VERSION.$GLIB_MINOR_VERSION
+LT_CURRENT=`expr $GLIB_MICRO_VERSION - $GLIB_INTERFACE_AGE`
+LT_REVISION=$GLIB_INTERFACE_AGE
+LT_AGE=`expr $GLIB_BINARY_AGE - $GLIB_INTERFACE_AGE`
+AC_SUBST(LT_RELEASE)
+AC_SUBST(LT_CURRENT)
+AC_SUBST(LT_REVISION)
+AC_SUBST(LT_AGE)
+
+VERSION=$GLIB_VERSION
+PACKAGE=glib
+
+AM_INIT_AUTOMAKE($PACKAGE, $VERSION, no-define)
 
 # Specify a configuration file
 AM_CONFIG_HEADER(glibconfig.h)

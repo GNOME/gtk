@@ -4,10 +4,32 @@ AC_INIT(gdk/gdktypes.h)
 # Save this value here, since automake will set cflags later
 cflags_set=${CFLAGS+set}
 
+# Making releases:
+#   GTK_MICRO_VERSION += 1;
+#   GTK_INTERFACE_AGE += 1;
+#   GTK_BINARY_AGE += 1;
+# if any functions have been added, set GTK_INTERFACE_AGE to 0.
+# if backwards compatibility has been broken,
+# set GTK_BINARY_AGE and GTK_INTERFACE_AGE to 0.
+#
 GTK_MAJOR_VERSION=1
-GTK_MINOR_VERSION=0
+GTK_MINOR_VERSION=1
 GTK_MICRO_VERSION=0
+GTK_INTERFACE_AGE=0
+GTK_BINARY_AGE=0
 GTK_VERSION=$GTK_MAJOR_VERSION.$GTK_MINOR_VERSION.$GTK_MICRO_VERSION
+AC_SUBST(GTK_VERSION)
+
+# libtool versioning
+LT_RELEASE=$GTK_MAJOR_VERSION.$GTK_MINOR_VERSION
+LT_CURRENT=`expr $GTK_MICRO_VERSION - $GTK_INTERFACE_AGE`
+LT_REVISION=$GTK_INTERFACE_AGE
+LT_AGE=`expr $GTK_BINARY_AGE - $GTK_INTERFACE_AGE`
+AC_SUBST(LT_RELEASE)
+AC_SUBST(LT_CURRENT)
+AC_SUBST(LT_REVISION)
+AC_SUBST(LT_AGE)
+
 
 # For automake.
 VERSION=$GTK_VERSION
@@ -149,7 +171,6 @@ AC_SUBST(x_includes)
 AC_SUBST(x_ldflags)
 AC_SUBST(x_libs)
 AC_SUBST(xinput_progs)
-AC_SUBST(GTK_VERSION)
 
 CFLAGS="$saved_cflags"
 LDFLAGS="$saved_ldflags"

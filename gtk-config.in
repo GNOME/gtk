@@ -45,7 +45,7 @@ while test $# -gt 0; do
       echo -I@libdir@/glib/include $includes @x_cflags@
       ;;
     --libs)
-      echo -L@libdir@ @x_ldflags@ -lgtk -lgdk -lglib @x_libs@ -lm
+      echo -L@libdir@ @x_ldflags@ -lgtk-@LT_RELEASE@ -lgdk-@LT_RELEASE@ -lglib-@LT_RELEASE@ @x_libs@ -lm
       ;;
     *)
       echo "${usage}" 1>&2
