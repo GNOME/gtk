@@ -2822,8 +2822,12 @@ gdk_event_translate (GdkEvent *event,
       if (!(window_impl->event_mask & GDK_EXPOSURE_MASK))
 	break;
 
+#if 0 /* we need to process exposes even with GDK_NO_BG
+       * Otherwise The GIMP canvas update is broken ....
+       */
       if (GDK_WINDOW_OBJECT (window)->bg_pixmap == GDK_NO_BG)
 	break;
+#endif
 
       if ((paintstruct.rcPaint.right == paintstruct.rcPaint.left)
           || (paintstruct.rcPaint.bottom == paintstruct.rcPaint.top))

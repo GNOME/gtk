@@ -583,10 +583,12 @@ EXPORTS
 	gtk_false
 	gtk_file_selection_complete
 	gtk_file_selection_get_filename
+	gtk_file_selection_get_selections
 	gtk_file_selection_get_type
 	gtk_file_selection_hide_fileop_buttons
 	gtk_file_selection_new
 	gtk_file_selection_set_filename
+	gtk_file_selection_set_select_multiple
 	gtk_file_selection_show_fileop_buttons
 	gtk_fixed_get_has_window
 	gtk_fixed_get_type

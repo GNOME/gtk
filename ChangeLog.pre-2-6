@@ -1,3 +1,19 @@
+2002-02-18  Hans Breuer  <hans@breuer.org>
+
+	* gdk/win32/gdkevents-win32.c : process WM_PAINT messages
+	for bg_pixmap == GDK_NO_BG, fixes The GIMP's canvas
+	rendering glitches on win32
+
+	* gdk/win32/gdkinput-win32.c : use g_object_new to create
+	GdkDevice instead of g_new
+ 
+	* gtk/gtkpaned.c : make LAST_SIGNAL the last in enum. 
+	This avoids to smash totally unrelated static data and
+	resulting random crashes. (as reported on gtk-devel-list, 
+	2002-02-10 : testgtk crashes)
+
+	* gtk/gtk.def : add new file selection entry points
+
 Mon Feb 18 17:34:43 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkentry.c gtk/gtktextview.c: Remove support for

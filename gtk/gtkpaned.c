@@ -44,9 +44,9 @@ enum {
   TOGGLE_HANDLE_FOCUS,
   MOVE_HANDLE,
   CYCLE_HANDLE_FOCUS,
-  LAST_SIGNAL,
   ACCEPT_POSITION,
-  CANCEL_POSITION
+  CANCEL_POSITION,
+  LAST_SIGNAL
 };
 
 static void     gtk_paned_class_init            (GtkPanedClass    *klass);
