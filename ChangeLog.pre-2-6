@@ -1,5 +1,8 @@
 2001-06-05  Alex Larsson  <alexl@redhat.com>
 
+	* demos/gtk-demo/appwindow.c (do_appwindow):
+	Don't swap the order of the args to gtk_widget_destroyed.
+
 	* tests/testgtk.c (destroy_properties):
 	Don't crash when the properties window is destroyed.
 

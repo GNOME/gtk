@@ -203,7 +203,7 @@ do_appwindow (void)
       /* NULL window variable when window is closed */
       g_signal_connectc (G_OBJECT (window), "destroy",
                          G_CALLBACK (gtk_widget_destroyed),
-                         &window, TRUE);
+                         &window, FALSE);
 
       table = gtk_table_new (1, 4, FALSE);
       
