@@ -1,3 +1,13 @@
+2004-10-06  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtktreeview.c (gtk_tree_view_search_iter): Set the cursor
+	before changing the selection to make the file chooser preview
+	update work better.  (#143826, Tommi Komulainen)
+
+2004-10-05  Matthias Clasen  <mclasen@redhat.com>
+
+	* NEWS: Update
+
 Wed Oct  6 00:45:04 2004    <timj@birnet.org>
 
 	* gdk/gdkwindow.c (gdk_window_is_viewable): check the iteration window
