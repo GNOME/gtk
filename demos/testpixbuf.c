@@ -393,7 +393,7 @@ new_testrgb_window (GdkPixbuf *pixbuf, gchar *title)
 	drawing_area = gtk_drawing_area_new ();
 
 	temp_box = gtk_hbox_new (FALSE, 0);
-	gtk_widget_set_usize (GTK_WIDGET(drawing_area), w, h);
+	gtk_widget_set_size_request (GTK_WIDGET(drawing_area), w, h);
 	gtk_box_pack_start (GTK_BOX (temp_box), drawing_area, FALSE, FALSE, 0);
 	gtk_box_pack_start (GTK_BOX (vbox), temp_box, FALSE, FALSE, 0);
 	

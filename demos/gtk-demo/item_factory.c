@@ -92,7 +92,7 @@ do_item_factory (void)
 			  FALSE, FALSE, 0);
 
       label = gtk_label_new ("Type\n<alt>\nto start");
-      gtk_widget_set_usize (label, 200, 200);
+      gtk_widget_set_size_request (label, 200, 200);
       gtk_misc_set_alignment (GTK_MISC (label), 0.5, 0.5);
       gtk_box_pack_start (GTK_BOX (box1), label, TRUE, TRUE, 0);
 

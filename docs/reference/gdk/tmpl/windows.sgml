@@ -87,6 +87,8 @@ Windows
 @GDK_HINT_ASPECT: 
 @GDK_HINT_RESIZE_INC: 
 @GDK_HINT_WIN_GRAVITY: 
+@GDK_HINT_USER_POS: 
+@GDK_HINT_USER_SIZE: 
 
 <!-- ##### STRUCT GdkGeometry ##### -->
 <para>

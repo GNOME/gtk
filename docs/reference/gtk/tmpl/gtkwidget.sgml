@@ -1874,22 +1874,12 @@ a widget changes from un-anchored to anchored or vice-versa.
 
 </para>
 
-<!-- ##### ARG GtkWidget:x ##### -->
+<!-- ##### ARG GtkWidget:width-request ##### -->
 <para>
 
 </para>
 
-<!-- ##### ARG GtkWidget:y ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkWidget:width ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkWidget:height ##### -->
+<!-- ##### ARG GtkWidget:height-request ##### -->
 <para>
 
 </para>

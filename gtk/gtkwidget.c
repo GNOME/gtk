@@ -121,10 +121,8 @@ enum {
   PROP_0,
   PROP_NAME,
   PROP_PARENT,
-  PROP_X,
-  PROP_Y,
-  PROP_WIDTH,
-  PROP_HEIGHT,
+  PROP_WIDTH_REQUEST,
+  PROP_HEIGHT_REQUEST,
   PROP_VISIBLE,
   PROP_SENSITIVE,
   PROP_APP_PAINTABLE,
@@ -213,7 +211,6 @@ static gint		gtk_widget_event_internal		(GtkWidget	  *widget,
 static gboolean		gtk_widget_real_mnemonic_activate	(GtkWidget	  *widget,
 								 gboolean	   group_cycling);
 static void		gtk_widget_aux_info_destroy		(GtkWidgetAuxInfo *aux_info);
-static void		gtk_widget_do_uposition			(GtkWidget	  *widget);
 static AtkObject*	gtk_widget_real_get_accessible		(GtkWidget	  *widget);
 static void		gtk_widget_accessible_interface_init	(AtkImplementorIface *iface);
 static AtkObject*	gtk_widget_ref_accessible		(AtkImplementor *implementor);
@@ -400,38 +397,21 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 							_("The parent widget of this widget. Must be a Container widget."),
 							GTK_TYPE_CONTAINER,
 							G_PARAM_READWRITE));
+
   g_object_class_install_property (gobject_class,
-				   PROP_X,
-				   g_param_spec_int ("x",
- 						     _("x coordinate"),
- 						     _("The x coordinate of the top-left corner of the widget, or -1 if not set"),
- 						     -G_MAXINT,
- 						     G_MAXINT,
- 						     -1,
- 						     G_PARAM_READWRITE));
-  g_object_class_install_property (gobject_class,
-				   PROP_Y,
-				   g_param_spec_int ("y",
- 						     _("y coordinate"),
- 						     _("The y coordinate of the top-left corner of the widget, or -1 if not set"),
- 						     -G_MAXINT,
- 						     G_MAXINT,
- 						     -1,
- 						     G_PARAM_READWRITE));
-  g_object_class_install_property (gobject_class,
-				   PROP_WIDTH,
-				   g_param_spec_int ("width",
- 						     _("Width"),
- 						     _("The width of the widget, or -1 if unset."),
+				   PROP_WIDTH_REQUEST,
+				   g_param_spec_int ("width_request",
+ 						     _("Width request"),
+ 						     _("Override for width request of the widget, or -1 if natural request should be used."),
  						     -1,
  						     G_MAXINT,
  						     -1,
  						     G_PARAM_READWRITE));
   g_object_class_install_property (gobject_class,
-				   PROP_HEIGHT,
-				   g_param_spec_int ("height",
- 						     _("Height"),
- 						     _("The height of the widget, or -1 if unset."),
+				   PROP_HEIGHT_REQUEST,
+				   g_param_spec_int ("height_request",
+ 						     _("Height request"),
+ 						     _("Override for height request of the widget, or -1 if natural request should be used."),
  						     -1,
  						     G_MAXINT,
  						     -1,
@@ -1078,7 +1058,6 @@ gtk_widget_set_property (GObject         *object,
 			 GParamSpec      *pspec)
 {
   GtkWidget *widget;
-  GtkWidgetAuxInfo *aux_info;
 
   widget = GTK_WIDGET (object);
 
@@ -1092,32 +1071,10 @@ gtk_widget_set_property (GObject         *object,
     case PROP_PARENT:
       gtk_container_add (GTK_CONTAINER (g_value_get_object (value)), widget);
       break;
-    case PROP_X:
-      aux_info = _gtk_widget_get_aux_info (widget, TRUE);
-      if (g_value_get_int (value) == -1)
-	aux_info->x_set = FALSE;
-      else
-	{
-	  aux_info->x_set = TRUE;
-	  aux_info->x = g_value_get_int (value);
-	}
-      gtk_widget_do_uposition (widget);
-      break;
-    case PROP_Y:
-      aux_info = _gtk_widget_get_aux_info (widget, TRUE);
-      if (g_value_get_int (value) == -1)
-	aux_info->y_set = FALSE;
-      else
-	{
-	  aux_info->y_set = TRUE;
-	  aux_info->y = g_value_get_int (value);
-	}
-      gtk_widget_do_uposition (widget);
-      break;
-    case PROP_WIDTH:
+    case PROP_WIDTH_REQUEST:
       gtk_widget_set_usize (widget, g_value_get_int (value), -2);
       break;
-    case PROP_HEIGHT:
+    case PROP_HEIGHT_REQUEST:
       gtk_widget_set_usize (widget, -2, g_value_get_int (value));
       break;
     case PROP_VISIBLE:
@@ -1191,7 +1148,6 @@ gtk_widget_get_property (GObject         *object,
   
   switch (prop_id)
     {
-      GtkWidgetAuxInfo *aux_info;
       gint *eventp;
       GdkExtensionMode *modep;
 
@@ -1207,33 +1163,19 @@ gtk_widget_get_property (GObject         *object,
       else
 	g_value_set_object (value, NULL);
       break;
-    case PROP_X:
-      aux_info =_gtk_widget_get_aux_info (widget, FALSE);
-      if (!aux_info || !aux_info->x_set)
-	g_value_set_int (value, -1);
-      else
-	g_value_set_int (value, aux_info->x);
+    case PROP_WIDTH_REQUEST:
+      {
+        int w;
+        gtk_widget_get_size_request (widget, &w, NULL);
+        g_value_set_int (value, w);
+      }
       break;
-    case PROP_Y:
-      aux_info =_gtk_widget_get_aux_info (widget, FALSE);
-      if (!aux_info || !aux_info->y_set)
-	g_value_set_int (value, -1);
-      else
-	g_value_set_int (value, aux_info->y);
-      break;
-    case PROP_WIDTH:
-      aux_info =_gtk_widget_get_aux_info (widget, FALSE);
-      if (!aux_info)
- 	g_value_set_int (value, -1);
-      else
-	g_value_set_int (value, aux_info->width);
-      break;
-    case PROP_HEIGHT:
-      aux_info =_gtk_widget_get_aux_info (widget, FALSE);
-      if (!aux_info)
- 	g_value_set_int (value, -1);
-      else
- 	g_value_set_int (value, aux_info->height);
+    case PROP_HEIGHT_REQUEST:
+      {
+        int h;
+        gtk_widget_get_size_request (widget, NULL, &h);
+        g_value_set_int (value, h);
+      }
       break;
     case PROP_VISIBLE:
       g_value_set_boolean (value, (GTK_WIDGET_VISIBLE (widget) != FALSE));
@@ -2247,10 +2189,20 @@ gtk_widget_draw (GtkWidget    *widget,
  * @widget: a #GtkWidget
  * @requisition: a #GtkRequisition to be filled in
  * 
- * This function is only used when implementing a #GtkContainer subclass.
- * Obtains the preferred size of a widget. The container uses this
- * information to arrange its child widgets and decide what size allocations
- * to give them with gtk_widget_size_allocate().
+ * This function is typically used when implementing a #GtkContainer
+ * subclass.  Obtains the preferred size of a widget. The container
+ * uses this information to arrange its child widgets and decide what
+ * size allocations to give them with gtk_widget_size_allocate().
+ *
+ * You can also call this function from an application, with some
+ * caveats. Most notably, getting a size request requires the widget
+ * to be associated with a screen, because font information may be
+ * needed. Multihead-aware applications should keep this in mind.
+ *
+ * Also remember that the size request is not necessarily the size
+ * a widget will actually be allocated.
+ *
+ * See also gtk_widget_get_child_requisition().
  **/
 void
 gtk_widget_size_request (GtkWidget	*widget,
@@ -2282,6 +2234,19 @@ gtk_widget_size_request (GtkWidget	*widget,
  * @widget->requisition, unless someone has forced a particular
  * geometry on the widget (e.g. with gtk_widget_set_usize()), in which
  * case it returns that geometry instead of the widget's requisition.
+ *
+ * This function differs from gtk_widget_size_request() in that
+ * it retrieves the last size request value from widget->requisition,
+ * while gtk_widget_size_request() actually calls the "size_request" method
+ * on @widget to compute the size request and fill in widget->requisition,
+ * and only then returns widget->requisition.
+ *
+ * Because this function does not call the "size_request" method, it
+ * can only be used when you know that widget->requisition is
+ * up-to-date, that is, gtk_widget_size_request() has been called
+ * since the last time a resize was queued. In general, only container
+ * implementations have this information; applications should use
+ * gtk_widget_size_request().
  **/
 void
 gtk_widget_get_child_requisition (GtkWidget	 *widget,
@@ -4306,28 +4271,6 @@ gtk_widget_child_focus (GtkWidget       *widget,
   return return_val;
 }
 
-/* Update the position from aux_info. Used from gtk_widget_set_uposition
- * and gtk_widget_set_property().
- */
-static void
-gtk_widget_do_uposition (GtkWidget *widget)
-{
-  GtkWidgetAuxInfo *aux_info =_gtk_widget_get_aux_info (widget, FALSE);
-
-  if (GTK_IS_WINDOW (widget) && aux_info->x_set && aux_info->y_set)
-    _gtk_window_reposition (GTK_WINDOW (widget), aux_info->x, aux_info->y);
-  
-  if (GTK_WIDGET_VISIBLE (widget) && widget->parent)
-    gtk_widget_size_allocate (widget, &widget->allocation);
-
-  g_object_freeze_notify (G_OBJECT (widget));
-  if (aux_info->x_set)
-    g_object_notify (G_OBJECT (widget), "x");
-  if (aux_info->y_set)
-    g_object_notify (G_OBJECT (widget), "y");
-  g_object_thaw_notify (G_OBJECT (widget));
-}
-
 /**
  * gtk_widget_set_uposition:
  * @widget: a #GtkWidget
@@ -4356,6 +4299,11 @@ gtk_widget_set_uposition (GtkWidget *widget,
 			  gint	     x,
 			  gint	     y)
 {
+  /* FIXME this function is the only place that aux_info->x and
+   * aux_info->y are even used I believe, and this function is
+   * deprecated. Should be cleaned up.
+   */
+  
   GtkWidgetAuxInfo *aux_info;
   
   g_return_if_fail (GTK_IS_WIDGET (widget));
@@ -4384,7 +4332,11 @@ gtk_widget_set_uposition (GtkWidget *widget,
 	}
     }
 
-  gtk_widget_do_uposition (widget);
+  if (GTK_IS_WINDOW (widget) && aux_info->x_set && aux_info->y_set)
+    _gtk_window_reposition (GTK_WINDOW (widget), aux_info->x, aux_info->y);
+  
+  if (GTK_WIDGET_VISIBLE (widget) && widget->parent)
+    gtk_widget_size_allocate (widget, &widget->allocation);
 }
 
 /**
@@ -4393,6 +4345,9 @@ gtk_widget_set_uposition (GtkWidget *widget,
  * @width: minimum width, or -1 to unset
  * @height: minimum height, or -1 to unset
  *
+ * This function is deprecated; use gtk_widget_set_size_request()
+ * instead.
+ * 
  * Sets the minimum size of a widget; that is, the widget's size
  * request will be @width by @height. You can use this function to
  * force a widget to be either larger or smaller than it is. The
@@ -4427,12 +4382,12 @@ gtk_widget_set_usize (GtkWidget *widget,
   
   if (width > -2)
     {
-      g_object_notify (G_OBJECT (widget), "width");
+      g_object_notify (G_OBJECT (widget), "width_request");
       aux_info->width = width;
     }
   if (height > -2)
     {
-      g_object_notify (G_OBJECT (widget), "height");  
+      g_object_notify (G_OBJECT (widget), "height_request");  
       aux_info->height = height;
     }
   
@@ -4443,21 +4398,79 @@ gtk_widget_set_usize (GtkWidget *widget,
 }
 
 /**
- * gtk_widget_get_usize:
+ * gtk_widget_set_size_request:
  * @widget: a #GtkWidget
- * @width: location to store the width, or %NULL
- * @height: location to store the height, or %NULL
+ * @width: width @widget should request, or -1 to unset
+ * @height: height @widget should request, or -1 to unset
  *
- * Gets the size that has explicitely set for the widget to request,
- * if any. A value of -1 stored in @width or @height indicates that
- * that dimension has not been set explicitely and the natural
- * requisition of the widget will be used intead. See
- * gtk_widget_set_usize().
+ * Sets the minimum size of a widget; that is, the widget's size
+ * request will be @width by @height. You can use this function to
+ * force a widget to be either larger or smaller than it normally
+ * would be.
+ *
+ * In most cases, gtk_window_set_default_size() is a better choice for
+ * toplevel windows than this function; setting the default size will
+ * still allow users to shrink the window. Setting the size request
+ * will force them to leave the window at least as large as the size
+ * request. When dealing with window sizes,
+ * gtk_window_set_geometry_hints() can be a useful function as well.
+ * 
+ * Note the inherent danger of setting any fixed size - themes,
+ * translations into other languages, different fonts, and user action
+ * can all change the appropriate size for a given widget. So, it's
+ * basically impossible to hardcode a size that will always be
+ * correct.
+ *
+ * The size request of a widget is the smallest size a widget can
+ * accept while still functioning well and drawing itself correctly.
+ * However in some strange cases a widget may be allocated less than
+ * its requested size, and in many cases a widget may be allocated more
+ * space than it requested.
+ *
+ * If the size request in a given direction is -1 (unset), then
+ * the "natural" size request of the widget will be used instead.
+ *
+ * Widgets can't actually be allocated a size less than 1 by 1, but
+ * you can pass 0,0 to this function to mean "as small as possible."
  **/
 void
-gtk_widget_get_usize (GtkWidget *widget,
-		      gint      *width,
-		      gint      *height)
+gtk_widget_set_size_request (GtkWidget *widget,
+                             gint       width,
+                             gint       height)
+{
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+  g_return_if_fail (width >= -1);
+  g_return_if_fail (height >= -1);
+
+  if (width == 0)
+    width = 1;
+  if (height == 0)
+    height = 1;
+  
+  gtk_widget_set_usize (widget, width, height);
+}
+
+
+/**
+ * gtk_widget_get_size_request:
+ * @widget: a #GtkWidget
+ * @width: return location for width, or %NULL
+ * @height: return location for height, or %NULL
+ *
+ * Gets the size request that was explicitly set for the widget using
+ * gtk_widget_set_size_request().  A value of -1 stored in @width or
+ * @height indicates that that dimension has not been set explicitly
+ * and the natural requisition of the widget will be used intead. See
+ * gtk_widget_set_size_request(). To get the size a widget will
+ * actually use, call gtk_widget_size_request() instead of
+ * this function.
+ * 
+ **/
+ 
+void
+gtk_widget_get_size_request (GtkWidget *widget,
+                             gint      *width,
+                             gint      *height)
 {
   GtkWidgetAuxInfo *aux_info;
 

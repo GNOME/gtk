@@ -1309,7 +1309,9 @@ gdk_event_translate (GdkEvent *event,
 	  (window_private->extension_events != 0))
 	_gdk_input_configure_event (&xevent->xconfigure, window);
 
-      if (!window || GDK_WINDOW_TYPE (window) == GDK_WINDOW_CHILD)
+      if (!window ||
+          GDK_WINDOW_TYPE (window) == GDK_WINDOW_CHILD ||
+          GDK_WINDOW_TYPE (window) == GDK_WINDOW_ROOT)
 	return_val = FALSE;
       else
 	{
@@ -1318,8 +1320,7 @@ gdk_event_translate (GdkEvent *event,
 	  event->configure.width = xevent->xconfigure.width;
 	  event->configure.height = xevent->xconfigure.height;
 	  
-	  if (!xevent->xconfigure.x &&
-	      !xevent->xconfigure.y &&
+	  if (!xevent->xconfigure.send_event && 
 	      !GDK_WINDOW_DESTROYED (window))
 	    {
 	      gint tx = 0;

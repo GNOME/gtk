@@ -562,6 +562,14 @@ GtkWidget *gtk_widget_get_parent          (GtkWidget           *widget);
 GdkWindow *gtk_widget_get_parent_window	  (GtkWidget	       *widget);
 gboolean   gtk_widget_child_focus         (GtkWidget           *widget,
                                            GtkDirectionType     direction);
+
+void       gtk_widget_set_size_request    (GtkWidget           *widget,
+                                           gint                 width,
+                                           gint                 height);
+void       gtk_widget_get_size_request    (GtkWidget           *widget,
+                                           gint                *width,
+                                           gint                *height);
+#ifndef GTK_DISABLE_DEPRECATED
 void	   gtk_widget_set_uposition	  (GtkWidget	       *widget,
 					   gint			x,
 					   gint			y);
@@ -571,6 +579,8 @@ void	   gtk_widget_set_usize		  (GtkWidget	       *widget,
 void       gtk_widget_get_usize           (GtkWidget           *widget,
 					   gint                *width,
 					   gint                *height);
+#endif
+
 void	   gtk_widget_set_events	  (GtkWidget	       *widget,
 					   gint			events);
 void       gtk_widget_add_events          (GtkWidget           *widget,

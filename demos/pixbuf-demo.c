@@ -212,8 +212,9 @@ main (int argc, char **argv)
 	frame = gdk_pixbuf_new (GDK_COLORSPACE_RGB, FALSE, 8, back_width, back_height);
 
 	window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-	gtk_widget_set_usize (window, back_width, back_height);
-	gtk_window_set_resizable (GTK_WINDOW (window), FALSE);
+
+	gtk_widget_set_size_request (window, back_width, back_height);
+        gtk_window_set_resizable (GTK_WINDOW (window), FALSE);
 
 	gtk_signal_connect (GTK_OBJECT (window), "destroy",
 			    GTK_SIGNAL_FUNC (destroy_cb), NULL);

@@ -397,6 +397,22 @@ Incompatible Changes from GTK+-1.2 to GTK+-2.0:
   using gdk_image_get() should really be ported to
   gdk_pixbuf_get_from_drawable().
 
+* gtk_widget_set_usize() has been renamed to
+  gtk_widget_set_size_request(), however the old name still exists
+  unless you define GTK_DISABLE_DEPRECATED.
+
+* gtk_widget_set_uposition() is deprecated; use gtk_window_move(), 
+  gtk_fixed_put(), or gtk_layout_put() instead.
+
+* gtk_window_set_policy() is deprecated. To get the effect of
+  "allow_shrink", call gtk_widget_set_size_request(window, 0, 0).  To
+  get the effect of "allow_grow", call
+  gtk_window_set_resizable(window, TRUE). You didn't want the effect
+  of auto_shrink, it made no sense. But maybe if you were using it you
+  want to use gtk_window_resize (window, 1, 1) to snap a window back
+  to its minimum size (the 1, 1 will be rounded up to the minimum
+  window size).
+
 * The core GTK+ now takes care of handling mapping, unmapping and
   realizing the child widgets of containers in
   gtk_widget_set_parent(). In most cases, this allows container

@@ -686,7 +686,7 @@ create_tree (void)
 
   gtk_tree_selection_set_mode (GTK_TREE_SELECTION (selection),
 			       GTK_TREE_SELECTION_SINGLE);
-  gtk_widget_set_usize (tree_view, 200, -1);
+  gtk_widget_set_size_request (tree_view, 200, -1);
 
   for (i=0; i < G_N_ELEMENTS (testgtk_demos); i++)
     {

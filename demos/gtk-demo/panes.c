@@ -148,7 +148,7 @@ do_panes (void)
 
       frame = gtk_frame_new (NULL);
       gtk_frame_set_shadow_type (GTK_FRAME(frame), GTK_SHADOW_IN);
-      gtk_widget_set_usize (frame, 60, 60);
+      gtk_widget_set_size_request (frame, 60, 60);
       gtk_paned_add1 (GTK_PANED (hpaned), frame);
       
       button = gtk_button_new_with_mnemonic ("_Hi there");

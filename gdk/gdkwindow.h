@@ -82,7 +82,9 @@ typedef enum
   GDK_HINT_BASE_SIZE   = 1 << 3,
   GDK_HINT_ASPECT      = 1 << 4,
   GDK_HINT_RESIZE_INC  = 1 << 5,
-  GDK_HINT_WIN_GRAVITY = 1 << 6
+  GDK_HINT_WIN_GRAVITY = 1 << 6,
+  GDK_HINT_USER_POS    = 1 << 7,
+  GDK_HINT_USER_SIZE   = 1 << 8
 } GdkWindowHints;
 
 

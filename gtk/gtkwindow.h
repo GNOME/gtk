@@ -69,24 +69,23 @@ struct _GtkWindow
   GdkWindow *frame;
   GtkWindowGroup *group;
 
-  guint16 resize_count;
-
+  guint16 configure_request_count;
+  guint allow_shrink : 1;
+  guint allow_grow : 1;
+  guint configure_notify_received : 1;
+  /* The following flags are initially TRUE (before a window is mapped).
+   * They cause us to compute a configure request that involves
+   * default-only parameters. Once mapped, we set them to FALSE.
+   * Then we set them to TRUE again on unmap (for position)
+   * and on unrealize (for size).
+   */
+  guint need_default_position : 1;
+  guint need_default_size : 1;
+  guint position : 3;
   GtkWindowType type : 4;
   guint has_user_ref_count : 1;
   guint has_focus : 1;
-  guint allow_shrink : 1;
-  guint allow_grow : 1;
-  guint auto_shrink : 1;
-  guint handling_resize : 1;
-  guint position : 2;
 
-  /* The following flag is initially TRUE when a window is mapped.
-   * and will be set to FALSE after it is first positioned.
-   * It is also temporarily reset when the window's size changes.
-   * 
-   * When TRUE, we move the window to the position the app set.
-   */
-  guint use_uposition : 1;
   guint modal : 1;
   guint destroy_with_parent : 1;
   
@@ -252,16 +251,33 @@ void       gtk_window_set_policy               (GtkWindow           *window,
 						gint                 allow_grow,
 						gint                 auto_shrink);
 #endif
-/* The following differs from gtk_widget_set_usize, in that
- * gtk_widget_set_usize() overrides the requisition, so sets a minimum
- * size, while this only sets the size requested from the WM.
+
+/* Set initial default size of the window (does not constrain user
+ * resize operations)
  */
-void       gtk_window_set_default_size         (GtkWindow           *window,
-						gint                 width,
-						gint                 height);
-void       gtk_window_get_default_size         (GtkWindow           *window,
-						gint                *width,
-						gint                *height);
+void     gtk_window_set_default_size (GtkWindow   *window,
+                                      gint         width,
+                                      gint         height);
+void     gtk_window_get_default_size (GtkWindow   *window,
+                                      gint        *width,
+                                      gint        *height);
+void     gtk_window_resize           (GtkWindow   *window,
+                                      gint         width,
+                                      gint         height);
+void     gtk_window_get_size         (GtkWindow   *window,
+                                      gint        *width,
+                                      gint        *height);
+void     gtk_window_move             (GtkWindow   *window,
+                                      gint         x,
+                                      gint         y);
+void     gtk_window_get_position     (GtkWindow   *window,
+                                      gint        *x,
+                                      gint        *y);
+gboolean gtk_window_parse_geometry   (GtkWindow   *window,
+                                      const gchar *geometry);
+
+/* Ignore this unless you are writing a GUI builder */
+void     gtk_window_reshow_with_initial_size (GtkWindow *window);
 
 /* Window groups
  */

@@ -1387,6 +1387,16 @@ gdk_window_set_geometry_hints (GdkWindow      *window,
       size_hints.x = 0;
       size_hints.y = 0;
     }
+
+  if (geom_mask & GDK_HINT_USER_POS)
+    {
+      size_hints.flags |= USPosition;
+    }
+
+  if (geom_mask & GDK_HINT_USER_SIZE)
+    {
+      size_hints.flags |= USSize;
+    }
   
   if (geom_mask & GDK_HINT_MIN_SIZE)
     {

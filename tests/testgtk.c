@@ -8109,16 +8109,10 @@ configure_event_callback (GtkWidget *widget,
   gchar *msg;
   gint x, y;
   
-#if 0
-  /* FIXME */
-  gtk_window_get_location (GTK_WINDOW (widget), &x, &y);
-#else  
-  x = 0;
-  y = 0;
-#endif
+  gtk_window_get_position (GTK_WINDOW (widget), &x, &y);
   
   msg = g_strdup_printf ("event: %d,%d  %d x %d\n"
-                         "location: %d, %d",
+                         "position: %d, %d",
                          event->x, event->y, event->width, event->height,
                          x, y);
   
@@ -8152,9 +8146,17 @@ set_size_callback (GtkWidget *widget,
   
   get_ints (data, &w, &h);
 
-  gtk_window_set_default_size (GTK_WINDOW (g_object_get_data (data, "target")), w, h);
+  gtk_window_resize (GTK_WINDOW (g_object_get_data (data, "target")), w, h);
 }
-     
+
+static void
+unset_default_size_callback (GtkWidget *widget,
+                             gpointer   data)
+{
+  gtk_window_set_default_size (g_object_get_data (data, "target"),
+                               -1, -1);
+}
+
 static void
 set_default_size_callback (GtkWidget *widget,
                            gpointer   data)
@@ -8168,6 +8170,14 @@ set_default_size_callback (GtkWidget *widget,
 }
 
 static void
+unset_usize_callback (GtkWidget *widget,
+                      gpointer   data)
+{
+  gtk_widget_set_size_request (g_object_get_data (data, "target"),
+                               -1, -1);
+}
+
+static void
 set_usize_callback (GtkWidget *widget,
                     gpointer   data)
 {
@@ -8175,8 +8185,8 @@ set_usize_callback (GtkWidget *widget,
   
   get_ints (data, &w, &h);
 
-  gtk_widget_set_usize (g_object_get_data (data, "target"),
-                        w, h);
+  gtk_widget_set_size_request (g_object_get_data (data, "target"),
+                               w, h);
 }
 
 static void
@@ -8187,7 +8197,21 @@ set_location_callback (GtkWidget *widget,
   
   get_ints (data, &x, &y);
 
-  gtk_widget_set_uposition (g_object_get_data (data, "target"), x, y);
+  gtk_window_move (g_object_get_data (data, "target"), x, y);
+}
+
+static void
+move_to_position_callback (GtkWidget *widget,
+                           gpointer   data)
+{
+  gint x, y;
+  GtkWindow *window;
+
+  window = g_object_get_data (data, "target");
+  
+  gtk_window_get_position (window, &x, &y);
+
+  gtk_window_move (window, x, y);
 }
 
 static void
@@ -8201,12 +8225,9 @@ set_geometry_callback (GtkWidget *entry,
   
   text = gtk_editable_get_chars (GTK_EDITABLE (entry), 0, -1);
 
-#if 0
-  /* FIXME */
   if (!gtk_window_parse_geometry (target, text))
     g_print ("Bad geometry string '%s'\n", text);
-#endif
-  
+
   g_free (text);
 }
 
@@ -8242,10 +8263,230 @@ auto_shrink_callback (GtkWidget *widget,
 
 static void
 gravity_selected (GtkWidget *widget,
-                  gpointer data)
+                  gpointer   data)
 {
   gtk_window_set_gravity (GTK_WINDOW (g_object_get_data (data, "target")),
                           gtk_option_menu_get_history (GTK_OPTION_MENU (widget)) + GDK_GRAVITY_NORTH_WEST);
+}
+
+static void
+pos_selected (GtkWidget *widget,
+              gpointer   data)
+{
+  gtk_window_set_position (GTK_WINDOW (g_object_get_data (data, "target")),
+                           gtk_option_menu_get_history (GTK_OPTION_MENU (widget)) + GTK_WIN_POS_NONE);
+}
+
+static void
+move_gravity_window_to_current_position (GtkWidget *widget,
+                                         gpointer   data)
+{
+  gint x, y;
+  GtkWindow *window;
+
+  window = GTK_WINDOW (data);    
+  
+  gtk_window_get_position (window, &x, &y);
+
+  gtk_window_move (window, x, y);
+}
+
+static void
+get_screen_corner (GtkWindow *window,
+                   gint      *x,
+                   gint      *y)
+{
+  int w, h;
+  
+  gtk_window_get_size (GTK_WINDOW (window), &w, &h);
+
+  switch (gtk_window_get_gravity (window))
+    {
+    case GDK_GRAVITY_SOUTH_EAST:
+      *x = gdk_screen_width () - w;
+      *y = gdk_screen_height () - h;
+      break;
+
+    case GDK_GRAVITY_NORTH_EAST:
+      *x = gdk_screen_width () - w;
+      *y = 0;
+      break;
+
+    case GDK_GRAVITY_SOUTH_WEST:
+      *x = 0;
+      *y = gdk_screen_height () - h;
+      break;
+
+    case GDK_GRAVITY_NORTH_WEST:
+      *x = 0;
+      *y = 0;
+      break;
+      
+    case GDK_GRAVITY_SOUTH:
+      *x = (gdk_screen_width () - w) / 2;
+      *y = gdk_screen_height () - h;
+      break;
+
+    case GDK_GRAVITY_NORTH:
+      *x = (gdk_screen_width () - w) / 2;
+      *y = 0;
+      break;
+
+    case GDK_GRAVITY_WEST:
+      *x = 0;
+      *y = (gdk_screen_height () - h) / 2;
+      break;
+
+    case GDK_GRAVITY_EAST:
+      *x = gdk_screen_width () - w;
+      *y = (gdk_screen_height () - h) / 2;
+      break;
+
+    case GDK_GRAVITY_CENTER:
+      *x = (gdk_screen_width () - w) / 2;
+      *y = (gdk_screen_height () - h) / 2;
+      break;
+
+    case GDK_GRAVITY_STATIC:
+      /* pick some random numbers */
+      *x = 350;
+      *y = 350;
+      break;
+
+    default:
+      g_assert_not_reached ();
+      break;
+    }
+}
+
+static void
+move_gravity_window_to_starting_position (GtkWidget *widget,
+                                          gpointer   data)
+{
+  gint x, y;
+  GtkWindow *window;
+
+  window = GTK_WINDOW (data);    
+  
+  get_screen_corner (window,
+                     &x, &y);
+  
+  gtk_window_move (window, x, y);
+}
+
+static GtkWidget*
+make_gravity_window (GtkWidget   *destroy_with,
+                     GdkGravity   gravity,
+                     const gchar *title)
+{
+  GtkWidget *window;
+  GtkWidget *button;
+  GtkWidget *vbox;
+  int x, y;
+  
+  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+
+  vbox = gtk_vbox_new (FALSE, 0);
+  gtk_widget_show (vbox);
+  
+  gtk_container_add (GTK_CONTAINER (window), vbox);
+  gtk_window_set_title (GTK_WINDOW (window), title);
+  gtk_window_set_gravity (GTK_WINDOW (window), gravity);
+
+  gtk_signal_connect_object (GTK_OBJECT (destroy_with),
+                             "destroy",
+                             GTK_SIGNAL_FUNC (gtk_widget_destroy),
+                             GTK_OBJECT (window));
+
+  
+  button = gtk_button_new_with_mnemonic ("_Move to current position");
+
+  g_signal_connect (G_OBJECT (button), "clicked",
+                    G_CALLBACK (move_gravity_window_to_current_position),
+                    window);
+
+  gtk_container_add (GTK_CONTAINER (vbox), button);
+  gtk_widget_show (button);
+
+  button = gtk_button_new_with_mnemonic ("Move to _starting position");
+
+  g_signal_connect (G_OBJECT (button), "clicked",
+                    G_CALLBACK (move_gravity_window_to_starting_position),
+                    window);
+
+  gtk_container_add (GTK_CONTAINER (vbox), button);
+  gtk_widget_show (button);
+  
+  /* Pretend this is the result of --geometry.
+   * DO NOT COPY THIS CODE unless you are setting --geometry results,
+   * and in that case you probably should just use gtk_window_parse_geometry().
+   * AGAIN, DO NOT SET GDK_HINT_USER_POS! It violates the ICCCM unless
+   * you are parsing --geometry or equivalent.
+   */
+  gtk_window_set_geometry_hints (GTK_WINDOW (window),
+                                 NULL, NULL,
+                                 GDK_HINT_USER_POS);
+
+  gtk_window_set_default_size (GTK_WINDOW (window),
+                               200, 200);
+
+  get_screen_corner (GTK_WINDOW (window), &x, &y);
+  
+  gtk_window_move (GTK_WINDOW (window),
+                   x, y);
+  
+  return window;
+}
+
+static void
+do_gravity_test (GtkWidget *widget,
+                 gpointer   data)
+{
+  GtkWidget *destroy_with = data;
+  GtkWidget *window;
+  
+  /* We put a window at each gravity point on the screen. */
+  window = make_gravity_window (destroy_with, GDK_GRAVITY_NORTH_WEST,
+                                "NorthWest");
+  gtk_widget_show (window);
+  
+  window = make_gravity_window (destroy_with, GDK_GRAVITY_SOUTH_EAST,
+                                "SouthEast");
+  gtk_widget_show (window);
+
+  window = make_gravity_window (destroy_with, GDK_GRAVITY_NORTH_EAST,
+                                "NorthEast");
+  gtk_widget_show (window);
+
+  window = make_gravity_window (destroy_with, GDK_GRAVITY_SOUTH_WEST,
+                                "SouthWest");
+  gtk_widget_show (window);
+
+  window = make_gravity_window (destroy_with, GDK_GRAVITY_SOUTH,
+                                "South");
+  gtk_widget_show (window);
+
+  window = make_gravity_window (destroy_with, GDK_GRAVITY_NORTH,
+                                "North");
+  gtk_widget_show (window);
+
+  
+  window = make_gravity_window (destroy_with, GDK_GRAVITY_WEST,
+                                "West");
+  gtk_widget_show (window);
+
+    
+  window = make_gravity_window (destroy_with, GDK_GRAVITY_EAST,
+                                "East");
+  gtk_widget_show (window);
+
+  window = make_gravity_window (destroy_with, GDK_GRAVITY_CENTER,
+                                "Center");
+  gtk_widget_show (window);
+
+  window = make_gravity_window (destroy_with, GDK_GRAVITY_STATIC,
+                                "Static");
+  gtk_widget_show (window);
 }
 
 static GtkWidget*
@@ -8287,7 +8528,7 @@ window_controls (GtkWidget *window)
                       GTK_SIGNAL_FUNC (configure_event_callback),
                       label);
 
-  adj = (GtkAdjustment *) gtk_adjustment_new (10.0, -3.0, 800.0, 1.0,
+  adj = (GtkAdjustment *) gtk_adjustment_new (10.0, -2000.0, 2000.0, 1.0,
                                               5.0, 0.0);
   spin = gtk_spin_button_new (adj, 0, 0);
 
@@ -8295,7 +8536,7 @@ window_controls (GtkWidget *window)
 
   g_object_set_data (G_OBJECT (control_window), "spin1", spin);
 
-  adj = (GtkAdjustment *) gtk_adjustment_new (10.0, -3.0, 800.0, 1.0,
+  adj = (GtkAdjustment *) gtk_adjustment_new (10.0, -2000.0, 2000.0, 1.0,
                                               5.0, 0.0);
   spin = gtk_spin_button_new (adj, 0, 0);
 
@@ -8309,15 +8550,29 @@ window_controls (GtkWidget *window)
   gtk_signal_connect (GTK_OBJECT (entry), "changed",
                       GTK_SIGNAL_FUNC (set_geometry_callback),
                       control_window);
+
+  button = gtk_button_new_with_label ("Show gravity test windows");
+  gtk_signal_connect_object (GTK_OBJECT (button),
+                             "clicked",
+                             GTK_SIGNAL_FUNC (do_gravity_test),
+                             control_window);
+  gtk_box_pack_end (GTK_BOX (vbox), button, FALSE, FALSE, 0);
+
+  button = gtk_button_new_with_label ("Reshow with initial size");
+  gtk_signal_connect_object (GTK_OBJECT (button),
+                             "clicked",
+                             GTK_SIGNAL_FUNC (gtk_window_reshow_with_initial_size),
+                             GTK_OBJECT (window));
+  gtk_box_pack_end (GTK_BOX (vbox), button, FALSE, FALSE, 0);
   
   button = gtk_button_new_with_label ("Queue resize");
   gtk_signal_connect_object (GTK_OBJECT (button),
                              "clicked",
                              GTK_SIGNAL_FUNC (gtk_widget_queue_resize),
-                             GTK_OBJECT (control_window));
+                             GTK_OBJECT (window));
   gtk_box_pack_end (GTK_BOX (vbox), button, FALSE, FALSE, 0);
   
-  button = gtk_button_new_with_label ("Set size");
+  button = gtk_button_new_with_label ("Resize");
   gtk_signal_connect (GTK_OBJECT (button),
                       "clicked",
                       GTK_SIGNAL_FUNC (set_size_callback),
@@ -8331,20 +8586,41 @@ window_controls (GtkWidget *window)
                       GTK_OBJECT (control_window));
   gtk_box_pack_end (GTK_BOX (vbox), button, FALSE, FALSE, 0);
 
-  button = gtk_button_new_with_label ("Set usize");
+  button = gtk_button_new_with_label ("Unset default size");
+  gtk_signal_connect (GTK_OBJECT (button),
+                      "clicked",
+                      GTK_SIGNAL_FUNC (unset_default_size_callback),
+                      GTK_OBJECT (control_window));
+  gtk_box_pack_end (GTK_BOX (vbox), button, FALSE, FALSE, 0);
+  
+  button = gtk_button_new_with_label ("Set size request");
   gtk_signal_connect (GTK_OBJECT (button),
                       "clicked",
                       GTK_SIGNAL_FUNC (set_usize_callback),
                       GTK_OBJECT (control_window));
   gtk_box_pack_end (GTK_BOX (vbox), button, FALSE, FALSE, 0);
 
-  button = gtk_button_new_with_label ("Set location");
+  button = gtk_button_new_with_label ("Unset size request");
+  gtk_signal_connect (GTK_OBJECT (button),
+                      "clicked",
+                      GTK_SIGNAL_FUNC (unset_usize_callback),
+                      GTK_OBJECT (control_window));
+  gtk_box_pack_end (GTK_BOX (vbox), button, FALSE, FALSE, 0);
+  
+  button = gtk_button_new_with_label ("Move");
   gtk_signal_connect (GTK_OBJECT (button),
                       "clicked",
                       GTK_SIGNAL_FUNC (set_location_callback),
                       GTK_OBJECT (control_window));
   gtk_box_pack_end (GTK_BOX (vbox), button, FALSE, FALSE, 0);
 
+  button = gtk_button_new_with_label ("Move to current position");
+  gtk_signal_connect (GTK_OBJECT (button),
+                      "clicked",
+                      GTK_SIGNAL_FUNC (move_to_position_callback),
+                      GTK_OBJECT (control_window));
+  gtk_box_pack_end (GTK_BOX (vbox), button, FALSE, FALSE, 0);
+  
   button = gtk_check_button_new_with_label ("Allow shrink");
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), FALSE);
   gtk_signal_connect (GTK_OBJECT (button),
@@ -8424,6 +8700,44 @@ window_controls (GtkWidget *window)
                       control_window);
 
   gtk_box_pack_end (GTK_BOX (vbox), om, FALSE, FALSE, 0);
+
+
+  menu = gtk_menu_new ();
+  
+  i = 0;
+  while (i < 5)
+    {
+      GtkWidget *mi;
+      static gchar *names[] = {
+        "GTK_WIN_POS_NONE",
+        "GTK_WIN_POS_CENTER",
+        "GTK_WIN_POS_MOUSE",
+        "GTK_WIN_POS_CENTER_ALWAYS",
+        "GTK_WIN_POS_CENTER_ON_PARENT",
+        NULL
+      };
+
+      g_assert (names[i]);
+      
+      mi = gtk_menu_item_new_with_label (names[i]);
+
+      gtk_menu_shell_append (GTK_MENU_SHELL (menu), mi);
+
+      ++i;
+    }
+  
+  gtk_widget_show_all (menu);
+  
+  om = gtk_option_menu_new ();
+  gtk_option_menu_set_menu (GTK_OPTION_MENU (om), menu);
+  
+
+  gtk_signal_connect (GTK_OBJECT (om),
+                      "changed",
+                      GTK_SIGNAL_FUNC (pos_selected),
+                      control_window);
+
+  gtk_box_pack_end (GTK_BOX (vbox), om, FALSE, FALSE, 0);
   
   gtk_widget_show_all (vbox);
   
@@ -8434,27 +8748,36 @@ void
 create_window_sizing (void)
 {
   static GtkWidget *window = NULL;
+  static GtkWidget *target_window = NULL;
   
-  if (!window)
+  if (!target_window)
     {
       GtkWidget *label;
       
-      window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+      target_window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
 
       label = gtk_label_new (NULL);
       gtk_label_set_markup (GTK_LABEL (label), "<span foreground=\"purple\"><big>Window being resized</big></span>\nBlah blah blah blah\nblah blah blah\nblah blah blah blah blah");
-      gtk_container_add (GTK_CONTAINER (window), label);
+      gtk_container_add (GTK_CONTAINER (target_window), label);
       gtk_widget_show (label);
       
+      gtk_signal_connect (GTK_OBJECT (target_window), "destroy",
+			  GTK_SIGNAL_FUNC (gtk_widget_destroyed),
+			  &target_window);
+
+      window = window_controls (target_window);
+      
       gtk_signal_connect (GTK_OBJECT (window), "destroy",
-			  GTK_SIGNAL_FUNC(gtk_widget_destroyed),
+			  GTK_SIGNAL_FUNC (gtk_widget_destroyed),
 			  &window);
-
-      gtk_window_set_title (GTK_WINDOW (window), "Window to size");
-
-      gtk_widget_show (window_controls (window));
+      
+      gtk_window_set_title (GTK_WINDOW (target_window), "Window to size");
     }
 
+  /* don't show target window by default, we want to allow testing
+   * of behavior on first show.
+   */
+  
   if (!GTK_WIDGET_VISIBLE (window))
     gtk_widget_show (window);
   else

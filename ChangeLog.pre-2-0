@@ -1,3 +1,58 @@
+2001-08-07  Havoc Pennington  <hp@pobox.com>
+
+	* gtk/gtkfilesel.c (open_ref_dir): fix a typo.
+
+	* gtk/gtkplug.c (gtk_plug_init): remove setting of auto_shrink;
+	some fixage is needed here, but nothing simple. Owen understands
+	it. ;-)
+
+        * gtk/gtkwindow.h, gtk/gtkwindow.c: Rework code and API for window
+	sizing and positioning.  Also, fix bug in compute_geometry_hints
+	(width/height confusion for setting min size). 
+	(gtk_window_move): new function
+	(gtk_window_resize): new function
+	(gtk_window_get_size): new function
+	(gtk_window_get_position): new function
+	(gtk_window_parse_geometry): new function
+	
+ 	* gtk/gtkwidget.c (gtk_widget_set_size_request): new function
+ 	(gtk_widget_get_size_request): new function
+ 	(gtk_widget_get_usize): delete, that was a short-lived function
+ 	;-)
+ 	(gtk_widget_set_usize): deprecate
+ 	(gtk_widget_set_uposition): deprecate, make it a trivial 
+	gtk_window_move() wrapper
+	(gtk_widget_class_init): remove x/y/width/height properties,
+	add width_request height_request
+	
+        * demos/*: update to avoid deprecated functions
+	
+	* gtk/gtklayout.c: add x/y child properties
+
+	* gtk/gtkfixed.c: add x/y child properties, and get rid of 
+	uses of "gint16"
+
+	* tests/testgtk.c (create_window_sizing): lots of tweaks to window
+	sizing test
+
+	* gdk/x11/gdkevents-x11.c (gdk_event_translate): Ensure that
+	configure events on toplevel windows are always in root window
+	coordinates, following ICCCM spec that all synthetic events 
+	are in root window coords already, while real events are 
+	in parent window coords. Previously the code assumed that 
+	coords of 0,0 were parent window coords, which was 
+	really broken.
+  
+ 	* gtk/gtkcontainer.c (gtk_container_get_focus_chain): fix
+ 	warning
+ 
+ 	* gdk/gdkwindow.h (GdkWindowHints): add GDK_HINT_USER_POS 
+ 	and GDK_HINT_USER_SIZE so we can set USSize and USPosition 
+ 	hints in gtk_window_parse_geometry()
+ 
+ 	* gdk/x11/gdkwindow-x11.c (gdk_window_set_geometry_hints): support
+ 	new USER_POS USER_SIZE hints 	
+
 2001-08-09  Matthias Clasen  <matthiasc@waldgeist.poet.de>
 
 	* tests/prop-editor.c (properties_from_type): Use 

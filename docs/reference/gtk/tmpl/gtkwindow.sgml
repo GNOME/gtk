@@ -509,11 +509,6 @@ The type of the window.
 The title of the window.
 </para>
 
-<!-- ##### ARG GtkWindow:auto-shrink ##### -->
-<para>
-If the window shrinks automatically when widgets within it shrink.
-</para>
-
 <!-- ##### ARG GtkWindow:allow-shrink ##### -->
 <para>
 If the window can be resized to a smaller size by the user.

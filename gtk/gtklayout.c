@@ -51,44 +51,56 @@ enum {
    PROP_HEIGHT
 };
 
-static void     gtk_layout_class_init         (GtkLayoutClass *class);
-static void     gtk_layout_get_property       (GObject        *object,
-					       guint          prop_id,
-					       GValue         *value,
-					       GParamSpec     *pspec);
-static void     gtk_layout_set_property       (GObject        *object,
-					       guint          prop_id,
-					       const GValue   *value,
-					       GParamSpec     *pspec);
-static void     gtk_layout_init               (GtkLayout      *layout);
+enum {
+  CHILD_PROP_0,
+  CHILD_PROP_X,
+  CHILD_PROP_Y
+};
 
-static void     gtk_layout_finalize           (GObject        *object);
-static void     gtk_layout_realize            (GtkWidget      *widget);
-static void     gtk_layout_unrealize          (GtkWidget      *widget);
-static void     gtk_layout_map                (GtkWidget      *widget);
-static void     gtk_layout_size_request       (GtkWidget      *widget,
-					       GtkRequisition *requisition);
-static void     gtk_layout_size_allocate      (GtkWidget      *widget,
-					       GtkAllocation  *allocation);
-static gint     gtk_layout_expose             (GtkWidget      *widget, 
-					       GdkEventExpose *event);
+static void gtk_layout_class_init         (GtkLayoutClass *class);
+static void gtk_layout_get_property       (GObject        *object,
+                                           guint           prop_id,
+                                           GValue         *value,
+                                           GParamSpec     *pspec);
+static void gtk_layout_set_property       (GObject        *object,
+                                           guint           prop_id,
+                                           const GValue   *value,
+                                           GParamSpec     *pspec);
+static void gtk_layout_init               (GtkLayout      *layout);
+static void gtk_layout_finalize           (GObject        *object);
+static void gtk_layout_realize            (GtkWidget      *widget);
+static void gtk_layout_unrealize          (GtkWidget      *widget);
+static void gtk_layout_map                (GtkWidget      *widget);
+static void gtk_layout_size_request       (GtkWidget      *widget,
+                                           GtkRequisition *requisition);
+static void gtk_layout_size_allocate      (GtkWidget      *widget,
+                                           GtkAllocation  *allocation);
+static gint gtk_layout_expose             (GtkWidget      *widget,
+                                           GdkEventExpose *event);
+static void gtk_layout_remove             (GtkContainer   *container,
+                                           GtkWidget      *widget);
+static void gtk_layout_forall             (GtkContainer   *container,
+                                           gboolean        include_internals,
+                                           GtkCallback     callback,
+                                           gpointer        callback_data);
+static void gtk_layout_set_adjustments    (GtkLayout      *layout,
+                                           GtkAdjustment  *hadj,
+                                           GtkAdjustment  *vadj);
+static void gtk_layout_set_child_property (GtkContainer   *container,
+                                           GtkWidget      *child,
+                                           guint           property_id,
+                                           const GValue   *value,
+                                           GParamSpec     *pspec);
+static void gtk_layout_get_child_property (GtkContainer   *container,
+                                           GtkWidget      *child,
+                                           guint           property_id,
+                                           GValue         *value,
+                                           GParamSpec     *pspec);
+static void gtk_layout_allocate_child     (GtkLayout      *layout,
+                                           GtkLayoutChild *child);
+static void gtk_layout_adjustment_changed (GtkAdjustment  *adjustment,
+                                           GtkLayout      *layout);
 
-static void     gtk_layout_remove             (GtkContainer *container, 
-					       GtkWidget    *widget);
-static void     gtk_layout_forall             (GtkContainer *container,
-					       gboolean      include_internals,
-					       GtkCallback   callback,
-					       gpointer      callback_data);
-static void     gtk_layout_set_adjustments    (GtkLayout     *layout,
-					       GtkAdjustment *hadj,
-					       GtkAdjustment *vadj);
-
-static void     gtk_layout_allocate_child     (GtkLayout      *layout,
-					       GtkLayoutChild *child);
-
-
-static void     gtk_layout_adjustment_changed (GtkAdjustment  *adjustment,
-					       GtkLayout      *layout);
 
 static GtkWidgetClass *parent_class = NULL;
 
@@ -213,6 +225,26 @@ gtk_layout_set_vadjustment (GtkLayout     *layout,
   g_object_notify (G_OBJECT (layout), "vadjustment");
 }
 
+static GtkLayoutChild*
+get_child (GtkLayout  *layout,
+           GtkWidget  *widget)
+{
+  GList *children;
+  
+  children = layout->children;
+  while (children)
+    {
+      GtkLayoutChild *child;
+      
+      child = children->data;
+      children = children->next;
+
+      if (child->widget == widget)
+        return child;
+    }
+
+  return NULL;
+}
 
 void           
 gtk_layout_put (GtkLayout     *layout, 
@@ -235,8 +267,46 @@ gtk_layout_put (GtkLayout     *layout,
   
   if (GTK_WIDGET_REALIZED (layout))
     gtk_widget_set_parent_window (child->widget, layout->bin_window);
-  
+
   gtk_widget_set_parent (child_widget, GTK_WIDGET (layout));
+}
+
+static void
+gtk_layout_move_internal (GtkLayout       *layout,
+                          GtkWidget       *widget,
+                          gboolean         change_x,
+                          gint             x,
+                          gboolean         change_y,
+                          gint             y)
+{
+  GtkLayoutChild *child;
+  
+  g_return_if_fail (GTK_IS_LAYOUT (layout));
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+  g_return_if_fail (widget->parent == GTK_WIDGET (layout));  
+  
+  child = get_child (layout, widget);
+
+  g_assert (child);
+
+  gtk_widget_freeze_child_notify (widget);
+  
+  if (change_x)
+    {
+      child->x = x;
+      gtk_widget_child_notify (widget, "x");
+    }
+
+  if (change_y)
+    {
+      child->y = y;
+      gtk_widget_child_notify (widget, "y");
+    }
+
+  gtk_widget_thaw_child_notify (widget);
+  
+  if (GTK_WIDGET_VISIBLE (widget) && GTK_WIDGET_VISIBLE (layout))
+    gtk_widget_queue_resize (GTK_WIDGET (layout));
 }
 
 void           
@@ -245,28 +315,11 @@ gtk_layout_move (GtkLayout     *layout,
 		 gint           x, 
 		 gint           y)
 {
-  GList *tmp_list;
-  GtkLayoutChild *child;
-  
   g_return_if_fail (GTK_IS_LAYOUT (layout));
+  g_return_if_fail (GTK_IS_WIDGET (child_widget));
+  g_return_if_fail (child_widget->parent == GTK_WIDGET (layout));  
 
-  tmp_list = layout->children;
-  while (tmp_list)
-    {
-      child = tmp_list->data;
-      tmp_list = tmp_list->next;
-
-      if (child->widget == child_widget)
-	{
-	  child->x = x;
-	  child->y = y;
-
-	  if (GTK_WIDGET_VISIBLE (child_widget) && GTK_WIDGET_VISIBLE (layout))
-	    gtk_widget_queue_resize (child_widget);
-
-	  return;
-	}
-    }
+  gtk_layout_move_internal (layout, child_widget, TRUE, x, TRUE, y);
 }
 
 static void
@@ -413,6 +466,29 @@ gtk_layout_class_init (GtkLayoutClass *class)
   gobject_class->get_property = gtk_layout_get_property;
   gobject_class->finalize = gtk_layout_finalize;
 
+  container_class->set_child_property = gtk_layout_set_child_property;
+  container_class->get_child_property = gtk_layout_get_child_property;
+
+  gtk_container_class_install_child_property (container_class,
+					      CHILD_PROP_X,
+					      g_param_spec_int ("x",
+                                                                _("X position"),
+                                                                _("X position of child widget"),
+                                                                G_MININT,
+                                                                G_MAXINT,
+                                                                0,
+                                                                G_PARAM_READWRITE));
+
+  gtk_container_class_install_child_property (container_class,
+					      CHILD_PROP_Y,
+					      g_param_spec_int ("y",
+                                                                _("Y position"),
+                                                                _("Y position of child widget"),
+                                                                G_MININT,
+                                                                G_MAXINT,
+                                                                0,
+                                                                G_PARAM_READWRITE));
+  
   g_object_class_install_property (gobject_class,
 				   PROP_HADJUSTMENT,
 				   g_param_spec_object ("hadjustment",
@@ -528,6 +604,57 @@ gtk_layout_set_property (GObject      *object,
     }
 }
 
+static void
+gtk_layout_set_child_property (GtkContainer    *container,
+                               GtkWidget       *child,
+                               guint            property_id,
+                               const GValue    *value,
+                               GParamSpec      *pspec)
+{
+  switch (property_id)
+    {
+    case CHILD_PROP_X:
+      gtk_layout_move_internal (GTK_LAYOUT (container),
+                                child,
+                                TRUE, g_value_get_int (value),
+                                FALSE, 0);
+      break;
+    case CHILD_PROP_Y:
+      gtk_layout_move_internal (GTK_LAYOUT (container),
+                                child,
+                                FALSE, 0,
+                                TRUE, g_value_get_int (value));
+      break;
+    default:
+      GTK_CONTAINER_WARN_INVALID_CHILD_PROPERTY_ID (container, property_id, pspec);
+      break;
+    }
+}
+
+static void
+gtk_layout_get_child_property (GtkContainer *container,
+                               GtkWidget    *child,
+                               guint         property_id,
+                               GValue       *value,
+                               GParamSpec   *pspec)
+{
+  GtkLayoutChild *layout_child;
+
+  layout_child = get_child (GTK_LAYOUT (container), child);
+  
+  switch (property_id)
+    {
+    case CHILD_PROP_X:
+      g_value_set_int (value, layout_child->x);
+      break;
+    case CHILD_PROP_Y:
+      g_value_set_int (value, layout_child->y);
+      break;
+    default:
+      GTK_CONTAINER_WARN_INVALID_CHILD_PROPERTY_ID (container, property_id, pspec);
+      break;
+    }
+}
 
 static void
 gtk_layout_init (GtkLayout *layout)

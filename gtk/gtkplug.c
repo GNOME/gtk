@@ -156,7 +156,6 @@ gtk_plug_init (GtkPlug *plug)
   window = GTK_WINDOW (plug);
 
   window->type = GTK_WINDOW_TOPLEVEL;
-  window->auto_shrink = TRUE;
 }
 
 static void

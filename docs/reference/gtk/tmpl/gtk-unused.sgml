@@ -1004,6 +1004,36 @@ the #GtkAdjustment which sets the range of the scale.
 
 @widget: the object which received the signal.
 
+<!-- ##### ARG GtkWidget:height ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ARG GtkWidget:width ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ARG GtkWidget:x ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ARG GtkWidget:y ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ARG GtkWindow:auto-shrink ##### -->
+<para>
+If the window shrinks automatically when widgets within it shrink.
+</para>
+
+
 <!-- ##### FUNCTION gtk_arg_copy ##### -->
 <para>
 It will either copy data into an existing argument or allocate a new argument
