@@ -15,7 +15,9 @@
 /* Define if you have the ANSI C header files.  */
 #undef STDC_HEADERS
 
-/* Other stuff */
+#undef ENABLE_MEM_CHECK
+#undef ENABLE_MEM_PROFILE
+
 #undef G_COMPILED_WITH_DEBUGGING
 #undef HAVE_BROKEN_WCTYPE
 #undef HAVE_DOPRNT

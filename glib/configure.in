@@ -47,9 +47,29 @@ AM_MAINTAINER_MODE
 AC_CANONICAL_HOST
 
 AC_ARG_ENABLE(debug, [  --enable-debug=[no/minimum/yes] turn on debugging [default=minimum]],,enable_debug=minimum)
+AC_ARG_ENABLE(mem_check, [  --enable-mem-check=[no/yes] turn on malloc/free sanity checking [default=no]],,enable_mem_check=no)
+AC_ARG_ENABLE(mem_profile, [  --enable-mem-profile=[no/yes] turn on malloc profiling atexit [default=no]],,enable_mem_profile=no)
 
 AC_ARG_ENABLE(ansi, [  --enable-ansi           turn on strict ansi [default=no]],
 		    , enable_ansi=no)
+
+echo -n "Enabling memory checking... "
+if test "x$enable_mem_check" = "xyes"; then
+  AC_DEFINE(ENABLE_MEM_CHECK, 1)
+  AC_SUBST(ENABLE_MEM_CHECK)
+  echo "yes"
+else
+  echo "no"
+fi
+
+echo -n "Enabling memory profiling... "
+if test "x$enable_mem_profile" = "xyes"; then
+  AC_DEFINE(ENABLE_MEM_PROFILE, 1)
+  AC_SUBST(ENABLE_MEM_PROFILE)
+  echo "yes"
+else
+  echo "no"
+fi
 
 if test "x$enable_debug" = "xyes"; then
   test "$cflags_set" = set || CFLAGS="$CFLAGS -g"

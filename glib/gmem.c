@@ -20,9 +20,8 @@
 #include <string.h>
 #include "glib.h"
 
-
-/* #define MEM_PROFILE */
-/* #define MEM_CHECK */
+/* #define ENABLE_MEM_PROFILE */
+/* #define ENABLE_MEM_CHECK */
 
 
 #define MAX_MEM_AREA  65536L
@@ -88,11 +87,11 @@ static gint   g_mem_chunk_area_search  (GMemArea *a,
 
 static GRealMemChunk *mem_chunks = NULL;
 
-#ifdef MEM_PROFILE
+#ifdef ENABLE_MEM_PROFILE
 static gulong allocations[4096] = { 0 };
 static gulong allocated_mem = 0;
 static gulong freed_mem = 0;
-#endif /* MEM_PROFILE */
+#endif /* ENABLE_MEM_PROFILE */
 
 
 #ifndef USE_DMALLOC
@@ -103,22 +102,22 @@ g_malloc (gulong size)
   gpointer p;
 
 
-#if defined(MEM_PROFILE) || defined(MEM_CHECK)
+#if defined(ENABLE_MEM_PROFILE) || defined(ENABLE_MEM_CHECK)
   gulong *t;
-#endif /* MEM_PROFILE || MEM_CHECK */
+#endif /* ENABLE_MEM_PROFILE || ENABLE_MEM_CHECK */
 
 
   if (size == 0)
     return NULL;
 
 
-#if defined(MEM_PROFILE) || defined(MEM_CHECK)
+#if defined(ENABLE_MEM_PROFILE) || defined(ENABLE_MEM_CHECK)
   size += SIZEOF_LONG;
-#endif /* MEM_PROFILE || MEM_CHECK */
+#endif /* ENABLE_MEM_PROFILE || ENABLE_MEM_CHECK */
 
-#ifdef MEM_CHECK
+#ifdef ENABLE_MEM_CHECK
   size += SIZEOF_LONG;
-#endif /* MEM_CHECK */
+#endif /* ENABLE_MEM_CHECK */
 
 
   p = (gpointer) malloc (size);
@@ -126,29 +125,29 @@ g_malloc (gulong size)
     g_error ("could not allocate %ld bytes", size);
 
 
-#ifdef MEM_CHECK
+#ifdef ENABLE_MEM_CHECK
   size -= SIZEOF_LONG;
 
   t = p;
   p = ((guchar*) p + SIZEOF_LONG);
   *t = 0;
-#endif /* MEM_CHECK */
+#endif /* ENABLE_MEM_CHECK */
 
-#if defined(MEM_PROFILE) || defined(MEM_CHECK)
+#if defined(ENABLE_MEM_PROFILE) || defined(ENABLE_MEM_CHECK)
   size -= SIZEOF_LONG;
 
   t = p;
   p = ((guchar*) p + SIZEOF_LONG);
   *t = size;
 
-#ifdef MEM_PROFILE
+#ifdef ENABLE_MEM_PROFILE
   if (size <= 4095)
     allocations[size-1] += 1;
   else
     allocations[4095] += 1;
   allocated_mem += size;
-#endif /* MEM_PROFILE */
-#endif /* MEM_PROFILE || MEM_CHECK */
+#endif /* ENABLE_MEM_PROFILE */
+#endif /* ENABLE_MEM_PROFILE || ENABLE_MEM_CHECK */
 
 
   return p;
@@ -160,22 +159,22 @@ g_malloc0 (gulong size)
   gpointer p;
 
 
-#if defined(MEM_PROFILE) || defined(MEM_CHECK)
+#if defined(ENABLE_MEM_PROFILE) || defined(ENABLE_MEM_CHECK)
   gulong *t;
-#endif /* MEM_PROFILE || MEM_CHECK */
+#endif /* ENABLE_MEM_PROFILE || ENABLE_MEM_CHECK */
 
 
   if (size == 0)
     return NULL;
 
 
-#ifdef MEM_PROFILE
+#ifdef ENABLE_MEM_PROFILE
   size += SIZEOF_LONG;
-#endif /* MEM_PROFILE */
+#endif /* ENABLE_MEM_PROFILE */
 
-#ifdef MEM_CHECK
+#ifdef ENABLE_MEM_CHECK
   size += SIZEOF_LONG;
-#endif /* MEM_CHECK */
+#endif /* ENABLE_MEM_CHECK */
 
 
   p = (gpointer) calloc (size, 1);
@@ -183,29 +182,29 @@ g_malloc0 (gulong size)
     g_error ("could not allocate %ld bytes", size);
 
 
-#ifdef MEM_CHECK
+#ifdef ENABLE_MEM_CHECK
   size -= SIZEOF_LONG;
 
   t = p;
   p = ((guchar*) p + SIZEOF_LONG);
   *t = 0;
-#endif /* MEM_CHECK */
+#endif /* ENABLE_MEM_CHECK */
 
-#if defined(MEM_PROFILE) || defined(MEM_CHECK)
+#if defined(ENABLE_MEM_PROFILE) || defined(ENABLE_MEM_CHECK)
   size -= SIZEOF_LONG;
 
   t = p;
   p = ((guchar*) p + SIZEOF_LONG);
   *t = size;
 
-#ifdef MEM_PROFILE
+#ifdef ENABLE_MEM_PROFILE
   if (size <= 4095)
     allocations[size-1] += 1;
   else
     allocations[4095] += 1;
   allocated_mem += size;
-#endif /* MEM_PROFILE */
-#endif /* MEM_PROFILE */
+#endif /* ENABLE_MEM_PROFILE */
+#endif /* ENABLE_MEM_PROFILE */
 
 
   return p;
@@ -217,42 +216,42 @@ g_realloc (gpointer mem,
 {
   gpointer p;
 
-#if defined(MEM_PROFILE) || defined(MEM_CHECK)
+#if defined(ENABLE_MEM_PROFILE) || defined(ENABLE_MEM_CHECK)
   gulong *t;
-#endif /* MEM_PROFILE || MEM_CHECK */
+#endif /* ENABLE_MEM_PROFILE || ENABLE_MEM_CHECK */
 
 
   if (size == 0)
     return NULL;
 
 
-#if defined(MEM_PROFILE) || defined(MEM_CHECK)
+#if defined(ENABLE_MEM_PROFILE) || defined(ENABLE_MEM_CHECK)
   size += SIZEOF_LONG;
-#endif /* MEM_PROFILE || MEM_CHECK */
+#endif /* ENABLE_MEM_PROFILE || ENABLE_MEM_CHECK */
 
-#ifdef MEM_CHECK
+#ifdef ENABLE_MEM_CHECK
   size += SIZEOF_LONG;
-#endif /* MEM_CHECK */
+#endif /* ENABLE_MEM_CHECK */
 
 
   if (!mem)
     p = (gpointer) malloc (size);
   else
     {
-#if defined(MEM_PROFILE) || defined(MEM_CHECK)
+#if defined(ENABLE_MEM_PROFILE) || defined(ENABLE_MEM_CHECK)
       t = (gulong*) ((guchar*) mem - SIZEOF_LONG);
-#ifdef MEM_PROFILE
+#ifdef ENABLE_MEM_PROFILE
       freed_mem += *t;
-#endif /* MEM_PROFILE */
+#endif /* ENABLE_MEM_PROFILE */
       mem = t;
-#endif /* MEM_PROFILE || MEM_CHECK */
+#endif /* ENABLE_MEM_PROFILE || ENABLE_MEM_CHECK */
 
-#ifdef MEM_CHECK
+#ifdef ENABLE_MEM_CHECK
       t = (gulong*) ((guchar*) mem - SIZEOF_LONG);
       if (*t >= 1)
 	g_warning ("trying to realloc freed memory\n");
       mem = t;
-#endif /* MEM_CHECK */
+#endif /* ENABLE_MEM_CHECK */
 
       p = (gpointer) realloc (mem, size);
     }
@@ -261,29 +260,29 @@ g_realloc (gpointer mem,
     g_error ("could not reallocate %ld bytes", size);
 
 
-#ifdef MEM_CHECK
+#ifdef ENABLE_MEM_CHECK
   size -= SIZEOF_LONG;
 
   t = p;
   p = ((guchar*) p + SIZEOF_LONG);
   *t = 0;
-#endif /* MEM_CHECK */
+#endif /* ENABLE_MEM_CHECK */
 
-#if defined(MEM_PROFILE) || defined(MEM_CHECK)
+#if defined(ENABLE_MEM_PROFILE) || defined(ENABLE_MEM_CHECK)
   size -= SIZEOF_LONG;
 
   t = p;
   p = ((guchar*) p + SIZEOF_LONG);
   *t = size;
 
-#ifdef MEM_PROFILE
+#ifdef ENABLE_MEM_PROFILE
   if (size <= 4095)
     allocations[size-1] += 1;
   else
     allocations[4095] += 1;
   allocated_mem += size;
-#endif /* MEM_PROFILE */
-#endif /* MEM_PROFILE || MEM_CHECK */
+#endif /* ENABLE_MEM_PROFILE */
+#endif /* ENABLE_MEM_PROFILE || ENABLE_MEM_CHECK */
 
 
   return p;
@@ -294,21 +293,21 @@ g_free (gpointer mem)
 {
   if (mem)
     {
-#if defined(MEM_PROFILE) || defined(MEM_CHECK)
+#if defined(ENABLE_MEM_PROFILE) || defined(ENABLE_MEM_CHECK)
       gulong *t;
       gulong size;
-#endif /* MEM_PROFILE || MEM_CHECK */
+#endif /* ENABLE_MEM_PROFILE || ENABLE_MEM_CHECK */
 
-#if defined(MEM_PROFILE) || defined(MEM_CHECK)
+#if defined(ENABLE_MEM_PROFILE) || defined(ENABLE_MEM_CHECK)
       t = (gulong*) ((guchar*) mem - SIZEOF_LONG);
       size = *t;
-#ifdef MEM_PROFILE
+#ifdef ENABLE_MEM_PROFILE
       freed_mem += size;
-#endif /* MEM_PROFILE */
+#endif /* ENABLE_MEM_PROFILE */
       mem = t;
-#endif /* MEM_PROFILE || MEM_CHECK */
+#endif /* ENABLE_MEM_PROFILE || ENABLE_MEM_CHECK */
 
-#ifdef MEM_CHECK
+#ifdef ENABLE_MEM_CHECK
       t = (gulong*) ((guchar*) mem - SIZEOF_LONG);
       if (*t >= 1)
 	g_warning ("freeing previously freed memory\n");
@@ -316,9 +315,9 @@ g_free (gpointer mem)
       mem = t;
 
       memset ((guchar*) mem + 8, 0, size);
-#else /* MEM_CHECK */
+#else /* ENABLE_MEM_CHECK */
       free (mem);
-#endif /* MEM_CHECK */
+#endif /* ENABLE_MEM_CHECK */
     }
 }
 
@@ -328,7 +327,7 @@ g_free (gpointer mem)
 void
 g_mem_profile (void)
 {
-#ifdef MEM_PROFILE
+#ifdef ENABLE_MEM_PROFILE
   gint i;
 
   for (i = 0; i < 4095; i++)
@@ -340,20 +339,20 @@ g_mem_profile (void)
   g_print ("%lu bytes allocated\n", allocated_mem);
   g_print ("%lu bytes freed\n", freed_mem);
   g_print ("%lu bytes in use\n", allocated_mem - freed_mem);
-#endif /* MEM_PROFILE */
+#endif /* ENABLE_MEM_PROFILE */
 }
 
 void
 g_mem_check (gpointer mem)
 {
-#ifdef MEM_CHECK
+#ifdef ENABLE_MEM_CHECK
   gulong *t;
 
   t = (gulong*) ((guchar*) mem - SIZEOF_LONG - SIZEOF_LONG);
 
   if (*t >= 1)
     g_warning ("mem: 0x%08x has been freed: %lu\n", (gulong) mem, *t);
-#endif /* MEM_CHECK */
+#endif /* ENABLE_MEM_CHECK */
 }
 
 GMemChunk*

@@ -33,6 +33,10 @@
 
 
 /* Other stuff */
+
+#undef ENABLE_MEM_CHECK
+#undef ENABLE_MEM_PROFILE
+
 #undef G_COMPILED_WITH_DEBUGGING
 #undef HAVE_BROKEN_WCTYPE
 #undef HAVE_DOPRNT
@@ -57,7 +61,6 @@
 #undef SIZEOF_LONG
 #undef SIZEOF_INT
 #undef SIZEOF_VOID_P
-
 
 /* #undef PACKAGE */
 /* #undef VERSION */
