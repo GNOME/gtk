@@ -1,3 +1,12 @@
+Mon Jan 11 23:52:58 1999  Lars Hamann  <lars@gtk.org>
+
+	* gtk/gtklist.c (gtk_list_signal_drag_begin)
+	(gtk_list_drag_begin): end drag selections if necessary.
+
+	* gtk/gtkspinbutton.c/h (gtk_spin_button_update): made function
+	public. Manually force synchronization of spin button text and
+ 	adjustment value.
+
 Mon Jan 11 15:23:32 1999  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtktogglebutton.c: eliminated some queue_draws when invoking

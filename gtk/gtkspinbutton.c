@@ -97,7 +97,6 @@ static gint gtk_spin_button_key_press      (GtkWidget          *widget,
 					    GdkEventKey        *event);
 static gint gtk_spin_button_key_release    (GtkWidget          *widget,
 					    GdkEventKey        *event);
-static void gtk_spin_button_update         (GtkSpinButton      *spin_button);
 static void gtk_spin_button_activate       (GtkEditable        *editable);
 static void gtk_spin_button_snap           (GtkSpinButton      *spin_button,
 					    gfloat              val);
@@ -1115,7 +1114,7 @@ gtk_spin_button_snap (GtkSpinButton *spin_button,
     }
 }
 
-static void 
+void 
 gtk_spin_button_update (GtkSpinButton *spin_button)
 {
   gfloat val;
