@@ -1,5 +1,7 @@
 2004-08-02  Matthias Clasen  <mclasen@redhat.com>
 
+	* tests/testcombo.c: Some trees in combo boxes.
+
 	* gtk/gtkcombobox.c: Rework the combo box to handle 
 	tree models.  (#139582, Matt Walton)
 	
