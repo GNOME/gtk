@@ -1,3 +1,8 @@
+Fri Mar 16 11:38:42 2001  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtktreeview.c (gtk_tree_view_set_model): Fixed some
+	braindeadness spotted by Jamie Strachan <frostfreek@yahoo.com>.
+
 2001-03-16  Alexander Larsson  <alexl@redhat.com>
 
 	* gdk/x11/gdkgeometry-x11.c (_gdk_window_process_expose):

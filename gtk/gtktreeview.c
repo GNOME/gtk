@@ -454,7 +454,8 @@ gtk_tree_view_destroy (GtkObject *object)
   GtkTreeView *tree_view = (GtkTreeView *) object;
   GList *list;
 
-  g_object_unref (G_OBJECT (tree_view->priv->model));
+  if (tree_view->priv->model)
+    g_object_unref (G_OBJECT (tree_view->priv->model));
   gtk_tree_view_unref_tree (tree_view, tree_view->priv->tree);
 
   for (list = tree_view->priv->columns; list; list = list->next)
@@ -3827,6 +3828,9 @@ gtk_tree_view_set_model (GtkTreeView  *tree_view,
   g_return_if_fail (tree_view != NULL);
   g_return_if_fail (GTK_IS_TREE_VIEW (tree_view));
 
+  if (model != NULL)
+    g_object_ref (model);
+
   if (tree_view->priv->model != NULL)
     {
       if (GTK_TREE_VIEW_FLAG_SET (tree_view, GTK_TREE_VIEW_MODEL_SETUP))
@@ -3854,10 +3858,11 @@ gtk_tree_view_set_model (GtkTreeView  *tree_view,
         gtk_tree_row_reference_free (tree_view->priv->drag_dest_row);
 
       GTK_TREE_VIEW_UNSET_FLAG (tree_view, GTK_TREE_VIEW_MODEL_SETUP);
+      g_object_unref (tree_view->priv->model);
     }
 
   tree_view->priv->model = model;
-  g_object_ref (model);
+
   if (model == NULL)
     {
       tree_view->priv->tree = NULL;
