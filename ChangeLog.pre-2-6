@@ -5,6 +5,9 @@
 
 2004-11-16  Matthias Clasen  <mclasen@redhat.com>
 
+	* gdk/win32/gdkevents-win32.c (gdk_event_translate): Fix a 
+	copy-and-paste error.  (#158459) 
+
 	* demos/gtk-demo/*.c: Don't include config.h in the examples.
 
 Tue Nov 16 00:08:07 2004  Jonathan Blandford  <jrb@redhat.com>

@@ -3282,7 +3282,7 @@ gdk_event_translate (GdkDisplay *display,
 	  maxw = rect.right - rect.left;
 	  maxh = rect.bottom - rect.top;
 	  mmi->ptMaxTrackSize.x = maxw > 0 && maxw < G_MAXSHORT ? maxw : G_MAXSHORT;
-	  mmi->ptMaxTrackSize.y = maxh > 0 && maxh < G_MAXSHORT ? maxw : G_MAXSHORT;
+	  mmi->ptMaxTrackSize.y = maxh > 0 && maxh < G_MAXSHORT ? maxh : G_MAXSHORT;
 	}
 
       if (impl->hint_flags & (GDK_HINT_MIN_SIZE | GDK_HINT_MAX_SIZE))
