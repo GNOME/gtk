@@ -3573,7 +3573,15 @@ gtk_file_chooser_default_initial_focus (GtkFileChooserEmbed *chooser_embed)
 
   if (impl->action == GTK_FILE_CHOOSER_ACTION_OPEN
       || impl->action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER)
-    widget = impl->browse_files_tree_view;
+    {
+      GtkTreePath *path;
+
+      path = gtk_tree_path_new_from_indices (0, -1);
+      gtk_tree_view_set_cursor (GTK_TREE_VIEW (impl->browse_files_tree_view), path, NULL, FALSE);
+      gtk_tree_path_free (path);
+
+      widget = impl->browse_files_tree_view;
+    }
   else if (impl->action == GTK_FILE_CHOOSER_ACTION_SAVE
 	   || impl->action == GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER)
     widget = impl->save_file_name_entry;

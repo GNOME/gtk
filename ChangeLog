@@ -1,5 +1,11 @@
 2004-03-08  Federico Mena Quintero  <federico@ximian.com>
 
+	* gtk/gtkfilechooserdefault.c
+	(gtk_file_chooser_default_initial_focus): Use
+	gtk_tree_view_set_cursor().
+
+2004-03-08  Federico Mena Quintero  <federico@ximian.com>
+
 	Patch "1a" from #136185, by Morten Welinder.
 
 	* gtk/gtkfilechooserdefault.c (get_file_info): Take in an argument
