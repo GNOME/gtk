@@ -459,9 +459,9 @@ setup_toplevel_window (GdkWindow *window, GdkWindow *parent)
 		   (guchar *) &GDK_DISPLAY_X11 (screen_x11->display)->leader_window, 1);
 
   if (!obj->focus_on_map)
-    gdk_x11_window_set_user_time(window, 0);
+    gdk_x11_window_set_user_time (window, 0);
   else if (GDK_DISPLAY_X11 (screen_x11->display)->user_time != 0)
-    gdk_x11_window_set_user_time(window, GDK_DISPLAY_X11 (screen_x11->display)->user_time);
+    gdk_x11_window_set_user_time (window, GDK_DISPLAY_X11 (screen_x11->display)->user_time);
 }
 
 /**
@@ -3391,6 +3391,7 @@ gdk_x11_window_set_user_time (GdkWindow *window,
 {
   GdkDisplay *display;
   GdkDisplayX11 *display_x11;
+  glong timestamp_long = (glong)timestamp;
 
   g_return_if_fail (window != NULL);
   g_return_if_fail (GDK_IS_WINDOW (window));
@@ -3404,10 +3405,10 @@ gdk_x11_window_set_user_time (GdkWindow *window,
   XChangeProperty (GDK_DISPLAY_XDISPLAY (display), GDK_WINDOW_XID (window),
                    gdk_x11_get_xatom_by_name_for_display (display, "_NET_WM_USER_TIME"),
                    XA_CARDINAL, 32, PropModeReplace,
-                   (guchar *)&timestamp, 1);
+                   (guchar *)&timestamp_long, 1);
 
-  if (timestamp != GDK_CURRENT_TIME)
-    display_x11->user_time = timestamp;
+  if (timestamp_long != GDK_CURRENT_TIME)
+    display_x11->user_time = timestamp_long;
 }
 
 /**
