@@ -1,14 +1,15 @@
 # gtk+ hu.po.
 # Copyright (C) 1999 Free Software Foundation, Inc.
 # Szabolcs BAN <shooby@gnome.hu>, 1999.
+# Andras Timar <timar@gnome.hu>, 2002.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.1.1\n"
-"POT-Creation-Date: 2002-12-02 20:45-0500\n"
-"PO-Revision-Date: 2002-10-26 15:39+0200\n"
-"Last-Translator: Szabolcs BAN <shooby@gnome.hu>\n"
-"Language-Team: Hungarian <hu@li.org>\n"
+"POT-Creation-Date: 2002-12-07 13:37+0100\n"
+"PO-Revision-Date: 2002-12-07 16:19+0100\n"
+"Last-Translator: Andras Timar <timar@gnome.hu>\n"
+"Language-Team: Hungarian <hu@gnome.hu>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8-bit\n"
@@ -135,13 +136,12 @@ msgid "Malformed chunk in animation"
 msgstr ""
 
 #: gdk-pixbuf/io-ani.c:676
-#, fuzzy
 msgid "The ANI image format"
-msgstr "A képformátum ismeretlen"
+msgstr "ANI képformátum"
 
 #: gdk-pixbuf/io-bmp.c:223 gdk-pixbuf/io-bmp.c:339
 msgid "Not enough memory to load bitmap image"
-msgstr ""
+msgstr "Nincs elég memória a kép betöltéséhez"
 
 #: gdk-pixbuf/io-bmp.c:263
 msgid "BMP image has unsupported header size"
@@ -153,7 +153,7 @@ msgstr ""
 
 #: gdk-pixbuf/io-bmp.c:1076
 msgid "The BMP image format"
-msgstr ""
+msgstr "BMP képformátum"
 
 #: gdk-pixbuf/io-gif.c:219
 #, c-format
@@ -171,7 +171,7 @@ msgstr "Belső hiba a GIF betöltőben (%s)"
 
 #: gdk-pixbuf/io-gif.c:574
 msgid "Stack overflow"
-msgstr ""
+msgstr "Veremtúlcsordulás"
 
 #: gdk-pixbuf/io-gif.c:634
 msgid "GIF image loader can't understand this image."
@@ -188,11 +188,11 @@ msgstr "Körkörös táblázat bejegyzés a GIF fájlban"
 #: gdk-pixbuf/io-gif.c:806 gdk-pixbuf/io-gif.c:1416 gdk-pixbuf/io-gif.c:1462
 #: gdk-pixbuf/io-gif.c:1577
 msgid "Not enough memory to load GIF file"
-msgstr ""
+msgstr "Nincs elég memória a GIF-fájl betöltéséhez"
 
 #: gdk-pixbuf/io-gif.c:1053
 msgid "GIF image is corrupt (incorrect LZW compression)"
-msgstr ""
+msgstr "A GIF-kép hibás (nem megfelelő LZW-tömörítés)"
 
 #: gdk-pixbuf/io-gif.c:1103
 msgid "File does not appear to be a GIF file"
@@ -227,9 +227,8 @@ msgid "GIF image was truncated or incomplete."
 msgstr ""
 
 #: gdk-pixbuf/io-gif.c:1636
-#, fuzzy
 msgid "The GIF image format"
-msgstr "A képformátum ismeretlen"
+msgstr "GIF képformátum"
 
 #: gdk-pixbuf/io-ico.c:218 gdk-pixbuf/io-ico.c:277 gdk-pixbuf/io-ico.c:338
 #: gdk-pixbuf/io-ico.c:401 gdk-pixbuf/io-ico.c:418
@@ -242,28 +241,27 @@ msgstr ""
 
 #: gdk-pixbuf/io-ico.c:299
 msgid "Icon has zero width"
-msgstr ""
+msgstr "Az ikon szélessége nulla"
 
 #: gdk-pixbuf/io-ico.c:309
 msgid "Icon has zero height"
-msgstr ""
+msgstr "Az ikon magassága nulla"
 
 #: gdk-pixbuf/io-ico.c:353
 msgid "Compressed icons are not supported"
-msgstr ""
+msgstr "Tömörített ikonok nincsenek támogatva"
 
 #: gdk-pixbuf/io-ico.c:386
 msgid "Unsupported icon type"
-msgstr ""
+msgstr "Nem támogatott ikontípus"
 
 #: gdk-pixbuf/io-ico.c:466
 msgid "Not enough memory to load ICO file"
 msgstr ""
 
 #: gdk-pixbuf/io-ico.c:871
-#, fuzzy
 msgid "The ICO image format"
-msgstr "A képformátum ismeretlen"
+msgstr "ICO képformátum"
 
 #: gdk-pixbuf/io-jpeg.c:114
 #, c-format
@@ -300,7 +298,7 @@ msgstr ""
 
 #: gdk-pixbuf/io-jpeg.c:940
 msgid "The JPEG image format"
-msgstr ""
+msgstr "JPEG képformátum"
 
 #: gdk-pixbuf/io-png.c:55
 msgid "Bits per channel of PNG image is invalid."
@@ -364,7 +362,7 @@ msgstr ""
 
 #: gdk-pixbuf/io-png.c:919
 msgid "The PNG image format"
-msgstr ""
+msgstr "PNG képformátum"
 
 #: gdk-pixbuf/io-pnm.c:248
 msgid "PNM loader expected to find an integer, but didn't"
@@ -613,17 +611,16 @@ msgid "The TIFF image format"
 msgstr ""
 
 #: gdk-pixbuf/io-wbmp.c:246
-#, fuzzy
 msgid "Image has zero width"
-msgstr "Kép widget"
+msgstr "A kép szélessége nulla"
 
 #: gdk-pixbuf/io-wbmp.c:264
 msgid "Image has zero height"
-msgstr ""
+msgstr "A kép magassága nulla"
 
 #: gdk-pixbuf/io-wbmp.c:275
 msgid "Not enough memory to load image"
-msgstr ""
+msgstr "Nincs elég memória a kép betöltéséhez"
 
 #: gdk-pixbuf/io-wbmp.c:334
 msgid "Couldn't save the rest"
@@ -631,11 +628,11 @@ msgstr ""
 
 #: gdk-pixbuf/io-wbmp.c:368
 msgid "The WBMP image format"
-msgstr ""
+msgstr "WBMP képformátum"
 
 #: gdk-pixbuf/io-xbm.c:285
 msgid "Invalid XBM file"
-msgstr ""
+msgstr "Érvénytelen XBM-fájl"
 
 #: gdk-pixbuf/io-xbm.c:295
 msgid "Insufficient memory to load XBM image file"
@@ -647,11 +644,11 @@ msgstr ""
 
 #: gdk-pixbuf/io-xbm.c:474
 msgid "The XBM image format"
-msgstr ""
+msgstr "XBM képformátum"
 
 #: gdk-pixbuf/io-xpm.c:1229
 msgid "No XPM header found"
-msgstr ""
+msgstr "Nem található az XPM-fejléc"
 
 #: gdk-pixbuf/io-xpm.c:1237
 msgid "XPM file has image width <= 0"
@@ -687,11 +684,11 @@ msgstr ""
 
 #: gdk/gdkdisplaymanager.c:117
 msgid "Default Display"
-msgstr ""
+msgstr "Alapértelmezett képernyő"
 
 #: gdk/gdkdisplaymanager.c:118
 msgid "The default display for GDK"
-msgstr ""
+msgstr "A GDK alapértelmezett képernyője"
 
 #. This is the text that should appear next to menu accelerators
 #. * that use the shift key. If the text on this key isn't typically
@@ -700,7 +697,7 @@ msgstr ""
 #.
 #: gtk/gtkaccellabel.c:117
 msgid "Shift"
-msgstr ""
+msgstr "Shift"
 
 #. This is the text that should appear next to menu accelerators
 #. * that use the control key. If the text on this key isn't typically
@@ -709,7 +706,7 @@ msgstr ""
 #.
 #: gtk/gtkaccellabel.c:123
 msgid "Ctrl"
-msgstr ""
+msgstr "Ctrl"
 
 #. This is the text that should appear next to menu accelerators
 #. * that use the alt key. If the text on this key isn't typically
@@ -718,7 +715,7 @@ msgstr ""
 #.
 #: gtk/gtkaccellabel.c:129
 msgid "Alt"
-msgstr ""
+msgstr "Alt"
 
 #: gtk/gtkaccellabel.c:137
 msgid "Accelerator Closure"
@@ -1435,7 +1432,7 @@ msgid "Inconsistent state"
 msgstr ""
 
 #: gtk/gtkcellrenderertoggle.c:142
-msgid "The inconsistent stae of the button"
+msgid "The inconsistent state of the button"
 msgstr ""
 
 #: gtk/gtkcellrenderertoggle.c:150
@@ -1578,7 +1575,7 @@ msgstr "_Telítettség:"
 
 #: gtk/gtkcolorsel.c:1858
 msgid "\"Deepness\" of the color."
-msgstr ""
+msgstr "A szín telítettsége"
 
 #: gtk/gtkcolorsel.c:1859
 msgid "_Value:"
@@ -1586,7 +1583,7 @@ msgstr "_Érték:"
 
 #: gtk/gtkcolorsel.c:1860
 msgid "Brightness of the color."
-msgstr ""
+msgstr "A szín fényessége"
 
 #: gtk/gtkcolorsel.c:1861
 msgid "_Red:"
@@ -1594,7 +1591,7 @@ msgstr "_Vörös:"
 
 #: gtk/gtkcolorsel.c:1862
 msgid "Amount of red light in the color."
-msgstr ""
+msgstr "A vörös fény mennyisége a színben"
 
 #: gtk/gtkcolorsel.c:1863
 msgid "_Green:"
@@ -1602,7 +1599,7 @@ msgstr "_Zöld:"
 
 #: gtk/gtkcolorsel.c:1864
 msgid "Amount of green light in the color."
-msgstr ""
+msgstr "A zöld fény mennyisége a színben"
 
 #: gtk/gtkcolorsel.c:1865
 msgid "_Blue:"
@@ -1610,7 +1607,7 @@ msgstr "_Kék:"
 
 #: gtk/gtkcolorsel.c:1866
 msgid "Amount of blue light in the color."
-msgstr ""
+msgstr "A kék fény mennyisége a színben"
 
 #: gtk/gtkcolorsel.c:1869
 msgid "_Opacity:"
@@ -1618,22 +1615,23 @@ msgstr "Á_tlátszóság:"
 
 #: gtk/gtkcolorsel.c:1877
 msgid "Transparency of the currently-selected color."
-msgstr ""
+msgstr "A jelenleg kiválasztott szín átlátszósága"
 
 #: gtk/gtkcolorsel.c:1892
 msgid "Color _Name:"
-msgstr ""
+msgstr "Szín _neve:"
 
 #: gtk/gtkcolorsel.c:1904
 msgid ""
 "You can enter an HTML-style hexadecimal color value, or simply a color name "
 "such as 'orange' in this entry."
 msgstr ""
+"Beírhatsz ide egy HTML-stílusú hexadecimális színértéket, vagy egyszerűen "
+"egy színnevet, például 'orange'."
 
 #: gtk/gtkcolorsel.c:1923
-#, fuzzy
 msgid "_Palette"
-msgstr "Egyéni paletta"
+msgstr "_Paletta"
 
 #: gtk/gtkcombo.c:143
 msgid "Enable arrow keys"
@@ -1773,9 +1771,8 @@ msgid "Width of border around the button area at the bottom of the dialog"
 msgstr ""
 
 #: gtk/gtkentry.c:436 gtk/gtklabel.c:368
-#, fuzzy
 msgid "Cursor Position"
-msgstr "Kérdés"
+msgstr "Kurzorpozíció"
 
 #: gtk/gtkentry.c:437 gtk/gtklabel.c:369
 msgid "The current position of the insertion cursor in chars"
@@ -1887,20 +1884,19 @@ msgstr "Fájlnév"
 
 #: gtk/gtkfilesel.c:517
 msgid "The currently selected filename"
-msgstr ""
+msgstr "A jelenleg kiválasztott fájl"
 
 #: gtk/gtkfilesel.c:523
 msgid "Show file operations"
-msgstr ""
+msgstr "Fájlműveletek megjelenítése"
 
 #: gtk/gtkfilesel.c:524
 msgid "Whether buttons for creating/manipulating files should be displayed"
 msgstr ""
 
 #: gtk/gtkfilesel.c:531
-#, fuzzy
 msgid "Select multiple"
-msgstr "Törlés"
+msgstr "Többszörös kijelölés"
 
 #: gtk/gtkfilesel.c:532
 msgid "Whether to allow multiple files to be selected"
@@ -1967,7 +1963,7 @@ msgstr ""
 #: gtk/gtkfilesel.c:1401
 #, c-format
 msgid "Error creating folder \"%s\": %s\n"
-msgstr ""
+msgstr "Hiba a mappa létrehozásakor: \"%s\": %s\n"
 
 #: gtk/gtkfilesel.c:1435
 msgid "New Folder"
@@ -1978,9 +1974,8 @@ msgid "_Folder name:"
 msgstr "_Mappa neve:"
 
 #: gtk/gtkfilesel.c:1476
-#, fuzzy
 msgid "C_reate"
-msgstr "Létrehozás"
+msgstr "_Létrehozás"
 
 #: gtk/gtkfilesel.c:1522
 #, c-format
@@ -2046,14 +2041,12 @@ msgid "Rename file \"%s\" to:"
 msgstr "'%s' fájl átnevezése:"
 
 #: gtk/gtkfilesel.c:1749
-#, fuzzy
 msgid "_Rename"
-msgstr "Átnevezés"
+msgstr "Á_tnevezés"
 
 #: gtk/gtkfilesel.c:2188
-#, fuzzy
 msgid "_Selection: "
-msgstr "Kiválasztott: "
+msgstr "_Kiválasztott: "
 
 #: gtk/gtkfilesel.c:3075
 #, c-format
@@ -3353,7 +3346,7 @@ msgstr "_Félkövér"
 
 #: gtk/gtkstock.c:278
 msgid "_Cancel"
-msgstr "_Mégse"
+msgstr "_Mégsem"
 
 #: gtk/gtkstock.c:279
 msgid "_CD-Rom"
@@ -3376,7 +3369,6 @@ msgid "_Copy"
 msgstr "_Másolás"
 
 #: gtk/gtkstock.c:284
-#, fuzzy
 msgid "Cu_t"
 msgstr "_Kivágás"
 
@@ -3665,22 +3657,20 @@ msgid "The row number to attach the bottom of the child to"
 msgstr ""
 
 #: gtk/gtktable.c:230
-#, fuzzy
 msgid "Horizontal options"
-msgstr "Vízszintes skála"
+msgstr "Vízszintes beállítások"
 
 #: gtk/gtktable.c:231
 msgid "Options specifying the horizontal behaviour of the child"
-msgstr ""
+msgstr "A gyermek vízszintes viselkedését meghatározó beállítások"
 
 #: gtk/gtktable.c:237
-#, fuzzy
 msgid "Vertical options"
-msgstr "Kérdés"
+msgstr "Függőleges beállítások"
 
 #: gtk/gtktable.c:238
 msgid "Options specifying the vertical behaviour of the child"
-msgstr ""
+msgstr "A gyermek függőleges viselkedését meghatározó beállítások"
 
 #: gtk/gtktable.c:244
 #, fuzzy
@@ -4096,7 +4086,7 @@ msgstr ""
 
 #: gtk/gtktextview.c:6474
 msgid "Input _Methods"
-msgstr ""
+msgstr "Beviteli _módok"
 
 #: gtk/gtkthemes.c:69
 #, fuzzy, c-format
