@@ -1,3 +1,14 @@
+2003-06-12  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkwidget.c: Document child-notify and drag-data-received
+	signals. Owen, we need to figure out where the best place for
+	these comments in the source is. I currently put them in front of
+	the signals enum.
+
+2003-06-11  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkdnd.c (gtk_drag_check_threshold): s/threshhold/threshold/.
+
 Thu Jan 12 01:01:19 2003  Kristian Rietveld  <kris@gtk.org>
 
 	* gtk/gtktreeviewcolumn.c (gtk_tree_view_column_cell_process_action):
