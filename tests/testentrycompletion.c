@@ -311,7 +311,7 @@ main (int argc, char *argv[])
   g_object_unref (completion);
   
   /* Create a tree model and use it as the completion model */
-  completion_model = tgtk_list_store_new (1, G_TYPE_STRING);
+  completion_model = gtk_list_store_new (1, G_TYPE_STRING);
 
   gtk_entry_completion_set_model (completion, completion_model);
   g_object_unref (completion_model);

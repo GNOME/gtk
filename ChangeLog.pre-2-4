@@ -1,3 +1,7 @@
+2004-03-08  Christian Neumair  <chris@gnome-de.org>
+
+	* tests/testentrycompletion.c: Fix typo.
+
 2004-03-08  Tor Lillqvist  <tml@iki.fi>
 
 	* README.win32: Update.
