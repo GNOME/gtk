@@ -848,7 +848,7 @@ gtk_font_selection_init(GtkFontSelection *fontsel)
 	  }
 	if (!inserted)
 	  row = gtk_clist_append(GTK_CLIST(clist), &property);
-	gtk_clist_set_row_data(GTK_CLIST(clist), row, (gpointer)i);
+	gtk_clist_set_row_data(GTK_CLIST(clist), row, GINT_TO_POINTER (i));
       }
       gtk_clist_select_row(GTK_CLIST(clist), 0, 0);
       gtk_clist_thaw (GTK_CLIST(clist));
@@ -912,7 +912,7 @@ gtk_font_selection_insert_fonts (GtkFontSelection *fontsel)
 	}
       else
 	row = gtk_clist_append(GTK_CLIST(fontsel->font_clist), &font->family);
-      gtk_clist_set_row_data(GTK_CLIST(fontsel->font_clist), row, (gpointer)i);
+      gtk_clist_set_row_data(GTK_CLIST(fontsel->font_clist), row, GINT_TO_POINTER (i));
     }
   gtk_clist_thaw (GTK_CLIST(fontsel->font_clist));
 }
@@ -945,7 +945,7 @@ gtk_font_selection_expose_list (GtkWidget		*widget,
       selection = GTK_CLIST(fontsel->font_clist)->selection;
       if (selection)
 	{
-	  index = (gint) selection->data;
+	  index = GPOINTER_TO_INT (selection->data);
 	  gtk_clist_moveto(GTK_CLIST(fontsel->font_clist), index, -1, 0.5, 0);
 	}
 
@@ -953,7 +953,7 @@ gtk_font_selection_expose_list (GtkWidget		*widget,
       selection = GTK_CLIST(fontsel->font_style_clist)->selection;
       if (selection)
 	{
-	  index = (gint) selection->data;
+	  index = GPOINTER_TO_INT (selection->data);
 	  gtk_clist_moveto(GTK_CLIST(fontsel->font_style_clist), index, -1,
 			   0.5, 0);
 	}
@@ -962,7 +962,7 @@ gtk_font_selection_expose_list (GtkWidget		*widget,
       selection = GTK_CLIST(fontsel->size_clist)->selection;
       if (selection)
 	{
-	  index = (gint) selection->data;
+	  index = GPOINTER_TO_INT (selection->data);
 	  gtk_clist_moveto(GTK_CLIST(fontsel->size_clist), index, -1, 0.5, 0);
 	}
     }
@@ -990,7 +990,7 @@ gtk_font_selection_select_font (GtkWidget      *w,
   if (bevent && !GTK_WIDGET_HAS_FOCUS (w))
     gtk_widget_grab_focus (w);
 
-  row = (gint)gtk_clist_get_row_data(GTK_CLIST(fontsel->font_clist), row);
+  row = GPOINTER_TO_INT (gtk_clist_get_row_data (GTK_CLIST (fontsel->font_clist), row));
   font = &font_info[row];
   gtk_entry_set_text(GTK_ENTRY(fontsel->font_entry), font->family);
 
@@ -1032,7 +1032,7 @@ gtk_font_selection_select_next (GtkFontSelection *fontsel,
   selection = GTK_CLIST(clist)->selection;
   if (!selection)
     return FALSE;
-  current_row = (gint) selection->data;
+  current_row = GPOINTER_TO_INT (selection->data);
 
   for (row = current_row + step;
        row >= 0 && row < GTK_CLIST(clist)->rows;
@@ -1041,7 +1041,7 @@ gtk_font_selection_select_next (GtkFontSelection *fontsel,
       /* If this is the style clist, make sure that the item is not a charset
 	 entry. */
       if (clist == fontsel->font_style_clist)
-	if ((gint) gtk_clist_get_row_data(GTK_CLIST(clist), row) == -1)
+	if (GPOINTER_TO_INT (gtk_clist_get_row_data(GTK_CLIST(clist), row)) == -1)
 	  continue;
 
       /* Now we've found the row to select. */
@@ -1188,7 +1188,7 @@ gtk_font_selection_show_available_styles (GtkFontSelection *fontsel)
 	    gtk_clist_set_shift(GTK_CLIST(fontsel->font_style_clist), row, 0,
 				0, 4);
 	  gtk_clist_set_row_data(GTK_CLIST(fontsel->font_style_clist), row,
-				 (gpointer) tmpstyle);
+				 GINT_TO_POINTER (tmpstyle));
 	}
     }
 
@@ -1217,8 +1217,7 @@ gtk_font_selection_select_best_style(GtkFontSelection *fontsel)
   style = -1;			/* Quite warning */
   for (row = 0; row < GTK_CLIST(fontsel->font_style_clist)->rows; row++)
     {
-      style = (gint)
-	gtk_clist_get_row_data(GTK_CLIST(fontsel->font_style_clist), row);
+      style = GPOINTER_TO_INT (gtk_clist_get_row_data (GTK_CLIST (fontsel->font_style_clist), row));
       if (style >= 0)
 	break;
     }
@@ -1263,8 +1262,7 @@ gtk_font_selection_select_style (GtkWidget      *w,
 
   /* The style index is stored in the row data, so we just need to copy
      the style values into the fontsel and reload the font. */
-  style = (gint) gtk_clist_get_row_data(GTK_CLIST(fontsel->font_style_clist),
-					row);
+  style = GPOINTER_TO_INT (gtk_clist_get_row_data(GTK_CLIST(fontsel->font_style_clist), row));
 
   /* Don't allow selection of charset rows. */
   if (style == -1)
@@ -1519,7 +1517,7 @@ gtk_font_selection_select_best_size(GtkFontSelection *fontsel)
       selection = GTK_CLIST(fontsel->size_clist)->selection;
       if (selection)
 	gtk_clist_unselect_row(GTK_CLIST(fontsel->size_clist),
-			       (gint) selection->data, 0);
+			       GPOINTER_TO_INT (selection->data), 0);
       gtk_clist_moveto(GTK_CLIST(fontsel->size_clist), best_row, -1, 0.5, 0);
 
       /* Show the size in the size entry. */
@@ -1934,7 +1932,7 @@ gtk_font_selection_filter_fonts	     (GtkFontSelection *fontsel)
       clist = fontsel->filter_clists[prop];
       selection = GTK_CLIST(clist)->selection;
       nselected = g_list_length(selection);
-      if (nselected != 1 || (gint)selection->data != 0)
+      if (nselected != 1 || GPOINTER_TO_INT (selection->data) != 0)
 	{
 	  empty_filter = FALSE;
 
@@ -1944,8 +1942,8 @@ gtk_font_selection_filter_fonts	     (GtkFontSelection *fontsel)
 	    {
 	      for (i = 0; i < nselected; i++)
 		{
-		  row = (gint)selection->data;
-		  index = (gint)gtk_clist_get_row_data(GTK_CLIST(clist), row);
+		  row = GPOINTER_TO_INT (selection->data);
+		  index = GPOINTER_TO_INT (gtk_clist_get_row_data (GTK_CLIST (clist), row));
 		  if (fontsel->property_filters[prop][i] != index)
 		    filter_changed = TRUE;
 		  selection = selection->next;
@@ -2022,7 +2020,7 @@ gtk_font_selection_apply_filter     (GtkFontSelection *fontsel)
       clist = fontsel->filter_clists[prop];
       selection = GTK_CLIST(clist)->selection;
       nselected = g_list_length(selection);
-      if (nselected == 1 && (gint)selection->data == 0)
+      if (nselected == 1 && GPOINTER_TO_INT (selection->data) == 0)
 	{
 	  fontsel->property_filters[prop] = NULL;
 	  fontsel->property_nfilters[prop] = 0;
@@ -2033,8 +2031,8 @@ gtk_font_selection_apply_filter     (GtkFontSelection *fontsel)
 	  fontsel->property_nfilters[prop] = nselected;
 	  for (i = 0; i < nselected; i++)
 	    {
-	      row = (gint)selection->data;
-	      index = (gint)gtk_clist_get_row_data(GTK_CLIST(clist), row);
+	      row = GPOINTER_TO_INT (selection->data);
+	      index = GPOINTER_TO_INT (gtk_clist_get_row_data (GTK_CLIST (clist), row));
 	      fontsel->property_filters[prop][i] = index;
 	      selection = selection->next;
 	    }
@@ -2092,7 +2090,7 @@ gtk_font_selection_apply_filter     (GtkFontSelection *fontsel)
 				 &font->family);
 	}
       gtk_clist_set_row_data(GTK_CLIST(fontsel->font_clist), row,
-			     (gpointer) i);
+			     GINT_TO_POINTER (i));
     }
   gtk_clist_thaw (GTK_CLIST(fontsel->font_clist));
 
@@ -2223,9 +2221,7 @@ gtk_font_selection_clear_filter     (GtkFontSelection *fontsel)
 
       for (row = 0; row < GTK_CLIST(fontsel->font_style_clist)->rows; row++)
 	{
-	  style =
-	    (gint)gtk_clist_get_row_data(GTK_CLIST(fontsel->font_style_clist),
-					 row);
+	  style = GPOINTER_TO_INT (gtk_clist_get_row_data(GTK_CLIST(fontsel->font_style_clist), row));
 	  if (style == fontsel->style)
 	    {
 	      found_style = TRUE;

@@ -1,3 +1,10 @@
+1998-06-18  Federico Mena Quintero  <federico@nuclecu.unam.mx>
+
+	* gtk/gtkfontsel.c: Use pointer<->int conversion macros to avoid warnings.
+
+	* gtk/gtkaccellabel.c (gtk_accel_label_accelerator_width): Use
+	g_return_val_if_fail, because the function *does* return a value.
+
 Thu Jun 18 03:30:06 1998  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkaccellabel.h:
