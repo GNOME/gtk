@@ -28,7 +28,7 @@ Sun Mar 15 23:44:10 1998  Tim Janik  <timj@gimp.org>
 	* gtk/gtkwidget.h:
 	* gtk/gtkmenushell.c: 
 	* gtk/gtkmenu.c: 
-	* gtk/gtkmain.c: removed GRAB_EXCLUSIVE again, just disable modal
+	* gtk/gtkmain.c: removed EXCLUSIVE_GRAB again, just disable modal
 	event delivery for insensitive children.
 
 Sun Mar 15 22:44:33 1998  Tim Janik  <timj@gimp.org>
