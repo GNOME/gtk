@@ -936,8 +936,8 @@ gtk_file_selection_rename_file (GtkWidget *widget, gpointer data)
   gtk_widget_show (fs->fileop_entry);
   
   gtk_entry_set_text (GTK_ENTRY (fs->fileop_entry), fs->fileop_file);
-  gtk_entry_select_region (GTK_ENTRY (fs->fileop_entry),
-			   0, strlen (fs->fileop_file));
+  gtk_editable_select_region (GTK_EDITABLE (fs->fileop_entry),
+			      0, strlen (fs->fileop_file));
 
   /* buttons */
   button = gtk_button_new_with_label ("Rename");

@@ -24,6 +24,7 @@ libgtk_la_SOURCES = \
 	gtkdata.c		\
 	gtkdialog.c		\
 	gtkdrawingarea.c	\
+	gtkeditable.c           \
 	gtkentry.c		\
 	gtkeventbox.c		\
 	gtkfilesel.c		\
@@ -117,6 +118,7 @@ gtkinclude_HEADERS = \
 	gtkdebug.h              \
 	gtkdialog.h		\
 	gtkdrawingarea.h	\
+	gtkeditable.h           \
 	gtkentry.h		\
 	gtkenums.h		\
 	gtkeventbox.h		\
@@ -213,7 +215,8 @@ EXTRA_DIST = \
 	tree_plus.xpm		\
 	tree_minus.xpm		\
 	tree_plus.xbm		\
-	tree_minus.xbm
+	tree_minus.xbm          \
+        circles.xbm
 
 INCLUDES = -I$(top_srcdir) -I$(top_srcdir)/glib @x_cflags@ 
 

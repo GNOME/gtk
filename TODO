@@ -57,6 +57,8 @@ Bugs:
    segfault in malloc
     -timj
 
+ * Change bitfields to guints from enums for C++ ?
+
 Additions:
  * it might be good to ues stdio and getch() instead of 1-character reads.
    so one can take advantage of buffering. Currently each read() takes a separate
@@ -111,3 +113,32 @@ TODO AFTER GTK 1.0
    This will be covered by upcoming themability, raster is working on it.
  
  * More work on Documentation
+
+ * Check return values on all calls to XIC[Get/Set]Values
+
+ * Rewrite the interface to the i18n stuff so GTK widgets don't need to
+   retrieve X values, and so they don't have to know the value of the
+   XNxxx character constants.
+
+ * The "-geometry" option should be supported
+
+  - Having gdk_init() parse the geometry option. (putting it into
+    GDK means you can use XParseGeometry() without wrapping it)
+
+  - Add a call gdk_get_geometry() that retrieves the results 
+    in a form like that returned by XParseGeometry()
+
+  - The application then can modify the results (as would gemvt)
+    then call a routine gtk_window_set_geometry() on whatever
+    it considers to be its main window.
+
+  - Then in some manner GtkWindow takes that into account when
+    setting its hints. (Probably it uses the size and position
+    as the current uposition and usize, and modulates that
+    be the equivalents of the X flags
+
+     XValue, YValue, WidthValue, HeightValue, XNegative, or YNegative
+
+    ( You'd have to extend gdk_window_set_hints to accept the
+      window gravity option to get it right. )
+

@@ -39,6 +39,7 @@
 #include <gtk/gtkdata.h>
 #include <gtk/gtkdialog.h>
 #include <gtk/gtkdrawingarea.h>
+#include <gtk/gtkeditable.h>
 #include <gtk/gtkentry.h>
 #include <gtk/gtkenums.h>
 #include <gtk/gtkeventbox.h>

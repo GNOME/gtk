@@ -21,7 +21,7 @@
 
 #include <gdk/gdk.h>
 #include <gtk/gtkadjustment.h>
-#include <gtk/gtkwidget.h>
+#include <gtk/gtkeditable.h>
 
 
 #ifdef __cplusplus
@@ -38,8 +38,6 @@ typedef struct _GtkPropertyMark   GtkPropertyMark;
 typedef struct _GtkText           GtkText;
 typedef struct _GtkTextClass      GtkTextClass;
 
-typedef void  (*GtkTextFunction) (GtkText *text);
-
 struct _GtkPropertyMark
 {
   /* Position in list. */
@@ -54,7 +52,7 @@ struct _GtkPropertyMark
 
 struct _GtkText
 {
-  GtkWidget widget;
+  GtkEditable editable;
 
   GdkWindow *text_area;
 
@@ -65,8 +63,6 @@ struct _GtkText
 
   GdkPixmap* line_wrap_bitmap;
   GdkPixmap* line_arrow_bitmap;
-
-  GdkIC  ic;
 
 		      /* GAPPED TEXT SEGMENT */
 
@@ -96,24 +92,17 @@ struct _GtkText
   /* First visible horizontal pixel. */
   guint first_onscreen_hor_pixel;
   /* First visible vertical pixel. */
-  guint first_onscreen_ver_pixel;
+ guint first_onscreen_ver_pixel;
 
 			     /* FLAGS */
 
   /* True iff the cursor has been placed yet. */
   guint has_cursor : 1;
-  /* True iff this buffer is editable. (Allowing a cursor to be placed). */
-  guint is_editable : 1;
   /* True iff this buffer is wrapping lines, otherwise it is using a
    * horizontal scrollbar. */
   guint line_wrap : 1;
   /* Frozen, don't do updates. @@@ fixme */
   guint freeze : 1;
-  /* Whether a selection. */
-  guint has_selection : 1;
-  /* Whether the selection is in the clipboard. */
-  guint own_selection : 1;
-  /* Whether it has been realized yet. */
 
 			/* TEXT PROPERTIES */
 
@@ -155,20 +144,11 @@ struct _GtkText
   GList *tab_stops;
   gint default_tab_width;
 
-			  /* Key bindings */
-
-  GtkTextFunction control_keys[26];
-  GtkTextFunction alt_keys[26];
-
-		      /* Selection nonsense. */
-
-  guint selection_start;
-  guint selection_stop;
 };
 
 struct _GtkTextClass
 {
-  GtkWidgetClass parent_class;
+  GtkEditableClass parent_class;
 };
 
 
@@ -197,9 +177,9 @@ gint       gtk_text_backward_delete (GtkText       *text,
 gint       gtk_text_forward_delete  (GtkText       *text,
 				     guint          nchars);
 
-gchar *    gtk_text_get_chars       (GtkText       *text,
-				     guint          index,
-				     guint          nchars);
+void       gtk_text_select_region  (GtkText        *entry,
+				    guint           start,
+				    guint           end);
 
 #define GTK_TEXT_INDEX(t, index)  \
       ((index) < (t)->gap_position ? (t)->text[index] : \

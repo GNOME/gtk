@@ -73,7 +73,7 @@ static void gtk_spin_button_value_changed  (GtkWidget          *widget,
 static gint gtk_spin_button_key_press      (GtkWidget          *widget,
 					    GdkEventKey        *event);
 static void gtk_spin_button_update         (GtkSpinButton      *spin_button);
-static void gtk_spin_button_changed        (GtkEntry           *entry);
+static void gtk_spin_button_changed        (GtkEditable        *editable);
 static void gtk_spin_button_activate       (GtkEntry           *entry);
 
 
@@ -109,11 +109,13 @@ gtk_spin_button_class_init (GtkSpinButtonClass *class)
 {
   GtkObjectClass *object_class;
   GtkWidgetClass *widget_class;
+  GtkEditableClass *editable_class;
   GtkEntryClass  *entry_class;
 
   object_class = (GtkObjectClass*) class;
   widget_class = (GtkWidgetClass*) class;
   entry_class  = (GtkEntryClass*)  class; 
+  editable_class  = (GtkEditableClass*)  class; 
 
   parent_class = gtk_type_class (gtk_entry_get_type ());
 
@@ -135,7 +137,7 @@ gtk_spin_button_class_init (GtkSpinButtonClass *class)
   widget_class->leave_notify_event = gtk_spin_button_leave_notify;
   widget_class->focus_out_event = gtk_spin_button_focus_out;
 
-  entry_class->changed = gtk_spin_button_changed;
+  editable_class->changed = gtk_spin_button_changed;
   entry_class->activate = gtk_spin_button_activate;
 }
 
@@ -900,22 +902,22 @@ gtk_spin_button_update (GtkSpinButton *spin_button)
 }
 
 static void
-gtk_spin_button_changed (GtkEntry *entry)
+gtk_spin_button_changed (GtkEditable *editable)
 {
-  g_return_if_fail (entry != NULL);
-  g_return_if_fail (GTK_IS_ENTRY (entry));
+  g_return_if_fail (editable != NULL);
+  g_return_if_fail (GTK_IS_SPIN_BUTTON (editable));
 
-  GTK_ENTRY_CLASS (parent_class)->changed (entry);
-  if (GTK_WIDGET_VISIBLE (GTK_WIDGET (entry)))
+  GTK_EDITABLE_CLASS (parent_class)->changed (editable);
+  if (GTK_WIDGET_VISIBLE (GTK_WIDGET (editable)))
     {
       GtkSpinButton *spin;
       gfloat val;
       gchar *error = NULL;
 
-      spin = GTK_SPIN_BUTTON (entry);
+      spin = GTK_SPIN_BUTTON (editable);
       spin->snapped = 0;
 
-      val = strtod (entry->text, &error);
+      val = strtod (GTK_ENTRY (editable)->text, &error);
       if (val < spin->adjustment->lower)
 	val = spin->adjustment->lower;
       else if (val > spin->adjustment->upper)
@@ -928,9 +930,9 @@ static void
 gtk_spin_button_activate (GtkEntry *entry)
 {
   g_return_if_fail (entry != NULL);
-  g_return_if_fail (GTK_IS_ENTRY (entry));
+  g_return_if_fail (GTK_IS_SPIN_BUTTON (entry));
 
-  if (entry->editable)
+  if (GTK_EDITABLE(entry)->editable)
     gtk_spin_button_update (GTK_SPIN_BUTTON (entry));
 }
 

@@ -1,3 +1,25 @@
+Sat Feb 28 23:58:54 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* gtk/gtkentry.[ch] gtktext.c gtkeditable.[ch]
+
+	Created a new base widget type Editable for the entry and
+	text widgets, which encapsulates most of the selection and
+	clipboard handling stuff, plus some common signals.
+
+	Changed the Entry widget extensively to support this, 
+	but the interface and appearance should be the same.
+
+	Changed the Text widget moderately to support this.
+
+	It now supports:
+
+	- Selection style cut and paste
+	- Clipboard style cut and paste
+	- Emacs style key bindings (~same as Entry)
+	- Word motion
+
+	There are definitely still some bugs in the new stuff.
+	
 Sat Feb 28 19:29:09 1998  Tim Janik  <timj@gimp.org>
 
 	* gtk/gtkclist.c (gtk_clist_new_with_titles): retrive the clist widget

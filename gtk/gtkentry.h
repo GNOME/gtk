@@ -20,7 +20,7 @@
 
 
 #include <gdk/gdk.h>
-#include <gtk/gtkwidget.h>
+#include <gtk/gtkeditable.h>
 
 
 #ifdef __cplusplus
@@ -38,7 +38,7 @@ typedef struct _GtkEntryClass  GtkEntryClass;
 
 struct _GtkEntry
 {
-  GtkWidget widget;
+  GtkEditable editable;
 
   GdkWindow *text_area;
   GdkPixmap *backing_pixmap;
@@ -48,32 +48,15 @@ struct _GtkEntry
   guint16 text_size;
   guint16 text_length;
   guint16 text_max_length;
-  gint16  current_pos;
-  gint16  selection_start_pos;
-  gint16  selection_end_pos;
   gint16  scroll_offset;
-  guint   have_selection : 1;
   guint   visible : 1;
-  guint   editable : 1;
   guint32 timer;
-  GdkIC   ic;
-
-  gchar *clipboard_text;
 };
 
 struct _GtkEntryClass
 {
-  GtkWidgetClass parent_class;
+  GtkEditableClass parent_class;
 
-  void (* insert_text)  (GtkEntry    *entry,
-			 const gchar *text,
-			 gint         length,
-			 gint        *position);
-  void (* delete_text)  (GtkEntry    *entry,
-			 gint         start_pos,
-			 gint         end_pos);
-  void (* changed)      (GtkEntry    *entry);
-  void (* set_text)     (GtkEntry    *entry);
   void (* activate)     (GtkEntry    *entry);
 };
 
@@ -90,8 +73,8 @@ void       gtk_entry_set_position   (GtkEntry      *entry,
 				     gint           position);
 gchar*     gtk_entry_get_text       (GtkEntry      *entry);
 void       gtk_entry_select_region  (GtkEntry      *entry,
-				     gint           start,
-				     gint           end);
+				     guint          start,
+				     guint          end);
 void       gtk_entry_set_visibility (GtkEntry      *entry,
 				     gboolean       visible);
 void       gtk_entry_set_editable   (GtkEntry      *entry,
