@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.1.12\n"
 "POT-Creation-Date: 2002-12-20 15:52-0500\n"
-"PO-Revision-Date: 2003-01-05 20:09-0200\n"
+"PO-Revision-Date: 2003-01-20 12:34-0200\n"
 "Last-Translator: Gustavo Noronha Silva <kov@debian.org>\n"
 "Language-Team: Brazilian Portuguese <ldp-br@bazar.conectiva.com.br>, Debian-"
 "BR <debian-l10n-portuguese@lists.debian.org>\n"
@@ -3529,7 +3529,7 @@ msgstr "_Acima"
 
 #: gtk/gtkstock.c:298
 msgid "_Help"
-msgstr "_Ajuda"
+msgstr "A_juda"
 
 #: gtk/gtkstock.c:299
 msgid "_Home"
