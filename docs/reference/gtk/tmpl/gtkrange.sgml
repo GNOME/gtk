@@ -153,17 +153,17 @@ Emitted when the range value changes.
 
 </para>
 
-<!-- ##### ARG GtkRange:stepper-size ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkRange:slider-width ##### -->
+<!-- ##### ARG GtkRange:trough-border ##### -->
 <para>
 
 </para>
 
 <!-- ##### ARG GtkRange:stepper-spacing ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkRange:stepper-size ##### -->
 <para>
 
 </para>
@@ -178,7 +178,7 @@ Emitted when the range value changes.
 
 </para>
 
-<!-- ##### ARG GtkRange:trough-border ##### -->
+<!-- ##### ARG GtkRange:slider-width ##### -->
 <para>
 
 </para>

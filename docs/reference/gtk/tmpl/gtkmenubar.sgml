@@ -64,12 +64,12 @@ Adds a new #GtkMenuItem to the GtkMenuBar at the position defined by @position
 @position: the position in the item list where the @child is added.
 
 
-<!-- ##### ARG GtkMenuBar:shadow-type ##### -->
+<!-- ##### ARG GtkMenuBar:internal-padding ##### -->
 <para>
 
 </para>
 
-<!-- ##### ARG GtkMenuBar:internal-padding ##### -->
+<!-- ##### ARG GtkMenuBar:shadow-type ##### -->
 <para>
 
 </para>

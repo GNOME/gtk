@@ -844,3 +844,13 @@ Deprecated alias for gtk_window_set_position().
 
 </para>
 
+<!-- ##### ARG GtkWindow:is-active ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkWindow:has-toplevel-focus ##### -->
+<para>
+
+</para>
+

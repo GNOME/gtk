@@ -248,12 +248,12 @@ mouse cursor is.
 
 </para>
 
-<!-- ##### ARG GtkButton:default-border ##### -->
+<!-- ##### ARG GtkButton:default-outside-border ##### -->
 <para>
 
 </para>
 
-<!-- ##### ARG GtkButton:default-outside-border ##### -->
+<!-- ##### ARG GtkButton:default-border ##### -->
 <para>
 
 </para>

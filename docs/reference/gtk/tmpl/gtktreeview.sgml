@@ -901,6 +901,16 @@ Function used for #gtk_tree_view_map_expanded_rows.
 
 </para>
 
+<!-- ##### ARG GtkTreeView:indent-expanders ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTreeView:horizontal-separator ##### -->
+<para>
+
+</para>
+
 <!-- ##### ARG GtkTreeView:expander-size ##### -->
 <para>
 
@@ -912,16 +922,6 @@ Function used for #gtk_tree_view_map_expanded_rows.
 </para>
 
 <!-- ##### ARG GtkTreeView:allow-rules ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkTreeView:horizontal-separator ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkTreeView:indent-expanders ##### -->
 <para>
 
 </para>

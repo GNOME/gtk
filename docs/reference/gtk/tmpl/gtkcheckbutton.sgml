@@ -66,12 +66,12 @@ Creates a new #GtkCheckButton with a #GtkLabel to the right of it.
 @Returns: 
 
 
-<!-- ##### ARG GtkCheckButton:indicator-size ##### -->
+<!-- ##### ARG GtkCheckButton:indicator-spacing ##### -->
 <para>
 
 </para>
 
-<!-- ##### ARG GtkCheckButton:indicator-spacing ##### -->
+<!-- ##### ARG GtkCheckButton:indicator-size ##### -->
 <para>
 
 </para>

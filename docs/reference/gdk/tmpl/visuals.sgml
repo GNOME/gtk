@@ -108,7 +108,6 @@ pixel_from_rgb (GdkVisual *visual,
     <structfield>blue_prec</structfield> give an alternate presentation
     of the information in <structfield>blue_mask</structfield>.
 @blue_prec: See above.
-@screen: 
 
 <!-- ##### ENUM GdkVisualType ##### -->
 <para>

@@ -1,3 +1,10 @@
+Fri Jun  7 23:11:42 2002  Jonathan Blandford  <jrb@gnome.org>
+
+	* gtk/gtktreeview.c (gtk_tree_view_real_expand_row): Fix sizing
+	bug.
+
+	* docs/reference/gtk/tmpl/gtkbutton.sgml: Remove ^M's.
+
 2002-06-07  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtktreeviewcolumn.c

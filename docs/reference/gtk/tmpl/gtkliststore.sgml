@@ -96,6 +96,7 @@ drop</link> interfaces.
 
 @list_store: 
 @iter: 
+@Returns: 
 <!-- # Unused Parameters # -->
 @store: 
 
