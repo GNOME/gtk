@@ -310,7 +310,7 @@ settings</replaceable> }</literal></term>
     <term><literal><replaceable>class</replaceable>::<replaceable>property</replaceable> = <replaceable>value</replaceable></literal></term>
      <listitem>
        <para>
-        Sets a <link linkend="style-property">style property</link> for a widget class.
+        Sets a <link linkend="style-properties">style property</link> for a widget class.
        </para>
      </listitem>
   </varlistentry>
