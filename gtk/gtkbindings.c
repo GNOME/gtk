@@ -793,8 +793,8 @@ static inline gboolean
 binding_match_activate (GSList          *pspec_list,
 			GtkObject	*object,
 			guint	         path_length,
-			gchar	        *path,
-			gchar	        *path_reversed)
+			const gchar     *path,
+			const gchar     *path_reversed)
 {
   GSList *slist;
 
@@ -938,7 +938,8 @@ gtk_bindings_activate (GtkObject      *object,
       while (class_type && !handled)
 	{
 	  guint path_length;
-	  gchar *path, *path_reversed;
+	  const gchar *path;
+	  gchar *path_reversed;
 	  
 	  path = gtk_type_name (class_type);
 	  path_reversed = g_strdup (path);

@@ -304,7 +304,7 @@ gtk_combo_window_key_press (GtkWidget   *window,
 static GtkListItem *
 gtk_combo_find (GtkCombo * combo)
 {
-  gchar *text;
+  const gchar *text;
   gchar *ltext;
   GList *clist;
   int (*string_compare) (const char *, const char *);

@@ -6184,8 +6184,9 @@ gtk_tree_view_real_start_interactive_search (GtkTreeView *tree_view)
 
   /* position window */
 
-  gtk_object_set_data (GTK_OBJECT (window), "text",
-                       gtk_entry_get_text (GTK_ENTRY (entry)));
+  gtk_object_set_data_full (GTK_OBJECT (window), "gtk-tree-view-text",
+			    g_strdup (gtk_entry_get_text (GTK_ENTRY (entry))),
+			    (GDestroyNotify) g_free);
   gtk_object_set_data (GTK_OBJECT (tree_view),
 		       GTK_TREE_VIEW_SEARCH_DIALOG_KEY, window);
 
@@ -8979,8 +8980,8 @@ gtk_tree_view_search_move (GtkWidget   *window,
   GtkTreeModel *model;
   GtkTreeSelection *selection;
 
-  text = gtk_object_get_data (GTK_OBJECT (window), "text");
-  selected_iter = gtk_object_get_data (GTK_OBJECT (window), "selected-iter");
+  text = gtk_object_get_data (GTK_OBJECT (window), "gtk-tree-view-text");
+  selected_iter = gtk_object_get_data (GTK_OBJECT (window), "gtk-tree-view-selected-iter");
 
   g_return_if_fail (text != NULL);
 
@@ -9191,10 +9192,10 @@ gtk_tree_view_search_init (GtkWidget   *entry,
 
   /* search */
   gtk_tree_selection_unselect_all (selection);
-  selected_iter = gtk_object_get_data (GTK_OBJECT (window), "selected-iter");
+  selected_iter = gtk_object_get_data (GTK_OBJECT (window), "gtk-tree-view-selected-iter");
   if (selected_iter)
     g_free (selected_iter);
-  gtk_object_remove_data (GTK_OBJECT (window), "selected-iter");
+  gtk_object_remove_data (GTK_OBJECT (window), "gtk-tree-view-selected-iter");
 
   if (len < 1)
     return;
@@ -9209,7 +9210,7 @@ gtk_tree_view_search_init (GtkWidget   *entry,
     {
       selected_iter = g_malloc (sizeof (int));
       *selected_iter = 1;
-      gtk_object_set_data (GTK_OBJECT (window), "selected-iter",
+      gtk_object_set_data (GTK_OBJECT (window), "gtk-tree-view-selected-iter",
                            selected_iter);
     }
 }

@@ -134,7 +134,7 @@ gtk_arg_set_from_value (GtkArg       *arg,
     case G_TYPE_STRING:         if (copy_string)
       GTK_VALUE_STRING (*arg) = g_value_dup_string (value);
     else
-      GTK_VALUE_STRING (*arg) = g_value_get_string (value);
+      GTK_VALUE_STRING (*arg) = (char *) g_value_get_string (value);
     break;
     default:
       return FALSE;

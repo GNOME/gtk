@@ -106,7 +106,7 @@ gtk_signal_connect_object_while_alive (GtkObject    *object,
   
   g_signal_connect_closure_by_id (object,
 				  g_signal_lookup (signal, G_OBJECT_TYPE (object)), 0,
-				  g_cclosure_new_object_swap (func, alive_object),
+				  g_cclosure_new_object_swap (func, G_OBJECT (alive_object)),
 				  FALSE);
 }
 
@@ -254,7 +254,7 @@ gtk_arg_set_from_value (GtkArg  *arg,
     case G_TYPE_STRING:		if (copy_string)
       GTK_VALUE_STRING (*arg) = g_value_dup_string (value);
     else
-      GTK_VALUE_STRING (*arg) = g_value_get_string (value);
+      GTK_VALUE_STRING (*arg) = (char *) g_value_get_string (value);
     break;
     default:
       return FALSE;
@@ -286,7 +286,7 @@ gtk_argloc_set_from_value (GtkArg  *arg,
     case G_TYPE_STRING:		if (copy_string)
       *GTK_RETLOC_STRING (*arg) = g_value_dup_string (value);
     else
-      *GTK_RETLOC_STRING (*arg) = g_value_get_string (value);
+      *GTK_RETLOC_STRING (*arg) = (char *) g_value_get_string (value);
     break;
     default:
       return FALSE;

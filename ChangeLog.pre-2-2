@@ -1,3 +1,32 @@
+Tue Oct 23 11:53:00 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/Makefile.am (INCLUDES): Remove G_DISABLE_CONST_RETURNS.
+
+	* gtk/gtkfontsel.[ch]: Make gtk_font_selection_get_font()
+	G_CONST_RETURN. (Murray Cumming)	
+
+	* gtk/gtkfontsel.c (gtk_font_selection_dialog_get_preview_text):
+	Make G_CONST_RETURN.
+
+	* gtk/gtkfilesel.c (open_user_dir): Fix bug with freeing
+	results of g_get_home_dir().
+
+	* gtk/gtkfilesel.c: Make filesel->fileop_file a duplicated 
+	copy. Storing the return from gtk_entry_get_text() is evil.
+
+	* gtk/gtkcombo.c gtk/gtkcellrenderertext.c gtk/gtkbindings.c 
+	gtk/gtkfilesel.c gtk/gtkfontsel.c gtk/gtkimmodule.c 
+	gtk/gtkobject.c gtk/gtkoldeditable.c gtk/gtktreedatalist.c
+	gtk/gtksignal.c: Add const.
+
+	* gdk/x11/gdkkeys-x11.c (get_direction): Add missing const.
+
+	* gtk/gtktreeview.c: Namespace object data keys to be safe, even 
+	if we are setting them on private widgets.
+
+	* gtk/gtktreeview.c (gtk_tree_view_real_start_interactive_search): 
+	Duplicate entry->text before setting it as object data.
+
 2001-10-22  Havoc Pennington  <hp@redhat.com>
 
 	* gtk/gtktextbuffer.c (gtk_text_buffer_place_cursor): don't back
@@ -58,12 +87,13 @@
 Mon Oct 22 11:47:47 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtklabel.c: Add cursor-position, selection-bound 
-	properties. (#62148, Reported by Padraig O'briain)
+	properties. (#62148, reported by Padraig O'Briain)
 
 	* gtk/gtkentry.c (gtk_entry_class_init): Rename text_position
 	to cursor_position. (1.3.x addition, text_position is an awful
 	name.) Make cursor_position read-only to avoid sticky questions
-	of interaction with selection_bound.
+	of interaction with selection_bound. (#62636, reported by
+	Padraig O'Briain)
 
 Mon Oct 22 16:25:12 2001  Owen Taylor  <otaylor@redhat.com>
 

@@ -504,7 +504,7 @@ gtk_font_selection_select_font (GtkWidget      *w,
 				gpointer        data)
 {
   GtkFontSelection *fontsel;
-  gchar *family_name;
+  const gchar *family_name;
   gint index;
   
   fontsel = GTK_FONT_SELECTION (data);
@@ -762,7 +762,7 @@ gtk_font_selection_size_activate (GtkWidget   *w,
 {
   GtkFontSelection *fontsel;
   gint new_size;
-  gchar *text;
+  const gchar *text;
   
   fontsel = GTK_FONT_SELECTION (data);
 
@@ -836,7 +836,7 @@ gtk_font_selection_update_preview (GtkFontSelection *fontsel)
   gint new_height;
   GtkRequisition old_requisition;
   GtkWidget *preview_entry = fontsel->preview_entry;
-  gchar *text;
+  const gchar *text;
 
   gtk_widget_get_child_requisition (preview_entry, &old_requisition);
   
@@ -957,7 +957,7 @@ gtk_font_selection_set_font_name (GtkFontSelection *fontsel,
 
 /* This returns the text in the preview entry. You should copy the returned
    text if you need it. */
-gchar*
+G_CONST_RETURN gchar*
 gtk_font_selection_get_preview_text  (GtkFontSelection *fontsel)
 {
   return gtk_entry_get_text (GTK_ENTRY (fontsel->preview_entry));
@@ -1093,7 +1093,7 @@ gtk_font_selection_dialog_set_font_name (GtkFontSelectionDialog *fsd,
   return gtk_font_selection_set_font_name (GTK_FONT_SELECTION (fsd->fontsel), fontname);
 }
 
-gchar*
+G_CONST_RETURN gchar*
 gtk_font_selection_dialog_get_preview_text (GtkFontSelectionDialog *fsd)
 {
   return gtk_font_selection_get_preview_text (GTK_FONT_SELECTION (fsd->fontsel));

@@ -659,7 +659,7 @@ gtk_rc_parse_named (GtkRcContext *context,
 		    const gchar  *type)
 {
   gchar *path = NULL;
-  gchar *home_dir;
+  const gchar *home_dir;
   gchar *subpath;
 
   if (type)

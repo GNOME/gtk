@@ -240,7 +240,7 @@ enum {
 static CompletionState*    cmpl_init_state        (void);
 static void                cmpl_free_state        (CompletionState *cmpl_state);
 static gint                cmpl_state_okay        (CompletionState* cmpl_state);
-static gchar*              cmpl_strerror          (gint);
+static const gchar*        cmpl_strerror          (gint);
 
 static PossibleCompletion* cmpl_completion_matches(gchar           *text_to_complete,
 						   gchar          **remaining_text,
@@ -293,7 +293,7 @@ static gint                cmpl_last_valid_char    (CompletionState* cmpl_state)
 /* When the user selects a non-directory, call cmpl_completion_fullname
  * to get the full name of the selected file.
  */
-static gchar*              cmpl_completion_fullname (gchar*, CompletionState* cmpl_state);
+static gchar*              cmpl_completion_fullname (const gchar*, CompletionState* cmpl_state);
 
 
 /* Directory operations. */
@@ -308,7 +308,7 @@ static gboolean       check_dir            (gchar *dir_name,
 static CompletionDir* open_dir             (gchar* dir_name,
 					    CompletionState* cmpl_state);
 #ifdef HAVE_PWD_H
-static CompletionDir* open_user_dir        (gchar* text_to_complete,
+static CompletionDir* open_user_dir        (const gchar* text_to_complete,
 					    CompletionState *cmpl_state);
 #endif
 static CompletionDir* open_relative_dir    (gchar* dir_name, CompletionDir* dir,
@@ -355,6 +355,7 @@ static void gtk_file_selection_get_property  (GObject         *object,
 					      GValue          *value,
 					      GParamSpec      *pspec);
 static void gtk_file_selection_init          (GtkFileSelection      *filesel);
+static void gtk_file_selection_finalize      (GObject               *object);
 static void gtk_file_selection_destroy       (GtkObject             *object);
 static gint gtk_file_selection_key_press     (GtkWidget             *widget,
 					      GdkEventKey           *event,
@@ -495,6 +496,7 @@ gtk_file_selection_class_init (GtkFileSelectionClass *class)
 
   parent_class = gtk_type_class (GTK_TYPE_DIALOG);
 
+  gobject_class->finalize = gtk_file_selection_finalize;
   gobject_class->set_property = gtk_file_selection_set_property;
   gobject_class->get_property = gtk_file_selection_get_property;
    
@@ -878,7 +880,7 @@ filenames_drag_get (GtkWidget        *widget,
 		    guint             time,
 		    GtkFileSelection *filesel)
 {
-  gchar *file;
+  const gchar *file;
   gchar *uri_list;
   char hostname[256];
   int res;
@@ -1085,7 +1087,7 @@ gtk_file_selection_get_filename (GtkFileSelection *filesel)
   static gchar nothing[2] = "";
   static gchar something[MAXPATHLEN*2];
   char *sys_filename;
-  char *text;
+  const char *text;
 
   g_return_val_if_fail (GTK_IS_FILE_SELECTION (filesel), nothing);
 
@@ -1158,6 +1160,14 @@ gtk_file_selection_destroy (GtkObject *object)
   GTK_OBJECT_CLASS (parent_class)->destroy (object);
 }
 
+static void
+gtk_file_selection_finalize (GObject *object)
+{
+  GtkFileSelection *filesel = GTK_FILE_SELECTION (object);
+
+  g_free (filesel->fileop_file);
+}
+
 /* Begin file operations callbacks */
 
 static void
@@ -1204,7 +1214,7 @@ gtk_file_selection_create_dir_confirmed (GtkWidget *widget,
 					 gpointer   data)
 {
   GtkFileSelection *fs = data;
-  gchar *dirname;
+  const gchar *dirname;
   gchar *path;
   gchar *full_path;
   gchar *sys_full_path;
@@ -1376,7 +1386,7 @@ gtk_file_selection_delete_file (GtkWidget *widget,
   GtkWidget *vbox;
   GtkWidget *button;
   GtkWidget *dialog;
-  gchar *filename;
+  const gchar *filename;
   gchar *buf;
   
   g_return_if_fail (GTK_IS_FILE_SELECTION (fs));
@@ -1392,7 +1402,8 @@ gtk_file_selection_delete_file (GtkWidget *widget,
   if (strlen (filename) < 1)
     return;
 
-  fs->fileop_file = filename;
+  g_free (fs->fileop_file);
+  fs->fileop_file = g_strdup (filename);
   
   /* main dialog */
   fs->fileop_dialog = dialog = gtk_dialog_new ();
@@ -1450,7 +1461,7 @@ gtk_file_selection_rename_file_confirmed (GtkWidget *widget,
 {
   GtkFileSelection *fs = data;
   gchar *buf;
-  gchar *file;
+  const gchar *file;
   gchar *path;
   gchar *new_filename;
   gchar *old_filename;
@@ -1532,7 +1543,8 @@ gtk_file_selection_rename_file (GtkWidget *widget,
   if (fs->fileop_dialog)
 	  return;
 
-  fs->fileop_file = gtk_entry_get_text (GTK_ENTRY (fs->selection_entry));
+  g_free (fs->fileop_file);
+  fs->fileop_file = g_strdup (gtk_entry_get_text (GTK_ENTRY (fs->selection_entry)));
   if (strlen (fs->fileop_file) < 1)
     return;
   
@@ -1638,9 +1650,7 @@ gtk_file_selection_key_press (GtkWidget   *widget,
 #ifdef G_WITH_CYGWIN
       translate_win32_path (fs);
 #endif
-      text = gtk_entry_get_text (GTK_ENTRY (fs->selection_entry));
-
-      text = g_strdup (text);
+      text = g_strdup (gtk_entry_get_text (GTK_ENTRY (fs->selection_entry)));
 
       gtk_file_selection_populate (fs, text, TRUE);
 
@@ -2078,7 +2088,7 @@ cmpl_last_valid_char (CompletionState *cmpl_state)
 }
 
 static gchar*
-cmpl_completion_fullname (gchar           *text,
+cmpl_completion_fullname (const gchar     *text,
 			  CompletionState *cmpl_state)
 {
   static char nothing[2] = "";
@@ -2489,7 +2499,7 @@ open_ref_dir (gchar           *text_to_complete,
 
 /* open a directory by user name */
 static CompletionDir*
-open_user_dir (gchar           *text_to_complete,
+open_user_dir (const gchar     *text_to_complete,
 	       CompletionState *cmpl_state)
 {
   CompletionDir *result;
@@ -2508,10 +2518,8 @@ open_user_dir (gchar           *text_to_complete,
   if (!cmp_len)
     {
       /* ~/ */
-      gchar *homedir = g_get_home_dir ();
+      const gchar *homedir = g_get_home_dir ();
       gchar *utf8_homedir = g_filename_to_utf8 (homedir, -1, NULL, NULL, NULL);
-
-      g_free (homedir);
 
       if (utf8_homedir)
 	result = open_dir (utf8_homedir, cmpl_state);
@@ -3494,7 +3502,7 @@ cmpl_state_okay (CompletionState* cmpl_state)
   return  cmpl_state && cmpl_state->reference_dir;
 }
 
-static gchar*
+static const gchar*
 cmpl_strerror (gint err)
 {
   if (err == CMPL_ERRNO_TOO_LONG)

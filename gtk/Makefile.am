@@ -11,7 +11,6 @@ INCLUDES = @STRIP_BEGIN@ \
 	-DGTK_VERSION=\"@GTK_VERSION@\"			\
 	-DGTK_BINARY_VERSION=\"@GTK_BINARY_VERSION@\"	\
 	-DTESTGTK_RCFILE=\"`pwd`/$(srcdir)/testgtkrc\"	\
-	-DG_DISABLE_CONST_RETURNS			\
 	-I$(top_builddir)/gtk				\
 	-I$(top_srcdir) -I../gdk			\
 	-I$(top_srcdir)/gdk				\

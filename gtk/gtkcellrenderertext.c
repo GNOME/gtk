@@ -1317,7 +1317,7 @@ gtk_cell_renderer_text_editing_done (GtkCellEditable *entry,
 				     gpointer         data)
 {
   gchar *path;
-  gchar *new_text;
+  const gchar *new_text;
 
   path = g_object_get_data (G_OBJECT (entry), GTK_CELL_RENDERER_TEXT_PATH);
   new_text = gtk_entry_get_text (GTK_ENTRY (entry));

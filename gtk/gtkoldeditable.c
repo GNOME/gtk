@@ -476,7 +476,7 @@ gtk_old_editable_get_public_chars (GtkOldEditable   *old_editable,
 				   gint              end)
 {
   gchar *str = NULL;
-  gchar *charset;
+  const gchar *charset;
   gboolean need_conversion = !g_get_charset (&charset);
 
   if (old_editable->visible)
@@ -595,7 +595,7 @@ gtk_old_editable_paste_received (GtkOldEditable *old_editable,
 				 gboolean        is_clipboard)
 {
   const gchar *str = NULL;
-  gchar *charset;
+  const gchar *charset;
   gboolean need_conversion = FALSE;
 
   if (text)

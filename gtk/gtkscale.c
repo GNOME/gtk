@@ -94,7 +94,7 @@ single_string_accumulator (GSignalInvocationHint *ihint,
                            gpointer               dummy)
 {
   gboolean continue_emission;
-  gchar *str;
+  const gchar *str;
   
   str = g_value_get_string (handler_return);
   g_value_set_string (return_accu, str);

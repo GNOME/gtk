@@ -482,7 +482,7 @@ _gtk_im_module_get_default_context_id (const gchar *locale)
   gint best_goodness = 0;
   gint i;
   gchar *tmp_locale, *tmp;
-  gchar *envvar;
+  const gchar *envvar;
       
   if (!contexts_hash)
     gtk_im_module_init ();

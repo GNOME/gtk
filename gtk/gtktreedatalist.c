@@ -265,7 +265,7 @@ gtk_tree_data_list_compare_func (GtkTreeModel *model,
   GValue a_value = {0, };
   GValue b_value = {0, };
   gint retval;
-  gchar *stra, *strb;
+  const gchar *stra, *strb;
 
   gtk_tree_model_get_value (model, a, column, &a_value);
   gtk_tree_model_get_value (model, b, column, &b_value);

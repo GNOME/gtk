@@ -205,7 +205,7 @@ static PangoDirection
 get_direction (void)
 {
   XkbDescRec *xkb = get_xkb ();
-  char *name;
+  const char *name;
   XkbStateRec state_rec;
   PangoDirection result;
 

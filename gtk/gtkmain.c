@@ -227,9 +227,10 @@ check_setugid (void)
 static gchar **
 get_module_path (void)
 {
-  gchar *module_path = g_getenv ("GTK_MODULE_PATH");
-  gchar *exe_prefix = g_getenv("GTK_EXE_PREFIX");
+  const gchar *module_path_env = g_getenv ("GTK_MODULE_PATH");
+  const gchar *exe_prefix = g_getenv("GTK_EXE_PREFIX");
   gchar **result;
+  gchar *module_path;
   gchar *default_dir;
 
   if (exe_prefix)
@@ -242,8 +243,8 @@ get_module_path (void)
       default_dir = g_build_filename (get_gtk_win32_directory (""), "modules", NULL);
 #endif
     }
-  module_path = g_strconcat (module_path ? module_path : "",
-			     module_path ? G_SEARCHPATH_SEPARATOR_S : "",
+  module_path = g_strconcat (module_path_env ? module_path_env : "",
+			     module_path_env ? G_SEARCHPATH_SEPARATOR_S : "",
 			     default_dir, NULL);
 
   result = pango_split_file_list (module_path);
