@@ -27,4 +27,8 @@ GdkPixBuf *gdk_pixbuf_rotate     (GdkPixBuf *pixbuf, gdouble angle);
 
 void	   gdk_pixbuf_destroy    (GdkPixBuf *pixbuf);
 
+GdkPixBuf *gdk_pixbuf_load_image_from_rgb_d (unsigned char *data, 
+					     int rgb_width, int rgb_height);
+
+
 #endif /* _GDK_PIXBUF_H_ */

@@ -46,7 +46,8 @@ libgdk_pixbufincludedir = $(includedir)/gdk-pixbuf
 libgdk_pixbuf_la_SOURCES = 	\
 #	gdk-pixbuf-drawable.c	\
 	gdk-pixbuf.c		\
-	gdk-pixbuf-io.c
+	gdk-pixbuf-io.c		\
+	gdk-pixbuf-data.c
 
 libgdk_pixbufinclude_HEADERS =	\
 #	gdk-pixbuf-drawable.h	\

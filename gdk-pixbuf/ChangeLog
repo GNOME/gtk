@@ -1,3 +1,10 @@
+1999-10-08  Michael Fulbright  <drmike@redhat.com>
+
+	* src/gdk-pixbuf-data.c: Added to load rgb data from const data.
+
+	* src/testpifbuf: Changed test program to display cdrom from rgb data
+	if no filename given to test program.
+
 1999-10-07  Cody Russell  <bratsche@dfw.net>
 	* src/gdk-pixbuf-drawable.[ch]: Added. (Actually, Miguel committed
 	them, but I wrote them).
