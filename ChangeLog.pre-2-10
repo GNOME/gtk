@@ -1,3 +1,15 @@
+2003-10-28  Mark McLoughlin  <mark@skynet.ie>
+
+	* gtk/gtkexpander.c:
+	(gtk_expander_class_init): hook up the destroy handler.
+	(gtk_expander_destroy), (gtk_expander_unrealize):
+	remove the expand/collapse timeout on destroy instead
+	of unrealize to avoid leaving the expander in a inconsistent
+	state when unrealizing during animation.
+	(gtk_expander_start_animation): remove realized check.
+	(gtk_expander_set_expanded): if the widget isn't realized,
+	expand immediately.
+
 Tue Oct 28 09:44:16 2003  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkxembed.c (_gtk_xembed_send_focus_message): Silently
