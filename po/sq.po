@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+/po\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-06-23 05:14+0200\n"
+"POT-Creation-Date: 2004-07-04 21:16+0200\n"
 "PO-Revision-Date: 2004-04-17 12:23+0200\n"
 "Last-Translator: Laurent Dhima <laurenti@alblinux.net>\n"
 "Language-Team: Albanian <gnome-albanian-perkthyesit@lists.sourceforge.net>\n"
@@ -18,7 +18,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#. GRUT modified this item
 #: gdk-pixbuf/gdk-pixbuf-animation.c:150 gdk-pixbuf/gdk-pixbuf-io.c:779
 #: gdk-pixbuf/gdk-pixbuf-io.c:926 tests/testfilechooser.c:192
 #, c-format
@@ -30,7 +29,6 @@ msgstr "Hapja e file '%s' dështoi: %s"
 msgid "Image file '%s' contains no data"
 msgstr "File '%s' nuk përmban të dhëna"
 
-#. GRUT modified this item
 #: gdk-pixbuf/gdk-pixbuf-animation.c:208 gdk-pixbuf/gdk-pixbuf-io.c:831
 #: gdk-pixbuf/gdk-pixbuf-io.c:969 tests/testfilechooser.c:237
 #, c-format
@@ -976,7 +974,6 @@ msgstr ""
 msgid "Home"
 msgstr "Shtëpia"
 
-#. GRUT modified this item
 #: gtk/gtkfilechooserdefault.c:1076 gtk/gtkpathbar.c:844
 msgid "Desktop"
 msgstr "Hapësira e Punës"
@@ -1131,15 +1128,15 @@ msgstr ""
 "E pamundur zgjedhja e %s:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:5338
+#: gtk/gtkfilechooserdefault.c:5339
 msgid "Open Location"
 msgstr "Hap pozicionin"
 
-#: gtk/gtkfilechooserdefault.c:5344
+#: gtk/gtkfilechooserdefault.c:5346
 msgid "Save in Location"
 msgstr "Ruaje tek Pozicioni"
 
-#: gtk/gtkfilechooserdefault.c:5362
+#: gtk/gtkfilechooserdefault.c:5365
 msgid "_Location:"
 msgstr "_Pozicioni:"
 
@@ -1219,7 +1216,6 @@ msgstr "Kartelë e Re"
 msgid "_Folder name:"
 msgstr "Emri i _kartelës:"
 
-#. GRUT modified this item
 #: gtk/gtkfilesel.c:1523
 msgid "C_reate"
 msgstr "K_rijo"
@@ -1654,7 +1650,6 @@ msgstr "_Disketë"
 msgid "_Bottom"
 msgstr "_Në fund"
 
-#. GRUT modified this item
 #: gtk/gtkstock.c:309
 msgid "_First"
 msgstr "_I pari"
@@ -1663,9 +1658,10 @@ msgstr "_I pari"
 msgid "_Last"
 msgstr "_I fundit"
 
+#. GRUT modified this item
 #: gtk/gtkstock.c:311
 msgid "_Top"
-msgstr "_Në majë"
+msgstr "_Në fillim"
 
 #: gtk/gtkstock.c:312
 msgid "_Back"
