@@ -1,5 +1,10 @@
 2001-08-20  Sven Neumann  <sven@gimp.org>
 
+	* POTFILES.in: removed gtk/gtkpacker.c since it is not part of the 
+	build anymore.
+
+2001-08-20  Sven Neumann  <sven@gimp.org>
+
 	* README.translators: corrected usage of conversion scripts, the
 	order of how to apply them was inverted.
 

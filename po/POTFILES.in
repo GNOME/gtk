@@ -87,7 +87,6 @@ gtk/gtkmessagedialog.c
 gtk/gtkmisc.c
 gtk/gtknotebook.c
 gtk/gtkoptionmenu.c
-gtk/gtkpacker.c
 gtk/gtkpaned.c
 gtk/gtkrc.c
 gtk/gtkpreview.c
