@@ -733,6 +733,7 @@ gdk_event_translate (GdkDisplay *display,
       charcount = XLookupString (&xevent->xkey, buf, 16,
 				 &keysym, &compose);
       event->key.keyval = keysym;      
+      event->key.hardware_keycode = xevent->xkey.keycode;
       
       GDK_NOTE (EVENTS, 
 		g_message ("key release:\t\twindow: %ld	 key: %12s  %d",

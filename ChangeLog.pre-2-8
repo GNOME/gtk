@@ -1,3 +1,8 @@
+2002-06-06  Matthias Clasen  <maclas@gmx.de>
+
+	* gdk/x11/gdkevents-x11.c (gdk_event_translate): Set
+	hardware_keycode for KeyRelease events.  (#84305)
+
 Thu May 23 15:44:30 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtktextview.c (changed_handler): Don't redraw
