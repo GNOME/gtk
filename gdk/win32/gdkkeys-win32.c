@@ -453,7 +453,6 @@ update_keymap (void)
 					   wcs[0], keysym,
 					   (shift&0x1 ? " shift" : ""),
 					   (shift&0x2 ? " altgr" : "")));
-
 		    }
 		  else if (k == 0)
 		    {
