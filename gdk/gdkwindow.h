@@ -3,7 +3,6 @@
 
 #include <gdk/gdkdrawable.h>
 #include <gdk/gdktypes.h>
-#include <gdk/gdkwindow.h>
 #include <gdk/gdkevents.h>
 
 #ifdef __cplusplus
