@@ -45,6 +45,7 @@
 #include <gtk/gtkframe.h>
 #include <gtk/gtkgamma.h>
 #include <gtk/gtkgc.h>
+#include <gtk/gtkhandlebox.h>
 #include <gtk/gtkhbox.h>
 #include <gtk/gtkhbbox.h>
 #include <gtk/gtkhpaned.h>
