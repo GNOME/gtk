@@ -1,3 +1,14 @@
+2004-02-19  Mark McLoughlin  <mark@skynet.ie>
+
+	Make the entire expander widget width prelight as suggested
+	by Seth in bug #134263.
+
+	* gtk/gtkexpander.c:
+	(gtk_expander_paint_prelight): impl.
+	(gtk_expander_paint): use it.
+	(gtk_expander_redraw_expander): don't only redraw the
+	arrow when prelit.
+
 2004-02-19  Alexander Larsson  <alexl@redhat.com>
 
 	* gtk/gtkfilechooser.c: (gtk_file_chooser_class_init):

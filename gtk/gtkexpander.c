@@ -700,6 +700,52 @@ gtk_expander_unmap (GtkWidget *widget)
 }
 
 static void
+gtk_expander_paint_prelight (GtkExpander *expander)
+{
+  GtkWidget *widget;
+  GtkContainer *container;
+  GtkExpanderPrivate *priv;
+  GdkRectangle area;
+  gboolean interior_focus;
+  int focus_width;
+  int focus_pad;
+  int expander_size;
+  int expander_spacing;
+
+  priv = expander->priv;
+  widget = GTK_WIDGET (expander);
+  container = GTK_CONTAINER (expander);
+
+  gtk_widget_style_get (widget,
+			"interior-focus", &interior_focus,
+			"focus-line-width", &focus_width,
+			"focus-padding", &focus_pad,
+			"expander-size", &expander_size,
+			"expander-spacing", &expander_spacing,
+			NULL);
+
+  area.x = widget->allocation.x + container->border_width;
+  area.y = widget->allocation.y + container->border_width;
+  area.width = widget->allocation.width - (2 * container->border_width);
+
+  if (priv->label_widget && GTK_WIDGET_VISIBLE (priv->label_widget))
+    area.height = priv->label_widget->allocation.height;
+  else
+    area.height = 0;
+
+  area.height += interior_focus ? (focus_width + focus_pad) * 2 : 0;
+  area.height = MAX (area.height, expander_size + 2 * expander_spacing);
+  area.height += !interior_focus ? (focus_width + focus_pad) * 2 : 0;
+
+  gtk_paint_flat_box (widget->style, widget->window,
+		      GTK_STATE_PRELIGHT,
+		      GTK_SHADOW_ETCHED_OUT,
+		      &area, widget, "expander",
+		      area.x, area.y,
+		      area.width, area.height);
+}
+
+static void
 gtk_expander_paint (GtkExpander *expander)
 {
   GtkWidget *widget;
@@ -712,7 +758,11 @@ gtk_expander_paint (GtkExpander *expander)
 
   state = widget->state;
   if (expander->priv->prelight)
-    state = GTK_STATE_PRELIGHT;
+    {
+      state = GTK_STATE_PRELIGHT;
+
+      gtk_expander_paint_prelight (expander);
+    }
 
   gtk_paint_expander (widget->style,
 		      widget->window,
@@ -859,15 +909,12 @@ gtk_expander_state_changed (GtkWidget    *widget,
 static void
 gtk_expander_redraw_expander (GtkExpander *expander)
 {
-  GdkRectangle bounds;
+  GtkWidget *widget;
 
-  get_expander_bounds (expander, &bounds);
+  widget = GTK_WIDGET (expander);
 
-  gtk_widget_queue_draw_area (GTK_WIDGET (expander),
-			      bounds.x,
-			      bounds.y,
-			      bounds.width,
-			      bounds.height);
+  if (GTK_WIDGET_REALIZED (widget))
+    gdk_window_invalidate_rect (widget->window, &widget->allocation, FALSE);
 }
 
 static gboolean
