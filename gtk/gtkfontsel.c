@@ -114,8 +114,8 @@ static const guint16 font_sizes[] = {
 
 /* These are the sizes of the font, style & size clists. */
 #define FONT_LIST_HEIGHT	136
-#define FONT_LIST_WIDTH		180
-#define FONT_STYLE_LIST_WIDTH	160
+#define FONT_LIST_WIDTH		190
+#define FONT_STYLE_LIST_WIDTH	170
 #define FONT_SIZE_LIST_WIDTH	60
 
 /* This is the number of fields in an X Logical Font Description font name.
@@ -289,7 +289,6 @@ static void    gtk_font_selection_show_available_styles
 (GtkFontSelection *fs);
 static void    gtk_font_selection_select_best_style  (GtkFontSelection *fs,
 						      gboolean	       use_first);
-static gint    gtk_font_selection_get_best_match     (GtkFontSelection *fs);
 
 static void    gtk_font_selection_select_style	     (GtkWidget      *w,
 						      gint	      row,
@@ -313,6 +312,8 @@ static void    gtk_font_selection_metric_callback    (GtkWidget      *w,
 static void    gtk_font_selection_expose_list	     (GtkWidget	     *w,
 						      GdkEventExpose *event,
 						      gpointer        data);
+static void    gtk_font_selection_realize_list	     (GtkWidget	     *widget,
+						      gpointer	      data);
 
 static void    gtk_font_selection_switch_page	     (GtkWidget      *w,
 						      GtkNotebookPage *page,
@@ -471,11 +472,12 @@ gtk_font_selection_init(GtkFontSelection *fontsel)
     fontsel->property_values[prop] = 0;
   
   /* Create the main notebook page. */
+  gtk_notebook_set_homogeneous_tabs (GTK_NOTEBOOK (fontsel), TRUE);
+  gtk_notebook_set_tab_hborder (GTK_NOTEBOOK (fontsel), 8);
   fontsel->main_vbox = gtk_vbox_new (FALSE, 4);
   gtk_widget_show (fontsel->main_vbox);
   gtk_container_set_border_width (GTK_CONTAINER (fontsel->main_vbox), 6);
   label = gtk_label_new("Font");
-  gtk_widget_set_usize (label, 120, -1);
   gtk_notebook_append_page (GTK_NOTEBOOK (fontsel),
 			    fontsel->main_vbox, label);
   
@@ -525,10 +527,9 @@ gtk_font_selection_init(GtkFontSelection *fontsel)
   /* Create the clists  */
   fontsel->font_clist = gtk_clist_new(1);
   gtk_clist_column_titles_hide (GTK_CLIST(fontsel->font_clist));
-  gtk_clist_set_column_width (GTK_CLIST(fontsel->font_clist), 0, 300);
-  gtk_widget_set_usize (fontsel->font_clist, FONT_LIST_WIDTH,
-			FONT_LIST_HEIGHT);
+  gtk_clist_set_column_auto_resize (GTK_CLIST (fontsel->font_clist), 0, TRUE);
   scrolled_win = gtk_scrolled_window_new (NULL, NULL);
+  gtk_widget_set_usize (scrolled_win, FONT_LIST_WIDTH, FONT_LIST_HEIGHT);
   gtk_container_add (GTK_CONTAINER (scrolled_win), fontsel->font_clist);
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled_win),
 				  GTK_POLICY_AUTOMATIC, GTK_POLICY_ALWAYS);
@@ -541,9 +542,10 @@ gtk_font_selection_init(GtkFontSelection *fontsel)
   
   fontsel->font_style_clist = gtk_clist_new(1);
   gtk_clist_column_titles_hide (GTK_CLIST(fontsel->font_style_clist));
-  gtk_clist_set_column_width (GTK_CLIST(fontsel->font_style_clist), 0, 300);
-  gtk_widget_set_usize (fontsel->font_style_clist, FONT_STYLE_LIST_WIDTH, -1);
+  gtk_clist_set_column_auto_resize (GTK_CLIST (fontsel->font_style_clist),
+				    0, TRUE);
   scrolled_win = gtk_scrolled_window_new (NULL, NULL);
+  gtk_widget_set_usize (scrolled_win, FONT_STYLE_LIST_WIDTH, -1);
   gtk_container_add (GTK_CONTAINER (scrolled_win), fontsel->font_style_clist);
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled_win),
 				  GTK_POLICY_AUTOMATIC, GTK_POLICY_ALWAYS);
@@ -555,8 +557,9 @@ gtk_font_selection_init(GtkFontSelection *fontsel)
   
   fontsel->size_clist = gtk_clist_new(1);
   gtk_clist_column_titles_hide (GTK_CLIST(fontsel->size_clist));
-  gtk_widget_set_usize (fontsel->size_clist, FONT_SIZE_LIST_WIDTH, -1);
+  gtk_clist_set_column_width (GTK_CLIST(fontsel->size_clist), 0, 20);
   scrolled_win = gtk_scrolled_window_new (NULL, NULL);
+  gtk_widget_set_usize (scrolled_win, FONT_SIZE_LIST_WIDTH, -1);
   gtk_container_add (GTK_CONTAINER (scrolled_win), fontsel->size_clist);
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled_win),
 				  GTK_POLICY_AUTOMATIC, GTK_POLICY_ALWAYS);
@@ -589,6 +592,10 @@ gtk_font_selection_init(GtkFontSelection *fontsel)
 		      "key_press_event",
 		      GTK_SIGNAL_FUNC(gtk_font_selection_on_clist_key_press),
 		      fontsel);
+  gtk_signal_connect_after (GTK_OBJECT (fontsel->font_style_clist),
+			    "realize",
+			    GTK_SIGNAL_FUNC(gtk_font_selection_realize_list),
+			    fontsel);
   
   /* Insert the standard font sizes */
   gtk_clist_freeze (GTK_CLIST(fontsel->size_clist));
@@ -622,7 +629,9 @@ gtk_font_selection_init(GtkFontSelection *fontsel)
   gtk_widget_show (hbox);
   gtk_box_pack_start (GTK_BOX (fontsel->main_vbox), hbox, FALSE, TRUE, 0);
   
-  fontsel->filter_button = gtk_button_new_with_label("  Reset Filter  ");
+  fontsel->filter_button = gtk_button_new_with_label("Reset Filter");
+  gtk_misc_set_padding (GTK_MISC (GTK_BIN (fontsel->filter_button)->child),
+			16, 0);
   gtk_widget_show(fontsel->filter_button);
   gtk_box_pack_start (GTK_BOX (hbox), fontsel->filter_button, FALSE, FALSE, 0);
   gtk_widget_set_sensitive (fontsel->filter_button, FALSE);
@@ -691,7 +700,6 @@ gtk_font_selection_init(GtkFontSelection *fontsel)
   gtk_widget_show (fontsel->info_vbox);
   gtk_container_set_border_width (GTK_CONTAINER (fontsel->info_vbox), 2);
   label = gtk_label_new("Font Information");
-  gtk_widget_set_usize (label, 120, -1);
   gtk_notebook_append_page (GTK_NOTEBOOK (fontsel),
 			    fontsel->info_vbox, label);
   
@@ -762,7 +770,6 @@ gtk_font_selection_init(GtkFontSelection *fontsel)
   gtk_widget_show (fontsel->filter_vbox);
   gtk_container_set_border_width (GTK_CONTAINER (fontsel->filter_vbox), 2);
   label = gtk_label_new("Filter");
-  gtk_widget_set_usize (label, 120, -1);
   gtk_notebook_append_page (GTK_NOTEBOOK (fontsel),
 			    fontsel->filter_vbox, label);
   
@@ -821,6 +828,7 @@ gtk_font_selection_init(GtkFontSelection *fontsel)
       gtk_widget_set_usize (clist, 100, filter_heights[prop]);
       gtk_clist_set_selection_mode(GTK_CLIST(clist), GTK_SELECTION_MULTIPLE);
       gtk_clist_column_titles_hide(GTK_CLIST(clist));
+      gtk_clist_set_column_auto_resize (GTK_CLIST (clist), 0, TRUE);
       scrolled_win = gtk_scrolled_window_new (NULL, NULL);
       gtk_container_add (GTK_CONTAINER (scrolled_win), clist);
       gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled_win),
@@ -973,6 +981,38 @@ gtk_font_selection_expose_list (GtkWidget		*widget,
       if (gtk_clist_row_is_visible(GTK_CLIST(fontsel->size_clist), index)
 	  != GTK_VISIBILITY_FULL)
       gtk_clist_moveto(GTK_CLIST(fontsel->size_clist), index, -1, 0.5, 0);
+    }
+}
+
+
+/* This is called when the style clist is realized. We need to set any
+   charset rows to insensitive colours. */
+static void
+gtk_font_selection_realize_list (GtkWidget		*widget,
+				 gpointer		 data)
+{
+  GtkFontSelection *fontsel;
+  gint row;
+  GdkColor *inactive_fg, *inactive_bg;
+
+#ifdef FONTSEL_DEBUG
+  g_message("In realize_list\n");
+#endif
+  fontsel = GTK_FONT_SELECTION (data);
+
+  /* Set the colours for any charset rows to insensitive. */
+  inactive_fg = &fontsel->font_style_clist->style->fg[GTK_STATE_INSENSITIVE];
+  inactive_bg = &fontsel->font_style_clist->style->bg[GTK_STATE_INSENSITIVE];
+
+  for (row = 0; row < GTK_CLIST (fontsel->font_style_clist)->rows; row++)
+    {
+      if (GPOINTER_TO_INT (gtk_clist_get_row_data (GTK_CLIST (fontsel->font_style_clist), row)) == -1)
+	{
+	  gtk_clist_set_foreground (GTK_CLIST (fontsel->font_style_clist),
+				    row, inactive_fg);
+	  gtk_clist_set_background (GTK_CLIST (fontsel->font_style_clist),
+				    row, inactive_bg);
+	}
     }
 }
 
@@ -1131,10 +1171,13 @@ gtk_font_selection_show_available_styles (GtkFontSelection *fontsel)
 				 &charset);
 	  gtk_clist_set_row_data(GTK_CLIST(fontsel->font_style_clist), row,
 				 (gpointer) -1);
-	  gtk_clist_set_foreground(GTK_CLIST(fontsel->font_style_clist),
-				   row, inactive_fg);
-	  gtk_clist_set_background(GTK_CLIST(fontsel->font_style_clist),
-				   row, inactive_bg);
+	  if (GTK_WIDGET_REALIZED (fontsel->font_style_clist))
+	    {
+	      gtk_clist_set_foreground(GTK_CLIST(fontsel->font_style_clist),
+				       row, inactive_fg);
+	      gtk_clist_set_background(GTK_CLIST(fontsel->font_style_clist),
+				       row, inactive_bg);
+	    }
 	}
       
       for (tmpstyle = style; tmpstyle < font->nstyles; tmpstyle++)
@@ -1219,8 +1262,8 @@ gtk_font_selection_select_best_style(GtkFontSelection *fontsel,
 {
   FontInfo *font;
   FontStyle *styles;
-  gint row, prop, style = -1, style_to_find;
-  gboolean found = FALSE;
+  gint row, prop, style, matched;
+  gint best_matched = -1, best_style = -1, best_row;
   
 #ifdef FONTSEL_DEBUG
   g_message("In select_best_style\n");
@@ -1228,30 +1271,46 @@ gtk_font_selection_select_best_style(GtkFontSelection *fontsel,
   font = &fontsel_info->font_info[fontsel->font_index];
   styles = &fontsel_info->font_styles[font->style_index];
   
-  /* If use_first is set, we just find the first style in the list, not
-     including charset items. */
-  style_to_find = use_first ? -1 : gtk_font_selection_get_best_match (fontsel);
-  
   for (row = 0; row < GTK_CLIST(fontsel->font_style_clist)->rows; row++)
     {
       style = GPOINTER_TO_INT (gtk_clist_get_row_data (GTK_CLIST (fontsel->font_style_clist), row));
-      if (style != -1 && (style_to_find == -1 || style_to_find == style))
+      /* Skip charset rows. */
+      if (style == -1)
+	continue;
+
+      /* If we just want the first style, we've got it. */
+      if (use_first)
 	{
-	  found = TRUE;
+	  best_style = style;
+	  best_row = row;
 	  break;
 	}
+
+      matched = 0;
+      for (prop = 0; prop < GTK_NUM_STYLE_PROPERTIES; prop++)
+	{
+	  if (fontsel->property_values[prop] == styles[style].properties[prop])
+	    matched++;
+	}
+      if (matched > best_matched)
+	{
+	  best_matched = matched;
+	  best_style = style;
+	  best_row = row;
+	}
     }
-  g_return_if_fail (found);
-  
-  fontsel->style = style;
-  
+  g_return_if_fail (best_style != -1);
+
+  fontsel->style = best_style;
+
   for (prop = 0; prop < GTK_NUM_STYLE_PROPERTIES; prop++)
     fontsel->property_values[prop] = styles[fontsel->style].properties[prop];
-  
-  gtk_clist_select_row(GTK_CLIST(fontsel->font_style_clist), row, 0);
-  if (gtk_clist_row_is_visible(GTK_CLIST(fontsel->font_style_clist), row)
+
+  gtk_clist_select_row(GTK_CLIST(fontsel->font_style_clist), best_row, 0);
+  if (gtk_clist_row_is_visible(GTK_CLIST(fontsel->font_style_clist), best_row)
       != GTK_VISIBILITY_FULL)
-    gtk_clist_moveto(GTK_CLIST(fontsel->font_style_clist), row, -1, 0.5, 0);
+    gtk_clist_moveto(GTK_CLIST(fontsel->font_style_clist), best_row, -1,
+		     0.5, 0);
   gtk_font_selection_show_available_sizes (fontsel);
   gtk_font_selection_select_best_size (fontsel);
 }
@@ -2128,6 +2187,8 @@ gtk_font_selection_show_available_fonts     (GtkFontSelection *fontsel)
 		      break;
 		    }
 		}
+	      if (!matched)
+		break;
 	    }
 	}
       
@@ -3035,38 +3096,6 @@ gtk_font_selection_get_font_name (GtkFontSelection *fontsel)
 }
 
 
-/* This returns the style with the best match to the current fontsel setting,
-   i.e. with the highest number of matching property values. */
-static gint
-gtk_font_selection_get_best_match(GtkFontSelection *fontsel)
-{
-  FontInfo *font;
-  FontStyle *styles;
-  gint prop, style, best_style = 0, matched, best_matched = 0;
-  
-  font = &fontsel_info->font_info[fontsel->font_index];
-  styles = &fontsel_info->font_styles[font->style_index];
-  
-  /* Find the style with the most matches. */
-  for (style = 0; style < font->nstyles; style++)
-    {
-      matched = 0;
-      for (prop = 0; prop < GTK_NUM_STYLE_PROPERTIES; prop++)
-	{
-	  if (fontsel->property_values[prop] == styles[style].properties[prop])
-	    matched++;
-	}
-      if (matched > best_matched)
-	{
-	  best_matched = matched;
-	  best_style = style;
-	}
-    }
-  
-  return best_style;
-}
-
-
 /* This sets the current font, selecting the appropriate clist rows.
    First we check the fontname is valid and try to find the font family
    - i.e. the name in the main list. If we can't find that, then just return.
@@ -3173,6 +3202,7 @@ gtk_font_selection_find_font (GtkFontSelection *fontsel,
 {
   FontInfo *font_info;
   gint lower, upper, middle = -1, cmp, nfonts;
+  gint found_family = -1;
   
   font_info = fontsel_info->font_info;
   nfonts = fontsel_info->nfonts;
@@ -3188,9 +3218,12 @@ gtk_font_selection_find_font (GtkFontSelection *fontsel,
       
       cmp = strcmp (family, font_info[middle].family);
       if (cmp == 0)
-	cmp = strcmp(fontsel_info->properties[FOUNDRY][foundry],
-		     fontsel_info->properties[FOUNDRY][font_info[middle].foundry]);
-      
+	{
+	  found_family = middle;
+	  cmp = strcmp(fontsel_info->properties[FOUNDRY][foundry],
+		       fontsel_info->properties[FOUNDRY][font_info[middle].foundry]);
+	}
+
       if (cmp == 0)
 	return middle;
       else if (cmp < 0)
@@ -3199,11 +3232,9 @@ gtk_font_selection_find_font (GtkFontSelection *fontsel,
 	lower = middle+1;
     }
   
-  /* If we can't match family & foundry see if just the family matches */
-  if (!strcmp (family, font_info[middle].family))
-    return middle;
-  
-  return -1;
+  /* We couldn't find the family and foundry, but we may have just found the
+     family, so we return that. */
+  return found_family;
 }
 
 

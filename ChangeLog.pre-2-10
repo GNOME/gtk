@@ -1,3 +1,23 @@
+1998-12-07  Damon Chaplin  <DAChaplin@msn.com>
+
+	* gtk/gtkfontsel.c (gtk_font_selection_select_best_style): made sure
+	we only try to match styles which are currently shown.
+
+	(gtk_font_selection_init): set the notebook tabs homogeneous and set
+	the border, so we don't need to set the size explicitly (bad for i18n).
+	Used the clist auto-resize feature for the font and style lists on the
+	main page and all the filters. Used padding for the 'Reset Filter'
+	button instead of spaces around it (bad for i18n).
+
+	(gtk_font_selection_find_font): when searching for
+	a font, if we can't match both the family and foundry, we return any
+	font where just	the family matches. (The foundry can even be '*'.)
+
+	(gtk_font_selection_show_available_styles): 
+	(gtk_font_selection_realize_list): don't set the style clist row
+	colours (for the charset rows) until the clist is realized, since we
+	use the clist style's insensitive colours.
+
 Mon Dec  7 13:38:06 1998  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/gdkimage.c (gdk_image_new): Use IPC_RMID
