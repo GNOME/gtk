@@ -1,3 +1,8 @@
+2003-09-21  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtk-sections.txt: Add gtk_widget_[gs]et_no_show_all.
+	Add gtk_toggle_action_[gs]et_draw_as_radio.
+
 2003-09-18  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtk-sections.txt: 

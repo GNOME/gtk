@@ -138,7 +138,8 @@ enum {
   PROP_COMPOSITE_CHILD,
   PROP_STYLE,
   PROP_EVENTS,
-  PROP_EXTENSION_EVENTS
+  PROP_EXTENSION_EVENTS,
+  PROP_NO_SHOW_ALL
 };
 
 typedef	struct	_GtkStateData	 GtkStateData;
@@ -521,6 +522,13 @@ gtk_widget_class_init (GtkWidgetClass *klass)
  						      GDK_TYPE_EXTENSION_MODE,
  						      GDK_EXTENSION_EVENTS_NONE,
  						      G_PARAM_READWRITE));
+  g_object_class_install_property (gobject_class,
+				   PROP_NO_SHOW_ALL,
+				   g_param_spec_boolean ("no_show_all",
+ 							 _("No show all"),
+ 							 _("Whether gtk_widget_show_all() should not affect this widget"),
+ 							 FALSE,
+ 							 G_PARAM_READWRITE));
   widget_signals[SHOW] =
     g_signal_new ("show",
 		  G_TYPE_FROM_CLASS (gobject_class),
@@ -1453,6 +1461,9 @@ gtk_widget_set_property (GObject         *object,
     case PROP_EXTENSION_EVENTS:
       gtk_widget_set_extension_events (widget, g_value_get_enum (value));
       break;
+    case PROP_NO_SHOW_ALL:
+      gtk_widget_set_no_show_all (widget, g_value_get_boolean (value));
+      break;
     default:
       break;
     }
@@ -1543,6 +1554,9 @@ gtk_widget_get_property (GObject         *object,
  	g_value_set_enum (value, 0);
       else
  	g_value_set_enum (value, (GdkExtensionMode) *modep);
+      break;
+    case PROP_NO_SHOW_ALL:
+      g_value_set_boolean (value, gtk_widget_get_no_show_all (widget));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -2052,6 +2066,9 @@ gtk_widget_show_all (GtkWidget *widget)
 
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
+  if ((GTK_WIDGET_FLAGS (widget) & GTK_NO_SHOW_ALL) != 0)
+    return;
+
   class = GTK_WIDGET_GET_CLASS (widget);
 
   if (class->show_all)
@@ -2070,6 +2087,9 @@ gtk_widget_hide_all (GtkWidget *widget)
   GtkWidgetClass *class;
 
   g_return_if_fail (GTK_IS_WIDGET (widget));
+
+  if ((GTK_WIDGET_FLAGS (widget) & GTK_NO_SHOW_ALL) != 0)
+    return;
 
   class = GTK_WIDGET_GET_CLASS (widget);
 
@@ -7209,4 +7229,56 @@ gtk_widget_get_clipboard (GtkWidget *widget, GdkAtom selection)
   
   return gtk_clipboard_get_for_display (gtk_widget_get_display (widget),
 					selection);
+}
+
+/**
+ * gtk_widget_get_no_show_all:
+ * @widget: a #GtkWidget
+ * 
+ * Returns the current value of the "no_show_all" property, which determines
+ * whether calls to gtk_widget_show_all() and gtk_widget_hide_all() 
+ * will affect this widget. 
+ * 
+ * Return value: the current value of the "no_show_all" property.
+ *
+ * Since: 2.4
+ **/
+gboolean
+gtk_widget_get_no_show_all (GtkWidget *widget)
+{
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
+  
+  return (GTK_WIDGET_FLAGS (widget) & GTK_NO_SHOW_ALL) != 0;
+}
+
+/**
+ * gtk_widget_set_no_show_all:
+ * @widget: a #GtkWidget
+ * @no_show_all: the new value for the "no_show_all" property
+ * 
+ * Sets the "no_show_all" property, which determines whether calls to 
+ * gtk_widget_show_all() and gtk_widget_hide_all() will affect this widget. 
+ *
+ * This is mostly for use in constructing widget hierarchies with externally
+ * controlled visibility, see #GtkUIManager.
+ * 
+ * Since: 2.4
+ **/
+void
+gtk_widget_set_no_show_all (GtkWidget *widget,
+			    gboolean   no_show_all)
+{
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+
+  no_show_all = (no_show_all != FALSE);
+
+  if (no_show_all == ((GTK_WIDGET_FLAGS (widget) & GTK_NO_SHOW_ALL) != 0))
+    return;
+
+  if (no_show_all)
+    GTK_WIDGET_SET_FLAGS (widget, GTK_NO_SHOW_ALL);
+  else
+    GTK_WIDGET_UNSET_FLAGS (widget, GTK_NO_SHOW_ALL);
+  
+  g_object_notify (G_OBJECT (widget), "no_show_all");
 }

@@ -2893,6 +2893,9 @@ GtkToggleAction
 gtk_toggle_action_toggled
 gtk_toggle_action_set_active
 gtk_toggle_action_get_active
+gtk_toggle_action_set_draw_as_radio
+gtk_toggle_action_get_draw_as_radio
+
 <SUBSECTION Standard>
 GTK_TYPE_TOGGLE_ACTION
 GTK_TOGGLE_ACTION
@@ -4032,6 +4035,8 @@ gtk_widget_set_default_visual
 gtk_widget_set_size_request
 gtk_widget_set_visual
 gtk_widget_thaw_child_notify
+gtk_widget_set_no_show_all
+gtk_widget_get_no_show_all
 <SUBSECTION>
 gtk_requisition_copy
 gtk_requisition_free

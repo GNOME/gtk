@@ -1,3 +1,35 @@
+2003-09-21  Matthias Clasen  <maclas@gmx.de>
+
+	Changes to make cross-process merging feasible:
+	
+	* gtk/gtkuimanager.[hc]: Add a readonly "ui" property which holds the
+	merged UI definition. Remove the "changed" signal, since its role
+	is now filled by "notify::ui". Instead add a "actions-changed" signal
+	which gets emitted when the set of actions changes.
+
+	* gtk/gtktoggleactionprivate.h:
+	* gtk/gtktoggleaction.[hc] (gtk_toggle_action_[sg]et_draw_as_radio):
+	Add a "draw_as_radio" property to toggle actions so that they can be
+	used as proxies for radio actions much like the "draw_as_radio" 
+	property on check menu items enables them to operate as proxies for
+	radio actions.
+
+	Prevent the "show_all" trap for action-based menus (see
+	http://mail.gnome.org/archives/gtk-devel-list/2003-September/
+	msg00260.html):
+
+	* gtk/gtkmenu.c (gtk_menu_{hide,show}_all): Remove g_return_if_fail()
+	calls from static functions.
+
+	* gtk/gtkuimanager.c (update_node): 
+	* gtk/gtkaction.c (connect_proxy): Set "no_show_all" on constructed
+	widgets whose visibility is externally controlled.
+
+	* gtk/gtkwidget.[hc] (gtk_widget_[gs]et_no_show_all): Add a boolean 
+	"no_show_all" property with setter and getter. When TRUE, it keeps
+	gtk_widget_{hide,show}_all() from modifying the visibility of the 
+	widget and its children.
+
 Sun Sep 21 23:13:37 2003  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 	* gtk/gtktextview.[ch]: Add new "tab moves focus" property (#122709)

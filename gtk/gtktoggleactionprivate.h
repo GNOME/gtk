@@ -36,7 +36,8 @@
 
 struct _GtkToggleActionPrivate 
 {
-  guint active : 1;
+  guint active        : 1;
+  guint draw_as_radio : 1;
 };
 
 #endif  /* __GTK_TOGGLE_ACTION_PRIVATE_H__ */

@@ -30,6 +30,7 @@
 
 #include <config.h>
 
+#include "gtkintl.h"
 #include "gtktoggleaction.h"
 #include "gtktoggleactionprivate.h"
 #include "gtktoggletoolbutton.h"
@@ -40,6 +41,11 @@ enum
 {
   TOGGLED,
   LAST_SIGNAL
+};
+
+enum {
+  PROP_0,
+  PROP_DRAW_AS_RADIO
 };
 
 static void gtk_toggle_action_init       (GtkToggleAction *action);
@@ -73,12 +79,22 @@ gtk_toggle_action_get_type (void)
   return type;
 }
 
-static void gtk_toggle_action_activate     (GtkAction *action);
+static void gtk_toggle_action_activate     (GtkAction       *action);
 static void gtk_toggle_action_real_toggled (GtkToggleAction *action);
-static void connect_proxy                  (GtkAction *action,
-					    GtkWidget *proxy);
-static void disconnect_proxy               (GtkAction *action,
-					    GtkWidget *proxy);
+static void connect_proxy                  (GtkAction       *action,
+					    GtkWidget       *proxy);
+static void disconnect_proxy               (GtkAction       *action,
+					    GtkWidget       *proxy);
+static void set_property                   (GObject         *object,
+					    guint            prop_id,
+					    const GValue    *value,
+					    GParamSpec      *pspec);
+static void get_property                   (GObject         *object,
+					    guint            prop_id,
+					    GValue          *value,
+					    GParamSpec      *pspec);
+static GtkWidget *create_menu_item         (GtkAction       *action);
+
 
 static GObjectClass *parent_class = NULL;
 static guint         action_signals[LAST_SIGNAL] = { 0 };
@@ -93,6 +109,9 @@ gtk_toggle_action_class_init (GtkToggleActionClass *klass)
   gobject_class = G_OBJECT_CLASS (klass);
   action_class = GTK_ACTION_CLASS (klass);
 
+  gobject_class->set_property = set_property;
+  gobject_class->get_property = get_property;
+
   action_class->activate = gtk_toggle_action_activate;
   action_class->connect_proxy = connect_proxy;
   action_class->disconnect_proxy = disconnect_proxy;
@@ -100,7 +119,17 @@ gtk_toggle_action_class_init (GtkToggleActionClass *klass)
   action_class->menu_item_type = GTK_TYPE_CHECK_MENU_ITEM;
   action_class->toolbar_item_type = GTK_TYPE_TOGGLE_TOOL_BUTTON;
 
+  action_class->create_menu_item = create_menu_item;
+
   klass->toggled = gtk_toggle_action_real_toggled;
+
+  g_object_class_install_property (gobject_class,
+                                   PROP_DRAW_AS_RADIO,
+                                   g_param_spec_boolean ("draw_as_radio",
+                                                         _("Create the same proxies as a radio action"),
+                                                         _("Whether the proxies for this action look like radio action proxies"),
+                                                         FALSE,
+                                                         G_PARAM_READWRITE));
 
   action_signals[TOGGLED] =
     g_signal_new ("toggled",
@@ -119,6 +148,46 @@ gtk_toggle_action_init (GtkToggleAction *action)
 {
   action->private_data = GTK_TOGGLE_ACTION_GET_PRIVATE (action);
   action->private_data->active = FALSE;
+  action->private_data->draw_as_radio = FALSE;
+}
+
+static void
+get_property (GObject     *object,
+	      guint        prop_id,
+	      GValue      *value,
+	      GParamSpec  *pspec)
+{
+  GtkToggleAction *action = GTK_TOGGLE_ACTION (object);
+  
+  switch (prop_id)
+    {
+    case PROP_DRAW_AS_RADIO:
+      g_value_set_boolean (value, gtk_toggle_action_get_draw_as_radio (action));
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+    }
+}
+
+
+static void
+set_property (GObject      *object,
+	      guint         prop_id,
+	      const GValue *value,
+	      GParamSpec   *pspec)
+{
+  GtkToggleAction *action = GTK_TOGGLE_ACTION (object);
+  
+  switch (prop_id)
+    {
+    case PROP_DRAW_AS_RADIO:
+      gtk_toggle_action_set_draw_as_radio (action, g_value_get_boolean (value));
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+    }
 }
 
 static void
@@ -250,4 +319,57 @@ gtk_toggle_action_get_active (GtkToggleAction *action)
   g_return_val_if_fail (GTK_IS_TOGGLE_ACTION (action), FALSE);
 
   return action->private_data->active;
+}
+
+
+/**
+ * gtk_toggle_action_set_draw_as_radio:
+ * @action: the action object
+ * @draw_as_radio: whether the action should have proxies like a radio 
+ *    action
+ *
+ * Sets whether the action should have proxies like a radio action.
+ *
+ * Since: 2.4
+ */
+void
+gtk_toggle_action_set_draw_as_radio (GtkToggleAction *action, 
+				     gboolean         draw_as_radio)
+{
+  g_return_if_fail (GTK_IS_TOGGLE_ACTION (action));
+
+  draw_as_radio = draw_as_radio != FALSE;
+
+  if (action->private_data->draw_as_radio != draw_as_radio)
+    {
+      action->private_data->draw_as_radio = draw_as_radio;
+      
+      g_object_notify (G_OBJECT (action), "draw_as_radio");      
+    }
+}
+
+/**
+ * gtk_toggle_action_get_draw_as_radio:
+ * @action: the action object
+ *
+ * Returns: whether the action should have proxies like a radio action.
+ *
+ * Since: 2.4
+ */
+gboolean
+gtk_toggle_action_get_draw_as_radio (GtkToggleAction *action)
+{
+  g_return_val_if_fail (GTK_IS_TOGGLE_ACTION (action), FALSE);
+
+  return action->private_data->draw_as_radio;
+}
+
+static GtkWidget *
+create_menu_item (GtkAction *action)
+{
+  GtkToggleAction *toggle_action = GTK_TOGGLE_ACTION (action);
+
+  return g_object_new (GTK_TYPE_CHECK_MENU_ITEM, 
+		       "draw_as_radio", toggle_action->private_data->draw_as_radio,
+		       NULL);
 }

@@ -61,9 +61,9 @@ struct _GtkUIManager {
 struct _GtkUIManagerClass {
   GObjectClass parent_class;
 
-  void (* add_widget)    (GtkUIManager *merge, 
-                          GtkWidget    *widget);
-  void (* changed)       (GtkUIManager *merge);
+  void (* add_widget)       (GtkUIManager *merge, 
+                             GtkWidget    *widget);
+  void (* actions_changed)  (GtkUIManager *merge);
 
   /* Padding for future expansion */
   void (*_gtk_reserved1) (void);

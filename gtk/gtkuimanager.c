@@ -139,14 +139,15 @@ static void     node_remove_ui_reference    (Node              *node,
 enum 
 {
   ADD_WIDGET,
-  CHANGED,
+  ACTIONS_CHANGED,
   LAST_SIGNAL
 };
 
 enum
 {
   PROP_0,
-  PROP_ADD_TEAROFFS
+  PROP_ADD_TEAROFFS,
+  PROP_UI
 };
 
 static guint merge_signals[LAST_SIGNAL] = { 0 };
@@ -213,8 +214,17 @@ gtk_ui_manager_class_init (GtkUIManagerClass *klass)
 							 _("Add tearoffs to menus"),
 							 _("Whether tearoff menu items should be added to menus"),
                                                          FALSE,
-							 G_PARAM_READABLE | G_PARAM_WRITABLE));
-  
+							 G_PARAM_READWRITE));
+
+  g_object_class_install_property (gobject_class,
+				   PROP_UI,
+				   g_param_spec_string ("ui",
+ 							_("Merged UI definition"),
+							_("An XML string describing the merged UI"),
+							NULL,
+							G_PARAM_READABLE));
+
+
   /**
    * GtkUIManager::add-widget:
    * @merge: a #GtkUIManager
@@ -236,18 +246,20 @@ gtk_ui_manager_class_init (GtkUIManagerClass *klass)
 		  GTK_TYPE_WIDGET);
 
   /**
-   * GtkUIManager::changed:
+   * GtkUIManager::actions-changed:
    * @merge: a #GtkUIManager
    *
-   * The "changed" signal is emitted whenever the merged UI changes.
+   * The "actions-changed" signal is emitted whenever the set of actions
+   * changes.
    *
    * Since: 2.4
    */
-  merge_signals[CHANGED] =
-    g_signal_new ("changed",
+  merge_signals[ACTIONS_CHANGED] =
+    g_signal_new ("actions_changed",
 		  G_OBJECT_CLASS_TYPE (klass),
 		  G_SIGNAL_RUN_FIRST | G_SIGNAL_NO_RECURSE,
-		  G_STRUCT_OFFSET (GtkUIManagerClass, changed),  NULL, NULL,
+		  G_STRUCT_OFFSET (GtkUIManagerClass, actions_changed),  
+		  NULL, NULL,
 		  g_cclosure_marshal_VOID__VOID,
 		  G_TYPE_NONE, 0);
   
@@ -334,6 +346,9 @@ gtk_ui_manager_get_property (GObject         *object,
     {
     case PROP_ADD_TEAROFFS:
       g_value_set_boolean (value, self->private_data->add_tearoffs);
+      break;
+    case PROP_UI:
+      g_value_set_string (value, gtk_ui_manager_get_ui (self));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -437,6 +452,8 @@ gtk_ui_manager_insert_action_group (GtkUIManager   *self,
 
   /* dirty all nodes, as action bindings may change */
   dirty_all_nodes (self);
+
+  g_signal_emit (self, merge_signals[ACTIONS_CHANGED], 0);
 }
 
 /**
@@ -464,6 +481,8 @@ gtk_ui_manager_remove_action_group (GtkUIManager   *self,
 
   /* dirty all nodes, as action bindings may change */
   dirty_all_nodes (self);
+
+  g_signal_emit (self, merge_signals[ACTIONS_CHANGED], 0);
 }
 
 /**
@@ -1185,7 +1204,7 @@ add_ui_from_string (GtkUIManager *self,
 
   queue_update (self);
 
-  g_signal_emit (self, merge_signals[CHANGED], 0);
+  g_object_notify (G_OBJECT (self), "ui");      
 
   return ctx.merge_id;
 
@@ -1416,7 +1435,7 @@ gtk_ui_manager_add_ui (GtkUIManager        *self,
 
   queue_update (self);
 
-  g_signal_emit (self, merge_signals[CHANGED], 0);
+  g_object_notify (G_OBJECT (self), "ui");      
 }
 
 static gboolean
@@ -1449,7 +1468,7 @@ gtk_ui_manager_remove_ui (GtkUIManager *self,
 
   queue_update (self);
 
-  g_signal_emit (self, merge_signals[CHANGED], 0);
+  g_object_notify (G_OBJECT (self), "ui");      
 }
 
 /* -------------------- Updates -------------------- */
@@ -1457,7 +1476,7 @@ gtk_ui_manager_remove_ui (GtkUIManager *self,
 
 static GtkAction *
 get_action_by_name (GtkUIManager *merge, 
-		    const char   *action_name)
+		    const gchar  *action_name)
 {
   GList *tmp;
 
@@ -1826,6 +1845,7 @@ update_node (GtkUIManager *self,
 		    info->proxy = gtk_action_create_menu_item (action);
 		    menu = gtk_menu_new ();
 		    tearoff = gtk_tearoff_menu_item_new ();
+		    gtk_widget_set_no_show_all (tearoff, TRUE);
 		    gtk_menu_shell_append (GTK_MENU_SHELL (menu), tearoff);
 		    gtk_menu_item_set_submenu (GTK_MENU_ITEM (info->proxy), menu);
 		    gtk_menu_shell_insert (GTK_MENU_SHELL (menushell), info->proxy, pos);
@@ -2036,6 +2056,7 @@ update_node (GtkUIManager *self,
 		  GtkToolItem *item = gtk_separator_tool_item_new ();
 		  gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, pos);
 		  info->proxy = GTK_WIDGET (item);
+		  gtk_widget_set_no_show_all (info->proxy, TRUE);
 		  g_object_set_data (G_OBJECT (info->proxy),
 				     "gtk-separator-mode",
 				     GINT_TO_POINTER (SEPARATOR_MODE_SMART));
@@ -2057,6 +2078,7 @@ update_node (GtkUIManager *self,
 	      if (find_menu_position (node, &menushell, &pos))
 		{
 		  info->proxy = gtk_separator_menu_item_new ();
+		  gtk_widget_set_no_show_all (info->proxy, TRUE);
 		  g_object_set_data (G_OBJECT (info->proxy),
 				     "gtk-separator-mode",
 				     GINT_TO_POINTER (SEPARATOR_MODE_SMART));

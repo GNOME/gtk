@@ -76,7 +76,8 @@ typedef enum
    */
   GTK_RECEIVES_DEFAULT = 1 << 20,
 
-  GTK_DOUBLE_BUFFERED  = 1 << 21
+  GTK_DOUBLE_BUFFERED  = 1 << 21,
+  GTK_NO_SHOW_ALL      = 1 << 22
 } GtkWidgetFlags;
 
 /* Kinds of widget-specific help */
@@ -449,6 +450,9 @@ void       gtk_widget_show_now            (GtkWidget           *widget);
 void	   gtk_widget_hide		  (GtkWidget	       *widget);
 void	   gtk_widget_show_all		  (GtkWidget	       *widget);
 void	   gtk_widget_hide_all		  (GtkWidget	       *widget);
+void       gtk_widget_set_no_show_all     (GtkWidget           *widget,
+					   gboolean             no_show_all);
+gboolean   gtk_widget_get_no_show_all     (GtkWidget           *widget);
 void	   gtk_widget_map		  (GtkWidget	       *widget);
 void	   gtk_widget_unmap		  (GtkWidget	       *widget);
 void	   gtk_widget_realize		  (GtkWidget	       *widget);

@@ -568,6 +568,7 @@ connect_proxy (GtkAction     *action,
     gtk_widget_show (proxy);
   else
     gtk_widget_hide (proxy);
+  gtk_widget_set_no_show_all (proxy, TRUE);
 
   if (GTK_IS_MENU_ITEM (proxy))
     {

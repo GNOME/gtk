@@ -3540,8 +3540,6 @@ gtk_menu_reparent (GtkMenu      *menu,
 static void
 gtk_menu_show_all (GtkWidget *widget)
 {
-  g_return_if_fail (GTK_IS_MENU (widget));
-
   /* Show children, but not self. */
   gtk_container_foreach (GTK_CONTAINER (widget), (GtkCallback) gtk_widget_show_all, NULL);
 }
@@ -3550,8 +3548,6 @@ gtk_menu_show_all (GtkWidget *widget)
 static void
 gtk_menu_hide_all (GtkWidget *widget)
 {
-  g_return_if_fail (GTK_IS_MENU (widget));
-
   /* Hide children, but not self. */
   gtk_container_foreach (GTK_CONTAINER (widget), (GtkCallback) gtk_widget_hide_all, NULL);
 }
