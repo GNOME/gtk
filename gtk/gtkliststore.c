@@ -27,6 +27,7 @@
 
 #define G_SLIST(x) ((GSList *) x)
 #define GTK_LIST_STORE_IS_SORTED(list) (GTK_LIST_STORE (list)->sort_column_id != -1)
+#define VALID_ITER(iter, list_store) (iter!= NULL && iter->user_data != NULL && list_store->stamp == iter->stamp)
 
 static void         gtk_list_store_init            (GtkListStore      *list_store);
 static void         gtk_list_store_class_init      (GtkListStoreClass *class);
@@ -328,7 +329,6 @@ gtk_list_store_set_n_columns (GtkListStore *list_store,
 {
   GType *new_columns;
 
-  g_return_if_fail (list_store != NULL);
   g_return_if_fail (GTK_IS_LIST_STORE (list_store));
   g_return_if_fail (n_columns > 0);
 
@@ -361,7 +361,6 @@ gtk_list_store_set_column_type (GtkListStore *list_store,
 				gint          column,
 				GType         type)
 {
-  g_return_if_fail (list_store != NULL);
   g_return_if_fail (GTK_IS_LIST_STORE (list_store));
   g_return_if_fail (column >=0 && column < list_store->n_columns);
   if (!_gtk_tree_data_list_check_type (type))
@@ -524,12 +523,12 @@ static gint
 gtk_list_store_iter_n_children (GtkTreeModel *tree_model,
 				GtkTreeIter  *iter)
 {
-  g_return_val_if_fail (GTK_LIST_STORE (tree_model)->stamp == iter->stamp, -1);
-
-  if (iter->user_data == NULL)
+  g_return_val_if_fail (GTK_IS_LIST_STORE (tree_model), -1);
+  if (iter == NULL)
     return GTK_LIST_STORE (tree_model)->length;
-  else
-    return 0;
+
+  g_return_val_if_fail (GTK_LIST_STORE (tree_model)->stamp == iter->stamp, -1);
+  return 0;
 }
 
 static gboolean
@@ -596,7 +595,7 @@ gtk_list_store_set_value (GtkListStore *list_store,
   gint orig_column = column;
 
   g_return_if_fail (GTK_IS_LIST_STORE (list_store));
-  g_return_if_fail (iter != NULL);
+  g_return_if_fail (VALID_ITER (iter, list_store));
   g_return_if_fail (column >= 0 && column < list_store->n_columns);
   g_return_if_fail (G_IS_VALUE (value));
 
@@ -697,6 +696,7 @@ gtk_list_store_set_valist (GtkListStore *list_store,
   gint column;
 
   g_return_if_fail (GTK_IS_LIST_STORE (list_store));
+  g_return_if_fail (VALID_ITER (iter, list_store));
 
   column = va_arg (var_args, gint);
 
@@ -757,6 +757,8 @@ gtk_list_store_set (GtkListStore *list_store,
   va_list var_args;
 
   g_return_if_fail (GTK_IS_LIST_STORE (list_store));
+  g_return_if_fail (iter != NULL);
+  g_return_if_fail (iter->stamp == list_store->stamp);
 
   va_start (var_args, iter);
   gtk_list_store_set_valist (list_store, iter, var_args);
@@ -840,9 +842,8 @@ gtk_list_store_remove (GtkListStore *list_store,
 {
   GtkTreePath *path;
 
-  g_return_if_fail (list_store != NULL);
   g_return_if_fail (GTK_IS_LIST_STORE (list_store));
-  g_return_if_fail (iter->user_data != NULL);
+  g_return_if_fail (VALID_ITER (iter, list_store));
 
   path = gtk_list_store_get_path (GTK_TREE_MODEL (list_store), iter);
 
@@ -896,7 +897,6 @@ gtk_list_store_insert (GtkListStore *list_store,
   GtkTreePath *path;
   GSList *new_list;
 
-  g_return_if_fail (list_store != NULL);
   g_return_if_fail (GTK_IS_LIST_STORE (list_store));
   g_return_if_fail (iter != NULL);
   g_return_if_fail (position >= 0);
@@ -951,9 +951,11 @@ gtk_list_store_insert_before (GtkListStore *list_store,
   GSList *list, *prev, *new_list;
   gint i = 0;
 
-  g_return_if_fail (list_store != NULL);
   g_return_if_fail (GTK_IS_LIST_STORE (list_store));
   g_return_if_fail (iter != NULL);
+  if (sibling)
+    g_return_if_fail (VALID_ITER (sibling, list_store));
+
 
   if (GTK_LIST_STORE_IS_SORTED (list_store))
     {
@@ -1036,11 +1038,10 @@ gtk_list_store_insert_after (GtkListStore *list_store,
   GSList *list, *new_list;
   gint i = 0;
 
-  g_return_if_fail (list_store != NULL);
   g_return_if_fail (GTK_IS_LIST_STORE (list_store));
   g_return_if_fail (iter != NULL);
   if (sibling)
-    g_return_if_fail (sibling->stamp == list_store->stamp);
+    g_return_if_fail (VALID_ITER (sibling, list_store));
 
   if (sibling == NULL ||
       GTK_LIST_STORE_IS_SORTED (list_store))
@@ -1085,7 +1086,6 @@ gtk_list_store_prepend (GtkListStore *list_store,
 {
   GtkTreePath *path;
 
-  g_return_if_fail (list_store != NULL);
   g_return_if_fail (GTK_IS_LIST_STORE (list_store));
   g_return_if_fail (iter != NULL);
 
@@ -1124,7 +1124,6 @@ gtk_list_store_append (GtkListStore *list_store,
 {
   GtkTreePath *path;
 
-  g_return_if_fail (list_store != NULL);
   g_return_if_fail (GTK_IS_LIST_STORE (list_store));
   g_return_if_fail (iter != NULL);
 

@@ -944,10 +944,10 @@ _gtk_tree_view_column_set_tree_view (GtkTreeViewColumn *column,
   gtk_tree_view_column_create_button (column);
 
   column->property_changed_signal =
-	  g_signal_connect (GTK_OBJECT (tree_view),
-			    "notify::model",
-			    GTK_SIGNAL_FUNC (gtk_tree_view_column_setup_sort_column_id_callback),
-			    column);
+	  g_signal_connect_swapped (GTK_OBJECT (tree_view),
+				    "notify::model",
+				    GTK_SIGNAL_FUNC (gtk_tree_view_column_setup_sort_column_id_callback),
+				    column);
 
   gtk_tree_view_column_setup_sort_column_id_callback (column);
 }

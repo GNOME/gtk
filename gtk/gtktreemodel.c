@@ -604,7 +604,6 @@ gtk_tree_model_get_flags (GtkTreeModel *tree_model)
 gint
 gtk_tree_model_get_n_columns (GtkTreeModel *tree_model)
 {
-  g_return_val_if_fail (tree_model != NULL, 0);
   g_return_val_if_fail (GTK_IS_TREE_MODEL (tree_model), 0);
   g_return_val_if_fail (GTK_TREE_MODEL_GET_IFACE (tree_model)->get_n_columns != NULL, 0);
 
@@ -624,7 +623,6 @@ GType
 gtk_tree_model_get_column_type (GtkTreeModel *tree_model,
 				gint          index)
 {
-  g_return_val_if_fail (tree_model != NULL, G_TYPE_INVALID);
   g_return_val_if_fail (GTK_IS_TREE_MODEL (tree_model), G_TYPE_INVALID);
   g_return_val_if_fail (GTK_TREE_MODEL_GET_IFACE (tree_model)->get_column_type != NULL, G_TYPE_INVALID);
   g_return_val_if_fail (index >= 0, G_TYPE_INVALID);
@@ -651,6 +649,7 @@ gtk_tree_model_get_iter (GtkTreeModel *tree_model,
   g_return_val_if_fail (iter != NULL, FALSE);
   g_return_val_if_fail (path != NULL, FALSE);
   g_return_val_if_fail (GTK_TREE_MODEL_GET_IFACE (tree_model)->get_iter != NULL, FALSE);
+  g_return_val_if_fail (path->depth > 0, FALSE);
 
   return (* GTK_TREE_MODEL_GET_IFACE (tree_model)->get_iter) (tree_model, iter, path);
 }
@@ -661,7 +660,8 @@ gtk_tree_model_get_iter (GtkTreeModel *tree_model,
  * @tree_model: A #GtkTreeModel.
  * @iter: The uninitialized #GtkTreeIter.
  * 
- * Gets the root iter, if it exists.
+ * Initialized @iter with the root iterator in the tree (the one at the root
+ * path) and returns %TRUE.   Returns %FALSE if the tree is empty.
  * 
  * Return value: TRUE, if @iter was set.
  **/
@@ -683,36 +683,6 @@ gtk_tree_model_get_iter_root (GtkTreeModel *tree_model,
 }
 
 /**
- * gtk_tree_model_get_first:
- * @tree_model: a #GtkTreeModel
- * @iter: iterator to initialize
- *
- * Initialized @iter with the first iterator in the tree (the one at the
- * root path) and returns %TRUE, or returns %FALSE if there are no
- * iterable locations in the model (i.e. the tree is empty).
- *
- * Return value: %TRUE if @iter was initialized
- **/
-gboolean
-gtk_tree_model_get_first (GtkTreeModel *tree_model,
-                          GtkTreeIter  *iter)
-{
-  gboolean retval;
-  GtkTreePath *path;
-
-  g_return_val_if_fail (GTK_IS_TREE_MODEL (tree_model), FALSE);
-  g_return_val_if_fail (iter != NULL, FALSE);
-
-  path = gtk_tree_path_new_root ();
-
-  retval = gtk_tree_model_get_iter (tree_model, iter, path);
-
-  gtk_tree_path_free (path);
-
-  return retval;
-}
-
-/**
  * gtk_tree_model_get_path:
  * @tree_model: A #GtkTreeModel.
  * @iter: The #GtkTreeIter.
@@ -726,9 +696,8 @@ GtkTreePath *
 gtk_tree_model_get_path (GtkTreeModel *tree_model,
 			 GtkTreeIter  *iter)
 {
-  g_return_val_if_fail (tree_model != NULL, NULL);
-  g_return_val_if_fail (iter != NULL, NULL);
   g_return_val_if_fail (GTK_IS_TREE_MODEL (tree_model), NULL);
+  g_return_val_if_fail (iter != NULL, NULL);
   g_return_val_if_fail (GTK_TREE_MODEL_GET_IFACE (tree_model)->get_path != NULL, NULL);
 
   return (* GTK_TREE_MODEL_GET_IFACE (tree_model)->get_path) (tree_model, iter);
@@ -741,8 +710,8 @@ gtk_tree_model_get_path (GtkTreeModel *tree_model,
  * @column: The column to lookup the value at.
  * @value: An empty #GValue to set.
  *
- * Sets initializes and sets @value to that at @column.  When done with value,
- * #g_value_unset needs to be called on it.
+ * Sets initializes and sets @value to that at @column.  When done with @value,
+ * #g_value_unset needs to be called to free any allocated memory.
  **/
 void
 gtk_tree_model_get_value (GtkTreeModel *tree_model,
@@ -750,9 +719,8 @@ gtk_tree_model_get_value (GtkTreeModel *tree_model,
 			  gint          column,
 			  GValue       *value)
 {
-  g_return_if_fail (tree_model != NULL);
-  g_return_if_fail (iter != NULL);
   g_return_if_fail (GTK_IS_TREE_MODEL (tree_model));
+  g_return_if_fail (iter != NULL);
   g_return_if_fail (value != NULL);
   g_return_if_fail (GTK_TREE_MODEL_GET_IFACE (tree_model)->get_value != NULL);
 
@@ -773,7 +741,6 @@ gboolean
 gtk_tree_model_iter_next (GtkTreeModel  *tree_model,
 			  GtkTreeIter   *iter)
 {
-  g_return_val_if_fail (tree_model != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_TREE_MODEL (tree_model), FALSE);
   g_return_val_if_fail (iter != NULL, FALSE);
   g_return_val_if_fail (GTK_TREE_MODEL_GET_IFACE (tree_model)->iter_next != NULL, FALSE);
@@ -819,7 +786,6 @@ gboolean
 gtk_tree_model_iter_has_child (GtkTreeModel *tree_model,
 			       GtkTreeIter  *iter)
 {
-  g_return_val_if_fail (tree_model != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_TREE_MODEL (tree_model), FALSE);
   g_return_val_if_fail (iter != NULL, FALSE);
   g_return_val_if_fail (GTK_TREE_MODEL_GET_IFACE (tree_model)->iter_has_child != NULL, FALSE);
@@ -832,8 +798,8 @@ gtk_tree_model_iter_has_child (GtkTreeModel *tree_model,
  * @tree_model: A #GtkTreeModel.
  * @iter: The #GtkTreeIter, or NULL.
  *
- * Returns the number of children that @iter has.  If @iter is NULL, then the
- * number of toplevel nodes is returned.
+ * Returns the number of children that @iter has.  As a special case, if @iter
+ * is NULL, then the number of toplevel nodes is returned.
  *
  * Return value: The number of children of @iter.
  **/
@@ -856,10 +822,10 @@ gtk_tree_model_iter_n_children (GtkTreeModel *tree_model,
  * @n: Then index of the desired child.
  *
  * Sets @iter to be the child of @parent, using the given index.  The first
- * index is 0.  If the index is too big, or @parent has no children, @iter is
- * set to an invalid iterator and FALSE is returned.  @parent will remain a
- * valid node after this function has been called.  If @parent is NULL, then the
- * root node is assumed.
+ * index is 0.  If @index is too big, or @parent has no children, @iter is set
+ * to an invalid iterator and FALSE is returned.  @parent will remain a valid
+ * node after this function has been called.  As a special case, if @parent is
+ * NULL, then the nth root node is set.
  *
  * Return value: TRUE, if @parent has an nth child.
  **/
@@ -869,7 +835,6 @@ gtk_tree_model_iter_nth_child (GtkTreeModel *tree_model,
 			       GtkTreeIter  *parent,
 			       gint          n)
 {
-  g_return_val_if_fail (tree_model != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_TREE_MODEL (tree_model), FALSE);
   g_return_val_if_fail (iter != NULL, FALSE);
   g_return_val_if_fail (n >= 0, FALSE);
@@ -896,7 +861,6 @@ gtk_tree_model_iter_parent (GtkTreeModel *tree_model,
 			    GtkTreeIter  *iter,
 			    GtkTreeIter  *child)
 {
-  g_return_val_if_fail (tree_model != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_TREE_MODEL (tree_model), FALSE);
   g_return_val_if_fail (iter != NULL, FALSE);
   g_return_val_if_fail (child != NULL, FALSE);
@@ -919,6 +883,9 @@ gtk_tree_model_iter_parent (GtkTreeModel *tree_model,
  * node.)  For example, a file-system based model would not want to keep the
  * entire file-heirarchy in memory, just the sections that are currently being
  * displayed by every current view.
+ *
+ * A model should be expected to be able to get an iter independent of it's
+ * reffed state.
  **/
 void
 gtk_tree_model_ref_node (GtkTreeModel *tree_model,
@@ -947,8 +914,8 @@ void
 gtk_tree_model_unref_node (GtkTreeModel *tree_model,
 			   GtkTreeIter  *iter)
 {
-  g_return_if_fail (tree_model != NULL);
   g_return_if_fail (GTK_IS_TREE_MODEL (tree_model));
+  g_return_if_fail (iter != NULL);
 
   if (GTK_TREE_MODEL_GET_IFACE (tree_model)->unref_node)
     (* GTK_TREE_MODEL_GET_IFACE (tree_model)->unref_node) (tree_model, iter);
@@ -978,6 +945,7 @@ gtk_tree_model_get (GtkTreeModel *tree_model,
   va_list var_args;
 
   g_return_if_fail (GTK_IS_TREE_MODEL (tree_model));
+  g_return_if_fail (iter != NULL);
 
   va_start (var_args, iter);
   gtk_tree_model_get_valist (tree_model, iter, var_args);
@@ -990,9 +958,8 @@ gtk_tree_model_get (GtkTreeModel *tree_model,
  * @iter: a row in @tree_model
  * @var_args: va_list of column/return location pairs
  *
- * See gtk_tree_model_get(), this version takes a va_list for
- * language bindings to use.
- *
+ * See gtk_tree_model_get(), this version takes a va_list for language bindings
+ * to use.
  **/
 void
 gtk_tree_model_get_valist (GtkTreeModel *tree_model,
@@ -1002,6 +969,7 @@ gtk_tree_model_get_valist (GtkTreeModel *tree_model,
   gint column;
 
   g_return_if_fail (GTK_IS_TREE_MODEL (tree_model));
+  g_return_if_fail (iter != NULL);
 
   column = va_arg (var_args, gint);
 
@@ -1044,7 +1012,6 @@ gtk_tree_model_range_changed (GtkTreeModel *tree_model,
 			      GtkTreeIter  *end_iter)
 {
   gint i;
-  g_return_if_fail (tree_model != NULL);
   g_return_if_fail (GTK_IS_TREE_MODEL (tree_model));
   g_return_if_fail (start_path != NULL);
   g_return_if_fail (start_iter != NULL);
@@ -1070,7 +1037,6 @@ gtk_tree_model_inserted (GtkTreeModel *tree_model,
 			 GtkTreePath  *path,
 			 GtkTreeIter  *iter)
 {
-  g_return_if_fail (tree_model != NULL);
   g_return_if_fail (GTK_IS_TREE_MODEL (tree_model));
   g_return_if_fail (path != NULL);
   g_return_if_fail (iter != NULL);
@@ -1083,7 +1049,6 @@ gtk_tree_model_has_child_toggled (GtkTreeModel *tree_model,
 				  GtkTreePath  *path,
 				  GtkTreeIter  *iter)
 {
-  g_return_if_fail (tree_model != NULL);
   g_return_if_fail (GTK_IS_TREE_MODEL (tree_model));
   g_return_if_fail (path != NULL);
   g_return_if_fail (iter != NULL);
@@ -1095,7 +1060,6 @@ void
 gtk_tree_model_deleted (GtkTreeModel *tree_model,
 			GtkTreePath  *path)
 {
-  g_return_if_fail (tree_model != NULL);
   g_return_if_fail (GTK_IS_TREE_MODEL (tree_model));
   g_return_if_fail (path != NULL);
 
@@ -1108,7 +1072,6 @@ gtk_tree_model_reordered (GtkTreeModel *tree_model,
 			  GtkTreeIter  *iter,
 			  gint         *new_order)
 {
-  g_return_if_fail (tree_model != NULL);
   g_return_if_fail (GTK_IS_TREE_MODEL (tree_model));
   g_return_if_fail (new_order != NULL);
 
@@ -1163,6 +1126,9 @@ gtk_tree_model_foreach (GtkTreeModel            *model,
 {
   GtkTreePath *path;
   GtkTreeIter iter;
+
+  g_return_if_fail (GTK_IS_TREE_MODEL (model));
+  g_return_if_fail (func != NULL);
 
   path = gtk_tree_path_new_root ();
   gtk_tree_model_get_iter (model, &iter, path);

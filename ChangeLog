@@ -1,3 +1,13 @@
+Mon Jul  9 12:50:51 2001  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtktreemodel.c: remove gtk_tree_model_get_first in favor of
+	gtk_tree_model_get_iter_root.
+
+	* gtk/gtkliststore.c: Add a bunch of g_return statements.
+	(gtk_list_store_iter_n_children): Fix up.
+
+	* gtk/gtktreestore.c: Add a bunch of g_return statements.
+
 Fri Jul  6 15:38:33 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkwidget.c (gtk_widget_class_init):

@@ -6097,25 +6097,25 @@ gtk_tree_view_set_model (GtkTreeView  *tree_view,
       if (GTK_TREE_VIEW_FLAG_SET (tree_view, GTK_TREE_VIEW_MODEL_SETUP))
 	{
 	  g_signal_handlers_disconnect_matched (G_OBJECT (tree_view->priv->model),
-						G_SIGNAL_MATCH_DATA,
+						G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA,
 						0, 0, NULL,
-						NULL, tree_view);
+						gtk_tree_view_range_changed, tree_view);
 	  g_signal_handlers_disconnect_matched (G_OBJECT (tree_view->priv->model),
-						G_SIGNAL_MATCH_DATA,
+						G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA,
 						0, 0, NULL,
-						NULL, tree_view);
+						gtk_tree_view_inserted, tree_view);
 	  g_signal_handlers_disconnect_matched (G_OBJECT (tree_view->priv->model),
-						G_SIGNAL_MATCH_DATA,
+						G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA,
 						0, 0, NULL,
-						NULL, tree_view);
+						gtk_tree_view_has_child_toggled, tree_view);
 	  g_signal_handlers_disconnect_matched (G_OBJECT (tree_view->priv->model),
-						G_SIGNAL_MATCH_DATA,
+						G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA,
 						0, 0, NULL,
-						NULL, tree_view);
+						gtk_tree_view_deleted, tree_view);
 	  g_signal_handlers_disconnect_matched (G_OBJECT (tree_view->priv->model),
-						G_SIGNAL_MATCH_DATA,
+						G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA,
 						0, 0, NULL,
-						NULL, tree_view);
+						gtk_tree_view_reordered, tree_view);
 	  if (tree_view->priv->tree)
 	    _gtk_rbtree_free (tree_view->priv->tree);
 	}
@@ -6470,7 +6470,6 @@ gtk_tree_view_remove_column (GtkTreeView       *tree_view,
     tree_view->priv->focus_column = NULL;
 
   tree_view->priv->columns = g_list_remove (tree_view->priv->columns, column);
-
   tree_view->priv->n_columns--;
 
   if (GTK_WIDGET_REALIZED (tree_view))
