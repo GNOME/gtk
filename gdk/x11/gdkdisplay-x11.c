@@ -127,6 +127,7 @@ gdk_display_open (const gchar *display_name)
   display_x11 = GDK_DISPLAY_X11 (display);
 
   display_x11->use_xft = -1;
+  display_x11->use_xshm = TRUE;
   display_x11->xdisplay = xdisplay;
 
   /* Set up handlers for Xlib internal connections */
@@ -535,7 +536,10 @@ gdk_x11_display_ungrab (GdkDisplay * display)
   
   display_x11->grab_count--;
   if (display_x11->grab_count == 0)
-    XUngrabServer (display_x11->xdisplay);
+    {
+      XUngrabServer (display_x11->xdisplay);
+      XFlush (display_x11->xdisplay);
+    }
 }
 
 static void

@@ -533,7 +533,6 @@ _gdk_x11_copy_to_image (GdkDrawable    *drawable,
 #define UNGRAB() G_STMT_START {					\
     if (have_grab) {						\
       gdk_x11_display_ungrab (display);				\
-      XFlush (xdisplay);					\
       have_grab = FALSE; }					\
   } G_STMT_END
 
@@ -671,7 +670,6 @@ _gdk_x11_copy_to_image (GdkDrawable    *drawable,
   if (have_grab)
     {				
       gdk_x11_display_ungrab (display);
-      XFlush (xdisplay);
       have_grab = FALSE;
     }
   
