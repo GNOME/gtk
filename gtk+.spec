@@ -142,12 +142,12 @@ fi
 %defattr(-, root, root)
 
 %doc AUTHORS COPYING ChangeLog NEWS README TODO
-%{prefix}/lib/libgtk.so.*
-%{prefix}/lib/libgdk.so.*
+%{prefix}/lib/libgtk-1.1.so.*
+%{prefix}/lib/libgdk-1.1.so.*
 
 %files -n glib
 %defattr(-, root, root)
-%{prefix}/lib/libglib.so.*
+%{prefix}/lib/libglib-1.1.so.*
 
 %files devel
 %defattr(-, root, root)
