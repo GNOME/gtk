@@ -33,9 +33,9 @@ noinst_PROGRAMS = testpixbuf
 DEPS = libgdk_pixbuf.la
 INCLUDES = $(GNOME_INCLUDEDIR)
 AM_CPPFLAGS = "-DPIXBUF_LIBDIR=\"$(libexecdir)\""
+
 LDADDS = libgdk_pixbuf.la @GNOME_LIBDIR@ @GNOMEUI_LIBS@
 
-testpixbuf_DEPENDENCIES = $(DEPS)
 testpixbuf_LDADD = $(LDADDS)
 
 #
