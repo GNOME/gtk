@@ -1415,7 +1415,7 @@ gtk_entry_adjust_scroll (GtkEntry *entry)
   else if (xoffset > text_area_width)
     entry->scroll_offset += xoffset - text_area_width + 1;
 
-  gtk_widget_queue_draw (entry);
+  gtk_widget_queue_draw (GTK_WIDGET(entry));
 }
 
 static void
