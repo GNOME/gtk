@@ -1881,7 +1881,7 @@ shortcuts_drag_set_delete_cursor (GtkFileChooserDefault *impl,
 	  int row_pixmap_width, row_pixmap_height;
 	  int pixbuf_width, pixbuf_height;
 	  int composite_width, composite_height;
-	  int pixbuf_y;
+	  int pixbuf_x, pixbuf_y;
 	  GdkGC *gc, *mask_gc;
 	  GdkColor color;
 	  GdkBitmap *pixbuf_mask;
@@ -1896,6 +1896,12 @@ shortcuts_drag_set_delete_cursor (GtkFileChooserDefault *impl,
 	  composite_height = MAX (row_pixmap_height, pixbuf_height);
 
 	  row_pixmap_y = (composite_height - row_pixmap_height) / 2;
+
+	  if (gtk_widget_get_direction (impl->browse_shortcuts_tree_view) == GTK_TEXT_DIR_RTL)
+	    pixbuf_x = 0;
+	  else
+	    pixbuf_x = composite_width - pixbuf_width;
+
 	  pixbuf_y = (composite_height - pixbuf_height) / 2;
 
 	  composite = gdk_pixmap_new (row_pixmap, composite_width, composite_height, -1);
@@ -1921,7 +1927,7 @@ shortcuts_drag_set_delete_cursor (GtkFileChooserDefault *impl,
 	     NULL, &pixbuf_mask, 128);
 	  gdk_draw_drawable (mask, mask_gc, pixbuf_mask,
 			     0, 0,
-			     0, pixbuf_y,
+			     pixbuf_x, pixbuf_y,
 			     pixbuf_width, pixbuf_height);
 	  g_object_unref (pixbuf_mask);
 
@@ -1935,7 +1941,7 @@ shortcuts_drag_set_delete_cursor (GtkFileChooserDefault *impl,
 
 	  gdk_draw_pixbuf (composite, gc, pixbuf,
 			   0, 0,
-			   0, pixbuf_y,
+			   pixbuf_x, pixbuf_y,
 			   pixbuf_width, pixbuf_height,
 			   GDK_RGB_DITHER_MAX,
 			   0, 0);
@@ -1993,10 +1999,8 @@ shortcuts_drag_leave_cb (GtkWidget             *widget,
 			 guint                  time_,
 			 GtkFileChooserDefault *impl)
 {
-  if (gtk_drag_get_source_widget (context) == widget)
+  if (gtk_drag_get_source_widget (context) == widget && !impl->shortcuts_drag_outside_idle)
     {
-      g_assert (impl->shortcuts_drag_outside_idle == NULL);
-
       impl->shortcuts_drag_outside_idle = g_idle_source_new ();
       g_source_set_closure (impl->shortcuts_drag_outside_idle,
 			    g_cclosure_new_object (G_CALLBACK (shortcuts_drag_outside_idle_cb),
@@ -2085,12 +2089,15 @@ shortcuts_drag_motion_cb (GtkWidget             *widget,
   GtkTreeViewDropPosition pos;
   GdkDragAction action;
 
-  if (gtk_drag_get_source_widget (context) == widget && impl->shortcuts_drag_outside)
+  if (gtk_drag_get_source_widget (context) == widget)
     {
-      g_assert (impl->shortcuts_drag_outside_idle == NULL);
+      shortcuts_cancel_drag_outside_idle (impl);
 
-      shortcuts_drag_set_delete_cursor (impl, FALSE);
-      impl->shortcuts_drag_outside = FALSE;
+      if (impl->shortcuts_drag_outside)
+	{
+	  shortcuts_drag_set_delete_cursor (impl, FALSE);
+	  impl->shortcuts_drag_outside = FALSE;
+	}
     }
 
   if (context->suggested_action == GDK_ACTION_COPY || (context->actions & GDK_ACTION_COPY) != 0)
@@ -2277,6 +2284,7 @@ shortcuts_drag_data_received_cb (GtkWidget          *widget,
   int bookmarks_index;
 
   impl = GTK_FILE_CHOOSER_DEFAULT (data);
+  g_assert (impl->shortcuts_drag_outside_idle == NULL);
 
   /* Compute position */
 

@@ -1,3 +1,11 @@
+2004-03-11  Federico Mena Quintero  <federico@ximian.com>
+
+	* gtk/gtkfilechooserdefault.c (shortcuts_drag_set_delete_cursor):
+	Put the trash icon on the right for LTR locales, or on the left
+	for RTL.
+	(shortcuts_drag_motion_cb): Cancel the idle handler here as well.
+	(shortcuts_drag_leave_cb): Test whether the idle is present.
+
 Thu Mar 11 17:51:10 2004  Owen Taylor  <otaylor@redhat.com>
 
 	* modules/input/gtkimcontextxim.c (preedit_done_callback):
