@@ -1,3 +1,10 @@
+2001-04-19  Federico Mena Quintero  <federico@ximian.com>
+
+	* gtk/gtkwindow.c (gtk_window_focus_filter): Only consider
+	crossing events if the parent of the window is the root window.
+	This is so that GtkPlugs will not do funny things when they think
+	they should get the focus.
+
 Wed Apr 11 16:20:00 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtklabel.c (gtk_label_parse_uline): Fix check

@@ -985,7 +985,13 @@ gtk_window_focus_filter (GdkXEvent *xevent,
       break;
     case EnterNotify:
     case LeaveNotify:
-      if (xev->xcrossing.detail != NotifyInferior &&
+      /* We only track the actual destination of keyboard events for real
+       * toplevels, not for embedded toplevels such as GtkPlug. The reason for
+       * this is that GtkPlug redirects events so the widget may effectively not
+       * have the focus even if it actually has the focus.
+       */
+      if (gdk_window_get_parent (GTK_WIDGET (window)->window) == GDK_ROOT_PARENT () &&
+	  xev->xcrossing.detail != NotifyInferior &&
 	  xev->xcrossing.focus && !window->window_has_focus)
 	{
 	  window->window_has_pointer_focus = (xev->xany.type == EnterNotify) ? TRUE : FALSE;
