@@ -27,6 +27,8 @@
 #include <sys/ioctl.h>
 #include <string.h>
 #include <math.h>
+#include <unistd.h>
+#include <errno.h>
 
 typedef struct _GdkFBMouse GdkFBMouse;
 typedef struct _GdkFBMouseDevice GdkFBMouseDevice;
@@ -275,21 +277,19 @@ static GdkFBMouseDevice mouse_devs[] =
   }
 };
 
-
 gboolean
-gdk_fb_mouse_open (void)
+gdk_fb_mouse_init (gboolean open_dev)
 {
-  GdkFBMouse *mouse;
-  GdkFBMouseDevice *device;
   char *mouse_type;
   int i;
 
-  mouse = g_new0 (GdkFBMouse, 1);
-  mouse->fd = -1;
+  gdk_fb_mouse = g_new0 (GdkFBMouse, 1);
+  gdk_fb_mouse->fd = -1;
+
   mouse_type = getenv ("GDK_MOUSE_TYPE");
   if (!mouse_type)
     mouse_type = "ps2";
-
+      
   for (i=0;i<G_N_ELEMENTS(mouse_devs);i++)
     {
       if (g_strcasecmp(mouse_type, mouse_devs[i].name)==0)
@@ -302,34 +302,56 @@ gdk_fb_mouse_open (void)
       return FALSE;
     }
 
-  device = &mouse_devs[i];
+  gdk_fb_mouse->dev = &mouse_devs[i];
 
-  mouse->dev = device;
-  
-  mouse->x = gdk_display->fb_width / 2;
-  mouse->y = gdk_display->fb_height / 2;
+  gdk_fb_mouse->x = gdk_display->fb_width / 2;
+  gdk_fb_mouse->y = gdk_display->fb_height / 2;
 
-  if (!device->open(mouse))
+  if (open_dev)
+    return gdk_fb_mouse_open ();
+  else
+    return TRUE;
+}
+
+gboolean
+gdk_fb_mouse_open (void)
+{
+  GdkFBMouseDevice *device;
+
+  device = gdk_fb_mouse->dev;
+
+  if (!device->open(gdk_fb_mouse))
     {
       g_warning ("Mouse driver open failed");
-      g_free (mouse);
       return FALSE;
     }
 
-  mouse->io = g_io_channel_unix_new (mouse->fd);
-  mouse->io_tag = g_io_add_watch (mouse->io, G_IO_IN|G_IO_ERR|G_IO_HUP|G_IO_NVAL, handle_mouse_io, mouse);
+  gdk_fb_mouse->io = 
+    g_io_channel_unix_new (gdk_fb_mouse->fd);
+  gdk_fb_mouse->io_tag = 
+    g_io_add_watch (gdk_fb_mouse->io,
+		    G_IO_IN|G_IO_ERR|G_IO_HUP|G_IO_NVAL, 
+		    handle_mouse_io, gdk_fb_mouse);
 
-  gdk_fb_mouse = mouse;
   return TRUE;
 }
 
 void 
 gdk_fb_mouse_close (void)
 {
-  g_source_remove (gdk_fb_mouse->io_tag);
-  gdk_fb_mouse->dev->close(gdk_fb_mouse);
-  g_io_channel_unref (gdk_fb_mouse->io);
-  g_free (gdk_fb_mouse);
+  if (gdk_fb_mouse->io_tag)
+    {
+      g_source_remove (gdk_fb_mouse->io_tag);
+      gdk_fb_mouse->io_tag = 0;
+    }
+     
+ gdk_fb_mouse->dev->close(gdk_fb_mouse);
+
+ if (gdk_fb_mouse->io)
+   {
+     g_io_channel_unref (gdk_fb_mouse->io);
+     gdk_fb_mouse->io = NULL;
+   }
 }
 
 static gboolean
@@ -427,6 +449,7 @@ static void
 gdk_fb_mouse_ps2_close (GdkFBMouse *mouse)
 {
   close (mouse->fd);
+  mouse->fd = -1;
 }
 
 static gboolean
@@ -500,8 +523,11 @@ gdk_fb_mouse_ms_open (GdkFBMouse   *mouse)
   struct termios tty;
 
   fd = gdk_fb_mouse_dev_open ("/dev/mouse", O_RDWR);
-  if (fd < 0)
-    return FALSE;
+  if (fd < 0) 
+    {
+      g_print ("Error opening /dev/mouse: %s\n", strerror (errno));
+      return FALSE;
+    }
   
   while ((i = read (fd, buf, sizeof(buf))) > 0)
     g_print ("Got %d bytes of junk from /dev/mouse\n", i);
@@ -526,6 +552,7 @@ static void
 gdk_fb_mouse_ms_close (GdkFBMouse   *mouse)
 {
   close (mouse->fd);
+  mouse->fd = -1;
 }
 
 static gboolean

@@ -39,10 +39,14 @@
 #include <sys/kd.h>
 #include <errno.h>
 
+#include <sys/socket.h>
+#include <sys/un.h>
+
 #include "gdk.h"
 
 #include "gdkprivate-fb.h"
 #include "gdkinternals.h"
+#include "gdkfbmanager.h"
 
 /* Private variable declarations
  */
@@ -484,6 +488,159 @@ gdk_fb_set_mode (GdkFBDisplay *display)
   return 0;
 }
 
+#ifdef ENABLE_FB_MANAGER
+static void
+gdk_fb_switch_from (void)
+{
+  g_print ("Switch from\n");
+  gdk_shadow_fb_stop_updates ();
+  gdk_fb_mouse_close ();
+  gdk_fb_keyboard_close ();
+}
+
+static void
+gdk_fb_switch_to (void)
+{
+  g_print ("switch_to\n");
+  gdk_shadow_fb_update (0, 0, 
+			gdk_display->fb_width, 
+			gdk_display->fb_height);
+
+  if (!gdk_fb_keyboard_open ())
+    g_warning ("Failed to re-initialize keyboard");
+  
+  if (!gdk_fb_mouse_open ())
+    g_warning ("Failed to re-initialize mouse");
+
+}
+
+
+static gboolean
+gdk_fb_manager_callback (GIOChannel *gioc,
+			 GIOCondition cond,
+			 gpointer data)
+{
+  struct FBManagerMessage msg;
+  GdkFBDisplay *display;
+  int res;
+
+  display = data;
+
+  res = recv (display->manager_fd, &msg, sizeof (msg), 0);
+
+  if (res==0)
+    {
+      g_source_remove (gdk_display->manager_tag);
+      /*g_io_channel_unref (kb->io);*/
+      close (gdk_display->manager_fd);
+
+    }
+
+  if (res != sizeof (msg))
+    {
+      g_warning ("Got wrong size message");
+      return TRUE;
+    }
+  
+  switch (msg.msg_type)
+    {
+    case FB_MANAGER_SWITCH_FROM:
+      g_print ("Got switch from message\n");
+      display->manager_blocked = TRUE;
+      gdk_fb_switch_from ();
+      msg.msg_type = FB_MANAGER_ACK;
+      send (display->manager_fd, &msg, sizeof (msg), 0);
+      break;
+    case FB_MANAGER_SWITCH_TO:
+      g_print ("Got switch to message\n");
+      display->manager_blocked = FALSE;
+      gdk_fb_switch_to ();
+      break;
+    default:
+      g_warning ("Got unknown message");
+    }
+  return TRUE;
+}
+
+#endif /* ENABLE_FB_MANAGER */
+
+static void
+gdk_fb_manager_connect (GdkFBDisplay *display)
+{
+  int fd;
+  struct sockaddr_un addr;
+  struct msghdr msg = {0};
+  struct cmsghdr *cmsg;
+  struct ucred credentials;
+  struct FBManagerMessage init_msg;
+  struct iovec iov;
+  char buf[CMSG_SPACE (sizeof (credentials))];  /* ancillary data buffer */
+  int *fdptr;
+  int res;
+
+  display->manager_blocked = FALSE;
+  display->manager_fd = -1;
+
+#ifdef ENABLE_FB_MANAGER
+  fd = socket (PF_UNIX, SOCK_STREAM, 0);
+  
+  g_print ("socket: %d\n", fd);
+
+  if (fd < 0)
+    return;
+
+  addr.sun_family = AF_UNIX;
+  strcpy (addr.sun_path, "/tmp/.fb.manager");
+
+  if (connect(fd, (struct sockaddr *)&addr, sizeof (addr)) < 0) 
+    {
+      g_print ("connect failed\n");
+      close (fd);
+      return;
+    }
+  
+  credentials.pid = getpid ();
+  credentials.uid = geteuid ();
+  credentials.gid = getegid ();
+
+  init_msg.msg_type = FB_MANAGER_NEW_CLIENT;
+  iov.iov_base = &init_msg;
+  iov.iov_len = sizeof (init_msg);
+
+  msg.msg_name = NULL;
+  msg.msg_namelen = 0;
+  msg.msg_iov = &iov;
+  msg.msg_iovlen = 1;
+  msg.msg_control = buf;
+  msg.msg_controllen = sizeof buf;
+  cmsg = CMSG_FIRSTHDR(&msg);
+  cmsg->cmsg_level = SOL_SOCKET;
+  cmsg->cmsg_type = SCM_CREDENTIALS;
+  cmsg->cmsg_len = CMSG_LEN (sizeof (credentials));
+  /* Initialize the payload: */
+  fdptr = (int *)CMSG_DATA (cmsg);
+  memcpy (fdptr, &credentials, sizeof (credentials));
+  /* Sum of the length of all control messages in the buffer: */
+  msg.msg_controllen = cmsg->cmsg_len;
+
+  res = sendmsg (fd, &msg, 0);
+
+  display->manager_fd = fd;
+  display->manager_blocked = TRUE;
+
+  display->manager_tag = g_io_add_watch (g_io_channel_unix_new (fd),
+					 G_IO_IN | G_IO_ERR | G_IO_HUP | G_IO_NVAL,
+					 gdk_fb_manager_callback,
+					 display);
+
+  init_msg.msg_type = FB_MANAGER_REQUEST_SWITCH_TO_PID;
+  init_msg.data = getpid ();
+
+  /* Request a switch-to */
+  send (fd, &init_msg, sizeof (init_msg), 0);
+#endif
+}
+
 static GdkFBDisplay *
 gdk_fb_display_new ()
 {
@@ -658,7 +815,9 @@ _gdk_windowing_init_check (int argc, char **argv)
 
   gdk_shadow_fb_init ();
   
-  if (!gdk_fb_keyboard_open ())
+  gdk_fb_manager_connect (gdk_display);
+
+  if (!gdk_fb_keyboard_init (!gdk_display->manager_blocked))
     {
       g_warning ("Failed to initialize keyboard");
       gdk_fb_display_destroy (gdk_display);
@@ -666,7 +825,7 @@ _gdk_windowing_init_check (int argc, char **argv)
       return FALSE;
     }
   
-  if (!gdk_fb_mouse_open ())
+  if (!gdk_fb_mouse_init (!gdk_display->manager_blocked))
     {
       g_warning ("Failed to initialize mouse");
       gdk_fb_keyboard_close ();
@@ -678,6 +837,7 @@ _gdk_windowing_init_check (int argc, char **argv)
   gdk_initialized = TRUE;
 
   gdk_selection_property = gdk_atom_intern ("GDK_SELECTION", FALSE);
+
   
   return TRUE;
 }
@@ -1041,8 +1201,10 @@ gdk_windowing_exit (void)
 {
 
   gdk_fb_mouse_close ();
+  /*leak  g_free (gdk_fb_mouse);*/
   
   gdk_fb_keyboard_close ();
+  /*leak g_free (gdk_fb_keyboard);*/
   
   gdk_fb_display_destroy (gdk_display);
   

@@ -1,3 +1,30 @@
+2001-06-25  Alexander Larsson  <alexl@redhat.com>
+
+	* configure.in:
+	Added --enable-fbmanager. This is some experimental code
+	that lets several GtkFB apps coordinate their access to the
+	framebuffer.
+	
+	* acconfig.h:
+	Added ENABLE_FB_MANAGER.
+
+	* gdk/linux-fb/Makefile.am:
+	Added gdkfbmanager and gdkfbswitch.
+
+	* gdk/linux-fb/gdkkeyboard-fb.c:
+	* gdk/linux-fb/gdkmouse-fb.c:
+	* gdk/linux-fb/gdkprivate-fb.h:
+	Split device init and open so that
+	they can be opened and closed while switched
+	away.
+
+	* gdk/linux-fb/gdkmain-fb.c:
+	Add the basic manager communication.
+
+	* gdk/linux-fb/gdkrender-fb.c:
+	Don't update to the shadow fb if we're
+	blocked by the fb manager.
+
 Sun Jun 24 22:15:16 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* docs/Changes-2.0.txt: Add note about child property

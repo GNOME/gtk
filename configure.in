@@ -135,6 +135,8 @@ case $gdktarget in
 esac
 
 AC_ARG_ENABLE(shadowfb, [  --disable-shadowfb      disable shadowfb support for linux-fb],,enable_shadowfb=yes)
+
+AC_ARG_ENABLE(fbmanager, [  --enable-fbmanager      enable framebuffer manager support (GtkFB)],enable_fbmanager=yes,enable_fbmanager=no)
 	
 if test "x$enable_debug" = "xyes"; then
   test "$cflags_set" = set || CFLAGS="$CFLAGS -g"
@@ -852,6 +854,13 @@ if test "x$gdktarget" = "xlinux-fb"; then
   if test x$enable_shadowfb = xyes ; then
     AC_DEFINE(ENABLE_SHADOW_FB)
   fi
+
+  if test x$enable_fbmanager = xyes ; then
+    AC_DEFINE(ENABLE_FB_MANAGER)
+    AM_CONDITIONAL(ENABLE_FB_MANAGER, true)
+  else
+    AM_CONDITIONAL(ENABLE_FB_MANAGER, false)
+  fi
   
   GDK_EXTRA_CFLAGS="$FREETYPE_CFLAGS"
   GDK_EXTRA_LIBS="$FREETYPE_LIBS $GDK_EXTRA_LIBS"
@@ -859,6 +868,7 @@ if test "x$gdktarget" = "xlinux-fb"; then
   AM_CONDITIONAL(USE_LINUX_FB, true)
 else
   AM_CONDITIONAL(USE_LINUX_FB, false)
+  AM_CONDITIONAL(ENABLE_FB_MANAGER, false)
 fi
 
 AC_SUBST(gdktargetlib)

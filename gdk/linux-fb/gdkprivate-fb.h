@@ -148,6 +148,11 @@ struct _GdkFBDisplay
   struct fb_var_screeninfo modeinfo;
   struct fb_var_screeninfo orig_modeinfo;
   int red_byte, green_byte, blue_byte; /* For truecolor */
+
+  /* fb manager */
+  int manager_fd;
+  int manager_tag;
+  int manager_blocked;
 };
 
 typedef struct {
@@ -414,7 +419,6 @@ extern GdkEventMask _gdk_fb_keyboard_grab_events;
 extern gboolean _gdk_fb_keyboard_grab_owner_events;
 
 extern GdkFBDisplay *gdk_display;
-extern GdkDrawableClass _gdk_fb_drawable_class;
 extern FILE *debug_out;
 GdkEvent *gdk_event_make(GdkWindow *window,
 			 GdkEventType type,
@@ -436,8 +440,10 @@ void gdk_fb_redraw_all(void);
 void gdk_fb_cursor_move (gint x, gint y, GdkWindow *in_window);
 
 guint gdk_fb_keyboard_modifiers (void);
+gboolean gdk_fb_keyboard_init  (gboolean open_dev);
 gboolean gdk_fb_keyboard_open  (void);
 void     gdk_fb_keyboard_close (void);
+gboolean gdk_fb_mouse_init     (gboolean open_dev);
 gboolean gdk_fb_mouse_open     (void);
 void     gdk_fb_mouse_close    (void);
 void     gdk_fb_mouse_get_info (gint            *x,

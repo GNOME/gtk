@@ -167,17 +167,18 @@ gdk_fb_keyboard_modifiers ()
 }
 
 gboolean
-gdk_fb_keyboard_open (void)
+gdk_fb_keyboard_init (gboolean open_dev)
 {
   GdkFBKeyboard *keyb;
-  GdkFBKeyboardDevice *device;
   char *keyb_type;
   int i;
 
-  keyb = g_new0 (GdkFBKeyboard, 1);
+  gdk_fb_keyboard = g_new0 (GdkFBKeyboard, 1);
+  keyb = gdk_fb_keyboard;
   keyb->fd = -1;
   
   keyb_type = getenv ("GDK_KEYBOARD_TYPE");
+  
   if (!keyb_type)
     keyb_type = "xlate";
 
@@ -193,19 +194,29 @@ gdk_fb_keyboard_open (void)
       return FALSE;
     }
 
-  device = &keyb_devs[i];
+  keyb->dev = &keyb_devs[i];
 
-  keyb->dev = device;
-  
+  if (open_dev)
+    return gdk_fb_keyboard_open ();
+  else
+    return TRUE;
+}
+
+gboolean
+gdk_fb_keyboard_open (void)
+{
+  GdkFBKeyboard *keyb;
+  GdkFBKeyboardDevice *device;
+
+  keyb = gdk_fb_keyboard;
+  device = keyb->dev;
+
   if (!device->open(keyb))
     {
       g_warning ("Keyboard driver open failed");
-      g_free (keyb);
       return FALSE;
     }
 
-  gdk_fb_keyboard = keyb;
-  
   return TRUE;
 }
 
@@ -213,7 +224,6 @@ void
 gdk_fb_keyboard_close (void)
 {
   gdk_fb_keyboard->dev->close(gdk_fb_keyboard);
-  g_free (gdk_fb_keyboard);
 }
 
 
@@ -903,6 +913,7 @@ xlate_close (GdkFBKeyboard *kb)
   
   g_source_remove (kb->io_tag);
   g_io_channel_unref (kb->io);
+  kb->fd = -1;
   /* don't close kb->fd, it is the tty from gdk_display */
 }
 

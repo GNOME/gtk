@@ -1405,6 +1405,9 @@ void
 gdk_shadow_fb_update (gint minx, gint miny, gint maxx, gint maxy)
 {
   struct itimerval timeout;
+
+  if (gdk_display->manager_blocked)
+    return;
   
   g_assert (minx <= maxx);
   g_assert (miny <= maxy);

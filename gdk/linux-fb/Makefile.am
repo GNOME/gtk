@@ -1,5 +1,11 @@
 ## Process this file with automake to produce Makefile.in
 
+if ENABLE_FB_MANAGER
+bin_PROGRAMS = gdkfbmanager gdkfbswitch
+else
+bin_PROGRAMS = 
+endif
+
 libgdkincludedir = $(includedir)/gtk-2.0/gdk
 libgdkfbincludedir = $(includedir)/gtk-2.0/gdk/linux-fb
 
@@ -61,14 +67,17 @@ libgdk_linux_fb_la_SOURCES =    \
 	mipolyutil.c		\
 	miscanfill.h		\
 	mispans.h		\
+	mispans.c		\
 	mistruct.h		\
 	mitypes.h		\
 	miwideline.c		\
 	miwideline.h		\
 	mizerclip.c		\
 	mizerline.c		\
-	mispans.c		\
-	gdkpango-fb.c
-	mispans.c
+	gdkpango-fb.c		\
+	gdkfbmanager.h
+
+gdkfbmanager_sources = gdkfbmanager.c 
+gdkfbswitch_sources = gdkfbswitch.c
 
 EXTRA_DIST=x-cursors.xbm

@@ -50,6 +50,9 @@
 /* Define to use shadowfb in the linux-fb port */
 #undef ENABLE_SHADOW_FB
 
+/* Define to use a fb manager in the linux-fb port */
+#undef ENABLE_FB_MANAGER
+
 #undef XINPUT_NONE
 #undef XINPUT_GXI
 #undef XINPUT_XFREE
