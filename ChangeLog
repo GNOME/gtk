@@ -1,3 +1,37 @@
+Sat Sep  5 07:13:19 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtktypeutils.h: don't include any gdk headers.
+	added structure definitions for GtkTypeObject and GtkTypeClass,
+	which cover the very basic fields of GtkObject and GtkObjectClass,
+	which are actually used by the type system.
+	
+	* gtk/gtktypeutils.c: don't include gtkobject.h or gtkcontainer.h,
+	we only refer to our own structures. improved class inheritance
+	sanity checking a bit.
+
+	* gtk/gtkobject.h: placed appropriate comments at the beginnings
+	of the GtkObject and GtkObjectClass structures, which explain
+	their relationship to GtkTypeObject and GtkTypeClass.
+
+	* gtk/gtktypeutils.h:
+	* gtk/gtkobject.h:
+	moved GTK_STRUCT_OFFSET(), GTK_CHECK_CAST(), GTK_CHECK_CLASS_CAST(),
+	GTK_CHECK_TYPE() and GTK_CHECK_CLASS_TYPE() macro definitions from
+ 	gtkobject.h to gtktypeutils.h.
+
+	* gtk/gtkobject.h:
+	* gtk/gtkobject.c:
+	removed gtk_object_check_cast() and gtk_object_check_class_cast()
+	functions. to keep source compatibility, we can provide macro aliases
+ 	for the corresponding gtk_type_* functions. but then again, people
+ 	shouldn't have been using these functions anyways since they were part
+ 	of Gtk's internal API.
+
+	* gtk/gtktypeutils.h:
+	* gtk/gtktypeutils.c:
+	implemented gtk_type_check_object_cast() and gtk_type_check_class_cast()
+	functions to check GtkTypeObject and GtkTypeClass types.
+
 Thu Sep  3 07:16:54 1998  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkctree.h:

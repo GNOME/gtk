@@ -33,42 +33,6 @@ extern "C" {
 
 
 
-#ifdef offsetof
-#define GTK_STRUCT_OFFSET(struct, field)	((gint) offsetof (struct, field))
-#else /* !offsetof */
-#define GTK_STRUCT_OFFSET(struct, field)	((gint) ((gchar*) &((struct*) 0)->field))
-#endif /* !offsetof */
-
-
-/* The debugging versions of the casting macros make sure the cast is "ok"
- *  before proceeding, but they are definately slower than their less
- *  careful counterparts as they involve no less than 3 function calls.
- */
-#ifdef GTK_NO_CHECK_CASTS
-
-#define GTK_CHECK_CAST(obj,cast_type,cast)	   ((cast*) (obj))
-#define GTK_CHECK_CLASS_CAST(klass,cast_type,cast) ((cast*) (klass))
-
-#else /* !GTK_NO_CHECK_CASTS */
-
-#define GTK_CHECK_CAST(obj,cast_type,cast) \
-  ((cast*) gtk_object_check_cast ((GtkObject*) (obj), (cast_type)))
-
-#define GTK_CHECK_CLASS_CAST(klass,cast_type,cast) \
-  ((cast*) gtk_object_check_class_cast ((GtkObjectClass*) (klass), (cast_type)))
-
-#endif /* GTK_NO_CHECK_CASTS */
-
-
-/* Determines whether `obj' and `klass' are a type of `otype'.
- */
-#define GTK_CHECK_TYPE(obj,otype)	   ( \
-  gtk_type_is_a (((GtkObject*) (obj))->klass->type, (otype)) \
-)
-#define GTK_CHECK_CLASS_TYPE(klass,otype)  ( \
-  gtk_type_is_a (((GtkObjectClass*) (klass))->type, (otype)) \
-)
-
 /* Macro for casting a pointer to a GtkObject or GtkObjectClass pointer.
  * The second portion of the ?: statments are just in place to offer
  * descriptive warning message.
@@ -76,12 +40,12 @@ extern "C" {
 #define GTK_OBJECT(object)		( \
   GTK_IS_OBJECT (object) ? \
     (GtkObject*) (object) : \
-    (GtkObject*) gtk_object_check_cast ((GtkObject*) (object), GTK_TYPE_OBJECT) \
+    (GtkObject*) gtk_type_check_object_cast ((GtkTypeObject*) (object), GTK_TYPE_OBJECT) \
 )
 #define GTK_OBJECT_CLASS(klass)		( \
   GTK_IS_OBJECT_CLASS (klass) ? \
     (GtkObjectClass*) (klass) : \
-    (GtkObjectClass*) gtk_object_check_class_cast ((GtkObjectClass*) (klass), GTK_TYPE_OBJECT) \
+    (GtkObjectClass*) gtk_type_check_class_cast ((GtkTypeClass*) (klass), GTK_TYPE_OBJECT) \
 )
 
 /* Macro for testing whether `object' and `klass' are of type GTK_TYPE_OBJECT.
@@ -145,17 +109,17 @@ typedef enum
 typedef struct _GtkObjectClass	GtkObjectClass;
 
 
-/* GtkObject is the base of the object hierarchy. It defines
- *  the few basic items that all derived classes contain.
+/* The GtkObject structure is the base of the Gtk+ objects hierarchy,
+ * it ``inherits'' from the GtkTypeObject by mirroring its fields,
+ * which must always be kept in sync completely. The GtkObject defines
+ * the few basic items that all derived classes contain.
  */
 struct _GtkObject
 {
-  /* A pointer to the objects class. This will actually point to
-   *  the derived objects class struct (which will be derived from
-   *  GtkObjectClass).
-   */
+  /* GtkTypeObject related fields: */
   GtkObjectClass *klass;
-  
+
+
   /* 32 bits of flags. GtkObject only uses 4 of these bits and
    *  GtkWidget uses the rest. This is done because structs are
    *  aligned on 4 or 8 byte boundaries. If a new bitfield were
@@ -174,17 +138,19 @@ struct _GtkObject
   gpointer object_data;
 };
 
-/* GtkObjectClass is the base of the class hierarchy. It defines
- *  the basic necessities for the class mechanism to work. Namely,
- *  the "type", "signals" and "nsignals" fields.
+/* The GtkObjectClass is the base of the Gtk+ objects classes hierarchy,
+ * it ``inherits'' from the GtkTypeClass by mirroring its fields, which
+ * must always be kept in sync completely. The GtkObjectClass defines
+ * the basic necessities for the object inheritance mechanism to work.
+ * Namely, the `signals' and `nsignals' fields as well as the function
+ * pointers, required to end an object's lifetime.
  */
 struct _GtkObjectClass
 {
-  /* The type identifier for the objects class. There is
-   *  one unique identifier per class.
-   */
+  /* GtkTypeClass fields: */
   GtkType type;
   
+
   /* The signals this object class handles. "signals" is an
    *  array of signal ID's.
    */
@@ -336,16 +302,6 @@ void	gtk_object_add_arg_type	        (const gchar	*arg_name,
 					 GtkType	arg_type,
 					 guint		arg_flags,
 					 guint		arg_id);
-
-/* The next two functions are provided to check an object/class pointer
- *  for its validity. Appropriate warning messages will be put out if
- *  the object or class pointers are invalid.
- */
-GtkObject*	gtk_object_check_cast	    (GtkObject	    *obj,
-					     GtkType	     cast_type);
-
-GtkObjectClass* gtk_object_check_class_cast (GtkObjectClass *klass,
-					     GtkType	     cast_type);
 
 /* Object data method variants that operate on key ids. */
 void gtk_object_set_data_by_id	    (GtkObject	     *object,
