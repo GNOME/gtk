@@ -259,6 +259,11 @@ struct _GdkFontPrivateWin32
   GSList *names;
 };
 
+struct _GdkVisualClass
+{
+  GObjectClass parent_class;
+};
+
 struct _GdkVisualPrivate
 {
   GdkVisual visual;

@@ -4229,7 +4229,7 @@ gtk_widget_set_child_visible (GtkWidget *widget,
 gboolean
 gtk_widget_get_child_visible (GtkWidget *widget)
 {
-  g_return_if_fail (GTK_IS_WIDGET (widget));
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
   
   return GTK_WIDGET_CHILD_VISIBLE (widget);
 }

@@ -517,7 +517,7 @@ gtk_old_editable_get_public_chars (GtkOldEditable   *old_editable,
 
   if (old_editable->visible)
     {
-      GError *error;
+      GError *error = NULL;
       gchar *tmp = gtk_editable_get_chars (GTK_EDITABLE (old_editable), start, end);
 
       if (need_conversion)
@@ -636,7 +636,7 @@ gtk_old_editable_paste_received (GtkOldEditable *old_editable,
 
   if (text)
     {
-      GError *error;
+      GError *error = NULL;
       
       need_conversion = !g_get_charset (&charset);
 

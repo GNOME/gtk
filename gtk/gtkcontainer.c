@@ -1488,7 +1488,7 @@ gtk_container_child_composite_name (GtkContainer *container,
   return NULL;
 }
 
-void
+static void
 gtk_container_real_set_focus_child (GtkContainer     *container,
 				    GtkWidget        *child)
 {

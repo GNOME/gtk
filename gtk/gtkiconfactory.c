@@ -1036,7 +1036,7 @@ find_and_prep_icon_source (GtkIconSet       *icon_set,
   
   if (source->pixbuf == NULL)
     {
-      GError *error;
+      GError *error = NULL;
       
       g_assert (source->filename);
       source->pixbuf = gdk_pixbuf_new_from_file (source->filename, &error);

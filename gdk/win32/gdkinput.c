@@ -50,28 +50,69 @@ static GdkDeviceAxis gdk_input_core_axes[] = {
   { GDK_AXIS_Y, 0, 0 }
 };
 
-GdkDevice gdk_input_core_info =
-{
-  "Core Pointer",
-  GDK_SOURCE_MOUSE,
-  GDK_MODE_SCREEN,
-  TRUE,
-  
-  2,
-  gdk_input_core_axes,
-
-  0,
-  NULL
-};
-
 /* Global variables  */
 
-GDKVAR GdkDevice *gdk_core_pointer = (GdkDevice *)&gdk_input_core_info;
+GDKVAR GdkDevice *gdk_core_pointer = NULL;
  
 gint              gdk_input_ignore_core;
 
 GList            *gdk_input_devices;
 GList            *gdk_input_windows;
+
+void
+_gdk_init_input_core (void)
+{
+  gdk_core_pointer = g_object_new (GDK_TYPE_DEVICE, NULL);
+  
+  gdk_core_pointer->name = "Core Pointer";
+  gdk_core_pointer->source = GDK_SOURCE_MOUSE;
+  gdk_core_pointer->mode = GDK_MODE_SCREEN;
+  gdk_core_pointer->has_cursor = TRUE;
+  gdk_core_pointer->num_axes = 2;
+  gdk_core_pointer->axes = gdk_input_core_axes;
+  gdk_core_pointer->num_keys = 0;
+  gdk_core_pointer->keys = NULL;
+}
+
+static void
+gdk_device_finalize (GObject *object)
+{
+  g_error ("A GdkDevice object was finalized. This should not happen");
+}
+
+static void
+gdk_device_class_init (GObjectClass *class)
+{
+  class->finalize = gdk_device_finalize;
+}
+
+GType
+gdk_device_get_type (void)
+{
+  static GType object_type = 0;
+
+  if (!object_type)
+    {
+      static const GTypeInfo object_info =
+      {
+        sizeof (GdkDeviceClass),
+        (GBaseInitFunc) NULL,
+        (GBaseFinalizeFunc) NULL,
+        (GClassInitFunc) gdk_device_class_init,
+        NULL,           /* class_finalize */
+        NULL,           /* class_data */
+        sizeof (GdkDevicePrivate),
+        0,              /* n_preallocs */
+        (GInstanceInitFunc) NULL,
+      };
+      
+      object_type = g_type_register_static (G_TYPE_OBJECT,
+                                            "GdkDevice",
+                                            &object_info, 0);
+    }
+  
+  return object_type;
+}
 
 GList *
 gdk_devices_list (void)
@@ -128,6 +169,31 @@ gdk_device_set_axis_use (GdkDevice   *device,
       device->axes[index].max = 1;
       break;
     }
+}
+
+gboolean
+gdk_device_get_history  (GdkDevice         *device,
+			 GdkWindow         *window,
+			 guint32            start,
+			 guint32            stop,
+			 GdkTimeCoord    ***events,
+			 gint              *n_events)
+{
+  g_return_val_if_fail (window != NULL, FALSE);
+  g_return_val_if_fail (GDK_IS_WINDOW (window), FALSE);
+  g_return_val_if_fail (events != NULL, FALSE);
+  g_return_val_if_fail (n_events != NULL, FALSE);
+
+  *n_events = 0;
+  *events = NULL;
+
+  if (GDK_WINDOW_DESTROYED (window))
+    return FALSE;
+    
+  if (GDK_IS_CORE (device))
+    return FALSE;
+  else
+    return _gdk_device_get_history (device, window, start, stop, events, n_events);
 }
 
 GdkTimeCoord ** 
@@ -281,7 +347,10 @@ gdk_input_exit (void)
 }
 
 gboolean
-gdk_device_get_axis (GdkDevice *device, gdouble *axes, GdkAxisUse use, gdouble *value)
+gdk_device_get_axis (GdkDevice  *device,
+		     gdouble    *axes,
+		     GdkAxisUse  use,
+		     gdouble    *value)
 {
   gint i;
   

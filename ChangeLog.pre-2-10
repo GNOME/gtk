@@ -1,3 +1,28 @@
+2001-07-20  Hans Breuer  <hans@breuer.org>
+
+	* gdk/win32/gdkinput-win32.c : gdk_device_get_history moved to
+	gdk/gdkinput.c like the other backends
+
+	* gdk/win32/gdkinput-win32.h :
+	* gdk/win32/gdkinput.c :
+	* gdk/win32/gdkvisual-win32.c :
+	* gdk/win32/gdkwin32.h : mechanical adaption to GdkDevice and
+	GdkVisual GObjectification. UNTESTED for pen-devices because
+	I simply have none.
+
+	* gdk/gdk.def :
+	* gtk/gtk.def : updated externals
+
+	* gtk/gtkiconfactory.c :
+	* gtk/gtkoldeditable.c : GError *error needs to be initialized (= NULL) 
+	before passing &error to functions to avoid strange crashes
+	
+	* gtk/gtkcontainer.c (gtk_container_real_set_focus_child) : is static
+
+	* gtk/gtkwidget.c (gtk_widget_get_child_visible): use g_return_val_if_fail
+
+	* gtk/makefile.msc.in : updated
+
 Thu Jul 19 15:35:32 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkscrolledwindow.c (gtk_scrolled_window_set_vadjustment):

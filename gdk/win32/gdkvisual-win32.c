@@ -28,6 +28,7 @@
 
 #include "gdkvisual.h"
 #include "gdkprivate-win32.h"
+//#include "gdkinternals.h"
 
 #include <stdlib.h>
 
@@ -35,11 +36,52 @@ static void  gdk_visual_decompose_mask (gulong     mask,
 					gint      *shift,
 					gint      *prec);
 
-static GdkVisualPrivate *system_visual;
+static GdkVisualPrivate *system_visual = NULL;
 
 static gint available_depths[1];
 
 static GdkVisualType available_types[1];
+
+static void
+gdk_visual_finalize (GObject *object)
+{
+  g_error ("A GdkVisual object was finalized. This should not happen");
+}
+
+static void
+gdk_visual_class_init (GObjectClass *class)
+{
+  class->finalize = gdk_visual_finalize;
+}
+
+
+GType
+gdk_visual_get_type (void)
+{
+  static GType object_type = 0;
+
+  if (!object_type)
+    {
+      static const GTypeInfo object_info =
+      {
+        sizeof (GdkVisualClass),
+        (GBaseInitFunc) NULL,
+        (GBaseFinalizeFunc) NULL,
+        (GClassInitFunc) gdk_visual_class_init,
+        NULL,           /* class_finalize */
+        NULL,           /* class_data */
+        sizeof (GdkVisual),
+        0,              /* n_preallocs */
+        (GInstanceInitFunc) NULL,
+      };
+      
+      object_type = g_type_register_static (G_TYPE_OBJECT,
+                                            "GdkVisual",
+                                            &object_info, 0);
+    }
+  
+  return object_type;
+}
 
 void
 gdk_visual_init (void)
@@ -208,18 +250,6 @@ gdk_visual_init (void)
 
   available_depths[0] = system_visual->visual.depth;
   available_types[0] = system_visual->visual.type;
-}
-
-GdkVisual*
-gdk_visual_ref (GdkVisual *visual)
-{
-  return visual;
-}
-
-void
-gdk_visual_unref (GdkVisual *visual)
-{
-  return;
 }
 
 gint
