@@ -1172,7 +1172,7 @@ gdk_window_resize (GdkWindow *window,
  * Equivalent to calling gdk_window_move() and gdk_window_resize(),
  * except that both operations are performed at once, avoiding strange
  * visual effects. (i.e. the user may be able to see the window first
- * move, then resize, if youu don't use gdk_window_move_resize().)
+ * move, then resize, if you don't use gdk_window_move_resize().)
  * 
  **/
 void
