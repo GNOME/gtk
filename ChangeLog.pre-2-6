@@ -1,5 +1,7 @@
 2004-11-09  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtk.symbols: Add new symbols.
+
 	Avoid resizing GtkStatusbar if the text of the label 
 	changes  (#90955, He Qiangqiang, fix proposed by 
 	Owen Taylor, patch by Christian Persch)

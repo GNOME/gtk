@@ -835,6 +835,7 @@ gtk_file_chooser_widget_new_with_backend
 gtk_file_filter_add_custom
 gtk_file_filter_add_mime_type
 gtk_file_filter_add_pattern
+gtk_file_filter_add_pixbuf_formats
 gtk_file_filter_filter
 gtk_file_filter_flags_get_type
 gtk_file_filter_get_name
@@ -1232,6 +1233,7 @@ gtk_label_get_mnemonic_keyval
 gtk_label_get_mnemonic_widget
 gtk_label_get_selectable
 gtk_label_get_selection_bounds
+gtk_label_get_single_line_mode
 gtk_label_get_text
 gtk_label_get_type
 gtk_label_get_use_markup
@@ -1251,6 +1253,7 @@ gtk_label_set_markup_with_mnemonic
 gtk_label_set_mnemonic_widget
 gtk_label_set_pattern
 gtk_label_set_selectable
+gtk_label_set_single_line_mode
 gtk_label_set_text
 gtk_label_set_text_with_mnemonic
 gtk_label_set_use_markup
