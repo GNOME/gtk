@@ -25,27 +25,28 @@ roughly described by the following DTD.
 &lt;!ELEMENT toolitem     EMPTY &gt;
 &lt;!ELEMENT separator    EMPTY &gt;
 &lt;!ELEMENT accelerator  EMPTY &gt;
-&lt;!ATTLIST menubar      name               &num;IMPLIED 
-                       action             &num;IMPLIED &gt;
-&lt;!ATTLIST toolbar      name               &num;IMPLIED 
-                       action             &num;IMPLIED &gt;
-&lt;!ATTLIST popup        name               &num;IMPLIED 
-                       action             &num;IMPLIED &gt;
-&lt;!ATTLIST placeholder  name               &num;IMPLIED
-                       action             &num;IMPLIED &gt;
-&lt;!ATTLIST separator    name               &num;IMPLIED
-                       action             &num;IMPLIED &gt;
-&lt;!ATTLIST menu         name               &num;IMPLIED
-                       action             &num;REQUIRED
-                       position (top|bot) &num;IMPLIED &gt;
-&lt;!ATTLIST menuitem     name               &num;IMPLIED
-                       action             &num;REQUIRED
-                       position (top|bot) &num;IMPLIED &gt;
-&lt;!ATTLIST toolitem     name               &num;IMPLIED
-                       action             &num;REQUIRED
-                       position (top|bot) &num;IMPLIED &gt;
-&lt;!ATTLIST accelerator  name               &num;IMPLIED
-                       action             &num;REQUIRED &gt;
+&lt;!ATTLIST menubar      name                  &num;IMPLIED 
+                       action                &num;IMPLIED &gt;
+&lt;!ATTLIST toolbar      name                  &num;IMPLIED 
+                       action                &num;IMPLIED &gt;
+&lt;!ATTLIST popup        name                  &num;IMPLIED 
+                       action                &num;IMPLIED &gt;
+&lt;!ATTLIST placeholder  name                  &num;IMPLIED
+                       action                &num;IMPLIED &gt;
+&lt;!ATTLIST separator    name                  &num;IMPLIED
+                       action                &num;IMPLIED
+                       expand   (true|false) &num;IMPLIED &gt;
+&lt;!ATTLIST menu         name                  &num;IMPLIED
+                       action                &num;REQUIRED
+                       position (top|bot)    &num;IMPLIED &gt;
+&lt;!ATTLIST menuitem     name                  &num;IMPLIED
+                       action                &num;REQUIRED
+                       position (top|bot)    &num;IMPLIED &gt;
+&lt;!ATTLIST toolitem     name                  &num;IMPLIED
+                       action                &num;REQUIRED
+                       position (top|bot)    &num;IMPLIED &gt;
+&lt;!ATTLIST accelerator  name                  &num;IMPLIED
+                       action                &num;REQUIRED &gt;
 </programlisting>
 There are some additional restrictions beyond those specified in the
 DTD, e.g. every toolitem must have a toolbar in its anchestry and
@@ -165,6 +166,12 @@ containing them, or multiple separators next to each other, are hidden. This
 is a useful feature, since the merging of UI elements from multiple sources 
 can make it hard or impossible to determine in advance whether a separator 
 will end up in such an unfortunate position.
+</para>
+
+<para>
+For separators in toolbars, you can set <literal>expand="true"</literal> to
+turn them from a small, visible separator to an expanding, invisible one.
+Toolitems following an expanding separator are effectively right-aligned.
 </para>
 </refsect2>
 <refsect2>

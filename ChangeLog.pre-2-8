@@ -1,3 +1,12 @@
+2005-02-08  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkuimanager.c (start_element_handler): Accept 
+	the "expand" attribute and set a flag in the node if it
+	is set to "true".
+	(update_node): If the expand flag is set, make separator
+	toolitems non-drawn and expanding.  (#166489, Christian Persch)
+
+
 2005-02-05  Hans Breuer  <hans@breuer.org>
 
 	* gdk/makefile.msc gdk/win32/makefile.msc gtk/makefile.msc.in :

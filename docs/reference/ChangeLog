@@ -1,3 +1,8 @@
+2005-02-08  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/tmpl/gtkuimanager.sgml: Mention the expanding
+	toolbar separators.
+
 2005-02-03  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtk-sections.txt: Add gtk_stock_set_translate_func.

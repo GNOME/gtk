@@ -76,6 +76,7 @@ struct _Node {
   GList *uifiles;
 
   guint dirty : 1;
+  guint expand : 1;  /* used for separators */
 };
 
 #define GTK_UI_MANAGER_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), GTK_TYPE_UI_MANAGER, GtkUIManagerPrivate))
@@ -1102,6 +1103,7 @@ start_element_handler (GMarkupParseContext *context,
   const gchar *action;
   GQuark action_quark;
   gboolean top;
+  gboolean expand;
   
   gboolean raise_error = TRUE;
 
@@ -1124,6 +1126,10 @@ start_element_handler (GMarkupParseContext *context,
       else if (!strcmp (attribute_names[i], "position"))
 	{
 	  top = !strcmp (attribute_values[i], "top");
+	}
+      else if (!strcmp (attribute_names[i], "expand"))
+	{
+	  expand = !strcmp (attribute_values[i], "true");
 	}
       else
 	{
@@ -1281,6 +1287,8 @@ start_element_handler (GMarkupParseContext *context,
 				 node_name, length,
 				 NODE_TYPE_SEPARATOR,
 				 TRUE, top);
+
+	  NODE_INFO (node)->expand = expand;
 
 	  if (NODE_INFO (node)->action_name == 0)
 	    NODE_INFO (node)->action_name = action_quark;
@@ -2467,6 +2475,7 @@ update_node (GtkUIManager *self,
 	{
 	  GtkWidget *toolbar;
 	  gint pos;
+	  gint separator_mode;
 	  
 	  if (GTK_IS_SEPARATOR_TOOL_ITEM (info->proxy))
 	    {
@@ -2484,9 +2493,18 @@ update_node (GtkUIManager *self,
 	      g_object_ref (info->proxy);
 	      gtk_object_sink (GTK_OBJECT (info->proxy));
 	      gtk_widget_set_no_show_all (info->proxy, TRUE);
+	      if (info->expand)
+		{
+		  gtk_tool_item_set_expand (GTK_TOOL_ITEM (item), TRUE);
+		  gtk_separator_tool_item_set_draw (item, FALSE);
+		  separator_mode = SEPARATOR_MODE_VISIBLE;
+		}
+		else
+		  separator_mode = SEPARATOR_MODE_SMART;
+
 	      g_object_set_data (G_OBJECT (info->proxy),
 				 "gtk-separator-mode",
-				 GINT_TO_POINTER (SEPARATOR_MODE_SMART));
+				 GINT_TO_POINTER (separator_mode));
 	      gtk_widget_show (info->proxy);
 	    }
 	}
