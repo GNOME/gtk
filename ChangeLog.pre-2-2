@@ -1,3 +1,8 @@
+Sun Jun 24 22:15:16 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* docs/Changes-2.0.txt: Add note about child property
+	changes.
+
 Sun Jun 24 21:34:32 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkenums.h gtk/gtkiconfactory.c: Add a special size for

@@ -366,3 +366,20 @@ Incompatible Changes from GTK+-1.2 to GTK+-2.0:
  
 * gtk_rc_set_image_loader() and gtk_rc_load_image() has been removed, now 
   that GTK+ includes decent image loading capabilities itself.
+
+* The child argument facility in gtkcontainer.c has been converted
+  to a child property facility using GParamSpec and other facilities
+  for GObject.   
+
+   - The set_child_arg and get_child_arg virtual methods have been
+     replaced with set_child_property / get_child_property, which
+     work similar to GObject->set_property/get_property.
+
+   - Other removed functions with the replacements:
+
+     gtk_container_add_child_arg_type => gtk_container_class_install_child_property
+     gtk_container_query_child_args   => gtk_container_class_list_child_properties
+     gtk_container_child_getv         => gtk_container_child_set_property
+     gtk_container_child_setv         => gtk_container_child_get_property
+     gtk_container_add_with_args      => gtk_container_add_with_properties
+     gtk_container_addv               => gtk_container_add / gtk_container_child_set_property
