@@ -170,21 +170,23 @@ _gdk_windowing_init_check (int argc, char **argv)
   {
     gint xkb_major = XkbMajorVersion;
     gint xkb_minor = XkbMinorVersion;
+    gint xkb_event_type;
     if (XkbLibraryVersion (&xkb_major, &xkb_minor))
       {
         xkb_major = XkbMajorVersion;
         xkb_minor = XkbMinorVersion;
-        if (XkbQueryExtension (gdk_display, NULL, NULL, NULL,
+	    
+        if (XkbQueryExtension (gdk_display, NULL, &_gdk_xkb_event_type, NULL,
                                &xkb_major, &xkb_minor))
           {
 	    Bool detectable_autorepeat_supported;
-	    
+
             _gdk_use_xkb = TRUE;
 
             XkbSelectEvents (gdk_display,
                              XkbUseCoreKbd,
-                             XkbMapNotifyMask,
-                             XkbMapNotifyMask);
+                             XkbMapNotifyMask | XkbStateNotifyMask,
+                             XkbMapNotifyMask | XkbStateNotifyMask);
 
 	    XkbSetDetectableAutoRepeat (gdk_display,
 					True,

@@ -24,6 +24,7 @@ enum {
   PROP_DOUBLE_CLICK_TIME,
   PROP_CURSOR_BLINK,
   PROP_CURSOR_BLINK_TIME,
+  PROP_SPLIT_CURSOR
 };
 
 
@@ -151,6 +152,14 @@ gtk_settings_class_init (GtkSettingsClass *class)
                                                                G_PARAM_READWRITE),
                                              NULL);
   g_assert (result == PROP_CURSOR_BLINK_TIME);
+  result = settings_install_property_parser (class,
+                                             g_param_spec_boolean ("gtk-split-cursor",
+								   _("Split Cursor"),
+								   _("Whether two cursors should be displayed for mixed left-to-right and right-to-left text"),
+								   TRUE,
+								   G_PARAM_READWRITE),
+                                             NULL);
+  g_assert (result == PROP_SPLIT_CURSOR);
 }
 
 static void

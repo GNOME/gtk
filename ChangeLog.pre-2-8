@@ -1,3 +1,31 @@
+Fri Jun  8 12:03:07 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdkkeys.[ch]: Add a direction-changed signal,
+	and gdk_keymap_get_current_direction().
+
+	* gdk/x11/gdkevents-x11.c gdk/x11/gdkkeys-x11.c
+	  gdk/x11/gdkmain-x11.c gdk/x11/gdkprivate-x11.h: Track
+	the current locked group, use it to set the keymap
+	direction.
+
+	* gtk/gtksettings.c: Add a new gtk-split-cursor setting
+	to determine whether we draw a split cursor or use
+	a jumping cursor based on the current direction.
+
+	* gtk/gtkentry.c gtk/gtktextview.c gtk/gtktextlayout.[ch]:
+	Obey the split cursor setting. 
+
+Fri Jun  8 11:57:50 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkimmulticontext.c (activate_cb): Only activate
+	when toggling on, not when toggling off... (#55906)
+
+Wed Jun  6 10:37:07 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkwidget.c (gtk_widget_set_double_buffered): 
+	s/gdk_window_begin_paint/gdk_window_begin_paint_region/
+	in docs. (#55812, Vitaly Tishkov)
+
 2001-06-08  Anders Carlsson  <andersca@codefactory.se>
 
 	* demos/gtk-demo/main.c (create_tree): Changed signal name from

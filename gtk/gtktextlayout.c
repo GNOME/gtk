@@ -94,14 +94,15 @@ static GtkTextLineData *gtk_text_layout_real_wrap (GtkTextLayout *layout,
 
 static void gtk_text_layout_invalidated     (GtkTextLayout     *layout);
 
-static void gtk_text_layout_real_invalidate     (GtkTextLayout     *layout,
-                                                 const GtkTextIter *start,
-                                                 const GtkTextIter *end);
-static void gtk_text_layout_invalidate_cache    (GtkTextLayout     *layout,
-                                                 GtkTextLine       *line);
-static void gtk_text_layout_real_free_line_data (GtkTextLayout     *layout,
-                                                 GtkTextLine       *line,
-                                                 GtkTextLineData   *line_data);
+static void gtk_text_layout_real_invalidate        (GtkTextLayout     *layout,
+						    const GtkTextIter *start,
+						    const GtkTextIter *end);
+static void gtk_text_layout_invalidate_cache       (GtkTextLayout     *layout,
+						    GtkTextLine       *line);
+static void gtk_text_layout_invalidate_cursor_line (GtkTextLayout     *layout);
+static void gtk_text_layout_real_free_line_data    (GtkTextLayout     *layout,
+						    GtkTextLine       *line,
+						    GtkTextLineData   *line_data);
 
 static void gtk_text_layout_invalidate_all (GtkTextLayout *layout);
 
@@ -338,6 +339,30 @@ gtk_text_layout_set_contexts (GtkTextLayout *layout,
   gtk_text_layout_invalidate_all (layout);
 }
 
+/**
+ * gtk_text_layout_set_cursor_direction:
+ * @direction: the new direction(s) for which to draw cursors.
+ *             %GTK_TEXT_DIR_NONE means draw cursors for both
+ *             left-to-right insertion and right-to-left insertion.
+ *             (The two cursors will be visually distinguished.)
+ * 
+ * Sets which text directions (left-to-right and/or right-to-left) for
+ * which cursors will be drawn for the insertion point. The visual
+ * point at which new text is inserted depends on whether the new
+ * text is right-to-left or left-to-right, so it may be desired to
+ * make the drawn position of the cursor depend on the keyboard state.
+ **/
+void
+gtk_text_layout_set_cursor_direction (GtkTextLayout   *layout,
+				      GtkTextDirection direction)
+{
+  if (direction != layout->cursor_direction)
+    {
+      layout->cursor_direction = direction;
+      gtk_text_layout_invalidate_cursor_line (layout);
+    }
+}
+
 void
 gtk_text_layout_set_screen_width (GtkTextLayout *layout, gint width)
 {
@@ -420,10 +445,6 @@ gtk_text_layout_set_preedit_string (GtkTextLayout *layout,
 				    PangoAttrList *preedit_attrs,
 				    gint           cursor_pos)
 {
-  GtkTextIter iter;
-  GtkTextLine *line;
-  GtkTextLineData *line_data;
-
   g_return_if_fail (GTK_IS_TEXT_LAYOUT (layout));
   g_return_if_fail (preedit_attrs != NULL || preedit_string == NULL);
 
@@ -451,19 +472,7 @@ gtk_text_layout_set_preedit_string (GtkTextLayout *layout,
       layout->preedit_cursor = 0;
     }
 
-  /* Now invalidate the paragraph containing the cursor
-   */
-  gtk_text_buffer_get_iter_at_mark (layout->buffer, &iter,
-				    gtk_text_buffer_get_mark (layout->buffer, "insert"));
-  
-  line = _gtk_text_iter_get_text_line (&iter);
-  line_data = _gtk_text_line_get_data (line, layout);
-  if (line_data)
-    {
-      gtk_text_layout_invalidate_cache (layout, line);
-      _gtk_text_line_invalidate_wrap (line, line_data);
-      gtk_text_layout_invalidated (layout);
-    }
+  gtk_text_layout_invalidate_cursor_line (layout);
 }
 
 void
@@ -644,6 +653,28 @@ gtk_text_layout_invalidate_cache (GtkTextLayout *layout,
       GtkTextLineDisplay *tmp_display = layout->one_display_cache;
       layout->one_display_cache = NULL;
       gtk_text_layout_free_line_display (layout, tmp_display);
+    }
+}
+
+/* Now invalidate the paragraph containing the cursor
+ */
+static void
+gtk_text_layout_invalidate_cursor_line (GtkTextLayout *layout)
+{
+  GtkTextIter iter;
+  GtkTextLine *line;
+  GtkTextLineData *line_data;
+
+  gtk_text_buffer_get_iter_at_mark (layout->buffer, &iter,
+				    gtk_text_buffer_get_mark (layout->buffer, "insert"));
+  
+  line = _gtk_text_iter_get_text_line (&iter);
+  line_data = _gtk_text_line_get_data (line, layout);
+  if (line_data)
+    {
+      gtk_text_layout_invalidate_cache (layout, line);
+      _gtk_text_line_invalidate_wrap (line, line_data);
+      gtk_text_layout_invalidated (layout);
     }
 }
 
@@ -1403,8 +1434,10 @@ add_cursor (GtkTextLayout      *layout,
             gint                start)
 {
   PangoRectangle strong_pos, weak_pos;
-  GtkTextCursorDisplay *cursor;
-
+  GtkTextCursorDisplay *cursor = NULL; /* Quiet GCC */
+  gboolean add_weak = FALSE;
+  gboolean add_strong = FALSE;
+  
   /* Hide insertion cursor when we have a selection or the layout
    * user has hidden the cursor.
    */
@@ -1416,28 +1449,43 @@ add_cursor (GtkTextLayout      *layout,
 
   pango_layout_get_cursor_pos (display->layout, start, &strong_pos, &weak_pos);
 
-  cursor = g_new (GtkTextCursorDisplay, 1);
-
-  cursor->x = PANGO_PIXELS (strong_pos.x);
-  cursor->y = PANGO_PIXELS (strong_pos.y);
-  cursor->height = PANGO_PIXELS (strong_pos.height);
-  cursor->is_strong = TRUE;
-  display->cursors = g_slist_prepend (display->cursors, cursor);
-
-  if (weak_pos.x == strong_pos.x)
-    cursor->is_weak = TRUE;
-  else
+  if (layout->cursor_direction == GTK_TEXT_DIR_NONE)
     {
-      cursor->is_weak = FALSE;
+      add_strong = TRUE;
+      add_weak = TRUE;
+    }
+  else if (display->direction == layout->cursor_direction)
+    add_strong = TRUE;
+  else
+    add_weak = TRUE;
 
+  if (add_strong)
+    {
       cursor = g_new (GtkTextCursorDisplay, 1);
 
-      cursor->x = PANGO_PIXELS (weak_pos.x);
-      cursor->y = PANGO_PIXELS (weak_pos.y);
-      cursor->height = PANGO_PIXELS (weak_pos.height);
-      cursor->is_strong = FALSE;
-      cursor->is_weak = TRUE;
+      cursor->x = PANGO_PIXELS (strong_pos.x);
+      cursor->y = PANGO_PIXELS (strong_pos.y);
+      cursor->height = PANGO_PIXELS (strong_pos.height);
+      cursor->is_strong = TRUE;
+      cursor->is_weak = FALSE;
       display->cursors = g_slist_prepend (display->cursors, cursor);
+    }
+  
+  if (add_weak)
+    {
+      if (weak_pos.x == strong_pos.x && add_strong)
+	cursor->is_weak = TRUE;
+      else
+	{
+	  cursor = g_new (GtkTextCursorDisplay, 1);
+	  
+	  cursor->x = PANGO_PIXELS (weak_pos.x);
+	  cursor->y = PANGO_PIXELS (weak_pos.y);
+	  cursor->height = PANGO_PIXELS (weak_pos.height);
+	  cursor->is_strong = FALSE;
+	  cursor->is_weak = TRUE;
+	  display->cursors = g_slist_prepend (display->cursors, cursor);
+	}
     }
 }
 
@@ -2838,25 +2886,31 @@ gtk_text_layout_move_iter_visually (GtkTextLayout *layout,
       GtkTextLine *line = _gtk_text_iter_get_text_line (iter);
       gint line_byte;
       gint extra_back = 0;
+      gboolean strong;
 
       int byte_count = _gtk_text_line_byte_count (line);
 
       int new_index;
       int new_trailing;
 
- 
       if (!display)
 	display = gtk_text_layout_get_line_display (layout, line, FALSE);
+
+      if (layout->cursor_direction == GTK_TEXT_DIR_NONE)
+	strong = TRUE;
+      else
+	strong = display->direction == layout->cursor_direction;
+
       line_byte = line_display_iter_to_index (layout, display, iter);
 
       if (count > 0)
         {
-          pango_layout_move_cursor_visually (display->layout, line_byte, 0, 1, &new_index, &new_trailing);
+          pango_layout_move_cursor_visually (display->layout, strong, line_byte, 0, 1, &new_index, &new_trailing);
           count--;
         }
       else
         {
-          pango_layout_move_cursor_visually (display->layout, line_byte, 0, -1, &new_index, &new_trailing);
+          pango_layout_move_cursor_visually (display->layout, strong, line_byte, 0, -1, &new_index, &new_trailing);
           count++;
         }
 

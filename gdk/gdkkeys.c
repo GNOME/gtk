@@ -27,11 +27,18 @@
 #include "gdkkeys.h"
 #include <config.h>
 
+enum {
+  DIRECTION_CHANGED,
+  LAST_SIGNAL
+};
+
 static void gdk_keymap_init       (GdkKeymap      *keymap);
 static void gdk_keymap_class_init (GdkKeymapClass *klass);
 static void gdk_keymap_finalize   (GObject              *object);
 
 static gpointer parent_class = NULL;
+
+static guint signals[LAST_SIGNAL] = { 0 };
 
 GType
 gdk_keymap_get_type (void)
@@ -75,6 +82,16 @@ gdk_keymap_class_init (GdkKeymapClass *klass)
   parent_class = g_type_class_peek_parent (klass);
 
   object_class->finalize = gdk_keymap_finalize;
+
+  signals[DIRECTION_CHANGED] =
+    g_signal_newc ("direction_changed",
+                   G_OBJECT_CLASS_TYPE (object_class),
+                   G_SIGNAL_RUN_LAST,
+                   G_STRUCT_OFFSET (GdkKeymapClass, direction_changed),
+                   NULL, NULL,
+                   g_cclosure_marshal_VOID__VOID,
+                   G_TYPE_NONE,
+                   0);
 }
 
 static void
@@ -83,17 +100,6 @@ gdk_keymap_finalize (GObject *object)
   GdkKeymap *keymap = GDK_KEYMAP (object);
   
   G_OBJECT_CLASS (parent_class)->finalize (object);
-}
-
-GdkKeymap*
-gdk_keymap_get_default (void)
-{
-  static GdkKeymap *keymap = NULL;
-
-  if (keymap == NULL)
-    keymap = g_object_new (gdk_keymap_get_type (), NULL);
-
-  return keymap;
 }
 
 

@@ -56,6 +56,7 @@ update_keyrange (void)
 #include <X11/XKBlib.h>
 
 gboolean _gdk_use_xkb = FALSE;
+gint _gdk_xkb_event_type;
 static XkbDescPtr xkb_desc = NULL;
 
 static XkbDescPtr
@@ -70,10 +71,13 @@ get_xkb (void)
       xkb_desc = XkbGetMap (gdk_display, XkbKeySymsMask, XkbUseCoreKbd);
       if (xkb_desc == NULL)
         g_error ("Failed to get keymap");
+
+      XkbGetNames (gdk_display, XkbGroupNamesMask, xkb_desc);
     }
   else if (current_serial != _gdk_keymap_serial)
     {
       XkbGetUpdatedMap (gdk_display, XkbKeySymsMask, xkb_desc);
+      XkbGetNames (gdk_display, XkbGroupNamesMask, xkb_desc);
     }
 
   current_serial = _gdk_keymap_serial;
@@ -92,6 +96,18 @@ static KeySym* keymap = NULL;
 static gint keysyms_per_keycode = 0;
 static XModifierKeymap* mod_keymap = NULL;
 static GdkModifierType group_switch_mask = 0;
+static PangoDirection current_direction;
+static gboolean       have_direction = FALSE;
+static GdkKeymap *default_keymap = NULL;
+
+GdkKeymap*
+gdk_keymap_get_default (void)
+{
+  if (default_keymap == NULL)
+    default_keymap = g_object_new (gdk_keymap_get_type (), NULL);
+
+  return default_keymap;
+}
 
 static void
 update_keymaps (void)
@@ -173,6 +189,60 @@ get_keymap (void)
   update_keymaps ();  
   
   return keymap;
+}
+
+#if HAVE_XKB
+
+PangoDirection
+get_direction (void)
+{
+  XkbDescRec *xkb = get_xkb ();
+  char *name;
+  XkbStateRec state_rec;
+  PangoDirection result;
+
+  XkbGetState (gdk_display, XkbUseCoreKbd, &state_rec);
+
+  name = gdk_atom_name (xkb->names->groups[state_rec.locked_group]);
+  if (g_strcasecmp (name, "arabic") == 0 ||
+      g_strcasecmp (name, "hebrew") == 0 ||
+      g_strcasecmp (name, "israelian") == 0)
+    result = PANGO_DIRECTION_RTL;
+  else
+    result = PANGO_DIRECTION_LTR;
+    
+  g_free (name);
+
+  return result;
+}
+
+void
+_gdk_keymap_state_changed (void)
+{
+  if (default_keymap)
+    {
+      PangoDirection new_direction = get_direction ();
+      
+      if (!have_direction || new_direction != current_direction)
+	{
+	  have_direction = TRUE;
+	  current_direction = new_direction;
+	  g_signal_emit_by_name (G_OBJECT (default_keymap), "direction_changed");
+	}
+    }
+}
+#endif /* HAVE_XKB */
+  
+PangoDirection
+gdk_keymap_get_direction (GdkKeymap *keymap)
+{
+  if (!have_direction)
+    {
+      current_direction = get_direction ();
+      have_direction = TRUE;
+    }
+  
+  return current_direction;
 }
 
 /**

@@ -95,6 +95,8 @@ void     _gdk_region_get_xrectangles       (GdkRegion            *region,
 void     _gdk_moveresize_handle_event      (XEvent *event);
 void     _gdk_moveresize_configure_done    (void);
 
+void     _gdk_keymap_state_changed         (void);
+
 extern GdkDrawableClass  _gdk_x11_drawable_class;
 extern gboolean	         gdk_use_xshm;
 extern Atom		 gdk_wm_delete_window;
@@ -115,6 +117,7 @@ extern guint _gdk_keymap_serial;
 #ifdef HAVE_XKB
 extern gboolean _gdk_use_xkb;
 extern gboolean _gdk_have_xkb_autorepeat;
+extern gint _gdk_xkb_event_type;
 #endif
 
 /* Whether we were able to turn on detectable-autorepeat using

@@ -157,6 +157,11 @@ struct _GtkTextLayout
   /* Whether to show the insertion cursor */
   guint cursor_visible : 1;
 
+  /* For what GtkTextDirection to draw cursor GTK_TEXT_DIR_NONE -
+   * means draw both cursors.
+   */
+  gint cursor_direction : 2;
+
   /* The preedit string and attributes, if any */
 
   gchar *preedit_string;
@@ -248,6 +253,8 @@ void gtk_text_layout_set_default_style      (GtkTextLayout     *layout,
 void gtk_text_layout_set_contexts           (GtkTextLayout     *layout,
                                              PangoContext      *ltr_context,
                                              PangoContext      *rtl_context);
+void gtk_text_layout_set_cursor_direction   (GtkTextLayout     *layout,
+					     GtkTextDirection   direction);
 void gtk_text_layout_default_style_changed  (GtkTextLayout     *layout);
  
 void gtk_text_layout_set_screen_width       (GtkTextLayout     *layout,

@@ -211,6 +211,8 @@ static void gtk_entry_toggle_overwrite   (GtkEntry        *entry);
 static void gtk_entry_real_activate      (GtkEntry        *entry);
 static void gtk_entry_popup_menu         (GtkWidget      *widget);
 
+static void gtk_entry_keymap_direction_changed (GdkKeymap *keymap,
+						GtkEntry  *entry);
 /* IM Context Callbacks
  */
 static void gtk_entry_commit_cb           (GtkIMContext      *context,
@@ -1511,6 +1513,11 @@ gtk_entry_focus_in (GtkWidget     *widget,
   entry->need_im_reset = TRUE;
   gtk_im_context_focus_in (entry->im_context);
 
+  g_signal_connect_data (gdk_keymap_get_default (),
+			 "direction_changed",
+			 G_CALLBACK (gtk_entry_keymap_direction_changed), entry, NULL,
+			 FALSE, FALSE);
+
   gtk_entry_check_cursor_blink (entry);
   
   return FALSE;
@@ -1530,6 +1537,10 @@ gtk_entry_focus_out (GtkWidget     *widget,
 
   gtk_entry_check_cursor_blink (entry);
   
+  g_signal_disconnect_by_func (gdk_keymap_get_default (),
+			       gtk_entry_keymap_direction_changed,
+			       entry);
+
   return FALSE;
 }
 
@@ -2006,6 +2017,13 @@ gtk_entry_real_activate (GtkEntry *entry)
     }
 }
 
+static void
+gtk_entry_keymap_direction_changed (GdkKeymap *keymap,
+				    GtkEntry  *entry)
+{
+  gtk_entry_queue_draw (entry);
+}
+
 /* IM Context Callbacks
  */
 
@@ -2408,29 +2426,64 @@ static void
 gtk_entry_draw_cursor (GtkEntry  *entry,
 		       CursorType type)
 {
+  GtkTextDirection keymap_direction =
+    (gdk_keymap_get_direction (gdk_keymap_get_default ()) == PANGO_DIRECTION_LTR) ?
+    GTK_TEXT_DIR_LTR : GTK_TEXT_DIR_RTL;
+  GtkTextDirection widget_direction = gtk_widget_get_direction (GTK_WIDGET (entry));
+  
   g_return_if_fail (entry != NULL);
   g_return_if_fail (GTK_IS_ENTRY (entry));
 
   if (GTK_WIDGET_DRAWABLE (entry))
     {
       GtkWidget *widget = GTK_WIDGET (entry);
+      gboolean split_cursor;
 
       gint xoffset = INNER_BORDER - entry->scroll_offset;
       gint strong_x, weak_x;
       gint text_area_height;
+      GdkGC *gc1 = NULL;
+      GdkGC *gc2 = NULL;
+      gint x1 = 0;
+      gint x2 = 0;
 
       gdk_window_get_size (entry->text_area, NULL, &text_area_height);
       
       gtk_entry_get_cursor_locations (entry, type, &strong_x, &weak_x);
+
+      g_object_get (gtk_settings_get_global (),
+		    "gtk-split-cursor", &split_cursor,
+		    NULL);
+
+      if (split_cursor)
+	{
+	  gc1 = entry->cursor_gc;
+	  x1 = strong_x;
+
+	  if (weak_x != strong_x)
+	    {
+	      gc2 = widget->style->text_gc[GTK_STATE_NORMAL];
+	      x2 = weak_x;
+	    }
+	}
+      else
+	{
+	  gc1 = entry->cursor_gc;
+	  
+	  if (keymap_direction == widget_direction)
+	    x1 = strong_x;
+	  else
+	    x1 = weak_x;
+	}
       
-      gdk_draw_line (entry->text_area, entry->cursor_gc,
-		     xoffset + strong_x, INNER_BORDER,
-		     xoffset + strong_x, text_area_height - INNER_BORDER);
+      gdk_draw_line (entry->text_area, gc1,
+		     xoffset + x1, INNER_BORDER,
+		     xoffset + x1, text_area_height - INNER_BORDER);
       
-      if (weak_x != strong_x)
-	gdk_draw_line (entry->text_area, widget->style->text_gc[GTK_STATE_NORMAL], 
-		       xoffset + weak_x, INNER_BORDER,
-		       xoffset + weak_x, text_area_height - INNER_BORDER);
+      if (gc2)
+	gdk_draw_line (entry->text_area, gc2,
+		       xoffset + x2, INNER_BORDER,
+		       xoffset + x2, text_area_height - INNER_BORDER);
     }
 }
 
@@ -2624,15 +2677,32 @@ gtk_entry_move_visually (GtkEntry *entry,
   while (count != 0)
     {
       int new_index, new_trailing;
+      gboolean split_cursor;
+      gboolean strong;
+
+      g_object_get (gtk_settings_get_global (),
+		    "gtk-split-cursor", &split_cursor,
+		    NULL);
+
+      if (split_cursor)
+	strong = TRUE;
+      else
+	{
+	  GtkTextDirection keymap_direction =
+	    (gdk_keymap_get_direction (gdk_keymap_get_default ()) == PANGO_DIRECTION_LTR) ?
+	    GTK_TEXT_DIR_LTR : GTK_TEXT_DIR_RTL;
+
+	  strong = keymap_direction == gtk_widget_get_direction (GTK_WIDGET (entry));
+	}
       
       if (count > 0)
 	{
-	  pango_layout_move_cursor_visually (layout, index, 0, 1, &new_index, &new_trailing);
+	  pango_layout_move_cursor_visually (layout, strong, index, 0, 1, &new_index, &new_trailing);
 	  count--;
 	}
       else
 	{
-	  pango_layout_move_cursor_visually (layout, index, 0, -1, &new_index, &new_trailing);
+	  pango_layout_move_cursor_visually (layout, strong, index, 0, -1, &new_index, &new_trailing);
 	  count++;
 	}
 
@@ -3630,5 +3700,3 @@ gtk_entry_pend_cursor_blink (GtkEntry *entry)
       show_cursor (entry);
     }
 }
-			   
-

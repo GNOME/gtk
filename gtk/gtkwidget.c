@@ -3204,7 +3204,7 @@ gtk_widget_set_app_paintable (GtkWidget *widget,
  *
  * Widgets are double buffered by default; you can use this function
  * to turn off the buffering. "Double buffered" simply means that
- * gdk_window_begin_paint() and gdk_window_end_paint() are called
+ * gdk_window_begin_paint_region() and gdk_window_end_paint() are called
  * automatically around expose events sent to the
  * widget. gdk_window_begin_paint() diverts all drawing to a widget's
  * window to an offscreen buffer, and gdk_window_end_paint() draws the

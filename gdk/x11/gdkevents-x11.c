@@ -1428,24 +1428,38 @@ gdk_event_translate (GdkEvent *event,
       return_val = FALSE;
       break;
 
-#ifdef HAVE_XKB
-    case XkbMapNotify:
-      ++_gdk_keymap_serial;
-      return_val = FALSE;
-      break;
-#endif
-      
     default:
-      /* something else - (e.g., a Xinput event) */
-      
-      if (window_private &&
-	  !GDK_WINDOW_DESTROYED (window_private) &&
-	  (window_private->extension_events != 0))
-	return_val = _gdk_input_other_event(event, xevent, window);
+#ifdef HAVE_XKB
+      if (xevent->type == _gdk_xkb_event_type)
+	{
+	  XkbEvent *xkb_event = (XkbEvent *)xevent;
+
+	  switch (xkb_event->any.xkb_type)
+	    {
+	    case XkbMapNotify:
+	      ++_gdk_keymap_serial;
+	      return_val = FALSE;
+	      break;
+	      
+	    case XkbStateNotify:
+	      _gdk_keymap_state_changed ();
+	      break;
+	    }
+	}
       else
-	return_val = FALSE;
-      
-      break;
+#endif
+	{
+	  /* something else - (e.g., a Xinput event) */
+	  
+	  if (window_private &&
+	      !GDK_WINDOW_DESTROYED (window_private) &&
+	      (window_private->extension_events != 0))
+	    return_val = _gdk_input_other_event(event, xevent, window);
+	  else
+	    return_val = FALSE;
+	  
+	  break;
+	}
     }
 
  done:

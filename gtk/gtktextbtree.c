@@ -409,13 +409,13 @@ _gtk_text_btree_new (GtkTextTagTable *table,
 
   tree->tag_changed_handler = g_signal_connect_data (G_OBJECT (tree->table),
                                                      "tag_changed",
-                                                     tag_changed_cb,
+                                                     G_CALLBACK (tag_changed_cb),
                                                      tree,
                                                      NULL, FALSE, FALSE);
 
   tree->tag_removed_handler = g_signal_connect_data (G_OBJECT (tree->table),
                                                      "tag_removed",
-                                                     tag_removed_cb,
+                                                     G_CALLBACK (tag_removed_cb),
                                                      tree,
                                                      NULL, FALSE, FALSE);
 

@@ -237,20 +237,21 @@ static void     gtk_text_view_update_layout_width       (GtkTextView        *tex
 static void     gtk_text_view_set_attributes_from_style (GtkTextView        *text_view,
                                                          GtkTextAttributes *values,
                                                          GtkStyle           *style);
-static void     gtk_text_view_ensure_layout         (GtkTextView        *text_view);
-static void     gtk_text_view_destroy_layout        (GtkTextView        *text_view);
-static void     gtk_text_view_reset_im_context      (GtkTextView        *text_view);
-static void     gtk_text_view_start_selection_drag  (GtkTextView        *text_view,
-                                                     const GtkTextIter  *iter,
-                                                     GdkEventButton     *event);
-static gboolean gtk_text_view_end_selection_drag    (GtkTextView        *text_view,
-                                                     GdkEventButton     *event);
-static void     gtk_text_view_start_selection_dnd   (GtkTextView        *text_view,
-                                                     const GtkTextIter  *iter,
-                                                     GdkEventMotion     *event);
-static void     gtk_text_view_check_cursor_blink    (GtkTextView        *text_view);
-static void     gtk_text_view_pend_cursor_blink     (GtkTextView        *text_view);
-static void     gtk_text_view_stop_cursor_blink     (GtkTextView        *text_view);
+static void     gtk_text_view_ensure_layout          (GtkTextView        *text_view);
+static void     gtk_text_view_destroy_layout         (GtkTextView        *text_view);
+static void     gtk_text_view_check_keymap_direction (GtkTextView        *text_view);
+static void     gtk_text_view_reset_im_context       (GtkTextView        *text_view);
+static void     gtk_text_view_start_selection_drag   (GtkTextView        *text_view,
+                                                      const GtkTextIter  *iter,
+                                                      GdkEventButton     *event);
+static gboolean gtk_text_view_end_selection_drag     (GtkTextView        *text_view,
+                                                      GdkEventButton     *event);
+static void     gtk_text_view_start_selection_dnd    (GtkTextView        *text_view,
+                                                      const GtkTextIter  *iter,
+                                                      GdkEventMotion     *event);
+static void     gtk_text_view_check_cursor_blink     (GtkTextView        *text_view);
+static void     gtk_text_view_pend_cursor_blink      (GtkTextView        *text_view);
+static void     gtk_text_view_stop_cursor_blink      (GtkTextView        *text_view);
 
 static void gtk_text_view_value_changed           (GtkAdjustment *adj,
 						   GtkTextView   *view);
@@ -3344,6 +3345,13 @@ gtk_text_view_button_release_event (GtkWidget *widget, GdkEventButton *event)
   return FALSE;
 }
 
+static void
+keymap_direction_changed (GdkKeymap   *keymap,
+			  GtkTextView *text_view)
+{
+  gtk_text_view_check_keymap_direction (text_view);
+}
+
 static gint
 gtk_text_view_focus_in_event (GtkWidget *widget, GdkEventFocus *event)
 {
@@ -3358,6 +3366,12 @@ gtk_text_view_focus_in_event (GtkWidget *widget, GdkEventFocus *event)
       gtk_text_view_check_cursor_blink (text_view);
     }
 
+  g_signal_connect_data (gdk_keymap_get_default (),
+			 "direction_changed",
+			 G_CALLBACK (keymap_direction_changed), text_view, NULL,
+			 FALSE, FALSE);
+  gtk_text_view_check_keymap_direction (text_view);
+  
   text_view->need_im_reset = TRUE;
   gtk_im_context_focus_in (GTK_TEXT_VIEW (widget)->im_context);
 
@@ -3377,6 +3391,10 @@ gtk_text_view_focus_out_event (GtkWidget *widget, GdkEventFocus *event)
       gtk_text_layout_set_cursor_visible (text_view->layout, FALSE);
       gtk_text_view_check_cursor_blink (text_view);
     }
+
+  g_signal_disconnect_by_func (gdk_keymap_get_default (),
+			       keymap_direction_changed,
+			       text_view);
 
   text_view->need_im_reset = TRUE;
   gtk_im_context_focus_out (GTK_TEXT_VIEW (widget)->im_context);
@@ -4275,6 +4293,28 @@ gtk_text_view_set_attributes_from_style (GtkTextView        *text_view,
 }
 
 static void
+gtk_text_view_check_keymap_direction (GtkTextView *text_view)
+{
+  if (text_view->layout)
+    {
+      gboolean split_cursor;
+      GtkTextDirection new_dir;
+  
+      g_object_get (gtk_settings_get_global (),
+		    "gtk-split-cursor", &split_cursor,
+		    NULL);
+      if (split_cursor)
+	new_dir = GTK_TEXT_DIR_NONE;
+      else
+	new_dir = (gdk_keymap_get_direction (gdk_keymap_get_default ()) == PANGO_DIRECTION_LTR) ?
+	  GTK_TEXT_DIR_LTR : GTK_TEXT_DIR_RTL;
+      
+      if (text_view->layout->cursor_direction != new_dir)
+	gtk_text_layout_set_cursor_direction (text_view->layout, new_dir);
+    }
+}
+
+static void
 gtk_text_view_ensure_layout (GtkTextView *text_view)
 {
   GtkWidget *widget;
@@ -4326,6 +4366,8 @@ gtk_text_view_ensure_layout (GtkTextView *text_view)
 
       g_object_unref (G_OBJECT (ltr_context));
       g_object_unref (G_OBJECT (rtl_context));
+
+      gtk_text_view_check_keymap_direction (text_view);
 
       style = gtk_text_attributes_new ();
 
