@@ -1,3 +1,11 @@
+1999-11-03  Federico Mena Quintero  <federico@redhat.com>
+
+	* src/gnome-canvas-pixbuf.c (gnome_canvas_pixbuf_init):
+	Initiailize the x and y fields.
+	(gnome_canvas_pixbuf_destroy): Queue a redraw upon destruction.
+	(PixbufPrivate): Renamed need_size_update to need_xform_update.
+	(recompute_bounding_box): Do not use temporary values.
+
 1999-11-03  Jonathan Blandford  <jrb@redhat.com>
 
 	* src/io-gif.c (set_gif_lzw_clear_code): new state.  Fixes

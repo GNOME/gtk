@@ -60,8 +60,8 @@ typedef struct {
 	/* Whether the pixbuf has changed */
 	guint need_pixbuf_update : 1;
 
-	/* Whether the size has changed */
-	guint need_size_update : 1;
+	/* Whether the transformation or size have changed */
+	guint need_xform_update : 1;
 } PixbufPrivate;
 
 
@@ -163,7 +163,6 @@ gnome_canvas_pixbuf_class_init (GnomeCanvasPixbufClass *class)
 				 GTK_TYPE_BOOL, GTK_ARG_READWRITE, ARG_HEIGHT_SET);
 	gtk_object_add_arg_type ("GnomeCanvasPixbuf::height_pixels",
 				 GTK_TYPE_BOOL, GTK_ARG_READWRITE, ARG_HEIGHT_PIXELS);
-
 	gtk_object_add_arg_type ("GnomeCanvasPixbuf::x",
 				 GTK_TYPE_DOUBLE, GTK_ARG_READWRITE, ARG_X);
 	gtk_object_add_arg_type ("GnomeCanvasPixbuf::x_set",
@@ -200,22 +199,26 @@ gnome_canvas_pixbuf_init (GnomeCanvasPixbuf *gcp)
 
 	priv->width = 0.0;
 	priv->height = 0.0;
+	priv->x = 0.0;
+	priv->y = 0.0;
 }
 
 /* Destroy handler for the pixbuf canvas item */
 static void
 gnome_canvas_pixbuf_destroy (GtkObject *object)
 {
+	GnomeCanvasItem *item;
 	GnomeCanvasPixbuf *gcp;
 	PixbufPrivate *priv;
 
 	g_return_if_fail (object != NULL);
 	g_return_if_fail (GNOME_IS_CANVAS_PIXBUF (object));
 
+	item = GNOME_CANVAS_ITEM (object);
 	gcp = (GNOME_CANVAS_PIXBUF (object));
 	priv = gcp->priv;
 
-	/* FIXME: redraw area */
+	gnome_canvas_request_redraw (item->canvas, item->x1, item->y1, item->x2, item->y2);
 
 	if (priv->pixbuf)
 		gdk_pixbuf_unref (priv->pixbuf);
@@ -269,19 +272,19 @@ gnome_canvas_pixbuf_set_arg (GtkObject *object, GtkArg *arg, guint arg_id)
 		val = GTK_VALUE_DOUBLE (*arg);
 		g_return_if_fail (val >= 0.0);
 		priv->width = val;
-		priv->need_size_update = TRUE;
+		priv->need_xform_update = TRUE;
 		gnome_canvas_item_request_update (item);
 		break;
 
 	case ARG_WIDTH_SET:
 		priv->width_set = GTK_VALUE_BOOL (*arg) ? TRUE : FALSE;
-		priv->need_size_update = TRUE;
+		priv->need_xform_update = TRUE;
 		gnome_canvas_item_request_update (item);
 		break;
 
 	case ARG_WIDTH_PIXELS:
 		priv->width_pixels = GTK_VALUE_BOOL (*arg) ? TRUE : FALSE;
-		priv->need_size_update = TRUE;
+		priv->need_xform_update = TRUE;
 		gnome_canvas_item_request_update (item);
 		break;
 
@@ -289,57 +292,55 @@ gnome_canvas_pixbuf_set_arg (GtkObject *object, GtkArg *arg, guint arg_id)
 		val = GTK_VALUE_DOUBLE (*arg);
 		g_return_if_fail (val >= 0.0);
 		priv->height = val;
-		priv->need_size_update = TRUE;
+		priv->need_xform_update = TRUE;
 		gnome_canvas_item_request_update (item);
 		break;
 
 	case ARG_HEIGHT_SET:
 		priv->height_set = GTK_VALUE_BOOL (*arg) ? TRUE : FALSE;
-		priv->need_size_update = TRUE;
+		priv->need_xform_update = TRUE;
 		gnome_canvas_item_request_update (item);
 		break;
 
 	case ARG_HEIGHT_PIXELS:
 		priv->height_pixels = GTK_VALUE_BOOL (*arg) ? TRUE : FALSE;
-		priv->need_size_update = TRUE;
+		priv->need_xform_update = TRUE;
 		gnome_canvas_item_request_update (item);
 		break;
 
 	case ARG_X:
-		val = GTK_VALUE_DOUBLE (*arg);
-		priv->x = val;
-		priv->need_size_update = TRUE;
+		priv->x = GTK_VALUE_DOUBLE (*arg);
+		priv->need_xform_update = TRUE;
 		gnome_canvas_item_request_update (item);
 		break;
 
 	case ARG_X_SET:
 		priv->x_set = GTK_VALUE_BOOL (*arg) ? TRUE : FALSE;
-		priv->need_size_update = TRUE;
+		priv->need_xform_update = TRUE;
 		gnome_canvas_item_request_update (item);
 		break;
 
 	case ARG_X_PIXELS:
 		priv->x_pixels = GTK_VALUE_BOOL (*arg) ? TRUE : FALSE;
-		priv->need_size_update = TRUE;
+		priv->need_xform_update = TRUE;
 		gnome_canvas_item_request_update (item);
 		break;
 
 	case ARG_Y:
-		val = GTK_VALUE_DOUBLE (*arg);
-		priv->y = val;
-		priv->need_size_update = TRUE;
+		priv->y = GTK_VALUE_DOUBLE (*arg);
+		priv->need_xform_update = TRUE;
 		gnome_canvas_item_request_update (item);
 		break;
 
 	case ARG_Y_SET:
 		priv->y_set = GTK_VALUE_BOOL (*arg) ? TRUE : FALSE;
-		priv->need_size_update = TRUE;
+		priv->need_xform_update = TRUE;
 		gnome_canvas_item_request_update (item);
 		break;
 
 	case ARG_Y_PIXELS:
 		priv->y_pixels = GTK_VALUE_BOOL (*arg) ? TRUE : FALSE;
-		priv->need_size_update = TRUE;
+		priv->need_xform_update = TRUE;
 		gnome_canvas_item_request_update (item);
 		break;
 
@@ -388,6 +389,7 @@ gnome_canvas_pixbuf_get_arg (GtkObject *object, GtkArg *arg, guint arg_id)
 	case ARG_HEIGHT_PIXELS:
 		GTK_VALUE_BOOL (*arg) = priv->height_pixels;
 		break;
+
 	case ARG_X:
 		GTK_VALUE_DOUBLE (*arg) = priv->x;
 		break;
@@ -399,6 +401,7 @@ gnome_canvas_pixbuf_get_arg (GtkObject *object, GtkArg *arg, guint arg_id)
 	case ARG_X_PIXELS:
 		GTK_VALUE_BOOL (*arg) = priv->x_pixels;
 		break;
+
 	case ARG_Y:
 		GTK_VALUE_DOUBLE (*arg) = priv->y;
 		break;
@@ -547,7 +550,6 @@ compute_render_affine (GnomeCanvasPixbuf *gcp, double *render_affine, double *i2
 	art_affine_multiply (render_affine, composite, i2c);
 }
 
-
 /* Recomputes the bounding box of a pixbuf canvas item.  The horizontal and
  * vertical dimensions may be specified in units or pixels, separately, so we
  * have to compute the components individually for each dimension.
@@ -559,7 +561,6 @@ recompute_bounding_box (GnomeCanvasPixbuf *gcp)
 	PixbufPrivate *priv;
 	double i2c[6], render_affine[6];
 	ArtDRect rect;
-
 
 	item = GNOME_CANVAS_ITEM (gcp);
 	priv = gcp->priv;
@@ -579,15 +580,10 @@ recompute_bounding_box (GnomeCanvasPixbuf *gcp)
 	compute_render_affine (gcp, render_affine, i2c);
 	art_drect_affine_transform (&rect, &rect, render_affine);
 
-	item->x1 = rect.x0;
-	item->y1 = rect.y0;
-	item->x2 = rect.x1;
-	item->y2 = rect.y1;
-
-	item->x1 = floor (item->x1);
-	item->y1 = floor (item->y1);
-	item->x2 = ceil (item->x2);
-	item->y2 = ceil (item->y2);
+	item->x1 = floor (rect.x0);
+	item->y1 = floor (rect.y0);
+	item->x2 = ceil (rect.x1);
+	item->y2 = ceil (rect.y1);
 }
 
 
@@ -611,23 +607,22 @@ gnome_canvas_pixbuf_update (GnomeCanvasItem *item, double *affine, ArtSVP *clip_
 	     && !(GTK_OBJECT_FLAGS (item) & GNOME_CANVAS_ITEM_VISIBLE))
 	    || (flags & GNOME_CANVAS_UPDATE_AFFINE)
 	    || priv->need_pixbuf_update
-	    || priv->need_size_update)
+	    || priv->need_xform_update)
 		gnome_canvas_request_redraw (item->canvas, item->x1, item->y1, item->x2, item->y2);
 
 	/* If we need a pixbuf update, or if the item changed visibility to
 	 * shown, recompute the bounding box.
 	 */
 	if (priv->need_pixbuf_update
-	    || priv->need_size_update
+	    || priv->need_xform_update
 	    || ((flags & GNOME_CANVAS_UPDATE_VISIBILITY)
 		&& (GTK_OBJECT_FLAGS (gcp) & GNOME_CANVAS_ITEM_VISIBLE))
 	    || (flags & GNOME_CANVAS_UPDATE_AFFINE)) {
 		recompute_bounding_box (gcp);
 		gnome_canvas_request_redraw (item->canvas, item->x1, item->y1, item->x2, item->y2);
 		priv->need_pixbuf_update = FALSE;
-		priv->need_size_update = FALSE;
+		priv->need_xform_update = FALSE;
 	}
-
 }
 
 
