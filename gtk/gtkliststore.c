@@ -547,7 +547,7 @@ gtk_list_store_set_cell (GtkListStore *list_store,
   g_return_if_fail (GTK_IS_LIST_STORE (list_store));
   g_return_if_fail (iter != NULL);
   g_return_if_fail (column >= 0 && column < list_store->n_columns);
-  g_return_if_fail (value != NULL);
+  g_return_if_fail (G_IS_VALUE (value));
 
   if (! g_type_is_a (G_VALUE_TYPE (value), list_store->column_headers[column]))
     {

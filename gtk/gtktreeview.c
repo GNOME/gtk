@@ -2075,128 +2075,74 @@ gtk_tree_view_header_focus (GtkTreeView      *tree_view,
        last_column &&
 	 !(GTK_TREE_VIEW_COLUMN (last_column->data)->visible) &&
 	 GTK_WIDGET_CAN_FOCUS (GTK_TREE_VIEW_COLUMN (last_column->data)->button);
-       last_column = last_column->prev)
-    ;
+       last_column = last_column->prev);
 
   for (first_column = tree_view->priv->columns;
        first_column &&
 	 !(GTK_TREE_VIEW_COLUMN (first_column->data)->visible) &&
 	 GTK_WIDGET_CAN_FOCUS (GTK_TREE_VIEW_COLUMN (first_column->data)->button);
-       first_column = first_column->next)
-    ;
+       first_column = first_column->next);
 
-  /* no headers are visible, or are focussable.  We can't focus in or out.
-   * I wonder if focussable is a real word...
+  /* No headers are visible, or are focusable.  We can't focus in or out.
    */
   if (last_column == NULL)
     return FALSE;
 
-  /* First thing we want to handle is entering and leaving the headers.
-   */
   switch (dir)
     {
     case GTK_DIR_TAB_BACKWARD:
-      if (!focus_child)
-	{
-	  focus_child = GTK_TREE_VIEW_COLUMN (last_column->data)->button;
-	  gtk_widget_grab_focus (focus_child);
-	  goto cleanup;
-	}
-      if (focus_child == GTK_TREE_VIEW_COLUMN (first_column->data)->button)
-	{
-	  focus_child = NULL;
-	  goto cleanup;
-	}
-      break;
-
     case GTK_DIR_TAB_FORWARD:
-      if (!focus_child)
+    case GTK_DIR_UP:
+    case GTK_DIR_DOWN:
+      if (focus_child == NULL)
 	{
-	  focus_child = GTK_TREE_VIEW_COLUMN (first_column->data)->button;
+	  if (tree_view->priv->focus_column == NULL)
+	    focus_child = GTK_TREE_VIEW_COLUMN (first_column->data)->button;
+	  else
+	    focus_child = GTK_TREE_VIEW_COLUMN (tree_view->priv->focus_column->data)->button;
 	  gtk_widget_grab_focus (focus_child);
-	  goto cleanup;
+	  break;
 	}
-      if (focus_child == GTK_TREE_VIEW_COLUMN (last_column->data)->button)
-	{
-	  focus_child = NULL;
-	  goto cleanup;
-	}
-      break;
+      return FALSE;
 
     case GTK_DIR_LEFT:
-      if (!focus_child)
+    case GTK_DIR_RIGHT:
+      if (focus_child == NULL)
+	{
+	  g_assert_not_reached ();
+	  return FALSE;
+	}
+
+      if (gtk_container_focus (GTK_CONTAINER (focus_child), dir))
+	{
+	  /* The focus moves inside the button. */
+	  /* This is probably a great example of bad UI */
+	  break;
+	}
+
+      /* We need to move the focus among the row of buttons. */
+      for (tmp_list = tree_view->priv->columns; tmp_list; tmp_list = tmp_list->next)
+	if (GTK_TREE_VIEW_COLUMN (tmp_list->data)->button == focus_child)
+	  break;
+
+      if (tmp_list == first_column && dir == GTK_DIR_LEFT)
 	{
 	  focus_child = GTK_TREE_VIEW_COLUMN (last_column->data)->button;
 	  gtk_widget_grab_focus (focus_child);
-	  goto cleanup;
+	  break;
 	}
-      if (focus_child == GTK_TREE_VIEW_COLUMN (first_column->data)->button)
-	{
-	  focus_child = NULL;
-	  goto cleanup;
-	}
-      break;
-
-    case GTK_DIR_RIGHT:
-      if (!focus_child)
+      else if (tmp_list == last_column && dir == GTK_DIR_RIGHT)
 	{
 	  focus_child = GTK_TREE_VIEW_COLUMN (first_column->data)->button;
 	  gtk_widget_grab_focus (focus_child);
-	  goto cleanup;
+	  break;
 	}
-      if (focus_child == GTK_TREE_VIEW_COLUMN (last_column->data)->button)
-	{
-	  focus_child = NULL;
-	  goto cleanup;
-	}
-      break;
 
-    case GTK_DIR_UP:
-      if (!focus_child)
-	{
-	  focus_child = GTK_TREE_VIEW_COLUMN (first_column->data)->button;
-	  gtk_widget_grab_focus (focus_child);
-	}
-      else
-	{
-	  focus_child = NULL;
-	}
-      goto cleanup;
-
-    case GTK_DIR_DOWN:
-      if (!focus_child)
-	{
-	  focus_child = GTK_TREE_VIEW_COLUMN (first_column->data)->button;
-	  gtk_widget_grab_focus (focus_child);
-	}
-      else
-	{
-	  focus_child = NULL;
-	}
-      goto cleanup;
-    }
-
-  /* We need to move the focus to the next button. */
-  if (focus_child)
-    {
-      for (tmp_list = tree_view->priv->columns; tmp_list; tmp_list = tmp_list->next)
-	if (GTK_TREE_VIEW_COLUMN (tmp_list->data)->button == focus_child)
-	  {
-	    if (gtk_container_focus (GTK_CONTAINER (GTK_TREE_VIEW_COLUMN (tmp_list->data)->button), dir))
-	      {
-		/* The focus moves inside the button. */
-		/* This is probably a great example of bad UI */
-		goto cleanup;
-	      }
-	    break;
-	  }
-
-      /* We need to move the focus among the row of buttons. */
       while (tmp_list)
 	{
 	  GtkTreeViewColumn *column;
 
-	  if (dir == GTK_DIR_RIGHT || dir == GTK_DIR_TAB_FORWARD)
+	  if (dir == GTK_DIR_RIGHT)
 	    tmp_list = tmp_list->next;
 	  else
 	    tmp_list = tmp_list->prev;
@@ -2204,7 +2150,7 @@ gtk_tree_view_header_focus (GtkTreeView      *tree_view,
 	  if (tmp_list == NULL)
 	    {
 	      g_warning ("Internal button not found");
-	      goto cleanup;
+	      break;
 	    }
 	  column = tmp_list->data;
 	  if (column->button &&
@@ -2216,9 +2162,12 @@ gtk_tree_view_header_focus (GtkTreeView      *tree_view,
 	      break;
 	    }
 	}
+      break;
+    default:
+      g_assert_not_reached ();
+      break;
     }
 
- cleanup:
   /* if focus child is non-null, we assume it's been set to the current focus child
    */
   if (focus_child)
@@ -2274,14 +2223,12 @@ gtk_tree_view_focus (GtkContainer     *container,
       switch (direction)
 	{
 	case GTK_DIR_LEFT:
+	case GTK_DIR_RIGHT:
 	  return (gtk_tree_view_header_focus (tree_view, direction));
 	case GTK_DIR_TAB_BACKWARD:
 	case GTK_DIR_UP:
 	  return FALSE;
 	case GTK_DIR_TAB_FORWARD:
-	  if (gtk_tree_view_header_focus (tree_view, direction))
-	    return TRUE;
-	case GTK_DIR_RIGHT:
 	case GTK_DIR_DOWN:
 	  GTK_TREE_VIEW_SET_FLAG (tree_view, GTK_TREE_VIEW_DRAW_KEYFOCUS);
 	  gtk_widget_grab_focus (GTK_WIDGET (container));
@@ -4185,6 +4132,9 @@ gtk_tree_view_remove_column (GtkTreeView       *tree_view,
   g_return_val_if_fail (column->tree_view == GTK_WIDGET (tree_view), -1);
 
   _gtk_tree_view_column_unset_tree_view (column);
+
+  if (GTK_TREE_VIEW_COLUMN (tree_view->priv->focus_column->data) == column)
+    tree_view->priv->focus_column = NULL;
 
   tree_view->priv->columns = g_list_remove (tree_view->priv->columns, column);
 

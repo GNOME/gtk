@@ -1,3 +1,18 @@
+Mon Mar 12 21:02:08 2001  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtktreeview.c (gtk_tree_view_header_focus): Fix up focus
+	code a lot.
+
+	* gtk/gtktreedatalist.c (_gtk_tree_data_list_free): use
+	g_mem_chunk.
+	(_gtk_tree_data_list_alloc): use g_mem_chunk.
+	(_gtk_tree_data_list_node_to_value): Fix to switch on
+	G_TYPE_FUNDAMENTAL.
+	(_gtk_tree_data_list_value_to_node): Fix to switch on
+	G_TYPE_FUNDAMENTAL.
+	(_gtk_tree_data_list_node_copy): Fix to switch on
+	G_TYPE_FUNDAMENTAL.
+
 2001-03-12  Havoc Pennington  <hp@redhat.com>
 
 	* gtk/gtkwindow.c (gtk_window_class_init): Patch from John Margaglione 

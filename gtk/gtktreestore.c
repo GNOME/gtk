@@ -563,7 +563,7 @@ gtk_tree_store_set_cell (GtkTreeStore *tree_store,
   g_return_if_fail (tree_store != NULL);
   g_return_if_fail (GTK_IS_TREE_STORE (tree_store));
   g_return_if_fail (column >= 0 && column < tree_store->n_columns);
-  g_return_if_fail (value != NULL);
+  g_return_if_fail (G_IS_VALUE (value));
 
   if (! g_type_is_a (G_VALUE_TYPE (value), tree_store->column_headers[column]))
     {

@@ -41,8 +41,6 @@ struct _GtkTreeDataList
 };
 
 
-void             _gtk_tree_data_list_push_allocator (GAllocator      *allocator);
-void             _gtk_tree_data_list_pop_allocator  (void);
 GtkTreeDataList *_gtk_tree_data_list_alloc          (void);
 void             _gtk_tree_data_list_free           (GtkTreeDataList *list,
 						     GType           *column_headers);

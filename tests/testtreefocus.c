@@ -1,6 +1,5 @@
 #include <gtk/gtk.h>
 
-
 typedef struct _TreeStruct TreeStruct;
 struct _TreeStruct
 {
@@ -170,7 +169,7 @@ make_model (void)
 			      OWEN_COLUMN, holiday->owen,
 			      VISIBLE_COLUMN, TRUE,
 			      -1);
-	  
+
 	  holiday ++;
 	}
       month ++;
@@ -197,7 +196,7 @@ havoc_toggled (GtkCellRendererToggle *cell,
 
   gtk_tree_path_free (path);
 }
-     
+
 static void
 owen_toggled (GtkCellRendererToggle *cell,
 	       gchar                 *path_str,
@@ -242,8 +241,8 @@ main (int argc, char *argv[])
   gtk_box_pack_start (GTK_BOX (vbox), scrolled_window, TRUE, TRUE, 0);
 
   model = make_model ();
-  tree_view = gtk_tree_view_new ();
-  g_object_set (G_OBJECT (tree_view), "model", model, NULL);
+  tree_view = gtk_tree_view_new_with_model (model);
+  //  g_object_set (G_OBJECT (tree_view), "model", model, NULL);
   gtk_tree_view_set_rules_hint (GTK_TREE_VIEW (tree_view), TRUE);
   renderer = gtk_cell_renderer_text_new ();
   gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (tree_view),
@@ -273,7 +272,7 @@ main (int argc, char *argv[])
 					       NULL);
   g_object_unref (renderer);
   gtk_container_add (GTK_CONTAINER (scrolled_window), tree_view);
-  
+
 
   gtk_widget_show_all (window);
   gtk_main ();
