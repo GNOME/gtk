@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-10-17 15:08-0400\n"
-"PO-Revision-Date: 2004-10-17 22:53-0400\n"
+"POT-Creation-Date: 2004-10-20 10:45-0400\n"
+"PO-Revision-Date: 2004-10-20 22:53-0400\n"
 "Last-Translator: Adam Weinberger <adamw@gnome.org>\n"
 "Language-Team: English/Canada <adamw@FreeBSD.org>\n"
 "MIME-Version: 1.0\n"
@@ -960,7 +960,8 @@ msgstr "Has Entry"
 #: gtk/gtkcellrenderercombo.c:156
 #, c-format
 msgid "If %FALSE, don't allow to enter strings other than the chosen ones"
-msgstr "If %FALSE, don't allow strings other than the chosen ones to be entered"
+msgstr ""
+"If %FALSE, don't allow strings other than the chosen ones to be entered"
 
 #: gtk/gtkcellrendererpixbuf.c:136
 msgid "Pixbuf Object"
@@ -1310,14 +1311,17 @@ msgstr "Underline set"
 msgid "Whether this tag affects underlining"
 msgstr "Whether this tag affects underlining"
 
-#: gtk/gtkcellrenderertext.c:470 gtk/gtkcellrenderertext.c:474
-#: gtk/gtktexttag.c:566
+#: gtk/gtkcellrenderertext.c:470 gtk/gtktexttag.c:566
 msgid "Language set"
 msgstr "Language set"
 
 #: gtk/gtkcellrenderertext.c:471 gtk/gtktexttag.c:567
 msgid "Whether this tag affects the language the text is rendered as"
 msgstr "Whether this tag affects the language the text is rendered as"
+
+#: gtk/gtkcellrenderertext.c:474
+msgid "Ellipsize set"
+msgstr "Ellipsize set"
 
 #: gtk/gtkcellrenderertext.c:475
 msgid "Whether this tag affects the ellipsize mode"
