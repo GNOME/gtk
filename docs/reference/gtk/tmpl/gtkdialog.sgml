@@ -51,8 +51,8 @@ gtk_dialog_add_action_widget(), clicking the button will emit a signal called
 "response" with a response ID that you specified. GTK+ will never assign a
 meaning to positive response IDs; these are entirely user-defined. But for
 convenience, you can use the response IDs in the #GtkResponseType enumeration
-(these all have values less than zero). If a dialog receives a delete event, the
-"response" signal will be emitted with a response ID of #GTK_RESPONSE_NONE.
+(these all have values less than zero). If a dialog receives a delete event, 
+the "response" signal will be emitted with a response ID of #GTK_RESPONSE_DELETE_EVENT.
 </para>
 
 
@@ -180,29 +180,35 @@ was clicked.
 
 <!-- ##### ENUM GtkDialogFlags ##### -->
 <para>
-
+Flags used to influence dialog construction.
 </para>
 
-@GTK_DIALOG_MODAL: 
-@GTK_DIALOG_DESTROY_WITH_PARENT: 
-@GTK_DIALOG_NO_SEPARATOR: 
+@GTK_DIALOG_MODAL: Make the constructed dialog modal, 
+  see gtk_widget_set_modal().
+@GTK_DIALOG_DESTROY_WITH_PARENT: Destroy the dialog when its
+  parent is destroyed, see gtk_window_set_destroy_with_parent().
+@GTK_DIALOG_NO_SEPARATOR: Don't put a separator between the
+  action area and the dialog content.
 
 <!-- ##### ENUM GtkResponseType ##### -->
 <para>
-
+Predefined values for use as response ids in gtk_dialog_add_button().
+All predefined values are negative, GTK+ leaves positive values for
+application-defined response ids. 
 </para>
 
-@GTK_RESPONSE_NONE: 
-@GTK_RESPONSE_REJECT: 
-@GTK_RESPONSE_ACCEPT: 
-@GTK_RESPONSE_DELETE_EVENT: 
-@GTK_RESPONSE_OK: 
-@GTK_RESPONSE_CANCEL: 
-@GTK_RESPONSE_CLOSE: 
-@GTK_RESPONSE_YES: 
-@GTK_RESPONSE_NO: 
-@GTK_RESPONSE_APPLY: 
-@GTK_RESPONSE_HELP: 
+@GTK_RESPONSE_NONE: Returned if an action widget has no response id, or if 
+   the dialog gets programmatically hidden or destroyed.
+@GTK_RESPONSE_REJECT: Generic response id, not used by GTK+ dialogs.
+@GTK_RESPONSE_ACCEPT: Generic response id, not used by GTK+ dialogs.
+@GTK_RESPONSE_DELETE_EVENT: Returned if the dialog is deleted.
+@GTK_RESPONSE_OK: Returned by OK buttons in GTK+ dialogs.
+@GTK_RESPONSE_CANCEL: Returned by Cancel buttons in GTK+ dialogs.
+@GTK_RESPONSE_CLOSE: Returned by Close buttons in GTK+ dialogs.
+@GTK_RESPONSE_YES: Returned by Yes buttons in GTK+ dialogs.
+@GTK_RESPONSE_NO: Returned by No buttons in GTK+ dialogs.
+@GTK_RESPONSE_APPLY: Returned by Apply buttons in GTK+ dialogs.
+@GTK_RESPONSE_HELP: Returned by Help buttons in GTK+ dialogs.
 
 <!-- ##### FUNCTION gtk_dialog_new ##### -->
 <para>

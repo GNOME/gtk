@@ -1,5 +1,7 @@
 2004-10-11  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/tmpl/gtkdialog.sgml: Document GtkDialogFlags and GtkResponseType.
+
 	* gtk/tmpl/gtktreesortable.sgml: Document GtkTreeIterCompareFunc
 	(#154943)
 
