@@ -18,12 +18,8 @@
  */
 #include "config.h"
 
-/* If you don't want to use gdk's signal handlers define this */
-/* #define I_NEED_TO_ACTUALLY_DEBUG_MY_PROGRAMS 1 */
-
 #include <X11/Xlocale.h>
 #include <ctype.h>
-#include <signal.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -131,7 +127,6 @@ static void	    gdk_exit_func		 (void);
 static int	    gdk_x_error			 (Display     *display, 
 						  XErrorEvent *error);
 static int	    gdk_x_io_error		 (Display     *display);
-static RETSIGTYPE   gdk_signal			 (int	       signum);
 
 GdkFilterReturn gdk_wm_protocols_filter (GdkXEvent *xev,
 					 GdkEvent  *event,
@@ -255,16 +250,6 @@ gdk_init (int	 *argc,
     }
   
   X_GETTIMEOFDAY (&start);
-  
-#ifndef I_NEED_TO_ACTUALLY_DEBUG_MY_PROGRAMS
-  signal (SIGHUP, gdk_signal);
-  signal (SIGINT, gdk_signal);
-  signal (SIGQUIT, gdk_signal);
-  signal (SIGBUS, gdk_signal);
-  signal (SIGSEGV, gdk_signal);
-  signal (SIGPIPE, gdk_signal);
-  signal (SIGTERM, gdk_signal);
-#endif
   
   gdk_display_name = NULL;
   
@@ -3109,73 +3094,6 @@ gdk_x_io_error (Display *display)
 {
   g_error ("an x io error occurred");
   return 0;
-}
-
-/*
- *--------------------------------------------------------------
- * gdk_signal
- *
- *   The signal handler.
- *
- * Arguments:
- *   "sig_num" is the number of the signal we received.
- *
- * Results:
- *   The signals we catch are all fatal. So we simply build
- *   up a nice little error message and print it and exit.
- *   If in the process of doing so another signal is received
- *   we notice that we are already exiting and simply kill
- *   our process.
- *
- * Side effects:
- *
- *--------------------------------------------------------------
- */
-
-static RETSIGTYPE
-gdk_signal (int sig_num)
-{
-  static int caught_fatal_sig = 0;
-  char *sig;
-  
-  if (caught_fatal_sig)
-    kill (getpid (), sig_num);
-  caught_fatal_sig = 1;
-  
-  switch (sig_num)
-    {
-    case SIGHUP:
-      sig = "sighup";
-      break;
-    case SIGINT:
-      sig = "sigint";
-      break;
-    case SIGQUIT:
-      sig = "sigquit";
-      break;
-    case SIGBUS:
-      sig = "sigbus";
-      break;
-    case SIGSEGV:
-      sig = "sigsegv";
-      break;
-    case SIGPIPE:
-      sig = "sigpipe";
-      break;
-    case SIGTERM:
-      sig = "sigterm";
-      break;
-    default:
-      sig = "unknown signal";
-      break;
-    }
-  
-  g_message ("\n** ERROR **: %s caught", sig);
-#ifdef G_ENABLE_DEBUG
-  abort ();
-#else /* !G_ENABLE_DEBUG */
-  gdk_exit (1);
-#endif /* !G_ENABLE_DEBUG */
 }
 
 /* Sends a ClientMessage to all toplevel client windows */

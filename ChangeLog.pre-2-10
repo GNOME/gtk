@@ -1,3 +1,11 @@
+Mon Dec 14 23:05:20 PST 1998 Manish Singh <yosh@gimp.org>
+
+	* acconfig.h
+	* configure.in: removed IPC_RMID_DEFERRED_RELEASE check
+
+	* gdk/gdk.c: remove signal handlers, since we do an IPC_RMID
+	after XShmAttach, and nobody complained
+
 Tue Dec 15 02:27:42 MET 1998 Sven Neumann <sven@gimp.org>
 
 	* po/de.po: Replaced the crappy german po-file with a valid one.

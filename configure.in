@@ -333,38 +333,6 @@ if test "x$enable_shm" = "xyes"; then
   AC_CHECK_HEADER(sys/ipc.h, AC_DEFINE(HAVE_IPC_H), no_sys_ipc=yes)
   AC_CHECK_HEADER(sys/shm.h, AC_DEFINE(HAVE_SHM_H), no_sys_shm=yes)
 
-  # Check whether shmctl IPC_RMID allowes subsequent attaches
-  if test "$ac_cv_header_sys_shm_h" = "yes"; then
-    AC_MSG_CHECKING(whether shmctl IPC_RMID allowes subsequent attaches)
-    AC_TRY_RUN([
-          #include <sys/types.h>
-          #include <sys/ipc.h>
-          #include <sys/shm.h>
-          int main()
-          {
-            int id;
-            char *shmaddr;
-          id = shmget (IPC_PRIVATE, 4, IPC_CREAT | 0777);
-          if (id == -1)
-            exit (2);
-            shmaddr = shmat (id, 0, 0);
-            shmctl (id, IPC_RMID, 0);
-            if ((char*) shmat (id, 0, 0) == (char*) -1)
-            {
-              shmdt (shmaddr);
-              exit (1);
-            }
-            shmdt (shmaddr);
-            shmdt (shmaddr);
-            exit (0);
-          }
-      ],
-      AC_DEFINE(IPC_RMID_DEFERRED_RELEASE)
-        AC_MSG_RESULT(yes),
-      AC_MSG_RESULT(no),
-      AC_MSG_RESULT(assuming no))
-  fi
-
   # Check for the X shared memory extension header file
   AC_MSG_CHECKING(X11/extensions/XShm.h)
   if test "x$no_xext_lib" = "xyes"; then

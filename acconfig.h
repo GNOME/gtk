@@ -29,12 +29,6 @@
 #undef HAVE_SYS_SELECT_H
 #undef HAVE_XCONVERTCASE
 
-/* some systems do not allow to ipcrm pages prior to
- * actual usage, namely: OSF1 V3.2, SunOS 4.1.1, 5.5, 5.5.1, 5.6,
- * IRIX 5.2 and 6.2.
- */
-#undef IPC_RMID_DEFERRED_RELEASE
-
 #undef NO_FD_SET
 
 #undef RESOURCE_BASE
