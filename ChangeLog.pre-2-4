@@ -17,7 +17,7 @@ Thu Jan 30 23:46:15 2003  Kristian Rietveld  <kris@gtk.org>
 Thu Jan 30 23:42:03 2003  Kristian Rietveld  <kris@gtk.org>
 
 	* gtk/gtkstyle.c (apply_affine_on_point): fix rouding error
-	(Fixes #96252, patch from Soeren Sandmann).
+	(Fixes #96242, patch from Soeren Sandmann).
 
 Thu Jan 30 16:54:29 2003  Owen Taylor  <otaylor@redhat.com>
 
