@@ -437,13 +437,15 @@ gtk_fixed_remove (GtkContainer *container,
 
       if (child->widget == widget)
 	{
+	  gboolean was_visible = GTK_WIDGET_VISIBLE (widget);
+	  
 	  gtk_widget_unparent (widget);
 
 	  fixed->children = g_list_remove_link (fixed->children, children);
 	  g_list_free (children);
 	  g_free (child);
 
-	  if (GTK_WIDGET_VISIBLE (widget) && GTK_WIDGET_VISIBLE (container))
+	  if (was_visible && GTK_WIDGET_VISIBLE (container))
 	    gtk_widget_queue_resize (GTK_WIDGET (container));
 
 	  break;

@@ -570,12 +570,14 @@ gtk_table_remove (GtkContainer *container,
 
       if (child->widget == widget)
         {
+	  gboolean was_visible = GTK_WIDGET_VISIBLE (widget);
+	  
 	  gtk_widget_unparent (widget);
 
           table->children = g_list_remove (table->children, child);
           g_free (child);
 
-          if (GTK_WIDGET_VISIBLE (widget) && GTK_WIDGET_VISIBLE (container))
+          if (was_visible && GTK_WIDGET_VISIBLE (container))
             gtk_widget_queue_resize (GTK_WIDGET (container));
           break;
         }
