@@ -211,7 +211,7 @@ static void         gtk_tree_model_sort_sort              (GtkTreeModelSort *tre
 static gint         gtk_tree_model_sort_level_find_insert (GtkTreeModelSort *tree_model_sort,
 							   SortLevel        *level,
 							   GtkTreeIter      *iter,
-							   gboolean          skip_sort_elt);
+							   gint             skip_index);
 static gboolean     gtk_tree_model_sort_insert_value      (GtkTreeModelSort *tree_model_sort,
 							   SortLevel        *level,
 							   GtkTreePath      *s_path,
@@ -436,7 +436,7 @@ gtk_tree_model_sort_row_changed (GtkTreeModel *s_model,
 
   gboolean free_s_path = FALSE;
 
-  gint offset, index = 0, old_index, i;
+  gint index = 0, old_index, i;
 
   g_return_if_fail (start_s_path != NULL || start_s_iter != NULL);
 
@@ -481,11 +481,7 @@ gtk_tree_model_sort_row_changed (GtkTreeModel *s_model,
 			       &tmpiter, start_s_path);
     }
 
-  offset = elt->offset;
-
-  for (i = 0; i < level->array->len; i++)
-    if (elt->offset == g_array_index (level->array, SortElt, i).offset)
-      old_index = i;
+  old_index = elt - SORT_ELT (level->array->data);
 
   memcpy (&tmp, elt, sizeof (SortElt));
 
@@ -493,12 +489,12 @@ gtk_tree_model_sort_row_changed (GtkTreeModel *s_model,
     index = gtk_tree_model_sort_level_find_insert (tree_model_sort,
 						   level,
 						   &tmp.iter,
-						   TRUE);
+						   old_index);
   else
     index = gtk_tree_model_sort_level_find_insert (tree_model_sort,
 						   level,
 						   &tmpiter,
-						   TRUE);
+						   old_index);
 
   if (index < old_index)
     {
@@ -1671,10 +1667,9 @@ static gint
 gtk_tree_model_sort_level_find_insert (GtkTreeModelSort *tree_model_sort,
 				       SortLevel        *level,
 				       GtkTreeIter      *iter,
-				       gboolean          skip_sort_elt)
+				       gint             skip_index)
 {
   gint start, middle, end;
-  gint skip_index;
   gint cmp;
   SortElt *tmp_elt;
   GtkTreeIter tmp_iter;
@@ -1706,13 +1701,10 @@ gtk_tree_model_sort_level_find_insert (GtkTreeModelSort *tree_model_sort,
 
   start = 0;
   end = level->array->len;
-  if (skip_sort_elt)
-    {
-      skip_index = SORT_ELT (iter->user_data2) - SORT_ELT (level->array->data);
-      end--;
-    }
-  else
+  if (skip_index < 0)
     skip_index = end;
+  else
+    end--;
 
   if (start == end)
     return 0;
@@ -1787,7 +1779,7 @@ gtk_tree_model_sort_insert_value (GtkTreeModelSort *tree_model_sort,
   else
     index = gtk_tree_model_sort_level_find_insert (tree_model_sort,
                                                    level, s_iter,
-                                                   FALSE);
+                                                   -1);
 
   g_array_insert_vals (level->array, index, &elt, 1);
   tmp_elt = SORT_ELT (level->array->data);
