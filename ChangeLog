@@ -1,3 +1,10 @@
+Tue Nov 16 00:08:07 2004  Jonathan Blandford  <jrb@redhat.com>
+
+	* docs/tools/widgets.c: Update so that toplevel windows accomodate
+	for the titlebar when sizing.  Also clean up statusbar
+
+	* docs/reference/gtk/images/*png: update
+
 2004-11-16  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkcellrenderertext.c (get_layout): Don't use the foreground
