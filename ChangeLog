@@ -1,5 +1,11 @@
 2004-08-22  Tor Lillqvist  <tml@iki.fi>
 
+	* gdk/win32/gdkwindow-win32.c (gdk_window_new_internal,
+	gdk_window_new, gdk_window_set_skip_taskbar_hint): Don't show TEMP
+	windows in the Task Manager. Implement by calling
+	gdk_window_set_skip_taskbar_hint(TRUE) on them. (#145481, Tim
+	Evans)
+
 	* gdk/win32/gdkdisplay-win32.c (enum_monitor, gdk_display_open):
 	Report whole of (primary) monitor, including any taskbars.
 	Excluding the taskbar area from the "root window" reported to GDK
