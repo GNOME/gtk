@@ -373,6 +373,7 @@ gboolean gdk_window_set_static_gravities (GdkWindow *window,
 
 /* GdkWindow */
 
+#ifndef GDK_DISABLE_DEPRECATED
 void	      gdk_window_set_hints	 (GdkWindow	  *window,
 					  gint		   x,
 					  gint		   y,
@@ -381,6 +382,7 @@ void	      gdk_window_set_hints	 (GdkWindow	  *window,
 					  gint		   max_width,
 					  gint		   max_height,
 					  gint		   flags);
+#endif
 void          gdk_window_set_type_hint   (GdkWindow       *window,
 					  GdkWindowTypeHint hint);
 void          gdk_window_set_modal_hint  (GdkWindow       *window,
