@@ -1,3 +1,7 @@
+2001-07-04  James Henstridge  <james@daa.com.au>
+
+	* gtk/gtkliststore.h: add missing gtk_list_store_newv prototype.
+
 Mon Jul  2 16:53:25 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/xembed.h gtk/gtkplug.c gtk/gtksocket.c: For
