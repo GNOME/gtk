@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.3.0\n"
 "POT-Creation-Date: 2003-02-04 10:14+0200\n"
-"PO-Revision-Date: 2003-02-04 03:26--500\n"
+"PO-Revision-Date: 2003-02-04 05:01--500\n"
 "Last-Translator: Yuriy Syrota <yuri@renome.rovno.ua>\n"
 "Language-Team: Ukrainian <uk@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -234,7 +234,7 @@ msgstr ""
 
 #: gdk-pixbuf/io-gif.c:1484
 msgid "GIF image was truncated or incomplete."
-msgstr ""
+msgstr "Зображення формату GIF обрізане чи незавершене."
 
 #: gdk-pixbuf/io-gif.c:1636
 msgid "The GIF image format"
@@ -283,7 +283,7 @@ msgstr "Помилка інтерпретації файлу зображенн�
 
 #: gdk-pixbuf/io-jpeg.c:349
 msgid "Insufficient memory to load image, try exiting some applications to free memory"
-msgstr ""
+msgstr "Недостатньо пам'яті для завантаження зображення, спробуйте закрити деякі додатки, щоб звільнити пам'ять"
 
 #: gdk-pixbuf/io-jpeg.c:383
 #: gdk-pixbuf/io-jpeg.c:744
@@ -300,12 +300,12 @@ msgstr "Не вдалося виділити пам'ять для заванта
 #: gdk-pixbuf/io-jpeg.c:812
 #, c-format
 msgid "JPEG quality must be a value between 0 and 100; value '%s' could not be parsed."
-msgstr ""
+msgstr "Якість формату JPEG має в діапазоні від 0 до 100; значення \"%s\" неможливо опрацювати."
 
 #: gdk-pixbuf/io-jpeg.c:827
 #, c-format
 msgid "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
-msgstr ""
+msgstr "Якість формату JPEG має в діапазоні від 0 до 100; значення \"%d\" не можна використовувати."
 
 #: gdk-pixbuf/io-jpeg.c:940
 msgid "The JPEG image format"
@@ -313,23 +313,23 @@ msgstr "Графічний формат JPEG"
 
 #: gdk-pixbuf/io-png.c:55
 msgid "Bits per channel of PNG image is invalid."
-msgstr ""
+msgstr "Значення кількості бітів на канал для зображення формату PNM неправильне."
 
 #: gdk-pixbuf/io-png.c:136
 msgid "Transformed PNG has zero width or height."
-msgstr ""
+msgstr "Перетворене зображення формату PNG має нульову ширину чи висоту."
 
 #: gdk-pixbuf/io-png.c:144
 msgid "Bits per channel of transformed PNG is not 8."
-msgstr ""
+msgstr "Значення кількості бітів на канал для зображення формату PNM не рівне 8."
 
 #: gdk-pixbuf/io-png.c:153
 msgid "Transformed PNG not RGB or RGBA."
-msgstr ""
+msgstr "Перетворенне зображення формату PNG не має тип RGB чи RGBA."
 
 #: gdk-pixbuf/io-png.c:162
 msgid "Transformed PNG has unsupported number of channels, must be 3 or 4."
-msgstr ""
+msgstr "Перетворене зображення формату PNG має непідтримувану кількість каналів, їх має бути 3 чи 4."
 
 #: gdk-pixbuf/io-png.c:183
 #, c-format
@@ -343,7 +343,7 @@ msgstr "Недостатньо пам'яті для завантаження ф�
 #: gdk-pixbuf/io-png.c:605
 #, c-format
 msgid "Insufficient memory to store a %ld by %ld image; try exiting some applications to reduce memory usage"
-msgstr ""
+msgstr "Недостатньо пам'яті для збереження %ld з %ld зображень; спробуйте закрити деякі додатки, щоб зменшити кількість використаної пам'яті"
 
 #: gdk-pixbuf/io-png.c:656
 msgid "Fatal error reading PNG image file"
@@ -356,16 +356,16 @@ msgstr "Фатальна помилка зчитування файлу зобр
 
 #: gdk-pixbuf/io-png.c:771
 msgid "Keys for PNG text chunks must have at least 1 and at most 79 characters."
-msgstr ""
+msgstr "Ключі для блоків тексту в зображенні формату PNG мають містити не менше 1 і не більше 79 символів."
 
 #: gdk-pixbuf/io-png.c:779
 msgid "Keys for PNG text chunks must be ASCII characters."
-msgstr ""
+msgstr "Ключі для блоків тексту в зображенні формату PNG мають бути символами з набору ASCII."
 
 #: gdk-pixbuf/io-png.c:812
 #, c-format
 msgid "Value for PNG text chunk %s can not be converted to ISO-8859-1 encoding."
-msgstr ""
+msgstr "Значення для блоку тексту \"%s\" в зображенні формату PNG не може бути перетворено в кодування ISO-8859-1."
 
 #: gdk-pixbuf/io-png.c:919
 msgid "The PNG image format"
@@ -373,7 +373,7 @@ msgstr "Формат зображення PNG"
 
 #: gdk-pixbuf/io-pnm.c:248
 msgid "PNM loader expected to find an integer, but didn't"
-msgstr ""
+msgstr "Завантажувач зображень формату PNM сподівався знайти ціле число, але не знайшов його"
 
 #: gdk-pixbuf/io-pnm.c:280
 msgid "PNM file has an incorrect initial byte"
@@ -381,7 +381,7 @@ msgstr "Файл PNM має некоректний початковий байт
 
 #: gdk-pixbuf/io-pnm.c:310
 msgid "PNM file is not in a recognized PNM subformat"
-msgstr ""
+msgstr "Файл формату PNM має незрозумілий підформат PNM"
 
 #: gdk-pixbuf/io-pnm.c:335
 msgid "PNM file has an image width of 0"
@@ -393,15 +393,15 @@ msgstr "Файл PNM містить зображення нульової вис
 
 #: gdk-pixbuf/io-pnm.c:379
 msgid "Maximum color value in PNM file is 0"
-msgstr ""
+msgstr "Максимальне значення кольору у файлі формату PNM дорівнює 0"
 
 #: gdk-pixbuf/io-pnm.c:387
 msgid "Maximum color value in PNM file is too large"
-msgstr ""
+msgstr "Максимальне значення кольору у файлі формату PNM надто велике"
 
 #: gdk-pixbuf/io-pnm.c:395
 msgid "Can't handle PNM files with maximum color values greater than 255"
-msgstr ""
+msgstr "Неможливо обробити файли формату PNM з максимальним значенням кольору більше, ніж 255"
 
 #: gdk-pixbuf/io-pnm.c:434
 #: gdk-pixbuf/io-pnm.c:462
@@ -416,7 +416,7 @@ msgstr "Формат зображення PNM не вірний"
 
 #: gdk-pixbuf/io-pnm.c:655
 msgid "PNM image loader does not support this PNM subformat"
-msgstr ""
+msgstr "Завантажувач зображень формату PNM не підтримує цей підформат PNM"
 
 #: gdk-pixbuf/io-pnm.c:710
 msgid "Premature end-of-file encountered"
