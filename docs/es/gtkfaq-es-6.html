@@ -1,0 +1,64 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<HTML>
+<HEAD>
+ <META NAME="GENERATOR" CONTENT="SGML-Tools 1.0.6">
+ <TITLE>GTK+ FAQ: Acerca de glib</TITLE>
+ <LINK HREF="gtkfaq-es-7.html" REL=next>
+ <LINK HREF="gtkfaq-es-5.html" REL=previous>
+ <LINK HREF="gtkfaq-es.html#toc6" REL=contents>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF">
+<A HREF="gtkfaq-es-7.html">Next</A>
+<A HREF="gtkfaq-es-5.html">Previous</A>
+<A HREF="gtkfaq-es.html#toc6">Contents</A>
+<HR NOSHADE>
+<H2><A NAME="s6">6. Acerca de glib</A></H2>
+
+<H2><A NAME="ss6.1">6.1 ¿Qué es glib?</A>
+</H2>
+
+<P>glib es una librería de funciones y definiciones útiles disponibles
+para ser utilizadas cuando se crean aplicaciones GDK y GTK. Proporciona
+reemplazos para algunas funciones estándar de libc, como malloc, las 
+cuales tienen errores en algunos sistemas.
+<P>También proporciona rutinas para manejar:
+<UL>
+<LI>Listas Doblemente Enlazadas</LI>
+<LI>Listas con Enlace Sencillo</LI>
+<LI>Cronómetros</LI>
+<LI>Manipulación de cadenas</LI>
+<LI>Un Analizador Léxico</LI>
+<LI>Funciones de Error</LI>
+</UL>
+<P>         
+<P>
+<H2><A NAME="ss6.2">6.2 ¿Por qué utilizar g_print, g_malloc, g_strdup y funciones compañeras de glib?</A>
+</H2>
+
+<P>Gracias a Tim Janik que escribió a gtk-list: (ligeramente modificado)
+<BLOCKQUOTE>
+Con respecto a g_malloc(), g_free() y hermanos, estas funciones son más
+seguras que sus equivalentes en libc. Por ejemplo, g_free() solo regresa si
+se llama con NULL. También, si se define USE_DMALLOC, la definición para
+estas funciones cambia (en glib.h) para utilizar MALLOC(), FREE() etc... Si
+MEM_PROFILE o MEM_CHECK se definen, hay incluso pequeñas estadísticas
+realizadas las cuales cuentan los tamaños de los bloques (mostrado por
+g_mem_profile() / g_mem_check()).
+<P>Considerando el hecho de que glib provee una interface para salvar espacio en
+pedazos de memoria si se tiene varios bloques que son siempre del mismo
+tamaño y para marcarlos ALLOC_ONLY si es necesario, es sencillo crear
+una pequeña envoltura para salvar (revisable para errores) alrededor del
+malloc/free normal asimismo - igual que gdk cubre Xlib. ;)
+<P>Utilizar g_error() y g_warning() dentro de aplicaciones como GIMP las cuales
+utilizan gtk por completo incluso da la oportunidad de hacer saltar una ventana
+que muestre los mensajes dentro de una ventana gtk con tu propio handler
+(utilizando g_set_error_handler()) con el mismo estilo que gtk_print() 
+(dentro de gtkmain.c).
+</BLOCKQUOTE>
+<P>
+<HR NOSHADE>
+<A HREF="gtkfaq-es-7.html">Next</A>
+<A HREF="gtkfaq-es-5.html">Previous</A>
+<A HREF="gtkfaq-es.html#toc6">Contents</A>
+</BODY>
+</HTML>

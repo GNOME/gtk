@@ -1,0 +1,195 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<HTML>
+<HEAD>
+ <META NAME="GENERATOR" CONTENT="SGML-Tools 1.0.6">
+ <TITLE>GTK+ FAQ: Cómo encontrar, configurar, instalar y comprobar GTK+</TITLE>
+ <LINK HREF="gtkfaq-es-3.html" REL=next>
+ <LINK HREF="gtkfaq-es-1.html" REL=previous>
+ <LINK HREF="gtkfaq-es.html#toc2" REL=contents>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF">
+<A HREF="gtkfaq-es-3.html">Next</A>
+<A HREF="gtkfaq-es-1.html">Previous</A>
+<A HREF="gtkfaq-es.html#toc2">Contents</A>
+<HR NOSHADE>
+<H2><A NAME="s2">2. Cómo encontrar, configurar, instalar y comprobar GTK+</A></H2>
+
+<H2><A NAME="ss2.1">2.1 ¿Qué necesito para correr GTK+?</A>
+</H2>
+
+<P>Para compilar GTK+, todo lo que necesita es un compilador de C (gcc) y
+el Sistema X Windows y librerías asociadas en su sistema.
+<P>
+<H2><A NAME="ss2.2">2.2 ¿Dónde puedo conseguir GTK+?</A>
+</H2>
+
+<P>El sitio canónico es:
+<PRE>
+ftp://ftp.gtk.org/pub/gtk
+</PRE>
+
+Por supuesto, cualquier espejo de ftp.gtk.org debe tener las últimas
+versiones también.
+<P>
+<H2><A NAME="ss2.3">2.3 ¿Cómo configuro/compilo GTK+?</A>
+</H2>
+
+<P>Por lo general, todo lo que necesita es emititir los comandos:
+<PRE>
+./configure
+make
+</PRE>
+
+en el directorio gtk+-version/.
+<P>
+<H2><A NAME="ss2.4">2.4 Cuando compilo GTK+ obtengo un error como: <CODE>make: file `Makefile' line 456: Syntax error</CODE></A>
+</H2>
+
+<P>Asegúrese de que utiliza GNU make (verifique con <CODE>make -v</CODE>). Hay
+varias versiones extrañas y maravillosas de make por ahí, y no todas
+manejan los <EM>Makefiles</EM> generados automáticamente.
+<P>
+<P>
+<H2><A NAME="ss2.5">2.5 ¡He compilado e instalado GTK+, pero no puedo lograr que los programas se enlacen con él!</A>
+</H2>
+
+<P>Este problema se encuentra comúnmente cuando las librerías GTK+ no pueden
+ser localizadas o tienen la versión incorrecta. Generalmente, el compilador
+se quejará de un 'unresolved symbol' (símbolo no resuelto). Hay dos cosas
+que necesita verificar:
+<P>
+<UL>
+<LI>Asegúrese de que las librerías pueden ser encontradas. Usted desea editar
+/etc/ld.so.conf para incluír los directorios que contienen las librerías
+GTK, de manera que luzca como:
+<PRE>
+/usr/X11R6/lib
+/usr/local/lib
+</PRE>
+
+Luego necesita correr /sbin/ldconfig como root. Puede encontrar que directorio
+utiliza GTK al ejecutar
+<PRE>
+gtk-config --libs
+</PRE>
+
+
+Si su sitema no utiliza ld.so para encontrar librerías (como Solaris),
+entonces tendrá que utilizar la variable de ambiente LD_LIBRARY_PATH
+(o compilar el camino en su programa, lo cual no voy a cubrir aquí). Así
+que, con un shell tipo Bourne usted puede hacer (si sus librerías GTK
+están en /usr/local/lib):
+<PRE>
+export LD_LIBRARY_PATH=/usr/local/lib
+</PRE>
+
+y en un csh, usted puede hacer:
+<PRE>
+setenv LD_LIBRARY_PATH /usr/local/lib
+</PRE>
+
+</LI>
+<LI>Asegúrese de que el enlazador está ha encontrado el conjunto correcto de
+librerías. Si tiene una distribución de Linux que instala GTK+ (ej.
+RedHat 5.0) entonces esta versión anterior puede ser utilizada. Ahora
+(asumiendo que tiene un sistema RedHat), emita el comando
+<PRE>
+rpm -e gtk gtk-devel
+</PRE>
+
+También puede querer remover los paquetes que dependen de gtk (rpm le
+dirá cuáles son). Si no tiene un sistema Linux RedHat, verifique
+para estar seguro que ni 
+<PRE>
+/usr/lib
+</PRE>
+ ni 
+<PRE>
+/usr/local/lib
+</PRE>
+
+contengan alguna de las librerías libgtk, libgdk, libglib, or libgck.
+Si existen, elimínelas (y cualquier archivo <EM>include</EM>, como 
+/usr/include/gtk y /usr/include/gdk) y reinstale gtk+.</LI>
+</UL>
+<P>
+<H2><A NAME="ss2.6">2.6 Cuando compilo programas con GTK+, obtengo mensajes de error del compilador diciendo que no es capaz de encontrar <CODE>"glibconfig.h"</CODE>.</A>
+</H2>
+
+<P>El archivo de encabezado "glibconfig.h" se movió al directorio 
+$exec_prefix/lib/glib/include/. $exec_prefix es el directorio que fue
+especificado al dar la bandera --exec-prefix a ./configure cuando se
+compiló GTK+. Va por omisión a $prefix, (especificado con --prefix),
+que en su lugar va por omisión a /usr/local/.
+<P>Ésto se hizo asi porque "glibconfig.h" incluye información 
+dependiente de la arquitectura, y el resto de los archivos <EM>include</EM> 
+se colocan en $prefix/include, el cual puede ser compartido entre distintas 
+arquitecturas.
+<P>GTK+ incluye un guión para el intérprete de comandos, 
+<CODE>gtk-config</CODE>, el cual hace fácil
+encontrar los caminos correctos de inclusión. El tutor de GTK+ incluye
+un ejemplo de como utilizar <CODE>gtk-config</CODE> para una compilación simple
+desde la línea de comandos. Para información sobre configuraciones más
+complicadas, vea el archivo docs/gtk-config.txt en la distribución de GTK+.
+<P>Si está intentando compilar un programa viejo, puede bordear el problema
+al configurarlo con una línea de comando como:
+<P>
+<BLOCKQUOTE><CODE>
+<PRE>
+CPPFLAGS="-I/usr/local/include/glib/include" ./configure
+</PRE>
+</CODE></BLOCKQUOTE>
+<P>para intérpretes de comandos compatibles con Bourne como bash, o para 
+variantes csh:
+<P>
+<BLOCKQUOTE><CODE>
+<PRE>
+setenv CPPFLAGS "-I/usr/local/include/glib/include" 
+./configure
+</PRE>
+</CODE></BLOCKQUOTE>
+<P>(Sustituya el valor apropiado de $exec_prefix para /usr/local.)
+<P>
+<H2><A NAME="ss2.7">2.7 Cuando instalo El GIMP, configure reporta que no puede encontrar GTK.</A>
+</H2>
+
+<P>Hay varias razones comúnes para esto:
+<UL>
+<LI>Usted tiene una versión vieja de GTK instalada en algún lugar.
+RedHat 5.0, por ejemplo, instala una copia anterior de GTK que no funcinará
+con las últimas veriones de GIMP. Debe eliminar esta copia vieja, pero
+observe que en el caso de RedHat 5.0 esto dañará las aplicaciones
+<CODE>control-panel</CODE>.
+<P>
+</LI>
+<LI><CODE>gtk-config</CODE> (u otro componente de GTK) no se encuentra en el camino
+(<EM>path</EM>),
+o hay una versión vieja en su sistema. Teclee:
+<PRE>
+gtk-config --version
+</PRE>
+
+para verificar ambos casos. Ésto debe devolver un valor de por lo menos
+0.99.8 para que las cosas funcionen correctamente con GIMP 0.99.23. Si
+devuelve un valor distinto a lo que usted espera, entonces tiene una versión
+vieja de GTK en su sistema.
+<P>
+</LI>
+<LI>El guión ./configure no puede encontrar las librerías GTK. Como
+./configure compila varios programas de prueba, necesita poder encontrar las
+librerías GTK. Revise la pregunta anterior para obtener más ayuda al
+respecto.</LI>
+</UL>
+<P>Si nada de lo anterior ayuda, entonces revise config.log, el cual es
+generado por ./configure cuando corre. Al final estará la última
+acción tomada antes de fallar. Si es una sección de código fuente,
+copie el código fuente a un archivo y compilelo con la línea
+jústamente arriba de él en config.log. Si la compilación tiene 
+éxito, intente ejecutarlo.
+<P>
+<HR NOSHADE>
+<A HREF="gtkfaq-es-3.html">Next</A>
+<A HREF="gtkfaq-es-1.html">Previous</A>
+<A HREF="gtkfaq-es.html#toc2">Contents</A>
+</BODY>
+</HTML>
