@@ -182,6 +182,11 @@ gdk_image_new_bitmap (GdkVisual *visual,
 
   image->bits_per_pixel = 1;
   image->bpp = 1;
+
+  /* free data right now, in contrast to the X11 version we have made
+   * our own copy. Use free, it was malloc()ed.
+   */
+  free (data);
   return(image);
 } /* gdk_image_new_bitmap() */
 

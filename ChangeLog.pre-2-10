@@ -1,3 +1,33 @@
+2001-01-06  Hans Breuer  <hans@breuer.org>
+
+	* gdk/gdk.def : updated exports
+
+	* gdk/win32/makefile.msc : -DGDK_ENABLE_BROKEN otherwise
+	gdk won't compile anymore
+ 
+	* gdk/win32/gdkevents-win32.c : initialize ret_val when
+	processing GDK_FILTER functions, initialize event.key->hardware_keycode.
+	Improved gdk_flush () to not only do pending drawing operations
+	but also process all currently pending events. This should make
+	the behaviour more similar to the X11 version.	
+
+	* gdk/win32/gdkgc-win32.c (predraw_set_background) : a background
+	option needs to be set even if there is no GDK_GC_BACKGROUND.
+	(gdk_win32_hdc_get) : use predraw_set_background () independent
+	of value_mask. This allows to draw dashed lines leaving the original
+	background intact.
+
+	* gdk/win32/gdkimage-win32.c (gdk_image_new_bitamp) : free data
+	after processing, because we can't reuse it as the X11 version does.
+
+	* gtk/gtk.def : updated exports
+
+	* gtk/makefile.msc.in : added ATK, removed all test apps. (I
+	would like to get rid of this file again, and use straight
+	makefile.msc again, as the other Gtk+ subdirs do)
+
+	* test/makefile.msc (new file) : build the test apps here
+
 Sat May  5 10:06:24 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* Release 1.3.5

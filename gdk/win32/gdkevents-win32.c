@@ -1623,6 +1623,8 @@ gdk_event_translate (GdkEvent *event,
       if (result != GDK_FILTER_CONTINUE)
 	{
 	  return_val =  (result == GDK_FILTER_TRANSLATE) ? TRUE : FALSE;
+	  *ret_val_flagp = TRUE;
+	  *ret_valp = return_val;
 	  goto done;
 	}
     }
@@ -1748,6 +1750,8 @@ gdk_event_translate (GdkEvent *event,
 	      switch (result)
 		{
 		case GDK_FILTER_REMOVE:
+		  *ret_val_flagp = TRUE;
+		  *ret_valp = 0;
 		  return_val = FALSE;
 		  break;
 
@@ -1756,6 +1760,8 @@ gdk_event_translate (GdkEvent *event,
 		  break;
 
 		case GDK_FILTER_CONTINUE:
+		  *ret_val_flagp = TRUE;
+		  *ret_valp = 1;
 		  return_val = TRUE;
 		  event->client.type = GDK_CLIENT_EVENT;
 		  event->client.window = window;
@@ -1828,6 +1834,8 @@ gdk_event_translate (GdkEvent *event,
     keyup_or_down:
 
       event->key.window = window;
+      event->key.hardware_keycode = msg->wParam;
+
       switch (msg->wParam)
 	{
 	case VK_LBUTTON:
@@ -3130,6 +3138,14 @@ gdk_event_send_clientmessage_toall (GdkEvent *event)
 void
 gdk_flush (void)
 {
+  MSG msg;
+
+  /* Process all messages currently available */
+  while (PeekMessage (&msg, NULL, 0, 0, PM_REMOVE))
+    {
+      TranslateMessage (&msg); /* Translate virt. key codes */
+      DispatchMessage (&msg);  /* Dispatch msg. to window */
+    }
   GdiFlush ();
 }
 

@@ -645,7 +645,7 @@ gdk_win32_gc_set_dashes (GdkGC *gc,
       return;
     }
   
-  /* win32_gc->pen_style = PS_COSMETIC; ??? */
+  win32_gc->pen_style = PS_COSMETIC; /* ??? */
   if (2 == n)
     {
       if ((dash_list[0] == dash_list[1]) && (dash_list[0] > 2))
@@ -946,10 +946,19 @@ predraw_set_background (GdkGC       *gc,
 			gboolean    *ok)
 {
   GdkGCWin32 *win32_gc = (GdkGCWin32 *) gc;
-  COLORREF bg = gdk_colormap_color (colormap, win32_gc->background);
 
-  if (SetBkColor (win32_gc->hdc, bg) == CLR_INVALID)
-    WIN32_GDI_FAILED ("SetBkColor"), *ok = FALSE;
+  if (win32_gc->values_mask & GDK_GC_BACKGROUND)
+    {
+      COLORREF bg = gdk_colormap_color (colormap, win32_gc->background);
+
+      if (SetBkColor (win32_gc->hdc, bg) == CLR_INVALID)
+        WIN32_GDI_FAILED ("SetBkColor"), *ok = FALSE;
+    }
+  else
+    {
+      if (0 == SetBkMode (win32_gc->hdc, TRANSPARENT))
+        WIN32_GDI_FAILED ("SetBkMode"), *ok = FALSE;
+    }
 }
 
 HDC
@@ -998,7 +1007,7 @@ gdk_win32_hdc_get (GdkDrawable    *drawable,
 
   if (ok
       && (usage & GDK_GC_BACKGROUND)
-      && (win32_gc->values_mask & GDK_GC_BACKGROUND))
+      /* && (win32_gc->values_mask & GDK_GC_BACKGROUND) */)
     predraw_set_background (gc, impl->colormap, &ok);
   
   if (ok && (usage & GDK_GC_FONT))

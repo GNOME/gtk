@@ -313,6 +313,7 @@ EXPORTS
 	gdk_window_clear_area_e
 	gdk_window_constrain_size
 	gdk_window_destroy
+	gdk_window_destroy_notify
 	gdk_window_end_paint
 	gdk_window_foreign_new
 	gdk_window_get_children
