@@ -1013,8 +1013,8 @@ cb_tree_destroy_event(GtkWidget* w)
   sTreeButtons* tree_buttons;
 
   /* free buttons structure associate at this tree */
-  tree_buttons = gtk_object_get_user_data(GTK_OBJECT(w));
-  free(tree_buttons);
+  tree_buttons = gtk_object_get_user_data (GTK_OBJECT (w));
+  g_free (tree_buttons);
 }
 
 static void
@@ -1184,7 +1184,7 @@ create_tree_sample(guint selection_mode,
   sTreeButtons* tree_buttons;
 
   /* create tree buttons struct */
-  if((tree_buttons = g_malloc(sizeof(sTreeButtons))) == NULL)
+  if ((tree_buttons = g_malloc (sizeof (sTreeButtons))) == NULL)
     {
       g_error("can't allocate memory for tree structure !\n");
       return;

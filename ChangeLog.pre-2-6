@@ -1,3 +1,8 @@
+Tue Oct  6 14:05:00 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/testgtk.c (cb_tree_destroy_event): use g_free to free g_malloced
+	memory (Martin Pool <mbp@wistful.humbug.org.au>).
+
 Mon Oct  5 15:26:30 1998  Raph Levien  <raph@gimp.org>
 
 	* gdk/gdkrgb.c (gdk_rgb_convert_0888_br): Fixed a few long's that
