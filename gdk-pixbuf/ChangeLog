@@ -1,3 +1,18 @@
+2001-10-29  Tor Lillqvist  <tml@iki.fi>
+
+	* Makefile.am: Use -no-undefined on Win32. Make
+	libgdk_pixbuf_1_3_la_OBJECTS depend on
+	gdk-pixbuf-marshal.c. Install import libraries.
+
+	* gdk_pixbuf.def: Update.
+
+	* gdk-pixbuf-io.c: (Win32) Use G_WIN32_DLLMAIN_FOR_DLL_NAME, saves
+	the actual DLL name of libgdk_pixbuf.
+	(get_libdir): Use it instead of guessing.
+
+	* io-xbm.c (gdk_pixbuf__xbm_image_begin_load): Use
+	g_file_open_tmp() insread of mkstemp().
+
 2001-10-18  Matthias Clasen  <matthiasc@poet.de>
 
 	* io-xbm.c (gdk_pixbuf__xbm_image_load_real): Don't dereference

@@ -28,6 +28,12 @@
 #include "gdk-pixbuf-private.h"
 #include "gdk-pixbuf-io.h"
 
+#ifdef G_OS_WIN32
+#define STRICT
+#include <windows.h>
+#undef STRICT
+#endif
+
 
 
 static gboolean
@@ -252,6 +258,10 @@ pixbuf_module_symbol (GModule *module, const char *module_name, const char *symb
 
 #ifdef G_OS_WIN32
 
+/* DllMain function needed to tuck away the gdk-pixbuf DLL name */
+
+G_WIN32_DLLMAIN_FOR_DLL_NAME (static, dll_name)
+
 static char *
 get_libdir (void)
 {
@@ -259,14 +269,12 @@ get_libdir (void)
 
   if (libdir == NULL)
     libdir = g_win32_get_package_installation_subdirectory
-      (GETTEXT_PACKAGE,
-       g_strdup_printf ("gdk_pixbuf-%d.%d.dll",
-			GDK_PIXBUF_MAJOR, GDK_PIXBUF_MINOR),
-       "loaders");
+      (GETTEXT_PACKAGE, dll_name, "lib\\gtk-2.0\\" GTK_VERSION "\\loaders");
 
   return libdir;
 }
 
+#undef PIXBUF_LIBDIR
 #define PIXBUF_LIBDIR get_libdir ()
 
 #endif

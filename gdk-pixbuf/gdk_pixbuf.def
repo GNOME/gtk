@@ -2,7 +2,10 @@ EXPORTS
 	_gdk_pixbuf_get_module
 	_gdk_pixbuf_get_named_module
 	_gdk_pixbuf_load_module
+	gdk_colorspace_get_type
+	gdk_interp_type_get_type
 	gdk_pixbuf_add_alpha
+	gdk_pixbuf_alpha_mode_get_type
 	gdk_pixbuf_animation_get_height
 	gdk_pixbuf_animation_get_iter
 	gdk_pixbuf_animation_get_static_image
@@ -22,6 +25,7 @@ EXPORTS
 	gdk_pixbuf_composite_color_simple
 	gdk_pixbuf_copy
 	gdk_pixbuf_copy_area
+	gdk_pixbuf_error_get_type
 	gdk_pixbuf_error_quark
 	gdk_pixbuf_fill
 	gdk_pixbuf_from_pixdata
@@ -48,19 +52,14 @@ EXPORTS
 	gdk_pixbuf_new_from_xpm_data
 	gdk_pixbuf_new_subpixbuf
 	gdk_pixbuf_ref
-;	gdk_pixbuf_rotate
 	gdk_pixbuf_saturate_and_pixelate
 	gdk_pixbuf_save
 	gdk_pixbuf_savev
 	gdk_pixbuf_scale
 	gdk_pixbuf_scale_simple
+	gdk_pixbuf_set_option
 	gdk_pixbuf_unref
 	gdk_pixdata_deserialize
 	gdk_pixdata_from_pixbuf
 	gdk_pixdata_serialize
 	gdk_pixdata_to_csource
-
-	gdk_pixbuf_alpha_mode_get_type
-	gdk_colorspace_get_type
-	gdk_pixbuf_error_get_type
-	gdk_interp_type_get_type
