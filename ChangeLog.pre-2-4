@@ -1,3 +1,21 @@
+Fri Dec 13 17:45:40 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/fnmatch.c gtk/gtkprivate.h gtk/gtkfilesel.c: 
+	System fnmatch wasn't going to be UTF-8 clean, neither 
+	was our	version. Redo our fnmatch.c to be UTF-8, add 
+	test cases, fix all sorts of bugs inherited
+	from the antique GNU fnmatch code. Change interface
+	to get rid of fnmatch.h constants. Fixes basic
+	non-workingness of filesel with non-ASCII filenames.
+
+	* gtk/fnmatch.h: No longer needed.
+
+Fri Dec 13 12:15:09 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkfilesel.c (find_parent_dir_fullname): If
+	getting the parent of the directory name, make
+	an attempt to change back to the original directory.
+
 Thu Dec 12 20:07:25 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkfilesel.c (cmpl_completion_fullname): Const

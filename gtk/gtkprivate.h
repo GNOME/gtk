@@ -96,6 +96,9 @@ const gchar *_gtk_get_data_prefix ();
 
 #endif /* G_OS_WIN32 */
 
+gboolean _gtk_fnmatch (const char *pattern,
+		       const char *string);
+
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */

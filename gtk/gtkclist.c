@@ -2844,10 +2844,6 @@ real_remove_row (GtkCList *clist,
     clist->row_list_end = g_list_previous (list);
   g_list_remove (list, clist_row);
 
-  /*if (clist->focus_row >=0 &&
-      (row <= clist->focus_row || clist->focus_row >= clist->rows))
-      clist->focus_row--;*/
-
   if (row < ROW_FROM_YPIXEL (clist, 0))
     clist->voffset += clist->row_height + CELL_SPACING;
 
@@ -4346,7 +4342,9 @@ sync_selection (GtkCList *clist,
 	clist->focus_row += d;
       if (clist->focus_row == -1 && clist->rows >= 1)
 	clist->focus_row = 0;
-      else if (clist->focus_row >= clist->rows)
+      else if (d < 0 && clist->focus_row >= clist->rows - 1)
+	clist->focus_row = clist->rows - 2;
+      else if (clist->focus_row >= clist->rows)	/* Paranoia */
 	clist->focus_row = clist->rows - 1;
     }
 

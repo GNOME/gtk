@@ -55,8 +55,6 @@
 #include <winsock.h>		/* For gethostname */
 #endif
 
-#include "fnmatch.h"
-
 #include "gdk/gdkkeysyms.h"
 #include "gtkbutton.h"
 #include "gtkcellrenderertext.h"
@@ -67,6 +65,7 @@
 #include "gtklabel.h"
 #include "gtkliststore.h"
 #include "gtkmain.h"
+#include "gtkprivate.h"
 #include "gtkscrolledwindow.h"
 #include "gtkstock.h"
 #include "gtktreeselection.h"
@@ -142,10 +141,6 @@ typedef struct _PossibleCompletion PossibleCompletion;
  * match by first_diff_index()
  */
 #define PATTERN_MATCH -1
-/* The arguments used by all fnmatch() calls below
- */
-#define FNMATCH_FLAGS (FNM_PATHNAME | FNM_PERIOD)
-
 #define CMPL_ERRNO_TOO_LONG ((1<<16)-1)
 #define CMPL_ERRNO_DID_NOT_CONVERT ((1<<16)-2)
 
@@ -3447,9 +3442,10 @@ find_parent_dir_fullname (gchar* dirname)
   
   if (chdir (sys_dirname) != 0 || chdir ("..") != 0)
     {
+      cmpl_errno = errno;
+      chdir (sys_orig_dir);
       g_free (sys_dirname);
       g_free (sys_orig_dir);
-      cmpl_errno = errno;
       return NULL;
     }
   g_free (sys_dirname);
@@ -3621,8 +3617,7 @@ find_completion_dir (gchar          *text_to_complete,
       for (i = 0; i < dir->sent->entry_count; i += 1)
 	{
 	  if (dir->sent->entries[i].is_dir &&
-	     fnmatch (pat_buf, dir->sent->entries[i].entry_name,
-		      FNMATCH_FLAGS)!= FNM_NOMATCH)
+	      _gtk_fnmatch (pat_buf, dir->sent->entries[i].entry_name))
 	    {
 	      if (found)
 		{
@@ -3649,7 +3644,7 @@ find_completion_dir (gchar          *text_to_complete,
 	{
 	  g_free (pat_buf);
 	  return NULL;
-	}
+}
       
       next->cmpl_parent = dir;
       
@@ -3772,8 +3767,7 @@ attempt_file_completion (CompletionState *cmpl_state)
     {
       if (dir->sent->entries[dir->cmpl_index].is_dir)
 	{
-	  if (fnmatch (pat_buf, dir->sent->entries[dir->cmpl_index].entry_name,
-		       FNMATCH_FLAGS) != FNM_NOMATCH)
+	  if (_gtk_fnmatch (pat_buf, dir->sent->entries[dir->cmpl_index].entry_name))
 	    {
 	      CompletionDir* new_dir;
 
@@ -3821,8 +3815,7 @@ attempt_file_completion (CompletionState *cmpl_state)
       append_completion_text (dir->sent->entries[dir->cmpl_index].entry_name, cmpl_state);
 
       cmpl_state->the_completion.is_a_completion =
-	fnmatch (pat_buf, dir->sent->entries[dir->cmpl_index].entry_name,
-		 FNMATCH_FLAGS) != FNM_NOMATCH;
+	_gtk_fnmatch (pat_buf, dir->sent->entries[dir->cmpl_index].entry_name);
 
       cmpl_state->the_completion.is_directory = dir->sent->entries[dir->cmpl_index].is_dir;
       if (dir->sent->entries[dir->cmpl_index].is_dir)
