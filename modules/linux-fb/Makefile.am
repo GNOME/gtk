@@ -24,7 +24,9 @@ LDFLAGS = @STRIP_BEGIN@ \
 fb_basic_la_SOURCES = basic.c
 
 fb_basic_la_LDFLAGS = -export-dynamic -avoid-version -module
-fb_basic_la_LIBADD = $(PANGO_LIBS) -L$(top_builddir)/gdk/.libs -lgdk-linux-fb-1.3 -lgdk_pixbuf-1.3
+fb_basic_la_LIBADD = $(PANGO_LIBS) \
+	-L$(top_builddir)/gdk/.libs -lgdk-linux-fb-1.3 \
+	-L$(top_builddir)/gdk-pixbuf/.libs -lgdk_pixbuf-1.3
 
 if USE_LINUX_FB
 

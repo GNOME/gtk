@@ -24,6 +24,7 @@
 #include <pango/pango.h>
 #include <pango/pango-utils.h>
 #include "gdkprivate-fb.h"
+#include <string.h>
 
 PangoGlyph
 pango_fb_get_unknown_glyph(PangoFont *font)
