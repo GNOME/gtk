@@ -4,51 +4,51 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.3.0\n"
-"POT-Creation-Date: 2000-06-03 18:36+0000\n"
-"PO-Revision-Date: 2000-06-03 18:37+00:00\n"
+"POT-Creation-Date: 2000-07-04 13:57+0000\n"
+"PO-Revision-Date: 2000-07-04 13:57+00:00\n"
 "Last-Translator: Valek Filippov <frob@df.ru>\n"
 "Language-Team: Russian <ru@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=koi8-r\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: gtk/gtkcolorsel.c:1424
+#: gtk/gtkcolorsel.c:1415
 msgid "Hue:"
 msgstr "Тон:"
 
-#: gtk/gtkcolorsel.c:1425
+#: gtk/gtkcolorsel.c:1416
 msgid "Saturation:"
 msgstr "Насыщенность:"
 
-#: gtk/gtkcolorsel.c:1426
+#: gtk/gtkcolorsel.c:1417
 msgid "Value:"
 msgstr "Значение:"
 
-#: gtk/gtkcolorsel.c:1427
+#: gtk/gtkcolorsel.c:1418
 msgid "Red:"
 msgstr "Красный:"
 
-#: gtk/gtkcolorsel.c:1428
+#: gtk/gtkcolorsel.c:1419
 msgid "Green:"
 msgstr "Зеленый:"
 
-#: gtk/gtkcolorsel.c:1429
+#: gtk/gtkcolorsel.c:1420
 msgid "Blue:"
 msgstr "Синий:"
 
-#: gtk/gtkcolorsel.c:1432
+#: gtk/gtkcolorsel.c:1423
 msgid "Opacity:"
 msgstr "Плотность:"
 
-#: gtk/gtkcolorsel.c:1447
+#: gtk/gtkcolorsel.c:1438
 msgid "Hex Value:"
 msgstr "Шестнадц.значение:"
 
-#: gtk/gtkcolorsel.c:1468
+#: gtk/gtkcolorsel.c:1459
 msgid "Custom Palette"
 msgstr "Другая палитра"
 
-#: gtk/gtkcolorsel.c:1473
+#: gtk/gtkcolorsel.c:1464
 msgid "Set Color"
 msgstr "Установить цвет"
 
@@ -63,13 +63,13 @@ msgid "Files"
 msgstr "Файлы"
 
 #. The OK button
-#: gtk/gtkfilesel.c:567 gtk/gtkfontsel.c:951 gtk/gtkgamma.c:415
+#: gtk/gtkfilesel.c:567 gtk/gtkfontsel.c:952 gtk/gtkgamma.c:415
 msgid "OK"
 msgstr "OK"
 
 #. The Cancel button
 #: gtk/gtkfilesel.c:574 gtk/gtkfilesel.c:963 gtk/gtkfilesel.c:1067
-#: gtk/gtkfilesel.c:1182 gtk/gtkfontsel.c:964 gtk/gtkgamma.c:423
+#: gtk/gtkfilesel.c:1182 gtk/gtkfontsel.c:965 gtk/gtkgamma.c:423
 msgid "Cancel"
 msgstr "Отменить"
 
@@ -100,7 +100,7 @@ msgid "Error"
 msgstr "Ошибка"
 
 #. close button
-#: gtk/gtkfilesel.c:851 gtk/gtkinputdialog.c:352
+#: gtk/gtkfilesel.c:851 gtk/gtkinputdialog.c:338
 msgid "Close"
 msgstr "Закрыть"
 
@@ -131,28 +131,28 @@ msgstr "Переименовать"
 msgid "Selection: "
 msgstr "Выбор: "
 
-#: gtk/gtkfontsel.c:190
+#: gtk/gtkfontsel.c:189
 msgid "Family:"
 msgstr "Семейство:"
 
-#: gtk/gtkfontsel.c:195
+#: gtk/gtkfontsel.c:194
 msgid "Style:"
 msgstr "Стиль:"
 
-#: gtk/gtkfontsel.c:200
+#: gtk/gtkfontsel.c:199
 msgid "Size:"
 msgstr "Размер:"
 
 #. create the text entry widget
-#: gtk/gtkfontsel.c:310
+#: gtk/gtkfontsel.c:309
 msgid "Preview:"
 msgstr "Пример:"
 
-#: gtk/gtkfontsel.c:958
+#: gtk/gtkfontsel.c:959
 msgid "Apply"
 msgstr "Применить"
 
-#: gtk/gtkfontsel.c:980
+#: gtk/gtkfontsel.c:981
 msgid "Font Selection"
 msgstr "Выбор шрифта"
 
@@ -165,84 +165,88 @@ msgid "Gamma value"
 msgstr "Гамма величина"
 
 #. shell and main vbox
-#: gtk/gtkinputdialog.c:198
+#: gtk/gtkinputdialog.c:185
 msgid "Input"
 msgstr "Ввод"
 
-#: gtk/gtkinputdialog.c:206
+#: gtk/gtkinputdialog.c:193
 msgid "No input devices"
 msgstr "Нет устройства ввода"
 
-#: gtk/gtkinputdialog.c:235
+#: gtk/gtkinputdialog.c:222
 msgid "Device:"
 msgstr "Устройство:"
 
-#: gtk/gtkinputdialog.c:251
+#: gtk/gtkinputdialog.c:238
 msgid "Disabled"
 msgstr "Выключен"
 
-#: gtk/gtkinputdialog.c:259
+#: gtk/gtkinputdialog.c:246
 msgid "Screen"
 msgstr "Экран"
 
-#: gtk/gtkinputdialog.c:267
+#: gtk/gtkinputdialog.c:254
 msgid "Window"
 msgstr "Окно"
 
-#: gtk/gtkinputdialog.c:275
+#: gtk/gtkinputdialog.c:262
 msgid "Mode: "
 msgstr "Режим: "
 
 #. The axis listbox
-#: gtk/gtkinputdialog.c:305
+#: gtk/gtkinputdialog.c:292
 msgid "Axes"
 msgstr "Оси"
 
 #. Keys listbox
-#: gtk/gtkinputdialog.c:321
+#: gtk/gtkinputdialog.c:308
 msgid "Keys"
 msgstr "Клавиши"
 
 #. We create the save button in any case, so that clients can
 #. connect to it, without paying attention to whether it exits
-#: gtk/gtkinputdialog.c:343
+#: gtk/gtkinputdialog.c:329
 msgid "Save"
 msgstr "Сохранить"
 
-#: gtk/gtkinputdialog.c:488
+#: gtk/gtkinputdialog.c:471
 msgid "X"
 msgstr "X"
 
-#: gtk/gtkinputdialog.c:489
+#: gtk/gtkinputdialog.c:472
 msgid "Y"
 msgstr "Y"
 
-#: gtk/gtkinputdialog.c:490
+#: gtk/gtkinputdialog.c:473
 msgid "Pressure"
 msgstr "Нажим"
 
-#: gtk/gtkinputdialog.c:491
+#: gtk/gtkinputdialog.c:474
 msgid "X Tilt"
 msgstr "Наклон X"
 
-#: gtk/gtkinputdialog.c:492
+#: gtk/gtkinputdialog.c:475
 msgid "Y Tilt"
 msgstr "Наклон Y"
 
-#: gtk/gtkinputdialog.c:532
+#: gtk/gtkinputdialog.c:476
+msgid "Wheel"
+msgstr "Колесо"
+
+#: gtk/gtkinputdialog.c:516
 msgid "none"
 msgstr "нет"
 
-#: gtk/gtkinputdialog.c:566 gtk/gtkinputdialog.c:602
+#: gtk/gtkinputdialog.c:550 gtk/gtkinputdialog.c:586
 msgid "(disabled)"
 msgstr "(отменен)"
 
-#: gtk/gtkinputdialog.c:595
+#: gtk/gtkinputdialog.c:579
 msgid "(unknown)"
 msgstr "(неизвестен)"
 
 #. and clear button
-#: gtk/gtkinputdialog.c:680
+#: gtk/gtkinputdialog.c:664
 msgid "clear"
 msgstr "очистить"
 
@@ -251,12 +255,12 @@ msgstr "очистить"
 msgid "Page %u"
 msgstr "Страница %u"
 
-#: gtk/gtkrc.c:1788
+#: gtk/gtkrc.c:1824
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\" line %d"
 msgstr "Файл с изображением не найден в pixmap_path: \"%s\", строка %d"
 
-#: gtk/gtkrc.c:1791
+#: gtk/gtkrc.c:1827
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "Файл с изображением не найден в pixmap_path: \"%s\""
