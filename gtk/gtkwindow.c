@@ -2417,7 +2417,8 @@ gtk_window_focus (GtkContainer     *container,
     }
 
   /* Now try to focus the first widget in the window */
-  if (GTK_WIDGET_DRAWABLE (bin->child) &&
+  if (bin->child &&
+      GTK_WIDGET_DRAWABLE (bin->child) &&
       GTK_WIDGET_IS_SENSITIVE (bin->child))
     {
       if (GTK_IS_CONTAINER (bin->child))
