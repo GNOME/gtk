@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.2.9\n"
 "POT-Creation-Date: 2001-03-02 09:10+0100\n"
-"PO-Revision-Date: 2001-03-02 09:12+0100\n"
+"PO-Revision-Date: 2001-03-02 19:41+0100\n"
 "Last-Translator: Fatih Demir <kabalak@gtranslator.org>\n"
 "Language-Team: Turkish <gnome-turk@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -123,7 +123,7 @@ msgstr "Yeniden adlandýr"
 
 #: gtk/gtkfilesel.c:1457
 msgid "Selection: "
-msgstr ""
+msgstr "Seçim:"
 
 #: gtk/gtkfontsel.c:210
 msgid "Foundry:"
@@ -131,7 +131,7 @@ msgstr ""
 
 #: gtk/gtkfontsel.c:211
 msgid "Family:"
-msgstr ""
+msgstr "Aile:"
 
 #: gtk/gtkfontsel.c:212
 msgid "Weight:"
@@ -147,7 +147,7 @@ msgstr ""
 
 #: gtk/gtkfontsel.c:215
 msgid "Add Style:"
-msgstr ""
+msgstr "Stil ekle:"
 
 #: gtk/gtkfontsel.c:216
 msgid "Pixel Size:"
@@ -159,15 +159,15 @@ msgstr ""
 
 #: gtk/gtkfontsel.c:218
 msgid "Resolution X:"
-msgstr ""
+msgstr "X çözünürlüðü:"
 
 #: gtk/gtkfontsel.c:219
 msgid "Resolution Y:"
-msgstr ""
+msgstr "Y çözünürlüðü:"
 
 #: gtk/gtkfontsel.c:220
 msgid "Spacing:"
-msgstr ""
+msgstr "Boþluk:"
 
 #: gtk/gtkfontsel.c:221
 msgid "Average Width:"
@@ -181,15 +181,15 @@ msgstr "Karakter kümesi:"
 #. of NULL initializers above
 #: gtk/gtkfontsel.c:459
 msgid "Font Property"
-msgstr ""
+msgstr "Yazý tipi özelliði"
 
 #: gtk/gtkfontsel.c:460
 msgid "Requested Value"
-msgstr ""
+msgstr "Istenilen deðer"
 
 #: gtk/gtkfontsel.c:461
 msgid "Actual Value"
-msgstr ""
+msgstr "Geçerli deðer"
 
 #: gtk/gtkfontsel.c:494
 msgid "Font"
@@ -201,7 +201,7 @@ msgstr "Yazý tipi:"
 
 #: gtk/gtkfontsel.c:509
 msgid "Font Style:"
-msgstr ""
+msgstr "Yazý tipi stili:"
 
 #: gtk/gtkfontsel.c:514
 msgid "Size:"
@@ -217,11 +217,11 @@ msgstr ""
 
 #: gtk/gtkfontsel.c:664
 msgid "Points"
-msgstr ""
+msgstr "Punto"
 
 #: gtk/gtkfontsel.c:671
 msgid "Pixels"
-msgstr ""
+msgstr "Piksel"
 
 #. create the text entry widget
 #: gtk/gtkfontsel.c:687
@@ -234,16 +234,16 @@ msgstr "Yazý tipi bilgileri"
 
 #: gtk/gtkfontsel.c:749
 msgid "Requested Font Name:"
-msgstr ""
+msgstr "Istenilen yazý tipi ismi:"
 
 #: gtk/gtkfontsel.c:760
 msgid "Actual Font Name:"
-msgstr ""
+msgstr "Geçerli yazý tipi ismi:"
 
 #: gtk/gtkfontsel.c:771
 #, c-format
 msgid "%i fonts available with a total of %i styles."
-msgstr ""
+msgstr "%2$i stilli %1$i yazý tipi eriþilir."
 
 #: gtk/gtkfontsel.c:786
 msgid "Filter"
@@ -280,7 +280,7 @@ msgstr ""
 
 #: gtk/gtkfontsel.c:1220 gtk/gtkfontsel.c:1972
 msgid "italic"
-msgstr ""
+msgstr "italik"
 
 #: gtk/gtkfontsel.c:1221 gtk/gtkfontsel.c:1973
 msgid "oblique"
@@ -300,11 +300,11 @@ msgstr "baþka"
 
 #: gtk/gtkfontsel.c:1231
 msgid "[M]"
-msgstr ""
+msgstr "[M]"
 
 #: gtk/gtkfontsel.c:1232
 msgid "[C]"
-msgstr ""
+msgstr "[C]"
 
 #: gtk/gtkfontsel.c:1792
 msgid "The selected font is not available."
@@ -317,8 +317,7 @@ msgstr "Seçili yazý tipi geçerli bir yazý tipi deðildir."
 #: gtk/gtkfontsel.c:1856
 msgid "This is a 2-byte font and may not be displayed correctly."
 msgstr ""
-"Yazý tipi bir 2 bayt yazý tipidir ve tamamen uygun olarak "
-"gösterilmeyebilir."
+"Yazý tipi bir 2 bayt yazý tipidir ve tamamen uygun olarak gösterilmeyebilir."
 
 #: gtk/gtkfontsel.c:1960 gtk/gtkinputdialog.c:607
 msgid "(unknown)"
