@@ -220,7 +220,10 @@ HTML_IMAGES = \
 	$(srcdir)/images/radio-group.png				\
 	$(srcdir)/images/separator.png					\
 	$(srcdir)/images/toggle-button.png				\
-	$(srcdir)/images/window.png
+	$(srcdir)/images/window.png					\
+	$(srcdir)/images/accel-label.png				\
+	$(srcdir)/images/file-button.png				\
+	$(srcdir)/images/icon-view.png
 
 # Extra options to supply to gtkdoc-fixref
 FIXXREF_OPTIONS=--extra-dir=../gdk-pixbuf/html --extra-dir=../gdk/html

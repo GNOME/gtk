@@ -1,3 +1,8 @@
+Wed Sep 15 00:57:37 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* docs/tools/widgets.c: Add accel label, file button
+	and icon view.
+
 Tue Sep 14 22:01:49 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* configure.in: New option --disable-visibility to disable

@@ -1,3 +1,12 @@
+Wed Sep 15 01:01:11 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* docs/reference/gtk/images/accel-label.png:
+	* docs/reference/gtk/images/file-button.png:
+	* docs/reference/gtk/images/icon-view.png:
+	* gtk/visual_index.xml: 
+	* gtk/Makefile.am (HTML_IMAGES): Add accel label, file button
+	and icon view.
+
 Tue Sep 14 22:13:51 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/building.sgml: Document --disable-visibility.

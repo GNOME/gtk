@@ -1,3 +1,4 @@
+#include <gdk/gdkkeysyms.h>
 #include "widgets.h"
       
 
@@ -94,6 +95,45 @@ create_label (void)
 }
 
 static WidgetInfo *
+create_accel_label (void)
+{
+  WidgetInfo *info;
+  GtkWidget *widget, *button, *box;
+  GtkAccelGroup *accel_group;
+
+  widget = gtk_accel_label_new ("Accel Label");
+
+  button = gtk_button_new_with_label ("Quit");
+  gtk_accel_label_set_accel_widget (GTK_ACCEL_LABEL (widget), button);
+  gtk_widget_set_no_show_all (button, TRUE);
+  
+  box = gtk_vbox_new (FALSE, 0);
+  gtk_container_add (GTK_CONTAINER (box), widget);
+  gtk_container_add (GTK_CONTAINER (box), button);
+
+  gtk_accel_label_set_accel_widget (GTK_ACCEL_LABEL (widget), button);
+  accel_group = gtk_accel_group_new();
+
+  info = g_new0 (WidgetInfo, 1);
+  info->name = g_strdup ("accel-label");
+  info->window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  gtk_widget_set_size_request (info->window, 200, -1);
+  gtk_widget_show_all (box);
+  gtk_container_add (GTK_CONTAINER (info->window), box);
+
+  info->no_focus = TRUE;
+  info->include_decorations = FALSE;
+
+  gtk_widget_set_app_paintable (info->window, TRUE);
+  g_signal_connect (info->window, "focus", G_CALLBACK (gtk_true), NULL);
+  gtk_container_set_border_width (GTK_CONTAINER (info->window), 12);
+  gtk_widget_add_accelerator (button, "activate", accel_group, GDK_Q, GDK_CONTROL_MASK,
+			      GTK_ACCEL_VISIBLE | GTK_ACCEL_LOCKED);
+
+  return info;
+}
+
+static WidgetInfo *
 create_combo_box_entry (void)
 {
   GtkWidget *widget;
@@ -156,6 +196,51 @@ create_tree_view (void)
 }
 
 static WidgetInfo *
+create_icon_view (void)
+{
+  GtkWidget *widget;
+  GtkWidget *vbox;
+  GtkWidget *align;
+  GtkWidget *icon_view;
+  GtkListStore *list_store;
+  GtkTreeIter iter;
+  GdkPixbuf *pixbuf;
+  WidgetInfo *info;
+
+  widget = gtk_frame_new (NULL);
+  gtk_frame_set_shadow_type (GTK_FRAME (widget), GTK_SHADOW_IN);
+  list_store = gtk_list_store_new (2, G_TYPE_STRING, GDK_TYPE_PIXBUF);
+  gtk_list_store_append (list_store, &iter);
+  pixbuf = gdk_pixbuf_new_from_file_at_size ("gnome-gmush.png", 20, 20, NULL);
+  gtk_list_store_set (list_store, &iter, 0, "One", 1, pixbuf, -1);
+  gtk_list_store_append (list_store, &iter);
+  pixbuf = gdk_pixbuf_new_from_file_at_size ("gnome-foot.png", 20, 20, NULL);
+  gtk_list_store_set (list_store, &iter, 0, "Two", 1, pixbuf, -1);
+
+  icon_view = gtk_icon_view_new();
+
+  gtk_icon_view_set_model (GTK_ICON_VIEW (icon_view), GTK_TREE_MODEL (list_store));
+  gtk_icon_view_set_text_column (GTK_ICON_VIEW (icon_view), 0);
+  gtk_icon_view_set_pixbuf_column (GTK_ICON_VIEW (icon_view), 1);
+  gtk_widget_set_size_request (icon_view, 220, 60);
+
+  gtk_container_add (GTK_CONTAINER (widget), icon_view);
+
+  vbox = gtk_vbox_new (FALSE, 3);
+  align = gtk_alignment_new (0.5, 0.5, 0.0, 0.0);
+  gtk_container_add (GTK_CONTAINER (align), widget);
+  gtk_box_pack_start (GTK_BOX (vbox), align, FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (vbox),
+		      gtk_label_new ("Icon View"),
+		      FALSE, FALSE, 0);
+
+  info = new_widget_info ("icon-view", vbox);
+  info->no_focus = FALSE;
+
+  return info;
+}
+
+static WidgetInfo *
 create_color_button (void)
 {
   GtkWidget *vbox;
@@ -195,6 +280,27 @@ create_font_button (void)
 		      FALSE, FALSE, 0);
 
   return new_widget_info ("font-button", vbox);
+}
+
+static WidgetInfo *
+create_file_button (void)
+{
+  GtkWidget *vbox;
+  GtkWidget *picker;
+  GtkWidget *align;
+
+  vbox = gtk_vbox_new (FALSE, 3);
+  align = gtk_alignment_new (0.5, 0.5, 0.0, 0.0);
+  picker = gtk_file_chooser_button_new ("File Button");
+  gtk_widget_set_size_request (picker, 150, -1);
+  gtk_file_chooser_set_filename (GTK_FILE_CHOOSER (picker), "/etc/yum.conf");
+  gtk_container_add (GTK_CONTAINER (align), picker);
+  gtk_box_pack_start (GTK_BOX (vbox), align, FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (vbox),
+		      gtk_label_new ("File Button"),
+		      FALSE, FALSE, 0);
+
+  return new_widget_info ("file-button", vbox);
 }
 
 static WidgetInfo *
@@ -311,6 +417,9 @@ get_all_widgets (void)
   retval = g_list_prepend (retval, create_panes ());
   retval = g_list_prepend (retval, create_frame ());
   retval = g_list_prepend (retval, create_window ());
+  retval = g_list_prepend (retval, create_accel_label ());
+  retval = g_list_prepend (retval, create_file_button ());
+  retval = g_list_prepend (retval, create_icon_view ());
   
   return retval;
 }
