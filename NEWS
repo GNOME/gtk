@@ -20,9 +20,9 @@ Overview of Changes in GTK+ 2.0.4
 * Memory leak and UMR fixes [Michael Meeks, Matthias Clasen, Valgrind]
 * Misc bug fixes
 
-Other contributors: Jacob Berkman, Remus Draica, Nano Golveia, 
-  Tim Janik, Sergey Kuzminov, George Lebl, Garrett Lesage, 
-  Timo Meinen, Michel Selten, Boris Shingarov, Jeff Waugh
+Other contributors: Nicholas Allen, Jacob Berkman, Remus Draica, 
+  Nano Golveia, Tim Janik, Sergey Kuzminov, George Lebl, Garrett Lesage, 
+  Robin Lu, Timo Meinen, Michel Selten, Boris Shingarov, Jeff Waugh
 
 Overview of Changes in GTK+ 2.0.3
 =================================

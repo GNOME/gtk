@@ -304,7 +304,8 @@ gdk_check_wm_state_changed (GdkWindow *window)
   gboolean found_sticky, found_maxvert, found_maxhorz;
   GdkWindowState old_state;
   
-  if (GDK_WINDOW_DESTROYED (window))
+  if (GDK_WINDOW_DESTROYED (window) ||
+      gdk_window_get_window_type (window) != GDK_WINDOW_TOPLEVEL)
     return;
   
   if (wm_state_atom == 0)
