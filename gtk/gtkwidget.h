@@ -576,9 +576,6 @@ void	   gtk_widget_set_uposition	  (GtkWidget	       *widget,
 void	   gtk_widget_set_usize		  (GtkWidget	       *widget,
 					   gint			width,
 					   gint			height);
-void       gtk_widget_get_usize           (GtkWidget           *widget,
-					   gint                *width,
-					   gint                *height);
 #endif
 
 void	   gtk_widget_set_events	  (GtkWidget	       *widget,

@@ -379,6 +379,7 @@ gtk_window_class_init (GtkWindowClass *klass)
                                    PROP_ALLOW_SHRINK,
                                    g_param_spec_boolean ("allow_shrink",
 							 _("Allow Shrink"),
+							 /* xgettext:no-c-format */
 							 _("If TRUE, the window has no mimimum size. Setting this to TRUE is 99% of the time a bad idea."),
 							 FALSE,
 							 G_PARAM_READWRITE));
