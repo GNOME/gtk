@@ -45,6 +45,10 @@ Fri May 15 09:44:10 1998  Tim Janik  <timj@gtk.org>
 	* gtk/gtkwidget.h (struct _GtkWidgetClass): corrected returntype of
 	the visibility_notify_event method and changed method order.
 
+1998-05-14    <sopwith@moebuis.labs.redhat.com>
+
+	* gtk/gtkwidget.[ch] Added visibility_notify_event to GtkWidget
+
 Thu May 14 03:04:43 1998  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtk.defs: added GtkButtonBoxStyle and GtkOrientation definitions
