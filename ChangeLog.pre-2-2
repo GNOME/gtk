@@ -1,3 +1,8 @@
+Thu Oct 22 22:40:35 1998  Lars Hamann  <lars@gtk.org>
+
+	* gtk/gtkctree.c (gtk_ctree_destroy): removed. gtk_clist_destroy
+	is sufficient
+
 Thu Oct 22 16:22:55 1998  Lars Hamann  <lars@gtk.org>
 
 	* gtk/gtkclist.c (COLUMN_FROM_XPIXEL): samll fix for invisible

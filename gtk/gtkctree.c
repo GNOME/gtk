@@ -49,7 +49,6 @@
 
 static void gtk_ctree_class_init        (GtkCTreeClass  *klass);
 static void gtk_ctree_init              (GtkCTree       *ctree);
-static void gtk_ctree_destroy           (GtkObject      *object);
 static void gtk_ctree_realize           (GtkWidget      *widget);
 static void gtk_ctree_unrealize         (GtkWidget      *widget);
 static gint gtk_ctree_button_press      (GtkWidget      *widget,
@@ -353,8 +352,6 @@ gtk_ctree_class_init (GtkCTreeClass *klass)
 
   gtk_object_class_add_signals (object_class, ctree_signals, LAST_SIGNAL);
 
-  object_class->destroy = gtk_ctree_destroy;
-
   widget_class->realize = gtk_ctree_realize;
   widget_class->unrealize = gtk_ctree_unrealize;
   widget_class->button_press_event = gtk_ctree_button_press;
@@ -451,43 +448,6 @@ gtk_ctree_init (GtkCTree *ctree)
   ctree->expander_style = GTK_CTREE_EXPANDER_SQUARE;
   ctree->drag_compare   = NULL;
   ctree->show_stub      = TRUE;
-}
-
-static void
-gtk_ctree_destroy (GtkObject *object)
-{
-  gint i;
-  GtkCList *clist;
-
-  g_return_if_fail (object != NULL);
-  g_return_if_fail (GTK_IS_CTREE (object));
-
-  clist = GTK_CLIST (object);
-
-  GTK_CLIST_SET_FLAG (clist, CLIST_FROZEN);
-
-  gtk_clist_clear (GTK_CLIST (object));
-
-  if (clist->vscrollbar)
-    {
-      gtk_widget_unparent (clist->vscrollbar);
-      clist->vscrollbar = NULL;
-    }
-  if (clist->hscrollbar)
-    {
-      gtk_widget_unparent (clist->hscrollbar);
-      clist->hscrollbar = NULL;
-    }
-
-  for (i = 0; i < clist->columns; i++)
-    if (clist->column[i].button)
-      {
-        gtk_widget_unparent (clist->column[i].button);
-        clist->column[i].button = NULL;
-      }
-
-  if (GTK_OBJECT_CLASS (container_class)->destroy)
-    (*GTK_OBJECT_CLASS (container_class)->destroy) (object);
 }
 
 static void
