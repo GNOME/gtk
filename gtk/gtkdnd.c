@@ -2053,7 +2053,7 @@ gtk_drag_source_unset_icon (GtkDragSourceSite *site)
       g_object_unref (site->icon_data.pixbuf.pixbuf);
       break;
     case GTK_IMAGE_STOCK:
-      g_free (G_OBJECT (site->icon_data.stock.stock_id));
+      g_free (site->icon_data.stock.stock_id);
       break;
     default:
       g_assert_not_reached();

@@ -1,3 +1,8 @@
+2003-05-11  Anders Carlsson  <andersca@codefactory.se>
+
+	* gtk/gtkdnd.c (gtk_drag_source_unset_icon): Don't cast a gchar to
+	a GObject. (#112762)
+
 2003-05-08  Sven Neumann  <sven@gimp.org>
 
 	* configure.in: set the HAVE_X11R6 automake conditional to false
