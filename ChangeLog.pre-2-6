@@ -1,3 +1,7 @@
+Sat Oct 30 13:17:18 BST 1999 Tony Gale <gale@gtk.org>
+
+        * docs/gtkfaq.sgml: FAQ update
+
 Sat Oct 30 09:09:09 1999  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkselection.c (gtk_target_list_remove): Use
