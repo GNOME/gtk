@@ -195,12 +195,17 @@ Additions:
    involves a XQueryTree.
 
  * Scrolled windows need to be smarter about when they size-request/allocate
-   their children.
+   their children. In particular, we should not be queuing the resizes
+   on the toplevel window, but on the Viewport.
 
  * Should all the default handlers really return FALSE? This can
    cause confusing presses to be sent to containers that actually
    want to get events on themselves.
 
+ * Fix block_resize, disable_resize.
+
+ * Buttons's should derive from Bin's. (GTK 2.0 change, breaks
+   lots of stuff)
 
 Text/Edit widget:
 

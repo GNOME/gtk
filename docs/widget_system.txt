@@ -333,8 +333,7 @@ Removing from a container
 When a widget is removed to a container, the container:
 
   1) Calls gtk_widget_unparent (widget)
-  2) Sets widget->parent to NULL
-  3) Queues a resize.
+  2) Queues a resize.
 
 Notes:
 
@@ -378,7 +377,7 @@ The Map signal
 
   1) Set the MAPPED flag
   2) If the widget has any windows, gdk_window_show those windows
-  3) call gtk_widget_map for all child windows that are 
+  3) call gtk_widget_map for all child widgets that are 
      VISIBLE and !MAPPED.
   3) Do any other functions related to putting the widget onscreen.
      (for instance, showing extra popup windows...)
