@@ -137,8 +137,8 @@ explode_gray_into_buf (struct jpeg_decompress_struct *cinfo,
 		to = lines[i] + (w - 1) * 3;
 		for (j = w - 1; j >= 0; j--) {
 			to[0] = from[0];
-			to[1] = from[1];
-			to[2] = from[2];
+			to[1] = from[0];
+			to[2] = from[0];
 			to -= 3;
 			from--;
 		}
@@ -447,7 +447,7 @@ image_load_increment (gpointer data, guchar *buf, guint size)
 			/* we're decompressing so feed jpeg lib scanlines */
 			guchar *lines[4];
 			guchar **lptr;
-			guchar *rowptr;
+			guchar *rowptr, *p;
 			gint   nlines, i;
 			gint   start_scanline;
 
@@ -458,8 +458,11 @@ image_load_increment (gpointer data, guchar *buf, guint size)
 				rowptr = context->dptr;
 				for (i=0; i < cinfo->rec_outbuf_height; i++) {
 					*lptr++ = rowptr;
-					rowptr +=  context->pixbuf->art_pixbuf->rowstride;;
+					rowptr += context->pixbuf->art_pixbuf->rowstride;;
 				}
+
+				for (p=lines[0],i=0; i< context->pixbuf->art_pixbuf->rowstride;i++, p++)
+					*p = 0;
 				
 				nlines = jpeg_read_scanlines (cinfo, lines,
 							      cinfo->rec_outbuf_height);
@@ -489,6 +492,8 @@ image_load_increment (gpointer data, guchar *buf, guint size)
 					 nlines, cinfo->src->bytes_in_buffer);
 #endif
 			}
+			/* did entire image */
+			return TRUE;
 		}
 	}
 
