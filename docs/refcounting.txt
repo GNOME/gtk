@@ -7,9 +7,10 @@ functions that follow these conventions:
   *_new:      Create a new structure with a reference count of 1.
   *_ref:      Increase ref count by one.
   *_unref:    Decrease ref count by one.  If the count drops to zero,
-              run aprropriate finalization code and free the memory.
-              No user visible actions should take place, like
-              destryoing windows, etc.
+              run appropriate finalization code and free the memory.
+	      For data structures with a _destroy function, it will be
+	      invoked at this point, if the data structure is not
+              already in a destroyed state.
 
 GtkObjects also provide the following functions:
 
