@@ -22,8 +22,8 @@
 
 #include <config.h>
 #include <stdlib.h>
-#include <gtk/gtk.h>
-#include <gdk-pixbuf/gdk-pixbuf.h>
+#include "gtk.h"
+#include "gdk-pixbuf.h"
 #include <math.h>
 
 
@@ -190,11 +190,14 @@ destroy_cb (GtkObject *object, gpointer data)
 	gtk_main_quit ();
 }
 
+extern void pixbuf_init();
+
 int
 main (int argc, char **argv)
 {
 	GtkWidget *window;
 
+	pixbuf_init ();
 	gtk_init (&argc, &argv);
 	gdk_rgb_init ();
 

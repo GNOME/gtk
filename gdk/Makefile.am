@@ -9,16 +9,17 @@ EXTRA_DIST =	\
 	makefile.cygwin \
 	makefile.msc
 
-common_includes = @STRIP_BEGIN@ \
-	-DG_LOG_DOMAIN=\"Gdk\"	\
-	-I$(top_srcdir)		\
-	-I$(top_builddir)/gdk	\
-	@GTK_DEBUG_FLAGS@ 	\
-	@GTK_XIM_FLAGS@		\
-	@GTK_LOCALE_FLAGS@	\
-	@PANGO_CFLAGS@		\
-	@GLIB_CFLAGS@		\
-	@more_cflags@ 		\
+common_includes = @STRIP_BEGIN@ 	\
+	-DG_LOG_DOMAIN=\"Gdk\"		\
+	-I$(top_srcdir)			\
+	-I$(top_builddir)/gdk		\
+	-I$(top_srcdir)/gdk-pixbuf 	\
+	@GTK_DEBUG_FLAGS@ 		\
+	@GTK_XIM_FLAGS@			\
+	@GTK_LOCALE_FLAGS@		\
+	@PANGO_CFLAGS@			\
+	@GLIB_CFLAGS@			\
+	@more_cflags@ 			\
 @STRIP_END@
 
 INCLUDES = $(common_includes)
@@ -65,6 +66,7 @@ gdk_public_h_sources = @STRIP_BEGIN@ \
 	gdkimage.h	\
 	gdkinput.h	\
 	gdkpango.h	\
+	gdkpixbuf.h	\
 	gdkpixmap.h	\
 	gdkprivate.h	\
 	gdkproperty.h	\
@@ -89,6 +91,8 @@ gdk_c_sources = @STRIP_BEGIN@ 	\
 	gdkimage.c		\
 	gdkinternals.h  	\
 	gdkpango.c		\
+	gdkpixbuf-drawable.c	\
+	gdkpixbuf-render.c	\
 	gdkpixmap.c		\
 	gdkpoly-generic.h	\
 	gdkpolyreg-generic.c	\

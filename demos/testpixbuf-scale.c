@@ -52,6 +52,8 @@ expose_cb (GtkWidget *widget, GdkEventExpose *event, gpointer data)
   return TRUE;
 }
 
+extern void pixbuf_init();
+
 int
 main(int argc, char **argv)
 {
@@ -61,6 +63,8 @@ main(int argc, char **argv)
 	GtkWidget *hbox, *label, *hscale;
 	GtkAdjustment *adjustment;
 	GtkRequisition scratch_requisition;
+
+	pixbuf_init ();
 
 	gtk_init (&argc, &argv);
 	gdk_rgb_init ();

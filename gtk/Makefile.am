@@ -10,6 +10,7 @@ INCLUDES = @STRIP_BEGIN@ \
 	-DTESTGTK_RCFILE=\"`pwd`/$(srcdir)/testgtkrc\"	\
 	-I$(top_srcdir) -I../gdk			\
 	-I$(top_srcdir)/gdk				\
+	-I$(top_srcdir)/gdk-pixbuf -I../gdk-pixbuf	\
 	@GTK_DEBUG_FLAGS@				\
 	@GTK_XIM_FLAGS@					\
 	@GTK_LOCALE_FLAGS@				\
@@ -118,6 +119,7 @@ gtk_public_h_sources = @STRIP_BEGIN@ \
 	gtkoptionmenu.h		\
 	gtkpacker.h		\
 	gtkpaned.h		\
+	gdk-pixbuf-loader.h	\
 	gtkpixmap.h		\
 	gtkplug.h		\
 	gtkpreview.h		\
@@ -318,6 +320,7 @@ gtk_c_sources = @STRIP_BEGIN@ \
 	gtkwindow.c		\
 	fnmatch.c		\
 	fnmatch.h		\
+	gdk-pixbuf-loader.c	\
 @STRIP_END@
 # we use our own built_sources variable rules to avoid automake's
 # BUILT_SOURCES oddities
@@ -517,17 +520,18 @@ uninstall-local:
 # test programs, not to be installed
 #
 noinst_PROGRAMS = testgtk testcalendar testinput testselection testrgb testdnd testtext simple testtextbuffer # testthreads
-DEPS = @gtktargetlib@ $(top_builddir)/gdk/@gdktargetlib@
+DEPS = @gtktargetlib@ $(top_builddir)/gdk-pixbuf/libgdk_pixbuf.la  $(top_builddir)/gdk/@gdktargetlib@
 LDADDS = @STRIP_BEGIN@ \
-	@gtktargetlib@			\
-	$(top_builddir)/gdk/@gdktargetlib@ \
-	@more_ldflags@			\
-	@more_libs@			\
-	@GDK_WLIBS@			\
-	@PANGO_LIBS@			\
-	@GLIB_LIBS@			\
-	@GTK_LIBS_EXTRA@		\
-	-lm				\
+	@gtktargetlib@					\
+	$(top_builddir)/gdk-pixbuf/libgdk_pixbuf.la	\
+	$(top_builddir)/gdk/@gdktargetlib@ 		\
+	@more_ldflags@					\
+	@more_libs@					\
+	@GDK_WLIBS@					\
+	@PANGO_LIBS@					\
+	@GLIB_LIBS@					\
+	@GTK_LIBS_EXTRA@				\
+	-lm						\
 @STRIP_END@
 testgtk_DEPENDENCIES = $(DEPS)
 testcalendar_DEPENDENCIES = $(DEPS)

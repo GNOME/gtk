@@ -1,3 +1,27 @@
+Wed Jun 21 16:38:13 2000  Owen Taylor  <otaylor@redhat.com>
+
+        * gdk-pixbuf/* docs/reference/gdk-pixbuf/*: Welcome aboard,
+	gdk-pixbuf.
+
+	* gtk/gdk-pixbuf-loader.c (gdk_pixbuf_loader_class_init):
+	fixups for GObject.
+
+	* gdk/Makefile.am gdk/gdkpixbuf-render.[ch] gdk/gdkpixbuf.[ch]: Bits of 
+	gdk-pixbuf with GDK dependencies moved into GDK.
+	
+	* gtk/Makefile.am gtk/gdk-pixbuf-loader.[ch]: Temporarily
+	move gdk-pixbuf-loader here until GObject has signals.
+
+	* demos/: New directory of demos. Move demos from
+	gdk-pixbuf here.
+
+	* demos/pixbuf-init.c: Small bit of code to check for
+	loaders in ../gdk-pixbuf/.libs/gdk-pixbuf, and if found,
+	set GDK_PIXBUF_MODULEDIR appropriately.
+
+	* gdk/gdkcompat.h: Remove GDK_DRAWABLE_PIXMAP compat
+	define which no longer makes sense.
+
 2000-06-21  Havoc Pennington  <hp@redhat.com>
 
 	* gtk/gtkwidget.c (gtk_widget_create_pango_context): Use

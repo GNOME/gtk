@@ -1,21 +1,7 @@
 SUBDIRS = pixops
 
-if BUILD_CANVAS_ITEM
-CANVAS_PIXBUF_LIB = libgnomecanvaspixbuf.la
-CANVAS_PIXBUF_HEADERFILES=gnome-canvas-pixbuf.h
-libgnomecanvaspixbuf_la_SOURCES = gnome-canvas-pixbuf.c
-EXTRA_GNOME_LIBS = $(GNOME_LIBS)
-else
-CANVAS_PIXBUF_LIB =
-CANVAS_PIXBUF_HEADERFILES =
-EXTRA_GNOME_LIBS =
-endif
-
 lib_LTLIBRARIES = 		\
-	libgdk_pixbuf.la	\
-	$(CANVAS_PIXBUF_LIB)
-
-libgnomecanvaspixbuf_la_LDFLAGS = -version-info 1:0:0 $(EXTRA_GNOME_LIBS)
+	libgdk_pixbuf.la
 
 libexecdir = $(libdir)/gdk-pixbuf/loaders
 
@@ -138,34 +124,21 @@ extra_sources = $(libpixbufloader_png_la_SOURCES) 	\
 builtin_libraries = 
 endif
 
-noinst_PROGRAMS = test-gdk-pixbuf testpixbuf testpixbuf-drawable testanimation testpixbuf-scale
+noinst_PROGRAMS = test-gdk-pixbuf
 TESTS = test-gdk-pixbuf
 
 DEPS = libgdk_pixbuf.la
 INCLUDES = -I$(top_srcdir) -I$(top_builddir) \
 	-I$(top_srcdir)/gdk-pixbuf \
 	-I$(top_builddir)/gdk-pixbuf \
-	$(GLIB_CFLAGS) $(GTK_CFLAGS) $(GNOME_CFLAGS)
+	$(GLIB_CFLAGS)
 AM_CPPFLAGS = "-DPIXBUF_LIBDIR=\"$(libexecdir)\""
 
-LDADDS = libgdk_pixbuf.la $(GLIB_LIBS) $(GTK_LIBS) $(STATIC_LIB_DEPS)
+LDADDS = libgdk_pixbuf.la $(GLIB_LIBS) $(STATIC_LIB_DEPS)
 
-if INSIDE_GNOME_LIBS
 test_gdk_pixbuf_LDADD = $(LDADDS) -lgmodule
-testpixbuf_LDADD = $(LDADDS) -lgmodule
-testpixbuf_drawable_LDADD = $(LDADDS)
-testpixbuf_scale_LDADD = $(LDADDS)
-testanimation_LDADD = $(LDADDS) -lgmodule
-else
-test_gdk_pixbuf_LDADD = $(LDADDS) $(GNOME_LIBS) -lgmodule
-testpixbuf_LDADD = $(LDADDS) $(GNOME_LIBS) -lgmodule
-testpixbuf_drawable_LDADD = $(LDADDS) $(GNOME_LIBS)
-testpixbuf_scale_LDADD = $(LDADDS) $(GNOME_LIBS)
-testanimation_LDADD = $(LDADDS) $(GNOME_LIBS) -lgmodule
-endif
 
-
-GDK_PIXBUF_LIBS = $(GLIB_LIBS) $(GTK_LIBS)
+GDK_PIXBUF_LIBS = $(GLIB_LIBS)
 
 #
 # The GdkPixBuf library
@@ -177,22 +150,17 @@ libgdk_pixbuf_la_SOURCES = 	\
 	gdk-pixbuf.c		\
 	gdk-pixbuf-animation.c	\
 	gdk-pixbuf-data.c	\
-	gdk-pixbuf-drawable.c	\
 	gdk-pixbuf-io.c		\
-	gdk-pixbuf-loader.c	\
-	gdk-pixbuf-render.c	\
 	gdk-pixbuf-scale.c	\
 	gdk-pixbuf-util.c	\
 	$(extra_sources)
 
-libgdk_pixbuf_la_LDFLAGS = -version-info 2:0:0 $(GLIB_LIBS) $(GTK_LIBS)
+libgdk_pixbuf_la_LDFLAGS = -version-info 2:0:0 $(GLIB_LIBS)
 libgdk_pixbuf_la_LIBADD = pixops/libpixops.la
 
 libgdk_pixbufinclude_HEADERS =	\
 	gdk-pixbuf.h		\
-	gdk-pixbuf-loader.h	\
-	gdk-pixbuf-features.h	\
-	$(CANVAS_PIXBUF_HEADERFILES)
+	gdk-pixbuf-features.h
 
 noinst_HEADERS = 		\
 	gdk-pixbuf-io.h		\

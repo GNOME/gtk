@@ -1,6 +1,6 @@
 ## Makefile.am for GTK+
 
-SRC_SUBDIRS = gdk modules gtk
+SRC_SUBDIRS = gdk-pixbuf gdk modules gtk demos
 SUBDIRS = po $(SRC_SUBDIRS) docs
 
 bin_SCRIPTS = gtk-config

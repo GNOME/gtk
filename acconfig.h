@@ -23,6 +23,7 @@
 #undef HAVE_GETTEXT
 #undef HAVE_IPC_H
 #undef HAVE_LC_MESSAGES
+#undef HAVE_PROGRESSIVE_JPEG
 #undef HAVE_PWD_H
 #undef HAVE_SHM_H
 #undef HAVE_STPCPY
@@ -36,8 +37,12 @@
 
 #undef RESOURCE_BASE
 
+#undef USE_GMODULE
+#undef USE_MMX
+
 /* Define to use X11R6 additions to XIM */
 #undef USE_X11R6_XIM
+
 
 #undef XINPUT_NONE
 #undef XINPUT_GXI

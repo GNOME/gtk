@@ -1,3 +1,9 @@
+Wed Jun 21 16:02:48 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk-pixbuf-io.c (gdk_pixbuf_load_module): Add feature to
+	support a GDK_PIXBUF_MODULEDIR env variable as a secondary
+	load location.
+
 2000-06-10  Federico Mena Quintero  <federico@helixcode.com>
 
 	* demo/pixbuf-demo.c: It was cold and rainy this Saturday morning,

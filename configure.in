@@ -646,9 +646,213 @@ AC_SUBST(GTK_DEBUG_FLAGS)
 AC_SUBST(GTK_XIM_FLAGS)
 AC_SUBST(GTK_LOCALE_FLAGS)
 
+##################################################
+# Checks for gdk-pixbuf
+##################################################
+
+AC_MSG_CHECKING(whether to build gmodulized gdk-pixbuf)
+
+AC_ARG_ENABLE(modules, [  --disable-modules       Disables dynamic module loading],[
+	if test x$withval = xyes; then 
+	    with_modules=yes
+        else
+            with_modules=no
+	fi
+])
+
+dynworks=false
+deps=
+if test x$with_modules = xno; then
+    AC_MSG_RESULT(no)
+else
+    AC_MSG_RESULT(yes)
+    AC_MSG_CHECKING(whether dynamic modules work)
+    oLIBS="$LIBS"
+    oCFLAGS="$CFLAGS"
+    CFLAGS="$GLIB_CFLAGS"
+    LIBS="$GLIB_LIBS"
+    AC_TRY_RUN([
+    #include <glib.h>
+    #include <gmodule.h>
+    main ()
+    {
+    	if (g_module_supported ())
+    	    exit (0);
+    	else
+    	    exit (1);
+    }
+    ], dynworks=true)
+    LIBS="$oLIBS"
+    CFLAGS="$oCFLAGS"
+fi
+
+dnl Now we check to see if our libtool supports shared lib deps
+dnl (in a rather ugly way even)
+if $dynworks; then
+   pixbuf_libtool_config="${CONFIG_SHELL-/bin/sh} libtool --config"
+   pixbuf_deplibs_check=`$pixbuf_libtool_config | \
+      grep '^[[a-z_]]*check[[a-z_]]*_method=[['\''"]]' | \
+      sed 's/.*[['\''"]]\(.*\)[['\''"]]$/\1/'`
+   if test "x$pixbuf_deplibs_check" = "xnone" || \
+      test "x$pixbuf_deplibs_check" = "xunknown" || \
+      test "x$pixbuf_deplibs_check" = "x"; then
+      dynworks=false
+   fi
+fi
+
+if $dynworks; then
+   AC_DEFINE(USE_GMODULE)
+   GMODULE_LIBS="`glib-config --libs gmodule`"
+   GMODULE_FLAGS="`glib-config --cflags gmodule`"
+   AC_SUBST(GMODULE_LIBS)
+   AC_SUBST(GMODULE_FLAGS)
+   AC_MSG_RESULT(yes)
+else
+   AC_MSG_RESULT(no)
+fi
+
+dnl Test for libtiff
+  if test -z "$LIBTIFF"; then
+    AC_CHECK_LIB(tiff, TIFFReadScanline,
+      AC_CHECK_HEADER(tiffio.h,
+        TIFF='tiff'; LIBTIFF='-ltiff',
+        AC_MSG_WARN(*** TIFF loader will not be built (TIFF header files not found) ***)),
+      AC_CHECK_LIB(tiff, TIFFWriteScanline,
+        AC_CHECK_HEADER(tiffio.h,
+          TIFF='tiff'; LIBTIFF='-ltiff -ljpeg -lz',
+          AC_MSG_WARN(*** TIFF loader will not be built (TIFF header files not found) ***)),
+        AC_CHECK_LIB(tiff34, TIFFFlushData,
+          AC_CHECK_HEADER(tiffio.h,
+            TIFF='tiff'; LIBTIFF='-ltiff34 -ljpeg -lz',
+            AC_MSG_WARN(*** TIFF loader will not be built (TIFF header files not found) ***)),
+        AC_MSG_WARN(*** TIFF plug-in will not be built (TIFF library not found) ***), -ljpeg -lz -lm), -ljpeg -lz -lm), -lm)
+  fi
+
+dnl Test for libjpeg
+  if test -z "$LIBJPEG"; then
+    AC_CHECK_LIB(jpeg, jpeg_destroy_decompress,
+      jpeg_ok=yes,
+      jpeg_ok=no
+      AC_MSG_WARN(*** JPEG loader will not be built (JPEG library not found) ***))
+    if test "$jpeg_ok" = yes; then
+      AC_MSG_CHECKING([for jpeglib.h])
+      AC_TRY_CPP(
+[#include <stdio.h>
+#undef PACKAGE
+#undef VERSION
+#include <jpeglib.h>],
+        jpeg_ok=yes,
+        jpeg_ok=no)
+      AC_MSG_RESULT($jpeg_ok)
+      if test "$jpeg_ok" = yes; then
+        LIBJPEG='-ljpeg'
+        AC_CHECK_LIB(jpeg, jpeg_simple_progression,     
+          AC_DEFINE(HAVE_PROGRESSIVE_JPEG),
+          AC_MSG_WARN(JPEG library does not support progressive saving.))
+      else
+          AC_MSG_WARN(*** JPEG loader will not be built (JPEG header file not found) ***)
+      fi
+    fi
+  fi
+
+dnl Test for libpng
+  if test -z "$LIBPNG"; then
+    AC_CHECK_LIB(png, png_read_info,
+      AC_CHECK_HEADER(png.h,
+        png_ok=yes,
+        png_ok=no),
+      AC_MSG_WARN(*** PNG loader will not be built (PNG library not found) ***), -lz -lm)
+    if test "$png_ok" = yes; then
+      AC_MSG_CHECKING([for png_structp in png.h])
+      AC_TRY_COMPILE([#include <png.h>],
+        [png_structp pp; png_infop info; png_colorp cmap; png_create_read_struct;],
+        png_ok=yes,
+        png_ok=no)
+      AC_MSG_RESULT($png_ok)
+      if test "$png_ok" = yes; then
+        PNG='png'; LIBPNG='-lpng -lz'
+      else
+        AC_MSG_WARN(*** PNG loader will not be built (PNG library is too old) ***)
+      fi
+    else
+     AC_MSG_WARN(*** PNG loader will not be built (PNG header file not found) ***)
+    fi
+  fi
+
+deps="$LIBTIFF $LIBJPEG $LIBPNG"
+
+AC_SUBST(LIBTIFF)
+AC_SUBST(LIBJPEG)
+AC_SUBST(LIBPNG)
+
+AM_CONDITIONAL(BUILD_DYNAMIC_MODULES, $dynworks)
+
+AC_HEADER_STDC
+AC_HEADER_DIRENT
+AC_HEADER_SYS_WAIT
+
+AC_TYPE_SIGNAL
+
+AM_CONDITIONAL(HAVE_TIFF, test "x$LIBTIFF" != x)
+AM_CONDITIONAL(HAVE_PNG, test "x$LIBPNG" != x)
+AM_CONDITIONAL(HAVE_JPEG, test "x$LIBJPEG" != x)
+
+GDK_PIXBUF_LIBDIR='-L${libdir}'
+GDK_PIXBUF_INCLUDEDIR="-I${includedir} $GTK_CFLAGS"
+GDK_PIXBUF_LIBS="$GLIB_LIBS -lgdk_pixbuf $deps $GTK_LIBS"
+AC_SUBST(STATIC_LIB_DEPS)
+STATIC_LIB_DEPS="$deps"
+
+AC_SUBST(GDK_PIXBUF_LIBDIR)
+AC_SUBST(GDK_PIXBUF_INCLUDEDIR)
+AC_SUBST(GDK_PIXBUF_LIBS)
+
+# Checks to see if we should compile in MMX support (there will be
+# a runtime test when the code is actually run to see if it should
+# be used - this just checks if we can compile it.)
 #
-# gtk-doc checks
+# This code is partially taken from Mesa
 #
+AC_MSG_CHECKING(for x86 platform)
+case $host_cpu in
+  i386|i486|i586|i686|i786|k6|k7)
+	use_x86_asm=yes
+        ;;
+   *)
+  	use_x86_asm=no
+esac
+AC_MSG_RESULT($use_x86_asm)
+
+use_mmx_asm=no
+if test $use_x86_asm = yes; then
+    save_ac_ext=$ac_ext
+    ac_ext=S
+    
+    AC_MSG_CHECKING(compiler support for MMX)
+    cp $srcdir/gdk-pixbuf/pixops/scale_line_22_33_mmx.S conftest.S
+    if AC_TRY_EVAL(ac_compile); then
+        use_mmx_asm=yes
+    fi
+
+    ac_ext=$save_ac_ext
+    if test $use_mmx_asm = yes; then
+      AC_DEFINE(USE_MMX)
+      AC_MSG_RESULT(yes)
+    else
+      AC_MSG_RESULT(no)
+    fi
+fi
+
+AM_CONDITIONAL(USE_MMX, test x$use_mmx_asm = xyes)
+
+
+##################################################
+# Checks for gtk-doc
+##################################################
+
+AC_CHECK_PROG(GTKDOC, gtkdoc-mkdb, true, false)
+AM_CONDITIONAL(HAVE_GTK_DOC, $GTKDOC)
+AC_SUBST(HAVE_GTK_DOC)
 
 dnl Let people disable the gtk-doc stuff.
 AC_ARG_ENABLE(gtk-doc, [  --enable-gtk-doc  Use gtk-doc to build documentation [default=auto]], enable_gtk_doc="$enableval", enable_gtk_doc=auto)
@@ -657,13 +861,21 @@ if test x$enable_gtk_doc = xauto ; then
   if test x$GTKDOC = xtrue ; then
     enable_gtk_doc=yes
   else
-    enable_gtk_doc=no
+    enable_gtk_doc=no 
   fi
 fi
 
 dnl NOTE: We need to use a separate automake conditional for this
 dnl       to make this work with the tarballs.
 AM_CONDITIONAL(ENABLE_GTK_DOC, test x$enable_gtk_doc = xyes)
+
+GDK_PIXBUF_DIR=`(cd $srcdir; pwd)`
+AC_SUBST(GDK_PIXBUF_DIR)
+
+
+##################################################
+# Output commands
+##################################################
 
 AC_OUTPUT_COMMANDS([
 
@@ -761,11 +973,15 @@ docs/gtk-config.1
 Makefile
 gtk-config
 po/Makefile.in
+demos/Makefile
 docs/Makefile
 docs/reference/Makefile
 docs/reference/gdk-pixbuf/Makefile
-docs/tutorial/Makefile
 docs/faq/Makefile
+docs/tutorial/Makefile
+gdk-pixbuf/Makefile
+gdk-pixbuf/gdk-pixbuf-features.h
+gdk-pixbuf/pixops/Makefile
 gdk/Makefile
 gdk/x11/Makefile
 gdk/win32/Makefile

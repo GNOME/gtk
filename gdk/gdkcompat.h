@@ -35,8 +35,6 @@ extern "C" {
 #define gdk_cursor_destroy             gdk_cursor_unref
 
 
-#define GDK_WINDOW_PIXMAP GDK_DRAWABLE_PIXMAP
-             
 #endif	/* GDK_DISABLE_COMPAT_H */
 
 #ifdef __cplusplus

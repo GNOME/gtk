@@ -1,6 +1,6 @@
 #include <config.h>
 #include <gtk/gtk.h>
-#include <gdk/gdkx.h>
+#include "x11/gdkx.h"
 #include "gdk-pixbuf.h"
 
 int close_app(GtkWidget *widget, gpointer data)
@@ -67,6 +67,8 @@ int configure_cb(GtkWidget *drawing_area, GdkEventConfigure *evt, gpointer data)
    return FALSE;
 }
 
+extern void pixbuf_init();
+
 int main(int argc, char **argv)
 {   
    GdkWindow     *root;
@@ -75,6 +77,8 @@ int main(int argc, char **argv)
    GtkWidget     *drawing_area;
    GdkPixbuf     *pixbuf;    
    
+   pixbuf_init ();
+
    gtk_init(&argc, &argv);   
    gdk_rgb_set_verbose(TRUE);
    gdk_rgb_init();

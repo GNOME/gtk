@@ -26,6 +26,12 @@
 #include <config.h>
 #include <stdio.h>
 #include <string.h>
+#include "gdk.h"		/* For gdk_screen_width/gdk_screen_height */
+#include "gdkcolor.h"
+#include "gdkimage.h"
+#include "gdkvisual.h"
+#include "gdkwindow.h"
+#include "gdkpixbuf.h"
 #include "gdk-pixbuf-private.h"
 
 #if (G_BYTE_ORDER == G_LITTLE_ENDIAN)
@@ -1082,7 +1088,6 @@ gdk_pixbuf_get_from_drawable (GdkPixbuf *dest,
 			      int dest_x, int dest_y,
 			      int width, int height)
 {
-	GdkWindowType window_type;
 	int src_width, src_height;
 	GdkImage *image;
 	int rowstride, bpp, alpha;
@@ -1091,9 +1096,7 @@ gdk_pixbuf_get_from_drawable (GdkPixbuf *dest,
 
 	g_return_val_if_fail (src != NULL, NULL);
 
-	window_type = gdk_window_get_type (src);
-
-	if (window_type == GDK_WINDOW_PIXMAP)
+	if (GDK_IS_PIXMAP (src))
 		g_return_val_if_fail (cmap != NULL, NULL);
 	else
 		/* FIXME: this is not perfect, since is_viewable() only tests
@@ -1113,7 +1116,7 @@ gdk_pixbuf_get_from_drawable (GdkPixbuf *dest,
 
 	/* Coordinate sanity checks */
 
-	gdk_window_get_size (src, &src_width, &src_height);
+	gdk_drawable_get_size (src, &src_width, &src_height);
 
 	g_return_val_if_fail (src_x >= 0 && src_y >= 0, NULL);
 	g_return_val_if_fail (src_x + width <= src_width && src_y + height <= src_height, NULL);
@@ -1124,7 +1127,7 @@ gdk_pixbuf_get_from_drawable (GdkPixbuf *dest,
 		g_return_val_if_fail (dest_y + height <= dest->height, NULL);
 	}
 
-	if (window_type != GDK_WINDOW_PIXMAP) {
+	if (!GDK_IS_PIXMAP (src)) {
 		int ret;
 		int src_xorigin, src_yorigin;
 		int screen_width, screen_height;
@@ -1158,7 +1161,7 @@ gdk_pixbuf_get_from_drawable (GdkPixbuf *dest,
 	}
 
 	/* Get the colormap if needed */
-	if (window_type != GDK_WINDOW_PIXMAP)
+	if (!GDK_IS_PIXMAP (src))
 		cmap = gdk_window_get_colormap (src);
 
 	alpha = dest->has_alpha;

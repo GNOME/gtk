@@ -1,5 +1,4 @@
 #include <math.h>
-#include <glib.h>
 #include "config.h"
 
 #include "pixops.h"

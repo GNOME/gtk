@@ -484,6 +484,8 @@ progressive_updated_callback(GdkPixbufLoader* loader, guint x, guint y, guint wi
 
 static int readlen = 4096;
 
+extern void pixbuf_init();
+
 int
 main (int argc, char **argv)
 {
@@ -493,6 +495,8 @@ main (int argc, char **argv)
 	GdkPixbuf *pixbuf;
 	GdkPixbufLoader *pixbuf_loader;
 
+	pixbuf_init ();
+	
 	gtk_init (&argc, &argv);
 
 	gdk_rgb_set_verbose (TRUE);

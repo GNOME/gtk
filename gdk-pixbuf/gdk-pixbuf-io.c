@@ -215,9 +215,13 @@ gdk_pixbuf_load_module (GdkPixbufModule *image_module)
 
 	module = g_module_open (path, G_MODULE_BIND_LAZY);
 	if (!module) {
-                /* Debug feature, check in present working directory */
+                /* Debug feature, check in GDK_PIXBUF_MODULEDIR, or working directory */
+	        char *dir = g_getenv ("GDK_PIXBUF_MODULEDIR");
+		if (!dir)
+			dir = "";
+	  
                 g_free (path);
-                path = g_module_build_path ("", module_name);
+                path = g_module_build_path (dir, module_name);
                 module = g_module_open (path, G_MODULE_BIND_LAZY);
 
                 if (!module) {

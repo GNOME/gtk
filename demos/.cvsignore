@@ -1,0 +1,9 @@
+Makefile
+Makefile.in
+.libs
+.deps
+testanimation
+testpixbuf-drawable
+testpixbuf-scale
+testpixbuf
+pixbuf-demo

@@ -367,6 +367,8 @@ progressive_updated_callback(GdkPixbufLoader* loader, guint x, guint y, guint wi
 
 static int readlen = 4096;
 
+extern void pixbuf_init();
+
 int
 main (int argc, char **argv)
 {
@@ -374,6 +376,8 @@ main (int argc, char **argv)
 	int found_valid = FALSE;
 
 	GdkPixbufAnimation *animation;
+
+	pixbuf_init ();
 
 	gtk_init (&argc, &argv);
 
