@@ -1,3 +1,15 @@
+Sat Mar 13 02:55:51 2004  Matthias Clasen  <maclas@gmx.de>
+
+	Fix middle button pasting in the TextView  (#81880, reported
+	by Evert Verhellen, patch by Paolo Borelli):
+	
+	* gtk/gtktextview.c (gtk_text_view_button_press_event): Retrieve 
+	the insert mark and move the cursor to it making sure of also 
+	scroll the window if needed.
+	
+	* gtk/gtktextbuffer.c (pre_paste_prep): Move the insert mark
+	to the insertion point.
+
 Sat Mar 13 01:38:55 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkcombobox.c (gtk_combo_box_remove): Add a remove 

@@ -2936,6 +2936,8 @@ pre_paste_prep (ClipboardRequest *request_data,
       if (gtk_text_buffer_get_selection_bounds (buffer, &start, &end))
         *insert_point = start;
     }
+
+  gtk_text_buffer_move_mark_by_name (buffer, "insert", insert_point);
 }
 
 static void
