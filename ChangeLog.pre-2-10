@@ -1,3 +1,11 @@
+Tue Jan  5 19:01:18 1999  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkcolorsel.c (gtk_color_selection_dialog_init): Push
+	GdkRGB's visual and colormap around the color selection
+	dialog so that the window and the previews have the
+	same colormap. If an app adds things to the colorsel
+	dialog, it will have to take care of them itself.
+
 Tue Jan  5 15:03:47 1999  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkmain.c (gtk_propagate_event): Make 

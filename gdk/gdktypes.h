@@ -734,8 +734,9 @@ typedef enum {
 typedef enum {
   GDK_DRAG_PROTO_MOTIF,
   GDK_DRAG_PROTO_XDND,
-  GDK_DRAG_PROTO_ROOTWIN	/* A root window with nobody claiming
+  GDK_DRAG_PROTO_ROOTWIN,	/* A root window with nobody claiming
 				 * drags */
+  GDK_DRAG_PROTO_NONE		/* Not a valid drag window */
 } GdkDragProtocol;
 
 /* The color type.
