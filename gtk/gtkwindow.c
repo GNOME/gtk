@@ -5067,10 +5067,9 @@ gtk_window_move_resize (GtkWindow *window)
                                  new_request.width, new_request.height);
 	    }
 	  else
-	    if (widget->window)
-	      gdk_window_move_resize (widget->window,
-				      new_request.x, new_request.y,
-				      new_request.width, new_request.height);
+	    gdk_window_move_resize (widget->window,
+				    new_request.x, new_request.y,
+				    new_request.width, new_request.height);
 	}
       else  /* only size changed */
 	{
@@ -5078,9 +5077,8 @@ gtk_window_move_resize (GtkWindow *window)
 	    gdk_window_resize (window->frame,
 			       new_request.width + window->frame_left + window->frame_right,
 			       new_request.height + window->frame_top + window->frame_bottom);
-	  if (widget->window)
-	    gdk_window_resize (widget->window,
-			       new_request.width, new_request.height);
+	  gdk_window_resize (widget->window,
+			     new_request.width, new_request.height);
 	}
       
       /* Increment the number of have-not-yet-received-notify requests */
