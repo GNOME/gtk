@@ -55,8 +55,8 @@ struct _GtkColorSelection
 {
   GtkVBox parent_instance;
 
-  /* < private > */
-  gpointer private;
+  /* < private_data > */
+  gpointer private_data;
 };
 
 struct _GtkColorSelectionClass

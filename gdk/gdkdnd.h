@@ -97,4 +97,4 @@ void            gdk_drag_abort       (GdkDragContext *context,
 }
 #endif /* __cplusplus */
 
-#endif __GDK_DND_H__
+#endif /* __GDK_DND_H__ */

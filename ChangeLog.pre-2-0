@@ -1,3 +1,15 @@
+Fri Jun 16 22:24:22 2000  Christopher Blizzard  <blizzard@redhat.com>
+
+	* gtk/gtkcolorsel.c: Change private class member to be named
+	private_data throughout the file.
+
+	* gtk/gtkcolorsel.h (struct _GtkColorSelection): Change private to
+	private_data to avoid clashing with keyword.
+
+Fri Jun 16 22:24:22 2000  Christopher Blizzard  <blizzard@redhat.com>
+
+	* gdk/gdkdnd.h: Add comment to remove warning.
+
 Sun Jun 18 15:35:35 2000  Pablo Saratxaga <pablo@mandrakesoft.com>
 
 	* gtk/gtkrc.cp1251,gtk/Makefile.am: the cp1251 is also used by
