@@ -20,7 +20,7 @@ this:
 <example>
 <title>How to create a group of radio menu items.</title>
 <programlisting>
-GList *group = NULL;
+GSList *group = NULL;
 GtkWidget *item;
 gint i;
 

@@ -1,3 +1,13 @@
+2003-05-27  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/tmpl/gtkradiomenuitem.sgml: Fix example.  (#113604, 
+	Julien Moutte)
+
+2003-05-19  Matthias Clasen  <maclas@gmx.de>
+
+	* gdk-pixbuf/gdk-pixbuf-sections.txt: 
+	* gdk/gdk-sections.txt: Add some unused symbols to private sections.
+
 2003-05-17  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtk-sections.txt: Add gtk_tree_row_reference_get_type.
