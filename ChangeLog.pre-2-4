@@ -1,3 +1,12 @@
+Sun Sep  2 23:19:07 2001  Kristian Rietveld  <kristian@planet.nl>
+
+	* gtk/gtktreeview.c (gtk_tree_view_search_iter): code cleaup,
+	fix for bug #59222.
+
+	* gtk/gtktreeview.c (gtk_tree_view_search_equal_func): add
+	gpointer search_data argument to function definition and
+	prototype, to match GtkTreeViewSearchEqualFunc typedef.
+
 Sat Sep  1 21:57:27 2001  Kristian Rietveld  <kristian@planet.nl>
 
 	* gtk/gtkrbtree.c (_gtk_rbtree_reorder): add warnings

@@ -364,7 +364,8 @@ static void     gtk_tree_view_search_move               (GtkWidget        *windo
 static gboolean gtk_tree_view_search_equal_func         (GtkTreeModel     *model,
 							 gint              column,
 							 gchar            *key,
-							 GtkTreeIter      *iter);
+							 GtkTreeIter      *iter,
+							 gpointer          search_data);
 static gboolean gtk_tree_view_search_iter               (GtkTreeModel     *model,
 							 GtkTreeSelection *selection,
 							 GtkTreeIter      *iter,
@@ -8865,7 +8866,8 @@ static gboolean
 gtk_tree_view_search_equal_func (GtkTreeModel *model,
 				 gint          column,
 				 gchar        *key,
-				 GtkTreeIter  *iter)
+				 GtkTreeIter  *iter,
+				 gpointer      search_data)
 {
   gboolean retval = TRUE;
   gchar *normalized_string;
@@ -8903,78 +8905,108 @@ gtk_tree_view_search_iter (GtkTreeModel     *model,
 			   gint             *count,
 			   gint              n)
 {
+  GtkRBTree *tree = NULL;
+  GtkRBNode *node = NULL;
+  GtkTreePath *path;
+
   GtkTreeView *tree_view = gtk_tree_selection_get_tree_view (selection);
   GtkTreeViewColumn *column =
     gtk_tree_view_get_column (tree_view, tree_view->priv->search_column);
-  
-  if (! tree_view->priv->search_equal_func (model, tree_view->priv->search_column, text, iter, tree_view->priv->search_user_data))
-    {
-      (*count)++;
-      
-      if (*count == n)
-        {
-          GtkTreePath *path;
-          
-          gtk_tree_selection_select_iter (selection, iter);
-          
-          path = gtk_tree_model_get_path (model, iter);
-	  gtk_tree_view_scroll_to_cell (tree_view, path, column, TRUE, 0.5, 0.5);
-	  gtk_tree_view_real_set_cursor (tree_view, path, FALSE);
-          gtk_tree_path_free (path);
-          
-          return TRUE;
-        }
-    }
-  
-  if (gtk_tree_model_iter_has_child (model, iter))
-    {
-      gboolean ret;
-      GtkTreeIter child;
-      
-      gtk_tree_model_iter_children (model, &child, iter);
-      ret = gtk_tree_view_search_iter (model, selection,
-				       &child, text,
-				       count, n);
-      
-      if (ret)
-        return TRUE; /* iter found and selected */
-    }
-  
-  while (gtk_tree_model_iter_next (model, iter))
+
+  path = gtk_tree_model_get_path (model, iter);
+  _gtk_tree_view_find_node (tree_view, path, &tree, &node);
+
+  do
     {
       if (! tree_view->priv->search_equal_func (model, tree_view->priv->search_column, text, iter, tree_view->priv->search_user_data))
         {
           (*count)++;
           if (*count == n)
             {
-              GtkTreePath *path;
-              
               gtk_tree_selection_select_iter (selection, iter);
-              
-              path = gtk_tree_model_get_path (model, iter);
-              gtk_tree_view_scroll_to_cell (tree_view, path, column, TRUE, 0.5, 0.5);
+              gtk_tree_view_scroll_to_cell (tree_view, path, column,
+					    TRUE, 0.5, 0.5);
 	      gtk_tree_view_real_set_cursor (tree_view, path, FALSE);
-              gtk_tree_path_free (path);
+
+	      if (path)
+		gtk_tree_path_free (path);
               
               return TRUE;
             }
         }
-      
-      if (gtk_tree_model_iter_has_child (model, iter))
-        {
-          gboolean ret;
-          GtkTreeIter child;
-          
-          gtk_tree_model_iter_children (model, &child, iter);
-          ret = gtk_tree_view_search_iter (model, selection,
-					   &child, text,
-					   count, n);
 
-          if (ret)
-            return TRUE; /* iter found and selected */
-        }
+      if (node->children)
+	{
+	  gboolean has_child;
+	  GtkTreeIter tmp;
+
+	  tree = node->children;
+	  node = tree->root;
+
+	  while (node->left != tree->nil)
+	    node = node->left;
+	  
+	  tmp = *iter;
+	  has_child = gtk_tree_model_iter_children (model, iter, &tmp);
+	  gtk_tree_path_append_index (path, 0);
+
+	  /* sanity check */
+	  TREE_VIEW_INTERNAL_ASSERT (has_child, FALSE);
+	}
+      else
+	{
+	  gboolean done = FALSE;
+
+	  do
+	    {
+	      node = _gtk_rbtree_next (tree, node);
+	      
+	      if (node)
+		{
+		  gboolean has_next;
+		  
+		  has_next = gtk_tree_model_iter_next (model, iter);
+		  
+		  done = TRUE;
+		  gtk_tree_path_next (path);
+
+		  /* sanity check */
+		  TREE_VIEW_INTERNAL_ASSERT (has_next, FALSE);
+		}
+	      else
+		{
+		  gboolean has_parent;
+		  GtkTreeIter tmp_iter = *iter;
+
+		  node = tree->parent_node;
+		  tree = tree->parent_tree;
+
+		  if (!tree)
+		    {
+		      if (path)
+			gtk_tree_path_free (path);
+
+		      /* we've run out of tree, done with this func */
+		      return FALSE;
+		    }
+
+		  has_parent = gtk_tree_model_iter_parent (model,
+							   iter,
+							   &tmp_iter);
+		  gtk_tree_path_up (path);
+
+		  /* sanity check */
+		  TREE_VIEW_INTERNAL_ASSERT (has_parent, FALSE);
+		}
+	    }
+	  while (!done);
+	}
     }
+  while (1);
 
+  if (path)
+    gtk_tree_path_free (path);
+  
   return FALSE;
 }
 
