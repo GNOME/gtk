@@ -1,3 +1,8 @@
+Sun Sep 30  05:31:32 2001 CEST Mikael Hermansson <tyan@linux.se>
+
+    * gtk/gtkcellrenderertext.c changed "weight" property type from 
+      g_param_spec_int to g_param_spec_enum.
+
 2001-09-29  Alexander Larsson  <alla@lysator.liu.se>
 
 	* configure.in:
