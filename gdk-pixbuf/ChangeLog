@@ -1,3 +1,8 @@
+Sun Aug 22 03:20:56 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* pixops/pixops.c (pixops_scale_nearest): Fix a mixup in the handling
+	of dest_channels.  (#111922, Christophe Fergeau)
+
 Fri Aug 20 11:59:10 2004  Owen Taylor  <otaylor@redhat.com>
 
 	* io-bmp.c: Fix infinite loop that can occur for bad

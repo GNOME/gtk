@@ -78,32 +78,32 @@ pixops_scale_nearest (guchar        *dest_buf,
   int xmax, xstart, xstop, x_pos, y_pos;
   const guchar *p;
 
-#define INNER_LOOP(SRC_CHANNELS,DEST_CHANNELS,ASSIGN_PIXEL)   	\
+#define INNER_LOOP(SRC_CHANNELS,DEST_CHANNELS,ASSIGN_PIXEL)     \
       xmax = x + (render_x1 - render_x0) * x_step;              \
       xstart = MIN (0, xmax);                                   \
       xstop = MIN (src_width << SCALE_SHIFT, xmax);             \
       p = src + (CLAMP (x, xstart, xstop) >> SCALE_SHIFT) * SRC_CHANNELS; \
       while (x < xstart)                                        \
-	{							\
-	  ASSIGN_PIXEL;				       		\
-	  dest += DEST_CHANNELS;				\
-	  x += x_step;						\
+        {                                                       \
+          ASSIGN_PIXEL;                                         \
+          dest += DEST_CHANNELS;                                \
+          x += x_step;                                          \
         }                                                       \
       while (x < xstop)                                         \
-	    {							\
-	  p = src + (x >> SCALE_SHIFT) * SRC_CHANNELS;          \
-	  ASSIGN_PIXEL;				       		\
-	  dest += DEST_CHANNELS;				\
-	  x += x_step;						\
-	    }							\
+        {                                                       \
+          p = src + (x >> SCALE_SHIFT) * SRC_CHANNELS;          \
+          ASSIGN_PIXEL;                                         \
+          dest += DEST_CHANNELS;                                \
+          x += x_step;                                          \
+        }                                                       \
       x_pos = x >> SCALE_SHIFT;                                 \
       p = src + CLAMP (x_pos, 0, src_width - 1) * SRC_CHANNELS; \
       while (x < xmax)                                          \
         {                                                       \
-	  ASSIGN_PIXEL;				       		\
-	  dest += DEST_CHANNELS;				\
-	  x += x_step;						\
-	}
+          ASSIGN_PIXEL;                                         \
+          dest += DEST_CHANNELS;                                \
+          x += x_step;                                          \
+        }
 
   for (i = 0; i < (render_y1 - render_y0); i++)
     {
@@ -124,18 +124,18 @@ pixops_scale_nearest (guchar        *dest_buf,
 	    }
 	  else
 	    {
-	      INNER_LOOP (3, 4, dest[0]=p[0];dest[1]=p[1];dest[2]=p[2]);
+	      INNER_LOOP (3, 4, dest[0]=p[0];dest[1]=p[1];dest[2]=p[2];dest[3]=0xff);
 	    }
 	}
       else if (src_channels == 4)
 	{
 	  if (dest_channels == 3)
 	    {
-	      INNER_LOOP (4, 3, dest[0]=p[0];dest[1]=p[1];dest[2]=p[2];dest[3]=0xff);
+	      INNER_LOOP (4, 3, dest[0]=p[0];dest[1]=p[1];dest[2]=p[2]);
 	    }
 	  else
 	    {
-	      gint32 *p32;
+	      guint32 *p32;
 	      INNER_LOOP(4, 4, p32=(guint32*)dest;*p32=*((guint32*)p));
 	    }
 	}
@@ -168,7 +168,6 @@ pixops_composite_nearest (guchar        *dest_buf,
   int xmax, xstart, xstop, x_pos, y_pos;
   const guchar *p;
   unsigned int  a0;
-
 
   for (i = 0; i < (render_y1 - render_y0); i++)
     {
