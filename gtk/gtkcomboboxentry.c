@@ -57,6 +57,7 @@ static void gtk_combo_box_entry_contents_changed (GtkEntry              *entry,
                                                   gpointer               user_data);
 static gboolean gtk_combo_box_entry_mnemonic_activate (GtkWidget        *entry,
 						       gboolean          group_cycling);
+static void gtk_combo_box_entry_grab_focus       (GtkWidget *widget);
 static void has_frame_changed                    (GtkComboBoxEntry      *entry_box,
 						  GParamSpec            *pspec,
 						  gpointer               data);
@@ -110,6 +111,7 @@ gtk_combo_box_entry_class_init (GtkComboBoxEntryClass *klass)
 
   widget_class = (GtkWidgetClass *)klass;
   widget_class->mnemonic_activate = gtk_combo_box_entry_mnemonic_activate;
+  widget_class->grab_focus = gtk_combo_box_entry_grab_focus;
 
   combo_class = (GtkComboBoxClass *)klass;
   combo_class->get_active_text = gtk_combo_box_entry_get_active_text;
@@ -358,6 +360,15 @@ gtk_combo_box_entry_mnemonic_activate (GtkWidget *widget,
 
   return TRUE;
 }
+
+static void
+gtk_combo_box_entry_grab_focus (GtkWidget *widget)
+{
+  GtkComboBoxEntry *entry_box = GTK_COMBO_BOX_ENTRY (widget);
+
+  gtk_widget_grab_focus (entry_box->priv->entry);
+}
+
 
 
 /* convenience API for simple text combos */

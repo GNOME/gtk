@@ -221,7 +221,7 @@ static void     gtk_combo_box_get_property         (GObject         *object,
                                                     GParamSpec      *spec);
 
 static void     gtk_combo_box_state_changed        (GtkWidget        *widget,
-			                            GtkStateType      previous);
+			                            GtkStateType      previous);static void     gtk_combo_box_grab_focus           (GtkWidget       *widget);
 static void     gtk_combo_box_style_set            (GtkWidget       *widget,
                                                     GtkStyle        *previous);
 static void     gtk_combo_box_button_toggled       (GtkWidget       *widget,
@@ -506,6 +506,7 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
   widget_class->expose_event = gtk_combo_box_expose_event;
   widget_class->scroll_event = gtk_combo_box_scroll_event;
   widget_class->mnemonic_activate = gtk_combo_box_mnemonic_activate;
+  widget_class->grab_focus = gtk_combo_box_grab_focus;
   widget_class->style_set = gtk_combo_box_style_set;
   widget_class->state_changed = gtk_combo_box_state_changed;
 
@@ -4795,6 +4796,14 @@ gtk_combo_box_mnemonic_activate (GtkWidget *widget,
 }
 
 static void
+gtk_combo_box_grab_focus (GtkWidget *widget)
+{
+  GtkComboBox *combo_box = GTK_COMBO_BOX (widget);
+
+  gtk_widget_grab_focus (combo_box->priv->button);
+}
+
+static void
 gtk_combo_box_destroy (GtkObject *object)
 {
   GtkComboBox *combo_box = GTK_COMBO_BOX (object);
@@ -5162,6 +5171,7 @@ gtk_combo_box_get_focus_on_click (GtkComboBox *combo)
   
   return combo->priv->focus_on_click;
 }
+
 
 #define __GTK_COMBO_BOX_C__
 #include "gtkaliasdef.c"

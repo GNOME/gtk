@@ -1,5 +1,10 @@
 2005-04-05  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkcomboboxentry.c (gtk_combo_box_entry_grab_focus): 
+	* gtk/gtkcombobox.c (gtk_combo_box_grab_focus): Implement
+	grab_focus for GtkComboBox and GtkComboBoxEntry.  (#171912,
+	Gustavo Carneiro)
+
 	* gtk/gtkicontheme.c: Store icon caches along with the
 	mtimes of the toplevel directories. The previous
 	mechanism of a hashtable-per-theme caused duplicate icon
