@@ -2,6 +2,8 @@
 
 gdkincludedir = $(includedir)/gdk
 
+configincludedir = $(pkglibdir)/include
+
 lib_LTLIBRARIES = libgdk.la
 
 INCLUDES = \
@@ -71,6 +73,16 @@ libgdk_la_LDFLAGS = \
          @x_ldflags@	\
          @x_libs@	\
          -lm
+
+configinclude_DATA = \
+	gdkconfig.h
+
+BUILT_SOURCES = stamp-gc-h #note: not gdkconfig.h
+gdkconfig.h: stamp-gc-h
+	@:
+stamp-gc-h: ../config.status
+	cd .. && CONFIG_FILES= CONFIG_HEADERS= CONFIG_OTHER=gdk/gdkconfig.h ./config.status
+	echo timestamp > stamp-gc-h
 
 EXTRA_PROGRAMS = gxid
 

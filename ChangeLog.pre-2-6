@@ -1,12 +1,27 @@
 1999-03-13  Tor Lillqvist  <tml@iki.fi>
 
-	* configure.in acconfig.h: Check for dirent.h and pwd.h.
+	* configure.in acconfig.h: Check for dirent.h and pwd.h. Generate
+	gdk/gdkconfig.h using similar mechanism as GLib's glibconfig.h.
 
+	* gtk-config.in: Add @libdir/gtk+/include (where gdkconfig.h is
+	installed) to CFLAGS.
+
+	* gdk/Makefile.am: Add rules for gdkconfig.h.
+
+	* gdk/gdktypes.h: Include gdkconfig.h. Define macros for windowing
+	APIs.
+
+	* gdk/gdkfontsel.c: Don't include Xlib.h, it gets included via
+	gdkx.h anyway when compiling for X11.
+	(gtk_font_selection_create_xlfd): Use g_strdup_printf. (In
+	general): Merge in Win32 version.
+	
 	* gtk/gtkfilesel.c: Use g_get_current_dir(). Merge in Win32
 	version: Use G_DIR_SEPARATOR, g_path_is_absolute, no tilde
-	expansion (based on HAVE_PWD_H), allow for drive letters. UNC
-	paths (\\server\share\...) not handled yet. Also, code from Craig
-	Setera's port to Win32 that uses cygwin.dll
+	expansion (if we don't have HAVE_PWD_H), allow for drive
+	letters. UNC paths (\\server\share\...) are not handled yet.  Also,
+	included code from Craig Setera's port to Win32 (the one that uses
+	X11, and the cygwin dll), even if it probably will be abandoned.
 
 	* gtk/gtkfilesel.c: Don't append a * to the pattern to complete if
 	the user entered one herself.  This way one can complete *.h and

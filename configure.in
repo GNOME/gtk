@@ -512,6 +512,68 @@ AC_SUBST(GTK_DEBUG_FLAGS)
 AC_SUBST(GTK_XIM_FLAGS)
 AC_SUBST(GTK_LOCALE_FLAGS)
 
+AC_OUTPUT_COMMANDS([
+
+## Generate `gdk/gdkconfig.h' in two cases
+## 1. `config.status' is run either explicitly, or via configure.
+##     Esp. not when it is run in `Makefile' to generate makefiles and
+##     config.h
+## 2. CONFIG_OTHER is set explicitly
+##
+## Case 1 is difficult.  We know that `automake' sets one of
+## CONFIG_FILES or CONFIG_HEADERS to empty.  This heuristic works
+## only when AM_CONFIG_HEADER is set, however.
+
+if test -n "${CONFIG_FILES}" && test -n "${CONFIG_HEADERS}"; then
+  # Both CONFIG_FILES and CONFIG_HEADERS are non-empty ==> Case 1
+  CONFIG_OTHER=${CONFIG_OTHER:-gdk/gdkconfig.h}
+fi
+case "$CONFIG_OTHER" in
+*gdk/gdkconfig.h*)
+	echo creating gdk/gdkconfig.h
+	outfile=gdkconfig.h-tmp
+	cat > $outfile <<\_______EOF
+/* gdkconfig.h
+ *
+ * This is a generated file.  Please modify `configure.in'
+ */
+
+#ifndef GDKCONFIG_H
+#define GDKCONFIG_H
+
+#ifdef __cplusplus
+extern "C" {
+#endif /* __cplusplus */
+
+_______EOF
+
+	cat >>$outfile <<_______EOF
+$gdk_windowing
+_______EOF
+
+	cat >>$outfile <<_______EOF
+
+#ifdef __cplusplus
+}
+#endif /* __cplusplus */
+
+#endif /* GDKCONFIG_H */
+_______EOF
+
+
+	if cmp -s $outfile gdk/gdkconfig.h; then
+	  echo gdk/gdkconfig.h is unchanged
+	  rm -f $outfile
+	else
+	  mv $outfile gdk/gdkconfig.h
+	fi ;;
+esac
+],[
+# Currently we always use X11 on those systems where we run configure...
+gdk_windowing='
+#define GDK_WINDOWING GDK_WINDOWING_X11'
+])
+
 AC_OUTPUT([
 gtk+.spec
 Makefile
