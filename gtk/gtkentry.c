@@ -82,6 +82,7 @@ enum {
   MOVE_CURSOR,
   INSERT_AT_CURSOR,
   DELETE_FROM_CURSOR,
+  BACKSPACE,
   CUT_CLIPBOARD,
   COPY_CLIPBOARD,
   PASTE_CLIPBOARD,
@@ -237,6 +238,7 @@ static void gtk_entry_insert_at_cursor   (GtkEntry        *entry,
 static void gtk_entry_delete_from_cursor (GtkEntry        *entry,
 					  GtkDeleteType    type,
 					  gint             count);
+static void gtk_entry_backspace          (GtkEntry        *entry);
 static void gtk_entry_cut_clipboard      (GtkEntry        *entry);
 static void gtk_entry_copy_clipboard     (GtkEntry        *entry);
 static void gtk_entry_paste_clipboard    (GtkEntry        *entry);
@@ -469,6 +471,7 @@ gtk_entry_class_init (GtkEntryClass *class)
   class->move_cursor = gtk_entry_move_cursor;
   class->insert_at_cursor = gtk_entry_insert_at_cursor;
   class->delete_from_cursor = gtk_entry_delete_from_cursor;
+  class->backspace = gtk_entry_backspace;
   class->cut_clipboard = gtk_entry_cut_clipboard;
   class->copy_clipboard = gtk_entry_copy_clipboard;
   class->paste_clipboard = gtk_entry_paste_clipboard;
@@ -644,6 +647,15 @@ gtk_entry_class_init (GtkEntryClass *class)
 		  GTK_TYPE_DELETE_TYPE,
 		  G_TYPE_INT);
 
+  signals[BACKSPACE] =
+    g_signal_new ("backspace",
+		  G_OBJECT_CLASS_TYPE (gobject_class),
+		  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+		  G_STRUCT_OFFSET (GtkEntryClass, backspace),
+		  NULL, NULL,
+		  _gtk_marshal_VOID__VOID,
+		  G_TYPE_NONE, 0);
+
   signals[CUT_CLIPBOARD] =
     g_signal_new ("cut_clipboard",
 		  G_OBJECT_CLASS_TYPE (gobject_class),
@@ -768,15 +780,11 @@ gtk_entry_class_init (GtkEntryClass *class)
 				G_TYPE_INT, 1);
   
   gtk_binding_entry_add_signal (binding_set, GDK_BackSpace, 0,
-				"delete_from_cursor", 2,
-				G_TYPE_ENUM, GTK_DELETE_CHARS,
-				G_TYPE_INT, -1);
+				"backspace", 0);
 
   /* Make this do the same as Backspace, to help with mis-typing */
   gtk_binding_entry_add_signal (binding_set, GDK_BackSpace, GDK_SHIFT_MASK,
-                                "delete_from_cursor", 2,
-                                G_TYPE_ENUM, GTK_DELETE_CHARS,
-                                G_TYPE_INT, -1);
+				"backspace", 0);
 
   gtk_binding_entry_add_signal (binding_set, GDK_Delete, GDK_CONTROL_MASK,
 				"delete_from_cursor", 2,
@@ -2418,6 +2426,72 @@ gtk_entry_delete_from_cursor (GtkEntry       *entry,
       break;
     }
   
+  gtk_entry_pend_cursor_blink (entry);
+}
+
+static void
+gtk_entry_backspace (GtkEntry *entry)
+{
+  GtkEditable *editable = GTK_EDITABLE (entry);
+  gint prev_pos;
+
+  gtk_entry_reset_im_context (entry);
+
+  if (!entry->editable || !entry->visible || !entry->text)
+    return;
+
+  if (entry->selection_bound != entry->current_pos)
+    {
+      gtk_editable_delete_selection (editable);
+      return;
+    }
+
+  prev_pos = gtk_entry_move_logically(entry, entry->current_pos, -1);
+
+  if (prev_pos < entry->current_pos)
+    {
+      PangoLayout *layout = gtk_entry_ensure_layout (entry, FALSE);
+      PangoLogAttr *log_attrs;
+      gint n_attrs;
+
+      pango_layout_get_log_attrs (layout, &log_attrs, &n_attrs);
+
+      if (log_attrs[prev_pos].backspace_deletes_character)
+	{
+	  gchar *cluster_text;
+	  gchar *normalized_text;
+          glong  len;
+
+	  cluster_text = gtk_editable_get_chars (editable,
+			  			 prev_pos,
+						 entry->current_pos);
+	  normalized_text = g_utf8_normalize (cluster_text,
+			  		      strlen (cluster_text),
+					      G_NORMALIZE_NFD);
+          len = g_utf8_strlen (normalized_text, -1);
+
+          gtk_editable_delete_text (editable, prev_pos, entry->current_pos);
+	  if (len > 1)
+	    {
+	      gint pos = entry->current_pos;
+
+	      gtk_editable_insert_text (editable, normalized_text,
+					g_utf8_offset_to_pointer (normalized_text, len - 1) - normalized_text,
+					&pos);
+	      gtk_editable_set_position (editable, pos);
+	    }
+
+	  g_free (normalized_text);
+	  g_free (cluster_text);
+	}
+      else
+	{
+          gtk_editable_delete_text (editable, prev_pos, entry->current_pos);
+	}
+      
+      g_free (log_attrs);
+    }
+
   gtk_entry_pend_cursor_blink (entry);
 }
 

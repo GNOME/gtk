@@ -1,3 +1,12 @@
+Mon Aug  2 01:30:03 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtktextview.[hc]: 
+	* gtk/gtkentry.[hc]: Add a new binding signal ::backspace,
+	bind it to the backspace key, and make it pay attention 
+	to the Pango backspace_deletes_character 
+	attribute.  (#119891, Noah Levitt, patch by Theppitak 
+	Karoonboonyanan)
+
 Mon Aug  2 01:02:57 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gdk/x11/gdkevents-x11.c (gdk_check_wm_state_changed): 

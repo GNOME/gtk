@@ -189,6 +189,7 @@ struct _GtkTextViewClass
   void (* delete_from_cursor)    (GtkTextView  *text_view,
                                   GtkDeleteType type,
                                   gint          count);
+  void (* backspace)             (GtkTextView *text_view);
 
   /* cut copy paste */
   void (* cut_clipboard)   (GtkTextView *text_view);
@@ -210,7 +211,6 @@ struct _GtkTextViewClass
   void (*_gtk_reserved5) (void);
   void (*_gtk_reserved6) (void);
   void (*_gtk_reserved7) (void);
-  void (*_gtk_reserved8) (void);
 };
 
 GType          gtk_text_view_get_type              (void) G_GNUC_CONST;

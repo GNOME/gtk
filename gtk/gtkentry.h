@@ -137,6 +137,7 @@ struct _GtkEntryClass
   void (* delete_from_cursor) (GtkEntry       *entry,
 			       GtkDeleteType   type,
 			       gint            count);
+  void (* backspace)          (GtkEntry       *entry);
   void (* cut_clipboard)      (GtkEntry       *entry);
   void (* copy_clipboard)     (GtkEntry       *entry);
   void (* paste_clipboard)    (GtkEntry       *entry);
@@ -146,7 +147,6 @@ struct _GtkEntryClass
   void (*_gtk_reserved1) (void);
   void (*_gtk_reserved2) (void);
   void (*_gtk_reserved3) (void);
-  void (*_gtk_reserved4) (void);
 };
 
 GType      gtk_entry_get_type       		(void) G_GNUC_CONST;

@@ -116,6 +116,7 @@ enum
   SET_ANCHOR,
   INSERT_AT_CURSOR,
   DELETE_FROM_CURSOR,
+  BACKSPACE,
   CUT_CLIPBOARD,
   COPY_CLIPBOARD,
   PASTE_CLIPBOARD,
@@ -260,6 +261,7 @@ static void gtk_text_view_insert_at_cursor (GtkTextView           *text_view,
 static void gtk_text_view_delete_from_cursor (GtkTextView           *text_view,
                                               GtkDeleteType          type,
                                               gint                   count);
+static void gtk_text_view_backspace        (GtkTextView           *text_view);
 static void gtk_text_view_cut_clipboard    (GtkTextView           *text_view);
 static void gtk_text_view_copy_clipboard   (GtkTextView           *text_view);
 static void gtk_text_view_paste_clipboard  (GtkTextView           *text_view);
@@ -526,6 +528,7 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
   klass->set_anchor = gtk_text_view_set_anchor;
   klass->insert_at_cursor = gtk_text_view_insert_at_cursor;
   klass->delete_from_cursor = gtk_text_view_delete_from_cursor;
+  klass->backspace = gtk_text_view_backspace;
   klass->cut_clipboard = gtk_text_view_cut_clipboard;
   klass->copy_clipboard = gtk_text_view_copy_clipboard;
   klass->paste_clipboard = gtk_text_view_paste_clipboard;
@@ -756,6 +759,15 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
 		  GTK_TYPE_DELETE_TYPE,
 		  G_TYPE_INT);
 
+  signals[BACKSPACE] =
+    g_signal_new ("backspace",
+		  G_OBJECT_CLASS_TYPE (gobject_class),
+		  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+		  G_STRUCT_OFFSET (GtkTextViewClass, backspace),
+		  NULL, NULL,
+		  _gtk_marshal_VOID__VOID,
+		  G_TYPE_NONE, 0);
+
   signals[CUT_CLIPBOARD] =
     g_signal_new ("cut_clipboard",
 		  G_OBJECT_CLASS_TYPE (gobject_class),
@@ -964,15 +976,11 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
 				G_TYPE_INT, 1);
   
   gtk_binding_entry_add_signal (binding_set, GDK_BackSpace, 0,
-				"delete_from_cursor", 2,
-				G_TYPE_ENUM, GTK_DELETE_CHARS,
-				G_TYPE_INT, -1);
+				"backspace", 0);
 
   /* Make this do the same as Backspace, to help with mis-typing */
   gtk_binding_entry_add_signal (binding_set, GDK_BackSpace, GDK_SHIFT_MASK,
-				"delete_from_cursor", 2,
-				G_TYPE_ENUM, GTK_DELETE_CHARS,
-				G_TYPE_INT, -1);
+				"backspace", 0);
 
   gtk_binding_entry_add_signal (binding_set, GDK_Delete, GDK_CONTROL_MASK,
 				"delete_from_cursor", 2,
@@ -5127,6 +5135,63 @@ gtk_text_view_delete_from_cursor (GtkTextView   *text_view,
         }
 
       gtk_text_buffer_end_user_action (get_buffer (text_view));
+
+      DV(g_print (G_STRLOC": scrolling onscreen\n"));
+      gtk_text_view_scroll_mark_onscreen (text_view,
+                                          gtk_text_buffer_get_mark (get_buffer (text_view), "insert"));
+    }
+}
+
+static void
+gtk_text_view_backspace (GtkTextView *text_view)
+{
+  GtkTextIter insert;
+  GtkTextIter start;
+  GtkTextIter end;
+
+  gtk_text_view_reset_im_context (text_view);
+
+  /* Backspace deletes the selection, if one exists */
+  if (gtk_text_buffer_delete_selection (get_buffer (text_view), TRUE,
+                                        text_view->editable))
+    return;
+
+  gtk_text_buffer_get_iter_at_mark (get_buffer (text_view),
+                                    &insert,
+                                    gtk_text_buffer_get_mark (get_buffer (text_view),
+                                                              "insert"));
+
+  start = insert;
+  end = insert;
+
+  gtk_text_iter_backward_cursor_position (&end);
+
+  if (!gtk_text_iter_equal (&start, &end))
+    {
+      gchar *cluster_text = gtk_text_iter_get_text (&start, &end);
+
+      gtk_text_buffer_begin_user_action (get_buffer (text_view));
+
+      if (gtk_text_buffer_delete_interactive (get_buffer (text_view), &start, &end,
+                                              text_view->editable))
+        {
+          gchar *normalized_text = g_utf8_normalize (cluster_text,
+                                                     strlen (cluster_text),
+                                                     G_NORMALIZE_NFD);
+          glong len = g_utf8_strlen (normalized_text, -1);
+
+          if (len > 1)
+            gtk_text_buffer_insert_interactive_at_cursor (get_buffer (text_view),
+                                                          normalized_text,
+                                                          g_utf8_offset_to_pointer (normalized_text, len - 1) - normalized_text,
+                                                          text_view->editable);
+
+          g_free (normalized_text);
+        }
+
+      gtk_text_buffer_end_user_action (get_buffer (text_view));
+
+      g_free (cluster_text);
 
       DV(g_print (G_STRLOC": scrolling onscreen\n"));
       gtk_text_view_scroll_mark_onscreen (text_view,
