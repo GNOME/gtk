@@ -1,5 +1,8 @@
 2004-09-21  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkfilechooserdefault.c (gtk_file_chooser_default_should_respond): 
+	Don't assert that current_focus != NULL, just return FALSE.
+
 	* gtk/gtkpathbar.c (gtk_path_bar_size_request): Give the path
 	bar arrows some more space.
 
