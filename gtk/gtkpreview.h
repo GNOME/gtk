@@ -46,6 +46,11 @@ struct _GtkPreview
   guint16 buffer_width;
   guint16 buffer_height;
 
+  guint16 bpp;
+  guint16 rowstride;
+
+  GdkRgbDither dither;
+
   guint type : 1;
   guint expand : 1;
 };
@@ -55,28 +60,8 @@ struct _GtkPreviewInfo
   GdkVisual *visual;
   GdkColormap *cmap;
 
-  gulong *color_pixels;
-  gulong *gray_pixels;
-  gulong *reserved_pixels;
+  guchar *lookup;
 
-  gulong *lookup_red;
-  gulong *lookup_green;
-  gulong *lookup_blue;
-
-  GtkDitherInfo *dither_red;
-  GtkDitherInfo *dither_green;
-  GtkDitherInfo *dither_blue;
-  GtkDitherInfo *dither_gray;
-  guchar ***dither_matrix;
-
-  guint nred_shades;
-  guint ngreen_shades;
-  guint nblue_shades;
-  guint ngray_shades;
-  guint nreserved;
-
-  guint bpp;
-  gint cmap_alloced;
   gdouble gamma;
 };
 
@@ -92,7 +77,6 @@ struct _GtkPreviewClass
 
   GtkPreviewInfo info;
 
-  GdkImage *image;
 };
 
 
@@ -111,6 +95,7 @@ void            gtk_preview_put                (GtkPreview      *preview,
 						gint             desty,
 						gint             width,
 						gint             height);
+/* gtk_preview_put_row is broken */
 void            gtk_preview_put_row            (GtkPreview      *preview,
 						guchar          *src,
 						guchar          *dest,
@@ -132,6 +117,8 @@ void            gtk_preview_set_color_cube     (guint            nred_shades,
 						guint            ngray_shades);
 void            gtk_preview_set_install_cmap   (gint             install_cmap);
 void            gtk_preview_set_reserved       (gint             nreserved);
+void            gtk_preview_set_dither         (GtkPreview      *preview,
+						GdkRgbDither     dither);
 GdkVisual*      gtk_preview_get_visual         (void);
 GdkColormap*    gtk_preview_get_cmap           (void);
 GtkPreviewInfo* gtk_preview_get_info           (void);

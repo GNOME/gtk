@@ -1,3 +1,16 @@
+1998-08-19  Raph Levien  <raph@gimp.org>
+
+	* gdk/gdkrgb.c: fixed some bugs in the 565_d mode, and added a
+	4bpp static_color mode (for vga displays). Also fixed a '64' value
+	in the dither matrix, which was causing one pixel out of 16k to be
+	dithered wrong.
+
+	* gtk/gtkpreview.{c,h}: Changed it to work with GdkRgb, gutting
+	most of the contents. This is an API change - any apps that relied
+	on the internal structure of GtkPreview will need some change -
+	most notably in the use of reserved colors. The Gimp needed
+	changes in this regard.
+
 Wed Aug 19 00:11:14 1998  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkmain.c (gtk_init): allow argument parsing in gtk without
