@@ -1,3 +1,14 @@
+2001-01-20  John Harper  <jsh@eazel.com>
+
+	* io-xbm.c: new pixbuf loader, for X bitmap files. Basically a
+	collision between Xlib's RdBitF.c and io-tiff.c
+
+	* gdk-pixbuf-io.c, Makefile.am, pixbufloader_xbm.def: added
+	io-xbm.c support
+
+	[ merged from stable gdk-pixbuf module. Untested, but it
+	compiles, and works fine in the stable module ]
+
 2001-01-18  Tor Lillqvist  <tml@iki.fi>
 
 	* gdk-pixbuf-io.c (get_libdir): (Win32) Use the new

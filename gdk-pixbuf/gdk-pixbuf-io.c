@@ -180,6 +180,26 @@ pixbuf_check_wbmp (guchar *buffer, int size)
   return FALSE;
 }
 
+
+static gboolean
+pixbuf_check_xbm (guchar *buffer, int size)
+{
+	if (size < 20)
+		return FALSE;
+
+	if (buffer [0] != '#'
+	    || buffer [1] != 'd'
+	    || buffer [2] != 'e'
+	    || buffer [3] != 'f'
+	    || buffer [4] != 'i'
+	    || buffer [5] != 'n'
+	    || buffer [6] != 'e'
+	    || buffer [7] != ' ')
+		return FALSE;
+
+	return TRUE;
+}
+
 static GdkPixbufModule file_formats [] = {
 	{ "png",  pixbuf_check_png, NULL,  NULL, NULL, NULL, NULL, NULL, NULL, },
 	{ "jpeg", pixbuf_check_jpeg, NULL, NULL, NULL, NULL, NULL, NULL, NULL },
@@ -192,6 +212,7 @@ static GdkPixbufModule file_formats [] = {
 	{ "ico",  pixbuf_check_ico, NULL,  NULL, NULL, NULL, NULL, NULL, NULL },
 	{ "bmp",  pixbuf_check_bmp, NULL,  NULL, NULL, NULL, NULL, NULL, NULL },
 	{ "wbmp", pixbuf_check_wbmp, NULL, NULL, NULL, NULL, NULL, NULL, NULL },
+	{ "xbm",  pixbuf_check_xbm, NULL,  NULL, NULL, NULL, NULL, NULL, NULL },
 	{ NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL }
 };
 
@@ -376,6 +397,11 @@ m_stop_load (tiff);
 /* XPM */
 m_load (xpm);
 m_load_xpm_data (xpm);
+/* XBM */
+m_load (xbm);
+m_begin_load (xbm);
+m_load_increment (xbm);
+m_stop_load (xbm);
 
 gboolean
 gdk_pixbuf_load_module (GdkPixbufModule *image_module,
@@ -480,6 +506,24 @@ gdk_pixbuf_load_module (GdkPixbufModule *image_module,
 	if (strcmp (image_module->module_name, "xpm") == 0){
 		image_module->load           = mname (xpm,load);
 		image_module->load_xpm_data  = mname (xpm,load_xpm_data);
+		return TRUE;
+	}
+#endif
+
+#ifdef INCLUDE_xpm
+	if (strcmp (image_module->module_name, "xpm") == 0){
+		image_module->load           = mname (xpm,load);
+		image_module->load_xpm_data  = mname (xpm,load_xpm_data);
+		return TRUE;
+	}
+#endif
+
+#ifdef INCLUDE_tiff
+	if (strcmp (image_module->module_name, "xbm") == 0){
+		image_module->load           = mname (xbm,load);
+		image_module->begin_load     = mname (xbm,begin_load);
+		image_module->load_increment = mname (xbm,load_increment);
+		image_module->stop_load      = mname (xbm,stop_load);
 		return TRUE;
 	}
 #endif

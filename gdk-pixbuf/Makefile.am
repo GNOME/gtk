@@ -84,6 +84,13 @@ libpixbufloader_static_wbmp_la_SOURCES = io-wbmp.c
 libpixbufloader_wbmp_la_SOURCES = io-wbmp.c
 libpixbufloader_wbmp_la_LDFLAGS = -avoid-version -module
 
+#
+# The XBM loader
+#
+libpixbufloader_xbm_la_SOURCES = io-xbm.c
+libpixbufloader_xbm_la_LDFLAGS = -version-info 1:0:0 -module
+libpixbufloader_xbm_la_LIBADD =
+
 if HAVE_PNG
 PNG_LIB = libpixbufloader-png.la
 endif
@@ -110,6 +117,8 @@ BMP_LIB = libpixbufloader-bmp.la
 
 WBMP_LIB = libpixbufloader-wbmp.la
 
+XBM_LIB = libpixbufloader-xbm.la
+
 if BUILD_DYNAMIC_MODULES
 
 loader_LTLIBRARIES = 	\
@@ -122,7 +131,8 @@ loader_LTLIBRARIES = 	\
 	$(TIFF_LIB)	\
 	$(PNM_LIB)	\
 	$(BMP_LIB)	\
-	$(WBMP_LIB)
+	$(WBMP_LIB)	\
+	$(XBM_LIB)
 
 
 extra_sources = 
@@ -214,4 +224,6 @@ EXTRA_DIST =			\
 	pixbufloader_gif.def		\
 	pixbufloader_png.def		\
 	pixbufloader_tiff.def		\
-	pixbufloader_wbmp.def
+	pixbufloader_wbmp.def		\
+	pixbufloader_xbm.def
+

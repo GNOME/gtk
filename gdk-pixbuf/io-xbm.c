@@ -1,0 +1,406 @@
+/* GdkPixbuf library - XBM image loader
+ *
+ * Copyright (C) 1999 Mark Crichton
+ * Copyright (C) 1999 The Free Software Foundation
+ * Copyright (C) 2001 Eazel, Inc.
+ *
+ * Authors: Mark Crichton <crichton@gimp.org>
+ *          Federico Mena-Quintero <federico@gimp.org>
+ *          Jonathan Blandford <jrb@redhat.com>
+ *	    John Harper <jsh@eazel.com>
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Library General Public
+ * License as published by the Free Software Foundation; either
+ * version 2 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Library General Public License for more details.
+ *
+ * You should have received a copy of the GNU Library General Public
+ * License along with this library; if not, write to the
+ * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+ * Boston, MA 02111-1307, USA.
+ */
+
+/* Following code adapted from io-tiff.c, which was ``(almost) blatantly
+   ripped from Imlib'' */
+
+#include <config.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+#include <stdio.h>
+#include <ctype.h>
+#include "gdk-pixbuf-private.h"
+#include "gdk-pixbuf-io.h"
+
+
+
+typedef struct _XBMData XBMData;
+struct _XBMData
+{
+	ModulePreparedNotifyFunc prepare_func;
+	ModuleUpdatedNotifyFunc update_func;
+	gpointer user_data;
+
+	gchar *tempname;
+	FILE *file;
+	gboolean all_okay;
+};
+
+
+/* xbm parser borrowed from xc/lib/X11/RdBitF.c */
+
+#define MAX_SIZE 255
+
+/* shared data for the image read/parse logic */
+static short hex_table[256];		/* conversion value */
+static gboolean initialized = FALSE;	/* easier to fill in at run time */
+
+
+/* Table index for the hex values. Initialized once, first time.
+ * Used for translation value or delimiter significance lookup.
+ */
+static void
+init_hex_table (void)
+{
+	/*
+	 * We build the table at run time for several reasons:
+	 *
+	 * 1. portable to non-ASCII machines.
+	 * 2. still reentrant since we set the init flag after setting table.
+	 * 3. easier to extend.
+	 * 4. less prone to bugs.
+	 */
+	hex_table['0'] = 0;
+	hex_table['1'] = 1;
+	hex_table['2'] = 2;
+	hex_table['3'] = 3;
+	hex_table['4'] = 4;
+	hex_table['5'] = 5;
+	hex_table['6'] = 6;
+	hex_table['7'] = 7;
+	hex_table['8'] = 8;
+	hex_table['9'] = 9;
+	hex_table['A'] = 10;
+	hex_table['B'] = 11;
+	hex_table['C'] = 12;
+	hex_table['D'] = 13;
+	hex_table['E'] = 14;
+	hex_table['F'] = 15;
+	hex_table['a'] = 10;
+	hex_table['b'] = 11;
+	hex_table['c'] = 12;
+	hex_table['d'] = 13;
+	hex_table['e'] = 14;
+	hex_table['f'] = 15;
+
+	/* delimiters of significance are flagged w/ negative value */
+	hex_table[' '] = -1;
+	hex_table[','] = -1;
+	hex_table['}'] = -1;
+	hex_table['\n'] = -1;
+	hex_table['\t'] = -1;
+
+	initialized = TRUE;
+}
+
+/* Read next hex value in the input stream, return -1 if EOF */
+static int
+next_int (FILE *fstream)
+{
+	int ch;
+	int value = 0;
+	int gotone = 0;
+	int done = 0;
+    
+	/* loop, accumulate hex value until find delimiter 
+	   skip any initial delimiters found in read stream */
+
+	while (!done) {
+		ch = getc (fstream);
+		if (ch == EOF) {
+			value = -1;
+			done++;
+		} else {
+			/* trim high bits, check type and accumulate */
+			ch &= 0xff;
+			if (isascii (ch) && isxdigit (ch)) {
+				value = (value << 4) + hex_table[ch];
+				gotone++;
+			} else if ((hex_table[ch]) < 0 && gotone) {
+				done++;
+			}
+		}
+	}
+	return value;
+}
+
+static gboolean
+read_bitmap_file_data (FILE *fstream,
+		       guint *width, guint *height,
+		       guchar **data,
+		       int *x_hot, int *y_hot)
+{
+	guchar *bits = NULL;		/* working variable */
+	char line[MAX_SIZE];		/* input line from file */
+	int size;			/* number of bytes of data */
+	char name_and_type[MAX_SIZE];	/* an input line */
+	char *type;			/* for parsing */
+	int value;			/* from an input line */
+	int version10p;			/* boolean, old format */
+	int padding;			/* to handle alignment */
+	int bytes_per_line;		/* per scanline of data */
+	guint ww = 0;			/* width */
+	guint hh = 0;			/* height */
+	int hx = -1;			/* x hotspot */
+	int hy = -1;			/* y hotspot */
+
+	/* first time initialization */
+	if (!initialized) {
+		init_hex_table ();
+	}
+
+	/* error cleanup and return macro */
+#define	RETURN(code) { g_free (bits); return code; }
+
+	while (fgets (line, MAX_SIZE, fstream)) {
+		if (strlen (line) == MAX_SIZE-1)
+			RETURN (FALSE);
+		if (sscanf (line,"#define %s %d",name_and_type,&value) == 2) {
+			if (!(type = strrchr (name_and_type, '_')))
+				type = name_and_type;
+			else {
+				type++;
+			}
+
+			if (!strcmp ("width", type))
+				ww = (unsigned int) value;
+			if (!strcmp ("height", type))
+				hh = (unsigned int) value;
+			if (!strcmp ("hot", type)) {
+				if (type-- == name_and_type
+				    || type-- == name_and_type)
+					continue;
+				if (!strcmp ("x_hot", type))
+					hx = value;
+				if (!strcmp ("y_hot", type))
+					hy = value;
+			}
+			continue;
+		}
+    
+		if (sscanf (line, "static short %s = {", name_and_type) == 1)
+			version10p = 1;
+		else if (sscanf (line,"static unsigned char %s = {",name_and_type) == 1)
+			version10p = 0;
+		else if (sscanf (line, "static char %s = {", name_and_type) == 1)
+			version10p = 0;
+		else
+			continue;
+
+		if (!(type = strrchr (name_and_type, '_')))
+			type = name_and_type;
+		else
+			type++;
+
+		if (strcmp ("bits[]", type))
+			continue;
+    
+		if (!ww || !hh)
+			RETURN (FALSE);
+
+		if ((ww % 16) && ((ww % 16) < 9) && version10p)
+			padding = 1;
+		else
+			padding = 0;
+
+		bytes_per_line = (ww+7)/8 + padding;
+
+		size = bytes_per_line * hh;
+		bits = g_malloc (size);
+
+		if (version10p) {
+			unsigned char *ptr;
+			int bytes;
+
+			for (bytes = 0, ptr = bits; bytes < size; (bytes += 2)) {
+				if ((value = next_int (fstream)) < 0)
+					RETURN (FALSE);
+				*(ptr++) = value;
+				if (!padding || ((bytes+2) % bytes_per_line))
+					*(ptr++) = value >> 8;
+			}
+		} else {
+			unsigned char *ptr;
+			int bytes;
+
+			for (bytes = 0, ptr = bits; bytes < size; bytes++, ptr++) {
+				if ((value = next_int (fstream)) < 0) 
+					RETURN (FALSE);
+				*ptr=value;
+			}
+		}
+	}
+
+	if (!bits)
+		RETURN (FALSE);
+
+	*data = bits;
+	*width = ww;
+	*height = hh;
+	if (x_hot)
+		*x_hot = hx;
+	if (y_hot)
+		*y_hot = hy;
+
+	return TRUE;
+}
+
+
+
+GdkPixbuf *
+gdk_pixbuf__xbm_image_load_real (FILE *f, XBMData *context)
+{
+	guint w, h;
+	int x_hot, y_hot;
+	guchar *data, *ptr;
+	guchar *pixels;
+	guint row_stride;
+	int x, y;
+	int reg, bits;
+
+	int num_pixs;
+	GdkPixbuf *pixbuf;
+
+	if (!read_bitmap_file_data (f, &w, &h, &data, &x_hot, &y_hot)) {
+		g_message ("Invalid XBM file: %s", context->tempname);
+		return NULL;
+	}
+
+	pixbuf = gdk_pixbuf_new (GDK_COLORSPACE_RGB, FALSE, 8, w, h);
+	pixels = gdk_pixbuf_get_pixels (pixbuf);
+	row_stride = gdk_pixbuf_get_rowstride (pixbuf);
+
+	if (context)
+		(* context->prepare_func) (pixbuf, context->user_data);
+
+
+	/* Initialize PIXBUF */
+
+	ptr = data;
+	for (y = 0; y < h; y++) {
+		bits = 0;
+		for (x = 0; x < w; x++) {
+			guchar channel;
+			if (bits == 0) {
+				reg = *ptr++;
+				bits = 8;
+			}
+
+			channel = (reg & 1) ? 0 : 255;
+			reg >>= 1;
+			bits--;
+
+			pixels[x*3+0] = channel;
+			pixels[x*3+1] = channel;
+			pixels[x*3+2] = channel;
+		}
+		pixels += row_stride;
+	}
+
+	if (context) {
+		(* context->update_func) (pixbuf, 0, 0, w, h, context->user_data);
+		gdk_pixbuf_unref (pixbuf);
+		pixbuf = NULL;
+	}
+
+	return pixbuf;
+}
+
+
+/* Static loader */
+
+GdkPixbuf *
+gdk_pixbuf__xbm_image_load (FILE *f)
+{
+	return gdk_pixbuf__xbm_image_load_real (f, NULL);
+}
+
+
+/* Progressive loader */
+
+/*
+ * Proper XBM progressive loading isn't implemented.  Instead we write
+ * it to a file, then load the file when it's done.  It's not pretty.
+ */
+
+gpointer
+gdk_pixbuf__xbm_image_begin_load (ModulePreparedNotifyFunc prepare_func,
+				  ModuleUpdatedNotifyFunc update_func,
+				  ModuleFrameDoneNotifyFunc frame_done_func,
+				  ModuleAnimationDoneNotifyFunc anim_done_func,
+				  gpointer user_data,
+				  GError **error)
+{
+	XBMData *context;
+	gint fd;
+
+	context = g_new (XBMData, 1);
+	context->prepare_func = prepare_func;
+	context->update_func = update_func;
+	context->user_data = user_data;
+	context->all_okay = TRUE;
+	context->tempname = g_strdup ("/tmp/gdkpixbuf-xbm-tmp.XXXXXX");
+	fd = mkstemp (context->tempname);
+	if (fd < 0) {
+	        g_free (context->tempname);
+		g_free (context);
+		return NULL;
+	}
+
+	context->file = fdopen (fd, "w+");
+	if (context->file == NULL) {
+		g_free (context->tempname);
+		g_free (context);
+		return NULL;
+	}
+
+	return context;
+}
+
+void
+gdk_pixbuf__xbm_image_stop_load (gpointer data)
+{
+	XBMData *context = (XBMData*) data;
+
+	g_return_if_fail (data != NULL);
+
+	fflush (context->file);
+	rewind (context->file);
+	if (context->all_okay)
+		gdk_pixbuf__xbm_image_load_real (context->file, context);
+
+	fclose (context->file);
+	unlink (context->tempname);
+	g_free (context->tempname);
+	g_free ((XBMData *) context);
+}
+
+gboolean
+gdk_pixbuf__xbm_image_load_increment (gpointer data, guchar *buf, guint size)
+{
+	XBMData *context = (XBMData *) data;
+
+	g_return_val_if_fail (data != NULL, FALSE);
+
+	if (fwrite (buf, sizeof (guchar), size, context->file) != size) {
+		context->all_okay = FALSE;
+		return FALSE;
+	}
+
+	return TRUE;
+}
