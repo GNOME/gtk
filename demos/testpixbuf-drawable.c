@@ -86,11 +86,10 @@ int main (int argc, char **argv)
    
    pixbuf_init ();
 
-   gtk_init (&argc, &argv);   
-   gdk_rgb_set_verbose (TRUE);
-   gdk_rgb_init ();
+   gtk_init(&argc, &argv);   
+   gdk_rgb_set_verbose(TRUE);
 
-   gtk_widget_set_default_colormap (gdk_rgb_get_cmap ());
+   gtk_widget_set_default_colormap(gdk_rgb_get_colormap());
 
    root = gdk_screen_get_root_window(gdk_get_default_screen ());
    pixbuf = gdk_pixbuf_get_from_drawable (NULL, root, NULL,
@@ -105,17 +104,17 @@ int main (int argc, char **argv)
    vbox = gtk_vbox_new (FALSE, 0);
    gtk_container_add(GTK_CONTAINER(window), vbox);  
    
-   drawing_area = gtk_drawing_area_new ();
-   gtk_widget_set_usize (GTK_WIDGET (drawing_area),
-                        gdk_pixbuf_get_width (pixbuf),
-                        gdk_pixbuf_get_height (pixbuf));
-   gtk_signal_connect (GTK_OBJECT (drawing_area), "expose_event",
-                      GTK_SIGNAL_FUNC (expose_cb), NULL);
+   drawing_area = gtk_drawing_area_new();
+   gtk_widget_set_size_request (GTK_WIDGET(drawing_area),
+                                gdk_pixbuf_get_width (pixbuf),
+                                gdk_pixbuf_get_height (pixbuf));
+   gtk_signal_connect(GTK_OBJECT(drawing_area), "expose_event",
+                      GTK_SIGNAL_FUNC(expose_cb), NULL);
 
-   gtk_signal_connect (GTK_OBJECT (drawing_area), "configure_event",
-                      GTK_SIGNAL_FUNC (configure_cb), NULL);
-   gtk_object_set_data (GTK_OBJECT (drawing_area), "pixbuf", pixbuf);
-   gtk_box_pack_start (GTK_BOX (vbox), drawing_area, TRUE, TRUE, 0);
+   gtk_signal_connect(GTK_OBJECT(drawing_area), "configure_event",
+                      GTK_SIGNAL_FUNC(configure_cb), NULL);
+   gtk_object_set_data(GTK_OBJECT(drawing_area), "pixbuf", pixbuf);
+   gtk_box_pack_start(GTK_BOX(vbox), drawing_area, TRUE, TRUE, 0);
    
    gtk_widget_show_all (window);
    gtk_main ();

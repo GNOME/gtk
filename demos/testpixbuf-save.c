@@ -3,6 +3,7 @@
 #include <stdio.h>
 
 #include <gtk/gtk.h>
+#include <gdk/gdkscreen.h>
 
 #ifdef GDK_WINDOWING_X11
 #include <gdk/x11/gdkx.h>
@@ -96,7 +97,7 @@ int
 configure_cb (GtkWidget *drawing_area, GdkEventConfigure *evt, gpointer data)
 {
         GdkPixbuf *pixbuf;
-        GdkScreen *scr = gdk_drawable_get_screen (drawing_area->window);                   
+                           
         pixbuf = (GdkPixbuf *) gtk_object_get_data (GTK_OBJECT (drawing_area),   
                                                     "pixbuf");
     
@@ -105,7 +106,7 @@ configure_cb (GtkWidget *drawing_area, GdkEventConfigure *evt, gpointer data)
                 GdkWindow *root;
                 GdkPixbuf *new_pixbuf;
 
-                root =  GDK_SCREEN_GET_CLASS (scr)->get_root_window (scr);
+                root = gdk_screen_get_root_window (gtk_widget_get_screen (drawing_area));
                 new_pixbuf = gdk_pixbuf_get_from_drawable (NULL, root, NULL,
                                                            0, 0, 0, 0, evt->width, evt->height);
                 gtk_object_set_data (GTK_OBJECT (drawing_area), "pixbuf", new_pixbuf);
@@ -126,7 +127,7 @@ main (int argc, char **argv)
    
         gtk_init (&argc, &argv);   
 
-        gtk_widget_set_default_colormap (gdk_rgb_get_cmap ());
+        gtk_widget_set_default_colormap (gdk_rgb_get_colormap ());
 
         root = gdk_screen_get_root_window (gdk_get_default_screen ());
         pixbuf = gdk_pixbuf_get_from_drawable (NULL, root, NULL,
@@ -142,9 +143,9 @@ main (int argc, char **argv)
         gtk_container_add (GTK_CONTAINER (window), vbox);  
    
         drawing_area = gtk_drawing_area_new ();
-        gtk_widget_set_usize (GTK_WIDGET (drawing_area),
-                              gdk_pixbuf_get_width (pixbuf),
-                              gdk_pixbuf_get_height (pixbuf));
+        gtk_widget_set_size_request (GTK_WIDGET (drawing_area),
+                                     gdk_pixbuf_get_width (pixbuf),
+                                     gdk_pixbuf_get_height (pixbuf));
         gtk_signal_connect (GTK_OBJECT (drawing_area), "expose_event",
                             GTK_SIGNAL_FUNC (expose_cb), NULL);
 

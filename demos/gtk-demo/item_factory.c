@@ -72,7 +72,7 @@ do_item_factory (void)
 				"<main>",
 				item_factory,
 				(GtkDestroyNotify) gtk_object_unref);
-      gtk_accel_group_attach (accel_group, GTK_OBJECT (window));
+      gtk_accel_group_attach (accel_group, G_OBJECT (window));
       gtk_window_set_title (GTK_WINDOW (window), "Item Factory");
       gtk_container_set_border_width (GTK_CONTAINER (window), 0);
       gtk_item_factory_create_items (item_factory, nmenu_items, menu_items, NULL);
@@ -92,7 +92,7 @@ do_item_factory (void)
 			  FALSE, FALSE, 0);
 
       label = gtk_label_new ("Type\n<alt>\nto start");
-      gtk_widget_set_usize (label, 200, 200);
+      gtk_widget_set_size_request (label, 200, 200);
       gtk_misc_set_alignment (GTK_MISC (label), 0.5, 0.5);
       gtk_box_pack_start (GTK_BOX (box1), label, TRUE, TRUE, 0);
 

@@ -24,9 +24,8 @@ INCLUDES = @STRIP_BEGIN@ \
 	-DDEMOCODEDIR="\"$(democodedir)\""		\
 	-I$(top_srcdir) 				\
 	-I$(top_builddir)/gdk				\
-	-DGDK_DISABLE_COMPAT_H				\
+	-DG_DISABLE_DEPRECATED	 			\
 	-DGDK_DISABLE_DEPRECATED			\
-	-DGTK_DISABLE_COMPAT_H				\
 	-DGTK_DISABLE_DEPRECATED 			\
 	@GTK_DEBUG_FLAGS@				\
 	@GTK_DEP_CFLAGS@				\

@@ -52,7 +52,6 @@ GTKDOC_CFLAGS = @STRIP_BEGIN@ 				\
 	-I$(top_srcdir) 				\
 	-I$(top_builddir) 				\
 	-I$(top_builddir)/gdk				\
-	-DGTK_DISABLE_COMPAT_H				\
 	@GTK_DEBUG_FLAGS@				\
 	@GTK_DEP_CFLAGS@				\
 @STRIP_END@
@@ -71,6 +70,13 @@ GTKDOC_LD=$(LIBTOOL) --mode=link $(CC)
 ####################################
 # Everything below here is generic #
 ####################################
+
+# We set GPATH here; this gives us semantics for GNU make
+# which are more like other make's VPATH, when it comes to
+# whether a source that is a target of one rule is then
+# searched for in VPATH/GPATH.
+#
+GPATH = $(srcdir)
 
 TARGET_DIR=$(HTML_DIR)/$(DOC_MODULE)
 

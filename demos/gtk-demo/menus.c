@@ -60,7 +60,7 @@ create_menu (gint     depth,
     {
       sprintf (buf, "item %2d - %d", depth, j);
       menuitem = gtk_radio_menu_item_new_with_label (group, buf);
-      group = gtk_radio_menu_item_group (GTK_RADIO_MENU_ITEM (menuitem));
+      group = gtk_radio_menu_item_get_group (GTK_RADIO_MENU_ITEM (menuitem));
 
       gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
       gtk_widget_show (menuitem);
@@ -100,7 +100,7 @@ do_menus (void)
 			  NULL);
       
       accel_group = gtk_accel_group_new ();
-      gtk_accel_group_attach (accel_group, GTK_OBJECT (window));
+      gtk_accel_group_attach (accel_group, G_OBJECT (window));
 
       gtk_window_set_title (GTK_WINDOW (window), "menus");
       gtk_container_set_border_width (GTK_CONTAINER (window), 0);
@@ -118,18 +118,18 @@ do_menus (void)
       
       menuitem = gtk_menu_item_new_with_label ("test\nline2");
       gtk_menu_item_set_submenu (GTK_MENU_ITEM (menuitem), menu);
-      gtk_menu_bar_append (GTK_MENU_BAR (menubar), menuitem);
+      gtk_menu_shell_append (GTK_MENU_SHELL (menubar), menuitem);
       gtk_widget_show (menuitem);
       
       menuitem = gtk_menu_item_new_with_label ("foo");
       gtk_menu_item_set_submenu (GTK_MENU_ITEM (menuitem), create_menu (3, TRUE));
-      gtk_menu_bar_append (GTK_MENU_BAR (menubar), menuitem);
+      gtk_menu_shell_append (GTK_MENU_SHELL (menubar), menuitem);
       gtk_widget_show (menuitem);
 
       menuitem = gtk_menu_item_new_with_label ("bar");
       gtk_menu_item_set_submenu (GTK_MENU_ITEM (menuitem), create_menu (4, TRUE));
       gtk_menu_item_right_justify (GTK_MENU_ITEM (menuitem));
-      gtk_menu_bar_append (GTK_MENU_BAR (menubar), menuitem);
+      gtk_menu_shell_append (GTK_MENU_SHELL (menubar), menuitem);
       gtk_widget_show (menuitem);
       
       box2 = gtk_vbox_new (FALSE, 10);

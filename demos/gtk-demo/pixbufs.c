@@ -246,7 +246,7 @@ do_pixbufs (void)
 	}
       else
 	{
-	  gtk_widget_set_usize (window, back_width, back_height);
+	  gtk_widget_set_size_request (window, back_width, back_height);
 
 	  frame = gdk_pixbuf_new (GDK_COLORSPACE_RGB, FALSE, 8, back_width, back_height);
 

@@ -19,13 +19,12 @@ EXTRA_DIST =			\
 	README.win32		\
 	README.nanox		\
 	config.h.win32		\
-	intl/libgettext.h	\
-	intl/po2tbl.sed.in	\
 	po/README.tools		\
 	po/README.translators	\
 	po/desk.pl		\
 	po/makefile.mingw	\
 	po/update.pl		\
+	po/po2tbl.sed.in	\
 	examples/aspectframe/Makefile  \
 	examples/aspectframe/aspectframe.c  \
 	examples/Makefile  \
@@ -136,6 +135,12 @@ gdk-$(GDKTARGET)-2.0-uninstalled.pc: gdk-2.0-uninstalled.pc
 
 pkgconfigdir = $(libdir)/pkgconfig
 pkgconfig_DATA= gdk-pixbuf-2.0.pc gdk-$(GDKTARGET)-2.0.pc gtk+-$(GDKTARGET)-2.0.pc
+
+DISTCLEANFILES =				\
+	gtk+-$(GDKTARGET)-2.0.pc		\
+	gdk-$(GDKTARGET)-2.0.pc			\
+	gtk+-$(GDKTARGET)-2.0-uninstalled.pc	\
+	gdk-$(GDKTARGET)-2.0-uninstalled.pc
 
 ## symlink gdk-2.0.pc and gtk+-2.0.pc to default target for the platform 
 DEFAULT_GDKTARGET=x11

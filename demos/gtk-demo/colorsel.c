@@ -78,7 +78,7 @@ do_colorsel (void)
       
       da = gtk_drawing_area_new ();
       /* set a minimum size */
-      gtk_widget_set_usize (da, 200, 200);
+      gtk_widget_set_size_request (da, 200, 200);
       /* set the color */
       gtk_widget_modify_bg (da, GTK_STATE_NORMAL, &color);
       
