@@ -1620,7 +1620,7 @@ gtk_file_selection_delete_file (GtkWidget *widget,
                             GTK_WINDOW (fs)->modal ? GTK_DIALOG_MODAL : 0,
                             GTK_MESSAGE_QUESTION,
                             GTK_BUTTONS_NONE,
-                            _("Really delete file \"%s\" ?"), filename);
+                            _("Really delete file \"%s\"?"), filename);
 
   g_signal_connect (dialog, "destroy",
 		    G_CALLBACK (gtk_file_selection_fileop_destroy),

@@ -1,3 +1,8 @@
+2004-01-01  Alexander Winston  <alexander.winston@comcast.net>
+
+	* gtk/gtkfilesel.c: (gtk_file_selection_delete_file): Removed space
+	that proceeded the end-of-sentence punctuation. Fixes: #130353.
+
 2004-01-05  Federico Mena Quintero  <federico@ximian.com>
 
 	* gtk/gtkfilechooserdefault.c (shortcuts_append_bookmarks): Oops,
