@@ -378,12 +378,22 @@ expose_predicate (Display *display, XEvent *xevent, XPointer arg)
 {
   GdkExposeInfo *info = (GdkExposeInfo *)arg;
 
-  if (xevent->xany.type != Expose)
+  /* Compressing across GravityNotify events is safe, because
+   * we completely ignore them, so they can't change what
+   * we are going to draw. Compressing across GravityNotify
+   * events is necessay because during window-unshading animation
+   * we'll get a whole bunch of them interspersed with
+   * expose events.
+   */
+  if ((xevent->xany.type != Expose) && 
+      (xevent->xany.type != GravityNotify))
     {
       info->seen_nonmatching = TRUE;
     }
 
-  if (info->seen_nonmatching || (xevent->xany.window != info->window))
+  if (info->seen_nonmatching ||
+      (xevent->xany.type != Expose) ||
+      (xevent->xany.window != info->window))
     return FALSE;
   else
     return TRUE;

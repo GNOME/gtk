@@ -1,3 +1,9 @@
+Wed Jan 27 22:51:23 1999  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdkevents.c (expose_predicate): Allow exposure
+	 compression across GravityNotify events to improve
+ 	 the appearance of a GTK+ window unshading.
+
 Wed Jan 27 21:56:07 1999  Owen Taylor  <otaylor@redhat.com>
 
         [ patch from Takashi Matsuda <matsu@arch.comp.kyutech.ac.jp> ]
@@ -8,7 +14,7 @@ Wed Jan 27 21:56:07 1999  Owen Taylor  <otaylor@redhat.com>
 	input method immediately, and only if that fails,
 	register than instantiate callback.
 
-	* gdk/gdkentry.c: Some tweaks to make sure that we
+	* gtk/gtkentry.c: Some tweaks to make sure that we
 	only get and set the IC attributes when appropriate.
 	
 Wed Jan 27 20:08:54 1999  Owen Taylor  <otaylor@redhat.com>
