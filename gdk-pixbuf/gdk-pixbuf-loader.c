@@ -173,7 +173,7 @@ gdk_pixbuf_loader_init (GdkPixbufLoader *loader)
   GdkPixbufLoaderPrivate *priv;
   
   priv = g_new0 (GdkPixbufLoaderPrivate, 1);
-  loader->private = priv;
+  loader->priv = priv;
 }
 
 static void
@@ -183,7 +183,7 @@ gdk_pixbuf_loader_finalize (GObject *object)
   GdkPixbufLoaderPrivate *priv = NULL;
   
   loader = GDK_PIXBUF_LOADER (object);
-  priv = loader->private;
+  priv = loader->priv;
 
   if (!priv->closed)
     g_warning ("GdkPixbufLoader finalized without calling gdk_pixbuf_loader_close() - this is not allowed. You must explicitly end the data stream to the loader before dropping the last reference.");
@@ -205,7 +205,7 @@ gdk_pixbuf_loader_prepare (GdkPixbuf *pixbuf,
 {
   GdkPixbufLoaderPrivate *priv = NULL;
   
-  priv = GDK_PIXBUF_LOADER (loader)->private;
+  priv = GDK_PIXBUF_LOADER (loader)->priv;
   gdk_pixbuf_ref (pixbuf);
 
   g_assert (priv->pixbuf == NULL);
@@ -224,7 +224,7 @@ gdk_pixbuf_loader_update (GdkPixbuf *pixbuf,
 {
   GdkPixbufLoaderPrivate *priv = NULL;
   
-  priv = GDK_PIXBUF_LOADER (loader)->private;
+  priv = GDK_PIXBUF_LOADER (loader)->priv;
   
   g_signal_emit (G_OBJECT (loader),
                  pixbuf_loader_signals[AREA_UPDATED],
@@ -241,7 +241,7 @@ gdk_pixbuf_loader_frame_done (GdkPixbufFrame *frame,
 {
   GdkPixbufLoaderPrivate *priv = NULL;
   
-  priv = GDK_PIXBUF_LOADER (loader)->private;
+  priv = GDK_PIXBUF_LOADER (loader)->priv;
   
   priv->pixbuf = NULL;
   
@@ -286,7 +286,7 @@ gdk_pixbuf_loader_animation_done (GdkPixbuf *pixbuf,
   GList *current = NULL;
   gint h, w;
   
-  priv = GDK_PIXBUF_LOADER (loader)->private;
+  priv = GDK_PIXBUF_LOADER (loader)->priv;
   priv->pixbuf = NULL;
   
   current = gdk_pixbuf_animation_get_frames (priv->animation);
@@ -314,7 +314,7 @@ gdk_pixbuf_loader_load_module (GdkPixbufLoader *loader,
                                const char      *image_type,
                                GError         **error)
 {
-  GdkPixbufLoaderPrivate *priv = loader->private;
+  GdkPixbufLoaderPrivate *priv = loader->priv;
 
   if (image_type)
     {
@@ -396,7 +396,7 @@ gdk_pixbuf_loader_eat_header_write (GdkPixbufLoader *loader,
                                     GError         **error)
 {
   gint n_bytes;
-  GdkPixbufLoaderPrivate *priv = loader->private;
+  GdkPixbufLoaderPrivate *priv = loader->priv;
   
   n_bytes = MIN(LOADER_HEADER_SIZE - priv->header_buf_offset, count);
   memcpy (priv->header_buf + priv->header_buf_offset, buf, n_bytes);
@@ -443,7 +443,7 @@ gdk_pixbuf_loader_write (GdkPixbufLoader *loader,
   g_return_val_if_fail (buf != NULL, FALSE);
   g_return_val_if_fail (count >= 0, FALSE);
   
-  priv = loader->private;
+  priv = loader->priv;
   
   /* we expect it's not to be closed */
   g_return_val_if_fail (priv->closed == FALSE, FALSE);
@@ -552,7 +552,7 @@ gdk_pixbuf_loader_get_pixbuf (GdkPixbufLoader *loader)
   g_return_val_if_fail (loader != NULL, NULL);
   g_return_val_if_fail (GDK_IS_PIXBUF_LOADER (loader), NULL);
   
-  priv = loader->private;
+  priv = loader->priv;
 
   if (priv->animation)
     {
@@ -590,7 +590,7 @@ gdk_pixbuf_loader_get_animation (GdkPixbufLoader *loader)
   g_return_val_if_fail (loader != NULL, NULL);
   g_return_val_if_fail (GDK_IS_PIXBUF_LOADER (loader), NULL);
   
-  priv = loader->private;
+  priv = loader->priv;
   
   return priv->animation;
 }
@@ -623,7 +623,7 @@ gdk_pixbuf_loader_close (GdkPixbufLoader *loader,
   g_return_val_if_fail (loader != NULL, TRUE);
   g_return_val_if_fail (GDK_IS_PIXBUF_LOADER (loader), TRUE);
   
-  priv = loader->private;
+  priv = loader->priv;
   
   /* we expect it's not closed */
   g_return_val_if_fail (priv->closed == FALSE, TRUE);

@@ -1,3 +1,8 @@
+2001-02-01  Havoc Pennington  <hp@pobox.com>
+
+	* gdk-pixbuf-loader.c, gdk-pixbuf-loader.h: rename "private" field
+	in struct to "priv" for C++
+
 2001-01-31  Havoc Pennington  <hp@pobox.com>
 
 	* gdk-pixbuf.c: include glib-object.h instead of gvaluetypes.h

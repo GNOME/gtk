@@ -44,7 +44,7 @@ struct _GdkPixbufLoader
   GObject parent_instance;
   
   /*< private >*/
-  gpointer private;
+  gpointer priv;
 };
 
 typedef struct _GdkPixbufLoaderClass GdkPixbufLoaderClass;
