@@ -1,5 +1,8 @@
 2002-11-29  Matthias Clasen  <maclas@gmx.de>
 
+	* gdk/tmpl/rgb.sgml: 
+	* gdk/tmpl/gcs.sgml: Minor tweaks.
+
 	* gdk/tmpl/gdkdisplaymanager.sgml: Add some docs.
 
 2002-11-27  Matthias Clasen  <maclas@gmx.de>

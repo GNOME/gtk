@@ -2,7 +2,7 @@
 GdkRGB
 
 <!-- ##### SECTION Short_Description ##### -->
-renders RGB, grayscale, or indexed image data to a #GdkDrawable
+Renders RGB, grayscale, or indexed image data to a GdkDrawable
 
 <!-- ##### SECTION Long_Description ##### -->
 
@@ -35,7 +35,7 @@ in cases where a "better" visual than the default is available.
 </para>
 
 <example>
-<title>A simple example program using GdkRGB.</title>
+<title>A simple example program using GdkRGB</title>
 <programlisting>
 &num;include &lt;gtk/gtk.h&gt;
 
