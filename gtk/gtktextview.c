@@ -134,6 +134,7 @@ enum
   PROP_INDENT,
   PROP_TABS,
   PROP_CURSOR_VISIBLE,
+  PROP_BUFFER,
   LAST_PROP
 };
 
@@ -635,6 +636,14 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
 							 _("If the insertion cursor is shown"),
 							 TRUE,
 							 G_PARAM_READWRITE));
+
+  g_object_class_install_property (gobject_class,
+                                   PROP_BUFFER,
+                                   g_param_spec_object ("buffer",
+							_("Buffer"),
+							_("The buffer which is displayed"),
+							GTK_TYPE_TEXT_BUFFER,
+							G_PARAM_READWRITE));
 
   
   /*
@@ -1162,6 +1171,8 @@ gtk_text_view_set_buffer (GtkTextView   *text_view,
 	  gtk_text_buffer_add_selection_clipboard (text_view->buffer, clipboard);
 	}
     }
+
+  g_object_notify (G_OBJECT (text_view), "buffer");
   
   if (GTK_WIDGET_VISIBLE (text_view))
     gtk_widget_queue_draw (GTK_WIDGET (text_view));
@@ -2545,6 +2556,10 @@ gtk_text_view_set_property (GObject         *object,
       gtk_text_view_set_cursor_visible (text_view, g_value_get_boolean (value));
       break;
 
+    case PROP_BUFFER:
+      gtk_text_view_set_buffer (text_view, GTK_TEXT_BUFFER (g_value_get_object (value)));
+      break;
+
     default:
       g_assert_not_reached ();
       break;
@@ -2605,6 +2620,10 @@ gtk_text_view_get_property (GObject         *object,
 
     case PROP_CURSOR_VISIBLE:
       g_value_set_boolean (value, text_view->cursor_visible);
+      break;
+
+    case PROP_BUFFER:
+      g_value_set_object (value, get_buffer (text_view));
       break;
 
     default:

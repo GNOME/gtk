@@ -1,3 +1,7 @@
+2003-03-15  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtktextview.c: Add a "buffer" property.  (#108353) 
+
 2003-03-13  Sven Neumann  <sven@gimp.org>
 
 	* gtk/gtkcellrendererpixbuf.c (gtk_cell_renderer_pixbuf_set_property):
