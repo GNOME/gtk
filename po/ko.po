@@ -5,6 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: $PACKAGE $VERSION, no-define\n"
+"Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2003-09-04 18:34+0200\n"
 "PO-Revision-Date: 2003-08-22 22:46+0900\n"
 "Last-Translator: Young-Ho, Cha <ganadist@chollian.net>\n"
@@ -2398,7 +2399,7 @@ msgstr "축(_A)"
 #. Keys listbox
 #: gtk/gtkinputdialog.c:337
 msgid "_Keys"
-msgstr "글쇠(_K)"
+msgstr "키(_K)"
 
 #: gtk/gtkinputdialog.c:557
 msgid "X"

@@ -1,3 +1,7 @@
+2003-09-15  Changwoo Ryu  <cwryu@debian.org>
+
+	* ko.po: Updated Korean translation.
+
 2003-09-08  Jordi Mallach  <jordi@sindominio.net>
 
 	* ca.po: Re-add lots of lost messages in the last update. Sigh.
