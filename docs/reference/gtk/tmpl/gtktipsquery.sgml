@@ -131,11 +131,11 @@ Emitted when a widget is selected during a query.
 @tip_text: the widget's tooltip.
 @tip_private: the widget's private tooltip (see gtk_tooltips_set_tip()).
 @event: the button press or button release event.
-@Returns: TRUE if the query should be stopped.
+@Returns: %TRUE if the query should be stopped.
 
 <!-- ##### ARG GtkTipsQuery:emit-always ##### -->
 <para>
-TRUE if the widget-entered and widget-selected signals are emitted even when
+%TRUE if the widget-entered and widget-selected signals are emitted even when
 the widget has no tooltip set.
 </para>
 

@@ -1831,7 +1831,7 @@ gtk_widget_unmap (GtkWidget *widget)
  * @widget: a #GtkWidget
  * 
  * Creates the GDK (windowing system) resources associated with a
- * widget.  For example, widget->window will be created when a widget
+ * widget.  For example, @widget->window will be created when a widget
  * is realized.  Normally realization happens implicitly; if you show
  * a widget and all its parent containers, then the widget will be
  * realized and mapped automatically.
@@ -1907,7 +1907,7 @@ gtk_widget_realize (GtkWidget *widget)
  *
  * This function is only useful in widget implementations.
  * Causes a widget to be unrealized (frees all GDK resources
- * associated with the widget, such as widget->window).
+ * associated with the widget, such as @widget->window).
  * 
  **/
 void
@@ -2711,8 +2711,8 @@ gtk_widget_remove_accelerator (GtkWidget     *widget,
  * Lists the closures used by @widget for accelerator group connections
  * with gtk_accel_group_connect_by_path() or gtk_accel_group_connect().
  * The closures can be used to monitor accelerator changes on @widget,
- * by connecting to the ::accel_changed signal of the #GtkAccelGroup
- * of a closure which can be found out with gtk_accel_group_from_accel_closure().
+ * by connecting to the ::accel_changed signal of the #GtkAccelGroup of a 
+ * closure which can be found out with gtk_accel_group_from_accel_closure().
  */
 GList*
 gtk_widget_list_accel_closures (GtkWidget *widget)
@@ -3255,7 +3255,7 @@ gtk_widget_intersect (GtkWidget	   *widget,
  * gtk_widget_region_intersect:
  * @widget: a #GtkWidget
  * @region: a #GdkRegion, in the same coordinate system as 
- *          widget->allocation. That is, relative to @widget->window
+ *          @widget->allocation. That is, relative to @widget->window
  *          for %NO_WINDOW widgets; relative to the parent window
  *          of @widget->window for widgets with their own window.
  * @returns: A newly allocated region holding the intersection of @widget
@@ -4319,7 +4319,7 @@ gtk_widget_get_pango_context (GtkWidget *widget)
  * 
  * Creates a new #PangoContext with the appropriate colormap,
  * font description, and base direction for drawing text for
- * this widget. See also gtk_widget_get_pango_context()
+ * this widget. See also gtk_widget_get_pango_context().
  * 
  * Return value: the new #PangoContext
  **/
@@ -4609,7 +4609,7 @@ gtk_widget_child_focus (GtkWidget       *widget,
  * 
  *
  * Sets the position of a widget. The funny "u" in the name comes from
- * the "user position" hint specified by the X window system, and
+ * the "user position" hint specified by the X Window System, and
  * exists for legacy reasons. This function doesn't work if a widget
  * is inside a container; it's only really useful on #GtkWindow.
  *
@@ -5076,7 +5076,7 @@ gtk_widget_get_visual (GtkWidget *widget)
  * gtk_widget_get_settings:
  * @widget: a #GtkWidget
  * 
- * Get the settings object holding the settings (global property
+ * Gets the settings object holding the settings (global property
  * settings, RC file information, etc) used for this widget.
  * 
  * Return value: the relevant #GtkSettings object
@@ -5282,15 +5282,15 @@ gtk_widget_get_composite_name (GtkWidget *widget)
  * the corresponding gtk_widget_pop_composite_child() call.
  * 
  * Here is a simple example:
- * <programlisting>
- *   gtk_widget_push_composite_child ();
+ * <informalexample><programlisting>
+ *   gtk_widget_push_composite_child (<!>);
  *   scrolled_window->hscrollbar = gtk_hscrollbar_new (hadjustment);
  *   gtk_widget_set_composite_name (scrolled_window->hscrollbar, "hscrollbar");
- *   gtk_widget_pop_composite_child ();
+ *   gtk_widget_pop_composite_child (<!>);
  *   gtk_widget_set_parent (scrolled_window->hscrollbar, 
  *                          GTK_WIDGET (scrolled_window));
  *   gtk_widget_ref (scrolled_window->hscrollbar);
- * </programlisting>
+ * </programlisting></informalexample>
  **/
 void
 gtk_widget_push_composite_child (void)
@@ -5901,7 +5901,7 @@ gtk_widget_shape_info_destroy (GtkWidgetShapeInfo *info)
  * @offset_x: X position of shape mask with respect to @window.
  * @offset_y: Y position of shape mask with respect to @window.
  * 
- * Sets a shape for this widget's gdk window. This allows for
+ * Sets a shape for this widget's GDK window. This allows for
  * transparent windows etc., see gdk_window_shape_combine_mask()
  * for more information.
  **/

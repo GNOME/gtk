@@ -87,7 +87,7 @@ Gets the currently-selected font.
 </para>
 
 @fsd: a #GtkFontSelectionDialog.
-@Returns: the currently-selected font, or NULL if no font is selected.
+@Returns: the currently-selected font, or %NULL if no font is selected.
 
 
 <!-- ##### FUNCTION gtk_font_selection_dialog_get_font_name ##### -->
@@ -96,7 +96,7 @@ Gets the currently-selected font name.
 </para>
 
 @fsd: a #GtkFontSelectionDialog.
-@Returns: the currently-selected font name, or NULL if no font is selected.
+@Returns: the currently-selected font name, or %NULL if no font is selected.
 
 
 <!-- ##### FUNCTION gtk_font_selection_dialog_set_font_name ##### -->
@@ -106,7 +106,7 @@ Sets the currently-selected font.
 
 @fsd: a #GtkFontSelectionDialog.
 @fontname: a fontname.
-@Returns: TRUE if the font was found.
+@Returns: %TRUE if the font was found.
 
 
 <!-- ##### FUNCTION gtk_font_selection_dialog_get_preview_text ##### -->

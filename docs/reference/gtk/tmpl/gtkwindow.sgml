@@ -55,13 +55,13 @@ attempts. There are really only two reasonable ways to call this function:
 <orderedlist>
 <listitem>
 <para>
-<literal>gtk_window_set_policy(GTK_WINDOW(window), FALSE, TRUE, FALSE)</literal> 
+<literal>gtk_window_set_policy (GTK_WINDOW (window), FALSE, TRUE, FALSE)</literal> 
 means that the window is user-resizable.
 </para>
 </listitem>
 <listitem>
 <para>
-<literal>gtk_window_set_policy(GTK_WINDOW(window), FALSE, FALSE, TRUE)</literal> 
+<literal>gtk_window_set_policy (GTK_WINDOW (window), FALSE, FALSE, TRUE)</literal> 
 means that the window's size is program-controlled, and should simply match 
 the current size request of the window's children.
 </para>
@@ -74,15 +74,15 @@ be resized by users.
 <para>
 The basic ugly truth of this function is that it should be simply:
 <programlisting>
- void gtk_window_set_resizable(GtkWidget* window, gboolean setting);
+ void gtk_window_set_resizable (GtkWidget* window, gboolean setting);
 </programlisting>
 ...which is why GTK+ 2.0 introduces gtk_window_set_resizable(), which you 
 should use instead of gtk_window_set_policy().
 </para>
 
 <para>
-If set to TRUE, the @allow_grow parameter allows the user to expand the window
-beyond the size request of its child widgets. If @allow_grow is TRUE, be sure to
+If set to %TRUE, the @allow_grow parameter allows the user to expand the window
+beyond the size request of its child widgets. If @allow_grow is %TRUE, be sure to
 check that your child widgets work properly as the window is resized.
 </para>
 
@@ -93,22 +93,22 @@ window will expand to contain them. However, normally the toplevel will not
 shrink to fit the size request of its children if it's too large; the
 @auto_shrink parameter causes the window to shrink when child widgets have too
 much space. @auto_shrink is normally used with the second of the two window
-policies mentioned above.  That is, set @auto_shrink to TRUE if you want the
+policies mentioned above.  That is, set @auto_shrink to %TRUE if you want the
 window to have a fixed, always-optimal size determined by your program.
 </para>
 
 <para>
 Note that @auto_shrink doesn't do anything if @allow_shrink and @allow_grow are
-both set to FALSE.
+both set to %FALSE.
 </para>
 
 <para>
-Neither of the two suggested window policies set the @allow_shrink paramter to
-TRUE.  If @allow_shrink is TRUE, the user can shrink the window so that its
+Neither of the two suggested window policies set the @allow_shrink parameter to
+%TRUE.  If @allow_shrink is %TRUE, the user can shrink the window so that its
 children do not receive their full size request; this is basically a bad thing,
 because most widgets will look wrong if this happens. Furthermore GTK+ has a
 tendency to re-expand the window if size is recalculated for any reason. The
-upshot is that @allow_shrink should always be set to FALSE.
+upshot is that @allow_shrink should always be set to %FALSE.
 </para>
 
 <para>
@@ -165,7 +165,7 @@ it's larger
 
 <!-- ##### MACRO gtk_window_position ##### -->
 <para>
-Deperecated alias for gtk_window_set_position().
+Deprecated alias for gtk_window_set_position().
 </para>
 
 

@@ -24,11 +24,11 @@ the socket must have been realized, and for hence,
 have been added to its parent.
 
 <example>
-<title> Obtaining the XID of a socket </title>
+<title>Obtaining the XID of a socket.</title>
 <programlisting>
 #include &lt;gdk/gdkx.h&gt;
 
-GtkWidget *socket = gtk_socket_new();
+GtkWidget *socket = gtk_socket_new (<!>);
 gtk_widget_show (socket);
 gtk_container_add (GTK_CONTAINER (parent), socket);
 
@@ -52,7 +52,7 @@ consequence being that the plug will appear as a
 separate toplevel window. You can check if the plug
 has been created by examining the
 <StructField>plug_window</StructField> field of the
-#GtkSocket structure. If this field is non-NULL, 
+#GtkSocket structure. If this field is non-%NULL, 
 then the plug has been successfully created inside
 of the socket.
 </para>

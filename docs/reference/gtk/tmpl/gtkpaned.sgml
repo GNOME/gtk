@@ -6,7 +6,7 @@ Base class for widgets with two adjustable panes
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>
-GtkPaned is the base class for widgets with two panes,
+#GtkPaned is the base class for widgets with two panes,
 arranged either horizontally (#GtkHPaned) or
 vertically (#GtkVPaned). Child widgets are 
 added to the panes of the widget with
@@ -21,7 +21,7 @@ child widgets and a small handle that the user
 can drag to adjust the division. It does not
 draw any relief around the children or around
 the separator. (The space in which the separator
-is called the gutter). Often, it is useful
+is called the gutter.) Often, it is useful
 to put each child inside a #GtkFrame with the
 shadow type set to %GTK_SHADOW_IN so that the
 gutter appears as a ridge.
@@ -33,7 +33,7 @@ Each child has two options that can be set,
 or shrink along with the paned widget. If @shrink
 is true, then when that child can be made smaller
 than it's requisition by the user. Setting @shrink
-to FALSE allows the application to set a minimum
+to %FALSE allows the application to set a minimum
 size. If @resize is false for both children, then
 this is treated as if @resize is true for both
 children.
@@ -45,11 +45,11 @@ gtk_paned_set_position().
 </para>
 
 <example>
-<title> Creating a paned widget with minimum sizes </title>
+<title>Creating a paned widget with minimum sizes.</title>
 <programlisting>
-GtkWidget *hpaned = gtk_hpaned_new();
-GtkWidget *frame1 = gtk_frame_new(NULL);
-GtkWidget *frame2 = gtk_frame_new(NULL);
+GtkWidget *hpaned = gtk_hpaned_new (<!>);
+GtkWidget *frame1 = gtk_frame_new (NULL);
+GtkWidget *frame2 = gtk_frame_new (NULL);
 gtk_frame_set_shadow_type (GTK_FRAME (frame1), GTK_SHADOW_IN);
 gtk_frame_set_shadow_type (GTK_FRAME (frame2), GTK_SHADOW_IN);
 
@@ -75,12 +75,9 @@ gtk_widget_set_usize (frame1, 50, -1);
 
 <!-- ##### FUNCTION gtk_paned_add1 ##### -->
 <para>
-Add a child to the top or left pane with
+Adds a child to the top or left pane with
 default parameters. This is equivalent
-to
-<programlisting>
-gtk_paned_pack1(paned, child, FALSE, TRUE);
-</programlisting>
+to <literal>gtk_paned_pack1 (paned, child, FALSE, TRUE)</literal>.
 </para>
 
 @paned: a paned widget
@@ -89,11 +86,9 @@ gtk_paned_pack1(paned, child, FALSE, TRUE);
 
 <!-- ##### FUNCTION gtk_paned_add2 ##### -->
 <para>
-Add a child to the bottom or right pane with default
+Adds a child to the bottom or right pane with default
 parameters. This is equivalent to 
-<programlisting>
-gtk_paned_pack2(paned, child, TRUE, TRUE);
-</programlisting>
+<literal>gtk_paned_pack2(paned, child, TRUE, TRUE)</literal>.
 </para>
 
 @paned: a paned widget
@@ -102,14 +97,14 @@ gtk_paned_pack2(paned, child, TRUE, TRUE);
 
 <!-- ##### MACRO gtk_paned_handle_size ##### -->
 <para>
-Old name for gtk_paned_set_handle_size()
+Old name for gtk_paned_set_handle_size().
 </para>
 
 
 
 <!-- ##### MACRO gtk_paned_gutter_size ##### -->
 <para>
-Old name for gtk_paned_set_gutter_size()
+Old name for gtk_paned_set_gutter_size().
 </para>
 
 @p: 
@@ -118,7 +113,7 @@ Old name for gtk_paned_set_gutter_size()
 
 <!-- ##### FUNCTION gtk_paned_pack1 ##### -->
 <para>
-Add a child to the top or left pane.
+Adds a child to the top or left pane.
 </para>
 
 @paned: a paned widget
@@ -129,7 +124,7 @@ Add a child to the top or left pane.
 
 <!-- ##### FUNCTION gtk_paned_pack2 ##### -->
 <para>
-Add a child to the bottom or right pane.
+Adds a child to the bottom or right pane.
 </para>
 
 @paned: a paned widget
@@ -140,7 +135,7 @@ Add a child to the bottom or right pane.
 
 <!-- ##### MACRO gtk_paned_set_gutter_size ##### -->
 <para>
-In older versions of Gtk, this function used to set the width of the 
+In older versions of GTK+, this function used to set the width of the 
 gutter (the area between the two panes). It does nothing now.
 </para>
 

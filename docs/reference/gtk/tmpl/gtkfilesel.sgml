@@ -6,7 +6,12 @@ prompt the user for a file or directory name.
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>
-GtkFileSelection should be used to retrieve file or directory names from the user. It will create a new dialog window containing a directory list, and a file list corresponding to the current working directory. The filesystem can be navigated using the directory list or the drop-down history menu. Alternatively, the TAB key can be used to navigate using filename completion - common in text based editors such as emacs and jed.
+#GtkFileSelection should be used to retrieve file or directory names from 
+the user. It will create a new dialog window containing a directory list, 
+and a file list corresponding to the current working directory. The filesystem 
+can be navigated using the directory list or the drop-down history menu. 
+Alternatively, the TAB key can be used to navigate using filename 
+completion - common in text based editors such as emacs and jed.
 </para>
 <para>
 File selection dialogs are created with a call to gtk_file_selection_new().
@@ -24,7 +29,7 @@ Simple file operations; create directory, delete file, and rename file, are avai
 </para>
 <para>
 <example>
-<title>Getting a filename from the user</title>
+<title>Getting a filename from the user.</title>
 <programlisting>
 
 /* The file selection widget and the string to store the chosen filename */
@@ -32,26 +37,26 @@ Simple file operations; create directory, delete file, and rename file, are avai
 GtkWidget *file_selector;
 gchar *selected_filename;
 
-void store_filename(GtkFileSelection *selector, gpointer user_data) {
-   selected_filename = gtk_file_selection_get_filename (GTK_FILE_SELECTION(file_selector));
+void store_filename (GtkFileSelection *selector, gpointer user_data) {
+   selected_filename = gtk_file_selection_get_filename (GTK_FILE_SELECTION (file_selector));
 }
 
-void create_file_selection(void) {
+void create_file_selection (void) {
 
    /* Create the selector */
    
-   file_selector = gtk_file_selection_new("Please select a file for editing.");
+   file_selector = gtk_file_selection_new ("Please select a file for editing.");
    
-   gtk_signal_connect (GTK_OBJECT (GTK_FILE_SELECTION(file_selector)->ok_button),
+   gtk_signal_connect (GTK_OBJECT (GTK_FILE_SELECTION (file_selector)->ok_button),
    			   "clicked", GTK_SIGNAL_FUNC (store_filename), NULL);
    			   
    /* Ensure that the dialog box is destroyed when the user clicks a button. */
    
-   gtk_signal_connect_object (GTK_OBJECT (GTK_FILE_SELECTION(file_selector)->ok_button),
+   gtk_signal_connect_object (GTK_OBJECT (GTK_FILE_SELECTION (file_selector)->ok_button),
    					  "clicked", GTK_SIGNAL_FUNC (gtk_widget_destroy),
    					  (gpointer) file_selector);
 
-   gtk_signal_connect_object (GTK_OBJECT (GTK_FILE_SELECTION(file_selector)->cancel_button),
+   gtk_signal_connect_object (GTK_OBJECT (GTK_FILE_SELECTION (file_selector)->cancel_button),
    					  "clicked", GTK_SIGNAL_FUNC (gtk_widget_destroy),
    					  (gpointer) file_selector);
    

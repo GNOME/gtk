@@ -48,9 +48,9 @@ attaches them to particular widgets. The attachment is done
 by the <literal>widget</literal>, <literal>widget_class</literal>,
 and <literal>class</literal> declarations. As an example
 of such a statement:
-<programlisting>
+<informalexample><programlisting>
 widget "mywindow.*.GtkEntry" style "my-entry-class"
-</programlisting>
+</programlisting></informalexample>
 attaches the style <literal>"my-entry-class"</literal>
 to all widgets whose <firstterm>widget class</firstterm>
 matches the <firstterm>pattern</firstterm>
@@ -63,7 +63,7 @@ any character, while <literal>"*"</literal> matches
 zero or more of any character. The three types of
 matching are against the widget path, the
 <firstterm>class path</firstterm> and the class
-heirarchy. Both the widget and the class paths consists of a
+hierarchy. Both the widget and the class paths consists of a
 <literal>"."</literal> separated list of all the
 parents of the widget and the widget itself from
 outermost to innermost. The difference is that in
@@ -76,23 +76,17 @@ for the widget path, the class name is always used.
 So, if you have a <classname>GtkEntry</classname> named
 <literal>"myentry"</literal>, inside of a of a window
 named <literal>"mywindow"</literal>, then the
-widget path is:
-<programlisting>
-"mwindow.GtkHBox.myentry"
-</programlisting>
-while the class path is:
-<programlisting>
-"GtkWindow.GtkHBox.GtkEntry"
-</programlisting>
+widget path is: <literal>"mwindow.GtkHBox.myentry"</literal>
+while the class path is: <literal>"GtkWindow.GtkHBox.GtkEntry"</literal>.
 </para>
 <para>
 Matching against class is a little different. The pattern
 match is done against all class names in the widgets
-class heirarchy (not the layout heirarchy) in sequence, so the
+class hierarchy (not the layout hierarchy) in sequence, so the
 pattern:
-<programlisting>
+<informalexample><programlisting>
 class "GtkButton" style "my-style"
-</programlisting>
+</programlisting></informalexample>
 will match not just <classname>GtkButton</classname> widgets,
 but also <classname>GtkToggleButton</classname> and
 <classname>GtkCheckButton</classname> widgets, since
@@ -125,7 +119,7 @@ The possible toplevel declarations are:
           <replaceable>name</replaceable></literal></term>
     <listitem>
      <para>Specify a style or binding set for a particular
-     branch of the inheritance heirarchy.</para>
+     branch of the inheritance hierarchy.</para>
     </listitem>
   </varlistentry>
   <varlistentry>
@@ -355,33 +349,33 @@ direction, state, and size. The <literal>*</literal> character can be used as a
 wildcard, and if direction/state/size are omitted they default to
 <literal>*</literal>. So for example, the following specifies different icons to
 use for left-to-right and right-to-left languages:
-<programlisting>
+<informalexample><programlisting>
 stock["my-stock-item"] = 
 {
   { "itemltr.png", LTR, *, * },
   { "itemrtl.png", RTL, *, * }
 }
-</programlisting>
+</programlisting></informalexample>
 This could be abbreviated as follows:
-<programlisting>
+<informalexample><programlisting>
 stock["my-stock-item"] = 
 {
   { "itemltr.png", LTR },
   { "itemrtl.png", RTL }
 }
-</programlisting>
+</programlisting></informalexample>
 </para>
 
 <para>
 You can specify custom icons for specific sizes, as follows:
-<programlisting>
+<informalexample><programlisting>
 stock["my-stock-item"] = 
 {
   { "itemmenusize.png", *, *, "gtk-menu" },
   { "itemtoolbarsize.png", *, *, "gtk-large-toolbar" }
   { "itemgeneric.png" } /* implicit *, *, * as a fallback */
 }
-</programlisting>
+</programlisting></informalexample>
 The sizes that come with GTK+ itself are <literal>"gtk-menu"</literal>,
 <literal>"gtk-small-toolbar"</literal>, <literal>"gtk-large-toolbar"</literal>,
 <literal>"gtk-button"</literal>, <literal>"gtk-dialog"</literal>. Applications
@@ -390,14 +384,14 @@ can define other sizes.
 
 <para>
 It's also possible to use custom icons for a given state, for example:
-<programlisting>
+<informalexample><programlisting>
 stock["my-stock-item"] = 
 {
   { "itemprelight.png", *, PRELIGHT },
   { "iteminsensitive.png", *, INSENSITIVE }, 
   { "itemgeneric.png" } /* implicit *, *, * as a fallback */
 }
-</programlisting>
+</programlisting></informalexample>
 </para>
 
 <para>
@@ -418,7 +412,7 @@ taken on particular key presses. The form of a binding
 set declaration is:
 </para>
 
-<programlisting>
+<informalexample><programlisting>
 binding <replaceable>name</replaceable> {
   bind <replaceable>key</replaceable> { 
     <replaceable>signalname</replaceable> (<replaceable>param</replaceable>, ...)
@@ -426,7 +420,7 @@ binding <replaceable>name</replaceable> {
   }
   ...
 }
-</programlisting>
+</programlisting></informalexample>
 
 <para>
 <replaceable>key</replaceable> is a string consisting of a 
@@ -634,11 +628,11 @@ specific portions of a RC file.
 
 <!-- ##### FUNCTION gtk_rc_add_widget_name_style ##### -->
 <para>
-Add a RcStyle that will be looked up by a match against
+Adds a RcStyle that will be looked up by a match against
 the widget's pathname. This is equivalent to a:
-<programlisting>
+<literal>
 widget PATTERN style STYLE
-</programlisting>
+</literal>
 statement in a RC file.
 </para>
 
@@ -648,12 +642,11 @@ statement in a RC file.
 
 <!-- ##### FUNCTION gtk_rc_add_widget_class_style ##### -->
 <para>
-Add a RcStyle that will be looked up by a match against
+Adds a RcStyle that will be looked up by a match against
 the widget's class pathname. This is equivalent to a:
-
-<programlisting>
+<literal>
 widget_class PATTERN style STYLE
-</programlisting>
+</literal>
 statement in a RC file.
 </para>
 
@@ -663,11 +656,11 @@ statement in a RC file.
 
 <!-- ##### FUNCTION gtk_rc_add_class_style ##### -->
 <para>
-Add a RcStyle that will be looked up by a matching against
-the class heirarchy of the widget. This is equivalent to a:
-<programlisting>
+Adds a RcStyle that will be looked up by a matching against
+the class hierarchy of the widget. This is equivalent to a:
+<literal>
 class PATTERN style STYLE
-</programlisting>
+</literal>
 statement in a RC file.
 </para>
 
@@ -677,7 +670,7 @@ statement in a RC file.
 
 <!-- ##### FUNCTION gtk_rc_parse ##### -->
 <para>
-Parse a given resource file.
+Parses a given resource file.
 </para>
 
 @filename: the filename of a file to parse.
@@ -685,7 +678,7 @@ Parse a given resource file.
 
 <!-- ##### FUNCTION gtk_rc_parse_string ##### -->
 <para>
-Parse resource information directly from a string.
+Parses resource information directly from a string.
 </para>
 
 @rc_string: a string to parse.
@@ -825,11 +818,11 @@ itself.)
 
 <!-- ##### FUNCTION gtk_rc_style_new ##### -->
 <para>
-Create a new #GtkRcStyle with no fields set and
+Creates a new #GtkRcStyle with no fields set and
 a reference count of 1.
 </para>
 
-@Returns: the newly create #GtkRcStyle
+@Returns: the newly-created #GtkRcStyle
 
 
 <!-- ##### FUNCTION gtk_rc_style_copy ##### -->
@@ -843,7 +836,7 @@ a reference count of 1.
 
 <!-- ##### FUNCTION gtk_rc_style_ref ##### -->
 <para>
-Increment the reference count of a #GtkRcStyle.
+Increments the reference count of a #GtkRcStyle.
 </para>
 
 @rc_style: a #GtkRcStyle
@@ -851,8 +844,8 @@ Increment the reference count of a #GtkRcStyle.
 
 <!-- ##### FUNCTION gtk_rc_style_unref ##### -->
 <para>
-Decrement the reference count of a #GtkRcStyle and
-free if the result is 0.
+Decrements the reference count of a #GtkRcStyle and
+frees if the result is 0.
 </para>
 
 @rc_style: a #GtkRcStyle

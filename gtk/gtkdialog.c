@@ -385,7 +385,7 @@ gtk_dialog_new_empty (const gchar     *title,
  * so the first button in the list will be the leftmost button in the dialog.
  *
  * Here's a simple example:
- * <programlisting>
+ * <informalexample><programlisting>
  *  GtkWidget *dialog = gtk_dialog_new_with_buttons ("My dialog",
  *                                                   main_app_window,
  *                                                   GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
@@ -394,7 +394,7 @@ gtk_dialog_new_empty (const gchar     *title,
  *                                                   GTK_STOCK_CANCEL,
  *                                                   GTK_RESPONSE_REJECT,
  *                                                   NULL);
- * </programlisting>
+ * </programlisting></informalexample>
  * 
  * Return value: a new #GtkDialog
  **/
@@ -618,8 +618,8 @@ gtk_dialog_add_buttons (GtkDialog   *dialog,
  * @response_id: a response ID
  * @setting: %TRUE for sensitive
  *
- * Calls gtk_widget_set_sensitive (widget, @setting) for each
- * widget in the dialog's action area with the given @response_id.
+ * Calls <literal>gtk_widget_set_sensitive (widget, @setting)</literal> 
+ * for each widget in the dialog's action area with the given @response_id.
  * A convenient way to sensitize/desensitize dialog buttons.
  **/
 void
@@ -850,19 +850,19 @@ run_destroy_handler (GtkDialog *dialog, gpointer data)
  * destroying the dialog if you wish to do so.
  *
  * Typical usage of this function might be:
- * <programlisting>
+ * <informalexample><programlisting>
  *   gint result = gtk_dialog_run (GTK_DIALOG (dialog));
  *   switch (result)
  *     {
  *       case GTK_RESPONSE_ACCEPT:
- *          do_application_specific_something ();
+ *          do_application_specific_something (<!>);
  *          break;
  *       default:
- *          do_nothing_since_dialog_was_cancelled ();
+ *          do_nothing_since_dialog_was_cancelled (<!>);
  *          break;
  *     }
  *   gtk_widget_destroy (dialog);
- * </programlisting>
+ * </programlisting></informalexample>
  * 
  * Return value: response ID
  **/

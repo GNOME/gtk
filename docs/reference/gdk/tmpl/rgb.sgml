@@ -7,7 +7,7 @@ renders RGB, grayscale, or indexed image data to a #GdkDrawable
 <!-- ##### SECTION Long_Description ##### -->
 
 <para>
-GdkRgb is a low-level module which renders RGB, grayscale, and indexed
+GdkRGB is a low-level module which renders RGB, grayscale, and indexed
 colormap images to a #GdkDrawable. It does this as efficiently as
 possible, handling issues such as colormaps, visuals, dithering,
 temporary buffers, and so on. Most code should use the higher-level
@@ -20,14 +20,15 @@ GdkRGB allocates a color cube to use when rendering images.  You can
 set the threshold for installing colormaps with
 gdk_rgb_set_min_colors(). The default is 5x5x5 (125). If a colorcube
 of this size or larger can be allocated in the default colormap, then
-that's done. Otherwise, GdkRgb creates its own private colormap.
+that's done. Otherwise, GdkRGB creates its own private colormap.
 Setting it to 0 means that it always tries to use the default
 colormap, and setting it to 216 means that it always creates a private
 one if it cannot allocate the 6x6x6 colormap in the default. If you
 always want a private colormap (to avoid consuming too many colormap
-entries for other apps, say), you can use gdk_rgb_set_install(TRUE).
+entries for other apps, say), you can use 
+<literal>gdk_rgb_set_install(TRUE)</literal>.
 Setting the value greater than 216 exercises a bug in older versions
-of GdkRgb. Note, however, that setting it to 0 doesn't let you get
+of GdkRGB. Note, however, that setting it to 0 doesn't let you get
 away with ignoring the colormap and visual - a colormap is always
 created in grayscale and direct color modes, and the visual is changed
 in cases where a "better" visual than the default is available.
@@ -57,7 +58,7 @@ main (int argc, char *argv[])
   gtk_init (&amp;argc, &amp;argv);
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-  darea = gtk_drawing_area_new ();
+  darea = gtk_drawing_area_new (<!>);
   gtk_widget_set_size_request (darea, IMAGE_WIDTH, IMAGE_HEIGHT);
   gtk_container_add (GTK_CONTAINER (window), darea);
   gtk_signal_connect (GTK_OBJECT (darea), "expose-event",
@@ -76,7 +77,7 @@ main (int argc, char *argv[])
 	}
     }
 
-  gtk_main ();
+  gtk_main (<!>);
   return 0;
 }
 
@@ -99,7 +100,7 @@ on_darea_expose (GtkWidget *widget,
 
 <varlistentry>
 <term>#GdkColor</term>
-<listitem><para>The underlying Gdk mechanism for allocating
+<listitem><para>The underlying GDK mechanism for allocating
 colors.</para></listitem>
 </varlistentry>
 
@@ -122,7 +123,7 @@ This function no longer does anything at all. It's completely useless
 
 <!-- ##### FUNCTION gdk_draw_rgb_image ##### -->
 <para>
-Draws an RGB image in the drawable. This is the core GdkRgb
+Draws an RGB image in the drawable. This is the core GdkRGB
 function, and likely the only one you will need to use.
 </para>
 
@@ -143,7 +144,7 @@ the pixel (x + i, y + j) is colored with red value @rgb_buf[@j *
 </para>
 
 @drawable: The #GdkDrawable to draw in (usually a #GdkWindow).
-@gc: The graphics context (all Gdk drawing operations require one; its
+@gc: The graphics context (all GDK drawing operations require one; its
 contents are ignored).
 @x: The x coordinate of the top-left corner in the drawable.
 @y: The y coordinate of the top-left corner in the drawable.
@@ -271,8 +272,7 @@ start of the next.
 
 <!-- ##### ENUM GdkRgbDither ##### -->
 <para>
-
-Selects whether or not GdkRgb applies dithering
+Selects whether or not GdkRGB applies dithering
 to the image on display. There are three values:
 </para>
 
@@ -300,7 +300,7 @@ only.
 </itemizedlist>
 
 <para>
-Since GdkRgb currently only handles images with 8 bits per component,
+Since GdkRGB currently only handles images with 8 bits per component,
 dithering on 24 bit per pixel displays is a moot point.
 </para>
 
@@ -380,9 +380,9 @@ a #GdkColor struct.
 
 <!-- ##### FUNCTION gdk_rgb_set_install ##### -->
 <para>
-If @install is TRUE, directs GdkRgb to always install a new "private"
+If @install is %TRUE, directs GdkRGB to always install a new "private"
 colormap rather than trying to find a best fit with the colors already
-allocated. Ordinarily, GdkRgb will install a colormap only if a
+allocated. Ordinarily, GdkRGB will install a colormap only if a
 sufficient cube cannot be allocated.
 </para>
 
@@ -391,13 +391,13 @@ A private colormap has more colors, leading to better quality display,
 but also leads to the dreaded "colormap flashing" effect.
 </para>
 
-@install: TRUE to set install mode.
+@install: %TRUE to set install mode.
 
 
 <!-- ##### FUNCTION gdk_rgb_set_min_colors ##### -->
 <para>
 Sets the minimum number of colors for the color cube. Generally,
-GdkRgb tries to allocate the largest color cube it can. If it can't
+GdkRGB tries to allocate the largest color cube it can. If it can't
 allocate a color cube at least as large as @min_colors, it installs a
 private colormap.
 </para>
@@ -407,14 +407,14 @@ private colormap.
 
 <!-- ##### FUNCTION gdk_rgb_get_visual ##### -->
 <para>
-Gets a "preferred visual" chosen by GdkRgb. In previous versions of
-GDK, this was the only visual GdkRgb could use for rendering. In
-current versions, it's simply the visual GdkRgb would have chosen as 
-the optimal one in those previous versions. GdkRgb can now render to 
+Gets a "preferred visual" chosen by GdkRGB. In previous versions of
+GDK, this was the only visual GdkRGB could use for rendering. In
+current versions, it's simply the visual GdkRGB would have chosen as 
+the optimal one in those previous versions. GdkRGB can now render to 
 drawables with any visual.
 </para>
 
-@Returns: The #GdkVisual chosen by GdkRgb.
+@Returns: The #GdkVisual chosen by GdkRGB.
 
 
 <!-- ##### FUNCTION gdk_rgb_get_colormap ##### -->
@@ -427,22 +427,22 @@ drawables with any visual.
 
 <!-- ##### MACRO gdk_rgb_get_cmap ##### -->
 <para>
-Gets the colormap set by GdkRgb. This colormap and the corresponding
-visual should be used when creating windows that will be drawn in by GdkRgb.
+Gets the colormap set by GdkRGB. This colormap and the corresponding
+visual should be used when creating windows that will be drawn in by GdkRGB.
 </para>
 
-@Returns: The #GdkColormap set by GdkRgb.
+@Returns: The #GdkColormap set by GdkRGB.
 
 
 <!-- ##### FUNCTION gdk_rgb_ditherable ##### -->
 <para>
-Determine whether the visual is ditherable. This function may be
+Determines whether the visual is ditherable. This function may be
 useful for presenting a user interface choice to the user about which
 dither mode is desired; if the display is not ditherable, it may make
 sense to gray out or hide the corresponding UI widget.
 </para>
 
-@Returns: TRUE if the visual is ditherable.
+@Returns: %TRUE if the visual is ditherable.
 
 
 <!-- ##### FUNCTION gdk_rgb_set_verbose ##### -->
@@ -450,6 +450,6 @@ sense to gray out or hide the corresponding UI widget.
 Sets the "verbose" flag. This is generally only useful for debugging.
 </para>
 
-@verbose: TRUE if verbose messages are desired.
+@verbose: %TRUE if verbose messages are desired.
 
 

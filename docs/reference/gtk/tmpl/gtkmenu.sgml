@@ -32,8 +32,8 @@ can pop up a menu when the 3rd mouse button is pressed.
 <title>Connecting the popup signal handler.</title>
 <programlisting>
     /* connect our handler which will popup the menu */
-    gtk_signal_connect_object(GTK_OBJECT(window), "button_press_event",
-	GTK_SIGNAL_FUNC (my_popup_handler), GTK_OBJECT(menu));
+    gtk_signal_connect_object (GTK_OBJECT (window), "button_press_event",
+	GTK_SIGNAL_FUNC (my_popup_handler), GTK_OBJECT (menu));
 </programlisting>
 </example>
 
@@ -41,7 +41,7 @@ can pop up a menu when the 3rd mouse button is pressed.
 <title>Signal handler which displays a popup menu.</title>
 <programlisting>
 static gint
-my_popup_handler(GtkWidget *widget, GdkEvent *event)
+my_popup_handler (GtkWidget *widget, GdkEvent *event)
 {
   GtkMenu *menu;
   GdkEventButton *event_button;
@@ -78,7 +78,7 @@ my_popup_handler(GtkWidget *widget, GdkEvent *event)
 
 <!-- ##### STRUCT GtkMenu ##### -->
 <para>
-The #GtkMenu-struct struct contains private data only, and
+The #GtkMenu struct contains private data only, and
 should be accessed using the functions below.
 </para>
 
@@ -145,7 +145,7 @@ Moves a #GtkMenuItem to a new position within the #GtkMenu.
 <para>
 Displays a menu and makes it available for selection.  Applications can use
 this function to display context-sensitive menus, and will typically supply
-NULL for the @parent_menu_shell, @parent_menu_item, @func and @data 
+%NULL for the @parent_menu_shell, @parent_menu_item, @func and @data 
 parameters.  The default menu positioning function will position the menu
 at the current pointer position.
 </para>
@@ -265,7 +265,7 @@ or reattached.
 </para>
 
 @menu: a #GtkMenu.
-@torn_off: If TRUE, menu is displayed as a tearoff menu.
+@torn_off: If %TRUE, menu is displayed as a tearoff menu.
 
 
 <!-- ##### FUNCTION gtk_menu_attach_to_widget ##### -->

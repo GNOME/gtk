@@ -25,28 +25,28 @@ gtk_toggle_button_get_active().
 To simply switch the state of a toggle button, use gtk_toggle_button_toggled.
 </para>
 <example>
-<title>Creating two #GtkToggleButton widgets.</title>
+<title>Creating two <structname>GtkToggleButton</structname> widgets.</title>
 <programlisting>
 
-void make_toggles(void) {
+void make_toggles (void) {
    GtkWidget *dialog, *toggle1, *toggle2;
 
-   dialog = gtk_dialog_new();
-   toggle1 = gtk_toggle_button_new_with_label("Hi, i'm a toggle button.");
+   dialog = gtk_dialog_new (<!>);
+   toggle1 = gtk_toggle_button_new_with_label ("Hi, i'm a toggle button.");
 
    /* Makes this toggle button invisible */
    gtk_toggle_button_set_mode (GTK_TOGGLE_BUTTON (toggle1), TRUE);
    
    gtk_signal_connect (GTK_OBJECT (toggle1), "toggled",
                        GTK_SIGNAL_FUNC (output_state), NULL);
-   gtk_box_pack_start (GTK_BOX (GTK_DIALOG(dialog)->action_area),
+   gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->action_area),
                        toggle1, FALSE, FALSE, 2);
 
-   toggle2 = gtk_toggle_button_new_with_label("Hi, i'm another toggle button.");
+   toggle2 = gtk_toggle_button_new_with_label ("Hi, i'm another toggle button.");
    gtk_toggle_button_set_mode (GTK_TOGGLE_BUTTON (toggle2), FALSE);
    gtk_signal_connect (GTK_OBJECT (toggle2), "toggled",
                        GTK_SIGNAL_FUNC (output_state), NULL);
-   gtk_box_pack_start (GTK_BOX (GTK_DIALOG(dialog)->action_area),
+   gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->action_area),
                        toggle2, FALSE, FALSE, 2);
 
    gtk_widget_show_all (dialog);
@@ -107,11 +107,11 @@ Creates a new toggle button with a text label.
 
 <!-- ##### FUNCTION gtk_toggle_button_set_mode ##### -->
 <para>
-Determines whether or not the toggle button is drawn on screen. The default mode is FALSE, which results in the button being displayed. To make the button invisible, set <structfield>draw_indicator</structfield> to TRUE.
+Determines whether or not the toggle button is drawn on screen. The default mode is %FALSE, which results in the button being displayed. To make the button invisible, set <structfield>draw_indicator</structfield> to %TRUE.
 </para>
 
 @toggle_button: a #GtkToggleButton.
-@draw_indicator: TRUE or FALSE.
+@draw_indicator: %TRUE or %FALSE.
 
 
 <!-- ##### FUNCTION gtk_toggle_button_get_mode ##### -->
@@ -125,7 +125,7 @@ Determines whether or not the toggle button is drawn on screen. The default mode
 
 <!-- ##### MACRO gtk_toggle_button_set_state ##### -->
 <para>
-This is a deprecated macro, and is only maintained for compatability reasons.
+This is a deprecated macro, and is only maintained for compatibility reasons.
 </para>
 
 
@@ -142,8 +142,8 @@ application ever to call this function.
 
 <!-- ##### FUNCTION gtk_toggle_button_get_active ##### -->
 <para>
-Queries a #GtkToggleButton and returns it's current state. Returns TRUE if
-the toggle button is pressed in and FALSE if it is raised.
+Queries a #GtkToggleButton and returns it's current state. Returns %TRUE if
+the toggle button is pressed in and %FALSE if it is raised.
 </para>
 
 @toggle_button: a #GtkToggleButton.
@@ -152,13 +152,13 @@ the toggle button is pressed in and FALSE if it is raised.
 
 <!-- ##### FUNCTION gtk_toggle_button_set_active ##### -->
 <para>
-Sets the status of the toggle button. Set to TRUE if you want the
-GtkToggleButton to be 'pressed in', and FALSE to raise it.
+Sets the status of the toggle button. Set to %TRUE if you want the
+GtkToggleButton to be 'pressed in', and %FALSE to raise it.
 This action causes the toggled signal to be emitted.
 </para>
 
 @toggle_button: a #GtkToggleButton.
-@is_active: TRUE or FALSE.
+@is_active: %TRUE or %FALSE.
 
 
 <!-- ##### FUNCTION gtk_toggle_button_get_inconsistent ##### -->
@@ -199,7 +199,7 @@ Sets whether the toggle button should be pressed in or not.
 
 <!-- ##### ARG GtkToggleButton:draw-indicator ##### -->
 <para>
-A value of TRUE causes the toggle button to be invisible. FALSE displays it
+A value of %TRUE causes the toggle button to be invisible. %FALSE displays it.
 again.
 </para>
 

@@ -1,3 +1,7 @@
+2001-12-13  Matthias Clasen  <matthiasc@poet.de>
+
+	* gtk/gtkdialog.c, gtk/gtkrc.c, gtk/gtkwidget.c: Markup fixes.
+
 Thu Dec 13 20:37:27 2001  Kristian Rietveld  <kris@gtk.org>
 
 	* gtk/gtktreeview.c (gtk_tree_view_button_press): do not try

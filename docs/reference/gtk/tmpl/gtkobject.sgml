@@ -2,7 +2,7 @@
 GtkObject
 
 <!-- ##### SECTION Short_Description ##### -->
-The base class of the Gtk type hierarchy.
+The base class of the GTK+ type hierarchy.
 
 <!-- ##### SECTION Long_Description ##### -->
 <refsect2>
@@ -28,22 +28,22 @@ sunk (has no floating reference).
 <para>
 When you add a widget to its parent container, the parent container
 will do this:
-<programlisting>
+<informalexample><programlisting>
   g_object_ref (G_OBJECT (child_widget));
   gtk_object_sink (GTK_OBJECT (child_widget));
-</programlisting>
+</programlisting></informalexample>
 This means that the container now owns a reference to the child widget (since 
 it called g_object_ref()), and the child widget has no floating reference.
 </para>
 <para>
 The purpose of the floating reference is to keep the child widget alive 
 until you add it to a parent container:
-<programlisting>
-   button = gtk_button_new ();
+<informalexample><programlisting>
+   button = gtk_button_new (<!>);
    /* button has one floating reference to keep it alive */
    gtk_container_add (GTK_CONTAINER (container), button);
    /* button has one non-floating reference owned by the container */
-</programlisting>
+</programlisting></informalexample>
 </para>
 <para>
 #GtkWindow is a special case, because GTK+ itself will ref/sink it on creation. 
@@ -291,11 +291,11 @@ Sets properties on an object. Deprecated in favor of g_object_set().
 <para>
 <informalexample>
 <programlisting>
-void set_box_properties(GtkBox* box)
+void set_box_properties (GtkBox* box)
 {
-  gtk_object_set(GTK_OBJECT(box), "homogeneous", TRUE,
-                                  "spacing", 8,
-				  NULL);
+  gtk_object_set (GTK_OBJECT (box), "homogeneous", TRUE,
+                                    "spacing", 8,
+				    NULL);
 }
 </programlisting>
 </informalexample>
@@ -389,7 +389,7 @@ pointer.  This function sets it.
 This function is equivalent to:
 <informalexample>
 <programlisting>
-	gtk_object_set_data(object, "user_data", data);
+	gtk_object_set_data (object, "user_data", data);
 </programlisting>
 </informalexample>
 </para>

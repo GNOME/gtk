@@ -48,6 +48,8 @@ As this example demonstrates, an expose handler should
 draw only the pixels within the requested area and
 should draw or clear all these pixels.
 </para>
+<example>
+<title>Simple <structname>GtkDrawingArea</structname> usage.</title>
 <programlisting>
 gboolean
 expose_event (GdkWidget *widget, GdkEventExpose *event, gpointer data)
@@ -68,11 +70,12 @@ expose_event (GdkWidget *widget, GdkEventExpose *event, gpointer data)
   return TRUE;
 }
 [...]
-  GtkWidget *drawing_area = gtk_drawing_area_new ();
+  GtkWidget *drawing_area = gtk_drawing_area_new (<!>);
   gtk_drawing_area_size (GTK_DRAWING_AREA (drawing_area),
                          100, 100);
   gtk_signal_connect (GTK_OBJECT (drawing_area), 
 </programlisting>
+</example>
 
 <!-- ##### SECTION See_Also ##### -->
 <para>
@@ -81,14 +84,14 @@ expose_event (GdkWidget *widget, GdkEventExpose *event, gpointer data)
 
 <!-- ##### STRUCT GtkDrawingArea ##### -->
 <para>
-The #GtkDrawingArea-struct struct contains private data only, and
+The #GtkDrawingArea struct contains private data only, and
 should be accessed using the functions below.
 </para>
 
 
 <!-- ##### FUNCTION gtk_drawing_area_new ##### -->
 <para>
-Create a new drawing area.
+Creates a new drawing area.
 </para>
 
 @Returns: a new #GtkDrawingArea
@@ -96,7 +99,7 @@ Create a new drawing area.
 
 <!-- ##### FUNCTION gtk_drawing_area_size ##### -->
 <para>
-Set the size that the drawing area will request
+Sets the size that the drawing area will request
 in response to a "size_request" signal. The 
 drawing area may actually be allocated a size
 larger than this depending on how it is packed

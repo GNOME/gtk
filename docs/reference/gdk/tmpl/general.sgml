@@ -92,7 +92,7 @@ set on all X windows created by the application to point to the leader window.
 See the X Session Management Library documentation for more information on
 session management and the Inter-Client Communication Conventions Manual
 (ICCCM) for information on the <literal>WM_CLIENT_LEADER</literal> property. 
-(Both documents are part of the X Windows distribution.)
+(Both documents are part of the X Window System distribution.)
 </para>
 
 @sm_client_id: the client id assigned by the session manager when the
@@ -104,7 +104,7 @@ connection was opened, or %NULL to remove the property.
 Exits the application using the <function>exit()</function> system call.
 </para>
 <para>
-This routine is provided mainly for backwards compatability, since it used to
+This routine is provided mainly for backwards compatibility, since it used to
 perform tasks necessary to exit the application cleanly. Those tasks are now
 performed in a function which is automatically called on exit (via the use
 of g_atexit()).
@@ -346,14 +346,14 @@ avoid the X error in any other way.
 <example>
 <title>Trapping an X error.</title>
 <programlisting>
-  gdk_error_trap_push ();
+  gdk_error_trap_push (<!>);
 
   /* ... Call the X function which may cause an error here ... */
 
   /* Flush the X queue to catch errors now. */
-  gdk_flush ();
+  gdk_flush (<!>);
 
-  if (gdk_error_trap_pop ())
+  if (gdk_error_trap_pop (<!>))
     {
       /* ... Handle the error here ... */
     }

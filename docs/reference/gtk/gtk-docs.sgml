@@ -3,7 +3,6 @@
 <!entity % local.notation.class "| PNG">
 
 <!entity hash "#">
-<!entity empty "">
 <!entity GtkAccelLabel SYSTEM "sgml/gtkaccellabel.sgml">
 <!entity GtkAdjustment SYSTEM "sgml/gtkadjustment.sgml">
 <!entity GtkAlignment SYSTEM "sgml/gtkalignment.sgml">

@@ -111,7 +111,7 @@ the "character grid" will be allowed.
 <para>
 Here's an example of how the terminal example would be implemented, assuming 
 a terminal area widget called "terminal" and a toplevel window "toplevel":
-<programlisting>
+<informalexample><programlisting>
 	GdkGeometry hints;
 
 	hints.base_width = terminal->char_width;
@@ -127,7 +127,7 @@ a terminal area widget called "terminal" and a toplevel window "toplevel":
 				       GDK_HINT_RESIZE_INC |
                                        GDK_HINT_MIN_SIZE |
                                        GDK_HINT_BASE_SIZE);
-</programlisting>
+</programlisting></informalexample>
 </para>
 
 <para>

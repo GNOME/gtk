@@ -457,10 +457,10 @@ gtk_rc_add_default_file (const gchar *filename)
 
 /**
  * gtk_rc_set_default_files:
- * @filenames: A %NULL terminated list of filenames.
+ * @filenames: A %NULL-terminated list of filenames.
  * 
  * Sets the list of files that GTK+ will read at the
- * end of gtk_init()
+ * end of gtk_init().
  **/
 void
 gtk_rc_set_default_files (gchar **filenames)
@@ -490,12 +490,11 @@ gtk_rc_set_default_files (gchar **filenames)
  * gtk_rc_get_default_files:
  * 
  * Retrieves the current list of RC files that will be parsed
- * at the end of gtk_init()
+ * at the end of gtk_init().
  * 
- * Return value: A NULL terminated array of filenames. This memory
+ * Return value: A %NULL-terminated array of filenames. This memory
  * is owned by GTK+ and must not be freed by the application.
- *  If you want to store this information, you should make a 
- * copy.
+ * If you want to store this information, you should make a copy.
  **/
 gchar **
 gtk_rc_get_default_files (void)
@@ -1029,7 +1028,7 @@ gtk_rc_style_new (void)
  * gtk_rc_style_copy:
  * @orig: the style to copy
  * 
- * Make a copy of the specified #GtkRcStyle. This function
+ * Makes a copy of the specified #GtkRcStyle. This function
  * will correctly copy an rc style that is a member of a class
  * derived from #GtkRcStyle.
  * 
@@ -1272,7 +1271,7 @@ gtk_rc_reset_widgets (GtkRcContext *context)
  * @force_load: load whether or not anything changed
  * 
  * If the modification time on any previously read file
- * for the given GtkSettings has changed, discard all style information
+ * for the given #GtkSettings has changed, discard all style information
  * and then reread all previously read RC files.
  * 
  * Return value: %TRUE if the files were reread.
@@ -1496,7 +1495,7 @@ gtk_rc_get_style (GtkWidget *widget)
  * @widget_path: the widget path to use when looking up the style, or %NULL
  * @class_path: the class path to use when looking up the style, or %NULL
  * @type: a type that will be used along with parent types of this type
- *        when matching against class styles, or G_TYPE_NONE
+ *        when matching against class styles, or #G_TYPE_NONE
  * 
  * Creates up a #GtkStyle from styles defined in a RC file by providing
  * the raw components used in matching. This function may be useful
@@ -1505,16 +1504,15 @@ gtk_rc_get_style (GtkWidget *widget)
  * would be items inside a GNOME canvas widget.
  *
  * The action of gtk_rc_get_style() is similar to:
- *
- * <programlisting>
+ * <informalexample><programlisting>
  *  gtk_widget_path (widget, NULL, &amp;path, NULL);
  *  gtk_widget_class_path (widget, NULL, &amp;class_path, NULL);
  *  gtk_rc_get_style_by_paths (gtk_widget_get_settings (widget), path, class_path,
  *                             G_OBJECT_TYPE (widget));
- * </programlisting>
+ * </programlisting></informalexample>
  * 
  * Return value: A style created by matching with the supplied paths,
- *   or %NULL if nothign matching was specified and the  default style should
+ *   or %NULL if nothing matching was specified and the default style should
  *   be used. The returned value is owned by GTK+ as part of an internal cache,
  *   so you must call g_object_ref() on the returned value if you want to
  *   keep a reference to it.
@@ -2689,7 +2687,7 @@ gtk_rc_check_pixmap_dir (const gchar *dir, const gchar *pixmap_file)
  * If the file is not found, it outputs a warning message using
  * g_warning() and returns %NULL.
  *
- * Return value: 
+ * Return value: the filename. 
  **/
 gchar*
 gtk_rc_find_pixmap_in_path (GtkSettings  *settings,

@@ -43,7 +43,7 @@ though it is almost always used to display just one accelerator key.
   GtkAccelGroup *accel_group;
 
   /* Create a #GtkAccelGroup and add it to the window. */
-  accel_group = gtk_accel_group_new ();
+  accel_group = gtk_accel_group_new (<!>);
   gtk_window_add_accel_group (GTK_WINDOW (window), accel_group);
 
   /* Create the menu item using the convenience function. */
@@ -51,9 +51,9 @@ though it is almost always used to display just one accelerator key.
   gtk_widget_show (save_item);
   gtk_container_add (GTK_CONTAINER (menu), save_item);
 
-  /* Now add the accelerator to the #GtkMenuItem. Note that since we called
-     gtk_menu_item_new_with_label() to create the #GtkMenuItem the
-     #GtkAccelLabel is automatically set up to display the #GtkMenuItem
+  /* Now add the accelerator to the GtkMenuItem. Note that since we called
+     gtk_menu_item_new_with_label(<!>) to create the GtkMenuItem the
+     GtkAccelLabel is automatically set up to display the GtkMenuItem
      accelerators. We just need to make sure we use GTK_ACCEL_VISIBLE here. */
   gtk_widget_add_accelerator (save_item, "activate", accel_group,
                               GDK_s, GDK_CONTROL_MASK, GTK_ACCEL_VISIBLE);

@@ -69,7 +69,7 @@ Gets the current #GdkPixmap and #GdkBitmap mask.
 </para>
 
 @pixmap: a #GtkPixmap.
-@build: set to TRUE if an extra pixmap should be automatically created to use
+@build: set to %TRUE if an extra pixmap should be automatically created to use
 when the pixmap is insensitive.
 
 

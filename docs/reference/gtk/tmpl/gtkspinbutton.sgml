@@ -6,14 +6,19 @@ retrieve an integer or floating-point number from the user.
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>
-A #GtkSpinButton is an ideal way to allow the user to set the value of some attribute. Rather than having to directly type a number into a #GtkEntry, #GtkSpinButton allows the user to click on one of two arrows to increment or decrement the displayed value. A value can still be typed in, with the bonus that it can be checked to ensure it is in a given range.
+A #GtkSpinButton is an ideal way to allow the user to set the value of some 
+attribute. Rather than having to directly type a number into a #GtkEntry, 
+#GtkSpinButton allows the user to click on one of two arrows to increment or 
+decrement the displayed value. A value can still be typed in, with the bonus 
+that it can be checked to ensure it is in a given range.
 </para>
 <para>
-The main properties of a #GtkSpinButton are through a #GtkAdjustment. See the #GtkAdjustment section for more details about an adjustment's properties.
+The main properties of a #GtkSpinButton are through a #GtkAdjustment. See the 
+#GtkAdjustment section for more details about an adjustment's properties.
 </para>
 <para>
 <example>
-<title>Using a GtkSpinButton to get an integer.</title>
+<title>Using a <structname>GtkSpinButton</structname> to get an integer.</title>
 <programlisting>
 
 /* Provides a function to retrieve an integer value from a GtkSpinButton
@@ -24,19 +29,19 @@ gint grab_int_value (GtkSpinButton *a_spinner, gpointer user_data) {
    return gtk_spin_button_get_value_as_int (a_spinner);
 }
 
-void create_integer_spin_button(void) {
+void create_integer_spin_button (void) {
 
    GtkWidget *window, *spinner;
    GtkAdjustment *spinner_adj;
 
-   spinner_adj = (GtkAdjustment *) gtk_adjustment_new(50.0, 0.0, 100.0, 1.0, 5.0, 5.0);
+   spinner_adj = (GtkAdjustment *) gtk_adjustment_new (50.0, 0.0, 100.0, 1.0, 5.0, 5.0);
    
-   window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
+   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
    gtk_container_set_border_width (GTK_CONTAINER (window), 5);
    
    /* creates the spinner, with no decimal places */
    spinner = gtk_spin_button_new (spinner_adj, 1.0, 0);
-   gtk_container_add (GTK_CONTAINER(window), spinner);
+   gtk_container_add (GTK_CONTAINER (window), spinner);
    
    gtk_widget_show_all (window);
    return;
@@ -48,7 +53,7 @@ void create_integer_spin_button(void) {
 
 <para>
 <example>
-<title>Using a GtkSpinButton to get a floating point value.</title>
+<title>Using a <structname>GtkSpinButton</structname> to get a floating point value.</title>
 <programlisting>
 
 /* Provides a function to retrieve a floating point value from a
@@ -59,19 +64,19 @@ gfloat grab_int_value (GtkSpinButton *a_spinner, gpointer user_data) {
    return gtk_spin_button_get_value_as_float (a_spinner);
 }
 
-void create_floating_spin_button(void) {
+void create_floating_spin_button (void) {
 
    GtkWidget *window, *spinner;
    GtkAdjustment *spinner_adj;
 
-   spinner_adj = (GtkAdjustment *) gtk_adjustment_new(2.500, 0.0, 5.0, 0.001, 0.1, 0.1);
+   spinner_adj = (GtkAdjustment *) gtk_adjustment_new (2.500, 0.0, 5.0, 0.001, 0.1, 0.1);
    
-   window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
+   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
    gtk_container_set_border_width (GTK_CONTAINER (window), 5);
    
    /* creates the spinner, with three decimal places */
    spinner = gtk_spin_button_new (spinner_adj, 0.001, 3);
-   gtk_container_add (GTK_CONTAINER(window), spinner);
+   gtk_container_add (GTK_CONTAINER (window), spinner);
    
    gtk_widget_show_all (window);
    return;
@@ -93,7 +98,9 @@ void create_floating_spin_button(void) {
 
 <!-- ##### STRUCT GtkSpinButton ##### -->
 <para>
-<structfield>entry</structfield> is the #GtkEntry part of the #GtkSpinButton widget, and can be used accordingly. All other fields contain private data and should only be modified using the functions below.
+<structfield>entry</structfield> is the #GtkEntry part of the #GtkSpinButton 
+widget, and can be used accordingly. All other fields contain private data 
+and should only be modified using the functions below.
 </para>
 
 

@@ -34,6 +34,8 @@ Scaling pixbufs and scaling and compositing pixbufs
     as calling gdk_pixbuf_scale().
   </para>
 
+  <example>
+  <title>Handling an expose event.</title>
   <programlisting>
 gboolean
 expose_cb (GtkWidget *widget, GdkEventExpose *event, gpointer data)
@@ -62,10 +64,11 @@ expose_cb (GtkWidget *widget, GdkEventExpose *event, gpointer data)
   return TRUE;
 }
   </programlisting>
+  </example>
 
 <!-- ##### SECTION See_Also ##### -->
   <para>
-    GdkRGB
+    <link linkend="gdk-GdkRGB">GdkRGB</link>.
   </para>
 
 <!-- ##### ENUM GdkInterpType ##### -->

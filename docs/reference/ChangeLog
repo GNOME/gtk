@@ -1,3 +1,23 @@
+2001-12-13  Matthias Clasen  <matthiasc@poet.de>
+	
+	* gdk-pixbuf/tmpl/scaling.sgml,	gdk/tmpl/fonts.sgml, 
+	gdk/tmpl/general.sgml, gdk/tmpl/rgb.sgml, gdk/tmpl/visuals.sgml,
+	gdk/tmpl/windows.sgml, gtk/gtk-docs.sgml, gtk/tmpl/gtkaccellabel.sgml,
+	gtk/tmpl/gtkcombo.sgml, gtk/tmpl/gtkdialog.sgml, 
+	gtk/tmpl/gtkdrawingarea.sgml, gtk/tmpl/gtkeditable.sgml, 
+	gtk/tmpl/gtkfilesel.sgml, gtk/tmpl/gtkfontseldlg.sgml,
+	gtk/tmpl/gtkimage.sgml, gtk/tmpl/gtkmain.sgml, gtk/tmpl/gtkmenu.sgml,
+	gtk/tmpl/gtkmessagedialog.sgml, gtk/tmpl/gtkobject.sgml,
+	gtk/tmpl/gtkpaned.sgml, gtk/tmpl/gtkradiobutton.sgml, 
+	gtk/tmpl/gtkrc.sgml, gtk/tmpl/gtkscale.sgml, gtk/tmpl/gtksignal.sgml, 
+	gtk/tmpl/gtksocket.sgml, gtk/tmpl/gtkspinbutton.sgml,
+	gtk/tmpl/gtktogglebutton.sgml, gtk/tmpl/gtksignal.sgml, 
+	gtk/tmpl/gtktooltips.sgml, gtk/tmpl/gtkwindow.sgml,
+	gdk/tmpl/regions.sgml, gtk/tmpl/gtkfontsel.sgml,
+	gtk/tmpl/gtkpixmap.sgml, gtk/tmpl/gtkprogress.sgml,
+	gtk/tmpl/gtkselection.sgml, gtk/tmpl/gtktable.sgml,
+	gtk/tmpl/gtktipsquery.sgml: Markup fixes (mainly examples).
+
 2001-12-12  Matthias Clasen  <matthiasc@poet.de>
 
 	* gtk/tmpl/gtklist.sgml: Markup fixes.

@@ -11,10 +11,10 @@ can be displayed as an image; most typically, you would load a
 #GdkPixbuf ("pixel buffer") from a file, and then display that. 
 There's a convenience function to do this, gtk_image_new_from_file(),
 used as follows:
-<programlisting>
+<informalexample><programlisting>
   GtkWidget *image;
   image = gtk_image_new_from_file ("myfile.png");
-</programlisting>
+</programlisting></informalexample>
 If the file isn't loaded successfully, the image will contain a
 "broken image" icon similar to that used in many web browsers.
 If you want to handle errors in loading the file yourself, 
@@ -36,8 +36,9 @@ align it (center, left, right) and add padding to it, using
 so by default does not receive events. If you want to receive events
 on the image, such as button clicks, place the image inside a 
 #GtkEventBox, then connect to the event signals on the event box.
-For example, here is some code that handles button press events 
-on a #GtkImage:
+<example>
+<title>Handling button press events on a 
+<structname>GtkImage</structname>.</title>
 <programlisting>
   static void
   button_press_callback (GtkWidget      *event_box, 
@@ -63,7 +64,7 @@ on a #GtkImage:
 
     image = gtk_image_new_from_file ("myfile.png");
 
-    event_box = gtk_event_box_new ();
+    event_box = gtk_event_box_new (<!>);
 
     gtk_container_add (GTK_CONTAINER (event_box), image);
 
@@ -75,6 +76,7 @@ on a #GtkImage:
     return image;
   }
 </programlisting>
+</example>
 </para>
 <para>
 When handling events on the event box, keep in mind that coordinates
@@ -328,33 +330,33 @@ functions), but they will all return %NULL values.
 
 <!-- ##### FUNCTION gtk_image_new ##### -->
 <para>
-Creates the new GtkImage using the value and the mask.
+Creates the new #GtkImage using the value and the mask.
 </para>
 
-@Returns: the GtkImage
+@Returns: the #GtkImage
 <!-- # Unused Parameters # -->
 @val: 
-@mask: a GDKBitmap that indicates which parts of the image should be transparent.
+@mask: a #GdkBitmap that indicates which parts of the image should be transparent.
 
 
 <!-- ##### FUNCTION gtk_image_set ##### -->
 <para>
-Sets the GtkImage
+Sets the #GtkImage.
 </para>
 
 @image: a #GdkPixmap
 @val: 
-@mask: a GDKBitmap that indicates which parts of the image should be transparent.
+@mask: a #GdkBitmap that indicates which parts of the image should be transparent.
 
 
 <!-- ##### FUNCTION gtk_image_get ##### -->
 <para>
-Gets the GtkImage
+Gets the #GtkImage.
 </para>
 
 @image: a #GdkPixmap
 @val: 
-@mask: a GDKBitmap that indicates which parts of the image should be transparent.
+@mask: a #GdkBitmap that indicates which parts of the image should be transparent.
 
 
 <!-- ##### ARG GtkImage:pixbuf ##### -->

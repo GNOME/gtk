@@ -20,13 +20,13 @@ To assign a tip to a particular #GtkWidget, gtk_tooltips_set_tip() is used.
 <note>
 <para>
 Tooltips can only be set on widgets which have their own X window.
-To check if a widget has its own window use 'GTK_WIDGET_NO_WINDOW (widget)'.
+To check if a widget has its own window use <literal>GTK_WIDGET_NO_WINDOW (widget)</literal>.
 To add a tooltip to a widget that doesn't have its own window, place the
 widget inside a #GtkEventBox and add a tooltip to that instead.
 </para>
 </note>
 <para>
-The default appearance of all tooltips in a program is determined by the current gtk theme that the user has selected.
+The default appearance of all tooltips in a program is determined by the current GTK+ theme that the user has selected.
 </para>
 <para>
 Information about the tooltip (if any) associated with an arbitrary widget can be retrieved using gtk_tooltips_data_get().
@@ -38,28 +38,28 @@ Information about the tooltip (if any) associated with an arbitrary widget can b
    GtkWidget *load_button, *save_button, *hbox;
    GtkTooltips *button_bar_tips;
    
-   button_bar_tips = gtk_tooltips_new();
+   button_bar_tips = gtk_tooltips_new (<!>);
    
-   /* Create the buttons and pack them into a #GtkHBox */
-   hbox = gtk_hbox_new(TRUE, 2);
+   /* Create the buttons and pack them into a GtkHBox */
+   hbox = gtk_hbox_new (TRUE, 2);
    
-   load_button = gtk_button_new_with_label("Load a file");
-   gtk_box_pack_start(GTK_BOX (hbox), load_button, TRUE, TRUE, 2);
-   gtk_widget_show(load_button);
+   load_button = gtk_button_new_with_label ("Load a file");
+   gtk_box_pack_start (GTK_BOX (hbox), load_button, TRUE, TRUE, 2);
+   gtk_widget_show (load_button);
    
-   save_button = gtk_button_new_with_label("Save a file");
-   gtk_box_pack_start(GTK_BOX (hbox), save_button, TRUE, TRUE, 2);
-   gtk_widget_show(save_button);
-   gtk_widget_show(hbox);
+   save_button = gtk_button_new_with_label ("Save a file");
+   gtk_box_pack_start (GTK_BOX (hbox), save_button, TRUE, TRUE, 2);
+   gtk_widget_show (save_button);
+   gtk_widget_show (hbox);
    
    /* Add the tips */
-   gtk_tooltips_set_tip(GTK_TOOLTIPS (button_bar_tips), load_button,
+   gtk_tooltips_set_tip (GTK_TOOLTIPS (button_bar_tips), load_button,
 				 "Load a new document into this window",
 				 "Requests the filename of a document.
 				  This will then be loaded into the current
 				  window, replacing the contents of whatever
 				  is already loaded.");
-   gtk_tooltips_set_tip(GTK_TOOLTIPS (button_bar_tips), save_button,
+   gtk_tooltips_set_tip (GTK_TOOLTIPS (button_bar_tips), save_button,
 				 "Saves the current document to a file",
 				 "If you have saved the document previously,
 				  then the new version will be saved over the
@@ -149,7 +149,7 @@ Retrieves any #GtkTooltipsData previously associated with the given widget.
 </para>
 
 @widget: a #GtkWidget.
-@Returns: a #GtkTooltipsData struct, or NULL if the widget has no tooltip.
+@Returns: a #GtkTooltipsData struct, or %NULL if the widget has no tooltip.
 
 
 <!-- ##### FUNCTION gtk_tooltips_force_window ##### -->

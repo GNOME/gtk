@@ -57,7 +57,7 @@ The <type>GdkVisual</type> structure contains information about
 a particular visual.
 </para>
 
-<figure float="1" id="rgbmask">
+<example id="rgbmask">
 <title>Constructing a pixel value from components</title>
 <programlisting>
 guint
@@ -69,7 +69,7 @@ pixel_from_rgb (GdkVisual *visual,
          ((r >> (16 - visual->blue_prec))  << visual->blue_shift);
 }
 </programlisting>
-</figure>
+</example>
 
 @parent_instance: inherited portion from #GObject
 @type: The type of this visual.

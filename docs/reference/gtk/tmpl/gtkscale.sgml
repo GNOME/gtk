@@ -115,7 +115,7 @@ signal handler which returns an allocated string representing @value.
 That string will then be used to display the scale's value.
 Here's an example signal handler which displays a value 1.0 as
 with "-->1.0<--".
-<programlisting>
+<informalexample><programlisting>
 static gchar*
 format_value_callback (GtkScale *scale,
                        gdouble   value)
@@ -123,7 +123,7 @@ format_value_callback (GtkScale *scale,
   return g_strdup_printf ("-->%0.*g<--",
                           gtk_scale_get_digits (scale), value);
 }
-</programlisting>
+</programlisting></informalexample>
 </para>
 
 @scale: the object which received the signal.

@@ -34,7 +34,8 @@ the entry field to the last or first item in the list, respectively.
 </para>
 
 <example id="gtkcombo-simple-example">
-<title>Creating a #GtkCombo widget with simple text items.</title>
+<title>Creating a <structname>GtkCombo</structname> widget with simple text 
+items.</title>
 <programlisting>
   GtkWidget *combo;
   GList *items = NULL;
@@ -45,19 +46,19 @@ the entry field to the last or first item in the list, respectively.
   items = g_list_append (items, "Fourth Item");
   items = g_list_append (items, "Fifth Item");
 
-  combo = gtk_combo_new ();
+  combo = gtk_combo_new (<!>);
   gtk_combo_set_popdown_strings (GTK_COMBO (combo), items);
 </programlisting>
 </example>
 
 <example>
-<title>Creating a #GtkCombo widget with a complex item.</title>
+<title>Creating a <structname>GtkCombo</structname> widget with a complex item.</title>
 <programlisting>
   GtkWidget *combo, *item, *hbox, *arrow, *label;
 
-  combo = gtk_combo_new ();
+  combo = gtk_combo_new (<!>);
 
-  item = gtk_list_item_new ();
+  item = gtk_list_item_new (<!>);
   gtk_widget_show (item);
 
   /* You can put almost anything into the GtkListItem widget. Here we will use

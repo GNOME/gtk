@@ -523,10 +523,10 @@ _gdk_pixbuf_get_module (guchar *buffer, guint size,
  * @error: Return location for an error
  *
  * Creates a new pixbuf by loading an image from a file.  The file format is
- * detected automatically. If NULL is returned, then @error will be set.
+ * detected automatically. If %NULL is returned, then @error will be set.
  * Possible errors are in the #GDK_PIXBUF_ERROR and #G_FILE_ERROR domains.
  *
- * Return value: A newly-created pixbuf with a reference count of 1, or NULL if
+ * Return value: A newly-created pixbuf with a reference count of 1, or %NULL if
  * any of several error conditions occurred:  the file could not be opened,
  * there was no loader for the file's format, there was not enough memory to
  * allocate the image buffer, or the image file contained invalid data.
@@ -739,17 +739,16 @@ gdk_pixbuf_real_save (GdkPixbuf     *pixbuf,
  * @Varargs: list of key-value save options
  *
  * Saves pixbuf to a file in @type, which is currently "jpeg" or
- * "png".  If @error is set, FALSE will be returned. Possible errors include 
+ * "png".  If @error is set, %FALSE will be returned. Possible errors include 
  * those in the #GDK_PIXBUF_ERROR domain and those in the #G_FILE_ERROR domain.
  *
- * The variable argument list should be NULL-terminated; if not empty,
+ * The variable argument list should be %NULL-terminated; if not empty,
  * it should contain pairs of strings that modify the save
  * parameters. For example:
- *
- * <programlisting>
+ * <informalexample><programlisting>
  * gdk_pixbuf_save (pixbuf, handle, "jpeg", &error,
  *                  "quality", "100", NULL);
- * </programlisting>
+ * </programlisting></informalexample>
  *
  * Currently only few parameters exist. JPEG images can be saved with a 
  * "quality" parameter; its value should be in the range [0,100]. 
@@ -795,12 +794,12 @@ gdk_pixbuf_save (GdkPixbuf  *pixbuf,
  * @pixbuf: pointer to GdkPixbuf.
  * @filename: Name of file to save.
  * @type: name of file format.
- * @option_keys: name of options to set, NULL-terminated
+ * @option_keys: name of options to set, %NULL-terminated
  * @option_values: values for named options
- * @error: return location for error, or NULL
+ * @error: return location for error, or %NULL
  *
  * Saves pixbuf to a file in @type, which is currently "jpeg" or "png".
- * If @error is set, FALSE will be returned. See gdk_pixbuf_save () for more
+ * If @error is set, %FALSE will be returned. See gdk_pixbuf_save () for more
  * details.
  *
  * Return value: whether an error was set
