@@ -39,15 +39,13 @@ LDFLAGS = @STRIP_BEGIN@ \
 	-lm							\
 @STRIP_END@
 
-#	$(top_builddir)/gdk/libgdk-1.3.la
-
 
 #
 # setup source file variables
 #
+
 # GTK+ header files for public installation (non-generated, or generated
 # by configure)
-
 gtk_public_h_sources = @STRIP_BEGIN@ \
 	gtk.h			\
 	gtkaccelgroup.h		\
@@ -157,7 +155,9 @@ gtk_public_h_sources = @STRIP_BEGIN@ \
 	gtktearoffmenuitem.h    \
 	gtktextbuffer.h		\
 	gtktextchild.h		\
+	gtktextdisplay.h	\
 	gtktextiter.h		\
+	gtktextlayout.h		\
 	gtktextmark.h		\
 	gtktexttag.h		\
 	gtktexttagtable.h	\
@@ -187,19 +187,6 @@ gtk_public_h_sources = @STRIP_BEGIN@ \
 	gtkwidget.h		\
 	gtkwindow.h		\
 @STRIP_END@
-
-#
-# GTK+ header files that we install, but don't extract enums from
-# (This class is iffy; we have it for the semi-public interface
-# of the Text widget, which is useful for writing new view types
-# such as a Canvas text item, but isn't part of the clean public
-# interface)
-
-gtk_semipublic_h_sources = @STRIP_BEGIN@ \
-	gtktextdisplay.h	\
-	gtktextlayout.h		\
-@STRIP_END@	
-
 # GTK+ header files that don't get installed
 gtk_private_h_sources = @STRIP_BEGIN@ \
 	gtkrbtree.h 		\
@@ -212,12 +199,8 @@ gtk_private_h_sources = @STRIP_BEGIN@ \
 	gtktexttagprivate.h	\
 	gtktreeprivate.h	\
 @STRIP_END@
-
-
-
-
 # GTK+ C sources to build the library from
-gtk_c_sources = @STRIP_BEGIN@ \
+gtk_c_sources = @STRIP_BEGIN@   \
 	gtkaccelgroup.c		\
 	gtkaccellabel.c		\
 	gtkadjustment.c		\
@@ -365,43 +348,6 @@ gtk_c_sources = @STRIP_BEGIN@ \
 	fnmatch.h		\
 	gdk-pixbuf-loader.c	\
 @STRIP_END@
-# we use our own built_sources variable rules to avoid automake's
-# BUILT_SOURCES oddities
-# we generate frequently rebuild files piggyback on a stamp file, so sources
-# depending on them only get rebuild when the built source actually changed
-# content
-#
-# built sources that don't get installed
-gtk_built_sources = @STRIP_BEGIN@ \
-	stamp-gtk.defs		\
-	stamp-gtktypebuiltins.h	\
-	stamp-gtkmarshal.h	\
-	gtktypebuiltins_vars.c	\
-	gtktypebuiltins_ids.c	\
-	gtktypebuiltins_evals.c	\
-	gtkmarshal.c		\
-	gtk.defs		\
-@STRIP_END@
-# built sources that get installed with the header files
-gtk_built_public_sources = @STRIP_BEGIN@ \
-	gtkcompat.h		\
-	gtkmarshal.h		\
-	gtktypebuiltins.h	\
-@STRIP_END@
-# non-header sources (headers should be specified in the above variables)
-# that don't serve as direct make target sources, i.e. they don't have
-# their own .lo rules and don't get publically installed
-gtk_extra_sources = @STRIP_BEGIN@ \
-	gtkcompat.h.in		\
-	makeenums.pl		\
-	makeenums.awk		\
-	maketypes.awk		\
-	makeenums.h		\
-	gtkargcollector.c	\
-	gtk-boxed.defs		\
-	genmarshal.c		\
-	gtkmarshal.list		\
-@STRIP_END@
 # Extra headers that are used for enum type array/id generation
 gdk_headers = @STRIP_BEGIN@ 	\
 	../gdk/gdkcc.h		\
@@ -425,40 +371,53 @@ gdk_headers = @STRIP_BEGIN@ 	\
 	../gdk/gdkwindow.h	\
 @STRIP_END@
 
+# we use our own built_sources variable rules to avoid automake's
+# BUILT_SOURCES oddities
+# we generate frequently rebuild files piggyback on a stamp file, so sources
+# depending on them only get rebuild when the built source actually changed
+# content
+
+# built sources that get installed with the header files
+gtk_built_public_sources = @STRIP_BEGIN@ \
+	gtkmarshal.h		\
+	gtktypebuiltins.h	\
+@STRIP_END@
+# built sources that don't get installed
+gtk_built_sources = @STRIP_BEGIN@ \
+	stamp-gtk.defs		\
+	stamp-gtktypebuiltins.h	\
+	stamp-gtkmarshal.h	\
+	gtktypebuiltins_vars.c	\
+	gtktypebuiltins_ids.c	\
+	gtktypebuiltins_evals.c	\
+	gtkmarshal.c		\
+	gtk.defs		\
+	${gtk_built_public_sources} \
+@STRIP_END@
+# non-header sources (headers should be specified in the above variables)
+# that don't serve as direct make target sources, i.e. they don't have
+# their own .lo rules and don't get publically installed
+gtk_extra_sources = @STRIP_BEGIN@ \
+	gtkcompat.h.in		\
+	makeenums.pl		\
+	makeenums.awk		\
+	maketypes.awk		\
+	makeenums.h		\
+	gtkargcollector.c	\
+	gtk-boxed.defs		\
+	gtkmarshal.list		\
+@STRIP_END@
+
+
 #
 # setup GTK+ sources and their dependancies
 #
-all_headers = $(gtk_public_h_sources) $(gtk_semipublic_h_sources) $(gtk_built_public_sources)
-all_sources = $(gtk_c_sources)
-
-extra = @gtktargetlib@
-if USE_X11
-libgtk_x11_includedir = $(includedir)/gtk-2.0/gtk
-libgtk_x11_include_HEADERS = $(all_headers)
-libgtk_x11_1_3_la_SOURCES = $(all_sources)
-endif
-
-if USE_NANOX
-libgtk_nanox_includedir = $(includedir)/gtk-2.0/gtk
-libgtk_nanox_include_HEADERS = $(all_headers)
-libgtk_nanox_1_3_la_SOURCES = $(all_sources)
-endif
-
-if USE_LINUX_FB
-libgtk_linux_fb_includedir = $(includedir)/gtk-2.0/gtk
-libgtk_linux_fb_include_HEADERS = $(all_headers)
-libgtk_linux_fb_1_3_la_SOURCES = $(all_sources)
-endif
-
-# now define the real one to workaround automake's mishandling
-lib_LTLIBRARIES = $(extra)
-
-EXTRA_LTLIBRARIES = libgtk-x11-1.3.la libgtk-nanox-1.3.la libgtk-linux-fb-1.3.la
-
-MAINTAINERCLEANFILES += $(gtk_built_public_sources) $(gtk_built_sources)
+gtk_target_headers = $(gtk_public_h_sources) $(gtk_built_public_sources)
+gtk_target_sources = $(gtk_c_sources)
+MAINTAINERCLEANFILES += $(gtk_built_sources)
 EXTRA_HEADERS +=
-EXTRA_DIST += $(gtk_private_h_sources)
-EXTRA_DIST += $(gtk_built_sources) $(gtk_built_public_sources) $(gtk_extra_sources)
+EXTRA_DIST += $(gtk_private_h_sources) $(gtk_extra_sources)
+EXTRA_DIST += $(gtk_built_sources)
 
 #
 # rules to generate built sources
@@ -466,13 +425,14 @@ EXTRA_DIST += $(gtk_built_sources) $(gtk_built_public_sources) $(gtk_extra_sourc
 # setup autogeneration dependancies
 gen_sources = xgen-gdef xgen-gtbh xgen-gtbvc xgen-gtbic xgen-gtbec xgen-gmh xgen-gmc
 CLEANFILES += $(gen_sources)
-OLD_STAMP: $(gtk_built_public_sources) $(gtk_built_sources)
-$(OBJECTS): OLD_STAMP 	# this is our oldest-source-stamp
+Makefile: oldest-source-stamp	# oh boy, does automake SUCK!
+oldest-source-stamp: $(gtk_built_sources)
+$(OBJECTS): oldest-source-stamp  ${gtk_built_public_sources} # this is our oldest file, used for implicit auto-generation deps
 # initial creation of the real stamp-* files
 gtk.defs gtkmarshal.h gtktypebuiltins.h:          # never add deps here
 	test -f "$(srcdir)/$@" || touch $(srcdir)/$@
 # normal autogeneration rules
-# all autogenerated files need to generated in the srcdir,
+# all autogenerated files need to be generated in the srcdir,
 # so old versions get remade and are not confused with newer
 # versions in the build dir. thus a development setup requires
 # srcdir to be writable, passing --disable-rebuilds to
@@ -484,15 +444,17 @@ $(srcdir)/stamp-gtk.defs: @REBUILD@ makeenums.pl gtk.defs gtk-boxed.defs $(gtk_p
 	&& (cmp -s xgen-gdef gtk.defs || cp xgen-gdef gtk.defs) \
 	&& rm -f xgen-gdef \
 	&& echo timestamp > $(@F)
-$(srcdir)/gtkmarshal.c: stamp-gtkmarshal.h
-$(srcdir)/gtkmarshal.c $(srcdir)/stamp-gtkmarshal.h: @REBUILD@ gtkmarshal.list gtkmarshal.h
+$(srcdir)/stamp-gtkmarshal.h: @REBUILD@ gtkmarshal.list gtkmarshal.h
 	cd $(srcdir) \
-	&& glib-genmarshal --prefix=gtk_marshal gtkmarshal.list --header --skip-source >> xgen-gmh \
+	&& glib-genmarshal --prefix=gtk_marshal gtkmarshal.list --header >> xgen-gmh \
+	&& (cmp -s xgen-gmh gtkmarshal.h || cp xgen-gmh gtkmarshal.h) \
+	&& rm -f xgen-gmh xgen-gmh~ \
+	&& echo timestamp > $(@F)
+$(srcdir)/gtkmarshal.c: $(srcdir)/stamp-gtkmarshal.h
+	cd $(srcdir) \
 	&& glib-genmarshal --prefix=gtk_marshal gtkmarshal.list --body >> xgen-gmc \
 	&& cp xgen-gmc gtkmarshal.c \
-	&& (cmp -s xgen-gmh gtkmarshal.h || cp xgen-gmh gtkmarshal.h) \
-	&& rm -f xgen-gmh xgen-gmc xgen-gmh~ xgen-gmc~ \
-	&& echo timestamp > stamp-gtkmarshal.h
+	&& rm -f xgen-gmc xgen-gmc~
 $(srcdir)/stamp-gtktypebuiltins.h: @REBUILD@ maketypes.awk stamp-gtk.defs gtktypebuiltins.h
 	cd $(srcdir) \
 	&& LC_ALL=C $(AWK) -f maketypes.awk gtk.defs macros > xgen-gtbh \
@@ -516,6 +478,28 @@ $(srcdir)/gtktypebuiltins_evals.c: @REBUILD@ makeenums.pl $(gtk_public_h_sources
 	&& rm -f xgen-gtbec
 
 
+# target platform:
+lib_ltlibraries = @gtktargetlib@
+# now define the real one to workaround automake's mishandling
+lib_LTLIBRARIES = $(lib_ltlibraries)
+if USE_X11
+libgtk_x11_includedir = $(includedir)/gtk-2.0/gtk
+libgtk_x11_include_HEADERS = $(gtk_target_headers)
+libgtk_x11_1_3_la_SOURCES = $(gtk_target_sources)
+endif
+if USE_NANOX
+libgtk_nanox_includedir = $(includedir)/gtk-2.0/gtk
+libgtk_nanox_include_HEADERS = $(gtk_target_headers)
+libgtk_nanox_1_3_la_SOURCES = $(gtk_target_sources)
+endif
+if USE_LINUX_FB
+libgtk_linux_fb_includedir = $(includedir)/gtk-2.0/gtk
+libgtk_linux_fb_include_HEADERS = $gtk_target_headers)
+libgtk_linux_fb_1_3_la_SOURCES = $(gtk_target_sources)
+endif
+EXTRA_LTLIBRARIES = libgtk-x11-1.3.la libgtk-nanox-1.3.la libgtk-linux-fb-1.3.la
+
+
 gtkconfdir = $(sysconfdir)/gtk-2.0
 gtkconf_DATA = gtkrc.el gtkrc.eo gtkrc.he gtkrc.hy gtkrc.ja \
 	gtkrc.ko gtkrc.ru gtkrc.tr gtkrc.th gtkrc.uk gtkrc.iso-8859-2 \
@@ -528,33 +512,31 @@ gtkconf_DATA = gtkrc.el gtkrc.eo gtkrc.he gtkrc.hy gtkrc.ja \
 # We create a dummy theme for the default GTK+ theme
 install-data-local:
 	$(mkinstalldirs) $(DESTDIR)$(datadir)/themes/Default/gtk-2.0
-	echo "# Empty gtkrc for default theme" > \
-	    $(DESTDIR)$(datadir)/themes/Default/gtk-2.0/gtkrc
+	echo "# Empty gtkrc for default theme" > $(DESTDIR)$(datadir)/themes/Default/gtk-2.0/gtkrc
 	$(mkinstalldirs) $(DESTDIR)$(gtkconfdir)
-	cd $(DESTDIR)$(gtkconfdir) && \
-	  for i in cs hr hu pl ro sk sl sq sr ; do \
-	    rm -f gtkrc.$$i ; \
-	    ln -s gtkrc.iso-8859-2 gtkrc.$$i ; \
-	  done ; \
-	  for i in bg_BG.iso88595 mk sp ru_RU.iso88595 ; do \
-	    rm -f gtkrc.$$i ; \
-	    ln -s gtkrc.iso-8859-5 gtkrc.$$i ; \
-	  done ; \
-	rm -f gtkrc.lt gtkrc.lv gtkrc.cy gtkrc.ga gtkrc.et gtkrc.ka \
-	     gtkrc.vi_VN.viscii111 gtkrc.vi_VN.tcvn5712 gtkrc.vi \
-	     gtkrc.be gtkrc.bg ; \
-	ln -s gtkrc.iso-8859-13 gtkrc.lt ; \
-	ln -s gtkrc.iso-8859-13 gtkrc.lv ; \
-	ln -s gtkrc.iso-8859-14 gtkrc.cy ; \
-	ln -s gtkrc.iso-8859-14 gtkrc.ga ; \
-	ln -s gtkrc.iso-8859-15 gtkrc.et ; \
-	ln -s gtkrc.ka_GE.georgianacademy gtkrc.ka ; \
-	ln -s gtkrc.vi_VN.viscii gtkrc.vi_VN.viscii111 ; \
-	ln -s gtkrc.vi_VN.tcvn gtkrc.vi_VN.tcvn5712 ; \
-	ln -s gtkrc.vi_VN.tcvn5712 gtkrc.vi ; \
-	ln -s gtkrc.cp1251 gtkrc.be ; \
-	ln -s gtkrc.cp1251 gtkrc.bg 
-
+	cd $(DESTDIR)$(gtkconfdir) \
+	&& for i in cs hr hu pl ro sk sl sq sr ; do \
+	     rm -f gtkrc.$$i ; \
+	     ln -s gtkrc.iso-8859-2 gtkrc.$$i ; \
+	   done \
+	&& for i in bg_BG.iso88595 mk sp ru_RU.iso88595 ; do \
+	     rm -f gtkrc.$$i ; \
+	     ln -s gtkrc.iso-8859-5 gtkrc.$$i ; \
+	   done \
+	&& rm -f gtkrc.lt gtkrc.lv gtkrc.cy gtkrc.ga gtkrc.et gtkrc.ka \
+	         gtkrc.vi_VN.viscii111 gtkrc.vi_VN.tcvn5712 gtkrc.vi \
+	         gtkrc.be gtkrc.bg \
+	&& ln -s gtkrc.iso-8859-13 gtkrc.lt \
+	&& ln -s gtkrc.iso-8859-13 gtkrc.lv \
+	&& ln -s gtkrc.iso-8859-14 gtkrc.cy \
+	&& ln -s gtkrc.iso-8859-14 gtkrc.ga \
+	&& ln -s gtkrc.iso-8859-15 gtkrc.et \
+	&& ln -s gtkrc.ka_GE.georgianacademy gtkrc.ka \
+	&& ln -s gtkrc.vi_VN.viscii gtkrc.vi_VN.viscii111 \
+	&& ln -s gtkrc.vi_VN.tcvn gtkrc.vi_VN.tcvn5712 \
+	&& ln -s gtkrc.vi_VN.tcvn5712 gtkrc.vi \
+	&& ln -s gtkrc.cp1251 gtkrc.be \
+	&& ln -s gtkrc.cp1251 gtkrc.bg
 uninstall-local:
 	rm -f $(DESTDIR)$(datadir)/themes/Default/gtk-2.0/gtkrc
 
@@ -621,7 +603,7 @@ test-debug: testgtk
 	$(SHELL) $$top_builddir/libtool --mode=execute gdb $$builddir/testgtk
 
 EXTRA_DIST += @STRIP_BEGIN@ 	\
-	OLD_STAMP		\
+	oldest-source-stamp	\
 	testgtk.1 		\
 	testgtkrc 		\
 	testgtkrc2 		\

@@ -1,3 +1,20 @@
+Thu Oct 26 07:36:16 2000  Tim Janik  <timj@gtk.org>
+
+	* gtk/Makefile.am: buncha cleanups, kludged build sources
+	dependencies with a Makefile: oldest-source-stamp dependancy
+	for the moment. automake is really fighting us here, with
+	intentionally not allowing user-defined rules or dependancies
+	prior to it's -include $(DEP_FILES) statement. sucks rocks!
+
+	* gtk/Makefile.am: added gtktextlayout.h and gtktextdisplay.h
+	to public headers. tehy have a comment stating that they are
+	"semi-public" aren't included by gtk.h and if enums popup there,
+	they can be /*< skip >*/-ed.
+
+	* gtk/gtktextlayout.h: 
+	* gtk/gtktextdisplay.h: indentation fixes, comment fixes,
+	added LGPL... <SIGH>
+
 Wed Oct 25 20:40:25 2000  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtktreemodel.h: Got rid of GtkTreeNode, and changed it to
