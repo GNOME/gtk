@@ -306,6 +306,10 @@ gdk_fb_fill_span(GdkDrawable *drawable, GdkGC *gc, GdkSegment *cur, GdkColor *co
       GdkFunction func = GDK_GC_FBDATA(gc)->values.function;
 
       cmask = GDK_GC_FBDATA(gc)->values.clip_mask;
+      clipxoff = clipyoff = tsxoff = tsyoff = 0;
+      mask_rowstride = 0;
+      solid_stipple = FALSE;
+      clipmem = NULL;
       if(cmask)
 	{
 	  clipmem = GDK_DRAWABLE_IMPL_FBDATA(cmask)->mem;

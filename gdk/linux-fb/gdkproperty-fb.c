@@ -145,7 +145,7 @@ gdk_property_change (GdkWindow   *window,
 {
   GdkWindowFBData *fbd = GDK_WINDOW_FBDATA(window);
   GdkWindowProperty *prop, *new_prop;
-  int new_size;
+  int new_size = 0;
   GdkEvent *event;
 
   g_return_if_fail (window != NULL);

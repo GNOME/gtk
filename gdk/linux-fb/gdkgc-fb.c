@@ -1,3 +1,6 @@
+#include <string.h>
+#include <stdlib.h>
+
 #include "gdkprivate-fb.h"
 #include "gdkgc.h"
 #include "gdkfb.h"

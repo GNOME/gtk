@@ -111,7 +111,7 @@ pango_fb_font_map_load_font(PangoFontMap *fontmap,
 {
   PangoFBFontMap *fbfm = (PangoFBFontMap *)fontmap;
   PangoFBFont *retval;
-  PangoFBFontListing *fl;
+  PangoFBFontListing *fl = NULL;
   int i;
   PangoFontDescription d2;
 

@@ -571,7 +571,15 @@ gdk_event_make(GdkWindow *window, GdkEventType type, gboolean append_to_queue)
   if(evmask & type_masks[type])
     {
       GdkEvent *event = gdk_event_new();
+#if 0
       guint32 the_time = g_latest_time.tv_sec * 1000 + g_latest_time.tv_usec / 1000;
+#else
+      guint32 the_time;
+      GTimeVal gcurtime;
+
+	g_get_current_time(&gcurtime);
+	the_time = gcurtime.tv_sec * 1000 + gcurtime.tv_usec / 1000;
+#endif
 
       event->any.type = type;
       event->any.window = gdk_window_ref(window);

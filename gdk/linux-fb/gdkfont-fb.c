@@ -26,6 +26,7 @@
 
 #include <math.h>
 #include <stdlib.h>
+#include <string.h>
 #include "gdkfont.h"
 #include "gdkprivate-fb.h"
 #include "gdkpango.h"

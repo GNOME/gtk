@@ -784,7 +784,7 @@ gdk_fb_window_move_resize (GdkWindow *window,
 
   if (!private->destroyed)
     {
-      GdkRegion *old_region;
+      GdkRegion *old_region = NULL;
       GdkRectangle old_rect;
 
       if(private->input_only)

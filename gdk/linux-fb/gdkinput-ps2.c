@@ -32,6 +32,7 @@
 #include <sys/kd.h>
 #include <ctype.h>
 #include <stdlib.h>
+#include <string.h>
 
 /*
  * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
@@ -483,9 +484,13 @@ handle_input(GIOChannel *gioc, GIOCondition cond, gpointer data)
   int n, left, dx=0, dy=0;
   PS2Mouse *mouse = data;
   gboolean new_button1, new_button2, new_button3;
-  time_t the_time = g_latest_time.tv_sec;
+  time_t the_time;
+  GTimeVal curtime;
   GdkWindow *mousewin;
   gboolean got_motion = FALSE;
+
+  g_get_current_time(&curtime);
+  the_time = curtime.tv_usec;
 
   while(1) /* Go through as many mouse events as we can */
     {
@@ -1036,13 +1041,15 @@ handle_keyboard_input(GIOChannel *gioc, GIOCondition cond, gpointer data)
   int i, n;
   Keyboard *k = data;
   time_t now;
+  GTimeVal curtime;
 
   n = read(k->fd, buf, sizeof(buf));
   if(n <= 0)
     g_error("Nothing from keyboard!");
 
   /* Now turn this into a keyboard event */
-  now = g_latest_time.tv_sec;
+  g_get_current_time(&curtime);
+  now = curtime.tv_sec;
 
   for(i = 0; i < n; i++)
     {

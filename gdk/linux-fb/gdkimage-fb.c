@@ -33,6 +33,7 @@
 
 #include <stdlib.h>
 #include <sys/types.h>
+#include <string.h>
 
 #include "gdk.h"
 #include "gdkimage.h"
