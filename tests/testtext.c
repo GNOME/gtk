@@ -2368,6 +2368,10 @@ create_view (Buffer *buffer)
   view->text_view = gtk_text_view_new_with_buffer (buffer->buffer);
   gtk_text_view_set_wrap_mode (GTK_TEXT_VIEW (view->text_view),
                                GTK_WRAP_WORD);
+
+  /* Make sure border width works, no real reason to do this other than testing */
+  gtk_container_set_border_width (GTK_CONTAINER (view->text_view),
+                                  10);
   
   /* Draw tab stops in the top and bottom windows. */
   
