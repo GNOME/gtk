@@ -592,6 +592,14 @@ types related to the text widget and how they work together.
 
 @textview: the object which received the signal.
 
+<!-- ##### SIGNAL GtkTextView::populate-popup ##### -->
+<para>
+
+</para>
+
+@textview: the object which received the signal.
+@arg1: 
+
 <!-- ##### SIGNAL GtkTextView::set-anchor ##### -->
 <para>
 

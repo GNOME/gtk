@@ -29,6 +29,7 @@
 #include "gtklabel.h"
 #include "gtksignal.h"
 #include "gtkstatusbar.h"
+#include "gtkwindow.h"
 
 typedef struct _GtkStatusbarMsg GtkStatusbarMsg;
 
@@ -46,13 +47,25 @@ enum
   SIGNAL_LAST
 };
 
-static void gtk_statusbar_class_init               (GtkStatusbarClass *class);
-static void gtk_statusbar_init                     (GtkStatusbar      *statusbar);
-static void gtk_statusbar_destroy                  (GtkObject         *object);
-static void gtk_statusbar_update		   (GtkStatusbar      *statusbar,
-						    guint	       context_id,
-						    const gchar       *text);
-     
+static void     gtk_statusbar_class_init     (GtkStatusbarClass *class);
+static void     gtk_statusbar_init           (GtkStatusbar      *statusbar);
+static void     gtk_statusbar_destroy        (GtkObject         *object);
+static void     gtk_statusbar_update         (GtkStatusbar      *statusbar,
+					      guint              context_id,
+					      const gchar       *text);
+static void     gtk_statusbar_size_allocate  (GtkWidget         *widget,
+					      GtkAllocation     *allocation);
+static void     gtk_statusbar_realize        (GtkWidget         *widget);
+static void     gtk_statusbar_unrealize      (GtkWidget         *widget);
+static void     gtk_statusbar_map            (GtkWidget         *widget);
+static void     gtk_statusbar_unmap          (GtkWidget         *widget);
+static gboolean gtk_statusbar_button_press   (GtkWidget         *widget,
+					      GdkEventButton    *event);
+static gboolean gtk_statusbar_expose_event   (GtkWidget         *widget,
+					      GdkEventExpose    *event);
+static void     gtk_statusbar_create_window  (GtkStatusbar      *statusbar);
+static void     gtk_statusbar_destroy_window (GtkStatusbar      *statusbar);
+
 static GtkContainerClass *parent_class;
 static guint              statusbar_signals[SIGNAL_LAST] = { 0 };
 
@@ -96,6 +109,16 @@ gtk_statusbar_class_init (GtkStatusbarClass *class)
   
   object_class->destroy = gtk_statusbar_destroy;
 
+  widget_class->size_allocate = gtk_statusbar_size_allocate;
+  
+  widget_class->realize = gtk_statusbar_realize;
+  widget_class->unrealize = gtk_statusbar_unrealize;
+  widget_class->map = gtk_statusbar_map;
+  widget_class->unmap = gtk_statusbar_unmap;
+  
+  widget_class->button_press_event = gtk_statusbar_button_press;
+  widget_class->expose_event = gtk_statusbar_expose_event;
+  
   class->messages_mem_chunk = g_mem_chunk_new ("GtkStatusBar messages mem chunk",
 					       sizeof (GtkStatusbarMsg),
 					       sizeof (GtkStatusbarMsg) * 64,
@@ -103,7 +126,7 @@ gtk_statusbar_class_init (GtkStatusbarClass *class)
 
   class->text_pushed = gtk_statusbar_update;
   class->text_popped = gtk_statusbar_update;
-
+  
   statusbar_signals[SIGNAL_TEXT_PUSHED] =
     gtk_signal_new ("text_pushed",
 		    GTK_RUN_LAST,
@@ -134,6 +157,8 @@ gtk_statusbar_init (GtkStatusbar *statusbar)
   box->spacing = 2;
   box->homogeneous = FALSE;
 
+  statusbar->has_resize_grip = TRUE;
+  
   statusbar->frame = gtk_frame_new (NULL);
   gtk_frame_set_shadow_type (GTK_FRAME (statusbar->frame), GTK_SHADOW_IN);
   gtk_box_pack_start (box, statusbar->frame, TRUE, TRUE, 0);
@@ -312,6 +337,37 @@ gtk_statusbar_remove (GtkStatusbar *statusbar,
     }
 }
 
+void
+gtk_statusbar_set_has_resize_grip (GtkStatusbar *statusbar,
+				   gboolean      setting)
+{
+  g_return_if_fail (GTK_IS_STATUSBAR (statusbar));
+
+  setting = setting != FALSE;
+
+  if (setting != statusbar->has_resize_grip)
+    {
+      statusbar->has_resize_grip = setting;
+      gtk_widget_queue_draw (GTK_WIDGET (statusbar));
+
+      if (GTK_WIDGET_REALIZED (statusbar))
+        {
+          if (statusbar->has_resize_grip && statusbar->grip_window == NULL)
+            gtk_statusbar_create_window (statusbar);
+          else if (!statusbar->has_resize_grip && statusbar->grip_window != NULL)
+            gtk_statusbar_destroy_window (statusbar);
+        }
+    }
+}
+
+gboolean
+gtk_statusbar_get_has_resize_grip (GtkStatusbar *statusbar)
+{
+  g_return_val_if_fail (GTK_IS_STATUSBAR (statusbar), FALSE);
+
+  return statusbar->has_resize_grip;
+}
+
 static void
 gtk_statusbar_destroy (GtkObject *object)
 {
@@ -342,4 +398,206 @@ gtk_statusbar_destroy (GtkObject *object)
   statusbar->keys = NULL;
 
   GTK_OBJECT_CLASS (parent_class)->destroy (object);
+}
+
+static void
+get_grip_rect (GtkStatusbar *statusbar,
+               GdkRectangle *rect)
+{
+  GtkWidget *widget;
+  gint w, h;
+  
+  widget = GTK_WIDGET (statusbar);
+
+  /* These are in effect the max/default size of the grip. */
+  w = 18;
+  h = 18;
+
+  if (w > (widget->allocation.width))
+    w = widget->allocation.width;
+
+  if (h > (widget->allocation.height - widget->style->ythickness))
+    h = widget->allocation.height - widget->style->ythickness;
+  
+  rect->x = widget->allocation.x + widget->allocation.width - w;
+  rect->y = widget->allocation.y + widget->allocation.height - h;
+  rect->width = w;
+  rect->height = h;
+}
+
+static void
+gtk_statusbar_size_allocate (GtkWidget     *widget,
+                             GtkAllocation *allocation)
+{
+  GtkStatusbar *statusbar;
+  GdkRectangle rect;
+  
+  statusbar = GTK_STATUSBAR (widget);
+  
+  GTK_WIDGET_CLASS (parent_class)->size_allocate (widget, allocation);
+
+  get_grip_rect (statusbar, &rect);
+  
+  if (statusbar->grip_window)
+    gdk_window_move_resize (statusbar->grip_window,
+                            rect.x, rect.y,
+                            rect.width, rect.height);
+}
+
+static void
+gtk_statusbar_create_window (GtkStatusbar *statusbar)
+{
+  GtkWidget *widget;
+  GdkWindowAttr attributes;
+  gint attributes_mask;
+  GdkRectangle rect;
+  
+  g_return_if_fail (GTK_WIDGET_REALIZED (statusbar));
+  g_return_if_fail (statusbar->has_resize_grip);
+  
+  widget = GTK_WIDGET (statusbar);
+
+  get_grip_rect (statusbar, &rect);
+
+  attributes.x = rect.x;
+  attributes.y = rect.y;
+  attributes.width = rect.width;
+  attributes.height = rect.height;
+  attributes.window_type = GDK_WINDOW_CHILD;
+  attributes.wclass = GDK_INPUT_ONLY;
+  attributes.event_mask = gtk_widget_get_events (widget) |
+    GDK_BUTTON_PRESS_MASK;
+
+  attributes_mask = GDK_WA_X | GDK_WA_Y;
+
+  statusbar->grip_window = gdk_window_new (widget->window,
+                                           &attributes, attributes_mask);
+  gdk_window_set_user_data (statusbar->grip_window, widget);
+}
+
+static void
+gtk_statusbar_destroy_window (GtkStatusbar *statusbar)
+{
+  gdk_window_set_user_data (statusbar->grip_window, NULL);
+  gdk_window_destroy (statusbar->grip_window);
+  statusbar->grip_window = NULL;
+}
+
+static void
+gtk_statusbar_realize (GtkWidget *widget)
+{
+  GtkStatusbar *statusbar;
+
+  statusbar = GTK_STATUSBAR (widget);
+  
+  (* GTK_WIDGET_CLASS (parent_class)->realize) (widget);
+
+  if (statusbar->has_resize_grip)
+    gtk_statusbar_create_window (statusbar);
+}
+
+static void
+gtk_statusbar_unrealize (GtkWidget *widget)
+{
+  GtkStatusbar *statusbar;
+
+  statusbar = GTK_STATUSBAR (widget);
+
+  if (statusbar->grip_window)
+    gtk_statusbar_destroy_window (statusbar);
+  
+  (* GTK_WIDGET_CLASS (parent_class)->unrealize) (widget);
+}
+
+static void
+gtk_statusbar_map (GtkWidget *widget)
+{
+  GtkStatusbar *statusbar;
+
+  statusbar = GTK_STATUSBAR (widget);
+  
+  (* GTK_WIDGET_CLASS (parent_class)->map) (widget);
+  
+  if (statusbar->grip_window)
+    gdk_window_show (statusbar->grip_window);
+}
+
+static void
+gtk_statusbar_unmap (GtkWidget *widget)
+{
+  GtkStatusbar *statusbar;
+
+  statusbar = GTK_STATUSBAR (widget);
+
+  if (statusbar->grip_window)
+    gdk_window_hide (statusbar->grip_window);
+  
+  (* GTK_WIDGET_CLASS (parent_class)->unmap) (widget);
+}
+
+static gboolean
+gtk_statusbar_button_press (GtkWidget      *widget,
+                            GdkEventButton *event)
+{
+  GtkStatusbar *statusbar;
+  GtkWidget *ancestor;
+  
+  statusbar = GTK_STATUSBAR (widget);
+  
+  if (!statusbar->has_resize_grip)
+    return FALSE;
+  
+  ancestor = gtk_widget_get_toplevel (widget);
+
+  if (!GTK_IS_WINDOW (ancestor))
+    return FALSE;
+
+  if (event->button == 1)
+    gtk_window_begin_resize_drag (GTK_WINDOW (ancestor),
+                                  GDK_WINDOW_EDGE_SOUTH_EAST,
+                                  event->button,
+                                  event->x_root, event->y_root,
+                                  event->time);
+  else if (event->button == 2)
+    gtk_window_begin_move_drag (GTK_WINDOW (ancestor),
+                                event->button,
+                                event->x_root, event->y_root,
+                                event->time);
+  else
+    return FALSE;
+  
+  return TRUE;
+}
+
+static gboolean
+gtk_statusbar_expose_event (GtkWidget      *widget,
+                            GdkEventExpose *event)
+{
+  GtkStatusbar *statusbar;
+  GdkRectangle rect;
+  
+  statusbar = GTK_STATUSBAR (widget);
+
+  GTK_WIDGET_CLASS (parent_class)->expose_event (widget, event);
+
+  if (statusbar->has_resize_grip)
+    {
+      get_grip_rect (statusbar, &rect);
+      
+      gtk_paint_resize_grip (widget->style,
+                             widget->window,
+                             GTK_WIDGET_STATE (widget),
+                             NULL,
+                             widget,
+                             "statusbar",
+                             GDK_WINDOW_EDGE_SOUTH_EAST,
+                             rect.x, rect.y,
+                             /* don't draw grip over the frame, though you
+                              * can click on the frame.
+                              */
+                             rect.width - widget->style->xthickness,
+                             rect.height - widget->style->ythickness);
+    }
+
+  return FALSE;
 }

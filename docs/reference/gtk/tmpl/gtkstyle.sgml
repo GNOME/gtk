@@ -91,6 +91,7 @@ Styles
 @draw_handle: 
 @draw_expander: 
 @draw_layout: 
+@draw_resize_grip: 
 
 <!-- ##### FUNCTION gtk_style_new ##### -->
 <para>

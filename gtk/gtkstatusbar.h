@@ -58,6 +58,10 @@ struct _GtkStatusbar
 
   guint seq_context_id;
   guint seq_message_id;
+
+  GdkWindow *grip_window;
+  
+  guint has_resize_grip : 1;
 };
 
 struct _GtkStatusbarClass
@@ -92,7 +96,9 @@ void       gtk_statusbar_remove        	(GtkStatusbar *statusbar,
 					 guint	       context_id,
 					 guint         message_id);
 
-
+void     gtk_statusbar_set_has_resize_grip (GtkStatusbar *statusbar,
+					    gboolean      setting);
+gboolean gtk_statusbar_get_has_resize_grip (GtkStatusbar *statusbar);
 
 #ifdef __cplusplus
 } 

@@ -92,6 +92,9 @@ void     _gdk_region_get_xrectangles       (GdkRegion            *region,
                                             XRectangle          **rects,
                                             gint                 *n_rects);
 
+void     _gdk_moveresize_handle_event      (XEvent *event);
+void     _gdk_moveresize_configure_done    (void);
+
 extern GdkDrawableClass  _gdk_x11_drawable_class;
 extern gboolean	         gdk_use_xshm;
 extern Atom		 gdk_wm_delete_window;
@@ -119,5 +122,7 @@ extern gboolean _gdk_have_xkb_autorepeat;
  * to checking the next event with XPending().
  */
 extern gboolean _gdk_have_xkb_autorepeat;
+
+extern GdkWindow *_gdk_moveresize_window;
 
 #endif /* __GDK_PRIVATE_X11_H__ */

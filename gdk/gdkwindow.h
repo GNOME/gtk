@@ -150,6 +150,19 @@ typedef enum
   GDK_GRAVITY_STATIC
 } GdkGravity;
 
+
+typedef enum
+{
+  GDK_WINDOW_EDGE_NORTH_WEST,
+  GDK_WINDOW_EDGE_NORTH,
+  GDK_WINDOW_EDGE_NORTH_EAST,
+  GDK_WINDOW_EDGE_WEST,
+  GDK_WINDOW_EDGE_EAST,
+  GDK_WINDOW_EDGE_SOUTH_WEST,
+  GDK_WINDOW_EDGE_SOUTH,
+  GDK_WINDOW_EDGE_SOUTH_EAST  
+} GdkWindowEdge;
+
 struct _GdkWindowAttr
 {
   gchar *title;
@@ -443,6 +456,18 @@ void          gdk_window_unmaximize      (GdkWindow       *window);
 
 void          gdk_window_register_dnd    (GdkWindow       *window);
 
+void gdk_window_begin_resize_drag (GdkWindow     *window,
+                                   GdkWindowEdge  edge,
+                                   gint           button,
+                                   gint           root_x,
+                                   gint           root_y,
+                                   guint32        timestamp);
+void gdk_window_begin_move_drag   (GdkWindow     *window,
+                                   gint           button,
+                                   gint           root_x,
+                                   gint           root_y,
+                                   guint32        timestamp);
+
 /* Interface for dirty-region queueing */
 void       gdk_window_invalidate_rect     (GdkWindow    *window,
 					   GdkRectangle *rect,
@@ -461,6 +486,13 @@ void       gdk_window_process_updates     (GdkWindow    *window,
 
 /* Enable/disable flicker, so you can tell if your code is inefficient. */
 void       gdk_window_set_debug_updates   (gboolean      setting);
+
+void       gdk_window_constrain_size      (GdkGeometry  *geometry,
+                                           guint         flags,
+                                           gint          width,
+                                           gint          height,
+                                           gint         *new_width,
+                                           gint         *new_height);
 
 #ifdef __cplusplus
 }

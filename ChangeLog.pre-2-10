@@ -1,4 +1,30 @@
-2001-03-29  Alexander Larsson  <alexl@redhat.com>
+Wed Mar 28 00:03:10 2001  Owen Taylor  <otaylor@redhat.com>
+
+	[ Patch from Havoc Pennington, hp@redhat.com ]
+
+	* gdk/gdkwindow.h gdk/x11/gdkwindow-x11.c:
+	Add functions gdk_window_begin_resize_drag/begin_move_drag
+	to start resizing or moving a toplevel window. This
+	is done either using the _NET_WM_MOVERESIZE protocol,
+	or, if that isn't present, by emulation.
+
+	* gtk/gtkwindow.[ch]: Add functions gtk_begin_move/resize_drag
+	to export the above to GTK+-land.
+
+	* gtk/gtkstyle.[ch]: Add ->draw_resize_grip() paint func.
+	
+	* gtk/gtkwindow.c gdk/gdkwindow.[ch] (gdk_window_constrain_size):
+	Move this function into gdkwindow, since we need it
+	when implementing fallback resizing.
+
+	* gdk/x11/gdkwindow-x11.c: gdk_window_set_geometry_hints.
+	Fix typo when setting gravity.
+
+	* gtk/gtkstatusbar.[ch] (gtk_statusbar_set_has_resize_grip):
+	Add an optional (but on by default) resize grip for resizing 
+	the parent window.
+
+01-03-29  Alexander Larsson  <alexl@redhat.com>
 
 	* gtk/gtktooltips.c (gtk_tooltips_event_handler):
 	Don't return TRUE from the event handler, that blocks all

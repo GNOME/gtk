@@ -386,6 +386,17 @@ struct _GtkStyleClass
 				 gint			 x,
 				 gint			 y,
                                  PangoLayout            *layout);
+  void (*draw_resize_grip)      (GtkStyle		*style,
+				 GdkWindow		*window,
+				 GtkStateType		 state_type,
+				 GdkRectangle		*area,
+				 GtkWidget		*widget,
+				 const gchar		*detail,
+                                 GdkWindowEdge           edge,
+				 gint			 x,
+				 gint			 y,
+				 gint			 width,
+				 gint			 height);
   
 };
 
@@ -571,6 +582,15 @@ void gtk_draw_layout     (GtkStyle        *style,
                           gint             x,
                           gint             y,
                           PangoLayout     *layout);
+
+void gtk_draw_resize_grip (GtkStyle       *style,
+                           GdkWindow      *window,
+                           GtkStateType    state_type,
+                           GdkWindowEdge   edge,
+                           gint            x,
+                           gint            y,
+                           gint            width,
+                           gint            height);
 
 void gtk_paint_hline      (GtkStyle        *style,
 			   GdkWindow       *window,
@@ -781,6 +801,18 @@ void gtk_paint_layout     (GtkStyle        *style,
                            gint             x,
                            gint             y,
                            PangoLayout     *layout);
+
+void gtk_paint_resize_grip (GtkStyle		*style,
+                            GdkWindow		*window,
+                            GtkStateType         state_type,
+                            GdkRectangle        *area,
+                            GtkWidget		*widget,
+                            const gchar		*detail,
+                            GdkWindowEdge        edge,
+                            gint                 x,
+                            gint                 y,
+                            gint                 width,
+                            gint           	 height);
 
 
 /* --- private API --- */

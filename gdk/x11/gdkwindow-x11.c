@@ -931,10 +931,14 @@ gdk_window_resize (GdkWindow *window,
 				       width, height);
       else
 	{
+	  GdkWindowImplX11 *impl = GDK_WINDOW_IMPL_X11 (private->impl);
+	  
+	  if (width != impl->width || height != impl->height)
+	    private->resize_count += 1;
+
 	  XResizeWindow (GDK_WINDOW_XDISPLAY (window),
 			 GDK_WINDOW_XID (window),
 			 width, height);
-	  private->resize_count += 1;
 	}
     }
 }
@@ -964,10 +968,14 @@ gdk_window_move_resize (GdkWindow *window,
 	_gdk_window_move_resize_child (window, x, y, width, height);
       else
 	{
+	  GdkWindowImplX11 *impl = GDK_WINDOW_IMPL_X11 (private->impl);
+	  
+	  if (width != impl->width || height != impl->height)
+	    private->resize_count += 1;
+	  
 	  XMoveResizeWindow (GDK_WINDOW_XDISPLAY (window),
 			     GDK_WINDOW_XID (window),
 			     x, y, width, height);
-	  private->resize_count += 1;
 	}
     }
 }
@@ -1344,7 +1352,7 @@ gdk_window_set_geometry_hints (GdkWindow      *window,
   if (geom_mask & GDK_HINT_WIN_GRAVITY)
     {
       size_hints.flags |= PWinGravity;
-      size_hints.width_inc = geometry->win_gravity;
+      size_hints.win_gravity = geometry->win_gravity;
     }
   
   /* FIXME: Would it be better to delete this property of
@@ -1353,6 +1361,65 @@ gdk_window_set_geometry_hints (GdkWindow      *window,
   XSetWMNormalHints (GDK_WINDOW_XDISPLAY (window),
 		     GDK_WINDOW_XID (window),
 		     &size_hints);
+}
+
+static void
+gdk_window_get_geometry_hints (GdkWindow      *window,
+                               GdkGeometry    *geometry,
+                               GdkWindowHints *geom_mask)
+{
+  XSizeHints size_hints;  
+  glong junk_size_mask = 0;
+
+  g_return_if_fail (GDK_IS_WINDOW (window));
+  g_return_if_fail (geometry != NULL);
+  g_return_if_fail (geom_mask != NULL);
+
+  *geom_mask = 0;
+  
+  if (GDK_WINDOW_DESTROYED (window))
+    return;
+  
+  if (!XGetWMNormalHints (GDK_WINDOW_XDISPLAY (window),
+                          GDK_WINDOW_XID (window),
+                          &size_hints,
+                          &junk_size_mask))
+    return;                   
+
+  if (size_hints.flags & PMinSize)
+    {
+      *geom_mask |= GDK_HINT_MIN_SIZE;
+      geometry->min_width = size_hints.min_width;
+      geometry->min_height = size_hints.min_height;
+    }
+
+  if (size_hints.flags & PMaxSize)
+    {
+      *geom_mask |= GDK_HINT_MAX_SIZE;
+      geometry->max_width = MAX (size_hints.max_width, 1);
+      geometry->max_height = MAX (size_hints.max_height, 1);
+    }
+
+  if (size_hints.flags & PResizeInc)
+    {
+      *geom_mask |= GDK_HINT_RESIZE_INC;
+      geometry->width_inc = size_hints.width_inc;
+      geometry->height_inc = size_hints.height_inc;
+    }
+
+  if (size_hints.flags & PAspect)
+    {
+      *geom_mask |= GDK_HINT_ASPECT;
+
+      geometry->min_aspect = (gdouble) size_hints.min_aspect.x / (gdouble) size_hints.min_aspect.y;
+      geometry->max_aspect = (gdouble) size_hints.max_aspect.x / (gdouble) size_hints.max_aspect.y;
+    }
+
+  if (size_hints.flags & PWinGravity)
+    {
+      *geom_mask |= GDK_HINT_WIN_GRAVITY;
+      geometry->win_gravity = size_hints.win_gravity;
+    }
 }
 
 static gboolean
@@ -3234,5 +3301,423 @@ gdk_window_xid_at_coords (gint     x,
     }
   XUngrabServer (xdisplay);
   return root;
+}
+
+static void
+wmspec_moveresize (GdkWindow *window,
+                   gint       direction,
+                   gint       root_x,
+                   gint       root_y,
+                   guint32    timestamp)     
+{
+  XEvent xev;
+
+  /* Release passive grab */
+  gdk_pointer_ungrab (timestamp);
+  
+  xev.xclient.type = ClientMessage;
+  xev.xclient.serial = 0;
+  xev.xclient.send_event = True;
+  xev.xclient.display = gdk_display;
+  xev.xclient.window = GDK_WINDOW_XID (window);
+  xev.xclient.message_type = gdk_atom_intern ("_NET_WM_MOVERESIZE", FALSE);
+  xev.xclient.format = 32;
+  xev.xclient.data.l[0] = root_x;
+  xev.xclient.data.l[1] = root_y;
+  xev.xclient.data.l[2] = direction;
+  xev.xclient.data.l[3] = 0;
+  xev.xclient.data.l[4] = 0;
+  
+  XSendEvent (gdk_display, gdk_root_window, False,
+	      SubstructureRedirectMask | SubstructureNotifyMask,
+	      &xev);
+}
+
+/* From the WM spec */
+#define _NET_WM_MOVERESIZE_SIZE_TOPLEFT      0
+#define _NET_WM_MOVERESIZE_SIZE_TOP          1
+#define _NET_WM_MOVERESIZE_SIZE_TOPRIGHT     2
+#define _NET_WM_MOVERESIZE_SIZE_RIGHT        3
+#define _NET_WM_MOVERESIZE_SIZE_BOTTOMRIGHT  4
+#define _NET_WM_MOVERESIZE_SIZE_BOTTOM       5
+#define _NET_WM_MOVERESIZE_SIZE_BOTTOMLEFT   6
+#define _NET_WM_MOVERESIZE_SIZE_LEFT         7
+#define _NET_WM_MOVERESIZE_MOVE              8
+
+static void
+wmspec_resize_drag (GdkWindow     *window,
+                    GdkWindowEdge  edge,
+                    gint           button,
+                    gint           root_x,
+                    gint           root_y,
+                    guint32        timestamp)
+{
+  gint direction;
+  
+  /* Let the compiler turn a switch into a table, instead
+   * of doing the table manually, this way is easier to verify.
+   */
+  switch (edge)
+    {
+    case GDK_WINDOW_EDGE_NORTH_WEST:
+      direction = _NET_WM_MOVERESIZE_SIZE_TOPLEFT;
+      break;
+
+    case GDK_WINDOW_EDGE_NORTH:
+      direction = _NET_WM_MOVERESIZE_SIZE_TOP;
+      break;
+
+    case GDK_WINDOW_EDGE_NORTH_EAST:
+      direction = _NET_WM_MOVERESIZE_SIZE_TOPRIGHT;
+      break;
+
+    case GDK_WINDOW_EDGE_WEST:
+      direction = _NET_WM_MOVERESIZE_SIZE_LEFT;
+      break;
+
+    case GDK_WINDOW_EDGE_EAST:
+      direction = _NET_WM_MOVERESIZE_SIZE_RIGHT;
+      break;
+
+    case GDK_WINDOW_EDGE_SOUTH_WEST:
+      direction = _NET_WM_MOVERESIZE_SIZE_BOTTOMLEFT;
+      break;
+
+    case GDK_WINDOW_EDGE_SOUTH:
+      direction = _NET_WM_MOVERESIZE_SIZE_BOTTOM;
+      break;
+
+    case GDK_WINDOW_EDGE_SOUTH_EAST:
+      direction = _NET_WM_MOVERESIZE_SIZE_BOTTOMRIGHT;
+      break;
+
+    default:
+      g_warning ("gdk_window_begin_resize_drag: bad resize edge %d!",
+                 edge);
+      return;
+      break;
+    }
+  
+  wmspec_moveresize (window, direction, root_x, root_y, timestamp);
+}
+
+/* This is global for use in gdkevents-x11.c */
+GdkWindow *_gdk_moveresize_window;
+
+static GdkWindow *moveresize_emulation_window = NULL;
+static gboolean is_resize = FALSE;
+static GdkWindowEdge resize_edge;
+static gint moveresize_button;
+static gint moveresize_x;
+static gint moveresize_y;
+static gint moveresize_orig_x;
+static gint moveresize_orig_y;
+static gint moveresize_orig_width;
+static gint moveresize_orig_height;
+static GdkWindowHints moveresize_geom_mask = 0;
+static GdkGeometry moveresize_geometry;
+static Time moveresize_process_time;
+
+static XEvent *moveresize_pending_event;
+
+static void
+update_pos (gint new_root_x,
+            gint new_root_y)
+{
+  gint dx, dy;
+  
+  dx = new_root_x - moveresize_x;
+  dy = new_root_y - moveresize_y;
+
+  if (is_resize)
+    {
+      gint w, h;
+
+      w = moveresize_orig_width;
+      h = moveresize_orig_height;
+      
+      switch (resize_edge)
+        {
+        case GDK_WINDOW_EDGE_SOUTH_EAST:
+          w += dx;
+          h += dy;
+          break;
+
+        }
+
+      w = MAX (w, 1);
+      h = MAX (h, 1);
+      
+      if (moveresize_geom_mask)
+        {
+          gdk_window_constrain_size (&moveresize_geometry,
+                                     moveresize_geom_mask,
+                                     w, h,
+                                     &w, &h);
+        }
+      
+      gdk_window_resize (_gdk_moveresize_window, w, h);
+    }
+  else
+    {
+      gint x, y;
+
+      x = moveresize_orig_x + dx;
+      y = moveresize_orig_y + dy;
+      
+      gdk_window_move (_gdk_moveresize_window, x, y);
+    }
+}
+
+static void
+finish_drag (void)
+{
+  gdk_window_destroy (moveresize_emulation_window);
+  moveresize_emulation_window = NULL;
+  _gdk_moveresize_window = NULL;
+
+  if (moveresize_pending_event)
+    {
+      g_free (moveresize_pending_event);
+      moveresize_pending_event = NULL;
+    }
+}
+
+static int
+lookahead_motion_predicate (Display *display,
+			    XEvent  *event,
+			    XPointer arg)
+{
+  gboolean *seen_release = (gboolean *)arg;
+  
+  if (*seen_release)
+    return False;
+
+  switch (event->xany.type)
+    {
+    case ButtonRelease:
+      *seen_release = TRUE;
+      break;
+    case MotionNotify:
+      moveresize_process_time = event->xmotion.time;
+      break;
+    default:
+      break;
+    }
+
+  return False;
+}
+
+static gboolean
+moveresize_lookahead (XEvent *event)
+{
+  XEvent tmp_event;
+  gboolean seen_release = FALSE;
+
+  if (moveresize_process_time)
+    {
+      if (event->xmotion.time == moveresize_process_time)
+	{
+	  moveresize_process_time = 0;
+	  return TRUE;
+	}
+      else
+	return FALSE;
+    }
+
+  XCheckIfEvent (gdk_display, &tmp_event,
+		 lookahead_motion_predicate, (XPointer)&seen_release);
+
+  return moveresize_process_time == 0;
+}
+	
+void
+_gdk_moveresize_handle_event (XEvent *event)
+{
+  guint button_mask = 0;
+  GdkWindowObject *window_private = (GdkWindowObject *) _gdk_moveresize_window;
+  
+  button_mask = GDK_BUTTON1_MASK << (moveresize_button - 1);
+  
+  switch (event->xany.type)
+    {
+    case MotionNotify:
+      if (window_private->resize_count > 0)
+	{
+	  if (moveresize_pending_event)
+	    *moveresize_pending_event = *event;
+	  else
+	    moveresize_pending_event = g_memdup (event, sizeof (XEvent));
+
+	  break;
+	}
+      if (!moveresize_lookahead (event))
+	break;
+      
+      update_pos (event->xmotion.x_root,
+                  event->xmotion.y_root);
+      
+      /* This should never be triggered in normal cases, but in the
+       * case where the drag started without an implicit grab being
+       * in effect, we could miss the release if it occurs before
+       * we grab the pointer; this ensures that we will never
+       * get a permanently stuck grab.
+       */
+      if ((event->xmotion.state & button_mask) == 0)
+        finish_drag ();
+      break;
+
+    case ButtonRelease:
+      update_pos (event->xbutton.x_root,
+                  event->xbutton.y_root);
+      
+      if (event->xbutton.button == moveresize_button)
+        finish_drag ();
+      break;
+    }
+}
+
+void
+_gdk_moveresize_configure_done (void)
+{
+  XEvent *tmp_event;
+  
+  if (moveresize_pending_event)
+    {
+      tmp_event = moveresize_pending_event;
+      moveresize_pending_event = NULL;
+      _gdk_moveresize_handle_event (tmp_event);
+      g_free (tmp_event);
+    }
+}
+
+static void
+create_moveresize_window (guint32 timestamp)
+{
+  GdkWindowAttr attributes;
+  gint attributes_mask;
+  GdkGrabStatus status;
+
+  g_assert (moveresize_emulation_window == NULL);
+  
+  attributes.x = -100;
+  attributes.y = -100;
+  attributes.width = 10;
+  attributes.height = 10;
+  attributes.window_type = GDK_WINDOW_TEMP;
+  attributes.wclass = GDK_INPUT_ONLY;
+  attributes.override_redirect = TRUE;
+  attributes.event_mask = 0;
+
+  attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_NOREDIR;
+
+  moveresize_emulation_window =
+    gdk_window_new (NULL, &attributes, attributes_mask);
+
+  gdk_window_show (moveresize_emulation_window);
+
+  status = gdk_pointer_grab (moveresize_emulation_window,
+                             FALSE,
+                             GDK_BUTTON_RELEASE_MASK |
+                             GDK_POINTER_MOTION_MASK,
+                             FALSE,
+                             NULL,
+                             timestamp);
+
+  if (status != GDK_GRAB_SUCCESS)
+    {
+      /* If this fails, some other client has grabbed the window
+       * already.
+       */
+      gdk_window_destroy (moveresize_emulation_window);
+      moveresize_emulation_window = NULL;
+    }
+
+  moveresize_process_time = 0;
+}
+
+static void
+emulate_resize_drag (GdkWindow     *window,
+                     GdkWindowEdge  edge,
+                     gint           button,
+                     gint           root_x,
+                     gint           root_y,
+                     guint32        timestamp)
+{
+  is_resize = TRUE;
+  moveresize_button = button;
+  resize_edge = edge;
+  moveresize_x = root_x;
+  moveresize_y = root_y;
+  _gdk_moveresize_window = GDK_WINDOW (g_object_ref (G_OBJECT (window)));
+
+  gdk_window_get_size (window, &moveresize_orig_width, &moveresize_orig_height);
+  
+  moveresize_geom_mask = 0;
+  gdk_window_get_geometry_hints (window,
+                                 &moveresize_geometry,
+                                 &moveresize_geom_mask);
+  
+  create_moveresize_window (timestamp);
+}
+
+static void
+emulate_move_drag (GdkWindow     *window,
+                   gint           button,
+                   gint           root_x,
+                   gint           root_y,
+                   guint32        timestamp)
+{
+  is_resize = FALSE;
+  moveresize_button = button;
+  moveresize_x = root_x;
+  moveresize_y = root_y;
+  _gdk_moveresize_window = GDK_WINDOW (g_object_ref (G_OBJECT (window)));
+
+  gdk_window_get_deskrelative_origin (_gdk_moveresize_window,
+                                      &moveresize_orig_x,
+                                      &moveresize_orig_y);
+  
+  create_moveresize_window (timestamp);
+}
+
+void
+gdk_window_begin_resize_drag (GdkWindow     *window,
+                              GdkWindowEdge  edge,
+                              gint           button,
+                              gint           root_x,
+                              gint           root_y,
+                              guint32        timestamp)
+{
+  g_return_if_fail (GDK_IS_WINDOW (window));
+  g_return_if_fail (moveresize_emulation_window == NULL);
+  
+  if (GDK_WINDOW_DESTROYED (window))
+    return;
+
+  if (gdk_net_wm_supports (gdk_atom_intern ("_NET_WM_MOVERESIZE", FALSE)))
+    wmspec_resize_drag (window, edge, button, root_x, root_y, timestamp);
+  else
+    emulate_resize_drag (window, edge, button, root_x, root_y, timestamp);
+}
+
+void
+gdk_window_begin_move_drag (GdkWindow *window,
+                            gint       button,
+                            gint       root_x,
+                            gint       root_y,
+                            guint32    timestamp)
+{
+  g_return_if_fail (GDK_IS_WINDOW (window));
+  g_return_if_fail (moveresize_emulation_window == NULL);
+  
+  if (GDK_WINDOW_DESTROYED (window))
+    return;
+
+  if (gdk_net_wm_supports (gdk_atom_intern ("_NET_WM_MOVERESIZE", FALSE)))
+    wmspec_moveresize (window, _NET_WM_MOVERESIZE_MOVE,
+                       root_x, root_y, timestamp);
+  else
+    emulate_move_drag (window, button, root_x, root_y, timestamp);
 }
 

@@ -2785,18 +2785,6 @@ _gtk_window_constrain_size (GtkWindow   *window,
     }
 }
 
-
-/* Constrain a window size to obey the hints passed in geometry
- * and flags. The result will be stored in *new_width and *new_height
- *
- * This routine is partially borrowed from fvwm.
- *
- * Copyright 1993, Robert Nation
- *     You may use this code for any purpose, as long as the original
- *     copyright remains in the source code and all documentation
- *
- * which in turn borrows parts of the algorithm from uwm
- */
 static void 
 gtk_window_constrain_size (GtkWindow   *window,
 			   GdkGeometry *geometry,
@@ -2806,105 +2794,8 @@ gtk_window_constrain_size (GtkWindow   *window,
 			   gint        *new_width,
 			   gint        *new_height)
 {
-  gint min_width = 0;
-  gint min_height = 0;
-  gint base_width = 0;
-  gint base_height = 0;
-  gint xinc = 1;
-  gint yinc = 1;
-  gint max_width = G_MAXINT;
-  gint max_height = G_MAXINT;
-  
-#define FLOOR(value, base)	( ((gint) ((value) / (base))) * (base) )
-
-  if ((flags & GDK_HINT_BASE_SIZE) && (flags & GDK_HINT_MIN_SIZE))
-    {
-      base_width = geometry->base_width;
-      base_height = geometry->base_height;
-      min_width = geometry->min_width;
-      min_height = geometry->min_height;
-    }
-  else if (flags & GDK_HINT_BASE_SIZE)
-    {
-      base_width = geometry->base_width;
-      base_height = geometry->base_height;
-      min_width = geometry->base_width;
-      min_height = geometry->base_height;
-    }
-  else if (flags & GDK_HINT_MIN_SIZE)
-    {
-      base_width = geometry->min_width;
-      base_height = geometry->min_height;
-      min_width = geometry->min_width;
-      min_height = geometry->min_height;
-    }
-
-  if (flags & GDK_HINT_MAX_SIZE)
-    {
-      max_width = geometry->max_width ;
-      max_height = geometry->max_height;
-    }
-
-  if (flags & GDK_HINT_RESIZE_INC)
-    {
-      xinc = MAX (xinc, geometry->width_inc);
-      yinc = MAX (yinc, geometry->height_inc);
-    }
-  
-  /* clamp width and height to min and max values
-   */
-  width = CLAMP (width, min_width, max_width);
-  height = CLAMP (height, min_height, max_height);
-  
-  /* shrink to base + N * inc
-   */
-  width = base_width + FLOOR (width - base_width, xinc);
-  height = base_height + FLOOR (height - base_height, yinc);
-
-  /* constrain aspect ratio, according to:
-   *
-   *                width     
-   * min_aspect <= -------- <= max_aspect
-   *                height    
-   */
-  
-  if (flags & GDK_HINT_ASPECT &&
-      geometry->min_aspect > 0 &&
-      geometry->max_aspect > 0)
-    {
-      gint delta;
-
-      if (geometry->min_aspect * height > width)
-	{
-	  delta = FLOOR (height - width * geometry->min_aspect, yinc);
-	  if (height - delta >= min_height)
-	    height -= delta;
-	  else
-	    { 
-	      delta = FLOOR (height * geometry->min_aspect - width, xinc);
-	      if (width + delta <= max_width) 
-		width += delta;
-	    }
-	}
-      
-      if (geometry->max_aspect * height < width)
-	{
-	  delta = FLOOR (width - height * geometry->max_aspect, xinc);
-	  if (width - delta >= min_width) 
-	    width -= delta;
-	  else
-	    {
-	      delta = FLOOR (width / geometry->max_aspect - height, yinc);
-	      if (height + delta <= max_height)
-		height += delta;
-	    }
-	}
-    }
-
-#undef FLOOR
-  
-  *new_width = width;
-  *new_height = height;
+  gdk_window_constrain_size (geometry, flags, width, height,
+                             new_width, new_height);
 }
 
 /* Compute the set of geometry hints and flags for a window
@@ -3483,8 +3374,86 @@ gtk_window_unmaximize (GtkWindow *window)
     gdk_window_unmaximize (toplevel);
 }
 
+/**
+ * gtk_window_begin_resize_drag:
+ * @window: a #GtkWindow
+ * @button: mouse button that initiated the drag
+ * @edge: position of the resize control
+ * @root_x: X position where the user clicked to initiate the drag, in root window coordinates
+ * @root_y: Y position where the user clicked to initiate the drag
+ * @timestamp: timestamp from the click event that initiated the drag
+ *
+ * Starts resizing a window. This function is used if an application
+ * has window resizing controls. When GDK can support it, the resize
+ * will be done using the standard mechanism for the window manager or
+ * windowing system. Otherwise, GDK will try to emulate window
+ * resizing, potentially not all that well, depending on the windowing system.
+ * 
+ **/
+void
+gtk_window_begin_resize_drag  (GtkWindow    *window,
+                               GdkWindowEdge edge,
+                               gint          button,
+                               gint          root_x,
+                               gint          root_y,
+                               guint32       timestamp)
+{
+  GtkWidget *widget;
+  GdkWindow *toplevel;
+  
+  g_return_if_fail (GTK_IS_WINDOW (window));
+  g_return_if_fail (GTK_WIDGET_VISIBLE (window));
+  
+  widget = GTK_WIDGET (window);
+  
+  if (window->frame)
+    toplevel = window->frame;
+  else
+    toplevel = widget->window;
+  
+  gdk_window_begin_resize_drag (toplevel,
+                                edge, button,
+                                root_x, root_y,
+                                timestamp);
+}
 
 
-
-
-
+/**
+ * gtk_window_begin_move_drag:
+ * @button: mouse button that initiated the drag
+ * @root_x: X position where the user clicked to initiate the drag, in root window coordinates
+ * @root_y: Y position where the user clicked to initiate the drag
+ * @timestamp: timestamp from the click event that initiated the drag
+ *
+ * Starts moving a window. This function is used if an application
+ * has window movement grips. When GDK can support it, the window movement
+ * will be done using the standard mechanism for the window manager or
+ * windowing system. Otherwise, GDK will try to emulate window
+ * movement, potentially not all that well, depending on the windowing system.
+ * 
+ **/
+void
+gtk_window_begin_move_drag  (GtkWindow *window,
+                             gint       button,
+                             gint       root_x,
+                             gint       root_y,
+                             guint32    timestamp)
+{
+  GtkWidget *widget;
+  GdkWindow *toplevel;
+  
+  g_return_if_fail (GTK_IS_WINDOW (window));
+  g_return_if_fail (GTK_WIDGET_VISIBLE (window));
+  
+  widget = GTK_WIDGET (window);
+  
+  if (window->frame)
+    toplevel = window->frame;
+  else
+    toplevel = widget->window;
+  
+  gdk_window_begin_move_drag (toplevel,
+                              button,
+                              root_x, root_y,
+                              timestamp);
+}

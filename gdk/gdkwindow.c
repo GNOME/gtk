@@ -2151,3 +2151,131 @@ gdk_window_set_debug_updates (gboolean setting)
   debug_updates = setting;
 }
 
+/**
+ * gdk_window_constrain_size:
+ * @geometry: a #GdkGeometry structure
+ * @flags: a mask indicating what portions of @geometry are set
+ * @width: desired width of window
+ * @height: desired height of the window
+ * @new_width: location to store resulting width
+ * @new_height: location to store resulting height
+ * 
+ * Constrains a desired width and height according to a 
+ * set of geometry hints (such as minimum and maximum size).
+ */
+void
+gdk_window_constrain_size (GdkGeometry *geometry,
+			   guint        flags,
+			   gint         width,
+			   gint         height,
+			   gint        *new_width,
+			   gint        *new_height)
+{
+  /* This routine is partially borrowed from fvwm.
+   *
+   * Copyright 1993, Robert Nation
+   *     You may use this code for any purpose, as long as the original
+   *     copyright remains in the source code and all documentation
+   *
+   * which in turn borrows parts of the algorithm from uwm
+   */
+  gint min_width = 0;
+  gint min_height = 0;
+  gint base_width = 0;
+  gint base_height = 0;
+  gint xinc = 1;
+  gint yinc = 1;
+  gint max_width = G_MAXINT;
+  gint max_height = G_MAXINT;
+  
+#define FLOOR(value, base)	( ((gint) ((value) / (base))) * (base) )
+
+  if ((flags & GDK_HINT_BASE_SIZE) && (flags & GDK_HINT_MIN_SIZE))
+    {
+      base_width = geometry->base_width;
+      base_height = geometry->base_height;
+      min_width = geometry->min_width;
+      min_height = geometry->min_height;
+    }
+  else if (flags & GDK_HINT_BASE_SIZE)
+    {
+      base_width = geometry->base_width;
+      base_height = geometry->base_height;
+      min_width = geometry->base_width;
+      min_height = geometry->base_height;
+    }
+  else if (flags & GDK_HINT_MIN_SIZE)
+    {
+      base_width = geometry->min_width;
+      base_height = geometry->min_height;
+      min_width = geometry->min_width;
+      min_height = geometry->min_height;
+    }
+
+  if (flags & GDK_HINT_MAX_SIZE)
+    {
+      max_width = geometry->max_width ;
+      max_height = geometry->max_height;
+    }
+
+  if (flags & GDK_HINT_RESIZE_INC)
+    {
+      xinc = MAX (xinc, geometry->width_inc);
+      yinc = MAX (yinc, geometry->height_inc);
+    }
+  
+  /* clamp width and height to min and max values
+   */
+  width = CLAMP (width, min_width, max_width);
+  height = CLAMP (height, min_height, max_height);
+  
+  /* shrink to base + N * inc
+   */
+  width = base_width + FLOOR (width - base_width, xinc);
+  height = base_height + FLOOR (height - base_height, yinc);
+
+  /* constrain aspect ratio, according to:
+   *
+   *                width     
+   * min_aspect <= -------- <= max_aspect
+   *                height    
+   */
+  
+  if (flags & GDK_HINT_ASPECT &&
+      geometry->min_aspect > 0 &&
+      geometry->max_aspect > 0)
+    {
+      gint delta;
+
+      if (geometry->min_aspect * height > width)
+	{
+	  delta = FLOOR (height - width * geometry->min_aspect, yinc);
+	  if (height - delta >= min_height)
+	    height -= delta;
+	  else
+	    { 
+	      delta = FLOOR (height * geometry->min_aspect - width, xinc);
+	      if (width + delta <= max_width) 
+		width += delta;
+	    }
+	}
+      
+      if (geometry->max_aspect * height < width)
+	{
+	  delta = FLOOR (width - height * geometry->max_aspect, xinc);
+	  if (width - delta >= min_width) 
+	    width -= delta;
+	  else
+	    {
+	      delta = FLOOR (width / geometry->max_aspect - height, yinc);
+	      if (height + delta <= max_height)
+		height += delta;
+	    }
+	}
+    }
+
+#undef FLOOR
+  
+  *new_width = width;
+  *new_height = height;
+}

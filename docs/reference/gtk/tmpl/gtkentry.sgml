@@ -315,6 +315,14 @@ to fit.
 
 @entry: the object which received the signal.
 
+<!-- ##### SIGNAL GtkEntry::populate-popup ##### -->
+<para>
+
+</para>
+
+@entry: the object which received the signal.
+@arg1: 
+
 <!-- ##### SIGNAL GtkEntry::toggle-overwrite ##### -->
 <para>
 

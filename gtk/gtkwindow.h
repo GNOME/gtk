@@ -172,7 +172,7 @@ void       gtk_window_set_decorated           (GtkWindow *window,
 /* If window is set modal, input will be grabbed when show and released when hide */
 void       gtk_window_set_modal                (GtkWindow           *window,
                                                 gboolean             modal);
-GList*	   gtk_window_list_toplevels	       (void);
+GList*	   gtk_window_list_toplevels           (void);
 
 void     gtk_window_add_mnemonic          (GtkWindow       *window,
 					   guint            keyval,
@@ -194,6 +194,18 @@ void     gtk_window_stick         (GtkWindow *window);
 void     gtk_window_unstick       (GtkWindow *window);
 void     gtk_window_maximize      (GtkWindow *window);
 void     gtk_window_unmaximize    (GtkWindow *window);
+
+void gtk_window_begin_resize_drag (GtkWindow     *window,
+                                   GdkWindowEdge  edge,
+                                   gint           button,
+                                   gint           root_x,
+                                   gint           root_y,
+                                   guint32        timestamp);
+void gtk_window_begin_move_drag   (GtkWindow     *window,
+                                   gint           button,
+                                   gint           root_x,
+                                   gint           root_y,
+                                   guint32        timestamp);
 
 
 /* --- internal functions --- */

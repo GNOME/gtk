@@ -428,6 +428,15 @@ gdk_event_translate (GdkEvent *event,
   if (window != NULL)
     gdk_window_ref (window);
 
+  if (_gdk_moveresize_window &&
+      (xevent->xany.type == MotionNotify ||
+       xevent->xany.type == ButtonRelease))
+    {
+      _gdk_moveresize_handle_event (xevent);
+      gdk_window_unref (window);
+      return FALSE;
+    }
+    
   if (wmspec_check_window != None &&
       xevent->xany.window == wmspec_check_window)
     {
@@ -1130,8 +1139,14 @@ gdk_event_translate (GdkEvent *event,
 	  window_private->y = event->configure.y;
 	  GDK_WINDOW_IMPL_X11 (window_private->impl)->width = xevent->xconfigure.width;
 	  GDK_WINDOW_IMPL_X11 (window_private->impl)->height = xevent->xconfigure.height;
-	  if (window_private->resize_count > 1)
-	    window_private->resize_count -= 1;
+	  if (window_private->resize_count >= 1)
+	    {
+	      window_private->resize_count -= 1;
+
+	      if (window_private->resize_count == 0 &&
+		  window == _gdk_moveresize_window)
+		_gdk_moveresize_configure_done ();
+	    }
 	}
       break;
       

@@ -129,3 +129,8 @@ field of the #GtkCheckMenuItem-struct struct to discover the new state.
 
 </para>
 
+<!-- ##### ARG GtkCheckMenuItem:inconsistent ##### -->
+<para>
+
+</para>
+

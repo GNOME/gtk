@@ -286,6 +286,18 @@ static void gtk_default_draw_layout     (GtkStyle        *style,
                                          gint             x,
                                          gint             y,
                                          PangoLayout     *layout);
+static void gtk_default_draw_resize_grip (GtkStyle       *style,
+                                          GdkWindow      *window,
+                                          GtkStateType    state_type,
+                                          GdkRectangle   *area,
+                                          GtkWidget      *widget,
+                                          const gchar    *detail,
+                                          GdkWindowEdge   edge,
+                                          gint            x,
+                                          gint            y,
+                                          gint            width,
+                                          gint            height);
+
 static void gtk_style_shade		(GdkColor	 *a,
 					 GdkColor	 *b,
 					 gdouble	  k);
@@ -459,6 +471,7 @@ gtk_style_class_init (GtkStyleClass *klass)
   klass->draw_handle = gtk_default_draw_handle;
   klass->draw_expander = gtk_default_draw_expander;
   klass->draw_layout = gtk_default_draw_layout;
+  klass->draw_resize_grip = gtk_default_draw_resize_grip;
 }
 
 static void
@@ -1026,6 +1039,26 @@ gtk_draw_layout (GtkStyle        *style,
                                             NULL, NULL, NULL,
                                             x, y, layout);
 }
+
+void
+gtk_draw_resize_grip (GtkStyle     *style,
+                      GdkWindow    *window,
+                      GtkStateType  state_type,
+                      GdkWindowEdge edge,
+                      gint          x,
+                      gint          y,
+                      gint          width,
+                      gint          height)
+{
+  g_return_if_fail (GTK_IS_STYLE (style));
+  g_return_if_fail (GTK_STYLE_GET_CLASS (style)->draw_resize_grip != NULL);
+
+  GTK_STYLE_GET_CLASS (style)->draw_resize_grip (style, window, state_type,
+                                                 NULL, NULL, NULL,
+                                                 edge,
+                                                 x, y, width, height);
+}
+
 
 void
 gtk_style_set_background (GtkStyle    *style,
@@ -3928,6 +3961,79 @@ gtk_default_draw_layout (GtkStyle        *style,
 }
 
 static void
+gtk_default_draw_resize_grip (GtkStyle       *style,
+                              GdkWindow      *window,
+                              GtkStateType    state_type,
+                              GdkRectangle   *area,
+                              GtkWidget      *widget,
+                              const gchar    *detail,
+                              GdkWindowEdge   edge,
+                              gint            x,
+                              gint            y,
+                              gint            width,
+                              gint            height)
+{
+  g_return_if_fail (GTK_IS_STYLE (style));
+  g_return_if_fail (window != NULL);
+  
+  if (area)
+    {
+      gdk_gc_set_clip_rectangle (style->light_gc[state_type], area);
+      gdk_gc_set_clip_rectangle (style->dark_gc[state_type], area);
+    }
+
+  /* make it square */
+  if (width != height)
+    width = height = MIN (width, height);
+  
+  switch (edge)
+    {
+    case GDK_WINDOW_EDGE_SOUTH_EAST:
+      {
+        gint xi, yi;
+
+        xi = x;
+        yi = y;
+
+        while (xi < (x + width - 3))
+          {
+            gdk_draw_line (window,
+                           style->light_gc[state_type],
+                           xi, y + height,
+                           x + width, yi);                           
+
+            ++xi;
+            ++yi;
+            
+            gdk_draw_line (window,
+                           style->dark_gc[state_type],
+                           xi, y + height,
+                           x + width, yi);                           
+
+            ++xi;
+            ++yi;
+            
+            gdk_draw_line (window,
+                           style->dark_gc[state_type],
+                           xi, y + height,
+                           x + width, yi);
+
+            xi += 3;
+            yi += 3;
+          }
+      }
+      break;
+
+    }
+  
+  if (area)
+    {
+      gdk_gc_set_clip_rectangle (style->light_gc[state_type], NULL);
+      gdk_gc_set_clip_rectangle (style->dark_gc[state_type], NULL);
+    }
+}
+
+static void
 gtk_style_shade (GdkColor *a,
                  GdkColor *b,
                  gdouble   k)
@@ -4492,4 +4598,25 @@ gtk_paint_layout (GtkStyle        *style,
                                             widget, detail, x, y, layout);
 }
 
+void
+gtk_paint_resize_grip (GtkStyle      *style,
+                       GdkWindow     *window,
+                       GtkStateType   state_type,
+                       GdkRectangle  *area,
+                       GtkWidget     *widget,
+                       const gchar   *detail,
+                       GdkWindowEdge  edge,
+                       gint           x,
+                       gint           y,
+                       gint           width,
+                       gint           height)
+
+{
+  g_return_if_fail (GTK_IS_STYLE (style));
+  g_return_if_fail (GTK_STYLE_GET_CLASS (style)->draw_resize_grip != NULL);
+
+  GTK_STYLE_GET_CLASS (style)->draw_resize_grip (style, window, state_type,
+                                                 area, widget, detail,
+                                                 edge, x, y, width, height);
+}
 
