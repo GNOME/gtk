@@ -51,7 +51,7 @@ libgdk_1_1_la_LDFLAGS = \
 	-version-info $(LT_CURRENT):$(LT_REVISION):$(LT_AGE) \
 	@x_ldflags@ @x_libs@
 
-INCLUDES = -I$(top_srcdir) -I../glib -I$(top_srcdir)/glib @x_cflags@ 
+INCLUDES = -I$(top_srcdir) @GLIB_CFLAGS@ @x_cflags@ 
 
 EXTRA_PROGRAMS = gxid
 

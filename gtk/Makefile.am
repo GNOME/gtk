@@ -275,7 +275,7 @@ EXTRA_DIST = \
 	tree_minus.xbm          \
         circles.xbm
 
-INCLUDES = -I$(top_srcdir) -I../glib -I$(top_srcdir)/glib @x_cflags@
+INCLUDES = -I$(top_srcdir) @GLIB_CFLAGS@ @x_cflags@
 
 noinst_PROGRAMS = testgtk testinput testselection testthreads simple 
 
@@ -283,14 +283,14 @@ noinst_PROGRAMS = testgtk testinput testselection testthreads simple
 
 DEPS =	\
 	libgtk-@LT_RELEASE@.la				\
-	$(top_builddir)/gdk/libgdk-@LT_RELEASE@.la	\
-	$(top_builddir)/glib/libglib-1.1.la
+	$(top_builddir)/gdk/libgdk-@LT_RELEASE@.la
+
 LDADDS = \
 	libgtk-@LT_RELEASE@.la				\
 	$(top_builddir)/gdk/libgdk-@LT_RELEASE@.la	\
 	@x_ldflags@					\
 	@x_libs@					\
-	$(top_builddir)/glib/libglib-1.1.la		\
+	@GLIB_LIBS@                                     \
 	-lm
 
 testgtk_DEPENDENCIES = $(DEPS)

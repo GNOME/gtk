@@ -1,3 +1,9 @@
+Prerequisites
+=============
+
+GTK+ requires the GLIB library, available at the same location as
+you got this package.
+
 Simple install procedure
 ========================
 
@@ -77,6 +83,19 @@ debugging information at all, run configure as:
 or,
 
  setenv CFLAGS -O2 ; ./configure  # csh and variants
+
+
+Using an uninstalled copy of GLIB
+=================================
+
+You can compile GTK+ against a copy of GLIB that you have not
+yet installed. To do this, give the --with-glib=DIR options
+to ./configure. For instance:
+
+ ./configure --with-glib=../glib-1.1.0
+
+This, however, will not work if you built GLIB with different
+source and build directories.
 
 
 Installation directories

@@ -1,5 +1,8 @@
 #!/bin/sh
 
+glib_libs=@glib_libs@
+glib_cflags=@glib_cflags@
+
 prefix=@prefix@
 exec_prefix=@exec_prefix@
 exec_prefix_set=no
@@ -41,11 +44,22 @@ while test $# -gt 0; do
     --cflags)
       if test @includedir@ != /usr/include ; then
         includes=-I@includedir@
+        for i in $glib_cflags ; do
+          if test $i = -I@includedir@ ; then
+            includes=""
+          fi
+        done
       fi
-      echo -I@libdir@/glib/include $includes @x_cflags@
+      echo -I@libdir@/glib/include $includes @x_cflags@ $glib_cflags
       ;;
     --libs)
-      echo -L@libdir@ @x_ldflags@ -lgtk-@LT_RELEASE@ -lgdk-@LT_RELEASE@ -lglib-@LT_RELEASE@ @x_libs@ -lm
+      libdirs=-L@libdir@
+      for i in $glib_libs ; do
+        if test $i = -I@libdir@ ; then
+          libdirs=""
+        fi
+      done
+      echo $libdirs @x_ldflags@ -lgtk-@LT_RELEASE@ -lgdk-@LT_RELEASE@ $glib_libs @x_libs@ -lm
       ;;
     *)
       echo "${usage}" 1>&2

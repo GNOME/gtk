@@ -1,3 +1,18 @@
+Wed Jun 10 19:36:35 1998  Owen Taylor  <otaylor@gtk.org>
+
+	* glib/* Moved to glib module
+
+	* INSTALL Makefile.am acconfig.h autogen.sh configure.in
+	  gtk-config.in gtk.m4 gdk/Makefile.am gtk/Makefile.am
+
+	  configuration changes for the above:
+	 
+	  - Use AM_PATH_GLIB by default to find glib; also accept
+	    a --with-glib option for using an uninstalled glib.
+	 
+	  - Put --enable-debug information into config.h so
+	    that we rebuild when it changes. (was in glibconfig.h)
+
 Wed Jun 10 22:23:27 1998  Lars Hamann  <lars@gtk.org>
 
 	* gtk/gtkctree.c (draw_row): adapted clist pixmap clipping
