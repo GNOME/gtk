@@ -1,14 +1,14 @@
 # Japanese translation table of GTK+ 1.2
-# Copyright (C) 1998 Free Software Foundation, Inc.
-# Yasuhiro SHIRASAKI <yasuhiro@awa.tohoku.ac.jp>, 1998.
+# Copyright (C) 1998, 2000 Free Software Foundation, Inc.
+# Yasuhiro SHIRASAKI <yasuhiro@awa.tohoku.ac.jp>, 1998, 2000.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.2.7\n"
-"POT-Creation-Date: 1999-10-08 10:56-0500\n"
-"PO-Revision-Date: 1999-10-08 11:42+0900\n"
+"POT-Creation-Date: 2000-02-15 11:12+0900\n"
+"PO-Revision-Date: 2000-02-15 11:20+09:00\n"
 "Last-Translator: 白崎 泰弘 <yasuhiro@awa.tohoku.ac.jp>\n"
-"Language-Team: Japanese <ja@li.org>\n"
+"Language-Team: Japanese <translation@gnome.gr.jp>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=EUC-JP\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -42,14 +42,14 @@ msgid "Opacity:"
 msgstr "不透明度:"
 
 #. The OK button
-#: gtk/gtkcolorsel.c:1727 gtk/gtkfilesel.c:469 gtk/gtkfontsel.c:3467
+#: gtk/gtkcolorsel.c:1727 gtk/gtkfilesel.c:469 gtk/gtkfontsel.c:3490
 #: gtk/gtkgamma.c:416
 msgid "OK"
 msgstr "了解"
 
 #. The Cancel button
 #: gtk/gtkcolorsel.c:1733 gtk/gtkfilesel.c:476 gtk/gtkfilesel.c:856
-#: gtk/gtkfilesel.c:956 gtk/gtkfilesel.c:1071 gtk/gtkfontsel.c:3480
+#: gtk/gtkfilesel.c:956 gtk/gtkfilesel.c:1071 gtk/gtkfontsel.c:3503
 #: gtk/gtkgamma.c:424
 msgid "Cancel"
 msgstr "取消"
@@ -196,7 +196,7 @@ msgstr "実際の値"
 msgid "Font"
 msgstr "フォント"
 
-#: gtk/gtkfontsel.c:504 gtk/gtkfontsel.c:2158 gtk/gtkfontsel.c:2388
+#: gtk/gtkfontsel.c:504 gtk/gtkfontsel.c:2181 gtk/gtkfontsel.c:2411
 msgid "Font:"
 msgstr "フォント:"
 
@@ -279,23 +279,23 @@ msgstr "(nil)"
 msgid "regular"
 msgstr "通常"
 
-#: gtk/gtkfontsel.c:1220 gtk/gtkfontsel.c:1950
+#: gtk/gtkfontsel.c:1220 gtk/gtkfontsel.c:1973
 msgid "italic"
 msgstr "イタリック"
 
-#: gtk/gtkfontsel.c:1221 gtk/gtkfontsel.c:1951
+#: gtk/gtkfontsel.c:1221 gtk/gtkfontsel.c:1974
 msgid "oblique"
 msgstr "斜体"
 
-#: gtk/gtkfontsel.c:1222 gtk/gtkfontsel.c:1952
+#: gtk/gtkfontsel.c:1222 gtk/gtkfontsel.c:1975
 msgid "reverse italic"
 msgstr "逆イタリック"
 
-#: gtk/gtkfontsel.c:1223 gtk/gtkfontsel.c:1953
+#: gtk/gtkfontsel.c:1223 gtk/gtkfontsel.c:1976
 msgid "reverse oblique"
 msgstr "逆斜体"
 
-#: gtk/gtkfontsel.c:1224 gtk/gtkfontsel.c:1954
+#: gtk/gtkfontsel.c:1224 gtk/gtkfontsel.c:1977
 msgid "other"
 msgstr "その他"
 
@@ -307,51 +307,51 @@ msgstr "[M]"
 msgid "[C]"
 msgstr "[C]"
 
-#: gtk/gtkfontsel.c:1782
+#: gtk/gtkfontsel.c:1793
 msgid "The selected font is not available."
 msgstr "選択されたフォントは有効ではありません."
 
-#: gtk/gtkfontsel.c:1788
+#: gtk/gtkfontsel.c:1799
 msgid "The selected font is not a valid font."
 msgstr "選択されたフォントは正しいフォントではありません."
 
-#: gtk/gtkfontsel.c:1846
+#: gtk/gtkfontsel.c:1857
 msgid "This is a 2-byte font and may not be displayed correctly."
 msgstr "これは 2-byte フォントなので正しく表示されないかもしれません."
 
-#: gtk/gtkfontsel.c:1938 gtk/gtkinputdialog.c:607
+#: gtk/gtkfontsel.c:1961 gtk/gtkinputdialog.c:607
 msgid "(unknown)"
 msgstr "(不明)"
 
-#: gtk/gtkfontsel.c:1949
+#: gtk/gtkfontsel.c:1972
 msgid "roman"
 msgstr "ローマン"
 
-#: gtk/gtkfontsel.c:1961
+#: gtk/gtkfontsel.c:1984
 msgid "proportional"
 msgstr "プロポーショナル"
 
-#: gtk/gtkfontsel.c:1962
+#: gtk/gtkfontsel.c:1985
 msgid "monospaced"
 msgstr "モノスペース"
 
-#: gtk/gtkfontsel.c:1963
+#: gtk/gtkfontsel.c:1986
 msgid "char cell"
 msgstr "文字セル"
 
-#: gtk/gtkfontsel.c:2163
+#: gtk/gtkfontsel.c:2186
 msgid "Font: (Filter Applied)"
 msgstr "フォント: (フィルター適用)"
 
-#: gtk/gtkfontsel.c:2639
+#: gtk/gtkfontsel.c:2662
 msgid "MAX_FONTS exceeded. Some fonts may be missing."
 msgstr "MAX_FONTS を越えました. 表示されないフォントがあります."
 
-#: gtk/gtkfontsel.c:3474
+#: gtk/gtkfontsel.c:3497
 msgid "Apply"
 msgstr "適用"
 
-#: gtk/gtkfontsel.c:3496
+#: gtk/gtkfontsel.c:3519
 msgid "Font Selection"
 msgstr "フォント選択"
 
@@ -441,25 +441,25 @@ msgstr "(無効)"
 msgid "clear"
 msgstr "クリア"
 
-#: gtk/gtknotebook.c:2048 gtk/gtknotebook.c:4120
+#: gtk/gtknotebook.c:2059 gtk/gtknotebook.c:4131
 #, c-format
 msgid "Page %u"
 msgstr "ページ %u"
 
-#: gtk/gtkrc.c:1706
+#: gtk/gtkrc.c:1702
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\" line %d"
-msgstr "画像ファイルが見付かりません piamap_path: \"%s\" %d 行目"
+msgstr "pixmap_path 中に画像ファイルが見付かりません: \"%s\" %d 行目"
 
-#: gtk/gtkrc.c:1709
+#: gtk/gtkrc.c:1705
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
-msgstr "画像ファイルが見付かりません pixmap_path: \"%s\""
+msgstr "pixmap_path 中に画像ファイルが見付かりません: \"%s\""
 
 #: gtk/gtkthemes.c:79
 #, c-format
 msgid "Unable to locate loadable module in module_path: \"%s\","
-msgstr "ローダブルモジュールが見付かりません module_path: \"%s\","
+msgstr "module_path 中にローダブルモジュールが見付かりません: \"%s\","
 
 #: gtk/gtktipsquery.c:180
 msgid "--- No Tip ---"
