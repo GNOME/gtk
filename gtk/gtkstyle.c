@@ -486,9 +486,20 @@ gtk_style_init (GtkStyle *style)
 {
   gint i;
   const gchar *font_name = _gtk_rc_context_get_default_font_name (gtk_settings_get_default ());
-  
+
   style->font_desc = pango_font_description_from_string (font_name);
 
+  if (!pango_font_description_get_family (style->font_desc))
+    {
+      g_warning ("Default font does not have a family set");
+      pango_font_description_set_family (style->font_desc, "Sans");
+    }
+  if (pango_font_description_get_size (style->font_desc) <= 0)
+    {
+      g_warning ("Default font does not have a positive size");
+      pango_font_description_set_size (style->font_desc, 10 * PANGO_SCALE);
+    }
+  
   style->attach_count = 0;
   style->colormap = NULL;
   style->depth = -1;

@@ -2405,11 +2405,6 @@ gtk_window_set_default_size_internal (GtkWindow    *window,
  * For more control over a window's initial size and how resizing works,
  * investigate gtk_window_set_geometry_hints().
  *
- * A useful feature: if you set the "geometry widget" via
- * gtk_window_set_geometry_hints(), the default size specified by
- * gtk_window_set_default_size() will be the default size of that
- * widget, not of the entire window.
- *
  * For some uses, gtk_window_resize() is a more appropriate function.
  * gtk_window_resize() changes the current size of the window, rather
  * than the size to be used on initial display. gtk_window_resize() always
@@ -2467,8 +2462,8 @@ gtk_window_get_default_size (GtkWindow *window,
 /**
  * gtk_window_resize:
  * @window: a #GtkWindow
- * @width: width to resize the window to
- * @height: height to resize the window to
+ * @width: width in pixels to resize the window to
+ * @height: height in pixels to resize the window to
  *
  * Resizes the window as if the user had done so, obeying geometry
  * constraints. The default geometry constraint is that windows may
@@ -4384,8 +4379,9 @@ gtk_window_move_resize (GtkWindow *window)
        * GTK_RESIZE_IMMEDIATE containers)
        */
       info->position_constraints_changed = FALSE;
-      window->need_default_position = FALSE;
       info->initial_pos_set = FALSE;
+      info->resize_width = -1;
+      info->resize_height = -1;
 
       /* for GTK_RESIZE_QUEUE toplevels, we are now awaiting a new
        * configure event in response to our resizing request.

@@ -1,3 +1,21 @@
+Sat Feb 23 22:37:23 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkstyle.c (gtk_style_init): Sanity check default
+	font family name and size.
+
+	* gtk/gtkwindow.c (gtk_window_set_default_size): Remove
+	incorrect comment about the geometry widget.
+
+	* gtk/gtkwindow.c (gtk_window_move_resize): Unset the
+	gtk_window_resize)() information once we've set the size
+	once, to avoid it coming back next time we queue a resize.
+	(#72359)
+
+	* gtk/gtkwindow.c (gtk_window_move_resize): Remove
+	setthing of ->need_default_size from here, Havoc
+	says that it should correspond more or less exactly
+	to GTK_WIDGET_MAPPED (window).
+
 Sat Feb 23 23:00:48 2002  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtktreemodel.h: add () to function macros as per owen's
