@@ -3638,18 +3638,17 @@ gtk_notebook_activate_mnemonic_switch_page (GtkWidget *child,
 					    gpointer data)
 {
   GtkNotebook *notebook = GTK_NOTEBOOK (data);
-  GtkNotebookPage *page;
   GList *list;
-
+  
   list = g_list_find_custom (notebook->children, child,
 			     gtk_notebook_page_compare_tab);
-  if (!list)  
-    return TRUE;
+  if (list)
+    {
+      GtkNotebookPage *page = list->data;
 
+      gtk_notebook_switch_page (notebook, page,  -1);
+    }
 
-  page = list->data;
-
-  gtk_notebook_switch_page (notebook, page,  -1);
   return TRUE;
 }
 

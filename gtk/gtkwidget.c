@@ -252,6 +252,22 @@ gtk_widget_get_type (void)
   return widget_type;
 }
 
+static gboolean
+accumulator_stop_handled_emission (GSignalInvocationHint *ihint,
+				   GValue                *return_accu,
+				   const GValue          *handler_return,
+				   gpointer               data)
+{
+  gboolean continue_emission;
+  gboolean signal_handled;
+
+  signal_handled = g_value_get_boolean (handler_return);
+  g_value_set_boolean (return_accu, signal_handled);
+  continue_emission = !signal_handled;
+
+  return continue_emission;
+}
+
 /*****************************************
  * gtk_widget_class_init:
  *
@@ -465,13 +481,14 @@ gtk_widget_class_init (GtkWidgetClass *klass)
     gtk_accel_group_create_remove (GTK_CLASS_TYPE (object_class), GTK_RUN_LAST,
 				   GTK_SIGNAL_OFFSET (GtkWidgetClass, remove_accelerator));
   widget_signals[ACTIVATE_MNEMONIC] =
-    gtk_signal_new ("activate_mnemonic",
-		    GTK_RUN_LAST,
-		    GTK_CLASS_TYPE (object_class),
-		    GTK_SIGNAL_OFFSET (GtkWidgetClass, activate_mnemonic),
-		    gtk_marshal_BOOLEAN__BOOLEAN,
-		    GTK_TYPE_BOOL, 1,
-		    GTK_TYPE_BOOL);
+    g_signal_newc ("activate_mnemonic",
+		   GTK_CLASS_TYPE (object_class),
+		   GTK_RUN_LAST,
+		   GTK_SIGNAL_OFFSET (GtkWidgetClass, activate_mnemonic),
+		   accumulator_stop_handled_emission, NULL,
+		   gtk_marshal_BOOLEAN__BOOLEAN,
+		   GTK_TYPE_BOOL, 1,
+		   GTK_TYPE_BOOL);
   widget_signals[GRAB_FOCUS] =
     gtk_signal_new ("grab_focus",
 		    GTK_RUN_LAST | GTK_RUN_ACTION,
@@ -2191,17 +2208,18 @@ gboolean
 gtk_widget_activate_mnemonic (GtkWidget *widget,
                               gboolean   group_cycling)
 {
-  gboolean handled = FALSE;
+  gboolean handled;
   
   g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
 
+  group_cycling = group_cycling != FALSE;
   if (!GTK_WIDGET_IS_SENSITIVE (widget))
-    return TRUE;
-    
-  gtk_signal_emit_by_name (GTK_OBJECT (widget),
-                           "activate_mnemonic",
-                           group_cycling,
-                           &handled);
+    handled = TRUE;
+  else
+    gtk_signal_emit (GTK_OBJECT (widget),
+		     widget_signals[ACTIVATE_MNEMONIC],
+		     group_cycling,
+		     &handled);
   return handled;
 }
 
@@ -2209,13 +2227,18 @@ static gboolean
 gtk_widget_real_activate_mnemonic (GtkWidget *widget,
                                    gboolean   group_cycling)
 {
-  if (group_cycling)
-    gtk_widget_grab_focus (widget);
-  else if (!group_cycling)
+  if (!group_cycling && GTK_WIDGET_GET_CLASS (widget)->activate_signal)
     gtk_widget_activate (widget);
+  else if (GTK_WIDGET_CAN_FOCUS (widget))
+    gtk_widget_grab_focus (widget);
+  else
+    {
+      g_warning ("widget `%s' isn't suitable for mnemonic activation",
+		 G_OBJECT_TYPE_NAME (widget));
+      gdk_beep ();
+    }
   return TRUE;
 }
-
 
 static gint
 gtk_widget_real_key_press_event (GtkWidget         *widget,

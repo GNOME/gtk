@@ -1,3 +1,20 @@
+Thu Mar 22 13:01:44 2001  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtklabel.[hc]: some cleanups, fixed mnemonic_widget handling,
+	added PROP_MNEMONIC_WIDGET.
+
+	* gtk/gtkwindow.c (gtk_window_activate_mnemonic): 
+	(gtk_window_remove_mnemonic): 
+	(gtk_window_add_mnemonic): fixed assertions.
+	(gtk_window_activate_mnemonic): constrain modifier checks to those
+	permitted by gtk_accelerator_get_default_mod_mask().
+	got rid of gtk_window_get_default_accel_group().
+
+	* gtk/gtkwidget.c (gtk_widget_real_activate_mnemonic): handle non
+	activatable widgets either by focussing or a warning.
+	added a signal accumulator to ::activate_mnemonic which stops the
+	emission once a handler returned TRUE.
+
 2001-03-22  Havoc Pennington  <hp@pobox.com>
 
 	* gtk/gtktoolbar.c (gtk_toolbar_insert_stock): handle mnemonics in

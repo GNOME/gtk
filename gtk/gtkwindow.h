@@ -174,9 +174,6 @@ void       gtk_window_set_modal                (GtkWindow           *window,
                                                 gboolean             modal);
 GList*	   gtk_window_list_toplevels	       (void);
 
-/* Get the "built-in" accel group (convenience thing) */
-GtkAccelGroup* gtk_window_get_default_accel_group (GtkWindow *window);
-
 void     gtk_window_add_mnemonic          (GtkWindow       *window,
 					   guint            keyval,
 					   GtkWidget       *target);

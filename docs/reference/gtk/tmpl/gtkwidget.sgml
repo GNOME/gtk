@@ -1247,6 +1247,15 @@ GtkWidget
 @Returns: 
 
 
+<!-- ##### SIGNAL GtkWidget::activate-mnemonic ##### -->
+<para>
+
+</para>
+
+@widget: the object which received the signal.
+@arg1: 
+@Returns: 
+
 <!-- ##### SIGNAL GtkWidget::add-accelerator ##### -->
 <para>
 

@@ -166,12 +166,8 @@ create_buttons (void)
 
   if (!window)
     {
-      GtkAccelGroup *accel_group;
-      
       window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
 
-      accel_group = gtk_window_get_default_accel_group (GTK_WINDOW (window));
-      
       gtk_signal_connect (GTK_OBJECT (window), "destroy",
 			  GTK_SIGNAL_FUNC (gtk_widget_destroyed),
 			  &window);

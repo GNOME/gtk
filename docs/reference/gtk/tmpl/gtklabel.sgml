@@ -64,16 +64,6 @@ gtk_label_set_pattern().
 @str: 
 
 
-<!-- ##### FUNCTION gtk_label_set_markup_with_accel ##### -->
-<para>
-
-</para>
-
-@label: 
-@str: 
-@Returns: 
-
-
 <!-- ##### FUNCTION gtk_label_set_pattern ##### -->
 <para>
 The pattern of underlines you want under the existing text within the
@@ -183,7 +173,12 @@ pointer, it isn't copied.
 
 </para>
 
-<!-- ##### ARG GtkLabel:accel-keyval ##### -->
+<!-- ##### ARG GtkLabel:mnemonic-keyval ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkLabel:mnemonic-widget ##### -->
 <para>
 
 </para>

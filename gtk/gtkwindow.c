@@ -822,29 +822,6 @@ gtk_window_remove_accel_group (GtkWindow       *window,
   gtk_accel_group_detach (accel_group, GTK_OBJECT (window));
 }
 
-GtkAccelGroup*
-gtk_window_get_default_accel_group (GtkWindow *window)
-{
-  GtkAccelGroup *group;
-  
-  g_return_val_if_fail (GTK_IS_WINDOW (window), NULL);
-
-  group = gtk_object_get_data (GTK_OBJECT (window),
-                               "gtk-accel-group");
-
-  if (group == NULL)
-    {
-      group = gtk_accel_group_new ();
-      gtk_window_add_accel_group (window, group);
-      gtk_object_set_data (GTK_OBJECT (window),
-                           "gtk-accel-group",
-                           group);
-      gtk_accel_group_unref (group);
-    }
-
-  return group;
-}
-
 void
 gtk_window_add_mnemonic (GtkWindow *window,
 			 guint      keyval,
@@ -853,17 +830,18 @@ gtk_window_add_mnemonic (GtkWindow *window,
   GtkWindowMnemonic key;
   GtkWindowMnemonic *mnemonic;
 
-  g_return_if_fail (window != NULL);
   g_return_if_fail (GTK_IS_WINDOW (window));
   g_return_if_fail (GTK_IS_WIDGET (target));
   
   key.window = window;
   key.keyval = keyval;
-  
   mnemonic = g_hash_table_lookup (mnemonic_hash_table, &key);
 
   if (mnemonic)
-    mnemonic->targets = g_slist_prepend (mnemonic->targets, target);
+    {
+      g_return_if_fail (g_slist_find (mnemonic->targets, target) == NULL);
+      mnemonic->targets = g_slist_prepend (mnemonic->targets, target);
+    }
   else
     {
       mnemonic = g_new (GtkWindowMnemonic, 1);
@@ -881,26 +859,20 @@ gtk_window_remove_mnemonic (GtkWindow *window,
   GtkWindowMnemonic key;
   GtkWindowMnemonic *mnemonic;
 
-  g_return_if_fail (window != NULL);
   g_return_if_fail (GTK_IS_WINDOW (window));
   g_return_if_fail (GTK_IS_WIDGET (target));
   
   key.window = window;
   key.keyval = keyval;
-  
   mnemonic = g_hash_table_lookup (mnemonic_hash_table, &key);
 
-  g_assert (mnemonic);
+  g_return_if_fail (mnemonic && g_slist_find (mnemonic->targets, target) != NULL);
 
-  if (mnemonic)
+  mnemonic->targets = g_slist_remove (mnemonic->targets, target);
+  if (mnemonic->targets == NULL)
     {
-      mnemonic->targets = g_slist_remove (mnemonic->targets, target);
-      
-      if (mnemonic->targets == NULL)
-	{
-	  g_hash_table_remove (mnemonic_hash_table, mnemonic);
-	  g_free (mnemonic);
-	}
+      g_hash_table_remove (mnemonic_hash_table, mnemonic);
+      g_free (mnemonic);
     }
 }
 
@@ -915,15 +887,13 @@ gtk_window_activate_mnemonic (GtkWindow      *window,
   GtkWidget *widget, *chosen_widget;
   gboolean overloaded;
 
-  g_return_val_if_fail (window != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_WINDOW (window), FALSE);
 
-  if (modifier != window->mnemonic_modifier)
+  if (window->mnemonic_modifier != (modifier & gtk_accelerator_get_default_mod_mask ()))
     return FALSE;
   
   key.window = window;
   key.keyval = keyval;
-  
   mnemonic = g_hash_table_lookup (mnemonic_hash_table, &key);
 
   if (!mnemonic)
@@ -953,9 +923,11 @@ gtk_window_activate_mnemonic (GtkWindow      *window,
   if (chosen_widget)
     {
       /* For round robin we put the activated entry on
-       * the end of the list after activation */
+       * the end of the list after activation
+       */
       mnemonic->targets = g_slist_remove (mnemonic->targets, chosen_widget);
       mnemonic->targets = g_slist_append (mnemonic->targets, chosen_widget);
+
       return gtk_widget_activate_mnemonic (chosen_widget, overloaded);
     }
   return FALSE;
@@ -965,8 +937,8 @@ void
 gtk_window_set_mnemonic_modifier (GtkWindow      *window,
 				  GdkModifierType modifier)
 {
-  g_return_if_fail (window != NULL);
   g_return_if_fail (GTK_IS_WINDOW (window));
+  g_return_if_fail ((modifier & ~GDK_MODIFIER_MASK) == 0);
 
   window->mnemonic_modifier = modifier;
 }
@@ -975,7 +947,6 @@ void
 gtk_window_set_position (GtkWindow         *window,
 			 GtkWindowPosition  position)
 {
-  g_return_if_fail (window != NULL);
   g_return_if_fail (GTK_IS_WINDOW (window));
 
   window->position = position;
@@ -1539,6 +1510,14 @@ gtk_window_mnemonic_hash_remove (gpointer	key,
 
   if (mnemonic->window == window)
     {
+      if (mnemonic->targets)
+	{
+	  gchar *name = gtk_accelerator_name (mnemonic->keyval, 0);
+
+	  g_warning ("mnemonic \"%s\" wasn't removed for widget (%p)",
+		     name, mnemonic->targets->data);
+	  g_free (name);
+	}
       g_slist_free (mnemonic->targets);
       g_free (mnemonic);
       
@@ -2064,12 +2043,9 @@ gtk_window_key_press_event (GtkWidget   *widget,
 
   handled = FALSE;
   
-  if (window->focus_widget &&
-      window->focus_widget != widget &&
+  if (window->focus_widget && window->focus_widget != widget &&
       GTK_WIDGET_IS_SENSITIVE (window->focus_widget))
-    {
-      handled = gtk_widget_event (window->focus_widget, (GdkEvent*) event);
-    }
+    handled = gtk_widget_event (window->focus_widget, (GdkEvent*) event);
 
   if (!handled)
     handled = gtk_window_activate_mnemonic (window,

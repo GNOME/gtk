@@ -76,6 +76,8 @@ GtkItemFactory
 @callback: 
 @callback_action: 
 @item_type: 
+@extra_data: 
+@extra_data2: 
 
 <!-- ##### STRUCT GtkItemFactoryItem ##### -->
 <para>

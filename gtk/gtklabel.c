@@ -54,7 +54,8 @@ enum {
   PROP_PATTERN,
   PROP_WRAP,
   PROP_SELECTABLE,
-  PROP_MNEMONIC_KEYVAL
+  PROP_MNEMONIC_KEYVAL,
+  PROP_MNEMONIC_WIDGET
 };
 
 static void gtk_label_class_init        (GtkLabelClass    *klass);
@@ -67,6 +68,7 @@ static void gtk_label_get_property      (GObject          *object,
 					 guint             prop_id,
 					 GValue           *value,
 					 GParamSpec       *pspec);
+static void gtk_label_destroy           (GtkObject        *object);
 static void gtk_label_finalize          (GObject          *object);
 static void gtk_label_size_request      (GtkWidget        *widget,
 					 GtkRequisition   *requisition);
@@ -158,17 +160,16 @@ static void
 gtk_label_class_init (GtkLabelClass *class)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (class);
-  GtkObjectClass *object_class;
-  GtkWidgetClass *widget_class;
-  
-  object_class = (GtkObjectClass*) class;
-  widget_class = (GtkWidgetClass*) class;
-  
+  GtkObjectClass *object_class = GTK_OBJECT_CLASS (class);
+  GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (class);
+
   parent_class = gtk_type_class (GTK_TYPE_MISC);
   
   gobject_class->set_property = gtk_label_set_property;
   gobject_class->get_property = gtk_label_get_property;
   gobject_class->finalize = gtk_label_finalize;
+
+  object_class->destroy = gtk_label_destroy;
   
   widget_class->size_request = gtk_label_size_request;
   widget_class->size_allocate = gtk_label_size_allocate;
@@ -248,13 +249,20 @@ gtk_label_class_init (GtkLabelClass *class)
   g_object_class_install_property (gobject_class,
                                    PROP_MNEMONIC_KEYVAL,
                                    g_param_spec_uint ("mnemonic_keyval",
-						      _("Mnemonic accelerator key value"),
+						      _("Mnemonic key"),
 						      _("The mnemonic accelerator key for this label."),
 						      0,
 						      G_MAXUINT,
 						      GDK_VoidSymbol,
 						      G_PARAM_READABLE));
-
+  g_object_class_install_property (gobject_class,
+                                   PROP_MNEMONIC_WIDGET,
+                                   g_param_spec_object ("mnemonic_widget",
+							_("Mnemonic widget"),
+							_("The widget to be activated when the label's mnemonic "
+							  "key is pressed."),
+							GTK_TYPE_WIDGET,
+							G_PARAM_READWRITE));
 }
 
 static void 
@@ -297,6 +305,9 @@ gtk_label_set_property (GObject      *object,
     case PROP_SELECTABLE:
       gtk_label_set_selectable (label, g_value_get_boolean (value));
       break;	  
+    case PROP_MNEMONIC_WIDGET:
+      gtk_label_set_mnemonic_widget (label, (GtkWidget*) g_value_get_object (value));
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -338,6 +349,9 @@ gtk_label_get_property (GObject     *object,
       break;
     case PROP_MNEMONIC_KEYVAL:
       g_value_set_uint (value, label->mnemonic_keyval);
+      break;
+    case PROP_MNEMONIC_WIDGET:
+      g_value_set_object (value, (GObject*) label->mnemonic_widget);
       break;
 
     default:
@@ -425,21 +439,21 @@ gtk_label_activate_mnemonic (GtkWidget *widget,
   if (GTK_LABEL (widget)->mnemonic_widget)
     return gtk_widget_activate_mnemonic (GTK_LABEL (widget)->mnemonic_widget, group_cycling);
 
-  /* Try to find the widget to activate by traversing the widget
-   * hierarachy.
+  /* Try to find the widget to activate by traversing the
+   * widget's ancestry.
    */
-  
   parent = widget->parent;
   while (parent)
     {
       if (GTK_WIDGET_CAN_FOCUS (parent) ||
 	  (!group_cycling && GTK_WIDGET_GET_CLASS (parent)->activate_signal) ||
-	  (parent->parent && GTK_IS_NOTEBOOK (parent->parent)) ||
+          (parent->parent && GTK_IS_NOTEBOOK (parent->parent)) ||
 	  (GTK_IS_MENU_ITEM (parent)))
 	return gtk_widget_activate_mnemonic (parent, group_cycling);
       parent = parent->parent;
     }
 
+  /* barf if there was nothing to activate */
   g_warning ("Couldn't find a target for a mnemonic activation.");
   gdk_beep ();
   
@@ -447,11 +461,12 @@ gtk_label_activate_mnemonic (GtkWidget *widget,
 }
 
 static void
-gtk_label_setup_mnemonic (GtkLabel *label, guint last_key)
+gtk_label_setup_mnemonic (GtkLabel *label,
+			  guint     last_key)
 {
   GtkWidget *toplevel;
 
-  if ((last_key != GDK_VoidSymbol) && label->mnemonic_window)
+  if (last_key != GDK_VoidSymbol && label->mnemonic_window)
     gtk_window_remove_mnemonic  (label->mnemonic_window,
 				 last_key,
 				 GTK_WIDGET (label));
@@ -499,13 +514,18 @@ gtk_label_hierarchy_changed (GtkWidget *widget)
  * mnemonic collisions and toggle focus between the colliding widgets otherwise.
  **/
 void
-gtk_label_set_mnemonic_widget (GtkLabel         *label,
-			       GtkWidget        *widget)
+gtk_label_set_mnemonic_widget (GtkLabel  *label,
+			       GtkWidget *widget)
 {
   g_return_if_fail (GTK_IS_LABEL (label));
-  g_return_if_fail (GTK_IS_WIDGET (widget));
+  if (widget)
+    g_return_if_fail (GTK_IS_WIDGET (widget));
 
+  if (label->mnemonic_widget)
+    gtk_widget_unref (label->mnemonic_widget);
   label->mnemonic_widget = widget;
+  if (label->mnemonic_widget)
+    gtk_widget_ref (label->mnemonic_widget);
 }
 
 
@@ -584,7 +604,8 @@ gtk_label_set_attributes_internal (GtkLabel         *label,
 
 
 /* Calculates text, attrs and mnemonic_keyval from
- * label, use_underline and use_markup */
+ * label, use_underline and use_markup
+ */
 static void
 gtk_label_recalculate (GtkLabel *label)
 {
@@ -604,6 +625,7 @@ gtk_label_recalculate (GtkLabel *label)
   if (!label->use_underline)
     {
       guint keyval = label->mnemonic_keyval;
+
       label->mnemonic_keyval = GDK_VoidSymbol;
       gtk_label_setup_mnemonic (label, keyval);
     }
@@ -871,6 +893,16 @@ gtk_label_get (GtkLabel *label,
   g_return_if_fail (str != NULL);
   
   *str = label->text;
+}
+
+static void
+gtk_label_destroy (GtkObject *object)
+{
+  GtkLabel *label = GTK_LABEL (object);
+
+  gtk_label_set_mnemonic_widget (label, NULL);
+
+  GTK_OBJECT_CLASS (parent_class)->destroy (object);
 }
 
 static void
@@ -1497,6 +1529,7 @@ window_to_layout_coords (GtkLabel *label,
     }
 }
 
+#if 0
 static void
 layout_to_window_coords (GtkLabel *label,
                          gint     *x,
@@ -1522,6 +1555,7 @@ layout_to_window_coords (GtkLabel *label,
       *y -= widget->allocation.y; /* go to selection window */
     }
 }
+#endif
 
 static void
 get_layout_index (GtkLabel *label,

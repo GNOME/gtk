@@ -171,24 +171,6 @@ Set the #GtkAccelGroup which holds global accelerators for the menu.
 @Returns: 
 
 
-<!-- ##### FUNCTION gtk_menu_get_uline_accel_group ##### -->
-<para>
-
-</para>
-
-@menu: 
-@Returns: 
-
-
-<!-- ##### FUNCTION gtk_menu_ensure_uline_accel_group ##### -->
-<para>
-
-</para>
-
-@menu: 
-@Returns: 
-
-
 <!-- ##### FUNCTION gtk_menu_set_title ##### -->
 <para>
 Sets the title string for the menu.  The title is displayed when the menu

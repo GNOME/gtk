@@ -236,15 +236,6 @@ it's larger
 @Returns: 
 
 
-<!-- ##### FUNCTION gtk_window_get_default_accel_group ##### -->
-<para>
-
-</para>
-
-@window: 
-@Returns: 
-
-
 <!-- ##### SIGNAL GtkWindow::frame-event ##### -->
 <para>
 

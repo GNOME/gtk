@@ -45,26 +45,6 @@ text.
 @Returns: The newly created #GtkButton widget.
 
 
-<!-- ##### FUNCTION gtk_button_new_accel ##### -->
-<para>
-
-</para>
-
-@uline_label: 
-@accel_group: 
-@Returns: 
-
-
-<!-- ##### FUNCTION gtk_button_new_stock ##### -->
-<para>
-
-</para>
-
-@stock_id: 
-@accel_group: 
-@Returns: 
-
-
 <!-- ##### FUNCTION gtk_button_pressed ##### -->
 <para>
 Emits a #GtkButton::pressed signal to the given #GtkButton.
