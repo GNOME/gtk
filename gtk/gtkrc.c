@@ -679,8 +679,9 @@ gtk_rc_parse_file (const gchar *filename, gboolean reload)
       /* Temporarily push directory name for this file on
        * a stack of directory names while parsing it
        */
-      rc_dir_stack = g_slist_prepend (rc_dir_stack,
- 				      g_dirname (rc_file->canonical_name));
+      rc_dir_stack = 
+	g_slist_prepend (rc_dir_stack,
+			 g_path_get_dirname (rc_file->canonical_name));
       gtk_rc_parse_any (filename, fd, NULL);
  
       tmp_list = rc_dir_stack;
@@ -1234,10 +1235,8 @@ gtk_rc_parse_any (const gchar  *input_name,
     }
   scanner->input_name = input_name;
 
-  g_scanner_freeze_symbol_table (scanner);
   for (i = 0; i < n_symbols; i++)
     g_scanner_add_symbol (scanner, symbols[i].name, GINT_TO_POINTER (symbols[i].token));
-  g_scanner_thaw_symbol_table (scanner);
   
   done = FALSE;
   while (!done)

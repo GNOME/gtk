@@ -1218,7 +1218,7 @@ buffer_pretty_name (Buffer *buffer)
   if (buffer->filename)
     {
       char *p;
-      char *result = g_strdup (g_basename (buffer->filename));
+      char *result = g_path_get_basename (buffer->filename);
       p = strchr (result, '/');
       if (p)
 	*p = '\0';

@@ -1,3 +1,17 @@
+2000-09-05  Sebastian Wilhelmi  <wilhelmi@ira.uka.de>
+
+	* gtk/gtkrc.c (gtk_rc_parse_file): Use g_path_get_dirname instead
+	of g_dirname, which is deprecated.
+	(gtk_rc_parse_any): Removed calls to
+	g_scanner_{freeze,thaw}_symbol_table, which are deprecated.
+
+	* gtk/gtkbindings.c (binding_entry_new, binding_entry_destroy):
+	Removed calls to g_hash_table_{freeze,thaw}, as they are
+	deprecated now.
+
+	* gtk/testtext.c (buffer_pretty_name): Use g_path_get_basename
+	instead of g_basename.
+	
 2000-09-04 Elliot Lee <sopwith@redhat.com>
 	* gdk/gdkpixbuf.h: Put text after #endif inside a comment to avoid ANSI warning.
 
