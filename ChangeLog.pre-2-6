@@ -1,3 +1,22 @@
+Sun May 13 12:01:12 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* autogen.sh (have_automake): Require libtool-1.4,
+	automake-1.4p1.
+
+	* acinclude.m4: Remove libtool macros.
+
+	* gdk-pixbuf/Makefile.am: Add dependencies to loade
+	modules.
+
+	* gdk/Makefile.am: Add dependency on libgdk_pixbuf.la
+	for libgdk.
+
+	* gtk/Makefile.am: Add dependency on libgdk_pixbuf.la
+	libgdk.la for libgtk.
+
+	* modules/input/Makefile.am: Make modules have full
+	dependencies.
+
 Wed May 16 14:06:01 2001  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtktreemodel.c (gtk_tree_path_new_from_string): fix bug

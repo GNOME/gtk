@@ -31,6 +31,7 @@ LDFLAGS = @STRIP_BEGIN@ 					\
 	-export-dynamic 					\
 	-rpath @prefix@/lib 					\
 	@LIBTOOL_EXPORT_OPTIONS@				\
+	$(top_builddir)/gdk-pixbuf/libgdk_pixbuf-1.3.la		\
 	@GDK_DEP_LIBS@						\
 	-lm							\
 @STRIP_END@

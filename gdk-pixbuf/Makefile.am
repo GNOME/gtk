@@ -5,12 +5,14 @@ lib_LTLIBRARIES = 		\
 
 loaderdir = $(libdir)/gtk-2.0/$(GTK_VERSION)/loaders
 
+module_libs = libgdk_pixbuf-1.3.la $(GDK_PIXBUF_DEP_LIBS)
+
 #
 # The PNG plugin.
 #
 libpixbufloader_png_la_SOURCES = io-png.c
 libpixbufloader_png_la_LDFLAGS = -avoid-version -module
-libpixbufloader_png_la_LIBADD = $(LIBPNG)
+libpixbufloader_png_la_LIBADD = $(LIBPNG) $(module_libs)
 libpixbufloader_static_png_la_SOURCES = io-png.c
 
 #
@@ -19,7 +21,7 @@ libpixbufloader_static_png_la_SOURCES = io-png.c
 libpixbufloader_static_jpeg_la_SOURCES = io-jpeg.c
 libpixbufloader_jpeg_la_SOURCES = io-jpeg.c
 libpixbufloader_jpeg_la_LDFLAGS = -avoid-version -module
-libpixbufloader_jpeg_la_LIBADD = $(LIBJPEG)
+libpixbufloader_jpeg_la_LIBADD = $(LIBJPEG) $(module_libs)
 
 #
 # The XPM loader
@@ -27,7 +29,7 @@ libpixbufloader_jpeg_la_LIBADD = $(LIBJPEG)
 libpixbufloader_static_xpm_la_SOURCES = io-xpm.c
 libpixbufloader_xpm_la_SOURCES = io-xpm.c
 libpixbufloader_xpm_la_LDFLAGS = -avoid-version -module
-libpixbufloader_xpm_la_LIBADD =
+libpixbufloader_xpm_la_LIBADD = $(module_libs)
 
 #
 # The GIF loader
@@ -35,7 +37,7 @@ libpixbufloader_xpm_la_LIBADD =
 libpixbufloader_static_gif_la_SOURCES = io-gif.c io-gif-animation.c io-gif-animation.h
 libpixbufloader_gif_la_SOURCES = io-gif.c io-gif-animation.c io-gif-animation.h
 libpixbufloader_gif_la_LDFLAGS = -avoid-version -module
-libpixbufloader_gif_la_LIBADD =
+libpixbufloader_gif_la_LIBADD = $(module_libs)
 
 #
 # The ICO loader
@@ -43,7 +45,7 @@ libpixbufloader_gif_la_LIBADD =
 libpixbufloader_static_ico_la_SOURCES = io-ico.c
 libpixbufloader_ico_la_SOURCES = io-ico.c
 libpixbufloader_ico_la_LDFLAGS = -avoid-version -module
-libpixbufloader_ico_la_LIBADD =
+libpixbufloader_ico_la_LIBADD = $(module_libs)
 
 #
 # The RAS loader
@@ -51,7 +53,7 @@ libpixbufloader_ico_la_LIBADD =
 libpixbufloader_static_ras_la_SOURCES = io-ras.c
 libpixbufloader_ras_la_SOURCES = io-ras.c
 libpixbufloader_ras_la_LDFLAGS = -avoid-version -module
-libpixbufloader_ras_la_LIBADD =
+libpixbufloader_ras_la_LIBADD = $(module_libs)
 
 #
 # The TIFF loader
@@ -59,7 +61,7 @@ libpixbufloader_ras_la_LIBADD =
 libpixbufloader_static_tiff_la_SOURCES = io-tiff.c
 libpixbufloader_tiff_la_SOURCES = io-tiff.c
 libpixbufloader_tiff_la_LDFLAGS = -avoid-version -module
-libpixbufloader_tiff_la_LIBADD = $(LIBTIFF)
+libpixbufloader_tiff_la_LIBADD = $(LIBTIFF) $(module_libs)
 
 #
 # The PNM loader
@@ -67,7 +69,7 @@ libpixbufloader_tiff_la_LIBADD = $(LIBTIFF)
 libpixbufloader_static_pnm_la_SOURCES = io-pnm.c
 libpixbufloader_pnm_la_SOURCES = io-pnm.c
 libpixbufloader_pnm_la_LDFLAGS = -avoid-version -module
-libpixbufloader_pnm_la_LIBADD =
+libpixbufloader_pnm_la_LIBADD = $(module_libs)
 
 #
 # The BMP loader
@@ -75,7 +77,7 @@ libpixbufloader_pnm_la_LIBADD =
 libpixbufloader_static_bmp_la_SOURCES = io-bmp.c
 libpixbufloader_bmp_la_SOURCES = io-bmp.c
 libpixbufloader_bmp_la_LDFLAGS = -avoid-version -module
-libpixbufloader_bmp_la_LIBADD =
+libpixbufloader_bmp_la_LIBADD = $(module_libs)
 
 #
 # The WBMP loader
@@ -83,13 +85,15 @@ libpixbufloader_bmp_la_LIBADD =
 libpixbufloader_static_wbmp_la_SOURCES = io-wbmp.c
 libpixbufloader_wbmp_la_SOURCES = io-wbmp.c
 libpixbufloader_wbmp_la_LDFLAGS = -avoid-version -module
+libpixbufloader_wbmp_la_LIBADD = $(module_libs)
 
 #
 # The XBM loader
 #
 libpixbufloader_xbm_la_SOURCES = io-xbm.c
 libpixbufloader_xbm_la_LDFLAGS = -version-info 1:0:0 -module
-libpixbufloader_xbm_la_LIBADD =
+libpixbufloader_xbm_la_LDFLAGS = -avoid-version -module
+libpixbufloader_xbm_la_LIBADD = $(module_libs)
 
 if HAVE_PNG
 PNG_LIB = libpixbufloader-png.la
