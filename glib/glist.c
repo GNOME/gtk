@@ -363,3 +363,55 @@ g_list_foreach (GList	 *list,
       list = list->next;
     }
 }
+
+
+GList*
+g_list_insert_sorted (GList    *list,
+                      gpointer  data,
+                      GCompareFunc  func)
+{
+  GList *tmp_list = list;
+  GList *new_list;
+  gint cmp;
+  
+  if (!list) 
+    {
+      new_list = g_list_alloc();
+      new_list->data = data;
+      return new_list;
+    }
+  
+  cmp = (*func) (tmp_list->data, data);
+  
+  while ((tmp_list->next) && (cmp > 0))
+    {
+      tmp_list = tmp_list->next;
+      cmp = (*func) (tmp_list->data, data);
+    }
+
+  if (cmp == 0)
+    return list;
+  
+  new_list = g_list_alloc();
+  new_list->data = data;
+
+  if ((!tmp_list->next) && (cmp > 0))
+    {
+      tmp_list->next = new_list;
+      new_list->prev = tmp_list;
+      return list;
+    }
+   
+  if (tmp_list->prev)
+    {
+      tmp_list->prev->next = new_list;
+      new_list->prev = tmp_list->prev;
+    }
+  new_list->next = tmp_list;
+  tmp_list->prev = new_list;
+ 
+  if (tmp_list == list)
+    return new_list;
+  else
+    return list;
+}

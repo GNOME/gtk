@@ -397,6 +397,9 @@ GList* g_list_prepend	  (GList     *list,
 GList* g_list_insert	  (GList     *list,
 			   gpointer   data,
 			   gint	      position);
+GList* g_list_insert_sorted (GList   *list,
+			     gpointer data,
+			     GCompareFunc func);			    
 GList* g_list_concat	  (GList     *list1, 
 			   GList     *list2);
 GList* g_list_remove	  (GList     *list,
@@ -415,6 +418,8 @@ void   g_list_foreach	  (GList     *list,
 			   GFunc      func,
 			   gpointer   user_data);
 
+#define g_list_previous(list) (((GList *)list)->prev)
+#define g_list_next(list) (((GList *)list)->next)
 
 /* Singly linked lists
  */
@@ -428,6 +433,9 @@ GSList* g_slist_prepend	    (GSList   *list,
 GSList* g_slist_insert	    (GSList   *list,
 			     gpointer  data,
 			     gint      position);
+GSList* g_slist_insert_sorted (GSList   *list,
+			       gpointer data,
+			       GCompareFunc func);			    
 GSList* g_slist_concat	    (GSList   *list1, 
 			     GSList   *list2);
 GSList* g_slist_remove	    (GSList   *list,
@@ -445,6 +453,7 @@ void	g_slist_foreach	    (GSList   *list,
 			     GFunc     func,
 			     gpointer  user_data);
 
+#define g_slist_next(list) (((GSList *)list)->next)
 
 /* List Allocators
  */

@@ -43,6 +43,29 @@ my_hash_compare (gpointer a,
   return *((gint*) a) == *((gint*) b);
 }
 
+gint 
+my_list_compare_one (gpointer a, gpointer b)
+{
+  gint one = *((gint*)a);
+  gint two = *((gint*)b);
+  return one-two;
+};
+
+gint 
+my_list_compare_two (gpointer a, gpointer b)
+{
+  gint one = *((gint*)a);
+  gint two = *((gint*)b);
+  return two-one;
+};
+
+/* void
+my_list_print (gpointer a, gpointer b)
+{
+  gint three = *((gint*)a);
+  g_print("%d", three);
+}; */
+
 gint
 my_compare (gpointer a,
 	    gpointer b)
@@ -74,6 +97,8 @@ main (int   argc,
   GStringChunk *string_chunk;
   GTimer *timer;
   gint nums[10] = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+  gint morenums[10] = { 8, 9, 7, 0, 3, 2, 5, 1, 4, 6};
+
   gchar *mem[10000], *tmp_string, *tmp_string_2;
   gint i, j;
   GArray *garray;
@@ -96,9 +121,45 @@ main (int   argc,
     {
       t = g_list_nth (list, i);
       if (*((gint*) t->data) != (9 - i))
-	g_error ("failed");
+	g_error ("Regular insert failed");
     }
 
+  g_list_free (list);
+  list = NULL;
+  
+  for (i = 0; i < 10; i++)
+    list = g_list_insert_sorted (list, &morenums[i], my_list_compare_one);
+
+  /*
+  g_print("\n");
+  g_list_foreach (list, my_list_print, NULL);
+  */
+
+  for (i = 0; i < 10; i++)
+    {
+      t = g_list_nth (list, i);
+      if (*((gint*) t->data) != (9 - i))
+         g_error ("Sorted insert failed");
+    }
+    
+  g_list_free (list);
+  list = NULL;
+  
+  for (i = 0; i < 10; i++)
+    list = g_list_insert_sorted (list, &morenums[i], my_list_compare_two);
+
+  /*
+  g_print("\n");
+  g_list_foreach (list, my_list_print, NULL);
+  */
+
+  for (i = 0; i < 10; i++)
+    {
+      t = g_list_nth (list, i);
+      if (*((gint*) t->data) != i)
+         g_error ("Sorted insert failed");
+    }
+    
   g_list_free (list);
 
   g_print ("ok\n");
@@ -119,6 +180,42 @@ main (int   argc,
     }
 
   g_slist_free (slist);
+  slist = NULL;
+
+  for (i = 0; i < 10; i++)
+    slist = g_slist_insert_sorted (slist, &morenums[i], my_list_compare_one);
+
+  /*
+  g_print("\n");
+  g_slist_foreach (slist, my_list_print, NULL);
+  */
+
+  for (i = 0; i < 10; i++)
+    {
+      st = g_slist_nth (slist, i);
+      if (*((gint*) st->data) != (9 - i))
+         g_error ("Sorted insert failed");
+    }
+     
+  g_slist_free(slist);
+  slist = NULL;
+   
+  for (i = 0; i < 10; i++)
+    slist = g_slist_insert_sorted (slist, &morenums[i], my_list_compare_two);
+
+  /*
+  g_print("\n");
+  g_slist_foreach (slist, my_list_print, NULL);
+  */
+
+  for (i = 0; i < 10; i++)
+    {
+      st = g_slist_nth (slist, i);
+      if (*((gint*) st->data) != i)
+         g_error("Sorted insert failed");
+    }
+    
+  g_slist_free(slist);
 
   g_print ("ok\n");
 
