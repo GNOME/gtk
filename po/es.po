@@ -17,8 +17,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: es\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-01-01 14:19+0100\n"
-"PO-Revision-Date: 2005-01-01 14:35+0100\n"
+"POT-Creation-Date: 2005-01-07 22:07+0100\n"
+"PO-Revision-Date: 2005-01-07 22:11+0100\n"
 "Last-Translator: Francisco Javier F. Serrador <serrador@cvs.gnome.org>\n"
 "Language-Team: Spanish <traductores@es.gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -189,20 +189,24 @@ msgstr "Porción malformada en la animación"
 msgid "The ANI image format"
 msgstr "El formato de imagen ANI"
 
-#: gdk-pixbuf/io-bmp.c:225 gdk-pixbuf/io-bmp.c:374
+#: gdk-pixbuf/io-bmp.c:227 gdk-pixbuf/io-bmp.c:383
 msgid "Not enough memory to load bitmap image"
 msgstr "No existe memoria suficiente para cargar el mapa de bits"
 
-#: gdk-pixbuf/io-bmp.c:267
+#: gdk-pixbuf/io-bmp.c:269
 msgid "BMP image has unsupported header size"
 msgstr "La imagen BMP tiene un tamaño de cabecera no soportado"
 
-#: gdk-pixbuf/io-bmp.c:286 gdk-pixbuf/io-bmp.c:311 gdk-pixbuf/io-bmp.c:334
-#: gdk-pixbuf/io-bmp.c:405
+#: gdk-pixbuf/io-bmp.c:288 gdk-pixbuf/io-bmp.c:320 gdk-pixbuf/io-bmp.c:343
+#: gdk-pixbuf/io-bmp.c:424
 msgid "BMP image has bogus header data"
 msgstr "La imagen BMP tiene datos de cabecera erróneos"
 
-#: gdk-pixbuf/io-bmp.c:1132
+#: gdk-pixbuf/io-bmp.c:307
+msgid "Topdown BMP images cannot be compressed"
+msgstr "Las imágenes BMP «Topdown» no se pueden comprimir"
+
+#: gdk-pixbuf/io-bmp.c:1154
 msgid "The BMP image format"
 msgstr "El formato de imagen BMP"
 
@@ -1054,8 +1058,8 @@ msgid ""
 "You can enter an HTML-style hexadecimal color value, or simply a color name "
 "such as 'orange' in this entry."
 msgstr ""
-"Puede introducir en esta entrada un valor de color en estilo HTML hexadecimal, "
-"o simplemente un nombre de color como «orange»."
+"Puede introducir en esta entrada un valor de color en estilo HTML "
+"hexadecimal, o simplemente un nombre de color como «orange»."
 
 #: gtk/gtkcolorsel.c:2022
 msgid "_Palette"
@@ -1087,27 +1091,27 @@ msgstr "_Insertar carácter de control Unicode"
 msgid "Invalid filename: %s"
 msgstr "Nombre de archivo no válido: %s"
 
-#: gtk/gtkfilechooserbutton.c:62 gtk/gtkfilechooserdefault.c:1227
+#: gtk/gtkfilechooserbutton.c:65
+msgid "Select A File"
+msgstr "Seleccione un archivo"
+
+#: gtk/gtkfilechooserbutton.c:66 gtk/gtkfilechooserdefault.c:1229
 #: gtk/gtkpathbar.c:982
 msgid "Home"
 msgstr "Inicio"
 
-#: gtk/gtkfilechooserbutton.c:63 gtk/gtkfilechooserdefault.c:1250
+#: gtk/gtkfilechooserbutton.c:67 gtk/gtkfilechooserdefault.c:1256
 #: gtk/gtkpathbar.c:984
 msgid "Desktop"
 msgstr "Escritorio"
 
 # #-#-#-#-#  memoria.po (memoria 1.0)  #-#-#-#-#
 # src/file-manager/fm-icon-text-window.c:85
-#: gtk/gtkfilechooserbutton.c:64
+#: gtk/gtkfilechooserbutton.c:68
 msgid "(None)"
 msgstr "(Ninguno)"
 
-#: gtk/gtkfilechooserbutton.c:349
-msgid "Select a File"
-msgstr "Seleccione un archivo"
-
-#: gtk/gtkfilechooserbutton.c:1503
+#: gtk/gtkfilechooserbutton.c:1515
 msgid "Other..."
 msgstr "Otro..."
 
@@ -1135,181 +1139,190 @@ msgstr "Nombre de archivo inválido"
 msgid "The folder contents could not be displayed"
 msgstr "El contenido de la carpeta no se pudo mostrar"
 
-#: gtk/gtkfilechooserdefault.c:2087
+#: gtk/gtkfilechooserdefault.c:1119
+#, c-format
+msgid "Could not get information about '%s': %s"
+msgstr "No se ha podido obtener información acerca del archivo «%s» : %s"
+
+#: gtk/gtkfilechooserdefault.c:2095
 #, c-format
 msgid "Add the folder '%s' to the bookmarks"
 msgstr "Añadir la carpeta «%s» a los marcadores"
 
-#: gtk/gtkfilechooserdefault.c:2128
+#: gtk/gtkfilechooserdefault.c:2136
 msgid "Add the current folder to the bookmarks"
 msgstr "Añadir la carpeta actual a los marcadores"
 
-#: gtk/gtkfilechooserdefault.c:2130
+#: gtk/gtkfilechooserdefault.c:2138
 msgid "Add the selected folders to the bookmarks"
 msgstr "Añadir las carpetas seleccionadas a los marcadores"
 
-#: gtk/gtkfilechooserdefault.c:2170
+#: gtk/gtkfilechooserdefault.c:2178
 #, c-format
 msgid "Remove the bookmark '%s'"
 msgstr "Quitar el marcador «%s»"
 
-#: gtk/gtkfilechooserdefault.c:2583
+#: gtk/gtkfilechooserdefault.c:2591
 #, c-format
 msgid "Could not add a bookmark for '%s' because it is an invalid path name."
 msgstr "No se pudo añadir un marcador para «%s» porque es un nombre de ruta inválido."
 
-#: gtk/gtkfilechooserdefault.c:2761
+#: gtk/gtkfilechooserdefault.c:2769
 msgid "Shortcuts"
 msgstr "Atajos"
 
-#: gtk/gtkfilechooserdefault.c:2815
+#: gtk/gtkfilechooserdefault.c:2823
 msgid "Folder"
 msgstr "Carpeta"
 
-#: gtk/gtkfilechooserdefault.c:2867 gtk/gtkstock.c:295
+#: gtk/gtkfilechooserdefault.c:2875 gtk/gtkstock.c:295
 msgid "_Add"
 msgstr "_Añadir"
 
-#: gtk/gtkfilechooserdefault.c:2874
+#: gtk/gtkfilechooserdefault.c:2882
 msgid "Add the selected folder to the bookmarks"
 msgstr "Añadir la carpeta seleccionada a los marcadores"
 
-#: gtk/gtkfilechooserdefault.c:2879 gtk/gtkstock.c:352
+#: gtk/gtkfilechooserdefault.c:2887 gtk/gtkstock.c:352
 msgid "_Remove"
 msgstr "_Quitar"
 
-#: gtk/gtkfilechooserdefault.c:2886
+#: gtk/gtkfilechooserdefault.c:2894
 msgid "Remove the selected bookmark"
 msgstr "Quitar el marcador seleccionado"
 
-#: gtk/gtkfilechooserdefault.c:2981
+#: gtk/gtkfilechooserdefault.c:2997
 msgid "_Add to Shortcuts"
 msgstr "_Añadir a los enlaces"
 
-#: gtk/gtkfilechooserdefault.c:2995
+#: gtk/gtkfilechooserdefault.c:3007
+msgid "Open _Location"
+msgstr "Abrir _dirección"
+
+#: gtk/gtkfilechooserdefault.c:3019
 msgid "Show _Hidden Files"
 msgstr "Mostrar archivos _ocultos"
 
-#: gtk/gtkfilechooserdefault.c:3119 gtk/gtkfilesel.c:767
+#: gtk/gtkfilechooserdefault.c:3143 gtk/gtkfilesel.c:767
 msgid "Files"
 msgstr "Archivos"
 
-#: gtk/gtkfilechooserdefault.c:3150
+#: gtk/gtkfilechooserdefault.c:3174
 msgid "Name"
 msgstr "Nombre"
 
-#: gtk/gtkfilechooserdefault.c:3175
+#: gtk/gtkfilechooserdefault.c:3199
 msgid "Size"
 msgstr "Tamaño"
 
-#: gtk/gtkfilechooserdefault.c:3188
+#: gtk/gtkfilechooserdefault.c:3212
 msgid "Modified"
 msgstr "Modificado"
 
-#: gtk/gtkfilechooserdefault.c:3220
+#: gtk/gtkfilechooserdefault.c:3244
 msgid "Select which types of files are shown"
 msgstr "Seleccione qué tipos de archivos se muestran"
 
 #. Create Folder
-#: gtk/gtkfilechooserdefault.c:3256
+#: gtk/gtkfilechooserdefault.c:3280
 msgid "Create Fo_lder"
 msgstr "Crear _carpeta"
 
 #. Name entry
-#: gtk/gtkfilechooserdefault.c:3374
+#: gtk/gtkfilechooserdefault.c:3398
 msgid "_Name:"
 msgstr "_Nombre:"
 
-#: gtk/gtkfilechooserdefault.c:3414
+#: gtk/gtkfilechooserdefault.c:3438
 msgid "_Browse for other folders"
 msgstr "_Buscar otras carpetas"
 
-#: gtk/gtkfilechooserdefault.c:3664
+#: gtk/gtkfilechooserdefault.c:3688
 msgid "Save in _folder:"
 msgstr "Guardar en una _carpeta:"
 
-#: gtk/gtkfilechooserdefault.c:3666
+#: gtk/gtkfilechooserdefault.c:3690
 msgid "Create in _folder:"
 msgstr "Crear en _carpeta:"
 
-#: gtk/gtkfilechooserdefault.c:4490
+#: gtk/gtkfilechooserdefault.c:4523
 msgid "Cannot change to folder because it is not local"
 msgstr "No se pudo cambiar a la carpeta porque no es local"
 
-#: gtk/gtkfilechooserdefault.c:5015
+#: gtk/gtkfilechooserdefault.c:5048
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "El atajo %s no existe"
 
-#: gtk/gtkfilechooserdefault.c:5475
+#: gtk/gtkfilechooserdefault.c:5508
 #, c-format
 msgid "Could not mount %s"
 msgstr "No se pudo montar %s"
 
-#: gtk/gtkfilechooserdefault.c:5768
+#: gtk/gtkfilechooserdefault.c:5802
 msgid "Type name of new folder"
 msgstr "Nombre del tipo de la carpeta nueva"
 
-#: gtk/gtkfilechooserdefault.c:5810
+#: gtk/gtkfilechooserdefault.c:5844
 #, c-format
 msgid "%d byte"
 msgid_plural "%d bytes"
 msgstr[0] "%d byte"
 msgstr[1] "%d bytes"
 
-#: gtk/gtkfilechooserdefault.c:5812
+#: gtk/gtkfilechooserdefault.c:5846
 #, c-format
 msgid "%.1f K"
-msgstr "%.1f K"
+msgstr "%.1f Kib"
 
-#: gtk/gtkfilechooserdefault.c:5814
+#: gtk/gtkfilechooserdefault.c:5848
 #, c-format
 msgid "%.1f M"
-msgstr "%.1f M"
+msgstr "%.1f Mib"
 
-#: gtk/gtkfilechooserdefault.c:5816
+#: gtk/gtkfilechooserdefault.c:5850
 #, c-format
 msgid "%.1f G"
-msgstr "%.1f G"
+msgstr "%.1f Gib"
 
-#: gtk/gtkfilechooserdefault.c:5868
+#: gtk/gtkfilechooserdefault.c:5902
 msgid "Today"
 msgstr "Hoy"
 
-#: gtk/gtkfilechooserdefault.c:5870
+#: gtk/gtkfilechooserdefault.c:5904
 msgid "Yesterday"
 msgstr "Ayer"
 
-#: gtk/gtkfilechooserdefault.c:5881
+#: gtk/gtkfilechooserdefault.c:5915
 msgid "Unknown"
 msgstr "Desconocido"
 
-#: gtk/gtkfilechooserdefault.c:5951
+#: gtk/gtkfilechooserdefault.c:5985
 msgid "Cannot change folder"
 msgstr "No se pudo cambiar la carpeta"
 
-#: gtk/gtkfilechooserdefault.c:5952
+#: gtk/gtkfilechooserdefault.c:5986
 msgid "The folder you specified is an invalid path."
 msgstr "La carpeta que especificó es una ruta inválida."
 
-#: gtk/gtkfilechooserdefault.c:5991
+#: gtk/gtkfilechooserdefault.c:6025
 #, c-format
 msgid "Could not build file name from '%s' and '%s'"
 msgstr "No se pudo construir el nombre del archivo de «%s» y «%s»"
 
-#: gtk/gtkfilechooserdefault.c:6027
+#: gtk/gtkfilechooserdefault.c:6061
 msgid "Could not select item"
 msgstr "No se pudo seleccionar el elemento"
 
-#: gtk/gtkfilechooserdefault.c:6067
+#: gtk/gtkfilechooserdefault.c:6101
 msgid "Open Location"
 msgstr "Abrir dirección"
 
-#: gtk/gtkfilechooserdefault.c:6074
+#: gtk/gtkfilechooserdefault.c:6108
 msgid "Save in Location"
 msgstr "Guardar en ubicación"
 
-#: gtk/gtkfilechooserdefault.c:6098
+#: gtk/gtkfilechooserdefault.c:6132
 msgid "_Location:"
 msgstr "_Dirección:"
 
@@ -1499,17 +1512,18 @@ msgid "(Empty)"
 msgstr "(vacío)"
 
 #: gtk/gtkfilesystemunix.c:415 gtk/gtkfilesystemunix.c:429
-#: gtk/gtkfilesystemunix.c:626
+#: gtk/gtkfilesystemunix.c:626 gtk/gtkfilesystemwin32.c:482
+#: gtk/gtkfilesystemwin32.c:495 gtk/gtkfilesystemwin32.c:1530
 #, c-format
 msgid "Error getting information for '%s': %s"
 msgstr "Error al obtener información para «%s» : %s"
 
-#: gtk/gtkfilesystemunix.c:495
+#: gtk/gtkfilesystemunix.c:495 gtk/gtkfilesystemwin32.c:537
 #, c-format
 msgid "Error creating directory '%s': %s"
 msgstr "Error al crear la carpeta «%s» : %s"
 
-#: gtk/gtkfilesystemunix.c:575 gtk/gtkfilesystemwin32.c:515
+#: gtk/gtkfilesystemunix.c:575 gtk/gtkfilesystemwin32.c:597
 msgid "This file system does not support mounting"
 msgstr "Este sistema de archivo no soporta montaje"
 
@@ -1531,7 +1545,7 @@ msgstr ""
 "El nombre «%s» no es válido debido a que contiene el carácter «%s». Por "
 "favor, use un nombre diferente."
 
-#: gtk/gtkfilesystemunix.c:1443
+#: gtk/gtkfilesystemunix.c:1443 gtk/gtkfilesystemwin32.c:1004
 #, c-format
 msgid "Bookmark saving failed: %s"
 msgstr "Ha fallado el guardado del marcador: %s"
@@ -1550,30 +1564,6 @@ msgstr "«%s» no existe en la lista de marcadores"
 #, c-format
 msgid "Error getting information for '%s'"
 msgstr "Error al obtener información para «%s»"
-
-#: gtk/gtkfilesystemwin32.c:407
-#, c-format
-msgid "%s: %s"
-msgstr "%s: %s"
-
-#: gtk/gtkfilesystemwin32.c:414 gtk/gtkfilesystemwin32.c:1384
-#, c-format
-msgid "error getting information for '%s': %s"
-msgstr "error al obtener información para «%s» : %s"
-
-#: gtk/gtkfilesystemwin32.c:455
-#, c-format
-msgid "error creating directory '%s': %s"
-msgstr "error al crear la carpeta «%s» : %s"
-
-#: gtk/gtkfilesystemwin32.c:928
-#, c-format
-msgid "Bookmark saving failed (%s)"
-msgstr "Se ha producido un error al guardar el marcador (%s)"
-
-#: gtk/gtkfilesystemwin32.c:1131
-msgid "This file system does not support icons for everything"
-msgstr "Este sistema de archivos no soporta iconos para todo"
 
 #: gtk/gtkfontbutton.c:178 gtk/gtkfontbutton.c:295
 msgid "Pick a Font"
@@ -1631,7 +1621,7 @@ msgstr "Valor _gamma"
 msgid "Error loading icon: %s"
 msgstr "Ocurrió un error al cargar el icono: %s"
 
-#: gtk/gtkicontheme.c:1262
+#: gtk/gtkicontheme.c:1263
 #, c-format
 msgid ""
 "Could not find the icon '%s'. The '%s' theme\n"
@@ -1644,7 +1634,7 @@ msgstr ""
 "Puede obtener una copia desde:\n"
 "\t%s"
 
-#: gtk/gtkicontheme.c:1327
+#: gtk/gtkicontheme.c:1328
 #, c-format
 msgid "Icon '%s' not present in theme"
 msgstr "El icono «%s» no está presente en el tema"
@@ -2245,6 +2235,21 @@ msgstr "Método de la entrada X"
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "No se ha podido obtener información para el archivo «%s» : %s"
+
+#~ msgid "%s: %s"
+#~ msgstr "%s: %s"
+
+#~ msgid "error getting information for '%s': %s"
+#~ msgstr "error al obtener información para «%s» : %s"
+
+#~ msgid "error creating directory '%s': %s"
+#~ msgstr "error al crear la carpeta «%s» : %s"
+
+#~ msgid "Bookmark saving failed (%s)"
+#~ msgstr "Se ha producido un error al guardar el marcador (%s)"
+
+#~ msgid "This file system does not support icons for everything"
+#~ msgstr "Este sistema de archivos no soporta iconos para todo"
 
 #~ msgid ""
 #~ "Could not change the current folder to %s:\n"
