@@ -1,3 +1,8 @@
+2000-10-12  Yukihiro Nakai  <nakai@gnome.gr.jp>
+
+	* zh_CN.GB2312: Initial Chinese(GB2312) translation
+	                from Wu Yulun.
+
 2000-07-10  Jesus Bravo Alvarez  <jba@pobox.com>
 
 	* gl.po: Fixed some strings.

@@ -1,0 +1,310 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: gtk+ 1.1.7 \n"
+"POT-Creation-Date:\n"
+"PO-Revision-Date: 1999-01-31\n"
+"Last-Translator: Wu Yulun <migr@operamail.com>\n"
+"Language-Team: Chinese <zh@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=gb2312\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "%i fonts available with a total of %i styles."
+msgstr "有 %i 种字体可用，共 %i 种形式。"
+
+msgid "(disabled)"
+msgstr "(禁止)"
+
+msgid "(unknown)"
+msgstr "(未知)"
+
+msgid "*"
+msgstr "*"
+
+msgid "--- No Tip ---"
+msgstr "--- 无提示 ---"
+
+msgid "Actual Font Name:"
+msgstr "字体真实名称:"
+
+msgid "Actual Value"
+msgstr "真实值"
+
+msgid "Add Style:"
+msgstr "增加式样:"
+
+msgid "Apply"
+msgstr "应用"
+
+msgid "Average Width:"
+msgstr "平均宽度:"
+
+msgid "Axes"
+msgstr "坐标"
+
+msgid "Bitmap"
+msgstr "位图"
+
+msgid "Blue:"
+msgstr "蓝:"
+
+msgid "Cancel"
+msgstr "取消"
+
+msgid "Charset:"
+msgstr "字符集:"
+
+msgid "Close"
+msgstr "关闭"
+
+msgid "Create"
+msgstr "创建"
+
+msgid "Create Dir"
+msgstr "创建目录"
+
+msgid "Create Directory"
+msgstr "创建目录"
+
+msgid "Delete"
+msgstr "删除"
+
+msgid "Delete File"
+msgstr "删除文件"
+
+msgid "Device:"
+msgstr "设备:"
+
+msgid "Directories"
+msgstr "目录"
+
+msgid "Directory name:"
+msgstr "目录名称:"
+
+msgid "Directory unreadable: %s"
+msgstr "无法读取目录: %s"
+
+msgid "Disabled"
+msgstr "禁止"
+
+msgid "Error"
+msgstr "错误"
+
+msgid "Family:"
+msgstr "家族:"
+
+msgid "Files"
+msgstr "文件"
+
+msgid "Filter"
+msgstr "过滤器"
+
+msgid "Font"
+msgstr "字体"
+
+msgid "Font Information"
+msgstr "字体信息"
+
+msgid "Font Property"
+msgstr "字体属性"
+
+msgid "Font Selection"
+msgstr "字体选择"
+
+msgid "Font Style:"
+msgstr "字体式样:"
+
+msgid "Font Types:"
+msgstr "字体类型:"
+
+msgid "Font:"
+msgstr "字体:"
+
+msgid "Font: (Filter Applied)"
+msgstr "字体: (使用过滤器)"
+
+msgid "Foundry:"
+msgstr "制作:"
+
+msgid "Gamma"
+msgstr "Gamma"
+
+msgid "Gamma value"
+msgstr "Gamma 值"
+
+msgid "Green:"
+msgstr "绿:"
+
+msgid "Help"
+msgstr "帮助"
+
+msgid "Hue:"
+msgstr "色调:"
+
+msgid "Input"
+msgstr "输入"
+
+msgid "Keys"
+msgstr "键"
+
+msgid "MAX_FONTS exceeded. Some fonts may be missing."
+msgstr "超过 MAX_FONTS 数，某些字体可能被遗漏。"
+
+msgid "Metric:"
+msgstr "量度:"
+
+msgid "Mode: "
+msgstr "模式:"
+
+msgid "No input devices"
+msgstr "无输入设备"
+
+msgid "OK"
+msgstr "确定"
+
+msgid "Opacity:"
+msgstr "透明度:"
+
+msgid "Page %u"
+msgstr "第 %u 页"
+
+msgid "Pixel Size:"
+msgstr "像素大小:"
+
+msgid "Pixels"
+msgstr "像素"
+
+msgid "Point Size:"
+msgstr "点大小:"
+
+msgid "Points"
+msgstr "点"
+
+msgid "Pressure"
+msgstr "压力"
+
+msgid "Preview:"
+msgstr "预览:"
+
+msgid "Red:"
+msgstr "红:"
+
+msgid "Rename"
+msgstr "重命名"
+
+msgid "Rename File"
+msgstr "重命名文件"
+
+msgid "Requested Font Name:"
+msgstr "所需字体名:"
+
+msgid "Requested Value"
+msgstr "所需值"
+
+msgid "Reset Filter"
+msgstr "重置过滤器"
+
+msgid "Resolution X:"
+msgstr "X 轴解析度:"
+
+msgid "Resolution Y:"
+msgstr "Y 轴解析度:"
+
+msgid "Saturation:"
+msgstr "饱和度:"
+
+msgid "Save"
+msgstr "保存"
+
+msgid "Scalable"
+msgstr "可缩放"
+
+msgid "Scaled Bitmap"
+msgstr "可缩放位图"
+
+msgid "Screen"
+msgstr "屏幕"
+
+msgid "Selection: "
+msgstr "选择: "
+
+msgid "Set Width:"
+msgstr "设置宽度:"
+
+msgid "Size:"
+msgstr "大小:"
+
+msgid "Slant:"
+msgstr "斜体:"
+
+msgid "Spacing:"
+msgstr "间距:"
+
+msgid "The selected font is not a valid font."
+msgstr "选定的字体无效。"
+
+msgid "The selected font is not available."
+msgstr "选定的字体不可用。"
+
+msgid "This is a 2-byte font and may not be displayed correctly."
+msgstr "该字体为双字节字体，可能无法正确显示。"
+
+msgid "Unable to locate image file in pixmap_path: \"%s\""
+msgstr "无法通过 pixmap_path 找到图像: \"%s\""
+
+msgid "Unable to locate image file in pixmap_path: \"%s\" line %d"
+msgstr "无法通过 pixmap_path 找到图像: \"%s\" 第 %d 行"
+
+msgid "Unable to locate loadable module in module_path: \"%s\","
+msgstr "无法通过 module_path 装载组件: \"%s\","
+
+msgid "Value:"
+msgstr "值:"
+
+msgid "Weight:"
+msgstr "宽度:"
+
+msgid "Window"
+msgstr "窗口"
+
+msgid "X Tilt"
+msgstr "X 向倾斜"
+
+msgid "Y Tilt"
+msgstr "Y 向倾斜"
+
+msgid "char cell"
+msgstr "字符元"
+
+msgid "clear"
+msgstr "清除"
+
+msgid "italic"
+msgstr "斜体"
+
+msgid "monospaced"
+msgstr "定宽"
+
+msgid "none"
+msgstr "无"
+
+msgid "oblique"
+msgstr "倾斜"
+
+msgid "other"
+msgstr "其它"
+
+msgid "proportional"
+msgstr "成比例的"
+
+msgid "regular"
+msgstr "规则"
+
+msgid "reverse italic"
+msgstr "反斜体"
+
+msgid "reverse oblique"
+msgstr "反倾斜"
+
+msgid "roman"
+msgstr "罗马体"
