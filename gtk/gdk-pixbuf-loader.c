@@ -25,6 +25,7 @@
 
 #include "gdk-pixbuf-loader.h"
 #include "gdk-pixbuf-io.h"
+#include <gtk/gtksignal.h>
 
 enum {
 	AREA_UPDATED,
@@ -58,10 +59,9 @@ static guint pixbuf_loader_signals[LAST_SIGNAL] = { 0 };
 /* our marshaller */
 typedef void (*GtkSignal_NONE__INT_INT_INT_INT) (GtkObject * object,
 							 gint arg1,
-							 gpointer arg2,
+							 gint arg2,
 							 gint arg3,
 							 gint arg4,
-							 gint arg5,
 							 gpointer user_data);
 void
 gtk_marshal_NONE__INT_INT_INT_INT (GtkObject * object,
@@ -184,7 +184,7 @@ gdk_pixbuf_loader_prepare (GdkPixbuf *pixbuf, gpointer loader)
 	g_assert (priv->pixbuf == NULL);
 
 	priv->pixbuf = pixbuf;
-	gtk_signal_emit (GTK_OBJECT (loader), druid_page_signals[AREA_PREPARED]);
+	gtk_signal_emit (GTK_OBJECT (loader), pixbuf_loader_signals[AREA_PREPARED]);
 }
 
 /* Public functions */
@@ -315,7 +315,7 @@ gdk_pixbuf_loader_close (GdkPixbufLoader *loader)
 	g_return_if_fail (priv->closed == FALSE);
 
 	/* We have less the 128 bytes in the image.  Flush it, and keep going. */
-	if (priv->module == NULL) {
+	if (priv->image_module == NULL) {
 		priv->image_module = gdk_pixbuf_get_module (priv->buf, priv->buf_offset);
 		if (priv->image_module &&
 		    ((priv->image_module->begin_load == NULL) ||
@@ -331,7 +331,7 @@ gdk_pixbuf_loader_close (GdkPixbufLoader *loader)
 	}
 
 	if (priv->image_module && priv->image_module->stop_load)
-		(priv->image_module->stop_load) (loader->context);
+		(priv->image_module->stop_load) (priv->context);
 
 	priv->closed = TRUE;
 }

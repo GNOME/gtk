@@ -136,17 +136,17 @@ pixbuf_check_ppm (guchar *buffer, int size)
 #endif
 
 ModuleType file_formats [] = {
-	{ "png",  pixbuf_check_png,  NULL, NULL, NULL },
-	{ "jpeg", pixbuf_check_jpeg, NULL, NULL, NULL },
-	{ "tiff", pixbuf_check_tiff, NULL, NULL, NULL },
-	{ "gif",  pixbuf_check_gif,  NULL, NULL, NULL },
+	{ "png",  pixbuf_check_png,  NULL, NULL, NULL, NULL, NULL, NULL },
+	{ "jpeg", pixbuf_check_jpeg, NULL, NULL, NULL, NULL, NULL, NULL },
+	{ "tiff", pixbuf_check_tiff, NULL, NULL, NULL, NULL, NULL, NULL },
+	{ "gif",  pixbuf_check_gif,  NULL, NULL, NULL, NULL, NULL, NULL },
 #define XPM_FILE_FORMAT_INDEX 4
-	{ "xpm",  pixbuf_check_xpm,  NULL, NULL, NULL },
+	{ "xpm",  pixbuf_check_xpm,  NULL, NULL, NULL, NULL, NULL, NULL },
 #if 0
-	{ "bmp",  pixbuf_check_bmp,  NULL, NULL, NULL },
-	{ "ppm",  pixbuf_check_ppm,  NULL, NULL, NULL },
+	{ "bmp",  pixbuf_check_bmp,  NULL, NULL, NULL, NULL, NULL, NULL },
+	{ "ppm",  pixbuf_check_ppm,  NULL, NULL, NULL, NULL, NULL, NULL },
 #endif
-	{ NULL, NULL, NULL, NULL }
+	{ NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL }
 };
 
 static void
@@ -155,7 +155,7 @@ image_handler_load (ModuleType *image_module)
 	char *module_name;
 	char *path;
 	GModule *module;
-	void *load_sym;
+	gpointer load_sym;
 
         g_return_if_fail(image_module->module == NULL);
 
@@ -177,6 +177,15 @@ image_handler_load (ModuleType *image_module)
 
         if (g_module_symbol (module, "image_load_xpm_data", &load_sym))
 		image_module->load_xpm_data = load_sym;
+
+        if (g_module_symbol (module, "image_begin_load", &load_sym))
+		image_module->begin_load = load_sym;
+
+        if (g_module_symbol (module, "image_stop_load", &load_sym))
+		image_module->stop_load = load_sym;
+
+        if (g_module_symbol (module, "image_load_increment", &load_sym))
+		image_module->load_increment = load_sym;
 }
 
 
