@@ -125,10 +125,15 @@ static GType gtk_button_child_type    (GtkContainer     *container);
 static void gtk_button_finish_activate (GtkButton *button,
 					gboolean   do_it);
 
-static GObject*	gtk_button_constructor     (GType                  type,
-					    guint                  n_construct_properties,
-					    GObjectConstructParam *construct_params);
+static GObject*	gtk_button_constructor (GType                  type,
+					guint                  n_construct_properties,
+					GObjectConstructParam *construct_params);
 static void gtk_button_construct_child (GtkButton             *button);
+static void gtk_button_state_changed   (GtkWidget             *widget,
+					GtkStateType           previous_state);
+static void gtk_button_grab_notify     (GtkWidget             *widget,
+					gboolean               was_grabbed);
+
 
 
 static GtkBinClass *parent_class = NULL;
@@ -196,6 +201,8 @@ gtk_button_class_init (GtkButtonClass *klass)
   widget_class->key_release_event = gtk_button_key_release;
   widget_class->enter_notify_event = gtk_button_enter_notify;
   widget_class->leave_notify_event = gtk_button_leave_notify;
+  widget_class->state_changed = gtk_button_state_changed;
+  widget_class->grab_notify = gtk_button_grab_notify;
 
   container_class->child_type = gtk_button_child_type;
   container_class->add = gtk_button_add;
@@ -1645,4 +1652,30 @@ gtk_button_screen_changed (GtkWidget *widget,
     priv->settings = NULL;
 
   show_image_change_notify (GTK_BUTTON (widget));
+}
+
+static void
+gtk_button_state_changed (GtkWidget    *widget,
+                          GtkStateType  previous_state)
+{
+  GtkButton *button = GTK_BUTTON (widget);
+
+  if (!GTK_WIDGET_IS_SENSITIVE (widget))
+    {
+      button->in_button = FALSE;
+      gtk_real_button_released (button);
+    }
+}
+
+static void
+gtk_button_grab_notify (GtkWidget *widget,
+			gboolean   was_grabbed)
+{
+  GtkButton *button = GTK_BUTTON (widget);
+
+  if (!was_grabbed)
+    {
+      button->in_button = FALSE;
+      gtk_real_button_released (button);
+    }
 }

@@ -1,5 +1,11 @@
 2004-09-26  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkbutton.c: Revert the button state to !button_down,
+	if we're missing the release event due to grab shadowing
+	or insensitivation.
+
+	* gtk/gtkpathbar.c: Make the slider buttons scroll.
+
 	* gtk/gtkfilechooserdefault.c (shortcuts_remove_rows): Remove 
 	debug spew.
 	(bookmarks_check_remove_sensitivity): Don't free an uninitialized
