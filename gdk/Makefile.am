@@ -43,8 +43,8 @@ gdkinclude_HEADERS = \
 	gdktypes.h	\
 	gdkx.h
 
-libgdk_la_LDFLAGS = -version-info 1:0:0 @x_ldflags@
-libgdk_la_LIBADD = @x_libs@
+libgdk_la_LDFLAGS = -version-info 1:0:0 \
+	@x_ldflags@ @x_libs@
 
 INCLUDES = -I$(top_srcdir) -I$(top_srcdir)/glib @x_cflags@ 
 
@@ -55,8 +55,8 @@ bin_PROGRAMS = @xinput_progs@
 gxid_SOURCES = gxid.c
 
 gxid_LDADD = \
-	@x_ldflags@				\
-	@x_libs@				\
+	@x_ldflags@	\
+	@x_libs@	\
 	-lm
 
 BUILT_SOURCES = gdkcursors.h gdkkeysyms.h
