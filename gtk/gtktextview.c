@@ -2123,6 +2123,7 @@ changed_handler (GtkTextLayout *layout,
 
       if (gdk_rectangle_intersect (&redraw_rect, &visible_rect, &redraw_rect))
         {
+          redraw_rect.x -= text_view->xoffset;
           redraw_rect.y -= text_view->yoffset;
           text_window_invalidate_rect (text_view->text_window,
                                        &redraw_rect);

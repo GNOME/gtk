@@ -1,5 +1,11 @@
 2000-11-15  Havoc Pennington  <hp@redhat.com>
 
+	* gtk/gtktextview.c (changed_handler): offset redraw rect by
+	xoffset in addition to yoffset, so horizontal scrolling doesn't
+	break redraws
+
+2000-11-15  Havoc Pennington  <hp@redhat.com>
+
 	* gtk/gtktextdisplay.c (gtk_text_layout_draw): Remove extra pixel
 	from the cursor
 	(render_layout_line): fix reversed test that caused weird
