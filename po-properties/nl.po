@@ -17,8 +17,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-02-24 19:38-0500\n"
-"PO-Revision-Date: 2004-02-19 23:13+0100\n"
+"POT-Creation-Date: 2004-02-24 05:17+0100\n"
+"PO-Revision-Date: 2004-02-26 11:52+0100\n"
 "Last-Translator: Tino Meinen <a.t.meinen@chello.nl>\n"
 "Language-Team: Dutch <vertaling@nl.linux.org>\n"
 "MIME-Version: 1.0\n"
@@ -650,12 +650,11 @@ msgstr ""
 
 #: gtk/gtkbutton.c:375
 msgid "Show button images"
-msgstr ""
+msgstr "Knopafbeeldingen tonen"
 
 #: gtk/gtkbutton.c:376
-#, fuzzy
 msgid "Whether stock icons should be shown in buttons"
-msgstr "Of tabs weergegeven worden of niet"
+msgstr "Of standaard pictogrammen in de knoppen worden getoond"
 
 #: gtk/gtkcalendar.c:464
 msgid "Year"
@@ -1028,9 +1027,10 @@ msgstr "Doorstreping"
 msgid "Whether to strike through the text"
 msgstr "Of de tekst doorstreept moet worden"
 
+#. GRUT modified this item
 #: gtk/gtkcellrenderertext.c:377 gtk/gtktexttag.c:471
 msgid "Underline"
-msgstr "Onderstreep"
+msgstr "Onderstrepen"
 
 #: gtk/gtkcellrenderertext.c:378 gtk/gtktexttag.c:472
 msgid "Style of underline for this text"
@@ -1343,54 +1343,54 @@ msgstr "Waarde in lijst"
 msgid "Whether entered values must already be present in the list"
 msgstr "Of ingegeven waardes altijd in de lijst aanwezig moeten zijn"
 
-#: gtk/gtkcombobox.c:400
+#: gtk/gtkcombobox.c:349
 msgid "ComboBox model"
 msgstr "ComboBox model"
 
-#: gtk/gtkcombobox.c:401
+#: gtk/gtkcombobox.c:350
 msgid "The model for the combo box"
 msgstr "Het model voor de combo-box"
 
-#: gtk/gtkcombobox.c:408
+#: gtk/gtkcombobox.c:357
 msgid "Wrap width"
 msgstr "Breedte laten doorlopen"
 
 # grid: netwerk, rooster, raster
 # layouting: indeling
-#: gtk/gtkcombobox.c:409
+#: gtk/gtkcombobox.c:358
 msgid "Wrap width for layouting the items in a grid"
 msgstr "Breedte laten doorlopen om de items in te delen op een rooster"
 
-#: gtk/gtkcombobox.c:418
+#: gtk/gtkcombobox.c:367
 msgid "Row span column"
 msgstr "'Row span' kolom"
 
-#: gtk/gtkcombobox.c:419
+#: gtk/gtkcombobox.c:368
 msgid "TreeModel column containing the row span values"
 msgstr "TreeModel-kolom die de 'row span' waarden bevat"
 
-#: gtk/gtkcombobox.c:428
+#: gtk/gtkcombobox.c:377
 msgid "Column span column"
 msgstr "'Column span' kolom"
 
-#: gtk/gtkcombobox.c:429
+#: gtk/gtkcombobox.c:378
 msgid "TreeModel column containing the column span values"
 msgstr "TreeModel-kolom die de 'colomn span' waarden bevat"
 
-#: gtk/gtkcombobox.c:438
+#: gtk/gtkcombobox.c:387
 msgid "Active item"
 msgstr "Actieve item"
 
-#: gtk/gtkcombobox.c:439
+#: gtk/gtkcombobox.c:388
 msgid "The item which is currently active"
 msgstr "Het item dat momenteel actief is"
 
 # voorkomen
-#: gtk/gtkcombobox.c:447
+#: gtk/gtkcombobox.c:396
 msgid "ComboBox appareance"
 msgstr "ComboBox uiterlijk"
 
-#: gtk/gtkcombobox.c:448
+#: gtk/gtkcombobox.c:397
 msgid "ComboBox appearance, where TRUE means Windows-style."
 msgstr "ComboBox uiterlijk, indien WAAR wordt Windows-stijl gebruikt."
 
@@ -2041,14 +2041,12 @@ msgid "Child widget to appear next to the menu text"
 msgstr "Dochterwidget dat naast de menutekst verschijnt"
 
 #: gtk/gtkimagemenuitem.c:143
-#, fuzzy
 msgid "Show menu images"
-msgstr "Weeknummers tonen"
+msgstr "Menu-afbeeldingen tonen"
 
 #: gtk/gtkimagemenuitem.c:144
-#, fuzzy
 msgid "Whether images should be shown in menus"
-msgstr "Of tabs weergegeven worden of niet"
+msgstr "Of afbeeldingen in menus worden getoond"
 
 #: gtk/gtkinvisible.c:114 gtk/gtkwindow.c:542
 msgid "Screen"
@@ -3077,43 +3075,44 @@ msgstr "Lijst van pictogramafmetingen (gtk-menu=16; gtk-knop=20,20..."
 
 #: gtk/gtksettings.c:364
 msgid "Xft Antialias"
-msgstr ""
+msgstr "Xft antialias"
 
 #: gtk/gtksettings.c:365
 msgid "Whether to antialias Xft fonts; 0=no, 1=yes, -1=default"
-msgstr ""
+msgstr "Of Xft lettertypen antialias krijgen; 0=nee, 1=ja, -1=standaard"
 
 #: gtk/gtksettings.c:374
 msgid "Xft Hinting"
-msgstr ""
+msgstr "Xft hinting"
 
 #: gtk/gtksettings.c:375
 msgid "Whether to hint Xft fonts; 0=no, 1=yes, -1=default"
-msgstr ""
+msgstr "Of Xft lettertypen hinting krijgen; 0=nee, 1=ja, -1=standaard"
 
 #: gtk/gtksettings.c:384
 msgid "Xft Hint Style"
-msgstr ""
+msgstr "Xft hint stijl"
 
+# moet none etc vertaald worden?
 #: gtk/gtksettings.c:385
 msgid "What degree of hinting to use; none, slight, medium, or full"
-msgstr ""
+msgstr "Welk soort hinting gebruikt wordt; none, slight, medium of full"
 
 #: gtk/gtksettings.c:394
 msgid "Xft RGBA"
-msgstr ""
+msgstr "Xft RGBA"
 
 #: gtk/gtksettings.c:395
 msgid "Type of subpixel antialiasing; none, rgb, bgr, vrgb, vbgr"
-msgstr ""
+msgstr "Type subpixel antialias; none, rgb, bgr, vrgb, vbgr"
 
 #: gtk/gtksettings.c:404
 msgid "Xft DPI"
-msgstr ""
+msgstr "Xft DPI"
 
 #: gtk/gtksettings.c:405
 msgid "Resolution for Xft, in 1024 * dots/inch. -1 to use default value"
-msgstr ""
+msgstr "Resolutie voor Xft, in 1024 * punten/inch. Standaardwaarde: -1 "
 
 #: gtk/gtksizegroup.c:241
 msgid "Mode"
@@ -4511,5 +4510,5 @@ msgstr "IM statusstijl"
 msgid "How to draw the input method statusbar"
 msgstr "Hoe de statusbalk voor invoermethode moet worden getekend"
 
-#~ msgid "File system object to use"
-#~ msgstr "Te gebruiken bestandsysteemobject"
+msgid "File system object to use"
+msgstr "Te gebruiken bestandsysteemobject"
