@@ -133,6 +133,8 @@ gdk_pixbuf_render_to_drawable (GdkPixbuf *pixbuf, GdkDrawable *drawable,
 	ArtIRect dest_rect, req_rect, area_rect;
 	GdkBitmap *bitmap;
 	GdkGC *gc;
+	guchar *buf;
+	int rowstride;
 
 	g_return_if_fail (pixbuf != NULL);
 	apb = pixbuf->art_pixbuf;
@@ -163,5 +165,13 @@ gdk_pixbuf_render_to_drawable (GdkPixbuf *pixbuf, GdkDrawable *drawable,
 		gdk_gc_set_clip_origin (gc, dest_x, dest_y);
 	}
 
-
+	/* Sigh, GdkRGB does not have gdk_draw_rgb_32_image_dithalign(), so we
+	 * have to pack the buffer first.
+	 */
+	if (apb->has_alpha)
+		buf = remove_alpha (apb, src_x, src_y, width, height, &rowstride);
+	else {
+		buf = apb->pixels + src_y * apb->rowstride + src_x * 3;
+		rowstride = apb->rowstride;
+	}
 }
