@@ -1,3 +1,14 @@
+Wed Mar 20 19:33:31 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkcalendar.c (gtk_calendar_main_button): When
+	changing months when the user clicks on a prev-month
+	or next-month day, focus and select the new day.
+	Ignore double clicks on prev-month, next-month days.
+	(Based on suggestions from Andras Salamon, #74173)
+
+	* gtk/gtkcalendar.c: Implement the focused/unfocused
+	selected color change.
+
 2002-03-20  Alex Larsson  <alexl@redhat.com>
 
 	Patches from Carlo E. Prelz <fluido@fluido.as>
