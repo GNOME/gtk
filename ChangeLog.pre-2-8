@@ -1,3 +1,7 @@
+2001-11-15  Sven Neumann  <sven@gimp.org>
+
+	* tests/testgtk.c: make it compile without warnings.
+
 2001-11-14  Alex Larsson  <alexl@redhat.com>
 
 	* gtk/gtklabel.c:

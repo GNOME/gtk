@@ -69,11 +69,11 @@ shape_create_icon (char     *xpm_file,
 		   gint      window_type);
 
 static GtkWidget *
-build_option_menu (gchar           *items[],
-		   gint             num_items,
-		   gint             history,
-		   void           (*func)(GtkWidget *widget, gpointer data),
-		   gpointer         data);
+build_option_menu (gchar    *items[],
+		   gint      num_items,
+		   gint      history,
+		   void    (*func)(GtkWidget *widget, gpointer data),
+		   gpointer  data);
 
 /* macro, structure and variables used by tree window demos */
 #define DEFAULT_NUMBER_OF_ITEM  3
@@ -100,11 +100,11 @@ typedef struct sTreeButtons {
 /* end of tree section */
 
 static GtkWidget *
-build_option_menu (gchar           *items[],
-		   gint             num_items,
-		   gint             history,
-		   void           (*func)(GtkWidget *widget, gpointer data),
-		   gpointer         data)
+build_option_menu (gchar     *items[],
+		   gint       num_items,
+		   gint       history,
+		   void     (*func)(GtkWidget *widget, gpointer data),
+		   gpointer   data)
 {
   GtkWidget *omenu;
   GtkWidget *menu;
@@ -3047,7 +3047,7 @@ create_menus (void)
 			  NULL);
       
       accel_group = gtk_accel_group_new ();
-      gtk_window_add_accel_group (window, accel_group);
+      gtk_window_add_accel_group (GTK_WINDOW (window), accel_group);
 
       gtk_window_set_title (GTK_WINDOW (window), "menus");
       gtk_container_set_border_width (GTK_CONTAINER (window), 0);
@@ -3359,7 +3359,7 @@ create_item_factory (void)
 				"<main>",
 				item_factory,
 				(GtkDestroyNotify) gtk_object_unref);
-      gtk_window_add_accel_group (window, accel_group);
+      gtk_window_add_accel_group (GTK_WINDOW (window), accel_group);
       gtk_window_set_title (GTK_WINDOW (window), "Item Factory");
       gtk_container_set_border_width (GTK_CONTAINER (window), 0);
       gtk_item_factory_create_items (item_factory, nmenu_items, menu_items, NULL);
@@ -4673,9 +4673,12 @@ list_clear (GtkWidget *widget,
 static GtkWidget *list_omenu;
 
 static void 
-list_toggle_sel_mode (GtkWidget *widget, GtkList *list)
+list_toggle_sel_mode (GtkWidget *widget, gpointer data)
 {
+  GtkList *list;
   gint i;
+
+  list = GTK_LIST (data);
 
   if (!GTK_WIDGET_MAPPED (widget))
     return;
@@ -5137,9 +5140,12 @@ undo_selection (GtkWidget *button, GtkCList *clist)
 }
 
 static void 
-clist_toggle_sel_mode (GtkWidget *widget, GtkCList *clist)
+clist_toggle_sel_mode (GtkWidget *widget, gpointer data)
 {
+  GtkCList *clist;
   gint i;
+
+  clist = GTK_CLIST (data);
 
   if (!GTK_WIDGET_MAPPED (widget))
     return;
@@ -5747,9 +5753,13 @@ void set_background (GtkCTree *ctree, GtkCTreeNode *node, gpointer data)
   gtk_ctree_node_set_row_style (ctree, node, style);
 }
 
-void ctree_toggle_line_style (GtkWidget *widget, GtkCTree *ctree)
+void 
+ctree_toggle_line_style (GtkWidget *widget, gpointer data)
 {
+  GtkCTree *ctree;
   gint i;
+
+  ctree = GTK_CTREE (data);
 
   if (!GTK_WIDGET_MAPPED (widget))
     return;
@@ -5765,9 +5775,13 @@ void ctree_toggle_line_style (GtkWidget *widget, GtkCTree *ctree)
   line_style = i;
 }
 
-void ctree_toggle_expander_style (GtkWidget *widget, GtkCTree *ctree)
+void 
+ctree_toggle_expander_style (GtkWidget *widget, gpointer data)
 {
+  GtkCTree *ctree;
   gint i;
+
+  ctree = GTK_CTREE (data);
 
   if (!GTK_WIDGET_MAPPED (widget))
     return;
@@ -5777,9 +5791,13 @@ void ctree_toggle_expander_style (GtkWidget *widget, GtkCTree *ctree)
   gtk_ctree_set_expander_style (ctree, (GtkCTreeExpanderStyle) i);
 }
 
-void ctree_toggle_justify (GtkWidget *widget, GtkCTree *ctree)
+void 
+ctree_toggle_justify (GtkWidget *widget, gpointer data)
 {
+  GtkCTree *ctree;
   gint i;
+
+  ctree = GTK_CTREE (data);
 
   if (!GTK_WIDGET_MAPPED (widget))
     return;
@@ -5790,9 +5808,13 @@ void ctree_toggle_justify (GtkWidget *widget, GtkCTree *ctree)
 				      (GtkJustification) i);
 }
 
-void ctree_toggle_sel_mode (GtkWidget *widget, GtkCTree *ctree)
+void 
+ctree_toggle_sel_mode (GtkWidget *widget, gpointer data)
 {
+  GtkCTree *ctree;
   gint i;
+
+  ctree = GTK_CTREE (data);
 
   if (!GTK_WIDGET_MAPPED (widget))
     return;
@@ -7453,9 +7475,10 @@ show_all_pages (GtkButton   *button,
 }
 
 static void
-notebook_type_changed (GtkWidget   *optionmenu,
-		       GtkNotebook *notebook)
+notebook_type_changed (GtkWidget *optionmenu,
+		       gpointer   data)
 {
+  GtkNotebook *notebook;
   gint i, c;
 
   enum {
@@ -7464,6 +7487,8 @@ notebook_type_changed (GtkWidget   *optionmenu,
     BORDERLESS,
     SCROLLABLE
   };
+
+  notebook = GTK_NOTEBOOK (data);
 
   c = gtk_option_menu_get_history (GTK_OPTION_MENU (optionmenu));
 
@@ -9079,9 +9104,12 @@ destroy_progress (GtkWidget     *widget,
 }
 
 static void
-progressbar_toggle_orientation (GtkWidget *widget, ProgressData *pdata)
+progressbar_toggle_orientation (GtkWidget *widget, gpointer data)
 {
+  ProgressData *pdata;
   gint i;
+
+  pdata = (ProgressData *) data;
 
   if (!GTK_WIDGET_MAPPED (widget))
     return;
@@ -9105,9 +9133,12 @@ toggle_show_text (GtkWidget *widget, ProgressData *pdata)
 }
 
 static void
-progressbar_toggle_bar_style (GtkWidget *widget, ProgressData *pdata)
+progressbar_toggle_bar_style (GtkWidget *widget, gpointer data)
 {
+  ProgressData *pdata;
   gint i;
+
+  pdata = (ProgressData *) data;
 
   if (!GTK_WIDGET_MAPPED (widget))
     return;
