@@ -343,6 +343,8 @@ gdk_window_cache_filter (GdkXEvent *xev,
 		    node->prev = above_node->prev;
 		    if (node->prev)
 		      node->prev->next = node;
+		    else
+		      cache->children = node;
 		    node->next = above_node;
 		    above_node->prev = node;
 		  }
