@@ -1,5 +1,8 @@
 2005-02-27  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkaction.c (connect_proxy): Improve the handling
+	of buttons as action proxys.  (#165534, Milosz Derezynski)
+
 	* gtk/gtklabel.c (gtk_label_size_request): Fix a typo.
 	(#168646, Vincent Untz)
 

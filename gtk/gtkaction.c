@@ -739,6 +739,17 @@ gtk_action_sync_stock_id (GtkAction  *action,
 }
 
 static void
+gtk_action_sync_button_stock_id (GtkAction  *action, 
+				 GParamSpec *pspec,
+				 GtkWidget  *proxy)
+{
+  g_object_set (G_OBJECT (proxy),
+                "stock-id",
+                action->private_data->stock_id,
+                NULL);
+}
+
+static void
 gtk_action_sync_tooltip (GtkAction  *action, 
 			 GParamSpec *pspec, 
 			 GtkWidget  *proxy)
@@ -931,16 +942,30 @@ connect_proxy (GtkAction     *action,
   else if (GTK_IS_BUTTON (proxy))
     {
       /* button specific synchronisers ... */
-
-      /* synchronise the label */
-      g_object_set (proxy,
-		    "label", action->private_data->short_label,
-		    "use_underline", TRUE,
-		    NULL);
-      g_signal_connect_object (action, "notify::short-label",
-			       G_CALLBACK (gtk_action_sync_short_label),
-			       proxy, 0);
+      if (gtk_button_get_use_stock (GTK_BUTTON (proxy)))
+	{
+	  /* synchronise stock-id */
+	  g_object_set (proxy,
+			"stock-id", action->private_data->stock_id,
+			NULL);
+	  g_signal_connect_object (action, "notify::stock-id",
+				   G_CALLBACK (gtk_action_sync_button_stock_id),
+				   proxy, 0);
+	}
+      else if (GTK_IS_LABEL(GTK_BIN(proxy)->child))
+	{
+	  /* synchronise the label */
+	  g_object_set (proxy,
+			"label", action->private_data->short_label,
+			"use_underline", TRUE,
+			NULL);
+	  g_signal_connect_object (action, "notify::short-label",
+				   G_CALLBACK (gtk_action_sync_short_label),
+				   proxy, 0);
+	  
+	}
       
+      /* we leave the button alone if there is a custom child */
       g_signal_connect_object (proxy, "clicked",
 			       G_CALLBACK (gtk_action_activate), action,
 			       G_CONNECT_SWAPPED);
