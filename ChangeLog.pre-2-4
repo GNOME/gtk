@@ -1,3 +1,12 @@
+Tue Oct 22 16:37:12 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtktooltips.c: Multihead safety fixes, handle
+	displays being closed. (#81651, based on patch
+	from Erwann Chenede)
+
+	* gtk/gtktoolbar.c (gtk_toolbar_init): Fix typo
+	from the last commit.
+
 Tue Oct 22 15:55:08 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtktoolbar.c: Fix handling of getting the 

@@ -62,6 +62,7 @@ static gint gtk_tooltips_timeout           (gpointer     data);
 
 static gint gtk_tooltips_paint_window      (GtkTooltips *tooltips);
 static void gtk_tooltips_draw_tips         (GtkTooltips *tooltips);
+static void gtk_tooltips_unset_tip_window  (GtkTooltips *tooltips);
 
 static gboolean get_keyboard_mode          (GtkWidget   *widget);
 
@@ -150,6 +151,34 @@ gtk_tooltips_destroy_data (GtkTooltipsData *tooltipsdata)
 }
 
 static void
+tip_window_display_closed (GdkDisplay  *display,
+			   gboolean     was_error,
+			   GtkTooltips *tooltips)
+{
+  gtk_tooltips_unset_tip_window (tooltips);
+}
+
+static void
+disconnect_tip_window_display_closed (GtkTooltips *tooltips)
+{
+  g_signal_handlers_disconnect_by_func (gtk_widget_get_display (tooltips->tip_window),
+					(gpointer) tip_window_display_closed,
+					tooltips);
+}
+
+static void
+gtk_tooltips_unset_tip_window (GtkTooltips *tooltips)
+{
+  if (tooltips->tip_window)
+    {
+      disconnect_tip_window_display_closed (tooltips);
+      
+      gtk_widget_destroy (tooltips->tip_window);
+      tooltips->tip_window = NULL;
+    }
+}
+
+static void
 gtk_tooltips_destroy (GtkObject *object)
 {
   GtkTooltips *tooltips = GTK_TOOLTIPS (object);
@@ -175,8 +204,34 @@ gtk_tooltips_destroy (GtkObject *object)
 	}
     }
 
-  if (tooltips->tip_window)
-    gtk_widget_destroy (tooltips->tip_window);
+  gtk_tooltips_unset_tip_window (tooltips);
+}
+
+static void
+gtk_tooltips_update_screen (GtkTooltips *tooltips,
+			    gboolean     new_window)
+{
+  gboolean screen_changed = FALSE;
+  
+  if (tooltips->active_tips_data->widget)
+    {
+      GdkScreen *screen = gtk_widget_get_screen (tooltips->active_tips_data->widget);
+
+      screen_changed = (screen != gtk_widget_get_screen (tooltips->tip_window));
+
+      if (screen_changed)
+	{
+	  if (!new_window)
+	    disconnect_tip_window_display_closed (tooltips);
+      
+	  gtk_window_set_screen (GTK_WINDOW (tooltips->tip_window), screen);
+	}
+    }
+
+  if (screen_changed || new_window)
+    g_signal_connect (gtk_widget_get_display (tooltips->tip_window), "closed",
+		      G_CALLBACK (tip_window_display_closed), tooltips);
+
 }
 
 void
@@ -187,8 +242,7 @@ gtk_tooltips_force_window (GtkTooltips *tooltips)
   if (!tooltips->tip_window)
     {
       tooltips->tip_window = gtk_window_new (GTK_WINDOW_POPUP);
-      gtk_window_set_screen (GTK_WINDOW (tooltips->tip_window),
-			     gtk_widget_get_screen (tooltips->active_tips_data->widget));
+      gtk_tooltips_update_screen (tooltips, TRUE);
       gtk_widget_set_app_paintable (tooltips->tip_window, TRUE);
       gtk_window_set_resizable (GTK_WINDOW (tooltips->tip_window), FALSE);
       gtk_widget_set_name (tooltips->tip_window, "gtk-tooltips");
@@ -351,6 +405,8 @@ gtk_tooltips_draw_tips (GtkTooltips *tooltips)
   widget = tooltips->active_tips_data->widget;
 
   keyboard_mode = get_keyboard_mode (widget);
+
+  gtk_tooltips_update_screen (tooltips, FALSE);
   
   screen = gtk_widget_get_screen (widget);
   scr_w = gdk_screen_get_width (screen);

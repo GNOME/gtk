@@ -406,7 +406,7 @@ gtk_toolbar_init (GtkToolbar *toolbar)
   toolbar->children     = NULL;
   toolbar->orientation  = GTK_ORIENTATION_HORIZONTAL;
   toolbar->icon_size    = DEFAULT_ICON_SIZE;
-  toolbar->style        = DEFAUL_TOOLBAR_STYLE;
+  toolbar->style        = DEFAULT_TOOLBAR_STYLE;
   toolbar->tooltips     = gtk_tooltips_new ();
   g_object_ref (toolbar->tooltips);
   gtk_object_sink (GTK_OBJECT (toolbar->tooltips));
