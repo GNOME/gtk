@@ -195,6 +195,20 @@ GTK_IN_REPARENT:
 	to have this flag set to prevent natural unrealization on the
 	process of getting unparented.
 
+GTK_NEED_REQUEST:
+	This flag is set if the widget doesn't have an up to date 
+	requisition. If this flag is set, we must actually emit ::size-request
+        when gtk_widget_size_request() is called. Otherwise, we can
+        simply widget->requisition. We keep track of this all the time
+        howevever, widgets with this flag set are only added to the resize 
+	queue if they are viewable.
+
+GTK_NEED_ALLOCATION:
+	This flag is set if the widget doesn't have an up to date 
+	allocation. If this flag is set, we must actually emit ::size-allocate
+        when gtk_widget_size_allocate() is called, even if the new allocation
+        is the same as the current allocation.
+ 
 Related Macros:
 
 GTK_WIDGET_DRAWABLE:

@@ -1,3 +1,18 @@
+Mon Feb 18 16:44:00 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* docs/widget_system.txt: Add some docs for GTK_NEED_REQUEST
+	GTK_NEED_ALLOCATION.
+
+	* gtk/gtkmenu.c (gtk_menu_popup): Scroll the menu
+	to the right place before showing the menu to
+	avoid spurious enter events.
+
+	* gtk/gtkmenu.c (gtk_menu_realize): Only scroll
+	if there is an active menu item.
+
+	* gtk/gtkwidget.c (gtk_widget_init): Set RESIZE_NEEDED
+	ALLOC_NEEDED initially.
+
 2002-02-18  Matthias Clasen  <maclas@gmx.de>
 
 	* NEWS: fix version number.
@@ -12,8 +27,8 @@ Mon Feb 18 14:40:22 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkcombo.c (gtk_combo_popdown_list): Fix problems
 	with stuck grab (#60132, reported by Nicolas Setton) and
-	stuck prelighting combine some common code for button release
-	and pressing Escape.
+	stuck prelighting. Combine duplicated code in three
+	places for popping down the list.
 
 Mon Feb 18 14:17:59 2002  Owen Taylor  <otaylor@redhat.com>
 

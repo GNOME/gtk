@@ -1283,6 +1283,8 @@ gtk_widget_init (GtkWidget *widget)
 			GTK_DOUBLE_BUFFERED);
 
   GTK_PRIVATE_SET_FLAG (widget, GTK_REDRAW_ON_ALLOC);
+  GTK_PRIVATE_SET_FLAG (widget, GTK_REQUEST_NEEDED);
+  GTK_PRIVATE_SET_FLAG (widget, GTK_ALLOC_NEEDED);
 
   widget->style = gtk_widget_get_default_style ();
   g_object_ref (widget->style);

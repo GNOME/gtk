@@ -742,16 +742,37 @@ gtk_menu_popup (GtkMenu		    *menu,
   menu->position_func_data = data;
   menu_shell->activate_time = activate_time;
 
-  gtk_menu_position (menu);
-
-  /* We need to show the menu _here_ because code expects to be
-   * able to tell if the menu is onscreen by looking at the
-   * GTK_WIDGET_VISIBLE (menu)
+  /* We need to show the menu here rather in the init function because
+   * code expects to be able to tell if the menu is onscreen by
+   * looking at the GTK_WIDGET_VISIBLE (menu)
    */
   gtk_widget_show (GTK_WIDGET (menu));
-  gtk_widget_show (menu->toplevel);
+
+  /* Compute the size of the toplevel and realize it so we
+   * can position and scroll correctly.
+   */
+  {
+    GtkRequisition tmp_request;
+    GtkAllocation tmp_allocation = { 0, };
+
+    gtk_widget_size_request (menu->toplevel, &tmp_request);
+    
+    tmp_allocation.width = tmp_request.width;
+    tmp_allocation.height = tmp_request.height;
+
+    gtk_widget_size_allocate (menu->toplevel, &tmp_allocation);
+    
+    gtk_widget_realize (GTK_WIDGET (menu));
+  }
+
+  gtk_menu_position (menu);
 
   gtk_menu_scroll_to (menu, menu->scroll_offset);
+
+  /* Once everything is set up correctly, map the toplevel window on
+     the screen.
+   */
+  gtk_widget_show (menu->toplevel);
 
   if (xgrab_shell == widget)
     popup_grab_on_window (widget->window, activate_time); /* Should always succeed */
@@ -1297,8 +1318,9 @@ gtk_menu_realize (GtkWidget *widget)
   gtk_style_set_background (widget->style, menu->view_window, GTK_STATE_NORMAL);
   gtk_style_set_background (widget->style, widget->window, GTK_STATE_NORMAL);
 
-  gtk_menu_scroll_item_visible (GTK_MENU_SHELL (widget),
-				GTK_MENU_SHELL (widget)->active_menu_item);
+  if (GTK_MENU_SHELL (widget)->active_menu_item)
+    gtk_menu_scroll_item_visible (GTK_MENU_SHELL (widget),
+				  GTK_MENU_SHELL (widget)->active_menu_item);
 
   gdk_window_show (menu->bin_window);
   gdk_window_show (menu->view_window);
