@@ -23,9 +23,9 @@ Overview of Changes in GTK+ 0.99.4:
 * Many enhancements to GtkNotebook.
 * New widget GtkSpinButton, check out testgtk.
 * New widget GtkTipsQuery for letting the user query tooltips of widgets.
-* Addition of gtkeditable base widget to encapsulate selection and
-  clipboard handling (Entry and Text use this)
-* Text widget more complete
+* Addition of GtkEditable base widget to encapsulate selection and
+  clipboard handling. (GtkEntry and GtkText use this)
+* Text widget more complete.
 * Additions to GtkStatusBar to make it complete.
 * Gdk now supports regions.
 * Access masks for widget arguments (GTK_ARG_READABLE/GTK_ARG_WRITABLE).
