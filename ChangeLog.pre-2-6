@@ -1,3 +1,10 @@
+Fri Feb 13 01:31:44 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkbutton.c (_gtk_button_paint): Don't draw bevels around
+	active, RELIEF_NONE buttons that aren't depressed. This improves
+	the appearance of buttons in notebook tabs.  (#109213, reported
+	by Benjamin Otte, patch by Rodney Dawes)
+
 Fri Feb 13 01:06:08 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* demos/gtk-demo/main.c (read_line): Protect getc_unlocked() by 

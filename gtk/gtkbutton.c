@@ -997,9 +997,8 @@ _gtk_button_paint (GtkButton    *button,
 	  height -= 2 * (focus_width + focus_pad);
 	}
 
-      if ((button->relief != GTK_RELIEF_NONE) ||
-	  ((GTK_WIDGET_STATE(widget) != GTK_STATE_NORMAL) &&
-	   (GTK_WIDGET_STATE(widget) != GTK_STATE_INSENSITIVE)))
+      if (button->relief != GTK_RELIEF_NONE || button->depressed ||
+	  GTK_WIDGET_STATE(widget) == GTK_STATE_PRELIGHT)
 	gtk_paint_box (widget->style, widget->window,
 		       state_type,
 		       shadow_type, area, widget, "button",
