@@ -1,5 +1,8 @@
 2005-01-03  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkfixed.c (gtk_fixed_set_has_window): 
+	Add a little motivation.  (#145556, Tommi Komulainen)
+
 	* docs/tutorial/gtk-tut.sgml: Clarify section on 
 	g_signal_connect_swapped.   (#120543, David Bourguignon)
 
