@@ -1844,9 +1844,10 @@ gdk_event_translate (GdkEvent *event,
     case KeyRelease:
       /* Lookup the string corresponding to the given keysym.
        */
+      keysym = GDK_VoidSymbol;
       charcount = XLookupString (&xevent->xkey, buf, 16,
-				 (KeySym*) &event->key.keyval,
-				 &compose);
+				 &keysym, &compose);
+      event->key.keyval = keysym;      
 
       /* Print debugging info.
        */

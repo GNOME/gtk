@@ -299,12 +299,16 @@ gdk_pixmap_skip_string (gchar *buffer)
   return &buffer[index];
 }
 
+/* Xlib crashed ince at a color name lengths around 125 */
+#define MAX_COLOR_LEN 120
+
 gchar*
 gdk_pixmap_extract_color (gchar *buffer)
 {
-  gint counter, finished = FALSE, numnames;
+  gint counter, numnames;
   gchar *ptr = NULL, ch, temp[128];
-  gchar color[128], *retcol;
+  gchar color[MAX_COLOR_LEN], *retcol;
+  gint space;
 
   counter = 0;
   while (ptr == NULL)
@@ -321,9 +325,6 @@ gdk_pixmap_extract_color (gchar *buffer)
       counter++;
     }
 
-  if (ptr == NULL)
-    return NULL;
-
   ptr = gdk_pixmap_skip_whitespaces (ptr);
 
   if (ptr[0] == 0)
@@ -337,18 +338,29 @@ gdk_pixmap_extract_color (gchar *buffer)
   color[0] = 0;
   numnames = 0;
 
-  while (finished == FALSE)
+  space = MAX_COLOR_LEN - 1;
+  while (space > 0)
     {
       sscanf (ptr, "%127s", temp);
 
-      if ((gint)ptr[0] == 0 || strcmp ("s", temp) == 0 || strcmp ("m", temp) == 0 ||
-          strcmp ("g", temp) == 0 || strcmp ("g4", temp) == 0)
-       finished = TRUE;
+      if (((gint)ptr[0] == 0) ||
+	  (strcmp ("s", temp) == 0) || (strcmp ("m", temp) == 0) ||
+          (strcmp ("g", temp) == 0) || (strcmp ("g4", temp) == 0))
+	{
+	  break;
+	}
       else
         {
           if (numnames > 0)
-            strcat (color, " ");
-          strcat (color, temp);
+	    {
+	      space -= 1;
+	      strcat (color, " ");
+	    }
+	  if (space > 0)
+	    {
+	      strncat (color, temp, space);
+	      space -= MIN (space, strlen (temp));
+	    }
           ptr = gdk_pixmap_skip_string (ptr);
           ptr = gdk_pixmap_skip_whitespaces (ptr);
           numnames++;
@@ -358,7 +370,6 @@ gdk_pixmap_extract_color (gchar *buffer)
   retcol = g_strdup (color);
   return retcol;
 }
-
 
 GdkPixmap*
 gdk_pixmap_colormap_create_from_xpm (GdkWindow   *window,

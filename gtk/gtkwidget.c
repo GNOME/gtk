@@ -1558,8 +1558,12 @@ static gint
 gtk_widget_idle_draw (void *data)
 {
   GSList *node;
+  GSList *draw_queue;
 
-  node = gtk_widget_redraw_queue;
+  draw_queue = node = gtk_widget_redraw_queue;
+  /* We set this gtk_widget_redraw_queue to NULL first, in case anybody
+   * calls queue_draw recursively
+   */
   gtk_widget_redraw_queue = NULL;
   while (node)
     {
@@ -1567,7 +1571,9 @@ gtk_widget_idle_draw (void *data)
       node = node->next;
     }
 
-  return gtk_widget_redraw_queue != NULL;
+  g_slist_free (draw_queue);
+  
+  return FALSE;
 }
 
 void
@@ -1628,7 +1634,7 @@ gtk_widget_idle_sizer (void *data)
     }
   g_slist_free (free_slist);
 
-  return gtk_widget_resize_queue != NULL;
+  return FALSE;
 }
 
 void

@@ -1,3 +1,26 @@
+Sun May 10 00:16:44 1998  Owen Taylor  <otaylor@gtk.org>
+
+	* gtk.m4: Work around inability of HP/UX to
+	sscanf from a readonly string.
+
+Sat May  9 23:14:39 1998  Owen Taylor  <otaylor@gtk.org>
+
+	* gdk/gdk.c: Fixed one more XLookupString location. (For KeyRelease)
+
+Fri May  8 21:31:50 1998  Owen Taylor  <otaylor@gtk.org>
+
+	* gtk/gtkwidget.c (gtk_widget_queue_draw): Free the
+	draw-queue when we are done. 
+
+	(gtk_widget_queue_draw/_queu_resize): Always return
+	FALSE and avoid having two idles at the same time.
+	
+Fri May  8 21:04:00 1998  Owen Taylor  <otaylor@gtk.org>
+
+	* gtk/gtktext.c: Various fixes to make sure cache
+	lines are freed if line_start_cache doesn't point to the
+	beginning of the cache.
+
 1998-05-06  Federico Mena Quintero  <federico@nuclecu.unam.mx>
 
 	* gtk/gtkclist.c (draw_row): Fixed incorrect painting of row

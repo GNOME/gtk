@@ -1896,6 +1896,13 @@ gtk_text_adjustment (GtkAdjustment *adjustment,
   g_return_if_fail (text != NULL);
   g_return_if_fail (GTK_IS_TEXT (text));
 
+  /* Just ignore it if we haven't been size-allocated yet, or
+   * if something weird has happened */
+  if ((text->line_start_cache == NULL) || 
+      (GTK_WIDGET (text)->allocation.height <= 1) || 
+      (GTK_WIDGET (text)->allocation.width <= 1))
+    return;
+
   if (adjustment == text->hadj)
     {
       g_warning ("horizontal scrolling not implemented");
@@ -2933,8 +2940,11 @@ find_line_containing_point (GtkText* text, guint point,
       if (scroll)
 	{
 	  lph = pixel_height_of (text, cache->next);
-	  
-	  while (lph > height || lph == 0)
+
+	  /* Scroll the bottom of the line is on screen, or until
+	   * the line is the first onscreen line.
+	   */
+	  while (cache->next != text->line_start_cache && lph > height)
 	    {
 	      TEXT_SHOW_LINE (text, cache, "cache");
 	      TEXT_SHOW_LINE (text, cache->next, "cache->next");
@@ -3171,6 +3181,14 @@ free_cache (GtkText* text)
 {
   GList* cache = text->line_start_cache;
 
+  if (cache)
+    {
+      while (cache->prev)
+	cache = cache->prev;
+
+      text->line_start_cache = cache;
+    }
+
   for (; cache; cache = cache->next)
     g_mem_chunk_free (params_mem_chunk, cache->data);
 
@@ -3182,26 +3200,29 @@ free_cache (GtkText* text)
 static GList*
 remove_cache_line (GtkText* text, GList* member)
 {
+  GList *list;
+
   if (member == text->line_start_cache)
     {
       if (text->line_start_cache)
 	text->line_start_cache = text->line_start_cache->next;
-      return text->line_start_cache;
     }
-  else
-    {
-      GList *list = member->prev;
 
-      list->next = list->next->next;
+  if (member->prev)
+    {
+      list = member->prev;
+  
+      list->next = member->next;
       if (list->next)
 	list->next->prev = list;
-
-      member->next = NULL;
-      g_mem_chunk_free (params_mem_chunk, member->data);
-      g_list_free (member);
-
-      return list->next;
     }
+
+  list = member->next;
+  
+  g_mem_chunk_free (params_mem_chunk, member->data);
+  g_list_free_1 (member);
+
+  return list;
 }
 
 /**********************************************************************/
