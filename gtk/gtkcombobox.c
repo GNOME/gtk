@@ -99,6 +99,7 @@ struct _GtkComboBoxPrivate
   GSList *cells;
 
   guint popup_in_progress : 1;
+  guint destroying : 1;
 };
 
 /* While debugging this evil code, I have learned that
@@ -198,6 +199,8 @@ static void     gtk_combo_box_style_set            (GtkWidget       *widget,
 static void     gtk_combo_box_button_toggled       (GtkWidget       *widget,
                                                     gpointer         data);
 static void     gtk_combo_box_add                  (GtkContainer    *container,
+                                                    GtkWidget       *widget);
+static void     gtk_combo_box_remove               (GtkContainer    *container,
                                                     GtkWidget       *widget);
 
 static ComboCellInfo *gtk_combo_box_get_cell_info  (GtkComboBox      *combo_box,
@@ -414,6 +417,7 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
   container_class = (GtkContainerClass *)klass;
   container_class->forall = gtk_combo_box_forall;
   container_class->add = gtk_combo_box_add;
+  container_class->remove = gtk_combo_box_remove;
 
   widget_class = (GtkWidgetClass *)klass;
   widget_class->size_allocate = gtk_combo_box_size_allocate;
@@ -521,7 +525,8 @@ gtk_combo_box_init (GtkComboBox *combo_box)
   combo_box->priv = GTK_COMBO_BOX_GET_PRIVATE (combo_box);
 
   combo_box->priv->cell_view = gtk_cell_view_new ();
-  gtk_container_add (GTK_CONTAINER (combo_box), combo_box->priv->cell_view);
+  gtk_widget_set_parent (combo_box->priv->cell_view, GTK_WIDGET (combo_box));
+  GTK_BIN (combo_box)->child = combo_box->priv->cell_view;
   gtk_widget_show (combo_box->priv->cell_view);
 
   combo_box->priv->width = 0;
@@ -691,9 +696,14 @@ gtk_combo_box_add (GtkContainer *container,
   GtkComboBox *combo_box = GTK_COMBO_BOX (container);
 
   if (combo_box->priv->cell_view && combo_box->priv->cell_view->parent)
-    gtk_container_remove (container, combo_box->priv->cell_view);
-
-  (* GTK_CONTAINER_CLASS (parent_class)->add) (container, widget);
+    {
+      gtk_widget_unparent (combo_box->priv->cell_view);
+      GTK_BIN (container)->child = NULL;
+      gtk_widget_queue_resize (GTK_WIDGET (container));
+    }
+  
+  gtk_widget_set_parent (widget, GTK_WIDGET (container));
+  GTK_BIN (container)->child = widget;
 
   if (combo_box->priv->cell_view &&
       widget != combo_box->priv->cell_view)
@@ -720,6 +730,56 @@ gtk_combo_box_add (GtkContainer *container,
           combo_box->priv->cell_view_frame = NULL;
         }
     }
+}
+
+static void
+gtk_combo_box_remove (GtkContainer *container,
+		      GtkWidget    *widget)
+{
+  GtkComboBox *combo_box = GTK_COMBO_BOX (container);
+  gboolean appears_as_list;
+
+  gtk_widget_unparent (widget);
+  GTK_BIN (container)->child = NULL;
+
+  if (combo_box->priv->destroying)
+    return;
+
+  gtk_widget_queue_resize (GTK_WIDGET (container));
+
+  if (!combo_box->priv->tree_view)
+    appears_as_list = FALSE;
+  else
+    appears_as_list = TRUE;
+  
+  if (appears_as_list)
+    gtk_combo_box_list_destroy (combo_box);
+  else if (GTK_IS_MENU (combo_box->priv->popup_widget))
+    {
+      gtk_combo_box_menu_destroy (combo_box);
+      gtk_menu_detach (GTK_MENU (combo_box->priv->popup_widget));
+      combo_box->priv->popup_widget = NULL;
+    }
+
+  if (!combo_box->priv->cell_view)
+    {
+      combo_box->priv->cell_view = gtk_cell_view_new ();
+      gtk_widget_set_parent (combo_box->priv->cell_view, GTK_WIDGET (container));
+      GTK_BIN (container)->child = combo_box->priv->cell_view;
+      
+      gtk_widget_show (combo_box->priv->cell_view);
+      gtk_cell_view_set_model (GTK_CELL_VIEW (combo_box->priv->cell_view),
+			       combo_box->priv->model);
+      cell_view_sync_cells (combo_box, GTK_CELL_VIEW (combo_box->priv->cell_view));
+    }
+
+
+  if (appears_as_list)
+    gtk_combo_box_list_setup (combo_box);
+  else
+    gtk_combo_box_menu_setup (combo_box, TRUE);
+
+  gtk_combo_box_set_active_internal (combo_box, combo_box->priv->active_item);
 }
 
 static ComboCellInfo *
@@ -3343,9 +3403,13 @@ gtk_combo_box_destroy (GtkObject *object)
 {
   GtkComboBox *combo_box = GTK_COMBO_BOX (object);
 
+  combo_box->priv->destroying = 1;
+
   GTK_OBJECT_CLASS (parent_class)->destroy (object);
 
   combo_box->priv->cell_view = NULL;
+
+  combo_box->priv->destroying = 0;
 }
 
 static void

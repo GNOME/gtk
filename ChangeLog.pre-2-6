@@ -1,3 +1,9 @@
+Sat Mar 13 01:38:55 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkcombobox.c (gtk_combo_box_remove): Add a remove 
+	implemenatation which restores the cell_view when the custom 
+	child is removed.  (#136555, Owen Taylor)
+
 Sat Mar 13 00:07:51 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtktreeviewcolumn.c (gtk_tree_view_column_cell_layout_clear): 
