@@ -3931,7 +3931,7 @@ gdk_window_set_static_gravities (GdkWindow *window,
       tmp_list = private->children;
       while (tmp_list)
 	{
-	  gdk_window_set_static_win_gravity (window, use_static);
+	  gdk_window_set_static_win_gravity (tmp_list->data, use_static);
 	  
 	  tmp_list = tmp_list->next;
 	}

@@ -1,3 +1,27 @@
+Mon Nov  5 10:01:49 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/x11/gdkgeometry-x11.c (gdk_window_compute_position): 
+	Clamp max window width/height to 32767, not 32768 since
+	we have to be able to deal with a dx/y of -32768 without
+	getting a width of 65536 when guffaw scrolling.
+
+	* gdk/x11/gdkgeometry-x11.c: Implement gdk_window_scroll()
+	for the guffaw scrolling case, fixing some problems with
+	copy-area case as well. Fix BadValue bug with moving windows
+	by large amounts.
+
+	* gdk/x11/gdkgeometry-x11.c (gdk_window_clip_changed): Update
+	clip in window structue before calling gdk_window_invalidate_region
+	since that trims new invalidations to the window's visible
+	region.
+
+	* gdk/x11/gdkwindow-x11.c (gdk_window_set_static_gravities): 
+	Really set the static window gravity on the children, not
+	repeatedly on the window.
+
+	* gtk/testgtk.c: Add a torture test for big windows and 
+	gdk_window_scroll().
+
 Sun Nov  4 17:36:08 2001  Manish Singh  <yosh@gimp.org>
 
 	* acconfig.h configure.in: sigsetjmp is macroized in some places,

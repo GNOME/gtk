@@ -143,6 +143,225 @@ destroy_tooltips (GtkWidget *widget, GtkWindow **window)
   *window = NULL;
 }
 
+
+/*
+ * Big windows and guffaw scrolling
+ */
+
+static gboolean
+pattern_expose (GtkWidget      *widget,
+		GdkEventExpose *event,
+		gpointer        data)
+{
+  GdkColor *color;
+  GdkWindow *window = event->window;
+
+  color = g_object_get_data (G_OBJECT (window), "pattern-color");
+  if (color)
+    {
+      GdkGC *tmp_gc = gdk_gc_new (window);
+      gdk_gc_set_rgb_fg_color (tmp_gc, color);
+
+      gdk_draw_rectangle (window, tmp_gc, TRUE,
+			  event->area.x, event->area.y,
+			  event->area.width, event->area.height);
+
+      g_object_unref (G_OBJECT (tmp_gc));
+    }
+
+  return FALSE;
+}
+
+static void
+pattern_set_bg (GtkWidget   *widget,
+		GdkWindow   *child,
+		gint         level)
+{
+  static const GdkColor colors[] = {
+    { 0, 0x4444, 0x4444, 0xffff },
+    { 0, 0x8888, 0x8888, 0xffff },
+    { 0, 0xaaaa, 0xaaaa, 0xffff }
+  };
+    
+  g_object_set_data (G_OBJECT (child), "pattern-color", (gpointer)&colors[level]);
+  gdk_window_set_user_data (child, widget);
+}
+
+static void
+create_pattern (GtkWidget   *widget,
+		GdkWindow   *parent,
+		gint         level,
+		gint         width,
+		gint         height)
+{
+  gint h = 1;
+  gint i = 0;
+    
+  GdkWindow *child;
+
+  while (2 * h <= height)
+    {
+      gint w = 1;
+      gint j = 0;
+      
+      while (2 * w <= width)
+	{
+	  if ((i + j) % 2 == 0)
+	    {
+	      gint x = w  - 1;
+	      gint y = h - 1;
+	      
+	      GdkWindowAttr attributes;
+
+	      attributes.window_type = GDK_WINDOW_CHILD;
+	      attributes.x = x;
+	      attributes.y = y;
+	      attributes.width = w;
+	      attributes.height = h;
+	      attributes.wclass = GDK_INPUT_OUTPUT;
+	      attributes.event_mask = GDK_EXPOSURE_MASK;
+	      attributes.visual = gtk_widget_get_visual (widget);
+	      attributes.colormap = gtk_widget_get_colormap (widget);
+	      
+	      child = gdk_window_new (parent, &attributes,
+				      GDK_WA_X | GDK_WA_Y | GDK_WA_VISUAL | GDK_WA_COLORMAP);
+
+	      pattern_set_bg (widget, child, level);
+
+	      if (level < 2)
+		create_pattern (widget, child, level + 1, w, h);
+
+	      gdk_window_show (child);
+	    }
+	  j++;
+	  w *= 2;
+	}
+      i++;
+      h *= 2;
+    }
+}
+
+#define PATTERN_SIZE (1 << 18)
+
+static void
+pattern_hadj_changed (GtkAdjustment *adj,
+		      GtkWidget     *darea)
+{
+  gint *old_value = g_object_get_data (G_OBJECT (adj), "old-value");
+  gint new_value = adj->value;
+
+  if (GTK_WIDGET_REALIZED (darea))
+    {
+      gdk_window_scroll (darea->window, *old_value - new_value, 0);
+      *old_value = new_value;
+    }
+}
+
+static void
+pattern_vadj_changed (GtkAdjustment *adj,
+		      GtkWidget *darea)
+{
+  gint *old_value = g_object_get_data (G_OBJECT (adj), "old-value");
+  gint new_value = adj->value;
+
+  if (GTK_WIDGET_REALIZED (darea))
+    {
+      gdk_window_scroll (darea->window, 0, *old_value - new_value);
+      *old_value = new_value;
+    }
+}
+
+static void
+pattern_realize (GtkWidget *widget,
+		 gpointer   data)
+{
+  pattern_set_bg (widget, widget->window, 0);
+  create_pattern (widget, widget->window, 1, PATTERN_SIZE, PATTERN_SIZE);
+}
+
+static void 
+create_big_windows (void)
+{
+  static GtkWidget *window = NULL;
+  GtkWidget *darea, *table, *scrollbar;
+  GtkWidget *eventbox;
+  GtkAdjustment *hadj;
+  GtkAdjustment *vadj;
+  static gint current_x;
+  static gint current_y;
+
+  if (!window)
+    {
+      current_x = 0;
+      current_y = 0;
+      
+      window = gtk_dialog_new_with_buttons ("Big Windows",
+                                            NULL, 0,
+                                            GTK_STOCK_CLOSE,
+                                            GTK_RESPONSE_NONE,
+                                            NULL);
+
+      gtk_window_set_default_size (GTK_WINDOW (window), 200, 300);
+
+      gtk_signal_connect (GTK_OBJECT (window), "destroy",
+			  GTK_SIGNAL_FUNC (gtk_widget_destroyed),
+			  &window);
+
+      gtk_signal_connect (GTK_OBJECT (window), "response",
+                          GTK_SIGNAL_FUNC (gtk_widget_destroy),
+                          NULL);
+
+      table = gtk_table_new (2, 2, FALSE);
+      gtk_box_pack_start (GTK_BOX (GTK_DIALOG (window)->vbox),
+			  table, TRUE, TRUE, 0);
+
+      darea = gtk_drawing_area_new ();
+
+      hadj = (GtkAdjustment *)gtk_adjustment_new (0, 0, PATTERN_SIZE, 10, 100, 100);
+      gtk_signal_connect (GTK_OBJECT (hadj), "value_changed",
+			  GTK_SIGNAL_FUNC (pattern_hadj_changed), darea);
+      g_object_set_data (G_OBJECT (hadj), "old-value", &current_x);
+      
+      vadj = (GtkAdjustment *)gtk_adjustment_new (0, 0, PATTERN_SIZE, 10, 100, 100);
+      gtk_signal_connect (GTK_OBJECT (vadj), "value_changed",
+			  GTK_SIGNAL_FUNC (pattern_vadj_changed), darea);
+      g_object_set_data (G_OBJECT (vadj), "old-value", &current_y);
+      
+      gtk_signal_connect (GTK_OBJECT (darea), "realize",
+                          GTK_SIGNAL_FUNC (pattern_realize),
+                          NULL);
+      gtk_signal_connect (GTK_OBJECT (darea), "expose_event",
+                          GTK_SIGNAL_FUNC (pattern_expose),
+                          NULL);
+
+      eventbox = gtk_event_box_new ();
+      gtk_table_attach (GTK_TABLE (table), eventbox,
+			0, 1,                  0, 1,
+			GTK_FILL | GTK_EXPAND, GTK_FILL | GTK_EXPAND,
+			0,                     0);
+
+      gtk_container_add (GTK_CONTAINER (eventbox), darea);
+
+      scrollbar = gtk_hscrollbar_new (hadj);
+      gtk_table_attach (GTK_TABLE (table), scrollbar,
+			0, 1,                  1, 2,
+			GTK_FILL | GTK_EXPAND, GTK_FILL,
+			0,                     0);
+
+      scrollbar = gtk_vscrollbar_new (vadj);
+      gtk_table_attach (GTK_TABLE (table), scrollbar,
+			1, 2,                  0, 1,
+			GTK_FILL,              GTK_EXPAND | GTK_FILL,
+			0,                     0);
+
+    }
+
+  if (!GTK_WIDGET_VISIBLE (window))
+    gtk_widget_show_all (window);
+  else
+    gtk_widget_hide (window);
+}
+
 /*
  * GtkButton
  */
@@ -10644,6 +10863,7 @@ struct {
   gboolean do_not_benchmark;
 } buttons[] =
 {
+  { "big windows", create_big_windows },
   { "button box", create_button_box },
   { "buttons", create_buttons },
   { "check buttons", create_check_buttons },
