@@ -1,3 +1,12 @@
+Mon Jan 22 14:31:29 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/x11/gdkevents-x11.c (gdk_event_translate): Unshift
+	the group when extracting it from the X keyboard event.
+
+	* modules/input/Makefile.am modules/input/imipa.c: 
+	Simple module for entering IPA. (Do we need a 
+	gtk-stupid-input-tricks CVS module?)
+
 Sat Mar  3 13:32:47 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkimmodule.c (gtk_im_module_init): Remove spurious

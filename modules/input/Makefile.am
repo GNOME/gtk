@@ -55,5 +55,8 @@ im_viqr_la_SOURCES = imviqr.c
 im_inuktitut_la_LDFLAGS = -rpath $(moduledir) -avoid-version -module
 im_inuktitut_la_SOURCES = iminuktitut.c
 
+im_ipa_la_LDFLAGS = -rpath $(moduledir) -avoid-version -module
+im_ipa_la_SOURCES = imipa.c
+
 module_LTLIBRARIES = im-cyrillic-translit.la $(IM_XIM_MODULE) im-viqr.la im-thai-broken.la \
-                     im-inuktitut.la
+                     im-inuktitut.la im-ipa.la
