@@ -1,5 +1,8 @@
 2004-10-21  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkiconcache.c: Make it compile without mmap() and
+	add some more checks.  (#155973, Morten Welinder)
+
 	Add convenience api for image dnd (#150165):
 	
 	* gtk/gtkselection.h: 

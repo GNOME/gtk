@@ -21,7 +21,10 @@
 #include "gtkdebug.h"
 #include "gtkiconcache.h"
 
+#ifdef HAVE_MMAP
 #include <sys/mman.h>
+#endif
+
 #include <sys/types.h>
 #include <sys/stat.h>
 #ifdef HAVE_UNISTD_H
@@ -60,8 +63,9 @@ _gtk_icon_cache_unref (GtkIconCache *cache)
     {
       GTK_NOTE (ICONTHEME, 
 		g_print ("unmapping icon cache\n"));
-
+#ifdef HAVE_MMAP
       munmap (cache->buffer, cache->size);
+#endif
       g_free (cache);
     }
 }
@@ -73,7 +77,7 @@ _gtk_icon_cache_new_for_path (const gchar *path)
   gint fd;
   struct stat st;
   struct stat path_st;
-  gchar *buffer;
+  gchar *buffer = MAP_FAILED;
   GtkIconCache *cache = NULL;
 
   if (g_getenv ("GTK_NO_ICON_CACHE"))
@@ -85,21 +89,19 @@ _gtk_icon_cache_new_for_path (const gchar *path)
   GTK_NOTE (ICONTHEME, 
 	    g_print ("look for cache in %s\n", path));
 
-  if (!g_file_test (cache_filename, G_FILE_TEST_IS_REGULAR))
-    {
-      g_free (cache_filename);
-      return NULL;
-    };
-
   /* Open the file and mmap it */
   fd = open (cache_filename, O_RDONLY);
 
-  g_free (cache_filename);
-  
   if (fd < 0)
-    return NULL;
+    {
+      g_free (cache_filename);
+      return NULL;
+    }
   
-  if (fstat (fd, &st) < 0)
+  if (!g_file_test (cache_filename, G_FILE_TEST_IS_REGULAR))
+    goto done;
+
+  if (fstat (fd, &st) < 0 || st.st_size < 4)
     goto done;
 
   if (stat (path, &path_st) < 0)
@@ -113,7 +115,9 @@ _gtk_icon_cache_new_for_path (const gchar *path)
       goto done; 
     }
 
-  buffer = mmap (0, st.st_size, PROT_READ, MAP_SHARED, fd, 0);
+#ifdef HAVE_MMAP
+  buffer = (gchar *) mmap (NULL, st.st_size, PROT_READ, MAP_SHARED, fd, 0);
+#endif
 
   if (buffer == MAP_FAILED)
     goto done;
@@ -122,7 +126,9 @@ _gtk_icon_cache_new_for_path (const gchar *path)
   if (GET_UINT16 (buffer, 0) != MAJOR_VERSION ||
       GET_UINT16 (buffer, 2) != MINOR_VERSION)
     {
+#ifdef HAVE_MMAP
       munmap (buffer, st.st_size);
+#endif
       GTK_NOTE (ICONTHEME, 
 		g_print ("wrong cache version\n"));
       goto done;
@@ -137,6 +143,7 @@ _gtk_icon_cache_new_for_path (const gchar *path)
   cache->size = st.st_size;
   
  done:
+  g_free (cache_filename);  
   close (fd);
 
   return cache;
