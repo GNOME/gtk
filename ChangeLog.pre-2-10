@@ -1,3 +1,7 @@
+Mon Feb  5 13:22:54 GMT 2001  Tony Gale <gale@gtk.org>
+
+	* docs/faq/gtk-faq.sgml: s/MISK/MISC/
+
 2001-02-04  Tor Lillqvist  <tml@iki.fi>
 
 	* gdk/gdk.def

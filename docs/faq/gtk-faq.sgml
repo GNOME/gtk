@@ -2,7 +2,7 @@
 <book>
 
 <bookinfo>
-  <date>January 16th 2001</date>
+  <date>February 5th 2001</date>
   <title>GTK+ FAQ</title>
   <authorgroup>
     <author>
@@ -2670,13 +2670,13 @@ void gtk_misc_set_alignment (GtkMisc *misc,
 GtkWidget       *label;
 
 /* horizontal : left align, vertical : top */
-gtk_misc_set_alignment(GTK_MISK(label), 0.0f, 0.0f);
+gtk_misc_set_alignment(GTK_MISC(label), 0.0f, 0.0f);
 
 /* horizontal : centered, vertical : centered */
-gtk_misc_set_alignment(GTK_MISK(label), 0.5f, 0.5f);
+gtk_misc_set_alignment(GTK_MISC(label), 0.5f, 0.5f);
 
 /* horizontal : right align, vertical : bottom */
-gtk_misc_set_alignment(GTK_MISK(label), 1.0f, 1.0f);
+gtk_misc_set_alignment(GTK_MISC(label), 1.0f, 1.0f);
 </programlisting>
 
 </sect1>
