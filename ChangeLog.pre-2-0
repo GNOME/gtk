@@ -19,6 +19,11 @@ Fri Apr 24 01:29:04 1998  Tim Janik  <timj@gtk.org>
         (gtk_widget_real_destroy): call gtk_accelerator_tables_delete (),
         so there are no stale pointers in accelerator tables left.
 
+1998-04-22  Federico Mena Quintero  <federico@nuclecu.unam.mx>
+
+        * gtk/gtkbin.c (gtk_bin_remove): Remember whether the widget was
+        visible before we unparent it.
+
 Wed Apr 22 04:15:26 1998  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkmain.c (gtk_handle_current_timeouts): prepend the
@@ -29,6 +34,19 @@ Wed Apr 22 04:15:26 1998  Tim Janik  <timj@gtk.org>
  	*really* bad thing.
 	(gtk_handle_current_idles): likewise (exchange "timout" with "idle" in
 	the above entry ;).
+
+Sat Apr 18 22:18:12 1998  Tim Janik  <timj@gtk.org>
+
+        * gtk/gtkradiomenuitem.h:
+        * gtk/gtkradiomenuitem.c (gtk_radio_menu_item_set_group): new function
+        ala gtk_radio_button_set_group.
+        (gtk_radio_menu_item_init): assure that we always have at least a group
+        that points to self.
+
+        * gtk/gtkradiobutton.c (gtk_radio_button_set_group): few cleanups and
+        added g_return_if_fail() statements.
+        (gtk_radio_button_init): assure that we always have at least a group
+        that points to self.
 
 Wed Apr 15 05:13:09 1998  Tim Janik  <timj@gtk.org>
 

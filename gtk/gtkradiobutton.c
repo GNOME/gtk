@@ -82,40 +82,45 @@ gtk_radio_button_class_init (GtkRadioButtonClass *class)
 static void
 gtk_radio_button_init (GtkRadioButton *radio_button)
 {
-  radio_button->group = NULL;
+  radio_button->group = g_slist_prepend (NULL, radio_button);
 }
 
 void
 gtk_radio_button_set_group (GtkRadioButton *radio_button,
 			    GSList *group)
 {
-  GSList *tmp_list;
-  GtkRadioButton *tmp_button;
-
+  g_return_if_fail (radio_button != NULL);
+  g_return_if_fail (GTK_IS_RADIO_BUTTON (radio_button));
+  g_return_if_fail (!g_slist_find (group, radio_button));
+  
   if (radio_button->group)
     {
+      GSList *slist;
+      
       radio_button->group = g_slist_remove (radio_button->group, radio_button);
       
-      tmp_list = radio_button->group;
-      while (tmp_list)
+      for (slist = radio_button->group; slist; slist = slist->next)
 	{
-	  tmp_button = tmp_list->data;
-	  tmp_list = tmp_list->next;
+	  GtkRadioButton *tmp_button;
+	  
+	  tmp_button = slist->data;
 	  
 	  tmp_button->group = radio_button->group;
 	}
     }
-
+  
   radio_button->group = g_slist_prepend (group, radio_button);
-  tmp_list = group;
-
-  if (tmp_list)
+  
+  if (group)
     {
-      while (tmp_list)
+      GSList *slist;
+      
+      for (slist = group; slist; slist = slist->next)
 	{
-	  tmp_button = tmp_list->data;
-	  tmp_list = tmp_list->next;
-
+	  GtkRadioButton *tmp_button;
+	  
+	  tmp_button = slist->data;
+	  
 	  tmp_button->group = radio_button->group;
 	}
     }

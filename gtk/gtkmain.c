@@ -1399,7 +1399,11 @@ gtk_handle_current_timeouts (guint32 the_time)
       timeoutf = tmp_list->data;
       
       current_timeouts = g_list_remove_link (current_timeouts, tmp_list);
-      tmp_list->next = running_timeouts;
+      if (running_timeouts)
+	{
+	  running_timeouts->prev = tmp_list;
+	  tmp_list->next = running_timeouts;
+	}
       running_timeouts = tmp_list;
       
       result = gtk_invoke_timeout_function (timeoutf);
@@ -1521,7 +1525,11 @@ gtk_handle_current_idles ()
       idlef = tmp_list->data;
       
       current_idles = g_list_remove_link (current_idles, tmp_list);
-      tmp_list->next = running_idles;
+      if (running_idles)
+	{
+	  running_idles->prev = tmp_list;
+	  tmp_list->next = running_idles;
+	}
       running_idles = tmp_list;
 
       result = gtk_idle_invoke_function (idlef);
