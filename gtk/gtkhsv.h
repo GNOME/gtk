@@ -58,7 +58,7 @@ struct _GtkHSV
 
 struct _GtkHSVClass
 {
-  GtkContainerClass parent_class;
+  GtkWidgetClass parent_class;
   
   /* Notification signals */
   
