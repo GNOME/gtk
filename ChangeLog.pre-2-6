@@ -1,5 +1,17 @@
 2004-03-08  Federico Mena Quintero  <federico@ximian.com>
 
+	Patch "1a" from #136185, by Morten Welinder.
+
+	* gtk/gtkfilechooserdefault.c (get_file_info): Take in an argument
+	that says whether the caller just wants the display name.
+	(shortcuts_insert_path): We only want the name in the call to
+	get_file_info().
+
+	* gtk/gtkpathbar.c (_gtk_path_bar_set_path): Don't request more
+	info than needed from the file_folder.
+
+2004-03-08  Federico Mena Quintero  <federico@ximian.com>
+
 	Fixes #136105.
 
 	* gtk/gtkfilechooserembed.h (struct _GtkFileChooserEmbedIface):

@@ -784,7 +784,6 @@ gtk_path_bar_check_parent_path (GtkPathBar         *path_bar,
 	  current_path = list;
 	  break;
 	}
-
     }
 
   if (current_path)
@@ -815,9 +814,12 @@ _gtk_path_bar_set_path (GtkPathBar         *path_bar,
 
   result = TRUE;
 
+  /* Check whether the new path is already present in the pathbar as buttons.
+   * This could be a parent directory or a previous selected subdirectory.
+   */
   if (gtk_path_bar_check_parent_path (path_bar, file_path, path_bar->file_system))
     return TRUE;
-      
+
   path = gtk_file_path_copy (file_path);
 
   gtk_widget_push_composite_child ();
@@ -827,43 +829,33 @@ _gtk_path_bar_set_path (GtkPathBar         *path_bar,
       GtkFilePath *parent_path = NULL;
       GtkWidget *button;
       const gchar *display_name;
-      GError *err = NULL;
       GtkFileFolder *file_folder;
       GtkFileInfo *file_info;
       gboolean valid;
-      GtkFileInfoType needed = GTK_FILE_INFO_DISPLAY_NAME;
       ButtonType button_type;
 
       valid = gtk_file_system_get_parent (path_bar->file_system,
 					  path,
 					  &parent_path,
-					  &err);
+					  error);
       if (!valid)
 	{
 	  result = FALSE;
-	  g_propagate_error (error, err);
 	  gtk_file_path_free (path);
 	  break;
 	}
 
-      if (first_directory)
-	needed |= GTK_FILE_INFO_IS_FOLDER;
+      file_folder = gtk_file_system_get_folder (path_bar->file_system,
+						parent_path ? parent_path : path,
+						GTK_FILE_INFO_DISPLAY_NAME,
+						NULL);
+      file_info = gtk_file_folder_get_info (file_folder, path, error);
+      g_object_unref (file_folder);
 
-      file_folder = gtk_file_system_get_folder
-	(path_bar->file_system,
-	 parent_path ? parent_path : path,
-	 needed,
-	 NULL);
-
-      file_info = gtk_file_folder_get_info (file_folder, path, &err);
-      if (!file_info || (first_directory && !gtk_file_info_get_is_folder (file_info)))
+      if (!file_info)
 	{
 	  result = FALSE;
 
-	  g_propagate_error (error, err);
-	  if (file_info)
-	    gtk_file_info_free (file_info);
-	  g_object_unref (file_folder);
 	  gtk_file_path_free (parent_path);
 	  gtk_file_path_free (path);
 	  break;
@@ -874,15 +866,13 @@ _gtk_path_bar_set_path (GtkPathBar         *path_bar,
       button = make_directory_button (path_bar, display_name, path, first_directory);
       gtk_file_info_free (file_info);
       gtk_file_path_free (path);
-      g_object_unref (file_folder);
 
       new_buttons = g_list_prepend (new_buttons, button);
 
       button_type = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (button), "gtk-path-bar-button-type"));
       if (button_type != NORMAL_BUTTON)
 	{
-	  if (parent_path)
-	    gtk_file_path_free (parent_path);
+	  gtk_file_path_free (parent_path);
 	  break;
 	}
 

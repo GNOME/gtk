@@ -751,7 +751,7 @@ shortcuts_unselect_all (GtkFileChooserDefault *impl)
 
 /* Convenience function to get the display name and icon info for a path */
 static GtkFileInfo *
-get_file_info (GtkFileSystem *file_system, const GtkFilePath *path, GError **error)
+get_file_info (GtkFileSystem *file_system, const GtkFilePath *path, gboolean name_only, GError **error)
 {
   GtkFilePath *parent_path;
   GtkFileFolder *parent_folder;
@@ -765,7 +765,7 @@ get_file_info (GtkFileSystem *file_system, const GtkFilePath *path, GError **err
 #if 0
 					      | GTK_FILE_INFO_ICON
 #endif
-					      | GTK_FILE_INFO_IS_FOLDER,
+					      | (name_only ? 0 : GTK_FILE_INFO_IS_FOLDER),
 					      error);
   gtk_file_path_free (parent_path);
 
@@ -808,22 +808,19 @@ shortcuts_insert_path (GtkFileChooserDefault *impl,
     }
   else
     {
-      GtkFileInfo *info;
-
-      info = get_file_info (impl->file_system, path, error);
-      if (!info)
-	return FALSE;
-
-      data = gtk_file_path_copy (path);
-
       if (label)
 	label_copy = g_strdup (label);
       else
-	label_copy = g_strdup (gtk_file_info_get_display_name (info));
+	{
+	  GtkFileInfo *info = get_file_info (impl->file_system, path, TRUE, error);
+	  if (!info)
+	    return FALSE;
+	  label_copy = g_strdup (gtk_file_info_get_display_name (info));
+	  gtk_file_info_free (info);
+	}
 
+      data = gtk_file_path_copy (path);
       pixbuf = gtk_file_system_render_icon (impl->file_system, path, GTK_WIDGET (impl), ICON_SIZE, NULL);
-
-      gtk_file_info_free (info);
     }
 
   if (pos == -1)
@@ -1426,7 +1423,7 @@ shortcuts_add_bookmark_from_path (GtkFileChooserDefault *impl,
     return;
 
   error = NULL;
-  info = get_file_info (impl->file_system, path, &error);
+  info = get_file_info (impl->file_system, path, FALSE, &error);
 
   if (!info)
     error_getting_info_dialog (impl, path, error);
@@ -2879,14 +2876,16 @@ gtk_file_chooser_default_set_current_folder (GtkFileChooser    *chooser,
 					     GError           **error)
 {
   GtkFileChooserDefault *impl = GTK_FILE_CHOOSER_DEFAULT (chooser);
-  GError *err;
+  GtkFileInfo *info;
 
-  err = NULL;
-  if (!_gtk_path_bar_set_path (GTK_PATH_BAR (impl->browse_path_bar), path, &err))
-    {
-      g_propagate_error (error, err);
-      return FALSE;
-    }
+  /* Test validity of path here.  */
+  info = get_file_info (impl->file_system, path, FALSE, error);
+  if (!info)
+    return FALSE;
+  gtk_file_info_free (info);
+
+  if (!_gtk_path_bar_set_path (GTK_PATH_BAR (impl->browse_path_bar), path, error))
+    return FALSE;
 
   if (impl->current_folder != path)
     {
@@ -2896,7 +2895,7 @@ gtk_file_chooser_default_set_current_folder (GtkFileChooser    *chooser,
       impl->current_folder = gtk_file_path_copy (path);
     }
 
-  /* Update the widgets that may trigger a folder chnage themselves */
+  /* Update the widgets that may trigger a folder change themselves.  */
 
   if (!impl->changing_folder)
     {
