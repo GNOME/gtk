@@ -1,3 +1,10 @@
+Fri Aug  1 16:30:13 2003  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/x11/gdkdrawable-x11.c (_gdk_x11_have_render): 
+	If the check for missing depths, try actually creating pixmaps
+	of the depths to deal with Xinerama not reporting
+	all the depths it should. (#115822)
+
 Fri Aug  1 15:33:59 2003  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtksocket.c: Patch from Denis Mikhalkin to

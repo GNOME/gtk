@@ -224,6 +224,17 @@ gdk_drawable_impl_x11_finalize (GObject *object)
 }
 
 #ifdef HAVE_XFT
+static void
+try_pixmap (Display *xdisplay,
+	    int      screen,
+	    int      depth)
+{
+  Pixmap pixmap = XCreatePixmap (xdisplay,
+				 RootWindow (xdisplay, screen),
+				 1, 1, depth);
+  XFreePixmap (xdisplay, pixmap);
+}
+
 gboolean
 _gdk_x11_have_render (GdkDisplay *display)
 {
@@ -266,6 +277,26 @@ _gdk_x11_have_render (GdkDisplay *display)
 		  XFree (depths);
 		}
 
+	      /* At this point, we might have a false positive;
+	       * buggy versions of Xinerama only report depths for
+	       * which there is an associated visual; so we actually
+	       * go ahead and try create pixmaps.
+	       */
+	      if (!(has_8 && has_32))
+		{
+		  gdk_error_trap_push ();
+		  if (!has_8)
+		    try_pixmap (xdisplay, screen, 8);
+		  if (!has_32)
+		    try_pixmap (xdisplay, screen, 32);
+		  XSync (xdisplay, False);
+		  if (gdk_error_trap_pop () == 0)
+		    {
+		      has_8 = TRUE;
+		      has_32 = TRUE;
+		    }
+		}
+	      
 	      if (!(has_8 && has_32))
 		{
 		  g_warning ("The X server advertises that RENDER support is present,\n"
