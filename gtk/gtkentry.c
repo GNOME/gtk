@@ -1952,6 +1952,13 @@ gtk_move_forward_word (GtkEntry *entry)
 
   editable = GTK_EDITABLE (entry);
 
+  /* Prevent any leak of information */
+  if (!editable->visible)
+    {
+      editable->current_pos = entry->text_length;
+      return;
+    }
+
   if (entry->text && (editable->current_pos < entry->text_length))
     {
       text = entry->text;
@@ -1982,6 +1989,13 @@ gtk_move_backward_word (GtkEntry *entry)
   gint i;
 
   editable = GTK_EDITABLE (entry);
+
+  /* Prevent any leak of information */
+  if (!editable->visible)
+    {
+      editable->current_pos = 0;
+      return;
+    }
 
   if (entry->text && editable->current_pos > 0)
     {
