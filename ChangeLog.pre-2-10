@@ -1,3 +1,10 @@
+Fri Feb  1 14:50:36 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkrc.c (gtk_rc_parse_string): Handle reparsing
+	any strings if the theme changes. (#69465)
+
+	* tests/testgtk.c: Add a test for gtk_rc_parse_string().
+
 Fri Feb  1 20:50:29 2002  Kristian Rietveld  <kris@gtk.org>
 
 	* gtk/gtktreeview.c (gtk_tree_view_dy_to_top_row): set tree to

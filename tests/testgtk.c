@@ -11033,6 +11033,7 @@ create_main_window (void)
 
   label = gtk_label_new (buffer);
   gtk_box_pack_start (GTK_BOX (box1), label, FALSE, FALSE, 0);
+  gtk_widget_set_name (label, "testgtk-version-label");
 
   scrolled_window = gtk_scrolled_window_new (NULL, NULL);
   gtk_container_set_border_width (GTK_CONTAINER (scrolled_window), 10);
@@ -11263,7 +11264,17 @@ main (int argc, char *argv[])
 				"debug_msg",
 				1,
 				GTK_TYPE_STRING, "GtkWidgetClass <ctrl><release>9 test");
+  
+  /* We use gtk_rc_parse_string() here so we can make sure it works across theme
+   * changes
+   */
 
+  gtk_rc_parse_string ("style \"testgtk-version-label\" { "
+		       "   fg[NORMAL] = \"#ff0000\"\n"
+		       "   font = \"Sans 18\"\n"
+		       "}\n"
+		       "widget \"*.testgtk-version-label\" style \"testgtk-version-label\"");
+  
   create_main_window ();
 
   gtk_main ();

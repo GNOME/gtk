@@ -74,6 +74,7 @@ struct _GtkRcSet
 
 struct _GtkRcFile
 {
+  gboolean is_string;		/* If TRUE, name is a string to parse with gtk_rc_parse_string() */
   time_t mtime;
   gchar *name;
   gchar *canonical_name;
@@ -784,10 +785,24 @@ _gtk_rc_init (void)
 void
 gtk_rc_parse_string (const gchar *rc_string)
 {
+  GtkRcFile *rc_file;
+  /* This is wrong; once we have meaingful RC context, we need to parse the
+   * string in all contexts, and in fact, in future contexts as well.
+   */
+  GtkRcContext *context = gtk_rc_context_get (gtk_settings_get_default ());
+      
   g_return_if_fail (rc_string != NULL);
 
-  gtk_rc_parse_any (gtk_rc_context_get (gtk_settings_get_default ()),
-		    "-", -1, rc_string);	/* FIXME */
+  rc_file = g_new (GtkRcFile, 1);
+  rc_file->is_string = TRUE;
+  rc_file->name = g_strdup (rc_string);
+  rc_file->canonical_name = NULL;
+  rc_file->mtime = 0;
+  rc_file->reload = TRUE;
+
+  context->rc_files = g_slist_append (context->rc_files, rc_file);
+
+  gtk_rc_parse_any (context, "-", -1, rc_string);
 }
 
 static void
@@ -819,6 +834,7 @@ gtk_rc_parse_file (GtkRcContext *context,
   if (!tmp_list)
     {
       rc_file = g_new (GtkRcFile, 1);
+      rc_file->is_string = FALSE;
       rc_file->name = g_strdup (filename);
       rc_file->canonical_name = NULL;
       rc_file->mtime = 0;
@@ -1325,12 +1341,15 @@ gtk_rc_reparse_all_for_settings (GtkSettings *settings,
       while (tmp_list)
 	{
 	  rc_file = tmp_list->data;
-	  
-	  if (!lstat (rc_file->name, &statbuf) && 
-	      (statbuf.st_mtime > rc_file->mtime))
+
+	  if (!rc_file->is_string)
 	    {
-	      mtime_modified = TRUE;
-	      break;
+	      if (!lstat (rc_file->name, &statbuf) && 
+		  (statbuf.st_mtime > rc_file->mtime))
+		{
+		  mtime_modified = TRUE;
+		  break;
+		}
 	    }
 	  
 	  tmp_list = tmp_list->next;
@@ -1354,7 +1373,12 @@ gtk_rc_reparse_all_for_settings (GtkSettings *settings,
 	{
 	  rc_file = tmp_list->data;
 	  if (rc_file->reload)
-	    gtk_rc_parse_file (context, rc_file->name, GTK_PATH_PRIO_RC, TRUE);
+	    {
+	      if (rc_file->is_string)
+		gtk_rc_parse_string (rc_file->name);
+	      else
+		gtk_rc_parse_file (context, rc_file->name, GTK_PATH_PRIO_RC, TRUE);
+	    }
 
 	  if (rc_file->canonical_name != rc_file->name)
 	    g_free (rc_file->canonical_name);
