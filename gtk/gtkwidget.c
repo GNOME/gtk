@@ -6384,6 +6384,14 @@ gtk_widget_unref (GtkWidget *widget)
 /* style properties
  */
 
+/**
+ * gtk_widget_class_install_style_property_parser:
+ * @class: a #GtkWidgetClass
+ * @pspec: the #GParamSpec for the style property
+ * @parser: the parser for the style property
+ * 
+ * Installs a style property on a widget class. 
+ **/
 void
 gtk_widget_class_install_style_property_parser (GtkWidgetClass     *class,
 						GParamSpec         *pspec,
@@ -6408,6 +6416,14 @@ gtk_widget_class_install_style_property_parser (GtkWidgetClass     *class,
   g_param_spec_pool_insert (style_property_spec_pool, pspec, G_OBJECT_CLASS_TYPE (class));
 }
 
+/**
+ * gtk_widget_class_install_style_property:
+ * @class: a #GtkWidgetClass
+ * @pspec: the #GParamSpec for the property
+ * 
+ * Installs a style property on a widget class. The parser for the
+ * style property is determined by the value type of @pspec.
+ **/
 void
 gtk_widget_class_install_style_property (GtkWidgetClass *class,
 					 GParamSpec     *pspec)
