@@ -60,6 +60,8 @@ _gdk_init_input_core (void)
   _gdk_core_pointer->axes = gdk_input_core_axes;
   _gdk_core_pointer->num_keys = 0;
   _gdk_core_pointer->keys = NULL;
+
+  _gdk_display->core_pointer = _gdk_core_pointer;
 }
 
 static void
@@ -323,6 +325,7 @@ _gdk_input_window_destroy (GdkWindow *window)
 void
 _gdk_input_init (void)
 {
+  _gdk_init_input_core ();
   _gdk_input_devices = g_list_append (NULL, _gdk_core_pointer);
   _gdk_input_ignore_core = FALSE;
 }

@@ -8,6 +8,7 @@ _libs
 libgdk-*.la
 gdkcursors.h
 gdkenumtypes.[ch]
+gdkmarshalers.h
 libgdk.la
 gdkconfig.h
 stamp-gc-h

@@ -1,3 +1,11 @@
+Sun Sep 22 18:22:37 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/linux-fb/{gdkinput.c,gdkkeyboard-fb.c,gdk/linux-fb/gdkmain-fb.c,
+	gdk/linux-fb/gdkprivate-fb.h, gdk/linux-fb/gdkwindow-fb.c}:
+	Patch from Eric Warmenhoven to with miscellaneous linux-fb
+	fixes, including a fix for a crash in 
+	gdk_keymap_get_entries_for_keycode (#87420)
+
 2002-09-22  Matthias Clasen  <maclas@gmx.de>
 
 	* gdk/gdkdraw.c (gdk_drawable_get_type): 
@@ -204,7 +212,7 @@ Tue Sep 10 09:47:52 2002  HideToshi Tajima  <hidetoshi.tajima@sun.com>
 
 Tue Sep 10 11:11:09 2002  Owen Taylor  <otaylor@redhat.com>
 
-	* gdk/linux-fb/*: Patch from Eric Warmonhoven to
+	* gdk/linux-fb/*: Patch from Eric Warmenhoven to
 	get linux-fb compiling with multihead changes.
 
 Tue Sep 10 09:29:00 2002  Owen Taylor  <otaylor@redhat.com>

@@ -118,7 +118,8 @@ enum {
   FB_VSYNC,
   FB_CSYNC,
   FB_EXTSYNC,
-  FB_DOUBLE
+  FB_DOUBLE,
+  FB_ACCEL
 };
 
 char *fb_modes_keywords[] =
@@ -132,7 +133,8 @@ char *fb_modes_keywords[] =
   "vsync",
   "csync",
   "extsync",
-  "double"
+  "double",
+  "accel"
 };
 
 static int
@@ -146,7 +148,7 @@ fb_modes_parse_mode (GScanner *scanner,
   char *modename;
   int geometry[5];
   int timings[7];
-  int vsync=0, hsync=0, csync=0, extsync=0, doublescan=0, laced=0;
+  int vsync=0, hsync=0, csync=0, extsync=0, doublescan=0, laced=0, accel=1;
   int found_geometry = 0;
   int found_timings = 0;
     
@@ -302,6 +304,23 @@ fb_modes_parse_mode (GScanner *scanner,
 	      return -1;
 	    }
 	  break;
+	case FB_ACCEL:
+	  token = g_scanner_get_next_token (scanner);
+	  if (token != G_TOKEN_IDENTIFIER)
+	    {
+	      g_free (modename);
+	      return -1;
+	    }
+	  if (g_strcasecmp (scanner->value.v_identifier, "false")==0)
+	    accel = 0;
+	  else if (g_strcasecmp (scanner->value.v_identifier, "true")==0)
+	    accel = 1;
+	  else
+	    {
+	      g_free (modename);
+	      return -1;
+	    }
+	  break;
 	}
       
       token = g_scanner_get_next_token (scanner);
@@ -350,6 +369,10 @@ fb_modes_parse_mode (GScanner *scanner,
 	  modeinfo->sync |= FB_SYNC_HOR_HIGH_ACT;
 	if (vsync)
 	  modeinfo->sync |= FB_SYNC_VERT_HIGH_ACT;
+	if (accel)
+	  modeinfo->accel_flags = FB_ACCELF_TEXT;
+	else
+	  modeinfo->accel_flags = 0;
       }
 
     g_free (modename);
@@ -833,6 +856,12 @@ _gdk_windowing_init (int *argc, char ***argv)
       gdk_display = NULL;
       return;
     }
+
+  /* Although atexit is evil, we need it here because otherwise the
+   * keyboard is left in a bad state. you can still run 'reset' but
+   * that gets annoying after running testgtk for the 20th time.
+   */
+  g_atexit(_gdk_windowing_exit);
 
   gdk_initialized = TRUE;
 

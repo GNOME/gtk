@@ -1958,7 +1958,9 @@ gdk_window_shape_combine_mask (GdkWindow *window,
   _gdk_window_shape_combine_region (window,
 				    (mask == GDK_FB_USE_CHILD_SHAPE)?
 				    GDK_FB_USE_CHILD_SHAPE :
-				    gdk_fb_region_create_from_bitmap (mask),
+				    mask ?
+				    gdk_fb_region_create_from_bitmap (mask) :
+				    NULL,
 				    x, y);
 }
 

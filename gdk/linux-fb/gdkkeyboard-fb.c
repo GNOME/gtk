@@ -935,7 +935,7 @@ static void
 xlate_close (GdkFBKeyboard *kb)
 {
   struct termios ts;
-  const char cursoron_str[] = "\033c";
+  const char cursoron_str[] = "\033c\033[3g\033]R";
 
   write_string (gdk_display->tty_fd, cursoron_str);
 
@@ -953,8 +953,11 @@ static guint
 xlate_lookup (GdkFBKeyboard       *kb,
 	      const GdkKeymapKey  *key)
 {
-  g_warning ("xlate_lookup() NIY");
-  return FALSE;
+  if (key->group != 0)
+    return 0;
+  if (key->level != 0)
+    return 0;
+  return key->keycode;
 }
 
 static gboolean
@@ -967,8 +970,15 @@ xlate_translate (GdkFBKeyboard       *kb,
 		 gint                *level,
 		 GdkModifierType     *consumed_modifiers)
 {
-  g_warning ("xlate_translate() NIY");
-  return FALSE;
+  if (keyval)
+    *keyval = hardware_keycode;
+  if (effective_group)
+    *effective_group = 0;
+  if (level)
+    *level = 0;
+  if (consumed_modifiers)
+    *consumed_modifiers = 0;
+  return TRUE;
 }
 
 static gboolean
@@ -977,10 +987,12 @@ xlate_get_for_keyval (GdkFBKeyboard       *kb,
 		      GdkKeymapKey       **keys,
 		      gint                *n_keys)
 {
-  g_warning ("xlate_get_for_keyval() NIY");
-  if (keys) *keys=NULL;
-  if (n_keys) *n_keys=0;
-  return FALSE;
+  *n_keys = 1;
+  *keys = g_new (GdkKeymapKey, 1);
+  (*keys)->keycode = keyval;
+  (*keys)->group = 0;
+  (*keys)->level = 0;
+  return TRUE;
 }
 
 static gboolean
@@ -990,10 +1002,22 @@ xlate_get_for_keycode (GdkFBKeyboard       *kb,
 		       guint              **keyvals,
 		       gint                *n_entries)
 {
-  g_warning ("xlate_get_for_keycode() NIY");
-  if (keys) *keys=NULL;
-  if (n_entries) *n_entries=0;
-  return FALSE;
+  if (keys)
+    {
+      *keys = g_new (GdkKeymapKey, 1);
+      (*keys)->keycode = hardware_keycode;
+      (*keys)->level = 0;
+      (*keys)->group = 0;
+    }
+  if (keyvals)
+    {
+      *keyvals = g_new (guint, 1);
+      **keyvals = hardware_keycode;
+    }
+  if (n_entries)
+    *n_entries = 1;
+
+  return TRUE;
 }
 
 /* Raw keyboard support */
