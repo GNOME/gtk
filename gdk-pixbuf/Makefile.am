@@ -204,7 +204,8 @@ builtin_objs = @INCLUDED_LOADER_OBJ@
 endif
 
 DEPS = libgdk_pixbuf-1.3.la
-INCLUDES = @STRIP_BEGIN@ \
+INCLUDES = @STRIP_BEGIN@ 			\
+	-DG_LOG_DOMAIN=\"GdkPixbuf\"		\
 	-I$(top_srcdir) -I$(top_builddir) 	\
 	-I$(top_srcdir)/gdk-pixbuf 		\
 	-I$(top_builddir)/gdk-pixbuf 		\

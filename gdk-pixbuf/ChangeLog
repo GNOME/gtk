@@ -1,5 +1,7 @@
 2001-12-12  Matthias Clasen  <matthiasc@poet.de>
 
+	* Makefile.am (INCLUDES): Define G_LOG_DOMAIN. (#66412)
+
 	* gdk-pixbuf-loader.c, gdk-pixbuf-util.c: Markup fixes.
 
 2001-12-11  Michael Natterer  <mitch@gimp.org>
