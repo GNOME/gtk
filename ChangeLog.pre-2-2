@@ -1,3 +1,10 @@
+Mon Mar  5 16:38:15 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkmenushell.c (gtk_menu_shell_enter_notify): Only
+	check the ignore_enter flag for the menu shell that
+	the item is actually a child of, not for attached
+	submenus. (#51536)
+
 Fri Mar  2 12:35:40 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* Release 1.2.9
