@@ -110,6 +110,8 @@ create_combo_box_grid_demo ()
                             0, create_color_pixbuf ("magenta"),
                             -1);
 
+        g_object_unref (store);
+
         gtk_combo_box_set_active (GTK_COMBO_BOX (combo), 0);
 
         return combo;
@@ -229,13 +231,14 @@ main (int argc, char **argv)
         GtkWidget *tmp, *boom;
         GtkCellRenderer *renderer;
         GdkPixbuf *pixbuf;
+        GtkTreeModel *model;
         GValue value = {0, };
 
         gtk_init (&argc, &argv);
 
         window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
         gtk_container_set_border_width (GTK_CONTAINER (window), 5);
-        g_signal_connect (window, "delete_event", gtk_main_quit, NULL);
+        g_signal_connect (window, "destroy", gtk_main_quit, NULL);
 
         mainbox = gtk_vbox_new (FALSE, 2);
         gtk_container_add (GTK_CONTAINER (window), mainbox);
@@ -287,7 +290,9 @@ main (int argc, char **argv)
         gtk_container_set_border_width (GTK_CONTAINER (boom), 5);
         gtk_container_add (GTK_CONTAINER (tmp), boom);
 
-        combobox = gtk_combo_box_new_with_model (create_blaat ());
+        model = create_blaat ();
+        combobox = gtk_combo_box_new_with_model (model);
+        g_object_unref (model);
         gtk_container_add (GTK_CONTAINER (boom), combobox);
 
         renderer = gtk_cell_renderer_pixbuf_new ();
