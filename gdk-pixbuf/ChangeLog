@@ -1,3 +1,10 @@
+1999-11-04  Michael Fulbright  <drmike@redhat.com>
+
+	* src/io-jpeg.c: Prettied up code slightly.
+	* src/io-pnm.c:  Start of pnm loader (from file and progressively).
+	                 Doesn't do much yet (will finish tomorrow).
+	* src/gdk-pixbuf-io.c: Added pnm to structure of known types.
+
 1999-11-04  Federico Mena Quintero  <federico@redhat.com>
 
 	* doc/tmpl/rendering.sgml: Populated.

@@ -150,7 +150,7 @@ explode_gray_into_buf (struct jpeg_decompress_struct *cinfo,
 GdkPixbuf *
 image_load (FILE *f)
 {
-	int w, h, i;
+	gint w, h, i;
 	guchar *pixels = NULL;
 	guchar *dptr;
 	guchar *lines[4]; /* Used to expand rows, via rec_outbuf_height, 
@@ -161,7 +161,6 @@ image_load (FILE *f)
 	guchar **lptr;
 	struct jpeg_decompress_struct cinfo;
 	struct error_handler_data jerr;
-	GdkPixbuf *pixbuf;
 
 	/* setup error handler */
 	cinfo.err = jpeg_std_error (&jerr.pub);
@@ -187,7 +186,7 @@ image_load (FILE *f)
 	w = cinfo.output_width;
 	h = cinfo.output_height;
 
-	pixels = malloc (h * w * 3);
+	pixels = g_malloc (h * w * 3);
 	if (!pixels) {
 		jpeg_destroy_decompress (&cinfo);
 		return NULL;
@@ -216,8 +215,6 @@ image_load (FILE *f)
 	return gdk_pixbuf_new_from_data (pixels, ART_PIX_RGB, FALSE,
 					 w, h, w * 3,
 					 free_buffer, NULL);
-
-	return pixbuf;
 }
 
 

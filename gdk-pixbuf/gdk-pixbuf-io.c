@@ -103,21 +103,8 @@ pixbuf_check_xpm (guchar *buffer, int size)
 	return FALSE;
 }
 
-#if 0
 static gboolean
-pixbuf_check_bmp (guchar *buffer, int size)
-{
-	if (size < 20)
-		return FALSE;
-
-	if (buffer [0] != 'B' || buffer [1] != 'M')
-		return FALSE;
-
-	return TRUE;
-}
-
-static gboolean
-pixbuf_check_ppm (guchar *buffer, int size)
+pixbuf_check_pnm (guchar *buffer, int size)
 {
 	if (size < 20)
 		return FALSE;
@@ -133,6 +120,20 @@ pixbuf_check_ppm (guchar *buffer, int size)
 	}
 	return FALSE;
 }
+
+#if 0
+static gboolean
+pixbuf_check_bmp (guchar *buffer, int size)
+{
+	if (size < 20)
+		return FALSE;
+
+	if (buffer [0] != 'B' || buffer [1] != 'M')
+		return FALSE;
+
+	return TRUE;
+}
+
 #endif
 
 GdkPixbufModule file_formats [] = {
@@ -142,9 +143,9 @@ GdkPixbufModule file_formats [] = {
 	{ "gif",  pixbuf_check_gif, NULL,  NULL, NULL, NULL, NULL, NULL },
 #define XPM_FILE_FORMAT_INDEX 4
 	{ "xpm",  pixbuf_check_xpm, NULL,  NULL, NULL, NULL, NULL, NULL },
+	{ "pnm",  pixbuf_check_pnm, NULL,  NULL, NULL, NULL, NULL, NULL },
 #if 0
 	{ "bmp",  pixbuf_check_bmp, NULL,  NULL, NULL, NULL, NULL, NULL },
-	{ "ppm",  pixbuf_check_ppm, NULL,  NULL, NULL, NULL, NULL, NULL },
 #endif
 	{ NULL, NULL, NULL, NULL, NULL, NULL, NULL }
 };
