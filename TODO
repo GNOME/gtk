@@ -207,6 +207,9 @@ Additions:
  * Buttons's should derive from Bin's. (GTK 2.0 change, breaks
    lots of stuff)
 
+ * New signals to handle accelerators: accel_before and accel_after (or
+   somesuch) to pre and post process accelerator calls. [Yosh]
+
 Text/Edit widget:
 
   Bugs:
