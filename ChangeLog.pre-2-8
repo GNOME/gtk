@@ -1,3 +1,8 @@
+Sun Mar  7 22:24:28 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkbutton.c (_gtk_button_paint): Don't use xthickness in the
+	height calculation.
+
 Sun Mar  7 14:34:04 2004  Jonathan Blandford  <jrb@gnome.org>
 
 	* gtk/gtkfilechooserdefault.c (trap_activate_cb): stop activate

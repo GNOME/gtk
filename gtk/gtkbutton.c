@@ -1042,7 +1042,7 @@ _gtk_button_paint (GtkButton    *button,
 	      x += widget->style->xthickness + focus_pad;
 	      y += widget->style->ythickness + focus_pad;
 	      width -= 2 * (widget->style->xthickness + focus_pad);
-	      height -=  2 * (widget->style->xthickness + focus_pad);
+	      height -=  2 * (widget->style->ythickness + focus_pad);
 	    }
 	  else
 	    {
