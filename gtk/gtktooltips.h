@@ -50,17 +50,16 @@ struct _GtkTooltips
   GtkData data;
 
   GtkWidget *tip_window;
-  GtkTooltipsData *active_widget;
-  GList *widget_list;
+  GtkTooltipsData *active_tips_data;
+  GList *tips_data_list;
 
   GdkGC *gc;
   GdkColor *foreground;
   GdkColor *background;
 
-  gint16 delay;
-  gint	 enabled : 1;
-  gint	 timer_active : 1;
-  gint	 timer_tag;
+  guint   delay : 30;
+  guint	  enabled : 1;
+  gint	  timer_tag;
 };
 
 struct _GtkTooltipsClass
@@ -74,7 +73,7 @@ GtkTooltips*	 gtk_tooltips_new	 (void);
 void		 gtk_tooltips_enable	 (GtkTooltips     *tooltips);
 void		 gtk_tooltips_disable	 (GtkTooltips     *tooltips);
 void		 gtk_tooltips_set_delay	 (GtkTooltips     *tooltips,
-					  gint	           delay);
+					  guint	           delay);
 void		 gtk_tooltips_set_tip	 (GtkTooltips     *tooltips,
 					  GtkWidget	  *widget,
 					  const gchar     *tip_text,

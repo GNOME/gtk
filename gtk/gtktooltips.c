@@ -41,7 +41,6 @@ static void gtk_tooltips_widget_remove     (GtkWidget   *widget,
                                             gpointer     data);
 static void gtk_tooltips_set_active_widget (GtkTooltips *tooltips,
                                             GtkWidget   *widget);
-static gint gtk_tooltips_widget_visible    (GtkWidget   *widget);
 static gint gtk_tooltips_timeout           (gpointer     data);
 static void gtk_tooltips_create_window     (GtkTooltips *tooltips);
 static void gtk_tooltips_draw_tips         (GtkTooltips *tooltips);
@@ -87,13 +86,16 @@ gtk_tooltips_class_init (GtkTooltipsClass *class)
 static void
 gtk_tooltips_init (GtkTooltips *tooltips)
 {
-  tooltips->enabled = TRUE;
-  tooltips->delay = DEFAULT_DELAY;
-  tooltips->widget_list = NULL;
+  tooltips->tip_window = NULL;
+  tooltips->active_tips_data = NULL;
+  tooltips->tips_data_list = NULL;
   tooltips->gc = NULL;
   tooltips->foreground = NULL;
   tooltips->background = NULL;
-  tooltips->tip_window = NULL;
+  
+  tooltips->delay = DEFAULT_DELAY;
+  tooltips->enabled = TRUE;
+  tooltips->timer_tag = 0;
 }
 
 GtkTooltips *
@@ -133,15 +135,15 @@ gtk_tooltips_destroy (GtkObject *object)
 
   g_return_if_fail (tooltips != NULL);
 
-  if (tooltips->timer_active == TRUE)
+  if (tooltips->timer_tag)
     {
-      tooltips->timer_active = FALSE;
       gtk_timeout_remove (tooltips->timer_tag);
+      tooltips->timer_tag = 0;
     }
 
-  if (tooltips->widget_list != NULL)
+  if (tooltips->tips_data_list != NULL)
     {
-      current = g_list_first (tooltips->widget_list);
+      current = g_list_first (tooltips->tips_data_list);
       while (current != NULL)
 	{
 	  tooltipsdata = (GtkTooltipsData*) current->data;
@@ -281,25 +283,14 @@ gtk_tooltips_disable (GtkTooltips *tooltips)
 {
   g_return_if_fail (tooltips != NULL);
 
+  gtk_tooltips_set_active_widget (tooltips, NULL);
+
   tooltips->enabled = FALSE;
-
-  if (tooltips->timer_active == TRUE)
-    {
-      gtk_timeout_remove (tooltips->timer_tag);
-      tooltips->timer_active = FALSE;
-    }
-
-  if (tooltips->active_widget != NULL)
-    {
-      if (tooltips->tip_window != NULL)
-	gtk_widget_hide (tooltips->tip_window);
-      tooltips->active_widget = NULL;
-    }
 }
 
 void
 gtk_tooltips_set_delay (GtkTooltips *tooltips,
-                        gint         delay)
+                        guint         delay)
 {
   g_return_if_fail (tooltips != NULL);
 
@@ -345,7 +336,7 @@ gtk_tooltips_set_tip (GtkTooltips *tooltips,
       tooltipsdata->tip_private = g_strdup (tip_private);
 
       gtk_tooltips_layout_text (tooltips, tooltipsdata);
-      tooltips->widget_list = g_list_append (tooltips->widget_list,
+      tooltips->tips_data_list = g_list_append (tooltips->tips_data_list,
                                              tooltipsdata);
       gtk_signal_connect_after(GTK_OBJECT (widget), "event",
                                (GtkSignalFunc) gtk_tooltips_event_handler,
@@ -390,21 +381,19 @@ gtk_tooltips_draw_tips (GtkTooltips * tooltips)
   GtkTooltipsData *data;
   GList *el;
 
-  if (tooltips->tip_window == NULL)
-    {
-      gtk_tooltips_create_window (tooltips);
-    }
-  else
+  if (!tooltips->tip_window)
+    gtk_tooltips_create_window (tooltips);
+  else if (GTK_WIDGET_VISIBLE (tooltips->tip_window))
     gtk_widget_hide (tooltips->tip_window);
 
   style = tooltips->tip_window->style;
   
-  widget = tooltips->active_widget->widget;
+  widget = tooltips->active_tips_data->widget;
 
   scr_w = gdk_screen_width ();
   scr_h = gdk_screen_height ();
 
-  data = tooltips->active_widget;
+  data = tooltips->active_tips_data;
   if (data->font != style->font)
     gtk_tooltips_layout_text (tooltips, data);
 
@@ -489,52 +478,44 @@ gtk_tooltips_timeout (gpointer data)
 {
   GtkTooltips *tooltips = (GtkTooltips *) data;
 
-  if (tooltips->active_widget != NULL &&
-      GTK_WIDGET_DRAWABLE (tooltips->active_widget->widget))
+  if (tooltips->active_tips_data != NULL &&
+      GTK_WIDGET_DRAWABLE (tooltips->active_tips_data->widget))
     gtk_tooltips_draw_tips (tooltips);
 
   return FALSE;
-}
-
-static gint
-gtk_tooltips_widget_visible (GtkWidget *widget)
-{
-  GtkWidget *current;
-
-  current = widget;
-
-  while (current != NULL)
-    {
-      if (!GTK_WIDGET_MAPPED (current) || !GTK_WIDGET_REALIZED (current))
-	return FALSE;
-      current = current->parent;
-    }
-
-  return TRUE;
 }
 
 static void
 gtk_tooltips_set_active_widget (GtkTooltips *tooltips,
                                 GtkWidget   *widget)
 {
-  GtkTooltipsData *tooltipsdata;
-  GList *current;
-
-  current = g_list_first (tooltips->widget_list);
-  tooltips->active_widget = NULL;
-
-  while (current != NULL)
+  if (tooltips->tip_window)
+    gtk_widget_hide (tooltips->tip_window);
+  if (tooltips->timer_tag)
     {
-      tooltipsdata = (GtkTooltipsData*) current->data;
-
-      if (widget == tooltipsdata->widget &&
-          gtk_tooltips_widget_visible (tooltipsdata->widget) == TRUE)
+      gtk_timeout_remove (tooltips->timer_tag);
+      tooltips->timer_tag = 0;
+    }
+  
+  tooltips->active_tips_data = NULL;
+  
+  if (widget)
+    {
+      GList *list;
+      
+      for (list = tooltips->tips_data_list; list; list = list->next)
 	{
-	  tooltips->active_widget = tooltipsdata;
-	  return;
+	  GtkTooltipsData *tooltipsdata;
+	  
+	  tooltipsdata = list->data;
+	  
+	  if (tooltipsdata->widget == widget &&
+	      GTK_WIDGET_DRAWABLE (widget))
+	    {
+	      tooltips->active_tips_data = tooltipsdata;
+	      break;
+	    }
 	}
-
-      current = current->next;
     }
 }
 
@@ -543,70 +524,45 @@ gtk_tooltips_event_handler (GtkWidget *widget,
                             GdkEvent  *event)
 {
   GtkTooltips *tooltips;
-  GtkTooltipsData *old_widget;
+  GtkTooltipsData *old_tips_data;
   GtkWidget *event_widget;
-  gint returnval = FALSE;
-
-  old_widget = gtk_tooltips_data_get (widget);
-  tooltips = old_widget->tooltips;
-  event_widget = gtk_get_event_widget (event);
-
-  if (tooltips->enabled == FALSE ||
-      event_widget != widget)
-    return returnval;
 
   if ((event->type == GDK_LEAVE_NOTIFY || event->type == GDK_ENTER_NOTIFY) &&
       event->crossing.detail == GDK_NOTIFY_INFERIOR)
-    return returnval;
+    return FALSE;
 
-  if (event->type == GDK_LEAVE_NOTIFY)
+  event_widget = gtk_get_event_widget (event);
+  if (event_widget != widget)
+    return FALSE;
+  
+  old_tips_data = gtk_tooltips_data_get (widget);
+  tooltips = old_tips_data->tooltips;
+
+  switch (event->type)
     {
-      if (tooltips->timer_active == TRUE)
+    case GDK_MOTION_NOTIFY:
+      /* do nothing */
+      break;
+      
+    case GDK_ENTER_NOTIFY:
+      old_tips_data = tooltips->active_tips_data;
+      if (tooltips->enabled &&
+	  (!old_tips_data || old_tips_data->widget != widget))
 	{
-	  gtk_timeout_remove (tooltips->timer_tag);
-	  tooltips->timer_active = FALSE;
+	  gtk_tooltips_set_active_widget (tooltips, widget);
+	  
+	  tooltips->timer_tag = gtk_timeout_add (tooltips->delay,
+						 gtk_tooltips_timeout,
+						 (gpointer) tooltips);
 	}
-      if (tooltips->tip_window != NULL)
-	gtk_widget_hide (tooltips->tip_window);
-      tooltips->active_widget = NULL;
-    }
-  else if (event->type == GDK_MOTION_NOTIFY || event->type == GDK_ENTER_NOTIFY)
-    {
-      old_widget = tooltips->active_widget;
+      break;
 
-      gtk_tooltips_set_active_widget (tooltips, widget);
-
-      if (old_widget != tooltips->active_widget)
-	{
-	  if (tooltips->timer_active == TRUE)
-	    {
-	      gtk_timeout_remove (tooltips->timer_tag);
-	      tooltips->timer_active = FALSE;
-	    }
-	  if (tooltips->active_widget != NULL)
-	    {
-	      if (tooltips->tip_window != NULL)
-		gtk_widget_hide (tooltips->tip_window);
-
-	      tooltips->timer_tag = gtk_timeout_add (tooltips->delay,
-                gtk_tooltips_timeout, (gpointer) tooltips);
-
-	      tooltips->timer_active = TRUE;
-	    }
-	}
-      else if (tooltips->active_widget == NULL)
-	{
-	  if (tooltips->tip_window != NULL)
-	    gtk_widget_hide (tooltips->tip_window);
-	}
-    }
-  else
-    {
-      if (tooltips->tip_window != NULL)
-	gtk_widget_hide (tooltips->tip_window);
+    default:
+      gtk_tooltips_set_active_widget (tooltips, NULL);
+      break;
     }
 
-  return returnval;
+  return FALSE;
 }
 
 static void
@@ -615,14 +571,10 @@ gtk_tooltips_widget_unmap (GtkWidget *widget,
 {
   GtkTooltipsData *tooltipsdata = (GtkTooltipsData *)data;
   GtkTooltips *tooltips = tooltipsdata->tooltips;
-
-  if (tooltips->active_widget &&
-      (tooltips->active_widget->widget == widget))
-    {
-      if (tooltips->tip_window != NULL)
-	gtk_widget_hide (tooltips->tip_window);
-      tooltips->active_widget = NULL;
-    }
+  
+  if (tooltips->active_tips_data &&
+      (tooltips->active_tips_data->widget == widget))
+    gtk_tooltips_set_active_widget (tooltips, NULL);
 }
 
 static void
@@ -633,7 +585,7 @@ gtk_tooltips_widget_remove (GtkWidget *widget,
   GtkTooltips *tooltips = tooltipsdata->tooltips;
 
   gtk_tooltips_widget_unmap (widget, data);
-  tooltips->widget_list = g_list_remove (tooltips->widget_list,
-					 tooltipsdata);
+  tooltips->tips_data_list = g_list_remove (tooltips->tips_data_list,
+					    tooltipsdata);
   gtk_tooltips_destroy_data (tooltipsdata);
 }
