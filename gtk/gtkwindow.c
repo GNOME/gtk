@@ -2137,13 +2137,20 @@ gtk_window_compute_reposition (GtkWindow  *window,
 			       gint       *y)
 {
   GtkWidget *widget;
-
+  GtkWindowPosition pos;
+  
   widget = GTK_WIDGET (window);
 
   *x = -1;
   *y = -1;
+
+  pos = window->position;
+  if (pos == GTK_WIN_POS_CENTER_ON_PARENT &&
+      (window->transient_parent == NULL ||
+       !GTK_WIDGET_MAPPED (window->transient_parent))
+    pos = GTK_WIN_POS_NONE;
   
-  switch (window->position)
+  switch (pos)
     {
     case GTK_WIN_POS_CENTER:
     case GTK_WIN_POS_CENTER_ALWAYS:
@@ -2156,6 +2163,21 @@ gtk_window_compute_reposition (GtkWindow  *window,
 	  *y = (screen_height - new_height) / 2;
 	}
       break;
+
+    case GTK_WIN_POS_CENTER_ON_PARENT:
+      if (window->use_uposition)
+        {
+          gint ox, oy;
+          gdk_window_get_origin (window->transient_parent->window,
+                                 &ox, &oy);
+          
+          g_assert (window->transient_parent);
+                                 
+          *x = ox + (window->transient_parent->allocation.width - new_width) / 2;
+          *y = oy + (window->transient_parent->allocation.height - new_height) / 2;
+        }
+      break;
+
     case GTK_WIN_POS_MOUSE:
       if (window->use_uposition)
 	{
