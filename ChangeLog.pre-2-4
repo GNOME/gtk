@@ -1,3 +1,9 @@
+2003-03-06  Tor Lillqvist  <tml@iki.fi>
+
+	* configure.in: Fix hacks needed in the dimm.h check.
+
+	* gtk/gtkfilesel.c (gtk_file_selection_set_filename): UTF-8 fix.
+
 2003-02-09  Tor Lillqvist  <tml@iki.fi>
 
 	* gtk/gtkfilesel.c (win32_gtk_add_drives_to_dir_list): Clean up.

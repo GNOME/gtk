@@ -718,8 +718,8 @@ void
 gtk_file_selection_set_filename (GtkFileSelection *filesel,
 				 const gchar      *filename)
 {
-  gchar *buf, *utf8_buf;
-  const char *name, *last_slash;
+  gchar *buf, *utf8_buf, *utf8_name;
+  const char *last_slash;
 
   g_return_if_fail (filesel != NULL);
   g_return_if_fail (GTK_IS_FILE_SELECTION (filesel));
@@ -734,22 +734,23 @@ gtk_file_selection_set_filename (GtkFileSelection *filesel,
   if (!last_slash)
     {
       buf = g_strdup ("");
-      name = filename;
+      utf8_name = g_filename_to_utf8 (filename, -1, NULL, NULL, NULL);
     }
   else
     {
       buf = g_strdup (filename);
       buf[last_slash - filename + 1] = 0;
-      name = last_slash + 1;
+      utf8_name = g_filename_to_utf8 (last_slash + 1, -1, NULL, NULL, NULL);
     }
 
   utf8_buf = g_filename_to_utf8 (buf, -1, NULL, NULL, NULL);
   gtk_file_selection_populate (filesel, utf8_buf, FALSE);
 
   if (filesel->selection_entry)
-    gtk_entry_set_text (GTK_ENTRY (filesel->selection_entry), name);
+    gtk_entry_set_text (GTK_ENTRY (filesel->selection_entry), utf8_name);
   g_free (buf);
   g_free (utf8_buf);
+  g_free (utf8_name);
 }
 
 gchar*
