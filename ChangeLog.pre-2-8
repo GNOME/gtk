@@ -1,5 +1,11 @@
 2004-10-24  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkicontheme.c: Use the new g_key_file api in GLib.
+
+	* gtk/Makefile.am (gtk_c_sources): Remove gtkiconthemeparser.[hc]
+
+	* gtk/gtkiconthemeparser.[hc]: Removed.
+
 	* gtk/gtkfilechooserdefault.c (location_popup_handler): If the
 	location dialog is brought up by typing '/', insert the slash
 	in the entry.  (#155370, Warren Togami)
@@ -17,7 +23,7 @@
 	Billy Biggs)	
 
 Sat Oct 23 16:14:37 2004  Søren Sandmann  <sandmann@redhat.com>
-
+tkIconThemeFile
 	* gtk/gtksequence.c (_gtk_sequence_node_insert_sorted): Remove
 	assertion that can get triggered by broken sort functions.
 

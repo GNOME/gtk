@@ -396,8 +396,6 @@ gtk_c_sources =                 \
 	gtkiconfactory.c	\
 	gtkiconcache.c		\
 	gtkicontheme.c		\
-	gtkiconthemeparser.c	\
-	gtkiconthemeparser.h	\
 	gtkiconview.c		\
 	gtkimage.c		\
 	gtkimagemenuitem.c	\

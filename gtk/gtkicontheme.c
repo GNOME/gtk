@@ -36,7 +36,6 @@
 #endif /* G_OS_WIN32 */
 
 #include "gtkicontheme.h"
-#include "gtkiconthemeparser.h"
 #include "gtkiconcache.h"
 #include "gtkintl.h"
 #include "gtksettings.h"
@@ -208,7 +207,7 @@ static void         theme_list_icons  (IconTheme        *theme,
 				       GQuark            context);
 static void         theme_subdir_load (GtkIconTheme     *icon_theme,
 				       IconTheme        *theme,
-				       GtkIconThemeFile *theme_file,
+				       GKeyFile         *theme_file,
 				       char             *subdir);
 static void         do_theme_change   (GtkIconTheme     *icon_theme);
 
@@ -863,10 +862,8 @@ insert_theme (GtkIconTheme *icon_theme, const char *theme_name)
   GtkIconThemePrivate *priv;
   IconTheme *theme;
   char *path;
-  char *contents;
-  char *directories;
-  char *inherits;
-  GtkIconThemeFile *theme_file;
+  GKeyFile *theme_file;
+  GError *error = NULL;
   IconThemeDirMtime *dir_mtime;
   struct stat stat_buf;
   
@@ -895,20 +892,25 @@ insert_theme (GtkIconTheme *icon_theme, const char *theme_name)
     }
 
   theme_file = NULL;
-  for (i = 0; i < priv->search_path_len; i++)
+  for (i = 0; i < priv->search_path_len && !theme_file; i++)
     {
       path = g_build_filename (priv->search_path[i],
 			       theme_name,
 			       "index.theme",
 			       NULL);
-      if (g_file_test (path, G_FILE_TEST_IS_REGULAR)) {
-	if (g_file_get_contents (path, &contents, NULL, NULL)) {
-	  theme_file = _gtk_icon_theme_file_new_from_string (contents, NULL);
-	  g_free (contents);
-	  g_free (path);
-	  break;
+      if (g_file_test (path, G_FILE_TEST_IS_REGULAR)) 
+	{
+	  theme_file = g_key_file_new ();
+	  g_key_file_set_list_separator (theme_file, ',');
+	  g_key_file_load_from_file (theme_file, path, 0, &error);
+	  if (error)
+	    {
+	      g_key_file_free (theme_file);
+	      theme_file = NULL;
+	      g_error_free (error);
+	      error = NULL;
+	    }
 	}
-      }
       g_free (path);
     }
 
@@ -916,71 +918,62 @@ insert_theme (GtkIconTheme *icon_theme, const char *theme_name)
     return;
   
   theme = g_new (IconTheme, 1);
-  if (!_gtk_icon_theme_file_get_locale_string (theme_file,
-					       "Icon Theme",
-					       "Name",
-					       &theme->display_name))
+  theme->display_name = 
+    g_key_file_get_locale_string (theme_file, "Icon Theme", "Name", NULL, NULL);
+  if (!theme->display_name)
     {
       g_warning ("Theme file for %s has no name\n", theme_name);
       g_free (theme);
-      _gtk_icon_theme_file_free (theme_file);
+      g_key_file_free (theme_file);
       return;
     }
 
-  if (!_gtk_icon_theme_file_get_string (theme_file,
-					"Icon Theme",
-					"Directories",
-					&directories))
+  dirs = g_key_file_get_string_list (theme_file, "Icon Theme", "Directories", NULL, NULL);
+  if (!dirs)
     {
       g_warning ("Theme file for %s has no directories\n", theme_name);
       g_free (theme->display_name);
       g_free (theme);
-      _gtk_icon_theme_file_free (theme_file);
+      g_key_file_free (theme_file);
       return;
     }
   
   theme->name = g_strdup (theme_name);
-  _gtk_icon_theme_file_get_locale_string (theme_file,
-					  "Icon Theme",
-					  "Comment",
-					  &theme->comment);
-  _gtk_icon_theme_file_get_string (theme_file,
-				   "Icon Theme",
-				   "Example",
-				   &theme->example);
-  
-  dirs = g_strsplit (directories, ",", 0);
+  theme->comment = 
+    g_key_file_get_locale_string (theme_file, 
+				  "Icon Theme", "Comment",
+				  NULL, NULL);
+  theme->example = 
+    g_key_file_get_string (theme_file, 
+			   "Icon Theme", "Example",
+			   NULL);
 
   theme->icon_caches = NULL;
   theme->dirs = NULL;
   for (i = 0; dirs[i] != NULL; i++)
-      theme_subdir_load (icon_theme, theme, theme_file, dirs[i]);
+    theme_subdir_load (icon_theme, theme, theme_file, dirs[i]);
   
   g_strfreev (dirs);
   
   theme->dirs = g_list_reverse (theme->dirs);
 
-  g_free (directories);
-
   /* Prepend the finished theme */
   priv->themes = g_list_prepend (priv->themes, theme);
 
-  if (_gtk_icon_theme_file_get_string (theme_file,
+  themes = g_key_file_get_string_list (theme_file,
 				       "Icon Theme",
 				       "Inherits",
-				       &inherits))
+				       NULL,
+				       NULL);
+  if (themes)
     {
-      themes = g_strsplit (inherits, ",", 0);
-
       for (i = 0; themes[i] != NULL; i++)
 	insert_theme (icon_theme, themes[i]);
       
       g_strfreev (themes);
-
-      g_free (inherits);
     }
 
-  _gtk_icon_theme_file_free (theme_file);
+  g_key_file_free (theme_file);
 }
 
 static void
@@ -1950,94 +1943,84 @@ theme_list_icons (IconTheme *theme, GHashTable *icons,
 static void
 load_icon_data (IconThemeDir *dir, const char *path, const char *name)
 {
-  GtkIconThemeFile *icon_file;
+  GKeyFile *icon_file;
   char *base_name;
   char **split;
-  char *contents;
+  gsize length;
   char *dot;
   char *str;
   char *split_point;
   int i;
+  gint *ivalues;
+  GError *error = NULL;
   
   GtkIconData *data;
 
-  if (g_file_get_contents (path, &contents, NULL, NULL))
+  icon_file = g_key_file_new ();
+  g_key_file_set_list_separator (icon_file, ',');
+  g_key_file_load_from_file (icon_file, path, 0, &error);
+  if (error)
     {
-      icon_file = _gtk_icon_theme_file_new_from_string (contents, NULL);
-      
-      if (icon_file)
-	{
-	  base_name = g_strdup (name);
-	  dot = strrchr (base_name, '.');
-	  *dot = 0;
-	  
-	  data = g_new0 (GtkIconData, 1);
-	  g_hash_table_replace (dir->icon_data, base_name, data);
-	  
-	  if (_gtk_icon_theme_file_get_string (icon_file, "Icon Data",
-					       "EmbeddedTextRectangle",
-					       &str))
-	    {
-	      split = g_strsplit (str, ",", 4);
-	      
-	      i = 0;
-	      while (split[i] != NULL)
-		i++;
-
-	      if (i==4)
-		{
-		  data->has_embedded_rect = TRUE;
-		  data->x0 = atoi (split[0]);
-		  data->y0 = atoi (split[1]);
-		  data->x1 = atoi (split[2]);
-		  data->y1 = atoi (split[3]);
-		}
-
-	      g_strfreev (split);
-	      g_free (str);
-	    }
-
-
-	  if (_gtk_icon_theme_file_get_string (icon_file, "Icon Data",
-					       "AttachPoints",
-					       &str))
-	    {
-	      split = g_strsplit (str, "|", -1);
-	      
-	      i = 0;
-	      while (split[i] != NULL)
-		i++;
-
-	      data->n_attach_points = i;
-	      data->attach_points = g_malloc (sizeof (GdkPoint) * i);
-
-	      i = 0;
-	      while (split[i] != NULL && i < data->n_attach_points)
-		{
-		  split_point = strchr (split[i], ',');
-		  if (split_point)
-		    {
-		      *split_point = 0;
-		      split_point++;
-		      data->attach_points[i].x = atoi (split[i]);
-		      data->attach_points[i].y = atoi (split_point);
-		    }
-		  i++;
-		}
-	      
-	      g_strfreev (split);
-	      g_free (str);
-	    }
-	  
-	  _gtk_icon_theme_file_get_locale_string (icon_file, "Icon Data",
-						  "DisplayName",
-						  &data->display_name);
-	  
-	  _gtk_icon_theme_file_free (icon_file);
-	}
-      g_free (contents);
+      g_error_free (error);
+      return;
     }
-  
+  else
+    {
+      base_name = g_strdup (name);
+      dot = strrchr (base_name, '.');
+      *dot = 0;
+      
+      data = g_new0 (GtkIconData, 1);
+      g_hash_table_replace (dir->icon_data, base_name, data);
+      
+      ivalues = g_key_file_get_integer_list (icon_file, 
+					     "Icon Data", "EmbeddedTextRectangle",
+					      &length, NULL);
+      if (ivalues)
+	{
+	  if (length == 4)
+	    {
+	      data->has_embedded_rect = TRUE;
+	      data->x0 = ivalues[0];
+	      data->y0 = ivalues[1];
+	      data->x1 = ivalues[2];
+	      data->y1 = ivalues[3];
+	    }
+	  
+	  g_free (ivalues);
+	}
+      
+      str = g_key_file_get_string (icon_file, "Icon Data", "AttachPoints", NULL);
+      if (str)
+	{
+	  split = g_strsplit (str, "|", -1);
+	  
+	  data->n_attach_points = g_strv_length (split);
+	  data->attach_points = g_malloc (sizeof (GdkPoint) * data->n_attach_points);
+
+	  i = 0;
+	  while (split[i] != NULL && i < data->n_attach_points)
+	    {
+	      split_point = strchr (split[i], ',');
+	      if (split_point)
+		{
+		  *split_point = 0;
+		  split_point++;
+		  data->attach_points[i].x = atoi (split[i]);
+		  data->attach_points[i].y = atoi (split_point);
+		}
+	      i++;
+	    }
+	  
+	  g_strfreev (split);
+	  g_free (str);
+	}
+      
+      data->display_name = g_key_file_get_locale_string (icon_file, 
+							 "Icon Data", "DisplayName",
+							 NULL, NULL);
+      g_key_file_free (icon_file);
+    }
 }
 
 static void
@@ -2095,9 +2078,9 @@ scan_directory (GtkIconThemePrivate *icon_theme,
 
 static void
 theme_subdir_load (GtkIconTheme *icon_theme,
-		   IconTheme *theme,
-		   GtkIconThemeFile *theme_file,
-		   char *subdir)
+		   IconTheme    *theme,
+		   GKeyFile     *theme_file,
+		   char         *subdir)
 {
   int base;
   char *type_string;
@@ -2110,18 +2093,20 @@ theme_subdir_load (GtkIconTheme *icon_theme,
   int max_size;
   int threshold;
   char *full_dir;
+  GError *error = NULL;
 
-  if (!_gtk_icon_theme_file_get_integer (theme_file,
-					 subdir,
-					 "Size",
-					 &size))
+  size = g_key_file_get_integer (theme_file, subdir, "Size", &error);
+  if (error)
     {
-      g_warning ("Theme directory %s of theme %s has no size field\n", subdir, theme->name);
+      g_error_free (error);
+      g_warning ("Theme directory %s of theme %s has no size field\n", 
+		 subdir, theme->name);
       return;
     }
   
   type = ICON_THEME_DIR_THRESHOLD;
-  if (_gtk_icon_theme_file_get_string (theme_file, subdir, "Type", &type_string))
+  type_string = g_key_file_get_string (theme_file, subdir, "Type", NULL);
+  if (type_string)
     {
       if (strcmp (type_string, "Fixed") == 0)
 	type = ICON_THEME_DIR_FIXED;
@@ -2134,30 +2119,40 @@ theme_subdir_load (GtkIconTheme *icon_theme,
     }
   
   context = 0;
-  if (_gtk_icon_theme_file_get_string (theme_file, subdir, "Context", &context_string))
+  context_string = g_key_file_get_string (theme_file, subdir, "Context", NULL);
+  if (context_string)
     {
       context = g_quark_from_string (context_string);
       g_free (context_string);
     }
 
-  if (!_gtk_icon_theme_file_get_integer (theme_file,
-					 subdir,
-					 "MaxSize",
-				     &max_size))
-    max_size = size;
-  
-  if (!_gtk_icon_theme_file_get_integer (theme_file,
-					 subdir,
-					 "MinSize",
-					 &min_size))
-    min_size = size;
-  
-  if (!_gtk_icon_theme_file_get_integer (theme_file,
-					 subdir,
-					 "Threshold",
-					 &threshold))
-    threshold = 2;
+  max_size = g_key_file_get_integer (theme_file, subdir, "MaxSize", &error);
+  if (error)
+    {
+      max_size = size;
 
+      g_error_free (error);
+      error = NULL;
+    }
+
+  min_size = g_key_file_get_integer (theme_file, subdir, "MinSize", &error);
+  if (error)
+    {
+      min_size = size;
+
+      g_error_free (error);
+      error = NULL;
+    }
+  
+  threshold = g_key_file_get_integer (theme_file, subdir, "Threshold", &error);
+  if (error)
+    {
+      threshold = 2;
+
+      g_error_free (error);
+      error = NULL;
+    }
+  
   for (base = 0; base < icon_theme->priv->search_path_len; base++)
     {
       GtkIconCache *cache;
