@@ -13,5 +13,8 @@ scripts in gnome-i18n/UTF-8, for example
   potoutf.sh fi.po
   cvs commit fi.po
 
+An alternative is to use the msgconv utility bundled along with
+gettext package >= 0.11.
+
 If you need help with this, ask, but please don't commit
 non-UTF-8 files here.
