@@ -5436,7 +5436,7 @@ msgstr "Tag permulaan diluar dugaan '%s' pada baris %d aksara %d"
 #: gtk/gtkuimanager.c:1158
 #, c-format
 msgid "Unexpected character data on line %d char %d"
-msgstr "Data aksara diluar dugaan '%s' pada baris %d aksara %d"
+msgstr "Data aksara diluar dugaan pada baris %d aksara %d"
 
 #: gtk/gtkuimanager.c:1916
 msgid "Empty"
