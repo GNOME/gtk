@@ -77,29 +77,33 @@ gdk_image_destroy
 <SECTION>
 <TITLE>GdkRGB</TITLE>
 <FILE>rgb</FILE>
-GdkRgbCmap
-GdkRgbDither
-
 gdk_rgb_init
-gdk_rgb_cmap_new
-gdk_rgb_cmap_free
 
-gdk_rgb_gc_set_foreground
-gdk_rgb_gc_set_background
-
+<SUBSECTION>
 gdk_draw_rgb_image
+gdk_draw_rgb_image_dithalign
 gdk_draw_indexed_image
 gdk_draw_gray_image
 gdk_draw_rgb_32_image
-gdk_draw_rgb_image_dithalign
+GdkRgbDither
+
+<SUBSECTION>
+gdk_rgb_cmap_new
+gdk_rgb_cmap_free
+GdkRgbCmap
+
+<SUBSECTION>
+gdk_rgb_gc_set_foreground
+gdk_rgb_gc_set_background
 gdk_rgb_xpixel_from_rgb
 
-gdk_rgb_set_verbose
-gdk_rgb_ditherable
+<SUBSECTION>
 gdk_rgb_set_install
 gdk_rgb_set_min_colors
 gdk_rgb_get_visual
 gdk_rgb_get_cmap
+gdk_rgb_ditherable
+gdk_rgb_set_verbose
 </SECTION>
 
 <SECTION>
@@ -164,26 +168,29 @@ gdk_char_height
 <TITLE>Drawing Primitives</TITLE>
 <FILE>drawing</FILE>
 GdkFill
-GdkFillRule
 GdkLineStyle
 GdkCapStyle
 GdkJoinStyle
 
 gdk_draw_point
+gdk_draw_points
 gdk_draw_line
+gdk_draw_lines
+gdk_draw_segments
+GdkSegment
 gdk_draw_rectangle
 gdk_draw_arc
 gdk_draw_polygon
+
+<SUBSECTION>
 gdk_draw_string
 gdk_draw_text
 gdk_draw_text_wc
+
+<SUBSECTION>
 gdk_draw_pixmap
 gdk_draw_bitmap
 gdk_draw_image
-gdk_draw_points
-gdk_draw_segments
-GdkSegment
-gdk_draw_lines
 </SECTION>
 
 <SECTION>
@@ -410,27 +417,34 @@ gdk_color_context_get_index_from_palette
 <FILE>regions</FILE>
 GdkPoint
 
+<SUBSECTION>
 GdkRectangle
 gdk_rectangle_intersect
 gdk_rectangle_union
 
+<SUBSECTION>
 GdkRegion
 gdk_region_new
+gdk_region_polygon
+GdkFillRule
 gdk_region_destroy
-gdk_region_get_clipbox
+
+<SUBSECTION>
+gdk_regions_intersect
+gdk_regions_union
+gdk_regions_subtract
+gdk_regions_xor
+gdk_region_union_with_rect
+gdk_region_offset
+gdk_region_shrink
+
+<SUBSECTION>
 gdk_region_empty
 gdk_region_equal
 gdk_region_point_in
 gdk_region_rect_in
 GdkOverlapType
-gdk_region_polygon
-gdk_region_offset
-gdk_region_shrink
-gdk_region_union_with_rect
-gdk_regions_intersect
-gdk_regions_union
-gdk_regions_subtract
-gdk_regions_xor
+gdk_region_get_clipbox
 </SECTION>
 
 <SECTION>

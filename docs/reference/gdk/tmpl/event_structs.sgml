@@ -8,6 +8,12 @@ Event Structures
 <para>
 
 </para>
+<note>
+<para>
+A common mistake is to forget to set the event mask of a widget so that the
+required events are received. See gtk_widget_set_events().
+</para>
+</note>
 
 <!-- ##### SECTION See_Also ##### -->
 <para>
@@ -16,12 +22,13 @@ Event Structures
 
 <!-- ##### STRUCT GdkEventAny ##### -->
 <para>
-
+Contains the fields which are common to all event structs.
+Any event can safely be cast to a #GdkEventAny to access these fields.
 </para>
 
-@type: 
-@window: 
-@send_event: 
+@type: the type of the event.
+@window: the window which received the event.
+@send_event: TRUE if the event was sent explicitly (e.g. using XSendEvent).
 
 <!-- ##### STRUCT GdkEventExpose ##### -->
 <para>
@@ -85,24 +92,55 @@ Event Structures
 
 <!-- ##### STRUCT GdkEventButton ##### -->
 <para>
-
+Used for button press and button release events. The
+<structfield>type</structfield> field will be one of %GDK_BUTTON_PRESS,
+%GDK_2BUTTON_PRESS, GDK_3BUTTON_PRESS, and GDK_BUTTON_RELEASE.
+</para>
+<para>
+Double and treble-clicks result in a sequence of events being received.
+For double-clicks the order of events will be:
+<orderedlist>
+<listitem><para>%GDK_BUTTON_PRESS</para></listitem>
+<listitem><para>%GDK_BUTTON_RELEASE</para></listitem>
+<listitem><para>%GDK_BUTTON_PRESS</para></listitem>
+<listitem><para>%GDK_2BUTTON_PRESS</para></listitem>
+<listitem><para>%GDK_BUTTON_RELEASE</para></listitem>
+</orderedlist>
+Note that the first click is received just like a normal
+button press, while the second click results in a %GDK_2BUTTON_PRESS being
+received just after the %GDK_BUTTON_PRESS.
+</para>
+<para>
+Treble-clicks are very similar to double-clicks, except that %GDK_3BUTTON_PRESS
+is inserted after the third click. The order of the events is:
+<orderedlist>
+<listitem><para>%GDK_BUTTON_PRESS</para></listitem>
+<listitem><para>%GDK_BUTTON_RELEASE</para></listitem>
+<listitem><para>%GDK_BUTTON_PRESS</para></listitem>
+<listitem><para>%GDK_2BUTTON_PRESS</para></listitem>
+<listitem><para>%GDK_BUTTON_RELEASE</para></listitem>
+<listitem><para>%GDK_BUTTON_PRESS</para></listitem>
+<listitem><para>%GDK_3BUTTON_PRESS</para></listitem>
+<listitem><para>%GDK_BUTTON_RELEASE</para></listitem>
+</orderedlist>
 </para>
 
-@type: 
-@window: 
-@send_event: 
-@time: 
-@x: 
-@y: 
-@pressure: 
+@type: the type of the event.
+@window: the window which received the event.
+@send_event: TRUE if the event was sent explicitly (e.g. using XSendEvent).
+@time: the time of the event in milliseconds. This wraps around every 50 days.
+@x: the x coordinate of the mouse relative to the window.
+@y: the y coordinate of the mouse relative to the window.
+@pressure: the pressure of the button press, intended for input devices such
+as graphics tablets. It defaults to 0.5.
 @xtilt: 
 @ytilt: 
 @state: 
 @button: 
 @source: 
 @deviceid: 
-@x_root: 
-@y_root: 
+@x_root: the x coordinate of the mouse relative to the root of the screen.
+@y_root: the y coordinate of the mouse relative to the root of the screen.
 
 <!-- ##### STRUCT GdkEventKey ##### -->
 <para>
@@ -192,14 +230,6 @@ Event Structures
 @atom: 
 @time: 
 @state: 
-
-<!-- ##### ENUM GdkPropertyState ##### -->
-<para>
-
-</para>
-
-@GDK_PROPERTY_NEW_VALUE: 
-@GDK_PROPERTY_DELETE: 
 
 <!-- ##### STRUCT GdkEventSelection ##### -->
 <para>

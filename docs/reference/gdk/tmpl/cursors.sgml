@@ -2,7 +2,7 @@
 Cursors
 
 <!-- ##### SECTION Short_Description ##### -->
-
+standard and pixmap cursors.
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>
@@ -40,6 +40,7 @@ Creates a new standard cursor.
 <para>
 Creates a new cursor from a given pixmap and mask. Both the pixmap and mask
 must have a depth of 1 (i.e. each pixel has only 2 values - on or off).
+The standard cursor size is 16 by 16 pixels.
 </para>
 <example><title>Creating a custom cursor.</title>
 <programlisting>

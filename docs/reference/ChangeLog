@@ -1,3 +1,17 @@
+1999-08-28  Damon Chaplin  <damon@karuna.freeserve.co.uk>
+
+	* gtk/tmpl/gtkbbox.sgml: new section from Lee Mallabone.
+
+	* gdk/gdk-sections.txt: rearranged rgb, regions, and drawing sections.
+
+	* gdk/tmpl/rgb.sgml: new section from Raph Levien, with a few changes
+	by me, including a little example app.
+
+	* gdk/tmpl/regions.sgml: 
+	* gdk/tmpl/event_structs.sgml: 
+	* gdk/tmpl/drawing.sgml: my first attempt.
+	* gdk/tmpl/cursors.sgml: tiny changes.
+
 Tue Aug 17 09:14:01 1999  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/tmpl/gtktypeutils.sgml: Fix corrupted end tag.
