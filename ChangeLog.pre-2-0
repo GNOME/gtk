@@ -59,6 +59,9 @@
 	assignment was used instead of equals in if test. Thanks to Hans
 	Breuer.
 
+	* gdk/win32/gdkgeometry-win32.c: New file, just a quick hack of
+	the X11 version.
+
 	* gdk/win32/makefile.{cygwin,msc}
 	* gtk/makefile.{cygwin,msc}: Updates. Better kludge to get the
 	path to the Win32 headers that works also with the mingw compiler.
