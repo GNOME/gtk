@@ -1,4 +1,5 @@
 2000-01-16  Federico Mena Quintero  <federico@helixcode.com>
+	* gdk-pixbuf/Makefile.am: Don't link against libgnomecanvaspixbuf.la
 
 	* configure.in: Removed the broken --enable-canvas-pixbuf option.
 	Added the stuff necessary to substitute the variables in
