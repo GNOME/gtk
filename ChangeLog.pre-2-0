@@ -1,3 +1,11 @@
+Sat May  1 15:04:42 PDT 1999 Manish Singh <yosh@gimp.org>
+
+	* acinclude.m4
+	* config.guess
+	* config.sub
+	* ltconfig
+	* ltmain.sh: upgrade to libtool 1.3
+
 Fri Apr 30 13:38:16 1999  Lars Hamann  <lars@gtk.org>
 
 	* gtk/gtkclist.c:
