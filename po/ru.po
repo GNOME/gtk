@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.3.0\n"
-"POT-Creation-Date: 2001-04-04 14:35+0400\n"
+"POT-Creation-Date: 2001-04-17 19:08-0400\n"
 "PO-Revision-Date: 2001-04-04 15:17+04:00\n"
 "Last-Translator: Valek Filippov <frob@df.ru>\n"
 "Language-Team: Russian <ru@li.org>\n"
@@ -110,7 +110,9 @@ msgstr "Изображение не содержит данных."
 
 #: gdk-pixbuf/gdk-pixbuf-data.c:308
 msgid "Image isn't in the correct format (inline GdkPixbuf format)"
-msgstr "Изображение имеет недопустимый формат (встроенный формат GtkPixbuf)"
+msgstr ""
+"Изображение имеет недопустимый формат "
+"(встроенный формат GtkPixbuf)"
 
 #: gdk-pixbuf/gdk-pixbuf-data.c:324
 #, c-format
@@ -196,7 +198,9 @@ msgstr ""
 
 #: gdk-pixbuf/io-bmp.c:309
 msgid "Not enough memory to load bitmap image"
-msgstr "Недостаточно памяти для загрузки изображения"
+msgstr ""
+"Недостаточно памяти для загрузки "
+"изображения"
 
 #: gdk-pixbuf/io-gif.c:426
 msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
@@ -258,13 +262,17 @@ msgstr ""
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%s' could not be "
 "parsed."
-msgstr "Качество JPEG должно быть между 0 и 100; значение \"%s\" не может быть обработано."
+msgstr ""
+"Качество JPEG должно быть между 0 и 100; "
+"значение \"%s\" не может быть обработано."
 
 #: gdk-pixbuf/io-jpeg.c:673
 #, c-format
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
-msgstr "Качество JPEG должно быть между 0 и 100; значение \"%d\" недопустимо."
+msgstr ""
+"Качество JPEG должно быть между 0 и 100; "
+"значение \"%d\" недопустимо."
 
 #: gdk-pixbuf/io-png.c:158
 #, c-format
@@ -345,15 +353,21 @@ msgstr ""
 
 #: gdk-pixbuf/io-tiff.c:76
 msgid "Failed to open TIFF image"
-msgstr "Не удалось открыть изображение в формате TIFF"
+msgstr ""
+"Не удалось открыть изображение в формате "
+"TIFF"
 
 #: gdk-pixbuf/io-tiff.c:89 gdk-pixbuf/io-tiff.c:104
 msgid "Insufficient memory to open TIFF file"
-msgstr "Недостаточно памяти, чтобы открыть файл TIFF"
+msgstr ""
+"Недостаточно памяти, чтобы открыть файл "
+"TIFF"
 
 #: gdk-pixbuf/io-tiff.c:235
 msgid "Failed to write to temporary file when loading TIFF image"
-msgstr "Не удалось записать временный файл при загрузке изображения в формате TIFF"
+msgstr ""
+"Не удалось записать временный файл при "
+"загрузке изображения в формате TIFF"
 
 #: gdk-pixbuf/io-xbm.c:284
 #, c-format
@@ -362,11 +376,15 @@ msgstr "Испорченный файл XBM: %s"
 
 #: gdk-pixbuf/io-xbm.c:295
 msgid "Insufficient memory to load XBM image file"
-msgstr "Недостаточно памяти для загрузки файла изображения в формате XBM"
+msgstr ""
+"Недостаточно памяти для загрузки файла "
+"изображения в формате XBM"
 
 #: gdk-pixbuf/io-xbm.c:431
 msgid "Failed to write to temporary file when loading XBM image"
-msgstr "Не удалось записать временный файл при загрузке изображения в формате XBM"
+msgstr ""
+"Не удалось записать временный файл при "
+"загрузке изображения в формате XBM"
 
 #: gdk-pixbuf/io-xpm.c:1257
 msgid "No XPM header found"
@@ -374,7 +392,9 @@ msgstr "Не найден заголовок XPM"
 
 #: gdk-pixbuf/io-xpm.c:1265
 msgid "XPM has more than 31 chars per pixel"
-msgstr "XPM имеет больше чем 31 символ на точку растра"
+msgstr ""
+"XPM имеет больше чем 31 символ на точку "
+"растра"
 
 #: gdk-pixbuf/io-xpm.c:1283
 msgid "Can't read XPM colormap"
@@ -382,11 +402,15 @@ msgstr "Невозможно прочесть цветовую карту XPM"
 
 #: gdk-pixbuf/io-xpm.c:1321
 msgid "Can't allocate memory for loading XPM image"
-msgstr "Не удалось получить память для загрузки файла изображения в формате XPM"
+msgstr ""
+"Не удалось получить память для загрузки "
+"файла изображения в формате XPM"
 
 #: gdk-pixbuf/io-xpm.c:1505
 msgid "Failed to write to temporary file when loading XPM image"
-msgstr "Не удалось записать временный файл при загрузке изображения в формате XPM"
+msgstr ""
+"Не удалось записать временный файл при "
+"загрузке изображения в формате XPM"
 
 #: gtk/gtkcellrenderer.c:101
 msgid "can_activate"
@@ -789,7 +813,8 @@ msgstr "Текущая позиция точки вставки"
 
 #: gtk/gtkentry.c:383
 msgid "Whether the entry contents can be edited"
-msgstr "Может ли содержимое записи быть изменено"
+msgstr ""
+"Может ли содержимое записи быть изменено"
 
 #: gtk/gtkentry.c:390
 msgid "Maximum length"
@@ -797,7 +822,9 @@ msgstr "Максимальная длина"
 
 #: gtk/gtkentry.c:391
 msgid "Maximum number of characters for this entry"
-msgstr "Максимальное число символов для этой записи"
+msgstr ""
+"Максимальное число символов для этой "
+"записи"
 
 #: gtk/gtkentry.c:399
 msgid "Visibility"
@@ -815,7 +842,9 @@ msgstr "Невидимый символ"
 
 #: gtk/gtkentry.c:407
 msgid "The character to use when masking entry contents (in \"password mode\")"
-msgstr "Символ используемый для сокрытия содержимого записи (в \"режиме пароля\")"
+msgstr ""
+"Символ используемый для сокрытия "
+"содержимого записи (в \"режиме пароля\")"
 
 #: gtk/gtkentry.c:414
 msgid "Activates default"
@@ -873,7 +902,9 @@ msgstr "Показать файловые операции"
 
 #: gtk/gtkfilesel.c:510
 msgid "Whether buttons for creating/manipulating files should be displayed."
-msgstr "Должны ли быть показаны кнопки для создания/обработки файлов."
+msgstr ""
+"Должны ли быть показаны кнопки для "
+"создания/обработки файлов."
 
 #. The directories clist
 #: gtk/gtkfilesel.c:625
@@ -919,7 +950,9 @@ msgstr ""
 
 #: gtk/gtkfilesel.c:1004 gtk/gtkfilesel.c:1258
 msgid "You probably used symbols not allowed in filenames."
-msgstr "Возможно вы используете символы недопустимые в названиях файлов."
+msgstr ""
+"Возможно вы используете символы "
+"недопустимые в названиях файлов."
 
 #: gtk/gtkfilesel.c:1012
 #, c-format
@@ -947,7 +980,9 @@ msgstr "Отменить"
 #: gtk/gtkfilesel.c:1120
 #, c-format
 msgid "The filename \"%s\" contains symbols that are not allowed in filenames"
-msgstr "Название файла \"%s\" содержит символы недопустимые в названиях файлов"
+msgstr ""
+"Название файла \"%s\" содержит символы "
+"недопустимые в названиях файлов"
 
 #: gtk/gtkfilesel.c:1123
 #, c-format
@@ -960,7 +995,9 @@ msgstr ""
 
 #: gtk/gtkfilesel.c:1125 gtk/gtkfilesel.c:1272
 msgid "It probably contains symbols not allowed in filenames."
-msgstr "Возможно содержит символы недопустимые в названиях файлов."
+msgstr ""
+"Возможно содержит символы недопустимые в "
+"названиях файлов."
 
 #: gtk/gtkfilesel.c:1134
 #, c-format
@@ -975,7 +1012,9 @@ msgstr "Удалить"
 #: gtk/gtkfilesel.c:1254 gtk/gtkfilesel.c:1268
 #, c-format
 msgid "The file name \"%s\" contains symbols that are not allowed in filenames"
-msgstr "Название файла \"%s\" содержит символы недопустимые в названиях файлов"
+msgstr ""
+"Название файла \"%s\" содержит символы "
+"недопустимые в названиях файлов"
 
 #: gtk/gtkfilesel.c:1256
 #, c-format
@@ -998,7 +1037,8 @@ msgstr ""
 #: gtk/gtkfilesel.c:1280
 #, c-format
 msgid "Error renaming file \"%s\" to \"%s\": %s"
-msgstr "Ошибка переименования файла \"%s\" в \"%s\": %s"
+msgstr ""
+"Ошибка переименования файла \"%s\" в \"%s\": %s"
 
 #. buttons
 #: gtk/gtkfilesel.c:1357
@@ -1022,7 +1062,8 @@ msgstr "Название слишком длинное"
 
 #: gtk/gtkfilesel.c:3287
 msgid "Couldn't convert filename"
-msgstr "Неудалось преобразовать название файла"
+msgstr ""
+"Неудалось преобразовать название файла"
 
 #: gtk/gtkfontsel.c:213
 msgid "_Family:"
@@ -1249,7 +1290,9 @@ msgstr "Название ярлыка"
 
 #: gtk/gtktexttag.c:197
 msgid "Name used to refer to the text tag"
-msgstr "Название используемое для ссылки на текстовый ярлык"
+msgstr ""
+"Название используемое для ссылки на "
+"текстовый ярлык"
 
 #: gtk/gtktexttag.c:222
 msgid "Background full height"
@@ -1283,7 +1326,9 @@ msgstr "Направление текста"
 
 #: gtk/gtktexttag.c:266
 msgid "Text direction, e.g. right-to-left or left-to-right"
-msgstr "Направление текста, т.е. справа на лево или слева на право"
+msgstr ""
+"Направление текста, т.е. справа на лево "
+"или слева на право"
 
 #: gtk/gtktexttag.c:365
 msgid "Justification"
@@ -1291,7 +1336,8 @@ msgstr "Выравнивание"
 
 #: gtk/gtktexttag.c:366
 msgid "Left, right, or center justification"
-msgstr "Выравнивание влево, вправо или по центру"
+msgstr ""
+"Выравнивание влево, вправо или по центру"
 
 #: gtk/gtktexttag.c:374
 msgid "Language"
@@ -1331,7 +1377,8 @@ msgstr "Точек растра над строками"
 
 #: gtk/gtktexttag.c:425
 msgid "Pixels of blank space above paragraphs"
-msgstr "Точек растра в пространстве над абзацами"
+msgstr ""
+"Точек растра в пространстве над абзацами"
 
 #: gtk/gtktexttag.c:434
 msgid "Pixels below lines"
@@ -1339,7 +1386,8 @@ msgstr "Точек растра под строками"
 
 #: gtk/gtktexttag.c:435
 msgid "Pixels of blank space below paragraphs"
-msgstr "Точек растра в пространстве под абзацами"
+msgstr ""
+"Точек растра в пространстве под абзацами"
 
 #: gtk/gtktexttag.c:444
 msgid "Pixels inside wrap"
@@ -1347,7 +1395,9 @@ msgstr "Точек растра в абзаце"
 
 #: gtk/gtktexttag.c:445
 msgid "Pixels of blank space between wrapped lines in a paragraph"
-msgstr "Точек растра в пространстве между перенесёнными строками в абзаце"
+msgstr ""
+"Точек растра в пространстве между "
+"перенесёнными строками в абзаце"
 
 #: gtk/gtktexttag.c:471
 msgid "Wrap mode"
@@ -1485,107 +1535,114 @@ msgstr ""
 #: gtk/gtkthemes.c:71
 #, c-format
 msgid "Unable to locate theme engine in module_path: \"%s\","
-msgstr "Загружаемый модуль тем не найден в module_path: \"%s\","
+msgstr ""
+"Загружаемый модуль тем не найден в module_path: "
+"\"%s\","
 
 #: gtk/gtktipsquery.c:181
 msgid "--- No Tip ---"
 msgstr "--- Нет подсказки ---"
 
-#: gtk/gtktreeviewcolumn.c:132
+#: gtk/gtktreeviewcolumn.c:133
 msgid "Cell renderer"
 msgstr "Отображение ячейки"
 
-#: gtk/gtktreeviewcolumn.c:133
+#: gtk/gtktreeviewcolumn.c:134
 msgid "Cell renderer object to use for rendering the cell"
 msgstr ""
 
-#: gtk/gtktreeviewcolumn.c:140
+#: gtk/gtktreeviewcolumn.c:141
 msgid "Visible"
 msgstr "Видимый"
 
-#: gtk/gtktreeviewcolumn.c:141
+#: gtk/gtktreeviewcolumn.c:142
 msgid "Whether to display the colomn"
 msgstr ""
 
-#: gtk/gtktreeviewcolumn.c:148
+#: gtk/gtktreeviewcolumn.c:149
 msgid "Sizing"
 msgstr ""
 
-#: gtk/gtktreeviewcolumn.c:149
+#: gtk/gtktreeviewcolumn.c:150
 msgid "Resize mode of the column"
 msgstr ""
 
-#: gtk/gtktreeviewcolumn.c:157
+#: gtk/gtktreeviewcolumn.c:158
 msgid "Width"
 msgstr "Ширина"
 
-#: gtk/gtktreeviewcolumn.c:158
+#: gtk/gtktreeviewcolumn.c:159
 msgid "Current width of the column"
 msgstr ""
 
-#: gtk/gtktreeviewcolumn.c:167
+#: gtk/gtktreeviewcolumn.c:168
 msgid "Minimum Width"
 msgstr "Минимальная ширина"
 
-#: gtk/gtktreeviewcolumn.c:168
+#: gtk/gtktreeviewcolumn.c:169
 msgid "Minimum allowed width of the column"
 msgstr "Минимально допустимая ширина столбца"
 
-#: gtk/gtktreeviewcolumn.c:177
+#: gtk/gtktreeviewcolumn.c:178
 msgid "Maximum Width"
 msgstr "Максимальная ширина"
 
-#: gtk/gtktreeviewcolumn.c:178
+#: gtk/gtktreeviewcolumn.c:179
 msgid "Maximum allowed width of the column"
-msgstr "Максимально допустимая ширина столбца"
+msgstr ""
+"Максимально допустимая ширина столбца"
 
-#: gtk/gtktreeviewcolumn.c:187
+#: gtk/gtktreeviewcolumn.c:188
 msgid "Title"
 msgstr "Заголовок"
 
-#: gtk/gtktreeviewcolumn.c:188
+#: gtk/gtktreeviewcolumn.c:189
 msgid "Title to appear in column header"
-msgstr "Заголовок отображаемый в заголовке столбца"
+msgstr ""
+"Заголовок отображаемый в заголовке "
+"столбца"
 
-#: gtk/gtktreeviewcolumn.c:195
+#: gtk/gtktreeviewcolumn.c:196
 msgid "Clickable"
 msgstr "Чувствительный к нажатиям"
 
-#: gtk/gtktreeviewcolumn.c:196
+#: gtk/gtktreeviewcolumn.c:197
 msgid "Whether the header can be clicked"
 msgstr "Чувствителен ли заголовок к нажатиям"
 
-#: gtk/gtktreeviewcolumn.c:204
+#: gtk/gtktreeviewcolumn.c:205
 msgid "Widget"
 msgstr "Виджет"
 
-#: gtk/gtktreeviewcolumn.c:205
+#: gtk/gtktreeviewcolumn.c:206
 msgid "Widget to put in column header button instead of column title"
 msgstr ""
 
-#: gtk/gtktreeviewcolumn.c:212
+#: gtk/gtktreeviewcolumn.c:213
 msgid "Alignment"
 msgstr "Выравнивание"
 
-#: gtk/gtktreeviewcolumn.c:213
+#: gtk/gtktreeviewcolumn.c:214
 msgid "Alignment of the column header text or widget"
 msgstr ""
 
-#: gtk/gtktreeviewcolumn.c:222
+#: gtk/gtktreeviewcolumn.c:223
 msgid "Sort indicator"
 msgstr "Индикатор сортировки"
 
-#: gtk/gtktreeviewcolumn.c:223
+#: gtk/gtktreeviewcolumn.c:224
 msgid "Whether to show a sort indicator"
 msgstr ""
 
-#: gtk/gtktreeviewcolumn.c:230
+#: gtk/gtktreeviewcolumn.c:231
 msgid "Sort order"
 msgstr "Порядок сортировки"
 
-#: gtk/gtktreeviewcolumn.c:231
+#: gtk/gtktreeviewcolumn.c:232
 msgid "Sort direction the sort indicator should indicate"
-msgstr "Направление сортировки должно отображаться индикатором"
+msgstr ""
+"Направление сортировки должно "
+"отображаться индикатором"
 
 #. ID
 #: modules/input/imcyrillic-translit.c:216

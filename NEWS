@@ -1,3 +1,11 @@
+Overview of Changes in GTK+ 1.3.4
+=================================
+
+* Win32 fixes
+* GtkTreeView improvements and fixes
+* Fix glib-2.0.m4
+* Miscellaneous bug fixes
+
 Overview of Changes in GTK+ 1.3.3
 =================================
 

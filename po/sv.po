@@ -8,7 +8,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
-"POT-Creation-Date: 2001-04-12 02:29+0200\n"
+"POT-Creation-Date: 2001-04-17 19:08-0400\n"
 "PO-Revision-Date: 2001-04-12 02:54+0200\n"
 "Last-Translator: Christian Rose <menthos@menthos.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -1480,99 +1480,99 @@ msgstr "Kan inte hitta temamotorn i \"module_path\": \"%s\","
 msgid "--- No Tip ---"
 msgstr "--- Inget tips ---"
 
-#: gtk/gtktreeviewcolumn.c:132
+#: gtk/gtktreeviewcolumn.c:133
 msgid "Cell renderer"
 msgstr "Cellrenderare"
 
-#: gtk/gtktreeviewcolumn.c:133
+#: gtk/gtktreeviewcolumn.c:134
 msgid "Cell renderer object to use for rendering the cell"
 msgstr "Cellrenderarobjekt att använda för rendering av cellen"
 
-#: gtk/gtktreeviewcolumn.c:140
+#: gtk/gtktreeviewcolumn.c:141
 msgid "Visible"
 msgstr "Synlig"
 
-#: gtk/gtktreeviewcolumn.c:141
+#: gtk/gtktreeviewcolumn.c:142
 msgid "Whether to display the colomn"
 msgstr "Huruvida kolumnen ska visas"
 
-#: gtk/gtktreeviewcolumn.c:148
+#: gtk/gtktreeviewcolumn.c:149
 msgid "Sizing"
 msgstr "Storleksändring"
 
-#: gtk/gtktreeviewcolumn.c:149
+#: gtk/gtktreeviewcolumn.c:150
 msgid "Resize mode of the column"
 msgstr "Kolumnens storleksändringsläge"
 
-#: gtk/gtktreeviewcolumn.c:157
+#: gtk/gtktreeviewcolumn.c:158
 msgid "Width"
 msgstr "Bredd"
 
-#: gtk/gtktreeviewcolumn.c:158
+#: gtk/gtktreeviewcolumn.c:159
 msgid "Current width of the column"
 msgstr "Kolumnens nuvarande bredd"
 
-#: gtk/gtktreeviewcolumn.c:167
+#: gtk/gtktreeviewcolumn.c:168
 msgid "Minimum Width"
 msgstr "Minsta bredd"
 
-#: gtk/gtktreeviewcolumn.c:168
+#: gtk/gtktreeviewcolumn.c:169
 msgid "Minimum allowed width of the column"
 msgstr "Minsta tillåtna bredd på kolumnen"
 
-#: gtk/gtktreeviewcolumn.c:177
+#: gtk/gtktreeviewcolumn.c:178
 msgid "Maximum Width"
 msgstr "Största bredd"
 
-#: gtk/gtktreeviewcolumn.c:178
+#: gtk/gtktreeviewcolumn.c:179
 msgid "Maximum allowed width of the column"
 msgstr "Största tillåtna bredd på kolumnen"
 
-#: gtk/gtktreeviewcolumn.c:187
+#: gtk/gtktreeviewcolumn.c:188
 msgid "Title"
 msgstr "Titel"
 
-#: gtk/gtktreeviewcolumn.c:188
+#: gtk/gtktreeviewcolumn.c:189
 msgid "Title to appear in column header"
 msgstr "Titel att visa i kolumnhuvudet"
 
-#: gtk/gtktreeviewcolumn.c:195
+#: gtk/gtktreeviewcolumn.c:196
 msgid "Clickable"
 msgstr "Klickbar"
 
-#: gtk/gtktreeviewcolumn.c:196
+#: gtk/gtktreeviewcolumn.c:197
 msgid "Whether the header can be clicked"
 msgstr "Huruvida huvudet kan klickas i"
 
-#: gtk/gtktreeviewcolumn.c:204
+#: gtk/gtktreeviewcolumn.c:205
 msgid "Widget"
 msgstr "Widget"
 
-#: gtk/gtktreeviewcolumn.c:205
+#: gtk/gtktreeviewcolumn.c:206
 msgid "Widget to put in column header button instead of column title"
 msgstr "Widget att placera kolumnhuvudets knapp istället för kolumntiteln"
 
-#: gtk/gtktreeviewcolumn.c:212
+#: gtk/gtktreeviewcolumn.c:213
 msgid "Alignment"
 msgstr "Justering"
 
-#: gtk/gtktreeviewcolumn.c:213
+#: gtk/gtktreeviewcolumn.c:214
 msgid "Alignment of the column header text or widget"
 msgstr "Justering på kolumnhuvudets text eller widget"
 
-#: gtk/gtktreeviewcolumn.c:222
+#: gtk/gtktreeviewcolumn.c:223
 msgid "Sort indicator"
 msgstr "Sorteringsindikator"
 
-#: gtk/gtktreeviewcolumn.c:223
+#: gtk/gtktreeviewcolumn.c:224
 msgid "Whether to show a sort indicator"
 msgstr "Huruvida en sorteringsindikator ska visas"
 
-#: gtk/gtktreeviewcolumn.c:230
+#: gtk/gtktreeviewcolumn.c:231
 msgid "Sort order"
 msgstr "Sorteringsordning"
 
-#: gtk/gtktreeviewcolumn.c:231
+#: gtk/gtktreeviewcolumn.c:232
 msgid "Sort direction the sort indicator should indicate"
 msgstr "Sorteringsriktning som sorteringsindikatorn ska indikera"
 

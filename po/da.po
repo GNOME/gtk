@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.3.0\n"
-"POT-Creation-Date: 2001-04-03 13:45+0200\n"
+"POT-Creation-Date: 2001-04-17 19:08-0400\n"
 "PO-Revision-Date: 2000-11-27 17:14+01:00\n"
 "Last-Translator: Keld Simonsen <keld@dkuug.dk>\n"
 "Language-Team: Danish <dansk@klid.dk>\n"
@@ -1521,101 +1521,101 @@ msgstr "Kunne ikke finde modul i module_path: \"%s\","
 msgid "--- No Tip ---"
 msgstr "--- Ingen hjælp ---"
 
-#: gtk/gtktreeviewcolumn.c:132
+#: gtk/gtktreeviewcolumn.c:133
 msgid "Cell renderer"
 msgstr ""
 
-#: gtk/gtktreeviewcolumn.c:133
+#: gtk/gtktreeviewcolumn.c:134
 msgid "Cell renderer object to use for rendering the cell"
 msgstr ""
 
-#: gtk/gtktreeviewcolumn.c:140
+#: gtk/gtktreeviewcolumn.c:141
 #, fuzzy
 msgid "Visible"
 msgstr "Slået fra"
 
-#: gtk/gtktreeviewcolumn.c:141
+#: gtk/gtktreeviewcolumn.c:142
 msgid "Whether to display the colomn"
 msgstr ""
 
-#: gtk/gtktreeviewcolumn.c:148
+#: gtk/gtktreeviewcolumn.c:149
 msgid "Sizing"
 msgstr ""
 
-#: gtk/gtktreeviewcolumn.c:149
+#: gtk/gtktreeviewcolumn.c:150
 msgid "Resize mode of the column"
 msgstr ""
 
-#: gtk/gtktreeviewcolumn.c:157
+#: gtk/gtktreeviewcolumn.c:158
 msgid "Width"
 msgstr ""
 
-#: gtk/gtktreeviewcolumn.c:158
+#: gtk/gtktreeviewcolumn.c:159
 msgid "Current width of the column"
 msgstr ""
 
-#: gtk/gtktreeviewcolumn.c:167
+#: gtk/gtktreeviewcolumn.c:168
 msgid "Minimum Width"
 msgstr ""
 
-#: gtk/gtktreeviewcolumn.c:168
+#: gtk/gtktreeviewcolumn.c:169
 msgid "Minimum allowed width of the column"
 msgstr ""
 
-#: gtk/gtktreeviewcolumn.c:177
+#: gtk/gtktreeviewcolumn.c:178
 msgid "Maximum Width"
 msgstr ""
 
-#: gtk/gtktreeviewcolumn.c:178
+#: gtk/gtktreeviewcolumn.c:179
 msgid "Maximum allowed width of the column"
 msgstr ""
 
-#: gtk/gtktreeviewcolumn.c:187
+#: gtk/gtktreeviewcolumn.c:188
 #, fuzzy
 msgid "Title"
 msgstr "Redigérbar"
 
-#: gtk/gtktreeviewcolumn.c:188
+#: gtk/gtktreeviewcolumn.c:189
 msgid "Title to appear in column header"
 msgstr ""
 
-#: gtk/gtktreeviewcolumn.c:195
+#: gtk/gtktreeviewcolumn.c:196
 msgid "Clickable"
 msgstr ""
 
-#: gtk/gtktreeviewcolumn.c:196
+#: gtk/gtktreeviewcolumn.c:197
 msgid "Whether the header can be clicked"
 msgstr ""
 
-#: gtk/gtktreeviewcolumn.c:204
+#: gtk/gtktreeviewcolumn.c:205
 msgid "Widget"
 msgstr ""
 
-#: gtk/gtktreeviewcolumn.c:205
+#: gtk/gtktreeviewcolumn.c:206
 msgid "Widget to put in column header button instead of column title"
 msgstr ""
 
-#: gtk/gtktreeviewcolumn.c:212
+#: gtk/gtktreeviewcolumn.c:213
 msgid "Alignment"
 msgstr ""
 
-#: gtk/gtktreeviewcolumn.c:213
+#: gtk/gtktreeviewcolumn.c:214
 msgid "Alignment of the column header text or widget"
 msgstr ""
 
-#: gtk/gtktreeviewcolumn.c:222
+#: gtk/gtktreeviewcolumn.c:223
 msgid "Sort indicator"
 msgstr ""
 
-#: gtk/gtktreeviewcolumn.c:223
+#: gtk/gtktreeviewcolumn.c:224
 msgid "Whether to show a sort indicator"
 msgstr ""
 
-#: gtk/gtktreeviewcolumn.c:230
+#: gtk/gtktreeviewcolumn.c:231
 msgid "Sort order"
 msgstr ""
 
-#: gtk/gtktreeviewcolumn.c:231
+#: gtk/gtktreeviewcolumn.c:232
 msgid "Sort direction the sort indicator should indicate"
 msgstr ""
 
