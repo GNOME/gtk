@@ -99,6 +99,7 @@ gint	   gtk_window_activate_default	       (GtkWindow           *window);
 /* If window is set modal, input will be grabbed when show and released when hide */
 void       gtk_window_set_modal                (GtkWindow           *window,
                                                 gboolean modal);
+
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */

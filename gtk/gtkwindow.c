@@ -89,15 +89,12 @@ static void gtk_window_set_hints          (GtkWidget         *widget,
 
 static void gtk_window_read_rcfiles       (GtkWidget         *widget,
 					   GdkEventClient    *event);
-static void gtk_window_draw           (GtkWidget        *widget,
-				       GdkRectangle     *area);
-static gint gtk_window_expose         (GtkWidget        *widget,
-				       GdkEventExpose   *event);
-static void gtk_window_style_set      (GtkWidget *widget,
-				       GtkStyle  *previous_style);
-
-
-
+static void gtk_window_draw               (GtkWidget         *widget,
+				           GdkRectangle      *area);
+static gint gtk_window_expose             (GtkWidget         *widget,
+				           GdkEventExpose    *event);
+static void gtk_window_style_set          (GtkWidget         *widget,
+				           GtkStyle          *previous_style);
 
 static GtkBinClass *parent_class = NULL;
 static guint window_signals[LAST_SIGNAL] = { 0 };

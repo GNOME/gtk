@@ -346,9 +346,9 @@ gtk_fixed_paint (GtkWidget    *widget,
   g_return_if_fail (area != NULL);
 
   if (GTK_WIDGET_DRAWABLE (widget))
-     gdk_window_clear_area (widget->window,
-			     area->x, area->y,
-			     area->width, area->height);
+    gdk_window_clear_area (widget->window,
+			   area->x, area->y,
+			   area->width, area->height);
 }
 
 static void
