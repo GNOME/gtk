@@ -484,6 +484,7 @@ void	      gdk_window_set_icon_name	 (GdkWindow	  *window,
 					  const gchar	  *name);
 void	      gdk_window_set_group	 (GdkWindow	  *window, 
 					  GdkWindow	  *leader);
+GdkWindow*    gdk_window_get_group	 (GdkWindow	  *window);
 void	      gdk_window_set_decorations (GdkWindow	  *window,
 					  GdkWMDecoration  decorations);
 gboolean      gdk_window_get_decorations (GdkWindow       *window,

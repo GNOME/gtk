@@ -370,7 +370,7 @@ check_leader_window_title (GdkDisplay *display)
 {
   GdkDisplayX11 *display_x11 = GDK_DISPLAY_X11 (display);
 
-  if (!display_x11->leader_window_title_set)
+  if (display_x11->leader_window && !display_x11->leader_window_title_set)
     {
       set_wm_name (display,
 		   display_x11->leader_window,
@@ -3870,9 +3870,36 @@ gdk_window_set_keep_below (GdkWindow *window, gboolean setting)
 }
 
 /**
+ * gdk_window_get_group:
+ * @window: a toplevel #GdkWindow
+ * 
+ * Returns the group leader window for @window. See gdk_window_set_group().
+ * 
+ * Return value: the group leader window for @window
+ *
+ * Since: 2.4
+ **/
+GdkWindow *
+gdk_window_get_group (GdkWindow *window)
+{
+  GdkToplevelX11 *toplevel;
+  
+  g_return_val_if_fail (window != NULL, NULL);
+  g_return_val_if_fail (GDK_IS_WINDOW (window), NULL);
+  g_return_val_if_fail (GDK_WINDOW_TYPE (window) != GDK_WINDOW_CHILD, NULL);
+
+  if (GDK_WINDOW_DESTROYED (window))
+    return NULL;
+  
+  toplevel = _gdk_x11_window_get_toplevel (window);
+
+  return toplevel->group_leader;
+}
+
+/**
  * gdk_window_set_group:
  * @window: a toplevel #GdkWindow
- * @leader: group leader window
+ * @leader: group leader window, or %NULL to restore the default group leader window
  *
  * Sets the group leader window for @window. By default,
  * GDK sets the group leader for all toplevel windows
@@ -3894,13 +3921,15 @@ gdk_window_set_group (GdkWindow *window,
   g_return_if_fail (window != NULL);
   g_return_if_fail (GDK_IS_WINDOW (window));
   g_return_if_fail (GDK_WINDOW_TYPE (window) != GDK_WINDOW_CHILD);
-  g_return_if_fail (leader != NULL);
-  g_return_if_fail (GDK_IS_WINDOW (leader));
+  g_return_if_fail (leader == NULL || GDK_IS_WINDOW (leader));
+
+  if (GDK_WINDOW_DESTROYED (window) || (leader != NULL && GDK_WINDOW_DESTROYED (leader)))
+    return;
 
   toplevel = _gdk_x11_window_get_toplevel (window);
 
-  if (GDK_WINDOW_DESTROYED (window) || GDK_WINDOW_DESTROYED (leader))
-    return;
+  if (leader == NULL) 
+    leader = gdk_display_get_default_group (gdk_drawable_get_display (window));
   
   if (toplevel->group_leader != leader)
     {

@@ -1,3 +1,8 @@
+Wed Dec 10 00:09:51 2003  Matthias Clasen  <maclas@gmx.de>
+
+	* gdk/gdk-sections.txt: Add gdk_window_get_group(), 
+	gdk_display_get_default_group().
+
 2003-12-08  Federico Mena Quintero  <federico@ximian.com>
  
  	* gtk/migrating-GtkAction.sgml: New chapter about how to migrate

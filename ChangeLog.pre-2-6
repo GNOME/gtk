@@ -1,3 +1,21 @@
+Wed Dec 10 00:06:24 2003  Matthias Clasen  <maclas@gmx.de>
+
+	Improve the GDK API for dealing with group leaders (#119375):
+	
+	* gdk/gdkwindow.h: 
+	* gdk/x11/gdkwindow-x11.c (gdk_window_get_group): New function to 
+	get the group leader of a toplevel window as a GdkWindow.
+
+	* gdk/gdkdisplay.h: 
+	* gdk/x11/gdkdisplay-x11.c (gdk_display_get_default_group): New 
+	function to get the default group leader as a GdkWindow.
+
+	* gdk/x11/gdkdisplay-x11.h (struct _GdkDisplayX11): Add a field for
+	the GdkWindow of the default group leader.
+	
+	* gdk/x11/gdkdisplay-x11.c (gdk_display_open): Construct the GdkWindow
+	for the default group leader.
+
 2003-12-09  Noah Levitt  <nlevitt@columbia.edu>
 
 	* gdk/gdkkeysyms.h:

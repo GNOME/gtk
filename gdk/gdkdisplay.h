@@ -157,6 +157,8 @@ void     gdk_display_get_maximal_cursor_size   (GdkDisplay    *display,
 						guint         *width,
 						guint         *height);
 
+GdkWindow *gdk_display_get_default_group       (GdkDisplay *display); 
+
 G_END_DECLS
 
 #endif				/* __GDK_DISPLAY_H__ */

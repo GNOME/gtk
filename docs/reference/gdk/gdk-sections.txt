@@ -143,6 +143,7 @@ gdk_display_supports_cursor_color
 gdk_display_supports_cursor_alpha
 gdk_display_get_default_cursor_size
 gdk_display_get_maximal_cursor_size
+gdk_display_get_default_group
 
 <SUBSECTION Standard>
 GDK_DISPLAY_OBJECT
@@ -704,6 +705,7 @@ gdk_window_set_icon_name
 gdk_window_set_transient_for
 gdk_window_set_role
 gdk_window_set_group
+gdk_window_get_group
 gdk_window_set_decorations
 gdk_window_get_decorations
 GdkWMDecoration

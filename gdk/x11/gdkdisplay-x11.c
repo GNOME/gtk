@@ -138,6 +138,7 @@ gdk_display_open (const gchar *display_name)
   Display *xdisplay;
   GdkDisplay *display;
   GdkDisplayX11 *display_x11;
+  GdkWindowAttr attr;
   gint argc;
   gchar **argv;
   const char *sm_client_id;
@@ -174,9 +175,19 @@ gdk_display_open (const gchar *display_name)
   
   /*set the default screen */
   display_x11->default_screen = display_x11->screens[DefaultScreen (display_x11->xdisplay)];
-  display_x11->leader_window = XCreateSimpleWindow (display_x11->xdisplay,
-						    GDK_SCREEN_X11 (display_x11->default_screen)->xroot_window,
-						    10, 10, 10, 10, 0, 0, 0);
+
+  attr.window_type = GDK_WINDOW_TOPLEVEL;
+  attr.wclass = GDK_INPUT_OUTPUT;
+  attr.x = 10;
+  attr.y = 10;
+  attr.width = 10;
+  attr.height = 10;
+  attr.event_mask = 0;
+
+  display_x11->leader_gdk_window = gdk_window_new (GDK_SCREEN_X11 (display_x11->default_screen)->root_window, 
+						   &attr, GDK_WA_X | GDK_WA_Y);
+  display_x11->leader_window = GDK_WINDOW_XID (display_x11->leader_gdk_window);
+
   display_x11->leader_window_title_set = FALSE;
 
   display_x11->gravity_works = GDK_UNKNOWN;
@@ -555,6 +566,25 @@ gdk_display_flush (GdkDisplay *display)
 
   if (!display->closed)
     XFlush (GDK_DISPLAY_XDISPLAY (display));
+}
+
+/**
+ * gdk_display_get_default_group:
+ * @display: a #GdkDisplay
+ * 
+ * Returns the default group leader window for all toplevel windows
+ * on @display. This window is implicitly created by GDK. 
+ * See gdk_window_set_group().
+ * 
+ * Return value: The default group leader window for @display
+ *
+ * Since: 2.4
+ **/
+GdkWindow *gdk_display_get_default_group (GdkDisplay *display)
+{
+  g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
+
+  return GDK_DISPLAY_X11 (display)->leader_gdk_window;
 }
 
 /**
