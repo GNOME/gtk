@@ -59,6 +59,7 @@ enum {
   STATE_CHANGED,
   PARENT_SET,
   STYLE_SET,
+  DIRECTION_CHANGED,
   ADD_ACCELERATOR,
   REMOVE_ACCELERATOR,
   GRAB_FOCUS,
@@ -163,10 +164,11 @@ static gint gtk_widget_real_key_release_event    (GtkWidget         *widget,
 						  GdkEventKey       *event);
 static void gtk_widget_style_set		 (GtkWidget	    *widget,
 						  GtkStyle          *previous_style);
+static void gtk_widget_direction_changed	 (GtkWidget	    *widget,
+						  GtkTextDirection   previous_direction);
 static void gtk_widget_real_grab_focus           (GtkWidget         *focus_widget);
 
 static GdkColormap* gtk_widget_peek_colormap (void);
-static GdkVisual*   gtk_widget_peek_visual   (void);
 static GtkStyle*    gtk_widget_peek_style    (void);
 
 static void gtk_widget_reparent_container_child  (GtkWidget     *widget,
@@ -292,6 +294,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   klass->state_changed = NULL;
   klass->parent_set = NULL;
   klass->style_set = gtk_widget_style_set;
+  klass->direction_changed = gtk_widget_direction_changed;
   klass->add_accelerator = (void*) gtk_accel_group_handle_add;
   klass->remove_accelerator = (void*) gtk_accel_group_handle_remove;
   klass->grab_focus = gtk_widget_real_grab_focus;
@@ -453,6 +456,14 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		    gtk_marshal_NONE__POINTER,
 		    GTK_TYPE_NONE, 1,
 		    GTK_TYPE_STYLE);
+  widget_signals[DIRECTION_CHANGED] =
+    gtk_signal_new ("direction_changed",
+		    GTK_RUN_FIRST,
+		    GTK_CLASS_TYPE (object_class),
+		    GTK_SIGNAL_OFFSET (GtkWidgetClass, direction_changed),
+		    gtk_marshal_NONE__UINT,
+		    GTK_TYPE_NONE, 1,
+		    GTK_TYPE_TEXT_DIRECTION);
   widget_signals[ADD_ACCELERATOR] =
     gtk_accel_group_create_add (GTK_CLASS_TYPE (object_class), GTK_RUN_LAST,
 				GTK_SIGNAL_OFFSET (GtkWidgetClass, add_accelerator));
@@ -3051,6 +3062,13 @@ gtk_widget_style_set (GtkWidget *widget,
 }
 
 static void
+gtk_widget_direction_changed (GtkWidget	       *widget,
+			      GtkTextDirection  previous_direction)
+{
+  gtk_widget_queue_resize (widget);
+}
+
+static void
 gtk_widget_set_style_internal (GtkWidget *widget,
 			       GtkStyle	 *style,
 			       gboolean   initial_emission)
@@ -3874,10 +3892,14 @@ void
 gtk_widget_set_direction (GtkWidget        *widget,
 			  GtkTextDirection  dir)
 {
+  GtkTextDirection old_dir;
+  
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (dir >= GTK_TEXT_DIR_NONE && dir <= GTK_TEXT_DIR_RTL);
- 
+
+  old_dir = gtk_widget_get_direction (widget);
+  
   if (dir == GTK_TEXT_DIR_NONE)
     GTK_PRIVATE_UNSET_FLAG (widget, GTK_DIRECTION_SET);
   else
@@ -3888,6 +3910,9 @@ gtk_widget_set_direction (GtkWidget        *widget,
       else
 	GTK_PRIVATE_UNSET_FLAG (widget, GTK_DIRECTION_LTR);
     }
+
+  if (old_dir != gtk_widget_get_direction (widget))
+    gtk_signal_emit (GTK_OBJECT (widget), widget_signals[DIRECTION_CHANGED], old_dir);
 }
 
 /**
@@ -3911,6 +3936,24 @@ gtk_widget_get_direction (GtkWidget *widget)
     return gtk_default_direction;
 }
 
+static void
+gtk_widget_set_default_direction_recurse (GtkWidget *widget, gpointer data)
+{
+  GtkTextDirection old_dir = GPOINTER_TO_UINT (data);
+
+  g_object_ref (G_OBJECT (widget));
+  
+  if (!GTK_WIDGET_DIRECTION_SET (widget))
+    gtk_signal_emit (GTK_OBJECT (widget), widget_signals[DIRECTION_CHANGED], old_dir);      
+  
+  if (GTK_IS_CONTAINER (widget))
+    gtk_container_forall (GTK_CONTAINER (widget),
+			  gtk_widget_set_default_direction_recurse,
+			  data);
+
+  g_object_unref (G_OBJECT (widget));
+}
+
 /**
  * gtk_widget_set_default_direction:
  * @dir: the new default direction. This cannot be
@@ -3924,7 +3967,25 @@ gtk_widget_set_default_direction (GtkTextDirection dir)
 {
   g_return_if_fail (dir == GTK_TEXT_DIR_RTL || dir == GTK_TEXT_DIR_LTR);
 
-  gtk_default_direction = dir;
+  if (dir != gtk_default_direction)
+    {
+      GList *toplevels, *tmp_list;
+      GtkTextDirection old_dir = gtk_default_direction;
+      
+      gtk_default_direction = dir;
+
+      tmp_list = toplevels = gtk_window_list_toplevels ();
+      while (tmp_list)
+	{
+	  gtk_widget_set_default_direction_recurse (tmp_list->data,
+						    GUINT_TO_POINTER (old_dir));
+	  g_object_unref (tmp_list->data);
+	  tmp_list = tmp_list->next;
+	}
+
+      g_list_free (toplevels);
+      
+    }
 }
 
 /**
@@ -4189,20 +4250,6 @@ gtk_widget_peek_colormap (void)
   if (colormap_stack)
     return (GdkColormap*) colormap_stack->data;
   return gtk_widget_get_default_colormap ();
-}
-
-/*****************************************
- * gtk_widget_peek_visual:
- *
- *   arguments:
- *
- *   results:
- *****************************************/
-
-static GdkVisual*
-gtk_widget_peek_visual (void)
-{
-  return gdk_colormap_get_visual (gtk_widget_peek_colormap ());
 }
 
 static void

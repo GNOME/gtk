@@ -1,3 +1,27 @@
+Sun Jul  2 14:37:58 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkoptionmenu.c (gtk_option_menu_size_request): Call 
+	gtk_widget_size_request() on reparented child, if one. Otherwise,
+	queue_resize() on the child never results in it getting size-requested
+	at all.
+
+	* gtk/testgtk.c (build_option_menu): Remove silly radio-menu-items
+	in option menus, so that (with luck) people won't copy it into
+	their apps in the future.
+
+	* gtk/gtkoptionmenu.c: Connect ::size_request on the menu
+	to gtk_option_menu_calc_size. This isn't perfect, but should fix
+	a lot of problems with changing the size of the menu's menu
+	items after adding it to the option menu.
+
+	* gtk/gtktexttag.c: Include gtkmain.h for gtk_get_default_language().
+
+	* gtk/gtkwidget.[ch]: Add a ::direction_changed that triggers when
+	the text direction for a widget changes.
+
+	* gtk/gtk{entry.c,label.[ch],textview.[ch]} gtk/testgtk.c: Use
+	::direction_changed to get rid of various hacks.
+
 Sun Jul  2 13:19:12 2000  Owen Taylor  <otaylor@redhat.com>
 
 	* docs/Changes-2.0.txt: Move Changes-1.4.txt to the appropriate

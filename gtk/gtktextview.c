@@ -101,6 +101,8 @@ static void gtk_text_view_realize              (GtkWidget        *widget);
 static void gtk_text_view_unrealize            (GtkWidget        *widget);
 static void gtk_text_view_style_set            (GtkWidget        *widget,
 						GtkStyle         *previous_style);
+static void gtk_text_view_direction_changed    (GtkWidget        *widget,
+						GtkTextDirection  previous_direction);
 static gint gtk_text_view_event                (GtkWidget        *widget,
 						GdkEvent         *event);
 static gint gtk_text_view_key_press_event      (GtkWidget        *widget,
@@ -537,6 +539,7 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
   widget_class->realize = gtk_text_view_realize;
   widget_class->unrealize = gtk_text_view_unrealize;
   widget_class->style_set = gtk_text_view_style_set;
+  widget_class->direction_changed = gtk_text_view_direction_changed;
   widget_class->size_request = gtk_text_view_size_request;
   widget_class->size_allocate = gtk_text_view_size_allocate;
   widget_class->event = gtk_text_view_event;
@@ -651,8 +654,6 @@ gtk_text_view_set_buffer (GtkTextView *text_view,
   
   if (buffer != NULL)
     {
-      char *mark_name;
-      
       GtkTextIter start;
       
       gtk_object_ref (GTK_OBJECT (buffer));
@@ -1056,23 +1057,9 @@ static void
 gtk_text_view_size_request (GtkWidget      *widget,
 			    GtkRequisition *requisition)
 {
-  GtkTextView *text_view = GTK_TEXT_VIEW (widget);
-  
   /* Hrm */
   requisition->width = 1;
   requisition->height = 1;
-
-  /* Check to see if the widget direction has changed */
-
-  if (text_view->layout)
-    {
-      GtkTextDirection direction = gtk_widget_get_direction (widget);
-      if (direction != text_view->layout->default_style->direction)
-	{
-	  text_view->layout->default_style->direction = direction;
-	  gtk_text_layout_default_style_changed (text_view->layout);	  
-	}
-    }
 }
 
 static void
@@ -1353,6 +1340,19 @@ gtk_text_view_style_set (GtkWidget *widget,
 				 &widget->style->base[GTK_WIDGET_STATE (widget)]);
 
       gtk_text_view_set_values_from_style (text_view, text_view->layout->default_style, widget->style);
+      gtk_text_layout_default_style_changed (text_view->layout);
+    }
+}
+
+static void 
+gtk_text_view_direction_changed (GtkWidget        *widget,
+				 GtkTextDirection  previous_direction)
+{
+  GtkTextView *text_view = GTK_TEXT_VIEW (widget);
+
+  if (text_view->layout)
+    {
+      text_view->layout->default_style->direction = gtk_widget_get_direction (widget);
       gtk_text_layout_default_style_changed (text_view->layout);
     }
 }

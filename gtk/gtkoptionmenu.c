@@ -204,6 +204,9 @@ gtk_option_menu_set_menu (GtkOptionMenu *option_menu,
       gtk_signal_connect (GTK_OBJECT (option_menu->menu), "deactivate",
 			  (GtkSignalFunc) gtk_option_menu_deactivate,
 			  option_menu);
+      gtk_signal_connect_object (GTK_OBJECT (option_menu->menu), "size_request",
+				 (GtkSignalFunc) gtk_option_menu_calc_size,
+				 GTK_OBJECT (option_menu));
 
       if (GTK_WIDGET (option_menu)->parent)
 	gtk_widget_queue_resize (GTK_WIDGET (option_menu));
@@ -288,6 +291,8 @@ gtk_option_menu_size_request (GtkWidget      *widget,
 {
   GtkOptionMenu *option_menu;
   gint tmp;
+  GtkRequisition child_requisition = { 0, 0 };
+      
 
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_OPTION_MENU (widget));
@@ -295,15 +300,23 @@ gtk_option_menu_size_request (GtkWidget      *widget,
 
   option_menu = GTK_OPTION_MENU (widget);
 
+  if (GTK_BIN (option_menu)->child && GTK_WIDGET_VISIBLE (GTK_BIN (option_menu)->child))
+    {
+      gtk_widget_size_request (GTK_BIN (option_menu)->child, &child_requisition);
+
+      requisition->width += child_requisition.width;
+      requisition->height += child_requisition.height;
+    }
+  
   requisition->width = ((GTK_CONTAINER (widget)->border_width +
 			 GTK_WIDGET (widget)->style->xthickness) * 2 +
-			option_menu->width +
+			MAX (child_requisition.width, option_menu->width) +
 			OPTION_INDICATOR_WIDTH +
 			OPTION_INDICATOR_SPACING * 5 +
 			CHILD_LEFT_SPACING + CHILD_RIGHT_SPACING + 2);
   requisition->height = ((GTK_CONTAINER (widget)->border_width +
 			  GTK_WIDGET (widget)->style->ythickness) * 2 +
-			 option_menu->height +
+			 MAX (child_requisition.height, option_menu->height) +
 			 CHILD_TOP_SPACING + CHILD_BOTTOM_SPACING + 2);
 
   tmp = (requisition->height - option_menu->height +
@@ -602,6 +615,8 @@ gtk_option_menu_calc_size (GtkOptionMenu *option_menu)
   GtkWidget *child;
   GList *children;
   GtkRequisition child_requisition;
+  gint old_width = option_menu->width;
+  gint old_height = option_menu->height;
 
   g_return_if_fail (option_menu != NULL);
   g_return_if_fail (GTK_IS_OPTION_MENU (option_menu));
@@ -626,6 +641,9 @@ gtk_option_menu_calc_size (GtkOptionMenu *option_menu)
 	    }
 	}
     }
+
+  if (old_width != option_menu->width || old_height != option_menu->height)
+    gtk_widget_queue_resize (GTK_WIDGET (option_menu));
 }
 
 static void

@@ -242,28 +242,30 @@ struct _GtkWidgetClass
   guint set_scroll_adjustments_signal;
   
   /* basics */
-  void (* show)		       (GtkWidget      *widget);
-  void (* show_all)            (GtkWidget      *widget);
-  void (* hide)		       (GtkWidget      *widget);
-  void (* hide_all)            (GtkWidget      *widget);
-  void (* map)		       (GtkWidget      *widget);
-  void (* unmap)	       (GtkWidget      *widget);
-  void (* realize)	       (GtkWidget      *widget);
-  void (* unrealize)	       (GtkWidget      *widget);
-  void (* draw)		       (GtkWidget      *widget,
-				GdkRectangle   *area);
-  void (* draw_focus)	       (GtkWidget      *widget);
-  void (* draw_default)	       (GtkWidget      *widget);
-  void (* size_request)	       (GtkWidget      *widget,
-				GtkRequisition *requisition);
-  void (* size_allocate)       (GtkWidget      *widget,
-				GtkAllocation  *allocation);
-  void (* state_changed)       (GtkWidget      *widget,
-				GtkStateType	previous_state);
-  void (* parent_set)	       (GtkWidget      *widget,
-				GtkWidget      *previous_parent);
-  void (* style_set)	       (GtkWidget      *widget,
-				GtkStyle       *previous_style);
+  void (* show)		       (GtkWidget        *widget);
+  void (* show_all)            (GtkWidget        *widget);
+  void (* hide)		       (GtkWidget        *widget);
+  void (* hide_all)            (GtkWidget        *widget);
+  void (* map)		       (GtkWidget        *widget);
+  void (* unmap)	       (GtkWidget        *widget);
+  void (* realize)	       (GtkWidget        *widget);
+  void (* unrealize)	       (GtkWidget        *widget);
+  void (* draw)		       (GtkWidget        *widget,
+				GdkRectangle     *area);
+  void (* draw_focus)	       (GtkWidget        *widget);
+  void (* draw_default)	       (GtkWidget        *widget);
+  void (* size_request)	       (GtkWidget        *widget,
+				GtkRequisition   *requisition);
+  void (* size_allocate)       (GtkWidget        *widget,
+				GtkAllocation    *allocation);
+  void (* state_changed)       (GtkWidget        *widget,
+				GtkStateType   	  previous_state);
+  void (* parent_set)	       (GtkWidget        *widget,
+				GtkWidget        *previous_parent);
+  void (* style_set)	       (GtkWidget        *widget,
+				GtkStyle         *previous_style);
+  void (* direction_changed)   (GtkWidget        *widget,
+				GtkTextDirection  previous_direction);
   
   /* accelerators */
   gint (* add_accelerator)     (GtkWidget      *widget,

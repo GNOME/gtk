@@ -106,23 +106,18 @@ build_option_menu (OptionMenuItem items[],
   GtkWidget *omenu;
   GtkWidget *menu;
   GtkWidget *menu_item;
-  GSList *group;
   gint i;
 
   omenu = gtk_option_menu_new ();
       
   menu = gtk_menu_new ();
-  group = NULL;
   
   for (i = 0; i < num_items; i++)
     {
-      menu_item = gtk_radio_menu_item_new_with_label (group, items[i].name);
+      menu_item = gtk_menu_item_new_with_label (items[i].name);
       gtk_signal_connect (GTK_OBJECT (menu_item), "activate",
 			  (GtkSignalFunc) items[i].func, data);
-      group = gtk_radio_menu_item_group (GTK_RADIO_MENU_ITEM (menu_item));
       gtk_menu_append (GTK_MENU (menu), menu_item);
-      if (i == history)
-	gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (menu_item), TRUE);
       gtk_widget_show (menu_item);
     }
 
@@ -5360,23 +5355,7 @@ flipping_toggled_cb (GtkWidget *widget, gpointer data)
   int state = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget));
   int new_direction = state ? GTK_TEXT_DIR_RTL : GTK_TEXT_DIR_LTR;
 
-  if (new_direction != gtk_widget_get_default_direction ())
-    {
-      GList *toplevels;
-      
-      gtk_widget_set_default_direction (new_direction);
-
-      toplevels = gtk_window_list_toplevels ();
-      while (toplevels)
-	{
-	  gtk_widget_queue_resize (toplevels->data);
-	  g_object_unref (toplevels->data);
-	  toplevels = toplevels->next;
-	}
-
-      g_list_free (toplevels);
-    }
-
+  gtk_widget_set_default_direction (new_direction);
 }
 
 void

@@ -55,68 +55,67 @@ enum {
 };
 
 
-static void           gtk_entry_class_init           (GtkEntryClass  *klass);
-static void           gtk_entry_init                 (GtkEntry       *entry);
-static void           gtk_entry_set_arg              (GtkObject      *object,
-						      GtkArg         *arg,
-						      guint           arg_id);
-static void           gtk_entry_get_arg              (GtkObject      *object,
-						      GtkArg         *arg,
-						      guint           arg_id);
-static void           gtk_entry_finalize             (GObject        *object);
-static void           gtk_entry_realize              (GtkWidget      *widget);
-static void           gtk_entry_unrealize            (GtkWidget      *widget);
-static void           gtk_entry_draw_focus           (GtkWidget      *widget);
-static void           gtk_entry_size_request         (GtkWidget      *widget,
-						      GtkRequisition *requisition);
-static void           gtk_entry_size_allocate        (GtkWidget      *widget,
-						      GtkAllocation  *allocation);
-static void           gtk_entry_draw                 (GtkWidget      *widget,
-						      GdkRectangle   *area);
-static gint           gtk_entry_expose               (GtkWidget      *widget,
-						      GdkEventExpose *event);
-static gint           gtk_entry_button_press         (GtkWidget      *widget,
-						      GdkEventButton *event);
-static gint           gtk_entry_button_release       (GtkWidget      *widget,
-						      GdkEventButton *event);
-static gint           gtk_entry_motion_notify        (GtkWidget      *widget,
-						      GdkEventMotion *event);
-static gint           gtk_entry_key_press            (GtkWidget      *widget,
-						      GdkEventKey    *event);
-static gint           gtk_entry_focus_in             (GtkWidget      *widget,
-						      GdkEventFocus  *event);
-static gint           gtk_entry_focus_out            (GtkWidget      *widget,
-						      GdkEventFocus  *event);
-static void           gtk_entry_draw_text            (GtkEntry       *entry);
-static void           gtk_entry_ensure_layout        (GtkEntry       *entry);
-static void           gtk_entry_draw_cursor          (GtkEntry       *entry);
-static void           gtk_entry_style_set            (GtkWidget      *widget,
-						      GtkStyle       *previous_style);
-static void           gtk_entry_state_changed        (GtkWidget      *widget,
-						      GtkStateType    previous_state);
-static void           gtk_entry_queue_draw           (GtkEntry       *entry);
-static gint           gtk_entry_find_position        (GtkEntry       *entry,
-						      gint            x);
-static void           gtk_entry_get_cursor_locations (GtkEntry       *entry,
-						      gint           *strong_x,
-						      gint           *weak_x);
-static void           entry_adjust_scroll            (GtkEntry       *entry);
-static void           gtk_entry_insert_text          (GtkEditable    *editable,
-						      const gchar    *new_text,
-						      gint            new_text_length,
-						      gint           *position);
-static void           gtk_entry_delete_text          (GtkEditable    *editable,
-						      gint            start_pos,
-						      gint            end_pos);
-static void           gtk_entry_update_text          (GtkEditable    *editable,
-						      gint            start_pos,
-						      gint            end_pos);
-static gchar *        gtk_entry_get_chars            (GtkEditable    *editable,
-						      gint            start_pos,
-						      gint            end_pos);
-
-
-
+static void   gtk_entry_class_init           (GtkEntryClass    *klass);
+static void   gtk_entry_init                 (GtkEntry         *entry);
+static void   gtk_entry_set_arg              (GtkObject        *object,
+					      GtkArg           *arg,
+					      guint             arg_id);
+static void   gtk_entry_get_arg              (GtkObject        *object,
+					      GtkArg           *arg,
+					      guint             arg_id);
+static void   gtk_entry_finalize             (GObject          *object);
+static void   gtk_entry_realize              (GtkWidget        *widget);
+static void   gtk_entry_unrealize            (GtkWidget        *widget);
+static void   gtk_entry_draw_focus           (GtkWidget        *widget);
+static void   gtk_entry_size_request         (GtkWidget        *widget,
+					      GtkRequisition   *requisition);
+static void   gtk_entry_size_allocate        (GtkWidget        *widget,
+					      GtkAllocation    *allocation);
+static void   gtk_entry_draw                 (GtkWidget        *widget,
+					      GdkRectangle     *area);
+static gint   gtk_entry_expose               (GtkWidget        *widget,
+					      GdkEventExpose   *event);
+static gint   gtk_entry_button_press         (GtkWidget        *widget,
+					      GdkEventButton   *event);
+static gint   gtk_entry_button_release       (GtkWidget        *widget,
+					      GdkEventButton   *event);
+static gint   gtk_entry_motion_notify        (GtkWidget        *widget,
+					      GdkEventMotion   *event);
+static gint   gtk_entry_key_press            (GtkWidget        *widget,
+					      GdkEventKey      *event);
+static gint   gtk_entry_focus_in             (GtkWidget        *widget,
+					      GdkEventFocus    *event);
+static gint   gtk_entry_focus_out            (GtkWidget        *widget,
+					      GdkEventFocus    *event);
+static void   gtk_entry_draw_text            (GtkEntry         *entry);
+static void   gtk_entry_ensure_layout        (GtkEntry         *entry);
+static void   gtk_entry_draw_cursor          (GtkEntry         *entry);
+static void   gtk_entry_style_set            (GtkWidget        *widget,
+					      GtkStyle         *previous_style);
+static void   gtk_entry_direction_changed    (GtkWidget        *widget,
+					      GtkTextDirection  previous_dir);
+static void   gtk_entry_state_changed        (GtkWidget        *widget,
+					      GtkStateType      previous_state);
+static void   gtk_entry_queue_draw           (GtkEntry         *entry);
+static gint   gtk_entry_find_position        (GtkEntry         *entry,
+					      gint              x);
+static void   gtk_entry_get_cursor_locations (GtkEntry         *entry,
+					      gint             *strong_x,
+					      gint             *weak_x);
+static void   entry_adjust_scroll            (GtkEntry         *entry);
+static void   gtk_entry_insert_text          (GtkEditable      *editable,
+					      const gchar      *new_text,
+					      gint              new_text_length,
+					      gint             *position);
+static void   gtk_entry_delete_text          (GtkEditable      *editable,
+					      gint              start_pos,
+					      gint              end_pos);
+static void   gtk_entry_update_text          (GtkEditable      *editable,
+					      gint              start_pos,
+					      gint              end_pos);
+static gchar *gtk_entry_get_chars            (GtkEditable      *editable,
+					      gint              start_pos,
+					      gint              end_pos);
 
 /* Binding actions */
 static void gtk_entry_move_cursor         (GtkEditable *editable,
@@ -288,6 +287,7 @@ gtk_entry_class_init (GtkEntryClass *class)
   widget_class->focus_in_event = gtk_entry_focus_in;
   widget_class->focus_out_event = gtk_entry_focus_out;
   widget_class->style_set = gtk_entry_style_set;
+  widget_class->direction_changed = gtk_entry_direction_changed;
   widget_class->state_changed = gtk_entry_state_changed;
 
   editable_class->insert_text = gtk_entry_insert_text;
@@ -668,14 +668,6 @@ gtk_entry_size_request (GtkWidget      *widget,
 
   entry = GTK_ENTRY (widget);
   
-  /* We do this to deal with direction changes - should that be a signal?
-   */
-  if (entry->layout)
-    {
-      g_object_unref (G_OBJECT (entry->layout));
-      entry->layout = NULL;
-    }
-
   gtk_entry_ensure_layout (entry);
 
   /* hackish for now, get metrics
@@ -1972,20 +1964,36 @@ static void
 gtk_entry_style_set	(GtkWidget      *widget,
 			 GtkStyle       *previous_style)
 {
-  GtkEntry *entry;
-
-  g_return_if_fail (widget != NULL);
-  g_return_if_fail (GTK_IS_ENTRY (widget));
+  GtkEntry *entry = GTK_ENTRY (widget);
 
   if (previous_style && GTK_WIDGET_REALIZED (widget))
     {
-      entry = GTK_ENTRY (widget);
-  
       entry_adjust_scroll (entry);
 
       gdk_window_set_background (widget->window, &widget->style->base[GTK_WIDGET_STATE (widget)]);
       gdk_window_set_background (entry->text_area, &widget->style->base[GTK_WIDGET_STATE (widget)]);
     }
+
+  if (entry->layout)
+    {
+      g_object_unref (G_OBJECT (entry->layout));
+      entry->layout = NULL;
+    }
+}
+
+static void 
+gtk_entry_direction_changed (GtkWidget        *widget,
+			     GtkTextDirection  previous_dir)
+{
+  GtkEntry *entry = GTK_ENTRY (widget);
+
+  if (entry->layout)
+    {
+      g_object_unref (G_OBJECT (entry->layout));
+      entry->layout = NULL;
+    }
+
+  GTK_WIDGET_CLASS (parent_class)->direction_changed (widget, previous_dir);
 }
 
 static void

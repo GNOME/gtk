@@ -39,22 +39,23 @@ enum {
   ARG_WRAP
 };
 
-static void gtk_label_class_init   (GtkLabelClass  *klass);
-static void gtk_label_init	   (GtkLabel	   *label);
-static void gtk_label_set_arg	   (GtkObject	   *object,
-				    GtkArg	   *arg,
-				    guint	    arg_id);
-static void gtk_label_get_arg	   (GtkObject      *object,
-				    GtkArg	   *arg,
-				    guint	    arg_id);
-static void gtk_label_finalize	   (GObject	   *object);
-static void gtk_label_size_request (GtkWidget	   *widget,
-				    GtkRequisition *requisition);
-static void gtk_label_style_set    (GtkWidget      *widget,
-				    GtkStyle       *previous_style);
-static gint gtk_label_expose	   (GtkWidget	   *widget,
-				    GdkEventExpose *event);
-
+static void gtk_label_class_init        (GtkLabelClass    *klass);
+static void gtk_label_init              (GtkLabel         *label);
+static void gtk_label_set_arg           (GtkObject        *object,
+					 GtkArg           *arg,
+					 guint             arg_id);
+static void gtk_label_get_arg           (GtkObject        *object,
+					 GtkArg           *arg,
+					 guint             arg_id);
+static void gtk_label_finalize          (GObject          *object);
+static void gtk_label_size_request      (GtkWidget        *widget,
+					 GtkRequisition   *requisition);
+static void gtk_label_style_set         (GtkWidget        *widget,
+					 GtkStyle         *previous_style);
+static void gtk_label_direction_changed (GtkWidget        *widget,
+					 GtkTextDirection  previous_dir);
+static gint gtk_label_expose            (GtkWidget        *widget,
+					 GdkEventExpose   *event);
 
 static GtkMiscClass *parent_class = NULL;
 
@@ -108,6 +109,7 @@ gtk_label_class_init (GtkLabelClass *class)
   
   widget_class->size_request = gtk_label_size_request;
   widget_class->style_set = gtk_label_style_set;
+  widget_class->direction_changed = gtk_label_direction_changed;
   widget_class->expose_event = gtk_label_expose;
 }
 
@@ -180,7 +182,6 @@ gtk_label_init (GtkLabel *label)
   label->wrap = FALSE;
 
   label->layout = NULL;
-  label->rtl = (gtk_widget_get_direction (GTK_WIDGET (label)) == GTK_TEXT_DIR_RTL);
   
   gtk_label_set_text (label, "");
 }
@@ -394,16 +395,6 @@ gtk_label_size_request (GtkWidget      *widget,
   requisition->width = label->misc.xpad;
   requisition->height = label->misc.ypad;
 
-  /* Detect direction changes. FIXME: make this a signal
-   */
-  if (label->rtl != (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL) &&
-      label->layout)
-    {
-      label->rtl = !label->rtl;
-      g_object_unref (G_OBJECT (label->layout));
-      label->layout = NULL;
-    }
-  
   if (!label->layout)
     {
       PangoAlignment align = PANGO_ALIGN_LEFT; /* Quiet gcc */
@@ -548,6 +539,21 @@ gtk_label_style_set (GtkWidget *widget,
       g_object_unref (G_OBJECT (label->layout));
       label->layout = NULL;
     }
+}
+
+static void 
+gtk_label_direction_changed (GtkWidget        *widget,
+			     GtkTextDirection previous_dir)
+{
+  GtkLabel *label = GTK_LABEL (widget);
+
+  if (label->layout)
+    {
+      g_object_unref (G_OBJECT (label->layout));
+      label->layout = NULL;
+    }
+
+  GTK_WIDGET_CLASS (parent_class)->direction_changed (widget, previous_dir);
 }
 
 #if 0

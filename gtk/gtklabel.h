@@ -60,7 +60,6 @@ struct _GtkLabel
   gboolean wrap : 1;
 
   /*< private >*/
-  gint rtl : 2;			/* Base dir, cached to detect changes */
   PangoLayout *layout;
 };
 
