@@ -1,3 +1,8 @@
+1999-11-02  Cody Russell  <bratsche@dfw.net>
+	* src/gdk-pixbuf-drawable.c: Changed the behavior to return NULL
+	if part of the requested image is offscreen, rather than clipping
+	the image.
+
 1999-11-02  Jonathan Blandford  <jrb@redhat.com>
 
 	* src/io-gif.c (gif_fill_in_lines): Fill in the gif's blank areas

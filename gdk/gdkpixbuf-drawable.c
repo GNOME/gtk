@@ -39,20 +39,12 @@ gdk_pixbuf_from_drawable_core (GdkWindow *window, gint x, gint y, gint width, gi
 				&window_width, &window_height, NULL);
 	gdk_window_get_origin(window, &window_x, &window_y);
 
-	if(window_x < 0) {
-		x = ABS(window_x);
-		width = window_width - x;
-	} else {
-		width = CLAMP(window_x + window_width, window_x,
-			      screen_width) - window_x;
-	}
-
-	if(window_y < 0) {
-		y = ABS(window_y);
-		height = window_height - y;
-	} else {
-		height = CLAMP(window_y + window_height, window_y,
-			       screen_height) - window_y;
+	/* If part of the requested image is offscreen, return NULL. */
+	if((window_x) < 0 || (window_y < 0) ||
+		(window_x + window_width > screen_width) ||
+		(window_y + window_height > screen_height))
+	{
+		return NULL;
 	}
 
 	image = gdk_image_get (window, x, y, width, height);
