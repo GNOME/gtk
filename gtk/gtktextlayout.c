@@ -2424,14 +2424,8 @@ gtk_text_layout_move_iter_to_previous_line (GtkTextLayout *layout,
         {
           gtk_text_layout_free_line_display (layout, display);
           display = gtk_text_layout_get_line_display (layout, prev_line, FALSE);
-
-          tmp_list = pango_layout_get_lines (display->layout);
-          
-          while (tmp_list->next)
-            {
-              layout_line = tmp_list->data;
-              tmp_list = tmp_list->next;
-            }
+	  tmp_list = g_slist_last (pango_layout_get_lines (display->layout));
+	  layout_line = tmp_list->data;
 
           line_display_index_to_iter (layout, display, iter,
                                       layout_line->start_index + layout_line->length, 0);

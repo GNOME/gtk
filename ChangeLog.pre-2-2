@@ -1,3 +1,9 @@
+Tue Jan  2 16:23:05 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtktextlayout.c
+	(gtk_text_layout_move_iter_to_previous_line): Fix unitialized
+	variable when moving back onto a single line.
+
 2001-01-01  Havoc Pennington  <hp@redhat.com>
 
 	* gtk/Makefile.am (LDFLAGS): add @LIBTOOL_EXPORT_OPTIONS@
