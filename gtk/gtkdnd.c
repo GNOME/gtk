@@ -896,7 +896,11 @@ gtk_drag_dest_handle_event (GtkWidget *toplevel,
 	      gdk_drag_status (context, 0, event->dnd.time);
 	  }
 	else if (event->type == GDK_DROP_START)
-	  gdk_drop_reply (context, data.found, event->dnd.time);
+	  {
+	    gdk_drop_reply (context, data.found, event->dnd.time);
+            if (context->protocol == GDK_DRAG_PROTO_MOTIF)
+	      gtk_drag_finish (context, FALSE, FALSE, event->dnd.time);
+	  }
       }
       break;
 

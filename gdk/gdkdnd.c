@@ -2852,12 +2852,12 @@ gdk_drop_reply (GdkDragContext   *context,
       xev.xclient.data.b[0] = XmDROP_START | 0x80;
       xev.xclient.data.b[1] = local_byte_order;
       if (ok)
-	xev.xclient.data.s[2] = XmDROP_COPY | 
+	xev.xclient.data.s[1] = XmDROP_COPY | 
 	                        (XmDROP_SITE_VALID << 4) |
 	                        (XmDROP_NOOP << 8) |
 	                        (XmDROP << 12);
       else
-	xev.xclient.data.s[2] = XmDROP_NOOP | 
+	xev.xclient.data.s[1] = XmDROP_NOOP | 
 	                        (XmNO_DROP_SITE << 4) |
 	                        (XmDROP_NOOP << 8) |
 	                        (XmDROP_CANCEL << 12);

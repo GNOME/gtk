@@ -1,3 +1,14 @@
+Tue Dec 22 17:01:43 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkdnd.c (gtk_drag_dest_handle_event): 
+	Request XmTRANFER_FAILURE on Motif drops not within
+	a drop zone. I don't know why this is necessary,
+	but it is.
+
+	* gdk/gdkdnd.c (gdk_drop_reply): Fixed error where
+	Motif flag field in response was getting wrong
+	values.
+
 Tue Dec 22 15:55:39 1998  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkoptionmenu.c (gtk_option_menu_button_press): 
