@@ -33,7 +33,7 @@ G_BEGIN_DECLS
 #define GTK_ICON_THEME_CLASS(klass)     (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_ICON_THEME, GtkIconThemeClass))
 #define GTK_IS_ICON_THEME(obj)          (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_ICON_THEME))
 #define GTK_IS_ICON_THEME_CLASS(klass)  (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_ICON_THEME))
-#define GTK_ICON_THEME_GET_CLASS(obj)   (G_TYPE_CHECK_GET_CLASS ((obj), GTK_TYPE_ICON_THEME, GtkIconThemeClass))
+#define GTK_ICON_THEME_GET_CLASS(obj)   (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_ICON_THEME, GtkIconThemeClass))
 
 typedef struct _GtkIconInfo         GtkIconInfo;
 typedef struct _GtkIconTheme        GtkIconTheme;
