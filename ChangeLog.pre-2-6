@@ -1,3 +1,9 @@
+Sun Jul  4 01:11:07 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtktreestore.c (gtk_tree_store_move): Don't crash if
+	somebody tries to move a node after itself in a list of 
+	length 1.  (#145291, Sampo Nurmentaus)
+
 Sat Jul  3 23:43:23 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* docs/faq/gtk-faq.sgml: 
