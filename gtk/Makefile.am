@@ -197,7 +197,7 @@ $(srcdir)/gtktypebuiltins.h: @MAINT@ $(srcdir)/gtk.defs $(srcdir)/gentypeinfo.el
 $(srcdir)/gtktypebuiltins.c: @MAINT@ $(srcdir)/gtk.defs $(srcdir)/gentypeinfo.el
 	$(SHELL) $(srcdir)/runelisp $(srcdir)/gentypeinfo.el id $< $@
 
-libgtk_la_LDFLAGS = -version-info 1:0:0
+libgtk_la_LDFLAGS = -version-info $(GTK_MAJOR_VERSION):$(GTK_MICRO_VERSION):0
 
 EXTRA_DIST = \
 	line-arrow.xbm 		\

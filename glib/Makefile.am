@@ -25,7 +25,7 @@ include_HEADERS = \
 configinclude_DATA = \
 		glibconfig.h
 
-libglib_la_LDFLAGS = -version-info 1:0:0
+libglib_la_LDFLAGS = -version-info $(GLIB_MAJOR_VERSION):$(GLIB_MICRO_VERSION):0
 
 INCLUDES = -I$(top_srcdir)
 

@@ -46,7 +46,7 @@ gdkinclude_HEADERS = \
 	gdktypes.h	\
 	gdkx.h
 
-libgdk_la_LDFLAGS = -version-info 1:0:0 \
+libgdk_la_LDFLAGS = -version-info $(GTK_MAJOR_VERSION):$(GTK_MICRO_VERSION):0 \
 	@x_ldflags@ @x_libs@
 
 INCLUDES = -I$(top_srcdir) -I../glib -I$(top_srcdir)/glib @x_cflags@ 
