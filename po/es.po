@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.3.15\n"
 "POT-Creation-Date: 2003-01-15 12:12+0100\n"
-"PO-Revision-Date: 2003-01-15 15:19-0300\n"
+"PO-Revision-Date: 2003-01-15 17:01-0300\n"
 "Last-Translator: Pablo Gonzalo del Campo <pablodc@bigfoot.com>\n"
 "Language-Team: Spanish <traductores@es.gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -122,7 +122,7 @@ msgstr "El formato de la imagen es desconocido"
 
 #: gdk-pixbuf/gdk-pixdata.c:155 gdk-pixbuf/gdk-pixdata.c:456
 msgid "Image pixel data corrupt"
-msgstr "Los datos del pixel de la imagen están corrompidos"
+msgstr "Los datos del píxel de la imagen están corrompidos"
 
 #: gdk-pixbuf/gdk-pixdata.c:402
 #, c-format
@@ -708,7 +708,7 @@ msgstr "El archivo XPM tienen un número inválido de colores"
 
 #: gdk-pixbuf/io-xpm.c:1261
 msgid "XPM has invalid number of chars per pixel"
-msgstr "El XPM tiene un número inválido de carácteres por pixel"
+msgstr "El XPM tiene un número inválido de carácteres por píxel"
 
 #: gdk-pixbuf/io-xpm.c:1279
 msgid "Can't read XPM colormap"
@@ -1038,7 +1038,7 @@ msgstr "Estilo del relieve del borde"
 
 #: gtk/gtkbutton.c:271
 msgid "Default Spacing"
-msgstr "Espaciado por Omisión"
+msgstr "Espaciado predeterminado"
 
 #: gtk/gtkbutton.c:272
 msgid "Extra space to add for CAN_DEFAULT buttons"
@@ -1907,7 +1907,7 @@ msgstr ""
 
 #: gtk/gtkentry.c:497
 msgid "Activates default"
-msgstr "Activado por omisión"
+msgstr "Activar por omisión"
 
 #: gtk/gtkentry.c:498
 msgid ""
@@ -1915,7 +1915,7 @@ msgid ""
 "dialog) when Enter is pressed"
 msgstr ""
 "Indica si se debe activar el widget predeterminado (como el botón "
-"predeterminado en una ventana) cuando se presione ENTER"
+"predeterminado en una ventana) cuando se presione INTRO"
 
 #: gtk/gtkentry.c:504
 msgid "Width in chars"
@@ -2302,7 +2302,7 @@ msgstr "Posición del manejador relativa al widget hijo"
 
 #: gtk/gtkhandlebox.c:220
 msgid "Snap edge"
-msgstr "Quiebre del borde"
+msgstr "Borde ajustado"
 
 #: gtk/gtkhandlebox.c:221
 msgid ""
@@ -2610,7 +2610,7 @@ msgstr "La altura de la disposición"
 #.
 #: gtk/gtkmain.c:806
 msgid "default:LTR"
-msgstr "default:LTR"
+msgstr "por omisión:LTR"
 
 #: gtk/gtkmenu.c:263
 msgid "Tearoff Title"
@@ -4144,7 +4144,7 @@ msgstr "Indica si esta marca afecta la indentación"
 
 #: gtk/gtktexttag.c:580
 msgid "Pixels above lines set"
-msgstr "Pixels·sobre el·conjunto·de·líneas"
+msgstr "Píxeles·sobre el·conjunto·de·líneas"
 
 #: gtk/gtktexttag.c:581 gtk/gtktexttag.c:585
 msgid "Whether this tag affects the number of pixels above lines"
@@ -4152,7 +4152,7 @@ msgstr "Indica si esta marca afecta la cantidad de píxeles sobre las líneas"
 
 #: gtk/gtktexttag.c:584
 msgid "Pixels below lines set"
-msgstr "Pixels debajo del conjunto de líneas"
+msgstr "Píxeles debajo del conjunto de líneas"
 
 #: gtk/gtktexttag.c:588
 msgid "Pixels inside wrap set"
@@ -4172,7 +4172,7 @@ msgstr "Indica si esta marca afecta el margen derecho"
 
 #: gtk/gtktexttag.c:604
 msgid "Wrap mode set"
-msgstr "Fijado modo recubrimiento"
+msgstr "Modo de ajuste activado"
 
 #: gtk/gtktexttag.c:605
 msgid "Whether this tag affects line wrap mode"
@@ -4196,35 +4196,35 @@ msgstr "Indica si esta marca afecta la visibilidad del texto"
 
 #: gtk/gtktextutil.c:46
 msgid "LRM _Left-to-right mark"
-msgstr "LRM marca de i_zquierda_a_derecha"
+msgstr "LRM Marca de i_zquierda-a-derecha"
 
 #: gtk/gtktextutil.c:47
 msgid "RLM _Right-to-left mark"
-msgstr "RLM marca de_recha_a_izquierda"
+msgstr "RLM Ma_rca de derecha-a-izquierda"
 
 #: gtk/gtktextutil.c:48
 msgid "LRE Left-to-right _embedding"
-msgstr "Incrustami_ento LRE izquierda-a-derecha"
+msgstr "LRE Incrustami_ento de izquierda-a-derecha"
 
 #: gtk/gtktextutil.c:49
 msgid "RLE Right-to-left e_mbedding"
-msgstr "Incrustamie_nto RLE derecha-a-izquierda"
+msgstr "RLE Incrustamie_nto de derecha-a-izquierda"
 
 #: gtk/gtktextutil.c:50
 msgid "LRO Left-to-right _override"
-msgstr "S_obreescritura LRO izquierda-a-derecha"
+msgstr "LRO S_obreescritura de izquierda-a-derecha"
 
 #: gtk/gtktextutil.c:51
 msgid "RLO Right-to-left o_verride"
-msgstr "So_breescritura RLO derecha-a-izquierda"
+msgstr "RLO So_breescritura de derecha-a-izquierda"
 
 #: gtk/gtktextutil.c:52
 msgid "PDF _Pop directional formatting"
-msgstr "_PDF Formateo direccional emergente"
+msgstr "PDF Formateo d_ireccional emergente"
 
 #: gtk/gtktextutil.c:53
 msgid "ZWS _Zero width space"
-msgstr "ZWS A_ncho de espacio cero"
+msgstr "ZWS Es_pacio de ancho cero"
 
 #: gtk/gtktextutil.c:54
 msgid "ZWJ Zero width _joiner"
@@ -4232,19 +4232,19 @@ msgstr "ZWJ En_samblador de ancho cero"
 
 #: gtk/gtktextutil.c:55
 msgid "ZWNJ Zero width _non-joiner"
-msgstr "ZWNJ No-e_nsamblador de ancho cero"
+msgstr "ZWNJ No-ens_amblador de ancho cero"
 
 #: gtk/gtktextview.c:540
 msgid "Pixels Above Lines"
-msgstr "Pixels sobre las líneas"
+msgstr "Píxeles sobre las líneas"
 
 #: gtk/gtktextview.c:550
 msgid "Pixels Below Lines"
-msgstr "Pixels por debajo de las líneas"
+msgstr "Píxeles por debajo de las líneas"
 
 #: gtk/gtktextview.c:560
 msgid "Pixels Inside Wrap"
-msgstr "Pixels dentro del ajuste"
+msgstr "Píxeles dentro del ajuste"
 
 #: gtk/gtktextview.c:578
 msgid "Wrap Mode"
@@ -4357,7 +4357,7 @@ msgstr "Tamaño del icono de la barra de herramientas"
 
 #: gtk/gtktoolbar.c:297
 msgid "Size of icons in default toolbars"
-msgstr "Tamaño de los iconos de la barra de herramientas"
+msgstr "Tamaño de los iconos el las barras de herramientas predeterminadas"
 
 #: gtk/gtktreemodelsort.c:306
 msgid "TreeModelSort Model"
@@ -4897,7 +4897,7 @@ msgstr "La posición inicial de la ventana"
 
 #: gtk/gtkwindow.c:516
 msgid "Default Width"
-msgstr "Ancho por omisión"
+msgstr "Ancho predeterminado"
 
 #: gtk/gtkwindow.c:517
 msgid "The default width of the window, used when initially showing the window"
@@ -4907,7 +4907,7 @@ msgstr ""
 
 #: gtk/gtkwindow.c:526
 msgid "Default Height"
-msgstr "Altura por Defecto"
+msgstr "Altura predeterminada"
 
 #: gtk/gtkwindow.c:527
 msgid "The default height of the window, used when initially showing the window"
