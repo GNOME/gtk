@@ -618,9 +618,8 @@ create_folder_tree (GtkFileChooserImplDefault *impl)
 				  GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
   gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (impl->tree_scrollwin),
 				       GTK_SHADOW_IN);
-#if 0
-  gtk_widget_show (impl->tree_scrollwin);
-#endif
+  if (impl->folder_mode)
+    gtk_widget_show (impl->tree_scrollwin);
 
   /* Tree */
 
@@ -743,7 +742,7 @@ create_shortcuts_tree (GtkFileChooserImplDefault *impl)
   return vbox;
 }
 
-/* Creates the widgets for the folder tree */
+/* Creates the widgets for the file list */
 static GtkWidget *
 create_file_list (GtkFileChooserImplDefault *impl)
 {
@@ -758,7 +757,8 @@ create_file_list (GtkFileChooserImplDefault *impl)
 				  GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
   gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (impl->list_scrollwin),
 				       GTK_SHADOW_IN);
-  gtk_widget_show (impl->list_scrollwin);
+  if (!impl->folder_mode)
+    gtk_widget_show (impl->list_scrollwin);
 
   /* Tree/list view */
 
@@ -895,22 +895,24 @@ gtk_file_chooser_impl_default_constructor (GType                  type,
   gtk_paned_set_position (GTK_PANED (hpaned), 200); /* FIXME: this sucks */
   gtk_widget_show (hpaned);
 
+  /* Shortcuts list */
+
+  widget = create_shortcuts_tree (impl);
+  gtk_paned_add1 (GTK_PANED (hpaned), widget);
+
   /* Folder tree */
 
-  hbox = gtk_hbox_new (FALSE, 6);
-  gtk_paned_add1 (GTK_PANED (hpaned), hbox);
+  hbox = gtk_hbox_new (FALSE, 12);
+  gtk_paned_add2 (GTK_PANED (hpaned), hbox);
   gtk_widget_show (hbox);
 
   widget = create_folder_tree (impl);
   gtk_box_pack_start (GTK_BOX (hbox), widget, TRUE, TRUE, 0);
 
-  widget = create_shortcuts_tree (impl);
-  gtk_box_pack_start (GTK_BOX (hbox), widget, TRUE, TRUE, 0);
-
   /* File list */
 
   widget = create_file_list (impl);
-  gtk_paned_add2 (GTK_PANED (hpaned), widget);
+  gtk_box_pack_start (GTK_BOX (hbox), widget, TRUE, TRUE, 0);
 
   /* Location/filename entry */
 
@@ -1140,6 +1142,234 @@ expand_and_select_func (GtkFileSystemModel *model,
   gtk_tree_view_scroll_to_cell (GTK_TREE_VIEW (impl->tree), path, NULL, TRUE, 0.3, 0.5);
 }
 
+static gboolean
+list_model_filter_func (GtkFileSystemModel *model,
+			GtkFilePath        *path,
+			const GtkFileInfo  *file_info,
+			gpointer            user_data)
+{
+  GtkFileChooserImplDefault *impl = user_data;
+  GtkFileFilterInfo filter_info;
+  GtkFileFilterFlags needed;
+  gboolean result;
+
+  if (!impl->current_filter)
+    return TRUE;
+
+  filter_info.contains = GTK_FILE_FILTER_DISPLAY_NAME | GTK_FILE_FILTER_MIME_TYPE;
+
+  needed = gtk_file_filter_get_needed (impl->current_filter);
+
+  filter_info.display_name = gtk_file_info_get_display_name (file_info);
+  filter_info.mime_type = gtk_file_info_get_mime_type (file_info);
+
+  if (needed & GTK_FILE_FILTER_FILENAME)
+    {
+      filter_info.filename = gtk_file_system_path_to_filename (impl->file_system, path);
+      if (filter_info.filename)
+	filter_info.contains |= GTK_FILE_FILTER_FILENAME;
+    }
+  else
+    filter_info.filename = NULL;
+
+  if (needed & GTK_FILE_FILTER_URI)
+    {
+      filter_info.uri = gtk_file_system_path_to_uri (impl->file_system, path);
+      if (filter_info.filename)
+	filter_info.contains |= GTK_FILE_FILTER_URI;
+    }
+  else
+    filter_info.uri = NULL;
+
+  result = gtk_file_filter_filter (impl->current_filter, &filter_info);
+
+  if (filter_info.filename)
+    g_free ((gchar *)filter_info.filename);
+  if (filter_info.uri)
+    g_free ((gchar *)filter_info.uri);
+
+  return result;
+}
+
+static void
+install_list_model_filter (GtkFileChooserImplDefault *impl)
+{
+  if (impl->current_filter)
+    _gtk_file_system_model_set_filter (impl->list_model,
+				       list_model_filter_func,
+				       impl);
+}
+
+#define COMPARE_DIRECTORIES											\
+  GtkFileChooserImplDefault *impl = user_data;									\
+  const GtkFileInfo *info_a = _gtk_file_system_model_get_info (impl->tree_model, a);				\
+  const GtkFileInfo *info_b = _gtk_file_system_model_get_info (impl->tree_model, b);				\
+  gboolean dir_a = gtk_file_info_get_is_folder (info_a);							\
+  gboolean dir_b = gtk_file_info_get_is_folder (info_b);							\
+														\
+  if (dir_a != dir_b)												\
+    return impl->list_sort_ascending ? (dir_a ? -1 : 1) : (dir_a ? 1 : -1) /* Directories *always* go first */
+
+/* Sort callback for the filename column */
+static gint
+name_sort_func (GtkTreeModel *model,
+		GtkTreeIter  *a,
+		GtkTreeIter  *b,
+		gpointer      user_data)
+{
+  COMPARE_DIRECTORIES;
+  else
+    return strcmp (gtk_file_info_get_display_key (info_a), gtk_file_info_get_display_key (info_b));
+}
+
+/* Sort callback for the size column */
+static gint
+size_sort_func (GtkTreeModel *model,
+		GtkTreeIter  *a,
+		GtkTreeIter  *b,
+		gpointer      user_data)
+{
+  COMPARE_DIRECTORIES;
+  else
+    {
+      gint64 size_a = gtk_file_info_get_size (info_a);
+      gint64 size_b = gtk_file_info_get_size (info_b);
+
+      return size_a > size_b ? -1 : (size_a == size_b ? 0 : 1);
+    }
+}
+
+/* Sort callback for the mtime column */
+static gint
+mtime_sort_func (GtkTreeModel *model,
+		 GtkTreeIter  *a,
+		 GtkTreeIter  *b,
+		 gpointer      user_data)
+{
+  COMPARE_DIRECTORIES;
+  else
+    {
+      GtkFileTime ta = gtk_file_info_get_modification_time (info_a);
+      GtkFileTime tb = gtk_file_info_get_modification_time (info_b);
+
+      return ta > tb ? -1 : (ta == tb ? 0 : 1);
+    }
+}
+
+/* Callback used when the sort column changes.  We cache the sort order for use
+ * in name_sort_func().
+ */
+static void
+list_sort_column_changed_cb (GtkTreeSortable           *sortable,
+			     GtkFileChooserImplDefault *impl)
+{
+  GtkSortType sort_type;
+
+  if (gtk_tree_sortable_get_sort_column_id (sortable, NULL, &sort_type))
+    impl->list_sort_ascending = (sort_type == GTK_SORT_ASCENDING);
+}
+
+/* Gets rid of the old list model and creates a new one for the current folder */
+static void
+set_list_model (GtkFileChooserImplDefault *impl)
+{
+  if (impl->list_model)
+    {
+      g_object_unref (impl->list_model);
+      impl->list_model = NULL;
+
+      g_object_unref (impl->sort_model);
+      impl->sort_model = NULL;
+    }
+
+  impl->list_model = _gtk_file_system_model_new (impl->file_system,
+						 impl->current_folder, 0,
+						 GTK_FILE_INFO_ICON |
+						 GTK_FILE_INFO_DISPLAY_NAME |
+						 GTK_FILE_INFO_IS_FOLDER |
+						 GTK_FILE_INFO_SIZE |
+						 GTK_FILE_INFO_MODIFICATION_TIME);
+  install_list_model_filter (impl);
+
+  impl->sort_model = (GtkTreeModelSort *)gtk_tree_model_sort_new_with_model (GTK_TREE_MODEL (impl->list_model));
+  gtk_tree_sortable_set_sort_func (GTK_TREE_SORTABLE (impl->sort_model), FILE_LIST_COL_NAME, name_sort_func, impl, NULL);
+  gtk_tree_sortable_set_sort_func (GTK_TREE_SORTABLE (impl->sort_model), FILE_LIST_COL_SIZE, size_sort_func, impl, NULL);
+  gtk_tree_sortable_set_sort_func (GTK_TREE_SORTABLE (impl->sort_model), FILE_LIST_COL_MTIME, mtime_sort_func, impl, NULL);
+  gtk_tree_sortable_set_default_sort_func (GTK_TREE_SORTABLE (impl->sort_model), NULL, NULL, NULL);
+  gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (impl->sort_model), FILE_LIST_COL_NAME, GTK_SORT_ASCENDING);
+  impl->list_sort_ascending = TRUE;
+
+  g_signal_connect (impl->sort_model, "sort_column_changed",
+		    G_CALLBACK (list_sort_column_changed_cb), impl);
+
+  gtk_tree_view_set_model (GTK_TREE_VIEW (impl->list),
+			   GTK_TREE_MODEL (impl->sort_model));
+  gtk_tree_view_columns_autosize (GTK_TREE_VIEW (impl->list));
+  gtk_tree_view_set_search_column (GTK_TREE_VIEW (impl->list),
+				   GTK_FILE_SYSTEM_MODEL_DISPLAY_NAME);
+}
+
+static void
+update_chooser_entry (GtkFileChooserImplDefault *impl)
+{
+  GtkTreeSelection *selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (impl->list));
+  const GtkFileInfo *info;
+  GtkTreeIter iter;
+  GtkTreeIter child_iter;
+
+  /* Fixing this for multiple selection involves getting the full
+   * selection and diffing to find out what the most recently selected
+   * file is; there is logic in GtkFileSelection that probably can
+   * be copied; check_preview_change() is similar.
+   */
+  if (impl->select_multiple ||
+      !gtk_tree_selection_get_selected (selection, NULL, &iter))
+    return;
+
+  gtk_tree_model_sort_convert_iter_to_child_iter (impl->sort_model,
+						  &child_iter,
+						  &iter);
+
+  info = _gtk_file_system_model_get_info (impl->list_model, &child_iter);
+
+  _gtk_file_chooser_entry_set_file_part (GTK_FILE_CHOOSER_ENTRY (impl->entry),
+					 gtk_file_info_get_display_name (info));
+}
+
+/* Sensitize the "add bookmark" button if the current folder is not in the
+ * bookmarks list, or de-sensitize it otherwise.
+ */
+static void
+check_bookmarks_sensitivity (GtkFileChooserImplDefault *impl)
+{
+  GtkTreeIter *iter;
+  gboolean exists;
+
+  if (!gtk_file_system_get_supports_bookmarks (impl->file_system))
+    return;
+
+  iter = gtk_tree_iter_copy (&impl->bookmarks_iter);
+
+  exists = FALSE;
+
+  while (gtk_tree_model_iter_next (GTK_TREE_MODEL (impl->shortcuts_model), iter))
+    {
+      GtkFilePath *path;
+
+      gtk_tree_model_get (GTK_TREE_MODEL (impl->shortcuts_model), iter, SHORTCUTS_COL_PATH, &path, -1);
+      g_assert (path != NULL);
+
+      if (gtk_file_path_compare (path, impl->current_folder) == 0)
+	{
+	  exists = TRUE;
+	  break;
+	}
+    }
+
+  gtk_widget_set_sensitive (impl->add_bookmark_button, !exists);
+  gtk_tree_iter_free (iter);
+}
+
 static void
 gtk_file_chooser_impl_default_set_current_folder (GtkFileChooser    *chooser,
 						  const GtkFilePath *path)
@@ -1148,9 +1378,6 @@ gtk_file_chooser_impl_default_set_current_folder (GtkFileChooser    *chooser,
 
   _gtk_file_system_model_path_do (impl->tree_model, path,
 				  expand_and_select_func, impl);
-
-  if (!impl->changing_folder)
-    select_shortcuts_folder (impl);
 }
 
 static GtkFilePath *
@@ -1452,64 +1679,6 @@ gtk_file_chooser_impl_default_list_shortcut_folders (GtkFileChooser *chooser)
   return gtk_file_paths_copy (impl->shortcut_folders);
 }
 
-static gboolean
-list_model_filter_func (GtkFileSystemModel *model,
-			GtkFilePath        *path,
-			const GtkFileInfo  *file_info,
-			gpointer            user_data)
-{
-  GtkFileChooserImplDefault *impl = user_data;
-  GtkFileFilterInfo filter_info;
-  GtkFileFilterFlags needed;
-  gboolean result;
-
-  if (!impl->current_filter)
-    return TRUE;
-
-  filter_info.contains = GTK_FILE_FILTER_DISPLAY_NAME | GTK_FILE_FILTER_MIME_TYPE;
-
-  needed = gtk_file_filter_get_needed (impl->current_filter);
-
-  filter_info.display_name = gtk_file_info_get_display_name (file_info);
-  filter_info.mime_type = gtk_file_info_get_mime_type (file_info);
-
-  if (needed & GTK_FILE_FILTER_FILENAME)
-    {
-      filter_info.filename = gtk_file_system_path_to_filename (impl->file_system, path);
-      if (filter_info.filename)
-	filter_info.contains |= GTK_FILE_FILTER_FILENAME;
-    }
-  else
-    filter_info.filename = NULL;
-
-  if (needed & GTK_FILE_FILTER_URI)
-    {
-      filter_info.uri = gtk_file_system_path_to_uri (impl->file_system, path);
-      if (filter_info.filename)
-	filter_info.contains |= GTK_FILE_FILTER_URI;
-    }
-  else
-    filter_info.uri = NULL;
-
-  result = gtk_file_filter_filter (impl->current_filter, &filter_info);
-
-  if (filter_info.filename)
-    g_free ((gchar *)filter_info.filename);
-  if (filter_info.uri)
-    g_free ((gchar *)filter_info.uri);
-
-  return result;
-}
-
-static void
-install_list_model_filter (GtkFileChooserImplDefault *impl)
-{
-  if (impl->current_filter)
-    _gtk_file_system_model_set_filter (impl->list_model,
-				       list_model_filter_func,
-				       impl);
-}
-
 static void
 set_current_filter (GtkFileChooserImplDefault *impl,
 		    GtkFileFilter             *filter)
@@ -1540,62 +1709,6 @@ set_current_filter (GtkFileChooserImplDefault *impl,
       install_list_model_filter (impl);
 
       g_object_notify (G_OBJECT (impl), "filter");
-    }
-}
-
-#define COMPARE_DIRECTORIES											\
-  GtkFileChooserImplDefault *impl = user_data;									\
-  const GtkFileInfo *info_a = _gtk_file_system_model_get_info (impl->tree_model, a);				\
-  const GtkFileInfo *info_b = _gtk_file_system_model_get_info (impl->tree_model, b);				\
-  gboolean dir_a = gtk_file_info_get_is_folder (info_a);							\
-  gboolean dir_b = gtk_file_info_get_is_folder (info_b);							\
-														\
-  if (dir_a != dir_b)												\
-    return impl->list_sort_ascending ? (dir_a ? -1 : 1) : (dir_a ? 1 : -1) /* Directories *always* go first */
-
-/* Sort callback for the filename column */
-static gint
-name_sort_func (GtkTreeModel *model,
-		GtkTreeIter  *a,
-		GtkTreeIter  *b,
-		gpointer      user_data)
-{
-  COMPARE_DIRECTORIES;
-  else
-    return strcmp (gtk_file_info_get_display_key (info_a), gtk_file_info_get_display_key (info_b));
-}
-
-/* Sort callback for the size column */
-static gint
-size_sort_func (GtkTreeModel *model,
-		GtkTreeIter  *a,
-		GtkTreeIter  *b,
-		gpointer      user_data)
-{
-  COMPARE_DIRECTORIES;
-  else
-    {
-      gint64 size_a = gtk_file_info_get_size (info_a);
-      gint64 size_b = gtk_file_info_get_size (info_b);
-
-      return size_a > size_b ? -1 : (size_a == size_b ? 0 : 1);
-    }
-}
-
-/* Sort callback for the mtime column */
-static gint
-mtime_sort_func (GtkTreeModel *model,
-		 GtkTreeIter  *a,
-		 GtkTreeIter  *b,
-		 gpointer      user_data)
-{
-  COMPARE_DIRECTORIES;
-  else
-    {
-      GtkFileTime ta = gtk_file_info_get_modification_time (info_a);
-      GtkFileTime tb = gtk_file_info_get_modification_time (info_b);
-
-      return ta > tb ? -1 : (ta == tb ? 0 : 1);
     }
 }
 
@@ -1657,33 +1770,6 @@ open_and_close (GtkTreeView *tree_view,
 }
 
 static void
-update_chooser_entry (GtkFileChooserImplDefault *impl)
-{
-  GtkTreeSelection *selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (impl->list));
-  const GtkFileInfo *info;
-  GtkTreeIter iter;
-  GtkTreeIter child_iter;
-
-  /* Fixing this for multiple selection involves getting the full
-   * selection and diffing to find out what the most recently selected
-   * file is; there is logic in GtkFileSelection that probably can
-   * be copied; check_preview_change() is similar.
-   */
-  if (impl->select_multiple ||
-      !gtk_tree_selection_get_selected (selection, NULL, &iter))
-    return;
-
-  gtk_tree_model_sort_convert_iter_to_child_iter (impl->sort_model,
-						  &child_iter,
-						  &iter);
-
-  info = _gtk_file_system_model_get_info (impl->list_model, &child_iter);
-
-  _gtk_file_chooser_entry_set_file_part (GTK_FILE_CHOOSER_ENTRY (impl->entry),
-					 gtk_file_info_get_display_name (info));
-}
-
-static void
 filter_option_menu_changed (GtkOptionMenu             *option_menu,
 			    GtkFileChooserImplDefault *impl)
 {
@@ -1736,19 +1822,6 @@ check_preview_change (GtkFileChooserImplDefault *impl)
     }
 }
 
-/* Callback used when the sort column changes.  We cache the sort order for use
- * in name_sort_func().
- */
-static void
-list_sort_column_changed_cb (GtkTreeSortable           *sortable,
-			     GtkFileChooserImplDefault *impl)
-{
-  GtkSortType sort_type;
-
-  if (gtk_tree_sortable_get_sort_column_id (sortable, NULL, &sort_type))
-    impl->list_sort_ascending = (sort_type == GTK_SORT_ASCENDING);
-}
-
 static void
 tree_selection_changed (GtkTreeSelection          *selection,
 			GtkFileChooserImplDefault *impl)
@@ -1769,15 +1842,6 @@ tree_selection_changed (GtkTreeSelection          *selection,
   impl->current_folder = gtk_file_path_copy (file_path);
   _gtk_file_chooser_entry_set_base_folder (GTK_FILE_CHOOSER_ENTRY (impl->entry), file_path);
 
-  if (impl->list_model)
-    {
-      g_object_unref (impl->list_model);
-      impl->list_model = NULL;
-
-      g_object_unref (impl->sort_model);
-      impl->sort_model = NULL;
-    }
-
   /* Close the tree up to only the parents of the newly selected
    * node and it's immediate children are visible.
    */
@@ -1785,46 +1849,18 @@ tree_selection_changed (GtkTreeSelection          *selection,
   open_and_close (GTK_TREE_VIEW (impl->tree), path);
   gtk_tree_path_free (path);
 
-  /* Now update the list view to show the new row.
-   */
-  file_path = _gtk_file_system_model_get_path (impl->tree_model, &iter);
-
-  impl->list_model = _gtk_file_system_model_new (impl->file_system,
-						 file_path, 0,
-						 GTK_FILE_INFO_ICON |
-						 GTK_FILE_INFO_DISPLAY_NAME |
-						 GTK_FILE_INFO_IS_FOLDER |
-						 GTK_FILE_INFO_SIZE |
-						 GTK_FILE_INFO_MODIFICATION_TIME);
-  install_list_model_filter (impl);
-
-  impl->sort_model = (GtkTreeModelSort *)gtk_tree_model_sort_new_with_model (GTK_TREE_MODEL (impl->list_model));
-  gtk_tree_sortable_set_sort_func (GTK_TREE_SORTABLE (impl->sort_model), FILE_LIST_COL_NAME, name_sort_func, impl, NULL);
-  gtk_tree_sortable_set_sort_func (GTK_TREE_SORTABLE (impl->sort_model), FILE_LIST_COL_SIZE, size_sort_func, impl, NULL);
-  gtk_tree_sortable_set_sort_func (GTK_TREE_SORTABLE (impl->sort_model), FILE_LIST_COL_MTIME, mtime_sort_func, impl, NULL);
-  gtk_tree_sortable_set_default_sort_func (GTK_TREE_SORTABLE (impl->sort_model), NULL, NULL, NULL);
-  gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (impl->sort_model), FILE_LIST_COL_NAME, GTK_SORT_ASCENDING);
-  impl->list_sort_ascending = TRUE;
-
-  g_signal_connect (impl->sort_model, "sort_column_changed",
-		    G_CALLBACK (list_sort_column_changed_cb), impl);
-
-  gtk_tree_view_set_model (GTK_TREE_VIEW (impl->list),
-			   GTK_TREE_MODEL (impl->sort_model));
-  gtk_tree_view_columns_autosize (GTK_TREE_VIEW (impl->list));
-  gtk_tree_view_set_search_column (GTK_TREE_VIEW (impl->list),
-				   GTK_FILE_SYSTEM_MODEL_DISPLAY_NAME);
+  /* Create the new list model */
+  set_list_model (impl);
 
   impl->changing_folder = TRUE;
-  gtk_tree_model_foreach (GTK_TREE_MODEL (impl->shortcuts_model),
-			  set_current_shortcut_foreach_cb,
-			  impl);
+  select_shortcuts_folder (impl);
   impl->changing_folder = FALSE;
 
   g_signal_emit_by_name (impl, "current-folder-changed", 0);
 
   update_chooser_entry (impl);
   check_preview_change (impl);
+  check_bookmarks_sensitivity (impl);
 
   g_signal_emit_by_name (impl, "selection-changed", 0);
 }
@@ -1848,7 +1884,7 @@ shortcuts_selection_changed (GtkTreeSelection          *selection,
   if (!path)
     {
       /* We are on the bookmarks separator node, so unselect it */
-      gtk_tree_selection_unselect_iter (selection, &iter);
+      select_shortcuts_folder (impl);
       /* FIXME: how to make this row unselectable? */
       return;
     }
