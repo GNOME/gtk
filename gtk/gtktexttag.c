@@ -1945,6 +1945,7 @@ _gtk_text_attributes_fill_from_tags (GtkTextAttributes *dest,
       GtkTextTag *tag = tags[n];
       GtkTextAttributes *vals = tag->values;
 
+      g_assert (tag->table != NULL);
       if (n > 0)
         g_assert (tags[n]->priority > tags[n-1]->priority);
 

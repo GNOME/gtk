@@ -1646,13 +1646,6 @@ arrow.
 @show_toggle_indicator: unused
 @show_submenu_indicator: whether to show the arrow or not
 
-<!-- ##### MACRO gtk_notebook_set_page ##### -->
-<para>
-</para>
-
-@notebook: 
-@page_num: 
-
 <!-- ##### FUNCTION gtk_object_arg_get ##### -->
 <para>
 Private function to get an argument and argument info from an object.
@@ -2370,14 +2363,6 @@ fundamental type.
 @window: 
 @Returns: 
 
-<!-- ##### FUNCTION gtk_window_get_resizeable ##### -->
-<para>
-
-</para>
-
-@window: 
-@Returns: 
-
 <!-- ##### FUNCTION gtk_window_set_decorations_hint ##### -->
 <para>
 
@@ -2393,13 +2378,4 @@ fundamental type.
 
 @window: 
 @functions: 
-
-<!-- ##### FUNCTION gtk_window_set_resizeable ##### -->
-<para>
-
-</para>
-
-@window: 
-@setting: 
-@resizeable: 
 

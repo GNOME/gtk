@@ -102,7 +102,12 @@ struct _NodeData {
   gint height;
   gint width : 24;
 
-  /* boolean indicating whether the height/width need to be recomputed */
+  /* boolean indicating whether the lines below this node are in need of validation.
+   * However, width/height should always represent the current total width and
+   * max height for lines below this node; the valid flag indicates whether the
+   * width/height on the lines needs recomputing, not whether the totals
+   * need recomputing.
+   */
   gint valid : 8;
 };
 
@@ -572,7 +577,10 @@ _gtk_text_btree_delete (GtkTextIter *start,
   gtk_text_iter_order (start, end);
 
   tree = _gtk_text_iter_get_btree (start);
-
+ 
+  if (gtk_debug_flags & GTK_DEBUG_TEXT)
+    _gtk_text_btree_check (tree);
+  
   {
     /*
      * The code below is ugly, but it's needed to make sure there
@@ -611,7 +619,7 @@ _gtk_text_btree_delete (GtkTextIter *start,
           }
 
         tags = _gtk_text_btree_get_tags (end,
-                                        &array_size);
+                                         &array_size);
 
         if (tags != NULL)
           {
@@ -701,6 +709,9 @@ _gtk_text_btree_delete (GtkTextIter *start,
               for (node = curnode; node != NULL;
                    node = node->parent)
                 {
+                  /* Don't update node->num_chars, because
+                   * that was done when we deleted the segments.
+                   */
                   node->num_lines -= 1;
                 }
 
@@ -791,21 +802,32 @@ _gtk_text_btree_delete (GtkTextIter *start,
     {
       BTreeView *view;
       GtkTextBTreeNode *ancestor_node;
-
       GtkTextLine *prevline;
+      int chars_moved;      
 
+      /* last_seg was appended to start_line up at the top of this function */
+      chars_moved = 0;
       for (seg = last_seg; seg != NULL;
            seg = seg->next)
         {
+          chars_moved += seg->char_count;
           if (seg->type->lineChangeFunc != NULL)
             {
               (*seg->type->lineChangeFunc)(seg, end_line);
             }
         }
+
+      for (node = start_line->parent; node != NULL;
+           node = node->parent)
+        {
+          node->num_chars += chars_moved;
+        }
+      
       curnode = end_line->parent;
       for (node = curnode; node != NULL;
            node = node->parent)
         {
+          node->num_chars -= chars_moved;
           node->num_lines--;
         }
       curnode->num_children--;
@@ -881,6 +903,9 @@ _gtk_text_btree_delete (GtkTextIter *start,
           view = view->next;
         }
 
+      /* avoid dangling pointer */
+      deleted_lines = NULL;
+      
       gtk_text_btree_rebalance (tree, curnode);
     }
 

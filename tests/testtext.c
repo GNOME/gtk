@@ -191,6 +191,9 @@ msgbox_key_press_cb (GtkWidget *widget, GdkEventKey *event, gpointer data)
   return FALSE;
 }
 
+/* Don't copy this example, it's all crack-smoking - you can just use
+ * GtkMessageDialog now
+ */
 gint
 msgbox_run (GtkWindow  *parent,
 	    const char *message,
@@ -842,6 +845,35 @@ do_example (gpointer             callback_data,
   view_add_example_widgets (new_view);
 }
 
+
+static void
+do_insert_and_scroll (gpointer             callback_data,
+                      guint                callback_action,
+                      GtkWidget           *widget)
+{
+  View *view = view_from_widget (widget);
+  GtkTextBuffer *buffer;
+  GtkTextIter start, end;
+  GtkTextMark *mark;
+  
+  buffer = view->buffer->buffer;
+
+  gtk_text_buffer_get_bounds (buffer, &start, &end);
+  mark = gtk_text_buffer_create_mark (buffer, NULL, &end, /* right grav */ FALSE);
+
+  gtk_text_iter_backward_char (&end);
+  gtk_text_buffer_insert (buffer, &end,
+                          "Hello this is multiple lines of text\n"
+                          "Line 1\n"  "Line 2\n"
+                          "Line 3\n"  "Line 4\n"
+                          "Line 5\n",
+                          -1);
+
+  gtk_text_view_scroll_to_mark (GTK_TEXT_VIEW (view->text_view), mark,
+                                0, TRUE, 0.0, 1.0);
+  gtk_text_buffer_delete_mark (buffer, mark);
+}
+
 static void
 do_wrap_changed (gpointer             callback_data,
 		 guint                callback_action,
@@ -1268,6 +1300,7 @@ static GtkItemFactoryEntry menu_items[] =
   { "/Attributes/Properties",       NULL, do_properties, 0, NULL },
   { "/_Test",   	 NULL,         0,           0, "<Branch>" },
   { "/Test/_Example",  	 NULL,         do_example,  0, NULL },
+  { "/Test/_Insert and scroll", NULL,         do_insert_and_scroll,  0, NULL },
 };
 
 static gboolean

@@ -1,3 +1,20 @@
+2001-09-07  Havoc Pennington  <hp@redhat.com>
+
+	* gtk/gtktextview.c (gtk_text_view_flush_scroll): update
+	adjustments after validating destination yrange; fixes #53918
+	(This may cause other issues, but I hope it won't)
+	
+2001-09-05  Havoc Pennington  <hp@redhat.com>
+
+	* gtk/gtktextbtree.c (_gtk_text_btree_delete): when merging end
+	line into start line, update the character counts in parent nodes; 
+	caused a bug when end and start line had different parent nodes.
+
+2001-08-30  Havoc Pennington  <hp@redhat.com>
+	
+	* gtk/gtktexttag.c (_gtk_text_attributes_fill_from_tags): add
+	assertion that tag is in a table
+
 Fri Sep  7 12:48:56 2001  Matthias Clasen  <matthiasc@poet.de>
 
 	* gdk/x11/gdkkeys-x11.c (get_direction): Don't call
@@ -466,7 +483,7 @@ Tue Aug 21 12:43:29 2001  Owen Taylor  <otaylor@redhat.com>
 	* configure.in (all_loaders): Add tga loader, 
 	patch by Nicola Girardi. (#56067)
 
-Tue Aug 21 02:57:13 2001  Jonathan Blandford  <jrb@redhat.com>>
+Tue Aug 21 02:57:13 2001  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtktreeview.c (gtk_tree_view_button_press): Fix up selection
 	a little.  More needs to be done tomorrow.
