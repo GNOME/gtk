@@ -445,6 +445,8 @@ GList* g_list_remove_link (GList     *list,
 GList* g_list_reverse	  (GList     *list);
 GList* g_list_nth	  (GList     *list,
 			   guint      n);
+gint   g_list_position    (GList     *list,
+			   GList     *link);
 GList* g_list_find	  (GList     *list,
 			   gpointer   data);
 GList* g_list_last	  (GList     *list);

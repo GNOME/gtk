@@ -126,6 +126,10 @@ main (int   argc,
 	g_error ("Regular insert failed");
     }
 
+  for (i = 0; i < 10; i++)
+    if(g_list_position(list, g_list_nth (list, i)) != i)
+      g_error("g_list_position does not seem to be the inverse of g_list_nth\n");
+
   g_list_free (list);
   list = NULL;
   

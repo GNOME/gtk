@@ -300,6 +300,21 @@ g_list_nth (GList *list,
   return list;
 }
 
+gint
+g_list_position (GList     *list,
+		 GList     *link)
+{
+  gint nth;
+  GList *curlink;
+  for(nth = 0, curlink = list; curlink; curlink = g_list_next(curlink), nth++)
+    {
+	if(curlink == link) return nth;
+    }
+
+  return -1;
+}
+
+
 GList*
 g_list_find (GList    *list,
 	     gpointer  data)

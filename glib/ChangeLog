@@ -1,3 +1,9 @@
+1998-04-27  Elliot Lee  <sopwith@cuc.ml.org>
+
+	* glist.c (g_list_position): New function to find the position of
+	a link in a list - should be the inverse of g_list_nth(), but
+	haven't tested it so poof.
+
 Tue Apr  7 19:36:48 1998  Owen Taylor  <owt1@cornell.edu>
 
 	* gutils.c (g_direct_compare): Removed, because that's what
