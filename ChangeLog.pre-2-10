@@ -1,3 +1,8 @@
+2000-05-29  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtkclist.c (gtk_clist_column_titles_active): let you set the
+	titles to be active, even if they aren't visible.
+
 2000-05-21  Nils Barth  <nils_barth@post.harvard.edu>
 
 	* gtkmenu.c:
