@@ -28,6 +28,7 @@
  */
 
 #undef GDK_DISABLE_DEPRECATED
+#undef GTK_DISABLE_DEPRECATED
 
 #include <math.h>
 #include "gtkcontainer.h"

@@ -217,6 +217,10 @@ static void             gtk_widget_invalidate_widget_windows    (GtkWidget      
 								 GdkRegion        *region);
 static GdkScreen *      gtk_widget_get_screen_unchecked         (GtkWidget        *widget);
 
+static void gtk_widget_set_usize_internal (GtkWidget *widget,
+					   gint       width,
+					   gint       height);
+
 
 /* --- variables --- */
 static gpointer         parent_class = NULL;
@@ -1154,10 +1158,10 @@ gtk_widget_set_property (GObject         *object,
       gtk_container_add (GTK_CONTAINER (g_value_get_object (value)), widget);
       break;
     case PROP_WIDTH_REQUEST:
-      gtk_widget_set_usize (widget, g_value_get_int (value), -2);
+      gtk_widget_set_usize_internal (widget, g_value_get_int (value), -2);
       break;
     case PROP_HEIGHT_REQUEST:
-      gtk_widget_set_usize (widget, -2, g_value_get_int (value));
+      gtk_widget_set_usize_internal (widget, -2, g_value_get_int (value));
       break;
     case PROP_VISIBLE:
       if (g_value_get_boolean (value))
@@ -1484,17 +1488,17 @@ gtk_widget_set (GtkWidget   *widget,
 }
 
 static inline void	   
-gtk_widget_queue_clear_child (GtkWidget *widget)
+gtk_widget_queue_draw_child (GtkWidget *widget)
 {
   GtkWidget *parent;
 
   parent = widget->parent;
   if (parent && GTK_WIDGET_DRAWABLE (parent))
-    gtk_widget_queue_clear_area (parent,
-				 widget->allocation.x,
-				 widget->allocation.y,
-				 widget->allocation.width,
-				 widget->allocation.height);
+    gtk_widget_queue_draw_area (parent,
+				widget->allocation.x,
+				widget->allocation.y,
+				widget->allocation.width,
+				widget->allocation.height);
 }
 
 /**
@@ -1537,7 +1541,7 @@ gtk_widget_unparent (GtkWidget *widget)
   else
     toplevel = NULL;
 
-  gtk_widget_queue_clear_child (widget);
+  gtk_widget_queue_draw_child (widget);
 
   /* Reset the width and height here, to force reallocation if we
    * get added back to a new parent. This won't work if our new
@@ -2011,54 +2015,6 @@ gtk_widget_queue_draw_area (GtkWidget *widget,
 			    gint       width,
  			    gint       height)
 {
-  g_return_if_fail (GTK_IS_WIDGET (widget));
-
-  gtk_widget_queue_clear_area (widget, x, y, width, height);
-}
-
-/**
- * gtk_widget_queue_draw:
- * @widget: a #GtkWidget
- *
- * Equivalent to calling gtk_widget_queue_draw_area() for the
- * entire area of a widget.
- * 
- **/
-void	   
-gtk_widget_queue_draw (GtkWidget *widget)
-{
-  g_return_if_fail (GTK_IS_WIDGET (widget));
-
-  gtk_widget_queue_clear (widget);
-}
-
-/* Invalidates the given area (allocation-relative-coordinates)
- * in all of the widget's windows
- */
-/**
- * gtk_widget_queue_clear_area:
- * @widget: a #GtkWidget
- * @x: x coordinate of upper-left corner of rectangle to redraw
- * @y: y coordinate of upper-left corner of rectangle to redraw
- * @width: width of region to draw
- * @height: height of region to draw
- * 
- * DEPRECATED. This function is no longer different from
- * gtk_widget_queue_draw_area(), though it once was. Now it just calls
- * gtk_widget_queue_draw_area(). Originally
- * gtk_widget_queue_clear_area() would force a redraw of the
- * background for %GTK_NO_WINDOW widgets, and
- * gtk_widget_queue_draw_area() would not. Now both functions ensure
- * the background will be redrawn.
- * 
- **/
-void	   
-gtk_widget_queue_clear_area (GtkWidget *widget,
-			     gint       x,
-			     gint       y,
-			     gint       width,
-			     gint       height)
-{
   GdkRectangle invalid_rect;
   GtkWidget *w;
   
@@ -2116,6 +2072,65 @@ gtk_widget_queue_clear_area (GtkWidget *widget,
 }
 
 /**
+ * gtk_widget_queue_draw:
+ * @widget: a #GtkWidget
+ *
+ * Equivalent to calling gtk_widget_queue_draw_area() for the
+ * entire area of a widget.
+ * 
+ **/
+void	   
+gtk_widget_queue_draw (GtkWidget *widget)
+{
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+
+  if (widget->allocation.width || widget->allocation.height)
+    {
+      if (GTK_WIDGET_NO_WINDOW (widget))
+	gtk_widget_queue_draw_area (widget, widget->allocation.x,
+				    widget->allocation.y,
+				    widget->allocation.width, 
+				    widget->allocation.height);
+      else
+	gtk_widget_queue_draw_area (widget, 0, 0, 
+				    widget->allocation.width, 
+				    widget->allocation.height);
+    }
+}
+
+/* Invalidates the given area (allocation-relative-coordinates)
+ * in all of the widget's windows
+ */
+/**
+ * gtk_widget_queue_clear_area:
+ * @widget: a #GtkWidget
+ * @x: x coordinate of upper-left corner of rectangle to redraw
+ * @y: y coordinate of upper-left corner of rectangle to redraw
+ * @width: width of region to draw
+ * @height: height of region to draw
+ * 
+ * DEPRECATED. This function is no longer different from
+ * gtk_widget_queue_draw_area(), though it once was. Now it just calls
+ * gtk_widget_queue_draw_area(). Originally
+ * gtk_widget_queue_clear_area() would force a redraw of the
+ * background for %GTK_NO_WINDOW widgets, and
+ * gtk_widget_queue_draw_area() would not. Now both functions ensure
+ * the background will be redrawn.
+ * 
+ **/
+void	   
+gtk_widget_queue_clear_area (GtkWidget *widget,
+			     gint       x,
+			     gint       y,
+			     gint       width,
+			     gint       height)
+{
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+
+  gtk_widget_queue_draw_area (widget, x, y, width, height);
+}
+
+/**
  * gtk_widget_queue_clear:
  * @widget: a #GtkWidget
  * 
@@ -2126,18 +2141,7 @@ gtk_widget_queue_clear (GtkWidget *widget)
 {
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
-  if (widget->allocation.width || widget->allocation.height)
-    {
-      if (GTK_WIDGET_NO_WINDOW (widget))
-	gtk_widget_queue_clear_area (widget, widget->allocation.x,
-				     widget->allocation.y,
-				     widget->allocation.width, 
-				     widget->allocation.height);
-      else
-	gtk_widget_queue_clear_area (widget, 0, 0, 
-				     widget->allocation.width, 
-				     widget->allocation.height);
-    }
+  gtk_widget_queue_draw (widget);
 }
 
 /**
@@ -3630,7 +3634,7 @@ gtk_widget_set_state (GtkWidget           *widget,
       gtk_widget_propagate_state (widget, &data);
   
       if (GTK_WIDGET_DRAWABLE (widget))
-	gtk_widget_queue_clear (widget);
+	gtk_widget_queue_draw (widget);
     }
 }
 
@@ -3650,7 +3654,7 @@ gtk_widget_set_app_paintable (GtkWidget *widget,
 	GTK_WIDGET_UNSET_FLAGS (widget, GTK_APP_PAINTABLE);
 
       if (GTK_WIDGET_DRAWABLE (widget))
-	gtk_widget_queue_clear (widget);
+	gtk_widget_queue_draw (widget);
 
       g_object_notify (G_OBJECT (widget), "app_paintable");
     }
@@ -3766,7 +3770,7 @@ gtk_widget_set_sensitive (GtkWidget *widget,
 
   gtk_widget_propagate_state (widget, &data);
   if (GTK_WIDGET_DRAWABLE (widget))
-    gtk_widget_queue_clear (widget);
+    gtk_widget_queue_draw (widget);
 
   g_object_notify (G_OBJECT (widget), "sensitive");
 }
@@ -4999,6 +5003,36 @@ gtk_widget_set_uposition (GtkWidget *widget,
     gtk_widget_size_allocate (widget, &widget->allocation);
 }
 
+static void
+gtk_widget_set_usize_internal (GtkWidget *widget,
+			       gint       width,
+			       gint       height)
+{
+  GtkWidgetAuxInfo *aux_info;
+  
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+  
+  g_object_freeze_notify (G_OBJECT (widget));
+
+  aux_info =_gtk_widget_get_aux_info (widget, TRUE);
+  
+  if (width > -2)
+    {
+      g_object_notify (G_OBJECT (widget), "width_request");
+      aux_info->width = width;
+    }
+  if (height > -2)
+    {
+      g_object_notify (G_OBJECT (widget), "height_request");  
+      aux_info->height = height;
+    }
+  
+  if (GTK_WIDGET_VISIBLE (widget))
+    gtk_widget_queue_resize (widget);
+
+  g_object_thaw_notify (G_OBJECT (widget));
+}
+
 /**
  * gtk_widget_set_usize:
  * @widget: a #GtkWidget
@@ -5032,29 +5066,9 @@ gtk_widget_set_usize (GtkWidget *widget,
 		      gint	 width,
 		      gint	 height)
 {
-  GtkWidgetAuxInfo *aux_info;
-  
   g_return_if_fail (GTK_IS_WIDGET (widget));
   
-  g_object_freeze_notify (G_OBJECT (widget));
-
-  aux_info =_gtk_widget_get_aux_info (widget, TRUE);
-  
-  if (width > -2)
-    {
-      g_object_notify (G_OBJECT (widget), "width_request");
-      aux_info->width = width;
-    }
-  if (height > -2)
-    {
-      g_object_notify (G_OBJECT (widget), "height_request");  
-      aux_info->height = height;
-    }
-  
-  if (GTK_WIDGET_VISIBLE (widget))
-    gtk_widget_queue_resize (widget);
-
-  g_object_thaw_notify (G_OBJECT (widget));
+  gtk_widget_set_usize_internal (widget, width, height);
 }
 
 /**
@@ -5107,7 +5121,7 @@ gtk_widget_set_size_request (GtkWidget *widget,
   if (height == 0)
     height = 1;
   
-  gtk_widget_set_usize (widget, width, height);
+  gtk_widget_set_usize_internal (widget, width, height);
 }
 
 

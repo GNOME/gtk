@@ -1072,8 +1072,6 @@ gtk_item_factory_create_item (GtkItemFactory	     *ifactory,
 
   if (GTK_IS_RADIO_MENU_ITEM (widget))
     gtk_radio_menu_item_set_group (GTK_RADIO_MENU_ITEM (widget), radio_group);
-  if (GTK_IS_CHECK_MENU_ITEM (widget))
-    gtk_check_menu_item_set_show_toggle (GTK_CHECK_MENU_ITEM (widget), TRUE);
   if (type_id == quark_type_image_item)
     {
       GError *error = NULL;

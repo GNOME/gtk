@@ -212,6 +212,35 @@ static void color_sample_draw_sample (GtkColorSelection *colorsel, int which);
 static void color_sample_draw_samples (GtkColorSelection *colorsel);
 
 static void
+set_color_internal (GtkColorSelection *colorsel,
+		    gdouble           *color)
+{
+  ColorSelectionPrivate *priv;
+  gint i;
+  
+  priv = colorsel->private_data;
+  priv->changing = TRUE;
+  priv->color[COLORSEL_RED] = color[0];
+  priv->color[COLORSEL_GREEN] = color[1];
+  priv->color[COLORSEL_BLUE] = color[2];
+  priv->color[COLORSEL_OPACITY] = color[3];
+  gtk_rgb_to_hsv (priv->color[COLORSEL_RED],
+		  priv->color[COLORSEL_GREEN],
+		  priv->color[COLORSEL_BLUE],
+		  &priv->color[COLORSEL_HUE],
+		  &priv->color[COLORSEL_SATURATION],
+		  &priv->color[COLORSEL_VALUE]);
+  if (priv->default_set == FALSE)
+    {
+      for (i = 0; i < COLORSEL_NUM_CHANNELS; i++)
+	priv->old_color[i] = priv->color[i];
+    }
+  priv->default_set = TRUE;
+  priv->default_alpha_set = TRUE;
+  update_color (colorsel);
+}
+
+static void
 set_color_icon (GdkDragContext *context,
 		gdouble        *colors)
 {
@@ -300,7 +329,7 @@ color_sample_drop_handle (GtkWidget        *widget,
       color[2] = (gdouble)vals[2] / 0xffff;
       color[3] = (gdouble)vals[3] / 0xffff;
       
-      gtk_color_selection_set_color (colorsel, color);
+      set_color_internal (colorsel, color);
     }
 }
 
@@ -970,21 +999,11 @@ palette_release (GtkWidget      *drawing_area,
         {
           gdouble color[4];
           palette_get_color (drawing_area, color);
-          gtk_color_selection_set_color (colorsel, color);
+          set_color_internal (colorsel, color);
         }
     }
 
   return FALSE;
-}
-
-static void
-palette_unset_color (GtkWidget *drawing_area)
-{
-  if (GPOINTER_TO_INT (g_object_get_data (G_OBJECT (drawing_area), "color_set")) == 0)
-    return;
-  
-  gtk_widget_reset_rc_styles (drawing_area);
-  g_object_set_data (G_OBJECT (drawing_area), "color_set", GINT_TO_POINTER (0));
 }
 
 static void
@@ -997,6 +1016,7 @@ palette_drop_handle (GtkWidget        *widget,
 		     guint             time,
 		     gpointer          data)
 {
+  GtkColorSelection *colorsel = GTK_COLOR_SELECTION (data);
   guint16 *vals;
   gdouble color[4];
   
@@ -1016,8 +1036,8 @@ palette_drop_handle (GtkWidget        *widget,
   color[1] = (gdouble)vals[1] / 0xffff;
   color[2] = (gdouble)vals[2] / 0xffff;
   color[3] = (gdouble)vals[3] / 0xffff;
-  palette_change_color (widget, GTK_COLOR_SELECTION (data), color);
-  gtk_color_selection_set_color (GTK_COLOR_SELECTION (data), color);
+  palette_change_color (widget, colorsel, color);
+  set_color_internal (colorsel, color);
 }
 
 static gint
@@ -1035,7 +1055,7 @@ palette_activate (GtkWidget   *widget,
         {
           gdouble color[4];
           palette_get_color (widget, color);
-          gtk_color_selection_set_color (GTK_COLOR_SELECTION (data), color);
+          set_color_internal (GTK_COLOR_SELECTION (data), color);
         }
       return TRUE;
     }
@@ -2025,7 +2045,7 @@ gtk_color_selection_new (void)
   
   colorsel = g_object_new (GTK_TYPE_COLOR_SELECTION, NULL);
   priv = colorsel->private_data;
-  gtk_color_selection_set_color (colorsel, color);
+  set_color_internal (colorsel, color);
   gtk_color_selection_set_has_opacity_control (colorsel, TRUE);
   
   /* We want to make sure that default_set is FALSE */
@@ -2237,31 +2257,9 @@ void
 gtk_color_selection_set_color (GtkColorSelection    *colorsel,
 			       gdouble              *color)
 {
-  ColorSelectionPrivate *priv;
-  gint i;
-  
   g_return_if_fail (GTK_IS_COLOR_SELECTION (colorsel));
-  
-  priv = colorsel->private_data;
-  priv->changing = TRUE;
-  priv->color[COLORSEL_RED] = color[0];
-  priv->color[COLORSEL_GREEN] = color[1];
-  priv->color[COLORSEL_BLUE] = color[2];
-  priv->color[COLORSEL_OPACITY] = color[3];
-  gtk_rgb_to_hsv (priv->color[COLORSEL_RED],
-		  priv->color[COLORSEL_GREEN],
-		  priv->color[COLORSEL_BLUE],
-		  &priv->color[COLORSEL_HUE],
-		  &priv->color[COLORSEL_SATURATION],
-		  &priv->color[COLORSEL_VALUE]);
-  if (priv->default_set == FALSE)
-    {
-      for (i = 0; i < COLORSEL_NUM_CHANNELS; i++)
-	priv->old_color[i] = priv->color[i];
-    }
-  priv->default_set = TRUE;
-  priv->default_alpha_set = TRUE;
-  update_color (colorsel);
+
+  set_color_internal (colorsel, color);
 }
 
 /**

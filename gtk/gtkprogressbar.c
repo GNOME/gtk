@@ -78,6 +78,15 @@ static void gtk_progress_bar_real_update   (GtkProgress         *progress);
 static void gtk_progress_bar_paint         (GtkProgress         *progress);
 static void gtk_progress_bar_act_mode_enter (GtkProgress        *progress);
 
+static void gtk_progress_bar_set_bar_style_internal       (GtkProgressBar *pbar,
+							   GtkProgressBarStyle style);
+static void gtk_progress_bar_set_discrete_blocks_internal (GtkProgressBar *pbar,
+							   guint           blocks);
+static void gtk_progress_bar_set_activity_step_internal   (GtkProgressBar *pbar,
+							   guint           step);
+static void gtk_progress_bar_set_activity_blocks_internal (GtkProgressBar *pbar,
+							   guint           blocks);
+
 
 GType
 gtk_progress_bar_get_type (void)
@@ -247,16 +256,16 @@ gtk_progress_bar_set_property (GObject      *object,
       gtk_progress_bar_set_orientation (pbar, g_value_get_enum (value));
       break;
     case PROP_BAR_STYLE:
-      gtk_progress_bar_set_bar_style (pbar, g_value_get_enum (value));
+      gtk_progress_bar_set_bar_style_internal (pbar, g_value_get_enum (value));
       break;
     case PROP_ACTIVITY_STEP:
-      gtk_progress_bar_set_activity_step (pbar, g_value_get_uint (value));
+      gtk_progress_bar_set_activity_step_internal (pbar, g_value_get_uint (value));
       break;
     case PROP_ACTIVITY_BLOCKS:
-      gtk_progress_bar_set_activity_blocks (pbar, g_value_get_uint (value));
+      gtk_progress_bar_set_activity_blocks_internal (pbar, g_value_get_uint (value));
       break;
     case PROP_DISCRETE_BLOCKS:
-      gtk_progress_bar_set_discrete_blocks (pbar, g_value_get_uint (value));
+      gtk_progress_bar_set_discrete_blocks_internal (pbar, g_value_get_uint (value));
       break;
     case PROP_FRACTION:
       gtk_progress_bar_set_fraction (pbar, g_value_get_double (value));
@@ -867,6 +876,68 @@ gtk_progress_bar_paint (GtkProgress *progress)
     }
 }
 
+static void
+gtk_progress_bar_set_bar_style_internal (GtkProgressBar     *pbar,
+					 GtkProgressBarStyle bar_style)
+{
+  g_return_if_fail (GTK_IS_PROGRESS_BAR (pbar));
+
+  if (pbar->bar_style != bar_style)
+    {
+      pbar->bar_style = bar_style;
+
+      if (GTK_WIDGET_DRAWABLE (GTK_WIDGET (pbar)))
+	gtk_widget_queue_resize (GTK_WIDGET (pbar));
+
+      g_object_notify (G_OBJECT (pbar), "bar_style");
+    }
+}
+
+static void
+gtk_progress_bar_set_discrete_blocks_internal (GtkProgressBar *pbar,
+					       guint           blocks)
+{
+  g_return_if_fail (GTK_IS_PROGRESS_BAR (pbar));
+  g_return_if_fail (blocks > 1);
+
+  if (pbar->blocks != blocks)
+    {
+      pbar->blocks = blocks;
+
+      if (GTK_WIDGET_DRAWABLE (GTK_WIDGET (pbar)))
+	gtk_widget_queue_resize (GTK_WIDGET (pbar));
+
+      g_object_notify (G_OBJECT (pbar), "discrete_blocks");
+    }
+}
+
+static void
+gtk_progress_bar_set_activity_step_internal (GtkProgressBar *pbar,
+					     guint           step)
+{
+  g_return_if_fail (GTK_IS_PROGRESS_BAR (pbar));
+
+  if (pbar->activity_step != step)
+    {
+      pbar->activity_step = step;
+      g_object_notify (G_OBJECT (pbar), "activity_step");
+    }
+}
+
+static void
+gtk_progress_bar_set_activity_blocks_internal (GtkProgressBar *pbar,
+					       guint           blocks)
+{
+  g_return_if_fail (GTK_IS_PROGRESS_BAR (pbar));
+  g_return_if_fail (blocks > 1);
+
+  if (pbar->activity_blocks != blocks)
+    {
+      pbar->activity_blocks = blocks;
+      g_object_notify (G_OBJECT (pbar), "activity_blocks");
+    }
+}
+
 /*******************************************************************/
 
 /**
@@ -1078,15 +1149,7 @@ gtk_progress_bar_set_bar_style (GtkProgressBar     *pbar,
 {
   g_return_if_fail (GTK_IS_PROGRESS_BAR (pbar));
 
-  if (pbar->bar_style != bar_style)
-    {
-      pbar->bar_style = bar_style;
-
-      if (GTK_WIDGET_DRAWABLE (GTK_WIDGET (pbar)))
-	gtk_widget_queue_resize (GTK_WIDGET (pbar));
-
-      g_object_notify (G_OBJECT (pbar), "bar_style");
-    }
+  gtk_progress_bar_set_bar_style_internal (pbar, bar_style);
 }
 
 void
@@ -1096,15 +1159,7 @@ gtk_progress_bar_set_discrete_blocks (GtkProgressBar *pbar,
   g_return_if_fail (GTK_IS_PROGRESS_BAR (pbar));
   g_return_if_fail (blocks > 1);
 
-  if (pbar->blocks != blocks)
-    {
-      pbar->blocks = blocks;
-
-      if (GTK_WIDGET_DRAWABLE (GTK_WIDGET (pbar)))
-	gtk_widget_queue_resize (GTK_WIDGET (pbar));
-
-      g_object_notify (G_OBJECT (pbar), "discrete_blocks");
-    }
+  gtk_progress_bar_set_discrete_blocks_internal (pbar, blocks);
 }
 
 void
@@ -1113,11 +1168,7 @@ gtk_progress_bar_set_activity_step (GtkProgressBar *pbar,
 {
   g_return_if_fail (GTK_IS_PROGRESS_BAR (pbar));
 
-  if (pbar->activity_step != step)
-    {
-      pbar->activity_step = step;
-      g_object_notify (G_OBJECT (pbar), "activity_step");
-    }
+  gtk_progress_bar_set_activity_step_internal (pbar, step);
 }
 
 void
@@ -1127,9 +1178,5 @@ gtk_progress_bar_set_activity_blocks (GtkProgressBar *pbar,
   g_return_if_fail (GTK_IS_PROGRESS_BAR (pbar));
   g_return_if_fail (blocks > 1);
 
-  if (pbar->activity_blocks != blocks)
-    {
-      pbar->activity_blocks = blocks;
-      g_object_notify (G_OBJECT (pbar), "activity_blocks");
-    }
+  gtk_progress_bar_set_activity_blocks_internal (pbar, blocks);
 }

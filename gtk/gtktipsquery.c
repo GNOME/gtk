@@ -27,6 +27,8 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
+#undef GTK_DISABLE_DEPRECATED
+
 #include	"gtktipsquery.h"
 #include	"gtksignal.h"
 #include	"gtktooltips.h"

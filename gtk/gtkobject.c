@@ -222,12 +222,12 @@ gtk_object_add_arg_type (const gchar *arg_name,
   g_return_if_fail (arg_name != NULL);
   g_return_if_fail (arg_type > G_TYPE_NONE);
   g_return_if_fail (arg_id > 0);
-  g_return_if_fail (arg_flags & GTK_ARG_READWRITE);
+  g_return_if_fail (arg_flags & G_PARAM_READWRITE);
   if (arg_flags & G_PARAM_CONSTRUCT)
     g_return_if_fail ((arg_flags & G_PARAM_CONSTRUCT_ONLY) == 0);
   if (arg_flags & (G_PARAM_CONSTRUCT | G_PARAM_CONSTRUCT_ONLY))
     g_return_if_fail (arg_flags & G_PARAM_WRITABLE);
-  g_return_if_fail ((arg_flags & ~(GTK_ARG_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_CONSTRUCT_ONLY)) == 0);
+  g_return_if_fail ((arg_flags & ~(G_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_CONSTRUCT_ONLY)) == 0);
 
   pname = strchr (arg_name, ':');
   g_return_if_fail (pname && pname[1] == ':');
@@ -239,7 +239,7 @@ gtk_object_add_arg_type (const gchar *arg_name,
   g_return_if_fail (G_TYPE_IS_OBJECT (type));
 
   oclass = gtk_type_class (type);
-  if (arg_flags & GTK_ARG_READABLE)
+  if (arg_flags & G_PARAM_READABLE)
     {
       if (oclass->get_property && oclass->get_property != gtk_arg_proxy_get_property)
 	{
@@ -249,7 +249,7 @@ gtk_object_add_arg_type (const gchar *arg_name,
 	}
       oclass->get_property = gtk_arg_proxy_get_property;
     }
-  if (arg_flags & GTK_ARG_WRITABLE)
+  if (arg_flags & G_PARAM_WRITABLE)
     {
       if (oclass->set_property && oclass->set_property != gtk_arg_proxy_set_property)
 	{
@@ -331,12 +331,13 @@ gtk_object_class_init (GtkObjectClass *class)
 							 "Anonymous User Data Pointer",
 							 G_PARAM_READABLE | G_PARAM_WRITABLE));
   object_signals[DESTROY] =
-    gtk_signal_new ("destroy",
-                    G_SIGNAL_RUN_CLEANUP | G_SIGNAL_NO_RECURSE | GTK_RUN_NO_HOOKS,
-                    GTK_CLASS_TYPE (class),
-                    GTK_SIGNAL_OFFSET (GtkObjectClass, destroy),
-                    _gtk_marshal_VOID__VOID,
-		    GTK_TYPE_NONE, 0);
+    g_signal_new ("destroy",
+		  G_TYPE_FROM_CLASS (gobject_class),
+		  G_SIGNAL_RUN_CLEANUP | G_SIGNAL_NO_RECURSE | G_SIGNAL_NO_HOOKS,
+		  G_STRUCT_OFFSET (GtkObjectClass, destroy),
+		  NULL, NULL,
+		  _gtk_marshal_VOID__VOID,
+		  G_TYPE_NONE, 0);
 }
 
 static void
@@ -372,7 +373,7 @@ gtk_object_dispose (GObject *gobject)
     {
       GTK_OBJECT_SET_FLAGS (object, GTK_IN_DESTRUCTION);
       
-      gtk_signal_emit (object, object_signals[DESTROY]);
+      g_signal_emit (object, object_signals[DESTROY], 0);
       
       GTK_OBJECT_UNSET_FLAGS (object, GTK_IN_DESTRUCTION);
     }
@@ -419,7 +420,7 @@ gtk_object_set_property (GObject      *object,
   switch (property_id)
     {
     case PROP_USER_DATA:
-      gtk_object_set_user_data (GTK_OBJECT (object), g_value_get_pointer (value));
+      g_object_set_data (G_OBJECT (object), "user_data", g_value_get_pointer (value));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
@@ -436,7 +437,7 @@ gtk_object_get_property (GObject     *object,
   switch (property_id)
     {
     case PROP_USER_DATA:
-      g_value_set_pointer (value, gtk_object_get_user_data (GTK_OBJECT (object)));
+      g_value_set_pointer (value, g_object_get_data (G_OBJECT (object), "user_data"));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
@@ -460,7 +461,7 @@ gtk_object_sink (GtkObject *object)
   if (GTK_OBJECT_FLOATING (object))
     {
       GTK_OBJECT_UNSET_FLAGS (object, GTK_FLOATING);
-      gtk_object_unref (object);
+      g_object_unref (object);
     }
 }
 
@@ -506,10 +507,10 @@ gtk_object_weakref (GtkObject        *object,
     quark_weakrefs = g_quark_from_static_string ("gtk-weakrefs");
 
   weak = g_new (GtkWeakRef, 1);
-  weak->next = gtk_object_get_data_by_id (object, quark_weakrefs);
+  weak->next = g_object_get_qdata (G_OBJECT (object), quark_weakrefs);
   weak->notify = notify;
   weak->data = data;
-  gtk_object_set_data_by_id (object, quark_weakrefs, weak);
+  g_object_set_qdata (G_OBJECT (object), quark_weakrefs, weak);
 }
 
 void
@@ -524,14 +525,14 @@ gtk_object_weakunref (GtkObject        *object,
   if (!quark_weakrefs)
     return;
 
-  weaks = gtk_object_get_data_by_id (object, quark_weakrefs);
+  weaks = g_object_get_qdata (G_OBJECT (object), quark_weakrefs);
   for (wp = &weaks; *wp; wp = &(*wp)->next)
     {
       w = *wp;
       if (w->notify == notify && w->data == data)
 	{
 	  if (w == weaks)
-	    gtk_object_set_data_by_id (object, quark_weakrefs, w->next);
+	    g_object_set_qdata (G_OBJECT (object), quark_weakrefs, w->next);
 	  else
 	    *wp = w->next;
 	  g_free (w);
@@ -547,7 +548,7 @@ gtk_object_notify_weaks (GtkObject *object)
     {
       GtkWeakRef *w1, *w2;
       
-      w1 = gtk_object_get_data_by_id (object, quark_weakrefs);
+      w1 = g_object_get_qdata (G_OBJECT (object), quark_weakrefs);
       
       while (w1)
 	{
@@ -567,7 +568,7 @@ gtk_object_new (GtkType      object_type,
   GtkObject *object;
   va_list var_args;
 
-  g_return_val_if_fail (GTK_TYPE_IS_OBJECT (object_type), NULL);
+  g_return_val_if_fail (G_TYPE_IS_OBJECT (object_type), NULL);
 
   va_start (var_args, first_property_name);
   object = (GtkObject *)g_object_new_valist (object_type, first_property_name, var_args);

@@ -28,6 +28,8 @@
  * The code here relies on all sorts of internal details of GTK+
  */
 
+#undef GTK_DISABLE_DEPRECATED
+
 #include <string.h>
 
 #include "gtkarrow.h"

@@ -24,6 +24,8 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
+#undef GTK_DISABLE_DEPRECATED
+
 #include <stdio.h>
 #include <string.h>
 #define GTK_ENABLE_BROKEN

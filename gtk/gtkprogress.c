@@ -67,26 +67,28 @@ static void gtk_progress_value_changed   (GtkAdjustment    *adjustment,
 static GtkWidgetClass *parent_class = NULL;
 
 
-GtkType
+GType
 gtk_progress_get_type (void)
 {
-  static GtkType progress_type = 0;
+  static GType progress_type = 0;
 
   if (!progress_type)
     {
-      static const GtkTypeInfo progress_info =
+      static const GTypeInfo progress_info =
       {
-	"GtkProgress",
-	sizeof (GtkProgress),
 	sizeof (GtkProgressClass),
-	(GtkClassInitFunc) gtk_progress_class_init,
-	(GtkObjectInitFunc) gtk_progress_init,
-        /* reserved_1 */ NULL,
-        /* reserved_2 */ NULL,
-        (GtkClassInitFunc) NULL
+	NULL,		/* base_init */
+	NULL,		/* base_finalize */
+	(GClassInitFunc) gtk_progress_class_init,
+	NULL,		/* class_finalize */
+	NULL,		/* class_data */
+	sizeof (GtkProgress),
+	0,		/* n_preallocs */
+	(GInstanceInitFunc) gtk_progress_init,
       };
 
-      progress_type = gtk_type_unique (GTK_TYPE_WIDGET, &progress_info);
+      progress_type = g_type_register_static (GTK_TYPE_WIDGET, "GtkProgress",
+					      &progress_info, 0);
     }
 
   return progress_type;

@@ -313,6 +313,8 @@ static void hls_to_rgb			(gdouble	 *h,
 
 static void style_unrealize_cursor_gcs (GtkStyle *style);
 
+static GdkFont *gtk_style_get_font_internal (GtkStyle *style);
+
 /*
  * Data for default check and radio buttons
  */
@@ -3190,11 +3192,11 @@ gtk_default_draw_string (GtkStyle      *style,
 
   if (state_type == GTK_STATE_INSENSITIVE)
     gdk_draw_string (window,
-		     gtk_style_get_font (style),
+		     gtk_style_get_font_internal (style),
 		     style->white_gc, x + 1, y + 1, string);
 
   gdk_draw_string (window,
-		   gtk_style_get_font (style),
+		   gtk_style_get_font_internal (style),
 		   style->fg_gc[state_type], x, y, string);
 
   if (area)
@@ -6037,21 +6039,8 @@ gtk_border_get_type (void)
   return our_type;
 }
 
-/**
- * gtk_style_get_font:
- * @style: a #GtkStyle
- * 
- * Gets the #GdkFont to use for the given style. This is
- * meant only as a replacement for direct access to @style->font
- * and should not be used in new code. New code should
- * use @style->font_desc instead.
- * 
- * Return value: the #GdkFont for the style. This font is owned
- *   by the style; if you want to keep around a copy, you must
- *   call gdk_font_ref().
- **/
-GdkFont *
-gtk_style_get_font (GtkStyle *style)
+static GdkFont *
+gtk_style_get_font_internal (GtkStyle *style)
 {
   g_return_val_if_fail (GTK_IS_STYLE (style), NULL);
 
@@ -6100,6 +6089,27 @@ gtk_style_get_font (GtkStyle *style)
     }
 
   return style->private_font;
+}
+
+/**
+ * gtk_style_get_font:
+ * @style: a #GtkStyle
+ * 
+ * Gets the #GdkFont to use for the given style. This is
+ * meant only as a replacement for direct access to @style->font
+ * and should not be used in new code. New code should
+ * use @style->font_desc instead.
+ * 
+ * Return value: the #GdkFont for the style. This font is owned
+ *   by the style; if you want to keep around a copy, you must
+ *   call gdk_font_ref().
+ **/
+GdkFont *
+gtk_style_get_font (GtkStyle *style)
+{
+  g_return_val_if_fail (GTK_IS_STYLE (style), NULL);
+
+  return gtk_style_get_font_internal (style);
 }
 
 /**

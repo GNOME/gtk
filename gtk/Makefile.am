@@ -19,6 +19,7 @@ INCLUDES = @STRIP_BEGIN@ \
 	-DG_DISABLE_DEPRECATED				\
 	-DGDK_PIXBUF_DISABLE_DEPRECATED			\
 	-DGDK_DISABLE_DEPRECATED			\
+	-DGTK_DISABLE_DEPRECATED			\
 	@GTK_DEBUG_FLAGS@				\
 	@GTK_DEP_CFLAGS@				\
 @STRIP_END@
@@ -534,7 +535,7 @@ stamp-gtktypebuiltins.h: @REBUILD@ $(gtk_public_h_sources) Makefile
 	&& echo timestamp > $(@F)
 $(srcdir)/gtktypebuiltins.c: @REBUILD@ $(gtk_public_h_sources) Makefile
 	( cd $(srcdir) && glib-mkenums \
-			--fhead "#define GTK_ENABLE_BROKEN\n#include \"gtk.h\"\n#include \"gtkprivate.h\"" \
+			--fhead "#undef GTK_DISABLE_DEPRECATED\n#define GTK_ENABLE_BROKEN\n#include \"gtk.h\"\n#include \"gtkprivate.h\"" \
 			--fprod "\n/* enumerations from \"@filename@\" */" \
 			--vhead "GType\n@enum_name@_get_type (void)\n{\n  static GType etype = 0;\n  if (etype == 0) {\n    static const G@Type@Value values[] = {" \
 			--vprod "      { @VALUENAME@, \"@VALUENAME@\", \"@valuenick@\" }," \

@@ -17,6 +17,8 @@
  * Boston, MA 02111-1307, USA.
  */
 
+#undef GTK_DISABLE_DEPRECATED
+
 #include	"gtksignal.h"
 
 /* the real parameter limit is of course given by GSignal, bu we need

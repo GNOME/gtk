@@ -2037,7 +2037,7 @@ gtk_invoke_idle_timeout (gpointer data)
   GtkArg args[1];
   gint ret_val = FALSE;
   args[0].name = NULL;
-  args[0].type = GTK_TYPE_BOOL;
+  args[0].type = G_TYPE_BOOLEAN;
   args[0].d.pointer_data = &ret_val;
   closure->marshal (NULL, closure->data,  0, args);
   return ret_val;
@@ -2051,13 +2051,13 @@ gtk_invoke_input (gpointer	    data,
   GtkClosure *closure = data;
 
   GtkArg args[3];
-  args[0].type = GTK_TYPE_INT;
+  args[0].type = G_TYPE_INT;
   args[0].name = NULL;
   GTK_VALUE_INT (args[0]) = source;
   args[1].type = GDK_TYPE_INPUT_CONDITION;
   args[1].name = NULL;
   GTK_VALUE_FLAGS (args[1]) = condition;
-  args[2].type = GTK_TYPE_NONE;
+  args[2].type = G_TYPE_NONE;
   args[2].name = NULL;
 
   closure->marshal (NULL, closure->data, 2, args);
@@ -2157,7 +2157,7 @@ gtk_quit_invoke_function (GtkQuitFunction *quitf)
       gint ret_val = FALSE;
 
       args[0].name = NULL;
-      args[0].type = GTK_TYPE_BOOL;
+      args[0].type = G_TYPE_BOOLEAN;
       args[0].d.pointer_data = &ret_val;
       ((GtkCallbackMarshal) quitf->marshal) (NULL,
 					     quitf->data,

@@ -127,6 +127,10 @@ typedef void (*GtkSignalFunc)       (void);
 #ifndef GTK_DISABLE_DEPRECATED
 typedef struct _GtkTypeInfo 	     GtkTypeInfo;
 typedef GSignalCMarshaller          GtkSignalMarshaller;
+#endif
+
+#if !defined (GTK_DISABLE_DEPRECATED) || defined (GTK_COMPILATION)
+/* Used by gtk_container_foreach_unmarshal () */
 
 /* GtkArg, used to hold differently typed values */
 struct _GtkArg
@@ -183,7 +187,9 @@ struct _GtkArg
 #define GTK_VALUE_OBJECT(a)	((a).d.object_data)
 #define GTK_VALUE_POINTER(a)	((a).d.pointer_data)
 #define GTK_VALUE_SIGNAL(a)	((a).d.signal_data)
+#endif /* !GTK_DISABLE_DEPRECATED || GTK_COMPILATION */
 
+#ifndef GTK_DISABLE_DEPRECATED
 /* return location macros, these all narrow down to
  * pointer types, because return values need to be
  * passed by reference
@@ -237,9 +243,6 @@ gpointer	gtk_type_new	(GtkType	 type);
 #define	gtk_type_parent(type)		 g_type_parent (type)
 #define	gtk_type_is_a(type, is_a_type)	 g_type_is_a ((type), (is_a_type))
 
-/* deprecated, use g_type_init() instead */
-void		gtk_type_init	(GTypeDebugFlags debug_flags);
-
 /* enum/flags compatibility functions, we strongly
  * recommend to use the glib enum/flags classes directly
  */
@@ -253,6 +256,11 @@ GtkFlagValue*	gtk_type_flags_find_value	(GtkType	 flags_type,
 						 const gchar	*value_name);
 
 #endif /* GTK_DISABLE_DEPRECATED */
+
+#if !defined (GTK_DISABLE_DEPRECATED) || defined (GTK_COMPILATION)
+/* deprecated, use g_type_init() instead */
+void		gtk_type_init	(GTypeDebugFlags debug_flags);
+#endif /* !GTK_DISABLE_DEPRECATED || GTK_COMPILATION */
 
 G_END_DECLS
 

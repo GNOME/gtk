@@ -200,9 +200,11 @@ void   gtk_item_factory_set_translate_func (GtkItemFactory      *ifactory,
 					    gpointer             data,
 					    GtkDestroyNotify     notify);
 
-#ifndef GTK_DISABLE_DEPRECATED
+#if !defined (GTK_DISABLE_DEPRECATED) || defined (GTK_COMPILATION)
 /* Compatibility functions for deprecated GtkMenuFactory code
  */
+
+/* Used by gtk_item_factory_create_menu_entries () */
 typedef void (*GtkMenuCallback) (GtkWidget *widget,
 				 gpointer   user_data);
 typedef struct {
@@ -212,19 +214,26 @@ typedef struct {
   gpointer callback_data;
   GtkWidget *widget;
 } GtkMenuEntry;
-GtkItemFactory*	gtk_item_factory_from_path   (const gchar       *path);
-void	gtk_item_factory_create_menu_entries (guint		 n_entries,
-					      GtkMenuEntry      *entries);
-void	gtk_item_factories_path_delete	   (const gchar		*ifactory_path,
-					    const gchar		*path);
+
+/* Used by gtk_item_factory_callback_marshal () */
 typedef	void	(*GtkItemFactoryCallback2) (GtkWidget		*widget,
 					    gpointer		 callback_data,
 					    guint		 callback_action);
+
+/* Used by gtk_item_factory_create_items () */
 void	gtk_item_factory_create_items_ac (GtkItemFactory	*ifactory,
 					  guint			 n_entries,
 					  GtkItemFactoryEntry	*entries,
 					  gpointer		 callback_data,
 					  guint			 callback_type);
+#endif /* !GTK_DISABLE_DEPRECATED || GTK_COMPILATION */
+
+#ifndef GTK_DISABLE_DEPRECATED
+GtkItemFactory*	gtk_item_factory_from_path   (const gchar       *path);
+void	gtk_item_factory_create_menu_entries (guint		 n_entries,
+					      GtkMenuEntry      *entries);
+void	gtk_item_factories_path_delete	   (const gchar		*ifactory_path,
+					    const gchar		*path);
 #endif /* GTK_DISABLE_DEPRECATED */
 
 

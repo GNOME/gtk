@@ -1,3 +1,74 @@
+Tue Nov 19 17:05:51 2002 Manish Singh  <yosh@gimp.org>
+
+	* gtk/Makefile.am: add -DGTK_DISABLE_DEPRECATED. #undef it at the
+	top of gtktypebuiltins.c.
+
+	* gtk/gtkclist.c
+	* gtk/gtkcombo.c
+	* gtk/gtkctree.c
+	* gtk/gtklist.c
+	* gtk/gtklistitem.c
+	* gtk/gtkoldeditable.c
+	* gtk/gtkpixmap.c
+	* gtk/gtkpreview.c
+	* gtk/gtksignal.c
+	* gtk/gtktext.c
+	* gtk/gtktipsquery.c
+	* gtk/gtktree.c
+	* gtk/gtktreeitem.c
+	* gtk/gtktypeutils.c: #undef GTK_DISABLE_DEPRECATED, deprecated widgets
+	and compat code.
+
+	* gtk/gtkcolorsel.c: move gtk_color_selection_set_color implementation
+	to set_color_internal, and use that. The deprecated function now
+	merely wraps it.
+
+	* gtk/gtkfontsel.c: same as above, except with
+	gtk_font_selection_get_font.
+
+	* gtk/gtknotebook.c: same as above, except with
+	gtk_notebook_set_homogeneous, and gtk_notebook_set_tab_{border,
+	hborder,vborder}.
+
+	* gtk/gtkprogressbar.c: same as above, except with
+	gtk_progress_bar_set_{bar_stype,discrete_blocks,activity_step,
+	activity_blocks}.
+
+	* gtk/gtkstyle.c: same as above, except with gtk_style_get_font.
+
+	* gtk/gtkwidget.c: same as above, except with gtk_widget_set_usize.
+
+	* gtk/gtkitemfactory.h: declare compatibility functions for deprecated
+	GtkMenuFactory stuff if GTK_COMPILATION, since they are used
+	internally by the compat code.
+
+	* gtk/gtkitemfactory.c (gtk_item_factory_create_item): remove
+	use of deprecated gtk_check_menu_item_set_show_toggle (it is a noop
+	now).
+
+	* gtk/gtkmain.c: replaced deprecated GTK_TYPE_* with G_TYPE_*.
+
+	* gtk/gtkobject.c: replaced various deprecated functions. In set and
+	get_property, use g_object_{set,get}_data with "user_data" instead
+	of gtk_object_{set,get}_user_data.
+
+	* gtk/gtkprogress.h: API declared if GTK_COMPILATION
+
+	* gtk/gtkprogress.c: port get_type to GObject API.
+
+	* gtk/gtktypeutils.h: declare GtkArg stuff and gtk_type_init,
+	if GTK_COMPILATION.
+
+	* gtk/gtkwidget.c: define gtk_widget_queue_clear in terms of
+	gtk_widget_queue_draw instead of the other way around.
+
+	* tests/Makefile.am: define -DGTK_DISABLE_DEPRECATED
+
+	* tests/testgtk.c
+	* tests/testselection.c
+	* tests/testsocket.c: #undef GTK_DISABLE_DEPRECATED, makes use of
+	deprecated stuff.
+
 Tue Nov 19 17:01:40 2002  Manish Singh  <yosh@gimp.org>
 
 	* gtk/gtktreeselection.c (gtk_tree_selection_real_modify_range):

@@ -153,6 +153,8 @@ static void     gtk_font_selection_preview_changed       (GtkWidget        *entr
 static void    gtk_font_selection_load_font          (GtkFontSelection *fs);
 static void    gtk_font_selection_update_preview     (GtkFontSelection *fs);
 
+static GdkFont* gtk_font_selection_get_font_internal (GtkFontSelection *fontsel);
+
 /* FontSelectionDialog */
 static void    gtk_font_selection_dialog_class_init  (GtkFontSelectionDialogClass *klass);
 static void    gtk_font_selection_dialog_init	     (GtkFontSelectionDialog *fontseldiag);
@@ -265,7 +267,7 @@ static void gtk_font_selection_get_property (GObject         *object,
       g_value_set_string (value, gtk_font_selection_get_font_name (fontsel));
       break;
     case PROP_FONT:
-      g_value_set_object (value, gtk_font_selection_get_font (fontsel));
+      g_value_set_object (value, gtk_font_selection_get_font_internal (fontsel));
       break;
     case PROP_PREVIEW_TEXT:
       g_value_set_string (value, gtk_font_selection_get_preview_text (fontsel));
@@ -1051,12 +1053,8 @@ gtk_font_selection_update_preview (GtkFontSelection *fontsel)
   gtk_editable_set_position (GTK_EDITABLE (preview_entry), 0);
 }
 
-/*****************************************************************************
- * These functions are the main public interface for getting/setting the font.
- *****************************************************************************/
-
 GdkFont*
-gtk_font_selection_get_font (GtkFontSelection *fontsel)
+gtk_font_selection_get_font_internal (GtkFontSelection *fontsel)
 {
   if (!fontsel->font)
     {
@@ -1068,6 +1066,16 @@ gtk_font_selection_get_font (GtkFontSelection *fontsel)
   return fontsel->font;
 }
 
+
+/*****************************************************************************
+ * These functions are the main public interface for getting/setting the font.
+ *****************************************************************************/
+
+GdkFont*
+gtk_font_selection_get_font (GtkFontSelection *fontsel)
+{
+  return gtk_font_selection_get_font_internal (fontsel);
+}
 
 gchar *
 gtk_font_selection_get_font_name (GtkFontSelection *fontsel)
