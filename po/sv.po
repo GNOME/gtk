@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2004-12-18 13:21+0100\n"
-"PO-Revision-Date: 2004-12-18 13:21+0100\n"
+"PO-Revision-Date: 2004-12-18 13:39+0100\n"
 "Last-Translator: Christian Rose <menthos@menthos.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -915,7 +915,7 @@ msgstr "calendar:week_start:1"
 #: gtk/gtkcellrendererprogress.c:235 gtk/gtkcellrendererprogress.c:293
 #, c-format
 msgid "progress bar label|%d %%"
-msgstr "etikett för förloppsindikator|%d %%"
+msgstr "etikett för förloppsmätare|%d %%"
 
 #: gtk/gtkcolorbutton.c:220 gtk/gtkcolorbutton.c:574
 msgid "Pick a Color"
