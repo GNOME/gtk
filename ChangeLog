@@ -1,3 +1,8 @@
+2004-05-10  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkfontsel.c (list_row_activated): Make Return activate the
+	default button.  (#118921)
+
 Mon May 10 15:03:50 2004  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 	* gtk/gtkwidget.c (_gtk_widget_grab_notify): New internal function
