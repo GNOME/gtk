@@ -247,82 +247,76 @@ gtk_label_expose (GtkWidget      *widget,
       if (!GTK_WIDGET_IS_SENSITIVE (widget))
 	state = GTK_STATE_INSENSITIVE;
 
-      /* We only draw the label if we have been allocated at least as
-       *  much space as we requested. If we have less space than we
-       *  need to draw the string then we _should_ have asked our
-       *  parent container to resize and a new allocation _should_
-       *  be forthcoming so there is no reason to redraw (incorrectly)
-       *  here.
+      maxl = widget->requisition.width - misc->xpad * 2;
+
+      /*
+       * GC Clipping
        */
-      if ((widget->allocation.width >= widget->requisition.width) &&
-	  (widget->allocation.height >= widget->requisition.height))
-	{
-	  maxl = widget->requisition.width - misc->xpad * 2;
-	  x = widget->allocation.x + misc->xpad +
-	       (widget->allocation.width - widget->requisition.width) * misc->xalign + 0.5;
-	  y = (widget->allocation.y * (1.0 - misc->yalign) +
-	       (widget->allocation.y + widget->allocation.height - (widget->requisition.height -
-								    misc->ypad * 2)) *
-	       misc->yalign + widget->style->font->ascent) + 1.5;
-          
-	  row = label->row;
-	  while (row && row->next)
-            {
-              len = (gchar*) row->next->data - (gchar*) row->data;
-              offset = 0;
-              if (label->jtype == GTK_JUSTIFY_CENTER)
-	    	offset = (maxl - gdk_text_width (widget->style->font, row->data, len)) / 2;
-              else if (label->jtype == GTK_JUSTIFY_RIGHT)
-	    	offset = (maxl - gdk_text_width (widget->style->font, row->data, len));
-              if (state == GTK_STATE_INSENSITIVE)
-                gdk_draw_text (widget->window, widget->style->font,
-                               widget->style->white_gc,
-                               offset + x + 1, y + 1, row->data, len);
-              
-              gdk_draw_text (widget->window, widget->style->font,
-                             widget->style->fg_gc[state],
-                             offset + x, y, row->data, len);
-              row = row->next;
-              y += widget->style->font->ascent + widget->style->font->descent + 2;
-            }
-          
-	 /* COMMENT: we can avoid gdk_text_width() calls here storing in label->row
-	    the widths of the rows calculated in gtk_label_set.
-	    Once we have a wrapping interface we can support GTK_JUSTIFY_FILL.
-	  */
-	 offset = 0;
-	 if (label->jtype == GTK_JUSTIFY_CENTER)
-           offset = (maxl - gdk_string_width (widget->style->font, row->data)) / 2;
-	 else if (label->jtype == GTK_JUSTIFY_RIGHT)
-           offset = (maxl - gdk_string_width (widget->style->font, row->data));
-	 if (state == GTK_STATE_INSENSITIVE)
-	   gdk_draw_string (widget->window, widget->style->font,
-                            widget->style->white_gc,
-                            offset + x + 1, y + 1, row->data);
-         
-	 gdk_draw_string (widget->window, widget->style->font,
-                          widget->style->fg_gc[state],
-                          offset + x, y, row->data);
+      gdk_gc_set_clip_rectangle (widget->style->white_gc, &event->area);
+      gdk_gc_set_clip_rectangle (widget->style->fg_gc[state], &event->area);
 
-         /*
-         gdk_draw_rectangle (widget->window,
-                             widget->style->bg_gc[GTK_STATE_SELECTED], FALSE,
-                             widget->allocation.x, widget->allocation.y,
-                             widget->allocation.width - 1, widget->allocation.height - 1);
-                             */
-	}
-      else
+      x = widget->allocation.x + misc->xpad +
+	(widget->allocation.width - widget->requisition.width) 
+	* misc->xalign + 0.5;
+
+      y = (widget->allocation.y * (1.0 - misc->yalign) +
+	   (widget->allocation.y + widget->allocation.height -
+	    (widget->requisition.height - misc->ypad * 2)) *
+	   misc->yalign + widget->style->font->ascent) + 1.5;
+          
+      row = label->row;
+      while (row && row->next)
 	{
-	  /*
-	  g_print ("gtk_label_expose: allocation too small: %d %d ( %d %d )\n",
-		   widget->allocation.width, widget->allocation.height,
-		   widget->requisition.width, widget->requisition.height);
-		   */
+	  len = (gchar*) row->next->data - (gchar*) row->data;
+	  offset = 0;
+
+	  if (label->jtype == GTK_JUSTIFY_CENTER)
+	    offset = (maxl - gdk_text_width (widget->style->font, row->data, len)) / 2;
+
+	  else if (label->jtype == GTK_JUSTIFY_RIGHT)
+	    offset = (maxl - gdk_text_width (widget->style->font, row->data, len));
+
+	  if (state == GTK_STATE_INSENSITIVE)
+	    gdk_draw_text (widget->window, widget->style->font,
+			   widget->style->white_gc,
+			   offset + x + 1, y + 1, row->data, len);
+	  
+	  gdk_draw_text (widget->window, widget->style->font,
+			 widget->style->fg_gc[state],
+			 offset + x, y, row->data, len);
+	  row = row->next;
+	  y += widget->style->font->ascent + widget->style->font->descent + 2;
 	}
+      
+      /* 
+       * COMMENT: we can avoid gdk_text_width() calls here storing in label->row
+       * the widths of the rows calculated in gtk_label_set.
+       * Once we have a wrapping interface we can support GTK_JUSTIFY_FILL.
+       */
+      offset = 0;
+
+      if (label->jtype == GTK_JUSTIFY_CENTER)
+	offset = (maxl - gdk_string_width (widget->style->font, row->data)) / 2;
+
+      else if (label->jtype == GTK_JUSTIFY_RIGHT)
+	offset = (maxl - gdk_string_width (widget->style->font, row->data));
+
+      if (state == GTK_STATE_INSENSITIVE)
+	gdk_draw_string (widget->window, widget->style->font,
+			 widget->style->white_gc,
+			 offset + x + 1, y + 1, row->data);
+      
+      gdk_draw_string (widget->window, widget->style->font,
+		       widget->style->fg_gc[state],
+		       offset + x, y, row->data);
+
+      gdk_gc_set_clip_mask (widget->style->white_gc, NULL);
+      gdk_gc_set_clip_mask (widget->style->fg_gc[state], NULL);
+
     }
-
   return TRUE;
 }
+
 
 
 
