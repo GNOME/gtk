@@ -1,7 +1,7 @@
-gdk_colorspace_get_type
-gdk_interp_type_get_type
+gdk_colorspace_get_type G_GNUC_CONST
+gdk_interp_type_get_type G_GNUC_CONST
 gdk_pixbuf_add_alpha
-gdk_pixbuf_alpha_mode_get_type
+gdk_pixbuf_alpha_mode_get_type G_GNUC_CONST
 gdk_pixbuf_animation_get_height
 gdk_pixbuf_animation_get_iter
 gdk_pixbuf_animation_get_static_image
@@ -11,7 +11,7 @@ gdk_pixbuf_animation_is_static_image
 gdk_pixbuf_animation_iter_advance
 gdk_pixbuf_animation_iter_get_delay_time
 gdk_pixbuf_animation_iter_get_pixbuf
-gdk_pixbuf_animation_iter_get_type
+gdk_pixbuf_animation_iter_get_type G_GNUC_CONST
 gdk_pixbuf_animation_iter_on_currently_loading_frame
 gdk_pixbuf_animation_new_from_file
 gdk_pixbuf_animation_ref
@@ -21,7 +21,7 @@ gdk_pixbuf_composite_color
 gdk_pixbuf_composite_color_simple
 gdk_pixbuf_copy
 gdk_pixbuf_copy_area
-gdk_pixbuf_error_get_type
+gdk_pixbuf_error_get_type 
 gdk_pixbuf_error_quark
 gdk_pixbuf_fill
 gdk_pixbuf_flip
@@ -68,7 +68,7 @@ gdk_pixbuf_new_subpixbuf
 gdk_pixbuf_non_anim_new
 gdk_pixbuf_ref
 gdk_pixbuf_rotate_simple
-gdk_pixbuf_rotation_get_type
+gdk_pixbuf_rotation_get_type G_GNUC_CONST
 gdk_pixbuf_saturate_and_pixelate
 gdk_pixbuf_save
 gdk_pixbuf_save_to_buffer
