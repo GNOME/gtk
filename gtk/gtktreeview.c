@@ -230,24 +230,22 @@ static void gtk_tree_view_real_expand_collapse_cursor_row (GtkTreeView     *tree
 							   gboolean         expand,
 							   gboolean         open_all);
 static void gtk_tree_view_real_select_cursor_parent       (GtkTreeView     *tree_view);
-static void gtk_tree_view_range_changed                   (GtkTreeModel    *model,
-							   GtkTreePath     *path,
-							   GtkTreeIter     *iter,
-							   GtkTreePath     *end_path,
-							   GtkTreeIter     *end_iter,
-							   gpointer         data);
-static void gtk_tree_view_inserted                        (GtkTreeModel    *model,
+static void gtk_tree_view_row_changed                     (GtkTreeModel    *model,
 							   GtkTreePath     *path,
 							   GtkTreeIter     *iter,
 							   gpointer         data);
-static void gtk_tree_view_has_child_toggled               (GtkTreeModel    *model,
+static void gtk_tree_view_row_inserted                    (GtkTreeModel    *model,
 							   GtkTreePath     *path,
 							   GtkTreeIter     *iter,
 							   gpointer         data);
-static void gtk_tree_view_deleted                         (GtkTreeModel    *model,
+static void gtk_tree_view_row_has_child_toggled           (GtkTreeModel    *model,
+							   GtkTreePath     *path,
+							   GtkTreeIter     *iter,
+							   gpointer         data);
+static void gtk_tree_view_row_deleted                     (GtkTreeModel    *model,
 							   GtkTreePath     *path,
 							   gpointer         data);
-static void gtk_tree_view_reordered                       (GtkTreeModel    *model,
+static void gtk_tree_view_rows_reordered                  (GtkTreeModel    *model,
 							   GtkTreePath     *parent,
 							   GtkTreeIter     *iter,
 							   gint            *new_order,
@@ -4261,11 +4259,9 @@ gtk_tree_view_real_move_cursor (GtkTreeView       *tree_view,
  */
 
 static void
-gtk_tree_view_range_changed (GtkTreeModel *model,
+gtk_tree_view_row_changed (GtkTreeModel *model,
 			     GtkTreePath  *path,
 			     GtkTreeIter  *iter,
-			     GtkTreePath  *end_path,
-			     GtkTreeIter  *end_iter,
 			     gpointer      data)
 {
   GtkTreeView *tree_view = (GtkTreeView *)data;
@@ -4322,10 +4318,10 @@ gtk_tree_view_range_changed (GtkTreeModel *model,
 }
 
 static void
-gtk_tree_view_inserted (GtkTreeModel *model,
-			GtkTreePath  *path,
-			GtkTreeIter  *iter,
-			gpointer      data)
+gtk_tree_view_row_inserted (GtkTreeModel *model,
+			    GtkTreePath  *path,
+			    GtkTreeIter  *iter,
+			    gpointer      data)
 {
   GtkTreeView *tree_view = (GtkTreeView *) data;
   gint *indices;
@@ -4382,7 +4378,7 @@ gtk_tree_view_inserted (GtkTreeModel *model,
 	  GtkTreePath *tmppath = _gtk_tree_view_find_path (tree_view,
 							   tree,
 							   tmpnode);
-	  gtk_tree_view_has_child_toggled (model, tmppath, NULL, data);
+	  gtk_tree_view_row_has_child_toggled (model, tmppath, NULL, data);
 	  gtk_tree_path_free (tmppath);
           goto done;
 	}
@@ -4420,10 +4416,10 @@ gtk_tree_view_inserted (GtkTreeModel *model,
 }
 
 static void
-gtk_tree_view_has_child_toggled (GtkTreeModel *model,
-				 GtkTreePath  *path,
-				 GtkTreeIter  *iter,
-				 gpointer      data)
+gtk_tree_view_row_has_child_toggled (GtkTreeModel *model,
+				     GtkTreePath  *path,
+				     GtkTreeIter  *iter,
+				     gpointer      data)
 {
   GtkTreeView *tree_view = (GtkTreeView *)data;
   GtkTreeIter real_iter;
@@ -4505,9 +4501,9 @@ count_children_helper (GtkRBTree *tree,
 }
 
 static void
-gtk_tree_view_deleted (GtkTreeModel *model,
-		       GtkTreePath  *path,
-		       gpointer      data)
+gtk_tree_view_row_deleted (GtkTreeModel *model,
+			   GtkTreePath  *path,
+			   gpointer      data)
 {
   GtkTreeView *tree_view = (GtkTreeView *)data;
   GtkRBTree *tree;
@@ -4576,11 +4572,11 @@ gtk_tree_view_deleted (GtkTreeModel *model,
 
 
 static void
-gtk_tree_view_reordered (GtkTreeModel *model,
-			 GtkTreePath  *parent,
-			 GtkTreeIter  *iter,
-			 gint         *new_order,
-			 gpointer      data)
+gtk_tree_view_rows_reordered (GtkTreeModel *model,
+			      GtkTreePath  *parent,
+			      GtkTreeIter  *iter,
+			      gint         *new_order,
+			      gpointer      data)
 {
   GtkTreeView *tree_view = GTK_TREE_VIEW (data);
   GtkRBTree *tree;
@@ -6269,15 +6265,15 @@ gtk_tree_view_set_model (GtkTreeView  *tree_view,
       gtk_tree_view_unref_and_check_selection_tree (tree_view, tree_view->priv->tree);
 
       g_signal_handlers_disconnect_by_func (G_OBJECT (tree_view->priv->model),
-					    gtk_tree_view_range_changed, tree_view);
+					    gtk_tree_view_row_changed, tree_view);
       g_signal_handlers_disconnect_by_func (G_OBJECT (tree_view->priv->model),
-					    gtk_tree_view_inserted, tree_view);
+					    gtk_tree_view_row_inserted, tree_view);
       g_signal_handlers_disconnect_by_func (G_OBJECT (tree_view->priv->model),
-					    gtk_tree_view_has_child_toggled, tree_view);
+					    gtk_tree_view_row_has_child_toggled, tree_view);
       g_signal_handlers_disconnect_by_func (G_OBJECT (tree_view->priv->model),
-					    gtk_tree_view_deleted, tree_view);
+					    gtk_tree_view_row_deleted, tree_view);
       g_signal_handlers_disconnect_by_func (G_OBJECT (tree_view->priv->model),
-					    gtk_tree_view_reordered, tree_view);
+					    gtk_tree_view_rows_reordered, tree_view);
       if (tree_view->priv->tree)
 	{
 	  _gtk_rbtree_free (tree_view->priv->tree);
@@ -6317,24 +6313,24 @@ gtk_tree_view_set_model (GtkTreeView  *tree_view,
 	}
       g_object_ref (tree_view->priv->model);
       g_signal_connect (tree_view->priv->model,
-			"range_changed",
-			G_CALLBACK (gtk_tree_view_range_changed),
+			"row_changed",
+			G_CALLBACK (gtk_tree_view_row_changed),
 			tree_view);
       g_signal_connect (tree_view->priv->model,
-			"inserted",
-			G_CALLBACK (gtk_tree_view_inserted),
+			"row_inserted",
+			G_CALLBACK (gtk_tree_view_row_inserted),
 			tree_view);
       g_signal_connect (tree_view->priv->model,
-			"has_child_toggled",
-			G_CALLBACK (gtk_tree_view_has_child_toggled),
+			"row_has_child_toggled",
+			G_CALLBACK (gtk_tree_view_row_has_child_toggled),
 			tree_view);
       g_signal_connect (tree_view->priv->model,
-			"deleted",
-			G_CALLBACK (gtk_tree_view_deleted),
+			"row_deleted",
+			G_CALLBACK (gtk_tree_view_row_deleted),
 			tree_view);
       g_signal_connect (tree_view->priv->model,
-			"reordered",
-			G_CALLBACK (gtk_tree_view_reordered),
+			"rows_reordered",
+			G_CALLBACK (gtk_tree_view_rows_reordered),
 			tree_view);
 
       path = gtk_tree_path_new_root ();

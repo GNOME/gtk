@@ -50,11 +50,11 @@ The tree interface used by #GtkTreeView
 </para>
 
 @g_iface: 
-@range_changed: 
-@inserted: 
-@has_child_toggled: 
-@deleted: 
-@reordered: 
+@row_changed: 
+@row_inserted: 
+@row_has_child_toggled: 
+@row_deleted: 
+@rows_reordered: 
 @get_flags: 
 @get_n_columns: 
 @get_column_type: 

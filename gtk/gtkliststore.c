@@ -636,7 +636,7 @@ gtk_list_store_set_value (GtkListStore *list_store,
 	    _gtk_tree_data_list_value_to_node (list, &real_value);
 	  else
 	    _gtk_tree_data_list_value_to_node (list, value);
-	  gtk_tree_model_range_changed (GTK_TREE_MODEL (list_store), path, iter, path, iter);
+	  gtk_tree_model_row_changed (GTK_TREE_MODEL (list_store), path, iter);
 	  gtk_tree_path_free (path);
 	  if (converted)
 	    g_value_unset (&real_value);
@@ -672,7 +672,7 @@ gtk_list_store_set_value (GtkListStore *list_store,
     _gtk_tree_data_list_value_to_node (list, &real_value);
   else
     _gtk_tree_data_list_value_to_node (list, value);
-  gtk_tree_model_range_changed (GTK_TREE_MODEL (list_store), path, iter, path, iter);
+  gtk_tree_model_row_changed (GTK_TREE_MODEL (list_store), path, iter);
   gtk_tree_path_free (path);
   if (converted)
     g_value_unset (&real_value);
@@ -858,7 +858,7 @@ gtk_list_store_remove (GtkListStore *list_store,
   validate_list_store (list_store);
 
   list_store->stamp ++;
-  gtk_tree_model_deleted (GTK_TREE_MODEL (list_store), path);
+  gtk_tree_model_row_deleted (GTK_TREE_MODEL (list_store), path);
   gtk_tree_path_free (path);
 
   if (next)
@@ -943,7 +943,7 @@ gtk_list_store_insert (GtkListStore *list_store,
 
   path = gtk_tree_path_new ();
   gtk_tree_path_append_index (path, position);
-  gtk_tree_model_inserted (GTK_TREE_MODEL (list_store), path, iter);
+  gtk_tree_model_row_inserted (GTK_TREE_MODEL (list_store), path, iter);
   gtk_tree_path_free (path);
 }
 
@@ -1031,7 +1031,7 @@ gtk_list_store_insert_before (GtkListStore *list_store,
 
   path = gtk_tree_path_new ();
   gtk_tree_path_append_index (path, i);
-  gtk_tree_model_inserted (GTK_TREE_MODEL (list_store), path, iter);
+  gtk_tree_model_row_inserted (GTK_TREE_MODEL (list_store), path, iter);
   gtk_tree_path_free (path);
 }
 
@@ -1084,7 +1084,7 @@ gtk_list_store_insert_after (GtkListStore *list_store,
 
   path = gtk_tree_path_new ();
   gtk_tree_path_append_index (path, i);
-  gtk_tree_model_inserted (GTK_TREE_MODEL (list_store), path, iter);
+  gtk_tree_model_row_inserted (GTK_TREE_MODEL (list_store), path, iter);
   gtk_tree_path_free (path);
 }
 
@@ -1122,7 +1122,7 @@ gtk_list_store_prepend (GtkListStore *list_store,
 
   path = gtk_tree_path_new ();
   gtk_tree_path_append_index (path, 0);
-  gtk_tree_model_inserted (GTK_TREE_MODEL (list_store), path, iter);
+  gtk_tree_model_row_inserted (GTK_TREE_MODEL (list_store), path, iter);
   gtk_tree_path_free (path);
 }
 
@@ -1167,7 +1167,7 @@ gtk_list_store_append (GtkListStore *list_store,
 
   path = gtk_tree_path_new ();
   gtk_tree_path_append_index (path, list_store->length - 1);
-  gtk_tree_model_inserted (GTK_TREE_MODEL (list_store), path, iter);
+  gtk_tree_model_row_inserted (GTK_TREE_MODEL (list_store), path, iter);
   gtk_tree_path_free (path);
 }
 
@@ -1325,7 +1325,7 @@ gtk_list_store_drag_data_received (GtkTreeDragDest   *drag_dest,
           G_SLIST (dest_iter.user_data)->data = copy_head;
 
 	  path = gtk_list_store_get_path (GTK_TREE_MODEL (tree_model), &dest_iter);
-	  gtk_tree_model_range_changed (GTK_TREE_MODEL (tree_model), path, &dest_iter, path, &dest_iter);
+	  gtk_tree_model_row_changed (GTK_TREE_MODEL (tree_model), path, &dest_iter);
 	  gtk_tree_path_free (path);
 	}
     }
@@ -1482,8 +1482,8 @@ gtk_list_store_sort (GtkListStore *list_store)
   path = gtk_tree_path_new ();
   iter.stamp = list_store->stamp;
   iter.user_data = NULL;
-  gtk_tree_model_reordered (GTK_TREE_MODEL (list_store),
-			    path, &iter, new_order);
+  gtk_tree_model_rows_reordered (GTK_TREE_MODEL (list_store),
+				 path, &iter, new_order);
   gtk_tree_path_free (path);
   g_free (new_order);
   g_array_free (sort_array, TRUE);
@@ -1664,9 +1664,9 @@ gtk_list_store_sort_iter_changed (GtkListStore *list_store,
   tmp_path = gtk_tree_path_new ();
   tmp_iter.user_data = NULL;
 
-  gtk_tree_model_reordered (GTK_TREE_MODEL (list_store),
-			    tmp_path, &tmp_iter,
-			    new_order);
+  gtk_tree_model_rows_reordered (GTK_TREE_MODEL (list_store),
+				 tmp_path, &tmp_iter,
+				 new_order);
 
   gtk_tree_path_free (tmp_path);
   g_free (new_order);

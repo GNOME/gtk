@@ -182,6 +182,11 @@ handlebox are detached from the main window.
 Determines the shadow type for the handlebox.
 </para>
 
+<!-- ##### ARG GtkHandleBox:shadow-type ##### -->
+<para>
+
+</para>
+
 <!-- ##### ARG GtkHandleBox:handle-position ##### -->
 <para>
 Determines the side of the handlebox where the handle is drawn.

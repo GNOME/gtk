@@ -1,3 +1,17 @@
+Wed Sep 12 19:01:05 2001  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtktreemodel.h (struct _GtkTreeModelIface): Rename interface
+	signals to make them more clear.  Also, change ::range_changed to
+	::row_changed.
+	* gtk/gtktreemodel.c: Adjust to interface change
+	* gtk/gtktreemodel.h: ditto
+	* gtk/gtktreemodelsort.c: ditto
+	* gtk/gtktreestore.c: ditto
+	* gtk/gtkliststore.c: ditto
+	* gtk/gtktreeview.c: ditto
+	* tests/testtreecolumns.c: ditto
+	* gtk/gtkmarshal.list: Actually remove a marshaller!
+
 2001-09-12  Padraig O'Briain <padraig.obriain@sun.com>
 
 	* gtk/gtktextview.c

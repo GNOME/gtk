@@ -71,47 +71,45 @@ gtk_tree_model_base_init (gpointer g_class)
 
   if (! initialized)
     {
-      g_signal_new ("range_changed",
+      g_signal_new ("row_changed",
                     GTK_TYPE_TREE_MODEL,
                     G_SIGNAL_RUN_LAST,
-                    G_STRUCT_OFFSET (GtkTreeModelIface, range_changed),
-                    NULL, NULL,
-                    gtk_marshal_VOID__BOXED_BOXED_BOXED_BOXED,
-                    G_TYPE_NONE, 4,
-                    GTK_TYPE_TREE_PATH,
-                    GTK_TYPE_TREE_ITER,
-                    GTK_TYPE_TREE_PATH,
-                    GTK_TYPE_TREE_ITER);
-      g_signal_new ("inserted",
-                    GTK_TYPE_TREE_MODEL,
-                    G_SIGNAL_RUN_LAST,
-                    G_STRUCT_OFFSET (GtkTreeModelIface, inserted),
+                    G_STRUCT_OFFSET (GtkTreeModelIface, row_changed),
                     NULL, NULL,
                     gtk_marshal_VOID__BOXED_BOXED,
                     G_TYPE_NONE, 2,
                     GTK_TYPE_TREE_PATH,
                     GTK_TYPE_TREE_ITER);
-      g_signal_new ("has_child_toggled",
+      g_signal_new ("row_inserted",
                     GTK_TYPE_TREE_MODEL,
                     G_SIGNAL_RUN_LAST,
-                    G_STRUCT_OFFSET (GtkTreeModelIface, has_child_toggled),
+                    G_STRUCT_OFFSET (GtkTreeModelIface, row_inserted),
                     NULL, NULL,
                     gtk_marshal_VOID__BOXED_BOXED,
                     G_TYPE_NONE, 2,
                     GTK_TYPE_TREE_PATH,
                     GTK_TYPE_TREE_ITER);
-      g_signal_new ("deleted",
+      g_signal_new ("row_has_child_toggled",
                     GTK_TYPE_TREE_MODEL,
                     G_SIGNAL_RUN_LAST,
-                    G_STRUCT_OFFSET (GtkTreeModelIface, deleted),
+                    G_STRUCT_OFFSET (GtkTreeModelIface, row_has_child_toggled),
+                    NULL, NULL,
+                    gtk_marshal_VOID__BOXED_BOXED,
+                    G_TYPE_NONE, 2,
+                    GTK_TYPE_TREE_PATH,
+                    GTK_TYPE_TREE_ITER);
+      g_signal_new ("row_deleted",
+                    GTK_TYPE_TREE_MODEL,
+                    G_SIGNAL_RUN_LAST,
+                    G_STRUCT_OFFSET (GtkTreeModelIface, row_deleted),
                     NULL, NULL,
                     gtk_marshal_VOID__BOXED,
                     G_TYPE_NONE, 1,
                     GTK_TYPE_TREE_PATH);
-      g_signal_new ("reordered",
+      g_signal_new ("rows_reordered",
                     GTK_TYPE_TREE_MODEL,
                     G_SIGNAL_RUN_LAST,
-                    G_STRUCT_OFFSET (GtkTreeModelIface, reordered),
+                    G_STRUCT_OFFSET (GtkTreeModelIface, rows_reordered),
                     NULL, NULL,
                     gtk_marshal_VOID__BOXED_BOXED_POINTER,
                     G_TYPE_NONE, 3,
@@ -1000,78 +998,88 @@ gtk_tree_model_get_valist (GtkTreeModel *tree_model,
     }
 }
 
+/**
+ * gtk_tree_model_row_changed:
+ * @tree_model: A #GtkTreeModel
+ * @path: A #GtkTreePath pointing to the changed row
+ * @iter: A valid #GtkTreeIter pointing to the changed row
+ * 
+ * Emits the "row_changed" signal on @tree_model.
+ **/
 void
-gtk_tree_model_range_changed (GtkTreeModel *tree_model,
-			      GtkTreePath  *start_path,
-			      GtkTreeIter  *start_iter,
-			      GtkTreePath  *end_path,
-			      GtkTreeIter  *end_iter)
+gtk_tree_model_row_changed (GtkTreeModel *tree_model,
+			    GtkTreePath  *path,
+			    GtkTreeIter  *iter)
 {
   gint i;
   g_return_if_fail (GTK_IS_TREE_MODEL (tree_model));
-  g_return_if_fail (start_path != NULL);
-  g_return_if_fail (start_iter != NULL);
-  g_return_if_fail (end_path != NULL);
-  g_return_if_fail (end_iter != NULL);
+  g_return_if_fail (path != NULL);
+  g_return_if_fail (iter != NULL);
 
-#ifndef G_DISABLE_CHECKS
-  g_return_if_fail (start_path->depth == end_path->depth);
-  for (i = 0; i < start_path->depth - 1; i++)
-    if (start_path->indices[i] != end_path->indices[i])
-      {
-	g_warning ("Concurrent paths were not passed in to gtk_tree_model_range_changed.\n");
-	return;
-      }
-#endif
-  g_signal_emit_by_name (tree_model, "range_changed",
-			 start_path, start_iter,
-			 end_path, end_iter);
+  g_signal_emit_by_name (tree_model, "row_changed", path, iter);
 }
 
+/**
+ * gtk_tree_model_row_inserted:
+ * @tree_model: A #GtkTreeModel
+ * @path: A #GtkTreePath pointing to the inserted row
+ * @iter: A valid #GtkTreeIter pointing to the inserted row
+ * 
+ * Emits the "row_inserted" signal on @tree_model
+ **/
 void
-gtk_tree_model_inserted (GtkTreeModel *tree_model,
-			 GtkTreePath  *path,
-			 GtkTreeIter  *iter)
+gtk_tree_model_row_inserted (GtkTreeModel *tree_model,
+			     GtkTreePath  *path,
+			     GtkTreeIter  *iter)
 {
   g_return_if_fail (GTK_IS_TREE_MODEL (tree_model));
   g_return_if_fail (path != NULL);
   g_return_if_fail (iter != NULL);
 
-  g_signal_emit_by_name (tree_model, "inserted", path, iter);
+  g_signal_emit_by_name (tree_model, "row_inserted", path, iter);
 }
 
+/**
+ * gtk_tree_model_row_has_child_toggled:
+ * @tree_model: A #GtkTreeModel
+ * @path: A #GtkTreePath pointing to the changed row
+ * @iter: A valid #GtkTreeIter pointing to the changed row
+ * 
+ * Emits the "row_has_child_toggled" signal on @tree_model.  This should be
+ * called by models after the child state of a node changes.
+ **/
 void
-gtk_tree_model_has_child_toggled (GtkTreeModel *tree_model,
-				  GtkTreePath  *path,
-				  GtkTreeIter  *iter)
+gtk_tree_model_row_has_child_toggled (GtkTreeModel *tree_model,
+				      GtkTreePath  *path,
+				      GtkTreeIter  *iter)
 {
   g_return_if_fail (GTK_IS_TREE_MODEL (tree_model));
   g_return_if_fail (path != NULL);
   g_return_if_fail (iter != NULL);
 
-  g_signal_emit_by_name (tree_model, "has_child_toggled", path, iter);
+  g_signal_emit_by_name (tree_model, "row_has_child_toggled", path, iter);
 }
 
 void
-gtk_tree_model_deleted (GtkTreeModel *tree_model,
-			GtkTreePath  *path)
+gtk_tree_model_row_deleted (GtkTreeModel *tree_model,
+			    GtkTreePath  *path)
 {
   g_return_if_fail (GTK_IS_TREE_MODEL (tree_model));
   g_return_if_fail (path != NULL);
 
-  g_signal_emit_by_name (tree_model, "deleted", path);
+  g_signal_emit_by_name (tree_model, "row_deleted", path);
 }
 
 void
-gtk_tree_model_reordered (GtkTreeModel *tree_model,
-			  GtkTreePath  *path,
-			  GtkTreeIter  *iter,
-			  gint         *new_order)
+gtk_tree_model_rows_reordered (GtkTreeModel *tree_model,
+			       GtkTreePath  *path,
+			       GtkTreeIter  *iter,
+			       gint         *new_order)
 {
   g_return_if_fail (GTK_IS_TREE_MODEL (tree_model));
   g_return_if_fail (new_order != NULL);
 
-  g_signal_emit_by_name (tree_model, "reordered", path, iter, new_order);
+  g_signal_emit_by_name (tree_model, "rows_reordered", path, iter, new_order);
 }
 
 
@@ -1344,15 +1352,15 @@ static void
 connect_ref_callbacks (GtkTreeModel *model)
 {
   g_signal_connect (G_OBJECT (model),
-		    "inserted",
+		    "row_inserted",
 		    (GCallback) gtk_tree_row_ref_inserted_callback,
 		    model);
   g_signal_connect (G_OBJECT (model),
-		    "deleted",
+		    "row_deleted",
 		    (GCallback) gtk_tree_row_ref_deleted_callback,
 		    model);
   g_signal_connect (G_OBJECT (model),
-		    "reordered",
+		    "rows_reordered",
 		    (GCallback) gtk_tree_row_ref_reordered_callback,
 		    model);
 }
