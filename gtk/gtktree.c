@@ -928,7 +928,7 @@ gtk_tree_size_allocate (GtkWidget     *widget,
     {
       child_allocation.x = GTK_CONTAINER (tree)->border_width;
       child_allocation.y = GTK_CONTAINER (tree)->border_width;
-      child_allocation.width = MAX (1, allocation->width - child_allocation.x * 2);
+      child_allocation.width = MAX (1, (gint)allocation->width - child_allocation.x * 2);
       
       children = tree->children;
       

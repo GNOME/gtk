@@ -1348,7 +1348,7 @@ gtk_table_size_allocate_pass1 (GtkTable *table)
 	    if (table->cols[col].shrink)
 	      {
 		extra = width / nshrink;
-		table->cols[col].allocation = MAX (1, table->cols[col].allocation - extra);
+		table->cols[col].allocation = MAX (1, (gint)table->cols[col].allocation - extra);
 		
 		width -= extra;
 		nshrink -= 1;
@@ -1426,7 +1426,7 @@ gtk_table_size_allocate_pass1 (GtkTable *table)
 	    if (table->rows[row].shrink)
 	      {
 		extra = height / nshrink;
-		table->rows[row].allocation = MAX (1, table->rows[row].allocation - extra);
+		table->rows[row].allocation = MAX (1, (gint)table->rows[row].allocation - extra);
 		
 		height -= extra;
 		nshrink -= 1;
@@ -1487,7 +1487,7 @@ gtk_table_size_allocate_pass2 (GtkTable *table)
 	  
 	  if (child->xfill)
 	    {
-	      allocation.width = MAX (1, max_width - child->xpadding * 2);
+	      allocation.width = MAX (1, max_width - (gint)child->xpadding * 2);
 	      allocation.x = x + (max_width - allocation.width) / 2;
 	    }
 	  else
@@ -1498,7 +1498,7 @@ gtk_table_size_allocate_pass2 (GtkTable *table)
 	  
 	  if (child->yfill)
 	    {
-	      allocation.height = MAX (1, max_height - child->ypadding * 2);
+	      allocation.height = MAX (1, max_height - (gint)child->ypadding * 2);
 	      allocation.y = y + (max_height - allocation.height) / 2;
 	    }
 	  else

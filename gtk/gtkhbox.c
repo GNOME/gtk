@@ -200,7 +200,7 @@ gtk_hbox_size_allocate (GtkWidget     *widget,
 
       x = allocation->x + GTK_CONTAINER (box)->border_width;
       child_allocation.y = allocation->y + GTK_CONTAINER (box)->border_width;
-      child_allocation.height = MAX (1, allocation->height - GTK_CONTAINER (box)->border_width * 2);
+      child_allocation.height = MAX (1, (gint)allocation->height - (gint)GTK_CONTAINER (box)->border_width * 2);
 
       children = box->children;
       while (children)
@@ -238,7 +238,7 @@ gtk_hbox_size_allocate (GtkWidget     *widget,
 
 	      if (child->fill)
 		{
-		  child_allocation.width = MAX (1, child_width - child->padding * 2);
+		  child_allocation.width = MAX (1, (gint)child_width - (gint)child->padding * 2);
 		  child_allocation.x = x + child->padding;
 		}
 	      else
@@ -291,7 +291,7 @@ gtk_hbox_size_allocate (GtkWidget     *widget,
 
               if (child->fill)
                 {
-                  child_allocation.width = MAX (1, child_width - child->padding * 2);
+                  child_allocation.width = MAX (1, (gint)child_width - (gint)child->padding * 2);
                   child_allocation.x = x + child->padding - child_width;
                 }
               else

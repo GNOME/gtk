@@ -368,7 +368,7 @@ gtk_list_size_allocate (GtkWidget     *widget,
     {
       child_allocation.x = GTK_CONTAINER (list)->border_width;
       child_allocation.y = GTK_CONTAINER (list)->border_width;
-      child_allocation.width = MAX (1, allocation->width -
+      child_allocation.width = MAX (1, (gint)allocation->width -
 				    child_allocation.x * 2);
 
       children = list->children;

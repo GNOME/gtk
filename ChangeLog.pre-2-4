@@ -1,3 +1,14 @@
+Wed Jan 13 22:34:29 1999  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkbutton.c gtk/gtkclist.c gtk/gtkhandlebox.c
+	gtk/gtkframe.c gtk/gtk[hv]box.c gtk[hv]paned.c gtk/gtklist.c
+	gtkmenu.c gtkmenuitem.c gtkmenubar.c gtknotebook.c
+	gtk/gtkscrolledwindow.c gtk/gtktable.c gtk/gtktree.c
+	gtk/gtktreeeitem.c gtk/gtkviewport.c
+	
+	Fix up comparisons of signed and unsigned ints to avoid 
+	assigning negative widths/heigths.
+
 Wed Jan 13 21:18:41 1999  Owen Taylor  <otaylor@redhat.com>
 
 	* acinclude.m4 (ac_result): Unset CATOBJEXT so

@@ -676,8 +676,8 @@ gtk_scrolled_window_relative_allocation (GtkWidget     *widget,
 
   allocation->x = GTK_CONTAINER (widget)->border_width;
   allocation->y = GTK_CONTAINER (widget)->border_width;
-  allocation->width = MAX (1, widget->allocation.width - allocation->x * 2);
-  allocation->height = MAX (1, widget->allocation.height - allocation->y * 2);
+  allocation->width = MAX (1, (gint)widget->allocation.width - allocation->x * 2);
+  allocation->height = MAX (1, (gint)widget->allocation.height - allocation->y * 2);
 
   if (scrolled_window->vscrollbar_visible)
     {
@@ -686,9 +686,9 @@ gtk_scrolled_window_relative_allocation (GtkWidget     *widget,
 	allocation->x += (scrolled_window->vscrollbar->requisition.width +
 			  SCROLLBAR_SPACING (scrolled_window));
 
-      allocation->width = MAX (1, allocation->width -
-			       (scrolled_window->vscrollbar->requisition.width +
-				SCROLLBAR_SPACING (scrolled_window)));
+      allocation->width = MAX (1, (gint)allocation->width -
+			       ((gint)scrolled_window->vscrollbar->requisition.width +
+				(gint)SCROLLBAR_SPACING (scrolled_window)));
     }
   if (scrolled_window->hscrollbar_visible)
     {
@@ -697,9 +697,9 @@ gtk_scrolled_window_relative_allocation (GtkWidget     *widget,
 	allocation->y += (scrolled_window->hscrollbar->requisition.height +
 			  SCROLLBAR_SPACING (scrolled_window));
 
-      allocation->height = MAX (1, allocation->height -
-				(scrolled_window->hscrollbar->requisition.height +
-				 SCROLLBAR_SPACING (scrolled_window)));
+      allocation->height = MAX (1, (gint)allocation->height -
+				((gint)scrolled_window->hscrollbar->requisition.height +
+				 (gint)SCROLLBAR_SPACING (scrolled_window)));
     }
 }
 

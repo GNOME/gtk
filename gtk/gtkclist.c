@@ -5367,9 +5367,9 @@ gtk_clist_size_allocate (GtkWidget     *widget,
    * border width */
   clist->internal_allocation.x = 0;
   clist->internal_allocation.y = 0;
-  clist->internal_allocation.width = MAX (1, allocation->width -
+  clist->internal_allocation.width = MAX (1, (gint)allocation->width -
 					  border_width * 2);
-  clist->internal_allocation.height = MAX (1, allocation->height -
+  clist->internal_allocation.height = MAX (1, (gint)allocation->height -
 					   border_width * 2);
 	
   /* allocate clist window assuming no scrollbars */
@@ -5378,11 +5378,11 @@ gtk_clist_size_allocate (GtkWidget     *widget,
   clist_allocation.y = (clist->internal_allocation.y +
 			widget->style->klass->ythickness +
 			clist->column_title_area.height);
-  clist_allocation.width = MAX (1, clist->internal_allocation.width - 
-				(2 * widget->style->klass->xthickness));
-  clist_allocation.height = MAX (1, clist->internal_allocation.height -
-				 (2 * widget->style->klass->ythickness) -
-				 clist->column_title_area.height);
+  clist_allocation.width = MAX (1, (gint)clist->internal_allocation.width - 
+				(2 * (gint)widget->style->klass->xthickness));
+  clist_allocation.height = MAX (1, (gint)clist->internal_allocation.height -
+				 (2 * (gint)widget->style->klass->ythickness) -
+				 (gint)clist->column_title_area.height);
   
   clist->clist_window_width = clist_allocation.width;
   clist->clist_window_height = clist_allocation.height;

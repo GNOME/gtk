@@ -449,8 +449,8 @@ gtk_viewport_realize (GtkWidget *widget)
       attributes.y = 0;
     }
 
-  attributes.width = MAX (1, widget->allocation.width - attributes.x * 2 - border_width * 2);
-  attributes.height = MAX (1, widget->allocation.height - attributes.y * 2 - border_width * 2);
+  attributes.width = MAX (1, (gint)widget->allocation.width - attributes.x * 2 - border_width * 2);
+  attributes.height = MAX (1, (gint)widget->allocation.height - attributes.y * 2 - border_width * 2);
   attributes.event_mask = 0;
 
   viewport->view_window = gdk_window_new (widget->window, &attributes, attributes_mask);

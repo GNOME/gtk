@@ -174,7 +174,7 @@ gtk_vpaned_size_allocate (GtkWidget     *widget,
 			     paned->groove_rectangle.height);
     }
   
-  child1_allocation.width = child2_allocation.width = MAX (1, allocation->width - border_width * 2);
+  child1_allocation.width = child2_allocation.width = MAX (1, (gint)allocation->width - border_width * 2);
   child1_allocation.height = paned->child1_size;
   child1_allocation.x = child2_allocation.x = border_width;
   child1_allocation.y = border_width;
@@ -186,7 +186,7 @@ gtk_vpaned_size_allocate (GtkWidget     *widget,
   paned->groove_rectangle.width = allocation->width;
   
   child2_allocation.y = paned->groove_rectangle.y + paned->gutter_size / 2 + 1;
-  child2_allocation.height = MAX (1, allocation->height 
+  child2_allocation.height = MAX (1, (gint)allocation->height 
     - child2_allocation.y - border_width);
   
   /* Now allocate the childen, making sure, when resizing not to

@@ -823,17 +823,17 @@ gtk_notebook_size_allocate (GtkWidget     *widget,
     {
       child_allocation.x = GTK_CONTAINER (widget)->border_width;
       child_allocation.y = GTK_CONTAINER (widget)->border_width;
-      child_allocation.width = MAX (1, allocation->width - child_allocation.x * 2);
-      child_allocation.height = MAX (1, allocation->height - child_allocation.y * 2);
+      child_allocation.width = MAX (1, (gint)allocation->width - child_allocation.x * 2);
+      child_allocation.height = MAX (1, (gint)allocation->height - child_allocation.y * 2);
 
       if (notebook->show_tabs || notebook->show_border)
 	{
 	  child_allocation.x += widget->style->klass->xthickness;
 	  child_allocation.y += widget->style->klass->ythickness;
-	  child_allocation.width = MAX (1, child_allocation.width -
-					widget->style->klass->xthickness * 2);
-	  child_allocation.height = MAX (1, child_allocation.height -
-					 widget->style->klass->ythickness * 2);
+	  child_allocation.width = MAX (1, (gint)child_allocation.width -
+					(gint) widget->style->klass->xthickness * 2);
+	  child_allocation.height = MAX (1, (gint)child_allocation.height -
+					 (gint) widget->style->klass->ythickness * 2);
 
 	  if (notebook->show_tabs && notebook->children && notebook->cur_page)
 	    {
@@ -843,15 +843,15 @@ gtk_notebook_size_allocate (GtkWidget     *widget,
 		  child_allocation.y += notebook->cur_page->requisition.height;
 		case GTK_POS_BOTTOM:
 		  child_allocation.height =
-		    MAX (1, child_allocation.height -
-			 notebook->cur_page->requisition.height);
+		    MAX (1, (gint)child_allocation.height -
+			 (gint)notebook->cur_page->requisition.height);
 		  break;
 		case GTK_POS_LEFT:
 		  child_allocation.x += notebook->cur_page->requisition.width;
 		case GTK_POS_RIGHT:
 		  child_allocation.width =
-		    MAX (1, child_allocation.width -
-			 notebook->cur_page->requisition.width);
+		    MAX (1, (gint)child_allocation.width -
+			 (gint)notebook->cur_page->requisition.width);
 		  break;
 		}
 	    }
