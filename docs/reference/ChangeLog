@@ -1,3 +1,7 @@
+2003-06-11  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/tmpl/gtkdnd.sgml: Fix some typos.
+
 2003-06-10  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtk-sections.txt: Add gtk_text_view_[gs]et_overwrite().
