@@ -1012,6 +1012,14 @@ gtk_tree_view_destroy (GtkObject *object)
   GtkWidget *search_dialog;
   GList *list;
 
+ if (tree_view->priv->columns != NULL)
+    {
+      for (list = tree_view->priv->columns; list; list = list->next)
+	g_object_unref (G_OBJECT (list->data));
+      g_list_free (tree_view->priv->columns);
+      tree_view->priv->columns = NULL;
+    }
+
   gtk_tree_view_set_model (tree_view, NULL);
 
   if (tree_view->priv->tree != NULL)
@@ -1025,14 +1033,6 @@ gtk_tree_view_destroy (GtkObject *object)
     {
       g_object_unref (G_OBJECT (tree_view->priv->model));
       tree_view->priv->model = NULL;
-    }
-
- if (tree_view->priv->columns != NULL)
-    {
-      for (list = tree_view->priv->columns; list; list = list->next)
-	g_object_unref (G_OBJECT (list->data));
-      g_list_free (tree_view->priv->columns);
-      tree_view->priv->columns = NULL;
     }
 
   if (tree_view->priv->selection != NULL)
@@ -7954,6 +7954,8 @@ gtk_tree_view_get_cell_area (GtkTreeView        *tree_view,
   g_return_if_fail (GTK_IS_TREE_VIEW (tree_view));
   g_return_if_fail (column == NULL || GTK_IS_TREE_VIEW_COLUMN (column));
   g_return_if_fail (rect != NULL);
+  g_return_if_fail (column->tree_view == tree_view);
+  g_return_if_fail (GTK_WIDGET_REALIZED (tree_view));
 
   gtk_widget_style_get (GTK_WIDGET (tree_view), "vertical_separator", &vertical_separator, NULL);
 
@@ -7984,10 +7986,8 @@ gtk_tree_view_get_cell_area (GtkTreeView        *tree_view,
 
   if (column)
     {
-      gint x2 = 0;
-
-      gtk_tree_view_get_cell_xrange (tree_view, tree, column, &rect->x, &x2);
-      rect->width = x2 - rect->x;
+      rect->x = column->button->allocation.x;
+      rect->width = column->button->allocation.width;
     }
 }
 
