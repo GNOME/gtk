@@ -1371,7 +1371,7 @@ gtk_label_ensure_layout (GtkLabel *label,
 	  align = PANGO_ALIGN_RIGHT;
 	  break;
 	case GTK_JUSTIFY_CENTER:
-	  align = PANGO_ALIGN_LEFT;
+	  align = PANGO_ALIGN_CENTER;
 	  break;
 	case GTK_JUSTIFY_FILL:
 	  /* FIXME: This just doesn't work to do this */

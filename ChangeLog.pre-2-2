@@ -1,3 +1,8 @@
+2001-11-08  Darin Adler  <darin@bentspoon.com>
+
+	* gtk/gtklabel.c: (gtk_label_ensure_layout): Fix an obvious
+	typo where it says LEFT instead of CENTER.
+
 2001-11-07  Darin Adler  <darin@bentspoon.com>
 
 	* gtk/gtkdialog.c: (gtk_dialog_set_response_sensitive),
