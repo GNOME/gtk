@@ -263,7 +263,7 @@ else
 pixbuf_csource=GDK_PIXBUF_MODULEDIR=$(top_builddir)/gdk-pixbuf $(top_builddir)/gdk-pixbuf/gdk-pixbuf-csource
 endif
 
-gtkstockpixbufs.h: $(top_builddir)/gdk-pixbuf/gdk-pixbuf-csource $(IMAGES)
+gtkstockpixbufs.h: @REBUILD_PNGS@ $(top_builddir)/gdk-pixbuf/gdk-pixbuf-csource $(IMAGES)
 	$(pixbuf_csource)							\
 	   --raw --build-list $(VARIABLES1) > $(srcdir)/gtkstockpixbufs.h ||	\
            ( rm -f $(srcdir)/gtkstockpixbufs.h && false )
