@@ -1,3 +1,8 @@
+2001-05-11  Havoc Pennington  <hp@pobox.com>
+	
+	* gdk/x11/gdkmain-x11.c: Improve error messages for X errors and
+	losing connection to the X server.
+
 Sun May 20 13:59:20 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* configure.in: Start checks for X from pangox/pangoxft

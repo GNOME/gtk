@@ -617,24 +617,32 @@ gdk_x_error (Display	 *display,
     {
       if (gdk_error_warnings)
 	{
-	  char buf[64];
-	  
+	  gchar buf[64];
+          gchar *msg;
+          
 	  XGetErrorText (display, error->error_code, buf, 63);
 
+          msg =
+            g_strdup_printf ("The program '%s' received an X Window System error.\n"
+                             "This probably reflects a bug in the program.\n"
+                             "The error was '%s'.\n"
+                             "  (Details: serial %ld error_code %d request_code %d minor_code %d)\n"
+                             "  (Note to programmers: normally, X errors are reported asynchronously;\n"
+                             "   that is, you will receive the error a while after causing it.\n"
+                             "   To debug your program, run it with the --sync command line\n"
+                             "   option to change this behavior. You can then get a meaningful\n"
+                             "   backtrace from your debugger if you break on the gdk_x_error() function.)",
+                             g_get_prgname (),
+                             buf,
+                             error->serial, 
+                             error->error_code, 
+                             error->request_code,
+                             error->minor_code);
+          
 #ifdef G_ENABLE_DEBUG	  
-	  g_error ("%s\n  serial %ld error_code %d request_code %d minor_code %d\n", 
-		   buf, 
-		   error->serial, 
-		   error->error_code, 
-		   error->request_code,
-		   error->minor_code);
+	  g_error ("%s", msg);
 #else /* !G_ENABLE_DEBUG */
-	  fprintf (stderr, "Gdk-ERROR **: %s\n  serial %ld error_code %d request_code %d minor_code %d\n",
-		   buf, 
-		   error->serial, 
-		   error->error_code, 
-		   error->request_code,
-		   error->minor_code);
+	  fprintf (stderr, "%s\n", msg);
 
 	  exit(1);
 #endif /* G_ENABLE_DEBUG */
@@ -675,11 +683,17 @@ gdk_x_io_error (Display *display)
    */
   if (errno == EPIPE)
     {
-      fprintf (stderr, "Gdk-ERROR **: X connection to %s broken (explicit kill or server shutdown).\n", gdk_display ? DisplayString (gdk_display) : gdk_get_display());
+      fprintf (stderr,
+               "The application '%s' lost its connection to the display %s;\n"
+               "most likely the X server was shut down or you killed/destroyed\n"
+               "the application.\n",
+               g_get_prgname (),
+               gdk_display ? DisplayString (gdk_display) : gdk_get_display());
     }
   else
     {
-      fprintf (stderr, "Gdk-ERROR **: Fatal IO error %d (%s) on X server %s.\n",
+      fprintf (stderr, "%s: Fatal IO error %d (%s) on X server %s.\n",
+               g_get_prgname (),
 	       errno, g_strerror (errno),
 	       gdk_display ? DisplayString (gdk_display) : gdk_get_display());
     }
