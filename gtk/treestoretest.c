@@ -21,7 +21,7 @@ node_set (GtkTreeIter *iter)
   gint n;
   gchar *str;
 
-  str = g_strdup_printf ("Row (%d)", i++);
+  str = g_strdup_printf ("Row (<span color=\"red\">%d</span>)", i++);
   gtk_tree_store_set (base_model, iter, 0, str, -1);
   g_free (str);
 
@@ -236,9 +236,6 @@ make_window (gint view_type)
     case 1:
       gtk_window_set_title (GTK_WINDOW (window), "Sorted list");
       break;
-    case 2:
-      gtk_window_set_title (GTK_WINDOW (window), "Uppercase flipped list");
-      break;
     }
 
   vbox = gtk_vbox_new (FALSE, 8);
@@ -321,7 +318,7 @@ make_window (gint view_type)
 
   /* The selected column */
   cell = gtk_cell_renderer_text_new ();
-  column = gtk_tree_view_column_new_with_attributes ("Node ID", cell, "text", 0, NULL);
+  column = gtk_tree_view_column_new_with_attributes ("Node ID", cell, "markup", 0, NULL);
   gtk_tree_view_append_column (GTK_TREE_VIEW (tree_view), column);
 
   cell = gtk_cell_renderer_text_new ();
@@ -352,7 +349,6 @@ main (int argc, char *argv[])
   /* FIXME: reverse this */
   make_window (0);
   make_window (1);
-  make_window (2);
 
   gtk_main ();
 

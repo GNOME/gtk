@@ -1,5 +1,14 @@
 2001-02-20  Alexander Larsson  <alexl@redhat.com>
 
+	* gtk/gtkcellrenderertext.[ch]:
+	Add a "markup" property.
+
+	* gtk/treestoretest.c:
+	Use the markup property, remove some leftover stuff from
+	GtkTreeModelMapping.
+
+2001-02-20  Alexander Larsson  <alexl@redhat.com>
+
 	* gtk/gtklabel.c (gtk_label_set_selectable):
 	Queue a redraw if the selectable setting was changed.
 

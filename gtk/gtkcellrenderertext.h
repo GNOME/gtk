@@ -46,6 +46,8 @@ struct _GtkCellRendererText
   PangoFontDescription font;
   PangoColor foreground;
   PangoColor background;
+  
+  PangoAttrList *extra_attrs;
 
   PangoUnderline underline_style;
 

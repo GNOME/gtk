@@ -53,6 +53,7 @@ enum {
   PROP_0,
 
   PROP_TEXT,
+  PROP_MARKUP,
   
   /* Style args */
   PROP_BACKGROUND,
@@ -148,6 +149,14 @@ gtk_cell_renderer_text_class_init (GtkCellRendererTextClass *class)
                                                         _("Text to render"),
                                                         NULL,
                                                         G_PARAM_READWRITE));
+  
+  g_object_class_install_property (object_class,
+                                   PROP_MARKUP,
+                                   g_param_spec_string ("markup",
+                                                        _("Markup"),
+                                                        _("Marked up text to render"),
+                                                        NULL,
+                                                        G_PARAM_WRITABLE));
   
   g_object_class_install_property (object_class,
                                    PROP_BACKGROUND,
@@ -364,7 +373,10 @@ gtk_cell_renderer_text_finalize (GObject *object)
 
   if (celltext->text)
     g_free (celltext->text);
-  
+
+  if (celltext->extra_attrs)
+    pango_attr_list_unref (celltext->extra_attrs);
+
   (* G_OBJECT_CLASS (parent_class)->finalize) (object);
 }
 
@@ -516,6 +528,7 @@ gtk_cell_renderer_text_get_property (GObject        *object,
       
     case PROP_BACKGROUND:
     case PROP_FOREGROUND:
+    case PROP_MARKUP:
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
       break;
@@ -653,6 +666,39 @@ gtk_cell_renderer_text_set_property (GObject      *object,
       if (celltext->text)
         g_free (celltext->text);
       celltext->text = g_strdup (g_value_get_string (value));
+      break;
+      
+    case PROP_MARKUP:
+      {
+	const gchar *str;
+	gchar *text = NULL;
+	GError *error = NULL;
+	PangoAttrList *attrs = NULL;
+	
+	if (celltext->text)
+	  g_free (celltext->text);
+
+	if (celltext->extra_attrs)
+	  pango_attr_list_unref (celltext->extra_attrs);
+
+	str = g_value_get_string (value);
+	if (str && !pango_parse_markup (str,
+					-1,
+					0,
+					&attrs,
+					&text,
+					NULL,
+					&error))
+	  {
+	    g_warning ("Failed to set cell text from markup due to error parsing markup: %s",
+		       error->message);
+	    g_error_free (error);
+	    return;
+	  }
+	
+	celltext->text = text;
+	celltext->extra_attrs = attrs;
+      }
       break;
       
     case PROP_BACKGROUND:
@@ -893,8 +939,11 @@ get_layout (GtkCellRendererText *celltext,
   PangoUnderline uline;
   
   layout = gtk_widget_create_pango_layout (widget, celltext->text);
-  
-  attr_list = pango_attr_list_new ();
+
+  if (celltext->extra_attrs)
+    attr_list = pango_attr_list_copy (celltext->extra_attrs);
+  else
+    attr_list = pango_attr_list_new ();
 
   if (will_render)
     {
