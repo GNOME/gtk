@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ta\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-09-18 14:22-0400\n"
+"POT-Creation-Date: 2004-10-08 15:41-0400\n"
 "PO-Revision-Date: 2004-09-16 13:29+0530\n"
 "Last-Translator: Jayaradha N <jaya@pune.redhat.com>\n"
 "Language-Team: Tamil <zhakanini@yahoogroups.com>\n"
@@ -936,7 +936,7 @@ msgstr ""
 "%s க்கான புத்தக குறியை சேர்க்க முடியவில்லை:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:817 gtk/gtkfilechooserdefault.c:5499
+#: gtk/gtkfilechooserdefault.c:817 gtk/gtkfilechooserdefault.c:5469
 #, c-format
 msgid ""
 "Could not build file name from '%s' and '%s':\n"
@@ -954,15 +954,15 @@ msgstr ""
 "தற்போதைய அடைவை %s ஐ மாற்ற முடியவில்லை:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:1143 gtk/gtkpathbar.c:842
+#: gtk/gtkfilechooserdefault.c:1140 gtk/gtkpathbar.c:842
 msgid "Home"
 msgstr "இல்லம்"
 
-#: gtk/gtkfilechooserdefault.c:1166 gtk/gtkpathbar.c:844
+#: gtk/gtkfilechooserdefault.c:1163 gtk/gtkpathbar.c:844
 msgid "Desktop"
 msgstr "கணிமேசை"
 
-#: gtk/gtkfilechooserdefault.c:1564
+#: gtk/gtkfilechooserdefault.c:1561
 #, c-format
 msgid ""
 "Could not create folder %s:\n"
@@ -971,12 +971,12 @@ msgstr ""
 "%s அடைவு உருவாக்க முடியவில்லை:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:1744
+#: gtk/gtkfilechooserdefault.c:1747
 #, c-format
 msgid "Could not add bookmark for %s because it is not a folder."
 msgstr "%s க்கான புத்தக குறியை சேர்க்க முடியவில்லை காரணம் அது அடைவு இல்லை"
 
-#: gtk/gtkfilechooserdefault.c:1849
+#: gtk/gtkfilechooserdefault.c:1852
 #, c-format
 msgid ""
 "Could not remove bookmark for %s:\n"
@@ -985,128 +985,128 @@ msgstr ""
 "%sக்கான புத்தக குறியை நீக்க முடியவில்லை:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:2431
+#: gtk/gtkfilechooserdefault.c:2434
 #, c-format
 msgid "Could not add a bookmark for %s because it is an invalid path name."
 msgstr "%s க்கான புத்தக குறியை சேர்க்க முடியவில்லை காரணம் செல்லாத பாதை."
 
-#: gtk/gtkfilechooserdefault.c:2572
+#: gtk/gtkfilechooserdefault.c:2575
 msgid "Shortcuts"
 msgstr "குறுக்குவிசை"
 
-#: gtk/gtkfilechooserdefault.c:2626
+#: gtk/gtkfilechooserdefault.c:2629
 msgid "Folder"
 msgstr "அடைவு"
 
 #. FIXME these need accelerators when appropriate, and
 #. * need the mnemonics to be rationalized
 #.
-#: gtk/gtkfilechooserdefault.c:2673 gtk/gtkstock.c:293
+#: gtk/gtkfilechooserdefault.c:2676 gtk/gtkstock.c:293
 msgid "_Add"
 msgstr "_சேர்"
 
-#: gtk/gtkfilechooserdefault.c:2683 gtk/gtkstock.c:341
+#: gtk/gtkfilechooserdefault.c:2686 gtk/gtkstock.c:341
 msgid "_Remove"
 msgstr "_கழட்டுக"
 
-#: gtk/gtkfilechooserdefault.c:2762
+#: gtk/gtkfilechooserdefault.c:2765
 msgid "Show _Hidden Files"
 msgstr "(_H)மறைந்த கோப்புகளை காட்டு"
 
-#: gtk/gtkfilechooserdefault.c:2877 gtk/gtkfilesel.c:766
+#: gtk/gtkfilechooserdefault.c:2880 gtk/gtkfilesel.c:766
 msgid "Files"
 msgstr "கோப்புகள்"
 
-#: gtk/gtkfilechooserdefault.c:2904
+#: gtk/gtkfilechooserdefault.c:2907
 msgid "Name"
 msgstr "பெயர்:"
 
-#: gtk/gtkfilechooserdefault.c:2926
+#: gtk/gtkfilechooserdefault.c:2929
 msgid "Size"
 msgstr "அளவு"
 
-#: gtk/gtkfilechooserdefault.c:2938
+#: gtk/gtkfilechooserdefault.c:2941
 msgid "Modified"
 msgstr "மாற்றப்பட்டது"
 
 #. Create Folder
-#: gtk/gtkfilechooserdefault.c:2983
+#: gtk/gtkfilechooserdefault.c:2986
 msgid "Create Fo_lder"
 msgstr "(_l)அடைவை உருவாக்குு"
 
 #. Name entry
-#: gtk/gtkfilechooserdefault.c:3090
+#: gtk/gtkfilechooserdefault.c:3093
 msgid "_Name:"
 msgstr "பெயர்:"
 
-#: gtk/gtkfilechooserdefault.c:3134
+#: gtk/gtkfilechooserdefault.c:3137
 msgid "_Browse for other folders"
 msgstr "(_B)மற்ற அடைவை பார்"
 
-#: gtk/gtkfilechooserdefault.c:3376
+#: gtk/gtkfilechooserdefault.c:3379
 msgid "Save in _folder:"
 msgstr "(_f)அடைவில் சேமி:"
 
-#: gtk/gtkfilechooserdefault.c:3378
+#: gtk/gtkfilechooserdefault.c:3381
 msgid "Create in _folder:"
 msgstr "(_f)அடைவில் உருவாக்கு"
 
-#: gtk/gtkfilechooserdefault.c:4069
+#: gtk/gtkfilechooserdefault.c:4072
 msgid "Can't change to folder because it isn't local"
 msgstr "இது உங்கள் கணினியில் உள்ள அடைவு இல்லை அடைவை மாற்ற முடியாது"
 
-#: gtk/gtkfilechooserdefault.c:4213
+#: gtk/gtkfilechooserdefault.c:4216
 msgid "Could not find the path"
 msgstr "பாதையை கண்டுபிடிக்க முடியவில்லை"
 
-#: gtk/gtkfilechooserdefault.c:4574
+#: gtk/gtkfilechooserdefault.c:4577
 #, c-format
 msgid "shortcut %s does not exist"
 msgstr "%s குறுக்கு வழி கிடையாது"
 
-#: gtk/gtkfilechooserdefault.c:5272
+#: gtk/gtkfilechooserdefault.c:5282
 msgid "Type name of new folder"
 msgstr "புதிய அடைவின் பெயரை உள்ளீடுக"
 
-#: gtk/gtkfilechooserdefault.c:5301
+#: gtk/gtkfilechooserdefault.c:5311
 #, c-format
 msgid "%d byte"
 msgid_plural "%d bytes"
 msgstr[0] "%d பைட்"
 msgstr[1] ""
 
-#: gtk/gtkfilechooserdefault.c:5303
+#: gtk/gtkfilechooserdefault.c:5313
 #, c-format
 msgid "%.1f K"
 msgstr "%.1f K"
 
-#: gtk/gtkfilechooserdefault.c:5305
+#: gtk/gtkfilechooserdefault.c:5315
 #, c-format
 msgid "%.1f M"
 msgstr "%.1f M"
 
-#: gtk/gtkfilechooserdefault.c:5307
+#: gtk/gtkfilechooserdefault.c:5317
 #, c-format
 msgid "%.1f G"
 msgstr "%.1f G"
 
-#: gtk/gtkfilechooserdefault.c:5352
+#: gtk/gtkfilechooserdefault.c:5362
 msgid "Today"
 msgstr "இன்று"
 
-#: gtk/gtkfilechooserdefault.c:5354
+#: gtk/gtkfilechooserdefault.c:5364
 msgid "Yesterday"
 msgstr "நேற்று"
 
-#: gtk/gtkfilechooserdefault.c:5365
+#: gtk/gtkfilechooserdefault.c:5375
 msgid "Unknown"
 msgstr "தெரியாதது"
 
-#: gtk/gtkfilechooserdefault.c:5460
+#: gtk/gtkfilechooserdefault.c:5430
 msgid "Cannot change to the folder you specified as it is an invalid path."
 msgstr "செல்லாத பாதையாக இருப்பதால் அடைவை மாற்ற முடியவில்லை"
 
-#: gtk/gtkfilechooserdefault.c:5537
+#: gtk/gtkfilechooserdefault.c:5507
 #, c-format
 msgid ""
 "Could not select %s:\n"
@@ -1115,15 +1115,15 @@ msgstr ""
 "%s தேர்வு செய்ய முடியவில்லை:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:5576
+#: gtk/gtkfilechooserdefault.c:5546
 msgid "Open Location"
 msgstr "இடத்தை திற"
 
-#: gtk/gtkfilechooserdefault.c:5583
+#: gtk/gtkfilechooserdefault.c:5553
 msgid "Save in Location"
 msgstr "இடத்தில் சேமி::"
 
-#: gtk/gtkfilechooserdefault.c:5602
+#: gtk/gtkfilechooserdefault.c:5572
 msgid "_Location:"
 msgstr "(_L)இடம்::"
 

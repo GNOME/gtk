@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-09-18 14:23-0400\n"
+"POT-Creation-Date: 2004-10-08 15:41-0400\n"
 "PO-Revision-Date: 2003-06-28 20:55+0700\n"
 "Last-Translator: Mohammad DAMT <mdamt@bisnisweb.com>\n"
 "Language-Team: Indonesia <sukarelawan@gnome.linux.or.id>\n"
@@ -51,7 +51,7 @@ msgstr ""
 msgid "The number of bits per sample"
 msgstr "Jumlah baris dalam tabel"
 
-#: gdk-pixbuf/gdk-pixbuf.c:143 gtk/gtklayout.c:648 gtk/gtktreeviewcolumn.c:239
+#: gdk-pixbuf/gdk-pixbuf.c:143 gtk/gtklayout.c:650 gtk/gtktreeviewcolumn.c:239
 msgid "Width"
 msgstr "Lebar"
 
@@ -60,7 +60,7 @@ msgstr "Lebar"
 msgid "The number of columns of the pixbuf"
 msgstr "Jumlah kolom dalam tabel"
 
-#: gdk-pixbuf/gdk-pixbuf.c:154 gtk/gtklayout.c:657
+#: gdk-pixbuf/gdk-pixbuf.c:154 gtk/gtklayout.c:659
 msgid "Height"
 msgstr "Tinggi"
 
@@ -204,7 +204,7 @@ msgstr "Sensitif"
 msgid "Whether the action is enabled."
 msgstr "Menentukan apakah widget terlihat atau tidak"
 
-#: gtk/gtkaction.c:264 gtk/gtkactiongroup.c:148 gtk/gtktreeview.c:561
+#: gtk/gtkaction.c:264 gtk/gtkactiongroup.c:148 gtk/gtktreeview.c:564
 #: gtk/gtktreeviewcolumn.c:223 gtk/gtkwidget.c:442
 msgid "Visible"
 msgstr "Terlihat"
@@ -1688,11 +1688,11 @@ msgstr "Widget label"
 msgid "A widget to display in place of the usual expander label"
 msgstr "Widget yang digunakan untuk menampilkan letak label bingkai"
 
-#: gtk/gtkexpander.c:246 gtk/gtktreeview.c:642
+#: gtk/gtkexpander.c:246 gtk/gtktreeview.c:645
 msgid "Expander Size"
 msgstr "Ukuran ekspander"
 
-#: gtk/gtkexpander.c:247 gtk/gtktreeview.c:643
+#: gtk/gtkexpander.c:247 gtk/gtktreeview.c:646
 msgid "Size of the expander arrow"
 msgstr "Ukuran panah ekspander"
 
@@ -1826,19 +1826,19 @@ msgstr ""
 msgid "Select multiple"
 msgstr "Pilih banyak"
 
-#: gtk/gtkfixed.c:121 gtk/gtklayout.c:612
+#: gtk/gtkfixed.c:121 gtk/gtklayout.c:614
 msgid "X position"
 msgstr "Posisi X"
 
-#: gtk/gtkfixed.c:122 gtk/gtklayout.c:613
+#: gtk/gtkfixed.c:122 gtk/gtklayout.c:615
 msgid "X position of child widget"
 msgstr "posisi X pada widget anak"
 
-#: gtk/gtkfixed.c:131 gtk/gtklayout.c:622
+#: gtk/gtkfixed.c:131 gtk/gtklayout.c:624
 msgid "Y position"
 msgstr "Posisi Y"
 
-#: gtk/gtkfixed.c:132 gtk/gtklayout.c:623
+#: gtk/gtkfixed.c:132 gtk/gtklayout.c:625
 msgid "Y position of child widget"
 msgstr "Posisi Y widget anak"
 
@@ -2155,27 +2155,27 @@ msgstr "Widget mnemonik"
 msgid "The widget to be activated when the label's mnemonic key is pressed"
 msgstr "Widget yang diaktifkan saat tombol singkat ditekan"
 
-#: gtk/gtklayout.c:632 gtk/gtkviewport.c:135
+#: gtk/gtklayout.c:634 gtk/gtkviewport.c:135
 msgid "Horizontal adjustment"
 msgstr "Penyesuaian horisontal"
 
-#: gtk/gtklayout.c:633 gtk/gtkscrolledwindow.c:238
+#: gtk/gtklayout.c:635 gtk/gtkscrolledwindow.c:238
 msgid "The GtkAdjustment for the horizontal position"
 msgstr "GtkAdjustment untuk posisi horisontal"
 
-#: gtk/gtklayout.c:640 gtk/gtkviewport.c:143
+#: gtk/gtklayout.c:642 gtk/gtkviewport.c:143
 msgid "Vertical adjustment"
 msgstr "Penyesuaian vertikal"
 
-#: gtk/gtklayout.c:641 gtk/gtkscrolledwindow.c:245
+#: gtk/gtklayout.c:643 gtk/gtkscrolledwindow.c:245
 msgid "The GtkAdjustment for the vertical position"
 msgstr "GtkAdjustment untuk posisi vertikal"
 
-#: gtk/gtklayout.c:649
+#: gtk/gtklayout.c:651
 msgid "The width of the layout"
 msgstr "Lebar layout"
 
-#: gtk/gtklayout.c:658
+#: gtk/gtklayout.c:660
 msgid "The height of the layout"
 msgstr "Tinggi layout"
 
@@ -2930,11 +2930,11 @@ msgid ""
 msgstr ""
 "Menambilkan tombol panah kedua dengan arah maju pada sisi lawan scrollbar"
 
-#: gtk/gtkscrolledwindow.c:237 gtk/gtktext.c:602 gtk/gtktreeview.c:545
+#: gtk/gtkscrolledwindow.c:237 gtk/gtktext.c:602 gtk/gtktreeview.c:548
 msgid "Horizontal Adjustment"
 msgstr "Penyesuaian Horisontal"
 
-#: gtk/gtkscrolledwindow.c:244 gtk/gtktext.c:610 gtk/gtktreeview.c:553
+#: gtk/gtkscrolledwindow.c:244 gtk/gtktext.c:610 gtk/gtktreeview.c:556
 msgid "Vertical Adjustment"
 msgstr "Penyesuaian Vertikal"
 
@@ -3880,130 +3880,130 @@ msgstr "Model TreeModelSort"
 msgid "The model for the TreeModelSort to sort"
 msgstr "Model untuk mengurutkan TreeModelSort"
 
-#: gtk/gtktreeview.c:537
+#: gtk/gtktreeview.c:540
 msgid "TreeView Model"
 msgstr "Model TreeView"
 
-#: gtk/gtktreeview.c:538
+#: gtk/gtktreeview.c:541
 msgid "The model for the tree view"
 msgstr "Model TreeView"
 
-#: gtk/gtktreeview.c:546
+#: gtk/gtktreeview.c:549
 msgid "Horizontal Adjustment for the widget"
 msgstr "Penyesuaian widget horisontal"
 
-#: gtk/gtktreeview.c:554
+#: gtk/gtktreeview.c:557
 msgid "Vertical Adjustment for the widget"
 msgstr "Penyesuaian widget vertikal"
 
-#: gtk/gtktreeview.c:562
+#: gtk/gtktreeview.c:565
 msgid "Show the column header buttons"
 msgstr "Tampilkan tombol pada bagian atas kolom"
 
-#: gtk/gtktreeview.c:569
+#: gtk/gtktreeview.c:572
 msgid "Headers Clickable"
 msgstr "Header Dapat Diklik"
 
-#: gtk/gtktreeview.c:570
+#: gtk/gtktreeview.c:573
 msgid "Column headers respond to click events"
 msgstr "Bagian atas kolom merespon kejadian klik"
 
-#: gtk/gtktreeview.c:577
+#: gtk/gtktreeview.c:580
 msgid "Expander Column"
 msgstr "Kolom Ekspander"
 
-#: gtk/gtktreeview.c:578
+#: gtk/gtktreeview.c:581
 msgid "Set the column for the expander column"
 msgstr "Set kolom untuk kolom ekspander"
 
-#: gtk/gtktreeview.c:585 gtk/gtktreeviewcolumn.c:330
+#: gtk/gtktreeview.c:588 gtk/gtktreeviewcolumn.c:330
 msgid "Reorderable"
 msgstr "Dapat diurut kembali"
 
-#: gtk/gtktreeview.c:586
+#: gtk/gtktreeview.c:589
 msgid "View is reorderable"
 msgstr "View dapat diurut kembali"
 
-#: gtk/gtktreeview.c:593
+#: gtk/gtktreeview.c:596
 msgid "Rules Hint"
 msgstr "Petunjuk pada aturan"
 
-#: gtk/gtktreeview.c:594
+#: gtk/gtktreeview.c:597
 msgid "Set a hint to the theme engine to draw rows in alternating colors"
 msgstr ""
 "Menentukan petunjuk pada mesin tematik untuk menggambar baris-baris dalam "
 "warna yang bergantian"
 
-#: gtk/gtktreeview.c:601
+#: gtk/gtktreeview.c:604
 msgid "Enable Search"
 msgstr "Dapat dicari"
 
-#: gtk/gtktreeview.c:602
+#: gtk/gtktreeview.c:605
 msgid "View allows user to search through columns interactively"
 msgstr "View membolehkan pengguna untuk mencari dalam kolom secara interaktif"
 
-#: gtk/gtktreeview.c:609
+#: gtk/gtktreeview.c:612
 msgid "Search Column"
 msgstr "Kolom pencarian"
 
-#: gtk/gtktreeview.c:610
+#: gtk/gtktreeview.c:613
 msgid "Model column to search through when searching through code"
 msgstr "Kolom pada model tempat mencari saat mencari dalam kode"
 
-#: gtk/gtktreeview.c:630
+#: gtk/gtktreeview.c:633
 #, fuzzy
 msgid "Fixed Height Mode"
 msgstr "Tinggi tetap"
 
-#: gtk/gtktreeview.c:631
+#: gtk/gtktreeview.c:634
 msgid "Speeds up GtkTreeView by assuming that all rows have the same height"
 msgstr ""
 
-#: gtk/gtktreeview.c:651
+#: gtk/gtktreeview.c:654
 msgid "Vertical Separator Width"
 msgstr "Lebar Separator Vertikal"
 
-#: gtk/gtktreeview.c:652
+#: gtk/gtktreeview.c:655
 msgid "Vertical space between cells.  Must be an even number"
 msgstr "Ruangan vertikal antara sel. Harus bernilai genap"
 
-#: gtk/gtktreeview.c:660
+#: gtk/gtktreeview.c:663
 msgid "Horizontal Separator Width"
 msgstr "Lebar Separator Horisontal"
 
-#: gtk/gtktreeview.c:661
+#: gtk/gtktreeview.c:664
 msgid "Horizontal space between cells.  Must be an even number"
 msgstr "Ruangan horisontal antara sel. Harus bernilai genap"
 
-#: gtk/gtktreeview.c:669
+#: gtk/gtktreeview.c:672
 msgid "Allow Rules"
 msgstr "Membolehkan aturan"
 
-#: gtk/gtktreeview.c:670
+#: gtk/gtktreeview.c:673
 msgid "Allow drawing of alternating color rows"
 msgstr "Membolehkan penggambaran baris-baris dalam warna yang bergantian"
 
-#: gtk/gtktreeview.c:676
+#: gtk/gtktreeview.c:679
 msgid "Indent Expanders"
 msgstr "Indentasi pada ekspander"
 
-#: gtk/gtktreeview.c:677
+#: gtk/gtktreeview.c:680
 msgid "Make the expanders indented"
 msgstr "Buat ekspander memiliki indentasi"
 
-#: gtk/gtktreeview.c:683
+#: gtk/gtktreeview.c:686
 msgid "Even Row Color"
 msgstr "Warna pada baris genap"
 
-#: gtk/gtktreeview.c:684
+#: gtk/gtktreeview.c:687
 msgid "Color to use for even rows"
 msgstr "Warna yang digunakan pada baris-baris pada posisi genap"
 
-#: gtk/gtktreeview.c:690
+#: gtk/gtktreeview.c:693
 msgid "Odd Row Color"
 msgstr "Warna baris ganjil"
 
-#: gtk/gtktreeview.c:691
+#: gtk/gtktreeview.c:694
 msgid "Color to use for odd rows"
 msgstr "Warna yang digunakan pada baris-baris pada posisi ganjil"
 

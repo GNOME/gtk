@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-09-18 14:23-0400\n"
+"POT-Creation-Date: 2004-10-08 15:41-0400\n"
 "PO-Revision-Date: 2003-05-28 17:57+0000\n"
 "Last-Translator: Mathieu van Woerkom <mathieu.brabants.org>\n"
 "Language-Team: Limburgish <li.org>\n"
@@ -49,7 +49,7 @@ msgstr ""
 msgid "The number of bits per sample"
 msgstr "'t deil rieje in de tabel"
 
-#: gdk-pixbuf/gdk-pixbuf.c:143 gtk/gtklayout.c:648 gtk/gtktreeviewcolumn.c:239
+#: gdk-pixbuf/gdk-pixbuf.c:143 gtk/gtklayout.c:650 gtk/gtktreeviewcolumn.c:239
 msgid "Width"
 msgstr "Breide"
 
@@ -58,7 +58,7 @@ msgstr "Breide"
 msgid "The number of columns of the pixbuf"
 msgstr "'t deil kelómme in de tabel"
 
-#: gdk-pixbuf/gdk-pixbuf.c:154 gtk/gtklayout.c:657
+#: gdk-pixbuf/gdk-pixbuf.c:154 gtk/gtklayout.c:659
 msgid "Height"
 msgstr "Huugde"
 
@@ -201,7 +201,7 @@ msgstr "Geveulig"
 msgid "Whether the action is enabled."
 msgstr "Of 't widget zichbaar moot zeen"
 
-#: gtk/gtkaction.c:264 gtk/gtkactiongroup.c:148 gtk/gtktreeview.c:561
+#: gtk/gtkaction.c:264 gtk/gtkactiongroup.c:148 gtk/gtktreeview.c:564
 #: gtk/gtktreeviewcolumn.c:223 gtk/gtkwidget.c:442
 msgid "Visible"
 msgstr "Zichbaar"
@@ -1706,11 +1706,11 @@ msgstr "Labelwidget"
 msgid "A widget to display in place of the usual expander label"
 msgstr "Ein widget veur te tuine in plaats van 't gebroekelike kaderlabel"
 
-#: gtk/gtkexpander.c:246 gtk/gtktreeview.c:642
+#: gtk/gtkexpander.c:246 gtk/gtktreeview.c:645
 msgid "Expander Size"
 msgstr "Oetklapper-gruutde"
 
-#: gtk/gtkexpander.c:247 gtk/gtktreeview.c:643
+#: gtk/gtkexpander.c:247 gtk/gtktreeview.c:646
 msgid "Size of the expander arrow"
 msgstr "Gruutde van de oetklappijel"
 
@@ -1842,19 +1842,19 @@ msgstr "Of knóppe veur 't make/verangere van besjtenj getuind mote waere"
 msgid "Select multiple"
 msgstr "Keus mierdere"
 
-#: gtk/gtkfixed.c:121 gtk/gtklayout.c:612
+#: gtk/gtkfixed.c:121 gtk/gtklayout.c:614
 msgid "X position"
 msgstr "X posisie"
 
-#: gtk/gtkfixed.c:122 gtk/gtklayout.c:613
+#: gtk/gtkfixed.c:122 gtk/gtklayout.c:615
 msgid "X position of child widget"
 msgstr "X posisie van dochterwidget"
 
-#: gtk/gtkfixed.c:131 gtk/gtklayout.c:622
+#: gtk/gtkfixed.c:131 gtk/gtklayout.c:624
 msgid "Y position"
 msgstr "Y posisie"
 
-#: gtk/gtkfixed.c:132 gtk/gtklayout.c:623
+#: gtk/gtkfixed.c:132 gtk/gtklayout.c:625
 msgid "Y position of child widget"
 msgstr "Y posisie van dochterwidget"
 
@@ -2174,27 +2174,27 @@ msgid "The widget to be activated when the label's mnemonic key is pressed"
 msgstr ""
 "'t widget veur te aktivere wen de sjnaktósj van 't label weurt ingedrök"
 
-#: gtk/gtklayout.c:632 gtk/gtkviewport.c:135
+#: gtk/gtklayout.c:634 gtk/gtkviewport.c:135
 msgid "Horizontal adjustment"
 msgstr "Horizontale aanpassing"
 
-#: gtk/gtklayout.c:633 gtk/gtkscrolledwindow.c:238
+#: gtk/gtklayout.c:635 gtk/gtkscrolledwindow.c:238
 msgid "The GtkAdjustment for the horizontal position"
 msgstr "De GtkAdjustment veur de horizontale posisie"
 
-#: gtk/gtklayout.c:640 gtk/gtkviewport.c:143
+#: gtk/gtklayout.c:642 gtk/gtkviewport.c:143
 msgid "Vertical adjustment"
 msgstr "Vertikale aanpassing"
 
-#: gtk/gtklayout.c:641 gtk/gtkscrolledwindow.c:245
+#: gtk/gtklayout.c:643 gtk/gtkscrolledwindow.c:245
 msgid "The GtkAdjustment for the vertical position"
 msgstr "De GtkAdjustment veur de vertikale posisie"
 
-#: gtk/gtklayout.c:649
+#: gtk/gtklayout.c:651
 msgid "The width of the layout"
 msgstr "De breide van de opmaak"
 
-#: gtk/gtklayout.c:658
+#: gtk/gtklayout.c:660
 msgid "The height of the layout"
 msgstr "De huugde van de opmaak"
 
@@ -2952,11 +2952,11 @@ msgstr ""
 "Tuin ein twiede veurwartse pielknop aan de euversjtaonde kantj van de "
 "sjuufbalk"
 
-#: gtk/gtkscrolledwindow.c:237 gtk/gtktext.c:602 gtk/gtktreeview.c:545
+#: gtk/gtkscrolledwindow.c:237 gtk/gtktext.c:602 gtk/gtktreeview.c:548
 msgid "Horizontal Adjustment"
 msgstr "Horizontale aanpassing"
 
-#: gtk/gtkscrolledwindow.c:244 gtk/gtktext.c:610 gtk/gtktreeview.c:553
+#: gtk/gtkscrolledwindow.c:244 gtk/gtktext.c:610 gtk/gtktreeview.c:556
 msgid "Vertical Adjustment"
 msgstr "Vertikale aanpassing"
 
@@ -3894,128 +3894,128 @@ msgstr "TreeModelSort Model"
 msgid "The model for the TreeModelSort to sort"
 msgstr "'t model veur te sortere veur de TreeModelSort"
 
-#: gtk/gtktreeview.c:537
+#: gtk/gtktreeview.c:540
 msgid "TreeView Model"
 msgstr "TreeView Model"
 
-#: gtk/gtktreeview.c:538
+#: gtk/gtktreeview.c:541
 msgid "The model for the tree view"
 msgstr "'t model van de TreeView"
 
-#: gtk/gtktreeview.c:546
+#: gtk/gtktreeview.c:549
 msgid "Horizontal Adjustment for the widget"
 msgstr "Horizontale aanpassing veur de widget"
 
-#: gtk/gtktreeview.c:554
+#: gtk/gtktreeview.c:557
 msgid "Vertical Adjustment for the widget"
 msgstr "Vertikale aanpassing veur de widget"
 
-#: gtk/gtktreeview.c:562
+#: gtk/gtktreeview.c:565
 msgid "Show the column header buttons"
 msgstr "Tuin de kelómkop-knóppe"
 
-#: gtk/gtktreeview.c:569
+#: gtk/gtktreeview.c:572
 msgid "Headers Clickable"
 msgstr "Köp Klikbaar"
 
-#: gtk/gtktreeview.c:570
+#: gtk/gtktreeview.c:573
 msgid "Column headers respond to click events"
 msgstr "Of kelómköp op eine moesklik reagere"
 
-#: gtk/gtktreeview.c:577
+#: gtk/gtktreeview.c:580
 msgid "Expander Column"
 msgstr "Oetklapper Kelóm"
 
-#: gtk/gtktreeview.c:578
+#: gtk/gtktreeview.c:581
 msgid "Set the column for the expander column"
 msgstr "Zèt de kelóm veur de oetklapper-kelóm"
 
-#: gtk/gtktreeview.c:585 gtk/gtktreeviewcolumn.c:330
+#: gtk/gtktreeview.c:588 gtk/gtktreeviewcolumn.c:330
 msgid "Reorderable"
 msgstr "Resem te verangere"
 
-#: gtk/gtktreeview.c:586
+#: gtk/gtktreeview.c:589
 msgid "View is reorderable"
 msgstr "Of de items in 't bild van resem te verangere zeen"
 
-#: gtk/gtktreeview.c:593
+#: gtk/gtktreeview.c:596
 msgid "Rules Hint"
 msgstr "Regele verdudelike"
 
-#: gtk/gtktreeview.c:594
+#: gtk/gtktreeview.c:597
 msgid "Set a hint to the theme engine to draw rows in alternating colors"
 msgstr "Geuf 't tema opdrach veur rieje alternerend te kleure"
 
-#: gtk/gtktreeview.c:601
+#: gtk/gtktreeview.c:604
 msgid "Enable Search"
 msgstr "Zeuke gebroeke"
 
-#: gtk/gtktreeview.c:602
+#: gtk/gtktreeview.c:605
 msgid "View allows user to search through columns interactively"
 msgstr "Bild bud mäögelikheid kelómme interaktief te doorzeuke"
 
-#: gtk/gtktreeview.c:609
+#: gtk/gtktreeview.c:612
 msgid "Search Column"
 msgstr "Zeuk kelóm"
 
-#: gtk/gtktreeview.c:610
+#: gtk/gtktreeview.c:613
 msgid "Model column to search through when searching through code"
 msgstr "Modelleer kelóm veur te doorzeuke wen computerkood doorzoch weurt"
 
-#: gtk/gtktreeview.c:630
+#: gtk/gtktreeview.c:633
 #, fuzzy
 msgid "Fixed Height Mode"
 msgstr "De vaste huugde"
 
-#: gtk/gtktreeview.c:631
+#: gtk/gtktreeview.c:634
 msgid "Speeds up GtkTreeView by assuming that all rows have the same height"
 msgstr ""
 
-#: gtk/gtktreeview.c:651
+#: gtk/gtktreeview.c:654
 msgid "Vertical Separator Width"
 msgstr "Breide vertikale sjeijingslien"
 
-#: gtk/gtktreeview.c:652
+#: gtk/gtktreeview.c:655
 msgid "Vertical space between cells.  Must be an even number"
 msgstr "Vertikale ruumde tösje selle. Moot ei aeve getal zeen"
 
-#: gtk/gtktreeview.c:660
+#: gtk/gtktreeview.c:663
 msgid "Horizontal Separator Width"
 msgstr "Breide horizontale sjeijingslien"
 
-#: gtk/gtktreeview.c:661
+#: gtk/gtktreeview.c:664
 msgid "Horizontal space between cells.  Must be an even number"
 msgstr "Horizontale ruumde tösje selle. Moot ei aeve getal zeen"
 
-#: gtk/gtktreeview.c:669
+#: gtk/gtktreeview.c:672
 msgid "Allow Rules"
 msgstr "Regele toesjtaon"
 
-#: gtk/gtktreeview.c:670
+#: gtk/gtktreeview.c:673
 msgid "Allow drawing of alternating color rows"
 msgstr "Alternerende riejkleure mäögelik make"
 
-#: gtk/gtktreeview.c:676
+#: gtk/gtktreeview.c:679
 msgid "Indent Expanders"
 msgstr "Oetklappers laote insjpringe"
 
-#: gtk/gtktreeview.c:677
+#: gtk/gtktreeview.c:680
 msgid "Make the expanders indented"
 msgstr "Maak de oetklappers ingesjpronge"
 
-#: gtk/gtktreeview.c:683
+#: gtk/gtktreeview.c:686
 msgid "Even Row Color"
 msgstr "Aeve riejkleur"
 
-#: gtk/gtktreeview.c:684
+#: gtk/gtktreeview.c:687
 msgid "Color to use for even rows"
 msgstr "De kleur van de aeve rieje"
 
-#: gtk/gtktreeview.c:690
+#: gtk/gtktreeview.c:693
 msgid "Odd Row Color"
 msgstr "Ónaeve riejkleur"
 
-#: gtk/gtktreeview.c:691
+#: gtk/gtktreeview.c:694
 msgid "Color to use for odd rows"
 msgstr "De kleur van de ónaeve rieje"
 

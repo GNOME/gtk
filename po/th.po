@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-09-18 14:22-0400\n"
+"POT-Creation-Date: 2004-10-08 15:41-0400\n"
 "PO-Revision-Date: 2004-03-15 19:30-0600\n"
 "Last-Translator: Paisa Seeluangsawat <paisa@users.sf.net>\n"
 "Language-Team: Thai <L10n@opentle.net>\n"
@@ -916,7 +916,7 @@ msgstr ""
 "ไม่สามารถเพิ่มที่คั่นหน้าสำหรับ %s:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:817 gtk/gtkfilechooserdefault.c:5499
+#: gtk/gtkfilechooserdefault.c:817 gtk/gtkfilechooserdefault.c:5469
 #, c-format
 msgid ""
 "Could not build file name from '%s' and '%s':\n"
@@ -934,15 +934,15 @@ msgstr ""
 "ไม่สามารถไปที่โฟลเดอร์แม่ของ %s:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:1143 gtk/gtkpathbar.c:842
+#: gtk/gtkfilechooserdefault.c:1140 gtk/gtkpathbar.c:842
 msgid "Home"
 msgstr "บ้าน"
 
-#: gtk/gtkfilechooserdefault.c:1166 gtk/gtkpathbar.c:844
+#: gtk/gtkfilechooserdefault.c:1163 gtk/gtkpathbar.c:844
 msgid "Desktop"
 msgstr "พื้นโต๊ะ"
 
-#: gtk/gtkfilechooserdefault.c:1564
+#: gtk/gtkfilechooserdefault.c:1561
 #, c-format
 msgid ""
 "Could not create folder %s:\n"
@@ -951,12 +951,12 @@ msgstr ""
 "ไม่สามารถสร้างโฟลเดอร์ %s:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:1744
+#: gtk/gtkfilechooserdefault.c:1747
 #, c-format
 msgid "Could not add bookmark for %s because it is not a folder."
 msgstr "%s ไม่ใช่โฟลเดอร์ จึงเพิ่มลงในที่คั่นหน้าไม่ได้"
 
-#: gtk/gtkfilechooserdefault.c:1849
+#: gtk/gtkfilechooserdefault.c:1852
 #, c-format
 msgid ""
 "Could not remove bookmark for %s:\n"
@@ -965,133 +965,133 @@ msgstr ""
 "ไม่สามารถลบที่คั่นหน้าสำหรับ %s:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:2431
+#: gtk/gtkfilechooserdefault.c:2434
 #, c-format
 msgid "Could not add a bookmark for %s because it is an invalid path name."
 msgstr "%s ไม่ใช่ตำแหน่งที่ใช้ได้ จึงเพิ่มลงในที่คั่นหน้าไม่ได้"
 
-#: gtk/gtkfilechooserdefault.c:2572
+#: gtk/gtkfilechooserdefault.c:2575
 msgid "Shortcuts"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:2626
+#: gtk/gtkfilechooserdefault.c:2629
 msgid "Folder"
 msgstr "โฟลเดอร์"
 
 #. FIXME these need accelerators when appropriate, and
 #. * need the mnemonics to be rationalized
 #.
-#: gtk/gtkfilechooserdefault.c:2673 gtk/gtkstock.c:293
+#: gtk/gtkfilechooserdefault.c:2676 gtk/gtkstock.c:293
 msgid "_Add"
 msgstr "เ_พิ่ม"
 
-#: gtk/gtkfilechooserdefault.c:2683 gtk/gtkstock.c:341
+#: gtk/gtkfilechooserdefault.c:2686 gtk/gtkstock.c:341
 msgid "_Remove"
 msgstr "เ_อาออก"
 
-#: gtk/gtkfilechooserdefault.c:2762
+#: gtk/gtkfilechooserdefault.c:2765
 msgid "Show _Hidden Files"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:2877 gtk/gtkfilesel.c:766
+#: gtk/gtkfilechooserdefault.c:2880 gtk/gtkfilesel.c:766
 msgid "Files"
 msgstr "แฟ้ม"
 
-#: gtk/gtkfilechooserdefault.c:2904
+#: gtk/gtkfilechooserdefault.c:2907
 msgid "Name"
 msgstr "ชื่อ"
 
-#: gtk/gtkfilechooserdefault.c:2926
+#: gtk/gtkfilechooserdefault.c:2929
 msgid "Size"
 msgstr "ขนาด"
 
-#: gtk/gtkfilechooserdefault.c:2938
+#: gtk/gtkfilechooserdefault.c:2941
 msgid "Modified"
 msgstr "แก้ไขเมื่อ"
 
 #. Create Folder
-#: gtk/gtkfilechooserdefault.c:2983
+#: gtk/gtkfilechooserdefault.c:2986
 #, fuzzy
 msgid "Create Fo_lder"
 msgstr "สร้างโฟ_ลเดอร์"
 
 #. Name entry
-#: gtk/gtkfilechooserdefault.c:3090
+#: gtk/gtkfilechooserdefault.c:3093
 msgid "_Name:"
 msgstr "_ชื่อ:"
 
-#: gtk/gtkfilechooserdefault.c:3134
+#: gtk/gtkfilechooserdefault.c:3137
 msgid "_Browse for other folders"
 msgstr "เรียกดูโฟลเดอร์อื่น"
 
-#: gtk/gtkfilechooserdefault.c:3376
+#: gtk/gtkfilechooserdefault.c:3379
 #, fuzzy
 msgid "Save in _folder:"
 msgstr "บันทึกในโฟ_ลเดอร์"
 
-#: gtk/gtkfilechooserdefault.c:3378
+#: gtk/gtkfilechooserdefault.c:3381
 #, fuzzy
 msgid "Create in _folder:"
 msgstr "สร้างโฟ_ลเดอร์"
 
-#: gtk/gtkfilechooserdefault.c:4069
+#: gtk/gtkfilechooserdefault.c:4072
 #, fuzzy
 msgid "Can't change to folder because it isn't local"
 msgstr "ไปโฟลเดอร์ที่ตั้งไม่สำเร็จ เพราะเป็นตำแหน่งที่ใช้ไม่ได้"
 
-#: gtk/gtkfilechooserdefault.c:4213
+#: gtk/gtkfilechooserdefault.c:4216
 #, fuzzy
 msgid "Could not find the path"
 msgstr "บันทึกที่เหลือไม่สำเร็จ"
 
-#: gtk/gtkfilechooserdefault.c:4574
+#: gtk/gtkfilechooserdefault.c:4577
 #, c-format
 msgid "shortcut %s does not exist"
 msgstr "จุดเชื่อม %s ไม่มีอยู่จริง"
 
-#: gtk/gtkfilechooserdefault.c:5272
+#: gtk/gtkfilechooserdefault.c:5282
 msgid "Type name of new folder"
 msgstr "พิมพ์ชื่อของโฟลเดอร์ใหม่"
 
-#: gtk/gtkfilechooserdefault.c:5301
+#: gtk/gtkfilechooserdefault.c:5311
 #, c-format
 msgid "%d byte"
 msgid_plural "%d bytes"
 msgstr[0] "%d ไบต์"
 msgstr[1] "%d ไบต์"
 
-#: gtk/gtkfilechooserdefault.c:5303
+#: gtk/gtkfilechooserdefault.c:5313
 #, c-format
 msgid "%.1f K"
 msgstr "%.1f K"
 
-#: gtk/gtkfilechooserdefault.c:5305
+#: gtk/gtkfilechooserdefault.c:5315
 #, c-format
 msgid "%.1f M"
 msgstr "%.1f M"
 
-#: gtk/gtkfilechooserdefault.c:5307
+#: gtk/gtkfilechooserdefault.c:5317
 #, c-format
 msgid "%.1f G"
 msgstr "%.1f G"
 
-#: gtk/gtkfilechooserdefault.c:5352
+#: gtk/gtkfilechooserdefault.c:5362
 msgid "Today"
 msgstr "วันนี้"
 
-#: gtk/gtkfilechooserdefault.c:5354
+#: gtk/gtkfilechooserdefault.c:5364
 msgid "Yesterday"
 msgstr "เมื่อวาน"
 
-#: gtk/gtkfilechooserdefault.c:5365
+#: gtk/gtkfilechooserdefault.c:5375
 msgid "Unknown"
 msgstr "ไม่รู้จัก"
 
-#: gtk/gtkfilechooserdefault.c:5460
+#: gtk/gtkfilechooserdefault.c:5430
 msgid "Cannot change to the folder you specified as it is an invalid path."
 msgstr "ไปโฟลเดอร์ที่ตั้งไม่สำเร็จ เพราะเป็นตำแหน่งที่ใช้ไม่ได้"
 
-#: gtk/gtkfilechooserdefault.c:5537
+#: gtk/gtkfilechooserdefault.c:5507
 #, fuzzy, c-format
 msgid ""
 "Could not select %s:\n"
@@ -1100,16 +1100,16 @@ msgstr ""
 "ไม่สามารถสร้างโฟลเดอร์ %s:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:5576
+#: gtk/gtkfilechooserdefault.c:5546
 msgid "Open Location"
 msgstr "เปิดตำแหน่ง"
 
-#: gtk/gtkfilechooserdefault.c:5583
+#: gtk/gtkfilechooserdefault.c:5553
 #, fuzzy
 msgid "Save in Location"
 msgstr "เปิดตำแหน่ง"
 
-#: gtk/gtkfilechooserdefault.c:5602
+#: gtk/gtkfilechooserdefault.c:5572
 msgid "_Location:"
 msgstr "ตำ_แหน่ง:"
 

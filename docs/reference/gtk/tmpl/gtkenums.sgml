@@ -349,7 +349,6 @@ Used to control what selections users are allowed to make.
    pointed to.
 @GTK_SELECTION_EXTENDED: Deprecated, behaves identical to %GTK_SELECTION_MULTIPLE.
 
-
 <!-- ##### ENUM GtkShadowType ##### -->
 <para>
 Used to change the appearance of an outline typically provided by a #GtkFrame.

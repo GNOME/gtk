@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-09-18 14:22-0400\n"
+"POT-Creation-Date: 2004-10-08 15:41-0400\n"
 "PO-Revision-Date: 2004-08-29 18:22+0545\n"
 "Last-Translator: Pawan Chitrakar <pawan@nplinux.org>\n"
 "Language-Team: Nepali <info@mpp.org.np>\n"
@@ -915,7 +915,7 @@ msgstr ""
 "%s:का लागि पृष्ठ-चिन्ह थप्न सकिएन\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:817 gtk/gtkfilechooserdefault.c:5499
+#: gtk/gtkfilechooserdefault.c:817 gtk/gtkfilechooserdefault.c:5469
 #, c-format
 msgid ""
 "Could not build file name from '%s' and '%s':\n"
@@ -933,15 +933,15 @@ msgstr ""
 "अहिलेको फाइल पत्र %s:मा परिवर्तन गर्न सकिएन \n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:1143 gtk/gtkpathbar.c:842
+#: gtk/gtkfilechooserdefault.c:1140 gtk/gtkpathbar.c:842
 msgid "Home"
 msgstr "मुख्य पृष्ठ"
 
-#: gtk/gtkfilechooserdefault.c:1166 gtk/gtkpathbar.c:844
+#: gtk/gtkfilechooserdefault.c:1163 gtk/gtkpathbar.c:844
 msgid "Desktop"
 msgstr "मंडला"
 
-#: gtk/gtkfilechooserdefault.c:1564
+#: gtk/gtkfilechooserdefault.c:1561
 #, c-format
 msgid ""
 "Could not create folder %s:\n"
@@ -950,12 +950,12 @@ msgstr ""
 "%s:फाइलपत्र निर्माण गर्न सकिएन \n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:1744
+#: gtk/gtkfilechooserdefault.c:1747
 #, c-format
 msgid "Could not add bookmark for %s because it is not a folder."
 msgstr "%s:का लागि पृष्ठ-चिन्ह थप्न सकिएन किनकि यो फाइल पत्र होइन"
 
-#: gtk/gtkfilechooserdefault.c:1849
+#: gtk/gtkfilechooserdefault.c:1852
 #, c-format
 msgid ""
 "Could not remove bookmark for %s:\n"
@@ -964,128 +964,128 @@ msgstr ""
 "%s:का लागि पृष्ठ-चिन्ह हटाउन सकिएन\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:2431
+#: gtk/gtkfilechooserdefault.c:2434
 #, c-format
 msgid "Could not add a bookmark for %s because it is an invalid path name."
 msgstr "%s:का लागि पृष्ठ-चिन्ह थप्न सकिएन किनकि यो अस्वीकृत मार्ग हो"
 
-#: gtk/gtkfilechooserdefault.c:2572
+#: gtk/gtkfilechooserdefault.c:2575
 msgid "Shortcuts"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:2626
+#: gtk/gtkfilechooserdefault.c:2629
 msgid "Folder"
 msgstr "फोल्डर"
 
 #. FIXME these need accelerators when appropriate, and
 #. * need the mnemonics to be rationalized
 #.
-#: gtk/gtkfilechooserdefault.c:2673 gtk/gtkstock.c:293
+#: gtk/gtkfilechooserdefault.c:2676 gtk/gtkstock.c:293
 msgid "_Add"
 msgstr "_थप्नुस्"
 
-#: gtk/gtkfilechooserdefault.c:2683 gtk/gtkstock.c:341
+#: gtk/gtkfilechooserdefault.c:2686 gtk/gtkstock.c:341
 msgid "_Remove"
 msgstr "_हटाउनुस्"
 
-#: gtk/gtkfilechooserdefault.c:2762
+#: gtk/gtkfilechooserdefault.c:2765
 msgid "Show _Hidden Files"
 msgstr "लुकेको फाईल देखाउनुस्"
 
-#: gtk/gtkfilechooserdefault.c:2877 gtk/gtkfilesel.c:766
+#: gtk/gtkfilechooserdefault.c:2880 gtk/gtkfilesel.c:766
 msgid "Files"
 msgstr "फाइलहरू"
 
-#: gtk/gtkfilechooserdefault.c:2904
+#: gtk/gtkfilechooserdefault.c:2907
 msgid "Name"
 msgstr "नाम"
 
-#: gtk/gtkfilechooserdefault.c:2926
+#: gtk/gtkfilechooserdefault.c:2929
 msgid "Size"
 msgstr "आकार"
 
-#: gtk/gtkfilechooserdefault.c:2938
+#: gtk/gtkfilechooserdefault.c:2941
 msgid "Modified"
 msgstr "सुधारिएको"
 
 #. Create Folder
-#: gtk/gtkfilechooserdefault.c:2983
+#: gtk/gtkfilechooserdefault.c:2986
 msgid "Create Fo_lder"
 msgstr "फोल्डर बनाउनुस्"
 
 #. Name entry
-#: gtk/gtkfilechooserdefault.c:3090
+#: gtk/gtkfilechooserdefault.c:3093
 msgid "_Name:"
 msgstr "_नाम"
 
-#: gtk/gtkfilechooserdefault.c:3134
+#: gtk/gtkfilechooserdefault.c:3137
 msgid "_Browse for other folders"
 msgstr "_अरु फाइलपत्रहरु खोलेर हेर्नुहोस्"
 
-#: gtk/gtkfilechooserdefault.c:3376
+#: gtk/gtkfilechooserdefault.c:3379
 msgid "Save in _folder:"
 msgstr "फोल्डरमा भण्डारण गर्नुस्"
 
-#: gtk/gtkfilechooserdefault.c:3378
+#: gtk/gtkfilechooserdefault.c:3381
 msgid "Create in _folder:"
 msgstr "फोल्डरमा बनाउनुस्"
 
-#: gtk/gtkfilechooserdefault.c:4069
+#: gtk/gtkfilechooserdefault.c:4072
 msgid "Can't change to folder because it isn't local"
 msgstr "फाइल पत्र परिबर्तन भएन किनकि यो लोकल होइन"
 
-#: gtk/gtkfilechooserdefault.c:4213
+#: gtk/gtkfilechooserdefault.c:4216
 msgid "Could not find the path"
 msgstr "मार्ग/बाटो भेट्न सकिएन"
 
-#: gtk/gtkfilechooserdefault.c:4574
+#: gtk/gtkfilechooserdefault.c:4577
 #, c-format
 msgid "shortcut %s does not exist"
 msgstr "%s को छोटकरी रुप भेटिँदैन"
 
-#: gtk/gtkfilechooserdefault.c:5272
+#: gtk/gtkfilechooserdefault.c:5282
 msgid "Type name of new folder"
 msgstr "नयाँ फाइलपत्रको नाम लेख"
 
-#: gtk/gtkfilechooserdefault.c:5301
+#: gtk/gtkfilechooserdefault.c:5311
 #, c-format
 msgid "%d byte"
 msgid_plural "%d bytes"
 msgstr[0] ""
 msgstr[1] ""
 
-#: gtk/gtkfilechooserdefault.c:5303
+#: gtk/gtkfilechooserdefault.c:5313
 #, c-format
 msgid "%.1f K"
 msgstr "%.1f  एफ के"
 
-#: gtk/gtkfilechooserdefault.c:5305
+#: gtk/gtkfilechooserdefault.c:5315
 #, c-format
 msgid "%.1f M"
 msgstr "%.1f M"
 
-#: gtk/gtkfilechooserdefault.c:5307
+#: gtk/gtkfilechooserdefault.c:5317
 #, c-format
 msgid "%.1f G"
 msgstr "%.1f G"
 
-#: gtk/gtkfilechooserdefault.c:5352
+#: gtk/gtkfilechooserdefault.c:5362
 msgid "Today"
 msgstr "आज"
 
-#: gtk/gtkfilechooserdefault.c:5354
+#: gtk/gtkfilechooserdefault.c:5364
 msgid "Yesterday"
 msgstr "हिजो"
 
-#: gtk/gtkfilechooserdefault.c:5365
+#: gtk/gtkfilechooserdefault.c:5375
 msgid "Unknown"
 msgstr "अपरिचित"
 
-#: gtk/gtkfilechooserdefault.c:5460
+#: gtk/gtkfilechooserdefault.c:5430
 msgid "Cannot change to the folder you specified as it is an invalid path."
 msgstr "फाइलपत्रलाइ चाहेको ठाउँमा लान मिलेन कारण यो अस्वीकृत मार्ग हो "
 
-#: gtk/gtkfilechooserdefault.c:5537
+#: gtk/gtkfilechooserdefault.c:5507
 #, c-format
 msgid ""
 "Could not select %s:\n"
@@ -1094,15 +1094,15 @@ msgstr ""
 "%s:को चयन भएन \n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:5576
+#: gtk/gtkfilechooserdefault.c:5546
 msgid "Open Location"
 msgstr "खुला स्थान"
 
-#: gtk/gtkfilechooserdefault.c:5583
+#: gtk/gtkfilechooserdefault.c:5553
 msgid "Save in Location"
 msgstr "स्थानमा भण्डारण गर्नुस्"
 
-#: gtk/gtkfilechooserdefault.c:5602
+#: gtk/gtkfilechooserdefault.c:5572
 msgid "_Location:"
 msgstr "स्थान"
 

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk-2-4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-09-18 14:22-0400\n"
+"POT-Creation-Date: 2004-10-08 15:41-0400\n"
 "PO-Revision-Date: 2004-08-28 17:04+0300\n"
 "Last-Translator: Mişu Moldovan <dumol@go.ro>\n"
 "Language-Team: Română <gnomero-list@lists.sourceforge.net>\n"
@@ -947,7 +947,7 @@ msgstr ""
 "Nu am putut adăuga un favorit pentru %s:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:817 gtk/gtkfilechooserdefault.c:5499
+#: gtk/gtkfilechooserdefault.c:817 gtk/gtkfilechooserdefault.c:5469
 #, c-format
 msgid ""
 "Could not build file name from '%s' and '%s':\n"
@@ -965,15 +965,15 @@ msgstr ""
 "Nu am reuşit să schimb directorul curent în %s:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:1143 gtk/gtkpathbar.c:842
+#: gtk/gtkfilechooserdefault.c:1140 gtk/gtkpathbar.c:842
 msgid "Home"
 msgstr "Acasă"
 
-#: gtk/gtkfilechooserdefault.c:1166 gtk/gtkpathbar.c:844
+#: gtk/gtkfilechooserdefault.c:1163 gtk/gtkpathbar.c:844
 msgid "Desktop"
 msgstr "Desktop"
 
-#: gtk/gtkfilechooserdefault.c:1564
+#: gtk/gtkfilechooserdefault.c:1561
 #, c-format
 msgid ""
 "Could not create folder %s:\n"
@@ -982,12 +982,12 @@ msgstr ""
 "Nu am putut crea directorul „%s”:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:1744
+#: gtk/gtkfilechooserdefault.c:1747
 #, c-format
 msgid "Could not add bookmark for %s because it is not a folder."
 msgstr "Nu am putut adăuga un favorit pentru %s deoarece nu e un director."
 
-#: gtk/gtkfilechooserdefault.c:1849
+#: gtk/gtkfilechooserdefault.c:1852
 #, c-format
 msgid ""
 "Could not remove bookmark for %s:\n"
@@ -996,128 +996,128 @@ msgstr ""
 "Nu am putut şterge favoritul %s:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:2431
+#: gtk/gtkfilechooserdefault.c:2434
 #, c-format
 msgid "Could not add a bookmark for %s because it is an invalid path name."
 msgstr "Nu am putut adăuga un favorit pentru %s deoarece are o cale invalidă."
 
-#: gtk/gtkfilechooserdefault.c:2572
+#: gtk/gtkfilechooserdefault.c:2575
 msgid "Shortcuts"
 msgstr "Scurtături"
 
-#: gtk/gtkfilechooserdefault.c:2626
+#: gtk/gtkfilechooserdefault.c:2629
 msgid "Folder"
 msgstr "Director"
 
 #. FIXME these need accelerators when appropriate, and
 #. * need the mnemonics to be rationalized
 #.
-#: gtk/gtkfilechooserdefault.c:2673 gtk/gtkstock.c:293
+#: gtk/gtkfilechooserdefault.c:2676 gtk/gtkstock.c:293
 msgid "_Add"
 msgstr "A_daugă"
 
-#: gtk/gtkfilechooserdefault.c:2683 gtk/gtkstock.c:341
+#: gtk/gtkfilechooserdefault.c:2686 gtk/gtkstock.c:341
 msgid "_Remove"
 msgstr "_Elimină"
 
-#: gtk/gtkfilechooserdefault.c:2762
+#: gtk/gtkfilechooserdefault.c:2765
 msgid "Show _Hidden Files"
 msgstr "Arată fişierele _ascunse"
 
-#: gtk/gtkfilechooserdefault.c:2877 gtk/gtkfilesel.c:766
+#: gtk/gtkfilechooserdefault.c:2880 gtk/gtkfilesel.c:766
 msgid "Files"
 msgstr "Fişiere"
 
-#: gtk/gtkfilechooserdefault.c:2904
+#: gtk/gtkfilechooserdefault.c:2907
 msgid "Name"
 msgstr "Nume"
 
-#: gtk/gtkfilechooserdefault.c:2926
+#: gtk/gtkfilechooserdefault.c:2929
 msgid "Size"
 msgstr "Mărime"
 
-#: gtk/gtkfilechooserdefault.c:2938
+#: gtk/gtkfilechooserdefault.c:2941
 msgid "Modified"
 msgstr "Modificat"
 
 #. Create Folder
-#: gtk/gtkfilechooserdefault.c:2983
+#: gtk/gtkfilechooserdefault.c:2986
 msgid "Create Fo_lder"
 msgstr "Creea_ză director"
 
 #. Name entry
-#: gtk/gtkfilechooserdefault.c:3090
+#: gtk/gtkfilechooserdefault.c:3093
 msgid "_Name:"
 msgstr "_Nume:"
 
-#: gtk/gtkfilechooserdefault.c:3134
+#: gtk/gtkfilechooserdefault.c:3137
 msgid "_Browse for other folders"
 msgstr "Navigare în al_te directoare"
 
-#: gtk/gtkfilechooserdefault.c:3376
+#: gtk/gtkfilechooserdefault.c:3379
 msgid "Save in _folder:"
 msgstr "Salvează în _director:"
 
-#: gtk/gtkfilechooserdefault.c:3378
+#: gtk/gtkfilechooserdefault.c:3381
 msgid "Create in _folder:"
 msgstr "Creează în _director:"
 
-#: gtk/gtkfilechooserdefault.c:4069
+#: gtk/gtkfilechooserdefault.c:4072
 msgid "Can't change to folder because it isn't local"
 msgstr "Nu pot schimba în directorul specificat deoarece nu este local"
 
-#: gtk/gtkfilechooserdefault.c:4213
+#: gtk/gtkfilechooserdefault.c:4216
 msgid "Could not find the path"
 msgstr "Nu am reuşit să găsesc calea"
 
-#: gtk/gtkfilechooserdefault.c:4574
+#: gtk/gtkfilechooserdefault.c:4577
 #, c-format
 msgid "shortcut %s does not exist"
 msgstr "combinaţia de taste %s nu există"
 
-#: gtk/gtkfilechooserdefault.c:5272
+#: gtk/gtkfilechooserdefault.c:5282
 msgid "Type name of new folder"
 msgstr "Introduceţi numele noului director"
 
-#: gtk/gtkfilechooserdefault.c:5301
+#: gtk/gtkfilechooserdefault.c:5311
 #, c-format
 msgid "%d byte"
 msgid_plural "%d bytes"
 msgstr[0] "%d octet"
 msgstr[1] "%d octeţi"
 
-#: gtk/gtkfilechooserdefault.c:5303
+#: gtk/gtkfilechooserdefault.c:5313
 #, c-format
 msgid "%.1f K"
 msgstr "%.1f O"
 
-#: gtk/gtkfilechooserdefault.c:5305
+#: gtk/gtkfilechooserdefault.c:5315
 #, c-format
 msgid "%.1f M"
 msgstr "%.1f M"
 
-#: gtk/gtkfilechooserdefault.c:5307
+#: gtk/gtkfilechooserdefault.c:5317
 #, c-format
 msgid "%.1f G"
 msgstr "%.1f G"
 
-#: gtk/gtkfilechooserdefault.c:5352
+#: gtk/gtkfilechooserdefault.c:5362
 msgid "Today"
 msgstr "Azi"
 
-#: gtk/gtkfilechooserdefault.c:5354
+#: gtk/gtkfilechooserdefault.c:5364
 msgid "Yesterday"
 msgstr "Ieri"
 
-#: gtk/gtkfilechooserdefault.c:5365
+#: gtk/gtkfilechooserdefault.c:5375
 msgid "Unknown"
 msgstr "Nu se ştie"
 
-#: gtk/gtkfilechooserdefault.c:5460
+#: gtk/gtkfilechooserdefault.c:5430
 msgid "Cannot change to the folder you specified as it is an invalid path."
 msgstr "Nu pot schimba în directorul specificat deoarece este o cale invalidă."
 
-#: gtk/gtkfilechooserdefault.c:5537
+#: gtk/gtkfilechooserdefault.c:5507
 #, c-format
 msgid ""
 "Could not select %s:\n"
@@ -1126,15 +1126,15 @@ msgstr ""
 "Nu am putut selecta %s:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:5576
+#: gtk/gtkfilechooserdefault.c:5546
 msgid "Open Location"
 msgstr "Deschide locaţia"
 
-#: gtk/gtkfilechooserdefault.c:5583
+#: gtk/gtkfilechooserdefault.c:5553
 msgid "Save in Location"
 msgstr "Salvează în locaţia"
 
-#: gtk/gtkfilechooserdefault.c:5602
+#: gtk/gtkfilechooserdefault.c:5572
 msgid "_Location:"
 msgstr "_Locaţie: "
 

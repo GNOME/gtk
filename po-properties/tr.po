@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-09-18 14:23-0400\n"
+"POT-Creation-Date: 2004-10-08 15:41-0400\n"
 "PO-Revision-Date: 2004-04-09 17:26+0300\n"
 "Last-Translator: Baris Cicek <baris@teamforce.name.tr>\n"
 "Language-Team: Turkish <gnome-turk@gnome.org>\n"
@@ -57,7 +57,7 @@ msgid "The number of bits per sample"
 msgstr "Örnek başına düşen bit sayısı"
 
 # gtk/gtklayout.c:435 gtk/gtktreeviewcolumn.c:188 gtk/gtkwidget.c:424
-#: gdk-pixbuf/gdk-pixbuf.c:143 gtk/gtklayout.c:648 gtk/gtktreeviewcolumn.c:239
+#: gdk-pixbuf/gdk-pixbuf.c:143 gtk/gtklayout.c:650 gtk/gtktreeviewcolumn.c:239
 msgid "Width"
 msgstr "Genişlik"
 
@@ -67,7 +67,7 @@ msgid "The number of columns of the pixbuf"
 msgstr "Pixbuf'taki sütun sayısı"
 
 # gtk/gtklayout.c:444 gtk/gtkwidget.c:433
-#: gdk-pixbuf/gdk-pixbuf.c:154 gtk/gtklayout.c:657
+#: gdk-pixbuf/gdk-pixbuf.c:154 gtk/gtklayout.c:659
 msgid "Height"
 msgstr "Yükseklik"
 
@@ -219,7 +219,7 @@ msgid "Whether the action is enabled."
 msgstr "Eylemin etkin olup olmaması."
 
 # gtk/gtktreeview.c:481 gtk/gtktreeviewcolumn.c:171 gtk/gtkwidget.c:442
-#: gtk/gtkaction.c:264 gtk/gtkactiongroup.c:148 gtk/gtktreeview.c:561
+#: gtk/gtkaction.c:264 gtk/gtkactiongroup.c:148 gtk/gtktreeview.c:564
 #: gtk/gtktreeviewcolumn.c:223 gtk/gtkwidget.c:442
 msgid "Visible"
 msgstr "Görünür"
@@ -1928,11 +1928,11 @@ msgid "A widget to display in place of the usual expander label"
 msgstr "Genişletici etiketinin yerinde gösterilecek parça"
 
 # gtk/gtktreeview.c:526
-#: gtk/gtkexpander.c:246 gtk/gtktreeview.c:642
+#: gtk/gtkexpander.c:246 gtk/gtktreeview.c:645
 msgid "Expander Size"
 msgstr "Genişletici Boyutu"
 
-#: gtk/gtkexpander.c:247 gtk/gtktreeview.c:643
+#: gtk/gtkexpander.c:247 gtk/gtktreeview.c:646
 msgid "Size of the expander arrow"
 msgstr "Genişletici okunun boyutu"
 
@@ -2067,20 +2067,20 @@ msgid "Select multiple"
 msgstr "Çoklu seç"
 
 # gtk/gtkpaned.c:116 gtk/gtkruler.c:138
-#: gtk/gtkfixed.c:121 gtk/gtklayout.c:612
+#: gtk/gtkfixed.c:121 gtk/gtklayout.c:614
 msgid "X position"
 msgstr "X konumu"
 
-#: gtk/gtkfixed.c:122 gtk/gtklayout.c:613
+#: gtk/gtkfixed.c:122 gtk/gtklayout.c:615
 msgid "X position of child widget"
 msgstr "Alt parçacığın X konumu"
 
 # gtk/gtkpaned.c:116 gtk/gtkruler.c:138
-#: gtk/gtkfixed.c:131 gtk/gtklayout.c:622
+#: gtk/gtkfixed.c:131 gtk/gtklayout.c:624
 msgid "Y position"
 msgstr "Y konumu"
 
-#: gtk/gtkfixed.c:132 gtk/gtklayout.c:623
+#: gtk/gtkfixed.c:132 gtk/gtklayout.c:625
 msgid "Y position of child widget"
 msgstr "Alt parçacığın Y konumu"
 
@@ -2441,32 +2441,32 @@ msgid "The widget to be activated when the label's mnemonic key is pressed"
 msgstr "Etiketin anımsatıcı tuşuna basıldığında etkinleştirilecek parçacık"
 
 # gtk/gtklayout.c:419 gtk/gtkviewport.c:131
-#: gtk/gtklayout.c:632 gtk/gtkviewport.c:135
+#: gtk/gtklayout.c:634 gtk/gtkviewport.c:135
 msgid "Horizontal adjustment"
 msgstr "Yatay hizalama"
 
 # gtk/gtklayout.c:420
-#: gtk/gtklayout.c:633 gtk/gtkscrolledwindow.c:238
+#: gtk/gtklayout.c:635 gtk/gtkscrolledwindow.c:238
 msgid "The GtkAdjustment for the horizontal position"
 msgstr "Yatay konum için GtkAdjustment"
 
 # gtk/gtklayout.c:427 gtk/gtkviewport.c:139
-#: gtk/gtklayout.c:640 gtk/gtkviewport.c:143
+#: gtk/gtklayout.c:642 gtk/gtkviewport.c:143
 msgid "Vertical adjustment"
 msgstr "Düşey hizalama"
 
 # gtk/gtklayout.c:428
-#: gtk/gtklayout.c:641 gtk/gtkscrolledwindow.c:245
+#: gtk/gtklayout.c:643 gtk/gtkscrolledwindow.c:245
 msgid "The GtkAdjustment for the vertical position"
 msgstr "Düşey konum için GtkAdjustment"
 
 # gtk/gtklayout.c:436
-#: gtk/gtklayout.c:649
+#: gtk/gtklayout.c:651
 msgid "The width of the layout"
 msgstr "Düzenin genişliği"
 
 # gtk/gtklayout.c:445
-#: gtk/gtklayout.c:658
+#: gtk/gtklayout.c:660
 msgid "The height of the layout"
 msgstr "Düzenin yüksekliği"
 
@@ -3307,12 +3307,12 @@ msgstr ""
 "Kaydırma çubuğunun ucundaki geri düğmesinin yanında ileri düğmesi göster"
 
 # gtk/gtktext.c:594 gtk/gtktreeview.c:465
-#: gtk/gtkscrolledwindow.c:237 gtk/gtktext.c:602 gtk/gtktreeview.c:545
+#: gtk/gtkscrolledwindow.c:237 gtk/gtktext.c:602 gtk/gtktreeview.c:548
 msgid "Horizontal Adjustment"
 msgstr "Yatay Hizalama"
 
 # gtk/gtktext.c:602 gtk/gtktreeview.c:473
-#: gtk/gtkscrolledwindow.c:244 gtk/gtktext.c:610 gtk/gtktreeview.c:553
+#: gtk/gtkscrolledwindow.c:244 gtk/gtktext.c:610 gtk/gtktreeview.c:556
 msgid "Vertical Adjustment"
 msgstr "Düşey Hizalama"
 
@@ -4404,143 +4404,143 @@ msgid "The model for the TreeModelSort to sort"
 msgstr "Sıralama için iTreeModelSort modeli"
 
 # gtk/gtktreeview.c:457
-#: gtk/gtktreeview.c:537
+#: gtk/gtktreeview.c:540
 msgid "TreeView Model"
 msgstr "TreeView Modeli"
 
 # gtk/gtktreeview.c:458
-#: gtk/gtktreeview.c:538
+#: gtk/gtktreeview.c:541
 msgid "The model for the tree view"
 msgstr "Ağaç görünümü için model"
 
 # gtk/gtktreeview.c:466
-#: gtk/gtktreeview.c:546
+#: gtk/gtktreeview.c:549
 msgid "Horizontal Adjustment for the widget"
 msgstr "Parçacık için Yatay Hizalama"
 
 # gtk/gtktreeview.c:474
-#: gtk/gtktreeview.c:554
+#: gtk/gtktreeview.c:557
 msgid "Vertical Adjustment for the widget"
 msgstr "Parçacık için Düşey Hizalama"
 
 # gtk/gtktreeview.c:482
-#: gtk/gtktreeview.c:562
+#: gtk/gtktreeview.c:565
 msgid "Show the column header buttons"
 msgstr "Sütun başlığı düğmelerini göster"
 
 # gtk/gtktreeview.c:489
-#: gtk/gtktreeview.c:569
+#: gtk/gtktreeview.c:572
 msgid "Headers Clickable"
 msgstr "Başlıklar Tıklanabilir"
 
 # gtk/gtktreeview.c:490
-#: gtk/gtktreeview.c:570
+#: gtk/gtktreeview.c:573
 msgid "Column headers respond to click events"
 msgstr "Başlıklar tıklama eylemine yanıt verir"
 
 # gtk/gtktreeview.c:497
-#: gtk/gtktreeview.c:577
+#: gtk/gtktreeview.c:580
 msgid "Expander Column"
 msgstr "Genişletici Sütun"
 
 # gtk/gtktreeview.c:498
-#: gtk/gtktreeview.c:578
+#: gtk/gtktreeview.c:581
 msgid "Set the column for the expander column"
 msgstr "Sütünü genişletici sütun olarak ayarlar"
 
 # gtk/gtktreeview.c:505 gtk/gtktreeviewcolumn.c:253
-#: gtk/gtktreeview.c:585 gtk/gtktreeviewcolumn.c:330
+#: gtk/gtktreeview.c:588 gtk/gtktreeviewcolumn.c:330
 msgid "Reorderable"
 msgstr "Sıralanabilir"
 
 # gtk/gtktreeview.c:506
-#: gtk/gtktreeview.c:586
+#: gtk/gtktreeview.c:589
 msgid "View is reorderable"
 msgstr "Görünüm yeniden sıralanabilir"
 
 # gtk/gtktreeview.c:513
-#: gtk/gtktreeview.c:593
+#: gtk/gtktreeview.c:596
 msgid "Rules Hint"
 msgstr "Kural İpucu"
 
 # gtk/gtktreeview.c:514
-#: gtk/gtktreeview.c:594
+#: gtk/gtktreeview.c:597
 msgid "Set a hint to the theme engine to draw rows in alternating colors"
 msgstr "Satırlara farklı renkler atamada tema aygıtına bir ipucu belirtir"
 
-#: gtk/gtktreeview.c:601
+#: gtk/gtktreeview.c:604
 msgid "Enable Search"
 msgstr "Aramayı Etkinleştir"
 
-#: gtk/gtktreeview.c:602
+#: gtk/gtktreeview.c:605
 msgid "View allows user to search through columns interactively"
 msgstr "Görünüm kullanıcıya sütunlarda etkileşimli arama yapma izni verir"
 
-#: gtk/gtktreeview.c:609
+#: gtk/gtktreeview.c:612
 msgid "Search Column"
 msgstr "Arama Sütunu"
 
-#: gtk/gtktreeview.c:610
+#: gtk/gtktreeview.c:613
 msgid "Model column to search through when searching through code"
 msgstr "Arama kod üzerinden yapıldığında arama yapılacak sütun modeli"
 
 # gtk/gtkcellrenderer.c:179
-#: gtk/gtktreeview.c:630
+#: gtk/gtktreeview.c:633
 msgid "Fixed Height Mode"
 msgstr "Sabit Yükseklik Kipi"
 
-#: gtk/gtktreeview.c:631
+#: gtk/gtktreeview.c:634
 msgid "Speeds up GtkTreeView by assuming that all rows have the same height"
 msgstr ""
 "GtkTreeView'i tüm satırları eşit yükseklikte olduğunu farzederek hızlandır"
 
 # gtk/gtktreeview.c:535
-#: gtk/gtktreeview.c:651
+#: gtk/gtktreeview.c:654
 msgid "Vertical Separator Width"
 msgstr "Düşey Ayırıcı Genişliği"
 
-#: gtk/gtktreeview.c:652
+#: gtk/gtktreeview.c:655
 msgid "Vertical space between cells.  Must be an even number"
 msgstr "Hücreler arasındaki düşey boşluk.  Bir çift sayı olmalıdır"
 
 # gtk/gtktreeview.c:544
-#: gtk/gtktreeview.c:660
+#: gtk/gtktreeview.c:663
 msgid "Horizontal Separator Width"
 msgstr "Yatay Ayırıcı Genişliği"
 
-#: gtk/gtktreeview.c:661
+#: gtk/gtktreeview.c:664
 msgid "Horizontal space between cells.  Must be an even number"
 msgstr "Hücreler arasındaki yatay boşluk.  Bir çift sayı olmalıdır"
 
-#: gtk/gtktreeview.c:669
+#: gtk/gtktreeview.c:672
 msgid "Allow Rules"
 msgstr "Kurallara İzin Ver"
 
-#: gtk/gtktreeview.c:670
+#: gtk/gtktreeview.c:673
 msgid "Allow drawing of alternating color rows"
 msgstr "İkili renklerde satırlar çizilmesine izin ver"
 
-#: gtk/gtktreeview.c:676
+#: gtk/gtktreeview.c:679
 msgid "Indent Expanders"
 msgstr "Genişleticileri Girintile"
 
-#: gtk/gtktreeview.c:677
+#: gtk/gtktreeview.c:680
 msgid "Make the expanders indented"
 msgstr "Genişleticilere girinti ekle"
 
-#: gtk/gtktreeview.c:683
+#: gtk/gtktreeview.c:686
 msgid "Even Row Color"
 msgstr "Çift Satır Rengi"
 
-#: gtk/gtktreeview.c:684
+#: gtk/gtktreeview.c:687
 msgid "Color to use for even rows"
 msgstr "Çift satırları için kullanılacak renk"
 
-#: gtk/gtktreeview.c:690
+#: gtk/gtktreeview.c:693
 msgid "Odd Row Color"
 msgstr "Tek Satır Rengi"
 
-#: gtk/gtktreeview.c:691
+#: gtk/gtktreeview.c:694
 msgid "Color to use for odd rows"
 msgstr "Tek satırlar için kullanılacak renk"
 

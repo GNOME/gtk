@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-09-18 14:22-0400\n"
+"POT-Creation-Date: 2004-10-08 15:41-0400\n"
 "PO-Revision-Date: 2003-11-18 11:32+0100\n"
 "Last-Translator: Gnome PL Team <translators@gnome.pl>\n"
 "Language-Team: Polish <translation-team-pl@lists.sourceforge.net>\n"
@@ -950,7 +950,7 @@ msgstr ""
 "Nie można dodać zakładki dla %s:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:817 gtk/gtkfilechooserdefault.c:5499
+#: gtk/gtkfilechooserdefault.c:817 gtk/gtkfilechooserdefault.c:5469
 #, c-format
 msgid ""
 "Could not build file name from '%s' and '%s':\n"
@@ -968,15 +968,15 @@ msgstr ""
 "Nie można przejść do folderu %s:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:1143 gtk/gtkpathbar.c:842
+#: gtk/gtkfilechooserdefault.c:1140 gtk/gtkpathbar.c:842
 msgid "Home"
 msgstr "Początek"
 
-#: gtk/gtkfilechooserdefault.c:1166 gtk/gtkpathbar.c:844
+#: gtk/gtkfilechooserdefault.c:1163 gtk/gtkpathbar.c:844
 msgid "Desktop"
 msgstr "Biurko"
 
-#: gtk/gtkfilechooserdefault.c:1564
+#: gtk/gtkfilechooserdefault.c:1561
 #, c-format
 msgid ""
 "Could not create folder %s:\n"
@@ -985,12 +985,12 @@ msgstr ""
 "Nie można utworzyć folderu %s:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:1744
+#: gtk/gtkfilechooserdefault.c:1747
 #, c-format
 msgid "Could not add bookmark for %s because it is not a folder."
 msgstr "Nie można dodać zakładki dla %s ponieważ to nie jest folderem."
 
-#: gtk/gtkfilechooserdefault.c:1849
+#: gtk/gtkfilechooserdefault.c:1852
 #, c-format
 msgid ""
 "Could not remove bookmark for %s:\n"
@@ -999,91 +999,91 @@ msgstr ""
 "Nie można usunąć zakładki dla %s:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:2431
+#: gtk/gtkfilechooserdefault.c:2434
 #, c-format
 msgid "Could not add a bookmark for %s because it is an invalid path name."
 msgstr ""
 "Nie można dodać zakładki dla %s ponieważ jest to niepoprawna nazwa ścieżki."
 
-#: gtk/gtkfilechooserdefault.c:2572
+#: gtk/gtkfilechooserdefault.c:2575
 msgid "Shortcuts"
 msgstr "Skróty"
 
-#: gtk/gtkfilechooserdefault.c:2626
+#: gtk/gtkfilechooserdefault.c:2629
 msgid "Folder"
 msgstr "Folder"
 
 #. FIXME these need accelerators when appropriate, and
 #. * need the mnemonics to be rationalized
 #.
-#: gtk/gtkfilechooserdefault.c:2673 gtk/gtkstock.c:293
+#: gtk/gtkfilechooserdefault.c:2676 gtk/gtkstock.c:293
 msgid "_Add"
 msgstr "_Dodaj"
 
-#: gtk/gtkfilechooserdefault.c:2683 gtk/gtkstock.c:341
+#: gtk/gtkfilechooserdefault.c:2686 gtk/gtkstock.c:341
 msgid "_Remove"
 msgstr "_Usuń"
 
-#: gtk/gtkfilechooserdefault.c:2762
+#: gtk/gtkfilechooserdefault.c:2765
 msgid "Show _Hidden Files"
 msgstr "Wyświetl u_kryte pliki"
 
-#: gtk/gtkfilechooserdefault.c:2877 gtk/gtkfilesel.c:766
+#: gtk/gtkfilechooserdefault.c:2880 gtk/gtkfilesel.c:766
 msgid "Files"
 msgstr "Pliki"
 
-#: gtk/gtkfilechooserdefault.c:2904
+#: gtk/gtkfilechooserdefault.c:2907
 msgid "Name"
 msgstr "Nazwa"
 
-#: gtk/gtkfilechooserdefault.c:2926
+#: gtk/gtkfilechooserdefault.c:2929
 msgid "Size"
 msgstr "Rozmiar"
 
-#: gtk/gtkfilechooserdefault.c:2938
+#: gtk/gtkfilechooserdefault.c:2941
 msgid "Modified"
 msgstr "Zmodyfikowany"
 
 #. Create Folder
-#: gtk/gtkfilechooserdefault.c:2983
+#: gtk/gtkfilechooserdefault.c:2986
 msgid "Create Fo_lder"
 msgstr "Utwórz fo_lder"
 
 #. Name entry
-#: gtk/gtkfilechooserdefault.c:3090
+#: gtk/gtkfilechooserdefault.c:3093
 msgid "_Name:"
 msgstr "_Nazwa:"
 
-#: gtk/gtkfilechooserdefault.c:3134
+#: gtk/gtkfilechooserdefault.c:3137
 msgid "_Browse for other folders"
 msgstr "_Przeglądaj inne foldery"
 
-#: gtk/gtkfilechooserdefault.c:3376
+#: gtk/gtkfilechooserdefault.c:3379
 msgid "Save in _folder:"
 msgstr "Zapis w f_olderze:"
 
-#: gtk/gtkfilechooserdefault.c:3378
+#: gtk/gtkfilechooserdefault.c:3381
 msgid "Create in _folder:"
 msgstr "Utwórz w fold_erze:"
 
-#: gtk/gtkfilechooserdefault.c:4069
+#: gtk/gtkfilechooserdefault.c:4072
 msgid "Can't change to folder because it isn't local"
 msgstr "Nie można przejść do folderu, ponieważ nie jest on lokalny"
 
-#: gtk/gtkfilechooserdefault.c:4213
+#: gtk/gtkfilechooserdefault.c:4216
 msgid "Could not find the path"
 msgstr "Nie można odnaleźć ścieżki"
 
-#: gtk/gtkfilechooserdefault.c:4574
+#: gtk/gtkfilechooserdefault.c:4577
 #, c-format
 msgid "shortcut %s does not exist"
 msgstr "skrót %s nie istnieje"
 
-#: gtk/gtkfilechooserdefault.c:5272
+#: gtk/gtkfilechooserdefault.c:5282
 msgid "Type name of new folder"
 msgstr "Podaj nazwę nowego folderu"
 
-#: gtk/gtkfilechooserdefault.c:5301
+#: gtk/gtkfilechooserdefault.c:5311
 #, c-format
 msgid "%d byte"
 msgid_plural "%d bytes"
@@ -1091,40 +1091,40 @@ msgstr[0] "%d bajt"
 msgstr[1] "%d bajty"
 msgstr[2] "%d bajtów"
 
-#: gtk/gtkfilechooserdefault.c:5303
+#: gtk/gtkfilechooserdefault.c:5313
 #, c-format
 msgid "%.1f K"
 msgstr "%.1f K"
 
-#: gtk/gtkfilechooserdefault.c:5305
+#: gtk/gtkfilechooserdefault.c:5315
 #, c-format
 msgid "%.1f M"
 msgstr "%.1f M"
 
-#: gtk/gtkfilechooserdefault.c:5307
+#: gtk/gtkfilechooserdefault.c:5317
 #, c-format
 msgid "%.1f G"
 msgstr "%.1f G"
 
-#: gtk/gtkfilechooserdefault.c:5352
+#: gtk/gtkfilechooserdefault.c:5362
 msgid "Today"
 msgstr "Dzisiaj"
 
-#: gtk/gtkfilechooserdefault.c:5354
+#: gtk/gtkfilechooserdefault.c:5364
 msgid "Yesterday"
 msgstr "Wczoraj"
 
-#: gtk/gtkfilechooserdefault.c:5365
+#: gtk/gtkfilechooserdefault.c:5375
 msgid "Unknown"
 msgstr "Nieznany"
 
-#: gtk/gtkfilechooserdefault.c:5460
+#: gtk/gtkfilechooserdefault.c:5430
 msgid "Cannot change to the folder you specified as it is an invalid path."
 msgstr ""
 "Nie można przejść do podanego folderu, ponieważ jest to niepoprawna nazwa "
 "ścieżki."
 
-#: gtk/gtkfilechooserdefault.c:5537
+#: gtk/gtkfilechooserdefault.c:5507
 #, c-format
 msgid ""
 "Could not select %s:\n"
@@ -1133,15 +1133,15 @@ msgstr ""
 "Nie można zaznaczyć %s:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:5576
+#: gtk/gtkfilechooserdefault.c:5546
 msgid "Open Location"
 msgstr "Otwarcie położenia"
 
-#: gtk/gtkfilechooserdefault.c:5583
+#: gtk/gtkfilechooserdefault.c:5553
 msgid "Save in Location"
 msgstr "Zapis w położeniu"
 
-#: gtk/gtkfilechooserdefault.c:5602
+#: gtk/gtkfilechooserdefault.c:5572
 msgid "_Location:"
 msgstr "Położ_enie:"
 

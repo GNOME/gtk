@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-09-10 20:02+0200\n"
+"POT-Creation-Date: 2004-10-08 15:41-0400\n"
 "PO-Revision-Date: 2004-10-03 10:31+0200\n"
 "Last-Translator: Jesús Bravo Álvarez <suso@trasno.net>\n"
 "Language-Team: Galician <proxecto@trasno.net>\n"
@@ -262,12 +262,12 @@ msgstr "A imaxe GIF está truncada ou incompleta."
 msgid "The GIF image format"
 msgstr "O formato de imaxe GIF"
 
-#: gdk-pixbuf/io-ico.c:219 gdk-pixbuf/io-ico.c:271 gdk-pixbuf/io-ico.c:332
-#: gdk-pixbuf/io-ico.c:395 gdk-pixbuf/io-ico.c:425
+#: gdk-pixbuf/io-ico.c:219 gdk-pixbuf/io-ico.c:271 gdk-pixbuf/io-ico.c:340
+#: gdk-pixbuf/io-ico.c:403 gdk-pixbuf/io-ico.c:433
 msgid "Not enough memory to load icon"
 msgstr "Non hai memoria dabondo para cargar a icona"
 
-#: gdk-pixbuf/io-ico.c:256
+#: gdk-pixbuf/io-ico.c:256 gdk-pixbuf/io-ico.c:330
 msgid "Invalid header in icon"
 msgstr "Cabeceira non válida na icona"
 
@@ -279,32 +279,32 @@ msgstr "A icona ten unha largura de cero"
 msgid "Icon has zero height"
 msgstr "A icona ten unha altura de cero"
 
-#: gdk-pixbuf/io-ico.c:347
+#: gdk-pixbuf/io-ico.c:355
 msgid "Compressed icons are not supported"
 msgstr "As iconas comprimidas non están soportadas"
 
-#: gdk-pixbuf/io-ico.c:380
+#: gdk-pixbuf/io-ico.c:388
 msgid "Unsupported icon type"
 msgstr "Tipo de icona non soportado"
 
-#: gdk-pixbuf/io-ico.c:474
+#: gdk-pixbuf/io-ico.c:482
 msgid "Not enough memory to load ICO file"
 msgstr "Non hai memoria dabondo para cargar o ficheiro ICO"
 
-#: gdk-pixbuf/io-ico.c:939
+#: gdk-pixbuf/io-ico.c:947
 msgid "Image too large to be saved as ICO"
 msgstr "Imaxe grande de máis para ser gardada coma ICO"
 
-#: gdk-pixbuf/io-ico.c:950
+#: gdk-pixbuf/io-ico.c:958
 msgid "Cursor hotspot outside image"
 msgstr "Zona de acción do cursor fóra da imaxe"
 
-#: gdk-pixbuf/io-ico.c:973
+#: gdk-pixbuf/io-ico.c:981
 #, c-format
 msgid "Unsupported depth for ICO file: %d"
 msgstr "Profundidade non soportada para un ficheiro ICO: %d"
 
-#: gdk-pixbuf/io-ico.c:1202
+#: gdk-pixbuf/io-ico.c:1210
 msgid "The ICO image format"
 msgstr "O formato de imaxe ICO"
 
@@ -326,12 +326,12 @@ msgstr ""
 msgid "Unsupported JPEG color space (%s)"
 msgstr "Espazo de cor JPEG non soportado (%s)"
 
-#: gdk-pixbuf/io-jpeg.c:481 gdk-pixbuf/io-jpeg.c:678 gdk-pixbuf/io-jpeg.c:941
-#: gdk-pixbuf/io-jpeg.c:950
+#: gdk-pixbuf/io-jpeg.c:481 gdk-pixbuf/io-jpeg.c:678 gdk-pixbuf/io-jpeg.c:943
+#: gdk-pixbuf/io-jpeg.c:952
 msgid "Couldn't allocate memory for loading JPEG file"
 msgstr "Non se puido asignar memoria para cargar o ficheiro JPEG"
 
-#: gdk-pixbuf/io-jpeg.c:893
+#: gdk-pixbuf/io-jpeg.c:894
 #, c-format
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%s' could not be "
@@ -340,7 +340,7 @@ msgstr ""
 "A calidade JPEG ten que ser un valor entre 0 e 100; non se puido interpretar "
 "o valor '%s'."
 
-#: gdk-pixbuf/io-jpeg.c:908
+#: gdk-pixbuf/io-jpeg.c:909
 #, c-format
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
@@ -348,7 +348,7 @@ msgstr ""
 "A calidade JPEG ten que ser un valor entre 0 e 100; o valor '%d' non está "
 "permitido."
 
-#: gdk-pixbuf/io-jpeg.c:1069
+#: gdk-pixbuf/io-jpeg.c:1071
 msgid "The JPEG image format"
 msgstr "O formato de imaxe JPEG"
 
@@ -708,26 +708,26 @@ msgid "XPM file has image height <= 0"
 msgstr "O ficheiro XPM ten unha altura de imaxe <=0"
 
 #: gdk-pixbuf/io-xpm.c:1253
-msgid "XPM file has invalid number of colors"
-msgstr "O ficheiro XPM ten un número de cores non válido"
-
-#: gdk-pixbuf/io-xpm.c:1261
 msgid "XPM has invalid number of chars per pixel"
 msgstr "O XPM ten un número de caracteres por píxel non válido"
 
-#: gdk-pixbuf/io-xpm.c:1279
-msgid "Can't read XPM colormap"
-msgstr "Non se pode ler o mapa de cores XPM"
+#: gdk-pixbuf/io-xpm.c:1260
+msgid "XPM file has invalid number of colors"
+msgstr "O ficheiro XPM ten un número de cores non válido"
 
-#: gdk-pixbuf/io-xpm.c:1317
+#: gdk-pixbuf/io-xpm.c:1272 gdk-pixbuf/io-xpm.c:1281 gdk-pixbuf/io-xpm.c:1333
 msgid "Can't allocate memory for loading XPM image"
 msgstr "Non se pode asignar memoria para cargar a imaxe XPM"
 
-#: gdk-pixbuf/io-xpm.c:1508
+#: gdk-pixbuf/io-xpm.c:1295
+msgid "Can't read XPM colormap"
+msgstr "Non se pode ler o mapa de cores XPM"
+
+#: gdk-pixbuf/io-xpm.c:1524
 msgid "Failed to write to temporary file when loading XPM image"
 msgstr "Falla escribindo a un ficheiro temporal ao cargar a imaxe XPM"
 
-#: gdk-pixbuf/io-xpm.c:1543
+#: gdk-pixbuf/io-xpm.c:1559
 msgid "The XPM image format"
 msgstr "O formato de imaxe XPM"
 
@@ -823,8 +823,8 @@ msgid ""
 "Select the color you want from the outer ring. Select the darkness or "
 "lightness of that color using the inner triangle."
 msgstr ""
-"Seleccione o ton de cor que desexa do anel exterior. Escolla a escuridade "
-"ou claridade da cor usando o triángulo interior."
+"Seleccione o ton de cor que desexa do anel exterior. Escolla a escuridade ou "
+"claridade da cor usando o triángulo interior."
 
 #: gtk/gtkcolorsel.c:1871
 msgid ""
@@ -968,15 +968,15 @@ msgstr ""
 "Non se puido cambiar o cartafol actual a %s:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:1143 gtk/gtkpathbar.c:842
+#: gtk/gtkfilechooserdefault.c:1140 gtk/gtkpathbar.c:842
 msgid "Home"
 msgstr "Persoal"
 
-#: gtk/gtkfilechooserdefault.c:1166 gtk/gtkpathbar.c:844
+#: gtk/gtkfilechooserdefault.c:1163 gtk/gtkpathbar.c:844
 msgid "Desktop"
 msgstr "Escritorio"
 
-#: gtk/gtkfilechooserdefault.c:1564
+#: gtk/gtkfilechooserdefault.c:1561
 #, c-format
 msgid ""
 "Could not create folder %s:\n"
@@ -985,12 +985,12 @@ msgstr ""
 "Non se puido crear o cartafol %s:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:1744
+#: gtk/gtkfilechooserdefault.c:1747
 #, c-format
 msgid "Could not add bookmark for %s because it is not a folder."
 msgstr "Non se pode engadir un marcador para %s porque non é un cartafol."
 
-#: gtk/gtkfilechooserdefault.c:1849
+#: gtk/gtkfilechooserdefault.c:1852
 #, c-format
 msgid ""
 "Could not remove bookmark for %s:\n"
@@ -999,120 +999,120 @@ msgstr ""
 "Non se puido eliminar o marcador para %s:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:2431
+#: gtk/gtkfilechooserdefault.c:2434
 #, c-format
 msgid "Could not add a bookmark for %s because it is an invalid path name."
 msgstr "Non se pode engadir un marcador para %s porque non é un camiño válido."
 
-#: gtk/gtkfilechooserdefault.c:2572
+#: gtk/gtkfilechooserdefault.c:2575
 msgid "Shortcuts"
 msgstr "Atallos"
 
-#: gtk/gtkfilechooserdefault.c:2626
+#: gtk/gtkfilechooserdefault.c:2629
 msgid "Folder"
 msgstr "Cartafol"
 
 #. FIXME these need accelerators when appropriate, and
 #. * need the mnemonics to be rationalized
 #.
-#: gtk/gtkfilechooserdefault.c:2673 gtk/gtkstock.c:293
+#: gtk/gtkfilechooserdefault.c:2676 gtk/gtkstock.c:293
 msgid "_Add"
 msgstr "_Engadir"
 
-#: gtk/gtkfilechooserdefault.c:2683 gtk/gtkstock.c:341
+#: gtk/gtkfilechooserdefault.c:2686 gtk/gtkstock.c:341
 msgid "_Remove"
 msgstr "E_liminar"
 
-#: gtk/gtkfilechooserdefault.c:2762
+#: gtk/gtkfilechooserdefault.c:2765
 msgid "Show _Hidden Files"
 msgstr "Mostrar ficheiros a_gochados"
 
-#: gtk/gtkfilechooserdefault.c:2877 gtk/gtkfilesel.c:766
+#: gtk/gtkfilechooserdefault.c:2880 gtk/gtkfilesel.c:766
 msgid "Files"
 msgstr "Ficheiros"
 
-#: gtk/gtkfilechooserdefault.c:2904
+#: gtk/gtkfilechooserdefault.c:2907
 msgid "Name"
 msgstr "Nome"
 
-#: gtk/gtkfilechooserdefault.c:2926
+#: gtk/gtkfilechooserdefault.c:2929
 msgid "Size"
 msgstr "Tamaño"
 
-#: gtk/gtkfilechooserdefault.c:2938
+#: gtk/gtkfilechooserdefault.c:2941
 msgid "Modified"
 msgstr "Modificado"
 
 #. Create Folder
-#: gtk/gtkfilechooserdefault.c:2983
+#: gtk/gtkfilechooserdefault.c:2986
 msgid "Create Fo_lder"
 msgstr "Crear _cartafol"
 
 #. Name entry
-#: gtk/gtkfilechooserdefault.c:3090
+#: gtk/gtkfilechooserdefault.c:3093
 msgid "_Name:"
 msgstr "_Nome:"
 
-#: gtk/gtkfilechooserdefault.c:3134
+#: gtk/gtkfilechooserdefault.c:3137
 msgid "_Browse for other folders"
 msgstr "_Examinar outros cartafoles"
 
-#: gtk/gtkfilechooserdefault.c:3376
+#: gtk/gtkfilechooserdefault.c:3379
 msgid "Save in _folder:"
 msgstr "Gardar no _cartafol:"
 
-#: gtk/gtkfilechooserdefault.c:3378
+#: gtk/gtkfilechooserdefault.c:3381
 msgid "Create in _folder:"
 msgstr "Crear no _cartafol:"
 
-#: gtk/gtkfilechooserdefault.c:4065
+#: gtk/gtkfilechooserdefault.c:4072
 msgid "Can't change to folder because it isn't local"
 msgstr "Non se pode entrar no cartafol porque non é local"
 
-#: gtk/gtkfilechooserdefault.c:4208
+#: gtk/gtkfilechooserdefault.c:4216
 msgid "Could not find the path"
 msgstr "Non se atopou o camiño"
 
-#: gtk/gtkfilechooserdefault.c:4569
+#: gtk/gtkfilechooserdefault.c:4577
 #, c-format
 msgid "shortcut %s does not exist"
 msgstr "o atallo %s non existe"
 
-#: gtk/gtkfilechooserdefault.c:5242
+#: gtk/gtkfilechooserdefault.c:5282
 msgid "Type name of new folder"
 msgstr "Escriba o nome do novo cartafol"
 
-#: gtk/gtkfilechooserdefault.c:5271
+#: gtk/gtkfilechooserdefault.c:5311
 #, c-format
 msgid "%d byte"
 msgid_plural "%d bytes"
 msgstr[0] "%d byte"
 msgstr[1] "%d bytes"
 
-#: gtk/gtkfilechooserdefault.c:5273
+#: gtk/gtkfilechooserdefault.c:5313
 #, c-format
 msgid "%.1f K"
 msgstr "%.1f K"
 
-#: gtk/gtkfilechooserdefault.c:5275
+#: gtk/gtkfilechooserdefault.c:5315
 #, c-format
 msgid "%.1f M"
 msgstr "%.1f M"
 
-#: gtk/gtkfilechooserdefault.c:5277
+#: gtk/gtkfilechooserdefault.c:5317
 #, c-format
 msgid "%.1f G"
 msgstr "%.1f G"
 
-#: gtk/gtkfilechooserdefault.c:5322
+#: gtk/gtkfilechooserdefault.c:5362
 msgid "Today"
 msgstr "Hoxe"
 
-#: gtk/gtkfilechooserdefault.c:5324
+#: gtk/gtkfilechooserdefault.c:5364
 msgid "Yesterday"
 msgstr "Onte"
 
-#: gtk/gtkfilechooserdefault.c:5335
+#: gtk/gtkfilechooserdefault.c:5375
 msgid "Unknown"
 msgstr "Descoñecido"
 

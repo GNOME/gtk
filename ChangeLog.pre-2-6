@@ -1,5 +1,9 @@
 2004-10-08  Matthias Clasen  <mclasen@redhat.com>
 
+	* === Released 2.4.11 ===
+
+2004-10-08  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtktreeview.c (gtk_tree_view_grab_notify): Don't start a 
 	drag if we loose the grab.
 
@@ -55,7 +59,7 @@ Wed Oct  6 00:45:04 2004    <timj@birnet.org>
 
 Tue Oct  5 21:00:54 2004  Tim Janik  <timj@gtk.org>
 
-        * gtk/gtkwidget.c (gtk_widget_size_allocate): applied owen's patch
+	* gtk/gtkwidget.c (gtk_widget_size_allocate): applied owen's patch
 	for conditional ALLOC_NEEDED flag updates to preserve resizing
 	flag invariants.
 

@@ -27,7 +27,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: el\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-09-18 14:23-0400\n"
+"POT-Creation-Date: 2004-10-08 15:41-0400\n"
 "PO-Revision-Date: 2004-09-10 11:44-0300\n"
 "Last-Translator: Nikos Charonitakis <frolix68@yahoo.gr>\n"
 "Language-Team: Greek <nls@tux.hellug.gr>\n"
@@ -68,7 +68,7 @@ msgstr "Bits ανα δείγμα"
 msgid "The number of bits per sample"
 msgstr "Ο αριθμός των Bits ανα δείγμα"
 
-#: gdk-pixbuf/gdk-pixbuf.c:143 gtk/gtklayout.c:648 gtk/gtktreeviewcolumn.c:239
+#: gdk-pixbuf/gdk-pixbuf.c:143 gtk/gtklayout.c:650 gtk/gtktreeviewcolumn.c:239
 msgid "Width"
 msgstr "Πλάτος"
 
@@ -76,7 +76,7 @@ msgstr "Πλάτος"
 msgid "The number of columns of the pixbuf"
 msgstr "Ο αριθμός των στηλών στο pixbuf"
 
-#: gdk-pixbuf/gdk-pixbuf.c:154 gtk/gtklayout.c:657
+#: gdk-pixbuf/gdk-pixbuf.c:154 gtk/gtklayout.c:659
 msgid "Height"
 msgstr "Ύψος"
 
@@ -228,7 +228,7 @@ msgstr "Ευαίσθητο"
 msgid "Whether the action is enabled."
 msgstr "Αν αυτή η ενέργεια θα είναι ενεργοποιημένη."
 
-#: gtk/gtkaction.c:264 gtk/gtkactiongroup.c:148 gtk/gtktreeview.c:561
+#: gtk/gtkaction.c:264 gtk/gtkactiongroup.c:148 gtk/gtktreeview.c:564
 #: gtk/gtktreeviewcolumn.c:223 gtk/gtkwidget.c:442
 msgid "Visible"
 msgstr "Ορατό"
@@ -1706,11 +1706,11 @@ msgstr ""
 "Ένα γραφικό συστατικό που θα εμφανίζεται στην θέση της σύνηθους ετικέτας "
 "expander"
 
-#: gtk/gtkexpander.c:246 gtk/gtktreeview.c:642
+#: gtk/gtkexpander.c:246 gtk/gtktreeview.c:645
 msgid "Expander Size"
 msgstr "Μέγεθος Expander"
 
-#: gtk/gtkexpander.c:247 gtk/gtktreeview.c:643
+#: gtk/gtkexpander.c:247 gtk/gtktreeview.c:646
 msgid "Size of the expander arrow"
 msgstr "Μέγεθος του βέλους ανάπτυξης"
 
@@ -1835,19 +1835,19 @@ msgstr "Αν θα εμφανίζονται κουμπιά για τη δημιο
 msgid "Select multiple"
 msgstr "Επιλογή πολλαπλών"
 
-#: gtk/gtkfixed.c:121 gtk/gtklayout.c:612
+#: gtk/gtkfixed.c:121 gtk/gtklayout.c:614
 msgid "X position"
 msgstr "Θέση X"
 
-#: gtk/gtkfixed.c:122 gtk/gtklayout.c:613
+#: gtk/gtkfixed.c:122 gtk/gtklayout.c:615
 msgid "X position of child widget"
 msgstr "Θέση X του θυγατρικού γραφικού συστατικού"
 
-#: gtk/gtkfixed.c:131 gtk/gtklayout.c:622
+#: gtk/gtkfixed.c:131 gtk/gtklayout.c:624
 msgid "Y position"
 msgstr "Θέση Υ"
 
-#: gtk/gtkfixed.c:132 gtk/gtklayout.c:623
+#: gtk/gtkfixed.c:132 gtk/gtklayout.c:625
 msgid "Y position of child widget"
 msgstr "Θέση Υ του θυγατρικού γραφικού συστατικού"
 
@@ -2160,27 +2160,27 @@ msgstr ""
 "Το γραφικό συστατικό που θα ενεργοποιείται όταν πατιέται το μνημονικό κλειδί "
 "της ετικέτας"
 
-#: gtk/gtklayout.c:632 gtk/gtkviewport.c:135
+#: gtk/gtklayout.c:634 gtk/gtkviewport.c:135
 msgid "Horizontal adjustment"
 msgstr "Οριζόντια ρύθμιση"
 
-#: gtk/gtklayout.c:633 gtk/gtkscrolledwindow.c:238
+#: gtk/gtklayout.c:635 gtk/gtkscrolledwindow.c:238
 msgid "The GtkAdjustment for the horizontal position"
 msgstr "Η GtkAdjustment για την οριζόντια θέση"
 
-#: gtk/gtklayout.c:640 gtk/gtkviewport.c:143
+#: gtk/gtklayout.c:642 gtk/gtkviewport.c:143
 msgid "Vertical adjustment"
 msgstr "Κάθετη ρύθμιση"
 
-#: gtk/gtklayout.c:641 gtk/gtkscrolledwindow.c:245
+#: gtk/gtklayout.c:643 gtk/gtkscrolledwindow.c:245
 msgid "The GtkAdjustment for the vertical position"
 msgstr "Η GtkAdjustment για την κάθετη θέση"
 
-#: gtk/gtklayout.c:649
+#: gtk/gtklayout.c:651
 msgid "The width of the layout"
 msgstr "Το πλάτος της διάταξης"
 
-#: gtk/gtklayout.c:658
+#: gtk/gtklayout.c:660
 msgid "The height of the layout"
 msgstr "Το ύψος της διάταξης"
 
@@ -2939,11 +2939,11 @@ msgstr ""
 "Προβολή ενός δεύτερου κουμπιού βέλους προς τα μπροστά στην αντίθετη άκρη της "
 "γραμμής κύλισης"
 
-#: gtk/gtkscrolledwindow.c:237 gtk/gtktext.c:602 gtk/gtktreeview.c:545
+#: gtk/gtkscrolledwindow.c:237 gtk/gtktext.c:602 gtk/gtktreeview.c:548
 msgid "Horizontal Adjustment"
 msgstr "Οριζόντια στοίχιση"
 
-#: gtk/gtkscrolledwindow.c:244 gtk/gtktext.c:610 gtk/gtktreeview.c:553
+#: gtk/gtkscrolledwindow.c:244 gtk/gtktext.c:610 gtk/gtktreeview.c:556
 msgid "Vertical Adjustment"
 msgstr "Κάθετη στοίχιση"
 
@@ -3882,131 +3882,131 @@ msgstr "Μοντέλο Δενδροειδούς Ταξινόμησης"
 msgid "The model for the TreeModelSort to sort"
 msgstr "Το μοντέλο για Δενδροειδή Ταξινόμηση"
 
-#: gtk/gtktreeview.c:537
+#: gtk/gtktreeview.c:540
 msgid "TreeView Model"
 msgstr "Μοντέλο Δενδροειδούς Προβολής"
 
-#: gtk/gtktreeview.c:538
+#: gtk/gtktreeview.c:541
 msgid "The model for the tree view"
 msgstr "Το μοντέλο για δενδροειδή προβολή"
 
-#: gtk/gtktreeview.c:546
+#: gtk/gtktreeview.c:549
 msgid "Horizontal Adjustment for the widget"
 msgstr "Οριζόντια στοίχιση για το γραφικό συστατικό"
 
-#: gtk/gtktreeview.c:554
+#: gtk/gtktreeview.c:557
 msgid "Vertical Adjustment for the widget"
 msgstr "Κάθετη  στοίχιση για το γραφικό συστατικό"
 
-#: gtk/gtktreeview.c:562
+#: gtk/gtktreeview.c:565
 msgid "Show the column header buttons"
 msgstr "Προβολή των κουμπιών της κεφαλίδας στήλης"
 
-#: gtk/gtktreeview.c:569
+#: gtk/gtktreeview.c:572
 msgid "Headers Clickable"
 msgstr "Δυνατότητα Κλικ στις Κεφαλίδες"
 
-#: gtk/gtktreeview.c:570
+#: gtk/gtktreeview.c:573
 msgid "Column headers respond to click events"
 msgstr "Οι κεφαλίδες στηλών να ανταποκρίνονται σε γεγονότα κλικ"
 
-#: gtk/gtktreeview.c:577
+#: gtk/gtktreeview.c:580
 msgid "Expander Column"
 msgstr "Διαστελλόμενη Στήλη"
 
-#: gtk/gtktreeview.c:578
+#: gtk/gtktreeview.c:581
 msgid "Set the column for the expander column"
 msgstr "Ορισμός στήλης για τη διαστελλόμενη στήλη"
 
-#: gtk/gtktreeview.c:585 gtk/gtktreeviewcolumn.c:330
+#: gtk/gtktreeview.c:588 gtk/gtktreeviewcolumn.c:330
 msgid "Reorderable"
 msgstr "Δυνατότητα αναταξινόμησης"
 
-#: gtk/gtktreeview.c:586
+#: gtk/gtktreeview.c:589
 msgid "View is reorderable"
 msgstr "Η προβολή έχει δυνατότητα αναταξινόμησης"
 
-#: gtk/gtktreeview.c:593
+#: gtk/gtktreeview.c:596
 msgid "Rules Hint"
 msgstr "Συμβουλή κανόνων"
 
-#: gtk/gtktreeview.c:594
+#: gtk/gtktreeview.c:597
 msgid "Set a hint to the theme engine to draw rows in alternating colors"
 msgstr ""
 "Ορισμός συμβουλής στη μηχανή θεμάτων για το σχεδιασμό γραμμών σε εναλλακτικά "
 "χρώματα."
 
-#: gtk/gtktreeview.c:601
+#: gtk/gtktreeview.c:604
 msgid "Enable Search"
 msgstr "Ενεργοποίηση Αναζήτησης"
 
-#: gtk/gtktreeview.c:602
+#: gtk/gtktreeview.c:605
 msgid "View allows user to search through columns interactively"
 msgstr "Η προβολή επιτρέπει τη  διαδραστική αναζήτηση μέσω στηλών"
 
-#: gtk/gtktreeview.c:609
+#: gtk/gtktreeview.c:612
 msgid "Search Column"
 msgstr "Στήλη Αναζήτησης"
 
-#: gtk/gtktreeview.c:610
+#: gtk/gtktreeview.c:613
 msgid "Model column to search through when searching through code"
 msgstr "Μοντέλο στήλης για αναζήτηση όταν γίνεται αναζήτηση μέσω κώδικα"
 
-#: gtk/gtktreeview.c:630
+#: gtk/gtktreeview.c:633
 msgid "Fixed Height Mode"
 msgstr "Λειτουργία σταθερού ύψους"
 
-#: gtk/gtktreeview.c:631
+#: gtk/gtktreeview.c:634
 msgid "Speeds up GtkTreeView by assuming that all rows have the same height"
 msgstr ""
 "Συντομεύει το GtkTreeView με το να θεωρεί ότι όλες οι γραμμές έχουν το ίδιο "
 "ύψος"
 
-#: gtk/gtktreeview.c:651
+#: gtk/gtktreeview.c:654
 msgid "Vertical Separator Width"
 msgstr "Πλάτος Κάθετου Διαχωριστικού"
 
-#: gtk/gtktreeview.c:652
+#: gtk/gtktreeview.c:655
 msgid "Vertical space between cells.  Must be an even number"
 msgstr "Κάθετο διάστημα μεταξύ κελιών. Πρέπει να είναι ζυγός αριθμός"
 
-#: gtk/gtktreeview.c:660
+#: gtk/gtktreeview.c:663
 msgid "Horizontal Separator Width"
 msgstr "Πλάτος Οριζόντιου Διαχωριστικού"
 
-#: gtk/gtktreeview.c:661
+#: gtk/gtktreeview.c:664
 msgid "Horizontal space between cells.  Must be an even number"
 msgstr "Οριζόντιο διάστημα μεταξύ κελιών. Πρέπει να είναι ζυγός αριθμός"
 
-#: gtk/gtktreeview.c:669
+#: gtk/gtktreeview.c:672
 msgid "Allow Rules"
 msgstr "Να Επιτρέπονται Κανόνες"
 
-#: gtk/gtktreeview.c:670
+#: gtk/gtktreeview.c:673
 msgid "Allow drawing of alternating color rows"
 msgstr "Να επιτρέπεται ο σχεδιασμός γραμμών με εναλλαγές γραμμές χρωμάτων"
 
-#: gtk/gtktreeview.c:676
+#: gtk/gtktreeview.c:679
 msgid "Indent Expanders"
 msgstr "Εσοχή Διαστελλόμενων Στοιχείων"
 
-#: gtk/gtktreeview.c:677
+#: gtk/gtktreeview.c:680
 msgid "Make the expanders indented"
 msgstr "Να οριοθετείται η εσοχή των διαστελλόμενων στοιχείων"
 
-#: gtk/gtktreeview.c:683
+#: gtk/gtktreeview.c:686
 msgid "Even Row Color"
 msgstr "Χρώμα Ζυγής Γραμμής"
 
-#: gtk/gtktreeview.c:684
+#: gtk/gtktreeview.c:687
 msgid "Color to use for even rows"
 msgstr "Χρώμα που θα χρησιμοποιείται για τις ζυγές γραμμές"
 
-#: gtk/gtktreeview.c:690
+#: gtk/gtktreeview.c:693
 msgid "Odd Row Color"
 msgstr "Χρώμα Μονής Γραμμής"
 
-#: gtk/gtktreeview.c:691
+#: gtk/gtktreeview.c:694
 msgid "Color to use for odd rows"
 msgstr "Χρώμα που θα χρησιμοποιείται για τις μονές γραμμές"
 
