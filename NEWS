@@ -22,6 +22,8 @@ Overview of Changes from GTK+ 2.3.2 to GTK+ 2.3.3
 * Remove C++-style comments. [Damien Carbery]
 * Memory leak fixes. [Christian Persch]
 * Miscellaneous fixes. [Morten Welinder]
+* Documentation:
+ - New section on how to check for modifier keys correctly. [Federico]
 
 Overview of Changes from GTK+ 2.3.1 to GTK+ 2.3.2
 =================================================
