@@ -196,7 +196,7 @@ struct _TreeRowData
 };
 
 /**
- * gtk_selection_data_set_tree_row:
+ * gtk_tree_set_row_drag_data:
  * @selection_data: some #GtkSelectionData
  * @tree_model: a #GtkTreeModel
  * @path: a row in @tree_model
@@ -207,9 +207,9 @@ struct _TreeRowData
  * Return value: %TRUE if the #GtkSelectionData had the proper target type to allow us to set a tree row
  **/
 gboolean
-gtk_selection_data_set_tree_row (GtkSelectionData *selection_data,
-                                 GtkTreeModel     *tree_model,
-                                 GtkTreePath      *path)
+gtk_tree_set_row_drag_data (GtkSelectionData *selection_data,
+			    GtkTreeModel     *tree_model,
+			    GtkTreePath      *path)
 {
   TreeRowData *trd;
   gchar *path_str;
@@ -249,7 +249,7 @@ gtk_selection_data_set_tree_row (GtkSelectionData *selection_data,
 }
 
 /**
- * gtk_selection_data_get_tree_row:
+ * gtk_tree_get_row_drag_data:
  * @selection_data: a #GtkSelectionData
  * @tree_model: a #GtkTreeModel
  * @path: row in @tree_model
@@ -268,9 +268,9 @@ gtk_selection_data_set_tree_row (GtkSelectionData *selection_data,
  *  is otherwise valid
  **/
 gboolean
-gtk_selection_data_get_tree_row (GtkSelectionData *selection_data,
-                                 GtkTreeModel    **tree_model,
-                                 GtkTreePath     **path)
+gtk_tree_get_row_drag_data (GtkSelectionData  *selection_data,
+			    GtkTreeModel     **tree_model,
+			    GtkTreePath      **path)
 {
   TreeRowData *trd;
   

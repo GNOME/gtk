@@ -1390,9 +1390,9 @@ gtk_tree_store_drag_data_get (GtkTreeDragSource *drag_source,
    * default handler.
    */
 
-  if (gtk_selection_data_set_tree_row (selection_data,
-                                       GTK_TREE_MODEL (drag_source),
-                                       path))
+  if (gtk_tree_set_row_drag_data (selection_data,
+				  GTK_TREE_MODEL (drag_source),
+				  path))
     {
       return TRUE;
     }
@@ -1492,9 +1492,9 @@ gtk_tree_store_drag_data_received (GtkTreeDragDest   *drag_dest,
 
   validate_tree (tree_store);
 
-  if (gtk_selection_data_get_tree_row (selection_data,
-                                       &src_model,
-                                       &src_path) &&
+  if (gtk_tree_get_row_drag_data (selection_data,
+				  &src_model,
+				  &src_path) &&
       src_model == tree_model)
     {
       /* Copy the given row to a new position */

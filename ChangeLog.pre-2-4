@@ -1,3 +1,13 @@
+Wed Oct 31 16:53:48 2001  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtktreednd.c (gtk_tree_set_row_drag_data): rename
+	gtk_selection_data_set_tree_row, #60218
+	(gtk_tree_get_row_drag_data): rename
+	gtk_selection_data_get_tree_row, #60218
+
+	* gtk/gtktreemodel.c (gtk_tree_row_ref_deleted_callback): Actually
+	get this right, after the third try, #63122.
+
 2001-10-31  jacob berkman  <jacob@ximian.com>
 
 	* gdk/gdkselection.h (GDK_TARGET_STRING): 

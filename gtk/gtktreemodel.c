@@ -397,7 +397,7 @@ gtk_tree_path_compare (const GtkTreePath *a,
  * @path: a #GtkTreePath
  * @descendant: another #GtkTreePath
  *
- *
+ * Returns %TRUE is @descendant is a descendant of @path.
  *
  * Return value: %TRUE if @descendant is contained inside @path
  **/
@@ -1303,15 +1303,24 @@ gtk_tree_row_ref_deleted_callback (GObject     *object,
 
       if (reference->path)
 	{
-	  if (gtk_tree_path_is_ancestor (path, reference->path))
-	    {
-	      reference->path->indices[path->depth-1]-=1;
-	    }
-	  else if (gtk_tree_path_compare (path, reference->path) == 0)
+	  gint i;
+
+	  if (path->depth > reference->path->depth)
+	    continue;
+	  for (i = 0; i < path->depth - 1; i++)
+	    if (path->indices[i] != reference->path->indices[i])
+	      continue;
+
+	  /* We know it affects us. */
+	  if (path->indices[i] == reference->path->indices[i])
 	    {
 	      gtk_tree_row_reference_unref_path (reference->path, reference->model, FALSE);
 	      gtk_tree_path_free (reference->path);
 	      reference->path = NULL;
+	    }
+	  else if (path->indices[i] < reference->path->indices[i])
+	    {
+	      reference->path->indices[path->depth-1]-=1;
 	    }
 	}
       tmp_list = g_slist_next (tmp_list);

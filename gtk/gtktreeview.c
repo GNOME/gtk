@@ -3581,9 +3581,9 @@ gtk_tree_view_drag_data_get (GtkWidget        *widget,
   /* If drag_data_get does nothing, try providing row data. */
   if (selection_data->target == gdk_atom_intern ("GTK_TREE_MODEL_ROW", FALSE))
     {
-      gtk_selection_data_set_tree_row (selection_data,
-                                       model,
-                                       source_row);
+      gtk_tree_set_row_drag_data (selection_data,
+				  model,
+				  source_row);
     }
 
  done:
@@ -3809,9 +3809,9 @@ gtk_tree_view_drag_data_received (GtkWidget        *widget,
           GtkTreeModel *src_model = NULL;
           GtkTreePath *src_path = NULL;
 
-          if (!gtk_selection_data_get_tree_row (selection_data,
-                                                &src_model,
-                                                &src_path))
+          if (!gtk_tree_get_row_drag_data (selection_data,
+					   &src_model,
+					   &src_path))
             suggested_action = 0;
 
           if (suggested_action)
