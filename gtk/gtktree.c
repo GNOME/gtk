@@ -178,7 +178,7 @@ gtk_tree_init (GtkTree *tree)
   tree->current_indent = 0;
   tree->level = 0;
   tree->view_mode = GTK_TREE_VIEW_LINE;
-  tree->view_line = 1;
+  tree->view_line = TRUE;
 }
 
 GtkWidget*
@@ -1194,7 +1194,7 @@ gtk_tree_set_view_mode (GtkTree       *tree,
 
 void
 gtk_tree_set_view_lines (GtkTree       *tree,
-			 guint          flag) 
+			 gboolean	flag) 
 {
   g_return_if_fail (tree != NULL);
   g_return_if_fail (GTK_IS_TREE (tree));

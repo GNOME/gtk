@@ -122,17 +122,17 @@ void       gtk_window_set_wmclass              (GtkWindow           *window,
 void       gtk_window_set_role                 (GtkWindow           *window,
                                                 const gchar         *role);
 void       gtk_window_set_policy               (GtkWindow           *window,
-						gint                 allow_shrink,
-						gint                 allow_grow,
-						gint                 auto_shrink);
+						gboolean	     allow_shrink,
+						gboolean	     allow_grow,
+						gboolean	     auto_shrink);
 void       gtk_window_add_accel_group          (GtkWindow           *window,
 						GtkAccelGroup	    *accel_group);
 void       gtk_window_remove_accel_group       (GtkWindow           *window,
 						GtkAccelGroup	    *accel_group);
 void       gtk_window_set_position             (GtkWindow           *window,
 						GtkWindowPosition    position);
-gint	   gtk_window_activate_focus	       (GtkWindow           *window);
-gint	   gtk_window_activate_default	       (GtkWindow           *window);
+gboolean   gtk_window_activate_focus	       (GtkWindow           *window);
+gboolean   gtk_window_activate_default	       (GtkWindow           *window);
 
 void       gtk_window_set_transient_for        (GtkWindow           *window, 
 						GtkWindow           *parent);

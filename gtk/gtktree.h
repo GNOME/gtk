@@ -120,7 +120,7 @@ void       gtk_tree_set_selection_mode (GtkTree          *tree,
 void       gtk_tree_set_view_mode      (GtkTree          *tree,
 				        GtkTreeViewMode   mode); 
 void       gtk_tree_set_view_lines     (GtkTree          *tree,
-					guint            flag);
+					gboolean	  flag);
 
 /* deprecated function, use gtk_container_remove instead.
  */

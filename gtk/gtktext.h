@@ -185,9 +185,9 @@ GtkWidget* gtk_text_new             (GtkAdjustment *hadj,
 void       gtk_text_set_editable    (GtkText       *text,
 				     gboolean       editable);
 void       gtk_text_set_word_wrap   (GtkText       *text,
-				     gint           word_wrap);
+				     gboolean       word_wrap);
 void       gtk_text_set_line_wrap   (GtkText       *text,
-				     gint           line_wrap);
+				     gboolean       line_wrap);
 void       gtk_text_set_adjustments (GtkText       *text,
 				     GtkAdjustment *hadj,
 				     GtkAdjustment *vadj);
@@ -203,9 +203,9 @@ void       gtk_text_insert          (GtkText       *text,
 				     GdkColor      *back,
 				     const char    *chars,
 				     gint           length);
-gint       gtk_text_backward_delete (GtkText       *text,
+gboolean   gtk_text_backward_delete (GtkText       *text,
 				     guint          nchars);
-gint       gtk_text_forward_delete  (GtkText       *text,
+gboolean   gtk_text_forward_delete  (GtkText       *text,
 				     guint          nchars);
 
 #define GTK_TEXT_INDEX(t, index)	(((t)->use_wchar) \

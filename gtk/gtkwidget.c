@@ -1428,7 +1428,7 @@ gtk_widget_real_hide (GtkWidget *widget)
  * 
  * Return value: %TRUE
  **/
-gint
+gboolean
 gtk_widget_hide_on_delete (GtkWidget      *widget)
 {
   g_return_val_if_fail (widget != NULL, FALSE);
@@ -2242,7 +2242,7 @@ gtk_widget_real_focus_out_event (GtkWidget     *widget,
  * 
  * Return value: return from the event signal emission (%TRUE if the event was handled)
  **/
-gint
+gboolean
 gtk_widget_event (GtkWidget *widget,
 		  GdkEvent  *event)
 {

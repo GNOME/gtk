@@ -78,7 +78,7 @@ void	   gtk_pixmap_get	 (GtkPixmap  *pixmap,
 				  GdkBitmap **mask);
 
 void       gtk_pixmap_set_build_insensitive (GtkPixmap *pixmap,
-		                             guint build);
+		                             gboolean   build);
 
 
 #ifdef __cplusplus

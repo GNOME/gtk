@@ -300,14 +300,14 @@ gtk_menu_item_set_placement (GtkMenuItem         *menu_item,
 
 void
 gtk_menu_item_configure (GtkMenuItem *menu_item,
-			 gint         show_toggle_indicator,
-			 gint         show_submenu_indicator)
+			 gboolean     show_toggle_indicator,
+			 gboolean     show_submenu_indicator)
 {
   g_return_if_fail (menu_item != NULL);
   g_return_if_fail (GTK_IS_MENU_ITEM (menu_item));
 
-  menu_item->show_toggle_indicator = (show_toggle_indicator == TRUE);
-  menu_item->show_submenu_indicator = (show_submenu_indicator == TRUE);
+  menu_item->show_toggle_indicator = show_toggle_indicator;
+  menu_item->show_submenu_indicator = show_submenu_indicator;
 }
 
 void

@@ -1449,7 +1449,7 @@ gtk_calendar_draw_focus (GtkWidget *widget)
     }
 }
 
-static gint
+static gboolean
 gtk_calendar_expose (GtkWidget	    *widget,
 		     GdkEventExpose *event)
 {
@@ -2161,7 +2161,7 @@ gtk_calendar_display_options (GtkCalendar	       *calendar,
   
 }
 
-gint
+gboolean
 gtk_calendar_select_month (GtkCalendar *calendar,
 			   guint	month,
 			   guint	year)
@@ -2238,7 +2238,7 @@ gtk_calendar_clear_marks (GtkCalendar *calendar)
     }
 }
 
-gint
+gboolean
 gtk_calendar_mark_day (GtkCalendar *calendar,
 		       guint	    day)
 {
@@ -2258,7 +2258,7 @@ gtk_calendar_mark_day (GtkCalendar *calendar,
   return TRUE;
 }
 
-gint
+gboolean
 gtk_calendar_unmark_day (GtkCalendar *calendar,
 			 guint	      day)
 {
@@ -2298,7 +2298,7 @@ gtk_calendar_get_date (GtkCalendar *calendar,
     *day = calendar->selected_day;
 }
 
-static gint
+static gboolean
 gtk_calendar_button_press (GtkWidget	  *widget,
 			   GdkEventButton *event)
 {
@@ -2337,7 +2337,7 @@ gtk_calendar_button_press (GtkWidget	  *widget,
   return FALSE;
 }
 
-static gint
+static gboolean
 gtk_calendar_motion_notify (GtkWidget	   *widget,
 			    GdkEventMotion *event)
 {
@@ -2379,7 +2379,7 @@ gtk_calendar_motion_notify (GtkWidget	   *widget,
   return TRUE;
 }
 
-static gint
+static gboolean
 gtk_calendar_enter_notify (GtkWidget	    *widget,
 			   GdkEventCrossing *event)
 {
@@ -2419,7 +2419,7 @@ gtk_calendar_enter_notify (GtkWidget	    *widget,
   return TRUE;
 }
 
-static gint
+static gboolean
 gtk_calendar_leave_notify (GtkWidget	    *widget,
 			   GdkEventCrossing *event)
 {
@@ -2625,7 +2625,7 @@ gtk_calendar_destroy (GtkObject *object)
     (* GTK_OBJECT_CLASS (parent_class)->destroy) (object);
 }
 
-static gint
+static gboolean
 gtk_calendar_key_press (GtkWidget   *widget,
 			GdkEventKey *event)
 {

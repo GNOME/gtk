@@ -30,6 +30,7 @@ GtkCellRenderer
 </para>
 
 @parent: 
+@can_activate: 
 @visible: 
 @xalign: 
 @yalign: 
@@ -43,6 +44,9 @@ GtkCellRenderer
 
 @cell: 
 @widget: 
+@cell_area: 
+@x_offset: 
+@y_offset: 
 @width: 
 @height: 
 

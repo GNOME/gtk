@@ -245,7 +245,7 @@ gtk_pixmap_expose (GtkWidget      *widget,
 }
 
 void
-gtk_pixmap_set_build_insensitive (GtkPixmap *pixmap, guint build)
+gtk_pixmap_set_build_insensitive (GtkPixmap *pixmap, gboolean build)
 {
   g_return_if_fail (pixmap != NULL);
   g_return_if_fail (GTK_IS_PIXMAP (pixmap));

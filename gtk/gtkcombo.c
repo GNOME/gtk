@@ -724,11 +724,11 @@ gtk_combo_init (GtkCombo * combo)
   GtkWidget *event_box;
   GdkCursor *cursor;
 
-  combo->case_sensitive = 0;
-  combo->value_in_list = 0;
-  combo->ok_if_empty = 1;
-  combo->use_arrows = 1;
-  combo->use_arrows_always = 0;
+  combo->case_sensitive = FALSE;
+  combo->value_in_list = FALSE;
+  combo->ok_if_empty = TRUE;
+  combo->use_arrows = TRUE;
+  combo->use_arrows_always = FALSE;
   combo->entry = gtk_entry_new ();
   combo->button = gtk_button_new ();
   combo->current_button = 0;
@@ -849,7 +849,7 @@ gtk_combo_new (void)
 }
 
 void
-gtk_combo_set_value_in_list (GtkCombo * combo, gint val, gint ok_if_empty)
+gtk_combo_set_value_in_list (GtkCombo * combo, gboolean val, gboolean ok_if_empty)
 {
   g_return_if_fail (combo != NULL);
   g_return_if_fail (GTK_IS_COMBO (combo));
@@ -859,7 +859,7 @@ gtk_combo_set_value_in_list (GtkCombo * combo, gint val, gint ok_if_empty)
 }
 
 void
-gtk_combo_set_case_sensitive (GtkCombo * combo, gint val)
+gtk_combo_set_case_sensitive (GtkCombo * combo, gboolean val)
 {
   g_return_if_fail (combo != NULL);
   g_return_if_fail (GTK_IS_COMBO (combo));
@@ -869,7 +869,7 @@ gtk_combo_set_case_sensitive (GtkCombo * combo, gint val)
 }
 
 void
-gtk_combo_set_use_arrows (GtkCombo * combo, gint val)
+gtk_combo_set_use_arrows (GtkCombo * combo, gboolean val)
 {
   g_return_if_fail (combo != NULL);
   g_return_if_fail (GTK_IS_COMBO (combo));
@@ -879,13 +879,13 @@ gtk_combo_set_use_arrows (GtkCombo * combo, gint val)
 }
 
 void
-gtk_combo_set_use_arrows_always (GtkCombo * combo, gint val)
+gtk_combo_set_use_arrows_always (GtkCombo * combo, gboolean val)
 {
   g_return_if_fail (combo != NULL);
   g_return_if_fail (GTK_IS_COMBO (combo));
 
   combo->use_arrows_always = val;
-  combo->use_arrows = 1;
+  combo->use_arrows = TRUE;
   g_object_notify (G_OBJECT (combo), "enable_arrows");
   g_object_notify (G_OBJECT (combo), "enable_arrows_always");
 }

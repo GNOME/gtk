@@ -450,7 +450,7 @@ gtk_arg_reset (GtkArg *arg)
     arg->type = GTK_TYPE_INVALID;
 }
 
-gint
+gboolean
 gtk_arg_info_equal (gconstpointer arg_info_1,
 		    gconstpointer arg_info_2)
 {

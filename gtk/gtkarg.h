@@ -92,7 +92,7 @@ GtkArg*		gtk_args_query		 (GtkType	class_type,
 					  guint32      **arg_flags,
 					  guint	       *n_args_p);
 gchar*		gtk_arg_name_strip_type	 (const gchar   *arg_name);
-gint		gtk_arg_info_equal	 (gconstpointer	 arg_info_1,
+gboolean	gtk_arg_info_equal	 (gconstpointer	 arg_info_1,
 					  gconstpointer	 arg_info_2);
 guint		gtk_arg_info_hash	 (gconstpointer	 arg_info);
 void		gtk_arg_to_valueloc	 (GtkArg	*arg,

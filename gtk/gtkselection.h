@@ -116,7 +116,7 @@ void     gtk_selection_add_targets   (GtkWidget            *widget,
 				      guint                 ntargets);
 void     gtk_selection_clear_targets (GtkWidget            *widget,
 				      GdkAtom               selection);
-gint     gtk_selection_convert       (GtkWidget            *widget,
+gboolean gtk_selection_convert       (GtkWidget            *widget,
 				      GdkAtom               selection,
 				      GdkAtom               target,
 				      guint32               time);
@@ -135,16 +135,16 @@ void gtk_selection_remove_all      (GtkWidget *widget);
 
 /* Event handlers */
 
-gint gtk_selection_clear           (GtkWidget 	      *widget,
-				    GdkEventSelection *event);
-gint gtk_selection_request         (GtkWidget  	      *widget,
-				    GdkEventSelection *event);
-gint gtk_selection_incr_event      (GdkWindow         *window,
-				    GdkEventProperty  *event);
-gint gtk_selection_notify          (GtkWidget         *widget,
-				    GdkEventSelection *event);
-gint gtk_selection_property_notify (GtkWidget         *widget,
-				    GdkEventProperty  *event);
+gboolean gtk_selection_clear		  (GtkWidget 	     *widget,
+					   GdkEventSelection *event);
+gboolean gtk_selection_request		  (GtkWidget  	     *widget,
+					   GdkEventSelection *event);
+gboolean gtk_selection_incr_event	  (GdkWindow         *window,
+					   GdkEventProperty  *event);
+gboolean gtk_selection_notify		  (GtkWidget         *widget,
+					   GdkEventSelection *event);
+gboolean gtk_selection_property_notify	  (GtkWidget         *widget,
+					   GdkEventProperty  *event);
 GtkSelectionData *gtk_selection_data_copy (GtkSelectionData *data);
 void		  gtk_selection_data_free (GtkSelectionData *data);
 

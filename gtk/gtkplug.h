@@ -53,7 +53,7 @@ struct _GtkPlug
   GtkWindow window;
 
   GdkWindow *socket_window;
-  gint same_app;
+  gboolean   same_app;
 };
 
 struct _GtkPlugClass

@@ -166,7 +166,7 @@ gtk_adjustment_clamp_page (GtkAdjustment *adjustment,
 			   gfloat         lower,
 			   gfloat         upper)
 {
-  gint need_emission;
+  gboolean need_emission;
 
   g_return_if_fail (adjustment != NULL);
   g_return_if_fail (GTK_IS_ADJUSTMENT (adjustment));

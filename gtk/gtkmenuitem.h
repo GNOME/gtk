@@ -96,8 +96,8 @@ void       gtk_menu_item_remove_submenu       (GtkMenuItem         *menu_item);
 void       gtk_menu_item_set_placement        (GtkMenuItem         *menu_item,
 					       GtkSubmenuPlacement  placement);
 void       gtk_menu_item_configure            (GtkMenuItem         *menu_item,
-					       gint                 show_toggle_indicator,
-					       gint                 show_submenu_indicator);
+					       gboolean		    show_toggle_indicator,
+					       gboolean		    show_submenu_indicator);
 void       gtk_menu_item_select               (GtkMenuItem         *menu_item);
 void       gtk_menu_item_deselect             (GtkMenuItem         *menu_item);
 void       gtk_menu_item_activate             (GtkMenuItem         *menu_item);

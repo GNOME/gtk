@@ -628,7 +628,7 @@ gtk_selection_remove_all (GtkWidget *widget)
  *     this widget). 
  *************************************************************/
 
-gint
+gboolean
 gtk_selection_convert (GtkWidget *widget, 
 		       GdkAtom	  selection, 
 		       GdkAtom	  target,
@@ -902,7 +902,7 @@ gtk_selection_init (void)
  *   results:
  *************************************************************/
 
-gint
+gboolean
 gtk_selection_clear (GtkWidget         *widget,
 		     GdkEventSelection *event)
 {
@@ -945,7 +945,7 @@ gtk_selection_clear (GtkWidget         *widget,
  *   results:
  *************************************************************/
 
-gint
+gboolean
 gtk_selection_request (GtkWidget *widget,
 		       GdkEventSelection *event)
 {
@@ -1160,7 +1160,7 @@ gtk_selection_request (GtkWidget *widget,
  *   results:
  *************************************************************/
 
-gint
+gboolean
 gtk_selection_incr_event (GdkWindow	   *window,
 			  GdkEventProperty *event)
 {
@@ -1334,7 +1334,7 @@ gtk_selection_incr_timeout (GtkIncrInfo *info)
  *     was event handled?
  *************************************************************/
 
-gint
+gboolean
 gtk_selection_notify (GtkWidget	       *widget,
 		      GdkEventSelection *event)
 {
@@ -1421,7 +1421,7 @@ gtk_selection_notify (GtkWidget	       *widget,
  *     was event handled?
  *************************************************************/
 
-gint
+gboolean
 gtk_selection_property_notify (GtkWidget	*widget,
 			       GdkEventProperty *event)
 {

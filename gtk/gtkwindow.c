@@ -737,9 +737,9 @@ gtk_window_set_default (GtkWindow *window,
 
 void
 gtk_window_set_policy (GtkWindow *window,
-		       gint       allow_shrink,
-		       gint       allow_grow,
-		       gint       auto_shrink)
+		       gboolean   allow_shrink,
+		       gboolean   allow_grow,
+		       gboolean   auto_shrink)
 {
   g_return_if_fail (window != NULL);
   g_return_if_fail (GTK_IS_WINDOW (window));
@@ -812,7 +812,7 @@ gtk_window_set_position (GtkWindow         *window,
   g_object_notify (G_OBJECT (window), "window_position");
 }
 
-gint
+gboolean 
 gtk_window_activate_focus (GtkWindow      *window)
 {
   g_return_val_if_fail (window != NULL, FALSE);
@@ -828,7 +828,7 @@ gtk_window_activate_focus (GtkWindow      *window)
   return FALSE;
 }
 
-gint
+gboolean
 gtk_window_activate_default (GtkWindow      *window)
 {
   g_return_val_if_fail (window != NULL, FALSE);

@@ -171,10 +171,10 @@ gtk_progress_get_arg (GtkObject      *object,
   switch (arg_id)
     {
     case ARG_ACTIVITY_MODE:
-      GTK_VALUE_BOOL (*arg) = (progress->activity_mode != 0);
+      GTK_VALUE_BOOL (*arg) = (progress->activity_mode != FALSE);
       break;
     case ARG_SHOW_TEXT:
-      GTK_VALUE_BOOL (*arg) = (progress->show_text != 0);
+      GTK_VALUE_BOOL (*arg) = (progress->show_text != FALSE);
       break;
     case ARG_TEXT_XALIGN:
       GTK_VALUE_FLOAT (*arg) = progress->x_align;
@@ -591,7 +591,7 @@ gtk_progress_get_value (GtkProgress *progress)
 
 void
 gtk_progress_set_show_text (GtkProgress *progress,
-			    gint        show_text)
+			    gboolean     show_text)
 {
   g_return_if_fail (progress != NULL);
   g_return_if_fail (GTK_IS_PROGRESS (progress));
@@ -677,14 +677,14 @@ gtk_progress_get_text_from_value (GtkProgress *progress,
 
 void
 gtk_progress_set_activity_mode (GtkProgress *progress,
-				guint        activity_mode)
+				gboolean     activity_mode)
 {
   g_return_if_fail (progress != NULL);
   g_return_if_fail (GTK_IS_PROGRESS (progress));
 
-  if (progress->activity_mode != (activity_mode != 0))
+  if (progress->activity_mode != (activity_mode != FALSE))
     {
-      progress->activity_mode = (activity_mode != 0);
+      progress->activity_mode = (activity_mode != FALSE);
 
       if (progress->activity_mode)
 	GTK_PROGRESS_GET_CLASS (progress)->act_mode_enter (progress);

@@ -1144,7 +1144,7 @@ gtk_toolbar_set_space_style (GtkToolbar           *toolbar,
 
 void
 gtk_toolbar_set_tooltips (GtkToolbar *toolbar,
-			  gint        enable)
+			  gboolean    enable)
 {
   g_return_if_fail (toolbar != NULL);
   g_return_if_fail (GTK_IS_TOOLBAR (toolbar));

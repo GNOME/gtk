@@ -709,7 +709,7 @@ gtk_button_paint (GtkWidget    *widget,
     }
 }
 
-static gint
+static gboolean
 gtk_button_expose (GtkWidget      *widget,
 		   GdkEventExpose *event)
 {
@@ -731,7 +731,7 @@ gtk_button_expose (GtkWidget      *widget,
   return FALSE;
 }
 
-static gint
+static gboolean
 gtk_button_button_press (GtkWidget      *widget,
 			 GdkEventButton *event)
 {
@@ -755,7 +755,7 @@ gtk_button_button_press (GtkWidget      *widget,
   return TRUE;
 }
 
-static gint
+static gboolean
 gtk_button_button_release (GtkWidget      *widget,
 			   GdkEventButton *event)
 {
@@ -791,7 +791,7 @@ gtk_button_key_release (GtkWidget   *widget,
     return FALSE;
 }
 
-static gint
+static gboolean
 gtk_button_enter_notify (GtkWidget        *widget,
 			 GdkEventCrossing *event)
 {
@@ -815,7 +815,7 @@ gtk_button_enter_notify (GtkWidget        *widget,
   return FALSE;
 }
 
-static gint
+static gboolean
 gtk_button_leave_notify (GtkWidget        *widget,
 			 GdkEventCrossing *event)
 {

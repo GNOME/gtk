@@ -211,7 +211,7 @@ void       gtk_toolbar_set_space_size        (GtkToolbar           *toolbar,
 void       gtk_toolbar_set_space_style       (GtkToolbar           *toolbar,
 					      GtkToolbarSpaceStyle  space_style);
 void       gtk_toolbar_set_tooltips          (GtkToolbar           *toolbar,
-					      gint                  enable);
+					      gboolean		    enable);
 void       gtk_toolbar_set_button_relief     (GtkToolbar           *toolbar,
 					      GtkReliefStyle        relief);
 GtkReliefStyle gtk_toolbar_get_button_relief (GtkToolbar           *toolbar);

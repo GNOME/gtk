@@ -464,7 +464,7 @@ guint	   gtk_widget_accelerator_signal  (GtkWidget           *widget,
 void	   gtk_widget_lock_accelerators   (GtkWidget	       *widget);
 void	   gtk_widget_unlock_accelerators (GtkWidget	       *widget);
 gboolean   gtk_widget_accelerators_locked (GtkWidget	       *widget);
-gint	   gtk_widget_event		  (GtkWidget	       *widget,
+gboolean   gtk_widget_event		  (GtkWidget	       *widget,
 					   GdkEvent	       *event);
 gint       gtk_widget_send_expose         (GtkWidget           *widget,
 					   GdkEvent            *event);
@@ -544,7 +544,7 @@ gboolean     gtk_widget_is_ancestor	(GtkWidget	*widget,
 
 /* Hide widget and return TRUE.
  */
-gint	   gtk_widget_hide_on_delete	(GtkWidget	*widget);
+gboolean     gtk_widget_hide_on_delete	(GtkWidget	*widget);
 
 /* Widget styles.
  */

@@ -64,7 +64,7 @@ static GMemChunk	*accel_entries_mem_chunk = NULL;
 
 
 /* --- functions --- */
-static gint
+static gboolean
 gtk_accel_entries_equal (gconstpointer a,
 			 gconstpointer b)
 {

@@ -4884,54 +4884,54 @@ gtk_ctree_node_get_cell_type (GtkCTree     *ctree,
   return GTK_CTREE_ROW (node)->row.cell[column].type;
 }
 
-gint
+gboolean
 gtk_ctree_node_get_text (GtkCTree      *ctree,
 			 GtkCTreeNode  *node,
 			 gint           column,
 			 gchar        **text)
 {
-  g_return_val_if_fail (ctree != NULL, 0);
-  g_return_val_if_fail (GTK_IS_CTREE (ctree), 0);
-  g_return_val_if_fail (node != NULL, 0);
+  g_return_val_if_fail (ctree != NULL, FALSE);
+  g_return_val_if_fail (GTK_IS_CTREE (ctree), FALSE);
+  g_return_val_if_fail (node != NULL, FALSE);
 
   if (column < 0 || column >= GTK_CLIST (ctree)->columns)
-    return 0;
+    return FALSE;
 
   if (GTK_CTREE_ROW (node)->row.cell[column].type != GTK_CELL_TEXT)
-    return 0;
+    return FALSE;
 
   if (text)
     *text = GTK_CELL_TEXT (GTK_CTREE_ROW (node)->row.cell[column])->text;
 
-  return 1;
+  return TRUE;
 }
 
-gint
+gboolean
 gtk_ctree_node_get_pixmap (GtkCTree     *ctree,
 			   GtkCTreeNode *node,
 			   gint          column,
 			   GdkPixmap   **pixmap,
 			   GdkBitmap   **mask)
 {
-  g_return_val_if_fail (ctree != NULL, 0);
-  g_return_val_if_fail (GTK_IS_CTREE (ctree), 0);
-  g_return_val_if_fail (node != NULL, 0);
+  g_return_val_if_fail (ctree != NULL, FALSE);
+  g_return_val_if_fail (GTK_IS_CTREE (ctree), FALSE);
+  g_return_val_if_fail (node != NULL, FALSE);
 
   if (column < 0 || column >= GTK_CLIST (ctree)->columns)
-    return 0;
+    return FALSE;
 
   if (GTK_CTREE_ROW (node)->row.cell[column].type != GTK_CELL_PIXMAP)
-    return 0;
+    return FALSE;
 
   if (pixmap)
     *pixmap = GTK_CELL_PIXMAP (GTK_CTREE_ROW(node)->row.cell[column])->pixmap;
   if (mask)
     *mask = GTK_CELL_PIXMAP (GTK_CTREE_ROW (node)->row.cell[column])->mask;
 
-  return 1;
+  return TRUE;
 }
 
-gint
+gboolean
 gtk_ctree_node_get_pixtext (GtkCTree      *ctree,
 			    GtkCTreeNode  *node,
 			    gint           column,
@@ -4940,15 +4940,15 @@ gtk_ctree_node_get_pixtext (GtkCTree      *ctree,
 			    GdkPixmap    **pixmap,
 			    GdkBitmap    **mask)
 {
-  g_return_val_if_fail (ctree != NULL, 0);
-  g_return_val_if_fail (GTK_IS_CTREE (ctree), 0);
-  g_return_val_if_fail (node != NULL, 0);
+  g_return_val_if_fail (ctree != NULL, FALSE);
+  g_return_val_if_fail (GTK_IS_CTREE (ctree), FALSE);
+  g_return_val_if_fail (node != NULL, FALSE);
   
   if (column < 0 || column >= GTK_CLIST (ctree)->columns)
-    return 0;
+    return FALSE;
   
   if (GTK_CTREE_ROW (node)->row.cell[column].type != GTK_CELL_PIXTEXT)
-    return 0;
+    return FALSE;
   
   if (text)
     *text = GTK_CELL_PIXTEXT (GTK_CTREE_ROW (node)->row.cell[column])->text;
@@ -4961,10 +4961,10 @@ gtk_ctree_node_get_pixtext (GtkCTree      *ctree,
   if (mask)
     *mask = GTK_CELL_PIXTEXT (GTK_CTREE_ROW (node)->row.cell[column])->mask;
   
-  return 1;
+  return TRUE;
 }
 
-gint
+gboolean
 gtk_ctree_get_node_info (GtkCTree      *ctree,
 			 GtkCTreeNode  *node,
 			 gchar        **text,
@@ -4976,9 +4976,9 @@ gtk_ctree_get_node_info (GtkCTree      *ctree,
 			 gboolean      *is_leaf,
 			 gboolean      *expanded)
 {
-  g_return_val_if_fail (ctree != NULL, 0);
-  g_return_val_if_fail (GTK_IS_CTREE (ctree), 0);
-  g_return_val_if_fail (node != NULL, 0);
+  g_return_val_if_fail (ctree != NULL, FALSE);
+  g_return_val_if_fail (GTK_IS_CTREE (ctree), FALSE);
+  g_return_val_if_fail (node != NULL, FALSE);
   
   if (text)
     *text = GTK_CELL_PIXTEXT 
@@ -4999,7 +4999,7 @@ gtk_ctree_get_node_info (GtkCTree      *ctree,
   if (expanded)
     *expanded = GTK_CTREE_ROW (node)->expanded;
   
-  return 1;
+  return TRUE;
 }
 
 void

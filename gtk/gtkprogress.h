@@ -84,7 +84,7 @@ struct _GtkProgressClass
 
 GtkType    gtk_progress_get_type            (void) G_GNUC_CONST;
 void       gtk_progress_set_show_text       (GtkProgress   *progress,
-					     gint           show_text);
+					     gboolean       show_text);
 void       gtk_progress_set_text_alignment  (GtkProgress   *progress,
 					     gfloat         x_align,
 					     gfloat         y_align);
@@ -102,7 +102,7 @@ void       gtk_progress_set_value           (GtkProgress   *progress,
 					     gfloat         value);
 gfloat     gtk_progress_get_value           (GtkProgress   *progress);
 void       gtk_progress_set_activity_mode   (GtkProgress   *progress,
-					     guint          activity_mode);
+					     gboolean       activity_mode);
 gchar*     gtk_progress_get_current_text    (GtkProgress   *progress);
 gchar*     gtk_progress_get_text_from_value (GtkProgress   *progress,
 					     gfloat         value);

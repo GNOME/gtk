@@ -116,17 +116,17 @@ gint     gtk_events_pending       (void);
  * we expose it mainly to allow filtering of events between
  * GDK and GTK+.
  */
-void  gtk_main_do_event          (GdkEvent           *event);
+void 	   gtk_main_do_event	   (GdkEvent           *event);
 
-void	   gtk_main		 (void);
-guint	   gtk_main_level	 (void);
-void	   gtk_main_quit	 (void);
-gint	   gtk_main_iteration	 (void);
+void	   gtk_main		   (void);
+guint	   gtk_main_level	   (void);
+void	   gtk_main_quit	   (void);
+gboolean   gtk_main_iteration	   (void);
 /* gtk_main_iteration() calls gtk_main_iteration_do(TRUE) */
-gint	   gtk_main_iteration_do (gboolean blocking);
+gboolean   gtk_main_iteration_do   (gboolean blocking);
 
-gint	   gtk_true		   (void) G_GNUC_CONST;
-gint	   gtk_false		   (void) G_GNUC_CONST;
+gboolean   gtk_true		   (void) G_GNUC_CONST;
+gboolean   gtk_false		   (void) G_GNUC_CONST;
 
 void	   gtk_grab_add		   (GtkWidget	       *widget);
 GtkWidget* gtk_grab_get_current	   (void);

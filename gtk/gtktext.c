@@ -745,7 +745,7 @@ gtk_text_new (GtkAdjustment *hadj,
 
 void
 gtk_text_set_word_wrap (GtkText *text,
-			gint     word_wrap)
+			gboolean word_wrap)
 {
   g_return_if_fail (text != NULL);
   g_return_if_fail (GTK_IS_TEXT (text));
@@ -761,7 +761,7 @@ gtk_text_set_word_wrap (GtkText *text,
 
 void
 gtk_text_set_line_wrap (GtkText *text,
-			gint     line_wrap)
+			gboolean line_wrap)
 {
   g_return_if_fail (text != NULL);
   g_return_if_fail (GTK_IS_TEXT (text));
@@ -1047,12 +1047,12 @@ gtk_text_insert (GtkText    *text,
     gtk_text_thaw (text);
 }
 
-gint
+gboolean
 gtk_text_backward_delete (GtkText *text,
 			  guint    nchars)
 {
-  g_return_val_if_fail (text != NULL, 0);
-  g_return_val_if_fail (GTK_IS_TEXT (text), 0);
+  g_return_val_if_fail (text != NULL, FALSE);
+  g_return_val_if_fail (GTK_IS_TEXT (text), FALSE);
   
   if (nchars > text->point.index || nchars <= 0)
     return FALSE;
@@ -1062,7 +1062,7 @@ gtk_text_backward_delete (GtkText *text,
   return gtk_text_forward_delete (text, nchars);
 }
 
-gint
+gboolean
 gtk_text_forward_delete (GtkText *text,
 			 guint    nchars)
 {
@@ -1070,8 +1070,8 @@ gtk_text_forward_delete (GtkText *text,
   GtkOldEditable *old_editable = GTK_OLD_EDITABLE (text);
   gboolean frozen = FALSE;
   
-  g_return_val_if_fail (text != NULL, 0);
-  g_return_val_if_fail (GTK_IS_TEXT (text), 0);
+  g_return_val_if_fail (text != NULL, FALSE);
+  g_return_val_if_fail (GTK_IS_TEXT (text), FALSE);
   
   if (text->point.index + nchars > TEXT_LENGTH (text) || nchars <= 0)
     return FALSE;

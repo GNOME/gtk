@@ -76,17 +76,17 @@ GtkType    gtk_combo_get_type              (void) G_GNUC_CONST;
 GtkWidget* gtk_combo_new                   (void);
 /* the text in the entry must be or not be in the list */
 void       gtk_combo_set_value_in_list     (GtkCombo*    combo, 
-                                            gint         val,
-                                            gint         ok_if_empty);
-/* set/unset arrows working for changing the value (can be annoying */
+                                            gboolean     val,
+                                            gboolean     ok_if_empty);
+/* set/unset arrows working for changing the value (can be annoying) */
 void       gtk_combo_set_use_arrows        (GtkCombo*    combo, 
-                                            gint         val);
+                                            gboolean     val);
 /* up/down arrows change value if current value not in list */
 void       gtk_combo_set_use_arrows_always (GtkCombo*    combo, 
-                                            gint         val);
+                                            gboolean     val);
 /* perform case-sensitive compares */
 void       gtk_combo_set_case_sensitive    (GtkCombo*    combo, 
-                                            gint         val);
+                                            gboolean     val);
 /* call this function on an item if it isn't a label or you
    want it to have a different value to be displayed in the entry */
 void       gtk_combo_set_item_string       (GtkCombo*    combo,

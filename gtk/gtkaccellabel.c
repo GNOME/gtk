@@ -39,21 +39,21 @@ enum {
   ARG_ACCEL_WIDGET
 };
 
-static void gtk_accel_label_class_init	 (GtkAccelLabelClass  *klass);
-static void gtk_accel_label_init	 (GtkAccelLabel	      *accel_label);
-static void gtk_accel_label_set_arg	 (GtkObject      *object,
-					  GtkArg	 *arg,
-					  guint		  arg_id);
-static void gtk_accel_label_get_arg	 (GtkObject      *object,
-					  GtkArg	 *arg,
-					  guint		  arg_id);
-static void gtk_accel_label_destroy	 (GtkObject	 *object);
-static void gtk_accel_label_finalize	 (GObject	 *object);
-static void gtk_accel_label_size_request (GtkWidget	 *widget,
-					  GtkRequisition *requisition);
-static gint gtk_accel_label_expose_event (GtkWidget	 *widget,
-					  GdkEventExpose *event);
-static gboolean gtk_accel_label_refetch_idle (GtkAccelLabel *accel_label);
+static void gtk_accel_label_class_init	     (GtkAccelLabelClass *klass);
+static void gtk_accel_label_init	     (GtkAccelLabel  *accel_label);
+static void gtk_accel_label_set_arg	     (GtkObject	     *object,
+					      GtkArg	     *arg,
+					      guint	      arg_id);
+static void gtk_accel_label_get_arg	     (GtkObject      *object,
+					      GtkArg	     *arg,
+					      guint	      arg_id);
+static void gtk_accel_label_destroy	     (GtkObject	     *object);
+static void gtk_accel_label_finalize	     (GObject	     *object);
+static void gtk_accel_label_size_request     (GtkWidget	     *widget,
+					      GtkRequisition *requisition);
+static gboolean gtk_accel_label_expose_event (GtkWidget	     *widget,
+					      GdkEventExpose *event);
+static gboolean gtk_accel_label_refetch_idle (GtkAccelLabel  *accel_label);
 
 static GtkAccelLabelClass *accel_label_class = NULL;
 static GtkLabelClass *parent_class = NULL;
@@ -249,7 +249,7 @@ gtk_accel_label_size_request (GtkWidget	     *widget,
   g_object_unref (G_OBJECT (layout));
 }
 
-static gint
+static gboolean 
 gtk_accel_label_expose_event (GtkWidget      *widget,
 			      GdkEventExpose *event)
 {

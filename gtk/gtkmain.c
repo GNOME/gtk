@@ -717,7 +717,7 @@ gtk_events_pending (void)
   return result;
 }
 
-gint 
+gboolean
 gtk_main_iteration (void)
 {
   GDK_THREADS_LEAVE ();
@@ -730,7 +730,7 @@ gtk_main_iteration (void)
     return TRUE;
 }
 
-gint 
+gboolean
 gtk_main_iteration_do (gboolean blocking)
 {
   GDK_THREADS_LEAVE ();
@@ -950,13 +950,13 @@ gtk_main_do_event (GdkEvent *event)
   g_list_free_1 (tmp_list);
 }
 
-gint
+gboolean
 gtk_true (void)
 {
   return TRUE;
 }
 
-gint
+gboolean
 gtk_false (void)
 {
   return FALSE;

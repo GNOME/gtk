@@ -221,7 +221,7 @@ gtk_arrow_set (GtkArrow      *arrow,
 }
 
 
-static gint
+static gboolean 
 gtk_arrow_expose (GtkWidget      *widget,
 		  GdkEventExpose *event)
 {
