@@ -2,13 +2,14 @@
 # Copyright (C) 2004
 # This file is distributed under the same license as the PACKAGE package.
 # Adam Weinberger <adamw@FreeBSD.org>, 2004.
-#
+# 
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-03-16 14:27-0500\n"
-"PO-Revision-Date: 2004-03-24 01:26-0500\n"
+"POT-Creation-Date: 2004-03-28 01:53-0500\n"
+"PO-Revision-Date: 2004-03-28 02:06-0500\n"
 "Last-Translator: Adam Weinberger <adamw@gnome.org>\n"
 "Language-Team: English/Canada <adamw@FreeBSD.org>\n"
 "MIME-Version: 1.0\n"
@@ -935,7 +936,7 @@ msgstr ""
 "Could not add a bookmark for %s:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:739 gtk/gtkfilechooserdefault.c:4942
+#: gtk/gtkfilechooserdefault.c:739 gtk/gtkfilechooserdefault.c:4983
 #, c-format
 msgid ""
 "Could not build file name from '%s' and '%s':\n"
@@ -953,15 +954,15 @@ msgstr ""
 "Could not change the current folder to %s:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:1037 gtk/gtkpathbar.c:809
+#: gtk/gtkfilechooserdefault.c:1037 gtk/gtkpathbar.c:828
 msgid "Home"
 msgstr "Home"
 
-#: gtk/gtkfilechooserdefault.c:1055 gtk/gtkpathbar.c:811
+#: gtk/gtkfilechooserdefault.c:1055 gtk/gtkpathbar.c:830
 msgid "Desktop"
 msgstr "Desktop"
 
-#: gtk/gtkfilechooserdefault.c:1491
+#: gtk/gtkfilechooserdefault.c:1494
 #, c-format
 msgid ""
 "Could not create folder %s:\n"
@@ -970,12 +971,12 @@ msgstr ""
 "Could not create folder %s:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:1648
+#: gtk/gtkfilechooserdefault.c:1641
 #, c-format
 msgid "Could not add bookmark for %s because it is not a folder."
 msgstr "Could not add bookmark for %s because it is not a folder."
 
-#: gtk/gtkfilechooserdefault.c:1731
+#: gtk/gtkfilechooserdefault.c:1722
 #, c-format
 msgid ""
 "Could not remove bookmark for %s:\n"
@@ -984,110 +985,110 @@ msgstr ""
 "Could not remove bookmark for %s:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:2297
+#: gtk/gtkfilechooserdefault.c:2288
 #, c-format
 msgid "Could not add a bookmark for %s because it is an invalid path name."
 msgstr "Could not add a bookmark for %s because it is an invalid path name."
 
-#: gtk/gtkfilechooserdefault.c:2485
+#: gtk/gtkfilechooserdefault.c:2476
 msgid "Folder"
 msgstr "Folder"
 
 #. FIXME these need accelerators when appropriate, and
 #. * need the mnemonics to be rationalized
 #.
-#: gtk/gtkfilechooserdefault.c:2532 gtk/gtkstock.c:276
+#: gtk/gtkfilechooserdefault.c:2523 gtk/gtkstock.c:276
 msgid "_Add"
 msgstr "_Add"
 
-#: gtk/gtkfilechooserdefault.c:2542 gtk/gtkstock.c:324
+#: gtk/gtkfilechooserdefault.c:2533 gtk/gtkstock.c:324
 msgid "_Remove"
 msgstr "_Remove"
 
-#: gtk/gtkfilechooserdefault.c:2628
+#: gtk/gtkfilechooserdefault.c:2619
 msgid "Name"
 msgstr "Name"
 
-#: gtk/gtkfilechooserdefault.c:2650
+#: gtk/gtkfilechooserdefault.c:2641
 msgid "Size"
 msgstr "Size"
 
-#: gtk/gtkfilechooserdefault.c:2662
+#: gtk/gtkfilechooserdefault.c:2653
 msgid "Modified"
 msgstr "Modified"
 
 #. Create Folder
-#: gtk/gtkfilechooserdefault.c:2724
+#: gtk/gtkfilechooserdefault.c:2715
 msgid "Create _Folder"
 msgstr "Create _Folder"
 
 #. Name entry
-#: gtk/gtkfilechooserdefault.c:2831
+#: gtk/gtkfilechooserdefault.c:2822
 msgid "_Name:"
 msgstr "_Name:"
 
-#: gtk/gtkfilechooserdefault.c:2873
+#: gtk/gtkfilechooserdefault.c:2864
 msgid "_Browse for other folders"
 msgstr "_Browse for other folders"
 
-#: gtk/gtkfilechooserdefault.c:3111
+#: gtk/gtkfilechooserdefault.c:3101
 msgid "Save in _folder:"
 msgstr "Save in _folder:"
 
-#: gtk/gtkfilechooserdefault.c:3113
+#: gtk/gtkfilechooserdefault.c:3103
 msgid "Create in _folder:"
 msgstr "Create in _folder:"
 
-#: gtk/gtkfilechooserdefault.c:3701
+#: gtk/gtkfilechooserdefault.c:3690
 msgid "Can't change to folder because it isn't local"
 msgstr "Can't change to folder because it isn't local"
 
-#: gtk/gtkfilechooserdefault.c:4148
+#: gtk/gtkfilechooserdefault.c:4141
 #, c-format
 msgid "shortcut %s does not exist"
 msgstr "shortcut %s does not exist"
 
-#: gtk/gtkfilechooserdefault.c:4765
+#: gtk/gtkfilechooserdefault.c:4756
 msgid "Type name of new folder"
 msgstr "Type name of new folder"
 
-#: gtk/gtkfilechooserdefault.c:4794
+#: gtk/gtkfilechooserdefault.c:4785
 #, c-format
 msgid "%d byte"
 msgstr "%d byte"
 
-#: gtk/gtkfilechooserdefault.c:4796
+#: gtk/gtkfilechooserdefault.c:4787
 #, c-format
 msgid "%.1f K"
 msgstr "%.1f K"
 
-#: gtk/gtkfilechooserdefault.c:4798
+#: gtk/gtkfilechooserdefault.c:4789
 #, c-format
 msgid "%.1f M"
 msgstr "%.1f M"
 
-#: gtk/gtkfilechooserdefault.c:4800
+#: gtk/gtkfilechooserdefault.c:4791
 #, c-format
 msgid "%.1f G"
 msgstr "%.1f G"
 
-#: gtk/gtkfilechooserdefault.c:4845
+#: gtk/gtkfilechooserdefault.c:4836
 msgid "Today"
 msgstr "Today"
 
-#: gtk/gtkfilechooserdefault.c:4847
+#: gtk/gtkfilechooserdefault.c:4838
 msgid "Yesterday"
 msgstr "Yesterday"
 
-#: gtk/gtkfilechooserdefault.c:4858
+#: gtk/gtkfilechooserdefault.c:4849
 msgid "Unknown"
 msgstr "Unknown"
 
-#: gtk/gtkfilechooserdefault.c:4903
+#: gtk/gtkfilechooserdefault.c:4944
 msgid "Cannot change to the folder you specified as it is an invalid path."
 msgstr "Cannot change to the folder you specified as it is an invalid path."
 
-#: gtk/gtkfilechooserdefault.c:4980
+#: gtk/gtkfilechooserdefault.c:5021
 #, c-format
 msgid ""
 "Could not select %s:\n"
@@ -1096,11 +1097,11 @@ msgstr ""
 "Could not select %s:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:5020
+#: gtk/gtkfilechooserdefault.c:5061
 msgid "Open Location"
 msgstr "Open Location"
 
-#: gtk/gtkfilechooserdefault.c:5044
+#: gtk/gtkfilechooserdefault.c:5085
 msgid "_Location:"
 msgstr "_Location:"
 
@@ -1288,23 +1289,24 @@ msgstr "Couldn't convert filename"
 msgid "(Empty)"
 msgstr "(Empty)"
 
-#: gtk/gtkfilesystemunix.c:415
+#: gtk/gtkfilesystemunix.c:415 gtk/gtkfilesystemwin32.c:380
 #, c-format
 msgid "%s: %s"
 msgstr "%s: %s"
 
 #: gtk/gtkfilesystemunix.c:422 gtk/gtkfilesystemunix.c:613
-#: gtk/gtkfilesystemunix.c:1657 gtk/gtkfilesystemwin32.c:1176
+#: gtk/gtkfilesystemunix.c:1657 gtk/gtkfilesystemwin32.c:387
+#: gtk/gtkfilesystemwin32.c:1269
 #, c-format
 msgid "error getting information for '%s': %s"
 msgstr "error getting information for '%s': %s"
 
-#: gtk/gtkfilesystemunix.c:486 gtk/gtkfilesystemwin32.c:376
+#: gtk/gtkfilesystemunix.c:486 gtk/gtkfilesystemwin32.c:428
 #, c-format
 msgid "error creating directory '%s': %s"
 msgstr "error creating directory '%s': %s"
 
-#: gtk/gtkfilesystemunix.c:566 gtk/gtkfilesystemwin32.c:417
+#: gtk/gtkfilesystemunix.c:566 gtk/gtkfilesystemwin32.c:488
 msgid "This file system does not support mounting"
 msgstr "This file system does not support mounting"
 
@@ -1312,7 +1314,7 @@ msgstr "This file system does not support mounting"
 msgid "Filesystem"
 msgstr "Filesystem"
 
-#: gtk/gtkfilesystemunix.c:1258 gtk/gtkfilesystemwin32.c:794
+#: gtk/gtkfilesystemunix.c:1258 gtk/gtkfilesystemwin32.c:875
 #, c-format
 msgid "Bookmark saving failed (%s)"
 msgstr "Bookmark saving failed (%s)"
@@ -1322,7 +1324,7 @@ msgstr "Bookmark saving failed (%s)"
 msgid "error getting information for '%s'"
 msgstr "error getting information for '%s'"
 
-#: gtk/gtkfilesystemwin32.c:950
+#: gtk/gtkfilesystemwin32.c:1031
 msgid "This file system does not support icons for everything"
 msgstr "This file system does not support icons for everything"
 
