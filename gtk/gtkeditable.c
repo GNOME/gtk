@@ -577,8 +577,14 @@ gtk_editable_selection_received  (GtkWidget         *widget,
 void
 gtk_editable_delete_selection (GtkEditable *editable)
 {
-  guint start = editable->selection_start_pos;
-  guint end = editable->selection_end_pos;
+  guint start;
+  guint end;
+
+  if (!editable->editable)
+    return;
+
+  start = editable->selection_start_pos;
+  end = editable->selection_end_pos;
 
   editable->selection_start_pos = 0;
   editable->selection_end_pos = 0;
@@ -655,8 +661,9 @@ gtk_editable_copy_clipboard (GtkEditable *editable, guint32 time)
 void
 gtk_editable_paste_clipboard (GtkEditable *editable, guint32 time)
 {
-  gtk_selection_convert (GTK_WIDGET(editable), 
-			 clipboard_atom, ctext_atom, time);
+  if (editable->editable)
+    gtk_selection_convert (GTK_WIDGET(editable), 
+			   clipboard_atom, ctext_atom, time);
 }
 
 void

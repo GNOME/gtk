@@ -144,6 +144,8 @@ struct _GtkText
   GList *tab_stops;
   gint default_tab_width;
 
+  /* Timer used for auto-scrolling off ends */
+  guint32 timer;
 };
 
 struct _GtkTextClass

@@ -168,21 +168,26 @@ TODO AFTER GTK 1.0
   - When selecting on a Text or Entry widget, the selection isn't
     claimed until you release the button, and that shows by the
     color of the selection. (Which is the real problem - it probably
-    is OK/better to delay claiming the selection)
+    is OK/better to delay claiming the selection) [fixed]
 
   - Related to the above, when you Shift/arrow to select text, the
     selected text doesn't show that you have the selection immediately.
 
-  - Selecting an entire line with triple-click doesn't work write - 
+  - Selecting an entire line with triple-click doesn't work right - 
     it should select the wrapped portion too.
 
   - Selecting an entire line should probably select the newline as
     well, so when the selection is cut/deleted, the newline goes
     along.
 
+  - Inserting text in a different property - problems? Shouldn't
+    split the last position off in any case.
+
   - Do something about the bg pixmap situation. (It will produce
     garbage when editing is enabled)
 
+  - "Copy" removes selection
+ 
   Improvements:
 
   - Finish making the key bindings consistent between the Entry

@@ -2175,7 +2175,7 @@ create_entry ()
       gtk_widget_show (cb);
 
       editable_check = gtk_check_button_new_with_label("Editable");
-      gtk_box_pack_start (GTK_BOX (box2), editable_check, TRUE, TRUE, 0);
+      gtk_box_pack_start (GTK_BOX (box2), editable_check, FALSE, TRUE, 0);
       gtk_signal_connect (GTK_OBJECT(editable_check), "toggled",
 			  GTK_SIGNAL_FUNC(entry_toggle_editable), entry);
       gtk_toggle_button_set_state(GTK_TOGGLE_BUTTON(editable_check), TRUE);
@@ -3288,7 +3288,6 @@ text_toggle_editable (GtkWidget *checkbutton,
 			  GTK_TOGGLE_BUTTON(checkbutton)->active);
 }
 
-
 /*
  * GtkText
  */
@@ -3306,10 +3305,14 @@ create_text ()
   GtkWidget *vscrollbar;
   GtkWidget *text;
 
+  FILE *infile;
+
   if (!window)
     {
       window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
       gtk_widget_set_name (window, "text window");
+      gtk_widget_set_usize (window, 500, 500);
+      gtk_window_set_policy (GTK_WINDOW(window), TRUE, TRUE, FALSE);
 
       gtk_signal_connect (GTK_OBJECT (window), "destroy",
 			  GTK_SIGNAL_FUNC(destroy_window),
@@ -3341,70 +3344,56 @@ create_text ()
 
       text = gtk_text_new (NULL, NULL);
       gtk_text_set_editable (GTK_TEXT (text), TRUE);
-      gtk_table_attach_defaults (GTK_TABLE (table), text, 0, 1, 0, 1);
+      gtk_table_attach (GTK_TABLE (table), text, 0, 1, 0, 1,
+			GTK_EXPAND | GTK_SHRINK | GTK_FILL,
+			GTK_EXPAND | GTK_SHRINK | GTK_FILL, 0, 0);
       gtk_widget_show (text);
 
       hscrollbar = gtk_hscrollbar_new (GTK_TEXT (text)->hadj);
       gtk_table_attach (GTK_TABLE (table), hscrollbar, 0, 1, 1, 2,
-			GTK_EXPAND | GTK_FILL, GTK_FILL, 0, 0);
+			GTK_EXPAND | GTK_FILL | GTK_SHRINK, GTK_FILL, 0, 0);
       gtk_widget_show (hscrollbar);
 
       vscrollbar = gtk_vscrollbar_new (GTK_TEXT (text)->vadj);
       gtk_table_attach (GTK_TABLE (table), vscrollbar, 1, 2, 0, 1,
-			GTK_FILL, GTK_EXPAND | GTK_FILL, 0, 0);
+			GTK_FILL, GTK_EXPAND | GTK_SHRINK | GTK_FILL, 0, 0);
       gtk_widget_show (vscrollbar);
 
       gtk_text_freeze (GTK_TEXT (text));
 
       gtk_widget_realize (text);
 
+      infile = fopen("testgtk.c", "r");
+      
+      if (infile)
+	{
+	  char buffer[1024];
+	  int nchars;
+	  
+	  while (1)
+	    {
+	      nchars = fread(buffer, 1, 1024, infile);
+	      gtk_text_insert (GTK_TEXT (text), NULL, &text->style->black,
+			       NULL, buffer, nchars);
+	      
+	      if (nchars < 1024)
+		break;
+	    }
+	  
+	  fclose (infile);
+	}
+      
       gtk_text_insert (GTK_TEXT (text), NULL, &text->style->black, NULL, 
-		       "spencer blah blah blah\n", -1);
-      gtk_text_insert (GTK_TEXT (text), NULL, &text->style->black, NULL, 
-		       "kimball\n", -1);
+		       "And even ", -1);
       gtk_text_insert (GTK_TEXT (text), NULL, &text->style->bg[GTK_STATE_NORMAL], NULL, 
-		       "is\n", -1);
+		       "colored", -1);
       gtk_text_insert (GTK_TEXT (text), NULL, &text->style->black, NULL, 
-		       "a\n", -1);
-      gtk_text_insert (GTK_TEXT (text), NULL, &text->style->black, NULL, 
-		       "wuss.\n", -1);
-      gtk_text_insert (GTK_TEXT (text), NULL, &text->style->black, NULL, 
-		       "but\n", -1);
-      gtk_text_insert (GTK_TEXT (text), NULL, &text->style->black, NULL,
-		       "josephine\n", -1);
-      gtk_text_insert (GTK_TEXT (text), NULL, &text->style->black, NULL, 
-		       "(his\n", -1);
-      gtk_text_insert (GTK_TEXT (text), NULL, &text->style->black, NULL, 
-		       "girlfriend\n", -1);
-      gtk_text_insert (GTK_TEXT (text), NULL, &text->style->black, NULL, 
-		       "is\n", -1);
-      gtk_text_insert (GTK_TEXT (text), NULL, &text->style->black, NULL, 
-		       "not).\n", -1);
-      gtk_text_insert (GTK_TEXT (text), NULL, &text->style->black, NULL, 
-		       "why?\n", -1);
-      gtk_text_insert (GTK_TEXT (text), NULL, &text->style->black, NULL, 
-		       "because\n", -1);
-      gtk_text_insert (GTK_TEXT (text), NULL, &text->style->black, NULL, 
-		       "spencer\n", -1);
-      gtk_text_insert (GTK_TEXT (text), NULL, &text->style->black, NULL, 
-		       "puked\n", -1);
-      gtk_text_insert (GTK_TEXT (text), NULL, &text->style->black, NULL, 
-		       "last\n", -1);
-      gtk_text_insert (GTK_TEXT (text), NULL, &text->style->black, NULL, 
-		       "night\n", -1);
-      gtk_text_insert (GTK_TEXT (text), NULL, &text->style->black, NULL, 
-		       "but\n", -1);
-      gtk_text_insert (GTK_TEXT (text), NULL, &text->style->black, NULL, 
-		       "josephine\n", -1);
-      gtk_text_insert (GTK_TEXT (text), NULL, &text->style->black, NULL, 
-		       "did\n", -1);
-      gtk_text_insert (GTK_TEXT (text), NULL, &text->style->black, NULL, 
-		       "not", -1);
+		       "text", -1);
 
       gtk_text_thaw (GTK_TEXT (text));
 
       editable_check = gtk_check_button_new_with_label("Editable");
-      gtk_box_pack_start (GTK_BOX (box2), editable_check, TRUE, TRUE, 0);
+      gtk_box_pack_start (GTK_BOX (box2), editable_check, FALSE, TRUE, 0);
       gtk_signal_connect (GTK_OBJECT(editable_check), "toggled",
 			  GTK_SIGNAL_FUNC(text_toggle_editable), text);
       gtk_toggle_button_set_state(GTK_TOGGLE_BUTTON(editable_check), TRUE);
