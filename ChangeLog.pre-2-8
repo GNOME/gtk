@@ -1,3 +1,9 @@
+Sat Feb  9 13:19:20 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* configure.in gtk/Makefile.am gtk/theme-bits/*: Add
+	tools and images used for creating the check/radio
+	button images in the default theme.
+
 Sat Feb  9 13:58:41 2002  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 	* gtk/gtkpaned.[ch]: Keyboard navigation for GtkPaned
@@ -17,7 +23,6 @@ Sat Feb  9 00:16:31 2002  Owen Taylor  <otaylor@redhat.com>
 	memory management problem.
 
 Fri Feb  8 20:24:58 2002  Owen Taylor  <otaylor@redhat.com>
-
 	
 	* gtk/gtkbindings.c (binding_compose_params): Fix problem
 	with string-valued parameters (#70012, Johan Dahlin.)
