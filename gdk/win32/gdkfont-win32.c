@@ -25,6 +25,7 @@
  */
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <ctype.h>
 
 #include <pango/pangowin32.h>
@@ -1148,8 +1149,8 @@ gdk_font_load_logfont (LOGFONT *lfp)
 
   for (tries = 0; ; tries++)
     {
-      GDK_NOTE (MISC, g_print ("... trying %d,%d,%d,%d,"
-			       "%d,%d,%d,%d,"
+      GDK_NOTE (MISC, g_print ("... trying %ld,%ld,%ld,%ld,"
+			       "%ld,%d,%d,%d,"
 			       "%d,%d,%d,"
 			       "%d,%#.02x,\"%s\"\n",
 			       lfp->lfHeight, lfp->lfWidth,
@@ -1229,7 +1230,7 @@ gdk_font_load_logfont (LOGFONT *lfp)
     singlefont->codepage = 0;
 
   GDK_NOTE (MISC, (g_print ("... = %#x %s cs %s cp%d\n",
-			    singlefont->hfont, face,
+			    (guint) singlefont->hfont, face,
 			    charset_name (singlefont->charset),
 			    singlefont->codepage),
 		   g_print ("... Unicode subranges:"),
@@ -1244,8 +1245,6 @@ gdk_font_load_logfont (LOGFONT *lfp)
 static GdkWin32SingleFont *
 gdk_font_load_internal (const gchar *font_name)
 {
-  GdkWin32SingleFont *singlefont;
-
   LOGFONT logfont;
 
   char *fn;
@@ -1488,7 +1487,6 @@ gdk_font_from_one_singlefont (GdkWin32SingleFont *singlefont)
   GdkFont *font;
   GdkFontPrivateWin32 *private;
   HGDIOBJ oldfont;
-  HANDLE *f;
   TEXTMETRIC textmetric;
 
   private = g_new (GdkFontPrivateWin32, 1);
@@ -1586,9 +1584,7 @@ gdk_fontset_load (const gchar *fontset_name)
   GdkFontPrivateWin32 *private;
   GdkWin32SingleFont *singlefont;
   HGDIOBJ oldfont;
-  HANDLE *f;
   TEXTMETRIC textmetric;
-  GSList *base_font_list = NULL;
   gchar *fs;
   gchar *b, *p, *s;
 
@@ -1663,7 +1659,7 @@ _gdk_font_destroy (GdkFont *font)
 
   singlefont = (GdkWin32SingleFont *) private->fonts->data;
   GDK_NOTE (MISC, g_print ("_gdk_font_destroy %#x\n",
-			   singlefont->hfont));
+			   (guint)singlefont->hfont));
 
   gdk_font_hash_remove (font->type, font);
   
@@ -1772,6 +1768,8 @@ unicode_classify (wchar_t wc)
       else
 	return -1;
     }
+  /* NOTREACHED */
+  return -1;
 }
 
 void
@@ -1787,7 +1785,7 @@ gdk_wchar_text_handle (GdkFont       *font,
   GdkFontPrivateWin32 *private;
   GdkWin32SingleFont *singlefont;
   GSList *list;
-  int i, block;
+  int  block;
   const wchar_t *start, *end, *wcp;
 
   wcp = wcstr;
@@ -1823,7 +1821,7 @@ gdk_wchar_text_handle (GdkFont       *font,
 
       GDK_NOTE (MISC, g_print ("%d:%d:%d:%#x ",
 			       start-wcstr, wcp-wcstr, block,
-			       (singlefont ? singlefont->hfont : 0)));
+			       (singlefont ? (guint) singlefont->hfont : 0)));
 
       /* Call the callback function */
       (*handler) (singlefont, start, wcp+1 - start, arg);

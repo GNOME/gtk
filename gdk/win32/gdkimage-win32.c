@@ -320,14 +320,15 @@ gdk_image_new (GdkImageType  type,
 }
 
 GdkImage*
-gdk_image_get (GdkWindow *window,
-	       gint       x,
-	       gint       y,
-	       gint       width,
-	       gint       height)
+_gdk_win32_get_image (GdkDrawable *drawable,
+		      gint         x,
+		      gint         y,
+		      gint         width,
+		      gint         height)
 {
   GdkImage *image;
   GdkImagePrivateWin32 *private;
+  GdkDrawableImplWin32 *impl;
   HDC hdc, memdc;
   struct {
     BITMAPINFOHEADER bmiHeader;
@@ -342,27 +343,26 @@ gdk_image_get (GdkWindow *window,
   BITMAP bm;
   int i;
 
-  g_return_val_if_fail (GDK_IS_DRAWABLE (window), NULL);
+  g_return_val_if_fail (GDK_IS_DRAWABLE_IMPL_WIN32 (drawable), NULL);
 
-  if (GDK_IS_WINDOW (window) && GDK_WINDOW_DESTROYED (window))
-    return NULL;
-
-  GDK_NOTE (MISC, g_print ("gdk_image_get: %#x %dx%d@+%d+%d\n",
-			   (guint) GDK_DRAWABLE_HANDLE (window),
+  GDK_NOTE (MISC, g_print ("_gdk_win32_get_image: %#x %dx%d@+%d+%d\n",
+			   (guint) GDK_DRAWABLE_HANDLE (drawable),
 			   width, height, x, y));
+
+  impl = GDK_DRAWABLE_IMPL_WIN32 (drawable);
 
   image = g_object_new (gdk_image_get_type (), NULL);
   private = IMAGE_PRIVATE_DATA (image);
 
   image->type = GDK_IMAGE_SHARED;
-  image->visual = gdk_drawable_get_visual (window);
+  image->visual = gdk_drawable_get_visual (drawable);
   image->width = width;
   image->height = height;
 
   /* This function is called both to blit from a window and from
    * a pixmap.
    */
-  if (GDK_IS_PIXMAP (window))
+  if (GDK_IS_PIXMAP (drawable))
     {
       if ((hdc = CreateCompatibleDC (NULL)) == NULL)
 	{
@@ -370,14 +370,14 @@ gdk_image_get (GdkWindow *window,
 	  g_free (image);
 	  return NULL;
 	}
-      if ((oldbitmap1 = SelectObject (hdc, GDK_PIXMAP_HBITMAP (window))) == NULL)
+      if ((oldbitmap1 = SelectObject (hdc, impl->handle)) == NULL)
 	{
 	  WIN32_GDI_FAILED ("SelectObject");
 	  DeleteDC (hdc);
 	  g_free (image);
 	  return NULL;
 	}
-      GetObject (GDK_PIXMAP_HBITMAP (window), sizeof (BITMAP), &bm);
+      GetObject (impl->handle, sizeof (BITMAP), &bm);
       GDK_NOTE (MISC,
 		g_print ("gdk_image_get: bmWidth:%ld bmHeight:%ld bmWidthBytes:%ld bmBitsPixel:%d\n",
 			 bm.bmWidth, bm.bmHeight, bm.bmWidthBytes, bm.bmBitsPixel));
@@ -393,7 +393,7 @@ gdk_image_get (GdkWindow *window,
     }
   else
     {
-      if ((hdc = GetDC (GDK_WINDOW_HWND (window))) == NULL)
+      if ((hdc = GetDC (impl->handle)) == NULL)
 	{
 	  WIN32_GDI_FAILED ("GetDC");
 	  g_free (image);
@@ -413,14 +413,14 @@ gdk_image_get (GdkWindow *window,
   if ((memdc = CreateCompatibleDC (hdc)) == NULL)
     {
       WIN32_GDI_FAILED ("CreateCompatibleDC");
-      if (GDK_IS_PIXMAP (window))
+      if (GDK_IS_PIXMAP (drawable))
 	{
 	  SelectObject (hdc, oldbitmap1);
 	  DeleteDC (hdc);
 	}
       else
 	{
-	  ReleaseDC (GDK_WINDOW_HWND (window), hdc);
+	  ReleaseDC (impl->handle, hdc);
 	}
       g_free (image);
       return NULL;
@@ -461,14 +461,14 @@ gdk_image_get (GdkWindow *window,
     {
       WIN32_GDI_FAILED ("CreateDIBSection");
       DeleteDC (memdc);
-      if (GDK_IS_PIXMAP (window))
+      if (GDK_IS_PIXMAP (drawable))
 	{
 	  SelectObject (hdc, oldbitmap1);
 	  DeleteDC (hdc);
 	}
       else
 	{
-	  ReleaseDC (GDK_WINDOW_HWND (window), hdc);
+	  ReleaseDC (impl->handle, hdc);
 	}
       g_free (image);
       return NULL;
@@ -479,14 +479,14 @@ gdk_image_get (GdkWindow *window,
       WIN32_GDI_FAILED ("SelectObject");
       DeleteObject (private->hbitmap);
       DeleteDC (memdc);
-      if (GDK_IS_PIXMAP (window))
+      if (GDK_IS_PIXMAP (drawable))
 	{
 	  SelectObject (hdc, oldbitmap1);
 	  DeleteDC (hdc);
 	}
       else
 	{
-	  ReleaseDC (GDK_WINDOW_HWND (window), hdc);
+	  ReleaseDC (impl->handle, hdc);
 	}
       g_free (image);
       return NULL;
@@ -498,14 +498,14 @@ gdk_image_get (GdkWindow *window,
       SelectObject (memdc, oldbitmap2);
       DeleteObject (private->hbitmap);
       DeleteDC (memdc);
-      if (GDK_IS_PIXMAP (window))
+      if (GDK_IS_PIXMAP (drawable))
 	{
 	  SelectObject (hdc, oldbitmap1);
 	  DeleteDC (hdc);
 	}
       else
 	{
-	  ReleaseDC (GDK_WINDOW_HWND (window), hdc);
+	  ReleaseDC (impl->handle, hdc);
 	}
       g_free (image);
       return NULL;
@@ -517,14 +517,14 @@ gdk_image_get (GdkWindow *window,
   if (!DeleteDC (memdc))
     WIN32_GDI_FAILED ("DeleteDC");
 
-  if (GDK_IS_PIXMAP (window))
+  if (GDK_IS_PIXMAP (drawable))
     {
       SelectObject (hdc, oldbitmap1);
       DeleteDC (hdc);
     }
   else
     {
-      ReleaseDC (GDK_WINDOW_HWND (window), hdc);
+      ReleaseDC (impl->handle, hdc);
     }
 
   switch (image->depth)

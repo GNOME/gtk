@@ -198,14 +198,14 @@ print_lc(LOGCONTEXT *lc)
   if (lc->lcMoveMask & PK_ROTATION) g_print (" PK_ROTATION");
   g_print ("\n");
   g_print ("lcBtnDnMask = %#x, lcBtnUpMask = %#x\n",
-	  lc->lcBtnDnMask, lc->lcBtnUpMask);
-  g_print ("lcInOrgX = %d, lcInOrgY = %d, lcInOrgZ = %d\n",
+	  (guint) lc->lcBtnDnMask, (guint) lc->lcBtnUpMask);
+  g_print ("lcInOrgX = %ld, lcInOrgY = %ld, lcInOrgZ = %ld\n",
 	  lc->lcInOrgX, lc->lcInOrgY, lc->lcInOrgZ);
-  g_print ("lcInExtX = %d, lcInExtY = %d, lcInExtZ = %d\n",
+  g_print ("lcInExtX = %ld, lcInExtY = %ld, lcInExtZ = %ld\n",
 	  lc->lcInExtX, lc->lcInExtY, lc->lcInExtZ);
-  g_print ("lcOutOrgX = %d, lcOutOrgY = %d, lcOutOrgZ = %d\n",
+  g_print ("lcOutOrgX = %ld, lcOutOrgY = %ld, lcOutOrgZ = %ld\n",
 	  lc->lcOutOrgX, lc->lcOutOrgY, lc->lcOutOrgZ);
-  g_print ("lcOutExtX = %d, lcOutExtY = %d, lcOutExtZ = %d\n",
+  g_print ("lcOutExtX = %ld, lcOutExtY = %ld, lcOutExtZ = %ld\n",
 	  lc->lcOutExtX, lc->lcOutExtY, lc->lcOutExtZ);
   g_print ("lcSensX = %g, lcSensY = %g, lcSensZ = %g\n",
 	  lc->lcSensX / 65536., lc->lcSensY / 65536., lc->lcSensZ / 65536.);
@@ -231,7 +231,7 @@ gdk_input_wintab_init (void)
   UINT ndevices, ncursors, ncsrtypes, firstcsr, hardware;
   BOOL active;
   AXIS axis_x, axis_y, axis_npressure, axis_or[3];
-  int i, j, k;
+  int i, k;
   int devix, cursorix;
   char devname[100], csrname[100];
 
@@ -358,7 +358,7 @@ gdk_input_wintab_init (void)
 	      g_warning ("gdk_input_init: WTOpen failed");
 	      return;
 	    }
-	  GDK_NOTE (MISC, g_print ("opened Wintab device %d %#x\n",
+	  GDK_NOTE (MISC, g_print ("opened Wintab device %d %p\n",
 				   devix, *hctx));
 
 	  wintab_contexts = g_list_append (wintab_contexts, hctx);
@@ -747,7 +747,7 @@ _gdk_input_other_event (GdkEvent  *event,
 
   GDK_NOTE (EVENTS,
 	    g_print ("gdk_input_win32_other_event: window=%#x (%d,%d)\n",
-		     GDK_WINDOW_HWND (window), x, y));
+		     (guint) GDK_WINDOW_HWND (window), x, y));
   
 #else
   /* ??? This code is pretty bogus */
@@ -854,7 +854,7 @@ _gdk_input_other_event (GdkEvent  *event,
 	  x = pt.x;
 	  y = pt.y;
 	  GDK_NOTE (EVENTS, g_print ("...propagating to %#x, (%d,%d)\n",
-				     GDK_WINDOW_HWND (window), x, y));
+				     (guint) GDK_WINDOW_HWND (window), x, y));
 	  goto dijkstra;
 	}
 
@@ -1016,16 +1016,15 @@ _gdk_input_grab_pointer (GdkWindow    *window,
   gboolean need_ungrab;
   GdkDevicePrivate *gdkdev;
   GList *tmp_list;
-  gint result;
 
   tmp_list = gdk_input_windows;
   new_window = NULL;
   need_ungrab = FALSE;
 
   GDK_NOTE (MISC, g_print ("gdk_input_win32_grab_pointer: %#x %d %#x\n",
-			   GDK_WINDOW_HWND (window),
+			   (guint) GDK_WINDOW_HWND (window),
 			   owner_events,
-			   (confine_to ? GDK_WINDOW_HWND (confine_to) : 0)));
+			   (confine_to ? (guint) GDK_WINDOW_HWND (confine_to) : 0)));
 
   while (tmp_list)
     {
@@ -1158,8 +1157,6 @@ gdk_device_get_state (GdkDevice       *device,
 		      gdouble         *axes,
 		      GdkModifierType *mask)
 {
-  gint i;
-
   g_return_if_fail (device != NULL);
   g_return_if_fail (GDK_IS_WINDOW (window));
 

@@ -680,8 +680,10 @@ gdk_window_paint_init_bg (GdkWindow      *window,
   gdk_gc_unref (tmp_gc);
 }
 
-
+#ifdef GDK_WINDOWING_X11
 #include "x11/gdkx.h"
+#endif
+
 void	      
 gdk_window_begin_paint_region (GdkWindow *window,
 			       GdkRegion *region)

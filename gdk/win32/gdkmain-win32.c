@@ -69,8 +69,6 @@ gboolean
 _gdk_windowing_init_check (int    argc,
 			   char **argv)
 {
-  gint i, j, k;
-  
 #ifdef HAVE_WINTAB
   if (getenv ("GDK_IGNORE_WINTAB") != NULL)
     gdk_input_ignore_wintab = TRUE;

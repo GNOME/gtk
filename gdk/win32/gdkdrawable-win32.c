@@ -111,6 +111,8 @@ static GdkColormap* gdk_win32_get_colormap   (GdkDrawable    *drawable);
 
 static gint         gdk_win32_get_depth      (GdkDrawable    *drawable);
 
+static GdkVisual*   gdk_win32_get_visual     (GdkDrawable    *drawable);
+
 static void gdk_drawable_impl_win32_class_init (GdkDrawableImplWin32Class *klass);
 
 static gpointer parent_class = NULL;
@@ -167,6 +169,9 @@ gdk_drawable_impl_win32_class_init (GdkDrawableImplWin32Class *klass)
   drawable_class->get_colormap = gdk_win32_get_colormap;
 
   drawable_class->get_depth = gdk_win32_get_depth;
+  drawable_class->get_visual = gdk_win32_get_visual;
+
+  drawable_class->get_image = _gdk_win32_get_image;
 }
 
 /*****************************************************
@@ -988,4 +993,10 @@ gdk_win32_get_depth (GdkDrawable *drawable)
   /* This is a bit bogus but I'm not sure the other way is better */
 
   return gdk_drawable_get_depth (GDK_DRAWABLE_IMPL_WIN32 (drawable)->wrapper);
+}
+
+static GdkVisual*
+gdk_win32_get_visual (GdkDrawable *drawable)
+{
+  return gdk_drawable_get_visual (GDK_DRAWABLE_IMPL_WIN32 (drawable)->wrapper);
 }

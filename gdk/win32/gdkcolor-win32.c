@@ -257,7 +257,6 @@ alloc_color(Colormap  colormap,
 	    gulong   *pixelp)
 {
   PALETTEENTRY entry, closeEntry;
-  HDC hdc;
   unsigned int i;
     
   entry = *color;
@@ -442,7 +441,6 @@ create_colormap (HWND     w,
 {
   char logPalBuf[sizeof(LOGPALETTE) + 256 * sizeof(PALETTEENTRY)];
   LOGPALETTE *logPalettePtr;
-  PALETTEENTRY *entryPtr;
   Colormap colormap;
   guint i;
   HPALETTE sysPal;
@@ -1387,7 +1385,6 @@ static Colormap
 default_colormap ()
 {
   static Colormap colormap;
-  gint i;
 
   if (colormap)
     return colormap;
@@ -1403,7 +1400,6 @@ gdk_colormap_new (GdkVisual *visual,
   GdkColormap *colormap;
   GdkColormapPrivateWin32 *private;
   Visual *xvisual;
-  int size;
   int i;
 
   g_return_val_if_fail (visual != NULL, NULL);
@@ -1463,6 +1459,9 @@ gdk_colormap_new (GdkVisual *visual,
       private->xcolormap = create_colormap (gdk_root_window,
 					    xvisual, FALSE);
       break;
+
+    case GDK_VISUAL_DIRECT_COLOR:
+      g_assert_not_reached ();
     }
 
   gdk_colormap_add (colormap);
@@ -1520,7 +1519,6 @@ gdk_colormap_get_system (void)
 {
   static GdkColormap *colormap = NULL;
   GdkColormapPrivateWin32 *private;
-  gint i;
 
   if (!colormap)
     {
@@ -1581,11 +1579,7 @@ gdk_colormap_change (GdkColormap *colormap,
 		     gint         ncolors)
 {
   GdkColormapPrivateWin32 *private;
-  GdkVisual *visual;
   XColor *palette;
-  gint shift;
-  int max_colors;
-  int size;
   int i;
 
   g_return_if_fail (GDK_IS_COLORMAP (colormap));
@@ -1654,7 +1648,6 @@ gdk_color_parse (const gchar *spec,
 		 GdkColor *color)
 {
   Colormap xcolormap;
-  XColor xcolor;
 
   g_return_val_if_fail (spec != NULL, FALSE);
   g_return_val_if_fail (color != NULL, FALSE);
@@ -2150,6 +2143,9 @@ gdk_colormap_alloc_colors (GdkColormap *colormap,
 	    nremaining++;
 	}
       break;
+
+    case GDK_VISUAL_DIRECT_COLOR:
+      g_assert_not_reached ();
     }
   return nremaining;
 }
@@ -2276,7 +2272,7 @@ gdk_win32_color_to_string (const GdkColor *color)
 {
   static char buf[100];
 
-  sprintf (buf, "(%.04x,%.04x,%.04x):%.06x",
+  sprintf (buf, "(%.04x,%.04x,%.04x):%.06lx",
 	   color->red, color->green, color->blue, color->pixel);
 
   return buf;

@@ -103,7 +103,7 @@ gdk_atom_name (GdkAtom atom)
     case GDK_SELECTION_TYPE_STRING: return g_strdup ("STRING");
     }
   if (atom < 0xC000)
-    return g_strdup_printf ("#%x", atom);
+    return g_strdup_printf ("#%x", (guint) atom);
   else if (GlobalGetAtomName (atom, name, sizeof (name)) == 0)
     return NULL;
   return g_strdup (name);
@@ -156,8 +156,9 @@ gdk_property_change (GdkWindow    *window,
 	    (prop_name = gdk_atom_name (property),
 	     type_name = gdk_atom_name (type),
 	     g_print ("gdk_property_change: %#x %#x (%s) %#x (%s) %s %d*%d bytes %.10s\n",
-		      GDK_WINDOW_HWND (window), property, prop_name,
-		      type, type_name,
+		      (guint) GDK_WINDOW_HWND (window),
+		      (guint) property, prop_name,
+		      (guint) type, type_name,
 		      (mode == GDK_PROP_MODE_REPLACE ? "REPLACE" :
 		       (mode == GDK_PROP_MODE_PREPEND ? "PREPEND" :
 			(mode == GDK_PROP_MODE_APPEND ? "APPEND" :
@@ -177,7 +178,7 @@ gdk_property_change (GdkWindow    *window,
 	  length++;
 #if 1      
       GDK_NOTE (MISC, g_print ("...OpenClipboard(%#x)\n",
-			       GDK_WINDOW_HWND (window)));
+			       (guint) GDK_WINDOW_HWND (window)));
       if (!OpenClipboard (GDK_WINDOW_HWND (window)))
 	{
 	  WIN32_API_FAILED ("OpenClipboard");
@@ -186,7 +187,7 @@ gdk_property_change (GdkWindow    *window,
 #endif
       hdata = GlobalAlloc (GMEM_MOVEABLE|GMEM_DDESHARE, length + 1);
       ptr = GlobalLock (hdata);
-      GDK_NOTE (MISC, g_print ("...hdata=%#x, ptr=%#x\n", hdata, ptr));
+      GDK_NOTE (MISC, g_print ("...hdata=%#x, ptr=%p\n", (guint) hdata, ptr));
 
       for (i = 0; i < nelements; i++)
 	{
@@ -197,7 +198,7 @@ gdk_property_change (GdkWindow    *window,
       *ptr++ = '\0';
       GlobalUnlock (hdata);
       GDK_NOTE (MISC, g_print ("...SetClipboardData(CF_TEXT, %#x)\n",
-			       hdata));
+			       (guint) hdata));
       if (!SetClipboardData(CF_TEXT, hdata))
 	WIN32_API_FAILED ("SetClipboardData");
 #if 1
@@ -214,7 +215,7 @@ void
 gdk_property_delete (GdkWindow *window,
 		     GdkAtom    property)
 {
-  gchar *prop_name, *type_name;
+  gchar *prop_name;
   extern void gdk_selection_property_delete (GdkWindow *);
 
   g_return_if_fail (window != NULL);
@@ -223,8 +224,8 @@ gdk_property_delete (GdkWindow *window,
   GDK_NOTE (MISC,
 	    (prop_name = gdk_atom_name (property),
 	     g_print ("gdk_property_delete: %#x %#x (%s)\n",
-		      (window ? GDK_WINDOW_HWND (window) : 0),
-		      property, prop_name),
+		      (window ? (guint) GDK_WINDOW_HWND (window) : 0),
+		      (guint) property, prop_name),
 	     g_free (prop_name)));
 
   if (property == gdk_selection_property)

@@ -50,8 +50,16 @@ void	 gdk_win32_handle_table_remove    (HANDLE handle);
 GdkGC *  _gdk_win32_gc_new       (GdkDrawable        *drawable,
 				  GdkGCValues        *values,
 				  GdkGCValuesMask     values_mask);
+
+GdkImage* _gdk_win32_get_image (GdkDrawable    *drawable,
+				gint            x,
+				gint            y,
+				gint            width,
+				gint            height);
+
 COLORREF gdk_colormap_color      (GdkColormap        *colormap,
 				  gulong              pixel);
+
 HRGN	 BitmapToRegion          (HBITMAP hBmp);
 
 gchar  *gdk_font_full_name_get   (GdkFont *font);

@@ -276,7 +276,6 @@ init_color (GdkColorContext *cc)
 static void
 init_true_color (GdkColorContext *cc)
 {
-  GdkColorContextPrivate *ccp = (GdkColorContextPrivate *) cc;
   gulong rmask, gmask, bmask;
   
   cc->mode = GDK_CC_MODE_TRUE;
