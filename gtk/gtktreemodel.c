@@ -323,6 +323,73 @@ gtk_tree_path_compare (const GtkTreePath *a,
 }
 
 /**
+ * gtk_tree_path_is_ancestor:
+ * @path: a #GtkTreePath
+ * @descendant: another #GtkTreePath
+ * 
+ * 
+ * 
+ * Return value: %TRUE if @descendant is contained inside @path
+ **/
+gboolean
+gtk_tree_path_is_ancestor (GtkTreePath *path,
+                           GtkTreePath *descendant)
+{
+  gint i;
+  
+  g_return_val_if_fail (path != NULL, FALSE);
+  g_return_val_if_fail (descendant != NULL, FALSE);
+
+  /* can't be an ancestor if we're deeper */
+  if (path->depth >= descendant->depth)
+    return FALSE;
+  
+  i = 0;
+  while (i < path->depth)
+    {
+      if (path->indices[i] != descendant->indices[i])
+        return FALSE;
+      ++i;
+    }
+
+  return TRUE;
+}
+
+/**
+ * gtk_tree_path_is_descendant:
+ * @path: a #GtkTreePath
+ * @ancestor: another #GtkTreePath
+ * 
+ * 
+ * 
+ * Return value: %TRUE if @ancestor contains @path somewhere below it
+ **/
+gboolean
+gtk_tree_path_is_descendant (GtkTreePath *path,
+                             GtkTreePath *ancestor)
+{
+  gint i;
+  
+  g_return_val_if_fail (path != NULL, FALSE);
+  g_return_val_if_fail (ancestor != NULL, FALSE);
+  
+  /* can't be a descendant if we're shallower in the tree */
+  if (path->depth <= ancestor->depth)
+    return FALSE;
+  
+  i = 0;
+  while (i < ancestor->depth)
+    {
+      if (path->indices[i] != ancestor->indices[i])
+        return FALSE;
+      ++i;
+    }
+
+  return TRUE;
+}
+
+
+/**
  * gtk_tree_path_next:
  * @path: A #GtkTreePath.
  * 
@@ -350,10 +417,10 @@ gtk_tree_path_prev (GtkTreePath *path)
 {
   g_return_val_if_fail (path != NULL, FALSE);
 
-  if (path->indices[path->depth] == 0)
+  if (path->indices[path->depth - 1] == 0)
     return FALSE;
 
-  path->indices[path->depth - 1] --;
+  path->indices[path->depth - 1] -= 1;
 
   return TRUE;
 }
@@ -437,6 +504,15 @@ inserted_callback (GtkTreeModel *tree_model,
   RowRefList *refs = data;
   GSList *tmp_list;
 
+  /* This function corrects the path stored in the reference to
+   * account for an insertion. Note that it's called _after_ the insertion
+   * with the path to the newly-inserted row. Which means that
+   * the inserted path is in a different "coordinate system" than
+   * the old path (e.g. if the inserted path was just before the old path,
+   * then inserted path and old path will be the same, and old path must be
+   * moved down one).
+   */
+  
   tmp_list = refs->list;
 
   while (tmp_list != NULL)
@@ -449,40 +525,21 @@ inserted_callback (GtkTreeModel *tree_model,
       
       if (reference->path)
         {
-          gint i;
           gint depth = gtk_tree_path_get_depth (path);
-          gint *indices = gtk_tree_path_get_indices (path);
           gint ref_depth = gtk_tree_path_get_depth (reference->path);
-          gint *ref_indices = gtk_tree_path_get_indices (reference->path);
-
-          for (i = 0; i < depth && i < ref_depth; i++)
+          
+          if (ref_depth >= depth)
             {
-              if (indices[i] < ref_indices[i])
-                {
-                  /* inserted node was before the referenced row;
-                   * move referenced path down 1
-                   */
-                  ref_indices[i] += 1;
-                  break;
-                }
-              else if (indices[i] > ref_indices[i])
-                {
-                  /* inserted node was past the referenced row */
-                  break;
-                }
-              else if (i == depth - 1)
-                {
-                  /* referenced row or its parent was inserted, this
-                   * is possible if you create the path and row reference
-                   * before you actually insert the row.
-                   */                  
-                  break;
-                }
-            }
+              gint *indices = gtk_tree_path_get_indices (path);
+              gint *ref_indices = gtk_tree_path_get_indices (reference->path);
+              gint i;
 
-          /* If we didn't break out of the for loop, the inserted path
-           * was a child of the referenced path
-           */
+              /* This is the depth that might affect us. */
+              i = depth - 1;
+              
+              if (indices[i] <= ref_indices[i])
+                ref_indices[i] += 1;
+            }
         }
 
       tmp_list = g_slist_next (tmp_list);
@@ -497,6 +554,17 @@ deleted_callback (GtkTreeModel *tree_model,
   RowRefList *refs = data;
   GSList *tmp_list;
 
+  /* This function corrects the path stored in the reference to
+   * account for an deletion. Note that it's called _after_ the
+   * deletion with the old path of the just-deleted row. Which means
+   * that the deleted path is the same now-defunct "coordinate system"
+   * as the path saved in the reference, which is what we want to fix.
+   *
+   * Note that this is different from the situation in "inserted," so
+   * while you might think you can cut-and-paste between these
+   * functions, it's not going to work. ;-)
+   */
+  
   tmp_list = refs->list;
 
   while (tmp_list != NULL)
@@ -509,41 +577,29 @@ deleted_callback (GtkTreeModel *tree_model,
       
       if (reference->path)
         {
-          gint i;
           gint depth = gtk_tree_path_get_depth (path);
-          gint *indices = gtk_tree_path_get_indices (path);
           gint ref_depth = gtk_tree_path_get_depth (reference->path);
-          gint *ref_indices = gtk_tree_path_get_indices (reference->path);
 
-          for (i = 0; i < depth && i < ref_depth; i++)
+          if (ref_depth >= depth)
             {
+              /* Need to adjust path upward */
+              gint *indices = gtk_tree_path_get_indices (path);
+              gint *ref_indices = gtk_tree_path_get_indices (reference->path);
+              gint i;
+
+              i = depth - 1;
               if (indices[i] < ref_indices[i])
+                ref_indices[i] -= 1;
+              else if (indices[i] == ref_indices[i])
                 {
-                  /* deleted node was before the referenced row;
-                   * move referenced path up 1
+                  /* the referenced node itself, or its parent, was
+                   * deleted, mark invalid
                    */
-                  ref_indices[i] -= 1;
-                  break;
-                }
-              else if (indices[i] > ref_indices[i])
-                {
-                  /* deleted node is past the referenced row */
-                  break;
-                }
-              else if (i == depth - 1)
-                {
-                  /* referenced row or its parent was deleted, mark it
-                   * invalid
-                   */
+
                   gtk_tree_path_free (reference->path);
                   reference->path = NULL;
-                  break;
                 }
             }
-
-          /* If we didn't break out of the for loop, the deleted path
-           * was a child of the referenced path
-           */
         }
 
       tmp_list = g_slist_next (tmp_list);
@@ -722,7 +778,6 @@ gtk_tree_iter_free (GtkTreeIter *iter)
   g_return_if_fail (iter != NULL);
 
   g_free (iter);
-
 }
 
 /**

@@ -80,7 +80,20 @@ static gboolean gtk_list_store_drag_data_get      (GtkTreeDragSource *drag_sourc
 static gboolean gtk_list_store_drag_data_received (GtkTreeDragDest   *drag_dest,
                                                    GtkTreePath       *dest,
                                                    GtkSelectionData  *selection_data);
-
+static gboolean gtk_list_store_row_drop_possible  (GtkTreeDragDest   *drag_dest,
+                                                   GtkTreeModel      *src_model,
+                                                   GtkTreePath       *src_path,
+                                                   GtkTreePath       *dest_path);
+static void
+validate_list_store (GtkListStore *list_store)
+{
+  if (gtk_debug_flags & GTK_DEBUG_TREE)
+    {
+      g_assert (g_slist_length (list_store->root) == list_store->length);
+      
+      g_assert (g_slist_last (list_store->root) == list_store->tail);
+    }
+}
 
 GtkType
 gtk_list_store_get_type (void)
@@ -210,6 +223,7 @@ static void
 gtk_list_store_drag_dest_init   (GtkTreeDragDestIface   *iface)
 {
   iface->drag_data_received = gtk_list_store_drag_data_received;
+  iface->row_drop_possible = gtk_list_store_row_drop_possible;
 }
 
 static void
@@ -218,6 +232,7 @@ gtk_list_store_init (GtkListStore *list_store)
   list_store->root = NULL;
   list_store->tail = NULL;
   list_store->stamp = g_random_int ();
+  list_store->length = 0;
 }
 
 GtkListStore *
@@ -323,14 +338,26 @@ gtk_list_store_get_iter (GtkTreeModel *tree_model,
 			 GtkTreeIter  *iter,
 			 GtkTreePath  *path)
 {
+  GSList *list;
+  gint i;
+  
   g_return_val_if_fail (GTK_IS_LIST_STORE (tree_model), FALSE);
-  g_return_val_if_fail (gtk_tree_path_get_depth (path) > 0, FALSE);
+  g_return_val_if_fail (gtk_tree_path_get_depth (path) > 0, FALSE);  
+
+  i = gtk_tree_path_get_indices (path)[0];
+
+  if (i >= GTK_LIST_STORE (tree_model)->length)
+    return FALSE;
+  
+  list = g_slist_nth (G_SLIST (GTK_LIST_STORE (tree_model)->root),
+                      i);
+
+  /* If this fails, list_store->length has gotten mangled. */
+  g_assert (list);
   
   iter->stamp = GTK_LIST_STORE (tree_model)->stamp;
-  iter->user_data = g_slist_nth (G_SLIST (GTK_LIST_STORE (tree_model)->root),
-				 gtk_tree_path_get_indices (path)[0]);
-
-  return iter->user_data != NULL;
+  iter->user_data = list;
+  return TRUE;
 }
 
 static GtkTreePath *
@@ -391,9 +418,13 @@ gtk_list_store_iter_next (GtkTreeModel  *tree_model,
   g_return_val_if_fail (GTK_IS_LIST_STORE (tree_model), FALSE);
   g_return_val_if_fail (GTK_LIST_STORE (tree_model)->stamp == iter->stamp, FALSE);
 
-  iter->user_data = G_SLIST (iter->user_data)->next;
-
-  return (iter->user_data != NULL);
+  if (G_SLIST (iter->user_data)->next)
+    {
+      iter->user_data = G_SLIST (iter->user_data)->next;
+      return TRUE;
+    }
+  else
+    return FALSE;
 }
 
 static gboolean
@@ -401,18 +432,22 @@ gtk_list_store_iter_children (GtkTreeModel *tree_model,
 			      GtkTreeIter  *iter,
 			      GtkTreeIter  *parent)
 {
+  /* this is a list, nodes have no children */
   if (parent)
-    {
-      iter->stamp = 0;      
-      iter->user_data = NULL;
-      return FALSE;
-    }
-  else
+    return FALSE;
+
+  /* but if parent == NULL we return the list itself as children of the
+   * "root"
+   */
+  
+  if (GTK_LIST_STORE (tree_model)->root)
     {
       iter->stamp = GTK_LIST_STORE (tree_model)->stamp;
       iter->user_data = GTK_LIST_STORE (tree_model)->root;
       return TRUE;
     }
+  else
+    return FALSE;
 }
 
 static gboolean
@@ -427,9 +462,9 @@ gtk_list_store_iter_n_children (GtkTreeModel *tree_model,
 				GtkTreeIter  *iter)
 {
   if (iter == NULL)
-    return g_slist_length (G_SLIST (GTK_LIST_STORE (tree_model)->root));
-
-  return 0;
+    return GTK_LIST_STORE (tree_model)->length;
+  else
+    return 0;
 }
 
 static gboolean
@@ -438,24 +473,23 @@ gtk_list_store_iter_nth_child (GtkTreeModel *tree_model,
 			       GtkTreeIter  *parent,
 			       gint          n)
 {
+  GSList *child;
+  
   g_return_val_if_fail (GTK_IS_LIST_STORE (tree_model), FALSE);
 
   if (parent)
+    return FALSE;
+
+  child = g_slist_nth (G_SLIST (GTK_LIST_STORE (tree_model)->root), n);
+
+  if (child)
     {
-      g_return_val_if_fail (iter->stamp == GTK_LIST_STORE (tree_model)->stamp, FALSE);
-      iter->stamp = 0;
-      iter->user_data = NULL;
-
-      return FALSE;
+      iter->user_data = child;
+      iter->stamp = GTK_LIST_STORE (tree_model)->stamp;
+      return TRUE;
     }
-
-  iter->user_data = g_slist_nth (G_SLIST (GTK_LIST_STORE (tree_model)->root), n);
-  if (iter->user_data)
-    iter->stamp = GTK_LIST_STORE (tree_model)->stamp;
   else
-    iter->stamp = 0;
-
-  return (iter->user_data != NULL);
+    return FALSE;
 }
 
 static gboolean
@@ -463,9 +497,6 @@ gtk_list_store_iter_parent (GtkTreeModel *tree_model,
 			    GtkTreeIter  *iter,
 			    GtkTreeIter  *child)
 {
-  iter->stamp = 0;
-  iter->user_data = NULL;
-
   return FALSE;
 }
 
@@ -674,11 +705,12 @@ remove_link_saving_prev (GSList  *list,
       if (tmp == link)
 	{
 	  if (prev)
-	    prev->next = tmp->next;
-	  if (list == tmp)
+	    prev->next = link->next;
+
+	  if (list == link)
 	    list = list->next;
 
-	  tmp->next = NULL;
+	  link->next = NULL;
 	  break;
 	}
 
@@ -709,6 +741,8 @@ gtk_list_store_remove_silently (GtkListStore *list_store,
     list_store->root = remove_link_saving_prev (G_SLIST (list_store->root),
                                                 G_SLIST (iter->user_data),
                                                 &prev);
+
+    list_store->length -= 1;
     
     if (iter->user_data == list_store->tail)
       list_store->tail = prev;
@@ -725,13 +759,16 @@ gtk_list_store_remove (GtkListStore *list_store,
 
   g_return_if_fail (list_store != NULL);
   g_return_if_fail (GTK_IS_LIST_STORE (list_store));
-  g_return_if_fail (iter->user_data != NULL);
-  
+  g_return_if_fail (iter->user_data != NULL);  
 
   path = gtk_list_store_get_path (GTK_TREE_MODEL (list_store), iter);
 
+  validate_list_store (list_store);
+  
   gtk_list_store_remove_silently (list_store, iter, path);
 
+  validate_list_store (list_store);  
+  
   gtk_signal_emit_by_name (GTK_OBJECT (list_store),
 			   "deleted",
 			   path);
@@ -753,6 +790,8 @@ insert_after (GtkListStore *list_store,
   /* if list was the tail, the new node is the new tail */
   if (sibling == list_store->tail)
     list_store->tail = new_list;
+
+  list_store->length += 1;
 }
 
 void
@@ -789,6 +828,8 @@ gtk_list_store_insert (GtkListStore *list_store,
   
   iter->stamp = list_store->stamp;
   iter->user_data = new_list;
+
+  validate_list_store (list_store);
   
   path = gtk_tree_path_new ();
   gtk_tree_path_append_index (path, position);
@@ -819,7 +860,8 @@ gtk_list_store_insert_before (GtkListStore *list_store,
   
   new_list = g_slist_alloc ();
 
-  prev = list = list_store->root;
+  prev = NULL;
+  list = list_store->root;
   while (list && list != sibling->user_data)
     {
       prev = list;
@@ -854,6 +896,10 @@ gtk_list_store_insert_before (GtkListStore *list_store,
 
   iter->stamp = list_store->stamp;
   iter->user_data = new_list;
+
+  list_store->length += 1;
+
+  validate_list_store (list_store);
   
   path = gtk_tree_path_new ();
   gtk_tree_path_append_index (path, i);
@@ -895,6 +941,8 @@ gtk_list_store_insert_after (GtkListStore *list_store,
   
   iter->stamp = list_store->stamp;
   iter->user_data = new_list;
+
+  validate_list_store (list_store);
   
   path = gtk_tree_path_new ();
   gtk_tree_path_append_index (path, i);
@@ -923,6 +971,10 @@ gtk_list_store_prepend (GtkListStore *list_store,
   G_SLIST (iter->user_data)->next = G_SLIST (list_store->root);
   list_store->root = iter->user_data;
 
+  list_store->length += 1;
+
+  validate_list_store (list_store);
+  
   path = gtk_tree_path_new ();
   gtk_tree_path_append_index (path, 0);
   gtk_signal_emit_by_name (GTK_OBJECT (list_store),
@@ -951,6 +1003,10 @@ gtk_list_store_append (GtkListStore *list_store,
     list_store->root = iter->user_data;
 
   list_store->tail = iter->user_data;
+
+  list_store->length += 1;
+
+  validate_list_store (list_store);
   
   path = gtk_tree_path_new ();
   gtk_tree_path_append_index (path, i);
@@ -1037,7 +1093,10 @@ gtk_list_store_drag_data_received (GtkTreeDragDest   *drag_dest,
       if (!gtk_tree_model_get_iter (src_model,
                                     &src_iter,
                                     src_path))
-        goto out;
+        {
+          g_print ("can't get source path as iter\n");
+          goto out;
+        }
 
       /* Get the path to insert _after_ (dest is the path to insert _before_) */
       prev = gtk_tree_path_copy (dest);
@@ -1051,6 +1110,8 @@ gtk_list_store_drag_data_received (GtkTreeDragDest   *drag_dest,
                                   &dest_iter);
           
           retval = TRUE;
+
+          g_print ("prepending to list\n");
         }
       else
         {
@@ -1063,7 +1124,11 @@ gtk_list_store_drag_data_received (GtkTreeDragDest   *drag_dest,
                                            &dest_iter,
                                            &tmp_iter);
               retval = TRUE;
+
+              g_print ("inserting into list\n");
             }
+          else
+            g_print ("can't get iter to insert after\n");
         }
 
       gtk_tree_path_free (prev);
@@ -1111,6 +1176,7 @@ gtk_list_store_drag_data_received (GtkTreeDragDest   *drag_dest,
       /* FIXME maybe add some data targets eventually, or handle text
        * targets in the simple case.
        */
+      g_print ("not accepting target\n");
     }
 
  out:
@@ -1119,4 +1185,30 @@ gtk_list_store_drag_data_received (GtkTreeDragDest   *drag_dest,
     gtk_tree_path_free (src_path);
   
   return retval;  
+}
+
+static gboolean
+gtk_list_store_row_drop_possible (GtkTreeDragDest *drag_dest,
+                                  GtkTreeModel    *src_model,
+                                  GtkTreePath     *src_path,
+                                  GtkTreePath     *dest_path)
+{
+  gint *indices;
+  
+  g_return_val_if_fail (GTK_IS_LIST_STORE (drag_dest), FALSE);
+
+  if (src_model != GTK_TREE_MODEL (drag_dest))
+    return FALSE;
+  
+  if (gtk_tree_path_get_depth (dest_path) != 1)
+    return FALSE;
+
+  /* can drop before any existing node, or before one past any existing. */
+
+  indices = gtk_tree_path_get_indices (dest_path);
+
+  if (indices[0] <= GTK_LIST_STORE (drag_dest)->length)
+    return TRUE;
+  else
+    return FALSE;
 }

@@ -239,9 +239,12 @@ _gtk_tree_data_list_node_copy (GtkTreeDataList *list,
                                GType            type)
 {
   GtkTreeDataList *new_list;
+
+  g_return_val_if_fail (list != NULL, NULL);
   
   new_list = _gtk_tree_data_list_alloc ();
-
+  new_list->next = NULL;
+  
   switch (type)
     {
     case G_TYPE_UINT:
@@ -279,3 +282,6 @@ _gtk_tree_data_list_node_copy (GtkTreeDataList *list,
   
   return new_list;
 }
+
+
+

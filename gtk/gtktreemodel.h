@@ -134,6 +134,11 @@ gboolean     gtk_tree_path_prev             (GtkTreePath       *path);
 gboolean     gtk_tree_path_up               (GtkTreePath       *path);
 void         gtk_tree_path_down             (GtkTreePath       *path);
 
+gboolean     gtk_tree_path_is_ancestor      (GtkTreePath       *path,
+                                             GtkTreePath       *descendant);
+gboolean     gtk_tree_path_is_descendant    (GtkTreePath       *path,
+                                             GtkTreePath       *ancestor);
+
 /* Row reference (an object that tracks model changes so it refers to the
  * same row always; a path refers to a position, not a fixed row)
  */

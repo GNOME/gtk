@@ -1,3 +1,58 @@
+2001-01-30  Havoc Pennington  <hp@redhat.com>
+
+	* gtk/gtkliststore.c (gtk_list_store_insert_before): fix bug in
+	here where prev pointer was set to the wrong thing
+
+	* gtk/gtktreemodel.c (gtk_tree_path_is_ancestor): new function
+	(gtk_tree_path_is_descendant): new function
+
+	* gtk/gtkliststore.c (gtk_list_store_iter_n_children): return
+	cached length
+	(gtk_list_store_get_iter): don't modify iter if we can't get the
+	path.
+
+	* gtk/gtkliststore.h (struct _GtkListStore): cache the length
+	
+	* gtk/gtktreednd.h: add virtual function row_drop_possible() to
+	GtkTreeDragDest
+
+	* gtk/gtktreestore.c (copy_node_data): fix varargs type error that
+	was causing segfault
+
+	* gtk/gtktreedatalist.c (_gtk_tree_data_list_node_copy): set next
+	pointer to NULL
+
+	* gtk/gtktreestore.c (gtk_tree_store_append): fix memleak
+
+	* gtk/gtkliststore.c (gtk_list_store_iter_next): don't modify iter
+	on returning FALSE
+	(gtk_list_store_iter_children): ditto
+	(gtk_list_store_iter_nth_child): ditto
+	(gtk_list_store_iter_nth_child): ditto
+	(gtk_list_store_iter_parent): ditto
+
+	* gtk/gtktreestore.c (gtk_tree_store_get_path): g_return_if_fail
+	on iter->user_data != NULL instead of silently accepting it.
+	(gtk_tree_store_iter_next): ditto. Also, don't modify iter unless
+	we are returning TRUE.
+	(gtk_tree_store_iter_children): ditto
+	(gtk_tree_store_iter_nth_child): ditto
+	(gtk_tree_store_iter_parent): ditto
+	(gtk_tree_store_insert): remove handling of parent->user_data ==
+	NULL, replace with parent == NULL	
+
+	* gtk/gtktreemodel.c (inserted_callback): put some fixes in here,
+	and a comment explaining things
+
+	* gtk/gtktreestore.c: add GtkTreeDragSource/GtkTreeDragDest
+	interface support to GtkTreeStore.
+
+	* gtk/gtktreemodel.c (gtk_tree_path_prev): didn't properly return
+	FALSE if no prev, fix
+
+	* gtk/gtktreeview.c (set_source_row): use a row reference
+	(set_dest_row): use a row reference
+
 Sat Jan 27 15:52:02 2001  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtktreeselection.c (gtk_tree_selection_unselect_iter): Fix

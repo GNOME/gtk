@@ -41,11 +41,11 @@ struct _GtkTreeDragSourceIface
 
   /* VTable - not signals */
 
-  gboolean     (* drag_data_get)        (GtkTreeDragSource   *dragsource,
+  gboolean     (* drag_data_get)        (GtkTreeDragSource   *drag_source,
                                          GtkTreePath         *path,
                                          GtkSelectionData    *selection_data);
 
-  gboolean     (* drag_data_delete)     (GtkTreeDragSource *dragsource,
+  gboolean     (* drag_data_delete)     (GtkTreeDragSource *drag_source,
                                          GtkTreePath       *path);
 };
 
@@ -76,10 +76,14 @@ struct _GtkTreeDragDestIface
 
   /* VTable - not signals */
 
-  gboolean     (* drag_data_received) (GtkTreeDragDest   *dragdest,
+  gboolean     (* drag_data_received) (GtkTreeDragDest   *drag_dest,
                                        GtkTreePath       *dest,
                                        GtkSelectionData  *selection_data);
 
+  gboolean     (* row_drop_possible)  (GtkTreeDragDest   *drag_dest,
+                                       GtkTreeModel      *src_model,
+                                       GtkTreePath       *src_path,
+                                       GtkTreePath       *dest_path);
 };
 
 GType           gtk_tree_drag_dest_get_type   (void) G_GNUC_CONST;
@@ -90,6 +94,12 @@ GType           gtk_tree_drag_dest_get_type   (void) G_GNUC_CONST;
 gboolean gtk_tree_drag_dest_drag_data_received (GtkTreeDragDest  *drag_dest,
                                                 GtkTreePath      *dest,
                                                 GtkSelectionData *selection_data);
+
+/* Returns TRUE if we can drop before path; path may not exist. */
+gboolean gtk_tree_drag_dest_row_drop_possible  (GtkTreeDragDest  *drag_dest,
+                                                GtkTreeModel     *src_model,
+                                                GtkTreePath      *src_path,
+                                                GtkTreePath      *dest_path);
 
 /* The selection data would normally have target type GTK_TREE_MODEL_ROW in this
  * case. If the target is wrong these functions return FALSE.

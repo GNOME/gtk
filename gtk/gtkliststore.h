@@ -45,6 +45,7 @@ struct _GtkListStore
   GSList *tail;
   gint n_columns;
   GType *column_headers;
+  gint length;
 };
 
 struct _GtkListStoreClass

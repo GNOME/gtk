@@ -155,6 +155,38 @@ gtk_tree_drag_dest_drag_data_received (GtkTreeDragDest  *drag_dest,
   return (* iface->drag_data_received) (drag_dest, dest, selection_data);
 }
 
+
+/**
+ * gtk_tree_drag_dest_drop_possible:
+ * @drag_dest: a #GtkTreeDragDest
+ * @src_model: #GtkTreeModel being dragged from
+ * @src_path: row being dragged
+ * @dest_path: destination row
+ * 
+ * Determines whether a drop is possible before the given @dest_path,
+ * at the same depth as @dest_path. i.e., can we drop @src_model such
+ * that it now resides at @dest_path. @dest_path does not have to
+ * exist; the return value will almost certainly be %FALSE if the
+ * parent of @dest_path doesn't exist, though.
+ * 
+ * Return value: %TRUE if a drop is possible before @dest_path
+ **/
+gboolean
+gtk_tree_drag_dest_row_drop_possible (GtkTreeDragDest   *drag_dest,
+                                      GtkTreeModel      *src_model,
+                                      GtkTreePath       *src_path,
+                                      GtkTreePath       *dest_path)
+{
+  GtkTreeDragDestIface *iface = GTK_TREE_DRAG_DEST_GET_IFACE (drag_dest);
+
+  g_return_val_if_fail (iface->row_drop_possible != NULL, FALSE);
+  g_return_val_if_fail (GTK_IS_TREE_MODEL (src_model), FALSE);
+  g_return_val_if_fail (src_path != NULL, FALSE);
+  g_return_val_if_fail (dest_path != NULL, FALSE);
+
+  return (* iface->row_drop_possible) (drag_dest, src_model, src_path, dest_path);
+}
+
 typedef struct _TreeRowData TreeRowData;
 
 struct _TreeRowData

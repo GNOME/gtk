@@ -20,6 +20,7 @@
 #include "gtktreemodel.h"
 #include "gtktreestore.h"
 #include "gtktreedatalist.h"
+#include "gtktreednd.h"
 #include "gtksignal.h"
 #include <string.h>
 #include <gobject/gvaluecollector.h>
@@ -40,6 +41,8 @@ static guint tree_store_signals[LAST_SIGNAL] = { 0 };
 static void         gtk_tree_store_init            (GtkTreeStore      *tree_store);
 static void         gtk_tree_store_class_init      (GtkTreeStoreClass *tree_store_class);
 static void         gtk_tree_store_tree_model_init (GtkTreeModelIface *iface);
+static void         gtk_tree_store_drag_source_init(GtkTreeDragSourceIface *iface);
+static void         gtk_tree_store_drag_dest_init  (GtkTreeDragDestIface   *iface);
 static guint        gtk_tree_store_get_flags       (GtkTreeModel      *tree_model);
 static gint         gtk_tree_store_get_n_columns   (GtkTreeModel      *tree_model);
 static GType        gtk_tree_store_get_column_type (GtkTreeModel      *tree_model,
@@ -68,6 +71,32 @@ static gboolean     gtk_tree_store_iter_parent     (GtkTreeModel      *tree_mode
 						    GtkTreeIter       *child);
 
 
+static gboolean gtk_tree_store_drag_data_delete   (GtkTreeDragSource *drag_source,
+                                                   GtkTreePath       *path);
+static gboolean gtk_tree_store_drag_data_get      (GtkTreeDragSource *drag_source,
+                                                   GtkTreePath       *path,
+                                                   GtkSelectionData  *selection_data);
+static gboolean gtk_tree_store_drag_data_received (GtkTreeDragDest   *drag_dest,
+                                                   GtkTreePath       *dest,
+                                                   GtkSelectionData  *selection_data);
+static gboolean gtk_tree_store_row_drop_possible  (GtkTreeDragDest   *drag_dest,
+                                                   GtkTreeModel      *src_model,
+                                                   GtkTreePath       *src_path,
+                                                   GtkTreePath       *dest_path);
+
+static void     validate_gnode                    (GNode *node);
+
+static inline void
+validate_tree (GtkTreeStore *tree_store)
+{
+  if (gtk_debug_flags & GTK_DEBUG_TREE)
+    {
+      g_assert (G_NODE (tree_store->root)->parent == NULL);
+      
+      validate_gnode (G_NODE (tree_store->root));
+    }
+}
+
 GtkType
 gtk_tree_store_get_type (void)
 {
@@ -95,10 +124,34 @@ gtk_tree_store_get_type (void)
 	NULL
       };
 
+      static const GInterfaceInfo drag_source_info =
+      {
+	(GInterfaceInitFunc) gtk_tree_store_drag_source_init,
+	NULL,
+	NULL
+      };
+
+      static const GInterfaceInfo drag_dest_info =
+      {
+	(GInterfaceInitFunc) gtk_tree_store_drag_dest_init,
+	NULL,
+	NULL
+      };
+      
       tree_store_type = g_type_register_static (GTK_TYPE_OBJECT, "GtkTreeStore", &tree_store_info, 0);
+
       g_type_add_interface_static (tree_store_type,
 				   GTK_TYPE_TREE_MODEL,
 				   &tree_model_info);
+
+      g_type_add_interface_static (tree_store_type,
+				   GTK_TYPE_TREE_DRAG_SOURCE,
+				   &drag_source_info);
+      g_type_add_interface_static (tree_store_type,
+				   GTK_TYPE_TREE_DRAG_DEST,
+				   &drag_dest_info);
+
+      
     }
 
   return tree_store_type;
@@ -162,6 +215,20 @@ gtk_tree_store_tree_model_init (GtkTreeModelIface *iface)
   iface->iter_n_children = gtk_tree_store_iter_n_children;
   iface->iter_nth_child = gtk_tree_store_iter_nth_child;
   iface->iter_parent = gtk_tree_store_iter_parent;
+}
+
+static void
+gtk_tree_store_drag_source_init (GtkTreeDragSourceIface *iface)
+{
+  iface->drag_data_delete = gtk_tree_store_drag_data_delete;
+  iface->drag_data_get = gtk_tree_store_drag_data_get;
+}
+
+static void
+gtk_tree_store_drag_dest_init   (GtkTreeDragDestIface   *iface)
+{
+  iface->drag_data_received = gtk_tree_store_drag_data_received;
+  iface->row_drop_possible = gtk_tree_store_row_drop_possible;
 }
 
 static void
@@ -242,7 +309,7 @@ gtk_tree_store_set_column_type (GtkTreeStore *tree_store,
 
 /* fulfill the GtkTreeModel requirements */
 /* NOTE: GtkTreeStore::root is a GNode, that acts as the parent node.  However,
- * it is not visible to the tree or to the user., and the path "1" refers to the
+ * it is not visible to the tree or to the user., and the path "0" refers to the
  * first child of GtkTreeStore::root.
  */
 
@@ -281,13 +348,13 @@ gtk_tree_store_get_path (GtkTreeModel *tree_model,
   GtkTreePath *retval;
   GNode *tmp_node;
   gint i = 0;
-
+  
   g_return_val_if_fail (tree_model != NULL, NULL);
   g_return_val_if_fail (GTK_IS_TREE_STORE (tree_model), NULL);
   g_return_val_if_fail (iter != NULL, NULL);
+  g_return_val_if_fail (iter->user_data != NULL, NULL);
 
-  if (iter->user_data == NULL)
-    return NULL;
+  validate_tree ((GtkTreeStore*)tree_model);
 
   g_assert (G_NODE (iter->user_data)->parent != NULL);
   
@@ -299,7 +366,8 @@ gtk_tree_store_get_path (GtkTreeModel *tree_model,
   else
     {
       GtkTreeIter tmp_iter = *iter;
-      tmp_iter.user_data = G_NODE (tmp_iter.user_data)->parent;
+      
+      tmp_iter.user_data = G_NODE (iter->user_data)->parent;
 
       retval = gtk_tree_store_get_path (tree_model,
 					&tmp_iter);
@@ -372,12 +440,15 @@ static gboolean
 gtk_tree_store_iter_next (GtkTreeModel  *tree_model,
 			  GtkTreeIter   *iter)
 {
-  if (iter->user_data == NULL)
+  g_return_val_if_fail (iter->user_data != NULL, FALSE);
+  
+  if (G_NODE (iter->user_data)->next)
+    {
+      iter->user_data = G_NODE (iter->user_data)->next;
+      return TRUE;
+    }
+  else
     return FALSE;
-
-  iter->user_data = G_NODE (iter->user_data)->next;
-
-  return (iter->user_data != NULL);
 }
 
 static gboolean
@@ -385,13 +456,23 @@ gtk_tree_store_iter_children (GtkTreeModel *tree_model,
 			      GtkTreeIter  *iter,
 			      GtkTreeIter  *parent)
 {
-  iter->stamp = GTK_TREE_STORE (tree_model)->stamp;
-  if (parent)
-    iter->user_data = G_NODE (parent->user_data)->children;
-  else
-    iter->user_data = G_NODE (GTK_TREE_STORE (tree_model)->root)->children;
+  GNode *children;
 
-  return iter->user_data != NULL;
+  g_return_val_if_fail (parent == NULL || parent->user_data != NULL, FALSE);
+  
+  if (parent)
+    children = G_NODE (parent->user_data)->children;
+  else
+    children = G_NODE (GTK_TREE_STORE (tree_model)->root)->children;
+
+  if (children)
+    {
+      iter->stamp = GTK_TREE_STORE (tree_model)->stamp;
+      iter->user_data = children;
+      return TRUE;
+    }
+  else
+    return FALSE;
 }
 
 static gboolean
@@ -401,6 +482,7 @@ gtk_tree_store_iter_has_child (GtkTreeModel *tree_model,
   g_return_val_if_fail (tree_model != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_TREE_STORE (tree_model), FALSE);
   g_return_val_if_fail (iter != NULL, FALSE);
+  g_return_val_if_fail (iter->user_data != NULL, FALSE);
 
   return G_NODE (iter->user_data)->children != NULL;
 }
@@ -414,11 +496,14 @@ gtk_tree_store_iter_n_children (GtkTreeModel *tree_model,
 
   g_return_val_if_fail (tree_model != NULL, 0);
   g_return_val_if_fail (GTK_IS_TREE_STORE (tree_model), 0);
-
+  g_return_val_if_fail (iter != NULL, FALSE);
+  g_return_val_if_fail (iter->user_data != NULL, FALSE);
+  
   if (iter == NULL)
     node = G_NODE (GTK_TREE_STORE (tree_model)->root)->children;
   else
     node = G_NODE (iter->user_data)->children;
+
   while (node)
     {
       i++;
@@ -435,24 +520,27 @@ gtk_tree_store_iter_nth_child (GtkTreeModel *tree_model,
 			       gint          n)
 {
   GNode *parent_node;
+  GNode *child;
 
   g_return_val_if_fail (tree_model != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_TREE_STORE (tree_model), FALSE);
-  g_return_val_if_fail (iter != NULL, FALSE);
+  g_return_val_if_fail (parent == NULL || parent->user_data != NULL, FALSE);
 
   if (parent == NULL)
     parent_node = GTK_TREE_STORE (tree_model)->root;
   else
     parent_node = parent->user_data;
 
-  iter->user_data = g_node_nth_child (parent_node, n);
+  child = g_node_nth_child (parent_node, n);
 
-  if (iter->user_data == NULL)
-    iter->stamp = 0;
+  if (child)
+    {
+      iter->user_data = child;
+      iter->stamp = GTK_TREE_STORE (tree_model)->stamp;
+      return TRUE;
+    }
   else
-    iter->stamp = GTK_TREE_STORE (tree_model)->stamp;
-
-  return (iter->user_data != NULL);
+    return FALSE;
 }
 
 static gboolean
@@ -460,19 +548,23 @@ gtk_tree_store_iter_parent (GtkTreeModel *tree_model,
 			    GtkTreeIter  *iter,
 			    GtkTreeIter  *child)
 {
-  g_assert (G_NODE (child->user_data)->parent != NULL);
+  GNode *parent;
   
-  iter->stamp = GTK_TREE_STORE (tree_model)->stamp;
-  iter->user_data = G_NODE (child->user_data)->parent;
+  g_return_val_if_fail (iter != NULL, FALSE);
+  g_return_val_if_fail (iter->user_data != NULL, FALSE);
 
-  if (iter->user_data == GTK_TREE_STORE (tree_model)->root)
+  parent = G_NODE (child->user_data)->parent;
+
+  g_assert (parent != NULL);  
+
+  if (parent != GTK_TREE_STORE (tree_model)->root)
     {
-      iter->stamp = 0;
-      iter->user_data = NULL;
-      return FALSE;
+      iter->user_data = parent;
+      iter->stamp = GTK_TREE_STORE (tree_model)->stamp;
+      return TRUE;
     }
-
-  return TRUE;
+  else
+    return FALSE;
 }
 
 /*
@@ -708,22 +800,27 @@ gtk_tree_store_insert (GtkTreeStore *model,
 		       gint          position)
 {
   GtkTreePath *path;
+  GNode *parent_node;
   
   g_return_if_fail (model != NULL);
   g_return_if_fail (GTK_IS_TREE_STORE (model));
 
-  if (parent->user_data == NULL)
-    parent->user_data = model->root;
+  if (parent)
+    parent_node = parent->user_data;
+  else
+    parent_node = model->root;
 
   iter->stamp = model->stamp;
   iter->user_data = g_node_new (NULL);
-  g_node_insert (G_NODE (parent->user_data), position, G_NODE (iter->user_data));
+  g_node_insert (parent_node, position, G_NODE (iter->user_data));
   
   path = gtk_tree_store_get_path (GTK_TREE_MODEL (model), iter);
   gtk_signal_emit_by_name (GTK_OBJECT (model),
 			   "inserted",
 			   path, iter);
   gtk_tree_path_free (path);
+
+  validate_tree ((GtkTreeStore*)model);
 }
 
 void
@@ -733,7 +830,7 @@ gtk_tree_store_insert_before (GtkTreeStore *model,
 			      GtkTreeIter  *sibling)
 {
   GtkTreePath *path;
-  GNode *parent_node = NULL;  
+  GNode *parent_node = NULL;
   GNode *new_node;
   
   g_return_if_fail (model != NULL);
@@ -767,6 +864,8 @@ gtk_tree_store_insert_before (GtkTreeStore *model,
 			   "inserted",
 			   path, iter);
   gtk_tree_path_free (path);
+
+  validate_tree ((GtkTreeStore*)model);
 }
 
 void
@@ -811,6 +910,8 @@ gtk_tree_store_insert_after (GtkTreeStore *model,
 			   "inserted",
 			   path, iter);
   gtk_tree_path_free (path);
+
+  validate_tree ((GtkTreeStore*)model);
 }
 
 void
@@ -861,6 +962,8 @@ gtk_tree_store_prepend (GtkTreeStore *model,
     {
       gtk_tree_store_insert_after (model, iter, parent, NULL);
     }
+
+  validate_tree ((GtkTreeStore*)model);
 }
 
 void
@@ -873,19 +976,19 @@ gtk_tree_store_append (GtkTreeStore *model,
   g_return_if_fail (model != NULL);
   g_return_if_fail (GTK_IS_TREE_STORE (model));
   g_return_if_fail (iter != NULL);
-
+  
   if (parent == NULL)
     parent_node = model->root;
   else
     parent_node = parent->user_data;
 
-  iter->stamp = model->stamp;
-  iter->user_data = g_node_new (NULL);
-
   if (parent_node->children == NULL)
     {
       GtkTreePath *path;
 
+      iter->stamp = model->stamp;
+      iter->user_data = g_node_new (NULL);
+      
       g_node_append (parent_node, G_NODE (iter->user_data));
 
       if (parent_node != model->root)
@@ -901,6 +1004,7 @@ gtk_tree_store_append (GtkTreeStore *model,
 	{
 	  path = gtk_tree_store_get_path (GTK_TREE_MODEL (model), iter);
 	}
+      
       gtk_signal_emit_by_name (GTK_OBJECT (model),
 			       "inserted",
 			       path,
@@ -911,6 +1015,8 @@ gtk_tree_store_append (GtkTreeStore *model,
     {
       gtk_tree_store_insert_before (model, iter, parent, NULL);
     }
+
+  validate_tree ((GtkTreeStore*)model);
 }
 
 gboolean
@@ -938,3 +1044,309 @@ gtk_tree_store_iter_depth (GtkTreeStore *model,
 
   return g_node_depth (G_NODE (iter->user_data)) - 1;
 }
+
+/* DND */
+
+
+
+static gboolean
+gtk_tree_store_drag_data_delete (GtkTreeDragSource *drag_source,
+                                 GtkTreePath       *path)
+{
+  GtkTreeIter iter;
+
+  g_return_val_if_fail (GTK_IS_TREE_STORE (drag_source), FALSE);
+  
+  if (gtk_tree_model_get_iter (GTK_TREE_MODEL (drag_source),
+                               &iter,
+                               path))
+    {
+      g_print ("data_delete deleting tree row\n");
+      gtk_tree_store_remove (GTK_TREE_STORE (drag_source),
+                             &iter);
+      return TRUE;
+    }
+  else
+    {
+      g_print ("data_delete path not in tree\n");
+      return FALSE;
+    }
+}
+
+static gboolean
+gtk_tree_store_drag_data_get (GtkTreeDragSource *drag_source,
+                              GtkTreePath       *path,
+                              GtkSelectionData  *selection_data)
+{
+  g_return_val_if_fail (GTK_IS_TREE_STORE (drag_source), FALSE);
+
+  /* Note that we don't need to handle the GTK_TREE_MODEL_ROW
+   * target, because the default handler does it for us, but
+   * we do anyway for the convenience of someone maybe overriding the
+   * default handler.
+   */
+
+  if (gtk_selection_data_set_tree_row (selection_data,
+                                       GTK_TREE_MODEL (drag_source),
+                                       path))
+    {
+      return TRUE;
+    }
+  else
+    {
+      /* FIXME handle text targets at least. */
+    }
+
+  return FALSE;
+}
+
+static void
+copy_node_data (GtkTreeStore *tree_store,
+                GtkTreeIter  *src_iter,
+                GtkTreeIter  *dest_iter)
+{
+  GtkTreeDataList *dl = G_NODE (src_iter->user_data)->data;
+  GtkTreeDataList *copy_head = NULL;
+  GtkTreeDataList *copy_prev = NULL;
+  GtkTreeDataList *copy_iter = NULL;
+  gint col;
+  
+  col = 0;
+  while (dl)
+    {
+      copy_iter = _gtk_tree_data_list_node_copy (dl,
+                                                 tree_store->column_headers[col]);
+
+      g_print ("copied col %d type %s\n", col,
+               g_type_name (tree_store->column_headers[col]));
+              
+      if (copy_head == NULL)
+        copy_head = copy_iter;
+
+      if (copy_prev)
+        copy_prev->next = copy_iter;
+
+      copy_prev = copy_iter;
+
+      dl = dl->next;
+      ++col;
+    }
+          
+  G_NODE (dest_iter->user_data)->data = copy_head;
+
+  gtk_signal_emit_by_name (GTK_OBJECT (tree_store),
+                           "changed",
+                           NULL, dest_iter);
+}
+
+static void
+recursive_node_copy (GtkTreeStore *tree_store,
+                     GtkTreeIter  *src_iter,
+                     GtkTreeIter  *dest_iter)
+{
+  GtkTreeIter child;
+  GtkTreeModel *model;
+
+  model = GTK_TREE_MODEL (tree_store);
+  
+  copy_node_data (tree_store, src_iter, dest_iter);
+
+  if (gtk_tree_model_iter_children (model,
+                                    &child,
+                                    src_iter))
+    {
+      /* Need to create children and recurse. Note our
+       * dependence on persistent iterators here.
+       */
+      do
+        {
+          GtkTreeIter copy;
+
+          /* Gee, a really slow algorithm... ;-) FIXME */
+          gtk_tree_store_append (tree_store,
+                                 &copy,
+                                 dest_iter);
+          
+          recursive_node_copy (tree_store, &child, &copy);
+        }
+      while (gtk_tree_model_iter_next (model, &child));
+    }
+}
+
+static gboolean
+gtk_tree_store_drag_data_received (GtkTreeDragDest   *drag_dest,
+                                   GtkTreePath       *dest,
+                                   GtkSelectionData  *selection_data)
+{
+  GtkTreeModel *tree_model;
+  GtkTreeStore *tree_store;
+  GtkTreeModel *src_model = NULL;
+  GtkTreePath *src_path = NULL;
+  gboolean retval = FALSE;
+  
+  g_return_val_if_fail (GTK_IS_TREE_STORE (drag_dest), FALSE);
+
+  tree_model = GTK_TREE_MODEL (drag_dest);
+  tree_store = GTK_TREE_STORE (drag_dest);
+
+  validate_tree (tree_store);
+  
+  if (gtk_selection_data_get_tree_row (selection_data,
+                                       &src_model,
+                                       &src_path) &&
+      src_model == tree_model)
+    {
+      /* Copy the given row to a new position */
+      GtkTreeIter src_iter;
+      GtkTreeIter dest_iter;
+      GtkTreePath *prev;
+      
+      if (!gtk_tree_model_get_iter (src_model,
+                                    &src_iter,
+                                    src_path))
+        {
+          g_print ("can't get source path as iter\n");
+          goto out;
+        }
+
+      /* Get the path to insert _after_ (dest is the path to insert _before_) */
+      prev = gtk_tree_path_copy (dest);
+      
+      if (!gtk_tree_path_prev (prev))
+        {
+          GtkTreeIter dest_parent;
+          GtkTreePath *parent;
+          GtkTreeIter *dest_parent_p;
+          
+          /* dest was the first spot at the current depth; which means
+           * we are supposed to prepend.
+           */
+          
+          /* Get the parent, NULL if parent is the root */
+          dest_parent_p = NULL;
+          parent = gtk_tree_path_copy (dest);
+          if (gtk_tree_path_up (parent))
+            {
+              gtk_tree_model_get_iter (tree_model,
+                                       &dest_parent,
+                                       parent);
+              dest_parent_p = &dest_parent;
+            }
+          gtk_tree_path_free (parent);
+          parent = NULL;
+          
+          gtk_tree_store_prepend (GTK_TREE_STORE (tree_model),
+                                  &dest_iter,
+                                  dest_parent_p);
+          
+          retval = TRUE;
+
+          g_print ("prepending to tree\n");
+        }
+      else
+        {
+          if (gtk_tree_model_get_iter (GTK_TREE_MODEL (tree_model),
+                                       &dest_iter,
+                                       prev))
+            {
+              GtkTreeIter tmp_iter = dest_iter;
+              gtk_tree_store_insert_after (GTK_TREE_STORE (tree_model),
+                                           &dest_iter,
+                                           NULL,
+                                           &tmp_iter);
+              retval = TRUE;
+
+              g_print ("inserting into tree\n");
+            }
+          else
+            g_print ("can't get iter to insert after\n");
+        }
+
+      gtk_tree_path_free (prev);
+      
+      /* If we succeeded in creating dest_iter, walk src_iter tree branch,
+       * duplicating it below dest_iter.
+       */
+      
+      if (retval)
+        {
+          recursive_node_copy (tree_store,
+                               &src_iter,
+                               &dest_iter);
+        }
+    }
+  else
+    {
+      /* FIXME maybe add some data targets eventually, or handle text
+       * targets in the simple case.
+       */
+      g_print ("not accepting target\n");
+    }
+
+ out:
+  
+  if (src_path)
+    gtk_tree_path_free (src_path);
+  
+  return retval;  
+}
+
+static gboolean
+gtk_tree_store_row_drop_possible (GtkTreeDragDest *drag_dest,
+                                  GtkTreeModel    *src_model,
+                                  GtkTreePath     *src_path,
+                                  GtkTreePath     *dest_path)
+{
+  /* can only drag to ourselves */
+  if (src_model != GTK_TREE_MODEL (drag_dest))
+    return FALSE;
+  
+  /* Can't drop into ourself. */
+  if (gtk_tree_path_is_ancestor (src_path,
+                                 dest_path))
+    return FALSE;
+
+  /* Can't drop if dest_path's parent doesn't exist */
+  {
+    GtkTreeIter iter;
+    GtkTreePath *tmp = gtk_tree_path_copy (dest_path);
+
+    /* if we can't go up, we know the parent exists, the root
+     * always exists.
+     */
+    if (gtk_tree_path_up (tmp))
+      {
+        if (!gtk_tree_model_get_iter (GTK_TREE_MODEL (drag_dest),
+                                      &iter, tmp))
+          {
+            if (tmp)
+              gtk_tree_path_free (tmp);
+            return FALSE;
+          }
+      }
+    
+    if (tmp)
+      gtk_tree_path_free (tmp);
+  }
+  
+  /* Can otherwise drop anywhere. */
+  return TRUE;
+}
+     
+static void
+validate_gnode (GNode* node)
+{
+  GNode *iter;
+  
+  iter = node->children;
+  while (iter != NULL)
+    {
+      g_assert (iter->parent == node);
+      if (iter->prev)
+        g_assert (iter->prev->next == iter);
+      validate_gnode (iter);
+      iter = iter->next;
+    }
+}
+
+

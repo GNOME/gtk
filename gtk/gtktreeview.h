@@ -194,9 +194,9 @@ void     gtk_tree_view_unset_rows_drag_dest   (GtkTreeView *tree_view);
 void       gtk_tree_view_set_drag_dest_row    (GtkTreeView              *tree_view,
                                                GtkTreePath              *path,
                                                GtkTreeViewDropPosition   pos);
-void       gtk_tree_view_get_drag_dest_row   (GtkTreeView              *tree_view,
-                                              GtkTreePath             **path,
-                                              GtkTreeViewDropPosition  *pos);
+void       gtk_tree_view_get_drag_dest_row    (GtkTreeView              *tree_view,
+                                               GtkTreePath             **path,
+                                               GtkTreeViewDropPosition  *pos);
 gboolean   gtk_tree_view_get_dest_row_at_pos  (GtkTreeView              *tree_view,
                                                gint                      drag_x,
                                                gint                      drag_y,
