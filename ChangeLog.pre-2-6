@@ -1,3 +1,8 @@
+2004-07-13  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkcombobox.c (gtk_combo_box_popdown): Don't
+	crash if unrealized.
+
 Tue Jul 13 01:50:06 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkaboutdialog.c (display_credits_dialog): Don't
