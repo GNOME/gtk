@@ -9,8 +9,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.3.15\n"
-"POT-Creation-Date: 2003-01-15 12:12+0100\n"
-"PO-Revision-Date: 2003-01-16 09:43GMT\n"
+"POT-Creation-Date: 2003-01-22 20:04+0100\n"
+"PO-Revision-Date: 2003-01-16 09:30GMT\n"
 "Last-Translator: Pablo Gonzalo del Campo <pablodc@bigfoot.com>\n"
 "Language-Team: Spanish <traductores@es.gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -1957,58 +1957,58 @@ msgstr "Seleccionar todo"
 msgid "Input Methods"
 msgstr "Métodos de entrada"
 
-#: gtk/gtkentry.c:3977 gtk/gtktextview.c:6524
+#: gtk/gtkentry.c:3977 gtk/gtktextview.c:6517
 msgid "_Insert Unicode control character"
 msgstr "_Insertar caracter de control unicode"
 
-#: gtk/gtkfilesel.c:512 gtk/gtkimage.c:167
+#: gtk/gtkfilesel.c:551 gtk/gtkimage.c:167
 msgid "Filename"
 msgstr "Nombre de archivo"
 
-#: gtk/gtkfilesel.c:513
+#: gtk/gtkfilesel.c:552
 msgid "The currently selected filename"
 msgstr "El nombre del archivo actualmente seleccionado"
 
-#: gtk/gtkfilesel.c:519
+#: gtk/gtkfilesel.c:558
 msgid "Show file operations"
 msgstr "Mostrar operaciones de archivo"
 
-#: gtk/gtkfilesel.c:520
+#: gtk/gtkfilesel.c:559
 msgid "Whether buttons for creating/manipulating files should be displayed"
 msgstr ""
 "Indica si los botones de creación/manipulación de archivos deben ser "
 "mostrados"
 
-#: gtk/gtkfilesel.c:527
+#: gtk/gtkfilesel.c:566
 msgid "Select multiple"
 msgstr "Selección múltiple"
 
-#: gtk/gtkfilesel.c:528
+#: gtk/gtkfilesel.c:567
 msgid "Whether to allow multiple files to be selected"
 msgstr "Indica si pueden ser seleccionado múltiples archivos"
 
-#: gtk/gtkfilesel.c:683
+#: gtk/gtkfilesel.c:722
 msgid "Folders"
 msgstr "Carpetas"
 
-#: gtk/gtkfilesel.c:687
+#: gtk/gtkfilesel.c:726
 msgid "Fol_ders"
 msgstr "_Carpetas"
 
-#: gtk/gtkfilesel.c:719
+#: gtk/gtkfilesel.c:758
 msgid "Files"
 msgstr "Archivos"
 
-#: gtk/gtkfilesel.c:723
+#: gtk/gtkfilesel.c:762
 msgid "_Files"
 msgstr "_Archivos"
 
-#: gtk/gtkfilesel.c:806 gtk/gtkfilesel.c:2204
+#: gtk/gtkfilesel.c:845 gtk/gtkfilesel.c:2243
 #, c-format
 msgid "Folder unreadable: %s"
 msgstr "Directorio ilegible: %s"
 
-#: gtk/gtkfilesel.c:937
+#: gtk/gtkfilesel.c:976
 #, c-format
 msgid ""
 "The file \"%s\" resides on another machine (called %s) and may not be "
@@ -2019,26 +2019,26 @@ msgstr ""
 "disponible para este programa.\n"
 "¿Está seguro que desea seleccionarlo?"
 
-#: gtk/gtkfilesel.c:1068
+#: gtk/gtkfilesel.c:1107
 msgid "_New Folder"
 msgstr "_Nueva carpeta"
 
-#: gtk/gtkfilesel.c:1079
+#: gtk/gtkfilesel.c:1118
 msgid "De_lete File"
 msgstr "_Borrar Archivo"
 
-#: gtk/gtkfilesel.c:1090
+#: gtk/gtkfilesel.c:1129
 msgid "_Rename File"
 msgstr "_Renombrar archivo"
 
-#: gtk/gtkfilesel.c:1386
+#: gtk/gtkfilesel.c:1425
 #, c-format
 msgid "The folder name \"%s\" contains symbols that are not allowed in filenames"
 msgstr ""
 "El nombre de la carpeta «%s» contiene símbolos que no están permitidos en "
 "los nombres de archivos"
 
-#: gtk/gtkfilesel.c:1388
+#: gtk/gtkfilesel.c:1427
 #, c-format
 msgid ""
 "Error creating folder \"%s\": %s\n"
@@ -2047,35 +2047,35 @@ msgstr ""
 "Ha ocurrido un error al crear la carpeta «%s» : %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1389 gtk/gtkfilesel.c:1630
+#: gtk/gtkfilesel.c:1428 gtk/gtkfilesel.c:1669
 msgid "You probably used symbols not allowed in filenames."
 msgstr "Probablemente ha empleado símbolos no permitidos en nombres de archivo."
 
-#: gtk/gtkfilesel.c:1397
+#: gtk/gtkfilesel.c:1436
 #, c-format
 msgid "Error creating folder \"%s\": %s\n"
 msgstr "Error al crear la carpeta «%s» : %s\n"
 
-#: gtk/gtkfilesel.c:1431
+#: gtk/gtkfilesel.c:1470
 msgid "New Folder"
 msgstr "Nueva carpeta"
 
-#: gtk/gtkfilesel.c:1446
+#: gtk/gtkfilesel.c:1485
 msgid "_Folder name:"
 msgstr "_Nombre del la carpeta:"
 
-#: gtk/gtkfilesel.c:1472
+#: gtk/gtkfilesel.c:1511
 msgid "C_reate"
 msgstr "C_rear"
 
-#: gtk/gtkfilesel.c:1518
+#: gtk/gtkfilesel.c:1557
 #, c-format
 msgid "The filename \"%s\" contains symbols that are not allowed in filenames"
 msgstr ""
 "El nombre «%s» contiene símbolos que no están permitidos en nombres de "
 "archivos."
 
-#: gtk/gtkfilesel.c:1521
+#: gtk/gtkfilesel.c:1560
 #, c-format
 msgid ""
 "Error deleting file \"%s\": %s\n"
@@ -2084,34 +2084,34 @@ msgstr ""
 "Error al borrar el archivo «%s»: %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1523 gtk/gtkfilesel.c:1644
+#: gtk/gtkfilesel.c:1562 gtk/gtkfilesel.c:1683
 msgid "It probably contains symbols not allowed in filenames."
 msgstr ""
 "Probablemente contenga símbolos que no están permitidos en los nombres de "
 "archivo."
 
-#: gtk/gtkfilesel.c:1532
+#: gtk/gtkfilesel.c:1571
 #, c-format
 msgid "Error deleting file \"%s\": %s"
 msgstr "Error al borrar el archivo «%s»: %s"
 
-#: gtk/gtkfilesel.c:1575
+#: gtk/gtkfilesel.c:1614
 #, c-format
 msgid "Really delete file \"%s\" ?"
 msgstr "¿Realmente desea eliminar el archivo «%s»?"
 
-#: gtk/gtkfilesel.c:1580
+#: gtk/gtkfilesel.c:1619
 msgid "Delete File"
 msgstr "Borrar Archivo"
 
-#: gtk/gtkfilesel.c:1626 gtk/gtkfilesel.c:1640
+#: gtk/gtkfilesel.c:1665 gtk/gtkfilesel.c:1679
 #, c-format
 msgid "The file name \"%s\" contains symbols that are not allowed in filenames"
 msgstr ""
 "El nombre «%s» contiene símbolos que no están permitidos en nombres de "
 "archivos"
 
-#: gtk/gtkfilesel.c:1628
+#: gtk/gtkfilesel.c:1667
 #, c-format
 msgid ""
 "Error renaming file to \"%s\": %s\n"
@@ -2120,7 +2120,7 @@ msgstr ""
 "Error al renombrar el archivo como «%s»: %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1642
+#: gtk/gtkfilesel.c:1681
 #, c-format
 msgid ""
 "Error renaming file \"%s\": %s\n"
@@ -2129,29 +2129,29 @@ msgstr ""
 "Error al renombrar el archivo «%s»: %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1652
+#: gtk/gtkfilesel.c:1691
 #, c-format
 msgid "Error renaming file \"%s\" to \"%s\": %s"
 msgstr "Error al renombrar el archivo «%s» como «%s»: %s"
 
-#: gtk/gtkfilesel.c:1699
+#: gtk/gtkfilesel.c:1738
 msgid "Rename File"
 msgstr "Renombrar Archivo"
 
-#: gtk/gtkfilesel.c:1714
+#: gtk/gtkfilesel.c:1753
 #, c-format
 msgid "Rename file \"%s\" to:"
 msgstr "Renombrar archivo «%s» como:"
 
-#: gtk/gtkfilesel.c:1745
+#: gtk/gtkfilesel.c:1784
 msgid "_Rename"
 msgstr "_Renombrar"
 
-#: gtk/gtkfilesel.c:2184
+#: gtk/gtkfilesel.c:2223
 msgid "_Selection: "
 msgstr "_Selección: "
 
-#: gtk/gtkfilesel.c:3077
+#: gtk/gtkfilesel.c:3117
 #, c-format
 msgid ""
 "The filename \"%s\" couldn't be converted to UTF-8 (try setting the "
@@ -2160,15 +2160,15 @@ msgstr ""
 "El nombre de archivo «%s» no ha podido ser convertido en UTF-8 (intente "
 "definir la variable de entorno G_BROKEN_FILENAMES): %s"
 
-#: gtk/gtkfilesel.c:3080
+#: gtk/gtkfilesel.c:3120
 msgid "Invalid Utf-8"
 msgstr "UTF-8 inválido"
 
-#: gtk/gtkfilesel.c:3948
+#: gtk/gtkfilesel.c:3997
 msgid "Name too long"
 msgstr "El nombre es muy largo"
 
-#: gtk/gtkfilesel.c:3950
+#: gtk/gtkfilesel.c:3999
 msgid "Couldn't convert filename"
 msgstr "No se ha podido convertir el nombre del archivo"
 
@@ -2858,7 +2858,7 @@ msgstr "Indica si los tabuladores hijos deberían rellenar el área asignada o n
 msgid "Tab pack type"
 msgstr "Tipo de empaquetado de la pestaña"
 
-#: gtk/gtknotebook.c:2438 gtk/gtknotebook.c:4766
+#: gtk/gtknotebook.c:2439 gtk/gtknotebook.c:4764
 #, c-format
 msgid "Page %u"
 msgstr "Página %u"
@@ -3296,11 +3296,11 @@ msgstr ""
 "Cantidad de píxeles entre las barras de desplazamientos y la ventana "
 "desplazada"
 
-#: gtk/gtksettings.c:167
+#: gtk/gtksettings.c:168
 msgid "Double Click Time"
 msgstr "Tiempo del doble clic"
 
-#: gtk/gtksettings.c:168
+#: gtk/gtksettings.c:169
 msgid ""
 "Maximum time allowed between two clicks for them to be considered a double "
 "click (in milliseconds)"
@@ -3308,27 +3308,27 @@ msgstr ""
 "Máximo tiempo permitido entre dos clic para ser considerados como un doble "
 "clic (en milisegundos)"
 
-#: gtk/gtksettings.c:175
+#: gtk/gtksettings.c:176
 msgid "Cursor Blink"
 msgstr "Parpadeo del cursor"
 
-#: gtk/gtksettings.c:176
+#: gtk/gtksettings.c:177
 msgid "Whether the cursor should blink"
 msgstr "Indica si el cursor debe parpadear"
 
-#: gtk/gtksettings.c:183
+#: gtk/gtksettings.c:184
 msgid "Cursor Blink Time"
 msgstr "Tiempo de centelleo del cursor"
 
-#: gtk/gtksettings.c:184
+#: gtk/gtksettings.c:185
 msgid "Length of the cursor blink cycle, in milleseconds"
 msgstr "Duración del ciclo de parpadeo del cursor, en milisegundos"
 
-#: gtk/gtksettings.c:191
+#: gtk/gtksettings.c:192
 msgid "Split Cursor"
 msgstr "Cursor cortado"
 
-#: gtk/gtksettings.c:192
+#: gtk/gtksettings.c:193
 msgid ""
 "Whether two cursors should be displayed for mixed left-to-right and right-to-"
 "left text"
@@ -3336,51 +3336,51 @@ msgstr ""
 "Indica si deben mostrarse dos cursores para el texto mezclado de izquierda-a-"
 "derecha y derecha-a-izquierda"
 
-#: gtk/gtksettings.c:199
+#: gtk/gtksettings.c:200
 msgid "Theme Name"
 msgstr "Nombre del tema"
 
-#: gtk/gtksettings.c:200
+#: gtk/gtksettings.c:201
 msgid "Name of theme RC file to load"
 msgstr "Nombre del archivo de tema RC a cargar"
 
-#: gtk/gtksettings.c:207
+#: gtk/gtksettings.c:208
 msgid "Key Theme Name"
 msgstr "Nombre del tema principal"
 
-#: gtk/gtksettings.c:208
+#: gtk/gtksettings.c:209
 msgid "Name of key theme RC file to load"
 msgstr "Nombre del archivo de tema RC principal a cargar"
 
-#: gtk/gtksettings.c:216
+#: gtk/gtksettings.c:217
 msgid "Menu bar accelerator"
 msgstr "Combinación de teclas de la barra de menús"
 
-#: gtk/gtksettings.c:217
+#: gtk/gtksettings.c:218
 msgid "Keybinding to activate the menu bar"
 msgstr "Combinación de teclas para activar la barra de menús"
 
-#: gtk/gtksettings.c:225
+#: gtk/gtksettings.c:226
 msgid "Drag threshold"
 msgstr "Umbral del arrastre"
 
-#: gtk/gtksettings.c:226
+#: gtk/gtksettings.c:227
 msgid "Number of pixels the cursor can move before dragging"
 msgstr "Cantidad de píxeles que el cursor puede mover antes de iniciar el arrastre"
 
-#: gtk/gtksettings.c:234
+#: gtk/gtksettings.c:235
 msgid "Font Name"
 msgstr "Nombre de la tipografía"
 
-#: gtk/gtksettings.c:235
+#: gtk/gtksettings.c:236
 msgid "Name of default font to use"
 msgstr "Nombre de la tipografía predeterminada a utilizar"
 
-#: gtk/gtksettings.c:243
+#: gtk/gtksettings.c:244
 msgid "Icon Sizes"
 msgstr "Tamaños de los iconos"
 
-#: gtk/gtksettings.c:244
+#: gtk/gtksettings.c:245
 msgid "List of icon sizes (gtk-menu=16,16;gtk-button=20,20..."
 msgstr "Lista de los tamaños de los iconos (gtk-menu=16,16;gtk-button=20,20..."
 
@@ -3725,7 +3725,7 @@ msgstr "_Deshacer"
 
 #: gtk/gtkstock.c:333
 msgid "_Yes"
-msgstr "_Si"
+msgstr "_Sí"
 
 #: gtk/gtkstock.c:334
 msgid "Zoom _100%"
@@ -4266,7 +4266,7 @@ msgstr "Cursor visible"
 msgid "If the insertion cursor is shown"
 msgstr "Si se muestra el cursor de inserción"
 
-#: gtk/gtktextview.c:6515
+#: gtk/gtktextview.c:6508
 msgid "Input _Methods"
 msgstr "Métodos de entrada"
 
