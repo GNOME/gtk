@@ -1,3 +1,8 @@
+Wed Jan 28 21:40:47 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkentrycompletion.c (gtk_entry_completion_action_data_func):
+	Don't leak string.  (#132482, Christian Persch)
+
 Tue Jan 27 18:45:47 2004  Manish Singh  <yosh@gimp.org>
 
         * m4macros/gtk-2.0.m4: quote AC_DEFUN macro names so automake

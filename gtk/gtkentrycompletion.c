@@ -688,6 +688,8 @@ gtk_entry_completion_action_data_func (GtkTreeViewColumn *tree_column,
                   "markup", NULL,
                   "text", string,
                   NULL);
+
+  g_free (string);
 }
 
 static void
