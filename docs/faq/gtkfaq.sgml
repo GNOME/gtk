@@ -7,9 +7,9 @@
 <title>GTK+ FAQ
 
 <!-- NOTE: Use only one author tag, otherwise sgml2txt barfs - TRG --> 
-<author>Nathan Froyd, Tony Gale, Shawn T. Amundson, Emmanuel Deloget
+<author>Tony Gale, Shawn T. Amundson, Emmanuel Deloget, Nathan Froyd
 
-<date>August 29th 1999
+<date>October 30th 1999
 
 <abstract> This document is intended to answer questions that are likely to be 
 frequently asked by programmers using GTK+ or people who are just looking at 
@@ -93,7 +93,7 @@ GTK+ == Gimp Toolkit
 
 GDK == Gtk+ Drawing Kit
 
-GLib == G Library
+GLib == G Libray
 
 <!-- ----------------------------------------------------------------- -->
 <sect1>Where is the documentation for GTK+?
@@ -109,14 +109,27 @@ with SGML, HTML, Postscript, DVI and text versions can be found in
 <htmlurl url="ftp://ftp.gtk.org/pub/gtk/tutorial"
 name="ftp://ftp.gtk.org/pub/gtk/tutorial">
 
-There is also a book available that details programming with GTK+ and
-GDK which has been written by Eric Harlow. It is entitled "Developing
-Linux Applications with GTK+ and GDK" and is available at all good
-book stores. The ISBN is 0-7357-0021-4
-
+There are now a couple of books available that deal with programming
+GTK+, GDK and GNOME:
+<itemize>
+<item> Eric Harlows book entitled "Developing Linux Applications with
+GTK+ and GDK". The ISBN is 0-7357-0021-4
+<P>
 The example code from Eric's book is available on-line at
 <htmlurl url="http://www.bcpl.net/~eharlow/book"
 name="http://www.bcpl.net/~eharlow/book">
+
+<item> Havoc Pennington has released a book called "GTK+/GNOME
+Application Development". The ISBN is 0-7357-0078-8
+<P>
+The free version of the book lives here:
+<htmlurl url="http://developer.gnome.org/doc/GGAD/"
+name="http://developer.gnome.org/doc/GGAD/">
+<P>
+And Havoc maintains information about it and errata here:
+<htmlurl url="http://pobox.com/~hp/gnome-app-devel.html"
+name="http://pobox.com/~hp/gnome-app-devel.html">
+</itemize>
 
 <!-- ----------------------------------------------------------------- -->
 <sect1>Is there a mailing list (or mailing list archive) for GTK+?
@@ -129,9 +142,10 @@ name="http://www.gtk.org/mailinglists.html">
 <!-- ----------------------------------------------------------------- -->
 <sect1>How to get help with GTK+
 <p>
-First, make sure your question isn't answered in the documentation, this
-FAQ or the tutorial. Done that? You're sure you've done that, right? In
-that case, the best place to post questions is to the GTK+ mailing list.
+First, make sure your question isn't answered in the documentation,
+this FAQ or the tutorial. Done that? You're sure you've done that,
+right? In that case, the best place to post questions is to the GTK+
+mailing list.
 
 <!-- ----------------------------------------------------------------- -->
 <sect1>How to report bugs in GTK+
@@ -166,25 +180,24 @@ Then describe the bug. Include:
 
 <item> How to reproduce the bug. 
 
-  If you can reproduce it with the testgtk program that is built 
-  in the gtk/ subdirectory, that will be most convenient.  Otherwise, 
-  please include a short test program that exhibits the behavior. 
-  As a last resort, you can also provide a pointer to a larger piece 
-  of software that can be downloaded.
+  If you can reproduce it with the testgtk program that is built in
+  the gtk/ subdirectory, that will be most convenient. Otherwise,
+  please include a short test program that exhibits the behavior. As
+  a last resort, you can also provide a pointer to a larger piece of
+  software that can be downloaded.
 
-  (Bugs that can be reproduced within the  GIMP are almost as good 
-  as bugs that can be reproduced in testgtk. If you are reporting a 
-  bug found with the GIMP, please include the version number of the GIMP 
+  (Bugs that can be reproduced within the GIMP are almost as good as
+  bugs that can be reproduced in testgtk. If you are reporting a bug
+  found with the GIMP, please include the version number of the GIMP
   you are using)
 
 <item> If the bug was a crash, the exact text that was printed out
   when the crash occured.
 
-<item> Further information such as stack traces may be useful, but
-  are not necessary. If you do send a stack trace, and the error
-  is an X error, it will be more useful if the stacktrace
-  is produced running the test program with the <tt/--sync/ command
-  line option.
+<item> Further information such as stack traces may be useful, but are
+  not necessary. If you do send a stack trace, and the error is an X
+  error, it will be more useful if the stacktrace is produced running
+  the test program with the <tt/--sync/ command line option.
 </itemize>
 
 <!-- ----------------------------------------------------------------- -->
@@ -246,24 +259,23 @@ Some of these are:
         a GTK+ based RAD tool which produces GTK+ applications
 </itemize>
 <p>
-In addition to the above, the GNOME project (<htmlurl url="http://www.gnome.org"
-name="http://www.gnome.org">)
-is using GTK+ to build a free desktop for Linux. Many more programs can be found
+In addition to the above, the GNOME project (<htmlurl
+url="http://www.gnome.org" name="http://www.gnome.org">) is using GTK+
+to build a free desktop for Linux. Many more programs can be found
 there.
 
 <!-- ----------------------------------------------------------------- -->
 <sect1>I'm looking for an application to write in GTK+. How about an IRC client? 
 <p> 
 
-Ask on gtk-list for suggestions. There are at least three IRC
-clients already under development (probably more in fact. The server at
+Ask on gtk-list for suggestions. There are at least three IRC clients
+already under development (probably more in fact. The server at
 <htmlurl url="http://www.forcix.cx/irc-clients.html"
 name="http://www.forcix.cx/irc-clients.html"> list a bunch of them).
 
 <itemize>
+<item>X-Chat.
 <item>girc. (Included with GNOME)
-<item>Bezerk (<htmlurl url="http://www.gtk.org/~trog/"
-                       name="http://www.gtk.org/~trog/">)
 <item>gsirc. (In the gnome CVS tree)
 </itemize>
 
@@ -650,7 +662,7 @@ development. This will introduce you to writing applications using C.
 The Tutorial doesn't (yet) contain information on all of the widgets
 that are in GTK+. For example code on how to use the basics of all the
 GTK+ widgets you should look at the file gtk/testgtk.c (and associated
-source files) within the GTK+ distribution. Looking at these exmaples will
+source files) within the GTK+ distribution. Looking at these examples will
 give you a good grounding on what the widgets can do.
 
 <!-- ----------------------------------------------------------------- -->
@@ -993,7 +1005,7 @@ workarounds exist. -->
 <sect1>Why do this strange 'x io error' occur when I <tt/fork()/ in my GTK+ app?
 <p>
 This is not really a GTK+ problem, and the problem is not related to <tt/fork()/
-too. If the 'x io error' occurs then you probably use the <tt/exit()/ function
+either. If the 'x io error' occurs then you probably use the <tt/exit()/ function
 in order to exit from the child process.
 
 When GDK opens an X display, it creates a socket file descriptor. When you use
@@ -1002,35 +1014,178 @@ and the underlying X library really doesn't like this.
 
 The right function to use here is <tt/_exit()/. 
 
-Erik Mouw gave the following piece of code about the fork()/exit() problem
-(slightly modified)
+Erik Mouw gave the following code example to illustrate handling
+fork() and exit().
 
 <tscreen><verb>
-  int pid = fork();
+/*-------------------------------------------------------------------------
+ * Filename:      gtk-fork.c
+ * Version:       0.99.1
+ * Copyright:     Copyright (C) 1999, Erik Mouw
+ * Author:        Erik Mouw <J.A.K.Mouw@its.tudelft.nl>
+ * Description:   GTK+ fork example
+ * Created at:    Thu Sep 23 21:37:55 1999
+ * Modified by:   Erik Mouw <J.A.K.Mouw@its.tudelft.nl>
+ * Modified at:   Thu Sep 23 22:39:39 1999
+ *-----------------------------------------------------------------------*/
+/*
+ * Compile with:
+ *
+ * cc -o gtk-fork gtk-fork.c `gtk-config --cflags --libs`
+ *
+ */
 
-  if(pid==-1)
+#include <stdio.h>
+#include <stdlib.h>
+#include <signal.h>
+#include <sys/types.h>
+#include <sys/wait.h>
+#include <unistd.h>
+#include <gtk/gtk.h>
+
+void sigchld_handler(int num)
+{
+  sigset_t set, oldset;
+  pid_t pid;
+  int status, exitstatus;
+
+  /* block other incoming SIGCHLD signals */
+  sigemptyset(&amp;set);
+  sigaddset(&amp;set, SIGCHLD);
+  sigprocmask(SIG_BLOCK, &amp;set, &amp;oldset);
+
+  /* wait for child */
+  while((pid = waitpid((pid_t)-1, &amp;status, WNOHANG)) > 0)
     {
+      if(WIFEXITED(status))
+	{
+	  exitstatus = WEXITSTATUS(status);
+
+	  fprintf(stderr, 
+		  "Parent: child exited, pid = %d, exit status = %d\n", 
+		  (int)pid, exitstatus);
+	}
+      else if(WIFSIGNALED(status))
+	{
+	  exitstatus = WTERMSIG(status);
+
+	  fprintf(stderr,
+		  "Parent: child terminated by signal %d, pid = %d\n",
+		  exitstatus, (int)pid);
+	}
+      else if(WIFSTOPPED(status))
+	{
+	  exitstatus = WSTOPSIG(status);
+
+	  fprintf(stderr,
+		  "Parent: child stopped by signal %d, pid = %d\n",
+		  exitstatus, (int)pid);
+	}
+      else
+	{
+	  fprintf(stderr,
+		  "Parent: child exited magically, pid = %d\n",
+		  (int)pid);
+	}
+    }
+
+  /* re-install the signal handler (some systems need this) */
+  signal(SIGCHLD, sigchld_handler);
+  
+  /* and unblock it */
+  sigemptyset(&amp;set);
+  sigaddset(&amp;set, SIGCHLD);
+  sigprocmask(SIG_UNBLOCK, &amp;set, &amp;oldset);
+}
+
+gint delete_event(GtkWidget *widget, GdkEvent *event, gpointer data)
+{
+  return(FALSE);
+}
+
+void destroy(GtkWidget *widget, gpointer data)
+{
+  gtk_main_quit();
+}
+
+void fork_me(GtkWidget *widget, gpointer data)
+{
+  pid_t pid;
+
+  pid = fork();
+
+  if(pid == -1)
+    {
+      /* ouch, fork() failed */
       perror("fork");
       exit(-1);
     }
-  else if(pid==0) /* child */
+  else if(pid == 0)
     {
-      retval=system("a command"); /* can use exec* functions here */
-      _exit(retval);  /* notice _exit() instead of exit() */
-    }
-  else /* parent */
-    {
-      for(;;)
-        {
-          if(waitpid(pid, &amp;status, WNOHANG) == pid)
-            {
-              waitpid(pid, &amp;status, WUNTRACED); /* anti zombie code */
-              break;
-            }
-        }
+      /* child */
+      fprintf(stderr, "Child: pid = %d\n", (int)getpid());
 
-      return(WEXITSTATUS(status));
+      execlp("ls", "ls", "-CF", "/", NULL);
+      
+      /* if exec() returns, there is something wrong */
+      perror("execlp");
+
+      /* exit child. note the use of _exit() instead of exit() */
+      _exit(-1);
     }
+  else
+    {
+      /* parent */
+      fprintf(stderr, "Parent: forked a child with pid = %d\n", (int)pid);
+    }
+}
+
+int main(int argc, char *argv[])
+{
+  GtkWidget *window;
+  GtkWidget *button;
+
+  gtk_init(&amp;argc, &amp;argv);
+
+  /* the basic stuff: make a window and set callbacks for destroy and
+   * delete events 
+   */
+  window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
+
+  gtk_signal_connect(GTK_OBJECT (window), "delete_event",
+		     GTK_SIGNAL_FUNC(delete_event), NULL);
+          
+  gtk_signal_connect(GTK_OBJECT (window), "destroy",
+		     GTK_SIGNAL_FUNC(destroy), NULL);
+
+#if (GTK_MAJOR_VERSION == 1) && (GTK_MINOR_VERSION == 0)
+  gtk_container_border_width(GTK_CONTAINER (window), 10);
+#else  
+  gtk_container_set_border_width(GTK_CONTAINER (window), 10);
+#endif
+
+  /* add a button to do something usefull */
+  button = gtk_button_new_with_label("Fork me!");
+          
+  gtk_signal_connect(GTK_OBJECT (button), "clicked",
+		     GTK_SIGNAL_FUNC(fork_me), NULL);
+
+  gtk_container_add(GTK_CONTAINER(window), button);
+          
+  /* show everything */
+  gtk_widget_show (button);
+  gtk_widget_show (window);
+
+
+  /* install a signal handler for SIGCHLD signals */
+  signal(SIGCHLD, sigchld_handler);
+
+  
+  /* main loop */
+  gtk_main ();
+
+  exit(0);         
+}
 </verb></tscreen>
 
 <!-- ----------------------------------------------------------------- -->
@@ -1084,7 +1239,18 @@ using the <tt/entry/ widget simply use:
 </verb></tscreen>
 
 <!-- ----------------------------------------------------------------- -->
+<sect1>How do I get the Window ID of a GtkWindow?
+<p>
+The actual Gdk/X window will be created when the widget gets
+realized. You can get the Window ID with:
 
+<verb>
+#include <gdk/gdkx.h>
+
+Window xwin = GDK_WINDOW_XWINDOW (GTK_WIDGET (my_window)->window);
+</verb>
+
+<!-- ----------------------------------------------------------------- -->
 <sect1>How do I catch a double click event (in a list widget, for example)?
 <p>
 Tim Janik wrote to gtk-list (slightly modified):
@@ -1235,8 +1401,7 @@ placed on a queue, which is processed within <tt/gtk_main()/. You can
 force the drawing queue to be processed using something like:
 
 <tscreen><verb>
-while (gtk_events_pending())
-        gtk_main_iteration();
+while (gtk_main_iteration(FALSE));
 </verb></tscreen>
 
 inside you're function that changes the widget.
@@ -1382,7 +1547,6 @@ function. The first parameter is you widget pointer. The second parameter
 is a boolean value: when this value is TRUE, the widget is enabled.
 
 <!-- ----------------------------------------------------------------- -->
-
 <sect1>Shouldn't the text argument in the gtk_clist_* functions be declared const?
 <p>
 For example:
@@ -1400,6 +1564,28 @@ pointers to const char).
 The type qualifier "const" may be subject to automatic casting, but
 in the array case, it is not the array itself that needs the (const)
 qualified cast, but its members, thus changing the whole type.
+
+<!-- ----------------------------------------------------------------- -->
+<sect1>How do I render pixels (image data) to the screen?
+<p>
+There are several ways to approach this. The simplest way is to use
+GdkRGB, see gdk/gdkrgb.h. You create an RGB buffer, render to your RGB
+buffer, then use GdkRGB routines to copy your RGB buffer to a drawing
+area or custom widget. The book "GTK+/Gnome Application Development"
+gives some details; GdkRGB is also documented in the GTK+ reference
+documentation.
+
+If you're writing a game or other graphics-intensive application, you
+might consider a more elaborate solution. OpenGL is the graphics
+standard that will let you access hardware accelaration in future
+versions of XFree86; so for maximum speed, you probably want to use
+OpenGL. A GtkGLArea widget is available for using OpenGL with GTK+
+(but GtkGLArea does not come with GTK+ itself). There are also several
+open source game libraries, such as ClanLib and Loki's Simple
+DirectMedia Layer library (SDL).
+
+You do NOT want to use <tt/gdk_draw_point()/, that will be extremely
+slow.
 
 <!-- ***************************************************************** -->
 <sect>Development with GTK+: widget specific questions 
@@ -1696,6 +1882,8 @@ style "postie"
 }
 widget "gtk-tooltips*" style "postie"
 </verb>
+
+<!-- ----------------------------------------------------------------- -->
 <sect1>How do I use horizontal scrollbars with a GtkText widget?
 <p>
 The short answer is that you can't. The current version of the GtkText
@@ -2230,8 +2418,8 @@ answer).  With your help, this document can grow and become more useful!
 This document is maintained by Nathan Froyd 
 <htmlurl url="mailto:maestrox@geocities.com" 
 name="&lt;maestrox@geocities.com&gt;">,
-Tony Gale <htmlurl url="mailto:gale@gimp.org" 
-name="&lt;gale@gimp.org&gt;"> and 
+Tony Gale <htmlurl url="mailto:gale@gtk.org" 
+name="&lt;gale@gtk.org&gt;"> and 
 Emmanuel Deloget <htmlurl url="mailto:logout@free.fr"
 name="&lt;logout@free.fr&gt;">.
 This FAQ was created by Shawn T. Amundson 

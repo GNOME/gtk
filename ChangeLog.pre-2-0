@@ -1,3 +1,7 @@
+Sat Oct 30 13:17:18 BST 1999 Tony Gale <gale@gtk.org>
+
+	* docs/gtkfaq.sgml: FAQ update
+
 1999-10-21  Tor Lillqvist  <tml@iki.fi>
 
 	* gdk/win32/gdkprivate.h: Add more font private data.
