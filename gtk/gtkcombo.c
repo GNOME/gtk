@@ -223,7 +223,7 @@ gtk_combo_entry_key_press (GtkEntry * entry, GdkEventKey * event, GtkCombo * com
       pos = gtk_editable_get_position (editable);
       prefix = gtk_editable_get_chars (editable, 0, pos);
 
-      g_completion_complete (cmpl, prefix, &nprefix);
+      g_completion_complete_utf8 (cmpl, prefix, &nprefix);
 
       if (nprefix && strlen (nprefix) > strlen (prefix)) 
 	{

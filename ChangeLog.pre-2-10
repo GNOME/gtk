@@ -1,3 +1,8 @@
+Thu Feb  5 00:59:08 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkcombo.c (gtk_combo_entry_key_press): Use 
+	g_completion_complete_utf8(). (#133313, Theppitak Karoonboonyanan)
+
 2004-02-04  Federico Mena Quintero  <federico@ximian.com>
 
 	Fix #59707.
