@@ -10,13 +10,13 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.3.15\n"
 "POT-Creation-Date: 2003-01-15 12:12+0100\n"
-"PO-Revision-Date: 2003-01-15 17:01-0300\n"
+"PO-Revision-Date: 2003-01-16 09:43GMT\n"
 "Last-Translator: Pablo Gonzalo del Campo <pablodc@bigfoot.com>\n"
 "Language-Team: Spanish <traductores@es.gnome.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: KBabel 1.1\n"
+"X-Generator: KBabel 0.9.5\n"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:146 gdk-pixbuf/gdk-pixbuf-io.c:736
 #, c-format
@@ -2610,7 +2610,7 @@ msgstr "La altura de la disposición"
 #.
 #: gtk/gtkmain.c:806
 msgid "default:LTR"
-msgstr "por omisión:LTR"
+msgstr "default:LTR"
 
 #: gtk/gtkmenu.c:263
 msgid "Tearoff Title"
@@ -5035,38 +5035,4 @@ msgstr "Estilo del estado IM"
 #: modules/input/gtkimcontextxim.c:270
 msgid "How to draw the input method statusbar"
 msgstr "Como dibujar el método de entrada de la barra de estado"
-
-#, fuzzy
-#~ msgid "The leftmost column of the child"
-#~ msgstr "El título de la ventana"
-
-#, fuzzy
-#~ msgid "The rightmost column of the child"
-#~ msgstr "Alineación Y para el hijo"
-
-#, fuzzy
-#~ msgid "The uppermost row of the child"
-#~ msgstr "El número de filas en la tabla"
-
-#, fuzzy
-#~ msgid "The lowest row of the child"
-#~ msgstr "Alineación Y para el hijo"
-
-#~ msgid "Don't know how to load the animation in file '%s'"
-#~ msgstr "No sé como cargar la animación del archivo «%s»"
-
-#~ msgid "Don't know how to load the image in file '%s'"
-#~ msgstr "No sé como cargar la imagen del archivo «%s»"
-
-#~ msgid "Failure reading ICO: %s"
-#~ msgstr "Fallo leyendo el ICO: %s"
-
-#~ msgid "ICO file was missing some data (perhaps it was truncated somehow?)"
-#~ msgstr ""
-#~ "Al archivo ICO le faltan algunos de datos (¿quizás se ha truncado en "
-#~ "algún momento?)"
-
-#, fuzzy
-#~ msgid "Insufficient memory to load TGA image"
-#~ msgstr "No hay memoria suficiente para cargar el archivo PNG"
 
