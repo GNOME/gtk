@@ -10,9 +10,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-09-18 14:22-0400\n"
-"PO-Revision-Date: 2004-09-17 11:28+0200\n"
-"Last-Translator: Laszlo Dvornik <dvornik@gnome.hu>\n"
+"POT-Creation-Date: 2004-09-25 12:07+0200\n"
+"PO-Revision-Date: 2004-09-25 16:50+0200\n"
+"Last-Translator: Gabor Kelemen <kelemeng@gnome.hu>\n"
 "Language-Team: Hungarian <gnome@gnome.hu>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -936,7 +936,7 @@ msgstr ""
 "Nem adható könyvjelző ehhez: %s\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:817 gtk/gtkfilechooserdefault.c:5499
+#: gtk/gtkfilechooserdefault.c:817 gtk/gtkfilechooserdefault.c:5506
 #, c-format
 msgid ""
 "Could not build file name from '%s' and '%s':\n"
@@ -1064,51 +1064,51 @@ msgstr "Az útvonal nem található"
 msgid "shortcut %s does not exist"
 msgstr "%s gyorsbillentyű nem létezik"
 
-#: gtk/gtkfilechooserdefault.c:5272
+#: gtk/gtkfilechooserdefault.c:5279
 msgid "Type name of new folder"
 msgstr "Új mappa típusának neve"
 
-#: gtk/gtkfilechooserdefault.c:5301
+#: gtk/gtkfilechooserdefault.c:5308
 #, c-format
 msgid "%d byte"
 msgid_plural "%d bytes"
 msgstr[0] "%d bájt"
 msgstr[1] "%d bájt"
 
-#: gtk/gtkfilechooserdefault.c:5303
+#: gtk/gtkfilechooserdefault.c:5310
 #, c-format
 msgid "%.1f K"
 msgstr "%.1f K"
 
-#: gtk/gtkfilechooserdefault.c:5305
+#: gtk/gtkfilechooserdefault.c:5312
 #, c-format
 msgid "%.1f M"
 msgstr "%.1f M"
 
-#: gtk/gtkfilechooserdefault.c:5307
+#: gtk/gtkfilechooserdefault.c:5314
 #, c-format
 msgid "%.1f G"
 msgstr "%.1f G"
 
-#: gtk/gtkfilechooserdefault.c:5352
+#: gtk/gtkfilechooserdefault.c:5359
 msgid "Today"
 msgstr "Ma"
 
-#: gtk/gtkfilechooserdefault.c:5354
+#: gtk/gtkfilechooserdefault.c:5361
 msgid "Yesterday"
 msgstr "Tegnap"
 
-#: gtk/gtkfilechooserdefault.c:5365
+#: gtk/gtkfilechooserdefault.c:5372
 msgid "Unknown"
 msgstr "Ismeretlen"
 
-#: gtk/gtkfilechooserdefault.c:5460
+#: gtk/gtkfilechooserdefault.c:5467
 msgid "Cannot change to the folder you specified as it is an invalid path."
 msgstr ""
 "Nem lehet az ön által megadott mappába lépni mivel az egy érvénytelen "
 "útvonal."
 
-#: gtk/gtkfilechooserdefault.c:5537
+#: gtk/gtkfilechooserdefault.c:5544
 #, c-format
 msgid ""
 "Could not select %s:\n"
@@ -1117,15 +1117,15 @@ msgstr ""
 "Nem lehet kijelölni a(z) %s-t:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:5576
+#: gtk/gtkfilechooserdefault.c:5583
 msgid "Open Location"
 msgstr "Hely megnyitása"
 
-#: gtk/gtkfilechooserdefault.c:5583
+#: gtk/gtkfilechooserdefault.c:5590
 msgid "Save in Location"
 msgstr "Mentés helye"
 
-#: gtk/gtkfilechooserdefault.c:5602
+#: gtk/gtkfilechooserdefault.c:5609
 msgid "_Location:"
 msgstr "He_ly:"
 
@@ -1587,7 +1587,7 @@ msgstr "_Félkövér"
 
 #: gtk/gtkstock.c:296
 msgid "_Cancel"
-msgstr "_Mégsem"
+msgstr "Mé_gsem"
 
 #: gtk/gtkstock.c:297
 msgid "_CD-Rom"
@@ -1959,6 +1959,3 @@ msgstr "X Input Method"
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "Nem lehet információt szerezni a(z) '%s' fájlról: %s"
-
-#~ msgid "Cannot allocate memory for loading XPM image"
-#~ msgstr "Nem lehet memóriát kiosztani az XPM-kép betöltéséhez"
