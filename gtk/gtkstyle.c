@@ -1377,6 +1377,21 @@ _gtk_style_peek_property_value (GtkStyle           *style,
   return &pcache->value;
 }
 
+GdkPixmap *
+load_bg_image (GdkColormap *colormap,
+	       GdkColor    *bg_color,
+	       const gchar *filename)
+{
+  if (strcmp (filename, "<parent>") == 0)
+    return (GdkPixmap*) GDK_PARENT_RELATIVE;
+  else
+    {
+      return gdk_pixmap_colormap_create_from_xpm (NULL, colormap, NULL,
+						  bg_color,
+						  filename);
+    }
+}
+
 static void
 gtk_style_real_realize (GtkStyle *style)
 {
@@ -1421,9 +1436,9 @@ gtk_style_real_realize (GtkStyle *style)
   for (i = 0; i < 5; i++)
     {
       if (style->rc_style && style->rc_style->bg_pixmap_name[i])
-        style->bg_pixmap[i] = gtk_rc_load_image (style->colormap,
-                                                 &style->bg[i],
-                                                 style->rc_style->bg_pixmap_name[i]);
+        style->bg_pixmap[i] = load_bg_image (style->colormap,
+					     &style->bg[i],
+					     style->rc_style->bg_pixmap_name[i]);
       
       if (!gdk_color_alloc (style->colormap, &style->fg[i]))
         g_warning ("unable to allocate color: ( %d %d %d )",

@@ -487,7 +487,7 @@ gtk_init_check (int	 *argc,
   gtk_colormap = gdk_colormap_get_system ();
 
   gtk_type_init (0);
-  gtk_rc_init ();
+  _gtk_rc_init ();
   
   
   /* Register an exit function to make sure we are able to cleanup.

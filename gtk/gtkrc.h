@@ -38,6 +38,9 @@ extern "C" {
 /* Forward declaration */
 typedef struct _GtkIconFactory GtkIconFactory;
 
+typedef struct _GtkRcStyleClass GtkRcStyleClass;
+typedef struct _GtkRCContext    GtkRcContext;
+
 #define GTK_TYPE_RC_STYLE              (gtk_rc_style_get_type ())
 #define GTK_RC_STYLE(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), GTK_TYPE_RC_STYLE, GtkRcStyle))
 #define GTK_RC_STYLE_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_RC_STYLE, GtkRcStyleClass))
@@ -52,8 +55,6 @@ typedef enum
   GTK_RC_TEXT		= 1 << 2,
   GTK_RC_BASE		= 1 << 3
 } GtkRcFlags;
-
-typedef struct _GtkRcStyleClass GtkRcStyleClass;
 
 struct _GtkRcStyle
 {
@@ -112,14 +113,15 @@ struct _GtkRcStyleClass
   GtkStyle * (*create_style) (GtkRcStyle *rc_style);
 };
 
-void	  gtk_rc_init			(void);
+void	  _gtk_rc_init			(void);
 void      gtk_rc_add_default_file	(const gchar *filename);
 void      gtk_rc_set_default_files      (gchar **filenames);
 gchar**   gtk_rc_get_default_files      (void);
 void	  gtk_rc_parse			(const gchar *filename);
 void	  gtk_rc_parse_string		(const gchar *rc_string);
-gboolean  gtk_rc_reparse_all		(void);
 GtkStyle* gtk_rc_get_style		(GtkWidget   *widget);
+
+gboolean  gtk_rc_reparse_all		(void);
 void	  gtk_rc_add_widget_name_style	(GtkRcStyle  *rc_style,
 					 const gchar *pattern);
 void	  gtk_rc_add_widget_class_style (GtkRcStyle  *rc_style,
@@ -127,25 +129,14 @@ void	  gtk_rc_add_widget_class_style (GtkRcStyle  *rc_style,
 void	  gtk_rc_add_class_style	(GtkRcStyle  *rc_style,
 					 const gchar *pattern);
 
+
+
 GType       gtk_rc_style_get_type   (void) G_GNUC_CONST;
 GtkRcStyle* gtk_rc_style_new        (void);
 GtkRcStyle* gtk_rc_style_copy       (GtkRcStyle *orig);
 void        gtk_rc_style_ref        (GtkRcStyle *rc_style);
 void        gtk_rc_style_unref      (GtkRcStyle *rc_style);
 
-/* Tell gtkrc to use a custom routine to load images specified in rc files instead of
- *   the default xpm-only loader
- */
-typedef	GdkPixmap*  (*GtkImageLoader) 		(GdkWindow   	*window,
-						 GdkColormap 	*colormap,
-						 GdkBitmap     **mask,
-						 GdkColor    	*transparent_color,
-						 const gchar 	*filename);
-void		gtk_rc_set_image_loader      	(GtkImageLoader	 loader);
-
-GdkPixmap*	gtk_rc_load_image		(GdkColormap 	*colormap,
-						 GdkColor    	*transparent_color,
-						 const gchar 	*filename);
 gchar*		gtk_rc_find_pixmap_in_path	(GScanner    	*scanner,
 						 const gchar	*pixmap_file);
 gchar*		gtk_rc_find_module_in_path	(const gchar 	*module_file);

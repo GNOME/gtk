@@ -1,3 +1,37 @@
+Thu Jun 21 13:42:01 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/x11/gdkkeys-x11.c (gdk_keymap_get_direction): Handle
+	the case without XKB properly.
+
+	* gtk/gtkrc.c (gtk_rc_set_default_files): Remove
+	unused gtk_rc_auto_parse variable.
+
+	* gtk/gtkrc.[ch] gtk/gtkstyle.c docs/Changes-2.0.txt:
+	Remove gtk_rc_set_image_loader(), gtk_rc_load_image(), no
+	longer needed with GdkPixbuf.
+
+	* gtk/gtkrc.c (_gtk_rc_init): Make private.
+
+Fri Jun 15 16:26:12 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkentry.h: Mark deprecated functions with
+	GTK_DISABLE_DEPRECATED.
+
+Mon Jun 11 18:15:16 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdk.h: Add missing gdk_rectangle_get_type() prototype.
+
+	* gtk/gtk[hv]scale.c: Include math.h, stdlib.h
+
+	* gdk/gdkpango.h gtk/gtkclist.c gtk/gtkentry.c gtk/gtkmain.[ch]
+	  gtk/gtkspinbutton.c gtk/gtkstyle.c gtk/gtktextbuffer.c
+	  gtk/gtktextdisplay.c gtk/gtktextiter.[ch]
+	  gtk/gtktextlayout.c gtk/gtktexttag.[ch] gtk/gtkwidget.c: Adapt
+	  to recent changes in Pango.
+
+	* tests/testgtk.c: Set language tags with gtk_label_set_markup()
+	  to test whether the basic engine honors them.
+
 Thu Jun 21 02:13:40 2001  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkcontainer.[hc]: added gtk_container_child_set_property() and
@@ -136,7 +170,7 @@ Thu Jun 14 19:21:27 2001  Jonathan Blandford  <jrb@redhat.com>
 
 	* demos/gtk-demo/main.c (main): fix colors ;-)
 
-Fri Jun  8 17:56:52 2001  Owen Taylor  <otaylor@redhat.com>
+`Fri Jun  8 17:56:52 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkwindow.[ch] gtk/gtkmain.c: Add a GtkWindowGroup struct
 	that allows grouping together multiple windows so that grabs

@@ -181,6 +181,8 @@ void         gtk_entry_get_layout_offsets       (GtkEntry      *entry,
 
 /* Deprecated compatibility functions
  */
+
+#ifndef GTK_DISABLE_DEPRECATED
 GtkWidget* gtk_entry_new_with_max_length	(gint           max);
 void       gtk_entry_append_text    		(GtkEntry      *entry,
 						 const gchar   *text);
@@ -191,6 +193,7 @@ void       gtk_entry_set_position   		(GtkEntry      *entry,
 void       gtk_entry_select_region  		(GtkEntry      *entry,
 						 gint           start,
 						 gint           end);
+#endif /* GTK_DISABLE_DEPRECATED */
 
 #ifdef __cplusplus
 }

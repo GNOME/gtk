@@ -192,7 +192,6 @@ get_keymap (void)
 }
 
 #if HAVE_XKB
-
 PangoDirection
 get_direction (void)
 {
@@ -236,13 +235,20 @@ _gdk_keymap_state_changed (void)
 PangoDirection
 gdk_keymap_get_direction (GdkKeymap *keymap)
 {
-  if (!have_direction)
+#if HAVE_XKB
+  if (_gdk_use_xkb)
     {
-      current_direction = get_direction ();
-      have_direction = TRUE;
-    }
+      if (!have_direction)
+	{
+	  current_direction = get_direction ();
+	  have_direction = TRUE;
+	}
   
-  return current_direction;
+      return current_direction;
+    }
+  else
+#endif /* HAVE_XKB */
+    return PANGO_DIRECTION_LTR;
 }
 
 /**

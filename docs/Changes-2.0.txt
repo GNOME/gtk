@@ -364,4 +364,5 @@ Incompatible Changes from GTK+-1.2 to GTK+-2.0:
   The purpose of this change was to allow non-containers to have 
   focusable elements.
  
- 
+* gtk_rc_set_image_loader() and gtk_rc_load_image() has been removed, now 
+  that GTK+ includes decent image loading capabilities itself.
