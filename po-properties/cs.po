@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-10-27 16:36-0400\n"
-"PO-Revision-Date: 2004-10-27 13:47+0200\n"
+"POT-Creation-Date: 2004-10-31 21:15+0100\n"
+"PO-Revision-Date: 2004-11-01 00:48+0100\n"
 "Last-Translator: Miloslav Trmac <bukm@centrum.cz>\n"
 "Language-Team: Czech <cs@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -945,30 +945,29 @@ msgstr "Pozadí buňky nastavené"
 msgid "Whether this tag affects the cell background color"
 msgstr "Jestli tento tag ovlivňuje barvu pozadí buňky"
 
-#: gtk/gtkcellrenderercombo.c:89
+#: gtk/gtkcellrenderercombo.c:88
 msgid "Model"
 msgstr "Model"
 
-#: gtk/gtkcellrenderercombo.c:90
+#: gtk/gtkcellrenderercombo.c:89
 msgid "The model containing the possible values for the combo box"
 msgstr "Model obsahující možné hodnoty kombinovaného pole"
 
-#: gtk/gtkcellrenderercombo.c:108 gtk/gtkcomboboxentry.c:114
+#: gtk/gtkcellrenderercombo.c:106 gtk/gtkcomboboxentry.c:114
 msgid "Text Column"
 msgstr "Sloupec textu"
 
-#: gtk/gtkcellrenderercombo.c:109 gtk/gtkcomboboxentry.c:115
+#: gtk/gtkcellrenderercombo.c:107 gtk/gtkcomboboxentry.c:115
 msgid "A column in the data source model to get the strings from"
 msgstr "Sloupec v modelu zdroje dat, odkud získat řetězce"
 
-#: gtk/gtkcellrenderercombo.c:127
+#: gtk/gtkcellrenderercombo.c:124
 msgid "Has Entry"
 msgstr "Má vstup"
 
-#: gtk/gtkcellrenderercombo.c:128
-#, c-format
-msgid "If %FALSE, don't allow to enter strings other than the chosen ones"
-msgstr "Je-li %FALSE, nepovolit zadávat jiné řetězce než zvolené"
+#: gtk/gtkcellrenderercombo.c:125
+msgid "If FALSE, don't allow to enter strings other than the chosen ones"
+msgstr "Je-li FALSE, nepovolit zadávat jiné řetězce než zvolené"
 
 #: gtk/gtkcellrendererpixbuf.c:136
 msgid "Pixbuf Object"
@@ -1023,7 +1022,7 @@ msgid "Value of the progress bar"
 msgstr "Hodnota pruhu průběhu"
 
 #: gtk/gtkcellrendererprogress.c:133 gtk/gtkcellrenderertext.c:204
-#: gtk/gtkentry.c:573 gtk/gtkprogressbar.c:219
+#: gtk/gtkentry.c:573 gtk/gtkprogressbar.c:220
 msgid "Text"
 msgstr "Text"
 
@@ -1202,7 +1201,7 @@ msgstr ""
 "jako pomocnou informaci při vykreslování textu. Pokud tomuto parametru "
 "nerozumíte, pravděpodobně jej nepotřebujete."
 
-#: gtk/gtkcellrenderertext.c:407 gtk/gtklabel.c:413
+#: gtk/gtkcellrenderertext.c:407 gtk/gtklabel.c:413 gtk/gtkprogressbar.c:242
 msgid "Ellipsize"
 msgstr "Zkrátit"
 
@@ -1780,43 +1779,43 @@ msgstr "Vybrat při fokusu"
 msgid "Whether to select the contents of an entry when it is focused"
 msgstr "Jestli vybrat obsah položky, pokud položka získá fokus"
 
-#: gtk/gtkentrycompletion.c:273
+#: gtk/gtkentrycompletion.c:272
 msgid "Completion Model"
 msgstr "Model doplňování"
 
-#: gtk/gtkentrycompletion.c:274
+#: gtk/gtkentrycompletion.c:273
 msgid "The model to find matches in"
 msgstr "Model, kde hledat odpovídající položky"
 
-#: gtk/gtkentrycompletion.c:280
+#: gtk/gtkentrycompletion.c:279
 msgid "Minimum Key Length"
 msgstr "Minimální délka klíče"
 
-#: gtk/gtkentrycompletion.c:281
+#: gtk/gtkentrycompletion.c:280
 msgid "Minimum length of the search key in order to look up matches"
 msgstr "Minimální délka hledaného klíče, aby se hledaly odpovídající položky"
 
-#: gtk/gtkentrycompletion.c:296 gtk/gtkiconview.c:361
+#: gtk/gtkentrycompletion.c:295 gtk/gtkiconview.c:361
 msgid "Text column"
 msgstr "Sloupec textu"
 
-#: gtk/gtkentrycompletion.c:297
+#: gtk/gtkentrycompletion.c:296
 msgid "The column of the model containing the strings."
 msgstr "Sloupec v modelu obsahující řetězce."
 
-#: gtk/gtkentrycompletion.c:315
+#: gtk/gtkentrycompletion.c:313
 msgid "Inline completion"
 msgstr "Doplňování na místě"
 
-#: gtk/gtkentrycompletion.c:316
+#: gtk/gtkentrycompletion.c:314
 msgid "Whether the common prefix should be inserted automatically"
 msgstr "Jestli má být automaticky vložena společná předpona"
 
-#: gtk/gtkentrycompletion.c:330
+#: gtk/gtkentrycompletion.c:328
 msgid "Popup completion"
 msgstr "Doplňování v okně"
 
-#: gtk/gtkentrycompletion.c:331
+#: gtk/gtkentrycompletion.c:329
 msgid "Whether the completions should be shown in a popup window"
 msgstr "Jestli má být společná předpona zobrazena v okně"
 
@@ -2213,7 +2212,7 @@ msgstr "Model ikonového pohledu"
 msgid "The model for the icon view"
 msgstr "Model pro ikonový pohled"
 
-#: gtk/gtkiconview.c:397 gtk/gtkprogressbar.c:151 gtk/gtktoolbar.c:507
+#: gtk/gtkiconview.c:397 gtk/gtkprogressbar.c:152 gtk/gtktoolbar.c:507
 msgid "Orientation"
 msgstr "Orientace"
 
@@ -2919,75 +2918,81 @@ msgid ""
 msgstr ""
 "Číslo mezi 0.0 a 1.0 udávající svislé zarovnání textu ve widgetu průběhu"
 
-#: gtk/gtkprogressbar.c:143 gtk/gtkrange.c:334 gtk/gtkspinbutton.c:242
+#: gtk/gtkprogressbar.c:144 gtk/gtkrange.c:334 gtk/gtkspinbutton.c:242
 msgid "Adjustment"
 msgstr "Zarovnání"
 
-#: gtk/gtkprogressbar.c:144
+#: gtk/gtkprogressbar.c:145
 msgid "The GtkAdjustment connected to the progress bar (Deprecated)"
 msgstr "GtkAdjustment spojený s pruhem průběhu (Zastaralé)"
 
-#: gtk/gtkprogressbar.c:152
+#: gtk/gtkprogressbar.c:153
 msgid "Orientation and growth direction of the progress bar"
 msgstr "Orientace a směr růstu pruhu průběhu"
 
-#: gtk/gtkprogressbar.c:160
+#: gtk/gtkprogressbar.c:161
 msgid "Bar style"
 msgstr "Styl pruhu"
 
-#: gtk/gtkprogressbar.c:161
+#: gtk/gtkprogressbar.c:162
 msgid "Specifies the visual style of the bar in percentage mode (Deprecated)"
 msgstr "Určuje vizuální styl pruhu v režim procent (Zastaralé)"
 
-#: gtk/gtkprogressbar.c:169
+#: gtk/gtkprogressbar.c:170
 msgid "Activity Step"
 msgstr "Krok aktivity"
 
-#: gtk/gtkprogressbar.c:170
+#: gtk/gtkprogressbar.c:171
 msgid "The increment used for each iteration in activity mode (Deprecated)"
 msgstr "Krok používaný pro každou iteraci v režimu aktivity (zastaralé)"
 
-#: gtk/gtkprogressbar.c:179
+#: gtk/gtkprogressbar.c:180
 msgid "Activity Blocks"
 msgstr "Bloky aktivity"
 
-#: gtk/gtkprogressbar.c:180
+#: gtk/gtkprogressbar.c:181
 msgid ""
 "The number of blocks which can fit in the progress bar area in activity mode "
 "(Deprecated)"
 msgstr ""
 "Počet bloků, které se vejdou do pruhu průběhu v režimu aktivity (zastaralé)"
 
-#: gtk/gtkprogressbar.c:189
+#: gtk/gtkprogressbar.c:190
 msgid "Discrete Blocks"
 msgstr "Oddělené bloky"
 
-#: gtk/gtkprogressbar.c:190
+#: gtk/gtkprogressbar.c:191
 msgid ""
 "The number of discrete blocks in a progress bar (when shown in the discrete "
 "style)"
 msgstr ""
 "Počet oddělených bloků v pruhu průběhu (při zobrazování v odděleném stylu)"
 
-#: gtk/gtkprogressbar.c:199
+#: gtk/gtkprogressbar.c:200
 msgid "Fraction"
 msgstr "Podíl"
 
-#: gtk/gtkprogressbar.c:200
+#: gtk/gtkprogressbar.c:201
 msgid "The fraction of total work that has been completed"
 msgstr "Podíl z celkové práce, který už je dokončen"
 
-#: gtk/gtkprogressbar.c:209
+#: gtk/gtkprogressbar.c:210
 msgid "Pulse Step"
 msgstr "Krok pulzu"
 
-#: gtk/gtkprogressbar.c:210
+#: gtk/gtkprogressbar.c:211
 msgid "The fraction of total progress to move the bouncing block when pulsed"
 msgstr "Podíl z celkového průběhu, o který se posunout blok při pulzu"
 
-#: gtk/gtkprogressbar.c:220
+#: gtk/gtkprogressbar.c:221
 msgid "Text to be displayed in the progress bar"
 msgstr "Text zobrazovaný v pruhu průběhu"
+
+#: gtk/gtkprogressbar.c:243
+msgid ""
+"The preferred place to ellipsize the string, if the progressbar does not "
+"have enough room to display the entire string, if at all"
+msgstr "Preferované místo, kde zkrátit řetězec, pokud pruh průběhu nemá dost místa pro zobrazení celého řetězce, pokud vůbec něčeho"
 
 #: gtk/gtkradioaction.c:139
 msgid "The value"
