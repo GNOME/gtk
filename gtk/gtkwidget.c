@@ -1105,6 +1105,8 @@ gtk_widget_destroy (GtkWidget *widget)
     }
   
   
+  gtk_grab_remove (widget);
+  
   if (widget->parent)
     {
       if (!GTK_OBJECT_BEING_DESTROYED (widget->parent))
@@ -3018,8 +3020,6 @@ gtk_real_widget_destroy (GtkObject *object)
     g_warning ("resize pending\n");
   if (GTK_WIDGET_RESIZE_NEEDED (widget))
     g_warning ("resize needed\n");
-  
-  gtk_grab_remove (widget);
   
   gtk_selection_remove_all (widget);
   

@@ -50,7 +50,7 @@ enum
   GTK_ANCHORED         = 1 << 15,
   GTK_BASIC            = 1 << 16,
   GTK_USER_STYLE       = 1 << 17,
-  GTK_GRAB_ALL         = 1 << 18,
+  GTK_HAS_GRAB         = 1 << 18,
   GTK_REDRAW_PENDING   = 1 << 19,
   GTK_RESIZE_PENDING   = 1 << 20,
   GTK_RESIZE_NEEDED    = 1 << 21,
@@ -91,7 +91,7 @@ enum
 #define GTK_WIDGET_ANCHORED(obj)          (GTK_OBJECT_FLAGS (obj) & GTK_ANCHORED)
 #define GTK_WIDGET_BASIC(obj)             (GTK_OBJECT_FLAGS (obj) & GTK_BASIC)
 #define GTK_WIDGET_USER_STYLE(obj)        (GTK_OBJECT_FLAGS (obj) & GTK_USER_STYLE)
-#define GTK_WIDGET_GRAB_ALL(obj)          (GTK_OBJECT_FLAGS (obj) & GTK_GRAB_ALL)
+#define GTK_WIDGET_HAS_GRAB(obj)          (GTK_OBJECT_FLAGS (obj) & GTK_HAS_GRAB)
 #define GTK_WIDGET_REDRAW_PENDING(obj)    (GTK_OBJECT_FLAGS (obj) & GTK_REDRAW_PENDING)
 #define GTK_WIDGET_RESIZE_PENDING(obj)    (GTK_OBJECT_FLAGS (obj) & GTK_RESIZE_PENDING)
 #define GTK_WIDGET_RESIZE_NEEDED(obj)     (GTK_OBJECT_FLAGS (obj) & GTK_RESIZE_NEEDED)

@@ -1,3 +1,10 @@
+Mon Jan 19 09:16:38 1998  Tim Janik  <timj@psynet.net>
+
+	* gtk/gtkmain.c (gtk_grab_add) (gtk_grab_remove): this is a stack
+ 	  of grabbing widgets now, having unique entries. the GTK_HAS_GRAB
+	  flag of a widget is set while it is on the stack (wasn't
+	  implemented before).
+
 Mon Jan 19 00:46:18 1998 MET  Eckehard Berns  <eb@berns.prima.de>
 
 	* gtk/gtktoolbar.[ch]: changed

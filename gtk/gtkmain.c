@@ -106,8 +106,8 @@ static GdkEvent *next_event = NULL;
 static GdkEvent *current_event = NULL;
 static GList *current_events = NULL;
 
-static GList *grabs = NULL;		   /* A list of grabs. The grabbing widget
-					    *  is the first one on the list.
+static GSList *grabs = NULL;		   /* A stack of unique grabs. The grabbing
+					    *  widget is the first one on the list.
 					    */
 static GList *init_functions = NULL;	   /* A list of init functions.
 					    */
@@ -481,19 +481,27 @@ gtk_false (void)
 void
 gtk_grab_add (GtkWidget *widget)
 {
-  /* Place the grab on the front of the list of grabs.
-   */
-  grabs = g_list_prepend (grabs, widget);
+  g_return_if_fail (widget != NULL);
+
+  if (!GTK_WIDGET_HAS_GRAB (widget) && !GTK_OBJECT_NEED_DESTROY (widget))
+    {
+      GTK_WIDGET_SET_FLAGS (widget, GTK_HAS_GRAB);
+
+      grabs = g_slist_prepend (grabs, widget);
+    }
 }
 
 void
 gtk_grab_remove (GtkWidget *widget)
 {
-  /* Remove the grab from the list of grabs.
-   * Note: the grab being removed may be in
-   *  the middle of the list.
-   */
-  grabs = g_list_remove (grabs, widget);
+  g_return_if_fail (widget != NULL);
+
+  if (GTK_WIDGET_HAS_GRAB (widget))
+    {
+      GTK_WIDGET_UNSET_FLAGS (widget, GTK_HAS_GRAB);
+
+      grabs = g_slist_remove (grabs, widget);
+    }
 }
 
 void
