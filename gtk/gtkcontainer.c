@@ -1132,7 +1132,7 @@ _gtk_container_queue_resize (GtkContainer *container)
   widget = GTK_WIDGET (container);
   resize_container = gtk_container_get_resize_container (container);
   
-  while (!GTK_WIDGET_ALLOC_NEEDED (widget) || !GTK_WIDGET_REQUEST_NEEDED (widget))
+  while (TRUE)
     {
       GTK_PRIVATE_SET_FLAG (widget, GTK_ALLOC_NEEDED);
       GTK_PRIVATE_SET_FLAG (widget, GTK_REQUEST_NEEDED);

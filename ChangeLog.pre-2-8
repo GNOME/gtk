@@ -1,3 +1,9 @@
+2004-10-12  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkcontainer.c (_gtk_container_queue_resize): Acknowledge 
+	the fact that invariants are broken and loop all the way up to 
+	the resize container.
+
 Tue Oct 12 17:11:02 2004    <timj@birnet.org>
 
 	* gtk/gtkwidget.c (gtk_widget_set_usize_internal): don't queue the
