@@ -1,3 +1,7 @@
+Mon Feb 15 07:45:28 1999  Tim Janik  <timj@gtk.org>
+
+	* configure.in (--enable-debug): default to yes for development trees.
+
 Fri Feb 12 00:08:01 1999  Lars Hamann  <lars@gtk.org>
 
 	* gtk/gtklist.c (gtk_list_remove_items_internal): don't autoselect
