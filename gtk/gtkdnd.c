@@ -1194,6 +1194,34 @@ gtk_drag_selection_received (GtkWidget        *widget,
   gtk_drag_release_ipc_widget (widget);
 }
 
+static void
+get_all_children_callback (GtkWidget *widget,
+			   gpointer   client_data)
+{
+  GList **children;
+
+  children = (GList**) client_data;
+  gtk_widget_ref (widget);
+  
+  *children = g_list_prepend (*children, widget);
+}
+
+static GList*
+get_all_children (GtkContainer *container)
+{
+  GList *children;
+
+  children = NULL;
+
+  gtk_container_forall (container,
+			get_all_children_callback,
+			&children);
+
+  return g_list_reverse (children);
+}
+
+
+
 /*************************************************************
  * gtk_drag_find_widget:
  *     Recursive callback used to locate widgets for 
@@ -1272,15 +1300,13 @@ gtk_drag_find_widget (GtkWidget       *widget,
       if (GTK_IS_CONTAINER (widget))
 	{
 	  GtkDragFindData new_data = *data;
-	  GList *children = gtk_container_children (GTK_CONTAINER (widget));
+	  GList *children = get_all_children (GTK_CONTAINER (widget));
 	  GList *tmp_list;
 
 	  new_data.x -= x_offset;
 	  new_data.y -= y_offset;
 	  new_data.found = FALSE;
 	  new_data.toplevel = FALSE;
-
-	  g_list_foreach (children, (GFunc)gtk_widget_ref, NULL);
 
 	  tmp_list = children;
 	  while (tmp_list)

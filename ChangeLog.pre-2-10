@@ -1,3 +1,11 @@
+Wed Mar 28 12:33:20 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkdnd.c: Fix problem where dropping into
+	internal child widgets (such as GtkCList tab labels)
+	(#52457, reported by Daniel Erat). Can't use
+	gtk_container_children(), so provide a substitute
+	which uses gtk_container_forall().
+
 2001-03-22  Darin Adler  <darin@eazel.com>
 
 	* gtk/gtkobject.h: Fixed #if G_ENABLE_DEBUG that
