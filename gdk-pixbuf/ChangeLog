@@ -1,3 +1,8 @@
+2003-06-03  Matthias Clasen  <maclas@gmx.de>
+
+	* gdk-pixdata.c (gdk_pixbuf_new_from_inline): Document
+	data_length == -1, add an example.  (#97290)
+
 2003-06-01  Matthias Clasen  <maclas@gmx.de>
 
 	* gdk-pixdata.h (struct _GdkPixdata): Fix misleading documentation
