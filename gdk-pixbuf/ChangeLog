@@ -1,3 +1,8 @@
+1999-11-29  Federico Mena Quintero  <federico@redhat.com>
+
+	* src/Makefile.am: Uncomment the GnomeCanvasPixbuf sources.  This
+	should be made conditional, not blindly commented out.
+
 1999-11-29  Jonathan Blandford  <jrb@redhat.com>
 
 	* src/Makefile.am (ICO_LIB): Added another loader from Arjan to

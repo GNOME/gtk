@@ -47,10 +47,10 @@ AM_CPPFLAGS = "-DPIXBUF_LIBDIR=\"$(libexecdir)\""
 
 LDADDS = libgdk_pixbuf.la $(LIBART_LIBS) $(GLIB_LIBS) $(GTK_LIBS)
 
-testpixbuf_LDADD = $(LDADDS) $(LIBART_LIBS) \
+testpixbuf_LDADD = $(LDADDS) $(LIBART_LIBS) $(GNOME_LIBS) \
 	-lgmodule
 
-testpixbuf_drawable_LDADD = $(LDADDS)
+testpixbuf_drawable_LDADD = $(LDADDS) $(GNOME_LIBS)
 
 GDK_PIXBUF_LIBS = $(LIBART_LIBS) $(GLIB_LIBS) $(GTK_LIBS)
 
@@ -65,16 +65,16 @@ libgdk_pixbuf_la_SOURCES = 	\
 	gdk-pixbuf-io.c		\
 	gdk-pixbuf-loader.c	\
 	gdk-pixbuf-render.c	\
-	gdk-pixbuf-drawable.c
-##	gnome-canvas-pixbuf.c
+	gdk-pixbuf-drawable.c	\
+	gnome-canvas-pixbuf.c
 
 libgdk_pixbuf_la_LDFLAGS = -version-info 1:0:0
 
 libgdk_pixbufinclude_HEADERS =	\
 	gdk-pixbuf.h		\
 	gdk-pixbuf-drawable.h	\
-	gdk-pixbuf-loader.h
-##	gnome-canvas-pixbuf.h
+	gdk-pixbuf-loader.h	\
+	gnome-canvas-pixbuf.h
 
 noinst_HEADERS = \
 	gdk-pixbuf-io.h
