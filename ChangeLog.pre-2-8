@@ -4,7 +4,8 @@
 
 	* gtk/gtkuimanager.[hc]: Add a boolean property, "add_tearoffs" with 
 	setter and getter. If it is set, add tearoff menu items to regular 
-	menus, but not to popups.
+	menus, but not to popups. Add a signal "changed", which gets emitted
+	when the merged ui has changed.
 
 	* tests/testmerge.c: Add button to test the generation of tearoff 
 	menu items.

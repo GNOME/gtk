@@ -140,6 +140,7 @@ enum
 {
   ADD_WIDGET,
   REMOVE_WIDGET,
+  CHANGED,
   LAST_SIGNAL
 };
 
@@ -231,7 +232,7 @@ gtk_ui_manager_class_init (GtkUIManagerClass *klass)
 		  G_SIGNAL_RUN_FIRST | G_SIGNAL_NO_RECURSE,
 		  G_STRUCT_OFFSET (GtkUIManagerClass, add_widget), NULL, NULL,
 		  g_cclosure_marshal_VOID__OBJECT,
-		  G_TYPE_NONE, 1,
+		  G_TYPE_NONE, 1, 
 		  GTK_TYPE_WIDGET);
 
   merge_signals[REMOVE_WIDGET] =
@@ -240,8 +241,23 @@ gtk_ui_manager_class_init (GtkUIManagerClass *klass)
 		  G_SIGNAL_RUN_FIRST | G_SIGNAL_NO_RECURSE,
 		  G_STRUCT_OFFSET (GtkUIManagerClass, remove_widget), NULL, NULL,
 		  g_cclosure_marshal_VOID__OBJECT,
-		  G_TYPE_NONE, 1,
+		  G_TYPE_NONE, 1, 
 		  GTK_TYPE_WIDGET);  
+  /**
+   * GtkUIManager::changed:
+   * @merge: a #GtkUIManager
+   *
+   * The changed signal is emitted whenever the merged UI changes.
+   *
+   * Since: 2.4
+   */
+  merge_signals[CHANGED] =
+    g_signal_new ("changed",
+		  G_OBJECT_CLASS_TYPE (klass),
+		  G_SIGNAL_RUN_FIRST | G_SIGNAL_NO_RECURSE,
+		  G_STRUCT_OFFSET (GtkUIManagerClass, changed),  NULL, NULL,
+		  g_cclosure_marshal_VOID__VOID,
+		  G_TYPE_NONE, 0);
   
   g_type_class_add_private (gobject_class, sizeof (GtkUIManagerPrivate));
 }
@@ -1050,6 +1066,8 @@ add_ui_from_string (GtkUIManager *self,
 
   gtk_ui_manager_queue_update (self);
 
+  g_signal_emit (self, merge_signals[CHANGED], 0);
+
   return ctx.merge_id;
 
  error:
@@ -1163,6 +1181,8 @@ gtk_ui_manager_remove_ui (GtkUIManager *self,
 		   remove_ui, GUINT_TO_POINTER (merge_id));
 
   gtk_ui_manager_queue_update (self);
+
+  g_signal_emit (self, merge_signals[CHANGED], 0);
 }
 
 /* -------------------- Updates -------------------- */
@@ -1683,15 +1703,15 @@ update_node (GtkUIManager *self,
     }
 
   /* handle cleanup of dead nodes */
-  if (node->children == NULL && NODE_INFO (node)->uifiles == NULL)
+  if (node->children == NULL && info->uifiles == NULL)
     {
-      if (NODE_INFO (node)->proxy)
-	gtk_widget_destroy (NODE_INFO (node)->proxy);
-      if ((NODE_INFO (node)->type == GTK_UI_MANAGER_MENU_PLACEHOLDER ||
-	   NODE_INFO (node)->type == GTK_UI_MANAGER_TOOLBAR_PLACEHOLDER) &&
-	  NODE_INFO (node)->extra)
-	gtk_widget_destroy (NODE_INFO (node)->extra);
-      g_chunk_free (NODE_INFO (node), merge_node_chunk);
+      if (info->proxy)
+	gtk_widget_destroy (info->proxy);
+      if ((info->type == GTK_UI_MANAGER_MENU_PLACEHOLDER ||
+	   info->type == GTK_UI_MANAGER_TOOLBAR_PLACEHOLDER) &&
+	  info->extra)
+	gtk_widget_destroy (info->extra);
+      g_chunk_free (info, merge_node_chunk);
       g_node_destroy (node);
     }
 }
