@@ -59,6 +59,10 @@ el.utf8: el.po
 en_GB.utf8: en_GB.po
 	iconv -f ISO-8859-1 -t UTF-8 en_GB.po >$@
 
+# IPA is already in UTF-8.
+en@IPA.utf8: en@IPA.po
+	cp en@IPA.po en@IPA.utf8
+
 es.utf8: es.po
 	iconv -f ISO-8859-1 -t UTF-8 es.po >$@
 
@@ -93,6 +97,10 @@ hr.utf8: hr.po
 
 hu.utf8: hu.po
 	iconv -f ISO-8859-2 -t UTF-8 hu.po >$@
+
+# Interlingua is in (7-bit) ASCII
+ia.utf8: ia.po
+	cp ia.po ia.utf8
 
 it.utf8: it.po
 	iconv -f ISO-8859-1 -t UTF-8 it.po >$@
