@@ -1,3 +1,15 @@
+Overview of Fixes in GTK+ 0.99.5:
+
+* Signal signedness and naming corrections
+* rc/style fixes
+* text, entry widget fixes
+* gtkeditable fixes
+* scrollbar flickering fixed
+* check casts are more descriptive
+* DND fixes
+* FAQ updates
+* Bug fixes
+
 Overview of Changes in GTK+ 0.99.4:
 
 * Reference counting revolution integrated.
