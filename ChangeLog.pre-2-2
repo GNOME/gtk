@@ -1,5 +1,9 @@
 2002-11-21  Matthias Clasen  <maclas@gmx.de>
 
+	* docs/tutorial/gtk-tut.sgml: 
+	* examples/calendar/calendar.c: Numerous fixes to the calendar 
+	example.  (#97956, Owen Taylor)
+
 	* gtk/gtktreeview.c (gtk_tree_view_set_cursor): Fix doc 
 	comment typos.  (#97432, Vitaly Tishkov)
 
