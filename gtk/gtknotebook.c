@@ -1513,13 +1513,6 @@ gtk_notebook_size_allocate (GtkWidget     *widget,
 
       gtk_notebook_pages_allocate (notebook);
     }
-
-  if ((vis_pages != 0) != notebook->have_visible_child)
-    {
-      notebook->have_visible_child = (vis_pages != 0);
-      if (notebook->show_tabs)
-	gtk_widget_queue_draw (widget);
-    }
 }
 
 static gint
@@ -3587,51 +3580,6 @@ gtk_notebook_page_allocate (GtkNotebook     *notebook,
   
   xthickness = widget->style->xthickness;
   ythickness = widget->style->ythickness;
-
-  /* If the size of the notebook tabs change, we need to queue
-   * a redraw on the tab area
-   */
-  if ((allocation->width != page->allocation.width) ||
-      (allocation->height != page->allocation.height))
-    {
-      gint x, y, width, height, border_width;
-
-      border_width = GTK_CONTAINER (notebook)->border_width;
-
-      switch (tab_pos)
-       {
-       case GTK_POS_TOP:
-         width = widget->allocation.width;
-         height = MAX (page->allocation.height, allocation->height) + ythickness;
-         x = 0;                              
-         y = border_width;
-         break;
-
-       case GTK_POS_BOTTOM:
-         width = widget->allocation.width + xthickness;
-         height = MAX (page->allocation.height, allocation->height) + ythickness;
-         x = 0;                              
-         y = widget->allocation.height - height - border_width;
-         break;
-
-       case GTK_POS_LEFT:
-         width = MAX (page->allocation.width, allocation->width) + xthickness;
-         height = widget->allocation.height;
-         x = border_width;
-         y = 0;
-         break;
-
-       case GTK_POS_RIGHT:
-       default:                /* quiet gcc */
-         width = MAX (page->allocation.width, allocation->width) + xthickness;
-         height = widget->allocation.height;
-         x = widget->allocation.width - width - border_width;
-         y = 0;
-         break;
-       }
-
-      gtk_widget_queue_draw_area (widget, x, y, width, height);
-    }
 
   page->allocation = *allocation;
   gtk_widget_get_child_requisition (page->tab_label, &tab_requisition);

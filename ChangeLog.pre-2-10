@@ -1,3 +1,13 @@
+Sun Jul 11 01:12:50 2004  Soeren Sandmann  <sandmann@daimi.au.dk>
+
+	Bug 144371
+	
+	* gtk/gtknotebook.c (gtk_notebook_size_allocate): Remove an
+	unnecessary redraw..
+
+	* gtk/gtknotebook.c (gtk_notebook_page_allocate): Remove some
+	incorrect redraws.
+
 Sat Jul 10 01:33:25 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* docs/RELEASE-HOWTO: Updates.
