@@ -1,3 +1,11 @@
+Sat Mar 13 10:49:46 2004  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkdnd.c (_gtk_drag_dest_handle_event): For
+	GTK_IS_PLUG toplevels, call gdk_window_get_origin() 
+	not gtk_window_get_position, as a hackround for not
+	having accurate notification of window position for
+	embedded windows. (#136112, Dan Winship)
+
 Sat Mar 13 10:34:03 2004  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtktextview.c gtk/gtktextbuffer.c: Revert last change;

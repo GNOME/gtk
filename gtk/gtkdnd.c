@@ -33,6 +33,7 @@
 #include "gtkimage.h"
 #include "gtkinvisible.h"
 #include "gtkmain.h"
+#include "gtkplug.h"
 #include "gtkstock.h"
 #include "gtkwindow.h"
 
@@ -1082,7 +1083,18 @@ _gtk_drag_dest_handle_event (GtkWidget *toplevel,
 	      }
 	  }
 
-	gdk_window_get_position (toplevel->window, &tx, &ty);
+#ifdef GDK_WINDOWING_X11
+	/* Hackaround for: http://bugzilla.gnome.org/show_bug.cgi?id=136112
+	 *
+	 * Currently gdk_window_get_position doesn't provide reliable
+	 * information for embedded windows, so we call the much more
+	 * expensive gdk_window_get_origin().
+	 */
+	if (GTK_IS_PLUG (toplevel))
+	  gdk_window_get_origin (toplevel->window, &tx, &ty);
+	else
+#endif /* GDK_WINDOWING_X11 */
+	  gdk_window_get_position (toplevel->window, &tx, &ty);
 
 	data.x = event->dnd.x_root - tx;
 	data.y = event->dnd.y_root - ty;
