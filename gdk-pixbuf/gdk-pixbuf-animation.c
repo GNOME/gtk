@@ -199,7 +199,7 @@ gdk_pixbuf_animation_new_from_file (const char *filename,
 		if (pixbuf == NULL)
                         return NULL;
 
-                animation = _gdk_pixbuf_non_anim_new (pixbuf);
+                animation = gdk_pixbuf_non_anim_new (pixbuf);
 
                 g_object_unref (pixbuf);
 	} else {
@@ -613,7 +613,7 @@ gdk_pixbuf_non_anim_finalize (GObject *object)
 }
 
 GdkPixbufAnimation*
-_gdk_pixbuf_non_anim_new (GdkPixbuf *pixbuf)
+gdk_pixbuf_non_anim_new (GdkPixbuf *pixbuf)
 {
         GdkPixbufNonAnim *non_anim;
 

@@ -154,10 +154,10 @@ prepared_callback (GdkPixbufLoader *loader,
 		context->animation->height = gdk_pixbuf_get_height (pixbuf);
 	
 	if (context->title != NULL) 
-		_gdk_pixbuf_set_option (pixbuf, "Title", context->title);
+		gdk_pixbuf_set_option (pixbuf, "Title", context->title);
 	
 	if (context->author != NULL) 
-		_gdk_pixbuf_set_option (pixbuf, "Author", context->author);
+		gdk_pixbuf_set_option (pixbuf, "Author", context->author);
 
 	g_object_ref (pixbuf);
 	context->animation->pixbufs[context->pos] = pixbuf;
@@ -447,7 +447,7 @@ ani_load_chunk (AniLoaderContext *context, GError **error)
 		g_print ("INAM %s\n", context->title);
 #endif
 		for (i = 0; i < context->pos; i++)
-			_gdk_pixbuf_set_option (context->animation->pixbufs[i], "Title", context->title);			
+			gdk_pixbuf_set_option (context->animation->pixbufs[i], "Title", context->title);			
 	}
         else if (context->chunk_id == TAG_IART) 
 	{
@@ -466,7 +466,7 @@ ani_load_chunk (AniLoaderContext *context, GError **error)
 		g_print ("IART %s\n", context->author);
 #endif
 		for (i = 0; i < context->pos; i++)
-			_gdk_pixbuf_set_option (context->animation->pixbufs[i], "Author", context->author);			
+			gdk_pixbuf_set_option (context->animation->pixbufs[i], "Author", context->author);			
 	}
 
 #ifdef DEBUG_ANI

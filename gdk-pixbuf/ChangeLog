@@ -1,3 +1,8 @@
+2002-09-19  Matthias Clasen  <maclas@gmx.de>
+
+	* Revert the previous change; the symbols need to be exported 
+	to be usable from dlopened modules.
+	
 2002-09-18  Matthias Clasen  <maclas@gmx.de>
 
 	* io-xpm.c, io-xbm.c, io-ico.c, io-ani.c, io-png.c,

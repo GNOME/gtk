@@ -317,7 +317,7 @@ gdk_pixbuf__png_image_load (FILE *f, GError **error)
         if (png_get_text (png_ptr, info_ptr, &text_ptr, &num_texts)) {
                 for (i = 0; i < num_texts; i++) {
                         png_text_to_pixbuf_option (text_ptr[i], &key, &value);
-                        _gdk_pixbuf_set_option (pixbuf, key, value);
+                        gdk_pixbuf_set_option (pixbuf, key, value);
                         g_free (key);
                         g_free (value);
                 }
@@ -616,7 +616,7 @@ png_info_callback   (png_structp png_read_ptr,
 
                         if (png_text_to_pixbuf_option (png_text_ptr[i],
                                                        &key, &value)) {
-                                _gdk_pixbuf_set_option (lc->pixbuf, key, value);
+                                gdk_pixbuf_set_option (lc->pixbuf, key, value);
                                 g_free (key);
                                 g_free (value);
                         }

@@ -420,9 +420,9 @@ static void DecodeHeader(guchar *Data, gint Bytes,
 		if (State->cursor) {
 			gchar hot[10];
 			g_snprintf (hot, 10, "%d", State->x_hot);
-			_gdk_pixbuf_set_option (State->pixbuf, "x_hot", hot);
+			gdk_pixbuf_set_option (State->pixbuf, "x_hot", hot);
 			g_snprintf (hot, 10, "%d", State->y_hot);
-			_gdk_pixbuf_set_option (State->pixbuf, "y_hot", hot);
+			gdk_pixbuf_set_option (State->pixbuf, "y_hot", hot);
 		}
 
 		if (State->prepared_func != NULL)

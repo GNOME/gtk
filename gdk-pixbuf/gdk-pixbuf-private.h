@@ -129,13 +129,13 @@ struct _GdkPixbufAnimationIterClass {
 };
       
 
-GdkPixbufAnimation* _gdk_pixbuf_non_anim_new (GdkPixbuf *pixbuf);
+GdkPixbufAnimation* gdk_pixbuf_non_anim_new (GdkPixbuf *pixbuf);
 
 
 
 /*  key/value pairs that can be attached by the pixbuf loader  */
 
-gboolean _gdk_pixbuf_set_option  (GdkPixbuf   *pixbuf,
+gboolean gdk_pixbuf_set_option  (GdkPixbuf   *pixbuf,
                                  const gchar *key,
                                  const gchar *value);
 
