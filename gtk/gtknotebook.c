@@ -170,6 +170,8 @@ static gint gtk_notebook_motion_notify       (GtkWidget        *widget,
 					      GdkEventMotion   *event);
 static gint gtk_notebook_focus_in            (GtkWidget        *widget,
 					      GdkEventFocus    *event);
+static gint gtk_notebook_focus_out           (GtkWidget        *widget,
+					      GdkEventFocus    *event);
 static void gtk_notebook_grab_notify         (GtkWidget          *widget,
 					      gboolean            was_grabbed);
 static void gtk_notebook_state_changed       (GtkWidget          *widget,
@@ -369,6 +371,7 @@ gtk_notebook_class_init (GtkNotebookClass *class)
   widget_class->grab_notify = gtk_notebook_grab_notify;
   widget_class->state_changed = gtk_notebook_state_changed;
   widget_class->focus_in_event = gtk_notebook_focus_in;
+  widget_class->focus_out_event = gtk_notebook_focus_out;
   widget_class->focus = gtk_notebook_focus;
   widget_class->style_set = gtk_notebook_style_set;
   
@@ -1926,7 +1929,18 @@ gtk_notebook_focus_in (GtkWidget     *widget,
 {
   GTK_NOTEBOOK (widget)->child_has_focus = FALSE;
 
-  return (* GTK_WIDGET_CLASS (parent_class)->focus_in_event) (widget, event);
+  gtk_notebook_redraw_tabs (GTK_NOTEBOOK (widget));
+  
+  return FALSE;
+}
+
+static gint
+gtk_notebook_focus_out (GtkWidget     *widget,
+			GdkEventFocus *event)
+{
+  gtk_notebook_redraw_tabs (GTK_NOTEBOOK (widget));
+
+  return FALSE;
 }
 
 static void
