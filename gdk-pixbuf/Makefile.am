@@ -38,8 +38,7 @@ libexec_LTLIBRARIES =		\
 	$(PNM_LIB)	\
 	$(BMP_LIB)
 
-#noinst_PROGRAMS = testpixbuf testpixbuf-drawable
-noinst_PROGRAMS = testpixbuf
+noinst_PROGRAMS = testpixbuf testpixbuf-drawable
 
 DEPS = libgdk_pixbuf.la
 INCLUDES = -I$(top_builddir)/gdk-pixbuf $(GLIB_CFLAGS) $(LIBART_CFLAGS) $(GTK_CFLAGS)
@@ -49,10 +48,10 @@ LDADDS = libgdk_pixbuf.la $(LIBART_LIBS) $(GLIB_LIBS) $(GTK_LIBS)
 
 if INSIDE_GNOME_LIBS
 testpixbuf_LDADD = $(LDADDS) $(LIBART_LIBS) -lgmodule
-#testpixbuf_drawable_LDADD = $(LDADDS)
+testpixbuf_drawable_LDADD = $(LDADDS)
 else
 testpixbuf_LDADD = $(LDADDS) $(LIBART_LIBS) $(GNOME_LIBS) -lgmodule
-#testpixbuf_drawable_LDADD = $(LDADDS) $(GNOME_LIBS)
+testpixbuf_drawable_LDADD = $(LDADDS) $(GNOME_LIBS)
 endif
 
 GDK_PIXBUF_LIBS = $(LIBART_LIBS) $(GLIB_LIBS) $(GTK_LIBS)

@@ -2,7 +2,6 @@
 #include <gtk/gtk.h>
 #include <gdk/gdkx.h>
 #include "gdk-pixbuf.h"
-#include "gdk-pixbuf-drawable.h"
 
 void close_app(GtkWidget *widget, gpointer data)
 {
@@ -79,7 +78,8 @@ int main(int argc, char **argv)
    gtk_widget_set_default_visual(gdk_rgb_get_visual());
 
    root = gdk_window_foreign_new(GDK_ROOT_WINDOW());
-   pixbuf = gdk_pixbuf_rgb_from_drawable(root, 0, 0, 150, 160);
+   pixbuf = gdk_pixbuf_get_from_drawable(NULL, root, NULL,
+					 0, 0, 0, 0, 150, 160);
    
    window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
    gtk_signal_connect(GTK_OBJECT(window), "delete_event",

@@ -1,3 +1,16 @@
+1999-12-09  Michael Zucchi  <zucchi@zedzone.mmc.com.au>
+
+	* gdk-pixbuf/gdk-pixbuf-drawable.c (gdk_pixbuf_get_from_drawable):
+	Filled in body of function.
+	(rgbconvert): Added GdkColormap parameter, and to all conversion
+	functions also.
+
+	* gdk-pixbuf/Makefile.am: Re-enabled building of
+	textpixbuf-drawable.
+
+	* gdk-pixbuf/testpixbuf-drawable.c (main): Changed to use
+	gdk_pixbuf_get_from_drawable().
+
 1999-12-08  Arjan van de Ven <arjan@fenrus.demon.nl>
 
 	* gdk-pixbuf/gdk-pixbuf-drawable.c : Fixed the red/green/red 
