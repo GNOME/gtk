@@ -896,9 +896,8 @@ send_xembed_message (GtkSocket *socket,
 
       xevent.xclient.window = GDK_WINDOW_XWINDOW (socket->plug_window);
       xevent.xclient.type = ClientMessage;
-      xevent.xclient.message_type = gdk_atom_intern_for_display ("_XEMBED",
-								 FALSE,
-			      gdk_window_get_display(socket->plug_window));
+      xevent.xclient.message_type = gdk_display_atom (gdk_window_get_display(socket->plug_window), "_XEMBED", FALSE);
+
       xevent.xclient.format = 32;
       xevent.xclient.data.l[0] = time;
       xevent.xclient.data.l[1] = message;
@@ -1128,9 +1127,11 @@ gtk_socket_filter_func (GdkXEvent *gdk_xevent, GdkEvent *event, gpointer data)
 	  GdkDisplay *display = gdk_window_get_display(socket->plug_window);
 
 	  if ((xevent->xproperty.atom == 
-	       gdk_atom_intern_for_display ("XdndAware", FALSE, display)) ||
+	       gdk_display_atom (display, "XdndAware", FALSE)) ||
+
 	      (xevent->xproperty.atom == 
-	       gdk_atom_intern_for_display ("_MOTIF_DRAG_RECEIVER_INFO", FALSE, display)))
+	       gdk_display_atom (display, "_MOTIF_DRAG_RECEIVER_INFO", FALSE)))
+
 	    {
 	      gdk_error_trap_push ();
 	      if (gdk_drag_get_protocol_for_display (xevent->xproperty.window,
@@ -1145,8 +1146,8 @@ gtk_socket_filter_func (GdkXEvent *gdk_xevent, GdkEvent *event, gpointer data)
 	}
       break;
     case ClientMessage:
-      if (xevent->xclient.message_type == gdk_atom_intern_for_display ("_XEMBED", FALSE,
-					   gdk_window_get_display(socket->plug_window)))
+      if (xevent->xclient.message_type == gdk_display_atom (gdk_window_get_display(socket->plug_window), "_XEMBED", FALSE))
+
 	{
 	  handle_xembed_message (socket,
 				 xevent->xclient.data.l[1],

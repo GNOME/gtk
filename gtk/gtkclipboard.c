@@ -111,7 +111,8 @@ gtk_clipboard_get_for_display (GdkAtom selection, GdkDisplay *display)
   GSList *tmp_list;
 
   if (selection == GDK_NONE)
-    selection = gdk_atom_intern_for_display ("CLIPBOARD", FALSE, display);
+    selection = gdk_display_atom (display, "CLIPBOARD", FALSE);
+
 
   tmp_list = clipboards;
   while (tmp_list)
@@ -661,16 +662,18 @@ request_text_received_func (GtkClipboard     *clipboard,
        * anything else and didn't get it, give up.
        */
       if (selection_data->target == 
-	 gdk_atom_intern_for_display ("UTF8_STRING", FALSE, clipboard->display))
+	 gdk_display_atom (clipboard->display, "UTF8_STRING", FALSE))
+
 	{
 	  gtk_clipboard_request_contents (clipboard,
-					  gdk_atom_intern_for_display ("TEXT", 
-						FALSE,clipboard->display), 
+					  gdk_display_atom (clipboard->display, "TEXT", FALSE), 
+
 					  request_text_received_func, info);
 	  return;
 	}
       else if (selection_data->target == 
-	        gdk_atom_intern_for_display ("TEXT", FALSE, clipboard->display))
+	        gdk_display_atom (clipboard->display, "TEXT", FALSE))
+
 	{
 	  gtk_clipboard_request_contents (clipboard,
 					  GDK_TARGET_STRING, 
@@ -716,9 +719,8 @@ gtk_clipboard_request_text (GtkClipboard                *clipboard,
   info->user_data = user_data;
 
   gtk_clipboard_request_contents (clipboard, 
-				  gdk_atom_intern_for_display ("UTF8_STRING",
-							       FALSE,
-							       clipboard->display),
+				  gdk_display_atom (clipboard->display, "UTF8_STRING", FALSE),
+
 				  request_text_received_func,
 				  info);
 }

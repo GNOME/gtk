@@ -270,9 +270,8 @@ gtk_target_list_add_table_for_display (GtkTargetList        *list,
   for (i=ntargets-1; i >= 0; i--)
     {
       GtkTargetPair *pair = g_new (GtkTargetPair, 1);
-      pair->target = gdk_atom_intern_for_display (targets[i].target,
-						  FALSE,
-						  display);
+      pair->target = gdk_display_atom (display, targets[i].target, FALSE);
+
       pair->flags = targets[i].flags;
       pair->info = targets[i].info;
       
@@ -941,27 +940,20 @@ gtk_selection_init (GdkDisplay *display)
   GtkSelectionDisplayCache *cache = g_new (GtkSelectionDisplayCache, 1);
   cache->display = display;
   cache->gtk_selection_atoms = g_new(GdkAtom, LAST_ATOM);
-  cache->gtk_selection_atoms[INCR] = gdk_atom_intern_for_display ("INCR",
-								  FALSE,
-								  display);
-  cache->gtk_selection_atoms[MULTIPLE] = gdk_atom_intern_for_display ("MULTIPLE",
-								      FALSE,
-								      display);
-  cache->gtk_selection_atoms[TIMESTAMP] = gdk_atom_intern_for_display ("TIMESTAMP", 
-								       FALSE,
-								       display);
-  cache->gtk_selection_atoms[TARGETS] = gdk_atom_intern_for_display ("TARGETS",
-								     FALSE,
-								     display);
-  cache->utf8_atom = gdk_atom_intern_for_display  ("UTF8_STRING",
-						   FALSE,
-						   display);
-  cache->text_atom = gdk_atom_intern_for_display  ("TEXT", 
-						   FALSE,
-						   display);
-  cache->ctext_atom = gdk_atom_intern_for_display  ("COMPOUND_TEXT", 
-						    FALSE,
-						    display);
+  cache->gtk_selection_atoms[INCR] = gdk_display_atom (display, "INCR", FALSE);
+
+  cache->gtk_selection_atoms[MULTIPLE] = gdk_display_atom (display, "MULTIPLE", FALSE);
+
+  cache->gtk_selection_atoms[TIMESTAMP] = gdk_display_atom (display, "TIMESTAMP", FALSE);
+
+  cache->gtk_selection_atoms[TARGETS] = gdk_display_atom (display, "TARGETS", FALSE);
+
+  cache->utf8_atom = gdk_display_atom (display, "UTF8_STRING", FALSE);
+
+  cache->text_atom = gdk_display_atom (display, "TEXT", FALSE);
+
+  cache->ctext_atom = gdk_display_atom (display, "COMPOUND_TEXT", FALSE);
+
   cache->current_retrievals = NULL;
   cache->current_incrs = NULL;
   cache->current_selections = NULL;

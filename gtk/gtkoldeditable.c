@@ -710,20 +710,17 @@ gtk_old_editable_selection_received  (GtkWidget         *widget,
        * for text and didn't get it, try string.  If we asked for
        * anything else and didn't get it, give up.
        */
-      if (selection_data->target == gdk_atom_intern_for_display ("UTF8_STRING", 
-								 FALSE,
-								 display))
+      if (selection_data->target == gdk_display_atom (display, "UTF8_STRING", FALSE))
+
 	{
 	  gtk_selection_convert (widget, GDK_SELECTION_PRIMARY,
-				 gdk_atom_intern_for_display ("TEXT",
-							      FALSE,
-							      display),
+				 gdk_display_atom (display, "TEXT", FALSE),
+
 				 time);
 	  return;
 	}
-      else if (selection_data->target == gdk_atom_intern_for_display ("TEXT", 
-								      FALSE,
-								      display))
+      else if (selection_data->target == gdk_display_atom (display, "TEXT", FALSE))
+
 	{
 	  gtk_selection_convert (widget, GDK_SELECTION_PRIMARY,
 				 GDK_TARGET_STRING,

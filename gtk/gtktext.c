@@ -1739,9 +1739,8 @@ gtk_text_button_press (GtkWidget      *widget,
 	    }
 	  
 	  gtk_selection_convert (widget, GDK_SELECTION_PRIMARY,
-				 gdk_atom_intern_for_display ("UTF8_STRING", 
-							      FALSE,
-					     GTK_WIDGET_GET_DISPLAY(widget)),
+				 gdk_display_atom (GTK_WIDGET_GET_DISPLAY(widget), "UTF8_STRING", FALSE),
+
 				 event->time);
 	}
       else

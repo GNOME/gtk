@@ -435,7 +435,8 @@ gdk_text_property_to_utf8_list_for_display (GdkDisplay *display,
     return make_list ((gchar *) text, length, TRUE, list);
   }
   else if (encoding ==
-	   gdk_atom_intern_for_display ("UTF8_STRING", FALSE, display)) {
+	   gdk_display_atom (display, "UTF8_STRING", FALSE)) {
+
     return make_list ((gchar *) text, length, FALSE, list);
   }
   else {

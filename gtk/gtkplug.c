@@ -554,9 +554,8 @@ send_xembed_message (GtkPlug *plug,
 
       xevent.xclient.window = GDK_WINDOW_XWINDOW (plug->socket_window);
       xevent.xclient.type = ClientMessage;
-      xevent.xclient.message_type = gdk_atom_intern_for_display ("_XEMBED", 
-								 FALSE,
-				     gdk_window_get_display(plug->socket_window));
+      xevent.xclient.message_type = gdk_display_atom (gdk_window_get_display(plug->socket_window), "_XEMBED", FALSE);
+
       xevent.xclient.format = 32;
       xevent.xclient.data.l[0] = time;
       xevent.xclient.data.l[1] = message;
@@ -708,9 +707,8 @@ gtk_plug_filter_func (GdkXEvent *gdk_xevent, GdkEvent *event, gpointer data)
     {
     case ClientMessage:
       if (xevent->xclient.message_type == 
-	  gdk_atom_intern_for_display ("_XEMBED", 
-				       FALSE,
-				       gdk_window_get_display(plug->socket_window)))
+	  gdk_display_atom (gdk_window_get_display(plug->socket_window), "_XEMBED", FALSE))
+
 	{
 	  handle_xembed_message (plug,
 				 xevent->xclient.data.l[1],

@@ -35,67 +35,13 @@
 #include "gdkdisplay-x11.h"
 #include "gdkscreen-x11.h"
 
-typedef struct {
-  GdkDisplay *display;
-  GHashTable *hash_table;
-} GdkAtomHash;
-
-static GdkAtomHash * 
-gdk_atom_hash_get(GdkDisplay *display, GSList * atom_hash_list)
-{
-  GSList *tmp = atom_hash_list;
-
-  if(!atom_hash_list)
-     return NULL;
-
-  while(tmp)
-  {
-    if(((GdkAtomHash *)tmp->data)->display == display)
-      return ((GdkAtomHash *)tmp->data);
-
-    tmp = tmp->next;
-  }
-  return NULL;
-}
-
-GdkAtom
-gdk_atom_intern_for_display (const gchar * atom_name,
-			     gboolean only_if_exists, GdkDisplay * dpy)
-{
-  GdkAtom retval;
-  static GSList *atom_hash_list = NULL;
-  GdkAtomHash * atom_hash;
-
-  g_return_val_if_fail (atom_name != NULL, GDK_NONE);
-
-  atom_hash = gdk_atom_hash_get(dpy, atom_hash_list);
-  if(!atom_hash)
-  {
-    /* list or hashtable doesn't exist for display */
-    atom_hash = g_new(GdkAtomHash, 1);
-    atom_hash->display = dpy;
-    atom_hash->hash_table = g_hash_table_new (g_str_hash, g_str_equal);
-    g_slist_append (atom_hash_list, atom_hash);
-  }
-
-  retval = GPOINTER_TO_UINT (g_hash_table_lookup (atom_hash->hash_table,
-						  atom_name));
-  if (!retval) {
-    retval =
-      XInternAtom (GDK_DISPLAY_XDISPLAY (dpy), atom_name, only_if_exists);
-
-    if (retval != None)
-      g_hash_table_insert (atom_hash->hash_table,
-			   g_strdup (atom_name), GUINT_TO_POINTER (retval));
-  }
-  return retval;
-}
 
 GdkAtom
 gdk_atom_intern (const gchar *atom_name, gboolean only_if_exists)
 {
-  GDK_NOTE(MULTIHEAD,g_message("Use gdk_atom_intern_for_display instead\n"));
-  return gdk_atom_intern_for_display(atom_name,only_if_exists,DEFAULT_GDK_DISPLAY);
+  GDK_NOTE(MULTIHEAD,g_message("Use gdk_display_atom instead\n"));
+  return gdk_display_atom (DEFAULT_GDK_DISPLAY, atom_name, only_if_exists);
+
 }
 gchar *
 gdk_atom_name_for_display (GdkAtom atom, GdkDisplay * dpy)

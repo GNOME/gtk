@@ -343,12 +343,12 @@ gdk_check_wm_state_changed (GdkWindow *window)
   if (type != None)
     {
 
-      sticky_atom = gdk_atom_intern_for_display ("_NET_WM_STATE_STICKY", FALSE,
-						 GDK_WINDOW_DISPLAY(window));
-      maxvert_atom = gdk_atom_intern_for_display ("_NET_WM_STATE_MAXIMIZED_VERT", FALSE, 
-						  GDK_WINDOW_DISPLAY(window));
-      maxhorz_atom = gdk_atom_intern_for_display ("_NET_WM_STATE_MAXIMIZED_HORZ", FALSE,
-						  GDK_WINDOW_DISPLAY(window));    
+      sticky_atom = gdk_display_atom (GDK_WINDOW_DISPLAY(window), "_NET_WM_STATE_STICKY", FALSE);
+
+      maxvert_atom = gdk_display_atom (GDK_WINDOW_DISPLAY(window), "_NET_WM_STATE_MAXIMIZED_VERT", FALSE);
+
+      maxhorz_atom = gdk_display_atom (GDK_WINDOW_DISPLAY(window), "_NET_WM_STATE_MAXIMIZED_HORZ", FALSE);    
+
 
       found_sticky = FALSE;
       found_maxvert = FALSE;

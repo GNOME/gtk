@@ -1286,8 +1286,8 @@ gtk_window_transient_parent_unrealized (GtkWidget *parent,
 {
   if (GTK_WIDGET_REALIZED (window))
     gdk_property_delete (window->window, 
-			 gdk_atom_intern_for_display ("WM_TRANSIENT_FOR", FALSE,
-					       GTK_WIDGET_GET_DISPLAY(parent)));
+			 gdk_display_atom (GTK_WIDGET_GET_DISPLAY(parent), "WM_TRANSIENT_FOR", FALSE));
+
 }
 
 static void       
@@ -2367,8 +2367,8 @@ gtk_window_client_event (GtkWidget	*widget,
   g_return_val_if_fail (event != NULL, FALSE);
 
   if (!atom_rcfiles)
-    atom_rcfiles = gdk_atom_intern_for_display("_GTK_READ_RCFILES", FALSE,
-					       GTK_WIDGET_GET_DISPLAY(widget));
+    atom_rcfiles = gdk_display_atom (GTK_WIDGET_GET_DISPLAY(widget), "_GTK_READ_RCFILES", FALSE);
+
 
   if(event->message_type == atom_rcfiles) 
     gtk_window_read_rcfiles (widget, event);    

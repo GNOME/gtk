@@ -713,14 +713,13 @@ gtk_drag_finish (GdkDragContext *context,
 
   if (success && del)
     {
-      target = gdk_atom_intern_for_display ("DELETE", FALSE, display);
+      target = gdk_display_atom (display, "DELETE", FALSE);
+
     }
   else if (context->protocol == GDK_DRAG_PROTO_MOTIF)
     {
-      target = gdk_atom_intern_for_display (success ? 
-				  "XmTRANSFER_SUCCESS" : 
-				  "XmTRANSFER_FAILURE",
-				FALSE, display);
+      target = gdk_display_atom (display, success ?    "XmTRANSFER_SUCCESS" :    "XmTRANSFER_FAILURE", FALSE);
+
     }
 
   if (target != GDK_NONE)
@@ -1177,18 +1176,17 @@ gtk_drag_selection_received (GtkWidget        *widget,
     }
 
   if (selection_data->target == 
-       gdk_atom_intern_for_display ("DELETE", FALSE, GTK_WIDGET_GET_DISPLAY(widget)))
+       gdk_display_atom (GTK_WIDGET_GET_DISPLAY(widget), "DELETE", FALSE))
+
     {
       gtk_drag_finish (context, TRUE, FALSE, time);
     }
   else if ((selection_data->target == 
-	    gdk_atom_intern_for_display ("XmTRANSFER_SUCCESS",
-					 FALSE,
-					 GTK_WIDGET_GET_DISPLAY(widget))) ||
+	    gdk_display_atom (GTK_WIDGET_GET_DISPLAY(widget), "XmTRANSFER_SUCCESS", FALSE)) ||
+
 	   (selection_data->target == 
-	    gdk_atom_intern_for_display ("XmTRANSFER_FAILURE", 
-					 FALSE,
-					 GTK_WIDGET_GET_DISPLAY(widget))))
+	    gdk_display_atom (GTK_WIDGET_GET_DISPLAY(widget), "XmTRANSFER_FAILURE", FALSE)))
+
     {
       /* Do nothing */
     }
@@ -2340,23 +2338,20 @@ gtk_drag_source_check_selection (GtkDragSourceInfo *info,
     {
       gtk_selection_add_target (info->ipc_widget,
 				selection,
-				gdk_atom_intern_for_display ("XmTRANSFER_SUCCESS", 
-							     FALSE,
-							     display),
+				gdk_display_atom (display, "XmTRANSFER_SUCCESS", FALSE),
+
 				TARGET_MOTIF_SUCCESS);
       gtk_selection_add_target (info->ipc_widget,
 				selection,
-				gdk_atom_intern_for_display ("XmTRANSFER_FAILURE", 
-							     FALSE,
-							     display),
+				gdk_display_atom (display, "XmTRANSFER_FAILURE", FALSE),
+
 				TARGET_MOTIF_FAILURE);
     }
 
   gtk_selection_add_target (info->ipc_widget,
 			    selection,
-			    gdk_atom_intern_for_display ("DELETE", 
-							 FALSE,
-							 display),
+			    gdk_display_atom (display, "DELETE", FALSE),
+
 			    TARGET_DELETE);
 }
 
@@ -2448,9 +2443,8 @@ gtk_drag_drop (GtkDragSourceInfo *info,
     {
       GtkSelectionData selection_data;
       GList *tmp_list;
-      GdkAtom target = gdk_atom_intern_for_display ("application/x-rootwin-drop", 
-						    FALSE,
-						    GTK_WIDGET_GET_DISPLAY(info->widget));
+      GdkAtom target = gdk_display_atom (GTK_WIDGET_GET_DISPLAY(info->widget), "application/x-rootwin-drop", FALSE);
+
       
       tmp_list = info->target_list->list;
       while (tmp_list)
@@ -2601,9 +2595,8 @@ gtk_drag_selection_get (GtkWidget        *widget,
   guint target_info;
 
   if (!null_atom)
-    null_atom = gdk_atom_intern_for_display ("NULL", 
-					     FALSE,
-					     GTK_WIDGET_GET_DISPLAY(widget));
+    null_atom = gdk_display_atom (GTK_WIDGET_GET_DISPLAY(widget), "NULL", FALSE);
+
 
   switch (sel_info)
     {

@@ -363,9 +363,8 @@ color_sample_drag_handle (GtkWidget        *widget,
   vals[3] = priv->has_opacity ? colsrc[COLORSEL_OPACITY] * 0xffff : 0xffff;
   
   gtk_selection_data_set (selection_data,
-			  gdk_atom_intern_for_display ("application/x-color",
-						       FALSE,
-						GTK_WIDGET_GET_DISPLAY(widget)),
+			  gdk_display_atom (GTK_WIDGET_GET_DISPLAY(widget), "application/x-color", FALSE),
+
 			  16, (guchar *)vals, 8);
 }
 
@@ -685,9 +684,8 @@ palette_drag_handle (GtkWidget        *widget,
   vals[3] = 0xffff;
   
   gtk_selection_data_set (selection_data,
-			  gdk_atom_intern_for_display ("application/x-color",
-							FALSE,
-					     GTK_WIDGET_GET_DISPLAY(widget)),
+			  gdk_display_atom (GTK_WIDGET_GET_DISPLAY(widget), "application/x-color", FALSE),
+
 			  16, (guchar *)vals, 8);
 }
 

@@ -50,6 +50,10 @@ void	        gdk_display_keyboard_ungrab	(GdkDisplay * display, guint32 time);
 gboolean        gdk_display_is_pointer_grabbed  (GdkDisplay * display);
 void		gdk_display_beep		(GdkDisplay * display);
 
+GdkAtom		gdk_display_atom		(GdkDisplay * dpy,
+						 const gchar * atom_name,
+						 gboolean only_if_exists);
+
 
 #ifdef __cplusplus
 }

@@ -16,9 +16,6 @@ typedef enum
 
 GdkAtom gdk_atom_intern (const gchar *atom_name,
 			 gboolean     only_if_exists);
-GdkAtom gdk_atom_intern_for_display (const gchar * atom_name,
-				     gboolean only_if_exists,
-				     GdkDisplay * dpy);
 gchar *gdk_atom_name_for_display (GdkAtom atom, GdkDisplay * dpy);
 gchar*  gdk_atom_name   (GdkAtom      atom);
 

@@ -187,3 +187,62 @@ gdk_display_beep (GdkDisplay * display)
   XBell (GDK_DISPLAY_XDISPLAY (display), 0);
 }
 
+/* helper function used for atom caching in gdk_display_atom */
+
+typedef struct {
+  GdkDisplay *display;
+  GHashTable *hash_table;
+} GdkAtomHash;
+
+static GdkAtomHash * 
+gdk_atom_hash_get(GdkDisplay *display, GSList * atom_hash_list)
+{
+  GSList *tmp = atom_hash_list;
+
+  if(!atom_hash_list)
+     return NULL;
+
+  while(tmp)
+  {
+    if(((GdkAtomHash *)tmp->data)->display == display)
+      return ((GdkAtomHash *)tmp->data);
+
+    tmp = tmp->next;
+  }
+  return NULL;
+}
+
+GdkAtom
+gdk_display_atom (GdkDisplay * dpy,
+		  const gchar * atom_name,
+		  gboolean only_if_exists)
+{
+  GdkAtom retval;
+  static GSList *atom_hash_list = NULL;
+  GdkAtomHash * atom_hash;
+
+  g_return_val_if_fail (atom_name != NULL, GDK_NONE);
+
+  atom_hash = gdk_atom_hash_get(dpy, atom_hash_list);
+  if(!atom_hash)
+  {
+    /* list or hashtable doesn't exist for display */
+    atom_hash = g_new(GdkAtomHash, 1);
+    atom_hash->display = dpy;
+    atom_hash->hash_table = g_hash_table_new (g_str_hash, g_str_equal);
+    g_slist_append (atom_hash_list, atom_hash);
+  }
+
+  retval = GPOINTER_TO_UINT (g_hash_table_lookup (atom_hash->hash_table,
+						  atom_name));
+  if (!retval) {
+    retval =
+      XInternAtom (GDK_DISPLAY_XDISPLAY (dpy), atom_name, only_if_exists);
+
+    if (retval != None)
+      g_hash_table_insert (atom_hash->hash_table,
+			   g_strdup (atom_name), GUINT_TO_POINTER (retval));
+  }
+  return retval;
+}
+
