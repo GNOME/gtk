@@ -47,14 +47,14 @@ msgstr "Opacidad:"
 #: gtk/gtkcolorsel.c:1668 gtk/gtkfilesel.c:564 gtk/gtkfontsel.c:3707
 #: gtk/gtkgamma.c:416
 msgid "OK"
-msgstr "OK"
+msgstr "Aceptar"
 
 #. The Cancel button
 #: gtk/gtkcolorsel.c:1674 gtk/gtkfilesel.c:571 gtk/gtkfilesel.c:949
 #: gtk/gtkfilesel.c:1053 gtk/gtkfilesel.c:1168 gtk/gtkfontsel.c:3720
 #: gtk/gtkgamma.c:424
 msgid "Cancel"
-msgstr "Anular"
+msgstr "Cancelar"
 
 #: gtk/gtkcolorsel.c:1679
 msgid "Help"
