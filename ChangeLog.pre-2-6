@@ -1,3 +1,13 @@
+Mon Jun 28 09:29:52 1999  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkwindow.c: add ::default_width and ::default_height arguments.
+	(gtk_window_set_default_size): don't change a value if it's < 0.
+	queue a resize.
+
+Sun Jun 27 11:00:33 1999  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtktext.c (gtk_text_insert): don't segfault on NULL inserts.
+
 Mon Jun 28 12:08:25 1999  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkfilesel.c (cmpl_completion_fullname): Don't

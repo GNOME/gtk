@@ -48,7 +48,9 @@ enum {
   ARG_ALLOW_SHRINK,
   ARG_ALLOW_GROW,
   ARG_MODAL,
-  ARG_WIN_POS
+  ARG_WIN_POS,
+  ARG_DEFAULT_WIDTH,
+  ARG_DEFAULT_HEIGHT
 };
 
 typedef struct {
@@ -171,7 +173,9 @@ gtk_window_class_init (GtkWindowClass *klass)
   gtk_object_add_arg_type ("GtkWindow::allow_grow", GTK_TYPE_BOOL, GTK_ARG_READWRITE, ARG_ALLOW_GROW);
   gtk_object_add_arg_type ("GtkWindow::modal", GTK_TYPE_BOOL, GTK_ARG_READWRITE, ARG_MODAL);
   gtk_object_add_arg_type ("GtkWindow::window_position", GTK_TYPE_WINDOW_POSITION, GTK_ARG_READWRITE, ARG_WIN_POS);
-
+  gtk_object_add_arg_type ("GtkWindow::default_width", GTK_TYPE_INT, GTK_ARG_READWRITE, ARG_DEFAULT_WIDTH);
+  gtk_object_add_arg_type ("GtkWindow::default_height", GTK_TYPE_INT, GTK_ARG_READWRITE, ARG_DEFAULT_HEIGHT);
+  
   window_signals[SET_FOCUS] =
     gtk_signal_new ("set_focus",
                     GTK_RUN_LAST,
@@ -274,6 +278,12 @@ gtk_window_set_arg (GtkObject  *object,
     case ARG_WIN_POS:
       gtk_window_set_position (window, GTK_VALUE_ENUM (*arg));
       break;
+    case ARG_DEFAULT_WIDTH:
+      gtk_window_set_default_size (window, GTK_VALUE_INT (*arg), -2);
+      break;
+    case ARG_DEFAULT_HEIGHT:
+      gtk_window_set_default_size (window, -2, GTK_VALUE_INT (*arg));
+      break;
     default:
       break;
     }
@@ -290,6 +300,7 @@ gtk_window_get_arg (GtkObject  *object,
 
   switch (arg_id)
     {
+      GtkWindowGeometryInfo *info;
     case ARG_TYPE:
       GTK_VALUE_ENUM (*arg) = window->type;
       break;
@@ -310,6 +321,20 @@ gtk_window_get_arg (GtkObject  *object,
       break;
     case ARG_WIN_POS:
       GTK_VALUE_ENUM (*arg) = window->position;
+      break;
+    case ARG_DEFAULT_WIDTH:
+      info = gtk_window_get_geometry_info (window, FALSE);
+      if (!info)
+	GTK_VALUE_INT (*arg) = -1;
+      else
+	GTK_VALUE_INT (*arg) = info->width;
+      break;
+    case ARG_DEFAULT_HEIGHT:
+      info = gtk_window_get_geometry_info (window, FALSE);
+      if (!info)
+	GTK_VALUE_INT (*arg) = -1;
+      else
+	GTK_VALUE_INT (*arg) = info->height;
       break;
     default:
       arg->type = GTK_TYPE_INVALID;
@@ -651,8 +676,9 @@ gtk_window_geometry_destroy (GtkWindowGeometryInfo *info)
   g_free (info);
 }
 
-static GtkWindowGeometryInfo *
-gtk_window_get_geometry_info (GtkWindow *window, gboolean create)
+static GtkWindowGeometryInfo*
+gtk_window_get_geometry_info (GtkWindow *window,
+			      gboolean   create)
 {
   GtkWindowGeometryInfo *info;
 
@@ -662,15 +688,14 @@ gtk_window_get_geometry_info (GtkWindow *window, gboolean create)
     {
       info = g_new (GtkWindowGeometryInfo, 1);
 
-      info->width = - 1;
-      info->height = -1;
+      info->width = 0;
+      info->height = 0;
       info->last_width = -1;
       info->last_height = -1;
       info->widget = NULL;
       info->mask = 0;
 
       gtk_object_set_data_full (GTK_OBJECT (window), 
-				
 				"gtk-window-geometry",
 				info, 
 				(GtkDestroyNotify) gtk_window_geometry_destroy);
@@ -715,12 +740,15 @@ gtk_window_set_default_size (GtkWindow   *window,
 {
   GtkWindowGeometryInfo *info;
 
-  g_return_if_fail (window != NULL);
+  g_return_if_fail (GTK_IS_WINDOW (window));
 
   info = gtk_window_get_geometry_info (window, TRUE);
 
-  info->width = width;
-  info->height = height;
+  if (width >= 0)
+    info->width = width;
+  if (height >= 0)
+    info->height = height;
+  gtk_widget_queue_resize (GTK_WIDGET (window));
 }
   
 static void

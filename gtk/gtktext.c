@@ -937,14 +937,15 @@ gtk_text_insert (GtkText    *text,
   
   g_return_if_fail (text != NULL);
   g_return_if_fail (GTK_IS_TEXT (text));
-
-  if (nchars < 0)
-    length = strlen (chars);
+  if (nchars > 0)
+    g_return_if_fail (chars != NULL);
   else
-    length = nchars;
-  
-  if (length == 0)
-    return;
+    {
+      if (!nchars || !chars)
+	return;
+      nchars = strlen (chars);
+    }
+  length = nchars;
   
   if (!text->freeze_count && (length > FREEZE_LENGTH))
     {
