@@ -245,9 +245,6 @@ either @region or @rect.
 
 <!-- ##### FUNCTION gdk_region_intersect ##### -->
 <para>
-Sets the area of @source1 to the intersection of the areas of @source1
-and @source2. The resulting area is the set of pixels contained in
-both @source1 and @source2.
 </para>
 
 @source1: a #GdkRegion
@@ -278,13 +275,10 @@ area is the set of pixels contained in @source1 but not in @source2.
 
 <!-- ##### FUNCTION gdk_region_xor ##### -->
 <para>
-Sets the area of @source1 to the exclusive-OR of the areas of @source1
-and @source2. The resulting area is the set of pixels contained in one
-or the other of the two sources but not in both.
 </para>
 
-@source1: a #GdkRegion
-@source2: a #GdkRegion
+@source1:
+@source2:
 
 
 <!-- ##### STRUCT GdkSpan ##### -->

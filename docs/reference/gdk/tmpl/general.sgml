@@ -79,24 +79,9 @@ locale.
 
 <!-- ##### FUNCTION gdk_set_sm_client_id ##### -->
 <para>
-Sets the <literal>SM_CLIENT_ID</literal> property on the application's leader window so that
-the window manager can save the application's state using the X11R6 ICCCM
-session management protocol.
-</para>
-<para>
-The leader window is automatically created by GDK and never shown. It's only
-use is for session management. The <literal>WM_CLIENT_LEADER</literal> property is automatically
-set on all X windows created by the application to point to the leader window.
-</para>
-<para>
-See the X Session Management Library documentation for more information on
-session management and the Inter-Client Communication Conventions Manual
-(ICCCM) for information on the <literal>WM_CLIENT_LEADER</literal> property. 
-(Both documents are part of the X Window System distribution.)
 </para>
 
-@sm_client_id: the client id assigned by the session manager when the
-connection was opened, or %NULL to remove the property.
+@sm_client_id:
 
 
 <!-- ##### FUNCTION gdk_exit ##### -->

@@ -30,6 +30,7 @@
 #include "gdkpixmap.h"
 #include "gdkdrawable.h"
 #include "gdkpixmap.h"
+#include "gdkscreen.h"
 
 #define USE_BACKING_STORE	/* Appears to work on Win32, too, now. */
 
@@ -154,8 +155,9 @@ static void   gdk_window_real_get_size  (GdkDrawable     *drawable,
 
 static GdkVisual*   gdk_window_real_get_visual   (GdkDrawable *drawable);
 static gint         gdk_window_real_get_depth    (GdkDrawable *drawable);
+static GdkScreen*   gdk_window_real_get_screen   (GdkDrawable *drawable);
 static void         gdk_window_real_set_colormap (GdkDrawable *drawable,
-                                             GdkColormap *cmap);
+						  GdkColormap *cmap);
 static GdkColormap* gdk_window_real_get_colormap (GdkDrawable *drawable);
 
 static GdkDrawable* gdk_window_get_composite_drawable (GdkDrawable *drawable,
@@ -240,6 +242,7 @@ gdk_window_class_init (GdkWindowObjectClass *klass)
   drawable_class->draw_image = gdk_window_draw_image;
   drawable_class->_draw_pixbuf = gdk_window_draw_pixbuf;
   drawable_class->get_depth = gdk_window_real_get_depth;
+  drawable_class->get_screen = gdk_window_real_get_screen;
   drawable_class->get_size = gdk_window_real_get_size;
   drawable_class->set_colormap = gdk_window_real_set_colormap;
   drawable_class->get_colormap = gdk_window_real_get_colormap;
@@ -698,9 +701,45 @@ gdk_window_remove_filter (GdkWindow     *window,
 }
 
 /**
+ * gdk_screen_get_toplevel_windows:
+ * @screen : The #GdkScreen where the toplevels are located.
+ * 
+ * Obtains a list of all toplevel windows known to GDK on the screen @screen.
+ * A toplevel window is a child of the root window (see
+ * gdk_get_default_root_window()).
+ *
+ * The returned list should be freed with g_list_free(), but
+ * its elements need not be freed.
+ * 
+ * Return value: list of toplevel windows, free with g_list_free()
+ **/
+GList *
+gdk_screen_get_toplevel_windows (GdkScreen *screen)
+{
+  GdkWindow * root_window;
+  GList *new_list = NULL;
+  GList *tmp_list;
+  
+  g_return_val_if_fail (GDK_IS_SCREEN (screen), NULL);
+  
+  root_window = gdk_screen_get_root_window (screen);
+
+  tmp_list = ((GdkWindowObject *)root_window)->children;
+  while (tmp_list)
+    {
+      if (GDK_WINDOW_TYPE (tmp_list->data) != GDK_WINDOW_FOREIGN)
+	new_list = g_list_prepend (new_list, tmp_list->data);
+      tmp_list = tmp_list->next;
+    }
+  
+  return new_list;
+}
+
+/**
  * gdk_window_get_toplevels:
  * 
- * Obtains a list of all toplevel windows known to GDK.
+ * Obtains a list of all toplevel windows known to GDK on the default
+ * screen (see gdk_window_get_toplevels_for_screen()).
  * A toplevel window is a child of the root window (see
  * gdk_get_default_root_window()).
  *
@@ -712,18 +751,7 @@ gdk_window_remove_filter (GdkWindow     *window,
 GList *
 gdk_window_get_toplevels (void)
 {
-  GList *new_list = NULL;
-  GList *tmp_list;
-  
-  tmp_list = ((GdkWindowObject *)_gdk_parent_root)->children;
-  while (tmp_list)
-    {
-      if (GDK_WINDOW_TYPE (tmp_list->data) != GDK_WINDOW_FOREIGN)
-	new_list = g_list_prepend (new_list, tmp_list->data);
-      tmp_list = tmp_list->next;
-    }
-  
-  return new_list;
+  return gdk_screen_get_toplevel_windows (gdk_get_default_screen ());
 }
 
 /**
@@ -758,12 +786,14 @@ gboolean
 gdk_window_is_viewable (GdkWindow *window)
 {
   GdkWindowObject *private = (GdkWindowObject *)window;
+  GdkScreen *screen = gdk_drawable_get_screen (window);
+  GdkWindow *root_window = gdk_screen_get_root_window (screen);
   
   g_return_val_if_fail (window != NULL, FALSE);
   g_return_val_if_fail (GDK_IS_WINDOW (window), FALSE);
   
   while (private && 
-	 (private != (GdkWindowObject *)_gdk_parent_root) &&
+	 (private != (GdkWindowObject *)root_window) &&
 	 (GDK_WINDOW_TYPE (private) != GDK_WINDOW_FOREIGN))
     {
       if (!GDK_WINDOW_IS_MAPPED (window))
@@ -1974,11 +2004,15 @@ gdk_window_real_get_visual (GdkDrawable *drawable)
 static gint
 gdk_window_real_get_depth (GdkDrawable *drawable)
 {
-  gint depth;
-  
   g_return_val_if_fail (GDK_IS_WINDOW (drawable), 0);
 
   return ((GdkWindowObject *)GDK_WINDOW (drawable))->depth;
+}
+
+static GdkScreen*
+gdk_window_real_get_screen (GdkDrawable *drawable)
+{
+  return gdk_drawable_get_screen (GDK_WINDOW_OBJECT (drawable)->impl);
 }
 
 static void
@@ -2069,7 +2103,7 @@ gdk_window_process_updates_internal (GdkWindow *window)
           if (debug_updates)
             {
               /* Make sure we see the red invalid area before redrawing. */
-              gdk_flush ();
+              gdk_display_sync (gdk_drawable_get_display (window));
               g_usleep (70000);
             }
           
@@ -2723,6 +2757,9 @@ gdk_window_get_pointer (GdkWindow	  *window,
  * location of that window in @win_x, @win_y. Returns %NULL if the
  * window under the mouse pointer is not known to GDK (for example,
  * belongs to another application).
+ *
+ * NOTE: For multihead-aware widgets or applications use
+ * gdk_screen_get_window_at_pointer() instead.
  * 
  * Return value: window under the mouse pointer
  **/
@@ -2730,7 +2767,7 @@ GdkWindow*
 gdk_window_at_pointer (gint *win_x,
 		       gint *win_y)
 {
-  return current_pointer_hooks->window_at_pointer (NULL, win_x, win_y);
+  return current_pointer_hooks->window_at_pointer (gdk_get_default_screen (), win_x, win_y);
 }
 
 /**
@@ -2744,6 +2781,6 @@ gdk_window_at_pointer (gint *win_x,
 GdkWindow *
 gdk_get_default_root_window (void)
 {
-  return _gdk_parent_root;
+  return gdk_screen_get_root_window (gdk_get_default_screen ());
 }
 

@@ -175,7 +175,7 @@ AC_ARG_ENABLE(xkb, [  --enable-xkb            support XKB [default=maybe]],
 			, enable_xkb="maybe")
 AC_ARG_ENABLE(rebuilds, [  --disable-rebuilds      disable all source autogeneration rules],,enable_rebuilds=yes)
 
-AC_ARG_WITH(xinput, [  --with-xinput=[no/gxi/xfree] support XInput ])
+AC_ARG_WITH(xinput, [  --with-xinput=[no/yes]  support XInput ])
 
 AC_ARG_WITH(wintab, [  --with-wintab=DIRECTORY use Wintab API with win32 backend])
 AC_ARG_WITH(ie55, [  --with-ie55=DIRECTORY IE5.5 libs and headers (for Active IMM)])
@@ -1084,18 +1084,13 @@ if test "x$gdktarget" = "xx11"; then
 
   # set up things for XInput
 
-  if test "x$with_xinput" = "xgxi" || test "x$with_xinput" = "xyes"; then
-    AC_DEFINE(XINPUT_GXI)
-    xinput_progs=gxid
-    x_extra_libs="-lXi $x_extra_libs"
-  elif test "x$with_xinput" = "xxfree"; then
+  if test "x$with_xinput" = "xxfree" || test "x$with_xinput" = "xyes"; then
     AC_DEFINE(XINPUT_XFREE)
     x_extra_libs="-lXi $x_extra_libs"
   else
     AC_DEFINE(XINPUT_NONE)
   fi
 
-  AM_CONDITIONAL(XINPUT_GXI, test x$with_xinput = xgxi)
   AM_CONDITIONAL(XINPUT_XFREE, test x$with_xinput = xxfree)
 
   if test "x$enable_shm" = "xyes"; then

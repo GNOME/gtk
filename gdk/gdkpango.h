@@ -28,13 +28,10 @@ extern "C" {
 
 /* Pango interaction */
 
-/* FIXME: The following function needs more parameters so that we can
- * properly deal with different visuals, the potential for multiple
- * screens in the future, etc. The PangoContext needs enough information
- * in it to create new GC's and to set the colors on those GC's.
- * A colormap is not sufficient.
- */
+PangoContext *gdk_pango_context_get_for_screen (GdkScreen    *screen);
+#ifndef GDK_MULTIHEAD_SAFE
 PangoContext *gdk_pango_context_get            (void);
+#endif
 void          gdk_pango_context_set_colormap   (PangoContext *context,
                                                 GdkColormap  *colormap);
 

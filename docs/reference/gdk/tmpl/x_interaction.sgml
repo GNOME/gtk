@@ -59,8 +59,10 @@ Returns the X window belonging to a #GdkWindow.
 Returns the display of a #GdkPixmap.
 </para>
 
-@win: a #GdkPixmap.
+@pix: 
 @Returns: an Xlib <type>Display*</type>.
+<!-- # Unused Parameters # -->
+@win: a #GdkPixmap.
 
 
 <!-- ##### MACRO GDK_PIXMAP_XID ##### -->
@@ -68,8 +70,10 @@ Returns the display of a #GdkPixmap.
 Returns the X pixmap belonging to a #GdkPixmap.
 </para>
 
-@win: a #GdkPixmap.
+@pix: 
 @Returns: the Xlib <type>XPixmap</type> of @win.
+<!-- # Unused Parameters # -->
+@win: a #GdkPixmap.
 
 
 <!-- ##### MACRO GDK_DRAWABLE_XDISPLAY ##### -->

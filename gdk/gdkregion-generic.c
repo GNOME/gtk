@@ -516,7 +516,6 @@ miIntersectO (GdkRegion    *pReg,
  * Converts @source1 into the intersection between @source1 and @source2.
  * That is, after calling this function @source2 will be unchanged and
  * @source1 will be the areas the two regions have in common.
- * 
  **/
 void
 gdk_region_intersect (GdkRegion *region,
@@ -1409,8 +1408,8 @@ gdk_region_subtract (GdkRegion *region,
  * @source2: another #GdkRegion
  *
  * XORs the two regions, placing the result in @source1.  The XOR of two
- * regions contains all areas which were not overlapping.  That is,
- * it's the union of the regions minus the intersection of the
+ * regions contains all areas in one or the other ofthe regions, but not both.
+ * That is, it's the union of the regions minus the intersection of the
  * regions.
  * 
  **/

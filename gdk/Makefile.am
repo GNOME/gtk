@@ -110,6 +110,8 @@ gdk_public_h_sources = @STRIP_BEGIN@ \
 	gdktypes.h	\
 	gdkvisual.h	\
 	gdkwindow.h	\
+	gdkdisplay.h	\
+	gdkscreen.h	\
 @STRIP_END@
 
 gdk_headers = @STRIP_BEGIN@       \
@@ -142,6 +144,8 @@ gdk_c_sources = @STRIP_BEGIN@ 	\
 	gdkregion-generic.c	\
 	gdkregion-generic.h	\
 	gdkwindow.c		\
+	gdkdisplay.c		\
+	gdkscreen.c		\
 @STRIP_END@
 
 #

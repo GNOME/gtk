@@ -27,6 +27,7 @@
 #include "gdkpixmap.h"
 #include "gdkinternals.h"
 #include "gdkpixbuf.h"
+#include "gdkscreen.h"
 
 static GdkGC *gdk_pixmap_create_gc      (GdkDrawable     *drawable,
                                          GdkGCValues     *values,
@@ -200,6 +201,7 @@ gdk_pixmap_class_init (GdkPixmapObjectClass *klass)
   drawable_class->draw_image = gdk_pixmap_draw_image;
   drawable_class->_draw_pixbuf = gdk_pixmap_draw_pixbuf;
   drawable_class->get_depth = gdk_pixmap_real_get_depth;
+  drawable_class->get_screen = gdk_pixmap_get_screen;
   drawable_class->get_size = gdk_pixmap_real_get_size;
   drawable_class->set_colormap = gdk_pixmap_real_set_colormap;
   drawable_class->get_colormap = gdk_pixmap_real_get_colormap;
@@ -474,13 +476,14 @@ gdk_pixmap_copy_to_image (GdkDrawable     *drawable,
 }
 
 static GdkBitmap *
-make_solid_mask (gint width, gint height)
+make_solid_mask (GdkScreen *screen, gint width, gint height)
 {
   GdkBitmap *bitmap;
   GdkGC *gc;
   GdkGCValues gc_values;
   
-  bitmap = gdk_pixmap_new (NULL, width, height, 1);
+  bitmap = gdk_pixmap_new (gdk_screen_get_root_window (screen),
+			   width, height, 1);
 
   gc_values.foreground.pixel = 1;
   gc = gdk_gc_new_with_values (bitmap, &gc_values, GDK_GC_FOREGROUND);
@@ -504,7 +507,7 @@ gdk_pixmap_colormap_new_from_pixbuf (GdkColormap *colormap,
   GdkPixbuf *render_pixbuf;
   GdkGC *tmp_gc;
   
-  pixmap = gdk_pixmap_new (NULL,
+  pixmap = gdk_pixmap_new (gdk_screen_get_root_window (colormap->screen),
 			   gdk_pixbuf_get_width (pixbuf),
 			   gdk_pixbuf_get_height (pixbuf),
 			   gdk_colormap_get_visual (colormap)->depth);
@@ -533,10 +536,11 @@ gdk_pixmap_colormap_new_from_pixbuf (GdkColormap *colormap,
     gdk_pixbuf_unref (render_pixbuf);
 
   if (mask)
-    gdk_pixbuf_render_pixmap_and_mask (pixbuf, NULL, mask, 128);
+    gdk_pixbuf_render_pixmap_and_mask_for_colormap (pixbuf, colormap, NULL, mask, 128);
 
   if (mask && !*mask)
-    *mask = make_solid_mask (gdk_pixbuf_get_width (pixbuf),
+    *mask = make_solid_mask (colormap->screen,
+			     gdk_pixbuf_get_width (pixbuf),
 			     gdk_pixbuf_get_height (pixbuf));
 
   return pixmap;

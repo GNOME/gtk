@@ -75,7 +75,8 @@ typedef enum {
   GDK_DEBUG_PIXMAP	  = 1 << 8,
   GDK_DEBUG_IMAGE	  = 1 << 9,
   GDK_DEBUG_INPUT	  = 1 <<10,
-  GDK_DEBUG_CURSOR	  = 1 <<11
+  GDK_DEBUG_CURSOR	  = 1 <<11,
+  GDK_DEBUG_MULTIHEAD	  = 1 <<12
 } GdkDebugFlag;
 
 #ifndef GDK_DISABLE_DEPRECATED
@@ -145,39 +146,44 @@ extern GdkEventFunc   _gdk_event_func;    /* Callback for events */
 extern gpointer       _gdk_event_data;
 extern GDestroyNotify _gdk_event_notify;
 
-/* FIFO's for event queue, and for events put back using
- * gdk_event_put().
- */
-extern GList *_gdk_queued_events;
-extern GList *_gdk_queued_tail;
-
 extern GdkDevice *_gdk_core_pointer;
+
+extern GSList    *_gdk_displays;
+extern gchar     *_gdk_display_name;
 
 GdkEvent* _gdk_event_new (void);
 
-void      _gdk_events_init   (void);
-void      _gdk_events_queue  (void);
-GdkEvent* _gdk_event_unqueue (void);
 
-GList* _gdk_event_queue_find_first  (void);
-void   _gdk_event_queue_remove_link (GList    *node);
-void   _gdk_event_queue_append      (GdkEvent *event);
+void      _gdk_events_queue  (GdkDisplay *display);
+GdkEvent* _gdk_event_unqueue (GdkDisplay *display);
 
-void _gdk_event_button_generate (GdkEvent *event);
+GList* _gdk_event_queue_find_first  (GdkDisplay *display);
+void   _gdk_event_queue_remove_link (GdkDisplay *display,
+				     GList      *node);
+GList*  _gdk_event_queue_append     (GdkDisplay *display,
+				     GdkEvent   *event);
+void _gdk_event_button_generate     (GdkDisplay *display,
+				     GdkEvent   *event);
+
+void gdk_synthesize_window_state (GdkWindow     *window,
+                                  GdkWindowState unset_flags,
+                                  GdkWindowState set_flags);
 
 #define GDK_SCRATCH_IMAGE_WIDTH 256
 #define GDK_SCRATCH_IMAGE_HEIGHT 64
 
-GdkImage* _gdk_image_new_for_depth (GdkImageType  type,
+GdkImage* _gdk_image_new_for_depth (GdkScreen    *screen,
+				    GdkImageType  type,
 				    GdkVisual    *visual,
 				    gint          width,
 				    gint          height,
 				    gint          depth);
-GdkImage *_gdk_image_get_scratch (gint  width,
-				  gint  height,
-				  gint  depth,
-				  gint *x,
-				  gint *y);
+GdkImage *_gdk_image_get_scratch (GdkScreen *screen,
+				  gint	     width,
+				  gint	     height,
+				  gint	     depth,
+				  gint	    *x,
+				  gint	    *y);
 
 /* Will most likely be exported in the future
  */
@@ -224,8 +230,8 @@ void _gdk_colormap_real_destroy (GdkColormap *colormap);
 void _gdk_cursor_destroy (GdkCursor *cursor);
 
 extern GdkArgDesc _gdk_windowing_args[];
-gboolean _gdk_windowing_init_check              (int         argc,
-						 char      **argv);
+void         _gdk_windowing_init                   (void);
+
 void     _gdk_windowing_window_get_offsets      (GdkWindow  *window,
 						 gint       *x_offset,
 						 gint       *y_offset);
@@ -248,10 +254,9 @@ GdkWindow* _gdk_windowing_window_get_pointer (GdkWindow       *window,
 					      gint            *y,
 					      GdkModifierType *mask);
 
-/* Return the number of bits-per-pixel for images of the specified depth.
- * (Future: needs to be GdkDiplay specific.)
- */
-gint _gdk_windowing_get_bits_for_depth (gint depth);
+/* Return the number of bits-per-pixel for images of the specified depth. */
+gint _gdk_windowing_get_bits_for_depth (GdkDisplay *display,
+					gint        depth);
 
 #define GDK_WINDOW_IS_MAPPED(window) ((((GdkWindowObject*)window)->state & GDK_WINDOW_STATE_WITHDRAWN) == 0)
 
@@ -289,17 +294,11 @@ GType _gdk_pixmap_impl_get_type (void) G_GNUC_CONST;
  * Initialization and exit routines *
  ************************************/
 
-void _gdk_windowing_window_init (void);
-void _gdk_visual_init (void);
-void _gdk_dnd_init    (void);
-
-void _gdk_windowing_image_init  (void);
 void _gdk_image_exit  (void);
-
-void _gdk_input_init  (void);
-void _gdk_input_exit  (void);
-
 void _gdk_windowing_exit (void);
+
+void _gdk_get_command_line_args (int    *argc,
+				 char ***argv);
 
 #ifdef __cplusplus
 }

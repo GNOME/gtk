@@ -120,18 +120,14 @@ image is freed.</para></warning>
 
 <!-- ##### FUNCTION gdk_image_get ##### -->
 <para>
-Gets part of a #GdkWindow and stores it in a new #GdkImage.
 </para>
 
 @drawable: 
-@x: the left edge of the rectangle to copy from @window.
-@y: the top edge of the rectangle to copy from @window.
-@width: the width of the area to copy, in pixels.
-@height: the height of the area to copy, in pixels.
-@Returns: a new #GdkImage with a copy of the given area of @window.
-<!-- # Unused Parameters # -->
-@window: the #GdkWindow to copy from.
-
+@x:
+@y:
+@width:
+@height:
+@Returns:
 
 <!-- ##### FUNCTION gdk_image_ref ##### -->
 <para>

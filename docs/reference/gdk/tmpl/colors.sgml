@@ -101,10 +101,9 @@ Creates a new colormap for the given visual.
 
 <!-- ##### FUNCTION gdk_colormap_get_system ##### -->
 <para>
-Returns the system's default colormap.
 </para>
 
-@Returns: the default colormap.
+@Returns:
 
 
 <!-- ##### FUNCTION gdk_colormap_get_system_size ##### -->

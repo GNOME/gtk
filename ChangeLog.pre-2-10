@@ -1,3 +1,52 @@
+Thu Apr 25 16:51:40 2002  Owen Taylor  <otaylor@redhat.com>
+
+	Start of integration of Erwann Chenede's multihead work
+	from the gtk-multihead branch.
+
+	* gdk/gdkdisplay.[ch] gdk/gdkscreen.[ch]
+	gdk/x11/gdkdisplay-x11.[ch] gdk/x11/gdkscreen-x11.[ch]
+	New classes representing a set of screens with attached
+	input devices and a single contiguous area, respectively.
+
+	* gdk/gdk.[ch] gdk/gdkinternals.h gdk/x11/gdkmain-x11.c:
+	gdk/x11/gdkprivate-x11.h: Make the initialization interface
+	simple _gdk_windowing_init() and do the rest in
+	gdk_open_display() calls.
+
+	* gdk/gdk.[ch]: Add gdk_parse_args() which can be used
+	to do the display-independent part of initialization
+	instead of gdk_init_[check].
+
+	* gdk/gdkcursor.h gdk/gdkfont.h gdk/gdkkeys.h gdk/gdkpixmap.h
+	gdk/gdkproperty.h gdk/gdkselection.h gdk/gdkwindow.h:
+	Add multihead variants (_for_display(), for_screen()) of functions
+	getting information specific to a particular screen screen or
+	display.
+
+	* gdk/gdkscreen.[ch]: Add gdk_screen__* variants of functions
+	like gdk_rgb_get_colormap() that used to get/list global
+	objects.
+
+	* gdk/x11/gdkx.h: Add functions for converting GdkScreen
+	and GdkDisplay into the X equivalents.
+
+	* gdk/x11/gdkwindow-x11.c: Removed gdk_window_xid_at_coords() 
+	not in the headers and unused.
+
+	* configure.in gdk/x11/{gxid.c,gxid_lib.[ch],gdkinput-gxi.c}:
+	Remove gxid support ... has not been tested for a long time...
+	"xfree" support is more	portable to non XFree86.
+
+	* gdk/**.h: Add a GDK_MULTIHEAD_SAFE define that can be
+	used to turn off functions that are inherently non-multihead
+	safe.
+
+	* gdk/**.c: add GDK_NOTE(multihead, ...) calls when functions
+	are used in non-multihead-safe ways.
+
+	* gdk/*.c gdk/x11/*.c: Changes to make the internals of GDK
+	multihead safe.
+
 Thu Apr 25 23:49:01 2002  Kristian Rietveld  <kris@gtk.org>
 
 	Fixes #74206.

@@ -1036,9 +1036,11 @@ gtk_main_iteration_do (gboolean blocking)
 
 /* private libgtk to libgdk interfaces
  */
-gboolean gdk_pointer_grab_info_libgtk_only  (GdkWindow **grab_window,
+gboolean gdk_pointer_grab_info_libgtk_only  (GdkDisplay *display,
+					     GdkWindow **grab_window,
 					     gboolean   *owner_events);
-gboolean gdk_keyboard_grab_info_libgtk_only (GdkWindow **grab_window,
+gboolean gdk_keyboard_grab_info_libgtk_only (GdkDisplay *display,
+					     GdkWindow **grab_window,
 					     gboolean   *owner_events);
 
 static void
@@ -1123,14 +1125,14 @@ rewrite_event_for_grabs (GdkEvent *event)
     case GDK_MOTION_NOTIFY:
     case GDK_PROXIMITY_IN:
     case GDK_PROXIMITY_OUT:
-      if (!gdk_pointer_grab_info_libgtk_only (&grab_window, &owner_events) ||
+      if (!gdk_pointer_grab_info_libgtk_only (gdk_get_default_display(), &grab_window, &owner_events) ||
 	  !owner_events)
 	return NULL;
       break;
 
     case GDK_KEY_PRESS:
     case GDK_KEY_RELEASE:
-      if (!gdk_keyboard_grab_info_libgtk_only (&grab_window, &owner_events) ||
+      if (!gdk_keyboard_grab_info_libgtk_only (gdk_get_default_display(), &grab_window, &owner_events) ||
 	  !owner_events)
 	return NULL;
       break;

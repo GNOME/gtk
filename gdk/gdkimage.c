@@ -188,6 +188,8 @@ struct _GdkScratchImageInfo {
   gint tile_x;
   gint tile_y1;
   gint tile_y2;
+
+  GdkScreen *screen;
 };
 
 static GSList *scratch_image_infos = NULL;
@@ -201,9 +203,11 @@ allocate_scratch_images (GdkScratchImageInfo *info,
   
   for (i = 0; i < n_images; i++)
     {
-      info->static_image[i] = _gdk_image_new_for_depth (shared ? GDK_IMAGE_SHARED : GDK_IMAGE_NORMAL,
+      info->static_image[i] = _gdk_image_new_for_depth (info->screen,
+							shared ? GDK_IMAGE_SHARED : GDK_IMAGE_NORMAL,
 							NULL,
-							GDK_SCRATCH_IMAGE_WIDTH * (N_REGIONS / n_images), GDK_SCRATCH_IMAGE_HEIGHT,
+							GDK_SCRATCH_IMAGE_WIDTH * (N_REGIONS / n_images), 
+							GDK_SCRATCH_IMAGE_HEIGHT,
 							info->depth);
       
       if (!info->static_image[i])
@@ -221,7 +225,8 @@ allocate_scratch_images (GdkScratchImageInfo *info,
 }
 
 static GdkScratchImageInfo *
-scratch_image_info_for_depth (gint depth)
+scratch_image_info_for_depth (GdkScreen *screen,
+			      gint       depth)
 {
   GSList *tmp_list;
   GdkScratchImageInfo *image_info;
@@ -231,7 +236,7 @@ scratch_image_info_for_depth (gint depth)
   while (tmp_list)
     {
       image_info = tmp_list->data;
-      if (image_info->depth == depth)
+      if (image_info->depth == depth && image_info->screen == screen)
 	return image_info;
       
       tmp_list = tmp_list->next;
@@ -240,6 +245,7 @@ scratch_image_info_for_depth (gint depth)
   image_info = g_new (GdkScratchImageInfo, 1);
 
   image_info->depth = depth;
+  image_info->screen = screen;
 
     /* Try to allocate as few possible shared images */
   for (i=0; i < G_N_ELEMENTS (possible_n_images); i++)
@@ -307,6 +313,7 @@ alloc_scratch_image (GdkScratchImageInfo *image_info)
 
 /**
  * _gdk_image_get_scratch:
+ * @screen: a #GdkScreen
  * @width: desired width
  * @height: desired height
  * @depth: depth of image 
@@ -314,24 +321,28 @@ alloc_scratch_image (GdkScratchImageInfo *image_info)
  * @y: Y location within returned image of scratch image
  * 
  * Allocates an image of size width/height, up to a maximum
- * of GDK_SCRATCH_IMAGE_WIDTHxGDK_SCRATCH_IMAGE_HEIGHT
+ * of GDK_SCRATCH_IMAGE_WIDTHxGDK_SCRATCH_IMAGE_HEIGHT that is
+ * suitable to use on @screen.
  * 
  * Return value: a scratch image. This must be used by a
  *  call to gdk_image_put() before any other calls to
  *  _gdk_image_get_scratch()
  **/
 GdkImage *
-_gdk_image_get_scratch (gint  width,
-			gint  height,
-			gint  depth,
-			gint *x,
-			gint *y)
+_gdk_image_get_scratch (GdkScreen   *screen,
+			gint	     width,			
+			gint	     height,
+			gint	     depth,
+			gint	    *x,
+			gint	    *y)
 {
   GdkScratchImageInfo *image_info;
   GdkImage *image;
   gint idx;
+  
+  g_return_val_if_fail (GDK_IS_SCREEN (screen), NULL);
 
-  image_info = scratch_image_info_for_depth (depth);
+  image_info = scratch_image_info_for_depth (screen, depth);
 
   if (width >= (GDK_SCRATCH_IMAGE_WIDTH >> 1))
     {

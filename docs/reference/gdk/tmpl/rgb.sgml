@@ -407,14 +407,9 @@ private colormap.
 
 <!-- ##### FUNCTION gdk_rgb_get_visual ##### -->
 <para>
-Gets a "preferred visual" chosen by GdkRGB. In previous versions of
-GDK, this was the only visual GdkRGB could use for rendering. In
-current versions, it's simply the visual GdkRGB would have chosen as 
-the optimal one in those previous versions. GdkRGB can now render to 
-drawables with any visual.
 </para>
 
-@Returns: The #GdkVisual chosen by GdkRGB.
+@Returns:
 
 
 <!-- ##### FUNCTION gdk_rgb_get_colormap ##### -->

@@ -20,7 +20,8 @@
 #include <config.h>
 #include <stdlib.h>
 
-#include "gdkprivate-x11.h"
+#include "gdkx.h"
+#include "gdkdisplay-x11.h"
 #include "gdkpango.h"
 #include <pango/pangox.h>
 #ifdef HAVE_XFT
@@ -28,9 +29,54 @@
 #endif
 
 /**
+ * gdk_pango_context_get_for_screen:
+ * @screen: the #GdkScreen for which the context is to be created.
+ * 
+ * Creates a #PangoContext for @screen.
+ *
+ * The context must be freed when you're finished with it.
+ * 
+ * When using GTK+, normally you should use gtk_widget_get_pango_context()
+ * instead of this function, to get the appropriate context for
+ * the widget you intend to render text onto.
+ * 
+ * Return value: a new #PangoContext for @screen
+ **/
+PangoContext *
+gdk_pango_context_get_for_screen (GdkScreen *screen)
+{
+  PangoContext *context;
+  GdkDisplayX11 *display_x11;
+  
+  g_return_val_if_fail (GDK_IS_SCREEN (screen), NULL);
+  
+  display_x11 = GDK_DISPLAY_X11 (GDK_SCREEN_DISPLAY (screen));
+  
+#ifdef HAVE_XFT
+  if (display_x11->use_xft == -1)
+    {
+      const char *val = g_getenv ("GDK_USE_XFT");
+
+      display_x11->use_xft = val && (atoi (val) != 0) && 
+	_gdk_x11_have_render (GDK_SCREEN_DISPLAY (screen));
+    }
+  
+  if (display_x11->use_xft)
+    context = pango_xft_get_context (GDK_SCREEN_XDISPLAY (screen),
+				     GDK_SCREEN_X11 (screen)->screen_num);
+  else
+#endif /* HAVE_XFT */
+    context = pango_x_get_context (GDK_SCREEN_XDISPLAY (screen));
+  
+  g_object_set_data (G_OBJECT (context), "gdk-pango-screen", screen);
+  
+  return context;
+}
+
+/**
  * gdk_pango_context_get:
  * 
- * Creates a #PangoContext for the default GDK display.
+ * Creates a #PangoContext for the default GDK screen.
  *
  * The context must be freed when you're finished with it.
  * 
@@ -43,18 +89,5 @@
 PangoContext *
 gdk_pango_context_get (void)
 {
-#ifdef HAVE_XFT
-  static gint use_xft = -1;
-  if (use_xft == -1)
-    {
-      const char *val = g_getenv ("GDK_USE_XFT");
-
-      use_xft = val && (atoi (val) != 0) && _gdk_x11_have_render ();
-    }
-  
-  if (use_xft)
-    return pango_xft_get_context (GDK_DISPLAY (), DefaultScreen (GDK_DISPLAY ()));
-  else
-#endif /* HAVE_XFT */
-    return pango_x_get_context (GDK_DISPLAY ());
+  return gdk_pango_context_get_for_screen (gdk_get_default_screen ());
 }

@@ -29,6 +29,7 @@
 #include "gdkgc.h"
 #include "gdkprivate-x11.h"
 #include "gdkregion-generic.h"
+#include "gdkx.h"
 
 #include <string.h>
 
@@ -110,7 +111,7 @@ gdk_gc_x11_finalize (GObject *object)
   
 #if HAVE_XFT
   if (x11_gc->fg_picture != None)
-    XRenderFreePicture (x11_gc->xdisplay, x11_gc->fg_picture);
+    XRenderFreePicture (GDK_GC_XDISPLAY (x11_gc), x11_gc->fg_picture);
 #endif  
   
   XFreeGC (GDK_GC_XDISPLAY (x11_gc), GDK_GC_XGC (x11_gc));
@@ -141,7 +142,7 @@ _gdk_x11_gc_new (GdkDrawable      *drawable,
   private->dirty_mask = 0;
   private->clip_region = NULL;
     
-  private->xdisplay = GDK_DRAWABLE_IMPL_X11 (drawable)->xdisplay;
+  private->screen = GDK_DRAWABLE_IMPL_X11 (drawable)->screen;
 
   if (values_mask & (GDK_GC_CLIP_X_ORIGIN | GDK_GC_CLIP_Y_ORIGIN))
     {
@@ -230,7 +231,8 @@ gdk_x11_gc_get_values (GdkGC       *gc,
     {
       values->foreground.pixel = xvalues.foreground;
       values->background.pixel = xvalues.background;
-      values->font = gdk_font_lookup (xvalues.font);
+      values->font = gdk_font_lookup_for_display (GDK_GC_DISPLAY (gc),
+						  xvalues.font);
 
       switch (xvalues.function)
 	{
@@ -300,8 +302,10 @@ gdk_x11_gc_get_values (GdkGC       *gc,
 	  break;
 	}
 
-      values->tile = gdk_pixmap_lookup (xvalues.tile);
-      values->stipple = gdk_pixmap_lookup (xvalues.stipple);
+      values->tile = gdk_pixmap_lookup_for_display (GDK_GC_DISPLAY (gc),
+						    xvalues.tile);
+      values->stipple = gdk_pixmap_lookup_for_display (GDK_GC_DISPLAY (gc),
+						       xvalues.stipple);
       values->clip_mask = NULL;
       values->subwindow_mode = xvalues.subwindow_mode;
       values->ts_x_origin = xvalues.ts_x_origin;
@@ -731,12 +735,28 @@ gdk_gc_copy (GdkGC *dst_gc, GdkGC *src_gc)
   x11_dst_gc->fg_pixel = x11_src_gc->fg_pixel;
 }
 
+/**
+ * gdk_gc_get_screen:
+ * @gc: a #GdkGC.
+ *
+ * Gets the #GdkScreen for which @gc was created
+ *
+ * Returns: the #GdkScreen for @gc.
+ */
+GdkScreen *  
+gdk_gc_get_screen (GdkGC *gc)
+{
+  g_return_val_if_fail (GDK_IS_GC_X11 (gc), NULL);
+  
+  return GDK_GC_X11 (gc)->screen;
+}
+
 Display *
 gdk_x11_gc_get_xdisplay (GdkGC *gc)
 {
   g_return_val_if_fail (GDK_IS_GC_X11 (gc), NULL);
 
-  return GDK_GC_X11(gc)->xdisplay;
+  return GDK_SCREEN_XDISPLAY (gdk_gc_get_screen (gc));
 }
 
 GC
@@ -804,7 +824,7 @@ _gdk_x11_gc_get_fg_picture (GdkGC *gc)
   
   g_return_val_if_fail (GDK_IS_GC_X11 (gc), None);
 
-  if (!_gdk_x11_have_render ())
+  if (!_gdk_x11_have_render (GDK_GC_DISPLAY (gc)))
     return None;
 
   x11_gc = GDK_GC_X11 (gc);
@@ -818,14 +838,15 @@ _gdk_x11_gc_get_fg_picture (GdkGC *gc)
       if (!pix_format)
 	return None;
 
-      pix = XCreatePixmap (x11_gc->xdisplay, _gdk_root_window,
+      pix = XCreatePixmap (GDK_GC_XDISPLAY (gc), 
+			   GDK_SCREEN_XROOTWIN (x11_gc->screen),
 			   1, 1, pix_format->depth);
       pa.repeat = True;
-      x11_gc->fg_picture = XRenderCreatePicture (x11_gc->xdisplay, 
+      x11_gc->fg_picture = XRenderCreatePicture (GDK_GC_XDISPLAY (gc), 
 						 pix,
 						 pix_format,
 						 CPRepeat, &pa);
-      XFreePixmap (x11_gc->xdisplay, pix);
+      XFreePixmap (GDK_GC_XDISPLAY (gc), pix);
       
       new = TRUE;
     }
@@ -842,7 +863,7 @@ _gdk_x11_gc_get_fg_picture (GdkGC *gc)
       x11_gc->fg_picture_color.blue = color.blue;
       x11_gc->fg_picture_color.alpha = 0xffff;
 
-      XRenderFillRectangle (x11_gc->xdisplay, PictOpSrc, 
+      XRenderFillRectangle (GDK_GC_XDISPLAY (gc), PictOpSrc, 
 			    x11_gc->fg_picture, &x11_gc->fg_picture_color,
 			    0, 0, 1, 1); 
     }

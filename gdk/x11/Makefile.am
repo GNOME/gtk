@@ -18,15 +18,6 @@ LDADDS = @STRIP_BEGIN@ 		\
 
 noinst_LTLIBRARIES = libgdk-x11.la
 
-if XINPUT_GXI
-xinput_sources =	   \
-	gdkinput-x11.c	   \
-	gdkinput-gxi.c
-gxid_sources =                  \
-	gxid_lib.c	   	\
-	gxid_lib.h	   	\
-	gxid_proto.h
-else
 if XINPUT_XFREE
 xinput_sources =	   \
 	gdkinput-x11.c	   \
@@ -35,12 +26,12 @@ else
 xinput_sources =	   \
 	gdkinput-none.c
 endif
-endif
 
 libgdk_x11_la_SOURCES =    	\
 	MwmUtil.h	   	\
 	gdkcolor-x11.c	   	\
 	gdkcursor-x11.c	   	\
+	gdkdisplay-x11.c	\
 	gdkdnd-x11.c	   	\
 	gdkdrawable-x11.c  	\
 	gdkdrawable-x11.h	\
@@ -58,6 +49,7 @@ libgdk_x11_la_SOURCES =    	\
 	gdkpixmap-x11.c	   	\
 	gdkpixmap-x11.h		\
 	gdkproperty-x11.c  	\
+	gdkscreen-x11.c		\
 	gdkselection-x11.c 	\
 	gdkvisual-x11.c	   	\
 	gdkwindow-x11.c    	\
@@ -66,7 +58,6 @@ libgdk_x11_la_SOURCES =    	\
 	gdkx.h		   	\
 	gdkprivate-x11.h   	\
 	gdkinputprivate.h  	\
-	$(gxid_sources)		\
 	xsettings-client.h	\
 	xsettings-client.c	\
 	xsettings-common.h	\
@@ -76,16 +67,9 @@ libgdk_x11_la_SOURCES =    	\
 libgdkinclude_HEADERS = 	\
 	gdkx.h
 
-EXTRA_PROGRAMS = gxid
-bin_PROGRAMS = @xinput_progs@
-
-gxid_SOURCES = gxid.c
-gxid_LDADD = $(LDADDS)
-
 # We need to include all these C files here since the conditionals
 # don't seem to be correctly expanded for the dist files.
 EXTRA_DIST = 			\
 	gdkinput-x11.c		\
 	gdkinput-xfree.c	\
-	gdkinput-gxi.c		\
 	gdkinput-none.c

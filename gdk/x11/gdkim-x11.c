@@ -27,10 +27,12 @@
 #include <locale.h>
 #include <stdlib.h>
 
+#include "gdkx.h"
 #include "gdk.h"		/* For gdk_flush() */
+#include "gdkx.h"
 #include "gdkpixmap.h"
 #include "gdkinternals.h"
-#include "gdkprivate-x11.h"
+#include "gdkdisplay-x11.h"
 
 #if HAVE_CONFIG_H
 #  include <config.h>
@@ -108,6 +110,17 @@ gdk_set_locale (void)
   return setlocale (LC_ALL, NULL);
 }
 
+static GdkDisplay *
+find_a_display ()
+{
+  GdkDisplay *display = gdk_get_default_display ();
+
+  if (!display)
+    display = _gdk_displays->data;
+
+  return display;
+}
+
 /*
  * gdk_wcstombs 
  *
@@ -123,6 +136,8 @@ gdk_wcstombs (const GdkWChar *src)
 
   if (gdk_use_mb)
     {
+      GdkDisplay *display = find_a_display ();
+      Display *xdisplay = GDK_DISPLAY_XDISPLAY (display);
       XTextProperty tpr;
 
       if (sizeof(wchar_t) != sizeof(GdkWChar))
@@ -133,7 +148,7 @@ gdk_wcstombs (const GdkWChar *src)
 	  src_alt = g_new (wchar_t, i+1);
 	  for (; i>=0; i--)
 	    src_alt[i] = src[i];
-	  if (XwcTextListToTextProperty (gdk_display, &src_alt, 1, XTextStyle, &tpr)
+	  if (XwcTextListToTextProperty (xdisplay, &src_alt, 1, XTextStyle, &tpr)
 	      != Success)
 	    {
 	      g_free (src_alt);
@@ -143,7 +158,7 @@ gdk_wcstombs (const GdkWChar *src)
 	}
       else
 	{
-	  if (XwcTextListToTextProperty (gdk_display, (wchar_t**)&src, 1,
+	  if (XwcTextListToTextProperty (xdisplay, (wchar_t**)&src, 1,
 					 XTextStyle, &tpr) != Success)
 	    {
 	      return NULL;
@@ -185,18 +200,20 @@ gdk_mbstowcs (GdkWChar *dest, const gchar *src, gint dest_max)
 {
   if (gdk_use_mb)
     {
+      GdkDisplay *display = find_a_display ();
+      Display *xdisplay = GDK_DISPLAY_XDISPLAY (display);
       XTextProperty tpr;
       wchar_t **wstrs, *wstr_src;
       gint num_wstrs;
       gint len_cpy;
-      if (XmbTextListToTextProperty (gdk_display, (char **)&src, 1, XTextStyle,
+      if (XmbTextListToTextProperty (xdisplay, (char **)&src, 1, XTextStyle,
 				     &tpr)
 	  != Success)
 	{
 	  /* NoMem or LocaleNotSupp */
 	  return -1;
 	}
-      if (XwcTextPropertyToTextList (gdk_display, &tpr, &wstrs, &num_wstrs)
+      if (XwcTextPropertyToTextList (xdisplay, &tpr, &wstrs, &num_wstrs)
 	  != Success)
 	{
 	  /* InvalidChar */

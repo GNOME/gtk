@@ -31,6 +31,7 @@
 #ifndef __GDK_PRIVATE_X11_H__
 #define __GDK_PRIVATE_X11_H__
 
+#include <gdk/gdkcursor.h>
 #include <gdk/gdkprivate.h>
 #include <gdk/x11/gdkwindow-x11.h>
 #include <gdk/x11/gdkpixmap-x11.h>
@@ -60,7 +61,7 @@ struct _GdkGCX11
   GdkGC parent_instance;
   
   GC xgc;
-  Display *xdisplay;
+  GdkScreen *screen;
   GdkRegion *clip_region;
   guint dirty_mask;
 
@@ -80,7 +81,7 @@ struct _GdkCursorPrivate
 {
   GdkCursor cursor;
   Cursor xcursor;
-  Display *xdisplay;
+  GdkScreen *screen;
 };
 
 struct _GdkVisualPrivate
@@ -89,19 +90,22 @@ struct _GdkVisualPrivate
   Visual *xvisual;
 };
 
-void          gdk_xid_table_insert     (XID             *xid,
-					gpointer         data);
-void          gdk_xid_table_remove     (XID              xid);
-gint          gdk_send_xevent          (Window           window,
-					gboolean         propagate,
-					glong            event_mask,
-					XEvent          *event_send);
+void _gdk_xid_table_insert (GdkDisplay *display,
+			    XID        *xid,
+			    gpointer    data);
+void _gdk_xid_table_remove (GdkDisplay *display,
+			    XID         xid);
+gint _gdk_send_xevent      (GdkDisplay *display,
+			    Window      window,
+			    gboolean    propagate,
+			    glong       event_mask,
+			    XEvent     *event_send);
 
 GType _gdk_gc_x11_get_type (void);
 
 #ifdef HAVE_XFT
-gboolean _gdk_x11_have_render       (void);
-Picture  _gdk_x11_gc_get_fg_picture (GdkGC *gc);
+gboolean _gdk_x11_have_render       (GdkDisplay *display);
+Picture  _gdk_x11_gc_get_fg_picture (GdkGC      *gc);
 #endif /* HAVE_XFT */
 
 GdkGC *_gdk_x11_gc_new                  (GdkDrawable     *drawable,
@@ -123,19 +127,6 @@ GdkImage *_gdk_x11_copy_to_image       (GdkDrawable *drawable,
 					gint         height);
 Pixmap   _gdk_x11_image_get_shm_pixmap (GdkImage    *image);
 
-/* Please see gdkwindow.c for comments on how to use */ 
-Window gdk_window_xid_at        (Window    base,
-				 gint      bx,
-				 gint      by,
-				 gint      x,
-				 gint      y,
-				 GList    *excludes,
-				 gboolean  excl_child);
-Window gdk_window_xid_at_coords (gint      x,
-				 gint      y,
-				 GList    *excludes,
-				 gboolean  excl_child);
-
 /* Routines from gdkgeometry-x11.c */
 void _gdk_window_init_position     (GdkWindow     *window);
 void _gdk_window_move_resize_child (GdkWindow     *window,
@@ -156,11 +147,13 @@ void     _gdk_region_get_xrectangles       (GdkRegion            *region,
                                             XRectangle          **rects,
                                             gint                 *n_rects);
 
-void     _gdk_moveresize_handle_event      (XEvent *event);
-void     _gdk_moveresize_configure_done    (void);
+gboolean _gdk_moveresize_handle_event   (XEvent     *event);
+gboolean _gdk_moveresize_configure_done (GdkDisplay *display,
+					 GdkWindow  *window);
 
-void     _gdk_keymap_state_changed         (void);
-gint     _gdk_x11_get_group_for_state      (GdkModifierType state);
+void _gdk_keymap_state_changed    (GdkDisplay      *display);
+gint _gdk_x11_get_group_for_state (GdkDisplay      *display,
+				   GdkModifierType  state);
 
 GC _gdk_x11_gc_flush (GdkGC *gc);
 
@@ -170,33 +163,36 @@ void _gdk_xgrab_check_unmap   (GdkWindow *window,
 			       gulong     serial);
 void _gdk_xgrab_check_destroy (GdkWindow *window);
 
+gboolean _gdk_x11_display_is_root_window (GdkDisplay *display,
+					  Window      xroot_window);
+
+void _gdk_x11_events_init_screen (GdkScreen *screen);
+
+void _gdk_events_init           (GdkDisplay *display);
+void _gdk_windowing_window_init (GdkScreen *screen);
+void _gdk_visual_init           (GdkScreen *screen);
+void _gdk_dnd_init		(GdkDisplay *display);
+void _gdk_windowing_image_init  (GdkDisplay *display);
+void _gdk_input_init            (GdkDisplay *display);
+
 extern GdkDrawableClass  _gdk_x11_drawable_class;
-extern Window		 _gdk_root_window;
 extern gboolean	         _gdk_use_xshm;
-extern Atom		 _gdk_wm_window_protocols[];
 extern const int         _gdk_nenvent_masks;
 extern const int         _gdk_event_mask_table[];
-extern gint		 _gdk_screen;
 extern GdkAtom		 _gdk_selection_property;
-extern gchar		*_gdk_display_name;
+extern gboolean          _gdk_synchronize;
 
-extern Window		 _gdk_leader_window;
-
-/* Used to detect not-up-to-date keymap */
-extern guint _gdk_keymap_serial;
-
-#ifdef HAVE_XKB
-extern gboolean _gdk_use_xkb;
-extern gboolean _gdk_have_xkb_autorepeat;
-extern gint _gdk_xkb_event_type;
-#endif
-
-/* Whether we were able to turn on detectable-autorepeat using
- * XkbSetDetectableAutorepeat. If FALSE, we'll fall back
- * to checking the next event with XPending().
- */
-extern gboolean _gdk_have_xkb_autorepeat;
-
-extern GdkWindow *_gdk_moveresize_window;
+#define GDK_PIXMAP_SCREEN(pix)	      (GDK_DRAWABLE_IMPL_X11 (((GdkPixmapObject *)pix)->impl)->screen)
+#define GDK_PIXMAP_DISPLAY(pix)       (GDK_SCREEN_X11 (GDK_PIXMAP_SCREEN (pix))->display)
+#define GDK_PIXMAP_XROOTWIN(pix)      (GDK_SCREEN_X11 (GDK_PIXMAP_SCREEN (pix))->xroot_window)
+#define GDK_DRAWABLE_DISPLAY(win)     (GDK_IS_WINDOW (win) ? GDK_WINDOW_DISPLAY (win) : GDK_PIXMAP_DISPLAY (win))
+#define GDK_DRAWABLE_SCREEN(win)      (GDK_IS_WINDOW (win) ? GDK_WINDOW_SCREEN (win) : GDK_PIXMAP_SCREEN (win))
+#define GDK_DRAWABLE_XROOTWIN(win)    (GDK_IS_WINDOW (win) ? GDK_WINDOW_XROOTWIN (win) : GDK_PIXMAP_XROOTWIN (win))
+#define GDK_SCREEN_DISPLAY(screen)    (GDK_SCREEN_X11 (screen)->display)
+#define GDK_SCREEN_XROOTWIN(screen)   (GDK_SCREEN_X11 (screen)->xroot_window)
+#define GDK_WINDOW_SCREEN(win)	      (GDK_DRAWABLE_IMPL_X11 (((GdkWindowObject *)win)->impl)->screen)
+#define GDK_WINDOW_DISPLAY(win)       (GDK_SCREEN_X11 (GDK_WINDOW_SCREEN (win))->display)
+#define GDK_WINDOW_XROOTWIN(win)      (GDK_SCREEN_X11 (GDK_WINDOW_SCREEN (win))->xroot_window)
+#define GDK_GC_DISPLAY(gc)            (GDK_SCREEN_DISPLAY (GDK_GC_X11(gc)->screen))
 
 #endif /* __GDK_PRIVATE_X11_H__ */

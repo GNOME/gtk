@@ -25,6 +25,7 @@
  */
 
 #include "gdkprivate-x11.h"
+#include "gdkdisplay-x11.h"
 #include <stdio.h>
 
 static guint     gdk_xid_hash  (XID *xid);
@@ -32,43 +33,73 @@ static gboolean  gdk_xid_equal (XID *a,
 				XID *b);
 
 
-static GHashTable *xid_ht = NULL;
-
-
 void
-gdk_xid_table_insert (XID      *xid,
-		      gpointer  data)
+_gdk_xid_table_insert (GdkDisplay *display,
+		       XID	  *xid,
+		       gpointer    data)
 {
+  GdkDisplayX11 *display_x11;
+  
   g_return_if_fail (xid != NULL);
+  g_return_if_fail (GDK_IS_DISPLAY (display));
+  
+  display_x11 = GDK_DISPLAY_X11 (display);
 
-  if (!xid_ht)
-    xid_ht = g_hash_table_new ((GHashFunc) gdk_xid_hash,
-			       (GEqualFunc) gdk_xid_equal);
+  if (!display_x11->xid_ht)
+    display_x11->xid_ht = g_hash_table_new ((GHashFunc) gdk_xid_hash,
+					    (GEqualFunc) gdk_xid_equal);
 
-  g_hash_table_insert (xid_ht, xid, data);
+  g_hash_table_insert (display_x11->xid_ht, xid, data);
 }
 
 void
-gdk_xid_table_remove (XID xid)
+_gdk_xid_table_remove (GdkDisplay *display,
+		       XID	   xid)
 {
-  if (!xid_ht)
-    xid_ht = g_hash_table_new ((GHashFunc) gdk_xid_hash,
-			       (GEqualFunc) gdk_xid_equal);
+  GdkDisplayX11 *display_x11;
+  
+  g_return_if_fail (GDK_IS_DISPLAY (display));
+  
+  display_x11 = GDK_DISPLAY_X11 (display);
+  
+  if (!display_x11->xid_ht)
+    display_x11->xid_ht = g_hash_table_new ((GHashFunc) gdk_xid_hash,
+					    (GEqualFunc) gdk_xid_equal);
 
-  g_hash_table_remove (xid_ht, &xid);
+  g_hash_table_remove (display_x11->xid_ht, &xid);
+}
+
+/** 
+ * gdk_xid_table_lookup_for_display:
+ * @display : the #GdkDisplay.
+ * @xid : an X id.
+ *
+ * Returns the Gdk object associated with the given X id.
+ *
+ * Returns: an GdkObject associated with the given X id.
+ */
+gpointer
+gdk_xid_table_lookup_for_display (GdkDisplay  *display,
+				  XID	       xid)
+{
+  GdkDisplayX11 *display_x11;
+  gpointer data = NULL;
+  
+  g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
+  
+  display_x11 = GDK_DISPLAY_X11 (display);
+
+  if (display_x11->xid_ht)
+    data = g_hash_table_lookup (display_x11->xid_ht, &xid);
+  
+  return data;
 }
 
 gpointer
 gdk_xid_table_lookup (XID xid)
 {
-  gpointer data = NULL;
-
-  if (xid_ht)
-    data = g_hash_table_lookup (xid_ht, &xid);
-  
-  return data;
+  return gdk_xid_table_lookup_for_display (gdk_get_default_display (), xid);
 }
-
 
 static guint
 gdk_xid_hash (XID *xid)

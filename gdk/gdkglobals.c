@@ -30,13 +30,13 @@
 #include "gdkprivate.h"
 #include "config.h"
 
-guint             _gdk_debug_flags = 0;
-GdkWindow        *_gdk_parent_root = NULL;
-gint              _gdk_error_code = 0;
-gint              _gdk_error_warnings = TRUE;
-GList            *_gdk_default_filters = NULL;
-GList            *_gdk_queued_events = NULL;
-GList            *_gdk_queued_tail = NULL;
+guint               _gdk_debug_flags = 0;
+gint                _gdk_error_code = 0;
+gint                _gdk_error_warnings = TRUE;
+GList              *_gdk_default_filters = NULL;
+gchar              *_gdk_display_name = NULL;
+
+GSList             *_gdk_displays = NULL;
 
 GMutex           *gdk_threads_mutex = NULL;          /* Global GDK lock */
 

@@ -27,6 +27,7 @@
 #include "gdkdrawable.h"
 #include "gdkinternals.h"
 #include "gdkwindow.h"
+#include "gdkscreen.h"
 #include "gdk-pixbuf-private.h"
 #include "gdkpixbuf.h"
 
@@ -202,7 +203,38 @@ gdk_drawable_get_depth (GdkDrawable *drawable)
 
   return GDK_DRAWABLE_GET_CLASS (drawable)->get_depth (drawable);
 }
+/**
+ * gdk_drawable_get_screen:
+ * @drawable: a #GdkDrawable
+ * 
+ * Gets the #GdkScreen associated with a #GdkDrawable.
+ * 
+ * Return value: the #GdkScreen associated with @drawable
+ **/
+GdkScreen*
+gdk_drawable_get_screen(GdkDrawable *drawable)
+{
+  g_return_val_if_fail (GDK_IS_DRAWABLE (drawable), NULL);
 
+  return GDK_DRAWABLE_GET_CLASS (drawable)->get_screen (drawable);
+}
+
+/**
+ * gdk_drawable_get_display:
+ * @drawable: a #GdkDrawable
+ * 
+ * Gets the #GdkDisplay associated with a #GdkDrawable.
+ * 
+ * Return value: the #GdkDisplay associated with @drawable
+ **/
+GdkDisplay*
+gdk_drawable_get_display (GdkDrawable *drawable)
+{
+  g_return_val_if_fail (GDK_IS_DRAWABLE (drawable), NULL);
+  
+  return gdk_screen_get_display (gdk_drawable_get_screen (drawable));
+}
+	
 /**
  * gdk_drawable_set_colormap:
  * @drawable: a #GdkDrawable
@@ -1216,7 +1248,8 @@ gdk_drawable_real_draw_pixbuf (GdkDrawable  *drawable,
        */
       if (visual)
 	{
-	  gint bits_per_pixel = _gdk_windowing_get_bits_for_depth (visual->depth);
+	  gint bits_per_pixel = _gdk_windowing_get_bits_for_depth (gdk_drawable_get_display (drawable),
+								   visual->depth);
 	  
 	  if (visual->byte_order == (G_BYTE_ORDER == G_BIG_ENDIAN ? GDK_MSB_FIRST : GDK_LSB_FIRST) &&
 	      visual->depth == 16 &&
@@ -1245,7 +1278,9 @@ gdk_drawable_real_draw_pixbuf (GdkDrawable  *drawable,
 		  
 		  gint width1 = MIN (width - x0, GDK_SCRATCH_IMAGE_WIDTH);
 		  
-		  GdkImage *image = _gdk_image_get_scratch (width1, height1, gdk_drawable_get_depth (drawable), &xs0, &ys0);
+		  GdkImage *image = _gdk_image_get_scratch (gdk_drawable_get_screen (drawable),
+							    width1, height1,
+							    gdk_drawable_get_depth (drawable), &xs0, &ys0);
 		  
 		  _gdk_drawable_copy_to_image (drawable, image,
 					       dest_x + x0, dest_y + y0,

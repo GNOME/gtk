@@ -51,10 +51,12 @@ void gdk_pixbuf_render_pixmap_and_mask_for_colormap (GdkPixbuf    *pixbuf,
 						     GdkPixmap   **pixmap_return,
 						     GdkBitmap   **mask_return,
 						     int           alpha_threshold);
+#ifndef GDK_MULTIHEAD_SAFE
 void gdk_pixbuf_render_pixmap_and_mask              (GdkPixbuf    *pixbuf,
 						     GdkPixmap   **pixmap_return,
 						     GdkBitmap   **mask_return,
 						     int           alpha_threshold);
+#endif
 
 
 /* Fetching a region from a drawable */

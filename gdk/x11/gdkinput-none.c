@@ -18,6 +18,7 @@
  */
 
 #include "gdkinputprivate.h"
+#include "gdkdisplay-x11.h"
 
 /*
  * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
@@ -27,12 +28,14 @@
  */
 
 void
-_gdk_input_init (void)
+_gdk_input_init (GdkDisplay *display)
 {
+  GdkDisplayX11 *display_x11 = GDK_DISPLAY_X11 (display);
+  
   _gdk_init_input_core ();
-  _gdk_input_devices = g_list_append (NULL, _gdk_core_pointer);
-
-  _gdk_input_ignore_core = FALSE;
+  
+  display_x11->input_devices = g_list_append (NULL, _gdk_core_pointer);
+  display_x11->input_ignore_core = FALSE;
 }
 
 void 
@@ -117,7 +120,8 @@ _gdk_input_grab_pointer (GdkWindow *     window,
 }
 
 void
-_gdk_input_ungrab_pointer (guint32         time)
+_gdk_input_ungrab_pointer (GdkDisplay *display,
+			   guint32     time)
 {
 }
 

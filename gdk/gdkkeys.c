@@ -24,18 +24,16 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
-#include "gdkkeys.h"
 #include <config.h>
+
+#include "gdkkeys.h"
 
 enum {
   DIRECTION_CHANGED,
   LAST_SIGNAL
 };
 
-static void gdk_keymap_init       (GdkKeymap      *keymap);
 static void gdk_keymap_class_init (GdkKeymapClass *klass);
-
-static gpointer parent_class = NULL;
 
 static guint signals[LAST_SIGNAL] = { 0 };
 
@@ -56,7 +54,7 @@ gdk_keymap_get_type (void)
         NULL,           /* class_data */
         sizeof (GdkKeymap),
         0,              /* n_preallocs */
-        (GInstanceInitFunc) gdk_keymap_init,
+        (GInstanceInitFunc) NULL,
       };
       
       object_type = g_type_register_static (G_TYPE_OBJECT,
@@ -68,17 +66,9 @@ gdk_keymap_get_type (void)
 }
 
 static void
-gdk_keymap_init (GdkKeymap *keymap)
-{
-
-}
-
-static void
 gdk_keymap_class_init (GdkKeymapClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
-
-  parent_class = g_type_class_peek_parent (klass);
 
   signals[DIRECTION_CHANGED] =
     g_signal_new ("direction_changed",

@@ -31,9 +31,18 @@ struct _GdkFont
 
 GType    gdk_font_get_type  (void);
 
+#ifndef GDK_MULTIHEAD_SAFE
 GdkFont* gdk_font_load             (const gchar          *font_name);
 GdkFont* gdk_fontset_load          (const gchar          *fontset_name);
 GdkFont* gdk_font_from_description (PangoFontDescription *font_desc);
+#endif
+
+GdkFont *gdk_font_load_for_display             (GdkDisplay           *display,
+						const gchar          *font_name);
+GdkFont *gdk_fontset_load_for_display          (GdkDisplay           *display,
+						const gchar          *fontset_name);
+GdkFont *gdk_font_from_description_for_display (GdkDisplay           *display,
+						PangoFontDescription *font_desc);
 
 GdkFont* gdk_font_ref	    (GdkFont        *font);
 void	 gdk_font_unref	    (GdkFont        *font);
@@ -91,6 +100,8 @@ void     gdk_string_extents (GdkFont     *font,
 			     gint        *width,
 			     gint        *ascent,
 			     gint        *descent);
+
+GdkDisplay * gdk_font_get_display (GdkFont *font);
 
 #ifdef GDK_WINDOWING_WIN32
 /* Ditto temporary */

@@ -134,6 +134,8 @@
 #include "gdkx.h"
 #include "gdkregion.h"
 #include "gdkinternals.h"
+#include "gdkscreen-x11.h"
+#include "gdkdisplay-x11.h"
 
 typedef struct _GdkWindowQueueItem GdkWindowQueueItem;
 typedef struct _GdkWindowParentPos GdkWindowParentPos;
@@ -185,8 +187,6 @@ static void gdk_window_tmp_reset_bg       (GdkWindow          *window);
 static void gdk_window_clip_changed       (GdkWindow          *window,
 					   GdkRectangle       *old_clip,
 					   GdkRectangle       *new_clip);
-
-static GQueue *translate_queue = NULL;
 
 void
 _gdk_windowing_window_get_offsets (GdkWindow *window,
@@ -915,17 +915,19 @@ static void
 gdk_window_queue (GdkWindow          *window,
 		  GdkWindowQueueItem *item)
 {
-  if (!translate_queue)
-    translate_queue = g_queue_new ();
+  GdkDisplayX11 *display_x11 = GDK_DISPLAY_X11 (GDK_WINDOW_DISPLAY (window));
+  
+  if (!display_x11->translate_queue)
+    display_x11->translate_queue = g_queue_new ();
 
   /* Keep length of queue finite by, if it grows too long,
    * figuring out the latest relevant serial and discarding
    * irrelevant queue items.
    */
-  if (translate_queue->length >= 64 )
+  if (display_x11->translate_queue->length >= 64)
     {
       gulong serial = find_current_serial (GDK_WINDOW_XDISPLAY (window));
-      GList *tmp_list = translate_queue->head;
+      GList *tmp_list = display_x11->translate_queue->head;
       
       while (tmp_list)
 	{
@@ -934,7 +936,7 @@ gdk_window_queue (GdkWindow          *window,
 	  
 	  if (serial > item->serial)
 	    {
-	      queue_delete_link (translate_queue, tmp_list);
+	      queue_delete_link (display_x11->translate_queue, tmp_list);
 	      queue_item_free (item);
 	    }
 
@@ -948,9 +950,9 @@ gdk_window_queue (GdkWindow          *window,
    * discard anti-expose items. (We can't discard translate
    * items 
    */
-  if (translate_queue->length >= 64 )
+  if (display_x11->translate_queue->length >= 64)
     {
-      GList *tmp_list = translate_queue->head;
+      GList *tmp_list = display_x11->translate_queue->head;
       
       while (tmp_list)
 	{
@@ -959,7 +961,7 @@ gdk_window_queue (GdkWindow          *window,
 	  
 	  if (item->type == GDK_WINDOW_QUEUE_ANTIEXPOSE)
 	    {
-	      queue_delete_link (translate_queue, tmp_list);
+	      queue_delete_link (display_x11->translate_queue, tmp_list);
 	      queue_item_free (item);
 	    }
 
@@ -972,7 +974,7 @@ gdk_window_queue (GdkWindow          *window,
   item->window = window;
   item->serial = NextRequest (GDK_WINDOW_XDISPLAY (window));
   
-  g_queue_push_tail (translate_queue, item);
+  g_queue_push_tail (display_x11->translate_queue, item);
 }
 
 static void
@@ -1009,12 +1011,12 @@ _gdk_window_process_expose (GdkWindow    *window,
   GdkWindowImplX11 *impl;
   GdkRegion *invalidate_region = gdk_region_rectangle (area);
   GdkRegion *clip_region;
-
+  GdkDisplayX11 *display_x11 = GDK_DISPLAY_X11 (GDK_WINDOW_DISPLAY (window));
   impl = GDK_WINDOW_IMPL_X11 (GDK_WINDOW_OBJECT (window)->impl);
       
-  if (translate_queue)
+  if (display_x11->translate_queue)
     {
-      GList *tmp_list = translate_queue->head;
+      GList *tmp_list = display_x11->translate_queue->head;
       
       while (tmp_list)
 	{
@@ -1033,7 +1035,8 @@ _gdk_window_process_expose (GdkWindow    *window,
 	    }
 	  else
 	    {
-	      queue_delete_link (translate_queue, translate_queue->head);
+	      queue_delete_link (display_x11->translate_queue, 
+				 display_x11->translate_queue->head);
 	      queue_item_free (item);
 	    }
 	}

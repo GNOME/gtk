@@ -3,9 +3,7 @@
 
 #include <gdk/gdktypes.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
+G_BEGIN_DECLS
 
 #define GDK_TYPE_VISUAL              (gdk_visual_get_type ())
 #define GDK_VISUAL(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_VISUAL, GdkVisual))
@@ -67,10 +65,13 @@ struct _GdkVisual
   guint32 blue_mask;
   gint blue_shift;
   gint blue_prec;
+
+  GdkScreen *screen;
 };
 
 GType         gdk_visual_get_type            (void);
 
+#ifndef GDK_MULTIHEAD_SAFE
 gint	      gdk_visual_get_best_depth	     (void);
 GdkVisualType gdk_visual_get_best_type	     (void);
 GdkVisual*    gdk_visual_get_system	     (void);
@@ -80,20 +81,19 @@ GdkVisual*    gdk_visual_get_best_with_type  (GdkVisualType  visual_type);
 GdkVisual*    gdk_visual_get_best_with_both  (gint	     depth,
 					      GdkVisualType  visual_type);
 
-#ifndef GDK_DISABLE_DEPRECATED
-#define gdk_visual_ref(v) g_object_ref(v)
-#define gdk_visual_unref(v) g_object_unref(v)
-#endif
-
 void gdk_query_depths	    (gint	    **depths,
 			     gint	     *count);
 void gdk_query_visual_types (GdkVisualType  **visual_types,
 			     gint	     *count);
 
 GList* gdk_list_visuals (void);
+#endif
 
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
+#ifndef GDK_DISABLE_DEPRECATED
+#define gdk_visual_ref(v) g_object_ref(v)
+#define gdk_visual_unref(v) g_object_unref(v)
+#endif
+
+G_END_DECLS
 
 #endif /* __GDK_VISUAL_H__ */

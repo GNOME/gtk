@@ -30,10 +30,13 @@
 #include "gdkprivate-x11.h"
 #include "gdkcursor.h"
 #include "gdkpixmap-x11.h"
+#include "gdkx.h"
 #include <gdk/gdkpixmap.h>
+#include "gdkscreen-x11.h"
 
 /**
- * gdk_cursor_new:
+ * gdk_cursor_new_for_screen:
+ * @screen: the #GdkScreen where the cursor will be defined
  * @cursor_type: cursor to create
  * 
  * Creates a new cursor from the set of builtin cursors.
@@ -98,21 +101,42 @@
  * Return value: a new #GdkCursor
  **/
 GdkCursor*
-gdk_cursor_new (GdkCursorType cursor_type)
+gdk_cursor_new_for_screen (GdkScreen    *screen,
+			   GdkCursorType cursor_type)
 {
   GdkCursorPrivate *private;
   GdkCursor *cursor;
   Cursor xcursor;
 
-  xcursor = XCreateFontCursor (gdk_display, cursor_type);
+  g_return_val_if_fail (GDK_IS_SCREEN (screen), NULL);
+
+  xcursor = XCreateFontCursor (GDK_SCREEN_XDISPLAY (screen), cursor_type);
   private = g_new (GdkCursorPrivate, 1);
-  private->xdisplay = gdk_display;
+  private->screen = screen;
   private->xcursor = xcursor;
-  cursor = (GdkCursor*) private;
+  cursor = (GdkCursor *) private;
   cursor->type = cursor_type;
   cursor->ref_count = 1;
   
   return cursor;
+}
+
+/**
+ * gdk_cursor_new:
+ * @cursor_type: cursor to create
+ * 
+ * Creates a new cursor from the set of builtin cursors for the default screen.
+ * See gdk_cursor_new_for_screen().
+ *
+ * To make the cursor invisible, use gdk_cursor_new_from_pixmap() to create
+ * a cursor with no pixels in it.
+ * 
+ * Return value: a new #GdkCursor
+ **/
+GdkCursor*
+gdk_cursor_new (GdkCursorType cursor_type)
+{
+  return gdk_cursor_new_for_screen (gdk_get_default_screen(), cursor_type);
 }
 
 GdkCursor*
@@ -128,6 +152,7 @@ gdk_cursor_new_from_pixmap (GdkPixmap *source,
   Pixmap source_pixmap, mask_pixmap;
   Cursor xcursor;
   XColor xfg, xbg;
+  GdkScreen *screen;
 
   g_return_val_if_fail (GDK_IS_PIXMAP (source), NULL);
   g_return_val_if_fail (GDK_IS_PIXMAP (mask), NULL);
@@ -136,6 +161,7 @@ gdk_cursor_new_from_pixmap (GdkPixmap *source,
 
   source_pixmap = GDK_PIXMAP_XID (source);
   mask_pixmap   = GDK_PIXMAP_XID (mask);
+  screen = GDK_PIXMAP_SCREEN (source);
 
   xfg.pixel = fg->pixel;
   xfg.red = fg->red;
@@ -146,9 +172,10 @@ gdk_cursor_new_from_pixmap (GdkPixmap *source,
   xbg.blue = bg->blue;
   xbg.green = bg->green;
   
-  xcursor = XCreatePixmapCursor (gdk_display, source_pixmap, mask_pixmap, &xfg, &xbg, x, y);
+  xcursor = XCreatePixmapCursor (GDK_SCREEN_XDISPLAY (screen),
+				 source_pixmap, mask_pixmap, &xfg, &xbg, x, y);
   private = g_new (GdkCursorPrivate, 1);
-  private->xdisplay = gdk_display;
+  private->screen = screen;
   private->xcursor = xcursor;
   cursor = (GdkCursor *) private;
   cursor->type = GDK_CURSOR_IS_PIXMAP;
@@ -166,7 +193,7 @@ _gdk_cursor_destroy (GdkCursor *cursor)
   g_return_if_fail (cursor->ref_count == 0);
 
   private = (GdkCursorPrivate *) cursor;
-  XFreeCursor (private->xdisplay, private->xcursor);
+  XFreeCursor (GDK_SCREEN_XDISPLAY (private->screen), private->xcursor);
 
   g_free (private);
 }
@@ -176,7 +203,7 @@ gdk_x11_cursor_get_xdisplay (GdkCursor *cursor)
 {
   g_return_val_if_fail (cursor != NULL, NULL);
 
-  return ((GdkCursorPrivate *)cursor)->xdisplay;
+  return GDK_SCREEN_XDISPLAY(((GdkCursorPrivate *)cursor)->screen);
 }
 
 Cursor
@@ -185,4 +212,21 @@ gdk_x11_cursor_get_xcursor (GdkCursor *cursor)
   g_return_val_if_fail (cursor != NULL, None);
 
   return ((GdkCursorPrivate *)cursor)->xcursor;
+}
+
+/** 
+ * gdk_cursor_get_screen:
+ * @cursor : a #GdkCursor.
+ *
+ * Returns the screen on which the GdkCursor is defined
+ *
+ * Returns : the #GdkScreen associated to @cursor
+ */
+
+GdkScreen *
+gdk_cursor_get_screen (GdkCursor *cursor)
+{
+  g_return_val_if_fail (cursor != NULL, NULL);
+
+  return ((GdkCursorPrivate *)cursor)->screen;
 }

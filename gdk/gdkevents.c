@@ -55,22 +55,11 @@ struct _GdkEventPrivate
 /* Private variable declarations
  */
 
-static guint32 button_click_time[2] = { 0, 0}; /* The last 2 button click times. Used
-						* to determine if the latest button click
-						* is part of a double or triple click.
-						*/
-static GdkWindow *button_window[2] = { NULL, NULL}; /* The last 2 windows to receive button presses.
-						     *	Also used to determine if the latest button
-						     *	click is part of a double or triple click.
-					     */
-static guint button_number[2] = { -1, -1 }; /* The last 2 buttons to be pressed.
-					     */
 GdkEventFunc   _gdk_event_func = NULL;    /* Callback for events */
 gpointer       _gdk_event_data = NULL;
 GDestroyNotify _gdk_event_notify = NULL;
 
-static guint double_click_time = 250;
-#define TRIPLE_CLICK_TIME      (2*double_click_time)
+#define TRIPLE_CLICK_TIME(display) (2*display->double_click_time)
 #define DOUBLE_CLICK_DIST      5
 #define TRIPLE_CLICK_DIST      5
 
@@ -78,20 +67,19 @@ static guint double_click_time = 250;
  * Functions for maintaining the event queue *
  *********************************************/
 
-/*************************************************************
+/**
  * _gdk_event_queue_find_first:
- *     Find the first event on the queue that is not still
- *     being filled in.
- *   arguments:
- *     
- *   results:
- *     Pointer to the list node for that event, or NULL
- *************************************************************/
-
+ * @display: a #GdkDisplay
+ * 
+ * Find the first event on the queue that is not still
+ * being filled in.
+ * 
+ * Return value: Pointer to the list node for that event, or NULL.
+ **/
 GList*
-_gdk_event_queue_find_first (void)
+_gdk_event_queue_find_first (GdkDisplay *display)
 {
-  GList *tmp_list = _gdk_queued_events;
+  GList *tmp_list = display->queued_events;
 
   while (tmp_list)
     {
@@ -105,58 +93,93 @@ _gdk_event_queue_find_first (void)
   return NULL;
 }
 
-/*************************************************************
- * _gdk_event_queue_remove_link:
- *     Remove a specified list node from the event queue.
- *   arguments:
- *     node: Node to remove.
- *   results:
- *************************************************************/
+/**
+ * _gdk_event_queue_append:
+ * @display: a #GdkDisplay
+ * @event: Event to append.
+ * 
+ * Appends an event onto the tail of the event queue.
+ *
+ * Returns: the newly appended list node.
+ **/
+GList *
+_gdk_event_queue_append (GdkDisplay *display,
+			 GdkEvent   *event)
+{
+  display->queued_tail = g_list_append (display->queued_tail, event);
+  
+  if (!display->queued_events)
+    display->queued_events = display->queued_tail;
+  else
+    display->queued_tail = display->queued_tail->next;
 
+  return display->queued_tail;
+}
+
+/**
+ * _gdk_event_queue_remove_link:
+ * @display: a #GdkDisplay
+ * @node: node to remove
+ * 
+ * Removes a specified list node from the event queue.
+ **/
 void
-_gdk_event_queue_remove_link (GList *node)
+_gdk_event_queue_remove_link (GdkDisplay *display,
+			      GList      *node)
 {
   if (node->prev)
     node->prev->next = node->next;
   else
-    _gdk_queued_events = node->next;
+    display->queued_events = node->next;
   
   if (node->next)
     node->next->prev = node->prev;
   else
-    _gdk_queued_tail = node->prev;
+    display->queued_tail = node->prev;
 }
 
-/*************************************************************
- * _gdk_event_queue_append:
- *     Append an event onto the tail of the event queue.
- *   arguments:
- *     event: Event to append.
- *   results:
- *************************************************************/
-
-void
-_gdk_event_queue_append (GdkEvent *event)
-{
-  _gdk_queued_tail = g_list_append (_gdk_queued_tail, event);
-  
-  if (!_gdk_queued_events)
-    _gdk_queued_events = _gdk_queued_tail;
-  else
-    _gdk_queued_tail = _gdk_queued_tail->next;
-}
-
-/*************************************************************
- * gdk_event_handler_set:
- *     
- *   arguments:
- *     func: Callback function to be called for each event.
- *     data: Data supplied to the function
- *     notify: function called when function is no longer needed
+/**
+ * _gdk_event_unqueue:
+ * @display: a #GdkDisplay
  * 
- *   results:
- *************************************************************/
+ * Removes and returns the first event from the event
+ * queue that is not still being filled in.
+ * 
+ * Return value: the event, or %NULL. Ownership is transferred
+ * to the caller.
+ **/
+GdkEvent*
+_gdk_event_unqueue (GdkDisplay *display)
+{
+  GdkEvent *event = NULL;
+  GList *tmp_list;
 
+  tmp_list = _gdk_event_queue_find_first (display);
+
+  if (tmp_list)
+    {
+      event = tmp_list->data;
+      _gdk_event_queue_remove_link (display, tmp_list);
+      g_list_free_1 (tmp_list);
+    }
+
+  return event;
+}
+
+/**
+ * gdk_event_handler_set:
+ * @func: the function to call to handle events from GDK.
+ * @data: user data to pass to the function. 
+ * @notify: the function to call when the handler function is removed, i.e. when
+ *          gdk_event_handler_set() is called with another event handler.
+ * 
+ * Sets the function to call to handle all events from GDK.
+ *
+ * Note that GTK+ uses this to install its own event handler, so it is
+ * usually not useful for GTK+ applications. (Although an application
+ * can call this function then call gtk_main_do_event() to pass
+ * events to GTK+.)
+ **/
 void 
 gdk_event_handler_set (GdkEventFunc   func,
 		       gpointer       data,
@@ -170,93 +193,82 @@ gdk_event_handler_set (GdkEventFunc   func,
   _gdk_event_notify = notify;
 }
 
-/*
- *--------------------------------------------------------------
- * gdk_event_get
- *
- *   Gets the next event.
- *
- * Arguments:
- *
- * Results:
- *   If an event is waiting that we care about, returns 
- *   a pointer to that event, to be freed with gdk_event_free.
- *   Otherwise, returns NULL.
- *
- * Side effects:
- *
- *--------------------------------------------------------------
- */
-
+/**
+ * gdk_event_get:
+ * 
+ * Checks all open displays for a #GdkEvent to process,to be processed
+ * on, fetching events from the windowing system if necessary.
+ * See gdk_display_get_event().
+ * 
+ * Return value: the next #GdkEvent to be processed, or %NULL if no events
+ * are pending. The returned #GdkEvent should be freed with gdk_event_free().
+ **/
 GdkEvent*
 gdk_event_get (void)
 {
-  _gdk_events_queue ();
+  GSList *tmp_list;
 
-  return _gdk_event_unqueue ();
+  for (tmp_list = _gdk_displays; tmp_list; tmp_list = tmp_list->next)
+    {
+      GdkEvent *event = gdk_display_get_event (tmp_list->data);
+      if (event)
+	return event;
+    }
+
+  return NULL;
 }
 
-/*
- *--------------------------------------------------------------
- * gdk_event_peek
+/**
+ * gdk_event_peek:
  *
- *   Gets the next event.
- *
- * Arguments:
- *
- * Results:
- *   If an event is waiting that we care about, returns 
- *   a copy of that event, but does not remove it from
- *   the queue. The pointer is to be freed with gdk_event_free.
- *   Otherwise, returns NULL.
- *
- * Side effects:
- *
- *--------------------------------------------------------------
- */
-
+ * If there is an event waiting in the event queue of some open
+ * display, returns a copy of it. See gdk_display_peek_event().
+ * 
+ * Return value: a copy of the first #GdkEvent on some event queue, or %NULL if no
+ * events are in any queues. The returned #GdkEvent should be freed with
+ * gdk_event_free().
+ **/
 GdkEvent*
 gdk_event_peek (void)
 {
-  GList *tmp_list;
+  GSList *tmp_list;
 
-  tmp_list = _gdk_event_queue_find_first ();
-  
-  if (tmp_list)
-    return gdk_event_copy (tmp_list->data);
-  else
-    return NULL;
+  for (tmp_list = _gdk_displays; tmp_list; tmp_list = tmp_list->next)
+    {
+      GdkEvent *event = gdk_display_peek_event (tmp_list->data);
+      if (event)
+	return event;
+    }
+
+  return NULL;
 }
 
+/**
+ * gdk_event_put:
+ * @event: a #GdkEvent.
+ *
+ * Appends a copy of the given event onto the front of the event
+ * queue for event->any.window's display, or the default event
+ * queue if event->any.window is %NULL. See gdk_display_put_event().
+ **/
 void
 gdk_event_put (GdkEvent *event)
 {
-  GdkEvent *new_event;
+  GdkDisplay *display;
   
   g_return_if_fail (event != NULL);
-  
-  new_event = gdk_event_copy (event);
 
-  _gdk_event_queue_append (new_event);
+  if (event->any.window)
+    display = gdk_drawable_get_display (event->any.window);
+  else
+    {
+      GDK_NOTE (MULTIHEAD,
+		g_message ("Falling back to default display for gdk_event_put()"));
+      display = gdk_get_default_display ();
+    }
+
+  gdk_display_put_event (display, event);
 }
-
-/*
- *--------------------------------------------------------------
- * gdk_event_copy
- *
- *   Copy a event structure into new storage.
- *
- * Arguments:
- *   "event" is the event struct to copy.
- *
- * Results:
- *   A new event structure.  Free it with gdk_event_free.
- *
- * Side effects:
- *   The reference count of the window in the event is increased.
- *
- *--------------------------------------------------------------
- */
 
 static GMemChunk *event_chunk = NULL;
 
@@ -277,6 +289,16 @@ _gdk_event_new (void)
   return (GdkEvent*) new_event;
 }
 
+/**
+ * gdk_event_copy:
+ * @event: a #GdkEvent
+ * 
+ * Copies a #GdkEvent, copying or incrementing the reference count of the
+ * resources associated with it (e.g. #GdkWindow's and strings).
+ * 
+ * Return value: a copy of @event. The returned #GdkEvent should be freed with
+ * gdk_event_free().
+ **/
 GdkEvent*
 gdk_event_copy (GdkEvent *event)
 {
@@ -328,24 +350,15 @@ gdk_event_copy (GdkEvent *event)
   return new_event;
 }
 
-/*
- *--------------------------------------------------------------
- * gdk_event_free
- *
- *   Free a event structure obtained from gdk_event_copy.  Do not use
- *   with other event structures.
- *
- * Arguments:
- *   "event" is the event struct to free.
- *
- * Results:
- *
- * Side effects:
- *   The reference count of the window in the event is decreased and
- *   might be freed, too.
- *
- *-------------------------------------------------------------- */
-
+/**
+ * gdk_event_free:
+ * @event:  a #GdkEvent.
+ * 
+ * Frees a #GdkEvent, freeing or decrementing any resources associated with it.
+ * Note that this function should only be called with events returned from
+ * gdk_event_peek(), gdk_event_get(), gdk_event_get_graphics_expose() and
+ * gdk_event_copy().
+ **/
 void
 gdk_event_free (GdkEvent *event)
 {
@@ -740,26 +753,15 @@ gdk_event_get_axis (GdkEvent   *event,
   return gdk_device_get_axis (device, axes, axis_use, value);
 }
 
-/*
- *--------------------------------------------------------------
- * gdk_set_show_events
- *
- *   Turns on/off the showing of events.
- *
- * Arguments:
- *   "show_events" is a boolean describing whether or
- *   not to show the events gdk receives.
- *
- * Results:
- *
- * Side effects:
- *   When "show_events" is TRUE, calls to "gdk_event_get"
- *   will output debugging informatin regarding the event
- *   received to stdout.
- *
- *--------------------------------------------------------------
- */
-
+/**
+ * gdk_set_show_events:
+ * @show_events:  %TRUE to output event debugging information.
+ * 
+ * Sets whether a trace of received events is output.
+ * Note that GTK+ must be compiled with debugging (that is,
+ * configured using the <option>--enable-debug</option> option)
+ * to use this option.
+ **/
 void
 gdk_set_show_events (gboolean show_events)
 {
@@ -769,6 +771,13 @@ gdk_set_show_events (gboolean show_events)
     _gdk_debug_flags &= ~GDK_DEBUG_EVENTS;
 }
 
+/**
+ * gdk_get_show_events:
+ * 
+ * Returns non-zero if event debugging output is enabled.
+ * 
+ * Return value: non-zero if event debugging output is enabled.
+ **/
 gboolean
 gdk_get_show_events (void)
 {
@@ -861,27 +870,10 @@ gdk_input_remove (gint tag)
   g_source_remove (tag);
 }
 
-GdkEvent*
-_gdk_event_unqueue (void)
-{
-  GdkEvent *event = NULL;
-  GList *tmp_list;
-
-  tmp_list = _gdk_event_queue_find_first ();
-
-  if (tmp_list)
-    {
-      event = tmp_list->data;
-      _gdk_event_queue_remove_link (tmp_list);
-      g_list_free_1 (tmp_list);
-    }
-
-  return event;
-}
-
 static void
-gdk_synthesize_click (GdkEvent *event,
-		      gint	nclicks)
+gdk_synthesize_click (GdkDisplay *display,
+		      GdkEvent   *event,
+		      gint	  nclicks)
 {
   GdkEvent temp_event;
   
@@ -890,49 +882,49 @@ gdk_synthesize_click (GdkEvent *event,
   temp_event = *event;
   temp_event.type = (nclicks == 2) ? GDK_2BUTTON_PRESS : GDK_3BUTTON_PRESS;
   
-  gdk_event_put (&temp_event);
+  gdk_display_put_event (display, &temp_event);
 }
 
 void
-_gdk_event_button_generate (GdkEvent *event)
+_gdk_event_button_generate (GdkDisplay *display,
+			    GdkEvent   *event)
 {
-  if ((event->button.time < (button_click_time[1] + TRIPLE_CLICK_TIME)) &&
-      (event->button.window == button_window[1]) &&
-      (event->button.button == button_number[1]))
+  if ((event->button.time < (display->button_click_time[1] + TRIPLE_CLICK_TIME (display))) &&
+      (event->button.window == display->button_window[1]) &&
+      (event->button.button == display->button_number[1]))
     {
-      gdk_synthesize_click (event, 3);
+      gdk_synthesize_click (display, event, 3);
       
-      button_click_time[1] = 0;
-      button_click_time[0] = 0;
-      button_window[1] = NULL;
-      button_window[0] = 0;
-      button_number[1] = -1;
-      button_number[0] = -1;
+      display->button_click_time[1] = 0;
+      display->button_click_time[0] = 0;
+      display->button_window[1] = NULL;
+      display->button_window[0] = 0;
+      display->button_number[1] = -1;
+      display->button_number[0] = -1;
     }
-  else if ((event->button.time < (button_click_time[0] + double_click_time)) &&
-	   (event->button.window == button_window[0]) &&
-	   (event->button.button == button_number[0]))
+  else if ((event->button.time < (display->button_click_time[0] + display->double_click_time)) &&
+	   (event->button.window == display->button_window[0]) &&
+	   (event->button.button == display->button_number[0]))
     {
-      gdk_synthesize_click (event, 2);
+      gdk_synthesize_click (display, event, 2);
       
-      button_click_time[1] = button_click_time[0];
-      button_click_time[0] = event->button.time;
-      button_window[1] = button_window[0];
-      button_window[0] = event->button.window;
-      button_number[1] = button_number[0];
-      button_number[0] = event->button.button;
+      display->button_click_time[1] = display->button_click_time[0];
+      display->button_click_time[0] = event->button.time;
+      display->button_window[1] = display->button_window[0];
+      display->button_window[0] = event->button.window;
+      display->button_number[1] = display->button_number[0];
+      display->button_number[0] = event->button.button;
     }
   else
     {
-      button_click_time[1] = 0;
-      button_click_time[0] = event->button.time;
-      button_window[1] = NULL;
-      button_window[0] = event->button.window;
-      button_number[1] = -1;
-      button_number[0] = event->button.button;
+      display->button_click_time[1] = 0;
+      display->button_click_time[0] = event->button.time;
+      display->button_window[1] = NULL;
+      display->button_window[0] = event->button.window;
+      display->button_number[1] = -1;
+      display->button_number[0] = event->button.button;
     }
 }
-
 
 void
 gdk_synthesize_window_state (GdkWindow     *window,
@@ -975,7 +967,7 @@ gdk_synthesize_window_state (GdkWindow     *window,
     case GDK_WINDOW_TOPLEVEL:
     case GDK_WINDOW_DIALOG:
     case GDK_WINDOW_TEMP: /* ? */
-      gdk_event_put (&temp_event);
+      gdk_display_put_event (gdk_drawable_get_display (window), &temp_event);
       break;
       
     case GDK_WINDOW_FOREIGN:
@@ -986,18 +978,33 @@ gdk_synthesize_window_state (GdkWindow     *window,
 }
 
 /**
- * gdk_set_double_click_time:
- * @msec: double click time in milliseconds (thousandths of a second)
- *
+ * gdk_display_set_double_click_time:
+ * @display: a #GdkDisplay
+ * @msec: double click time in milliseconds (thousandths of a second) 
+ * 
  * Sets the double click time (two clicks within this time interval
  * count as a double click and result in a #GDK_2BUTTON_PRESS event).
  * Applications should NOT set this, it is a global user-configured setting.
+ **/
+void
+gdk_set_double_click_time_for_display (GdkDisplay *display,
+				       guint       msec)
+{
+  display->double_click_time = msec;
+}
+
+/**
+ * gdk_set_double_click_time:
+ * @msec: double click time in milliseconds (thousandths of a second)
  *
+ * Set the double click time for the default display. See
+ * gdk_display_set_double_click_time(). Applications should NOT
+ * set this, it is a global user-configured setting.
  **/
 void
 gdk_set_double_click_time (guint msec)
 {
-  double_click_time = msec;
+  gdk_set_double_click_time_for_display (gdk_get_default_display (), msec);
 }
 
 GType

@@ -30,7 +30,6 @@
 #include <config.h>
 
 #include <gdk/gdkdrawable.h>
-#include <gdk/x11/gdkx.h>
 
 #ifdef HAVE_XFT
 #include <X11/extensions/Xrender.h>
@@ -62,7 +61,7 @@ struct _GdkDrawableImplX11
   GdkColormap *colormap;
   
   Window xid;
-  Display *xdisplay;
+  GdkScreen *screen;
 
 #ifdef HAVE_XFT
   Picture picture;

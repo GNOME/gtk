@@ -197,10 +197,6 @@ struct _GdkGeometry
   GdkGravity win_gravity;
 };
 
-/* Dummy typedef for placeholder in GdkPointerHooks.window_at_pointer
- */
-typedef struct _GdkScreen GdkScreen;
-
 struct _GdkPointerHooks 
 {
   GdkWindow* (*get_pointer)       (GdkWindow	   *window,
@@ -378,8 +374,14 @@ gboolean gdk_window_set_static_gravities (GdkWindow *window,
 					  gboolean   use_static);   
 
 /* Functions to create/lookup windows from their native equivalents */ 
+#ifndef GDK_MULTIHEAD_SAFE
 GdkWindow*    gdk_window_foreign_new (GdkNativeWindow anid);
 GdkWindow*    gdk_window_lookup      (GdkNativeWindow anid);
+#endif
+GdkWindow    *gdk_window_foreign_new_for_display (GdkDisplay      *display,
+						  GdkNativeWindow  anid);
+GdkWindow*    gdk_window_lookup_for_display (GdkDisplay      *display,
+					     GdkNativeWindow  anid);
 
 
 /* GdkWindow */
@@ -477,7 +479,10 @@ gboolean      gdk_window_get_decorations (GdkWindow       *window,
 					  GdkWMDecoration *decorations);
 void	      gdk_window_set_functions	 (GdkWindow	  *window,
 					  GdkWMFunction	   functions);
+#ifndef GDK_MULTIHEAD_SAFE
 GList *       gdk_window_get_toplevels   (void);
+void          gdk_set_sm_client_id       (const gchar *sm_client_id);
+#endif
 
 void          gdk_window_iconify         (GdkWindow       *window);
 void          gdk_window_deiconify       (GdkWindow       *window);

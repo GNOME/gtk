@@ -51,6 +51,8 @@ static int gdk_initialized = 0;			    /* 1 if the library is initialized,
 						     */
 
 static gchar  *gdk_progclass = NULL;
+static gint    gdk_argc = 0;
+static gchar **gdk_argv = NULL;
 
 #ifdef G_ENABLE_DEBUG
 static const GDebugKey gdk_debug_keys[] = {
@@ -66,6 +68,7 @@ static const GDebugKey gdk_debug_keys[] = {
   {"image",	    GDK_DEBUG_IMAGE},
   {"input",	    GDK_DEBUG_INPUT},
   {"cursor",	    GDK_DEBUG_CURSOR},
+  {"multihead",	    GDK_DEBUG_MULTIHEAD},
 };
 
 static const int gdk_ndebug_keys = G_N_ELEMENTS (gdk_debug_keys);
@@ -233,14 +236,126 @@ gdk_arg_name_cb (const char *key, const char *value, gpointer user_data)
 }
 
 static GdkArgDesc gdk_args[] = {
-  { "class" ,       GDK_ARG_CALLBACK, NULL, gdk_arg_class_cb    },
-  { "name",         GDK_ARG_CALLBACK, NULL, gdk_arg_name_cb     },
+  { "class" ,       GDK_ARG_CALLBACK, NULL, gdk_arg_class_cb                   },
+  { "name",         GDK_ARG_CALLBACK, NULL, gdk_arg_name_cb                    },
+  { "display",      GDK_ARG_STRING,   &_gdk_display_name,     (GdkArgFunc)NULL },
+
 #ifdef G_ENABLE_DEBUG
   { "gdk-debug",    GDK_ARG_CALLBACK, NULL, gdk_arg_debug_cb    },
   { "gdk-no-debug", GDK_ARG_CALLBACK, NULL, gdk_arg_no_debug_cb },
 #endif /* G_ENABLE_DEBUG */
   { NULL }
 };
+
+
+/**
+ * _gdk_get_command_line_args:
+ * @argv: location to store argv pointer
+ * @argc: location 
+ * 
+ * Retrieve the command line arguments passed to gdk_init().
+ * The returned argv pointer points to static storage ; no
+ * copy is made.
+ **/
+void
+_gdk_get_command_line_args (int    *argc,
+			    char ***argv)
+{
+  *argc = gdk_argc;
+  *argv = gdk_argv;
+}
+
+/**
+ * gdk_parse_args:
+ * @argc: the number of command line arguments.
+ * @argv: the array of command line arguments.
+ * 
+ * Parse command line arguments, and store for future
+ * use by calls to gdk_open_display().
+ *
+ * Any arguments used by GDK are removed from the array and @argc and @argv are
+ * updated accordingly.
+ *
+ * You shouldn't call this function explicitely if you are using
+ * gtk_init(), gtk_init_check(), gdk_init(), or gdk_init_check().
+ **/
+void
+gdk_parse_args (int    *argc,
+		char ***argv)
+{
+  GdkArgContext *arg_context;
+  gint i;
+
+  if (argc && argv)
+    {
+      gdk_argc = *argc;
+      
+      gdk_argv = g_malloc ((gdk_argc + 1) * sizeof (char*));
+      for (i = 0; i < gdk_argc; i++)
+	gdk_argv[i] = g_strdup ((*argv)[i]);
+      gdk_argv[gdk_argc] = NULL;
+
+      if (*argc > 0)
+	{
+	  gchar *d;
+	  
+	  d = strrchr((*argv)[0], G_DIR_SEPARATOR);
+	  if (d != NULL)
+	    g_set_prgname (d + 1);
+	  else
+	    g_set_prgname ((*argv)[0]);
+	}
+    }
+  else
+    {
+      g_set_prgname ("<unknown>");
+    }
+
+  /* We set the fallback program class here, rather than lazily in
+   * gdk_get_program_class, since we don't want -name to override it.
+   */
+  gdk_progclass = g_strdup (g_get_prgname ());
+  if (gdk_progclass[0])
+    gdk_progclass[0] = g_ascii_toupper (gdk_progclass[0]);
+  
+#ifdef G_ENABLE_DEBUG
+  {
+    gchar *debug_string = getenv("GDK_DEBUG");
+    if (debug_string != NULL)
+      _gdk_debug_flags = g_parse_debug_string (debug_string,
+					      (GDebugKey *) gdk_debug_keys,
+					      gdk_ndebug_keys);
+  }
+#endif	/* G_ENABLE_DEBUG */
+  
+  arg_context = gdk_arg_context_new (NULL);
+  gdk_arg_context_add_table (arg_context, gdk_args);
+  gdk_arg_context_add_table (arg_context, _gdk_windowing_args);
+  gdk_arg_context_parse (arg_context, argc, argv);
+  gdk_arg_context_destroy (arg_context);
+  
+  GDK_NOTE (MISC, g_message ("progname: \"%s\"", g_get_prgname ()));
+
+  g_type_init ();
+
+  /* Do any setup particular to the windowing system
+   */
+  _gdk_windowing_init ();
+}
+
+/** 
+ * gdk_get_display_arg_name:
+ *
+ * Gets the display name specified in the command line arguments passed
+ * to gdk_init() or gdk_parse_args(), if any.
+ *
+ * Returns: the display name, if specified explicitely, otherwise %NULL
+ */
+gchar *
+gdk_get_display_arg_name (void)
+{
+  return _gdk_display_name;
+}
 
 /*
  *--------------------------------------------------------------
@@ -268,86 +383,24 @@ gboolean
 gdk_init_check (int    *argc,
 		char ***argv)
 {
-  gchar **argv_orig = NULL;
-  gint argc_orig = 0;
-  GdkArgContext *arg_context;
-  gboolean result;
-  int i;
+  GdkDisplay *display;
   
   if (gdk_initialized)
     return TRUE;
 
-  if (argc && argv)
-    {
-      argc_orig = *argc;
-      
-      argv_orig = g_malloc ((argc_orig + 1) * sizeof (char*));
-      for (i = 0; i < argc_orig; i++)
-	argv_orig[i] = g_strdup ((*argv)[i]);
-      argv_orig[argc_orig] = NULL;
-
-      if (*argc > 0)
-	{
-	  gchar *d;
-	  
-	  d = strrchr((*argv)[0], G_DIR_SEPARATOR);
-	  if (d != NULL)
-	    g_set_prgname (d + 1);
-	  else
-	    g_set_prgname ((*argv)[0]);
-	}
-    }
-  else
-    {
-      g_set_prgname ("<unknown>");
-    }
-  
-  /* We set the fallback program class here, rather than lazily in
-   * gdk_get_program_class, since we don't want -name to override it.
-   */
-  gdk_progclass = g_strdup (g_get_prgname ());
-  if (gdk_progclass[0])
-    gdk_progclass[0] = g_ascii_toupper (gdk_progclass[0]);  
-  
-#ifdef G_ENABLE_DEBUG
-  {
-    gchar *debug_string = getenv("GDK_DEBUG");
-    if (debug_string != NULL)
-      _gdk_debug_flags = g_parse_debug_string (debug_string,
-					      (GDebugKey *) gdk_debug_keys,
-					      gdk_ndebug_keys);
-  }
-#endif	/* G_ENABLE_DEBUG */
-  
-  arg_context = gdk_arg_context_new (NULL);
-  gdk_arg_context_add_table (arg_context, gdk_args);
-  gdk_arg_context_add_table (arg_context, _gdk_windowing_args);
-  gdk_arg_context_parse (arg_context, argc, argv);
-  gdk_arg_context_destroy (arg_context);
-  
-  GDK_NOTE (MISC, g_message ("progname: \"%s\"", g_get_prgname ()));
-
-  g_type_init ();
-  
-  result = _gdk_windowing_init_check (argc_orig, argv_orig);
-
-  for (i = 0; i < argc_orig; i++)
-    g_free(argv_orig[i]);
-  g_free(argv_orig);
-
-  if (!result)
-    return FALSE;
-  
-  _gdk_visual_init ();
-  _gdk_windowing_window_init ();
-  _gdk_windowing_image_init ();
-  _gdk_events_init ();
-  _gdk_input_init ();
-  _gdk_dnd_init ();
+  gdk_parse_args (argc, argv);
 
   gdk_initialized = 1;
 
-  return TRUE;
+  display = gdk_open_display (_gdk_display_name);
+
+  if (display)
+    {
+      gdk_set_default_display (display);
+      return TRUE;
+    }
+  else
+    return FALSE;
 }
 
 void
@@ -355,7 +408,7 @@ gdk_init (int *argc, char ***argv)
 {
   if (!gdk_init_check (argc, argv))
     {
-      g_warning ("cannot open display: %s", gdk_get_display ());
+      g_warning ("cannot open display: %s", gdk_get_display_arg_name ());
       exit(1);
     }
 }

@@ -35,7 +35,9 @@
 
 G_BEGIN_DECLS
 
-extern Display		*gdk_display;
+#ifndef GDK_MULTIHEAD_SAFE
+extern Display          *gdk_display;
+#endif
 
 Display *gdk_x11_drawable_get_xdisplay    (GdkDrawable *drawable);
 XID      gdk_x11_drawable_get_xid         (GdkDrawable *drawable);
@@ -45,77 +47,122 @@ Display *gdk_x11_colormap_get_xdisplay    (GdkColormap *colormap);
 Colormap gdk_x11_colormap_get_xcolormap   (GdkColormap *colormap);
 Display *gdk_x11_cursor_get_xdisplay      (GdkCursor   *cursor);
 Cursor   gdk_x11_cursor_get_xcursor       (GdkCursor   *cursor);
+Display *gdk_x11_display_get_xdisplay     (GdkDisplay  *display);
 Visual * gdk_x11_visual_get_xvisual       (GdkVisual   *visual);
 Display *gdk_x11_gc_get_xdisplay          (GdkGC       *gc);
 GC       gdk_x11_gc_get_xgc               (GdkGC       *gc);
+Screen * gdk_x11_screen_get_xscreen       (GdkScreen   *screen);
+int      gdk_x11_screen_get_screen_number (GdkScreen   *screen);
+#ifndef GDK_MULTIHEAD_SAFE
 Window   gdk_x11_get_default_root_xwindow (void);
 Display *gdk_x11_get_default_xdisplay     (void);
 gint     gdk_x11_get_default_screen       (void);
+#endif
 
 #define GDK_COLORMAP_XDISPLAY(cmap)   (gdk_x11_colormap_get_xdisplay (cmap))
 #define GDK_COLORMAP_XCOLORMAP(cmap)  (gdk_x11_colormap_get_xcolormap (cmap))
 #define GDK_CURSOR_XDISPLAY(cursor)   (gdk_x11_cursor_get_xdisplay (cursor))
 #define GDK_CURSOR_XCURSOR(cursor)    (gdk_x11_cursor_get_xcursor (cursor))
-#define GDK_DISPLAY()                 gdk_display
 #define GDK_IMAGE_XDISPLAY(image)     (gdk_x11_image_get_xdisplay (image))
 #define GDK_IMAGE_XIMAGE(image)       (gdk_x11_image_get_ximage (image))
+
+#ifndef GDK_MULTIHEAD_SAFE
+#define GDK_DISPLAY()                 gdk_display
+#endif
 
 #ifdef INSIDE_GDK_X11
 
 #include "gdkprivate-x11.h"
+#include "gdkscreen-x11.h"
 
-#define GDK_ROOT_WINDOW()             _gdk_root_window
-#undef GDK_ROOT_PARENT
-#define GDK_ROOT_PARENT()             ((GdkWindow *)_gdk_parent_root)
-#define GDK_WINDOW_XDISPLAY(win)      (GDK_DRAWABLE_IMPL_X11(((GdkWindowObject *)win)->impl)->xdisplay)
+#define GDK_DISPLAY_XDISPLAY(display) (GDK_DISPLAY_X11(display)->xdisplay)
+
+#define GDK_WINDOW_XDISPLAY(win)      (GDK_SCREEN_X11 (GDK_WINDOW_SCREEN (win))->xdisplay)
 #define GDK_WINDOW_XID(win)           (GDK_DRAWABLE_IMPL_X11(((GdkWindowObject *)win)->impl)->xid)
-#define GDK_PIXMAP_XDISPLAY(win)      (GDK_DRAWABLE_IMPL_X11(((GdkPixmapObject *)win)->impl)->xdisplay)
-#define GDK_PIXMAP_XID(win)           (GDK_DRAWABLE_IMPL_X11(((GdkPixmapObject *)win)->impl)->xid)
+#define GDK_PIXMAP_XDISPLAY(pix)      (GDK_SCREEN_X11 (GDK_PIXMAP_SCREEN (pix))->xdisplay)
+#define GDK_PIXMAP_XID(pix)           (GDK_DRAWABLE_IMPL_X11(((GdkPixmapObject *)pix)->impl)->xid)
 #define GDK_DRAWABLE_XDISPLAY(win)    (GDK_IS_WINDOW (win) ? GDK_WINDOW_XDISPLAY (win) : GDK_PIXMAP_XDISPLAY (win))
 #define GDK_DRAWABLE_XID(win)         (GDK_IS_WINDOW (win) ? GDK_WINDOW_XID (win) : GDK_PIXMAP_XID (win))
-#define GDK_GC_XDISPLAY(gc)           (GDK_GC_X11(gc)->xdisplay)
+#define GDK_GC_XDISPLAY(gc)           (GDK_SCREEN_XDISPLAY(GDK_GC_X11(gc)->screen))
+#define GDK_GC_XGC(gc)		      (GDK_GC_X11(gc)->xgc)
+#define GDK_SCREEN_XDISPLAY(screen)   (GDK_SCREEN_X11 (screen)->xdisplay)
+#define GDK_SCREEN_XSCREEN(screen)    (GDK_SCREEN_X11 (screen)->xscreen)
+#define GDK_SCREEN_XNUMBER(screen)    (GDK_SCREEN_X11 (screen)->screen_number) 
 #define GDK_VISUAL_XVISUAL(vis)       (((GdkVisualPrivate *) vis)->xvisual)
-#define GDK_GC_XGC(gc)       (GDK_GC_X11(gc)->xgc)
-#define GDK_GC_GET_XGC(gc)   (GDK_GC_X11(gc)->dirty_mask ? _gdk_x11_gc_flush (gc) : ((GdkGCX11 *)(gc))->xgc)
-#define GDK_WINDOW_XWINDOW    GDK_DRAWABLE_XID
+#define GDK_GC_GET_XGC(gc)	      (GDK_GC_X11(gc)->dirty_mask ? _gdk_x11_gc_flush (gc) : ((GdkGCX11 *)(gc))->xgc)
+#define GDK_WINDOW_XWINDOW	      GDK_DRAWABLE_XID
 
 #else /* INSIDE_GDK_X11 */
 
+#ifndef GDK_MULTIHEAD_SAFE
 #define GDK_ROOT_WINDOW()             (gdk_x11_get_default_root_xwindow ())
-#define GDK_WINDOW_XDISPLAY(win)      (gdk_x11_drawable_get_xdisplay (win))
+#endif
+
+#define GDK_DISPLAY_XDISPLAY(display) (gdk_x11_display_get_xdisplay (display))
+
+#define GDK_WINDOW_XDISPLAY(win)      (gdk_x11_drawable_get_xdisplay (((GdkWindowObject *)win)->impl))
 #define GDK_WINDOW_XID(win)           (gdk_x11_drawable_get_xid (win))
 #define GDK_WINDOW_XWINDOW(win)       (gdk_x11_drawable_get_xid (win))
-#define GDK_PIXMAP_XDISPLAY(win)      (gdk_x11_drawable_get_xdisplay (win))
+#define GDK_PIXMAP_XDISPLAY(win)      (gdk_x11_drawable_get_xdisplay (((GdkPixmapObject *)win)->impl))
 #define GDK_PIXMAP_XID(win)           (gdk_x11_drawable_get_xid (win))
 #define GDK_DRAWABLE_XDISPLAY(win)    (gdk_x11_drawable_get_xdisplay (win))
 #define GDK_DRAWABLE_XID(win)         (gdk_x11_drawable_get_xid (win))
-#define GDK_VISUAL_XVISUAL(visual)    (gdk_x11_visual_get_xvisual (visual))
 #define GDK_GC_XDISPLAY(gc)           (gdk_x11_gc_get_xdisplay (gc))
 #define GDK_GC_XGC(gc)                (gdk_x11_gc_get_xgc (gc))
+#define GDK_SCREEN_XDISPLAY(screen)   (gdk_x11_display_get_xdisplay (gdk_screen_get_display (screen)))
+#define GDK_SCREEN_XSCREEN(screen)    (gdk_x11_screen_get_xscreen (screen))
+#define GDK_SCREEN_XNUMBER(screen)    (gdk_x11_screen_get_screen_number (screen))
+#define GDK_VISUAL_XVISUAL(visual)    (gdk_x11_visual_get_xvisual (visual))
 
 #endif /* INSIDE_GDK_X11 */
 
-GdkVisual*   gdkx_visual_get   (VisualID xvisualid);
+GdkVisual* gdkx_visual_get_for_screen (GdkScreen *screen,
+				       VisualID   xvisualid);
+#ifndef GDK_MULTIHEAD_SAFE
+GdkVisual* gdkx_visual_get            (VisualID   xvisualid);
+#endif
+
 /* XXX: Do not use this function until it is fixed. An X Colormap
  *      is useless unless we also have the visual. */
 GdkColormap* gdkx_colormap_get (Colormap xcolormap);
 
 /* Return the Gdk* for a particular XID */
-gpointer      gdk_xid_table_lookup     (XID              xid);
-
+gpointer      gdk_xid_table_lookup_for_display (GdkDisplay *display,
+						XID         xid);
 guint32       gdk_x11_get_server_time  (GdkWindow       *window);
 
-/* FIXME should take a GdkDisplay* */
-void          gdk_x11_grab_server      (void);
-void          gdk_x11_ungrab_server    (void);
-
 /* returns TRUE if we support the given WM spec feature */
-gboolean      gdk_net_wm_supports      (GdkAtom property);
+gboolean gdk_x11_screen_supports_net_wm_hint (GdkScreen *screen,
+					      GdkAtom    property);
 
+#ifndef GDK_MULTIHEAD_SAFE
+gpointer      gdk_xid_table_lookup   (XID              xid);
+gboolean      gdk_net_wm_supports    (GdkAtom    property);
+void          gdk_x11_grab_server    ();
+void          gdk_x11_ungrab_server  ();
+
+#endif
+
+GdkDisplay   *gdk_x11_lookup_xdisplay (Display *xdisplay);
+
+GList *gdk_list_visuals_for_screen (GdkScreen *screen);
+
+
+/* Functions to get the X Atom equivalent to the GdkAtom */
+Atom	              gdk_x11_atom_to_xatom_for_display (GdkDisplay  *display,
+							 GdkAtom      virtual_atom);
+GdkAtom		      gdk_x11_xatom_to_atom_for_display (GdkDisplay  *display,
+							 Atom	      xatom);
+Atom		      gdk_x11_get_xatom_by_name_for_display (GdkDisplay  *display,
+							     const gchar *atom_name);
+G_CONST_RETURN gchar *gdk_x11_get_xatom_name_for_display (GdkDisplay  *display,
+							  Atom         xatom);
+#ifndef GDK_MULTIHEAD_SAFE
 Atom                  gdk_x11_atom_to_xatom     (GdkAtom      atom);
 GdkAtom               gdk_x11_xatom_to_atom     (Atom         xatom);
 Atom                  gdk_x11_get_xatom_by_name (const gchar *atom_name);
 G_CONST_RETURN gchar *gdk_x11_get_xatom_name    (Atom         xatom);
+#endif
 
 #ifndef GDK_DISABLE_DEPRECATED
 
@@ -126,7 +173,12 @@ G_CONST_RETURN char *gdk_x11_font_get_name     (GdkFont *font);
 #define GDK_FONT_XDISPLAY(font)       (gdk_x11_font_get_xdisplay (font))
 #define GDK_FONT_XFONT(font)          (gdk_x11_font_get_xfont (font))
 
+#ifndef GDK_MULTIHEAD_SAFE
+
 #define gdk_font_lookup(xid)	   ((GdkFont*) gdk_xid_table_lookup (xid))
+
+#endif /* GDK_MULTIHEAD_SAFE */
+#define gdk_font_lookup_for_display(display, xid) ((GdkFont*) gdk_xid_table_lookup_for_display (display, xid))
 
 #endif /* GDK_DISABLE_DEPRECATED */
 

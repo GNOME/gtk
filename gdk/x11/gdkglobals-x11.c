@@ -28,17 +28,8 @@
 
 #include "gdktypes.h"
 #include "gdkprivate-x11.h"
-#include "config.h"
 
-gboolean          _gdk_use_xshm = TRUE;
-gchar            *_gdk_display_name = NULL;
+gboolean          _gdk_use_xshm = TRUE;  /* used as a cmd line arg */
 Display          *gdk_display = NULL;
-gint              _gdk_screen;
-Window            _gdk_root_window;
-Window            _gdk_leader_window;
-Atom              _gdk_wm_window_protocols[3];
 GdkAtom           _gdk_selection_property;
-
-GdkWindowObject *_gdk_xgrab_window = NULL;  /* Window that currently holds the
-                                            *	x pointer grab
-                                            */
+gboolean          _gdk_synchronize = FALSE;

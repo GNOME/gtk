@@ -73,9 +73,19 @@ GdkPixmap* gdk_pixmap_colormap_create_from_xpm_d (GdkWindow    *window,
 						  GdkColor     *transparent_color,
 						  gchar       **data);
 
-/* Functions to create/lookup pixmaps from their native equivalents */
+GdkScreen *gdk_pixmap_get_screen (GdkDrawable *drawable);
+
+/* Functions to create/lookup pixmaps from their native equivalents
+ */
+#ifndef GDK_MULTIHEAD_SAFE
 GdkPixmap*    gdk_pixmap_foreign_new (GdkNativeWindow anid);
 GdkPixmap*    gdk_pixmap_lookup      (GdkNativeWindow anid);
+#endif /* GDK_MULTIHEAD_SAFE */
+
+GdkPixmap*    gdk_pixmap_foreign_new_for_screen (GdkScreen       *screen,
+						 GdkNativeWindow  anid);
+GdkPixmap*    gdk_pixmap_lookup_for_display     (GdkDisplay      *display,
+						 GdkNativeWindow  anid);
 
 #ifndef GDK_DISABLE_DEPRECATED
 #define gdk_bitmap_ref                 gdk_drawable_ref

@@ -25,12 +25,12 @@
 #include <config.h>
 #include <stdio.h>
 #include <string.h>
-#include "gdk.h"		/* For gdk_screen_width/gdk_screen_height */
 #include "gdkcolor.h"
 #include "gdkimage.h"
 #include "gdkvisual.h"
 #include "gdkwindow.h"
 #include "gdkpixbuf.h"
+#include "gdkpixmap.h"
 #include "gdk-pixbuf-private.h"
 #include "gdkinternals.h"
 
@@ -1552,7 +1552,8 @@ gdk_pixbuf_get_from_drawable (GdkPixbuf   *dest,
 	  
 	  gint width1 = MIN (width - x0, GDK_SCRATCH_IMAGE_WIDTH);
 	  
-	  image = _gdk_image_get_scratch (width1, height1, depth, &xs0, &ys0);
+	  image = _gdk_image_get_scratch (gdk_drawable_get_screen (src), 
+					  width1, height1, depth, &xs0, &ys0);
 
 	  _gdk_drawable_copy_to_image (src, image,
 				       src_x + x0, src_y + y0,

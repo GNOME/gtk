@@ -29,6 +29,7 @@
 
 #include <gdk/gdkcolor.h>
 #include <gdk/gdkcursor.h>
+#include <gdk/gdkdisplay.h>
 #include <gdk/gdkdnd.h>
 #include <gdk/gdkdrawable.h>
 #include <gdk/gdkenumtypes.h>
@@ -44,6 +45,7 @@
 #include <gdk/gdkproperty.h>
 #include <gdk/gdkregion.h>
 #include <gdk/gdkrgb.h>
+#include <gdk/gdkscreen.h>
 #include <gdk/gdkselection.h>
 #include <gdk/gdktypes.h>
 #include <gdk/gdkvisual.h>
@@ -57,6 +59,8 @@ extern "C" {
 /* Initialization, exit and events
  */
 #define	  GDK_PRIORITY_EVENTS		(G_PRIORITY_DEFAULT)
+void 	  gdk_parse_args	   	(gint	   	*argc,
+					 gchar        ***argv);
 void 	  gdk_init		   	(gint	   	*argc,
 					 gchar        ***argv);
 gboolean  gdk_init_check   	        (gint	   	*argc,
@@ -81,6 +85,7 @@ gboolean  gdk_get_use_xshm		(void);
 #endif /* GDK_DISABLE_DEPRECATED */
 
 gchar*	  gdk_get_display		(void);
+gchar*	  gdk_get_display_arg_name	(void);
 
 #ifndef GDK_DISABLE_DEPRECATED
 gint gdk_input_add_full	  (gint		     source,
@@ -101,10 +106,12 @@ GdkGrabStatus gdk_pointer_grab       (GdkWindow    *window,
 				      GdkWindow    *confine_to,
 				      GdkCursor    *cursor,
 				      guint32       time);
-void          gdk_pointer_ungrab     (guint32       time);
 GdkGrabStatus gdk_keyboard_grab      (GdkWindow    *window,
 				      gboolean      owner_events,
 				      guint32       time);
+
+#ifndef GDK_MULTIHEAD_SAFE
+void          gdk_pointer_ungrab     (guint32       time);
 void          gdk_keyboard_ungrab    (guint32       time);
 gboolean      gdk_pointer_is_grabbed (void);
 
@@ -114,10 +121,14 @@ gint gdk_screen_height (void) G_GNUC_CONST;
 gint gdk_screen_width_mm  (void) G_GNUC_CONST;
 gint gdk_screen_height_mm (void) G_GNUC_CONST;
 
-void gdk_flush (void);
 void gdk_beep (void);
+#endif /* GDK_MULTIHEAD_SAFE */
 
-void gdk_set_double_click_time (guint msec);
+void gdk_flush (void);
+
+#ifndef GDK_MULTIHEAD_SAFE
+void gdk_set_double_click_time             (guint       msec);
+#endif
 
 /* Rectangle utilities
  */
@@ -140,10 +151,14 @@ gint       gdk_mbstowcs          (GdkWChar         *dest,
 				  gint              dest_max);
 
 /* Miscellaneous */
-void     gdk_event_send_clientmessage_toall (GdkEvent    *event);
-gboolean gdk_event_send_client_message (GdkEvent    *event,
-					guint32      xid);
-
+#ifndef GDK_MULTIHEAD_SAFE
+gboolean gdk_event_send_client_message      (GdkEvent  *event,
+					     guint32    xid);
+void     gdk_event_send_clientmessage_toall (GdkEvent  *event);
+#endif
+gboolean gdk_event_send_client_message_for_display (GdkDisplay *display,
+						    GdkEvent   *event,
+						    guint32	xid);
 /* Threading
  */
 

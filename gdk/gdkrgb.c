@@ -51,6 +51,7 @@
 #include "gdkinternals.h"	/* _gdk_windowing_get_bits_for_depth() */
 
 #include "gdkrgb.h"
+#include "gdkscreen.h"
 
 typedef struct _GdkRgbInfo     GdkRgbInfo;
 typedef struct _GdkRgbCmapInfo GdkRgbCmapInfo;
@@ -228,7 +229,7 @@ gdk_rgb_try_colormap (GdkRgbInfo *image_info, gboolean force,
   if (image_info->cmap)
     cmap = image_info->cmap;
   else
-    cmap = gdk_colormap_get_system ();
+    cmap = gdk_screen_get_system_colormap (image_info->visual->screen);
 
   colors_needed = nr * ng * nb;
   for (i = 0; i < 256; i++)
@@ -238,7 +239,7 @@ gdk_rgb_try_colormap (GdkRgbInfo *image_info, gboolean force,
     }
 
 #ifndef GAMMA
-  if (cmap == gdk_colormap_get_system())
+  if (cmap == gdk_screen_get_system_colormap (image_info->visual->screen))
     /* find color cube colors that are already present */
     for (i = 0; i < MIN (256, cmap->size); i++)
       {
@@ -457,7 +458,7 @@ gdk_rgb_score_visual (GdkVisual *visual)
   if (quality == 0)
     return 0;
 
-  sys = (visual == gdk_visual_get_system ());
+  sys = (visual == gdk_screen_get_system_visual (visual->screen));
 
   pseudo = (visual->type == GDK_VISUAL_PSEUDO_COLOR || visual->type == GDK_VISUAL_TRUE_COLOR);
 
@@ -475,13 +476,13 @@ gdk_rgb_score_visual (GdkVisual *visual)
 }
 
 static GdkVisual *
-gdk_rgb_choose_visual (void)
+gdk_rgb_choose_visual (GdkScreen *screen)
 {
   GList *visuals, *tmp_list;
   guint32 score, best_score;
   GdkVisual *visual, *best_visual;
 
-  visuals = gdk_list_visuals ();
+  visuals = gdk_screen_list_visuals (screen);
   tmp_list = visuals;
 
   best_visual = tmp_list->data;
@@ -633,14 +634,14 @@ gdk_rgb_create_info (GdkVisual *visual, GdkColormap *colormap)
        image_info->visual->depth >= 3))
     {
       if (!image_info->cmap)
-	image_info->cmap = gdk_colormap_ref (gdk_colormap_get_system ());
+	image_info->cmap = gdk_colormap_ref (gdk_screen_get_system_colormap (visual->screen));
       
       gdk_rgb_colorcube_222 (image_info);
     }
   else if (image_info->visual->type == GDK_VISUAL_PSEUDO_COLOR)
     {
       if (!image_info->cmap &&
-	  (gdk_rgb_install_cmap || image_info->visual != gdk_visual_get_system ()))
+	  (gdk_rgb_install_cmap || image_info->visual != gdk_screen_get_system_visual (visual->screen)))
 	{
 	  image_info->cmap = gdk_colormap_new (image_info->visual, FALSE);
 	  image_info->cmap_alloced = TRUE;
@@ -658,7 +659,7 @@ gdk_rgb_create_info (GdkVisual *visual, GdkColormap *colormap)
 		 image_info->nblue_shades);
 
       if (!image_info->cmap)
-	image_info->cmap = gdk_colormap_ref (gdk_colormap_get_system ());
+	image_info->cmap = gdk_colormap_ref (gdk_screen_get_system_colormap (visual->screen));
     }
 #ifdef ENABLE_GRAYSCALE
   else if (image_info->visual->type == GDK_VISUAL_GRAYSCALE)
@@ -678,8 +679,8 @@ gdk_rgb_create_info (GdkVisual *visual, GdkColormap *colormap)
 	{
 	  /* Always install colormap in direct color. */
 	  if (image_info->visual->type != GDK_VISUAL_DIRECT_COLOR &&
-	      image_info->visual == gdk_visual_get_system ())
-	    image_info->cmap = gdk_colormap_ref (gdk_colormap_get_system ());
+	      image_info->visual == gdk_screen_get_system_visual (visual->screen))
+	    image_info->cmap = gdk_colormap_ref (gdk_screen_get_system_colormap (visual->screen));
 	  else
 	    {
 	      image_info->cmap = gdk_colormap_new (image_info->visual, FALSE);
@@ -690,8 +691,7 @@ gdk_rgb_create_info (GdkVisual *visual, GdkColormap *colormap)
 
   image_info->bitmap = (image_info->visual->depth == 1);
 
-  image_info->bpp = (_gdk_windowing_get_bits_for_depth (image_info->visual->depth) + 7) / 8;
-
+  image_info->bpp = (_gdk_windowing_get_bits_for_depth (gdk_screen_get_display (visual->screen), image_info->visual->depth) + 7) / 8;
   gdk_rgb_select_conv (image_info);
 
   if (!gdk_rgb_quark)
@@ -793,7 +793,7 @@ gdk_rgb_xpixel_from_rgb (guint32 rgb)
   guint32 g = rgb & 0xff00;
   guint32 b = rgb & 0xff;
 
-  return gdk_rgb_xpixel_from_rgb_internal (gdk_rgb_get_colormap(),
+  return gdk_rgb_xpixel_from_rgb_internal (gdk_screen_get_rgb_colormap (gdk_get_default_screen ()),
 					   (r >> 8) + (r >> 16), g + (g >> 8), b + (b << 8));
 }
 
@@ -2884,7 +2884,8 @@ gdk_rgb_select_conv (GdkRgbInfo *image_info)
 
   depth = image_info->visual->depth;
 
-  bpp = _gdk_windowing_get_bits_for_depth (image_info->visual->depth);
+  bpp = _gdk_windowing_get_bits_for_depth (gdk_screen_get_display (image_info->visual->screen),
+					   image_info->visual->depth);
 
   byte_order = image_info->visual->byte_order;
   if (gdk_rgb_verbose)
@@ -3117,7 +3118,9 @@ gdk_draw_rgb_image_core (GdkRgbInfo *image_info,
 	  width1 = MIN (width - x0, GDK_SCRATCH_IMAGE_WIDTH);
 	  buf_ptr = buf + y0 * rowstride + x0 * pixstride;
 
-	  image = _gdk_image_get_scratch (width1, height1, image_info->visual->depth, &xs0, &ys0);
+	  image = _gdk_image_get_scratch (gdk_drawable_get_screen (drawable), 
+					  width1, height1,
+					  image_info->visual->depth, &xs0, &ys0);
 
 	  conv (image_info, image, xs0, ys0, width1, height1, buf_ptr, rowstride,
 		x + x0 + xdith, y + y0 + ydith, cmap);
@@ -3134,6 +3137,7 @@ static GdkRgbInfo *
 gdk_rgb_get_info_from_drawable (GdkDrawable *drawable)
 {
   GdkColormap *cmap = gdk_drawable_get_colormap (drawable);
+  GdkScreen *screen = gdk_drawable_get_screen (drawable);
 
   if (!cmap)
     {
@@ -3142,7 +3146,7 @@ gdk_rgb_get_info_from_drawable (GdkDrawable *drawable)
        */
 
       gint depth = gdk_drawable_get_depth (drawable);
-      GdkColormap *rgb_cmap = gdk_rgb_get_colormap();
+      GdkColormap *rgb_cmap = gdk_screen_get_rgb_colormap (screen);
       if (depth == gdk_colormap_get_visual (rgb_cmap)->depth)
 	cmap = rgb_cmap;
       else
@@ -3453,7 +3457,7 @@ gdk_rgb_ditherable (void)
 /**
  * gdk_rgb_get_colormap:
  * 
- * Returns the preferred colormap for rendering image data.  Not a
+ * Get the preferred colormap for rendering image data.  Not a
  * very useful function; historically, GDK could only render RGB image
  * data to one colormap and visual, but in the current version it can
  * render to any colormap and visual. So there's no need to call this
@@ -3465,18 +3469,77 @@ GdkColormap *
 gdk_rgb_get_colormap (void)
 {
   static GdkColormap *cmap = NULL;
-  
   if (!cmap)
     {
-      GdkRgbInfo *image_info = gdk_rgb_create_info (gdk_rgb_choose_visual (), NULL);
+      GdkRgbInfo *image_info = gdk_rgb_create_info (gdk_rgb_choose_visual (gdk_get_default_screen ()), NULL);
       cmap = image_info->cmap;
     }
 
   return cmap;
 }
 
+/**
+ * gdk_screen_get_rgb_colormap:
+ * @screen : a #GdkScreen.
+ * 
+ * Gets the preferred colormap for rendering image data on @screen.
+ * Not a very useful function; historically, GDK could only render RGB
+ * image data to one colormap and visual, but in the current version
+ * it can render to any colormap and visual. So there's no need to
+ * call this function.
+ * 
+ * Return value: the preferred colormap
+ **/
+GdkColormap *
+gdk_screen_get_rgb_colormap (GdkScreen *screen)
+{
+  GdkColormap *cmap;
+  g_return_val_if_fail (GDK_IS_SCREEN (screen), NULL);
+  cmap = g_object_get_data (G_OBJECT (screen), "rgb-colormap"); 
+  if (!cmap)
+    {
+      GdkRgbInfo *image_info = gdk_rgb_create_info (gdk_rgb_choose_visual (screen), NULL);
+      cmap = image_info->cmap;
+      g_object_set_data (G_OBJECT (screen), "rgb-colormap", cmap);
+    }
+
+  return cmap;
+}
+
+/**
+ * gdk_screen_get_rgb_visual:
+ * @screen : a #GdkScreen
+ * 
+ * Gets a "preferred visual" chosen by GdkRGB for rendering image data
+ * on @screen. In previous versions of
+ * GDK, this was the only visual GdkRGB could use for rendering. In
+ * current versions, it's simply the visual GdkRGB would have chosen as 
+ * the optimal one in those previous versions. GdkRGB can now render to 
+ * drawables with any visual.
+ * 
+ * Return value: The #GdkVisual chosen by GdkRGB.
+ **/
+GdkVisual *
+gdk_screen_get_rgb_visual (GdkScreen *screen)
+{
+  g_return_val_if_fail (GDK_IS_SCREEN (screen), NULL);
+  return gdk_colormap_get_visual (gdk_screen_get_rgb_colormap (screen));
+}
+
+/**
+ * gdk_rgb_get_visual:
+ * 
+ * Gets a "preferred visual" chosen by GdkRGB for rendering image data
+ * on the default screen. In previous versions of GDK, this was the
+ * only visual GdkRGB could use for rendering. In current versions,
+ * it's simply the visual GdkRGB would have chosen as the optimal one
+ * in those previous versions. GdkRGB can now render to drawables with
+ * any visual.
+ * 
+ * Return value: The #GdkVisual chosen by GdkRGB.
+ **/
 GdkVisual *
 gdk_rgb_get_visual (void)
 {
-  return gdk_colormap_get_visual (gdk_rgb_get_colormap ());
+  return gdk_screen_get_rgb_visual (gdk_get_default_screen ());
 }

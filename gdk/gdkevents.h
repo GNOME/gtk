@@ -472,16 +472,14 @@ void	  gdk_event_handler_set 	(GdkEventFunc    func,
 void	  gdk_set_show_events		(gboolean	 show_events);
 gboolean  gdk_get_show_events		(void);
 
-/*
- * The following function adds a global filter for all client
- * messages of type message_type
- */
+#ifndef GDK_MULTIHEAD_SAFE
 void gdk_add_client_message_filter (GdkAtom       message_type,
 				    GdkFilterFunc func,
 				    gpointer      data);
 
 gboolean gdk_setting_get (const gchar *name,
 			  GValue      *value); 
+#endif /* GDK_MULTIHEAD_SAFE */
 
 #ifdef __cplusplus
 }
