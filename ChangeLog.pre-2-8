@@ -1,5 +1,9 @@
 2000-11-15  Havoc Pennington  <hp@redhat.com>
 
+	* gtk/testtext.c: Implement essential color cycling feature
+
+2000-11-15  Havoc Pennington  <hp@redhat.com>
+
 	* gtk/gtktextview.c (changed_handler): Invalidate the side windows
 	when we invalidate the main window.
 

@@ -24,6 +24,9 @@ struct _Buffer
   GtkTextTag *not_editable_tag;
   GtkTextTag *found_text_tag;
   GtkTextTag *custom_tabs_tag;
+  GSList *color_tags;
+  guint color_cycle_timeout;
+  gdouble start_hue;
 };
 
 struct _View
@@ -51,6 +54,9 @@ static void     buffer_search_forward (Buffer *buffer,
 static void     buffer_search_backward (Buffer *buffer,
                                        const char *str,
                                        View *view);
+static void     buffer_set_colors      (Buffer  *buffer,
+                                        gboolean enabled);
+static void     buffer_cycle_colors    (Buffer  *buffer);
 
 static View *view_from_widget (GtkWidget *widget);
 
@@ -906,6 +912,16 @@ do_cursor_visible_changed (gpointer callback_data,
 }
 
 static void
+do_color_cycle_changed (gpointer callback_data,
+                        guint callback_action,
+                        GtkWidget *widget)
+{
+  View *view = view_from_widget (widget);
+
+  buffer_set_colors (view->buffer, callback_action);
+}
+
+static void
 do_apply_editable (gpointer callback_data,
                    guint callback_action,
                    GtkWidget *widget)
@@ -982,6 +998,69 @@ do_apply_tabs (gpointer callback_data,
           gtk_text_buffer_apply_tag (view->buffer->buffer,
                                      view->buffer->custom_tabs_tag,
                                      &start, &end);
+        }
+    }
+}
+
+static void
+do_apply_colors (gpointer callback_data,
+                 guint callback_action,
+                 GtkWidget *widget)
+{
+  View *view = view_from_widget (widget);
+  Buffer *buffer = view->buffer;
+  GtkTextIter start;
+  GtkTextIter end;
+  
+  if (gtk_text_buffer_get_selection_bounds (view->buffer->buffer,
+                                            &start, &end))
+    {
+      if (!callback_action)
+        {
+          GSList *tmp;
+          
+          tmp = buffer->color_tags;
+          while (tmp != NULL)
+            {
+              gtk_text_buffer_remove_tag (view->buffer->buffer,
+                                          tmp->data,
+                                          &start, &end);              
+              tmp = g_slist_next (tmp);
+            }
+        }
+      else
+        {
+          GSList *tmp;
+          
+          tmp = buffer->color_tags;
+          while (TRUE)
+            {
+              GtkTextIter next;
+              gboolean done = FALSE;
+              
+              next = start;
+              gtk_text_iter_next_char (&next);
+              gtk_text_iter_next_char (&next);
+
+              if (gtk_text_iter_compare (&next, &end) > 0)
+                {
+                  next = end;
+                  done = TRUE;
+                }
+              
+              gtk_text_buffer_apply_tag (view->buffer->buffer,
+                                         tmp->data,
+                                         &start, &next);
+
+              start = next;
+
+              if (done)
+                return;
+              
+              tmp = g_slist_next (tmp);
+              if (tmp == NULL)
+                tmp = buffer->color_tags;
+            } 
         }
     }
 }
@@ -1142,6 +1221,9 @@ static GtkItemFactoryEntry menu_items[] =
   { "/Settings/sep1",        NULL,      0,                0, "<Separator>" },
   { "/Settings/Sane spacing", NULL,    do_spacing_changed,  FALSE, "<RadioItem>" },
   { "/Settings/Funky spacing", NULL,    do_spacing_changed,  TRUE, "/Settings/Sane spacing" },
+  { "/Settings/sep1",        NULL,      0,                0, "<Separator>" },
+  { "/Settings/Don't cycle color tags", NULL,    do_color_cycle_changed,  FALSE, "<RadioItem>" },
+  { "/Settings/Cycle colors", NULL,    do_color_cycle_changed,  TRUE, "/Settings/Don't cycle color tags" },
   { "/_Attributes",   	  NULL,         0,                0, "<Branch>" },
   { "/Attributes/Editable",   	  NULL,         do_apply_editable, TRUE, NULL },
   { "/Attributes/Not editable",   	  NULL,         do_apply_editable, FALSE, NULL },
@@ -1149,6 +1231,8 @@ static GtkItemFactoryEntry menu_items[] =
   { "/Attributes/Visible",   	  NULL,         do_apply_invisible, TRUE, NULL },
   { "/Attributes/Custom tabs",   	  NULL,         do_apply_tabs, FALSE, NULL },
   { "/Attributes/Default tabs",   	  NULL,         do_apply_tabs, TRUE, NULL },
+  { "/Attributes/Color cycles",   	  NULL,         do_apply_colors, TRUE, NULL },
+  { "/Attributes/No colors",   	          NULL,         do_apply_colors, FALSE, NULL },
   { "/_Test",   	 NULL,         0,           0, "<Branch>" },
   { "/Test/_Example",  	 NULL,         do_example,  0, NULL },
 };
@@ -1298,11 +1382,14 @@ check_buffer_saved (Buffer *buffer)
     return TRUE;
 }
 
+#define N_COLORS 16
+
 static Buffer *
 create_buffer (void)
 {
   Buffer *buffer;
   PangoTabArray *tabs;
+  gint i;
   
   buffer = g_new (Buffer, 1);
 
@@ -1312,6 +1399,22 @@ create_buffer (void)
   buffer->filename = NULL;
   buffer->untitled_serial = -1;
 
+  buffer->color_tags = NULL;
+  buffer->color_cycle_timeout = 0;
+  buffer->start_hue = 0.0;
+  
+  i = 0;
+  while (i < N_COLORS)
+    {
+      GtkTextTag *tag;
+
+      tag = gtk_text_buffer_create_tag (buffer->buffer, NULL);
+      
+      buffer->color_tags = g_slist_prepend (buffer->color_tags, tag);
+      
+      ++i;
+    }
+  
   buffer->invisible_tag = gtk_text_buffer_create_tag (buffer->buffer, NULL);
   gtk_object_set (GTK_OBJECT (buffer->invisible_tag),
                   "invisible", TRUE,
@@ -1480,11 +1583,182 @@ buffer_unref (Buffer *buffer)
   buffer->refcount--;
   if (buffer->refcount == 0)
     {
+      buffer_set_colors (buffer, FALSE);
       buffers = g_slist_remove (buffers, buffer);
       gtk_object_unref (GTK_OBJECT (buffer->buffer));
       g_free (buffer->filename);
       g_free (buffer);
     }
+}
+
+static void
+hsv_to_rgb (gdouble *h,
+	    gdouble *s,
+	    gdouble *v)
+{
+  gdouble hue, saturation, value;
+  gdouble f, p, q, t;
+
+  if (*s == 0.0)
+    {
+      *h = *v;
+      *s = *v;
+      *v = *v; /* heh */
+    }
+  else
+    {
+      hue = *h * 6.0;
+      saturation = *s;
+      value = *v;
+      
+      if (hue >= 6.0)
+	hue = 0.0;
+      
+      f = hue - (int) hue;
+      p = value * (1.0 - saturation);
+      q = value * (1.0 - saturation * f);
+      t = value * (1.0 - saturation * (1.0 - f));
+      
+      switch ((int) hue)
+	{
+	case 0:
+	  *h = value;
+	  *s = t;
+	  *v = p;
+	  break;
+	  
+	case 1:
+	  *h = q;
+	  *s = value;
+	  *v = p;
+	  break;
+	  
+	case 2:
+	  *h = p;
+	  *s = value;
+	  *v = t;
+	  break;
+	  
+	case 3:
+	  *h = p;
+	  *s = q;
+	  *v = value;
+	  break;
+	  
+	case 4:
+	  *h = t;
+	  *s = p;
+	  *v = value;
+	  break;
+	  
+	case 5:
+	  *h = value;
+	  *s = p;
+	  *v = q;
+	  break;
+	  
+	default:
+	  g_assert_not_reached ();
+	}
+    }
+}
+
+static void
+hue_to_color (gdouble   hue,
+              GdkColor *color)
+{
+  gdouble h, s, v;
+
+  h = hue;
+  s = 1.0;
+  v = 1.0;
+
+  g_return_if_fail (hue <= 1.0);
+  
+  hsv_to_rgb (&h, &s, &v);
+
+  color->red = h * 65535;
+  color->green = s * 65535;
+  color->blue = v * 65535;
+}
+
+
+static gint
+color_cycle_timeout (gpointer data)
+{
+  Buffer *buffer = data;
+
+  buffer_cycle_colors (buffer);
+
+  return TRUE;
+}
+
+static void
+buffer_set_colors (Buffer  *buffer,
+                   gboolean enabled)
+{
+  GSList *tmp;
+  gdouble hue = 0.0;
+
+  if (enabled && buffer->color_cycle_timeout == 0)
+    buffer->color_cycle_timeout = gtk_timeout_add (500, color_cycle_timeout, buffer);
+  else if (!enabled && buffer->color_cycle_timeout != 0)
+    {
+      gtk_timeout_remove (buffer->color_cycle_timeout);
+      buffer->color_cycle_timeout = 0;
+    }
+    
+  tmp = buffer->color_tags;
+  while (tmp != NULL)
+    {
+      if (enabled)
+        {
+          GdkColor color;
+          
+          hue_to_color (hue, &color);
+
+          gtk_object_set (GTK_OBJECT (tmp->data),
+                          "foreground_gdk", &color,
+                          NULL);
+        }
+      else
+        gtk_object_set (GTK_OBJECT (tmp->data),
+                        "foreground_set", FALSE,
+                        NULL);
+
+      hue += 1.0 / N_COLORS;
+      
+      tmp = g_slist_next (tmp);
+    }
+}
+
+static void
+buffer_cycle_colors (Buffer *buffer)
+{
+  GSList *tmp;
+  gdouble hue = buffer->start_hue;
+  
+  tmp = buffer->color_tags;
+  while (tmp != NULL)
+    {
+      GdkColor color;
+      
+      hue_to_color (hue, &color);
+      
+      gtk_object_set (GTK_OBJECT (tmp->data),
+                      "foreground_gdk", &color,
+                      NULL);
+
+      hue += 1.0 / N_COLORS;
+      if (hue > 1.0)
+        hue = 0.0;
+      
+      tmp = g_slist_next (tmp);
+    }
+
+  buffer->start_hue += 1.0 / N_COLORS;
+  if (buffer->start_hue > 1.0)
+    buffer->start_hue = 0.0;
 }
 
 static void
