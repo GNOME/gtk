@@ -1884,9 +1884,12 @@ gtk_selection_default_handler (GtkWidget	*widget,
       data->type = GDK_SELECTION_TYPE_ATOM;
       data->format = 32;
       data->length = count * sizeof (GdkAtom);
-      
-      p = g_new (GdkAtom, count);
+
+      /* selection data is always terminated by a trailing \0
+       */
+      p = g_malloc (data->length + 1);
       data->data = (guchar *)p;
+      data->data[data->length] = '\0';
       
       *p++ = gtk_selection_atoms[TIMESTAMP];
       *p++ = gtk_selection_atoms[TARGETS];

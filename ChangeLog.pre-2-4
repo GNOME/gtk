@@ -1,14 +1,20 @@
+Thu Jan 29 11:00:18 2004  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkselection.c (gtk_selection_default_handler): 
+	nul-terminate the target atoms. (#132656, Christian Persch)
+
 Thu Jan 29 00:59:03 2004  Matthias Clasen  <maclas@gmx.de>
 
-	* gtk/gtktreemodelfilter.c (gtk_tree_model_filter_rows_reordered): Don't leak
-	path if we bail out early.  (#132505, Christian Persch)
+	* gtk/gtktreemodelfilter.c (gtk_tree_model_filter_rows_reordered):
+	Don't leak path if we bail out early.  (#132505, Christian Persch)
 
 Thu Jan 29 00:48:47 2004  Matthias Clasen  <maclas@gmx.de>
 
-	* gtk/gtkactiongroup.c (gtk_action_group_add_toggle_actions_full): 
-	* gtk/gtkactiongroup.c (gtk_action_group_add_actions_full): Do reference
-	counting on the user_data that is shared between multiple signal handlers,
-	to avoid calling the destroy notify multiple times.  (#132447, Adam Hooper)
+	* gtk/gtkactiongroup.c (gtk_action_group_add_toggle_actions_full):
+	* gtk/gtkactiongroup.c (gtk_action_group_add_actions_full): Do
+	reference counting on the user_data that is shared between
+	multiple signal handlers, to avoid calling the destroy notify
+	multiple times.  (#132447, Adam Hooper)
 
 2004-01-28  Hans Breuer  <hans@breuer.org>
 
