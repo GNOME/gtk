@@ -537,7 +537,7 @@ Incompatible Changes from GTK+-1.2 to GTK+-2.0:
   GtkFixed is a little special; it is now created by default as
   a NO_WINDOW widget, but if you do 
 
-    GTK_WIDGET_UNSET_FLAGS (fixed, GTK_WIDGET_NO_WINDOW)
+    gtk_fixed_set_has_window (fixed, TRUE);
 
   after creating a fixed widget, it will create a window and
   handle it properly.

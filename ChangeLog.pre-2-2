@@ -1,3 +1,26 @@
+Mon Nov 19 17:11:23 2001  Owen Taylor  <otaylor@redhat.com>
+
+	(Fixes related to #64428, Michael Meeks)
+
+	* gtk/gtkplug.c (gtk_plug_set_is_child): Unmap the
+	widget, so it gets mapped again properly when we
+	add to a parent.
+
+	* gtk/gtkplug.c (_gtk_plug_add_to_socket): Set
+	plug->socket_window. 
+
+	* gtk/gtkplug.c (_gtk_plug_remove_from_socket): Set
+	socket_window to NULL, not FALSE.
+
+	* gtk/gtkplug.c (_gtk_plug_add_to_socket): Set
+	socket->same_app to TRUE. (#64612)
+
+Mon Nov 19 15:50:41 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkfixed.[ch] docs/Changes-2.0.txt: Add 
+	gtk_fixed_set/get_has_window() to remove criticism
+	about GTK_WIDGET_SET_FLAGS() hacks.
+
 2001-11-19  Michael Natterer  <mitch@gimp.org>
 
 	* gtk/gtknotebook.c: show notebook->event_window with
