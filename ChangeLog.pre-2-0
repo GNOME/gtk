@@ -1,3 +1,12 @@
+1998-10-01  Martin Baulig  <martin@home-of-linux.org>
+
+	* gtk/gtkclist.h (GtkCListColumn): Added `visible'.
+	
+	* gtk/gtkclist.c (gtk_clist_set_column_visibility): New function.
+	Makes it possible to individually show and hide columns.
+	(size_allocate_columns): Adapted to keep track of hidden columns.
+	(size_allocate_title_buttons): Likewise.
+
 Sat Oct  3 17:54:48 1998  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkargcollector.c (GTK_ARG_COLLECT_VALUE): for unknown foreign

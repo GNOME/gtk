@@ -261,6 +261,7 @@ struct _GtkCListColumn
   gint width;
   GtkJustification justification;
   
+  gint visible : 1;  
   gint width_set : 1;
 };
 
@@ -400,6 +401,11 @@ void gtk_clist_column_title_passive  (GtkCList *clist,
 				      gint      column);
 void gtk_clist_column_titles_active  (GtkCList *clist);
 void gtk_clist_column_titles_passive (GtkCList *clist);
+
+/* set visibility of a column */
+void gtk_clist_set_column_visibility (GtkCList *clist,
+				      gint      column,
+				      gint      visible);
 
 /* set the title in the column title button */
 void gtk_clist_set_column_title (GtkCList    *clist,

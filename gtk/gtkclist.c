@@ -1010,6 +1010,23 @@ gtk_clist_column_titles_hide (GtkCList * clist)
 }
 
 void
+gtk_clist_set_column_visibility (GtkCList * clist, gint column, gint visible)
+{
+  g_return_if_fail (clist != NULL);
+  g_return_if_fail (GTK_IS_CLIST (clist));
+
+  if (column < 0 || column >= clist->columns)
+    return;
+
+  if (clist->column[column].visible && !visible)
+    gtk_widget_hide (clist->column[column].button);
+  else if (!clist->column[column].visible && visible)
+    gtk_widget_show (clist->column[column].button);
+
+  clist->column[column].visible = visible ? TRUE : FALSE;
+}
+
+void
 gtk_clist_column_title_active (GtkCList * clist,
 			       gint column)
 {
@@ -2653,6 +2670,8 @@ gtk_clist_draw (GtkWidget * widget,
 
       for (i = 0; i < clist->columns; i++)
 	{
+	  if (!clist->column[i].visible)
+	    continue;
 	  if (gtk_widget_intersect (clist->column[i].button, area, &child_area))
 	    gtk_widget_draw (clist->column[i].button, &child_area);
 	}
@@ -3913,6 +3932,7 @@ size_allocate_title_buttons (GtkCList * clist)
 {
   gint i, last_button = 0;
   GtkAllocation button_allocation;
+  gint visible_columns = clist->columns;
 
   if (!GTK_WIDGET_REALIZED (clist))
     return;
@@ -3922,16 +3942,22 @@ size_allocate_title_buttons (GtkCList * clist)
   button_allocation.width = 0;
   button_allocation.height = clist->column_title_area.height;
 
-  for (i = 0; i < clist->columns; i++)
+  for (i = clist->columns-1; i > 0; i--)
+    if (!clist->column[i].visible)
+      visible_columns = i;
+    else
+      break;
+
+  for (i = 0; i < visible_columns; i++)
     {
       button_allocation.width += clist->column[i].area.width;
 
-      if (i == clist->columns - 1)
+      if (i == visible_columns - 1)
 	button_allocation.width += 2 * (CELL_SPACING + COLUMN_INSET);
-      else
+      else if (clist->column[i].visible)
 	button_allocation.width += CELL_SPACING + (2 * COLUMN_INSET);
 
-      if (i == (clist->columns - 1) || clist->column[i + 1].button)
+      if (i == (visible_columns - 1) || clist->column[i + 1].button)
 	{
 	  gtk_widget_size_allocate (clist->column[last_button].button, &button_allocation);
 	  button_allocation.x += button_allocation.width;
@@ -3955,12 +3981,19 @@ static void
 size_allocate_columns (GtkCList * clist)
 {
   gint i, xoffset = 0;
+  gint visible_columns = clist->columns;
 
-  for (i = 0; i < clist->columns; i++)
+  for (i = visible_columns-1; i > 0; i--)
+    if (!clist->column[i].visible)
+      visible_columns = i;
+    else
+      break;
+
+  for (i = 0; i < visible_columns; i++)
     {
       clist->column[i].area.x = xoffset + CELL_SPACING + COLUMN_INSET;
 
-      if (i == clist->columns - 1)
+      if (i == visible_columns - 1)
 	{
 	  gint width;
 
@@ -3987,8 +4020,13 @@ size_allocate_columns (GtkCList * clist)
 	  clist->column[i].area.width = clist->column[i].width;
 	}
 
-      xoffset += clist->column[i].area.width + CELL_SPACING + (2 * COLUMN_INSET);
+      if (clist->column[i].visible)
+	xoffset += clist->column[i].area.width +
+	  CELL_SPACING + (2 * COLUMN_INSET);
     }
+
+  for (i = visible_columns; i < clist->columns; i++)
+    clist->column[i].area.width = 0;
 }
 
 /*
@@ -4749,6 +4787,7 @@ columns_new (GtkCList * clist)
       column[i].button = NULL;
       column[i].window = NULL;
       column[i].width = 0;
+      column[i].visible = 1;
       column[i].width_set = FALSE;
       column[i].justification = GTK_JUSTIFY_LEFT;
     }
