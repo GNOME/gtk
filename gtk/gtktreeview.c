@@ -10340,48 +10340,6 @@ gtk_tree_view_expand_all_emission_helper (GtkRBTree *tree,
                           gtk_tree_view_expand_all_emission_helper,
                           tree_view);
 }
-
-static void
-gtk_tree_view_expand_all_helper (GtkRBTree  *tree,
-				 GtkRBNode  *node,
-				 gpointer  data)
-{
-  GtkTreeView *tree_view = data;
-
-  if (node->children)
-    _gtk_rbtree_traverse (node->children,
-			  node->children->root,
-			  G_PRE_ORDER,
-			  gtk_tree_view_expand_all_helper,
-			  data);
-  else if ((node->flags & GTK_RBNODE_IS_PARENT) == GTK_RBNODE_IS_PARENT && node->children == NULL)
-    {
-      GtkTreePath *path;
-      GtkTreeIter iter;
-      GtkTreeIter child;
-
-      node->children = _gtk_rbtree_new ();
-      node->children->parent_tree = tree;
-      node->children->parent_node = node;
-      path = _gtk_tree_view_find_path (tree_view, tree, node);
-      gtk_tree_model_get_iter (tree_view->priv->model, &iter, path);
-      gtk_tree_model_iter_children (tree_view->priv->model, &child, &iter);
-      gtk_tree_view_build_tree (tree_view,
-				node->children,
-				&child,
-				gtk_tree_path_get_depth (path) + 1,
-				TRUE);
-
-      g_signal_emit (tree_view, tree_view_signals[ROW_EXPANDED], 0, &iter, path);
-      _gtk_rbtree_traverse (node->children,
-                            node->children->root,
-                            G_PRE_ORDER,
-                            gtk_tree_view_expand_all_emission_helper,
-                            tree_view);
-      gtk_tree_path_free (path);
-    }
-}
-
 /**
  * gtk_tree_view_expand_all:
  * @tree_view: A #GtkTreeView.
@@ -10391,16 +10349,26 @@ gtk_tree_view_expand_all_helper (GtkRBTree  *tree,
 void
 gtk_tree_view_expand_all (GtkTreeView *tree_view)
 {
+  GtkTreePath *path;
+  GtkRBTree *tree;
+  GtkRBNode *node;
+
   g_return_if_fail (GTK_IS_TREE_VIEW (tree_view));
 
   if (tree_view->priv->tree == NULL)
     return;
 
-  _gtk_rbtree_traverse (tree_view->priv->tree,
-			tree_view->priv->tree->root,
-			G_PRE_ORDER,
-			gtk_tree_view_expand_all_helper,
-			tree_view);
+  path = gtk_tree_path_new_first ();
+  _gtk_tree_view_find_node (tree_view, path, &tree, &node);
+
+  while (node)
+    {
+      gtk_tree_view_real_expand_row (tree_view, path, tree, node, TRUE, FALSE);
+      node = _gtk_rbtree_next (tree, node);
+      gtk_tree_path_next (path);
+  }
+
+  gtk_tree_path_free (path);
 }
 
 /* Timeout to animate the expander during expands and collapses */

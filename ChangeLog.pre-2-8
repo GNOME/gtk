@@ -1,3 +1,8 @@
+Mon Apr  4 19:13:23 2005  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtktreeview.c (gtk_tree_view_expand_all): change to use
+	gtk_tree_view_real_expand_row() instead of doing this by hand.
+
 Mon Apr  4 14:33:55 2005  Manish Singh  <yosh@gimp.org>
 
         * gtk/gtkcomboboxentry.c (gtk_combo_box_entry_get_active_text):
