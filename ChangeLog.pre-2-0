@@ -1,3 +1,7 @@
+Mon Aug 10 12:49:54 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkhbbox.h: fixed an #include statement (reported by Eric Kidd).
+
 Thu Aug  6 22:37:21 1998  Stefan Jeske  <stefan@gtk.org>
 
 	* gtk/gtkclist.c: Renamed my_merge and my_mergesort to
