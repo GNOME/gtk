@@ -683,7 +683,7 @@ gdk_window_foreign_new_for_display (GdkDisplay      *display,
   RECT rect;
   POINT point;
 
-  g_return_val_if_fail (display == gdk_get_default_display (), NULL);
+  g_return_val_if_fail (display == gdk_display_get_default (), NULL);
 
   window = g_object_new (GDK_TYPE_WINDOW, NULL);
   private = (GdkWindowObject *)window;
@@ -2618,7 +2618,7 @@ gdk_window_begin_move_drag (GdkWindow *window,
 GdkWindow *
 gdk_window_lookup_for_display (GdkDisplay *display, GdkNativeWindow anid)
 {
-  g_return_val_if_fail (display == gdk_get_default_display(), NULL);
+  g_return_val_if_fail (display == gdk_display_get_default(), NULL);
 
   return gdk_window_lookup (anid);
 }

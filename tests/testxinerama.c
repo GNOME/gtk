@@ -38,7 +38,7 @@ main (int argc, char *argv[])
 
   gtk_init (&argc, &argv);
 
-  screen = gdk_get_default_screen ();
+  screen = gdk_screen_get_default ();
 
   num_monitors = gdk_screen_get_n_monitors (screen);
   if (num_monitors == 1)

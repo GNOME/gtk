@@ -192,11 +192,11 @@ gdk_char_height (GdkFont *font,
 GdkFont*
 gdk_font_from_description (PangoFontDescription *font_desc)
 {
-  return gdk_font_from_description_for_display (gdk_get_default_display (),font_desc);
+  return gdk_font_from_description_for_display (gdk_display_get_default (),font_desc);
 }
 
 GdkFont*
 gdk_font_load (const gchar *font_name)
 {  
-   return gdk_font_load_for_display (gdk_get_default_display(), font_name);
+   return gdk_font_load_for_display (gdk_display_get_default(), font_name);
 }

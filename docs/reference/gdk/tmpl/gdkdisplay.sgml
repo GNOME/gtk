@@ -35,12 +35,20 @@ of an X display. All its fields are private and should not be accessed directly.
 </para>
 
 
-<!-- ##### FUNCTION gdk_open_display ##### -->
+<!-- ##### FUNCTION gdk_display_open ##### -->
 <para>
 
 </para>
 
 @display_name: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_display_get_default ##### -->
+<para>
+
+</para>
+
 @Returns: 
 
 
@@ -195,21 +203,5 @@ of an X display. All its fields are private and should not be accessed directly.
 
 @display: 
 @sm_client_id: 
-
-
-<!-- ##### FUNCTION gdk_set_default_display ##### -->
-<para>
-
-</para>
-
-@display: 
-
-
-<!-- ##### FUNCTION gdk_get_default_display ##### -->
-<para>
-
-</para>
-
-@Returns: 
 
 

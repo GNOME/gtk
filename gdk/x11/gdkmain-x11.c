@@ -120,7 +120,7 @@ gdk_set_use_xshm (gboolean use_xshm)
 gboolean
 gdk_get_use_xshm (void)
 {
-  return GDK_DISPLAY_X11 (gdk_get_default_display ())->use_xshm;
+  return GDK_DISPLAY_X11 (gdk_display_get_default ())->use_xshm;
 }
 
 static GdkGrabStatus
@@ -465,7 +465,7 @@ _gdk_xgrab_check_destroy (GdkWindow *window)
 void
 gdk_set_sm_client_id (const gchar* sm_client_id)
 {
-  gdk_display_set_sm_client_id (gdk_get_default_display (),sm_client_id);
+  gdk_display_set_sm_client_id (gdk_display_get_default (),sm_client_id);
 }
 
 /**
@@ -710,7 +710,7 @@ gdk_error_trap_pop (void)
 gchar *
 gdk_get_display (void)
 {
-  return g_strdup (gdk_display_get_name (gdk_get_default_display ()));
+  return g_strdup (gdk_display_get_name (gdk_display_get_default ()));
 }
 
 /**
@@ -771,13 +771,13 @@ _gdk_region_get_xrectangles (GdkRegion   *region,
 void
 gdk_x11_grab_server ()
 {
-  gdk_x11_display_grab (gdk_get_default_display ());
+  gdk_x11_display_grab (gdk_display_get_default ());
 }
 
 void
 gdk_x11_ungrab_server ()
 {
-  gdk_x11_display_ungrab (gdk_get_default_display ());
+  gdk_x11_display_ungrab (gdk_display_get_default ());
 }
 
 /**
@@ -792,17 +792,17 @@ gdk_x11_ungrab_server ()
 gint
 gdk_x11_get_default_screen (void)
 {
-  return gdk_screen_get_number (gdk_get_default_screen ());
+  return gdk_screen_get_number (gdk_screen_get_default ());
 }
 
 Window
 gdk_x11_get_default_root_xwindow (void)
 {
-  return GDK_SCREEN_XROOTWIN (gdk_get_default_screen ());
+  return GDK_SCREEN_XROOTWIN (gdk_screen_get_default ());
 }
 
 Display *
 gdk_x11_get_default_xdisplay (void)
 {
-  return GDK_DISPLAY_XDISPLAY (gdk_get_default_display ());
+  return GDK_DISPLAY_XDISPLAY (gdk_display_get_default ());
 }

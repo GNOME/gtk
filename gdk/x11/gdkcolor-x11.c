@@ -413,8 +413,8 @@ gdk_screen_get_system_colormap (GdkScreen *screen)
 gint
 gdk_colormap_get_system_size (void)
 {
-  return DisplayCells (GDK_SCREEN_XDISPLAY (gdk_get_default_screen()),
-		       GDK_SCREEN_X11 (gdk_get_default_screen())->screen_num);
+  return DisplayCells (GDK_SCREEN_XDISPLAY (gdk_screen_get_default()),
+		       GDK_SCREEN_X11 (gdk_screen_get_default())->screen_num);
 }
 
 void

@@ -86,7 +86,7 @@ gint          gdk_screen_get_monitor_at_window (GdkScreen *screen,
 void          gdk_screen_broadcast_client_message  (GdkScreen       *screen,
 						    GdkEvent        *event);
 
-GdkScreen *gdk_get_default_screen (void);
+GdkScreen *gdk_screen_get_default (void);
 
 gboolean   gdk_screen_get_setting (GdkScreen   *screen,
 				   const gchar *name,

@@ -5654,7 +5654,7 @@ gtk_style_get_font (GtkStyle *style)
 	}
       else
 	{
-	  display = gdk_get_default_display ();
+	  display = gdk_display_get_default ();
 	  GTK_NOTE (MULTIHEAD,
 		    g_warning ("gtk_style_get_font() should not be called on an unattached style"));
 	}

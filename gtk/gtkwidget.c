@@ -4659,7 +4659,7 @@ gtk_widget_get_screen (GtkWidget *widget)
 		 g_type_name (G_OBJECT_TYPE(G_OBJECT (widget))),
 		 g_type_name (G_OBJECT_TYPE(G_OBJECT (toplevel))));
 #endif
-      return gdk_get_default_screen ();
+      return gdk_screen_get_default ();
     }
 }
 
@@ -5593,7 +5593,7 @@ gtk_widget_set_default_colormap (GdkColormap *colormap)
 GdkColormap*
 gtk_widget_get_default_colormap (void)
 {
-  return gdk_screen_get_default_colormap (gdk_get_default_screen ());
+  return gdk_screen_get_default_colormap (gdk_screen_get_default ());
 }
 
 /**

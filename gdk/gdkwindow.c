@@ -751,7 +751,7 @@ gdk_screen_get_toplevel_windows (GdkScreen *screen)
 GList *
 gdk_window_get_toplevels (void)
 {
-  return gdk_screen_get_toplevel_windows (gdk_get_default_screen ());
+  return gdk_screen_get_toplevel_windows (gdk_screen_get_default ());
 }
 
 /**
@@ -2769,7 +2769,7 @@ GdkWindow*
 gdk_window_at_pointer (gint *win_x,
 		       gint *win_y)
 {
-  return gdk_screen_get_window_at_pointer (gdk_get_default_screen (), win_x, win_y);
+  return gdk_screen_get_window_at_pointer (gdk_screen_get_default (), win_x, win_y);
 }
 
 /**
@@ -2783,7 +2783,7 @@ gdk_window_at_pointer (gint *win_x,
 GdkWindow *
 gdk_get_default_root_window (void)
 {
-  return gdk_screen_get_root_window (gdk_get_default_screen ());
+  return gdk_screen_get_root_window (gdk_screen_get_default ());
 }
 
 /**
@@ -2802,6 +2802,6 @@ gdk_get_default_root_window (void)
 GdkWindow *
 gdk_window_foreign_new (GdkNativeWindow anid)
 {
-  return gdk_window_foreign_new_for_display (gdk_get_default_display (), anid);
+  return gdk_window_foreign_new_for_display (gdk_display_get_default (), anid);
 }
 

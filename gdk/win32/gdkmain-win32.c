@@ -188,7 +188,7 @@ gdk_set_sm_client_id (const gchar* sm_client_id)
 void
 gdk_display_beep (GdkDisplay *display)
 {
-  g_return_if_fail (display == gdk_get_default_display());
+  g_return_if_fail (display == gdk_display_get_default());
   Beep(1000, 50);
 }
 

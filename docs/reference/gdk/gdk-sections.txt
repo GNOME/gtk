@@ -116,7 +116,8 @@ gdk_wm_function_get_type
 <FILE>gdkdisplay</FILE>
 <TITLE>GdkDisplay</TITLE>
 GdkDisplay
-gdk_open_display
+gdk_display_open
+gdk_display_get_default
 gdk_display_get_name
 gdk_display_get_n_screens
 gdk_display_get_screen
@@ -134,8 +135,6 @@ gdk_display_put_event
 gdk_display_add_client_message_filter
 gdk_display_set_double_click_time
 gdk_display_set_sm_client_id
-gdk_set_default_display
-gdk_get_default_display
 <SUBSECTION Standard>
 GDK_DISPLAY_OBJECT
 GDK_IS_DISPLAY
@@ -150,6 +149,7 @@ GDK_DISPLAY_GET_CLASS
 <FILE>gdkscreen</FILE>
 <TITLE>GdkScreen</TITLE>
 GdkScreen
+gdk_screen_get_default
 gdk_screen_get_default_colormap
 gdk_screen_set_default_colormap
 gdk_screen_get_system_colormap
@@ -172,7 +172,6 @@ gdk_screen_get_monitor_geometry
 gdk_screen_get_monitor_at_point
 gdk_screen_get_monitor_at_window
 gdk_screen_broadcast_client_message
-gdk_get_default_screen
 gdk_screen_get_setting
 <SUBSECTION Standard>
 GDK_SCREEN

@@ -840,7 +840,7 @@ palette_change_color (GtkWidget         *drawing_area,
 			     GTK_CUSTOM_PALETTE_WIDTH * GTK_CUSTOM_PALETTE_HEIGHT);
   else if (noscreen_change_palette_hook != default_noscreen_change_palette_func)
     {
-      if (screen != gdk_get_default_screen ())
+      if (screen != gdk_screen_get_default ())
 	g_warning ("gtk_color_selection_set_change_palette_hook used by widget is not on the default screen.");
       (* noscreen_change_palette_hook) (current_colors, 
 					GTK_CUSTOM_PALETTE_WIDTH * GTK_CUSTOM_PALETTE_HEIGHT);
@@ -1683,7 +1683,7 @@ static void
 default_noscreen_change_palette_func (const GdkColor *colors,
 				      gint            n_colors)
 {
-  default_change_palette_func (gdk_get_default_screen (), colors, n_colors);
+  default_change_palette_func (gdk_screen_get_default (), colors, n_colors);
 }
 
 static void

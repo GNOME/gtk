@@ -25,7 +25,7 @@
 PangoContext *
 gdk_pango_context_get_for_screen (GdkScreen *screen)
 {
-  g_return_val_if_fail (screen == gdk_get_default_screen (), NULL);
+  g_return_val_if_fail (screen == gdk_screen_get_default (), NULL);
 
   return pango_win32_get_context ();
 }

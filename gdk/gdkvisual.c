@@ -40,7 +40,7 @@
 GList*
 gdk_list_visuals (void)
 {
-  return gdk_screen_list_visuals (gdk_get_default_screen ());
+  return gdk_screen_list_visuals (gdk_screen_get_default ());
 }
 
 /**
@@ -55,5 +55,5 @@ gdk_list_visuals (void)
 GdkVisual*
 gdk_visual_get_system (void)
 {
-  return gdk_screen_get_system_visual (gdk_get_default_screen());
+  return gdk_screen_get_system_visual (gdk_screen_get_default());
 }

@@ -8,7 +8,7 @@ gdk_selection_owner_set (GdkWindow *owner,
 			 guint32    time,
 			 gboolean   send_event)
 {
-  return gdk_selection_owner_set_for_display (gdk_get_default_display (),
+  return gdk_selection_owner_set_for_display (gdk_display_get_default (),
 					      owner, selection, 
 					      time, send_event);
 }
@@ -16,7 +16,7 @@ gdk_selection_owner_set (GdkWindow *owner,
 GdkWindow*
 gdk_selection_owner_get (GdkAtom selection)
 {
-  return gdk_selection_owner_get_for_display (gdk_get_default_display (), 
+  return gdk_selection_owner_get_for_display (gdk_display_get_default (), 
 					      selection);
 }
 
@@ -27,7 +27,7 @@ gdk_selection_send_notify (guint32  requestor,
 			   GdkAtom  property,
 			   guint32  time)
 {
-  gdk_selection_send_notify_for_display (gdk_get_default_display (), 
+  gdk_selection_send_notify_for_display (gdk_display_get_default (), 
 					 requestor, selection, 
 					 target, property, time);
 }
@@ -54,7 +54,7 @@ gdk_text_property_to_utf8_list (GdkAtom        encoding,
 				gint           length,
 				gchar       ***list)
 {
-  return gdk_text_property_to_utf8_list_for_display (gdk_get_default_display (),
+  return gdk_text_property_to_utf8_list_for_display (gdk_display_get_default (),
 						     encoding, format, text, length, list);
 }
 
@@ -79,7 +79,7 @@ gdk_utf8_to_compound_text (const gchar *str,
 			   guchar     **ctext,
 			   gint        *length)
 {
-  return gdk_utf8_to_compound_text_for_display (gdk_get_default_display (),
+  return gdk_utf8_to_compound_text_for_display (gdk_display_get_default (),
 						str, encoding, format, 
 						ctext, length);
 }

@@ -26,7 +26,7 @@ static GdkColormap *default_colormap = NULL;
 GdkDisplay *
 gdk_screen_get_display (GdkScreen *screen)
 {
-  return gdk_get_default_display ();
+  return gdk_display_get_default ();
 }
 
 gint

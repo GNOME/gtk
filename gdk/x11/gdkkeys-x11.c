@@ -380,7 +380,7 @@ gdk_keymap_get_direction (GdkKeymap *keymap)
 {
   if (!keymap)
     {
-      keymap = gdk_keymap_get_for_display (gdk_get_default_display ());
+      keymap = gdk_keymap_get_for_display (gdk_display_get_default ());
       GDK_NOTE (MULTIHEAD,
 		g_message ("_multihead : reverting to default display keymap "
 			   "in gdk_keymap_get_direction"));
@@ -441,7 +441,7 @@ gdk_keymap_get_entries_for_keyval (GdkKeymap     *keymap,
 
   if (!keymap)
     {
-      keymap = gdk_keymap_get_for_display (gdk_get_default_display ());
+      keymap = gdk_keymap_get_for_display (gdk_display_get_default ());
       GDK_NOTE (MULTIHEAD,
 		g_message ("_multihead : reverting to default display keymap "
 			   "in gdk_keymap_get_entries_for_keyval\n"));
@@ -595,7 +595,7 @@ gdk_keymap_get_entries_for_keycode (GdkKeymap     *keymap,
 
   if (!keymap)
     {
-      keymap = gdk_keymap_get_for_display (gdk_get_default_display ());
+      keymap = gdk_keymap_get_for_display (gdk_display_get_default ());
       GDK_NOTE (MULTIHEAD,
 		g_message ("_multihead : reverting to default display keymap "
 			   "in gdk_keymap_get_entries_for_keycode\n"));
@@ -769,7 +769,7 @@ gdk_keymap_lookup_key (GdkKeymap          *keymap,
   
   if (!keymap)
     {
-      keymap = gdk_keymap_get_for_display (gdk_get_default_display ());
+      keymap = gdk_keymap_get_for_display (gdk_display_get_default ());
       GDK_NOTE (MULTIHEAD,
 		g_message ("_multihead : reverting to default display keymap "
 			   "in gdk_keymap_lookup_key\n"));

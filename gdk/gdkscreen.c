@@ -156,7 +156,7 @@ gdk_screen_get_monitor_at_window (GdkScreen      *screen,
 gint
 gdk_screen_width (void)
 {
-  return gdk_screen_get_width (gdk_get_default_screen());
+  return gdk_screen_get_width (gdk_screen_get_default());
 }
 
 /**
@@ -169,7 +169,7 @@ gdk_screen_width (void)
 gint
 gdk_screen_height (void)
 {
-  return gdk_screen_get_height (gdk_get_default_screen());
+  return gdk_screen_get_height (gdk_screen_get_default());
 }
 
 /**
@@ -184,7 +184,7 @@ gdk_screen_height (void)
 gint
 gdk_screen_width_mm (void)
 {
-  return gdk_screen_get_width_mm (gdk_get_default_screen());
+  return gdk_screen_get_width_mm (gdk_screen_get_default());
 }
 
 /**
@@ -199,7 +199,7 @@ gdk_screen_width_mm (void)
 gint
 gdk_screen_height_mm (void)
 {
-  return gdk_screen_get_height_mm (gdk_get_default_screen ());
+  return gdk_screen_get_height_mm (gdk_screen_get_default ());
 }
 
 /**

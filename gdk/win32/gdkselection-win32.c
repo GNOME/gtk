@@ -119,7 +119,7 @@ gdk_selection_owner_set_for_display (GdkDisplay *display,
   GdkEvent tmp_event;
   gchar *sel_name;
 
-  g_return_val_if_fail (display == gdk_get_default_display (), FALSE);
+  g_return_val_if_fail (display == gdk_display_get_default (), FALSE);
 
   GDK_NOTE (DND,
 	    (sel_name = gdk_atom_name (selection),
@@ -199,7 +199,7 @@ gdk_selection_owner_get_for_display (GdkDisplay *display,
   GdkWindow *window;
   gchar *sel_name;
 
-  g_return_val_if_fail (display == gdk_get_default_display (), NULL);
+  g_return_val_if_fail (display == gdk_display_get_default (), NULL);
 
   /* Return NULL for CLIPBOARD, because otherwise cut&paste
    * inside the same application doesn't work. We must pretend to gtk
@@ -516,7 +516,7 @@ gdk_selection_send_notify_for_display (GdkDisplay *display,
   GdkEvent tmp_event;
   gchar *sel_name, *tgt_name, *prop_name;
 
-  g_return_if_fail (display == gdk_get_default_display ());
+  g_return_if_fail (display == gdk_display_get_default ());
 
   GDK_NOTE (DND,
 	    (sel_name = gdk_atom_name (selection),
@@ -722,7 +722,7 @@ gdk_text_property_to_utf8_list_for_display (GdkDisplay    *display,
 {
   g_return_val_if_fail (text != NULL, 0);
   g_return_val_if_fail (length >= 0, 0);
-  g_return_val_if_fail (display == gdk_get_default_display (), 0);
+  g_return_val_if_fail (display == gdk_display_get_default (), 0);
 
   if (encoding == GDK_TARGET_STRING)
     {
@@ -882,7 +882,7 @@ gdk_utf8_to_compound_text_for_display (GdkDisplay *display,
   gboolean result;
 
   g_return_val_if_fail (str != NULL, FALSE);
-  g_return_val_if_fail (display == gdk_get_default_display (), FALSE);
+  g_return_val_if_fail (display == gdk_display_get_default (), FALSE);
 
   need_conversion = !g_get_charset (&charset);
 

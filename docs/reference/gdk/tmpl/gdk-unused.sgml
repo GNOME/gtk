@@ -605,6 +605,20 @@ status information, so the application does not need to do anything.
 @win: 
 @Returns: 
 
+<!-- ##### FUNCTION gdk_get_default_display ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+<!-- ##### FUNCTION gdk_get_default_screen ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
 <!-- ##### FUNCTION gdk_ic_attr_destroy ##### -->
 <para>
 Destroys the given #GdkICAttr struct, freeing the allocated memory.
@@ -848,6 +862,14 @@ they will be ignored.
 </para>
 
 
+<!-- ##### FUNCTION gdk_open_display ##### -->
+<para>
+
+</para>
+
+@display_name: 
+@Returns: 
+
 <!-- ##### VARIABLE gdk_progclass ##### -->
 <para>
 
@@ -873,4 +895,11 @@ they will be ignored.
 
 </para>
 
+
+<!-- ##### FUNCTION gdk_set_default_display ##### -->
+<para>
+
+</para>
+
+@display: 
 

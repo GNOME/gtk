@@ -174,7 +174,7 @@ gdk_pixmap_new (GdkWindow *window,
     {
       GDK_NOTE (MULTIHEAD, g_message ("need to specify the screen parent window "
 				      "for gdk_pixmap_new() to be multihead safe"));
-      window = gdk_screen_get_root_window (gdk_get_default_screen ());
+      window = gdk_screen_get_root_window (gdk_screen_get_default ());
     }
 
   if (GDK_IS_WINDOW (window) && GDK_WINDOW_DESTROYED (window))
@@ -229,7 +229,7 @@ gdk_bitmap_create_from_data (GdkWindow   *window,
     {
       GDK_NOTE (MULTIHEAD, g_message ("need to specify the screen parent window "
 				     "for gdk_bitmap_create_from_data() to be multihead safe"));
-      window = gdk_screen_get_root_window (gdk_get_default_screen ());
+      window = gdk_screen_get_root_window (gdk_screen_get_default ());
     }
   
   if (GDK_IS_WINDOW (window) && GDK_WINDOW_DESTROYED (window))
@@ -279,7 +279,7 @@ gdk_pixmap_create_from_data (GdkWindow   *window,
     {
       GDK_NOTE (MULTIHEAD, g_message ("need to specify the screen parent window"
 				      "for gdk_pixmap_create_from_data() to be multihead safe"));
-      window = gdk_screen_get_root_window (gdk_get_default_screen ());
+      window = gdk_screen_get_root_window (gdk_screen_get_default ());
     }
 
   if (GDK_IS_WINDOW (window) && GDK_WINDOW_DESTROYED (window))
@@ -385,7 +385,7 @@ gdk_pixmap_foreign_new_for_display (GdkDisplay      *display,
 GdkPixmap*
 gdk_pixmap_foreign_new (GdkNativeWindow anid)
 {
-   return gdk_pixmap_foreign_new_for_display (gdk_get_default_display (), anid);
+   return gdk_pixmap_foreign_new_for_display (gdk_display_get_default (), anid);
 }
 
 /**
@@ -403,7 +403,7 @@ gdk_pixmap_foreign_new (GdkNativeWindow anid)
 GdkPixmap*
 gdk_pixmap_lookup (GdkNativeWindow anid)
 {
-  return (GdkPixmap*) gdk_xid_table_lookup_for_display (gdk_get_default_display (), anid);
+  return (GdkPixmap*) gdk_xid_table_lookup_for_display (gdk_display_get_default (), anid);
 }
 
 /**

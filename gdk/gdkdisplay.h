@@ -72,7 +72,7 @@ struct _GdkDisplayClass
 };
 
 GType       gdk_display_get_type (void);
-GdkDisplay *gdk_open_display                (const gchar *display_name);
+GdkDisplay *gdk_display_open                (const gchar *display_name);
 
 G_CONST_RETURN gchar * gdk_display_get_name (GdkDisplay *display);
 
@@ -107,7 +107,7 @@ void gdk_display_set_sm_client_id      (GdkDisplay  *display,
 					const gchar *sm_client_id);
 
 void        gdk_set_default_display (GdkDisplay *display);
-GdkDisplay *gdk_get_default_display (void);
+GdkDisplay *gdk_display_get_default (void);
 
 GdkDevice  *gdk_display_get_core_pointer (GdkDisplay *display);
 

@@ -88,7 +88,7 @@ gdk_display_finalize (GObject *object)
   
   _gdk_displays = g_slist_remove (_gdk_displays, display);
 
-  if (gdk_get_default_display() == display)
+  if (gdk_display_get_default() == display)
     gdk_display_manager_set_default_display (gdk_display_manager_get(),
 					     NULL);
   
@@ -182,7 +182,7 @@ gdk_display_put_event (GdkDisplay *display,
 void
 gdk_pointer_ungrab (guint32 time)
 {
-  gdk_display_pointer_ungrab (gdk_get_default_display (), time);
+  gdk_display_pointer_ungrab (gdk_display_get_default (), time);
 }
 
 /**
@@ -198,7 +198,7 @@ gdk_pointer_ungrab (guint32 time)
 gboolean
 gdk_pointer_is_grabbed (void)
 {
-  return gdk_display_pointer_is_grabbed (gdk_get_default_display ());
+  return gdk_display_pointer_is_grabbed (gdk_display_get_default ());
 }
 
 /**
@@ -211,7 +211,7 @@ gdk_pointer_is_grabbed (void)
 void
 gdk_keyboard_ungrab (guint32 time)
 {
-  gdk_display_keyboard_ungrab (gdk_get_default_display (), time);
+  gdk_display_keyboard_ungrab (gdk_display_get_default (), time);
 }
 
 /**
@@ -222,7 +222,7 @@ gdk_keyboard_ungrab (guint32 time)
 void
 gdk_beep (void)
 {
-  gdk_display_beep (gdk_get_default_display ());
+  gdk_display_beep (gdk_display_get_default ());
 }
 
 /**
@@ -242,7 +242,7 @@ gdk_event_send_client_message (GdkEvent *event, guint32 xid)
 {
   g_return_val_if_fail (event != NULL, FALSE);
 
-  return gdk_event_send_client_message_for_display (gdk_get_default_display (),
+  return gdk_event_send_client_message_for_display (gdk_display_get_default (),
 						    event, xid);
 }
 
@@ -263,7 +263,7 @@ gdk_event_send_clientmessage_toall (GdkEvent *event)
 {
   g_return_if_fail (event != NULL);
 
-  gdk_screen_broadcast_client_message (gdk_get_default_screen (), event);
+  gdk_screen_broadcast_client_message (gdk_screen_get_default (), event);
 }
 
 /**
@@ -277,7 +277,7 @@ gdk_event_send_clientmessage_toall (GdkEvent *event)
 GdkDevice *
 gdk_device_get_core_pointer (void)
 {
-  return gdk_display_get_core_pointer (gdk_get_default_display ());
+  return gdk_display_get_core_pointer (gdk_display_get_default ());
 }
 
 /**

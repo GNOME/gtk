@@ -71,7 +71,7 @@ main (int argc, char *argv[])
   
   gtk_init (&argc, &argv);
 
-  dpy = gdk_get_default_display ();
+  dpy = gdk_display_get_default ();
   num_screen = gdk_display_get_n_screens (dpy);
   displayname = g_strdup (gdk_display_get_name (dpy));
   g_print ("This X Server (%s) manages %d screen(s).\n",

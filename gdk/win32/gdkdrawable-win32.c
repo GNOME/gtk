@@ -31,7 +31,7 @@
 
 #include <pango/pangowin32.h>
 
-#include "gdkscreen.h" /* gdk_get_default_screen() */
+#include "gdkscreen.h" /* gdk_screen_get_default() */
 #include "gdkprivate-win32.h"
 
 static void gdk_win32_draw_rectangle (GdkDrawable    *drawable,
@@ -1451,7 +1451,7 @@ gdk_win32_get_depth (GdkDrawable *drawable)
 static GdkScreen*
 gdk_win32_get_screen (GdkDrawable *drawable)
 {
-  return gdk_get_default_screen ();
+  return gdk_screen_get_default ();
 }
  
 static GdkVisual*

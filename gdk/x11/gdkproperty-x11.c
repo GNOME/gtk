@@ -196,7 +196,7 @@ gdk_x11_atom_to_xatom_for_display (GdkDisplay *display,
 Atom
 gdk_x11_atom_to_xatom (GdkAtom atom)
 {
-  return gdk_x11_atom_to_xatom_for_display (gdk_get_default_display (), atom);
+  return gdk_x11_atom_to_xatom_for_display (gdk_display_get_default (), atom);
 }
 
 /**
@@ -263,7 +263,7 @@ gdk_x11_xatom_to_atom_for_display (GdkDisplay *display,
 GdkAtom
 gdk_x11_xatom_to_atom (Atom xatom)
 {
-  return gdk_x11_xatom_to_atom_for_display (gdk_get_default_display (), xatom);
+  return gdk_x11_xatom_to_atom_for_display (gdk_display_get_default (), xatom);
 }
 
 static void
@@ -359,7 +359,7 @@ gdk_x11_get_xatom_by_name_for_display (GdkDisplay  *display,
 Atom
 gdk_x11_get_xatom_by_name (const gchar *atom_name)
 {
-  return gdk_x11_get_xatom_by_name_for_display (gdk_get_default_display (),
+  return gdk_x11_get_xatom_by_name_for_display (gdk_display_get_default (),
 						atom_name);
 }
 
@@ -430,7 +430,7 @@ gdk_property_get (GdkWindow   *window,
 
   if (!window)
     {
-      GdkScreen *screen = gdk_get_default_screen ();
+      GdkScreen *screen = gdk_screen_get_default ();
       window = gdk_screen_get_root_window (screen);
       
       GDK_NOTE (MULTIHEAD, g_message ("gdk_property_get(): window is NULL\n"));
@@ -542,7 +542,7 @@ gdk_property_change (GdkWindow    *window,
     {
       GdkScreen *screen;
       
-      screen = gdk_get_default_screen ();
+      screen = gdk_screen_get_default ();
       window = gdk_screen_get_root_window (screen);
       
       GDK_NOTE (MULTIHEAD, g_message ("gdk_property_delete(): window is NULL\n"));
@@ -588,7 +588,7 @@ gdk_property_delete (GdkWindow *window,
 
   if (!window)
     {
-      GdkScreen *screen = gdk_get_default_screen ();
+      GdkScreen *screen = gdk_screen_get_default ();
       window = gdk_screen_get_root_window (screen);
       
       GDK_NOTE (MULTIHEAD, 

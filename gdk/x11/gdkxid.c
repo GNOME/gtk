@@ -98,7 +98,7 @@ gdk_xid_table_lookup_for_display (GdkDisplay  *display,
 gpointer
 gdk_xid_table_lookup (XID xid)
 {
-  return gdk_xid_table_lookup_for_display (gdk_get_default_display (), xid);
+  return gdk_xid_table_lookup_for_display (gdk_display_get_default (), xid);
 }
 
 static guint

@@ -91,7 +91,7 @@ gdk_cursor_new_for_display (GdkDisplay   *display,
   GdkCursor *cursor;
   HCURSOR hcursor;
 
-  g_return_val_if_fail (display == gdk_get_default_display (), NULL);
+  g_return_val_if_fail (display == gdk_display_get_default (), NULL);
 
   hcursor = _gdk_win32_data_to_wcursor (cursor_type);
 
@@ -310,5 +310,5 @@ _gdk_cursor_destroy (GdkCursor *cursor)
 GdkDisplay *
 gdk_cursor_get_display (GdkCursor *cursor)
 {
-  return gdk_get_default_display ();
+  return gdk_display_get_default ();
 }

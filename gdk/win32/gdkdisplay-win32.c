@@ -32,7 +32,7 @@ _gdk_windowing_set_default_display (GdkDisplay *display)
 }
 
 GdkDisplay *
-gdk_open_display (const gchar *display_name)
+gdk_display_open (const gchar *display_name)
 {
   if (_gdk_display != NULL)
     return NULL; /* single display only */

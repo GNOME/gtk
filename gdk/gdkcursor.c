@@ -94,5 +94,5 @@ gdk_cursor_unref (GdkCursor *cursor)
 GdkCursor*
 gdk_cursor_new (GdkCursorType cursor_type)
 {
-  return gdk_cursor_new_for_display (gdk_get_default_display(), cursor_type);
+  return gdk_cursor_new_for_display (gdk_display_get_default(), cursor_type);
 }

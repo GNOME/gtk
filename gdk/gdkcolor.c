@@ -273,6 +273,6 @@ gdk_color_parse (const gchar *spec,
 GdkColormap*
 gdk_colormap_get_system (void)
 {
-  return gdk_screen_get_system_colormap (gdk_get_default_screen ());
+  return gdk_screen_get_system_colormap (gdk_screen_get_default ());
 }
 

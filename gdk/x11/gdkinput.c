@@ -100,7 +100,7 @@ gdk_device_get_type (void)
 GList *
 gdk_devices_list (void)
 {
-  return gdk_display_list_devices (gdk_get_default_display ());
+  return gdk_display_list_devices (gdk_display_get_default ());
 }
 
 /**

@@ -432,7 +432,7 @@ gdk_text_property_to_text_list (GdkAtom       encoding,
 				gint          length,
 				gchar      ***list)
 {
-  return gdk_text_property_to_text_list_for_display (gdk_get_default_display (),
+  return gdk_text_property_to_text_list_for_display (gdk_display_get_default (),
 						     encoding, format, text, length, list);
 }
 
@@ -668,7 +668,7 @@ gdk_string_to_compound_text (const gchar *str,
 			     guchar     **ctext,
 			     gint        *length)
 {
-  return gdk_string_to_compound_text_for_display (gdk_get_default_display (),
+  return gdk_string_to_compound_text_for_display (gdk_display_get_default (),
 						  str, encoding, format, 
 						  ctext, length);
 }

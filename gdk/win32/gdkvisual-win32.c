@@ -28,7 +28,7 @@
 #include <stdlib.h>
 
 #include "gdkvisual.h"
-#include "gdkscreen.h" /* gdk_get_default_screen() */
+#include "gdkscreen.h" /* gdk_screen_get_default() */
 #include "gdkprivate-win32.h"
 
 static void  gdk_visual_decompose_mask (gulong     mask,
@@ -369,7 +369,7 @@ gdk_visual_get_screen (GdkVisual *visual)
 {
   g_return_val_if_fail (GDK_IS_VISUAL (visual), NULL);
 
-  return gdk_get_default_screen ();
+  return gdk_screen_get_default ();
 }
 
 static void

@@ -841,5 +841,5 @@ gdk_pango_layout_get_clip_region (PangoLayout *layout,
 PangoContext *
 gdk_pango_context_get (void)
 {
-  return gdk_pango_context_get_for_screen (gdk_get_default_screen ());
+  return gdk_pango_context_get_for_screen (gdk_screen_get_default ());
 }

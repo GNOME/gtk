@@ -271,7 +271,7 @@ gtk_settings_get_for_screen (GdkScreen *screen)
 GtkSettings*
 gtk_settings_get_default (void)
 {
-  return gtk_settings_get_for_screen (gdk_get_default_screen ());
+  return gtk_settings_get_for_screen (gdk_screen_get_default ());
 }
 
 static void

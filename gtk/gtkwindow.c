@@ -651,7 +651,7 @@ gtk_window_init (GtkWindow *window)
   window->gravity = GDK_GRAVITY_NORTH_WEST;
   window->decorated = TRUE;
   window->mnemonic_modifier = GDK_MOD1_MASK;
-  window->screen = gdk_get_default_screen ();
+  window->screen = gdk_screen_get_default ();
   
   colormap = _gtk_widget_peek_colormap ();
   if (colormap)

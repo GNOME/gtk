@@ -2844,7 +2844,7 @@ guint32
 gdk_drag_get_protocol (guint32          xid,
 		       GdkDragProtocol *protocol)
 {
-  return gdk_drag_get_protocol_for_display (gdk_get_default_display (), xid, protocol);
+  return gdk_drag_get_protocol_for_display (gdk_display_get_default (), xid, protocol);
 }
 
 void

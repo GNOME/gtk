@@ -326,7 +326,7 @@ void
 gtk_plug_construct (GtkPlug         *plug,
 		    GdkNativeWindow  socket_id)
 {
-  gtk_plug_construct_for_display (plug, gdk_get_default_display (), socket_id);
+  gtk_plug_construct_for_display (plug, gdk_display_get_default (), socket_id);
 }
 
 /**
@@ -385,7 +385,7 @@ gtk_plug_construct_for_display (GtkPlug         *plug,
 GtkWidget*
 gtk_plug_new (GdkNativeWindow socket_id)
 {
-  return gtk_plug_new_for_display (gdk_get_default_display (), socket_id);
+  return gtk_plug_new_for_display (gdk_display_get_default (), socket_id);
 }
 
 /**

@@ -113,7 +113,7 @@ gdk_set_locale (void)
 static GdkDisplay *
 find_a_display ()
 {
-  GdkDisplay *display = gdk_get_default_display ();
+  GdkDisplay *display = gdk_display_get_default ();
 
   if (!display)
     display = _gdk_displays->data;

@@ -89,7 +89,7 @@ gdk_display_x11_class_init (GdkDisplayX11Class * class)
 }
 
 /**
- * gdk_open_display:
+ * gdk_display_open:
  * @display_name: the name of the display to open
  * @returns: a #GdkDisplay, or %NULL if the display
  *  could not be opened.
@@ -97,7 +97,7 @@ gdk_display_x11_class_init (GdkDisplayX11Class * class)
  * Opens a display.
  */
 GdkDisplay *
-gdk_open_display (const gchar *display_name)
+gdk_display_open (const gchar *display_name)
 {
   Display *xdisplay;
   GdkDisplay *display;

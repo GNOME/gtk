@@ -575,7 +575,7 @@ default_display_notify_cb (GdkDisplayManager *display_manager)
    */
   static gboolean initialized = FALSE;
 
-  if (!gdk_get_default_display () || initialized)
+  if (!gdk_display_get_default () || initialized)
     return;
 
   initialized = TRUE;
@@ -617,7 +617,7 @@ display_opened_cb (GdkDisplayManager *display_manager,
  * 
  * Parses command line arguments, and initializes global
  * attributes of GTK+, but does not actually open a connection
- * to a display. (See gdk_open_display(), gdk_get_display_arg_name())
+ * to a display. (See gdk_display_open(), gdk_get_display_arg_name())
  *
  * Any arguments used by GTK or GDK are removed from the array and
  * @argc and @argv are updated accordingly.
@@ -873,10 +873,10 @@ gtk_init_check (int	 *argc,
   if (!gtk_parse_args (argc, argv))
     return FALSE;
 
-  if (gdk_get_default_display ())
+  if (gdk_display_get_default ())
     return TRUE;
 
-  display = gdk_open_display (gdk_get_display_arg_name ());
+  display = gdk_display_open (gdk_get_display_arg_name ());
 
   if (display)
     {

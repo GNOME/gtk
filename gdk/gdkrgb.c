@@ -797,7 +797,7 @@ gdk_rgb_xpixel_from_rgb (guint32 rgb)
   guint32 g = rgb & 0xff00;
   guint32 b = rgb & 0xff;
 
-  return gdk_rgb_xpixel_from_rgb_internal (gdk_screen_get_rgb_colormap (gdk_get_default_screen ()),
+  return gdk_rgb_xpixel_from_rgb_internal (gdk_screen_get_rgb_colormap (gdk_screen_get_default ()),
 					   (r >> 8) + (r >> 16), g + (g >> 8), b + (b << 8));
 }
 
@@ -3476,7 +3476,7 @@ gdk_rgb_get_colormap (void)
   static GdkColormap *cmap = NULL;
   if (!cmap)
     {
-      GdkRgbInfo *image_info = gdk_rgb_create_info (gdk_rgb_choose_visual (gdk_get_default_screen ()), NULL);
+      GdkRgbInfo *image_info = gdk_rgb_create_info (gdk_rgb_choose_visual (gdk_screen_get_default ()), NULL);
       cmap = image_info->cmap;
     }
 
@@ -3546,5 +3546,5 @@ gdk_screen_get_rgb_visual (GdkScreen *screen)
 GdkVisual *
 gdk_rgb_get_visual (void)
 {
-  return gdk_screen_get_rgb_visual (gdk_get_default_screen ());
+  return gdk_screen_get_rgb_visual (gdk_screen_get_default ());
 }

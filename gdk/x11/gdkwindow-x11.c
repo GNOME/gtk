@@ -372,7 +372,7 @@ gdk_window_new (GdkWindow     *parent,
       GDK_NOTE (MULTIHEAD,
 		g_warning ("gdk_window_new(): no parent specified reverting to parent = default root window"));
       
-      screen = gdk_get_default_screen ();
+      screen = gdk_screen_get_default ();
       parent = gdk_screen_get_root_window (screen);
     }
   else
@@ -2224,7 +2224,7 @@ gdk_window_get_geometry (GdkWindow *window,
     {
       GDK_NOTE (MULTIHEAD,
 		g_message ("gdk_window_get_geometry(): Window needs to be non-NULL to be multi head safe"));
-      window = gdk_screen_get_root_window ((gdk_get_default_screen ()));
+      window = gdk_screen_get_root_window ((gdk_screen_get_default ()));
     }
 
   if (!GDK_WINDOW_DESTROYED (window))
@@ -2488,7 +2488,7 @@ _gdk_windowing_window_get_pointer (GdkWindow       *window,
     {
       GDK_NOTE (MULTIHEAD,
 		g_message ("_gdk_windowing_window_get_pointer(): window arg is need for multihead safe operation"));
-      window = gdk_screen_get_root_window (gdk_get_default_screen ());
+      window = gdk_screen_get_root_window (gdk_screen_get_default ());
     }
   
   _gdk_windowing_window_get_offsets (window, &xoffset, &yoffset);

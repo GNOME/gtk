@@ -30,6 +30,14 @@ when GDK gets multihead support.
 </para>
 
 
+<!-- ##### FUNCTION gdk_screen_get_default ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+
 <!-- ##### FUNCTION gdk_screen_get_default_colormap ##### -->
 <para>
 
@@ -235,14 +243,6 @@ when GDK gets multihead support.
 
 @screen: 
 @event: 
-
-
-<!-- ##### FUNCTION gdk_get_default_screen ##### -->
-<para>
-
-</para>
-
-@Returns: 
 
 
 <!-- ##### FUNCTION gdk_screen_get_setting ##### -->

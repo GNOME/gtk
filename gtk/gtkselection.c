@@ -419,7 +419,7 @@ gtk_selection_owner_set (GtkWidget *widget,
       GTK_NOTE (MULTIHEAD,
 		g_warning ("gtk_selection_owner_set (NULL,...) is not multihead safe"));
 		 
-      display = gdk_get_default_display ();
+      display = gdk_display_get_default ();
     }
   
   return gtk_selection_owner_set_for_display (display, widget,

@@ -27,7 +27,7 @@
 
 #include "gdkimage.h"
 #include "gdkpixmap.h"
-#include "gdkscreen.h" /* gdk_get_default_screen() */
+#include "gdkscreen.h" /* gdk_screen_get_default() */
 #include "gdkprivate-win32.h"
 
 static GList *image_list = NULL;
@@ -208,7 +208,7 @@ _gdk_image_new_for_depth (GdkScreen    *screen,
 
   g_return_val_if_fail (!visual || GDK_IS_VISUAL (visual), NULL);
   g_return_val_if_fail (visual || depth != -1, NULL);
-  g_return_val_if_fail (screen == gdk_get_default_screen (), NULL);
+  g_return_val_if_fail (screen == gdk_screen_get_default (), NULL);
  
   if (visual)
     depth = visual->depth;
@@ -382,7 +382,7 @@ gint
 _gdk_windowing_get_bits_for_depth (GdkDisplay *display,
                                    gint        depth)
 {
-  g_return_val_if_fail (display == gdk_get_default_display (), 0);
+  g_return_val_if_fail (display == gdk_display_get_default (), 0);
 
   switch (depth)
     {

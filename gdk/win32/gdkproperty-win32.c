@@ -486,7 +486,7 @@ gdk_screen_get_setting (GdkScreen   *screen,
                         const gchar *name,
                         GValue      *value)
 {
-  g_return_val_if_fail (screen == gdk_get_default_screen (), FALSE);
+  g_return_val_if_fail (screen == gdk_screen_get_default (), FALSE);
 
   /*
    * XXX : if these values get changed through the Windoze UI the

@@ -1526,7 +1526,7 @@ gdk_font_load_for_display (GdkDisplay  *display,
   TEXTMETRIC textmetric;
 
   g_return_val_if_fail (font_name != NULL, NULL);
-  g_return_val_if_fail (display == gdk_get_default_display (), NULL);
+  g_return_val_if_fail (display == gdk_display_get_default (), NULL);
 
   font = gdk_font_hash_lookup (GDK_FONT_FONTSET, font_name);
   if (font)
@@ -1582,7 +1582,7 @@ gdk_font_from_description_for_display (GdkDisplay           *display,
   GdkFont *result = NULL;
 
   g_return_val_if_fail (font_desc != NULL, NULL);
-  g_return_val_if_fail (display == gdk_get_default_display (), NULL);
+  g_return_val_if_fail (display == gdk_display_get_default (), NULL);
 
   font_map = pango_win32_font_map_for_display ();
   font = pango_font_map_load_font (font_map, gdk_pango_context_get (), font_desc);

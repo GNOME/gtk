@@ -399,7 +399,7 @@ gdk_fontset_load_for_display (GdkDisplay  *display,
 GdkFont*
 gdk_fontset_load (const gchar *fontset_name)
 {
-  return gdk_fontset_load_for_display (gdk_get_default_display (), fontset_name);
+  return gdk_fontset_load_for_display (gdk_display_get_default (), fontset_name);
 }
 
 void

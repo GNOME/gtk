@@ -355,7 +355,7 @@ gdk_add_client_message_filter (GdkAtom       message_type,
 			       GdkFilterFunc func,
 			       gpointer      data)
 {
-  gdk_display_add_client_message_filter (gdk_get_default_display (),
+  gdk_display_add_client_message_filter (gdk_display_get_default (),
 					 message_type, func, data);
 }
 
@@ -2179,7 +2179,7 @@ gdk_x11_screen_supports_net_wm_hint (GdkScreen *screen,
 gboolean
 gdk_net_wm_supports (GdkAtom property)
 {
-  return gdk_x11_screen_supports_net_wm_hint (gdk_get_default_screen (), property);
+  return gdk_x11_screen_supports_net_wm_hint (gdk_screen_get_default (), property);
 }
 
 static struct

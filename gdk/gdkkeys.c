@@ -282,5 +282,5 @@ gdk_keyval_is_lower (guint keyval)
 GdkKeymap*
 gdk_keymap_get_default (void)
 {
-  return gdk_keymap_get_for_display (gdk_get_default_display ());
+  return gdk_keymap_get_for_display (gdk_display_get_default ());
 }

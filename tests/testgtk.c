@@ -7305,7 +7305,7 @@ screen_display_check (GtkWidget *widget, ScreenDisplaySelection *data)
   if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (data->radio_dpy)))
     {
       display_name = g_strdup (gtk_entry_get_text (data->entry));
-      display = gdk_open_display (display_name);
+      display = gdk_display_open (display_name);
       
       if (!display)
 	{

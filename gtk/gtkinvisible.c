@@ -128,7 +128,7 @@ gtk_invisible_init (GtkInvisible *invisible)
   gtk_object_sink (GTK_OBJECT (invisible));
 
   invisible->has_user_ref_count = TRUE;
-  invisible->screen = gdk_get_default_screen ();
+  invisible->screen = gdk_screen_get_default ();
   
   colormap = _gtk_widget_peek_colormap ();
   if (colormap)

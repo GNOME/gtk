@@ -46,7 +46,7 @@ make_selection_dialog (GdkScreen * screen,
   double_entry->e2 = GTK_ENTRY (other_entry);
 
   if (!screen)
-    screen = gdk_get_default_screen ();
+    screen = gdk_screen_get_default ();
 
   window = gtk_widget_new (GTK_TYPE_DIALOG,
 			   "screen", screen,
@@ -122,7 +122,7 @@ main (int argc, char *argv[])
 	  if (!g_strcasecmp (screen2_name, ""))
 	    g_printerr ("No display name, reverting to default display\n");
 	  
-	  dpy2 = gdk_open_display (screen2_name);
+	  dpy2 = gdk_display_open (screen2_name);
 	  if (dpy2)
 	    {
 	      scr2 = gdk_display_get_default_screen (dpy2);

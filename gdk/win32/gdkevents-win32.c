@@ -154,7 +154,7 @@ real_window_procedure (HWND   hwnd,
 		       LPARAM lparam)
 {
   /* any way to have more than one display on win32 ? */
-  GdkDisplay *display = gdk_get_default_display ();
+  GdkDisplay *display = gdk_display_get_default ();
   GdkEventPrivate event;
   GdkEvent *eventp;
   MSG msg;
@@ -389,7 +389,7 @@ gboolean
 gdk_events_pending (void)
 {
   MSG msg;
-  GdkDisplay *display = gdk_get_default_display ();
+  GdkDisplay *display = gdk_display_get_default ();
 
   return (_gdk_event_queue_find_first (display) ||
 	  PeekMessage (&msg, NULL, 0, 0, PM_NOREMOVE));
@@ -570,7 +570,7 @@ gdk_display_pointer_ungrab (GdkDisplay *display,
                             guint32     time)
 {
   GDK_NOTE (EVENTS, g_print ("gdk_pointer_ungrab\n"));
-  g_return_if_fail (display == gdk_get_default_display ());
+  g_return_if_fail (display == gdk_display_get_default ());
 
 #if 0
   _gdk_input_ungrab_pointer (time);
@@ -644,7 +644,7 @@ find_window_for_pointer_event (GdkWindow*  reported_window,
 gboolean
 gdk_display_pointer_is_grabbed (GdkDisplay *display)
 {
-  g_return_val_if_fail (display == gdk_get_default_display (), FALSE);
+  g_return_val_if_fail (display == gdk_display_get_default (), FALSE);
   GDK_NOTE (EVENTS, g_print ("gdk_pointer_is_grabbed: %s\n",
 			     p_grab_window != NULL ? "TRUE" : "FALSE"));
   return p_grab_window != NULL;
@@ -655,7 +655,7 @@ gdk_pointer_grab_info_libgtk_only (GdkDisplay *display,
 				   GdkWindow **grab_window,
 				   gboolean   *owner_events)
 {
-  g_return_val_if_fail (display == gdk_get_default_display (), FALSE);
+  g_return_val_if_fail (display == gdk_display_get_default (), FALSE);
 
   if (p_grab_window != NULL)
     {
@@ -721,7 +721,7 @@ void
 gdk_display_keyboard_ungrab (GdkDisplay *display,
                              guint32 time)
 {
-  g_return_if_fail (display == gdk_get_default_display ());
+  g_return_if_fail (display == gdk_display_get_default ());
 
   GDK_NOTE (EVENTS, g_print ("gdk_keyboard_ungrab\n"));
 
@@ -745,7 +745,7 @@ gdk_keyboard_grab_info_libgtk_only (GdkDisplay *display,
 				    GdkWindow **grab_window,
 				    gboolean   *owner_events)
 {
-  g_return_val_if_fail (display == gdk_get_default_display (), FALSE);
+  g_return_val_if_fail (display == gdk_display_get_default (), FALSE);
 
   if (k_grab_window)
     {
@@ -3382,7 +3382,7 @@ gdk_event_prepare (GSource *source,
 {
   MSG msg;
   gboolean retval;
-  GdkDisplay *display = gdk_get_default_display ();
+  GdkDisplay *display = gdk_display_get_default ();
   
   GDK_THREADS_ENTER ();
 
@@ -3401,7 +3401,7 @@ gdk_event_check (GSource *source)
 {
   MSG msg;
   gboolean retval;
-  GdkDisplay *display = gdk_get_default_display ();
+  GdkDisplay *display = gdk_display_get_default ();
   
   GDK_THREADS_ENTER ();
 
@@ -3422,7 +3422,7 @@ gdk_event_dispatch (GSource     *source,
 		    gpointer     user_data)
 {
   GdkEvent *event;
-  GdkDisplay *display = gdk_get_default_display ();
+  GdkDisplay *display = gdk_display_get_default ();
  
   GDK_THREADS_ENTER ();
 
@@ -3481,7 +3481,7 @@ gdk_display_sync (GdkDisplay * display)
 {
   MSG msg;
 
-  g_return_if_fail (display == gdk_get_default_display ());
+  g_return_if_fail (display == gdk_display_get_default ());
 
   /* Process all messages currently available */
   while (PeekMessage (&msg, NULL, 0, 0, PM_REMOVE))

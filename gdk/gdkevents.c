@@ -264,7 +264,7 @@ gdk_event_put (GdkEvent *event)
     {
       GDK_NOTE (MULTIHEAD,
 		g_message ("Falling back to default display for gdk_event_put()"));
-      display = gdk_get_default_display ();
+      display = gdk_display_get_default ();
     }
 
   gdk_display_put_event (display, event);
@@ -1004,7 +1004,7 @@ gdk_display_set_double_click_time (GdkDisplay *display,
 void
 gdk_set_double_click_time (guint msec)
 {
-  gdk_display_set_double_click_time (gdk_get_default_display (), msec);
+  gdk_display_set_double_click_time (gdk_display_get_default (), msec);
 }
 
 GType
@@ -1034,5 +1034,5 @@ gboolean
 gdk_setting_get (const gchar *name,
 		 GValue      *value)
 {
-  return gdk_screen_get_setting (gdk_get_default_screen (), name, value);
+  return gdk_screen_get_setting (gdk_screen_get_default (), name, value);
 }

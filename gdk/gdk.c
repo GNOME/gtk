@@ -271,7 +271,7 @@ _gdk_get_command_line_args (int    *argc,
  * @argv: the array of command line arguments.
  * 
  * Parse command line arguments, and store for future
- * use by calls to gdk_open_display().
+ * use by calls to gdk_display_open().
  *
  * Any arguments used by GDK are removed from the array and @argc and @argv are
  * updated accordingly.
@@ -392,10 +392,10 @@ gdk_init_check (int    *argc,
   
   gdk_parse_args (argc, argv);
 
-  if (gdk_get_default_display ())
+  if (gdk_display_get_default ())
     return TRUE;
     
-  display = gdk_open_display (_gdk_display_name);
+  display = gdk_display_open (_gdk_display_name);
 
   if (display)
     {

@@ -52,7 +52,7 @@ GdkDisplay *display;
 
 gtk_init (&amp;argc, &amp;argv);
 
-display = gdk_get_default_display ();
+display = gdk_display_get_default ();
 num_screen = gdk_display_get_n_screens (display);
 displayname = gdk_display_get_name (display);
 if (num_screen &lt;= 1)

@@ -1,3 +1,12 @@
+Thu Jun 20 19:41:09 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdkdisplay.h gdk/gdkscreen.h gdk/**.c gtk/*.c
+	tests/*.c: Renames:
+
+	 gdk_get_default_display => gdk_display_get_default
+	 gdk_get_default_screen  => gdk_screen_get_default
+	 gdk_open_display        => gdk_display_open
+
 Thu Jun 20 16:49:00 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/gdkdisplaymanager.[ch] gdk/gdk.[ch] gdk/gdkdisplay.c 
