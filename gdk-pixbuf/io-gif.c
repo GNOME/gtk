@@ -382,7 +382,7 @@ ReadImage (FILE *file,
 	}
 
 	context->pixbuf = gdk_pixbuf_new (ART_PIX_RGB,
-					  context->gif89.transparent,
+					  TRUE,//context->gif89.transparent,
 					  8,
 					  context->width,
 					  context->height);
@@ -390,7 +390,7 @@ ReadImage (FILE *file,
 	dest = gdk_pixbuf_get_pixels (context->pixbuf);
 	while ((v = LWZReadByte (file, FALSE, c)) >= 0) {
 //		g_print ("in inner loop: xpos = %d, ypos = %d\n", xpos, ypos);
-		if (context->gif89.transparent) {
+		if (TRUE || context->gif89.transparent) {
 			temp = dest + (ypos * len + xpos) * 4;
 			*temp = cmap [0][(guchar) v];
 			*(temp+1) = cmap [1][(guchar) v];
