@@ -7,7 +7,6 @@ INCLUDES = @STRIP_BEGIN@ \
 	-DGTK_LIBDIR=\"$(libdir)\"			\
 	-DGTK_DATA_PREFIX=\"$(prefix)\"			\
 	-DGTK_SYSCONFDIR=\"$(sysconfdir)\"		\
-	-DGTK_LOCALEDIR=\"$(gtklocaledir)\"		\
 	-DGTK_VERSION=\"@GTK_VERSION@\"			\
 	-DGTK_BINARY_VERSION=\"@GTK_BINARY_VERSION@\"	\
 	-DGTK_HOST=\"@host@\"	                        \

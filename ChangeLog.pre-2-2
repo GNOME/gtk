@@ -1,3 +1,13 @@
+Wed Dec 11 14:04:23 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* configure.in: version 2.1.4, interface age 1.
+	
+	* configure.in: Require GLib-2.1.4, so we will catch
+	the need for the new AM_GLIB_DEFINE_LOCALEDIR() in
+	an obvious way.
+
+	* configure.in gtk/Makefile.am: Use AM_GLIB_DEFINE_LOCALEDIR()
+
 Tue Dec 10 15:46:01 PST 2002  Manish Singh  <yosh@gimp.org>
 
 	* gdk/x11/gdkwindow-x11.c (set_initial_hints): 
