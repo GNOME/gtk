@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-01-10 01:07+0100\n"
-"PO-Revision-Date: 2004-01-10 01:10+0100\n"
+"POT-Creation-Date: 2004-01-13 09:03+0100\n"
+"PO-Revision-Date: 2004-01-13 09:56+0100\n"
 "Last-Translator: Данило Шеган <danilo@prevod.org>\n"
 "Language-Team: Serbian (sr) <serbiangnome-lista@nongnu.org>\n"
 "MIME-Version: 1.0\n"
@@ -870,74 +870,74 @@ msgstr "Елемент за пречицу"
 msgid "The widget to be monitored for accelerator changes"
 msgstr "Елемент који треба пратити ради измена пречица"
 
-#: gtk/gtkaction.c:189 gtk/gtkactiongroup.c:118
+#: gtk/gtkaction.c:193 gtk/gtkactiongroup.c:133
 msgid "Name"
 msgstr "Име"
 
-#: gtk/gtkaction.c:190
+#: gtk/gtkaction.c:194
 msgid "A unique name for the action."
 msgstr "Јединствено име за акцију."
 
-#: gtk/gtkaction.c:197 gtk/gtkbutton.c:203 gtk/gtkexpander.c:202
+#: gtk/gtkaction.c:201 gtk/gtkbutton.c:203 gtk/gtkexpander.c:202
 #: gtk/gtkframe.c:125 gtk/gtklabel.c:290 gtk/gtktoolbutton.c:179
 msgid "Label"
 msgstr "Ознака"
 
-#: gtk/gtkaction.c:198
+#: gtk/gtkaction.c:202
 msgid "The label used for menu items and buttons that activate this action."
 msgstr ""
 "Ознака која се користи за ставке менија и дугмад који покрећу ову акцију."
 
-#: gtk/gtkaction.c:204
+#: gtk/gtkaction.c:208
 msgid "Short label"
 msgstr "Кратка ознака"
 
-#: gtk/gtkaction.c:205
+#: gtk/gtkaction.c:209
 msgid "A shorter label that may be used on toolbar buttons."
 msgstr "Краћа ознака која се може користити на думгадима алатки."
 
-#: gtk/gtkaction.c:211
+#: gtk/gtkaction.c:215
 msgid "Tooltip"
 msgstr "Облачић"
 
-#: gtk/gtkaction.c:212
+#: gtk/gtkaction.c:216
 msgid "A tooltip for this action."
 msgstr "Облачић за ову акцију."
 
-#: gtk/gtkaction.c:218
+#: gtk/gtkaction.c:222
 msgid "Stock Icon"
 msgstr "Испоручена икона"
 
-#: gtk/gtkaction.c:219
+#: gtk/gtkaction.c:223
 msgid "The stock icon displayed in widgets representing this action."
 msgstr ""
 "Испоручена икона која се приказује у елементима који представљају ову акцију."
 
-#: gtk/gtkaction.c:225 gtk/gtktoolitem.c:154
+#: gtk/gtkaction.c:229 gtk/gtktoolitem.c:154
 msgid "Visible when horizontal"
 msgstr "Видљиво када је водоравно"
 
-#: gtk/gtkaction.c:226 gtk/gtktoolitem.c:155
+#: gtk/gtkaction.c:230 gtk/gtktoolitem.c:155
 msgid ""
 "Whether the toolbar item is visible when the toolbar is in a horizontal "
 "orientation."
 msgstr "Да ли се приказује ставка алатки када су постављене водоравно."
 
-#: gtk/gtkaction.c:232 gtk/gtktoolitem.c:161
+#: gtk/gtkaction.c:236 gtk/gtktoolitem.c:161
 msgid "Visible when vertical"
 msgstr "Видљиво када је усправно"
 
-#: gtk/gtkaction.c:233 gtk/gtktoolitem.c:162
+#: gtk/gtkaction.c:237 gtk/gtktoolitem.c:162
 msgid ""
 "Whether the toolbar item is visible when the toolbar is in a vertical "
 "orientation."
 msgstr "Да ли се приказује ставка алатки када су постављене усправно."
 
-#: gtk/gtkaction.c:239 gtk/gtktoolitem.c:168
+#: gtk/gtkaction.c:243 gtk/gtktoolitem.c:168
 msgid "Is important"
 msgstr "Важно је"
 
-#: gtk/gtkaction.c:240
+#: gtk/gtkaction.c:244
 msgid ""
 "Whether the action is considered important. When TRUE, toolitem proxies for "
 "this action show text in GTK_TOOLBAR_BOTH_HORIZ mode."
@@ -945,35 +945,53 @@ msgstr ""
 "Да ли се акција сматра важном. Ако је постављено, посредници за ставке "
 "алатки ове акције приказују текст у режиму GTK_TOOLBAR_BOTH_HORIZ."
 
-#: gtk/gtkaction.c:246
+#: gtk/gtkaction.c:250
 msgid "Hide if empty"
 msgstr "Сакриј ако је празно"
 
-#: gtk/gtkaction.c:247
+#: gtk/gtkaction.c:251
 msgid "When TRUE, empty menu proxies for this action are hidden."
 msgstr ""
 "Ако је постављено, празни посредници менија за ову акцију се сакривају."
 
-#: gtk/gtkaction.c:253 gtk/gtkwidget.c:446
+#: gtk/gtkaction.c:257 gtk/gtkactiongroup.c:141 gtk/gtkwidget.c:446
 msgid "Sensitive"
 msgstr "Осетљив"
 
-#: gtk/gtkaction.c:254
+#: gtk/gtkaction.c:258
 msgid "Whether the action is enabled."
 msgstr "Да ли је акција укључена."
 
-#: gtk/gtkaction.c:260 gtk/gtktreeview.c:551 gtk/gtktreeviewcolumn.c:222
-#: gtk/gtkwidget.c:439
+#: gtk/gtkaction.c:264 gtk/gtkactiongroup.c:148 gtk/gtktreeview.c:551
+#: gtk/gtktreeviewcolumn.c:222 gtk/gtkwidget.c:439
 msgid "Visible"
 msgstr "Видљив"
 
-#: gtk/gtkaction.c:261
+#: gtk/gtkaction.c:265
 msgid "Whether the action is visible."
 msgstr "Да ли је акција видљива."
 
-#: gtk/gtkactiongroup.c:119
+#: gtk/gtkaction.c:271
+msgid "Action Group"
+msgstr "Група акција"
+
+#: gtk/gtkaction.c:272
+msgid ""
+"The GtkActionGroup this GtkAction is associated with, or NULL (for internal "
+"use)."
+msgstr "GtkActionGroup са којом је овај GtkAction повезан, или NULL (за унутрашњу употребу)."
+
+#: gtk/gtkactiongroup.c:134
 msgid "A name for the action group."
 msgstr "Јединствено име за групу акција."
+
+#: gtk/gtkactiongroup.c:142
+msgid "Whether the action group is enabled."
+msgstr "Да ли је група акција укључена."
+
+#: gtk/gtkactiongroup.c:149
+msgid "Whether the action group is visible."
+msgstr "Да ли је група акција видљива."
 
 #: gtk/gtkalignment.c:116
 msgid "Horizontal alignment"
@@ -5633,38 +5651,38 @@ msgstr "Редослед уређења"
 msgid "Sort direction the sort indicator should indicate"
 msgstr "Смер уређивања који показатељ уређења треба да показује"
 
-#: gtk/gtkuimanager.c:213
+#: gtk/gtkuimanager.c:217
 msgid "Add tearoffs to menus"
 msgstr "Додај отцепљивање у меније"
 
-#: gtk/gtkuimanager.c:214
+#: gtk/gtkuimanager.c:218
 msgid "Whether tearoff menu items should be added to menus"
 msgstr "Да ли се додају ставке менија за отцепљивање у меније"
 
-#: gtk/gtkuimanager.c:221
+#: gtk/gtkuimanager.c:225
 msgid "Merged UI definition"
 msgstr "Спојена дефиниција сучеља"
 
-#: gtk/gtkuimanager.c:222
+#: gtk/gtkuimanager.c:226
 msgid "An XML string describing the merged UI"
 msgstr "XML ниска која описује спојено сучеље"
 
-#: gtk/gtkuimanager.c:930
+#: gtk/gtkuimanager.c:1064
 #, c-format
 msgid "Unknown attribute '%s' on line %d char %d"
 msgstr "Непознат атрибут „%s“ у %d. реду, %d. знак"
 
-#: gtk/gtkuimanager.c:1139
+#: gtk/gtkuimanager.c:1273
 #, c-format
 msgid "Unexpected start tag '%s' on line %d char %d"
 msgstr "Неочекивана почетна ознака „%s“ у %d. реду, %d. знак"
 
-#: gtk/gtkuimanager.c:1224
+#: gtk/gtkuimanager.c:1358
 #, c-format
 msgid "Unexpected character data on line %d char %d"
 msgstr "Неочекивани знаковни подаци у %d. реду, %d. знак"
 
-#: gtk/gtkuimanager.c:2016
+#: gtk/gtkuimanager.c:2135
 msgid "Empty"
 msgstr "Празно"
 
