@@ -10,6 +10,7 @@ EXTRA_DIST =	\
         gtk.m4          \
 	makecopyright	\
 	TODO		\
+	NEWS.pre-1-0	\
 	ChangeLog.pre-1-0	\
 	examples/aspectframe/Makefile  \
 	examples/aspectframe/aspectframe.c  \
