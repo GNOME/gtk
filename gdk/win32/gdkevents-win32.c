@@ -156,7 +156,9 @@ real_window_procedure (HWND   hwnd,
   GdkEvent *eventp;
   MSG msg;
   DWORD pos;
+#ifdef HAVE_DIMM_H
   LRESULT lres;
+#endif
   gint ret_val;
   gboolean ret_val_flag;
 
@@ -293,7 +295,9 @@ void
 _gdk_events_init (void)
 {
   GSource *source;
+#ifdef HAVE_DIMM_H
   HRESULT hres;
+#endif
 #ifdef USE_TRACKMOUSEEVENT
   HMODULE user32, imm32;
   HINSTANCE commctrl32;
@@ -2931,6 +2935,16 @@ gdk_event_translate (GdkEvent *event,
 	  mmi->ptMaxSize.x = MIN(window_impl->hint_max_width, gdk_screen_width ());
 	  mmi->ptMaxSize.y = MIN(window_impl->hint_max_height, gdk_screen_height ());
 	}
+	else if (window_impl->hint_flags & GDK_HINT_MIN_SIZE)
+	{
+	  /* need to initialize */
+	  mmi->ptMaxSize.x = gdk_screen_width ();
+	  mmi->ptMaxSize.y = gdk_screen_height ();
+	}
+	/* lovely API inconsistence: return FALSE when handled */
+	if (ret_val_flagp)
+	  *ret_val_flagp = !(window_impl->hint_flags &
+	                     (GDK_HINT_MIN_SIZE | GDK_HINT_MAX_SIZE));
       break;
 
     case WM_MOVE:

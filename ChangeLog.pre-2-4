@@ -1,3 +1,9 @@
+2001-11-10  Hans Breuer  <hans@breuer.org>
+
+	* gdk/win32/gdkevents-win32.c (gdk_event_translate) : make sure 
+	we know what we are talking about when asked for MINMAXINFO.
+	Also some cleaning for !HAVE_DIMM_H etc.
+
 2001-11-10  Matthias Clasen  <matthiasc@poet.de>
 
 	* gtk/gtktreeviewcolumn.c: Fix docs for 
@@ -8,7 +14,7 @@
 
 	* gtk/gtkcolorsel.c: Documentation fixes.
 
-2001-10-28  Hans Breuer  <hans@breuer.org>
+2001-11-10  Hans Breuer  <hans@breuer.org>
 
 	* gtk/gtkfontsel.c : use g_strcasecmp(), some poor platforms
 	don't have strcasecmp()
