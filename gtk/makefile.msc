@@ -7,7 +7,7 @@ BIN = C:\bin
 
 # This is the location of pthreads for Win32, 
 # see http://sourceware.cygnus.com/pthreads-win32/
-PTHREADS = ..\..\pthreads-snap-1999-04-07
+PTHREADS = ..\..\pthreads-snap-1999-05-30
 PTHREAD_LIB = $(PTHREADS)\pthread.lib
 PTHREAD_INC = -I $(PTHREADS)
 

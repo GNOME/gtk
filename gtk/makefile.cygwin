@@ -7,7 +7,7 @@ BIN = /bin
 
 # This is the location of pthreads for Win32, 
 # see http://sourceware.cygnus.com/pthreads-win32/
-PTHREADS = ../../pthreads-snap-1999-04-07
+PTHREADS = ../../pthreads-snap-1999-05-30
 PTHREAD_LIB = -L $(PTHREADS) -lpthread
 PTHREAD_INC = -I $(PTHREADS)
 
@@ -32,8 +32,9 @@ GTK_VER=1.3
 
 GDKSYSDEP = ../gdk/win32
 GLIB = ../../glib
+GETTEXT = ../../gettext-0.10.35
 
-CFLAGS = $(OPTIMIZE) -I. -I.. -I$(GDKSYSDEP) -I$(GLIB) -I$(GLIB)/gmodule -DGTK_DISABLE_COMPAT_H
+CFLAGS = $(OPTIMIZE) -I. -I.. -I$(GDKSYSDEP) -I$(GLIB) -I$(GLIB)/gmodule -I$(GETTEXT)/intl -DGTK_DISABLE_COMPAT_H
 
 all : \
 	../config.h	\
@@ -319,7 +320,7 @@ gtkmarshal.h gtkmarshal.c : gtkmarshal.list genmarshal.pl
 # Linking:
 #
 gtk-$(GTK_VER).dll : generated $(gtk_OBJECTS) gtk.def
-	$(GLIB)/build-dll gtk $(GTK_VER) gtk.def $(gtk_OBJECTS) -L $(GDKSYSDEP) -lgdk-$(GTK_VER) -L $(GLIB) -lglib-$(GLIB_VER) -lgmodule-$(GLIB_VER) -lgdi32 -luser32
+	$(GLIB)/build-dll gtk $(GTK_VER) gtk.def $(gtk_OBJECTS) -L $(GDKSYSDEP) -lgdk-$(GTK_VER) -L$(GETTEXT)/intl -lgnu-intl -L $(GLIB) -lglib-$(GLIB_VER) -lgmodule-$(GLIB_VER) -lgdi32 -luser32
 
 # General rule for compiling the objects into the DLL
 .c.o :

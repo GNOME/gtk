@@ -1,3 +1,7 @@
+1999-07-03  Tor Lillqvist  <tml@iki.fi>
+
+	* gtk/makefile.{cygwin,msc}: New pthreads version. Use gettext.
+
 Mon Jun 28 10:03:07 1999  Tor Lillqvist  <tml@iki.fi>
 
 	* gdk/win32/gdkimage.c (gdk_image_get): bpl was set wrong for
