@@ -376,6 +376,21 @@ gtk_button_class_init (GtkButtonClass *klass)
 							     0,
 							     G_PARAM_READABLE));
 
+  /**
+   * GtkButton:displace-focus:
+   *
+   * Whether the child_displacement_x/child_displacement_y properties should also 
+   * affect the focus rectangle.
+   *
+   * Since: 2.6
+   */
+  gtk_widget_class_install_style_property (widget_class,
+					   g_param_spec_boolean ("displace-focus",
+								 P_("Displace focus"),
+								 P_("Whether the child_displacement_x/_y properties should also affect the focus rectangle"),
+						       FALSE,
+						       G_PARAM_READABLE));
+
   gtk_settings_install_property (g_param_spec_boolean ("gtk-button-images",
 						       P_("Show button images"),
 						       P_("Whether stock icons should be shown in buttons"),
@@ -1064,6 +1079,16 @@ _gtk_button_paint (GtkButton    *button,
        
       if (GTK_WIDGET_HAS_FOCUS (widget))
 	{
+	  gint child_displacement_x;
+	  gint child_displacement_y;
+	  gboolean displace_focus;
+	  
+	  gtk_widget_style_get (GTK_WIDGET (widget),
+				"child_displacement_y", &child_displacement_y,
+				"child_displacement_x", &child_displacement_x,
+				"displace_focus", &displace_focus,
+				NULL);
+
 	  if (interior_focus)
 	    {
 	      x += widget->style->xthickness + focus_pad;
@@ -1077,6 +1102,12 @@ _gtk_button_paint (GtkButton    *button,
 	      y -= focus_width + focus_pad;
 	      width += 2 * (focus_width + focus_pad);
 	      height += 2 * (focus_width + focus_pad);
+	    }
+
+	  if (button->depressed && displace_focus)
+	    {
+	      x += child_displacement_x;
+	      y += child_displacement_y;
 	    }
 
 	  gtk_paint_focus (widget->style, widget->window, GTK_WIDGET_STATE (widget),
