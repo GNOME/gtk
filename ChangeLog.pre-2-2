@@ -1,3 +1,12 @@
+Fri Feb  1 19:57:59 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* configure.in: Fix use of ! in shell.
+
+	* gtk/gtktooltips.c (gtk_tooltips_class_init) gtkrc.default: 
+	Move the setting of default tooltips colors to gtktooltips.c
+	from gtkrc.default. (Use default priority so themes will
+	override.) (#58542)
+
 Fri Feb  1 17:48:51 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkrc.c (gtk_rc_get_style): Fix ordering of
