@@ -201,11 +201,13 @@ gdk_visual_init ()
 	break;
       }
 
+#ifdef G_ENABLE_DEBUG 
   if (gdk_debug_flags & GDK_DEBUG_MISC)
     for (i = 0; i < nvisuals; i++)
       g_print ("visual: %s: %d\n",
 	       visual_names[visuals[i].visual.type],
 	       visuals[i].visual.depth);
+#endif /* G_ENABLE_DEBUG */
 
   navailable_depths = 0;
   for (i = 0; i < npossible_depths; i++)
