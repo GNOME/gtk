@@ -1,3 +1,15 @@
+2005-03-07  Matthias Clasen  <mclasen@redhat.com>
+
+	* io-xpm.c: Use a generated table of offsets
+	into a big const string to avoid relocations
+	in the rgb color table. (#168901, Tommi Komulainen)
+	
+	* gen-color-table.pl: Script to generate the table,
+	copied from Owen Taylors script by the same name
+	in Pango.
+	
+	* xpm-color-table.h: The generated table.
+
 2005-03-03  Matthias Clasen  <mclasen@redhat.com>
 
 	* io-xpm.c (pixbuf_create_from_xpm): Check the number
