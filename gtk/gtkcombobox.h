@@ -52,11 +52,13 @@ struct _GtkComboBoxClass
   /* signals */
   void     (* changed)          (GtkComboBox *combo_box);
 
+  /* vfuncs */
+  gchar *  (* get_active_text)  (GtkComboBox *combo_box);
+
   /* Padding for future expansion */
   void (*_gtk_reserved0) (void);
   void (*_gtk_reserved1) (void);
   void (*_gtk_reserved2) (void);
-  void (*_gtk_reserved3) (void);
 };
 
 

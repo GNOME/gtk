@@ -1,3 +1,17 @@
+2005-04-01  Matthias Clasen  <mclasen@redhat.com>
+
+	Make gtk_combo_box_get_active_text do the right thing for
+	GtkComboBoxEntry (#171373, Robert Staudinger)
+	
+	* gtk/gtkcombobox.h: Add a get_active_text vfunc.
+	
+	* gtk/gtkcombobox.c (gtk_combo_box_real_get_active_text): And
+	implement it here.
+
+	* gtk/gtkcomboboxentry.c (gtk_combo_box_entry_get_active_text): 
+	Implement get_active_text by always returning the content of 
+	the entry.
+
 2005-03-31  Sven Neumann  <sven@gimp.org>
 
 	Merged from gtk-2-6:
