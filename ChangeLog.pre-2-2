@@ -1,3 +1,15 @@
+Sun Jan 27 22:13:02  Kristian Rietveld  <kris@gtk.org>
+
+	Fix for bug #69586
+
+	* gtk/gtktreeprivate.h: get rid of tab_offset, introduce
+	expander_size
+
+	* gtk/gtktreeview.c: get rid of ->priv->tab_offset, introduce
+	expander_size caching (from style), fix CELL_HEIGHT macro,
+	use MAX ("RBNODE_HEIGHT", expander_size) (differs per case) for
+	row height calculation, added style_set callback
+
 2002-01-27  Anders Carlsson  <andersca@gnu.org>
 
 	* gtk/gtklabel.c (gtk_label_create_window): Set the cursor to
