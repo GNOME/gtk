@@ -242,7 +242,7 @@ gtk_init_check (int	 *argc,
 	      
 	      if (*module_name == '=')
 		module_name++;
-	      else
+	      else if (i + 1 < *argc)
 		{
 		  (*argv)[i] = NULL;
 		  i += 1;
@@ -250,7 +250,8 @@ gtk_init_check (int	 *argc,
 		}
 	      (*argv)[i] = NULL;
 
-	      gtk_modules = g_slist_prepend (gtk_modules, g_strdup (module_name));
+	      if (module_name && *module_name)
+		gtk_modules = g_slist_prepend (gtk_modules, g_strdup (module_name));
 	    }
 	  else if (strcmp ("--g-fatal-warnings", (*argv)[i]) == 0)
 	    {
