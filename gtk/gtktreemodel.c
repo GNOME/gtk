@@ -651,6 +651,39 @@ gtk_tree_model_get_iter (GtkTreeModel *tree_model,
   return (* GTK_TREE_MODEL_GET_IFACE (tree_model)->get_iter) (tree_model, iter, path);
 }
 
+/**
+ * gtk_tree_model_get_iter_from_string:
+ * @tree_model: A #GtkTreeModel.
+ * @iter: An uninitialized #GtkTreeIter.
+ * @path_string: A string representation of a #GtkTreePath.
+ *
+ * Sets @iter to a valid iterator pointing to @path_string, if it
+ * exists. Otherwise, @iter is left invalid and %FALSE is returned.
+ *
+ * Return value: TRUE, if @iter was set.
+ **/
+gboolean
+gtk_tree_model_get_iter_from_string (GtkTreeModel *tree_model,
+				     GtkTreeIter  *iter,
+				     const gchar  *path_string)
+{
+  gboolean retval;
+  GtkTreePath *path;
+
+  g_return_val_if_fail (GTK_IS_TREE_MODEL (tree_model), FALSE);
+  g_return_val_if_fail (iter != NULL, FALSE);
+  g_return_val_if_fail (path_string != NULL, FALSE);
+  
+  path = gtk_tree_path_new_from_string (path_string);
+  
+  g_return_val_if_fail (path != NULL, FALSE);
+
+  retval = gtk_tree_model_get_iter (tree_model, iter, path);
+  gtk_tree_path_free (path);
+  
+  return retval;
+}
+
 
 /**
  * gtk_tree_model_get_iter_root:

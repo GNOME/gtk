@@ -176,6 +176,9 @@ GType             gtk_tree_model_get_column_type (GtkTreeModel *tree_model,
 gboolean          gtk_tree_model_get_iter        (GtkTreeModel *tree_model,
 						  GtkTreeIter  *iter,
 						  GtkTreePath  *path);
+gboolean          gtk_tree_model_get_iter_from_string (GtkTreeModel *tree_model,
+						       GtkTreeIter  *iter,
+						       const gchar  *path_string);
 gboolean          gtk_tree_model_get_iter_root   (GtkTreeModel *tree_model,
 						  GtkTreeIter  *iter);
 GtkTreePath *     gtk_tree_model_get_path        (GtkTreeModel *tree_model,
