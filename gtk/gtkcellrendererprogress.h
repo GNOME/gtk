@@ -42,12 +42,6 @@ typedef struct _GtkCellRendererProgress         GtkCellRendererProgress;
 typedef struct _GtkCellRendererProgressClass    GtkCellRendererProgressClass;
 typedef struct _GtkCellRendererProgressPrivate  GtkCellRendererProgressPrivate;
 
-enum
-{
-  GTK_PROGRESS_CELL_UNKNOWN = -1,
-  GTK_PROGRESS_CELL_FAILED = -2
-};
-
 struct _GtkCellRendererProgress
 {
   GtkCellRenderer parent_instance;

@@ -1,3 +1,16 @@
+Sun May 16 22:27:17 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkintl.h (Q_): Add a Q_() macro. 
+
+	* gtk/gtkcellrendererprogress.h: Remove GTK_PROGRESS_CELL_UNKNOWN
+	and GTK_PROGRESS_CELL_FAILED. With the ability the set the label,
+	they are not really needed.
+
+	* gtk/gtkcellrendererprogress.c: Use the xpad and ypad properties
+	instead of hardwired padding, use Q_() for the default label, 
+	compute a reasonable minimal size.  (#142571, #142572, #142573,
+	Tommi Komulainen, Christian Persch)
+	
 2004-05-15  Tor Lillqvist  <tml@iki.fi>
 
 	* gdk/win32/gdkdnd-win32.c: Put back the ref_count field in the

@@ -34,9 +34,6 @@
                                                                                      GTK_TYPE_CELL_RENDERER_PROGRESS, \
                                                                                      GtkCellRendererProgressPrivate))
 
-#define XPAD 4
-#define YPAD 8
-
 enum
 {
 	PROP_0,
@@ -65,8 +62,9 @@ static void gtk_cell_renderer_progress_set_property (GObject                 *ob
 static void gtk_cell_renderer_progress_set_value    (GtkCellRendererProgress *cellprogress,
 						     gint                     value);
 static void gtk_cell_renderer_progress_set_text     (GtkCellRendererProgress *cellprogress,
-						     gchar                   *text);
-static void compute_dimensions                      (GtkWidget               *widget,
+						     const gchar             *text);
+static void compute_dimensions                      (GtkCellRenderer         *cell,
+						     GtkWidget               *widget,
 						     const gchar             *text,
 						     gint                    *width,
 						     gint                    *height);
@@ -114,7 +112,7 @@ gtk_cell_renderer_progress_class_init (GtkCellRendererProgressClass *klass)
 				   g_param_spec_int ("value",
 						     P_("Value"),
 						     P_("Value of the progress bar"),
-						     -2, 100, 0,
+						     0, 100, 0,
 						     G_PARAM_READWRITE));
 
   /**
@@ -147,6 +145,7 @@ gtk_cell_renderer_progress_init (GtkCellRendererProgress *cellprogress)
   cellprogress->priv->text = NULL;
   cellprogress->priv->label = NULL;
   cellprogress->priv->min_w = -1;
+  cellprogress->priv->min_h = -1;
 }
 
 
@@ -230,19 +229,9 @@ gtk_cell_renderer_progress_set_value (GtkCellRendererProgress *cellprogress,
 
   if (cellprogress->priv->text)
     text = g_strdup (cellprogress->priv->text);
-  else if (cellprogress->priv->value == GTK_PROGRESS_CELL_FAILED)
-    /* Translator hint: this is a label on progress bars inside a tree view. 
-     */
-    text = g_strdup (_("Failed"));
-  else if (cellprogress->priv->value == GTK_PROGRESS_CELL_UNKNOWN)
-    /* Translator hint: this is a label on progress bars inside a tree view. 
-     */
-    text = g_strdup (_("Unknown"));
   else
-    /* Translator hint: this is the default label on progress bars
-     * inside a tree view. %d will be replaced by the percentage 
-     */
-    text = g_strdup_printf (_("%d %%"), cellprogress->priv->value);
+    text = g_strdup_printf (Q_("progress bar label|%d %%"), 
+			    cellprogress->priv->value);
   
   g_free (cellprogress->priv->label);
   cellprogress->priv->label = text;
@@ -250,7 +239,7 @@ gtk_cell_renderer_progress_set_value (GtkCellRendererProgress *cellprogress,
 
 static void
 gtk_cell_renderer_progress_set_text (GtkCellRendererProgress *cellprogress, 
-				     gchar                   *text)
+				     const gchar             *text)
 {
   gchar *new_text;
 
@@ -263,10 +252,11 @@ gtk_cell_renderer_progress_set_text (GtkCellRendererProgress *cellprogress,
 }
 
 static void
-compute_dimensions (GtkWidget   *widget, 
-		    const gchar *text, 
-		    gint        *width, 
-		    gint        *height)
+compute_dimensions (GtkCellRenderer *cell,
+		    GtkWidget       *widget, 
+		    const gchar     *text, 
+		    gint            *width, 
+		    gint            *height)
 {
   PangoRectangle logical_rect;
   PangoLayout *layout;
@@ -275,10 +265,10 @@ compute_dimensions (GtkWidget   *widget,
   pango_layout_get_pixel_extents (layout, NULL, &logical_rect);
   
   if (width)
-    *width = logical_rect.width + XPAD * 2 + widget->style->xthickness * 2;
+    *width = logical_rect.width + cell->xpad * 2 + widget->style->xthickness * 2;
   
   if (height)
-    *height = logical_rect.height + YPAD * 2 + widget->style->ythickness * 2;
+    *height = logical_rect.height + cell->ypad * 2 + widget->style->ythickness * 2;
   
   g_object_unref (G_OBJECT (layout));
 }
@@ -294,13 +284,18 @@ gtk_cell_renderer_progress_get_size (GtkCellRenderer *cell,
 {
   GtkCellRendererProgress *cellprogress = GTK_CELL_RENDERER_PROGRESS (cell);
   gint w, h;
-  
+  gchar *text;
+
   if (cellprogress->priv->min_w < 0)
-    compute_dimensions (widget, _("Unknown"),
-			&cellprogress->priv->min_w,
-			&cellprogress->priv->min_h);
+    {
+      text = g_strdup_printf (Q_("progress bar label|%d %%"), 100);
+      compute_dimensions (cell, widget, text,
+			  &cellprogress->priv->min_w,
+			  &cellprogress->priv->min_h);
+      g_free (text);
+    }
   
-  compute_dimensions (widget, cellprogress->priv->label, &w, &h);
+  compute_dimensions (cell, widget, cellprogress->priv->label, &w, &h);
   
   if (width)
       *width = MAX (cellprogress->priv->min_w, w);
@@ -330,11 +325,11 @@ gtk_cell_renderer_progress_render (GtkCellRenderer *cell,
   
   gc = gdk_gc_new (window);
   
-  x = cell_area->x + XPAD;
-  y = cell_area->y + YPAD;
+  x = cell_area->x + cell->xpad;
+  y = cell_area->y + cell->ypad;
   
-  w = cell_area->width - XPAD * 2;
-  h = cell_area->height - YPAD * 2;
+  w = cell_area->width - cell->xpad * 2;
+  h = cell_area->height - cell->ypad * 2;
   
   gdk_gc_set_rgb_fg_color (gc, &widget->style->fg[GTK_STATE_NORMAL]);
   gdk_draw_rectangle (window, gc, TRUE, x, y, w, h);
@@ -347,7 +342,7 @@ gtk_cell_renderer_progress_render (GtkCellRenderer *cell,
   gdk_draw_rectangle (window, gc, TRUE, x, y, w, h);
   
   gdk_gc_set_rgb_fg_color (gc, &widget->style->bg[GTK_STATE_SELECTED]);
-  perc_w = w * cellprogress->priv->value / 100;
+  perc_w = w * MAX (0, cellprogress->priv->value) / 100;
   gdk_draw_rectangle (window, gc, TRUE, is_rtl ? (x + w - perc_w) : x, y, perc_w, h);
   
   layout = gtk_widget_create_pango_layout (widget, cellprogress->priv->label);
