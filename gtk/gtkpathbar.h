@@ -59,9 +59,10 @@ struct _GtkPathBar
   gint16 slider_width;
   gint16 spacing;
   gint16 button_offset;
+  guint timer;
   guint slider_visible : 1;
+  guint need_timer : 1;
   guint ignore_click : 1;
-  guint need_timer;
 };
 
 struct _GtkPathBarClass

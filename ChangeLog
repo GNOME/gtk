@@ -1,3 +1,8 @@
+2004-09-27  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkpathbar.h (struct _GtkPathBar): Only need a bit for
+	need_timer.
+
 2004-09-26  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtknotebook.c (gtk_notebook_class_init): Add a missing _
