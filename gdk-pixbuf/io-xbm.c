@@ -295,6 +295,14 @@ gdk_pixbuf__xbm_image_load_real (FILE *f, XBMData *context, GError **error)
                 return NULL;
         }
         
+	if (x_hot != -1 && y_hot != -1) {
+		gchar hot[10];
+		g_snprintf (hot, 10, "%d", x_hot);
+		gdk_pixbuf_set_option (pixbuf, "x_hot", hot);
+		g_snprintf (hot, 10, "%d", y_hot);
+		gdk_pixbuf_set_option (pixbuf, "y_hot", hot);
+	}
+
 	pixels = gdk_pixbuf_get_pixels (pixbuf);
 	row_stride = gdk_pixbuf_get_rowstride (pixbuf);
 

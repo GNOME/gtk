@@ -1,3 +1,10 @@
+2002-09-06  Matthias Clasen  <maclas@gmx.de>
+
+	* io-xpm.c (pixbuf_create_from_xpm): 
+	* io-xbm.c (gdk_pixbuf__xbm_image_load_real): 
+	* io-ico.c (DecodeHeader): Attach hotspot coordinates to the
+	pixbuf as options "x_hot" and "y_hot". 
+
 2002-09-04  Matthias Clasen  <maclas@gmx.de>
 
 	* io-tga.c (io_buffer_append): 

@@ -1208,7 +1208,7 @@ static GdkPixbuf *
 pixbuf_create_from_xpm (const gchar * (*get_buf) (enum buf_op op, gpointer handle), gpointer handle,
                         GError **error)
 {
-	gint w, h, n_col, cpp;
+	gint w, h, n_col, cpp, x_hot, y_hot, items;
 	gint cnt, xcnt, ycnt, wbytes, n;
 	gint is_trans = FALSE;
 	const gchar *buffer;
@@ -1229,7 +1229,7 @@ pixbuf_create_from_xpm (const gchar * (*get_buf) (enum buf_op op, gpointer handl
                              _("No XPM header found"));
 		return NULL;
 	}
-	sscanf (buffer, "%d %d %d %d", &w, &h, &n_col, &cpp);
+	items = sscanf (buffer, "%d %d %d %d %d %d", &w, &h, &n_col, &cpp, &x_hot, &y_hot);
 	if (w <= 0) {
                 g_set_error (error,
                              GDK_PIXBUF_ERROR,
@@ -1354,6 +1354,15 @@ pixbuf_create_from_xpm (const gchar * (*get_buf) (enum buf_op op, gpointer handl
 	g_hash_table_destroy (color_hash);
 	g_free (colors);
 	g_free (name_buf);
+
+	if (items == 6) {
+		gchar hot[10];
+		g_snprintf (hot, 10, "%d", x_hot);
+		gdk_pixbuf_set_option (pixbuf, "x_hot", hot);
+		g_snprintf (hot, 10, "%d", y_hot);
+		gdk_pixbuf_set_option (pixbuf, "y_hot", hot);
+
+	}
 
 	return pixbuf;
 }

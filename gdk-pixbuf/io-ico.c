@@ -146,6 +146,9 @@ struct ico_progressive_state {
 				   4 = 4 bpp colormapped
 				   1  = 1 bit bitonal 
 				 */
+        gboolean cursor;
+        gint x_hot;
+        gint y_hot;
 
 	struct headerpair Header;	/* Decoded (BE->CPU) header */
 	
@@ -199,6 +202,8 @@ static void DecodeHeader(guchar *Data, gint Bytes,
  
  	/* Step 1: The ICO header */
 
+	State->cursor = ((Data[3] << 8) + Data[2] == 2) ? TRUE : FALSE;
+
  	IconCount = (Data[5] << 8) + (Data[4]);
 	
  	State->HeaderSize = 6 + IconCount*16;
@@ -238,6 +243,8 @@ static void DecodeHeader(guchar *Data, gint Bytes,
 
 		if (ThisScore>State->ImageScore) {
 			State->ImageScore = ThisScore;
+			State->x_hot = (Ptr[5] << 8) + Ptr[4];
+			State->y_hot = (Ptr[7] << 8) + Ptr[6];
 			State->DIBoffset = (Ptr[15]<<24)+(Ptr[14]<<16)+
 					   (Ptr[13]<<8) + (Ptr[12]);
 								 
@@ -409,6 +416,13 @@ static void DecodeHeader(guchar *Data, gint Bytes,
 				     GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY,
 				     _("Not enough memory to load icon"));
 			return;
+		}
+		if (State->cursor) {
+			gchar hot[10];
+			g_snprintf (hot, 10, "%d", State->x_hot);
+			gdk_pixbuf_set_option (State->pixbuf, "x_hot", hot);
+			g_snprintf (hot, 10, "%d", State->y_hot);
+			gdk_pixbuf_set_option (State->pixbuf, "y_hot", hot);
 		}
 
 		if (State->prepared_func != NULL)
