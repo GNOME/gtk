@@ -1,5 +1,9 @@
 2004-09-09  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/makegtkalias.pl: 
+	* gdk/makegdkalias.pl: Use the short prefix "IA__" for 
+	aliases instead of the long suffix "__internal_alias". 
+
 	* tests/testfilechooser.c (main): Update sensitivity of the "Select all"
 	button.
 

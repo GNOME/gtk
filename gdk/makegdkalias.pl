@@ -94,7 +94,7 @@ while (<>) {
 
   my $str = $_;
   chomp($str);
-  my $alias = $str."__internal_alias";
+  my $alias = "IA__".$str;
  
   print <<EOF
 extern __typeof ($str) $alias __attribute((visibility("hidden")));

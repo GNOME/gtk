@@ -1,3 +1,8 @@
+2004-09-09  Matthias Clasen  <mclasen@redhat.com>
+
+	* makegdkpixbufalias.pl: Use the short prefix "IA__" for 
+	aliases instead of the long suffix "__internal_alias". 
+	
 2004-09-01  Matthias Clasen  <mclasen@redhat.com>
 
 	* gdk-pixbuf-core.h: Align argument names with source.
