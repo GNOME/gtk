@@ -167,6 +167,8 @@ GtkTreeViewColumn
 </para>
 
 @tree_column: 
+@width: 
+<!-- # Unused Parameters # -->
 @size: 
 
 

@@ -781,6 +781,15 @@ types related to the text widget and how they work together.
 @Returns: 
 
 
+<!-- ##### FUNCTION gtk_text_iter_order ##### -->
+<para>
+
+</para>
+
+@first: 
+@second: 
+
+
 <!-- ##### FUNCTION gtk_text_iter_spew ##### -->
 <para>
 

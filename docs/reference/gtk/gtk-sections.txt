@@ -442,7 +442,6 @@ gtk_container_check_resize
 gtk_container_foreach
 gtk_container_foreach_full
 gtk_container_children
-gtk_container_focus
 gtk_container_set_reallocate_redraws
 gtk_container_set_focus_child
 gtk_container_set_focus_vadjustment
@@ -1020,7 +1019,7 @@ GtkImageStockData
 <TITLE>GtkImageMenuItem</TITLE>
 GtkImageMenuItem
 GtkImageMenuItemClass
-gtk_image_menu_item_add_image
+gtk_image_menu_item_set_image
 gtk_image_menu_item_get_image
 gtk_image_menu_item_get_type
 gtk_image_menu_item_new
@@ -1805,7 +1804,6 @@ GtkScale
 gtk_scale_set_digits
 gtk_scale_set_draw_value
 gtk_scale_set_value_pos
-gtk_scale_get_value_width
 <SUBSECTION Standard>
 GTK_SCALE
 GTK_IS_SCALE
@@ -1816,8 +1814,6 @@ GTK_IS_SCALE_CLASS
 GTK_SCALE_GET_CLASS
 <SUBSECTION Private>
 gtk_scale_value_width
-gtk_scale_get_value_size
-gtk_scale_draw_value
 </SECTION>
 
 <SECTION>
@@ -2235,7 +2231,7 @@ gtk_text_iter_backward_search
 gtk_text_iter_equal
 gtk_text_iter_compare
 gtk_text_iter_in_range
-gtk_text_iter_reorder
+gtk_text_iter_order
 gtk_text_iter_spew
 </SECTION>
 
@@ -2667,7 +2663,6 @@ gtk_tree_view_column_new_with_attributes
 gtk_tree_view_column_set_cell_renderer
 gtk_tree_view_column_add_attribute
 gtk_tree_view_column_set_attributes
-gtk_tree_view_column_set_cell_data
 gtk_tree_view_column_set_visible
 gtk_tree_view_column_get_visible
 gtk_tree_view_column_set_sizing
@@ -3657,8 +3652,6 @@ GtkFunction
 GtkDestroyNotify
 GtkCallbackMarshal
 GtkSignalMarshaller
-GtkArgGetFunc
-GtkArgSetFunc
 GtkTypeObject
 GtkArg
 GTK_VALUE_CHAR
@@ -3764,7 +3757,6 @@ GtkStateType
 GtkSubmenuDirection
 GtkSubmenuPlacement
 GtkToolbarStyle
-GtkTroughType
 GtkUpdateType
 GtkVisibility
 GtkWindowPosition

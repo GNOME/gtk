@@ -1776,6 +1776,15 @@ gtk_label_destroy_window (GtkLabel *label)
   label->select_info->window = NULL;
 }
 
+/**
+ * gtk_label_set_selectable:
+ * @label: a #GtkLabel
+ * @setting: %TRUE to allow selecting text in the label
+ *
+ * Selectable labels allow the user to select text from the label, for
+ * copy-and-paste.
+ * 
+ **/
 void
 gtk_label_set_selectable (GtkLabel *label,
                           gboolean  setting)
@@ -1826,6 +1835,14 @@ gtk_label_set_selectable (GtkLabel *label,
     }
 }
 
+/**
+ * gtk_label_get_selectable:
+ * @label: a #GtkLabel
+ * 
+ * Gets the value set by gtk_label_set_selectable().
+ * 
+ * Return value: %TRUE if the user can copy text from the label
+ **/
 gboolean
 gtk_label_get_selectable (GtkLabel *label)
 {

@@ -1,3 +1,10 @@
+2001-06-14  Havoc Pennington  <hp@redhat.com>
+
+        Docs fixups, and:
+	
+	* gtk/gtkcompat.h: remove GTK_DISABLE_COMPAT_H, replace with
+	GTK_DISABLE_DEPRECATED
+
 Thu Jun 14 19:21:27 2001  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtktreestore.c (gtk_tree_store_sort_helper): Whoops.  Forgot
