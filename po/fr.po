@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.2.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2003-07-20 20:02+0200\n"
-"PO-Revision-Date: 2003-07-20 19:51+0200\n"
+"POT-Creation-Date: 2003-08-03 11:04+0200\n"
+"PO-Revision-Date: 2003-08-03 10:42+0200\n"
 "Last-Translator: Christophe Merlet (RedFox) <redfox@redfoxcenter.org>\n"
 "Language-Team: GNOME French Team <gnomefr@traduc.org>\n"
 "MIME-Version: 1.0\n"
@@ -556,7 +556,7 @@ msgstr "Impossible d'allouer de la mémoire pour l'en-tête TGA"
 
 #: gdk-pixbuf/io-tga.c:934
 msgid "Too big value in the infolen field of TGA header."
-msgstr "Valeur trop grande dans le champ infolen de l'entête TGA."
+msgstr "Valeur trop grande dans le champ infolen de l'en-tête TGA."
 
 #: gdk-pixbuf/io-tga.c:958
 msgid "Can't allocate memory for TGA cmap temporary buffer"
@@ -1550,7 +1550,7 @@ msgstr "Inconsistent"
 msgid "Whether to display an \"inconsistent\" state"
 msgstr "Indique s'il faut afficher un état inconsistent"
 
-#: gtk/gtkcolorsel.c:559
+#: gtk/gtkcolorsel.c:561
 msgid ""
 "The previously-selected color, for comparison to the color you're selecting "
 "now. You can drag this color to a palette entry, or select this color as "
@@ -1561,7 +1561,7 @@ msgstr ""
 "sur une entrée de palette, ou sélectionner cette couleur comme actuel en la "
 "glissant sur un autre échantillon de couleur à coté."
 
-#: gtk/gtkcolorsel.c:564
+#: gtk/gtkcolorsel.c:566
 msgid ""
 "The color you've chosen. You can drag this color to a palette entry to save "
 "it for use in the future."
@@ -1569,11 +1569,11 @@ msgstr ""
 "La couleur que vous avez choisie. Vous pouvez faire glisser cette couleur "
 "dans une entrée de la palette pour pouvoir la réutiliser ultérieurement."
 
-#: gtk/gtkcolorsel.c:925
+#: gtk/gtkcolorsel.c:927
 msgid "_Save color here"
 msgstr "_Enregistrer la couleur ici"
 
-#: gtk/gtkcolorsel.c:1128
+#: gtk/gtkcolorsel.c:1132
 msgid ""
 "Click this palette entry to make it the current color. To change this entry, "
 "drag a color swatch here or right-click it and select \"Save color here.\""
@@ -1582,49 +1582,49 @@ msgstr ""
 "modifier cette entrée, glissez un échantillon de couleur ou faîte un clic-"
 "droit dessus et sélectionnez « Enregistrer la couleur ici »."
 
-#: gtk/gtkcolorsel.c:1752
+#: gtk/gtkcolorsel.c:1756
 msgid "Has Opacity Control"
 msgstr "A un contrôle d'opacité"
 
-#: gtk/gtkcolorsel.c:1753
+#: gtk/gtkcolorsel.c:1757
 msgid "Whether the color selector should allow setting opacity"
 msgstr "Indique si le sélecteur de couleur doit permettre de régler l'opacité"
 
-#: gtk/gtkcolorsel.c:1759
+#: gtk/gtkcolorsel.c:1763
 msgid "Has palette"
 msgstr "A une palette"
 
-#: gtk/gtkcolorsel.c:1760
+#: gtk/gtkcolorsel.c:1764
 msgid "Whether a palette should be used"
 msgstr "Indique si une palette doit être utilisée"
 
-#: gtk/gtkcolorsel.c:1766
+#: gtk/gtkcolorsel.c:1770
 msgid "Current Color"
 msgstr "Couleur courante"
 
-#: gtk/gtkcolorsel.c:1767
+#: gtk/gtkcolorsel.c:1771
 msgid "The current color"
 msgstr "Couleur courante"
 
-#: gtk/gtkcolorsel.c:1773
+#: gtk/gtkcolorsel.c:1777
 msgid "Current Alpha"
 msgstr "Alpha courant"
 
-#: gtk/gtkcolorsel.c:1774
+#: gtk/gtkcolorsel.c:1778
 msgid "The current opacity value (0 fully transparent, 65535 fully opaque)"
 msgstr ""
 "La valeur courante de l'opacité (0 : entièrement transparent, 65535 : "
 "entièrement opaque)"
 
-#: gtk/gtkcolorsel.c:1788
+#: gtk/gtkcolorsel.c:1792
 msgid "Custom palette"
 msgstr "Palette personnalisée"
 
-#: gtk/gtkcolorsel.c:1789
+#: gtk/gtkcolorsel.c:1793
 msgid "Palette to use in the color selector"
 msgstr "Palette à utiliser dans le sélecteur de couleurs"
 
-#: gtk/gtkcolorsel.c:1830
+#: gtk/gtkcolorsel.c:1834
 msgid ""
 "Select the color you want from the outer ring. Select the darkness or "
 "lightness of that color using the inner triangle."
@@ -1633,7 +1633,7 @@ msgstr ""
 "Sélectionnez la luminosité ou l'obscurité de la couleur en utilisant le "
 "triangle intérieur."
 
-#: gtk/gtkcolorsel.c:1855
+#: gtk/gtkcolorsel.c:1859
 msgid ""
 "Click the eyedropper, then click a color anywhere on your screen to select "
 "that color."
@@ -1641,67 +1641,67 @@ msgstr ""
 "Cliquez sur la pipette, et cliquez sur une couleur n'importe où sur l'écran "
 "pour sélectionner cette couleur."
 
-#: gtk/gtkcolorsel.c:1864
+#: gtk/gtkcolorsel.c:1868
 msgid "_Hue:"
 msgstr "_Teinte :"
 
-#: gtk/gtkcolorsel.c:1865
+#: gtk/gtkcolorsel.c:1869
 msgid "Position on the color wheel."
 msgstr "Position sur la roue des couleurs."
 
-#: gtk/gtkcolorsel.c:1866
+#: gtk/gtkcolorsel.c:1870
 msgid "_Saturation:"
 msgstr "_Saturation :"
 
-#: gtk/gtkcolorsel.c:1867
+#: gtk/gtkcolorsel.c:1871
 msgid "\"Deepness\" of the color."
 msgstr "« Profondeur » de la couleur."
 
-#: gtk/gtkcolorsel.c:1868
+#: gtk/gtkcolorsel.c:1872
 msgid "_Value:"
 msgstr "_Valeur :"
 
-#: gtk/gtkcolorsel.c:1869
+#: gtk/gtkcolorsel.c:1873
 msgid "Brightness of the color."
 msgstr "Brillance de la couleur."
 
-#: gtk/gtkcolorsel.c:1870
+#: gtk/gtkcolorsel.c:1874
 msgid "_Red:"
 msgstr "_Rouge :"
 
-#: gtk/gtkcolorsel.c:1871
+#: gtk/gtkcolorsel.c:1875
 msgid "Amount of red light in the color."
 msgstr "Quantité de rouge dans la couleur."
 
-#: gtk/gtkcolorsel.c:1872
+#: gtk/gtkcolorsel.c:1876
 msgid "_Green:"
 msgstr "_Vert :"
 
-#: gtk/gtkcolorsel.c:1873
+#: gtk/gtkcolorsel.c:1877
 msgid "Amount of green light in the color."
 msgstr "Quantité de vert dans la couleur."
 
-#: gtk/gtkcolorsel.c:1874
+#: gtk/gtkcolorsel.c:1878
 msgid "_Blue:"
 msgstr "_Bleu :"
 
-#: gtk/gtkcolorsel.c:1875
+#: gtk/gtkcolorsel.c:1879
 msgid "Amount of blue light in the color."
 msgstr "Quantité de bleu dans la couleur."
 
-#: gtk/gtkcolorsel.c:1878
+#: gtk/gtkcolorsel.c:1882
 msgid "_Opacity:"
 msgstr "_Opacité :"
 
-#: gtk/gtkcolorsel.c:1886
+#: gtk/gtkcolorsel.c:1890
 msgid "Transparency of the currently-selected color."
 msgstr "Transparence de la couleur sélectionnée."
 
-#: gtk/gtkcolorsel.c:1901
+#: gtk/gtkcolorsel.c:1905
 msgid "Color _Name:"
 msgstr "_Nom de la couleur :"
 
-#: gtk/gtkcolorsel.c:1916
+#: gtk/gtkcolorsel.c:1920
 msgid ""
 "You can enter an HTML-style hexadecimal color value, or simply a color name "
 "such as 'orange' in this entry."
@@ -1710,7 +1710,7 @@ msgstr ""
 "(comme les codes de couleur HTML), ou bien un nom de couleur (comme « orange "
 "»)."
 
-#: gtk/gtkcolorsel.c:1935
+#: gtk/gtkcolorsel.c:1939
 msgid "_Palette"
 msgstr "_Palette"
 
@@ -1828,7 +1828,7 @@ msgstr "A un séparateur"
 
 #: gtk/gtkdialog.c:137
 msgid "The dialog has a separator bar above its buttons"
-msgstr "Le dialogue a une barre de séparation au dessus de ses boutons"
+msgstr "Le dialogue a une barre de séparation au-dessus de ses boutons"
 
 #: gtk/gtkdialog.c:162
 msgid "Content area border"
@@ -2013,7 +2013,7 @@ msgstr "Fichiers"
 msgid "_Files"
 msgstr "_Fichiers"
 
-#: gtk/gtkfilesel.c:845 gtk/gtkfilesel.c:2237
+#: gtk/gtkfilesel.c:845 gtk/gtkfilesel.c:2239
 #, c-format
 msgid "Folder unreadable: %s"
 msgstr "Dossier non lisible : %s"
@@ -2041,7 +2041,7 @@ msgstr "_Supprimer le fichier"
 msgid "_Rename File"
 msgstr "_Renommer le fichier"
 
-#: gtk/gtkfilesel.c:1429
+#: gtk/gtkfilesel.c:1431
 #, c-format
 msgid ""
 "The folder name \"%s\" contains symbols that are not allowed in filenames"
@@ -2049,7 +2049,7 @@ msgstr ""
 "Le nom du dossier « %s » contient des symboles non autorisés dans des noms "
 "de fichiers."
 
-#: gtk/gtkfilesel.c:1431
+#: gtk/gtkfilesel.c:1433
 #, c-format
 msgid ""
 "Error creating folder \"%s\": %s\n"
@@ -2058,37 +2058,37 @@ msgstr ""
 "Erreur lors de la création du dossier « %s » : %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1432 gtk/gtkfilesel.c:1668
+#: gtk/gtkfilesel.c:1434 gtk/gtkfilesel.c:1670
 msgid "You probably used symbols not allowed in filenames."
 msgstr ""
 "Vous avez probablement utilisé des symboles non valides dans un nom de "
 "fichiers."
 
-#: gtk/gtkfilesel.c:1440
+#: gtk/gtkfilesel.c:1442
 #, c-format
 msgid "Error creating folder \"%s\": %s\n"
 msgstr "Erreur lors de la création du dossier « %s » : %s\n"
 
-#: gtk/gtkfilesel.c:1474
+#: gtk/gtkfilesel.c:1476
 msgid "New Folder"
 msgstr "Nouveau dossier"
 
-#: gtk/gtkfilesel.c:1489
+#: gtk/gtkfilesel.c:1491
 msgid "_Folder name:"
 msgstr "_Nom du dossier :"
 
-#: gtk/gtkfilesel.c:1513
+#: gtk/gtkfilesel.c:1515
 msgid "C_reate"
 msgstr "C_réer"
 
-#: gtk/gtkfilesel.c:1556
+#: gtk/gtkfilesel.c:1558
 #, c-format
 msgid "The filename \"%s\" contains symbols that are not allowed in filenames"
 msgstr ""
 "Le nom du fichier « %s » contient des symboles non valides dans un nom de "
 "fichiers."
 
-#: gtk/gtkfilesel.c:1559
+#: gtk/gtkfilesel.c:1561
 #, c-format
 msgid ""
 "Error deleting file \"%s\": %s\n"
@@ -2097,33 +2097,33 @@ msgstr ""
 "Erreur lors de la suppression du fichier « %s » : %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1561 gtk/gtkfilesel.c:1682
+#: gtk/gtkfilesel.c:1563 gtk/gtkfilesel.c:1684
 msgid "It probably contains symbols not allowed in filenames."
 msgstr ""
 "Il contient probablement des symboles non valides dans un nom de fichiers."
 
-#: gtk/gtkfilesel.c:1570
+#: gtk/gtkfilesel.c:1572
 #, c-format
 msgid "Error deleting file \"%s\": %s"
 msgstr "Erreur lors de la suppression du fichier « %s » : %s"
 
-#: gtk/gtkfilesel.c:1613
+#: gtk/gtkfilesel.c:1615
 #, c-format
 msgid "Really delete file \"%s\" ?"
 msgstr "Voulez-vous vraiment supprimer le fichier « %s » ?"
 
-#: gtk/gtkfilesel.c:1618
+#: gtk/gtkfilesel.c:1620
 msgid "Delete File"
 msgstr "Supprimer le fichier"
 
-#: gtk/gtkfilesel.c:1664 gtk/gtkfilesel.c:1678
+#: gtk/gtkfilesel.c:1666 gtk/gtkfilesel.c:1680
 #, c-format
 msgid "The file name \"%s\" contains symbols that are not allowed in filenames"
 msgstr ""
 "Le nom du fichier « %s » contient des symboles non valides dans un nom de "
 "fichiers."
 
-#: gtk/gtkfilesel.c:1666
+#: gtk/gtkfilesel.c:1668
 #, c-format
 msgid ""
 "Error renaming file to \"%s\": %s\n"
@@ -2132,7 +2132,7 @@ msgstr ""
 "Erreur lors du renommage en « %s » : %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1680
+#: gtk/gtkfilesel.c:1682
 #, c-format
 msgid ""
 "Error renaming file \"%s\": %s\n"
@@ -2141,29 +2141,29 @@ msgstr ""
 "Erreur lors du renommage de « %s » : %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1690
+#: gtk/gtkfilesel.c:1692
 #, c-format
 msgid "Error renaming file \"%s\" to \"%s\": %s"
 msgstr "Erreur lors du renommage de « %s » en « %s » : %s"
 
-#: gtk/gtkfilesel.c:1737
+#: gtk/gtkfilesel.c:1739
 msgid "Rename File"
 msgstr "Renommer le fichier"
 
-#: gtk/gtkfilesel.c:1752
+#: gtk/gtkfilesel.c:1754
 #, c-format
 msgid "Rename file \"%s\" to:"
 msgstr "Renommer le fichier « %s » en :"
 
-#: gtk/gtkfilesel.c:1781
+#: gtk/gtkfilesel.c:1783
 msgid "_Rename"
 msgstr "_Renommer"
 
-#: gtk/gtkfilesel.c:2217
+#: gtk/gtkfilesel.c:2219
 msgid "_Selection: "
 msgstr "_Sélection : "
 
-#: gtk/gtkfilesel.c:3111
+#: gtk/gtkfilesel.c:3097
 #, c-format
 msgid ""
 "The filename \"%s\" couldn't be converted to UTF-8 (try setting the "
@@ -2172,15 +2172,15 @@ msgstr ""
 "Le nom du fichier « %s » n'a pas pu être converti en UTF-8 (essayez "
 "d'activer la variable d'environnement G_BROKEN_FILENAMES) : %s"
 
-#: gtk/gtkfilesel.c:3114
+#: gtk/gtkfilesel.c:3100
 msgid "Invalid Utf-8"
 msgstr "UTF-8 non valide"
 
-#: gtk/gtkfilesel.c:3991
+#: gtk/gtkfilesel.c:3977
 msgid "Name too long"
 msgstr "Nom trop long"
 
-#: gtk/gtkfilesel.c:3993
+#: gtk/gtkfilesel.c:3979
 msgid "Couldn't convert filename"
 msgstr "Impossible de convertir le nom du fichier"
 
@@ -2650,7 +2650,7 @@ msgid ""
 "Whether menu accelerators can be changed by pressing a key over the menu item"
 msgstr ""
 "Indique si les accélérateurs pour les entrées de menu peuvent être modifiés "
-"en pressant une combinaison de touche au dessus d'une entrée de menu"
+"en pressant une combinaison de touche au-dessus d'une entrée de menu"
 
 #: gtk/gtkmenu.c:385
 msgid "Delay before submenus appear"
@@ -4050,24 +4050,24 @@ msgid ""
 "Offset of text above the baseline (below the baseline if rise is negative) "
 "in pixels"
 msgstr ""
-"Décalage du texte au-dessus de la ligne de base (en-dessous de la ligne de "
+"Décalage du texte au-dessus de la ligne de base (au-dessous de la ligne de "
 "base si le décalage est négatif) en pixels"
 
 #: gtk/gtktexttag.c:433
 msgid "Pixels above lines"
-msgstr "Pixels au dessus de la ligne"
+msgstr "Pixels au-dessus de la ligne"
 
 #: gtk/gtktexttag.c:434 gtk/gtktextview.c:547
 msgid "Pixels of blank space above paragraphs"
-msgstr "Espacement en pixels au dessus des paragraphes"
+msgstr "Espacement en pixels au-dessus des paragraphes"
 
 #: gtk/gtktexttag.c:443
 msgid "Pixels below lines"
-msgstr "Pixels en dessous des lignes"
+msgstr "Pixels au-dessous des lignes"
 
 #: gtk/gtktexttag.c:444 gtk/gtktextview.c:557
 msgid "Pixels of blank space below paragraphs"
-msgstr "Espacement en pixels en dessous des paragraphes"
+msgstr "Espacement en pixels au-dessous des paragraphes"
 
 #: gtk/gtktexttag.c:453
 msgid "Pixels inside wrap"
@@ -4168,11 +4168,11 @@ msgstr "Pixels au-dessus de la ligne défini"
 #: gtk/gtktexttag.c:581 gtk/gtktexttag.c:585
 msgid "Whether this tag affects the number of pixels above lines"
 msgstr ""
-"Indique si cette balise affecte le nombre de pixels au dessus des lignes"
+"Indique si cette balise affecte le nombre de pixels au-dessus des lignes"
 
 #: gtk/gtktexttag.c:584
 msgid "Pixels below lines set"
-msgstr "Pixels en-dessous de la ligne défini"
+msgstr "Pixels au-dessous de la ligne défini"
 
 #: gtk/gtktexttag.c:588
 msgid "Pixels inside wrap set"
@@ -4217,51 +4217,51 @@ msgstr "Indique si cette balise affecte la visibilité du texte"
 
 #: gtk/gtktextutil.c:46
 msgid "LRM _Left-to-right mark"
-msgstr "Marque LRM _Gauche-à-droite"
+msgstr "LRM Marque _gauche-à-droite"
 
 #: gtk/gtktextutil.c:47
 msgid "RLM _Right-to-left mark"
-msgstr "Marque RLM _Droite-à-gauche"
+msgstr "RLM Marque _droite-à-gauche"
 
 #: gtk/gtktextutil.c:48
 msgid "LRE Left-to-right _embedding"
-msgstr "LRE Gauche-à-droite _imbriqué"
+msgstr "LRE _Enchâssement gauche-à-droite "
 
 #: gtk/gtktextutil.c:49
 msgid "RLE Right-to-left e_mbedding"
-msgstr "RLE Droite-à-gauche i_briqué"
+msgstr "RLE E_nchâssement droite-à-gauche"
 
 #: gtk/gtktextutil.c:50
 msgid "LRO Left-to-right _override"
-msgstr "LRO Gauche-à-droite _prioritaire"
+msgstr "LRO _Forçage gauche-à-droite"
 
 #: gtk/gtktextutil.c:51
 msgid "RLO Right-to-left o_verride"
-msgstr "RLO Droite-à-gauche p_rioritaire"
+msgstr "RLO F_orçage droite-à-gauche"
 
 #: gtk/gtktextutil.c:52
 msgid "PDF _Pop directional formatting"
-msgstr "Formatage PDF _Pop directionnel"
+msgstr "PDF _Dépilement de formatage directionnel"
 
 #: gtk/gtktextutil.c:53
 msgid "ZWS _Zero width space"
-msgstr "ZWS largeur d'espace _zéro"
+msgstr "ZWS E_space sans chasse"
 
 #: gtk/gtktextutil.c:54
 msgid "ZWJ Zero width _joiner"
-msgstr "ZWJ _joiner de largeur zéro"
+msgstr "ZWJ _Liant sans chasse"
 
 #: gtk/gtktextutil.c:55
 msgid "ZWNJ Zero width _non-joiner"
-msgstr "ZWNJ _non-joiner de largeur zéro"
+msgstr "ZWNJ _Anti-liant sans chasse"
 
 #: gtk/gtktextview.c:546
 msgid "Pixels Above Lines"
-msgstr "Pixels au dessus des lignes"
+msgstr "Pixels au-dessus des lignes"
 
 #: gtk/gtktextview.c:556
 msgid "Pixels Below Lines"
-msgstr "Pixels en dessous des lignes"
+msgstr "Pixels au-dessous des lignes"
 
 #: gtk/gtktextview.c:566
 msgid "Pixels Inside Wrap"
@@ -4577,7 +4577,7 @@ msgstr "Titre"
 
 #: gtk/gtktreeviewcolumn.c:250
 msgid "Title to appear in column header"
-msgstr "Titre à afficher dans l'entête de la colonne"
+msgstr "Titre à afficher dans l'en-tête de la colonne"
 
 #: gtk/gtktreeviewcolumn.c:257
 msgid "Clickable"
@@ -4585,7 +4585,7 @@ msgstr "Cliquable"
 
 #: gtk/gtktreeviewcolumn.c:258
 msgid "Whether the header can be clicked"
-msgstr "Indique si l'on peut cliquer sur l'entête"
+msgstr "Indique si l'on peut cliquer sur l'en-tête"
 
 #: gtk/gtktreeviewcolumn.c:266
 msgid "Widget"
@@ -4593,7 +4593,7 @@ msgstr "Widget"
 
 #: gtk/gtktreeviewcolumn.c:267
 msgid "Widget to put in column header button instead of column title"
-msgstr "Widget à placer dans l'entête de la colonne à la place du titre"
+msgstr "Widget à placer dans l'en-tête de la colonne à la place du titre"
 
 #: gtk/gtktreeviewcolumn.c:274
 msgid "Alignment"
@@ -4601,7 +4601,7 @@ msgstr "Alignement"
 
 #: gtk/gtktreeviewcolumn.c:275
 msgid "X Alignment of the column header text or widget"
-msgstr "Alignement X du texte ou widget de l'entête de la colonne"
+msgstr "Alignement X du texte ou widget de l'en-tête de la colonne"
 
 #: gtk/gtktreeviewcolumn.c:285
 msgid "Whether the column can be reordered around the headers"
