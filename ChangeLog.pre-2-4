@@ -1,3 +1,13 @@
+Sun Mar 14 21:03:15 2004  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkpathbar.[ch]: Add _gtk_path_bar_up()/
+	_gtk_path_bar_down().
+
+	* gtk/gtkfilechooserdefault.c: Use _gtk_path_bar_up()/
+	_gtk_path_bar_down() as bindings for Alt-Up
+	and new Alt-Down. (Partly based on a patch by
+	Mark McLoughlin, #136987)
+
 2004-03-14  Federico Mena Quintero  <federico@ximian.com>
 
 	Fixes #136185, patch by Morten Welinder, with some changes.

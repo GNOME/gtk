@@ -1073,3 +1073,57 @@ _gtk_path_bar_set_file_system (GtkPathBar    *path_bar,
   path_bar->root_path = gtk_file_system_filename_to_path (path_bar->file_system, "/");
   g_free (desktop);
 }
+
+/**
+ * _gtk_path_bar_up:
+ * @path_bar: a #GtkPathBar
+ * 
+ * If the selected button in the pathbar is not the furthest button "up" (in the
+ * root direction), act as if the user clicked on the next button up.
+ **/
+void
+_gtk_path_bar_up (GtkPathBar *path_bar)
+{
+  GList *l;
+
+  for (l = path_bar->button_list; l; l = l->next)
+    {
+      GtkWidget *button = BUTTON_DATA (l->data)->button;
+      if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (button)))
+	{
+	  if (l->next)
+	    {
+	      GtkWidget *next_button = BUTTON_DATA (l->next->data)->button;
+	      button_clicked_cb (next_button, l->next->data);
+	    }
+	  break;
+	}
+    }
+}
+
+/**
+ * _gtk_path_bar_down:
+ * @path_bar: a #GtkPathBar
+ * 
+ * If the selected button in the pathbar is not the furthest button "down" (in the
+ * leaf direction), act as if the user clicked on the next button down.
+ **/
+void
+_gtk_path_bar_down (GtkPathBar *path_bar)
+{
+  GList *l;
+
+  for (l = path_bar->button_list; l; l = l->next)
+    {
+      GtkWidget *button = BUTTON_DATA (l->data)->button;
+      if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (button)))
+	{
+	  if (l->prev)
+	    {
+	      GtkWidget *prev_button = BUTTON_DATA (l->prev->data)->button;
+	      button_clicked_cb (prev_button, l->prev->data);
+	    }
+	  break;
+	}
+    }
+}

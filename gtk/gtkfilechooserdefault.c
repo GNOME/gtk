@@ -138,6 +138,7 @@ struct _GtkFileChooserDefault
 
   GtkFilePath *current_volume_path;
   GtkFilePath *current_folder;
+  GtkFilePath *lowest_folder;
   GtkFilePath *preview_path;
   char *preview_display_name;
 
@@ -168,6 +169,7 @@ struct _GtkFileChooserDefault
 enum {
   LOCATION_POPUP,
   UP_FOLDER,
+  DOWN_FOLDER,
   HOME_FOLDER,
   LAST_SIGNAL
 };
@@ -306,6 +308,7 @@ static void           gtk_file_chooser_default_initial_focus          (GtkFileCh
 
 static void location_popup_handler (GtkFileChooserDefault *impl);
 static void up_folder_handler      (GtkFileChooserDefault *impl);
+static void down_folder_handler    (GtkFileChooserDefault *impl);
 static void home_folder_handler    (GtkFileChooserDefault *impl);
 static void update_appearance      (GtkFileChooserDefault *impl);
 
@@ -486,6 +489,14 @@ gtk_file_chooser_default_class_init (GtkFileChooserDefaultClass *class)
 			     NULL, NULL,
 			     _gtk_marshal_VOID__VOID,
 			     G_TYPE_NONE, 0);
+  signals[DOWN_FOLDER] =
+    _gtk_binding_signal_new ("down-folder",
+			     G_OBJECT_CLASS_TYPE (class),
+			     G_SIGNAL_RUN_FIRST | G_SIGNAL_ACTION,
+			     G_CALLBACK (down_folder_handler),
+			     NULL, NULL,
+			     _gtk_marshal_VOID__VOID,
+			     G_TYPE_NONE, 0);
   signals[HOME_FOLDER] =
     _gtk_binding_signal_new ("home-folder",
 			     G_OBJECT_CLASS_TYPE (class),
@@ -509,6 +520,15 @@ gtk_file_chooser_default_class_init (GtkFileChooserDefaultClass *class)
   gtk_binding_entry_add_signal (binding_set,
 				GDK_KP_Up, GDK_MOD1_MASK,
 				"up-folder",
+				0);
+
+  gtk_binding_entry_add_signal (binding_set,
+				GDK_Down, GDK_MOD1_MASK,
+				"down-folder",
+				0);
+  gtk_binding_entry_add_signal (binding_set,
+				GDK_KP_Down, GDK_MOD1_MASK,
+				"down-folder",
 				0);
 
   gtk_binding_entry_add_signal (binding_set,
@@ -4941,24 +4961,14 @@ location_popup_handler (GtkFileChooserDefault *impl)
 static void
 up_folder_handler (GtkFileChooserDefault *impl)
 {
-  GtkFilePath *parent_path;
-  GError *error;
+  _gtk_path_bar_up (GTK_PATH_BAR (impl->browse_path_bar));
+}
 
-  error = NULL;
-  if (gtk_file_system_get_parent (impl->file_system, impl->current_folder, &parent_path, &error))
-    {
-      if (parent_path) /* If we were on a root, parent_path will be NULL */
-	{
-	  change_folder_and_display_error (impl, parent_path);
-	  gtk_file_path_free (parent_path);
-	}
-    }
-  else
-    {
-      error_dialog (impl,
-		    _("Could not go to the parent folder of %s:\n%s"),
-		    impl->current_folder, error);
-    }
+/* Handler for the "down-folder" keybinding signal */
+static void
+down_folder_handler (GtkFileChooserDefault *impl)
+{
+  _gtk_path_bar_down (GTK_PATH_BAR (impl->browse_path_bar));
 }
 
 /* Handler for the "home-folder" keybinding signal */
