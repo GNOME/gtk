@@ -58,26 +58,29 @@ static void gtk_aspect_frame_compute_child_allocation (GtkFrame            *fram
 
 static GtkFrameClass *parent_class = NULL;
 
-GtkType
+GType
 gtk_aspect_frame_get_type (void)
 {
-  static GtkType aspect_frame_type = 0;
+  static GType aspect_frame_type = 0;
   
   if (!aspect_frame_type)
     {
-      static const GtkTypeInfo aspect_frame_info =
+      static const GTypeInfo aspect_frame_info =
       {
-	"GtkAspectFrame",
-	sizeof (GtkAspectFrame),
 	sizeof (GtkAspectFrameClass),
-	(GtkClassInitFunc) gtk_aspect_frame_class_init,
-	(GtkObjectInitFunc) gtk_aspect_frame_init,
-        /* reserved_1 */ NULL,
-        /* reserved_2 */ NULL,
-        (GtkClassInitFunc) NULL,
+	NULL,		/* base_init */
+	NULL,		/* base_finalize */
+	(GClassInitFunc) gtk_aspect_frame_class_init,
+	NULL,		/* class_finalize */
+	NULL,		/* class_data */
+	sizeof (GtkAspectFrame),
+	0,		/* n_preallocs */
+	(GInstanceInitFunc) gtk_aspect_frame_init,
       };
       
-      aspect_frame_type = gtk_type_unique (GTK_TYPE_FRAME, &aspect_frame_info);
+      aspect_frame_type =
+	g_type_register_static (GTK_TYPE_FRAME, "GtkAspectFrame",
+				&aspect_frame_info, 0);
     }
   
   return aspect_frame_type;
@@ -87,13 +90,11 @@ static void
 gtk_aspect_frame_class_init (GtkAspectFrameClass *class)
 {
   GObjectClass *gobject_class;
-  GtkObjectClass *object_class;
   GtkFrameClass *frame_class;
   
-  parent_class = gtk_type_class (GTK_TYPE_FRAME);
+  parent_class = g_type_class_peek_parent (class);
 
   gobject_class = (GObjectClass*) class;
-  object_class = (GtkObjectClass*) class;
   frame_class = (GtkFrameClass*) class;
   
   gobject_class->set_property = gtk_aspect_frame_set_property;
@@ -222,7 +223,7 @@ gtk_aspect_frame_new (const gchar *label,
 {
   GtkAspectFrame *aspect_frame;
 
-  aspect_frame = gtk_type_new (gtk_aspect_frame_get_type ());
+  aspect_frame = g_object_new (GTK_TYPE_ASPECT_FRAME, NULL);
 
   aspect_frame->xalign = CLAMP (xalign, 0.0, 1.0);
   aspect_frame->yalign = CLAMP (yalign, 0.0, 1.0);

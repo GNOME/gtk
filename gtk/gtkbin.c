@@ -27,41 +27,41 @@
 #include "gtkbin.h"
 
 
-static void gtk_bin_class_init (GtkBinClass    *klass);
-static void gtk_bin_init       (GtkBin         *bin);
-static void gtk_bin_add        (GtkContainer   *container,
-			        GtkWidget      *widget);
-static void gtk_bin_remove     (GtkContainer   *container,
-			        GtkWidget      *widget);
-static void gtk_bin_forall     (GtkContainer   *container,
-				gboolean	include_internals,
-			        GtkCallback     callback,
-			        gpointer        callback_data);
-static GtkType gtk_bin_child_type (GtkContainer*container);
+static void gtk_bin_class_init  (GtkBinClass    *klass);
+static void gtk_bin_init        (GtkBin         *bin);
+static void gtk_bin_add         (GtkContainer   *container,
+			         GtkWidget      *widget);
+static void gtk_bin_remove      (GtkContainer   *container,
+			         GtkWidget      *widget);
+static void gtk_bin_forall      (GtkContainer   *container,
+				 gboolean	include_internals,
+				 GtkCallback     callback,
+				 gpointer        callback_data);
+static GType gtk_bin_child_type (GtkContainer   *container);
 
 
 static GtkContainerClass *parent_class = NULL;
 
 
-GtkType
+GType
 gtk_bin_get_type (void)
 {
-  static GtkType bin_type = 0;
+  static GType bin_type = 0;
 
   if (!bin_type)
     {
       static const GTypeInfo bin_info =
       {
 	sizeof (GtkBinClass),
-	NULL,            /* base_init */
-        NULL,            /* base_finalize */
+	NULL,		/* base_init */
+	NULL,		/* base_finalize */
 	(GClassInitFunc) gtk_bin_class_init,
-	NULL,            /* class_finalize */
-        NULL,            /* class_data */
+	NULL,		/* class_finalize */
+	NULL,		/* class_data */
 	sizeof (GtkBin),
-	0,               /* n_preallocs */
+	0,		/* n_preallocs */
 	(GInstanceInitFunc) gtk_bin_init,
-	NULL,            /* value_table */
+	NULL,		/* value_table */
       };
 
       bin_type = g_type_register_static (GTK_TYPE_CONTAINER, "GtkBin", 
@@ -74,15 +74,11 @@ gtk_bin_get_type (void)
 static void
 gtk_bin_class_init (GtkBinClass *class)
 {
-  GtkObjectClass *object_class;
-  GtkWidgetClass *widget_class;
   GtkContainerClass *container_class;
 
-  object_class = (GtkObjectClass*) class;
-  widget_class = (GtkWidgetClass*) class;
   container_class = (GtkContainerClass*) class;
 
-  parent_class = gtk_type_class (GTK_TYPE_CONTAINER);
+  parent_class = g_type_class_peek_parent (class);
 
   container_class->add = gtk_bin_add;
   container_class->remove = gtk_bin_remove;
@@ -99,13 +95,13 @@ gtk_bin_init (GtkBin *bin)
 }
 
 
-static GtkType
+static GType
 gtk_bin_child_type (GtkContainer *container)
 {
   if (!GTK_BIN (container)->child)
     return GTK_TYPE_WIDGET;
   else
-    return GTK_TYPE_NONE;
+    return G_TYPE_NONE;
 }
 
 static void

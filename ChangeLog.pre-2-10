@@ -1,3 +1,8 @@
+Fri Oct  4 16:48:27 2002  Manish Singh  <yosh@gimp.org>
+
+	* gtkaspectframe.[ch] gtkbin.[ch] gtkframe.[ch] gtkhruler.[ch]
+	gtkruler.[ch] gtkvruler.[ch]: Deprecation cleanup
+
 Fri Oct  4 15:47:06 2002  Manish Singh  <yosh@gimp.org>
 
 	* gtkbbox.[ch] gtkhbbox.[ch] gtkhscale.[ch] gtkscale.[ch]

@@ -76,26 +76,28 @@ static void gtk_frame_real_compute_child_allocation (GtkFrame      *frame,
 static GtkBinClass *parent_class = NULL;
 
 
-GtkType
+GType
 gtk_frame_get_type (void)
 {
-  static GtkType frame_type = 0;
+  static GType frame_type = 0;
 
   if (!frame_type)
     {
-      static const GtkTypeInfo frame_info =
+      static const GTypeInfo frame_info =
       {
-	"GtkFrame",
-	sizeof (GtkFrame),
 	sizeof (GtkFrameClass),
-	(GtkClassInitFunc) gtk_frame_class_init,
-	(GtkObjectInitFunc) gtk_frame_init,
-        /* reserved_1 */ NULL,
-	/* reserved_2 */ NULL,
-	(GtkClassInitFunc) NULL,
+	NULL,		/* base_init */
+	NULL,		/* base_finalize */
+	(GClassInitFunc) gtk_frame_class_init,
+	NULL,		/* class_finalize */
+	NULL,		/* class_data */
+	sizeof (GtkFrame),
+	0,		/* n_preallocs */
+	(GInstanceInitFunc) gtk_frame_init,
       };
 
-      frame_type = gtk_type_unique (gtk_bin_get_type (), &frame_info);
+      frame_type = g_type_register_static (GTK_TYPE_BIN, "GtkFrame",
+					   &frame_info, 0);
     }
 
   return frame_type;
@@ -105,16 +107,14 @@ static void
 gtk_frame_class_init (GtkFrameClass *class)
 {
   GObjectClass *gobject_class;
-  GtkObjectClass *object_class;
   GtkWidgetClass *widget_class;
   GtkContainerClass *container_class;
 
   gobject_class = (GObjectClass*) class;
-  object_class = GTK_OBJECT_CLASS (class);
   widget_class = GTK_WIDGET_CLASS (class);
   container_class = GTK_CONTAINER_CLASS (class);
 
-  parent_class = gtk_type_class (gtk_bin_get_type ());
+  parent_class = g_type_class_peek_parent (class);
 
   gobject_class->set_property = gtk_frame_set_property;
   gobject_class->get_property = gtk_frame_get_property;
@@ -265,13 +265,7 @@ gtk_frame_get_property (GObject         *object,
 GtkWidget*
 gtk_frame_new (const gchar *label)
 {
-  GtkFrame *frame;
-
-  frame = gtk_type_new (gtk_frame_get_type ());
-
-  gtk_frame_set_label (frame, label);
-
-  return GTK_WIDGET (frame);
+  return g_object_new (GTK_TYPE_FRAME, "label", label, NULL);
 }
 
 static void
@@ -470,7 +464,7 @@ gtk_frame_set_shadow_type (GtkFrame      *frame,
 
       if (GTK_WIDGET_DRAWABLE (frame))
 	{
-	  gtk_widget_queue_clear (GTK_WIDGET (frame));
+	  gtk_widget_queue_draw (GTK_WIDGET (frame));
 	}
       
       gtk_widget_queue_resize (GTK_WIDGET (frame));

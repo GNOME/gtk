@@ -63,26 +63,28 @@ static const GtkRulerMetric ruler_metrics[] =
 };
 
 
-GtkType
+GType
 gtk_ruler_get_type (void)
 {
-  static GtkType ruler_type = 0;
+  static GType ruler_type = 0;
 
   if (!ruler_type)
     {
-      static const GtkTypeInfo ruler_info =
+      static const GTypeInfo ruler_info =
       {
-	"GtkRuler",
-	sizeof (GtkRuler),
 	sizeof (GtkRulerClass),
-	(GtkClassInitFunc) gtk_ruler_class_init,
-	(GtkObjectInitFunc) gtk_ruler_init,
-	/* reserved_1 */ NULL,
-        /* reserved_2 */ NULL,
-        (GtkClassInitFunc) NULL,
+	NULL,		/* base_init */
+	NULL,		/* base_finalize */
+	(GClassInitFunc) gtk_ruler_class_init,
+	NULL,		/* class_finalize */
+	NULL,		/* class_data */
+	sizeof (GtkRuler),
+	0,		/* n_preallocs */
+	(GInstanceInitFunc) gtk_ruler_init,
       };
 
-      ruler_type = gtk_type_unique (GTK_TYPE_WIDGET, &ruler_info);
+      ruler_type = g_type_register_static (GTK_TYPE_WIDGET, "GtkRuler",
+					   &ruler_info, 0);
     }
 
   return ruler_type;
@@ -92,14 +94,12 @@ static void
 gtk_ruler_class_init (GtkRulerClass *class)
 {
   GObjectClass   *gobject_class;
-  GtkObjectClass *object_class;
   GtkWidgetClass *widget_class;
 
   gobject_class = G_OBJECT_CLASS (class);
-  object_class = (GtkObjectClass*) class;
   widget_class = (GtkWidgetClass*) class;
 
-  parent_class = gtk_type_class (GTK_TYPE_WIDGET);
+  parent_class = g_type_class_peek_parent (class);
   
   gobject_class->set_property = gtk_ruler_set_property;
   gobject_class->get_property = gtk_ruler_get_property;
@@ -388,9 +388,9 @@ gtk_ruler_unrealize (GtkWidget *widget)
   GtkRuler *ruler = GTK_RULER (widget);
 
   if (ruler->backing_store)
-    gdk_pixmap_unref (ruler->backing_store);
+    g_object_unref (ruler->backing_store);
   if (ruler->non_gr_exp_gc)
-    gdk_gc_destroy (ruler->non_gr_exp_gc);
+    g_object_unref (ruler->non_gr_exp_gc);
 
   ruler->backing_store = NULL;
   ruler->non_gr_exp_gc = NULL;
@@ -429,12 +429,12 @@ gtk_ruler_expose (GtkWidget      *widget,
 
       gtk_ruler_draw_ticks (ruler);
       
-      gdk_draw_pixmap (widget->window,
-		       ruler->non_gr_exp_gc,
-		       ruler->backing_store,
-		       0, 0, 0, 0,
-		       widget->allocation.width,
-		       widget->allocation.height);
+      gdk_draw_drawable (widget->window,
+			 ruler->non_gr_exp_gc,
+			 ruler->backing_store,
+			 0, 0, 0, 0,
+			 widget->allocation.width,
+			 widget->allocation.height);
       
       gtk_ruler_draw_pos (ruler);
     }
@@ -453,12 +453,12 @@ gtk_ruler_make_pixmap (GtkRuler *ruler)
 
   if (ruler->backing_store)
     {
-      gdk_window_get_size (ruler->backing_store, &width, &height);
+      gdk_drawable_get_size (ruler->backing_store, &width, &height);
       if ((width == widget->allocation.width) &&
 	  (height == widget->allocation.height))
 	return;
 
-      gdk_pixmap_unref (ruler->backing_store);
+      g_object_unref (ruler->backing_store);
     }
 
   ruler->backing_store = gdk_pixmap_new (widget->window,

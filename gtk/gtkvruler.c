@@ -46,26 +46,28 @@ static void gtk_vruler_draw_ticks    (GtkRuler       *ruler);
 static void gtk_vruler_draw_pos      (GtkRuler       *ruler);
 
 
-GtkType
+GType
 gtk_vruler_get_type (void)
 {
-  static GtkType vruler_type = 0;
+  static GType vruler_type = 0;
 
   if (!vruler_type)
     {
-      static const GtkTypeInfo vruler_info =
+      static const GTypeInfo vruler_info =
       {
-	"GtkVRuler",
-	sizeof (GtkVRuler),
 	sizeof (GtkVRulerClass),
-	(GtkClassInitFunc) gtk_vruler_class_init,
-	(GtkObjectInitFunc) gtk_vruler_init,
-	/* reserved_1 */ NULL,
-        /* reserved_2 */ NULL,
-        (GtkClassInitFunc) NULL,
+	NULL,		/* base_init */
+	NULL,		/* base_finalize */
+	(GClassInitFunc) gtk_vruler_class_init,
+	NULL,		/* class_finalize */
+	NULL,		/* class_data */
+	sizeof (GtkVRuler),
+	0,		/* n_preallocs */
+	(GInstanceInitFunc) gtk_vruler_init,
       };
 
-      vruler_type = gtk_type_unique (GTK_TYPE_RULER, &vruler_info);
+      vruler_type = g_type_register_static (GTK_TYPE_RULER, "GtkVRuler",
+					    &vruler_info, 0);
     }
 
   return vruler_type;
@@ -99,7 +101,7 @@ gtk_vruler_init (GtkVRuler *vruler)
 GtkWidget*
 gtk_vruler_new (void)
 {
-  return GTK_WIDGET (gtk_type_new (GTK_TYPE_VRULER));
+  return g_object_new (GTK_TYPE_VRULER, NULL);
 }
 
 
@@ -267,7 +269,7 @@ gtk_vruler_draw_ticks (GtkRuler *ruler)
 	}
     }
 
-  g_object_unref (G_OBJECT (layout));
+  g_object_unref (layout);
 }
 
 
@@ -302,12 +304,12 @@ gtk_vruler_draw_pos (GtkRuler *ruler)
 	{
 	  /*  If a backing store exists, restore the ruler  */
 	  if (ruler->backing_store && ruler->non_gr_exp_gc)
-	    gdk_draw_pixmap (ruler->widget.window,
-			     ruler->non_gr_exp_gc,
-			     ruler->backing_store,
-			     ruler->xsrc, ruler->ysrc,
-			     ruler->xsrc, ruler->ysrc,
-			     bs_width, bs_height);
+	    gdk_draw_drawable (ruler->widget.window,
+			       ruler->non_gr_exp_gc,
+			       ruler->backing_store,
+			       ruler->xsrc, ruler->ysrc,
+			       ruler->xsrc, ruler->ysrc,
+			       bs_width, bs_height);
 
 	  increment = (gdouble) height / (ruler->upper - ruler->lower);
 

@@ -46,26 +46,28 @@ static void gtk_hruler_draw_ticks    (GtkRuler       *ruler);
 static void gtk_hruler_draw_pos      (GtkRuler       *ruler);
 
 
-GtkType
+GType
 gtk_hruler_get_type (void)
 {
-  static GtkType hruler_type = 0;
+  static GType hruler_type = 0;
 
   if (!hruler_type)
     {
-      static const GtkTypeInfo hruler_info =
+      static const GTypeInfo hruler_info =
       {
-	"GtkHRuler",
-	sizeof (GtkHRuler),
 	sizeof (GtkHRulerClass),
-	(GtkClassInitFunc) gtk_hruler_class_init,
-	(GtkObjectInitFunc) gtk_hruler_init,
-	/* reserved_1 */ NULL,
-        /* reserved_2 */ NULL,
-        (GtkClassInitFunc) NULL,
+	NULL,		/* base_init */
+	NULL,		/* base_finalize */
+	(GClassInitFunc) gtk_hruler_class_init,
+	NULL,		/* class_finalize */
+	NULL,		/* class_data */
+	sizeof (GtkHRuler),
+	0,		/* n_preallocs */
+	(GInstanceInitFunc) gtk_hruler_init,
       };
 
-      hruler_type = gtk_type_unique (GTK_TYPE_RULER, &hruler_info);
+      hruler_type = g_type_register_static (GTK_TYPE_RULER, "GtkHRuler",
+					    &hruler_info, 0);
     }
 
   return hruler_type;
@@ -100,7 +102,7 @@ gtk_hruler_init (GtkHRuler *hruler)
 GtkWidget*
 gtk_hruler_new (void)
 {
-  return GTK_WIDGET (gtk_type_new (GTK_TYPE_HRULER));
+  return g_object_new (GTK_TYPE_HRULER, NULL);
 }
 
 static gint
@@ -266,7 +268,7 @@ gtk_hruler_draw_ticks (GtkRuler *ruler)
 	}
     }
 
-  g_object_unref (G_OBJECT (layout));
+  g_object_unref (layout);
 }
 
 static void
@@ -300,12 +302,12 @@ gtk_hruler_draw_pos (GtkRuler *ruler)
 	{
 	  /*  If a backing store exists, restore the ruler  */
 	  if (ruler->backing_store && ruler->non_gr_exp_gc)
-	    gdk_draw_pixmap (ruler->widget.window,
-			     ruler->non_gr_exp_gc,
-			     ruler->backing_store,
-			     ruler->xsrc, ruler->ysrc,
-			     ruler->xsrc, ruler->ysrc,
-			     bs_width, bs_height);
+	    gdk_draw_drawable (ruler->widget.window,
+			       ruler->non_gr_exp_gc,
+			       ruler->backing_store,
+			       ruler->xsrc, ruler->ysrc,
+			       ruler->xsrc, ruler->ysrc,
+			       bs_width, bs_height);
 
 	  increment = (gdouble) width / (ruler->upper - ruler->lower);
 

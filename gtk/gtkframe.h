@@ -38,11 +38,11 @@ extern "C" {
 
 
 #define GTK_TYPE_FRAME                  (gtk_frame_get_type ())
-#define GTK_FRAME(obj)                  (GTK_CHECK_CAST ((obj), GTK_TYPE_FRAME, GtkFrame))
-#define GTK_FRAME_CLASS(klass)          (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_FRAME, GtkFrameClass))
-#define GTK_IS_FRAME(obj)               (GTK_CHECK_TYPE ((obj), GTK_TYPE_FRAME))
-#define GTK_IS_FRAME_CLASS(klass)       (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_FRAME))
-#define GTK_FRAME_GET_CLASS(obj)        (GTK_CHECK_GET_CLASS ((obj), GTK_TYPE_FRAME, GtkFrameClass))
+#define GTK_FRAME(obj)                  (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_FRAME, GtkFrame))
+#define GTK_FRAME_CLASS(klass)          (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_FRAME, GtkFrameClass))
+#define GTK_IS_FRAME(obj)               (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_FRAME))
+#define GTK_IS_FRAME_CLASS(klass)       (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_FRAME))
+#define GTK_FRAME_GET_CLASS(obj)        (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_FRAME, GtkFrameClass))
 
 
 typedef struct _GtkFrame       GtkFrame;
@@ -68,7 +68,7 @@ struct _GtkFrameClass
 };
 
 
-GtkType    gtk_frame_get_type         (void) G_GNUC_CONST;
+GType      gtk_frame_get_type         (void) G_GNUC_CONST;
 GtkWidget* gtk_frame_new              (const gchar   *label);
 
 void                  gtk_frame_set_label (GtkFrame    *frame,

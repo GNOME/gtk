@@ -38,11 +38,11 @@ extern "C" {
 
 
 #define GTK_TYPE_BIN                  (gtk_bin_get_type ())
-#define GTK_BIN(obj)                  (GTK_CHECK_CAST ((obj), GTK_TYPE_BIN, GtkBin))
-#define GTK_BIN_CLASS(klass)          (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_BIN, GtkBinClass))
-#define GTK_IS_BIN(obj)               (GTK_CHECK_TYPE ((obj), GTK_TYPE_BIN))
-#define GTK_IS_BIN_CLASS(klass)       (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_BIN))
-#define GTK_BIN_GET_CLASS(obj)        (GTK_CHECK_GET_CLASS ((obj), GTK_TYPE_BIN, GtkBinClass))
+#define GTK_BIN(obj)                  (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_BIN, GtkBin))
+#define GTK_BIN_CLASS(klass)          (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_BIN, GtkBinClass))
+#define GTK_IS_BIN(obj)               (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_BIN))
+#define GTK_IS_BIN_CLASS(klass)       (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_BIN))
+#define GTK_BIN_GET_CLASS(obj)        (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_BIN, GtkBinClass))
 
 
 typedef struct _GtkBin       GtkBin;
@@ -61,7 +61,7 @@ struct _GtkBinClass
 };
 
 
-GtkType  gtk_bin_get_type   (void) G_GNUC_CONST;
+GType      gtk_bin_get_type  (void) G_GNUC_CONST;
 
 GtkWidget *gtk_bin_get_child (GtkBin *bin);
 

@@ -48,11 +48,11 @@ extern "C" {
 
 
 #define GTK_TYPE_VRULER            (gtk_vruler_get_type ())
-#define GTK_VRULER(obj)            (GTK_CHECK_CAST ((obj), GTK_TYPE_VRULER, GtkVRuler))
-#define GTK_VRULER_CLASS(klass)    (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_VRULER, GtkVRulerClass))
-#define GTK_IS_VRULER(obj)         (GTK_CHECK_TYPE ((obj), GTK_TYPE_VRULER))
-#define GTK_IS_VRULER_CLASS(klass) (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_VRULER))
-#define GTK_VRULER_GET_CLASS(obj)  (GTK_CHECK_GET_CLASS ((obj), GTK_TYPE_VRULER, GtkVRulerClass))
+#define GTK_VRULER(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_VRULER, GtkVRuler))
+#define GTK_VRULER_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_VRULER, GtkVRulerClass))
+#define GTK_IS_VRULER(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_VRULER))
+#define GTK_IS_VRULER_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_VRULER))
+#define GTK_VRULER_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_VRULER, GtkVRulerClass))
 
 
 typedef struct _GtkVRuler       GtkVRuler;
@@ -69,7 +69,7 @@ struct _GtkVRulerClass
 };
 
 
-GtkType    gtk_vruler_get_type (void) G_GNUC_CONST;
+GType      gtk_vruler_get_type (void) G_GNUC_CONST;
 GtkWidget* gtk_vruler_new      (void);
 
 

@@ -48,11 +48,11 @@ extern "C" {
 
 
 #define GTK_TYPE_HRULER	           (gtk_hruler_get_type ())
-#define GTK_HRULER(obj)            (GTK_CHECK_CAST ((obj), GTK_TYPE_HRULER, GtkHRuler))
-#define GTK_HRULER_CLASS(klass)    (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_HRULER, GtkHRulerClass))
-#define GTK_IS_HRULER(obj)         (GTK_CHECK_TYPE ((obj), GTK_TYPE_HRULER))
-#define GTK_IS_HRULER_CLASS(klass) (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_HRULER))
-#define GTK_HRULER_GET_CLASS(obj)  (GTK_CHECK_GET_CLASS ((obj), GTK_TYPE_HRULER, GtkHRulerClass))
+#define GTK_HRULER(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_HRULER, GtkHRuler))
+#define GTK_HRULER_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_HRULER, GtkHRulerClass))
+#define GTK_IS_HRULER(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_HRULER))
+#define GTK_IS_HRULER_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_HRULER))
+#define GTK_HRULER_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_HRULER, GtkHRulerClass))
 
 
 typedef struct _GtkHRuler       GtkHRuler;
@@ -69,7 +69,7 @@ struct _GtkHRulerClass
 };
 
 
-GtkType    gtk_hruler_get_type (void) G_GNUC_CONST;
+GType      gtk_hruler_get_type (void) G_GNUC_CONST;
 GtkWidget* gtk_hruler_new      (void);
 
 
