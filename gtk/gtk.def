@@ -171,6 +171,7 @@ EXPORTS
 	gtk_clipboard_clear
 	gtk_clipboard_get
 	gtk_clipboard_get_owner
+	gtk_clipboard_get_type
 	gtk_clipboard_request_contents
 	gtk_clipboard_request_text
 	gtk_clipboard_set_text
@@ -1765,6 +1766,7 @@ EXPORTS
 	gtk_tree_row_reference_deleted
 	gtk_tree_row_reference_free
 	gtk_tree_row_reference_get_path
+	gtk_tree_row_reference_get_type
 	gtk_tree_row_reference_inserted
 	gtk_tree_row_reference_new
 	gtk_tree_row_reference_new_proxy
@@ -2113,6 +2115,7 @@ EXPORTS
 	gtk_window_get_role
 	gtk_window_get_screen
 	gtk_window_get_size
+	gtk_window_get_skip_taskbar_hint
 	gtk_window_get_title
 	gtk_window_get_transient_for
 	gtk_window_get_type

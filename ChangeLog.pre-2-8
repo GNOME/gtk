@@ -1,6 +1,7 @@
 2003-03-02  Tor Lillqvist  <tml@iki.fi>
 
-	* gdk/gdk.def: Add a bunch of missing entries. Noticed by Cedric
+	* gdk/gdk.def
+	* gtk/gtk.def: Add a bunch of missing entries. Noticed by Cedric
 	Gustin.
 
 2003-03-01  Matthias Clasen  <maclas@gmx.de>
