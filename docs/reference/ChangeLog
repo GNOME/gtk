@@ -1,3 +1,12 @@
+Thu May 27 00:44:48 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtk-sections.txt: Add gtk_entry_completion_get_text_column.
+
+Thu May 27 00:20:52 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/tmpl/gtkentrycompletion.sgml: Add notes about 
+	GtkEntryCompletionMatchFunc.
+
 Tue May 25 21:54:55 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/tmpl/gtkframe.sgml: Move docs inline.

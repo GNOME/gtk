@@ -80,11 +80,14 @@ The GtkEntryCompletion struct contains only private data.
 <!-- ##### USER_FUNCTION GtkEntryCompletionMatchFunc ##### -->
 <para>
 A function which decides whether the row indicated by @iter matches a given 
-@key, and should be displayed as a possible completion for @key.
+@key, and should be displayed as a possible completion for @key. Note that
+@key is normalized and case-folded (see g_utf8_normalize() and 
+g_utf8_casefold()). If this is not appropriate, match functions have access
+to the unmodified key via <literal>gtk_entry_get_text (GTK_ENTRY (gtk_entry_completion_get_entry (<!-- -->)))</literal>.
 </para>
 
 @completion: the #GtkEntryCompletion
-@key: the string to match
+@key: the string to match, normalized and case-folded
 @iter: a #GtkTreeIter indicating the row to match
 @user_data: user data given to gtk_entry_completion_set_match_func()
 @Returns: %TRUE if @iter should be displayed as a possible completion for @key

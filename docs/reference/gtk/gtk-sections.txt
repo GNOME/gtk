@@ -1047,6 +1047,7 @@ gtk_entry_completion_insert_action_text
 gtk_entry_completion_insert_action_markup
 gtk_entry_completion_delete_action
 gtk_entry_completion_set_text_column
+gtk_entry_completion_get_text_column
 <SUBSECTION Standard>
 GTK_TYPE_ENTRY_COMPLETION
 GTK_ENTRY_COMPLETION

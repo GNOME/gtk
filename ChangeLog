@@ -1,3 +1,9 @@
+Thu May 27 00:45:07 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkentrycompletion.h:
+	* gtk/gtkentrycompletion.c (gtk_entry_completion_get_text_column): 
+	Getter for text_column. Also make ::text_column a property.
+
 Thu May 27 00:11:01 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkmenuitem.c (gtk_menu_item_size_request): Fix a typo.

@@ -51,7 +51,8 @@ enum
 {
   PROP_0,
   PROP_MODEL,
-  PROP_MINIMUM_KEY_LENGTH
+  PROP_MINIMUM_KEY_LENGTH,
+  PROP_TEXT_COLUMN
 };
 
 #define GTK_ENTRY_COMPLETION_GET_PRIVATE(obj)(G_TYPE_INSTANCE_GET_PRIVATE ((obj), GTK_TYPE_ENTRY_COMPLETION, GtkEntryCompletionPrivate))
@@ -238,6 +239,22 @@ gtk_entry_completion_class_init (GtkEntryCompletionClass *klass)
                                                      G_MAXINT,
                                                      1,
                                                      G_PARAM_READWRITE));
+  /**
+   * GtkEntryCompletion::text-column:
+   *
+   * The column of the model containing the strings.
+   *
+   * Since: 2.6
+   */
+  g_object_class_install_property (object_class,
+                                   PROP_TEXT_COLUMN,
+                                   g_param_spec_int ("text_column",
+                                                     P_("Text column"),
+                                                     P_("The column of the model containing the strings."),
+                                                     -1,
+                                                     G_MAXINT,
+                                                     -1,
+                                                     G_PARAM_READWRITE));
 
   g_type_class_add_private (object_class, sizeof (GtkEntryCompletionPrivate));
 }
@@ -358,6 +375,7 @@ gtk_entry_completion_set_property (GObject      *object,
                                    GParamSpec   *pspec)
 {
   GtkEntryCompletion *completion = GTK_ENTRY_COMPLETION (object);
+  GtkEntryCompletionPrivate *priv = GTK_ENTRY_COMPLETION_GET_PRIVATE (completion);
 
   switch (prop_id)
     {
@@ -369,6 +387,10 @@ gtk_entry_completion_set_property (GObject      *object,
       case PROP_MINIMUM_KEY_LENGTH:
         gtk_entry_completion_set_minimum_key_length (completion,
                                                      g_value_get_int (value));
+        break;
+
+      case PROP_TEXT_COLUMN:
+	priv->text_column = g_value_get_int (value);
         break;
 
       default:
@@ -394,6 +416,10 @@ gtk_entry_completion_get_property (GObject    *object,
 
       case PROP_MINIMUM_KEY_LENGTH:
         g_value_set_int (value, gtk_entry_completion_get_minimum_key_length (completion));
+        break;
+
+      case PROP_TEXT_COLUMN:
+        g_value_set_int (value, gtk_entry_completion_get_text_column (completion));
         break;
 
       default:
@@ -1021,8 +1047,9 @@ gtk_entry_completion_delete_action (GtkEntryCompletion *completion,
  * to have a list displaying all (and just) strings in the completion list,
  * and to get those strings from @column in the model of @completion.
  *
- * This functions creates and adds a GtkCellRendererText for the selected column.
-
+ * This functions creates and adds a #GtkCellRendererText for the selected 
+ * column.
+ * 
  * Since: 2.4
  */
 void
@@ -1042,6 +1069,26 @@ gtk_entry_completion_set_text_column (GtkEntryCompletion *completion,
   gtk_cell_layout_add_attribute (GTK_CELL_LAYOUT (completion),
                                  cell,
                                  "text", column);
+
+  g_object_notify (completion, "text_column");
+}
+
+/**
+ * gtk_entry_completion_get_text_column:
+ * @completion: a #GtkEntryCompletion
+ * 
+ * Returns the column in the model of @completion to get strings from.
+ * 
+ * Return value: the column containing the strings
+ *
+ * Since: 2.6
+ **/
+gint
+gtk_entry_completion_get_text_column (GtkEntryCompletion *completion)
+{
+  g_return_if_fail (GTK_IS_ENTRY_COMPLETION (completion));
+
+  return completion->priv->text_column;  
 }
 
 /* private */

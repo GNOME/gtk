@@ -102,6 +102,7 @@ void                gtk_entry_completion_delete_action          (GtkEntryComplet
 /* convenience */
 void                gtk_entry_completion_set_text_column        (GtkEntryCompletion          *completion,
                                                                  gint                         column);
+gint                gtk_entry_completion_get_text_column        (GtkEntryCompletion          *completion);
 
 G_END_DECLS
 
