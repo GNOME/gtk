@@ -1,5 +1,16 @@
 2004-11-29  Matthias Clasen  <mclasen@redhat.com>
 
+	Determine the direction of XKB groups from their content, 
+	not by looking for hardcoded keymap names.  (#116626, patch by 
+	Behdad Esfahbod, based on an earlier patch by Ilya Konstantinov)
+	
+	* gdk/x11/gdkkeys-x11.c (struct _GdkKeymapX11): Cache directions
+	for XKB groups.
+	(get_direction): Determine direction of group by looking at 
+	directions of keysyms.
+	(update_direction): Maintain the cache of group directions.
+	(gdk_keymap_get_direction): Use update_direction().
+
 	* gdk/gdkkeynames.c: Add dead_hook and dead_horn.
 
 	* gdk/gdkkeysyms.h (GDK_dead_hook, GDK_dead_horn): Define

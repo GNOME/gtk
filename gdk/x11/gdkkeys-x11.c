@@ -59,10 +59,19 @@ typedef struct _GdkKeymapX11 GdkKeymapX11;
 #define GDK_KEYMAP_X11(object)       (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_KEYMAP_X11, GdkKeymapX11))
 #define GDK_IS_KEYMAP_X11(object)    (G_TYPE_CHECK_INSTANCE_TYPE ((object), GDK_TYPE_KEYMAP_X11))
 
+typedef struct _DirectionCacheEntry DirectionCacheEntry;
+
+struct _DirectionCacheEntry
+{
+  guint serial;
+  Atom group_atom;
+  PangoDirection direction;
+};
+
 struct _GdkKeymapX11
 {
   GdkKeymap     parent_instance;
-  
+
   gint min_keycode;
   gint max_keycode;
   KeySym* keymap;
@@ -75,9 +84,18 @@ struct _GdkKeymapX11
   PangoDirection current_direction;
   gboolean have_direction;
   guint current_serial;
-  
+
 #ifdef HAVE_XKB
   XkbDescPtr xkb_desc;
+  /* We cache the directions */
+  Atom current_group_atom;
+  guint current_cache_serial;
+  /* A cache of size four should be more than enough, people usually
+   * have two groups around, and the xkb limit is four.  It still
+   * works correct for more than four groups.  It's just the
+   * cache.
+   */
+  DirectionCacheEntry group_direction_cache[4];
 #endif
 };
 
@@ -130,12 +148,14 @@ gdk_keymap_x11_init (GdkKeymapX11 *keymap)
   keymap->group_switch_mask = 0;
   keymap->lock_keysym = GDK_Caps_Lock;
   keymap->have_direction = FALSE;
-  
+  keymap->current_serial = 0;
+
 #ifdef HAVE_XKB
   keymap->xkb_desc = NULL;
+  keymap->current_group_atom = 0;
+  keymap->current_cache_serial = 0;
 #endif
 
-  keymap->current_serial = 0;
 }
 
 static inline void
@@ -211,14 +231,17 @@ gdk_keymap_get_for_display (GdkDisplay *display)
  * otherwise we lose a whole group of keys
  */
 #define KEYSYM_INDEX(keymap_impl, group, level) \
-  (2 * ((group) % (int)((keymap_impl->keysyms_per_keycode + 1) / 2)) + (level))
+  (2 * ((group) % (gint)((keymap_impl->keysyms_per_keycode + 1) / 2)) + (level))
 #define KEYSYM_IS_KEYPAD(s) (((s) >= 0xff80 && (s) <= 0xffbd) || \
                              ((s) >= 0x11000000 && (s) <= 0x1100ffff))
 
-static int
-get_symbol (const KeySym *syms, GdkKeymapX11 *keymap_x11, int group, int level)
+static gint
+get_symbol (const KeySym *syms,
+	    GdkKeymapX11 *keymap_x11,
+	    gint group,
+	    gint level)
 {
-  int index;
+  gint index;
 
   index = KEYSYM_INDEX(keymap_x11, group, level);
   if (index > keymap_x11->keysyms_per_keycode)
@@ -397,7 +420,7 @@ get_keymap (GdkKeymapX11 *keymap_x11)
 
 static GdkKeymap *
 get_effective_keymap (GdkKeymap  *keymap,
-		       const char *function)
+		      const char *function)
 {
   if (!keymap)
     {
@@ -412,33 +435,131 @@ get_effective_keymap (GdkKeymap  *keymap,
 
 #if HAVE_XKB
 static PangoDirection
-get_direction (GdkKeymapX11 *keymap_x11)
+get_direction (XkbDescRec *xkb, 
+	       gint group)
 {
-  XkbDescRec *xkb = get_xkb (keymap_x11);
-  const char *name;
-  XkbStateRec state_rec;
-  PangoDirection result;
+  gint code;
 
-  GdkDisplay *display = GDK_KEYMAP (keymap_x11)->display;
+  gint rtl_minus_ltr = 0; /* total number of RTL keysyms minus LTR ones */
 
-  XkbGetState (GDK_DISPLAY_XDISPLAY (display), XkbUseCoreKbd, &state_rec);
-  
-  if (xkb->names->groups[state_rec.locked_group] == None)
-    result = PANGO_DIRECTION_LTR;
-  else
+  for (code = xkb->min_key_code; code <= xkb->max_key_code; code++)
     {
-      name = gdk_x11_get_xatom_name_for_display (display, xkb->names->groups[state_rec.locked_group]);
+      gint width = XkbKeyGroupWidth (xkb, code, group);
+      gint level;
+      for (level = 0; level < width; level++)
+	{
+	  KeySym sym = XkbKeySymEntry (xkb, code, level, group);
+	  PangoDirection dir = pango_unichar_direction (gdk_keyval_to_unicode (sym));
 
-      if (g_ascii_strcasecmp (name, "arabic") == 0 ||
-	  g_ascii_strcasecmp (name, "hebrew") == 0 ||
-	  g_ascii_strcasecmp (name, "israelian") == 0)
-	result = PANGO_DIRECTION_RTL;
-      else
-	result = PANGO_DIRECTION_LTR;
+	  switch (dir)
+	    {
+	    case PANGO_DIRECTION_RTL:
+	      rtl_minus_ltr++;
+	      break;
+	    case PANGO_DIRECTION_LTR:
+	      rtl_minus_ltr--;
+	      break;
+	    default:
+	      break;
+	    }
+	}
     }
     
-  return result;
+  if (rtl_minus_ltr > 0)
+    return PANGO_DIRECTION_RTL;
+  else
+    return PANGO_DIRECTION_LTR;
 }
+
+static void
+update_direction (GdkKeymapX11 *keymap_x11)
+{
+  XkbDescRec *xkb = get_xkb (keymap_x11);
+  XkbStateRec state_rec;
+  GdkDisplay *display = GDK_KEYMAP (keymap_x11)->display;
+  gint group;
+  Atom group_atom;
+
+  XkbGetState (GDK_DISPLAY_XDISPLAY (display), XkbUseCoreKbd, &state_rec);
+  group = XkbGroupLock (&state_rec);
+  group_atom = xkb->names->groups[group];
+
+  /* a group change? */
+  if (!keymap_x11->have_direction || keymap_x11->current_group_atom != group_atom)
+    {
+      gboolean cache_hit = FALSE;
+      DirectionCacheEntry *cache = keymap_x11->group_direction_cache;
+
+      PangoDirection direction = PANGO_DIRECTION_NEUTRAL;
+      gint i;
+
+      if (keymap_x11->have_direction)
+	{
+          /* lookup in cache */
+	  for (i = 0; i < G_N_ELEMENTS (keymap_x11->group_direction_cache); i++)
+	  {
+	    if (cache[i].group_atom == group_atom)
+	      {
+		cache_hit = TRUE;
+		cache[i].serial = keymap_x11->current_cache_serial++; /* freshen */
+		direction = cache[i].direction;
+		group_atom = cache[i].group_atom;
+		break;
+	      }
+	  }
+	}
+      else
+	{
+          /* initialize cache */
+	  for (i = 0; i < G_N_ELEMENTS (keymap_x11->group_direction_cache); i++)
+	    {
+	      cache[i].group_atom = 0;
+	      cache[i].serial = keymap_x11->current_cache_serial;
+	    }
+	  keymap_x11->current_cache_serial++;
+	}
+
+      /* insert in cache */
+      if (!cache_hit)
+	{
+	  gint oldest = 0;
+
+	  direction = get_direction (xkb, group);
+
+	  /* remove the oldest entry */
+	  for (i = 0; i < G_N_ELEMENTS (keymap_x11->group_direction_cache); i++)
+	    {
+	      if (cache[i].serial < cache[oldest].serial)
+	        oldest = i;
+	    }
+	  
+	  cache[oldest].group_atom = group_atom;
+	  cache[oldest].direction = direction;
+	  cache[oldest].serial = keymap_x11->current_cache_serial++;
+	}
+
+      keymap_x11->current_group_atom = group_atom;
+
+      keymap_x11->have_direction = TRUE;
+      keymap_x11->current_direction = direction;
+    }
+}
+
+static void
+_gdk_keymap_direction_changed (GdkKeymapX11 *keymap_x11)
+{
+  gboolean had_direction;
+  PangoDirection direction;
+
+  had_direction = keymap_x11->have_direction;
+  direction = keymap_x11->current_direction;
+
+  update_direction (keymap_x11);
+  
+  if (!had_direction || direction != keymap_x11->current_direction)
+    g_signal_emit_by_name (keymap_x11, "direction_changed");
+}
+
 
 void
 _gdk_keymap_state_changed (GdkDisplay *display)
@@ -449,14 +570,7 @@ _gdk_keymap_state_changed (GdkDisplay *display)
     {
       GdkKeymapX11 *keymap_x11 = GDK_KEYMAP_X11 (display_x11->keymap);
       
-      PangoDirection new_direction = get_direction (keymap_x11);
-      
-      if (!keymap_x11->have_direction || new_direction != keymap_x11->current_direction)
-	{
-	  keymap_x11->have_direction = TRUE;
-	  keymap_x11->current_direction = new_direction;
-	  g_signal_emit_by_name (keymap_x11, "direction_changed");
-	}
+      _gdk_keymap_direction_changed (keymap_x11);
     }
 }
 
@@ -484,16 +598,13 @@ gdk_keymap_get_direction (GdkKeymap *keymap)
       GdkKeymapX11 *keymap_x11 = GDK_KEYMAP_X11 (keymap);
       
       if (!keymap_x11->have_direction)
-	{
-	  keymap_x11->current_direction = get_direction (keymap_x11);
-	  keymap_x11->have_direction = TRUE;
-	}
+	update_direction (keymap_x11);
   
       return keymap_x11->current_direction;
     }
   else
 #endif /* HAVE_XKB */
-    return PANGO_DIRECTION_LTR;
+    return PANGO_DIRECTION_NEUTRAL;
 }
 
 /**
