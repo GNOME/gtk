@@ -1,3 +1,12 @@
+Sun Mar  7 03:03:57 2004  Jonathan Blandford  <jrb@gnome.org>
+
+	* gtk/gtkfilechooserdefault.c
+	(gtk_file_chooser_default_get_paths): if action is
+	SELECT_FOLDER, then return the currentd folder if none is
+	selected.
+	(gtk_file_chooser_default_should_respond): Allow 'Ok' to be hit if
+	no directory is selected in SELECT_FOLDER mode.
+
 Sat Mar  6 23:31:18 2004  Jonathan Blandford  <jrb@gnome.org>
 
 	* gtk/gtkfilechooserdefault.c (struct _GtkFileChooserDefault):

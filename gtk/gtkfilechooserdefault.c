@@ -3059,6 +3059,14 @@ gtk_file_chooser_default_get_paths (GtkFileChooser *chooser)
   if (info.path_from_entry)
     info.result = g_slist_prepend (info.result, info.path_from_entry);
 
+  /* If there's no folder selected, and we're in SELECT_FOLDER mode, then we
+   * fall back to the current directory */
+  if (impl->action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER &&
+      info.result == NULL)
+    {
+      info.result = g_slist_prepend (info.result, gtk_file_path_copy (impl->current_folder));
+    }
+
   return g_slist_reverse (info.result);
 }
 
@@ -3438,12 +3446,15 @@ gtk_file_chooser_default_should_respond (GtkFileChooserEmbed *chooser_embed)
 	return FALSE;
     }
 
-  /* Second, do we have an empty selection? */
-
-  selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (impl->browse_files_tree_view));
-  num_selected = gtk_tree_selection_count_selected_rows (selection);
-  if (num_selected == 0)
-    return FALSE;
+  /* Second, do we have an empty selection */
+  if (impl->action == GTK_FILE_CHOOSER_ACTION_OPEN
+      || impl->action == GTK_FILE_CHOOSER_ACTION_SAVE)
+    {
+      selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (impl->browse_files_tree_view));
+      num_selected = gtk_tree_selection_count_selected_rows (selection);
+      if (num_selected == 0)
+	return FALSE;
+    }
 
   /* Third, should we return file names or folder names? */
 
