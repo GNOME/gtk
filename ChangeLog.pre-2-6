@@ -1,3 +1,13 @@
+Sat Mar  2 15:48:04 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkentry.c (gtk_entry_new_with_max_length,
+	gtk_entry_set_max_length): Clamp @max parameter passed in to 
+	[0, MAX_SIZE], improve docs. Fix default and range 
+	for ::max-length property, range for ::ncursor_position,
+	::selection_bound properties. (#55916, Vitaly Tishkov)
+
+	* gtk/gtkmain.c (rewrite_event_for_grabs): Fix typo
+
 Fri Mar  1 18:39:44 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/x11/{gdkevents-x11.c,gdkmain-x11.c,gdkprivate-x11.h,

@@ -435,7 +435,7 @@ gtk_entry_class_init (GtkEntryClass *class)
                                                      _("Cursor Position"),
                                                      _("The current position of the insertion cursor in chars."),
                                                      0,
-                                                     G_MAXINT,
+                                                     MAX_SIZE,
                                                      0,
                                                      G_PARAM_READABLE));
   
@@ -445,7 +445,7 @@ gtk_entry_class_init (GtkEntryClass *class)
                                                      _("Selection Bound"),
                                                      _("The position of the opposite end of the selection from the cursor in chars."),
                                                      0,
-                                                     G_MAXINT,
+                                                     MAX_SIZE,
                                                      0,
                                                      G_PARAM_READABLE));
   
@@ -461,10 +461,10 @@ gtk_entry_class_init (GtkEntryClass *class)
                                    PROP_MAX_LENGTH,
                                    g_param_spec_int ("max_length",
                                                      _("Maximum length"),
-                                                     _("Maximum number of characters for this entry"),
-                                                     -1,
-                                                     G_MAXINT,
-                                                     -1,
+                                                     _("Maximum number of characters for this entry. Zero if no maximum."),
+                                                     0,
+                                                     MAX_SIZE,
+                                                     0,
                                                      G_PARAM_READABLE | G_PARAM_WRITABLE));
   g_object_class_install_property (gobject_class,
                                    PROP_VISIBILITY,
@@ -3257,10 +3257,29 @@ gtk_entry_new (void)
   return GTK_WIDGET (gtk_type_new (GTK_TYPE_ENTRY));
 }
 
+/**
+ * gtk_entry_new_with_max_length:
+ * @max: the maximum length of the entry, or 0 for no maximum.
+ *   (other than the maximum length of entries.) The value passed in will
+ *   be clamped to the range 0-65536.
+ *
+ * Creates a new #GtkEntry widget with the given maximum length.
+ * 
+ * Note: the existance of this function is inconsistent
+ * with the rest of the GTK+ API. The normal setup would
+ * be to just require the user to make an extra call
+ * to gtk_entry_set_max_length() instead. It is not
+ * expected that this function will be removed, but
+ * it would be better practice not to use it.
+ * 
+ * Return value: a new #GtkEntry.
+ **/
 GtkWidget*
 gtk_entry_new_with_max_length (gint max)
 {
   GtkEntry *entry;
+
+  max = CLAMP (max, 0, MAX_SIZE);
 
   entry = gtk_type_new (GTK_TYPE_ENTRY);
   entry->text_max_length = max;
@@ -3417,11 +3436,24 @@ gtk_entry_select_region  (GtkEntry       *entry,
   gtk_editable_select_region (GTK_EDITABLE (entry), start, end);
 }
 
+/**
+ * gtk_entry_set_max_length:
+ * @entry: a #GtkEntry.
+ * @max: the maximum length of the entry, or 0 for no maximum.
+ *   (other than the maximum length of entries.) The value passed in will
+ *   be clamped to the range 0-65536.
+ * 
+ * Sets the maximum allowed length of the contents of the widget. If
+ * the current contents are longer than the given length, then they
+ * will be truncated to fit.
+ **/
 void
 gtk_entry_set_max_length (GtkEntry     *entry,
                           gint          max)
 {
   g_return_if_fail (GTK_IS_ENTRY (entry));
+
+  max = CLAMP (max, 0, MAX_SIZE);
 
   if (max > 0 && entry->text_length > max)
     gtk_editable_delete_text (GTK_EDITABLE (entry), max, -1);

@@ -1056,7 +1056,7 @@ static GdkEvent *
 rewrite_event_for_grabs (GdkEvent *event)
 {
   GdkWindow *grab_window;
-  GtkWidget *event_widget, *grab_widget;;
+  GtkWidget *event_widget, *grab_widget;
   gboolean owner_events;
 
   switch (event->type)
