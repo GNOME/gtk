@@ -1060,7 +1060,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
     g_signal_new ("screen_changed",
 		  G_TYPE_FROM_CLASS (gobject_class),
 		  G_SIGNAL_RUN_LAST,
-		  G_STRUCT_OFFSET (GtkWidgetClass, hierarchy_changed),
+		  G_STRUCT_OFFSET (GtkWidgetClass, screen_changed),
 		  NULL, NULL,
 		  _gtk_marshal_VOID__OBJECT,
 		  G_TYPE_NONE, 1,
