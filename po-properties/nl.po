@@ -6,21 +6,21 @@
 # Vincent van Adrighem <adrighem@gnome.org>, 2004.
 # --------------
 # Discussiepunten:
-# tag -> markering/etiket?
-# render -> render/weergeven/tonen?
-# spinbutton -> spinknop
-# tooltip -> tooltip/werktip/tip
-# Standard display -> standaar display
 # expander -> uitklapper
-# separator -> scheiding/scheidingslijn
+# focus -> aandacht/invoeraandacht/de aandacht/focus
+# render -> render/weergeven/tonen?
 # selected -> geselecteerde/gekozen
-# focus -> aandacht/invoeraandacht/de aandacht
+# separator -> scheiding/scheidingslijn
+# spinbutton -> spinknop
+# standard display -> standaard display
+# tag -> markering/etiket?
+# tooltip -> tooltip/werktip/tip
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-10-27 16:36-0400\n"
-"PO-Revision-Date: 2004-03-03 11:48+0100\n"
+"POT-Creation-Date: 2004-10-25 12:07+0200\n"
+"PO-Revision-Date: 2004-10-31 18:43+0100\n"
 "Last-Translator: Tino Meinen <a.t.meinen@chello.nl>\n"
 "Language-Team: Dutch <vertaling@nl.linux.org>\n"
 "MIME-Version: 1.0\n"
@@ -103,122 +103,109 @@ msgstr "Standaard display"
 msgid "The default display for GDK"
 msgstr "Het standaard display voor GDK"
 
-#: gtk/gtkaboutdialog.c:187
-#, fuzzy
+#: gtk/gtkaboutdialog.c:186
 msgid "Program name"
-msgstr "Etiketnaam"
+msgstr "Programmanaam"
 
-#: gtk/gtkaboutdialog.c:188
+#: gtk/gtkaboutdialog.c:187
 msgid ""
 "The name of the program. If this is not set, it defaults to "
 "g_get_application_name()"
-msgstr ""
+msgstr "De naam van het programma. Als dit niet is ingesteld wordt standaard g_get_application_name() gebruikt"
+
+#: gtk/gtkaboutdialog.c:194
+msgid "Program version"
+msgstr "Programmaversie"
 
 #: gtk/gtkaboutdialog.c:195
-msgid "Program version"
-msgstr ""
-
-#: gtk/gtkaboutdialog.c:196
-#, fuzzy
 msgid "The version of the program"
-msgstr "De oriëntatie van de werkbalk"
+msgstr "De versie van het programma"
+
+#: gtk/gtkaboutdialog.c:201
+msgid "Copyright string"
+msgstr "Copyright-tekenreeks"
 
 #: gtk/gtkaboutdialog.c:202
-msgid "Copyright string"
-msgstr ""
-
-#: gtk/gtkaboutdialog.c:203
 msgid "Copyright information for the program"
-msgstr ""
+msgstr "Copyright-informatie over het programma"
+
+#: gtk/gtkaboutdialog.c:209
+msgid "Comments string"
+msgstr "Opmerking-tekenreeks"
 
 #: gtk/gtkaboutdialog.c:210
-#, fuzzy
-msgid "Comments string"
-msgstr "Kolom-spatiëring"
-
-#: gtk/gtkaboutdialog.c:211
 msgid "Comments about the program"
-msgstr ""
+msgstr "Opmerkingen over het programma"
+
+# webstek
+#: gtk/gtkaboutdialog.c:224
+msgid "Website URL"
+msgstr "Website URL"
 
 #: gtk/gtkaboutdialog.c:225
-msgid "Website URL"
-msgstr ""
-
-#: gtk/gtkaboutdialog.c:226
 msgid "The URL for the link to the website of the program"
-msgstr ""
+msgstr "De URL voor de link naar de website van het programma"
+
+#: gtk/gtkaboutdialog.c:232
+msgid "Website label"
+msgstr "Website-label"
 
 #: gtk/gtkaboutdialog.c:233
-#, fuzzy
-msgid "Website label"
-msgstr "Grootte gebruiken in label"
-
-#: gtk/gtkaboutdialog.c:234
 msgid ""
 "The label for the link to the website of the program. If this is not set, it "
 "defaults to the URL"
-msgstr ""
+msgstr "De label voor de link naar de website van het programma. Als dit niet is ingesteld wordt standaard de URL gebruikt"
+
+#: gtk/gtkaboutdialog.c:240
+msgid "Authors"
+msgstr "Auteurs"
 
 #: gtk/gtkaboutdialog.c:241
-msgid "Authors"
-msgstr ""
-
-#: gtk/gtkaboutdialog.c:242
 msgid "List of authors of the programs"
-msgstr ""
+msgstr "Lijst met de makers van het programma"
+
+#: gtk/gtkaboutdialog.c:247
+msgid "Documenters"
+msgstr "Documentalisten"
 
 #: gtk/gtkaboutdialog.c:248
-msgid "Documenters"
-msgstr ""
-
-#: gtk/gtkaboutdialog.c:249
 msgid "List of people documenting the program"
-msgstr ""
+msgstr "Lijst van degenen die het programma hebben gedocumenteerd"
+
+#: gtk/gtkaboutdialog.c:255
+msgid "Artists"
+msgstr "Artiesten"
 
 #: gtk/gtkaboutdialog.c:256
-msgid "Artists"
-msgstr ""
-
-#: gtk/gtkaboutdialog.c:257
 msgid "List of people who have contributed artwork to the program"
-msgstr ""
+msgstr "Lijst van degenen die hebben bijgedragen aan het grafische werk van het programma"
+
+#: gtk/gtkaboutdialog.c:263
+msgid "Translator credits"
+msgstr "Vertalers"
 
 #: gtk/gtkaboutdialog.c:264
-msgid "Translator credits"
-msgstr ""
-
-#: gtk/gtkaboutdialog.c:265
 msgid ""
 "Credits to the translators. This string should be marked as translatable"
-msgstr ""
+msgstr "De vertalers. Deze tekenreeks moet als vertaalbaar worden gemarkeerd"
+
+#: gtk/gtkaboutdialog.c:271
+msgid "Logo"
+msgstr "Logo"
 
 #: gtk/gtkaboutdialog.c:272
-msgid "Logo"
-msgstr ""
-
-#: gtk/gtkaboutdialog.c:273
 msgid ""
 "A logo for the about box. If this is not set, it defaults to "
 "gtk_window_get_default_icon_list()"
-msgstr ""
+msgstr "Een logo voor het info-dialoogvenster. Als er geen logo is gegeven wordt standaard gtk_window_het_default_icon_list() gebruikt."
+
+#: gtk/gtkaboutdialog.c:279
+msgid "Link Color"
+msgstr "Link-kleur"
 
 #: gtk/gtkaboutdialog.c:280
-#, fuzzy
-msgid "Logo Icon Name"
-msgstr "Lettertypenaam"
-
-#: gtk/gtkaboutdialog.c:281
-msgid "A named icon to use as the logo for the about box."
-msgstr ""
-
-#: gtk/gtkaboutdialog.c:288
-#, fuzzy
-msgid "Link Color"
-msgstr "Huidige Kleur"
-
-#: gtk/gtkaboutdialog.c:289
 msgid "Color of hyperlinks"
-msgstr ""
+msgstr "De kleur van hyperlinks"
 
 #: gtk/gtkaccellabel.c:139
 msgid "Accelerator Closure"
@@ -245,7 +232,7 @@ msgid "A unique name for the action."
 msgstr "Een unieke naar voor de actie."
 
 #: gtk/gtkaction.c:204 gtk/gtkbutton.c:220 gtk/gtkexpander.c:206
-#: gtk/gtkframe.c:127 gtk/gtklabel.c:300 gtk/gtktoolbutton.c:181
+#: gtk/gtkframe.c:127 gtk/gtklabel.c:291 gtk/gtktoolbutton.c:181
 msgid "Label"
 msgstr "Label"
 
@@ -300,13 +287,10 @@ msgid "Visible when overflown"
 msgstr "Zichtbaar indien verticaal"
 
 #: gtk/gtkaction.c:251
-#, fuzzy
 msgid ""
 "When TRUE, toolitem proxies for this action are represented in the toolbar "
 "overflow menu."
 msgstr ""
-"If de actie belangrijk wordt geacht. Indien WAAR, tonen 'toolitem-proxies' "
-"voor deze actie de tekst in GTK_TOOLBAR_BOTH_HORIZ modus."
 
 #: gtk/gtkaction.c:258 gtk/gtktoolitem.c:166
 msgid "Visible when vertical"
@@ -693,12 +677,12 @@ msgid ""
 msgstr ""
 "Tekst van het labelwidget op de knop, indien de knop een labelwidget bevat"
 
-#: gtk/gtkbutton.c:228 gtk/gtkexpander.c:214 gtk/gtklabel.c:321
+#: gtk/gtkbutton.c:228 gtk/gtkexpander.c:214 gtk/gtklabel.c:312
 #: gtk/gtktoolbutton.c:188
 msgid "Use underline"
 msgstr "Gebruik onderstreping"
 
-#: gtk/gtkbutton.c:229 gtk/gtkexpander.c:215 gtk/gtklabel.c:322
+#: gtk/gtkbutton.c:229 gtk/gtkexpander.c:215 gtk/gtklabel.c:313
 msgid ""
 "If set, an underline in the text indicates the next character should be used "
 "for the mnemonic accelerator key"
@@ -783,16 +767,16 @@ msgstr ""
 "Hoever de dochter in de y-richting moet worden verplaatst als de knop "
 "ingedrukt wordt"
 
+# verzetten/verplaatsen
 #: gtk/gtkbutton.c:396
-#, fuzzy
 msgid "Displace focus"
-msgstr "Is aandacht"
+msgstr "Aandacht verzetten"
 
 #: gtk/gtkbutton.c:397
 msgid ""
 "Whether the child_displacement_x/_y properties should also affect the focus "
 "rectangle"
-msgstr ""
+msgstr "Of de eigenschappen voor dochter_verplaatsing_x/_y tevens de voor de aandachtsrechthoek moeten gelden"
 
 #: gtk/gtkbutton.c:402
 msgid "Show button images"
@@ -973,14 +957,13 @@ msgid "Whether this tag affects the cell background color"
 msgstr "Of dit etiket de cel-achtergrondkleur beïnvloedt"
 
 #: gtk/gtkcellrenderercombo.c:89
-#, fuzzy
 msgid "Model"
-msgstr "Modus"
+msgstr "Model"
 
+# het model bevattende de mogelijke waarden....
 #: gtk/gtkcellrenderercombo.c:90
-#, fuzzy
 msgid "The model containing the possible values for the combo box"
-msgstr "Het model voor de combo-box"
+msgstr "Het model dat de mogelijke waarden voor de combo-box bevat"
 
 #: gtk/gtkcellrenderercombo.c:108 gtk/gtkcomboboxentry.c:114
 msgid "Text Column"
@@ -993,12 +976,12 @@ msgstr "Een kolom in het databron-model met de gevraagde tekenreeksen"
 
 #: gtk/gtkcellrenderercombo.c:127
 msgid "Has Entry"
-msgstr ""
+msgstr "Heeft invoer"
 
 #: gtk/gtkcellrenderercombo.c:128
 #, c-format
 msgid "If %FALSE, don't allow to enter strings other than the chosen ones"
-msgstr ""
+msgstr "Indien %FALSE, kunnen geen andere tekenreeksen worden ingevoerd dan de voorgekozen tekenreeksen"
 
 #: gtk/gtkcellrendererpixbuf.c:136
 msgid "Pixbuf Object"
@@ -1024,7 +1007,7 @@ msgstr "gesloten uitklapbare pixbuf"
 msgid "Pixbuf for closed expander"
 msgstr "Pixbuf voor gesloten uitklapbare item"
 
-#: gtk/gtkcellrendererpixbuf.c:163 gtk/gtkimage.c:199
+#: gtk/gtkcellrendererpixbuf.c:163 gtk/gtkimage.c:194
 msgid "Stock ID"
 msgstr "Standaard-ID"
 
@@ -1050,9 +1033,8 @@ msgid "Render detail to pass to the theme engine"
 msgstr "Weergavedetail door te geven aan de thema-motor"
 
 #: gtk/gtkcellrendererprogress.c:116
-#, fuzzy
 msgid "Value of the progress bar"
-msgstr "Tekst die weergegeven wordt in de voortgangsbalk"
+msgstr "Waarde van de voortgangsbalk"
 
 #: gtk/gtkcellrendererprogress.c:133 gtk/gtkcellrenderertext.c:204
 #: gtk/gtkentry.c:573 gtk/gtkprogressbar.c:219
@@ -1060,10 +1042,10 @@ msgid "Text"
 msgstr "Tekst"
 
 #: gtk/gtkcellrendererprogress.c:134
-#, fuzzy
 msgid "Text on the progress bar"
-msgstr "Tekst die weergegeven wordt in de voortgangsbalk"
+msgstr "Tekst op de voortgangsbalk"
 
+# de te maken tekst
 #: gtk/gtkcellrenderertext.c:205
 msgid "Text to render"
 msgstr "Te renderen tekst"
@@ -1072,11 +1054,12 @@ msgstr "Te renderen tekst"
 msgid "Markup"
 msgstr "Opmaak"
 
+# vormgegeven tekst te renderen
 #: gtk/gtkcellrenderertext.c:213
 msgid "Marked up text to render"
 msgstr "Te renderen opgemaakte tekst"
 
-#: gtk/gtkcellrenderertext.c:220 gtk/gtklabel.c:307
+#: gtk/gtkcellrenderertext.c:220 gtk/gtklabel.c:298
 msgid "Attributes"
 msgstr "Attributen"
 
@@ -1240,15 +1223,16 @@ msgstr ""
 "hint bij het renderen van de tekst. Als u deze parameter niet begrijpt, "
 "heeft u het waarschijnlijk niet nodig."
 
-#: gtk/gtkcellrenderertext.c:407 gtk/gtklabel.c:413
+#: gtk/gtkcellrenderertext.c:407 gtk/gtklabel.c:404
 msgid "Ellipsize"
-msgstr ""
+msgstr "Ellipsis"
 
+# if at all, vertalen?
 #: gtk/gtkcellrenderertext.c:408
 msgid ""
 "The preferred place to ellipsize the string, if the cell renderer does not "
 "have enough room to display the entire string, if at all"
-msgstr ""
+msgstr "De voorkeursplaats waar de tekenreeks een ellipsis krijgt wanneer de cel-renderer niet voldoende ruimte heeft om de gehele tekenreeks weer te geven."
 
 #: gtk/gtkcellrenderertext.c:418 gtk/gtkcellview.c:195 gtk/gtktexttag.c:510
 msgid "Background set"
@@ -1363,14 +1347,12 @@ msgid "Whether this tag affects the language the text is rendered as"
 msgstr "Of dit label de taal waarin de tekst gerenderd wordt beïnvloedt"
 
 #: gtk/gtkcellrenderertext.c:474
-#, fuzzy
 msgid "Ellipsize set"
-msgstr "Verhoging aangezet"
+msgstr "Ellipsis aangezet"
 
 #: gtk/gtkcellrenderertext.c:475
-#, fuzzy
 msgid "Whether this tag affects the ellipsize mode"
-msgstr "Of dit label de verhoging beïnvloedt"
+msgstr "Of dit label de ellipsis-modus beïnvloedt"
 
 #: gtk/gtkcellrenderertoggle.c:142
 msgid "Toggle state"
@@ -1420,7 +1402,7 @@ msgstr "Indicatorspatiëring"
 msgid "Spacing around check or radio indicator"
 msgstr "Spatiëring rondom aanvink- of selectie-indicator"
 
-#: gtk/gtkcheckmenuitem.c:118 gtk/gtkfilechooserbutton.c:257
+#: gtk/gtkcheckmenuitem.c:118 gtk/gtkfilechooserbutton.c:226
 #: gtk/gtktogglebutton.c:134
 msgid "Active"
 msgstr "Actief"
@@ -1453,7 +1435,7 @@ msgstr "Alpha gebruiken"
 msgid "Whether or not to give the color an alpha value"
 msgstr "Of aan de kleur een alpha-waarde moet worden gegeven"
 
-#: gtk/gtkcolorbutton.c:218 gtk/gtkfilechooserbutton.c:251
+#: gtk/gtkcolorbutton.c:218 gtk/gtkfilechooserbutton.c:220
 #: gtk/gtkfontbutton.c:176 gtk/gtktreeviewcolumn.c:298
 msgid "Title"
 msgstr "Titel"
@@ -1597,38 +1579,36 @@ msgid "The item which is currently active"
 msgstr "Het item dat momenteel actief is"
 
 # enkelvoud mooier? Menu heeft afscheurperforatie
+# afscheurlijn/afscheurmogelijkheid
+# afscheurlijn aan menus toevoegen
+# Menus hebben afscheurlijn<
 #: gtk/gtkcombobox.c:588 gtk/gtkuimanager.c:221
 msgid "Add tearoffs to menus"
-msgstr "Menus hebben afscheur-perforatie"
+msgstr "Afscheurlijn aan menus toevoegen"
 
 #: gtk/gtkcombobox.c:589
-#, fuzzy
 msgid "Whether dropdowns should have a tearoff menu item"
-msgstr "Of tabs gelijke afmetingen moeten hebben"
+msgstr "Of dropdowns een afscheurlijn moeten hebben"
 
 #: gtk/gtkcombobox.c:604 gtk/gtkentry.c:530
 msgid "Has Frame"
 msgstr "Heeft kader"
 
 #: gtk/gtkcombobox.c:605
-#, fuzzy
 msgid "Whether the combo box draws a frame around the child"
-msgstr "Of de kolom rond de koppen geordend kan worden"
+msgstr "Of de combobox een kader rond de dochter tekent"
 
 #: gtk/gtkcombobox.c:613
-#, fuzzy
 msgid "Whether the combo box grabs focus when it is clicked with the mouse"
-msgstr "Of de knop de aandacht krijgt als het met de muis wordt aangeklikt"
+msgstr "Of de combobox de aandacht krijgt als het met de muis wordt aangeklikt"
 
 #: gtk/gtkcombobox.c:619
 msgid "Appears as list"
 msgstr "Verschijnt als lijst"
 
 #: gtk/gtkcombobox.c:620
-#, fuzzy
 msgid "Whether dropdowns should look like lists rather than menus"
-msgstr ""
-"Of combobox dropdowns als lijsten getoond worden in plaats van als menus"
+msgstr "Of dropdowns als lijsten getoond worden in plaats van als menus"
 
 #: gtk/gtkcontainer.c:205
 msgid "Resize mode"
@@ -1729,19 +1709,19 @@ msgid "Width of border around the button area at the bottom of the dialog"
 msgstr ""
 "Breedte van het kader rondom de knoppenbalk onderaan het dialoogvenster"
 
-#: gtk/gtkentry.c:485 gtk/gtklabel.c:378
+#: gtk/gtkentry.c:485 gtk/gtklabel.c:369
 msgid "Cursor Position"
 msgstr "Cursorpositie"
 
-#: gtk/gtkentry.c:486 gtk/gtklabel.c:379
+#: gtk/gtkentry.c:486 gtk/gtklabel.c:370
 msgid "The current position of the insertion cursor in chars"
 msgstr "De huidige positie van de invoegcurser, in lettertekens"
 
-#: gtk/gtkentry.c:495 gtk/gtklabel.c:388
+#: gtk/gtkentry.c:495 gtk/gtklabel.c:379
 msgid "Selection Bound"
 msgstr "Selectie begrensd"
 
-#: gtk/gtkentry.c:496 gtk/gtklabel.c:389
+#: gtk/gtkentry.c:496 gtk/gtklabel.c:380
 msgid ""
 "The position of the opposite end of the selection from the cursor in chars"
 msgstr ""
@@ -1827,13 +1807,10 @@ msgstr "X-uitlijning"
 # RTL right to left
 # misschien omzetten naar RNL?
 #: gtk/gtkentry.c:590 gtk/gtkmisc.c:101
-#, fuzzy
 msgid ""
 "The horizontal alignment, from 0 (left) to 1 (right). Reversed for RTL "
 "layouts."
-msgstr ""
-"De horizontale uitlijning, van 0 (links) naar 1 (rechts). Omgekeerd voor RTL "
-"indelingen"
+msgstr "De horizontale opstelling, van 0 (links) naar 1 (rechts). Omgekeerd voor RTL indelingen"
 
 #: gtk/gtkentry.c:828
 msgid "Select on focus"
@@ -1862,33 +1839,28 @@ msgid "Minimum length of the search key in order to look up matches"
 msgstr "Minimum lengte van de zoeksleutel voor het opzoeken van overeenkomsten"
 
 #: gtk/gtkentrycompletion.c:296 gtk/gtkiconview.c:361
-#, fuzzy
 msgid "Text column"
 msgstr "Tekstkolom"
 
-# enigszins vrij vertaald, maar betekenis klopt volgens mij
 #: gtk/gtkentrycompletion.c:297
-#, fuzzy
 msgid "The column of the model containing the strings."
-msgstr "Een kolom in het databron-model met de gevraagde tekenreeksen"
+msgstr "Een kolom van het model met de tekenreeksen."
 
 #: gtk/gtkentrycompletion.c:315
 msgid "Inline completion"
-msgstr ""
+msgstr "Inlijns voltooiing"
 
 #: gtk/gtkentrycompletion.c:316
-#, fuzzy
 msgid "Whether the common prefix should be inserted automatically"
-msgstr "Of het kader weergegeven wordt of niet"
+msgstr "Of de standaard prefix automatisch moet worden ingevoegd"
 
 #: gtk/gtkentrycompletion.c:330
 msgid "Popup completion"
-msgstr ""
+msgstr "Popup voltooiing"
 
 #: gtk/gtkentrycompletion.c:331
-#, fuzzy
 msgid "Whether the completions should be shown in a popup window"
-msgstr "Of het kader weergegeven wordt of niet"
+msgstr "Of de aanvullingen in een popup-venster getoond moeten worden"
 
 #: gtk/gtkeventbox.c:121
 msgid "Visible Window"
@@ -1927,11 +1899,11 @@ msgstr "Of de uitklapper is geopend en het dochterwidget toont"
 msgid "Text of the expander's label"
 msgstr "Labeltekst van de uitklapper"
 
-#: gtk/gtkexpander.c:222 gtk/gtklabel.c:314
+#: gtk/gtkexpander.c:222 gtk/gtklabel.c:305
 msgid "Use markup"
 msgstr "Opmaak gebruiken"
 
-#: gtk/gtkexpander.c:223 gtk/gtklabel.c:315
+#: gtk/gtkexpander.c:223 gtk/gtklabel.c:306
 msgid "The text of the label includes XML markup. See pango_parse_markup()"
 msgstr "De tekst van het label bevat XML-opmaak. Bekijk pango_parse_markup()"
 
@@ -2044,32 +2016,21 @@ msgstr "Verborgen tonen"
 msgid "Whether the hidden files and folders should be displayed"
 msgstr "Of verborgen bestanden en mappen moeten worden weergegeven"
 
-#: gtk/gtkfilechooserbutton.c:244
+#: gtk/gtkfilechooserbutton.c:213
 msgid "Dialog"
-msgstr ""
+msgstr "Dialoogvenster"
 
-#: gtk/gtkfilechooserbutton.c:245
+#: gtk/gtkfilechooserbutton.c:214
 msgid "The file chooser dialog to use."
-msgstr ""
+msgstr "De te gebruiken bestandskiezer."
 
-#: gtk/gtkfilechooserbutton.c:252
-#, fuzzy
+#: gtk/gtkfilechooserbutton.c:221
 msgid "The title of the file chooser dialog."
-msgstr "De titel van het lettertypeselectie-dialoogvenster"
+msgstr "De titel van het bestandsselectie-dialoogvenster."
 
-#: gtk/gtkfilechooserbutton.c:258
-#, fuzzy
+#: gtk/gtkfilechooserbutton.c:227
 msgid "Whether the browse dialog is visible or not."
-msgstr "Of het widget zichtbaar moet zijn"
-
-#: gtk/gtkfilechooserbutton.c:262
-#, fuzzy
-msgid "Width In Characters"
-msgstr "Breedte, in lettertekens"
-
-#: gtk/gtkfilechooserbutton.c:263
-msgid "The desired width of the button widget, in characters."
-msgstr ""
+msgstr "Of het verkenningsvenster zichtbaar is of niet."
 
 #: gtk/gtkfilechooserdefault.c:589
 msgid "Default file chooser backend"
@@ -2079,7 +2040,7 @@ msgstr "Standaard backend bestandkiezer"
 msgid "Name of the GtkFileChooser backend to use by default"
 msgstr "Naam van de gebruikte backend voor de bestandkiezer"
 
-#: gtk/gtkfilesel.c:560 gtk/gtkimage.c:190
+#: gtk/gtkfilesel.c:560 gtk/gtkimage.c:185
 msgid "Filename"
 msgstr "Bestandsnaam"
 
@@ -2261,19 +2222,16 @@ msgstr ""
 "afgeleid van handle_position"
 
 #: gtk/gtkiconview.c:324
-#, fuzzy
 msgid "Selection mode"
-msgstr "Selectie begrensd"
+msgstr "Selectiemodus"
 
 #: gtk/gtkiconview.c:325
-#, fuzzy
 msgid "The selection mode"
-msgstr "Het geselecteerde jaar"
+msgstr "De selectiemodus"
 
 #: gtk/gtkiconview.c:343
-#, fuzzy
 msgid "Pixbuf column"
-msgstr "Tekstkolom"
+msgstr "Pixbufkolom"
 
 #: gtk/gtkiconview.c:344
 msgid "Model column used to retrieve the icon pixbuf from"
@@ -2293,14 +2251,12 @@ msgid "Model column used to retrieve the text if using Pango markup"
 msgstr ""
 
 #: gtk/gtkiconview.c:389
-#, fuzzy
 msgid "Icon View Model"
-msgstr "TreeView Model"
+msgstr "Pictogramweergave-model"
 
 #: gtk/gtkiconview.c:390
-#, fuzzy
 msgid "The model for the icon view"
-msgstr "Het model van de TreeView"
+msgstr "Het model van de pictogramweergave"
 
 #: gtk/gtkiconview.c:397 gtk/gtkprogressbar.c:151 gtk/gtktoolbar.c:507
 msgid "Orientation"
@@ -2309,120 +2265,110 @@ msgstr "Oriëntatie"
 #: gtk/gtkiconview.c:398
 msgid ""
 "How the text and icon of each item are positioned relative to each other"
-msgstr ""
+msgstr "Hoe de tekst en pictogram van elk item ten opzichte van elkaar zijn geplaatst"
 
+# selectierechthoek/selectieveld/selectiebox
 #: gtk/gtkiconview.c:406
-#, fuzzy
 msgid "Selection Box Color"
-msgstr "Selectie begrensd"
+msgstr "Selectieveld kleur"
 
 #: gtk/gtkiconview.c:407
-#, fuzzy
 msgid "Color of the selection box"
-msgstr "De titel van het lettertypeselectie-dialoogvenster"
+msgstr "De kleur van het selectieveld"
 
 #: gtk/gtkiconview.c:413
-#, fuzzy
 msgid "Selection Box Alpha"
-msgstr "Selectie begrensd"
+msgstr "Selectieveld alpha"
 
 #: gtk/gtkiconview.c:414
-#, fuzzy
 msgid "Opacity of the selection box"
-msgstr "De titel van het lettertypeselectie-dialoogvenster"
+msgstr "Doorzichtigheid van het selectieveld"
 
-#: gtk/gtkimage.c:158
+#: gtk/gtkimage.c:153
 msgid "Pixbuf"
 msgstr "Pixbuf"
 
-#: gtk/gtkimage.c:159
+#: gtk/gtkimage.c:154
 msgid "A GdkPixbuf to display"
 msgstr "Een weer te geven GdkPixbuf"
 
-#: gtk/gtkimage.c:166
+#: gtk/gtkimage.c:161
 msgid "Pixmap"
 msgstr "Pixmap"
 
-#: gtk/gtkimage.c:167
+#: gtk/gtkimage.c:162
 msgid "A GdkPixmap to display"
 msgstr "Een weer te geven GdkPixmap"
 
-#: gtk/gtkimage.c:174
+#: gtk/gtkimage.c:169
 msgid "Image"
 msgstr "Afbeelding"
 
-#: gtk/gtkimage.c:175
+#: gtk/gtkimage.c:170
 msgid "A GdkImage to display"
 msgstr "Een weer te geven GdkImage"
 
-#: gtk/gtkimage.c:182
+#: gtk/gtkimage.c:177
 msgid "Mask"
 msgstr "Masker"
 
-#: gtk/gtkimage.c:183
+#: gtk/gtkimage.c:178
 msgid "Mask bitmap to use with GdkImage or GdkPixmap"
 msgstr "Te gebruiken bitmapmasker voor GdkImage of GdkPixmap"
 
-#: gtk/gtkimage.c:191
+#: gtk/gtkimage.c:186
 msgid "Filename to load and display"
 msgstr "Te laden en weer te geven bestandsnaam"
 
-#: gtk/gtkimage.c:200
+#: gtk/gtkimage.c:195
 msgid "Stock ID for a stock image to display"
 msgstr "Standaard-ID voor een weer te geven standaardafbeelding"
 
-#: gtk/gtkimage.c:207
+#: gtk/gtkimage.c:202
 msgid "Icon set"
-msgstr "Pictogrammenverzameling"
+msgstr "Pictogramverzameling"
 
-#: gtk/gtkimage.c:208
+#: gtk/gtkimage.c:203
 msgid "Icon set to display"
-msgstr "Weer te geven pictogrammenverzameling"
+msgstr "Weer te geven pictogramverzameling"
 
-#: gtk/gtkimage.c:215
+#: gtk/gtkimage.c:210
 msgid "Icon size"
 msgstr "Pictogramafmetingen"
 
-#: gtk/gtkimage.c:216
-#, fuzzy
+#: gtk/gtkimage.c:211
 msgid "Symbolic size to use for stock icon, icon set or named icon"
-msgstr ""
-"De gebtuikte afmetingen voor het standaardpictogram of pictogramverzameling"
+msgstr "Symbolische grootte voor een standaardpictogram, pictogramverzameling, of pictogram met naam"
 
-#: gtk/gtkimage.c:232
-#, fuzzy
+#: gtk/gtkimage.c:227
 msgid "Pixel size"
-msgstr "Beeldpunten"
+msgstr "Beeldpuntengrootte"
 
-#: gtk/gtkimage.c:233
-#, fuzzy
+#: gtk/gtkimage.c:228
 msgid "Pixel size to use for named icon"
-msgstr ""
-"De gebtuikte afmetingen voor het standaardpictogram of pictogramverzameling"
+msgstr "De te gebruiken beeldpuntgrootte voor pictogram met naam"
 
-#: gtk/gtkimage.c:241
+#: gtk/gtkimage.c:236
 msgid "Animation"
 msgstr "Animatie"
 
-#: gtk/gtkimage.c:242
+#: gtk/gtkimage.c:237
 msgid "GdkPixbufAnimation to display"
 msgstr "GdkPixbufAnimation om weer te geven"
 
-#: gtk/gtkimage.c:257 gtk/gtkwindow.c:563
-#, fuzzy
+#: gtk/gtkimage.c:252 gtk/gtkwindow.c:563
 msgid "Icon Name"
-msgstr "Lettertypenaam"
+msgstr "Pictogramnaam"
 
-#: gtk/gtkimage.c:258
-#, fuzzy
+#: gtk/gtkimage.c:253
 msgid "The name of the icon from the icon theme"
-msgstr "De naam van het geselecteerde lettertype"
+msgstr "De naam van het pictogram uit het pictogramthema"
 
-#: gtk/gtkimage.c:265
+#: gtk/gtkimage.c:260
 msgid "Storage type"
 msgstr "Opslagtype"
 
-#: gtk/gtkimage.c:266
+#: gtk/gtkimage.c:261
 msgid "The representation being used for image data"
 msgstr "De te gebruiken representatie voor afbeeldingsdata"
 
@@ -2450,20 +2396,20 @@ msgstr "Scherm"
 msgid "The screen where this window will be displayed"
 msgstr "Het scherm waar dit venster wordt getoond"
 
-#: gtk/gtklabel.c:301
+#: gtk/gtklabel.c:292
 msgid "The text of the label"
 msgstr "De tekst van het label"
 
-#: gtk/gtklabel.c:308
+#: gtk/gtklabel.c:299
 msgid "A list of style attributes to apply to the text of the label"
 msgstr ""
 "Een lijst van stijlattributen om toe te passen op de tekst van het label"
 
-#: gtk/gtklabel.c:329 gtk/gtktexttag.c:376 gtk/gtktextview.c:594
+#: gtk/gtklabel.c:320 gtk/gtktexttag.c:376 gtk/gtktextview.c:594
 msgid "Justification"
 msgstr "Uitvulling"
 
-#: gtk/gtklabel.c:330
+#: gtk/gtklabel.c:321
 msgid ""
 "The alignment of the lines in the text of the label relative to each other. "
 "This does NOT affect the alignment of the label within its allocation. See "
@@ -2473,11 +2419,11 @@ msgstr ""
 "Dit beïnvloed NIET de uitlijning van het label in zijn huidige plaatsing. "
 "Bekijk daarvoor GtkMisc::xalign."
 
-#: gtk/gtklabel.c:338
+#: gtk/gtklabel.c:329
 msgid "Pattern"
 msgstr "Patroon"
 
-#: gtk/gtklabel.c:339
+#: gtk/gtklabel.c:330
 msgid ""
 "A string with _ characters in positions correspond to characters in the text "
 "to underline"
@@ -2485,53 +2431,45 @@ msgstr ""
 "Een tekenreeks met _-tekens in posities komt overeen met tekens in de te "
 "onderstrepen tekst"
 
-#: gtk/gtklabel.c:346
+#: gtk/gtklabel.c:337
 msgid "Line wrap"
 msgstr "Regelterugloop"
 
-#: gtk/gtklabel.c:347
+#: gtk/gtklabel.c:338
 msgid "If set, wrap lines if the text becomes too wide"
 msgstr "Indien aangezet, is er regelterugloop  als de tekst te breed wordt"
 
-#: gtk/gtklabel.c:353
+#: gtk/gtklabel.c:344
 msgid "Selectable"
 msgstr "Selecteerbaar"
 
-#: gtk/gtklabel.c:354
+#: gtk/gtklabel.c:345
 msgid "Whether the label text can be selected with the mouse"
 msgstr "Of de labeltekst geselecteerd kan worden met de muis"
 
-#: gtk/gtklabel.c:360
+#: gtk/gtklabel.c:351
 msgid "Mnemonic key"
 msgstr "Sneltoets"
 
-#: gtk/gtklabel.c:361
+#: gtk/gtklabel.c:352
 msgid "The mnemonic accelerator key for this label"
 msgstr "De sneltoets voor dit label"
 
-#: gtk/gtklabel.c:369
+#: gtk/gtklabel.c:360
 msgid "Mnemonic widget"
 msgstr "Sneltoets-widget"
 
-#: gtk/gtklabel.c:370
+#: gtk/gtklabel.c:361
 msgid "The widget to be activated when the label's mnemonic key is pressed"
 msgstr ""
 "Het widget om te activeren als de sneltoets van het label wordt ingedrukt"
 
-#: gtk/gtklabel.c:414
+# if at all  vertalen?
+#: gtk/gtklabel.c:405
 msgid ""
 "The preferred place to ellipsize the string, if the label does not have "
 "enough room to display the entire string, if at all"
-msgstr ""
-
-#: gtk/gtklabel.c:431
-#, fuzzy
-msgid "Width In Chararacters"
-msgstr "Breedte, in lettertekens"
-
-#: gtk/gtklabel.c:432
-msgid "The desired width of the label, in characters"
-msgstr ""
+msgstr "De voorkeursplaats waar de tekenreeks een ellipsis krijgt wanneer het label niet voldoende ruimte heeft om de gehele tekenreeks weer te geven."
 
 #: gtk/gtklayout.c:635 gtk/gtkviewport.c:136
 msgid "Horizontal adjustment"
@@ -2559,7 +2497,7 @@ msgstr "De hoogte van de opmaak"
 
 #: gtk/gtkmenu.c:521
 msgid "Tearoff Title"
-msgstr "Afscheur-Titel"
+msgstr "Afscheur-titel"
 
 #: gtk/gtkmenu.c:522
 msgid ""
@@ -2570,9 +2508,8 @@ msgstr ""
 "losgescheurd wordt"
 
 #: gtk/gtkmenu.c:536
-#, fuzzy
 msgid "Tearoff State"
-msgstr "Afscheur-Titel"
+msgstr "Afscheur-status"
 
 #: gtk/gtkmenu.c:537
 #, fuzzy
@@ -2705,40 +2642,40 @@ msgstr "Menu"
 
 #: gtk/gtkmenutoolbutton.c:248
 msgid "The dropdown menu"
-msgstr ""
+msgstr "Het dropdown menu"
 
-#: gtk/gtkmessagedialog.c:124
+#: gtk/gtkmessagedialog.c:108
 msgid "Image/label border"
 msgstr "Afbeeldings/label -kader"
 
-#: gtk/gtkmessagedialog.c:125
+#: gtk/gtkmessagedialog.c:109
 msgid "Width of border around the label and image in the message dialog"
 msgstr "Breedte van het kader rondom label en afbeelding in het dialoogvenster"
 
-#: gtk/gtkmessagedialog.c:140
+#: gtk/gtkmessagedialog.c:124
 msgid "Use separator"
 msgstr "Scheiding gebruiken"
 
-#: gtk/gtkmessagedialog.c:141
+#: gtk/gtkmessagedialog.c:125
 msgid ""
 "Whether to put a separator between the message dialog's text and the buttons"
 msgstr ""
 "Of een scheiding moet worden aangebracht tussen de tekst van het "
 "dialoogvenster en de knoppen"
 
-#: gtk/gtkmessagedialog.c:147
+#: gtk/gtkmessagedialog.c:131
 msgid "Message Type"
 msgstr "Berichttype"
 
-#: gtk/gtkmessagedialog.c:148
+#: gtk/gtkmessagedialog.c:132
 msgid "The type of message"
 msgstr "Het type van het bericht"
 
-#: gtk/gtkmessagedialog.c:155
+#: gtk/gtkmessagedialog.c:139
 msgid "Message Buttons"
 msgstr "Berichtknoppen"
 
-#: gtk/gtkmessagedialog.c:156
+#: gtk/gtkmessagedialog.c:140
 msgid "The buttons shown in the message dialog"
 msgstr "De weer te geven knoppen in het berichten dialoogvenster"
 
@@ -2855,9 +2792,8 @@ msgid "Tab label"
 msgstr "Tab-label"
 
 #: gtk/gtknotebook.c:482
-#, fuzzy
 msgid "The string displayed on the child's tab label"
-msgstr "De weergegeven tekst op het tab-label van de dochter"
+msgstr "De weergegeven tekenreeks op het tab-label van de dochter"
 
 #: gtk/gtknotebook.c:488
 msgid "Menu label"
@@ -3382,11 +3318,11 @@ msgstr "Tekenen"
 msgid "Whether the separator is drawn, or just blank"
 msgstr "Of de scheiding getoond wordt of onzichtbaar is"
 
-#: gtk/gtksettings.c:270
+#: gtk/gtksettings.c:268
 msgid "Double Click Time"
 msgstr "Dubbelklik-tijd"
 
-#: gtk/gtksettings.c:271
+#: gtk/gtksettings.c:269
 msgid ""
 "Maximum time allowed between two clicks for them to be considered a double "
 "click (in milliseconds)"
@@ -3395,11 +3331,11 @@ msgstr ""
 "als een dubbelklik (in milliseconden)"
 
 # itt dubbelkliktijd 
-#: gtk/gtksettings.c:278
+#: gtk/gtksettings.c:276
 msgid "Double Click Distance"
 msgstr "Dubbelklik-afstand"
 
-#: gtk/gtksettings.c:279
+#: gtk/gtksettings.c:277
 msgid ""
 "Maximum distance allowed between two clicks for them to be considered a "
 "double click (in pixels)"
@@ -3407,27 +3343,27 @@ msgstr ""
 "Maximale afstand tussen twee keer klikken zodat het nog beschouwd kan worden "
 "als een dubbelklik (in beeldpunten)"
 
-#: gtk/gtksettings.c:286
+#: gtk/gtksettings.c:284
 msgid "Cursor Blink"
 msgstr "Knipperende cursor"
 
-#: gtk/gtksettings.c:287
+#: gtk/gtksettings.c:285
 msgid "Whether the cursor should blink"
 msgstr "Of de cursor moet knipperen"
 
-#: gtk/gtksettings.c:294
+#: gtk/gtksettings.c:292
 msgid "Cursor Blink Time"
 msgstr "Cursor knippertijd"
 
-#: gtk/gtksettings.c:295
+#: gtk/gtksettings.c:293
 msgid "Length of the cursor blink cycle, in milleseconds"
 msgstr "Lengte van de cursor knippercyclus, in milliseconden"
 
-#: gtk/gtksettings.c:302
+#: gtk/gtksettings.c:300
 msgid "Split Cursor"
 msgstr "Gespleten Cursor"
 
-#: gtk/gtksettings.c:303
+#: gtk/gtksettings.c:301
 msgid ""
 "Whether two cursors should be displayed for mixed left-to-right and right-to-"
 "left text"
@@ -3435,117 +3371,117 @@ msgstr ""
 "Of de twee cursors weergegeven moeten worden voor gemengd links-naar-rechts "
 "en rechts-naar-links"
 
-#: gtk/gtksettings.c:310
+#: gtk/gtksettings.c:308
 msgid "Theme Name"
 msgstr "Thema-naam"
 
-#: gtk/gtksettings.c:311
+#: gtk/gtksettings.c:309
 msgid "Name of theme RC file to load"
 msgstr "Naam van het te laden RC themabestand"
 
-#: gtk/gtksettings.c:318
+#: gtk/gtksettings.c:316
 msgid "Icon Theme Name"
 msgstr "Pictogramthema-naam"
 
-#: gtk/gtksettings.c:319
+#: gtk/gtksettings.c:317
 msgid "Name of icon theme to use"
 msgstr "Naam van het gebruikte pictogramthema"
 
-#: gtk/gtksettings.c:327
+#: gtk/gtksettings.c:325
 msgid "Key Theme Name"
 msgstr "Sleutel thema-naam"
 
-#: gtk/gtksettings.c:328
+#: gtk/gtksettings.c:326
 msgid "Name of key theme RC file to load"
 msgstr "Naam van het te laden sleutel RC themabestand"
 
-#: gtk/gtksettings.c:336
+#: gtk/gtksettings.c:334
 msgid "Menu bar accelerator"
 msgstr "Menubalk sneltoets"
 
-#: gtk/gtksettings.c:337
+#: gtk/gtksettings.c:335
 msgid "Keybinding to activate the menu bar"
 msgstr "Sneltoets om de menubalk te activeren"
 
-#: gtk/gtksettings.c:345
+#: gtk/gtksettings.c:343
 msgid "Drag threshold"
 msgstr "Sleepdrempel"
 
-#: gtk/gtksettings.c:346
+#: gtk/gtksettings.c:344
 msgid "Number of pixels the cursor can move before dragging"
 msgstr ""
 "Aantal beeldpunten dat de cursor moet bewegen om het slepen te activeren"
 
-#: gtk/gtksettings.c:354
+#: gtk/gtksettings.c:352
 msgid "Font Name"
 msgstr "Lettertypenaam"
 
-#: gtk/gtksettings.c:355
+#: gtk/gtksettings.c:353
 msgid "Name of default font to use"
 msgstr "Naam van het standaard lettertype"
 
-#: gtk/gtksettings.c:363
+#: gtk/gtksettings.c:361
 msgid "Icon Sizes"
 msgstr "Pictogramafmetingen"
 
-#: gtk/gtksettings.c:364
+#: gtk/gtksettings.c:362
 msgid "List of icon sizes (gtk-menu=16,16;gtk-button=20,20..."
 msgstr "Lijst van pictogramafmetingen (gtk-menu=16; gtk-knop=20,20..."
 
-#: gtk/gtksettings.c:372
+#: gtk/gtksettings.c:370
 msgid "GTK Modules"
-msgstr ""
+msgstr "GTK modules"
 
-#: gtk/gtksettings.c:373
+#: gtk/gtksettings.c:371
 msgid "List of currently active GTK modules"
-msgstr ""
+msgstr "Lijst met actieve GTK modules"
 
-#: gtk/gtksettings.c:382
+#: gtk/gtksettings.c:380
 msgid "Xft Antialias"
 msgstr "Xft antialias"
 
-#: gtk/gtksettings.c:383
+#: gtk/gtksettings.c:381
 msgid "Whether to antialias Xft fonts; 0=no, 1=yes, -1=default"
 msgstr "Of Xft lettertypen antialias krijgen; 0=nee, 1=ja, -1=standaard"
 
-#: gtk/gtksettings.c:392
+#: gtk/gtksettings.c:390
 msgid "Xft Hinting"
 msgstr "Xft hinting"
 
-#: gtk/gtksettings.c:393
+#: gtk/gtksettings.c:391
 msgid "Whether to hint Xft fonts; 0=no, 1=yes, -1=default"
 msgstr "Of Xft lettertypen hinting krijgen; 0=nee, 1=ja, -1=standaard"
 
-#: gtk/gtksettings.c:402
+#: gtk/gtksettings.c:400
 msgid "Xft Hint Style"
 msgstr "Xft hint stijl"
 
 # moet none etc vertaald worden?
-#: gtk/gtksettings.c:403
+#: gtk/gtksettings.c:401
 msgid "What degree of hinting to use; none, slight, medium, or full"
 msgstr "Welk soort hinting gebruikt wordt; none, slight, medium of full"
 
-#: gtk/gtksettings.c:412
+#: gtk/gtksettings.c:410
 msgid "Xft RGBA"
 msgstr "Xft RGBA"
 
-#: gtk/gtksettings.c:413
+#: gtk/gtksettings.c:411
 msgid "Type of subpixel antialiasing; none, rgb, bgr, vrgb, vbgr"
 msgstr "Type subpixel antialias; none, rgb, bgr, vrgb, vbgr"
 
-#: gtk/gtksettings.c:422
+#: gtk/gtksettings.c:420
 msgid "Xft DPI"
 msgstr "Xft DPI"
 
-#: gtk/gtksettings.c:423
+#: gtk/gtksettings.c:421
 msgid "Resolution for Xft, in 1024 * dots/inch. -1 to use default value"
 msgstr "Resolutie voor Xft, in 1024 * punten/inch. Standaardwaarde: -1 "
 
-#: gtk/gtksettings.c:432
+#: gtk/gtksettings.c:430
 msgid "Alternative button order"
-msgstr ""
+msgstr "Alternatieve knoppenvolgorde"
 
-#: gtk/gtksettings.c:433
+#: gtk/gtksettings.c:431
 #, fuzzy
 msgid "Whether buttons in dialogs should use the alternative button order"
 msgstr "Of standaard pictogrammen in de knoppen worden getoond"
@@ -3768,11 +3704,11 @@ msgstr "Woordafbreking"
 msgid "Whether words are wrapped at widget edges"
 msgstr "Of woorden afgebroken worden aan de randen van widgets"
 
-#: gtk/gtktextbuffer.c:184
+#: gtk/gtktextbuffer.c:183
 msgid "Tag Table"
 msgstr "Etiket-tabel"
 
-#: gtk/gtktextbuffer.c:185
+#: gtk/gtktextbuffer.c:184
 msgid "Text Tag Table"
 msgstr "Tekst etiket-tabel"
 
@@ -3878,14 +3814,10 @@ msgid "Left, right, or center justification"
 msgstr "Links, rechts of centrale uitlijning"
 
 #: gtk/gtktexttag.c:386
-#, fuzzy
 msgid ""
 "The language this text is in, as an ISO code. Pango can use this as a hint "
 "when rendering the text. If not set, an appropriate default will be used."
-msgstr ""
-"De taal van deze tekst, als een ISO-code. Pango kan dit gebruiken als een "
-"hint bij het renderen van de tekst. Als u deze parameter niet begrijpt, "
-"heeft u het waarschijnlijk niet nodig."
+msgstr "De taal van deze tekst, als een ISO-code. Pango kan dit gebruiken als een hint bij het renderen van de tekst. Indien niet ingesteld, zal een geschikte standaard worden gebruikt."
 
 #: gtk/gtktexttag.c:393
 msgid "Left margin"
@@ -4383,12 +4315,11 @@ msgstr "Of de kleurenkiezer ook de doorzichtigheid kan instellen"
 msgid "Hover Expand"
 msgstr "Uitklappen"
 
-# vensterbeheer ipv window manager?
+# engels taalfout: collaped
 #: gtk/gtktreeview.c:693
-#, fuzzy
 msgid ""
 "Whether rows should be expanded/collaped when the pointer moves over them"
-msgstr "Of het venster de versiering van de window-manager moet krijgen."
+msgstr ""
 
 #: gtk/gtktreeview.c:713
 msgid "Vertical Separator Width"
@@ -4456,7 +4387,7 @@ msgstr "Huidige breedte van de kolom"
 
 #: gtk/gtktreeviewcolumn.c:251
 msgid "Space which is inserted between cells"
-msgstr ""
+msgstr "Ruimte die tusseen cellen geplaatst wordt"
 
 # vergroting/verkleining
 #: gtk/gtktreeviewcolumn.c:259
@@ -4546,7 +4477,7 @@ msgstr "De richting waarheen de sorteerindicator moet wijzen"
 # niet helemaal strict vertaald, maar wel duidelijk
 #: gtk/gtkuimanager.c:222
 msgid "Whether tearoff menu items should be added to menus"
-msgstr "Of afscheur-perforatie aan een menu wordt toegevoegd"
+msgstr "Of afscheurlijnen aan menus moeten worden toegevoegd"
 
 #: gtk/gtkuimanager.c:229
 msgid "Merged UI definition"
@@ -4999,14 +4930,6 @@ msgstr "IM statusstijl"
 #: modules/input/gtkimcontextxim.c:340
 msgid "How to draw the input method statusbar"
 msgstr "Hoe de statusbalk voor invoermethode moet worden getekend"
-
-#, fuzzy
-#~ msgid "Row separator column"
-#~ msgstr "'Row span' kolom"
-
-#, fuzzy
-#~ msgid "Boolean TreeModel column specifying which rows are separators"
-#~ msgstr "TreeModel-kolom die de 'row span' waarden bevat"
 
 # voorkomen
 #~ msgid "ComboBox appareance"
