@@ -1,3 +1,18 @@
+Mon Jun 26 18:53:31 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdkrgb.c: If possible, create only a single shm segment and
+	use multiple parts of it instead of creating a bunch of separate
+	segments, since the maximum number of segments per system is not
+	large. (This might be worth backporting to GTK+-1.2.x if we make a
+	new release )
+
+	* gdk/gdkrgb.c: Localize a bunch of variables into the GdkRgbInfo
+	structure in preparation for per-colormap GdkRGB.
+
+	* gdk/x11/gdkimage-x11.c (gdk_image_new): Don't set gdk_use_xshm
+	to False when we get EINVAL from shmget so that the caller of
+	gdk_image_new can retry with a smaller segment size.
+
 Mon Jun 26 13:01:16 BST 2000  Tony Gale <gale@gtk.org>
 
 	* docs/faq/gtk-faq.sgml: Add Sections 4 & 5.

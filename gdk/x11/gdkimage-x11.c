@@ -53,6 +53,8 @@
 #include <X11/extensions/XShm.h>
 #endif /* USE_SHM */
 
+#include <errno.h>
+
 #include "gdk.h"		/* For gdk_error_trap_* / gdk_flush_* */
 #include "gdkimage.h"
 #include "gdkprivate.h"
@@ -142,28 +144,28 @@ gdk_image_new_bitmap(GdkVisual *visual, gpointer data, gint w, gint h)
  * Desc: create a new bitmap image
  */
 {
-        Visual *xvisual;
-        GdkImage *image;
-        GdkImagePrivateX11 *private;
-        image = GDK_IMAGE (g_type_create_instance (gdk_image_get_type ()));
-        private = PRIVATE_DATA (image);
-        private->xdisplay = gdk_display;
-        image->type = GDK_IMAGE_NORMAL;
-        image->visual = visual;
-        image->width = w;
-        image->height = h;
-        image->depth = 1;
-        xvisual = ((GdkVisualPrivate*) visual)->xvisual;
-        private->ximage = XCreateImage(private->xdisplay, xvisual, 1, XYBitmap,
-				       0, 0, w ,h, 8, 0);
-        private->ximage->data = data;
-        private->ximage->bitmap_bit_order = MSBFirst;
-        private->ximage->byte_order = MSBFirst;
-        image->byte_order = MSBFirst;
-        image->mem =  private->ximage->data;
-        image->bpl = private->ximage->bytes_per_line;
-        image->bpp = 1;
-	return(image);
+  Visual *xvisual;
+  GdkImage *image;
+  GdkImagePrivateX11 *private;
+  image = GDK_IMAGE (g_type_create_instance (gdk_image_get_type ()));
+  private = PRIVATE_DATA (image);
+  private->xdisplay = gdk_display;
+  image->type = GDK_IMAGE_NORMAL;
+  image->visual = visual;
+  image->width = w;
+  image->height = h;
+  image->depth = 1;
+  xvisual = ((GdkVisualPrivate*) visual)->xvisual;
+  private->ximage = XCreateImage(private->xdisplay, xvisual, 1, XYBitmap,
+				 0, 0, w ,h, 8, 0);
+  private->ximage->data = data;
+  private->ximage->bitmap_bit_order = MSBFirst;
+  private->ximage->byte_order = MSBFirst;
+  image->byte_order = MSBFirst;
+  image->mem =  private->ximage->data;
+  image->bpl = private->ximage->bytes_per_line;
+  image->bpp = 1;
+  return(image);
 } /* gdk_image_new_bitmap() */
 
 static int
@@ -265,13 +267,21 @@ gdk_image_new (GdkImageType  type,
 
 	      if (x_shm_info->shmid == -1)
 		{
-		  g_warning ("shmget failed!");
+		  /* EINVAL indicates, most likely, that the segment we asked for
+		   * is bigger than SHMMAX, so we don't treat it as a permanently
+		   * fatal error. ENOSPC and ENOMEM may also indicate this, but
+		   * more likely are permanent errors.
+		   */
+		  if (errno != EINVAL)
+		    {
+		      g_warning ("shmget failed!");
+		      gdk_use_xshm = False;
+		    }
 
 		  XDestroyImage (private->ximage);
 		  g_free (private->x_shm_info);
 		  g_free (image);
 
-		  gdk_use_xshm = False;
 		  return NULL;
 		}
 
