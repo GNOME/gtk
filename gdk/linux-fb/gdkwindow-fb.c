@@ -177,7 +177,9 @@ gdk_window_new (GdkWindow     *parent,
   
   g_return_val_if_fail (attributes != NULL, NULL);
   
-  if (!parent || attributes->window_type != GDK_WINDOW_CHILD)
+  if (!parent ||
+      (attributes->window_type != GDK_WINDOW_CHILD &&
+       attributes->window_type != GDK_WINDOW_TEMP))
     parent = gdk_parent_root;
   
   parent_private = (GdkWindowObject*) parent;

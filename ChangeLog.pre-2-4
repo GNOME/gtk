@@ -1,3 +1,12 @@
+2001-02-20  Alexander Larsson  <alexl@redhat.com>
+
+	* gdk/linux-fb/gdkgc-fb.c (gdk_gc_copy):
+	Actually copy the whole gc, not just the public parts.
+	
+	* gdk/linux-fb/gdkwindow-fb.c (gdk_window_new):
+	GDK_WINDOW_TEMP are not toplevel. Fixes selectable
+	labels.
+
 2001-02-19  Havoc Pennington  <hp@pobox.com>
 
 	* gdk/gdkwindow.c: docs

@@ -397,7 +397,7 @@ gdk_gc_copy (GdkGC *dst_gc, GdkGC *src_gc)
   if (dst_private->values_mask & GDK_GC_CLIP_MASK)
     gdk_pixmap_unref(dst_private->values.clip_mask);
 
-  *dst_gc = *src_gc;
+  *dst_private = *GDK_GC_FBDATA (src_gc);
   if (dst_private->values_mask & GDK_GC_FONT)
     gdk_font_ref(dst_private->values.font);
   if (dst_private->values_mask & GDK_GC_TILE)
