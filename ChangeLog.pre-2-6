@@ -1,3 +1,8 @@
+Tue Jul  4 13:13:01 BST 2000  Tony Gale <gale@gtk.org>
+
+	* docs/faq/gtk-faq.sgml: Add remaining sections. Completes
+	  initial conversion to DocBook.
+
 2000-07-04  Tor Lillqvist  <tml@iki.fi>
 
 	* README.win32: Improve a bit.

@@ -2863,6 +2863,494 @@ main (int argc, char *argv[])
 
       </sect2>
     </sect1>
+    <!-- ***************************************************************** -->
+    <sect1>
+      <title>About GLib</title>
+ 
+      <!-- ----------------------------------------------------------------- -->
+
+      <sect2>
+	<title>What is GLib?</title>
+
+	<para>GLib is a library of useful functions and definitions
+	available for use  when creating GDK and GTK applications. It
+	provides replacements for some standard libc functions, such
+	as malloc, which are buggy on some systems.</para>
+
+	<para>It also provides routines for handling:</para>
+
+	<itemizedlist>
+	  <listitem><simpara>Doubly Linked Lists</simpara>
+	  </listitem>
+	  <listitem><simpara>Singly Linked Lists</simpara>
+	  </listitem>
+	  <listitem><simpara>Timers</simpara>
+	  </listitem>
+	  <listitem><simpara>String Handling</simpara>
+	  </listitem>
+	  <listitem><simpara>A Lexical Scanner</simpara>
+	  </listitem>
+	  <listitem><simpara>Error Functions</simpara>
+	  </listitem>
+	</itemizedlist>
+      </sect2>
+ 
+      <!-- ----------------------------------------------------------------- -->
+
+      <sect2>
+	<title>How can I use the doubly linked lists?</title>
+
+	<para>The GList object is defined as:</para>
+
+<programlisting role="C">
+typedef struct _GList GList;
+
+struct _GList
+{
+  gpointer data;
+  GList *next;
+  GList *prev;
+};
+</programlisting>
+
+	<para>To use the GList objects, simply:</para>
+
+<programlisting role="C">
+GList   *list = NULL;
+GList   *listrunner;
+gint    array[] = { 1, 2, 3, 4, 5, 6 };
+gint    pos;
+gint    *value;
+
+/* add data to the list */
+for (pos=0;pos < sizeof array; pos++) {
+  list = g_list_append(list, (gpointer)&amp;array[pos]);
+}
+
+/* run through the list */
+listrunner = g_list_first(list);
+while (listrunner) {
+  value = (gint *)listrunner->data;
+  printf("%d\n", *value);
+  listrunner = g_list_next(listrunner);
+}
+
+/* removing datas from the list */
+listrunner = g_list_first(list);
+list = g_list_remove_link(list, listrunner);
+list = g_list_remove(list, &amp;array[4]);
+</programlisting>
+
+	<para>The same code is usable with singly linked lists (GSList
+        objects) by replacing g_list_* functions with the relevant
+        g_slist_* ones (g_slist_append,  g_slist_remove, ...). Just
+        remember that since you can't go backward in a singly linked
+        list, there is no g_slist_first function - you'll need to keep
+        a  reference on the first node of the list.</para>
+
+	<!-- Some Examples might be useful here! NF -->
+	<!-- I believe it should be better :) ED -->
+	<!-- Linked lists are pretty standard data structures - don't want to
+	over do it - TRG -->
+
+      </sect2>
+ 
+      <!-- ----------------------------------------------------------------- -->
+
+      <sect2>
+	<title>Memory does not seem to be released when I free the
+	list nodes I've allocated</title>
+
+	<para>GLib tries to be "intelligent" on this special issue: it
+        assumes that you are likely to reuse the objects, so caches
+        the allocated memory. If you do not want to use this behavior,
+        you'll probably want to set up a special allocator.</para>
+
+	<para>To quote Tim Janik:</para>
+	<para><quote>If you have a certain portion of code that uses *lots*
+        of GLists or GNodes, and you know you'd better want to release
+        all of them after a short while, you'd want to use a
+        GAllocator. Pushing an allocator into g_list will make all
+        subsequent glist operations private to that allocator's memory
+        pool (and thus you have to take care to pop the allocator
+        again, before making any external calls): </quote></para>
+
+<programlisting role="C">
+GAllocator *allocator;
+GList *list = NULL;
+guint i;
+
+/* set a new allocation pool for GList nodes */
+allocator = g_allocator_new ("list heap", 1024);
+g_list_push_allocator (allocator);
+
+/* do some list operations */
+for (i = 0; i < 4096; i++)
+  list = g_list_prepend (list, NULL);
+list = g_list_reverse (list);
+
+/* beware to pop allocator befor calling external functions */
+g_list_pop_allocator ();
+gtk_label_set_text (GTK_LABEL (some_label), "some text");
+
+/* and set our private glist pool again */
+g_list_push_allocator (allocator);
+
+/* do some list operations */
+g_list_free (list);
+list = NULL;
+for (i = 0; i < 4096; i++)
+  list = g_list_prepend (list, NULL);
+  
+/* and back out (while freeing all of the list nodes in our pool) */
+g_list_pop_allocator ();
+g_allocator_free (allocator);
+</programlisting>
+
+      </sect2>
+ 
+      <!-- ----------------------------------------------------------------- -->
+
+      <sect2>
+	<title>Why use g_print, g_malloc, g_strdup and fellow glib
+	functions?</title>
+
+	<para>Thanks to Tim Janik who wrote to gtk-list: (slightly
+	modified)</para>
+
+        <para><quote>Regarding g_malloc(), g_free() and siblings, these
+	functions are much safer than their libc equivalents. For
+	example, g_free() just returns if called with NULL. Also, if
+	USE_DMALLOC is defined, the definition for these functions
+	changes (in glib.h) to use MALLOC(), FREE() etc... If
+	MEM_PROFILE or MEM_CHECK are defined, there are even small
+	statistics made counting the used block sizes (shown by
+	g_mem_profile() / g_mem_check()).</quote></para>
+
+	<para><quote>Considering the fact that glib provides an interface for
+        memory chunks to save space if you have lots of blocks that
+        are always the same size and to mark them ALLOC_ONLY if
+        needed, it is just straight forward to create a small saver
+        (debug able) wrapper around the normal malloc/free stuff as
+        well - just like gdk covers Xlib. ;)</quote></para>
+
+        <para><quote>Using g_error() and g_warning() inside of applications
+        like the GIMP that fully rely on gtk even gives the
+        opportunity to pop up a window showing the messages inside of
+        a gtk window with your own handler (by using
+        g_set_error_handler()) along the lines of
+        <literal>gtk_print()</literal> (inside of
+        gtkmain.c).</quote></para>
+
+      </sect2>
+ 
+      <!-- ----------------------------------------------------------------- -->
+
+      <sect2>
+	<title>What's a GScanner and how do I use one?</title>
+
+	<para>A GScanner will tokenize your text, that is, it'll return
+        an integer for every word or number that appears in its input
+        stream, following certain (customizable) rules to perform this
+        translation. You still need to write the parsing functions on
+        your own though.</para>
+
+	<para>Here's a little test program supplied by Tim Janik that
+	will parse</para>
+
+	<para><literallayout>
+        <literal>&lt;SYMBOL&gt; = &lt;OPTIONAL-MINUS&gt; &lt;NUMBER&gt; ;</literal>
+	</literallayout></para>
+
+	<para>constructs, while skipping "#\n" and "/**/" style
+	comments.</para>
+
+<programlisting role="C">
+#include &lt;glib.h&gt;
+
+/* some test text to be fed into the scanner */
+static const gchar *test_text =
+( "ping = 5;\n"
+  "/* slide in some \n"
+  " * comments, just for the\n"
+  " * fun of it \n"
+  " */\n"
+  "pong = -6; \n"
+  "\n"
+  "# the next value is a float\n"
+  "zonk = 0.7;\n"
+  "# redefine ping\n"
+  "ping = - 0.5;\n" );
+
+/* define enumeration values to be returned for specific symbols */
+enum {
+  SYMBOL_PING = G_TOKEN_LAST + 1,
+  SYMBOL_PONG = G_TOKEN_LAST + 2,
+  SYMBOL_ZONK = G_TOKEN_LAST + 3
+};
+
+/* symbol array */
+static const struct {
+  gchar *symbol_name;
+  guint  symbol_token;
+} symbols[] = {
+  { "ping", SYMBOL_PING, },
+  { "pong", SYMBOL_PONG, },
+  { "zonk", SYMBOL_ZONK, },
+  { NULL, 0, },
+}, *symbol_p = symbols;
+
+static gfloat ping = 0;
+static gfloat pong = 0;
+static gfloat zonk = 0;
+
+static guint
+parse_symbol (GScanner *scanner)
+{
+  guint symbol;
+  gboolean negate = FALSE;
+
+  /* expect a valid symbol */
+  g_scanner_get_next_token (scanner);
+  symbol = scanner->token;
+  if (symbol < SYMBOL_PING ||
+      symbol > SYMBOL_ZONK)
+    return G_TOKEN_SYMBOL;
+
+  /* expect '=' */
+  g_scanner_get_next_token (scanner);
+  if (scanner->token != '=')
+    return '=';
+
+  /* feature optional '-' */
+  g_scanner_peek_next_token (scanner);
+  if (scanner->next_token == '-')
+    {
+      g_scanner_get_next_token (scanner);
+      negate = !negate;
+    }
+
+  /* expect a float (ints are converted to floats on the fly) */
+  g_scanner_get_next_token (scanner);
+  if (scanner->token != G_TOKEN_FLOAT)
+    return G_TOKEN_FLOAT;
+
+  /* make sure the next token is a ';' */
+  if (g_scanner_peek_next_token (scanner) != ';')
+    {
+      /* not so, eat up the non-semicolon and error out */
+      g_scanner_get_next_token (scanner);
+      return ';';
+    }
+
+  /* assign value, eat the semicolon and exit successfully */
+  switch (symbol)
+    {
+    case SYMBOL_PING:
+      ping = negate ? - scanner->value.v_float : scanner->value.v_float;
+      break;
+    case SYMBOL_PONG:
+      pong = negate ? - scanner->value.v_float : scanner->value.v_float;
+      break;
+    case SYMBOL_ZONK:
+      zonk = negate ? - scanner->value.v_float : scanner->value.v_float;
+      break;
+    }
+  g_scanner_get_next_token (scanner);
+
+  return G_TOKEN_NONE;
+}
+
+int
+main (int argc, char *argv[])
+{
+  GScanner *scanner;
+  guint expected_token;
+
+  scanner = g_scanner_new (NULL);
+
+  /* adjust lexing behaviour to suit our needs
+   */
+  /* convert non-floats (octal values, hex values...) to G_TOKEN_INT */
+  scanner->config->numbers_2_int = TRUE;
+  /* convert G_TOKEN_INT to G_TOKEN_FLOAT */
+  scanner->config->int_2_float = TRUE;
+  /* don't return G_TOKEN_SYMBOL, but the symbol's value */
+  scanner->config->symbol_2_token = TRUE;
+
+  /* load symbols into the scanner */
+  while (symbol_p->symbol_name)
+    {
+      g_scanner_add_symbol (scanner,
+                            symbol_p->symbol_name,
+                            GINT_TO_POINTER (symbol_p->symbol_token));
+      symbol_p++;
+    }
+
+  /* feed in the text */
+  g_scanner_input_text (scanner, test_text, strlen (test_text));
+
+  /* give the error handler an idea on how the input is named */
+  scanner->input_name = "test text";
+
+  /* scanning loop, we parse the input until its end is reached,
+   * the scanner encountered a lexing error, or our sub routine came
+   * across invalid syntax
+   */
+  do
+    {
+      expected_token = parse_symbol (scanner);
+      
+      g_scanner_peek_next_token (scanner);
+    }
+  while (expected_token == G_TOKEN_NONE &&
+         scanner->next_token != G_TOKEN_EOF &&
+         scanner->next_token != G_TOKEN_ERROR);
+
+  /* give an error message upon syntax errors */
+  if (expected_token != G_TOKEN_NONE)
+    g_scanner_unexp_token (scanner, expected_token, NULL, "symbol", NULL, NULL, TRUE);
+
+  /* finsish parsing */
+  g_scanner_destroy (scanner);
+
+  /* print results */
+  g_print ("ping: %f\n", ping);
+  g_print ("pong: %f\n", pong);
+  g_print ("zonk: %f\n", zonk);
+  
+  return 0;
+}
+</programlisting>
+
+	<para>You need to understand that the scanner will parse its
+        input and tokenize it, it is up to you to interpret these
+        tokens, not define their types before they get parsed,
+        e.g. watch gscanner parse a string:</para>
+
+	<para><literallayout>
+        <literal>"hi i am 17"</literal>
+        <literal> |  | |  |</literal>
+        <literal> |  | |  v</literal>
+        <literal> |  | v  TOKEN_INT, value: 17</literal>
+        <literal> |  v TOKEN_IDENTIFIER, value: "am"</literal>
+        <literal> v  TOKEN_CHAR, value: 'i'</literal>
+        <literal>TOKEN_IDENTIFIER, value: "hi"</literal>
+	</literallayout></para>
+
+	<para>If you configure the scanner with:</para>
+
+<programlisting role="C">
+scanner->config->int_2_float = TRUE;
+scanner->config->char_2_token = TRUE;
+scanner->config->scan_symbols = TRUE;
+</programlisting>
+
+	<para>and add "am" as a symbol with</para>
+
+<programlisting role="C">
+g_scanner_add_symbol (scanner, "am", "symbol value");
+</programlisting>
+
+	<para>GScanner will parse it as</para>
+
+	<para><literallayout>
+        <literal>"hi i am 17"</literal>
+        <literal> |  | |  |</literal>
+        <literal> |  | |  v</literal>
+        <literal> |  | v  TOKEN_FLOAT, value: 17.0  (automatic int->float conversion)</literal>
+        <literal> |  | TOKEN_SYMBOL, value: "symbol value"  (a successfull hash table lookup</literal>
+        <literal> |  |                                       turned a TOKEN_IDENTIFIER into a</literal>
+        <literal> |  |                                       TOKEN_SYMBOL and took over the</literal>
+        <literal> |  v                                       symbol's value)</literal>
+        <literal> v  'i'  ('i' can be a valid token as well, as all chars >0 and <256)</literal>
+        <literal>TOKEN_IDENTIFIER, value: "hi"</literal>
+        </literallayout></para>
+
+	<para>You need to match the token sequence with your code, and
+	if you encounter something that you don't want, you error
+	out:</para>
+
+<programlisting role="C">
+/* expect an identifier ("hi") */
+g_scanner_get_next_token (scanner);
+if (scanner->token != G_TOKEN_IDENTIFIER)
+  return G_TOKEN_IDENTIFIER;
+/* expect a token 'i' */
+g_scanner_get_next_token (scanner);
+if (scanner->token != 'i')
+  return 'i';
+/* expect a symbol ("am") */
+g_scanner_get_next_token (scanner);
+if (scanner->token != G_TOKEN_SYMBOL)
+  return G_TOKEN_SYMBOL;
+/* expect a float (17.0) */
+g_scanner_get_next_token (scanner);
+if (scanner->token != G_TOKEN_FLOAT)
+  return G_TOKEN_FLOAT;
+</programlisting>
+
+	<para>If you got past here, you have parsed "hi i am 17" and
+        would have accepted "dooh i am 42" and  "bah i am 0.75" as
+        well, but you would have not accepted "hi 7 am 17" or "hi i hi
+        17".</para>
+
+      </sect2>
+    </sect1>
+    <!-- ***************************************************************** -->
+    <sect1>
+      <title>GTK+ FAQ Contributions, Maintainers and Copyright</title>
+
+<para>If you would like to make a contribution to the FAQ, send either one
+of us an e-mail message with the exact text you think should be
+included (question and answer). With your help, this document can grow
+and become more useful!</para>
+
+<para>This document is maintained by 
+Tony Gale <ulink
+		 url="mailto:gale@gtk.org">&lt;gale@gtk.org&gt;</ulink>
+
+Nathan Froyd <ulink url="mailto:maestrox@geocities.com">
+&lt;maestrox@geocities.com&gt;</ulink>,
+and 
+Emmanuel Deloget <ulink url="mailto:logout@free.fr">
+&lt;logout@free.fr&gt;</ulink>.
+This FAQ was created by Shawn T. Amundson 
+<ulink url="mailto:amundson@gimp.org">
+&lt;amundson@gimp.org&gt;</ulink> who continues to provide support.
+
+Contributions should be sent to Tony Gale <ulink
+url="mailto:gale@gtk.org">&lt;gale@gtk.org&gt;</ulink></para>
+
+<para>The GTK+ FAQ is Copyright (C) 1997-2000 by Shawn T. Amundson, 
+Tony Gale, Emmanuel Deloget and Nathan Froyd.</para>
+
+<para>Permission is granted to make and distribute verbatim copies of this
+manual provided the copyright notice and this permission notice are
+preserved on all copies.</para>
+
+<para>Permission is granted to copy and distribute modified versions of this
+document under the conditions for verbatim copying, provided that this
+copyright notice is included exactly as in the original, and that the
+entire resulting derived work is distributed under the terms of a
+permission notice identical to this one.</para>
+
+<para>Permission is granted to copy and distribute translations of this
+document into another language, under the above conditions for
+modified versions.</para>
+
+<para>If you are intending to incorporate this document into a published
+work, please contact one of the maintainers, and we will make an
+effort to ensure that you have the most up to date information
+available.</para>
+
+<para>There is no guarentee that this document lives up to its intended
+purpose.  This is simply provided as a free resource.  As such, the
+authors and maintainers of the information provided within can not
+make any guarentee that the information is even accurate.</para>
+
+    </sect1>
+
   </chapter>
 
   <!-- ----------------------------------------------------------------- -->
