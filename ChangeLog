@@ -1,3 +1,8 @@
+2003-06-01  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkwindow.c (gtk_window_parse_geometry): Add some hints and
+	an example to the docs.  (#98427)
+
 2003-05-30  Murray Cumming  <murrayc@usa.net>
   
   	* gtk/gtkalignment.[h|c]: Added 4-sided padding as properties with

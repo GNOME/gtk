@@ -6504,7 +6504,52 @@ gtk_XParseGeometry (const char   *string,
  * indicating to the window manager that the size/position of
  * the window was user-specified. This causes most window
  * managers to honor the geometry.
+ *
+ * Note that for gtk_window_parse_geometry() to work as expected, it has
+ * to be called when the window has its "final" size, i.e. after calling
+ * gtk_widget_show_all() on the contents and gtk_window_set_geometry_hints()
+ * on the window.
  * 
+ * <informalexample><programlisting>
+ * int
+ * main (int argc, char *argv[])
+ * {
+ *   GtkWidget *window, vbox;
+ *   GdkGeometry size_hints;
+ *   
+ *   gtk_init (&amp;argc, &amp;argv);
+ *   
+ *   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+ *   vbox = gtk_vbox_new (FALSE, 0);
+ *   
+ *   gtk_container_add (GTK_CONTAINER (window), vbox);
+ *   fill_with_content (vbox);
+ *   gtk_widget_show_all (vbox);
+ *   
+ *   size_hints = {
+ *     100, 50, 0, 0, 100, 50, 10, 10, 0.0, 0.0, GDK_GRAVITY_NORTH_WEST  
+ *   };
+ *   
+ *   gtk_window_set_geometry_hints (GTK_WINDOW (window),
+ * 	  			    window,
+ * 				    &amp;size_hints,
+ * 				    GDK_HINT_MIN_SIZE | 
+ * 				    GDK_HINT_BASE_SIZE | 
+ * 				    GDK_HINT_RESIZE_INC);
+ *   
+ *   if (argc &gt; 1)
+ *     {
+ *       if (!gtk_window_parse_geometry (GTK_WINDOW (window), argv[1]))
+ *         fprintf (stderr, "Failed to parse '&percnt;s'\n", argv[1]);
+ *     }
+ *    
+ *    gtk_widget_show_all (window);
+ *    gtk_main ();
+ *    
+ *    return 0;
+ * }
+ * </programlisting></informalexample>
+ *
  * Return value: %TRUE if string was parsed successfully
  **/
 gboolean
