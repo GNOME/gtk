@@ -268,7 +268,7 @@ gtk_paned_class_init (GtkPanedClass *class)
    * Since: 2.4
    */
   g_object_class_install_property (object_class,
-				   PROP_MIN_POSITION,
+				   PROP_MAX_POSITION,
 				   g_param_spec_int ("min_position",
 						     P_("Minimal Position"),
 						     P_("Smallest possible value for the \"position\" property"),

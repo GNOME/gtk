@@ -1,3 +1,9 @@
+Sun Aug 22 13:44:53 2004  Soeren Sandmann  <sandmann@daimi.au.dk>
+
+	* gtk/gtkpaned.c (gtk_paned_class_init): Use PROP_MAX_POSITION,
+	not PROP_MIN_POSITION for the max_position property. Fix pointet
+	out by Tommi Komulainen.
+
 Sun Aug 22 13:32:33 2004  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 	* gtk/gtkliststore.c (gtk_list_store_insert): Normalize the
