@@ -305,21 +305,30 @@ gdk_text_property_to_text_list (GdkAtom       encoding,
   XTextProperty property;
   gint count = 0;
   gint res;
-
-  if (!list) 
-    return 0;
+  gchar **local_list;
 
   property.value = (guchar *)text;
   property.encoding = gdk_x11_atom_to_xatom (encoding);
   property.format = format;
   property.nitems = length;
-  res = XmbTextPropertyToTextList (GDK_DISPLAY(), &property, list, &count);
+  res = XmbTextPropertyToTextList (GDK_DISPLAY(), &property, &local_list, &count);
 
-  if (res == XNoMemory || res == XLocaleNotSupported || 
-      res == XConverterNotFound)
-    return 0;
+  if (res == XNoMemory || res == XLocaleNotSupported || res == XConverterNotFound)
+    {
+      if (list)
+	*list = NULL;
+
+      return 0;
+    }
   else
-    return count;
+    {
+      if (list)
+	*list = local_list;
+      else
+	XFreeStringList (local_list);
+      
+      return count;
+    }
 }
 
 void
@@ -482,8 +491,10 @@ gdk_text_property_to_utf8_list (GdkAtom        encoding,
 		(*list)[count++] = g_strdup (local_list[i]);
 	    }
 	}
+
+      if (local_count)
+	gdk_free_text_list (local_list);
       
-      gdk_free_text_list (local_list);
       (*list)[count] = NULL;
 
       return count;

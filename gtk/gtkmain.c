@@ -458,7 +458,10 @@ gtk_init_check (int	 *argc,
 #endif
 
   if (do_setlocale)
-    setlocale (LC_ALL, "");
+    {
+      if (!setlocale (LC_ALL, ""))
+	g_warning ("Locale not supported by C library.\n\tUsing the fallback 'C' locale.");
+    }
   
   /* Initialize "gdk". We pass along the 'argc' and 'argv'
    *  parameters as they contain information that GDK uses

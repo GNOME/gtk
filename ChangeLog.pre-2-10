@@ -1,3 +1,15 @@
+Wed Feb 13 12:41:44 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkmain.c (gtk_init_check): g_warning() if setting
+	the local fails, like gdk_set_locale() did.
+
+	* gdk/x11/gdkselection-x11.c (gdk_text_property_to_utf8_list): 
+	Don't free local_list if local_count == 0. (#71241, reported
+	by Kevin Vandersloot.)
+
+	* gdk/x11/gdkselection-x11.c (gdk_text_property_to_text_list): 
+	Clean up list == NULL handling and failure.
+
 Wed Feb 13 11:27:31 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* tests/testtreeview.c (typesystem_recurse): Cast GType
