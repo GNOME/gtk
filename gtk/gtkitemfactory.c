@@ -257,8 +257,8 @@ gtk_item_factory_item_remove_widget (GtkWidget		*widget,
  * @accel_widget:     widget to install an accelerator on 
  * @full_path:	      the full path for the @accel_widget 
  * @accel_group:      the accelerator group to install the accelerator in
- * @accel_key:        key value of the accelerator
- * @accel_mods:       modifier combination of the accelerator
+ * @keyval:           key value of the accelerator
+ * @modifiers:        modifier combination of the accelerator
  *
  * Installs an accelerator for @accel_widget in @accel_group, that causes
  * the ::activate signal to be emitted if the accelerator is activated.
@@ -272,8 +272,8 @@ void
 gtk_item_factory_add_foreign (GtkWidget      *accel_widget,
 			      const gchar    *full_path,
 			      GtkAccelGroup  *accel_group,
-			      guint           accel_key,
-			      GdkModifierType accel_mods)
+			      guint           keyval,
+			      GdkModifierType modifiers)
 {
   GtkItemFactoryClass *class;
   GtkItemFactoryItem *item;
@@ -283,7 +283,7 @@ gtk_item_factory_add_foreign (GtkWidget      *accel_widget,
 
   class = gtk_type_class (GTK_TYPE_ITEM_FACTORY);
 
-  accel_key = accel_key != GDK_VoidSymbol ? accel_key : 0;
+  keyval = keyval != GDK_VoidSymbol ? keyval : 0;
 
   item = g_hash_table_lookup (class->item_ht, full_path);
   if (!item)
@@ -304,7 +304,8 @@ gtk_item_factory_add_foreign (GtkWidget      *accel_widget,
 
   /* set the item path for the widget
    */
-  gtk_object_set_data_by_id (GTK_OBJECT (accel_widget), quark_item_path, item->path);
+  gtk_object_set_data_by_id (GTK_OBJECT (accel_widget), 
+                             quark_item_path, item->path);
   gtk_widget_set_name (accel_widget, item->path);
   if (accel_group)
     {
@@ -315,7 +316,8 @@ gtk_item_factory_add_foreign (GtkWidget      *accel_widget,
 				      (GtkDestroyNotify) gtk_accel_group_unref);
     }
   else
-    gtk_object_set_data_by_id (GTK_OBJECT (accel_widget), quark_accel_group, NULL);
+    gtk_object_set_data_by_id (GTK_OBJECT (accel_widget), 
+                               quark_accel_group, NULL);
 
   /* install defined accelerators
    */
@@ -323,7 +325,7 @@ gtk_item_factory_add_foreign (GtkWidget      *accel_widget,
     {
       if (accel_group)
 	{
-	  gtk_accel_map_add_entry (full_path, accel_key, accel_mods);
+	  gtk_accel_map_add_entry (full_path, keyval, modifiers);
 	  _gtk_widget_set_accel_path (accel_widget, full_path, accel_group);
 	}
     }
@@ -624,7 +626,7 @@ gtk_item_factory_create_items (GtkItemFactory	   *ifactory,
  * @n_entries: the length of @entries
  * @entries: an array of #GtkItemFactoryEntry<!>s 
  * @callback_data: data passed to the callback functions of all entries
- * @callback_data: 1 if the callback functions in @entries are of type
+ * @callback_type: 1 if the callback functions in @entries are of type
  *    #GtkItemFactoryCallback1, 2 if they are of type #GtkItemFactoryCallback2 
  *
  * Creates the menu items from the @entries.
@@ -906,7 +908,7 @@ gtk_item_factory_parse_path (GtkItemFactory *ifactory,
  * @ifactory: a #GtkItemFactory
  * @entry: the #GtkItemFactoryEntry to create an item for
  * @callback_data: data passed to the callback function of @entry
- * @callback_data: 1 if the callback function of @entry is of type
+ * @callback_type: 1 if the callback function of @entry is of type
  *    #GtkItemFactoryCallback1, 2 if it is of type #GtkItemFactoryCallback2 
  *
  * Creates an item for @entry.
@@ -1329,6 +1331,7 @@ gtk_item_factory_delete_entry (GtkItemFactory         *ifactory,
 
 /**
  * gtk_item_factory_delete_entries:
+ * @ifactory: a #GtkItemFactory
  * @n_entries: the length of @entries
  * @entries: an array of #GtkItemFactoryEntry<!>s 
  *
@@ -1371,7 +1374,7 @@ gtk_item_factory_menu_pos (GtkMenu  *menu,
 
 /**
  * gtk_item_factory_popup_data_from_widget:
- * @widget a widget
+ * @widget: a widget
  * @returns: @popup_data associated with the item factory from
  *   which @widget was created, or %NULL if @widget wasn't created
  *   by an item factory
@@ -1381,7 +1384,7 @@ gtk_item_factory_menu_pos (GtkMenu  *menu,
  * is popped down again.
  */
 gpointer
-gtk_item_factory_popup_data_from_widget (GtkWidget     *widget)
+gtk_item_factory_popup_data_from_widget (GtkWidget *widget)
 {
   GtkItemFactory *ifactory;
   
