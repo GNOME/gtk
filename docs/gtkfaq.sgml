@@ -1979,6 +1979,179 @@ showing the messages inside of a gtk window with your own handler
 (inside of gtkmain.c).
 </quote>
 
+<!-- ----------------------------------------------------------------- -->
+<sect1>What's a GScanner and how do I use one?  
+<p>
+A GScanner will tokenize your text, that is, it'll return an integer
+for every word or number that appears in its input stream, following
+certain (customizable) rules to perform this translation.
+You still need to write the parsing functions on your own though.
+
+Here's a little test program supplied by Tim Janik that will parse
+
+<verb>
+<SYMBOL> = <OPTIONAL-MINUS> <NUMBER> ;
+</verb>
+
+constructs, while skipping "#\n" and "/**/" style comments.
+
+<verb>
+#include <glib.h>
+
+/* some test text to be fed into the scanner */
+static const gchar *test_text =
+( "ping = 5;\n"
+  "/* slide in some \n"
+  " * comments, just for the\n"
+  " * fun of it \n"
+  " */\n"
+  "pong = -6; \n"
+  "\n"
+  "# the next value is a float\n"
+  "zonk = 0.7;\n"
+  "# redefine ping\n"
+  "ping = - 0.5;\n" );
+
+/* define enumeration values to be returned for specific symbols */
+enum {
+  SYMBOL_PING = G_TOKEN_LAST + 1,
+  SYMBOL_PONG = G_TOKEN_LAST + 2,
+  SYMBOL_ZONK = G_TOKEN_LAST + 3
+};
+
+/* symbol array */
+static const struct {
+  gchar *symbol_name;
+  guint  symbol_token;
+} symbols[] = {
+  { "ping", SYMBOL_PING, },
+  { "pong", SYMBOL_PONG, },
+  { "zonk", SYMBOL_ZONK, },
+  { NULL, 0, },
+}, *symbol_p = symbols;
+
+static gfloat ping = 0;
+static gfloat pong = 0;
+static gfloat zonk = 0;
+
+static guint
+parse_symbol (GScanner *scanner)
+{
+  guint symbol;
+  gboolean negate = FALSE;
+
+  /* expect a valid symbol */
+  g_scanner_get_next_token (scanner);
+  symbol = scanner->token;
+  if (symbol < SYMBOL_PING ||
+      symbol > SYMBOL_ZONK)
+    return G_TOKEN_SYMBOL;
+
+  /* expect '=' */
+  g_scanner_get_next_token (scanner);
+  if (scanner->token != '=')
+    return '=';
+
+  /* feature optional '-' */
+  g_scanner_peek_next_token (scanner);
+  if (scanner->next_token == '-')
+    {
+      g_scanner_get_next_token (scanner);
+      negate = !negate;
+    }
+
+  /* expect a float (ints are converted to floats on the fly) */
+  g_scanner_get_next_token (scanner);
+  if (scanner->token != G_TOKEN_FLOAT)
+    return G_TOKEN_FLOAT;
+
+  /* make sure the next token is a ';' */
+  if (g_scanner_peek_next_token (scanner) != ';')
+    {
+      /* not so, eat up the non-semicolon and error out */
+      g_scanner_get_next_token (scanner);
+      return ';';
+    }
+
+  /* assign value, eat the semicolon and exit successfully */
+  switch (symbol)
+    {
+    case SYMBOL_PING:
+      ping = negate ? - scanner->value.v_float : scanner->value.v_float;
+      break;
+    case SYMBOL_PONG:
+      pong = negate ? - scanner->value.v_float : scanner->value.v_float;
+      break;
+    case SYMBOL_ZONK:
+      zonk = negate ? - scanner->value.v_float : scanner->value.v_float;
+      break;
+    }
+  g_scanner_get_next_token (scanner);
+
+  return G_TOKEN_NONE;
+}
+int
+main (int argc, char *argv[])
+{
+  GScanner *scanner;
+  guint expected_token;
+
+  scanner = g_scanner_new (NULL);
+
+  /* adjust lexing behaviour to suit our needs
+   */
+  /* convert non-floats (octal values, hex values...) to G_TOKEN_INT */
+  scanner->config->numbers_2_int = TRUE;
+  /* convert G_TOKEN_INT to G_TOKEN_FLOAT */
+  scanner->config->int_2_float = TRUE;
+  /* don't return G_TOKEN_SYMBOL, but the symbol's value */
+  scanner->config->symbol_2_token = TRUE;
+
+  /* load symbols into the scanner */
+  while (symbol_p->symbol_name)
+    {
+      g_scanner_add_symbol (scanner,
+                            symbol_p->symbol_name,
+                            GINT_TO_POINTER (symbol_p->symbol_token));
+      symbol_p++;
+    }
+
+  /* feed in the text */
+  g_scanner_input_text (scanner, test_text, strlen (test_text));
+
+  /* give the error handler an idea on how the input is named */
+  scanner->input_name = "test text";
+
+  /* scanning loop, we parse the input untill it's end is reached,
+   * the scanner encountered a lexing error, or our sub routine came
+   * across invalid syntax
+   */
+  do
+    {
+      expected_token = parse_symbol (scanner);
+      
+      g_scanner_peek_next_token (scanner);
+    }
+  while (expected_token == G_TOKEN_NONE &&
+         scanner->next_token != G_TOKEN_EOF &&
+         scanner->next_token != G_TOKEN_ERROR);
+
+  /* give an error message upon syntax errors */
+  if (expected_token != G_TOKEN_NONE)
+    g_scanner_unexp_token (scanner, expected_token, NULL, "symbol", NULL, NULL, TRUE);
+
+  /* finsish parsing */
+  g_scanner_destroy (scanner);
+
+  /* print results */
+  g_print ("ping: %f\n", ping);
+  g_print ("pong: %f\n", pong);
+  g_print ("zonk: %f\n", zonk);
+  
+  return 0;
+}
+</verb>
+
 <!-- ***************************************************************** -->
 <sect>GTK+ FAQ Contributions, Maintainers and Copyright
 <p>
