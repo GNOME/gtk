@@ -1748,8 +1748,9 @@ gtk_tree_view_column_get_reorderable (GtkTreeViewColumn *tree_column)
  * @tree_column: a #GtkTreeViewColumn
  * @sort_column_id: The sort_column_id of the model to sort on.
  * 
- * Sets the sort_column_id that the column sorts on.  Doing so makes headers
- * clickable.
+ * Sets the logical sort_column_id that this column sorts on when this
+ * column is selected for sorting.  Doing so makes
+ * the column header clickable.
  **/
 void
 gtk_tree_view_column_set_sort_column_id (GtkTreeViewColumn *tree_column,
@@ -1792,6 +1793,24 @@ gtk_tree_view_column_set_sort_column_id (GtkTreeViewColumn *tree_column,
 							  NULL, FALSE);
 
   gtk_tree_view_column_setup_sort_column_id_callback (tree_column);
+}
+
+/**
+ * gtk_tree_view_column_get_sort_column_id:
+ * @tree_column: a #GtkTreeViewColumn
+ *
+ * Gets the logical sort_column_id that the model sorts on when this
+ * coumn is selected for sorting. See gtk_tree_view_column_set_sort_column_id().
+ *
+ * Return value: the current sort_column_id for this column, or -1 if
+ *               this column can't be used for sorting.
+ **/
+gint
+gtk_tree_view_column_get_sort_column_id (GtkTreeViewColumn *tree_column)
+{
+  g_return_val_if_fail (GTK_IS_TREE_VIEW_COLUMN (tree_column), 0);
+
+  return tree_column->sort_column_id;
 }
 
 /**

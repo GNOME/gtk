@@ -614,7 +614,7 @@ gtk_notebook_set_property (GObject         *object,
       gtk_notebook_set_homogeneous_tabs (notebook, g_value_get_boolean (value));
       break;  
     case PROP_PAGE:
-      gtk_notebook_set_page (notebook, g_value_get_int (value));
+      gtk_notebook_set_current_page (notebook, g_value_get_int (value));
       break;
     case PROP_TAB_POS:
       gtk_notebook_set_tab_pos (notebook, g_value_get_enum (value));
@@ -3956,7 +3956,7 @@ gtk_notebook_remove_page (GtkNotebook *notebook,
 /* Public GtkNotebook Page Switch Methods :
  * gtk_notebook_get_current_page
  * gtk_notebook_page_num
- * gtk_notebook_set_page
+ * gtk_notebook_set_current_page
  * gtk_notebook_next_page
  * gtk_notebook_prev_page
  */
@@ -4044,7 +4044,7 @@ gtk_notebook_page_num (GtkNotebook      *notebook,
 }
 
 /**
- * gtk_notebook_set_page:
+ * gtk_notebook_set_current_page:
  * @notebook: a #GtkNotebook
  * @page_num: index of the page to switch to, starting from 0.
  *            If negative, or greater than the number of pages
@@ -4053,8 +4053,8 @@ gtk_notebook_page_num (GtkNotebook      *notebook,
  * Switches to the page number @page_num.
  **/
 void
-gtk_notebook_set_page (GtkNotebook *notebook,
-		       gint         page_num)
+gtk_notebook_set_current_page (GtkNotebook *notebook,
+			       gint         page_num)
 {
   GList *list;
 
@@ -4160,6 +4160,23 @@ gtk_notebook_set_show_border (GtkNotebook *notebook,
 }
 
 /**
+ * gtk_notebook_get_show_border:
+ * @notebook: a #GtkNotebook
+ *
+ * Returns whether a bevel will be drawn around the notebook pages. See
+ * gtk_notebook_set_show_border().
+ *
+ * Return value: %TRUE if the bevel is drawn
+ **/
+gboolean
+gtk_notebook_get_show_border (GtkNotebook *notebook)
+{
+  g_return_val_if_fail (GTK_IS_NOTEBOOK (notebook), FALSE);
+
+  return notebook->show_border;
+}
+
+/**
  * gtk_notebook_set_show_tabs:
  * @notebook: a #GtkNotebook
  * @show_tabs: %TRUE if the tabs should be shown.
@@ -4215,6 +4232,23 @@ gtk_notebook_set_show_tabs (GtkNotebook *notebook,
 }
 
 /**
+ * gtk_notebook_get_show_tabs:
+ * @notebook: a #GtkNotebook
+ *
+ * Returns whether the tabs of the notebook are shown. See
+ * gtk_notebook_set_show_tabs().
+ *
+ * Return value: %TRUE if the tabs are shown
+ **/
+gboolean
+gtk_notebook_get_show_tabs (GtkNotebook *notebook)
+{
+  g_return_val_if_fail (GTK_IS_NOTEBOOK (notebook), FALSE);
+
+  return notebook->show_tabs;
+}
+
+/**
  * gtk_notebook_set_tab_pos:
  * @notebook: 
  * @pos: 
@@ -4236,6 +4270,23 @@ gtk_notebook_set_tab_pos (GtkNotebook     *notebook,
     }
 
   g_object_notify (G_OBJECT (notebook), "tab_pos");
+}
+
+/**
+ * gtk_notebook_get_tab_pos:
+ * @notebook: a #GtkNotebook
+ *
+ * Gets the edge at which the tabs for switching pages in the
+ * notebook are drawn.
+ *
+ * Return value: the edge at which the tabs are drawn
+ **/
+GtkPositionType
+gtk_notebook_get_tab_pos (GtkNotebook *notebook)
+{
+  g_return_val_if_fail (GTK_IS_NOTEBOOK (notebook), GTK_POS_TOP);
+
+  return notebook->tab_pos;
 }
 
 /**
@@ -4371,6 +4422,23 @@ gtk_notebook_set_scrollable (GtkNotebook *notebook,
 
       g_object_notify (G_OBJECT (notebook), "scrollable");
     }
+}
+
+/**
+ * gtk_notebook_get_scrollable:
+ * @notebook: a #GtkNotebook
+ *
+ * Returns whether the tab label area has arrows for scrolling. See
+ * gtk_notebook_set_scrollable().
+ *
+ * Return value: %TRUE if arrows for scrolling are present
+ **/
+gboolean
+gtk_notebook_get_scrollable (GtkNotebook *notebook)
+{
+  g_return_val_if_fail (GTK_IS_NOTEBOOK (notebook), FALSE);
+
+  return notebook->scrollable;
 }
 
 /* Public GtkNotebook Popup Menu Methods:
@@ -4561,15 +4629,45 @@ gtk_notebook_set_tab_label_text (GtkNotebook *notebook,
 }
 
 /**
+ * gtk_notebook_get_tab_label_text:
+ * @notebook: a #GtkNotebook
+ * @child: a widget contained in a page of @notebook
+ *
+ * Retrieves the text of the tab label for the page containing
+ *    @child.
+ *
+ * Returns value: the text of the tab label, or %NULL if the
+ *                tab label widget is not a #GtkLabel. The
+ *                string is owned by the widget and must not
+ *                be freed.
+ **/
+G_CONST_RETURN gchar *
+gtk_notebook_get_tab_label_text (GtkNotebook *notebook,
+				 GtkWidget   *child)
+{
+  GtkWidget *tab_label;
+
+  g_return_val_if_fail (GTK_IS_NOTEBOOK (notebook), NULL);
+  g_return_val_if_fail (GTK_IS_WIDGET (child), NULL);
+
+  tab_label = gtk_notebook_get_tab_label (notebook, child);
+
+  if (tab_label && GTK_IS_LABEL (tab_label))
+    return gtk_label_get_text (GTK_LABEL (tab_label));
+  else
+    return NULL;
+}
+
+/**
  * gtk_notebook_get_menu_label:
  * @notebook: a #GtkNotebook
- * @child: the page
+ * @child: a widget contained in a page of @notebook
  * 
- * Returns the menu label of the page containing @child. NULL is
- * returned if @child is not in @notebook or NULL if it has the
- * default menu label.
+ * Retrieves the menu label widget of the page containing @child.
  * 
- * Return value: the menu label
+ * Return value: the menu label, or %NULL if the
+ *               notebook page does not have a menu label other
+ *               than the default (the tab label).
  **/
 GtkWidget*
 gtk_notebook_get_menu_label (GtkNotebook *notebook,
@@ -4663,6 +4761,37 @@ gtk_notebook_set_menu_label_text (GtkNotebook *notebook,
   gtk_widget_child_notify (child, "menu_label");
 }
 
+/**
+ * gtk_notebook_get_menu_label_text:
+ * @notebook: a #GtkNotebook
+ * @child: the child widget of a page of the notebook.
+ *
+ * Retrieves the text of the menu label for the page containing
+ *    @child.
+ *
+ * Returns value: the text of the tab label, or %NULL if the
+ *                widget does not have a menu label other than
+ *                the default menu label, or the menu label widget
+ *                is not a #GtkLabel. The string is owned by
+ *                the widget and must not be freed.
+ **/
+G_CONST_RETURN gchar *
+gtk_notebook_get_menu_label_text (GtkNotebook *notebook,
+				  GtkWidget *child)
+{
+  GtkWidget *menu_label;
+
+  g_return_val_if_fail (GTK_IS_NOTEBOOK (notebook), NULL);
+  g_return_val_if_fail (GTK_IS_WIDGET (child), NULL);
+ 
+  menu_label = gtk_notebook_get_menu_label (notebook, child);
+
+  if (menu_label && GTK_IS_LABEL (menu_label))
+    return gtk_label_get_text (GTK_LABEL (menu_label));
+  else
+    return NULL;
+}
+  
 /* Helper function called when pages are reordered
  */
 static void

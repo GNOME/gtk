@@ -74,6 +74,7 @@ GtkWidget* gtk_toggle_button_new_with_label    (const gchar     *label);
 GtkWidget* gtk_toggle_button_new_with_mnemonic (const gchar     *label);
 void       gtk_toggle_button_set_mode          (GtkToggleButton *toggle_button,
                                                 gboolean         draw_indicator);
+gboolean   gtk_toggle_button_get_mode          (GtkToggleButton *toggle_button);
 void       gtk_toggle_button_set_active        (GtkToggleButton *toggle_button,
                                                 gboolean         is_active);
 gboolean   gtk_toggle_button_get_active        (GtkToggleButton *toggle_button);

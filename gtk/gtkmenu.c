@@ -910,6 +910,23 @@ gtk_menu_set_tearoff_state (GtkMenu  *menu,
     }
 }
 
+/**
+ * gtk_menu_get_tearoff_state:
+ * @menu: a #GtkMenu
+ *
+ * Returns whether the menu is torn off. See
+ * gtk_menu_set_tearoff_state ().
+ *
+ * Return value: %TRUE if the menu is currently torn off.
+ **/
+gboolean
+gtk_menu_get_tearoff_state (GtkMenu *menu)
+{
+  g_return_val_if_fail (GTK_IS_MENU (menu), FALSE);
+
+  return menu->torn_off;
+}
+
 void       
 gtk_menu_set_title (GtkMenu     *menu,
 		    const gchar *title)
@@ -919,6 +936,23 @@ gtk_menu_set_title (GtkMenu     *menu,
 
   gtk_object_set_data_full (GTK_OBJECT (menu), "gtk-menu-title",
 			    g_strdup (title), (GtkDestroyNotify) g_free);
+}
+
+/**
+ * gtk_menu_get_title:
+ * @menu: a #GtkMenu
+ *
+ * Returns the title of the menu. See gtk_menu_set_title().
+ *
+ * Return value: the title of the menu, or %NULL if the menu has no
+ *               title set on it.
+ **/
+G_CONST_RETURN gchar *
+gtk_menu_get_title (GtkMenu *menu)
+{
+  g_return_val_if_fail (GTK_IS_MENU (menu), NULL);
+
+  return gtk_object_get_data (GTK_OBJECT (menu), "gtk-menu-title");
 }
 
 void

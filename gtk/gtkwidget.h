@@ -538,6 +538,7 @@ void	   gtk_widget_set_parent	  (GtkWidget	       *widget,
 					   GtkWidget	       *parent);
 void	   gtk_widget_set_parent_window	  (GtkWidget	       *widget,
 					   GdkWindow	       *parent_window);
+GtkWidget *gtk_widget_get_parent          (GtkWidget           *widget);
 GdkWindow *gtk_widget_get_parent_window	  (GtkWidget	       *widget);
 gboolean   gtk_widget_child_focus         (GtkWidget           *widget,
                                            GtkDirectionType     direction);
@@ -547,6 +548,9 @@ void	   gtk_widget_set_uposition	  (GtkWidget	       *widget,
 void	   gtk_widget_set_usize		  (GtkWidget	       *widget,
 					   gint			width,
 					   gint			height);
+void       gtk_widget_get_usize           (GtkWidget           *widget,
+					   gint                *width,
+					   gint                *height);
 void	   gtk_widget_set_events	  (GtkWidget	       *widget,
 					   gint			events);
 void       gtk_widget_add_events          (GtkWidget           *widget,

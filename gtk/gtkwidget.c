@@ -3415,6 +3415,22 @@ gtk_widget_set_parent (GtkWidget *widget,
   g_object_notify (G_OBJECT (widget), "parent");
 }
 
+/**
+ * gtk_widget_get_parent:
+ * @widget: a #GtkWidget
+ *
+ * Returns the parent container of @widget.
+ *
+ * Return value: the parent container of @widget, or %NULL
+ **/
+GtkWidget *
+gtk_widget_get_parent (GtkWidget *widget)
+{
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
+
+  return widget->parent;
+}
+
 /*****************************************
  * Widget styles
  * see docs/styles.txt
@@ -4397,6 +4413,36 @@ gtk_widget_set_usize (GtkWidget *widget,
     gtk_widget_queue_resize (widget);
 
   g_object_thaw_notify (G_OBJECT (widget));
+}
+
+/**
+ * gtk_widget_get_usize:
+ * @widget: a #GtkWidget
+ * @width: location to store the width, or %NULL
+ * @height: location to store the height, or %NULL
+ *
+ * Gets the size that has explicitely set for the widget to request,
+ * if any. A value of -1 stored in @width or @height indicates that
+ * that dimension has not been set explicitely and the natural
+ * requisition of the widget will be used intead. See
+ * gtk_widget_set_usize().
+ **/
+void
+gtk_widget_get_usize (GtkWidget *widget,
+		      gint      *width,
+		      gint      *height)
+{
+  GtkWidgetAuxInfo *aux_info;
+
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+
+  aux_info = _gtk_widget_get_aux_info (widget, FALSE);
+
+  if (width)
+    *width = aux_info ? aux_info->width : -1;
+
+  if (height)
+    *height = aux_info ? aux_info->height : -1;
 }
 
 /**

@@ -816,6 +816,23 @@ gtk_container_set_border_width (GtkContainer *container,
 }
 
 /**
+ * gtk_container_get_border_width:
+ * @container: a #GtkContainer
+ * 
+ * Retrieves the border width of the container. See
+ * gtk_container_set_border_width().
+ *
+ * Return value: the current border width
+ **/
+guint
+gtk_container_get_border_width (GtkContainer *container)
+{
+  g_return_val_if_fail (GTK_IS_CONTAINER (container), 0);
+
+  return container->border_width;
+}
+
+/**
  * gtk_container_add:
  * @container: a #GtkContainer
  * @widget: a widget to be placed inside @container
@@ -936,6 +953,23 @@ gtk_container_set_resize_mode (GtkContainer  *container,
 	}
        g_object_notify (G_OBJECT (container), "resize_mode");
     }
+}
+
+/**
+ * gtk_container_get_resize_mode:
+ * @container: a #GtkContainer
+ * 
+ * Returns the resize mode for the container. See
+ * gtk_container_set_resize_mode ().
+ *
+ * Return value: the current resize mode
+ **/
+GtkResizeMode
+gtk_container_get_resize_mode (GtkContainer *container)
+{
+  g_return_val_if_fail (GTK_IS_CONTAINER (container), GTK_RESIZE_PARENT);
+
+  return container->resize_mode;
 }
 
 void
@@ -1498,11 +1532,7 @@ gtk_container_real_set_focus_child (GtkContainer     *container,
 static GList*
 get_focus_chain (GtkContainer *container)
 {
-  GList *chain;
-  
-  chain = g_object_get_data (G_OBJECT (container), "gtk-container-focus-chain");
-
-  return chain;
+  return g_object_get_data (G_OBJECT (container), "gtk-container-focus-chain");
 }
 
 static GList*
@@ -1561,11 +1591,7 @@ gtk_container_focus (GtkWidget        *widget,
        */
       if (container->has_focus_chain)
         {
-          GList *chain;
-
-          chain = get_focus_chain (container);
-
-          children = g_list_copy (chain);
+          children = g_list_copy (get_focus_chain (container));
         }
       else
         {
@@ -2082,6 +2108,41 @@ gtk_container_set_focus_chain (GtkContainer *container,
                      chain);
 }
 
+/**
+ * gtk_container_get_focus_chain:
+ * @container:         a #GtkContainer
+ * @focusable_widgets: location to store the focus chain of the
+ *                     container, or %NULL. You should free this list
+ *                     using g_list_free() when you are done with it, however
+ *                     no additional reference count is added to the
+ *                     individual widgets in the focus chain.
+ * 
+ * Retrieve the focus chain of the container, if one has been
+ * set explicitely. If no focus chain has been explicitely
+ * set, GTK+ computes the focus chain based on the positions
+ * of the children. In that case, GTK+ stores %NULL in
+ * @focusable_widgets and returns %FALSE.
+ *
+ * Return value: %TRUE if the focus chain of the container,
+ *   has been set explicitely.
+ **/
+gboolean
+gtk_container_get_focus_chain (GtkContainer *container,
+			       GList       **focus_chain)
+{
+  g_return_val_if_fail (GTK_IS_CONTAINER (container), NULL);
+
+  if (focus_chain)
+    {
+      if (container->has_focus_chain)
+	*focus_chain = g_list_copy (get_focus_chain (container));
+      else
+	*focus_chain = NULL;
+    }
+
+  return container->has_focus_chain;
+}
+
 void
 gtk_container_unset_focus_chain (GtkContainer  *container)
 {  
@@ -2131,6 +2192,29 @@ gtk_container_set_focus_vadjustment (GtkContainer  *container,
 				  (GtkDestroyNotify) gtk_object_unref);
 }
 
+/**
+ * gtk_container_get_focus_vadjustment:
+ * @container: a #GtkContainer
+ *
+ * Retrieves the vertical focus adjustment for the container. See
+ * gtk_container_set_focus_vadjustment ().
+ *
+ * Return value: the vertical focus adjustment, or %NULL if
+ *   none has been set.
+ **/
+GtkAdjustment *
+gtk_container_get_focus_vadjustment (GtkContainer *container)
+{
+  GtkAdjustment *vadjustment;
+    
+  g_return_val_if_fail (GTK_IS_CONTAINER (container), NULL);
+
+  vadjustment = gtk_object_get_data_by_id (GTK_OBJECT (container),
+					   vadjustment_key_id);
+
+  return vadjustment;
+}
+
 void
 gtk_container_set_focus_hadjustment (GtkContainer  *container,
 				     GtkAdjustment *adjustment)
@@ -2147,6 +2231,29 @@ gtk_container_set_focus_hadjustment (GtkContainer  *container,
 				  hadjustment_key_id,
 				  adjustment,
 				  (GtkDestroyNotify) gtk_object_unref);
+}
+
+/**
+ * gtk_container_get_focus_hadjustment:
+ * @container: a #GtkContainer
+ *
+ * Retrieves the horizontal focus adjustment for the container. See
+ * gtk_container_set_focus_hadjustment ().
+ *
+ * Return value: the horizontal focus adjustment, or %NULL if none
+ *   none has been set.
+ **/
+GtkAdjustment *
+gtk_container_get_focus_hadjustment (GtkContainer *container)
+{
+  GtkAdjustment *hadjustment;
+
+  g_return_val_if_fail (GTK_IS_CONTAINER (container), NULL);
+
+  hadjustment = gtk_object_get_data_by_id (GTK_OBJECT (container),
+		  			   hadjustment_key_id);
+
+  return hadjustment;
 }
 
 

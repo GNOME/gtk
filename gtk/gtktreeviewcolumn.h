@@ -167,6 +167,7 @@ gboolean                gtk_tree_view_column_get_reorderable     (GtkTreeViewCol
  */
 void                    gtk_tree_view_column_set_sort_column_id  (GtkTreeViewColumn       *tree_column,
 								  gint                     sort_column_id);
+gint                    gtk_tree_view_column_get_sort_column_id  (GtkTreeViewColumn       *tree_column);
 void                    gtk_tree_view_column_set_sort_indicator  (GtkTreeViewColumn       *tree_column,
 								  gboolean                 setting);
 gboolean                gtk_tree_view_column_get_sort_indicator  (GtkTreeViewColumn       *tree_column);

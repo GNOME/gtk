@@ -661,6 +661,26 @@ gtk_table_set_row_spacing (GtkTable *table,
   g_object_notify (G_OBJECT (table), "row_spacing");
 }
 
+/**
+ * gtk_table_get_row_spacing:
+ * @table: a #GtkTable
+ * @row: a row in the table, 0 indicates the first row
+ *
+ * Gets the amount of space between row @row, and
+ * row @row + 1. See gtk_table_set_row_spacing().
+ *
+ * Return value: the row spacing
+ **/
+guint
+gtk_table_get_row_spacing (GtkTable *table,
+			   guint     row)
+{
+  g_return_val_if_fail (GTK_IS_TABLE (table), 0);
+  g_return_val_if_fail (row < table->nrows - 1, 0);
+ 
+  return table->rows[row].spacing;
+}
+
 void
 gtk_table_set_col_spacing (GtkTable *table,
 			   guint     column,
@@ -681,6 +701,26 @@ gtk_table_set_col_spacing (GtkTable *table,
   g_object_notify (G_OBJECT (table), "column_spacing");
 }
 
+/**
+ * gtk_table_get_col_spacing:
+ * @table: a #GtkTable
+ * @col: a column in the table, 0 indicates the first column
+ *
+ * Gets the amount of space between column @col, and
+ * column @col + 1. See gtk_table_set_col_spacing().
+ *
+ * Return value: the column spacing
+ **/
+guint
+gtk_table_get_col_spacing (GtkTable *table,
+			   guint     column)
+{
+  g_return_val_if_fail (GTK_IS_TABLE (table), 0);
+  g_return_val_if_fail (column < table->ncols, 0);
+
+  return table->cols[column].spacing;
+}
+
 void
 gtk_table_set_row_spacings (GtkTable *table,
 			    guint     spacing)
@@ -696,6 +736,24 @@ gtk_table_set_row_spacings (GtkTable *table,
   
   if (GTK_WIDGET_VISIBLE (table))
     gtk_widget_queue_resize (GTK_WIDGET (table));
+}
+
+/**
+ * gtk_table_get_default_row_spacing:
+ * @table: a #GtkTable
+ *
+ * Gets the default row spacing for the table. This is
+ * the spacing that will be used for newly added rows.
+ * (See gtk_table_set_row_spacings())
+ *
+ * Returns value: the default row spacing
+ **/
+guint
+gtk_table_get_default_row_spacing (GtkTable *table)
+{
+  g_return_val_if_fail (GTK_IS_TABLE (table), 0);
+
+  return table->row_spacing;
 }
 
 void
@@ -715,6 +773,24 @@ gtk_table_set_col_spacings (GtkTable *table,
     gtk_widget_queue_resize (GTK_WIDGET (table));
 }
 
+/**
+ * gtk_table_get_default_col_spacing:
+ * @table: a #GtkTable
+ *
+ * Gets the default column spacing for the table. This is
+ * the spacing that will be used for newly added columns.
+ * (See gtk_table_set_col_spacings())
+ *
+ * Returns value: the default column spacing
+ **/
+guint
+gtk_table_get_default_col_spacing (GtkTable *table)
+{
+  g_return_val_if_fail (GTK_IS_TABLE (table), 0);
+
+  return table->column_spacing;
+}
+
 void
 gtk_table_set_homogeneous (GtkTable *table,
 			   gboolean  homogeneous)
@@ -730,6 +806,23 @@ gtk_table_set_homogeneous (GtkTable *table,
       if (GTK_WIDGET_VISIBLE (table))
 	gtk_widget_queue_resize (GTK_WIDGET (table));
     }
+}
+
+/**
+ * gtk_table_get_homogeneous:
+ * @table: a #GtkTable
+ *
+ * Returns whether the table cells are all constrained to the same
+ * width and height. (See gtk_table_set_homogenous ())
+ *
+ * Return value: %TRUE if the cells are all constrained to the same size
+ **/
+gboolean
+gtk_table_get_homogeneous (GtkTable *table)
+{
+  g_return_val_if_fail (GTK_IS_TABLE (table), FALSE);
+
+  return table->homogeneous;
 }
 
 static void

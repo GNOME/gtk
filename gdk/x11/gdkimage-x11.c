@@ -313,9 +313,8 @@ gdk_image_new (GdkImageType  type,
 		image_list = g_list_prepend (image_list, image);
 	    }
 	  else
-#else /* !USE_SHM */
-	    goto error;
 #endif /* USE_SHM */
+	    goto error;
 	  break;
 	case GDK_IMAGE_NORMAL:
 	  private->ximage = XCreateImage (private->xdisplay, xvisual, visual->depth,

@@ -143,7 +143,7 @@ GtkWidget* gtk_notebook_get_nth_page     (GtkNotebook *notebook,
 					  gint         page_num);
 gint       gtk_notebook_page_num         (GtkNotebook *notebook,
 					  GtkWidget   *child);
-void       gtk_notebook_set_page         (GtkNotebook *notebook,
+void       gtk_notebook_set_current_page (GtkNotebook *notebook,
 					  gint         page_num);
 void       gtk_notebook_next_page        (GtkNotebook *notebook);
 void       gtk_notebook_prev_page        (GtkNotebook *notebook);
@@ -152,22 +152,30 @@ void       gtk_notebook_prev_page        (GtkNotebook *notebook);
  *            set Notebook, NotebookTab style              *
  ***********************************************************/
 
-void gtk_notebook_set_show_border      (GtkNotebook     *notebook,
-					gboolean         show_border);
-void gtk_notebook_set_show_tabs        (GtkNotebook     *notebook,
-					gboolean         show_tabs);
-void gtk_notebook_set_tab_pos          (GtkNotebook     *notebook,
-				        GtkPositionType  pos);
-void gtk_notebook_set_homogeneous_tabs (GtkNotebook     *notebook,
-					gboolean         homogeneous);
-void gtk_notebook_set_tab_border       (GtkNotebook     *notebook,
-					guint            border_width);
-void gtk_notebook_set_tab_hborder      (GtkNotebook     *notebook,
-					guint            tab_hborder);
-void gtk_notebook_set_tab_vborder      (GtkNotebook     *notebook,
-					guint            tab_vborder);
-void gtk_notebook_set_scrollable       (GtkNotebook     *notebook,
-					gboolean         scrollable);
+void     gtk_notebook_set_show_border      (GtkNotebook     *notebook,
+					    gboolean         show_border);
+gboolean gtk_notebook_get_show_border      (GtkNotebook     *notebook);
+void     gtk_notebook_set_show_tabs        (GtkNotebook     *notebook,
+					    gboolean         show_tabs);
+gboolean gtk_notebook_get_show_tabs        (GtkNotebook     *notebook);
+void     gtk_notebook_set_tab_pos          (GtkNotebook     *notebook,
+				            GtkPositionType  pos);
+GtkPositionType gtk_notebook_get_tab_pos   (GtkNotebook     *notebook);
+
+#ifndef GTK_DISABLE_DEPRECATED
+void     gtk_notebook_set_homogeneous_tabs (GtkNotebook     *notebook,
+					    gboolean         homogeneous);
+void     gtk_notebook_set_tab_border       (GtkNotebook     *notebook,
+					    guint            border_width);
+void     gtk_notebook_set_tab_hborder      (GtkNotebook     *notebook,
+					    guint            tab_hborder);
+void     gtk_notebook_set_tab_vborder      (GtkNotebook     *notebook,
+					    guint            tab_vborder);
+#endif /* GTK_DISABLE_DEPRECATED */
+
+void     gtk_notebook_set_scrollable       (GtkNotebook     *notebook,
+					    gboolean         scrollable);
+gboolean gtk_notebook_get_scrollable       (GtkNotebook     *notebook);
 
 /***********************************************************
  *               enable/disable PopupMenu                  *
@@ -188,6 +196,8 @@ void gtk_notebook_set_tab_label           (GtkNotebook *notebook,
 void gtk_notebook_set_tab_label_text      (GtkNotebook *notebook,
 					   GtkWidget   *child,
 					   const gchar *tab_text);
+G_CONST_RETURN gchar *gtk_notebook_get_tab_label_text (GtkNotebook *notebook,
+						       GtkWidget   *child);
 GtkWidget * gtk_notebook_get_menu_label   (GtkNotebook *notebook,
 					   GtkWidget   *child);
 void gtk_notebook_set_menu_label          (GtkNotebook *notebook,
@@ -196,6 +206,8 @@ void gtk_notebook_set_menu_label          (GtkNotebook *notebook,
 void gtk_notebook_set_menu_label_text     (GtkNotebook *notebook,
 					   GtkWidget   *child,
 					   const gchar *menu_text);
+G_CONST_RETURN gchar *gtk_notebook_get_menu_label_text (GtkNotebook *notebook,
+							GtkWidget   *child);
 void gtk_notebook_query_tab_label_packing (GtkNotebook *notebook,
 					   GtkWidget   *child,
 					   gboolean    *expand,

@@ -387,6 +387,23 @@ gtk_frame_set_label_widget (GtkFrame  *frame,
   g_object_notify (G_OBJECT (frame), "label_widget");
 }
 
+/**
+ * gtk_frame_get_label_widget:
+ * @frame: a #GtkFrame
+ *
+ * Retrieves the label widget for the frame. See
+ * gtk_frame_set_label_widget().
+ *
+ * Return value: the label widget, or %NULL if there is none.
+ **/
+GtkWidget *
+gtk_frame_get_label_widget (GtkFrame *frame)
+{
+  g_return_val_if_fail (GTK_IS_FRAME (frame), NULL);
+
+  return frame->label_widget;
+}
+
 void
 gtk_frame_set_label_align (GtkFrame *frame,
 			   gfloat    xalign,
@@ -413,6 +430,28 @@ gtk_frame_set_label_align (GtkFrame *frame,
   gtk_widget_queue_resize (GTK_WIDGET (frame));
 }
 
+/**
+ * gtk_frame_get_label_align:
+ * @frame: a #GtkFrame
+ * @xalign: location to store X alignment of frame's label, or %NULL
+ * @yalign: location to store X alignment of frame's label, or %NULL
+ * 
+ * Retrieves the X and Y alignment of the frame's label. See
+ * gtk_frame_set_label_align().
+ **/
+void
+gtk_frame_get_label_align (GtkFrame *frame,
+		           gfloat   *xalign,
+			   gfloat   *yalign)
+{
+  g_return_if_fail (GTK_IS_FRAME (frame));
+
+  if (xalign)
+    *xalign = frame->label_xalign;
+  if (yalign)
+    *yalign = frame->label_yalign;
+}
+
 void
 gtk_frame_set_shadow_type (GtkFrame      *frame,
 			   GtkShadowType  type)
@@ -432,6 +471,23 @@ gtk_frame_set_shadow_type (GtkFrame      *frame,
       
       gtk_widget_queue_resize (GTK_WIDGET (frame));
     }
+}
+
+/**
+ * gtk_frame_get_shadow_type:
+ * @frame: a #GtkFrame
+ *
+ * Retrieves the shadow type of the frame. See
+ * gtk_frame_set_shadow_type().
+ *
+ * Return value: the current shadow type of the frame.
+ **/
+GtkShadowType
+gtk_frame_get_shadow_type (GtkFrame *frame)
+{
+  g_return_val_if_fail (GTK_IS_FRAME (frame), GTK_SHADOW_ETCHED_IN);
+
+  return frame->shadow_type;
 }
 
 static void

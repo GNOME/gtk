@@ -444,18 +444,18 @@ create_radio_buttons (void)
       gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
 
       button = gtk_radio_button_new_with_label (
-	         gtk_radio_button_group (GTK_RADIO_BUTTON (button)),
+	         gtk_radio_button_get_group (GTK_RADIO_BUTTON (button)),
 		 "button2");
       gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), TRUE);
       gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
 
       button = gtk_radio_button_new_with_label (
-                 gtk_radio_button_group (GTK_RADIO_BUTTON (button)),
+                 gtk_radio_button_get_group (GTK_RADIO_BUTTON (button)),
 		 "button3");
       gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
 
       button = gtk_radio_button_new_with_label (
-                 gtk_radio_button_group (GTK_RADIO_BUTTON (button)),
+                 gtk_radio_button_get_group (GTK_RADIO_BUTTON (button)),
 		 "inconsistent");
       gtk_toggle_button_set_inconsistent (GTK_TOGGLE_BUTTON (button), TRUE);
       gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
@@ -1424,17 +1424,17 @@ create_tree_mode_window(void)
       gtk_box_pack_start(GTK_BOX(box4), button, TRUE, TRUE, 0);
       sTreeSampleSelection.single_button = button;
 
-      button = gtk_radio_button_new_with_label(gtk_radio_button_group (GTK_RADIO_BUTTON (button)),
+      button = gtk_radio_button_new_with_label(gtk_radio_button_get_group (GTK_RADIO_BUTTON (button)),
 					       "BROWSE");
       gtk_box_pack_start(GTK_BOX(box4), button, TRUE, TRUE, 0);
       sTreeSampleSelection.browse_button = button;
 
-      button = gtk_radio_button_new_with_label(gtk_radio_button_group (GTK_RADIO_BUTTON (button)),
+      button = gtk_radio_button_new_with_label(gtk_radio_button_get_group (GTK_RADIO_BUTTON (button)),
 					       "MULTIPLE");
       gtk_box_pack_start(GTK_BOX(box4), button, TRUE, TRUE, 0);
       sTreeSampleSelection.multiple_button = button;
 
-      sTreeSampleSelection.selection_mode_group = gtk_radio_button_group (GTK_RADIO_BUTTON (button));
+      sTreeSampleSelection.selection_mode_group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (button));
 
       /* create option mode frame */
       frame = gtk_frame_new("Options");

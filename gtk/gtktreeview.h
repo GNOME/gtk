@@ -207,6 +207,7 @@ gboolean               gtk_tree_view_row_expanded                  (GtkTreeView 
 								    GtkTreePath               *path);
 void                   gtk_tree_view_set_reorderable               (GtkTreeView               *tree_view,
 								    gboolean                   reorderable);
+gboolean               gtk_tree_view_get_reorderable               (GtkTreeView               *tree_view);
 void                   gtk_tree_view_set_cursor                    (GtkTreeView               *tree_view,
 								    GtkTreePath               *path);
 

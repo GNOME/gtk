@@ -77,11 +77,16 @@ G_CONST_RETURN gchar *gtk_frame_get_label (GtkFrame    *frame);
 
 void       gtk_frame_set_label_widget (GtkFrame      *frame,
 				       GtkWidget     *label_widget);
+GtkWidget *gtk_frame_get_label_widget (GtkFrame      *frame);
 void       gtk_frame_set_label_align  (GtkFrame      *frame,
 				       gfloat         xalign,
 				       gfloat         yalign);
+void       gtk_frame_get_label_align  (GtkFrame      *frame,
+				       gfloat        *xalign,
+				       gfloat        *yalign);
 void       gtk_frame_set_shadow_type  (GtkFrame      *frame,
 				       GtkShadowType  type);
+GtkShadowType gtk_frame_get_shadow_type (GtkFrame    *frame);
 
 #ifdef __cplusplus
 }

@@ -107,6 +107,7 @@ struct _GtkContainerClass
 GtkType gtk_container_get_type		 (void) G_GNUC_CONST;
 void    gtk_container_set_border_width	 (GtkContainer	   *container,
 					  guint		    border_width);
+guint   gtk_container_get_border_width   (GtkContainer     *container);
 void    gtk_container_add		 (GtkContainer	   *container,
 					  GtkWidget	   *widget);
 void    gtk_container_remove		 (GtkContainer	   *container,
@@ -114,6 +115,7 @@ void    gtk_container_remove		 (GtkContainer	   *container,
 
 void    gtk_container_set_resize_mode    (GtkContainer     *container,
 					  GtkResizeMode     resize_mode);
+GtkResizeMode gtk_container_get_resize_mode (GtkContainer     *container);
 
 void    gtk_container_check_resize       (GtkContainer     *container);
 
@@ -132,6 +134,8 @@ void     gtk_container_propagate_expose (GtkContainer   *container,
 
 void     gtk_container_set_focus_chain  (GtkContainer   *container,
                                          GList          *focusable_widgets);
+gboolean gtk_container_get_focus_chain  (GtkContainer   *container,
+					 GList         **focusable_widgets);
 void     gtk_container_unset_focus_chain (GtkContainer  *container);
 
 /* Widget-level methods */
@@ -142,8 +146,10 @@ void   gtk_container_set_focus_child	   (GtkContainer     *container,
 					    GtkWidget	     *child);
 void   gtk_container_set_focus_vadjustment (GtkContainer     *container,
 					    GtkAdjustment    *adjustment);
+GtkAdjustment *gtk_container_get_focus_vadjustment (GtkContainer *container);
 void   gtk_container_set_focus_hadjustment (GtkContainer     *container,
 					    GtkAdjustment    *adjustment);
+GtkAdjustment *gtk_container_get_focus_hadjustment (GtkContainer *container);
 
 void    gtk_container_resize_children      (GtkContainer     *container);
 

@@ -126,6 +126,23 @@ gtk_adjustment_new (gdouble value,
   return GTK_OBJECT (adjustment);
 }
 
+/**
+ * gtk_adjustment_get_value:
+ * @adjustment: a #GtkAdjustment
+ *
+ * Gets the current value of the adjustment. See
+ * gtk_adjustment_set_value ().
+ *
+ * Return value: The current value of the adjustment.
+ **/
+gdouble
+gtk_adjustment_get_value (GtkAdjustment *adjustment)
+{
+  g_return_val_if_fail (GTK_IS_ADJUSTMENT (adjustment), 0.);
+
+  return adjustment->value;
+}
+
 void
 gtk_adjustment_set_value (GtkAdjustment        *adjustment,
 			  gdouble               value)

@@ -7317,6 +7317,24 @@ static GtkTargetEntry row_targets[] = {
   { "GTK_TREE_MODEL_ROW", GTK_TARGET_SAME_WIDGET, 0 }
 };
 
+
+/**
+ * gtk_tree_view_get_reorderable:
+ * @tree_view: a #GtkTreeView
+ *
+ * Retrieves whether the user can reorder the tree via drag-and-drop. See
+ * gtk_tree_view_set_reorderable().
+ *
+ * Return value: %TRUE if the tree can be reordered.
+ **/
+gboolean
+gtk_tree_view_get_reorderable (GtkTreeView *tree_view)
+{
+  g_return_val_if_fail (GTK_IS_TREE_VIEW (tree_view), FALSE);
+
+  return tree_view->priv->reorderable;
+}
+
 /**
  * gtk_tree_view_set_reorderable:
  * @tree_view: A #GtkTreeView.

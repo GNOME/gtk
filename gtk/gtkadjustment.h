@@ -81,6 +81,7 @@ void	   gtk_adjustment_value_changed		(GtkAdjustment	 *adjustment);
 void	   gtk_adjustment_clamp_page		(GtkAdjustment	 *adjustment,
 						 gdouble	  lower,
 						 gdouble	  upper);
+gdouble	   gtk_adjustment_get_value		(GtkAdjustment   *adjustment);
 void	   gtk_adjustment_set_value		(GtkAdjustment	 *adjustment,
 						 gdouble	  value);
 

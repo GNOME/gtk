@@ -129,7 +129,7 @@ gtk_radio_button_set_arg (GtkObject	 *object,
 
     case ARG_GROUP:
       if (GTK_VALUE_OBJECT (*arg))
-	slist = gtk_radio_button_group ((GtkRadioButton*) GTK_VALUE_OBJECT (*arg));
+	slist = gtk_radio_button_get_group ((GtkRadioButton*) GTK_VALUE_OBJECT (*arg));
       else
 	slist = NULL;
       gtk_radio_button_set_group (radio_button, slist);
@@ -263,7 +263,7 @@ gtk_radio_button_new_from_widget (GtkRadioButton *group)
 {
   GSList *l = NULL;
   if (group)
-    l = gtk_radio_button_group (group);
+    l = gtk_radio_button_get_group (group);
   return gtk_radio_button_new (l);
 }
 
@@ -274,7 +274,7 @@ gtk_radio_button_new_with_label_from_widget (GtkRadioButton *group,
 {
   GSList *l = NULL;
   if (group)
-    l = gtk_radio_button_group (group);
+    l = gtk_radio_button_get_group (group);
   return gtk_radio_button_new_with_label (l, label);
 }
 
@@ -295,12 +295,12 @@ gtk_radio_button_new_with_mnemonic_from_widget (GtkRadioButton *group,
 {
   GSList *l = NULL;
   if (group)
-    l = gtk_radio_button_group (group);
+    l = gtk_radio_button_get_group (group);
   return gtk_radio_button_new_with_mnemonic (l, label);
 }
 
 GSList*
-gtk_radio_button_group (GtkRadioButton *radio_button)
+gtk_radio_button_get_group (GtkRadioButton *radio_button)
 {
   g_return_val_if_fail (radio_button != NULL, NULL);
   g_return_val_if_fail (GTK_IS_RADIO_BUTTON (radio_button), NULL);

@@ -6043,9 +6043,49 @@ gtk_text_view_set_border_window_size (GtkTextView      *text_view,
       break;
 
     default:
-      g_warning ("Can't set size of center or widget or private GtkTextWindowType in %s", G_STRLOC);
+      g_warning ("Can only set size of left/right/top/bottom border windows with gtk_text_view_set_border_window_size in %s\n", G_STRLOC);
       break;
     }
+}
+
+/**
+ * gtk_text_view_get_border_window_size:
+ * @text_view: a #GtkTextView
+ * @type: window to return size from
+ *
+ * Gets the width of the specified border window. See
+ * gtk_text_view_set_border_window_size().
+ *
+ * Return value: width of window
+ **/
+gint
+gtk_text_view_get_border_window_size (GtkTextView       *text_view,
+				      GtkTextWindowType  type)
+{
+  g_return_val_if_fail (GTK_IS_TEXT_VIEW (text_view), 0);
+  g_return_val_if_fail (type != GTK_TEXT_WINDOW_WIDGET, 0);
+  g_return_val_if_fail (type != GTK_TEXT_WINDOW_TEXT, 0);
+  
+  switch (type)
+    {
+    case GTK_TEXT_WINDOW_LEFT:
+      return text_view->left_window->requisition.width;
+      
+    case GTK_TEXT_WINDOW_RIGHT:
+      return text_view->right_window->requisition.width;
+      
+    case GTK_TEXT_WINDOW_TOP:
+      return text_view->top_window->requisition.height;
+
+    case GTK_TEXT_WINDOW_BOTTOM:
+      return text_view->bottom_window->requisition.height;
+      
+    default:
+      g_warning ("Can only get size of left/right/top/bottom border windows with gtk_text_view_get_border_window_size in %s\n", G_STRLOC);
+      break;
+    }
+
+  return 0;
 }
 
 /**

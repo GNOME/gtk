@@ -239,6 +239,30 @@ gtk_ruler_set_metric (GtkRuler      *ruler,
     gtk_widget_queue_draw (GTK_WIDGET (ruler));
 }
 
+/**
+ * gtk_ruler_get_metric:
+ * @ruler: a #GtkRuler
+ *
+ * Gets the units used for a #GtkRule . See gtk_ruler_set_metric().
+ *
+ * Return value: the units currently used for @ruler
+ **/
+GtkMetricType
+gtk_ruler_get_metric (GtkRuler *ruler)
+{
+  gint i;
+
+  g_return_val_if_fail (GTK_IS_RULER (ruler), 0);
+
+  for (i = 0; i < G_N_ELEMENTS (ruler_metrics); i++)
+    if (ruler->metric == &ruler_metrics[i])
+      return i;
+
+  g_assert_not_reached ();
+
+  return 0;
+}
+
 void
 gtk_ruler_set_range (GtkRuler *ruler,
 		     gdouble   lower,
@@ -272,6 +296,37 @@ gtk_ruler_set_range (GtkRuler *ruler,
 
   if (GTK_WIDGET_DRAWABLE (ruler))
     gtk_widget_queue_draw (GTK_WIDGET (ruler));
+}
+
+/**
+ * gtk_ruler_get_range:
+ * @ruler: a #GtkRuler
+ * @lower: location to store lower limit of the ruler, or %NULL
+ * @upper: location to store upper limit of the ruler, or %NULL
+ * @position: location to store the current position of the mark on the ruler, or %NULL
+ * @max_size: location to store the maximum size of the ruler used when calculating
+ *            the space to leave for the text, or %NULL.
+ *
+ * Retrieves values indicating the range and current position of a #GtkRuler.
+ * See gtk_ruler_set_range().
+ **/
+void
+gtk_ruler_get_range (GtkRuler *ruler,
+		     gdouble  *lower,
+		     gdouble  *upper,
+		     gdouble  *position,
+		     gdouble  *max_size)
+{
+  g_return_if_fail (GTK_IS_RULER (ruler));
+
+  if (lower)
+    *lower = ruler->lower;
+  if (upper)
+    *upper = ruler->upper;
+  if (position)
+    *position = ruler->position;
+  if (max_size)
+    *max_size = ruler->max_size;
 }
 
 void

@@ -90,6 +90,7 @@ void	   gtk_box_pack_end_defaults   (GtkBox	     *box,
 					GtkWidget    *widget);
 void	   gtk_box_set_homogeneous     (GtkBox	     *box,
 					gboolean      homogeneous);
+gboolean   gtk_box_get_homogeneous     (GtkBox	     *box);
 void	   gtk_box_set_spacing	       (GtkBox	     *box,
 					gint	      spacing);
 gint       gtk_box_get_spacing         (GtkBox       *box);

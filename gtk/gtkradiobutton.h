@@ -73,9 +73,13 @@ GtkWidget* gtk_radio_button_new_with_mnemonic             (GSList         *group
                                                            const gchar    *label);
 GtkWidget* gtk_radio_button_new_with_mnemonic_from_widget (GtkRadioButton *group,
                                                            const gchar    *label);
-GSList*    gtk_radio_button_group                         (GtkRadioButton *radio_button);
+GSList*    gtk_radio_button_get_group                     (GtkRadioButton *radio_button);
 void       gtk_radio_button_set_group                     (GtkRadioButton *radio_button,
                                                            GSList         *group);
+
+#ifndef GTK_DISABLE_DEPRECATED
+#define gtk_radio_button_group gtk_radio_button_get_group
+#endif
 
 #ifdef __cplusplus
 }

@@ -81,6 +81,7 @@ void           gtk_viewport_set_vadjustment (GtkViewport   *viewport,
 					     GtkAdjustment *adjustment);
 void           gtk_viewport_set_shadow_type (GtkViewport   *viewport,
 					     GtkShadowType  type);
+GtkShadowType  gtk_viewport_get_shadow_type (GtkViewport   *viewport);
 
 
 #ifdef __cplusplus

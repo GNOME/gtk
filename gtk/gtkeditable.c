@@ -179,3 +179,24 @@ gtk_editable_set_editable (GtkEditable    *editable,
 		  "editable", is_editable != FALSE,
 		  NULL);
 }
+
+/**
+ * gtk_editable_get_editable:
+ * @editable: a #GtkEditable
+ *
+ * Retrieves whether @editable is editable. See
+ * gtk_editable_set_editable().
+ *
+ * Return value: %TRUE if @editable is editable.
+ **/
+gboolean
+gtk_editable_get_editable (GtkEditable *editable)
+{
+  gboolean value;
+
+  g_return_val_if_fail (GTK_IS_EDITABLE (editable), FALSE);
+
+  gtk_object_get (GTK_OBJECT (editable), "editable", &value, NULL);
+
+  return value;
+}

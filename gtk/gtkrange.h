@@ -123,6 +123,7 @@ GtkType        gtk_range_get_type               (void) G_GNUC_CONST;
 
 void           gtk_range_set_update_policy (GtkRange      *range,
                                             GtkUpdateType  policy);
+GtkUpdateType  gtk_range_get_update_policy (GtkRange      *range);
 void           gtk_range_set_adjustment    (GtkRange      *range,
                                             GtkAdjustment *adjustment);
 GtkAdjustment* gtk_range_get_adjustment    (GtkRange      *range);

@@ -132,10 +132,11 @@ Compatibility macro; in gtkcompat.h.
 @Returns: 
 
 
-<!-- ##### FUNCTION gtk_notebook_set_page ##### -->
+<!-- ##### MACRO gtk_notebook_set_page ##### -->
 <para>
 </para>
 
+<!-- # Unused Parameters # -->
 @notebook: 
 @page_num: 
 

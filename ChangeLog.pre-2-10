@@ -1,3 +1,25 @@
+Sun Jun 24 11:29:35 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/x11/gdkimage-x11.c (gdk_image_new): Fix stupid error
+	introduced last night that was making things decidedly not work.
+
+	* gtk/*.[ch]: Patch from Kristian Rietveld adding 80 getters
+	so that we have getter/setter pairing everywhere it makes
+	sense. (#55767)
+
+	* gtk/gtkradiobutton.[ch] gtk/gtktoolbar.c tests/testgtk.:
+	Rename gtk_radio_button_group to gtk_radio_button_get_group, add a
+	deprecated compat macro. (#55516)
+
+	* gtk/gtklabel.[ch]: Add functions
+	gtk_label_set/get_use_underline(), gtk_label_set/get_use_markup(),
+	gtk_label_set_label(), which mirror the property API for GtkLabel.
+	Make gtk_label_get_attributes() only reflect the attributes
+	set by gtk_label_set_attributes.
+
+	* gtk/gtknotebook.c (gtk_notebook_set_current_page) gtk/gtkcompat.h: Rename
+	from gtk_notebook_set_page().
+
 Sat Jun 23 18:02:46 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* configure.in: Fix tests for XShm.h.

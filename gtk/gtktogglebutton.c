@@ -333,6 +333,23 @@ gtk_toggle_button_set_mode (GtkToggleButton *toggle_button,
     }
 }
 
+/**
+ * gtk_toggle_button_get_mode:
+ * @toggle_button: a #GtkToggleButton
+ *
+ * Retrieves whether the button is displayed as a separate indicator
+ * and label. See gtk_toggle_button_set_mode().
+ *
+ * Return value: %TRUE if the togglebutton is drawn as a separate indicator
+ *   and label.
+ **/
+gboolean
+gtk_toggle_button_get_mode (GtkToggleButton *toggle_button)
+{
+  g_return_val_if_fail (GTK_IS_TOGGLE_BUTTON (toggle_button), FALSE);
+
+  return toggle_button->draw_indicator;
+}
 
 void
 gtk_toggle_button_set_active (GtkToggleButton *toggle_button,

@@ -73,6 +73,7 @@ GtkType          gtk_tree_selection_get_type            (void);
 
 void             gtk_tree_selection_set_mode            (GtkTreeSelection            *selection,
 							 GtkTreeSelectionMode         type);
+GtkTreeSelectionMode gtk_tree_selection_get_mode        (GtkTreeSelection            *selection);
 void             gtk_tree_selection_set_select_function (GtkTreeSelection            *selection,
 							 GtkTreeSelectionFunc         func,
 							 gpointer                     data,

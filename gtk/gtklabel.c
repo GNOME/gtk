@@ -285,24 +285,16 @@ gtk_label_set_property (GObject      *object,
   switch (prop_id)
     {
     case PROP_LABEL:
-      gtk_label_set_label_internal (label,
-				    g_strdup (g_value_get_string (value)));
-      gtk_label_recalculate (label);
-      if (last_keyval != label->mnemonic_keyval)
-	gtk_label_setup_mnemonic (label, last_keyval);
+      gtk_label_set_label (label, g_value_get_string (value));
       break;
     case PROP_ATTRIBUTES:
       gtk_label_set_attributes (label, g_value_get_boxed (value));
       break;
     case PROP_USE_MARKUP:
-      gtk_label_set_use_markup_internal (label, g_value_get_boolean (value));
-      gtk_label_recalculate (label);
+      gtk_label_set_use_markup (label, g_value_get_boolean (value));
       break;
     case PROP_USE_UNDERLINE:
-      gtk_label_set_use_underline_internal (label, g_value_get_boolean (value));
-      gtk_label_recalculate (label);
-      if (label->use_underline)
-	gtk_label_setup_mnemonic (label, last_keyval);
+      gtk_label_set_use_underline (label, g_value_get_boolean (value));
       break;
     case PROP_JUSTIFY:
       gtk_label_set_justify (label, g_value_get_enum (value));
@@ -398,9 +390,10 @@ gtk_label_init (GtkLabel *label)
 /**
  * gtk_label_new:
  * @str: The text of the label
- * @returns: a new #GtkLabel
  *
  * Creates a new #GtkLabel, containing the text in @str.
+ *
+ * Return value: the new #GtkLabel
  **/
 GtkWidget*
 gtk_label_new (const gchar *str)
@@ -419,7 +412,6 @@ gtk_label_new (const gchar *str)
  * gtk_label_new_with_mnemonic:
  * @str: The text of the label, with an underscore in front of the
  *       mnemonic character
- * @returns: a new #GtkLabel
  *
  * Creates a new #GtkLabel, containing the text in @str.
  *
@@ -435,6 +427,8 @@ gtk_label_new (const gchar *str)
  * label is inside a button or menu item, the button or menu item will
  * automatically become the mnemonic widget and be activated by
  * the mnemonic.
+ *
+ * Return value: the new #GtkLabel
  **/
 GtkWidget*
 gtk_label_new_with_mnemonic (const gchar *str)
@@ -550,6 +544,23 @@ gtk_label_set_mnemonic_widget (GtkLabel  *label,
     gtk_widget_ref (label->mnemonic_widget);
 }
 
+/**
+ * gtk_label_get_mnemonic_widget:
+ * @label: a #GtkLabel
+ *
+ * Retrieves the target of the mnemonic (keyboard shortcut) of this
+ * label. See gtk_label_set_mnemonic_widget ().
+ *
+ * Return value: the target of the label's mnemonic, or %NULL if none
+ *               has been set and the default algorithm will be used.
+ **/
+GtkWidget *
+gtk_label_get_mnemonic_widget (GtkLabel *label)
+{
+  g_return_val_if_fail (GTK_IS_LABEL (label), NULL);
+
+  return label->mnemonic_widget;
+}
 
 /**
  * gtk_label_get_mnemonic_keyval:
@@ -593,12 +604,14 @@ gtk_label_set_label_internal (GtkLabel *label,
 
 static void
 gtk_label_set_use_markup_internal (GtkLabel *label,
-				   gboolean val)
+				   gboolean  val)
 {
   val = val != FALSE;
   if (label->use_markup != val)
-    g_object_notify (G_OBJECT (label), "use_markup");
-  label->use_markup = val;
+    {
+      g_object_notify (G_OBJECT (label), "use_markup");
+      label->use_markup = val;
+    }
 }
 
 static void
@@ -607,19 +620,29 @@ gtk_label_set_use_underline_internal (GtkLabel *label,
 {
   val = val != FALSE;
   if (label->use_underline != val)
-    g_object_notify (G_OBJECT (label), "use_underline");
-  label->use_underline = val;
+    {
+      g_object_notify (G_OBJECT (label), "use_underline");
+      label->use_underline = val;
+    }
 }
 
 static void
-gtk_label_set_attributes_internal (GtkLabel         *label,
-				   PangoAttrList    *attrs)
+gtk_label_set_attributes_internal (GtkLabel      *label,
+				   PangoAttrList *attrs)
 {
   if (attrs)
     pango_attr_list_ref (attrs);
   
   if (label->attrs)
     pango_attr_list_unref (label->attrs);
+
+  if (!label->use_markup && !label->use_underline)
+    {
+      pango_attr_list_ref (attrs);
+      if (label->effective_attrs)
+	pango_attr_list_unref (label->effective_attrs);
+      label->effective_attrs = attrs;
+    }
 
   label->attrs = attrs;
   g_object_notify (G_OBJECT (label), "attributes");
@@ -633,7 +656,7 @@ static void
 gtk_label_recalculate (GtkLabel *label)
 {
   if (label->use_markup)
-      set_markup (label, label->label, label->use_underline);
+    set_markup (label, label->label, label->use_underline);
   else
     {
       if (label->use_underline)
@@ -641,7 +664,11 @@ gtk_label_recalculate (GtkLabel *label)
       else
 	{
 	  gtk_label_set_text_internal (label, g_strdup (label->label));
-	  gtk_label_set_attributes_internal (label, NULL);
+	  if (label->attrs)
+	    pango_attr_list_ref (label->attrs);
+	  if (label->effective_attrs)
+	    pango_attr_list_unref (label->effective_attrs);
+	  label->effective_attrs = label->attrs;
 	}
     }
 
@@ -685,7 +712,8 @@ gtk_label_set_text (GtkLabel    *label,
  * @attrs: a #PangoAttrList
  * 
  * Sets a #PangoAttrList; the attributes in the list are applied to the
- * label text.
+ * label text. The attributes set with this function will be ignored
+ * if label->use_underline or label->use_markup is %TRUE.
  **/
 void
 gtk_label_set_attributes (GtkLabel         *label,
@@ -697,6 +725,72 @@ gtk_label_set_attributes (GtkLabel         *label,
   
   gtk_label_clear_layout (label);  
   gtk_widget_queue_resize (GTK_WIDGET (label));
+}
+
+/**
+ * gtk_label_get_attributes:
+ * @label: a #GtkLabel
+ *
+ * Gets the attribute list that was set on the label using
+ * gtk_label_set_attributes(), if any. This function does
+ * not reflect attributes that come from the labels markup
+ * (see gtk_label_set_markup()). If you want to get the
+ * effective attributes for the label, use
+ * pango_layout_get_attribute (gtk_label_get_layout (label)).
+ *
+ * Return value: the attribute list, or %NULL if none was set.
+ **/
+PangoAttrList *
+gtk_label_get_attributes (GtkLabel *label)
+{
+  g_return_val_if_fail (GTK_IS_LABEL (label), NULL);
+
+  return label->attrs;
+}
+
+/**
+ * gtk_label_set_label:
+ * @label: a #GtkLabel
+ * @str: the new text to set for the label
+ *
+ * Sets the text of the label. The label is interpreted as
+ * including embedded underlines and/or Pango markup depending
+ * on the values of label->use_underline and label->use_markup.
+ **/
+void
+gtk_label_set_label (GtkLabel    *label,
+		     const gchar *str)
+{
+  guint last_keyval;
+
+  g_return_if_fail (GTK_IS_LABEL (label));
+  g_return_if_fail (str != NULL);
+
+  last_keyval = label->mnemonic_keyval;
+
+  gtk_label_set_label_internal (label, g_strdup (str));
+  gtk_label_recalculate (label);
+  if (last_keyval != label->mnemonic_keyval)
+    gtk_label_setup_mnemonic (label, last_keyval);
+}
+
+/**
+ * gtk_label_get_label:
+ * @label: a #GtkLabel
+ *
+ * Fetches the text from a label widget including any embedded
+ * underlines indicating mnemonics and Pango markup. (See
+ * gtk_label_get_text ()).
+ *
+ * Return value: the text of the label widget. This string is
+ *   owned by the widget and must not be modified or freed.
+ **/
+G_CONST_RETURN gchar *
+gtk_label_get_label (GtkLabel *label)
+{
+  g_return_val_if_fail (GTK_IS_LABEL (label), NULL);
+
+  return label->label;
 }
 
 static void
@@ -728,8 +822,9 @@ set_markup (GtkLabel    *label,
 
   if (attrs)
     {
-      gtk_label_set_attributes_internal (label, attrs);
-      pango_attr_list_unref (attrs);
+      if (label->effective_attrs)
+	pango_attr_list_unref (label->effective_attrs);
+      label->effective_attrs = attrs;
     }
 
   if (accel_char != 0)
@@ -792,10 +887,12 @@ gtk_label_set_markup_with_mnemonic (GtkLabel    *label,
  * gtk_label_get_text:
  * @label: a #GtkLabel
  * 
- * Fetches the text from a label widget
+ * Fetches the text from a label widget, as displayed on the
+ * screen. This does not include any embedded underlines
+ * indicating mnemonics or Pango markup. (See gtk_label_get_label())
  * 
  * Return value: the text in the label widget. This is the internal
- * string used by the label, and must not be modified.
+ *   string used by the label, and must not be modified.
  **/
 G_CONST_RETURN gchar *
 gtk_label_get_text (GtkLabel *label)
@@ -854,7 +951,6 @@ gtk_label_set_pattern_internal (GtkLabel    *label,
   g_return_if_fail (GTK_IS_LABEL (label));
   
   attrs = gtk_label_pattern_to_attrs (label, pattern);
-
   gtk_label_set_attributes_internal (label, attrs);
 }
 
@@ -871,6 +967,14 @@ gtk_label_set_pattern (GtkLabel	   *label,
 }
 
 
+/**
+ * gtk_label_set_justify:
+ * @label: a #GtkLabel
+ * @jtype: a #GtkJustification
+ *
+ * Sets the alignment of the lines in the text of the label relative to
+ * each other.
+ **/
 void
 gtk_label_set_justify (GtkLabel        *label,
 		       GtkJustification jtype)
@@ -890,6 +994,29 @@ gtk_label_set_justify (GtkLabel        *label,
     }
 }
 
+/**
+ * gtk_label_get_justify:
+ * @label: a #GtkLabel
+ *
+ * Returns the justification of the label. See gtk_label_set_justification ().
+ *
+ * Return value: GtkJustification
+ **/
+GtkJustification
+gtk_label_get_justify (GtkLabel *label)
+{
+  g_return_val_if_fail (GTK_IS_LABEL (label), 0);
+
+  return label->jtype;
+}
+
+/**
+ * gtk_label_set_line_wrap:
+ * @label: a #GtkLabel
+ * @wrap: the setting
+ *
+ * If true, the lines will be wrapped if the text becomes too wide.
+ */
 void
 gtk_label_set_line_wrap (GtkLabel *label,
 			 gboolean  wrap)
@@ -905,6 +1032,22 @@ gtk_label_set_line_wrap (GtkLabel *label,
       
       gtk_widget_queue_resize (GTK_WIDGET (label));
     }
+}
+
+/**
+ * gtk_label_get_line_wrap:
+ * @label: a #GtkLabel
+ *
+ * Returns whether lines in the label are automatically wrapped. See gtk_label_set_line_wrap ().
+ *
+ * Return value: %TRUE if the lines of the label are automatically wrapped.
+ */
+gboolean
+gtk_label_get_line_wrap (GtkLabel *label)
+{
+  g_return_val_if_fail (GTK_IS_LABEL (label), FALSE);
+
+  return label->wrap;
 }
 
 void
@@ -944,6 +1087,9 @@ gtk_label_finalize (GObject *object)
     g_object_unref (G_OBJECT (label->layout));
 
   if (label->attrs)
+    pango_attr_list_unref (label->attrs);
+
+  if (label->effective_attrs)
     pango_attr_list_unref (label->attrs);
 
   g_free (label->select_info);
@@ -1002,8 +1148,8 @@ gtk_label_ensure_layout (GtkLabel *label,
 
       label->layout = gtk_widget_create_pango_layout (widget, label->text);
 
-      if (label->attrs)
-	pango_layout_set_attributes (label->layout, label->attrs);
+      if (label->effective_attrs)
+	pango_layout_set_attributes (label->layout, label->effective_attrs);
       
       switch (label->jtype)
 	{
@@ -2102,3 +2248,75 @@ gtk_label_get_layout_offsets (GtkLabel *label,
   get_layout_location (label, x, y);
 }
 
+/**
+ * gtk_label_set_use_markup:
+ * @label: a #GtkLabel
+ * @setting: %TRUE if the label's text should be parsed for markup.
+ *
+ * Sets whether the text of the label contains markup in Pango's
+ * text markup lango. See gtk_label_set_markup().
+ **/
+void
+gtk_label_set_use_markup (GtkLabel *label,
+			  gboolean  setting)
+{
+  g_return_if_fail (GTK_IS_LABEL (label));
+
+  gtk_label_set_use_markup_internal (label, setting);
+  gtk_label_recalculate (label);
+}
+
+/**
+ * gtk_label_get_use_markup:
+ * @label: a #GtkLabel
+ *
+ * Returns whether the label's text is interpreted as marked up with the
+ * Pango text markup language. See gtk_label_set_use_markup ().
+ *
+ * Return value: %TRUE if the label's text will be parsed for markup.
+ **/
+gboolean
+gtk_label_get_use_markup (GtkLabel *label)
+{
+  g_return_val_if_fail (GTK_IS_LABEL (label), FALSE);
+  
+  return label->use_markup;
+}
+
+/**
+ * gtk_label_set_use_underline:
+ * @label: a #GtkLabel
+ * @setting: %TRUE if underlines in the text indicate mnemonics
+ *
+ * If true, an underline in the text indicates the next character should be
+ * used for the mnemonic accelerator key.
+ */
+void
+gtk_label_set_use_underline (GtkLabel *label,
+			     gboolean  setting)
+{
+  g_return_if_fail (GTK_IS_LABEL (label));
+
+  gtk_label_set_use_underline_internal (label, setting);
+  gtk_label_recalculate (label);
+  if (label->use_underline)
+    gtk_label_setup_mnemonic (label, label->mnemonic_keyval);
+}
+
+/**
+ * gtk_label_get_use_underline:
+ * @label: a #GtkLabel
+ *
+ * Returns whether an embedded underline in thef label indicates a
+ * mnemonic. See gtk_label_set_use_underline ().
+ *
+ * Return value: %TRUE whether an embedded underline in the label indicates
+ *               the mnemonic accelerator keys.
+ **/
+gboolean
+gtk_label_get_use_underline (GtkLabel *label)
+{
+  g_return_val_if_fail (GTK_IS_LABEL (label), FALSE);
+  
+  return label->use_underline;
+}

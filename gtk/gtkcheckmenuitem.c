@@ -210,6 +210,23 @@ gtk_check_menu_item_set_active (GtkCheckMenuItem *check_menu_item,
      }
 }
 
+/**
+ * gtk_check_menu_item_get_active:
+ * @check_menu_item: a #GtkCheckMenuItem
+ * 
+ * Returns whether the check menu item is active. See
+ * gtk_check_menu_item_set_active ().
+ * 
+ * Return value: %TRUE if the menu item is checked.
+ */
+gboolean
+gtk_check_menu_item_get_active (GtkCheckMenuItem *check_menu_item)
+{
+  g_return_val_if_fail (GTK_IS_CHECK_MENU_ITEM (check_menu_item), FALSE);
+
+  return check_menu_item->active;
+}
+
 static void
 gtk_check_menu_item_toggle_size_request (GtkMenuItem *menu_item,
 					 gint        *requisition)

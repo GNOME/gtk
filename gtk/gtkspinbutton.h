@@ -132,14 +132,21 @@ GtkAdjustment*	gtk_spin_button_get_adjustment	   (GtkSpinButton  *spin_button);
 
 void		gtk_spin_button_set_digits	   (GtkSpinButton  *spin_button,
 						    guint	    digits);
+guint           gtk_spin_button_get_digits         (GtkSpinButton  *spin_button);
 
 void		gtk_spin_button_set_increments	   (GtkSpinButton  *spin_button,
 						    gdouble         step,
 						    gdouble         page);
+void            gtk_spin_button_get_increments     (GtkSpinButton  *spin_button,
+						    gdouble        *step,
+						    gdouble        *page);
 
 void		gtk_spin_button_set_range	   (GtkSpinButton  *spin_button,
 						    gdouble         min,
 						    gdouble         max);
+void            gtk_spin_button_get_range          (GtkSpinButton  *spin_button,
+						    gdouble        *min,
+						    gdouble        *max);
 
 gdouble		gtk_spin_button_get_value          (GtkSpinButton  *spin_button);
 
@@ -150,9 +157,11 @@ void		gtk_spin_button_set_value	   (GtkSpinButton  *spin_button,
 
 void		gtk_spin_button_set_update_policy  (GtkSpinButton  *spin_button,
 						    GtkSpinButtonUpdatePolicy  policy);
+GtkSpinButtonUpdatePolicy gtk_spin_button_get_update_policy (GtkSpinButton *spin_button);
 
 void		gtk_spin_button_set_numeric	   (GtkSpinButton  *spin_button,
 						    gboolean	    numeric);
+gboolean        gtk_spin_button_get_numeric        (GtkSpinButton  *spin_button);
 
 void		gtk_spin_button_spin		   (GtkSpinButton  *spin_button,
 						    GtkSpinType     direction,
@@ -160,9 +169,11 @@ void		gtk_spin_button_spin		   (GtkSpinButton  *spin_button,
 
 void		gtk_spin_button_set_wrap	   (GtkSpinButton  *spin_button,
 						    gboolean	    wrap);
+gboolean        gtk_spin_button_get_wrap           (GtkSpinButton  *spin_button);
 
 void		gtk_spin_button_set_snap_to_ticks  (GtkSpinButton  *spin_button,
 						    gboolean	    snap_to_ticks);
+gboolean        gtk_spin_button_get_snap_to_ticks  (GtkSpinButton  *spin_button);
 void            gtk_spin_button_update             (GtkSpinButton  *spin_button);
 
 

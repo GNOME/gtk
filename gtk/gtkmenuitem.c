@@ -311,6 +311,23 @@ gtk_menu_item_set_submenu (GtkMenuItem *menu_item,
     }
 }
 
+/**
+ * gtk_menu_item_get_submenu:
+ * @menu_item: a #GtkMenuItem
+ *
+ * Gets the submenu underneath this menu item, if any. See
+ * gtk_menu_item_set_submenu().
+ *
+ * Return value: submenu for this menu item, or %NULL if none.
+ **/
+GtkWidget *
+gtk_menu_item_get_submenu (GtkMenuItem *menu_item)
+{
+  g_return_val_if_fail (GTK_IS_MENU_ITEM (menu_item), NULL);
+
+  return menu_item->submenu;
+}
+
 void
 gtk_menu_item_remove_submenu (GtkMenuItem         *menu_item)
 {

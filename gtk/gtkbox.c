@@ -478,6 +478,23 @@ gtk_box_set_homogeneous (GtkBox  *box,
     }
 }
 
+/**
+ * gtk_box_get_homogeneous:
+ * @box: a #GtkBox
+ *
+ * Returns whether the box is homogeneous (all children are the
+ * same size). See gtk_box_set_homogeneous ().
+ *
+ * Return value: %TRUE if the box is homogeneous.
+ **/
+gboolean
+gtk_box_get_homogeneous (GtkBox *box)
+{
+  g_return_val_if_fail (GTK_IS_BOX (box), FALSE);
+
+  return box->homogeneous;
+}
+
 void
 gtk_box_set_spacing (GtkBox *box,
 		     gint    spacing)

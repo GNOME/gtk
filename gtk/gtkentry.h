@@ -149,8 +149,10 @@ GtkType    gtk_entry_get_type       		(void) G_GNUC_CONST;
 GtkWidget* gtk_entry_new            		(void);
 void       gtk_entry_set_visibility 		(GtkEntry      *entry,
 						 gboolean       visible);
+gboolean   gtk_entry_get_visibility             (GtkEntry      *entry);
 void       gtk_entry_set_invisible_char         (GtkEntry      *entry,
                                                  gunichar       ch);
+gunichar   gtk_entry_get_invisible_char         (GtkEntry      *entry);
 void       gtk_entry_set_editable   		(GtkEntry      *entry,
 						 gboolean       editable);
 void       gtk_entry_set_has_frame              (GtkEntry      *entry,
@@ -159,6 +161,7 @@ gboolean   gtk_entry_get_has_frame              (GtkEntry      *entry);
 /* text is truncated if needed */
 void       gtk_entry_set_max_length 		(GtkEntry      *entry,
 						 gint           max);
+gint       gtk_entry_get_max_length             (GtkEntry      *entry);
 void       gtk_entry_set_activates_default      (GtkEntry      *entry,
                                                  gboolean       setting);
 gboolean   gtk_entry_get_activates_default      (GtkEntry      *entry);

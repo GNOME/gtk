@@ -3075,6 +3075,23 @@ gtk_entry_set_visibility (GtkEntry *entry,
 }
 
 /**
+ * gtk_entry_get_visibility:
+ * @entry: a #GtkEntry
+ *
+ * Retrieves whether the text in @entry is visible. See
+ * gtk_entry_set_visibility().
+ *
+ * Return value: %TRUE if the text is currently visible
+ **/
+gboolean
+gtk_entry_get_visibility (GtkEntry *entry)
+{
+  g_return_val_if_fail (GTK_IS_ENTRY (entry), FALSE);
+
+  return entry->visible;
+}
+
+/**
  * gtk_entry_set_invisible_char:
  * @entry: a #GtkEntry
  * @ch: a Unicode character
@@ -3100,6 +3117,24 @@ gtk_entry_set_invisible_char (GtkEntry *entry,
   entry->invisible_char = ch;
   g_object_notify (G_OBJECT (entry), "invisible_char");
   gtk_entry_recompute (entry);  
+}
+
+/**
+ * gtk_entry_get_invisible_char:
+ * @entry: a #GtkEntry
+ *
+ * Retrieves the character displayed in place of the real characters
+ * for entries with visisbility set to false. See gtk_entry_set_invisible_char().
+ *
+ * Return value: the current invisible char, or 0, if the entry does not
+ *               show invisible text at all. 
+ **/
+gunichar
+gtk_entry_get_invisible_char (GtkEntry *entry)
+{
+  g_return_val_if_fail (GTK_IS_ENTRY (entry), 0);
+
+  return entry->invisible_char;
 }
 
 void
@@ -3141,6 +3176,24 @@ gtk_entry_set_max_length (GtkEntry     *entry,
   
   entry->text_max_length = max;
   g_object_notify (G_OBJECT (entry), "max_length");
+}
+
+/**
+ * gtk_entry_get_max_length:
+ * @entry: a #GtkEntry
+ *
+ * Retrieves the maximum allowed length of the text in
+ * @entry. See gtk_entry_set_max_length().
+ *
+ * Return value: the maximum allowed number of characters
+ *               in #GtkEntry, or 0 if there is no maximum.
+ **/
+gint
+gtk_entry_get_max_length (GtkEntry *entry)
+{
+  g_return_val_if_fail (GTK_IS_ENTRY (entry), 0);
+
+  return entry->text_max_length;
 }
 
 /**

@@ -65,6 +65,7 @@ struct _GtkLabel
   
   gchar  *text; 
   PangoAttrList *attrs;
+  PangoAttrList *effective_attrs;
   
   PangoLayout *layout;
 
@@ -80,28 +81,42 @@ struct _GtkLabelClass
 };
 
 GtkType               gtk_label_get_type          (void) G_GNUC_CONST;
-GtkWidget*            gtk_label_new               (const char       *str);
-GtkWidget*            gtk_label_new_with_mnemonic (const char       *str);
-void                  gtk_label_set_text          (GtkLabel         *label,
-						   const char       *str);
-G_CONST_RETURN gchar* gtk_label_get_text          (GtkLabel         *label);
-void                  gtk_label_set_attributes    (GtkLabel         *label,
-						   PangoAttrList    *attrs);
-void                  gtk_label_set_markup        (GtkLabel         *label,
-						   const gchar      *str);
+GtkWidget*            gtk_label_new               (const char    *str);
+GtkWidget*            gtk_label_new_with_mnemonic (const char    *str);
+void                  gtk_label_set_text          (GtkLabel      *label,
+						   const char    *str);
+G_CONST_RETURN gchar* gtk_label_get_text          (GtkLabel      *label);
+void                  gtk_label_set_attributes    (GtkLabel      *label,
+						   PangoAttrList *attrs);
+PangoAttrList        *gtk_label_get_attributes    (GtkLabel      *label);
+void                  gtk_label_set_label         (GtkLabel      *label,
+						   const gchar   *str);
+G_CONST_RETURN gchar *gtk_label_get_label         (GtkLabel      *label);
+void                  gtk_label_set_markup        (GtkLabel      *label,
+						   const gchar   *str);
+void                  gtk_label_set_use_markup    (GtkLabel      *label,
+						   gboolean       setting);
+gboolean              gtk_label_get_use_markup    (GtkLabel      *label);
+void                  gtk_label_set_use_underline (GtkLabel      *label,
+						   gboolean       setting);
+gboolean              gtk_label_get_use_underline (GtkLabel      *label);
+
 void     gtk_label_set_markup_with_mnemonic       (GtkLabel         *label,
 						   const gchar      *str);
 guint    gtk_label_get_mnemonic_keyval            (GtkLabel         *label);
 void     gtk_label_set_mnemonic_widget            (GtkLabel         *label,
 						   GtkWidget        *widget);
+GtkWidget *gtk_label_get_mnemonic_widget          (GtkLabel         *label);
 void     gtk_label_set_text_with_mnemonic         (GtkLabel         *label,
 						   const gchar      *str);
 void     gtk_label_set_justify                    (GtkLabel         *label,
 						   GtkJustification  jtype);
+GtkJustification gtk_label_get_justify            (GtkLabel         *label);
 void     gtk_label_set_pattern                    (GtkLabel         *label,
 						   const gchar      *pattern);
 void     gtk_label_set_line_wrap                  (GtkLabel         *label,
 						   gboolean          wrap);
+gboolean gtk_label_get_line_wrap                  (GtkLabel         *label);
 void     gtk_label_set_selectable                 (GtkLabel         *label,
 						   gboolean          setting);
 gboolean gtk_label_get_selectable                 (GtkLabel         *label);
@@ -116,7 +131,6 @@ PangoLayout *gtk_label_get_layout         (GtkLabel *label);
 void         gtk_label_get_layout_offsets (GtkLabel *label,
                                            gint     *x,
                                            gint     *y);
-
 
 
 #ifndef	GTK_DISABLE_COMPAT_H

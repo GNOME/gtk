@@ -73,6 +73,7 @@ GtkWidget* gtk_check_menu_item_new_with_label    (const gchar      *label);
 GtkWidget* gtk_check_menu_item_new_with_mnemonic (const gchar      *label);
 void       gtk_check_menu_item_set_active        (GtkCheckMenuItem *check_menu_item,
                                                   gboolean          is_active);
+gboolean   gtk_check_menu_item_get_active        (GtkCheckMenuItem *check_menu_item);
 void       gtk_check_menu_item_toggled           (GtkCheckMenuItem *check_menu_item);
 void       gtk_check_menu_item_set_inconsistent  (GtkCheckMenuItem *check_menu_item,
                                                   gboolean          setting);

@@ -431,6 +431,22 @@ gtk_range_set_update_policy (GtkRange      *range,
 }
 
 /**
+ * gtk_range_get_update_policy:
+ * @range: a #GtkRange
+ *
+ * Gets the update policy of @range. See gtk_range_set_update_policy().
+ *
+ * Return value: the current update policy
+ **/
+GtkUpdateType
+gtk_range_get_update_policy (GtkRange *range)
+{
+  g_return_val_if_fail (GTK_IS_RANGE (range), GTK_UPDATE_CONTINUOUS);
+
+  return range->update_policy;
+}
+
+/**
  * gtk_range_set_adjustment:
  * @range: a #GtkRange
  * @adjustment: a #GtkAdjustment

@@ -1058,6 +1058,22 @@ gtk_toolbar_set_icon_size (GtkToolbar  *toolbar,
 }
 
 /**
+ * gtk_toolbar_get_icon_size:
+ * @toolbar: a #GtkToolbar
+ *
+ * Retrieves the icon size fo the toolbar. See gtk_toolbar_set_icon_size().
+ *
+ * Return value: the current icon size for the icons on the toolbar.
+ **/
+GtkIconSize
+gtk_toolbar_get_icon_size (GtkToolbar *toolbar)
+{
+  g_return_val_if_fail (GTK_IS_TOOLBAR (toolbar), GTK_ICON_SIZE_LARGE_TOOLBAR);
+
+  return toolbar->icon_size;
+}
+
+/**
  * gtk_toolbar_unset_icon_size:
  * @toolbar: a #GtkToolbar
  * 
@@ -1377,7 +1393,7 @@ gtk_toolbar_internal_insert_element (GtkToolbar          *toolbar,
       else
 	{
 	  child->widget = gtk_radio_button_new (widget
-						? gtk_radio_button_group (GTK_RADIO_BUTTON (widget))
+						? gtk_radio_button_get_group (GTK_RADIO_BUTTON (widget))
 						: NULL);
 	  gtk_button_set_relief (GTK_BUTTON (child->widget), get_button_relief (toolbar));
 	  gtk_toggle_button_set_mode (GTK_TOGGLE_BUTTON (child->widget), FALSE);
@@ -1466,6 +1482,23 @@ gtk_toolbar_set_orientation (GtkToolbar     *toolbar,
   gtk_signal_emit (GTK_OBJECT (toolbar), toolbar_signals[ORIENTATION_CHANGED], orientation);
 }
 
+/**
+ * gtk_toolbar_get_orientation:
+ * @toolbar: a #GtkToolbar
+ * 
+ * Retrieves the current orientation of the toolbar. See
+ * gtk_toolbar_set_orientation().
+ *
+ * Return value: the orientation
+ **/
+GtkOrientation
+gtk_toolbar_get_orientation (GtkToolbar *toolbar)
+{
+  g_return_val_if_fail (GTK_IS_TOOLBAR (toolbar), GTK_ORIENTATION_HORIZONTAL);
+
+  return toolbar->orientation;
+}
+
 void
 gtk_toolbar_set_style (GtkToolbar      *toolbar,
 		       GtkToolbarStyle  style)
@@ -1474,6 +1507,23 @@ gtk_toolbar_set_style (GtkToolbar      *toolbar,
 
   toolbar->style_set = TRUE;
   gtk_signal_emit (GTK_OBJECT (toolbar), toolbar_signals[STYLE_CHANGED], style);
+}
+
+/**
+ * gtk_toolbar_get_style:
+ * @toolbar: a #GtkToolbar
+ *
+ * Retrieves whether the toolbar has text, icons, or both . See
+ * gtk_toolbar_set_style().
+ 
+ * Return value: the current style of @toolbar
+ **/
+GtkToolbarStyle
+gtk_toolbar_get_style (GtkToolbar *toolbar)
+{
+  g_return_val_if_fail (GTK_IS_TOOLBAR (toolbar), GTK_TOOLBAR_BOTH);
+
+  return toolbar->style;
 }
 
 /**
@@ -1515,6 +1565,23 @@ gtk_toolbar_set_tooltips (GtkToolbar *toolbar,
     gtk_tooltips_enable (toolbar->tooltips);
   else
     gtk_tooltips_disable (toolbar->tooltips);
+}
+
+/**
+ * gtk_toolbar_get_tooltips:
+ * @toolbar: a #GtkToolbar
+ *
+ * Retrieves whether tooltips are enabled. See
+ * gtk_toolbar_set_tooltips().
+ *
+ * Return value: %TRUE if tooltips are enabled
+ **/
+gboolean
+gtk_toolbar_get_tooltips (GtkToolbar *toolbar)
+{
+  g_return_val_if_fail (GTK_IS_TOOLBAR (toolbar), FALSE);
+
+  return toolbar->tooltips->enabled;
 }
 
 static void

@@ -201,7 +201,7 @@ gtk_handle_box_class_init (GtkHandleBoxClass *class)
                                                       _("Snap edge"),
                                                       _("Side of the handlebox that's lined up with the docking point to dock the handlebox."),
 						      GTK_TYPE_POSITION_TYPE,
-						      GTK_POS_LEFT,
+						      GTK_POS_TOP,
                                                       G_PARAM_READABLE | G_PARAM_WRITABLE));
   object_class->destroy = gtk_handle_box_destroy;
 
@@ -747,6 +747,23 @@ gtk_handle_box_set_shadow_type (GtkHandleBox  *handle_box,
     }
 }
 
+/**
+ * gtk_handle_box_get_shadow_type:
+ * @handle_box: a #GtkHandleBox
+ * 
+ * Gets the type of shadow drawn around the handle box. See
+ * gtk_handle_box_set_shadow_type().
+ *
+ * Return value: the type of shadow currently drawn around the handle box.
+ **/
+GtkShadowType
+gtk_handle_box_get_shadow_type (GtkHandleBox *handle_box)
+{
+  g_return_val_if_fail (GTK_IS_HANDLE_BOX (handle_box), GTK_SHADOW_ETCHED_OUT);
+
+  return handle_box->shadow_type;
+}
+
 void        
 gtk_handle_box_set_handle_position  (GtkHandleBox    *handle_box,
 				     GtkPositionType  position)
@@ -757,6 +774,23 @@ gtk_handle_box_set_handle_position  (GtkHandleBox    *handle_box,
       g_object_notify (G_OBJECT (handle_box), "handle_position");
       gtk_widget_queue_resize (GTK_WIDGET (handle_box));
     }
+}
+
+/**
+ * gtk_handle_box_get_handle_position:
+ * @handle_box: a #GtkHandleBox
+ *
+ * Gets the handle position of the handle box. See
+ * gtk_handle_box_set_handle_position().
+ *
+ * Return value: the current handle position.
+ **/
+GtkPositionType
+gtk_handle_box_get_handle_position (GtkHandleBox *handle_box)
+{
+  g_return_val_if_fail (GTK_IS_HANDLE_BOX (handle_box), GTK_POS_LEFT);
+
+  return handle_box->handle_position;
 }
 
 void        
@@ -771,6 +805,24 @@ gtk_handle_box_set_snap_edge        (GtkHandleBox    *handle_box,
       handle_box->snap_edge = edge;
       g_object_notify (G_OBJECT (handle_box), "snap_edge");
     }
+}
+
+/**
+ * gtk_handle_box_get_snap_edge:
+ * @handle_box: a #GtkHandleBox
+ * 
+ * Gets the edge used for determining reattachment of the handle box. See
+ * gtk_handle_box_set_snap_edge().
+ *
+ * Return value: the edge used for determining reattachment, or (GtkPositionType)-1 if this
+ *               is determined (as per default) from the handle position. 
+ **/
+GtkPositionType
+gtk_handle_box_get_snap_edge (GtkHandleBox *handle_box)
+{
+  g_return_val_if_fail (GTK_IS_HANDLE_BOX (handle_box), (GtkPositionType)-1);
+
+  return handle_box->snap_edge;
 }
 
 static void

@@ -165,9 +165,9 @@ _gtk_tree_selection_set_tree_view (GtkTreeSelection *selection,
 /**
  * gtk_tree_selection_set_mode:
  * @selection: A #GtkTreeSelection.
- * @type: The selection type.
+ * @type: The selection mode
  *
- * Sets the selection type of the @selection.  If the previous type was
+ * Sets the selection mode of the @selection.  If the previous type was
  * #GTK_TREE_SELECTION_MULTI and @type is #GTK_TREE_SELECTION_SINGLE, then
  * the anchor is kept selected, if it was previously selected.
  **/
@@ -216,6 +216,23 @@ gtk_tree_selection_set_mode (GtkTreeSelection     *selection,
 	GTK_RBNODE_SET_FLAG (node, GTK_RBNODE_IS_SELECTED);
     }
   selection->type = type;
+}
+
+/**
+ * gtk_tree_selection_get_mode:
+ * @selection: a #GtkTreeSelection
+ *
+ * Gets the selection mode for @selection. See
+ * gtk_tree_selection_set_mode().
+ *
+ * Return value: the current selection mode
+ **/
+GtkTreeSelectionMode
+gtk_tree_selection_get_mode (GtkTreeSelection *selection)
+{
+  g_return_val_if_fail (GTK_IS_TREE_SELECTION (selection), GTK_TREE_SELECTION_SINGLE);
+
+  return selection->type;
 }
 
 /**

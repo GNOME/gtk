@@ -63,6 +63,7 @@ extern "C" {
 #define	gtk_accel_label_accelerator_width	gtk_accel_label_get_accel_width
 #define	gtk_container_border_width		gtk_container_set_border_width
 #define	gtk_notebook_current_page               gtk_notebook_get_current_page
+#define gtk_notebook_set_page                   gtk_notebook_set_current_page
 #define	gtk_packer_configure                    gtk_packer_set_child_packing
 #define	gtk_paned_gutter_size(p,s)		(void) 0
 #define	gtk_paned_set_gutter_size(p,s)		(void) 0

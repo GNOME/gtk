@@ -363,6 +363,23 @@ gtk_text_layout_set_cursor_direction (GtkTextLayout   *layout,
     }
 }
 
+/**
+ * gtk_text_layout_get_buffer:
+ * @layout: a #GtkTextLayout
+ *
+ * Gets the text buffer used by the layout. See
+ * gtk_text_layout_set_buffer().
+ *
+ * Return value: the text buffer used by the layout.
+ **/
+GtkTextBuffer *
+gtk_text_layout_get_buffer (GtkTextLayout *layout)
+{
+  g_return_val_if_fail (GTK_IS_TEXT_LAYOUT (layout), NULL);
+
+  return layout->buffer;
+}
+
 void
 gtk_text_layout_set_screen_width (GtkTextLayout *layout, gint width)
 {

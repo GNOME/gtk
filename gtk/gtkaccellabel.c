@@ -226,6 +226,24 @@ gtk_accel_label_finalize (GObject *object)
   G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
+/**
+ * gtk_accel_label_get_accel_widget:
+ * @accel_label: a #GtkAccelLabel
+ *
+ * Fetches the widget monitored by this accelerator label. See
+ * gtk_accel_label_set_accel_widget().
+ *
+ * Return value: the widget monitored by the accelerator label,
+ *               or %NULL.
+ **/
+GtkWidget *
+gtk_accel_label_get_accel_widget (GtkAccelLabel *accel_label)
+{
+  g_return_val_if_fail (GTK_IS_ACCEL_LABEL (accel_label), NULL);
+
+  return accel_label->accel_widget;
+}
+
 guint
 gtk_accel_label_get_accel_width (GtkAccelLabel *accel_label)
 {

@@ -149,11 +149,13 @@ GtkType    gtk_window_get_type                 (void) G_GNUC_CONST;
 GtkWidget* gtk_window_new                      (GtkWindowType        type);
 void       gtk_window_set_title                (GtkWindow           *window,
 						const gchar         *title);
+G_CONST_RETURN gchar *gtk_window_get_title     (GtkWindow           *window);
 void       gtk_window_set_wmclass              (GtkWindow           *window,
 						const gchar         *wmclass_name,
 						const gchar         *wmclass_class);
 void       gtk_window_set_role                 (GtkWindow           *window,
                                                 const gchar         *role);
+G_CONST_RETURN gchar *gtk_window_get_role      (GtkWindow           *window);
 void       gtk_window_add_accel_group          (GtkWindow           *window,
 						GtkAccelGroup	    *accel_group);
 void       gtk_window_remove_accel_group       (GtkWindow           *window,
@@ -165,10 +167,13 @@ gboolean   gtk_window_activate_default	       (GtkWindow           *window);
 
 void       gtk_window_set_transient_for        (GtkWindow           *window, 
 						GtkWindow           *parent);
+GtkWindow *gtk_window_get_transient_for        (GtkWindow           *window);
 void       gtk_window_set_type_hint            (GtkWindow           *window, 
 						GdkWindowTypeHint    hint);
+GdkWindowTypeHint gtk_window_get_type_hint     (GtkWindow           *window);
 void       gtk_window_set_destroy_with_parent  (GtkWindow           *window,
                                                 gboolean             setting);
+gboolean   gtk_window_get_destroy_with_parent  (GtkWindow           *window);
 
 void       gtk_window_set_resizeable           (GtkWindow           *window,
                                                 gboolean             resizeable);
@@ -187,18 +192,25 @@ void       gtk_window_set_geometry_hints       (GtkWindow           *window,
 /* gtk_window_set_has_frame () must be called before realizing the window_*/
 void       gtk_window_set_has_frame            (GtkWindow *window, 
 						gboolean   setting);
+gboolean   gtk_window_get_has_frame            (GtkWindow *window);
 void       gtk_window_set_frame_dimensions     (GtkWindow *window, 
 						gint       left,
 						gint       top,
 						gint       right,
 						gint       bottom);
-
-void       gtk_window_set_decorated           (GtkWindow *window,
-                                               gboolean   setting);
+void       gtk_window_get_frame_dimensions     (GtkWindow *window, 
+						gint      *left,
+						gint      *top,
+						gint      *right,
+						gint      *bottom);
+void       gtk_window_set_decorated            (GtkWindow *window,
+                                                gboolean   setting);
+gboolean   gtk_window_get_decorated            (GtkWindow *window);
 
 /* If window is set modal, input will be grabbed when show and released when hide */
 void       gtk_window_set_modal      (GtkWindow *window,
 				      gboolean   modal);
+gboolean   gtk_window_get_modal      (GtkWindow *window);
 GList*     gtk_window_list_toplevels (void);
 
 void     gtk_window_add_mnemonic          (GtkWindow       *window,
@@ -212,6 +224,7 @@ gboolean gtk_window_mnemonic_activate     (GtkWindow       *window,
 					   GdkModifierType  modifier);
 void     gtk_window_set_mnemonic_modifier (GtkWindow       *window,
 					   GdkModifierType  modifier);
+GdkModifierType gtk_window_get_mnemonic_modifier (GtkWindow *window);
 
 void     gtk_window_present       (GtkWindow *window);
 void     gtk_window_iconify       (GtkWindow *window);
@@ -246,6 +259,9 @@ void       gtk_window_set_policy               (GtkWindow           *window,
 void       gtk_window_set_default_size         (GtkWindow           *window,
 						gint                 width,
 						gint                 height);
+void       gtk_window_get_default_size         (GtkWindow           *window,
+						gint                *width,
+						gint                *height);
 
 /* Window groups
  */

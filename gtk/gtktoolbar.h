@@ -215,6 +215,11 @@ void       gtk_toolbar_set_tooltips          (GtkToolbar           *toolbar,
 void       gtk_toolbar_unset_style           (GtkToolbar           *toolbar);
 void       gtk_toolbar_unset_icon_size       (GtkToolbar           *toolbar);
 
+GtkOrientation  gtk_toolbar_get_orientation  (GtkToolbar           *toolbar);
+GtkToolbarStyle gtk_toolbar_get_style        (GtkToolbar           *toolbar);
+GtkIconSize     gtk_toolbar_get_icon_size    (GtkToolbar           *toolbar);
+gboolean        gtk_toolbar_get_tooltips     (GtkToolbar           *toolbar);
+
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */
