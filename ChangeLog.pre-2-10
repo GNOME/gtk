@@ -1,3 +1,7 @@
+Tue Jul 13 01:15:05 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkiconview.c: Some documentation updates.
+
 Tue Jul 13 00:40:29 2004  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 	* gdk/gdkwindow.c (gdk_window_process_updates_internal): Do an

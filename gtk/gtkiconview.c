@@ -1,4 +1,4 @@
-/* gtkiconview.h
+/* gtkiconview.c
  * Copyright (C) 2002, 2004  Anders Carlsson <andersca@gnu.org>
  *
  * This library is free software; you can redistribute it and/or
@@ -300,6 +300,15 @@ gtk_icon_view_class_init (GtkIconViewClass *klass)
   klass->move_cursor = gtk_icon_view_real_move_cursor;
   
   /* Properties */
+  /**
+   * GtkIconView:selection-mode:
+   * 
+   * The ::selection-mode property specifies the selection mode of
+   * icon view. If the mode is #GTK_SELECTION_MULTIPLE, rubberband selection
+   * is enabled, for the other modes, only keyboard selection is possible.
+   *
+   * Since: 2.6
+   */
   g_object_class_install_property (gobject_class,
 				   PROP_SELECTION_MODE,
 				   g_param_spec_enum ("selection_mode",
@@ -309,6 +318,16 @@ gtk_icon_view_class_init (GtkIconViewClass *klass)
 						      GTK_SELECTION_SINGLE,
 						      G_PARAM_READWRITE));
 
+  /**
+   * GtkIconView:pixbuf-column:
+   *
+   * The ::pixbuf-column property contains the number of the model column
+   * containing the pixbufs which are displayed. The pixbuf column must be 
+   * of type #GDK_TYPE_PIXBUF. Setting this property to -1 turns off the
+   * display of pixbufs.
+   *
+   * Since: 2.6
+   */
   g_object_class_install_property (gobject_class,
 				   PROP_PIXBUF_COLUMN,
 				   g_param_spec_int ("pixbuf_column",
@@ -317,6 +336,16 @@ gtk_icon_view_class_init (GtkIconViewClass *klass)
 						     -1, G_MAXINT, -1,
 						     G_PARAM_READWRITE));
 
+  /**
+   * GtkIconView:text-column:
+   *
+   * The ::text-column property contains the number of the model column
+   * containing the texts which are displayed. The text column must be 
+   * of type #G_TYPE_STRING. If this property and the :markup-column 
+   * property are both set to -1, no texts are displayed.   
+   *
+   * Since: 2.6
+   */
   g_object_class_install_property (gobject_class,
 				   PROP_TEXT_COLUMN,
 				   g_param_spec_int ("text_column",
@@ -325,19 +354,31 @@ gtk_icon_view_class_init (GtkIconViewClass *klass)
 						     -1, G_MAXINT, -1,
 						     G_PARAM_READWRITE));
 
+  
+  /**
+   * GtkIconView:markup-column:
+   *
+   * The ::markup-column property contains the number of the model column
+   * containing markup information to be displayed. The markup column must be 
+   * of type #G_TYPE_STRING. If this property and the :text-column property 
+   * are both set to column numbers, it overrides the text column.
+   * If both are set to -1, no texts are displayed.   
+   *
+   * Since: 2.6
+   */
   g_object_class_install_property (gobject_class,
 				   PROP_MARKUP_COLUMN,
 				   g_param_spec_int ("markup_column",
 						     P_("Markup column"),
-						     P_("Model column used to retrieve the text if using pango markup"),
+						     P_("Model column used to retrieve the text if using Pango markup"),
 						     -1, G_MAXINT, -1,
 						     G_PARAM_READWRITE));
   
   g_object_class_install_property (gobject_class,
                                    PROP_MODEL,
                                    g_param_spec_object ("model",
-							P_("Icon List Model"),
-							P_("The model for the icon list"),
+							P_("Icon View Model"),
+							P_("The model for the icon view"),
 							GTK_TYPE_TREE_MODEL,
 							G_PARAM_READWRITE));
   
@@ -655,7 +696,7 @@ gtk_icon_view_realize (GtkWidget *widget)
 				   &attributes, attributes_mask);
   gdk_window_set_user_data (widget->window, widget);
 
-  /* Make the window for the icon list */
+  /* Make the window for the icon view */
   attributes.x = 0;
   attributes.y = 0;
   attributes.width = MAX (icon_view->priv->width, widget->allocation.width);
@@ -2657,6 +2698,8 @@ gtk_icon_view_scroll_to_item (GtkIconView     *icon_view,
  * Creates a new #GtkIconView widget
  * 
  * Return value: A newly created #GtkIconView widget
+ *
+ * Since: 2.6
  **/
 GtkWidget *
 gtk_icon_view_new (void)
@@ -2668,7 +2711,7 @@ gtk_icon_view_new (void)
  * gtk_icon_view_new_with_model:
  * @model: The model.
  * 
- * Creates a new #GtkIconView widget with the model initialized @model.
+ * Creates a new #GtkIconView widget with the model @model.
  * 
  * Return value: A newly created #GtkIconView widget.
  *
@@ -2684,13 +2727,13 @@ gtk_icon_view_new_with_model (GtkTreeModel *model)
 /**
  * gtk_icon_view_get_path_at_pos:
  * @icon_view: A #GtkIconView.
- * @x: The x position to be identified.
+ * @x: The x position to be identified
  * @y: The y position to be identified
  * 
  * Finds the path at the point (@x, @y), relative to widget coordinates.
  * 
  * Return value: The #GtkTreePath corresponding to the icon or %NULL
- * if no icon exists at that coordinate.
+ * if no icon exists at that position.
  *
  * Since: 2.6 
  **/
@@ -2720,7 +2763,7 @@ gtk_icon_view_get_path_at_pos (GtkIconView *icon_view,
  * @func: The funcion to call for each selected icon.
  * @data: User data to pass to the function.
  * 
- * Calls a function for each selected icon. Note that the tree or
+ * Calls a function for each selected icon. Note that the model or
  * selection cannot be modified from within this function.
  *
  * Since: 2.6 
@@ -2775,7 +2818,7 @@ gtk_icon_view_set_selection_mode (GtkIconView      *icon_view,
  * gtk_icon_view_get_selection_mode:
  * @icon_view: A #GtkIconView.
  * 
- * Sets the selection mode of the @icon_view.
+ * Gets the selection mode of the @icon_view.
  *
  * Return value: the current selection mode
  *
@@ -2794,8 +2837,9 @@ gtk_icon_view_get_selection_mode (GtkIconView *icon_view)
  * @icon_view: A #GtkIconView.
  * @model: The model.
  *
- * Sets the model for a #GtkIconView.  If the @icon_view already has a model
- * set, it will remove it before setting the new model.  If @model is %NULL, then
+ * Sets the model for a #GtkIconView.  
+ * If the @icon_view already has a model set, it will remove 
+ * it before setting the new model.  If @model is %NULL, then
  * it will unset the old model.
  *
  * Since: 2.6 
@@ -2917,7 +2961,7 @@ gtk_icon_view_get_model (GtkIconView *icon_view)
  **/
 void
 gtk_icon_view_set_text_column (GtkIconView *icon_view,
-			       int          column)
+			       gint          column)
 {
   if (column == icon_view->priv->text_column)
     return;
@@ -2970,7 +3014,7 @@ gtk_icon_view_get_text_column (GtkIconView  *icon_view)
  * Sets the column with markup information for @icon_view to be
  * @column. The markup column must be of type #G_TYPE_STRING.
  * If the markup column is set to something, it overrides
- * the text column set by #gtk_icon_view_set_text_column.
+ * the text column set by gtk_icon_view_set_text_column().
  *
  * Since: 2.6
  **/
@@ -3033,7 +3077,7 @@ gtk_icon_view_get_markup_column (GtkIconView  *icon_view)
  **/
 void
 gtk_icon_view_set_pixbuf_column (GtkIconView *icon_view,
-				 int          column)
+				 gint         column)
 {
   if (column == icon_view->priv->pixbuf_column)
     return;
@@ -3085,6 +3129,8 @@ gtk_icon_view_get_pixbuf_column (GtkIconView  *icon_view)
  * @path: The #GtkTreePath to be selected.
  * 
  * Selects the row at @path.
+ *
+ * Since: 2.6
  **/
 void
 gtk_icon_view_select_path (GtkIconView *icon_view,
@@ -3111,6 +3157,8 @@ gtk_icon_view_select_path (GtkIconView *icon_view,
  * @path: The #GtkTreePath to be unselected.
  * 
  * Unselects the row at @path.
+ *
+ * Since: 2.6
  **/
 void
 gtk_icon_view_unselect_path (GtkIconView *icon_view,
