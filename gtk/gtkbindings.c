@@ -1130,7 +1130,8 @@ _gtk_bindings_activate_event (GtkObject      *object,
 
   entries = _gtk_key_hash_lookup (key_hash,
 				  event->hardware_keycode,
-				  event->state & BINDING_MOD_MASK () & ~GDK_RELEASE_MASK,
+				  event->state,
+				  BINDING_MOD_MASK () & ~GDK_RELEASE_MASK,
 				  event->group);
   
   handled = gtk_bindings_activate_list (object, entries,

@@ -39,6 +39,7 @@ void        _gtk_key_hash_remove_entry  (GtkKeyHash      *key_hash,
 GSList *    _gtk_key_hash_lookup        (GtkKeyHash      *key_hash,
 					 guint16          hardware_keycode,
 					 GdkModifierType  state,
+					 GdkModifierType  mask,
 					 gint             group);
 GSList *    _gtk_key_hash_lookup_keyval (GtkKeyHash      *key_hash,
 					 guint            keyval,

@@ -6751,7 +6751,8 @@ _gtk_window_activate_key (GtkWindow   *window,
     {
       GSList *entries = _gtk_key_hash_lookup (key_hash,
 					      event->hardware_keycode,
-					      event->state & gtk_accelerator_get_default_mod_mask (),
+					      event->state,
+					      gtk_accelerator_get_default_mod_mask (),
 					      event->group);
       GSList *tmp_list;
 

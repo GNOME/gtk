@@ -1,3 +1,15 @@
+Wed May 21 12:52:01 2003  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkkeyhash.[ch] (_gtk_key_hash_looku): We need 
+	to pass the unmasked state to gdk_keymap_translate_keyboard_state() 
+	to handle the case where a modifier not in the mask
+	(like Num_Lock) changes the key value, so replace
+	the masked state with a state/mask pair. (#106913,
+	Olivier Ripoll)
+
+	* gtk/gtkwindow.c gtk/gtkbinding.c: Update to pass
+	in state/mask pair to _gtk_key_hash_lookup()
+
 Tue May 20 21:58:00 2003  Hidetoshi Tajima  <hidetoshi.tajima@sun.com>
 
 	* modules/input/gtkimcontextxim.c (xim_info_display_closed):
