@@ -1,4 +1,15 @@
+2004-10-24  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkfilechooserdefault.c (location_popup_handler): If the
+	location dialog is brought up by typing '/', insert the slash
+	in the entry.  (#155370, Warren Togami)
+
 2004-10-23  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkfilechooserdefault.c (tree_view_keybinding_cb) 
+	(trap_activate_cb): Accept shift-/ for bringing up the location
+	popup, since German and French keyboards generate such 
+	events.  (#154163, Frederic Crozat)
 
 	* gtk/gtktreeview.c (gtk_tree_view_size_allocate): Invalidate 
 	the window if the tree is empty, to avoid resizing artifacts

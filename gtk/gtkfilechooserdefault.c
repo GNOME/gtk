@@ -331,7 +331,8 @@ static void           gtk_file_chooser_default_get_resizable_hints    (GtkFileCh
 static gboolean       gtk_file_chooser_default_should_respond         (GtkFileChooserEmbed *chooser_embed);
 static void           gtk_file_chooser_default_initial_focus          (GtkFileChooserEmbed *chooser_embed);
 
-static void location_popup_handler (GtkFileChooserDefault *impl);
+static void location_popup_handler (GtkFileChooserDefault *impl,
+				    const gchar           *path);
 static void up_folder_handler      (GtkFileChooserDefault *impl);
 static void down_folder_handler    (GtkFileChooserDefault *impl);
 static void home_folder_handler    (GtkFileChooserDefault *impl);
@@ -516,8 +517,8 @@ gtk_file_chooser_default_class_init (GtkFileChooserDefaultClass *class)
 			     G_SIGNAL_RUN_FIRST | G_SIGNAL_ACTION,
 			     G_CALLBACK (location_popup_handler),
 			     NULL, NULL,
-			     _gtk_marshal_VOID__VOID,
-			     G_TYPE_NONE, 0);
+			     _gtk_marshal_VOID__STRING,
+			     G_TYPE_NONE, 1, G_TYPE_STRING);
   signals[UP_FOLDER] =
     _gtk_binding_signal_new ("up-folder",
 			     G_OBJECT_CLASS_TYPE (class),
@@ -548,12 +549,12 @@ gtk_file_chooser_default_class_init (GtkFileChooserDefaultClass *class)
   gtk_binding_entry_add_signal (binding_set,
 				GDK_l, GDK_CONTROL_MASK,
 				"location-popup",
-				0);
+				1, G_TYPE_STRING, "");
 
   gtk_binding_entry_add_signal (binding_set,
 				GDK_slash, 0,
 				"location-popup",
-				0);
+				1, G_TYPE_STRING, "/");
 
   gtk_binding_entry_add_signal (binding_set,
 				GDK_Up, GDK_MOD1_MASK,
@@ -2653,9 +2654,9 @@ tree_view_keybinding_cb (GtkWidget             *tree_view,
 			 GtkFileChooserDefault *impl)
 {
   if (event->keyval == GDK_slash &&
-      ! (event->state & gtk_accelerator_get_default_mod_mask ()))
+      ! (event->state & (~GDK_SHIFT_MASK & gtk_accelerator_get_default_mod_mask ())))
     {
-      location_popup_handler (impl);
+      location_popup_handler (impl, "/");
       return TRUE;
     }
   
@@ -2830,9 +2831,9 @@ trap_activate_cb (GtkWidget   *widget,
   impl = (GtkFileChooserDefault *) data;
   
   if (event->keyval == GDK_slash &&
-      ! (event->state & gtk_accelerator_get_default_mod_mask ()))
+      ! (event->state & (~GDK_SHIFT_MASK & gtk_accelerator_get_default_mod_mask ())))
     {
-      location_popup_handler (impl);
+      location_popup_handler (impl, "/");
       return TRUE;
     }
 
@@ -4468,7 +4469,8 @@ gtk_file_chooser_default_select_all (GtkFileChooser *chooser)
 {
   GtkFileChooserDefault *impl = GTK_FILE_CHOOSER_DEFAULT (chooser);
   if (impl->select_multiple)
-    gtk_tree_model_foreach (impl->sort_model, maybe_select, impl);
+    gtk_tree_model_foreach (GTK_TREE_MODEL (impl->sort_model), 
+			    maybe_select, impl);
 }
 
 static void
@@ -5598,7 +5600,8 @@ _gtk_file_chooser_default_new (const char *file_system)
 }
 
 static GtkWidget *
-location_entry_create (GtkFileChooserDefault *impl)
+location_entry_create (GtkFileChooserDefault *impl,
+		       const gchar           *path)
 {
   GtkWidget *entry;
 
@@ -5607,17 +5610,26 @@ location_entry_create (GtkFileChooserDefault *impl)
   gtk_entry_set_width_chars (GTK_ENTRY (entry), 30);
   gtk_entry_set_activates_default (GTK_ENTRY (entry), TRUE);
   _gtk_file_chooser_entry_set_file_system (GTK_FILE_CHOOSER_ENTRY (entry), impl->file_system);
-  _gtk_file_chooser_entry_set_base_folder (GTK_FILE_CHOOSER_ENTRY (entry), impl->current_folder);
   _gtk_file_chooser_entry_set_action (GTK_FILE_CHOOSER_ENTRY (entry), impl->action);
-  if (impl->action == GTK_FILE_CHOOSER_ACTION_OPEN
-      || impl->action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER)
-    _gtk_file_chooser_entry_set_file_part (GTK_FILE_CHOOSER_ENTRY (entry), "");
-  else if (impl->action == GTK_FILE_CHOOSER_ACTION_SAVE
-	   || impl->action == GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER)
-    _gtk_file_chooser_entry_set_file_part (GTK_FILE_CHOOSER_ENTRY (entry),
-					   gtk_entry_get_text (GTK_ENTRY (impl->save_file_name_entry)));
+  if (path[0])
+    {
+      _gtk_file_chooser_entry_set_base_folder (GTK_FILE_CHOOSER_ENTRY (entry), 
+					       (const GtkFilePath *)gtk_file_path_new_steal (path));
+      _gtk_file_chooser_entry_set_file_part (GTK_FILE_CHOOSER_ENTRY (entry), path);
+    }
   else
-    g_assert_not_reached ();
+    {
+      _gtk_file_chooser_entry_set_base_folder (GTK_FILE_CHOOSER_ENTRY (entry), impl->current_folder);
+      if (impl->action == GTK_FILE_CHOOSER_ACTION_OPEN
+	  || impl->action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER)
+	_gtk_file_chooser_entry_set_file_part (GTK_FILE_CHOOSER_ENTRY (entry), "");
+      else if (impl->action == GTK_FILE_CHOOSER_ACTION_SAVE
+	       || impl->action == GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER)
+	_gtk_file_chooser_entry_set_file_part (GTK_FILE_CHOOSER_ENTRY (entry),
+					       gtk_entry_get_text (GTK_ENTRY (impl->save_file_name_entry)));
+      else
+	g_assert_not_reached ();
+    }
 
   return GTK_WIDGET (entry);
 }
@@ -5734,7 +5746,8 @@ update_from_entry (GtkFileChooserDefault *impl,
 }
 
 static void
-location_popup_handler (GtkFileChooserDefault *impl)
+location_popup_handler (GtkFileChooserDefault *impl,
+			const gchar           *path)
 {
   GtkWidget *dialog;
   GtkWindow *toplevel;
@@ -5781,13 +5794,20 @@ location_popup_handler (GtkFileChooserDefault *impl)
   label = gtk_label_new_with_mnemonic (_("_Location:"));
   gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, FALSE, 0);
 
-  entry = location_entry_create (impl);
+  entry = location_entry_create (impl, path);
+
   gtk_box_pack_start (GTK_BOX (hbox), entry, TRUE, TRUE, 0);
   gtk_label_set_mnemonic_widget (GTK_LABEL (label), entry);
 
   /* Run */
 
   gtk_widget_show_all (dialog);
+  /* If the dialog is brought up by typing the first characters
+   * of a path, unselect the text in the entry, so that you can
+   * just type on without erasing the initial part.
+   */
+  if (path[0])
+    gtk_editable_select_region (GTK_EDITABLE (entry), -1, -1);
 
   refocus = TRUE;
 
@@ -5871,7 +5891,7 @@ _shortcuts_model_filter_init (ShortcutsModelFilter *model)
 /* GtkTreeDragSource::row_draggable implementation for the shortcuts filter model */
 static gboolean
 shortcuts_model_filter_row_draggable (GtkTreeDragSource *drag_source,
-				      GtkTreePath       *path)
+				      GtkTreePath[0]       *path)
 {
   ShortcutsModelFilter *model;
   int pos;
