@@ -5,6 +5,7 @@
  *
  * Authors: Mark Crichton <crichton@gimp.org>
  *          Federico Mena-Quintero <federico@gimp.org>
+ *          Jonathan Blandford <jrb@redhat.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -110,8 +111,8 @@ image_load_real (FILE *f, TiffData *context)
 	TIFFClose (tiff);
 
 	if (context) {
-		gdk_pixbuf_unref (pixbuf);
 		(* context->update_func) (pixbuf, 0, 0, w, h, context->user_data);
+		gdk_pixbuf_unref (pixbuf);
 	}
 
 	return pixbuf;

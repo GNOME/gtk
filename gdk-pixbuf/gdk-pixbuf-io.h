@@ -44,8 +44,7 @@ typedef void (* ModuleUpdatedNotifyFunc) (GdkPixbuf *pixbuf,
 					  guint width, guint height,
 					  gpointer user_data);
 /* Needed only for animated images. */
-typedef void (* ModuleFrameDoneNotifyFunc) (GdkPixbuf *pixbuf,
-					    gint frame,
+typedef void (* ModuleFrameDoneNotifyFunc) (GdkPixbufFrame *frame,
 					    gpointer user_data);
 typedef void (* ModuleAnimationDoneNotifyFunc) (GdkPixbuf *pixbuf,
 						gpointer user_data);

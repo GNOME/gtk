@@ -1,5 +1,15 @@
 2000-01-07  Jonathan Blandford  <jrb@redhat.com>
 
+	* gdk-pixbuf/gdk-pixbuf-io.c: Added progressive animation loading.
+	* gdk-pixbuf/gdk-pixbuf-io.h: Added progressive animation loading.
+	* gdk-pixbuf/gdk-pixbuf-loader.c: Added progressive animation
+	loading.
+	* gdk-pixbuf/gdk-pixbuf-loader.h: Added progressive animation
+	loading.
+	* gdk-pixbuf/io-gif.c (image_load_increment): I think the
+	ref-counting mess is finally fixed.  Added progressive animation
+	loading. 
+
 	* doc/tmpl/gdk-pixbuf-loader.sgml: much longer long description
 	added. 
 

@@ -35,6 +35,8 @@
 enum {
 	AREA_UPDATED,
 	AREA_PREPARED,
+	FRAME_DONE,
+	ANIMATION_DONE,
 	CLOSED,
 	LAST_SIGNAL
 };
@@ -89,11 +91,11 @@ gtk_marshal_NONE__INT_INT_INT_INT (GtkObject *object, GtkSignalFunc func, gpoint
 
 /**
  * gdk_pixbuf_loader_get_type:
- * @void: 
- * 
+ * @void:
+ *
  * Registers the #GdkPixubfLoader class if necessary, and returns the type ID
  * associated to it.
- * 
+ *
  * Return value: The type ID of the #GdkPixbufLoader class.
  **/
 GtkType
@@ -148,6 +150,22 @@ gdk_pixbuf_loader_class_init (GdkPixbufLoaderClass *class)
 				GTK_TYPE_INT,
 				GTK_TYPE_INT);
 
+	pixbuf_loader_signals[FRAME_DONE] =
+		gtk_signal_new ("frame_done",
+				GTK_RUN_LAST,
+				parent_class->type,
+				GTK_SIGNAL_OFFSET (GdkPixbufLoaderClass, frame_done),
+				gtk_marshal_NONE__NONE,
+				GTK_TYPE_NONE, 0);
+
+	pixbuf_loader_signals[ANIMATION_DONE] =
+		gtk_signal_new ("animation_done",
+				GTK_RUN_LAST,
+				parent_class->type,
+				GTK_SIGNAL_OFFSET (GdkPixbufLoaderClass, animation_done),
+				gtk_marshal_NONE__NONE,
+				GTK_TYPE_NONE, 0);
+
 	pixbuf_loader_signals[CLOSED] =
 		gtk_signal_new ("closed",
 				GTK_RUN_LAST,
@@ -186,6 +204,8 @@ gdk_pixbuf_loader_destroy (GtkObject *object)
 	if (!priv->closed)
 		gdk_pixbuf_loader_close (loader);
 
+	if (priv->animation)
+		gdk_pixbuf_animation_unref (priv->animation);
 	if (priv->pixbuf)
 		gdk_pixbuf_unref (priv->pixbuf);
 
@@ -236,14 +256,40 @@ gdk_pixbuf_loader_update (GdkPixbuf *pixbuf, guint x, guint y, guint width, guin
 			 MIN (height, gdk_pixbuf_get_height (priv->pixbuf)));
 }
 
+static void
+gdk_pixbuf_loader_frame_done (GdkPixbufFrame *frame, gpointer loader)
+{
+	GdkPixbufLoaderPrivate *priv = NULL;
+
+	priv = GDK_PIXBUF_LOADER (loader)->private;
+
+	if (priv->animation == NULL) {
+		priv->animation = g_new0 (GdkPixbufAnimation, 1);
+		priv->animation->n_frames = 0;
+		priv->animation->ref_count = 1;
+	}
+
+	priv->animation->frames = g_list_append (priv->animation->frames, frame);
+	priv->animation->n_frames ++;
+	gtk_signal_emit (GTK_OBJECT (loader),
+			 pixbuf_loader_signals[FRAME_DONE],
+			 frame);
+}
+
+static void
+gdk_pixbuf_loader_animation_done (GdkPixbuf *pixbuf, gpointer loader)
+{
+	gtk_signal_emit (GTK_OBJECT (loader),
+			 pixbuf_loader_signals[ANIMATION_DONE]);
+}
+
 
 
 /**
  * gdk_pixbuf_loader_new:
- * @void: 
- * 
+ *
  * Creates a new pixbuf loader object.
- * 
+ *
  * Return value: A newly-created pixbuf loader.
  **/
 GdkPixbufLoader *
@@ -276,7 +322,11 @@ gdk_pixbuf_loader_load_module(GdkPixbufLoader *loader)
 		return 0;
 	}
 
-	priv->context = (*priv->image_module->begin_load) (gdk_pixbuf_loader_prepare, gdk_pixbuf_loader_update, NULL, NULL, loader);
+	priv->context = (*priv->image_module->begin_load) (gdk_pixbuf_loader_prepare,
+							   gdk_pixbuf_loader_update,
+							   gdk_pixbuf_loader_frame_done,
+							   gdk_pixbuf_loader_animation_done,
+							   loader);
 
 	if (priv->context == NULL) {
 		g_warning("Failed to begin progressive load");
@@ -285,7 +335,7 @@ gdk_pixbuf_loader_load_module(GdkPixbufLoader *loader)
 
 	if( (* priv->image_module->load_increment) (priv->context, priv->header_buf, priv->header_buf_offset) )
 		return priv->header_buf_offset;
- 
+
 	return 0;
 }
 
@@ -297,9 +347,9 @@ gdk_pixbuf_loader_eat_header_write (GdkPixbufLoader *loader, const guchar *buf, 
 
 	nbytes = MIN(LOADER_HEADER_SIZE - priv->header_buf_offset, count);
 	memcpy (priv->header_buf + priv->header_buf_offset, buf, nbytes);
-	    
+
 	priv->header_buf_offset += nbytes;
-	    
+
 	if(priv->header_buf_offset >= LOADER_HEADER_SIZE) {
 		if (gdk_pixbuf_loader_load_module(loader) == 0)
 			return 0;
@@ -385,11 +435,12 @@ gdk_pixbuf_loader_get_pixbuf (GdkPixbufLoader *loader)
 /**
  * gdk_pixbuf_loader_get_animation:
  * @loader: A pixbuf loader
- * 
+ *
  * Queries the GdkPixbufAnimation that a pixbuf loader is currently creating.
  * In general it only makes sense to call this function afer the "area_prepared"
- * signal has been emitted by the loader.
- * 
+ * signal has been emitted by the loader.  If the image is not an animation,
+ * then it will return NULL.
+ *
  * Return value: The GdkPixbufAnimation that the loader is loading, or NULL if
  not enough data has been read to determine the information.
  **/
@@ -438,3 +489,4 @@ gdk_pixbuf_loader_close (GdkPixbufLoader *loader)
 	gtk_signal_emit (GTK_OBJECT (loader),
 			 pixbuf_loader_signals[CLOSED]);
 }
+

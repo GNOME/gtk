@@ -42,6 +42,7 @@
  * -2 -> failure; abort the load
  * -3 -> control needs to be passed back to the main loop
  *        \_ (most of the time returning 0 will get this, but not always)
+ *
  * >1 -> for functions that get a guchar, the char will be returned.
  *
  * -jrb (11/03/1999)
@@ -129,6 +130,8 @@ struct _GifContext
 	/* progressive read, only. */
 	ModulePreparedNotifyFunc prepare_func;
 	ModuleUpdatedNotifyFunc update_func;
+	ModuleFrameDoneNotifyFunc frame_done_func;
+	ModuleAnimationDoneNotifyFunc anim_done_func;
 	gpointer user_data;
 	guchar *buf;
 	guint ptr;
@@ -670,7 +673,7 @@ gif_get_lzw (GifContext *context)
 
 		if (context->prepare_func)
 			(* context->prepare_func) (context->pixbuf, context->user_data);
-		if (context->animation) {
+		if (context->animation || context->frame_done_func) {
 			context->frame = g_new (GdkPixbufFrame, 1);
 			context->frame->x_offset = 0;
 			context->frame->y_offset = 0;
@@ -691,8 +694,10 @@ gif_get_lzw (GifContext *context)
 				break;
 			}
 			context->frame->pixbuf = context->pixbuf;
-			context->animation->n_frames ++;
-			context->animation->frames = g_list_append (context->animation->frames, context->frame);
+			if (context->animation) {
+				context->animation->n_frames ++;
+				context->animation->frames = g_list_append (context->animation->frames, context->frame);
+			}
 		}
 	}
 	dest = gdk_pixbuf_get_pixels (context->pixbuf);
@@ -816,6 +821,10 @@ gif_get_lzw (GifContext *context)
 	}
 
 	if (context->animation && context->state == GIF_GET_NEXT_STEP) {
+		(* context->frame_done_func) (context->frame,
+					      context->user_data);
+
+		gdk_pixbuf_unref (context->pixbuf);
 		context->pixbuf = NULL;
 		context->frame = NULL;
 	}
@@ -1059,6 +1068,8 @@ new_context (void)
 	context->state = GIF_START;
 	context->prepare_func = NULL;
 	context->update_func = NULL;
+	context->frame_done_func = NULL;
+	context->anim_done_func = NULL;
 	context->user_data = NULL;
 	context->buf = NULL;
 	context->amount_needed = 0;
@@ -1099,6 +1110,8 @@ image_begin_load (ModulePreparedNotifyFunc prepare_func,
 	context = new_context ();
 	context->prepare_func = prepare_func;
 	context->update_func = update_func;
+	context->frame_done_func = frame_done_func;
+	context->anim_done_func = anim_done_func;
 	context->user_data = user_data;
 
 	return (gpointer) context;
@@ -1113,7 +1126,9 @@ image_stop_load (gpointer data)
 
 	if (context->pixbuf)
 		gdk_pixbuf_unref (context->pixbuf);
-/*  	g_free (context->buf); */
+	if (context->animation)
+		gdk_pixbuf_animation_unref (context->animation);
+/*  	g_free (context->buf);*/
 	g_free (context);
 }
 

@@ -23,8 +23,11 @@ Rendering a pixbuf to a GDK drawable.
   <important>
     <para>
       Since these functions use GdkRGB for rendering, you must
-      initialize GdkRGB before using any of them.  You can do this by
-      calling gdk_rgb_init() near the beginning of your program.
+      initialize GdkRGB before using any of them.  If you are using
+      GNOME, gnome_init() will do this for you automatically.
+      Otherwise, you can do this by calling gdk_rgb_init() near the
+      beginning of your program.
+      
     </para>
   </important>
 
