@@ -1,3 +1,9 @@
+Thu Sep 17 19:06:47 PDT 1998 Manish Singh <yosh@gimp.org>
+
+	* install-sh
+	* missing
+	* mkinstalldirs: updated to latest automake version
+
 1998-09-17  Raja R Harinath  <harinath@cs.umn.edu>
 
 	* gtk/Makefile.am (source_headers): Move `gtkfeature.h' ...
