@@ -1,3 +1,11 @@
+Tue Jan  8 10:58:04 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk-pixbuf-util.c (gdk_pixbuf_saturate_and_pixelate): 
+	 - Massive cleanup, make actually legible. 
+	 - Fix some clamp-to-range bugs	found by Jim Cape (#68231). 
+	 - Add a g_return_if_fail() if src and dest alpha don't match.
+	 - Allow for src_rowstride != dest_rowstride.
+
 2002-01-04  Hans Breuer  <hans@breuer.org>
 
 	* gdk_pixbuf.def : don't export functions prefixed

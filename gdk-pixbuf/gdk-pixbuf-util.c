@@ -151,8 +151,6 @@ gdk_pixbuf_copy_area (const GdkPixbuf *src_pixbuf,
 
 
 
-#define INTENSITY(r, g, b) ((r) * 0.30 + (g) * 0.59 + (b) * 0.11)
-
 /**
  * gdk_pixbuf_saturate_and_pixelate:
  * @src: source image
@@ -182,7 +180,7 @@ gdk_pixbuf_saturate_and_pixelate(const GdkPixbuf *src,
         g_return_if_fail (GDK_IS_PIXBUF (dest));
         g_return_if_fail (gdk_pixbuf_get_height (src) == gdk_pixbuf_get_height (dest));
         g_return_if_fail (gdk_pixbuf_get_width (src) == gdk_pixbuf_get_width (dest));
-        g_return_if_fail (gdk_pixbuf_get_rowstride (src) == gdk_pixbuf_get_rowstride (dest));
+        g_return_if_fail (gdk_pixbuf_get_has_alpha (src) == gdk_pixbuf_get_has_alpha (dest));
         g_return_if_fail (gdk_pixbuf_get_colorspace (src) == gdk_pixbuf_get_colorspace (dest));
   
         if (saturation == 1.0 && !pixelate) {
@@ -190,60 +188,58 @@ gdk_pixbuf_saturate_and_pixelate(const GdkPixbuf *src,
                         memcpy (gdk_pixbuf_get_pixels (dest),
                                 gdk_pixbuf_get_pixels (src),
                                 gdk_pixbuf_get_height (src) * gdk_pixbuf_get_rowstride (src));
-
-                return;
         } else {
-                gint i, j;
-                gint width, height, has_alpha, rowstride;
-                guchar *target_pixels;
-                guchar *original_pixels;
-                guchar *current_pixel;
+                int i, j, t;
+                int width, height, has_alpha, src_rowstride, dest_rowstride, bytes_per_pixel;
+		guchar *src_line;
+		guchar *dest_line;
+                guchar *src_pixel;
+		guchar *dest_pixel;
                 guchar intensity;
 
                 has_alpha = gdk_pixbuf_get_has_alpha (src);
+		bytes_per_pixel = has_alpha ? 4 : 3;
                 width = gdk_pixbuf_get_width (src);
                 height = gdk_pixbuf_get_height (src);
-                rowstride = gdk_pixbuf_get_rowstride (src);
+                src_rowstride = gdk_pixbuf_get_rowstride (src);
+                dest_rowstride = gdk_pixbuf_get_rowstride (dest);
                 
-                target_pixels = gdk_pixbuf_get_pixels (dest);
-                original_pixels = gdk_pixbuf_get_pixels (src);
-
-                for (i = 0; i < height; i++) {
-                        for (j = 0; j < width; j++) {
-                                current_pixel = original_pixels + i*rowstride + j*(has_alpha?4:3);
-                                intensity = INTENSITY (*(current_pixel), *(current_pixel + 1), *(current_pixel + 2));
-                                if (pixelate && (i+j)%2 == 0) {
-                                        *(target_pixels + i*rowstride + j*(has_alpha?4:3)) = intensity/2 + 127;
-                                        *(target_pixels + i*rowstride + j*(has_alpha?4:3) + 1) = intensity/2 + 127;
-                                        *(target_pixels + i*rowstride + j*(has_alpha?4:3) + 2) = intensity/2 + 127;
-                                } else if (pixelate) {
+                src_line = gdk_pixbuf_get_pixels (src);
+                dest_line = gdk_pixbuf_get_pixels (dest);
+		
 #define DARK_FACTOR 0.7
-                                        *(target_pixels + i*rowstride + j*(has_alpha?4:3)) =
-                                                (guchar) (((1.0 - saturation) * intensity
-                                                           + saturation * (*(current_pixel)))) * DARK_FACTOR;
-                                        *(target_pixels + i*rowstride + j*(has_alpha?4:3) + 1) =
-                                                (guchar) (((1.0 - saturation) * intensity
-                                                           + saturation * (*(current_pixel + 1)))) * DARK_FACTOR;
-                                        *(target_pixels + i*rowstride + j*(has_alpha?4:3) + 2) =
-                                                (guchar) (((1.0 - saturation) * intensity
-                                                           + saturation * (*(current_pixel + 2)))) * DARK_FACTOR;
-                                } else {
-                                        *(target_pixels + i*rowstride + j*(has_alpha?4:3)) =
-                                                (guchar) ((1.0 - saturation) * intensity
-                                                          + saturation * (*(current_pixel)));
-                                        *(target_pixels + i*rowstride + j*(has_alpha?4:3) + 1) =
-                                                (guchar) ((1.0 - saturation) * intensity
-                                                          + saturation * (*(current_pixel + 1)));
-                                        *(target_pixels + i*rowstride + j*(has_alpha?4:3) + 2) =
-                                                (guchar) ((1.0 - saturation) * intensity
-                                                          + saturation * (*(current_pixel + 2)));
-                                }
-              
-                                if (has_alpha)
-                                        *(target_pixels + i*rowstride + j*(has_alpha?4:3) + 3) = *(current_pixel + 3);
-                        }
-                }
+#define INTENSITY(r, g, b) ((r) * 0.30 + (g) * 0.59 + (b) * 0.11)
+#define CLAMP_UCHAR(v) (t = (v), CLAMP (t, 0, 255))
+#define SATURATE(v) ((1.0 - saturation) * intensity + saturation * (v))
 
-                return;
+		for (i = 0 ; i < height ; i++) {
+			src_pixel = src_line;
+			src_line += src_rowstride;
+			dest_pixel = dest_line;
+			dest_line += dest_rowstride;
+
+			for (j = 0 ; j < width ; j++) {
+                                intensity = INTENSITY (src_pixel[0], src_pixel[1], src_pixel[2]);
+                                if (pixelate && (i + j) % 2 == 0) {
+                                        dest_pixel[0] = intensity / 2 + 127;
+                                        dest_pixel[1] = intensity / 2 + 127;
+                                        dest_pixel[2] = intensity / 2 + 127;
+                                } else if (pixelate) {
+                                        dest_pixel[0] = CLAMP_UCHAR ((SATURATE (src_pixel[0])) * DARK_FACTOR);
+					dest_pixel[1] = CLAMP_UCHAR ((SATURATE (src_pixel[1])) * DARK_FACTOR);
+                                        dest_pixel[2] = CLAMP_UCHAR ((SATURATE (src_pixel[2])) * DARK_FACTOR);
+                                } else {
+                                        dest_pixel[0] = CLAMP_UCHAR (SATURATE (src_pixel[0]));
+                                        dest_pixel[1] = CLAMP_UCHAR (SATURATE (src_pixel[1]));
+                                        dest_pixel[2] = CLAMP_UCHAR (SATURATE (src_pixel[2]));
+                                }
+				
+                                if (has_alpha)
+                                        dest_pixel[3] = src_pixel[3];
+
+				src_pixel += bytes_per_pixel;
+				dest_pixel += bytes_per_pixel;
+			}
+                }
         }
 }
