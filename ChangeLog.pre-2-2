@@ -1,3 +1,8 @@
+2002-11-18  Abigail Brady  <morwen@evilmagic.org>
+
+	* gtk/gtkimmodule.c: (_gtk_im_module_list): Sort the list of Input 
+	Modules	by name, keeping Default at top.
+
 Sun Nov 17 13:45:08 2002  Manish Singh  <yosh@gimp.org>
 
 	* gdk/Makefile.am: add -DGDK_DISABLE_DEPRECATED

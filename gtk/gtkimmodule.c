@@ -388,6 +388,13 @@ gtk_im_module_init ()
   g_free (filename);
 }
 
+static gint
+compare_gtkimcontextinfo_name(const GtkIMContextInfo **a,
+			      const GtkIMContextInfo **b)
+{
+  return g_utf8_collate ((*a)->context_name, (*b)->context_name);
+}
+
 /**
  * _gtk_im_module_list:
  * @contexts: location to store an array of pointers to #GtkIMContextInfo
@@ -437,6 +444,9 @@ _gtk_im_module_list (const GtkIMContextInfo ***contexts,
 	  
 	  tmp_list = tmp_list->next;
 	}
+
+      /* fisrt element (Default) should always be at top */
+      qsort ((*contexts)+1, n-1, sizeof (GtkIMContextInfo *), (GCompareFunc)compare_gtkimcontextinfo_name);
     }
 }
 
