@@ -1,3 +1,18 @@
+Wed Feb 25 13:50:05 GMT 1998  Tony Gale <gale@gimp.org>
+
+	* docs/gtkfaq.sgml: added questions on:
+		- Why don't the contents of a button move when 
+		  the button is pressed?
+        	- How do I catch a double click event in 
+ 		  a list widget?         
+     		- When compiling GTK+ I get an error like: 
+		  make: file `Makefile' line 456: Syntax error 
+          Removed questions on menus which are covered in the
+	  tutorial.
+
+	  Added link to HTML versions of FAQ and Tutorial on my
+	  web site.
+
 Tue Feb 24 22:47:01 1998  Owen Taylor  <owt1@cornell.edu>
 
 	* gtk/gtktext.c: Added some support for i18n. The support 

@@ -8,7 +8,7 @@
 
 <!-- NOTE: Use only one author tag, otherwise sgml2txt barfs - TRG --> 
 <author>Nathan Froyd, Tony Gale, Shawn T. Amundson.
-<date>February 20th 1998
+<date>February 25th 1998
 <abstract>
 This document is intended to answer questions that are likely to be 
 frequently asked by programmers using GTK+ or people who are just
@@ -83,13 +83,15 @@ reference material for both GTK and GDK, and this FAQ.
 
 There is also a GTK+ Tutorial which can be found at 
 <htmlurl url="http://www.levien.com/~slow/gtk/" 
-name="http://www.levien.com/~slow/gtk/">
+name="http://www.levien.com/~slow/gtk/">.
 
-In addition, if you are
-on the web, you can browse all of the above by going to 
+The Tutorial and FAQ can also be found at
+<htmlurl url="http://www.geocities.com/ResearchTriangle/Lab/4299/"
+name="http://www.geocities.com/ResearchTriangle/Lab/4299/">.
+       
+In addition, you can find links to all of these documents by going to
 <htmlurl url="http://www.gimp.org/gtk/docs" 
-name="http://www.gimp.org/gtk/docs">, where they
-are already converted to HTML format.
+name="http://www.gimp.org/gtk/docs">.
 
 <!-- ----------------------------------------------------------------- -->
 <sect1>Is there a mailing list (or mailing list archive) for GTK+?
@@ -132,9 +134,10 @@ Bug reports should be sent to the GTK+ mailing list.
 <p>
 Some applications which use GTK+ are:
 <itemize>
-<item>GIMP (<htmlurl url="http://www.XCF.Berkeley.EDU/~gimp/" name="http://www.XCF.Berkeley.EDU/~gimp/"> ), 
+<item>GIMP (<htmlurl url="http://www.XCF.Berkeley.EDU/~gimp/" 
+                  name="http://www.XCF.Berkeley.EDU/~gimp/"> ), 
       an image manipulation program
-<item>gsumi (<htmlurl url="http://www.msc.cornell.edu/~otaylor/gsumi/gsumi.html" 
+<item>Gsumi (<htmlurl url="http://www.msc.cornell.edu/~otaylor/gsumi/gsumi.html" 
                   name="http://www.msc.cornell.edu/~otaylor/gsumi/gsumi.html">),
       a fun B+W doodling program with XInput support.
 <item>GUBI (<htmlurl url="http://www.SoftHome.net/pub/users/timj/gubi/index.htm"
@@ -166,11 +169,14 @@ there.
 <sect>How to find, configure, install, and troubleshoot GTK+
 
 <!-- ***************************************************************** -->
+
+<!-- ----------------------------------------------------------------- -->
 <sect1>What do I need to run GTK+?
 <p>
 To compile GTK+, all you need is a C compiler (gcc) and the X Window System
 and associated libraries on your system.
 
+<!-- ----------------------------------------------------------------- -->
 <sect1>Where can I get GTK+?
 <p>
 The canonical site is:
@@ -188,6 +194,16 @@ make
 </verb>
 in the gtk+-version/ directory.
 
+<!-- ----------------------------------------------------------------- -->
+<sect1>When compiling GTK+ I get an error like: 
+<tt/make: file `Makefile' line 456: Syntax error/
+<p>
+Make sure that you are using GNU make (use <tt/make -v/ to check). There are
+many weird and wonderful versions of make out there, and not all of them
+handle the automatically generated Makefiles.
+
+<!-- ----------------------------------------------------------------- -->
+ 
 <sect1>I've compiled and installed GTK+, but I can't get any programs to link
 with it!
 <p>
@@ -223,6 +239,7 @@ and reinstall gtk+.
 <sect>Development of GTK+
 <!-- ***************************************************************** -->
 
+<!-- ----------------------------------------------------------------- -->
 <sect1>When will it reach version 1.0?
 <p>
 The file 'TODO' in the gtk+ distribution lists the things that need to be done
@@ -311,6 +328,11 @@ ftp://ftp.gimp.org/pub/gtk/gtk--/
 </verb>
 <p>
 
+<item>Perl bindings
+<verb>
+ftp://ftp.gimp.org/pub/gtk/perl
+</verb>
+   
 <item>Guile bindings. The home page is at:
 <verb>
 http://www.ping.de/sites/zagadka/guile-gtk/
@@ -335,11 +357,6 @@ http://www.acs.ucalgary.cs/~nashceme/python-gtk/
 If you try python-gtk and don't like it, there's also pygtk located at:
 <verb>
 ftp://ftp.gimp.org/pub/gtk/python/
-
-<item>
-If you're a perl fanatic, you might enjoy using the perl-gtk interface at:
-<verb>
-ftp://ftp.gimp.org/pub/gtk/perl/
 </verb>
 
 <item>
@@ -454,7 +471,7 @@ code where you are changing a lot of stuff. This will result in much faster
 speed since it will prevent resizing of the entire widget hierarchy. 
 
 <!-- ----------------------------------------------------------------- -->
-<sect1>How do I catach a double click event in a list widget?
+<sect1>How do I catch a double click event in a list widget?
 <p>
 Tim Janik wrote to gtk-list (slightly modified):
 
@@ -476,11 +493,11 @@ signal_handler_event(GtkWiget *widget, GdkEvenButton *event, gpointer func_data)
 }
 </verb></tscreen>
 
-And connect the handler to your object:        
+And connect the handler to your object:
 
 <tscreen><verb>
 {
-  /* list, list item init stuff */
+  /* list, list item init stuff */     
 
   gtk_signal_connect(GTK_OBJECT(list_item),
                      "button_press_event",
@@ -497,7 +514,7 @@ And connect the handler to your object:
   /* something else */
 }
 </verb></tscreen>
-         
+                          
 <!-- ----------------------------------------------------------------- -->
 <sect1>How do I find out about the selection of a GtkList?
 <p>
@@ -632,110 +649,31 @@ copy gtkviewport.c and strip out the adjustment and shadow
 functionality (perhaps you could call it GtkClipper).
 
 <!-- ----------------------------------------------------------------- -->
-<sect1>How do I make menus?
+<sect1>Why don't the contents of a button move when the button is pressed? Here's a patch to make it work that way...
 <p>
-Sascha Ziemann wrote to the gtk-list:  (slightly modified)
-<quote>
-First you have to write a function for every menu: (the translate
-function returns simple strings)
-</quote>
-<tscreen><verb>
-/***********************************************************************
-** Create the File-Menu
-*/
-GtkWidget* create_file_menu (GtkWidget *window)
-{
-  GtkWidget *menu;
-  GtkWidget *submenu;
-  GtkWidget *menuitem;
-  GSList *group;
+From: Peter Mattis
 
-  menu = gtk_menu_new ();
-  submenu = NULL;
-  group = NULL;
+The reason buttons don't move their child down and to the right when
+they are depressed is because I don't think that's what is happening
+visually. My view of buttons is that you are looking at them straight
+on. That is, the user interface lies in a plane and you're above it
+looking straight at it. When a button gets pressed it moves directly
+away from you. To be absolutely correct I guess the child should
+actually shrink a tiny amount. But I don't see why the child should
+shift down and to the left. Remember, the child is supposed to be
+attached to the buttons surface. Its not good for it to appear like
+the child is slipping on the surface of the button.
 
-  menuitem = gtk_menu_item_new_with_label(translate("file-new-label"));
-  gtk_menu_append (GTK_MENU (menu), menuitem);
-  gtk_widget_show (menuitem);
-  
-  menuitem = gtk_menu_item_new_with_label(translate("file-open-label"));
-  gtk_menu_append (GTK_MENU (menu), menuitem);
-  gtk_widget_show (menuitem);
-  
-  gtk_menu_line_new(GTK_MENU(menu));
-
-  menuitem = gtk_menu_item_new_with_label(translate("file-save-label"));
-  gtk_menu_append (GTK_MENU (menu), menuitem);
-  gtk_widget_show (menuitem);
-  
-  menuitem = gtk_menu_item_new_with_label(translate("file-saveas-label"));
-  gtk_menu_append (GTK_MENU (menu), menuitem);
-  gtk_widget_show (menuitem);
-  
-  menuitem = gtk_menu_item_new_with_label(translate("file-saveall-label"));
-  gtk_menu_append (GTK_MENU (menu), menuitem);
-  gtk_widget_show (menuitem);
-  
-  gtk_menu_line_new(GTK_MENU(menu));
-
-  menuitem = gtk_menu_item_new_with_label(translate("file-export-label"));
-  gtk_menu_append (GTK_MENU (menu), menuitem);
-  gtk_widget_show (menuitem);
-  
-  return menu;
-}
-</verb></tscreen>
-<quote>
-And in your main window creation function you create a menubar in a box.
-</quote>
-<tscreen><verb>
-  /*
-  ** base frame
-  */
-  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-  gtk_signal_connect (GTK_OBJECT (window), "destroy",
-                      (GtkSignalFunc) destroy_program,
-                      &amp
-window);
-  gtk_widget_set_name (window, "EDINI");
-  gtk_widget_set_uposition (window, 20, 20);
-  base_frame_box = gtk_vbox_new (FALSE, 10);
-  gtk_container_add (GTK_CONTAINER (window), base_frame_box);
-  gtk_widget_show (base_frame_box);
-
-  /*
-  ** the menu bar
-  */
-  menubar = gtk_menu_bar_new ();
-  gtk_box_pack_start (GTK_BOX (base_frame_box), menubar, FALSE, TRUE, 0);
-  gtk_widget_show (menubar);
-
-  menu = create_file_menu(window);
-
-  menuitem = gtk_menu_item_new_with_label(translate("file-menu-label"));
-  gtk_menu_item_set_submenu (GTK_MENU_ITEM (menuitem), menu);
-  gtk_menu_bar_append (GTK_MENU_BAR (menubar), menuitem);
-  gtk_widget_show (menuitem);
-
-</verb></tscreen>
-
-<!-- ----------------------------------------------------------------- -->
-<sect1>Is there a better way to do the menus?
-<p>
-Jay Painter wrote to the gtk-list: (slightly modified)
-<quote>
-The best way to make menus is with gtk_menu_factory where you create a
-structure with all your menus in it, feed it to a function, and all your
-menus get created for you without 50 calls to gtk_menuitem_new.  You can
-find a good example in the GZilla code.  I still don't know exaclty what
-all the fields are in the structure, but NULL is always a good choice for
-those.  :)
-</quote>
-
+On a more practical note, I did implement this at one point and
+determined it didn't look good and removed it.
+     
 <!-- ----------------------------------------------------------------- -->
 <sect1>How can I define a separation line in a menu? 
 <p>
-Just insert an empty menu item: 
+See the <htmlurl url="http://www.levien.com/~slow/gtk/"
+name="Tutorial"> for information on how to create menus.
+However, to create a separation line in a menu, just insert an
+empty menu item:
 
 <tscreen><verb>
 menuitem = gtk_menu_item_new();
