@@ -8368,7 +8368,9 @@ void
 gtk_tree_view_expand_all (GtkTreeView *tree_view)
 {
   g_return_if_fail (GTK_IS_TREE_VIEW (tree_view));
-  g_return_if_fail (tree_view->priv->tree != NULL);
+
+  if (tree_view->priv->tree == NULL)
+    return;
 
   _gtk_rbtree_traverse (tree_view->priv->tree,
 			tree_view->priv->tree->root,
@@ -8462,7 +8464,9 @@ gtk_tree_view_collapse_all (GtkTreeView *tree_view)
   guint *indices;
 
   g_return_if_fail (GTK_IS_TREE_VIEW (tree_view));
-  g_return_if_fail (tree_view->priv->tree != NULL);
+
+  if (tree_view->priv->tree == NULL)
+    return;
 
   path = gtk_tree_path_new ();
   gtk_tree_path_down (path);

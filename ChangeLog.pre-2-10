@@ -1,3 +1,9 @@
+2002-02-26  Richard Hult  <rhult@codefactory.se>
+
+	* gtk/gtktreeview.c (gtk_tree_view_expand_all): Fix
+	#72586. Silently accept empty tree.
+	(gtk_tree_view_collapse_all): Likewise.
+
 2002-02-26  Tor Lillqvist  <tml@iki.fi>
 
 	* gtk/gtk.def: A couple of name changes.
