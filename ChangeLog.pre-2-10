@@ -1,5 +1,8 @@
 2005-04-05  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkmenushell.c (gtk_menu_shell_activate_item): Keep a 
+	reference to the item.  (#167920, Hazael Maldonado Torres)
+
 	* gtk/gtktreeview.c (gtk_tree_view_set_search_column): Add some
 	more docs on interactive search.
 
