@@ -57,7 +57,7 @@ while test $# -gt 0; do
       libdirs=-L@libdir@
       for i in $glib_libs ; do
         if test $i != -L@libdir@ ; then
-          if test -z "$my_glib_lib" ; then
+          if test -z "$my_glib_libs" ; then
             my_glib_libs="$i"
           else
             my_glib_libs="$my_glib_libs $i"
