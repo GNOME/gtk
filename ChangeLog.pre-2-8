@@ -1,7 +1,10 @@
 Wed Nov 12 21:40:10 2003  Matthias Clasen  <maclas@gmx.de>
 
-	Changes to improve menu positioning on Xinerama (#108328):
+	Changes to improve menu positioning on Xinerama (#108328, #126150):
 	
+	* gtk/gtkmenuitem.c (gtk_menu_item_position_menu): Use the event 
+	window of the menuitem to determine the monitor. This fixes some
+
 	* gtk/gtkmenu.c (struct _GtkMenuPrivate): Add a menu_num field
 	to store the monitor on which the menu is to be positioned.
 

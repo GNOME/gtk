@@ -1024,7 +1024,7 @@ gtk_menu_item_position_menu (GtkMenu  *menu,
   theight = GTK_WIDGET (menu)->requisition.height;
 
   screen = gtk_widget_get_screen (widget);
-  monitor_num = gdk_screen_get_monitor_at_window (screen, widget->window);
+  monitor_num = gdk_screen_get_monitor_at_window (screen, menu_item->event_window);
   if (monitor_num < 0)
     monitor_num = 0;
   gdk_screen_get_monitor_geometry (screen, monitor_num, &monitor);
