@@ -1,3 +1,16 @@
+Sun Sep 03 00:47:08 2000  George Lebl <jirka@5z.com>
+
+	* gtk/gtkwidget.h:  Add some documenting comments about 
+	  GTK_CAN_DEFAULT, GTK_HAS_DEFAULT and GTK_RECEIVES_DEFAULT
+	  just as owen said on irc.
+
+	* gtk/gtkwindow.c (gtk_window_set_default):  Don't blindly
+	  set HAS_DEFAULT.  Only set it if there isn't another window
+	  holding it (a focus window which RECEIVES_DEFAULT) and only unset
+	  it if the widget is not the focused window with RECEIVES_DEFAULT.
+	  This fixes weird double default bugs in dialogs which has things
+	  call gtk_window_set_default at times.
+
 Fri Sep  1 22:39:07 2000  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkmenu.[ch] TODO.xml: Apply patch from

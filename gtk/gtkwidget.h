@@ -53,14 +53,25 @@ typedef enum
   GTK_PARENT_SENSITIVE = 1 << 10,
   GTK_CAN_FOCUS        = 1 << 11,
   GTK_HAS_FOCUS        = 1 << 12,
+
+  /* widget is allowed to receive the default via gtk_widget_grab_default
+   * and will reserve space to draw the default if possible */
   GTK_CAN_DEFAULT      = 1 << 13,
+
+  /* the widget currently is receiving the default action and should be drawn
+   * appropriately if possible */
   GTK_HAS_DEFAULT      = 1 << 14,
+
   GTK_HAS_GRAB	       = 1 << 15,
   GTK_RC_STYLE	       = 1 << 16,
   GTK_COMPOSITE_CHILD  = 1 << 17,
   GTK_NO_REPARENT      = 1 << 18,
   GTK_APP_PAINTABLE    = 1 << 19,
+
+  /* the widget when focused will receive the default action and have
+   * HAS_DEFAULT set even if there is a different widget set as default */
   GTK_RECEIVES_DEFAULT = 1 << 20,
+
   GTK_DOUBLE_BUFFERED  = 1 << 21
 } GtkWidgetFlags;
 
