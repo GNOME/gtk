@@ -1,3 +1,14 @@
+Wed Mar 10 01:49:27 2004  Matthias Clasen  <maclas@gmx.de>
+
+	Fix #136614 in a better way:
+	
+	* gtk/gtkoptionmenu.c (gtk_option_menu_init): Undo the last change.
+	* gtk/gtkbutton.c (struct _GtkButtonPrivate): Add a flag, align_set.
+	* gtk/gtkbutton.c (gtk_button_init): Initialize align_set to 0.
+	* gtk/gtkbutton.c (maybe_set_alignment): Rework to only set the
+	alignment if priv->align_set is set.
+	* gtk/gtkbutton.c (gtk_button_set_alignment): Set align_set to 1.
+
 Wed Mar 10 01:21:05 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkcombobox.c (gtk_combo_box_menu_position_below): Place

@@ -78,6 +78,7 @@ struct _GtkButtonPrivate
   GtkSettings *settings;
   guint        show_image_connection;
   GtkWidget   *image;
+  guint        align_set : 1;
 };
 
 static void gtk_button_class_init     (GtkButtonClass   *klass);
@@ -404,6 +405,7 @@ gtk_button_init (GtkButton *button)
 
   priv->xalign = 0.5;
   priv->yalign = 0.5;
+  priv->align_set = 0;
 }
 
 static void
@@ -452,19 +454,25 @@ gtk_button_child_type  (GtkContainer     *container)
 }
 
 static void
-maybe_set_alignment (GtkWidget *widget,
-		     gfloat     xalign,
-		     gfloat     yalign)
+maybe_set_alignment (GtkButton *button,
+		     GtkWidget *widget)
 {
+  GtkButtonPrivate *priv = GTK_BUTTON_GET_PRIVATE (button);
+
   if (GTK_IS_MISC (widget))
     {
       GtkMisc *misc = GTK_MISC (widget);
-      gtk_misc_set_alignment (misc, xalign, yalign);
+      
+      if (priv->align_set)
+	gtk_misc_set_alignment (misc, priv->xalign, priv->yalign);
     }
   else if (GTK_IS_ALIGNMENT (widget))
     {
       GtkAlignment *alignment = GTK_ALIGNMENT (widget);
-      gtk_alignment_set (alignment, xalign, yalign, alignment->xscale, alignment->yscale);
+
+      if (priv->align_set)
+	gtk_alignment_set (alignment, priv->xalign, priv->yalign, 
+			   alignment->xscale, alignment->yscale);
     }
 }
 
@@ -472,10 +480,8 @@ static void
 gtk_button_add (GtkContainer *container,
 		GtkWidget    *widget)
 {
-  GtkButton *button = GTK_BUTTON (container);
-  GtkButtonPrivate *priv = GTK_BUTTON_GET_PRIVATE (button);
+  maybe_set_alignment (GTK_BUTTON (container), widget);
 
-  maybe_set_alignment (widget, priv->xalign, priv->yalign);
   GTK_CONTAINER_CLASS (parent_class)->add (container, widget);
 }
 
@@ -608,8 +614,11 @@ gtk_button_construct_child (GtkButton *button)
 		    NULL);
       hbox = gtk_hbox_new (FALSE, 2);
 
-      align = gtk_alignment_new (priv->xalign, priv->yalign, 0.0, 0.0);
-      
+      if (priv->align_set)
+	align = gtk_alignment_new (priv->xalign, priv->yalign, 0.0, 0.0);
+      else
+	align = gtk_alignment_new (0.5, 0.5, 0.0, 0.0);
+	
       gtk_box_pack_start (GTK_BOX (hbox), priv->image, FALSE, FALSE, 0);
       gtk_box_pack_end (GTK_BOX (hbox), label, FALSE, FALSE, 0);
       
@@ -628,7 +637,8 @@ gtk_button_construct_child (GtkButton *button)
   else
     label = gtk_label_new (button->label_text);
   
-  gtk_misc_set_alignment (GTK_MISC (label), priv->xalign, priv->yalign);
+  if (priv->align_set)
+    gtk_misc_set_alignment (GTK_MISC (label), priv->xalign, priv->yalign);
 
   gtk_widget_show (label);
   gtk_container_add (GTK_CONTAINER (button), label);
@@ -1465,8 +1475,9 @@ gtk_button_set_alignment (GtkButton *button,
 
   priv->xalign = xalign;
   priv->yalign = yalign;
+  priv->align_set = 1;
 
-  maybe_set_alignment (GTK_BIN (button)->child, xalign, yalign);
+  maybe_set_alignment (button, GTK_BIN (button)->child);
 
   g_object_freeze_notify (G_OBJECT (button));
   g_object_notify (G_OBJECT (button), "xalign");
