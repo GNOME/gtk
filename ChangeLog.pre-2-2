@@ -1,3 +1,7 @@
+Mon Oct 16 11:39:29 2000  Tim Janik  <timj@gtk.org>
+
+	* configure.in: up version number to 1.2.9, interface 4, binary 9.
+
 2000-10-13  Yukihiro Nakai  <nakai@gnome.gr.jp>
 
 	* configure.in: Add zh_CN.GB2312 (Chinese GB2312) to
