@@ -1,5 +1,10 @@
 2001-10-23  Havoc Pennington  <hp@redhat.com>
 
+	* gtk/gtktextiter.c (test_log_attrs): handle case where offset ==
+	0 and char_len == 0, bug #61729
+
+2001-10-23  Havoc Pennington  <hp@redhat.com>
+
 	* gtk/gtktextiter.c (gtk_text_iter_forward_cursor_positions): fix
 	return value, #61714 (Vitaly Tishkov)
 	(gtk_text_iter_backward_sentence_starts): ditto

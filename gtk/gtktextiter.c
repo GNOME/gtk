@@ -2869,7 +2869,7 @@ test_log_attrs (const GtkTextIter *iter,
    * for one past the end
    */
   
-  if (offset <= char_len)
+  if (attrs && offset <= char_len)
     result = (* func) (attrs, offset, 0, char_len);
 
   return result;
