@@ -4423,6 +4423,7 @@ gtk_window_move_resize (GtkWindow *window)
        */
       info->position_constraints_changed = FALSE;
       window->need_default_position = FALSE;
+      info->initial_pos_set = FALSE;
 
       /* for GTK_RESIZE_QUEUE toplevels, we are now awaiting a new
        * configure event in response to our resizing request.
