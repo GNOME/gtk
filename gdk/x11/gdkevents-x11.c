@@ -650,11 +650,23 @@ gdk_event_translate (GdkEvent *event,
       
       /* If we get a ButtonPress event where the button is 4 or 5,
 	 it's a Scroll event */
-      if (xevent->xbutton.button == 4 || xevent->xbutton.button == 5)
-	{
+      switch (xevent->xbutton.button)
+        {
+        case 4: /* up */
+        case 5: /* down */
+        case 6: /* left */
+        case 7: /* right */
 	  event->scroll.type = GDK_SCROLL;
-	  event->scroll.direction = (xevent->xbutton.button == 4) ? 
-	    GDK_SCROLL_UP : GDK_SCROLL_DOWN;
+
+          if (xevent->xbutton.button == 4)
+            event->scroll.direction = GDK_SCROLL_UP;
+          else if (xevent->xbutton.button == 5)
+            event->scroll.direction = GDK_SCROLL_DOWN;
+          else if (xevent->xbutton.button == 6)
+            event->scroll.direction = GDK_SCROLL_LEFT;
+          else
+            event->scroll.direction = GDK_SCROLL_RIGHT;
+
 	  event->scroll.window = window;
 	  event->scroll.time = xevent->xbutton.x;
 	  event->scroll.x = xevent->xbutton.x + xoffset;
@@ -663,9 +675,9 @@ gdk_event_translate (GdkEvent *event,
 	  event->scroll.y_root = (gfloat)xevent->xbutton.y_root;
 	  event->scroll.state = (GdkModifierType) xevent->xbutton.state;
 	  event->scroll.device = gdk_core_pointer;
-	}
-      else
-	{
+          break;
+          
+        default:
 	  event->button.type = GDK_BUTTON_PRESS;
 	  event->button.window = window;
 	  event->button.time = xevent->xbutton.time;
@@ -679,6 +691,7 @@ gdk_event_translate (GdkEvent *event,
 	  event->button.device = gdk_core_pointer;
 	  
 	  gdk_event_button_generate (event);
+          break;
 	}
 
       break;
