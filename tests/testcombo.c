@@ -916,25 +916,13 @@ main (int argc, char **argv)
         gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (cellview),
                                     renderer,
                                     FALSE);
-        g_value_init (&value, GDK_TYPE_PIXBUF);
-        g_value_set_instance (&value, pixbuf);
-        gtk_cell_view_set_values (GTK_CELL_VIEW (cellview),
-                                  renderer,
-                                  "pixbuf", &value,
-                                  NULL);
-        g_value_unset (&value);
+        g_object_set (renderer, "pixbuf", pixbuf, NULL);
 
         renderer = gtk_cell_renderer_text_new ();
         gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (cellview),
                                     renderer,
                                     TRUE);
-        g_value_init (&value, G_TYPE_STRING);
-        g_value_set_string (&value, "la la la");
-        gtk_cell_view_set_values (GTK_CELL_VIEW (cellview),
-                                  renderer,
-                                  "text", &value,
-                                  NULL);
-        g_value_unset (&value);
+        g_object_set (renderer, "text", "la la la", NULL);
         gtk_container_add (GTK_CONTAINER (boom), cellview);
 
         /* GtkComboBox list */

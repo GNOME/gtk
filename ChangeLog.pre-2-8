@@ -1,5 +1,11 @@
 2004-12-14  Matthias Clasen  <mclasen@redhat.com>
 
+	* tests/testcombo.c (main): Don't use gtk_cell_renderer_set_values().
+
+	* gtk/gtk.symbols: 
+	* gtk/gtkcellview.[hc]: Remove gtk_cell_renderer_set_value[s]
+	for now.
+
 	* configure.in: Bump version to 2.6.0
 
 	* NEWS: Updates
