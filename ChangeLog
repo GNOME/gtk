@@ -1,5 +1,7 @@
 2002-09-05  jacob berkman  <jacob@ximian.com>
 
+	* configure.in: fix non-solaris xinerama checks (bug #89732)
+
 	* autogen.sh: get automake-1.4 changes from -2-0 branch
 
 2002-09-05  Tor Lillqvist  <tml@iki.fi>

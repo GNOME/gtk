@@ -1058,6 +1058,9 @@ if test "x$gdktarget" = "xx11"; then
 
   # Check for Xinerama extension (Solaris impl or Xfree impl)
 
+  gtk_save_cppflags="$CPPFLAGS"
+  CPPFLAGS="$CPPFLAGS $x_cflags"
+
   case "$host" in
       *-*-solaris*)
           # Check for solaris
@@ -1070,7 +1073,7 @@ if test "x$gdktarget" = "xx11"; then
 		    x_extra_libs="-lXext $x_extra_libs"
 		fi
 		AC_DEFINE(HAVE_SOLARIS_XINERAMA)
-		AC_DEFINE(HAVE_XINERAMA), use_solaris_xinerama=no)
+		AC_DEFINE(HAVE_XINERAMA), use_solaris_xinerama=no, -lXext $x_libs_for_checks)
 	  fi	
 	  AC_MSG_CHECKING(for Xinerama support on Solaris)
 	  AC_MSG_RESULT($use_solaris_xinerama);
@@ -1079,7 +1082,7 @@ if test "x$gdktarget" = "xx11"; then
 	  # Check for XFree
 	  use_xfree_xinerama=yes
 	  AC_CHECK_LIB(Xinerama, XineramaQueryExtension,
-	      [AC_CHECK_HEADER(extensions/Xinerama.h, 
+	      [AC_CHECK_HEADER(X11/extensions/Xinerama.h, 
 		  x_extra_libs="-lXinerama $x_extra_libs"   
 		  if test -z "`echo $x_extra_libs $x_libs | grep "\-lXext" 2> /dev/null`"; then
 		      x_extra_libs="-lXext $x_extra_libs"
@@ -1087,11 +1090,13 @@ if test "x$gdktarget" = "xx11"; then
 		  AC_DEFINE(HAVE_XFREE_XINERAMA)
 		  AC_DEFINE(HAVE_XINERAMA), 
 		  use_xfree_xinerama=no)],
-	      use_xfree_xinerama=no)
+	      use_xfree_xinerama=no, -lXext $x_libs_for_checks)
 	  AC_MSG_CHECKING(for Xinerama support on XFree86)
 	  AC_MSG_RESULT($use_xfree_xinerama);	    
           ;;
   esac
+
+  CPPFLAGS="$gtk_save_cppflags"
 
   # Check for shaped window extension
 
