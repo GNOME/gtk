@@ -11369,7 +11369,8 @@ gtk_tree_view_remove_widget (GtkCellEditable *cell_editable,
   _gtk_tree_view_column_stop_editing (tree_view->priv->edited_column);
   tree_view->priv->edited_column = NULL;
 
-  gtk_widget_grab_focus (GTK_WIDGET (tree_view));
+  if (GTK_WIDGET_HAS_FOCUS (cell_editable))
+    gtk_widget_grab_focus (GTK_WIDGET (tree_view));
 
   gtk_container_remove (GTK_CONTAINER (tree_view),
 			GTK_WIDGET (cell_editable));
