@@ -1,3 +1,11 @@
+2003-01-12  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/Makefile.am (libgdk_win32_2_0_la_DEPENDENCIES): Depend on
+	gdk.def.
+
+	* gdk/gdk.def
+	* gtk/gtk.def: Add some missing entries. Thanks to Kenichi SUTO.
+
 2003-01-09  Tor Lillqvist  <tml@iki.fi>
 
 	* gdk/win32/gdkwindow-win32.c (gdk_window_set_skip_taskbar_hint):

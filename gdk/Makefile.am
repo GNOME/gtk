@@ -179,6 +179,7 @@ libgdk_linux_fb_2_0_la_LIBADD = linux-fb/libgdk-linux-fb.la @GDK_DEP_LIBS@
 libgdk_win32_2_0_la_LIBADD = \
 	win32/libgdk-win32.la $(wintab_lib) $(ie55uuid_lib) \
 	@GDK_DEP_LIBS@
+libgdk_win32_2_0_la_DEPENDENCIES = gdk.def
 
 lib_LTLIBRARIES = $(gdktargetlib)
 
