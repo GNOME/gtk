@@ -1,5 +1,10 @@
 2004-08-07  Tor Lillqvist  <tml@iki.fi>
 
+	* gdk/win32/gdkkeys-win32.c (update_keymap): Don't hardcode
+	mapping of VK_DECIMAL to GDK_KP_Decimal. Instead, let ToAsciiEx()
+	map it to what's printed on the keypad decimal key for the current
+	input locale (keyboard layout). (#149404)
+
 	* gdk/win32/gdkevents-win32.c (handle_configure_event,
 	gdk_event_translate:WM_WINDOWPOSCHANGED): Add _gdk_offset_{x,y} to
 	top-level window coordinates, not just in generated
