@@ -20,7 +20,6 @@
 
 #include <stdio.h>
 #include <string.h>
-#include <time.h>
 #include <gtk/gtk.h>
 
 #define DEF_PAD 10
@@ -55,15 +54,15 @@ void calendar_date_to_string (CalendarData *data,
 			      char         *buffer,
 			      gint          buff_len)
 {
-  struct tm tm;
-  time_t time;
+  GDate *date;
+  guint year, month, day;
 
-  memset (&tm, 0, sizeof (tm));
-  gtk_calendar_get_date (GTK_CALENDAR (data->window),
-			 &tm.tm_year, &tm.tm_mon, &tm.tm_mday);
-  tm.tm_year -= TM_YEAR_BASE;
-  time = mktime (&tm);
-  strftime (buffer, buff_len - 1, "%x", gmtime (&time));
+  gtk_calendar_get_date (GTK_CALENDAR(data->window),
+			 &year, &month, &day);
+  date = g_date_new_dmy (day, month + 1, year);
+  g_date_strftime (buffer, buff_len-1, "%x", date);
+
+  g_date_free (date);
 }
 
 void calendar_set_signal_strings (char         *sig_str,
@@ -100,21 +99,19 @@ void calendar_day_selected (GtkWidget    *widget,
 void calendar_day_selected_double_click (GtkWidget    *widget,
                                          CalendarData *data)
 {
-  struct tm tm;
   char buffer[256] = "day_selected_double_click: ";
+  guint day;
 
   calendar_date_to_string (data, buffer+27, 256-27);
   calendar_set_signal_strings (buffer, data);
 
-  memset (&tm, 0, sizeof (tm));
   gtk_calendar_get_date (GTK_CALENDAR (data->window),
-			 &tm.tm_year, &tm.tm_mon, &tm.tm_mday);
-  tm.tm_year -= TM_YEAR_BASE;
+			 NULL, NULL, &day);
 
-  if (GTK_CALENDAR (data->window)->marked_date[tm.tm_mday-1] == 0) {
-    gtk_calendar_mark_day (GTK_CALENDAR (data->window), tm.tm_mday);
+  if (GTK_CALENDAR (data->window)->marked_date[day-1] == 0) {
+    gtk_calendar_mark_day (GTK_CALENDAR (data->window), day);
   } else { 
-    gtk_calendar_unmark_day (GTK_CALENDAR (data->window), tm.tm_mday);
+    gtk_calendar_unmark_day (GTK_CALENDAR (data->window), day);
   }
 }
 

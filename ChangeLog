@@ -1,3 +1,8 @@
+Thu Nov  7 14:51:31 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* tests/testcalendar.c (calendar_date_to_string): 
+	Use g_date_strftime(), fixing #74745. (Alper Ersoy)
+
 2002-11-07  Anders Carlsson  <andersca@gnu.org>
 
 	* gtk/gtkhpaned.c: (gtk_hpaned_size_allocate):
