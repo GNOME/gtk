@@ -2,6 +2,7 @@
 
 	* gdk/win32/gdkpixmap-win32.c (gdk_pixmap_foreign_new_for_display,
 	gdk_pixmap_lookup, gdk_pixmap_lookup_for_display): Implement.
+	(#104108, Naofumi Yasufuku)
 
 	* gdk/gdk.def: Export the above.
 
