@@ -5223,8 +5223,9 @@ gtk_ctree_node_moveto (GtkCTree     *ctree,
   gtk_clist_moveto (clist, row, column, row_align, col_align);
 }
 
-GtkVisibility gtk_ctree_node_is_visible (GtkCTree     *ctree,
-                                         GtkCTreeNode *node)
+GtkVisibility 
+gtk_ctree_node_is_visible (GtkCTree     *ctree,
+                           GtkCTreeNode *node)
 {
   gint row;
   
@@ -6128,13 +6129,13 @@ gtk_ctree_drag_data_received (GtkWidget        *widget,
 /* dummy boxed type definition, used so that the GtkCTreeNode signal
  * arguments have a reasonable type.
  */
-gpointer
+static gpointer
 ctree_node_copy (gpointer boxed)
 {
   return boxed;
 }
 
-void
+static void
 ctree_node_free (gpointer boxed)
 {
   /* nothing */

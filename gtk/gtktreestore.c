@@ -714,7 +714,7 @@ gtk_tree_store_iter_parent (GtkTreeModel *tree_model,
 
 
 /* Does not emit a signal */
-gboolean
+static gboolean
 gtk_tree_store_real_set_value (GtkTreeStore *tree_store,
 			       GtkTreeIter  *iter,
 			       gint          column,

@@ -490,7 +490,7 @@ gtk_menu_detach (GtkMenu *menu)
   gtk_widget_unref (GTK_WIDGET (menu));
 }
 
-void 
+static void 
 gtk_menu_remove (GtkContainer *container,
 		 GtkWidget    *widget)
 {

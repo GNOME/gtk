@@ -1794,7 +1794,7 @@ gtk_label_expose (GtkWidget      *widget,
   return TRUE;
 }
 
-void
+static void
 gtk_label_set_uline_text_internal (GtkLabel    *label,
 				   const gchar *str)
 {

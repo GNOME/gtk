@@ -46,11 +46,11 @@ static void     gtk_im_multicontext_reset              (GtkIMContext            
 static void     gtk_im_multicontext_set_cursor_location (GtkIMContext            *context,
 							GdkRectangle		*area);
 
-void            gtk_im_multicontext_preedit_start_cb   (GtkIMContext            *slave,
+static void     gtk_im_multicontext_preedit_start_cb   (GtkIMContext            *slave,
 							GtkIMMulticontext       *multicontext);
-void            gtk_im_multicontext_preedit_end_cb     (GtkIMContext            *slave,
+static void     gtk_im_multicontext_preedit_end_cb     (GtkIMContext            *slave,
 							GtkIMMulticontext       *multicontext);
-void            gtk_im_multicontext_preedit_changed_cb (GtkIMContext            *slave,
+static void     gtk_im_multicontext_preedit_changed_cb (GtkIMContext            *slave,
 							GtkIMMulticontext       *multicontext);
 void            gtk_im_multicontext_commit_cb          (GtkIMContext            *slave,
 							const gchar             *str,
@@ -294,21 +294,21 @@ gtk_im_multicontext_set_cursor_location (GtkIMContext   *context,
     gtk_im_context_set_cursor_location (slave, area);
 }
 
-void
+static void
 gtk_im_multicontext_preedit_start_cb   (GtkIMContext      *slave,
 					GtkIMMulticontext *multicontext)
 {
   g_signal_emit_by_name (multicontext, "preedit_start");
 }
 
-void
+static void
 gtk_im_multicontext_preedit_end_cb (GtkIMContext      *slave,
 				    GtkIMMulticontext *multicontext)
 {
   g_signal_emit_by_name (multicontext, "preedit_end");
 }
 
-void
+static void
 gtk_im_multicontext_preedit_changed_cb (GtkIMContext      *slave,
 					GtkIMMulticontext *multicontext)
 {

@@ -497,10 +497,10 @@ gtk_paned_set_position (GtkPaned *paned,
 }
 
 void
-gtk_paned_compute_position(GtkPaned *paned,
-			   gint      allocation,
-			   gint      child1_req,
-			   gint      child2_req)
+gtk_paned_compute_position (GtkPaned *paned,
+			    gint      allocation,
+			    gint      child1_req,
+			    gint      child2_req)
 {
   gint old_position;
   

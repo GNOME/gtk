@@ -629,7 +629,7 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
                   GTK_TYPE_TEXT_ITER);
 }
 
-void
+static void
 gtk_text_tag_init (GtkTextTag *text_tag)
 {
   /* 0 is basically a fine way to initialize everything in the

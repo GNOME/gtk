@@ -1354,7 +1354,7 @@ _gtk_style_peek_property_value (GtkStyle           *style,
   return &pcache->value;
 }
 
-GdkPixmap *
+static GdkPixmap *
 load_bg_image (GdkColormap *colormap,
 	       GdkColor    *bg_color,
 	       const gchar *filename)

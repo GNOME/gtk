@@ -210,7 +210,7 @@ gtk_text_layout_class_init (GtkTextLayoutClass *klass)
                   GTK_TYPE_INT);
 }
 
-void
+static void
 gtk_text_layout_init (GtkTextLayout *text_layout)
 {
   text_layout->cursor_visible = TRUE;

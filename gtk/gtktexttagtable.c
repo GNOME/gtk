@@ -106,7 +106,7 @@ gtk_text_tag_table_class_init (GtkTextTagTableClass *klass)
                   G_TYPE_OBJECT);
 }
 
-void
+static void
 gtk_text_tag_table_init (GtkTextTagTable *table)
 {
   table->hash = g_hash_table_new (g_str_hash, g_str_equal);
@@ -149,7 +149,7 @@ gtk_text_tag_table_finalize (GObject *object)
   table = GTK_TEXT_TAG_TABLE (object);
 
   gtk_text_tag_table_foreach (table, foreach_unref, NULL);
-  
+
   g_hash_table_destroy (table->hash);
   g_slist_free (table->anonymous);
 

@@ -87,7 +87,7 @@ gtk_scale_get_type (void)
   return scale_type;
 }
 
-gboolean
+static gboolean
 single_string_accumulator (GSignalInvocationHint *ihint,
                            GValue                *return_accu,
                            const GValue          *handler_return,

@@ -597,7 +597,7 @@ gtk_list_store_iter_parent (GtkTreeModel *tree_model,
   return FALSE;
 }
 
-gboolean
+static gboolean
 gtk_list_store_real_set_value (GtkListStore *list_store,
 			       GtkTreeIter  *iter,
 			       gint          column,

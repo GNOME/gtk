@@ -920,7 +920,7 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
                                 "toggle_overwrite", 0);
 }
 
-void
+static void
 gtk_text_view_init (GtkTextView *text_view)
 {
   GtkWidget *widget;
@@ -5779,7 +5779,7 @@ text_window_scroll        (GtkTextWindow *win,
     }
 }
 
-void
+static void
 text_window_invalidate_rect (GtkTextWindow *win,
                              GdkRectangle  *rect)
 {

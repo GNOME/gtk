@@ -300,7 +300,7 @@ gtk_text_buffer_class_init (GtkTextBufferClass *klass)
                   0);  
 }
 
-void
+static void
 gtk_text_buffer_init (GtkTextBuffer *buffer)
 {
   buffer->clipboard_contents_buffers = NULL;
@@ -440,7 +440,6 @@ gtk_text_buffer_set_text (GtkTextBuffer *buffer,
  */
 
 static void
-
 gtk_text_buffer_real_insert_text (GtkTextBuffer *buffer,
                                   GtkTextIter *iter,
                                   const gchar *text,
