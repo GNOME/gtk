@@ -723,6 +723,22 @@ Registers a window as a potential drop destination.
 @y_offset: 
 
 
+<!-- ##### FUNCTION gdk_window_enable_synchronized_configure ##### -->
+<para>
+
+</para>
+
+@window: 
+
+
+<!-- ##### FUNCTION gdk_window_configure_finished ##### -->
+<para>
+
+</para>
+
+@window: 
+
+
 <!-- ##### FUNCTION gdk_window_set_user_data ##### -->
 <para>
 

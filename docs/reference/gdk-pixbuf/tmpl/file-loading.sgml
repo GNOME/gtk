@@ -60,9 +60,11 @@ End:
 @filename: 
 @width: 
 @height: 
-@keep_aspect_ratio: 
+@preserve_aspect_ratio: 
 @error: 
 @Returns: 
+<!-- # Unused Parameters # -->
+@keep_aspect_ratio: 
 
 
 <!-- ##### FUNCTION gdk_pixbuf_get_file_info ##### -->

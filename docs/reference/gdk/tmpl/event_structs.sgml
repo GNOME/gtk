@@ -417,7 +417,7 @@ only available if the X server supports the XFIXES extension.
 @owner: the new owner of the selection
 @reason: the reason for the ownership change as a #GdkOwnerChange value
 @selection: the atom identifying the selection
-@time: the timestamp of the event 
+@time: the timestamp of the event
 @selection_time: the time at which the selection ownership was taken over
 
 <!-- ##### ENUM GdkScrollDirection ##### -->
@@ -509,3 +509,4 @@ Specifies why a selection ownership was changed.
 @GDK_OWNER_CHANGE_NEW_OWNER: some other app claimed the ownership
 @GDK_OWNER_CHANGE_DESTROY: the window was destroyed
 @GDK_OWNER_CHANGE_CLOSE: the client was closed
+

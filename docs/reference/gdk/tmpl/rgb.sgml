@@ -450,7 +450,7 @@ about which dither mode is desired; if the display is not ditherable, it may
 make sense to gray out or hide the corresponding UI widget.
 </para>
 
-@cmap: a #GdkColormap 
+@cmap: a #GdkColormap
 @Returns: %TRUE if the visual associated with @cmap is ditherable.
 
 

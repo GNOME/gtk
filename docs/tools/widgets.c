@@ -245,10 +245,10 @@ create_icon_view (void)
   gtk_frame_set_shadow_type (GTK_FRAME (widget), GTK_SHADOW_IN);
   list_store = gtk_list_store_new (2, G_TYPE_STRING, GDK_TYPE_PIXBUF);
   gtk_list_store_append (list_store, &iter);
-  pixbuf = gdk_pixbuf_new_from_file_at_size ("gnome-gmush.png", 20, 20, NULL);
+  pixbuf = gdk_pixbuf_new_from_file ("gnome-gmush.png", NULL);
   gtk_list_store_set (list_store, &iter, 0, "One", 1, pixbuf, -1);
   gtk_list_store_append (list_store, &iter);
-  pixbuf = gdk_pixbuf_new_from_file_at_size ("gnome-foot.png", 20, 20, NULL);
+  pixbuf = gdk_pixbuf_new_from_file ("gnome-foot.png", NULL);
   gtk_list_store_set (list_store, &iter, 0, "Two", 1, pixbuf, -1);
 
   icon_view = gtk_icon_view_new();

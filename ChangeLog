@@ -1,3 +1,10 @@
+Thu Sep 16 02:07:56 2004  Jonathan Blandford  <jrb@gnome.org>
+
+	* docs/tools/widgets.c (create_icon_view): load images at normal
+	size.
+
+	* docs/reference/gtk/images/*png: Update shots.
+
 Thu Sep 16 00:33:11 2004  Jonathan Blandford  <jrb@gnome.org>
 
 	* docs/tools/widgets.c (new_widget_info): Add constrained sizing
