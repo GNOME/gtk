@@ -1,3 +1,9 @@
+Mon Oct 22 08:51:02 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdk.[ch] (gdk_threads_init) docs/Changes-2.0.txt: 
+	Add a function, gdk_threads_init() that must be explicitely 
+	called to enable the GDK thread mutex.
+
 2001-10-22  Jakub Steiner <jimmac@ximian.com>
 
 	* gtk/stock-icons/stock_stop.png: no body parts

@@ -279,9 +279,6 @@ gdk_init_check (int    *argc,
   if (gdk_initialized)
     return TRUE;
 
-  if (g_thread_supported ())
-    gdk_threads_mutex = g_mutex_new ();
-  
   if (argc && argv)
     {
       argc_orig = *argc;
@@ -512,6 +509,26 @@ void
 gdk_threads_leave ()
 {
   GDK_THREADS_LEAVE ();
+}
+
+/**
+ * gdk_threads_init:
+ * 
+ * Initializes GDK so that it can be used from multiple threads
+ * in conjunction with gdk_threads_enter() and gdk_threads_leave().
+ * If g_thread_init() has not yet been called, calls
+ * g_thread_init(NULL).
+ *
+ * This call must be made before any use of the main loop from
+ * GTK+; to be safe, call it before gtk_init().
+ **/
+void
+gdk_threads_init ()
+{
+  if (!g_thread_supported ())
+    g_thread_init (NULL);
+
+  gdk_threads_mutex = g_mutex_new ();
 }
 
 G_CONST_RETURN char *

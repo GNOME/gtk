@@ -151,6 +151,7 @@ GDKVAR GMutex *gdk_threads_mutex;
 
 void     gdk_threads_enter                (void);
 void     gdk_threads_leave                (void);
+void     gdk_threads_init                 (void);  
 
 #ifdef	G_THREADS_ENABLED
 #  define GDK_THREADS_ENTER()	G_STMT_START {	\

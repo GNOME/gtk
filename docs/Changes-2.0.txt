@@ -494,3 +494,14 @@ Incompatible Changes from GTK+-1.2 to GTK+-2.0:
 * The default selected day for GtkCalendar is now the current day in the
   month, not the first day in the month. The current month and year
   were already used.
+
+* GDK is no longer put into threaded mode automatically when 
+  g_thread_init() has been called. In order to use the 
+  global GDK thread mutex with gdk_threads_enter() and 
+  gdk_threads_leave(), you must call gdk_threads_init() explicitely.
+  gdk_threads_init() calls g_thread_init() if it hasn't already
+  been called, so you can typically change your call to g_thread_init()
+  into a call to gdk_threads_init().
+
+  If you aren't using GDK and GTK+ functions from multiple threads,
+  there is no reason to call gdk_threads_init().
