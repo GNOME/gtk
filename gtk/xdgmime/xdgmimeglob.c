@@ -242,7 +242,7 @@ _xdg_glob_hash_insert_text (XdgGlobHashNode *glob_hash_node,
   if (*text == '\000')
     {
       if (node->mime_type)
-	free (node->mime_type);
+	free ((void *) node->mime_type);
       node->mime_type = mime_type;
     }
   else

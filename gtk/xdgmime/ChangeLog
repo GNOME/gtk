@@ -1,3 +1,8 @@
+Sat Mar 19 23:52:33 2005  Manish Singh  <yosh@gimp.org>
+
+	* xdgmimeglob.c (_xdg_glob_hash_insert_text): cast away the constness
+	in the call to free().
+
 2005-03-20  Matthias Clasen  <mclasen@redhat.com>
 
 	* xdgmimeglob.c (_xdg_glob_hash_insert_text): Don't 
