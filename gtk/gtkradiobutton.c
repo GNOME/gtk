@@ -110,7 +110,7 @@ gtk_radio_button_class_init (GtkRadioButtonClass *class)
 				   PROP_GROUP,
 				   g_param_spec_object ("group",
 							P_("Group"),
-							P_("The radio button whose group this widget belongs."),
+							P_("The radio button whose group this widget belongs to."),
 							GTK_TYPE_RADIO_BUTTON,
 							G_PARAM_WRITABLE));
   object_class->destroy = gtk_radio_button_destroy;

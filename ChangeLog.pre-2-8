@@ -1,3 +1,12 @@
+2004-07-23  Dafydd Harries  <daf@muse.19inch.net>
+
+Fri Jul 23 16:35:23 2004
+	* gtk/gtkradioaction.c:
+	* gtk/gtkradiobutton.c:
+	* gtk/gtkentry.c:
+	* gtk/gtkmisc.c:
+	Improve various translatable messages. (#137616)
+
 Fri Jul 23 11:11:10 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkcellrenderertext.c (gtk_cell_renderer_text_start_editing): 

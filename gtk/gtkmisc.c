@@ -97,7 +97,7 @@ gtk_misc_class_init (GtkMiscClass *class)
                                    PROP_XALIGN,
                                    g_param_spec_float ("xalign",
 						       P_("X align"),
-						       P_("The horizontal alignment, from 0 (left) to 1 (right). Reversed for RTL layouts"),
+						       P_("The horizontal alignment, from 0 (left) to 1 (right). Reversed for RTL layouts."),
 						       0.0,
 						       1.0,
 						       0.5,

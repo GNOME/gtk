@@ -153,7 +153,7 @@ gtk_radio_action_class_init (GtkRadioActionClass *klass)
 				   PROP_GROUP,
 				   g_param_spec_object ("group",
 							P_("Group"),
-							P_("The radio action whose group this action belongs."),
+							P_("The radio action whose group this action belongs to."),
 							GTK_TYPE_RADIO_ACTION,
 							G_PARAM_WRITABLE));
 

@@ -575,7 +575,7 @@ gtk_entry_class_init (GtkEntryClass *class)
                                    PROP_XALIGN,
                                    g_param_spec_float ("xalign",
 						       P_("X align"),
-						       P_("The horizontal alignment, from 0 (left) to 1 (right). Reversed for RTL layouts"),
+						       P_("The horizontal alignment, from 0 (left) to 1 (right). Reversed for RTL layouts."),
 						       0.0,
 						       1.0,
 						       0.0,
