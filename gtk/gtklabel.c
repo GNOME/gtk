@@ -568,7 +568,7 @@ gtk_label_split_text_wrapped (GtkLabel *label)
 	  if (label->jtype == GTK_JUSTIFY_FILL)
 	    word->space = (space_width * 3 + 1) / 2;
 	  else
-	    word->space += space_width * nspaces;
+	    word->space = space_width * nspaces;
 	}
       else
 	{
