@@ -148,7 +148,7 @@ Find or create an atom corresponding to a given string.
 @only_if_exists: if %TRUE, do not create a new atom, but
                  just return the atom if it already exists.
 @Returns: the atom corresponding to @atom_name, or, if
-          @only_if_exists is false, and an atom does not
+          @only_if_exists is TRUE, and an atom does not
           already exists for the string, %GDK_NONE.
 
 
