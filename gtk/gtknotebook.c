@@ -478,14 +478,14 @@ gtk_notebook_class_init (GtkNotebookClass *class)
 					      CHILD_PROP_TAB_LABEL,
 					      g_param_spec_string ("tab_label", 
 								   P_("Tab label"),
-								   P_("The string displayed on the childs tab label"),
+								   P_("The string displayed on the child's tab label"),
 								   NULL,
 								   G_PARAM_READWRITE));
   gtk_container_class_install_child_property (container_class,
 					      CHILD_PROP_MENU_LABEL,
 					      g_param_spec_string ("menu_label", 
 								   P_("Menu label"), 
-								   P_("The string displayed in the childs menu entry"),
+								   P_("The string displayed in the child's menu entry"),
 								   NULL,
 								   G_PARAM_READWRITE));
   gtk_container_class_install_child_property (container_class,
@@ -499,14 +499,14 @@ gtk_notebook_class_init (GtkNotebookClass *class)
 					      CHILD_PROP_TAB_EXPAND,
 					      g_param_spec_boolean ("tab_expand", 
 								    P_("Tab expand"), 
-								    P_("Whether to expand the childs tab or not"),
+								    P_("Whether to expand the child's tab or not"),
 								    TRUE,
 								    G_PARAM_READWRITE));
   gtk_container_class_install_child_property (container_class,
 					      CHILD_PROP_TAB_FILL,
 					      g_param_spec_boolean ("tab_fill", 
 								    P_("Tab fill"), 
-								    P_("Whether the childs tab should fill the allocated area or not"),
+								    P_("Whether the child's tab should fill the allocated area or not"),
 								    TRUE,
 								    G_PARAM_READWRITE));
   gtk_container_class_install_child_property (container_class,

@@ -2026,7 +2026,7 @@ gtk_tree_view_size_allocate (GtkWidget     *widget,
       GtkTreeViewChild *child = tmp_list->data;
       tmp_list = tmp_list->next;
 
-      /* totally ignore our childs requisition */
+      /* totally ignore our child's requisition */
       allocation.x = child->x;
       allocation.y = child->y;
       allocation.width = child->width;

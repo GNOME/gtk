@@ -2170,7 +2170,7 @@ gtk_tree_store_move (GtkTreeStore *tree_store,
 
       if (gtk_tree_path_get_depth (path) != gtk_tree_path_get_depth (pos_path))
         {
-          g_warning ("Given childs are not in the same level\n");
+          g_warning ("Given children are not in the same level\n");
 
 	  goto free_paths_and_out;
         }
@@ -2182,7 +2182,7 @@ gtk_tree_store_move (GtkTreeStore *tree_store,
       if (gtk_tree_path_get_depth (path) > 0 &&
 	  gtk_tree_path_compare (path, tmppath))
         {
-          g_warning ("Given childs are not in the same level\n");
+          g_warning ("Given children are not in the same level\n");
 
           gtk_tree_path_free (tmppath);
 	  goto free_paths_and_out;
