@@ -1,4 +1,4 @@
-# translation of el.po to 
+# translation of el.po to
 # translation of el.po to Greek
 # gtk+ Greek PO file
 # Copyright (C) 1999, 2000, 2001, 2002,2003, 2004, 2005 Free Software Foundation, Inc.
@@ -24,18 +24,19 @@
 # Nikos Kannelopoulos <nkan@panafonet.gr>, 2003.
 # Kostas Papadimas <pkst@gnome.org>, 2002,2003, 2004.
 # Nikos Charonitakis <charosn@her.forthnet.gr>, 2005.
+# Simos Xenitellis <simos74@gmx.net>, 2005.
 msgid ""
 msgstr ""
 "Project-Id-Version: el\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2005-02-21 10:47+0200\n"
-"PO-Revision-Date: 2005-02-21 11:08+0200\n"
-"Last-Translator: Nikos Charonitakis <charosn@her.forthnet.gr>\n"
-"Language-Team:  <team@gnome.gr>\n"
+"PO-Revision-Date: 2005-02-23 17:28+0000\n"
+"Last-Translator: Simos Xenitellis <simos74@gmx.net>\n"
+"Language-Team: Greek <nls@tux.hellug.gr>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: KBabel 1.9.1\n"
+"X-Generator: KBabel 1.3.1\n"
 "Plural-Forms:  nplurals=2; plural=(n != 1);\n"
 
 #: gdk-pixbuf/gdk-pixbuf.c:108
@@ -117,9 +118,8 @@ msgid "Screen"
 msgstr "Οθόνη"
 
 #: gdk/gdkpango.c:575
-#, fuzzy
 msgid "the GdkScreen for the renderer"
-msgstr "Το μοντέλο για δενδροειδή προβολή"
+msgstr "το GdkScreen του προγράμματος απόδοσης"
 
 #: gtk/gtkaboutdialog.c:202
 msgid "Program name"
@@ -129,7 +129,7 @@ msgstr "Όνομα προγράμματος"
 msgid ""
 "The name of the program. If this is not set, it defaults to "
 "g_get_application_name()"
-msgstr ""
+msgstr "Το όνομα του προγράμματος. Αν δεν έχει οριστεί, θέτει εξ ορισμού το g_get_application_name()"
 
 #: gtk/gtkaboutdialog.c:217
 msgid "Program version"
@@ -161,7 +161,7 @@ msgstr "URL Ιστοσελίδας"
 
 #: gtk/gtkaboutdialog.c:285
 msgid "The URL for the link to the website of the program"
-msgstr ""
+msgstr "Το URL για το σύνδεσμο στο δικτυακό τόπο του προγράμματος"
 
 #: gtk/gtkaboutdialog.c:301
 msgid "Website label"
@@ -171,7 +171,7 @@ msgstr "Ετικέτα ιστοσελίδας"
 msgid ""
 "The label for the link to the website of the program. If this is not set, it "
 "defaults to the URL"
-msgstr ""
+msgstr "Η ετικέτα για το σύνδεσμο στο δικτυακό τόπο του προγράμματος. Αν δεν έχει τεθεί, η προεπιλογή είναι το URL"
 
 #: gtk/gtkaboutdialog.c:318
 msgid "Authors"
@@ -215,15 +215,15 @@ msgstr "Λογότυπο"
 msgid ""
 "A logo for the about box. If this is not set, it defaults to "
 "gtk_window_get_default_icon_list()"
-msgstr ""
+msgstr "Το λογότυπο για το διάλογο Περί. Αν δεν έχει τεθεί, η προεπιλογή είναι από το gtk_window_get_default_icon_list()"
 
 #: gtk/gtkaboutdialog.c:402
 msgid "Logo Icon Name"
-msgstr "Όνομα εικονιδίου λογοτύπου"
+msgstr "Όνομα Εικονιδίου Λογοτύπου"
 
 #: gtk/gtkaboutdialog.c:403
 msgid "A named icon to use as the logo for the about box."
-msgstr ""
+msgstr "Το όνομα του εικονιδίου για χρήση ως λογότυπο στο διάλογο Περί."
 
 #: gtk/gtkaboutdialog.c:410
 msgid "Link Color"
@@ -311,13 +311,10 @@ msgid "Visible when overflown"
 msgstr "Ορατό σε κάθετη θέση"
 
 #: gtk/gtkaction.c:251
-#, fuzzy
 msgid ""
 "When TRUE, toolitem proxies for this action are represented in the toolbar "
 "overflow menu."
-msgstr ""
-"Όατν είναι TRUE, οι κενοί διαμεσολαβητές μενού για αυτή την ενέργεια θα "
-"αποκρύπτονται."
+msgstr "Όταν είναι TRUE, οι διαμεσολαβητές αντικειμένου εργαλείου για την ενέργεια αυτή αναπαριστώνται στο μενού υπερχείλησης της εργαλειοθήκης."
 
 #: gtk/gtkaction.c:258 gtk/gtktoolitem.c:166
 msgid "Visible when vertical"
@@ -351,7 +348,7 @@ msgstr "Απόκρυψη αν είναι κενό"
 #: gtk/gtkaction.c:276
 msgid "When TRUE, empty menu proxies for this action are hidden."
 msgstr ""
-"Όατν είναι TRUE, οι κενοί διαμεσολαβητές μενού για αυτή την ενέργεια θα "
+"Όταν είναι TRUE, οι κενοί διαμεσολαβητές μενού για αυτή την ενέργεια θα "
 "αποκρύπτονται."
 
 #: gtk/gtkaction.c:282 gtk/gtkactiongroup.c:142 gtk/gtkcellrenderer.c:222
@@ -762,7 +759,6 @@ msgid "Image widget"
 msgstr "Γραφικό συστατικό εικόνας"
 
 #: gtk/gtkbutton.c:307
-#, fuzzy
 msgid "Child widget to appear next to the button text"
 msgstr "Θυγατρικό γραφικό συστατικό που θα εμφανίζεται δίπλα από το κείμενο του κουμπιού"
 
@@ -807,15 +803,14 @@ msgstr ""
 "απελευθερώνεται το κουμπί"
 
 #: gtk/gtkbutton.c:411
-#, fuzzy
 msgid "Displace focus"
-msgstr "Έχει εστίαση"
+msgstr "Μετατόπιση εστίασης"
 
 #: gtk/gtkbutton.c:412
 msgid ""
 "Whether the child_displacement_x/_y properties should also affect the focus "
 "rectangle"
-msgstr ""
+msgstr "Αν οι ιδιότητες child_displacement_x/_y θα επηρεάζουν και το ορθογώνιο εστίασης"
 
 #: gtk/gtkbutton.c:417
 msgid "Show button images"
@@ -999,9 +994,8 @@ msgid "Model"
 msgstr "Μοντέλο"
 
 #: gtk/gtkcellrenderercombo.c:89
-#, fuzzy
 msgid "The model containing the possible values for the combo box"
-msgstr "Το μοντέλο για  combo box"
+msgstr "Το μοντέλο που περιέχει τις πιθανές τιμές για το combo box"
 
 #: gtk/gtkcellrenderercombo.c:109 gtk/gtkcomboboxentry.c:114
 msgid "Text Column"
@@ -1013,11 +1007,11 @@ msgstr "Μια στήλη στο μοντέλο πηγής δεδομένων γ
 
 #: gtk/gtkcellrenderercombo.c:127
 msgid "Has Entry"
-msgstr ""
+msgstr "Έχει Εισαγωγή"
 
 #: gtk/gtkcellrenderercombo.c:128
 msgid "If FALSE, don't allow to enter strings other than the chosen ones"
-msgstr ""
+msgstr "Αν FALSE, να μην εισάγονται αλφαριθμητικά εκτός από τα επιλεγμένα"
 
 #: gtk/gtkcellrendererpixbuf.c:136
 msgid "Pixbuf Object"
@@ -1249,28 +1243,28 @@ msgid ""
 "when rendering the text. If you don't understand this parameter, you "
 "probably don't need it"
 msgstr ""
-"Η γλώσσα στο κείμενο ως κωδικοποίηση ISO. Το Pango μπορεί να το "
-"χρησιμοποιήσει αυτό ως συμβουλή όταν θα εμφανίζει το κείμενο. Αν δεν "
-"καταλαβαίνετε αυτήν την παράμετρο πιθανόν και να μην τη χρειάζεστε"
+"Η γλώσσα που είναι γραμμένο το κείμενο, ως κωδικός ISO. Το Pango μπορεί να το "
+"χρησιμοποιήσει αυτό ως συμβουλή όταν αποδίδει το κείμενο. Αν δεν "
+"καταλαβαίνετε αυτήν την παράμετρο, πιθανόν και να μην τη χρειάζεστε"
 
 #: gtk/gtkcellrenderertext.c:416 gtk/gtklabel.c:433 gtk/gtkprogressbar.c:242
 msgid "Ellipsize"
-msgstr ""
+msgstr "Χρήση αποσιωπητικών"
 
 #: gtk/gtkcellrenderertext.c:417
 msgid ""
 "The preferred place to ellipsize the string, if the cell renderer does not "
 "have enough room to display the entire string, if at all"
-msgstr ""
+msgstr "Η προτιμώμενη θέση για τη χρήση αποσιωπητικών στο αλφαριθμητικό, αν η εργασία απόδοσης κελιού δεν έχει αρκετό χώρο για να το εμφανίσει ολόκληρο"
 
 #: gtk/gtkcellrenderertext.c:434 gtk/gtkfilechooserbutton.c:365
 #: gtk/gtklabel.c:453
 msgid "Width In Characters"
-msgstr "Πλάτος σε χαρακτήρες"
+msgstr "Πλάτος Σε Χαρακτήρες"
 
 #: gtk/gtkcellrenderertext.c:435 gtk/gtklabel.c:454
 msgid "The desired width of the label, in characters"
-msgstr ""
+msgstr "Το επιθυμητό πλάτος της ετικέτας, σε χαρακτήρες"
 
 #: gtk/gtkcellrenderertext.c:447 gtk/gtkcellview.c:197 gtk/gtktexttag.c:510
 msgid "Background set"
@@ -1385,14 +1379,12 @@ msgid "Whether this tag affects the language the text is rendered as"
 msgstr "Αν η αναγνωριστική ετικέτα θα επηρεάζει τη γλώσσα χειρισμού του κειμένου"
 
 #: gtk/gtkcellrenderertext.c:503
-#, fuzzy
 msgid "Ellipsize set"
-msgstr "Ορισμός ανάδυσης"
+msgstr "Ορισμός Αποσιωπητικών"
 
 #: gtk/gtkcellrenderertext.c:504
-#, fuzzy
 msgid "Whether this tag affects the ellipsize mode"
-msgstr "Αν αυτή η αναγνωριστική ετικέτα επηρεάζει την ανάδυση"
+msgstr "Αν αυτή η αναγνωριστική ετικέτα επηρεάζει τη χρήση αποσιωπητικών"
 
 #: gtk/gtkcellrenderertoggle.c:142
 msgid "Toggle state"
@@ -1577,7 +1569,7 @@ msgstr "Μοντέλο ComboBox"
 
 #: gtk/gtkcombobox.c:552
 msgid "The model for the combo box"
-msgstr "Το μοντέλο για  combo box"
+msgstr "Το μοντέλο για combo box"
 
 #: gtk/gtkcombobox.c:568
 msgid "Wrap width"
@@ -1616,32 +1608,28 @@ msgid "Add tearoffs to menus"
 msgstr "Προσθήκη αποσπώμενων στα μενού"
 
 #: gtk/gtkcombobox.c:655
-#, fuzzy
 msgid "Whether dropdowns should have a tearoff menu item"
-msgstr "Αν οι στηλοθέτες θα πρέπει να έχουν ομογενοποιημένο μέγεθος"
+msgstr "Αν τα κυλιόμενα μενού θα έχουν στοιχείο απόσπασης μενού"
 
 #: gtk/gtkcombobox.c:670 gtk/gtkentry.c:530
 msgid "Has Frame"
 msgstr "Έχει Πλαίσιο"
 
 #: gtk/gtkcombobox.c:671
-#, fuzzy
 msgid "Whether the combo box draws a frame around the child"
-msgstr "Αν η στήλη μπορεί να ανακαταταχθεί γύρω από τις κεφαλίδες"
+msgstr "Αν το combo box σχεδιάζει πλαίσιο γύρω από το θυγατρικό συστατικό"
 
 #: gtk/gtkcombobox.c:679
-#, fuzzy
 msgid "Whether the combo box grabs focus when it is clicked with the mouse"
-msgstr "Αν το κουμπί θα εστιάζεται όταν γίνεται κλικ με με το ποντίκι"
+msgstr "Αν το combo box εστιάζεται όταν γίνεται κλικ με με το ποντίκι"
 
 #: gtk/gtkcombobox.c:685
 msgid "Appears as list"
 msgstr "Εμφανίζεται ως λίστα"
 
 #: gtk/gtkcombobox.c:686
-#, fuzzy
 msgid "Whether dropdowns should look like lists rather than menus"
-msgstr "Αν τα κυλιόμενα combobox θα εμφανίζονται ως λίστες αντι για μενού"
+msgstr "Αν τα κυλιόμενα μενού θα εμφανίζονται ως λίστες αντί για τυπικά μενού"
 
 #: gtk/gtkcontainer.c:205
 msgid "Resize mode"
@@ -1868,27 +1856,24 @@ msgid "Text column"
 msgstr "Στήλη κειμένου"
 
 #: gtk/gtkentrycompletion.c:296
-#, fuzzy
 msgid "The column of the model containing the strings."
-msgstr "Μια στήλη στο μοντέλο πηγής δεδομένων για την λήψη αλφαριθμητικών"
+msgstr "Η στήλη στο μοντέλο που περιέχει τα αλφαριθμητικά."
 
 #: gtk/gtkentrycompletion.c:313
 msgid "Inline completion"
-msgstr ""
+msgstr "Εκ των έσω συμπλήρωση"
 
 #: gtk/gtkentrycompletion.c:314
-#, fuzzy
 msgid "Whether the common prefix should be inserted automatically"
-msgstr "Αν θα εμφανίζεται ή όχι το περίγραμμα"
+msgstr "Αν η κοινή κατάληξη θα εισάγεται αυτόματα"
 
 #: gtk/gtkentrycompletion.c:328
 msgid "Popup completion"
-msgstr ""
+msgstr "Συμπλήρωση μέσω αναδυόμενου"
 
 #: gtk/gtkentrycompletion.c:329
-#, fuzzy
 msgid "Whether the completions should be shown in a popup window"
-msgstr "Αν θα εμφανίζεται ή όχι το περίγραμμα"
+msgstr "Αν οι συμπληρώσεις θα εμφανίζονται σε αναδυόμενο παράθυρο"
 
 #: gtk/gtkeventbox.c:121
 msgid "Visible Window"
@@ -2052,16 +2037,15 @@ msgstr "Διάλογος"
 
 #: gtk/gtkfilechooserbutton.c:337
 msgid "The file chooser dialog to use."
-msgstr ""
+msgstr "Ο διάλογος επιλογής αρχείου προς χρήση."
 
 #: gtk/gtkfilechooserbutton.c:352
-#, fuzzy
 msgid "The title of the file chooser dialog."
-msgstr "Ο τίτλος του διαλόγου επιλογής γραμματοσειράς"
+msgstr "Ο τίτλος του διαλόγου επιλογής αρχείου."
 
 #: gtk/gtkfilechooserbutton.c:366
 msgid "The desired width of the button widget, in characters."
-msgstr ""
+msgstr "Το επιθυμητό πλάτος του γραφικού συστατικού κουμπιού, σε χαρακτήρες."
 
 #: gtk/gtkfilechooserdefault.c:622
 msgid "Default file chooser backend"
@@ -2264,7 +2248,7 @@ msgstr "Στήλη Pixbuf"
 
 #: gtk/gtkiconview.c:353
 msgid "Model column used to retrieve the icon pixbuf from"
-msgstr ""
+msgstr "Το μοντέλο στήλης για τη λήψη του pixbuf εικονιδίου"
 
 #: gtk/gtkiconview.c:371
 msgid "Model column used to retrieve the text from"
