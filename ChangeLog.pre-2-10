@@ -1,3 +1,7 @@
+2003-06-03  Christian Rose  <menthos@menthos.com>
+
+	* configure.in: Added "li" to ALL_LINGUAS.
+
 Mon Jun  2 18:58:54 2003  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtknotebook.c (gtk_notebook_size_allocate): Don't

@@ -1,3 +1,8 @@
+2003-06-03  Christian Rose  <menthos@menthos.com>
+
+	* li.po: Added Limburgish translation by
+	Mathieu van Woerkom <mathieu.brabants.org>.
+
 2003-06-03  Abel Cheung  <maddog@linux.org.hk>
 
 	* POTFILES.in: Added gdk-pixbuf/io-pcx.c and
