@@ -1,3 +1,20 @@
+Fri Feb 27 22:51:35 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/tmpl/gtkoptionmenu.sgml: 
+	* gtk/tmpl/gtkcombo.sgml: Add some more deprecation notes.
+
+Fri Feb 27 22:47:28 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/tmpl/gtkfilechooser.sgml: Suppress link in example.
+
+Fri Feb 27 22:40:50 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/Makefile.am (IGNORE_HFILES): Add gtkpathbar.h
+
+Fri Feb 27 22:27:34 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtk-sections.txt: Add gtk_widget_{add,remove,list}_mnemonic_label(s).
+
 2004-02-27  Federico Mena Quintero  <federico@ximian.com>
 
 	* gtk/migrating-GtkFileChooser.sgml: Inform about
