@@ -155,7 +155,7 @@ msgstr ""
 
 #: gdk-pixbuf/io-gif.c:998
 msgid "GIF image is corrupt (incorrect LZW compression)"
-msgstr ""
+msgstr "Зображення GIF зіпсовано (невірне стиснення LZW)"
 
 #: gdk-pixbuf/io-gif.c:1048
 msgid "File does not appear to be a GIF file"
@@ -236,11 +236,8 @@ msgid ""
 msgstr ""
 
 #: gdk-pixbuf/io-png.c:636
-#, fuzzy
 msgid "Fatal error reading PNG image file"
-msgstr ""
-"Фатальна помилка зчитування файлу "
-"зображення PNG: %s"
+msgstr "Фатальна помилка зчитування файлу зображення PNG"
 
 #: gdk-pixbuf/io-png.c:685
 #, c-format
@@ -322,11 +319,8 @@ msgid "Raw PNM formats require exactly one whitespace before sample data"
 msgstr ""
 
 #: gdk-pixbuf/io-pnm.c:775
-#, fuzzy
 msgid "Can't allocate memory for loading PNM image"
-msgstr ""
-"Не вдалося виділити пам'ять для "
-"завантаження файлу JPEG"
+msgstr "Неможливо виділити пам'ять для завантаження файлу PNM"
 
 #: gdk-pixbuf/io-pnm.c:824
 msgid "Insufficient memory to load PNM context struct"
@@ -342,15 +336,15 @@ msgstr "Недостатньо пам'яті для завантаження ф�
 
 #: gdk-pixbuf/io-tiff.c:152
 msgid "Could not get image width (bad TIFF file)"
-msgstr ""
+msgstr "Не вдалось отримати ширину (невірний файл TIFF)"
 
 #: gdk-pixbuf/io-tiff.c:159
 msgid "Could not get image height (bad TIFF file)"
-msgstr ""
+msgstr "Не вдалось отримати висоту (невірний файл TIFF)"
 
 #: gdk-pixbuf/io-tiff.c:169
 msgid "Width or height of TIFF image is zero"
-msgstr ""
+msgstr "Ширина чи висота зображення TIFF рівна нулю"
 
 #: gdk-pixbuf/io-tiff.c:178 gdk-pixbuf/io-tiff.c:194 gdk-pixbuf/io-tiff.c:482
 msgid "Insufficient memory to open TIFF file"
@@ -1321,7 +1315,6 @@ msgid "Can be used to add a new child to the container."
 msgstr ""
 
 #: gtk/gtkcurve.c:121
-#, fuzzy
 msgid "Curve type"
 msgstr "Тип кривої"
 
@@ -1330,40 +1323,36 @@ msgid "Is this curve linear, spline interpolated, or free-form"
 msgstr ""
 
 #: gtk/gtkcurve.c:130
-#, fuzzy
 msgid "Minimum X"
-msgstr "Мінімальна ширина"
+msgstr "Мінімальне X"
 
 #: gtk/gtkcurve.c:131
 msgid "Minimum possible value for X"
-msgstr ""
+msgstr "Мінімальне можливе значення X"
 
 #: gtk/gtkcurve.c:140
-#, fuzzy
 msgid "Maximum X"
-msgstr "Максимальна ширина"
+msgstr "Максимальне X"
 
 #: gtk/gtkcurve.c:141
 msgid "Maximum possible X value."
-msgstr ""
+msgstr "Максимальне можливе значення X."
 
 #: gtk/gtkcurve.c:150
-#, fuzzy
 msgid "Minimum Y"
-msgstr "Мінімальна ширина"
+msgstr "Мінімальне Y"
 
 #: gtk/gtkcurve.c:151
 msgid "Minimum possible value for Y"
-msgstr ""
+msgstr "Мінімальне можливе знаяення Y"
 
 #: gtk/gtkcurve.c:160
-#, fuzzy
 msgid "Maximum Y"
-msgstr "Максимальна ширина"
+msgstr "Максимальне Y"
 
 #: gtk/gtkcurve.c:161
 msgid "Maximum possible value for Y"
-msgstr ""
+msgstr "Максимальне можливе значення Y"
 
 #: gtk/gtkdialog.c:126
 msgid "Has separator"
