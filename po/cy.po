@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.4\n"
-"POT-Creation-Date: 2002-02-23 13:53+0100\n"
+"POT-Creation-Date: 2002-02-24 00:08-0500\n"
 "PO-Revision-Date: 2002-02-23 10:23-0000\n"
 "Last-Translator: Rhoslyn Prys <rhoslyn.prys@ntlworld.com>\n"
 "Language-Team: Cymraeg/Welsh <en@li.org>\n"
@@ -1626,70 +1626,70 @@ msgstr "Dewis: "
 msgid "Whether to select the contents of an entry when it is focused."
 msgstr ""
 
-#: gtk/gtkentry.c:3805 gtk/gtklabel.c:3163
+#: gtk/gtkentry.c:3806 gtk/gtklabel.c:3163
 #, fuzzy
 msgid "Select All"
 msgstr "Dewis: "
 
-#: gtk/gtkentry.c:3815 gtk/gtklabel.c:3173
+#: gtk/gtkentry.c:3816 gtk/gtklabel.c:3173
 msgid "Input Methods"
 msgstr ""
 
-#: gtk/gtkentry.c:3825 gtk/gtktextview.c:6299
+#: gtk/gtkentry.c:3826 gtk/gtktextview.c:6299
 msgid "_Insert Unicode control character"
 msgstr ""
 
-#: gtk/gtkfilesel.c:526 gtk/gtkimage.c:161
+#: gtk/gtkfilesel.c:534 gtk/gtkimage.c:161
 #, fuzzy
 msgid "Filename"
 msgstr "Ail-enwi"
 
-#: gtk/gtkfilesel.c:527
+#: gtk/gtkfilesel.c:535
 msgid "The currently selected filename."
 msgstr ""
 
-#: gtk/gtkfilesel.c:533
+#: gtk/gtkfilesel.c:541
 msgid "Show file operations"
 msgstr ""
 
-#: gtk/gtkfilesel.c:534
+#: gtk/gtkfilesel.c:542
 msgid "Whether buttons for creating/manipulating files should be displayed."
 msgstr ""
 
-#: gtk/gtkfilesel.c:541
+#: gtk/gtkfilesel.c:549
 #, fuzzy
 msgid "Select multiple"
 msgstr "Dileu Ffeil"
 
-#: gtk/gtkfilesel.c:542
+#: gtk/gtkfilesel.c:550
 msgid "Whether to allow multiple files to be selected."
 msgstr ""
 
-#: gtk/gtkfilesel.c:677
+#: gtk/gtkfilesel.c:685
 #, fuzzy
 msgid "Folders"
 msgstr "Ffeiliau"
 
-#: gtk/gtkfilesel.c:681
+#: gtk/gtkfilesel.c:689
 #, fuzzy
 msgid "Fol_ders"
 msgstr "Ffeiliau"
 
-#: gtk/gtkfilesel.c:709
+#: gtk/gtkfilesel.c:717
 msgid "Files"
 msgstr "Ffeiliau"
 
-#: gtk/gtkfilesel.c:713
+#: gtk/gtkfilesel.c:721
 #, fuzzy
 msgid "_Files"
 msgstr "Ffeiliau"
 
-#: gtk/gtkfilesel.c:789 gtk/gtkfilesel.c:2102
+#: gtk/gtkfilesel.c:797 gtk/gtkfilesel.c:2099
 #, fuzzy, c-format
 msgid "Folder unreadable: %s"
 msgstr "Cyfeiriadur yn annarllenadwy: %s"
 
-#: gtk/gtkfilesel.c:913
+#: gtk/gtkfilesel.c:921
 #, c-format
 msgid ""
 "The file \"%s\" resides on another machine (called %s) and may not be "
@@ -1697,122 +1697,122 @@ msgid ""
 "Are you sure that you want to select it?"
 msgstr ""
 
-#: gtk/gtkfilesel.c:1043
+#: gtk/gtkfilesel.c:1051
 msgid "_New Folder"
 msgstr ""
 
-#: gtk/gtkfilesel.c:1054
+#: gtk/gtkfilesel.c:1062
 #, fuzzy
 msgid "De_lete File"
 msgstr "Dileu Ffeil"
 
-#: gtk/gtkfilesel.c:1065
+#: gtk/gtkfilesel.c:1073
 #, fuzzy
 msgid "_Rename File"
 msgstr "Ail-enwi Ffeil"
 
-#: gtk/gtkfilesel.c:1325
+#: gtk/gtkfilesel.c:1333
 #, c-format
 msgid ""
 "The folder name \"%s\" contains symbols that are not allowed in filenames"
 msgstr ""
 
-#: gtk/gtkfilesel.c:1327
+#: gtk/gtkfilesel.c:1335
 #, c-format
 msgid ""
 "Error creating folder \"%s\": %s\n"
 "%s"
 msgstr ""
 
-#: gtk/gtkfilesel.c:1328 gtk/gtkfilesel.c:1564
+#: gtk/gtkfilesel.c:1336 gtk/gtkfilesel.c:1572
 msgid "You probably used symbols not allowed in filenames."
 msgstr ""
 
-#: gtk/gtkfilesel.c:1336
+#: gtk/gtkfilesel.c:1344
 #, c-format
 msgid "Error creating folder \"%s\": %s\n"
 msgstr ""
 
-#: gtk/gtkfilesel.c:1370
+#: gtk/gtkfilesel.c:1378
 msgid "New Folder"
 msgstr ""
 
-#: gtk/gtkfilesel.c:1385
+#: gtk/gtkfilesel.c:1393
 msgid "_Folder name:"
 msgstr ""
 
-#: gtk/gtkfilesel.c:1411
+#: gtk/gtkfilesel.c:1419
 msgid "Create"
 msgstr "Creu"
 
-#: gtk/gtkfilesel.c:1452
+#: gtk/gtkfilesel.c:1460
 #, c-format
 msgid "The filename \"%s\" contains symbols that are not allowed in filenames"
 msgstr ""
 
-#: gtk/gtkfilesel.c:1455
+#: gtk/gtkfilesel.c:1463
 #, c-format
 msgid ""
 "Error deleting file \"%s\": %s\n"
 "%s"
 msgstr ""
 
-#: gtk/gtkfilesel.c:1457 gtk/gtkfilesel.c:1578
+#: gtk/gtkfilesel.c:1465 gtk/gtkfilesel.c:1586
 msgid "It probably contains symbols not allowed in filenames."
 msgstr ""
 
-#: gtk/gtkfilesel.c:1466
+#: gtk/gtkfilesel.c:1474
 #, c-format
 msgid "Error deleting file \"%s\": %s"
 msgstr ""
 
-#: gtk/gtkfilesel.c:1509
+#: gtk/gtkfilesel.c:1517
 #, c-format
 msgid "Really delete file \"%s\" ?"
 msgstr ""
 
-#: gtk/gtkfilesel.c:1514
+#: gtk/gtkfilesel.c:1522
 msgid "Delete File"
 msgstr "Dileu Ffeil"
 
-#: gtk/gtkfilesel.c:1560 gtk/gtkfilesel.c:1574
+#: gtk/gtkfilesel.c:1568 gtk/gtkfilesel.c:1582
 #, c-format
 msgid "The file name \"%s\" contains symbols that are not allowed in filenames"
 msgstr ""
 
-#: gtk/gtkfilesel.c:1562
+#: gtk/gtkfilesel.c:1570
 #, c-format
 msgid ""
 "Error renaming file to \"%s\": %s\n"
 "%s"
 msgstr ""
 
-#: gtk/gtkfilesel.c:1576
+#: gtk/gtkfilesel.c:1584
 #, c-format
 msgid ""
 "Error renaming file \"%s\": %s\n"
 "%s"
 msgstr ""
 
-#: gtk/gtkfilesel.c:1586
+#: gtk/gtkfilesel.c:1594
 #, c-format
 msgid "Error renaming file \"%s\" to \"%s\": %s"
 msgstr ""
 
-#: gtk/gtkfilesel.c:1633
+#: gtk/gtkfilesel.c:1641
 msgid "Rename File"
 msgstr "Ail-enwi Ffeil"
 
-#: gtk/gtkfilesel.c:1648
+#: gtk/gtkfilesel.c:1656
 #, fuzzy, c-format
 msgid "Rename file \"%s\" to:"
 msgstr "Ail-enwi Ffeil"
 
-#: gtk/gtkfilesel.c:1679
+#: gtk/gtkfilesel.c:1687
 msgid "Rename"
 msgstr "Ail-enwi"
 
-#: gtk/gtkfilesel.c:2081
+#: gtk/gtkfilesel.c:2078
 msgid "Selection: "
 msgstr "Dewis: "
 
@@ -1973,7 +1973,7 @@ msgstr ""
 #. Remove this icon source so we don't keep trying to
 #. * load it.
 #.
-#: gtk/gtkiconfactory.c:1060
+#: gtk/gtkiconfactory.c:1282
 #, c-format
 msgid "Error loading icon: %s"
 msgstr ""
@@ -2478,17 +2478,17 @@ msgstr ""
 msgid "Width of handle"
 msgstr ""
 
-#: gtk/gtkrc.c:2181
+#: gtk/gtkrc.c:2253
 #, c-format
 msgid "Unable to find include file: \"%s\""
 msgstr ""
 
-#: gtk/gtkrc.c:2823 gtk/gtkrc.c:2826
+#: gtk/gtkrc.c:2895 gtk/gtkrc.c:2898
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "Methu canfod ffeil delwedd yn pixmap_path: \"%s\""
 
-#: gtk/gtkrc.c:3257
+#: gtk/gtkrc.c:3329
 #, c-format
 msgid "Pixmap path element: \"%s\" must be absolute, %s, line %d"
 msgstr ""
@@ -2830,72 +2830,81 @@ msgstr ""
 msgid "Style of bevel around the contents"
 msgstr ""
 
-#: gtk/gtksettings.c:147
+#: gtk/gtksettings.c:148
 msgid "Double Click Time"
 msgstr ""
 
-#: gtk/gtksettings.c:148
+#: gtk/gtksettings.c:149
 msgid ""
 "Maximum time allowed between two clicks for them to be considered a double "
 "click (in milliseconds)"
 msgstr ""
 
-#: gtk/gtksettings.c:155
+#: gtk/gtksettings.c:156
 msgid "Cursor Blink"
 msgstr ""
 
-#: gtk/gtksettings.c:156
+#: gtk/gtksettings.c:157
 msgid "Whether the cursor should blink"
 msgstr ""
 
-#: gtk/gtksettings.c:163
+#: gtk/gtksettings.c:164
 msgid "Cursor Blink Time"
 msgstr ""
 
-#: gtk/gtksettings.c:164
+#: gtk/gtksettings.c:165
 msgid "Length of the cursor blink cycle, in milleseconds"
 msgstr ""
 
-#: gtk/gtksettings.c:171
+#: gtk/gtksettings.c:172
 msgid "Split Cursor"
 msgstr ""
 
-#: gtk/gtksettings.c:172
+#: gtk/gtksettings.c:173
 msgid ""
 "Whether two cursors should be displayed for mixed left-to-right and right-to-"
 "left text"
 msgstr ""
 
-#: gtk/gtksettings.c:179
+#: gtk/gtksettings.c:180
 msgid "Theme Name"
 msgstr ""
 
-#: gtk/gtksettings.c:180
+#: gtk/gtksettings.c:181
 msgid "Name of theme RC file to load"
 msgstr ""
 
-#: gtk/gtksettings.c:187
+#: gtk/gtksettings.c:188
 msgid "Key Theme Name"
 msgstr ""
 
-#: gtk/gtksettings.c:188
+#: gtk/gtksettings.c:189
 msgid "Name of key theme RC file to load"
 msgstr ""
 
-#: gtk/gtksettings.c:196
+#: gtk/gtksettings.c:197
 msgid "Menu bar accelerator"
 msgstr ""
 
-#: gtk/gtksettings.c:197
+#: gtk/gtksettings.c:198
 msgid "Keybinding to activate the menu bar"
 msgstr ""
 
-#: gtk/gtksettings.c:205
+#: gtk/gtksettings.c:206
 msgid "Drag threshold"
 msgstr ""
 
-#: gtk/gtksettings.c:206
+#: gtk/gtksettings.c:207
 msgid "Number of pixels the cursor can move before dragging"
+msgstr ""
+
+#: gtk/gtksettings.c:215
+#, fuzzy
+msgid "Font Name"
+msgstr "Ffont"
+
+#: gtk/gtksettings.c:216
+msgid "Name of default font to use"
 msgstr ""
 
 #: gtk/gtkspinbutton.c:238

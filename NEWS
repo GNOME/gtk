@@ -1,3 +1,34 @@
+Overview of Changes in GTK+ 1.3.15
+==================================
+
+* New stock and improved icon images
+  [Tuomas Kuosomann, Jakub Steiner, Anders Carlsson]
+* Widget drawing improvements for check and radio buttons,
+  spinbuttons [Soeren Sandmann]
+* Clean up module search path algorithm, use GTK_PATH [Owen Taylor]
+* Add GtkSetting for font name. [Richard Hestilow]
+* Much improved key matching code, accelerators work independent
+  of group [Owen]
+* Make mnemonics work for embedded GtkPlug widgets [Owen]
+* Keynav improvements for GtkTreeView [Kristian Rietveld]
+* Fix gtk_tree_view_scroll_to_cell() [Jonathan Blandford]
+* Rename gtk_tree_view_get_iter_root() and gtk_tree_path_new_root()
+  to gtk_tree_view_get_iter_first() and gtk_tree_path_new_first(),
+  add compatibility macros.
+* GtkTreeView bug fixes [Kristian, Anders, Damon Chaplin]
+* GtkTextView bug fixes [Havoc Pennington]
+* Pad class structures for future binary compatibility [Owen]
+* Tutorial improvements [Sven Neumann, Matthias Clasen]
+* Fixes for MULTIPLE selection target [Gregory Merchan, Owen]
+* Fix problems with initial widget size [Owen]
+* AIX compilation fixes [Miroslaw Dobrzanski-Neumann]
+* Win32 fixes [Hans Breuer, Tor Lillqvist]
+* Miscellaneous bug fixes
+
+Other contributors: David L. Cooper, Eric Fischer, Jody Goldberg, 
+  Satajyit Kanungo, Thomas Leonard, Mark Patton, Manish Singh, 
+  Nicolas Setton
+
 Overview of Changes in GTK+ 1.3.14
 ==================================
 

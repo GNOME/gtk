@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.3.14\n"
-"POT-Creation-Date: 2002-02-23 14:29+0100\n"
+"POT-Creation-Date: 2002-02-24 00:08-0500\n"
 "PO-Revision-Date: 2002-02-23 14:34+0100\n"
 "Last-Translator: Kjartan Maraas <kmaraas@gnome.org>\n"
 "Language-Team: Norwegian (bokmål) <no@li.org>\n"
@@ -1663,64 +1663,64 @@ msgstr "Velg på fokus"
 msgid "Whether to select the contents of an entry when it is focused."
 msgstr "Om innholdet i oppføringen skal markeres når den får fokus."
 
-#: gtk/gtkentry.c:3805 gtk/gtklabel.c:3163
+#: gtk/gtkentry.c:3806 gtk/gtklabel.c:3163
 msgid "Select All"
 msgstr "Velg alt"
 
-#: gtk/gtkentry.c:3815 gtk/gtklabel.c:3173
+#: gtk/gtkentry.c:3816 gtk/gtklabel.c:3173
 msgid "Input Methods"
 msgstr "Inndatametode"
 
-#: gtk/gtkentry.c:3825 gtk/gtktextview.c:6299
+#: gtk/gtkentry.c:3826 gtk/gtktextview.c:6299
 msgid "_Insert Unicode control character"
 msgstr "Sett _inn Unicode kontrolltegn"
 
-#: gtk/gtkfilesel.c:526 gtk/gtkimage.c:161
+#: gtk/gtkfilesel.c:534 gtk/gtkimage.c:161
 msgid "Filename"
 msgstr "Filnavn"
 
-#: gtk/gtkfilesel.c:527
+#: gtk/gtkfilesel.c:535
 msgid "The currently selected filename."
 msgstr "Filnavn som er valgt nå."
 
-#: gtk/gtkfilesel.c:533
+#: gtk/gtkfilesel.c:541
 msgid "Show file operations"
 msgstr "Vis filoperasjoner"
 
-#: gtk/gtkfilesel.c:534
+#: gtk/gtkfilesel.c:542
 msgid "Whether buttons for creating/manipulating files should be displayed."
 msgstr "Vis knapper for oppretting/manipulering av filer."
 
-#: gtk/gtkfilesel.c:541
+#: gtk/gtkfilesel.c:549
 msgid "Select multiple"
 msgstr "Velg flere"
 
-#: gtk/gtkfilesel.c:542
+#: gtk/gtkfilesel.c:550
 msgid "Whether to allow multiple files to be selected."
 msgstr "Om valg av flere filer skal tillates."
 
-#: gtk/gtkfilesel.c:677
+#: gtk/gtkfilesel.c:685
 msgid "Folders"
 msgstr "Mapper"
 
-#: gtk/gtkfilesel.c:681
+#: gtk/gtkfilesel.c:689
 msgid "Fol_ders"
 msgstr "M_apper"
 
-#: gtk/gtkfilesel.c:709
+#: gtk/gtkfilesel.c:717
 msgid "Files"
 msgstr "Filer"
 
-#: gtk/gtkfilesel.c:713
+#: gtk/gtkfilesel.c:721
 msgid "_Files"
 msgstr "_Filer"
 
-#: gtk/gtkfilesel.c:789 gtk/gtkfilesel.c:2102
+#: gtk/gtkfilesel.c:797 gtk/gtkfilesel.c:2099
 #, c-format
 msgid "Folder unreadable: %s"
 msgstr "Uleselig mappe: %s"
 
-#: gtk/gtkfilesel.c:913
+#: gtk/gtkfilesel.c:921
 #, c-format
 msgid ""
 "The file \"%s\" resides on another machine (called %s) and may not be "
@@ -1731,25 +1731,25 @@ msgstr ""
 "tilgjengelig for dette programmet.\n"
 "Er du sikker på at du ønsker å velge den?"
 
-#: gtk/gtkfilesel.c:1043
+#: gtk/gtkfilesel.c:1051
 msgid "_New Folder"
 msgstr "_Ny mappe"
 
-#: gtk/gtkfilesel.c:1054
+#: gtk/gtkfilesel.c:1062
 msgid "De_lete File"
 msgstr "S_lett fil"
 
-#: gtk/gtkfilesel.c:1065
+#: gtk/gtkfilesel.c:1073
 msgid "_Rename File"
 msgstr "End_re navn på filen"
 
-#: gtk/gtkfilesel.c:1325
+#: gtk/gtkfilesel.c:1333
 #, c-format
 msgid ""
 "The folder name \"%s\" contains symbols that are not allowed in filenames"
 msgstr "Mappenavn «%s» inneholder symboler som ikke er tillatt i filnavn"
 
-#: gtk/gtkfilesel.c:1327
+#: gtk/gtkfilesel.c:1335
 #, c-format
 msgid ""
 "Error creating folder \"%s\": %s\n"
@@ -1758,33 +1758,33 @@ msgstr ""
 "Feil under oppretting av mappe «%s»: %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1328 gtk/gtkfilesel.c:1564
+#: gtk/gtkfilesel.c:1336 gtk/gtkfilesel.c:1572
 msgid "You probably used symbols not allowed in filenames."
 msgstr "Du brukte sannsynligvis symboler som ikke er tillatt i filnavn."
 
-#: gtk/gtkfilesel.c:1336
+#: gtk/gtkfilesel.c:1344
 #, c-format
 msgid "Error creating folder \"%s\": %s\n"
 msgstr "Feil under oppretting av mappe «%s»: %s\n"
 
-#: gtk/gtkfilesel.c:1370
+#: gtk/gtkfilesel.c:1378
 msgid "New Folder"
 msgstr "Ny mappe"
 
-#: gtk/gtkfilesel.c:1385
+#: gtk/gtkfilesel.c:1393
 msgid "_Folder name:"
 msgstr "_Mappenavn:"
 
-#: gtk/gtkfilesel.c:1411
+#: gtk/gtkfilesel.c:1419
 msgid "Create"
 msgstr "Lag"
 
-#: gtk/gtkfilesel.c:1452
+#: gtk/gtkfilesel.c:1460
 #, c-format
 msgid "The filename \"%s\" contains symbols that are not allowed in filenames"
 msgstr "Filnavnet «%s» inneholder symboler som ikke er tillatt i filnavn"
 
-#: gtk/gtkfilesel.c:1455
+#: gtk/gtkfilesel.c:1463
 #, c-format
 msgid ""
 "Error deleting file \"%s\": %s\n"
@@ -1793,30 +1793,30 @@ msgstr ""
 "Feil under sletting av fil «%s»: %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1457 gtk/gtkfilesel.c:1578
+#: gtk/gtkfilesel.c:1465 gtk/gtkfilesel.c:1586
 msgid "It probably contains symbols not allowed in filenames."
 msgstr "Det inneholder sannsynligvis symboler som ikke er tillatt i filnavn."
 
-#: gtk/gtkfilesel.c:1466
+#: gtk/gtkfilesel.c:1474
 #, c-format
 msgid "Error deleting file \"%s\": %s"
 msgstr "Feil under sletting av fil «%s»: %s"
 
-#: gtk/gtkfilesel.c:1509
+#: gtk/gtkfilesel.c:1517
 #, c-format
 msgid "Really delete file \"%s\" ?"
 msgstr "Virkelig slette fil «%s»?"
 
-#: gtk/gtkfilesel.c:1514
+#: gtk/gtkfilesel.c:1522
 msgid "Delete File"
 msgstr "Slett fil"
 
-#: gtk/gtkfilesel.c:1560 gtk/gtkfilesel.c:1574
+#: gtk/gtkfilesel.c:1568 gtk/gtkfilesel.c:1582
 #, c-format
 msgid "The file name \"%s\" contains symbols that are not allowed in filenames"
 msgstr "Filnavn «%s» inneholder symboler som ikke er tillatt i filnavn"
 
-#: gtk/gtkfilesel.c:1562
+#: gtk/gtkfilesel.c:1570
 #, c-format
 msgid ""
 "Error renaming file to \"%s\": %s\n"
@@ -1825,7 +1825,7 @@ msgstr ""
 "Feil under endring av navn på fil «%s»: %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1576
+#: gtk/gtkfilesel.c:1584
 #, c-format
 msgid ""
 "Error renaming file \"%s\": %s\n"
@@ -1834,25 +1834,25 @@ msgstr ""
 "Feil under endring av navn på fil «%s»: %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1586
+#: gtk/gtkfilesel.c:1594
 #, c-format
 msgid "Error renaming file \"%s\" to \"%s\": %s"
 msgstr "Feil under endring av navn på fil «%s» til «%s»: %s"
 
-#: gtk/gtkfilesel.c:1633
+#: gtk/gtkfilesel.c:1641
 msgid "Rename File"
 msgstr "Gi filen nytt navn"
 
-#: gtk/gtkfilesel.c:1648
+#: gtk/gtkfilesel.c:1656
 #, c-format
 msgid "Rename file \"%s\" to:"
 msgstr "Gi fil «%s» nytt navn:"
 
-#: gtk/gtkfilesel.c:1679
+#: gtk/gtkfilesel.c:1687
 msgid "Rename"
 msgstr "Gi nytt navn"
 
-#: gtk/gtkfilesel.c:2081
+#: gtk/gtkfilesel.c:2078
 msgid "Selection: "
 msgstr "Valg:"
 
@@ -2009,7 +2009,7 @@ msgstr ""
 #. Remove this icon source so we don't keep trying to
 #. * load it.
 #.
-#: gtk/gtkiconfactory.c:1060
+#: gtk/gtkiconfactory.c:1282
 #, c-format
 msgid "Error loading icon: %s"
 msgstr "Feil under lasting av ikon: %s"
@@ -2513,17 +2513,17 @@ msgstr "Størrelse på håndtak"
 msgid "Width of handle"
 msgstr "Størrelse på håndtak"
 
-#: gtk/gtkrc.c:2181
+#: gtk/gtkrc.c:2253
 #, c-format
 msgid "Unable to find include file: \"%s\""
 msgstr "Kan ikke finne include-fil: «%s»"
 
-#: gtk/gtkrc.c:2823 gtk/gtkrc.c:2826
+#: gtk/gtkrc.c:2895 gtk/gtkrc.c:2898
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "Kunne ikke finne bildefil i pixmap_path: «%s»"
 
-#: gtk/gtkrc.c:3257
+#: gtk/gtkrc.c:3329
 #, c-format
 msgid "Pixmap path element: \"%s\" must be absolute, %s, line %d"
 msgstr "Stielement for pixmap: «%s» må være absolutt, %s, linje %d"
@@ -2871,11 +2871,11 @@ msgstr "Skyggetype"
 msgid "Style of bevel around the contents"
 msgstr "Stil på kanten rundt innholdet"
 
-#: gtk/gtksettings.c:147
+#: gtk/gtksettings.c:148
 msgid "Double Click Time"
 msgstr "Tid for dobbelklikk"
 
-#: gtk/gtksettings.c:148
+#: gtk/gtksettings.c:149
 msgid ""
 "Maximum time allowed between two clicks for them to be considered a double "
 "click (in milliseconds)"
@@ -2883,27 +2883,27 @@ msgstr ""
 "Lengste tidsintervall mellom to klikk for at de skal betraktes som et "
 "dobbelklikk (i millisekunder)"
 
-#: gtk/gtksettings.c:155
+#: gtk/gtksettings.c:156
 msgid "Cursor Blink"
 msgstr "Markørblinking"
 
-#: gtk/gtksettings.c:156
+#: gtk/gtksettings.c:157
 msgid "Whether the cursor should blink"
 msgstr "La markøren blinke"
 
-#: gtk/gtksettings.c:163
+#: gtk/gtksettings.c:164
 msgid "Cursor Blink Time"
 msgstr "Tid for markørblink"
 
-#: gtk/gtksettings.c:164
+#: gtk/gtksettings.c:165
 msgid "Length of the cursor blink cycle, in milleseconds"
 msgstr "Lengde på markørblinking, i millisekunder"
 
-#: gtk/gtksettings.c:171
+#: gtk/gtksettings.c:172
 msgid "Split Cursor"
 msgstr "Delt markør"
 
-#: gtk/gtksettings.c:172
+#: gtk/gtksettings.c:173
 msgid ""
 "Whether two cursors should be displayed for mixed left-to-right and right-to-"
 "left text"
@@ -2911,37 +2911,46 @@ msgstr ""
 "Om to markører skal vises for blandet venstre-til-høyre og høyre-til-venstre "
 "tekst"
 
-#: gtk/gtksettings.c:179
+#: gtk/gtksettings.c:180
 msgid "Theme Name"
 msgstr "Temanavn"
 
-#: gtk/gtksettings.c:180
+#: gtk/gtksettings.c:181
 msgid "Name of theme RC file to load"
 msgstr "Navn på RC-fil som skal lastes"
 
-#: gtk/gtksettings.c:187
+#: gtk/gtksettings.c:188
 msgid "Key Theme Name"
 msgstr "Navn på nøkkeltema"
 
-#: gtk/gtksettings.c:188
+#: gtk/gtksettings.c:189
 msgid "Name of key theme RC file to load"
 msgstr "Navn på RC-fil for nøkkeltema som skal lastes"
 
-#: gtk/gtksettings.c:196
+#: gtk/gtksettings.c:197
 msgid "Menu bar accelerator"
 msgstr "Aksellerator for menylinje"
 
-#: gtk/gtksettings.c:197
+#: gtk/gtksettings.c:198
 msgid "Keybinding to activate the menu bar"
 msgstr "Tastaturbinding som aktiverer menylinjen"
 
-#: gtk/gtksettings.c:205
+#: gtk/gtksettings.c:206
 msgid "Drag threshold"
 msgstr "Terskel for dra-operasjon"
 
-#: gtk/gtksettings.c:206
+#: gtk/gtksettings.c:207
 msgid "Number of pixels the cursor can move before dragging"
 msgstr "Antall piklser markøren kan flyttes før en dra-operasjon startes"
+
+#: gtk/gtksettings.c:215
+#, fuzzy
+msgid "Font Name"
+msgstr "Skriftnavn"
+
+#: gtk/gtksettings.c:216
+msgid "Name of default font to use"
+msgstr ""
 
 #: gtk/gtkspinbutton.c:238
 msgid "The adjustment that holds the value of the spinbutton"
