@@ -182,7 +182,7 @@ struct _GtkWidget
    */
   guint8 state;
   
-  /* The saved state of the widget. When a widgets state
+  /* The saved state of the widget. When a widget's state
    *  is changed to GTK_STATE_INSENSITIVE via
    *  "gtk_widget_set_state" or "gtk_widget_set_sensitive"
    *  the old state is kept around in this field. The state
@@ -190,9 +190,9 @@ struct _GtkWidget
    */
   guint8 saved_state;
   
-  /* The widgets name. If the widget does not have a name
+  /* The widget's name. If the widget does not have a name
    *  (the name is NULL), then its name (as returned by
-   *  "gtk_widget_get_name") is its classes name.
+   *  "gtk_widget_get_name") is its class's name.
    * Among other things, the widget name is used to determine
    *  the style to use for a widget.
    */
@@ -207,21 +207,21 @@ struct _GtkWidget
    */
   GtkStyle *style;
   
-  /* The widgets desired size.
+  /* The widget's desired size.
    */
   GtkRequisition requisition;
   
-  /* The widgets allocated size.
+  /* The widget's allocated size.
    */
   GtkAllocation allocation;
   
-  /* The widgets window or its parent window if it does
+  /* The widget's window or its parent window if it does
    *  not have a window. (Which will be indicated by the
    *  GTK_NO_WINDOW flag being set).
    */
   GdkWindow *window;
   
-  /* The widgets parent.
+  /* The widget's parent.
    */
   GtkWidget *parent;
 };
