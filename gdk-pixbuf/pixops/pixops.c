@@ -90,12 +90,12 @@ pixops_scale_nearest (guchar        *dest_buf,
 	  x += x_step;						\
         }                                                       \
       while (x < xstop)                                         \
-	    {							\
+	{							\
 	  p = src + (x >> SCALE_SHIFT) * SRC_CHANNELS;          \
 	  ASSIGN_PIXEL;				       		\
 	  dest += DEST_CHANNELS;				\
 	  x += x_step;						\
-	    }							\
+	}							\
       x_pos = x >> SCALE_SHIFT;                                 \
       p = src + CLAMP (x_pos, 0, src_width - 1) * SRC_CHANNELS; \
       while (x < xmax)                                          \
@@ -107,10 +107,13 @@ pixops_scale_nearest (guchar        *dest_buf,
 
   for (i = 0; i < (render_y1 - render_y0); i++)
     {
+      const guchar *src;
+      guchar *dest;
+
       y_pos = ((i + render_y0) * y_step + y_step / 2) >> SCALE_SHIFT;
       y_pos = CLAMP (y_pos, 0, src_height - 1);
-      const guchar *src  = src_buf + y_pos * src_rowstride;
-      guchar       *dest = dest_buf + i * dest_rowstride;
+      src  = src_buf + y_pos * src_rowstride;
+      dest = dest_buf + i * dest_rowstride;
 
       x = render_x0 * x_step + x_step / 2;
 
@@ -133,7 +136,8 @@ pixops_scale_nearest (guchar        *dest_buf,
 	    }
 	  else
 	    {
-	      INNER_LOOP(4, 4, guint32 *p32=(guint32*)dest;*p32=*((guint32*)p));
+	      guint32 *p32;
+	      INNER_LOOP(4, 4, p32=(guint32*)dest;*p32=*((guint32*)p));
 	    }
 	}
     }
@@ -169,10 +173,13 @@ pixops_composite_nearest (guchar        *dest_buf,
 
   for (i = 0; i < (render_y1 - render_y0); i++)
     {
+      const guchar *src;
+      guchar *dest;
+
       y_pos = ((i + render_y0) * y_step + y_step / 2) >> SCALE_SHIFT;
       y_pos = CLAMP (y_pos, 0, src_height - 1);
-      const guchar *src  = src_buf + y_pos * src_rowstride;
-      guchar       *dest = dest_buf + i * dest_rowstride;
+      src  = src_buf + y_pos * src_rowstride;
+      dest = dest_buf + i * dest_rowstride;
 
       x = render_x0 * x_step + x_step / 2;
       
@@ -259,10 +266,13 @@ pixops_composite_color_nearest (guchar        *dest_buf,
 
   for (i = 0; i < (render_y1 - render_y0); i++)
     {
+      const guchar *src;
+      guchar *dest;
+
       y_pos = ((i + render_y0) * y_step + y_step / 2) >> SCALE_SHIFT;
       y_pos = CLAMP (y_pos, 0, src_height - 1);
-      const guchar *src  = src_buf + y_pos * src_rowstride;
-      guchar       *dest = dest_buf + i * dest_rowstride;
+      src  = src_buf + y_pos * src_rowstride;
+      dest = dest_buf + i * dest_rowstride;
 
       x = render_x0 * x_step + x_step / 2;
       
