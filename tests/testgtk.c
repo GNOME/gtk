@@ -5029,25 +5029,28 @@ create_notebook (void)
 				 GTK_SIGNAL_FUNC (gtk_notebook_next_page),
 				 GTK_OBJECT (notebook));
       gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
+      GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
 
       button = gtk_button_new_with_label ("prev");
       gtk_signal_connect_object (GTK_OBJECT (button), "clicked",
 				 GTK_SIGNAL_FUNC (gtk_notebook_prev_page),
 				 GTK_OBJECT (notebook));
       gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
+      GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
 
       button = gtk_button_new_with_label ("rotate");
       gtk_signal_connect (GTK_OBJECT (button), "clicked",
 			  GTK_SIGNAL_FUNC (rotate_notebook),
 			  notebook);
       gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
+      GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
 
       button = gtk_button_new_with_label ("reparent");
       gtk_signal_connect (GTK_OBJECT (button), "clicked",
 			  GTK_SIGNAL_FUNC (notebook_reparent),
 			  notebook);
       gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
-
+      GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
     }
 
   if (!GTK_WIDGET_VISIBLE (window))

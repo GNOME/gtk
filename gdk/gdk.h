@@ -360,6 +360,10 @@ void   gdk_gc_set_line_attributes (GdkGC	    *gc,
 				   GdkLineStyle	     line_style,
 				   GdkCapStyle	     cap_style,
 				   GdkJoinStyle	     join_style);
+void   gdk_gc_set_dashes          (GdkGC            *gc,
+				   gint	             dash_offset,
+				   gchar             dash_list[],
+				   gint              n);
 void   gdk_gc_copy		  (GdkGC	     *dst_gc,
 				   GdkGC	     *src_gc);
 

@@ -703,6 +703,22 @@ gdk_gc_set_line_attributes (GdkGC	*gc,
 }
 
 void
+gdk_gc_set_dashes (GdkGC *gc,
+		   gint	  dash_offset,
+		   gchar  dash_list[],
+		   gint   n)
+{
+  GdkGCPrivate *private;
+
+  g_return_if_fail (gc != NULL);
+  g_return_if_fail (dash_list != NULL);
+
+  private = (GdkGCPrivate*) gc;
+
+  XSetDashes (private->xdisplay, private->xgc, dash_offset, dash_list, n);
+}
+
+void
 gdk_gc_copy (GdkGC *dst_gc, GdkGC *src_gc)
 {
   GdkGCPrivate *dst_private, *src_private;

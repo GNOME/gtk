@@ -1,3 +1,8 @@
+1998-05-05  Stefan Jeske  <stefan@gtk.org>
+
+	* gdk/gdkgc.c gdk/gdk.h gtk/gtkctree.c (gdk_gc_set_dashes):
+	New function to wrap XSetDashes; modified gtkctree.c to use it.
+
 1998-05-04  Federico Mena Quintero  <federico@nuclecu.unam.mx>
 
 	* configure.in: Added $x_libs in the other_libraries field in the

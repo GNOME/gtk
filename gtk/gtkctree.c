@@ -398,7 +398,6 @@ gtk_ctree_realize (GtkWidget *widget)
 {
   GtkCTree *ctree;
   GdkGCValues values;
-  GdkGCPrivate *private;
 
   ctree = GTK_CTREE (widget);
 
@@ -419,8 +418,7 @@ gtk_ctree_realize (GtkWidget *widget)
     {
       gdk_gc_set_line_attributes (ctree->lines_gc, 1, 
 				  GDK_LINE_ON_OFF_DASH, None, None);
-      private = (GdkGCPrivate *) ctree->lines_gc;
-      XSetDashes (private->xdisplay, private->xgc, 0, "\1\1", 2);
+      gdk_gc_set_dashes (ctree->lines_gc, 0, "\1\1", 2);
     }
 
   if (ctree->reorderable)
@@ -801,7 +799,6 @@ create_xor_gc (GtkCTree *ctree)
 {
   GtkCList *clist;
   GdkGCValues values;
-  GdkGCPrivate *private;
 
   clist = GTK_CLIST (ctree);
 
@@ -814,8 +811,7 @@ create_xor_gc (GtkCTree *ctree)
 					  GDK_GC_SUBWINDOW);
   gdk_gc_set_line_attributes (ctree->xor_gc, 1, GDK_LINE_ON_OFF_DASH, 
 			      None, None);
-  private = (GdkGCPrivate*) ctree->xor_gc;
-  XSetDashes (private->xdisplay, private->xgc, 0, "\2\2", 2);
+  gdk_gc_set_dashes (ctree->xor_gc, 0, "\2\2", 2);
 }
 
 static void
@@ -3675,8 +3671,6 @@ void
 gtk_ctree_set_line_style (GtkCTree          *ctree, 
 			  GtkCTreeLineStyle  line_style)
 {
-  GdkGCPrivate *private;
-
   g_return_if_fail (ctree != NULL);
   g_return_if_fail (GTK_IS_CTREE (ctree));
 
@@ -3698,8 +3692,7 @@ gtk_ctree_set_line_style (GtkCTree          *ctree,
 	  if (GTK_WIDGET_REALIZED (ctree))
 	    gdk_gc_set_line_attributes (ctree->lines_gc, 1, 
 					GDK_LINE_ON_OFF_DASH, None, None);
-	  private = (GdkGCPrivate *) ctree->lines_gc;
-	  XSetDashes (private->xdisplay, private->xgc, 0, "\1\1", 2);
+	  gdk_gc_set_dashes (ctree->lines_gc, 0, "\1\1", 2);
 	  break;
 	case GTK_CTREE_LINES_NONE:
 	  break;
