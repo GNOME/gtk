@@ -1,3 +1,9 @@
+Mon Aug 23 17:19:19 2004  Jonathan Blandford  <jrb@redhat.com>
+
+	* configure.in:
+	* docs/tools/Makefile.am (clean-local): add the doc shooter to the
+	docs dir as an uninstalled helper tool.
+
 2004-08-23  Matthias Clasen  <mclasen@redhat.com>
 
 	* gdk/x11/gdkwindow-x11.c (show_window_internal): Make it compile.

@@ -1601,6 +1601,7 @@ docs/reference/gdk/version.xml
 docs/reference/gtk/Makefile
 docs/reference/gtk/version.xml
 docs/faq/Makefile
+docs/tools/Makefile
 docs/tutorial/Makefile
 gdk-pixbuf/Makefile
 gdk-pixbuf/gdk_pixbuf.rc

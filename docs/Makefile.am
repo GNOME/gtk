@@ -1,6 +1,6 @@
 ## Process this file with automake to produce Makefile.in
 
-SUBDIRS = tutorial faq reference
+SUBDIRS = tutorial faq reference tools
 
 EXTRA_DIST = \
 	defsformat.txt			\
