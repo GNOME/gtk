@@ -4568,14 +4568,17 @@ gtk_widget_get_screen (GtkWidget *widget)
     return GTK_WINDOW (GTK_MENU (toplevel)->toplevel)->screen;
   if (GTK_IS_OPTION_MENU (toplevel))
     return GTK_WINDOW (GTK_MENU(GTK_OPTION_MENU (toplevel)->menu)->toplevel)->screen;
-      
-	
+
+#ifdef GDK_MULTIHEAD_SAFE  
   g_warning (G_STRLOC ": Can't get associated screen"
 	     " for a widget unless it is inside a toplevel GtkWindow\n"
 	     " widget type is %s associated top level type is %s",
 	     g_type_name (G_OBJECT_TYPE(G_OBJECT (widget))),
 	     g_type_name (G_OBJECT_TYPE(G_OBJECT (toplevel))));
   return NULL;
+#else
+  return gdk_get_default_display ();
+#endif
 }
 /**
  * gtk_widget_has_screen:

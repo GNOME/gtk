@@ -26,8 +26,9 @@ Obtains the Xlib window id of the root window of the default screen.
 The current display.
 </para>
 
-@object: 
 @Returns: an Xlib <type>Display*</type>.
+<!-- # Unused Parameters # -->
+@object: 
 
 
 <!-- ##### MACRO GDK_WINDOW_XDISPLAY ##### -->

@@ -29,11 +29,16 @@
 
 #include <gdk/gdkprivate.h>
 #include <gdk/gdkcursor.h>
+#include <gdk/gdkdisplaymgr.h>
 
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
 
 G_BEGIN_DECLS
+
+#ifndef GDK_MULTIHEAD_SAFE
+extern Display          *gdk_display;
+#endif
 
 Display *gdk_x11_drawable_get_xdisplay    (GdkDrawable *drawable);
 XID      gdk_x11_drawable_get_xid         (GdkDrawable *drawable);
@@ -59,6 +64,8 @@ gint     gdk_x11_get_default_screen       (void);
 #define GDK_CURSOR_XCURSOR(cursor)    (gdk_x11_cursor_get_xcursor (cursor))
 #define GDK_IMAGE_XDISPLAY(image)     (gdk_x11_image_get_xdisplay (image))
 #define GDK_IMAGE_XIMAGE(image)       (gdk_x11_image_get_ximage (image))
+
+#define GDK_DISPLAY()                 gdk_get_default_display()
 
 #ifdef INSIDE_GDK_X11
 

@@ -100,34 +100,19 @@ void
 gdk_xid_table_insert (XID      *xid,
 		      gpointer  data)
 {
-  g_return_if_fail (xid != NULL);
-
-  if (!xid_ht)
-    xid_ht = g_hash_table_new ((GHashFunc) gdk_xid_hash,
-			       (GEqualFunc) gdk_xid_equal);
-
-  g_hash_table_insert (xid_ht, xid, data);
+  gdk_xid_table_insert_for_display (gdk_get_default_display (), xid, data);
 }
 
 void
 gdk_xid_table_remove (XID xid)
 {
-  if (!xid_ht)
-    xid_ht = g_hash_table_new ((GHashFunc) gdk_xid_hash,
-			       (GEqualFunc) gdk_xid_equal);
-
-  g_hash_table_remove (xid_ht, &xid);
+  gdk_xid_table_remove_for_display (gdk_get_default_display (), xid);
 }
 
 gpointer
 gdk_xid_table_lookup (XID xid)
 {
-  gpointer data = NULL;
-
-  if (xid_ht)
-    data = g_hash_table_lookup (xid_ht, &xid);
-  
-  return data;
+  gdk_xid_table_lookup_for_display (gdk_get_default_display (), xid);
 }
 #endif
 

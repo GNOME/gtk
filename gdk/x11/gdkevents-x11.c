@@ -366,7 +366,7 @@ gdk_add_client_message_filter (GdkAtom       message_type,
   filter->function = func;
   filter->data = data;
   
-  GDK_DISPLAY_IMPL_X11(display)->client_filters = 
+  GDK_DISPLAY_IMPL_X11(gdk_get_default_display())->client_filters = 
     g_list_prepend (GDK_DISPLAY_IMPL_X11 
 		    (gdk_get_default_display())->client_filters,
 		    filter);

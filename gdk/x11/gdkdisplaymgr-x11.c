@@ -81,6 +81,9 @@ gdk_display_manager_set_default_display (GdkDisplayManager * display_mgr,
   g_return_if_fail (GDK_IS_DISPLAY_MANAGER (display_mgr));
   g_return_if_fail (GDK_IS_DISPLAY (default_display));
   display_mgr->default_display = default_display;
+#ifndef GDK_MULTIHEAD_SAFE
+  gdk_display = GDK_DISPLAY_XDISPLAY (default_display);
+#endif
 }
 
 GdkDisplay *

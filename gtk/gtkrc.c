@@ -803,7 +803,7 @@ gtk_rc_parse_string (const gchar *rc_string)
 {
   g_return_if_fail (rc_string != NULL);
 
-  gtk_rc_parse_any (gtk_rc_context_get (gtk_settings_get_for_screen (gdk_get_default_scren ())),
+  gtk_rc_parse_any (gtk_rc_context_get (gtk_settings_get_for_screen (gdk_get_default_screen ())),
 		    "-", -1, rc_string);	/* FIXME */
 }
 #endif
@@ -916,7 +916,7 @@ gtk_rc_parse (const gchar *filename)
 {
   g_return_if_fail (filename != NULL);
 
-  gtk_rc_parse_file (gtk_rc_context_get (gtk_settings_get_for_screen (gdk_get_default_scren ())),
+  gtk_rc_parse_file (gtk_rc_context_get (gtk_settings_get_for_screen (gdk_get_default_screen ())),
 		     filename, GTK_PATH_PRIO_RC, TRUE); /* FIXME */
 }
 #endif

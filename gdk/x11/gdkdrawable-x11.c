@@ -756,16 +756,40 @@ gdk_x11_get_depth (GdkDrawable *drawable)
   return gdk_drawable_get_depth (GDK_DRAWABLE_IMPL_X11 (drawable)->wrapper);
 }
 
+
+static GdkDrawable * get_impl_drawable (GdkDrawable *drawable)
+{
+  GdkDrawable *impl;
+  
+  if (GDK_IS_WINDOW (drawable))
+    impl = ((GdkPixmapObject *)drawable)->impl;
+  else if (GDK_IS_PIXMAP (drawable))
+    impl = ((GdkPixmapObject *)drawable)->impl;
+  else
+    {
+      g_warning (G_STRLOC " drawable is not a pixmap or window");
+      return None;
+    }
+  return impl;
+}
+
+
 static GdkScreen*
 gdk_x11_get_screen (GdkDrawable *drawable)
 {
-  return GDK_DRAWABLE_IMPL_X11 (drawable)->screen;
+  if (GDK_IS_DRAWABLE_IMPL_X11 (drawable))
+    return GDK_DRAWABLE_IMPL_X11 (drawable)->screen;
+  else
+    return GDK_DRAWABLE_IMPL_X11 (get_impl_drawable (drawable))->screen;
 }
 
 static GdkDisplay*
 gdk_x11_get_display (GdkDrawable *drawable)
 {
-  return gdk_screen_get_display (GDK_DRAWABLE_IMPL_X11 (drawable)->screen);
+  if (GDK_IS_DRAWABLE_IMPL_X11 (drawable))
+    return gdk_screen_get_display (GDK_DRAWABLE_IMPL_X11 (drawable)->screen);
+  else
+    return gdk_screen_get_display (GDK_DRAWABLE_IMPL_X11 (get_impl_drawable (drawable))->screen);
 }
 
 static GdkVisual*
