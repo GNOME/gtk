@@ -1,3 +1,13 @@
+Mon Jan 21 10:29:45 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdk.c: Fix wrong types for command line arguments 
+	(#69124, Ryan Lovett)
+
+	* gdk/gdk.c (gdk_arg_context_parse): Fix bug in parsing
+	parsing '--arg VALUE'.
+
+	* gdk/gdk.c: Remove unused variable gdk_error_trap_free_list.
+
 2002-01-21  Havoc Pennington  <hp@pobox.com>
 
 	* gdk/gdkwindow.c (gdk_window_add_filter): mention that window 

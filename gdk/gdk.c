@@ -50,8 +50,6 @@ static int gdk_initialized = 0;			    /* 1 if the library is initialized,
 						     * 0 otherwise.
 						     */
 
-static GSList *gdk_error_trap_free_list = NULL;      /* Free list */
-
 static gchar  *gdk_progclass = NULL;
 
 #ifdef G_ENABLE_DEBUG
@@ -128,7 +126,7 @@ gdk_arg_context_parse (GdkArgContext *context, gint *argc, gchar ***argv)
 			int len = strlen (table[k].name);
 			
 			if (strncmp (arg, table[k].name, len) == 0 &&
-			    (arg[len] == '=' || argc[len] == 0))
+			    (arg[len] == '=' || arg[len] == 0))
 			  {
 			    char *value = NULL;
 
@@ -228,8 +226,8 @@ gdk_arg_name_cb (const char *key, const char *value, gpointer user_data)
 }
 
 static GdkArgDesc gdk_args[] = {
-  { "class" ,       GDK_ARG_STRING,   NULL, gdk_arg_class_cb    },
-  { "name",         GDK_ARG_STRING,   NULL, gdk_arg_name_cb     },
+  { "class" ,       GDK_ARG_CALLBACK, NULL, gdk_arg_class_cb    },
+  { "name",         GDK_ARG_CALLBACK, NULL, gdk_arg_name_cb     },
 #ifdef G_ENABLE_DEBUG
   { "gdk-debug",    GDK_ARG_CALLBACK, NULL, gdk_arg_debug_cb    },
   { "gdk-no-debug", GDK_ARG_CALLBACK, NULL, gdk_arg_no_debug_cb },
