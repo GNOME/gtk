@@ -1,3 +1,13 @@
+Sat Jun  5 23:07:30 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkentrycompletion.c: (gtk_entry_completion_init),
+	(gtk_entry_completion_list_enter_notify),
+	(gtk_entry_completion_list_motion_notify),
+	(_gtk_entry_completion_popup), (_gtk_entry_completion_popdown):
+	* gtk/gtkentryprivate.h: Add an ignore_enter flag and
+	use it as in the menu code to avoid the initial selection if
+	the window pops up under the pointer.  (Anders Carlsson)
+
 Sat Jun  5 20:05:39 2004  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 	* tests/testmerge.c: Add a checkbox to queue an

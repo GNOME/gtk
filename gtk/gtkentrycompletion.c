@@ -109,7 +109,12 @@ static gboolean gtk_entry_completion_action_button_press (GtkWidget             
                                                           gpointer                 user_data);
 static void     gtk_entry_completion_selection_changed   (GtkTreeSelection        *selection,
                                                           gpointer                 data);
-
+static gboolean	gtk_entry_completion_list_enter_notify	 (GtkWidget               *widget,
+							  GdkEventCrossing        *event,
+							  gpointer                 data);
+static gboolean gtk_entry_completion_list_motion_notify	 (GtkWidget		  *widget,
+							  GdkEventMotion          *event,
+							  gpointer 		   data);
 static void     gtk_entry_completion_insert_action       (GtkEntryCompletion      *completion,
                                                           gint                     index,
                                                           const gchar             *string,
@@ -271,6 +276,12 @@ gtk_entry_completion_init (GtkEntryCompletion *completion)
   g_signal_connect (priv->tree_view, "button_press_event",
                     G_CALLBACK (gtk_entry_completion_list_button_press),
                     completion);
+  g_signal_connect (priv->tree_view, "enter_notify_event",
+		    G_CALLBACK (gtk_entry_completion_list_enter_notify),
+		    completion);
+  g_signal_connect (priv->tree_view, "motion_notify_event",
+		    G_CALLBACK (gtk_entry_completion_list_motion_notify),
+		    completion);
   gtk_tree_view_set_headers_visible (GTK_TREE_VIEW (priv->tree_view), FALSE);
   _gtk_tree_view_set_hover_selection (GTK_TREE_VIEW (priv->tree_view), TRUE);
 
@@ -303,6 +314,12 @@ gtk_entry_completion_init (GtkEntryCompletion *completion)
   g_signal_connect (priv->action_view, "button_press_event",
                     G_CALLBACK (gtk_entry_completion_action_button_press),
                     completion);
+  g_signal_connect (priv->action_view, "enter_notify_event",
+		    G_CALLBACK (gtk_entry_completion_list_enter_notify),
+		    completion);
+  g_signal_connect (priv->action_view, "motion_notify_event",
+		    G_CALLBACK (gtk_entry_completion_list_motion_notify),
+		    completion);
   gtk_tree_view_set_headers_visible (GTK_TREE_VIEW (priv->action_view), FALSE);
   _gtk_tree_view_set_hover_selection (GTK_TREE_VIEW (priv->action_view), TRUE);
 
@@ -1096,6 +1113,29 @@ get_borders (GtkEntry *entry,
     }
 }
 
+static gboolean
+gtk_entry_completion_list_enter_notify (GtkWidget        *widget,
+					GdkEventCrossing *event,
+					gpointer          data)
+{
+  GtkEntryCompletion *completion = GTK_ENTRY_COMPLETION (data);
+  
+  return completion->priv->ignore_enter;
+}
+
+static gboolean
+gtk_entry_completion_list_motion_notify (GtkWidget      *widget,
+					 GdkEventMotion *event,
+					 gpointer        data)
+{
+  GtkEntryCompletion *completion = GTK_ENTRY_COMPLETION (data);
+
+  completion->priv->ignore_enter = FALSE; 
+  
+  return FALSE;
+}
+
+
 /* some nasty size requisition */
 gboolean
 _gtk_entry_completion_resize_popup (GtkEntryCompletion *completion)
@@ -1196,8 +1236,8 @@ _gtk_entry_completion_popup (GtkEntryCompletion *completion)
   if (GTK_WIDGET_MAPPED (completion->priv->popup_window))
     return;
 
-  completion->priv->may_wrap = TRUE;
-
+  completion->priv->ignore_enter = TRUE;
+    
   column = gtk_tree_view_get_column (GTK_TREE_VIEW (completion->priv->action_view), 0);
   renderers = gtk_tree_view_column_get_cell_renderers (column);
   gtk_widget_ensure_style (completion->priv->tree_view);
@@ -1223,6 +1263,8 @@ _gtk_entry_completion_popup (GtkEntryCompletion *completion)
 void
 _gtk_entry_completion_popdown (GtkEntryCompletion *completion)
 {
+  completion->priv->ignore_enter = FALSE;
+  
   gdk_pointer_ungrab (GDK_CURRENT_TIME);
   gtk_grab_remove (completion->priv->popup_window);
 
