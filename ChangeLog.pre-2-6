@@ -1,3 +1,8 @@
+Fri Oct 25 17:32:44 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtktoolbar.c: Don't insert mnemonics for stock
+	items (#72918, reported by Mikael Hallendal)
+
 Fri Oct 25 14:51:34 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkfilesel.c: Fix sensitivity of file operation

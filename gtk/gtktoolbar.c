@@ -25,6 +25,8 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
+#include <string.h>
+
 #include "gtkbutton.h"
 #include "gtktogglebutton.h"
 #include "gtkradiobutton.h"
@@ -118,8 +120,7 @@ static GtkWidget * gtk_toolbar_internal_insert_element (GtkToolbar          *too
                                                         GtkWidget           *icon,
                                                         GtkSignalFunc        callback,
                                                         gpointer             user_data,
-                                                        gint                 position,
-                                                        gboolean             has_mnemonic);
+                                                        gint                 position);
 
 static GtkWidget * gtk_toolbar_internal_insert_item (GtkToolbar    *toolbar,
                                                      const char    *text,
@@ -128,8 +129,7 @@ static GtkWidget * gtk_toolbar_internal_insert_item (GtkToolbar    *toolbar,
                                                      GtkWidget     *icon,
                                                      GtkSignalFunc  callback,
                                                      gpointer       user_data,
-                                                     gint           position,
-                                                     gboolean       has_mnemonic);
+                                                     gint           position);
 
 static void        gtk_toolbar_update_button_relief (GtkToolbar *toolbar);
 
@@ -959,14 +959,13 @@ gtk_toolbar_internal_insert_item (GtkToolbar    *toolbar,
                                   GtkWidget     *icon,
                                   GtkSignalFunc  callback,
                                   gpointer       user_data,
-                                  gint           position,
-                                  gboolean       has_mnemonic)
+                                  gint           position)
 {
   return gtk_toolbar_internal_insert_element (toolbar, GTK_TOOLBAR_CHILD_BUTTON,
                                               NULL, text,
                                               tooltip_text, tooltip_private_text,
                                               icon, callback, user_data,
-                                              position, has_mnemonic);
+                                              position);
 }
      
 GtkWidget *
@@ -982,7 +981,7 @@ gtk_toolbar_insert_item (GtkToolbar    *toolbar,
   return gtk_toolbar_internal_insert_item (toolbar, 
                                            text, tooltip_text, tooltip_private_text,
                                            icon, callback, user_data,
-                                           position, FALSE);
+                                           position);
 }
 
 /**
@@ -1083,6 +1082,32 @@ gtk_toolbar_unset_icon_size (GtkToolbar  *toolbar)
     }
 }
 
+static gchar *
+elide_underscores (const gchar *original)
+{
+  gchar *q, *result;
+  const gchar *p;
+  gboolean last_underscore;
+
+  q = result = g_malloc (strlen (original + 1));
+  last_underscore = FALSE;
+  
+  for (p = original; *p; p++)
+    {
+      if (!last_underscore && *p == '_')
+	last_underscore = TRUE;
+      else
+	{
+	  last_underscore = FALSE;
+	  *q++ = *p;
+	}
+    }
+  
+  *q = '\0';
+  
+  return result;
+}
+
 /**
  * gtk_toolbar_insert_stock:
  * @toolbar: A #GtkToolbar
@@ -1096,8 +1121,7 @@ gtk_toolbar_unset_icon_size (GtkToolbar  *toolbar)
  *
  * Inserts a stock item at the specified position of the toolbar.  If
  * @stock_id is not a known stock item ID, it's inserted verbatim,
- * except that underscores are used to mark mnemonics (see
- * gtk_label_new_with_mnemonic()).
+ * except that underscores used to mark mnemonics are removed.
  *
  * Returns: the inserted widget
  */
@@ -1111,32 +1135,30 @@ gtk_toolbar_insert_stock (GtkToolbar      *toolbar,
 			  gint             position)
 {
   GtkStockItem item;
-  GtkWidget *image;
+  GtkWidget *image = NULL;
+  const gchar *label;
+  gchar *label_no_mnemonic;
 
   if (gtk_stock_lookup (stock_id, &item))
     {
       image = gtk_image_new_from_stock (stock_id, toolbar->icon_size);
-
-      return gtk_toolbar_internal_insert_item (toolbar,
-                                               item.label,
-                                               tooltip_text,
-                                               tooltip_private_text,
-                                               image,
-                                               callback,
-                                               user_data,
-                                               position,
-                                               TRUE);
+      label = item.label;
     }
   else
-    return gtk_toolbar_internal_insert_item (toolbar,
-                                             stock_id,
-                                             tooltip_text,
-                                             tooltip_private_text,
-                                             NULL,
-                                             callback,
-                                             user_data,
-                                             position,
-                                             TRUE);
+    label = stock_id;
+
+  label_no_mnemonic = elide_underscores (label);
+  
+  return gtk_toolbar_internal_insert_item (toolbar,
+					   label_no_mnemonic,
+					   tooltip_text,
+					   tooltip_private_text,
+					   image,
+					   callback,
+					   user_data,
+					   position);
+
+  g_free (label_no_mnemonic);
 }
 
 
@@ -1366,7 +1388,7 @@ gtk_toolbar_insert_element (GtkToolbar          *toolbar,
   return gtk_toolbar_internal_insert_element (toolbar, type, widget, text,
                                               tooltip_text, tooltip_private_text,
                                               icon, callback, user_data,
-                                              position, FALSE);
+                                              position);
 }
 
 static GtkWidget *
@@ -1379,8 +1401,7 @@ gtk_toolbar_internal_insert_element (GtkToolbar          *toolbar,
                                      GtkWidget           *icon,
                                      GtkSignalFunc        callback,
                                      gpointer             user_data,
-                                     gint                 position,
-                                     gboolean             has_mnemonic)
+                                     gint                 position)
 {
   GtkToolbarChild *child;
   GtkWidget *box;
@@ -1453,10 +1474,7 @@ gtk_toolbar_internal_insert_element (GtkToolbar          *toolbar,
 
       if (text)
 	{
-          if (has_mnemonic)
-            child->label = gtk_label_new_with_mnemonic (text);
-          else
-            child->label = gtk_label_new (text);
+	  child->label = gtk_label_new (text);
 	  gtk_box_pack_end (GTK_BOX (box), child->label, FALSE, FALSE, 0);
 	  if (toolbar->style != GTK_TOOLBAR_ICONS)
 	    gtk_widget_show (child->label);
