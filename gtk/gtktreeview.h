@@ -86,10 +86,6 @@ struct _GtkTreeViewClass
   void     (* columns_changed)            (GtkTreeView       *tree_view);
 
   /* Key Binding signals */
-  void     (* begin_extended_selection)   (GtkTreeView       *tree_view);
-  void     (* end_extended_selection)     (GtkTreeView       *tree_view);
-  void     (* begin_free_motion)          (GtkTreeView       *tree_view);
-  void     (* end_free_motion)            (GtkTreeView       *tree_view);
   void     (* move_cursor)                (GtkTreeView       *tree_view,
 				           GtkMovementStep    step,
 				           gint               count);

@@ -40,7 +40,7 @@ enum
 };
 
 static GObjectClass *parent_class = NULL;
-static guint tree_selection_signals[LAST_SIGNAL] = { 0 };
+static guint tree_selection_signals [LAST_SIGNAL] = { 0 };
 
 GtkType
 gtk_tree_selection_get_type (void)
@@ -816,10 +816,7 @@ gtk_tree_selection_real_select_range (GtkTreeSelection *selection,
 
   do
     {
-      if (GTK_RBNODE_FLAG_SET (start_node, GTK_RBNODE_IS_SELECTED))
-	{
-	  dirty = gtk_tree_selection_real_select_node (selection, start_tree, start_node, FALSE);
-	}
+      dirty |= gtk_tree_selection_real_select_node (selection, start_tree, start_node, TRUE);
 
       if (start_node == end_node)
 	break;
@@ -833,26 +830,13 @@ gtk_tree_selection_real_select_range (GtkTreeSelection *selection,
 	}
       else
 	{
-	  gboolean done = FALSE;
-	  do
+	  _gtk_rbtree_next_full (start_tree, start_node, &start_tree, &start_node);
+	  if (start_tree == NULL)
 	    {
-	      start_node = _gtk_rbtree_next (start_tree, start_node);
-	      if (start_node != NULL)
-		{
-		  done = TRUE;
-		}
-	      else
-		{
-		  start_node = start_tree->parent_node;
-		  start_tree = start_tree->parent_tree;
-		  if (start_tree == NULL)
-                    /* FIXME should this really be silent, or should it g_warning? */
-		    /* we've run out of tree */
-		    /* This means we never found end node!! */
-		    break;
-		}
+	      /* we just ran out of tree.  That means someone passed in bogus values.
+	       */
+	      return dirty;
 	    }
-	  while (!done);
 	}
     }
   while (TRUE);

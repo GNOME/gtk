@@ -172,9 +172,6 @@ struct _GtkTreeViewPrivate
   /* hint to display rows in alternating colors */
   guint has_rules : 1;
 
-  guint in_extended_selection : 1;
-  guint in_free_motion : 1;
-
   /* interactive search */
   guint enable_search : 1;
   gint search_column;

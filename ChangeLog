@@ -1,3 +1,9 @@
+Wed Aug 22 18:25:46 2001  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtktreeview.c: Fix selection.  I think it's all dandy now.
+	We check the current event for modifiers rather than try to trap
+	all presses.
+
 2001-08-22  Anders Carlsson  <andersca@gnu.org>
 
 	* gtk/gtkliststore.h (GTK_LIST_STORE_CLASS): Fix a small typo.
