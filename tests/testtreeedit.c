@@ -80,6 +80,20 @@ edited (GtkCellRendererText *cell,
   gtk_tree_path_free (path);
 }
 
+static gboolean
+button_press_event (GtkWidget *widget, GdkEventButton *event, gpointer callback_data)
+{
+	/* Deselect if people click outside any row. */
+	if (event->window == gtk_tree_view_get_bin_window (GTK_TREE_VIEW (widget))
+	    && !gtk_tree_view_get_path_at_pos (GTK_TREE_VIEW (widget),
+					       event->x, event->y, NULL, NULL, NULL, NULL)) {
+		gtk_tree_selection_unselect_all (gtk_tree_view_get_selection (GTK_TREE_VIEW (widget)));
+	}
+
+	/* Let the default code run in any case; it won't reselect anything. */
+	return FALSE;
+}
+
 gint
 main (gint argc, gchar **argv)
 {
@@ -102,6 +116,7 @@ main (gint argc, gchar **argv)
 
   tree_model = create_model ();
   tree_view = gtk_tree_view_new_with_model (tree_model);
+  g_signal_connect (tree_view, "button_press_event", G_CALLBACK (button_press_event), NULL);
   gtk_tree_view_set_rules_hint (GTK_TREE_VIEW (tree_view), TRUE);
   gtk_tree_view_set_headers_visible (GTK_TREE_VIEW (tree_view), FALSE);
 
