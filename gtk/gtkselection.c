@@ -685,7 +685,7 @@ void
 gtk_selection_data_set (GtkSelectionData *selection_data,
 			GdkAtom		  type,
 			gint		  format,
-			guchar		 *data,
+			const guchar	 *data,
 			gint		  length)
 {
   if (selection_data->data)
