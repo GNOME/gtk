@@ -1,3 +1,8 @@
+2005-03-11  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkicontheme.c (gtk_icon_theme_set_custom_theme): Fix
+	the doc comments.  (#169967, Masao Mutoh)
+
 2005-03-12  Ivan, Wong Yat Cheung  <email@ivanwong.info>
 
 	Big window fix for Win32. Big windows are still emulated within

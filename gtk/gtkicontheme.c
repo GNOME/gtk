@@ -823,12 +823,13 @@ gtk_icon_theme_prepend_search_path (GtkIconTheme *icon_theme,
 /**
  * gtk_icon_theme_set_custom_theme:
  * @icon_theme: a #GtkIconTheme
- * @theme_name: name of icon theme to use instead of configured theme
+ * @theme_name: name of icon theme to use instead of configured theme,
+ *   or %NULL to unset a previously set custom theme
  * 
  * Sets the name of the icon theme that the #GtkIconTheme object uses
  * overriding system configuration. This function cannot be called
  * on the icon theme objects returned from gtk_icon_theme_get_default()
- * and gtk_icon_theme_get_default().
+ * and gtk_icon_theme_get_for_screen().
  *
  * Since: 2.4
  **/
