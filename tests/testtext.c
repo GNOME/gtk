@@ -930,6 +930,8 @@ do_search (gpointer callback_data,
   GtkWidget *dialog;
   GtkWidget *search_text;
   GtkTextBuffer *buffer;
+
+#if 0
   
   dialog = gtk_dialog_new_with_buttons ("Search",
                                         GTK_WINDOW (view->window),
@@ -958,6 +960,7 @@ do_search (gpointer callback_data,
   gtk_widget_grab_focus (search_text);
   
   gtk_widget_show_all (dialog);
+#endif
 }
 
 static void
@@ -1288,7 +1291,8 @@ buffer_search_forward (Buffer *buffer, const char *str,
           ++i;
         }
     }
-  
+
+#if 0  
   dialog = gtk_message_dialog_new (GTK_WINDOW (view->window),
                                    GTK_MESSAGE_INFO,
                                    GTK_BUTTONS_OK,
@@ -1302,6 +1306,7 @@ buffer_search_forward (Buffer *buffer, const char *str,
                              GTK_OBJECT (dialog));
   
   gtk_widget_show (dialog);
+#endif
 }
 
 static void

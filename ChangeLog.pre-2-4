@@ -1,5 +1,10 @@
 2000-07-25  Havoc Pennington  <hp@redhat.com>
 
+	* gtk/testtext.c: Comment out some stuff that depends on the rest
+	of my patches.
+
+2000-07-25  Havoc Pennington  <hp@redhat.com>
+
 	* gtk/gtkmarshal.list: Add NONE:POINTER,POINTER,INT for the text
 	buffer
 
