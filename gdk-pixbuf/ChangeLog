@@ -1,3 +1,11 @@
+2000-04-04  Ettore Perazzoli  <ettore@helixcode.com>
+
+	* gdk-pixbuf/gdk-pixbuf-animation.c
+	(gdk_pixbuf_animation_get_width): New accessor function.
+	(gdk_pixbuf_animation_get_height): New accessor function.
+	(gdk_pixbuf_animation_get_num_frames): New accessor function.
+	(gdk_pixbuf_animation_get_frames): New accessor function.
+
 2000-04-01  Federico Mena Quintero  <federico@helixcode.com>
 
 	* gdk-pixbuf/gdk-pixbuf.c: Reverted Mark's change.  The refcount

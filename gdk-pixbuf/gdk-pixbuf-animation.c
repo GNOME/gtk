@@ -162,3 +162,64 @@ gdk_pixbuf_animation_unref (GdkPixbufAnimation *animation)
 		g_free (animation);
 	}
 }
+
+/**
+ * gdk_pixbuf_animation_get_width:
+ * @animation: An animation.
+ * 
+ * Return the width of @animation.
+ **/
+int
+gdk_pixbuf_animation_get_width (GdkPixbufAnimation *animation)
+{
+	g_return_val_if_fail (animation != NULL, 0);
+	g_return_val_if_fail (animation->ref_count > 0, 0);
+
+	return animation->width;
+}
+
+/**
+ * gdk_pixbuf_animation_get_height:
+ * @animation: An animation.
+ * 
+ * Return the height of @animation.
+ **/
+int
+gdk_pixbuf_animation_get_height (GdkPixbufAnimation *animation)
+{
+	g_return_val_if_fail (animation != NULL, 0);
+	g_return_val_if_fail (animation->ref_count > 0, 0);
+
+	return animation->height;
+}
+
+/**
+ * gdk_pixbuf_animation_get_num_frames:
+ * @animation: An animation.
+ * 
+ * Return the number of frames in @animation.
+ **/
+int
+gdk_pixbuf_animation_get_num_frames (GdkPixbufAnimation *animation)
+{
+	g_return_val_if_fail (animation != NULL, 0);
+	g_return_val_if_fail (animation->ref_count > 0, 0);
+
+	return animation->n_frames;
+}
+
+/**
+ * gdk_pixbuf_animation_get_frames:
+ * @animation: An animation.
+ * 
+ * Return the frames of @animation as a list of
+ * GdkPixbufAnimationFrame objects.
+ **/
+GList *
+gdk_pixbuf_animation_get_frames (GdkPixbufAnimation *animation)
+{
+	g_return_val_if_fail (animation != NULL, 0);
+	g_return_val_if_fail (animation->ref_count > 0, 0);
+
+	return animation->frames;
+}
