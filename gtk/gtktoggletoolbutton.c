@@ -102,12 +102,14 @@ gtk_toggle_tool_button_class_init (GtkToggleToolButtonClass *klass)
 		  NULL, NULL,
 		  g_cclosure_marshal_VOID__VOID,
 		  G_TYPE_NONE, 0);
+
+  g_type_class_add_private (object_class, sizeof (GtkToggleToolButtonPrivate));
 }
 
 static void
 gtk_toggle_tool_button_init (GtkToggleToolButton *button)
 {
-  button->priv = g_new0 (GtkToggleToolButtonPrivate, 1);
+  button->priv = GTK_TOGGLE_TOOL_BUTTON_GET_PRIVATE (button);
   
   g_signal_connect_object (_gtk_tool_button_get_button (GTK_TOOL_BUTTON (button)),
 			   "toggled", G_CALLBACK (button_toggled), button, 0);

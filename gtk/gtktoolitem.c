@@ -190,10 +190,7 @@ gtk_tool_item_class_init (GtkToolItemClass *klass)
 		  G_TYPE_STRING,
 		  G_TYPE_STRING);		  
 
-  /* FIXME: enable this when bug 116921 is fixed */
-#if 0
   g_type_class_add_private (object_class, sizeof (GtkToolItemPrivate));
-#endif
 }
 
 static void
@@ -201,11 +198,7 @@ gtk_tool_item_init (GtkToolItem *toolitem)
 {
   GTK_WIDGET_UNSET_FLAGS (toolitem, GTK_CAN_FOCUS);  
 
-  /* FIXME: enable this when bug 116921 is fixed */
-#if 0
   toolitem->priv = GTK_TOOL_ITEM_GET_PRIVATE (toolitem);
-#endif
-  toolitem->priv = g_new0 (GtkToolItemPrivate, 1);
 
   toolitem->priv->visible_horizontal = TRUE;
   toolitem->priv->visible_vertical = TRUE;

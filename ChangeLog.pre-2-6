@@ -1,3 +1,14 @@
+Tue Jul  8 21:35:22 2003  Soeren Sandmann  <sandmann@daimi.au.dk>
+
+	* gtk/gtktoggletoolbutton.h: remove strange #define
+	* gtk/gtktoolbutton.h: fix cut'n'paste error
+	* gtk/gtktoolbutton.c (gtk_tool_button_init): use instance
+	private data
+	* gtk/gtktoolitem.c (gtk_tool_item_class_init): use instance
+	private data instead of g_new0()
+	* gtk/gtktoggletoolbutton.c (gtk_toggle_tool_button_init): use
+	instance private data
+
 Tue Jul  8 21:10:14 2003  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 	* gtk/gtkbutton.c (gtk_button_realize): remove GDK_EXPOSURE_MASK
