@@ -1,3 +1,7 @@
+2003-09-02  Dom Lachowicz <cinamod@hotmail.com>
+
+	* src/wimp_style.c: We now honor font preferences being bold or italic
+	
 2003-08-29  Dom Lachowicz <cinamod@hotmail.com>
 
 	* src/*.c: Theme GTK toolbar arrows to XP chevrons, once my GTK patch is committed.

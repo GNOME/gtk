@@ -153,13 +153,53 @@ sys_font_to_pango_font (SystemFontType type, char * buf)
 {
   LOGFONT lf;
   int pt_size;
+  const char * weight;
+  const char * style;
+
+/*
+TODO: I don't think that pango font descriptions let you set these
+  BYTE lfUnderline; underline=single|none
+  BYTE lfStrikeOut; strikethrough=true|false
+*/
 
   if (get_system_font(type, &lf))
     {
+	  switch (lf.lfWeight) {
+		case FW_THIN:
+		case FW_EXTRALIGHT:
+			weight = "ultralight";
+			break;
+
+		case FW_LIGHT:
+			weight = "light";
+			break;
+
+		case FW_SEMIBOLD:
+		case FW_BOLD:
+			weight = "bold";
+			break;
+
+		case FW_ULTRABOLD:
+			weight = "ultrabold";
+			break;
+
+		case FW_HEAVY:
+			weight = "heavy";
+
+		default:
+			weight = "normal";
+			break;
+	  }
+
+	  if (lf.lfItalic)
+		  style="italic";
+	  else
+		  style="normal";
+
       pt_size = -MulDiv(lf.lfHeight, 72,
                         GetDeviceCaps(GetDC(GetDesktopWindow()),
                                       LOGPIXELSY));
-      sprintf(buf, "%s %d", lf.lfFaceName, pt_size);
+      sprintf(buf, "%s %s %s %d", lf.lfFaceName, style, weight, pt_size);
 
 	  return buf;
 	}
@@ -170,7 +210,7 @@ sys_font_to_pango_font (SystemFontType type, char * buf)
 static void
 setup_system_font(GtkStyle *style)
 {
-  char buf[64], * font; /* It's okay, lfFaceName is smaller than 32 chars */
+  char buf[256], * font; /* It's okay, lfFaceName is smaller than 32 chars */
 
   if ((font = sys_font_to_pango_font(MESSAGE_FONT, buf)) != NULL)
     {
