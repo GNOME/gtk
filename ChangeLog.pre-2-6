@@ -1,3 +1,7 @@
+2004-08-13  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkaction.c (gtk_action_new): Fix the docs.
+
 Fri Aug 13 01:06:56 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtktreeview.c (gtk_tree_view_row_inserted): 
@@ -45,7 +49,7 @@ Thu Aug 12 01:35:46 2004  Matthias Clasen  <maclas@gmx.de>
 	implementing the necesssary ATK interfaces.  (#149728,
 	Padraig O'Briain)
 
-Thu Aug 12 00:02:29 2004  Matthias Clasen  <maclas@gmx.de>
+Thu Aug 12 00:02:29 2004  Matthias Clasen  <maclas@gmx.de
 
 	* gtk/gtkaction.c (gtk_action_new): Link to information about
 	allowed action names.  (#149620, David Malcolm)
