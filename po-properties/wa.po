@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: gtk20 1.3.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2004-04-30 12:06-0400\n"
-"PO-Revision-Date: 2004-04-06 16:36+0200\n"
+"PO-Revision-Date: 2004-05-03 14:21+0200\n"
 "Last-Translator: Pablo Saratxaga <pablo@walon.org>\n"
 "Language-Team: Walloon <linux-wa@walon.org>\n"
 "MIME-Version: 1.0\n"
@@ -2803,35 +2803,39 @@ msgstr ""
 
 #: gtk/gtkseparatortoolitem.c:135
 msgid "Draw"
-msgstr ""
+msgstr "Dessiné"
 
 #: gtk/gtkseparatortoolitem.c:136
 msgid "Whether the separator is drawn, or just blank"
-msgstr ""
+msgstr "Si l' separateu est dessiné, ou leyî vude"
 
 #: gtk/gtksettings.c:262
 msgid "Double Click Time"
-msgstr ""
+msgstr "Tins pol dobe clitchaedje"
 
 #: gtk/gtksettings.c:263
 msgid ""
 "Maximum time allowed between two clicks for them to be considered a double "
 "click (in milliseconds)"
 msgstr ""
+"Tins macsimom inte deus clitchs po k' i soeyexhe veyous come on dobe "
+"clitchaedje (e milisegondes)"
 
 #: gtk/gtksettings.c:270
 msgid "Double Click Distance"
-msgstr ""
+msgstr "Distance pol dobe clitchaedje"
 
 #: gtk/gtksettings.c:271
 msgid ""
 "Maximum distance allowed between two clicks for them to be considered a "
 "double click (in pixels)"
 msgstr ""
+"Distance macsimom inte deus clitchs po k' i soeyexhe veyous come on dobe "
+"clitchaedje (e picsels)"
 
 #: gtk/gtksettings.c:278
 msgid "Cursor Blink"
-msgstr ""
+msgstr "Gligntant cursoe"
 
 #: gtk/gtksettings.c:279
 msgid "Whether the cursor should blink"
@@ -2839,7 +2843,7 @@ msgstr ""
 
 #: gtk/gtksettings.c:286
 msgid "Cursor Blink Time"
-msgstr ""
+msgstr "Tins di gligntaedje do cursoe"
 
 #: gtk/gtksettings.c:287
 msgid "Length of the cursor blink cycle, in milleseconds"
@@ -4137,6 +4141,8 @@ msgid ""
 "If TRUE, the window has no mimimum size. Setting this to TRUE is 99% of the "
 "time a bad idea"
 msgstr ""
+"Si metou a VRAIY, li purnea n' a pont d' grandeu minimom. Mete çouci a VRAIY "
+"est 99% des côps ene måle idêye"
 
 #: gtk/gtkwindow.c:474
 msgid "Allow Grow"

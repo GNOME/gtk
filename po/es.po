@@ -1594,7 +1594,7 @@ msgstr "No se ha podido encontrar el archivo include: «%s»"
 #: gtk/gtkrc.c:3029 gtk/gtkrc.c:3032
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
-msgstr "Imposible de encontrar un archivo imagen en pixmap_path: «%s»"
+msgstr "Imposible encontrar un archivo imagen en pixmap_path: «%s»"
 
 #: gtk/gtkrc.c:3467
 #, c-format
@@ -1923,7 +1923,7 @@ msgstr "ZWNJ No-ens_amblador de ancho cero"
 #: gtk/gtkthemes.c:70
 #, c-format
 msgid "Unable to locate theme engine in module_path: \"%s\","
-msgstr "Imposible de encontrar el motor de estilos en module_path: «%s»,"
+msgstr "Imposible encontrar el motor de estilos en module_path: «%s»,"
 
 #: gtk/gtktipsquery.c:185
 msgid "--- No Tip ---"
