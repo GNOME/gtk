@@ -1,6 +1,8 @@
-2004-07-01  Raymond Penners  <raymond@dotsphinx.com>
+2004-07-02  Raymond Penners  <raymond@dotsphinx.com>
 
 	* === Released 0.6.1 ===
+	
+	* configure.in: Really bumped version number (0.6.1)
 	
 	* src/msw_style.c,src/Theme/gtk-2.0/gtkrc: Removed hard-coded icon
 	button blocking. It is now configurable from within the gtkrc
