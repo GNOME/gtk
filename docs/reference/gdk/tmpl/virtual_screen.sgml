@@ -1,0 +1,70 @@
+<!-- ##### SECTION Title ##### -->
+Virtual Screen Support
+
+<!-- ##### SECTION Short_Description ##### -->
+
+Functions to retrieve monitors information in Xinerama mode
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+This section describes the functions available to retrieve information
+about the monitors size and positioning when an application is started
+on virtual screen (e.g. Xinerama mode on X).
+
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### FUNCTION gdk_screen_use_virtual_screen ##### -->
+<para>
+
+</para>
+
+@screen: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_screen_get_num_monitors ##### -->
+<para>
+
+</para>
+
+@screen: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_screen_get_monitor_geometry ##### -->
+<para>
+
+</para>
+
+@screen: 
+@num_monitor: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_screen_get_monitor_num_at_point ##### -->
+<para>
+
+</para>
+
+@screen: 
+@x: 
+@y: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_screen_get_monitor_num_at_window ##### -->
+<para>
+
+</para>
+
+@screen: 
+@anid: 
+@Returns: 
+
+
