@@ -587,18 +587,18 @@ static gint
 gtk_menu_shell_is_item (GtkMenuShell *menu_shell,
 			GtkWidget    *child)
 {
-  GtkMenuShell *parent;
+  GtkWidget *parent;
 
   g_return_val_if_fail (menu_shell != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_MENU_SHELL (menu_shell), FALSE);
   g_return_val_if_fail (child != NULL, FALSE);
 
-  parent = GTK_MENU_SHELL (child->parent);
+  parent = child->parent;
   while (parent && GTK_IS_MENU_SHELL (parent))
     {
-      if (parent == menu_shell)
+      if (parent == (GtkWidget*) menu_shell)
 	return TRUE;
-      parent = GTK_MENU_SHELL (parent->parent_menu_shell);
+      parent = GTK_MENU_SHELL (parent)->parent_menu_shell;
     }
 
   return FALSE;

@@ -1210,7 +1210,7 @@ gpointer
 gtk_object_get_user_data (GtkObject *object)
 {
   if (user_data_key_id)
-    gtk_object_get_data_by_id (object, user_data_key_id);
+    return gtk_object_get_data_by_id (object, user_data_key_id);
 
   return NULL;
 }
