@@ -1,4 +1,30 @@
-Overview of Changes from GTK+ 2.3.2 to GTK+ 2.3.4
+Overview of Changes from GTK+ 2.3.4 to GTK+ 2.3.5
+=================================================
+* GtkFileChooser  [Federico Mena Quintero]:
+ - Enable DND in the shortcuts list.  [Federico]
+ - More folder modes.  [Jonathan R Blandford]
+ - Misc. fixes  [Jonathan]
+* GtkComboBox
+ - Memory leak/crash fixes.  [Damon Chaplin, Matthias Clasen]
+ - Always grab when popping the list up.  [Damon, Matthias]
+ - Improve popup positioning.  [Matthias]
+* Improve space allocation in menubars.  [Soeren Sandmann]
+* Improve key bindings in GtkEntryCompletion  [Matthias]
+* Hide XCursor dependency.  [Soeren]
+* Make mouse wheel scrolling usable.  [Soeren]
+* Use resize cursors for resize grips.  [Soeren]
+* Add a way to list the mnemonic labels of a widget.  [Owen Taylor]
+* Add a group-changed signal to GtkRadioButton.  [Owen, Padraig O'Briain]
+* Export insertion cursor drawing functionality.  [Alexander Larsson, Owen]
+* Support squiggly red underlines in text views.  [Owen]
+* Memory leak fixes.  [Owen]
+* Win32 fixes.  [Hans Breuer]
+* Misc. fixes  [Owen Taylor, Tomasz Lloczko, George Bronnikov, Manish Singh,
+  J. Ali Harlow]
+* Documentation improvements  [Matthias, Federico, Torsten Schoenfeld]
+* Updated translations (sr,sr@Latn,sr@ije,ja,th,nl,de,pt,da,et,fi,ar,fr)
+
+Overview of Changes from GTK+ 2.3.3 to GTK+ 2.3.4
 =================================================
 * Fix broken gtk_binary_age setting causing wrong soname [Owen Taylor]
 * Add some extra GtkExpander docs [Federico Mena Quintero]

@@ -1,3 +1,7 @@
+Mon Mar  1 00:51:11 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* NEWS: News for 2.3.5.
+
 Sun Feb 29 23:25:35 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkentry.c (gtk_entry_completion_key_press): 
