@@ -65,6 +65,32 @@ typedef struct {
   DWORD        bV5Reserved; 
 } BITMAPV5HEADER;
 
+#define GetAncestor(hwnd,what) _gdk_win32_get_ancestor_parent(hwnd)
+
+static HWND
+_gdk_win32_get_ancestor_parent (HWND hwnd)
+{
+#ifndef GA_PARENT
+#  define GA_PARENT 1 
+#endif
+  typedef HWND (WINAPI *PFN_GetAncestor) (HWND,UINT);
+  static PFN_GetAncestor p_GetAncestor = NULL;
+  static gboolean once = FALSE;
+  
+  if (!once)
+    {
+      HMODULE user32;
+
+      user32 = GetModuleHandle ("user32.dll");
+      p_GetAncestor = (PFN_GetAncestor)GetProcAddress (user32, "GetAncestor");
+      once = TRUE;
+    }
+  if (p_GetAncestor)
+    return p_GetAncestor (hwnd, GA_PARENT);
+  else /* not completely right, but better than nothing ? */
+    return GetParent (hwnd);
+}
+
 #endif
 
 #if 0

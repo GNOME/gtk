@@ -3782,7 +3782,7 @@ gtk_default_draw_option (GtkStyle      *style,
 		 x + exterior_size / 2.,
 		 y + exterior_size / 2.,
 		 (exterior_size - 1) / 2.,
-		 0, 2 * M_PI);
+		 0, 2 * G_PI);
 
       cairo_save (cr);
       cairo_fill (cr);
@@ -3828,7 +3828,7 @@ gtk_default_draw_option (GtkStyle      *style,
 		 x + pad + interior_size / 2.,
 		 y + pad + interior_size / 2.,
 		 interior_size / 2.,
-		 0, 2 * M_PI);
+		 0, 2 * G_PI);
       cairo_fill (cr);
     }
   else if (shadow_type == GTK_SHADOW_ETCHED_IN) /* inconsistent */

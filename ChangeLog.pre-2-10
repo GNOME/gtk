@@ -1,3 +1,26 @@
+2005-04-03  Hans Breuer  <hans@breuer.org>
+
+	[merged from gtk-2-6 branch]
+	* gdk/win32/gdkdrawable-win32.c : let dash_offset shift the start of
+	the line pattern not the start of the line. Fixes bug #171641.
+
+	* gtk/makefile.msc.in : follow .symbols changes
+
+	* gdk/win32/gdkwindow-win32.c : declare and resolve GetAncestor()
+	dynamically. (It is not available in _WIN_VER <= 0x0400)
+
+	* gdk/win32/makefile.msc : removed gdkpango-win32.obj
+
+	* gtk/gtkhsv.c gtk/gtkstyle.c : use G_PI instead of M_PI
+
+	[also applied to gtk-2-6 branch]
+	* gdk/makefile.msc gdk-pixbuf/makefile.msc : handle gdk*alias.def
+
+	* gdk/makefile.msc.in : add gtkmnemonichash.obj
+
+	* test/testgtk.c(set_parent_signal) : use g_message instead of
+	g_print to keep the 'testgtk --bench=all' output clean
+
 2005-04-03  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkruler.c: Add a "metric" property.

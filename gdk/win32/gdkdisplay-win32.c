@@ -1,5 +1,5 @@
 /* GDK - The GIMP Drawing Kit
- * Copyright (C) 2002 Hans Breuer
+ * Copyright (C) 2002,2005 Hans Breuer
  * Copyright (C) 2003 Tor Lillqvist
  *
  * This library is free software; you can redistribute it and/or
@@ -20,7 +20,6 @@
 
 #include <config.h>
 #include "gdk.h"
-#define _WIN32_WINNT 0x0500	/* To get ProcessIdToSessionId */
 #include "gdkprivate-win32.h"
 
 #define HAVE_MONITOR_INFO
@@ -176,6 +175,33 @@ _gdk_monitor_init (void)
 
 }
 
+/*
+ * Dynamic version of ProcessIdToSessionId() form Terminal Service.
+ * It is only returning something else than 0 when running under
+ * Terminal Service, available since NT4 SP4 and not for win9x
+ */
+static guint
+get_session_id (void)
+{
+  typedef BOOL (WINAPI *t_ProcessIdToSessionId) (DWORD, DWORD*);
+  static t_ProcessIdToSessionId p_ProcessIdToSessionId = NULL;
+  static HMODULE kernel32 = NULL;
+  DWORD id = 0;
+
+  if (kernel32 == NULL)
+    {
+      kernel32 = GetModuleHandle ("kernel32.dll");
+
+      g_assert (kernel32 != NULL);
+
+      p_ProcessIdToSessionId = (t_ProcessIdToSessionId) GetProcAddress (kernel32, "ProcessIdToSessionId");
+   }
+  if (p_ProcessIdToSessionId)
+      p_ProcessIdToSessionId (GetCurrentProcessId (), &id); /* got it (or not ;) */
+
+  return id;
+}
+
 GdkDisplay *
 gdk_display_open (const gchar *display_name)
 {
@@ -259,10 +285,8 @@ gdk_display_get_name (GdkDisplay *display)
 	window_station_name = "WinSta0";
     }
 
-  ProcessIdToSessionId (GetCurrentProcessId (), &session_id);
-  
   display_name = g_strdup_printf ("%ld\\%s\\%s",
-				  session_id, window_station_name,
+				  get_session_id (), window_station_name,
 				  desktop_name);
 
   retval = g_quark_to_string (g_quark_from_string (display_name));

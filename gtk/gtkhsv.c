@@ -1051,7 +1051,7 @@ paint_ring (GtkHSV      *hsv,
   cairo_arc (cr,
 	     center, center,
 	     priv->size / 2. - priv->ring_width / 2.,
-	     0, 2 * M_PI);
+	     0, 2 * G_PI);
   cairo_stroke (cr);
   
   cairo_restore (cr);
@@ -1257,7 +1257,7 @@ paint_triangle (GtkHSV      *hsv,
 #define FOCUS_RADIUS 6
 
   cairo_new_path (cr);
-  cairo_arc (cr, xx, yy, RADIUS, 0, 2 * M_PI);
+  cairo_arc (cr, xx, yy, RADIUS, 0, 2 * G_PI);
   cairo_stroke (cr);
   
   /* Draw focus outline */
