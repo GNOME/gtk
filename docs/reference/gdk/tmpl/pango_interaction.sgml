@@ -1,0 +1,33 @@
+<!-- ##### SECTION Title ##### -->
+Pango Interaction
+
+<!-- ##### SECTION Short_Description ##### -->
+
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### FUNCTION gdk_pango_context_get ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_pango_context_set_colormap ##### -->
+<para>
+
+</para>
+
+@context: 
+@colormap: 
+
+

@@ -1,0 +1,297 @@
+<!-- ##### SECTION Title ##### -->
+X Window System Interaction
+
+<!-- ##### SECTION Short_Description ##### -->
+
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### MACRO GDK_GC_X11 ##### -->
+<para>
+
+</para>
+
+@object: 
+
+
+<!-- ##### MACRO GDK_GC_X11_GET_CLASS ##### -->
+<para>
+
+</para>
+
+@obj: 
+
+
+<!-- ##### MACRO GDK_ROOT_WINDOW ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO GDK_ROOT_PARENT ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO GDK_DISPLAY ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO GDK_WINDOW_XDISPLAY ##### -->
+<para>
+
+</para>
+
+@win: 
+
+
+<!-- ##### MACRO GDK_WINDOW_XID ##### -->
+<para>
+
+</para>
+
+@win: 
+
+
+<!-- ##### MACRO GDK_PIXMAP_XDISPLAY ##### -->
+<para>
+
+</para>
+
+@win: 
+
+
+<!-- ##### MACRO GDK_PIXMAP_XID ##### -->
+<para>
+
+</para>
+
+@win: 
+
+
+<!-- ##### MACRO GDK_DRAWABLE_XDISPLAY ##### -->
+<para>
+
+</para>
+
+@win: 
+
+
+<!-- ##### MACRO GDK_DRAWABLE_XID ##### -->
+<para>
+
+</para>
+
+@win: 
+
+
+<!-- ##### MACRO GDK_IMAGE_XDISPLAY ##### -->
+<para>
+
+</para>
+
+@image: 
+
+
+<!-- ##### MACRO GDK_IMAGE_XIMAGE ##### -->
+<para>
+
+</para>
+
+@image: 
+
+
+<!-- ##### MACRO GDK_GC_XDISPLAY ##### -->
+<para>
+
+</para>
+
+@gc: 
+
+
+<!-- ##### MACRO GDK_COLORMAP_XDISPLAY ##### -->
+<para>
+
+</para>
+
+@cmap: 
+
+
+<!-- ##### MACRO GDK_COLORMAP_XCOLORMAP ##### -->
+<para>
+
+</para>
+
+@cmap: 
+
+
+<!-- ##### MACRO GDK_VISUAL_XVISUAL ##### -->
+<para>
+
+</para>
+
+@vis: 
+
+
+<!-- ##### MACRO GDK_FONT_XDISPLAY ##### -->
+<para>
+
+</para>
+
+@font: 
+
+
+<!-- ##### MACRO GDK_FONT_XFONT ##### -->
+<para>
+
+</para>
+
+@font: 
+
+
+<!-- ##### MACRO GDK_GC_XGC ##### -->
+<para>
+
+</para>
+
+@gc: 
+
+
+<!-- ##### MACRO GDK_GC_GET_XGC ##### -->
+<para>
+
+</para>
+
+@gc: 
+
+
+<!-- ##### MACRO GDK_WINDOW_XWINDOW ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### VARIABLE gdk_screen ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### VARIABLE gdk_display_name ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### VARIABLE gdk_leader_window ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### VARIABLE gdk_selection_property ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### VARIABLE gdk_progclass ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### FUNCTION gdkx_visual_get ##### -->
+<para>
+
+</para>
+
+@xvisualid: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdkx_colormap_get ##### -->
+<para>
+
+</para>
+
+@xcolormap: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_get_client_window ##### -->
+<para>
+
+</para>
+
+@dpy: 
+@win: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_pixmap_foreign_new ##### -->
+<para>
+
+</para>
+
+@anid: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_window_foreign_new ##### -->
+<para>
+
+</para>
+
+@anid: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_xid_table_lookup ##### -->
+<para>
+
+</para>
+
+@xid: 
+@Returns: 
+
+
+<!-- ##### MACRO gdk_window_lookup ##### -->
+<para>
+
+</para>
+
+@xid: 
+
+
+<!-- ##### MACRO gdk_pixmap_lookup ##### -->
+<para>
+
+</para>
+
+@xid: 
+
+
+<!-- ##### MACRO gdk_font_lookup ##### -->
+<para>
+
+</para>
+
+@xid: 
+
+
