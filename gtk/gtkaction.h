@@ -85,7 +85,7 @@ GtkAction   *gtk_action_new                    (const gchar *name,
 						const gchar *label,
 						const gchar *tooltip,
 						const gchar *stock_id);
-const gchar* gtk_action_get_name               (GtkAction     *action);
+G_CONST_RETURN gchar* gtk_action_get_name      (GtkAction     *action);
 gboolean     gtk_action_is_sensitive           (GtkAction     *action);
 gboolean     gtk_action_get_sensitive          (GtkAction     *action);
 void         gtk_action_set_sensitive          (GtkAction     *action,
@@ -106,6 +106,7 @@ void         gtk_action_disconnect_proxy       (GtkAction     *action,
 GSList*      gtk_action_get_proxies            (GtkAction     *action);
 void         gtk_action_connect_accelerator    (GtkAction     *action);
 void         gtk_action_disconnect_accelerator (GtkAction     *action);
+G_CONST_RETURN gchar *gtk_action_get_accel_path (GtkAction     *action);
 
 /* protected ... for use by child actions */
 void         gtk_action_block_activate_from    (GtkAction     *action,

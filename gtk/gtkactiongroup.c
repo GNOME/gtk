@@ -387,7 +387,7 @@ gtk_action_group_real_get_action (GtkActionGroup *self,
  * 
  * Since: 2.4
  */
-const gchar *
+G_CONST_RETURN gchar *
 gtk_action_group_get_name (GtkActionGroup *action_group)
 {
   g_return_val_if_fail (GTK_IS_ACTION_GROUP (action_group), NULL);

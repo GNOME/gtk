@@ -1,5 +1,15 @@
 2004-11-09  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkaction.[hc]: 
+	* gtk/gtkactiongroup.[hc]: Make return types G_CONST_RETURN
+	instead of const.
+
+	* gtk/gtk.symbols: 
+	* gtk/gtkaction.h: 
+	* gtk/gtkaction.c (gtk_action_get_accel_path): Add
+	a function to obtain the accel path of an action. (#148106,
+	Michael Natterer)
+
 	* tests/testiconview.c: Fix double-click activation.
 
 	* gtk/gtkstatusbar.c (gtk_statusbar_init): Raise the grip

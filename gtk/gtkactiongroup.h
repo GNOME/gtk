@@ -105,7 +105,7 @@ struct _GtkRadioActionEntry
 
 GType           gtk_action_group_get_type                (void);
 GtkActionGroup *gtk_action_group_new                     (const gchar                *name);
-const gchar    *gtk_action_group_get_name                (GtkActionGroup             *action_group);
+G_CONST_RETURN gchar *gtk_action_group_get_name          (GtkActionGroup             *action_group);
 gboolean        gtk_action_group_get_sensitive           (GtkActionGroup             *action_group);
 void            gtk_action_group_set_sensitive           (GtkActionGroup             *action_group,
 							  gboolean                    sensitive);

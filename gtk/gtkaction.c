@@ -1193,7 +1193,7 @@ gtk_action_get_proxies (GtkAction *action)
  *
  * Since: 2.4
  **/
-const gchar *
+G_CONST_RETURN gchar *
 gtk_action_get_name (GtkAction *action)
 {
   g_return_val_if_fail (GTK_IS_ACTION (action), NULL);
@@ -1437,6 +1437,30 @@ gtk_action_set_accel_path (GtkAction   *action,
 
   action->private_data->accel_quark = g_quark_from_string (accel_path);
 }
+
+/**
+ * gtk_action_get_accel_path:
+ * @action: the action object
+ *
+ * Returns the accel path for this action.  
+ *
+ * Since: 2.6
+ *
+ * Returns: the accel path for this action, or %NULL
+ *   if none is set. The returned string is owned by GTK+
+ *   and must not be freed or modified.
+ */
+G_CONST_RETURN gchar *
+gtk_action_get_accel_path (GtkAction *action)
+{
+  g_return_val_if_fail (GTK_IS_ACTION (action), NULL);
+
+  if (action->private_data->accel_quark)
+    return g_quark_to_string (action->private_data->accel_quark);
+  else
+    return NULL;
+}
+
 
 /**
  * gtk_action_set_accel_group:
