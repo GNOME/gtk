@@ -641,6 +641,7 @@ gtk_file_selection_destroy (GtkObject *object)
 	{
 	  callback_arg = list->data;
 	  g_free (callback_arg->directory);
+	  g_free (callback_arg);
 	  list = list->next;
 	}
       g_list_free (filesel->history_list);
@@ -1072,7 +1073,6 @@ gtk_file_selection_update_history_menu (GtkFileSelection *fs,
   GtkWidget *menu_item;
   GList *list;
   gchar *current_dir;
-  gchar *directory;
   gint dir_len;
   gint i;
   
@@ -1087,6 +1087,7 @@ gtk_file_selection_update_history_menu (GtkFileSelection *fs,
       while (list) {
 	callback_arg = list->data;
 	g_free (callback_arg->directory);
+	g_free (callback_arg);
 	list = list->next;
       }
       g_list_free (fs->history_list);
@@ -1111,7 +1112,6 @@ gtk_file_selection_update_history_menu (GtkFileSelection *fs,
 	  if (i != dir_len) 
 		  current_dir[i + 1] = '\0';
 	  menu_item = gtk_menu_item_new_with_label (current_dir);
-	  directory = g_strdup (current_dir);
 	  
 	  callback_arg = g_new (HistoryCallbackArg, 1);
 	  callback_arg->menu_item = menu_item;
@@ -1122,7 +1122,7 @@ gtk_file_selection_update_history_menu (GtkFileSelection *fs,
 	  if (dir_len == i) {
 	    callback_arg->directory = g_strdup ("");
 	  } else {
-	    callback_arg->directory = directory;
+	    callback_arg->directory = g_strdup (current_dir);
 	  }
 	  
 	  fs->history_list = g_list_append (fs->history_list, callback_arg);
@@ -1572,6 +1572,8 @@ cmpl_free_state (CompletionState* cmpl_state)
 
   if (cmpl_state->user_dir_name_buffer)
     g_free (cmpl_state->user_dir_name_buffer);
+  if (cmpl_state->user_home_dir)
+    g_free (cmpl_state->user_home_dir);
   if (cmpl_state->user_directories)
     g_free (cmpl_state->user_directories);
   if (cmpl_state->the_completion.text)
@@ -2485,7 +2487,7 @@ static gint
 get_pwdb(CompletionState* cmpl_state)
 {
   struct passwd *pwd_ptr;
-  gchar* buf_ptr, *home_dir = NULL;
+  gchar* buf_ptr;
   gint len = 0, i, count = 0;
 
   if(cmpl_state->user_dir_name_buffer)
@@ -2511,10 +2513,8 @@ get_pwdb(CompletionState* cmpl_state)
 	  cmpl_errno = errno;
 	  goto error;
 	}
-      home_dir = pwd_ptr->pw_dir;
-
-      len += strlen(home_dir);
-      len += 1;
+      /* Allocate this separately, since it might be filled in elsewhere */
+      cmpl_state->user_home_dir = g_strdup (pwd_ptr->pw_dir);
     }
 
   setpwent ();
@@ -2524,14 +2524,6 @@ get_pwdb(CompletionState* cmpl_state)
   cmpl_state->user_directories_len = count;
 
   buf_ptr = cmpl_state->user_dir_name_buffer;
-
-  if (!cmpl_state->user_home_dir)
-    {
-      strcpy(buf_ptr, home_dir);
-      cmpl_state->user_home_dir = buf_ptr;
-      buf_ptr += strlen(buf_ptr);
-      buf_ptr += 1;
-    }
 
   for(i = 0; i < count; i += 1)
     {

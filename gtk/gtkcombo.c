@@ -22,6 +22,7 @@
 #include "gtklabel.h"
 #include "gtklist.h"
 #include "gtkentry.h"
+#include "gtkeventbox.h"
 #include "gtkbutton.h"
 #include "gtklistitem.h"
 #include "gtkscrolledwindow.h"
@@ -342,7 +343,10 @@ gtk_combo_popup_list (GtkButton * button, GtkCombo * combo)
   gtk_widget_grab_focus (combo->popwin);
   gtk_grab_add (combo->popwin);
   gdk_pointer_grab (combo->popwin->window, TRUE,
-		    GDK_BUTTON_PRESS_MASK, NULL, NULL, GDK_CURRENT_TIME);
+		    GDK_BUTTON_PRESS_MASK | 
+		    GDK_BUTTON_RELEASE_MASK |
+		    GDK_POINTER_MOTION_MASK, 
+		    NULL, NULL, GDK_CURRENT_TIME);
 }
 
 #if 0
@@ -442,6 +446,8 @@ gtk_combo_init (GtkCombo * combo)
 {
   GtkWidget *arrow;
   GtkWidget *frame;
+  GtkWidget *event_box;
+  GdkCursor *cursor;
 
   combo->case_sensitive = 0;
   combo->value_in_list = 0;
@@ -473,22 +479,34 @@ gtk_combo_init (GtkCombo * combo)
   combo->popwin = gtk_window_new (GTK_WINDOW_POPUP);
   gtk_widget_ref (combo->popwin);
   gtk_window_set_policy (GTK_WINDOW (combo->popwin), 1, 1, 0);
+  
+  gtk_widget_set_events (combo->popwin, GDK_KEY_PRESS_MASK);
+
+  event_box = gtk_event_box_new ();
+  gtk_container_add (GTK_CONTAINER (combo->popwin), event_box);
+  gtk_widget_show (event_box);
+
+  gtk_widget_realize (event_box);
+  cursor = gdk_cursor_new (GDK_TOP_LEFT_ARROW);
+  gdk_window_set_cursor (event_box->window, cursor);
+  gdk_cursor_destroy (cursor);
 
   frame = gtk_frame_new (NULL);
-  gtk_container_add (GTK_CONTAINER (combo->popwin), frame);
+  gtk_container_add (GTK_CONTAINER (event_box), frame);
   gtk_frame_set_shadow_type (GTK_FRAME (frame), GTK_SHADOW_OUT);
   gtk_widget_show (frame);
 
   combo->popup = gtk_scrolled_window_new (NULL, NULL);
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (combo->popup),
 				GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
+
   combo->list = gtk_list_new ();
   gtk_list_set_selection_mode(GTK_LIST(combo->list), GTK_SELECTION_BROWSE);
   gtk_container_add (GTK_CONTAINER (frame), combo->popup);
   gtk_container_add (GTK_CONTAINER (combo->popup), combo->list);
   gtk_widget_show (combo->list);
   gtk_widget_show (combo->popup);
-  gtk_widget_set_events (combo->popwin, gtk_widget_get_events (combo->popwin) | GDK_KEY_PRESS_MASK);
+
   combo->list_change_id = gtk_signal_connect (GTK_OBJECT (combo->list), "selection_changed",
 			     (GtkSignalFunc) gtk_combo_update_entry, combo);
   gtk_signal_connect (GTK_OBJECT (combo->popwin), "key_press_event",

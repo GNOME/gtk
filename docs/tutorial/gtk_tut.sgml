@@ -258,20 +258,20 @@ int main (int argc, char *argv[])
 To compile use:
 
 <tscreen><verb>
-gcc -Wall -g helloworld.c -o hello_world -L/usr/X11R6/lib \
-    -lgtk -lgdk -lglib -lX11 -lXext -lm
+gcc -Wall -g helloworld.c -o hello_world `gtk-config --cflags` \
+    `gtk-config --libs`
 </verb></tscreen>
 <p>
-The libraries above must all be in your default search paths, if not, add
--L&lt;library directory&gt; and gcc will look in these directories for
-the needed
-libraries.  For instance, on my Debian Linux system, I have to add
-<tt>-L/usr/X11R6/lib</> for it to find the X11 libraries.
+
+This uses the program <tt>gtk-config</>, which comes with gtk. This
+program 'knows' what compiler switches are needed to compile programs
+that use gtk. <tt>gtk-config --cflags</> will output a list of include
+directories for the compiler to look in, and <tt>gtk-config --libs</>
+will output the list of libraries for the compiler to link with and
+the directories to find them in.
+
 <p>
-The order of the libraries are significant.  The linker has to know what
-functions it needs from a library before it processes it.
-<p>
-The libraries we are linking in are:
+The libraries that are usually linked in are:
 <itemize>
 <item>The GTK library (-lgtk), the widget library, based on top of GDK.
 <item>The GDK library (-lgdk), the Xlib wrapper.
