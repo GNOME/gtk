@@ -1,3 +1,5 @@
+=================== Move back into gtk-engines ====================
+	
 Sat Jan 19 02:45:17 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* src/pixbuf-render.c (theme_pixbuf_compute_hints): Catch
