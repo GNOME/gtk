@@ -1,3 +1,12 @@
+1998-12-06  Marius Vollmer  <mvo@zagadka.ping.de>
+
+	* gtk/gtksignal.c (gtk_signal_newv): Allow a NULL marshaller.
+	(gtk_signal_connect_by_type): Allow only no_marshal handlers to
+	connect to signals with a NULL marshaller.
+
+	* gtk/gtktypeutils.c (gtk_type_get_info): New.
+	gtk/gtktypeutils.h (gtk_type_get_info): New prototype.
+
 Sun Dec  6 14:27:35 1998  Stefan Jeske  <stefan@gtk.org>
 
 	* gtk/gtkspinbutton.c (gtk_spin_button_draw_arrow): Grey out
