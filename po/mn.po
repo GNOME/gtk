@@ -1,16 +1,19 @@
 # translation of gtk+.gtk-2-2.mn.po to Mongolian
+# translation of gtk+.gtk-2-2.mn.po to Mongolian
 # This file is distributed under the same license as the PACKAGE package.
+# SukhOchir <sukhochir@csms.edu.mn>
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # Sanlig Badral <badral@chinggis.com>, 2003
-# SukhOchir <sukhochir@csms.edu.mn>
+# Sanlig Badral <badral@users.sf.net>, 2003
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.gtk-2-2.mn\n"
-"POT-Creation-Date: 2003-06-09 16:30-0400\n"
-"PO-Revision-Date: 2003-04-22 14:43+0200\n"
-"Last-Translator: Sanlig Badral <badral@chinggis.com>\n"
-"Language-Team: Mongolian <openmn-gnome@lists.sourceforge.net>\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2003-06-20 03:35+0200\n"
+"PO-Revision-Date: 2003-06-20 18:30+0200\n"
+"Last-Translator: Sanlig Badral <badral@users.sf.net>\n"
+"Language-Team: Mongolian <openmn-kdemn@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -30,8 +33,7 @@ msgstr "\"%s\" зургийн файл өгөгдөл агуулаагүй"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:198 gdk-pixbuf/gdk-pixbuf-io.c:781
 #, c-format
-msgid ""
-"Failed to load image '%s': reason not known, probably a corrupt image file"
+msgid "Failed to load image '%s': reason not known, probably a corrupt image file"
 msgstr ""
 "\"%s\" зураг ачаалагдсангүй: Шалтгаан нь тодорхойгүй, магадгүй зураг "
 "эвдэрхий бололтой"
@@ -202,8 +204,7 @@ msgstr "GIF төрлийн файл уншигдахгүй байна: %s"
 # gdk-pixbuf/io-gif.c:460 gdk-pixbuf/io-gif.c:1382 gdk-pixbuf/io-gif.c:1542
 #: gdk-pixbuf/io-gif.c:491 gdk-pixbuf/io-gif.c:1428 gdk-pixbuf/io-gif.c:1589
 msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
-msgstr ""
-"GIF төрлийн файлын зарим өгөгдөл алдагдсан байна (магадгүй тасарсан байх?)"
+msgstr "GIF төрлийн файлын зарим өгөгдөл алдагдсан байна (магадгүй тасарсан байх?)"
 
 # gdk-pixbuf/io-gif.c:469
 #: gdk-pixbuf/io-gif.c:500
@@ -368,8 +369,7 @@ msgstr ""
 # gdk-pixbuf/io-jpeg.c:679
 #: gdk-pixbuf/io-jpeg.c:827
 #, c-format
-msgid ""
-"JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
+msgid "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
 msgstr ""
 "JPEG төрөл нь 0 ба 100 -ийн хоорондох утгыг авбал сайн; \"%d\" утга бол "
 "зөвшөөрөгдөөгүй."
@@ -435,24 +435,19 @@ msgstr "PNG зургийн файлыг уншихад ноцтой алдаа %
 
 # gdk-pixbuf/io-png.c:800
 #: gdk-pixbuf/io-png.c:771
-msgid ""
-"Keys for PNG text chunks must have at least 1 and at most 79 characters."
-msgstr ""
-"PNG хэсэг текстийн түлхүүр нь 1 ба 79 хүртэл тэмдэгтүүдээр байвал зүгээр."
+msgid "Keys for PNG text chunks must have at least 1 and at most 79 characters."
+msgstr "PNG хэсэг текстийн түлхүүр нь 1 ба 79 хүртэл тэмдэгтүүдээр байвал зүгээр."
 
 # gdk-pixbuf/io-png.c:808
 #: gdk-pixbuf/io-png.c:779
 msgid "Keys for PNG text chunks must be ASCII characters."
-msgstr ""
-"PNG хэсэг текстэд түлхүүр нь ASCII тэмдэгтүүд байвал зүгээр набора ASCII."
+msgstr "PNG хэсэг текстэд түлхүүр нь ASCII тэмдэгтүүд байвал зүгээр набора ASCII."
 
 # gdk-pixbuf/io-png.c:829
 #: gdk-pixbuf/io-png.c:812
 #, c-format
-msgid ""
-"Value for PNG text chunk %s can not be converted to ISO-8859-1 encoding."
-msgstr ""
-"PNG хэсэг текстэд утга нь %s -г ISO-8859-1 хувиргагч руу хөрвүүлж чадсангүй."
+msgid "Value for PNG text chunk %s can not be converted to ISO-8859-1 encoding."
+msgstr "PNG хэсэг текстэд утга нь %s -г ISO-8859-1 хувиргагч руу хөрвүүлж чадсангүй."
 
 # gdk-pixbuf/io-pnm.c:560 gdk-pixbuf/io-pnm.c:602
 #: gdk-pixbuf/io-png.c:919
@@ -521,8 +516,7 @@ msgstr "Файлын төгсгөл хэт эрт олдлоо"
 
 #: gdk-pixbuf/io-pnm.c:742 gdk-pixbuf/io-pnm.c:962
 msgid "Raw PNM formats require exactly one whitespace before sample data"
-msgstr ""
-"Боловсроогүй PNM төрөл яг нэг цагаан зай жишээ өгөгдлийн өмнөө шаарддаг"
+msgstr "Боловсроогүй PNM төрөл яг нэг цагаан зай жишээ өгөгдлийн өмнөө шаарддаг"
 
 # gdk-pixbuf/io-pnm.c:775
 #: gdk-pixbuf/io-pnm.c:769
@@ -1180,8 +1174,7 @@ msgstr "Нөөц хэрэглэх"
 
 # gtk/gtkbutton.c:206
 #: gtk/gtkbutton.c:206
-msgid ""
-"If set, the label is used to pick a stock item instead of being displayed"
+msgid "If set, the label is used to pick a stock item instead of being displayed"
 msgstr ""
 "Хэрвээ идэвхитэй бол бичээс харагдахгүй харин стандарт эмблемийг хөтөлбөрөөс "
 "сонгоход хэрэглэгдэнэ."
@@ -1221,8 +1214,7 @@ msgid "Child X Displacement"
 msgstr "Дэд элементийн хэвтээ тэнхлэгийн дагуух шилжилт"
 
 #: gtk/gtkbutton.c:285
-msgid ""
-"How far in the x direction to move the child when the button is depressed"
+msgid "How far in the x direction to move the child when the button is depressed"
 msgstr ""
 "Хэрэв товч дарагдсан бол дэд элемтентийг хэвтээ тэнхлэгийн дагуу хэр зэрэг "
 "шилжүүлэх"
@@ -1232,8 +1224,7 @@ msgid "Child Y Displacement"
 msgstr "Дэд элементийн босоо тэнхлэгийн дагуух шилжилт"
 
 #: gtk/gtkbutton.c:293
-msgid ""
-"How far in the y direction to move the child when the button is depressed"
+msgid "How far in the y direction to move the child when the button is depressed"
 msgstr ""
 "Хэрэв товч дарагдсан бол дэд элемтентийг босоо тэнхлэгийн дагуу хэр зэрэг "
 "шилжүүлэх"
@@ -1577,10 +1568,8 @@ msgstr "Өсөлт"
 
 # gtk/gtkcellrenderertext.c:332 gtk/gtktexttag.c:428
 #: gtk/gtkcellrenderertext.c:333
-msgid ""
-"Offset of text above the baseline (below the baseline if rise is negative)"
-msgstr ""
-"Текстийн үндсэн шугам дээр (Хэрэв өсөлт нь идэвхгүй бол шугаман доогуур)"
+msgid "Offset of text above the baseline (below the baseline if rise is negative)"
+msgstr "Текстийн үндсэн шугам дээр (Хэрэв өсөлт нь идэвхгүй бол шугаман доогуур)"
 
 # gtk/gtkcellrenderertext.c:342 gtk/gtktexttag.c:467
 #: gtk/gtkcellrenderertext.c:343 gtk/gtktexttag.c:463
@@ -1752,8 +1741,7 @@ msgstr "Радио-төлөв "
 # gtk/gtkcellrenderertoggle.c:149
 #: gtk/gtkcellrenderertoggle.c:160
 msgid "Draw the toggle button as a radio button"
-msgstr ""
-"Зөвхөн нэг нь сонгогдох товчнууд шиг шилжилтийг идэвхжүүлэгч товчыг зурах "
+msgstr "Зөвхөн нэг нь сонгогдох товчнууд шиг шилжилтийг идэвхжүүлэгч товчыг зурах "
 
 # gtk/gtkcheckbutton.c:95 gtk/gtkoptionmenu.c:195
 #: gtk/gtkcheckbutton.c:98 gtk/gtkoptionmenu.c:197
@@ -1762,8 +1750,7 @@ msgstr "Индикаторийн хэмжээ "
 
 #: gtk/gtkcheckbutton.c:99
 msgid "Size of check or radio indicator"
-msgstr ""
-"Олон сонгогдож болох эсвэл нэг нь сонгогдож болох тодорхойлогчын хэмжээ "
+msgstr "Олон сонгогдож болох эсвэл нэг нь сонгогдож болох тодорхойлогчын хэмжээ "
 
 #: gtk/gtkcheckbutton.c:106 gtk/gtkoptionmenu.c:203
 msgid "Indicator Spacing"
@@ -2158,8 +2145,7 @@ msgstr "Сонгогдсоны хязгаар"
 
 # gtk/gtkentry.c:446 gtk/gtklabel.c:369
 #: gtk/gtkentry.c:450 gtk/gtklabel.c:379
-msgid ""
-"The position of the opposite end of the selection from the cursor in chars"
+msgid "The position of the opposite end of the selection from the cursor in chars"
 msgstr "Тэмдэгтийн курсороос сонгогдсоны харалдаа төгсгөлийн байрлал."
 
 # gtk/gtkentry.c:456
@@ -2352,10 +2338,8 @@ msgstr "Файл шинээр нэрлэх"
 
 #: gtk/gtkfilesel.c:1429
 #, c-format
-msgid ""
-"The folder name \"%s\" contains symbols that are not allowed in filenames"
-msgstr ""
-"\"%s\" хавтас үүсгэхэд оролцсон тэмдэгтүүд нь файл нэрлэхэд зөвшөөрөгдөөгүй"
+msgid "The folder name \"%s\" contains symbols that are not allowed in filenames"
+msgstr "\"%s\" хавтас үүсгэхэд оролцсон тэмдэгтүүд нь файл нэрлэхэд зөвшөөрөгдөөгүй"
 
 # gtk/gtkfilesel.c:1360
 #: gtk/gtkfilesel.c:1431
@@ -2395,8 +2379,7 @@ msgstr "Үү_сгэх"
 #: gtk/gtkfilesel.c:1556
 #, c-format
 msgid "The filename \"%s\" contains symbols that are not allowed in filenames"
-msgstr ""
-"Файлын \"%s\" нэрэнд файлыг нэрлэхэд зөвшөөрөгдөөгүй тэмдэгт орсон байна"
+msgstr "Файлын \"%s\" нэрэнд файлыг нэрлэхэд зөвшөөрөгдөөгүй тэмдэгт орсон байна"
 
 # gtk/gtkfilesel.c:1488
 #: gtk/gtkfilesel.c:1559
@@ -2434,8 +2417,7 @@ msgstr "Файл устгах"
 #: gtk/gtkfilesel.c:1664 gtk/gtkfilesel.c:1678
 #, c-format
 msgid "The file name \"%s\" contains symbols that are not allowed in filenames"
-msgstr ""
-"Файлын \"%s\" нэрэнд файлыг нэрлэхэд зөвшөөрөгдөөгүй тэмдэгт орсон байна"
+msgstr "Файлын \"%s\" нэрэнд файлыг нэрлэхэд зөвшөөрөгдөөгүй тэмдэгт орсон байна"
 
 # gtk/gtkfilesel.c:1595
 #: gtk/gtkfilesel.c:1666
@@ -2668,8 +2650,7 @@ msgstr "Захыг тэнцүүлэх"
 msgid ""
 "Side of the handlebox that's lined up with the docking point to dock the "
 "handlebox"
-msgstr ""
-"Барих цонхыг ухаж гаргаж ирэх барих цонхны агшаах цэгээр сүвлэгдсэн тал"
+msgstr "Барих цонхыг ухаж гаргаж ирэх барих цонхны агшаах цэгээр сүвлэгдсэн тал"
 
 # gtk/gtkhandlebox.c:210
 #: gtk/gtkhandlebox.c:229
@@ -2680,8 +2661,7 @@ msgstr "Захыг тэнцүүлэх"
 msgid ""
 "Whether to use the value from the snap_edge property or a value derived from "
 "handle_position"
-msgstr ""
-"snap_edge онцлогийг эсвэл тодорхойлогчийн байрлалаас өвлөсөн утгыг хэрэглэх"
+msgstr "snap_edge онцлогийг эсвэл тодорхойлогчийн байрлалаас өвлөсөн утгыг хэрэглэх"
 
 # gtk/gtkiconfactory.c:1318
 #. Remove this icon source so we don't keep trying to
@@ -2788,9 +2768,8 @@ msgstr "Цэсийн текстийн хажууд гарах удирдлагы
 
 # gtk/gtkwindow.c:466
 #: gtk/gtkimmodule.c:419
-#, fuzzy
 msgid "Default"
-msgstr "Стандарт өргөн"
+msgstr "Стандарт"
 
 # gtk/gtkinputdialog.c:184
 #: gtk/gtkinputdialog.c:230
@@ -3039,8 +3018,7 @@ msgid "Can change accelerators"
 msgstr "Товчлууруудын комбинацийг өөрчилж болно."
 
 #: gtk/gtkmenu.c:380
-msgid ""
-"Whether menu accelerators can be changed by pressing a key over the menu item"
+msgid "Whether menu accelerators can be changed by pressing a key over the menu item"
 msgstr ""
 "Цэсийн элемент дээр товч дарагдсан үед цэсийн хурдасгагч товчлууруудыг "
 "өөрчилж болох эсэх"
@@ -3050,10 +3028,8 @@ msgid "Delay before submenus appear"
 msgstr "Дэд цэс харагдахаас өмнө түр завсарлах"
 
 #: gtk/gtkmenu.c:386
-msgid ""
-"Minimum time the pointer must stay over a menu item before the submenu appear"
-msgstr ""
-"Дэд цэс харагдахаас өмнө хулганын заагч цэс дээр байх хамгийн бага хугацаа."
+msgid "Minimum time the pointer must stay over a menu item before the submenu appear"
+msgstr "Дэд цэс харагдахаас өмнө хулганын заагч цэс дээр байх хамгийн бага хугацаа."
 
 #: gtk/gtkmenu.c:393
 msgid "Delay before hiding a submenu"
@@ -3140,8 +3116,7 @@ msgid "X pad"
 msgstr "хэвтээ дүүрэлт"
 
 #: gtk/gtkmisc.c:119
-msgid ""
-"The amount of space to add on the left and right of the widget, in pixels"
+msgid "The amount of space to add on the left and right of the widget, in pixels"
 msgstr "Удирдах элементийн зүүн ба баруун талд нэмэгдэх зайн хэмжээ (цэгээр)"
 
 #: gtk/gtkmisc.c:128
@@ -3149,8 +3124,7 @@ msgid "Y pad"
 msgstr "босоо дүүрэлт"
 
 #: gtk/gtkmisc.c:129
-msgid ""
-"The amount of space to add on the top and bottom of the widget, in pixels"
+msgid "The amount of space to add on the top and bottom of the widget, in pixels"
 msgstr "Удирдах элементийн дээд ба доод талд нэмэгдэх зайн хэмжээ (цэгээр)"
 
 # gtk/gtknotebook.c:362
@@ -3310,8 +3284,7 @@ msgid "Spacing around indicator"
 msgstr "Индикатор орчимийн завсар"
 
 #: gtk/gtkpaned.c:219
-msgid ""
-"Position of paned separator in pixels (0 means all the way to the left/top)"
+msgid "Position of paned separator in pixels (0 means all the way to the left/top)"
 msgstr "Тусгаарлагчийн байрлал цэгээр ( 0 бол бүх зам зүүн дээд булан хүртэл )"
 
 #: gtk/gtkpaned.c:227
@@ -3331,8 +3304,7 @@ msgid "Width of handle"
 msgstr "Элементийн өргөн"
 
 #: gtk/gtkpreview.c:133
-msgid ""
-"Whether the preview widget should take up the entire space it is allocated"
+msgid "Whether the preview widget should take up the entire space it is allocated"
 msgstr "Жишээлэн харах элемент түүнд нөөцлөгдсөн бүх зайг эзлэх эсэх"
 
 # gtk/gtkprogress.c:122
@@ -3394,8 +3366,7 @@ msgstr "Тохируулах"
 
 #: gtk/gtkprogressbar.c:143
 msgid "The GtkAdjustment connected to the progress bar (Deprecated)"
-msgstr ""
-"GtkAdjustment процесийн индикатортой холбогдсон (Хэрэглэхгүй байсан нь дээр )"
+msgstr "GtkAdjustment процесийн индикатортой холбогдсон (Хэрэглэхгүй байсан нь дээр )"
 
 # gtk/gtkprogressbar.c:139 gtk/gtktoolbar.c:224
 #: gtk/gtkprogressbar.c:150 gtk/gtktoolbar.c:231
@@ -3543,8 +3514,7 @@ msgid "Arrow X Displacement"
 msgstr "Сумны хэвтээ шилжилт"
 
 #: gtk/gtkrange.c:338
-msgid ""
-"How far in the x direction to move the arrow when the button is depressed"
+msgid "How far in the x direction to move the arrow when the button is depressed"
 msgstr "Товч дарагдаж байгаа үед товч хэвтээ чиглэлд шилжинэ"
 
 #: gtk/gtkrange.c:345
@@ -3552,8 +3522,7 @@ msgid "Arrow Y Displacement"
 msgstr "Сумны босоо шилжилт"
 
 #: gtk/gtkrange.c:346
-msgid ""
-"How far in the y direction to move the arrow when the button is depressed"
+msgid "How far in the y direction to move the arrow when the button is depressed"
 msgstr "Товч дарагдаж байгаа үед товч босоо чиглэлд шилжинэ"
 
 # gtk/gtkrc.c:2270
@@ -3666,8 +3635,7 @@ msgstr "Засагдсан гүйлгүүрийн хэмжээ"
 
 #: gtk/gtkscrollbar.c:90
 msgid "Don't change slider size, just lock it to the minimum length"
-msgstr ""
-"Гүйлгүүрийн хэмжээг бүү өөрчил, зүгээр л түүнд хамгийн бага хэмжээг өг."
+msgstr "Гүйлгүүрийн хэмжээг бүү өөрчил, зүгээр л түүнд хамгийн бага хэмжээг өг."
 
 #: gtk/gtkscrollbar.c:97
 msgid "Backward stepper"
@@ -3690,8 +3658,7 @@ msgid "Secondary backward stepper"
 msgstr "Гэдрэг шилжих нэмэлт товч"
 
 #: gtk/gtkscrollbar.c:114
-msgid ""
-"Display a second backward arrow button on the opposite end of the scrollbar"
+msgid "Display a second backward arrow button on the opposite end of the scrollbar"
 msgstr "Гүйлгүүрийн эсрэг талд гэдрэг шилжих сумтай хоёр дох товчийг дүрслэх"
 
 #: gtk/gtkscrollbar.c:121
@@ -3699,8 +3666,7 @@ msgid "Secondary forward stepper"
 msgstr "Урагш шилжих нэмэлт товч"
 
 #: gtk/gtkscrollbar.c:122
-msgid ""
-"Display a secondary forward arrow button on the opposite end of the scrollbar"
+msgid "Display a secondary forward arrow button on the opposite end of the scrollbar"
 msgstr "Гүйлгүүрийн эсрэг талд урагш шилжих сумтай хоёр дох товчийг дүрслэх"
 
 #: gtk/gtkscrolledwindow.c:235 gtk/gtktext.c:601 gtk/gtktreeview.c:528
@@ -3922,10 +3888,8 @@ msgid "Update Policy"
 msgstr "Идэвхижүүлэлтийн арга"
 
 #: gtk/gtkspinbutton.c:293
-msgid ""
-"Whether the spin button should update always, or only when the value is legal"
-msgstr ""
-"Тоолуур гүйгч товч тогтмол эсвэл зөвхөн зөв утгатай үед шинэчлэгдэж байх"
+msgid "Whether the spin button should update always, or only when the value is legal"
+msgstr "Тоолуур гүйгч товч тогтмол эсвэл зөвхөн зөв утгатай үед шинэчлэгдэж байх"
 
 # gtk/gtkspinbutton.c:298
 #: gtk/gtkspinbutton.c:301
@@ -4382,8 +4346,7 @@ msgstr "Хэвтээ бөглөлт"
 msgid ""
 "Extra space to put between the child and its left and right neighbors, in "
 "pixels"
-msgstr ""
-"Цэгүүдэд баруун ба зүүн хөрш ба хүүгийн хооронд өргөтгөсөн зайнаас шургуулна"
+msgstr "Цэгүүдэд баруун ба зүүн хөрш ба хүүгийн хооронд өргөтгөсөн зайнаас шургуулна"
 
 #: gtk/gtktable.c:251
 msgid "Vertical padding"
@@ -4622,8 +4585,7 @@ msgid "Wrap mode"
 msgstr "Мөр таслах горим"
 
 #: gtk/gtktexttag.c:481 gtk/gtktextview.c:585
-msgid ""
-"Whether to wrap lines never, at word boundaries, or at character boundaries"
+msgid "Whether to wrap lines never, at word boundaries, or at character boundaries"
 msgstr "Мөрүүдийг үг эсвэл тэмдэгтийн хязгаараар таслахгүй юу?"
 
 #: gtk/gtktexttag.c:490 gtk/gtktextview.c:632
@@ -4856,8 +4818,7 @@ msgstr "Хэрэв түлхүүр товч нь дарагдсан эсвэл д
 
 #: gtk/gtktogglebutton.c:141
 msgid "If the toggle button is in an \"in between\" state"
-msgstr ""
-"Хэрэв түлхүүр товч нь дарагдаж байх үед байвал \"энэ хооронд\" байрлана"
+msgstr "Хэрэв түлхүүр товч нь дарагдаж байх үед байвал \"энэ хооронд\" байрлана"
 
 # gtk/gtktogglebutton.c:146
 #: gtk/gtktogglebutton.c:148
@@ -4924,8 +4885,7 @@ msgid "Toolbar style"
 msgstr "Хэрэгслийн мөрийн хэв маяг"
 
 #: gtk/gtktoolbar.c:292
-msgid ""
-"Whether default toolbars have text only, text and icons, icons only, etc."
+msgid "Whether default toolbars have text only, text and icons, icons only, etc."
 msgstr ""
 "Анхдагч хэрэгслийн мөр нь зөвхөн текст, текст ба тэмдэг, зөвхөн тэмдэгтэй "
 "гэх мэтчилэн байдаг "
@@ -4965,7 +4925,7 @@ msgid "Vertical Adjustment for the widget"
 msgstr "Удирдлагын элементийн босоо тохируулга"
 
 # gtk/gtktreeview.c:538 gtk/gtktreeviewcolumn.c:174 gtk/gtkwidget.c:423
-#: gtk/gtktreeview.c:544 gtk/gtktreeviewcolumn.c:185 gtk/gtkwidget.c:433
+#: gtk/gtktreeview.c:544 gtk/gtktreeviewcolumn.c:185 gtk/gtkwidget.c:505
 msgid "Visible"
 msgstr "Харагдах байдал"
 
@@ -5168,8 +5128,7 @@ msgstr "Виджет"
 
 #: gtk/gtktreeviewcolumn.c:267
 msgid "Widget to put in column header button instead of column title"
-msgstr ""
-"Удирдлагын элемент нь баганы гарчигийн оронд баганы толгой товчыг тавидаг "
+msgstr "Удирдлагын элемент нь баганы гарчигийн оронд баганы толгой товчыг тавидаг "
 
 # gtk/gtktreeviewcolumn.c:263
 #: gtk/gtktreeviewcolumn.c:274
@@ -5219,140 +5178,137 @@ msgid "Determines how the shadowed box around the viewport is drawn"
 msgstr "Цонхны сүүдэр яаж зурагдахыг шалгах."
 
 # gtk/gtkwidget.c:390
-#: gtk/gtkwidget.c:400
+#: gtk/gtkwidget.c:472
 msgid "Widget name"
 msgstr "Удирдлагын элементийн нэр."
 
 # gtk/gtkwidget.c:391
-#: gtk/gtkwidget.c:401
+#: gtk/gtkwidget.c:473
 msgid "The name of the widget"
 msgstr "Удирдлагын элементийн нэр."
 
 # gtk/gtkwidget.c:397
-#: gtk/gtkwidget.c:407
+#: gtk/gtkwidget.c:479
 msgid "Parent widget"
 msgstr "Эцэг удирдлагын элемент"
 
 # gtk/gtkwidget.c:398
-#: gtk/gtkwidget.c:408
+#: gtk/gtkwidget.c:480
 msgid "The parent widget of this widget. Must be a Container widget"
 msgstr "Энэ виджетийн эцэг виджет нь агуулга виджет байх ёстой."
 
-#: gtk/gtkwidget.c:415
+#: gtk/gtkwidget.c:487
 msgid "Width request"
 msgstr "Өргөсгөх хүсэлт"
 
-#: gtk/gtkwidget.c:416
+#: gtk/gtkwidget.c:488
 msgid ""
 "Override for width request of the widget, or -1 if natural request should be "
 "used"
-msgstr ""
-"1 бол жинхэнэ хүсэлт хэрэглэх эсвэл виджетийн өргөсгөх хүсэлтийг үл тоох"
+msgstr "1 бол жинхэнэ хүсэлт хэрэглэх эсвэл виджетийн өргөсгөх хүсэлтийг үл тоох"
 
-#: gtk/gtkwidget.c:424
+#: gtk/gtkwidget.c:496
 msgid "Height request"
 msgstr "Өндөрсгөх хүсэлт"
 
-#: gtk/gtkwidget.c:425
+#: gtk/gtkwidget.c:497
 msgid ""
 "Override for height request of the widget, or -1 if natural request should "
 "be used"
-msgstr ""
-"1 бол жинхэнэ хүсэлт хэрэглэх эсвэл виджетийн өндөрсгөх хүсэлтийг үл тоох"
+msgstr "1 бол жинхэнэ хүсэлт хэрэглэх эсвэл виджетийн өндөрсгөх хүсэлтийг үл тоох"
 
 # gtk/gtkwidget.c:424
-#: gtk/gtkwidget.c:434
+#: gtk/gtkwidget.c:506
 msgid "Whether the widget is visible"
 msgstr "Удирдлагын элемент харагдаж байна."
 
 # gtk/gtkwidget.c:430
-#: gtk/gtkwidget.c:440
+#: gtk/gtkwidget.c:512
 msgid "Sensitive"
 msgstr "Мэдрэмжтэй"
 
 # gtk/gtkwidget.c:431
-#: gtk/gtkwidget.c:441
+#: gtk/gtkwidget.c:513
 msgid "Whether the widget responds to input"
 msgstr "Удирдлагын элемент оролт руу хариу өгөх эсэх"
 
 # gtk/gtkwidget.c:437
-#: gtk/gtkwidget.c:447
+#: gtk/gtkwidget.c:519
 msgid "Application paintable"
 msgstr "Зураглагдах програм"
 
 # gtk/gtkwidget.c:438
-#: gtk/gtkwidget.c:448
+#: gtk/gtkwidget.c:520
 msgid "Whether the application will paint directly on the widget"
 msgstr "Програм нь удирдлагын элемент дээр шууд дүрслэх эсэх"
 
 # gtk/gtkwidget.c:444
-#: gtk/gtkwidget.c:454
+#: gtk/gtkwidget.c:526
 msgid "Can focus"
 msgstr "Төвтэй байж болно."
 
 # gtk/gtkwidget.c:445
-#: gtk/gtkwidget.c:455
+#: gtk/gtkwidget.c:527
 msgid "Whether the widget can accept the input focus"
 msgstr "Удирдлагын элемент оролтын төв зөвшөөрөх эсэх"
 
 # gtk/gtkwidget.c:451
-#: gtk/gtkwidget.c:461
+#: gtk/gtkwidget.c:533
 msgid "Has focus"
 msgstr "Төвтэй байна"
 
 # gtk/gtkwidget.c:452
-#: gtk/gtkwidget.c:462
+#: gtk/gtkwidget.c:534
 msgid "Whether the widget has the input focus"
 msgstr "Удирдлагын элемент оролтын төв байгаа эсэх"
 
 # gtk/gtkwidget.c:451
-#: gtk/gtkwidget.c:468
+#: gtk/gtkwidget.c:540
 msgid "Is focus"
 msgstr "Төв байна"
 
-#: gtk/gtkwidget.c:469
+#: gtk/gtkwidget.c:541
 msgid "Whether the widget is the focus widget within the toplevel"
 msgstr "Удирдлагын элемент нь дээд шатны төв удирдлагын элементээр байх эсэх"
 
-#: gtk/gtkwidget.c:475
+#: gtk/gtkwidget.c:547
 msgid "Can default"
 msgstr "Стандартаар байж болно."
 
-#: gtk/gtkwidget.c:476
+#: gtk/gtkwidget.c:548
 msgid "Whether the widget can be the default widget"
 msgstr "Удирдлагын элементийг стандартаар авах эсэх"
 
-#: gtk/gtkwidget.c:482
+#: gtk/gtkwidget.c:554
 msgid "Has default"
 msgstr "Стандартаар байна"
 
-#: gtk/gtkwidget.c:483
+#: gtk/gtkwidget.c:555
 msgid "Whether the widget is the default widget"
 msgstr "Удирдлагын элемент нь стандарт утгатай байна."
 
-#: gtk/gtkwidget.c:489
+#: gtk/gtkwidget.c:561
 msgid "Receives default"
 msgstr "Анхдагчыг нь хүлээн авч байна."
 
-#: gtk/gtkwidget.c:490
+#: gtk/gtkwidget.c:562
 msgid "If TRUE, the widget will receive the default action when it is focused"
-msgstr ""
-"Удирдлагын элемент нь төв оролтын анхдагч үйл ажиллагааг хүлээн авч байна."
+msgstr "Удирдлагын элемент нь төв оролтын анхдагч үйл ажиллагааг хүлээн авч байна."
 
-#: gtk/gtkwidget.c:496
+#: gtk/gtkwidget.c:568
 msgid "Composite child"
 msgstr "Нийлмэл хүү обьект"
 
-#: gtk/gtkwidget.c:497
+#: gtk/gtkwidget.c:569
 msgid "Whether the widget is part of a composite widget"
 msgstr "Удирдлагын элемент нь нийлмэл элементүүдийн хэсэг эсэх."
 
 # gtk/gtkwidget.c:486
-#: gtk/gtkwidget.c:503
+#: gtk/gtkwidget.c:575
 msgid "Style"
 msgstr "Загвар"
 
-#: gtk/gtkwidget.c:504
+#: gtk/gtkwidget.c:576
 msgid ""
 "The style of the widget, which contains information about how it will look "
 "(colors etc)"
@@ -5361,83 +5317,83 @@ msgstr ""
 "гэх.мэт)"
 
 # gtk/gtkwidget.c:493
-#: gtk/gtkwidget.c:510
+#: gtk/gtkwidget.c:582
 msgid "Events"
 msgstr "Үйл явдал"
 
-#: gtk/gtkwidget.c:511
+#: gtk/gtkwidget.c:583
 msgid "The event mask that decides what kind of GdkEvents this widget gets"
 msgstr ""
 "Үйл явдал маск нь энэ удирдлагын элемент ямар төрлийн GdkEvents вэ гэдгийг "
 "шийддэг"
 
-#: gtk/gtkwidget.c:518
+#: gtk/gtkwidget.c:590
 msgid "Extension events"
 msgstr "Өргөтгөлийн үйл явц."
 
-#: gtk/gtkwidget.c:519
+#: gtk/gtkwidget.c:591
 msgid "The mask that decides what kind of extension events this widget gets"
 msgstr "Энэ элемент ямар төрлийн өргөтгөл авахыг шийддэг маск"
 
-#: gtk/gtkwidget.c:1098
+#: gtk/gtkwidget.c:1170
 msgid "Interior Focus"
 msgstr "Дотоод төв оролт"
 
-#: gtk/gtkwidget.c:1099
+#: gtk/gtkwidget.c:1171
 msgid "Whether to draw the focus indicator inside widgets"
 msgstr "Удирдлагын элемент дотор төв заагчыг зурах эсэх"
 
-#: gtk/gtkwidget.c:1105
+#: gtk/gtkwidget.c:1177
 msgid "Focus linewidth"
 msgstr "Төв шугамын өргөн"
 
-#: gtk/gtkwidget.c:1106
+#: gtk/gtkwidget.c:1178
 msgid "Width, in pixels, of the focus indicator line"
 msgstr "Төв заагчын шугамын өргөн (цэгээр)"
 
-#: gtk/gtkwidget.c:1112
+#: gtk/gtkwidget.c:1184
 msgid "Focus line dash pattern"
 msgstr "Төв шугаман хэв зургийн зураас"
 
-#: gtk/gtkwidget.c:1113
+#: gtk/gtkwidget.c:1185
 msgid "Dash pattern used to draw the focus indicator"
 msgstr "Хэв зургийн зураас нь төв заагчийг зурахад хэрэглэнэ."
 
-#: gtk/gtkwidget.c:1118
+#: gtk/gtkwidget.c:1190
 msgid "Focus padding"
 msgstr "Дотоод төв"
 
-#: gtk/gtkwidget.c:1119
+#: gtk/gtkwidget.c:1191
 msgid "Width, in pixels, between focus indicator and the widget 'box'"
 msgstr "Төв цэгийг заагч болон удирдлагын 'box' элементийн хоорондын өргөн "
 
 # gtk/gtkwidget.c:1077
-#: gtk/gtkwidget.c:1124
+#: gtk/gtkwidget.c:1196
 msgid "Cursor color"
 msgstr "Түүчээний өнгө"
 
-#: gtk/gtkwidget.c:1125
+#: gtk/gtkwidget.c:1197
 msgid "Color with which to draw insertion cursor"
 msgstr "Нэмэлт түүчээний өнгө."
 
 # gtk/gtkwidget.c:1083
-#: gtk/gtkwidget.c:1130
+#: gtk/gtkwidget.c:1202
 msgid "Secondary cursor color"
 msgstr "Хоёрдогч түүчээний өнгө."
 
-#: gtk/gtkwidget.c:1131
+#: gtk/gtkwidget.c:1203
 msgid ""
 "Color with which to draw the secondary insertion cursor when editing mixed "
 "right-to-left and left-to-right text"
 msgstr "Хоёрдахь нэмэлт түүчээний өнгө."
 
 # gtk/gtkwidget.c:1089
-#: gtk/gtkwidget.c:1136
+#: gtk/gtkwidget.c:1208
 msgid "Cursor line aspect ratio"
 msgstr "Түүчээний харьцаа"
 
 # gtk/gtkwidget.c:1090
-#: gtk/gtkwidget.c:1137
+#: gtk/gtkwidget.c:1209
 msgid "Aspect ratio with which to draw insertion cursor"
 msgstr "Түүчээний харьцаа."
 
@@ -5497,8 +5453,7 @@ msgstr "Модал"
 msgid ""
 "If TRUE, the window is modal (other windows are not usable while this one is "
 "up)"
-msgstr ""
-"Хэрэв цонх нь modal (хамгийн наад цонхноос бусад нь идэвхгүй байдаг) бол үнэн"
+msgstr "Хэрэв цонх нь modal (хамгийн наад цонхноос бусад нь идэвхгүй байдаг) бол үнэн"
 
 # gtk/gtkwindow.c:457
 #: gtk/gtkwindow.c:507
@@ -5527,8 +5482,7 @@ msgstr "Стандалрт өндөр"
 
 # gtk/gtkwindow.c:477
 #: gtk/gtkwindow.c:527
-msgid ""
-"The default height of the window, used when initially showing the window"
+msgid "The default height of the window, used when initially showing the window"
 msgstr "Стандарт өндөртэй цонхыг эхэлж үзүүлдэг."
 
 # gtk/gtkwindow.c:486
@@ -5643,19 +5597,20 @@ msgstr "Вьетнам (VIQR)"
 msgid "X Input Method"
 msgstr "Х оролтын тогтолцоо"
 
-#: modules/input/gtkimcontextxim.c:263
+#: modules/input/gtkimcontextxim.c:276
 msgid "IM Preedit style"
 msgstr "IM Preedit хэлбэр"
 
-#: modules/input/gtkimcontextxim.c:264
+#: modules/input/gtkimcontextxim.c:277
 msgid "How to draw the input method preedit string"
 msgstr "Урьдаас боловсруулсан оролтын схемийн үгсийг яаж тодорхойлох вэ"
 
-#: modules/input/gtkimcontextxim.c:272
+#: modules/input/gtkimcontextxim.c:285
 msgid "IM Status style"
 msgstr "IM төлөвийн хэлбэр"
 
 # gtk/gtktoolbar.c:234
-#: modules/input/gtkimcontextxim.c:273
+#: modules/input/gtkimcontextxim.c:286
 msgid "How to draw the input method statusbar"
 msgstr "Төлөвийн самбарыг оруулах аргыг хэрхэн үзүүлэх"
+
