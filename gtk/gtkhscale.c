@@ -28,9 +28,9 @@
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include "gtkalias.h"
 #include "gtkhscale.h"
 #include "gtkintl.h"
+#include "gtkalias.h"
 
 static gpointer parent_class;
 
@@ -258,3 +258,6 @@ gtk_hscale_get_layout_offsets (GtkScale *scale,
   *x += widget->allocation.x;
   *y += widget->allocation.y;
 }
+
+#define __GTK_HSCALE_C__
+#include "gtkaliasdef.c"

@@ -30,10 +30,7 @@
 
 #include <gtk/gtkcontainer.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
-
+G_BEGIN_DECLS
 
 #define GTK_TYPE_PANED                  (gtk_paned_get_type ())
 #define GTK_PANED(obj)                  (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_PANED, GtkPaned))
@@ -138,8 +135,6 @@ void    gtk_paned_compute_position (GtkPaned  *paned,
 #define	gtk_paned_set_gutter_size(p,s)		(void) 0
 #endif /* GTK_DISABLE_DEPRECATED */
 
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
+G_END_DECLS
 
 #endif /* __GTK_PANED_H__ */

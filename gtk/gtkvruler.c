@@ -27,8 +27,8 @@
 #include <config.h>
 #include <math.h>
 #include <string.h>
-#include "gtkalias.h"
 #include "gtkvruler.h"
+#include "gtkalias.h"
 
 #include <glib/gprintf.h>
 
@@ -329,3 +329,6 @@ gtk_vruler_draw_pos (GtkRuler *ruler)
 	}
     }
 }
+
+#define __GTK_VRULER_C__
+#include "gtkaliasdef.c"

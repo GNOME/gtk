@@ -20,7 +20,6 @@
 #include <config.h>
 #include <string.h>
 
-#include "gtkalias.h"
 #include "gtkintl.h"
 #include "gtkbin.h"
 #include "gtkentry.h"
@@ -29,6 +28,7 @@
 #include "gtkcellrenderertext.h"
 #include "gtkcombobox.h"
 #include "gtkcomboboxentry.h"
+#include "gtkalias.h"
 
 static void gtk_cell_renderer_combo_class_init (GtkCellRendererComboClass *klass);
 static void gtk_cell_renderer_combo_init       (GtkCellRendererCombo      *self);
@@ -392,3 +392,6 @@ gtk_cell_renderer_combo_start_editing (GtkCellRenderer     *cell,
 
   return GTK_CELL_EDITABLE (combo);
 }
+
+#define __GTK_CELL_RENDERER_COMBO_C__
+#include "gtkaliasdef.c"

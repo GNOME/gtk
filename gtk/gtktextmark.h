@@ -47,12 +47,10 @@
  *
  */
 
-#ifndef GTK_TEXT_MARK_H
-#define GTK_TEXT_MARK_H
+#ifndef __GTK_TEXT_MARK_H__
+#define __GTK_TEXT_MARK_H__
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
+G_BEGIN_DECLS
 
 /* The GtkTextMark data type */
 
@@ -95,9 +93,7 @@ gboolean              gtk_text_mark_get_deleted      (GtkTextMark *mark);
 GtkTextBuffer*        gtk_text_mark_get_buffer       (GtkTextMark *mark);
 gboolean              gtk_text_mark_get_left_gravity (GtkTextMark *mark);
 
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
+G_END_DECLS
 
 #endif
 

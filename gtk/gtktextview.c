@@ -27,7 +27,6 @@
 #include <config.h>
 #include <string.h>
 
-#include "gtkalias.h"
 #define GTK_TEXT_USE_INTERNAL_UNSUPPORTED_API
 #include "gtkbindings.h"
 #include "gtkdnd.h"
@@ -48,6 +47,7 @@
 #include "gtksizegroup.h"          /* FIXME http://bugzilla.gnome.org/show_bug.cgi?id=72258 */
 #include "gtktextutil.h"
 #include "gtkwindow.h"
+#include "gtkalias.h"
 
 /* How scrolling, validation, exposes, etc. work.
  *
@@ -8301,3 +8301,6 @@ gtk_text_view_move_visually (GtkTextView *text_view,
 
   return gtk_text_layout_move_iter_visually (text_view->layout, iter, count);
 }
+
+#define __GTK_TEXT_VIEW_C__
+#include "gtkaliasdef.c"

@@ -28,7 +28,6 @@
 
 #include <config.h>
 #include "gdk/gdkkeysyms.h"
-#include "gtkalias.h"
 #include "gtkbindings.h"
 #include "gtkmain.h"
 #include "gtkmarshalers.h"
@@ -37,6 +36,7 @@
 #include "gtksettings.h"
 #include "gtkintl.h"
 #include "gtkwindow.h"
+#include "gtkalias.h"
 
 
 #define BORDER_SPACING  0
@@ -601,3 +601,6 @@ gtk_menu_bar_get_popup_delay (GtkMenuShell *menu_shell)
 
   return popup_delay;
 }
+
+#define __GTK_MENU_BAR_C__
+#include "gtkaliasdef.c"

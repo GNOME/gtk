@@ -19,9 +19,9 @@
 
 
 #include <config.h>
-#include "gtkalias.h"
 #include "gtktreesortable.h"
 #include "gtkmarshalers.h"
+#include "gtkalias.h"
 
 static void gtk_tree_sortable_base_init (gpointer g_class);
 
@@ -237,3 +237,6 @@ gtk_tree_sortable_has_default_sort_func (GtkTreeSortable *sortable)
   
   return (* iface->has_default_sort_func) (sortable);
 }
+
+#define __GTK_TREE_SORTABLE_C__
+#include "gtkaliasdef.c"

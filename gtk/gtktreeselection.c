@@ -19,11 +19,11 @@
 
 #include <config.h>
 #include <string.h>
-#include "gtkalias.h"
 #include "gtktreeselection.h"
 #include "gtktreeprivate.h"
 #include "gtkrbtree.h"
 #include "gtkmarshalers.h"
+#include "gtkalias.h"
 
 static void gtk_tree_selection_init              (GtkTreeSelection      *selection);
 static void gtk_tree_selection_class_init        (GtkTreeSelectionClass *class);
@@ -1543,3 +1543,6 @@ gtk_tree_selection_real_select_node (GtkTreeSelection *selection,
 
   return FALSE;
 }
+
+#define __GTK_TREE_SELECTION_C__
+#include "gtkaliasdef.c"

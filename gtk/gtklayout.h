@@ -28,17 +28,14 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
-#ifndef __GTK_LAYOUT_H
-#define __GTK_LAYOUT_H
+#ifndef __GTK_LAYOUT_H__
+#define __GTK_LAYOUT_H__
 
 #include <gdk/gdk.h>
 #include <gtk/gtkcontainer.h>
 #include <gtk/gtkadjustment.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
-
+G_BEGIN_DECLS
 
 #define GTK_TYPE_LAYOUT            (gtk_layout_get_type ())
 #define GTK_LAYOUT(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_LAYOUT, GtkLayout))
@@ -130,8 +127,6 @@ void           gtk_layout_freeze          (GtkLayout     *layout);
 void           gtk_layout_thaw            (GtkLayout     *layout);
 #endif /* GTK_DISABLE_DEPRECATED */
 
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
+G_END_DECLS
 
-#endif /* __GTK_LAYOUT_H */
+#endif /* __GTK_LAYOUT_H__ */

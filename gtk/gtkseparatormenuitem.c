@@ -25,8 +25,8 @@
  */
 
 #include <config.h>
-#include "gtkalias.h"
 #include "gtkseparatormenuitem.h"
+#include "gtkalias.h"
 
 G_DEFINE_TYPE(GtkSeparatorMenuItem, gtk_separator_menu_item, GTK_TYPE_MENU_ITEM);
 
@@ -46,3 +46,6 @@ gtk_separator_menu_item_new (void)
 {
   return g_object_new (GTK_TYPE_SEPARATOR_MENU_ITEM, NULL);
 }
+
+#define __GTK_SEPARATOR_MENU_ITEM_C__
+#include "gtkaliasdef.c"

@@ -20,9 +20,9 @@
 #include <config.h>
 #include <string.h>
 
-#include "gtkalias.h"
 #include "gtkwidget.h"
 #include "gtkaccessible.h"
+#include "gtkalias.h"
 
 static void gtk_accessible_class_init (GtkAccessibleClass *klass);
 
@@ -93,3 +93,6 @@ gtk_accessible_real_connect_widget_destroyed (GtkAccessible *accessible)
                       &accessible->widget);
   }
 }
+
+#define __GTK_ACCESSIBLE_C__
+#include "gtkaliasdef.c"

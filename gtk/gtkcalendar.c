@@ -39,7 +39,6 @@
 #include <time.h>
 #include <glib/gprintf.h>
 
-#include "gtkalias.h"
 #include "gtkcalendar.h"
 #include "gtkdnd.h"
 #include "gtkintl.h"
@@ -47,6 +46,7 @@
 #include "gtkmarshalers.h"
 #include "gtkintl.h"
 #include "gdk/gdkkeysyms.h"
+#include "gtkalias.h"
 
 /***************************************************************************/
 /* The following date routines are taken from the lib_date package.  Keep
@@ -3545,3 +3545,6 @@ gtk_calendar_drag_data_received (GtkWidget        *widget,
   gtk_calendar_select_day (calendar, day);
   g_object_thaw_notify (G_OBJECT (calendar));  
 }
+
+#define __GTK_CALENDAR_C__
+#include "gtkaliasdef.c"

@@ -41,10 +41,7 @@
 #include <gdk/gdk.h>
 #include <gtk/gtkdrawingarea.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
-
+G_BEGIN_DECLS
 
 #define GTK_TYPE_CURVE                  (gtk_curve_get_type ())
 #define GTK_CURVE(obj)                  (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_CURVE, GtkCurve))
@@ -110,9 +107,6 @@ void		gtk_curve_set_vector	(GtkCurve *curve,
 void		gtk_curve_set_curve_type (GtkCurve *curve, GtkCurveType type);
 
 
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
-
+G_END_DECLS
 
 #endif /* __GTK_CURVE_H__ */

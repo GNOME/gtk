@@ -1,5 +1,5 @@
-#ifndef GTK_TEXT_BTREE_H
-#define GTK_TEXT_BTREE_H
+#ifndef __GTK_TEXT_BTREE_H__
+#define __GTK_TEXT_BTREE_H__
 
 #if 0
 #define DEBUG_VALIDATION_AND_SCROLLING
@@ -18,9 +18,7 @@
 #include <gtk/gtktextsegment.h>
 #include <gtk/gtktextiter.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
+G_BEGIN_DECLS
 
 GtkTextBTree  *_gtk_text_btree_new        (GtkTextTagTable *table,
                                            GtkTextBuffer   *buffer);
@@ -315,9 +313,7 @@ void _gtk_text_btree_release_mark_segment (GtkTextBTree       *tree,
 void _gtk_text_btree_notify_will_remove_tag (GtkTextBTree *tree,
                                              GtkTextTag   *tag);
 
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
+G_END_DECLS
 
 #endif
 

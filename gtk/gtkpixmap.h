@@ -34,10 +34,7 @@
 #include <gtk/gtkmisc.h>
 
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
-
+G_BEGIN_DECLS
 
 #define GTK_TYPE_PIXMAP			 (gtk_pixmap_get_type ())
 #define GTK_PIXMAP(obj)			 (GTK_CHECK_CAST ((obj), GTK_TYPE_PIXMAP, GtkPixmap))
@@ -81,10 +78,7 @@ void       gtk_pixmap_set_build_insensitive (GtkPixmap *pixmap,
 		                             gboolean   build);
 
 
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
-
+G_END_DECLS
 
 #endif /* __GTK_PIXMAP_H__ */
 

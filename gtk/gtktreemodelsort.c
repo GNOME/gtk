@@ -40,13 +40,13 @@
 #include <config.h>
 #include <string.h>
 
-#include "gtkalias.h"
 #include "gtktreemodelsort.h"
 #include "gtktreesortable.h"
 #include "gtktreestore.h"
 #include "gtktreedatalist.h"
 #include "gtkintl.h"
 #include "gtktreednd.h"
+#include "gtkalias.h"
 
 typedef struct _SortElt SortElt;
 typedef struct _SortLevel SortLevel;
@@ -100,7 +100,7 @@ enum {
 #define SORT_ELT(sort_elt) ((SortElt *)sort_elt)
 #define SORT_LEVEL(sort_level) ((SortLevel *)sort_level)
 
-#define GET_CHILD_ITER(tree_model_sort,child_iter,sort_iter) gtk_tree_model_sort_convert_iter_to_child_iter(GTK_TREE_MODEL_SORT (tree_model_sort), child_iter, sort_iter);
+#define GET_CHILD_ITER(tree_model_sort,ch_iter,so_iter) gtk_tree_model_sort_convert_iter_to_child_iter(GTK_TREE_MODEL_SORT (tree_model_sort), ch_iter, so_iter);
 
 #define NO_SORT_FUNC ((GtkTreeIterCompareFunc) 0x1)
 
@@ -2502,3 +2502,6 @@ gtk_tree_model_sort_iter_is_valid (GtkTreeModelSort *tree_model_sort,
   return gtk_tree_model_sort_iter_is_valid_helper (iter,
 						   tree_model_sort->root);
 }
+
+#define __GTK_TREE_MODEL_SORT_C__
+#include "gtkaliasdef.c"

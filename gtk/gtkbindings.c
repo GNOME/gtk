@@ -31,11 +31,11 @@
 #include <string.h>
 #include <stdarg.h>
 #include <gdkkeysyms.h>
-#include "gtkalias.h"
 #include "gtkbindings.h"
 #include "gtkkeyhash.h"
 #include "gtkwidget.h"
 #include "gtkrc.h"
+#include "gtkalias.h"
 
 
 /* --- defines --- */
@@ -1504,3 +1504,6 @@ _gtk_binding_signal_new (const gchar	    *signal_name,
  
   return signal_id;
 }
+
+#define __GTK_BINDINGS_C__
+#include "gtkaliasdef.c"

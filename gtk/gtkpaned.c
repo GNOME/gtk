@@ -25,7 +25,6 @@
  */
 
 #include <config.h>
-#include "gtkalias.h"
 #include "gtkintl.h"
 #include "gtkpaned.h"
 #include "gtkbindings.h"
@@ -34,6 +33,7 @@
 #include "gtkwindow.h"
 #include "gtkmain.h"
 #include "gtkmarshalers.h"
+#include "gtkalias.h"
 
 enum {
   PROP_0,
@@ -1796,3 +1796,6 @@ gtk_paned_toggle_handle_focus (GtkPaned *paned)
 
   return FALSE;
 }
+
+#define __GTK_PANED_C__
+#include "gtkaliasdef.c"

@@ -28,7 +28,6 @@
 #include <stdlib.h>
 #include <errno.h>
 #include <string.h>
-#include "gtkalias.h"
 #include <pango/pango-utils.h>	/* For pango_scan_* */
 #include "gtkiconfactory.h"
 #include "stock-icons/gtkstockpixbufs.h"
@@ -38,6 +37,7 @@
 #include "gtkstock.h"
 #include "gtkwidget.h"
 #include "gtkintl.h"
+#include "gtkalias.h"
 
 
 static GSList *all_icon_factories = NULL;
@@ -2988,3 +2988,6 @@ gtk_icon_source_get_filename (const GtkIconSource *source)
 }
 
 #endif
+
+#define __GTK_ICON_FACTORY_C__
+#include "gtkaliasdef.c"

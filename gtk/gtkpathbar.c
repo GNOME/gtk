@@ -19,7 +19,6 @@
 
 #include <config.h>
 #include <string.h>
-#include "gtkalias.h"
 #include "gtkpathbar.h"
 #include "gtktogglebutton.h"
 #include "gtkalignment.h"
@@ -33,6 +32,7 @@
 #include "gtkhbox.h"
 #include "gtkmain.h"
 #include "gtkmarshalers.h"
+#include "gtkalias.h"
 
 enum {
   PATH_CLICKED,

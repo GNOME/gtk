@@ -25,10 +25,10 @@
  */
 
 #include <config.h>
-#include "gtkalias.h"
 #include "gtkcontainer.h"
 #include "gtkmisc.h"
 #include "gtkintl.h"
+#include "gtkalias.h"
 
 
 enum {
@@ -366,3 +366,6 @@ gtk_misc_realize (GtkWidget *widget)
       gdk_window_set_back_pixmap (widget->window, NULL, TRUE);
     }
 }
+
+#define __GTK_MISC_C__
+#include "gtkaliasdef.c"

@@ -34,10 +34,7 @@
 #include <gtk/gtkadjustment.h>
 #include <gtk/gtkoldeditable.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
-
+G_BEGIN_DECLS
 
 #define GTK_TYPE_TEXT                  (gtk_text_get_type ())
 #define GTK_TEXT(obj)                  (GTK_CHECK_CAST ((obj), GTK_TYPE_TEXT, GtkText))
@@ -214,10 +211,7 @@ gboolean   gtk_text_forward_delete  (GtkText       *text,
 	: ((index) < (t)->gap_position ? (t)->text.ch[index] : \
 					(t)->text.ch[(index)+(t)->gap_size]))
 
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
-
+G_END_DECLS
 
 #endif /* __GTK_TEXT_H__ */
 

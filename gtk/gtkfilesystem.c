@@ -20,10 +20,10 @@
 
 #include <config.h>
 #include <gmodule.h>
-#include "gtkalias.h"
 #include "gtkfilesystem.h"
 #include "gtkicontheme.h"
 #include "gtkmodules.h"
+#include "gtkalias.h"
 
 #include <string.h>
 
@@ -1147,4 +1147,5 @@ _gtk_file_system_create (const char *file_system_name)
   return fs;
 }
 
-
+#define __GTK_FILE_SYSTEM_C__
+#include "gtkaliasdef.c"

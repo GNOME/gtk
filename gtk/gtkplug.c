@@ -25,7 +25,6 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
-#include "gtkalias.h"
 #include "gtkmain.h"
 #include "gtkmarshalers.h"
 #include "gtkplug.h"
@@ -35,6 +34,8 @@
 #include "x11/gdkx.h"
 
 #include "gtkxembed.h"
+
+#include "gtkalias.h"
 
 static void            gtk_plug_class_init            (GtkPlugClass     *klass);
 static void            gtk_plug_init                  (GtkPlug          *plug);
@@ -1138,3 +1139,6 @@ gtk_plug_filter_func (GdkXEvent *gdk_xevent, GdkEvent *event, gpointer data)
 
   return GDK_FILTER_CONTINUE;
 }
+
+#define __GTK_PLUG_C__
+#include "gtkaliasdef.c"

@@ -24,15 +24,13 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
-#ifndef GTK_TEXT_ITER_H
-#define GTK_TEXT_ITER_H
+#ifndef __GTK_TEXT_ITER_H__
+#define __GTK_TEXT_ITER_H__
 
 #include <gtk/gtktexttag.h>
 #include <gtk/gtktextchild.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
+G_BEGIN_DECLS
 
 typedef enum {
   GTK_TEXT_SEARCH_VISIBLE_ONLY = 1 << 0,
@@ -291,9 +289,7 @@ gboolean gtk_text_iter_in_range        (const GtkTextIter *iter,
 void     gtk_text_iter_order           (GtkTextIter *first,
                                         GtkTextIter *second);
 
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
+G_END_DECLS
 
 #endif
 

@@ -35,9 +35,7 @@
 
 #include <gtk/gtkclist.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif				/* __cplusplus */
+G_BEGIN_DECLS
 
 #define GTK_TYPE_CTREE            (gtk_ctree_get_type ())
 #define GTK_CTREE(obj)            (GTK_CHECK_CAST ((obj), GTK_TYPE_CTREE, GtkCTree))
@@ -440,9 +438,7 @@ void gtk_ctree_sort_recursive                    (GtkCTree     *ctree,
  */
 GType   gtk_ctree_node_get_type                  (void) G_GNUC_CONST;
 
-#ifdef __cplusplus
-}
-#endif				/* __cplusplus */
+G_END_DECLS
 
 #endif				/* __GTK_CTREE_H__ */
 

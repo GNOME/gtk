@@ -19,11 +19,11 @@
 
 #include <config.h>
 
-#include "gtkalias.h"
 #include "gtkaccelmap.h"
 
 #include "gtkmarshalers.h"
 #include "gtkwindow.h"  /* in lack of GtkAcceleratable */
+#include "gtkalias.h"
 
 #include <glib/gstdio.h>
 
@@ -1028,3 +1028,6 @@ gtk_accel_map_save (const gchar *file_name)
 }
 
 #endif
+
+#define __GTK_ACCEL_MAP_C__
+#include "gtkaliasdef.c"

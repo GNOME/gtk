@@ -27,11 +27,11 @@
 #include <config.h>
 #include <string.h>
 
-#include "gtkalias.h"
 #include "gtkstock.h"
 #include "gtkiconfactory.h"
 #include "gtkintl.h"
 #include <gdk/gdkkeysyms.h>
+#include "gtkalias.h"
 
 static GHashTable *stock_hash = NULL;
 static void init_stock_hash (void);
@@ -380,3 +380,6 @@ init_stock_hash (void)
       gtk_stock_add_static (builtin_items, G_N_ELEMENTS (builtin_items));
     }
 }
+
+#define __GTK_STOCK_C__
+#include "gtkaliasdef.c"

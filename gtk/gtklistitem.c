@@ -27,7 +27,6 @@
 #undef GTK_DISABLE_DEPRECATED
 
 #include <config.h>
-#include "gtkalias.h"
 #include "gtkbindings.h"
 #include "gtklabel.h"
 #include "gtklistitem.h"
@@ -35,6 +34,7 @@
 #include "gtkmarshalers.h"
 #include "gtksignal.h"
 #include <gdk/gdkkeysyms.h>
+#include "gtkalias.h"
 
 
 enum
@@ -624,3 +624,6 @@ gtk_real_list_item_toggle (GtkItem *item)
       break;
     }
 }
+
+#define __GTK_LIST_ITEM_C__
+#include "gtkaliasdef.c"

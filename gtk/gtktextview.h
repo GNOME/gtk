@@ -24,17 +24,15 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
-#ifndef GTK_TEXT_VIEW_H
-#define GTK_TEXT_VIEW_H
+#ifndef __GTK_TEXT_VIEW_H__
+#define __GTK_TEXT_VIEW_H__
 
 #include <gtk/gtkcontainer.h>
 #include <gtk/gtkimcontext.h>
 #include <gtk/gtktextbuffer.h>
 #include <gtk/gtkmenu.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
+G_BEGIN_DECLS
 
 #define GTK_TYPE_TEXT_VIEW             (gtk_text_view_get_type ())
 #define GTK_TEXT_VIEW(obj)             (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_TEXT_VIEW, GtkTextView))
@@ -363,8 +361,6 @@ PangoTabArray*   gtk_text_view_get_tabs               (GtkTextView      *text_vi
 /* note that the return value of this changes with the theme */
 GtkTextAttributes* gtk_text_view_get_default_attributes (GtkTextView    *text_view);
 
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
+G_END_DECLS
 
-#endif /* GTK_TEXT_VIEW_H */
+#endif /* __GTK_TEXT_VIEW_H__ */

@@ -30,9 +30,7 @@
 
 #include <gdk/gdk.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
+G_BEGIN_DECLS
 
 typedef struct _GtkStockItem GtkStockItem;
 
@@ -156,9 +154,6 @@ void          gtk_stock_item_free (GtkStockItem       *item);
 #define GTK_STOCK_ZOOM_IN          "gtk-zoom-in"
 #define GTK_STOCK_ZOOM_OUT         "gtk-zoom-out"
 
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
-
+G_END_DECLS
 
 #endif /* __GTK_STOCK_H__ */

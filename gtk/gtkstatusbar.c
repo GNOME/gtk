@@ -26,13 +26,13 @@
  */
 
 #include <config.h>
-#include "gtkalias.h"
 #include "gtkframe.h"
 #include "gtklabel.h"
 #include "gtkmarshalers.h"
 #include "gtkstatusbar.h"
 #include "gtkwindow.h"
 #include "gtkintl.h"
+#include "gtkalias.h"
 
 typedef struct _GtkStatusbarMsg GtkStatusbarMsg;
 
@@ -871,3 +871,6 @@ label_selectable_changed (GtkWidget  *label,
       statusbar->has_resize_grip && statusbar->grip_window)
     gdk_window_raise (statusbar->grip_window);
 }
+
+#define __GTK_STATUSBAR_C__
+#include "gtkaliasdef.c"

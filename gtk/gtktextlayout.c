@@ -78,11 +78,11 @@
 
 #define GTK_TEXT_USE_INTERNAL_UNSUPPORTED_API
 #include <config.h>
-#include "gtkalias.h"
 #include "gtkmarshalers.h"
 #include "gtktextlayout.h"
 #include "gtktextbtree.h"
 #include "gtktextiterprivate.h"
+#include "gtkalias.h"
 
 #include <stdlib.h>
 #include <string.h>
@@ -3272,3 +3272,6 @@ gtk_text_layout_buffer_delete_range (GtkTextBuffer *textbuffer,
 
   gtk_text_layout_update_cursor_line (layout);
 }
+
+#define __GTK_TEXT_LAYOUT_C__
+#include "gtkaliasdef.c"

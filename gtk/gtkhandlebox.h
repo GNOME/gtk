@@ -38,10 +38,7 @@
 #include <gtk/gtkbin.h>
 
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
-
+G_BEGIN_DECLS
 
 #define GTK_TYPE_HANDLE_BOX            (gtk_handle_box_get_type ())
 #define GTK_HANDLE_BOX(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_HANDLE_BOX, GtkHandleBox))
@@ -106,10 +103,6 @@ void          gtk_handle_box_set_snap_edge        (GtkHandleBox    *handle_box,
 						   GtkPositionType  edge);
 GtkPositionType gtk_handle_box_get_snap_edge      (GtkHandleBox    *handle_box);
 
-
-
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
+G_END_DECLS
 
 #endif /* __GTK_HANDLE_BOX_H__ */

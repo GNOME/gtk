@@ -28,8 +28,8 @@
 #include <math.h>
 #include <glib/gprintf.h>
 #include <string.h>
-#include "gtkalias.h"
 #include "gtkhruler.h"
+#include "gtkalias.h"
 
 
 #define RULER_HEIGHT          14
@@ -324,3 +324,6 @@ gtk_hruler_draw_pos (GtkRuler *ruler)
 	}
     }
 }
+
+#define __GTK_HRULER_C__
+#include "gtkaliasdef.c"

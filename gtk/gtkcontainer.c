@@ -29,7 +29,6 @@
 #include <string.h>
 #include <stdlib.h>
 
-#include "gtkalias.h"
 #include "gtkcontainer.h"
 #include "gtkprivate.h"
 #include "gtkmain.h"
@@ -39,6 +38,7 @@
 #include "gtktoolbar.h"
 #include <gobject/gobjectnotifyqueue.c>
 #include <gobject/gvaluecollector.h>
+#include "gtkalias.h"
 
 
 enum {
@@ -2463,3 +2463,6 @@ gtk_container_propagate_expose (GtkContainer   *container,
       gdk_event_free (child_event);
     }
 }
+
+#define __GTK_CONTAINER_C__
+#include "gtkaliasdef.c"

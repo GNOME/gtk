@@ -34,10 +34,7 @@
 #include <gtk/gtkitem.h>
 
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
-
+G_BEGIN_DECLS
 
 #define GTK_TYPE_TREE_ITEM              (gtk_tree_item_get_type ())
 #define GTK_TREE_ITEM(obj)              (GTK_CHECK_CAST ((obj), GTK_TYPE_TREE_ITEM, GtkTreeItem))
@@ -87,10 +84,7 @@ void       gtk_tree_item_expand         (GtkTreeItem *tree_item);
 void       gtk_tree_item_collapse       (GtkTreeItem *tree_item);
 
 
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
-
+G_END_DECLS
 
 #endif /* __GTK_TREE_ITEM_H__ */
 

@@ -20,8 +20,8 @@
 #undef GTK_DISABLE_DEPRECATED
 
 #include	<config.h>
-#include 	"gtkalias.h"
 #include	"gtksignal.h"
+#include 	"gtkalias.h"
 
 /* the real parameter limit is of course given by GSignal, bu we need
  * an upper limit for the implementations. so this should be adjusted
@@ -389,3 +389,6 @@ gtk_signal_emitv_by_name (GtkObject   *object,
   
   gtk_signal_emitv (object, g_signal_lookup (name, GTK_OBJECT_TYPE (object)), args);
 }
+
+#define __GTK_SIGNAL_C__
+#include "gtkaliasdef.c"

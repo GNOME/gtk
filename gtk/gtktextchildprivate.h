@@ -47,14 +47,12 @@
  *
  */
 
-#ifndef GTK_TEXT_CHILD_PRIVATE_H
-#define GTK_TEXT_CHILD_PRIVATE_H
+#ifndef __GTK_TEXT_CHILD_PRIVATE_H__
+#define __GTK_TEXT_CHILD_PRIVATE_H__
 
 #include <gtk/gtktexttypes.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
+G_BEGIN_DECLS
 
 typedef struct _GtkTextPixbuf GtkTextPixbuf;
 
@@ -85,8 +83,6 @@ void                _gtk_widget_segment_unref    (GtkTextLineSegment *widget_seg
 
 GtkTextLayout*      _gtk_anchored_child_get_layout (GtkWidget *child);
 
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
+G_END_DECLS
 
 #endif

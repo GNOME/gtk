@@ -34,10 +34,7 @@
 #include <gtk/gtkadjustment.h>
 
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
-
+G_BEGIN_DECLS
 
 #define GTK_TYPE_CONTAINER              (gtk_container_get_type ())
 #define GTK_CONTAINER(obj)              (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_CONTAINER, GtkContainer))
@@ -223,9 +220,6 @@ GList *_gtk_container_focus_sort             (GtkContainer     *container,
 #define	gtk_container_border_width		gtk_container_set_border_width
 #endif /* GTK_DISABLE_DEPRECATED */
 
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
-
+G_END_DECLS
 
 #endif /* __GTK_CONTAINER_H__ */

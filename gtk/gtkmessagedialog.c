@@ -26,7 +26,6 @@
  */
 
 #include <config.h>
-#include "gtkalias.h"
 #include "gtkmessagedialog.h"
 #include "gtklabel.h"
 #include "gtkhbox.h"
@@ -36,6 +35,7 @@
 #include "gtkiconfactory.h"
 #include "gtkintl.h"
 #include <string.h>
+#include "gtkalias.h"
 
 #define GTK_MESSAGE_DIALOG_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), GTK_TYPE_MESSAGE_DIALOG, GtkMessageDialogPrivate))
 
@@ -727,3 +727,6 @@ gtk_message_dialog_style_set (GtkWidget *widget,
   if (GTK_WIDGET_CLASS (parent_class)->style_set)
     (GTK_WIDGET_CLASS (parent_class)->style_set) (widget, prev_style);
 }
+
+#define __GTK_MESSAGE_DIALOG_C__
+#include "gtkaliasdef.c"

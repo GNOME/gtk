@@ -19,12 +19,12 @@
  */
 
 #include <config.h>
-#include "gtkalias.h"
 #include "gtkfilechooserwidget.h"
 #include "gtkfilechooserdefault.h"
 #include "gtkfilechooserutils.h"
 #include "gtktypebuiltins.h"
 #include "gtkfilechooserembed.h"
+#include "gtkalias.h"
 
 struct _GtkFileChooserWidgetPrivate
 {
@@ -248,3 +248,6 @@ gtk_file_chooser_widget_new_with_backend (GtkFileChooserAction  action,
 		       "file-system-backend", backend,
 		       NULL);
 }
+
+#define __GTK_FILE_CHOOSER_WIDGET_C__
+#include "gtkaliasdef.c"

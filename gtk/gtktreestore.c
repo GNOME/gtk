@@ -20,11 +20,11 @@
 #include <config.h>
 #include <string.h>
 #include <gobject/gvaluecollector.h>
-#include "gtkalias.h"
 #include "gtktreemodel.h"
 #include "gtktreestore.h"
 #include "gtktreedatalist.h"
 #include "gtktreednd.h"
+#include "gtkalias.h"
 
 #define G_NODE(node) ((GNode *)node)
 #define GTK_TREE_STORE_IS_SORTED(tree) (GTK_TREE_STORE (tree)->sort_column_id != GTK_TREE_SORTABLE_UNSORTED_SORT_COLUMN_ID)
@@ -2985,3 +2985,6 @@ validate_gnode (GNode* node)
       iter = iter->next;
     }
 }
+
+#define __GTK_TREE_STORE_C__
+#include "gtkaliasdef.c"

@@ -1,5 +1,5 @@
-#ifndef GTK_TEXT_TAG_H
-#define GTK_TEXT_TAG_H
+#ifndef __GTK_TEXT_TAG_H__
+#define __GTK_TEXT_TAG_H__
 
 #include <glib-object.h>
 #include <gdk/gdk.h>
@@ -8,9 +8,7 @@
 /* Not needed, retained for compatibility -Yosh */
 #include <gtk/gtkobject.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
+G_BEGIN_DECLS
 
 typedef struct _GtkTextIter GtkTextIter;
 typedef struct _GtkTextTagTable GtkTextTagTable;
@@ -231,9 +229,7 @@ void               gtk_text_attributes_ref         (GtkTextAttributes *values);
 GType              gtk_text_attributes_get_type    (void) G_GNUC_CONST;
 
 
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
+G_END_DECLS
 
 #endif
 

@@ -27,12 +27,12 @@
 
 #include <config.h>
 #include <math.h>
-#include "gtkalias.h"
 #include "gtkintl.h"
 #include "gtkscale.h"
 #include "gtkmarshalers.h"
 #include "gdk/gdkkeysyms.h"
 #include "gtkbindings.h"
+#include "gtkalias.h"
 
 
 #define	MAX_DIGITS	(64)	/* don't change this,
@@ -748,3 +748,5 @@ void _gtk_scale_clear_layout (GtkScale *scale)
     }
 }
 
+#define __GTK_SCALE_C__
+#include "gtkaliasdef.c"

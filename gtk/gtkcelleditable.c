@@ -19,9 +19,9 @@
 
 
 #include <config.h>
-#include "gtkalias.h"
 #include "gtkcelleditable.h"
 #include "gtkmarshalers.h"
+#include "gtkalias.h"
 
 static void gtk_cell_editable_base_init (gpointer g_class);
 
@@ -128,3 +128,6 @@ gtk_cell_editable_remove_widget (GtkCellEditable *cell_editable)
 
   g_signal_emit_by_name (cell_editable, "remove_widget");
 }
+
+#define __GTK_CELL_EDITABLE_C__
+#include "gtkaliasdef.c"

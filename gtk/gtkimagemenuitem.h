@@ -24,18 +24,14 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
-#ifndef __GTK_MENU_IMAGE_ITEM_H__
-#define __GTK_MENU_IMAGE_ITEM_H__
+#ifndef __GTK_IMAGE_MENU_ITEM_H__
+#define __GTK_IMAGE_MENU_ITEM_H__
 
 
 #include <gdk/gdk.h>
 #include <gtk/gtkmenuitem.h>
 
-
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
-
+G_BEGIN_DECLS
 
 #define GTK_TYPE_IMAGE_MENU_ITEM            (gtk_image_menu_item_get_type ())
 #define GTK_IMAGE_MENU_ITEM(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_IMAGE_MENU_ITEM, GtkImageMenuItem))
@@ -72,10 +68,6 @@ void       gtk_image_menu_item_set_image         (GtkImageMenuItem *image_menu_i
                                                   GtkWidget        *image);
 GtkWidget* gtk_image_menu_item_get_image         (GtkImageMenuItem *image_menu_item);
 
-
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
-
+G_END_DECLS
 
 #endif /* __GTK_IMAGE_MENU_ITEM_H__ */

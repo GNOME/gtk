@@ -31,11 +31,7 @@
 #include <gdk/gdk.h>
 #include <gtk/gtkcontainer.h>
 
-
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
-
+G_BEGIN_DECLS
 
 #define GTK_TYPE_NOTEBOOK                  (gtk_notebook_get_type ())
 #define GTK_NOTEBOOK(obj)                  (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_NOTEBOOK, GtkNotebook))
@@ -242,9 +238,6 @@ void gtk_notebook_reorder_child           (GtkNotebook *notebook,
 #define gtk_notebook_set_page                   gtk_notebook_set_current_page
 #endif /* GTK_DISABLE_DEPRECATED */
 
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
-
+G_END_DECLS
 
 #endif /* __GTK_NOTEBOOK_H__ */

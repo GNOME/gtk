@@ -25,9 +25,9 @@
  */
 
 #include <config.h>
-#include "gtkalias.h"
 #include "gtkbbox.h"
 #include "gtkintl.h"
+#include "gtkalias.h"
 
 enum {
   PROP_0,
@@ -503,3 +503,6 @@ _gtk_button_box_child_requisition (GtkWidget *widget,
   if (height)
     *height = needed_height;
 }
+
+#define __GTK_BUTTON_BOX_C__
+#include "gtkaliasdef.c"

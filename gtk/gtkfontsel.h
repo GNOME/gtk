@@ -36,9 +36,7 @@
 #include <gtk/gtkdialog.h>
 #include <gtk/gtkvbox.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
+G_BEGIN_DECLS
 
 #define GTK_TYPE_FONT_SELECTION              (gtk_font_selection_get_type ())
 #define GTK_FONT_SELECTION(obj)              (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_FONT_SELECTION, GtkFontSelection))
@@ -194,9 +192,7 @@ void	 gtk_font_selection_dialog_set_preview_text (GtkFontSelectionDialog *fsd,
 						     const gchar	    *text);
 
 
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
+G_END_DECLS
 
 
 #endif /* __GTK_FONTSEL_H__ */

@@ -25,8 +25,8 @@
  */
 
 #include <config.h>
-#include "gtkalias.h"
 #include "gtkgc.h"
+#include "gtkalias.h"
 
 
 typedef struct _GtkGCKey       GtkGCKey;
@@ -415,3 +415,6 @@ gtk_gc_drawable_equal (GtkGCDrawable *a,
 {
   return (a->depth == b->depth);
 }
+
+#define __GTK_GC_C__
+#include "gtkaliasdef.c"

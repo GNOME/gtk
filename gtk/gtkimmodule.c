@@ -35,11 +35,11 @@
 #include <glib/gstdio.h>
 #include <gmodule.h>
 #include <pango/pango-utils.h>
-#include "gtkalias.h"
 #include "gtkimmodule.h"
 #include "gtkimcontextsimple.h"
 #include "gtkrc.h"
 #include "gtkintl.h"
+#include "gtkalias.h"
 
 /* Do *not* include "gtkprivate.h" in this file. If you do, the
  * correct_libdir_prefix() function below will have to move somewhere

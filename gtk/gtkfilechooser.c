@@ -19,12 +19,12 @@
  */
 
 #include <config.h>
-#include "gtkalias.h"
 #include "gtkfilechooser.h"
 #include "gtkfilechooserprivate.h"
 #include "gtkfilesystem.h"
 #include "gtkintl.h"
 #include "gtktypebuiltins.h"
+#include "gtkalias.h"
 
 static void gtk_file_chooser_class_init (gpointer g_iface);
 
@@ -1996,3 +1996,6 @@ gtk_file_chooser_list_shortcut_folders (GtkFileChooser *chooser)
 }
 
 #endif
+
+#define __GTK_FILE_CHOOSER_C__
+#include "gtkaliasdef.c"

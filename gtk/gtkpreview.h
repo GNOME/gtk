@@ -33,10 +33,7 @@
 #include <gtk/gtkwidget.h>
 
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
-
+G_BEGIN_DECLS
 
 #define GTK_TYPE_PREVIEW            (gtk_preview_get_type ())
 #define GTK_PREVIEW(obj)            (GTK_CHECK_CAST ((obj), GTK_TYPE_PREVIEW, GtkPreview))
@@ -136,10 +133,7 @@ GtkPreviewInfo* gtk_preview_get_info           (void);
 void            gtk_preview_reset              (void);
 
 
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
-
+G_END_DECLS
 
 #endif /* __GTK_PREVIEW_H__ */
 

@@ -18,7 +18,6 @@
  */
 
 #include <config.h>
-#include "gtkalias.h"
 #include "gtkcellview.h"
 #include "gtkcelllayout.h"
 #include "gtkintl.h"
@@ -26,6 +25,7 @@
 #include "gtkcellrenderertext.h"
 #include "gtkcellrendererpixbuf.h"
 #include <gobject/gmarshal.h>
+#include "gtkalias.h"
 
 typedef struct _GtkCellViewCellInfo GtkCellViewCellInfo;
 struct _GtkCellViewCellInfo
@@ -967,6 +967,18 @@ gtk_cell_view_set_displayed_row (GtkCellView *cell_view,
   gtk_widget_queue_draw (GTK_WIDGET (cell_view));
 }
 
+/**
+ * gtk_cell_view_get_displayed_row:
+ * @cell_view: a #GtkCellView
+ *
+ * Returns a #GtkTreePath referring to the currently 
+ * displayed row. If no row is currently displayed, 
+ * %NULL is returned.
+ *
+ * Returns: the currently displayed row or %NULL
+ *
+ * Since: 2.6
+ */
 GtkTreePath *
 gtk_cell_view_get_displayed_row (GtkCellView *cell_view)
 {
@@ -1085,3 +1097,6 @@ gtk_cell_view_get_cell_renderers (GtkCellView *cell_view)
 
   return g_list_reverse (retval);
 }
+
+#define __GTK_CELL_VIEW_C__
+#include "gtkaliasdef.c"

@@ -42,10 +42,7 @@
 #include <gtk/gtkwidget.h>
 
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
-
+G_BEGIN_DECLS
 
 #define GTK_TYPE_RULER            (gtk_ruler_get_type ())
 #define GTK_RULER(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_RULER, GtkRuler))
@@ -126,9 +123,6 @@ void          gtk_ruler_get_range  (GtkRuler *ruler,
 				    gdouble  *position,
 				    gdouble  *max_size);
 
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
-
+G_END_DECLS
 
 #endif /* __GTK_RULER_H__ */

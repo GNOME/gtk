@@ -30,7 +30,6 @@
 #include <stdarg.h>
 
 
-#include "gtkalias.h"
 #define GTK_TEXT_USE_INTERNAL_UNSUPPORTED_API
 #include "gtkclipboard.h"
 #include "gtkinvisible.h"
@@ -39,6 +38,7 @@
 #include "gtktextbtree.h"
 #include "gtktextiterprivate.h"
 #include "gtkintl.h"
+#include "gtkalias.h"
 
 typedef struct _ClipboardRequest ClipboardRequest;
 
@@ -3770,3 +3770,6 @@ _gtk_text_buffer_spew (GtkTextBuffer *buffer)
 {
   _gtk_text_btree_spew (get_btree (buffer));
 }
+
+#define __GTK_TEXT_BUFFER_C__
+#include "gtkaliasdef.c"

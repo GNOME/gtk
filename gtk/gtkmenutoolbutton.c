@@ -20,7 +20,6 @@
  */
 
 #include <config.h>
-#include "gtkalias.h"
 #include "gtkmenutoolbutton.h"
 #include "gtkintl.h"
 #include "gtktogglebutton.h"
@@ -29,6 +28,7 @@
 #include "gtkvbox.h"
 #include "gtkmenu.h"
 #include "gtkmain.h"
+#include "gtkalias.h"
 
 
 #define GTK_MENU_TOOL_BUTTON_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), GTK_TYPE_MENU_TOOL_BUTTON, GtkMenuToolButtonPrivate))
@@ -609,3 +609,5 @@ gtk_menu_tool_button_set_arrow_tooltip (GtkMenuToolButton *button,
   gtk_tooltips_set_tip (tooltips, button->priv->arrow_button, tip_text, tip_private);
 }
 
+#define __GTK_MENU_TOOL_BUTTON_C__
+#include "gtkaliasdef.c"

@@ -22,11 +22,9 @@
 #ifndef __GTK_CLIPBOARD_H__
 #define __GTK_CLIPBOARD_H__
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
-
 #include <gtk/gtkselection.h>
+
+G_BEGIN_DECLS
 
 #define GTK_TYPE_CLIPBOARD            (gtk_clipboard_get_type ())
 #define GTK_CLIPBOARD(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_CLIPBOARD, GtkClipboard))
@@ -127,8 +125,6 @@ void     _gtk_clipboard_handle_event    (GdkEventOwnerChange *event);
 
 void     _gtk_clipboard_store_all       (void);
   
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
+G_END_DECLS
 
 #endif /* __GTK_CLIPBOARD_H__ */

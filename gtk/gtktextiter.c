@@ -26,11 +26,11 @@
 
 #define GTK_TEXT_USE_INTERNAL_UNSUPPORTED_API
 #include <config.h>
-#include "gtkalias.h"
 #include "gtktextiter.h"
 #include "gtktextbtree.h"
 #include "gtktextiterprivate.h"
 #include "gtkdebug.h"
+#include "gtkalias.h"
 #include <string.h>
 
 #define FIX_OVERFLOWS(varname) if ((varname) == G_MININT) (varname) = G_MININT + 1
@@ -5446,3 +5446,5 @@ _gtk_text_iter_check (const GtkTextIter *iter)
     g_error ("Iterator was on last line (past the end iterator)");
 }
 
+#define __GTK_TEXT_ITER_C__
+#include "gtkaliasdef.c"

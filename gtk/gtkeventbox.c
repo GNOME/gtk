@@ -25,9 +25,9 @@
  */
 
 #include <config.h>
-#include "gtkalias.h"
 #include "gtkeventbox.h"
 #include "gtkintl.h"
+#include "gtkalias.h"
 
 typedef struct 
 {
@@ -610,3 +610,5 @@ gtk_event_box_expose (GtkWidget      *widget,
   return FALSE;
 }
 
+#define __GTK_EVENT_BOX_C__
+#include "gtkaliasdef.c"

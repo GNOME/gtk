@@ -22,10 +22,11 @@
  */
 
 #include <config.h>
-#include "gtkalias.h"
 #include "gtkprivate.h"
 #include "gtkwindow.h"
 #include "gtkmain.h"
+#include "gtkwindow-decorate.h"
+#include "gtkalias.h"
 
 
 #ifdef GDK_WINDOWING_FB
@@ -830,4 +831,5 @@ gtk_decorated_window_move_resize_window (GtkWindow   *window,
 #endif
 
 
-
+#define __GTK_WINDOW_DECORATE_C__
+#include "gtkaliasdef.c"

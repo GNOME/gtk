@@ -21,10 +21,11 @@
 #include <config.h>
 #include <string.h>
 
-#include "gtkalias.h"
 #include "gtkfilefilter.h"
 #include "gtkobject.h"
 #include "gtkprivate.h"
+
+#include "gtkalias.h"
 
 #ifdef G_OS_UNIX
 #define XDG_PREFIX _gtk_xdg
@@ -453,3 +454,6 @@ gtk_file_filter_filter (GtkFileFilter           *filter,
 
   return FALSE;
 }
+
+#define __GTK_FILE_FILTER_C__
+#include "gtkaliasdef.c"

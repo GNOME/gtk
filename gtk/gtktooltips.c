@@ -29,7 +29,6 @@
 #include <string.h>
 #include <stdio.h>
 
-#include "gtkalias.h"
 #include "gtklabel.h"
 #include "gtkmain.h"
 #include "gtkmenuitem.h"
@@ -38,6 +37,7 @@
 #include "gtkwindow.h"
 #include "gtkstyle.h"
 #include "gtktooltips.h"
+#include "gtkalias.h"
 
 
 #define DEFAULT_DELAY 500           /* Default delay in ms */
@@ -795,3 +795,6 @@ gtk_tooltips_get_info_from_tip_window (GtkWindow    *tip_window,
 
   return has_tips;
 }
+
+#define __GTK_TOOLTIPS_C__
+#include "gtkaliasdef.c"

@@ -30,9 +30,7 @@
 #include <gtk/gtkcolorsel.h>
 #include <gtk/gtkvbox.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
+G_BEGIN_DECLS
 
 #define GTK_TYPE_COLOR_SELECTION_DIALOG            (gtk_color_selection_dialog_get_type ())
 #define GTK_COLOR_SELECTION_DIALOG(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_COLOR_SELECTION_DIALOG, GtkColorSelectionDialog))
@@ -73,9 +71,6 @@ GType      gtk_color_selection_dialog_get_type (void) G_GNUC_CONST;
 GtkWidget* gtk_color_selection_dialog_new      (const gchar *title); 
 
 
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
-
+G_END_DECLS
 
 #endif /* __GTK_COLOR_SELECTION_DIALOG_H__ */

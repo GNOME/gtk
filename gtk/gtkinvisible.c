@@ -26,9 +26,9 @@
 
 #include <config.h>
 #include <gdk/gdk.h>
-#include "gtkalias.h"
 #include "gtkinvisible.h"
 #include "gtkintl.h"
+#include "gtkalias.h"
 
 enum {
   PROP_0,
@@ -348,3 +348,5 @@ gtk_invisible_constructor (GType                  type,
   return object;
 }
 
+#define __GTK_INVISIBLE_C__
+#include "gtkaliasdef.c"

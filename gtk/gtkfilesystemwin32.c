@@ -20,12 +20,12 @@
  */
 
 #include <config.h>
-#include "gtkalias.h"
 #include "gtkfilesystem.h"
 #include "gtkfilesystemwin32.h"
 #include "gtkintl.h"
 #include "gtkstock.h"
 #include "gtkiconfactory.h"
+#include "gtkalias.h"
 
 #include <glib/gstdio.h>
 
@@ -1711,3 +1711,6 @@ _gtk_file_system_win32_path_compare (const gchar *path1,
 
   return retval;
 }
+
+#define __GTK_FILE_SYSTEM_WIN32_C__
+#include "gtkaliasdef.c"

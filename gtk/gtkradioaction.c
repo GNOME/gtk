@@ -30,12 +30,12 @@
 
 #include <config.h>
 
-#include "gtkalias.h"
 #include "gtkradioaction.h"
 #include "gtkradiomenuitem.h"
 #include "gtktoggleactionprivate.h"
 #include "gtktoggletoolbutton.h"
 #include "gtkintl.h"
+#include "gtkalias.h"
 
 #define GTK_RADIO_ACTION_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), GTK_TYPE_RADIO_ACTION, GtkRadioActionPrivate))
 
@@ -467,3 +467,6 @@ gtk_radio_action_get_current_value (GtkRadioAction *action)
 
   return action->private_data->value;
 }
+
+#define __GTK_RADIO_ACTION_C__
+#include "gtkaliasdef.c"

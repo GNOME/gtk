@@ -24,8 +24,8 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
-#ifndef GTK_TEXT_BUFFER_H
-#define GTK_TEXT_BUFFER_H
+#ifndef __GTK_TEXT_BUFFER_H__
+#define __GTK_TEXT_BUFFER_H__
 
 #include <gtk/gtkwidget.h>
 #include <gtk/gtkclipboard.h>
@@ -34,9 +34,7 @@
 #include <gtk/gtktextmark.h>
 #include <gtk/gtktextchild.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
+G_BEGIN_DECLS
 
 /*
  * This is the PUBLIC representation of a text buffer.
@@ -377,8 +375,6 @@ const PangoLogAttr* _gtk_text_buffer_get_line_log_attrs (GtkTextBuffer     *buff
 void _gtk_text_buffer_notify_will_remove_tag (GtkTextBuffer *buffer,
                                               GtkTextTag    *tag);
 
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
+G_END_DECLS
 
 #endif

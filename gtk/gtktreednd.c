@@ -19,8 +19,8 @@
 
 #include <config.h>
 #include <string.h>
-#include "gtkalias.h"
 #include "gtktreednd.h"
+#include "gtkalias.h"
 
 GType
 gtk_tree_drag_source_get_type (void)
@@ -328,3 +328,6 @@ gtk_tree_get_row_drag_data (GtkSelectionData  *selection_data,
   
   return TRUE;
 }
+
+#define __GTK_TREE_DND_C__
+#include "gtkaliasdef.c"

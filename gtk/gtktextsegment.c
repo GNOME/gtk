@@ -52,7 +52,6 @@
 
 #define GTK_TEXT_USE_INTERNAL_UNSUPPORTED_API
 #include <config.h>
-#include "gtkalias.h"
 #include "gtktextbtree.h"
 #include <string.h>
 #include <stdlib.h>
@@ -62,6 +61,7 @@
 #include "gtktextlayout.h"
 #include "gtktextiterprivate.h"
 #include "gtkdebug.h"
+#include "gtkalias.h"
 
 /*
  *--------------------------------------------------------------
@@ -623,3 +623,6 @@ GtkTextLineSegmentClass gtk_text_toggle_off_type = {
   toggle_segment_line_change_func,                      /* lineChangeFunc */
   _gtk_toggle_segment_check_func                        /* checkFunc */
 };
+
+#define __GTK_TEXT_SEGMENT_C__
+#include "gtkaliasdef.c"

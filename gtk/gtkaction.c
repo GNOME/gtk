@@ -30,7 +30,6 @@
 
 #include <config.h>
 
-#include "gtkalias.h"
 #include "gtkaction.h"
 #include "gtkactiongroup.h"
 #include "gtkaccellabel.h"
@@ -45,6 +44,7 @@
 #include "gtktearoffmenuitem.h"
 #include "gtktoolbutton.h"
 #include "gtktoolbar.h"
+#include "gtkalias.h"
 
 
 #define GTK_ACTION_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), GTK_TYPE_ACTION, GtkActionPrivate))
@@ -1574,3 +1574,6 @@ gtk_action_disconnect_accelerator (GtkAction *action)
     gtk_accel_group_disconnect (action->private_data->accel_group,
 				action->private_data->accel_closure);
 }
+
+#define __GTK_ACTION_C__
+#include "gtkaliasdef.c"

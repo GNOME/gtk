@@ -26,10 +26,10 @@
  */
 
 #include <config.h>
-#include "gtkalias.h"
 #include "gtkvscrollbar.h"
 #include "gdk/gdkkeysyms.h"
 #include "gtkintl.h"
+#include "gtkalias.h"
 
 static void     gtk_vscrollbar_class_init       (GtkVScrollbarClass *klass);
 static void     gtk_vscrollbar_init             (GtkVScrollbar      *vscrollbar);
@@ -89,3 +89,6 @@ gtk_vscrollbar_new (GtkAdjustment *adjustment)
   
   return vscrollbar;
 }
+
+#define __GTK_VSCROLLBAR_C__
+#include "gtkaliasdef.c"

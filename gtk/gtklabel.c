@@ -26,7 +26,6 @@
 #include <config.h>
 #include <math.h>
 #include <string.h>
-#include "gtkalias.h"
 #include "gtklabel.h"
 #include "gtkdnd.h"
 #include "gtkmain.h"
@@ -42,6 +41,7 @@
 #include "gtknotebook.h"
 #include "gtkstock.h"
 #include "gtkbindings.h"
+#include "gtkalias.h"
 
 #define GTK_LABEL_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), GTK_TYPE_LABEL, GtkLabelPrivate))
 
@@ -3948,3 +3948,6 @@ gtk_label_do_popup (GtkLabel       *label,
                     popup_position_func, label,
                     0, gtk_get_current_event_time ());
 }
+
+#define __GTK_LABEL_C__
+#include "gtkaliasdef.c"

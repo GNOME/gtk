@@ -17,12 +17,12 @@
  */
 
 #include <config.h>
-#include "gtkalias.h"
 #include "gtkmodules.h"
 #include "gtksettings.h"
 #include "gtkrc.h"
 #include "gtkintl.h"
 #include "gtkwidget.h"
+#include "gtkalias.h"
 
 typedef struct _GtkSettingsValuePrivate GtkSettingsValuePrivate;
 
@@ -1404,3 +1404,6 @@ settings_update_modules (GtkSettings *settings)
   
   g_free (modules);
 }
+
+#define __GTK_SETTINGS_C__
+#include "gtkaliasdef.c"

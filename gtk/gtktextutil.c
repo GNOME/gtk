@@ -25,10 +25,10 @@
  */
 
 #include <config.h>
-#include "gtkalias.h"
 #include "gtktextutil.h"
 #include "gtkintl.h"
 #include "gtkmenuitem.h"
+#include "gtkalias.h"
 
 typedef struct _GtkUnicodeMenuEntry GtkUnicodeMenuEntry;
 typedef struct _GtkTextUtilCallbackInfo GtkTextUtilCallbackInfo;

@@ -35,7 +35,6 @@
 #include <config.h>
 #include <glib/gprintf.h>
 #include <stdlib.h>
-#include "gtkalias.h"
 #include "gdk/gdkkeysyms.h"
 #include "gtkbutton.h"
 #include "gtkentry.h"
@@ -59,6 +58,7 @@
 #define GTK_DISABLE_DEPRECATED
 
 #include "gtkintl.h"
+#include "gtkalias.h"
 
 typedef struct _GtkInputDialogPrivate GtkInputDialogPrivate;
 typedef struct _GtkInputKeyInfo       GtkInputKeyInfo;
@@ -768,3 +768,6 @@ gtk_input_dialog_fill_keys(GtkInputDialog *inputd, GdkDevice *info)
 				info->keys[i].modifiers);
     }
 }
+
+#define __GTK_INPUTDIALOG_C__
+#include "gtkaliasdef.c"

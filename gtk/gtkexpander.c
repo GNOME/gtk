@@ -23,7 +23,6 @@
 
 #include <config.h>
 
-#include "gtkalias.h"
 #include "gtkexpander.h"
 
 #include "gtklabel.h"
@@ -33,6 +32,7 @@
 #include "gtkintl.h"
 #include "gtkprivate.h"
 #include <gdk/gdkkeysyms.h>
+#include "gtkalias.h"
 
 #define GTK_EXPANDER_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), GTK_TYPE_EXPANDER, GtkExpanderPrivate))
 
@@ -1640,3 +1640,6 @@ gtk_expander_get_label_widget (GtkExpander *expander)
 
   return expander->priv->label_widget;
 }
+
+#define __GTK_EXPANDER_C__
+#include "gtkaliasdef.c"

@@ -29,9 +29,7 @@
 
 #include <gtk/gtkpaned.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
+G_BEGIN_DECLS
 
 #define GTK_TYPE_HPANED		   (gtk_hpaned_get_type ())
 #define GTK_HPANED(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_HPANED, GtkHPaned))
@@ -57,8 +55,6 @@ struct _GtkHPanedClass
 GType      gtk_hpaned_get_type (void) G_GNUC_CONST;
 GtkWidget *gtk_hpaned_new      (void);
 
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
+G_END_DECLS
 
 #endif /* __GTK_HPANED_H__ */

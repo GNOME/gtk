@@ -34,10 +34,7 @@
 #include <gtk/gtkbutton.h>
 
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
-
+G_BEGIN_DECLS
 
 #define GTK_TYPE_OPTION_MENU              (gtk_option_menu_get_type ())
 #define GTK_OPTION_MENU(obj)              (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_OPTION_MENU, GtkOptionMenu))
@@ -86,10 +83,7 @@ void       gtk_option_menu_set_history (GtkOptionMenu *option_menu,
 					guint          index_);
 
 
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
-
+G_END_DECLS
 
 #endif /* __GTK_OPTION_MENU_H__ */
 

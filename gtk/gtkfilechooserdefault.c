@@ -20,7 +20,6 @@
 
 #include <config.h>
 #include "gdk/gdkkeysyms.h"
-#include "gtkalias.h"
 #include "gtkalignment.h"
 #include "gtkbindings.h"
 #include "gtkbutton.h"
@@ -73,6 +72,8 @@
 #elif defined (G_OS_WIN32)
 #include "gtkfilesystemwin32.h"
 #endif
+
+#include "gtkalias.h"
 
 #include <errno.h>
 #include <string.h>
@@ -6501,3 +6502,6 @@ shortcuts_model_filter_new (GtkFileChooserDefault *impl,
 
   return GTK_TREE_MODEL (model);
 }
+
+#define __GTK_FILE_CHOOSER_DEFAULT_C__
+#include "gtkaliasdef.c"

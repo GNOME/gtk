@@ -30,11 +30,11 @@
 #include <config.h>
 #include <string.h>
 
-#include "gtkalias.h"
 #include "gtkaccellabel.h"
 #include "gtkaccelmap.h"
 #include "gtkmain.h"
 #include "gtkintl.h"
+#include "gtkalias.h"
 
 enum {
   PROP_0,
@@ -636,3 +636,6 @@ gtk_accel_label_refetch (GtkAccelLabel *accel_label)
 
   return FALSE;
 }
+
+#define __GTK_ACCEL_LABEL_C__
+#include "gtkaliasdef.c"

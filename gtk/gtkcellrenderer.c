@@ -18,11 +18,11 @@
  */
 
 #include <config.h>
-#include "gtkalias.h"
 #include "gtkcellrenderer.h"
 #include "gtkintl.h"
 #include "gtkmarshalers.h"
 #include "gtktreeprivate.h"
+#include "gtkalias.h"
 
 static void gtk_cell_renderer_init       (GtkCellRenderer      *cell);
 static void gtk_cell_renderer_class_init (GtkCellRendererClass *class);
@@ -808,3 +808,5 @@ gtk_cell_renderer_stop_editing (GtkCellRenderer *cell,
     }
 }
 
+#define __GTK_CELL_RENDERER_C__
+#include "gtkaliasdef.c"

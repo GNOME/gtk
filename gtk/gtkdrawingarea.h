@@ -32,10 +32,7 @@
 #include <gtk/gtkwidget.h>
 
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
-
+G_BEGIN_DECLS
 
 #define GTK_TYPE_DRAWING_AREA            (gtk_drawing_area_get_type ())
 #define GTK_DRAWING_AREA(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_DRAWING_AREA, GtkDrawingArea))
@@ -77,9 +74,6 @@ void       gtk_drawing_area_size       (GtkDrawingArea      *darea,
 #endif /* GTK_DISABLE_DEPRECATED */
 
 
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
-
+G_END_DECLS
 
 #endif /* __GTK_DRAWING_AREA_H__ */

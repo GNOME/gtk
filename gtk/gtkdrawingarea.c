@@ -25,8 +25,8 @@
  */
 
 #include <config.h>
-#include "gtkalias.h"
 #include "gtkdrawingarea.h"
+#include "gtkalias.h"
 
 
 static void gtk_drawing_area_class_init    (GtkDrawingAreaClass *klass);
@@ -170,3 +170,6 @@ gtk_drawing_area_send_configure (GtkDrawingArea *darea)
   gtk_widget_event (widget, event);
   gdk_event_free (event);
 }
+
+#define __GTK_DRAWING_AREA_C__
+#include "gtkaliasdef.c"

@@ -31,10 +31,7 @@
 #include <gtk/gtkwindow.h>
 
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
-
+G_BEGIN_DECLS
 
 #define GTK_TYPE_TOOLTIPS                  (gtk_tooltips_get_type ())
 #define GTK_TOOLTIPS(obj)                  (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_TOOLTIPS, GtkTooltips))
@@ -107,9 +104,6 @@ gboolean         gtk_tooltips_get_info_from_tip_window (GtkWindow    *tip_window
                                                         GtkTooltips **tooltips,
                                                         GtkWidget   **current_widget);
 
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
-
+G_END_DECLS
 
 #endif /* __GTK_TOOLTIPS_H__ */

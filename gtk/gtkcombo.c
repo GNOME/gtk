@@ -33,7 +33,6 @@
 #include <config.h>
 #include <string.h>
 
-#include "gtkalias.h"
 #include "gtkarrow.h"
 #include "gtklabel.h"
 #include "gtklist.h"
@@ -48,6 +47,7 @@
 #include "gtkcombo.h"
 #include "gtkframe.h"
 #include "gtkintl.h"
+#include "gtkalias.h"
 
 const gchar gtk_combo_string_key[] = "gtk-combo-string-value";
 
@@ -1254,3 +1254,6 @@ gtk_combo_get_property (GObject         *object,
     }
    
 }
+
+#define __GTK_SMART_COMBO_C__
+#include "gtkaliasdef.c"

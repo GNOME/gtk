@@ -1,15 +1,12 @@
-#ifndef GTK_TEXT_TYPES_H
-#define GTK_TEXT_TYPES_H
-
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
+#ifndef __GTK_TEXT_TYPES_H__
+#define __GTK_TEXT_TYPES_H__
 
 #include <glib.h>
 
 #include <gtk/gtktextbuffer.h>
 #include <gtk/gtktexttagprivate.h>
 
+G_BEGIN_DECLS
 
 typedef struct _GtkTextCounter GtkTextCounter;
 typedef struct _GtkTextLineSegment GtkTextLineSegment;
@@ -53,9 +50,7 @@ VARIABLE const gchar gtk_text_unknown_char_utf8[];
 
 gboolean gtk_text_byte_begins_utf8_char (const gchar *byte);
 
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
+G_END_DECLS
 
 #endif
 

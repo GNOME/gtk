@@ -30,10 +30,7 @@
 #include <gtk/gtkbox.h>
 
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
-  
+G_BEGIN_DECLS  
 
 #define GTK_TYPE_BUTTON_BOX             (gtk_button_box_get_type ())
 #define GTK_BUTTON_BOX(obj)             (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_BUTTON_BOX, GtkButtonBox))
@@ -99,10 +96,7 @@ void _gtk_button_box_child_requisition (GtkWidget *widget,
 					int       *nvis_secondaries,
 					int       *width,
 					int       *height);
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
-
+G_END_DECLS
 
 #endif /* __GTK_BUTTON_BOX_H__ */
 

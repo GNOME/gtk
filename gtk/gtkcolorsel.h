@@ -30,10 +30,7 @@
 #include <gtk/gtkdialog.h>
 #include <gtk/gtkvbox.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
-
+G_BEGIN_DECLS
 
 #define GTK_TYPE_COLOR_SELECTION			(gtk_color_selection_get_type ())
 #define GTK_COLOR_SELECTION(obj)			(G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_COLOR_SELECTION, GtkColorSelection))
@@ -128,9 +125,6 @@ void gtk_color_selection_set_update_policy (GtkColorSelection *colorsel,
 					    GtkUpdateType      policy);
 #endif /* GTK_DISABLE_DEPRECATED */
 
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
-
+G_END_DECLS
 
 #endif /* __GTK_COLOR_SELECTION_H__ */

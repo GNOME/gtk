@@ -32,9 +32,7 @@
 #include <gtk/gtkwindow.h>
 
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
+G_BEGIN_DECLS
 
 /* Parameters for dialog construction */
 typedef enum
@@ -174,9 +172,6 @@ void _gtk_dialog_set_ignore_separator (GtkDialog *dialog,
 gint _gtk_dialog_get_response_for_widget (GtkDialog *dialog,
 					  GtkWidget *widget);
 
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
-
+G_END_DECLS
 
 #endif /* __GTK_DIALOG_H__ */

@@ -25,12 +25,12 @@
 #include <config.h>
 #include <math.h>
 #include <string.h>
-#include "gtkalias.h"
 #include "gtkhsv.h"
 #include "gdk/gdkkeysyms.h"
 #include "gtkbindings.h"
 #include "gtkcontainer.h"
 #include "gtkmarshalers.h"
+#include "gtkalias.h"
 
 /*
  * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
@@ -1777,3 +1777,6 @@ gtk_hsv_move (GtkHSV          *hsv,
   
   gtk_hsv_set_color (hsv, hue, sat, val);
 }
+
+#define __GTK_HSV_C__
+#include "gtkaliasdef.c"

@@ -23,10 +23,7 @@
 #include <gtk/gtkimcontext.h>
 #include <gtk/gtkmenushell.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
-
+G_BEGIN_DECLS
 
 #define GTK_TYPE_IM_MULTICONTEXT              (gtk_im_multicontext_get_type ())
 #define GTK_IM_MULTICONTEXT(obj)              (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_IM_MULTICONTEXT, GtkIMMulticontext))
@@ -68,9 +65,6 @@ GtkIMContext *gtk_im_multicontext_new      (void);
 void          gtk_im_multicontext_append_menuitems (GtkIMMulticontext *context,
 						    GtkMenuShell      *menushell);
 
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
-
+G_END_DECLS
 
 #endif /* __GTK_IM_MULTICONTEXT_H__ */

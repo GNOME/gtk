@@ -20,12 +20,12 @@
 #include <config.h>
 #include <string.h>
 #include <gobject/gvaluecollector.h>
-#include "gtkalias.h"
 #include "gtktreemodel.h"
 #include "gtkliststore.h"
 #include "gtktreedatalist.h"
 #include "gtktreednd.h"
 #include "gtksequence.h"
+#include "gtkalias.h"
 
 #define GTK_LIST_STORE_IS_SORTED(list) (GTK_LIST_STORE (list)->sort_column_id != GTK_TREE_SORTABLE_UNSORTED_SORT_COLUMN_ID)
 #define VALID_ITER(iter, list_store) ((iter)!= NULL && (iter)->user_data != NULL && list_store->stamp == (iter)->stamp && !_gtk_sequence_ptr_is_end ((iter)->user_data) && _gtk_sequence_ptr_get_sequence ((iter)->user_data) == list_store->seq)
@@ -2077,3 +2077,6 @@ gtk_list_store_insert_with_valuesv (GtkListStore *list_store,
   gtk_tree_model_row_inserted (GTK_TREE_MODEL (list_store), path, iter);
   gtk_tree_path_free (path);
 }
+
+#define __GTK_LIST_STORE_C__
+#include "gtkaliasdef.c"

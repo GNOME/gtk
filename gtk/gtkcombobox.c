@@ -18,7 +18,6 @@
  */
 
 #include <config.h>
-#include "gtkalias.h"
 #include "gtkcombobox.h"
 
 #include "gtkarrow.h"
@@ -51,6 +50,7 @@
 #include "gtkintl.h"
 
 #include "gtktreeprivate.h"
+#include "gtkalias.h"
 
 /* WELCOME, to THE house of evil code */
 
@@ -5140,3 +5140,6 @@ gtk_combo_box_get_focus_on_click (GtkComboBox *combo)
   
   return combo->priv->focus_on_click;
 }
+
+#define __GTK_COMBO_BOX_C__
+#include "gtkaliasdef.c"
