@@ -1,3 +1,12 @@
+Thu Dec 17 18:24:41 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtk[hv]paned.c (gtk_[hv]paned_size_allocate): Handle
+	the case where one side of the the pane is empty.
+
+	* gtk/gtkfilesel.c (gtk_file_selection_init): Set
+	dir_title before using it. (Pointed out by
+	Lavoie Philippe <lavoie@zeus.genie.uottawa.ca>)
+	
 Thu Dec 17 10:53:20 1998  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtklabel.c (gtk_label_set_text): Free 

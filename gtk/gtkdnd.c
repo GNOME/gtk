@@ -2028,6 +2028,10 @@ gtk_drag_drop_finished (GtkDragSourceInfo *info,
 	      gdk_window_raise (info->icon_window->window);
 	    }
 	  
+	  /* Mark the context as dead, so if the destination decides
+	   * to respond really late, we still are OK.
+	   */
+	  g_dataset_set_data (info->context, "gtk-info", NULL);
 	  gtk_timeout_add (ANIM_STEP_TIME, gtk_drag_anim_timeout, anim);
 	}
     }

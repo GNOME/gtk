@@ -148,8 +148,8 @@ gtk_hpaned_size_allocate (GtkWidget     *widget,
 			      widget->allocation.width
 			        - paned->gutter_size
 			        - 2 * border_width,
-			      paned->child1->requisition.width,
-			      paned->child2->requisition.width);
+			      paned->child1 ? paned->child1->requisition.width : 0,
+			      paned->child2 ? paned->child2->requisition.width : 0);
   
   /* Move the handle before the children so we don't get extra expose events */
 
