@@ -84,6 +84,12 @@ create_tags (GtkTextBuffer *buffer)
                               /* points times the PANGO_SCALE factor */
                               "size", 30 * PANGO_SCALE, NULL);
 
+  gtk_text_buffer_create_tag (buffer, "xx-small",
+                              "scale", PANGO_SCALE_XX_SMALL, NULL);
+
+  gtk_text_buffer_create_tag (buffer, "x-large",
+                              "scale", PANGO_SCALE_X_LARGE, NULL);
+  
   gtk_text_buffer_create_tag (buffer, "monospace",
                               "family", "monospace", NULL);
   
@@ -199,8 +205,17 @@ insert_text (GtkTextBuffer *buffer)
   gtk_text_buffer_insert_with_tags_by_name (buffer, &iter,
                                             "big", -1,
                                             "big", NULL);
-  gtk_text_buffer_insert (buffer, &iter, " text.\n\n", -1);
-
+  gtk_text_buffer_insert (buffer, &iter, " text. ", -1);
+  gtk_text_buffer_insert (buffer, &iter, "It's best not to hardcode specific text sizes; you can use relative sizes as with CSS, such as ", -1);
+  gtk_text_buffer_insert_with_tags_by_name (buffer, &iter,
+                                            "xx-small", -1,
+                                            "xx-small", NULL);
+  gtk_text_buffer_insert (buffer, &iter, " or ", -1);
+  gtk_text_buffer_insert_with_tags_by_name (buffer, &iter,
+                                            "x-large", -1,
+                                            "x-large", NULL);
+  gtk_text_buffer_insert (buffer, &iter, " to ensure that your program properly adapts if the user changes the default font size.\n\n", -1);
+  
   gtk_text_buffer_insert_with_tags_by_name (buffer, &iter, "Colors. ", -1,
                                             "heading", NULL);
   

@@ -1511,7 +1511,7 @@ gtk_text_iter_is_end (const GtkTextIter *iter)
 }
 
 /**
- * gtk_text_iter_is_first:
+ * gtk_text_iter_is_start:
  * @iter: an iterator
  *
  * Returns TRUE if @iter is the first iterator in the buffer, that is
@@ -1520,7 +1520,7 @@ gtk_text_iter_is_end (const GtkTextIter *iter)
  * Return value: whether @iter is the first in the buffer
  **/
 gboolean
-gtk_text_iter_is_first (const GtkTextIter *iter)
+gtk_text_iter_is_start (const GtkTextIter *iter)
 {
   return gtk_text_iter_get_offset (iter) == 0;
 }
@@ -4253,7 +4253,7 @@ lines_window_init (LinesWindow       *win,
   /* If we start on line 1, there are 2 lines to search (0 and 1), so
    * n_lines can be 2.
    */
-  if (gtk_text_iter_is_first (start) ||
+  if (gtk_text_iter_is_start (start) ||
       gtk_text_iter_get_line (start) + 1 < win->n_lines)
     {
       /* Already at the end, or not enough lines to match */

@@ -378,15 +378,6 @@ types related to the text widget and how they work together.
 @Returns: 
 
 
-<!-- ##### FUNCTION gtk_text_iter_is_first ##### -->
-<para>
-
-</para>
-
-@iter: 
-@Returns: 
-
-
 <!-- ##### FUNCTION gtk_text_iter_forward_char ##### -->
 <para>
 

@@ -6511,6 +6511,13 @@ create_event_watcher (void)
  * GtkRange
  */
 
+static gchar*
+reformat_value (GtkScale *scale,
+                gdouble   value)
+{
+  return g_strdup_printf ("-->%g<--", value);
+}
+
 static void
 create_range_controls (void)
 {
@@ -6563,6 +6570,15 @@ create_range_controls (void)
       gtk_box_pack_start (GTK_BOX (box2), scrollbar, TRUE, TRUE, 0);
       gtk_widget_show (scrollbar);
 
+      scale = gtk_hscale_new (GTK_ADJUSTMENT (adjustment));
+      gtk_scale_set_draw_value (GTK_SCALE (scale), TRUE);
+      gtk_signal_connect (GTK_OBJECT (scale),
+                          "format_value",
+                          GTK_SIGNAL_FUNC (reformat_value),
+                          NULL);
+      gtk_box_pack_start (GTK_BOX (box2), scale, TRUE, TRUE, 0);
+      gtk_widget_show (scale);
+      
       hbox = gtk_hbox_new (FALSE, 0);
 
       scale = gtk_vscale_new (GTK_ADJUSTMENT (adjustment));
@@ -6579,10 +6595,20 @@ create_range_controls (void)
       gtk_range_set_inverted (GTK_RANGE (scale), TRUE);
       gtk_box_pack_start (GTK_BOX (hbox), scale, TRUE, TRUE, 0);
       gtk_widget_show (scale);
+
+      scale = gtk_vscale_new (GTK_ADJUSTMENT (adjustment));
+      gtk_scale_set_draw_value (GTK_SCALE (scale), TRUE);
+      gtk_signal_connect (GTK_OBJECT (scale),
+                          "format_value",
+                          GTK_SIGNAL_FUNC (reformat_value),
+                          NULL);
+      gtk_box_pack_start (GTK_BOX (hbox), scale, TRUE, TRUE, 0);
+      gtk_widget_show (scale);
+
       
       gtk_box_pack_start (GTK_BOX (box2), hbox, TRUE, TRUE, 0);
       gtk_widget_show (hbox);
-
+      
       separator = gtk_hseparator_new ();
       gtk_box_pack_start (GTK_BOX (box1), separator, FALSE, TRUE, 0);
       gtk_widget_show (separator);
@@ -8158,9 +8184,14 @@ configure_event_callback (GtkWidget *widget,
   GtkWidget *label = data;
   gchar *msg;
   gint x, y;
-
-  x = widget->allocation.x;
-  y = widget->allocation.y;
+  
+#if 0
+  /* FIXME */
+  gtk_window_get_location (GTK_WINDOW (widget), &x, &y);
+#else  
+  x = 0;
+  y = 0;
+#endif
   
   msg = g_strdup_printf ("event: %d,%d  %d x %d\n"
                          "location: %d, %d",
@@ -8236,6 +8267,26 @@ set_location_callback (GtkWidget *widget,
 }
 
 static void
+set_geometry_callback (GtkWidget *entry,
+                       gpointer   data)
+{
+  gchar *text;
+  GtkWindow *target;
+
+  target = GTK_WINDOW (g_object_get_data (G_OBJECT (data), "target"));
+  
+  text = gtk_editable_get_chars (GTK_EDITABLE (entry), 0, -1);
+
+#if 0
+  /* FIXME */
+  if (!gtk_window_parse_geometry (target, text))
+    g_print ("Bad geometry string '%s'\n", text);
+#endif
+  
+  g_free (text);
+}
+
+static void
 allow_shrink_callback (GtkWidget *widget,
                        gpointer   data)
 {
@@ -8282,6 +8333,7 @@ window_controls (GtkWidget *window)
   GtkWidget *button;
   GtkWidget *spin;
   GtkAdjustment *adj;
+  GtkWidget *entry;
   GtkWidget *om;
   GtkWidget *menu;
   gint i;
@@ -8327,6 +8379,13 @@ window_controls (GtkWidget *window)
 
   g_object_set_data (G_OBJECT (control_window), "spin2", spin);
 
+  entry = gtk_entry_new ();
+  gtk_box_pack_start (GTK_BOX (vbox), entry, FALSE, FALSE, 0);
+
+  gtk_signal_connect (GTK_OBJECT (entry), "changed",
+                      GTK_SIGNAL_FUNC (set_geometry_callback),
+                      control_window);
+  
   button = gtk_button_new_with_label ("Queue resize");
   gtk_signal_connect_object (GTK_OBJECT (button),
                              "clicked",
@@ -8386,6 +8445,20 @@ window_controls (GtkWidget *window)
                       GTK_OBJECT (control_window));
   gtk_box_pack_end (GTK_BOX (vbox), button, FALSE, FALSE, 0);
 
+  button = gtk_button_new_with_mnemonic ("_Show");
+  gtk_signal_connect_object (GTK_OBJECT (button),
+                             "clicked",
+                             GTK_SIGNAL_FUNC (gtk_widget_show),
+                             GTK_OBJECT (window));
+  gtk_box_pack_end (GTK_BOX (vbox), button, FALSE, FALSE, 0);
+
+  button = gtk_button_new_with_mnemonic ("_Hide");
+  gtk_signal_connect_object (GTK_OBJECT (button),
+                             "clicked",
+                             GTK_SIGNAL_FUNC (gtk_widget_hide),
+                             GTK_OBJECT (window));
+  gtk_box_pack_end (GTK_BOX (vbox), button, FALSE, FALSE, 0);
+  
   menu = gtk_menu_new ();
   
   i = 0;

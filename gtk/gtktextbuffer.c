@@ -2106,6 +2106,127 @@ gtk_text_buffer_remove_tag_by_name (GtkTextBuffer *buffer,
   gtk_text_buffer_emit_tag (buffer, tag, FALSE, start, end);
 }
 
+static gint
+pointer_cmp (gconstpointer a,
+             gconstpointer b)
+{
+  if (a < b)
+    return -1;
+  else if (a > b)
+    return 1;
+  else
+    return 0;
+}
+
+/**
+ * gtk_text_buffer_remove_all_tags:
+ * @buffer: a #GtkTextBuffer
+ * @start: one bound of range to be untagged
+ * @end: other bound of range to be untagged
+ * 
+ * Removes all tags in the range between @start and @end.  Be careful
+ * with this function; it could remove tags added in code unrelated to
+ * the code you're currently writing. That is, using this function is
+ * probably a bad idea if you have two or more unrelated code sections
+ * that add tags.
+ **/
+void
+gtk_text_buffer_remove_all_tags (GtkTextBuffer     *buffer,
+                                 const GtkTextIter *start,
+                                 const GtkTextIter *end)
+{
+  GtkTextIter first, second, tmp;
+  GSList *tags;
+  GSList *tmp_list;
+  GSList *prev;
+  GtkTextTag *tag;
+  
+  g_return_if_fail (GTK_IS_TEXT_BUFFER (buffer));
+  g_return_if_fail (start != NULL);
+  g_return_if_fail (end != NULL);
+  
+  first = *start;
+  second = *end;
+
+  gtk_text_iter_reorder (&first, &second);
+
+  /* Get all tags turned on at the start */
+  tags = gtk_text_iter_get_tags (&first);
+  
+  /* Find any that are toggled on within the range */
+  tmp = first;
+  while (gtk_text_iter_forward_to_tag_toggle (&tmp, NULL))
+    {
+      GSList *toggled;
+      GSList *tmp_list2;
+
+      if (gtk_text_iter_compare (&tmp, &second) >= 0)
+        break; /* past the end of the range */
+      
+      toggled = gtk_text_iter_get_toggled_tags (&tmp, TRUE);
+
+      /* We could end up with a really big-ass list here.
+       * Fix it someday.
+       */
+      tmp_list2 = toggled;
+      while (tmp_list2 != NULL)
+        {
+          tags = g_slist_prepend (tags, tmp_list2->data);
+
+          tmp_list2 = g_slist_next (tmp_list2);
+        }
+
+      g_slist_free (toggled);
+    }
+  
+  /* Sort the list */
+  tags = g_slist_sort (tags, pointer_cmp);
+
+  /* Strip duplicates */
+  tag = NULL;
+  prev = NULL;
+  tmp_list = tags;
+  while (tmp_list != NULL)
+    {
+      if (tag == tmp_list->data)
+        {
+          /* duplicate */
+          if (prev)
+            prev->next = tmp_list->next;
+
+          tmp_list->next = NULL;
+
+          g_slist_free (tmp_list);
+
+          tmp_list = prev->next;
+          /* prev is unchanged */
+        }
+      else
+        {
+          /* not a duplicate */
+          tag = GTK_TEXT_TAG (tmp_list->data);
+          prev = tmp_list;
+          tmp_list = tmp_list->next;
+        }
+    }
+
+  g_list_foreach (tags, (GFunc) g_object_ref, NULL);
+  
+  tmp_list = tags;
+  while (tmp_list != NULL)
+    {
+      tag = GTK_TEXT_TAG (tmp_list->data);
+
+      gtk_text_buffer_remove_tag (buffer, tag, &first, &second);
+      
+      tmp_list = tmp_list->next;
+    }
+
+  g_list_foreach (tags, (GFunc) g_object_unref, NULL);
+  
+  g_slist_free (tags);
+}
+
 
 /*
  * Obtain various iterators

@@ -58,6 +58,7 @@ Describes a type of line wrapping.
 @justification: 
 @direction: 
 @font: 
+@font_scale: 
 @left_margin: 
 @indent: 
 @right_margin: 
@@ -279,6 +280,11 @@ Font as a #PangoFontDescription.
 
 </para>
 
+<!-- ##### ARG GtkTextTag:scale ##### -->
+<para>
+
+</para>
+
 <!-- ##### ARG GtkTextTag:size-points ##### -->
 <para>
 
@@ -415,6 +421,11 @@ applies to the first character in a paragraph.
 </para>
 
 <!-- ##### ARG GtkTextTag:size-set ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTextTag:scale-set ##### -->
 <para>
 
 </para>

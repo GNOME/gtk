@@ -266,6 +266,9 @@ void gtk_text_buffer_remove_tag_by_name    (GtkTextBuffer     *buffer,
                                             const gchar       *name,
                                             const GtkTextIter *start,
                                             const GtkTextIter *end);
+void gtk_text_buffer_remove_all_tags       (GtkTextBuffer     *buffer,
+                                            const GtkTextIter *start,
+                                            const GtkTextIter *end);
 
 
 /* You can either ignore the return value, or use it to

@@ -1,3 +1,4 @@
+/* -*- Mode: C; tab-width: 8; indent-tabs-mode: nil; c-basic-offset: 8 -*- */
 /* GdkPixbuf library - Private declarations
  *
  * Copyright (C) 1999 The Free Software Foundation
@@ -73,22 +74,6 @@ struct _GdkPixbufClass {
 
 };
 
-/* Private part of the GdkPixbufFrame structure */
-struct _GdkPixbufFrame {
-	/* The pixbuf with this frame's image data */
-	GdkPixbuf *pixbuf;
-
-	/* Offsets for overlaying onto the animation's area */
-	int x_offset;
-	int y_offset;
-
-	/* Frame duration in ms */
-	int delay_time;
-
-	/* Overlay mode */
-	GdkPixbufFrameAction action;
-};
-
 typedef struct _GdkPixbufAnimationClass GdkPixbufAnimationClass;
 
 #define GDK_PIXBUF_ANIMATION_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), GDK_TYPE_PIXBUF_ANIMATION, GdkPixbufAnimationClass))
@@ -99,22 +84,50 @@ typedef struct _GdkPixbufAnimationClass GdkPixbufAnimationClass;
 struct _GdkPixbufAnimation {
         GObject parent_instance;
 
-	/* Number of frames */
-        int n_frames;
-
-	/* List of GdkPixbufFrame structures */
-        GList *frames;
-
-	/* bounding box size */
-	int width, height;
 };
 
 struct _GdkPixbufAnimationClass {
         GObjectClass parent_class;
 
+        gboolean                (*is_static_image)  (GdkPixbufAnimation *anim);
+
+        GdkPixbuf*              (*get_static_image) (GdkPixbufAnimation *anim);
+        
+        void                    (*get_size) (GdkPixbufAnimation *anim,
+                                             int                 *width,
+                                             int                 *height);
+        
+        GdkPixbufAnimationIter* (*get_iter) (GdkPixbufAnimation *anim,
+                                             const GTimeVal     *start_time);
 
 };
 
+
+
+typedef struct _GdkPixbufAnimationIterClass GdkPixbufAnimationIterClass;
+
+#define GDK_PIXBUF_ANIMATION_ITER_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), GDK_TYPE_PIXBUF_ANIMATION_ITER, GdkPixbufAnimationIterClass))
+#define GDK_IS_PIXBUF_ANIMATION_ITER_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GDK_TYPE_PIXBUF_ANIMATION_ITER))
+#define GDK_PIXBUF_ANIMATION_ITER_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GDK_TYPE_PIXBUF_ANIMATION_ITER, GdkPixbufAnimationIterClass))
+
+struct _GdkPixbufAnimationIter {
+        GObject parent_instance;
+
+};
+
+struct _GdkPixbufAnimationIterClass {
+        GObjectClass parent_class;
+
+        int        (*get_delay_time)   (GdkPixbufAnimationIter *iter);
+
+        GdkPixbuf* (*get_pixbuf)       (GdkPixbufAnimationIter *iter);
+
+        gboolean (*on_currently_loading_frame) (GdkPixbufAnimationIter *iter);
+
+        gboolean (*advance)            (GdkPixbufAnimationIter *iter,
+                                        const GTimeVal         *current_time);
+};
+      
 
 
 #define GDK_PIXBUF_INLINE_MAGIC_NUMBER 0x47646B50 /* 'GdkP' */
@@ -125,6 +138,8 @@ typedef enum
   GDK_PIXBUF_INLINE_RLE = 1
 } GdkPixbufInlineFormat;
 
+
 
+GdkPixbufAnimation* gdk_pixbuf_non_anim_new (GdkPixbuf *pixbuf);
 
 #endif

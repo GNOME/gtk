@@ -2,15 +2,17 @@
 Animations
 
 <!-- ##### SECTION Short_Description ##### -->
-Animations as multi-frame structures.
+Animated images.
 
 <!-- ##### SECTION Long_Description ##### -->
   <para>
-    The &gdk-pixbuf; library provides a simple mechanism to load and
-    represent animations, primarily animated GIF files.  Animations
-    are represented as lists of #GdkPixbufFrame structures.  Each
-    frame structure contains a #GdkPixbuf structure and information
-    about the frame's overlay mode and duration.
+    The &gdk-pixbuf; library provides a simple mechanism to load and represent
+    animations. An animation is conceptually a series of frames to be displayed
+    over time. Each frame is the same size. The animation may not be represented
+    as a series of frames internally; for example, it may be stored as a 
+    sprite and instructions for moving the sprite around a background. To display 
+    an animation you don't need to understand its representation, however; you just
+    ask &gdk-pixbuf; what should be displayed at a given point in time. 
   </para>
 
 <!-- ##### SECTION See_Also ##### -->
@@ -18,34 +20,9 @@ Animations as multi-frame structures.
     #GdkPixbufLoader
   </para>
 
-<!-- ##### ENUM GdkPixbufFrameAction ##### -->
-  <para>
-    Each animation frame can have several things happen to it when the
-    next frame is displayed.  The #GdkPixbufFrameAction determines
-    this.  These are essentially the overlay modes supported by GIF
-    animations.
-  </para>
-
-@GDK_PIXBUF_FRAME_RETAIN: The previous image should remain displayed,
-and will potentially be occluded by the new frame.
-@GDK_PIXBUF_FRAME_DISPOSE: The animation will be reverted to the state
-before the frame was shown.
-@GDK_PIXBUF_FRAME_REVERT: The animation will be reverted to the first
-frame.
-
-<!-- ##### STRUCT GdkPixbufFrame ##### -->
-  <para>
-    This structure describes a frame in a #GdkPixbufAnimation.  Each
-    frame consists of a #GdkPixbuf, an offset of the frame within the
-    animation's bounding box, a duration, and an overlay mode or
-    action.
-  </para>
-
-
 <!-- ##### STRUCT GdkPixbufAnimation ##### -->
   <para>
-    This structure describes an animation, which is represented as a
-    list of #GdkPixbufFrame structures.
+    This object describes an animation.
   </para>
 
 
@@ -76,25 +53,7 @@ frame.
 @animation: 
 
 
-<!-- ##### FUNCTION gdk_pixbuf_animation_get_frames ##### -->
-<para>
-
-</para>
-
-@animation: 
-@Returns: 
-
-
 <!-- ##### FUNCTION gdk_pixbuf_animation_get_width ##### -->
-<para>
-
-</para>
-
-@animation: 
-@Returns: 
-
-
-<!-- ##### FUNCTION gdk_pixbuf_animation_get_num_frames ##### -->
 <para>
 
 </para>
@@ -110,72 +69,5 @@ frame.
 
 @animation: 
 @Returns: 
-
-
-<!-- ##### FUNCTION gdk_pixbuf_frame_copy ##### -->
-<para>
-
-</para>
-
-@src: 
-@Returns: 
-
-
-<!-- ##### FUNCTION gdk_pixbuf_frame_free ##### -->
-<para>
-
-</para>
-
-@frame: 
-
-
-<!-- ##### FUNCTION gdk_pixbuf_frame_get_pixbuf ##### -->
-<para>
-
-</para>
-
-@frame: 
-@Returns: 
-
-
-<!-- ##### FUNCTION gdk_pixbuf_frame_get_action ##### -->
-<para>
-
-</para>
-
-@frame: 
-@Returns: 
-
-
-<!-- ##### FUNCTION gdk_pixbuf_frame_get_y_offset ##### -->
-<para>
-
-</para>
-
-@frame: 
-@Returns: 
-
-
-<!-- ##### FUNCTION gdk_pixbuf_frame_get_delay_time ##### -->
-<para>
-
-</para>
-
-@frame: 
-@Returns: 
-
-
-<!-- ##### FUNCTION gdk_pixbuf_frame_get_x_offset ##### -->
-<para>
-
-</para>
-
-@frame: 
-@Returns: <!--
-Local variables:
-mode: sgml
-sgml-parent-document: ("../gdk-pixbuf.sgml" "book" "refsect2" "")
-End:
--->
 
 

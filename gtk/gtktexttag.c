@@ -85,6 +85,7 @@ enum {
   PROP_STRETCH,
   PROP_SIZE,
   PROP_SIZE_POINTS,
+  PROP_SCALE,
   PROP_PIXELS_ABOVE_LINES,
   PROP_PIXELS_BELOW_LINES,
   PROP_PIXELS_INSIDE_WRAP,
@@ -114,6 +115,7 @@ enum {
   PROP_WEIGHT_SET,
   PROP_STRETCH_SET,
   PROP_SIZE_SET,
+  PROP_SCALE_SET,
   PROP_PIXELS_ABOVE_LINES_SET,
   PROP_PIXELS_BELOW_LINES_SET,
   PROP_PIXELS_INSIDE_WRAP_SET,
@@ -350,6 +352,16 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
                                                      G_PARAM_READABLE | G_PARAM_WRITABLE));
 
   g_object_class_install_property (object_class,
+                                   PROP_SCALE,
+                                   g_param_spec_double ("scale",
+                                                        _("Font scale"),
+                                                        _("Font scale"),
+                                                        0.0,
+                                                        G_MAXDOUBLE,
+                                                        1.0,
+                                                        G_PARAM_READABLE | G_PARAM_WRITABLE));
+  
+  g_object_class_install_property (object_class,
                                    PROP_SIZE_POINTS,
                                    g_param_spec_double ("size_points",
                                                         _("Font points"),
@@ -543,6 +555,10 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
                 _("Font size set"),
                 _("Whether this tag affects the font size"));
 
+  ADD_SET_PROP ("scale_set", PROP_SCALE_SET,
+                _("Font scale set"),
+                _("Whether this tag scales the font size by a factor"));
+  
   ADD_SET_PROP ("justification_set", PROP_JUSTIFICATION_SET,
                 _("Justification set"),
                 _("Whether this tag affects paragraph justification"));
@@ -963,6 +979,12 @@ gtk_text_tag_set_property (GObject      *object,
       size_changed = TRUE;
       break;
 
+    case PROP_SCALE:
+      text_tag->values->font_scale = g_value_get_double (value);
+      text_tag->scale_set = TRUE;
+      size_changed = TRUE;
+      break;
+      
     case PROP_SIZE_POINTS:
       text_tag->values->font.size = g_value_get_double (value) * PANGO_SCALE;
       text_tag->size_set = TRUE;
@@ -1151,6 +1173,11 @@ gtk_text_tag_set_property (GObject      *object,
       text_tag->size_set = g_value_get_boolean (value);
       size_changed = TRUE;
       break;
+
+    case PROP_SCALE_SET:
+      text_tag->scale_set = g_value_get_boolean (value);
+      size_changed = TRUE;
+      break;
       
     case PROP_PIXELS_ABOVE_LINES_SET:
       text_tag->pixels_above_lines_set = g_value_get_boolean (value);
@@ -1332,9 +1359,13 @@ gtk_text_tag_get_property (GObject      *object,
     case PROP_SIZE:
       g_value_set_int (value,  tag->values->font.size);
       break;
-
+      
     case PROP_SIZE_POINTS:
       g_value_set_double (value, ((double)tag->values->font.size) / (double)PANGO_SCALE);
+      break;
+
+    case PROP_SCALE:
+      g_value_set_double (value, tag->values->font_scale);
       break;
       
     case PROP_PIXELS_ABOVE_LINES:
@@ -1444,6 +1475,10 @@ gtk_text_tag_get_property (GObject      *object,
 
     case PROP_SIZE_SET:
       g_value_set_boolean (value, tag->size_set);
+      break;
+
+    case PROP_SCALE_SET:
+      g_value_set_boolean (value, tag->scale_set);
       break;
       
     case PROP_PIXELS_ABOVE_LINES_SET:
@@ -1724,6 +1759,8 @@ gtk_text_attributes_new (void)
 
   values->language = gtk_get_default_language ();
 
+  values->font_scale = 1.0;
+  
   return values;
 }
 
@@ -1965,6 +2002,10 @@ _gtk_text_attributes_fill_from_tags (GtkTextAttributes *dest,
       if (tag->size_set)
         dest->font.size = vals->font.size;
 
+      /* multiply all the scales together to get a composite */
+      if (tag->scale_set)
+        dest->font_scale *= vals->font_scale;
+      
       if (tag->justification_set)
         dest->justification = vals->justification;
 
@@ -2038,6 +2079,7 @@ _gtk_text_tag_affects_size (GtkTextTag *tag)
     tag->variant_set ||
     tag->weight_set ||
     tag->size_set ||
+    tag->scale_set ||
     tag->stretch_set ||
     tag->justification_set ||
     tag->left_margin_set ||

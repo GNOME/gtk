@@ -70,6 +70,7 @@ enum {
   PROP_STRETCH,
   PROP_SIZE,
   PROP_SIZE_POINTS,
+  PROP_SCALE,
   PROP_EDITABLE,
   PROP_STRIKETHROUGH,
   PROP_UNDERLINE,
@@ -84,6 +85,7 @@ enum {
   PROP_WEIGHT_SET,
   PROP_STRETCH_SET,
   PROP_SIZE_SET,
+  PROP_SCALE_SET,
   PROP_EDITABLE_SET,
   PROP_STRIKETHROUGH_SET,
   PROP_UNDERLINE_SET,
@@ -282,6 +284,16 @@ gtk_cell_renderer_text_class_init (GtkCellRendererTextClass *class)
                                                         G_MAXDOUBLE,
                                                         0.0,
                                                         G_PARAM_READABLE | G_PARAM_WRITABLE));  
+
+  g_object_class_install_property (object_class,
+                                   PROP_SCALE,
+                                   g_param_spec_double ("scale",
+                                                        _("Font scale"),
+                                                        _("Font scaling factor"),
+                                                        0.0,
+                                                        G_MAXDOUBLE,
+                                                        1.0,
+                                                        G_PARAM_READABLE | G_PARAM_WRITABLE));
   
   g_object_class_install_property (object_class,
                                    PROP_RISE,
@@ -351,6 +363,10 @@ gtk_cell_renderer_text_class_init (GtkCellRendererTextClass *class)
                 _("Font size set"),
                 _("Whether this tag affects the font size"));
 
+  ADD_SET_PROP ("scale_set", PROP_SCALE_SET,
+                _("Font scale set"),
+                _("Whether this tag scales the font size by a factor"));
+  
   ADD_SET_PROP ("rise_set", PROP_RISE_SET,
                 _("Rise set"),
                 _("Whether this tag affects the rise"));
@@ -462,6 +478,10 @@ gtk_cell_renderer_text_get_property (GObject        *object,
       g_value_set_double (value, ((double)celltext->font.size) / (double)PANGO_SCALE);
       break;
 
+    case PROP_SCALE:
+      g_value_set_double (value, celltext->font_scale);
+      break;
+      
     case PROP_EDITABLE:
       g_value_set_boolean (value, celltext->editable);
       break;
@@ -510,6 +530,10 @@ gtk_cell_renderer_text_get_property (GObject        *object,
       g_value_set_boolean (value, celltext->size_set);
       break;
 
+    case PROP_SCALE_SET:
+      g_value_set_boolean (value, celltext->scale_set);
+      break;
+      
     case PROP_EDITABLE_SET:
       g_value_set_boolean (value, celltext->editable_set);
       break;
@@ -824,6 +848,11 @@ gtk_cell_renderer_text_set_property (GObject      *object,
       g_object_notify (G_OBJECT (celltext), "font");
       break;
 
+    case PROP_SCALE:
+      celltext->font_scale = g_value_get_double (value);
+      celltext->scale_set = TRUE;
+      break;
+      
     case PROP_SIZE_POINTS:
       celltext->font.size = g_value_get_double (value) * PANGO_SCALE;
 
@@ -849,6 +878,7 @@ gtk_cell_renderer_text_set_property (GObject      *object,
       celltext->underline_style = g_value_get_enum (value);
       celltext->underline_set = TRUE;
       g_object_notify (G_OBJECT (celltext), "underline_set");
+            
       break;
 
     case PROP_RISE:
@@ -859,62 +889,54 @@ gtk_cell_renderer_text_set_property (GObject      *object,
 
     case PROP_BACKGROUND_SET:
       celltext->background_set = g_value_get_boolean (value);
-      g_object_notify(G_OBJECT(object), "background_set");
       break;
 
     case PROP_FOREGROUND_SET:
       celltext->foreground_set = g_value_get_boolean (value);
-      g_object_notify(G_OBJECT(object), "foreground_set");
       break;
 
     case PROP_FAMILY_SET:
       celltext->family_set = g_value_get_boolean (value);
-      g_object_notify(G_OBJECT(object), "family_set");
       break;
 
     case PROP_STYLE_SET:
       celltext->style_set = g_value_get_boolean (value);
-      g_object_notify(G_OBJECT(object), "style_set");
       break;
 
     case PROP_VARIANT_SET:
       celltext->variant_set = g_value_get_boolean (value);
-      g_object_notify(G_OBJECT(object), "variant_set");
       break;
 
     case PROP_WEIGHT_SET:
       celltext->weight_set = g_value_get_boolean (value);
-      g_object_notify(G_OBJECT(object), "weight_set");
       break;
 
     case PROP_STRETCH_SET:
       celltext->stretch_set = g_value_get_boolean (value);
-      g_object_notify(G_OBJECT(object), "stretch_set");
       break;
 
     case PROP_SIZE_SET:
       celltext->size_set = g_value_get_boolean (value);
-      g_object_notify(G_OBJECT(object), "size_set");
       break;
 
+    case PROP_SCALE_SET:
+      celltext->scale_set = g_value_get_boolean (value);
+      break;
+      
     case PROP_EDITABLE_SET:
       celltext->editable_set = g_value_get_boolean (value);
-      g_object_notify(G_OBJECT(object), "editable_set");
       break;
 
     case PROP_STRIKETHROUGH_SET:
       celltext->strikethrough_set = g_value_get_boolean (value);
-      g_object_notify(G_OBJECT(object), "strikethrough_set");
       break;
 
     case PROP_UNDERLINE_SET:
       celltext->underline_set = g_value_get_boolean (value);
-      g_object_notify(G_OBJECT(object), "underline_set");
       break;
 
     case PROP_RISE_SET:
       celltext->rise_set = g_value_get_boolean (value);
-      g_object_notify(G_OBJECT(object), "rise_set");
       break;
 
     default:
@@ -1012,6 +1034,10 @@ get_layout (GtkCellRendererText *celltext,
       celltext->font.size >= 0)
     add_attr (attr_list, pango_attr_size_new (celltext->font.size));
 
+  if (celltext->scale_set &&
+      celltext->font_scale != 1.0)
+    add_attr (attr_list, pango_attr_scale_new (celltext->font_scale));
+  
   if (celltext->underline_set)
     uline = celltext->underline_style;
   else

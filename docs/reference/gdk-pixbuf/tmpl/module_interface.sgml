@@ -28,6 +28,7 @@ Module Interface
 </para>
 
 @pixbuf: 
+@anim: 
 @user_data: 
 
 
@@ -41,24 +42,6 @@ Module Interface
 @y: 
 @width: 
 @height: 
-@user_data: 
-
-
-<!-- ##### USER_FUNCTION ModuleFrameDoneNotifyFunc ##### -->
-<para>
-
-</para>
-
-@frame: 
-@user_data: 
-
-
-<!-- ##### USER_FUNCTION ModuleAnimationDoneNotifyFunc ##### -->
-<para>
-
-</para>
-
-@pixbuf: 
 @user_data: 
 
 

@@ -84,8 +84,6 @@ typedef struct {
 static GdkPixbuf   *gdk_pixbuf__pnm_image_load          (FILE *f, GError **error);
 static gpointer    gdk_pixbuf__pnm_image_begin_load     (ModulePreparedNotifyFunc func, 
 							 ModuleUpdatedNotifyFunc func2,
-							 ModuleFrameDoneNotifyFunc frame_done_func,
-							 ModuleAnimationDoneNotifyFunc anim_done_func,
 							 gpointer user_data,
 							 GError **error);
 static gboolean    gdk_pixbuf__pnm_image_stop_load      (gpointer context, GError **error);
@@ -763,8 +761,6 @@ gdk_pixbuf__pnm_image_load (FILE *f, GError **error)
 static gpointer
 gdk_pixbuf__pnm_image_begin_load (ModulePreparedNotifyFunc prepared_func, 
 				  ModuleUpdatedNotifyFunc  updated_func,
-				  ModuleFrameDoneNotifyFunc frame_done_func,
-				  ModuleAnimationDoneNotifyFunc anim_done_func,
 				  gpointer user_data,
 				  GError **error)
 {
@@ -923,6 +919,7 @@ gdk_pixbuf__pnm_image_load_increment (gpointer data,
 			
 			/* Notify the client that we are ready to go */
 			(* context->prepared_func) (context->pixbuf,
+						    NULL,
 						    context->user_data);
 		}
 		

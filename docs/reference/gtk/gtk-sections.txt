@@ -967,6 +967,7 @@ GTK_HSEPARATOR_GET_CLASS
 <FILE>gtkimage</FILE>
 <TITLE>GtkImage</TITLE>
 GtkImage
+GtkImageType
 gtk_image_get_icon_set
 gtk_image_get_image
 gtk_image_get_pixbuf
@@ -1002,7 +1003,6 @@ GtkImageImageData
 GtkImagePixbufData
 GtkImagePixmapData
 GtkImageStockData
-GtkImageType
 </SECTION>
 
 <SECTION>

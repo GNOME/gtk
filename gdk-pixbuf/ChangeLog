@@ -1,3 +1,32 @@
+2001-05-04  Havoc Pennington  <hp@redhat.com>
+
+	* pixops/pixops.c (pixops_process): merge fix from stable: Patch
+	 from hoshem@mel.comcen.com.au to fix nonzero X offsets.  Fixes
+	 bug #50371.
+	
+        * gdk-pixbuf/pixops/pixops.c (pixops_composite_nearest): merge
+	from stable: Patch from OKADA Mitsuru <m-okada@fjb.co.jp> to fix
+	confusion of using "src" instead of "p".
+        (pixops_composite_color_nearest): Use a more accurate (and
+	correct, to begin with) compositing method.  This cures checks
+	showing through on images with no alpha.
+
+	* gdk-pixbuf.c (gdk_pixbuf_fill): fix bug that left some trailing
+	bytes unfilled.
+
+	* gdk-pixbuf-io.h: fix UpdatedNotifyFunc to use signed ints
+
+	* gdk-pixbuf-loader.h (struct _GdkPixbufLoaderClass): Change
+	area_updated signal to use signed ints.  Removed animation-related
+	signals.
+
+	* io-gif.c, io-gif-animation.h, io-gif-animation.c: Massive
+	rewrite action
+
+	* gdk-pixbuf-animation.c: Add GdkPixbufAnimationIter to abstract
+	all the pesky details. Remove old frame-based API. Make
+	GdkPixbufAnimation an abstract base class, derived by the loaders.
+
 Sun Apr 22 15:51:32 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* Makefile.am (LDADDS): Add $(MATH_LIB).

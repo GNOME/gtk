@@ -28,6 +28,24 @@ below.
 </para>
 
 
+<!-- ##### ENUM GtkImageType ##### -->
+<para>
+Describes the representation stored by a #GtkImage. If you want to get the image
+from the widget, you can only get the currently-stored representation. e.g.  if
+the gtk_image_get_storage_type() returns #GTK_IMAGE_PIXBUF, then you can call
+gtk_image_get_pixbuf() but not gtk_image_get_stock().  For empty images, you can
+request any storage type (call any of the "get" functions), but they will all
+return %NULL values.
+</para>
+
+@GTK_IMAGE_EMPTY: there is no image displayed by the widget
+@GTK_IMAGE_PIXMAP: the widget contains a #GdkPixmap
+@GTK_IMAGE_IMAGE: the widget contains a #GdkImage
+@GTK_IMAGE_PIXBUF: the widget contains a #GdkPixbuf
+@GTK_IMAGE_STOCK: the widget contains a stock icon name
+@GTK_IMAGE_ICON_SET: the widget contains a #GtkIconSet
+@GTK_IMAGE_ANIMATION: 
+
 <!-- ##### FUNCTION gtk_image_get_icon_set ##### -->
 <para>
 

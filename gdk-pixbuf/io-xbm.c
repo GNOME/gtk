@@ -300,7 +300,7 @@ gdk_pixbuf__xbm_image_load_real (FILE *f, XBMData *context, GError **error)
 	row_stride = gdk_pixbuf_get_rowstride (pixbuf);
 
 	if (context)
-		(* context->prepare_func) (pixbuf, context->user_data);
+		(* context->prepare_func) (pixbuf, NULL, context->user_data);
 
 
 	/* Initialize PIXBUF */
@@ -355,8 +355,6 @@ gdk_pixbuf__xbm_image_load (FILE *f, GError **error)
 static gpointer
 gdk_pixbuf__xbm_image_begin_load (ModulePreparedNotifyFunc prepare_func,
 				  ModuleUpdatedNotifyFunc update_func,
-				  ModuleFrameDoneNotifyFunc frame_done_func,
-				  ModuleAnimationDoneNotifyFunc anim_done_func,
 				  gpointer user_data,
 				  GError **error)
 {

@@ -32,8 +32,8 @@ libpixbufloader_xpm_la_LIBADD =
 #
 # The GIF loader
 #
-libpixbufloader_static_gif_la_SOURCES = io-gif.c
-libpixbufloader_gif_la_SOURCES = io-gif.c
+libpixbufloader_static_gif_la_SOURCES = io-gif.c io-gif-animation.c io-gif-animation.h
+libpixbufloader_gif_la_SOURCES = io-gif.c io-gif-animation.c io-gif-animation.h
 libpixbufloader_gif_la_LDFLAGS = -avoid-version -module
 libpixbufloader_gif_la_LIBADD =
 

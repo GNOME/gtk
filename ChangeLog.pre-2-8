@@ -1,3 +1,46 @@
+2001-05-04  Havoc Pennington  <hp@redhat.com>
+
+	* configure.in: fix some shell typos
+
+	* gtk/gtkcolorsel.c (gtk_color_selection_destroy): warning fix
+
+	* gtk/gtkimage.c: handle animations
+
+	* gtk/gtkcheckbutton.c (gtk_check_button_size_request): request
+	border_width * 2, not just border_width
+
+	* gtk/gtkscale.c: add "format_value" signal to allow people
+	to override the way values are drawn.
+	(gtk_scale_get_value_size): fix width/height mistake,
+	and compute size from actual displayed text, not 
+	from made-up text.
+
+	* gtk/gtktexttag.c (gtk_text_tag_class_init): fix return type in 
+	signal registration
+
+	* tests/testtext.c: Add "Remove all tags" menu item for testing
+
+	* gtk/gtktextbuffer.c (gtk_text_buffer_remove_all_tags): implement
+
+	* demos/gtk-demo/main.c (main): add hack so we can find modules
+	without installing gtk
+
+	* demos/gtk-demo/textview.c (insert_text): demo font scaling
+
+	* gtk/gtkcellrenderertext.c: Add "scale" property (font scaling
+	factor)
+	(gtk_cell_renderer_text_set_property): remove some bogus
+	g_object_notify
+
+	* gtk/gtktexttag.c: add "scale" property which is a font scaling
+	factor
+
+	* gtk/gtktextlayout.c (add_text_attrs): add font scale attribute 
+	to layout
+
+	* gtk/gtktextiter.c (gtk_text_iter_is_start): rename from
+	gtk_text_iter_is_first
+
 2001-01-06  Hans Breuer  <hans@breuer.org>
 
 	* gdk/gdk.def : updated exports

@@ -465,6 +465,18 @@ main (int argc, char **argv)
   GtkWidget *tree;
   GtkTextTag *tag;
 
+  /* Most code in gtk-demo is intended to be exemplary, but not
+   * these few lines, which are just a hack so gtk-demo will work
+   * in the GTK tree without installing it.
+   */
+  if (g_file_test ("../../gdk-pixbuf/.libs/libpixbufloader-pnm.so",
+                   G_FILE_TEST_EXISTS))
+    {
+      putenv ("GDK_PIXBUF_MODULEDIR=../../gdk-pixbuf/.libs");
+      putenv ("GTK_IM_MODULE_FILE=../../modules/input/gtk.immodules");
+    }
+  /* -- End of hack -- */
+  
   gtk_init (&argc, &argv);
   
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);

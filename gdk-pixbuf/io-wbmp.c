@@ -65,9 +65,7 @@ struct wbmp_progressive_state {
 static gpointer
 gdk_pixbuf__wbmp_image_begin_load(ModulePreparedNotifyFunc prepared_func,
 				  ModuleUpdatedNotifyFunc updated_func,
-				  ModuleFrameDoneNotifyFunc frame_done_func,
-				  ModuleAnimationDoneNotifyFunc
-				  anim_done_func, gpointer user_data,
+                                  gpointer user_data,
                                   GError **error);
 
 static gboolean gdk_pixbuf__wbmp_image_stop_load(gpointer data, GError **error);
@@ -87,7 +85,7 @@ static GdkPixbuf *gdk_pixbuf__wbmp_image_load(FILE * f, GError **error)
 
 	GdkPixbuf *pb;
 
-	State = gdk_pixbuf__wbmp_image_begin_load(NULL, NULL, NULL, NULL, NULL,
+	State = gdk_pixbuf__wbmp_image_begin_load(NULL, NULL, NULL,
                                                   error);
 
         if (State == NULL)
@@ -120,9 +118,7 @@ static GdkPixbuf *gdk_pixbuf__wbmp_image_load(FILE * f, GError **error)
 static gpointer
 gdk_pixbuf__wbmp_image_begin_load(ModulePreparedNotifyFunc prepared_func,
                                   ModuleUpdatedNotifyFunc updated_func,
-                                  ModuleFrameDoneNotifyFunc frame_done_func,
-                                  ModuleAnimationDoneNotifyFunc
-                                  anim_done_func, gpointer user_data,
+                                  gpointer user_data,
                                   GError **error)
 {
 	struct wbmp_progressive_state *context;
@@ -285,7 +281,7 @@ static gboolean gdk_pixbuf__wbmp_image_load_increment(gpointer data,
 		    g_assert(context->pixbuf);
 
 		    if(context->prepared_func)
-		      context->prepared_func(context->pixbuf, context->user_data);
+		      context->prepared_func(context->pixbuf, NULL, context->user_data);
 		  }
 	      }
 	    else if(context->needmore)

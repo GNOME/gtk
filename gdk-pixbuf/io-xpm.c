@@ -1424,8 +1424,6 @@ struct _XPMContext
 static gpointer
 gdk_pixbuf__xpm_image_begin_load (ModulePreparedNotifyFunc prepare_func,
                                   ModuleUpdatedNotifyFunc update_func,
-                                  ModuleFrameDoneNotifyFunc frame_done_func,
-                                  ModuleAnimationDoneNotifyFunc anim_done_func,
                                   gpointer user_data,
                                   GError **error)
 {
@@ -1471,7 +1469,9 @@ gdk_pixbuf__xpm_image_stop_load (gpointer data,
                pixbuf = gdk_pixbuf__xpm_image_load (context->file, error);
 
                if (pixbuf != NULL) {
-                       (* context->prepare_func) (pixbuf, context->user_data);
+                       (* context->prepare_func) (pixbuf,
+                                                  NULL,
+                                                  context->user_data);
                        (* context->update_func) (pixbuf, 0, 0, pixbuf->width, pixbuf->height, context->user_data);
                        gdk_pixbuf_unref (pixbuf);
 

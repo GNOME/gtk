@@ -1063,6 +1063,23 @@ do_apply_colors (gpointer callback_data,
     }
 }
 
+static void
+do_remove_tags (gpointer callback_data,
+                guint callback_action,
+                GtkWidget *widget)
+{
+  View *view = view_from_widget (widget);
+  GtkTextIter start;
+  GtkTextIter end;
+  
+  if (gtk_text_buffer_get_selection_bounds (view->buffer->buffer,
+                                            &start, &end))
+    {
+      gtk_text_buffer_remove_all_tags (view->buffer->buffer,
+                                       &start, &end);
+    }
+}
+
 enum
 {
   RESPONSE_FORWARD,
@@ -1235,6 +1252,7 @@ static GtkItemFactoryEntry menu_items[] =
   { "/Attributes/Default tabs",   	  NULL,         do_apply_tabs, TRUE, NULL },
   { "/Attributes/Color cycles",   	  NULL,         do_apply_colors, TRUE, NULL },
   { "/Attributes/No colors",   	          NULL,         do_apply_colors, FALSE, NULL },
+  { "/Attributes/Remove all tags",       NULL, do_remove_tags, 0, NULL },
   { "/_Test",   	 NULL,         0,           0, "<Branch>" },
   { "/Test/_Example",  	 NULL,         do_example,  0, NULL },
 };

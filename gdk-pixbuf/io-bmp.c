@@ -174,9 +174,7 @@ struct bmp_progressive_state {
 static gpointer
 gdk_pixbuf__bmp_image_begin_load(ModulePreparedNotifyFunc prepared_func,
 				 ModuleUpdatedNotifyFunc updated_func,
-				 ModuleFrameDoneNotifyFunc frame_done_func,
-				 ModuleAnimationDoneNotifyFunc
-				 anim_done_func, gpointer user_data,
+                                 gpointer user_data,
                                  GError **error);
 
 static gboolean gdk_pixbuf__bmp_image_stop_load(gpointer data, GError **error);
@@ -198,7 +196,7 @@ static GdkPixbuf *gdk_pixbuf__bmp_image_load(FILE * f, GError **error)
 	GdkPixbuf *pb;
 
 	State =
-	    gdk_pixbuf__bmp_image_begin_load(NULL, NULL, NULL, NULL, NULL,
+	    gdk_pixbuf__bmp_image_begin_load(NULL, NULL, NULL,
                                              error);
 
         if (State == NULL)
@@ -312,7 +310,7 @@ static gboolean DecodeHeader(unsigned char *BFH, unsigned char *BIH,
                 
 		if (State->prepared_func != NULL)
 			/* Notify the client that we are ready to go */
-			(*State->prepared_func) (State->pixbuf, State->user_data);
+			(*State->prepared_func) (State->pixbuf, NULL, State->user_data);
 
 	}
 
@@ -328,9 +326,7 @@ static gboolean DecodeHeader(unsigned char *BFH, unsigned char *BIH,
 static gpointer
 gdk_pixbuf__bmp_image_begin_load(ModulePreparedNotifyFunc prepared_func,
 				 ModuleUpdatedNotifyFunc updated_func,
-				 ModuleFrameDoneNotifyFunc frame_done_func,
-				 ModuleAnimationDoneNotifyFunc
-				 anim_done_func, gpointer user_data,
+                                 gpointer user_data,
                                  GError **error)
 {
 	struct bmp_progressive_state *context;

@@ -35,8 +35,6 @@
 enum {
   AREA_UPDATED,
   AREA_PREPARED,
-  FRAME_DONE,
-  ANIMATION_DONE,
   CLOSED,
   LAST_SIGNAL
 };
@@ -56,7 +54,6 @@ static guint    pixbuf_loader_signals[LAST_SIGNAL] = { 0 };
 
 typedef struct
 {
-  GdkPixbuf *pixbuf;
   GdkPixbufAnimation *animation;
   gboolean closed;
   guchar header_buf[LOADER_HEADER_SIZE];
@@ -136,25 +133,6 @@ gdk_pixbuf_loader_class_init (GdkPixbufLoaderClass *class)
                    G_TYPE_INT,
                    G_TYPE_INT);
   
-  pixbuf_loader_signals[FRAME_DONE] =
-    g_signal_newc ("frame_done",
-                   G_TYPE_FROM_CLASS (object_class),
-                   G_SIGNAL_RUN_LAST,
-                   G_STRUCT_OFFSET (GdkPixbufLoaderClass, frame_done),
-		   NULL, NULL,
-                   gdk_pixbuf_marshal_VOID__POINTER,
-                   G_TYPE_NONE, 1,
-                   GDK_TYPE_PIXBUF_FRAME);
-  
-  pixbuf_loader_signals[ANIMATION_DONE] =
-    g_signal_newc ("animation_done",
-                   G_TYPE_FROM_CLASS (object_class),
-                   G_SIGNAL_RUN_LAST,                   
-                   G_STRUCT_OFFSET (GdkPixbufLoaderClass, animation_done),
-		   NULL, NULL,
-                   gdk_pixbuf_marshal_VOID__VOID,
-                   G_TYPE_NONE, 0);
-  
   pixbuf_loader_signals[CLOSED] =
     g_signal_newc ("closed",
                    G_TYPE_FROM_CLASS (object_class),
@@ -188,9 +166,6 @@ gdk_pixbuf_loader_finalize (GObject *object)
   
   if (priv->animation)
     gdk_pixbuf_animation_unref (priv->animation);
-
-  if (priv->pixbuf)
-    gdk_pixbuf_unref (priv->pixbuf);
   
   g_free (priv);
   
@@ -198,26 +173,30 @@ gdk_pixbuf_loader_finalize (GObject *object)
 }
 
 static void
-gdk_pixbuf_loader_prepare (GdkPixbuf *pixbuf,
-			   gpointer   loader)
+gdk_pixbuf_loader_prepare (GdkPixbuf          *pixbuf,
+                           GdkPixbufAnimation *anim,
+			   gpointer            loader)
 {
   GdkPixbufLoaderPrivate *priv = NULL;
   
   priv = GDK_PIXBUF_LOADER (loader)->priv;
-  gdk_pixbuf_ref (pixbuf);
 
-  g_assert (priv->pixbuf == NULL);
+  if (anim)
+    g_object_ref (G_OBJECT (anim));
+  else
+    anim = gdk_pixbuf_non_anim_new (pixbuf);
   
-  priv->pixbuf = pixbuf;
+  priv->animation = anim;
+  
   g_signal_emit (G_OBJECT (loader), pixbuf_loader_signals[AREA_PREPARED], 0);
 }
 
 static void
 gdk_pixbuf_loader_update (GdkPixbuf *pixbuf,
-			  guint      x,
-			  guint      y,
-			  guint      width,
-			  guint      height,
+			  gint       x,
+			  gint       y,
+			  gint       width,
+			  gint       height,
 			  gpointer   loader)
 {
   GdkPixbufLoaderPrivate *priv = NULL;
@@ -229,82 +208,8 @@ gdk_pixbuf_loader_update (GdkPixbuf *pixbuf,
                  0,
                  x, y,
                  /* sanity check in here.  Defend against an errant loader */
-                 MIN (width, gdk_pixbuf_get_width (priv->pixbuf)),
-                 MIN (height, gdk_pixbuf_get_height (priv->pixbuf)));
-}
-
-static void
-gdk_pixbuf_loader_frame_done (GdkPixbufFrame *frame,
-			      gpointer        loader)
-{
-  GdkPixbufLoaderPrivate *priv = NULL;
-  
-  priv = GDK_PIXBUF_LOADER (loader)->priv;
-  
-  priv->pixbuf = NULL;
-  
-  if (priv->animation == NULL)
-    {
-      priv->animation = g_object_new (GDK_TYPE_PIXBUF_ANIMATION, NULL);
-      
-      priv->animation->n_frames = 0;
-      priv->animation->width  = gdk_pixbuf_get_width  (frame->pixbuf) + frame->x_offset;
-      priv->animation->height = gdk_pixbuf_get_height (frame->pixbuf) + frame->y_offset;
-    }
-  else
-    {
-      int w, h;
-      
-      /* update bbox size */
-      w = gdk_pixbuf_get_width (frame->pixbuf) + frame->x_offset;
-      h = gdk_pixbuf_get_height (frame->pixbuf) + frame->y_offset;
-      
-      if (w > priv->animation->width) {
-	priv->animation->width = w;
-      }
-      if (h > priv->animation->height) {
-	priv->animation->height = h;
-      }
-    }
-  
-  priv->animation->frames = g_list_append (priv->animation->frames, frame);
-  priv->animation->n_frames++;
-  g_signal_emit (G_OBJECT (loader),
-                 pixbuf_loader_signals[FRAME_DONE],
-                 0,
-                 frame);
-}
-
-static void
-gdk_pixbuf_loader_animation_done (GdkPixbuf *pixbuf,
-				  gpointer   loader)
-{
-  GdkPixbufLoaderPrivate *priv = NULL;
-  GdkPixbufFrame    *frame;
-  GList *current = NULL;
-  gint h, w;
-  
-  priv = GDK_PIXBUF_LOADER (loader)->priv;
-  priv->pixbuf = NULL;
-  
-  current = gdk_pixbuf_animation_get_frames (priv->animation);
-  
-  while (current)
-    {
-      frame = (GdkPixbufFrame *) current->data;
-      
-      /* update bbox size */
-      w = gdk_pixbuf_get_width (frame->pixbuf) + frame->x_offset;
-      h = gdk_pixbuf_get_height (frame->pixbuf) + frame->y_offset;
-      
-      if (w > priv->animation->width)
-	priv->animation->width = w;
-      if (h > priv->animation->height)
-	priv->animation->height = h;
-      current = current->next;
-    }
-  
-  g_signal_emit (G_OBJECT (loader), pixbuf_loader_signals[ANIMATION_DONE], 0);
+                 MIN (width, gdk_pixbuf_animation_get_width (priv->animation)),
+                 MIN (height, gdk_pixbuf_animation_get_height (priv->animation)));
 }
 
 static gint
@@ -353,8 +258,6 @@ gdk_pixbuf_loader_load_module (GdkPixbufLoader *loader,
   
   priv->context = priv->image_module->begin_load (gdk_pixbuf_loader_prepare,
 						  gdk_pixbuf_loader_update,
-						  gdk_pixbuf_loader_frame_done,
-						  gdk_pixbuf_loader_animation_done,
 						  loader,
                                                   error);
   
@@ -450,7 +353,7 @@ gdk_pixbuf_loader_write (GdkPixbufLoader *loader,
     {
       gint eaten;
       
-      eaten = gdk_pixbuf_loader_eat_header_write(loader, buf, count, error);
+      eaten = gdk_pixbuf_loader_eat_header_write (loader, buf, count, error);
       if (eaten <= 0)
 	return FALSE;
       
@@ -540,13 +443,14 @@ gdk_pixbuf_loader_new_with_type (const char *image_type,
  * "area_prepared" signal has been emitted by the loader; this means
  * that enough data has been read to know the size of the image that
  * will be allocated.  If the loader has not received enough data via
- * gdk_pixbuf_loader_write(), then this function returns NULL.  The
+ * gdk_pixbuf_loader_write(), then this function returns %NULL.  The
  * returned pixbuf will be the same in all future calls to the loader,
  * so simply calling gdk_pixbuf_ref() should be sufficient to continue
  * using it.  Additionally, if the loader is an animation, it will
- * return the first frame of the animation.
+ * return the "static image" of the animation
+ * (see gdk_pixbuf_animation_get_static_image()).
  * 
- * Return value: The GdkPixbuf that the loader is creating, or NULL if not
+ * Return value: The #GdkPixbuf that the loader is creating, or %NULL if not
  * enough data has been read to determine how to create the image buffer.
  **/
 GdkPixbuf *
@@ -560,19 +464,9 @@ gdk_pixbuf_loader_get_pixbuf (GdkPixbufLoader *loader)
   priv = loader->priv;
 
   if (priv->animation)
-    {
-      GList *list;
-      
-      list = gdk_pixbuf_animation_get_frames (priv->animation);
-      if (list != NULL)
-        {
-          GdkPixbufFrame *frame = list->data;
-          
-          return gdk_pixbuf_frame_get_pixbuf (frame);
-        }
-    }
-  
-  return priv->pixbuf;
+    return gdk_pixbuf_animation_get_static_image (priv->animation);
+  else
+    return NULL;
 }
 
 /**
@@ -581,8 +475,9 @@ gdk_pixbuf_loader_get_pixbuf (GdkPixbufLoader *loader)
  *
  * Queries the GdkPixbufAnimation that a pixbuf loader is currently creating.
  * In general it only makes sense to call this function afer the "area_prepared"
- * signal has been emitted by the loader.  If the image is not an animation,
- * then it will return NULL.
+ * signal has been emitted by the loader. If the loader doesn't have enough
+ * bytes yet (hasn't emitted the area_prepared signal) this function will return
+ * %NULL.
  *
  * Return value: The GdkPixbufAnimation that the loader is loading, or NULL if
  not enough data has been read to determine the information.

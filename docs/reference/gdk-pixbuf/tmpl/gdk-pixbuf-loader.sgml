@@ -132,15 +132,6 @@ Application-driven progressive image loading.
 @Returns: 
 
 
-<!-- ##### SIGNAL GdkPixbufLoader::animation-done ##### -->
-  <para>
-    This signal is emitted when an animation is done loading.
-  </para>
-
-@gdkpixbufloader: the object which received the signal.
-<!-- # Unused Parameters # -->
-@loader: Loader which emitted the signal.
-
 <!-- ##### SIGNAL GdkPixbufLoader::area-prepared ##### -->
   <para>
     This signal is emitted when the pixbuf loader has been fed the
@@ -193,16 +184,4 @@ mode: sgml
 sgml-parent-document: ("../gdk-pixbuf.sgml" "book" "refsect2" "")
 End:
 -->
-
-<!-- ##### SIGNAL GdkPixbufLoader::frame-done ##### -->
-  <para>
-    This signal is emitted when a frame is done loading.  It will be
-    emitted for each frame in an animation data stream.
-  </para>
-
-@gdkpixbufloader: the object which received the signal.
-@arg1: 
-<!-- # Unused Parameters # -->
-@loader: Loader which emitted the signal.
-@frame: Frame which just completed loading.
 

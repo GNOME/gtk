@@ -1848,7 +1848,7 @@ gtk_color_selection_destroy (GtkObject *object)
 
   if (priv->tooltips)
     {
-      gtk_object_destroy (priv->tooltips);
+      gtk_object_destroy (GTK_OBJECT (priv->tooltips));
       priv->tooltips = NULL;
     }
   

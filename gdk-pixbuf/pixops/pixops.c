@@ -1,4 +1,5 @@
 #include <math.h>
+#include <glib.h>
 #include "config.h"
 
 #include "pixops.h"
@@ -93,6 +94,7 @@ pixops_scale_nearest (guchar        *dest_buf,
   for (i = 0; i < (render_y1 - render_y0); i++)
     {
       const guchar *src  = src_buf + (((i + render_y0) * y_step + y_step / 2) >> SCALE_SHIFT) * src_rowstride;
+      /* FIXME Owen needs to look at this */
       guchar       *dest = dest_buf + i * dest_rowstride;
 
       x = render_x0 * x_step + x_step / 2;
@@ -160,7 +162,6 @@ pixops_composite_nearest (guchar        *dest_buf,
   for (i = 0; i < (render_y1 - render_y0); i++)
     {
       const guchar *src  = src_buf + (((i + render_y0) * y_step + y_step / 2) >> SCALE_SHIFT) * src_rowstride;
-      /* FIXME Owen needs to look at this */
       guchar       *dest = dest_buf + i * dest_rowstride;
 
       x = render_x0 * x_step + x_step / 2;
@@ -183,9 +184,9 @@ pixops_composite_nearest (guchar        *dest_buf,
 
 	      if (w != 0)
 		{
-		  dest[0] = (w0 * src[0] + w1 * dest[0]) / w;
-		  dest[1] = (w0 * src[1] + w1 * dest[1]) / w;
-		  dest[2] = (w0 * src[2] + w1 * dest[2]) / w;
+		  dest[0] = (w0 * p[0] + w1 * dest[0]) / w;
+		  dest[1] = (w0 * p[1] + w1 * dest[1]) / w;
+		  dest[2] = (w0 * p[2] + w1 * dest[2]) / w;
 		  dest[3] = w / 0xff;
 		}
 	      else
@@ -274,25 +275,39 @@ pixops_composite_color_nearest (guchar        *dest_buf,
       for (j=0 ; j < (render_x1 - render_x0); j++)
 	{
 	  const guchar *p = src + (x >> SCALE_SHIFT) * src_channels;
-          unsigned int  a0;
+          int a0;
+	  int tmp;
 
 	  if (src_has_alpha)
 	    a0 = (p[3] * overall_alpha + 0xff) >> 8;
 	  else
 	    a0 = overall_alpha;
 
-	  if (((j + check_x) >> check_shift) & 1)
+	  if (a0 == 255)
 	    {
-	      dest[0] = r2 + ((a0 * ((int)p[0] - r2) + 0xff) >> 8);
-	      dest[1] = g2 + ((a0 * ((int)p[1] - g2) + 0xff) >> 8);
-	      dest[2] = b2 + ((a0 * ((int)p[2] - b2) + 0xff) >> 8);
+	      dest[0] = p[0];
+	      dest[1] = p[1];
+	      dest[2] = p[2];
 	    }
 	  else
-	    {
-	      dest[0] = r1 + ((a0 * ((int)p[0] - r1) + 0xff) >> 8);
-	      dest[1] = g1 + ((a0 * ((int)p[1] - g1) + 0xff) >> 8);
-	      dest[2] = b1 + ((a0 * ((int)p[2] - b1) + 0xff) >> 8);
-	    }
+	    if (((j + check_x) >> check_shift) & 1)
+	      {
+		tmp = ((int) p[0] - r2) * a0;
+		dest[0] = r2 + ((tmp + (tmp >> 8) + 0x80) >> 8);
+		tmp = ((int) p[1] - g2) * a0;
+		dest[1] = g2 + ((tmp + (tmp >> 8) + 0x80) >> 8);
+		tmp = ((int) p[2] - b2) * a0;
+		dest[2] = b2 + ((tmp + (tmp >> 8) + 0x80) >> 8);
+	      }
+	    else
+	      {
+		tmp = ((int) p[0] - r1) * a0;
+		dest[0] = r1 + ((tmp + (tmp >> 8) + 0x80) >> 8);
+		tmp = ((int) p[1] - g1) * a0;
+		dest[1] = g1 + ((tmp + (tmp >> 8) + 0x80) >> 8);
+		tmp = ((int) p[2] - b1) * a0;
+		dest[2] = b1 + ((tmp + (tmp >> 8) + 0x80) >> 8);
+	      }
 	  
 	  if (dest_channels == 4)
 	    dest[3] = 0xff;
@@ -1003,7 +1018,7 @@ pixops_process (guchar         *dest_buf,
 
       dest_x += (new_outbuf - outbuf) / dest_channels;
 
-      x = dest_x * x_step + scaled_x_offset;
+      x = (dest_x - check_x + render_x0) * x_step + scaled_x_offset;
       outbuf = new_outbuf;
 
       while (outbuf < outbuf_end)

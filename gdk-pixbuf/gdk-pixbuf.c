@@ -412,7 +412,7 @@ gdk_pixbuf_error_quark (void)
 /**
  * gdk_pixbuf_fill:
  * @pixbuf: a #GdkPixbuf
- * @pixel: RGBA pixel to clear to (0xffffff00 is opaque white, 0x000000ff transparent black)
+ * @pixel: RGBA pixel to clear to (0xffffffff is opaque white, 0x00000000 transparent black)
  *
  * Clears a pixbuf to the given RGBA value, converting the RGBA value into
  * the pixbuf's pixel format. The alpha will be ignored if the pixbuf
@@ -454,7 +454,7 @@ gdk_pixbuf_fill (GdkPixbuf *pixbuf,
                 
                 p = pixels;
                 end = pixels + pixbuf->rowstride * pixbuf->height;
-                end -= (pixbuf->rowstride - pixbuf->width);
+                end -= (pixbuf->rowstride - pixbuf->width * pixbuf->n_channels);
                 
                 while (p < end) {
                         *p++ = r;

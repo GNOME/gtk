@@ -532,7 +532,6 @@ gtk_vscale_draw_value (GtkScale *scale)
 {
   GtkStateType state_type;
   GtkWidget *widget;
-  gchar buffer[32];
   gint width, height;
   gint x, y;
   
@@ -545,10 +544,14 @@ gtk_vscale_draw_value (GtkScale *scale)
     {
       PangoLayout *layout;
       PangoRectangle logical_rect;
+      gchar *txt;
       
-      sprintf (buffer, "%0.*f", GTK_RANGE (scale)->digits, GTK_RANGE (scale)->adjustment->value);
-
-      layout = gtk_widget_create_pango_layout (widget, buffer);
+      txt = _gtk_scale_format_value (scale,
+                                     GTK_RANGE (scale)->adjustment->value);
+      
+      layout = gtk_widget_create_pango_layout (widget, txt);
+      g_free (txt);
+      
       pango_layout_get_pixel_extents (layout, NULL, &logical_rect);
 
       switch (scale->value_pos)

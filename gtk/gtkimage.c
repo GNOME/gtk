@@ -28,11 +28,13 @@
 #include "gtkimage.h"
 #include "gtkiconfactory.h"
 #include "gtkstock.h"
+#include <string.h>
 
 static void gtk_image_class_init   (GtkImageClass  *klass);
 static void gtk_image_init         (GtkImage       *image);
 static gint gtk_image_expose       (GtkWidget      *widget,
                                     GdkEventExpose *event);
+static void gtk_image_unmap        (GtkWidget      *widget);
 static void gtk_image_size_request (GtkWidget      *widget,
                                     GtkRequisition *requisition);
 static void gtk_image_destroy      (GtkObject      *object);
@@ -85,6 +87,7 @@ gtk_image_class_init (GtkImageClass *class)
 
   widget_class->expose_event = gtk_image_expose;
   widget_class->size_request = gtk_image_size_request;
+  widget_class->unmap = gtk_image_unmap;
 }
 
 static void
@@ -163,11 +166,22 @@ gtk_image_new_from_image  (GdkImage  *gdk_image,
  * gtk_image_new_from_file:
  * @filename: a filename
  * 
- * Creates a new #GtkImage displaying the file @filename. If the
- * file isn't found or can't be loaded, the #GtkImage will display
- * a "broken image" icon. If you need to detect failures to load
- * the file, use gdk_pixbuf_new_from_file() to load the file yourself,
- * then create the #GtkImage from the pixbuf.
+ * Creates a new #GtkImage displaying the file @filename. If the file
+ * isn't found or can't be loaded, the resulting #GtkImage will
+ * display a "broken image" icon. This function never returns %NULL,
+ * it always returns a valid #GtkImage widget.
+ *
+ * If the file contains an animation, the image will contain an
+ * animation.
+ *
+ * If you need to detect failures to load the file, use
+ * gdk_pixbuf_new_from_file() to load the file yourself, then create
+ * the #GtkImage from the pixbuf. (Or for animations, use
+ * gdk_pixbuf_animation_new_from_file()).
+ *
+ * The storage type (gtk_image_get_storage_type()) of the returned
+ * image is not defined, it will be whatever is appropriate for
+ * displaying the file.
  * 
  * Return value: a new #GtkImage
  **/
@@ -194,7 +208,7 @@ gtk_image_new_from_file   (const gchar *filename)
  * 
  * Note that this function just creates an #GtkImage from the pixbuf.  The
  * #GtkImage created will not react to state changes.  Should you want that, you
- * should use @gtk_image_new_from_icon_set.
+ * should use gtk_image_new_from_icon_set().
  * 
  * Return value: a new #GtkImage
  **/
@@ -264,6 +278,31 @@ gtk_image_new_from_icon_set (GtkIconSet     *icon_set,
   image = gtk_type_new (GTK_TYPE_IMAGE);
 
   gtk_image_set_from_icon_set (image, icon_set, size);
+
+  return GTK_WIDGET (image);
+}
+
+/**
+ * gtk_image_new_from_animation:
+ * @animation: an animation
+ * 
+ * Creates a #GtkImage displaying the given animation.
+ * The #GtkImage does not assume a reference to the
+ * animation; you still need to unref it if you own references.
+ * #GtkImage will add its own reference rather than adopting yours.
+ * 
+ * Return value: a new #GtkImage widget
+ **/
+GtkWidget*
+gtk_image_new_from_animation (GdkPixbufAnimation *animation)
+{
+  GtkImage *image;
+
+  g_return_val_if_fail (GDK_IS_PIXBUF_ANIMATION (animation), NULL);
+  
+  image = gtk_type_new (GTK_TYPE_IMAGE);
+
+  gtk_image_set_from_animation (image, animation);
 
   return GTK_WIDGET (image);
 }
@@ -376,7 +415,7 @@ void
 gtk_image_set_from_file   (GtkImage    *image,
                            const gchar *filename)
 {
-  GdkPixbuf *pixbuf;
+  GdkPixbufAnimation *anim;
   
   g_return_if_fail (GTK_IS_IMAGE (image));
   g_return_if_fail (filename != NULL);
@@ -386,9 +425,9 @@ gtk_image_set_from_file   (GtkImage    *image,
   if (filename == NULL)
     return;
   
-  pixbuf = gdk_pixbuf_new_from_file (filename, NULL);
+  anim = gdk_pixbuf_animation_new_from_file (filename, NULL);
 
-  if (pixbuf == NULL)
+  if (anim == NULL)
     {
       gtk_image_set_from_stock (image,
                                 GTK_STOCK_MISSING_IMAGE,
@@ -396,9 +435,22 @@ gtk_image_set_from_file   (GtkImage    *image,
       return;
     }
 
-  gtk_image_set_from_pixbuf (image, pixbuf);
+  /* We could just unconditionally set_from_animation,
+   * but it's nicer for memory if we toss the animation
+   * if it's just a single pixbuf
+   */
 
-  g_object_unref (G_OBJECT (pixbuf));
+  if (gdk_pixbuf_animation_is_static_image (anim))
+    {
+      gtk_image_set_from_pixbuf (image,
+                                 gdk_pixbuf_animation_get_static_image (anim));
+    }
+  else
+    {
+      gtk_image_set_from_animation (image, anim);
+    }
+
+  g_object_unref (G_OBJECT (anim));
 }
 
 /**
@@ -497,6 +549,41 @@ gtk_image_set_from_icon_set  (GtkImage       *image,
       /* Size is demand-computed in size request method
        * if we're an icon set
        */
+    }
+}
+
+/**
+ * gtk_image_set_from_animation:
+ * @image: a #GtkImage
+ * @animation: the #GdkPixbufAnimation
+ * 
+ * Causes the #GtkImage to display the given animation (or display
+ * nothing, if you set the animation to %NULL).
+ **/
+void
+gtk_image_set_from_animation (GtkImage           *image,
+                              GdkPixbufAnimation *animation)
+{
+  g_return_if_fail (GTK_IS_IMAGE (image));
+  g_return_if_fail (animation == NULL ||
+                    GDK_IS_PIXBUF_ANIMATION (animation));
+  
+  if (animation)
+    g_object_ref (G_OBJECT (animation));
+
+  gtk_image_reset (image);
+
+  if (animation != NULL)
+    {
+      image->storage_type = GTK_IMAGE_ANIMATION;
+
+      image->data.anim.anim = animation;
+      image->data.anim.frame_timeout = 0;
+      image->data.anim.iter = NULL;
+      
+      gtk_image_update_size (image,
+                             gdk_pixbuf_animation_get_width (animation),
+                             gdk_pixbuf_animation_get_height (animation));
     }
 }
 
@@ -660,6 +747,33 @@ gtk_image_get_icon_set  (GtkImage        *image,
     *size = image->data.icon_set.size;
 }
 
+/**
+ * gtk_image_get_animation:
+ * @image: a #GtkImage
+ *
+ *
+ * Gets the #GdkPixbufAnimation being displayed by the #GtkImage.
+ * The storage type of the image must be %GTK_IMAGE_EMPTY or
+ * %GTK_IMAGE_ANIMATION (see gtk_image_get_storage_type()).
+ * The caller of this function does not own a reference to the
+ * returned animation.
+ * 
+ * Return value: the displayed animation, or %NULL if the image is empty
+ **/
+GdkPixbufAnimation*
+gtk_image_get_animation (GtkImage *image)
+{
+  g_return_val_if_fail (GTK_IS_IMAGE (image), NULL);
+  g_return_val_if_fail (image->storage_type == GTK_IMAGE_ANIMATION ||
+                        image->storage_type == GTK_IMAGE_EMPTY,
+                        NULL);
+
+  if (image->storage_type == GTK_IMAGE_EMPTY)
+    image->data.anim.anim = NULL;
+  
+  return image->data.anim.anim;
+}
+
 GtkWidget*
 gtk_image_new (GdkImage  *val,
 	       GdkBitmap *mask)
@@ -695,6 +809,55 @@ gtk_image_get (GtkImage   *image,
   gtk_image_get_image (image, val, mask);
 }
 
+static void
+gtk_image_unmap (GtkWidget *widget)
+{
+  GtkImage *image;
+
+  image = GTK_IMAGE (widget);
+
+  if (image->storage_type == GTK_IMAGE_ANIMATION)
+    {
+      /* Reset the animation */
+      
+      if (image->data.anim.frame_timeout)
+        {
+          g_source_remove (image->data.anim.frame_timeout);
+          image->data.anim.frame_timeout = 0;
+        }
+
+      if (image->data.anim.iter)
+        {
+          g_object_unref (G_OBJECT (image->data.anim.iter));
+          image->data.anim.iter = NULL;
+        }
+    }
+
+  if (GTK_WIDGET_CLASS (parent_class)->unmap)
+    GTK_WIDGET_CLASS (parent_class)->unmap (widget);
+}
+
+gint
+animation_timeout (gpointer data)
+{
+  GtkImage *image;
+
+  image = GTK_IMAGE (data);
+  
+  image->data.anim.frame_timeout = 0;
+
+  gdk_pixbuf_animation_iter_advance (image->data.anim.iter, NULL);
+
+  if (gdk_pixbuf_animation_iter_get_delay_time (image->data.anim.iter) >= 0)
+    image->data.anim.frame_timeout =
+      g_timeout_add (gdk_pixbuf_animation_iter_get_delay_time (image->data.anim.iter),
+                     animation_timeout,
+                     image);
+  
+  gtk_widget_queue_draw (GTK_WIDGET (image));
+
+  return FALSE;
+}
 
 static gint
 gtk_image_expose (GtkWidget      *widget,
@@ -777,6 +940,24 @@ gtk_image_expose (GtkWidget      *widget,
               image_bound.height = gdk_pixbuf_get_height (stock_pixbuf);
             }
           break;
+
+        case GTK_IMAGE_ANIMATION:
+          {
+            if (image->data.anim.iter == NULL)
+              {
+                image->data.anim.iter = gdk_pixbuf_animation_get_iter (image->data.anim.anim, NULL);
+                
+                if (gdk_pixbuf_animation_iter_get_delay_time (image->data.anim.iter) >= 0)
+                  image->data.anim.frame_timeout =
+                    g_timeout_add (gdk_pixbuf_animation_iter_get_delay_time (image->data.anim.iter),
+                                   animation_timeout,
+                                   image);
+              }
+
+            image_bound.width = gdk_pixbuf_animation_get_width (image->data.anim.anim);
+            image_bound.height = gdk_pixbuf_animation_get_height (image->data.anim.anim);
+          }
+          break;
           
         default:
           break;
@@ -849,6 +1030,25 @@ gtk_image_expose (GtkWidget      *widget,
                 }
               break;
 
+            case GTK_IMAGE_ANIMATION:
+              /* don't advance the anim iter here, or we could get frame changes between two
+               * exposes of different areas.
+               */
+              
+              gdk_pixbuf_render_to_drawable_alpha (gdk_pixbuf_animation_iter_get_pixbuf (image->data.anim.iter),
+                                                   widget->window,
+                                                   image_bound.x - x,
+                                                   image_bound.y - y,
+                                                   image_bound.x,
+                                                   image_bound.y,
+                                                   image_bound.width,
+                                                   image_bound.height,
+                                                   GDK_PIXBUF_ALPHA_FULL,
+                                                   128,
+                                                   GDK_RGB_DITHER_NORMAL,
+                                                   0, 0);
+              break;
+              
             default:
               break;
             }
@@ -876,9 +1076,6 @@ gtk_image_clear (GtkImage *image)
       if (image->data.pixmap.mask)
         g_object_unref (G_OBJECT (image->data.pixmap.mask));
 
-      image->data.pixmap.pixmap = NULL;
-      image->data.pixmap.mask = NULL;
-
       break;
 
     case GTK_IMAGE_IMAGE:
@@ -889,9 +1086,6 @@ gtk_image_clear (GtkImage *image)
       if (image->data.image.mask)
         g_object_unref (G_OBJECT (image->data.image.mask));
 
-      image->data.image.image = NULL;
-      image->data.image.mask = NULL;
-
       break;
 
     case GTK_IMAGE_PIXBUF:
@@ -899,26 +1093,26 @@ gtk_image_clear (GtkImage *image)
       if (image->data.pixbuf.pixbuf)
         g_object_unref (G_OBJECT (image->data.pixbuf.pixbuf));
 
-      image->data.pixbuf.pixbuf = NULL;
-
       break;
 
     case GTK_IMAGE_STOCK:
 
       g_free (image->data.stock.stock_id);
-
-      image->data.stock.stock_id = NULL;
-      image->data.stock.size = 0;
       
       break;
 
     case GTK_IMAGE_ICON_SET:
       if (image->data.icon_set.icon_set)
         gtk_icon_set_unref (image->data.icon_set.icon_set);
-
-      image->data.icon_set.size = 0;
-      image->data.icon_set.icon_set = NULL;
       
+      break;
+
+    case GTK_IMAGE_ANIMATION:
+      if (image->data.anim.frame_timeout)
+        g_source_remove (image->data.anim.frame_timeout);
+
+      if (image->data.anim.anim)
+        g_object_unref (G_OBJECT (image->data.anim.anim));      
       break;
       
     case GTK_IMAGE_EMPTY:
@@ -928,6 +1122,8 @@ gtk_image_clear (GtkImage *image)
     }
 
   image->storage_type = GTK_IMAGE_EMPTY;
+
+  memset (&image->data, '\0', sizeof (image->data));
 }
 
 static void

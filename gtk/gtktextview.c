@@ -506,6 +506,7 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
                            GTK_ARG_READWRITE, ARG_PIXELS_INSIDE_WRAP);
   gtk_object_add_arg_type ("GtkTextView::editable", GTK_TYPE_BOOL,
                            GTK_ARG_READWRITE, ARG_EDITABLE);
+
   gtk_object_add_arg_type ("GtkTextView::wrap_mode", GTK_TYPE_WRAP_MODE,
                            GTK_ARG_READWRITE, ARG_WRAP_MODE);
   gtk_object_add_arg_type ("GtkTextView::justify", GTK_TYPE_JUSTIFICATION,

@@ -54,6 +54,7 @@ typedef enum {
 /* All of these are opaque structures */
 typedef struct _GdkPixbuf GdkPixbuf;
 typedef struct _GdkPixbufAnimation GdkPixbufAnimation;
+typedef struct _GdkPixbufAnimationIter GdkPixbufAnimationIter;
 typedef struct _GdkPixbufFrame GdkPixbufFrame;
 
 #define GDK_TYPE_PIXBUF              (gdk_pixbuf_get_type ())
@@ -64,6 +65,9 @@ typedef struct _GdkPixbufFrame GdkPixbufFrame;
 #define GDK_PIXBUF_ANIMATION(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_PIXBUF_ANIMATION, GdkPixbufAnimation))
 #define GDK_IS_PIXBUF_ANIMATION(object)        (G_TYPE_CHECK_INSTANCE_TYPE ((object), GDK_TYPE_PIXBUF_ANIMATION))
 
+#define GDK_TYPE_PIXBUF_ANIMATION_ITER              (gdk_pixbuf_animation_iter_get_type ())
+#define GDK_PIXBUF_ANIMATION_ITER(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_PIXBUF_ANIMATION_ITER, GdkPixbufAnimationIter))
+#define GDK_IS_PIXBUF_ANIMATION_ITER(object)        (G_TYPE_CHECK_INSTANCE_TYPE ((object), GDK_TYPE_PIXBUF_ANIMATION_ITER))
 
 /* Handler that must free the pixel array */
 typedef void (* GdkPixbufDestroyNotify) (guchar *pixels, gpointer data);
@@ -255,13 +259,6 @@ GdkPixbuf *gdk_pixbuf_composite_color_simple (const GdkPixbuf *src,
 
 /* Animation support */
 
-/* GIF-like animation overlay modes for frames */
-typedef enum {
-	GDK_PIXBUF_FRAME_RETAIN,
-	GDK_PIXBUF_FRAME_DISPOSE,
-	GDK_PIXBUF_FRAME_REVERT
-} GdkPixbufFrameAction;
-
 GType               gdk_pixbuf_animation_get_type        (void) G_GNUC_CONST;
 
 GdkPixbufAnimation *gdk_pixbuf_animation_new_from_file   (const char         *filename,
@@ -272,21 +269,20 @@ void                gdk_pixbuf_animation_unref           (GdkPixbufAnimation *an
 
 int                 gdk_pixbuf_animation_get_width       (GdkPixbufAnimation *animation);
 int                 gdk_pixbuf_animation_get_height      (GdkPixbufAnimation *animation);
-GList              *gdk_pixbuf_animation_get_frames      (GdkPixbufAnimation *animation);
-int                 gdk_pixbuf_animation_get_num_frames  (GdkPixbufAnimation *animation);
+gboolean            gdk_pixbuf_animation_is_static_image  (GdkPixbufAnimation *animation);
+GdkPixbuf          *gdk_pixbuf_animation_get_static_image (GdkPixbufAnimation *animation);
 
-/* Frame accessors */
+GdkPixbufAnimationIter *gdk_pixbuf_animation_get_iter                        (GdkPixbufAnimation     *animation,
+                                                                              const GTimeVal         *start_time);
+GType                   gdk_pixbuf_animation_iter_get_type                   (void) G_GNUC_CONST;
+int                     gdk_pixbuf_animation_iter_get_delay_time             (GdkPixbufAnimationIter *iter);
+GdkPixbuf              *gdk_pixbuf_animation_iter_get_pixbuf                 (GdkPixbufAnimationIter *iter);
+gboolean                gdk_pixbuf_animation_iter_on_currently_loading_frame (GdkPixbufAnimationIter *iter);
+gboolean                gdk_pixbuf_animation_iter_advance                    (GdkPixbufAnimationIter *iter,
+                                                                              const GTimeVal         *current_time);
 
-GdkPixbuf           *gdk_pixbuf_frame_get_pixbuf     (GdkPixbufFrame *frame);
-int                  gdk_pixbuf_frame_get_x_offset   (GdkPixbufFrame *frame);
-int                  gdk_pixbuf_frame_get_y_offset   (GdkPixbufFrame *frame);
-int                  gdk_pixbuf_frame_get_delay_time (GdkPixbufFrame *frame);
-GdkPixbufFrameAction gdk_pixbuf_frame_get_action     (GdkPixbufFrame *frame);
-GdkPixbufFrame      *gdk_pixbuf_frame_copy           (GdkPixbufFrame *src);
-void                 gdk_pixbuf_frame_free           (GdkPixbufFrame *frame);
-GType                gdk_pixbuf_frame_get_type       (void) G_GNUC_CONST;
-#define              GDK_TYPE_PIXBUF_FRAME gdk_pixbuf_frame_get_type ()
 
+ 
 #include <gdk-pixbuf/gdk-pixbuf-loader.h>
 
 

@@ -41,6 +41,7 @@ Styles
 @mid: 
 @text: 
 @base: 
+@text_aa: 
 @black: 
 @white: 
 @font: 
@@ -54,6 +55,7 @@ Styles
 @mid_gc: 
 @text_gc: 
 @base_gc: 
+@text_aa_gc: 
 @black_gc: 
 @white_gc: 
 @bg_pixmap: 
@@ -504,6 +506,7 @@ Styles
 @style: 
 @window: 
 @state_type: 
+@use_text: 
 @x: 
 @y: 
 @layout: 
@@ -874,6 +877,7 @@ Styles
 @style: 
 @window: 
 @state_type: 
+@use_text: 
 @area: 
 @widget: 
 @detail: 

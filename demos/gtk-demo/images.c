@@ -8,6 +8,8 @@
  *
  * If you want to put image data in your program as a C variable,
  * use the make-inline-pixbuf program that comes with GTK+.
+ * This way you won't need to depend on loading external files, your
+ * application binary can be self-contained.
  */
 
 #include <gtk/gtk.h>
@@ -39,14 +41,14 @@ progressive_prepared_callback (GdkPixbufLoader* loader, gpointer data)
 
 static void
 progressive_updated_callback (GdkPixbufLoader* loader,
-                              guint x, guint y, guint width, guint height,
+                              gint x, gint y, gint width, gint height,
                               gpointer data)
 {
   GtkWidget* image;
   
   image = GTK_WIDGET (data);
 
-  /* We know the pixbuf inside the image has changed, but the image
+  /* We know the pixbuf inside the GtkImage has changed, but the image
    * itself doesn't know this; so queue a redraw.  If we wanted to be
    * really efficient, we could use a drawing area or something
    * instead of a GtkImage, so we could control the exact position of
@@ -85,7 +87,7 @@ progressive_timeout (gpointer data)
                                            GTK_DIALOG_DESTROY_WITH_PARENT,
                                            GTK_MESSAGE_ERROR,
                                            GTK_BUTTONS_CLOSE,
-                                           "Failure reading image file 'gtk-logo-rgb.gif': %s",
+                                           "Failure reading image file 'alphatest.png': %s",
                                            g_strerror (errno));
 
           gtk_signal_connect (GTK_OBJECT (dialog),
@@ -180,10 +182,10 @@ progressive_timeout (gpointer data)
     {
       const gchar *filename;
 
-      if (g_file_test ("./gtk-logo-rgb.gif", G_FILE_TEST_EXISTS))
-        filename = "./gtk-logo-rgb.gif";
+      if (g_file_test ("./alphatest.png", G_FILE_TEST_EXISTS))
+        filename = "./alphatest.png";
       else
-        filename = DEMOCODEDIR"/gtk-logo-rgb.gif";
+        filename = DEMOCODEDIR"/alphatest.png";
       
       image_stream = fopen (filename, "r");
 
@@ -195,7 +197,7 @@ progressive_timeout (gpointer data)
                                            GTK_DIALOG_DESTROY_WITH_PARENT,
                                            GTK_MESSAGE_ERROR,
                                            GTK_BUTTONS_CLOSE,
-                                           "Unable to open image file 'gtk-logo-rgb.gif': %s",
+                                           "Unable to open image file 'alphatest.png': %s",
                                            g_strerror (errno));
 
           gtk_signal_connect (GTK_OBJECT (dialog),
@@ -246,7 +248,7 @@ start_progressive_loading (GtkWidget *image)
    * The timeout simply simulates a slow data source by inserting
    * pauses in the reading process.
    */
-  load_timeout = g_timeout_add (300,
+  load_timeout = g_timeout_add (150,
                                 progressive_timeout,
                                 image);
 }
@@ -359,6 +361,37 @@ do_images (void)
 
       gtk_container_add (GTK_CONTAINER (frame), image);
 
+
+      /* Animation */
+
+      label = gtk_label_new (NULL);
+      gtk_label_set_markup (GTK_LABEL (label),
+                            "<u>Animation loaded from a file</u>");
+      gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, FALSE, 0);
+      
+      frame = gtk_frame_new (NULL);
+      gtk_frame_set_shadow_type (GTK_FRAME (frame), GTK_SHADOW_IN);
+      /* The alignment keeps the frame from growing when users resize
+       * the window
+       */
+      align = gtk_alignment_new (0.5, 0.5, 0, 0);
+      gtk_container_add (GTK_CONTAINER (align), frame);
+      gtk_box_pack_start (GTK_BOX (vbox), align, FALSE, FALSE, 0);
+
+      /* We look for the image in the current directory first,
+       * so you can run gtk-demo without installing GTK
+       */
+      if (g_file_test ("./floppybuddy.gif", G_FILE_TEST_EXISTS))
+        image = gtk_image_new_from_file ("./floppybuddy.gif");
+      else
+        image = gtk_image_new_from_file (DEMOCODEDIR"/floppybuddy.gif");
+
+      gtk_container_add (GTK_CONTAINER (frame), image);
+      
+
+      /* Progressive */
+      
+      
       label = gtk_label_new (NULL);
       gtk_label_set_markup (GTK_LABEL (label),
                             "<u>Progressive image loading</u>");

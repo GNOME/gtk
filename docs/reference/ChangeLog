@@ -1,4 +1,8 @@
-2001-04-20  Havoc Pennington  <hp@redhat.com>
+2001-04-26  Havoc Pennington  <hp@redhat.com>
+
+	* gtk/tmpl/gtkimage.sgml: document GtkImageType
+
+	* gtk/gtk-sections.txt: GtkImageType is public
 
 	* gdk/tmpl/images.sgml: add warning about gtk_image_new_bitmap
 

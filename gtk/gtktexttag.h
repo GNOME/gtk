@@ -60,6 +60,7 @@ struct _GtkTextTag
   guint weight_set : 1;
   guint stretch_set : 1;
   guint size_set : 1;
+  guint scale_set : 1;
   guint fg_stipple_set : 1;
   guint justification_set : 1;
   guint left_margin_set : 1;
@@ -148,6 +149,8 @@ struct _GtkTextAttributes
   /* Individual chunks of this can be set/unset as a group */
   PangoFontDescription font;
 
+  gdouble font_scale;
+  
   gint left_margin;
 
   gint indent;  

@@ -92,7 +92,7 @@ gdk_pixbuf__tiff_image_load_real (FILE *f, TiffData *context, GError **error)
         }
         
 	if (context)
-		(* context->prepare_func) (pixbuf, context->user_data);
+		(* context->prepare_func) (pixbuf, NULL, context->user_data);
 
 	/* Yes, it needs to be _TIFFMalloc... */
 	rast = (uint32 *) _TIFFmalloc (num_pixs * sizeof (uint32));
@@ -163,8 +163,6 @@ gdk_pixbuf__tiff_image_load (FILE *f, GError **error)
 static gpointer
 gdk_pixbuf__tiff_image_begin_load (ModulePreparedNotifyFunc prepare_func,
 				   ModuleUpdatedNotifyFunc update_func,
-				   ModuleFrameDoneNotifyFunc frame_done_func,
-				   ModuleAnimationDoneNotifyFunc anim_done_func,
 				   gpointer user_data,
                                    GError **error)
 {

@@ -393,6 +393,15 @@ it's larger
 @setting: 
 
 
+<!-- ##### FUNCTION gtk_window_set_decorations_hint ##### -->
+<para>
+
+</para>
+
+@window: 
+@decorations: 
+
+
 <!-- ##### FUNCTION gtk_window_set_frame_dimensions ##### -->
 <para>
 
@@ -403,6 +412,15 @@ it's larger
 @top: 
 @right: 
 @bottom: 
+
+
+<!-- ##### FUNCTION gtk_window_set_functions_hint ##### -->
+<para>
+
+</para>
+
+@window: 
+@functions: 
 
 
 <!-- ##### FUNCTION gtk_window_set_has_frame ##### -->

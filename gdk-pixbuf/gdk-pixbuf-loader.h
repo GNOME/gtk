@@ -51,21 +51,21 @@ typedef struct _GdkPixbufLoaderClass GdkPixbufLoaderClass;
 struct _GdkPixbufLoaderClass
 {
   GObjectClass parent_class;
-  
-  void (*area_prepared)   (GdkPixbufLoader *loader);
-  void (*area_updated)    (GdkPixbufLoader *loader,
-			   guint            x,
-			   guint            y,
-			   guint            width,
-			   guint            height);
-  void (*frame_done)      (GdkPixbufLoader *loader,
-			   GdkPixbufFrame  *frame);
-  void (*animation_done)  (GdkPixbufLoader *loader);
-  void (*closed)          (GdkPixbufLoader *loader);
+
+  void (*area_prepared)      (GdkPixbufLoader *loader);
+
+  /* Last known frame needs a redraw for x, y, width, height */
+  void (*area_updated)       (GdkPixbufLoader *loader,
+                              int              x,
+                              int              y,
+			      int              width,
+			      int              height);
+
+  void (*closed)             (GdkPixbufLoader *loader);
 };
 
 
-GType              gdk_pixbuf_loader_get_type      (void) G_GNUC_CONST;
+GType                gdk_pixbuf_loader_get_type      (void) G_GNUC_CONST;
 GdkPixbufLoader *    gdk_pixbuf_loader_new           (void);
 GdkPixbufLoader *    gdk_pixbuf_loader_new_with_type (const char *image_type,
                                                       GError    **error);

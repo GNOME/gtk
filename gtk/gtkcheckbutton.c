@@ -246,8 +246,8 @@ gtk_check_button_size_request (GtkWidget      *widget,
       gint indicator_spacing;
       gint border_width = GTK_CONTAINER (widget)->border_width;
       
-      requisition->width = border_width + 2;
-      requisition->height = border_width + 2;
+      requisition->width = border_width * 2 + 2;
+      requisition->height = border_width * 2 + 2;
 
       child = GTK_BIN (widget)->child;
       if (child && GTK_WIDGET_VISIBLE (child))
@@ -255,7 +255,7 @@ gtk_check_button_size_request (GtkWidget      *widget,
 	  GtkRequisition child_requisition;
 	  
 	  gtk_widget_size_request (child, &child_requisition);
-	  
+
 	  requisition->width += child_requisition.width;
 	  requisition->height += child_requisition.height;
 	}

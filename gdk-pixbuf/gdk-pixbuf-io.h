@@ -39,16 +39,15 @@ extern "C" {
 
 
 
-typedef void (* ModulePreparedNotifyFunc) (GdkPixbuf *pixbuf, gpointer user_data);
-typedef void (* ModuleUpdatedNotifyFunc) (GdkPixbuf *pixbuf,
-					  guint x, guint y,
-					  guint width, guint height,
-					  gpointer user_data);
-/* Needed only for animated images. */
-typedef void (* ModuleFrameDoneNotifyFunc) (GdkPixbufFrame *frame,
-					    gpointer user_data);
-typedef void (* ModuleAnimationDoneNotifyFunc) (GdkPixbuf *pixbuf,
-						gpointer user_data);
+typedef void (* ModulePreparedNotifyFunc) (GdkPixbuf          *pixbuf,
+                                           GdkPixbufAnimation *anim,
+                                           gpointer            user_data);
+typedef void (* ModuleUpdatedNotifyFunc)  (GdkPixbuf *pixbuf,
+                                           int        x,
+                                           int        y,
+                                           int        width,
+                                           int        height,
+                                           gpointer   user_data);
 
 typedef struct _GdkPixbufModule GdkPixbufModule;
 struct _GdkPixbufModule {
@@ -63,8 +62,6 @@ struct _GdkPixbufModule {
 
         gpointer (* begin_load)     (ModulePreparedNotifyFunc prepare_func,
                                      ModuleUpdatedNotifyFunc update_func,
-                                     ModuleFrameDoneNotifyFunc frame_done_func,
-                                     ModuleAnimationDoneNotifyFunc anim_done_func,
                                      gpointer user_data,
                                      GError **error);
         gboolean (* stop_load)      (gpointer context,

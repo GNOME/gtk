@@ -1280,6 +1280,16 @@ add_text_attrs (GtkTextLayout      *layout,
   attr->end_index = start + byte_count;
 
   pango_attr_list_insert (attrs, attr);
+
+  if (style->font_scale != 1.0)
+    {
+      attr = pango_attr_scale_new (style->font_scale);
+
+      attr->start_index = start;
+      attr->end_index = start + byte_count;
+      
+      pango_attr_list_insert (attrs, attr);
+    }
 }
 
 static void

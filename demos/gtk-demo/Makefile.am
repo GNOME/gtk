@@ -59,8 +59,10 @@ gtk_demo_SOURCES = 		\
 gtk_demo_DEPENDENCIES = $(DEPS)
 gtk_demo_LDADD = $(LDADDS)
 
-IMAGEFILES=	apple-red.png		\
+IMAGEFILES=	alphatest.png		\
+	        apple-red.png		\
 		background.jpg		\
+		floppybuddy.gif		\
 		gnome-applets.png	\
 		gnome-calendar.png	\
 		gnome-foot.png		\

@@ -324,8 +324,6 @@ struct _LoadContext {
 static gpointer
 gdk_pixbuf__png_image_begin_load (ModulePreparedNotifyFunc prepare_func,
 				  ModuleUpdatedNotifyFunc update_func,
-				  ModuleFrameDoneNotifyFunc frame_done_func,
-				  ModuleAnimationDoneNotifyFunc anim_done_func,
 				  gpointer user_data,
                                   GError **error)
 {
@@ -540,7 +538,7 @@ png_info_callback   (png_structp png_read_ptr,
         /* Notify the client that we are ready to go */
 
         if (lc->prepare_func)
-                (* lc->prepare_func) (lc->pixbuf, lc->notify_user_data);
+                (* lc->prepare_func) (lc->pixbuf, NULL, lc->notify_user_data);
         
         return;
 }

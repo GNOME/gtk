@@ -61,6 +61,9 @@ struct _GtkScaleClass
   GtkRangeClass parent_class;
 
   gint value_spacing;
+
+  gchar* (* format_value) (GtkRange *range,
+                           gdouble   value);  
   
   void (* draw_value) (GtkScale *scale);
 };
@@ -78,6 +81,9 @@ void    gtk_scale_get_value_size  (GtkScale        *scale,
 				   gint            *height);
 
 void    gtk_scale_draw_value      (GtkScale        *scale);
+
+gchar  *_gtk_scale_format_value   (GtkScale        *scale,
+                                   gdouble          value);
 
 #ifdef __cplusplus
 }

@@ -108,9 +108,10 @@ GSList  *  gtk_text_iter_get_marks  (const GtkTextIter *iter);
 GtkTextChildAnchor* gtk_text_iter_get_child_anchor (const GtkTextIter *iter);
 
 /* Return list of tags toggled at this point (toggled_on determines
-   whether the list is of on-toggles or off-toggles) */
+ * whether the list is of on-toggles or off-toggles)
+ */
 GSList  *gtk_text_iter_get_toggled_tags  (const GtkTextIter  *iter,
-                                          gboolean             toggled_on);
+                                          gboolean            toggled_on);
 
 gboolean gtk_text_iter_begins_tag        (const GtkTextIter  *iter,
                                           GtkTextTag         *tag);
@@ -145,7 +146,7 @@ gboolean gtk_text_iter_get_attributes    (const GtkTextIter    *iter,
                                           GtkTextAttributes    *values);
 gchar*   gtk_text_iter_get_language      (const GtkTextIter    *iter);
 gboolean gtk_text_iter_is_end            (const GtkTextIter    *iter);
-gboolean gtk_text_iter_is_first          (const GtkTextIter    *iter);
+gboolean gtk_text_iter_is_start          (const GtkTextIter    *iter);
 
 /*
  * Moving around the buffer

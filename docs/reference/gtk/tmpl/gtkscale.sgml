@@ -43,7 +43,9 @@ slider.</entry>
 
 <!-- ##### FUNCTION gtk_scale_set_digits ##### -->
 <para>
-Sets the number of decimal places that are displayed in the value.
+Sets the number of decimal places that are displayed in the value.  Also causes
+the value of the adjustment to be rounded off to this number of digits, so the
+retrieved value matches the value the user saw.
 </para>
 
 @scale: a #GtkScale.
@@ -79,6 +81,15 @@ string.
 @scale: a #GtkScale.
 @Returns: the maximum width needed to display the value string.
 
+
+<!-- ##### SIGNAL GtkScale::format-value ##### -->
+<para>
+
+</para>
+
+@scale: the object which received the signal.
+@arg1: 
+@Returns: 
 
 <!-- ##### ARG GtkScale:digits ##### -->
 <para>

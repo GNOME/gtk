@@ -27,6 +27,7 @@
 #include <math.h>
 #include "gtkintl.h"
 #include "gtkscale.h"
+#include "gtkmarshal.h"
 
 enum {
   ARG_0,
@@ -35,6 +36,12 @@ enum {
   ARG_VALUE_POS
 };
 
+enum {
+  FORMAT_VALUE,
+  LAST_SIGNAL
+};
+
+static guint signals[LAST_SIGNAL];
 
 static void gtk_scale_class_init      (GtkScaleClass *klass);
 static void gtk_scale_init            (GtkScale      *scale);
@@ -78,6 +85,22 @@ gtk_scale_get_type (void)
   return scale_type;
 }
 
+gboolean
+single_string_accumulator (GSignalInvocationHint *ihint,
+                           GValue                *return_accu,
+                           const GValue          *handler_return,
+                           gpointer               dummy)
+{
+  gboolean continue_emission;
+  gchar *str;
+  
+  str = g_value_get_string (handler_return);
+  g_value_set_string (return_accu, str);
+  continue_emission = str == NULL;
+  
+  return continue_emission;
+}
+
 static void
 gtk_scale_class_init (GtkScaleClass *class)
 {
@@ -104,6 +127,16 @@ gtk_scale_class_init (GtkScaleClass *class)
 			   GTK_ARG_READWRITE,
 			   ARG_VALUE_POS);
 
+  signals[FORMAT_VALUE] =
+    g_signal_newc ("format_value",
+		   G_TYPE_FROM_CLASS (object_class),
+		   G_SIGNAL_RUN_LAST,
+		   G_STRUCT_OFFSET (GtkScaleClass, format_value),
+		   single_string_accumulator, NULL,
+		   gtk_marshal_STRING__DOUBLE,
+		   G_TYPE_STRING, 1,
+		   G_TYPE_DOUBLE);
+  
   object_class->set_arg = gtk_scale_set_arg;
   object_class->get_arg = gtk_scale_get_arg;
 
@@ -280,58 +313,27 @@ gtk_scale_get_value_size (GtkScale *scale,
     {
       PangoLayout *layout;
       PangoRectangle logical_rect;
-      gchar buffer[128];
-      gdouble value;
-      gint digits;
-      gint i, j;
+      gchar *txt;
       
       range = GTK_RANGE (scale);
 
       layout = gtk_widget_create_pango_layout (GTK_WIDGET (scale), NULL);
 
-      value = ABS (range->adjustment->lower);
-      if (value == 0) value = 1;
-      digits = log10 (value) + 1;
-      if (digits > 13)
-	digits = 13;
-
-      i = 0;
-      if (range->adjustment->lower < 0)
-        buffer[i++] = '-';
-      for (j = 0; j < digits; j++)
-        buffer[i++] = '0';
-      if (GTK_RANGE (scale)->digits)
-        buffer[i++] = '.';
-      for (j = 0; j < GTK_RANGE (scale)->digits; j++)
-        buffer[i++] = '0';
-      buffer[i] = '\0';
-
-      pango_layout_set_text (layout, buffer, i);
+      txt = _gtk_scale_format_value (scale, range->adjustment->lower);
+      pango_layout_set_text (layout, txt, -1);
+      g_free (txt);
+      
       pango_layout_get_pixel_extents (layout, NULL, &logical_rect);
 
       if (width)
 	*width = logical_rect.width;
       if (height)
-	*height = logical_rect.width;
+	*height = logical_rect.height;
+
+      txt = _gtk_scale_format_value (scale, range->adjustment->upper);
+      pango_layout_set_text (layout, txt, -1);
+      g_free (txt);
       
-      value = ABS (range->adjustment->upper);
-      if (value == 0) value = 1;
-      digits = log10 (value) + 1;
-      if (digits > 13)
-        digits = 13;
-
-      i = 0;
-      if (range->adjustment->upper < 0)
-        buffer[i++] = '-';
-      for (j = 0; j < digits; j++)
-        buffer[i++] = '0';
-      if (GTK_RANGE (scale)->digits)
-        buffer[i++] = '.';
-      for (j = 0; j < GTK_RANGE (scale)->digits; j++)
-        buffer[i++] = '0';
-      buffer[i] = '\0';
-
-      pango_layout_set_text (layout, buffer, i);
       pango_layout_get_pixel_extents (layout, NULL, &logical_rect);
 
       if (width)
@@ -382,4 +384,33 @@ gtk_scale_draw_background (GtkRange *range)
   g_return_if_fail (GTK_IS_SCALE (range));
 
   gtk_scale_draw_value (GTK_SCALE (range));
+}
+
+/**
+ * _gtk_scale_format_value:
+ * @scale: a #GtkScale
+ * @value: adjustment value
+ * 
+ * Emits "format_value" signal to format the value, if no user
+ * signal handlers, falls back to a default format.
+ * 
+ * Return value: formatted value
+ **/
+gchar*
+_gtk_scale_format_value (GtkScale *scale,
+                         gdouble   value)
+{
+  gchar *fmt = NULL;
+
+  g_signal_emit (G_OBJECT (scale),
+                 signals[FORMAT_VALUE],
+                 0,
+                 value,
+                 &fmt);
+
+  if (fmt)
+    return fmt;
+  else
+    return g_strdup_printf ("%0.*f", GTK_RANGE (scale)->digits,
+                            value);
 }

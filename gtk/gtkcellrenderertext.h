@@ -44,6 +44,7 @@ struct _GtkCellRendererText
   /*< private >*/
   gchar *text;
   PangoFontDescription font;
+  gdouble font_scale;
   PangoColor foreground;
   PangoColor background;
   
@@ -66,6 +67,8 @@ struct _GtkCellRendererText
   guint stretch_set : 1;
   guint size_set : 1;
 
+  guint scale_set : 1;
+  
   guint foreground_set : 1;
   guint background_set : 1;
   
