@@ -128,7 +128,7 @@ struct _GtkObject
   guint32 flags;
   
   /* reference count.
-   * refer to the file REFCOUNTING on this issue.
+   * refer to the file docs/refcounting.txt on this issue.
    */
   guint ref_count;
   
