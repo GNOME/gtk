@@ -737,7 +737,8 @@ guint16 gtk_compose_ignore[] = {
   GDK_Super_L,
   GDK_Super_R,
   GDK_Hyper_L,
-  GDK_Hyper_R 
+  GDK_Hyper_R,
+  GDK_Mode_switch
 };
 
 static void     gtk_im_context_simple_class_init         (GtkIMContextSimpleClass  *class);

@@ -1,3 +1,8 @@
+Wed May 23 20:07:53 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkimcontextsimple.c: Add Mode_Switch to list of keys
+	to ignore when doing compose processing.
+
 2001-05-22  Joe Shaw  <joe@ximian.com>
 
 	* gtk/gtktextiter.c (_gtk_text_btree_get_iter_at_last_toggle): 
