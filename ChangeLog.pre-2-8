@@ -1,3 +1,11 @@
+Sat Nov 11 23:07:30 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkentry.c (gtk_entry_key_press): Call 
+	gtk_widget_activate for GDK_Return.
+
+	* gtk/gtkentry.c (gtk_entry_preedit_changed_cb): Fix handling
+	of preedit cursor position.
+
 Sun Nov  5 04:24:53 2000  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkcellrenderertextpixbuf.c: Make parent_class

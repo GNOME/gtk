@@ -1040,15 +1040,22 @@ gtk_entry_key_press (GtkWidget   *widget,
   if (!entry->editable)
     return FALSE;
 
-  /* Activate key bindings
-   */
-  if (GTK_WIDGET_CLASS (parent_class)->key_press_event (widget, event))
+  if (gtk_im_context_filter_keypress (entry->im_context, event))
+    {
+      entry->need_im_reset = TRUE;
+      return TRUE;
+    }
+  else if (GTK_WIDGET_CLASS (parent_class)->key_press_event (widget, event))
+    /* Activate key bindings
+     */
     return TRUE;
+  else if (event->keyval == GDK_Return)
+    {
+      gtk_widget_activate (widget);
+      return TRUE;
+    }
 
-  /* Not bound, pass to input method
-   */
-  entry->need_im_reset = TRUE;
-  return gtk_im_context_filter_keypress (entry->im_context, event);
+  return FALSE;
 }
 
 static gint
@@ -1564,7 +1571,7 @@ gtk_entry_preedit_changed_cb (GtkIMContext *context,
 				     &cursor_pos);
   entry->preedit_length = strlen (preedit_string);
   cursor_pos = CLAMP (cursor_pos, 0, g_utf8_strlen (preedit_string, -1));
-  cursor_pos = g_utf8_offset_to_pointer (preedit_string, cursor_pos) - preedit_string;
+  entry->preedit_cursor = g_utf8_offset_to_pointer (preedit_string, cursor_pos) - preedit_string;
   g_free (preedit_string);
 
   gtk_entry_recompute (entry);
