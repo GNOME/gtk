@@ -79,7 +79,8 @@ get_unescaped_char (const char **str,
 static gboolean
 gtk_fnmatch_intern (const char *pattern,
 		    const char *string,
-		    gboolean   component_start)
+		    gboolean    component_start,
+		    gboolean    no_leading_period)
 {
   const char *p = pattern, *n = string;
   
@@ -97,7 +98,7 @@ gtk_fnmatch_intern (const char *pattern,
 	    return FALSE;
 	  else if (nc == G_DIR_SEPARATOR)
 	    return FALSE;
-	  else if (nc == '.' && component_start)
+	  else if (nc == '.' && component_start && no_leading_period)
 	    return FALSE;
 	  break;
 	case '\\':
@@ -107,7 +108,7 @@ gtk_fnmatch_intern (const char *pattern,
 	    return FALSE;
 	  break;
 	case '*':
-	  if (nc == '.' && component_start)
+	  if (nc == '.' && component_start && no_leading_period)
 	    return FALSE;
 
 	  {
@@ -148,7 +149,7 @@ gtk_fnmatch_intern (const char *pattern,
 	    for (p = last_p; nc != '\0';)
 	      {
 		if ((c == '[' || nc == c) &&
-		    gtk_fnmatch_intern (p, last_n, component_start))
+		    gtk_fnmatch_intern (p, last_n, component_start, no_leading_period))
 		  return TRUE;
 		
 		component_start = (nc == G_DIR_SEPARATOR);
@@ -168,7 +169,7 @@ gtk_fnmatch_intern (const char *pattern,
 	    if (nc == '\0' || nc == G_DIR_SEPARATOR)
 	      return FALSE;
 
-	    if (nc == '.' && component_start)
+	    if (nc == '.' && component_start && no_leading_period)
 	      return FALSE;
 
 	    not = (*p == '!' || *p == '^');
@@ -245,116 +246,116 @@ gtk_fnmatch_intern (const char *pattern,
  *
  *   FNM_FILE_NAME   - always set
  *   FNM_LEADING_DIR - never set
- *   FNM_PERIOD      - always set
  *   FNM_NOESCAPE    - set only on windows
  *   FNM_CASEFOLD    - set only on windows
  */
 gboolean
 _gtk_fnmatch (const char *pattern,
-	      const char *string)
+	      const char *string,
+	      gboolean no_leading_period)
 {
-  return gtk_fnmatch_intern (pattern, string, TRUE);
+  return gtk_fnmatch_intern (pattern, string, TRUE, no_leading_period);
 }
 
 #undef FNMATCH_TEST_CASES
 #ifdef FNMATCH_TEST_CASES
 
-#define TEST(pat, str, result) \
-  g_assert (_gtk_fnmatch ((pat), (str)) == result)
+#define TEST(pat, str, no_leading_period, result) \
+  g_assert (_gtk_fnmatch ((pat), (str), (no_leading_period)) == result)
 
 int main (int argc, char **argv)
 {
-  TEST ("[a-]", "-", TRUE);
+  TEST ("[a-]", "-", TRUE, TRUE);
   
-  TEST ("a", "a", TRUE);
-  TEST ("a", "b", FALSE);
+  TEST ("a", "a", TRUE, TRUE);
+  TEST ("a", "b", TRUE, FALSE);
 
   /* Test what ? matches */
-  TEST ("?", "a", TRUE);
-  TEST ("?", ".", FALSE);
-  TEST ("a?", "a.", TRUE);
-  TEST ("a/?", "a/b", TRUE);
-  TEST ("a/?", "a/.", FALSE);
-  TEST ("?", "/", FALSE);
+  TEST ("?", "a", TRUE, TRUE);
+  TEST ("?", ".", TRUE, FALSE);
+  TEST ("a?", "a.", TRUE, TRUE);
+  TEST ("a/?", "a/b", TRUE, TRUE);
+  TEST ("a/?", "a/.", TRUE, FALSE);
+  TEST ("?", "/", TRUE, FALSE);
 
   /* Test what * matches */
-  TEST ("*", "a", TRUE);
-  TEST ("*", ".", FALSE);
-  TEST ("a*", "a.", TRUE);
-  TEST ("a/*", "a/b", TRUE);
-  TEST ("a/*", "a/.", FALSE);
-  TEST ("*", "/", FALSE);
+  TEST ("*", "a", TRUE, TRUE);
+  TEST ("*", ".", TRUE, FALSE);
+  TEST ("a*", "a.", TRUE, TRUE);
+  TEST ("a/*", "a/b", TRUE, TRUE);
+  TEST ("a/*", "a/.", TRUE, FALSE);
+  TEST ("*", "/", TRUE, FALSE);
 
   /* Range tests */
-  TEST ("[ab]", "a", TRUE);
-  TEST ("[ab]", "c", FALSE);
-  TEST ("[^ab]", "a", FALSE);
-  TEST ("[!ab]", "a", FALSE);
-  TEST ("[^ab]", "c", TRUE);
-  TEST ("[!ab]", "c", TRUE);
-  TEST ("[a-c]", "b", TRUE);
-  TEST ("[a-c]", "d", FALSE);
-  TEST ("[a-]", "-", TRUE);
-  TEST ("[]]", "]", TRUE);
-  TEST ("[^]]", "a", TRUE);
-  TEST ("[!]]", "a", TRUE);
+  TEST ("[ab]", "a", TRUE, TRUE);
+  TEST ("[ab]", "c", TRUE, FALSE);
+  TEST ("[^ab]", "a", TRUE, FALSE);
+  TEST ("[!ab]", "a", TRUE, FALSE);
+  TEST ("[^ab]", "c", TRUE, TRUE);
+  TEST ("[!ab]", "c", TRUE, TRUE);
+  TEST ("[a-c]", "b", TRUE, TRUE);
+  TEST ("[a-c]", "d", TRUE, FALSE);
+  TEST ("[a-]", "-", TRUE, TRUE);
+  TEST ("[]]", "]", TRUE, TRUE);
+  TEST ("[^]]", "a", TRUE, TRUE);
+  TEST ("[!]]", "a", TRUE, TRUE);
 
   /* Various unclosed ranges */
-  TEST ("[ab", "a", FALSE);
-  TEST ("[a-", "a", FALSE);
-  TEST ("[ab", "c", FALSE);
-  TEST ("[a-", "c", FALSE);
-  TEST ("[^]", "a", FALSE);
+  TEST ("[ab", "a", TRUE, FALSE);
+  TEST ("[a-", "a", TRUE, FALSE);
+  TEST ("[ab", "c", TRUE, FALSE);
+  TEST ("[a-", "c", TRUE, FALSE);
+  TEST ("[^]", "a", TRUE, FALSE);
 
   /* Ranges and special no-wildcard matches */
-  TEST ("[.]", ".", FALSE);
-  TEST ("a[.]", "a.", TRUE);
-  TEST ("a/[.]", "a/.", FALSE);
-  TEST ("[/]", "/", FALSE);
-  TEST ("[^/]", "a", TRUE);
+  TEST ("[.]", ".", TRUE, FALSE);
+  TEST ("a[.]", "a.", TRUE, TRUE);
+  TEST ("a/[.]", "a/.", TRUE, FALSE);
+  TEST ("[/]", "/", TRUE, FALSE);
+  TEST ("[^/]", "a", TRUE, TRUE);
   
   /* Basic tests of * (and combinations of * and ?) */
-  TEST ("a*b", "ab", TRUE);
-  TEST ("a*b", "axb", TRUE);
-  TEST ("a*b", "axxb", TRUE);
-  TEST ("a**b", "ab", TRUE);
-  TEST ("a**b", "axb", TRUE);
-  TEST ("a**b", "axxb", TRUE);
-  TEST ("a*?*b", "ab", FALSE);
-  TEST ("a*?*b", "axb", TRUE);
-  TEST ("a*?*b", "axxb", TRUE);
+  TEST ("a*b", "ab", TRUE, TRUE);
+  TEST ("a*b", "axb", TRUE, TRUE);
+  TEST ("a*b", "axxb", TRUE, TRUE);
+  TEST ("a**b", "ab", TRUE, TRUE);
+  TEST ("a**b", "axb", TRUE, TRUE);
+  TEST ("a**b", "axxb", TRUE, TRUE);
+  TEST ("a*?*b", "ab", TRUE, FALSE);
+  TEST ("a*?*b", "axb", TRUE, TRUE);
+  TEST ("a*?*b", "axxb", TRUE, TRUE);
 
   /* Test of  *[range] */
-  TEST ("a*[cd]", "ac", TRUE);
-  TEST ("a*[cd]", "axc", TRUE);
-  TEST ("a*[cd]", "axx", FALSE);
+  TEST ("a*[cd]", "ac", TRUE, TRUE);
+  TEST ("a*[cd]", "axc", TRUE, TRUE);
+  TEST ("a*[cd]", "axx", TRUE, FALSE);
 
-  TEST ("a/[.]", "a/.", FALSE);
-  TEST ("a*[.]", "a/.", FALSE);
+  TEST ("a/[.]", "a/.", TRUE, FALSE);
+  TEST ("a*[.]", "a/.", TRUE, FALSE);
 
   /* Test of UTF-8 */
 
-  TEST ("ä", "ä", TRUE);      /* TEST ("ä", "ä", TRUE); */
-  TEST ("?", "ä", TRUE);       /* TEST ("?", "ä", TRUE); */
-  TEST ("*ö", "äö", TRUE);   /* TEST ("*ö", "äö", TRUE); */
-  TEST ("*ö", "ääö", TRUE); /* TEST ("*ö", "ääö", TRUE); */
-  TEST ("[ä]", "ä", TRUE);    /* TEST ("[ä]", "ä", TRUE); */
-  TEST ("[ä-ö]", "é", TRUE); /* TEST ("[ä-ö]", "é", TRUE); */
-  TEST ("[ä-ö]", "a", FALSE); /* TEST ("[ä-ö]", "a", FALSE); */
+  TEST ("ä", "ä", TRUE, TRUE);      /* TEST ("ä", "ä", TRUE); */
+  TEST ("?", "ä", TRUE, TRUE);       /* TEST ("?", "ä", TRUE); */
+  TEST ("*ö", "äö", TRUE, TRUE);   /* TEST ("*ö", "äö", TRUE); */
+  TEST ("*ö", "ääö", TRUE, TRUE); /* TEST ("*ö", "ääö", TRUE); */
+  TEST ("[ä]", "ä", TRUE, TRUE);    /* TEST ("[ä]", "ä", TRUE); */
+  TEST ("[ä-ö]", "é", TRUE, TRUE); /* TEST ("[ä-ö]", "é", TRUE); */
+  TEST ("[ä-ö]", "a", TRUE, FALSE); /* TEST ("[ä-ö]", "a", FALSE); */
 
 #ifdef DO_ESCAPE
   /* Tests of escaping */
-  TEST ("\\\\", "\\", TRUE);
-  TEST ("\\?", "?", TRUE);
-  TEST ("\\?", "a", FALSE);
-  TEST ("\\*", "*", TRUE);
-  TEST ("\\*", "a", FALSE);
-  TEST ("\\[a-b]", "[a-b]", TRUE);
-  TEST ("[\\\\]", "\\", TRUE);
-  TEST ("[\\^a]", "a", TRUE);
-  TEST ("[a\\-c]", "b", FALSE);
-  TEST ("[a\\-c]", "-", TRUE);
-  TEST ("[a\\]", "a", FALSE);
+  TEST ("\\\\", "\\", TRUE, TRUE);
+  TEST ("\\?", "?", TRUE, TRUE);
+  TEST ("\\?", "a", TRUE, FALSE);
+  TEST ("\\*", "*", TRUE, TRUE);
+  TEST ("\\*", "a", TRUE, FALSE);
+  TEST ("\\[a-b]", "[a-b]", TRUE, TRUE);
+  TEST ("[\\\\]", "\\", TRUE, TRUE);
+  TEST ("[\\^a]", "a", TRUE, TRUE);
+  TEST ("[a\\-c]", "b", TRUE, FALSE);
+  TEST ("[a\\-c]", "-", TRUE, TRUE);
+  TEST ("[a\\]", "a", TRUE, FALSE);
 #endif /* DO_ESCAPE */
   
   return 0;

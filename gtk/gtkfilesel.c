@@ -3694,7 +3694,7 @@ find_completion_dir (gchar          *text_to_complete,
       for (i = 0; i < dir->sent->entry_count; i += 1)
 	{
 	  if (dir->sent->entries[i].is_dir &&
-	      _gtk_fnmatch (pat_buf, dir->sent->entries[i].entry_name))
+	      _gtk_fnmatch (pat_buf, dir->sent->entries[i].entry_name, TRUE))
 	    {
 	      if (found)
 		{
@@ -3844,7 +3844,7 @@ attempt_file_completion (CompletionState *cmpl_state)
     {
       if (dir->sent->entries[dir->cmpl_index].is_dir)
 	{
-	  if (_gtk_fnmatch (pat_buf, dir->sent->entries[dir->cmpl_index].entry_name))
+	  if (_gtk_fnmatch (pat_buf, dir->sent->entries[dir->cmpl_index].entry_name, TRUE))
 	    {
 	      CompletionDir* new_dir;
 
@@ -3892,7 +3892,7 @@ attempt_file_completion (CompletionState *cmpl_state)
       append_completion_text (dir->sent->entries[dir->cmpl_index].entry_name, cmpl_state);
 
       cmpl_state->the_completion.is_a_completion =
-	_gtk_fnmatch (pat_buf, dir->sent->entries[dir->cmpl_index].entry_name);
+	_gtk_fnmatch (pat_buf, dir->sent->entries[dir->cmpl_index].entry_name, TRUE);
 
       cmpl_state->the_completion.is_directory = dir->sent->entries[dir->cmpl_index].is_dir;
       if (dir->sent->entries[dir->cmpl_index].is_dir)

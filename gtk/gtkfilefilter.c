@@ -378,7 +378,7 @@ gtk_file_filter_filter (GtkFileFilter           *filter,
 	  break;
 	case FILTER_RULE_PATTERN:
 	  if (filter_info->display_name != NULL &&
-	      _gtk_fnmatch (rule->u.pattern, filter_info->display_name))
+	      _gtk_fnmatch (rule->u.pattern, filter_info->display_name, FALSE))
 	    return TRUE;
 	  break;
 	case FILTER_RULE_CUSTOM:

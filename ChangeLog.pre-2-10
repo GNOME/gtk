@@ -1,3 +1,19 @@
+2004-06-02  Federico Mena Quintero  <federico@ximian.com>
+
+	Fix #138807.
+
+	* gtk/fnmatch.c (_gtk_fnmatch): Take a no_leading_period argument.
+	(gtk_fnmatch_intern): Likewise; also implement this option.
+
+	* gtk/gtkprivate.h (_gtk_fnmatch): Updated prototype.
+
+	* gtk/gtkfilesel.c (find_completion_dir): Pass TRUE for the
+	no_leading_period argument of _gtk_fnmatch().
+	(attempt_file_completion): Likewise.
+
+	* gtk/gtkfilefilter.c (gtk_file_filter_filter): Pass FALSE for the
+	no_leading_period argument of _gtk_fnmatch().
+
 Wed Jun  2 00:47:11 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkselection.c (_gtk_selection_request): Remove leftover
