@@ -1,3 +1,8 @@
+Tue Feb 24 17:51:49 2004  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkaccellabel.c (gtk_accel_label_refetch): Convert
+	underscores in keyval names to spaces. (#131480)
+
 Tue Feb 24 17:35:59 2004  Owen Taylor  <otaylor@redhat.com>
 
 	* m4macros/gtk-2.0.m4: Add some quotes around ***. (#130073,

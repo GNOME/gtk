@@ -503,6 +503,19 @@ gtk_accel_label_get_string (GtkAccelLabel *accel_label)
   return accel_label->accel_string;
 }
 
+/* Underscores in key names are better displayed as spaces
+ * E.g., Page_Up should be "Page Up"
+ */
+static void
+substitute_underscores (char *str)
+{
+  char *p;
+
+  for (p = str; *p; p++)
+    if (*p == '_')
+      *p = ' ';
+}
+
 gboolean
 gtk_accel_label_refetch (GtkAccelLabel *accel_label)
 {
@@ -577,6 +590,7 @@ gtk_accel_label_refetch (GtkAccelLabel *accel_label)
 	      tmp = gtk_accelerator_name (key->accel_key, 0);
 	      if (tmp[0] != 0 && tmp[1] == 0)
 		tmp[0] = g_ascii_toupper (tmp[0]);
+	      substitute_underscores (tmp);
 	      g_string_append (gstring, tmp);
 	      g_free (tmp);
 	    }
