@@ -6515,26 +6515,26 @@ gtk_widget_unref (GtkWidget *widget)
 
 /**
  * gtk_widget_class_install_style_property_parser:
- * @class: a #GtkWidgetClass
+ * @klass: a #GtkWidgetClass
  * @pspec: the #GParamSpec for the style property
  * @parser: the parser for the style property
  * 
  * Installs a style property on a widget class. 
  **/
 void
-gtk_widget_class_install_style_property_parser (GtkWidgetClass     *class,
+gtk_widget_class_install_style_property_parser (GtkWidgetClass     *klass,
 						GParamSpec         *pspec,
 						GtkRcPropertyParser parser)
 {
-  g_return_if_fail (GTK_IS_WIDGET_CLASS (class));
+  g_return_if_fail (GTK_IS_WIDGET_CLASS (klass));
   g_return_if_fail (G_IS_PARAM_SPEC (pspec));
   g_return_if_fail (pspec->flags & G_PARAM_READABLE);
   g_return_if_fail (!(pspec->flags & (G_PARAM_CONSTRUCT_ONLY | G_PARAM_CONSTRUCT)));
   
-  if (g_param_spec_pool_lookup (style_property_spec_pool, pspec->name, G_OBJECT_CLASS_TYPE (class), FALSE))
+  if (g_param_spec_pool_lookup (style_property_spec_pool, pspec->name, G_OBJECT_CLASS_TYPE (klass), FALSE))
     {
       g_warning (G_STRLOC ": class `%s' already contains a style property named `%s'",
-		 G_OBJECT_CLASS_NAME (class),
+		 G_OBJECT_CLASS_NAME (klass),
 		 pspec->name);
       return;
     }
@@ -6542,29 +6542,29 @@ gtk_widget_class_install_style_property_parser (GtkWidgetClass     *class,
   g_param_spec_ref (pspec);
   g_param_spec_sink (pspec);
   g_param_spec_set_qdata (pspec, quark_property_parser, (gpointer) parser);
-  g_param_spec_pool_insert (style_property_spec_pool, pspec, G_OBJECT_CLASS_TYPE (class));
+  g_param_spec_pool_insert (style_property_spec_pool, pspec, G_OBJECT_CLASS_TYPE (klass));
 }
 
 /**
  * gtk_widget_class_install_style_property:
- * @class: a #GtkWidgetClass
+ * @klass: a #GtkWidgetClass
  * @pspec: the #GParamSpec for the property
  * 
  * Installs a style property on a widget class. The parser for the
  * style property is determined by the value type of @pspec.
  **/
 void
-gtk_widget_class_install_style_property (GtkWidgetClass *class,
+gtk_widget_class_install_style_property (GtkWidgetClass *klass,
 					 GParamSpec     *pspec)
 {
   GtkRcPropertyParser parser;
 
-  g_return_if_fail (GTK_IS_WIDGET_CLASS (class));
+  g_return_if_fail (GTK_IS_WIDGET_CLASS (klass));
   g_return_if_fail (G_IS_PARAM_SPEC (pspec));
 
   parser = _gtk_rc_property_parser_from_type (G_PARAM_SPEC_VALUE_TYPE (pspec));
 
-  gtk_widget_class_install_style_property_parser (class, pspec, parser);
+  gtk_widget_class_install_style_property_parser (klass, pspec, parser);
 }
 
 /**

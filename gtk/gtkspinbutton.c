@@ -306,7 +306,9 @@ gtk_spin_button_class_init (GtkSpinButtonClass *class)
 							G_PARAM_READWRITE));  
   
   gtk_widget_class_install_style_property_parser (widget_class,
-						  g_param_spec_enum ("shadow_type", "Shadow Type", NULL,
+						  g_param_spec_enum ("shadow_type", 
+								     "Shadow Type", 
+								     _("Style of bevel around the spin button"),
 								     GTK_TYPE_SHADOW_TYPE,
 								     GTK_SHADOW_IN,
 								     G_PARAM_READABLE),

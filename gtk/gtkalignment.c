@@ -519,7 +519,7 @@ gtk_alignment_size_allocate (GtkWidget     *widget,
 
 /**
  * gtk_alignment_set_padding:
- * @alignment a #GtkAlignment
+ * @alignment: a #GtkAlignment
  * @padding_top: the padding at the top of the widget
  * @padding_bottom: the padding at the bottom of the widget
  * @padding_left: the padding at the left of the widget
@@ -579,7 +579,7 @@ gtk_alignment_set_padding (GtkAlignment    *alignment,
 
 /**
  * gtk_alignment_get_padding:
- * @alignment a #GtkAlignment
+ * @alignment: a #GtkAlignment
  * @padding_top: location to store the padding for the top of the widget, or %NULL
  * @padding_bottom: location to store the padding for the bottom of the widget, or %NULL
  * @padding_left: location to store the padding for the left of the widget, or %NULL

@@ -1,3 +1,13 @@
+2003-06-24  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkspinbutton.c (gtk_spin_button_class_init): Add a blurb for shadow_type.
+
+	* gtk/gtkwidget.c (gtk_widget_class_install_style_property_parser): 
+	(gtk_widget_class_list_style_properties): Use same parameter names as in 
+	header (to silence gtk-doc).
+
+	* gtk/gtkalignment.c (gtk_alignment_[gs]et_padding): Fix doc comments.
+
 Tue Jun 24 20:00:45 BST 2003  Tony Gale <gale@gtk.org>
 
 	* docs/faq/gtk-faq.sgml: Thread support updates
