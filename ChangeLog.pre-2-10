@@ -1,3 +1,8 @@
+Mon Apr  4 14:33:55 2005  Manish Singh  <yosh@gimp.org>
+
+        * gtk/gtkcomboboxentry.c (gtk_combo_box_entry_get_active_text):
+        cast combo->priv->entry to GTK_ENTRY()
+
 Mon Apr  4 12:14:35 2005  Søren Sandmann  <sandmann@redhat.com>
 
 	* gtk/gtkmenu.c (gtk_menu_handle_scrolling): Translate x, y into

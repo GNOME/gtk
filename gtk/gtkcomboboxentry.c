@@ -394,7 +394,7 @@ gtk_combo_box_entry_get_active_text (GtkComboBox *combo_box)
   GtkComboBoxEntry *combo = GTK_COMBO_BOX_ENTRY (combo_box);
 
   if (combo->priv->entry)
-    return g_strdup (gtk_entry_get_text (combo->priv->entry));
+    return g_strdup (gtk_entry_get_text (GTK_ENTRY (combo->priv->entry)));
 
   return NULL;
 }
