@@ -2736,8 +2736,7 @@ real_remove_row (GtkCList *clist,
     gtk_signal_emit (GTK_OBJECT (clist), clist_signals[UNSELECT_ROW],
 		     row, -1, NULL);
 
-  /* reset the row end pointer if we're removing at the
-   * end of the list */
+  /* reset the row end pointer if we're removing at the end of the list */
   clist->rows--;
   if (clist->row_list == list)
     clist->row_list = g_list_next (list);
@@ -6049,7 +6048,8 @@ adjust_adjustments (GtkCList *clist,
       clist->vadjustment->lower = 0;
       clist->vadjustment->upper = LIST_HEIGHT (clist);
 
-      if (clist->clist_window_height - clist->voffset > LIST_HEIGHT (clist))
+      if (clist->clist_window_height - clist->voffset > LIST_HEIGHT (clist) ||
+	  (clist->voffset + (gint)clist->vadjustment->value) != 0)
 	{
 	  clist->vadjustment->value = MAX (0, (LIST_HEIGHT (clist) -
 					       clist->clist_window_height));
@@ -6067,7 +6067,8 @@ adjust_adjustments (GtkCList *clist,
       clist->hadjustment->lower = 0;
       clist->hadjustment->upper = LIST_WIDTH (clist);
 
-      if (clist->clist_window_width - clist->hoffset > LIST_WIDTH (clist))
+      if (clist->clist_window_width - clist->hoffset > LIST_WIDTH (clist) ||
+	  (clist->hoffset + (gint)clist->hadjustment->value) != 0)
 	{
 	  clist->hadjustment->value = MAX (0, (LIST_WIDTH (clist) -
 					       clist->clist_window_width));

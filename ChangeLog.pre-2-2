@@ -1,3 +1,9 @@
+Wed May 12 21:56:40 1999  Lars Hamann  <lars@gtk.org>
+
+	* gtk/gtkclist.c (adjust_adjustments): signal emit value_changed
+	signals if h/voffsets differ from adjustment values.
+	Reportet by Jerome Bolliet <bolliet@in2p3.fr>
+
 Mon May 10 22:20:06 CDT 1999 Shawn T. Amundson <amundson@gtk.org>
 
 	* GTK+ is as easy as 1.2.3...
