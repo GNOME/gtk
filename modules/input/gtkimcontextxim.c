@@ -64,7 +64,7 @@ struct _GtkIMContextXIM
   XIMCallback status_done_callback;
   XIMCallback status_draw_callback;
 
-  XICCallback string_conversion_callback;
+  XIMCallback string_conversion_callback;
 
   XIC ic;
 
@@ -1358,7 +1358,7 @@ set_string_conversion_callback (GtkIMContextXIM *context_xim, XIC xic)
     return;
   
   context_xim->string_conversion_callback.client_data = (XPointer)context_xim;
-  context_xim->string_conversion_callback.callback = (XICProc)string_conversion_callback;
+  context_xim->string_conversion_callback.callback = (XIMProc)string_conversion_callback;
   
   XSetICValues (xic,
 		XNStringConversionCallback,

@@ -1,5 +1,9 @@
 2004-05-04  Matthias Clasen  <mclasen@redhat.com>
 
+	* modules/input/gtkimcontextxim.c: Fix the recent
+	string_conversion_callback change to work on 
+	Solaris.  (#141190, Padraig O'Briain)
+
 	* gtk/gtkselection.c: Disable debug logging again.
 
 2004-05-03  Matthias Clasen  <mclasen@redhat.com>
