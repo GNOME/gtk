@@ -55,77 +55,6 @@
 #define WIDGET_CLASS(w)	 GTK_WIDGET_GET_CLASS (w)
 #define	INIT_PATH_SIZE	(512)
 
-/**
- * GtkWidget::child-notify:
- * @widget: the object which received the signal.
- * @pspec: the #GParamSpec of the changed child property.
- * @user_data: user data set when the signal handler was connected.
- *
- * The ::child-notify signal is emitted for each child property that has 
- * changed on an object. The signal's detail holds the property name. 
- */
-
-/**
- * GtkWidget::drag-data-received:
- * @widget: the object which received the signal.
- * @drag_context: the drag context
- * @x: where the drop happened
- * @y: where the drop happened
- * @data: the received data
- * @info: the info that has been registered with the target in the 
- *        #GtkTargetList.
- * @time: the timestamp at which the data was received
- * @user_data: user data set when the signal handler was connected.
- *
- * The ::drag-data-received signal is emitted on the drop site when the drop 
- * happens and the data has been received. A handler for this signal is 
- * expected to process the received data and then call gtk_drag_finish(), 
- * setting the <literal>success</literal> parameter depending on whether the 
- * data was processed successfully. 
- * 
- * The handler may inspect and modify <literal>context-&gt;action</literal> 
- * before calling gtk_drag_finish(), e.g. to implement %GTK_ACTION_ASK as 
- * shown in the following example:
- * <informalexample><programlisting>
- * void  
- * drag_data_received (GtkWidget          *widget,
- *                     GdkDragContext     *context,
- *                     gint                x,
- *                     gint                y,
- *                     GtkSelectionData   *data,
- *                     guint               info,
- *                     guint               time)
- * {
- *   if ((data->length >= 0) && (data->format == 8))
- *     {
- *       if (context->action == GDK_ACTION_ASK) 
- *         {
- *           GtkWidget *dialog;
- *           gint response;
- *           
- *           dialog = gtk_message_dialog_new (NULL,
- *                                            GTK_DIALOG_MODAL | 
- *                                            GTK_DIALOG_DESTROY_WITH_PARENT,
- *                                            GTK_MESSAGE_INFO,
- *                                            GTK_BUTTONS_YES_NO,
- *                                            "Move the data ?\n");
- *           response = gtk_dialog_run (GTK_DIALOG (dialog));
- *           gtk_widget_destroy (dialog);
- *             
- *           if (response == GTK_RESPONSE_YES)
- *             context->action = GDK_ACTION_MOVE;
- *           else
- *             context->action = GDK_ACTION_COPY;
- *          }
- *          
- *       gtk_drag_finish (context, TRUE, FALSE, time);
- *       return;
- *     }
- *       
- *    gtk_drag_finish (context, FALSE, FALSE, time);
- *  }
- * </programlisting></informalexample>
- */
 
 enum {
   SHOW,
@@ -711,6 +640,16 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		  _gtk_marshal_VOID__BOOLEAN,
 		  G_TYPE_NONE, 1,
 		  G_TYPE_BOOLEAN);
+
+/**
+ * GtkWidget::child-notify:
+ * @widget: the object which received the signal.
+ * @pspec: the #GParamSpec of the changed child property.
+ * @user_data: user data set when the signal handler was connected.
+ *
+ * The ::child-notify signal is emitted for each child property that has 
+ * changed on an object. The signal's detail holds the property name. 
+ */
   widget_signals[CHILD_NOTIFY] =
     g_signal_new ("child_notify",
 		   G_TYPE_FROM_CLASS (gobject_class),
@@ -1056,6 +995,68 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		  GTK_TYPE_SELECTION_DATA | G_SIGNAL_TYPE_STATIC_SCOPE,
 		  G_TYPE_UINT,
 		  G_TYPE_UINT);
+
+/**
+ * GtkWidget::drag-data-received:
+ * @widget: the object which received the signal.
+ * @drag_context: the drag context
+ * @x: where the drop happened
+ * @y: where the drop happened
+ * @data: the received data
+ * @info: the info that has been registered with the target in the 
+ *        #GtkTargetList.
+ * @time: the timestamp at which the data was received
+ * @user_data: user data set when the signal handler was connected.
+ *
+ * The ::drag-data-received signal is emitted on the drop site when the drop 
+ * happens and the data has been received. A handler for this signal is 
+ * expected to process the received data and then call gtk_drag_finish(), 
+ * setting the <literal>success</literal> parameter depending on whether the 
+ * data was processed successfully. 
+ * 
+ * The handler may inspect and modify <literal>context-&gt;action</literal> 
+ * before calling gtk_drag_finish(), e.g. to implement %GTK_ACTION_ASK as 
+ * shown in the following example:
+ * <informalexample><programlisting>
+ * void  
+ * drag_data_received (GtkWidget          *widget,
+ *                     GdkDragContext     *context,
+ *                     gint                x,
+ *                     gint                y,
+ *                     GtkSelectionData   *data,
+ *                     guint               info,
+ *                     guint               time)
+ * {
+ *   if ((data->length >= 0) && (data->format == 8))
+ *     {
+ *       if (context->action == GDK_ACTION_ASK) 
+ *         {
+ *           GtkWidget *dialog;
+ *           gint response;
+ *           
+ *           dialog = gtk_message_dialog_new (NULL,
+ *                                            GTK_DIALOG_MODAL | 
+ *                                            GTK_DIALOG_DESTROY_WITH_PARENT,
+ *                                            GTK_MESSAGE_INFO,
+ *                                            GTK_BUTTONS_YES_NO,
+ *                                            "Move the data ?\n");
+ *           response = gtk_dialog_run (GTK_DIALOG (dialog));
+ *           gtk_widget_destroy (dialog);
+ *             
+ *           if (response == GTK_RESPONSE_YES)
+ *             context->action = GDK_ACTION_MOVE;
+ *           else
+ *             context->action = GDK_ACTION_COPY;
+ *          }
+ *          
+ *       gtk_drag_finish (context, TRUE, FALSE, time);
+ *       return;
+ *     }
+ *       
+ *    gtk_drag_finish (context, FALSE, FALSE, time);
+ *  }
+ * </programlisting></informalexample>
+ */
   widget_signals[DRAG_DATA_RECEIVED] =
     g_signal_new ("drag_data_received",
 		  G_TYPE_FROM_CLASS (gobject_class),

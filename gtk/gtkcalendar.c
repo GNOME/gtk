@@ -433,6 +433,14 @@ gtk_calendar_class_init (GtkCalendarClass *class)
 						     _("The selected day (as a number between 1 and 31, or 0 to unselect the currently selected day)"),
 						     0, 31, 0,
 						     G_PARAM_READWRITE));
+
+/**
+ * GtkCalendar:show-heading:
+ *
+ * Determines whether a heading is displayed.
+ *
+ * Since: 2.4
+ */
   g_object_class_install_property (gobject_class,
                                    PROP_SHOW_HEADING,
                                    g_param_spec_boolean ("show_heading",
@@ -440,6 +448,14 @@ gtk_calendar_class_init (GtkCalendarClass *class)
 							 _("If TRUE, a heading is displayed"),
 							 TRUE,
 							 G_PARAM_READWRITE));
+
+/**
+ * GtkCalendar:show-day-names:
+ *
+ * Determines whether day names are displayed.
+ *
+ * Since: 2.4
+ */
   g_object_class_install_property (gobject_class,
                                    PROP_SHOW_DAY_NAMES,
                                    g_param_spec_boolean ("show_day_names",
@@ -447,6 +463,13 @@ gtk_calendar_class_init (GtkCalendarClass *class)
 							 _("If TRUE, day names are displayed"),
 							 TRUE,
 							 G_PARAM_READWRITE));
+/**
+ * GtkCalendar:no-month-change:
+ *
+ * Determines whether the selected month can be changed.
+ *
+ * Since: 2.4
+ */
   g_object_class_install_property (gobject_class,
                                    PROP_NO_MONTH_CHANGE,
                                    g_param_spec_boolean ("no_month_change",
@@ -454,6 +477,14 @@ gtk_calendar_class_init (GtkCalendarClass *class)
 							 _("If TRUE, the selected month can not be changed"),
 							 FALSE,
 							 G_PARAM_READWRITE));
+
+/**
+ * GtkCalendar:show-week-numbers:
+ *
+ * Determines whether week numbers are displayed.
+ *
+ * Since: 2.4
+ */
   g_object_class_install_property (gobject_class,
                                    PROP_SHOW_WEEK_NUMBERS,
                                    g_param_spec_boolean ("show_week_numbers",
@@ -461,6 +492,14 @@ gtk_calendar_class_init (GtkCalendarClass *class)
 							 _("If TRUE, week numbers are displayed"),
 							 FALSE,
 							 G_PARAM_READWRITE));
+
+/**
+ * GtkCalendar:week-start-monday:
+ *
+ * If this is %TRUE, Monday is displayed as the first day of the week.
+ *
+ * Since: 2.4
+ */
   g_object_class_install_property (gobject_class,
                                    PROP_WEEK_START_MONDAY,
                                    g_param_spec_boolean ("week_start_monday",

@@ -107,7 +107,7 @@ gtk_alignment_class_init (GtkAlignmentClass *class)
 
   widget_class->size_request = gtk_alignment_size_request;
   widget_class->size_allocate = gtk_alignment_size_allocate;
-  
+
   g_object_class_install_property (gobject_class,
                                    PROP_XALIGN,
                                    g_param_spec_float("xalign",
@@ -147,7 +147,13 @@ gtk_alignment_class_init (GtkAlignmentClass *class)
                                                       G_PARAM_READABLE | G_PARAM_WRITABLE));
 
 
-  /* Padding properties: */
+/**
+ * GtkAlignment:top-padding:
+ *
+ * The padding to insert at the top of the widget.
+ *
+ * Since: 2.4
+ */
   g_object_class_install_property (gobject_class,
                                    PROP_PADDING_TOP,
                                    g_param_spec_uint("top_padding",
@@ -158,6 +164,13 @@ gtk_alignment_class_init (GtkAlignmentClass *class)
                                                       0,
                                                       G_PARAM_READABLE | G_PARAM_WRITABLE));
 
+/**
+ * GtkAlignment:top-padding:
+ *
+ * The padding to insert at the bottom of the widget.
+ *
+ * Since: 2.4
+ */
   g_object_class_install_property (gobject_class,
                                    PROP_PADDING_BOTTOM,
                                    g_param_spec_uint("bottom_padding",
@@ -168,6 +181,13 @@ gtk_alignment_class_init (GtkAlignmentClass *class)
                                                       0,
                                                       G_PARAM_READABLE | G_PARAM_WRITABLE));
 
+/**
+ * GtkAlignment:top-padding:
+ *
+ * The padding to insert at the left of the widget.
+ *
+ * Since: 2.4
+ */
   g_object_class_install_property (gobject_class,
                                    PROP_PADDING_LEFT,
                                    g_param_spec_uint("left_padding",
@@ -178,6 +198,13 @@ gtk_alignment_class_init (GtkAlignmentClass *class)
                                                       0,
                                                       G_PARAM_READABLE | G_PARAM_WRITABLE));
 
+/**
+ * GtkAlignment:top-padding:
+ *
+ * The padding to insert at the right of the widget.
+ *
+ * Since: 2.4
+ */
   g_object_class_install_property (gobject_class,
                                    PROP_PADDING_RIGHT,
                                    g_param_spec_uint("right_padding",

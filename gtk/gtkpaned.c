@@ -256,6 +256,14 @@ gtk_paned_class_init (GtkPanedClass *class)
 							     5,
 							     G_PARAM_READABLE));
 
+/**
+ * GtkPaned:resize:
+ *
+ * The "resize" child property determines whether the child expands and 
+ * shrinks along with the paned widget.
+ * 
+ * Since: 2.4 
+ */
   gtk_container_class_install_child_property (container_class,
 					      CHILD_PROP_RESIZE,
 					      g_param_spec_boolean ("resize", 
@@ -264,6 +272,14 @@ gtk_paned_class_init (GtkPanedClass *class)
 								    TRUE,
 								    G_PARAM_READWRITE));
 
+/**
+ * GtkPaned:shrink:
+ *
+ * The "shrink" child property determines whether the child can be made 
+ * smaller than its requisition.
+ * 
+ * Since: 2.4 
+ */
   gtk_container_class_install_child_property (container_class,
 					      CHILD_PROP_SHRINK,
 					      g_param_spec_boolean ("shrink", 

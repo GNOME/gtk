@@ -509,7 +509,16 @@ gtk_notebook_class_init (GtkNotebookClass *class)
 								 _("A GtkPackType indicating whether the child is packed with reference to the start or end of the parent"),
 								 GTK_TYPE_PACK_TYPE, GTK_PACK_START,
 								 G_PARAM_READWRITE));
-  
+
+/**
+ * GtkNotebook:has-secondary-backward-stepper:
+ *
+ * The "has-secondary-backward-stepper" property determines whether 
+ * a second backward arrow button is displayed on the opposite end 
+ * of the tab area.
+ *
+ * Since: 2.4
+ */  
   gtk_widget_class_install_style_property (widget_class,
 					   g_param_spec_boolean ("has_secondary backward_stepper",
 								 _("Secondary backward stepper"),
@@ -518,6 +527,15 @@ gtk_notebook_class_init (GtkNotebookClass *class)
 								 
 								 G_PARAM_READABLE));
 
+/**
+ * GtkNotebook:has-secondary-forward-stepper:
+ *
+ * The "has-secondary-forward-stepper" property determines whether 
+ * a second forward arrow button is displayed on the opposite end 
+ * of the tab area.
+ *
+ * Since: 2.4
+ */  
   gtk_widget_class_install_style_property (widget_class,
 					   g_param_spec_boolean ("has_secondary_forward_stepper",
 								 _("Secondary forward stepper"),
@@ -526,6 +544,14 @@ gtk_notebook_class_init (GtkNotebookClass *class)
 								 
 								 G_PARAM_READABLE));
 
+/**
+ * GtkNotebook:has-backward-stepper:
+ *
+ * The "has-backward-stepper" property determines whether 
+ * the standard backward arrow button is displayed.
+ *
+ * Since: 2.4
+ */  
   gtk_widget_class_install_style_property (widget_class,
 					   g_param_spec_boolean ("has_backward_stepper",
 								 _("Backward stepper"),
@@ -534,6 +560,14 @@ gtk_notebook_class_init (GtkNotebookClass *class)
 								 
                                                                    G_PARAM_READABLE));
 
+/**
+ * GtkNotebook:has-forward-stepper:
+ *
+ * The "has-forward-stepper" property determines whether 
+ * the standard forward arrow button is displayed.
+ *
+ * Since: 2.4
+ */  
   gtk_widget_class_install_style_property (widget_class,
 					   g_param_spec_boolean ("has_forward_stepper",
 								 _("Forward stepper"),
