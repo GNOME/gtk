@@ -1,3 +1,10 @@
+Mon Feb 23 16:52:12 2004  Jonathan Blandford  <jrb@gnome.org>
+
+	* gtk/gtkfilechooserdefault.c
+	(gtk_file_chooser_default_class_init): Seth was confused by
+	keybindings.  They should be Alt, not Ctl.  Also, A-Home should go
+	home, not up.
+
 Mon Feb 23 15:23:23 2004  Jonathan Blandford  <jrb@gnome.org>
 
 	* gtk/gtkpathbar.c (gtk_path_bar_set_path): Display the root a bit

@@ -401,21 +401,21 @@ gtk_file_chooser_default_class_init (GtkFileChooserDefaultClass *class)
 				0);
 
   gtk_binding_entry_add_signal (binding_set,
-				GDK_Up, GDK_CONTROL_MASK,
+				GDK_Up, GDK_MOD1_MASK,
 				"up-folder",
 				0);
   gtk_binding_entry_add_signal (binding_set,
-				GDK_KP_Up, GDK_CONTROL_MASK,
+				GDK_KP_Up, GDK_MOD1_MASK,
 				"up-folder",
 				0);
 
   gtk_binding_entry_add_signal (binding_set,
-				GDK_Home, GDK_CONTROL_MASK,
-				"up-folder",
+				GDK_Home, GDK_MOD1_MASK,
+				"home-folder",
 				0);
   gtk_binding_entry_add_signal (binding_set,
-				GDK_KP_Home, GDK_CONTROL_MASK,
-				"up-folder",
+				GDK_KP_Home, GDK_MOD1_MASK,
+				"home-folder",
 				0);
 
   _gtk_file_chooser_install_properties (gobject_class);
