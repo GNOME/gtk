@@ -105,7 +105,6 @@ struct _GtkFileChooserDefault
   GtkWidget *save_file_name_entry;
   GtkWidget *save_folder_label;
   GtkWidget *save_folder_combo;
-  GtkWidget *save_extra_align;
   GtkWidget *save_expander;
 
   /* The file browsing widgets */
@@ -118,7 +117,6 @@ struct _GtkFileChooserDefault
   GtkWidget *browse_files_popup_menu_hidden_files_item;
   GtkWidget *browse_new_folder_button;
   GtkWidget *browse_path_bar;
-  GtkWidget *browse_extra_align;
 
   GtkFileSystemModel *browse_files_model;
 
@@ -127,6 +125,7 @@ struct _GtkFileChooserDefault
   GtkWidget *preview_box;
   GtkWidget *preview_label;
   GtkWidget *preview_widget;
+  GtkWidget *extra_align;
   GtkWidget *extra_widget;
 
   GtkListStore *shortcuts_model;
@@ -3144,10 +3143,6 @@ save_widgets_create (GtkFileChooserDefault *impl)
 		    0, 0);
   gtk_label_set_mnemonic_widget (GTK_LABEL (impl->save_folder_label), impl->save_folder_combo);
 
-  /* custom widget */
-  impl->save_extra_align = gtk_alignment_new (0.0, 0.5, 1.0, 1.0);
-  gtk_box_pack_start (GTK_BOX (vbox), impl->save_extra_align, FALSE, FALSE, 0);
-
   /* Expander */
   alignment = gtk_alignment_new (0.0, 0.5, 1.0, 1.0);
   gtk_box_pack_start (GTK_BOX (vbox), alignment, FALSE, FALSE, 0);
@@ -3188,10 +3183,6 @@ browse_widgets_create (GtkFileChooserDefault *impl)
 
   g_object_unref (size_group);
 
-  /* Alignment to hold custom widget */
-  impl->browse_extra_align = gtk_alignment_new (0.0, .5, 1.0, 1.0);
-  gtk_box_pack_start (GTK_BOX (vbox), impl->browse_extra_align, FALSE, FALSE, 0);
-
   return vbox;
 }
 
@@ -3224,6 +3215,10 @@ gtk_file_chooser_default_constructor (GType                  type,
   impl->browse_widgets = browse_widgets_create (impl);
   gtk_box_pack_start (GTK_BOX (impl), impl->browse_widgets, TRUE, TRUE, 0);
 
+  /* Alignment to hold extra widget */
+  impl->extra_align = gtk_alignment_new (0.0, 0.5, 1.0, 1.0);
+  gtk_box_pack_start (GTK_BOX (impl), impl->extra_align, FALSE, FALSE, 0);
+
   gtk_widget_pop_composite_child ();
   update_appearance (impl);
 
@@ -3243,9 +3238,19 @@ set_extra_widget (GtkFileChooserDefault *impl,
     }
 
   if (impl->extra_widget)
-    g_object_unref (impl->extra_widget);
+    {
+      gtk_container_remove (GTK_CONTAINER (impl->extra_align), impl->extra_widget);
+      g_object_unref (impl->extra_widget);
+    }
 
   impl->extra_widget = extra_widget;
+  if (impl->extra_widget)
+    {
+      gtk_container_add (GTK_CONTAINER (impl->extra_align), impl->extra_widget);
+      gtk_widget_show (impl->extra_align);
+    }
+  else
+    gtk_widget_hide (impl->extra_align);
 }
 
 static void
@@ -3384,8 +3389,6 @@ set_file_system_backend (GtkFileChooserDefault *impl,
 static void
 update_appearance (GtkFileChooserDefault *impl)
 {
-  GtkWidget *child;
-
   if (impl->action == GTK_FILE_CHOOSER_ACTION_SAVE ||
       impl->action == GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER)
     {
@@ -3446,56 +3449,6 @@ update_appearance (GtkFileChooserDefault *impl)
   else
     gtk_widget_show (impl->browse_new_folder_button);
 
-  if (impl->extra_widget)
-    {
-      GtkWidget *align;
-      GtkWidget *unused_align;
-
-      if (impl->action == GTK_FILE_CHOOSER_ACTION_SAVE
-	  || impl->action == GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER)
-	{
-	  align = impl->save_extra_align;
-	  unused_align = impl->browse_extra_align;
-	}
-      else
-	{
-	  align = impl->browse_extra_align;
-	  unused_align = impl->save_extra_align;
-	}
-
-      /* We own a ref on extra_widget, so it's safe to do this */
-      child = GTK_BIN (unused_align)->child;
-      if (child)
-	gtk_container_remove (GTK_CONTAINER (unused_align), child);
-
-      child = GTK_BIN (align)->child;
-      if (child && child != impl->extra_widget)
-	{
-	  gtk_container_remove (GTK_CONTAINER (align), child);
-	  gtk_container_add (GTK_CONTAINER (align), impl->extra_widget);
-	}
-      else if (child == NULL)
-	{
-	  gtk_container_add (GTK_CONTAINER (align), impl->extra_widget);
-	}
-
-      gtk_widget_show (align);
-      gtk_widget_hide (unused_align);
-    }
-  else
-    {
-      child = GTK_BIN (impl->browse_extra_align)->child;
-      if (child)
-	gtk_container_remove (GTK_CONTAINER (impl->browse_extra_align), child);
-
-      child = GTK_BIN (impl->save_extra_align)->child;
-      if (child)
-	gtk_container_remove (GTK_CONTAINER (impl->save_extra_align), child);
-
-      gtk_widget_hide (impl->save_extra_align);
-      gtk_widget_hide (impl->browse_extra_align);
-    }
-
   g_signal_emit_by_name (impl, "default-size-changed");
 }
 
@@ -3552,7 +3505,6 @@ gtk_file_chooser_default_set_property (GObject      *object,
       break;
     case GTK_FILE_CHOOSER_PROP_EXTRA_WIDGET:
       set_extra_widget (impl, g_value_get_object (value));
-      update_appearance (impl);
       break;
     case GTK_FILE_CHOOSER_PROP_SELECT_MULTIPLE:
       {
@@ -4973,11 +4925,14 @@ gtk_file_chooser_default_initial_focus (GtkFileChooserEmbed *chooser_embed)
   if (impl->action == GTK_FILE_CHOOSER_ACTION_OPEN
       || impl->action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER)
     {
-      GtkTreePath *path;
+      if (impl->load_state == LOAD_FINISHED)
+	{
+	  GtkTreePath *path;
 
-      path = gtk_tree_path_new_from_indices (0, -1);
-      gtk_tree_view_set_cursor (GTK_TREE_VIEW (impl->browse_files_tree_view), path, NULL, FALSE);
-      gtk_tree_path_free (path);
+	  path = gtk_tree_path_new_from_indices (0, -1);
+	  gtk_tree_view_set_cursor (GTK_TREE_VIEW (impl->browse_files_tree_view), path, NULL, FALSE);
+	  gtk_tree_path_free (path);
+	}
 
       widget = impl->browse_files_tree_view;
     }
