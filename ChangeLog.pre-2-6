@@ -1,3 +1,9 @@
+Thu Dec 18 00:07:01 2003  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtktreemodel.h (gtk_tree_path_new_root),
+	(gtk_tree_model_get_iter_root): now deprecated (#106953, reported
+	by Matthias Clasen).
+
 Wed Dec 17 23:50:56 2003  Kristian Rietveld  <kris@gtk.org>
 
 	* gtk/gtkcellrendererpixbuf.c (gtk_cell_renderer_pixbuf_set_property):

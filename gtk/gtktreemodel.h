@@ -123,7 +123,6 @@ GtkTreePath *gtk_tree_path_new_from_string  (const gchar       *path);
 GtkTreePath *gtk_tree_path_new_from_indices (gint               first_index,
 					     ...);
 gchar       *gtk_tree_path_to_string        (GtkTreePath       *path);
-#define gtk_tree_path_new_root() gtk_tree_path_new_first()
 GtkTreePath *gtk_tree_path_new_first        (void);
 void         gtk_tree_path_append_index     (GtkTreePath       *path,
 					     gint               index_);
@@ -145,6 +144,10 @@ gboolean     gtk_tree_path_is_ancestor      (GtkTreePath       *path,
                                              GtkTreePath       *descendant);
 gboolean     gtk_tree_path_is_descendant    (GtkTreePath       *path,
                                              GtkTreePath       *ancestor);
+
+#ifndef GTK_DISABLE_DEPRECATED
+#define gtk_tree_path_new_root() gtk_tree_path_new_first()
+#endif /* !GTK_DISABLE_DEPRECATED */
 
 /* Row reference (an object that tracks model changes so it refers to the same
  * row always; a path refers to a position, not a fixed row).  You almost always
@@ -193,7 +196,6 @@ gboolean          gtk_tree_model_get_iter_from_string (GtkTreeModel *tree_model,
 						       const gchar  *path_string);
 gchar *           gtk_tree_model_get_string_from_iter (GtkTreeModel *tree_model,
                                                        GtkTreeIter  *iter);
-#define gtk_tree_model_get_iter_root(tree_model, iter) gtk_tree_model_get_iter_first(tree_model, iter)
 gboolean          gtk_tree_model_get_iter_first  (GtkTreeModel *tree_model,
 						  GtkTreeIter  *iter);
 GtkTreePath *     gtk_tree_model_get_path        (GtkTreeModel *tree_model,
@@ -234,6 +236,10 @@ void              gtk_tree_model_foreach         (GtkTreeModel            *model
 						  GtkTreeModelForeachFunc  func,
 						  gpointer                 user_data);
 
+
+#ifndef GTK_DISABLE_DEPRECATED
+#define gtk_tree_model_get_iter_root(tree_model, iter) gtk_tree_model_get_iter_first(tree_model, iter)
+#endif /* !GTK_DISABLE_DEPRECATED */
 
 /* Signals */
 void gtk_tree_model_row_changed           (GtkTreeModel *tree_model,
