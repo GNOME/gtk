@@ -188,7 +188,6 @@ gtk_public_h_sources =          \
 	gtkradiotoolbutton.h	\
 	gtkrange.h		\
 	gtkrc.h			\
-	gtkresizegrip.h		\
 	gtkruler.h		\
 	gtkscale.h		\
 	gtkscrollbar.h		\
@@ -380,7 +379,6 @@ gtk_c_sources =                 \
 	gtkrange.c		\
 	gtkrbtree.c 		\
 	gtkrc.c			\
-	gtkresizegrip.c		\
 	gtkruler.c		\
 	gtkscale.c		\
 	gtkscrollbar.c		\
