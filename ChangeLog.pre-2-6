@@ -1,3 +1,32 @@
+2000-11-01  Havoc Pennington  <hp@pobox.com>
+
+	* gtk/gtklabel.c (gtk_label_set_attributes): Set a PangoAttrList
+	on a label
+	(gtk_label_finalize): unref the attr list if any.
+
+	* gtk/testgtk.c (create_get_image): close test on second click
+	(make_message_dialog): close dialog if it exists
+
+	* gdk/gdkpango.c (gdk_draw_layout): Handle rise attribute
+
+	* gdk-2.0.pc.in (Requires): Make it require gdk-pixbuf-2.0 not
+	gdk-pixbuf
+
+	* gtk/gtklabel.c (gtk_label_set_markup): new function to set label
+	from Pango markup format
+	(gtk_label_set_markup_with_accel): ditto but with accelerator
+	parsing
+
+	* gtk/gtkimage.c (gtk_image_expose): reformatting.
+
+	* gdk/gdkpixbuf-drawable.c (gdk_pixbuf_get_from_drawable): Hack to
+	reflect current state of GDK - use gdk_drawable_get_colormap, etc.
+	Check GDK_IS_WINDOW() not !GDK_IS_PIXMAP() to decide whether to 
+	call gdk_window_get_origin().
+
+	* gdk/gdkpixbuf-render.c (gdk_pixbuf_render_to_drawable_alpha):
+	implement GDK_PIXBUF_ALPHA_FULL
+	
 Wed Nov  1 03:43:42 2000  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtksignal.c (gtk_signal_compat_matched): make use of

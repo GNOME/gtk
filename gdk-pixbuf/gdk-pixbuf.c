@@ -203,6 +203,60 @@ gdk_pixbuf_copy (const GdkPixbuf *pixbuf)
 					 NULL);
 }
 
+/**
+ * gdk_pixbuf_new_subpixbuf:
+ * @src_pixbuf: a #GdkPixbuf
+ * @src_x: X coord in @src_pixbuf
+ * @src_y: Y coord in @src_pixbuf
+ * @width: width of region in @src_pixbuf
+ * @height: height of region in @src_pixbuf
+ * 
+ * Creates a new pixbuf which represents a sub-region of
+ * @src_pixbuf. The new pixbuf shares its pixels with the
+ * original pixbuf, so writing to one affects both.
+ * The new pixbuf holds a reference to @src_pixbuf, so
+ * @src_pixbuf will not be finalized until the new pixbuf
+ * is finalized.
+ * 
+ * Return value: a new pixbuf 
+ **/
+GdkPixbuf*
+gdk_pixbuf_new_subpixbuf (GdkPixbuf *src_pixbuf,
+                          int        src_x,
+                          int        src_y,
+                          int        width,
+                          int        height)
+{
+        guchar *pixels;
+        GdkPixbuf *sub;
+
+        g_return_val_if_fail (GDK_IS_PIXBUF (src_pixbuf), NULL);
+        g_return_val_if_fail (src_x >= 0 && src_x + width <= src_pixbuf->width, NULL);
+        g_return_val_if_fail (src_y >= 0 && src_y + height <= src_pixbuf->height, NULL);
+
+        pixels = (gdk_pixbuf_get_pixels (src_pixbuf)
+                  + src_y * src_pixbuf->rowstride
+                  + src_x * src_pixbuf->n_channels);
+
+        sub = gdk_pixbuf_new_from_data (pixels,
+                                        src_pixbuf->colorspace,
+                                        src_pixbuf->has_alpha,
+                                        src_pixbuf->bits_per_sample,
+                                        width, height,
+                                        src_pixbuf->rowstride,
+                                        NULL, NULL);
+
+        /* Keep a reference to src_pixbuf */
+        g_object_ref (G_OBJECT (src_pixbuf));
+  
+        g_object_set_qdata_full (G_OBJECT (sub),
+                                 g_quark_from_static_string ("gdk-pixbuf-subpixbuf-src"),
+                                 src_pixbuf,
+                                 (GDestroyNotify) g_object_unref);
+
+        return sub;
+}
+
 
 
 /* Accessors */

@@ -1,3 +1,7 @@
+2000-11-01  Havoc Pennington  <hp@pobox.com>
+
+	* gtk/gtk-sections.txt: Add new label functions
+
 Sun Oct 29 02:59:50 2000  Owen Taylor  <otaylor@redhat.com>
 
 	* **: Updates to new gtk-doc, gsignal, causing quite

@@ -246,6 +246,11 @@ gdk_pixbuf_render_to_drawable (GdkPixbuf   *pixbuf,
  * the alpha channel of the image.  If performance is crucial, consider handling
  * the alpha channel yourself (possibly by caching it in your application) and
  * using gdk_pixbuf_render_to_drawable() or GdkRGB directly instead.
+ *
+ * The #GDK_PIXBUF_ALPHA_FULL mode involves round trips to the X
+ * server, and may also be somewhat slow in its current implementation
+ * (though in the future it could be made significantly faster, in
+ * principle).
  **/
 void
 gdk_pixbuf_render_to_drawable_alpha (GdkPixbuf   *pixbuf,
@@ -260,7 +265,8 @@ gdk_pixbuf_render_to_drawable_alpha (GdkPixbuf   *pixbuf,
 {
   GdkBitmap *bitmap = NULL;
   GdkGC *gc;
-
+  GdkPixbuf *composited = NULL;
+  
   g_return_if_fail (pixbuf != NULL);
   g_return_if_fail (pixbuf->colorspace == GDK_COLORSPACE_RGB);
   g_return_if_fail (pixbuf->n_channels == 3 || pixbuf->n_channels == 4);
@@ -278,30 +284,75 @@ gdk_pixbuf_render_to_drawable_alpha (GdkPixbuf   *pixbuf,
 
   if (pixbuf->has_alpha)
     {
-      /* Right now we only support GDK_PIXBUF_ALPHA_BILEVEL, so we
-       * unconditionally create the clipping mask.
-       */
+      if (alpha_mode == GDK_PIXBUF_ALPHA_BILEVEL)
+        {
+          bitmap = gdk_pixmap_new (NULL, width, height, 1);
+          gdk_pixbuf_render_threshold_alpha (pixbuf, bitmap,
+                                             src_x, src_y,
+                                             0, 0,
+                                             width, height,
+                                             alpha_threshold);
+          
+          gdk_gc_set_clip_mask (gc, bitmap);
+          gdk_gc_set_clip_origin (gc, dest_x, dest_y);
+        }
+      else if (alpha_mode == GDK_PIXBUF_ALPHA_FULL)
+        {
+          GdkPixbuf *sub = NULL;
+          
+          composited = gdk_pixbuf_get_from_drawable (NULL,
+                                                     drawable,
+                                                     NULL,
+                                                     dest_x, dest_y,
+                                                     0, 0,
+                                                     width, height);
 
-      bitmap = gdk_pixmap_new (NULL, width, height, 1);
-      gdk_pixbuf_render_threshold_alpha (pixbuf, bitmap,
-					 src_x, src_y,
-					 0, 0,
-					 width, height,
-					 alpha_threshold);
+          if (src_x != 0 || src_y != 0)
+            {
+              sub = gdk_pixbuf_new_subpixbuf (pixbuf, src_x, src_y,
+                                              width, height);
+            }
+          
+          gdk_pixbuf_composite (sub ? sub : pixbuf,
+                                composited,
+                                0, 0,
+                                width, height,
+                                0, 0,
+                                1.0, 1.0,
+                                GDK_INTERP_BILINEAR,
+                                255);
 
-      gdk_gc_set_clip_mask (gc, bitmap);
-      gdk_gc_set_clip_origin (gc, dest_x, dest_y);
+          if (sub)
+            g_object_unref (G_OBJECT (sub));
+        }
     }
 
-  gdk_pixbuf_render_to_drawable (pixbuf, drawable, gc,
-				 src_x, src_y,
-				 dest_x, dest_y,
-				 width, height,
-				 dither,
-				 x_dither, y_dither);
+  if (composited)
+    {
+      gdk_pixbuf_render_to_drawable (composited,
+                                     drawable, gc,
+                                     0, 0,
+                                     dest_x, dest_y,
+                                     width, height,
+                                     dither,
+                                     x_dither, y_dither);
+    }
+  else
+    {
+      gdk_pixbuf_render_to_drawable (pixbuf,
+                                     drawable, gc,
+                                     src_x, src_y,
+                                     dest_x, dest_y,
+                                     width, height,
+                                     dither,
+                                     x_dither, y_dither);
+    }
 
   if (bitmap)
     gdk_bitmap_unref (bitmap);
+
+  if (composited)
+    g_object_unref (G_OBJECT (composited));
 
   gdk_gc_unref (gc);
 }

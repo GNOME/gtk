@@ -1902,7 +1902,9 @@ create_get_image (void)
 {
   static GtkWidget *window = NULL;
 
-  if (!window)
+  if (window)
+    gtk_widget_destroy (window);
+  else
     {
       GtkWidget *sw;
       GtkWidget *src;
@@ -2085,6 +2087,28 @@ void create_labels (void)
       gtk_label_set_pattern (GTK_LABEL (label), "_________________________ _ _________ _ _____ _ __ __  ___ ____ _____");
       gtk_container_add (GTK_CONTAINER (frame), label);
       gtk_box_pack_start (GTK_BOX (vbox), frame, FALSE, FALSE, 0);
+
+      frame = gtk_frame_new ("Markup label");
+      label = gtk_label_new (NULL);
+
+      gtk_label_set_markup (GTK_LABEL (label),
+                            "This <span foreground=\"blue\" background=\"orange\">label</span> has "
+                            "<b>markup</b> such as "
+                            "<big><i>Big Italics</i></big>\n"
+                            "<tt>Monospace font</tt>\n"
+                            "<u>Underline!</u>\n"
+                            "foo\n"
+                            "<span foreground=\"green\" background=\"red\">Ugly colors</span>\n"
+                            "and nothing on this line,\n"
+                            "or this.\n"
+                            "or this either\n"
+                            "or even on this one\n"
+                            "la <big>la <big>la <big>la <big>la</big></big></big></big>\n"
+                            "but this word is <span foreground=\"purple\"><big>purple</big></span>\n"
+                            "We like <sup>superscript</sup> and <sub>subscript</sub> too");
+      gtk_container_add (GTK_CONTAINER (frame), label);
+      gtk_box_pack_start (GTK_BOX (vbox), frame, FALSE, FALSE, 0);
+      
     }
   if (!GTK_WIDGET_VISIBLE (window))
     gtk_widget_show_all (window);
@@ -3031,8 +3055,7 @@ make_message_dialog (GtkWidget **dialog,
 {
   if (*dialog)
     {
-      if (GTK_WIDGET_REALIZED (*dialog))
-        gdk_window_show ((*dialog)->window);
+      gtk_widget_destroy (*dialog);
 
       return;
     }

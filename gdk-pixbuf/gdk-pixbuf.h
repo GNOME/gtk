@@ -116,6 +116,13 @@ GdkPixbuf *gdk_pixbuf_new (GdkColorspace colorspace, gboolean has_alpha, int bit
 
 GdkPixbuf *gdk_pixbuf_copy (const GdkPixbuf *pixbuf);
 
+/* Create a pixbuf which points to the pixels of another pixbuf */
+GdkPixbuf *gdk_pixbuf_new_subpixbuf (GdkPixbuf *src_pixbuf,
+                                     int        src_x,
+                                     int        src_y,
+                                     int        width,
+                                     int        height);
+
 /* Simple loading */
 
 GdkPixbuf *gdk_pixbuf_new_from_file (const char *filename,

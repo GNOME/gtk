@@ -180,8 +180,9 @@ gtk_label_init (GtkLabel *label)
 
   label->jtype = GTK_JUSTIFY_CENTER;
   label->wrap = FALSE;
-
+  
   label->layout = NULL;
+  label->attrs = NULL;
   
   gtk_label_set_text (label, "");
 }
@@ -204,10 +205,13 @@ gtk_label_set_text_internal (GtkLabel *label,
 			     gchar    *str)
 {
   g_free (label->label);
-
+  
   label->label = str;
   if (label->layout)
-    pango_layout_set_text (label->layout, str, -1);
+    {
+      g_object_unref (G_OBJECT (label->layout));
+      label->layout = NULL;
+    }
   
   gtk_widget_queue_resize (GTK_WIDGET (label));
 }
@@ -217,8 +221,111 @@ gtk_label_set_text (GtkLabel    *label,
 		    const gchar *str)
 {
   g_return_if_fail (GTK_IS_LABEL (label));
-
+  
   gtk_label_set_text_internal (label, g_strdup (str ? str : ""));
+}
+
+/**
+ * gtk_label_set_attributes:
+ * @label: a #GtkLabel
+ * @attrs: a #PangoAttrList
+ * 
+ * Sets a #PangoAttrList; the attributes in the list are applied to the
+ * label text.
+ **/
+void
+gtk_label_set_attributes (GtkLabel         *label,
+                          PangoAttrList    *attrs)
+{
+  g_return_if_fail (GTK_IS_LABEL (label));
+
+  if (attrs)
+    pango_attr_list_ref (attrs);
+  
+  if (label->attrs)
+    pango_attr_list_unref (label->attrs);
+
+  label->attrs = attrs;
+}
+
+static guint
+set_markup (GtkLabel    *label,
+            const gchar *str,
+            gboolean     with_uline)
+{
+  gchar *text = NULL;
+  GError *error = NULL;
+  PangoAttrList *attrs = NULL;
+  gunichar accel_char = 0;
+
+  if (str == NULL)
+    str = "";
+  
+  if (!pango_parse_markup (str,
+                           -1,
+                           with_uline ? '_' : 0,
+                           &attrs,
+                           &text,
+                           with_uline ? &accel_char : NULL,
+                           &error))
+    {
+      g_warning ("Failed to set label from markup due to error parsing markup: %s",
+                 error->message);
+      g_error_free (error);
+      return 0;
+    }
+
+  if (text)
+    gtk_label_set_text (label, text);
+
+  if (attrs)
+    {
+      gtk_label_set_attributes (label, attrs);
+      pango_attr_list_unref (attrs);
+    }
+
+  if (accel_char != 0)
+    return gdk_keyval_to_lower (accel_char);
+  else
+    return GDK_VoidSymbol;
+}
+
+/**
+ * gtk_label_set_markup:
+ * @label: a #GtkLabel
+ * @str: a markup string (see <link linkend="PangoMarkupFormat">Pango markup format</link>)
+ * 
+ * Parses @str which is marked up with the Pango text markup language,
+ * setting the label's text and attribute list based on the parse results.
+ **/
+void
+gtk_label_set_markup (GtkLabel    *label,
+                      const gchar *str)
+{  
+  g_return_if_fail (GTK_IS_LABEL (label));
+
+  set_markup (label, str, FALSE);
+}
+
+/**
+ * gtk_label_set_markup:
+ * @label: a #GtkLabel
+ * @str: a markup string (see <link linkend="PangoMarkupFormat">Pango markup format</link>)
+ * 
+ * Parses @str which is marked up with the Pango text markup language,
+ * setting the label's text and attribute list based on the parse results.
+ * If characters in @str are preceded by an underscore, they are underlined
+ * indicating that they represent a keyboard accelerator, and the GDK
+ * keyval for the first underlined accelerator is returned. If there are
+ * no underlines in the text, GDK_VoidSymbol will be returned.
+ **/
+guint
+gtk_label_set_markup_with_accel (GtkLabel    *label,
+                                 const gchar *str)
+{
+  g_return_if_fail (GTK_IS_LABEL (label));
+
+  return set_markup (label, str, TRUE);
 }
 
 /**
@@ -315,14 +422,16 @@ gtk_label_finalize (GObject *object)
   if (label->layout)
     g_object_unref (G_OBJECT (label->layout));
 
+  if (label->attrs)
+    pango_attr_list_unref (label->attrs);
+  
   G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
-static PangoAttrList *
-gtk_label_pattern_to_attrs (GtkLabel *label)
+static void
+gtk_label_pattern_to_attrs (GtkLabel      *label,
+                            PangoAttrList *attrs)
 {
-  PangoAttrList *attrs = pango_attr_list_new ();
-
   if (label->pattern)
     {
       const char *start;
@@ -355,8 +464,6 @@ gtk_label_pattern_to_attrs (GtkLabel *label)
 	    break;
 	}
     }
-
-  return attrs;
 }
 
 static void
@@ -398,13 +505,24 @@ gtk_label_size_request (GtkWidget      *widget,
   if (!label->layout)
     {
       PangoAlignment align = PANGO_ALIGN_LEFT; /* Quiet gcc */
-      PangoAttrList *attrs = gtk_label_pattern_to_attrs (label);
+      PangoAttrList *attrs = NULL;
 
       label->layout = gtk_widget_create_pango_layout (widget, label->label);
 
-      pango_layout_set_attributes (label->layout, attrs);
+      /* FIXME move to a model where the pattern isn't stored
+       * permanently, and just modifes or creates the AttrList
+       */
+      if (label->attrs)
+        {
+          attrs = pango_attr_list_copy (label->attrs);
+          pango_layout_set_attributes (label->layout, attrs);
+        }
+      else
+        attrs = pango_attr_list_new ();
+      
+      gtk_label_pattern_to_attrs (label, attrs);
       pango_attr_list_unref (attrs);
-
+      
       switch (label->jtype)
 	{
 	case GTK_JUSTIFY_LEFT:

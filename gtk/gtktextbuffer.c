@@ -388,6 +388,7 @@ gtk_text_buffer_set_text (GtkTextBuffer *buffer,
  */
 
 static void
+
 gtk_text_buffer_real_insert_text (GtkTextBuffer *buffer,
                                   GtkTextIter *iter,
                                   const gchar *text,
@@ -556,11 +557,11 @@ gtk_text_buffer_insert_interactive_at_cursor (GtkTextBuffer *buffer,
  * Copies text, tags, and pixbufs between @start and @end (the order
  * of @start and @end doesn't matter) and inserts the copy at @iter.
  * Used instead of simply getting/inserting text because it preserves
- * images and tags. If @start and @end are in a different buffer
- * from @buffer, the two buffers must share the same tag table.
+ * images and tags. If @start and @end are in a different buffer from
+ * @buffer, the two buffers must share the same tag table.
  *
- * Implemented via multiple emissions of the insert_text and
- * apply_tag signals, so expect those.
+ * Implemented via emissions of the insert_text and apply_tag signals,
+ * so expect those.
  **/
 void
 gtk_text_buffer_insert_range (GtkTextBuffer     *buffer,

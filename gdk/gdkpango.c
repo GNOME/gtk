@@ -33,6 +33,7 @@ struct _GdkPangoContextInfo
 
 static void gdk_pango_get_item_properties (PangoItem      *item,
 					   PangoUnderline *uline,
+                                           gint           *rise,
 					   PangoAttrColor *fg_color,
 					   gboolean       *fg_set,
 					   PangoAttrColor *bg_color,
@@ -133,7 +134,6 @@ gdk_pango_context_set_colormap (PangoContext *context,
     }
 }
 
-
 /**
  * gdk_draw_layout_line:
  * @drawable:  the drawable on which to draw the line
@@ -157,7 +157,8 @@ gdk_draw_layout_line (GdkDrawable      *drawable,
   PangoRectangle ink_rect;
   PangoContext *context;
   gint x_off = 0;
-
+  gint rise = 0;
+  
   g_return_if_fail (drawable != NULL);
   g_return_if_fail (gc != NULL);
   g_return_if_fail (line != NULL);
@@ -173,12 +174,21 @@ gdk_draw_layout_line (GdkDrawable      *drawable,
       PangoAttrColor fg_color, bg_color;
       gboolean fg_set, bg_set, shape_set;
       GdkGC *fg_gc;
+      gint risen_y;
       
       tmp_list = tmp_list->next;
-
-      gdk_pango_get_item_properties (run->item, &uline, &fg_color, &fg_set, &bg_color, &bg_set, &shape_set, &ink_rect,
+      
+      gdk_pango_get_item_properties (run->item, &uline,
+                                     &rise,
+                                     &fg_color, &fg_set,
+                                     &bg_color, &bg_set,
+                                     &shape_set,
+                                     &ink_rect,
 				     &logical_rect);
 
+      /* we subtract the rise because X coordinates are upside down */
+      risen_y = y - rise / PANGO_SCALE;
+      
       if (!shape_set)
 	{
 	  if (uline == PANGO_UNDERLINE_NONE)
@@ -195,7 +205,7 @@ gdk_draw_layout_line (GdkDrawable      *drawable,
 
 	  gdk_draw_rectangle (drawable, bg_gc, TRUE,
 			      x + (x_off + logical_rect.x) / PANGO_SCALE,
-			      y + overall_rect.y / PANGO_SCALE,
+			      risen_y + overall_rect.y / PANGO_SCALE,
 			      logical_rect.width / PANGO_SCALE,
 			      overall_rect.height / PANGO_SCALE);
 
@@ -209,7 +219,9 @@ gdk_draw_layout_line (GdkDrawable      *drawable,
 
       if (!shape_set)
 	gdk_draw_glyphs (drawable, fg_gc, run->item->analysis.font,
-			 x + x_off / PANGO_SCALE, y, run->glyphs);
+			 x + x_off / PANGO_SCALE,
+                         risen_y,
+                         run->glyphs);
 
       switch (uline)
 	{
@@ -217,18 +229,22 @@ gdk_draw_layout_line (GdkDrawable      *drawable,
 	  break;
 	case PANGO_UNDERLINE_DOUBLE:
 	  gdk_draw_line (drawable, fg_gc,
-			 x + (x_off + ink_rect.x) / PANGO_SCALE - 1, y + 4,
+			 x + (x_off + ink_rect.x) / PANGO_SCALE - 1,
+                         risen_y + 4,
 			 x + (x_off + ink_rect.x + ink_rect.width) / PANGO_SCALE, y + 4);
 	  /* Fall through */
 	case PANGO_UNDERLINE_SINGLE:
 	  gdk_draw_line (drawable, fg_gc,
-			 x + (x_off + ink_rect.x) / PANGO_SCALE - 1, y + 2,
+			 x + (x_off + ink_rect.x) / PANGO_SCALE - 1,
+                         risen_y + 2,
 			 x + (x_off + ink_rect.x + ink_rect.width) / PANGO_SCALE, y + 2);
 	  break;
 	case PANGO_UNDERLINE_LOW:
 	  gdk_draw_line (drawable, fg_gc,
-			 x + (x_off + ink_rect.x) / PANGO_SCALE - 1, y + (ink_rect.y + ink_rect.height) / PANGO_SCALE + 2,
-			 x + (x_off + ink_rect.x + ink_rect.width) / PANGO_SCALE, y + (ink_rect.y + ink_rect.height) / PANGO_SCALE + 2);
+			 x + (x_off + ink_rect.x) / PANGO_SCALE - 1,
+                         risen_y + (ink_rect.y + ink_rect.height) / PANGO_SCALE + 2,
+			 x + (x_off + ink_rect.x + ink_rect.width) / PANGO_SCALE,
+                         risen_y + (ink_rect.y + ink_rect.height) / PANGO_SCALE + 2);
 	  break;
 	}
 
@@ -328,6 +344,7 @@ gdk_draw_layout (GdkDrawable     *drawable,
 static void
 gdk_pango_get_item_properties (PangoItem      *item,
 			       PangoUnderline *uline,
+                               gint           *rise,
 			       PangoAttrColor *fg_color,
 			       gboolean       *fg_set,
 			       PangoAttrColor *bg_color,
@@ -346,6 +363,9 @@ gdk_pango_get_item_properties (PangoItem      *item,
 
   if (shape_set)
     *shape_set = FALSE;
+
+  if (rise)
+    *rise = 0;
   
   while (tmp_list)
     {
@@ -382,7 +402,12 @@ gdk_pango_get_item_properties (PangoItem      *item,
 	  if (ink_rect)
 	    *ink_rect = ((PangoAttrShape *)attr)->ink_rect;
 	  break;
-	  
+
+        case PANGO_ATTR_RISE:
+          if (rise)
+            *rise = ((PangoAttrInt *)attr)->value;
+          break;
+          
 	default:
 	  break;
 	}

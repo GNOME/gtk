@@ -1195,14 +1195,12 @@ gdk_pixbuf_get_from_drawable (GdkPixbuf   *dest,
   int src_width, src_height;
   GdkImage *image;
   int rowstride, bpp, alpha;
-
+  
   /* General sanity checks */
 
   g_return_val_if_fail (src != NULL, NULL);
 
-  if (GDK_IS_PIXMAP (src))
-    g_return_val_if_fail (cmap != NULL, NULL);
-  else
+  if (GDK_IS_WINDOW (src))
     /* FIXME: this is not perfect, since is_viewable() only tests
      * recursively up the Gdk parent window tree, but stops at
      * foreign windows or Gdk toplevels.  I.e. if a window manager
@@ -1219,6 +1217,17 @@ gdk_pixbuf_get_from_drawable (GdkPixbuf   *dest,
       g_return_val_if_fail (dest->bits_per_sample == 8, NULL);
     }
 
+  if (cmap == NULL)
+    cmap = gdk_drawable_get_colormap (src);
+
+  if (cmap == NULL)
+    {
+      g_warning ("%s: Source drawable has no colormap; either pass "
+                 "in a colormap, or set the colormap on the drawable "
+                 "with gdk_drawable_set_colormap()", G_STRLOC);
+      return NULL;
+    }
+  
   /* Coordinate sanity checks */
 
   gdk_drawable_get_size (src, &src_width, &src_height);
@@ -1233,7 +1242,7 @@ gdk_pixbuf_get_from_drawable (GdkPixbuf   *dest,
       g_return_val_if_fail (dest_y + height <= dest->height, NULL);
     }
 
-  if (!GDK_IS_PIXMAP (src))
+  if (GDK_IS_WINDOW (src))
     {
       int ret;
       int src_xorigin, src_yorigin;
@@ -1268,10 +1277,6 @@ gdk_pixbuf_get_from_drawable (GdkPixbuf   *dest,
 	  return NULL;
 	}
     }
-
-  /* Get the colormap if needed */
-  if (!GDK_IS_PIXMAP (src))
-    cmap = gdk_window_get_colormap (src);
 
   alpha = dest->has_alpha;
   rowstride = dest->rowstride;

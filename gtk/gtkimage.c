@@ -520,9 +520,8 @@ gtk_image_expose (GtkWidget      *widget,
                                                        image->data.stock.stock_id,
                                                        image->data.stock.size,
                                                        NULL);
-
           if (stock_pixbuf)
-            {
+            {              
               image_bound.width = gdk_pixbuf_get_width (stock_pixbuf);
               image_bound.height = gdk_pixbuf_get_height (stock_pixbuf);
             }
@@ -583,8 +582,10 @@ gtk_image_expose (GtkWidget      *widget,
             case GTK_IMAGE_PIXBUF:
               gdk_pixbuf_render_to_drawable_alpha (image->data.pixbuf.pixbuf,
                                                    widget->window,
-                                                   image_bound.x - x, image_bound.y - y,
-                                                   image_bound.x, image_bound.y,
+                                                   image_bound.x - x,
+                                                   image_bound.y - y,
+                                                   image_bound.x,
+                                                   image_bound.y,
                                                    image_bound.width, image_bound.height,
                                                    GDK_PIXBUF_ALPHA_FULL,
                                                    128,
@@ -598,8 +599,10 @@ gtk_image_expose (GtkWidget      *widget,
                 {
                   gdk_pixbuf_render_to_drawable_alpha (stock_pixbuf,
                                                        widget->window,
-                                                       image_bound.x - x, image_bound.y - y,
-                                                       image_bound.x, image_bound.y,
+                                                       image_bound.x - x,
+                                                       image_bound.y - y,
+                                                       image_bound.x - 4,
+                                                       image_bound.y - 4,
                                                        image_bound.width, image_bound.height,
                                                        GDK_PIXBUF_ALPHA_FULL,
                                                        128,

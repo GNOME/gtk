@@ -1102,13 +1102,16 @@ GTK_ITEM_FACTORY_GET_CLASS
 GtkLabel
 GtkLabelWord
 gtk_label_new
-gtk_label_set
+gtk_label_set_text
+gtk_label_set_attributes
+gtk_label_set_markup
+gtk_label_set_markup_with_accel
 gtk_label_set_pattern
 gtk_label_set_justify
 gtk_label_get
 gtk_label_parse_uline
 gtk_label_set_line_wrap
-gtk_label_set_text
+gtk_label_set
 <SUBSECTION Standard>
 GTK_LABEL
 GTK_IS_LABEL

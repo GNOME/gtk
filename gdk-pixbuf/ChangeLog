@@ -1,3 +1,8 @@
+2000-11-01  Havoc Pennington  <hp@pobox.com>
+
+	* gdk-pixbuf.c (gdk_pixbuf_new_subpixbuf): New function to create 
+	a pixbuf pointing to a subregion of another pixbuf.
+
 2000-10-16  Tor Lillqvist  <tml@iki.fi>
 
 	* gdk-pixbuf-io.c: Define also m_save (for the non-gmodule case).
