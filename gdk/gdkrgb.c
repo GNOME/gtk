@@ -649,7 +649,13 @@ gdk_rgb_xpixel_from_rgb (guint32 rgb)
 {
   gulong pixel;
 
-  if (image_info->visual->type == GDK_VISUAL_PSEUDO_COLOR)
+  if (image_info->bitmap)
+    {
+      return ((rgb & 0xff0000) >> 16) +
+	((rgb & 0xff00) >> 7) +
+	(rgb & 0xff) > 510;
+    }
+  else if (image_info->visual->type == GDK_VISUAL_PSEUDO_COLOR)
     pixel = colorcube[((rgb & 0xf00000) >> 12) |
 		     ((rgb & 0xf000) >> 8) |
 		     ((rgb & 0xf0) >> 4)];
@@ -660,7 +666,8 @@ gdk_rgb_xpixel_from_rgb (guint32 rgb)
 			 ((rgb & 0x8000) >> 12) |
 			 ((rgb & 0x80) >> 7)];
     }
-  else
+  else if (image_info->visual->type == GDK_VISUAL_TRUE_COLOR ||
+	   image_info->visual->type == GDK_VISUAL_DIRECT_COLOR)
     {
 #ifdef VERBOSE
       g_print ("shift, prec: r %d %d g %d %d b %d %d\n",
@@ -681,6 +688,15 @@ gdk_rgb_xpixel_from_rgb (guint32 rgb)
 	       (((rgb & 0xff) >>
 		 (8 - image_info->visual->blue_prec)) <<
 		image_info->visual->blue_shift));
+    }
+  else if (image_info->visual->type == GDK_VISUAL_STATIC_GRAY ||
+	   image_info->visual->type == GDK_VISUAL_GRAYSCALE)
+    {
+      int gray = ((rgb & 0xff0000) >> 16) +
+	((rgb & 0xff00) >> 7) +
+	(rgb & 0xff);
+
+      return gray >> (10 - image_info->visual->depth);
     }
 
   return pixel;
@@ -2266,6 +2282,14 @@ gdk_rgb_convert_gray4_pack (GdkImage *image,
 	  obptr[0] = (pix0 << 4) | pix1;
 	  obptr++;
 	}
+      if (width & 1)
+	{
+	  r = *bp2++;
+	  g = *bp2++;
+	  b = *bp2++;
+	  pix0 = (g + ((b + r) >> 1)) >> shift;
+	  obptr[0] = (pix0 << 4);
+	}
       bptr += rowstride;
       obuf += bpl;
     }
@@ -2355,6 +2379,16 @@ gdk_rgb_convert_gray4_d_pack (GdkImage *image,
 	  pix1 = (gray - (gray >> prec)) >> right;
 	  obptr[0] = (pix0 << 4) | pix1;
 	  obptr++;
+	}
+      if (width & 1)
+	{
+	  r = *bp2++;
+	  g = *bp2++;
+	  b = *bp2++;
+	  gray = (g + ((b + r) >> 1)) >> 1;
+	  gray += (dmp[(x_align + x + 1) & (DM_WIDTH - 1)] << 2) >> prec;
+	  pix0 = (gray - (gray >> prec)) >> right;
+	  obptr[0] = (pix0 << 4);
 	}
       bptr += rowstride;
       obuf += bpl;

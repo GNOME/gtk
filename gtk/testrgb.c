@@ -137,11 +137,59 @@ testrgb_rgb_test (GtkWidget *drawing_area)
       buf[x * 3 + 1] = cindex & 2 ? 0 : 255;
       buf[x * 3 + 2] = cindex & 1 ? 0 : 255;
     }
-  for (y = 1; y < (HEIGHT * 3) / 4; y++)
+  for (y = 1; y < (HEIGHT * 19) / 32; y++)
     {
       memcpy (buf + y * WIDTH * 3, buf, WIDTH * 3);
     }
-  for (; y < (HEIGHT * 13) / 16; y++)
+  for (; y < (HEIGHT * 20) / 32; y++)
+    {
+      for (x = 0; x < WIDTH; x++)
+	{
+	  guchar gray;
+
+	  gray = (x * 255) / (WIDTH - 1);
+	  buf[y * WIDTH * 3 + x * 3] = gray;
+	  buf[y * WIDTH * 3 + x * 3 + 1] = 0;
+	  buf[y * WIDTH * 3 + x * 3 + 2] = 0;
+	}
+    }
+  for (; y < (HEIGHT * 21) / 32; y++)
+    {
+      for (x = 0; x < WIDTH; x++)
+	{
+	  guchar gray;
+
+	  gray = (x * 255) / (WIDTH - 1);
+	  buf[y * WIDTH * 3 + x * 3] = 0;
+	  buf[y * WIDTH * 3 + x * 3 + 1] = gray;
+	  buf[y * WIDTH * 3 + x * 3 + 2] = 0;
+	}
+    }
+  for (; y < (HEIGHT * 22) / 32; y++)
+    {
+      for (x = 0; x < WIDTH; x++)
+	{
+	  guchar gray;
+
+	  gray = (x * 255) / (WIDTH - 1);
+	  buf[y * WIDTH * 3 + x * 3] = 0;
+	  buf[y * WIDTH * 3 + x * 3 + 1] = 0;
+	  buf[y * WIDTH * 3 + x * 3 + 2] = gray;
+	}
+    }
+  for (; y < (HEIGHT * 24) / 32; y++)
+    {
+      for (x = 0; x < WIDTH; x++)
+	{
+	  guchar gray;
+
+	  gray = 112 + (x * 31) / (WIDTH - 1);
+	  buf[y * WIDTH * 3 + x * 3] = gray;
+	  buf[y * WIDTH * 3 + x * 3 + 1] = gray;
+	  buf[y * WIDTH * 3 + x * 3 + 2] = gray;
+	}
+    }
+  for (; y < (HEIGHT * 26) / 32; y++)
     {
       for (x = 0; x < WIDTH; x++)
 	{

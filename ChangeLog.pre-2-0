@@ -1,3 +1,11 @@
+Thu Sep 10 17:04:03 1998  Raph Levien  <raph@gimp.org>
+
+	* gtk/testrgb.c (testrgb_rgb_test): Small changes to the test
+	pattern.
+
+	* gdk/gdkrgb.c (gdk_rgb_convert_gray4_pack): Fixed some alignment
+	bugs in the 4bit gray cases.
+
 Wed Sep  9 02:48:44 PDT 1998 Manish Singh <yosh@gimp.org>
 
 	* configure.in: added -posix check for NeXTStep
