@@ -1,3 +1,8 @@
+2000-12-14  Tor Lillqvist  <tml@iki.fi>
+
+	* makefile.mingw: Simplify, now that the .po files are already in
+	UTF-8.
+
 2000-12-08  Pablo Saratxaga <pablo@mandrakesoft.com>
 
 	* az.po: Added Azeri language file
