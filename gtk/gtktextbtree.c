@@ -1117,9 +1117,9 @@ gtk_text_btree_create_child_anchor (GtkTextIter *iter)
   
   seg = _gtk_widget_segment_new ();
 
+  tree = seg->body.child.tree = gtk_text_iter_get_btree (iter);
+  
   insert_pixbuf_or_widget_segment (iter, seg);
-
-  tree = seg->body.child.tree;
 
   if (tree->child_anchor_table == NULL)
     tree->child_anchor_table = g_hash_table_new (NULL, NULL);

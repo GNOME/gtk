@@ -65,6 +65,7 @@ static void  check_close_view (View   *view);
 static void  close_view       (View   *view);
 static void  view_set_title   (View   *view);
 static void  view_init_menus  (View   *view);
+static void  view_add_example_widgets (View *view);
 
 GSList *buffers = NULL;
 GSList *views = NULL;
@@ -419,8 +420,6 @@ static char  *book_closed_xpm[] = {
 "      ..        ",
 "                "};
 
-
-
 void
 fill_example_buffer (GtkTextBuffer *buffer)
 {
@@ -431,7 +430,8 @@ fill_example_buffer (GtkTextBuffer *buffer)
   GdkPixbuf *pixbuf;
   int i;
   char *str;
-
+  GtkTextChildAnchor *anchor;
+  
   /* FIXME this is broken if called twice on a buffer, since
    * we try to create tags a second time.
    */
@@ -513,6 +513,18 @@ fill_example_buffer (GtkTextBuffer *buffer)
                   "left_margin", 20,
                   "right_margin", 20,
                   NULL);
+
+
+#if 0
+  gtk_text_buffer_get_iter_at_offset (buffer, &iter, 0);
+
+  anchor = gtk_text_buffer_create_child_anchor (buffer, &iter);
+
+  g_object_ref (G_OBJECT (anchor));
+  
+  g_object_set_data_full (G_OBJECT (buffer), "anchor", anchor,
+                          (GDestroyNotify) g_object_unref);
+#endif
   
   pixbuf = gdk_pixbuf_new_from_xpm_data (book_closed_xpm);
   
@@ -840,6 +852,8 @@ do_example (gpointer             callback_data,
   new_view = get_empty_view (view);
   
   fill_example_buffer (new_view->buffer->buffer);
+
+  view_add_example_widgets (new_view);
 }
 
 static void
@@ -2103,7 +2117,7 @@ create_view (Buffer *buffer)
   
   GtkWidget *sw;
   GtkWidget *vbox;
-
+  
   view = g_new0 (View, 1);
   views = g_slist_prepend (views, view);
 
@@ -2185,9 +2199,41 @@ create_view (Buffer *buffer)
 
   view_set_title (view);
   view_init_menus (view);
+
+  view_add_example_widgets (view);
   
   gtk_widget_show_all (view->window);
   return view;
+}
+
+static void
+view_add_example_widgets (View *view)
+{
+  GtkTextChildAnchor *anchor;
+  Buffer *buffer;
+
+  return;
+  
+  buffer = view->buffer;
+  
+  anchor = gtk_object_get_data (GTK_OBJECT (buffer->buffer),
+                                "anchor");
+
+  if (anchor && !gtk_text_child_anchor_get_deleted (anchor))
+    {
+      GtkWidget *widget;
+      
+      widget = gtk_image_new_from_stock (GTK_STOCK_DIALOG_WARNING,
+                                         GTK_ICON_SIZE_DIALOG);
+
+      widget = gtk_button_new_with_label ("Foo");
+      
+      gtk_text_view_add_child_at_anchor (GTK_TEXT_VIEW (view->text_view),
+                                         widget,
+                                         anchor);
+
+      gtk_widget_show (widget);
+    }
 }
 
 static gboolean

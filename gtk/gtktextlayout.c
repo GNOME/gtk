@@ -1346,7 +1346,8 @@ add_child_attrs (GtkTextLayout      *layout,
           height = req.height;
 
           display->shaped_objects =
-            g_slist_append (display->shaped_objects, child);                           
+            g_slist_append (display->shaped_objects, child);
+          
           break;
         }
       
@@ -1430,17 +1431,69 @@ add_cursor (GtkTextLayout      *layout,
     }
 }
 
+static gboolean
+is_shape (PangoLayoutRun *run)
+{
+  GSList *tmp_list = run->item->extra_attrs;
+    
+  while (tmp_list)
+    {
+      PangoAttribute *attr = tmp_list->data;
+
+      if (attr->klass->type == PANGO_ATTR_SHAPE)
+        return TRUE;
+
+      tmp_list = tmp_list->next;
+    }
+
+  return FALSE;
+}
+
 static void
-allocate_child_widgets (GtkTextLayout      *layout,
+allocate_child_widgets (GtkTextLayout      *text_layout,
                         GtkTextLineDisplay *display)
 {
+  GSList *shaped = display->shaped_objects;
+  PangoLayout *layout = display->layout;
+  PangoLayoutIter *iter;
   
-#if 0
-  gtk_signal_emit (GTK_OBJECT (layout),
-                   signals[ALLOCATE_CHILD],
-                   child,
-                   x, y);
-#endif
+  iter = pango_layout_get_iter (layout);
+  
+  do
+    {
+      PangoLayoutRun *run = pango_layout_iter_get_run (iter);
+
+      if (run && is_shape (run))
+        {
+          GObject *shaped_object = shaped->data;
+          shaped = shaped->next;
+
+          if (GTK_IS_WIDGET (shaped_object))
+            {
+              PangoRectangle extents;
+
+              /* We emit "allocate_child" with the x,y of
+               * the widget with respect to the top of the line
+               * and the left side of the buffer
+               */
+              
+              pango_layout_iter_get_run_extents (iter,
+                                                 NULL,
+                                                 &extents);
+
+              printf ("extents at %d,%d\n", extents.x, extents.y);
+              
+              gtk_signal_emit (GTK_OBJECT (text_layout),
+                               signals[ALLOCATE_CHILD],
+                               shaped_object,
+                               PANGO_PIXELS (extents.x) + display->x_offset,
+                               PANGO_PIXELS (extents.y) + display->top_margin);
+            }
+        }
+    }
+  while (pango_layout_iter_next_run (iter));
+  
+  pango_layout_iter_free (iter);
 }
 
 static void
@@ -1548,7 +1601,8 @@ gtk_text_layout_get_line_display (GtkTextLayout *layout,
   GSList *cursor_byte_offsets = NULL;
   GSList *cursor_segs = NULL;
   GSList *tmp_list1, *tmp_list2;
-
+  gboolean saw_widget = FALSE;
+  
   g_return_val_if_fail (line != NULL, NULL);
 
   if (layout->one_display_cache)
@@ -1688,6 +1742,8 @@ gtk_text_layout_get_line_display (GtkTextLayout *layout,
                 }
               else if (seg->type == &gtk_text_child_type)
                 {
+                  saw_widget = TRUE;
+                  
                   add_generic_attrs (layout, &style->appearance,
                                      seg->byte_count,
                                      attrs, byte_offset,
@@ -1804,7 +1860,8 @@ gtk_text_layout_get_line_display (GtkTextLayout *layout,
 
   layout->one_display_cache = display;
 
-  allocate_child_widgets (layout, display);
+  if (saw_widget)
+    allocate_child_widgets (layout, display);
   
   return display;
 }

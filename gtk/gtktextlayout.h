@@ -368,6 +368,9 @@ void gtk_text_child_anchor_unregister_child (GtkTextChildAnchor *anchor,
 void gtk_text_child_anchor_queue_resize     (GtkTextChildAnchor *anchor,
                                              GtkTextLayout      *layout);
 
+void gtk_text_anchored_child_set_layout     (GtkWidget          *child,
+                                             GtkTextLayout      *layout);
+
 void gtk_text_layout_spew (GtkTextLayout *layout);
 
 #ifdef __cplusplus

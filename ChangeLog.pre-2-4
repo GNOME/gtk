@@ -1,3 +1,12 @@
+2000-11-20  Havoc Pennington  <hp@redhat.com>
+
+	* gtk/gtktextview.c, gtk/gtktextlayout.c, gtk/gtktextchild.c,
+	gtk/testtext.c: Semi-finish widget embedding. Need guffaw
+	scrolling to be implemented in GDK to finish. Also, right now
+	we just size_allocate all children on every layout change,
+	which is pretty lame. Test commented out of testtext.c, 
+	until it works better.
+
 2000-11-20  Alexander Larsson  <alla@lysator.liu.se>
 
 	* gdk/linux-fb/gdkdrawable-fb2.c:

@@ -242,7 +242,6 @@ _gtk_widget_segment_remove (GtkTextLineSegment *widget_segment,
                             GtkWidget          *child)
 {
   g_return_if_fail (widget_segment->type = &gtk_text_child_type);
-  g_return_if_fail (widget_segment->body.child.tree != NULL);
   
   widget_segment->body.child.widgets =
     g_slist_remove (widget_segment->body.child.widgets,
@@ -420,10 +419,12 @@ gtk_text_child_anchor_unregister_child (GtkTextChildAnchor *anchor,
 {
   g_return_if_fail (GTK_IS_TEXT_CHILD_ANCHOR (anchor));
   g_return_if_fail (GTK_IS_WIDGET (child));
-  g_return_if_fail (_gtk_anchored_child_get_layout (child) != NULL);
-  
-  gtk_text_child_anchor_queue_resize (anchor,
-                                      _gtk_anchored_child_get_layout (child));
+
+  if (_gtk_anchored_child_get_layout (child))
+    {
+      gtk_text_child_anchor_queue_resize (anchor,
+                                          _gtk_anchored_child_get_layout (child));
+    }
   
   _gtk_anchored_child_set_layout (child, NULL);
   
@@ -439,10 +440,12 @@ gtk_text_child_anchor_queue_resize (GtkTextChildAnchor *anchor,
   GtkTextLineSegment *seg;
   
   g_return_if_fail (GTK_IS_TEXT_CHILD_ANCHOR (anchor));
-
+  g_return_if_fail (GTK_IS_TEXT_LAYOUT (layout));
+  
   seg = anchor->segment;
 
-  g_return_if_fail (seg->body.child.tree != NULL);
+  if (seg->body.child.tree == NULL)
+    return NULL;
   
   gtk_text_buffer_get_iter_at_child_anchor (layout->buffer,
                                             &start, anchor);
@@ -451,4 +454,15 @@ gtk_text_child_anchor_queue_resize (GtkTextChildAnchor *anchor,
   
   gtk_text_layout_invalidate (layout, &start, &end);
 }
+
+void
+gtk_text_anchored_child_set_layout (GtkWidget     *child,
+                                    GtkTextLayout *layout)
+{
+  g_return_if_fail (GTK_IS_WIDGET (child));
+  g_return_if_fail (layout == NULL || GTK_IS_TEXT_LAYOUT (layout));
+  
+  _gtk_anchored_child_set_layout (child, layout);
+}
+
 

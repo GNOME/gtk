@@ -365,21 +365,30 @@ render_layout_line (GdkDrawable        *drawable,
               gint width, height;
               GdkRectangle draw_rect;
               GtkWidget *widget;
-
-              /* FIXME this doesn't work at all, and remember to use
-               * risen_y
-               */
               
               widget = GTK_WIDGET (shaped);
               
               width = widget->allocation.width;
               height = widget->allocation.height;
 
+              printf ("widget allocation at %d,%d %d x %d\n",
+                      widget->allocation.x,
+                      widget->allocation.y,
+                      widget->allocation.width,
+                      widget->allocation.height);
+              
               if (GTK_WIDGET_DRAWABLE (widget) &&
-                  gtk_widget_intersect (widget,
-                                        &render_state->clip_rect,
-                                        &draw_rect))
+                  gdk_rectangle_intersect (&widget->allocation,
+                                           &render_state->clip_rect,
+                                           &draw_rect))
+
                 {
+                  printf ("drawing widget area %d,%d %d x %d\n",
+                          draw_rect.x,
+                          draw_rect.y,
+                          draw_rect.width,
+                          draw_rect.height);
+
                   gtk_widget_draw (widget, &draw_rect);
                 }
 
