@@ -1,3 +1,84 @@
+Mon Apr 29 18:28:00 2002  Owen Taylor  <otaylor@redhat.com>
+
+	Integrate Erwann Chenede's multihead changes for the gtk/ directory.
+
+	* gtk/gtkclipboard.[ch]: Add gtk_clipboard_get_for_display(),
+	make internals multihead aware.
+
+	* gtk/gtkcolorsel.[ch]: Add
+	gtk_color_selection_set_change_palette_with_screen_hook () [ugh!]
+	make up for non-multihead safety of
+	gtk_color_selection_set_change_palette_hook()
+
+	* gtk/gtkinvisible.[ch] gtk/gtkmenu.[ch] gtkwindow.[ch]: Add
+	gtk_{invisible,menu,window}_set_screen(); add "screen" properties
+	for GtkWindow and GtkMenu.
+
+	* gtk/gtkplug.[ch]: Add gtk_plug_construct_for_display(),
+	gtk_plug_new_for_display(). Multihead fixes.
+
+	* gtk/gtkselection.[ch]: Add gtk_selection_owner_set_for_display(),
+	make internals multihead aware.
+
+	* gtk/gtksettings.[ch]: Add gtk_settings_get_for_screen(), get
+	rid of now-useless gtk_settings_constructor().
+
+	* gtk/gtkstyle.[ch]: Add gtk_style_get_font_for_display(), fix
+	check/radio button indicators bitmap handling to be multihead
+	safe.
+
+	* gtk/gtkwidget.[ch]: Add gtk_widget_get_screen(), gtk_widget_has_screen(),
+	gtk_widget_get_display(), gtk_widget_get_clipboard(),
+	gtk_widget_get_root_window().
+	
+	* gtk/gtkbindings.c gtk/gtkbutton.c gtk/gtkclist.c gtk/gtkcombo.c
+	gtk/gtkctree.c gtk/gtkdnd.c gtk/gtkfilesel.c gtk/gtkgamma.c
+	gtk/gtkhandlebox.c gtk/gtkhsv.c gtk/gtkimcontext.c gtk/gtklabel.c
+	gtk/gtklist.c gtk/gtkmain.c gtk/gtkmenuitem.c gtk/gtkmenushell.c
+	gtk/gtknotebook.c gtk/gtkoldeditable.c gtk/gtkoptionmenu.c
+	gtk/gtkpaned.c gtk/gtkpreview.c gtk/gtksocket.c gtk/gtktext.c
+	gtk/gtktextbuffer.c gtk/gtktextview.c gtk/gtktipsquery.c
+	gtk/gtktooltips.c gtk/gtktreeview.c gtk/gtktreeviewcolumn.c:
+	misc mechanical multihead-safety fixes.
+	
+	* gtk/gtkclipboard.c: Use a GtkImage rather than a pixmap for
+	the dropper, look up the color palette only at realization time,
+	other multihead fixes.
+
+	* gtk/gtkcombo.c (gtk_combo_unrealize): Popdown the list when 
+	unrealizing.
+
+	* gtk/gtkentry.c: Only claim ownership of the primary selection 
+	when realized, misc multihead fixes.
+
+	* gtk/gtkfontsel.c: Only fill in fonts when attached to a screen,
+	fix gtk_font_selection_get_font() for multihead.
+
+	* gtk/gtkgc.c: make the depth => drawable hash per-screen.
+
+	* gtk/gtkinvisible.c: Add a constructor that realizes the
+	widget, so we get a realized widget with g_object_new() as
+	well gtk_invisible_new() as before.
+
+	* gtk/gtkmain.c: Get rid of unused gtk_visual/gtk_colormap
+	variables.
+
+	* gtk/gtktextdisplay.c: Add warnings if stipple bitmaps
+	are used on the wrong screen.
+
+	* gtk/gtktoolbar.c: Make handling of GtkSettings-based layout
+	read properties and connect to settings when the screen is changed,
+	rather than on init/finalize.
+
+	* gtk/gtkwindow.c: Fix icon handing to be multihead safe ...
+	default icon pixmaps/mask are only shared between windows on the 
+	same screen. Misc multihead fixes.
+
+Sat Apr 27 13:49:53 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkclipboard.c (gtk_clipboard_get_for_display):
+	Update docs to reference GDK_SELECTION_CLIPBOARD rather GDK_NONE.
+
 2002-04-29  Alex Larsson  <alexl@redhat.com>
 
 	* gdk/linux-fb/gdkproperty-fb.c (gdk_property_get):

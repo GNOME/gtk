@@ -2232,10 +2232,10 @@ static struct
 };
 
 static void
-gdk_xsettings_notify_cb (const char        *name,
-			  XSettingsAction   action,
-			  XSettingsSetting *setting,
-			  void             *data)
+gdk_xsettings_notify_cb (const char       *name,
+			 XSettingsAction   action,
+			 XSettingsSetting *setting,
+			 void             *data)
 {
   GdkEvent new_event;
   GdkScreen *screen = data;
