@@ -2919,12 +2919,14 @@ save_folder_combo_create (GtkFileChooserDefault *impl)
   gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (combo), cell,
 				  "pixbuf", SHORTCUTS_COL_PIXBUF,
 				  "visible", SHORTCUTS_COL_PIXBUF_VISIBLE,
+				  "sensitive", SHORTCUTS_COL_PIXBUF_VISIBLE,
 				  NULL);
 
   cell = _gtk_cell_renderer_sep_text_new ();
   gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (combo), cell, TRUE);
   gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (combo), cell,
 				  "text", SHORTCUTS_COL_NAME,
+				  "sensitive", SHORTCUTS_COL_PIXBUF_VISIBLE,
 				  NULL);
 
   g_signal_connect (combo, "changed",
