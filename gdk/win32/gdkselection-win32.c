@@ -95,7 +95,7 @@ _gdk_dropfiles_store (gchar *data)
       dropfiles_prop->data = data;
       dropfiles_prop->length = strlen (data);
       dropfiles_prop->format = 8;
-      dropfiles_prop->type = text_uri_list;
+      dropfiles_prop->type = _text_uri_list;
     }
   else
     {
@@ -280,7 +280,7 @@ gdk_selection_convert (GdkWindow *requestor,
 	}
 
       if (IsClipboardFormatAvailable (CF_UNICODETEXT) ||
-	  IsClipboardFormatAvailable (cf_utf8_string) ||
+	  IsClipboardFormatAvailable (_cf_utf8_string) ||
 	  IsClipboardFormatAvailable (CF_TEXT))
 	{
 	  GdkAtom *data = g_new (GdkAtom, 1);
@@ -292,7 +292,7 @@ gdk_selection_convert (GdkWindow *requestor,
 	property = GDK_NONE;
     }
   else if (selection == GDK_SELECTION_CLIPBOARD &&
-	   (target == compound_text ||
+	   (target == _compound_text ||
 	    target == GDK_TARGET_STRING))
     {
       /* Converting the CLIPBOARD selection means he wants the
@@ -342,7 +342,7 @@ gdk_selection_convert (GdkWindow *requestor,
 	      GlobalUnlock (hdata);
 	    }
 	}
-      else if ((hdata = GetClipboardData (cf_utf8_string)) != NULL)
+      else if ((hdata = GetClipboardData (_cf_utf8_string)) != NULL)
 	{
 	  /* UTF8_STRING is a format we store ourselves when necessary */
 	  guchar *ptr;
@@ -426,7 +426,7 @@ gdk_selection_convert (GdkWindow *requestor,
 
       CloseClipboard ();
     }
-  else if (selection == gdk_win32_dropfiles)
+  else if (selection == _gdk_win32_dropfiles)
     {
       /* This means he wants the names of the dropped files.
        * gdk_dropfiles_filter already has stored the text/uri-list
@@ -609,7 +609,7 @@ gdk_string_to_compound_text_for_display (GdkDisplay  *display,
   GDK_NOTE (DND, g_print ("gdk_string_to_compound_text: %.20s\n", str));
 
   if (encoding)
-    *encoding = compound_text;
+    *encoding = _compound_text;
 
   if (format)
     *format = 8;
@@ -720,7 +720,7 @@ gdk_text_property_to_utf8_list_for_display (GdkDisplay    *display,
     {
       return make_list ((gchar *)text, length, TRUE, list);
     }
-  else if (encoding == utf8_string)
+  else if (encoding == _utf8_string)
     {
       return make_list ((gchar *)text, length, FALSE, list);
     }

@@ -213,7 +213,7 @@ gdk_input_wintab_init (void)
   _gdk_input_devices = NULL;
   wintab_contexts = NULL;
 
-  if (!gdk_input_ignore_wintab &&
+  if (!_gdk_input_ignore_wintab &&
       WTInfo (0, 0, NULL))
     {
       WTInfo (WTI_INTERFACE, IFC_SPECVERSION, &specversion);
@@ -848,7 +848,7 @@ _gdk_input_other_event (GdkEvent  *event,
       if (event->any.type == GDK_BUTTON_PRESS
 	  || event->any.type == GDK_BUTTON_RELEASE)
 	{
-	  event->button.time = msg->time;
+	  event->button.time = _gdk_win32_get_next_tick (msg->time);
 	  event->button.device = &gdkdev->info;
 	  
 #if 0
@@ -877,7 +877,7 @@ _gdk_input_other_event (GdkEvent  *event,
 	}
       else
 	{
-	  event->motion.time = msg->time;
+	  event->motion.time = _gdk_win32_get_next_tick (msg->time);
 	  event->motion.is_hint = FALSE;
 	  event->motion.device = &gdkdev->info;
 
@@ -946,7 +946,7 @@ _gdk_input_other_event (GdkEvent  *event,
 	  event->proximity.type = GDK_PROXIMITY_IN;
 	  _gdk_input_ignore_core = TRUE;
 	}
-      event->proximity.time = msg->time;
+      event->proximity.time = _gdk_win32_get_next_tick (msg->time);
       event->proximity.device = &gdkdev->info;
 
       GDK_NOTE (EVENTS_OR_INPUT,

@@ -28,29 +28,29 @@
 #include "gdktypes.h"
 #include "gdkprivate-win32.h"
 
-HWND              gdk_root_window = NULL;
-HDC		  gdk_display_hdc;
-HINSTANCE	  gdk_dll_hinstance;
-HINSTANCE	  gdk_app_hmodule;
+HWND              _gdk_root_window = NULL;
+HDC		  _gdk_display_hdc;
+HINSTANCE	  _gdk_dll_hinstance;
+HINSTANCE	  _gdk_app_hmodule;
 
 HKL		  _gdk_input_locale;
 UINT		  _gdk_input_codepage;
 
-WORD  		  cf_rtf;
-WORD		  cf_utf8_string;
+WORD  		  _cf_rtf;
+WORD		  _cf_utf8_string;
 
-GdkAtom           utf8_string;
-GdkAtom		  compound_text;
-GdkAtom		  text_uri_list;
+GdkAtom           _utf8_string;
+GdkAtom		  _compound_text;
+GdkAtom		  _text_uri_list;
 
-GdkAtom		  local_dnd;
-GdkAtom		  gdk_win32_dropfiles;
-GdkAtom		  gdk_ole2_dnd;
+GdkAtom		  _local_dnd;
+GdkAtom		  _gdk_win32_dropfiles;
+GdkAtom		  _gdk_ole2_dnd;
 
 GdkAtom           _gdk_selection_property;
 
-DWORD		  windows_version;
+DWORD		  _windows_version;
 
-gint		  gdk_input_ignore_wintab = FALSE;
-gint              gdk_event_func_from_window_proc = FALSE;
-gint		  gdk_max_colors = 0;
+gint		  _gdk_input_ignore_wintab = FALSE;
+gint              _gdk_event_func_from_window_proc = FALSE;
+gint		  _gdk_max_colors = 0;

@@ -95,16 +95,16 @@ _gdk_visual_init (void)
   } bmi;
   HBITMAP hbm;
 
-  const gint rastercaps = GetDeviceCaps (gdk_display_hdc, RASTERCAPS);
-  gint bitspixel = GetDeviceCaps (gdk_display_hdc, BITSPIXEL);
+  const gint rastercaps = GetDeviceCaps (_gdk_display_hdc, RASTERCAPS);
+  gint bitspixel = GetDeviceCaps (_gdk_display_hdc, BITSPIXEL);
   gint map_entries = 0;
 
   system_visual = g_object_new (GDK_TYPE_VISUAL, NULL);
 
   if (rastercaps & RC_PALETTE)
     {
-      const int sizepalette = GetDeviceCaps (gdk_display_hdc, SIZEPALETTE);
-      const int numcolors = GetDeviceCaps (gdk_display_hdc, NUMCOLORS);
+      const int sizepalette = GetDeviceCaps (_gdk_display_hdc, SIZEPALETTE);
+      const int numcolors = GetDeviceCaps (_gdk_display_hdc, NUMCOLORS);
       gchar *max_colors = getenv ("GDK_WIN32_MAX_COLORS");
       system_visual->type = GDK_VISUAL_PSEUDO_COLOR;
 
@@ -113,9 +113,9 @@ _gdk_visual_init (void)
       g_assert (sizepalette == 256);
 
       if (max_colors != NULL)
-	gdk_max_colors = atoi (max_colors);
+	_gdk_max_colors = atoi (max_colors);
       
-      map_entries = gdk_max_colors;
+      map_entries = _gdk_max_colors;
 
       if (map_entries >= 16 && map_entries < sizepalette)
 	{
@@ -179,10 +179,10 @@ _gdk_visual_init (void)
       memset (&bmi, 0, sizeof (bmi));
       bmi.bi.biSize = sizeof (bmi.bi);
 
-      hbm = CreateCompatibleBitmap (gdk_display_hdc, 1, 1);
-      GetDIBits (gdk_display_hdc, hbm, 0, 1, NULL,
+      hbm = CreateCompatibleBitmap (_gdk_display_hdc, 1, 1);
+      GetDIBits (_gdk_display_hdc, hbm, 0, 1, NULL,
 		 (BITMAPINFO *) &bmi, DIB_RGB_COLORS);
-      GetDIBits (gdk_display_hdc, hbm, 0, 1, NULL,
+      GetDIBits (_gdk_display_hdc, hbm, 0, 1, NULL,
 		 (BITMAPINFO *) &bmi, DIB_RGB_COLORS);
       DeleteObject (hbm);
 

@@ -965,7 +965,7 @@ gdk_dropfiles_filter (GdkXEvent *xev,
       gdk_drawable_ref (context->dest_window);
       /* WM_DROPFILES drops are always file names */
       context->targets =
-	g_list_append (NULL, GUINT_TO_POINTER (text_uri_list));
+	g_list_append (NULL, GUINT_TO_POINTER (_text_uri_list));
       current_dest_drag = context;
 
       event->dnd.type = GDK_DROP_START;
@@ -977,7 +977,7 @@ gdk_dropfiles_filter (GdkXEvent *xev,
 
       event->dnd.x_root = pt.x;
       event->dnd.y_root = pt.y;
-      event->dnd.time = msg->time;
+      event->dnd.time = _gdk_win32_get_next_tick (msg->time);
 
       nfiles = DragQueryFile (hdrop, 0xFFFFFFFF, NULL, 0);
 
@@ -1675,11 +1675,11 @@ GdkAtom
 gdk_drag_get_selection (GdkDragContext *context)
 {
   if (context->protocol == GDK_DRAG_PROTO_LOCAL)
-    return local_dnd;
+    return _local_dnd;
   else if (context->protocol == GDK_DRAG_PROTO_WIN32_DROPFILES)
-    return gdk_win32_dropfiles;
+    return _gdk_win32_dropfiles;
   else if (context->protocol == GDK_DRAG_PROTO_OLE2)
-    return gdk_ole2_dnd;
+    return _gdk_ole2_dnd;
   else
     return GDK_NONE;
 }

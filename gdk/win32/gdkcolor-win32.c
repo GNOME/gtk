@@ -118,92 +118,6 @@ gdk_colormap_finalize (GObject *object)
   G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
-static gint
-palette_size (HPALETTE hpal)
-{
-  WORD npal = 0;
-
-  if (!GetObject (hpal, sizeof (npal), &npal))
-    WIN32_GDI_FAILED ("GetObject (HPALETTE)");
-
-  return npal;
-}
-
-#ifdef G_ENABLE_DEBUG
-
-gchar *
-gdk_win32_color_to_string (const GdkColor *color)
-{
-  static char buf[100];
-
-  sprintf (buf, "(%.04x,%.04x,%.04x):%.06x",
-	   color->red, color->green, color->blue, color->pixel);
-
-  return buf;
-}
-
-void
-gdk_win32_print_paletteentries (const PALETTEENTRY *pep,
-				const int           nentries)
-{
-  char buf[20];
-  int i;
-
-  for (i = 0; i < nentries; i++)
-    g_print ("  %3d %02x:  %02x %02x %02x%s\n",
-	     i, i,
-	     pep[i].peRed, pep[i].peGreen, pep[i].peBlue,
-	     (pep[i].peFlags == 0 ? "" :
-	      (pep[i].peFlags == PC_EXPLICIT ? " PC_EXPLICIT" :
-	       (pep[i].peFlags == PC_NOCOLLAPSE ? " PC_NOCOLLAPSE" :
-		(pep[i].peFlags == PC_RESERVED ? " PC_RESERVED" :
-		 (sprintf (buf, " %d", pep[i].peFlags), buf))))));
-}
-
-void
-gdk_win32_print_system_palette (void)
-{
-  PALETTEENTRY *pe;
-  int k;
-
-  k = GetSystemPaletteEntries (gdk_display_hdc, 0, 0, NULL);
-  pe = g_new (PALETTEENTRY, k);
-  k = GetSystemPaletteEntries (gdk_display_hdc, 0, k, pe);
-
-  if (!k)
-    g_print ("GetSystemPaletteEntries failed: %s\n",
-	     g_win32_error_message (GetLastError ()));
-  else
-    {
-      g_print ("System palette: %d entries\n", k);
-      gdk_win32_print_paletteentries (pe, k);
-    }
-  g_free (pe);
-}
-
-void
-gdk_win32_print_hpalette (HPALETTE hpal)
-{
-  PALETTEENTRY *pe;
-  gint n, npal;
-
-  npal = palette_size (hpal);
-  pe = g_new (PALETTEENTRY, npal);
-  n = GetPaletteEntries (hpal, 0, npal, pe);
-
-  if (!n)
-    g_print ("HPALETTE %p: GetPaletteEntries failed: %s\n",
-	     hpal, g_win32_error_message (GetLastError ()));
-  else
-    {
-      g_print ("HPALETTE %p: %d (%d) entries\n", hpal, n, npal);
-      gdk_win32_print_paletteentries (pe, n);
-    }
-  g_free (pe);
-}
-
-#endif
-
 /* Mimics XAllocColorCells. Allocate read/write color cells. */
 
 static gboolean
@@ -431,7 +345,7 @@ alloc_color (GdkColormap  *cmap,
     case GDK_VISUAL_TRUE_COLOR:
       /* Determine what color will actually be used on non-colormap systems. */
 
-      *pixelp = GetNearestColor (gdk_display_hdc, new_pixel);
+      *pixelp = GetNearestColor (_gdk_display_hdc, new_pixel);
       color->peRed = GetRValue (*pixelp);
       color->peGreen = GetGValue (*pixelp);
       color->peBlue = GetBValue (*pixelp);
@@ -502,7 +416,7 @@ free_colors (GdkColormap *cmap,
 	    }
 	}
 #if 0
-      GDK_NOTE (COLORMAP, gdk_win32_print_hpalette (cmapp->hpal));
+      GDK_NOTE (COLORMAP, _gdk_win32_print_hpalette (cmapp->hpal));
 #else
       GDK_NOTE (COLORMAP, (set_black_count > 0 ?
 			   g_print ("free_colors: %d (%d) set to black\n",
@@ -550,7 +464,7 @@ create_colormap (GdkColormap *cmap,
     lp.pal.palPalEntry[i].peFlags = 0;
   GDK_NOTE (COLORMAP, (g_print ("Default palette %p: %d entries\n",
 				hpal, lp.pal.palNumEntries),
-		       gdk_win32_print_paletteentries (lp.pal.palPalEntry,
+		       _gdk_win32_print_paletteentries (lp.pal.palPalEntry,
 						       lp.pal.palNumEntries)));
   DeleteObject (hpal);
   
@@ -604,7 +518,7 @@ sync_colors (GdkColormap *colormap)
 	  
   GDK_NOTE (COLORMAP, (g_print ("sync_colors: %p hpal=%p: %d entries\n",
 				private, private->hpal, nlookup),
-		       gdk_win32_print_paletteentries (pe, nlookup)));
+		       _gdk_win32_print_paletteentries (pe, nlookup)));
 	  
   for (i = 0; i < nlookup; i++)
     {

@@ -1,3 +1,178 @@
+2002-11-12  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/win32/gdkprivate-win32.h
+	* gdk/win32/*.c: Rename all global variables and functions to
+	start with underscore.
+
+	Merge from stable:
+	
+	More work on the Win32 backend. The cause of some scrolling
+	problems was that SetWindowPos() and ScrollWindowEx() don't blit
+	those parts of the window they think are invalid. As we didn't
+	keep Windows's update region in synch with GDK's, Windows thought
+	those areas that in fact had been updated were invalid. Calling
+	ValidateRgn() in _gdk_windowing_window_queue_antiexpose() seems to
+	be an elegant and efficient solution, removing from Windows's
+	update region those areas we are about to repaint proactively.
+
+	In some cases garbage leftover values were used for the clip
+	origin in GdkGCWin32. This showed up as odd blank areas around the
+	pixmaps included in the Text Widget in gtk-demo.
+
+	Having the clip region either as a GdkRegion or a HRGN in
+	GdkGCWin32 was unnecessary, it's better to just use a HRGN.
+
+	The translation and antiexpose queue handling in
+	gdkgeometry-win32.c seems unnecessary (and not implementable in
+	the same way as on X11 anyway, no serial numbers) on Windows,
+	ifdeffed out.
+	
+	Don't (try to) do guffaw scrolling as there is no static window
+	gravity on Windows. Guffaw scrolling would be unnecessary anyway,
+	as there is the ScrollWindow() API. This improves the behaviour of
+	the Text Widget demo in gtk-demo a lot. But I have no idea how the
+	lack of static win gravity should be handled in other places where
+	the X11 code uses it. Especially _gdk_window_move_resize_child().
+
+	There is still some problem in expose handling. By moving an
+	obscuring window back and forth over testgtk's main window, for
+	instance, every now and then you typically get narrow vertical or
+	horizontal strips of pixels that haven't been properly redrawn
+	after being exposed. A fencepost error somewhere?
+
+	Otherwise, all of testgtk and gtk-demo except "big windows" now
+	seem to work pretty well. (Well, that is in the stable branch, I
+	haven't really tested HEAD. Only checked that gdk/win32 compiles.)
+
+	Bug #79720 should be fixed now.
+	
+	* gdk/win32/gdkcolor-win32.c (gdk_win32_color_to_string,
+	gdk_win32_print_paletteentries, gdk_win32_print_system_palette,
+	gdk_win32_print_hpalette)
+	* gdk/win32/gdkdrawable-win32.c (gdk_win32_drawable_description)
+	* gdk/win32/gdkevents-win32.c (gdk_win32_message_name):
+	Move all debugging helper functions to gdkmain-win32.c.
+
+	* gdk/win32/gdkdrawable-win32.c (_gdk_win32_draw_tiles):
+	Rewrite. Make static. Must take tile origin parameters, too.
+
+	(gdk_win32_draw_rectangle): Pass the tile/stipple origin to
+	_gdk_win32_draw_tiles(). Remove #if 0 code.
+
+	(blit_inside_window): Don't call ScrollDC(), that didn't work at
+	all like I thought. A simple call to BitBlt() is enough.
+	
+	* gdk/win32/gdkevents-win32.c (gdk_event_translate) Remove unused
+	latin_locale_loaded variable.
+
+	(_gdk_win32_get_next_tick): New function. Used to make sure
+	timestamps of events are always increasing, both in events
+	generated from the window procedure and in events gotten via
+	PeekMessage(). Not sure whether this is actually useful, but it
+	seemed as a good idea.
+
+	(real_window_procedure): Don't use a local GdkEventPrivate
+	variable. Don't attempt any compression of configure or expose
+	events here, handled elsewhere.
+
+	(erase_background): Accumulate window offsets when traversing up
+	the parent chain for GDK_PARENT_RELATIVE_BG, in order to get
+	correct alignment of background pixmaps. Don't fill with
+	BLACK_BRUSH if GDK_NO_BG.
+
+	(gdk_event_get_graphics_expose): A bit more verbose debugging output.
+
+	(gdk_event_translate): Use _gdk_win32_get_next_tick(). In the
+	WM_PAINT handler, don't check for empty update rect. When we get a
+	WM_PAINT, the update region isn't empty. And if it for some
+	strange reason is, that will be handled later anyway. Call
+	GetUpdateRgn() before calling BeginPaint() and EndPaint() (which
+	empty the update region).
+
+	* gdk/win32/gdkdnd-win32.c
+	* gdk/win32/gdkinput-win32.c:
+	Use _gdk_win32_get_next_tick().
+	
+	* gdk/win32/gdkfont-win32.c: Use %p to print HFONTs.
+
+	(gdk_text_size): Remove, unused.
+
+	* gdk/win32/gdkgc-win32.c:  Set clip origins to zero
+	when appropriate.
+
+	(gdk_gc_copy): Increase refcount on colormap if present.
+
+	(gdk_win32_hdc_get): Handle just hcliprgn. If we have a stipple,
+	combine it with clip region after selecting into the DC.
+
+	(_gdk_win32_bitmap_to_hrgn): Rename from _gdk_win32_bitmap_to_region.
+
+	(_gdk_win3_gdkregion_to_hrgn): New function, code snippet
+	extracted from gdk_win32_hdc_get().
+
+	* gdk/win32/gdkgeometry-win32.c: Ifdef out the translate_queue
+	handling.
+
+	(gdk_window_copy_area_scroll): Increase clipRect to avoid
+	ScrollWindowEx() not scrolling pixels it thinks are invalid.
+	Scroll also children with the ScrollWindowEx() call. No need to
+	call gdk_window_move() on the children.
+
+	(gdk_window_scroll): Don't do guffaw scrolling.
+
+	(gdk_window_compute_position): Fix typo, used win32_y where x was
+	intended.
+
+	(gdk_window_premove, gdk_window_postmove,
+	gdk_window_clip_changed): Add debugging output.
+
+	(_gdk_windowing_window_queue_antiexpose): Just call ValidateRgn()
+	on the region.
+
+	(_gdk_window_process_expose): No use for the serial number
+	parameter now. Instead of a rectangle, take a region parameter, as
+	Windows gives us one in WM_PAINT.
+
+	* gdk/win32/gdkmain-win32.c (_gdk_win32_lbstyle_to_string,
+	_gdk_win32_pstype_to_string, _gdk_win32_psstyle_to_string,
+	_gdk_win32_psendcap_to_string, _gdk_win32_psjoin_to_string,
+	_gdk_win32_rect_to_string, _gdk_win32_gdkrectangle_to_string,
+	_gdk_win32_gdkregion_to_string): New debugging functions.
+
+	(static_printf): Helper function for the above. sprintfs into a
+	static circular buffer, return value should be used "soon".
+
+	* gdk/win32/gdkwindow-win32.c (gdk_propagate_shapes): Plug memory
+	leak, free list after use.
+
+	(gdk_window_gravity_works): Remove, we know that there is no such
+	thing on Windows.
+
+	(gdk_window_set_static_bit_gravity,
+	gdk_window_set_static_win_gravity): Ditto, remove, they didn't do
+	anything anyway.
+
+	(_gdk_windowing_window_init, gdk_window_foreign_new): Call
+	_gdk_window_init_position() like in the X11 backend.
+
+	(gdk_window_reparent): Don't call the now nonexistent
+	gdk_window_set_static_win_gravity(). No idea what should be done
+	instead.
+
+	(gdk_window_get_geometry): The returned x and y should be relative
+	to parent. Used to be always zero..
+
+	(gdk_window_set_static_gravities): Return FALSE if trying to set
+	static gravity.
+	
+	* gdk/win32/gdkprivate-win32.h: Drop the clip_region field from
+	GdkGCWin32. Only use the HRGN hcliprgn. Declare new
+	functions.
+
+	* gdk/win32/*.c: Use new debugging functions.
+
+	* gdk/win32/rc/gdk.rc.in: Update copyright year.
+
 Tue Nov 12 16:51:04 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkinputdialog.c: Make multihead aware (#80283)

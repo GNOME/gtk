@@ -73,7 +73,7 @@ _gdk_win32_data_to_wcursor (GdkCursorType cursor_type)
 #undef SET_BIT
 #undef RESET_BIT
 
-  rv = CreateCursor (gdk_app_hmodule, cursors[i].hotx, cursors[i].hoty,
+  rv = CreateCursor (_gdk_app_hmodule, cursors[i].hotx, cursors[i].hoty,
 		     w, h, and_plane, xor_plane);
   if (rv == NULL)
     WIN32_API_FAILED ("CreateCursor");
@@ -264,7 +264,7 @@ gdk_cursor_new_from_pixmap (GdkPixmap *source,
       q[-1] |= residue;	/* Set left-over bits */
     }
       
-  hcursor = CreateCursor (gdk_app_hmodule, x, y, cursor_width, cursor_height,
+  hcursor = CreateCursor (_gdk_app_hmodule, x, y, cursor_width, cursor_height,
 			  and_mask, xor_mask);
 
   GDK_NOTE (MISC, g_print ("gdk_cursor_new_from_pixmap: "

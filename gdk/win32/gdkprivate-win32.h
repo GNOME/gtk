@@ -263,11 +263,7 @@ struct _GdkGCWin32
    * window or pixmap. We thus keep all the necessary values in the
    * GdkGCWin32 object.
    */
-  HDC hdc;
 
-  int saved_dc;
-
-  GdkRegion *clip_region;
   HRGN hcliprgn;
 
   GdkGCValuesMask values_mask;
@@ -286,8 +282,13 @@ struct _GdkGCWin32
   DWORD pen_style;
   DWORD *pen_dashes;		/* use for PS_USERSTYLE or step-by-step rendering */
   gint pen_num_dashes;
-  HANDLE hwnd;			/* If a HDC is allocated, for which window,
-				 * or what bitmap is selected into it
+
+  /* Following fields are valid while the GC exists as a Windows DC */
+  HDC hdc;
+  int saved_dc;
+
+  HANDLE hwnd;			/* For which window, or what bitmap is
+				 * selected into it
 				 */
   HPALETTE holdpal;
 };
@@ -299,25 +300,16 @@ struct _GdkGCWin32Class
 
 GType _gdk_gc_win32_get_type (void);
 
-/* Routines from gdkgeometry-win32.c */
+gulong _gdk_win32_get_next_tick (gulong suggested_tick);
+
 void _gdk_window_init_position     (GdkWindow *window);
 void _gdk_window_move_resize_child (GdkWindow *window,
 				    gint       x,
 				    gint       y,
 				    gint       width,
 				    gint       height);
-void _gdk_window_process_expose    (GdkWindow     *window,
-                                    gulong         serial,
-                                    GdkRectangle  *area);
-
-/* gdkdrawable-win32.c, background draw helper */
-void _gdk_win32_draw_tiles (GdkDrawable *drawable,
-                            GdkGC       *gc,
-                            GdkPixmap   *tile,
-                            gint        x, 
-                            gint        y, 
-                            gint        width, 
-                            gint        height);
+void _gdk_window_process_expose    (GdkWindow *window,
+                                    GdkRegion *invalidate_region);
 
 void _gdk_win32_selection_init (void);
 void _gdk_win32_dnd_exit (void);
@@ -372,9 +364,11 @@ void      _gdk_win32_blit               (gboolean              use_fg_bg,
 COLORREF  _gdk_win32_colormap_color     (GdkColormap *colormap,
 				         gulong       pixel);
 
-HRGN	  _gdk_win32_bitmap_to_region   (GdkPixmap   *bitmap);
+HRGN	  _gdk_win32_bitmap_to_hrgn     (GdkPixmap   *bitmap);
 
-gchar     *gdk_font_full_name_get         (GdkFont     *font);
+HRGN	  _gdk_win32_gdkregion_to_hrgn  (GdkRegion   *region,
+					 gint         x_origin,
+					 gint         y_origin);
 
 void    _gdk_selection_property_store (GdkWindow *owner,
                                        GdkAtom    type,
@@ -404,48 +398,62 @@ void    _gdk_wchar_text_handle    (GdkFont       *font,
 				   void          *arg);
 
 #ifdef G_ENABLE_DEBUG
-gchar *gdk_win32_color_to_string      (const        GdkColor *color);
-gchar *gdk_win32_cap_style_to_string  (GdkCapStyle  cap_style);
-gchar *gdk_win32_fill_style_to_string (GdkFill      fill);
-gchar *gdk_win32_function_to_string   (GdkFunction  function);
-gchar *gdk_win32_join_style_to_string (GdkJoinStyle join_style);
-gchar *gdk_win32_line_style_to_string (GdkLineStyle line_style);
-gchar *gdk_win32_message_name         (UINT         msg);
+gchar *_gdk_win32_color_to_string      (const GdkColor *color);
+void   _gdk_win32_print_paletteentries (const PALETTEENTRY *pep,
+					const int           nentries);
+void   _gdk_win32_print_system_palette (void);
+void   _gdk_win32_print_hpalette       (HPALETTE     hpal);
+void   _gdk_win32_print_dc             (HDC          hdc);
 
-#define PING() printf(G_STRLOC),fflush(stdout)
-#else
-#define PING()
+gchar *_gdk_win32_cap_style_to_string  (GdkCapStyle  cap_style);
+gchar *_gdk_win32_fill_style_to_string (GdkFill      fill);
+gchar *_gdk_win32_function_to_string   (GdkFunction  function);
+gchar *_gdk_win32_join_style_to_string (GdkJoinStyle join_style);
+gchar *_gdk_win32_line_style_to_string (GdkLineStyle line_style);
+gchar *_gdk_win32_drawable_description (GdkDrawable *d);
+
+gchar *_gdk_win32_lbstyle_to_string    (UINT         brush_style);
+gchar *_gdk_win32_pstype_to_string     (DWORD        pen_style);
+gchar *_gdk_win32_psstyle_to_string    (DWORD        pen_style);
+gchar *_gdk_win32_psendcap_to_string   (DWORD        pen_style);
+gchar *_gdk_win32_psjoin_to_string     (DWORD        pen_style);
+gchar *_gdk_win32_message_to_string    (UINT         msg);
+gchar *_gdk_win32_rect_to_string       (const RECT  *rect);
+
+gchar *_gdk_win32_gdkrectangle_to_string (const GdkRectangle *rect);
+gchar *_gdk_win32_gdkregion_to_string    (const GdkRegion    *box);
+
 #endif
 
-gchar  *gdk_win32_last_error_string (void);
-void    gdk_win32_api_failed        (const gchar *where,
+gchar  *_gdk_win32_last_error_string (void);
+void    _gdk_win32_api_failed        (const gchar *where,
 				     gint line,
 				     const gchar *api);
-void    gdk_other_api_failed        (const gchar *where,
+void    _gdk_other_api_failed        (const gchar *where,
 				     gint line,
 				     const gchar *api);
-void    gdk_win32_gdi_failed        (const gchar *where,
+void    _gdk_win32_gdi_failed        (const gchar *where,
 				     gint line,
 				     const gchar *api);
 
 #ifdef __GNUC__
-#define WIN32_API_FAILED(api) gdk_win32_api_failed (__FILE__ ":" __PRETTY_FUNCTION__, __LINE__, api)
-#define WIN32_GDI_FAILED(api) gdk_win32_gdi_failed (__FILE__ ":" __PRETTY_FUNCTION__, __LINE__, api)
-#define OTHER_API_FAILED(api) gdk_other_api_failed (__FILE__ ":" __PRETTY_FUNCTION__, __LINE__, api)
+#define WIN32_API_FAILED(api) _gdk_win32_api_failed (__FILE__ ":" __PRETTY_FUNCTION__, __LINE__, api)
+#define WIN32_GDI_FAILED(api) _gdk_win32_gdi_failed (__FILE__ ":" __PRETTY_FUNCTION__, __LINE__, api)
+#define OTHER_API_FAILED(api) _gdk_other_api_failed (__FILE__ ":" __PRETTY_FUNCTION__, __LINE__, api)
 #else
-#define WIN32_API_FAILED(api) gdk_win32_api_failed (__FILE__, __LINE__, api)
-#define WIN32_GDI_FAILED(api) gdk_win32_gdi_failed (__FILE__, __LINE__, api)
-#define OTHER_API_FAILED(api) gdk_other_api_failed (__FILE__, __LINE__, api)
+#define WIN32_API_FAILED(api) _gdk_win32_api_failed (__FILE__, __LINE__, api)
+#define WIN32_GDI_FAILED(api) _gdk_win32_gdi_failed (__FILE__, __LINE__, api)
+#define OTHER_API_FAILED(api) _gdk_other_api_failed (__FILE__, __LINE__, api)
 #endif
  
 extern LRESULT CALLBACK _gdk_win32_window_procedure (HWND, UINT, WPARAM, LPARAM);
 
-extern HWND		 gdk_root_window;
+extern HWND		 _gdk_root_window;
 extern GdkWindow        *_gdk_parent_root;
 
-extern HDC		 gdk_display_hdc;
-extern HINSTANCE	 gdk_dll_hinstance;
-extern HINSTANCE	 gdk_app_hmodule;
+extern HDC		 _gdk_display_hdc;
+extern HINSTANCE	 _gdk_dll_hinstance;
+extern HINSTANCE	 _gdk_app_hmodule;
 
 /* These are thread specific, but GDK/win32 works OK only when invoked
  * from a single thread anyway.
@@ -456,28 +464,28 @@ extern UINT		 _gdk_input_codepage;
 extern guint		 _gdk_keymap_serial;
 
 /* Registered clipboard formats */
-extern WORD		 cf_rtf;
-extern WORD		 cf_utf8_string;
+extern WORD		 _cf_rtf;
+extern WORD		 _cf_utf8_string;
 
 /* GdkAtoms: Targets */
-extern GdkAtom           utf8_string;
-extern GdkAtom		 compound_text;
-extern GdkAtom		 text_uri_list;
+extern GdkAtom           _utf8_string;
+extern GdkAtom		 _compound_text;
+extern GdkAtom		 _text_uri_list;
 
 /* DND selections */
-extern GdkAtom           local_dnd;
-extern GdkAtom		 gdk_win32_dropfiles;
-extern GdkAtom		 gdk_ole2_dnd;
+extern GdkAtom           _local_dnd;
+extern GdkAtom		 _gdk_win32_dropfiles;
+extern GdkAtom		 _gdk_ole2_dnd;
 
 extern GdkAtom		 _gdk_selection_property;
 
-extern DWORD		 windows_version;
-#define IS_WIN_NT()      (windows_version < 0x80000000)
+extern DWORD		 _windows_version;
+#define IS_WIN_NT()      (_windows_version < 0x80000000)
 
 /* Options */
-extern gboolean		 gdk_input_ignore_wintab;
-extern gboolean		 gdk_event_func_from_window_proc;
-extern gint		 gdk_max_colors;
+extern gboolean		 _gdk_input_ignore_wintab;
+extern gboolean		 _gdk_event_func_from_window_proc;
+extern gint		 _gdk_max_colors;
 
 #define GDK_WIN32_COLORMAP_DATA(cmap) ((GdkColormapPrivateWin32 *) GDK_COLORMAP (cmap)->windowing_data)
 

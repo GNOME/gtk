@@ -425,7 +425,7 @@ gdk_property_change (GdkWindow    *window,
 	  break;
 
 	case RICH_TEXT:
-	  cf = cf_rtf;
+	  cf = _cf_rtf;
 	  memmove (ucptr, rtf->str, size);
 	  g_string_free (rtf, TRUE);
 
@@ -439,7 +439,7 @@ gdk_property_change (GdkWindow    *window,
 	      guchar *utf8ptr = GlobalLock (hutf8);
 	      memmove (utf8ptr, data, nelements);
 	      GlobalUnlock (hutf8);
-	      if (!SetClipboardData (cf_utf8_string, hutf8))
+	      if (!SetClipboardData (_cf_utf8_string, hutf8))
 		WIN32_API_FAILED ("SetClipboardData (UTF8_STRING)");
 	    }
 	  break;
