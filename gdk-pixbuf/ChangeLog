@@ -1,3 +1,11 @@
+1999-12-05  Federico Mena Quintero  <federico@redhat.com>
+
+	* gdk-pixbuf/Makefile.am (testpixbuf_LDADD): Add back
+	$(GNOME_LIBS).  This must compile outside of gnome-libs.  If you
+	want, send me a patch to do the conditional stuff properly.
+	Otherwise, please read the GNOME Programming Guidelines,
+	especially the "CVS policies" section.
+
 1999-12-05  Jaka Mocnik  <jaka.mocnik@kiss.uni-lj.si>
 
 	* gdk-pixbuf/Makefile.am: removed GNOME_LIBS from testpixbuf_LDADD.
