@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.3.x\n"
 "POT-Creation-Date: 2003-01-13 16:16+0100\n"
-"PO-Revision-Date: 2003-01-13 16:15+0100\n"
-"Last-Translator: Christian Neumair <chris@gnome-de.org>\n"
+"PO-Revision-Date: 2003-01-14 16:15+0100\n"
+"Last-Translator: Benjamin Greiner <nadaschauher@gmx.de>\n"
 "Language-Team: German <gnome-de@gnome.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -4306,7 +4306,7 @@ msgstr "Eingabe_methoden"
 #: gtk/gtkthemes.c:69
 #, c-format
 msgid "Unable to locate theme engine in module_path: \"%s\","
-msgstr "Themen-Engine konnte nicht in module_path »%s« gefunden werden,"
+msgstr "Themen-Engine »%s« konnte nicht in module_path gefunden werden,"
 
 #: gtk/gtktipsquery.c:184
 msgid "--- No Tip ---"
