@@ -151,7 +151,9 @@ gdk_display_open (const gchar *display_name)
   XClassHint *class_hint;
   gulong pid;
   gint i;
+#ifdef HAVE_XFIXES
   gint ignore;
+#endif
 
   xdisplay = XOpenDisplay (display_name);
   if (!xdisplay)

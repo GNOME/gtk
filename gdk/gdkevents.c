@@ -559,6 +559,7 @@ gdk_event_get_time (GdkEvent *event)
       case GDK_UNMAP:
       case GDK_WINDOW_STATE:
       case GDK_SETTING:
+      case GDK_OWNER_CHANGE:
         /* return current time */
         break;
       }
@@ -634,6 +635,7 @@ gdk_event_get_state (GdkEvent        *event,
       case GDK_UNMAP:
       case GDK_WINDOW_STATE:
       case GDK_SETTING:
+      case GDK_OWNER_CHANGE:
         /* no state field */
         break;
       }
