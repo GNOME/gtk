@@ -1,12 +1,17 @@
 # Files from the Gtk ditribution which have already been
+# marked to allow runtime translation of messages
 gdk-pixbuf/gdk-pixbuf-animation.c
 gdk-pixbuf/gdk-pixbuf-data.c
 gdk-pixbuf/gdk-pixbuf-io.c
+gdk-pixbuf/gdk-pixbuf-loader.c
+gdk-pixbuf/io-bmp.c
 gdk-pixbuf/io-gif.c
 gdk-pixbuf/io-jpeg.c
 gdk-pixbuf/io-png.c
 gdk-pixbuf/io-pnm.c
-gdk-pixbuf/gdk-pixbuf-loader.c
+gdk-pixbuf/io-tiff.c
+gdk-pixbuf/io-xbm.c
+gdk-pixbuf/io-xpm.c
 gtk/gtkcellrenderer.c
 gtk/gtkcellrendererpixbuf.c
 gtk/gtkcellrenderertext.c
@@ -14,16 +19,24 @@ gtk/gtkcellrenderertextpixbuf.c
 gtk/gtkcellrenderertoggle.c
 gtk/gtkcolorsel.c
 gtk/gtkcolorseldialog.c
+gtk/gtkentry.c
 gtk/gtkfilesel.c
 gtk/gtkfontsel.c
 gtk/gtkgamma.c
 gtk/gtkiconfactory.c
 gtk/gtkinputdialog.c
 gtk/gtkmain.c
-gtk/gtkstock.c
 gtk/gtknotebook.c
 gtk/gtkrc.c
 gtk/gtkstock.c
+gtk/gtkstock.c
+gtk/gtktexttag.c
+gtk/gtktextview.c
 gtk/gtkthemes.c
 gtk/gtktipsquery.c
-# marked to allow runtime translation of messages
+gtk/gtktreeviewcolumn.c
+modules/input/imcyrillic-translit.c
+modules/input/iminuktitut.c
+modules/input/imthai-broken.c
+modules/input/imviqr.c
+modules/input/imxim.c

@@ -5,41 +5,45 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.3.0\n"
-"POT-Creation-Date: 2001-01-29 21:03+0100\n"
-"PO-Revision-Date: 2001-01-29 21:14+01:00\n"
+"POT-Creation-Date: 2001-02-27 13:09+0100\n"
+"PO-Revision-Date: 2001-02-27 13:11+01:00\n"
 "Last-Translator: Kjartan Maraas <kmaraas@online.no>\n"
 "Language-Team: Norwegian <no@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=iso-8859-1\n"
 "Content-Transfer-Encoding: 8-bit\n"
 
-#: gdk-pixbuf/gdk-pixbuf-animation.c:127 gdk-pixbuf/gdk-pixbuf-io.c:516
+#: gdk-pixbuf/gdk-pixbuf-animation.c:125 gdk-pixbuf/gdk-pixbuf-io.c:516
 #, c-format
 msgid "Failed to open file '%s': %s"
 msgstr "Feil under åpning av fil '%s': %s"
 
-#: gdk-pixbuf/gdk-pixbuf-animation.c:138 gdk-pixbuf/gdk-pixbuf-io.c:526
+#: gdk-pixbuf/gdk-pixbuf-animation.c:136 gdk-pixbuf/gdk-pixbuf-io.c:526
 #, c-format
 msgid "Image file '%s' contains no data"
 msgstr "Bildefil '%s' inneholder ikke data"
 
-#: gdk-pixbuf/gdk-pixbuf-animation.c:167
+#: gdk-pixbuf/gdk-pixbuf-animation.c:165
 #, c-format
 msgid "Don't know how to load the animation in file '%s'"
 msgstr "Vet ikke hvordan animasjonen i fil '%s' skal lastes"
 
-#: gdk-pixbuf/gdk-pixbuf-animation.c:189 gdk-pixbuf/gdk-pixbuf-io.c:571
+#: gdk-pixbuf/gdk-pixbuf-animation.c:187 gdk-pixbuf/gdk-pixbuf-io.c:571
 #, c-format
 msgid ""
 "Failed to load image '%s': reason not known, probably a corrupt image file"
-msgstr "Feil under lasting av bilde '%s': årsak ikke kjent, sannsynligvis korrupt bildefil"
+msgstr ""
+"Feil under lasting av bilde '%s': årsak ikke kjent, sannsynligvis korrupt "
+"bildefil"
 
-#: gdk-pixbuf/gdk-pixbuf-animation.c:228
+#: gdk-pixbuf/gdk-pixbuf-animation.c:226
 #, c-format
 msgid ""
 "Failed to load animation '%s': reason not known, probably a corrupt "
 "animation file"
-msgstr "Feil under lasting av animasjon '%s': årsak ikke kjent, sannsynligvis korrupt animasjonsfil"
+msgstr ""
+"Feil under lasting av animasjon '%s': årsak ikke kjent, sannsynligvis "
+"korrupt animasjonsfil"
 
 #: gdk-pixbuf/gdk-pixbuf-data.c:126
 msgid "Image data is partially missing"
@@ -56,8 +60,8 @@ msgid "Image size is impossibly large, perhaps the data was corrupted somehow"
 msgstr ""
 
 #: gdk-pixbuf/gdk-pixbuf-data.c:167
-msgid "Image data is partially missing, probably it was ocorrupted somehow."
-msgstr ""
+msgid "Image data is partially missing, probably it was corrupted somehow."
+msgstr "Bildedata mangler delvis, sannsynligvis korrupt på en eller annen måte."
 
 #: gdk-pixbuf/gdk-pixbuf-data.c:183
 #, c-format
@@ -151,6 +155,22 @@ msgstr ""
 msgid ""
 "Failed to close '%s' while writing image, all data may not have been saved: "
 "%s"
+msgstr ""
+
+#: gdk-pixbuf/gdk-pixbuf-loader.c:348
+#, c-format
+msgid "Incremental loading of image type '%s' is not supported"
+msgstr ""
+
+#: gdk-pixbuf/gdk-pixbuf-loader.c:373 gdk-pixbuf/gdk-pixbuf-loader.c:474
+#, c-format
+msgid ""
+"Internal error: Image loader module '%s' failed to begin loading an image, "
+"but didn't give a reason for the failure"
+msgstr ""
+
+#: gdk-pixbuf/io-bmp.c:309
+msgid "Not enough memory to load bitmap image"
 msgstr ""
 
 #: gdk-pixbuf/io-gif.c:426
@@ -276,33 +296,66 @@ msgstr ""
 msgid "Insufficient memory to load PNM file"
 msgstr ""
 
-#: gdk-pixbuf/gdk-pixbuf-loader.c:350
-#, c-format
-msgid "Incremental loading of image type '%s' is not supported"
-msgstr ""
+#: gdk-pixbuf/io-tiff.c:76
+msgid "Failed to open TIFF image"
+msgstr "Feil under åpning av TIFF-bilde"
 
-#: gdk-pixbuf/gdk-pixbuf-loader.c:375 gdk-pixbuf/gdk-pixbuf-loader.c:476
+#: gdk-pixbuf/io-tiff.c:89 gdk-pixbuf/io-tiff.c:104
+msgid "Insufficient memory to open TIFF file"
+msgstr "Ikke nok minne til å åpne TIFF-bilde"
+
+#: gdk-pixbuf/io-tiff.c:235
+msgid "Failed to write to temporary file when loading TIFF image"
+msgstr "Feil under skriving til midlertidig fil under lasting av TIFF-bilde"
+
+#: gdk-pixbuf/io-xbm.c:284
 #, c-format
-msgid ""
-"Internal error: Image loader module '%s' failed to begin loading an image, "
-"but didn't give a reason for the failure"
-msgstr ""
+msgid "Invalid XBM file: %s"
+msgstr "Ugyldig XBM-fil: %s"
+
+#: gdk-pixbuf/io-xbm.c:295
+msgid "Insufficient memory to load XBM image file"
+msgstr "Ikke nok minne til å laste XBM-bildefil"
+
+#: gdk-pixbuf/io-xbm.c:431
+msgid "Failed to write to temporary file when loading XBM image"
+msgstr "Feil under skriving til midlertidig file under lasting av XBM-bilde"
+
+#: gdk-pixbuf/io-xpm.c:1257
+msgid "No XPM header found"
+msgstr "Ingen XPM-header funnet"
+
+#: gdk-pixbuf/io-xpm.c:1265
+msgid "XPM has more than 31 chars per pixel"
+msgstr "XPM har mer enn 31 tegn per piksel"
+
+#: gdk-pixbuf/io-xpm.c:1283
+msgid "Can't read XPM colormap"
+msgstr "Kan ikke lese fargekart for XPM"
+
+#: gdk-pixbuf/io-xpm.c:1321
+msgid "Can't allocate memory for loading XPM image"
+msgstr "Kan ikke allokere minne for lasting av XPM-bilde"
+
+#: gdk-pixbuf/io-xpm.c:1505
+msgid "Failed to write to temporary file when loading XPM image"
+msgstr "Feil under skriving til midlertidig fil under lasting av XPM-bilde"
 
 #: gtk/gtkcellrenderer.c:100
 msgid "xalign"
-msgstr ""
+msgstr "xalign"
 
 #: gtk/gtkcellrenderer.c:101
 msgid "The x-align."
-msgstr ""
+msgstr "X-justering."
 
 #: gtk/gtkcellrenderer.c:111
 msgid "yalign"
-msgstr ""
+msgstr "yalign"
 
 #: gtk/gtkcellrenderer.c:112
 msgid "The y-align."
-msgstr ""
+msgstr "Y-justering."
 
 #: gtk/gtkcellrenderer.c:122
 msgid "xpad"
@@ -328,73 +381,237 @@ msgstr "Pixbuf-objekt"
 msgid "The pixbuf to render."
 msgstr "Pixbuf som skal rendres."
 
-#: gtk/gtkcellrenderertext.c:117
-msgid "Text String"
-msgstr "Tekststreng"
+#: gtk/gtkcellrenderertext.c:148
+msgid "Text"
+msgstr ""
 
-#: gtk/gtkcellrenderertext.c:118
-msgid "The text of the renderer."
-msgstr "Teksten som skal rendres."
+#: gtk/gtkcellrenderertext.c:149
+msgid "Text to render"
+msgstr "Tekst som skal rendres"
 
-#: gtk/gtkcellrenderertext.c:126
-msgid "Font String"
-msgstr "Skrifttypestreng"
+#: gtk/gtkcellrenderertext.c:156
+msgid "Markup"
+msgstr ""
 
-#: gtk/gtkcellrenderertext.c:127
-msgid "The string of the font."
-msgstr "Strengen til skrifttypen."
+#: gtk/gtkcellrenderertext.c:157
+#, fuzzy
+msgid "Marked up text to render"
+msgstr "Pixbuf som skal rendres."
 
-#: gtk/gtkcellrenderertext.c:134
-msgid "Background Color string"
-msgstr "Streng for bakgrunnsfarge"
+#: gtk/gtkcellrenderertext.c:164 gtk/gtktexttag.c:208
+msgid "Background color name"
+msgstr "Navn på bakgrunnsfarge"
 
-#: gtk/gtkcellrenderertext.c:135 gtk/gtkcellrenderertext.c:143
-msgid "The color for the background of the text."
-msgstr "Farge for bakgrunn for teksten."
+#: gtk/gtkcellrenderertext.c:165 gtk/gtktexttag.c:209
+msgid "Background color as a string"
+msgstr "Bakgrunnsfarge som en streng"
 
-#: gtk/gtkcellrenderertext.c:142
-msgid "Foreground Color string"
-msgstr "Forgrunnsfargestreng"
+#: gtk/gtkcellrenderertext.c:172 gtk/gtktexttag.c:216
+msgid "Background color"
+msgstr "Bakgrunnsfarge"
 
-#: gtk/gtkcellrenderertext.c:150
-msgid "Strikethrough"
-msgstr "Gjennomstreking"
+#: gtk/gtkcellrenderertext.c:173 gtk/gtktexttag.c:217
+msgid "Background color as a GdkColor"
+msgstr "Bakgrunnsfarge som en GdkColor"
 
-#: gtk/gtkcellrenderertext.c:151
-msgid "Draw a line through the text."
-msgstr "Tegn en linje gjennom teksten."
+#: gtk/gtkcellrenderertext.c:180 gtk/gtktexttag.c:242
+msgid "Foreground color name"
+msgstr "Navn på forgrunnsfarge"
 
-#: gtk/gtkcellrenderertext.c:159
-msgid "Underline"
-msgstr "Understrek"
+#: gtk/gtkcellrenderertext.c:181 gtk/gtktexttag.c:243
+msgid "Foreground color as a string"
+msgstr "Forgrunnsfarge som en streng"
 
-#: gtk/gtkcellrenderertext.c:160
-msgid "Underline the text."
-msgstr "Understrek teksten."
+#: gtk/gtkcellrenderertext.c:188 gtk/gtktexttag.c:250
+msgid "Foreground color"
+msgstr "Forgrunnsfarge"
 
-#: gtk/gtkcellrenderertext.c:168
+#: gtk/gtkcellrenderertext.c:189 gtk/gtktexttag.c:251
+msgid "Foreground color as a GdkColor"
+msgstr "Forgrunnsfarge som en GdkColor"
+
+#: gtk/gtkcellrenderertext.c:197 gtk/gtkentry.c:373 gtk/gtktexttag.c:276
 msgid "Editable"
 msgstr "Redigerbar"
 
-#: gtk/gtkcellrenderertext.c:169
-msgid "Make the text editable."
-msgstr "Gjør teksten redigerbar."
+#: gtk/gtkcellrenderertext.c:198 gtk/gtktexttag.c:277
+msgid "Whether the text can be modified by the user"
+msgstr ""
 
-#: gtk/gtkcellrenderertext.c:177
-msgid "Italic"
-msgstr "Kursiv"
+#: gtk/gtkcellrenderertext.c:205 gtk/gtkcellrenderertext.c:213
+#: gtk/gtktexttag.c:284 gtk/gtktexttag.c:292
+msgid "Font"
+msgstr "Skrifttype"
 
-#: gtk/gtkcellrenderertext.c:178
-msgid "Make the text italic."
-msgstr "Gjør teksten kursiv."
+#: gtk/gtkcellrenderertext.c:206 gtk/gtktexttag.c:285
+msgid "Font description as a string"
+msgstr "Beskrivelse av skrifttypen som en streng"
 
-#: gtk/gtkcellrenderertext.c:185
-msgid "Bold"
-msgstr "Uthevet"
+#: gtk/gtkcellrenderertext.c:214 gtk/gtktexttag.c:293
+msgid "Font description as a PangoFontDescription struct"
+msgstr ""
 
-#: gtk/gtkcellrenderertext.c:186
-msgid "Make the text bold."
-msgstr "Gjør teksten uthevet."
+#: gtk/gtkcellrenderertext.c:222 gtk/gtktexttag.c:301
+msgid "Font family"
+msgstr "Skrifttypefamilie"
+
+#: gtk/gtkcellrenderertext.c:223 gtk/gtktexttag.c:302
+msgid "Name of the font family, e.g. Sans, Helvetica, Times, Monospace"
+msgstr ""
+
+#: gtk/gtkcellrenderertext.c:230 gtk/gtkcellrenderertext.c:231
+#: gtk/gtktexttag.c:309 gtk/gtktexttag.c:310
+msgid "Font style"
+msgstr "Skrifttypestil"
+
+#: gtk/gtkcellrenderertext.c:239 gtk/gtkcellrenderertext.c:240
+#: gtk/gtktexttag.c:318 gtk/gtktexttag.c:319
+msgid "Font variant"
+msgstr "Skrifttypevariant"
+
+#: gtk/gtkcellrenderertext.c:248 gtk/gtkcellrenderertext.c:249
+#: gtk/gtktexttag.c:327 gtk/gtktexttag.c:328
+msgid "Font weight"
+msgstr "Skrifttypens vekt"
+
+#: gtk/gtkcellrenderertext.c:259 gtk/gtkcellrenderertext.c:260
+#: gtk/gtktexttag.c:338 gtk/gtktexttag.c:339
+msgid "Font stretch"
+msgstr "Skrifttypens \"strekk\""
+
+#: gtk/gtkcellrenderertext.c:268 gtk/gtkcellrenderertext.c:269
+#: gtk/gtktexttag.c:347 gtk/gtktexttag.c:348
+msgid "Font size"
+msgstr "Størrelse for skrifttype"
+
+#: gtk/gtkcellrenderertext.c:278 gtk/gtktexttag.c:357
+msgid "Font points"
+msgstr "Punkter for skrifttype"
+
+#: gtk/gtkcellrenderertext.c:279 gtk/gtktexttag.c:358
+msgid "Font size in points"
+msgstr "Størrelse for skrifttype i punkter"
+
+#: gtk/gtkcellrenderertext.c:288 gtk/gtktexttag.c:416
+msgid "Rise"
+msgstr "Hev"
+
+#: gtk/gtkcellrenderertext.c:289 gtk/gtktexttag.c:417
+msgid ""
+"Offset of text above the baseline (below the baseline if rise is negative)"
+msgstr ""
+
+#: gtk/gtkcellrenderertext.c:299 gtk/gtktexttag.c:456
+msgid "Strikethrough"
+msgstr "Gjennomstreking"
+
+#: gtk/gtkcellrenderertext.c:300 gtk/gtktexttag.c:457
+msgid "Whether to strike through the text"
+msgstr "Bruk gjennomstreking av teksten"
+
+#: gtk/gtkcellrenderertext.c:307 gtk/gtktexttag.c:464
+msgid "Underline"
+msgstr "Understrek"
+
+#: gtk/gtkcellrenderertext.c:308 gtk/gtktexttag.c:465
+msgid "Style of underline for this text"
+msgstr "Stil for understreking av denne teksten."
+
+#: gtk/gtkcellrenderertext.c:318 gtk/gtktexttag.c:501
+msgid "Background set"
+msgstr ""
+
+#: gtk/gtkcellrenderertext.c:319 gtk/gtktexttag.c:502
+msgid "Whether this tag affects the background color"
+msgstr ""
+
+#: gtk/gtkcellrenderertext.c:322 gtk/gtktexttag.c:513
+msgid "Foreground set"
+msgstr ""
+
+#: gtk/gtkcellrenderertext.c:323 gtk/gtktexttag.c:514
+msgid "Whether this tag affects the foreground color"
+msgstr ""
+
+#: gtk/gtkcellrenderertext.c:326 gtk/gtktexttag.c:521
+msgid "Editability set"
+msgstr ""
+
+#: gtk/gtkcellrenderertext.c:327 gtk/gtktexttag.c:522
+msgid "Whether this tag affects text editability"
+msgstr ""
+
+#: gtk/gtkcellrenderertext.c:330 gtk/gtktexttag.c:525
+msgid "Font family set"
+msgstr ""
+
+#: gtk/gtkcellrenderertext.c:331 gtk/gtktexttag.c:526
+msgid "Whether this tag affects the font family"
+msgstr ""
+
+#: gtk/gtkcellrenderertext.c:334 gtk/gtktexttag.c:529
+msgid "Font style set"
+msgstr ""
+
+#: gtk/gtkcellrenderertext.c:335 gtk/gtktexttag.c:530
+msgid "Whether this tag affects the font style"
+msgstr ""
+
+#: gtk/gtkcellrenderertext.c:338 gtk/gtktexttag.c:533
+msgid "Font variant set"
+msgstr ""
+
+#: gtk/gtkcellrenderertext.c:339 gtk/gtktexttag.c:534
+msgid "Whether this tag affects the font variant"
+msgstr ""
+
+#: gtk/gtkcellrenderertext.c:342 gtk/gtktexttag.c:537
+msgid "Font weight set"
+msgstr ""
+
+#: gtk/gtkcellrenderertext.c:343 gtk/gtktexttag.c:538
+msgid "Whether this tag affects the font weight"
+msgstr ""
+
+#: gtk/gtkcellrenderertext.c:346 gtk/gtktexttag.c:541
+msgid "Font stretch set"
+msgstr ""
+
+#: gtk/gtkcellrenderertext.c:347 gtk/gtktexttag.c:542
+msgid "Whether this tag affects the font stretch"
+msgstr ""
+
+#: gtk/gtkcellrenderertext.c:350 gtk/gtktexttag.c:545
+msgid "Font size set"
+msgstr ""
+
+#: gtk/gtkcellrenderertext.c:351 gtk/gtktexttag.c:546
+msgid "Whether this tag affects the font size"
+msgstr ""
+
+#: gtk/gtkcellrenderertext.c:354 gtk/gtktexttag.c:565
+msgid "Rise set"
+msgstr ""
+
+#: gtk/gtkcellrenderertext.c:355 gtk/gtktexttag.c:566
+msgid "Whether this tag affects the rise"
+msgstr ""
+
+#: gtk/gtkcellrenderertext.c:358 gtk/gtktexttag.c:581
+msgid "Strikethrough set"
+msgstr ""
+
+#: gtk/gtkcellrenderertext.c:359 gtk/gtktexttag.c:582
+msgid "Whether this tag affects strikethrough"
+msgstr ""
+
+#: gtk/gtkcellrenderertext.c:362 gtk/gtktexttag.c:589
+msgid "Underline set"
+msgstr ""
+
+#: gtk/gtkcellrenderertext.c:363 gtk/gtktexttag.c:590
+msgid "Whether this tag affects underlining"
+msgstr ""
 
 #: gtk/gtkcellrenderertextpixbuf.c:113
 msgid "Pixbuf location"
@@ -410,47 +627,47 @@ msgstr "pixbuf xalign"
 
 #: gtk/gtkcellrenderertextpixbuf.c:134
 msgid "The x-align of the pixbuf."
-msgstr ""
+msgstr "X-justering for pixbuf."
 
 #: gtk/gtkcellrenderertextpixbuf.c:144
 msgid "pixbuf yalign"
-msgstr ""
+msgstr "pixbuf yalign"
 
 #: gtk/gtkcellrenderertextpixbuf.c:145
 msgid "The y-align of the pixbuf."
-msgstr ""
+msgstr "Y-justering for pixbuf."
 
 #: gtk/gtkcellrenderertextpixbuf.c:155
 msgid "pixbuf xpad"
-msgstr ""
+msgstr "pixbuf xfyll"
 
 #: gtk/gtkcellrenderertextpixbuf.c:156
 msgid "The xpad of the pixbuf."
-msgstr ""
+msgstr "X-fyll for pixbuf."
 
 #: gtk/gtkcellrenderertextpixbuf.c:166
 msgid "pixbuf ypad"
-msgstr ""
+msgstr "pixbuf yfyll"
 
 #: gtk/gtkcellrenderertextpixbuf.c:167
 msgid "The ypad of the pixbuf."
-msgstr ""
+msgstr "Y-fyll for pixbuf."
 
 #: gtk/gtkcellrenderertoggle.c:125
 msgid "Toggle state"
-msgstr ""
+msgstr "Knappetilstand"
 
 #: gtk/gtkcellrenderertoggle.c:126
 msgid "The toggle state of the button"
-msgstr ""
+msgstr "Tilstand for knapp (vending)"
 
 #: gtk/gtkcellrenderertoggle.c:134
 msgid "Radio state"
-msgstr ""
+msgstr "Radiotilstand"
 
 #: gtk/gtkcellrenderertoggle.c:135
 msgid "Draw the toggle button as a radio button"
-msgstr ""
+msgstr "Tegn knapp for vending som en radioknapp"
 
 #: gtk/gtkcolorsel.c:1385
 msgid "Hue:"
@@ -492,30 +709,81 @@ msgstr "Egendefinert palett"
 msgid "Set Color"
 msgstr "Sett farge"
 
+#: gtk/gtkentry.c:363
+msgid "Text Position"
+msgstr "Tekstplassering"
+
+#: gtk/gtkentry.c:364
+msgid "The current position of the insertion point"
+msgstr ""
+
+#: gtk/gtkentry.c:374
+#, fuzzy
+msgid "Whether the entry contents can be edited"
+msgstr "Om toppteksten kan klikkes"
+
+#: gtk/gtkentry.c:381
+msgid "Maximum length"
+msgstr "Maksimal lengde"
+
+#: gtk/gtkentry.c:382
+msgid "Maximum number of characters for this entry"
+msgstr ""
+
+#: gtk/gtkentry.c:390
+msgid "Visibility"
+msgstr "Synlighet"
+
+#: gtk/gtkentry.c:391
+msgid ""
+"FALSE displays the \"invisible char\" instead of the actual text (password "
+"mode)"
+msgstr ""
+
+#: gtk/gtkentry.c:397
+msgid "Invisible character"
+msgstr "Usynlig tegn"
+
+#: gtk/gtkentry.c:398
+msgid "The character to use when masking entry contents (in \"password mode\")"
+msgstr ""
+
+#: gtk/gtkentry.c:2792 gtk/gtktextview.c:4905
+msgid "Cut"
+msgstr "Klipp ut"
+
+#: gtk/gtkentry.c:2793 gtk/gtktextview.c:4906
+msgid "Copy"
+msgstr "Kopiér"
+
+#: gtk/gtkentry.c:2794 gtk/gtktextview.c:4907
+msgid "Paste"
+msgstr "Lim inn"
+
 #. The directories clist
-#: gtk/gtkfilesel.c:514
+#: gtk/gtkfilesel.c:526
 msgid "Directories"
 msgstr "Kataloger"
 
 #. The files clist
-#: gtk/gtkfilesel.c:534
+#: gtk/gtkfilesel.c:546
 msgid "Files"
 msgstr "Filer"
 
-#: gtk/gtkfilesel.c:600 gtk/gtkfilesel.c:1636
+#: gtk/gtkfilesel.c:612 gtk/gtkfilesel.c:1648
 #, c-format
 msgid "Directory unreadable: %s"
 msgstr "Uleselig katalog: %s"
 
-#: gtk/gtkfilesel.c:632
+#: gtk/gtkfilesel.c:644
 msgid "Create Dir"
 msgstr "Lag katalog"
 
-#: gtk/gtkfilesel.c:643 gtk/gtkfilesel.c:1043
+#: gtk/gtkfilesel.c:655 gtk/gtkfilesel.c:1055
 msgid "Delete File"
 msgstr "Slett fil"
 
-#: gtk/gtkfilesel.c:654 gtk/gtkfilesel.c:1156
+#: gtk/gtkfilesel.c:666 gtk/gtkfilesel.c:1168
 msgid "Rename File"
 msgstr "Gi filen nytt navn"
 
@@ -524,44 +792,44 @@ msgstr "Gi filen nytt navn"
 #. (GtkSignalFunc) gtk_file_selection_fileop_destroy,
 #. (gpointer) fs);
 #.
-#: gtk/gtkfilesel.c:824 gtk/gtkstock.c:171
+#: gtk/gtkfilesel.c:836 gtk/gtkstock.c:230
 msgid "Error"
 msgstr "Feil"
 
 #. close button
-#: gtk/gtkfilesel.c:847 gtk/gtkinputdialog.c:334 gtk/gtkstock.c:181
+#: gtk/gtkfilesel.c:859 gtk/gtkinputdialog.c:334 gtk/gtkstock.c:240
 msgid "Close"
 msgstr "Lukk"
 
-#: gtk/gtkfilesel.c:929
+#: gtk/gtkfilesel.c:941
 msgid "Create Directory"
 msgstr "Lag katalog"
 
-#: gtk/gtkfilesel.c:943
+#: gtk/gtkfilesel.c:955
 msgid "Directory name:"
 msgstr "Katalognavn:"
 
 #. buttons
-#: gtk/gtkfilesel.c:956
+#: gtk/gtkfilesel.c:968
 msgid "Create"
 msgstr "Lag"
 
-#: gtk/gtkfilesel.c:965 gtk/gtkfilesel.c:1074 gtk/gtkfilesel.c:1198
-#: gtk/gtkgamma.c:423 gtk/gtkstock.c:176
+#: gtk/gtkfilesel.c:977 gtk/gtkfilesel.c:1086 gtk/gtkfilesel.c:1210
+#: gtk/gtkgamma.c:423 gtk/gtkstock.c:235
 msgid "Cancel"
 msgstr "Avbryt"
 
 #. buttons
-#: gtk/gtkfilesel.c:1065
+#: gtk/gtkfilesel.c:1077
 msgid "Delete"
 msgstr "Slett"
 
 #. buttons
-#: gtk/gtkfilesel.c:1189
+#: gtk/gtkfilesel.c:1201
 msgid "Rename"
 msgstr "Gi nytt navn"
 
-#: gtk/gtkfilesel.c:1615
+#: gtk/gtkfilesel.c:1627
 msgid "Selection: "
 msgstr "Valg:"
 
@@ -594,17 +862,17 @@ msgstr "Gamma"
 msgid "Gamma value"
 msgstr "Gammaverdi"
 
-#: gtk/gtkgamma.c:415 gtk/gtkstock.c:175
+#: gtk/gtkgamma.c:415 gtk/gtkstock.c:234
 msgid "OK"
 msgstr "OK"
 
 #. Remove this icon source so we don't keep trying to
 #. * load it.
 #.
-#: gtk/gtkiconfactory.c:675
+#: gtk/gtkiconfactory.c:860
 #, c-format
 msgid "Error loading icon: %s"
-msgstr ""
+msgstr "Feil under lasting av ikon: %s"
 
 #. shell and main vbox
 #: gtk/gtkinputdialog.c:181
@@ -647,7 +915,7 @@ msgstr "Taster"
 
 #. We create the save button in any case, so that clients can
 #. connect to it, without paying attention to whether it exits
-#: gtk/gtkinputdialog.c:325 gtk/gtkstock.c:186
+#: gtk/gtkinputdialog.c:325 gtk/gtkstock.c:245
 msgid "Save"
 msgstr "Lagre"
 
@@ -697,69 +965,308 @@ msgstr "tøm"
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: gtk/gtkmain.c:427
+#: gtk/gtkmain.c:473
 msgid "default:LTR"
 msgstr "standard:LTR"
-
-#. KEEP IN SYNC with gtkiconfactory.c stock icons
-#: gtk/gtkstock.c:169
-msgid "Information"
-msgstr "Informasjon"
-
-#: gtk/gtkstock.c:170
-msgid "Warning"
-msgstr "Advarsel"
-
-#: gtk/gtkstock.c:172
-msgid "Question"
-msgstr "Spørsmål"
-
-#: gtk/gtkstock.c:174
-msgid "_Apply"
-msgstr "_Bruk"
-
-#: gtk/gtkstock.c:177
-msgid "_Close"
-msgstr "_Lukk"
-
-#: gtk/gtkstock.c:178
-msgid "_Yes"
-msgstr "_Ja"
-
-#: gtk/gtkstock.c:179
-msgid "_No"
-msgstr "_Nei"
-
-#: gtk/gtkstock.c:182
-msgid "Quit"
-msgstr "Avslutt"
-
-#: gtk/gtkstock.c:183
-msgid "Help"
-msgstr "Hjelp"
-
-#: gtk/gtkstock.c:184
-msgid "New"
-msgstr "Ny"
-
-#: gtk/gtkstock.c:185
-msgid "Open"
-msgstr "Åpne"
 
 #: gtk/gtknotebook.c:2033 gtk/gtknotebook.c:4349
 #, c-format
 msgid "Page %u"
 msgstr "Side %u"
 
-#: gtk/gtkrc.c:2024
+#: gtk/gtkrc.c:2025
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\" line %d"
 msgstr "Kunne ikke finne bildefilen i pixmap_patg: \"%s\" linje %d"
 
-#: gtk/gtkrc.c:2027
+#: gtk/gtkrc.c:2028
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "Kunne ikke finne bildefil i pixmap_path: \"%s\""
+
+#. KEEP IN SYNC with gtkiconfactory.c stock icons
+#: gtk/gtkstock.c:228
+msgid "Information"
+msgstr "Informasjon"
+
+#: gtk/gtkstock.c:229
+msgid "Warning"
+msgstr "Advarsel"
+
+#: gtk/gtkstock.c:231
+msgid "Question"
+msgstr "Spørsmål"
+
+#: gtk/gtkstock.c:233
+msgid "_Apply"
+msgstr "_Bruk"
+
+#: gtk/gtkstock.c:236
+msgid "_Close"
+msgstr "_Lukk"
+
+#: gtk/gtkstock.c:237
+msgid "_Yes"
+msgstr "_Ja"
+
+#: gtk/gtkstock.c:238
+msgid "_No"
+msgstr "_Nei"
+
+#: gtk/gtkstock.c:241
+msgid "Quit"
+msgstr "Avslutt"
+
+#: gtk/gtkstock.c:242
+msgid "Help"
+msgstr "Hjelp"
+
+#: gtk/gtkstock.c:243
+msgid "New"
+msgstr "Ny"
+
+#: gtk/gtkstock.c:244
+msgid "Open"
+msgstr "Åpne"
+
+#: gtk/gtktexttag.c:198
+msgid "Tag name"
+msgstr "Navn på tag"
+
+#: gtk/gtktexttag.c:199
+msgid "Name used to refer to the text tag"
+msgstr "Navn som brukes ved referanse til tekst-taggen"
+
+#: gtk/gtktexttag.c:224
+msgid "Background full height"
+msgstr "Full høyde for bakgrunnsfarge"
+
+#: gtk/gtktexttag.c:225
+msgid ""
+"Whether the background color fills the entire line height or only the height "
+"of the tagged characters"
+msgstr ""
+
+#: gtk/gtktexttag.c:233
+msgid "Background stipple mask"
+msgstr "Stiplingsmaske for bakgrunnsfarge"
+
+#: gtk/gtktexttag.c:234
+msgid "Bitmap to use as a mask when drawing the text background"
+msgstr ""
+
+#: gtk/gtktexttag.c:259
+msgid "Foreground stipple mask"
+msgstr "Stiplingsmaske for forgrunnsfarge"
+
+#: gtk/gtktexttag.c:260
+msgid "Bitmap to use as a mask when drawing the text foreground"
+msgstr ""
+
+#: gtk/gtktexttag.c:267
+msgid "Text direction"
+msgstr "Tekstretning"
+
+#: gtk/gtktexttag.c:268
+msgid "Text direction, e.g. right-to-left or left-to-right"
+msgstr ""
+
+#: gtk/gtktexttag.c:367
+msgid "Justification"
+msgstr "Justering"
+
+#: gtk/gtktexttag.c:368
+msgid "Left, right, or center justification"
+msgstr "Venstre-, høyre- eller senterjustering"
+
+#: gtk/gtktexttag.c:376
+msgid "Language"
+msgstr "Språk"
+
+#: gtk/gtktexttag.c:377
+msgid "Language engine code to use for rendering the text"
+msgstr "Språkmotor som skal brukes for å rendre teksten"
+
+#: gtk/gtktexttag.c:384
+msgid "Left margin"
+msgstr "Venstre marg"
+
+#: gtk/gtktexttag.c:385
+msgid "Width of the left margin in pixels"
+msgstr "Bredde på venstre marg i piksler"
+
+#: gtk/gtktexttag.c:394
+msgid "Right margin"
+msgstr "Høyre marg"
+
+#: gtk/gtktexttag.c:395
+msgid "Width of the right margin in pixels"
+msgstr "Bredde på høyre marg i piksler"
+
+#: gtk/gtktexttag.c:405
+msgid "Indent"
+msgstr "Rykk inn"
+
+#: gtk/gtktexttag.c:406
+msgid "Amount to indent the paragraph, in pixels"
+msgstr "Mengde innrykk i avsnittet, i piksler"
+
+#: gtk/gtktexttag.c:426
+msgid "Pixels above lines"
+msgstr "Piksler over linjer"
+
+#: gtk/gtktexttag.c:427
+msgid "Pixels of blank space above paragraphs"
+msgstr ""
+
+#: gtk/gtktexttag.c:436
+msgid "Pixels below lines"
+msgstr ""
+
+#: gtk/gtktexttag.c:437
+msgid "Pixels of blank space below paragraphs"
+msgstr ""
+
+#: gtk/gtktexttag.c:446
+msgid "Pixels inside wrap"
+msgstr ""
+
+#: gtk/gtktexttag.c:447
+msgid "Pixels of blank space between wrapped lines in a paragraph"
+msgstr ""
+
+#: gtk/gtktexttag.c:473
+msgid "Wrap mode"
+msgstr "Brytningsmodus"
+
+#: gtk/gtktexttag.c:474
+msgid ""
+"Whether to wrap lines never, at word boundaries, or at character boundaries"
+msgstr ""
+
+#: gtk/gtktexttag.c:483
+msgid "Tabs"
+msgstr "Faner"
+
+#: gtk/gtktexttag.c:484
+msgid "Custom tabs for this text"
+msgstr ""
+
+#: gtk/gtktexttag.c:491
+msgid "Invisible"
+msgstr "Usynlig"
+
+#: gtk/gtktexttag.c:492
+msgid "Whether this text is hidden"
+msgstr ""
+
+#: gtk/gtktexttag.c:505
+msgid "Background full height set"
+msgstr ""
+
+#: gtk/gtktexttag.c:506
+msgid "Whether this tag affects background height"
+msgstr ""
+
+#: gtk/gtktexttag.c:509
+msgid "Background stipple set"
+msgstr ""
+
+#: gtk/gtktexttag.c:510
+msgid "Whether this tag affects the background stipple"
+msgstr ""
+
+#: gtk/gtktexttag.c:517
+msgid "Foreground stipple set"
+msgstr ""
+
+#: gtk/gtktexttag.c:518
+msgid "Whether this tag affects the foreground stipple"
+msgstr ""
+
+#: gtk/gtktexttag.c:549
+msgid "Justification set"
+msgstr ""
+
+#: gtk/gtktexttag.c:550
+msgid "Whether this tag affects paragraph justification"
+msgstr ""
+
+#: gtk/gtktexttag.c:553
+msgid "Language set"
+msgstr ""
+
+#: gtk/gtktexttag.c:554
+msgid "Whether this tag affects the language the text is rendered as"
+msgstr ""
+
+#: gtk/gtktexttag.c:557
+msgid "Left margin set"
+msgstr ""
+
+#: gtk/gtktexttag.c:558
+msgid "Whether this tag affects the left margin"
+msgstr ""
+
+#: gtk/gtktexttag.c:561
+msgid "Indent set"
+msgstr ""
+
+#: gtk/gtktexttag.c:562
+msgid "Whether this tag affects indentation"
+msgstr ""
+
+#: gtk/gtktexttag.c:569
+msgid "Pixels above lines set"
+msgstr ""
+
+#: gtk/gtktexttag.c:570 gtk/gtktexttag.c:574
+msgid "Whether this tag affects the number of pixels above lines"
+msgstr ""
+
+#: gtk/gtktexttag.c:573
+msgid "Pixels below lines set"
+msgstr ""
+
+#: gtk/gtktexttag.c:577
+msgid "Pixels inside wrap set"
+msgstr ""
+
+#: gtk/gtktexttag.c:578
+msgid "Whether this tag affects the number of pixels between wrapped lines"
+msgstr ""
+
+#: gtk/gtktexttag.c:585
+msgid "Right margin set"
+msgstr ""
+
+#: gtk/gtktexttag.c:586
+msgid "Whether this tag affects the right margin"
+msgstr ""
+
+#: gtk/gtktexttag.c:593
+msgid "Wrap mode set"
+msgstr ""
+
+#: gtk/gtktexttag.c:594
+msgid "Whether this tag affects line wrap mode"
+msgstr ""
+
+#: gtk/gtktexttag.c:597
+msgid "Tabs set"
+msgstr ""
+
+#: gtk/gtktexttag.c:598
+msgid "Whether this tag affects tabs"
+msgstr ""
+
+#: gtk/gtktexttag.c:601
+msgid "Invisible set"
+msgstr ""
+
+#: gtk/gtktexttag.c:602
+msgid "Whether this tag affects text visibility"
+msgstr ""
 
 #: gtk/gtkthemes.c:71
 #, c-format
@@ -769,3 +1276,169 @@ msgstr "Kunne ikke finne lastbar modul i module_path: \"%s\","
 #: gtk/gtktipsquery.c:180
 msgid "--- No Tip ---"
 msgstr "--- Ingen tips ---"
+
+#: gtk/gtktreeviewcolumn.c:130
+msgid "Cell renderer"
+msgstr ""
+
+#: gtk/gtktreeviewcolumn.c:131
+msgid "Cell renderer object to use for rendering the cell"
+msgstr ""
+
+#: gtk/gtktreeviewcolumn.c:138
+msgid "Visible"
+msgstr "Synlig"
+
+#: gtk/gtktreeviewcolumn.c:139
+msgid "Whether to display the colomn"
+msgstr ""
+
+#: gtk/gtktreeviewcolumn.c:146
+msgid "Sizing"
+msgstr "Størrelse"
+
+#: gtk/gtktreeviewcolumn.c:147
+msgid "Resize mode of the column"
+msgstr ""
+
+#: gtk/gtktreeviewcolumn.c:155
+msgid "Width"
+msgstr "Bredde"
+
+#: gtk/gtktreeviewcolumn.c:156
+msgid "Current width of the column"
+msgstr ""
+
+#: gtk/gtktreeviewcolumn.c:165
+msgid "Minimum Width"
+msgstr "Minimal bredde"
+
+#: gtk/gtktreeviewcolumn.c:166
+msgid "Minimum allowed width of the column"
+msgstr ""
+
+#: gtk/gtktreeviewcolumn.c:175
+msgid "Maximum Width"
+msgstr "Maksimal bredde"
+
+#: gtk/gtktreeviewcolumn.c:176
+msgid "Maximum allowed width of the column"
+msgstr ""
+
+#: gtk/gtktreeviewcolumn.c:185
+msgid "Title"
+msgstr "Tittel"
+
+#: gtk/gtktreeviewcolumn.c:186
+msgid "Title to appear in column header"
+msgstr "Tittel som vises i kolonnetopptekst"
+
+#: gtk/gtktreeviewcolumn.c:193
+msgid "Clickable"
+msgstr "Klikkbar"
+
+#: gtk/gtktreeviewcolumn.c:194
+msgid "Whether the header can be clicked"
+msgstr "Om toppteksten kan klikkes"
+
+#: gtk/gtktreeviewcolumn.c:202
+msgid "Widget"
+msgstr "Widget"
+
+#: gtk/gtktreeviewcolumn.c:203
+msgid "Widget to put in column header button instead of column title"
+msgstr ""
+
+#: gtk/gtktreeviewcolumn.c:210
+msgid "Alignment"
+msgstr ""
+
+#: gtk/gtktreeviewcolumn.c:211
+msgid "Alignment of the column header text or widget"
+msgstr ""
+
+#: gtk/gtktreeviewcolumn.c:220
+msgid "Sort indicator"
+msgstr ""
+
+#: gtk/gtktreeviewcolumn.c:221
+msgid "Whether to show a sort indicator"
+msgstr ""
+
+#: gtk/gtktreeviewcolumn.c:228
+msgid "Sort order"
+msgstr ""
+
+#: gtk/gtktreeviewcolumn.c:229
+msgid "Sort direction the sort indicator should indicate"
+msgstr ""
+
+#. ID
+#: modules/input/imcyrillic-translit.c:216
+msgid "Cyrillic (Transliterated)"
+msgstr "Kyrillisk (transliterert)"
+
+#. ID
+#: modules/input/iminuktitut.c:126
+msgid "Inukitut (Transliterated)"
+msgstr "Inukitut (transliterert)"
+
+#. ID
+#: modules/input/imthai-broken.c:177
+msgid "Thai (Broken)"
+msgstr "Thai (ødelagt)"
+
+#. ID
+#: modules/input/imviqr.c:243
+msgid "Vietnamese (VIQR)"
+msgstr "Vietnamesisk (VIQR)"
+
+#. ID
+#: modules/input/imxim.c:27
+msgid "X Input Method"
+msgstr "X-inndatametode"
+
+#~ msgid "Text String"
+#~ msgstr "Tekststreng"
+
+#~ msgid "The text of the renderer."
+#~ msgstr "Teksten som skal rendres."
+
+#~ msgid "Font String"
+#~ msgstr "Skrifttypestreng"
+
+#~ msgid "The string of the font."
+#~ msgstr "Strengen til skrifttypen."
+
+#~ msgid "Background Color string"
+#~ msgstr "Streng for bakgrunnsfarge"
+
+#~ msgid "The color for the background of the text."
+#~ msgstr "Farge for bakgrunn for teksten."
+
+#~ msgid "Foreground Color string"
+#~ msgstr "Forgrunnsfargestreng"
+
+#~ msgid "Draw a line through the text."
+#~ msgstr "Tegn en linje gjennom teksten."
+
+#~ msgid "Underline the text."
+#~ msgstr "Understrek teksten."
+
+#~ msgid "Make the text editable."
+#~ msgstr "Gjør teksten redigerbar."
+
+#~ msgid "Italic"
+#~ msgstr "Kursiv"
+
+#~ msgid "Make the text italic."
+#~ msgstr "Gjør teksten kursiv."
+
+#~ msgid "Bold"
+#~ msgstr "Uthevet"
+
+#~ msgid "Make the text bold."
+#~ msgstr "Gjør teksten uthevet."
+
+#~ msgid "Justification of the column"
+#~ msgstr "Justering av kolonnen"
