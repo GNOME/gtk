@@ -3931,7 +3931,6 @@ gtk_text_view_button_press_event (GtkWidget *widget, GdkEventButton *event)
       else if (event->button == 2)
         {
           GtkTextIter iter;
-          GtkTextMark *mark;
 
           gtk_text_layout_get_iter_at_pixel (text_view->layout,
                                              &iter,
@@ -3939,21 +3938,9 @@ gtk_text_view_button_press_event (GtkWidget *widget, GdkEventButton *event)
                                              event->y + text_view->yoffset);
 
           gtk_text_buffer_paste_clipboard (get_buffer (text_view),
-                                           gtk_widget_get_clipboard (widget, GDK_SELECTION_PRIMARY),
-                                           &iter,
-                                           text_view->editable);
-
-          mark = gtk_text_buffer_get_mark (get_buffer (text_view), "insert");
-          gtk_text_buffer_get_iter_at_mark (get_buffer (text_view),
-                                            &iter,
-                                            mark);
-
-          gtk_text_buffer_place_cursor (get_buffer (text_view), &iter);
-
-          DV(g_print (G_STRLOC": scrolling onscreen\n"));
-          gtk_text_view_scroll_mark_onscreen (text_view,
-                                              gtk_text_buffer_get_mark (get_buffer (text_view),
-                                                                        "insert"));
+					   gtk_widget_get_clipboard (widget, GDK_SELECTION_PRIMARY),
+					   &iter,
+					   text_view->editable);
           return TRUE;
         }
       else if (event->button == 3)

@@ -1,3 +1,9 @@
+Sat Mar 13 10:34:03 2004  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtktextview.c gtk/gtktextbuffer.c: Revert last change;
+	it causes problems for pastes from other applications; see
+	comments in bugzilla for #81880.
+
 Sat Mar 13 02:55:51 2004  Matthias Clasen  <maclas@gmx.de>
 
 	Fix middle button pasting in the TextView  (#81880, reported
