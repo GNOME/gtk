@@ -2482,8 +2482,8 @@ gtk_tree_view_column_cell_process_action (GtkTreeViewColumn  *tree_column,
   gint extra_space;
   gint min_x, min_y, max_x, max_y;
   gint focus_line_width;
-  gint dx;
   gint special_cells;
+  gint horizontal_separator;
   gboolean cursor_row = FALSE;
   gboolean rtl;
   /* If we have rtl text, we need to transform our areas */
@@ -2526,11 +2526,11 @@ gtk_tree_view_column_cell_process_action (GtkTreeViewColumn  *tree_column,
 
   gtk_widget_style_get (GTK_WIDGET (tree_column->tree_view),
 			"focus-line-width", &focus_line_width,
+			"horizontal-seperator", &horizontal_separator,
 			NULL);
 
   real_cell_area = *cell_area;
   real_background_area = *background_area;
-  /* HUH?  dx = real_cell_area.x - real_background_area.x - focus_line_width; */
 
   real_cell_area.x += focus_line_width;
 
@@ -2547,7 +2547,7 @@ gtk_tree_view_column_cell_process_action (GtkTreeViewColumn  *tree_column,
       full_requested_width += info->requested_width;
     }
 
-  extra_space = cell_area->width - full_requested_width;
+  extra_space = cell_area->width + horizontal_separator - full_requested_width;
 
   if (extra_space < 0)
     extra_space = 0;
@@ -2570,11 +2570,11 @@ gtk_tree_view_column_cell_process_action (GtkTreeViewColumn  *tree_column,
       else
         flags &= ~GTK_CELL_RENDERER_FOCUSED;
 
-      real_background_area.width = info->requested_width +
-	(info->expand?extra_space:0);
-      info->real_width = real_background_area.width;
+      info->real_width = info->requested_width + (info->expand?extra_space:0);
 
-      real_cell_area.width = real_background_area.width;
+      real_cell_area.width = info->real_width;
+      real_background_area.width=
+        real_cell_area.x + real_cell_area.width - real_background_area.x;
       real_cell_area.width -= 2 * focus_line_width;
 
       rtl_cell_area = real_cell_area;
@@ -2705,8 +2705,8 @@ gtk_tree_view_column_cell_process_action (GtkTreeViewColumn  *tree_column,
 
       flags &= ~GTK_CELL_RENDERER_FOCUSED;
 
-      real_cell_area.x += (info->real_width + tree_column->spacing);
-      real_background_area.x += (info->real_width + tree_column->spacing);
+      real_cell_area.x += (real_cell_area.width + tree_column->spacing);
+      real_background_area.x += (real_background_area.width + tree_column->spacing);
     }
 
   /* iterate list for PACK_END cells */
@@ -2725,11 +2725,11 @@ gtk_tree_view_column_cell_process_action (GtkTreeViewColumn  *tree_column,
       else
         flags &= ~GTK_CELL_RENDERER_FOCUSED;
 
-      real_background_area.width = info->requested_width +
-	(info->expand?extra_space:0);
-      info->real_width = real_background_area.width;
+      info->real_width = info->requested_width + (info->expand?extra_space:0);
 
-      real_cell_area.width = real_background_area.width;
+      real_cell_area.width = info->real_width;
+      real_background_area.width =
+        real_cell_area.x + real_cell_area.width - real_background_area.x;
       real_cell_area.width -= 2 * focus_line_width;
 
       rtl_cell_area = real_cell_area;
@@ -2858,8 +2858,8 @@ gtk_tree_view_column_cell_process_action (GtkTreeViewColumn  *tree_column,
 
       flags &= ~GTK_CELL_RENDERER_FOCUSED;
 
-      real_cell_area.x += (info->real_width + tree_column->spacing);
-      real_background_area.x += (info->real_width + tree_column->spacing);
+      real_cell_area.x += (real_cell_area.width + tree_column->spacing);
+      real_background_area.x += (real_background_area.width + tree_column->spacing);
     }
 
   /* fill focus_rectangle when required */

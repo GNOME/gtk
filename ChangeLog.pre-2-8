@@ -1,3 +1,12 @@
+Tue Jun 10 01:09:33 2003  Kristian Rietveld  <kris@gtk.org>
+
+	Merged from stable.
+
+	* gtk/gtktreeviewcolumn.c (gtk_tree_view_column_cell_process_action):
+	Remove the weird dx logic, get all cell_area and background_area
+	calculations right. Not sure what was up with it before. (Fixes
+	#110989, testcase from Vasco Alexandre da Silva Costa).
+
 Tue Jun 10 00:58:23 2003  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 	* tests/testgtk.c: Make it compile with C89 compilers
