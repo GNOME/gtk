@@ -533,13 +533,13 @@ gdk_pointer_grab (GdkWindow    *window,
     hcursor = NULL;
   else if ((hcursor = CopyCursor (cursor_private->hcursor)) == NULL)
     WIN32_API_FAILED ("CopyCursor");
-#if 0
+
   return_val = _gdk_input_grab_pointer (window,
 					owner_events,
 					event_mask,
 					confine_to,
 					time);
-#endif
+
   if (return_val == GDK_GRAB_SUCCESS)
     {
       if (!GDK_WINDOW_DESTROYED (window))
@@ -615,9 +615,8 @@ gdk_display_pointer_ungrab (GdkDisplay *display,
   GDK_NOTE (EVENTS, g_print ("%sgdk_display_pointer_ungrab%s",
 			     (debug_indent > 0 ? "\n" : ""),
 			     (debug_indent == 0 ? "\n" : "")));
-#if 0
+
   _gdk_input_ungrab_pointer (time);
-#endif
 
   if (GetCapture () != NULL)
     ReleaseCapture ();
@@ -1557,6 +1556,9 @@ translate_mouse_coords (GdkWindow *window1,
   msg->lParam = MAKELPARAM (pt.x, pt.y);
 }
 
+/* The check_extended flag controls whether to check if the windows want
+ * events from extended input devices and if the message should be skipped
+ * because an extended input device is active */
 static gboolean
 propagate (GdkWindow  **window,
 	   MSG         *msg,
@@ -1564,13 +1566,24 @@ propagate (GdkWindow  **window,
 	   gboolean     grab_owner_events,
 	   gint	        grab_mask,
 	   gboolean   (*doesnt_want_it) (gint mask,
-					 MSG *msg))
+					 MSG *msg),
+	   gboolean    	check_extended)
 {
   gboolean in_propagation = FALSE;
 
   if (grab_window != NULL && !grab_owner_events)
     {
       /* Event source is grabbed with owner_events FALSE */
+
+      /* See if the event should be ignored because an extended input device
+       * is used */
+      if (check_extended &&
+	  ((GdkWindowObject *) grab_window)->extension_events != 0 &&
+	  _gdk_input_ignore_core)
+	{
+	  GDK_NOTE (EVENTS, g_print (" (ignored for grabber)"));
+	  return FALSE;
+	}
       if ((*doesnt_want_it) (grab_mask, msg))
 	{
 	  GDK_NOTE (EVENTS, g_print (" (grabber doesn't want it)"));
@@ -1585,7 +1598,16 @@ propagate (GdkWindow  **window,
     }
   while (TRUE)
     {
-     if ((*doesnt_want_it) (((GdkWindowObject *) *window)->event_mask, msg))
+      /* See if the event should be ignored because an extended input device
+       * is used */
+      if (check_extended &&
+	  ((GdkWindowObject *) *window)->extension_events != 0 &&
+	  _gdk_input_ignore_core)
+	{
+	  GDK_NOTE (EVENTS, g_print (" (ignored)"));
+	  return FALSE;
+	}
+      if ((*doesnt_want_it) (((GdkWindowObject *) *window)->event_mask, msg))
 	{
 	  /* Owner doesn't want it, propagate to parent. */
 	  GdkWindow *parent = gdk_window_get_parent (*window);
@@ -1595,6 +1617,16 @@ propagate (GdkWindow  **window,
 	      if (grab_window != NULL)
 		{
 		  /* Event source is grabbed with owner_events TRUE */
+
+		  /* See if the event should be ignored because an extended
+		   * input device is used */
+		  if (check_extended &&
+		      ((GdkWindowObject *) grab_window)->extension_events != 0 &&
+		      _gdk_input_ignore_core)
+		    {
+		      GDK_NOTE (EVENTS, g_print (" (ignored for grabber)"));
+		      return FALSE;
+		    }
 		  if ((*doesnt_want_it) (grab_mask, msg))
 		    {
 		      /* Grabber doesn't want it either */
@@ -2168,16 +2200,9 @@ gdk_event_translate (GdkDisplay *display,
 
       assign_object (&window, new_window);
 
-      if (((GdkWindowObject *) window)->extension_events != 0 &&
-	  _gdk_input_ignore_core)
-	{
-	  GDK_NOTE (EVENTS, g_print (" (ignored)"));
-	  goto done;
-	}
-
       if (!propagate (&window, msg,
 		      p_grab_window, p_grab_owner_events, p_grab_mask,
-		      doesnt_want_scroll))
+		      doesnt_want_scroll, TRUE))
 	goto done;
 
       if (GDK_WINDOW_DESTROYED (window))
@@ -2319,7 +2344,7 @@ gdk_event_translate (GdkDisplay *display,
 
       if (!propagate (&window, msg,
 		      k_grab_window, k_grab_owner_events, GDK_ALL_EVENTS_MASK,
-		      doesnt_want_key))
+		      doesnt_want_key, FALSE))
 	break;
 
       if (GDK_WINDOW_DESTROYED (window))
@@ -2401,7 +2426,7 @@ gdk_event_translate (GdkDisplay *display,
 
       if (!propagate (&window, msg,
 		      k_grab_window, k_grab_owner_events, GDK_ALL_EVENTS_MASK,
-		      doesnt_want_char))
+		      doesnt_want_char, FALSE))
 	break;
 
       if (GDK_WINDOW_DESTROYED (window))
@@ -2479,16 +2504,9 @@ gdk_event_translate (GdkDisplay *display,
 	    synthesize_crossing_events (window, GDK_CROSSING_NORMAL, msg);
 	}
 
-      if (((GdkWindowObject *) window)->extension_events != 0 &&
-	  _gdk_input_ignore_core)
-	{
-	  GDK_NOTE (EVENTS, g_print (" (ignored)"));
-	  break;
-	}
-
       if (!propagate (&window, msg,
 		      p_grab_window, p_grab_owner_events, p_grab_mask,
-		      doesnt_want_button_press))
+		      doesnt_want_button_press, TRUE))
 	break;
 
       if (GDK_WINDOW_DESTROYED (window))
@@ -2568,16 +2586,18 @@ gdk_event_translate (GdkDisplay *display,
 	    synthesize_crossing_events (window, GDK_CROSSING_NORMAL, msg);
 	}
 
+#if 0
       if (((GdkWindowObject *) window)->extension_events != 0 &&
 	  _gdk_input_ignore_core)
 	{
 	  GDK_NOTE (EVENTS, g_print (" (ignored)"));
 	  break;
 	}
+#endif
 
       if (!propagate (&window, msg,
 		      p_grab_window, p_grab_owner_events, p_grab_mask,
-		      doesnt_want_button_release))
+		      doesnt_want_button_release, TRUE))
 	{
 	}
       else if (!GDK_WINDOW_DESTROYED (window))
@@ -2640,16 +2660,9 @@ gdk_event_translate (GdkDisplay *display,
 	    synthesize_crossing_events (window, GDK_CROSSING_NORMAL, msg);
 	}
 
-      if (((GdkWindowObject *) window)->extension_events != 0 &&
-	  _gdk_input_ignore_core)
-	{
-	  GDK_NOTE (EVENTS, g_print (" (ignored)"));
-	  break;
-	}
-
       if (!propagate (&window, msg,
 		      p_grab_window, p_grab_owner_events, p_grab_mask,
-		      doesnt_want_button_motion))
+		      doesnt_want_button_motion, TRUE))
 	break;
 
       if (GDK_WINDOW_DESTROYED (window))
@@ -2747,16 +2760,9 @@ gdk_event_translate (GdkDisplay *display,
 	  assign_object (&window, new_window);
 	}
 
-      if (((GdkWindowObject *) window)->extension_events != 0 &&
-	  _gdk_input_ignore_core)
-	{
-	  GDK_NOTE (EVENTS, g_print (" (ignored)"));
-	  break;
-	}
-
       if (!propagate (&window, msg,
 		      p_grab_window, p_grab_owner_events, p_grab_mask,
-		      doesnt_want_scroll))
+		      doesnt_want_scroll, TRUE))
 	break;
 
       if (GDK_WINDOW_DESTROYED (window))
