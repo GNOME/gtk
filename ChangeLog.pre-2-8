@@ -1,3 +1,11 @@
+Sat Jul 17 23:03:30 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkiconview.c (gtk_icon_view_paint_item): 
+	* gtk/gtkiconview.c (gtk_icon_view_calculate_item_size): 
+	* gtk/gtkiconview.c (gtk_icon_view_layout_single_row): Draw 
+	focus indicator outside the selection, respect focus 
+	line width.  (#147460) 
+
 Sat Jul 17 01:17:33 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gdk/x11/gdkdnd-x11.c (xdnd_check_dest): Fix a warning

@@ -1431,6 +1431,7 @@ gtk_icon_view_adjustment_changed (GtkAdjustment *adjustment,
 static GList *
 gtk_icon_view_layout_single_row (GtkIconView *icon_view, GList *first_item, gint *y, gint *maximum_width, gint row)
 {
+  gint focus_width, focus_pad;
   gint x, current_width, max_height, max_pixbuf_height;
   GList *items, *last_item;
   gint maximum_layout_width;
@@ -1443,6 +1444,11 @@ gtk_icon_view_layout_single_row (GtkIconView *icon_view, GList *first_item, gint
   max_pixbuf_height = 0;
   items = first_item;
   current_width = 0;
+
+  gtk_widget_style_get (GTK_WIDGET (icon_view),
+			"focus-line-width", &focus_width,
+			"focus-padding", &focus_pad,
+			NULL);
 
   x += ICON_VIEW_LEFT_MARGIN;
   current_width += ICON_VIEW_LEFT_MARGIN + ICON_VIEW_RIGHT_MARGIN;
@@ -1502,7 +1508,7 @@ gtk_icon_view_layout_single_row (GtkIconView *icon_view, GList *first_item, gint
       GtkIconViewItem *item = items->data;
 
       item->pixbuf_y = item->y + (max_pixbuf_height - item->pixbuf_height);
-      item->layout_y = item->pixbuf_y + item->pixbuf_height + ICON_TEXT_PADDING;
+      item->layout_y = item->pixbuf_y + item->pixbuf_height + ICON_TEXT_PADDING + focus_width + focus_pad;
       /* Update the bounding box */
       item->y = item->pixbuf_y;
 
@@ -1600,12 +1606,18 @@ static void
 gtk_icon_view_calculate_item_size (GtkIconView *icon_view,
 				   GtkIconViewItem *item)
 {
-  int layout_width, layout_height;
-  int maximum_layout_width;
+  gint focus_width, focus_pad;
+  gint layout_width, layout_height;
+  gint maximum_layout_width;
   GdkPixbuf *pixbuf;
   
   if (item->width != -1 && item->width != -1) 
     return;
+
+  gtk_widget_style_get (GTK_WIDGET (icon_view),
+			"focus-line-width", &focus_width,
+			"focus-padding", &focus_pad,
+			NULL);
 
   if (icon_view->priv->pixbuf_column != -1)
     {
@@ -1632,8 +1644,9 @@ gtk_icon_view_calculate_item_size (GtkIconView *icon_view,
       
       pango_layout_get_pixel_size (icon_view->priv->layout, &layout_width, &layout_height);
       
-      item->width = MAX ((layout_width + 2 * ICON_TEXT_PADDING), item->pixbuf_width);
-      item->height = layout_height + 2 * ICON_TEXT_PADDING + item->pixbuf_height;
+      item->width = MAX (layout_width + 2 * (ICON_TEXT_PADDING + focus_width + focus_pad), item->pixbuf_width);
+      item->height = layout_height + 2 * (ICON_TEXT_PADDING + focus_width + focus_pad) + item->pixbuf_height;
+
       item->layout_width = layout_width;
       item->layout_height = layout_height;
     }
@@ -1708,12 +1721,18 @@ gtk_icon_view_paint_item (GtkIconView     *icon_view,
 			  GtkIconViewItem *item,
 			  GdkRectangle    *area)
 {
+  gint focus_width, focus_pad;
   GdkPixbuf *pixbuf, *tmp;
   GtkStateType state;
   
   if (!VALID_MODEL_AND_COLUMNS (icon_view))
     return;
   
+  gtk_widget_style_get (GTK_WIDGET (icon_view),
+			"focus-line-width", &focus_width,
+			"focus-padding", &focus_pad,
+			NULL);
+
   if (GTK_WIDGET_HAS_FOCUS (icon_view))
     state = GTK_STATE_SELECTED;
   else
@@ -1766,14 +1785,14 @@ gtk_icon_view_paint_item (GtkIconView     *icon_view,
 	  item == icon_view->priv->cursor_item)
 	gtk_paint_focus (GTK_WIDGET (icon_view)->style,
 			 icon_view->priv->bin_window,
-			 item->selected ? GTK_STATE_SELECTED : GTK_STATE_NORMAL,
+			 GTK_STATE_NORMAL,
 			 area,
 			 GTK_WIDGET (icon_view),
 			 "icon_view",
-			 item->layout_x - ICON_TEXT_PADDING,
-			 item->layout_y - ICON_TEXT_PADDING,
-			 item->layout_width + 2 * ICON_TEXT_PADDING,
-			 item->layout_height + 2 * ICON_TEXT_PADDING);
+			 item->layout_x - ICON_TEXT_PADDING - focus_width - focus_pad,
+			 item->layout_y - ICON_TEXT_PADDING - focus_width - focus_pad,
+			 item->layout_width + 2 * (ICON_TEXT_PADDING + focus_width + focus_pad),
+			 item->layout_height + 2 * (ICON_TEXT_PADDING + focus_width + focus_pad));
     }
 }
 
