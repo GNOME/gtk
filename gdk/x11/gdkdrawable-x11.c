@@ -1042,20 +1042,18 @@ convert_to_format (guchar        *src_buf,
 	    guchar *p = (src_buf + i * src_rowstride);
 	    guchar *q = (dest_buf + i * dest_rowstride);
 	    guchar *end = p + 4 * width;
-	    guchar a;
-	    guint t;
+	    guint t1,t2,t3;
 	    
-#define MULT(d,c,a) G_STMT_START { t = c * a; d = ((t >> 8) + t) >> 8; } G_STMT_END
+#define MULT(d,c,a,t) G_STMT_START { t = c * a; d = ((t >> 8) + t) >> 8; } G_STMT_END
 	    
 	    if (dest_byteorder == GDK_LSB_FIRST)
 	      {
 		while (p < end)
 		  {
-		    a = p[3];
-		    MULT(q[0], p[2], a);
-		    MULT(q[1], p[1], a);
-		    MULT(q[2], p[0], a);
-		    q[3] = a;
+		    MULT(q[0], p[2], p[3], t1);
+		    MULT(q[1], p[1], p[3], t2);
+		    MULT(q[2], p[0], p[3], t3);
+		    q[3] = p[3];
 		    p += 4;
 		    q += 4;
 		  }
@@ -1064,11 +1062,10 @@ convert_to_format (guchar        *src_buf,
 	      {
 		while (p < end)
 		  {
-		    a = p[3];
-		    q[0] = a;
-		    MULT(q[1], p[0], a);
-		    MULT(q[2], p[1], a);
-		    MULT(q[3], p[2], a);
+		    q[0] = p[3];
+		    MULT(q[1], p[0], p[3], t1);
+		    MULT(q[2], p[1], p[3], t2);
+		    MULT(q[3], p[2], p[3], t3);
 		    p += 4;
 		    q += 4;
 		  }
