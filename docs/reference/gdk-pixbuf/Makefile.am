@@ -39,7 +39,8 @@ gdk_pixbuf_doc_DATA =			\
 	gdk-pixbuf-sections.txt
 
 content_files =				\
-	compiling.sgml
+	compiling.sgml			\
+	gdk-pixbuf.sgml
 
 EXTRA_DIST = 				\
 	$(gdk_pixbuf_doc_DATA)		\

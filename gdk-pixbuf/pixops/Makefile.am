@@ -20,3 +20,6 @@ libpixops_la_SOURCES =  		\
 	pixops.h			\
 	pixops-internal.h		\
 	$(mmx_sources)
+
+EXTRA_DIST =				\
+	DETAILS
