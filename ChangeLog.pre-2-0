@@ -1,3 +1,12 @@
+Fri Dec 26 02:59:39 1997  Federico Mena  <federico@bananoid.nuclecu.unam.mx>
+
+	* gdk/gdktypes.h gdk/gdk.c gdk/gdkwindow.c: Added new
+ 	GDK_NO_EXPOSE and GDK_VISIBILITY_NOTIFY events.  They are needed
+ 	for Alan Cox's TV widget and for GtkXmHTML.  Only missing with
+ 	respect to their Xlib counterparts are the major_code and
+ 	minor_code fields from the GdkEventNoExpose structure.  Does
+ 	anyone need them?
+
 Tue Dec 23 03:03:17 1997  Tim Janik  <timj@psynet.net>
 
 	* gtk/gtkscrolledwindow.c (SCROLLBAR_SPACING): this macro computes
