@@ -1,3 +1,12 @@
+Thu May 29 16:31:34 2003  Kristian Rietveld  <kris@gtk.org>
+
+	Merged from stable.
+
+	* gtk/gtktreeview.c (gtk_tree_view_maybe_begin_dragging_row),
+	(gtk_tree_view_drag_begin): set the DnD icon in _drag_begin
+	instead of _maybe_begin_dragging_row, so the icon can be
+	overridden by apps. (Fixes #104374, patch from Daniel Elstner).
+
 Thu May 29 16:14:04 2003  Kristian Rietveld  <kris@gtk.org>
 
 	Merged from stable.

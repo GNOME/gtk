@@ -5131,25 +5131,6 @@ gtk_tree_view_maybe_begin_dragging_row (GtkTreeView      *tree_view,
                             button,
                             (GdkEvent*)event);
 
-  gtk_drag_set_icon_default (context);
-
-  {
-    GdkPixmap *row_pix;
-
-    row_pix = gtk_tree_view_create_row_drag_icon (tree_view,
-                                                  path);
-
-    gtk_drag_set_icon_pixmap (context,
-                              gdk_drawable_get_colormap (row_pix),
-                              row_pix,
-                              NULL,
-                              /* the + 1 is for the black border in the icon */
-                              tree_view->priv->press_start_x + 1,
-                              cell_y + 1);
-
-    g_object_unref (row_pix);
-  }
-
   set_source_row (context, model, path);
 
  out:
@@ -5164,7 +5145,38 @@ static void
 gtk_tree_view_drag_begin (GtkWidget      *widget,
                           GdkDragContext *context)
 {
-  /* do nothing */
+  GtkTreeView *tree_view;
+  GtkTreePath *path = NULL;
+  gint cell_x, cell_y;
+  GdkPixmap *row_pix;
+
+  tree_view = GTK_TREE_VIEW (widget);
+
+  g_return_if_fail (get_info (tree_view) != NULL);
+
+  gtk_tree_view_get_path_at_pos (tree_view,
+                                 tree_view->priv->press_start_x,
+                                 tree_view->priv->press_start_y,
+                                 &path,
+                                 NULL,
+                                 &cell_x,
+                                 &cell_y);
+
+  g_return_if_fail (path != NULL);
+
+  row_pix = gtk_tree_view_create_row_drag_icon (tree_view,
+                                                path);
+
+  gtk_drag_set_icon_pixmap (context,
+                            gdk_drawable_get_colormap (row_pix),
+                            row_pix,
+                            NULL,
+                            /* the + 1 is for the black border in the icon */
+                            tree_view->priv->press_start_x + 1,
+                            cell_y + 1);
+
+  g_object_unref (row_pix);
+  gtk_tree_path_free (path);
 }
 
 static void
