@@ -1,3 +1,13 @@
+1999-03-13  Tor Lillqvist  <tml@iki.fi>
+
+	* configure.in acconfig.h: Check for dirent.h and pwd.h.
+
+	* gtk/gtkfilesel.c: Use g_get_current_dir(). Merge in Win32
+	version: Use G_DIR_SEPARATOR, g_path_is_absolute, no tilde
+	expansion (based on HAVE_PWD_H), allow for drive letters. UNC
+	names not handled yet. Also, code from Craig Setera's port to
+	Win32 that uses cygwin.dll
+
 Tue Mar  9 01:01:28 1999  Tim Janik  <timj@gtk.org>
 
         * gdk/gdkfont.c (gdk_font_load): first lookup the xfont ID in our

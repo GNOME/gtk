@@ -269,6 +269,9 @@ AC_SUBST(glib_thread_cflags)
 AC_SUBST(glib_thread_libs)
 AC_SUBST(GLIB_DEPLIBS)
 
+AC_CHECK_HEADERS(dirent.h, AC_DEFINE(HAVE_DIRENT_H))
+AC_CHECK_HEADERS(pwd.h, AC_DEFINE(HAVE_PWD_H))
+
 # Find the X11 include and library directories
 AC_PATH_X
 AC_PATH_XTRA

@@ -24,16 +24,39 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
+#include "config.h"
+
 #include <stdio.h>
 #include <sys/types.h>
 #include <sys/stat.h>
+#ifdef HAVE_SYS_PARAM_H
 #include <sys/param.h>
+#endif
+#ifdef HAVE_DIRENT_H
 #include <dirent.h>
+#endif
 #include <stdlib.h>
+#ifdef HAVE_UNISTD_H
 #include <unistd.h>
+#endif
 #include <string.h>
 #include <errno.h>
+#ifdef HAVE_PWD_H
 #include <pwd.h>
+#endif
+
+#ifdef WIN32
+#define STRICT
+#include <windows.h>
+
+#ifdef _MSC_VER
+#ifndef S_ISDIR
+#define S_ISDIR(mode) ((mode)&_S_IFDIR)
+#endif
+#define mkdir(path,mode) mkdir(path)
+#endif
+#endif
+
 #include "fnmatch.h"
 
 #include "gdk/gdkkeysyms.h"
@@ -253,13 +276,17 @@ static gchar*              cmpl_completion_fullname (gchar*, CompletionState* cm
 static CompletionDir* open_ref_dir         (gchar* text_to_complete,
 					    gchar** remaining_text,
 					    CompletionState* cmpl_state);
+#ifndef WIN32
 static gboolean       check_dir            (gchar *dir_name, 
 					    struct stat *result, 
 					    gboolean *stat_subdirs);
+#endif
 static CompletionDir* open_dir             (gchar* dir_name,
 					    CompletionState* cmpl_state);
+#ifdef HAVE_PWD_H
 static CompletionDir* open_user_dir        (gchar* text_to_complete,
 					    CompletionState *cmpl_state);
+#endif
 static CompletionDir* open_relative_dir    (gchar* dir_name, CompletionDir* dir,
 					    CompletionState *cmpl_state);
 static CompletionDirSent* open_new_dir     (gchar* dir_name, 
@@ -285,9 +312,11 @@ static CompletionDir* find_completion_dir(gchar* text_to_complete,
 					  CompletionState* cmpl_state);
 static PossibleCompletion* append_completion_text(gchar* text,
 						  CompletionState* cmpl_state);
+#ifdef HAVE_PWD_H
 static gint get_pwdb(CompletionState* cmpl_state);
-static gint first_diff_index(gchar* pat, gchar* text);
 static gint compare_user_dir(const void* a, const void* b);
+#endif
+static gint first_diff_index(gchar* pat, gchar* text);
 static gint compare_cmpl_dir(const void* a, const void* b);
 static void update_cmpl(PossibleCompletion* poss,
 			CompletionState* cmpl_state);
@@ -329,6 +358,71 @@ static GtkWindowClass *parent_class = NULL;
 
 /* Saves errno when something cmpl does fails. */
 static gint cmpl_errno;
+
+#ifdef __CYGWIN32__
+/*
+ * Take the path currently in the file selection
+ * entry field and translate as necessary from
+ * a WIN32 style to CYGWIN32 style path.  For
+ * instance translate:
+ * x:\somepath\file.jpg
+ * to:
+ * //x/somepath/file.jpg
+ *
+ * Replace the path in the selection text field.
+ * Return a boolean value concerning whether a
+ * translation had to be made.
+ */
+int
+translate_win32_path(GtkFileSelection *filesel)
+{
+  int updated = 0;
+  gchar *path;
+
+  /*
+   * Retrieve the current path
+   */
+  path = gtk_entry_get_text (GTK_ENTRY (filesel->selection_entry));
+
+  /*
+   * Translate only if this looks like a DOS-ish
+   * path... First handle any drive letters.
+   */
+  if (isalpha(path[0]) && (path[1] == ':')) {
+    /*
+     * This part kind of stinks... It isn't possible
+     * to know if there is enough space in the current
+     * string for the extra character required in this
+     * conversion.  Assume that there isn't enough space
+     * and use the set function on the text field to
+     * set the newly created string.
+     */
+    gchar *newPath;
+
+    newPath = g_malloc(strlen(path) + 2);
+    sprintf(newPath, "//%c/%s", path[0], (path + 3));
+    gtk_entry_set_text (GTK_ENTRY (filesel->selection_entry), newPath);
+
+    path = newPath;
+    updated = 1;
+  }
+
+  /*
+   * Now, replace backslashes with forward slashes 
+   * if necessary.
+   */
+  if (strchr(path, '\\')) {
+    int index;
+    for (index = 0; path[index] != '\0'; index++)
+      if (path[index] == '\\')
+	path[index] = '/';
+
+    updated = 1;
+  }
+    
+  return updated;
+}
+#endif
 
 GtkType
 gtk_file_selection_get_type (void)
@@ -608,7 +702,7 @@ gtk_file_selection_set_filename (GtkFileSelection *filesel,
   g_return_if_fail (GTK_IS_FILE_SELECTION (filesel));
   g_return_if_fail (filename != NULL);
 
-  last_slash = strrchr (filename, '/');
+  last_slash = strrchr (filename, G_DIR_SEPARATOR);
 
   if (!last_slash)
     {
@@ -641,6 +735,9 @@ gtk_file_selection_get_filename (GtkFileSelection *filesel)
   g_return_val_if_fail (filesel != NULL, nothing);
   g_return_val_if_fail (GTK_IS_FILE_SELECTION (filesel), nothing);
 
+#ifdef __CYGWIN32__
+  translate_win32_path(filesel);
+#endif
   text = gtk_entry_get_text (GTK_ENTRY (filesel->selection_entry));
   if (text)
     {
@@ -779,7 +876,7 @@ gtk_file_selection_create_dir_confirmed (GtkWidget *widget, gpointer data)
   cmpl_state = (CompletionState*) fs->cmpl_state;
   path = cmpl_reference_position (cmpl_state);
   
-  full_path = g_strconcat (path, "/", dirname, NULL);
+  full_path = g_strconcat (path, G_DIR_SEPARATOR_S, dirname, NULL);
   if ( (mkdir (full_path, 0755) < 0) ) 
     {
       buf = g_strconcat ("Error creating directory \"", dirname, "\":  ", 
@@ -876,7 +973,7 @@ gtk_file_selection_delete_file_confirmed (GtkWidget *widget, gpointer data)
   cmpl_state = (CompletionState*) fs->cmpl_state;
   path = cmpl_reference_position (cmpl_state);
   
-  full_path = g_strconcat (path, "/", fs->fileop_file, NULL);
+  full_path = g_strconcat (path, G_DIR_SEPARATOR_S, fs->fileop_file, NULL);
   if ( (unlink (full_path) < 0) ) 
     {
       buf = g_strconcat ("Error deleting file \"", fs->fileop_file, "\":  ", 
@@ -905,6 +1002,10 @@ gtk_file_selection_delete_file (GtkWidget *widget, gpointer data)
 
   if (fs->fileop_dialog)
 	  return;
+
+#ifdef __CYGWIN32__
+  translate_win32_path(fs);
+#endif
 
   filename = gtk_entry_get_text (GTK_ENTRY (fs->selection_entry));
   if (strlen(filename) < 1)
@@ -980,8 +1081,8 @@ gtk_file_selection_rename_file_confirmed (GtkWidget *widget, gpointer data)
   cmpl_state = (CompletionState*) fs->cmpl_state;
   path = cmpl_reference_position (cmpl_state);
   
-  new_filename = g_strconcat (path, "/", file, NULL);
-  old_filename = g_strconcat (path, "/", fs->fileop_file, NULL);
+  new_filename = g_strconcat (path, G_DIR_SEPARATOR_S, file, NULL);
+  old_filename = g_strconcat (path, G_DIR_SEPARATOR_S, fs->fileop_file, NULL);
 
   if ( (rename (old_filename, new_filename)) < 0) 
     {
@@ -1091,6 +1192,9 @@ gtk_file_selection_key_press (GtkWidget   *widget,
   if (event->keyval == GDK_Tab)
     {
       fs = GTK_FILE_SELECTION (user_data);
+#ifdef __CYGWIN32__
+      translate_win32_path(fs);
+#endif
       text = gtk_entry_get_text (GTK_ENTRY (fs->selection_entry));
 
       text = g_strdup (text);
@@ -1174,11 +1278,15 @@ gtk_file_selection_update_history_menu (GtkFileSelection *fs,
     {
       /* the i == dir_len is to catch the full path for the first 
        * entry. */
-      if ( (current_dir[i] == '/') || (i == dir_len))
+      if ( (current_dir[i] == G_DIR_SEPARATOR) || (i == dir_len))
 	{
 	  /* another small hack to catch the full path */
 	  if (i != dir_len) 
 		  current_dir[i + 1] = '\0';
+#ifdef __CYGWIN32__
+	  if (!strcmp(current_dir, "//"))
+	    continue;
+#endif
 	  menu_item = gtk_menu_item_new_with_label (current_dir);
 	  
 	  callback_arg = g_new (HistoryCallbackArg, 1);
@@ -1226,6 +1334,18 @@ gtk_file_selection_file_button (GtkWidget *widget,
   
   gtk_clist_get_text (GTK_CLIST (fs->file_list), row, 0, &temp);
   filename = g_strdup (temp);
+
+#ifdef __CYGWIN32__
+  /* Check to see if the selection was a drive selector */
+  if (isalpha(filename[0]) && (filename[1] == ':')) {
+    /* It is... map it to a CYGWIN32 drive */
+    char temp_filename[10];
+
+    sprintf(temp_filename, "//%c/", tolower(filename[0]));
+    g_free(filename);
+    filename = g_strdup(temp_filename);
+  }
+#endif /* CYGWIN32 */
 
   if (filename)
     {
@@ -1286,6 +1406,51 @@ gtk_file_selection_dir_button (GtkWidget *widget,
     }
 }
 
+#ifdef WIN32
+
+static void
+win32_gtk_add_drives_to_dir_list(GtkWidget *the_dir_list)
+{
+  gchar *text[2], *textPtr;
+  gchar buffer[128];
+  char volumeNameBuf[128];
+  char formatBuffer[128];
+  gint row;
+
+  text[1] = NULL;
+
+  /* Get the Drives string */
+  GetLogicalDriveStrings(sizeof(buffer), buffer);
+
+  /* Add the drives as necessary */
+  textPtr = buffer;
+  while (*textPtr != '\0') {
+    /* Get the volume information for this drive */
+    if ((tolower(textPtr[0]) != 'a') && (tolower(textPtr[0]) != 'b'))
+      {
+	/* Ignore floppies (?) */
+	DWORD maxComponentLength, flags;
+
+	GetVolumeInformation(textPtr,
+			     volumeNameBuf, sizeof(volumeNameBuf),
+			     NULL, &maxComponentLength,
+			     &flags, NULL, 0);
+	/* Build the actual displayable string */
+
+	sprintf(formatBuffer, "%c:\\", toupper(textPtr[0]));
+#if 0 /* HB: removed to allow drive change AND directory update with one click */
+	if (strlen(volumeNameBuf) > 0)
+	  sprintf(formatBuffer, "%s (%s)", formatBuffer, volumeNameBuf);
+#endif
+	/* Add to the list */
+	text[0] = formatBuffer;
+	row = gtk_clist_append (GTK_CLIST (the_dir_list), text);
+      }
+    textPtr += (strlen(textPtr) + 1);
+  }
+}
+#endif
+
 static void
 gtk_file_selection_populate (GtkFileSelection *fs,
 			     gchar            *rel_path,
@@ -1326,14 +1491,14 @@ gtk_file_selection_populate (GtkFileSelection *fs,
 
   /* Set the dir_list to include ./ and ../ */
   text[1] = NULL;
-  text[0] = "./";
+  text[0] = "." G_DIR_SEPARATOR_S;
   row = gtk_clist_append (GTK_CLIST (fs->dir_list), text);
 
-  text[0] = "../";
+  text[0] = ".." G_DIR_SEPARATOR_S;
   row = gtk_clist_append (GTK_CLIST (fs->dir_list), text);
 
   /*reset the max widths of the lists*/
-  dir_list_width = gdk_string_width(fs->dir_list->style->font,"../");
+  dir_list_width = gdk_string_width(fs->dir_list->style->font,".." G_DIR_SEPARATOR_S);
   gtk_clist_set_column_width(GTK_CLIST(fs->dir_list),0,dir_list_width);
   file_list_width = 1;
   gtk_clist_set_column_width(GTK_CLIST(fs->file_list),0,file_list_width);
@@ -1350,8 +1515,8 @@ gtk_file_selection_populate (GtkFileSelection *fs,
 	  
           if (cmpl_is_directory (poss))
             {
-              if (strcmp (filename, "./") != 0 &&
-                  strcmp (filename, "../") != 0)
+              if (strcmp (filename, "." G_DIR_SEPARATOR_S) != 0 &&
+                  strcmp (filename, ".." G_DIR_SEPARATOR_S) != 0)
 		{
 		  int width = gdk_string_width(fs->dir_list->style->font,
 					       filename);
@@ -1380,6 +1545,11 @@ gtk_file_selection_populate (GtkFileSelection *fs,
 
       poss = cmpl_next_completion (cmpl_state);
     }
+
+#ifdef WIN32
+  /* For Windows, add drives as potential selections */
+  win32_gtk_add_drives_to_dir_list (fs->dir_list);
+#endif
 
   gtk_clist_thaw (GTK_CLIST (fs->dir_list));
   gtk_clist_thaw (GTK_CLIST (fs->file_list));
@@ -1505,10 +1675,11 @@ cmpl_completion_fullname (gchar* text, CompletionState* cmpl_state)
     {
       return nothing;
     }
-  else if (text[0] == '/')
+  else if (g_path_is_absolute (text))
     {
       strcpy (cmpl_state->updated_text, text);
     }
+#ifdef HAVE_PWD_H
   else if (text[0] == '~')
     {
       CompletionDir* dir;
@@ -1527,16 +1698,18 @@ cmpl_completion_fullname (gchar* text, CompletionState* cmpl_state)
 
 	  strcpy (cmpl_state->updated_text, dir->fullname);
 
-	  slash = strchr (text, '/');
+	  slash = strchr (text, G_DIR_SEPARATOR);
 
 	  if (slash)
 	    strcat (cmpl_state->updated_text, slash);
 	}
     }
+#endif
   else
     {
       strcpy (cmpl_state->updated_text, cmpl_state->reference_dir->fullname);
-      strcat (cmpl_state->updated_text, "/");
+      if (cmpl_state->updated_text[strlen (cmpl_state->updated_text) - 1] != G_DIR_SEPARATOR)
+	strcat (cmpl_state->updated_text, G_DIR_SEPARATOR_S);
       strcat (cmpl_state->updated_text, text);
     }
 
@@ -1570,25 +1743,12 @@ cmpl_is_a_completion (PossibleCompletion* pc)
 static CompletionState*
 cmpl_init_state (void)
 {
-  gchar getcwd_buf[2*MAXPATHLEN];
+  gchar *getcwd_buf;
   CompletionState *new_state;
 
   new_state = g_new (CompletionState, 1);
 
-  /* We don't use getcwd() on SUNOS, because, it does a popen("pwd")
-   * and, if that wasn't bad enough, hangs in doing so.
-   */
-#if defined(sun) && !defined(__SVR4)
-  if (!getwd (getcwd_buf))
-#else    
-  if (!getcwd (getcwd_buf, MAXPATHLEN))
-#endif    
-    {
-      /* Oh joy, we can't get the current directory. Um..., we should have
-       * a root directory, right? Right? (Probably not portable to non-Unix)
-       */
-      strcpy (getcwd_buf, "/");
-    }
+  getcwd_buf = g_get_current_dir ();
 
 tryagain:
 
@@ -1610,10 +1770,11 @@ tryagain:
   if (!new_state->reference_dir)
     {
       /* Directories changing from underneath us, grumble */
-      strcpy (getcwd_buf, "/");
+      strcpy (getcwd_buf, G_DIR_SEPARATOR_S);
       goto tryagain;
     }
 
+  g_free (getcwd_buf);
   return new_state;
 }
 
@@ -1728,7 +1889,8 @@ cmpl_completion_matches (gchar* text_to_complete,
   cmpl_state->updated_text[0] = 0;
   cmpl_state->re_complete = FALSE;
 
-  first_slash = strchr (text_to_complete, '/');
+#ifdef HAVE_PWD_H
+  first_slash = strchr (text_to_complete, G_DIR_SEPARATOR);
 
   if (text_to_complete[0] == '~' && !first_slash)
     {
@@ -1741,7 +1903,7 @@ cmpl_completion_matches (gchar* text_to_complete,
 
       return poss;
     }
-
+#endif
   cmpl_state->reference_dir =
     open_ref_dir (text_to_complete, remaining_text, cmpl_state);
 
@@ -1778,10 +1940,14 @@ cmpl_next_completion (CompletionState* cmpl_state)
 
   cmpl_state->the_completion.text[0] = 0;
 
+#ifdef HAVE_PWD_H
   if(cmpl_state->user_completion_index >= 0)
     poss = attempt_homedir_completion(cmpl_state->last_completion_text, cmpl_state);
   else
     poss = attempt_file_completion(cmpl_state);
+#else
+  poss = attempt_file_completion(cmpl_state);
+#endif
 
   update_cmpl(poss, cmpl_state);
 
@@ -1801,15 +1967,39 @@ open_ref_dir(gchar* text_to_complete,
   gchar* first_slash;
   CompletionDir *new_dir;
 
-  first_slash = strchr(text_to_complete, '/');
+  first_slash = strchr(text_to_complete, G_DIR_SEPARATOR);
 
-  if (text_to_complete[0] == '/' || !cmpl_state->reference_dir)
+#ifdef __CYGWIN32__
+  if (text_to_complete[0] == '/' && text_to_complete[1] == '/')
     {
-      new_dir = open_dir("/", cmpl_state);
+      char root_dir[5];
+      sprintf(root_dir, "//%c", text_to_complete[2]);
 
-      if(new_dir)
-	*remaining_text = text_to_complete + 1;
+      new_dir = open_dir(root_dir, cmpl_state);
+
+      if (new_dir) {
+	*remaining_text = text_to_complete + 4;
+      }
     }
+#else
+  if (FALSE)
+    ;
+#endif
+  else if (g_path_is_absolute (text_to_complete) || !cmpl_state->reference_dir)
+    {
+      char *root;
+      int rootlen;
+
+      rootlen = g_path_skip_root (text_to_complete) - text_to_complete;
+      root = g_malloc (rootlen + 1);
+      memcpy (root, text_to_complete, rootlen);
+      root[rootlen] = '\0';
+      new_dir = open_dir (root, cmpl_state);
+      if (new_dir)
+	*remaining_text = g_path_skip_root (text_to_complete);
+      g_free (root);
+    }
+#ifdef HAVE_PWD_H
   else if (text_to_complete[0] == '~')
     {
       new_dir = open_user_dir(text_to_complete, cmpl_state);
@@ -1826,6 +2016,7 @@ open_ref_dir(gchar* text_to_complete,
 	  return NULL;
 	}
     }
+#endif
   else
     {
       *remaining_text = text_to_complete;
@@ -1842,6 +2033,8 @@ open_ref_dir(gchar* text_to_complete,
   return new_dir;
 }
 
+#ifdef HAVE_PWD_H
+
 /* open a directory by user name */
 static CompletionDir*
 open_user_dir(gchar* text_to_complete,
@@ -1852,7 +2045,7 @@ open_user_dir(gchar* text_to_complete,
 
   g_assert(text_to_complete && text_to_complete[0] == '~');
 
-  first_slash = strchr(text_to_complete, '/');
+  first_slash = strchr(text_to_complete, G_DIR_SEPARATOR);
 
   if (first_slash)
     cmp_len = first_slash - text_to_complete - 1;
@@ -1888,6 +2081,8 @@ open_user_dir(gchar* text_to_complete,
     }
 }
 
+#endif
+
 /* open a directory relative the the current relative directory */
 static CompletionDir*
 open_relative_dir(gchar* dir_name,
@@ -1906,8 +2101,13 @@ open_relative_dir(gchar* dir_name,
 
   if(dir->fullname_len > 1)
     {
-      path_buf[dir->fullname_len] = '/';
-      strcpy(path_buf + dir->fullname_len + 1, dir_name);
+      if (path_buf[dir->fullname_len - 1] != G_DIR_SEPARATOR)
+	{
+	  path_buf[dir->fullname_len] = G_DIR_SEPARATOR;
+	  strcpy (path_buf + dir->fullname_len + 1, dir_name);
+	}
+      else
+	strcpy (path_buf + dir->fullname_len, dir_name);
     }
   else
     {
@@ -1994,8 +2194,13 @@ open_new_dir(gchar* dir_name, struct stat* sbuf, gboolean stat_subdirs)
       *buffer_ptr = 0;
       buffer_ptr += 1;
 
-      path_buf[path_buf_len] = '/';
-      strcpy(path_buf + path_buf_len + 1, dirent_ptr->d_name);
+      if (path_buf[path_buf_len-1] != G_DIR_SEPARATOR)
+	{
+	  path_buf[path_buf_len] = G_DIR_SEPARATOR;
+	  strcpy(path_buf + path_buf_len + 1, dirent_ptr->d_name);
+	}
+      else
+	strcpy(path_buf + path_buf_len, dirent_ptr->d_name);
 
       if (stat_subdirs)
 	{
@@ -2016,6 +2221,8 @@ open_new_dir(gchar* dir_name, struct stat* sbuf, gboolean stat_subdirs)
 
   return sent;
 }
+
+#ifndef WIN32
 
 static gboolean
 check_dir(gchar *dir_name, struct stat *result, gboolean *stat_subdirs)
@@ -2070,6 +2277,8 @@ check_dir(gchar *dir_name, struct stat *result, gboolean *stat_subdirs)
   return TRUE;
 }
 
+#endif
+
 /* open a directory by absolute pathname */
 static CompletionDir*
 open_dir(gchar* dir_name, CompletionState* cmpl_state)
@@ -2079,6 +2288,7 @@ open_dir(gchar* dir_name, CompletionState* cmpl_state)
   CompletionDirSent *sent;
   GList* cdsl;
 
+#ifndef WIN32
   if (!check_dir (dir_name, &sbuf, &stat_subdirs))
     return NULL;
 
@@ -2095,6 +2305,9 @@ open_dir(gchar* dir_name, CompletionState* cmpl_state)
 
       cdsl = cdsl->next;
     }
+#else
+  stat_subdirs = TRUE;
+#endif
 
   sent = open_new_dir(dir_name, &sbuf, stat_subdirs);
 
@@ -2129,47 +2342,42 @@ static gint
 correct_dir_fullname(CompletionDir* cmpl_dir)
 {
   gint length = strlen(cmpl_dir->fullname);
+  gchar *first_slash = strchr(cmpl_dir->fullname, G_DIR_SEPARATOR);
   struct stat sbuf;
 
-  if (strcmp(cmpl_dir->fullname + length - 2, "/.") == 0)
+  /* Does it end with /. (\.) ? */
+  if (length >= 2 &&
+      strcmp(cmpl_dir->fullname + length - 2, G_DIR_SEPARATOR_S ".") == 0)
     {
-      if (length == 2) 
+      /* Is it just the root directory (on a drive) ? */
+      if (cmpl_dir->fullname + length - 2 == first_slash)
 	{
-	  strcpy(cmpl_dir->fullname, "/");
-	  cmpl_dir->fullname_len = 1;
+	  cmpl_dir->fullname[length - 1] = 0;
+	  cmpl_dir->fullname_len = length - 1;
 	  return TRUE;
-	} else {
+	}
+      else
+	{
 	  cmpl_dir->fullname[length - 2] = 0;
 	}
     }
-  else if (strcmp(cmpl_dir->fullname + length - 3, "/./") == 0)
+
+  /* Ends with /./ (\.\)? */
+  else if (length >= 3 &&
+	   strcmp(cmpl_dir->fullname + length - 3,
+		  G_DIR_SEPARATOR_S "." G_DIR_SEPARATOR_S) == 0)
     cmpl_dir->fullname[length - 2] = 0;
-  else if (strcmp(cmpl_dir->fullname + length - 3, "/..") == 0)
+
+  /* Ends with /.. (\..) ? */
+  else if (length >= 3 &&
+	   strcmp(cmpl_dir->fullname + length - 3,
+		  G_DIR_SEPARATOR_S "..") == 0)
     {
-      if(length == 3)
+      /* Is it just /.. (X:\..)? */
+      if(cmpl_dir->fullname + length - 3 == first_slash)
 	{
-	  strcpy(cmpl_dir->fullname, "/");
-	  cmpl_dir->fullname_len = 1;
-	  return TRUE;
-	}
-
-      if(stat(cmpl_dir->fullname, &sbuf) < 0)
-	{
-	  cmpl_errno = errno;
-	  return FALSE;
-	}
-
-      cmpl_dir->fullname[length - 2] = 0;
-
-      if(!correct_parent(cmpl_dir, &sbuf))
-	return FALSE;
-    }
-  else if (strcmp(cmpl_dir->fullname + length - 4, "/../") == 0)
-    {
-      if(length == 4)
-	{
-	  strcpy(cmpl_dir->fullname, "/");
-	  cmpl_dir->fullname_len = 1;
+	  cmpl_dir->fullname[length - 2] = 0;
+	  cmpl_dir->fullname_len = length - 2;
 	  return TRUE;
 	}
 
@@ -2185,6 +2393,31 @@ correct_dir_fullname(CompletionDir* cmpl_dir)
 	return FALSE;
     }
 
+  /* Ends with /../ (\..\)? */
+  else if (length >= 4 &&
+	   strcmp(cmpl_dir->fullname + length - 4,
+		  G_DIR_SEPARATOR_S ".." G_DIR_SEPARATOR_S) == 0)
+    {
+      /* Is it just /../ (X:\..\)? */
+      if(cmpl_dir->fullname + length - 4 == first_slash)
+	{
+	  cmpl_dir->fullname[length - 3] = 0;
+	  cmpl_dir->fullname_len = length - 3;
+	  return TRUE;
+	}
+
+      if(stat(cmpl_dir->fullname, &sbuf) < 0)
+	{
+	  cmpl_errno = errno;
+	  return FALSE;
+	}
+
+      cmpl_dir->fullname[length - 4] = 0;
+
+      if(!correct_parent(cmpl_dir, &sbuf))
+	return FALSE;
+    }
+
   cmpl_dir->fullname_len = strlen(cmpl_dir->fullname);
 
   return TRUE;
@@ -2195,15 +2428,21 @@ correct_parent(CompletionDir* cmpl_dir, struct stat *sbuf)
 {
   struct stat parbuf;
   gchar *last_slash;
+  gchar *first_slash;
   gchar *new_name;
   gchar c = 0;
 
-  last_slash = strrchr(cmpl_dir->fullname, '/');
-
+  last_slash = strrchr(cmpl_dir->fullname, G_DIR_SEPARATOR);
   g_assert(last_slash);
+  first_slash = strchr(cmpl_dir->fullname, G_DIR_SEPARATOR);
 
-  if(last_slash != cmpl_dir->fullname)
-    { /* last_slash[0] = 0; */ }
+  /* Clever (?) way to check for top-level directory that works also on
+   * Win32, where there is a drive letter and colon prefixed...
+   */
+  if (last_slash != first_slash)
+    {
+      last_slash[0] = 0;
+    }
   else
     {
       c = last_slash[1];
@@ -2213,17 +2452,20 @@ correct_parent(CompletionDir* cmpl_dir, struct stat *sbuf)
   if (stat(cmpl_dir->fullname, &parbuf) < 0)
     {
       cmpl_errno = errno;
+      if (!c)
+	last_slash[0] = G_DIR_SEPARATOR;
       return FALSE;
     }
 
+#ifndef NATIVE_WIN32		/* No inode numbers on Win32 */
   if (parbuf.st_ino == sbuf->st_ino && parbuf.st_dev == sbuf->st_dev)
     /* it wasn't a link */
     return TRUE;
 
   if(c)
     last_slash[1] = c;
-  /* else
-    last_slash[0] = '/'; */
+  else
+    last_slash[0] = G_DIR_SEPARATOR;
 
   /* it was a link, have to figure it out the hard way */
 
@@ -2235,25 +2477,20 @@ correct_parent(CompletionDir* cmpl_dir, struct stat *sbuf)
   g_free(cmpl_dir->fullname);
 
   cmpl_dir->fullname = new_name;
+#endif
 
   return TRUE;
 }
 
+#ifndef NATIVE_WIN32
+
 static gchar*
 find_parent_dir_fullname(gchar* dirname)
 {
-  gchar buffer[MAXPATHLEN];
-  gchar buffer2[MAXPATHLEN];
+  gchar *orig_dir;
+  gchar *result;
 
-#if defined(sun) && !defined(__SVR4)
-  if(!getwd(buffer))
-#else
-  if(!getcwd(buffer, MAXPATHLEN))
-#endif    
-    {
-      cmpl_errno = errno;
-      return NULL;
-    }
+  orig_dir = g_get_current_dir ();
 
   if(chdir(dirname) != 0 || chdir("..") != 0)
     {
@@ -2261,30 +2498,25 @@ find_parent_dir_fullname(gchar* dirname)
       return NULL;
     }
 
-#if defined(sun) && !defined(__SVR4)
-  if(!getwd(buffer2))
-#else
-  if(!getcwd(buffer2, MAXPATHLEN))
-#endif
-    {
-      chdir(buffer);
-      cmpl_errno = errno;
+  result = g_get_current_dir ();
 
-      return NULL;
-    }
-
-  if(chdir(buffer) != 0)
+  if(chdir(orig_dir) != 0)
     {
       cmpl_errno = errno;
       return NULL;
     }
 
-  return g_strdup(buffer2);
+  g_free (orig_dir);
+  return result;
 }
+
+#endif
 
 /**********************************************************************/
 /*                        Completion Operations                       */
 /**********************************************************************/
+
+#ifdef HAVE_PWD_H
 
 static PossibleCompletion*
 attempt_homedir_completion(gchar* text_to_complete,
@@ -2325,7 +2557,7 @@ attempt_homedir_completion(gchar* text_to_complete,
 			      user_directories[cmpl_state->user_completion_index].login,
 			     cmpl_state);
 
-      return append_completion_text("/", cmpl_state);
+      return append_completion_text(G_DIR_SEPARATOR_S, cmpl_state);
     }
 
   if(text_to_complete[1] ||
@@ -2340,9 +2572,17 @@ attempt_homedir_completion(gchar* text_to_complete,
       cmpl_state->the_completion.is_a_completion = 1;
       cmpl_state->the_completion.is_directory = 1;
 
-      return append_completion_text("~/", cmpl_state);
+      return append_completion_text("~" G_DIR_SEPARATOR_S, cmpl_state);
     }
 }
+
+#endif
+
+#ifdef WIN32
+#define FOLD(c) (tolower(c))
+#else
+#define FOLD(c) (c)
+#endif
 
 /* returns the index (>= 0) of the first differing character,
  * PATTERN_MATCH if the completion matches */
@@ -2351,7 +2591,7 @@ first_diff_index(gchar* pat, gchar* text)
 {
   gint diff = 0;
 
-  while(*pat && *text && *text == *pat)
+  while(*pat && *text && FOLD(*text) == FOLD(*pat))
     {
       pat += 1;
       text += 1;
@@ -2400,7 +2640,7 @@ find_completion_dir(gchar* text_to_complete,
 		    gchar** remaining_text,
 		    CompletionState* cmpl_state)
 {
-  gchar* first_slash = strchr(text_to_complete, '/');
+  gchar* first_slash = strchr(text_to_complete, G_DIR_SEPARATOR);
   CompletionDir* dir = cmpl_state->reference_dir;
   CompletionDir* next;
   *remaining_text = text_to_complete;
@@ -2460,7 +2700,7 @@ find_completion_dir(gchar* text_to_complete,
 	}
       
       *remaining_text = first_slash + 1;
-      first_slash = strchr(*remaining_text, '/');
+      first_slash = strchr(*remaining_text, G_DIR_SEPARATOR);
 
       g_free (pat_buf);
     }
@@ -2541,7 +2781,7 @@ attempt_file_completion(CompletionState *cmpl_state)
 
   g_assert(dir->cmpl_text);
 
-  first_slash = strchr(dir->cmpl_text, '/');
+  first_slash = strchr(dir->cmpl_text, G_DIR_SEPARATOR);
 
   if(first_slash)
     {
@@ -2607,7 +2847,7 @@ attempt_file_completion(CompletionState *cmpl_state)
 	  append_completion_text(dir->fullname +
 				 strlen(cmpl_state->completion_dir->fullname) + 1,
 				 cmpl_state);
-	  append_completion_text("/", cmpl_state);
+	  append_completion_text(G_DIR_SEPARATOR_S, cmpl_state);
 	}
 
       append_completion_text(dir->sent->entries[dir->cmpl_index].entry_name, cmpl_state);
@@ -2618,13 +2858,14 @@ attempt_file_completion(CompletionState *cmpl_state)
 
       cmpl_state->the_completion.is_directory = dir->sent->entries[dir->cmpl_index].is_dir;
       if(dir->sent->entries[dir->cmpl_index].is_dir)
-	append_completion_text("/", cmpl_state);
+	append_completion_text(G_DIR_SEPARATOR_S, cmpl_state);
 
       g_free (pat_buf);
       return &cmpl_state->the_completion;
     }
 }
 
+#ifdef HAVE_PWD_H
 
 static gint
 get_pwdb(CompletionState* cmpl_state)
@@ -2701,11 +2942,18 @@ compare_user_dir(const void* a, const void* b)
 		(((CompletionUserDir*)b))->login);
 }
 
+#endif
+
 static gint
 compare_cmpl_dir(const void* a, const void* b)
 {
+#ifndef WIN32
   return strcmp((((CompletionDirEntry*)a))->entry_name,
 		(((CompletionDirEntry*)b))->entry_name);
+#else
+  return g_strcasecmp((((CompletionDirEntry*)a))->entry_name,
+		      (((CompletionDirEntry*)b))->entry_name);
+#endif
 }
 
 static gint
