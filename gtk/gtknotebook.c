@@ -4124,17 +4124,20 @@ gtk_notebook_set_tab_vborder_internal (GtkNotebook *notebook,
  *             or %NULL to use the default label, 'page N'.
  * 
  * Appends a page to @notebook.
+ *
+ * Return value: the index (starting from 0) of the appended
+ * page in the notebook, or -1 if function fails
  **/
-void
+gint
 gtk_notebook_append_page (GtkNotebook *notebook,
 			  GtkWidget   *child,
 			  GtkWidget   *tab_label)
 {
-  g_return_if_fail (GTK_IS_NOTEBOOK (notebook));
-  g_return_if_fail (GTK_IS_WIDGET (child));
-  g_return_if_fail (tab_label == NULL || GTK_IS_WIDGET (tab_label));
+  g_return_val_if_fail (GTK_IS_NOTEBOOK (notebook), -1);
+  g_return_val_if_fail (GTK_IS_WIDGET (child), -1);
+  g_return_val_if_fail (tab_label == NULL || GTK_IS_WIDGET (tab_label), -1);
   
-  gtk_notebook_insert_page_menu (notebook, child, tab_label, NULL, -1);
+  return gtk_notebook_insert_page_menu (notebook, child, tab_label, NULL, -1);
 }
 
 /**
@@ -4152,19 +4155,22 @@ gtk_notebook_append_page (GtkNotebook *notebook,
  * 
  * Appends a page to @notebook, specifying the widget to use as the
  * label in the popup menu.
+ *
+ * Return value: the index (starting from 0) of the appended
+ * page in the notebook, or -1 if function fails
  **/
-void
+gint
 gtk_notebook_append_page_menu (GtkNotebook *notebook,
 			       GtkWidget   *child,
 			       GtkWidget   *tab_label,
 			       GtkWidget   *menu_label)
 {
-  g_return_if_fail (GTK_IS_NOTEBOOK (notebook));
-  g_return_if_fail (GTK_IS_WIDGET (child));
-  g_return_if_fail (tab_label == NULL || GTK_IS_WIDGET (tab_label));
-  g_return_if_fail (menu_label == NULL || GTK_IS_WIDGET (menu_label));
+  g_return_val_if_fail (GTK_IS_NOTEBOOK (notebook), -1);
+  g_return_val_if_fail (GTK_IS_WIDGET (child), -1);
+  g_return_val_if_fail (tab_label == NULL || GTK_IS_WIDGET (tab_label), -1);
+  g_return_val_if_fail (menu_label == NULL || GTK_IS_WIDGET (menu_label), -1);
   
-  gtk_notebook_insert_page_menu (notebook, child, tab_label, menu_label, -1);
+  return gtk_notebook_insert_page_menu (notebook, child, tab_label, menu_label, -1);
 }
 
 /**
@@ -4175,17 +4181,20 @@ gtk_notebook_append_page_menu (GtkNotebook *notebook,
  *             or %NULL to use the default label, 'page N'.
  *
  * Prepends a page to @notebook.
+ *
+ * Return value: the index (starting from 0) of the prepended
+ * page in the notebook, or -1 if function fails
  **/
-void
+gint
 gtk_notebook_prepend_page (GtkNotebook *notebook,
 			   GtkWidget   *child,
 			   GtkWidget   *tab_label)
 {
-  g_return_if_fail (GTK_IS_NOTEBOOK (notebook));
-  g_return_if_fail (GTK_IS_WIDGET (child));
-  g_return_if_fail (tab_label == NULL || GTK_IS_WIDGET (tab_label));
+  g_return_val_if_fail (GTK_IS_NOTEBOOK (notebook), -1);
+  g_return_val_if_fail (GTK_IS_WIDGET (child), -1);
+  g_return_val_if_fail (tab_label == NULL || GTK_IS_WIDGET (tab_label), -1);
   
-  gtk_notebook_insert_page_menu (notebook, child, tab_label, NULL, 0);
+  return gtk_notebook_insert_page_menu (notebook, child, tab_label, NULL, 0);
 }
 
 /**
@@ -4203,19 +4212,22 @@ gtk_notebook_prepend_page (GtkNotebook *notebook,
  * 
  * Prepends a page to @notebook, specifying the widget to use as the
  * label in the popup menu.
+ *
+ * Return value: the index (starting from 0) of the prepended
+ * page in the notebook, or -1 if function fails
  **/
-void
+gint
 gtk_notebook_prepend_page_menu (GtkNotebook *notebook,
 				GtkWidget   *child,
 				GtkWidget   *tab_label,
 				GtkWidget   *menu_label)
 {
-  g_return_if_fail (GTK_IS_NOTEBOOK (notebook));
-  g_return_if_fail (GTK_IS_WIDGET (child));
-  g_return_if_fail (tab_label == NULL || GTK_IS_WIDGET (tab_label));
-  g_return_if_fail (menu_label == NULL || GTK_IS_WIDGET (menu_label));
+  g_return_val_if_fail (GTK_IS_NOTEBOOK (notebook), -1);
+  g_return_val_if_fail (GTK_IS_WIDGET (child), -1);
+  g_return_val_if_fail (tab_label == NULL || GTK_IS_WIDGET (tab_label), -1);
+  g_return_val_if_fail (menu_label == NULL || GTK_IS_WIDGET (menu_label), -1);
   
-  gtk_notebook_insert_page_menu (notebook, child, tab_label, menu_label, 0);
+  return gtk_notebook_insert_page_menu (notebook, child, tab_label, menu_label, 0);
 }
 
 /**
@@ -4227,19 +4239,22 @@ gtk_notebook_prepend_page_menu (GtkNotebook *notebook,
  * @position: the index (starting at 0) at which to insert the page,
  *            or -1 to append the page after all other pages.
  * 
- * Insert a page into @notebook at the given position
+ * Insert a page into @notebook at the given position.
+ *
+ * Return value: the index (starting from 0) of the inserted
+ * page in the notebook, or -1 if function fails
  **/
-void
+gint
 gtk_notebook_insert_page (GtkNotebook *notebook,
 			  GtkWidget   *child,
 			  GtkWidget   *tab_label,
 			  gint         position)
 {
-  g_return_if_fail (GTK_IS_NOTEBOOK (notebook));
-  g_return_if_fail (GTK_IS_WIDGET (child));
-  g_return_if_fail (tab_label == NULL || GTK_IS_WIDGET (tab_label));
+  g_return_val_if_fail (GTK_IS_NOTEBOOK (notebook), -1);
+  g_return_val_if_fail (GTK_IS_WIDGET (child), -1);
+  g_return_val_if_fail (tab_label == NULL || GTK_IS_WIDGET (tab_label), -1);
   
-  gtk_notebook_insert_page_menu (notebook, child, tab_label, NULL, position);
+  return gtk_notebook_insert_page_menu (notebook, child, tab_label, NULL, position);
 }
 
 
@@ -4289,8 +4304,11 @@ gtk_notebook_mnemonic_activate_switch_page (GtkWidget *child,
  * 
  * Insert a page into @notebook at the given position, specifying
  * the widget to use as the label in the popup menu.
+ *
+ * Return value: the index (starting from 0) of the inserted
+ * page in the notebook, or -1 if function fails
  **/
-void
+gint
 gtk_notebook_insert_page_menu (GtkNotebook *notebook,
 			       GtkWidget   *child,
 			       GtkWidget   *tab_label,
@@ -4300,10 +4318,10 @@ gtk_notebook_insert_page_menu (GtkNotebook *notebook,
   GtkNotebookPage *page;
   gint nchildren;
 
-  g_return_if_fail (GTK_IS_NOTEBOOK (notebook));
-  g_return_if_fail (GTK_IS_WIDGET (child));
-  g_return_if_fail (tab_label == NULL || GTK_IS_WIDGET (tab_label));
-  g_return_if_fail (menu_label == NULL || GTK_IS_WIDGET (menu_label));
+  g_return_val_if_fail (GTK_IS_NOTEBOOK (notebook), -1);
+  g_return_val_if_fail (GTK_IS_WIDGET (child), -1);
+  g_return_val_if_fail (tab_label == NULL || GTK_IS_WIDGET (tab_label), -1);
+  g_return_val_if_fail (menu_label == NULL || GTK_IS_WIDGET (menu_label), -1);
 
   gtk_widget_freeze_child_notify (child);
   
@@ -4394,6 +4412,8 @@ gtk_notebook_insert_page_menu (GtkNotebook *notebook,
   gtk_widget_child_notify (child, "menu_label");
   gtk_widget_child_notify (child, "position");
   gtk_widget_thaw_child_notify (child);
+
+  return position;
 }
 
 /**

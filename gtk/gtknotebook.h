@@ -122,25 +122,25 @@ struct _GtkNotebookClass
 
 GType   gtk_notebook_get_type       (void) G_GNUC_CONST;
 GtkWidget * gtk_notebook_new        (void);
-void gtk_notebook_append_page       (GtkNotebook *notebook,
+gint gtk_notebook_append_page       (GtkNotebook *notebook,
 				     GtkWidget   *child,
 				     GtkWidget   *tab_label);
-void gtk_notebook_append_page_menu  (GtkNotebook *notebook,
+gint gtk_notebook_append_page_menu  (GtkNotebook *notebook,
 				     GtkWidget   *child,
 				     GtkWidget   *tab_label,
 				     GtkWidget   *menu_label);
-void gtk_notebook_prepend_page      (GtkNotebook *notebook,
+gint gtk_notebook_prepend_page      (GtkNotebook *notebook,
 				     GtkWidget   *child,
 				     GtkWidget   *tab_label);
-void gtk_notebook_prepend_page_menu (GtkNotebook *notebook,
+gint gtk_notebook_prepend_page_menu (GtkNotebook *notebook,
 				     GtkWidget   *child,
 				     GtkWidget   *tab_label,
 				     GtkWidget   *menu_label);
-void gtk_notebook_insert_page       (GtkNotebook *notebook,
+gint gtk_notebook_insert_page       (GtkNotebook *notebook,
 				     GtkWidget   *child,
 				     GtkWidget   *tab_label,
 				     gint         position);
-void gtk_notebook_insert_page_menu  (GtkNotebook *notebook,
+gint gtk_notebook_insert_page_menu  (GtkNotebook *notebook,
 				     GtkWidget   *child,
 				     GtkWidget   *tab_label,
 				     GtkWidget   *menu_label,

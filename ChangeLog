@@ -1,3 +1,14 @@
+Fri Jan 16 00:04:43 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtknotebook.h:
+	* gtk/gtknotebook.c (gtk_notebook_append_page): 
+	* gtk/gtknotebook.c (gtk_notebook_append_page_menu): 
+	* gtk/gtknotebook.c (gtk_notebook_prepend_page): 
+	* gtk/gtknotebook.c (gtk_notebook_prepend_page_menu): 
+	* gtk/gtknotebook.c (gtk_notebook_insert_page): 
+	* gtk/gtknotebook.c (gtk_notebook_insert_page_menu): Return the
+	index of the newly inserted page.  (#130986, Olexiy Avramchenko) 
+
 Thu Jan 15 23:17:14 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkuimanager.c (gtk_ui_manager_get_toplevels): Inserting
