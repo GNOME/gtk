@@ -968,12 +968,12 @@ disconnect_proxy (GtkAction *action,
 					action);
 
   /* disconnect handlers for notify::* signals */
-  g_signal_handlers_disconnect_by_func (proxy,
+  g_signal_handlers_disconnect_by_func (action,
 					G_CALLBACK (gtk_action_sync_sensitivity),
-					action);
-  g_signal_handlers_disconnect_by_func (proxy,
+					proxy);
+  g_signal_handlers_disconnect_by_func (action,
 					G_CALLBACK (gtk_action_sync_property),
-					action);
+					proxy);
 
   g_signal_handlers_disconnect_by_func (action,
 				G_CALLBACK (gtk_action_sync_stock_id), proxy);

@@ -1,3 +1,10 @@
+2004-08-22  Philip Langdale  <plangdale@vmware.com>
+
+	* gtk/gtkaction.c (gtk_action_disconnect_proxy): Two signals
+	(gtk_action_sync_property and gtk_action_sync_sensitive) were
+	not being correctly disconnected, leading to actions continuing
+	to affect disconnected proxies. (#150607)
+
 2004-08-22  Tor Lillqvist  <tml@iki.fi>
 
 	* gdk/win32/gdkwindow-win32.c (gdk_window_new_internal,
