@@ -1,3 +1,8 @@
+Mon May 10 04:20:41 1999  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkmenushell.c (gtk_menu_shell_activate_item): propagate
+	::selection-done emissions up to the topmost menu shell.
+
 Fri May  7 10:15:14 1999  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtknotebook.c (gtk_notebook_set_scrollable): Unset
