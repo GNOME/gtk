@@ -1,3 +1,9 @@
+2004-07-13  Federico Mena Quintero  <federico@ximian.com>
+
+	* gtk/gtkfilechooserdefault.c (shortcuts_activate_volume): Set a
+	busy cursor while mounting the volume.  Also, ref the chooser
+	while mounting, as we may re-enter.  Fixes #139376.
+
 2004-07-13  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtktreeview.c (gtk_tree_view_adjustment_changed): 

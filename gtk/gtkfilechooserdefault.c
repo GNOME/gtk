@@ -4840,12 +4840,22 @@ shortcuts_activate_volume (GtkFileChooserDefault *impl,
 {
   GtkFilePath *path;
 
+  /* We ref the file chooser since volume_mount() may run a main loop, and the
+   * user could close the file chooser window in the meantime.
+   */
+  g_object_ref (impl);
+
   if (!gtk_file_system_volume_get_is_mounted (impl->file_system, volume))
     {
       GError *error;
+      gboolean result;
+
+      set_busy_cursor (impl, TRUE);
 
       error = NULL;
-      if (!gtk_file_system_volume_mount (impl->file_system, volume, &error))
+      result = gtk_file_system_volume_mount (impl->file_system, volume, &error);
+
+      if (!result)
 	{
 	  char *msg;
 
@@ -4855,14 +4865,21 @@ shortcuts_activate_volume (GtkFileChooserDefault *impl,
 	  error_message (impl, msg);
 	  g_free (msg);
 	  g_error_free (error);
-
-	  return;
 	}
+
+      set_busy_cursor (impl, FALSE);
+
+      if (!result)
+	goto out;
     }
 
   path = gtk_file_system_volume_get_base_path (impl->file_system, volume);
   change_folder_and_display_error (impl, path);
   gtk_file_path_free (path);
+
+ out:
+
+  g_object_unref (impl);
 }
 
 /* Opens the folder or volume at the specified index in the shortcuts list */
