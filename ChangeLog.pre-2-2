@@ -1,3 +1,13 @@
+Tue Jan 30 16:39:25 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkitemfactory.c (gtk_item_factory_delete_item): For menu
+	items with submenus, destroy the item along with the submenu.
+	(#7841, Brian Masney(?)) Also, handle paths of the form '<foo>/abcd...' 
+	properly.
+
+	* gtk/testgtk.c (menu_items): Add a dummy branch that we delete
+	later.
+
 Tue Jan 30 15:51:25 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkwindow.c (gtk_window_real_set_focus): Fix a problem where

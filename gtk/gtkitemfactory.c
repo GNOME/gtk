@@ -1304,8 +1304,7 @@ gtk_item_factory_delete_item (GtkItemFactory         *ifactory,
 			      const gchar            *path)
 {
   GtkItemFactoryClass *class;
-  GtkItemFactoryItem *item;
-  gchar *fpath;
+  GtkWidget *widget;
 
   g_return_if_fail (ifactory != NULL);
   g_return_if_fail (GTK_IS_ITEM_FACTORY (ifactory));
@@ -1313,25 +1312,14 @@ gtk_item_factory_delete_item (GtkItemFactory         *ifactory,
 
   class = GTK_ITEM_FACTORY_CLASS (GTK_OBJECT (ifactory)->klass);
 
-  fpath = g_strconcat (ifactory->path, path, NULL);
-  item = g_hash_table_lookup (class->item_ht, fpath);
-  g_free (fpath);
+  widget = gtk_item_factory_get_widget (ifactory, path);
 
-  if (item)
+  if (widget)
     {
-      GtkWidget *widget = NULL;
-      GSList *slist;
+      if (GTK_IS_MENU (widget))
+	widget = gtk_menu_get_attach_widget (GTK_MENU (widget));
 
-      for (slist = item->widgets; slist; slist = slist->next)
-	{
-	  widget = slist->data;
-
-	  if (gtk_item_factory_from_widget (widget) == ifactory)
-	    break;
-	}
-
-      if (slist)
-	gtk_widget_destroy (widget);
+      gtk_widget_destroy (widget);
     }
 }
 
