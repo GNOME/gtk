@@ -1,5 +1,13 @@
 2003-03-29  Matthias Clasen  <maclas@gmx.de>
 
+	* gtk/gtkcolorseldialog.c (gtk_color_selection_dialog_init): Set
+	a default window title to match the GtkFontSelectionDialog behavior.
+ 
+	(gtk_color_selection_dialog_new): Don't call
+	gtk_window_set_title() if title is NULL.  (bug #101975, Daniel Elstner)
+
+2003-03-29  Matthias Clasen  <maclas@gmx.de>
+
 	Fix for bug #78499:
 	
 	* gtk/gtkentry.h (struct _GtkEntry): Add flags select_words and
