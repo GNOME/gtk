@@ -106,29 +106,3 @@ Sets the text displayed in the preview area.
 @text: the text to display in the preview area.
 
 
-<!-- ##### FUNCTION gtk_font_selection_set_filter ##### -->
-<para>
-Sets one of the two font filters, to limit the fonts shown.
-</para>
-
-@fontsel: a #GtkFontSelection.
-@filter_type: which of the two font filters to set, either
-#GTK_FONT_FILTER_BASE or #GTK_FONT_FILTER_USER. The user filter
-can be changed by the user, but the base filter is permanent.
-@font_type: the types of font to be shown. This is a bitwise combination of
-#GTK_FONT_BITMAP, #GTK_FONT_SCALABLE and #GTK_FONT_SCALABLE_BITMAP,
-or #GTK_FONT_ALL to show all three font types.
-@foundries: a NULL-terminated array of strings containing foundry names which
-will be shown, or NULL to show all foundries.
-@weights: a NULL-terminated array of strings containing weight names which
-will be shown, or NULL to show all weights.
-@slants: a NULL-terminated array of strings containing slant names which
-will be shown, or NULL to show all slants.
-@setwidths: a NULL-terminated array of strings containing setwidth names which
-will be shown, or NULL to show all setwidths.
-@spacings: a NULL-terminated array of strings containing spacings which
-will be shown, or NULL to show all spacings.
-@charsets: a NULL-terminated array of strings containing charset names which
-will be shown, or NULL to show all charsets.
-
-

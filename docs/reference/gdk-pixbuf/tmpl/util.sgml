@@ -29,6 +29,7 @@ Utility and miscellaneous convenience functions.
 @b: 
 @Returns: 
 
+
 <!-- ##### FUNCTION gdk_pixbuf_copy_area ##### -->
 <para>
 
@@ -41,12 +42,11 @@ Utility and miscellaneous convenience functions.
 @height: 
 @dest_pixbuf: 
 @dest_x: 
-@dest_y: 
-
-
-<!--
+@dest_y: <!--
 Local variables:
 mode: sgml
 sgml-parent-document: ("../gdk-pixbuf.sgml" "book" "refsect2" "")
 End:
 -->
+
+

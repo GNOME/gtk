@@ -69,3 +69,12 @@ selected value for the option menu.
 0 to n-1.
 
 
+<!-- ##### FUNCTION gtk_option_menu_get_history ##### -->
+<para>
+
+</para>
+
+@option_menu: 
+@Returns: 
+
+

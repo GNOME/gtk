@@ -60,6 +60,7 @@ displays.
 The #GdkImage struct contains information on the image and the pixel data.
 </para>
 
+@parent_instance: 
 @type: the type of the image.
 @visual: the visual.
 @byte_order: the byte order.
@@ -69,6 +70,7 @@ The #GdkImage struct contains information on the image and the pixel data.
 @bpp: the number of bytes per pixel.
 @bpl: the number of bytes per line of the image.
 @mem: the pixel data.
+@windowing_data: 
 
 <!-- ##### FUNCTION gdk_image_new ##### -->
 <para>
@@ -116,19 +118,39 @@ Creates a new #GdkImage with a depth of 1 from the given data.
 Gets part of a #GdkWindow and stores it in a new #GdkImage.
 </para>
 
-@window: the #GdkWindow to copy from.
+@drawable: 
 @x: the left edge of the rectangle to copy from @window.
 @y: the top edge of the rectangle to copy from @window.
 @width: the width of the area to copy, in pixels.
 @height: the height of the area to copy, in pixels.
 @Returns: a new #GdkImage with a copy of the given area of @window.
+<!-- # Unused Parameters # -->
+@window: the #GdkWindow to copy from.
 
 
-<!-- ##### FUNCTION gdk_image_destroy ##### -->
+<!-- ##### FUNCTION gdk_image_ref ##### -->
+<para>
+
+</para>
+
+@image: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_image_unref ##### -->
+<para>
+
+</para>
+
+@image: 
+
+
+<!-- ##### MACRO gdk_image_destroy ##### -->
 <para>
 Destroys a #GdkImage, freeing any resources allocated for it.
 </para>
 
+<!-- # Unused Parameters # -->
 @image: a #GdkImage.
 
 

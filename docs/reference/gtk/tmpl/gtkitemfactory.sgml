@@ -136,6 +136,18 @@ GtkItemFactory
 @scanner: 
 
 
+<!-- ##### FUNCTION gtk_item_factory_add_foreign ##### -->
+<para>
+
+</para>
+
+@accel_widget: 
+@full_path: 
+@accel_group: 
+@keyval: 
+@modifiers: 
+
+
 <!-- ##### FUNCTION gtk_item_factory_from_widget ##### -->
 <para>
 
@@ -154,6 +166,16 @@ GtkItemFactory
 @Returns: 
 
 
+<!-- ##### FUNCTION gtk_item_factory_get_item ##### -->
+<para>
+
+</para>
+
+@ifactory: 
+@path: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gtk_item_factory_get_widget ##### -->
 <para>
 
@@ -165,6 +187,16 @@ GtkItemFactory
 
 
 <!-- ##### FUNCTION gtk_item_factory_get_widget_by_action ##### -->
+<para>
+
+</para>
+
+@ifactory: 
+@action: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_item_factory_get_item_by_action ##### -->
 <para>
 
 </para>

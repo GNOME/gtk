@@ -10,6 +10,7 @@ A #GtkProgress is the abstract base class used to derive
 a #GtkProgressBar which provides a visual representation of
 the progress of a long running operation.  
 </para>
+
 <!-- ##### SECTION See_Also ##### -->
 <para>
 
@@ -21,6 +22,7 @@ The #GtkProgress-struct struct contains private data only.
 and should be accessed using the functions below.
 </para>
 
+
 <!-- ##### FUNCTION gtk_progress_set_show_text ##### -->
 <para>
 Controls whether progress text is shown.
@@ -29,6 +31,7 @@ Controls whether progress text is shown.
 @progress: a #GtkProgress.
 @show_text: a boolean indicating whether the progress text
 is shown.
+
 
 <!-- ##### FUNCTION gtk_progress_set_text_alignment ##### -->
 <para>
@@ -202,3 +205,4 @@ A number between 0.0 and 1.0 specifying the horizontal alignment.
 <para>
 A number between 0.0 and 1.0 specifying the vertical alignment.
 </para>
+

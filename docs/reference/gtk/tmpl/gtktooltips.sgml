@@ -98,9 +98,6 @@ Information about the tooltip (if any) associated with an arbitrary widget can b
 @widget: 
 @tip_text: 
 @tip_private: 
-@font: 
-@width: 
-@row: 
 
 <!-- ##### FUNCTION gtk_tooltips_new ##### -->
 <para>

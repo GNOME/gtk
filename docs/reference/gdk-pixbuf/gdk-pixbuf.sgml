@@ -1,4 +1,5 @@
 <!doctype book PUBLIC "-//Davenport//DTD DocBook V3.0//EN" [
+<!entity gdk-pixbuf-Initialization-and-Versions SYSTEM "sgml/initialization_versions.sgml">
 <!entity gdk-pixbuf-gdk-pixbuf SYSTEM "sgml/gdk-pixbuf.sgml">
 <!entity gdk-pixbuf-refcounting SYSTEM "sgml/refcounting.sgml">
 <!entity gdk-pixbuf-file-loading SYSTEM "sgml/file-loading.sgml">
@@ -8,12 +9,13 @@
 <!entity gdk-pixbuf-from-drawables SYSTEM "sgml/from-drawables.sgml">
 <!entity gdk-pixbuf-util SYSTEM "sgml/util.sgml">
 <!entity gdk-pixbuf-animation SYSTEM "sgml/animation.sgml">
+<!entity gdk-pixbuf-Module-Interface SYSTEM "sgml/module_interface.sgml">
 <!entity GdkPixbufLoader SYSTEM "sgml/gdk-pixbuf-loader.sgml">
 <!entity GnomeCanvasPixbuf SYSTEM "sgml/gnome-canvas-pixbuf.sgml">
 <!entity Compiling SYSTEM "compiling.sgml">
 ]>
 
-<book>
+<book id="index">
   <bookinfo>
     <title>The <application>gdk-pixbuf</application> Library</title>
 
@@ -35,7 +37,7 @@
     </copyright>
   </bookinfo>
 
-  <reference>
+  <reference id="api">
     <title>API Reference</title>
 
     <partintro>
@@ -47,18 +49,23 @@
       </para>
     </partintro>
 
+    &gdk-pixbuf-Initialization-and-Versions;
     &gdk-pixbuf-gdk-pixbuf;
     &gdk-pixbuf-refcounting;
     &gdk-pixbuf-file-loading;
     &gdk-pixbuf-creating;
-    &gdk-pixbuf-rendering;
     &gdk-pixbuf-scaling;
-    &gdk-pixbuf-from-drawables;
     &gdk-pixbuf-util;
     &gdk-pixbuf-animation;
     &GdkPixbufLoader;
     &GnomeCanvasPixbuf;
   </reference>
 
+  <reference id="internals">
+    <title>Internals</title>
+    &gdk-pixbuf-Module-Interface;
+  </reference>
+
   &Compiling;
+
 </book>

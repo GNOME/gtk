@@ -136,3 +136,8 @@ pointer, it isn't copied.
 The #GtkJustification setting.  See gtk_label_set_justify() for more info.
 </para>
 
+<!-- ##### ARG GtkLabel:wrap ##### -->
+<para>
+
+</para>
+

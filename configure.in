@@ -870,6 +870,16 @@ AM_CONDITIONAL(USE_MMX, test x$use_mmx_asm = xyes)
 # Checks for gtk-doc and docbook-tools
 ##################################################
 
+AC_ARG_WITH(html-dir, [  --with-html-dir=PATH path to installed docs ])
+
+if test "x$with_html_dir" = "x" ; then
+  HTML_DIR='${datadir}/gtk-doc/html'
+else
+  HTML_DIR=$with_html_dir
+fi
+
+AC_SUBST(HTML_DIR)
+
 AC_CHECK_PROG(GTKDOC, gtkdoc-mkdb, true, false)
 AM_CONDITIONAL(HAVE_GTK_DOC, $GTKDOC)
 AC_SUBST(HAVE_GTK_DOC)
@@ -1002,6 +1012,8 @@ demos/Makefile
 docs/Makefile
 docs/reference/Makefile
 docs/reference/gdk-pixbuf/Makefile
+docs/reference/gdk/Makefile
+docs/reference/gtk/Makefile
 docs/faq/Makefile
 docs/tutorial/Makefile
 gdk-pixbuf/Makefile

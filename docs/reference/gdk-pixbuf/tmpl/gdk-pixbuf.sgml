@@ -33,6 +33,24 @@ Information that describes an image.
     rowstride or number of bytes between rows.
   </para>
 
+@parent_instance: 
+@colorspace: 
+@n_channels: 
+@bits_per_sample: 
+@width: 
+@height: 
+@rowstride: 
+@pixels: 
+@destroy_fn: 
+@destroy_fn_data: 
+@has_alpha: 
+
+<!-- ##### STRUCT GdkPixbufClass ##### -->
+<para>
+
+</para>
+
+
 <!-- ##### FUNCTION gdk_pixbuf_get_colorspace ##### -->
 <para>
 
@@ -102,11 +120,11 @@ Information that describes an image.
 </para>
 
 @pixbuf: 
-@Returns: 
-
-<!--
+@Returns: <!--
 Local variables:
 mode: sgml
 sgml-parent-document: ("../gdk-pixbuf.sgml" "book" "refsect2" "")
 End:
 -->
+
+

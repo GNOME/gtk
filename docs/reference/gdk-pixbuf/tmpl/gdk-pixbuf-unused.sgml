@@ -1,27 +1,148 @@
-<!-- ##### FUNCTION gdk_pixbuf_load_module ##### -->
+<!-- ##### USER_FUNCTION GdkPixbufLastUnref ##### -->
+  <para>
+    A function of this type can be used to override the default
+    operation when a pixbuf loses its last reference, i.e. when
+    gdk_pixbuf_unref() is called on a #GdkPixbuf structure that has a
+    reference count of 1.  This function should determine whether to
+    finalize the pixbuf by calling gdk_pixbuf_finalize(), or whether
+    to just resume normal execution.  The last unref handler for a
+    #GdkPixbuf can be set using the
+    gdk_pixbuf_set_last_unref_handler() function.  By default, pixbufs
+    will be finalized automatically if no last unref handler has been
+    defined.
+  </para>
+
+@pixbuf: The pixbuf that is losing its last reference.
+@data: User closure data.
+
+<!-- ##### SECTION ./tmpl/from-drawables.sgml:Title ##### -->
+Drawables to Pixbufs
+
+
+<!-- ##### ARG GnomeCanvasPixbuf:height_pixels ##### -->
 <para>
 
 </para>
 
-@image_module: 
+
+<!-- ##### SECTION ./tmpl/rendering.sgml:See_Also ##### -->
+  <para>
+    GdkRGB
+  </para>
+
+
+<!-- ##### FUNCTION gdk_pixbuf_render_pixmap_and_mask ##### -->
+<para>
+
+</para>
+
+@pixbuf: 
+@pixmap_return: 
+@mask_return: 
+@alpha_threshold: <!--
+Local variables:
+mode: sgml
+sgml-parent-document: ("../gdk-pixbuf.sgml" "book" "refsect2" "")
+End:
+-->
+
+<!-- ##### FUNCTION gdk_pixbuf_render_to_drawable ##### -->
+<para>
+
+</para>
+
+@pixbuf: 
+@drawable: 
+@gc: 
+@src_x: 
+@src_y: 
+@dest_x: 
+@dest_y: 
+@width: 
+@height: 
+@dither: 
+@x_dither: 
+@y_dither: 
+
+<!-- ##### FUNCTION gdk_pixbuf_get_from_drawable ##### -->
+<para>
+
+</para>
+
+@dest: 
+@src: 
+@cmap: 
+@src_x: 
+@src_y: 
+@dest_x: 
+@dest_y: 
+@width: 
+@height: 
+@Returns: <!--
+Local variables:
+mode: sgml
+sgml-parent-document: ("../gdk-pixbuf.sgml" "book" "refsect2" "")
+End:
+-->
+
+<!-- ##### FUNCTION gdk_pixbuf_new_from_art_pixbuf ##### -->
+<para>
+
+</para>
+
+@art_pixbuf: 
+@Returns: 
+
+<!-- ##### ARG GnomeCanvasPixbuf:y_pixels ##### -->
+<para>
+
+</para>
+
 
 <!-- ##### SECTION ./tmpl/gdk-pixbuf-io.sgml:Short_Description ##### -->
 
 
 
-<!-- ##### STRUCT GdkPixbufModule ##### -->
+<!-- ##### SECTION ./tmpl/from-drawables.sgml:Long_Description ##### -->
+  <para>
+    The functions in this section allow you to take the image data
+    from a GDK drawable and dump it into a #GdkPixbuf.  This can be
+    used for screenshots and other special effects.  Note that these
+    operations can be expensive, since the image data has to be
+    transferred from the X server to the client program and converted.
+  </para>
+
+
+<!-- ##### SECTION ./tmpl/gdk-pixbuf-io.sgml:See_Also ##### -->
 <para>
 
 </para>
 
-@module_name: 
-@format_check: 
-@module: 
-@load: 
-@load_xpm_data: 
-@begin_load: 
-@stop_load: 
-@load_increment: 
+
+<!-- ##### FUNCTION gdk_pixbuf_finalize ##### -->
+<para>
+
+</para>
+
+@pixbuf: <!--
+Local variables:
+mode: sgml
+sgml-parent-document: ("../gdk-pixbuf.sgml" "book" "refsect2" "")
+End:
+-->
+
+<!-- ##### SECTION ./tmpl/rendering.sgml:Short_Description ##### -->
+Rendering a pixbuf to a GDK drawable.
+
+
+<!-- ##### FUNCTION gdk_pixbuf_set_last_unref_handler ##### -->
+<para>
+
+</para>
+
+@pixbuf: 
+@last_unref_fn: 
+@last_unref_fn_data: 
 
 <!-- ##### ARG GnomeCanvasPixbuf:x_set ##### -->
   <para>
@@ -32,70 +153,55 @@
   </para>
 
 
-<!-- ##### USER_FUNCTION ModulePreparedNotifyFunc ##### -->
+<!-- ##### FUNCTION gdk_pixbuf_get_format ##### -->
 <para>
 
 </para>
 
 @pixbuf: 
-@user_data: 
-
-<!-- ##### FUNCTION gdk_pixbuf_get_module ##### -->
-<para>
-
-</para>
-
-@buffer: 
-@size: 
 @Returns: 
 
-<!-- ##### SECTION ./tmpl/gdk-pixbuf-io.sgml:See_Also ##### -->
-<para>
-
-</para>
-
-
-<!-- ##### FUNCTION gdk_pixbuf_new_from_art_pixbuf ##### -->
-<para>
-
-</para>
-
-@art_pixbuf: 
-@Returns: 
-
-<!-- ##### ARG GnomeCanvasPixbuf:height_pixels ##### -->
-<para>
-
-</para>
-
-
-<!-- ##### ARG GnomeCanvasPixbuf:y_pixels ##### -->
-<para>
-
-</para>
-
-
-<!-- ##### SECTION ./tmpl/gdk-pixbuf-io.sgml:Long_Description ##### -->
-<para>
-
-</para>
-
-
-<!-- ##### USER_FUNCTION ModuleUpdatedNotifyFunc ##### -->
+<!-- ##### FUNCTION gdk_pixbuf_render_to_drawable_alpha ##### -->
 <para>
 
 </para>
 
 @pixbuf: 
-@user_data: 
-@x: 
-@y: 
+@drawable: 
+@src_x: 
+@src_y: 
+@dest_x: 
+@dest_y: 
 @width: 
 @height: 
+@alpha_mode: 
+@alpha_threshold: 
+@dither: 
+@x_dither: 
+@y_dither: 
 
-<!-- ##### SECTION ./tmpl/gdk-pixbuf-io.sgml:Title ##### -->
-gdk-pixbuf-io
+<!-- ##### ARG GnomeCanvasPixbuf:x_pixels ##### -->
+<para>
 
+</para>
+
+
+<!-- ##### SECTION ./tmpl/from-drawables.sgml:See_Also ##### -->
+  <para>
+    gdk_image_get().
+  </para>
+
+
+<!-- ##### SECTION ./tmpl/rendering.sgml:Title ##### -->
+Rendering
+
+
+<!-- ##### MACRO GDK_PIXBUF_LOADER ##### -->
+  <para>
+    Casts a #GtkObject to a #GdkPixbufLoader.
+  </para>
+
+@obj: A GTK+ object.
 
 <!-- ##### ARG GnomeCanvasPixbuf:y_set ##### -->
   <para>
@@ -108,23 +214,83 @@ gdk-pixbuf-io
   </para>
 
 
-<!-- ##### ARG GnomeCanvasPixbuf:x_pixels ##### -->
-<para>
+<!-- ##### SECTION ./tmpl/rendering.sgml:Long_Description ##### -->
+  <para>
+    The <application>gdk-pixbuf</application> library provides several
+    convenience functions to render pixbufs to GDK drawables.  It uses
+    the GdkRGB to render the image data.
+  </para>
 
-</para>
+  <para>
+    At this point there is not a standard alpha channel extension for
+    the X Window System, so it is not possible to use full opacity
+    information when painting images to arbitrary drawables.  The
+    <application>gdk-pixbuf</application> convenience functions will
+    threshold the opacity information to create a bi-level clipping
+    mask (black and white), and use that to draw the image onto a
+    drawable.
+  </para>
+
+  <important>
+    <para>
+      Since these functions use GdkRGB for rendering, you must
+      initialize GdkRGB before using any of them.  You can do this by
+      calling gdk_rgb_init() near the beginning of your program.
+    </para>
+  </important>
 
 
-<!-- ##### FUNCTION gdk_pixbuf_get_format ##### -->
+<!-- ##### SECTION ./tmpl/from-drawables.sgml:Short_Description ##### -->
+Getting parts of a drawable's image data into a pixbuf.
+
+
+<!-- ##### FUNCTION gdk_pixbuf_render_threshold_alpha ##### -->
 <para>
 
 </para>
 
 @pixbuf: 
-@Returns: 
+@bitmap: 
+@src_x: 
+@src_y: 
+@dest_x: 
+@dest_y: 
+@width: 
+@height: 
+@alpha_threshold: 
 
 <!-- ##### ARG GnomeCanvasPixbuf:width_pixels ##### -->
 <para>
 
 </para>
+
+
+<!-- ##### ENUM GdkPixbufAlphaMode ##### -->
+  <para>
+    These values can be passed to
+    gdk_pixbuf_render_to_drawable_alpha() to control how the alpha
+    chanel of an image should be handled.  This function can create a
+    bilevel clipping mask (black and white) and use it while painting
+    the image.  In the future, when the X Window System gets an alpha
+    channel extension, it will be possible to do full alpha
+    compositing onto arbitrary drawables.  For now both cases fall
+    back to a bilevel clipping mask.
+  </para>
+
+@GDK_PIXBUF_ALPHA_BILEVEL: A bilevel clipping mask (black and white)
+will be created and used to draw the image.  Pixels below 0.5 opacity
+will be considered fully transparent, and all others will be
+considered fully opaque.
+@GDK_PIXBUF_ALPHA_FULL: For now falls back to #GDK_PIXBUF_ALPHA_BILEVEL.
+In the future it will do full alpha compositing.
+
+<!-- ##### SECTION ./tmpl/gdk-pixbuf-io.sgml:Long_Description ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### SECTION ./tmpl/gdk-pixbuf-io.sgml:Title ##### -->
+gdk-pixbuf-io
 
 

@@ -254,3 +254,10 @@ once used for changing the colormap and visual on the fly.
 
 
 
+<!-- ##### ARG GtkPreview:expand ##### -->
+<para>
+Determines the way that the the preview widget behaves
+when the size it is allocated is larger than the requested
+size. See gtk_preview_set_expand().
+</para>
+

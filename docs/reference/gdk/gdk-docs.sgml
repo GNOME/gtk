@@ -3,6 +3,7 @@
 <!entity gdk-Bitmaps-and-Pixmaps SYSTEM "sgml/pixmaps.sgml">
 <!entity gdk-Images SYSTEM "sgml/images.sgml">
 <!entity gdk-GdkRGB SYSTEM "sgml/rgb.sgml">
+<!entity gdk-Pixbufs SYSTEM "sgml/pixbufs.sgml">
 <!entity gdk-Colormaps-and-Colors SYSTEM "sgml/colors.sgml">
 <!entity gdk-Fonts SYSTEM "sgml/fonts.sgml">
 <!entity gdk-Drawing-Primitives SYSTEM "sgml/drawing.sgml">
@@ -13,6 +14,7 @@
 <!entity gdk-Properties-and-Atoms SYSTEM "sgml/properties.sgml">
 <!entity gdk-Input-Methods SYSTEM "sgml/input_methods.sgml">
 <!entity gdk-Input-Contexts SYSTEM "sgml/input_contexts.sgml">
+<!entity gdk-Pango-Interaction SYSTEM "sgml/pango_interaction.sgml">
 <!entity gdk-Color-Contexts SYSTEM "sgml/color_contexts.sgml">
 <!entity gdk-Points-Rectangles-and-Regions SYSTEM "sgml/regions.sgml">
 <!entity gdk-Threads SYSTEM "sgml/threads.sgml">
@@ -23,14 +25,16 @@
 <!entity gdk-Cursors SYSTEM "sgml/cursors.sgml">
 <!entity gdk-Input SYSTEM "sgml/input.sgml">
 <!entity gdk-Drag-and-Drop SYSTEM "sgml/dnd.sgml">
+<!entity gdk-X-Window-System-Interaction SYSTEM
+"sgml/x_interaction.sgml">
 ]>
 <book id="index">
   <bookinfo>
     <title>GDK Reference Manual</title>
   </bookinfo>
 
-  <chapter id="gdk">
-    <title>GDK</title>
+  <reference id="reference">
+    <title>API Reference</title>
     &gdk-General;
 
     &gdk-Points-Rectangles-and-Regions;
@@ -40,6 +44,7 @@
     &gdk-Bitmaps-and-Pixmaps;
     &gdk-GdkRGB;
     &gdk-Images;
+    &gdk-Pixbufs;
 
     &gdk-Colormaps-and-Colors;
     &gdk-Color-Contexts;
@@ -66,7 +71,10 @@
 
     &gdk-Key-Values;
 
+    &gdk-Pango-Interaction;
     &gdk-Input-Methods;
     &gdk-Input-Contexts;
-  </chapter>
+
+    &gdk-X-Window-System-Interaction;
+  </reference>
 </book>

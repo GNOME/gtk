@@ -48,24 +48,6 @@ GtkWindow
 @wmclass_class: 
 
 
-<!-- ##### FUNCTION gtk_window_set_focus ##### -->
-<para>
-
-</para>
-
-@window: 
-@focus: 
-
-
-<!-- ##### FUNCTION gtk_window_set_default ##### -->
-<para>
-
-</para>
-
-@window: 
-@defaultw: 
-
-
 <!-- ##### FUNCTION gtk_window_set_policy ##### -->
 <para>
 Changes how a toplevel window deals with its size request and user resize
@@ -198,24 +180,6 @@ it's larger
 @modal: 
 
 
-<!-- ##### FUNCTION gtk_window_add_embedded_xid ##### -->
-<para>
-
-</para>
-
-@window: 
-@xid: 
-
-
-<!-- ##### FUNCTION gtk_window_remove_embedded_xid ##### -->
-<para>
-
-</para>
-
-@window: 
-@xid: 
-
-
 <!-- ##### FUNCTION gtk_window_set_default_size ##### -->
 <para>
 
@@ -253,6 +217,14 @@ it's larger
 
 @window: 
 @parent: 
+
+
+<!-- ##### FUNCTION gtk_window_list_toplevels ##### -->
+<para>
+
+</para>
+
+@Returns: 
 
 
 <!-- ##### SIGNAL GtkWindow::set-focus ##### -->
@@ -296,5 +268,15 @@ If the window is modal, i.e. it grabs all GTK+ events.
 <!-- ##### ARG GtkWindow:window_position ##### -->
 <para>
 The position of the window.
+</para>
+
+<!-- ##### ARG GtkWindow:default_width ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkWindow:default_height ##### -->
+<para>
+
 </para>
 

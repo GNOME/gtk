@@ -14,12 +14,6 @@ Threads
 
 </para>
 
-<!-- ##### VARIABLE gdk_threads_mutex ##### -->
-<para>
-
-</para>
-
-
 <!-- ##### MACRO GDK_THREADS_ENTER ##### -->
 <para>
 
@@ -46,5 +40,11 @@ Threads
 
 </para>
 
+
+
+<!-- ##### VARIABLE gdk_threads_mutex ##### -->
+<para>
+
+</para>
 
 

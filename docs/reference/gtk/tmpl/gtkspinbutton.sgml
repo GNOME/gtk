@@ -320,6 +320,30 @@ Refreshes a spin button. The behaviour of the update is determined by gtk_spin_b
 @spin_button: a #GtkSpinButton.
 
 
+<!-- ##### MACRO GTK_INPUT_ERROR ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### SIGNAL GtkSpinButton::input ##### -->
+<para>
+
+</para>
+
+@spinbutton: the object which received the signal.
+@arg1: 
+@Returns: 
+
+<!-- ##### SIGNAL GtkSpinButton::output ##### -->
+<para>
+
+</para>
+
+@spinbutton: the object which received the signal.
+@Returns: 
+
 <!-- ##### ARG GtkSpinButton:adjustment ##### -->
 <para>
 the #GtkAdjustment that defines a spin button's main properties.

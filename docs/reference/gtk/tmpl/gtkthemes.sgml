@@ -19,15 +19,6 @@ Themes
 
 </para>
 
-@parse_rc_style: 
-@merge_rc_style: 
-@rc_style_to_style: 
-@duplicate_style: 
-@realize_style: 
-@unrealize_style: 
-@destroy_rc_style: 
-@destroy_style: 
-@set_background: 
 
 <!-- ##### FUNCTION gtk_theme_engine_get ##### -->
 <para>
@@ -54,20 +45,24 @@ Themes
 @engine: 
 
 
-<!-- ##### FUNCTION gtk_themes_init ##### -->
+<!-- ##### FUNCTION gtk_theme_engine_create_rc_style ##### -->
 <para>
 
 </para>
 
-@argc: 
-@argv: 
+@engine: 
+@Returns: 
 
 
-<!-- ##### FUNCTION gtk_themes_exit ##### -->
+<!-- ##### FUNCTION gtk_theme_engine_register_type ##### -->
 <para>
 
 </para>
 
-@error_code: 
+@engine: 
+@parent_type: 
+@type_name: 
+@type_info: 
+@Returns: 
 
 

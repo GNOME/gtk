@@ -84,18 +84,15 @@ expose_cb (GtkWidget *widget, GdkEventExpose *event, gpointer data)
 
 @GDK_INTERP_NEAREST: Nearest neighbor sampling; this is the fastest
 and lowest quality mode.
-
 @GDK_INTERP_TILES: This is an accurate simulation of the PostScript
 image operator without any interpolation enabled.  Each pixel is
 rendered as a tiny parallelogram of solid color, the edges of which
 are implemented with antialiasing.  It resembles nearest neighbor for
 enlargement, and bilinear for reduction.
-
 @GDK_INTERP_BILINEAR: Bilinear interpolation.  For enlargement, it is
 equivalent to point-sampling the ideal bilinear-interpolated image.
 For reduction, it is equivalent to laying down small tiles and
 integrating over the coverage area.
-
 @GDK_INTERP_HYPER: This is the slowest and highest quality
 reconstruction function.  It is derived from the hyperbolic filters in
 Wolberg's "Digital Image Warping", and is formally defined as the
@@ -188,12 +185,11 @@ image (the filter is designed to be idempotent for 1:1 pixel mapping).
 @check_size: 
 @color1: 
 @color2: 
-@Returns: 
-
-
-<!--
+@Returns: <!--
 Local variables:
 mode: sgml
 sgml-parent-document: ("../gdk-pixbuf.sgml" "book" "refsect2" "")
 End:
 -->
+
+

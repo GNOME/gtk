@@ -1,6 +1,13 @@
 
 # GdkPixmap, GdkBitmap and GdkDrawable are the same as GdkWindow.
 <STRUCT>
+<NAME>GdkWindow</NAME>
+struct GdkPixmap
+{
+  gpointer user_data;
+};
+</STRUCT>
+<STRUCT>
 <NAME>GdkPixmap</NAME>
 struct GdkPixmap
 {
@@ -21,3 +28,24 @@ struct GdkDrawable
   gpointer user_data;
 };
 </STRUCT>
+
+<MACRO>
+<NAME>GDK_WINDOWING_X11</NAME>
+#define GDK_WINDOWING_X11
+</MACRO>
+
+<MACRO>
+<NAME>GDK_WINDOWING_WIN32</NAME>
+#define GDK_WINDOWING_WIN32
+</MACRO>
+
+<MACRO>
+<NAME>GDK_WINDOWING_NANOX</NAME>
+#define GDK_WINDOWING_NANOX
+</MACRO>
+
+<MACRO>
+<NAME>GDK_WINDOWING_FB</NAME>
+#define GDK_WINDOWING_FB
+</MACRO>
+

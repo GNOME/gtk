@@ -27,28 +27,6 @@ place. <!-- TODO: talk about the menu -->
 
 </para>
 
-@container: the parent class object
-@cur_page: the currently displayed page
-@children: a GList with the children of the notebook; belonging to
-#GtkNotebookPage
-@first_tab: 
-@focus_tab: 
-@menu: 
-@panel: 
-@timer: 
-@tab_hborder: 
-@tab_vborder: 
-@show_tabs: 
-@homogeneous: 
-@show_border: 
-@tab_pos: 
-@scrollable: 
-@in_child: 
-@click_child: 
-@button: 
-@need_timer: 
-@child_has_focus: 
-@have_visible_child: 
 
 <!-- ##### MACRO GTK_NOTEBOOK_PAGE ##### -->
 <para>
@@ -153,7 +131,7 @@ bounds, it is assumed to be the current number of pages.
 </para>
 
 @notebook: the notebook widget
-@child: the content of the new page 
+@child: the content of the new page
 @tab_label: the bookmark of the page
 @menu_label: the menu label of the page
 @position: the position to insert the page
@@ -273,24 +251,6 @@ Sets whether there should be a border around the bookmarks or not.
 @border_width: a boolean value
 
 
-<!-- ##### FUNCTION gtk_notebook_set_tab_hborder ##### -->
-<para>
-Sets whether the tabs should have a horizontal border.
-</para>
-
-@notebook: the notebook widget
-@tab_hborder: a boolean value
-
-
-<!-- ##### FUNCTION gtk_notebook_set_tab_vborder ##### -->
-<para>
-Sets whether the tabs should have a vertical border.
-</para>
-
-@notebook: the notebook widget
-@tab_vborder: a boolean value
-
-
 <!-- ##### FUNCTION gtk_notebook_popup_enable ##### -->
 <para>
 Enables the popup menu: if the user clicks with the right mouse button on
@@ -357,7 +317,7 @@ Looks for the packing attributes of the bookmarks of @child.
 
 @notebook: the notebook widget
 @child: the page
-@expand: a pointer to return the expand value (or NULL) 
+@expand: a pointer to return the expand value (or NULL)
 @fill: a pointer to return the fill value (or NULL)
 @pack_type: a pointer to return the pack_type (or NULL)
 
@@ -392,6 +352,15 @@ Creates a new label and sets it as the menu label of @child.
 @menu_text: the label text
 
 
+<!-- ##### FUNCTION gtk_notebook_set_tab_hborder ##### -->
+<para>
+Sets whether the tabs should have a horizontal border.
+</para>
+
+@notebook: the notebook widget
+@tab_hborder: a boolean value
+
+
 <!-- ##### FUNCTION gtk_notebook_set_tab_label ##### -->
 <para>
 Changes the bookmark label of @child. Nothing happens if @child is not in
@@ -424,6 +393,15 @@ Creates a new label and sets it as the bookmark label of @child.
 @notebook: the notebook widget
 @child: the page
 @tab_text: the label text
+
+
+<!-- ##### FUNCTION gtk_notebook_set_tab_vborder ##### -->
+<para>
+Sets whether the tabs should have a vertical border.
+</para>
+
+@notebook: the notebook widget
+@tab_vborder: a boolean value
 
 
 <!-- ##### SIGNAL GtkNotebook::switch-page ##### -->
@@ -478,5 +456,10 @@ Whether the bookmarks should be scrollable or not
 <!-- ##### ARG GtkNotebook:enable_popup ##### -->
 <para>
 Whether the popup menu is enabled or not
+</para>
+
+<!-- ##### ARG GtkNotebook:homogeneous ##### -->
+<para>
+
 </para>
 

@@ -1,3 +1,36 @@
+Thu Sep  7 11:47:02 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtktextbuffer.c gtk/gtkimcontext.c gtk/gtkwidget.c:
+	Doc comment fixing. (Mostly non-matching parameter names.)
+
+	* gtk/gtkcalendar.c gtk/gtklist.c gtk/gtknotebook.c: Modify
+	comments a little to avoid looking like a doc comment.
+
+	* gtk/gtkspinbutton.h (GTK_INPUT_ERROR): Change INPUT_ERROR to
+	GTK_INPUT_ERROR. (Should the mechanism for erros in spin button
+	conversions be changed to GError?)
+
+	* gtk/gtkcolorsel.c (GTK_CUSTOM_PALETTE_WIDTH/HEIGHT): 
+	Move private #defines into .c file.
+
+	* gtk/gtktexttag.c (gtk_text_tag_class_init): Alphabetize
+	order of argument addition, remove duplicates.
+
+	* gtk/gtkaspectframe.h (struct _GtkAspectFrameClass):
+	parent class is FrameClass, not BinClass.
+
+	* gtk/gtk.h: Add gtkinvisible, which was missing.
+	(It's occasionalyl useful for client apps, if seldom.)
+
+	* gdk/gdktypes.h: Remove obsolete GDK_CORE_POINTER
+	#define.
+
+Wed Sep  6 09:53:15 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/x11/gdkwindow-x11.c (gdk_window_new): Use X-space
+	coordinates when creating window, instead of GDK-space
+	coordinates. (Avoid BadValue on too large windows.)
+
 2000-09-05  Sebastian Wilhelmi  <wilhelmi@ira.uka.de>
 
 	* configure.in (use_mmx_asm): Remove conftest* after use along the
@@ -16,7 +49,9 @@
 	instead of g_basename.
 	
 2000-09-04 Elliot Lee <sopwith@redhat.com>
-	* gdk/gdkpixbuf.h: Put text after #endif inside a comment to avoid ANSI warning.
+	
+	* gdk/gdkpixbuf.h: Put text after #endif inside a comment to avoid
+	ANSI warning.
 
 Sun Sep 03 00:47:08 2000  George Lebl <jirka@5z.com>
 

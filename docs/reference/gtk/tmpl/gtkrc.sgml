@@ -424,18 +424,23 @@ This can later be composited together with other
 #GtkRcStyle structures to form a #GtkStyle.
 </para>
 
+@parent_instance: 
 @name: 
-@font_name: 
-@fontset_name: 
 @bg_pixmap_name: 
+@font_desc: 
 @color_flags: 
 @fg: 
 @bg: 
 @text: 
 @base: 
-@engine: 
-@engine_data: 
-@ref_count: 
+@xthickness: 
+@ythickness: 
+
+<!-- ##### STRUCT GtkRcStyleClass ##### -->
+<para>
+
+</para>
+
 
 <!-- ##### ENUM GtkRcFlags ##### -->
 <para>
@@ -510,10 +515,13 @@ specific portions of a RC file.
 @GTK_RC_TOKEN_INSENSITIVE: 
 @GTK_RC_TOKEN_FG: 
 @GTK_RC_TOKEN_BG: 
-@GTK_RC_TOKEN_BASE: 
 @GTK_RC_TOKEN_TEXT: 
+@GTK_RC_TOKEN_BASE: 
+@GTK_RC_TOKEN_XTHICKNESS: 
+@GTK_RC_TOKEN_YTHICKNESS: 
 @GTK_RC_TOKEN_FONT: 
 @GTK_RC_TOKEN_FONTSET: 
+@GTK_RC_TOKEN_FONT_NAME: 
 @GTK_RC_TOKEN_BG_PIXMAP: 
 @GTK_RC_TOKEN_PIXMAP_PATH: 
 @GTK_RC_TOKEN_STYLE: 
@@ -756,6 +764,15 @@ a reference count of 1.
 @Returns: the newly create #GtkRcStyle
 
 
+<!-- ##### FUNCTION gtk_rc_style_copy ##### -->
+<para>
+
+</para>
+
+@orig: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gtk_rc_style_ref ##### -->
 <para>
 Increment the reference count of a #GtkRcStyle.
@@ -771,12 +788,5 @@ free if the result is 0.
 </para>
 
 @rc_style: a #GtkRcStyle
-
-
-<!-- ##### FUNCTION gtk_rc_init ##### -->
-<para>
-Internal function.
-</para>
-
 
 

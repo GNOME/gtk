@@ -114,7 +114,6 @@ A macro to test whether the CList is in "add mode."
 @clist: The #GtkCList widget to check.
 
 
-
 <!-- ##### MACRO GTK_CLIST_AUTO_SORT ##### -->
 <para>
 A macro to test whether the CList has automatic sorting
@@ -122,7 +121,6 @@ switched on.
 </para>
 
 @clist: The #GtkCList widget to check.
-
 
 
 <!-- ##### MACRO GTK_CLIST_AUTO_RESIZE_BLOCKED ##### -->
@@ -133,14 +131,12 @@ A macro to check if automatic resizing of columns is blocked.
 @clist: The #GtkCList widget to check.
 
 
-
 <!-- ##### MACRO GTK_CLIST_REORDERABLE ##### -->
 <para>
 A macro to test if the CList's columns are re-orderable
 </para>
 
 @clist: The #GtkCList widget to check.
-
 
 
 <!-- ##### MACRO GTK_CLIST_USE_DRAG_ICONS ##### -->
@@ -151,7 +147,6 @@ A macro to check if the USE_DRAG_ICONS property is enabled.
 @clist: The #GtkCList widget to check.
 
 
-
 <!-- ##### MACRO GTK_CLIST_DRAW_DRAG_LINE ##### -->
 <para>
 A macro to check if the DRAW_DRAG_LINE property is enabled.
@@ -160,14 +155,12 @@ A macro to check if the DRAW_DRAG_LINE property is enabled.
 @clist: The #GtkCList widget to check.
 
 
-
 <!-- ##### MACRO GTK_CLIST_DRAW_DRAG_RECT ##### -->
 <para>
 A macro to check if the DRAW_DRAG_RECT property is enabled.
 </para>
 
 @clist: The #GtkCList widget to check.
-
 
 
 <!-- ##### MACRO GTK_CLIST_ROW ##### -->
@@ -216,7 +209,7 @@ Function prototype for the compare function callback.
 </para>
 
 @clist: The #GtkCList that is affected.
-@ptr1: A #gconstpointer to the first node to compare. 
+@ptr1: A #gconstpointer to the first node to compare.
 @ptr2: A #gconstpointer to the second node to compare.
 @Returns: 0 if the nodes are equal, less than 0 if the first node should
 come before the second, and greater than 1 if the second come before the
@@ -1313,5 +1306,10 @@ clicked.
 <para>
 A boolean value for setting whether to use icons during drag
 operations.
+</para>
+
+<!-- ##### ARG GtkCList:sort_type ##### -->
+<para>
+
 </para>
 

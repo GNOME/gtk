@@ -52,7 +52,6 @@ gtk_vbutton_box_get_layout_default().
 
 </para>
 
-@button_box: the #GtkButtonBox that this class is derived from.
 
 <!-- ##### FUNCTION gtk_vbutton_box_new ##### -->
 <para>
@@ -94,3 +93,5 @@ Sets a new layout mode that will be used by all button boxes.
 </para>
 
 @layout: a new #GtkButtonBoxStyle.
+
+

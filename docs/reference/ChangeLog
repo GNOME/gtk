@@ -1,3 +1,12 @@
+Thu Sep  7 14:15:03 2000  Owen Taylor  <otaylor@redhat.com>
+
+        * gdk/* gtk/*: Move gtk-reference files into GTK+ tree proper.
+
+	* Update sections.txt files to correspond to current code,
+	tweak .sgml files and Makefiles to correspond.
+
+	* gtk/tmpl/gtkradiomenuitem.sgml (this): Remove extra <para>
+
 2000-06-14  Damon Chaplin  <damon@helixcode.com>
 
 	* gtk/tmpl/gtktooltips.sgml: added a note about no-window widgets.

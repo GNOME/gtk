@@ -93,6 +93,24 @@ Frees the argument, and optionally its contents.
 @free_contents: whether to free the string, if it is a string.
 
 
+<!-- ##### FUNCTION gtk_arg_reset ##### -->
+<para>
+
+</para>
+
+@arg: 
+
+
+<!-- ##### FUNCTION gtk_arg_values_equal ##### -->
+<para>
+
+</para>
+
+@arg1: 
+@arg2: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gtk_args_collect ##### -->
 <para>
 Private:  given a hashtable of argument information it takes a vararg
@@ -198,5 +216,14 @@ A #GHashFunc for hashing #GtkArgInfos.
 
 @arg_info: a #GtkArgInfo.
 @Returns: a hash value for that #GtkArgInfo.
+
+
+<!-- ##### FUNCTION gtk_arg_to_valueloc ##### -->
+<para>
+
+</para>
+
+@arg: 
+@value_pointer: 
 
 

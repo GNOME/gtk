@@ -111,6 +111,15 @@ GtkContainer
 @Returns: 
 
 
+<!-- ##### FUNCTION gtk_container_set_reallocate_redraws ##### -->
+<para>
+
+</para>
+
+@container: 
+@needs_redraws: 
+
+
 <!-- ##### FUNCTION gtk_container_set_focus_child ##### -->
 <para>
 
@@ -136,22 +145,6 @@ GtkContainer
 
 @container: 
 @adjustment: 
-
-
-<!-- ##### FUNCTION gtk_container_register_toplevel ##### -->
-<para>
-
-</para>
-
-@container: 
-
-
-<!-- ##### FUNCTION gtk_container_unregister_toplevel ##### -->
-<para>
-
-</para>
-
-@container: 
 
 
 <!-- ##### FUNCTION gtk_container_resize_children ##### -->
@@ -330,14 +323,6 @@ GtkContainer
 @Returns: 
 
 
-<!-- ##### FUNCTION gtk_container_get_toplevels ##### -->
-<para>
-
-</para>
-
-@Returns: 
-
-
 <!-- ##### FUNCTION gtk_container_set_border_width ##### -->
 <para>
 
@@ -345,6 +330,14 @@ GtkContainer
 
 @container: 
 @border_width: 
+
+
+<!-- ##### FUNCTION gtk_container_dequeue_resize_handler ##### -->
+<para>
+
+</para>
+
+@container: 
 
 
 <!-- ##### SIGNAL GtkContainer::add ##### -->
@@ -398,6 +391,11 @@ GtkContainer
 </para>
 
 <!-- ##### ARG GtkContainer:child ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkContainer:reallocate_redraws ##### -->
 <para>
 
 </para>

@@ -89,6 +89,14 @@ Selects the menu item from the menu shell.
 @menu_item: The #GtkMenuItem to select.
 
 
+<!-- ##### FUNCTION gtk_menu_shell_deselect ##### -->
+<para>
+
+</para>
+
+@menu_shell: 
+
+
 <!-- ##### FUNCTION gtk_menu_shell_activate_item ##### -->
 <para>
 Activates the menu item within the menu shell.

@@ -1,0 +1,66 @@
+<!-- ##### SECTION Title ##### -->
+gtktextmark
+
+<!-- ##### SECTION Short_Description ##### -->
+
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### STRUCT GtkTextMark ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### FUNCTION gtk_text_mark_set_visible ##### -->
+<para>
+
+</para>
+
+@mark: 
+@setting: 
+
+
+<!-- ##### FUNCTION gtk_text_mark_is_visible ##### -->
+<para>
+
+</para>
+
+@mark: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_text_mark_ref ##### -->
+<para>
+
+</para>
+
+@mark: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_text_mark_unref ##### -->
+<para>
+
+</para>
+
+@mark: 
+
+
+<!-- ##### FUNCTION gtk_text_mark_deleted ##### -->
+<para>
+
+</para>
+
+@mark: 
+@Returns: 
+
+

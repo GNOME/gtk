@@ -40,6 +40,8 @@
 <!entity GtkHScrollbar SYSTEM "sgml/gtkhscrollbar.sgml">
 <!entity GtkHSeparator SYSTEM "sgml/gtkhseparator.sgml">
 <!entity GtkImage SYSTEM "sgml/gtkimage.sgml">
+<!entity GtkIMContext SYSTEM "sgml/gtkimcontext.sgml">
+<!entity GtkIMMulticontext SYSTEM "sgml/gtkimmulticontext.sgml">
 <!entity GtkInputDialog SYSTEM "sgml/gtkinputdialog.sgml">
 <!entity GtkInvisible SYSTEM "sgml/gtkinvisible.sgml">
 <!entity GtkItem SYSTEM "sgml/gtkitem.sgml">
@@ -77,6 +79,12 @@
 <!entity GtkTable SYSTEM "sgml/gtktable.sgml">
 <!entity GtkTearoffMenuItem SYSTEM "sgml/gtktearoffmenuitem.sgml">
 <!entity GtkText SYSTEM "sgml/gtktext.sgml">
+<!entity GtkTextBuffer SYSTEM "sgml/gtktextbuffer.sgml">
+<!entity gtk-GtkTextIter SYSTEM "sgml/gtktextiter.sgml">
+<!entity gtk-GtkTextMark SYSTEM "sgml/gtktextmark.sgml">
+<!entity GtkTextTag SYSTEM "sgml/gtktexttag.sgml">
+<!entity GtkTextTagTable SYSTEM "sgml/gtktexttagtable.sgml">
+<!entity GtkTextView SYSTEM "sgml/gtktextview.sgml">
 <!entity GtkTipsQuery SYSTEM "sgml/gtktipsquery.sgml">
 <!entity GtkToggleButton SYSTEM "sgml/gtktogglebutton.sgml">
 <!entity GtkToolbar SYSTEM "sgml/gtktoolbar.sgml">
@@ -108,7 +116,6 @@
 <!entity gtk-Types SYSTEM "sgml/gtktypeutils.sgml">
 <!entity gtk-Bindings SYSTEM "sgml/gtkbindings.sgml">
 <!entity gtk-Standard-Enumerations SYSTEM "sgml/gtkenums.sgml">
-<!entity gtk-Private-Information SYSTEM "sgml/gtkprivate.sgml">
 
 <!entity index-Object-Tree SYSTEM "sgml/tree_index.sgml">
 
@@ -181,7 +188,6 @@ An advanced widget set.
     &gtk-Types;
     &gtk-Bindings;
     &gtk-Standard-Enumerations;
-    &gtk-Private-Information;
   </chapter>
 
   <chapter id="gtkobjects" role="no-toc">
@@ -228,6 +234,8 @@ An advanced widget set.
     &GtkHScrollbar;
     &GtkHSeparator;
     &GtkImage;
+    &GtkIMContext;
+    &GtkIMMulticontext;
     &GtkInputDialog;
     &GtkInvisible;
     &GtkItem;
@@ -265,6 +273,12 @@ An advanced widget set.
     &GtkTable;
     &GtkTearoffMenuItem;
     &GtkText;
+    &GtkTextBuffer;
+    &gtk-GtkTextIter;
+    &gtk-GtkTextMark;
+    &GtkTextTag;
+    &GtkTextTagTable;
+    &GtkTextView;
     &GtkTipsQuery;
     &GtkToggleButton;
     &GtkToolbar;

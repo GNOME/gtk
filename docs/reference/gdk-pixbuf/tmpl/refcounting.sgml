@@ -68,24 +68,6 @@ Functions to perform reference counting and memory management on a
 @data: User closure data.
 
 
-<!-- ##### USER_FUNCTION GdkPixbufLastUnref ##### -->
-  <para>
-    A function of this type can be used to override the default
-    operation when a pixbuf loses its last reference, i.e. when
-    gdk_pixbuf_unref() is called on a #GdkPixbuf structure that has a
-    reference count of 1.  This function should determine whether to
-    finalize the pixbuf by calling gdk_pixbuf_finalize(), or whether
-    to just resume normal execution.  The last unref handler for a
-    #GdkPixbuf can be set using the
-    gdk_pixbuf_set_last_unref_handler() function.  By default, pixbufs
-    will be finalized automatically if no last unref handler has been
-    defined.
-  </para>
-
-@pixbuf: The pixbuf that is losing its last reference.
-@data: User closure data.
-
-
 <!-- ##### FUNCTION gdk_pixbuf_ref ##### -->
   <para>
 
@@ -103,26 +85,3 @@ Functions to perform reference counting and memory management on a
 @pixbuf: 
 
 
-<!-- ##### FUNCTION gdk_pixbuf_set_last_unref_handler ##### -->
-<para>
-
-</para>
-
-@pixbuf: 
-@last_unref_fn: 
-@last_unref_fn_data: 
-
-
-<!-- ##### FUNCTION gdk_pixbuf_finalize ##### -->
-<para>
-
-</para>
-
-@pixbuf:
-
-<!--
-Local variables:
-mode: sgml
-sgml-parent-document: ("../gdk-pixbuf.sgml" "book" "refsect2" "")
-End:
--->

@@ -30,45 +30,41 @@ usually used for clipping graphical operations (see gdk_gc_set_clip_region()).
 
 <!-- ##### STRUCT GdkPoint ##### -->
 <para>
-Defines the x and y coordinates of a point.
-Note that both are defined as #gint16 values, so the coordinates are limited
-to between -32,768 and 32,767.
+
 </para>
 
-@x: the x coordinate of the point.
-@y: the y coordinate of the point.
+@x: 
+@y: 
 
 <!-- ##### STRUCT GdkRectangle ##### -->
 <para>
-Defines the position and size of a rectangle.
+
 </para>
 
-@x: the x coordinate of the left edge of the rectangle.
-@y: the y coordinate of the top of the rectangle.
-@width: the width of the rectangle.
-@height: the height of the rectangle.
+@x: 
+@y: 
+@width: 
+@height: 
 
 <!-- ##### FUNCTION gdk_rectangle_intersect ##### -->
 <para>
-Calculates the intersection of two rectangles.
+
 </para>
 
-@src1: a #GdkRectangle.
-@src2: a #GdkRectangle.
-@dest: the intersection of @src1 and @src2.
-@Returns: TRUE if the rectangles intersect.
+@src1: 
+@src2: 
+@dest: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gdk_rectangle_union ##### -->
 <para>
-Calculates the union of two rectangles.
-The union of rectangles @src1 and @src2 is the smallest rectangle which
-includes both @src1 and @src2 within it.
+
 </para>
 
-@src1: a #GdkRectangle.
-@src2: a #GdkRectangle.
-@dest: the union of @src1 and @src2.
+@src1: 
+@src2: 
+@dest: 
 
 
 <!-- ##### STRUCT GdkRegion ##### -->
@@ -78,7 +74,6 @@ The only user-visible field of the structure is the user_data member, which
 can be used to attach arbitrary data to the #GdkRegion.
 </para>
 
-@user_data: arbitrary data attached to the #GdkRegion.
 
 <!-- ##### FUNCTION gdk_region_new ##### -->
 <para>
@@ -112,6 +107,24 @@ The fill rule is only relevant for polygons which overlap themselves.
 included in the region, while areas overlapped an even number of times are not.
 @GDK_WINDING_RULE: overlapping areas are always included.
 
+<!-- ##### FUNCTION gdk_region_copy ##### -->
+<para>
+
+</para>
+
+@region: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_region_rectangle ##### -->
+<para>
+
+</para>
+
+@rectangle: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gdk_region_destroy ##### -->
 <para>
 Destroys a #GdkRegion.
@@ -120,81 +133,13 @@ Destroys a #GdkRegion.
 @region: a #GdkRegion.
 
 
-<!-- ##### FUNCTION gdk_regions_intersect ##### -->
+<!-- ##### FUNCTION gdk_region_get_clipbox ##### -->
 <para>
-Returns the intersection of two regions.
-</para>
-
-@source1: a #GdkRegion.
-@source2: a #GdkRegion.
-@Returns: the intersection of @source1 and @source2.
-
-
-<!-- ##### FUNCTION gdk_regions_union ##### -->
-<para>
-Returns the union of two regions.
-This is all pixels in either of @source1 or @source2.
-</para>
-
-@source1: a #GdkRegion.
-@source2: a #GdkRegion.
-@Returns: the union of @source1 and @source2.
-
-
-<!-- ##### FUNCTION gdk_regions_subtract ##### -->
-<para>
-Subtracts one region from another.
-The result is a region containing all the pixels which are in @source1, but
-which are not in @source2.
-</para>
-
-@source1: a #GdkRegion.
-@source2: a #GdkRegion to subtract from @source1.
-@Returns: @source1 - @source2.
-
-
-<!-- ##### FUNCTION gdk_regions_xor ##### -->
-<para>
-Returns the difference between the union and the intersection of two regions.
-This is a region containing the pixels that are in one of the source regions,
-but which are not in both.
-</para>
-
-@source1: a #GdkRegion.
-@source2: a #GdkRegion.
-@Returns: the difference between the union and the intersection of @source1
-and @source2.
-
-
-<!-- ##### FUNCTION gdk_region_union_with_rect ##### -->
-<para>
-Returns the union of a region and a rectangle.
+Returns the smallest rectangle which includes the entire #GdkRegion.
 </para>
 
 @region: a #GdkRegion.
-@rect: a #GdkRectangle.
-@Returns: the union of @region and @rect.
-
-
-<!-- ##### FUNCTION gdk_region_offset ##### -->
-<para>
-Moves a region the specified distance.
-</para>
-
-@region: a #GdkRegion.
-@dx: the distance to move the region horizontally.
-@dy: the distance to move the region vertically.
-
-
-<!-- ##### FUNCTION gdk_region_shrink ##### -->
-<para>
-Resizes a region by the specified amount.
-Positive values shrink the region. Negative values expand it.
-</para>
-
-@region: a #GdkRegion.
-@dx: the number of pixels to shrink the region horizontally.
-@dy: the number of pixels to shrink the region vertically.
+@rectangle: returns the smallest rectangle which includes all of @region.
 
 
 <!-- ##### FUNCTION gdk_region_empty ##### -->
@@ -248,12 +193,71 @@ Specifies the possible values returned by gdk_region_rect_in().
 @GDK_OVERLAP_RECTANGLE_OUT: if the rectangle is outside the #GdkRegion.
 @GDK_OVERLAP_RECTANGLE_PART: if the rectangle is partly inside the #GdkRegion.
 
-<!-- ##### FUNCTION gdk_region_get_clipbox ##### -->
+<!-- ##### FUNCTION gdk_region_offset ##### -->
 <para>
-Returns the smallest rectangle which includes the entire #GdkRegion.
+Moves a region the specified distance.
 </para>
 
 @region: a #GdkRegion.
-@rectangle: returns the smallest rectangle which includes all of @region.
+@dx: the distance to move the region horizontally.
+@dy: the distance to move the region vertically.
+
+
+<!-- ##### FUNCTION gdk_region_shrink ##### -->
+<para>
+Resizes a region by the specified amount.
+Positive values shrink the region. Negative values expand it.
+</para>
+
+@region: a #GdkRegion.
+@dx: the number of pixels to shrink the region horizontally.
+@dy: the number of pixels to shrink the region vertically.
+
+
+<!-- ##### FUNCTION gdk_region_union_with_rect ##### -->
+<para>
+Returns the union of a region and a rectangle.
+</para>
+
+@region: a #GdkRegion.
+@rect: a #GdkRectangle.
+<!-- # Unused Parameters # -->
+@Returns: the union of @region and @rect.
+
+
+<!-- ##### FUNCTION gdk_region_intersect ##### -->
+<para>
+
+</para>
+
+@source1: 
+@source2: 
+
+
+<!-- ##### FUNCTION gdk_region_union ##### -->
+<para>
+
+</para>
+
+@source1: 
+@source2: 
+
+
+<!-- ##### FUNCTION gdk_region_subtract ##### -->
+<para>
+
+</para>
+
+@source1: 
+@source2: 
+
+
+<!-- ##### FUNCTION gdk_region_xor ##### -->
+<para>
+
+</para>
+
+@source1: 
+@source2: 
 
 

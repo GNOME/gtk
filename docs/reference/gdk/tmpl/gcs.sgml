@@ -37,7 +37,18 @@ It is an opaque structure with no user-visible
 elements.
 </para>
 
-@dummy_var: 
+@parent_instance: 
+@clip_x_origin: 
+@clip_y_origin: 
+@ts_x_origin: 
+@ts_y_origin: 
+@colormap: 
+
+<!-- ##### STRUCT GdkGCClass ##### -->
+<para>
+
+</para>
+
 
 <!-- ##### STRUCT GdkGCValues ##### -->
 <para>
@@ -209,6 +220,7 @@ useful. For bitmaps, %GDK_AND and %GDK_OR are also useful.
 @GDK_COPY_INVERT: 
 @GDK_OR_INVERT: 
 @GDK_NAND: 
+@GDK_NOR: 
 @GDK_SET: 
 
 <!-- ##### FUNCTION gdk_gc_new ##### -->
@@ -216,9 +228,11 @@ useful. For bitmaps, %GDK_AND and %GDK_OR are also useful.
 Create a new graphics context with default values. 
 </para>
 
+@drawable: 
+@Returns: the new graphics context.
+<!-- # Unused Parameters # -->
 @window: a #GdkDrawable. The created GC must always be used
  with drawables of the same depth as this one.
-@Returns: the new graphics context.
 
 
 <!-- ##### FUNCTION gdk_gc_new_with_values ##### -->
@@ -226,12 +240,14 @@ Create a new graphics context with default values.
 Create a new GC with the given initial values.
 </para>
 
-@window: a #GdkDrawable. The created GC must always be used
- with drawables of the same depth as this one.
+@drawable: 
 @values: a structure containing initial values for the GC.
 @values_mask: a bit mask indicating which fields in @values
    are set.
 @Returns: the new graphics context.
+<!-- # Unused Parameters # -->
+@window: a #GdkDrawable. The created GC must always be used
+ with drawables of the same depth as this one.
 
 
 <!-- ##### FUNCTION gdk_gc_ref ##### -->
@@ -253,13 +269,24 @@ context will be destroyed.
 @gc: a #GdkGC.
 
 
-<!-- ##### FUNCTION gdk_gc_destroy ##### -->
+<!-- ##### MACRO gdk_gc_destroy ##### -->
 <para>
 Identical to gdk_gc_unref(). This function is obsolete
 and should not be used.
 </para>
 
+<!-- # Unused Parameters # -->
 @gc: a #GdkGC.
+
+
+<!-- ##### FUNCTION gdk_gc_set_values ##### -->
+<para>
+
+</para>
+
+@gc: 
+@values: 
+@values_mask: 
 
 
 <!-- ##### FUNCTION gdk_gc_get_values ##### -->
@@ -287,6 +314,24 @@ Sets the background color for a graphics context.
 
 @gc: a #GdkGC.
 @color: the new background color.
+
+
+<!-- ##### FUNCTION gdk_gc_set_rgb_fg_color ##### -->
+<para>
+
+</para>
+
+@gc: 
+@color: 
+
+
+<!-- ##### FUNCTION gdk_gc_set_rgb_bg_color ##### -->
+<para>
+
+</para>
+
+@gc: 
+@color: 
 
 
 <!-- ##### FUNCTION gdk_gc_set_font ##### -->
@@ -635,5 +680,23 @@ onto another graphics context.
 
 @dst_gc: the destination graphics context.
 @src_gc: the source graphics context.
+
+
+<!-- ##### FUNCTION gdk_gc_set_colormap ##### -->
+<para>
+
+</para>
+
+@gc: 
+@colormap: 
+
+
+<!-- ##### FUNCTION gdk_gc_get_colormap ##### -->
+<para>
+
+</para>
+
+@gc: 
+@Returns: 
 
 

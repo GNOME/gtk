@@ -39,8 +39,9 @@ gtk_hruler_get_type
 gtk_hscale_get_type
 gtk_hscrollbar_get_type
 gtk_hseparator_get_type
-gtk_identifier_get_type
 gtk_image_get_type
+gtk_im_context_get_type
+gtk_im_multicontext_get_type
 gtk_input_dialog_get_type
 gtk_invisible_get_type
 gtk_item_get_type
@@ -78,6 +79,10 @@ gtk_statusbar_get_type
 gtk_table_get_type
 gtk_tearoff_menu_item_get_type
 gtk_text_get_type
+gtk_text_buffer_get_type
+gtk_text_tag_get_type
+gtk_text_tag_table_get_type
+gtk_text_view_get_type
 gtk_tips_query_get_type
 gtk_toggle_button_get_type
 gtk_toolbar_get_type

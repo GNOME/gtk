@@ -60,7 +60,15 @@ You should call this function before <function>gtk_init</function> to
 support internationalization of your GTK+ applications.
 </para>
 
-@Returns: A string corresponding to the locale set. 
+@Returns: A string corresponding to the locale set.
+
+
+<!-- ##### FUNCTION gtk_get_default_language ##### -->
+<para>
+
+</para>
+
+@Returns: 
 
 
 <!-- ##### FUNCTION gtk_init ##### -->
@@ -247,7 +255,7 @@ the event:
   After finishing the delivery the event is popped from the event stack.
 </para></listitem>
 </orderedlist>
-    
+
 @event: An event to process (normally) passed by Gdk.
 
 
@@ -259,7 +267,7 @@ cleaned from any arguments that GTK+ handles itself.
 </para>
 
 @argc: Pointer to the number of arguments remaining after gtk_init.
-@argv: Points to the argument vector. 
+@argv: Points to the argument vector.
 
 
 <!-- ##### FUNCTION gtk_true ##### -->

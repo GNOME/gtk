@@ -1,5 +1,5 @@
 <!-- ##### SECTION Title ##### -->
-gdk-pixbuf-io
+Module Interface
 
 <!-- ##### SECTION Short_Description ##### -->
 
@@ -29,11 +29,29 @@ gdk-pixbuf-io
 </para>
 
 @pixbuf: 
-@user_data: 
 @x: 
 @y: 
 @width: 
 @height: 
+@user_data: 
+
+
+<!-- ##### USER_FUNCTION ModuleFrameDoneNotifyFunc ##### -->
+<para>
+
+</para>
+
+@frame: 
+@user_data: 
+
+
+<!-- ##### USER_FUNCTION ModuleAnimationDoneNotifyFunc ##### -->
+<para>
+
+</para>
+
+@pixbuf: 
+@user_data: 
 
 
 <!-- ##### STRUCT GdkPixbufModule ##### -->
@@ -49,6 +67,7 @@ gdk-pixbuf-io
 @begin_load: 
 @stop_load: 
 @load_increment: 
+@load_animation: 
 
 <!-- ##### FUNCTION gdk_pixbuf_get_module ##### -->
 <para>
@@ -57,6 +76,15 @@ gdk-pixbuf-io
 
 @buffer: 
 @size: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_pixbuf_get_named_module ##### -->
+<para>
+
+</para>
+
+@name: 
 @Returns: 
 
 

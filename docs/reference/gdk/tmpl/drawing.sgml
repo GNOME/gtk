@@ -25,6 +25,103 @@ more information.
 
 </para>
 
+<!-- ##### STRUCT GdkDrawable ##### -->
+<para>
+
+</para>
+
+@user_data: 
+
+<!-- ##### STRUCT GdkDrawableClass ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### FUNCTION gdk_drawable_ref ##### -->
+<para>
+
+</para>
+
+@drawable: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_drawable_unref ##### -->
+<para>
+
+</para>
+
+@drawable: 
+
+
+<!-- ##### FUNCTION gdk_drawable_set_data ##### -->
+<para>
+
+</para>
+
+@drawable: 
+@key: 
+@data: 
+@destroy_func: 
+
+
+<!-- ##### FUNCTION gdk_drawable_get_data ##### -->
+<para>
+
+</para>
+
+@drawable: 
+@key: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_drawable_get_visual ##### -->
+<para>
+
+</para>
+
+@drawable: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_drawable_set_colormap ##### -->
+<para>
+
+</para>
+
+@drawable: 
+@colormap: 
+
+
+<!-- ##### FUNCTION gdk_drawable_get_colormap ##### -->
+<para>
+
+</para>
+
+@drawable: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_drawable_get_depth ##### -->
+<para>
+
+</para>
+
+@drawable: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_drawable_get_size ##### -->
+<para>
+
+</para>
+
+@drawable: 
+@width: 
+@height: 
+
+
 <!-- ##### FUNCTION gdk_draw_point ##### -->
 <para>
 Draws a point, using the foreground color and other attributes of the #GdkGC.
@@ -157,6 +254,43 @@ polygon.
 @npoints: the number of points.
 
 
+<!-- ##### FUNCTION gdk_draw_glyphs ##### -->
+<para>
+
+</para>
+
+@drawable: 
+@gc: 
+@font: 
+@x: 
+@y: 
+@glyphs: 
+
+
+<!-- ##### FUNCTION gdk_draw_layout_line ##### -->
+<para>
+
+</para>
+
+@drawable: 
+@gc: 
+@x: 
+@y: 
+@line: 
+
+
+<!-- ##### FUNCTION gdk_draw_layout ##### -->
+<para>
+
+</para>
+
+@drawable: 
+@gc: 
+@x: 
+@y: 
+@layout: 
+
+
 <!-- ##### FUNCTION gdk_draw_string ##### -->
 <para>
 Draws a string of characters in the given font or fontset.
@@ -200,11 +334,12 @@ If the font is a 1-byte font, the string is converted into 1-byte characters
 @text_length: the number of characters to draw.
 
 
-<!-- ##### FUNCTION gdk_draw_pixmap ##### -->
+<!-- ##### MACRO gdk_draw_pixmap ##### -->
 <para>
 Draws a pixmap, or a part of a pixmap, onto another drawable.
 </para>
 
+<!-- # Unused Parameters # -->
 @drawable: a #GdkDrawable (a #GdkWindow or a #GdkPixmap).
 @gc: a #GdkGC.
 @src: the source #GdkPixmap to draw.
@@ -216,6 +351,22 @@ Draws a pixmap, or a part of a pixmap, onto another drawable.
 the right edge of the source pixmap.
 @height: the height of the area to be copied, or -1 to make the area extend
 to the bottom edge of the source pixmap.
+
+
+<!-- ##### FUNCTION gdk_draw_drawable ##### -->
+<para>
+
+</para>
+
+@drawable: 
+@gc: 
+@src: 
+@xsrc: 
+@ysrc: 
+@xdest: 
+@ydest: 
+@width: 
+@height: 
 
 
 <!-- ##### FUNCTION gdk_draw_image ##### -->

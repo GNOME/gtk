@@ -292,6 +292,24 @@ memory bandwidth.
 start of the next.
 
 
+<!-- ##### FUNCTION gdk_draw_rgb_32_image_dithalign ##### -->
+<para>
+
+</para>
+
+@drawable: 
+@gc: 
+@x: 
+@y: 
+@width: 
+@height: 
+@dith: 
+@buf: 
+@rowstride: 
+@xdith: 
+@ydith: 
+
+
 <!-- ##### ENUM GdkRgbDither ##### -->
 <para>
 
@@ -359,7 +377,7 @@ colors. This is used only for gdk_draw_indexed_image().
 </para>
 
 @colors: 
-@lut: 
+@n_colors: 
 
 <!-- ##### FUNCTION gdk_rgb_gc_set_foreground ##### -->
 <para>
@@ -390,6 +408,15 @@ a #GdkColor struct.
 
 @rgb: The color, represented as a 0xRRGGBB integer value.
 @Returns: The X pixel value.
+
+
+<!-- ##### FUNCTION gdk_rgb_find_color ##### -->
+<para>
+
+</para>
+
+@colormap: 
+@color: 
 
 
 <!-- ##### FUNCTION gdk_rgb_set_install ##### -->
@@ -428,7 +455,15 @@ colormap should be used when creating windows that will be drawn in by GdkRgb.
 @Returns: The #GdkVisual chosen by GdkRgb.
 
 
-<!-- ##### FUNCTION gdk_rgb_get_cmap ##### -->
+<!-- ##### FUNCTION gdk_rgb_get_colormap ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+
+<!-- ##### MACRO gdk_rgb_get_cmap ##### -->
 <para>
 Gets the colormap set by GdkRgb. This colormap and the corresponding
 visual should be used when creating windows that will be drawn in by GdkRgb.

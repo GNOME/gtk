@@ -155,3 +155,17 @@ handlebox are detached from the main window.
 Determines the shadow type for the handlebox.
 </para>
 
+<!-- ##### ARG GtkHandleBox:handle_position ##### -->
+<para>
+Determines the side of the handlebox where the handle is drawn.
+</para>
+
+<!-- ##### ARG GtkHandleBox:snap_edge ##### -->
+<para>
+Determines the snap edge of a handlebox. The snap edge is
+the edge of the detached child that must be aligned
+with the corresponding edge of the "ghost" left
+behind when the child was detached to reattach
+the torn-off window. See gtk_handle_box_set_snap_edge().
+</para>
+

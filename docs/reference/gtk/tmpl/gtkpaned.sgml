@@ -73,7 +73,6 @@ gtk_widget_set_usize (frame1, 50, -1);
 </para>
 
 @handle_size: 
-@gutter_size: 
 
 <!-- ##### FUNCTION gtk_paned_add1 ##### -->
 <para>
@@ -114,17 +113,8 @@ Old name for gtk_paned_set_handle_size()
 Old name for gtk_paned_set_gutter_size()
 </para>
 
-
-
-<!-- ##### FUNCTION gtk_paned_compute_position ##### -->
-<para>
-Internal function used by #GtkHPaned and #GtkVPaned
-</para>
-
-@paned: 
-@allocation: 
-@child1_req: 
-@child2_req: 
+@p: 
+@s: 
 
 
 <!-- ##### FUNCTION gtk_paned_pack1 ##### -->
@@ -149,11 +139,14 @@ Add a child to the bottom or right pane.
 @shrink: can this child be made smaller than its requsition.
 
 
-<!-- ##### FUNCTION gtk_paned_set_gutter_size ##### -->
+<!-- ##### MACRO gtk_paned_set_gutter_size ##### -->
 <para>
 Set the width of the gutter. (The area between the two panes).
 </para>
 
+@p: 
+@s: 
+<!-- # Unused Parameters # -->
 @paned: a paned widget
 @size: the width of the widget in pixels
 
@@ -169,13 +162,24 @@ Set the the handle size to @size x @size pixels.
 
 <!-- ##### FUNCTION gtk_paned_set_position ##### -->
 <para>
-Set the position of the separator, as if set by the user.
-If position is negative, the remembered position is
-forgotten, and the division is recomputed from the
-the requisitions of the children.
+
 </para>
 
-@paned: a paned widget
-@position: the new position of the separator.
+@paned: 
+@position: 
 
+
+<!-- ##### FUNCTION gtk_paned_get_position ##### -->
+<para>
+
+</para>
+
+@paned: 
+@Returns: 
+
+
+<!-- ##### ARG GtkPaned:handle_size ##### -->
+<para>
+
+</para>
 

@@ -147,7 +147,7 @@ Incompatible Changes from GTK+-1.2 to GTK+-1.4:
 
 - The visual for a widget, and also the default visual is now derived
   from the colormap for the widget and the default colormap. 
-  gtk_widget_set_visual(), gtk_widget_set_defualt_visual(), gtk_widget_push_visual() 
+  gtk_widget_set_visual(), gtk_widget_set_default_visual(), gtk_widget_push_visual() 
   and gtk_widget_pop_visual() now do nothing. Since the visual always
   had to match that of the colormap, it is safe to simply delete
   all references to these functions.

@@ -109,6 +109,7 @@ pseudo-color colormaps.</entry>
 </tbody></tgroup></informaltable>
 </para>
 
+@parent_instance: 
 @size: 
 @colors: 
 
@@ -384,7 +385,8 @@ table that stores #GdkColor's.
 </para>
 
 @colora: a #GdkColor.
-@colorb: NOT USED.
 @Returns: The hash function appled to @colora
+<!-- # Unused Parameters # -->
+@colorb: NOT USED.
 
 

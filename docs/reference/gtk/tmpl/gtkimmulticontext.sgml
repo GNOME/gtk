@@ -1,0 +1,30 @@
+<!-- ##### SECTION Title ##### -->
+GtkIMMulticontext
+
+<!-- ##### SECTION Short_Description ##### -->
+
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### STRUCT GtkIMMulticontext ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### FUNCTION gtk_im_multicontext_new ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+

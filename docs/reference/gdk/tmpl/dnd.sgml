@@ -146,6 +146,9 @@ the GTK+ documentation for more information.
 @GDK_DRAG_PROTO_XDND: 
 @GDK_DRAG_PROTO_ROOTWIN: 
 @GDK_DRAG_PROTO_NONE: 
+@GDK_DRAG_PROTO_WIN32_DROPFILES: 
+@GDK_DRAG_PROTO_OLE2: 
+@GDK_DRAG_PROTO_LOCAL: 
 
 <!-- ##### FUNCTION gdk_drag_context_unref ##### -->
 <para>
@@ -160,6 +163,7 @@ the GTK+ documentation for more information.
 
 </para>
 
+@parent_instance: 
 @protocol: 
 @is_source: 
 @source_window: 

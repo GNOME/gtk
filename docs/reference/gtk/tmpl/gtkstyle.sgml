@@ -34,7 +34,7 @@ Styles
 
 </para>
 
-@klass: 
+@parent_instance: 
 @fg: 
 @bg: 
 @light: 
@@ -45,6 +45,9 @@ Styles
 @black: 
 @white: 
 @font: 
+@font_desc: 
+@xthickness: 
+@ythickness: 
 @fg_gc: 
 @bg_gc: 
 @light_gc: 
@@ -55,22 +58,19 @@ Styles
 @black_gc: 
 @white_gc: 
 @bg_pixmap: 
-@ref_count: 
-@attach_count: 
-@depth: 
-@colormap: 
-@engine: 
-@engine_data: 
-@rc_style: 
-@styles: 
 
 <!-- ##### STRUCT GtkStyleClass ##### -->
 <para>
 
 </para>
 
-@xthickness: 
-@ythickness: 
+@parent_class: 
+@realize: 
+@unrealize: 
+@copy: 
+@clone: 
+@init_from_rc: 
+@set_background: 
 @draw_hline: 
 @draw_vline: 
 @draw_shadow: 

@@ -212,6 +212,17 @@ the time isn't known.
 @Returns: 0 if the grab was successful.
 
 
+<!-- ##### ENUM GdkGrabStatus ##### -->
+<para>
+
+</para>
+
+@GDK_GRAB_SUCCESS: 
+@GDK_GRAB_ALREADY_GRABBED: 
+@GDK_GRAB_INVALID_TIME: 
+@GDK_GRAB_NOT_VIEWABLE: 
+@GDK_GRAB_FROZEN: 
+
 <!-- ##### FUNCTION gdk_pointer_ungrab ##### -->
 <para>
 Ungrabs the pointer, if it is grabbed by this application.
@@ -343,5 +354,33 @@ Removes the X error trap installed with gdk_error_trap_push().
 </para>
 
 @Returns: the X error code, or 0 if no error occurred.
+
+
+<!-- ##### MACRO GDK_WINDOWING_X11 ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO GDK_WINDOWING_WIN32 ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO GDK_WINDOWING_NANOX ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO GDK_WINDOWING_FB ##### -->
+<para>
+
+</para>
+
 
 

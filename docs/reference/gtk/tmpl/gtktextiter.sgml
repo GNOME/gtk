@@ -1,0 +1,570 @@
+<!-- ##### SECTION Title ##### -->
+gtktextiter
+
+<!-- ##### SECTION Short_Description ##### -->
+
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### STRUCT GtkTextBuffer ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### STRUCT GtkTextIter ##### -->
+<para>
+
+</para>
+
+@dummy1: 
+@dummy2: 
+@dummy3: 
+@dummy4: 
+@dummy10: 
+@dummy11: 
+@dummy5: 
+@dummy6: 
+@dummy7: 
+@dummy8: 
+@dummy9: 
+@pad1: 
+@pad2: 
+
+<!-- ##### FUNCTION gtk_text_iter_get_buffer ##### -->
+<para>
+
+</para>
+
+@iter: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_text_iter_copy ##### -->
+<para>
+
+</para>
+
+@iter: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_text_iter_free ##### -->
+<para>
+
+</para>
+
+@iter: 
+
+
+<!-- ##### FUNCTION gtk_text_iter_get_offset ##### -->
+<para>
+
+</para>
+
+@iter: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_text_iter_get_line ##### -->
+<para>
+
+</para>
+
+@iter: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_text_iter_get_line_offset ##### -->
+<para>
+
+</para>
+
+@iter: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_text_iter_get_line_index ##### -->
+<para>
+
+</para>
+
+@iter: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_text_iter_get_char ##### -->
+<para>
+
+</para>
+
+@iter: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_text_iter_get_slice ##### -->
+<para>
+
+</para>
+
+@start: 
+@end: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_text_iter_get_text ##### -->
+<para>
+
+</para>
+
+@start: 
+@end: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_text_iter_get_visible_slice ##### -->
+<para>
+
+</para>
+
+@start: 
+@end: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_text_iter_get_visible_text ##### -->
+<para>
+
+</para>
+
+@start: 
+@end: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_text_iter_get_pixmap ##### -->
+<para>
+
+</para>
+
+@iter: 
+@pixmap: 
+@mask: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_text_iter_get_marks ##### -->
+<para>
+
+</para>
+
+@iter: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_text_iter_get_toggled_tags ##### -->
+<para>
+
+</para>
+
+@iter: 
+@toggled_on: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_text_iter_begins_tag ##### -->
+<para>
+
+</para>
+
+@iter: 
+@tag: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_text_iter_ends_tag ##### -->
+<para>
+
+</para>
+
+@iter: 
+@tag: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_text_iter_toggles_tag ##### -->
+<para>
+
+</para>
+
+@iter: 
+@tag: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_text_iter_has_tag ##### -->
+<para>
+
+</para>
+
+@iter: 
+@tag: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_text_iter_editable ##### -->
+<para>
+
+</para>
+
+@iter: 
+@default_setting: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_text_iter_starts_line ##### -->
+<para>
+
+</para>
+
+@iter: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_text_iter_ends_line ##### -->
+<para>
+
+</para>
+
+@iter: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_text_iter_get_chars_in_line ##### -->
+<para>
+
+</para>
+
+@iter: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_text_iter_get_attributes ##### -->
+<para>
+
+</para>
+
+@iter: 
+@values: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_text_iter_is_last ##### -->
+<para>
+
+</para>
+
+@iter: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_text_iter_is_first ##### -->
+<para>
+
+</para>
+
+@iter: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_text_iter_next_char ##### -->
+<para>
+
+</para>
+
+@iter: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_text_iter_prev_char ##### -->
+<para>
+
+</para>
+
+@iter: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_text_iter_forward_chars ##### -->
+<para>
+
+</para>
+
+@iter: 
+@count: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_text_iter_backward_chars ##### -->
+<para>
+
+</para>
+
+@iter: 
+@count: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_text_iter_forward_line ##### -->
+<para>
+
+</para>
+
+@iter: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_text_iter_backward_line ##### -->
+<para>
+
+</para>
+
+@iter: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_text_iter_forward_lines ##### -->
+<para>
+
+</para>
+
+@iter: 
+@count: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_text_iter_backward_lines ##### -->
+<para>
+
+</para>
+
+@iter: 
+@count: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_text_iter_forward_word_ends ##### -->
+<para>
+
+</para>
+
+@iter: 
+@count: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_text_iter_backward_word_starts ##### -->
+<para>
+
+</para>
+
+@iter: 
+@count: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_text_iter_forward_word_end ##### -->
+<para>
+
+</para>
+
+@iter: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_text_iter_backward_word_start ##### -->
+<para>
+
+</para>
+
+@iter: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_text_iter_set_offset ##### -->
+<para>
+
+</para>
+
+@iter: 
+@char_offset: 
+
+
+<!-- ##### FUNCTION gtk_text_iter_set_line ##### -->
+<para>
+
+</para>
+
+@iter: 
+@line_number: 
+
+
+<!-- ##### FUNCTION gtk_text_iter_set_line_offset ##### -->
+<para>
+
+</para>
+
+@iter: 
+@char_on_line: 
+
+
+<!-- ##### FUNCTION gtk_text_iter_forward_to_end ##### -->
+<para>
+
+</para>
+
+@iter: 
+
+
+<!-- ##### FUNCTION gtk_text_iter_forward_to_newline ##### -->
+<para>
+
+</para>
+
+@iter: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_text_iter_forward_to_tag_toggle ##### -->
+<para>
+
+</para>
+
+@iter: 
+@tag: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_text_iter_backward_to_tag_toggle ##### -->
+<para>
+
+</para>
+
+@iter: 
+@tag: 
+@Returns: 
+
+
+<!-- ##### USER_FUNCTION GtkTextCharPredicate ##### -->
+<para>
+
+</para>
+
+@ch: 
+@user_data: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_text_iter_forward_find_char ##### -->
+<para>
+
+</para>
+
+@iter: 
+@pred: 
+@user_data: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_text_iter_backward_find_char ##### -->
+<para>
+
+</para>
+
+@iter: 
+@pred: 
+@user_data: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_text_iter_forward_search ##### -->
+<para>
+
+</para>
+
+@iter: 
+@str: 
+@visible_only: 
+@slice: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_text_iter_backward_search ##### -->
+<para>
+
+</para>
+
+@iter: 
+@str: 
+@visible_only: 
+@slice: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_text_iter_equal ##### -->
+<para>
+
+</para>
+
+@lhs: 
+@rhs: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_text_iter_compare ##### -->
+<para>
+
+</para>
+
+@lhs: 
+@rhs: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_text_iter_in_region ##### -->
+<para>
+
+</para>
+
+@iter: 
+@start: 
+@end: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_text_iter_reorder ##### -->
+<para>
+
+</para>
+
+@first: 
+@second: 
+
+
+<!-- ##### FUNCTION gtk_text_iter_spew ##### -->
+<para>
+
+</para>
+
+@iter: 
+@desc: 
+
+

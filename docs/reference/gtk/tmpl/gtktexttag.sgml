@@ -1,0 +1,402 @@
+<!-- ##### SECTION Title ##### -->
+GtkTextTag
+
+<!-- ##### SECTION Short_Description ##### -->
+
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### STRUCT GtkTextTag ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### STRUCT GtkTextBTreeNode ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### STRUCT GtkTextTagTable ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### STRUCT GtkTextTabArray ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ENUM GtkWrapMode ##### -->
+<para>
+
+</para>
+
+@GTK_WRAPMODE_NONE: 
+@GTK_WRAPMODE_CHAR: 
+@GTK_WRAPMODE_WORD: 
+
+<!-- ##### STRUCT GtkTextAttributes ##### -->
+<para>
+
+</para>
+
+@refcount: 
+@appearance: 
+@border_width: 
+@relief: 
+@justify: 
+@direction: 
+@font_desc: 
+@left_margin: 
+@left_wrapped_line_margin: 
+@offset: 
+@right_margin: 
+@pixels_above_lines: 
+@pixels_below_lines: 
+@pixels_inside_wrap: 
+@tab_array: 
+@wrap_mode: 
+@language: 
+@invisible: 
+@bg_full_height: 
+@editable: 
+@realized: 
+@pad1: 
+@pad2: 
+@pad3: 
+@pad4: 
+
+<!-- ##### FUNCTION gtk_text_tag_new ##### -->
+<para>
+
+</para>
+
+@name: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_text_tag_get_priority ##### -->
+<para>
+
+</para>
+
+@tag: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_text_tag_set_priority ##### -->
+<para>
+
+</para>
+
+@tag: 
+@priority: 
+
+
+<!-- ##### FUNCTION gtk_text_tag_event ##### -->
+<para>
+
+</para>
+
+@tag: 
+@event_object: 
+@event: 
+@iter: 
+@Returns: 
+
+
+<!-- ##### STRUCT GtkTextAppearance ##### -->
+<para>
+
+</para>
+
+@bg_color: 
+@fg_color: 
+@bg_stipple: 
+@fg_stipple: 
+@underline: 
+@overstrike: 
+@draw_bg: 
+@inside_selection: 
+
+<!-- ##### FUNCTION gtk_text_attributes_new ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_text_attributes_copy ##### -->
+<para>
+
+</para>
+
+@src: 
+@dest: 
+
+
+<!-- ##### FUNCTION gtk_text_attributes_unref ##### -->
+<para>
+
+</para>
+
+@values: 
+
+
+<!-- ##### FUNCTION gtk_text_attributes_ref ##### -->
+<para>
+
+</para>
+
+@values: 
+
+
+<!-- ##### SIGNAL GtkTextTag::event ##### -->
+<para>
+
+</para>
+
+@texttag: the object which received the signal.
+@arg1: 
+@event: 
+@arg2: 
+@Returns: 
+
+<!-- ##### ARG GtkTextTag:name ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTextTag:background ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTextTag:background_gdk ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTextTag:background_full_height ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTextTag:background_stipple ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTextTag:direction ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTextTag:editable ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTextTag:font ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTextTag:font_desc ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTextTag:foreground ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTextTag:foreground_gdk ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTextTag:foreground_stipple ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTextTag:justify ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTextTag:language ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTextTag:left_margin ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTextTag:left_wrapped_line_margin ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTextTag:offset ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTextTag:overstrike ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTextTag:pixels_above_lines ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTextTag:pixels_below_lines ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTextTag:pixels_inside_wrap ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTextTag:right_margin ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTextTag:underline ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTextTag:wrap_mode ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTextTag:background_set ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTextTag:background_full_height_set ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTextTag:background_gdk_set ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTextTag:background_stipple_set ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTextTag:editable_set ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTextTag:font_set ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTextTag:foreground_set ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTextTag:foreground_gdk_set ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTextTag:foreground_stipple_set ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTextTag:justify_set ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTextTag:language_set ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTextTag:left_margin_set ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTextTag:left_wrapped_line_margin_set ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTextTag:offset_set ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTextTag:overstrike_set ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTextTag:pixels_above_lines_set ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTextTag:pixels_below_lines_set ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTextTag:pixels_inside_wrap_set ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTextTag:right_margin_set ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTextTag:underline_set ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTextTag:wrap_mode_set ##### -->
+<para>
+
+</para>
+

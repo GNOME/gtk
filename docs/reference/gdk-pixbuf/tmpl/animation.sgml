@@ -29,10 +29,8 @@ Animations as multi-frame structures.
 
 @GDK_PIXBUF_FRAME_RETAIN: The previous image should remain displayed,
 and will potentially be occluded by the new frame.
-
 @GDK_PIXBUF_FRAME_DISPOSE: The animation will be reverted to the state
 before the frame was shown.
-
 @GDK_PIXBUF_FRAME_REVERT: The animation will be reverted to the first
 frame.
 
@@ -44,11 +42,29 @@ frame.
     action.
   </para>
 
+@pixbuf: 
+@x_offset: 
+@y_offset: 
+@delay_time: 
+@action: 
+
 <!-- ##### STRUCT GdkPixbufAnimation ##### -->
   <para>
     This structure describes an animation, which is represented as a
     list of #GdkPixbufFrame structures.
   </para>
+
+@parent_instance: 
+@n_frames: 
+@frames: 
+@width: 
+@height: 
+
+<!-- ##### STRUCT GdkPixbufAnimationClass ##### -->
+<para>
+
+</para>
+
 
 <!-- ##### FUNCTION gdk_pixbuf_animation_new_from_file ##### -->
 <para>
@@ -154,11 +170,11 @@ frame.
 </para>
 
 @frame: 
-@Returns: 
-
-<!--
+@Returns: <!--
 Local variables:
 mode: sgml
 sgml-parent-document: ("../gdk-pixbuf.sgml" "book" "refsect2" "")
 End:
 -->
+
+

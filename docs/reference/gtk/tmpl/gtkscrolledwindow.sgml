@@ -130,15 +130,6 @@ i.e. has been filled in with a valid signal identifier.
 @child: Widget you want to scroll.
 
 
-<!-- ##### FUNCTION gtk_scrolled_window_set_hadjustment ##### -->
-<para>
-Sets the #GtkAdjustment for the horizontal scrollbar.
-</para>
-
-@scrolled_window: A #GtkScrolledWindow.
-@hadjustment: Horizontal scroll adjustment.
-
-
 <!-- ##### FUNCTION gtk_scrolled_window_set_placement ##### -->
 <para>
 Determines the location of the child widget with respect to the
@@ -150,6 +141,24 @@ Other values in #GtkCornerType are %GTK_CORNER_TOP_RIGHT,
 
 @scrolled_window: A #GtkScrolledWindow.
 @window_placement: Position of the child window.
+
+
+<!-- ##### FUNCTION gtk_scrolled_window_set_shadow_type ##### -->
+<para>
+
+</para>
+
+@scrolled_window: 
+@type: 
+
+
+<!-- ##### FUNCTION gtk_scrolled_window_set_hadjustment ##### -->
+<para>
+Sets the #GtkAdjustment for the horizontal scrollbar.
+</para>
+
+@scrolled_window: A #GtkScrolledWindow.
+@hadjustment: Horizontal scroll adjustment.
 
 
 <!-- ##### FUNCTION gtk_scrolled_window_set_vadjustment ##### -->
@@ -187,5 +196,10 @@ Vertical scrollbar policy (show scrollbar always, never, or "when appropriate").
 <para>
 Position of child window with respect to scrollbars; top left, top
 right, bottom left, bottom right.
+</para>
+
+<!-- ##### ARG GtkScrolledWindow:shadow ##### -->
+<para>
+
 </para>
 

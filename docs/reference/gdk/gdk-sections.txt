@@ -24,6 +24,7 @@ gdk_screen_height_mm
 
 <SUBSECTION>
 gdk_pointer_grab
+GdkGrabStatus
 gdk_pointer_ungrab
 gdk_pointer_is_grabbed
 
@@ -46,13 +47,15 @@ gdk_set_use_xshm
 gdk_error_trap_push
 gdk_error_trap_pop
 
+<SUBSECTION>
+GDK_WINDOWING_X11
+GDK_WINDOWING_WIN32
+GDK_WINDOWING_NANOX
+GDK_WINDOWING_FB
+
 <SUBSECTION Private>
 GdkStatus
-gdk_time_get
-gdk_timer_get
-gdk_timer_set
-gdk_timer_enable
-gdk_timer_disable
+GDKVAR
 </SECTION>
 
 <SECTION>
@@ -71,6 +74,20 @@ gdk_pixmap_unref
 GdkBitmap
 gdk_bitmap_ref
 gdk_bitmap_unref
+
+<SUBSECTION Standard>
+GDK_PIXMAP
+GDK_PIXMAP_GET_CLASS
+GDK_PIXMAP_OBJECT
+GDK_TYPE_PIXMAP
+GDK_IS_PIXMAP
+GDK_PIXMAP_CLASS
+GDK_IS_PIXMAP_CLASS
+
+<SUBSECTION Private>
+gdk_pixmap_get_type
+GdkPixmapObject
+GdkPixmapObjectClass
 </SECTION>
 
 <SECTION>
@@ -81,10 +98,24 @@ gdk_image_new
 GdkImageType
 gdk_image_new_bitmap
 gdk_image_get
+gdk_image_ref
+gdk_image_unref
 gdk_image_destroy
 <SUBSECTION>
 gdk_image_put_pixel
 gdk_image_get_pixel
+
+<SUBSECTION Standard>
+GDK_IMAGE
+GDK_TYPE_IMAGE
+GDK_IS_IMAGE
+GDK_IMAGE_CLASS
+GDK_IMAGE_GET_CLASS
+GDK_IS_IMAGE_CLASS
+
+<SUBSECTION Private>
+GdkImageClass
+gdk_image_get_type
 </SECTION>
 
 <SECTION>
@@ -98,6 +129,7 @@ gdk_draw_rgb_image_dithalign
 gdk_draw_indexed_image
 gdk_draw_gray_image
 gdk_draw_rgb_32_image
+gdk_draw_rgb_32_image_dithalign
 GdkRgbDither
 
 <SUBSECTION>
@@ -109,14 +141,27 @@ GdkRgbCmap
 gdk_rgb_gc_set_foreground
 gdk_rgb_gc_set_background
 gdk_rgb_xpixel_from_rgb
+gdk_rgb_find_color
 
 <SUBSECTION>
 gdk_rgb_set_install
 gdk_rgb_set_min_colors
 gdk_rgb_get_visual
+gdk_rgb_get_colormap
 gdk_rgb_get_cmap
 gdk_rgb_ditherable
 gdk_rgb_set_verbose
+</SECTION>
+
+<SECTION>
+<TITLE>Pixbufs</TITLE>
+<FILE>pixbufs</FILE>
+GdkPixbufAlphaMode
+gdk_pixbuf_render_threshold_alpha
+gdk_pixbuf_render_to_drawable
+gdk_pixbuf_render_to_drawable_alpha
+gdk_pixbuf_render_pixmap_and_mask
+gdk_pixbuf_get_from_drawable
 </SECTION>
 
 <SECTION>
@@ -146,6 +191,18 @@ gdk_color_alloc
 gdk_color_change
 gdk_color_equal
 gdk_color_hash
+
+<SUBSECTION Standard>
+GDK_COLORMAP
+GDK_COLORMAP_GET_CLASS
+GDK_TYPE_COLORMAP
+GDK_IS_COLORMAP
+GDK_COLORMAP_CLASS
+GDK_IS_COLORMAP_CLASS
+
+<SUBSECTION Private>
+GdkColormapClass
+gdk_colormap_get_type
 </SECTION>
 
 <SECTION>
@@ -155,6 +212,7 @@ GdkFont
 GdkFontType
 gdk_font_load
 gdk_fontset_load
+gdk_font_from_description
 gdk_font_ref
 gdk_font_unref
 gdk_font_id
@@ -177,6 +235,10 @@ gdk_text_height
 gdk_char_height
 
 <SUBSECTION>
+gdk_font_full_name_get
+gdk_font_full_name_free
+
+<SUBSECTION>
 GdkWChar
 gdk_wcstombs
 gdk_mbstowcs
@@ -185,6 +247,19 @@ gdk_mbstowcs
 <SECTION>
 <TITLE>Drawing Primitives</TITLE>
 <FILE>drawing</FILE>
+GdkDrawable
+GdkDrawableClass
+gdk_drawable_ref
+gdk_drawable_unref
+gdk_drawable_set_data
+gdk_drawable_get_data
+gdk_drawable_get_visual
+gdk_drawable_set_colormap
+gdk_drawable_get_colormap
+gdk_drawable_get_depth
+gdk_drawable_get_size
+
+<SUBSECTION>
 gdk_draw_point
 gdk_draw_points
 gdk_draw_line
@@ -194,6 +269,9 @@ GdkSegment
 gdk_draw_rectangle
 gdk_draw_arc
 gdk_draw_polygon
+gdk_draw_glyphs
+gdk_draw_layout_line
+gdk_draw_layout
 
 <SUBSECTION>
 gdk_draw_string
@@ -202,7 +280,16 @@ gdk_draw_text_wc
 
 <SUBSECTION>
 gdk_draw_pixmap
+gdk_draw_drawable
 gdk_draw_image
+
+<SUBSECTION Standard>
+GDK_DRAWABLE
+GDK_DRAWABLE_GET_CLASS
+GDK_TYPE_DRAWABLE
+GDK_IS_DRAWABLE
+GDK_DRAWABLE_CLASS
+GDK_IS_DRAWABLE_CLASS
 
 <SUBSECTION Private>
 gdk_draw_bitmap
@@ -212,6 +299,7 @@ gdk_draw_bitmap
 <TITLE>Graphics Contexts</TITLE>
 <FILE>gcs</FILE>
 GdkGC
+GdkGCClass
 GdkGCValues
 GdkGCValuesMask
 
@@ -222,9 +310,12 @@ gdk_gc_new_with_values
 gdk_gc_ref
 gdk_gc_unref
 gdk_gc_destroy
+gdk_gc_set_values
 gdk_gc_get_values
 gdk_gc_set_foreground
 gdk_gc_set_background
+gdk_gc_set_rgb_fg_color
+gdk_gc_set_rgb_bg_color
 gdk_gc_set_font
 gdk_gc_set_function
 gdk_gc_set_fill
@@ -245,6 +336,17 @@ GdkCapStyle
 GdkJoinStyle
 gdk_gc_set_dashes
 gdk_gc_copy
+gdk_gc_set_colormap
+gdk_gc_get_colormap
+
+<SUBSECTION Standard>
+GDK_GC
+GDK_TYPE_GC
+GDK_IS_GC
+gdk_gc_get_type
+GDK_GC_CLASS
+GDK_GC_GET_CLASS
+GDK_IS_GC_CLASS
 </SECTION>
 
 <SECTION>
@@ -283,6 +385,7 @@ gdk_window_new
 gdk_window_destroy
 gdk_window_ref
 gdk_window_unref
+gdk_window_get_window_type
 gdk_window_at_pointer
 gdk_window_show
 gdk_window_hide
@@ -292,6 +395,7 @@ gdk_window_withdraw
 gdk_window_move
 gdk_window_resize
 gdk_window_move_resize
+gdk_window_scroll
 gdk_window_reparent
 gdk_window_clear
 gdk_window_clear_area
@@ -300,6 +404,22 @@ gdk_window_copy_area
 gdk_window_raise
 gdk_window_lower
 gdk_window_register_dnd
+
+<SUBSECTION>
+gdk_window_begin_paint_rect
+gdk_window_begin_paint_region
+gdk_window_end_paint
+
+<SUBSECTION>
+gdk_window_invalidate_rect
+gdk_window_invalidate_region
+gdk_window_get_update_area
+gdk_window_freeze_updates
+gdk_window_thaw_updates
+gdk_window_process_all_updates
+gdk_window_process_updates
+
+<SUBSECTION>
 gdk_window_set_user_data
 gdk_window_set_override_redirect
 gdk_window_add_filter
@@ -334,6 +454,7 @@ GdkModifierType
 gdk_window_get_parent
 gdk_window_get_toplevel
 gdk_window_get_children
+gdk_window_peek_children
 gdk_window_get_events
 gdk_window_set_events
 gdk_window_set_icon
@@ -346,8 +467,21 @@ GdkWMDecoration
 gdk_window_set_functions
 GdkWMFunction
 gdk_window_get_toplevels
-GdkDrawable
-gdk_drawable_set_data
+
+<SUBSECTION Standard>
+GDK_WINDOW
+GDK_WINDOW_GET_CLASS
+GDK_WINDOW_OBJECT
+GDK_TYPE_WINDOW
+GDK_IS_WINDOW
+GDK_WINDOW_CLASS
+GDK_IS_WINDOW_CLASS
+
+<SUBSECTION Private>
+gdk_window_object_get_type
+gdk_drawable_get_type
+GdkWindowObject
+GdkWindowObjectClass
 </SECTION>
 
 <SECTION>
@@ -391,6 +525,19 @@ gdk_im_set_best_style
 <SUBSECTION>
 gdk_im_begin
 gdk_im_end
+
+<SUBSECTION Private>
+gdk_iswalnum
+gdk_iswspace
+GDK_HAVE_WCHAR_H
+GDK_HAVE_WCTYPE_H
+</SECTION>
+
+<SECTION>
+<TITLE>Pango Interaction</TITLE>
+<FILE>pango_interaction</FILE>
+gdk_pango_context_get
+gdk_pango_context_set_colormap
 </SECTION>
 
 <SECTION>
@@ -448,34 +595,36 @@ GdkRegion
 gdk_region_new
 gdk_region_polygon
 GdkFillRule
+gdk_region_copy
+gdk_region_rectangle
 gdk_region_destroy
 
 <SUBSECTION>
-gdk_regions_intersect
-gdk_regions_union
-gdk_regions_subtract
-gdk_regions_xor
-gdk_region_union_with_rect
-gdk_region_offset
-gdk_region_shrink
-
-<SUBSECTION>
+gdk_region_get_clipbox
 gdk_region_empty
 gdk_region_equal
 gdk_region_point_in
 gdk_region_rect_in
 GdkOverlapType
-gdk_region_get_clipbox
+
+<SUBSECTION>
+gdk_region_offset
+gdk_region_shrink
+gdk_region_union_with_rect
+gdk_region_intersect
+gdk_region_union
+gdk_region_subtract
+gdk_region_xor
 </SECTION>
 
 <SECTION>
 <TITLE>Threads</TITLE>
 <FILE>threads</FILE>
-gdk_threads_mutex
 GDK_THREADS_ENTER
 GDK_THREADS_LEAVE
 gdk_threads_enter
 gdk_threads_leave
+gdk_threads_mutex
 </SECTION>
 
 <SECTION>
@@ -489,33 +638,44 @@ gdk_keyval_is_upper
 gdk_keyval_is_lower
 
 <SUBSECTION>
+gdk_keyval_convert_case
 gdk_keyval_to_upper
 gdk_keyval_to_lower
+
+<SUBSECTION>
+gdk_keyval_to_unicode
+gdk_unicode_to_keyval
 </SECTION>
 
 <SECTION>
 <TITLE>Input Devices</TITLE>
 <FILE>input_devices</FILE>
-GDK_CORE_POINTER
-gdk_input_list_devices
-GdkDeviceInfo
+GdkDevice
+GdkInputSource
+GdkInputMode
 GdkDeviceKey
+GdkDeviceAxis
+GdkAxisUse
+gdk_devices_list
+gdk_core_pointer
+gdk_device_set_source
+gdk_device_set_mode
+gdk_device_set_key
+gdk_device_set_axis_use
+
+<SUBSECTION>
+gdk_device_get_state
+gdk_device_get_history
+gdk_device_free_history
+GdkTimeCoord
+gdk_device_get_axis
+
+<SUBSECTION>
 gdk_input_set_extension_events
 GdkExtensionMode
-gdk_input_set_source
-GdkInputSource
-gdk_input_set_mode
-GdkInputMode
-gdk_input_set_axes
-GdkAxisUse
-gdk_input_set_key
-gdk_input_window_get_pointer
-gdk_input_motion_events
-GdkTimeCoord
 
 <SUBSECTION Private>
-gdk_input_init
-gdk_input_exit
+GDK_MAX_TIMECOORD_AXES
 </SECTION>
 
 <SECTION>
@@ -525,6 +685,8 @@ GdkEventType
 GdkEventMask
 GDK_CURRENT_TIME
 GDK_PRIORITY_EVENTS
+GDK_PRIORITY_REDRAW
+
 
 <SUBSECTION>
 gdk_events_pending
@@ -535,6 +697,7 @@ gdk_event_put
 gdk_event_copy
 gdk_event_free
 gdk_event_get_time
+gdk_event_get_axis
 
 <SUBSECTION>
 gdk_event_handler_set
@@ -559,6 +722,7 @@ GdkEvent
 GdkEventAny
 GdkEventKey
 GdkEventButton
+GdkEventScroll
 GdkEventMotion
 GdkEventExpose
 GdkEventVisibility
@@ -567,12 +731,14 @@ GdkEventFocus
 GdkEventConfigure
 GdkEventProperty
 GdkEventSelection
+GdkNativeWindow
 GdkEventDND
 GdkEventProximity
 GdkEventClient
 GdkEventNoExpose
 
 <SUBSECTION>
+GdkScrollDirection
 GdkVisibilityState
 GdkCrossingMode
 GdkNotifyType
@@ -586,6 +752,8 @@ GdkCursor
 GdkCursorType
 gdk_cursor_new
 gdk_cursor_new_from_pixmap
+gdk_cursor_ref
+gdk_cursor_unref
 gdk_cursor_destroy
 </SECTION>
 
@@ -619,4 +787,75 @@ gdk_drag_context_unref
 GdkDragContext
 GdkDragAction
 gdk_drag_status
+
+<SUBSECTION Standard>
+GDK_DRAG_CONTEXT
+GDK_TYPE_DRAG_CONTEXT
+GDK_IS_DRAG_CONTEXT
+GDK_DRAG_CONTEXT_CLASS
+GDK_DRAG_CONTEXT_GET_CLASS
+GDK_IS_DRAG_CONTEXT_CLASS
+
+<SUBSECTION Private>
+GdkDragContextClass
+gdk_drag_context_get_type
+</SECTION>
+
+<SECTION>
+<TITLE>X Window System Interaction</TITLE>
+<FILE>x_interaction</FILE>
+GDK_GC_X11
+GDK_GC_X11_GET_CLASS
+GDK_ROOT_WINDOW
+GDK_ROOT_PARENT
+GDK_DISPLAY
+GDK_WINDOW_XDISPLAY
+GDK_WINDOW_XID
+GDK_PIXMAP_XDISPLAY
+GDK_PIXMAP_XID
+GDK_DRAWABLE_XDISPLAY
+GDK_DRAWABLE_XID
+GDK_IMAGE_XDISPLAY
+GDK_IMAGE_XIMAGE
+GDK_GC_XDISPLAY
+GDK_COLORMAP_XDISPLAY
+GDK_COLORMAP_XCOLORMAP
+GDK_VISUAL_XVISUAL
+GDK_FONT_XDISPLAY
+GDK_FONT_XFONT
+GDK_GC_XGC
+GDK_GC_GET_XGC
+GDK_WINDOW_XWINDOW
+gdk_screen
+gdk_display_name
+gdk_leader_window
+gdk_selection_property
+gdk_progclass
+gdkx_visual_get
+gdkx_colormap_get
+gdk_get_client_window
+gdk_pixmap_foreign_new
+gdk_window_foreign_new
+gdk_xid_table_lookup
+gdk_window_lookup
+gdk_pixmap_lookup
+gdk_font_lookup
+
+<SUBSECTION Private>
+GDK_TYPE_GC_X11
+GDK_IS_GC_X11
+gdk_gc_x11_get_type
+GDK_GC_X11_CLASS
+GDK_IS_GC_X11_CLASS
+GdkGCX11
+GdkGCX11Class
+GdkGCXData
+GdkColormapPrivateX11
+GdkCursorPrivate
+GdkFontPrivateX
+GdkImagePrivateX11
+GdkVisualPrivate
+GdkICPrivate
+gdk_display
+gdk_root_window
 </SECTION>

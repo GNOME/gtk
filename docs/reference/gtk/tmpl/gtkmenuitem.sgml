@@ -38,8 +38,6 @@ only a few are really useful.
 
 </para>
 
-@item: the parent class object
-@submenu: the submenu attached to this item; read only
 
 <!-- ##### FUNCTION gtk_menu_item_new ##### -->
 <para>

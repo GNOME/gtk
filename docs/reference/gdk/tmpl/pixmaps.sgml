@@ -147,21 +147,23 @@ in which case a default color will be used.
 @Returns: the #GdkPixmap.
 
 
-<!-- ##### FUNCTION gdk_pixmap_ref ##### -->
+<!-- ##### MACRO gdk_pixmap_ref ##### -->
 <para>
 Increase the reference count of a pixmap.
 </para>
 
-@pixmap: a #GdkPixmap
 @Returns: @pixmap
+<!-- # Unused Parameters # -->
+@pixmap: a #GdkPixmap
 
 
-<!-- ##### FUNCTION gdk_pixmap_unref ##### -->
+<!-- ##### MACRO gdk_pixmap_unref ##### -->
 <para>
 Decrease the reference count of a pixmap. If the resulting
 reference count is zero, destroy the pixmap.
 </para>
 
+<!-- # Unused Parameters # -->
 @pixmap: a #GdkPixmap
 
 
@@ -175,22 +177,24 @@ refers generically to any of these types.
 
 @user_data: 
 
-<!-- ##### FUNCTION gdk_bitmap_ref ##### -->
+<!-- ##### MACRO gdk_bitmap_ref ##### -->
 <para>
 Increase the reference count of a bitmap. An alias
 for gdk_pixmap_ref().
 </para>
 
-@pixmap: 
 @Returns: 
+<!-- # Unused Parameters # -->
+@pixmap: 
 
 
-<!-- ##### FUNCTION gdk_bitmap_unref ##### -->
+<!-- ##### MACRO gdk_bitmap_unref ##### -->
 <para>
 Decrease the reference count of a bitmap. An alias
 for gdk_pixmap_unref().
 </para>
 
+<!-- # Unused Parameters # -->
 @pixmap: 
 
 

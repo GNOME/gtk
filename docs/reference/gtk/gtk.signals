@@ -212,14 +212,14 @@ GtkColorSelection *colorselection
 <NAME>GtkContainer::add</NAME>
 <RETURNS>void</RETURNS>
 GtkContainer *container
-GtkWidget *widget
+GtkWidget  widget
 </SIGNAL>
 
 <SIGNAL>
 <NAME>GtkContainer::remove</NAME>
 <RETURNS>void</RETURNS>
 GtkContainer *container
-GtkWidget *widget
+GtkWidget  widget
 </SIGNAL>
 
 <SIGNAL>
@@ -239,7 +239,7 @@ GtkDirectionType direction
 <NAME>GtkContainer::set-focus-child</NAME>
 <RETURNS>void</RETURNS>
 GtkContainer *container
-GtkWidget *widget
+GtkWidget  widget
 </SIGNAL>
 
 <SIGNAL>
@@ -416,14 +416,39 @@ GtkEditable *editable
 <NAME>GtkHandleBox::child-attached</NAME>
 <RETURNS>void</RETURNS>
 GtkHandleBox *handlebox
-GtkWidget *widget
+GtkWidget  widget
 </SIGNAL>
 
 <SIGNAL>
 <NAME>GtkHandleBox::child-detached</NAME>
 <RETURNS>void</RETURNS>
 GtkHandleBox *handlebox
-GtkWidget *widget
+GtkWidget  widget
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkIMContext::preedit-start</NAME>
+<RETURNS>void</RETURNS>
+GtkIMContext *imcontext
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkIMContext::preedit-end</NAME>
+<RETURNS>void</RETURNS>
+GtkIMContext *imcontext
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkIMContext::preedit-changed</NAME>
+<RETURNS>void</RETURNS>
+GtkIMContext *imcontext
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkIMContext::commit</NAME>
+<RETURNS>void</RETURNS>
+GtkIMContext *imcontext
+gstring  arg1
 </SIGNAL>
 
 <SIGNAL>
@@ -468,14 +493,14 @@ GtkList *list
 <NAME>GtkList::select-child</NAME>
 <RETURNS>void</RETURNS>
 GtkList *list
-GtkWidget *widget
+GtkWidget  widget
 </SIGNAL>
 
 <SIGNAL>
 <NAME>GtkList::unselect-child</NAME>
 <RETURNS>void</RETURNS>
 GtkList *list
-GtkWidget *widget
+GtkWidget  widget
 </SIGNAL>
 
 <SIGNAL>
@@ -604,6 +629,19 @@ GtkObject *object
 </SIGNAL>
 
 <SIGNAL>
+<NAME>GtkSpinButton::input</NAME>
+<RETURNS>gint</RETURNS>
+GtkSpinButton *spinbutton
+gpointer  arg1
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkSpinButton::output</NAME>
+<RETURNS>gboolean</RETURNS>
+GtkSpinButton *spinbutton
+</SIGNAL>
+
+<SIGNAL>
 <NAME>GtkStatusbar::text-pushed</NAME>
 <RETURNS>void</RETURNS>
 GtkStatusbar *statusbar
@@ -617,6 +655,163 @@ gchar           *text
 GtkStatusbar *statusbar
 guint            context_id
 gchar           *text
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkTextBuffer::insert-text</NAME>
+<RETURNS>void</RETURNS>
+GtkTextBuffer *textbuffer
+gpointer  arg1
+gpointer  arg2
+gint  arg3
+gboolean  arg4
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkTextBuffer::delete-text</NAME>
+<RETURNS>void</RETURNS>
+GtkTextBuffer *textbuffer
+gpointer  arg1
+gpointer  arg2
+gboolean  arg3
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkTextBuffer::changed</NAME>
+<RETURNS>void</RETURNS>
+GtkTextBuffer *textbuffer
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkTextBuffer::modified-changed</NAME>
+<RETURNS>void</RETURNS>
+GtkTextBuffer *textbuffer
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkTextBuffer::mark-set</NAME>
+<RETURNS>void</RETURNS>
+GtkTextBuffer *textbuffer
+gpointer  arg1
+gpointer  arg2
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkTextBuffer::mark-deleted</NAME>
+<RETURNS>void</RETURNS>
+GtkTextBuffer *textbuffer
+gpointer  arg1
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkTextBuffer::apply-tag</NAME>
+<RETURNS>void</RETURNS>
+GtkTextBuffer *textbuffer
+gpointer  arg1
+gpointer  arg2
+gpointer  arg3
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkTextBuffer::remove-tag</NAME>
+<RETURNS>void</RETURNS>
+GtkTextBuffer *textbuffer
+gpointer  arg1
+gpointer  arg2
+gpointer  arg3
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkTextTag::event</NAME>
+<RETURNS>gint</RETURNS>
+GtkTextTag *texttag
+GtkObject  arg1
+GdkEvent *event
+gpointer  arg2
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkTextTagTable::tag-changed</NAME>
+<RETURNS>void</RETURNS>
+GtkTextTagTable *texttagtable
+GtkObject  arg1
+gboolean  arg2
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkTextTagTable::tag-added</NAME>
+<RETURNS>void</RETURNS>
+GtkTextTagTable *texttagtable
+GtkObject  arg1
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkTextTagTable::tag-removed</NAME>
+<RETURNS>void</RETURNS>
+GtkTextTagTable *texttagtable
+GtkObject  arg1
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkTextView::move-insert</NAME>
+<RETURNS>void</RETURNS>
+GtkTextView *textview
+GEnum  arg1
+gint  arg2
+gboolean  arg3
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkTextView::set-anchor</NAME>
+<RETURNS>void</RETURNS>
+GtkTextView *textview
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkTextView::scroll-text</NAME>
+<RETURNS>void</RETURNS>
+GtkTextView *textview
+GEnum  arg1
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkTextView::delete-text</NAME>
+<RETURNS>void</RETURNS>
+GtkTextView *textview
+GEnum  arg1
+gint  arg2
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkTextView::cut-text</NAME>
+<RETURNS>void</RETURNS>
+GtkTextView *textview
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkTextView::copy-text</NAME>
+<RETURNS>void</RETURNS>
+GtkTextView *textview
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkTextView::paste-text</NAME>
+<RETURNS>void</RETURNS>
+GtkTextView *textview
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkTextView::toggle-overwrite</NAME>
+<RETURNS>void</RETURNS>
+GtkTextView *textview
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkTextView::set-scroll-adjustments</NAME>
+<RETURNS>void</RETURNS>
+GtkTextView *textview
+GtkAdjustment  arg1
+GtkAdjustment  arg2
 </SIGNAL>
 
 <SIGNAL>
@@ -680,14 +875,14 @@ GtkTree *tree
 <NAME>GtkTree::select-child</NAME>
 <RETURNS>void</RETURNS>
 GtkTree *tree
-GtkWidget *widget
+GtkWidget  widget
 </SIGNAL>
 
 <SIGNAL>
 <NAME>GtkTree::unselect-child</NAME>
 <RETURNS>void</RETURNS>
 GtkTree *tree
-GtkWidget *widget
+GtkWidget  widget
 </SIGNAL>
 
 <SIGNAL>
@@ -793,6 +988,13 @@ GtkStyle        *previous_style
 </SIGNAL>
 
 <SIGNAL>
+<NAME>GtkWidget::direction-changed</NAME>
+<RETURNS>void</RETURNS>
+GtkWidget *widget
+GtkTextDirection  arg1
+</SIGNAL>
+
+<SIGNAL>
 <NAME>GtkWidget::add-accelerator</NAME>
 <RETURNS>void</RETURNS>
 GtkWidget *widget
@@ -837,6 +1039,13 @@ GdkEventButton *event
 <RETURNS>gboolean</RETURNS>
 GtkWidget *widget
 GdkEventButton *event
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GtkWidget::scroll-event</NAME>
+<RETURNS>gboolean</RETURNS>
+GtkWidget *widget
+GdkEvent *event
 </SIGNAL>
 
 <SIGNAL>

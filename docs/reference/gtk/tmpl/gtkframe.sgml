@@ -45,6 +45,17 @@ the current label, if any, is removed.
 @label: 
 
 
+<!-- ##### FUNCTION gtk_frame_set_label_widget ##### -->
+<para>
+
+</para>
+
+@frame: 
+@label_widget: 
+<!-- # Unused Parameters # -->
+@title_widget: 
+
+
 <!-- ##### FUNCTION gtk_frame_set_label_align ##### -->
 <para>
 Set the alignment of the Frame widget's label. The

@@ -1,0 +1,550 @@
+<!-- ##### SECTION Title ##### -->
+GtkTextBuffer
+
+<!-- ##### SECTION Short_Description ##### -->
+
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### STRUCT GtkTextBTree ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### FUNCTION gtk_text_buffer_new ##### -->
+<para>
+
+</para>
+
+@table: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_text_buffer_get_line_count ##### -->
+<para>
+
+</para>
+
+@buffer: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_text_buffer_get_char_count ##### -->
+<para>
+
+</para>
+
+@buffer: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_text_buffer_get_tag_table ##### -->
+<para>
+
+</para>
+
+@buffer: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_text_buffer_insert ##### -->
+<para>
+
+</para>
+
+@buffer: 
+@iter: 
+@text: 
+@len: 
+
+
+<!-- ##### FUNCTION gtk_text_buffer_insert_at_cursor ##### -->
+<para>
+
+</para>
+
+@buffer: 
+@text: 
+@len: 
+
+
+<!-- ##### FUNCTION gtk_text_buffer_insert_interactive ##### -->
+<para>
+
+</para>
+
+@buffer: 
+@iter: 
+@text: 
+@len: 
+@default_editable: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_text_buffer_insert_interactive_at_cursor ##### -->
+<para>
+
+</para>
+
+@buffer: 
+@text: 
+@len: 
+@default_editable: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_text_buffer_delete ##### -->
+<para>
+
+</para>
+
+@buffer: 
+@start: 
+@end: 
+<!-- # Unused Parameters # -->
+@start_iter: 
+@end_iter: 
+
+
+<!-- ##### FUNCTION gtk_text_buffer_delete_interactive ##### -->
+<para>
+
+</para>
+
+@buffer: 
+@start_iter: 
+@end_iter: 
+@default_editable: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_text_buffer_get_text ##### -->
+<para>
+
+</para>
+
+@buffer: 
+@start: 
+@end: 
+@include_hidden_chars: 
+@Returns: 
+<!-- # Unused Parameters # -->
+@start_iter: 
+@end_iter: 
+
+
+<!-- ##### FUNCTION gtk_text_buffer_get_slice ##### -->
+<para>
+
+</para>
+
+@buffer: 
+@start: 
+@end: 
+@include_hidden_chars: 
+@Returns: 
+<!-- # Unused Parameters # -->
+@start_iter: 
+@end_iter: 
+
+
+<!-- ##### FUNCTION gtk_text_buffer_insert_pixmap ##### -->
+<para>
+
+</para>
+
+@buffer: 
+@iter: 
+@pixmap: 
+@mask: 
+
+
+<!-- ##### FUNCTION gtk_text_buffer_create_mark ##### -->
+<para>
+
+</para>
+
+@buffer: 
+@mark_name: 
+@where: 
+@left_gravity: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_text_buffer_move_mark ##### -->
+<para>
+
+</para>
+
+@buffer: 
+@mark: 
+@where: 
+
+
+<!-- ##### FUNCTION gtk_text_buffer_delete_mark ##### -->
+<para>
+
+</para>
+
+@buffer: 
+@mark: 
+
+
+<!-- ##### FUNCTION gtk_text_buffer_get_mark ##### -->
+<para>
+
+</para>
+
+@buffer: 
+@name: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_text_buffer_place_cursor ##### -->
+<para>
+
+</para>
+
+@buffer: 
+@where: 
+
+
+<!-- ##### FUNCTION gtk_text_buffer_apply_tag ##### -->
+<para>
+
+</para>
+
+@buffer: 
+@tag: 
+@start_index: 
+@end_index: 
+
+
+<!-- ##### FUNCTION gtk_text_buffer_remove_tag ##### -->
+<para>
+
+</para>
+
+@buffer: 
+@tag: 
+@start_index: 
+@end_index: 
+
+
+<!-- ##### FUNCTION gtk_text_buffer_apply_tag_by_name ##### -->
+<para>
+
+</para>
+
+@buffer: 
+@name: 
+@start_index: 
+@end_index: 
+
+
+<!-- ##### FUNCTION gtk_text_buffer_remove_tag_by_name ##### -->
+<para>
+
+</para>
+
+@buffer: 
+@name: 
+@start_index: 
+@end_index: 
+
+
+<!-- ##### FUNCTION gtk_text_buffer_create_tag ##### -->
+<para>
+
+</para>
+
+@buffer: 
+@tag_name: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_text_buffer_get_iter_at_line_offset ##### -->
+<para>
+
+</para>
+
+@buffer: 
+@iter: 
+@line_number: 
+@char_offset: 
+
+
+<!-- ##### FUNCTION gtk_text_buffer_get_iter_at_offset ##### -->
+<para>
+
+</para>
+
+@buffer: 
+@iter: 
+@char_offset: 
+
+
+<!-- ##### FUNCTION gtk_text_buffer_get_iter_at_line ##### -->
+<para>
+
+</para>
+
+@buffer: 
+@iter: 
+@line_number: 
+
+
+<!-- ##### FUNCTION gtk_text_buffer_get_last_iter ##### -->
+<para>
+
+</para>
+
+@buffer: 
+@iter: 
+
+
+<!-- ##### FUNCTION gtk_text_buffer_get_bounds ##### -->
+<para>
+
+</para>
+
+@buffer: 
+@start: 
+@end: 
+
+
+<!-- ##### FUNCTION gtk_text_buffer_get_iter_at_mark ##### -->
+<para>
+
+</para>
+
+@buffer: 
+@iter: 
+@mark: 
+
+
+<!-- ##### FUNCTION gtk_text_buffer_get_tags ##### -->
+<para>
+
+</para>
+
+@buffer: 
+@iter: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_text_buffer_modified ##### -->
+<para>
+
+</para>
+
+@buffer: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_text_buffer_set_modified ##### -->
+<para>
+
+</para>
+
+@buffer: 
+@setting: 
+
+
+<!-- ##### FUNCTION gtk_text_buffer_set_clipboard_contents ##### -->
+<para>
+
+</para>
+
+@buffer: 
+@text: 
+
+
+<!-- ##### FUNCTION gtk_text_buffer_get_clipboard_contents ##### -->
+<para>
+
+</para>
+
+@buffer: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_text_buffer_paste_primary_selection ##### -->
+<para>
+
+</para>
+
+@buffer: 
+@override_location: 
+@time: 
+@interactive: 
+@default_editable: 
+
+
+<!-- ##### FUNCTION gtk_text_buffer_delete_selection ##### -->
+<para>
+
+</para>
+
+@buffer: 
+@interactive: 
+@default_editable: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_text_buffer_cut ##### -->
+<para>
+
+</para>
+
+@buffer: 
+@time: 
+@interactive: 
+@default_editable: 
+
+
+<!-- ##### FUNCTION gtk_text_buffer_copy ##### -->
+<para>
+
+</para>
+
+@buffer: 
+@time: 
+
+
+<!-- ##### FUNCTION gtk_text_buffer_paste_clipboard ##### -->
+<para>
+
+</para>
+
+@buffer: 
+@time: 
+@interactive: 
+@default_editable: 
+
+
+<!-- ##### FUNCTION gtk_text_buffer_get_selection_bounds ##### -->
+<para>
+
+</para>
+
+@buffer: 
+@start: 
+@end: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_text_buffer_find_string ##### -->
+<para>
+
+</para>
+
+@buffer: 
+@iter: 
+@str: 
+@start: 
+@end: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_text_buffer_find_regexp ##### -->
+<para>
+
+</para>
+
+@buffer: 
+@regexp: 
+@start: 
+@end: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_text_buffer_spew ##### -->
+<para>
+
+</para>
+
+@buffer: 
+
+
+<!-- ##### SIGNAL GtkTextBuffer::insert-text ##### -->
+<para>
+
+</para>
+
+@textbuffer: the object which received the signal.
+@arg1: 
+@arg2: 
+@arg3: 
+@arg4: 
+
+<!-- ##### SIGNAL GtkTextBuffer::delete-text ##### -->
+<para>
+
+</para>
+
+@textbuffer: the object which received the signal.
+@arg1: 
+@arg2: 
+@arg3: 
+
+<!-- ##### SIGNAL GtkTextBuffer::changed ##### -->
+<para>
+
+</para>
+
+@textbuffer: the object which received the signal.
+
+<!-- ##### SIGNAL GtkTextBuffer::modified-changed ##### -->
+<para>
+
+</para>
+
+@textbuffer: the object which received the signal.
+
+<!-- ##### SIGNAL GtkTextBuffer::mark-set ##### -->
+<para>
+
+</para>
+
+@textbuffer: the object which received the signal.
+@arg1: 
+@arg2: 
+
+<!-- ##### SIGNAL GtkTextBuffer::mark-deleted ##### -->
+<para>
+
+</para>
+
+@textbuffer: the object which received the signal.
+@arg1: 
+
+<!-- ##### SIGNAL GtkTextBuffer::apply-tag ##### -->
+<para>
+
+</para>
+
+@textbuffer: the object which received the signal.
+@arg1: 
+@arg2: 
+@arg3: 
+
+<!-- ##### SIGNAL GtkTextBuffer::remove-tag ##### -->
+<para>
+
+</para>
+
+@textbuffer: the object which received the signal.
+@arg1: 
+@arg2: 
+@arg3: 
+

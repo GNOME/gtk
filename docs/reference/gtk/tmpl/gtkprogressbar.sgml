@@ -69,6 +69,9 @@ An enumeration representing the styles for drawing the progress bar.
 </tbody></tgroup></informaltable>
 </para>
 
+@GTK_PROGRESS_CONTINUOUS: 
+@GTK_PROGRESS_DISCRETE: 
+
 <!-- ##### ENUM GtkProgressBarOrientation ##### -->
 <para>
 An enumeration representing possible orientations and growth
@@ -101,12 +104,52 @@ directions for the visible progress bar.
 </tbody></tgroup></informaltable>
 </para>
 
+@GTK_PROGRESS_LEFT_TO_RIGHT: 
+@GTK_PROGRESS_RIGHT_TO_LEFT: 
+@GTK_PROGRESS_BOTTOM_TO_TOP: 
+@GTK_PROGRESS_TOP_TO_BOTTOM: 
+
 <!-- ##### FUNCTION gtk_progress_bar_new ##### -->
 <para>
 Creates a new #GtkProgressBar.
 </para>
 
 @Returns: a #GtkProgressBar.
+
+
+<!-- ##### FUNCTION gtk_progress_bar_pulse ##### -->
+<para>
+
+</para>
+
+@pbar: 
+
+
+<!-- ##### FUNCTION gtk_progress_bar_set_text ##### -->
+<para>
+
+</para>
+
+@pbar: 
+@text: 
+
+
+<!-- ##### FUNCTION gtk_progress_bar_set_fraction ##### -->
+<para>
+
+</para>
+
+@pbar: 
+@fraction: 
+
+
+<!-- ##### FUNCTION gtk_progress_bar_set_pulse_step ##### -->
+<para>
+
+</para>
+
+@pbar: 
+@fraction: 
 
 
 <!-- ##### FUNCTION gtk_progress_bar_new_with_adjustment ##### -->
@@ -214,5 +257,15 @@ area in activity mode.
 <para>
 The number of blocks which which make up progress bar
 when it is shown in %GTK_PROGRESS_DISCRETE style.
+</para>
+
+<!-- ##### ARG GtkProgressBar:fraction ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkProgressBar:pulse_step ##### -->
+<para>
+
 </para>
 

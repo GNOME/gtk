@@ -1,0 +1,105 @@
+<!-- ##### SECTION Title ##### -->
+GtkTextTagTable
+
+<!-- ##### SECTION Short_Description ##### -->
+
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### USER_FUNCTION GtkTextTagTableForeach ##### -->
+<para>
+
+</para>
+
+@tag: 
+@data: 
+
+
+<!-- ##### FUNCTION gtk_text_tag_table_new ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_text_tag_table_add ##### -->
+<para>
+
+</para>
+
+@table: 
+@tag: 
+
+
+<!-- ##### FUNCTION gtk_text_tag_table_remove ##### -->
+<para>
+
+</para>
+
+@table: 
+@tag: 
+
+
+<!-- ##### FUNCTION gtk_text_tag_table_lookup ##### -->
+<para>
+
+</para>
+
+@table: 
+@name: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_text_tag_table_foreach ##### -->
+<para>
+
+</para>
+
+@table: 
+@func: 
+@data: 
+
+
+<!-- ##### FUNCTION gtk_text_tag_table_size ##### -->
+<para>
+
+</para>
+
+@table: 
+@Returns: 
+
+
+<!-- ##### SIGNAL GtkTextTagTable::tag-changed ##### -->
+<para>
+
+</para>
+
+@texttagtable: the object which received the signal.
+@arg1: 
+@arg2: 
+
+<!-- ##### SIGNAL GtkTextTagTable::tag-added ##### -->
+<para>
+
+</para>
+
+@texttagtable: the object which received the signal.
+@arg1: 
+
+<!-- ##### SIGNAL GtkTextTagTable::tag-removed ##### -->
+<para>
+
+</para>
+
+@texttagtable: the object which received the signal.
+@arg1: 
+

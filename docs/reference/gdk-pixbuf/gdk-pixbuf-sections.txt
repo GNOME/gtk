@@ -1,9 +1,25 @@
 <INCLUDE>gdk-pixbuf/gdk-pixbuf.h</INCLUDE>
 
 <SECTION>
+<TITLE>Initialization and Versions</TITLE>
+<FILE>initialization_versions</FILE>
+gdk_pixbuf_init
+gdk_pixbuf_preinit
+gdk_pixbuf_postinit
+
+<SUBSECTION>
+gdk_pixbuf_version
+GDK_PIXBUF_VERSION
+GDK_PIXBUF_MAJOR
+GDK_PIXBUF_MINOR
+GDK_PIXBUF_MICRO
+</SECTION>
+
+<SECTION>
 <FILE>gdk-pixbuf</FILE>
 GdkColorspace
 GdkPixbuf
+GdkPixbufClass
 gdk_pixbuf_get_colorspace
 gdk_pixbuf_get_n_channels
 gdk_pixbuf_get_has_alpha
@@ -12,16 +28,24 @@ gdk_pixbuf_get_pixels
 gdk_pixbuf_get_width
 gdk_pixbuf_get_height
 gdk_pixbuf_get_rowstride
+
+<SUBSECTION Standard>
+GDK_PIXBUF
+GDK_TYPE_PIXBUF
+GDK_IS_PIXBUF
+GDK_IS_PIXBUF_CLASS
+GDK_PIXBUF_CLASS
+GDK_PIXBUF_GET_CLASS
+
+<SUBSECTION Private>
+gdk_pixbuf_get_type
 </SECTION>
 
 <SECTION>
 <FILE>refcounting</FILE>
 GdkPixbufDestroyNotify
-GdkPixbufLastUnref
 gdk_pixbuf_ref
 gdk_pixbuf_unref
-gdk_pixbuf_set_last_unref_handler
-gdk_pixbuf_finalize
 </SECTION>
 
 <SECTION>
@@ -38,20 +62,6 @@ gdk_pixbuf_copy
 </SECTION>
 
 <SECTION>
-<FILE>rendering</FILE>
-GdkPixbufAlphaMode
-gdk_pixbuf_render_to_drawable_alpha
-gdk_pixbuf_render_to_drawable
-gdk_pixbuf_render_threshold_alpha
-gdk_pixbuf_render_pixmap_and_mask
-</SECTION>
-
-<SECTION>
-<FILE>from-drawables</FILE>
-gdk_pixbuf_get_from_drawable
-</SECTION>
-
-<SECTION>
 <FILE>util</FILE>
 gdk_pixbuf_add_alpha
 gdk_pixbuf_copy_area
@@ -62,6 +72,7 @@ gdk_pixbuf_copy_area
 GdkPixbufFrameAction
 GdkPixbufFrame
 GdkPixbufAnimation
+GdkPixbufAnimationClass
 gdk_pixbuf_animation_new_from_file
 gdk_pixbuf_animation_ref
 gdk_pixbuf_animation_unref
@@ -74,6 +85,17 @@ gdk_pixbuf_frame_get_action
 gdk_pixbuf_frame_get_y_offset
 gdk_pixbuf_frame_get_delay_time
 gdk_pixbuf_frame_get_x_offset
+
+<SUBSECTION Standard>
+GDK_PIXBUF_ANIMATION
+GDK_PIXBUF_ANIMATION_CLASS
+GDK_TYPE_PIXBUF_ANIMATION
+GDK_PIXBUF_ANIMATION_GET_CLASS
+GDK_IS_PIXBUF_ANIMATION_CLASS
+GDK_IS_PIXBUF_ANIMATION
+
+<SUBSECTION Private>
+gdk_pixbuf_animation_get_type
 </SECTION>
 
 <SECTION>
@@ -88,33 +110,34 @@ gdk_pixbuf_composite_color_simple
 
 <SECTION>
 <FILE>gdk-pixbuf-loader</FILE>
-GDK_PIXBUF_LOADER
 <TITLE>GdkPixbufLoader</TITLE>
 gdk_pixbuf_loader_new
+gdk_pixbuf_loader_new_with_type
 gdk_pixbuf_loader_write
 gdk_pixbuf_loader_get_pixbuf
 gdk_pixbuf_loader_get_animation
 gdk_pixbuf_loader_close
 <SUBSECTION Standard>
+GDK_PIXBUF_LOADER
+GDK_PIXBUF_LOADER_GET_CLASS
 GDK_TYPE_PIXBUF_LOADER
 GDK_IS_PIXBUF_LOADER
-gdk_pixbuf_loader_get_type
 GDK_PIXBUF_LOADER_CLASS
 GDK_IS_PIXBUF_LOADER_CLASS
 <SUBSECTION Private>
 GdkPixbufLoader
+gdk_pixbuf_loader_get_type
 </SECTION>
 
 <SECTION>
-<FILE>gnome-canvas-pixbuf</FILE>
-GNOME_CANVAS_PIXBUF
-<TITLE>GnomeCanvasPixbuf</TITLE>
-<SUBSECTION Standard>
-GNOME_TYPE_CANVAS_PIXBUF
-GNOME_IS_CANVAS_PIXBUF
-gnome_canvas_pixbuf_get_type
-GNOME_CANVAS_PIXBUF_CLASS
-GNOME_IS_CANVAS_PIXBUF_CLASS
-<SUBSECTION Private>
-GnomeCanvasPixbuf
+<TITLE>Module Interface</TITLE>
+<FILE>module_interface</FILE>
+ModulePreparedNotifyFunc
+ModuleUpdatedNotifyFunc
+ModuleFrameDoneNotifyFunc
+ModuleAnimationDoneNotifyFunc
+GdkPixbufModule
+gdk_pixbuf_get_module
+gdk_pixbuf_get_named_module
+gdk_pixbuf_load_module
 </SECTION>

@@ -61,3 +61,48 @@ Checks that the GTK+ library in use is compatable with the given version.
 a string describing the version mismatch.
 
 
+<!-- ##### MACRO GTK_MAJOR_VERSION ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO GTK_MINOR_VERSION ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO GTK_MICRO_VERSION ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO GTK_BINARY_AGE ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO GTK_INTERFACE_AGE ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO GTK_CHECK_VERSION ##### -->
+<para>
+
+</para>
+
+@major: 
+@minor: 
+@micro: 
+
+

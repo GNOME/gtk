@@ -226,28 +226,6 @@ Keyboard Accelerators
 @Returns: 
 
 
-<!-- ##### FUNCTION gtk_accel_group_marshal_add ##### -->
-<para>
-
-</para>
-
-@object: 
-@func: 
-@func_data: 
-@args: 
-
-
-<!-- ##### FUNCTION gtk_accel_group_marshal_remove ##### -->
-<para>
-
-</para>
-
-@object: 
-@func: 
-@func_data: 
-@args: 
-
-
 <!-- ##### FUNCTION gtk_accel_groups_from_object ##### -->
 <para>
 

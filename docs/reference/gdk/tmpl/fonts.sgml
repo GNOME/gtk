@@ -356,6 +356,15 @@ assumptions about the initial reference count.
 @Returns: a #GdkFont, or NULL if the fontset could not be loaded.
 
 
+<!-- ##### FUNCTION gdk_font_from_description ##### -->
+<para>
+
+</para>
+
+@font_desc: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gdk_font_ref ##### -->
 <para>
 Increase the reference count of a count by one.
@@ -577,6 +586,23 @@ relation to the baseline. See gdk_text_extents().
 @font: a #GdkFont
 @character: the character to measure.
 @Returns: the height of the character in pixels.
+
+
+<!-- ##### FUNCTION gdk_font_full_name_get ##### -->
+<para>
+
+</para>
+
+@font: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_font_full_name_free ##### -->
+<para>
+
+</para>
+
+@name: 
 
 
 <!-- ##### TYPEDEF GdkWChar ##### -->

@@ -9,63 +9,71 @@ DOC_MAIN_SGML_FILE=gdk-pixbuf.sgml
 # The directory containing the source code (if it contains documentation).
 DOC_SOURCE_DIR=$(GDK_PIXBUF_DIR)/gdk-pixbuf
 
-CFLAGS=`gnome-config --cflags gnomeui gdk_pixbuf gnomecanvaspixbuf`
-LDFLAGS=`gnome-config --libs gnomeui gdk_pixbuf gnomecanvaspixbuf`
+# Extra options to supply to gtkdoc-fixref
+FIXXREF_OPTIONS=
 
-HTML_DIR=$(datadir)/gnome/html
+# Header files to ignore when scanning
+IGNORE_HFILES=pixops.h pixops-internal.h
 
-TARGET_DIR=$(HTML_DIR)/$(DOC_MODULE)
+# Extra files to add when scanning
+EXTRA_HFILES=			\
+	$(top_srcdir)/gtk/gdk-pixbuf-loader.h
+
+# CFLAGS and LDFLAGS for compiling scan program
+CFLAGS=
+LDFLAGS=
 
 tmpl_sources =					\
 	tmpl/animation.sgml			\
 	tmpl/creating.sgml			\
 	tmpl/file-loading.sgml			\
-	tmpl/from-drawables.sgml		\
 	tmpl/gdk-pixbuf-loader.sgml		\
 	tmpl/gdk-pixbuf-unused.sgml		\
 	tmpl/gdk-pixbuf.sgml			\
-	tmpl/gnome-canvas-pixbuf.sgml		\
+	tmpl/initialization_versions.sgml	\
+	tmpl/module_interface.sgml		\
 	tmpl/refcounting.sgml			\
-	tmpl/rendering.sgml			\
 	tmpl/scaling.sgml			\
 	tmpl/util.sgml
 
-gdk_pixbuf_docdir = $(HTML_DIR)
-gdk_pixbuf_doc_DATA =			\
-	gdk-pixbuf.html			\
-	gdk-pixbuf.hierarchy		\
-	gdk-pixbuf.types		\
-	gdk-pixbuf-decl.txt		\
-	gdk-pixbuf-sections.txt
-
+# Extra SGML files that are included by DOC_MAIN_SGML_FILE
 content_files =				\
 	compiling.sgml			\
 	gdk-pixbuf.sgml
 
+####################################
+# Everything below here is generic #
+####################################
+
+TARGET_DIR=$(HTML_DIR)/$(DOC_MODULE)
+
 EXTRA_DIST = 				\
-	$(gdk_pixbuf_doc_DATA)		\
-	$(content_files)
+	$(DOC_MAIN_SGML_FILE)		\
+	$(content_files)		\
+	$(DOC_MODULE)-sections.txt	\
+	$(DOC_MODULE)-overrides.txt
 
 if ENABLE_GTK_DOC
-gdk-pixbuf.html: html/book1.html
-	-cd $(srcdir) && cp html/book1.html gdk-pixbuf.html
-else
-gdk-pixbuf.html:
-endif
+all-local: html/index.html
 
-html/book1.html: sgml/gdk-pixbuf-doc.bottom $(content_files)
-	$(MAKE) html
+$(DOC_MODULE)-decl.txt: 
+	$(MAKE) scan
 
-sgml/gdk-pixbuf-doc.bottom: $(tmpl_sources)
+$(tmpl_sources): $(DOC_MODULE)-decl.txt $(DOC_MODULE)-sections.txt $(DOC_MODULE)-overrides.txt
+	$(MAKE) templates
+
+sgml/$(DOC_MODULE)-doc.bottom: $(tmpl_sources) $(DOC_MODULE)-decl.txt
 	$(MAKE) sgml
+
+html/index.html: sgml/$(DOC_MODULE)-doc.bottom $(DOC_MAIN_SGML_FILE) $(content_fiels)
+	$(MAKE) html
+endif
 
 scan:
 	-(cd $(srcdir) \
-	&& env CFLAGS=$(CFLAGS) LDFLAGS=$(LDFLAGS) \
-		 gtkdoc-scanobj --module=$(DOC_MODULE) \
-	&& gtkdoc-scan --module=$(DOC_MODULE) --source-dir=$(DOC_SOURCE_DIR) --ignore-headers="pixops.h pixops-internal.h" )
+	&& gtkdoc-scan --module=$(DOC_MODULE) --source-dir=$(DOC_SOURCE_DIR) --ignore-headers="$(IGNORE_HFILES)" $(EXTRA_HFILES))
 
-templates: scan
+templates: 
 	cd $(srcdir) && gtkdoc-mktmpl --module=$(DOC_MODULE)
 
 sgml:
@@ -75,6 +83,8 @@ sgml:
 html:
 	test -d $(srcdir)/html || mkdir $(srcdir)/html
 	-cd $(srcdir)/html && gtkdoc-mkhtml $(DOC_MODULE) ../$(DOC_MAIN_SGML_FILE)
+	@echo '-- Fixing Crossreferences' 
+	gtkdoc-fixxref --module-dir=html --html-dir=$(HTML_DIR) $(FIXXREF_OPTIONS)
 
 clean-local:
 	rm -f *~ *.bak *.signals *-unused.txt
@@ -94,11 +104,20 @@ install-data-local:
 	  done; \
 	  echo '-- Installing $(srcdir)/html/index.sgml' ; \
 	  $(INSTALL_DATA) $(srcdir)/html/index.sgml $(DESTDIR)$(TARGET_DIR); \
-	  echo '-- Fixing Crossreferences' ; \
-	  gtkdoc-fixxref --module=$(DOC_MODULE) --html-dir=$(HTML_DIR)|| true; \
 	fi)
 
-dist-hook:
+#
+# Require gtk-doc when making dist
+#
+if ENABLE_GTK_DOC
+dist-check-gtkdoc:
+else
+dist-check-gtkdoc:
+	@echo "*** gtk-doc must be installed and enabled in order to make dist
+	@false
+endif
+
+dist-hook: dist-check-gtkdoc
 	mkdir $(distdir)/html
 	mkdir $(distdir)/sgml
 	mkdir $(distdir)/tmpl

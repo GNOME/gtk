@@ -1,0 +1,315 @@
+<!-- ##### SECTION Title ##### -->
+GtkTextView
+
+<!-- ##### SECTION Short_Description ##### -->
+
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### STRUCT GtkTextView ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ENUM GtkTextViewMovementStep ##### -->
+<para>
+
+</para>
+
+@GTK_TEXT_MOVEMENT_CHAR: 
+@GTK_TEXT_MOVEMENT_POSITIONS: 
+@GTK_TEXT_MOVEMENT_WORD: 
+@GTK_TEXT_MOVEMENT_WRAPPED_LINE: 
+@GTK_TEXT_MOVEMENT_LINE: 
+@GTK_TEXT_MOVEMENT_LINE_ENDS: 
+@GTK_TEXT_MOVEMENT_BUFFER_ENDS: 
+
+<!-- ##### ENUM GtkTextViewScrollType ##### -->
+<para>
+
+</para>
+
+@GTK_TEXT_SCROLL_TO_TOP: 
+@GTK_TEXT_SCROLL_TO_BOTTOM: 
+@GTK_TEXT_SCROLL_PAGE_DOWN: 
+@GTK_TEXT_SCROLL_PAGE_UP: 
+
+<!-- ##### ENUM GtkTextViewDeleteType ##### -->
+<para>
+
+</para>
+
+@GTK_TEXT_DELETE_CHAR: 
+@GTK_TEXT_DELETE_HALF_WORD: 
+@GTK_TEXT_DELETE_WHOLE_WORD: 
+@GTK_TEXT_DELETE_HALF_WRAPPED_LINE: 
+@GTK_TEXT_DELETE_WHOLE_WRAPPED_LINE: 
+@GTK_TEXT_DELETE_HALF_LINE: 
+@GTK_TEXT_DELETE_WHOLE_LINE: 
+@GTK_TEXT_DELETE_WHITESPACE: 
+@GTK_TEXT_DELETE_WHITESPACE_LEAVE_ONE: 
+
+<!-- ##### FUNCTION gtk_text_view_new ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_text_view_new_with_buffer ##### -->
+<para>
+
+</para>
+
+@buffer: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_text_view_set_buffer ##### -->
+<para>
+
+</para>
+
+@text_view: 
+@buffer: 
+
+
+<!-- ##### FUNCTION gtk_text_view_get_buffer ##### -->
+<para>
+
+</para>
+
+@text_view: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_text_view_get_iter_at_pixel ##### -->
+<para>
+
+</para>
+
+@text_view: 
+@iter: 
+@x: 
+@y: 
+
+
+<!-- ##### FUNCTION gtk_text_view_scroll_to_mark ##### -->
+<para>
+
+</para>
+
+@text_view: 
+@mark: 
+@mark_within_margin: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_text_view_move_mark_onscreen ##### -->
+<para>
+
+</para>
+
+@text_view: 
+@mark: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_text_view_place_cursor_onscreen ##### -->
+<para>
+
+</para>
+
+@text_view: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_text_view_get_visible_rect ##### -->
+<para>
+
+</para>
+
+@text_view: 
+@visible_rect: 
+
+
+<!-- ##### FUNCTION gtk_text_view_set_wrap_mode ##### -->
+<para>
+
+</para>
+
+@text_view: 
+@wrap_mode: 
+
+
+<!-- ##### FUNCTION gtk_text_view_get_wrap_mode ##### -->
+<para>
+
+</para>
+
+@text_view: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_text_view_set_editable ##### -->
+<para>
+
+</para>
+
+@text_view: 
+@setting: 
+
+
+<!-- ##### FUNCTION gtk_text_view_get_editable ##### -->
+<para>
+
+</para>
+
+@text_view: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_text_view_set_cursor_visible ##### -->
+<para>
+
+</para>
+
+@text_view: 
+@setting: 
+
+
+<!-- ##### FUNCTION gtk_text_view_get_cursor_visible ##### -->
+<para>
+
+</para>
+
+@text_view: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_text_view_get_iter_location ##### -->
+<para>
+
+</para>
+
+@text_view: 
+@iter: 
+@location: 
+
+
+<!-- ##### SIGNAL GtkTextView::move-insert ##### -->
+<para>
+
+</para>
+
+@textview: the object which received the signal.
+@arg1: 
+@arg2: 
+@arg3: 
+
+<!-- ##### SIGNAL GtkTextView::set-anchor ##### -->
+<para>
+
+</para>
+
+@textview: the object which received the signal.
+
+<!-- ##### SIGNAL GtkTextView::scroll-text ##### -->
+<para>
+
+</para>
+
+@textview: the object which received the signal.
+@arg1: 
+
+<!-- ##### SIGNAL GtkTextView::delete-text ##### -->
+<para>
+
+</para>
+
+@textview: the object which received the signal.
+@arg1: 
+@arg2: 
+
+<!-- ##### SIGNAL GtkTextView::cut-text ##### -->
+<para>
+
+</para>
+
+@textview: the object which received the signal.
+
+<!-- ##### SIGNAL GtkTextView::copy-text ##### -->
+<para>
+
+</para>
+
+@textview: the object which received the signal.
+
+<!-- ##### SIGNAL GtkTextView::paste-text ##### -->
+<para>
+
+</para>
+
+@textview: the object which received the signal.
+
+<!-- ##### SIGNAL GtkTextView::toggle-overwrite ##### -->
+<para>
+
+</para>
+
+@textview: the object which received the signal.
+
+<!-- ##### SIGNAL GtkTextView::set-scroll-adjustments ##### -->
+<para>
+
+</para>
+
+@textview: the object which received the signal.
+@arg1: 
+@arg2: 
+
+<!-- ##### ARG GtkTextView:height_lines ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTextView:width_columns ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTextView:pixels_above_lines ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTextView:pixels_below_lines ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTextView:pixels_inside_wrap ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTextView:editable ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTextView:wrap_mode ##### -->
+<para>
+
+</para>
+

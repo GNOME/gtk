@@ -13,7 +13,6 @@ instant exactly one of the radio menu items from a group is selected.
 The correct way to create a group of radio menu items is aproximativly
 this:
 </para>
-<para>
 <example>
 <title>How to create a group of radio menu items.</title>
 <programlisting>

@@ -142,7 +142,7 @@ Used for packing widgets into #GtkBox widgets. (See also: #GtkVBox,
 #GtkHBox, and #GtkButtonBox).
 </para>
 
-@GTK_PACK_START: The 
+@GTK_PACK_START: The
 @GTK_PACK_END: 
 
 <!-- ##### ENUM GtkPathPriorityType ##### -->
@@ -244,7 +244,7 @@ Used to change the appearance of an outline typically provided by a #GtkFrame.
 @GTK_SHADOW_IN: The outline is bevelled inwards.
 @GTK_SHADOW_OUT: The outline is bevelled outwards like a button.
 @GTK_SHADOW_ETCHED_IN: The outline itself is an inward bevel, but the frame
-does 
+does
 @GTK_SHADOW_ETCHED_OUT: 
 
 <!-- ##### ENUM GtkStateType ##### -->
@@ -283,6 +283,7 @@ Used to customize the appearance of a #GtkToolbar.
 @GTK_TOOLBAR_ICONS: Buttons should display only icons in the toolbar.
 @GTK_TOOLBAR_TEXT: Buttons should display only text labels in the toolbar.
 @GTK_TOOLBAR_BOTH: Buttons should display text and icons in the toolbar.
+@GTK_TOOLBAR_BOTH_HORIZ: 
 
 <!-- ##### ENUM GtkTroughType ##### -->
 <para>
@@ -320,6 +321,7 @@ Window placement can be influenced using this enumeration.
 @GTK_WIN_POS_NONE: No influence is made on placement.
 @GTK_WIN_POS_CENTER: Windows should be placed in the center of the screen.
 @GTK_WIN_POS_MOUSE: Windows should be placed at the current mouse position.
+@GTK_WIN_POS_CENTER_ALWAYS: 
 
 <!-- ##### ENUM GtkWindowType ##### -->
 <para>

@@ -6,54 +6,148 @@ DOC_MODULE=gtk
 # The top-level SGML file.
 DOC_MAIN_SGML_FILE=gtk-docs.sgml
 
-# We could alternatively use this for using installed headers.
-INCLUDE_DIR=`gtk-config --prefix`/include/gtk
+# The directory containing the source code
+DOC_SOURCE_DIR=$(top_srcdir)/gtk
 
+# Extra options to supply to gtkdoc-fixref
+FIXXREF_OPTIONS=--extra-dir=../gdk-pixbuf/html --extra-dir=../gdk/html
+
+# Header files to ignore when scanning
+IGNORE_HFILES=			\
+	fnmatch.h		\
+	gdk-pixbuf-loader.h	\
+	gtkdebug.h		\
+	gtkhsv.h		\
+	gtkimcontextsimple.h	\
+	gtkintl.h		\
+	gtkprivate.h		\
+	gtktextbtree.h		\
+	gtktextchild.h		\
+	gtktextdisplay.h	\
+	gtktextiterprivate.h	\
+	gtktextlayout.h		\
+	gtktextmarkprivate.h	\
+	gtktextsegment.h	\
+	gtktexttagprivate.h	\
+	gtktexttypes.h		\
+	gtktypebuiltins.h
+
+GTKDOC_CFLAGS = @STRIP_BEGIN@ 				\
+	@CFLAGS@					\
+	-I$(top_srcdir) 				\
+	-I$(top_builddir)/gdk				\
+	-DGTK_DISABLE_COMPAT_H				\
+	@GTK_DEBUG_FLAGS@				\
+	@GTK_XIM_FLAGS@					\
+	@GTK_LOCALE_FLAGS@				\
+	@PANGO_CFLAGS@					\
+	@GLIB_CFLAGS@					\
+	@more_cflags@					\
+@STRIP_END@
+
+GTKDOC_LIBS = @STRIP_BEGIN@ 				\
+	$(top_builddir)/gdk-pixbuf/libgdk_pixbuf-1.3.la	\
+	$(top_builddir)/gdk/@gdktargetlib@        	\
+	$(top_builddir)/gtk/@gtktargetlib@ 		\
+	@more_ldflags@					\
+	@more_libs@					\
+	@GDK_WLIBS@					\
+	@PANGO_LIBS@					\
+	@GLIB_LIBS@					\
+	@GTK_LIBS_EXTRA@				\
+	-lm						\
+@STRIP_END@
+
+GTKDOC_CC=$(LIBTOOL) --mode=compile $(CC)
+GTKDOC_LD=$(LIBTOOL) --mode=link $(CC)
+
+content_files = 		\
+	objects_grouped.sgml
+
+####################################
+# Everything below here is generic #
+####################################
 
 TARGET_DIR=$(HTML_DIR)/$(DOC_MODULE)
 
-CFLAGS=`gtk-config --cflags`
-LDFLAGS=`gtk-config --libs`
+EXTRA_DIST = 				\
+	$(DOC_MAIN_SGML_FILE)		\
+	$(content_files)		\
+	$(DOC_MODULE)-sections.txt	\
+	$(DOC_MODULE)-overrides.txt
+
+if ENABLE_GTK_DOC
+all-local: html/index.html
+
+$(DOC_MODULE)-decl.txt: 
+	$(MAKE) scan
+
+$(tmpl_sources): $(DOC_MODULE)-decl.txt $(DOC_MODULE)-sections.txt $(DOC_MODULE)-overrides.txt
+	$(MAKE) templates
+
+sgml/$(DOC_MODULE)-doc.bottom: $(tmpl_sources) $(DOC_MODULE)-decl.txt
+	$(MAKE) sgml
+
+html/index.html: sgml/$(DOC_MODULE)-doc.bottom $(DOC_MAIN_SGML_FILE) $(content_fiels)
+	$(MAKE) html
+endif
 
 scan:
-	CFLAGS=$(CFLAGS) LDFLAGS=$(LDFLAGS) gtkdoc-scanobj --module=$(DOC_MODULE)
-	gtkdoc-scan --module=$(DOC_MODULE) --ignore-headers='gtkintl.h' $(INCLUDE_DIR)/*.h
+	(cd $(srcdir) \
+	&& CC="$(GTKDOC_CC)" LD="$(GTKDOC_LD)" CFLAGS="$(GTKDOC_CFLAGS)" LDFLAGS="$(GTKDOC_LIBS)" gtkdoc-scangobj --module=$(DOC_MODULE) \
+	&& gtkdoc-scan --module=$(DOC_MODULE) --source-dir=$(DOC_SOURCE_DIR) --ignore-headers="$(IGNORE_HFILES)" $(EXTRA_HFILES))
 
-templates: scan
-	gtkdoc-mktmpl --module=$(DOC_MODULE)
+templates: 
+	cd $(srcdir) && gtkdoc-mktmpl --module=$(DOC_MODULE)
 
 sgml:
-	gtkdoc-mkdb --module=$(DOC_MODULE)
+	cd $(srcdir) \
+	&& gtkdoc-mkdb --module=$(DOC_MODULE) --source-dir=$(DOC_SOURCE_DIR)
 
 html:
-	if ! test -d html ; then mkdir html ; fi
-	-cd html && gtkdoc-mkhtml $(DOC_MODULE) ../$(DOC_MAIN_SGML_FILE)
+	test -d $(srcdir)/html || mkdir $(srcdir)/html
+	-cd $(srcdir)/html && gtkdoc-mkhtml $(DOC_MODULE) ../$(DOC_MAIN_SGML_FILE)
+	@echo '-- Fixing Crossreferences' 
+	gtkdoc-fixxref --module-dir=html --html-dir=$(HTML_DIR) $(FIXXREF_OPTIONS)
 
 clean-local:
-	rm -f *~ *.bak *.hierarchy *.signals *.args *-unused.txt
+	rm -f *~ *.bak *.signals *-unused.txt
 
 maintainer-clean-local: clean
-	rm -rf sgml html $(DOC_MODULE)-decl-list.txt $(DOC_MODULE)-decl.txt 
+	cd $(srcdir) && rm -rf sgml html $(DOC_MODULE)-decl-list.txt $(DOC_MODULE)-decl.txt
 
 install-data-local:
-	install -d -m 0755 $(TARGET_DIR)
-	install -m 0644 html/*.html $(TARGET_DIR)
-	install -m 0644 html/index.sgml $(TARGET_DIR)
-	gtkdoc-fixxref --module=$(DOC_MODULE) --html-dir=$(HTML_DIR)
+	$(mkinstalldirs) $(DESTDIR)$(TARGET_DIR)
+	(installfiles=`echo $(srcdir)/html/*.html`; \
+	if test "$$installfiles" = '$(srcdir)/html/*.html'; \
+	then echo '-- Nothing to install' ; \
+	else \
+	  for i in $$installfiles; do \
+	    echo '-- Installing '$$i ; \
+	    $(INSTALL_DATA) $$i $(DESTDIR)$(TARGET_DIR); \
+	  done; \
+	  echo '-- Installing $(srcdir)/html/index.sgml' ; \
+	  $(INSTALL_DATA) $(srcdir)/html/index.sgml $(DESTDIR)$(TARGET_DIR); \
+	fi)
 
-EXTRA_DIST = \
-	$(DOC_MAIN_SGML_FILE) \
-	$(DOC_MODULE)-sections.txt \
-	gtk-overrides.txt \
-	gtk-decl.txt \
-	gtk.hierarchy \
-	gtk.signals \
-	gtk.args \
-	gtk.types \
-	objects_grouped.sgml
+#
+# Require gtk-doc when making dist
+#
+if ENABLE_GTK_DOC
+dist-check-gtkdoc:
+else
+dist-check-gtkdoc:
+	@echo "*** gtk-doc must be installed and enabled in order to make dist
+	@false
+endif
 
-dist-hook:
+dist-hook: dist-check-gtkdoc
+	mkdir $(distdir)/html
+	mkdir $(distdir)/sgml
 	mkdir $(distdir)/tmpl
-	cp -p tmpl/*.sgml $(distdir)/tmpl
+	-cp $(srcdir)/html/*.html $(srcdir)/html/*.css $(distdir)/html
+	-cp $(srcdir)/tmpl/*.sgml $(distdir)/tmpl
+	-cp $(srcdir)/sgml/*.sgml $(distdir)/sgml
+	-cp $(srcdir)/sgml/*.bottom $(srcdir)/sgml/*.top $(distdir)/sgml
 
 .PHONY : html sgml templates scan

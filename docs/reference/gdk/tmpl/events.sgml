@@ -81,6 +81,7 @@ has changed.
 @GDK_VISIBILITY_NOTIFY: the window visibility status has changed.
 @GDK_NO_EXPOSE: indicates that the source region was completely available
 when parts of a drawable were copied. This is not very useful.
+@GDK_SCROLL: 
 
 <!-- ##### ENUM GdkEventMask ##### -->
 <para>
@@ -118,6 +119,7 @@ events when the application asks for them, by calling gdk_window_get_pointer().
 @GDK_PROXIMITY_IN_MASK: 
 @GDK_PROXIMITY_OUT_MASK: 
 @GDK_SUBSTRUCTURE_MASK: 
+@GDK_SCROLL_MASK: 
 @GDK_ALL_EVENTS_MASK: the combination of all the above event masks.
 
 <!-- ##### MACRO GDK_CURRENT_TIME ##### -->
@@ -131,6 +133,13 @@ Represents the current time, and can be used anywhere a time is expected.
 <para>
 This is the priority that events from the X server are given in the
 <link linkend="glib-The-Main-Event-Loop">GLib Main Loop</link>.
+</para>
+
+
+
+<!-- ##### MACRO GDK_PRIORITY_REDRAW ##### -->
+<para>
+
 </para>
 
 
@@ -215,6 +224,17 @@ Gets the timestamp from a #GdkEvent.
 @event: a #GdkEvent.
 @Returns: the timestamp from @event, or #GDK_CURRENT_TIME if the event has
 no timestamp.
+
+
+<!-- ##### FUNCTION gdk_event_get_axis ##### -->
+<para>
+
+</para>
+
+@event: 
+@axis_use: 
+@value: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gdk_event_handler_set ##### -->

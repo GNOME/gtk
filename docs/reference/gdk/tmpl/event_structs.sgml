@@ -143,21 +143,33 @@ must also occur within 1/2 second of the first button press.
 @time: the time of the event in milliseconds.
 @x: the x coordinate of the mouse relative to the window.
 @y: the y coordinate of the mouse relative to the window.
-@pressure: the pressure of the button press, intended for input devices such
-as graphics tablets. It defaults to 0.5.
-@xtilt: the horizontal tilt of the input device. Defaults to 0.
-@ytilt: the vertical tilt of the input device. Defaults to 0.
+@axes: 
 @state: a bit-mask representing the state of the modifier keys (e.g. Control,
 Shift and Alt) and the pointer buttons. See #GdkModifierType.
 @button: the button which was pressed or released, numbered from 1 to 5.
 Normally button 1 is the left mouse button, 2 is the middle button,
 and 3 is the right button. On 2-button mice, the middle button can often
 be simulated by pressing both mouse buttons together.
-@source: the input device where the event came from, usually %GDK_SOURCE_MOUSE.
-@deviceid: the input device ID, usually %GDK_CORE_POINTER but may be
-different if touch screens or graphics tablets are being used.
+@device: 
 @x_root: the x coordinate of the mouse relative to the root of the screen.
 @y_root: the y coordinate of the mouse relative to the root of the screen.
+
+<!-- ##### STRUCT GdkEventScroll ##### -->
+<para>
+
+</para>
+
+@type: 
+@window: 
+@send_event: 
+@time: 
+@x: 
+@y: 
+@state: 
+@direction: 
+@device: 
+@x_root: 
+@y_root: 
 
 <!-- ##### STRUCT GdkEventMotion ##### -->
 <para>
@@ -170,13 +182,10 @@ different if touch screens or graphics tablets are being used.
 @time: 
 @x: 
 @y: 
-@pressure: 
-@xtilt: 
-@ytilt: 
+@axes: 
 @state: 
 @is_hint: 
-@source: 
-@deviceid: 
+@device: 
 @x_root: 
 @y_root: 
 
@@ -206,15 +215,6 @@ Generated when the window visibility status has changed.
 @state: the new visibility state (%GDK_VISIBILITY_FULLY_OBSCURED,
 %GDK_VISIBILITY_PARTIAL or %GDK_VISIBILITY_UNOBSCURED).
 
-<!-- ##### ENUM GdkVisibilityState ##### -->
-<para>
-Specifies the visiblity status of a window for a #GdkEventVisibility.
-</para>
-
-@GDK_VISIBILITY_UNOBSCURED: the window is completely visible.
-@GDK_VISIBILITY_PARTIAL: the window is partially visible.
-@GDK_VISIBILITY_FULLY_OBSCURED: the window is not visible at all.
-
 <!-- ##### STRUCT GdkEventCrossing ##### -->
 <para>
 
@@ -233,27 +233,6 @@ Specifies the visiblity status of a window for a #GdkEventVisibility.
 @detail: 
 @focus: 
 @state: 
-
-<!-- ##### ENUM GdkCrossingMode ##### -->
-<para>
-
-</para>
-
-@GDK_CROSSING_NORMAL: 
-@GDK_CROSSING_GRAB: 
-@GDK_CROSSING_UNGRAB: 
-
-<!-- ##### ENUM GdkNotifyType ##### -->
-<para>
-
-</para>
-
-@GDK_NOTIFY_ANCESTOR: 
-@GDK_NOTIFY_VIRTUAL: 
-@GDK_NOTIFY_INFERIOR: 
-@GDK_NOTIFY_NONLINEAR: 
-@GDK_NOTIFY_NONLINEAR_VIRTUAL: 
-@GDK_NOTIFY_UNKNOWN: 
 
 <!-- ##### STRUCT GdkEventFocus ##### -->
 <para>
@@ -292,14 +271,6 @@ Describes a property change on a window.
 @state: whether the property was changed (%GDK_PROPERTY_NEW_VALUE) or
 deleted (%GDK_PROPERTY_DELETE).
 
-<!-- ##### ENUM GdkPropertyState ##### -->
-<para>
-Specifies the type of a property change for a #GdkEventProperty.
-</para>
-
-@GDK_PROPERTY_NEW_VALUE: the property value wan changed.
-@GDK_PROPERTY_DELETE: the property was deleted.
-
 <!-- ##### STRUCT GdkEventSelection ##### -->
 <para>
 
@@ -311,8 +282,14 @@ Specifies the type of a property change for a #GdkEventProperty.
 @selection: 
 @target: 
 @property: 
-@requestor: 
 @time: the time of the event in milliseconds.
+@requestor: 
+
+<!-- ##### TYPEDEF GdkNativeWindow ##### -->
+<para>
+
+</para>
+
 
 <!-- ##### STRUCT GdkEventDND ##### -->
 <para>
@@ -336,8 +313,7 @@ Specifies the type of a property change for a #GdkEventProperty.
 @window: the window which received the event.
 @send_event: TRUE if the event was sent explicitly (e.g. using XSendEvent).
 @time: the time of the event in milliseconds.
-@source: 
-@deviceid: 
+@device: 
 
 <!-- ##### STRUCT GdkEventClient ##### -->
 <para>
@@ -365,4 +341,52 @@ FIXME: add more here.
 @type: the type of the event (%GDK_NO_EXPOSE).
 @window: the window which received the event.
 @send_event: TRUE if the event was sent explicitly (e.g. using XSendEvent).
+
+<!-- ##### ENUM GdkScrollDirection ##### -->
+<para>
+
+</para>
+
+@GDK_SCROLL_UP: 
+@GDK_SCROLL_DOWN: 
+@GDK_SCROLL_LEFT: 
+@GDK_SCROLL_RIGHT: 
+
+<!-- ##### ENUM GdkVisibilityState ##### -->
+<para>
+Specifies the visiblity status of a window for a #GdkEventVisibility.
+</para>
+
+@GDK_VISIBILITY_UNOBSCURED: the window is completely visible.
+@GDK_VISIBILITY_PARTIAL: the window is partially visible.
+@GDK_VISIBILITY_FULLY_OBSCURED: the window is not visible at all.
+
+<!-- ##### ENUM GdkCrossingMode ##### -->
+<para>
+
+</para>
+
+@GDK_CROSSING_NORMAL: 
+@GDK_CROSSING_GRAB: 
+@GDK_CROSSING_UNGRAB: 
+
+<!-- ##### ENUM GdkNotifyType ##### -->
+<para>
+
+</para>
+
+@GDK_NOTIFY_ANCESTOR: 
+@GDK_NOTIFY_VIRTUAL: 
+@GDK_NOTIFY_INFERIOR: 
+@GDK_NOTIFY_NONLINEAR: 
+@GDK_NOTIFY_NONLINEAR_VIRTUAL: 
+@GDK_NOTIFY_UNKNOWN: 
+
+<!-- ##### ENUM GdkPropertyState ##### -->
+<para>
+Specifies the type of a property change for a #GdkEventProperty.
+</para>
+
+@GDK_PROPERTY_NEW_VALUE: the property value wan changed.
+@GDK_PROPERTY_DELETE: the property was deleted.
 

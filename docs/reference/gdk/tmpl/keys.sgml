@@ -71,6 +71,16 @@ Returns TRUE if the given key value is in lower case.
 case conversion.
 
 
+<!-- ##### FUNCTION gdk_keyval_convert_case ##### -->
+<para>
+
+</para>
+
+@symbol: 
+@lower: 
+@upper: 
+
+
 <!-- ##### FUNCTION gdk_keyval_to_upper ##### -->
 <para>
 Converts a key value to upper case, if applicable.
@@ -89,5 +99,23 @@ Converts a key value to lower case, if applicable.
 @keyval: a key value.
 @Returns: the lower case form of @keyval, or @keyval itself if it is already
 in lower case or it is not subject to case conversion.
+
+
+<!-- ##### FUNCTION gdk_keyval_to_unicode ##### -->
+<para>
+
+</para>
+
+@keyval: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_unicode_to_keyval ##### -->
+<para>
+
+</para>
+
+@wc: 
+@Returns: 
 
 

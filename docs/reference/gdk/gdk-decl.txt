@@ -1,3 +1,282 @@
+<STRUCT>
+<NAME>GdkGCXData</NAME>
+</STRUCT>
+<STRUCT>
+<NAME>GdkColormapPrivateX11</NAME>
+</STRUCT>
+<STRUCT>
+<NAME>GdkCursorPrivate</NAME>
+</STRUCT>
+<STRUCT>
+<NAME>GdkFontPrivateX</NAME>
+</STRUCT>
+<STRUCT>
+<NAME>GdkImagePrivateX11</NAME>
+</STRUCT>
+<STRUCT>
+<NAME>GdkVisualPrivate</NAME>
+</STRUCT>
+<STRUCT>
+<NAME>GdkICPrivate</NAME>
+</STRUCT>
+<STRUCT>
+<NAME>GdkCursorPrivate</NAME>
+struct GdkCursorPrivate
+{
+  GdkCursor cursor;
+  Cursor xcursor;
+  Display *xdisplay;
+};
+</STRUCT>
+<STRUCT>
+<NAME>GdkFontPrivateX</NAME>
+struct GdkFontPrivateX
+{
+  GdkFontPrivate base;
+  /* XFontStruct *xfont; */
+  /* generic pointer point to XFontStruct or XFontSet */
+  gpointer xfont;
+  Display *xdisplay;
+
+  GSList *names;
+};
+</STRUCT>
+<STRUCT>
+<NAME>GdkVisualPrivate</NAME>
+struct GdkVisualPrivate
+{
+  GdkVisual visual;
+  Visual *xvisual;
+};
+</STRUCT>
+<STRUCT>
+<NAME>GdkColormapPrivateX11</NAME>
+struct GdkColormapPrivateX11
+{
+  Colormap xcolormap;
+  Display *xdisplay;
+  gint private_val;
+
+  GHashTable *hash;
+  GdkColorInfo *info;
+  time_t last_sync_time;
+};
+</STRUCT>
+<STRUCT>
+<NAME>GdkImagePrivateX11</NAME>
+struct GdkImagePrivateX11
+{
+  XImage *ximage;
+  Display *xdisplay;
+  gpointer x_shm_info;
+};
+</STRUCT>
+<STRUCT>
+<NAME>GdkICPrivate</NAME>
+struct GdkICPrivate
+{
+  XIC xic;
+  GdkICAttr *attr;
+  GdkICAttributesType mask;
+};
+</STRUCT>
+<STRUCT>
+<NAME>GdkGCX11</NAME>
+</STRUCT>
+<STRUCT>
+<NAME>GdkGCX11Class</NAME>
+</STRUCT>
+<MACRO>
+<NAME>GDK_TYPE_GC_X11</NAME>
+#define GDK_TYPE_GC_X11              (gdk_gc_x11_get_type ())
+</MACRO>
+<MACRO>
+<NAME>GDK_GC_X11</NAME>
+#define GDK_GC_X11(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_GC_X11, GdkGCX11))
+</MACRO>
+<MACRO>
+<NAME>GDK_GC_X11_CLASS</NAME>
+#define GDK_GC_X11_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), GDK_TYPE_GC_X11, GdkGCX11Class))
+</MACRO>
+<MACRO>
+<NAME>GDK_IS_GC_X11</NAME>
+#define GDK_IS_GC_X11(object)        (G_TYPE_CHECK_INSTANCE_TYPE ((object), GDK_TYPE_GC_X11))
+</MACRO>
+<MACRO>
+<NAME>GDK_IS_GC_X11_CLASS</NAME>
+#define GDK_IS_GC_X11_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GDK_TYPE_GC_X11))
+</MACRO>
+<MACRO>
+<NAME>GDK_GC_X11_GET_CLASS</NAME>
+#define GDK_GC_X11_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GDK_TYPE_GC_X11, GdkGCX11Class))
+</MACRO>
+<STRUCT>
+<NAME>GdkGCX11</NAME>
+struct GdkGCX11
+{
+  GdkGC parent_instance;
+  
+  GC xgc;
+  Display *xdisplay;
+  GdkRegion *clip_region;
+  guint dirty_mask;
+};
+</STRUCT>
+<FUNCTION>
+<NAME>gdk_gc_x11_get_type</NAME>
+<RETURNS>GType  </RETURNS>
+void
+</FUNCTION>
+<MACRO>
+<NAME>GDK_ROOT_WINDOW</NAME>
+#define GDK_ROOT_WINDOW()             gdk_root_window
+</MACRO>
+<MACRO>
+<NAME>GDK_ROOT_PARENT</NAME>
+#define GDK_ROOT_PARENT()             ((GdkWindow *)gdk_parent_root)
+</MACRO>
+<MACRO>
+<NAME>GDK_DISPLAY</NAME>
+#define GDK_DISPLAY()                 gdk_display
+</MACRO>
+<MACRO>
+<NAME>GDK_WINDOW_XDISPLAY</NAME>
+#define GDK_WINDOW_XDISPLAY(win)      (GDK_DRAWABLE_IMPL_X11(((GdkWindowObject *)win)->impl)->xdisplay)
+</MACRO>
+<MACRO>
+<NAME>GDK_WINDOW_XID</NAME>
+#define GDK_WINDOW_XID(win)           (GDK_DRAWABLE_IMPL_X11(((GdkWindowObject *)win)->impl)->xid)
+</MACRO>
+<MACRO>
+<NAME>GDK_PIXMAP_XDISPLAY</NAME>
+#define GDK_PIXMAP_XDISPLAY(win)      (GDK_DRAWABLE_IMPL_X11(((GdkPixmapObject *)win)->impl)->xdisplay)
+</MACRO>
+<MACRO>
+<NAME>GDK_PIXMAP_XID</NAME>
+#define GDK_PIXMAP_XID(win)           (GDK_DRAWABLE_IMPL_X11(((GdkPixmapObject *)win)->impl)->xid)
+</MACRO>
+<MACRO>
+<NAME>GDK_DRAWABLE_XDISPLAY</NAME>
+#define GDK_DRAWABLE_XDISPLAY(win)    (GDK_IS_WINDOW (win) ? GDK_WINDOW_XDISPLAY (win) : GDK_PIXMAP_XDISPLAY (win))
+</MACRO>
+<MACRO>
+<NAME>GDK_DRAWABLE_XID</NAME>
+#define GDK_DRAWABLE_XID(win)         (GDK_IS_WINDOW (win) ? GDK_WINDOW_XID (win) : GDK_PIXMAP_XID (win))
+</MACRO>
+<MACRO>
+<NAME>GDK_IMAGE_XDISPLAY</NAME>
+#define GDK_IMAGE_XDISPLAY(image)     (((GdkImagePrivateX11 *) GDK_IMAGE (image)->windowing_data)->xdisplay)
+</MACRO>
+<MACRO>
+<NAME>GDK_IMAGE_XIMAGE</NAME>
+#define GDK_IMAGE_XIMAGE(image)       (((GdkImagePrivateX11 *) GDK_IMAGE (image)->windowing_data)->ximage)
+</MACRO>
+<MACRO>
+<NAME>GDK_GC_XDISPLAY</NAME>
+#define GDK_GC_XDISPLAY(gc)           (GDK_GC_X11(gc)->xdisplay)
+</MACRO>
+<MACRO>
+<NAME>GDK_COLORMAP_XDISPLAY</NAME>
+#define GDK_COLORMAP_XDISPLAY(cmap)   (((GdkColormapPrivateX11 *)GDK_COLORMAP (cmap)->windowing_data)->xdisplay)
+</MACRO>
+<MACRO>
+<NAME>GDK_COLORMAP_XCOLORMAP</NAME>
+#define GDK_COLORMAP_XCOLORMAP(cmap)  (((GdkColormapPrivateX11 *)GDK_COLORMAP (cmap)->windowing_data)->xcolormap)
+</MACRO>
+<MACRO>
+<NAME>GDK_VISUAL_XVISUAL</NAME>
+#define GDK_VISUAL_XVISUAL(vis)       (((GdkVisualPrivate *) vis)->xvisual)
+</MACRO>
+<MACRO>
+<NAME>GDK_FONT_XDISPLAY</NAME>
+#define GDK_FONT_XDISPLAY(font)       (((GdkFontPrivate *) font)->xdisplay)
+</MACRO>
+<MACRO>
+<NAME>GDK_FONT_XFONT</NAME>
+#define GDK_FONT_XFONT(font)          (((GdkFontPrivateX *)font)->xfont)
+</MACRO>
+<MACRO>
+<NAME>GDK_GC_XGC</NAME>
+#define GDK_GC_XGC(gc)       (GDK_GC_X11(gc)->xgc)
+</MACRO>
+<MACRO>
+<NAME>GDK_GC_GET_XGC</NAME>
+#define GDK_GC_GET_XGC(gc)   (GDK_GC_X11(gc)->dirty_mask ? _gdk_x11_gc_flush (gc) : GDK_GC_XGC (gc))
+</MACRO>
+<MACRO>
+<NAME>GDK_WINDOW_XWINDOW</NAME>
+#define GDK_WINDOW_XWINDOW    GDK_DRAWABLE_XID
+</MACRO>
+<VARIABLE>
+<NAME>gdk_display</NAME>
+extern Display		*gdk_display;
+</VARIABLE>
+<VARIABLE>
+<NAME>gdk_root_window</NAME>
+extern Window		 gdk_root_window;
+</VARIABLE>
+<VARIABLE>
+<NAME>gdk_screen</NAME>
+extern gint		 gdk_screen;
+</VARIABLE>
+<VARIABLE>
+<NAME>gdk_display_name</NAME>
+extern gchar		*gdk_display_name;
+</VARIABLE>
+<VARIABLE>
+<NAME>gdk_leader_window</NAME>
+extern Window		 gdk_leader_window;
+</VARIABLE>
+<VARIABLE>
+<NAME>gdk_selection_property</NAME>
+extern Atom		 gdk_selection_property;
+</VARIABLE>
+<VARIABLE>
+<NAME>gdk_progclass</NAME>
+extern gchar		*gdk_progclass;
+</VARIABLE>
+<FUNCTION>
+<NAME>gdkx_visual_get</NAME>
+<RETURNS>GdkVisual *</RETURNS>
+VisualID xvisualid
+</FUNCTION>
+<FUNCTION>
+<NAME>gdkx_colormap_get</NAME>
+<RETURNS>GdkColormap *</RETURNS>
+Colormap xcolormap
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_get_client_window</NAME>
+<RETURNS>Window  </RETURNS>
+Display  *dpy,Window    win
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_pixmap_foreign_new</NAME>
+<RETURNS>GdkPixmap     *</RETURNS>
+GdkNativeWindow anid
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_window_foreign_new</NAME>
+<RETURNS>GdkWindow     *</RETURNS>
+GdkNativeWindow anid
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_xid_table_lookup</NAME>
+<RETURNS>gpointer  </RETURNS>
+XID              xid
+</FUNCTION>
+<MACRO>
+<NAME>gdk_window_lookup</NAME>
+#define gdk_window_lookup(xid)	   ((GdkWindow*) gdk_xid_table_lookup (xid))
+</MACRO>
+<MACRO>
+<NAME>gdk_pixmap_lookup</NAME>
+#define gdk_pixmap_lookup(xid)	   ((GdkPixmap*) gdk_xid_table_lookup (xid))
+</MACRO>
+<MACRO>
+<NAME>gdk_font_lookup</NAME>
+#define gdk_font_lookup(xid)	   ((GdkFont*) gdk_xid_table_lookup (xid))
+</MACRO>
 <MACRO>
 <NAME>GDK_PRIORITY_EVENTS</NAME>
 #define	  GDK_PRIORITY_EVENTS		(G_PRIORITY_DEFAULT)
@@ -33,98 +312,18 @@ void
 void
 </FUNCTION>
 <FUNCTION>
-<NAME>gdk_events_pending</NAME>
-<RETURNS>gboolean  </RETURNS>
-void
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_event_get</NAME>
-<RETURNS>GdkEvent *</RETURNS>
-void
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_event_peek</NAME>
-<RETURNS>GdkEvent *</RETURNS>
-void
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_event_get_graphics_expose</NAME>
-<RETURNS>GdkEvent *</RETURNS>
-GdkWindow 	*window
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_event_put</NAME>
-<RETURNS>void  </RETURNS>
-GdkEvent  	*event
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_event_copy</NAME>
-<RETURNS>GdkEvent *</RETURNS>
-GdkEvent 	*event
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_event_free</NAME>
-<RETURNS>void 	</RETURNS>
-GdkEvent 	*event
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_event_get_time</NAME>
-<RETURNS>guint32  </RETURNS>
-GdkEvent 	*event
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_event_handler_set</NAME>
-<RETURNS>void 	</RETURNS>
-GdkEventFunc    func,gpointer        data,GDestroyNotify  notify
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_set_show_events</NAME>
-<RETURNS>void 	</RETURNS>
-gint		 show_events
-</FUNCTION>
-<FUNCTION>
 <NAME>gdk_set_use_xshm</NAME>
 <RETURNS>void 	</RETURNS>
-gint		 use_xshm
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_get_show_events</NAME>
-<RETURNS>gint 	</RETURNS>
-void
+gboolean	 use_xshm
 </FUNCTION>
 <FUNCTION>
 <NAME>gdk_get_use_xshm</NAME>
-<RETURNS>gint 	</RETURNS>
+<RETURNS>gboolean  </RETURNS>
 void
 </FUNCTION>
 <FUNCTION>
 <NAME>gdk_get_display</NAME>
 <RETURNS>gchar *</RETURNS>
-void
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_time_get</NAME>
-<RETURNS>guint32  </RETURNS>
-void
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_timer_get</NAME>
-<RETURNS>guint32  </RETURNS>
-void
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_timer_set</NAME>
-<RETURNS>void 	</RETURNS>
-guint32 milliseconds
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_timer_enable</NAME>
-<RETURNS>void 	</RETURNS>
-void
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_timer_disable</NAME>
-<RETURNS>void 	</RETURNS>
 void
 </FUNCTION>
 <FUNCTION>
@@ -144,27 +343,27 @@ gint		     tag
 </FUNCTION>
 <FUNCTION>
 <NAME>gdk_pointer_grab</NAME>
-<RETURNS>gint  </RETURNS>
-GdkWindow *	 window,gint		 owner_events,GdkEventMask	 event_mask,GdkWindow *	 confine_to,GdkCursor *	 cursor,guint32	 time
+<RETURNS>GdkGrabStatus  </RETURNS>
+GdkWindow    *window,gboolean      owner_events,GdkEventMask  event_mask,GdkWindow    *confine_to,GdkCursor    *cursor,guint32       time
 </FUNCTION>
 <FUNCTION>
 <NAME>gdk_pointer_ungrab</NAME>
 <RETURNS>void  </RETURNS>
-guint32	 time
+guint32       time
 </FUNCTION>
 <FUNCTION>
 <NAME>gdk_keyboard_grab</NAME>
-<RETURNS>gint  </RETURNS>
-GdkWindow *	  window,gint		  owner_events,guint32	  time
+<RETURNS>GdkGrabStatus  </RETURNS>
+GdkWindow    *window,gboolean      owner_events,guint32       time
 </FUNCTION>
 <FUNCTION>
 <NAME>gdk_keyboard_ungrab</NAME>
 <RETURNS>void  </RETURNS>
-guint32	  time
+guint32       time
 </FUNCTION>
 <FUNCTION>
 <NAME>gdk_pointer_is_grabbed</NAME>
-<RETURNS>gint  </RETURNS>
+<RETURNS>gboolean  </RETURNS>
 void
 </FUNCTION>
 <FUNCTION>
@@ -208,209 +407,605 @@ void
 void
 </FUNCTION>
 <FUNCTION>
-<NAME>gdk_visual_get_best_depth</NAME>
+<NAME>gdk_rectangle_intersect</NAME>
+<RETURNS>gboolean  </RETURNS>
+GdkRectangle *src1,GdkRectangle *src2,GdkRectangle *dest
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_rectangle_union</NAME>
+<RETURNS>void  </RETURNS>
+GdkRectangle *src1,GdkRectangle *src2,GdkRectangle *dest
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_wcstombs</NAME>
+<RETURNS>gchar      *</RETURNS>
+const GdkWChar   *src
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_mbstowcs</NAME>
+<RETURNS>gint  </RETURNS>
+GdkWChar         *dest,const gchar      *src,gint              dest_max
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_event_send_clientmessage_toall</NAME>
+<RETURNS>void  </RETURNS>
+GdkEvent    *event
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_event_send_client_message</NAME>
+<RETURNS>gboolean  </RETURNS>
+GdkEvent    *event,guint32      xid
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_keyval_name</NAME>
+<RETURNS>gchar *</RETURNS>
+guint        keyval
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_keyval_from_name</NAME>
+<RETURNS>guint  </RETURNS>
+const gchar *keyval_name
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_keyval_convert_case</NAME>
+<RETURNS>void  </RETURNS>
+guint        symbol,guint       *lower,guint       *upper
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_keyval_to_upper</NAME>
+<RETURNS>guint  </RETURNS>
+guint        keyval
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_keyval_to_lower</NAME>
+<RETURNS>guint  </RETURNS>
+guint        keyval
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_keyval_is_upper</NAME>
+<RETURNS>gboolean  </RETURNS>
+guint        keyval
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_keyval_is_lower</NAME>
+<RETURNS>gboolean  </RETURNS>
+guint        keyval
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_keyval_to_unicode</NAME>
+<RETURNS>guint32  </RETURNS>
+guint        keyval
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_unicode_to_keyval</NAME>
+<RETURNS>guint  </RETURNS>
+guint32      wc
+</FUNCTION>
+<VARIABLE>
+<NAME>gdk_threads_mutex</NAME>
+extern GMutex *gdk_threads_mutex;
+</VARIABLE>
+<FUNCTION>
+<NAME>gdk_threads_enter</NAME>
+<RETURNS>void  </RETURNS>
+void
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_threads_leave</NAME>
+<RETURNS>void  </RETURNS>
+void
+</FUNCTION>
+<MACRO>
+<NAME>GDK_THREADS_ENTER</NAME>
+#  define GDK_THREADS_ENTER()	G_STMT_START {	\
+      if (gdk_threads_mutex)                 	\
+        g_mutex_lock (gdk_threads_mutex);   	\
+   } G_STMT_END
+</MACRO>
+<MACRO>
+<NAME>GDK_THREADS_LEAVE</NAME>
+#  define GDK_THREADS_LEAVE()	G_STMT_START { 	\
+      if (gdk_threads_mutex)                 	\
+        g_mutex_unlock (gdk_threads_mutex); 	\
+   } G_STMT_END
+</MACRO>
+<MACRO>
+<NAME>GDK_THREADS_ENTER</NAME>
+#  define GDK_THREADS_ENTER()
+</MACRO>
+<MACRO>
+<NAME>GDK_THREADS_LEAVE</NAME>
+#  define GDK_THREADS_LEAVE()
+</MACRO>
+<STRUCT>
+<NAME>GdkColorContextDither</NAME>
+</STRUCT>
+<STRUCT>
+<NAME>GdkColorContext</NAME>
+</STRUCT>
+<ENUM>
+<NAME>GdkColorContextMode</NAME>
+typedef enum
+{
+  GDK_CC_MODE_UNDEFINED,
+  GDK_CC_MODE_BW,
+  GDK_CC_MODE_STD_CMAP,
+  GDK_CC_MODE_TRUE,
+  GDK_CC_MODE_MY_GRAY,
+  GDK_CC_MODE_PALETTE
+} GdkColorContextMode;
+</ENUM>
+<STRUCT>
+<NAME>GdkColorContextDither</NAME>
+struct GdkColorContextDither
+{
+  gint fast_rgb[32][32][32]; /* quick look-up table for faster rendering */
+  gint fast_err[32][32][32]; /* internal RGB error information */
+  gint fast_erg[32][32][32];
+  gint fast_erb[32][32][32];
+};
+</STRUCT>
+<STRUCT>
+<NAME>GdkColorContext</NAME>
+struct GdkColorContext
+{
+  GdkVisual *visual;
+  GdkColormap *colormap;
+
+  gint num_colors;		/* available no. of colors in colormap */
+  gint max_colors;		/* maximum no. of colors */
+  gint num_allocated;		/* no. of allocated colors */
+
+  GdkColorContextMode mode;
+  gint need_to_free_colormap;
+  GdkAtom std_cmap_atom;
+
+  gulong *clut;			/* color look-up table */
+  GdkColor *cmap;		/* colormap */
+
+  GHashTable *color_hash;	/* hash table of allocated colors */
+  GdkColor *palette;		/* preallocated palette */
+  gint num_palette;		/* size of palette */
+
+  GdkColorContextDither *fast_dither;	/* fast dither matrix */
+
+  struct
+  {
+    gint red;
+    gint green;
+    gint blue;
+  } shifts;
+
+</STRUCT>
+<FUNCTION>
+<NAME>gdk_color_context_new</NAME>
+<RETURNS>GdkColorContext  *</RETURNS>
+GdkVisual   *visual,GdkColormap *colormap
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_color_context_new_mono</NAME>
+<RETURNS>GdkColorContext  *</RETURNS>
+GdkVisual   *visual,GdkColormap *colormap
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_color_context_free</NAME>
+<RETURNS>void 	</RETURNS>
+GdkColorContext *cc
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_color_context_get_pixel</NAME>
+<RETURNS>gulong 	</RETURNS>
+GdkColorContext *cc,gushort	    red,gushort	    green,gushort	    blue,gint		   *failed
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_color_context_get_pixels</NAME>
+<RETURNS>void 	</RETURNS>
+GdkColorContext *cc,gushort	   *reds,gushort	   *greens,gushort	   *blues,gint		    ncolors,gulong	   *colors,gint		   *nallocated
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_color_context_get_pixels_incremental</NAME>
+<RETURNS>void 	</RETURNS>
+GdkColorContext *cc,gushort	   *reds,gushort	   *greens,gushort	   *blues,gint		    ncolors,gint		   *used,gulong	   *colors,gint		   *nallocated
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_color_context_query_color</NAME>
+<RETURNS>gint 	</RETURNS>
+GdkColorContext *cc,GdkColor	   *color
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_color_context_query_colors</NAME>
+<RETURNS>gint 	</RETURNS>
+GdkColorContext *cc,GdkColor	   *colors,gint		    num_colors
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_color_context_add_palette</NAME>
+<RETURNS>gint 	</RETURNS>
+GdkColorContext *cc,GdkColor	   *palette,gint		    num_palette
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_color_context_init_dither</NAME>
+<RETURNS>void 	</RETURNS>
+GdkColorContext *cc
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_color_context_free_dither</NAME>
+<RETURNS>void 	</RETURNS>
+GdkColorContext *cc
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_color_context_get_pixel_from_palette</NAME>
+<RETURNS>gulong 	</RETURNS>
+GdkColorContext *cc,gushort	   *red,gushort	   *green,gushort	   *blue,gint		   *failed
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_color_context_get_index_from_palette</NAME>
+<RETURNS>guchar 	</RETURNS>
+GdkColorContext *cc,gint		   *red,gint		   *green,gint		   *blue,gint		   *failed
+</FUNCTION>
+<STRUCT>
+<NAME>GdkColor</NAME>
+struct GdkColor
+{
+  gulong  pixel;
+  gushort red;
+  gushort green;
+  gushort blue;
+};
+</STRUCT>
+<STRUCT>
+<NAME>GdkColormapClass</NAME>
+</STRUCT>
+<MACRO>
+<NAME>GDK_TYPE_COLORMAP</NAME>
+#define GDK_TYPE_COLORMAP              (gdk_colormap_get_type ())
+</MACRO>
+<MACRO>
+<NAME>GDK_COLORMAP</NAME>
+#define GDK_COLORMAP(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_COLORMAP, GdkColormap))
+</MACRO>
+<MACRO>
+<NAME>GDK_COLORMAP_CLASS</NAME>
+#define GDK_COLORMAP_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), GDK_TYPE_COLORMAP, GdkColormapClass))
+</MACRO>
+<MACRO>
+<NAME>GDK_IS_COLORMAP</NAME>
+#define GDK_IS_COLORMAP(object)        (G_TYPE_CHECK_INSTANCE_TYPE ((object), GDK_TYPE_COLORMAP))
+</MACRO>
+<MACRO>
+<NAME>GDK_IS_COLORMAP_CLASS</NAME>
+#define GDK_IS_COLORMAP_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GDK_TYPE_COLORMAP))
+</MACRO>
+<MACRO>
+<NAME>GDK_COLORMAP_GET_CLASS</NAME>
+#define GDK_COLORMAP_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GDK_TYPE_COLORMAP, GdkColormapClass))
+</MACRO>
+<STRUCT>
+<NAME>GdkColormap</NAME>
+struct GdkColormap
+{
+  GObject parent_instance;
+
+  /*< public >*/
+  gint      size;
+  GdkColor *colors;
+
+  /*< private >*/
+  GdkVisual *visual;
+  
+  gpointer windowing_data;
+};
+</STRUCT>
+<FUNCTION>
+<NAME>gdk_colormap_get_type</NAME>
+<RETURNS>GType  </RETURNS>
+void
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_colormap_new</NAME>
+<RETURNS>GdkColormap *</RETURNS>
+GdkVisual   *visual,gboolean	allocate
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_colormap_ref</NAME>
+<RETURNS>GdkColormap *</RETURNS>
+GdkColormap *cmap
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_colormap_unref</NAME>
+<RETURNS>void 	</RETURNS>
+GdkColormap *cmap
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_colormap_get_system</NAME>
+<RETURNS>GdkColormap *</RETURNS>
+void
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_colormap_get_system_size</NAME>
 <RETURNS>gint 	</RETURNS>
 void
 </FUNCTION>
 <FUNCTION>
-<NAME>gdk_visual_get_best_type</NAME>
-<RETURNS>GdkVisualType  </RETURNS>
-void
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_visual_get_system</NAME>
-<RETURNS>GdkVisual *</RETURNS>
-void
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_visual_get_best</NAME>
-<RETURNS>GdkVisual *</RETURNS>
-void
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_visual_get_best_with_depth</NAME>
-<RETURNS>GdkVisual *</RETURNS>
-gint	     depth
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_visual_get_best_with_type</NAME>
-<RETURNS>GdkVisual *</RETURNS>
-GdkVisualType  visual_type
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_visual_get_best_with_both</NAME>
-<RETURNS>GdkVisual *</RETURNS>
-gint	     depth,GdkVisualType  visual_type
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_visual_ref</NAME>
-<RETURNS>GdkVisual *</RETURNS>
-GdkVisual *visual
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_visual_unref</NAME>
-<RETURNS>void 	</RETURNS>
-GdkVisual *visual
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_query_depths</NAME>
+<NAME>gdk_colormap_change</NAME>
 <RETURNS>void  </RETURNS>
-gint	    **depths,gint	     *count
+GdkColormap	*colormap,gint		 ncolors
 </FUNCTION>
 <FUNCTION>
-<NAME>gdk_query_visual_types</NAME>
+<NAME>gdk_colormap_alloc_colors</NAME>
+<RETURNS>gint  </RETURNS>
+GdkColormap *colormap,GdkColor    *colors,gint         ncolors,gboolean     writeable,gboolean     best_match,gboolean    *success
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_colormap_alloc_color</NAME>
+<RETURNS>gboolean  </RETURNS>
+GdkColormap *colormap,GdkColor    *color,gboolean     writeable,gboolean     best_match
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_colormap_free_colors</NAME>
 <RETURNS>void  </RETURNS>
-GdkVisualType  **visual_types,gint	     *count
+GdkColormap *colormap,GdkColor    *colors,gint         ncolors
 </FUNCTION>
 <FUNCTION>
-<NAME>gdk_list_visuals</NAME>
-<RETURNS>GList *</RETURNS>
-void
+<NAME>gdk_colormap_get_visual</NAME>
+<RETURNS>GdkVisual  *</RETURNS>
+GdkColormap *colormap
 </FUNCTION>
 <FUNCTION>
-<NAME>gdk_window_new</NAME>
-<RETURNS>GdkWindow *</RETURNS>
-GdkWindow	    *parent,GdkWindowAttr *attributes,gint	     attributes_mask
+<NAME>gdk_color_copy</NAME>
+<RETURNS>GdkColor  *</RETURNS>
+const GdkColor *color
 </FUNCTION>
 <FUNCTION>
-<NAME>gdk_window_destroy</NAME>
-<RETURNS>void 	</RETURNS>
-GdkWindow	    *window
+<NAME>gdk_color_free</NAME>
+<RETURNS>void  </RETURNS>
+GdkColor       *color
 </FUNCTION>
 <FUNCTION>
+<NAME>gdk_color_parse</NAME>
+<RETURNS>gint  </RETURNS>
+const gchar    *spec,GdkColor       *color
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_color_hash</NAME>
+<RETURNS>guint  </RETURNS>
+const GdkColor *colora
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_color_equal</NAME>
+<RETURNS>gboolean  </RETURNS>
+const GdkColor *colora,const GdkColor *colorb
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_colors_store</NAME>
+<RETURNS>void  </RETURNS>
+GdkColormap	*colormap,GdkColor	*colors,gint		 ncolors
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_colors_alloc</NAME>
+<RETURNS>gint  </RETURNS>
+GdkColormap	*colormap,gboolean	 contiguous,gulong	*planes,gint		 nplanes,gulong	*pixels,gint		 npixels
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_colors_free</NAME>
+<RETURNS>void  </RETURNS>
+GdkColormap	*colormap,gulong	*pixels,gint		 npixels,gulong	 planes
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_color_white</NAME>
+<RETURNS>gint  </RETURNS>
+GdkColormap	*colormap,GdkColor	*color
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_color_black</NAME>
+<RETURNS>gint  </RETURNS>
+GdkColormap	*colormap,GdkColor	*color
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_color_alloc</NAME>
+<RETURNS>gint  </RETURNS>
+GdkColormap	*colormap,GdkColor	*color
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_color_change</NAME>
+<RETURNS>gint  </RETURNS>
+GdkColormap	*colormap,GdkColor	*color
+</FUNCTION>
+<MACRO>
+<NAME>gdk_draw_pixmap</NAME>
+#define gdk_draw_pixmap                gdk_draw_drawable
+</MACRO>
+<MACRO>
+<NAME>gdk_draw_bitmap</NAME>
+#define gdk_draw_bitmap                gdk_draw_drawable
+</MACRO>
+<MACRO>
+<NAME>gdk_window_get_size</NAME>
+#define gdk_window_get_size            gdk_drawable_get_size
+</MACRO>
+<MACRO>
+<NAME>gdk_window_get_type</NAME>
+#define gdk_window_get_type            gdk_window_get_window_type
+</MACRO>
+<MACRO>
+<NAME>gdk_window_get_colormap</NAME>
+#define gdk_window_get_colormap        gdk_drawable_get_colormap
+</MACRO>
+<MACRO>
+<NAME>gdk_window_set_colormap</NAME>
+#define gdk_window_set_colormap        gdk_drawable_set_colormap
+</MACRO>
+<MACRO>
+<NAME>gdk_window_get_visual</NAME>
+#define gdk_window_get_visual          gdk_drawable_get_visual
+</MACRO>
+<MACRO>
 <NAME>gdk_window_ref</NAME>
-<RETURNS>GdkWindow *</RETURNS>
-GdkWindow	    *window
-</FUNCTION>
-<FUNCTION>
+#define gdk_window_ref                 gdk_drawable_ref
+</MACRO>
+<MACRO>
 <NAME>gdk_window_unref</NAME>
-<RETURNS>void 	</RETURNS>
-GdkWindow	    *window
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_window_at_pointer</NAME>
-<RETURNS>GdkWindow *</RETURNS>
-gint	   *win_x,gint	   *win_y
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_window_show</NAME>
-<RETURNS>void 	</RETURNS>
-GdkWindow	   *window
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_window_hide</NAME>
-<RETURNS>void 	</RETURNS>
-GdkWindow	   *window
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_window_withdraw</NAME>
-<RETURNS>void 	</RETURNS>
-GdkWindow	   *window
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_window_move</NAME>
-<RETURNS>void 	</RETURNS>
-GdkWindow	   *window,gint	    x,gint	    y
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_window_resize</NAME>
-<RETURNS>void 	</RETURNS>
-GdkWindow	   *window,gint	    width,gint	    height
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_window_move_resize</NAME>
-<RETURNS>void 	</RETURNS>
-GdkWindow	   *window,gint	    x,gint	    y,gint	    width,gint	    height
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_window_reparent</NAME>
-<RETURNS>void 	</RETURNS>
-GdkWindow	   *window,GdkWindow	   *new_parent,gint	    x,gint	    y
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_window_clear</NAME>
-<RETURNS>void 	</RETURNS>
-GdkWindow	   *window
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_window_clear_area</NAME>
-<RETURNS>void 	</RETURNS>
-GdkWindow	   *window,gint	    x,gint	    y,gint	    width,gint	    height
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_window_clear_area_e</NAME>
-<RETURNS>void 	</RETURNS>
-GdkWindow	   *window,gint	    x,gint	    y,gint	    width,gint	    height
-</FUNCTION>
-<FUNCTION>
+#define gdk_window_unref               gdk_drawable_unref
+</MACRO>
+<MACRO>
+<NAME>gdk_bitmap_ref</NAME>
+#define gdk_bitmap_ref                 gdk_drawable_ref
+</MACRO>
+<MACRO>
+<NAME>gdk_bitmap_unref</NAME>
+#define gdk_bitmap_unref               gdk_drawable_unref
+</MACRO>
+<MACRO>
+<NAME>gdk_pixmap_ref</NAME>
+#define gdk_pixmap_ref                 gdk_drawable_ref
+</MACRO>
+<MACRO>
+<NAME>gdk_pixmap_unref</NAME>
+#define gdk_pixmap_unref               gdk_drawable_unref
+</MACRO>
+<MACRO>
 <NAME>gdk_window_copy_area</NAME>
-<RETURNS>void 	</RETURNS>
-GdkWindow	   *window,GdkGC	   *gc,gint	    x,gint	    y,GdkWindow	   *source_window,gint	    source_x,gint	    source_y,gint	    width,gint	    height
+#define gdk_window_copy_area(drawable,gc,x,y,source_drawable,source_x,source_y,width,height) \
+   gdk_draw_pixmap(drawable,gc,source_drawable,source_x,source_y,x,y,width,height)
+</MACRO>
+<MACRO>
+<NAME>gdk_gc_destroy</NAME>
+#define gdk_gc_destroy                 gdk_gc_unref
+</MACRO>
+<MACRO>
+<NAME>gdk_image_destroy</NAME>
+#define gdk_image_destroy              gdk_image_unref
+</MACRO>
+<MACRO>
+<NAME>gdk_cursor_destroy</NAME>
+#define gdk_cursor_destroy             gdk_cursor_unref
+</MACRO>
+<MACRO>
+<NAME>gdk_rgb_get_cmap</NAME>
+#define gdk_rgb_get_cmap               gdk_rgb_get_colormap
+</MACRO>
+<ENUM>
+<NAME>GdkCursorType</NAME>
+typedef enum
+{
+#include <gdk/gdkcursors.h>
+  GDK_LAST_CURSOR,
+  GDK_CURSOR_IS_PIXMAP = -1
+} GdkCursorType;
+</ENUM>
+<STRUCT>
+<NAME>GdkCursor</NAME>
+struct GdkCursor
+{
+  GdkCursorType type;
+  guint ref_count;
+};
+</STRUCT>
+<FUNCTION>
+<NAME>gdk_cursor_new</NAME>
+<RETURNS>GdkCursor *</RETURNS>
+GdkCursorType	   cursor_type
 </FUNCTION>
 <FUNCTION>
-<NAME>gdk_window_raise</NAME>
-<RETURNS>void 	</RETURNS>
-GdkWindow	   *window
+<NAME>gdk_cursor_new_from_pixmap</NAME>
+<RETURNS>GdkCursor *</RETURNS>
+GdkPixmap	  *source,GdkPixmap	  *mask,GdkColor	  *fg,GdkColor	  *bg,gint		   x,gint		   y
 </FUNCTION>
 <FUNCTION>
-<NAME>gdk_window_lower</NAME>
-<RETURNS>void 	</RETURNS>
-GdkWindow	   *window
+<NAME>gdk_cursor_ref</NAME>
+<RETURNS>GdkCursor *</RETURNS>
+GdkCursor      *cursor
 </FUNCTION>
 <FUNCTION>
-<NAME>gdk_window_set_user_data</NAME>
-<RETURNS>void 	</RETURNS>
-GdkWindow	  *window,gpointer	   user_data
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_window_set_override_redirect</NAME>
-<RETURNS>void 	</RETURNS>
-GdkWindow  *window,gboolean override_redirect
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_window_add_filter</NAME>
-<RETURNS>void 	</RETURNS>
-GdkWindow     *window,GdkFilterFunc	function,gpointer	data
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_window_remove_filter</NAME>
-<RETURNS>void 	</RETURNS>
-GdkWindow     *window,GdkFilterFunc	function,gpointer	data
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_window_shape_combine_mask</NAME>
+<NAME>gdk_cursor_unref</NAME>
 <RETURNS>void  </RETURNS>
-GdkWindow	    *window,GdkBitmap	    *shape_mask,gint	     offset_x,gint	     offset_y
+GdkCursor      *cursor
 </FUNCTION>
+<STRUCT>
+<NAME>GdkDragContext</NAME>
+</STRUCT>
+<ENUM>
+<NAME>GdkDragAction</NAME>
+typedef enum
+{
+  GDK_ACTION_DEFAULT = 1 << 0,
+  GDK_ACTION_COPY    = 1 << 1,
+  GDK_ACTION_MOVE    = 1 << 2,
+  GDK_ACTION_LINK    = 1 << 3,
+  GDK_ACTION_PRIVATE = 1 << 4,
+  GDK_ACTION_ASK     = 1 << 5
+} GdkDragAction;
+</ENUM>
+<ENUM>
+<NAME>GdkDragProtocol</NAME>
+typedef enum
+{
+  GDK_DRAG_PROTO_MOTIF,
+  GDK_DRAG_PROTO_XDND,
+  GDK_DRAG_PROTO_ROOTWIN,	  /* A root window with nobody claiming
+				   * drags */
+  GDK_DRAG_PROTO_NONE,		  /* Not a valid drag window */
+  GDK_DRAG_PROTO_WIN32_DROPFILES, /* The simple WM_DROPFILES dnd */
+  GDK_DRAG_PROTO_OLE2,		  /* The complex OLE2 dnd (not implemented) */
+  GDK_DRAG_PROTO_LOCAL            /* Intra-app */
+} GdkDragProtocol;
+</ENUM>
+<STRUCT>
+<NAME>GdkDragContextClass</NAME>
+</STRUCT>
+<MACRO>
+<NAME>GDK_TYPE_DRAG_CONTEXT</NAME>
+#define GDK_TYPE_DRAG_CONTEXT              (gdk_drag_context_get_type ())
+</MACRO>
+<MACRO>
+<NAME>GDK_DRAG_CONTEXT</NAME>
+#define GDK_DRAG_CONTEXT(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_DRAG_CONTEXT, GdkDragContext))
+</MACRO>
+<MACRO>
+<NAME>GDK_DRAG_CONTEXT_CLASS</NAME>
+#define GDK_DRAG_CONTEXT_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), GDK_TYPE_DRAG_CONTEXT, GdkDragContextClass))
+</MACRO>
+<MACRO>
+<NAME>GDK_IS_DRAG_CONTEXT</NAME>
+#define GDK_IS_DRAG_CONTEXT(object)        (G_TYPE_CHECK_INSTANCE_TYPE ((object), GDK_TYPE_DRAG_CONTEXT))
+</MACRO>
+<MACRO>
+<NAME>GDK_IS_DRAG_CONTEXT_CLASS</NAME>
+#define GDK_IS_DRAG_CONTEXT_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GDK_TYPE_DRAG_CONTEXT))
+</MACRO>
+<MACRO>
+<NAME>GDK_DRAG_CONTEXT_GET_CLASS</NAME>
+#define GDK_DRAG_CONTEXT_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GDK_TYPE_DRAG_CONTEXT, GdkDragContextClass))
+</MACRO>
+<STRUCT>
+<NAME>GdkDragContext</NAME>
+struct GdkDragContext {
+  GObject parent_instance;
+
+  /*< public >*/
+  
+  GdkDragProtocol protocol;
+  
+  gboolean is_source;
+  
+  GdkWindow *source_window;
+  GdkWindow *dest_window;
+
+  GList *targets;
+  GdkDragAction actions;
+  GdkDragAction suggested_action;
+  GdkDragAction action; 
+
+  guint32 start_time;
+
+  /*< private >*/
+  
+  gpointer windowing_data;
+};
+</STRUCT>
 <FUNCTION>
-<NAME>gdk_window_set_child_shapes</NAME>
-<RETURNS>void  </RETURNS>
-GdkWindow *window
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_window_merge_child_shapes</NAME>
-<RETURNS>void  </RETURNS>
-GdkWindow *window
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_window_is_visible</NAME>
-<RETURNS>gboolean  </RETURNS>
-GdkWindow *window
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_window_is_viewable</NAME>
-<RETURNS>gboolean  </RETURNS>
-GdkWindow *window
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_window_set_static_gravities</NAME>
-<RETURNS>gboolean  </RETURNS>
-GdkWindow *window,gboolean   use_static
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_add_client_message_filter</NAME>
-<RETURNS>void  </RETURNS>
-GdkAtom       message_type,GdkFilterFunc func,gpointer      data
+<NAME>gdk_drag_context_get_type</NAME>
+<RETURNS>GType  </RETURNS>
+void
 </FUNCTION>
 <FUNCTION>
 <NAME>gdk_drag_context_new</NAME>
@@ -477,506 +1072,681 @@ GdkDragContext *context,guint32         time
 <RETURNS>void  </RETURNS>
 GdkDragContext *context,guint32         time
 </FUNCTION>
+<STRUCT>
+<NAME>GdkDrawableClass</NAME>
+</STRUCT>
+<MACRO>
+<NAME>GDK_TYPE_DRAWABLE</NAME>
+#define GDK_TYPE_DRAWABLE              (gdk_drawable_get_type ())
+</MACRO>
+<MACRO>
+<NAME>GDK_DRAWABLE</NAME>
+#define GDK_DRAWABLE(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_DRAWABLE, GdkDrawable))
+</MACRO>
+<MACRO>
+<NAME>GDK_DRAWABLE_CLASS</NAME>
+#define GDK_DRAWABLE_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), GDK_TYPE_DRAWABLE, GdkDrawableClass))
+</MACRO>
+<MACRO>
+<NAME>GDK_IS_DRAWABLE</NAME>
+#define GDK_IS_DRAWABLE(object)        (G_TYPE_CHECK_INSTANCE_TYPE ((object), GDK_TYPE_DRAWABLE))
+</MACRO>
+<MACRO>
+<NAME>GDK_IS_DRAWABLE_CLASS</NAME>
+#define GDK_IS_DRAWABLE_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GDK_TYPE_DRAWABLE))
+</MACRO>
+<MACRO>
+<NAME>GDK_DRAWABLE_GET_CLASS</NAME>
+#define GDK_DRAWABLE_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GDK_TYPE_DRAWABLE, GdkDrawableClass))
+</MACRO>
+<STRUCT>
+<NAME>GdkDrawable</NAME>
+struct GdkDrawable
+{
+  GObject parent_instance;
+};
+</STRUCT>
 <FUNCTION>
-<NAME>gdk_drag_get_selection</NAME>
-<RETURNS>GdkAtom  </RETURNS>
-GdkDragContext *context
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_window_set_hints</NAME>
-<RETURNS>void 	</RETURNS>
-GdkWindow	  *window,gint		   x,gint		   y,gint		   min_width,gint		   min_height,gint		   max_width,gint		   max_height,gint		   flags
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_window_set_geometry_hints</NAME>
-<RETURNS>void  </RETURNS>
-GdkWindow        *window,GdkGeometry      *geometry,GdkWindowHints    flags
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_set_sm_client_id</NAME>
-<RETURNS>void  </RETURNS>
-const gchar *sm_client_id
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_window_set_title</NAME>
-<RETURNS>void 	</RETURNS>
-GdkWindow	  *window,const gchar	  *title
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_window_set_role</NAME>
-<RETURNS>void  </RETURNS>
-GdkWindow       *window,const gchar     *role
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_window_set_transient_for</NAME>
-<RETURNS>void  </RETURNS>
-GdkWindow       *window,GdkWindow       *leader
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_window_set_background</NAME>
-<RETURNS>void 	</RETURNS>
-GdkWindow	  *window,GdkColor	  *color
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_window_set_back_pixmap</NAME>
-<RETURNS>void 	</RETURNS>
-GdkWindow	  *window,GdkPixmap	  *pixmap,gint		   parent_relative
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_window_set_cursor</NAME>
-<RETURNS>void 	</RETURNS>
-GdkWindow	  *window,GdkCursor	  *cursor
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_window_set_colormap</NAME>
-<RETURNS>void 	</RETURNS>
-GdkWindow	  *window,GdkColormap	  *colormap
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_window_get_user_data</NAME>
-<RETURNS>void 	</RETURNS>
-GdkWindow	  *window,gpointer	  *data
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_window_get_geometry</NAME>
-<RETURNS>void 	</RETURNS>
-GdkWindow	  *window,gint		  *x,gint		  *y,gint		  *width,gint		  *height,gint		  *depth
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_window_get_position</NAME>
-<RETURNS>void 	</RETURNS>
-GdkWindow	  *window,gint		  *x,gint		  *y
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_window_get_size</NAME>
-<RETURNS>void 	</RETURNS>
-GdkWindow	  *window,gint		  *width,gint		  *height
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_window_get_visual</NAME>
-<RETURNS>GdkVisual *</RETURNS>
-GdkWindow	  *window
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_window_get_colormap</NAME>
-<RETURNS>GdkColormap *</RETURNS>
-GdkWindow	  *window
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_window_get_type</NAME>
-<RETURNS>GdkWindowType  </RETURNS>
-GdkWindow	  *window
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_window_get_origin</NAME>
-<RETURNS>gint 	</RETURNS>
-GdkWindow	  *window,gint		  *x,gint		  *y
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_window_get_deskrelative_origin</NAME>
-<RETURNS>gboolean  </RETURNS>
-GdkWindow	  *window,gint		  *x,gint		  *y
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_window_get_root_origin</NAME>
-<RETURNS>void 	</RETURNS>
-GdkWindow	  *window,gint		  *x,gint		  *y
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_window_get_pointer</NAME>
-<RETURNS>GdkWindow *</RETURNS>
-GdkWindow	  *window,gint		  *x,gint		  *y,GdkModifierType *mask
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_window_get_parent</NAME>
-<RETURNS>GdkWindow *</RETURNS>
-GdkWindow	  *window
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_window_get_toplevel</NAME>
-<RETURNS>GdkWindow *</RETURNS>
-GdkWindow	  *window
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_window_get_children</NAME>
-<RETURNS>GList *</RETURNS>
-GdkWindow	  *window
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_window_get_events</NAME>
-<RETURNS>GdkEventMask  </RETURNS>
-GdkWindow	  *window
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_window_set_events</NAME>
-<RETURNS>void 	</RETURNS>
-GdkWindow	  *window,GdkEventMask	   event_mask
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_window_set_icon</NAME>
-<RETURNS>void 	</RETURNS>
-GdkWindow	  *window,GdkWindow	  *icon_window,GdkPixmap	  *pixmap,GdkBitmap	  *mask
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_window_set_icon_name</NAME>
-<RETURNS>void 	</RETURNS>
-GdkWindow	  *window,gchar		  *name
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_window_set_group</NAME>
-<RETURNS>void 	</RETURNS>
-GdkWindow	  *window,GdkWindow	  *leader
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_window_set_decorations</NAME>
-<RETURNS>void 	</RETURNS>
-GdkWindow	  *window,GdkWMDecoration  decorations
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_window_set_functions</NAME>
-<RETURNS>void 	</RETURNS>
-GdkWindow	  *window,GdkWMFunction	   functions
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_window_get_toplevels</NAME>
-<RETURNS>GList  *</RETURNS>
+<NAME>gdk_drawable_get_type</NAME>
+<RETURNS>GType  </RETURNS>
 void
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_window_register_dnd</NAME>
-<RETURNS>void  </RETURNS>
-GdkWindow       *window
 </FUNCTION>
 <FUNCTION>
 <NAME>gdk_drawable_set_data</NAME>
 <RETURNS>void  </RETURNS>
-GdkDrawable     *drawable,const gchar     *key,gpointer	   data,GDestroyNotify   destroy_func
+GdkDrawable    *drawable,const gchar    *key,gpointer	  data,GDestroyNotify  destroy_func
 </FUNCTION>
 <FUNCTION>
-<NAME>gdk_cursor_new</NAME>
-<RETURNS>GdkCursor *</RETURNS>
-GdkCursorType	  cursor_type
+<NAME>gdk_drawable_get_data</NAME>
+<RETURNS>gpointer  </RETURNS>
+GdkDrawable    *drawable,const gchar    *key
 </FUNCTION>
 <FUNCTION>
-<NAME>gdk_cursor_new_from_pixmap</NAME>
-<RETURNS>GdkCursor *</RETURNS>
-GdkPixmap	  *source,GdkPixmap	  *mask,GdkColor	  *fg,GdkColor	  *bg,gint		   x,gint		   y
+<NAME>gdk_drawable_get_size</NAME>
+<RETURNS>void  </RETURNS>
+GdkDrawable	  *drawable,gint	          *width,gint  	  *height
 </FUNCTION>
 <FUNCTION>
-<NAME>gdk_cursor_destroy</NAME>
+<NAME>gdk_drawable_set_colormap</NAME>
 <RETURNS>void 	</RETURNS>
-GdkCursor	 *cursor
+GdkDrawable	  *drawable,GdkColormap	  *colormap
 </FUNCTION>
 <FUNCTION>
-<NAME>gdk_gc_new</NAME>
-<RETURNS>GdkGC *</RETURNS>
-GdkWindow	    *window
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_gc_new_with_values</NAME>
-<RETURNS>GdkGC *</RETURNS>
-GdkWindow	    *window,GdkGCValues	    *values,GdkGCValuesMask   values_mask
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_gc_ref</NAME>
-<RETURNS>GdkGC *</RETURNS>
-GdkGC	    *gc
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_gc_unref</NAME>
-<RETURNS>void  </RETURNS>
-GdkGC	    *gc
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_gc_destroy</NAME>
-<RETURNS>void  </RETURNS>
-GdkGC	    *gc
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_gc_get_values</NAME>
-<RETURNS>void  </RETURNS>
-GdkGC	    *gc,GdkGCValues	    *values
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_gc_set_foreground</NAME>
-<RETURNS>void  </RETURNS>
-GdkGC	    *gc,GdkColor	    *color
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_gc_set_background</NAME>
-<RETURNS>void  </RETURNS>
-GdkGC	    *gc,GdkColor	    *color
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_gc_set_font</NAME>
-<RETURNS>void  </RETURNS>
-GdkGC	    *gc,GdkFont	    *font
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_gc_set_function</NAME>
-<RETURNS>void  </RETURNS>
-GdkGC	    *gc,GdkFunction	     function
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_gc_set_fill</NAME>
-<RETURNS>void  </RETURNS>
-GdkGC	    *gc,GdkFill	     fill
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_gc_set_tile</NAME>
-<RETURNS>void  </RETURNS>
-GdkGC	    *gc,GdkPixmap	    *tile
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_gc_set_stipple</NAME>
-<RETURNS>void  </RETURNS>
-GdkGC	    *gc,GdkPixmap	    *stipple
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_gc_set_ts_origin</NAME>
-<RETURNS>void  </RETURNS>
-GdkGC	    *gc,gint		     x,gint		     y
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_gc_set_clip_origin</NAME>
-<RETURNS>void  </RETURNS>
-GdkGC	    *gc,gint		     x,gint		     y
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_gc_set_clip_mask</NAME>
-<RETURNS>void  </RETURNS>
-GdkGC	    *gc,GdkBitmap	    *mask
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_gc_set_clip_rectangle</NAME>
-<RETURNS>void  </RETURNS>
-GdkGC	    *gc,GdkRectangle	    *rectangle
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_gc_set_clip_region</NAME>
-<RETURNS>void  </RETURNS>
-GdkGC	    *gc,GdkRegion	    *region
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_gc_set_subwindow</NAME>
-<RETURNS>void  </RETURNS>
-GdkGC	    *gc,GdkSubwindowMode  mode
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_gc_set_exposures</NAME>
-<RETURNS>void  </RETURNS>
-GdkGC	    *gc,gint		     exposures
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_gc_set_line_attributes</NAME>
-<RETURNS>void  </RETURNS>
-GdkGC	    *gc,gint		     line_width,GdkLineStyle	     line_style,GdkCapStyle	     cap_style,GdkJoinStyle	     join_style
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_gc_set_dashes</NAME>
-<RETURNS>void  </RETURNS>
-GdkGC            *gc,gint	             dash_offset,gchar             dash_list[],gint              n
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_gc_copy</NAME>
-<RETURNS>void  </RETURNS>
-GdkGC	     *dst_gc,GdkGC	     *src_gc
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_pixmap_new</NAME>
-<RETURNS>GdkPixmap *</RETURNS>
-GdkWindow  *window,gint	     width,gint	     height,gint	     depth
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_bitmap_create_from_data</NAME>
-<RETURNS>GdkBitmap *</RETURNS>
-GdkWindow   *window,const gchar *data,gint	      width,gint	      height
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_pixmap_create_from_data</NAME>
-<RETURNS>GdkPixmap *</RETURNS>
-GdkWindow   *window,const gchar *data,gint	      width,gint	      height,gint	      depth,GdkColor    *fg,GdkColor    *bg
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_pixmap_create_from_xpm</NAME>
-<RETURNS>GdkPixmap *</RETURNS>
-GdkWindow  *window,GdkBitmap **mask,GdkColor   *transparent_color,const gchar *filename
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_pixmap_colormap_create_from_xpm</NAME>
-<RETURNS>GdkPixmap *</RETURNS>
-GdkWindow   *window,GdkColormap *colormap,GdkBitmap  **mask,GdkColor    *transparent_color,const gchar *filename
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_pixmap_create_from_xpm_d</NAME>
-<RETURNS>GdkPixmap *</RETURNS>
-GdkWindow  *window,GdkBitmap **mask,GdkColor   *transparent_color,gchar	   **data
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_pixmap_colormap_create_from_xpm_d</NAME>
-<RETURNS>GdkPixmap *</RETURNS>
-GdkWindow   *window,GdkColormap *colormap,GdkBitmap  **mask,GdkColor    *transparent_color,gchar     **data
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_pixmap_ref</NAME>
-<RETURNS>GdkPixmap  *</RETURNS>
-GdkPixmap  *pixmap
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_pixmap_unref</NAME>
-<RETURNS>void 	</RETURNS>
-GdkPixmap  *pixmap
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_bitmap_ref</NAME>
-<RETURNS>GdkBitmap  *</RETURNS>
-GdkBitmap  *pixmap
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_bitmap_unref</NAME>
-<RETURNS>void 	</RETURNS>
-GdkBitmap  *pixmap
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_image_new_bitmap</NAME>
-<RETURNS>GdkImage *</RETURNS>
-GdkVisual     *visual,gpointer      data,gint          width,gint          height
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_image_new</NAME>
-<RETURNS>GdkImage *</RETURNS>
-GdkImageType  type,GdkVisual    *visual,gint	      width,gint	      height
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_image_get</NAME>
-<RETURNS>GdkImage *</RETURNS>
-GdkWindow    *window,gint	      x,gint	      y,gint	      width,gint	      height
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_image_put_pixel</NAME>
-<RETURNS>void 	</RETURNS>
-GdkImage     *image,gint	      x,gint	      y,guint32	      pixel
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_image_get_pixel</NAME>
-<RETURNS>guint32 	</RETURNS>
-GdkImage     *image,gint	      x,gint	      y
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_image_destroy</NAME>
-<RETURNS>void 	</RETURNS>
-GdkImage     *image
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_colormap_new</NAME>
+<NAME>gdk_drawable_get_colormap</NAME>
 <RETURNS>GdkColormap *</RETURNS>
-GdkVisual      *visual,gint		   allocate
+GdkDrawable	  *drawable
 </FUNCTION>
 <FUNCTION>
-<NAME>gdk_colormap_ref</NAME>
-<RETURNS>GdkColormap *</RETURNS>
-GdkColormap    *cmap
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_colormap_unref</NAME>
-<RETURNS>void 	</RETURNS>
-GdkColormap    *cmap
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_colormap_get_system</NAME>
-<RETURNS>GdkColormap *</RETURNS>
-void
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_colormap_get_system_size</NAME>
-<RETURNS>gint 	</RETURNS>
-void
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_colormap_change</NAME>
-<RETURNS>void  </RETURNS>
-GdkColormap    *colormap,gint		   ncolors
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_colormap_alloc_colors</NAME>
-<RETURNS>gint  </RETURNS>
-GdkColormap    *colormap,GdkColor       *colors,gint            ncolors,gboolean        writeable,gboolean        best_match,gboolean       *success
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_colormap_alloc_color</NAME>
-<RETURNS>gboolean  </RETURNS>
-GdkColormap    *colormap,GdkColor       *color,gboolean        writeable,gboolean        best_match
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_colormap_free_colors</NAME>
-<RETURNS>void  </RETURNS>
-GdkColormap    *colormap,GdkColor       *colors,gint            ncolors
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_colormap_get_visual</NAME>
+<NAME>gdk_drawable_get_visual</NAME>
 <RETURNS>GdkVisual *</RETURNS>
-GdkColormap    *colormap
+GdkDrawable	  *drawable
 </FUNCTION>
 <FUNCTION>
-<NAME>gdk_color_copy</NAME>
-<RETURNS>GdkColor *</RETURNS>
-GdkColor       *color
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_color_free</NAME>
-<RETURNS>void  </RETURNS>
-GdkColor       *color
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_color_parse</NAME>
-<RETURNS>gboolean  </RETURNS>
-const gchar    *spec,GdkColor       *color
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_color_hash</NAME>
-<RETURNS>guint  </RETURNS>
-const GdkColor *colora,const GdkColor *colorb
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_color_equal</NAME>
+<NAME>gdk_drawable_get_depth</NAME>
 <RETURNS>gint  </RETURNS>
-const GdkColor *colora,const GdkColor *colorb
+GdkDrawable	  *drawable
 </FUNCTION>
 <FUNCTION>
-<NAME>gdk_colors_store</NAME>
+<NAME>gdk_drawable_ref</NAME>
+<RETURNS>GdkDrawable *</RETURNS>
+GdkDrawable    *drawable
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_drawable_unref</NAME>
 <RETURNS>void  </RETURNS>
-GdkColormap	*colormap,GdkColor	*colors,gint		 ncolors
+GdkDrawable    *drawable
 </FUNCTION>
 <FUNCTION>
-<NAME>gdk_colors_alloc</NAME>
-<RETURNS>gboolean  </RETURNS>
-GdkColormap	*colormap,gint		 contiguous,gulong	*planes,gint		 nplanes,gulong	*pixels,gint		 npixels
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_colors_free</NAME>
+<NAME>gdk_draw_point</NAME>
 <RETURNS>void  </RETURNS>
-GdkColormap	*colormap,gulong	*pixels,gint		 npixels,gulong	 planes
+GdkDrawable      *drawable,GdkGC            *gc,gint              x,gint              y
 </FUNCTION>
 <FUNCTION>
-<NAME>gdk_color_white</NAME>
-<RETURNS>gboolean  </RETURNS>
-GdkColormap	*colormap,GdkColor	*color
+<NAME>gdk_draw_line</NAME>
+<RETURNS>void  </RETURNS>
+GdkDrawable      *drawable,GdkGC            *gc,gint              x1,gint              y1,gint              x2,gint              y2
 </FUNCTION>
 <FUNCTION>
-<NAME>gdk_color_black</NAME>
-<RETURNS>gboolean  </RETURNS>
-GdkColormap	*colormap,GdkColor	*color
+<NAME>gdk_draw_rectangle</NAME>
+<RETURNS>void  </RETURNS>
+GdkDrawable      *drawable,GdkGC            *gc,gint              filled,gint              x,gint              y,gint              width,gint              height
 </FUNCTION>
 <FUNCTION>
-<NAME>gdk_color_alloc</NAME>
-<RETURNS>gboolean  </RETURNS>
-GdkColormap	*colormap,GdkColor	*color
+<NAME>gdk_draw_arc</NAME>
+<RETURNS>void  </RETURNS>
+GdkDrawable      *drawable,GdkGC            *gc,gint              filled,gint              x,gint              y,gint              width,gint              height,gint              angle1,gint              angle2
 </FUNCTION>
 <FUNCTION>
-<NAME>gdk_color_change</NAME>
-<RETURNS>gboolean  </RETURNS>
-GdkColormap	*colormap,GdkColor	*color
+<NAME>gdk_draw_polygon</NAME>
+<RETURNS>void  </RETURNS>
+GdkDrawable      *drawable,GdkGC            *gc,gint              filled,GdkPoint         *points,gint              npoints
 </FUNCTION>
+<FUNCTION>
+<NAME>gdk_draw_string</NAME>
+<RETURNS>void  </RETURNS>
+GdkDrawable      *drawable,GdkFont          *font,GdkGC            *gc,gint              x,gint              y,const gchar      *string
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_draw_text</NAME>
+<RETURNS>void  </RETURNS>
+GdkDrawable      *drawable,GdkFont          *font,GdkGC            *gc,gint              x,gint              y,const gchar      *text,gint              text_length
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_draw_text_wc</NAME>
+<RETURNS>void  </RETURNS>
+GdkDrawable      *drawable,GdkFont          *font,GdkGC            *gc,gint              x,gint              y,const GdkWChar   *text,gint              text_length
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_draw_drawable</NAME>
+<RETURNS>void  </RETURNS>
+GdkDrawable      *drawable,GdkGC            *gc,GdkDrawable      *src,gint              xsrc,gint              ysrc,gint              xdest,gint              ydest,gint              width,gint              height
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_draw_image</NAME>
+<RETURNS>void  </RETURNS>
+GdkDrawable      *drawable,GdkGC            *gc,GdkImage         *image,gint              xsrc,gint              ysrc,gint              xdest,gint              ydest,gint              width,gint              height
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_draw_points</NAME>
+<RETURNS>void  </RETURNS>
+GdkDrawable      *drawable,GdkGC            *gc,GdkPoint         *points,gint              npoints
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_draw_segments</NAME>
+<RETURNS>void  </RETURNS>
+GdkDrawable      *drawable,GdkGC            *gc,GdkSegment       *segs,gint              nsegs
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_draw_lines</NAME>
+<RETURNS>void  </RETURNS>
+GdkDrawable      *drawable,GdkGC            *gc,GdkPoint         *points,gint              npoints
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_draw_glyphs</NAME>
+<RETURNS>void  </RETURNS>
+GdkDrawable      *drawable,GdkGC            *gc,PangoFont        *font,gint              x,gint              y,PangoGlyphString *glyphs
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_draw_layout_line</NAME>
+<RETURNS>void  </RETURNS>
+GdkDrawable      *drawable,GdkGC            *gc,gint              x,gint              y,PangoLayoutLine  *line
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_draw_layout</NAME>
+<RETURNS>void  </RETURNS>
+GdkDrawable      *drawable,GdkGC            *gc,gint              x,gint              y,PangoLayout      *layout
+</FUNCTION>
+<MACRO>
+<NAME>GDK_PRIORITY_EVENTS</NAME>
+#define GDK_PRIORITY_EVENTS	(G_PRIORITY_DEFAULT)
+</MACRO>
+<MACRO>
+<NAME>GDK_PRIORITY_REDRAW</NAME>
+#define GDK_PRIORITY_REDRAW     (G_PRIORITY_HIGH_IDLE + 20)
+</MACRO>
+<STRUCT>
+<NAME>GdkEventAny</NAME>
+</STRUCT>
+<STRUCT>
+<NAME>GdkEventExpose</NAME>
+</STRUCT>
+<STRUCT>
+<NAME>GdkEventNoExpose</NAME>
+</STRUCT>
+<STRUCT>
+<NAME>GdkEventVisibility</NAME>
+</STRUCT>
+<STRUCT>
+<NAME>GdkEventMotion</NAME>
+</STRUCT>
+<STRUCT>
+<NAME>GdkEventButton</NAME>
+</STRUCT>
+<STRUCT>
+<NAME>GdkEventScroll</NAME>
+</STRUCT>
+<STRUCT>
+<NAME>GdkEventKey</NAME>
+</STRUCT>
+<STRUCT>
+<NAME>GdkEventFocus</NAME>
+</STRUCT>
+<STRUCT>
+<NAME>GdkEventCrossing</NAME>
+</STRUCT>
+<STRUCT>
+<NAME>GdkEventConfigure</NAME>
+</STRUCT>
+<STRUCT>
+<NAME>GdkEventProperty</NAME>
+</STRUCT>
+<STRUCT>
+<NAME>GdkEventSelection</NAME>
+</STRUCT>
+<STRUCT>
+<NAME>GdkEventProximity</NAME>
+</STRUCT>
+<STRUCT>
+<NAME>GdkEventClient</NAME>
+</STRUCT>
+<STRUCT>
+<NAME>GdkEventDND</NAME>
+</STRUCT>
+<USER_FUNCTION>
+<NAME>GdkEventFunc</NAME>
+<RETURNS>void </RETURNS>
+GdkEvent *event,
+			      gpointer	data
+</USER_FUNCTION>
+<TYPEDEF>
+<NAME>GdkXEvent</NAME>
+typedef void GdkXEvent;	  /* Can be cast to XEvent */
+</TYPEDEF>
+<ENUM>
+<NAME>GdkFilterReturn</NAME>
+typedef enum {
+  GDK_FILTER_CONTINUE,	  /* Event not handled, continue processesing */
+  GDK_FILTER_TRANSLATE,	  /* Translated event stored */
+  GDK_FILTER_REMOVE	  /* Terminate processing, removing event */
+} GdkFilterReturn;
+</ENUM>
+<USER_FUNCTION>
+<NAME>GdkFilterFunc</NAME>
+<RETURNS>GdkFilterReturn </RETURNS>
+GdkXEvent *xevent,
+					  GdkEvent *event,
+					  gpointer  data
+</USER_FUNCTION>
+<ENUM>
+<NAME>GdkEventType</NAME>
+typedef enum
+{
+  GDK_NOTHING		= -1,
+  GDK_DELETE		= 0,
+  GDK_DESTROY		= 1,
+  GDK_EXPOSE		= 2,
+  GDK_MOTION_NOTIFY	= 3,
+  GDK_BUTTON_PRESS	= 4,
+  GDK_2BUTTON_PRESS	= 5,
+  GDK_3BUTTON_PRESS	= 6,
+  GDK_BUTTON_RELEASE	= 7,
+  GDK_KEY_PRESS		= 8,
+  GDK_KEY_RELEASE	= 9,
+  GDK_ENTER_NOTIFY	= 10,
+  GDK_LEAVE_NOTIFY	= 11,
+  GDK_FOCUS_CHANGE	= 12,
+  GDK_CONFIGURE		= 13,
+  GDK_MAP		= 14,
+  GDK_UNMAP		= 15,
+  GDK_PROPERTY_NOTIFY	= 16,
+  GDK_SELECTION_CLEAR	= 17,
+  GDK_SELECTION_REQUEST = 18,
+  GDK_SELECTION_NOTIFY	= 19,
+  GDK_PROXIMITY_IN	= 20,
+  GDK_PROXIMITY_OUT	= 21,
+  GDK_DRAG_ENTER        = 22,
+  GDK_DRAG_LEAVE        = 23,
+  GDK_DRAG_MOTION       = 24,
+  GDK_DRAG_STATUS       = 25,
+  GDK_DROP_START        = 26,
+  GDK_DROP_FINISHED     = 27,
+  GDK_CLIENT_EVENT	= 28,
+  GDK_VISIBILITY_NOTIFY = 29,
+  GDK_NO_EXPOSE		= 30,
+  GDK_SCROLL            = 31
+} GdkEventType;
+</ENUM>
+<ENUM>
+<NAME>GdkEventMask</NAME>
+typedef enum
+{
+  GDK_EXPOSURE_MASK		= 1 << 1,
+  GDK_POINTER_MOTION_MASK	= 1 << 2,
+  GDK_POINTER_MOTION_HINT_MASK	= 1 << 3,
+  GDK_BUTTON_MOTION_MASK	= 1 << 4,
+  GDK_BUTTON1_MOTION_MASK	= 1 << 5,
+  GDK_BUTTON2_MOTION_MASK	= 1 << 6,
+  GDK_BUTTON3_MOTION_MASK	= 1 << 7,
+  GDK_BUTTON_PRESS_MASK		= 1 << 8,
+  GDK_BUTTON_RELEASE_MASK	= 1 << 9,
+  GDK_KEY_PRESS_MASK		= 1 << 10,
+  GDK_KEY_RELEASE_MASK		= 1 << 11,
+  GDK_ENTER_NOTIFY_MASK		= 1 << 12,
+  GDK_LEAVE_NOTIFY_MASK		= 1 << 13,
+  GDK_FOCUS_CHANGE_MASK		= 1 << 14,
+  GDK_STRUCTURE_MASK		= 1 << 15,
+  GDK_PROPERTY_CHANGE_MASK	= 1 << 16,
+  GDK_VISIBILITY_NOTIFY_MASK	= 1 << 17,
+  GDK_PROXIMITY_IN_MASK		= 1 << 18,
+  GDK_PROXIMITY_OUT_MASK	= 1 << 19,
+  GDK_SUBSTRUCTURE_MASK		= 1 << 20,
+  GDK_SCROLL_MASK               = 1 << 21,
+  GDK_ALL_EVENTS_MASK		= 0x3FFFFE
+} GdkEventMask;
+</ENUM>
+<ENUM>
+<NAME>GdkVisibilityState</NAME>
+typedef enum
+{
+  GDK_VISIBILITY_UNOBSCURED,
+  GDK_VISIBILITY_PARTIAL,
+  GDK_VISIBILITY_FULLY_OBSCURED
+} GdkVisibilityState;
+</ENUM>
+<ENUM>
+<NAME>GdkScrollDirection</NAME>
+typedef enum
+{
+  GDK_SCROLL_UP,
+  GDK_SCROLL_DOWN,
+  GDK_SCROLL_LEFT,
+  GDK_SCROLL_RIGHT
+} GdkScrollDirection;
+</ENUM>
+<ENUM>
+<NAME>GdkNotifyType</NAME>
+typedef enum
+{
+  GDK_NOTIFY_ANCESTOR		= 0,
+  GDK_NOTIFY_VIRTUAL		= 1,
+  GDK_NOTIFY_INFERIOR		= 2,
+  GDK_NOTIFY_NONLINEAR		= 3,
+  GDK_NOTIFY_NONLINEAR_VIRTUAL	= 4,
+  GDK_NOTIFY_UNKNOWN		= 5
+} GdkNotifyType;
+</ENUM>
+<ENUM>
+<NAME>GdkCrossingMode</NAME>
+typedef enum
+{
+  GDK_CROSSING_NORMAL,
+  GDK_CROSSING_GRAB,
+  GDK_CROSSING_UNGRAB
+} GdkCrossingMode;
+</ENUM>
+<ENUM>
+<NAME>GdkPropertyState</NAME>
+typedef enum
+{
+  GDK_PROPERTY_NEW_VALUE,
+  GDK_PROPERTY_DELETE
+} GdkPropertyState;
+</ENUM>
+<STRUCT>
+<NAME>GdkEventAny</NAME>
+struct GdkEventAny
+{
+  GdkEventType type;
+  GdkWindow *window;
+  gint8 send_event;
+};
+</STRUCT>
+<STRUCT>
+<NAME>GdkEventExpose</NAME>
+struct GdkEventExpose
+{
+  GdkEventType type;
+  GdkWindow *window;
+  gint8 send_event;
+  GdkRectangle area;
+  gint count; /* If non-zero, how many more events follow. */
+};
+</STRUCT>
+<STRUCT>
+<NAME>GdkEventNoExpose</NAME>
+struct GdkEventNoExpose
+{
+  GdkEventType type;
+  GdkWindow *window;
+  gint8 send_event;
+  /* XXX: does anyone need the X major_code or minor_code fields? */
+};
+</STRUCT>
+<STRUCT>
+<NAME>GdkEventVisibility</NAME>
+struct GdkEventVisibility
+{
+  GdkEventType type;
+  GdkWindow *window;
+  gint8 send_event;
+  GdkVisibilityState state;
+};
+</STRUCT>
+<STRUCT>
+<NAME>GdkEventMotion</NAME>
+struct GdkEventMotion
+{
+  GdkEventType type;
+  GdkWindow *window;
+  gint8 send_event;
+  guint32 time;
+  gdouble x;
+  gdouble y;
+  gdouble *axes;
+  guint state;
+  gint16 is_hint;
+  GdkDevice *device;
+  gdouble x_root, y_root;
+};
+</STRUCT>
+<STRUCT>
+<NAME>GdkEventButton</NAME>
+struct GdkEventButton
+{
+  GdkEventType type;
+  GdkWindow *window;
+  gint8 send_event;
+  guint32 time;
+  gdouble x;
+  gdouble y;
+  gdouble *axes;
+  guint state;
+  guint button;
+  GdkDevice *device;
+  gdouble x_root, y_root;
+};
+</STRUCT>
+<STRUCT>
+<NAME>GdkEventScroll</NAME>
+struct GdkEventScroll
+{
+  GdkEventType type;
+  GdkWindow *window;
+  gint8 send_event;
+  guint32 time;
+  gdouble x;
+  gdouble y;
+  guint state;
+  GdkScrollDirection direction;
+  GdkDevice *device;
+  gdouble x_root, y_root;
+};
+</STRUCT>
+<STRUCT>
+<NAME>GdkEventKey</NAME>
+struct GdkEventKey
+{
+  GdkEventType type;
+  GdkWindow *window;
+  gint8 send_event;
+  guint32 time;
+  guint state;
+  guint keyval;
+  gint length;
+  gchar *string;
+};
+</STRUCT>
+<STRUCT>
+<NAME>GdkEventCrossing</NAME>
+struct GdkEventCrossing
+{
+  GdkEventType type;
+  GdkWindow *window;
+  gint8 send_event;
+  GdkWindow *subwindow;
+  guint32 time;
+  gdouble x;
+  gdouble y;
+  gdouble x_root;
+  gdouble y_root;
+  GdkCrossingMode mode;
+  GdkNotifyType detail;
+  gboolean focus;
+  guint state;
+};
+</STRUCT>
+<STRUCT>
+<NAME>GdkEventFocus</NAME>
+struct GdkEventFocus
+{
+  GdkEventType type;
+  GdkWindow *window;
+  gint8 send_event;
+  gint16 in;
+};
+</STRUCT>
+<STRUCT>
+<NAME>GdkEventConfigure</NAME>
+struct GdkEventConfigure
+{
+  GdkEventType type;
+  GdkWindow *window;
+  gint8 send_event;
+  gint x, y;
+  gint width;
+  gint height;
+};
+</STRUCT>
+<STRUCT>
+<NAME>GdkEventProperty</NAME>
+struct GdkEventProperty
+{
+  GdkEventType type;
+  GdkWindow *window;
+  gint8 send_event;
+  GdkAtom atom;
+  guint32 time;
+  guint state;
+};
+</STRUCT>
+<STRUCT>
+<NAME>GdkEventSelection</NAME>
+struct GdkEventSelection
+{
+  GdkEventType type;
+  GdkWindow *window;
+  gint8 send_event;
+  GdkAtom selection;
+  GdkAtom target;
+  GdkAtom property;
+  guint32 time;
+  GdkNativeWindow requestor;
+};
+</STRUCT>
+<STRUCT>
+<NAME>GdkEventProximity</NAME>
+struct GdkEventProximity
+{
+  GdkEventType type;
+  GdkWindow *window;
+  gint8 send_event;
+  guint32 time;
+  GdkDevice *device;
+};
+</STRUCT>
+<STRUCT>
+<NAME>GdkEventClient</NAME>
+struct GdkEventClient
+{
+  GdkEventType type;
+  GdkWindow *window;
+  gint8 send_event;
+  GdkAtom message_type;
+  gushort data_format;
+  union {
+    char b[20];
+    short s[10];
+    long l[5];
+  } data;
+};
+</STRUCT>
+<STRUCT>
+<NAME>GdkEventDND</NAME>
+struct GdkEventDND {
+  GdkEventType type;
+  GdkWindow *window;
+  gint8 send_event;
+  GdkDragContext *context;
+
+  guint32 time;
+  gshort x_root, y_root;
+};
+</STRUCT>
+<UNION>
+<NAME>GdkEvent</NAME>
+union GdkEvent
+{
+  GdkEventType		    type;
+  GdkEventAny		    any;
+  GdkEventExpose	    expose;
+  GdkEventNoExpose	    no_expose;
+  GdkEventVisibility	    visibility;
+  GdkEventMotion	    motion;
+  GdkEventButton	    button;
+  GdkEventScroll            scroll;
+  GdkEventKey		    key;
+  GdkEventCrossing	    crossing;
+  GdkEventFocus		    focus_change;
+  GdkEventConfigure	    configure;
+  GdkEventProperty	    property;
+  GdkEventSelection	    selection;
+  GdkEventProximity	    proximity;
+  GdkEventClient	    client;
+  GdkEventDND               dnd;
+};
+</UNION>
+<FUNCTION>
+<NAME>gdk_events_pending</NAME>
+<RETURNS>gboolean  </RETURNS>
+void
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_event_get</NAME>
+<RETURNS>GdkEvent *</RETURNS>
+void
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_event_peek</NAME>
+<RETURNS>GdkEvent *</RETURNS>
+void
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_event_get_graphics_expose</NAME>
+<RETURNS>GdkEvent *</RETURNS>
+GdkWindow 	*window
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_event_put</NAME>
+<RETURNS>void  </RETURNS>
+GdkEvent  	*event
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_event_copy</NAME>
+<RETURNS>GdkEvent *</RETURNS>
+GdkEvent 	*event
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_event_free</NAME>
+<RETURNS>void 	</RETURNS>
+GdkEvent 	*event
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_event_get_time</NAME>
+<RETURNS>guint32  </RETURNS>
+GdkEvent 	*event
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_event_get_axis</NAME>
+<RETURNS>gboolean  </RETURNS>
+GdkEvent       *event,GdkAxisUse      axis_use,gdouble        *value
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_event_handler_set</NAME>
+<RETURNS>void 	</RETURNS>
+GdkEventFunc    func,gpointer        data,GDestroyNotify  notify
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_set_show_events</NAME>
+<RETURNS>void 	</RETURNS>
+gboolean	 show_events
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_get_show_events</NAME>
+<RETURNS>gboolean  </RETURNS>
+void
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_add_client_message_filter</NAME>
+<RETURNS>void  </RETURNS>
+GdkAtom       message_type,GdkFilterFunc func,gpointer      data
+</FUNCTION>
+<ENUM>
+<NAME>GdkFontType</NAME>
+typedef enum
+{
+  GDK_FONT_FONT,
+  GDK_FONT_FONTSET
+} GdkFontType;
+</ENUM>
+<STRUCT>
+<NAME>GdkFont</NAME>
+struct GdkFont
+{
+  GdkFontType type;
+  gint ascent;
+  gint descent;
+};
+</STRUCT>
 <FUNCTION>
 <NAME>gdk_font_load</NAME>
 <RETURNS>GdkFont *</RETURNS>
@@ -985,7 +1755,22 @@ const gchar    *font_name
 <FUNCTION>
 <NAME>gdk_fontset_load</NAME>
 <RETURNS>GdkFont *</RETURNS>
-gchar          *fontset_name
+const gchar    *fontset_name
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_font_load</NAME>
+<RETURNS>GdkFont *</RETURNS>
+const gchar          *font_name
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_fontset_load</NAME>
+<RETURNS>GdkFont *</RETURNS>
+const gchar          *fontset_name
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_font_from_description</NAME>
+<RETURNS>GdkFont *</RETURNS>
+PangoFontDescription *font_desc
 </FUNCTION>
 <FUNCTION>
 <NAME>gdk_font_ref</NAME>
@@ -1004,7 +1789,7 @@ const GdkFont  *font
 </FUNCTION>
 <FUNCTION>
 <NAME>gdk_font_equal</NAME>
-<RETURNS>gint 	</RETURNS>
+<RETURNS>gboolean  </RETURNS>
 const GdkFont  *fonta,const GdkFont  *fontb
 </FUNCTION>
 <FUNCTION>
@@ -1078,208 +1863,427 @@ GdkFont        *font,const GdkWChar *text,gint            text_length,gint      
 GdkFont     *font,const gchar *string,gint        *lbearing,gint        *rbearing,gint        *width,gint        *ascent,gint        *descent
 </FUNCTION>
 <FUNCTION>
-<NAME>gdk_draw_point</NAME>
-<RETURNS>void  </RETURNS>
-GdkDrawable  *drawable,GdkGC	       *gc,gint		x,gint		y
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_draw_line</NAME>
-<RETURNS>void  </RETURNS>
-GdkDrawable  *drawable,GdkGC	       *gc,gint		x1,gint		y1,gint		x2,gint		y2
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_draw_rectangle</NAME>
-<RETURNS>void  </RETURNS>
-GdkDrawable  *drawable,GdkGC	       *gc,gint		filled,gint		x,gint		y,gint		width,gint		height
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_draw_arc</NAME>
-<RETURNS>void  </RETURNS>
-GdkDrawable  *drawable,GdkGC	       *gc,gint		filled,gint		x,gint		y,gint		width,gint		height,gint		angle1,gint		angle2
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_draw_polygon</NAME>
-<RETURNS>void  </RETURNS>
-GdkDrawable  *drawable,GdkGC	       *gc,gint		filled,GdkPoint     *points,gint		npoints
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_draw_string</NAME>
-<RETURNS>void  </RETURNS>
-GdkDrawable  *drawable,GdkFont      *font,GdkGC	       *gc,gint		x,gint		y,const gchar  *string
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_draw_text</NAME>
-<RETURNS>void  </RETURNS>
-GdkDrawable  *drawable,GdkFont      *font,GdkGC	       *gc,gint		x,gint		y,const gchar  *text,gint		text_length
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_draw_text_wc</NAME>
-<RETURNS>void  </RETURNS>
-GdkDrawable	 *drawable,GdkFont	 *font,GdkGC		 *gc,gint		  x,gint		  y,const GdkWChar *text,gint		  text_length
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_draw_pixmap</NAME>
-<RETURNS>void  </RETURNS>
-GdkDrawable  *drawable,GdkGC	       *gc,GdkDrawable  *src,gint		xsrc,gint		ysrc,gint		xdest,gint		ydest,gint		width,gint		height
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_draw_bitmap</NAME>
-<RETURNS>void  </RETURNS>
-GdkDrawable  *drawable,GdkGC	       *gc,GdkDrawable  *src,gint		xsrc,gint		ysrc,gint		xdest,gint		ydest,gint		width,gint		height
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_draw_image</NAME>
-<RETURNS>void  </RETURNS>
-GdkDrawable  *drawable,GdkGC	       *gc,GdkImage     *image,gint		xsrc,gint		ysrc,gint		xdest,gint		ydest,gint		width,gint		height
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_draw_points</NAME>
-<RETURNS>void  </RETURNS>
-GdkDrawable  *drawable,GdkGC	       *gc,GdkPoint     *points,gint		npoints
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_draw_segments</NAME>
-<RETURNS>void  </RETURNS>
-GdkDrawable  *drawable,GdkGC	       *gc,GdkSegment   *segs,gint		nsegs
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_draw_lines</NAME>
-<RETURNS>void  </RETURNS>
-GdkDrawable  *drawable,GdkGC        *gc,GdkPoint     *points,gint          npoints
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_selection_owner_set</NAME>
-<RETURNS>gint 	</RETURNS>
-GdkWindow	 *owner,GdkAtom	  selection,guint32	  time,gint	  send_event
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_selection_owner_get</NAME>
-<RETURNS>GdkWindow *</RETURNS>
-GdkAtom	  selection
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_selection_convert</NAME>
-<RETURNS>void 	</RETURNS>
-GdkWindow	 *requestor,GdkAtom	  selection,GdkAtom	  target,guint32	  time
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_selection_property_get</NAME>
-<RETURNS>gint 	</RETURNS>
-GdkWindow  *requestor,guchar	 **data,GdkAtom	  *prop_type,gint	  *prop_format
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_selection_send_notify</NAME>
-<RETURNS>void 	</RETURNS>
-guint32	    requestor,GdkAtom	    selection,GdkAtom	    target,GdkAtom	    property,guint32	    time
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_text_property_to_text_list</NAME>
-<RETURNS>gint 	</RETURNS>
-GdkAtom encoding, gint format,guchar *text, gint length,gchar ***list
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_free_text_list</NAME>
-<RETURNS>void 	</RETURNS>
-gchar **list
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_string_to_compound_text</NAME>
-<RETURNS>gint 	</RETURNS>
-gchar *str,GdkAtom *encoding, gint *format,guchar **ctext, gint *length
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_free_compound_text</NAME>
-<RETURNS>void 	</RETURNS>
-guchar *ctext
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_atom_intern</NAME>
-<RETURNS>GdkAtom  </RETURNS>
-const gchar *atom_name,gint	  only_if_exists
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_atom_name</NAME>
+<NAME>gdk_font_full_name_get</NAME>
 <RETURNS>gchar *</RETURNS>
-GdkAtom atom
+GdkFont *font
 </FUNCTION>
 <FUNCTION>
-<NAME>gdk_property_get</NAME>
-<RETURNS>gint 	</RETURNS>
-GdkWindow	 *window,GdkAtom	  property,GdkAtom	  type,gulong	  offset,gulong	  length,gint	  pdelete,GdkAtom	 *actual_property_type,gint	 *actual_format,gint	 *actual_length,guchar	**data
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_property_change</NAME>
+<NAME>gdk_font_full_name_free</NAME>
 <RETURNS>void 	</RETURNS>
-GdkWindow	 *window,GdkAtom	  property,GdkAtom	  type,gint	  format,GdkPropMode  mode,guchar	 *data,gint	  nelements
+gchar *name
 </FUNCTION>
+<STRUCT>
+<NAME>GdkGCValues</NAME>
+</STRUCT>
+<STRUCT>
+<NAME>GdkGCClass</NAME>
+</STRUCT>
+<ENUM>
+<NAME>GdkCapStyle</NAME>
+typedef enum
+{
+  GDK_CAP_NOT_LAST,
+  GDK_CAP_BUTT,
+  GDK_CAP_ROUND,
+  GDK_CAP_PROJECTING
+} GdkCapStyle;
+</ENUM>
+<ENUM>
+<NAME>GdkFill</NAME>
+typedef enum
+{
+  GDK_SOLID,
+  GDK_TILED,
+  GDK_STIPPLED,
+  GDK_OPAQUE_STIPPLED
+} GdkFill;
+</ENUM>
+<ENUM>
+<NAME>GdkFunction</NAME>
+typedef enum
+{
+  GDK_COPY,
+  GDK_INVERT,
+  GDK_XOR,
+  GDK_CLEAR,
+  GDK_AND,
+  GDK_AND_REVERSE,
+  GDK_AND_INVERT,
+  GDK_NOOP,
+  GDK_OR,
+  GDK_EQUIV,
+  GDK_OR_REVERSE,
+  GDK_COPY_INVERT,
+  GDK_OR_INVERT,
+  GDK_NAND,
+  GDK_NOR,
+  GDK_SET
+} GdkFunction;
+</ENUM>
+<ENUM>
+<NAME>GdkJoinStyle</NAME>
+typedef enum
+{
+  GDK_JOIN_MITER,
+  GDK_JOIN_ROUND,
+  GDK_JOIN_BEVEL
+} GdkJoinStyle;
+</ENUM>
+<ENUM>
+<NAME>GdkLineStyle</NAME>
+typedef enum
+{
+  GDK_LINE_SOLID,
+  GDK_LINE_ON_OFF_DASH,
+  GDK_LINE_DOUBLE_DASH
+} GdkLineStyle;
+</ENUM>
+<ENUM>
+<NAME>GdkSubwindowMode</NAME>
+typedef enum
+{
+  GDK_CLIP_BY_CHILDREN	= 0,
+  GDK_INCLUDE_INFERIORS = 1
+} GdkSubwindowMode;
+</ENUM>
+<ENUM>
+<NAME>GdkGCValuesMask</NAME>
+typedef enum
+{
+  GDK_GC_FOREGROUND    = 1 << 0,
+  GDK_GC_BACKGROUND    = 1 << 1,
+  GDK_GC_FONT	       = 1 << 2,
+  GDK_GC_FUNCTION      = 1 << 3,
+  GDK_GC_FILL	       = 1 << 4,
+  GDK_GC_TILE	       = 1 << 5,
+  GDK_GC_STIPPLE       = 1 << 6,
+  GDK_GC_CLIP_MASK     = 1 << 7,
+  GDK_GC_SUBWINDOW     = 1 << 8,
+  GDK_GC_TS_X_ORIGIN   = 1 << 9,
+  GDK_GC_TS_Y_ORIGIN   = 1 << 10,
+  GDK_GC_CLIP_X_ORIGIN = 1 << 11,
+  GDK_GC_CLIP_Y_ORIGIN = 1 << 12,
+  GDK_GC_EXPOSURES     = 1 << 13,
+  GDK_GC_LINE_WIDTH    = 1 << 14,
+  GDK_GC_LINE_STYLE    = 1 << 15,
+  GDK_GC_CAP_STYLE     = 1 << 16,
+  GDK_GC_JOIN_STYLE    = 1 << 17
+} GdkGCValuesMask;
+</ENUM>
+<STRUCT>
+<NAME>GdkGCValues</NAME>
+struct GdkGCValues
+{
+  GdkColor	    foreground;
+  GdkColor	    background;
+  GdkFont	   *font;
+  GdkFunction	    function;
+  GdkFill	    fill;
+  GdkPixmap	   *tile;
+  GdkPixmap	   *stipple;
+  GdkPixmap	   *clip_mask;
+  GdkSubwindowMode  subwindow_mode;
+  gint		    ts_x_origin;
+  gint		    ts_y_origin;
+  gint		    clip_x_origin;
+  gint		    clip_y_origin;
+  gint		    graphics_exposures;
+  gint		    line_width;
+  GdkLineStyle	    line_style;
+  GdkCapStyle	    cap_style;
+  GdkJoinStyle	    join_style;
+};
+</STRUCT>
+<MACRO>
+<NAME>GDK_TYPE_GC</NAME>
+#define GDK_TYPE_GC              (gdk_gc_get_type ())
+</MACRO>
+<MACRO>
+<NAME>GDK_GC</NAME>
+#define GDK_GC(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_GC, GdkGC))
+</MACRO>
+<MACRO>
+<NAME>GDK_GC_CLASS</NAME>
+#define GDK_GC_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), GDK_TYPE_GC, GdkGCClass))
+</MACRO>
+<MACRO>
+<NAME>GDK_IS_GC</NAME>
+#define GDK_IS_GC(object)        (G_TYPE_CHECK_INSTANCE_TYPE ((object), GDK_TYPE_GC))
+</MACRO>
+<MACRO>
+<NAME>GDK_IS_GC_CLASS</NAME>
+#define GDK_IS_GC_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GDK_TYPE_GC))
+</MACRO>
+<MACRO>
+<NAME>GDK_GC_GET_CLASS</NAME>
+#define GDK_GC_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GDK_TYPE_GC, GdkGCClass))
+</MACRO>
+<STRUCT>
+<NAME>GdkGC</NAME>
+struct GdkGC
+{
+  GObject parent_instance;
+
+  gint clip_x_origin;
+  gint clip_y_origin;
+  gint ts_x_origin;
+  gint ts_y_origin;
+
+  GdkColormap *colormap;
+};
+</STRUCT>
 <FUNCTION>
-<NAME>gdk_property_delete</NAME>
-<RETURNS>void 	</RETURNS>
-GdkWindow	 *window,GdkAtom	  property
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_rectangle_intersect</NAME>
-<RETURNS>gint  </RETURNS>
-GdkRectangle *src1,GdkRectangle *src2,GdkRectangle *dest
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_rectangle_union</NAME>
-<RETURNS>void  </RETURNS>
-GdkRectangle *src1,GdkRectangle *src2,GdkRectangle *dest
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_input_init</NAME>
-<RETURNS>void  </RETURNS>
+<NAME>gdk_gc_get_type</NAME>
+<RETURNS>GType  </RETURNS>
 void
 </FUNCTION>
 <FUNCTION>
-<NAME>gdk_input_exit</NAME>
+<NAME>gdk_gc_new</NAME>
+<RETURNS>GdkGC  *</RETURNS>
+GdkDrawable	    *drawable
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_gc_new_with_values</NAME>
+<RETURNS>GdkGC  *</RETURNS>
+GdkDrawable	    *drawable,GdkGCValues	    *values,GdkGCValuesMask   values_mask
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_gc_ref</NAME>
+<RETURNS>GdkGC  *</RETURNS>
+GdkGC	    *gc
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_gc_unref</NAME>
 <RETURNS>void  </RETURNS>
-void
+GdkGC	    *gc
 </FUNCTION>
 <FUNCTION>
-<NAME>gdk_input_list_devices</NAME>
-<RETURNS>GList  *</RETURNS>
-void
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_input_set_extension_events</NAME>
+<NAME>gdk_gc_get_values</NAME>
 <RETURNS>void  </RETURNS>
-GdkWindow *window,gint mask,GdkExtensionMode mode
+GdkGC	    *gc,GdkGCValues	    *values
 </FUNCTION>
 <FUNCTION>
-<NAME>gdk_input_set_source</NAME>
+<NAME>gdk_gc_set_values</NAME>
 <RETURNS>void  </RETURNS>
-guint32 deviceid,GdkInputSource source
+GdkGC           *gc,GdkGCValues	   *values,GdkGCValuesMask  values_mask
 </FUNCTION>
 <FUNCTION>
-<NAME>gdk_input_set_mode</NAME>
-<RETURNS>gint  </RETURNS>
-guint32 deviceid,GdkInputMode mode
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_input_set_axes</NAME>
+<NAME>gdk_gc_set_foreground</NAME>
 <RETURNS>void  </RETURNS>
-guint32 deviceid,GdkAxisUse *axes
+GdkGC	    *gc,GdkColor	    *color
 </FUNCTION>
 <FUNCTION>
-<NAME>gdk_input_set_key</NAME>
+<NAME>gdk_gc_set_background</NAME>
 <RETURNS>void  </RETURNS>
-guint32 deviceid,guint   index,guint   keyval,GdkModifierType modifiers
+GdkGC	    *gc,GdkColor	    *color
 </FUNCTION>
 <FUNCTION>
-<NAME>gdk_input_window_get_pointer</NAME>
+<NAME>gdk_gc_set_font</NAME>
 <RETURNS>void  </RETURNS>
-GdkWindow       *window,guint32	       deviceid,gdouble	       *x,gdouble	       *y,gdouble	       *pressure,gdouble	       *xtilt,gdouble	       *ytilt,GdkModifierType *mask
+GdkGC	    *gc,GdkFont	    *font
 </FUNCTION>
 <FUNCTION>
-<NAME>gdk_input_motion_events</NAME>
-<RETURNS>GdkTimeCoord  *</RETURNS>
-GdkWindow *window,guint32 deviceid,guint32 start,guint32 stop,gint *nevents_return
+<NAME>gdk_gc_set_function</NAME>
+<RETURNS>void  </RETURNS>
+GdkGC	    *gc,GdkFunction	     function
 </FUNCTION>
+<FUNCTION>
+<NAME>gdk_gc_set_fill</NAME>
+<RETURNS>void  </RETURNS>
+GdkGC	    *gc,GdkFill	     fill
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_gc_set_tile</NAME>
+<RETURNS>void  </RETURNS>
+GdkGC	    *gc,GdkPixmap	    *tile
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_gc_set_stipple</NAME>
+<RETURNS>void  </RETURNS>
+GdkGC	    *gc,GdkPixmap	    *stipple
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_gc_set_ts_origin</NAME>
+<RETURNS>void  </RETURNS>
+GdkGC	    *gc,gint		     x,gint		     y
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_gc_set_clip_origin</NAME>
+<RETURNS>void  </RETURNS>
+GdkGC	    *gc,gint		     x,gint		     y
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_gc_set_clip_mask</NAME>
+<RETURNS>void  </RETURNS>
+GdkGC	    *gc,GdkBitmap	    *mask
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_gc_set_clip_rectangle</NAME>
+<RETURNS>void  </RETURNS>
+GdkGC	    *gc,GdkRectangle	    *rectangle
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_gc_set_clip_region</NAME>
+<RETURNS>void  </RETURNS>
+GdkGC	    *gc,GdkRegion	    *region
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_gc_set_subwindow</NAME>
+<RETURNS>void  </RETURNS>
+GdkGC	    *gc,GdkSubwindowMode  mode
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_gc_set_exposures</NAME>
+<RETURNS>void  </RETURNS>
+GdkGC	    *gc,gboolean	     exposures
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_gc_set_line_attributes</NAME>
+<RETURNS>void  </RETURNS>
+GdkGC	    *gc,gint		     line_width,GdkLineStyle	     line_style,GdkCapStyle	     cap_style,GdkJoinStyle	     join_style
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_gc_set_dashes</NAME>
+<RETURNS>void  </RETURNS>
+GdkGC            *gc,gint	             dash_offset,gint8             dash_list[],gint              n
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_gc_copy</NAME>
+<RETURNS>void  </RETURNS>
+GdkGC	    *dst_gc,GdkGC	    *src_gc
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_gc_set_colormap</NAME>
+<RETURNS>void  </RETURNS>
+GdkGC       *gc,GdkColormap *colormap
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_gc_get_colormap</NAME>
+<RETURNS>GdkColormap  *</RETURNS>
+GdkGC       *gc
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_gc_set_rgb_fg_color</NAME>
+<RETURNS>void  </RETURNS>
+GdkGC       *gc,GdkColor    *color
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_gc_set_rgb_bg_color</NAME>
+<RETURNS>void  </RETURNS>
+GdkGC       *gc,GdkColor    *color
+</FUNCTION>
+<MACRO>
+<NAME>gdk_iswalnum</NAME>
+#  define gdk_iswalnum(c) iswalnum(c)
+</MACRO>
+<MACRO>
+<NAME>gdk_iswspace</NAME>
+#  define gdk_iswspace(c) iswspace(c)
+</MACRO>
+<MACRO>
+<NAME>gdk_iswalnum</NAME>
+#  define gdk_iswalnum(c) ((wchar_t)(c) <= 0xFF && isalnum(c))
+</MACRO>
+<MACRO>
+<NAME>gdk_iswspace</NAME>
+#  define gdk_iswspace(c) ((wchar_t)(c) <= 0xFF && isspace(c))
+</MACRO>
+<STRUCT>
+<NAME>GdkIC</NAME>
+</STRUCT>
+<STRUCT>
+<NAME>GdkICAttr</NAME>
+</STRUCT>
+<ENUM>
+<NAME>GdkIMStyle</NAME>
+typedef enum			/*< flags >*/
+{
+  GDK_IM_PREEDIT_AREA	   = 0x0001, 
+  GDK_IM_PREEDIT_CALLBACKS = 0x0002, 
+  GDK_IM_PREEDIT_POSITION  = 0x0004,
+  GDK_IM_PREEDIT_NOTHING   = 0x0008,
+  GDK_IM_PREEDIT_NONE	   = 0x0010,
+  GDK_IM_PREEDIT_MASK      = 0x001f,
+
+  GDK_IM_STATUS_AREA	   = 0x0100, 
+  GDK_IM_STATUS_CALLBACKS  = 0x0200,
+  GDK_IM_STATUS_NOTHING	   = 0x0400,
+  GDK_IM_STATUS_NONE	   = 0x0800,
+  GDK_IM_STATUS_MASK	   = 0x0f00 
+} GdkIMStyle;
+</ENUM>
+<ENUM>
+<NAME>GdkICAttributesType</NAME>
+typedef enum
+{
+  GDK_IC_STYLE			= 1 << 0,
+  GDK_IC_CLIENT_WINDOW		= 1 << 1,
+  GDK_IC_FOCUS_WINDOW		= 1 << 2,
+  GDK_IC_FILTER_EVENTS		= 1 << 3,
+  GDK_IC_SPOT_LOCATION		= 1 << 4,
+  GDK_IC_LINE_SPACING		= 1 << 5,
+  GDK_IC_CURSOR			= 1 << 6,
+
+  GDK_IC_PREEDIT_FONTSET	= 1 << 10,
+  GDK_IC_PREEDIT_AREA		= 1 << 11,
+  GDK_IC_PREEDIT_AREA_NEEDED	= 1 << 12,
+  GDK_IC_PREEDIT_FOREGROUND	= 1 << 13,
+  GDK_IC_PREEDIT_BACKGROUND	= 1 << 14,
+  GDK_IC_PREEDIT_PIXMAP		= 1 << 15,
+  GDK_IC_PREEDIT_COLORMAP	= 1 << 16,
+
+  GDK_IC_STATUS_FONTSET		= 1 << 21,
+  GDK_IC_STATUS_AREA		= 1 << 22,
+  GDK_IC_STATUS_AREA_NEEDED	= 1 << 23,
+  GDK_IC_STATUS_FOREGROUND	= 1 << 24,
+  GDK_IC_STATUS_BACKGROUND	= 1 << 25,
+  GDK_IC_STATUS_PIXMAP		= 1 << 26,
+  GDK_IC_STATUS_COLORMAP	= 1 << 27,
+
+  GDK_IC_ALL_REQ		= GDK_IC_STYLE |
+    				  GDK_IC_CLIENT_WINDOW,
+
+  GDK_IC_PREEDIT_AREA_REQ	= GDK_IC_PREEDIT_AREA | 
+				  GDK_IC_PREEDIT_FONTSET,
+  GDK_IC_PREEDIT_POSITION_REQ	= GDK_IC_PREEDIT_AREA | GDK_IC_SPOT_LOCATION |
+				  GDK_IC_PREEDIT_FONTSET,
+
+  GDK_IC_STATUS_AREA_REQ	= GDK_IC_STATUS_AREA | 
+				  GDK_IC_STATUS_FONTSET
+} GdkICAttributesType;
+</ENUM>
+<STRUCT>
+<NAME>GdkICAttr</NAME>
+struct GdkICAttr
+{
+  GdkIMStyle style;
+  GdkWindow *client_window;
+  GdkWindow *focus_window;
+  GdkEventMask filter_events;
+  GdkPoint spot_location;
+  gint line_spacing;
+  GdkCursor *cursor;
+
+  GdkFont *preedit_fontset;
+  GdkRectangle preedit_area;
+  GdkRectangle preedit_area_needed; 
+  GdkColor preedit_foreground;
+  GdkColor preedit_background;
+  GdkPixmap *preedit_pixmap;
+  GdkColormap *preedit_colormap;
+
+  GdkFont *status_fontset;
+  GdkRectangle status_area;
+  GdkRectangle status_area_needed; 
+  GdkColor status_foreground;
+  GdkColor status_background;
+  GdkPixmap *status_pixmap;
+  GdkColormap *status_colormap;
+};
+</STRUCT>
 <FUNCTION>
 <NAME>gdk_im_ready</NAME>
-<RETURNS>gint  </RETURNS>
+<RETURNS>gboolean  </RETURNS>
 void
 </FUNCTION>
 <FUNCTION>
@@ -1342,397 +2346,6 @@ GdkIC              *ic,GdkICAttr          *attr,GdkICAttributesType mask
 <RETURNS>GdkICAttributesType  </RETURNS>
 GdkIC              *ic,GdkICAttr          *attr,GdkICAttributesType mask
 </FUNCTION>
-<FUNCTION>
-<NAME>gdk_wcstombs</NAME>
-<RETURNS>gchar      *</RETURNS>
-const GdkWChar   *src
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_mbstowcs</NAME>
-<RETURNS>gint  </RETURNS>
-GdkWChar         *dest,const gchar      *src,gint              dest_max
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_color_context_new</NAME>
-<RETURNS>GdkColorContext  *</RETURNS>
-GdkVisual   *visual,GdkColormap *colormap
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_color_context_new_mono</NAME>
-<RETURNS>GdkColorContext  *</RETURNS>
-GdkVisual   *visual,GdkColormap *colormap
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_color_context_free</NAME>
-<RETURNS>void 	</RETURNS>
-GdkColorContext *cc
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_color_context_get_pixel</NAME>
-<RETURNS>gulong 	</RETURNS>
-GdkColorContext *cc,gushort	    red,gushort	    green,gushort	    blue,gint		   *failed
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_color_context_get_pixels</NAME>
-<RETURNS>void 	</RETURNS>
-GdkColorContext *cc,gushort	   *reds,gushort	   *greens,gushort	   *blues,gint		    ncolors,gulong	   *colors,gint		   *nallocated
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_color_context_get_pixels_incremental</NAME>
-<RETURNS>void 	</RETURNS>
-GdkColorContext *cc,gushort	   *reds,gushort	   *greens,gushort	   *blues,gint		    ncolors,gint		   *used,gulong	   *colors,gint		   *nallocated
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_color_context_query_color</NAME>
-<RETURNS>gint 	</RETURNS>
-GdkColorContext *cc,GdkColor	   *color
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_color_context_query_colors</NAME>
-<RETURNS>gint 	</RETURNS>
-GdkColorContext *cc,GdkColor	   *colors,gint		    num_colors
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_color_context_add_palette</NAME>
-<RETURNS>gint 	</RETURNS>
-GdkColorContext *cc,GdkColor	   *palette,gint		    num_palette
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_color_context_init_dither</NAME>
-<RETURNS>void 	</RETURNS>
-GdkColorContext *cc
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_color_context_free_dither</NAME>
-<RETURNS>void 	</RETURNS>
-GdkColorContext *cc
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_color_context_get_pixel_from_palette</NAME>
-<RETURNS>gulong 	</RETURNS>
-GdkColorContext *cc,gushort	   *red,gushort	   *green,gushort	   *blue,gint		   *failed
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_color_context_get_index_from_palette</NAME>
-<RETURNS>guchar 	</RETURNS>
-GdkColorContext *cc,gint		   *red,gint		   *green,gint		   *blue,gint		   *failed
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_region_new</NAME>
-<RETURNS>GdkRegion *</RETURNS>
-void
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_region_destroy</NAME>
-<RETURNS>void 	</RETURNS>
-GdkRegion	   *region
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_region_get_clipbox</NAME>
-<RETURNS>void 	</RETURNS>
-GdkRegion    *region,GdkRectangle *rectangle
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_region_empty</NAME>
-<RETURNS>gboolean  </RETURNS>
-GdkRegion	   *region
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_region_equal</NAME>
-<RETURNS>gboolean  </RETURNS>
-GdkRegion	   *region1,GdkRegion	   *region2
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_region_point_in</NAME>
-<RETURNS>gboolean  </RETURNS>
-GdkRegion	   *region,int		   x,int		   y
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_region_rect_in</NAME>
-<RETURNS>GdkOverlapType  </RETURNS>
-GdkRegion	   *region,GdkRectangle  *rect
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_region_polygon</NAME>
-<RETURNS>GdkRegion *</RETURNS>
-GdkPoint      *points,gint           npoints,GdkFillRule    fill_rule
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_region_offset</NAME>
-<RETURNS>void 	</RETURNS>
-GdkRegion	   *region,gint	   dx,gint	   dy
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_region_shrink</NAME>
-<RETURNS>void 	</RETURNS>
-GdkRegion	   *region,gint	   dx,gint	   dy
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_region_union_with_rect</NAME>
-<RETURNS>GdkRegion *</RETURNS>
-GdkRegion	  *region,GdkRectangle	  *rect
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_regions_intersect</NAME>
-<RETURNS>GdkRegion *</RETURNS>
-GdkRegion	  *source1,GdkRegion	  *source2
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_regions_union</NAME>
-<RETURNS>GdkRegion *</RETURNS>
-GdkRegion	  *source1,GdkRegion	  *source2
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_regions_subtract</NAME>
-<RETURNS>GdkRegion *</RETURNS>
-GdkRegion	  *source1,GdkRegion	  *source2
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_regions_xor</NAME>
-<RETURNS>GdkRegion *</RETURNS>
-GdkRegion	  *source1,GdkRegion	  *source2
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_event_send_clientmessage_toall</NAME>
-<RETURNS>void  </RETURNS>
-GdkEvent    *event
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_event_send_client_message</NAME>
-<RETURNS>gboolean  </RETURNS>
-GdkEvent    *event,guint32      xid
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_keyval_name</NAME>
-<RETURNS>gchar *</RETURNS>
-guint	keyval
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_keyval_from_name</NAME>
-<RETURNS>guint  </RETURNS>
-const gchar *keyval_name
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_keyval_to_upper</NAME>
-<RETURNS>guint  </RETURNS>
-guint	keyval
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_keyval_to_lower</NAME>
-<RETURNS>guint  </RETURNS>
-guint	keyval
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_keyval_is_upper</NAME>
-<RETURNS>gboolean  </RETURNS>
-guint	keyval
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_keyval_is_lower</NAME>
-<RETURNS>gboolean  </RETURNS>
-guint	keyval
-</FUNCTION>
-<VARIABLE>
-<NAME>gdk_threads_mutex</NAME>
-extern GMutex *gdk_threads_mutex;
-</VARIABLE>
-<FUNCTION>
-<NAME>gdk_threads_enter</NAME>
-<RETURNS>void  </RETURNS>
-void
-</FUNCTION>
-<FUNCTION>
-<NAME>gdk_threads_leave</NAME>
-<RETURNS>void  </RETURNS>
-void
-</FUNCTION>
-<MACRO>
-<NAME>GDK_THREADS_ENTER</NAME>
-#  define GDK_THREADS_ENTER()	G_STMT_START {	\
-      if (gdk_threads_mutex)                 	\
-        g_mutex_lock (gdk_threads_mutex);   	\
-   } G_STMT_END
-</MACRO>
-<MACRO>
-<NAME>GDK_THREADS_LEAVE</NAME>
-#  define GDK_THREADS_LEAVE()	G_STMT_START { 	\
-      if (gdk_threads_mutex)                 	\
-        g_mutex_unlock (gdk_threads_mutex); 	\
-   } G_STMT_END
-</MACRO>
-<MACRO>
-<NAME>GDK_THREADS_ENTER</NAME>
-#  define GDK_THREADS_ENTER()
-</MACRO>
-<MACRO>
-<NAME>GDK_THREADS_LEAVE</NAME>
-#  define GDK_THREADS_LEAVE()
-</MACRO>
-<MACRO>
-<NAME>GDK_NONE</NAME>
-#define GDK_NONE	     0L
-</MACRO>
-<MACRO>
-<NAME>GDK_CURRENT_TIME</NAME>
-#define GDK_CURRENT_TIME     0L
-</MACRO>
-<MACRO>
-<NAME>GDK_PARENT_RELATIVE</NAME>
-#define GDK_PARENT_RELATIVE  1L
-</MACRO>
-<MACRO>
-<NAME>GDK_CORE_POINTER</NAME>
-#define GDK_CORE_POINTER 0xfedc
-</MACRO>
-<TYPEDEF>
-<NAME>GdkAtom</NAME>
-typedef gulong			      GdkAtom;
-</TYPEDEF>
-<STRUCT>
-<NAME>GdkColor</NAME>
-</STRUCT>
-<STRUCT>
-<NAME>GdkColormap</NAME>
-</STRUCT>
-<STRUCT>
-<NAME>GdkVisual</NAME>
-</STRUCT>
-<STRUCT>
-<NAME>GdkWindowAttr</NAME>
-</STRUCT>
-<STRUCT>
-<NAME>GdkWindow</NAME>
-</STRUCT>
-<STRUCT>
-<NAME>GdkGeometry</NAME>
-</STRUCT>
-<STRUCT>
-<NAME>GdkImage</NAME>
-</STRUCT>
-<STRUCT>
-<NAME>GdkGCValues</NAME>
-</STRUCT>
-<STRUCT>
-<NAME>GdkGC</NAME>
-</STRUCT>
-<STRUCT>
-<NAME>GdkPoint</NAME>
-</STRUCT>
-<STRUCT>
-<NAME>GdkRectangle</NAME>
-</STRUCT>
-<STRUCT>
-<NAME>GdkSegment</NAME>
-</STRUCT>
-<STRUCT>
-<NAME>GdkFont</NAME>
-</STRUCT>
-<STRUCT>
-<NAME>GdkCursor</NAME>
-</STRUCT>
-<STRUCT>
-<NAME>GdkColorContextDither</NAME>
-</STRUCT>
-<STRUCT>
-<NAME>GdkColorContext</NAME>
-</STRUCT>
-<STRUCT>
-<NAME>GdkDragContext</NAME>
-</STRUCT>
-<STRUCT>
-<NAME>GdkEventAny</NAME>
-</STRUCT>
-<STRUCT>
-<NAME>GdkEventExpose</NAME>
-</STRUCT>
-<STRUCT>
-<NAME>GdkEventNoExpose</NAME>
-</STRUCT>
-<STRUCT>
-<NAME>GdkEventVisibility</NAME>
-</STRUCT>
-<STRUCT>
-<NAME>GdkEventMotion</NAME>
-</STRUCT>
-<STRUCT>
-<NAME>GdkEventButton</NAME>
-</STRUCT>
-<STRUCT>
-<NAME>GdkEventKey</NAME>
-</STRUCT>
-<STRUCT>
-<NAME>GdkEventFocus</NAME>
-</STRUCT>
-<STRUCT>
-<NAME>GdkEventCrossing</NAME>
-</STRUCT>
-<STRUCT>
-<NAME>GdkEventConfigure</NAME>
-</STRUCT>
-<STRUCT>
-<NAME>GdkEventProperty</NAME>
-</STRUCT>
-<STRUCT>
-<NAME>GdkEventSelection</NAME>
-</STRUCT>
-<STRUCT>
-<NAME>GdkEventProximity</NAME>
-</STRUCT>
-<STRUCT>
-<NAME>GdkEventClient</NAME>
-</STRUCT>
-<STRUCT>
-<NAME>GdkEventDND</NAME>
-</STRUCT>
-<STRUCT>
-<NAME>GdkDeviceKey</NAME>
-</STRUCT>
-<STRUCT>
-<NAME>GdkDeviceInfo</NAME>
-</STRUCT>
-<STRUCT>
-<NAME>GdkTimeCoord</NAME>
-</STRUCT>
-<STRUCT>
-<NAME>GdkRegion</NAME>
-</STRUCT>
-<USER_FUNCTION>
-<NAME>GdkEventFunc</NAME>
-<RETURNS>void </RETURNS>
-GdkEvent *event,
-			      gpointer	data
-</USER_FUNCTION>
-<STRUCT>
-<NAME>GdkIC</NAME>
-</STRUCT>
-<STRUCT>
-<NAME>GdkICAttr</NAME>
-</STRUCT>
-<TYPEDEF>
-<NAME>GdkWChar</NAME>
-typedef guint32			    GdkWChar;
-</TYPEDEF>
-<ENUM>
-<NAME>GdkWindowType</NAME>
-typedef enum
-{
-  GDK_WINDOW_ROOT,
-  GDK_WINDOW_TOPLEVEL,
-  GDK_WINDOW_CHILD,
-  GDK_WINDOW_DIALOG,
-  GDK_WINDOW_TEMP,
-  GDK_WINDOW_PIXMAP,
-  GDK_WINDOW_FOREIGN
-} GdkWindowType;
-</ENUM>
-<ENUM>
-<NAME>GdkWindowClass</NAME>
-typedef enum
-{
-  GDK_INPUT_OUTPUT,
-  GDK_INPUT_ONLY
-} GdkWindowClass;
-</ENUM>
 <ENUM>
 <NAME>GdkImageType</NAME>
 typedef enum
@@ -1742,335 +2355,112 @@ typedef enum
   GDK_IMAGE_FASTEST
 } GdkImageType;
 </ENUM>
+<STRUCT>
+<NAME>GdkImageClass</NAME>
+</STRUCT>
+<MACRO>
+<NAME>GDK_TYPE_IMAGE</NAME>
+#define GDK_TYPE_IMAGE              (gdk_image_get_type ())
+</MACRO>
+<MACRO>
+<NAME>GDK_IMAGE</NAME>
+#define GDK_IMAGE(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_IMAGE, GdkImage))
+</MACRO>
+<MACRO>
+<NAME>GDK_IMAGE_CLASS</NAME>
+#define GDK_IMAGE_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), GDK_TYPE_IMAGE, GdkImageClass))
+</MACRO>
+<MACRO>
+<NAME>GDK_IS_IMAGE</NAME>
+#define GDK_IS_IMAGE(object)        (G_TYPE_CHECK_INSTANCE_TYPE ((object), GDK_TYPE_IMAGE))
+</MACRO>
+<MACRO>
+<NAME>GDK_IS_IMAGE_CLASS</NAME>
+#define GDK_IS_IMAGE_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GDK_TYPE_IMAGE))
+</MACRO>
+<MACRO>
+<NAME>GDK_IMAGE_GET_CLASS</NAME>
+#define GDK_IMAGE_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GDK_TYPE_IMAGE, GdkImageClass))
+</MACRO>
+<STRUCT>
+<NAME>GdkImage</NAME>
+struct GdkImage
+{
+  GObject parent_instance;
+  
+  GdkImageType	type;
+  GdkVisual    *visual;	    /* visual used to create the image */
+  GdkByteOrder	byte_order;
+  gint		width;
+  gint		height;
+  guint16	depth;
+  guint16	bpp;	    /* bytes per pixel */
+  guint16	bpl;	    /* bytes per line */
+  gpointer	mem;
+
+  gpointer windowing_data;
+};
+</STRUCT>
+<FUNCTION>
+<NAME>gdk_image_get_type</NAME>
+<RETURNS>GType  </RETURNS>
+void
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_image_new_bitmap</NAME>
+<RETURNS>GdkImage *</RETURNS>
+GdkVisual     *visual,gpointer      data,gint          width,gint          height
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_image_new</NAME>
+<RETURNS>GdkImage *</RETURNS>
+GdkImageType  type,GdkVisual    *visual,gint	      width,gint	      height
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_image_get</NAME>
+<RETURNS>GdkImage *</RETURNS>
+GdkDrawable  *drawable,gint	      x,gint	      y,gint	      width,gint	      height
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_image_ref</NAME>
+<RETURNS>GdkImage  *</RETURNS>
+GdkImage     *image
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_image_unref</NAME>
+<RETURNS>void  </RETURNS>
+GdkImage     *image
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_image_put_pixel</NAME>
+<RETURNS>void 	</RETURNS>
+GdkImage     *image,gint	      x,gint	      y,guint32	      pixel
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_image_get_pixel</NAME>
+<RETURNS>guint32 	</RETURNS>
+GdkImage     *image,gint	      x,gint	      y
+</FUNCTION>
+<STRUCT>
+<NAME>GdkDeviceKey</NAME>
+</STRUCT>
+<STRUCT>
+<NAME>GdkDeviceAxis</NAME>
+</STRUCT>
+<STRUCT>
+<NAME>GdkDevice</NAME>
+</STRUCT>
+<STRUCT>
+<NAME>GdkTimeCoord</NAME>
+</STRUCT>
 <ENUM>
-<NAME>GdkVisualType</NAME>
+<NAME>GdkExtensionMode</NAME>
 typedef enum
 {
-  GDK_VISUAL_STATIC_GRAY,
-  GDK_VISUAL_GRAYSCALE,
-  GDK_VISUAL_STATIC_COLOR,
-  GDK_VISUAL_PSEUDO_COLOR,
-  GDK_VISUAL_TRUE_COLOR,
-  GDK_VISUAL_DIRECT_COLOR
-} GdkVisualType;
-</ENUM>
-<ENUM>
-<NAME>GdkFontType</NAME>
-typedef enum
-{
-  GDK_FONT_FONT,
-  GDK_FONT_FONTSET
-} GdkFontType;
-</ENUM>
-<ENUM>
-<NAME>GdkWindowAttributesType</NAME>
-typedef enum
-{
-  GDK_WA_TITLE	  = 1 << 1,
-  GDK_WA_X	  = 1 << 2,
-  GDK_WA_Y	  = 1 << 3,
-  GDK_WA_CURSOR	  = 1 << 4,
-  GDK_WA_COLORMAP = 1 << 5,
-  GDK_WA_VISUAL	  = 1 << 6,
-  GDK_WA_WMCLASS  = 1 << 7,
-  GDK_WA_NOREDIR  = 1 << 8
-} GdkWindowAttributesType;
-</ENUM>
-<ENUM>
-<NAME>GdkWindowHints</NAME>
-typedef enum
-{
-  GDK_HINT_POS	      = 1 << 0,
-  GDK_HINT_MIN_SIZE   = 1 << 1,
-  GDK_HINT_MAX_SIZE   = 1 << 2,
-  GDK_HINT_BASE_SIZE  = 1 << 3,
-  GDK_HINT_ASPECT     = 1 << 4,
-  GDK_HINT_RESIZE_INC = 1 << 5
-} GdkWindowHints;
-</ENUM>
-<ENUM>
-<NAME>GdkFunction</NAME>
-typedef enum
-{
-  GDK_COPY,
-  GDK_INVERT,
-  GDK_XOR,
-  GDK_CLEAR,
-  GDK_AND,
-  GDK_AND_REVERSE,
-  GDK_AND_INVERT,
-  GDK_NOOP,
-  GDK_OR,
-  GDK_EQUIV,
-  GDK_OR_REVERSE,
-  GDK_COPY_INVERT,
-  GDK_OR_INVERT,
-  GDK_NAND,
-  GDK_SET
-} GdkFunction;
-</ENUM>
-<ENUM>
-<NAME>GdkFill</NAME>
-typedef enum
-{
-  GDK_SOLID,
-  GDK_TILED,
-  GDK_STIPPLED,
-  GDK_OPAQUE_STIPPLED
-} GdkFill;
-</ENUM>
-<ENUM>
-<NAME>GdkFillRule</NAME>
-typedef enum
-{
-  GDK_EVEN_ODD_RULE,
-  GDK_WINDING_RULE
-} GdkFillRule;
-</ENUM>
-<ENUM>
-<NAME>GdkLineStyle</NAME>
-typedef enum
-{
-  GDK_LINE_SOLID,
-  GDK_LINE_ON_OFF_DASH,
-  GDK_LINE_DOUBLE_DASH
-} GdkLineStyle;
-</ENUM>
-<ENUM>
-<NAME>GdkCapStyle</NAME>
-typedef enum
-{
-  GDK_CAP_NOT_LAST,
-  GDK_CAP_BUTT,
-  GDK_CAP_ROUND,
-  GDK_CAP_PROJECTING
-} GdkCapStyle;
-</ENUM>
-<ENUM>
-<NAME>GdkJoinStyle</NAME>
-typedef enum
-{
-  GDK_JOIN_MITER,
-  GDK_JOIN_ROUND,
-  GDK_JOIN_BEVEL
-} GdkJoinStyle;
-</ENUM>
-<ENUM>
-<NAME>GdkCursorType</NAME>
-typedef enum
-{
-#include <gdk/gdkcursors.h>
-  GDK_LAST_CURSOR,
-  GDK_CURSOR_IS_PIXMAP = -1
-} GdkCursorType;
-</ENUM>
-<ENUM>
-<NAME>GdkFilterReturn</NAME>
-typedef enum {
-  GDK_FILTER_CONTINUE,	  /* Event not handled, continue processesing */
-  GDK_FILTER_TRANSLATE,	  /* Translated event stored */
-  GDK_FILTER_REMOVE	  /* Terminate processing, removing event */
-} GdkFilterReturn;
-</ENUM>
-<ENUM>
-<NAME>GdkVisibilityState</NAME>
-typedef enum {
-  GDK_VISIBILITY_UNOBSCURED,
-  GDK_VISIBILITY_PARTIAL,
-  GDK_VISIBILITY_FULLY_OBSCURED
-} GdkVisibilityState;
-</ENUM>
-<ENUM>
-<NAME>GdkEventType</NAME>
-typedef enum
-{
-  GDK_NOTHING		= -1,
-  GDK_DELETE		= 0,
-  GDK_DESTROY		= 1,
-  GDK_EXPOSE		= 2,
-  GDK_MOTION_NOTIFY	= 3,
-  GDK_BUTTON_PRESS	= 4,
-  GDK_2BUTTON_PRESS	= 5,
-  GDK_3BUTTON_PRESS	= 6,
-  GDK_BUTTON_RELEASE	= 7,
-  GDK_KEY_PRESS		= 8,
-  GDK_KEY_RELEASE	= 9,
-  GDK_ENTER_NOTIFY	= 10,
-  GDK_LEAVE_NOTIFY	= 11,
-  GDK_FOCUS_CHANGE	= 12,
-  GDK_CONFIGURE		= 13,
-  GDK_MAP		= 14,
-  GDK_UNMAP		= 15,
-  GDK_PROPERTY_NOTIFY	= 16,
-  GDK_SELECTION_CLEAR	= 17,
-  GDK_SELECTION_REQUEST = 18,
-  GDK_SELECTION_NOTIFY	= 19,
-  GDK_PROXIMITY_IN	= 20,
-  GDK_PROXIMITY_OUT	= 21,
-  GDK_DRAG_ENTER        = 22,
-  GDK_DRAG_LEAVE        = 23,
-  GDK_DRAG_MOTION       = 24,
-  GDK_DRAG_STATUS       = 25,
-  GDK_DROP_START        = 26,
-  GDK_DROP_FINISHED     = 27,
-  GDK_CLIENT_EVENT	= 28,
-  GDK_VISIBILITY_NOTIFY = 29,
-  GDK_NO_EXPOSE		= 30
-} GdkEventType;
-</ENUM>
-<ENUM>
-<NAME>GdkEventMask</NAME>
-typedef enum
-{
-  GDK_EXPOSURE_MASK		= 1 << 1,
-  GDK_POINTER_MOTION_MASK	= 1 << 2,
-  GDK_POINTER_MOTION_HINT_MASK	= 1 << 3,
-  GDK_BUTTON_MOTION_MASK	= 1 << 4,
-  GDK_BUTTON1_MOTION_MASK	= 1 << 5,
-  GDK_BUTTON2_MOTION_MASK	= 1 << 6,
-  GDK_BUTTON3_MOTION_MASK	= 1 << 7,
-  GDK_BUTTON_PRESS_MASK		= 1 << 8,
-  GDK_BUTTON_RELEASE_MASK	= 1 << 9,
-  GDK_KEY_PRESS_MASK		= 1 << 10,
-  GDK_KEY_RELEASE_MASK		= 1 << 11,
-  GDK_ENTER_NOTIFY_MASK		= 1 << 12,
-  GDK_LEAVE_NOTIFY_MASK		= 1 << 13,
-  GDK_FOCUS_CHANGE_MASK		= 1 << 14,
-  GDK_STRUCTURE_MASK		= 1 << 15,
-  GDK_PROPERTY_CHANGE_MASK	= 1 << 16,
-  GDK_VISIBILITY_NOTIFY_MASK	= 1 << 17,
-  GDK_PROXIMITY_IN_MASK		= 1 << 18,
-  GDK_PROXIMITY_OUT_MASK	= 1 << 19,
-  GDK_SUBSTRUCTURE_MASK		= 1 << 20,
-  GDK_ALL_EVENTS_MASK		= 0x0FFFFF
-} GdkEventMask;
-</ENUM>
-<ENUM>
-<NAME>GdkNotifyType</NAME>
-typedef enum
-{
-  GDK_NOTIFY_ANCESTOR		= 0,
-  GDK_NOTIFY_VIRTUAL		= 1,
-  GDK_NOTIFY_INFERIOR		= 2,
-  GDK_NOTIFY_NONLINEAR		= 3,
-  GDK_NOTIFY_NONLINEAR_VIRTUAL	= 4,
-  GDK_NOTIFY_UNKNOWN		= 5
-} GdkNotifyType;
-</ENUM>
-<ENUM>
-<NAME>GdkCrossingMode</NAME>
-typedef enum
-{
-  GDK_CROSSING_NORMAL,
-  GDK_CROSSING_GRAB,
-  GDK_CROSSING_UNGRAB
-} GdkCrossingMode;
-</ENUM>
-<ENUM>
-<NAME>GdkModifierType</NAME>
-typedef enum
-{
-  GDK_SHIFT_MASK    = 1 << 0,
-  GDK_LOCK_MASK	    = 1 << 1,
-  GDK_CONTROL_MASK  = 1 << 2,
-  GDK_MOD1_MASK	    = 1 << 3,
-  GDK_MOD2_MASK	    = 1 << 4,
-  GDK_MOD3_MASK	    = 1 << 5,
-  GDK_MOD4_MASK	    = 1 << 6,
-  GDK_MOD5_MASK	    = 1 << 7,
-  GDK_BUTTON1_MASK  = 1 << 8,
-  GDK_BUTTON2_MASK  = 1 << 9,
-  GDK_BUTTON3_MASK  = 1 << 10,
-  GDK_BUTTON4_MASK  = 1 << 11,
-  GDK_BUTTON5_MASK  = 1 << 12,
-  GDK_RELEASE_MASK  = 1 << 13,
-  GDK_MODIFIER_MASK = 0x3fff
-} GdkModifierType;
-</ENUM>
-<ENUM>
-<NAME>GdkSubwindowMode</NAME>
-typedef enum
-{
-  GDK_CLIP_BY_CHILDREN	= 0,
-  GDK_INCLUDE_INFERIORS = 1
-} GdkSubwindowMode;
-</ENUM>
-<ENUM>
-<NAME>GdkInputCondition</NAME>
-typedef enum
-{
-  GDK_INPUT_READ       = 1 << 0,
-  GDK_INPUT_WRITE      = 1 << 1,
-  GDK_INPUT_EXCEPTION  = 1 << 2
-} GdkInputCondition;
-</ENUM>
-<ENUM>
-<NAME>GdkStatus</NAME>
-typedef enum
-{
-  GDK_OK	  = 0,
-  GDK_ERROR	  = -1,
-  GDK_ERROR_PARAM = -2,
-  GDK_ERROR_FILE  = -3,
-  GDK_ERROR_MEM	  = -4
-} GdkStatus;
-</ENUM>
-<ENUM>
-<NAME>GdkByteOrder</NAME>
-typedef enum
-{
-  GDK_LSB_FIRST,
-  GDK_MSB_FIRST
-} GdkByteOrder;
-</ENUM>
-<ENUM>
-<NAME>GdkGCValuesMask</NAME>
-typedef enum
-{
-  GDK_GC_FOREGROUND    = 1 << 0,
-  GDK_GC_BACKGROUND    = 1 << 1,
-  GDK_GC_FONT	       = 1 << 2,
-  GDK_GC_FUNCTION      = 1 << 3,
-  GDK_GC_FILL	       = 1 << 4,
-  GDK_GC_TILE	       = 1 << 5,
-  GDK_GC_STIPPLE       = 1 << 6,
-  GDK_GC_CLIP_MASK     = 1 << 7,
-  GDK_GC_SUBWINDOW     = 1 << 8,
-  GDK_GC_TS_X_ORIGIN   = 1 << 9,
-  GDK_GC_TS_Y_ORIGIN   = 1 << 10,
-  GDK_GC_CLIP_X_ORIGIN = 1 << 11,
-  GDK_GC_CLIP_Y_ORIGIN = 1 << 12,
-  GDK_GC_EXPOSURES     = 1 << 13,
-  GDK_GC_LINE_WIDTH    = 1 << 14,
-  GDK_GC_LINE_STYLE    = 1 << 15,
-  GDK_GC_CAP_STYLE     = 1 << 16,
-  GDK_GC_JOIN_STYLE    = 1 << 17
-} GdkGCValuesMask;
-</ENUM>
-<ENUM>
-<NAME>GdkSelection</NAME>
-typedef enum
-{
-  GDK_SELECTION_PRIMARY = 1,
-  GDK_SELECTION_SECONDARY = 2
-} GdkSelection;
-</ENUM>
-<ENUM>
-<NAME>GdkPropertyState</NAME>
-typedef enum
-{
-  GDK_PROPERTY_NEW_VALUE,
-  GDK_PROPERTY_DELETE
-} GdkPropertyState;
-</ENUM>
-<ENUM>
-<NAME>GdkPropMode</NAME>
-typedef enum
-{
-  GDK_PROP_MODE_REPLACE,
-  GDK_PROP_MODE_PREPEND,
-  GDK_PROP_MODE_APPEND
-} GdkPropMode;
+  GDK_EXTENSION_EVENTS_NONE,
+  GDK_EXTENSION_EVENTS_ALL,
+  GDK_EXTENSION_EVENTS_CURSOR
+} GdkExtensionMode;
 </ENUM>
 <ENUM>
 <NAME>GdkInputSource</NAME>
@@ -2101,8 +2491,519 @@ typedef enum
   GDK_AXIS_PRESSURE,
   GDK_AXIS_XTILT,
   GDK_AXIS_YTILT,
+  GDK_AXIS_WHEEL,
   GDK_AXIS_LAST
 } GdkAxisUse;
+</ENUM>
+<STRUCT>
+<NAME>GdkDeviceKey</NAME>
+struct GdkDeviceKey
+{
+  guint keyval;
+  GdkModifierType modifiers;
+};
+</STRUCT>
+<STRUCT>
+<NAME>GdkDeviceAxis</NAME>
+struct GdkDeviceAxis
+{
+  GdkAxisUse use;
+  gdouble    min;
+  gdouble    max;
+};
+</STRUCT>
+<STRUCT>
+<NAME>GdkDevice</NAME>
+struct GdkDevice
+{
+  /* All fields are read-only */
+	  
+  gchar *name;
+  GdkInputSource source;
+  GdkInputMode mode;
+  gboolean has_cursor;	     /* TRUE if the X pointer follows device motion */
+	  
+  gint num_axes;
+  GdkDeviceAxis *axes;
+	  
+  gint num_keys;
+  GdkDeviceKey *keys;
+};
+</STRUCT>
+<MACRO>
+<NAME>GDK_MAX_TIMECOORD_AXES</NAME>
+#define GDK_MAX_TIMECOORD_AXES 128
+</MACRO>
+<STRUCT>
+<NAME>GdkTimeCoord</NAME>
+struct GdkTimeCoord
+{
+  guint32 time;
+  gdouble axes[GDK_MAX_TIMECOORD_AXES];
+};
+</STRUCT>
+<FUNCTION>
+<NAME>gdk_devices_list</NAME>
+<RETURNS>GList  *</RETURNS>
+void
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_device_set_source</NAME>
+<RETURNS>void  </RETURNS>
+GdkDevice      *device,GdkInputSource  source
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_device_set_mode</NAME>
+<RETURNS>gboolean  </RETURNS>
+GdkDevice      *device,GdkInputMode    mode
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_device_set_key</NAME>
+<RETURNS>void  </RETURNS>
+GdkDevice      *device,guint           index,guint           keyval,GdkModifierType modifiers
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_device_set_axis_use</NAME>
+<RETURNS>void  </RETURNS>
+GdkDevice         *device,guint              index,GdkAxisUse         use
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_device_get_state</NAME>
+<RETURNS>void  </RETURNS>
+GdkDevice         *device,GdkWindow         *window,gdouble           *axes,GdkModifierType   *mask
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_device_get_history</NAME>
+<RETURNS>gboolean  </RETURNS>
+GdkDevice         *device,GdkWindow         *window,guint32            start,guint32            stop,GdkTimeCoord    ***events,gint              *n_events
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_device_free_history</NAME>
+<RETURNS>void  </RETURNS>
+GdkTimeCoord     **events,gint               n_events
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_device_get_axis</NAME>
+<RETURNS>gboolean  </RETURNS>
+GdkDevice         *device,gdouble           *axes,GdkAxisUse         use,gdouble           *value
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_input_set_extension_events</NAME>
+<RETURNS>void  </RETURNS>
+GdkWindow        *window,gint              mask,GdkExtensionMode  mode
+</FUNCTION>
+<VARIABLE>
+<NAME>gdk_core_pointer</NAME>
+extern GdkDevice *gdk_core_pointer;
+</VARIABLE>
+<FUNCTION>
+<NAME>gdk_pango_context_get</NAME>
+<RETURNS>PangoContext  *</RETURNS>
+void
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_pango_context_set_colormap</NAME>
+<RETURNS>void  </RETURNS>
+PangoContext *context,GdkColormap  *colormap
+</FUNCTION>
+<ENUM>
+<NAME>GdkPixbufAlphaMode</NAME>
+typedef enum
+{
+  GDK_PIXBUF_ALPHA_BILEVEL,
+  GDK_PIXBUF_ALPHA_FULL
+} GdkPixbufAlphaMode;
+</ENUM>
+<FUNCTION>
+<NAME>gdk_pixbuf_render_threshold_alpha</NAME>
+<RETURNS>void  </RETURNS>
+GdkPixbuf           *pixbuf,GdkBitmap           *bitmap,int                  src_x,int                  src_y,int                  dest_x,int                  dest_y,int                  width,int                  height,int                  alpha_threshold
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_pixbuf_render_to_drawable</NAME>
+<RETURNS>void  </RETURNS>
+GdkPixbuf           *pixbuf,GdkDrawable         *drawable,GdkGC               *gc,int                  src_x,int                  src_y,int                  dest_x,int                  dest_y,int                  width,int                  height,GdkRgbDither         dither,int                  x_dither,int                  y_dither
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_pixbuf_render_to_drawable_alpha</NAME>
+<RETURNS>void  </RETURNS>
+GdkPixbuf           *pixbuf,GdkDrawable         *drawable,int                  src_x,int                  src_y,int                  dest_x,int                  dest_y,int                  width,int                  height,GdkPixbufAlphaMode   alpha_mode,int                  alpha_threshold,GdkRgbDither         dither,int                  x_dither,int                  y_dither
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_pixbuf_render_pixmap_and_mask</NAME>
+<RETURNS>void  </RETURNS>
+GdkPixbuf           *pixbuf,GdkPixmap          **pixmap_return,GdkBitmap          **mask_return,int                  alpha_threshold
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_pixbuf_get_from_drawable</NAME>
+<RETURNS>GdkPixbuf  *</RETURNS>
+GdkPixbuf   *dest,GdkDrawable *src,GdkColormap *cmap,int          src_x,int          src_y,int          dest_x,int          dest_y,int          width,int          height
+</FUNCTION>
+<STRUCT>
+<NAME>GdkPixmapObject</NAME>
+</STRUCT>
+<STRUCT>
+<NAME>GdkPixmapObjectClass</NAME>
+</STRUCT>
+<MACRO>
+<NAME>GDK_TYPE_PIXMAP</NAME>
+#define GDK_TYPE_PIXMAP              (gdk_pixmap_get_type ())
+</MACRO>
+<MACRO>
+<NAME>GDK_PIXMAP</NAME>
+#define GDK_PIXMAP(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_PIXMAP, GdkPixmap))
+</MACRO>
+<MACRO>
+<NAME>GDK_PIXMAP_CLASS</NAME>
+#define GDK_PIXMAP_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), GDK_TYPE_PIXMAP, GdkPixmapObjectClass))
+</MACRO>
+<MACRO>
+<NAME>GDK_IS_PIXMAP</NAME>
+#define GDK_IS_PIXMAP(object)        (G_TYPE_CHECK_INSTANCE_TYPE ((object), GDK_TYPE_PIXMAP))
+</MACRO>
+<MACRO>
+<NAME>GDK_IS_PIXMAP_CLASS</NAME>
+#define GDK_IS_PIXMAP_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GDK_TYPE_PIXMAP))
+</MACRO>
+<MACRO>
+<NAME>GDK_PIXMAP_GET_CLASS</NAME>
+#define GDK_PIXMAP_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GDK_TYPE_PIXMAP, GdkPixmapClass))
+</MACRO>
+<MACRO>
+<NAME>GDK_PIXMAP_OBJECT</NAME>
+#define GDK_PIXMAP_OBJECT(object)    ((GdkPixmapObject *) GDK_PIXMAP (object))
+</MACRO>
+<STRUCT>
+<NAME>GdkPixmapObject</NAME>
+struct GdkPixmapObject
+{
+  GdkDrawable parent_instance;
+  
+  GdkDrawable *impl;  /* window-system-specific delegate object */
+
+  gint depth;
+};
+</STRUCT>
+<FUNCTION>
+<NAME>gdk_pixmap_get_type</NAME>
+<RETURNS>GType  </RETURNS>
+void
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_pixmap_new</NAME>
+<RETURNS>GdkPixmap *</RETURNS>
+GdkWindow  *window,gint	     width,gint	     height,gint	     depth
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_bitmap_create_from_data</NAME>
+<RETURNS>GdkBitmap *</RETURNS>
+GdkWindow   *window,const gchar *data,gint	      width,gint	      height
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_pixmap_create_from_data</NAME>
+<RETURNS>GdkPixmap *</RETURNS>
+GdkWindow   *window,const gchar *data,gint	      width,gint	      height,gint	      depth,GdkColor    *fg,GdkColor    *bg
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_pixmap_create_from_xpm</NAME>
+<RETURNS>GdkPixmap *</RETURNS>
+GdkWindow  *window,GdkBitmap **mask,GdkColor   *transparent_color,const gchar *filename
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_pixmap_colormap_create_from_xpm</NAME>
+<RETURNS>GdkPixmap *</RETURNS>
+GdkWindow   *window,GdkColormap *colormap,GdkBitmap  **mask,GdkColor    *transparent_color,const gchar *filename
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_pixmap_create_from_xpm_d</NAME>
+<RETURNS>GdkPixmap *</RETURNS>
+GdkWindow  *window,GdkBitmap **mask,GdkColor   *transparent_color,gchar	   **data
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_pixmap_colormap_create_from_xpm_d</NAME>
+<RETURNS>GdkPixmap *</RETURNS>
+GdkWindow   *window,GdkColormap *colormap,GdkBitmap  **mask,GdkColor    *transparent_color,gchar     **data
+</FUNCTION>
+<ENUM>
+<NAME>GdkPropMode</NAME>
+typedef enum
+{
+  GDK_PROP_MODE_REPLACE,
+  GDK_PROP_MODE_PREPEND,
+  GDK_PROP_MODE_APPEND
+} GdkPropMode;
+</ENUM>
+<FUNCTION>
+<NAME>gdk_atom_intern</NAME>
+<RETURNS>GdkAtom  </RETURNS>
+const gchar *atom_name,gboolean     only_if_exists
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_atom_name</NAME>
+<RETURNS>gchar *</RETURNS>
+GdkAtom      atom
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_property_get</NAME>
+<RETURNS>gboolean  </RETURNS>
+GdkWindow     *window,GdkAtom        property,GdkAtom        type,gulong         offset,gulong         length,gint           pdelete,GdkAtom       *actual_property_type,gint          *actual_format,gint          *actual_length,guchar       **data
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_property_change</NAME>
+<RETURNS>void  </RETURNS>
+GdkWindow     *window,GdkAtom        property,GdkAtom        type,gint           format,GdkPropMode    mode,const guchar  *data,gint           nelements
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_property_delete</NAME>
+<RETURNS>void  </RETURNS>
+GdkWindow     *window,GdkAtom        property
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_text_property_to_text_list</NAME>
+<RETURNS>gint  </RETURNS>
+GdkAtom        encoding,gint           format,const guchar  *text,gint           length,gchar       ***list
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_free_text_list</NAME>
+<RETURNS>void  </RETURNS>
+gchar        **list
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_string_to_compound_text</NAME>
+<RETURNS>gint  </RETURNS>
+const gchar   *str,GdkAtom       *encoding,gint          *format,guchar       **ctext,gint          *length
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_free_compound_text</NAME>
+<RETURNS>void  </RETURNS>
+guchar        *ctext
+</FUNCTION>
+<ENUM>
+<NAME>GdkFillRule</NAME>
+typedef enum
+{
+  GDK_EVEN_ODD_RULE,
+  GDK_WINDING_RULE
+} GdkFillRule;
+</ENUM>
+<ENUM>
+<NAME>GdkOverlapType</NAME>
+typedef enum
+{
+  GDK_OVERLAP_RECTANGLE_IN,
+  GDK_OVERLAP_RECTANGLE_OUT,
+  GDK_OVERLAP_RECTANGLE_PART
+} GdkOverlapType;
+</ENUM>
+<FUNCTION>
+<NAME>gdk_region_new</NAME>
+<RETURNS>GdkRegion  *</RETURNS>
+void
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_region_polygon</NAME>
+<RETURNS>GdkRegion  *</RETURNS>
+GdkPoint     *points,gint          npoints,GdkFillRule   fill_rule
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_region_copy</NAME>
+<RETURNS>GdkRegion  *</RETURNS>
+GdkRegion    *region
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_region_rectangle</NAME>
+<RETURNS>GdkRegion  *</RETURNS>
+GdkRectangle *rectangle
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_region_destroy</NAME>
+<RETURNS>void  </RETURNS>
+GdkRegion    *region
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_region_get_clipbox</NAME>
+<RETURNS>void 	</RETURNS>
+GdkRegion    *region,GdkRectangle *rectangle
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_region_empty</NAME>
+<RETURNS>gboolean  </RETURNS>
+GdkRegion    *region
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_region_equal</NAME>
+<RETURNS>gboolean  </RETURNS>
+GdkRegion    *region1,GdkRegion    *region2
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_region_point_in</NAME>
+<RETURNS>gboolean  </RETURNS>
+GdkRegion    *region,int           x,int           y
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_region_rect_in</NAME>
+<RETURNS>GdkOverlapType  </RETURNS>
+GdkRegion    *region,GdkRectangle *rect
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_region_offset</NAME>
+<RETURNS>void  </RETURNS>
+GdkRegion    *region,gint          dx,gint          dy
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_region_shrink</NAME>
+<RETURNS>void  </RETURNS>
+GdkRegion    *region,gint          dx,gint          dy
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_region_union_with_rect</NAME>
+<RETURNS>void  </RETURNS>
+GdkRegion    *region,GdkRectangle *rect
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_region_intersect</NAME>
+<RETURNS>void  </RETURNS>
+GdkRegion    *source1,GdkRegion    *source2
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_region_union</NAME>
+<RETURNS>void  </RETURNS>
+GdkRegion    *source1,GdkRegion    *source2
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_region_subtract</NAME>
+<RETURNS>void  </RETURNS>
+GdkRegion    *source1,GdkRegion    *source2
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_region_xor</NAME>
+<RETURNS>void  </RETURNS>
+GdkRegion    *source1,GdkRegion    *source2
+</FUNCTION>
+<STRUCT>
+<NAME>GdkRgbCmap</NAME>
+</STRUCT>
+<STRUCT>
+<NAME>GdkRgbCmap</NAME>
+struct GdkRgbCmap {
+  guint32 colors[256];
+  gint n_colors;
+
+  /*< private >*/
+  GSList *info_list;
+};
+</STRUCT>
+<FUNCTION>
+<NAME>gdk_rgb_init</NAME>
+<RETURNS>void  </RETURNS>
+void
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_rgb_xpixel_from_rgb</NAME>
+<RETURNS>gulong  </RETURNS>
+guint32      rgb
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_rgb_gc_set_foreground</NAME>
+<RETURNS>void  </RETURNS>
+GdkGC       *gc,guint32      rgb
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_rgb_gc_set_background</NAME>
+<RETURNS>void  </RETURNS>
+GdkGC       *gc,guint32      rgb
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_rgb_find_color</NAME>
+<RETURNS>void  </RETURNS>
+GdkColormap *colormap,GdkColor    *color
+</FUNCTION>
+<ENUM>
+<NAME>GdkRgbDither</NAME>
+typedef enum
+{
+  GDK_RGB_DITHER_NONE,
+  GDK_RGB_DITHER_NORMAL,
+  GDK_RGB_DITHER_MAX
+} GdkRgbDither;
+</ENUM>
+<FUNCTION>
+<NAME>gdk_draw_rgb_image</NAME>
+<RETURNS>void  </RETURNS>
+GdkDrawable  *drawable,GdkGC        *gc,gint          x,gint          y,gint          width,gint          height,GdkRgbDither  dith,guchar       *rgb_buf,gint          rowstride
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_draw_rgb_image_dithalign</NAME>
+<RETURNS>void  </RETURNS>
+GdkDrawable  *drawable,GdkGC        *gc,gint          x,gint          y,gint          width,gint          height,GdkRgbDither  dith,guchar       *rgb_buf,gint          rowstride,gint          xdith,gint          ydith
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_draw_rgb_32_image</NAME>
+<RETURNS>void  </RETURNS>
+GdkDrawable  *drawable,GdkGC        *gc,gint          x,gint          y,gint          width,gint          height,GdkRgbDither  dith,guchar       *buf,gint          rowstride
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_draw_rgb_32_image_dithalign</NAME>
+<RETURNS>void  </RETURNS>
+GdkDrawable  *drawable,GdkGC        *gc,gint          x,gint          y,gint          width,gint          height,GdkRgbDither  dith,guchar       *buf,gint          rowstride,gint          xdith,gint          ydith
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_draw_gray_image</NAME>
+<RETURNS>void  </RETURNS>
+GdkDrawable  *drawable,GdkGC        *gc,gint          x,gint          y,gint          width,gint          height,GdkRgbDither  dith,guchar       *buf,gint          rowstride
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_draw_indexed_image</NAME>
+<RETURNS>void  </RETURNS>
+GdkDrawable  *drawable,GdkGC        *gc,gint          x,gint          y,gint          width,gint          height,GdkRgbDither  dith,guchar       *buf,gint          rowstride,GdkRgbCmap   *cmap
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_rgb_cmap_new</NAME>
+<RETURNS>GdkRgbCmap  *</RETURNS>
+guint32      *colors,gint          n_colors
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_rgb_cmap_free</NAME>
+<RETURNS>void  </RETURNS>
+GdkRgbCmap   *cmap
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_rgb_ditherable</NAME>
+<RETURNS>gboolean  </RETURNS>
+void
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_rgb_set_verbose</NAME>
+<RETURNS>void  </RETURNS>
+gboolean verbose
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_rgb_set_install</NAME>
+<RETURNS>void  </RETURNS>
+gboolean install
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_rgb_set_min_colors</NAME>
+<RETURNS>void  </RETURNS>
+gint     min_colors
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_rgb_get_colormap</NAME>
+<RETURNS>GdkColormap  *</RETURNS>
+void
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_rgb_get_visual</NAME>
+<RETURNS>GdkVisual  *</RETURNS>
+void
+</FUNCTION>
+<ENUM>
+<NAME>GdkSelection</NAME>
+typedef enum
+{
+  GDK_SELECTION_PRIMARY = 1,
+  GDK_SELECTION_SECONDARY = 2
+} GdkSelection;
 </ENUM>
 <ENUM>
 <NAME>GdkTarget</NAME>
@@ -2129,72 +3030,355 @@ typedef enum
   GDK_SELECTION_TYPE_STRING = 31
 } GdkSelectionType;
 </ENUM>
+<FUNCTION>
+<NAME>gdk_selection_owner_set</NAME>
+<RETURNS>gboolean  </RETURNS>
+GdkWindow	 *owner,GdkAtom	  selection,guint32	  time,gboolean      send_event
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_selection_owner_get</NAME>
+<RETURNS>GdkWindow *</RETURNS>
+GdkAtom	  selection
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_selection_convert</NAME>
+<RETURNS>void 	</RETURNS>
+GdkWindow	 *requestor,GdkAtom	  selection,GdkAtom	  target,guint32	  time
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_selection_property_get</NAME>
+<RETURNS>gboolean  </RETURNS>
+GdkWindow  *requestor,guchar	 **data,GdkAtom	  *prop_type,gint	  *prop_format
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_selection_send_notify</NAME>
+<RETURNS>void 	</RETURNS>
+guint32	    requestor,GdkAtom	    selection,GdkAtom	    target,GdkAtom	    property,guint32	    time
+</FUNCTION>
+<MACRO>
+<NAME>GDKVAR</NAME>
+#    define GDKVAR __declspec(dllexport)
+</MACRO>
+<MACRO>
+<NAME>GDKVAR</NAME>
+#    define GDKVAR extern __declspec(dllimport)
+</MACRO>
+<MACRO>
+<NAME>GDKVAR</NAME>
+#  define GDKVAR extern
+</MACRO>
+<MACRO>
+<NAME>GDK_NONE</NAME>
+#define GDK_NONE	     0L
+</MACRO>
+<MACRO>
+<NAME>GDK_CURRENT_TIME</NAME>
+#define GDK_CURRENT_TIME     0L
+</MACRO>
+<MACRO>
+<NAME>GDK_PARENT_RELATIVE</NAME>
+#define GDK_PARENT_RELATIVE  1L
+</MACRO>
+<STRUCT>
+<NAME>GdkPoint</NAME>
+</STRUCT>
+<STRUCT>
+<NAME>GdkRectangle</NAME>
+</STRUCT>
+<STRUCT>
+<NAME>GdkSegment</NAME>
+</STRUCT>
+<TYPEDEF>
+<NAME>GdkWChar</NAME>
+typedef guint32			    GdkWChar;
+</TYPEDEF>
+<TYPEDEF>
+<NAME>GdkAtom</NAME>
+typedef gulong     		    GdkAtom;
+</TYPEDEF>
+<TYPEDEF>
+<NAME>GdkNativeWindow</NAME>
+typedef gpointer GdkNativeWindow;
+</TYPEDEF>
+<TYPEDEF>
+<NAME>GdkNativeWindow</NAME>
+typedef guint32 GdkNativeWindow;
+</TYPEDEF>
+<STRUCT>
+<NAME>GdkColor</NAME>
+</STRUCT>
+<STRUCT>
+<NAME>GdkColormap</NAME>
+</STRUCT>
+<STRUCT>
+<NAME>GdkCursor</NAME>
+</STRUCT>
+<STRUCT>
+<NAME>GdkFont</NAME>
+</STRUCT>
+<STRUCT>
+<NAME>GdkGC</NAME>
+</STRUCT>
+<STRUCT>
+<NAME>GdkImage</NAME>
+</STRUCT>
+<STRUCT>
+<NAME>GdkRegion</NAME>
+</STRUCT>
+<STRUCT>
+<NAME>GdkVisual</NAME>
+</STRUCT>
+<STRUCT>
+<NAME>GdkDrawable</NAME>
+</STRUCT>
 <ENUM>
-<NAME>GdkExtensionMode</NAME>
+<NAME>GdkByteOrder</NAME>
 typedef enum
 {
-  GDK_EXTENSION_EVENTS_NONE,
-  GDK_EXTENSION_EVENTS_ALL,
-  GDK_EXTENSION_EVENTS_CURSOR
-} GdkExtensionMode;
+  GDK_LSB_FIRST,
+  GDK_MSB_FIRST
+} GdkByteOrder;
 </ENUM>
 <ENUM>
-<NAME>GdkIMStyle</NAME>
-typedef enum			/*< flags >*/
-{
-  GDK_IM_PREEDIT_AREA	   = 0x0001, 
-  GDK_IM_PREEDIT_CALLBACKS = 0x0002, 
-  GDK_IM_PREEDIT_POSITION  = 0x0004,
-  GDK_IM_PREEDIT_NOTHING   = 0x0008,
-  GDK_IM_PREEDIT_NONE	   = 0x0010,
-  GDK_IM_PREEDIT_MASK      = 0x001f,
-
-  GDK_IM_STATUS_AREA	   = 0x0100, 
-  GDK_IM_STATUS_CALLBACKS  = 0x0200,
-  GDK_IM_STATUS_NOTHING	   = 0x0400,
-  GDK_IM_STATUS_NONE	   = 0x0800,
-  GDK_IM_STATUS_MASK	   = 0x0f00 
-} GdkIMStyle;
-</ENUM>
-<ENUM>
-<NAME>GdkICAttributesType</NAME>
+<NAME>GdkModifierType</NAME>
 typedef enum
 {
-  GDK_IC_STYLE			= 1 << 0,
-  GDK_IC_CLIENT_WINDOW		= 1 << 1,
-  GDK_IC_FOCUS_WINDOW		= 1 << 2,
-  GDK_IC_FILTER_EVENTS		= 1 << 3,
-  GDK_IC_SPOT_LOCATION		= 1 << 4,
-  GDK_IC_LINE_SPACING		= 1 << 5,
-  GDK_IC_CURSOR			= 1 << 6,
+  GDK_SHIFT_MASK    = 1 << 0,
+  GDK_LOCK_MASK	    = 1 << 1,
+  GDK_CONTROL_MASK  = 1 << 2,
+  GDK_MOD1_MASK	    = 1 << 3,
+  GDK_MOD2_MASK	    = 1 << 4,
+  GDK_MOD3_MASK	    = 1 << 5,
+  GDK_MOD4_MASK	    = 1 << 6,
+  GDK_MOD5_MASK	    = 1 << 7,
+  GDK_BUTTON1_MASK  = 1 << 8,
+  GDK_BUTTON2_MASK  = 1 << 9,
+  GDK_BUTTON3_MASK  = 1 << 10,
+  GDK_BUTTON4_MASK  = 1 << 11,
+  GDK_BUTTON5_MASK  = 1 << 12,
+  /* The next few modifiers are used by XKB, so we skip to the end
+   */
+  GDK_RELEASE_MASK  = 1 << 31,
+  GDK_MODIFIER_MASK = GDK_RELEASE_MASK | 0x1fff
+} GdkModifierType;
+</ENUM>
+<ENUM>
+<NAME>GdkInputCondition</NAME>
+typedef enum
+{
+  GDK_INPUT_READ       = 1 << 0,
+  GDK_INPUT_WRITE      = 1 << 1,
+  GDK_INPUT_EXCEPTION  = 1 << 2
+} GdkInputCondition;
+</ENUM>
+<ENUM>
+<NAME>GdkStatus</NAME>
+typedef enum
+{
+  GDK_OK	  = 0,
+  GDK_ERROR	  = -1,
+  GDK_ERROR_PARAM = -2,
+  GDK_ERROR_FILE  = -3,
+  GDK_ERROR_MEM	  = -4
+} GdkStatus;
+</ENUM>
+<ENUM>
+<NAME>GdkGrabStatus</NAME>
+typedef enum
+{
+  GDK_GRAB_SUCCESS         = 0,
+  GDK_GRAB_ALREADY_GRABBED = 1,
+  GDK_GRAB_INVALID_TIME    = 2,
+  GDK_GRAB_NOT_VIEWABLE    = 3,
+  GDK_GRAB_FROZEN          = 4
+} GdkGrabStatus;
+</ENUM>
+<USER_FUNCTION>
+<NAME>GdkInputFunction</NAME>
+<RETURNS>void </RETURNS>
+gpointer	    data,
+				  gint		    source,
+				  GdkInputCondition condition
+</USER_FUNCTION>
+<USER_FUNCTION>
+<NAME>GdkDestroyNotify</NAME>
+<RETURNS>void </RETURNS>
+gpointer data
+</USER_FUNCTION>
+<STRUCT>
+<NAME>GdkPoint</NAME>
+struct GdkPoint
+{
+  gint x;
+  gint y;
+};
+</STRUCT>
+<STRUCT>
+<NAME>GdkRectangle</NAME>
+struct GdkRectangle
+{
+  gint x;
+  gint y;
+  gint width;
+  gint height;
+};
+</STRUCT>
+<STRUCT>
+<NAME>GdkSegment</NAME>
+struct GdkSegment
+{
+  gint x1;
+  gint y1;
+  gint x2;
+  gint y2;
+};
+</STRUCT>
+<ENUM>
+<NAME>GdkVisualType</NAME>
+typedef enum
+{
+  GDK_VISUAL_STATIC_GRAY,
+  GDK_VISUAL_GRAYSCALE,
+  GDK_VISUAL_STATIC_COLOR,
+  GDK_VISUAL_PSEUDO_COLOR,
+  GDK_VISUAL_TRUE_COLOR,
+  GDK_VISUAL_DIRECT_COLOR
+} GdkVisualType;
+</ENUM>
+<STRUCT>
+<NAME>GdkVisual</NAME>
+struct GdkVisual
+{
+  GdkVisualType type;
+  gint depth;
+  GdkByteOrder byte_order;
+  gint colormap_size;
+  gint bits_per_rgb;
 
-  GDK_IC_PREEDIT_FONTSET	= 1 << 10,
-  GDK_IC_PREEDIT_AREA		= 1 << 11,
-  GDK_IC_PREEDIT_AREA_NEEDED	= 1 << 12,
-  GDK_IC_PREEDIT_FOREGROUND	= 1 << 13,
-  GDK_IC_PREEDIT_BACKGROUND	= 1 << 14,
-  GDK_IC_PREEDIT_PIXMAP		= 1 << 15,
-  GDK_IC_PREEDIT_COLORMAP	= 1 << 16,
+  guint32 red_mask;
+  gint red_shift;
+  gint red_prec;
 
-  GDK_IC_STATUS_FONTSET		= 1 << 21,
-  GDK_IC_STATUS_AREA		= 1 << 22,
-  GDK_IC_STATUS_AREA_NEEDED	= 1 << 23,
-  GDK_IC_STATUS_FOREGROUND	= 1 << 24,
-  GDK_IC_STATUS_BACKGROUND	= 1 << 25,
-  GDK_IC_STATUS_PIXMAP		= 1 << 26,
-  GDK_IC_STATUS_COLORMAP	= 1 << 27,
+  guint32 green_mask;
+  gint green_shift;
+  gint green_prec;
 
-  GDK_IC_ALL_REQ		= GDK_IC_STYLE |
-    				  GDK_IC_CLIENT_WINDOW,
-
-  GDK_IC_PREEDIT_AREA_REQ	= GDK_IC_PREEDIT_AREA | 
-				  GDK_IC_PREEDIT_FONTSET,
-  GDK_IC_PREEDIT_POSITION_REQ	= GDK_IC_PREEDIT_AREA | GDK_IC_SPOT_LOCATION |
-				  GDK_IC_PREEDIT_FONTSET,
-
-  GDK_IC_STATUS_AREA_REQ	= GDK_IC_STATUS_AREA | 
-				  GDK_IC_STATUS_FONTSET
-} GdkICAttributesType;
+  guint32 blue_mask;
+  gint blue_shift;
+  gint blue_prec;
+};
+</STRUCT>
+<FUNCTION>
+<NAME>gdk_visual_get_best_depth</NAME>
+<RETURNS>gint 	</RETURNS>
+void
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_visual_get_best_type</NAME>
+<RETURNS>GdkVisualType  </RETURNS>
+void
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_visual_get_system</NAME>
+<RETURNS>GdkVisual *</RETURNS>
+void
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_visual_get_best</NAME>
+<RETURNS>GdkVisual *</RETURNS>
+void
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_visual_get_best_with_depth</NAME>
+<RETURNS>GdkVisual *</RETURNS>
+gint	     depth
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_visual_get_best_with_type</NAME>
+<RETURNS>GdkVisual *</RETURNS>
+GdkVisualType  visual_type
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_visual_get_best_with_both</NAME>
+<RETURNS>GdkVisual *</RETURNS>
+gint	     depth,GdkVisualType  visual_type
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_visual_ref</NAME>
+<RETURNS>GdkVisual *</RETURNS>
+GdkVisual *visual
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_visual_unref</NAME>
+<RETURNS>void 	</RETURNS>
+GdkVisual *visual
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_query_depths</NAME>
+<RETURNS>void  </RETURNS>
+gint	    **depths,gint	     *count
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_query_visual_types</NAME>
+<RETURNS>void  </RETURNS>
+GdkVisualType  **visual_types,gint	     *count
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_list_visuals</NAME>
+<RETURNS>GList *</RETURNS>
+void
+</FUNCTION>
+<STRUCT>
+<NAME>GdkGeometry</NAME>
+</STRUCT>
+<STRUCT>
+<NAME>GdkWindowAttr</NAME>
+</STRUCT>
+<ENUM>
+<NAME>GdkWindowClass</NAME>
+typedef enum
+{
+  GDK_INPUT_OUTPUT,
+  GDK_INPUT_ONLY
+} GdkWindowClass;
+</ENUM>
+<ENUM>
+<NAME>GdkWindowType</NAME>
+typedef enum
+{
+  GDK_WINDOW_ROOT,
+  GDK_WINDOW_TOPLEVEL,
+  GDK_WINDOW_CHILD,
+  GDK_WINDOW_DIALOG,
+  GDK_WINDOW_TEMP,
+  GDK_WINDOW_FOREIGN
+} GdkWindowType;
+</ENUM>
+<ENUM>
+<NAME>GdkWindowAttributesType</NAME>
+typedef enum
+{
+  GDK_WA_TITLE	  = 1 << 1,
+  GDK_WA_X	  = 1 << 2,
+  GDK_WA_Y	  = 1 << 3,
+  GDK_WA_CURSOR	  = 1 << 4,
+  GDK_WA_COLORMAP = 1 << 5,
+  GDK_WA_VISUAL	  = 1 << 6,
+  GDK_WA_WMCLASS  = 1 << 7,
+  GDK_WA_NOREDIR  = 1 << 8
+} GdkWindowAttributesType;
+</ENUM>
+<ENUM>
+<NAME>GdkWindowHints</NAME>
+typedef enum
+{
+  GDK_HINT_POS	      = 1 << 0,
+  GDK_HINT_MIN_SIZE   = 1 << 1,
+  GDK_HINT_MAX_SIZE   = 1 << 2,
+  GDK_HINT_BASE_SIZE  = 1 << 3,
+  GDK_HINT_ASPECT     = 1 << 4,
+  GDK_HINT_RESIZE_INC = 1 << 5
+} GdkWindowHints;
 </ENUM>
 <ENUM>
 <NAME>GdkWMDecoration</NAME>
@@ -2221,110 +3405,15 @@ typedef enum
   GDK_FUNC_CLOSE	= 1 << 5
 } GdkWMFunction;
 </ENUM>
-<USER_FUNCTION>
-<NAME>GdkInputFunction</NAME>
-<RETURNS>void </RETURNS>
-gpointer	    data,
-				  gint		    source,
-				  GdkInputCondition condition
-</USER_FUNCTION>
-<USER_FUNCTION>
-<NAME>GdkDestroyNotify</NAME>
-<RETURNS>void </RETURNS>
-gpointer data
-</USER_FUNCTION>
-<ENUM>
-<NAME>GdkColorContextMode</NAME>
-typedef enum
-{
-  GDK_CC_MODE_UNDEFINED,
-  GDK_CC_MODE_BW,
-  GDK_CC_MODE_STD_CMAP,
-  GDK_CC_MODE_TRUE,
-  GDK_CC_MODE_MY_GRAY,
-  GDK_CC_MODE_PALETTE
-} GdkColorContextMode;
-</ENUM>
-<ENUM>
-<NAME>GdkOverlapType</NAME>
-typedef enum
-{
-  GDK_OVERLAP_RECTANGLE_IN,
-  GDK_OVERLAP_RECTANGLE_OUT,
-  GDK_OVERLAP_RECTANGLE_PART
-} GdkOverlapType;
-</ENUM>
-<ENUM>
-<NAME>GdkDragAction</NAME>
-typedef enum {
-  GDK_ACTION_DEFAULT = 1 << 0,
-  GDK_ACTION_COPY    = 1 << 1,
-  GDK_ACTION_MOVE    = 1 << 2,
-  GDK_ACTION_LINK    = 1 << 3,
-  GDK_ACTION_PRIVATE = 1 << 4,
-  GDK_ACTION_ASK     = 1 << 5
-} GdkDragAction;
-</ENUM>
-<ENUM>
-<NAME>GdkDragProtocol</NAME>
-typedef enum {
-  GDK_DRAG_PROTO_MOTIF,
-  GDK_DRAG_PROTO_XDND,
-  GDK_DRAG_PROTO_ROOTWIN,	/* A root window with nobody claiming
-				 * drags */
-  GDK_DRAG_PROTO_NONE		/* Not a valid drag window */
-} GdkDragProtocol;
-</ENUM>
-<STRUCT>
-<NAME>GdkColor</NAME>
-struct GdkColor
-{
-  gulong  pixel;
-  gushort red;
-  gushort green;
-  gushort blue;
-};
-</STRUCT>
-<STRUCT>
-<NAME>GdkColormap</NAME>
-struct GdkColormap
-{
-  gint      size;
-  GdkColor *colors;
-};
-</STRUCT>
-<STRUCT>
-<NAME>GdkVisual</NAME>
-struct GdkVisual
-{
-  GdkVisualType type;
-  gint depth;
-  GdkByteOrder byte_order;
-  gint colormap_size;
-  gint bits_per_rgb;
-
-  guint32 red_mask;
-  gint red_shift;
-  gint red_prec;
-
-  guint32 green_mask;
-  gint green_shift;
-  gint green_prec;
-
-  guint32 blue_mask;
-  gint blue_shift;
-  gint blue_prec;
-};
-</STRUCT>
 <STRUCT>
 <NAME>GdkWindowAttr</NAME>
 struct GdkWindowAttr
 {
   gchar *title;
   gint event_mask;
-  gint16 x, y;
-  gint16 width;
-  gint16 height;
+  gint x, y;
+  gint width;
+  gint height;
   GdkWindowClass wclass;
   GdkVisual *visual;
   GdkColormap *colormap;
@@ -2333,13 +3422,6 @@ struct GdkWindowAttr
   gchar *wmclass_name;
   gchar *wmclass_class;
   gboolean override_redirect;
-};
-</STRUCT>
-<STRUCT>
-<NAME>GdkWindow</NAME>
-struct GdkWindow
-{
-  gpointer user_data;
 };
 </STRUCT>
 <STRUCT>
@@ -2359,561 +3441,421 @@ struct GdkGeometry {
 };
 </STRUCT>
 <STRUCT>
-<NAME>GdkImage</NAME>
-struct GdkImage
-{
-  GdkImageType	type;
-  GdkVisual    *visual;	    /* visual used to create the image */
-  GdkByteOrder	byte_order;
-  guint16	width;
-  guint16	height;
-  guint16	depth;
-  guint16	bpp;	    /* bytes per pixel */
-  guint16	bpl;	    /* bytes per line */
-  gpointer	mem;
-};
+<NAME>GdkWindowObject</NAME>
 </STRUCT>
 <STRUCT>
-<NAME>GdkGCValues</NAME>
-struct GdkGCValues
-{
-  GdkColor	    foreground;
-  GdkColor	    background;
-  GdkFont	   *font;
-  GdkFunction	    function;
-  GdkFill	    fill;
-  GdkPixmap	   *tile;
-  GdkPixmap	   *stipple;
-  GdkPixmap	   *clip_mask;
-  GdkSubwindowMode  subwindow_mode;
-  gint		    ts_x_origin;
-  gint		    ts_y_origin;
-  gint		    clip_x_origin;
-  gint		    clip_y_origin;
-  gint		    graphics_exposures;
-  gint		    line_width;
-  GdkLineStyle	    line_style;
-  GdkCapStyle	    cap_style;
-  GdkJoinStyle	    join_style;
-};
+<NAME>GdkWindowObjectClass</NAME>
 </STRUCT>
+<MACRO>
+<NAME>GDK_TYPE_WINDOW</NAME>
+#define GDK_TYPE_WINDOW              (gdk_window_object_get_type ())
+</MACRO>
+<MACRO>
+<NAME>GDK_WINDOW</NAME>
+#define GDK_WINDOW(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_WINDOW, GdkWindow))
+</MACRO>
+<MACRO>
+<NAME>GDK_WINDOW_CLASS</NAME>
+#define GDK_WINDOW_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), GDK_TYPE_WINDOW, GdkWindowObjectClass))
+</MACRO>
+<MACRO>
+<NAME>GDK_IS_WINDOW</NAME>
+#define GDK_IS_WINDOW(object)        (G_TYPE_CHECK_INSTANCE_TYPE ((object), GDK_TYPE_WINDOW))
+</MACRO>
+<MACRO>
+<NAME>GDK_IS_WINDOW_CLASS</NAME>
+#define GDK_IS_WINDOW_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GDK_TYPE_WINDOW))
+</MACRO>
+<MACRO>
+<NAME>GDK_WINDOW_GET_CLASS</NAME>
+#define GDK_WINDOW_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GDK_TYPE_WINDOW, GdkWindowObjectClass))
+</MACRO>
+<MACRO>
+<NAME>GDK_WINDOW_OBJECT</NAME>
+#define GDK_WINDOW_OBJECT(object)    ((GdkWindowObject *) GDK_WINDOW (object))
+</MACRO>
 <STRUCT>
-<NAME>GdkGC</NAME>
-struct GdkGC
+<NAME>GdkWindowObject</NAME>
+struct GdkWindowObject
 {
-  gint dummy_var;
-};
-</STRUCT>
-<STRUCT>
-<NAME>GdkPoint</NAME>
-struct GdkPoint
-{
-  gint16 x;
-  gint16 y;
-};
-</STRUCT>
-<STRUCT>
-<NAME>GdkRectangle</NAME>
-struct GdkRectangle
-{
-  gint16 x;
-  gint16 y;
-  guint16 width;
-  guint16 height;
-};
-</STRUCT>
-<STRUCT>
-<NAME>GdkSegment</NAME>
-struct GdkSegment
-{
-  gint16 x1;
-  gint16 y1;
-  gint16 x2;
-  gint16 y2;
-};
-</STRUCT>
-<STRUCT>
-<NAME>GdkFont</NAME>
-struct GdkFont
-{
-  GdkFontType type;
-  gint ascent;
-  gint descent;
-};
-</STRUCT>
-<STRUCT>
-<NAME>GdkCursor</NAME>
-struct GdkCursor
-{
-  GdkCursorType type;
-};
-</STRUCT>
-<STRUCT>
-<NAME>GdkColorContextDither</NAME>
-struct GdkColorContextDither
-{
-  gint fast_rgb[32][32][32]; /* quick look-up table for faster rendering */
-  gint fast_err[32][32][32]; /* internal RGB error information */
-  gint fast_erg[32][32][32];
-  gint fast_erb[32][32][32];
-};
-</STRUCT>
-<STRUCT>
-<NAME>GdkColorContext</NAME>
-struct GdkColorContext
-{
-  GdkVisual *visual;
-  GdkColormap *colormap;
+  GdkDrawable parent_instance;
 
-  gint num_colors;		/* available no. of colors in colormap */
-  gint max_colors;		/* maximum no. of colors */
-  gint num_allocated;		/* no. of allocated colors */
-
-  GdkColorContextMode mode;
-  gint need_to_free_colormap;
-  GdkAtom std_cmap_atom;
-
-  gulong *clut;			/* color look-up table */
-  GdkColor *cmap;		/* colormap */
-
-  GHashTable *color_hash;	/* hash table of allocated colors */
-  GdkColor *palette;		/* preallocated palette */
-  gint num_palette;		/* size of palette */
-
-  GdkColorContextDither *fast_dither;	/* fast dither matrix */
-
-  struct
-  {
-    gint red;
-    gint green;
-    gint blue;
-  } shifts;
-
-</STRUCT>
-<STRUCT>
-<NAME>GdkDeviceKey</NAME>
-struct GdkDeviceKey
-{
-  guint keyval;
-  GdkModifierType modifiers;
-};
-</STRUCT>
-<STRUCT>
-<NAME>GdkDeviceInfo</NAME>
-struct GdkDeviceInfo
-{
-  guint32 deviceid;
-  gchar *name;
-  GdkInputSource source;
-  GdkInputMode mode;
-  gint has_cursor;	/* TRUE if the X pointer follows device motion */
-  gint num_axes;
-  GdkAxisUse *axes;    /* Specifies use for each axis */
-  gint num_keys;
-  GdkDeviceKey *keys;
-};
-</STRUCT>
-<STRUCT>
-<NAME>GdkTimeCoord</NAME>
-struct GdkTimeCoord
-{
-  guint32 time;
-  gdouble x;
-  gdouble y;
-  gdouble pressure;
-  gdouble xtilt;
-  gdouble ytilt;
-};
-</STRUCT>
-<STRUCT>
-<NAME>GdkDragContext</NAME>
-struct GdkDragContext {
-  GdkDragProtocol protocol;
+  GdkDrawable *impl; /* window-system-specific delegate object */  
   
-  gboolean is_source;
-  
-  GdkWindow *source_window;
-  GdkWindow *dest_window;
+  GdkWindowObject *parent;
 
-  GList *targets;
-  GdkDragAction actions;
-  GdkDragAction suggested_action;
-  GdkDragAction action; 
-
-  guint32 start_time;
-};
-</STRUCT>
-<TYPEDEF>
-<NAME>GdkXEvent</NAME>
-typedef void GdkXEvent;	  /* Can be cast to XEvent */
-</TYPEDEF>
-<USER_FUNCTION>
-<NAME>GdkFilterFunc</NAME>
-<RETURNS>GdkFilterReturn </RETURNS>
-GdkXEvent *xevent,
-					  GdkEvent *event,
-					  gpointer  data
-</USER_FUNCTION>
-<STRUCT>
-<NAME>GdkEventAny</NAME>
-struct GdkEventAny
-{
-  GdkEventType type;
-  GdkWindow *window;
-  gint8 send_event;
-};
-</STRUCT>
-<STRUCT>
-<NAME>GdkEventExpose</NAME>
-struct GdkEventExpose
-{
-  GdkEventType type;
-  GdkWindow *window;
-  gint8 send_event;
-  GdkRectangle area;
-  gint count; /* If non-zero, how many more events follow. */
-};
-</STRUCT>
-<STRUCT>
-<NAME>GdkEventNoExpose</NAME>
-struct GdkEventNoExpose
-{
-  GdkEventType type;
-  GdkWindow *window;
-  gint8 send_event;
-  /* XXX: does anyone need the X major_code or minor_code fields? */
-};
-</STRUCT>
-<STRUCT>
-<NAME>GdkEventVisibility</NAME>
-struct GdkEventVisibility
-{
-  GdkEventType type;
-  GdkWindow *window;
-  gint8 send_event;
-  GdkVisibilityState state;
-};
-</STRUCT>
-<STRUCT>
-<NAME>GdkEventMotion</NAME>
-struct GdkEventMotion
-{
-  GdkEventType type;
-  GdkWindow *window;
-  gint8 send_event;
-  guint32 time;
-  gdouble x;
-  gdouble y;
-  gdouble pressure;
-  gdouble xtilt;
-  gdouble ytilt;
-  guint state;
-  gint16 is_hint;
-  GdkInputSource source;
-  guint32 deviceid;
-  gdouble x_root, y_root;
-};
-</STRUCT>
-<STRUCT>
-<NAME>GdkEventButton</NAME>
-struct GdkEventButton
-{
-  GdkEventType type;
-  GdkWindow *window;
-  gint8 send_event;
-  guint32 time;
-  gdouble x;
-  gdouble y;
-  gdouble pressure;
-  gdouble xtilt;
-  gdouble ytilt;
-  guint state;
-  guint button;
-  GdkInputSource source;
-  guint32 deviceid;
-  gdouble x_root, y_root;
-};
-</STRUCT>
-<STRUCT>
-<NAME>GdkEventKey</NAME>
-struct GdkEventKey
-{
-  GdkEventType type;
-  GdkWindow *window;
-  gint8 send_event;
-  guint32 time;
-  guint state;
-  guint keyval;
-  gint length;
-  gchar *string;
-};
-</STRUCT>
-<STRUCT>
-<NAME>GdkEventCrossing</NAME>
-struct GdkEventCrossing
-{
-  GdkEventType type;
-  GdkWindow *window;
-  gint8 send_event;
-  GdkWindow *subwindow;
-  guint32 time;
-  gdouble x;
-  gdouble y;
-  gdouble x_root;
-  gdouble y_root;
-  GdkCrossingMode mode;
-  GdkNotifyType detail;
-  gboolean focus;
-  guint state;
-};
-</STRUCT>
-<STRUCT>
-<NAME>GdkEventFocus</NAME>
-struct GdkEventFocus
-{
-  GdkEventType type;
-  GdkWindow *window;
-  gint8 send_event;
-  gint16 in;
-};
-</STRUCT>
-<STRUCT>
-<NAME>GdkEventConfigure</NAME>
-struct GdkEventConfigure
-{
-  GdkEventType type;
-  GdkWindow *window;
-  gint8 send_event;
-  gint16 x, y;
-  gint16 width;
-  gint16 height;
-};
-</STRUCT>
-<STRUCT>
-<NAME>GdkEventProperty</NAME>
-struct GdkEventProperty
-{
-  GdkEventType type;
-  GdkWindow *window;
-  gint8 send_event;
-  GdkAtom atom;
-  guint32 time;
-  guint state;
-};
-</STRUCT>
-<STRUCT>
-<NAME>GdkEventSelection</NAME>
-struct GdkEventSelection
-{
-  GdkEventType type;
-  GdkWindow *window;
-  gint8 send_event;
-  GdkAtom selection;
-  GdkAtom target;
-  GdkAtom property;
-  guint32 requestor;
-  guint32 time;
-};
-</STRUCT>
-<STRUCT>
-<NAME>GdkEventProximity</NAME>
-struct GdkEventProximity
-{
-  GdkEventType type;
-  GdkWindow *window;
-  gint8 send_event;
-  guint32 time;
-  GdkInputSource source;
-  guint32 deviceid;
-};
-</STRUCT>
-<STRUCT>
-<NAME>GdkEventClient</NAME>
-struct GdkEventClient
-{
-  GdkEventType type;
-  GdkWindow *window;
-  gint8 send_event;
-  GdkAtom message_type;
-  gushort data_format;
-  union {
-    char b[20];
-    short s[10];
-    long l[5];
-  } data;
-};
-</STRUCT>
-<STRUCT>
-<NAME>GdkEventDND</NAME>
-struct GdkEventDND {
-  GdkEventType type;
-  GdkWindow *window;
-  gint8 send_event;
-  GdkDragContext *context;
-
-  guint32 time;
-  gshort x_root, y_root;
-};
-</STRUCT>
-<UNION>
-<NAME>GdkEvent</NAME>
-union GdkEvent
-{
-  GdkEventType		    type;
-  GdkEventAny		    any;
-  GdkEventExpose	    expose;
-  GdkEventNoExpose	    no_expose;
-  GdkEventVisibility	    visibility;
-  GdkEventMotion	    motion;
-  GdkEventButton	    button;
-  GdkEventKey		    key;
-  GdkEventCrossing	    crossing;
-  GdkEventFocus		    focus_change;
-  GdkEventConfigure	    configure;
-  GdkEventProperty	    property;
-  GdkEventSelection	    selection;
-  GdkEventProximity	    proximity;
-  GdkEventClient	    client;
-  GdkEventDND               dnd;
-};
-</UNION>
-<STRUCT>
-<NAME>GdkRegion</NAME>
-struct GdkRegion
-{
   gpointer user_data;
-};
-</STRUCT>
-<STRUCT>
-<NAME>GdkICAttr</NAME>
-struct GdkICAttr
-{
-  GdkIMStyle style;
-  GdkWindow *client_window;
-  GdkWindow *focus_window;
-  GdkEventMask filter_events;
-  GdkPoint spot_location;
-  gint line_spacing;
-  GdkCursor *cursor;
 
-  GdkFont *preedit_fontset;
-  GdkRectangle preedit_area;
-  GdkRectangle preedit_area_needed; 
-  GdkColor preedit_foreground;
-  GdkColor preedit_background;
-  GdkPixmap *preedit_pixmap;
-  GdkColormap *preedit_colormap;
+  gint x;
+  gint y;
+  
+  gint extension_events;
 
-  GdkFont *status_fontset;
-  GdkRectangle status_area;
-  GdkRectangle status_area_needed; 
-  GdkColor status_foreground;
-  GdkColor status_background;
-  GdkPixmap *status_pixmap;
-  GdkColormap *status_colormap;
+  GList *filters;
+  GList *children;
+
+  GdkColor bg_color;
+  GdkPixmap *bg_pixmap;
+  
+  GSList *paint_stack;
+  
+  GdkRegion *update_area;
+  guint update_freeze_count;
+  
+  guint8 window_type;
+  guint8 depth;
+  guint8 resize_count;
+  guint mapped : 1;
+  guint guffaw_gravity : 1;
+  guint input_only : 1;
+  
+  guint destroyed : 2;
 };
 </STRUCT>
-<STRUCT>
-<NAME>GdkRgbCmap</NAME>
-</STRUCT>
-<STRUCT>
-<NAME>GdkRgbCmap</NAME>
-struct GdkRgbCmap {
-  guint32 colors[256];
-  guchar lut[256]; /* for 8-bit modes */
-};
-</STRUCT>
 <FUNCTION>
-<NAME>gdk_rgb_init</NAME>
-<RETURNS>void</RETURNS>
+<NAME>gdk_window_object_get_type</NAME>
+<RETURNS>GType  </RETURNS>
 void
 </FUNCTION>
 <FUNCTION>
-<NAME>gdk_rgb_xpixel_from_rgb</NAME>
-<RETURNS>gulong</RETURNS>
-guint32 rgb
+<NAME>gdk_window_new</NAME>
+<RETURNS>GdkWindow *</RETURNS>
+GdkWindow     *parent,GdkWindowAttr *attributes,gint           attributes_mask
 </FUNCTION>
 <FUNCTION>
-<NAME>gdk_rgb_gc_set_foreground</NAME>
-<RETURNS>void</RETURNS>
-GdkGC *gc, guint32 rgb
+<NAME>gdk_window_destroy</NAME>
+<RETURNS>void  </RETURNS>
+GdkWindow     *window
 </FUNCTION>
 <FUNCTION>
-<NAME>gdk_rgb_gc_set_background</NAME>
-<RETURNS>void</RETURNS>
-GdkGC *gc, guint32 rgb
-</FUNCTION>
-<ENUM>
-<NAME>GdkRgbDither</NAME>
-typedef enum
-{
-  GDK_RGB_DITHER_NONE,
-  GDK_RGB_DITHER_NORMAL,
-  GDK_RGB_DITHER_MAX
-} GdkRgbDither;
-</ENUM>
-<FUNCTION>
-<NAME>gdk_draw_rgb_image</NAME>
-<RETURNS>void</RETURNS>
-GdkDrawable *drawable,GdkGC *gc,gint x,gint y,gint width,gint height,GdkRgbDither dith,guchar *rgb_buf,gint rowstride
+<NAME>gdk_window_get_window_type</NAME>
+<RETURNS>GdkWindowType  </RETURNS>
+GdkWindow     *window
 </FUNCTION>
 <FUNCTION>
-<NAME>gdk_draw_rgb_image_dithalign</NAME>
-<RETURNS>void</RETURNS>
-GdkDrawable *drawable,GdkGC *gc,gint x,gint y,gint width,gint height,GdkRgbDither dith,guchar *rgb_buf,gint rowstride,gint xdith,gint ydith
+<NAME>gdk_window_at_pointer</NAME>
+<RETURNS>GdkWindow *</RETURNS>
+gint          *win_x,gint          *win_y
 </FUNCTION>
 <FUNCTION>
-<NAME>gdk_draw_rgb_32_image</NAME>
-<RETURNS>void</RETURNS>
-GdkDrawable *drawable,GdkGC *gc,gint x,gint y,gint width,gint height,GdkRgbDither dith,guchar *buf,gint rowstride
+<NAME>gdk_window_show</NAME>
+<RETURNS>void  </RETURNS>
+GdkWindow     *window
 </FUNCTION>
 <FUNCTION>
-<NAME>gdk_draw_gray_image</NAME>
-<RETURNS>void</RETURNS>
-GdkDrawable *drawable,GdkGC *gc,gint x,gint y,gint width,gint height,GdkRgbDither dith,guchar *buf,gint rowstride
+<NAME>gdk_window_hide</NAME>
+<RETURNS>void  </RETURNS>
+GdkWindow     *window
 </FUNCTION>
 <FUNCTION>
-<NAME>gdk_rgb_cmap_new</NAME>
-<RETURNS>GdkRgbCmap  *</RETURNS>
-guint32 *colors, gint n_colors
+<NAME>gdk_window_withdraw</NAME>
+<RETURNS>void  </RETURNS>
+GdkWindow     *window
 </FUNCTION>
 <FUNCTION>
-<NAME>gdk_rgb_cmap_free</NAME>
-<RETURNS>void</RETURNS>
-GdkRgbCmap *cmap
+<NAME>gdk_window_move</NAME>
+<RETURNS>void  </RETURNS>
+GdkWindow     *window,gint           x,gint           y
 </FUNCTION>
 <FUNCTION>
-<NAME>gdk_draw_indexed_image</NAME>
-<RETURNS>void</RETURNS>
-GdkDrawable *drawable,GdkGC *gc,gint x,gint y,gint width,gint height,GdkRgbDither dith,guchar *buf,gint rowstride,GdkRgbCmap *cmap
+<NAME>gdk_window_resize</NAME>
+<RETURNS>void  </RETURNS>
+GdkWindow     *window,gint           width,gint           height
 </FUNCTION>
 <FUNCTION>
-<NAME>gdk_rgb_ditherable</NAME>
-<RETURNS>gboolean</RETURNS>
+<NAME>gdk_window_move_resize</NAME>
+<RETURNS>void  </RETURNS>
+GdkWindow     *window,gint           x,gint           y,gint           width,gint           height
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_window_reparent</NAME>
+<RETURNS>void  </RETURNS>
+GdkWindow     *window,GdkWindow     *new_parent,gint           x,gint           y
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_window_clear</NAME>
+<RETURNS>void  </RETURNS>
+GdkWindow     *window
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_window_clear_area</NAME>
+<RETURNS>void  </RETURNS>
+GdkWindow     *window,gint           x,gint           y,gint           width,gint           height
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_window_clear_area_e</NAME>
+<RETURNS>void  </RETURNS>
+GdkWindow     *window,gint           x,gint           y,gint           width,gint           height
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_window_raise</NAME>
+<RETURNS>void  </RETURNS>
+GdkWindow     *window
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_window_lower</NAME>
+<RETURNS>void  </RETURNS>
+GdkWindow     *window
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_window_set_user_data</NAME>
+<RETURNS>void  </RETURNS>
+GdkWindow     *window,gpointer       user_data
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_window_set_override_redirect</NAME>
+<RETURNS>void  </RETURNS>
+GdkWindow     *window,gboolean       override_redirect
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_window_add_filter</NAME>
+<RETURNS>void  </RETURNS>
+GdkWindow     *window,GdkFilterFunc  function,gpointer       data
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_window_remove_filter</NAME>
+<RETURNS>void  </RETURNS>
+GdkWindow     *window,GdkFilterFunc  function,gpointer       data
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_window_scroll</NAME>
+<RETURNS>void  </RETURNS>
+GdkWindow *window,gint       dx,gint       dy
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_window_shape_combine_mask</NAME>
+<RETURNS>void  </RETURNS>
+GdkWindow	    *window,GdkBitmap	    *shape_mask,gint	     offset_x,gint	     offset_y
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_window_set_child_shapes</NAME>
+<RETURNS>void  </RETURNS>
+GdkWindow *window
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_window_merge_child_shapes</NAME>
+<RETURNS>void  </RETURNS>
+GdkWindow *window
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_window_is_visible</NAME>
+<RETURNS>gboolean  </RETURNS>
+GdkWindow *window
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_window_is_viewable</NAME>
+<RETURNS>gboolean  </RETURNS>
+GdkWindow *window
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_window_set_static_gravities</NAME>
+<RETURNS>gboolean  </RETURNS>
+GdkWindow *window,gboolean   use_static
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_window_set_hints</NAME>
+<RETURNS>void 	</RETURNS>
+GdkWindow	  *window,gint		   x,gint		   y,gint		   min_width,gint		   min_height,gint		   max_width,gint		   max_height,gint		   flags
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_window_set_geometry_hints</NAME>
+<RETURNS>void  </RETURNS>
+GdkWindow        *window,GdkGeometry      *geometry,GdkWindowHints    flags
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_set_sm_client_id</NAME>
+<RETURNS>void  </RETURNS>
+const gchar *sm_client_id
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_window_begin_paint_rect</NAME>
+<RETURNS>void 	</RETURNS>
+GdkWindow    *window,GdkRectangle *rectangle
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_window_begin_paint_region</NAME>
+<RETURNS>void 	</RETURNS>
+GdkWindow    *window,GdkRegion    *region
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_window_end_paint</NAME>
+<RETURNS>void 	</RETURNS>
+GdkWindow    *window
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_window_set_title</NAME>
+<RETURNS>void 	</RETURNS>
+GdkWindow	  *window,const gchar	  *title
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_window_set_role</NAME>
+<RETURNS>void  </RETURNS>
+GdkWindow       *window,const gchar     *role
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_window_set_transient_for</NAME>
+<RETURNS>void  </RETURNS>
+GdkWindow       *window,GdkWindow       *leader
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_window_set_background</NAME>
+<RETURNS>void 	</RETURNS>
+GdkWindow	  *window,GdkColor	  *color
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_window_set_back_pixmap</NAME>
+<RETURNS>void 	</RETURNS>
+GdkWindow	  *window,GdkPixmap	  *pixmap,gboolean	   parent_relative
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_window_set_cursor</NAME>
+<RETURNS>void 	</RETURNS>
+GdkWindow	  *window,GdkCursor	  *cursor
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_window_get_user_data</NAME>
+<RETURNS>void 	</RETURNS>
+GdkWindow	  *window,gpointer	  *data
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_window_get_geometry</NAME>
+<RETURNS>void 	</RETURNS>
+GdkWindow	  *window,gint		  *x,gint		  *y,gint		  *width,gint		  *height,gint		  *depth
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_window_get_position</NAME>
+<RETURNS>void 	</RETURNS>
+GdkWindow	  *window,gint		  *x,gint		  *y
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_window_get_origin</NAME>
+<RETURNS>gint 	</RETURNS>
+GdkWindow	  *window,gint		  *x,gint		  *y
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_window_get_deskrelative_origin</NAME>
+<RETURNS>gboolean  </RETURNS>
+GdkWindow	  *window,gint		  *x,gint		  *y
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_window_get_root_origin</NAME>
+<RETURNS>void 	</RETURNS>
+GdkWindow	  *window,gint		  *x,gint		  *y
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_window_get_pointer</NAME>
+<RETURNS>GdkWindow *</RETURNS>
+GdkWindow	  *window,gint		  *x,gint		  *y,GdkModifierType *mask
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_window_get_parent</NAME>
+<RETURNS>GdkWindow  *</RETURNS>
+GdkWindow       *window
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_window_get_toplevel</NAME>
+<RETURNS>GdkWindow  *</RETURNS>
+GdkWindow       *window
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_window_get_children</NAME>
+<RETURNS>GList  *</RETURNS>
+GdkWindow	  *window
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_window_peek_children</NAME>
+<RETURNS>GList  *</RETURNS>
+GdkWindow       *window
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_window_get_events</NAME>
+<RETURNS>GdkEventMask  </RETURNS>
+GdkWindow	  *window
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_window_set_events</NAME>
+<RETURNS>void 	</RETURNS>
+GdkWindow	  *window,GdkEventMask	   event_mask
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_window_set_icon</NAME>
+<RETURNS>void 	</RETURNS>
+GdkWindow	  *window,GdkWindow	  *icon_window,GdkPixmap	  *pixmap,GdkBitmap	  *mask
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_window_set_icon_name</NAME>
+<RETURNS>void 	</RETURNS>
+GdkWindow	  *window,const gchar	  *name
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_window_set_group</NAME>
+<RETURNS>void 	</RETURNS>
+GdkWindow	  *window,GdkWindow	  *leader
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_window_set_decorations</NAME>
+<RETURNS>void 	</RETURNS>
+GdkWindow	  *window,GdkWMDecoration  decorations
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_window_set_functions</NAME>
+<RETURNS>void 	</RETURNS>
+GdkWindow	  *window,GdkWMFunction	   functions
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_window_get_toplevels</NAME>
+<RETURNS>GList  *</RETURNS>
 void
 </FUNCTION>
 <FUNCTION>
-<NAME>gdk_rgb_set_verbose</NAME>
-<RETURNS>void</RETURNS>
-gboolean verbose
+<NAME>gdk_window_register_dnd</NAME>
+<RETURNS>void  </RETURNS>
+GdkWindow       *window
 </FUNCTION>
 <FUNCTION>
-<NAME>gdk_rgb_set_install</NAME>
-<RETURNS>void</RETURNS>
-gboolean install
+<NAME>gdk_window_invalidate_rect</NAME>
+<RETURNS>void  </RETURNS>
+GdkWindow    *window,GdkRectangle *rect,gboolean      invalidate_children
 </FUNCTION>
 <FUNCTION>
-<NAME>gdk_rgb_set_min_colors</NAME>
-<RETURNS>void</RETURNS>
-gint min_colors
+<NAME>gdk_window_invalidate_region</NAME>
+<RETURNS>void  </RETURNS>
+GdkWindow    *window,GdkRegion    *region,gboolean      invalidate_children
 </FUNCTION>
 <FUNCTION>
-<NAME>gdk_rgb_get_cmap</NAME>
-<RETURNS>GdkColormap  *</RETURNS>
+<NAME>gdk_window_get_update_area</NAME>
+<RETURNS>GdkRegion  *</RETURNS>
+GdkWindow    *window
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_window_freeze_updates</NAME>
+<RETURNS>void  </RETURNS>
+GdkWindow    *window
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_window_thaw_updates</NAME>
+<RETURNS>void  </RETURNS>
+GdkWindow    *window
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_window_process_all_updates</NAME>
+<RETURNS>void  </RETURNS>
 void
 </FUNCTION>
 <FUNCTION>
-<NAME>gdk_rgb_get_visual</NAME>
-<RETURNS>GdkVisual  *</RETURNS>
-void
+<NAME>gdk_window_process_updates</NAME>
+<RETURNS>void  </RETURNS>
+GdkWindow    *window,gboolean      update_children
 </FUNCTION>
+<MACRO>
+<NAME>GDK_WINDOWING_X11</NAME>
+#define GDK_WINDOWING_X11
+</MACRO>
+<MACRO>
+<NAME>GDK_HAVE_WCHAR_H</NAME>
+#define GDK_HAVE_WCHAR_H 1
+</MACRO>
+<MACRO>
+<NAME>GDK_HAVE_WCTYPE_H</NAME>
+#define GDK_HAVE_WCTYPE_H 1
+</MACRO>

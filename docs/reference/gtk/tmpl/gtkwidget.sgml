@@ -42,6 +42,7 @@ GtkWidget
 @GTK_NO_REPARENT: 
 @GTK_APP_PAINTABLE: 
 @GTK_RECEIVES_DEFAULT: 
+@GTK_DOUBLE_BUFFERED: 
 
 <!-- ##### MACRO GTK_WIDGET_TYPE ##### -->
 <para>
@@ -219,6 +220,14 @@ GtkWidget
 @wid: 
 
 
+<!-- ##### MACRO GTK_WIDGET_DOUBLE_BUFFERED ##### -->
+<para>
+
+</para>
+
+@wid: 
+
+
 <!-- ##### MACRO GTK_WIDGET_SET_FLAGS ##### -->
 <para>
 
@@ -323,6 +332,7 @@ GtkWidget
 </para>
 
 @widget: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gtk_widget_unref ##### -->
@@ -813,11 +823,14 @@ GtkWidget
 @Returns: 
 
 
-<!-- ##### FUNCTION gtk_widget_set_visual ##### -->
+<!-- ##### MACRO gtk_widget_set_visual ##### -->
 <para>
 
 </para>
 
+@w: 
+@v: 
+<!-- # Unused Parameters # -->
 @widget: 
 @visual: 
 
@@ -926,11 +939,13 @@ GtkWidget
 @cmap: 
 
 
-<!-- ##### FUNCTION gtk_widget_push_visual ##### -->
+<!-- ##### MACRO gtk_widget_push_visual ##### -->
 <para>
 
 </para>
 
+@v: 
+<!-- # Unused Parameters # -->
 @visual: 
 
 
@@ -948,11 +963,12 @@ GtkWidget
 
 
 
-<!-- ##### FUNCTION gtk_widget_pop_visual ##### -->
+<!-- ##### MACRO gtk_widget_pop_visual ##### -->
 <para>
 
 </para>
 
+@v: 
 
 
 <!-- ##### FUNCTION gtk_widget_set_default_style ##### -->
@@ -971,20 +987,22 @@ GtkWidget
 @colormap: 
 
 
-<!-- ##### FUNCTION gtk_widget_set_default_visual ##### -->
-<para>
-
-</para>
-
-@visual: 
-
-
 <!-- ##### FUNCTION gtk_widget_get_default_style ##### -->
 <para>
 
 </para>
 
 @Returns: 
+
+
+<!-- ##### MACRO gtk_widget_set_default_visual ##### -->
+<para>
+
+</para>
+
+@v: 
+<!-- # Unused Parameters # -->
+@visual: 
 
 
 <!-- ##### FUNCTION gtk_widget_get_default_colormap ##### -->
@@ -996,6 +1014,49 @@ GtkWidget
 
 
 <!-- ##### FUNCTION gtk_widget_get_default_visual ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_widget_set_direction ##### -->
+<para>
+
+</para>
+
+@widget: 
+@dir: 
+
+
+<!-- ##### ENUM GtkTextDirection ##### -->
+<para>
+
+</para>
+
+@GTK_TEXT_DIR_NONE: 
+@GTK_TEXT_DIR_LTR: 
+@GTK_TEXT_DIR_RTL: 
+
+<!-- ##### FUNCTION gtk_widget_get_direction ##### -->
+<para>
+
+</para>
+
+@widget: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_widget_set_default_direction ##### -->
+<para>
+
+</para>
+
+@dir: 
+
+
+<!-- ##### FUNCTION gtk_widget_get_default_direction ##### -->
 <para>
 
 </para>
@@ -1062,6 +1123,92 @@ GtkWidget
 @style: 
 
 
+<!-- ##### FUNCTION gtk_widget_get_modifier_style ##### -->
+<para>
+
+</para>
+
+@widget: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_widget_modify_fg ##### -->
+<para>
+
+</para>
+
+@widget: 
+@state: 
+@color: 
+
+
+<!-- ##### FUNCTION gtk_widget_modify_bg ##### -->
+<para>
+
+</para>
+
+@widget: 
+@state: 
+@color: 
+
+
+<!-- ##### FUNCTION gtk_widget_modify_text ##### -->
+<para>
+
+</para>
+
+@widget: 
+@state: 
+@color: 
+
+
+<!-- ##### FUNCTION gtk_widget_modify_base ##### -->
+<para>
+
+</para>
+
+@widget: 
+@state: 
+@color: 
+
+
+<!-- ##### FUNCTION gtk_widget_modify_font ##### -->
+<para>
+
+</para>
+
+@widget: 
+@font_desc: 
+
+
+<!-- ##### FUNCTION gtk_widget_create_pango_context ##### -->
+<para>
+
+</para>
+
+@widget: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_widget_get_pango_context ##### -->
+<para>
+
+</para>
+
+@widget: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_widget_create_pango_layout ##### -->
+<para>
+
+</para>
+
+@widget: 
+@text: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gtk_widget_pop_composite_child ##### -->
 <para>
 
@@ -1125,6 +1272,15 @@ GtkWidget
 @app_paintable: 
 
 
+<!-- ##### FUNCTION gtk_widget_set_double_buffered ##### -->
+<para>
+
+</para>
+
+@widget: 
+@double_buffered: 
+
+
 <!-- ##### FUNCTION gtk_widget_set_composite_name ##### -->
 <para>
 
@@ -1151,6 +1307,15 @@ GtkWidget
 </para>
 
 @widget: 
+
+
+<!-- ##### FUNCTION gtk_widget_accelerators_locked ##### -->
+<para>
+
+</para>
+
+@widget: 
+@Returns: 
 
 
 <!-- ##### SIGNAL GtkWidget::show ##### -->
@@ -1257,6 +1422,14 @@ GtkWidget
 @widget: the object which received the signal.
 @previous_style: 
 
+<!-- ##### SIGNAL GtkWidget::direction-changed ##### -->
+<para>
+
+</para>
+
+@widget: the object which received the signal.
+@arg1: 
+
 <!-- ##### SIGNAL GtkWidget::add-accelerator ##### -->
 <para>
 
@@ -1305,6 +1478,15 @@ GtkWidget
 @Returns: 
 
 <!-- ##### SIGNAL GtkWidget::button-release-event ##### -->
+<para>
+
+</para>
+
+@widget: the object which received the signal.
+@event: 
+@Returns: 
+
+<!-- ##### SIGNAL GtkWidget::scroll-event ##### -->
 <para>
 
 </para>
