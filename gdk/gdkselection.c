@@ -188,7 +188,7 @@ gdk_selection_send_notify (guint32  requestor,
   xevent.property = property;
   xevent.time = time;
 
-  XSendEvent (gdk_display, requestor, False, NoEventMask, (XEvent*) &xevent);
+  gdk_send_xevent (requestor, False, NoEventMask, (XEvent*) &xevent);
 }
 
 gint

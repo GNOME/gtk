@@ -837,6 +837,8 @@ gtk_selection_request (GtkWidget *widget,
       gint     length;
       
       mult_atoms = NULL;
+      
+      gdk_error_trap_push();
       if (!gdk_property_get (info->requestor, event->property, 0, /* AnyPropertyType */
 			     0, GTK_SELECTION_MAX_SIZE, FALSE,
 			     &type, &format, &length, &mult_atoms))
@@ -847,6 +849,7 @@ gtk_selection_request (GtkWidget *widget,
 	  g_free (info);
 	  return TRUE;
 	}
+      gdk_error_trap_pop();
       
       info->num_conversions = length / (2*sizeof (GdkAtom));
       info->conversions = g_new (GtkIncrConversion, info->num_conversions);
@@ -957,9 +960,19 @@ gtk_selection_request (GtkWidget *widget,
 			   mult_atoms, 2*info->num_conversions);
       g_free (mult_atoms);
     }
-  
-  gdk_selection_send_notify (event->requestor, event->selection, event->target,
-			     event->property, event->time);
+
+  if (info->num_conversions == 1 &&
+      info->conversions[0].property == GDK_NONE)
+    {
+      /* Reject the entire conversion */
+      gdk_selection_send_notify (event->requestor, event->selection, 
+				 event->target, GDK_NONE, event->time);
+    }
+  else
+    {
+      gdk_selection_send_notify (event->requestor, event->selection, 
+				 event->target, event->property, event->time);
+    }
   
   if (info->num_incrs == 0)
     {
@@ -1162,7 +1175,7 @@ gtk_selection_notify (GtkWidget	       *widget,
 {
   GList *tmp_list;
   GtkRetrievalInfo *info = NULL;
-  guchar  *buffer;
+  guchar  *buffer = NULL;
   gint length;
   GdkAtom type;
   gint	  format;
@@ -1183,8 +1196,12 @@ gtk_selection_notify (GtkWidget	       *widget,
   
   if (!tmp_list)		/* no retrieval in progress */
     return FALSE;
-  
-  if (event->property == GDK_NONE)
+
+  if (event->property != GDK_NONE)
+    length = gdk_selection_property_get (widget->window, &buffer, 
+					 &type, &format);
+
+  if (event->property == GDK_NONE || buffer == NULL)
     {
       current_retrievals = g_list_remove_link (current_retrievals, tmp_list);
       g_list_free (tmp_list);
@@ -1194,9 +1211,6 @@ gtk_selection_notify (GtkWidget	       *widget,
       
       return TRUE;
     }
-  
-  length = gdk_selection_property_get (widget->window, &buffer, 
-				       &type, &format);
   
   if (type == gtk_selection_atoms[INCR])
     {
