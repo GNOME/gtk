@@ -330,7 +330,7 @@ functions), but they will all return %NULL values.
 
 <!-- ##### FUNCTION gtk_image_new ##### -->
 <para>
-Creates the new #GtkImage using the value and the mask.
+
 </para>
 
 @Returns: the #GtkImage
