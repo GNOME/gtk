@@ -1,15 +1,15 @@
 # Romanian translation for gtk+
-# Copyright (C) 1999-2004 Free Software Foundation, Inc.
+# Copyright (C) 1999 - 2004 Free Software Foundation, Inc.
 # Dan Damian <dand@dnttm.ro>, 1999, 2000.
 # Marius Andreiana <marius galuna.ro>, 2001, 2002.
 # Mişu Moldovan <dumol@go.ro>, 2003, 2004.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: gtk+ 2.3.5\n"
+"Project-Id-Version: gtk-2-4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-08-25 13:27-0400\n"
-"PO-Revision-Date: 2004-03-14 16:36+0200\n"
+"POT-Creation-Date: 2004-08-28 12:00+0200\n"
+"PO-Revision-Date: 2004-08-28 17:04+0300\n"
 "Last-Translator: Mişu Moldovan <dumol@go.ro>\n"
 "Language-Team: Română <gnomero-list@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -57,7 +57,7 @@ msgid ""
 "Image-loading module %s does not export the proper interface; perhaps it's "
 "from a different GTK version?"
 msgstr ""
-"Modulul de încărcare al imaginilor %s nu exportă interfaţa corectă. Poate "
+"Modulul de încărcare a imaginilor %s nu exportă interfaţa corectă. Poate "
 "este dintr-o versiune GTK diferită?"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:577 gdk-pixbuf/gdk-pixbuf-io.c:625
@@ -82,13 +82,12 @@ msgstr "Nu am reuşit să încarc imaginea „%s”: %s"
 #: gdk-pixbuf/gdk-pixbuf-io.c:1158
 #, c-format
 msgid "Error writing to image file: %s"
-msgstr "Eroare la scriere fişierului imagine JPEG: %s"
+msgstr "Eroare la scrierea fişierului imagine JPEG: %s"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:1202 gdk-pixbuf/gdk-pixbuf-io.c:1318
 #, c-format
 msgid "This build of gdk-pixbuf does not support saving the image format: %s"
-msgstr ""
-"Această versiune gdk-pixbuf compilată nu suportă salvarea formatului de "
+msgstr "Această versiune de gdk-pixbuf nu suportă salvarea formatului de "
 "imagine: %s"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:1231
@@ -114,17 +113,17 @@ msgid ""
 "Failed to close '%s' while writing image, all data may not have been saved: %"
 "s"
 msgstr ""
-"Nu am reuşit să închid „%s” la scrierea imaginii, s-ar putea să nu fi salvat "
+"Nu am reuşit să închid „%s” la scrierea imaginii, e posibil să nu fi salvat "
 "toate datele: %s"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:1657 gdk-pixbuf/gdk-pixbuf-io.c:1707
 msgid "Insufficient memory to save image into a buffer"
-msgstr "Memorie insuficientă pentru a salva imaginea în buffer"
+msgstr "Memorie insuficientă pentru a salva imaginea în tampon"
 
 #: gdk-pixbuf/gdk-pixbuf-loader.c:378
 #, c-format
 msgid "Incremental loading of image type '%s' is not supported"
-msgstr "Încărcarea incrementală a imaginii tip „%s” nu este suportată"
+msgstr "Încărcarea progresivă a imaginilor tip „%s” nu este suportată"
 
 #: gdk-pixbuf/gdk-pixbuf-loader.c:402 gdk-pixbuf/gdk-pixbuf-loader.c:504
 #, c-format
@@ -216,7 +215,7 @@ msgstr "Stivă supraîncărcată"
 
 #: gdk-pixbuf/io-gif.c:635
 msgid "GIF image loader can't understand this image."
-msgstr "Modulul de încărcare GIF nu înţelege această imagine."
+msgstr "Modulul de încărcare GIF nu poate prelucra această imagine."
 
 #: gdk-pixbuf/io-gif.c:664
 msgid "Bad code encountered"
@@ -250,7 +249,7 @@ msgid ""
 "colormap."
 msgstr ""
 "Imaginea GIF nu are o hartă globală de culoare şi un cadru al său nu are "
-"hartă proprie de culoare."
+"hartă locală de culoare."
 
 #: gdk-pixbuf/io-gif.c:1498
 msgid "GIF image was truncated or incomplete."
@@ -271,7 +270,7 @@ msgstr "Antet invalid în iconiţă"
 
 #: gdk-pixbuf/io-ico.c:293
 msgid "Icon has zero width"
-msgstr "Iconiţa are lăţime zero"
+msgstr "Iconiţa are lăţimea zero"
 
 #: gdk-pixbuf/io-ico.c:303
 msgid "Icon has zero height"
@@ -317,12 +316,12 @@ msgid ""
 "memory"
 msgstr ""
 "Memorie insuficientă pentru încărcarea imaginii, încercaţi să închideţi "
-"câteva aplicaţii pentru a eliberarea memorie"
+"câteva aplicaţii pentru a eliberare memorie"
 
 #: gdk-pixbuf/io-jpeg.c:383 gdk-pixbuf/io-jpeg.c:749
 #, c-format
 msgid "Unsupported JPEG color space (%s)"
-msgstr "Spaţiu culoare JPEG nesuportat (%s)"
+msgstr "Adâncime de culoare JPEG nesuportată (%s)"
 
 #: gdk-pixbuf/io-jpeg.c:481 gdk-pixbuf/io-jpeg.c:678 gdk-pixbuf/io-jpeg.c:941
 #: gdk-pixbuf/io-jpeg.c:950
@@ -360,7 +359,7 @@ msgstr "Nu pot aloca memorie pentru un buffer context"
 
 #: gdk-pixbuf/io-pcx.c:607
 msgid "Image has invalid width and/or height"
-msgstr "Imaginea are înălţime sau lăţime invalidă"
+msgstr "Imaginea are înălţimea sau lăţimea invalidă"
 
 #: gdk-pixbuf/io-pcx.c:619 gdk-pixbuf/io-pcx.c:680
 msgid "Image has unsupported bpp"
@@ -373,7 +372,7 @@ msgstr "Imaginea are un număr nesuportat de biţi pentru adâncime: %d"
 
 #: gdk-pixbuf/io-pcx.c:648
 msgid "Couldn't create new pixbuf"
-msgstr "Nu pot crea un nou pixbuf"
+msgstr "Nu pot crea un nou „pixbuf”"
 
 #: gdk-pixbuf/io-pcx.c:656
 msgid "Couldn't allocate memory for line data"
@@ -405,7 +404,7 @@ msgstr "Fişierul PNG transformat are lăţimea sau înălţimea zero."
 
 #: gdk-pixbuf/io-png.c:144
 msgid "Bits per channel of transformed PNG is not 8."
-msgstr "Numărul de biţi per canal al fişirului PNG transformat nu este 8."
+msgstr "Numărul de biţi/canal al fişirului PNG transformat nu este opt."
 
 #: gdk-pixbuf/io-png.c:153
 msgid "Transformed PNG not RGB or RGBA."
@@ -413,9 +412,8 @@ msgstr "Fişierul PNG transformat nu este RBG sau RGBA."
 
 #: gdk-pixbuf/io-png.c:162
 msgid "Transformed PNG has unsupported number of channels, must be 3 or 4."
-msgstr ""
-"Fişierul PNG transformat are un număr nesuportat de canale, acestea trebuie "
-"să fie 3 sau 4."
+msgstr "Fişierul PNG transformat are un număr nesuportat de canale, acestea "
+"trebuie să fie trei sau patru."
 
 #: gdk-pixbuf/io-png.c:183
 #, c-format
@@ -460,7 +458,7 @@ msgstr "Fragmentele de text dintr-un PNG trebuie să fie caractere ASCII."
 msgid ""
 "Value for PNG text chunk %s can not be converted to ISO-8859-1 encoding."
 msgstr ""
-"Valoarea fragmentului de text PNG %s nu poate fi convertită în codarea ISO-"
+"Valoarea fragmentului de text PNG %s nu poate fi convertită la codarea ISO-"
 "8859-1."
 
 #: gdk-pixbuf/io-png.c:994
@@ -469,7 +467,7 @@ msgstr "Formatul de imagine PNG"
 
 #: gdk-pixbuf/io-pnm.c:249
 msgid "PNM loader expected to find an integer, but didn't"
-msgstr "Modulul de încărcare PNM se aştepta la un întreg, dar a găsit altceva."
+msgstr "Modulul de încărcare PNM aştepta un întreg, dar a primit altceva."
 
 #: gdk-pixbuf/io-pnm.c:281
 msgid "PNM file has an incorrect initial byte"
@@ -618,11 +616,11 @@ msgstr "Formatul de imagine TGA"
 
 #: gdk-pixbuf/io-tiff.c:175
 msgid "Could not get image width (bad TIFF file)"
-msgstr "N-am putut obţine lăţimea imaginii (fişier TIFF incorect)"
+msgstr "Nu am putut obţine lăţimea imaginii (fişier TIFF incorect)"
 
 #: gdk-pixbuf/io-tiff.c:182
 msgid "Could not get image height (bad TIFF file)"
-msgstr "N-am putut obţine înălţimea imaginii (fişier TIFF incorect)"
+msgstr "Nu am putut obţine înălţimea imaginii (fişier TIFF incorect)"
 
 #: gdk-pixbuf/io-tiff.c:190
 msgid "Width or height of TIFF image is zero"
@@ -647,7 +645,7 @@ msgstr "Nu am reuşit să deschid imaginea TIFF"
 
 #: gdk-pixbuf/io-tiff.c:382
 msgid "TIFFClose operation failed"
-msgstr "Operaţiunea TIFFClose a eşuat"
+msgstr "Operaţiunea „TIFFClose” a eşuat"
 
 #: gdk-pixbuf/io-tiff.c:517 gdk-pixbuf/io-tiff.c:530
 msgid "Failed to load TIFF image"
@@ -659,11 +657,11 @@ msgstr "Formatul de imagine TIFF"
 
 #: gdk-pixbuf/io-wbmp.c:246
 msgid "Image has zero width"
-msgstr "Imaginea are lăţime zero"
+msgstr "Imaginea are lăţimea zero"
 
 #: gdk-pixbuf/io-wbmp.c:264
 msgid "Image has zero height"
-msgstr "Imaginea are înălţime zero"
+msgstr "Imaginea are înălţimea zero"
 
 #: gdk-pixbuf/io-wbmp.c:275
 msgid "Not enough memory to load image"
@@ -791,9 +789,9 @@ msgid ""
 "now. You can drag this color to a palette entry, or select this color as "
 "current by dragging it to the other color swatch alongside."
 msgstr ""
-"Culoarea selectată anterior, pentru comparaţie cu culoarea selectată acum. "
+"Culoarea selectată anterior, pentru comparaţie cu culoarea curent selectată. "
 "Puteţi trage această culoare peste o intrare paletă sau selectaţi-o ca fiind "
-"culoarea curentă trăgând-o peste cealaltă bucată de culoare de alături."
+"culoarea curentă trăgând-o peste bucata de culoare de alături."
 
 #: gtk/gtkcolorsel.c:572
 msgid ""
@@ -801,7 +799,7 @@ msgid ""
 "it for use in the future."
 msgstr ""
 "Culoarea pe care aţi ales-o. Puteţi trage această culoare peste o intrare "
-"paletă sau să o salvaţi pentru a o utiliza în viitor."
+"paletă sau o puteţi salva pentru a o utiliza în viitor."
 
 #: gtk/gtkcolorsel.c:933
 msgid "_Save color here"
@@ -838,7 +836,7 @@ msgstr "_Nuanţă:"
 
 #: gtk/gtkcolorsel.c:1881
 msgid "Position on the color wheel."
-msgstr "Poziţia în cercul culorilor."
+msgstr "Poziţia în cercul culorilor"
 
 #: gtk/gtkcolorsel.c:1883
 msgid "_Saturation:"
@@ -846,15 +844,15 @@ msgstr "_Saturaţie:"
 
 #: gtk/gtkcolorsel.c:1884
 msgid "\"Deepness\" of the color."
-msgstr "„Adâncimea” culorii."
+msgstr "Adâncimea culorii"
 
 #: gtk/gtkcolorsel.c:1885
 msgid "_Value:"
-msgstr "_Valoarea:"
+msgstr "_Valoare:"
 
 #: gtk/gtkcolorsel.c:1886
 msgid "Brightness of the color."
-msgstr "Luminozitatea culorii."
+msgstr "Luminozitatea culorii"
 
 #: gtk/gtkcolorsel.c:1887
 msgid "_Red:"
@@ -862,7 +860,7 @@ msgstr "Roş_u:"
 
 #: gtk/gtkcolorsel.c:1888
 msgid "Amount of red light in the color."
-msgstr "Cantitatea de roşu în culoare."
+msgstr "Cantitatea de roşu în culoare"
 
 #: gtk/gtkcolorsel.c:1889
 msgid "_Green:"
@@ -870,7 +868,7 @@ msgstr "V_erde:"
 
 #: gtk/gtkcolorsel.c:1890
 msgid "Amount of green light in the color."
-msgstr "Cantitatea de verde în culoare."
+msgstr "Cantitatea de verde în culoare"
 
 #: gtk/gtkcolorsel.c:1891
 msgid "_Blue:"
@@ -878,7 +876,7 @@ msgstr "_Albastru:"
 
 #: gtk/gtkcolorsel.c:1892
 msgid "Amount of blue light in the color."
-msgstr "Cantitatea de albastru în culoare."
+msgstr "Cantitatea de albastru în culoare"
 
 #: gtk/gtkcolorsel.c:1895
 msgid "_Opacity:"
@@ -886,7 +884,7 @@ msgstr "_Opacitate:"
 
 #: gtk/gtkcolorsel.c:1903 gtk/gtkcolorsel.c:1914
 msgid "Transparency of the color."
-msgstr "Transparenţa culorii."
+msgstr "Transparenţa culorii"
 
 #: gtk/gtkcolorsel.c:1921
 msgid "Color _Name:"
@@ -905,9 +903,8 @@ msgid "_Palette"
 msgstr "_Paletă"
 
 #: gtk/gtkcolorsel.c:1987
-#, fuzzy
 msgid "Color Wheel"
-msgstr "Cerc"
+msgstr "Cercul culorilor"
 
 #: gtk/gtkcolorseldialog.c:116
 msgid "Color Selection"
@@ -923,7 +920,7 @@ msgstr "_Metode de intrare"
 
 #: gtk/gtkentry.c:4344 gtk/gtktextview.c:6954
 msgid "_Insert Unicode Control Character"
-msgstr "_Inserare caracter de control Unicode"
+msgstr "_Inserare control Unicode"
 
 #: gtk/gtkfilechooser.c:1583 gtk/gtkfilechooser.c:1627
 #: gtk/gtkfilechooser.c:1702 gtk/gtkfilechooser.c:1746
@@ -987,7 +984,7 @@ msgstr ""
 #: gtk/gtkfilechooserdefault.c:1744
 #, c-format
 msgid "Could not add bookmark for %s because it is not a folder."
-msgstr "Nu am putut adăuga un favorit pentru %s deoarece este un director."
+msgstr "Nu am putut adăuga un favorit pentru %s deoarece nu e un director."
 
 #: gtk/gtkfilechooserdefault.c:1849
 #, c-format
@@ -1005,7 +1002,7 @@ msgstr "Nu am putut adăuga un favorit pentru %s deoarece are o cale invalidă."
 
 #: gtk/gtkfilechooserdefault.c:2572
 msgid "Shortcuts"
-msgstr ""
+msgstr "Scurtături"
 
 #: gtk/gtkfilechooserdefault.c:2626
 msgid "Folder"
@@ -1024,7 +1021,7 @@ msgstr "_Elimină"
 
 #: gtk/gtkfilechooserdefault.c:2762
 msgid "Show _Hidden Files"
-msgstr ""
+msgstr "Arată fişierele _ascunse"
 
 #: gtk/gtkfilechooserdefault.c:2877 gtk/gtkfilesel.c:766
 msgid "Files"
@@ -1044,9 +1041,8 @@ msgstr "Modificat"
 
 #. Create Folder
 #: gtk/gtkfilechooserdefault.c:2983
-#, fuzzy
 msgid "Create Fo_lder"
-msgstr "Creează _director"
+msgstr "Creea_ză director"
 
 #. Name entry
 #: gtk/gtkfilechooserdefault.c:3090
@@ -1055,7 +1051,7 @@ msgstr "_Nume:"
 
 #: gtk/gtkfilechooserdefault.c:3134
 msgid "_Browse for other folders"
-msgstr "_Navigare în alte directoare"
+msgstr "Navigare în al_te directoare"
 
 #: gtk/gtkfilechooserdefault.c:3376
 msgid "Save in _folder:"
@@ -1063,16 +1059,15 @@ msgstr "Salvează în _director:"
 
 #: gtk/gtkfilechooserdefault.c:3378
 msgid "Create in _folder:"
-msgstr "Creează _director:"
+msgstr "Creează în _director:"
 
 #: gtk/gtkfilechooserdefault.c:4065
 msgid "Can't change to folder because it isn't local"
 msgstr "Nu pot schimba în directorul specificat deoarece nu este local"
 
 #: gtk/gtkfilechooserdefault.c:4208
-#, fuzzy
 msgid "Could not find the path"
-msgstr "N-am putut salva restul"
+msgstr "Nu am reuşit să găsesc calea"
 
 #: gtk/gtkfilechooserdefault.c:4569
 #, c-format
@@ -1115,7 +1110,7 @@ msgstr "Ieri"
 
 #: gtk/gtkfilechooserdefault.c:5335
 msgid "Unknown"
-msgstr "Necunoscut"
+msgstr "Nu se ştie"
 
 #: gtk/gtkfilechooserdefault.c:5430
 msgid "Cannot change to the folder you specified as it is an invalid path."
@@ -1135,9 +1130,8 @@ msgid "Open Location"
 msgstr "Deschide locaţia"
 
 #: gtk/gtkfilechooserdefault.c:5553
-#, fuzzy
 msgid "Save in Location"
-msgstr "Deschide locaţia"
+msgstr "Salvează în locaţia"
 
 #: gtk/gtkfilechooserdefault.c:5572
 msgid "_Location:"
@@ -1223,9 +1217,8 @@ msgstr "C_reează"
 #: gtk/gtkfilesel.c:1566
 #, c-format
 msgid "The filename \"%s\" contains symbols that are not allowed in filenames"
-msgstr ""
-"Numele fişierului „%s” conţine simboluri care nu sunt permise în numele de "
-"fişiere"
+msgstr "Numele fişierului „%s” conţine simboluri care nu sunt permise în "
+"numele fişierelor"
 
 #: gtk/gtkfilesel.c:1569
 #, c-format
@@ -1238,7 +1231,7 @@ msgstr ""
 
 #: gtk/gtkfilesel.c:1571 gtk/gtkfilesel.c:1692
 msgid "It probably contains symbols not allowed in filenames."
-msgstr "Probabil conţine simboluri nepermise în numele de fişiere."
+msgstr "Probabil conţine simboluri nepermise în numele fişierelor."
 
 #: gtk/gtkfilesel.c:1580
 #, c-format
@@ -1257,7 +1250,7 @@ msgstr "Şterge fişierul"
 #: gtk/gtkfilesel.c:1674 gtk/gtkfilesel.c:1688
 #, c-format
 msgid "The file name \"%s\" contains symbols that are not allowed in filenames"
-msgstr "Numele de fişier „%s” conţine simboluri nepermise în numele de fişiere"
+msgstr "Numele de fişier „%s” conţine simboluri nepermise în numele fişierelor"
 
 #: gtk/gtkfilesel.c:1676
 #, c-format
@@ -1300,7 +1293,7 @@ msgid "_Selection: "
 msgstr "_Selecţie: "
 
 #: gtk/gtkfilesel.c:3139
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The filename \"%s\" couldn't be converted to UTF-8. (try setting the "
 "environment variable G_FILENAME_ENCODING): %s"
@@ -1349,9 +1342,9 @@ msgid "Filesystem"
 msgstr "Sistem de fişiere"
 
 #: gtk/gtkfilesystemunix.c:735
-#, fuzzy, c-format
+#, c-format
 msgid "Could not get a stock icon for %s"
-msgstr "Nu putut obţine detalii despre fişierul „%s”: %s"
+msgstr "Nu am putut obţine o iconiţă standard pentru %s"
 
 #: gtk/gtkfilesystemunix.c:830
 #, c-format
@@ -1359,6 +1352,8 @@ msgid ""
 "The name \"%s\" is not valid because it contains the character \"%s\". "
 "Please use a different name."
 msgstr ""
+"Numele „%s” nu este valid deoarece conţine caracterul „%s”. Vă rugăm să "
+"utilizaţi un nume diferit."
 
 #: gtk/gtkfilesystemunix.c:1438 gtk/gtkfilesystemwin32.c:923
 #, c-format
@@ -1368,11 +1363,11 @@ msgstr "Salvarea favoritului a eşuat (%s)"
 #: gtk/gtkfilesystemunix.c:1734
 #, c-format
 msgid "error getting information for '%s'"
-msgstr "eroare la obţinerea detalilor despre '%s'"
+msgstr "eroare la obţinerea detalilor despre „%s”"
 
 #: gtk/gtkfilesystemwin32.c:1126
 msgid "This file system does not support icons for everything"
-msgstr "Acest sistem de fişiere nu suportă iconiţe pentru orice"
+msgstr "Acest sistem de fişiere nu suportă iconiţe pentru tot"
 
 #: gtk/gtkfontbutton.c:177 gtk/gtkfontbutton.c:294
 msgid "Pick a Font"
@@ -1439,7 +1434,7 @@ msgid ""
 "\t%s"
 msgstr ""
 "Nu am găsit iconiţa „%s”. Nici tema „%s” nu a fost găsită, s-ar putea să "
-"trebuiască să o reinstalaţi. Puteţi obţine o copie de la:\t%s"
+"trebuiască să o reinstalaţi. Puteţi obţine o copie de la: \t%s"
 
 #: gtk/gtkicontheme.c:1251
 #, c-format
@@ -1577,7 +1572,7 @@ msgstr "Calea elementului pixmap: „%s” trebuie să fie absolută, %s, linia 
 #. KEEP IN SYNC with gtkiconfactory.c stock icons, when appropriate
 #: gtk/gtkstock.c:285
 msgid "Information"
-msgstr "Info"
+msgstr "Detalii"
 
 #: gtk/gtkstock.c:286
 msgid "Warning"
@@ -1693,11 +1688,11 @@ msgstr "_Acasă"
 
 #: gtk/gtkstock.c:319
 msgid "Increase Indent"
-msgstr "Măreşte identarea"
+msgstr "Măreşte indentarea"
 
 #: gtk/gtkstock.c:320
 msgid "Decrease Indent"
-msgstr "Micşorează identarea"
+msgstr "Micşorează indentarea"
 
 #: gtk/gtkstock.c:321
 msgid "_Index"
@@ -1853,27 +1848,27 @@ msgstr "Mi_cşorează"
 
 #: gtk/gtktextutil.c:47
 msgid "LRM _Left-to-right mark"
-msgstr "Semn LRM _Stânga-Dreapta"
+msgstr "Semn _Stânga-Dreapta LRM"
 
 #: gtk/gtktextutil.c:48
 msgid "RLM _Right-to-left mark"
-msgstr "Semn RLM _Dreapta-Stânga"
+msgstr "Semn _Dreapta-Stânga RLM"
 
 #: gtk/gtktextutil.c:49
 msgid "LRE Left-to-right _embedding"
-msgstr "Î_ncapsulare LRE Stânga-Dreapta"
+msgstr "Î_ncapsulare Stânga-Dreapta LRE"
 
 #: gtk/gtktextutil.c:50
 msgid "RLE Right-to-left e_mbedding"
-msgstr "În_capsulare RLE Dreapta-Stânga"
+msgstr "În_capsulare Dreapta-Stânga RLE"
 
 #: gtk/gtktextutil.c:51
 msgid "LRO Left-to-right _override"
-msgstr "S_uprascriere LRO Stânga-Dreapta"
+msgstr "S_uprascriere Stânga-Dreapta LRO"
 
 #: gtk/gtktextutil.c:52
 msgid "RLO Right-to-left o_verride"
-msgstr "Supr_ascriere RLO Dreapta-Stânga"
+msgstr "Supr_ascriere Dreapta-Stânga RLO"
 
 #: gtk/gtktextutil.c:53
 msgid "PDF _Pop directional formatting"
@@ -1974,15 +1969,3 @@ msgstr "Metodă de intrare X"
 msgid "Could not get information for file '%s': %s"
 msgstr "Nu putut obţine detalii despre fişierul „%s”: %s"
 
-#~ msgid "Unsupported TIFF variant"
-#~ msgstr "Variantă TIFF nesuportată"
-
-#~ msgid "%d/%b/%Y"
-#~ msgstr "%d/%b/%Y"
-
-#~ msgid ""
-#~ "Could not go to the parent folder of %s:\n"
-#~ "%s"
-#~ msgstr ""
-#~ "Nu am putut deschide directorul părinte al %s:\n"
-#~ "%s"
