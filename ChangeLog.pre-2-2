@@ -1,3 +1,8 @@
+Sun Dec 15 18:39:09 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* configure.in: Hard-code GTK_BINARY_VERSION=2.2.0 for
+	now; should stay the same until we branch for 2.3.
+
 Sun Dec 15 18:14:16 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkmenuitem.c (gtk_real_menu_item_activate_item): 
