@@ -1,3 +1,7 @@
+2001-08-19  Fatih Demir <kabalak@gtranslator.org>
+
+	* configure.in: Added "ta" to the languages list.
+
 Sun Aug  5 10:29:42 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtklist.c: ref/unref, not ref/ref.
