@@ -1491,7 +1491,7 @@ gtk_toolbar_size_allocate (GtkWidget     *widget,
   if (need_arrow)
     {
       arrow_allocation.width = arrow_size;
-      arrow_allocation.height = short_size;
+      arrow_allocation.height = MAX (short_size, 1);
     }
   
   /* expand expandable items */
@@ -1669,7 +1669,7 @@ gtk_toolbar_size_allocate (GtkWidget     *widget,
 	      alloc = allocations[i];
 	    }
 
-	  if (alloc.width == 0 || alloc.height == 0)
+	  if (alloc.width <= 0 || alloc.height <= 0)
 	    {
 	      toolbar_content_set_child_visible (content, toolbar, FALSE);
 	    }
