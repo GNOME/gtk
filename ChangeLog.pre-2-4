@@ -1,3 +1,15 @@
+Thu Nov  7 18:50:38 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkwidget.c (gtk_widget_get_pango_context): Note
+	that get_pango_context() is not "until death does us
+	part", but "until the screen changes".
+
+	* gtk/gtkwidget.c (gtk_widget_create_pango_context): Add
+	a MULTIHEAD warning.
+
+	* gtk/gtkwidget.c (do_screen_change): Clear pango context
+	for widget if set.
+
 Thu Nov  7 18:09:42 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkfilesel.c (open_new_dir): Escape invalid

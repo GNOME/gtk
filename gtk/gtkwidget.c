@@ -215,6 +215,7 @@ static void		gtk_widget_accessible_interface_init	(AtkImplementorIface *iface);
 static AtkObject*	gtk_widget_ref_accessible		(AtkImplementor *implementor);
 static void             gtk_widget_invalidate_widget_windows    (GtkWidget        *widget,
 								 GdkRegion        *region);
+static GdkScreen *      gtk_widget_get_screen_unchecked         (GtkWidget        *widget);
 
 
 /* --- variables --- */
@@ -4312,7 +4313,16 @@ do_screen_change (GtkWidget *widget,
 		  GdkScreen *new_screen)
 {
   if (old_screen != new_screen)
-    g_signal_emit (widget, widget_signals[SCREEN_CHANGED], 0, old_screen);
+    {
+      if (old_screen)
+	{
+	  PangoContext *context = g_object_get_qdata (G_OBJECT (widget), quark_pango_context);
+	  if (context)
+	    g_object_set_qdata (G_OBJECT (widget), quark_pango_context, NULL);
+	}
+      
+      g_signal_emit (widget, widget_signals[SCREEN_CHANGED], 0, old_screen);
+    }
 }
 
 static void
@@ -4480,8 +4490,9 @@ gtk_widget_peek_pango_context (GtkWidget *widget)
  * Gets a #PangoContext with the appropriate colormap, font description
  * and base direction for this widget. Unlike the context returned
  * by gtk_widget_create_pango_context(), this context is owned by
- * the widget (it can be used as long as widget exists), and will
- * be updated to match any changes to the widget's attributes.
+ * the widget (it can be used until the screen for the widget changes
+ * or the widget is removed from its toplevel), and will be updated to
+ * match any changes to the widget's attributes.
  *
  * If you create and keep a #PangoLayout using this context, you must
  * deal with changes to the context by calling pango_layout_context_changed()
@@ -4494,18 +4505,10 @@ PangoContext *
 gtk_widget_get_pango_context (GtkWidget *widget)
 {
   PangoContext *context;
-  GdkScreen *screen;
 
   g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
   
   context = g_object_get_qdata (G_OBJECT (widget), quark_pango_context);
-  if (context)
-    {
-      screen = g_object_get_data (G_OBJECT (context), "gdk-pango-screen");
-      if (screen && (screen != gtk_widget_get_screen (widget)))
-	  context = NULL;
-    }
-  
   if (!context)
     {
       context = gtk_widget_create_pango_context (GTK_WIDGET (widget));
@@ -4531,11 +4534,21 @@ gtk_widget_get_pango_context (GtkWidget *widget)
 PangoContext *
 gtk_widget_create_pango_context (GtkWidget *widget)
 {
+  GdkScreen *screen;
   PangoContext *context;
 
   g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
 
-  context = gdk_pango_context_get_for_screen (gtk_widget_get_screen (widget));
+  screen = gtk_widget_get_screen_unchecked (widget);
+  if (!screen)
+    {
+      GTK_NOTE (MULTIHEAD,
+		g_warning ("gtk_widget_create_pango_context ()) called without screen"));
+      
+      screen = gdk_screen_get_default ();
+    }
+
+  context = gdk_pango_context_get_for_screen (screen);
 
   gdk_pango_context_set_colormap (context, gtk_widget_get_colormap (widget));
   pango_context_set_base_dir (context,
