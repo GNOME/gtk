@@ -1,4 +1,14 @@
 2002-05-02 Erwann Chenede - <erwann.chenede@sun.com>
+        
+	* gdk/gdkscreen.c (gdk_screen_get_monitor_at_point):
+	* gdk/gdkscreen.h :
+	* gdk/x11/gdkscreen-x11.c :
+	make gdk_screen_get_monitor_at_point cross platform instead
+	of backend dependant. #80480
+	* tests/testxinerama.c (main):
+	changed the warning message.
+	
+2002-05-02 Erwann Chenede - <erwann.chenede@sun.com>
 
 	* gdk/x11/gdkscreen-x11.c (gdk_screen_x11_get_root_window):
 	removed unneeded ref. #79977
