@@ -1,16 +1,16 @@
 # translation of nn.po to Norwegian Nynorsk
 # Norwegian translation of gtk+.
-# Copyright (C) 1998-2002, 2003 Free Software Foundation, Inc.
+# Copyright (C) 1998-2002, 2003, 2004 Free Software Foundation, Inc.
 # Kjartan Maraas <kmaraas@gnome.org>, 1998-2001.
 # Roy-Magne Mo <rmo@sunnmore.net>, 2001-2002.
-# Åsmund Skjæveland <aasmunds@fys.uio.no>, 2003.
+# Åsmund Skjæveland <aasmunds@fys.uio.no>, 2003, 2004.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: nn\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2003-12-27 17:16+0100\n"
-"PO-Revision-Date: 2003-12-28 12:40+0100\n"
+"POT-Creation-Date: 2004-01-02 12:44+0100\n"
+"PO-Revision-Date: 2004-01-03 23:53+0100\n"
 "Last-Translator: Åsmund Skjæveland <aasmunds@fys.uio.no>\n"
 "Language-Team: Norwegian Nynorsk <i18n-nn@lister.ping.uio.no>\n"
 "MIME-Version: 1.0\n"
@@ -34,8 +34,8 @@ msgstr "Biletefila «%s» inneheld ikkje data"
 #, c-format
 msgid "Failed to load image '%s': reason not known, probably a corrupt image file"
 msgstr ""
-"Klarte ikkje å lasta biletet «%s». Årsaken er ukjent, men truleg ei "
-"øydelagt biletefil"
+"Klarte ikkje å lasta biletet «%s». Årsaken er ukjent, men truleg ei øydelagt "
+"biletefil"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:226
 #, c-format
@@ -735,19 +735,19 @@ msgstr "Alt"
 
 #: gtk/gtkaccellabel.c:137
 msgid "Accelerator Closure"
-msgstr ""
+msgstr "Snøggtastlukking"
 
 #: gtk/gtkaccellabel.c:138
 msgid "The closure to be monitored for accelerator changes"
-msgstr ""
+msgstr "Lukkinga som skal overvakast for snøggtastendringar"
 
 #: gtk/gtkaccellabel.c:144
 msgid "Accelerator Widget"
-msgstr ""
+msgstr "Snøggtastelement"
 
 #: gtk/gtkaccellabel.c:145
 msgid "The widget to be monitored for accelerator changes"
-msgstr ""
+msgstr "Skjermelementet som skal overvakast for snøggtastendringar"
 
 #: gtk/gtkaction.c:185 gtk/gtkactiongroup.c:117
 msgid "Name"
@@ -797,14 +797,15 @@ msgid "Is important"
 msgstr "Er viktig"
 
 #: gtk/gtkaction.c:222
+#, fuzzy
 msgid ""
 "Whether the action is considered important. When TRUE, toolitem proxies for "
 "this action show text in GTK_TOOLBAR_BOTH_HORIZ mode."
-msgstr ""
+msgstr "Om handlinga vert rekna for viktig. Når sann,"
 
 #: gtk/gtkaction.c:228
 msgid "Hide if empty"
-msgstr "Skjul dersom tom"
+msgstr "Gøym dersom tom"
 
 #: gtk/gtkaction.c:229
 msgid "When TRUE, empty menu proxies for this action are hidden."
@@ -994,7 +995,7 @@ msgstr "Kor mykje storleiken til barnet skal aukast oppe og nede"
 
 #: gtk/gtkbbox.c:155
 msgid "Layout style"
-msgstr ""
+msgstr "Stil på plassering"
 
 # TRN: Skal verdiane omsetjast?
 #: gtk/gtkbbox.c:156
@@ -1272,7 +1273,7 @@ msgstr "Vis cella"
 
 #: gtk/gtkcellrenderer.c:138
 msgid "xalign"
-msgstr ""
+msgstr "xjustering"
 
 #: gtk/gtkcellrenderer.c:139
 msgid "The x-align"
@@ -1280,7 +1281,7 @@ msgstr "X-justeringa"
 
 #: gtk/gtkcellrenderer.c:149
 msgid "yalign"
-msgstr ""
+msgstr "yjustering"
 
 #: gtk/gtkcellrenderer.c:150
 msgid "The y-align"
@@ -1288,7 +1289,7 @@ msgstr "Y-justeringa"
 
 #: gtk/gtkcellrenderer.c:160
 msgid "xpad"
-msgstr ""
+msgstr "xfyll"
 
 #: gtk/gtkcellrenderer.c:161
 msgid "The xpad"
@@ -1296,7 +1297,7 @@ msgstr "X-polstringa"
 
 #: gtk/gtkcellrenderer.c:171
 msgid "ypad"
-msgstr ""
+msgstr "yfyll"
 
 #: gtk/gtkcellrenderer.c:172
 msgid "The ypad"
@@ -1368,7 +1369,7 @@ msgstr "Pixbuf som skal teiknast"
 
 #: gtk/gtkcellrendererpixbuf.c:142
 msgid "Pixbuf Expander Open"
-msgstr ""
+msgstr "Pixbuf for open utvidar"
 
 #: gtk/gtkcellrendererpixbuf.c:143
 msgid "Pixbuf for open expander"
@@ -1376,7 +1377,7 @@ msgstr "Pixbuf for open utvidar"
 
 #: gtk/gtkcellrendererpixbuf.c:151
 msgid "Pixbuf Expander Closed"
-msgstr ""
+msgstr "Pixbuf for lukka utvidar"
 
 #: gtk/gtkcellrendererpixbuf.c:152
 msgid "Pixbuf for closed expander"
@@ -2023,11 +2024,11 @@ msgstr "Modellen for kombinasjonsboksen"
 
 #: gtk/gtkcombobox.c:349
 msgid "Wrap width"
-msgstr ""
+msgstr "Brytingsbreidde"
 
 #: gtk/gtkcombobox.c:350
 msgid "Wrap width for layouting the items in a grid"
-msgstr ""
+msgstr "Brytingsbreidde når elementa vert plasserte i eit rutenett"
 
 #: gtk/gtkcombobox.c:359
 msgid "Row span column"
@@ -2047,7 +2048,7 @@ msgstr ""
 
 #: gtk/gtkcombobox.c:379
 msgid "Active item"
-msgstr "Valt oppføring"
+msgstr "Vald oppføring"
 
 #: gtk/gtkcombobox.c:380
 msgid "The item which is currently active"
@@ -2175,7 +2176,7 @@ msgstr "Den noverande plasseringa til innsetjingsmarkøren, i teikn"
 
 #: gtk/gtkentry.c:456 gtk/gtklabel.c:378
 msgid "Selection Bound"
-msgstr ""
+msgstr "Utvalsgrense"
 
 #: gtk/gtkentry.c:457 gtk/gtklabel.c:379
 msgid "The position of the opposite end of the selection from the cursor in chars"
@@ -2245,7 +2246,7 @@ msgstr "Tal på teikn som det skal setjast av plass til i feltet"
 
 #: gtk/gtkentry.c:524
 msgid "Scroll offset"
-msgstr ""
+msgstr "Utrulla"
 
 #: gtk/gtkentry.c:525
 msgid "Number of pixels of the entry scrolled off the screen to the left"
@@ -4333,7 +4334,7 @@ msgstr "_Feit"
 
 #: gtk/gtkstock.c:278
 msgid "_Cancel"
-msgstr "_Avbryt"
+msgstr "A_vbryt"
 
 #: gtk/gtkstock.c:279
 msgid "_CD-Rom"
@@ -4982,32 +4983,26 @@ msgid "Whether this tag affects text visibility"
 msgstr "Om denne merkinga påvirkar om tekst er synleg eller ikkje"
 
 #: gtk/gtktextutil.c:46
-#, fuzzy
 msgid "LRM _Left-to-right mark"
 msgstr "VHM _Venstre-til-høgre-merke"
 
 #: gtk/gtktextutil.c:47
-#, fuzzy
 msgid "RLM _Right-to-left mark"
 msgstr "HVM _Høgre-til-venstre-merke"
 
 #: gtk/gtktextutil.c:48
-#, fuzzy
 msgid "LRE Left-to-right _embedding"
 msgstr "VHI V_enstre-til-høgre-innbygging"
 
 #: gtk/gtktextutil.c:49
-#, fuzzy
 msgid "RLE Right-to-left e_mbedding"
 msgstr "HVE Høgre-til-venstre-in_nbygging"
 
 #: gtk/gtktextutil.c:50
-#, fuzzy
 msgid "LRO Left-to-right _override"
 msgstr "VHO Venstre-til-høgre-_overstyring"
 
 #: gtk/gtktextutil.c:51
-#, fuzzy
 msgid "RLO Right-to-left o_verride"
 msgstr "HVO Høgre-til-venstre-o_verstyring"
 
@@ -5016,17 +5011,16 @@ msgid "PDF _Pop directional formatting"
 msgstr ""
 
 #: gtk/gtktextutil.c:53
-#, fuzzy
 msgid "ZWS _Zero width space"
 msgstr "NBS _Nullbreiddeskiljeteikn"
 
 #: gtk/gtktextutil.c:54
 msgid "ZWJ Zero width _joiner"
-msgstr ""
+msgstr "NBL _Nullbreiddesamanlimar"
 
 #: gtk/gtktextutil.c:55
 msgid "ZWNJ Zero width _non-joiner"
-msgstr ""
+msgstr "NBUL _Nullbreidde utan samanliming"
 
 #: gtk/gtktextview.c:555
 msgid "Pixels Above Lines"
@@ -5062,11 +5056,11 @@ msgstr "Om innsetjingsmarkøren vert vist eller ikkje"
 
 #: gtk/gtktextview.c:657
 msgid "Buffer"
-msgstr ""
+msgstr "Buffer"
 
 #: gtk/gtktextview.c:658
 msgid "The buffer which is displayed"
-msgstr ""
+msgstr "Bufferet som vert vist"
 
 #: gtk/gtktextview.c:665
 msgid "Overwrite mode"
@@ -5199,13 +5193,12 @@ msgstr "Tekst å visa i elementet"
 
 # TRN: Hæ?
 #: gtk/gtktoolbutton.c:187
-#, fuzzy
 msgid ""
 "If set, an underline in the label property indicates that the next character "
 "should be used for the mnemonic accelerator key in the overflow menu"
 msgstr ""
 "Dersom denne er satt, skal ei understreking i teksten visa at det neste "
-"teiknet skal brukast som snøggtast i...øh.."
+"teiknet skal brukast som snøggtast i overflytmenyen"
 
 #: gtk/gtktoolbutton.c:194
 msgid "Widget to use as the item label"
@@ -5443,7 +5436,7 @@ msgstr "Titlen som skal visast i kolonnehovudet"
 
 #: gtk/gtktreeviewcolumn.c:295
 msgid "Column gets share of extra width allocated to the widget"
-msgstr ""
+msgstr "Kolonna får ein del av den ekstra breidda som er satt av til skjermelementet"
 
 #: gtk/gtktreeviewcolumn.c:302
 msgid "Clickable"
@@ -5948,7 +5941,7 @@ msgstr "Amharisk (EZ+)"
 #. ID
 #: modules/input/imcedilla.c:90
 msgid "Cedilla"
-msgstr ""
+msgstr "Cedilla"
 
 #. ID
 #: modules/input/imcyrillic-translit.c:216
