@@ -1,5 +1,7 @@
 2004-03-17  Morten Welinder  <terra@gnome.org>
 
+	* tests/prop-editor.c (object_changed): Plug leak.
+
 	* tests/testfilechooser.c (main): Plug some leaks and expose
 	others.
 

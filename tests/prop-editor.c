@@ -442,6 +442,9 @@ object_changed (GObject *object, GParamSpec *pspec, gpointer data)
   gtk_label_set_text (GTK_LABEL (label), str);
   gtk_widget_set_sensitive (button, G_IS_OBJECT (obj));
 
+  if (obj)
+    g_object_unref (obj);
+
   g_free (str);
 }
 
