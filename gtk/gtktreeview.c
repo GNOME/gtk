@@ -6204,7 +6204,7 @@ gtk_tree_view_row_activated (GtkTreeView       *tree_view,
   g_return_if_fail (GTK_IS_TREE_VIEW (tree_view));
 
   /* FIXME: Actually activate the path internally, not just emit the signal */
-  g_warning ("FIXME: Actually activate the path internally, not just emit the signal\n");
+  /*  g_warning ("FIXME: Actually activate the path internally, not just emit the signal\n"); */
   g_signal_emit (G_OBJECT(tree_view), tree_view_signals[ROW_ACTIVATED], 0, path, column);
 }
 

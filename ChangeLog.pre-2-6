@@ -1,3 +1,11 @@
+Sat May  5 09:18:30 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* demos/gtk-demo/images.c (progressive_timeout): Fix
+	typo in filename.
+
+	* gtk/gtktreeview.c (gtk_tree_view_row_activated): Comment
+	out FIXME warning; just too annoying.
+
 2001-05-04  Alex Larsson  <alla@lysator.liu.se>
 
 	* gdk/linux-fb/gdkcolor-fb.c:

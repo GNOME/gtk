@@ -183,7 +183,7 @@ progressive_timeout (gpointer data)
       if (g_file_test ("./gtk-logo-rgb.gif", G_FILE_TEST_EXISTS))
         filename = "./gtk-logo-rgb.gif";
       else
-        filename = DEMOCODEDIR"/gtk-log-rgb.gif";
+        filename = DEMOCODEDIR"/gtk-logo-rgb.gif";
       
       image_stream = fopen (filename, "r");
 
