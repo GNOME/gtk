@@ -41,6 +41,7 @@
 
 #include "gtkcalendar.h"
 #include "gtkmarshalers.h"
+#include "gtkintl.h"
 #include "gdk/gdkkeysyms.h"
 
 /***************************************************************************/
@@ -212,6 +213,20 @@ enum {
   LAST_SIGNAL
 };
 
+enum
+{
+  PROP_0,
+  PROP_YEAR,
+  PROP_MONTH,
+  PROP_DAY,
+  PROP_SHOW_HEADING,
+  PROP_SHOW_DAY_NAMES,
+  PROP_NO_MONTH_CHANGE,
+  PROP_SHOW_WEEK_NUMBERS,
+  PROP_WEEK_START_MONDAY,
+  PROP_LAST
+};
+
 static gint gtk_calendar_signals[LAST_SIGNAL] = { 0 };
 
 static GtkWidgetClass *parent_class = NULL;
@@ -261,6 +276,14 @@ typedef void (*GtkCalendarSignalDate) (GtkObject *object, guint arg1, guint arg2
 static void gtk_calendar_class_init	(GtkCalendarClass *class);
 static void gtk_calendar_init		(GtkCalendar *calendar);
 static void gtk_calendar_finalize	(GObject *calendar);
+static void gtk_calendar_set_property   (GObject      *object,
+				         guint         prop_id,
+				         const GValue *value,
+				         GParamSpec   *pspec);
+static void gtk_calendar_get_property   (GObject      *object,
+					 guint         prop_id,
+					 GValue       *value,
+					 GParamSpec   *pspec);
 static void gtk_calendar_realize	(GtkWidget *widget);
 static void gtk_calendar_unrealize	(GtkWidget *widget);
 static void gtk_calendar_size_request	(GtkWidget *widget,
@@ -347,6 +370,8 @@ gtk_calendar_class_init (GtkCalendarClass *class)
   
   parent_class = g_type_class_peek_parent (class);
   
+  gobject_class->set_property = gtk_calendar_set_property;
+  gobject_class->get_property = gtk_calendar_get_property;
   gobject_class->finalize = gtk_calendar_finalize;
 
   widget_class->realize = gtk_calendar_realize;
@@ -369,6 +394,64 @@ gtk_calendar_class_init (GtkCalendarClass *class)
   class->next_month = NULL;
   class->prev_year = NULL;
   class->next_year = NULL;
+
+  g_object_class_install_property (gobject_class,
+                                   PROP_YEAR,
+                                   g_param_spec_int ("year",
+						     _("Year"),
+						     _("The selected year"),
+						     0, G_MAXINT, 0,
+						     G_PARAM_READWRITE));
+  g_object_class_install_property (gobject_class,
+                                   PROP_MONTH,
+                                   g_param_spec_int ("month",
+						     _("Month"),
+						     _("The selected month (as a number between 0 and 11)"),
+						     0, 11, 0,
+						     G_PARAM_READWRITE));
+  g_object_class_install_property (gobject_class,
+                                   PROP_DAY,
+                                   g_param_spec_int ("day",
+						     _("Day"),
+						     _("The selected day (as a number between 1 and 31, or 0 to unselect the currently selected day)"),
+						     0, 31, 0,
+						     G_PARAM_READWRITE));
+  g_object_class_install_property (gobject_class,
+                                   PROP_SHOW_HEADING,
+                                   g_param_spec_boolean ("show_heading",
+							 _("Show Heading"),
+							 _("If TRUE, a heading is displayed"),
+							 TRUE,
+							 G_PARAM_READWRITE));
+  g_object_class_install_property (gobject_class,
+                                   PROP_SHOW_DAY_NAMES,
+                                   g_param_spec_boolean ("show_day_names",
+							 _("Show Day Names"),
+							 _("If TRUE, day names are displayed"),
+							 TRUE,
+							 G_PARAM_READWRITE));
+  g_object_class_install_property (gobject_class,
+                                   PROP_NO_MONTH_CHANGE,
+                                   g_param_spec_boolean ("no_month_change",
+							 _("No Month Change"),
+							 _("If TRUE, the selected month can not be changed"),
+							 FALSE,
+							 G_PARAM_READWRITE));
+  g_object_class_install_property (gobject_class,
+                                   PROP_SHOW_WEEK_NUMBERS,
+                                   g_param_spec_boolean ("show_week_numbers",
+							 _("Show Week Numbers"),
+							 _("If TRUE, week numbers are displayed"),
+							 FALSE,
+							 G_PARAM_READWRITE));
+  g_object_class_install_property (gobject_class,
+                                   PROP_WEEK_START_MONDAY,
+                                   g_param_spec_boolean ("week_start_monday",
+							 _("Week Start Monday"),
+							 _("If TRUE, Monday is displayed as the first day of the week"),
+							 FALSE,
+							 G_PARAM_READWRITE));
+
 
   gtk_calendar_signals[MONTH_CHANGED_SIGNAL] =
     g_signal_new ("month_changed",
@@ -1990,32 +2073,56 @@ gtk_calendar_compute_days (GtkCalendar *calendar)
     }
 }
 
-/* ----------------------------------------------------------------------
-   NAME:	gtk_calendar_display_options
-   DESCRIPTION:	Set display options (whether to display the
-   heading and the month headings)
-   
-   flags is can be an XOR of:
-   GTK_CALENDAR_SHOW_HEADING
-   GTK_CALENDAR_SHOW_DAY_NAMES
-   GTK_CALENDAR_NO_MONTH_CHANGE
-   GTK_CALENDAR_SHOW_WEEK_NUMBERS
-   GTK_CALENDAR_WEEK_START_MONDAY
-   ---------------------------------------------------------------------- */
-
 void
 gtk_calendar_display_options (GtkCalendar	       *calendar,
 			      GtkCalendarDisplayOptions flags)
+{
+  gtk_calendar_set_display_options (calendar, flags);
+}
+
+/**
+ * gtk_calendar_get_display_options:
+ * @calendar: a #GtkCalendar
+ * 
+ * Returns the current display options of @calendar. 
+ * 
+ * Return value: the display options.
+ *
+ * Since: 2.4
+ **/
+GtkCalendarDisplayOptions 
+gtk_calendar_get_display_options (GtkCalendar         *calendar)
+{
+  g_return_val_if_fail (GTK_IS_CALENDAR (calendar), 0);
+
+  return calendar->display_flags;
+}
+
+/**
+ * gtk_calendar_set_display_options:
+ * @calendar: a #GtkCalendar
+ * @flags: the display options to set
+ * 
+ * Sets display options (whether to display the heading and the month  
+ * headings).
+ *
+ * Since: 2.4
+ **/
+void
+gtk_calendar_set_display_options (GtkCalendar	       *calendar,
+				  GtkCalendarDisplayOptions flags)
 {
   GtkCalendarPrivateData *private_data;
   gint resize = 0;
   GtkWidget *widget;
   gint i;
+  GtkCalendarDisplayOptions old_flags;
   
   g_return_if_fail (GTK_IS_CALENDAR (calendar));
   
   widget = GTK_WIDGET (calendar);
   private_data = GTK_CALENDAR_PRIVATE_DATA (calendar);
+  old_flags = calendar->display_flags;
   
   if (GTK_WIDGET_REALIZED (widget))
     {
@@ -2126,6 +2233,18 @@ gtk_calendar_display_options (GtkCalendar	       *calendar,
   else
     calendar->display_flags = flags;
   
+  g_object_freeze_notify (G_OBJECT (calendar));
+  if ((old_flags ^ calendar->display_flags) & GTK_CALENDAR_SHOW_HEADING)
+    g_object_notify (G_OBJECT (calendar), "show_heading");
+  if ((old_flags ^ calendar->display_flags) & GTK_CALENDAR_SHOW_DAY_NAMES)
+    g_object_notify (G_OBJECT (calendar), "show_day_names");
+  if ((old_flags ^ calendar->display_flags) & GTK_CALENDAR_NO_MONTH_CHANGE)
+    g_object_notify (G_OBJECT (calendar), "no_month_change");
+  if ((old_flags ^ calendar->display_flags) & GTK_CALENDAR_SHOW_WEEK_NUMBERS)
+    g_object_notify (G_OBJECT (calendar), "show_week_numbers");
+  if ((old_flags ^ calendar->display_flags) & GTK_CALENDAR_WEEK_START_MONDAY)
+    g_object_notify (G_OBJECT (calendar), "week_start_monday");
+  g_object_thaw_notify (G_OBJECT (calendar));
 }
 
 gboolean
@@ -2142,6 +2261,12 @@ gtk_calendar_select_month (GtkCalendar *calendar,
   gtk_calendar_compute_days (calendar);
   
   gtk_widget_queue_draw (GTK_WIDGET (calendar));
+
+  g_object_freeze_notify (G_OBJECT (calendar));
+  g_object_notify (G_OBJECT (calendar), "month");
+  g_object_notify (G_OBJECT (calendar), "year");
+  g_object_thaw_notify (G_OBJECT (calendar));
+
   g_signal_emit (calendar,
 		 gtk_calendar_signals[MONTH_CHANGED_SIGNAL],
 		 0);
@@ -2177,6 +2302,8 @@ gtk_calendar_select_day (GtkCalendar *calendar,
 	gtk_calendar_paint_day_num (GTK_WIDGET (calendar), day);
     }
   
+  g_object_notify (G_OBJECT (calendar), "day");
+
   g_signal_emit (calendar,
 		 gtk_calendar_signals[DAY_SELECTED_SIGNAL],
 		 0);
@@ -2719,4 +2846,130 @@ gtk_calendar_key_press (GtkWidget   *widget,
     }	
   
   return return_val;
+}
+
+static void
+gtk_calendar_set_display_option (GtkCalendar              *calendar,
+				 GtkCalendarDisplayOptions flag,
+				 gboolean                  setting)
+{
+  GtkCalendarDisplayOptions flags;
+  if (setting) 
+    flags = calendar->display_flags | flag;
+  else
+    flags = calendar->display_flags & ~flag; 
+  gtk_calendar_display_options (calendar, flags);
+}
+
+static gboolean
+gtk_calendar_get_display_option (GtkCalendar              *calendar,
+				 GtkCalendarDisplayOptions flag)
+{
+  return (calendar->display_flags & flag) != 0;
+}
+
+
+static void 
+gtk_calendar_set_property (GObject      *object,
+			   guint         prop_id,
+			   const GValue *value,
+			   GParamSpec   *pspec)
+{
+  GtkCalendar *calendar;
+
+  calendar = GTK_CALENDAR (object);
+
+  switch (prop_id) 
+    {
+    case PROP_YEAR:
+      gtk_calendar_select_month (calendar,
+				 calendar->month,
+				 g_value_get_int (value));
+      break;
+    case PROP_MONTH:
+      gtk_calendar_select_month (calendar,
+				 g_value_get_int (value),
+				 calendar->year);
+      break;
+    case PROP_DAY:
+      gtk_calendar_select_day (calendar,
+			       g_value_get_int (value));
+      break;
+    case PROP_SHOW_HEADING:
+      gtk_calendar_set_display_option (calendar,
+				       GTK_CALENDAR_SHOW_HEADING,
+				       g_value_get_boolean (value));
+      break;
+    case PROP_SHOW_DAY_NAMES:
+      gtk_calendar_set_display_option (calendar,
+				       GTK_CALENDAR_SHOW_DAY_NAMES,
+				       g_value_get_boolean (value));
+      break;
+    case PROP_NO_MONTH_CHANGE:
+      gtk_calendar_set_display_option (calendar,
+				       GTK_CALENDAR_NO_MONTH_CHANGE,
+				       g_value_get_boolean (value));
+      break;
+    case PROP_SHOW_WEEK_NUMBERS:
+      gtk_calendar_set_display_option (calendar,
+				       GTK_CALENDAR_SHOW_WEEK_NUMBERS,
+				       g_value_get_boolean (value));
+      break;
+    case PROP_WEEK_START_MONDAY:
+      gtk_calendar_set_display_option (calendar,
+				       GTK_CALENDAR_WEEK_START_MONDAY,
+				       g_value_get_boolean (value));
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+    }
+}
+
+static void 
+gtk_calendar_get_property (GObject      *object,
+			   guint         prop_id,
+			   GValue       *value,
+			   GParamSpec   *pspec)
+{
+  GtkCalendar *calendar;
+
+  calendar = GTK_CALENDAR (object);
+
+  switch (prop_id) 
+    {
+    case PROP_YEAR:
+      g_value_set_int (value, calendar->year);
+      break;
+    case PROP_MONTH:
+      g_value_set_int (value, calendar->month);
+      break;
+    case PROP_DAY:
+      g_value_set_int (value, calendar->selected_day);
+      break;
+    case PROP_SHOW_HEADING:
+      g_value_set_boolean (value, gtk_calendar_get_display_option (calendar,
+								   GTK_CALENDAR_SHOW_HEADING));
+      break;
+    case PROP_SHOW_DAY_NAMES:
+      g_value_set_boolean (value, gtk_calendar_get_display_option (calendar,
+								   GTK_CALENDAR_SHOW_DAY_NAMES));
+      break;
+    case PROP_NO_MONTH_CHANGE:
+      g_value_set_boolean (value, gtk_calendar_get_display_option (calendar,
+								   GTK_CALENDAR_NO_MONTH_CHANGE));
+      break;
+    case PROP_SHOW_WEEK_NUMBERS:
+      g_value_set_boolean (value, gtk_calendar_get_display_option (calendar,
+								   GTK_CALENDAR_SHOW_WEEK_NUMBERS));
+      break;
+    case PROP_WEEK_START_MONDAY:
+      g_value_set_boolean (value, gtk_calendar_get_display_option (calendar,
+								   GTK_CALENDAR_WEEK_START_MONDAY));
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+    }
+
 }

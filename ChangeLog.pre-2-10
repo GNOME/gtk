@@ -1,3 +1,11 @@
+2003-05-08  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkcalendar.[ch] (gtk_calendar_set_display_options): 
+	(gtk_calendar_get_display_options): New functions.
+	(gtk_calendar_display_options): Depreate.  (#64567)
+	(gtk_calendar_class_init): Add boolean properties for the display
+	options.  (#50949)
+
 Tue May  6 16:50:52 2003  Owen Taylor  <otaylor@redhat.com>
 
 	Patch from James Henstridge to update to automake-1.7

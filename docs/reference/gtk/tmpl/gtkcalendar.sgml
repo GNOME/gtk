@@ -21,7 +21,7 @@ Alternative, all marks can be cleared with gtk_calendar_clear_marks().
 </para>
 <para>
 The way in which the calendar itself is displayed can be altered using
-gtk_calendar_display_options().
+gtk_calendar_set_display_options().
 </para>
 <para>
 The selected date can be retrieved from a #GtkCalendar using
@@ -166,6 +166,7 @@ Sets display options (whether to display the heading and the month headings).
 
 @calendar: a #GtkCalendar.
 @flags: the display options to set.
+@Deprecated: Use gtk_calendar_set_display_options() instead
 
 
 <!-- ##### FUNCTION gtk_calendar_get_date ##### -->

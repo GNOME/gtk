@@ -284,6 +284,8 @@ gtk_calendar_select_day
 gtk_calendar_mark_day
 gtk_calendar_unmark_day
 gtk_calendar_clear_marks
+gtk_calendar_get_display_options
+gtk_calendar_set_display_options
 gtk_calendar_display_options
 gtk_calendar_get_date
 gtk_calendar_freeze

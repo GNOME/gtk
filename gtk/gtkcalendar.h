@@ -131,8 +131,14 @@ gboolean   gtk_calendar_unmark_day	(GtkCalendar *calendar,
 void	   gtk_calendar_clear_marks	(GtkCalendar *calendar);
 
 
+void	   gtk_calendar_set_display_options (GtkCalendar    	      *calendar,
+					     GtkCalendarDisplayOptions flags);
+GtkCalendarDisplayOptions
+           gtk_calendar_get_display_options (GtkCalendar   	      *calendar);
+#ifndef GTK_DISABLE_DEPRECATED
 void	   gtk_calendar_display_options (GtkCalendar		  *calendar,
 					 GtkCalendarDisplayOptions flags);
+#endif
 
 void	   gtk_calendar_get_date	(GtkCalendar *calendar, 
 					 guint	     *year,
