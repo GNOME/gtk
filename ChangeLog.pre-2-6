@@ -1,3 +1,9 @@
+Thu Mar 21 10:04:05 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdkwindow.c (gdk_window_real_get_depth): Remove
+	some left over debugging code with a G_BREAKPOINT()
+	in it.
+
 Wed Mar 20 19:33:31 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkcalendar.c (gtk_calendar_main_button): When

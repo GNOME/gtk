@@ -1978,15 +1978,7 @@ gdk_window_real_get_depth (GdkDrawable *drawable)
   
   g_return_val_if_fail (GDK_IS_WINDOW (drawable), 0);
 
-  depth = ((GdkWindowObject *)GDK_WINDOW (drawable))->depth;
-
-  if (depth == 0)
-    {
-      g_print ("0 depth for type %s\n", g_type_name (G_OBJECT_TYPE (drawable)));
-      G_BREAKPOINT ();
-    }
-
-  return depth;
+  return ((GdkWindowObject *)GDK_WINDOW (drawable))->depth;
 }
 
 static void
