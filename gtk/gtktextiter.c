@@ -92,12 +92,14 @@ iter_set_from_byte_offset (GtkTextRealIter *iter,
 {
   iter_set_common (iter, line);
 
-  _gtk_text_line_byte_locate (iter->line,
-                              byte_offset,
-                              &iter->segment,
-                              &iter->any_segment,
-                              &iter->segment_byte_offset,
-                              &iter->line_byte_offset);
+  if (!_gtk_text_line_byte_locate (iter->line,
+                                   byte_offset,
+                                   &iter->segment,
+                                   &iter->any_segment,
+                                   &iter->segment_byte_offset,
+                                   &iter->line_byte_offset))
+    g_error ("Byte index %d is off the end of the line",
+             byte_offset);
 }
 
 static void
@@ -107,12 +109,14 @@ iter_set_from_char_offset (GtkTextRealIter *iter,
 {
   iter_set_common (iter, line);
 
-  _gtk_text_line_char_locate (iter->line,
-                              char_offset,
-                              &iter->segment,
-                              &iter->any_segment,
-                              &iter->segment_char_offset,
-                              &iter->line_char_offset);
+  if (!_gtk_text_line_char_locate (iter->line,
+                                   char_offset,
+                                   &iter->segment,
+                                   &iter->any_segment,
+                                   &iter->segment_char_offset,
+                                   &iter->line_char_offset))
+    g_error ("Char offset %d is off the end of the line",
+             char_offset);
 }
 
 static void

@@ -1929,6 +1929,8 @@ line_display_index_to_iter (GtkTextLayout      *layout,
 			    gint                index,
 			    gint                trailing)
 {
+  gint line_len;
+  
   if (index >= display->insert_index + layout->preedit_len)
     index -= layout->preedit_len;
   else if (index > display->insert_index)
@@ -1937,8 +1939,25 @@ line_display_index_to_iter (GtkTextLayout      *layout,
       trailing = 0;
     }
   
-  _gtk_text_btree_get_iter_at_line (_gtk_text_buffer_get_btree (layout->buffer),
-                                   iter, display->line, index);
+  line_len = _gtk_text_line_byte_count (display->line);
+  g_assert (index <= line_len);
+
+  if (index < line_len)
+    _gtk_text_btree_get_iter_at_line (_gtk_text_buffer_get_btree (layout->buffer),
+                                      iter, display->line, index);
+  else
+    {
+      /* Clamp to end of line - really this clamping should have been done
+       * before here, maybe in Pango, this is a broken band-aid I think
+       */
+      g_assert (index == line_len);
+      
+      _gtk_text_btree_get_iter_at_line (_gtk_text_buffer_get_btree (layout->buffer),
+                                        iter, display->line, 0);
+      gtk_text_iter_forward_to_delimiters (iter);
+    }
+
+  /* FIXME should this be cursor positions? */
   gtk_text_iter_forward_chars (iter, trailing);
 }
 

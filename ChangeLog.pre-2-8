@@ -1,3 +1,15 @@
+2001-01-04  Havoc Pennington  <hp@redhat.com>
+
+	* gtk/gtktextlayout.c (line_display_index_to_iter): if index is
+	equal to the line length, then position iterator before paragraph 
+	separators. Fixes crash reported by Mikael Hermansson when
+	pressing left arrow from the start of a line.	
+
+	* gtk/gtktextiter.c (iter_set_from_byte_offset): Add g_error
+	about byte indexes off the end
+	(iter_set_from_char_offset): add g_error about char offsets
+	off the end
+
 2001-01-03  Havoc Pennington  <hp@redhat.com>
 
 	* gtk/gtktextbtree.c: Adapt to uscore-ification of gtktextiterprivate
