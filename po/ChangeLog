@@ -1,3 +1,8 @@
+2000-01-04  Kjartan Maraas  <kmaraas@online.no>
+
+	* update.sh: A little script that lets people
+	update the .pot file without makefiles etc.
+
 1999-12-23  Fatih Demir <kabalak@gmx.net>
 
 	* tr.po: Added the Turkish translation , edited ../configure.in & makefile.cygwin .
