@@ -140,4 +140,4 @@ extern gint             gdk_input_ignore_core;
 
 void gdk_input_window_destroy (GdkWindow *window);
 
-#endif __GDK_INPUT_H__
+#endif /* __GDK_INPUT_H__ */
