@@ -4206,7 +4206,8 @@ wmspec_resize_drag (GdkWindow     *window,
 }
 
 static MoveResizeData *
-get_move_resize_data (GdkDisplay *display)
+get_move_resize_data (GdkDisplay *display,
+		      gboolean    create)
 {
   MoveResizeData *mv_resize;
   static GQuark move_resize_quark = 0;
@@ -4216,7 +4217,7 @@ get_move_resize_data (GdkDisplay *display)
   
   mv_resize = g_object_get_qdata (G_OBJECT (display), move_resize_quark);
 
-  if (!mv_resize)
+  if (!mv_resize && create)
     {
       mv_resize = g_new0 (MoveResizeData, 1);
       mv_resize->display = display;
@@ -4296,7 +4297,7 @@ lookahead_motion_predicate (Display *xdisplay,
 {
   gboolean *seen_release = (gboolean *)arg;
   GdkDisplay *display = gdk_x11_lookup_xdisplay (xdisplay);
-  MoveResizeData *mv_resize = get_move_resize_data (display);
+  MoveResizeData *mv_resize = get_move_resize_data (display, FALSE);
 
   if (*seen_release)
     return False;
@@ -4346,7 +4347,7 @@ _gdk_moveresize_handle_event (XEvent *event)
   guint button_mask = 0;
   GdkWindowObject *window_private;
   GdkDisplay *display= gdk_x11_lookup_xdisplay (event->xany.display);
-  MoveResizeData *mv_resize = get_move_resize_data (display);
+  MoveResizeData *mv_resize = get_move_resize_data (display, FALSE);
 
   if (!mv_resize->moveresize_window)
     return FALSE;
@@ -4402,12 +4403,10 @@ _gdk_moveresize_configure_done (GdkDisplay *display,
 				GdkWindow  *window)
 {
   XEvent *tmp_event;
-  MoveResizeData *mv_resize = get_move_resize_data (display);
+  MoveResizeData *mv_resize = get_move_resize_data (display, FALSE);
   
-  if (window != mv_resize->moveresize_window)
+  if (!mv_resize || window != mv_resize->moveresize_window)
     return FALSE;
-
-  g_assert (mv_resize != NULL);
 
   if (mv_resize->moveresize_pending_event)
     {
@@ -4476,7 +4475,7 @@ emulate_resize_drag (GdkWindow     *window,
                      gint           root_y,
                      guint32        timestamp)
 {
-  MoveResizeData *mv_resize = get_move_resize_data (GDK_WINDOW_DISPLAY (window));
+  MoveResizeData *mv_resize = get_move_resize_data (GDK_WINDOW_DISPLAY (window), TRUE);
 
   mv_resize->is_resize = TRUE;
   mv_resize->moveresize_button = button;
@@ -4504,7 +4503,7 @@ emulate_move_drag (GdkWindow     *window,
                    gint           root_y,
                    guint32        timestamp)
 {
-  MoveResizeData *mv_resize = get_move_resize_data (GDK_WINDOW_DISPLAY (window));
+  MoveResizeData *mv_resize = get_move_resize_data (GDK_WINDOW_DISPLAY (window), TRUE);
   
   mv_resize->is_resize = FALSE;
   mv_resize->moveresize_button = button;

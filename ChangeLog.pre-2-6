@@ -1,3 +1,10 @@
+Tue Jun 18 11:46:33 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/x11/gdkwindow-x11.c (get_move_resize_data): Add
+	a gboolean create argument, so we don't create the
+	structure unless we actually emulate move-resize
+	drags.
+
 Sat Jun 15 23:53:03 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkfilesel.c (gtk_file_selection_set_filename): 
