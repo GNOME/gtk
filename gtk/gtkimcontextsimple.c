@@ -1122,8 +1122,13 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
 	  (event->keyval == GDK_Control_L || event->keyval == GDK_Control_R ||
 	   event->keyval == GDK_Shift_L || event->keyval == GDK_Shift_R))
 	{
-	  gtk_im_context_simple_commit_char (context, context_simple->tentative_match);
-	  context_simple->compose_buffer[0] = 0;
+	  if (context_simple->tentative_match)
+	    {
+	      gtk_im_context_simple_commit_char (context, context_simple->tentative_match);
+	      context_simple->compose_buffer[0] = 0;
+	    }
+	  else
+	    context_simple->in_hex_sequence = 0;
 
 	  return TRUE;
 	}

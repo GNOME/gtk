@@ -1,3 +1,8 @@
+Mon Feb 18 12:31:52 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkimcontextsimple.c (gtk_im_context_simple_filter_keypress): 
+	Don't commit unless we got at least one hex digit. (#70619)
+
 Sun Feb 17 21:30:49 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* Released 1.3.14
