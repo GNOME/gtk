@@ -1,3 +1,10 @@
+2002-01-15  Matthias Clasen  <matthiasc@poet.de>
+
+	* gtk/gtkenums.h (GtkMatchType): Deprecate. (#68183)
+
+	* gtk/gtkscale.h (gtk_scale_value_width): Remove useless 
+ 	compatibility macro. (#67730) 
+
 Wed Jan 16 10:54:38 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* configure.in: Fix typo in --help output.

@@ -689,6 +689,70 @@ In GTK+ 1.2, if an event handler returned <literal>TRUE</literal> it prevented
   how to subclass the old version of <structname>GtkRange</structname>, you 
   have our respect). Also, <literal>GtkTroughType</literal> is gone.
 </para>
+<para>
+ Here are some notable changes:
+ <itemizedlist>
+   <listitem>
+     <para>
+       <literal>stepper_size</literal> style property is the height for 
+       vertical ranges, width for horizontal; the other dimension matches 
+       the trough size.
+     </para>
+   </listitem>
+   <listitem>
+     <para>
+       Added the ability to do NeXT-style steppers (and several other styles
+       that don't make any sense).
+     </para>
+   </listitem>
+   <listitem>
+     <para>
+       Added <literal>min_slider_length</literal>, 
+       <literal>fixed_slider_length</literal> properties to
+       <structname>GtkScrollbar</structname>.
+     </para>
+   </listitem>
+   <listitem>
+     <para>
+       Cleaned some private (or at least useless) functions out of
+       <filename>gtkscale.h</filename>, e.g. 
+       <function>gtk_scale_value_width</literal>.
+     </para>
+   </listitem>
+   <listitem>
+     <para>
+       Moved bindings from subclasses to <structname>GtkScale</structname>, 
+       even arrow keys, since blind users don't know scale orientation.
+     </para>
+   </listitem>
+   <listitem>
+     <para>
+       Changed <literal>move_slider</literal> action signal to use new 
+       <structname>GtkScrollType</structname>, remove  
+       <structname>GtkTroughType</structname> argument.
+     </para>
+   </listitem>
+   <listitem>
+     <para>
+       Digits rounds the values a range will input to the given
+       number of decimals, but will not try to force adjustment
+       values set by other controllers. That is, we no longer
+       modify <literal>adjustment->value</literal> inside a 
+       <literal>value_changed</literal> handler.
+     </para>
+   </listitem>
+   <listitem>
+     <para>
+       Added getters for <structname>GtkScale</structname> setters.
+     </para>
+   </listitem>
+   <listitem>
+     <para>
+       Middle-click begins a slider drag.
+     </para>
+   </listitem>
+ </itemizedlist>
+</para>
 </listitem>
 
 <listitem>

@@ -162,6 +162,7 @@ typedef enum
   GTK_JUSTIFY_FILL
 } GtkJustification;
 
+#ifndef GTK_DISABLE_DEPRECATED
 /* GtkPatternSpec match types */
 typedef enum
 {
@@ -172,6 +173,7 @@ typedef enum
   GTK_MATCH_EXACT,     /* "AAAAA" */
   GTK_MATCH_LAST
 } GtkMatchType;
+#endif /* GTK_DISABLE_DEPRECATED */
 
 /* Menu keyboard movement types */
 typedef enum

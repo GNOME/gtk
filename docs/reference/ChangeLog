@@ -1,3 +1,8 @@
+2002-01-15  Matthias Clasen  <matthiasc@poet.de>
+
+	* gtk/changes-2.0.sgml: Details about GtkRange and subclasses
+	rewrite. (#67730)
+
 2002-01-14  Matthias Clasen  <matthiasc@poet.de>
 
 	* gtk/running.sgml: Add ids to some elements to make them
