@@ -1,8 +1,12 @@
+# simplified Chinese translation for gtk+
+# Copyright (C) 1999-2001 Free Software Foundation, Inc.
+# Wu Yulun <migr@operamail.com>, 1999.
+# 
 msgid ""
 msgstr ""
-"Project-Id-Version: gtk+ 1.1.7 \n"
+"Project-Id-Version: gtk+ 1.2.10 \n"
 "POT-Creation-Date: 2001-03-28 16:12-0500\n"
-"PO-Revision-Date: 1999-01-31\n"
+"PO-Revision-Date: 2001-08-14 15:59+0800\n"
 "Last-Translator: Wu Yulun <migr@operamail.com>\n"
 "Language-Team: Chinese <zh@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -269,7 +273,7 @@ msgstr "*"
 #. Convert '(nil)' weights to 'regular', since it looks nicer.
 #: gtk/gtkfontsel.c:1215
 msgid "(nil)"
-msgstr ""
+msgstr "(无)"
 
 #: gtk/gtkfontsel.c:1215
 msgid "regular"
@@ -297,11 +301,11 @@ msgstr "其它"
 
 #: gtk/gtkfontsel.c:1231
 msgid "[M]"
-msgstr ""
+msgstr "[M]"
 
 #: gtk/gtkfontsel.c:1232
 msgid "[C]"
-msgstr ""
+msgstr "[C]"
 
 #: gtk/gtkfontsel.c:1792
 msgid "The selected font is not available."
@@ -406,11 +410,11 @@ msgstr "保存"
 
 #: gtk/gtkinputdialog.c:500
 msgid "X"
-msgstr ""
+msgstr "X"
 
 #: gtk/gtkinputdialog.c:501
 msgid "Y"
-msgstr ""
+msgstr "Y"
 
 #: gtk/gtkinputdialog.c:502
 msgid "Pressure"
