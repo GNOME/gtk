@@ -6,10 +6,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: gtk+ 1.3.15\n"
-"POT-Creation-Date: 2002-02-28 00:45+0100\n"
-"PO-Revision-Date: 2002-02-28 00:40+0100\n"
-"Last-Translator: Christian Meyer <chrisime@gnome.org>\n"
+"Project-Id-Version: gtk+ 2.0.0\n"
+"POT-Creation-Date: 2002-03-02 14:38+0100\n"
+"PO-Revision-Date: 2002-03-02 14:40+0100\n"
+"Last-Translator: Sven Neumann <sven@gimp.org>\n"
 "Language-Team: German <gnome-de@gnome.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -615,7 +615,7 @@ msgstr "Bildpuffer von %u Bytes konnte nicht bereit gestellt werden"
 #.
 #: gtk/gtkaccellabel.c:116
 msgid "Shift"
-msgstr "Umschalt"
+msgstr "Shift"
 
 #. This is the text that should appear next to menu accelerators
 #. * that use the control key. If the text on this key isn't typically
@@ -1532,27 +1532,27 @@ msgstr "Wert in Liste"
 msgid "Whether entered values must already be present in the list"
 msgstr "Müssen eingetragene Werte bereits in der Liste vorhanden sein?"
 
-#: gtk/gtkcontainer.c:203
+#: gtk/gtkcontainer.c:200
 msgid "Resize mode"
 msgstr "Größenänderungs-Modus"
 
-#: gtk/gtkcontainer.c:204
+#: gtk/gtkcontainer.c:201
 msgid "Specify how resize events are handled"
 msgstr "Die Art und Weise, wie mit Größenänderungs-Ereignissen umgegangen wird"
 
-#: gtk/gtkcontainer.c:211
+#: gtk/gtkcontainer.c:208
 msgid "Border width"
 msgstr "Randbreite"
 
-#: gtk/gtkcontainer.c:212
+#: gtk/gtkcontainer.c:209
 msgid "The width of the empty border outside the containers children."
 msgstr "Breite des leeren Randes um die Kinder des Containers."
 
-#: gtk/gtkcontainer.c:220
+#: gtk/gtkcontainer.c:217
 msgid "Child"
 msgstr "Kind"
 
-#: gtk/gtkcontainer.c:221
+#: gtk/gtkcontainer.c:218
 msgid "Can be used to add a new child to the container."
 msgstr "Kann benutzt werden, um ein neues Kind zum Container hinzuzufügen"
 
@@ -1737,7 +1737,7 @@ msgstr "Alles auswählen"
 msgid "Input Methods"
 msgstr "Eingabemethoden"
 
-#: gtk/gtkentry.c:3854 gtk/gtktextview.c:6360
+#: gtk/gtkentry.c:3854 gtk/gtktextview.c:6372
 msgid "_Insert Unicode control character"
 msgstr "Unicode-Steuerzeichen _einfügen"
 
@@ -1927,7 +1927,7 @@ msgstr "Umbn"
 msgid "Selection: "
 msgstr "Auswahl:"
 
-#: gtk/gtkfilesel.c:2953
+#: gtk/gtkfilesel.c:2954
 #, c-format
 msgid ""
 "The filename %s couldn't be converted to UTF-8. Try setting the environment "
@@ -1936,11 +1936,11 @@ msgstr ""
 "Der Dateiname %s konnte nicht in UTF-8 umgewandelt werden. Versuchen Sie, "
 "die Umgebungsvariable G_BROKEN_FILENAMES zu setzen."
 
-#: gtk/gtkfilesel.c:3817
+#: gtk/gtkfilesel.c:3818
 msgid "Name too long"
 msgstr "Name zu lang"
 
-#: gtk/gtkfilesel.c:3819
+#: gtk/gtkfilesel.c:3820
 msgid "Couldn't convert filename"
 msgstr "Dateiname konnte nicht umgewandelt werden"
 
@@ -2058,7 +2058,7 @@ msgstr "Gamma"
 msgid "_Gamma value"
 msgstr "_Gamma-Wert"
 
-#: gtk/gtkhandlebox.c:192 gtk/gtkmenubar.c:150 gtk/gtkstatusbar.c:158
+#: gtk/gtkhandlebox.c:192 gtk/gtkmenubar.c:215 gtk/gtkstatusbar.c:158
 #: gtk/gtktoolbar.c:277 gtk/gtkviewport.c:148
 msgid "Shadow type"
 msgstr "Schattentyp"
@@ -2342,7 +2342,7 @@ msgstr ""
 msgid "Horizontal adjustment"
 msgstr "Horizontale Stellgröße"
 
-#: gtk/gtklayout.c:618 gtk/gtkscrolledwindow.c:235
+#: gtk/gtklayout.c:618 gtk/gtkscrolledwindow.c:237
 msgid "The GtkAdjustment for the horizontal position."
 msgstr "Das GtkAdjustment für die Horizontalposition."
 
@@ -2350,7 +2350,7 @@ msgstr "Das GtkAdjustment für die Horizontalposition."
 msgid "Vertical adjustment"
 msgstr "Vertikale Stellgröße"
 
-#: gtk/gtklayout.c:626 gtk/gtkscrolledwindow.c:242
+#: gtk/gtklayout.c:626 gtk/gtkscrolledwindow.c:244
 msgid "The GtkAdjustment for the vertical position."
 msgstr "Das GtkAdjustment für die Vertikalposition."
 
@@ -2403,15 +2403,15 @@ msgstr ""
 "Sollen Menükürzel geändert werden können, indem man über dem Menüeintrag "
 "eine Taste drückt?"
 
-#: gtk/gtkmenubar.c:151
+#: gtk/gtkmenubar.c:216
 msgid "Style of bevel around the menubar"
 msgstr "Stil der Fase um die Menüleiste"
 
-#: gtk/gtkmenubar.c:158 gtk/gtktoolbar.c:251
+#: gtk/gtkmenubar.c:223 gtk/gtktoolbar.c:251
 msgid "Internal padding"
 msgstr "Interne Polsterung"
 
-#: gtk/gtkmenubar.c:159
+#: gtk/gtkmenubar.c:224
 msgid "Amount of border space between the menubar shadow and the menu items"
 msgstr "Rand zwischen dem Schatten der Menüleiste und den Menüeinträgen"
 
@@ -2807,30 +2807,22 @@ msgid "Spacing between step buttons and thumb"
 msgstr "Abstand zwischen Schrittschaltern und Schieber"
 
 #: gtk/gtkrange.c:329
-#, fuzzy
 msgid "Arrow X Displacement"
-msgstr "x-Versatz des Kindes"
+msgstr "x-Versatz des Pfeiles"
 
 #: gtk/gtkrange.c:330
-#, fuzzy
 msgid ""
 "How far in the x direction to move the arrow when the button is depressed"
-msgstr ""
-"Wie weit soll das Kind in der x-Richtung versetzt werden, wenn der Knopf "
-"gedrückt wird?"
+msgstr "Wie weit soll der Pfeil in der x-Richtung versetzt werden, wenn der Knopf gedrückt wird?"
 
 #: gtk/gtkrange.c:337
-#, fuzzy
 msgid "Arrow Y Displacement"
-msgstr "y-Versatz des Kindes"
+msgstr "y-Versatz des Pfeiles"
 
 #: gtk/gtkrange.c:338
-#, fuzzy
 msgid ""
 "How far in the y direction to move the arrow when the button is depressed"
-msgstr ""
-"Wie weit soll das Kind in der y-Richtung versetzt werden, wenn der Knopf "
-"gedrückt wird?"
+msgstr "Wie weit soll der Pfeil in der y-Richtung versetzt werden, wenn der Knopf gedrückt wird?"
 
 #: gtk/gtkruler.c:118
 msgid "Lower"
@@ -2955,43 +2947,43 @@ msgstr ""
 "Einen sekundären Vorwärtspfeil am gegenüberliegenden Ende des Rollbalkens "
 "anzeigen"
 
-#: gtk/gtkscrolledwindow.c:234 gtk/gtktext.c:598 gtk/gtktreeview.c:522
+#: gtk/gtkscrolledwindow.c:236 gtk/gtktext.c:598 gtk/gtktreeview.c:522
 msgid "Horizontal Adjustment"
 msgstr "Horizontale Stellgröße"
 
-#: gtk/gtkscrolledwindow.c:241 gtk/gtktext.c:606 gtk/gtktreeview.c:530
+#: gtk/gtkscrolledwindow.c:243 gtk/gtktext.c:606 gtk/gtktreeview.c:530
 msgid "Vertical Adjustment"
 msgstr "Vertikale Stellgröße"
 
-#: gtk/gtkscrolledwindow.c:248
+#: gtk/gtkscrolledwindow.c:250
 msgid "Horizontal Scrollbar Policy"
 msgstr "Horizontale Rollbalkenrichtlinie"
 
-#: gtk/gtkscrolledwindow.c:249
+#: gtk/gtkscrolledwindow.c:251
 msgid "When the horizontal scrollbar is displayed"
 msgstr "Wann soll der horizontale Rollbalken angezeigt werden?"
 
-#: gtk/gtkscrolledwindow.c:256
+#: gtk/gtkscrolledwindow.c:258
 msgid "Vertical Scrollbar Policy"
 msgstr "Vertikale Rollbalkenrichtlinie"
 
-#: gtk/gtkscrolledwindow.c:257
+#: gtk/gtkscrolledwindow.c:259
 msgid "When the vertical scrollbar is displayed"
 msgstr "Wann soll der vertikale Rollbalken angezeigt werden?"
 
-#: gtk/gtkscrolledwindow.c:265
+#: gtk/gtkscrolledwindow.c:267
 msgid "Window Placement"
 msgstr "Fensterplatzierung"
 
-#: gtk/gtkscrolledwindow.c:266
+#: gtk/gtkscrolledwindow.c:268
 msgid "Where the contents are located with respect to the scrollbars"
 msgstr "Wo soll der Inhalt im Verhältnis zu den Rollbalken liegen?"
 
-#: gtk/gtkscrolledwindow.c:273
+#: gtk/gtkscrolledwindow.c:275
 msgid "Shadow Type"
 msgstr "Schattentyp"
 
-#: gtk/gtkscrolledwindow.c:274
+#: gtk/gtkscrolledwindow.c:276
 msgid "Style of bevel around the contents"
 msgstr "Stil der Fase um den Inhalt"
 
@@ -3074,7 +3066,7 @@ msgstr "Schriftname"
 
 #: gtk/gtksettings.c:216
 msgid "Name of default font to use"
-msgstr ""
+msgstr "Vorgabe für Schrift"
 
 #: gtk/gtkspinbutton.c:238
 msgid "The adjustment that holds the value of the spinbutton"
@@ -3791,7 +3783,7 @@ msgid "If the insertion cursor is shown"
 msgstr "Soll der Einfügecursngezeigt werden?"
 
 # gtk/gtkentry.c:3567 gtk/gtktextview
-#: gtk/gtktextview.c:6351
+#: gtk/gtktextview.c:6363
 msgid "Input _Methods"
 msgstr "Eingabe_methoden"
 
