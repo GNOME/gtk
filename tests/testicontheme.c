@@ -63,12 +63,7 @@ main (int argc, char *argv[])
 	size = GTK_ICON_SIZE_BUTTON;
       
       window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-#if 1
-      pixbuf = gtk_icon_theme_load_icon (icon_theme, argv[3], size, 0, NULL);
-      image = gtk_image_new_from_pixbuf (pixbuf);
-#else
       image = gtk_image_new_from_icon_name (argv[3], size); 
-#endif
       gtk_container_add (GTK_CONTAINER (window), image);
       gtk_widget_show_all (window);
       
