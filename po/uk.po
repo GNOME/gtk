@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.3.0\n"
 "POT-Creation-Date: 2003-02-04 10:14+0200\n"
-"PO-Revision-Date: 2003-02-04 05:01--500\n"
+"PO-Revision-Date: 2003-02-04 05:49--500\n"
 "Last-Translator: Yuriy Syrota <yuri@renome.rovno.ua>\n"
 "Language-Team: Ukrainian <uk@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -93,9 +93,8 @@ msgid "Internal error: Image loader module '%s' failed to begin loading an image
 msgstr "Внутрішня помилка: Модуль завантаження зображень \"%s\" зазнав збою на початку завантаження зображення, але не повідомив про причину збою"
 
 #: gdk-pixbuf/gdk-pixdata.c:145
-#, fuzzy
 msgid "Image header corrupt"
-msgstr "Зображення має нульову ширину"
+msgstr "Заголовок зображення пошкоджений"
 
 #: gdk-pixbuf/gdk-pixdata.c:150
 msgid "Image format unknown"
@@ -121,9 +120,8 @@ msgstr "Непідтримуваний тип анімації"
 
 #: gdk-pixbuf/io-ani.c:348
 #: gdk-pixbuf/io-ani.c:538
-#, fuzzy
 msgid "Invalid header in animation"
-msgstr "Неправильний заголовок у піктограмі"
+msgstr "Неправильний заголовок у анімації"
 
 #: gdk-pixbuf/io-ani.c:358
 #: gdk-pixbuf/io-ani.c:382
@@ -131,9 +129,8 @@ msgstr "Неправильний заголовок у піктограмі"
 #: gdk-pixbuf/io-ani.c:460
 #: gdk-pixbuf/io-ani.c:511
 #: gdk-pixbuf/io-ani.c:583
-#, fuzzy
 msgid "Not enough memory to load animation"
-msgstr "Недостатньо пам'яті для завантаження піктограми"
+msgstr "Недостатньо пам'яті для завантаження анімації"
 
 #: gdk-pixbuf/io-ani.c:400
 #: gdk-pixbuf/io-ani.c:417
@@ -143,7 +140,7 @@ msgstr "Неправильний фрагмент у анімації"
 
 #: gdk-pixbuf/io-ani.c:676
 msgid "The ANI image format"
-msgstr "Формат зображення ANI"
+msgstr "Формат ANI для зображень"
 
 #: gdk-pixbuf/io-bmp.c:223
 #: gdk-pixbuf/io-bmp.c:339
@@ -162,7 +159,7 @@ msgstr "Зображення формату BMP має неправильні д
 
 #: gdk-pixbuf/io-bmp.c:1076
 msgid "The BMP image format"
-msgstr "Графічний формат BMP"
+msgstr "Формат BMP для зображень"
 
 #: gdk-pixbuf/io-gif.c:219
 #, c-format
@@ -218,19 +215,19 @@ msgstr "Формат файлу GIF версії %s не підтримуєть�
 
 #: gdk-pixbuf/io-gif.c:1188
 msgid "GIF image contained a frame with height or width 0."
-msgstr ""
+msgstr "Зображення формату GIF містить кадр з нульовою шириною чи висотою."
 
 #: gdk-pixbuf/io-gif.c:1201
 msgid "GIF image contained a frame appearing outside the image bounds."
-msgstr ""
+msgstr "Зображення формату GIF містить кадр, що виходить за межі зображення."
 
 #: gdk-pixbuf/io-gif.c:1217
 msgid "First frame of GIF image had 'revert to previous' as its disposal mode."
-msgstr ""
+msgstr "Перший кадр зображення формату GIF мав режим розміщення \"повернення до попереднього\""
 
 #: gdk-pixbuf/io-gif.c:1252
 msgid "GIF image has no global colormap, and a frame inside it has no local colormap."
-msgstr ""
+msgstr "Зображення формату GIF не має глобальної мапи кольорів, і кадр в ньому не має локальної мапи кольорів."
 
 #: gdk-pixbuf/io-gif.c:1484
 msgid "GIF image was truncated or incomplete."
@@ -238,7 +235,7 @@ msgstr "Зображення формату GIF обрізане чи незав
 
 #: gdk-pixbuf/io-gif.c:1636
 msgid "The GIF image format"
-msgstr "Формат зображення GIF"
+msgstr "Формат GIF для зображень"
 
 #: gdk-pixbuf/io-ico.c:218
 #: gdk-pixbuf/io-ico.c:277
@@ -270,11 +267,11 @@ msgstr "Непідтримуваний тип піктограми"
 
 #: gdk-pixbuf/io-ico.c:466
 msgid "Not enough memory to load ICO file"
-msgstr "Недостатньо пам'яті для завантаження файлу ICO"
+msgstr "Недостатньо пам'яті для завантаження файлу у форматі ICO"
 
 #: gdk-pixbuf/io-ico.c:871
 msgid "The ICO image format"
-msgstr "Формат зображення ICO"
+msgstr "Формат ICO для зображень"
 
 #: gdk-pixbuf/io-jpeg.c:114
 #, c-format
@@ -309,7 +306,7 @@ msgstr "Якість формату JPEG має в діапазоні від 0 �
 
 #: gdk-pixbuf/io-jpeg.c:940
 msgid "The JPEG image format"
-msgstr "Графічний формат JPEG"
+msgstr "Формат JPEG для зображень"
 
 #: gdk-pixbuf/io-png.c:55
 msgid "Bits per channel of PNG image is invalid."
@@ -369,7 +366,7 @@ msgstr "Значення для блоку тексту \"%s\" в зображе
 
 #: gdk-pixbuf/io-png.c:919
 msgid "The PNG image format"
-msgstr "Формат зображення PNG"
+msgstr "Формат PNG для зображень"
 
 #: gdk-pixbuf/io-pnm.c:248
 msgid "PNM loader expected to find an integer, but didn't"
@@ -412,7 +409,7 @@ msgstr ""
 #: gdk-pixbuf/io-pnm.c:554
 #: gdk-pixbuf/io-pnm.c:596
 msgid "PNM image format is invalid"
-msgstr "Формат зображення PNM не вірний"
+msgstr "Неправильний формат зображення PNM"
 
 #: gdk-pixbuf/io-pnm.c:655
 msgid "PNM image loader does not support this PNM subformat"
@@ -437,7 +434,7 @@ msgstr "Недостатньо пам'яті для завантаження с�
 
 #: gdk-pixbuf/io-pnm.c:869
 msgid "Unexpected end of PNM image data"
-msgstr "Неочікуване завершення даних зображення PNM"
+msgstr "Несподіване завершення даних зображення PNM"
 
 #: gdk-pixbuf/io-pnm.c:991
 msgid "Insufficient memory to load PNM file"
@@ -445,7 +442,7 @@ msgstr "Недостатньо пам'яті для завантаження ф�
 
 #: gdk-pixbuf/io-pnm.c:1070
 msgid "The PNM/PBM/PGM/PPM image format family"
-msgstr ""
+msgstr "Родина форматів зображень PNM/PBM/PGM/PPM"
 
 #: gdk-pixbuf/io-ras.c:125
 #, fuzzy
@@ -468,7 +465,7 @@ msgstr "Не вистачає пам'яті для завантаження RAS-
 
 #: gdk-pixbuf/io-ras.c:532
 msgid "The Sun raster image format"
-msgstr ""
+msgstr "Формат компанії Sun для растрових зображень"
 
 #: gdk-pixbuf/io-tga.c:159
 msgid "Can't allocate memory for IOBuffer struct"
@@ -509,7 +506,7 @@ msgstr ""
 
 #: gdk-pixbuf/io-tga.c:668
 msgid "Unexpected bitdepth for colormap entries"
-msgstr ""
+msgstr "Несподівана бітова глибина для елементів мапи кольорів"
 
 #: gdk-pixbuf/io-tga.c:686
 msgid "Can't allocate TGA header memory"
@@ -565,7 +562,7 @@ msgstr "Неможливо виділити пам'ять для заванта�
 
 #: gdk-pixbuf/io-tga.c:991
 msgid "Unexpected bitdepth for TGA colormap"
-msgstr ""
+msgstr "Несподівана бітова глибина для мапи кольорів формату TGA"
 
 #: gdk-pixbuf/io-tga.c:1032
 msgid "Pseudo-Color image without colormap"
@@ -588,7 +585,7 @@ msgstr "Непідтримуваний тип зображення TGA"
 
 #: gdk-pixbuf/io-tga.c:1370
 msgid "The Targa image format"
-msgstr ""
+msgstr "Формат Targa для зображень"
 
 #: gdk-pixbuf/io-tiff.c:191
 msgid "Could not get image width (bad TIFF file)"
@@ -637,7 +634,7 @@ msgstr "Не вдалося завантажити зображення TIFF"
 
 #: gdk-pixbuf/io-tiff.c:591
 msgid "The TIFF image format"
-msgstr ""
+msgstr "Формат TIFF для зображень"
 
 #: gdk-pixbuf/io-wbmp.c:246
 msgid "Image has zero width"
@@ -657,7 +654,7 @@ msgstr ""
 
 #: gdk-pixbuf/io-wbmp.c:368
 msgid "The WBMP image format"
-msgstr ""
+msgstr "Формат WBMP для зображень"
 
 #: gdk-pixbuf/io-xbm.c:285
 msgid "Invalid XBM file"
@@ -673,7 +670,7 @@ msgstr "Не вдалося записати тимчасовий файл пі�
 
 #: gdk-pixbuf/io-xbm.c:474
 msgid "The XBM image format"
-msgstr ""
+msgstr "Формат XBM для зображень"
 
 #: gdk-pixbuf/io-xpm.c:1229
 msgid "No XPM header found"
@@ -709,7 +706,7 @@ msgstr "Не вдалося записати тимчасовий файл пі�
 
 #: gdk-pixbuf/io-xpm.c:1543
 msgid "The XPM image format"
-msgstr "Графічний формат XPM"
+msgstr "Формат XPM для зображень"
 
 #: gdk/gdkdisplaymanager.c:117
 #, fuzzy
@@ -3314,11 +3311,11 @@ msgstr ""
 
 #: gtk/gtksettings.c:244
 msgid "Icon Sizes"
-msgstr ""
+msgstr "Розміри піктограм"
 
 #: gtk/gtksettings.c:245
 msgid "List of icon sizes (gtk-menu=16,16;gtk-button=20,20..."
-msgstr ""
+msgstr "Список розмірів піктограм (gtk-menu=16,16;gtk-button=20,20..."
 
 #: gtk/gtksizegroup.c:241
 msgid "Mode"
@@ -4619,9 +4616,8 @@ msgid "Composite child"
 msgstr ""
 
 #: gtk/gtkwidget.c:497
-#, fuzzy
 msgid "Whether the widget is part of a composite widget"
-msgstr "Стан відповідання віджета на ввід"
+msgstr "Чи є елемент керування частпною складеного елемента керування"
 
 #: gtk/gtkwidget.c:503
 msgid "Style"
