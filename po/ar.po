@@ -9,13 +9,13 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-01-22 18:01-0500\n"
-"PO-Revision-Date: 2004-01-09 22:20+0100\n"
+"POT-Creation-Date: 2004-01-31 04:19+0100\n"
+"PO-Revision-Date: 2004-02-04 16:54+0100\n"
 "Last-Translator: Arafat Medini <lumina@silverpen.de>\n"
 "Language-Team: Arabic <doc@arabeyes.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
+"Content-Transfer-Encoding: 8bit"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:147 gdk-pixbuf/gdk-pixbuf-io.c:736
 #: gdk-pixbuf/gdk-pixbuf-io.c:869 tests/testfilechooser.c:198
@@ -77,9 +77,9 @@ msgid "Failed to load image '%s': %s"
 msgstr "فشل تحميل الصورة '%s': %s"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:1095
-#, fuzzy, c-format
+#, c-format
 msgid "Error writing to image file: %s"
-msgstr "خطأ ترجمة ملف صورة JPEG (%s)"
+msgstr "فشلت الكتابة إلى ملف الصورة: %s"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:1139 gdk-pixbuf/gdk-pixbuf-io.c:1255
 #, c-format
@@ -87,19 +87,16 @@ msgid "This build of gdk-pixbuf does not support saving the image format: %s"
 msgstr "بناء gdk-pixbuf هذا لا يدعم حفظ تهيئة الصور: %s"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:1168
-#, fuzzy
 msgid "Insufficient memory to save image to callback"
-msgstr "ذاكرة غير لفتح صورة ملف XBM"
+msgstr "ذاكرة غير كافية لحفظ صورة عند إعادة ندائها"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:1180
-#, fuzzy
 msgid "Failed to open temporary file"
-msgstr "فشل فتح صورة TIFF"
+msgstr "فشل فتح الملف الوقتي"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:1199
-#, fuzzy
 msgid "Failed to read from temporary file"
-msgstr "فشلت الكتابة في ملف مؤقت عند تحميل صورة XBM"
+msgstr "فشلت القراءة من الملف الوقتي"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:1379
 #, c-format
@@ -114,9 +111,8 @@ msgid ""
 msgstr "فشل غلق '%s' أثناء كتابة الصورة، قد لم يتم حفظ كل·البيانات: % s"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:1586 gdk-pixbuf/gdk-pixbuf-io.c:1636
-#, fuzzy
 msgid "Insufficient memory to save image into a buffer"
-msgstr "ذاكرة غير لفتح صورة ملف XBM"
+msgstr "ذاكرة غير لحفظ الصورة في الذاكرة الوسيطة"
 
 #: gdk-pixbuf/gdk-pixbuf-loader.c:377
 #, c-format
@@ -145,11 +141,9 @@ msgid "Image pixel data corrupt"
 msgstr "البيانات البكسلية للصورة تالفة"
 
 #: gdk-pixbuf/gdk-pixdata.c:402
-#, fuzzy, c-format
+#, c-format
 msgid "failed to allocate image buffer of %u byte"
-msgid_plural "failed to allocate image buffer of %u bytes"
-msgstr[0] "فشل تخصيص ذاكرة وسيطة للصورة بحجم %u بايتا"
-msgstr[1] "فشل تخصيص ذاكرة وسيطة للصورة بحجم %u بايتا"
+msgstr "فشل تخصيص ذاكرة وسيطة للصورة بحجم %u بايتا"
 
 #: gdk-pixbuf/io-ani.c:244
 msgid "Unexpected icon chunk in animation"
@@ -291,7 +285,7 @@ msgstr "لا يمكن حفظ الصورة كـ ICO لأنها كبيرة جدا"
 
 #: gdk-pixbuf/io-ico.c:950
 msgid "Cursor hotspot outside image"
-msgstr ""
+msgstr "منطقة المؤشر الحرجة خارج الصورة"
 
 #: gdk-pixbuf/io-ico.c:973
 #, c-format
@@ -349,7 +343,7 @@ msgstr "لم يمكن تخصيص ذاكرة لالترويسة"
 
 #: gdk-pixbuf/io-pcx.c:205 gdk-pixbuf/io-pcx.c:565
 msgid "Couldn't allocate memory for context buffer"
-msgstr ""
+msgstr "لم يمكن تخصيص ذاكرة للذاكرة الوسيطة للحالة"
 
 #: gdk-pixbuf/io-pcx.c:606
 msgid "Image has invalid width and/or height"
@@ -374,7 +368,7 @@ msgstr "لم يمكن تخصيص ذاكرة لبيانات السطر"
 
 #: gdk-pixbuf/io-pcx.c:662
 msgid "Couldn't allocate memory for paletted data"
-msgstr ""
+msgstr "لم يمكن تخصيص ذاكرة للبيانات المرصفة"
 
 #: gdk-pixbuf/io-pcx.c:709
 msgid "Didn't get all lines of PCX image"
@@ -537,7 +531,7 @@ msgstr "لصورة RAS نوع مجهول"
 
 #: gdk-pixbuf/io-ras.c:156
 msgid "unsupported RAS image variation"
-msgstr ""
+msgstr "إنحراف صورة RAS غير مدعوم"
 
 #: gdk-pixbuf/io-ras.c:171 gdk-pixbuf/io-ras.c:200
 msgid "Not enough memory to load RAS image"
@@ -577,7 +571,7 @@ msgstr "لا يمكن تخصيص خانات لخارطة الألوان"
 
 #: gdk-pixbuf/io-tga.c:720
 msgid "Unexpected bitdepth for colormap entries"
-msgstr ""
+msgstr "عمق بت غير مترقب لخانات خارطة الألوان"
 
 #: gdk-pixbuf/io-tga.c:738
 msgid "Can't allocate TGA header memory"
@@ -630,7 +624,7 @@ msgstr "فشل تحميل بيانات RGB من ملف TIFF"
 
 #: gdk-pixbuf/io-tiff.c:276
 msgid "Unsupported TIFF variant"
-msgstr ""
+msgstr "إنحراف TIFF غير مدعوم"
 
 #: gdk-pixbuf/io-tiff.c:346
 msgid "Failed to open TIFF image"
@@ -782,6 +776,8 @@ msgid ""
 "now. You can drag this color to a palette entry, or select this color as "
 "current by dragging it to the other color swatch alongside."
 msgstr ""
+"اللون المنتقى سابقا، للمقارنة باللون الذي إنتقيته الآن. يمكنك سحب هذا اللون"
+"لخانة لوحة ألوان، أو أختياره كاللون الحالي بسحبه للمربع اللوني."
 
 #: gtk/gtkcolorsel.c:566
 msgid ""
@@ -819,7 +815,7 @@ msgstr "انقر القطارة ثم انقر أي لون في أي مكان ع�
 
 #: gtk/gtkcolorsel.c:1873
 msgid "_Hue:"
-msgstr ""
+msgstr "ال_فارق بين الألوان:"
 
 #: gtk/gtkcolorsel.c:1874
 msgid "Position on the color wheel."
@@ -839,7 +835,7 @@ msgstr "ال_قيمة:"
 
 #: gtk/gtkcolorsel.c:1879
 msgid "Brightness of the color."
-msgstr ""
+msgstr "بريق اللون."
 
 #: gtk/gtkcolorsel.c:1880
 msgid "_Red:"
@@ -903,7 +899,7 @@ msgstr "طرق ال_إدخال"
 
 #: gtk/gtkentry.c:4099 gtk/gtktextview.c:6896
 msgid "_Insert Unicode Control Character"
-msgstr ""
+msgstr "إ_دراج رمز تحكم يونيكود"
 
 #: gtk/gtkfilechooser.c:1452 gtk/gtkfilechooser.c:1496
 #: gtk/gtkfilechooser.c:1571 gtk/gtkfilechooser.c:1615
@@ -929,7 +925,7 @@ msgstr ""
 "لم يمكن اضافة علامة موقع لـ %s:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:465 gtk/gtkfilechooserdefault.c:2917
+#: gtk/gtkfilechooserdefault.c:465 gtk/gtkfilechooserdefault.c:2937
 #, c-format
 msgid ""
 "Could not build file name from '%s' and '%s':\n"
@@ -957,28 +953,25 @@ msgstr ""
 "%s"
 
 #: gtk/gtkfilechooserdefault.c:925
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Could not create folder %s:\n"
 "%s"
 msgstr ""
-"لم يمكن الذهاب للدليل الاب لـ %s:\n"
+"لم يمكن إنشاء المجلد %s:\n"
 "%s"
 
 #: gtk/gtkfilechooserdefault.c:1001
-#, fuzzy
 msgid "Add"
-msgstr "إ_ضافة"
+msgstr "إضافة"
 
 #: gtk/gtkfilechooserdefault.c:1011
-#, fuzzy
 msgid "Remove"
-msgstr "_حذف"
+msgstr "حذف"
 
 #: gtk/gtkfilechooserdefault.c:1021
-#, fuzzy
 msgid "Up"
-msgstr "إلى الأع_لى"
+msgstr "إلى الأعلى"
 
 #: gtk/gtkfilechooserdefault.c:1101 gtk/gtkfilechooserdefault.c:1456
 msgid "File name"
@@ -1017,9 +1010,8 @@ msgstr "مغير"
 
 #. Label and entry
 #: gtk/gtkfilechooserdefault.c:1513
-#, fuzzy
 msgid "_Filename:"
-msgstr "اسم الملف"
+msgstr "ا_سم الملف:"
 
 #. Preview
 #: gtk/gtkfilechooserdefault.c:1598
@@ -1027,55 +1019,53 @@ msgid "Preview"
 msgstr "لمحة"
 
 #. Change the current folder label
-#: gtk/gtkfilechooserdefault.c:2118
+#: gtk/gtkfilechooserdefault.c:2130
 #, c-format
 msgid "Current folder: %s"
 msgstr "الدليل الحالي: %s"
 
-#: gtk/gtkfilechooserdefault.c:2521
+#: gtk/gtkfilechooserdefault.c:2533
 #, c-format
 msgid "shortcut %s does not exist"
 msgstr "المختصر %s غير موجود"
 
-#: gtk/gtkfilechooserdefault.c:3063
+#: gtk/gtkfilechooserdefault.c:3083
 msgid "Type name of new folder"
-msgstr ""
+msgstr "إسم نوع المجلد الجديد"
 
-#: gtk/gtkfilechooserdefault.c:3090
-#, fuzzy, c-format
+#: gtk/gtkfilechooserdefault.c:3110
+#, c-format
 msgid "%d byte"
-msgid_plural "%d bytes"
-msgstr[0] "%d·بايتات"
-msgstr[1] "%d·بايتات"
+msgstr "%d بايتا"
 
-#: gtk/gtkfilechooserdefault.c:3092
+#: gtk/gtkfilechooserdefault.c:3112
 #, c-format
 msgid "%.1f K"
 msgstr "%.1f كـ"
 
-#: gtk/gtkfilechooserdefault.c:3094
+#: gtk/gtkfilechooserdefault.c:3114
 #, c-format
 msgid "%.1f M"
 msgstr "%.1f م"
 
-#: gtk/gtkfilechooserdefault.c:3096
+#: gtk/gtkfilechooserdefault.c:3116
 #, c-format
 msgid "%.1f G"
 msgstr "%.1f غ"
 
-#: gtk/gtkfilechooserdefault.c:3141
+#: gtk/gtkfilechooserdefault.c:3161
 msgid "Today"
 msgstr "اليوم"
 
-#: gtk/gtkfilechooserdefault.c:3143
+#: gtk/gtkfilechooserdefault.c:3163
 msgid "Yesterday"
 msgstr "البارحة"
 
-#: gtk/gtkfilechooserdefault.c:3151
+#: gtk/gtkfilechooserdefault.c:3171
 msgid "%d/%b/%Y"
 msgstr "%d/%b/%Y"
 
-#: gtk/gtkfilechooserdefault.c:3154
+#: gtk/gtkfilechooserdefault.c:3174
 msgid "Unknown"
 msgstr "مجهول"
 
@@ -1182,9 +1172,9 @@ msgid "Error deleting file \"%s\": %s"
 msgstr "خطأ عند حذف الملف \"%s\": %s"
 
 #: gtk/gtkfilesel.c:1623
-#, fuzzy, c-format
+#, c-format
 msgid "Really delete file \"%s\"?"
-msgstr "اعادة تسمية الملف \"%s\" كـ:"
+msgstr "هل تريد حقا حذف الملف \"%s\"?"
 
 #: gtk/gtkfilesel.c:1628
 msgid "Delete File"
@@ -1260,43 +1250,33 @@ msgstr "لم يمكن تحويل اسم الملف"
 msgid "(Empty)"
 msgstr "(فارغ)"
 
-#: gtk/gtkfilesystemunix.c:335 gtk/gtkfilesystemwin32.c:417
+#: gtk/gtkfilesystemunix.c:351 gtk/gtkfilesystemwin32.c:373
 #, c-format
 msgid "error creating directory '%s': %s"
 msgstr "حدث خطأ عند إنشاء الدليل '%s': %s"
 
-#: gtk/gtkfilesystemunix.c:378 gtk/gtkfilesystemwin32.c:458
-#, fuzzy
+#: gtk/gtkfilesystemunix.c:392 gtk/gtkfilesystemwin32.c:414
 msgid "This file system does not support mounting"
-msgstr "نظام الملفات هذا لا يدعم الأيقونات"
+msgstr "نظام الملفات هذا لا يدعم التجهيز"
 
-#: gtk/gtkfilesystemunix.c:386
-#, fuzzy
+#: gtk/gtkfilesystemunix.c:400
 msgid "Filesystem"
 msgstr "نظام الملفات"
 
-#: gtk/gtkfilesystemunix.c:648
-msgid "This file system does not support icons"
-msgstr "نظام الملفات هذا لا يدعم الأيقونات"
-
-#: gtk/gtkfilesystemunix.c:661 gtk/gtkfilesystemunix.c:674
-msgid "This file system does not support bookmarks"
-msgstr "نظام الملفات هذا لا يدعم علامات المواقع"
-
-#: gtk/gtkfilesystemunix.c:847 gtk/gtkfilesystemwin32.c:1197
+#: gtk/gtkfilesystemunix.c:419 gtk/gtkfilesystemunix.c:1295
+#: gtk/gtkfilesystemwin32.c:1154
 #, c-format
 msgid "error getting information for '%s': %s"
 msgstr "خطأ تلقي معلومات لـ '%s': %s"
 
-#: gtk/gtkfilesystemwin32.c:820
+#: gtk/gtkfilesystemunix.c:1005 gtk/gtkfilesystemwin32.c:777
 #, c-format
 msgid "Bookmark saving failed (%s)"
 msgstr "فشل حفظ علامة الموقع (%s)"
 
-#: gtk/gtkfilesystemwin32.c:976
-#, fuzzy
+#: gtk/gtkfilesystemwin32.c:933
 msgid "This file system does not support icons for everything"
-msgstr "نظام الملفات هذا لا يدعم الأيقونات"
+msgstr "نظام الملفات هذا لا يدعم الأيقونات لكل شيء"
 
 #: gtk/gtkfontbutton.c:177 gtk/gtkfontbutton.c:294
 msgid "Pick a Font"
@@ -1340,16 +1320,16 @@ msgstr "الخط المنتقى"
 
 #: gtk/gtkgamma.c:399
 msgid "Gamma"
-msgstr ""
+msgstr "جاما"
 
 #: gtk/gtkgamma.c:409
 msgid "_Gamma value"
-msgstr ""
+msgstr "قيمة _جاما"
 
 #. Remove this icon source so we don't keep trying to
 #. * load it.
 #.
-#: gtk/gtkiconfactory.c:1559
+#: gtk/gtkiconfactory.c:1563
 #, c-format
 msgid "Error loading icon: %s"
 msgstr "خطأ عند تحميل الأيقونة: %s"
@@ -1362,6 +1342,10 @@ msgid ""
 "You can get a copy from:\n"
 "\t%s"
 msgstr ""
+"لم يمكن إيجاد الأيقونة '%s'.·كما لم يمكن ايجاد التيمة '%s'\n"
+"ربما يتوجب عليك تثبيته.\n"
+"يمكنك تلقي نسخة من:\n"
+"\t%s"
 
 #: gtk/gtkicontheme.c:1247
 #, c-format
@@ -1378,7 +1362,7 @@ msgstr "إدخال"
 
 #: gtk/gtkinputdialog.c:242
 msgid "No extended input devices"
-msgstr ""
+msgstr "أجهزة الإدخال دون إمتدادات"
 
 #: gtk/gtkinputdialog.c:254
 msgid "_Device:"
@@ -1602,7 +1586,7 @@ msgstr "إلى الأع_لى"
 
 #: gtk/gtkstock.c:298
 msgid "_Harddisk"
-msgstr ""
+msgstr "قرص _صلب"
 
 #: gtk/gtkstock.c:299
 msgid "_Help"
@@ -1614,11 +1598,11 @@ msgstr "الدليل ال_منزلي"
 
 #: gtk/gtkstock.c:301
 msgid "Increase Indent"
-msgstr ""
+msgstr "رفع التجويف"
 
 #: gtk/gtkstock.c:302
 msgid "Decrease Indent"
-msgstr ""
+msgstr "خفض التجويف"
 
 #: gtk/gtkstock.c:303
 msgid "_Index"
@@ -1649,126 +1633,130 @@ msgid "_Right"
 msgstr "_يمين"
 
 #: gtk/gtkstock.c:310
+msgid "_Network"
+msgstr "_شبكة"
+
+#: gtk/gtkstock.c:311
 msgid "_New"
 msgstr "_جديد"
 
-#: gtk/gtkstock.c:311
+#: gtk/gtkstock.c:312
 msgid "_No"
 msgstr "_لا"
 
-#: gtk/gtkstock.c:312
+#: gtk/gtkstock.c:313
 msgid "_OK"
 msgstr "_موافق"
 
-#: gtk/gtkstock.c:313
+#: gtk/gtkstock.c:314
 msgid "_Open"
 msgstr "_فتح"
 
-#: gtk/gtkstock.c:314
+#: gtk/gtkstock.c:315
 msgid "_Paste"
 msgstr "_لصق"
 
-#: gtk/gtkstock.c:315
+#: gtk/gtkstock.c:316
 msgid "_Preferences"
 msgstr "_تفضيلات"
 
-#: gtk/gtkstock.c:316
+#: gtk/gtkstock.c:317
 msgid "_Print"
 msgstr "_طباعة"
 
-#: gtk/gtkstock.c:317
+#: gtk/gtkstock.c:318
 msgid "Print Pre_view"
 msgstr "_لمحة عن المطبوعة"
 
-#: gtk/gtkstock.c:318
+#: gtk/gtkstock.c:319
 msgid "_Properties"
 msgstr "_خصائص"
 
-#: gtk/gtkstock.c:319
+#: gtk/gtkstock.c:320
 msgid "_Quit"
 msgstr "_إنهاء"
 
-#: gtk/gtkstock.c:320
+#: gtk/gtkstock.c:321
 msgid "_Redo"
 msgstr "_إعادة"
 
-#: gtk/gtkstock.c:321
+#: gtk/gtkstock.c:322
 msgid "_Refresh"
 msgstr "_تحديث"
 
-#: gtk/gtkstock.c:322
+#: gtk/gtkstock.c:323
 msgid "_Remove"
 msgstr "_حذف"
 
-#: gtk/gtkstock.c:323
+#: gtk/gtkstock.c:324
 msgid "_Revert"
 msgstr "_تراجع"
 
-#: gtk/gtkstock.c:324
+#: gtk/gtkstock.c:325
 msgid "_Save"
 msgstr "_حفظ"
 
-#: gtk/gtkstock.c:325
+#: gtk/gtkstock.c:326
 msgid "Save _As"
 msgstr "_حفظ كـ"
 
-#: gtk/gtkstock.c:326
+#: gtk/gtkstock.c:327
 msgid "_Color"
 msgstr "_لون"
 
-#: gtk/gtkstock.c:327
+#: gtk/gtkstock.c:328
 msgid "_Font"
 msgstr "_خط"
 
-#: gtk/gtkstock.c:328
+#: gtk/gtkstock.c:329
 msgid "_Ascending"
 msgstr "_تصاعدي"
 
-#: gtk/gtkstock.c:329
+#: gtk/gtkstock.c:330
 msgid "_Descending"
 msgstr "_تنازلي"
 
-#: gtk/gtkstock.c:330
+#: gtk/gtkstock.c:331
 msgid "_Spell Check"
 msgstr "_تثبم من التهجية"
 
-#: gtk/gtkstock.c:331
+#: gtk/gtkstock.c:332
 msgid "_Stop"
 msgstr "_توقف"
 
-#: gtk/gtkstock.c:332
+#: gtk/gtkstock.c:333
 msgid "_Strikethrough"
 msgstr "_شطب"
 
-#: gtk/gtkstock.c:333
+#: gtk/gtkstock.c:334
 msgid "_Undelete"
 msgstr "_تراجع عن الحذف"
 
-#: gtk/gtkstock.c:334
+#: gtk/gtkstock.c:335
 msgid "_Underline"
 msgstr "_تسطير"
 
-#: gtk/gtkstock.c:335
+#: gtk/gtkstock.c:336
 msgid "_Undo"
 msgstr "_تراجع"
 
-#: gtk/gtkstock.c:336
+#: gtk/gtkstock.c:337
 msgid "_Yes"
 msgstr "_نعم"
 
-#: gtk/gtkstock.c:337
+#: gtk/gtkstock.c:338
 msgid "Zoom _100%"
 msgstr "تكبير للحجم الأ_صلي"
 
-#: gtk/gtkstock.c:338
+#: gtk/gtkstock.c:339
 msgid "Zoom to _Fit"
 msgstr "تكبير لل_ملائمة"
 
-#: gtk/gtkstock.c:339
+#: gtk/gtkstock.c:340
 msgid "Zoom _In"
 msgstr "_تكبير"
 
-#: gtk/gtkstock.c:340
+#: gtk/gtkstock.c:341
 msgid "Zoom _Out"
 msgstr "ت_صغير"
 
@@ -1824,7 +1812,7 @@ msgstr "--- لا توجد تلميحة ---"
 #: gtk/gtkuimanager.c:1065
 #, c-format
 msgid "Unknown attribute '%s' on line %d char %d"
-msgstr ""
+msgstr "صفة مجهولة '%s' عند السطر %d·الرمز %d"
 
 #: gtk/gtkuimanager.c:1274
 #, c-format
@@ -1838,7 +1826,7 @@ msgstr "بيانات رمز غير مرتقبة عند السطر %d الرمز 
 
 #: gtk/gtkuimanager.c:2136
 msgid "Empty"
-msgstr ""
+msgstr "فارغ"
 
 #. ID
 #: modules/input/imam-et.c:453
@@ -1853,12 +1841,12 @@ msgstr "سيدلا"
 #. ID
 #: modules/input/imcyrillic-translit.c:216
 msgid "Cyrillic (Transliterated)"
-msgstr ""
+msgstr "سريالي·(منسوخ·بحروف·لغة·أخرى)"
 
 #. ID
 #: modules/input/iminuktitut.c:126
 msgid "Inukitut (Transliterated)"
-msgstr ""
+msgstr "إنوكتوت·(منسوخة·بحروف·لغة·أخرى)"
 
 #. ID
 #: modules/input/imipa.c:144
@@ -1894,3 +1882,9 @@ msgstr "طريقة الإدخال X"
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "لم يمكن تلقي معلومات عن الملف '%s': %s"
+
+#~ msgid "This file system does not support icons"
+#~ msgstr "نظام الملفات هذا لا يدعم الأيقونات"
+
+#~ msgid "This file system does not support bookmarks"
+#~ msgstr "نظام الملفات هذا لا يدعم علامات المواقع"
