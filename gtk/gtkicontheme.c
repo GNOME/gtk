@@ -1179,11 +1179,11 @@ gtk_icon_theme_lookup_icon (GtkIconTheme       *icon_theme,
 	    }
 	  if (!found)
 	    {
-	      g_warning (_("Could not find the icon '%s'.  The '" DEFAULT_THEME_NAME "' theme\n"
+	      g_warning (_("Could not find the icon '%s'. The '%s' theme\n"
 			   "was not found either, perhaps you need to install it.\n"
-			   "You can get a copy from :\n"
-			   "\thttp://freedesktop.org/Software/icon-theme/releases"),
-			 icon_name);
+			   "You can get a copy from:\n"
+			   "\t%s"),
+			 icon_name, DEFAULT_THEME_NAME, "http://freedesktop.org/Software/icon-theme/releases");
 	    }
 	}
     }

@@ -92,7 +92,7 @@ void          gtk_tree_model_filter_convert_iter_to_child_iter (GtkTreeModelFilt
                                                                 GtkTreeIter                  *filter_iter);
 GtkTreePath  *gtk_tree_model_filter_convert_child_path_to_path (GtkTreeModelFilter           *filter,
                                                                 GtkTreePath                  *child_path);
-GtkTreePath  *gtk_tree_model_filter_convert_path_to_child_path (GtkTreeModelFilter           *path,
+GtkTreePath  *gtk_tree_model_filter_convert_path_to_child_path (GtkTreeModelFilter           *filter,
                                                                 GtkTreePath                  *filter_path);
 
 /* extras */

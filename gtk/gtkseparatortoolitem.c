@@ -260,7 +260,7 @@ gtk_separator_tool_item_new (void)
 
 /**
  * gtk_separator_tool_item_get_draw:
- * @separator_tool_item: a #GtkSeparatorToolItem 
+ * @item: a #GtkSeparatorToolItem 
  * 
  * Returns whether @separator_tool_item is drawn as a
  * line, or just blank. See gtk_separator_tool_item_set_draw().
@@ -270,16 +270,16 @@ gtk_separator_tool_item_new (void)
  * Since: 2.4
  **/
 gboolean
-gtk_separator_tool_item_get_draw (GtkSeparatorToolItem *separator_tool_item)
+gtk_separator_tool_item_get_draw (GtkSeparatorToolItem *item)
 {
-  g_return_val_if_fail (GTK_IS_SEPARATOR_TOOL_ITEM (separator_tool_item), FALSE);
+  g_return_val_if_fail (GTK_IS_SEPARATOR_TOOL_ITEM (item), FALSE);
   
-  return separator_tool_item->priv->draw;
+  return item->priv->draw;
 }
 
 /**
  * gtk_separator_tool_item_set_draw:
- * @separator_tool_item: a #GtkSeparatorToolItem
+ * @item: a #GtkSeparatorToolItem
  * @draw: whether @separator_tool_item is drawn as a vertical iln
  * 
  * When @separator_tool_items is drawn as a vertical line, or just blank.
@@ -289,20 +289,20 @@ gtk_separator_tool_item_get_draw (GtkSeparatorToolItem *separator_tool_item)
  * Since: 2.4
  **/
 void
-gtk_separator_tool_item_set_draw (GtkSeparatorToolItem *separator_tool_item,
+gtk_separator_tool_item_set_draw (GtkSeparatorToolItem *item,
 				  gboolean              draw)
 {
-  g_return_if_fail (GTK_IS_SEPARATOR_TOOL_ITEM (separator_tool_item));
+  g_return_if_fail (GTK_IS_SEPARATOR_TOOL_ITEM (item));
 
   draw = draw != FALSE;
 
-  if (draw != separator_tool_item->priv->draw)
+  if (draw != item->priv->draw)
     {
-      separator_tool_item->priv->draw = draw;
+      item->priv->draw = draw;
 
-      gtk_widget_queue_draw (GTK_WIDGET (separator_tool_item));
+      gtk_widget_queue_draw (GTK_WIDGET (item));
 
-      g_object_notify (G_OBJECT (separator_tool_item), "draw");
+      g_object_notify (G_OBJECT (item), "draw");
     }
 }
 

@@ -1959,7 +1959,7 @@ logical_to_physical (GtkToolbar *toolbar,
 /**
  * gtk_toolbar_set_drop_highlight_item:
  * @toolbar: a #GtkToolbar
- * @item: a #GtkToolItem, or %NULL to turn of highlighting
+ * @tool_item: a #GtkToolItem, or %NULL to turn of highlighting
  * @index: a position on @toolbar
  * 
  * Highlights @toolbar to give an idea of what it would look like

@@ -1,62 +1,63 @@
 Overview of Changes from GTK+ 2.3.1 to GTK+ 2.3.2
 =================================================
-* Add functions to save pixbufs to non-file locations.  [Tim Evans]
-* Add a function to determine the type and size of a file without
-  loading it completely.  [Matthias Clasen]
-* Turn pixbuf attributes into construct-only properties. [Matthias]
-* Fix building gdk-pixbuf with --disable-modules --with-included-loaders.
-  [Matthias, Owen Taylor]
-* Fix dynamic menus. [Matthias, Michael Meeks]
-* Split the translations into two domains: ui strings and
-  error messages go to gtk20, property nicks and blurbs to 
-  gtk20-properties.  [Matthias]
+* GdkPixbuf
+ - Add functions to save pixbufs to non-file locations.  [Tim Evans]
+ - Add a function to determine the type and size of a file without
+   loading it completely.  [Matthias Clasen]
+ - Turn pixbuf attributes into construct-only properties. [Matthias]
+ - Fix building gdk-pixbuf with --disable-modules --with-included-loaders.
+   [Matthias, Owen Taylor]
+* Fix the logic for changing the toplevelness of a window.  [Soeren Sandmann]
+* Do not interpret distant clicks as double clicks, using a
+  new double-click-distance setting.  [Matthias]
+* Improve the GDK API for dealing with group leaders. [Matthias]
+* Utility function for application launching in multi-screen scenarios.
+  [Mark McLoughlin]
+* Support big and small and alpha-blended icons under Win32. [Tim Evans]
+* Misc Win32 improvements [Tor Lillquist, Hans]
+* GtkFileChooser [Federico]
+ - Fix new filename entry in Save mode [Jan Arne Petersen]
+ - Improved the look of GtkFileChooserDefault. [Tuomas Kuosmanen]
+ - Added support for file system volumes such as CD-ROMs, 
+   floppies, and network shares.
+ - Add a "New Folder" button for Save mode in GtkFileChooser.
+ - Better support for Folder mode.
+* GtkTreeView
+ - Speed up by adding a fixed height mode.  [Kristian Rietveld]
+ - Add a single-paragraph mode and a language property to 
+   GtkCellRendererText [Kristian Rietveld]
+ - Add a editing-canceled signal to GtkCellRenderer [Federico Mena Quintero]
+ - Misc GtkTreeView bug fixes [Kristian, Soeren, Jonathan Blandford]
+* Add a way to list the supported targets of a clipboard. [Dom Lachowicz]
 * Add stock icons: harddisk, indent, unindent.  [Hans Breuer, Jody Goldberg]
-* Add a way to lock indivual accelerator paths  [Matthias]
-* Add a way to list the supported targets of a 
-  clipboard. [Dom Lachowicz]
 * Improve the GtkCalendar drawing code.  [Matthias]
 * GtkCalendar supports starting the week on any day [Matthias]
-* Make GtkToolbar compatible with 2.2 again [Soeren Sandmann]
+* Make GtkToolbar compatible with 2.2 again [Soeren]
 * Misc GtkToolbar fixes and API improvements [Christian Persch, 
   Olivar Avramchenko, Jody, Soeren]
 * Misc GtkUIManager fixes and API improvements.  [Jody, Matthias, Jeff Franks]
-* Fix the logic for changing the toplevelness of a 
-  window.  [Soeren]
+* Add a way to lock individual accelerator paths  [Matthias]
 * Add gtk_menu_shell_cancel() to emit the "cancel" signal on 
   a menu shell.  [Matthias]
-* Do not interpret distant clicks as double clicks, using a
-  new double-click-distance setting.  [Matthias]
-* Utility function for application launching in multi-screen 
-  scenarios.  [Mark McLoughlin]
-* Improve the GDK API for dealing with group leaders. [Matthias]
+* Fix dynamic menus. [Matthias, Michael Meeks]
 * Add xalign, yalign properties to GtkButton. [Jody]
-* Misc Win32 improvements [Tor Lillquist, Hans]
-* Support big and small and alpha-blended icons under Win32.
-* Speed up GtkTreeView, add a fixed height mode.  [Kristian Rietveld]
-* Add a single-paragraph mode and a language property to 
-  GtkCellRendererText [Kristian]
-* Add a editing-canceled signal to GtkCellRenderer [Federico Mena Quintero]
-* Misc GtkTreeView bug fixes [Kristian, Soeren, Jonathan Blandford]
 * Implement or improve RTL support in GtkComboBox, GtkCellView, 
-  GtkViewport [IBM L3 NLS Support Team, Matthias, Kristian]
+  GtkViewport [Semion Chichelnitsky, Matthias, Kristian]
 * Support for "no focus" windows. [Matthias]
-* Fix new filename entry in Save mode in GtkFileChooser. [Jan Arne Petersen]
-* Improved the look of GtkFileChooserDefault. [Federico, Tuomas Kuosmanen]
-* Added support for file system volumes such as CD-ROMs, floppies, and network
-  shares to GtkFileChooser. [Federico]
-* Add a "New Folder" button for Save mode in GtkFileChooser. [Federico]
-* Better support for Folder mode in GtkFileChooser. [Federico]
-* Documentation improvements [Matthias, Federico, Manish, 
-  Murray Cumming, Theppitak Karoonboonyanan]
+* Documentation improvements [Matthias, Federico, Manish, Murray Cumming, 
+  Theppitak Karoonboonyanan]
 * FAQ updates [Tony Gale]
-* New and updated translations (bn,ru,sr,sr@Latn,es,cs,sv,ja,no,de,
-  nl,sq,pt,pt_BR,nn,hr,lt,fa,it,et,cy,ko,mn,ar,ga,wa,br,af,ms)
-Other contributors: Marco Pesenti Gritti, Tim-Philipp Müller,
-  Noah Levitt, Sebastian Rittau, Bill Haneman, Herman Bloggs, 
-  Adam Wright, Manish Singh, Kjartan Maraas, Evan Martin, 
-  Alexander Larsson, Joshua N Pritikin, Torsten Schoenfeld, 
-  Christian Neumair, Daniel Rogers, Alexander Winston, Johannes 
-  Weißl, Anders Carlsson, Morten Welinder, Olivier Andrieu
+* Split the translations into two domains: ui strings and
+  error messages go to gtk20, property nicks and blurbs to 
+  gtk20-properties. [Matthias]
+* New and updated translations (af,ar,bn,br,cs,cy,da,de,es,et,fa,fr,ga,hr,
+  it,ja,ko,lt,mn,ms,nl,nn,no,pl,pt,pt_BR,ru,sr,sr@Latn,sv,sq,wa)
+Other contributors: Olivier Andrieu, Herman Bloggs, Anders Carlsson,
+  Marco Pesenti Gritti, Bill Haneman, Alexander Larsson, Noah Levitt, 
+  Kjartan Maraas, Evan Martin, Tim-Philipp Müller, Christian Neumair, 
+  Joshua N Pritikin, Sebastian Rittau, Daniel Rogers, Manish Singh, 
+  Torsten Schoenfeld, Alexander Winston, Johannes Weißl,  Morten Welinder, 
+  Adam Wright
 
 Overview of Changes in GTK+-2.3.1
 =================================
