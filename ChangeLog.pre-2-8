@@ -1,3 +1,8 @@
+Wed Jan  9 20:56:42 2002  Jonathan Blandford  <jrb@redhat.com>
+
+	* gdk/x11/gdkkeys-x11.c (get_xkb): get the types as well as the
+	symbols because we need them in MyEnhancedXkbTranslateKeyCode.
+
 2002-01-10  Tor Lillqvist  <tml@iki.fi>
 
 	Apply the same fixes and improvements as to the

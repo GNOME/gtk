@@ -68,7 +68,7 @@ get_xkb (void)
   
   if (xkb_desc == NULL)
     {
-      xkb_desc = XkbGetMap (gdk_display, XkbKeySymsMask, XkbUseCoreKbd);
+      xkb_desc = XkbGetMap (gdk_display, XkbKeySymsMask | XkbKeyTypesMask, XkbUseCoreKbd);
       if (xkb_desc == NULL)
         g_error ("Failed to get keymap");
 
@@ -76,7 +76,7 @@ get_xkb (void)
     }
   else if (current_serial != _gdk_keymap_serial)
     {
-      XkbGetUpdatedMap (gdk_display, XkbKeySymsMask, xkb_desc);
+      XkbGetUpdatedMap (gdk_display, XkbKeySymsMask | XkbKeyTypesMask, xkb_desc);
       XkbGetNames (gdk_display, XkbGroupNamesMask, xkb_desc);
     }
 
