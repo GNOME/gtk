@@ -189,15 +189,25 @@ gdk_fb_clip_region(GdkDrawable *drawable, GdkGC *gc, gboolean do_clipping, gbool
 {
   GdkRectangle draw_rect;
   GdkRegion *real_clip_region, *tmpreg;
-  gboolean watchit = FALSE;
+  gboolean watchit = FALSE, skipit = FALSE;
 
   g_assert(!GDK_IS_WINDOW(GDK_DRAWABLE_P(drawable)->wrapper) || !GDK_WINDOW_P(GDK_DRAWABLE_P(drawable)->wrapper)->input_only);
 
   draw_rect.x = GDK_DRAWABLE_FBDATA(drawable)->llim_x;
   draw_rect.y = GDK_DRAWABLE_FBDATA(drawable)->llim_y;
-  draw_rect.width = GDK_DRAWABLE_FBDATA(drawable)->lim_x - draw_rect.x;
-  draw_rect.height = GDK_DRAWABLE_FBDATA(drawable)->lim_y - draw_rect.y;
+  if(!GDK_IS_WINDOW(GDK_DRAWABLE_FBDATA(drawable)) || GDK_WINDOW_P(GDK_DRAWABLE_P(drawable)->wrapper)->mapped)
+    {
+      draw_rect.width = GDK_DRAWABLE_FBDATA(drawable)->lim_x - draw_rect.x;
+      draw_rect.height = GDK_DRAWABLE_FBDATA(drawable)->lim_y - draw_rect.y;
+    }
+  else
+    {
+      draw_rect.width = draw_rect.height = 0;
+      skipit = TRUE;
+    }
   real_clip_region = gdk_region_rectangle(&draw_rect);
+  if(skipit)
+    return real_clip_region;
 
   if(do_clipping && GDK_IS_WINDOW(GDK_DRAWABLE_FBDATA(drawable)->wrapper) && GDK_WINDOW_P(GDK_DRAWABLE_P(drawable)->wrapper)->mapped && !GDK_WINDOW_P(GDK_DRAWABLE_FBDATA(drawable)->wrapper)->input_only)
     {
@@ -547,8 +557,6 @@ gdk_fb_fill_spans(GdkDrawable *real_drawable,
 
   drawable = real_drawable;
 
-  GDK_CHECK_IMPL(drawable);
-
   if(GDK_IS_WINDOW(GDK_DRAWABLE_P(drawable)->wrapper) && !GDK_WINDOW_P(GDK_DRAWABLE_P(drawable)->wrapper)->mapped)
     return;
   if(GDK_IS_WINDOW(GDK_DRAWABLE_P(drawable)->wrapper) && GDK_WINDOW_P(GDK_DRAWABLE_P(drawable)->wrapper)->input_only)
@@ -795,8 +803,6 @@ gdk_fb_drawing_context_init(GdkFBDrawingContext *dc,
   dc->bg_relto = GDK_DRAWABLE_P(drawable)->wrapper;
   dc->draw_bg = draw_bg;
 
-  GDK_CHECK_IMPL(drawable);
-
   if(GDK_IS_WINDOW(GDK_DRAWABLE_P(drawable)->wrapper))
     {
       dc->bgpm = GDK_WINDOW_P(GDK_DRAWABLE_P(drawable)->wrapper)->bg_pixmap;
@@ -884,8 +890,6 @@ gdk_fb_draw_drawable_3 (GdkDrawable *drawable,
   int i;
   int draw_direction = 1;
   gboolean do_quick_draw;
-
-  GDK_CHECK_IMPL(drawable);
 
   if(GDK_IS_WINDOW(GDK_DRAWABLE_P(drawable)->wrapper))
     {

@@ -1413,8 +1413,14 @@ static guint update_idle = 0;
 static void
 gdk_window_process_updates_internal (GdkWindow *window)
 {
-  GdkWindowObject *private = (GdkWindowObject *)window;
+  GdkWindowObject *private = (GdkWindowObject *)window, *cur;
   gboolean save_region = FALSE;
+
+  for(cur = private; cur; cur = cur->parent)
+    {
+      if(!cur->mapped)
+	return;
+    }
 
   /* If an update got queued during update processing, we can get a
    * window in the update queue that has an empty update_area.
@@ -1529,6 +1535,9 @@ gdk_window_invalidate_rect   (GdkWindow    *window,
   if (GDK_WINDOW_DESTROYED (window))
     return;
   
+  if (private->input_only || !private->mapped)
+    return;
+
   if (!rect)
     {
       window_rect.x = 0;
@@ -1602,7 +1611,7 @@ gdk_window_invalidate_region (GdkWindow *window,
   if (GDK_WINDOW_DESTROYED (window))
     return;
   
-  if (private->input_only)
+  if (private->input_only || !private->mapped)
     return;
   
   if (private->update_area)

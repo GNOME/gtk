@@ -1,5 +1,8 @@
 ## Process this file with automake to produce Makefile.in
 
+libgdkincludedir = $(includedir)/gtk-2.0/gdk
+libgdkfbincludedir = $(includedir)/gtk-2.0/gdk/linux-fb
+
 INCLUDES = @STRIP_BEGIN@ 	\
 	-DG_LOG_DOMAIN=\"Gdk\"	\
 	-I$(top_srcdir)		\
@@ -21,12 +24,14 @@ LDFLAGS = @STRIP_BEGIN@ \
 
 noinst_LTLIBRARIES = libgdk-linux-fb.la
 
+libgdkinclude_HEADERS= \
+	gdkfb.h
+
 libgdk_linux_fb_la_SOURCES =    	\
 	gdkcolor-fb.c	   	\
 	gdkcursor-fb.c	   	\
 	gdkdnd-fb.c	   	\
 	gdkdrawable-fb2.c  	\
-	gdkfb.h			\
 	gdkfont-fb.c	   	\
 	gdkgc-fb.c 	   	\
 	gdkgeometry-fb.c  	\

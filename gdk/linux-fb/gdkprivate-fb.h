@@ -271,7 +271,17 @@ void gdk_fb_draw_rectangle (GdkDrawable    *drawable,
 void gdk_fb_fill_spans(GdkDrawable *real_drawable, GdkGC *gc, GdkRectangle *rects, int nrects);
 GdkRegion *gdk_fb_clip_region(GdkDrawable *drawable, GdkGC *gc, gboolean do_clipping, gboolean do_children);
 
-extern GdkWindow *_gdk_fb_pointer_grab_window, *_gdk_fb_keyboard_grab_window, *_gdk_fb_pointer_grab_confine;
+GdkGrabStatus
+gdk_fb_pointer_grab (GdkWindow *	  window,
+		     gint		  owner_events,
+		     GdkEventMask	  event_mask,
+		     GdkWindow *	  confine_to,
+		     GdkCursor *	  cursor,
+		     guint32  time,
+		     gboolean implicit_grab);
+void gdk_fb_pointer_ungrab (guint32 time, gboolean implicit_grab);
+
+extern GdkWindow *_gdk_fb_pointer_grab_window, *_gdk_fb_pointer_grab_window_events, *_gdk_fb_keyboard_grab_window, *_gdk_fb_pointer_grab_confine;
 extern GdkEventMask _gdk_fb_pointer_grab_events, _gdk_fb_keyboard_grab_events;
 extern GdkCursor *_gdk_fb_pointer_grab_cursor;
 extern GdkFBDisplay *gdk_display;
@@ -289,7 +299,7 @@ void gdk_fb_cursor_hide(void);
 void gdk_fb_redraw_all(void);
 
 void gdk_input_ps2_get_mouseinfo(gint *x, gint *y, GdkModifierType *mask);
-void gdk_fb_window_visibility_crossing(GdkWindow *window, gboolean is_show);
+void gdk_fb_window_visibility_crossing(GdkWindow *window, gboolean is_show, gboolean is_grab);
 
 #define PANGO_TYPE_FB_FONT              (pango_fb_font_get_type ())
 #define PANGO_FB_FONT(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), PANGO_TYPE_FB_FONT, PangoFBFont))

@@ -1,3 +1,10 @@
+2000-07-31  Elliot Lee  <sopwith@redhat.com>
+
+	* gtk/gtkcolorsel.c: We really do need to include gdkfb.h in order to get the GDK_PARENT_ROOT() macro to work.
+	* gtk/gtkmarshal.list: Add NONE:STRING,POINTER
+	* gdk/gdkwindow.c: Don't send expose events, or invalidate pieces of, windows that aren't shown.
+	* gdk/linux-fb: Redraw-when-menu-hidden solved, plus a bunch of pointer grab stuff.
+
 Mon Jul 31 13:53:16 BST 2000  Tony Gale <gale@gtk.org>
 
         * docs/gtkfaq.sgml docs/gtk-faq.sgml:

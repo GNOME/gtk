@@ -457,7 +457,7 @@ gdk_window_invalidate_region_clear(GdkWindow *window, GdkRegion *region)
   int i;
   GdkWindowPrivate *private = GDK_WINDOW_P(window);
 
-  if (private->input_only)
+  if (private->input_only || !private->mapped)
     return;
 
   if(private->bg_pixmap != GDK_NO_BG)
@@ -513,7 +513,7 @@ gdk_window_invalidate_rect_clear(GdkWindow *window, GdkRectangle *rect)
 {
   GdkWindowPrivate *private = GDK_WINDOW_P(window);
 
-  if (private->input_only)
+  if (private->input_only || !private->mapped)
     return;
 
   if(GDK_WINDOW_P(window)->bg_pixmap != GDK_NO_BG)
@@ -562,7 +562,7 @@ gdk_fb_redraw_all(void)
   r.x = r.y = 0;
   r.width = GDK_DRAWABLE_IMPL_FBDATA(gdk_parent_root)->width;
   r.height = GDK_DRAWABLE_IMPL_FBDATA(gdk_parent_root)->height;
-  gdk_window_invalidate_rect(gdk_parent_root, &r, TRUE);
+  gdk_window_invalidate_rect_clear(gdk_parent_root, &r);
   gdk_window_process_all_updates();
 }
 
@@ -588,7 +588,7 @@ gdk_window_show (GdkWindow *window)
 	  send_map_events(private, TRUE);
 
 	  private->mapped = FALSE; /* a hack, ayup, to make gdk_window_get_pointer get the other window */
-	  gdk_fb_window_visibility_crossing(window, TRUE);
+	  gdk_fb_window_visibility_crossing(window, TRUE, FALSE);
 	  private->mapped = TRUE;
 
 	  if(private->input_only)
@@ -631,12 +631,16 @@ gdk_window_hide (GdkWindow *window)
 	gdk_fb_drawable_clear(gdk_parent_root);
 
       if(all_parents_shown((GdkWindowPrivate *)private->parent))
-	gdk_fb_window_visibility_crossing(window, FALSE);
+	gdk_fb_window_visibility_crossing(window, FALSE, FALSE);
 
       do_hide = gdk_fb_cursor_need_hide(&r);
 
       if(do_hide)
 	gdk_fb_cursor_hide();
+      if(window == _gdk_fb_pointer_grab_window)
+	gdk_pointer_ungrab(GDK_CURRENT_TIME);
+      if(window == _gdk_fb_keyboard_grab_window)
+	gdk_keyboard_ungrab(GDK_CURRENT_TIME);
       gdk_window_invalidate_rect_clear(gdk_parent_root, &r);
       if(do_hide)
 	gdk_fb_cursor_unhide();

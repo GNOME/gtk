@@ -31,6 +31,8 @@
 #include "x11/gdkx.h"
 #elif defined (GDK_WINDOWING_WIN32)
 #include "win32/gdkwin32.h"
+#elif defined (GDK_WINDOWING_FB)
+#include "linux-fb/gdkfb.h"
 #endif
 
 #include "gdk/gdkkeysyms.h"

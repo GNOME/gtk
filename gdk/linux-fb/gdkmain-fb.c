@@ -163,15 +163,41 @@ gdk_pointer_grab (GdkWindow *	  window,
 		  GdkCursor *	  cursor,
 		  guint32	  time)
 {
+  return gdk_fb_pointer_grab (window,
+			      owner_events,
+			      event_mask,
+			      confine_to,
+			      cursor,
+			      time, FALSE);
+}
+
+static gboolean _gdk_fb_pointer_implicit_grab = FALSE;
+
+GdkGrabStatus
+gdk_fb_pointer_grab (GdkWindow *	  window,
+		     gint		  owner_events,
+		     GdkEventMask	  event_mask,
+		     GdkWindow *	  confine_to,
+		     GdkCursor *	  cursor,
+		     guint32	  time,
+		     gboolean implicit_grab)
+{
   g_return_val_if_fail (window != NULL, 0);
   g_return_val_if_fail (GDK_IS_WINDOW (window), 0);
   g_return_val_if_fail (confine_to == NULL || GDK_IS_WINDOW (confine_to), 0);
 
   if(_gdk_fb_pointer_grab_window)
-    gdk_pointer_ungrab(time);
+    {
+      if(implicit_grab && !_gdk_fb_pointer_implicit_grab)
+	return GDK_GRAB_ALREADY_GRABBED;
 
-  if(!owner_events)
-    _gdk_fb_pointer_grab_window = gdk_window_ref(window);
+      gdk_pointer_ungrab(time);
+    }
+
+  _gdk_fb_pointer_implicit_grab = implicit_grab;
+
+  _gdk_fb_pointer_grab_window = gdk_window_ref(window);
+  _gdk_fb_pointer_grab_window_events = owner_events?NULL:_gdk_fb_pointer_grab_window;
 
   _gdk_fb_pointer_grab_confine = confine_to?gdk_window_ref(confine_to):NULL;
   _gdk_fb_pointer_grab_events = event_mask;
@@ -179,6 +205,8 @@ gdk_pointer_grab (GdkWindow *	  window,
 
   if(cursor)
     gdk_fb_cursor_reset();
+
+  gdk_fb_window_visibility_crossing(window, TRUE, TRUE);
   
   return GDK_GRAB_SUCCESS;
 }
@@ -201,11 +229,19 @@ gdk_pointer_grab (GdkWindow *	  window,
 void
 gdk_pointer_ungrab (guint32 time)
 {
+  gdk_fb_pointer_ungrab(time, FALSE);
+}
+
+void
+gdk_fb_pointer_ungrab (guint32 time, gboolean implicit_grab)
+{
   gboolean have_grab_cursor = _gdk_fb_pointer_grab_cursor && 1;
 
-  if(_gdk_fb_pointer_grab_window)
-    gdk_window_unref(_gdk_fb_pointer_grab_window);
-  _gdk_fb_pointer_grab_window = NULL;
+  if(!_gdk_fb_pointer_grab_window)
+    return;
+
+  if(implicit_grab && !_gdk_fb_pointer_implicit_grab)
+    return;
 
   if(_gdk_fb_pointer_grab_confine)
     gdk_window_unref(_gdk_fb_pointer_grab_confine);
@@ -217,6 +253,15 @@ gdk_pointer_ungrab (guint32 time)
 
   if(have_grab_cursor)
     gdk_fb_cursor_reset();
+
+  gdk_fb_window_visibility_crossing(_gdk_fb_pointer_grab_window, FALSE, TRUE);
+  
+  if(_gdk_fb_pointer_grab_window)
+    gdk_window_unref(_gdk_fb_pointer_grab_window);
+  _gdk_fb_pointer_grab_window = NULL;
+  _gdk_fb_pointer_grab_window_events = NULL;
+
+  _gdk_fb_pointer_implicit_grab = FALSE;
 }
 
 /*
@@ -496,7 +541,14 @@ gdk_event_make(GdkWindow *window, GdkEventType type, gboolean append_to_queue)
     GDK_SCROLL_MASK /* GDK_SCROLL            = 31 */
   };
   guint evmask;
+
   evmask = GDK_WINDOW_IMPL_FBDATA(window)->event_mask;
+
+  /* Bad hack to make sure that things work semi-properly with owner_events */
+  if(_gdk_fb_pointer_grab_window)
+    evmask |= _gdk_fb_pointer_grab_events;
+  if(_gdk_fb_keyboard_grab_window)
+    evmask |= _gdk_fb_keyboard_grab_events;
 
   if(evmask & GDK_BUTTON_MOTION_MASK)
     {

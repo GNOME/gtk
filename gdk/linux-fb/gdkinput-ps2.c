@@ -97,8 +97,8 @@ send_button_event(PS2Mouse *mouse, guint button, gboolean press_event, time_t th
   GdkWindow *window;
   int nbuttons = 0;
 
-  if(_gdk_fb_pointer_grab_window)
-    window = _gdk_fb_pointer_grab_window;
+  if(_gdk_fb_pointer_grab_window_events)
+    window = _gdk_fb_pointer_grab_window_events;
   else
     window = gdk_window_get_pointer(NULL, NULL, NULL, NULL);
 
@@ -159,14 +159,14 @@ send_button_event(PS2Mouse *mouse, guint button, gboolean press_event, time_t th
   if(mouse->button3_pressed)
     nbuttons++;
 
-  if(press_event && nbuttons == 1 && !_gdk_fb_pointer_grab_window)
+  if(press_event && nbuttons == 1)
     {
-      gdk_pointer_grab(window, FALSE, gdk_window_get_events(window), NULL, NULL, GDK_CURRENT_TIME);
+      gdk_fb_pointer_grab(window, FALSE, gdk_window_get_events(window), NULL, NULL, GDK_CURRENT_TIME, TRUE);
       mouse->click_grab = TRUE;
     }
   else if(!press_event && nbuttons == 0 && mouse->click_grab)
     {
-      gdk_pointer_ungrab(GDK_CURRENT_TIME);
+      gdk_fb_pointer_ungrab(GDK_CURRENT_TIME, TRUE);
       mouse->click_grab = FALSE;
     }
 
@@ -368,7 +368,7 @@ move_pointer(PS2Mouse *mouse, GdkWindow *in_window)
 
   gdk_fb_cursor_hide();
 
-  if(_gdk_fb_pointer_grab_cursor)
+  if(_gdk_fb_pointer_grab_window && _gdk_fb_pointer_grab_cursor)
     the_cursor = _gdk_fb_pointer_grab_cursor;
   else
     {
@@ -397,17 +397,19 @@ gdk_fb_cursor_reset(void)
   move_pointer(gdk_fb_ps2mouse, win);
 }
 
-void gdk_fb_window_visibility_crossing(GdkWindow *window, gboolean is_show)
+void gdk_fb_window_visibility_crossing(GdkWindow *window, gboolean is_show, gboolean is_grab)
 {
   gint winx, winy;
   GdkModifierType my_mask;
 
   gdk_input_ps2_get_mouseinfo(&winx, &winy, &my_mask);
 
-  if(winx >= GDK_DRAWABLE_IMPL_FBDATA(window)->llim_x
-     && winx < GDK_DRAWABLE_IMPL_FBDATA(window)->lim_x
-     && winy >= GDK_DRAWABLE_IMPL_FBDATA(window)->llim_y
-     && winy < GDK_DRAWABLE_IMPL_FBDATA(window)->lim_y)
+  if(is_grab
+     || (winx >= GDK_DRAWABLE_IMPL_FBDATA(window)->llim_x
+	 && winx < GDK_DRAWABLE_IMPL_FBDATA(window)->lim_x
+	 && winy >= GDK_DRAWABLE_IMPL_FBDATA(window)->llim_y
+	 && winy < GDK_DRAWABLE_IMPL_FBDATA(window)->lim_y)
+     )
     {
       GdkWindow *oldwin, *newwin, *curwin;
       GdkEvent *event;
@@ -437,7 +439,15 @@ void gdk_fb_window_visibility_crossing(GdkWindow *window, gboolean is_show)
 	  event->crossing.y = winy - y_int;
 	  event->crossing.x_root = winx;
 	  event->crossing.y_root = winy;
-	  event->crossing.mode = GDK_CROSSING_NORMAL;
+	  if(is_grab)
+	    {
+	      if(is_show)
+		event->crossing.mode = GDK_CROSSING_GRAB;
+	      else
+		event->crossing.mode = GDK_CROSSING_UNGRAB;
+	    }
+	  else
+	    event->crossing.mode = GDK_CROSSING_NORMAL;
 	  event->crossing.detail = GDK_NOTIFY_UNKNOWN;
 	  event->crossing.focus = FALSE;
 	  event->crossing.state = my_mask;
@@ -553,8 +563,8 @@ handle_input(GIOChannel *gioc, GIOCondition cond, gpointer data)
 
     win = gdk_window_get_pointer(NULL, NULL, NULL, NULL);
     move_pointer(mouse, win);
-    if(_gdk_fb_pointer_grab_window)
-      win = _gdk_fb_pointer_grab_window;
+    if(_gdk_fb_pointer_grab_window_events)
+      win = _gdk_fb_pointer_grab_window_events;
 
     gdk_window_get_origin(win, &x, &y);
     x = mouse->x - x;
