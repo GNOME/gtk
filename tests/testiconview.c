@@ -22,8 +22,9 @@
 #include <string.h>
 #include "prop-editor.h"
 
-#define NUMBER_OF_ITEMS 10
-#define MANY_ITEMS 10000
+#define NUMBER_OF_ITEMS   10
+#define SOME_ITEMS       100
+#define MANY_ITEMS     10000
 
 static void
 fill_model (GtkTreeModel *model)
@@ -103,7 +104,7 @@ foreach_selected_remove (GtkWidget *button, GtkIconView *icon_list)
 
 
 static void
-add_many (GtkWidget *button, GtkIconView *icon_list)
+add_n_items (GtkIconView *icon_list, gint n)
 {
   static gint count = NUMBER_OF_ITEMS;
 
@@ -117,7 +118,7 @@ add_many (GtkWidget *button, GtkIconView *icon_list)
   pixbuf = gdk_pixbuf_new_from_file ("gnome-textfile.png", NULL);
 
 
-  for (i = 0; i < MANY_ITEMS; i++)
+  for (i = 0; i < n; i++)
     {
       str = g_strdup_printf ("Icon %d", count);
       str2 = g_strdup_printf ("Icon <b>%d</b>", count);	
@@ -132,6 +133,18 @@ add_many (GtkWidget *button, GtkIconView *icon_list)
       g_free (str2);
       count++;
     }
+}
+
+static void
+add_some (GtkWidget *button, GtkIconView *icon_list)
+{
+  add_n_items (icon_list, SOME_ITEMS);
+}
+
+static void
+add_many (GtkWidget *button, GtkIconView *icon_list)
+{
+  add_n_items (icon_list, MANY_ITEMS);
 }
 
 static void
@@ -307,6 +320,10 @@ main (gint argc, gchar **argv)
   bbox = gtk_hbutton_box_new ();
   gtk_button_box_set_layout (GTK_BUTTON_BOX (bbox), GTK_BUTTONBOX_START);
   gtk_box_pack_start (GTK_BOX (vbox), bbox, FALSE, FALSE, 0);
+
+  button = gtk_button_new_with_label ("Add some");
+  g_signal_connect (button, "clicked", G_CALLBACK (add_some), icon_list);
+  gtk_box_pack_start_defaults (GTK_BOX (bbox), button);
 
   button = gtk_button_new_with_label ("Add many");
   g_signal_connect (button, "clicked", G_CALLBACK (add_many), icon_list);
