@@ -497,7 +497,6 @@ main (int argc, char **argv)
 
 	GdkPixbuf *pixbuf;
 	GdkPixbufLoader *pixbuf_loader;
-	FILE *file;
 
 	gtk_init (&argc, &argv);
 
@@ -519,6 +518,7 @@ main (int argc, char **argv)
 
 		if (tbf_bps) {
 			bps = atoi(tbf_bps);
+			g_print ("Simulating %d kBytes/sec\n", bps);
 			readlen = (bps*1024)/10;
 		}
 	}
