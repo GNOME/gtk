@@ -1,3 +1,11 @@
+2002-02-24  Anders Carlsson  <andersca@gnu.org>
+
+	* gtk/stock-icons/stock_dialog_error_48.png: 
+	* gtk/stock-icons/stock_sort_ascending_16.png:
+	* gtk/stock-icons/stock_undelete_24.png: 
+	* gtk/stock-icons/stock_sort_descending_16.png: 
+	Alpha-pad icons so they get the correct size.
+	
 Sat Feb 23 16:52:38 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkentry.c: Patch from Matthias Clasen to remove some
