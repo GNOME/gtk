@@ -30,7 +30,6 @@ Tue Jan 27 18:45:47 2004  Manish Singh  <yosh@gimp.org>
 
 	* acconfig.h: Remove HAVE_WINSOCK_H, not used any longer.
 
->>>>>>> 1.4000.2.347
 Sat Jan  3 11:39:42 2004  Manish Singh  <yosh@gimp.org>
 
         * gtk/gtkclipboard.c: Update freedesktop.org clipboard doc link.
