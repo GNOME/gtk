@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2004-02-25 20:24+0100\n"
-"PO-Revision-Date: 2004-02-27 15:35-0600\n"
+"PO-Revision-Date: 2004-03-02 01:16-0600\n"
 "Last-Translator: Paisa Seeluangsawat <paisa@users.sf.net>\n"
 "Language-Team: Thai <L10n@opentle.net>\n"
 "MIME-Version: 1.0\n"
@@ -989,7 +989,7 @@ msgstr "แก้ไขเมื่อ"
 #. Create Folder
 #: gtk/gtkfilechooserdefault.c:1750
 msgid "Create _Folder"
-msgstr "สร้าง_โฟลเดอร์"
+msgstr "สร้างโฟ_ลเดอร์"
 
 #. Preview
 #: gtk/gtkfilechooserdefault.c:1774
@@ -1004,7 +1004,7 @@ msgstr "_ชื่อ:"
 #. Folder combo
 #: gtk/gtkfilechooserdefault.c:1844
 msgid "Save in _Folder:"
-msgstr "บันทึกใน_โฟลเดอร์"
+msgstr "บันทึกในโฟ_ลเดอร์"
 
 #: gtk/gtkfilechooserdefault.c:1862
 msgid "_Browse for other folders"
@@ -1084,7 +1084,7 @@ msgstr "โฟลเดอร์"
 
 #: gtk/gtkfilesel.c:734
 msgid "Fol_ders"
-msgstr "_โฟลเดอร์"
+msgstr "โฟ_ลเดอร์"
 
 #: gtk/gtkfilesel.c:766
 msgid "Files"
