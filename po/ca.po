@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.2.6\n"
-"POT-Creation-Date: 2000-01-28 15:18+0100\n"
-"PO-Revision-Date: 1999-04-07 22:31+02:00\n"
+"POT-Creation-Date: 2000-02-03 23:53+0100\n"
+"PO-Revision-Date: 1999-11-18 21:11+01:00\n"
 "Last-Translator: Ivan Vilata i Balaguer <al011097@alumail.uji.es>\n"
 "Language-Team: linux-ca@chanae.alphanet.ch\n"
 "MIME-Version: 1.0\n"
@@ -269,7 +269,7 @@ msgstr "*"
 #. Convert '(nil)' weights to 'regular', since it looks nicer.
 #: gtk/gtkfontsel.c:1215
 msgid "(nil)"
-msgstr ""
+msgstr "(nul)"
 
 #: gtk/gtkfontsel.c:1215
 msgid "regular"
@@ -437,7 +437,7 @@ msgstr "(desactivat)"
 msgid "clear"
 msgstr "esborrar"
 
-#: gtk/gtknotebook.c:2057 gtk/gtknotebook.c:4129
+#: gtk/gtknotebook.c:2059 gtk/gtknotebook.c:4131
 #, c-format
 msgid "Page %u"
 msgstr "Pàgina %u"

@@ -13,7 +13,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.2.5\n"
-"POT-Creation-Date: 2000-01-28 15:18+0100\n"
+"POT-Creation-Date: 2000-02-03 23:53+0100\n"
 "PO-Revision-Date: 2000-01-02 13:15+0100\n"
 "Last-Translator: Jesus Bravo Alvarez <jba@pobox.com>\n"
 "Language-Team: Galician <gpul-traduccion@ceu.fi.udc.es>\n"
@@ -449,7 +449,7 @@ msgstr "(desactivado)"
 msgid "clear"
 msgstr "limpar"
 
-#: gtk/gtknotebook.c:2057 gtk/gtknotebook.c:4129
+#: gtk/gtknotebook.c:2059 gtk/gtknotebook.c:4131
 #, c-format
 msgid "Page %u"
 msgstr "Páxina %u"

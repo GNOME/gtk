@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.2.6\n"
-"POT-Creation-Date: 2000-01-28 15:18+0100\n"
+"POT-Creation-Date: 2000-02-03 23:53+0100\n"
 "PO-Revision-Date: 2000-01-28 15:19+0100\n"
 "Last-Translator: Kæstutis Kruþikas <DrKestas@takas.lt>\n"
 "Language-Team: Lithuanian\n"
@@ -441,7 +441,7 @@ msgstr "(atjungta)"
 msgid "clear"
 msgstr "iðvalyti"
 
-#: gtk/gtknotebook.c:2057 gtk/gtknotebook.c:4129
+#: gtk/gtknotebook.c:2059 gtk/gtknotebook.c:4131
 #, c-format
 msgid "Page %u"
 msgstr "Puslapis %u"
