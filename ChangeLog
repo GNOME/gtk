@@ -1,5 +1,14 @@
 2005-01-26  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkentrycompletion.c (gtk_entry_completion_class_init): 
+	Don't allow -1 as minimum-key-length.
+	(gtk_entry_completion_set_model): Add missing notification.
+	(gtk_entry_completion_set_minimum_key_length): Add missing
+	notification, allow setting minimum-key-length to 0.  (#165194,
+	Vincent Ladeuil)
+
+2005-01-26  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtkaboutdialog.c (display_license_dialog): Make sure
 	the license dialog is initially displayed without a horizontal
 	scrollbar.  

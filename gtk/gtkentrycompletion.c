@@ -278,7 +278,7 @@ gtk_entry_completion_class_init (GtkEntryCompletionClass *klass)
                                    g_param_spec_int ("minimum_key_length",
                                                      P_("Minimum Key Length"),
                                                      P_("Minimum length of the search key in order to look up matches"),
-                                                     -1,
+                                                     0,
                                                      G_MAXINT,
                                                      1,
                                                      G_PARAM_READWRITE));
@@ -942,6 +942,8 @@ gtk_entry_completion_set_model (GtkEntryCompletion *completion,
                            GTK_TREE_MODEL (completion->priv->filter_model));
   g_object_unref (completion->priv->filter_model);
 
+  g_object_notify (G_OBJECT (completion), "model");
+
   if (GTK_WIDGET_VISIBLE (completion->priv->popup_window))
     _gtk_entry_completion_resize_popup (completion);
 }
@@ -1014,9 +1016,14 @@ gtk_entry_completion_set_minimum_key_length (GtkEntryCompletion *completion,
                                              gint                length)
 {
   g_return_if_fail (GTK_IS_ENTRY_COMPLETION (completion));
-  g_return_if_fail (length >= 1);
+  g_return_if_fail (length >= 0);
 
-  completion->priv->minimum_key_length = length;
+  if (completion->priv->minimum_key_length != length)
+    {
+      completion->priv->minimum_key_length = length;
+     
+      g_object_notify (G_OBJECT (completion), "minimum_key_length");
+    }
 }
 
 /**
