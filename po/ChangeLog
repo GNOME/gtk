@@ -1,3 +1,8 @@
+2005-01-26  Changwoo Ryu  <cwryu@debian.org>
+
+	* ChangeLog: Removed CVS conflict indicator.
+	* ko.po: Updated Korean translation.
+
 2005-01-24  Hendrik Brandt  <heb@gnome-de.org>
 
 	* de.po: Updated German translation.
@@ -6,12 +11,6 @@
 
 	* pt_BR.po: Updated Brazilian Portuguese translation.
 
-<<<<<<< ChangeLog
-2005-01-24  Raphael Higino  <raphaelh@cvs.gnome.org>
-
-	* pt_BR.po: Updated Brazilian Portuguese translation.
-
-=======
 2005-01-24  Raphael Higino  <raphaelh@cvs.gnome.org>
 
 	* pt_BR.po: Updated Brazilian Portuguese translation.
@@ -91,7 +90,6 @@
 
 	* pt.po: Updated Portuguese translation.
 
->>>>>>> 1.999.2.23
 2005-01-10  Raphael Higino  <raphaelh@cvs.gnome.org>
 
 	* pt_BR.po: Updated Brazilian Portuguese translation.
