@@ -1516,7 +1516,7 @@ gtk_drag_begin (GtkWidget         *widget,
   
   if (event)
     info->cursor = gtk_drag_get_cursor (
-	    gtk_drag_get_event_action (event, info->button, actions));
+	    gtk_drag_get_event_action (event, info->button, 0));
 
   gtk_signal_emit_by_name (GTK_OBJECT (widget), "drag_begin",
 			   info->context);

@@ -1,3 +1,10 @@
+Wed Jan 20 19:57:14 1999  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkdnd.c (gtk_drag_begin): Start off with the
+	cursor for "no drop" since if we'll get a status
+	if we are over a drag window, but none if we aren't
+	over one. 
+
 1999-01-20  Jeff Garzik  <jgarzik@pobox.com>
 
 	* gtk/gtkcombo.c (gtk_combo_entry_key_press):
