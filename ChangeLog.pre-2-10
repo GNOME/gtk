@@ -1,3 +1,10 @@
+Thu Jan 30 16:01:29 2003  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdkrgb.c (gdk_rgb_try_colormap): Remove the 
+	attempt-to-allocate then free code. To handle multiple
+	people allocating colors at the same time, we need
+	to just go ahead and try. (#102213, Shivram U)
+	
 2003-01-30  Daniel Elstner  <daniel.elstner@gmx.net>
 
 	* gtk/gtkcolorsel.c (palette_paint): Explicitely draw an opaque

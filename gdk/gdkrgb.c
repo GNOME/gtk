@@ -277,22 +277,6 @@ gdk_rgb_try_colormap (GdkRgbInfo *image_info, gboolean force,
       }
 #endif
 
-  if (colors_needed && 
-      image_info->visual->type != GDK_VISUAL_STATIC_COLOR)
-    {
-      if (!gdk_colors_alloc (cmap, 0, NULL, 0, junk, colors_needed))
-	{
-	  char tmp_str[80];
-	  
-	  g_snprintf (tmp_str, 80,
-		   "%d %d %d colormap failed (in gdk_colors_alloc)\n",
-		   nr, ng, nb);
-	  return gdk_rgb_cmap_fail (tmp_str, cmap, pixels);
-	}
-
-      gdk_colors_free (cmap, junk, colors_needed, 0);
-    }
-
   for (r = 0, i = 0; r < nr; r++)
     for (g = 0; g < ng; g++)
       for (b = 0; b < nb; b++, i++)
