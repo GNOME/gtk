@@ -169,7 +169,7 @@ _gtk_tree_selection_set_tree_view (GtkTreeSelection *selection,
  * @type: The selection mode
  *
  * Sets the selection mode of the @selection.  If the previous type was
- * #GTK_SELECTION_MULTIPLE and, then the anchor is kept selected, if it was
+ * #GTK_SELECTION_MULTIPLE, then the anchor is kept selected, if it was
  * previously selected.
  **/
 void

@@ -1,5 +1,12 @@
 2001-10-18  Matthias Clasen  <matthiasc@poet.de>
 
+	* gtk/gtktreeselection.c (gtk_tree_selection_set_mode): 
+	Fix docs. (#61976)
+ 
+	* gtk/gtkplug.c (gtk_plug_get_id) : Fix docs. (#62144)
+
+	* gtk/gtkliststore.c: Fix docs. (#61672, #61675)
+
         * gdk/gdkwindow.h, gdk/gdkpixmap.h, gdk/x11/gdkx.h,
         gdk/x11/gdkwindow-x11.c, gdk/x11/gdkpixmap-x11.c,
         gdk/win32/gdkwin32.h, gdk/win32/gdkwindow-win32.c,

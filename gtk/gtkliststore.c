@@ -737,7 +737,7 @@ gtk_list_store_set_value (GtkListStore *list_store,
  * @iter: A valid #GtkTreeIter for the row being modified
  * @var_args: va_list of column/value pairs
  *
- * See @gtk_list_store_set; this version takes a va_list for use by language
+ * See gtk_list_store_set(); this version takes a va_list for use by language
  * bindings.
  *
  **/
@@ -895,7 +895,9 @@ gtk_list_store_remove_silently (GtkListStore *list_store,
  * @list_store: A #GtkListStore
  * @iter: A valid #GtkTreeIter
  *
- * Removes the given row from the list store.  After being removed, @iter is set to be the next valid row, or invalidated if it pointed to the last row inn @list_store
+ * Removes the given row from the list store.  After being removed, 
+ * @iter is set to be the next valid row, or invalidated if it pointed 
+ * to the last row in @list_store.
  *
  **/
 void
@@ -960,8 +962,8 @@ insert_after (GtkListStore *list_store,
  * Creates a new row at @position.  @iter will be changed to point to this new
  * row.  If @position is larger than the number of rows on the list, then the
  * new row will be appended to the list.  The row will be empty before this
- * function is called.  To fill in values, you need to call @gtk_list_store_set
- * or @gtk_list_store_set_value.
+ * function is called.  To fill in values, you need to call gtk_list_store_set()
+ * or gtk_list_store_set_value().
  *
  **/
 void
@@ -1013,10 +1015,10 @@ gtk_list_store_insert (GtkListStore *list_store,
  * @iter: An unset #GtkTreeIter to set to the new row
  * @sibling: A valid #GtkTreeIter, or %NULL
  *
- * Inserts a new row before @sibling.  If @sibling is %NULL, then the row will be
- * appended to the beginning of the list.  @iter will be changed to point to
- * this new row.  The row will be empty before this function is called.  To fill
- * in values, you need to call @gtk_list_store_set or @gtk_list_store_set_value.
+ * Inserts a new row before @sibling. If @sibling is %NULL, then the row will be
+ * appended to the end of the list. @iter will be changed to point to this new 
+ * row. The row will be empty before this function is called. To fill in values,
+ * you need to call gtk_list_store_set() or gtk_list_store_set_value().
  *
  **/
 void
@@ -1101,10 +1103,10 @@ gtk_list_store_insert_before (GtkListStore *list_store,
  * @iter: An unset #GtkTreeIter to set to the new row
  * @sibling: A valid #GtkTreeIter, or %NULL
  *
- * Inserts a new row after @sibling.  If @sibling is %NULL, then the row will be
- * prepended to the beginning of the list.  @iter will be changed to point to
- * this new row.  The row will be empty after this function is called.  To fill
- * in values, you need to call @gtk_list_store_set or @gtk_list_store_set_value.
+ * Inserts a new row after @sibling. If @sibling is %NULL, then the row will be
+ * prepended to the beginning of the list. @iter will be changed to point to
+ * this new row. The row will be empty after this function is called. To fill
+ * in values, you need to call gtk_list_store_set() or gtk_list_store_set_value().
  *
  **/
 void
@@ -1153,9 +1155,9 @@ gtk_list_store_insert_after (GtkListStore *list_store,
  * @list_store: A #GtkListStore
  * @iter: An unset #GtkTreeIter to set to the prepend row
  *
- * Prepend a new row to @list_store.  @iter will be changed to point to this new
- * row.  The row will be empty after this function is called.  To fill in
- * values, you need to call @gtk_list_store_set or @gtk_list_store_set_value.
+ * Prepend a new row to @list_store. @iter will be changed to point to this new
+ * row. The row will be empty after this function is called. To fill in
+ * values, you need to call gtk_list_store_set() or gtk_list_store_set_value().
  *
  **/
 void
@@ -1193,7 +1195,7 @@ gtk_list_store_prepend (GtkListStore *list_store,
  *
  * Appends a new row to @list_store.  @iter will be changed to point to this new
  * row.  The row will be empty after this function is called.  To fill in
- * values, you need to call @gtk_list_store_set or @gtk_list_store_set_value.
+ * values, you need to call gtk_list_store_set() or gtk_list_store_set_value().
  *
  **/
 void

@@ -336,7 +336,7 @@ gtk_plug_new (GdkNativeWindow socket_id)
  * 
  * Gets the window ID of a #GtkPlug widget, which can then
  * be used to embed this window inside another window, for
- * instance with gtk_sock_add_id (id).
+ * instance with gtk_socket_add_id().
  * 
  * Return value: the window ID for the plug
  **/
