@@ -492,11 +492,11 @@ gtk_ui_manager_get_accel_group (GtkUIManager   *self)
  * @self: a #GtkUIManager
  * @path: a path
  * 
- * Looks up a widget by following a path. The path consists of the names 
- * specified in the XML description of the UI. separated by '/'. Elements which 
- * don't have a name attribute in the XML (e.g. &lt;popup&gt;) can be addressed 
- * by their XML element name (e.g. "popup"). The root element (&lt;ui&gt;) can 
- * be omitted in the path.
+ * Looks up a widget by following a path. 
+ * The path consists of the names specified in the XML description of the UI. 
+ * separated by '/'. Elements which don't have a name or action attribute in 
+ * the XML (e.g. &lt;popup&gt;) can be addressed by their XML element name 
+ * (e.g. "popup"). The root element (&lt;ui&gt;) can be omitted in the path.
  * 
  * Return value: the widget found by following the path, or %NULL if no widget
  *   was found.
@@ -529,11 +529,8 @@ gtk_ui_manager_get_widget (GtkUIManager *self,
  * @self: a #GtkUIManager
  * @path: a path
  * 
- * Looks up an action by following a path. The path consists of the names 
- * specified in the XML description of the UI. separated by '/'. Elements 
- * which don't have a name attribute in the XML (e.g. &lt;popup&gt;) can be
- * addressed by their XML element name (e.g. "popup"). The root element 
- * (&lt;ui&gt;) can be omitted in the path.
+ * Looks up an action by following a path. See gtk_ui_manager_get_widget()
+ * for more information about paths.
  * 
  * Return value: the action whose proxy widget is found by following the path, 
  *     or %NULL if no widget was found.
@@ -784,7 +781,6 @@ start_element_handler (GMarkupParseContext *context,
   gboolean top;
 
   gboolean raise_error = TRUE;
-  gchar *error_attr = NULL;
 
   node_name = NULL;
   action = NULL;
@@ -804,6 +800,20 @@ start_element_handler (GMarkupParseContext *context,
       else if (!strcmp (attribute_names[i], "pos"))
 	{
 	  top = !strcmp (attribute_values[i], "top");
+	}
+      else
+	{
+	  gint line_number, char_number;
+	  
+	  g_markup_parse_context_get_position (context,
+					       &line_number, &char_number);
+	  g_set_error (error,
+		       G_MARKUP_ERROR,
+		       G_MARKUP_ERROR_UNKNOWN_ATTRIBUTE,
+		       _("Unknown attribute '%s' on line %d char %d"),
+		       attribute_names[i],
+		       line_number, char_number);
+	  return;
 	}
     }
 
@@ -988,20 +998,12 @@ start_element_handler (GMarkupParseContext *context,
  
       g_markup_parse_context_get_position (context,
 					   &line_number, &char_number);
-      if (error_attr)
-	g_set_error (error,
-		     G_MARKUP_ERROR,
-		     G_MARKUP_ERROR_UNKNOWN_ATTRIBUTE,
-		     _("Unknown attribute '%s' on line %d char %d"),
-		     error_attr,
-		     line_number, char_number);
-      else
-	g_set_error (error,
-		     G_MARKUP_ERROR,
-		     G_MARKUP_ERROR_UNKNOWN_ELEMENT,
-		     _("Unknown tag '%s' on line %d char %d"),
-		     element_name,
-		     line_number, char_number);
+      g_set_error (error,
+		   G_MARKUP_ERROR,
+		   G_MARKUP_ERROR_UNKNOWN_ELEMENT,
+		   _("Unexpected start tag '%s' on line %d char %d"),
+		   element_name,
+		   line_number, char_number);
     }
 }
 
@@ -1012,43 +1014,29 @@ end_element_handler (GMarkupParseContext *context,
 		     GError             **error)
 {
   ParseContext *ctx = user_data;
-  GtkUIManager *self = ctx->self;
 
   switch (ctx->state)
     {
     case STATE_START:
-      g_warning ("shouldn't get any end tags in start state");
-      /* should we GError here? */
+    case STATE_END:
+      /* no need to GError here, GMarkup already catches this */
       break;
     case STATE_ROOT:
-      if (ctx->current != self->private_data->root_node)
-	g_warning ("we are in STATE_ROOT, but the current node isn't the root");
       ctx->current = NULL;
       ctx->state = STATE_END;
       break;
     case STATE_MENU:
+    case STATE_TOOLBAR:
       ctx->current = ctx->current->parent;
       if (NODE_INFO (ctx->current)->type == GTK_UI_MANAGER_ROOT) 
 	ctx->state = STATE_ROOT;
       /* else, stay in same state */
-      break;
-    case STATE_TOOLBAR:
-      ctx->current = ctx->current->parent;
-      /* we conditionalise this test, in case we are closing off a
-       * placeholder */
-      if (NODE_INFO (ctx->current)->type == GTK_UI_MANAGER_ROOT)
-	ctx->state = STATE_ROOT;
-      /* else, stay in STATE_TOOLBAR state */
       break;
     case STATE_MENUITEM:
       ctx->state = STATE_MENU;
       break;
     case STATE_TOOLITEM:
       ctx->state = STATE_TOOLBAR;
-      break;
-    case STATE_END:
-      g_warning ("shouldn't get any end tags at this point");
-      /* should do an error here */
       break;
     }
 }
@@ -1059,13 +1047,12 @@ cleanup (GMarkupParseContext *context,
 	 gpointer             user_data)
 {
   ParseContext *ctx = user_data;
-  GtkUIManager *self = ctx->self;
 
   ctx->current = NULL;
   /* should also walk through the tree and get rid of nodes related to
    * this UI file's tag */
 
-  gtk_ui_manager_remove_ui (self, ctx->merge_id);
+  gtk_ui_manager_remove_ui (ctx->self, ctx->merge_id);
 }
 
 static GMarkupParser ui_parser = {

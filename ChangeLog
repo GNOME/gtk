@@ -1,3 +1,10 @@
+2003-09-04  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkuimanager.c: Various doc tweaks.
+
+	* gtk/gtkuimanager.c (start_element_handler):
+	(end_element_handler): Improve error reporting. 
+
 Wed Sep  3 23:18:17 2003  Kristian Rietveld  <kris@gtk.org>
 
 	Merge from stable.
