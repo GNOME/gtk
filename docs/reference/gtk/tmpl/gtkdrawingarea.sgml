@@ -16,7 +16,8 @@ the application may want to connect to:
   <listitem>
     <para>
     Mouse and button press signals to respond to input from
-    the user.
+    the user. (Use gtk_widget_add_events() to enable events 
+    you wish to receive.)
     </para>
   </listitem>
   <listitem>
@@ -77,6 +78,14 @@ onscreen, or when it's covered by another window and then uncovered
 region" of the drawing area's window; gtk_widget_queue_draw_area() and
 gdk_window_invalidate_rect() are equally good ways to do this. You'll
 then get an expose event for the invalid region.
+</para>
+
+<para>
+To receive mouse events on a drawing area, you will need to enable
+them with gtk_widget_add_events(). To receive keyboard events, 
+you will need to set the #GTK_CAN_FOCUS flag on the drawing area, and
+should probably draw some user-visible indication that the drawing
+area is focused. See gtk_paint_focus() for one way to draw focus.
 </para>
 
 <!-- ##### SECTION See_Also ##### -->

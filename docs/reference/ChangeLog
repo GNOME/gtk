@@ -1,3 +1,8 @@
+2002-01-03  Havoc Pennington  <hp@pobox.com>
+
+	* gtk/tmpl/gtkdrawingarea.sgml: add mention of
+	gtk_widget_add_events() and GTK_CAN_FOCUS
+
 2002-01-04  Matthias Clasen  <matthiasc@poet.de>
 
 	* gtk/tmpl/gtktextview.sgml: Small additions.
