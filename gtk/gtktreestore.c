@@ -1027,8 +1027,10 @@ gtk_tree_store_set (GtkTreeStore *tree_store,
  * Removes @iter from @tree_store.  After being removed, @iter is set to the
  * next valid row at that level, or invalidated if it previously pointed to the
  * last one.
+ *
+ * Return value: %TRUE if @iter is still valid, %FALSE if not.
  **/
-void
+gboolean
 gtk_tree_store_remove (GtkTreeStore *tree_store,
 		       GtkTreeIter  *iter)
 {
@@ -1037,8 +1039,8 @@ gtk_tree_store_remove (GtkTreeStore *tree_store,
   GNode *parent;
   GNode *next_node;
 
-  g_return_if_fail (GTK_IS_TREE_STORE (tree_store));
-  g_return_if_fail (VALID_ITER (iter, tree_store));
+  g_return_val_if_fail (GTK_IS_TREE_STORE (tree_store), FALSE);
+  g_return_val_if_fail (VALID_ITER (iter, tree_store), FALSE);
 
   parent = G_NODE (iter->user_data)->parent;
 
@@ -1073,12 +1075,15 @@ gtk_tree_store_remove (GtkTreeStore *tree_store,
     {
       iter->stamp = tree_store->stamp;
       iter->user_data = next_node;
+      return TRUE;
     }
   else
     {
       iter->stamp = 0;
       iter->user_data = NULL;
     }
+
+  return FALSE;
 }
 
 /**
@@ -1478,6 +1483,55 @@ gtk_tree_store_clear (GtkTreeStore *tree_store)
   g_return_if_fail (GTK_IS_TREE_STORE (tree_store));
 
   gtk_tree_store_clear_traverse (tree_store->root, tree_store);
+}
+
+static gboolean
+gtk_tree_store_iter_is_valid_helper (GtkTreeIter *iter,
+				     GNode       *first)
+{
+  GNode *node;
+
+  node = first;
+
+  do
+    {
+      if (node == iter->user_data)
+	return TRUE;
+
+      if (node->children)
+	if (gtk_tree_store_iter_is_valid_helper (iter, node->children))
+	  return TRUE;
+
+      node = node->next;
+    }
+  while (node);
+
+  return FALSE;
+}
+
+/**
+ * gtk_tree_store_iter_is_valid:
+ * @tree_store: A #GtkTreeStore.
+ * @iter: A #GtkTreeIter.
+ *
+ * WARNING: This function is slow. Only use it for debugging and/or testing
+ * purposes.
+ *
+ * Checks if the given iter is a valid iter for this #GtkTreeStore.
+ *
+ * Return value: %TRUE if the iter is valid, %FALSE if the iter is invalid.
+ **/
+gboolean
+gtk_tree_store_iter_is_valid (GtkTreeStore *tree_store,
+                              GtkTreeIter  *iter)
+{
+  g_return_val_if_fail (GTK_IS_TREE_STORE (tree_store), FALSE);
+  g_return_val_if_fail (iter != NULL, FALSE);
+
+  if (!VALID_ITER (iter, tree_store))
+    return FALSE;
+
+  return gtk_tree_store_iter_is_valid_helper (iter, tree_store->root);
 }
 
 /* DND */

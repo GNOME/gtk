@@ -1,3 +1,16 @@
+Tue Jun  4 19:24:41 2002  Kristian Rietveld  <kris@gtk.org>
+
+	Discussed in #76249.
+
+	* gtk/gtkliststore.[ch]: made gtk_list_store_remove return a gboolean,
+	added gtk_list_store_iter_is_valid.
+
+	* gtk/gtktreestore.[ch]: made gtk_tree_store_remove return a gboolean,
+	added gtk_tree_store_iter_is_valid.
+
+	* gtk/gtktreemodelsort.[ch]: added VALID_ITER macro as in liststore
+	and treestore sources, added gtk_tree_model_sort_iter_is_valid.
+	
 Tue Jun  4 19:18:20 2002  Kristian Rietveld  <kris@gtk.org>
 
 	* gtk/gtktreemodel.[ch]: add gtk_tree_model_get_string_from_iter

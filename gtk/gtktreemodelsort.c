@@ -101,6 +101,8 @@ enum {
 
 #define NO_SORT_FUNC ((GtkTreeIterCompareFunc) 0x1)
 
+#define VALID_ITER(iter, tree_model_sort) (iter != NULL && iter->user_data != NULL && iter->user_data2 != NULL && tree_model_sort->stamp == iter->stamp)
+
 /* general (object/interface init, etc) */
 static void gtk_tree_model_sort_init                  (GtkTreeModelSort      *tree_model_sort);
 static void gtk_tree_model_sort_class_init            (GtkTreeModelSortClass *tree_model_sort_class);
@@ -2250,4 +2252,51 @@ gtk_tree_model_sort_clear_cache (GtkTreeModelSort *tree_model_sort)
 
   if (tree_model_sort->zero_ref_count)
     gtk_tree_model_sort_clear_cache_helper (tree_model_sort, (SortLevel *)tree_model_sort->root);
+}
+
+static gboolean
+gtk_tree_model_sort_iter_is_valid_helper (GtkTreeIter *iter,
+					  SortLevel   *level)
+{
+  gint i;
+
+  for (i = 0; i < level->array->len; i++)
+    {
+      SortElt *elt = &g_array_index (level->array, SortElt, i);
+
+      if (iter->user_data == level && iter->user_data2 == elt)
+	return TRUE;
+
+      if (elt->children)
+	if (gtk_tree_model_sort_iter_is_valid_helper (iter, elt->children))
+	  return TRUE;
+    }
+
+  return FALSE;
+}
+
+/**
+ * gtk_tree_model_sort_iter_is_valid:
+ * @tree_model_sort: A #GtkTreeModelSort.
+ * @iter: A #GtkTreeIter.
+ *
+ * WARNING: This function is slow. Only use it for debugging and/or testing
+ * purposes.
+ *
+ * Checks if the given iter is a valid iter for this #GtkTreeModelSort.
+ *
+ * Return value: %TRUE if the iter is valid, %FALSE if the iter is invalid.
+ **/
+gboolean
+gtk_tree_model_sort_iter_is_valid (GtkTreeModelSort *tree_model_sort,
+                                   GtkTreeIter      *iter)
+{
+  g_return_val_if_fail (GTK_IS_TREE_MODEL_SORT (tree_model_sort), FALSE);
+  g_return_val_if_fail (iter != NULL, FALSE);
+
+  if (!VALID_ITER (iter, tree_model_sort))
+    return FALSE;
+
+  return gtk_tree_model_sort_iter_is_valid_helper (iter,
+						   tree_model_sort->root);
 }

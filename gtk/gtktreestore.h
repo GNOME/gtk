@@ -89,7 +89,7 @@ void          gtk_tree_store_set              (GtkTreeStore *tree_store,
 void          gtk_tree_store_set_valist       (GtkTreeStore *tree_store,
 					       GtkTreeIter  *iter,
 					       va_list       var_args);
-void          gtk_tree_store_remove           (GtkTreeStore *tree_store,
+gboolean      gtk_tree_store_remove           (GtkTreeStore *tree_store,
 					       GtkTreeIter  *iter);
 void          gtk_tree_store_insert           (GtkTreeStore *tree_store,
 					       GtkTreeIter  *iter,
@@ -115,6 +115,8 @@ gboolean      gtk_tree_store_is_ancestor      (GtkTreeStore *tree_store,
 gint          gtk_tree_store_iter_depth       (GtkTreeStore *tree_store,
 					       GtkTreeIter  *iter);
 void          gtk_tree_store_clear            (GtkTreeStore *tree_store);
+gboolean      gtk_tree_store_iter_is_valid    (GtkTreeStore *tree_store,
+                                               GtkTreeIter  *iter);
 
 
 #ifdef __cplusplus

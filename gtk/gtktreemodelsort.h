@@ -92,6 +92,8 @@ void          gtk_tree_model_sort_convert_iter_to_child_iter (GtkTreeModelSort *
 							      GtkTreeIter      *sorted_iter);
 void          gtk_tree_model_sort_reset_default_sort_func    (GtkTreeModelSort *tree_model_sort);
 void          gtk_tree_model_sort_clear_cache                (GtkTreeModelSort *tree_model_sort);
+gboolean      gtk_tree_model_sort_iter_is_valid              (GtkTreeModelSort *tree_model_sort,
+                                                              GtkTreeIter      *iter);
 
 
 G_END_DECLS

@@ -90,7 +90,7 @@ void          gtk_list_store_set              (GtkListStore *list_store,
 void          gtk_list_store_set_valist       (GtkListStore *list_store,
 					       GtkTreeIter  *iter,
 					       va_list       var_args);
-void          gtk_list_store_remove           (GtkListStore *list_store,
+gboolean      gtk_list_store_remove           (GtkListStore *list_store,
 					       GtkTreeIter  *iter);
 void          gtk_list_store_insert           (GtkListStore *list_store,
 					       GtkTreeIter  *iter,
@@ -106,6 +106,8 @@ void          gtk_list_store_prepend          (GtkListStore *list_store,
 void          gtk_list_store_append           (GtkListStore *list_store,
 					       GtkTreeIter  *iter);
 void          gtk_list_store_clear            (GtkListStore *list_store);
+gboolean      gtk_list_store_iter_is_valid    (GtkListStore *list_store,
+                                               GtkTreeIter  *iter);
 
 
 #ifdef __cplusplus

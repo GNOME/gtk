@@ -976,16 +976,17 @@ gtk_list_store_remove_silently (GtkListStore *list_store,
  * @iter is set to be the next valid row, or invalidated if it pointed 
  * to the last row in @list_store.
  *
+ * Return value: %TRUE if @iter is valid, %FALSE if not.
  **/
-void
+gboolean
 gtk_list_store_remove (GtkListStore *list_store,
 		       GtkTreeIter  *iter)
 {
   GtkTreePath *path;
   GSList *next;
 
-  g_return_if_fail (GTK_IS_LIST_STORE (list_store));
-  g_return_if_fail (VALID_ITER (iter, list_store));
+  g_return_val_if_fail (GTK_IS_LIST_STORE (list_store), FALSE);
+  g_return_val_if_fail (VALID_ITER (iter, list_store), FALSE);
 
   next = G_SLIST (iter->user_data)->next;
   path = gtk_list_store_get_path (GTK_TREE_MODEL (list_store), iter);
@@ -1003,11 +1004,14 @@ gtk_list_store_remove (GtkListStore *list_store,
     {
       iter->stamp = list_store->stamp;
       iter->user_data = next;
+      return TRUE;
     }
   else
     {
       iter->stamp = 0;
     }
+
+  return FALSE;
 }
 
 static void
@@ -1339,6 +1343,41 @@ gtk_list_store_clear (GtkListStore *list_store)
     }
 }
 
+/**
+ * gtk_list_store_iter_is_valid:
+ * @list_store: A #GtkListStore.
+ * @iter: A #GtkTreeIter.
+ *
+ * WARNING: This function is slow. Only use it for debugging and/or testing
+ * purposes.
+ *
+ * Checks if the given iter is a valid iter for this #GtkListStore.
+ *
+ * Return value: %TRUE if the iter is valid, %FALSE if the iter is invalid.
+ **/
+gboolean
+gtk_list_store_iter_is_valid (GtkListStore *list_store,
+                              GtkTreeIter  *iter)
+{
+  GList *list;
+
+  g_return_val_if_fail (GTK_IS_LIST_STORE (list_store), FALSE);
+  g_return_val_if_fail (iter != NULL, FALSE);
+
+  if (!VALID_ITER (iter, list_store))
+    return FALSE;
+
+  if (iter->user_data == list_store->root)
+    return TRUE;
+  if (iter->user_data == list_store->tail)
+    return TRUE;
+
+  for (list = ((GList *)list_store->root)->next; list; list = list->next)
+    if (list == iter->user_data)
+      return TRUE;
+
+  return FALSE;
+}
 
 static gboolean
 gtk_list_store_drag_data_delete (GtkTreeDragSource *drag_source,
