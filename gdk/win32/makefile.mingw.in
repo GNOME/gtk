@@ -13,7 +13,7 @@ include ../../build/win32/make.mingw
 # Possibly override GTK+ version from build/win32/module.defs
 GTK_VER = @GTK_MAJOR_VERSION@.@GTK_MINOR_VERSION@
 
-OPTIMIZE = -g
+OPTIMIZE = -g -Wall
 
 INCLUDES = -I ../.. -I .. -I $(WTKIT)/include
 DEPCFLAGS = $(GLIB_CFLAGS) $(PANGO_CFLAGS)
@@ -42,6 +42,7 @@ gdk_win32_OBJECTS =				\
 	gdkinput.o				\
 	gdkinput-win32.o			\
 	gdkmain-win32.o				\
+	gdkpango-win32.o			\
 	gdkpixmap-win32.o			\
 	gdkproperty-win32.o			\
 	gdkselection-win32.o			\

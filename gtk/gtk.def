@@ -1274,6 +1274,8 @@ EXPORTS
 	gtk_widget_add_accelerator
 	gtk_widget_add_events
 	gtk_widget_class_path
+	gtk_widget_create_pango_context
+	gtk_widget_create_pango_layout
 	gtk_widget_destroy
 	gtk_widget_destroyed
 	gtk_widget_draw
@@ -1293,7 +1295,9 @@ EXPORTS
 	gtk_widget_get_direction
 	gtk_widget_get_events
 	gtk_widget_get_extension_events
+	gtk_widget_get_modifier_style
 	gtk_widget_get_name
+	gtk_widget_get_pango_context
 	gtk_widget_get_parent_window
 	gtk_widget_get_pointer
 	gtk_widget_get_style
@@ -1310,7 +1314,12 @@ EXPORTS
 	gtk_widget_is_ancestor
 	gtk_widget_lock_accelerators
 	gtk_widget_map
+	gtk_widget_modify_base
+	gtk_widget_modify_bg
+	gtk_widget_modify_fg
+	gtk_widget_modify_font
 	gtk_widget_modify_style
+	gtk_widget_modify_text
 	gtk_widget_new
 	gtk_widget_newv
 	gtk_widget_path

@@ -1,3 +1,22 @@
+2000-09-07  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/win32/makefile.mingw.in: Use -Wall. Add gdkpango-win32.o
+
+	* gdk/win32/gdkwin32.h: Add more definitions missing from the free
+	w32api headers.
+
+	* gdk/win32/gdkprivate-win32.h: Add a couple of missing
+	declarations.
+
+	* gdk/win32/gdkdrawable-win32.c: Remove gcc -Wall warnings.
+	(gdk_win32_get_colormap): A line had been deleted by mistake.
+
+	* gdk/win32/gdkevents-win32.c: Remove lint (gcc -Wall) here, too.
+	(gdk_event_translate): Handle more virtual keycodes to be able to
+	generate GDK events for Control-comma, Control-period, etc.
+
+	* gtk/gtk.def: Add some missing entry points.
+
 Thu Sep  7 11:47:02 2000  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtktextbuffer.c gtk/gtkimcontext.c gtk/gtkwidget.c:

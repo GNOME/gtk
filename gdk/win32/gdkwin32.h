@@ -67,10 +67,47 @@ extern "C" {
 #define FS_VIETNAMESE 0x100
 #endif
 
+/* Some virtual keycodes are missing */
 #ifndef VM_OEM_PLUS
 #define VK_OEM_PLUS 0xBB
 #endif
 
+#ifndef VK_OEM_COMMA
+#define VK_OEM_COMMA 0xBC
+#endif
+
+#ifndef VK_OEM_MINUS
+#define VK_OEM_MINUS 0xBD
+#endif
+
+#ifndef VK_OEM_PERIOD
+#define VK_OEM_PERIOD 0xBE
+#endif
+
+#ifndef VK_OEM_1
+#define VK_OEM_1 0xBA
+#endif
+#ifndef VK_OEM_2
+#define VK_OEM_2 0xBF
+#endif
+#ifndef VK_OEM_3
+#define VK_OEM_3 0xC0
+#endif
+#ifndef VK_OEM_4
+#define VK_OEM_4 0xDB
+#endif
+#ifndef VK_OEM_5
+#define VK_OEM_5 0xDC
+#endif
+#ifndef VK_OEM_6
+#define VK_OEM_6 0xDD
+#endif
+#ifndef VK_OEM_7
+#define VK_OEM_7 0xDE
+#endif
+#ifndef VK_OEM_8
+#define VK_OEM_8 0xDF
+#endif
 
 /* Missing messages */
 #ifndef WM_MOUSEWHEEL

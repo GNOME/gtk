@@ -178,6 +178,8 @@ gdk_win32_get_colormap (GdkDrawable *drawable)
 {
   GdkDrawableImplWin32 *impl;
   
+  impl = GDK_DRAWABLE_IMPL_WIN32 (drawable);
+
   return impl->colormap;
 }
 
@@ -221,8 +223,8 @@ gdk_win32_draw_rectangle (GdkDrawable *drawable,
   POINT pts[4];
   gboolean ok = TRUE;
 
-  GDK_NOTE (MISC, g_print ("gdk_win32_draw_rectangle: %#x (%d) %s%dx%d@+%d+%d\n",
-			   GDK_DRAWABLE_HANDLE (drawable),
+  GDK_NOTE (MISC, g_print ("gdk_win32_draw_rectangle: %#x (%p) %s%dx%d@+%d+%d\n",
+			   (guint) GDK_DRAWABLE_HANDLE (drawable),
 			   gc_private,
 			   (filled ? "fill " : ""),
 			   width, height, x, y));
@@ -319,13 +321,12 @@ gdk_win32_draw_arc (GdkDrawable *drawable,
 		    gint         angle1,
 		    gint         angle2)
 {
-  GdkGCWin32 *gc_private = GDK_GC_WIN32 (gc);
   const GdkGCValuesMask mask = GDK_GC_FOREGROUND|GDK_GC_BACKGROUND;
   HDC hdc;
   int nXStartArc, nYStartArc, nXEndArc, nYEndArc;
 
   GDK_NOTE (MISC, g_print ("gdk_draw_arc: %#x  %d,%d,%d,%d  %d %d\n",
-			   GDK_DRAWABLE_HANDLE (drawable),
+			   (guint) GDK_DRAWABLE_HANDLE (drawable),
 			   x, y, width, height, angle1, angle2));
 
   /* Seems that drawing arcs with width or height <= 2 fails, at least
@@ -396,8 +397,9 @@ gdk_win32_draw_polygon (GdkDrawable *drawable,
   gboolean ok = TRUE;
   int i;
 
-  GDK_NOTE (MISC, g_print ("gdk_win32_draw_polygon: %#x (%d) %d\n",
-			   GDK_DRAWABLE_HANDLE (drawable), gc_private,
+  GDK_NOTE (MISC, g_print ("gdk_win32_draw_polygon: %#x (%p) %d\n",
+			   (guint) GDK_DRAWABLE_HANDLE (drawable),
+			   gc_private,
 			   npoints));
 
   if (npoints < 2)
@@ -510,7 +512,6 @@ gdk_win32_draw_text (GdkDrawable *drawable,
 		     const gchar *text,
 		     gint         text_length)
 {
-  GdkGCWin32 *gc_private = GDK_GC_WIN32 (gc);
   const GdkGCValuesMask mask = GDK_GC_FOREGROUND|GDK_GC_FONT;
   wchar_t *wcstr, wc;
   gint wlen;
@@ -526,7 +527,7 @@ gdk_win32_draw_text (GdkDrawable *drawable,
   arg.hdc = gdk_win32_hdc_get (drawable, gc, mask);
 
   GDK_NOTE (MISC, g_print ("gdk_draw_text: %#x (%d,%d) \"%.*s\" (len %d)\n",
-			   GDK_DRAWABLE_HANDLE (drawable),
+			   (guint) GDK_DRAWABLE_HANDLE (drawable),
 			   x, y,
 			   (text_length > 10 ? 10 : text_length),
 			   text, text_length));
@@ -560,9 +561,8 @@ gdk_win32_draw_text_wc (GdkDrawable	 *drawable,
 			const GdkWChar *text,
 			gint		  text_length)
 {
-  GdkGCWin32 *gc_private = GDK_GC_WIN32 (gc);
   const GdkGCValuesMask mask = GDK_GC_FOREGROUND|GDK_GC_FONT;
-  gint i, wlen;
+  gint i;
   wchar_t *wcstr;
   gdk_draw_text_arg arg;
 
@@ -576,7 +576,7 @@ gdk_win32_draw_text_wc (GdkDrawable	 *drawable,
   arg.hdc = gdk_win32_hdc_get (drawable, gc, mask);
 
   GDK_NOTE (MISC, g_print ("gdk_draw_text_wc: %#x (%d,%d) len: %d\n",
-			   GDK_DRAWABLE_HANDLE (drawable),
+			   (guint) GDK_DRAWABLE_HANDLE (drawable),
 			   x, y, text_length));
       
   if (sizeof (wchar_t) != sizeof (GdkWChar))
@@ -608,8 +608,6 @@ gdk_win32_draw_drawable (GdkDrawable *drawable,
 			 gint         width,
 			 gint         height)
 {
-  GdkGCWin32 *gc_private = GDK_GC_WIN32 (gc);
-  GdkDrawableImplWin32 *src_impl = GDK_DRAWABLE_IMPL_WIN32 (src);
   HDC hdc;
   HDC srcdc;
   HGDIOBJ hgdiobj;
@@ -620,8 +618,9 @@ gdk_win32_draw_drawable (GdkDrawable *drawable,
 
   GDK_NOTE (MISC, g_print ("gdk_draw_pixmap: dest: %#x @+%d+%d"
 			   "src: %#x %dx%d@+%d+%d\n",
-		 	   GDK_DRAWABLE_HANDLE (drawable), xdest, ydest,
-			   GDK_PIXMAP_HBITMAP (src),
+		 	   (guint) GDK_DRAWABLE_HANDLE (drawable),
+			   xdest, ydest,
+			   (guint) GDK_PIXMAP_HBITMAP (src),
 			   width, height, xsrc, ysrc));
 
   hdc = gdk_win32_hdc_get (drawable, gc, 0);
@@ -643,7 +642,7 @@ gdk_win32_draw_drawable (GdkDrawable *drawable,
 	  OffsetRgn (outside_rgn, xdest, ydest);
 	  GDK_NOTE (MISC, (GetRgnBox (outside_rgn, &r),
 			   g_print ("...calling InvalidateRgn, "
-				    "bbox: %dx%d@+%d+%d\n",
+				    "bbox: %ldx%ld@+%ld+%ld\n",
 				    r.right - r.left - 1, r.bottom - r.top - 1,
 				    r.left, r.top)));
 	  InvalidateRgn (GDK_DRAWABLE_HANDLE (drawable), outside_rgn, TRUE);
@@ -756,7 +755,8 @@ gdk_win32_draw_points (GdkDrawable *drawable,
   fg = gdk_colormap_color (impl->colormap, gc_private->foreground);
 
   GDK_NOTE (MISC, g_print ("gdk_draw_points: %#x %dx%.06x\n",
-			   GDK_DRAWABLE_HANDLE (drawable), npoints, fg));
+			   (guint) GDK_DRAWABLE_HANDLE (drawable),
+			   npoints, (guint) fg));
 
   for (i = 0; i < npoints; i++)
     SetPixel (hdc, points[i].x, points[i].y, fg);
@@ -778,7 +778,7 @@ gdk_win32_draw_segments (GdkDrawable *drawable,
   int i;
 
   GDK_NOTE (MISC, g_print ("gdk_win32_draw_segments: %#x nsegs: %d\n",
-			   GDK_DRAWABLE_HANDLE (drawable), nsegs));
+			   (guint) GDK_DRAWABLE_HANDLE (drawable), nsegs));
 
   hdc = gdk_win32_hdc_get (drawable, gc, mask);
 
@@ -880,8 +880,6 @@ gdk_win32_draw_glyphs (GdkDrawable      *drawable,
 		       gint              y,
 		       PangoGlyphString *glyphs)
 {
-  GdkDrawableImplWin32 *impl = GDK_DRAWABLE_IMPL_WIN32 (drawable);
-  GdkGCWin32 *gc_private = GDK_GC_WIN32 (gc);
   const GdkGCValuesMask mask = GDK_GC_FOREGROUND;
   HDC hdc;
 
@@ -904,7 +902,6 @@ gdk_win32_draw_image (GdkDrawable     *drawable,
 		      gint             height)
 {
   GdkDrawableImplWin32 *impl = GDK_DRAWABLE_IMPL_WIN32 (drawable);
-  GdkGCWin32 *gc_private = GDK_GC_WIN32 (gc);
   GdkImagePrivateWin32 *image_private = (GdkImagePrivateWin32 *) image;
   GdkColormapPrivateWin32 *colormap_private = (GdkColormapPrivateWin32 *) impl->colormap;
   HDC hdc, memdc;

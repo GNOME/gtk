@@ -76,6 +76,12 @@ gchar  *gdk_win32_last_error_string (void);
 void    gdk_win32_api_failed        (const gchar *where,
 				     gint line,
 				     const gchar *api);
+void    gdk_other_api_failed        (const gchar *where,
+				     gint line,
+				     const gchar *api);
+void    gdk_win32_gdi_failed        (const gchar *where,
+				     gint line,
+				     const gchar *api);
 
 #ifdef __GNUC__
 #define WIN32_API_FAILED(api) gdk_win32_api_failed (__FILE__ ":" __PRETTY_FUNCTION__, __LINE__, api)
