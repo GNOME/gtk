@@ -1,3 +1,8 @@
+Fri Jul 10 09:37:50 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkaccellabel.c (gtk_accel_label_accelerator_width): only take the
+ 	padding into account if there is an accelerator.
+
 Fri Jul 10 05:51:44 1998  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkcontainer.c:

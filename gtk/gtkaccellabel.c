@@ -211,7 +211,8 @@ gtk_accel_label_accelerator_width (GtkAccelLabel *accel_label)
   g_return_val_if_fail (accel_label != NULL, 0);
   g_return_val_if_fail (GTK_IS_ACCEL_LABEL (accel_label), 0);
   
-  return accel_label->accel_padding + accel_label->accel_string_width;
+  return (accel_label->accel_string_width +
+	  (accel_label->accel_string_width ? accel_label->accel_padding : 0));
 }
 
 static void
