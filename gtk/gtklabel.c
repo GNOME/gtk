@@ -2018,7 +2018,7 @@ gtk_label_size_request (GtkWidget      *widget,
        priv->width_chars > 0 || priv->max_width_chars > 0) && 
       aux_info && aux_info->width > 0)
     width += aux_info->width;
-  else if (label->ellipsize || priv->width_chars > 0 || priv->width_chars > 0)
+  else if (label->ellipsize || priv->width_chars > 0 || priv->max_width_chars > 0)
     {
       PangoContext *context;
       PangoFontMetrics *metrics;

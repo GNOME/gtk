@@ -1,5 +1,8 @@
 2005-02-27  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtklabel.c (gtk_label_size_request): Fix a typo.
+	(#168646, Vincent Untz)
+
 	* gtk/gtkfilechooserdefault.c (save_folder_combo_create): 
 	Unset "focus-on-click" for the save folder combo.  (#168688,
 	Sven Neumann)
