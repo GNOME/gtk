@@ -59,6 +59,8 @@ struct _GtkActionPrivate
   guint visible         : 1;
   guint label_set       : 1; /* these two used so we can set label */
   guint short_label_set : 1; /* based on stock id */
+  guint visible_horizontal : 1;
+  guint visible_vertical   : 1;
   guint is_important    : 1;
   guint hide_if_empty   : 1;
 
@@ -88,6 +90,8 @@ enum
   PROP_SHORT_LABEL,
   PROP_TOOLTIP,
   PROP_STOCK_ID,
+  PROP_VISIBLE_HORIZONTAL,
+  PROP_VISIBLE_VERTICAL,
   PROP_IS_IMPORTANT,
   PROP_HIDE_IF_EMPTY,
   PROP_SENSITIVE,
@@ -216,6 +220,20 @@ gtk_action_class_init (GtkActionClass *klass)
 							NULL,
 							G_PARAM_READWRITE));
   g_object_class_install_property (gobject_class,
+				   PROP_VISIBLE_HORIZONTAL,
+				   g_param_spec_boolean ("visible_horizontal",
+							 _("Visible when horizontal"),
+							 _("Whether the toolbar item is visible when the toolbar is in a horizontal orientation."),
+							 TRUE,
+							 G_PARAM_READWRITE));
+  g_object_class_install_property (gobject_class,
+				   PROP_VISIBLE_VERTICAL,
+				   g_param_spec_boolean ("visible_vertical",
+							 _("Visible when vertical"),
+							 _("Whether the toolbar item is visible when the toolbar is in a vertical orientation."),
+							 TRUE,
+							 G_PARAM_READWRITE));
+  g_object_class_install_property (gobject_class,
 				   PROP_IS_IMPORTANT,
 				   g_param_spec_boolean ("is_important",
 							 _("Is important"),
@@ -315,6 +333,8 @@ gtk_action_init (GtkAction *action)
   action->private_data->short_label = NULL;
   action->private_data->tooltip = NULL;
   action->private_data->stock_id = NULL;
+  action->private_data->visible_horizontal = TRUE;
+  action->private_data->visible_vertical   = TRUE;
   action->private_data->is_important = FALSE;
   action->private_data->hide_if_empty = TRUE;
 
@@ -436,6 +456,12 @@ gtk_action_set_property (GObject         *object,
 	  g_object_notify (object, "short_label");
 	}
       break;
+    case PROP_VISIBLE_HORIZONTAL:
+      action->private_data->visible_horizontal = g_value_get_boolean (value);
+      break;
+    case PROP_VISIBLE_VERTICAL:
+      action->private_data->visible_vertical = g_value_get_boolean (value);
+      break;
     case PROP_IS_IMPORTANT:
       action->private_data->is_important = g_value_get_boolean (value);
       break;
@@ -480,6 +506,12 @@ gtk_action_get_property (GObject    *object,
       break;
     case PROP_STOCK_ID:
       g_value_set_string (value, action->private_data->stock_id);
+      break;
+    case PROP_VISIBLE_HORIZONTAL:
+      g_value_set_boolean (value, action->private_data->visible_horizontal);
+      break;
+    case PROP_VISIBLE_VERTICAL:
+      g_value_set_boolean (value, action->private_data->visible_vertical);
       break;
     case PROP_IS_IMPORTANT:
       g_value_set_boolean (value, action->private_data->is_important);
@@ -782,6 +814,8 @@ connect_proxy (GtkAction     *action,
 		    "label", action->private_data->short_label,
 		    "use_underline", TRUE,
 		    "stock_id", action->private_data->stock_id,
+		    "visible_horizontal", action->private_data->visible_horizontal,
+		    "visible_vertical",	  action->private_data->visible_vertical,
 		    "is_important", action->private_data->is_important,
 		    NULL);
       /* FIXME: we should set the tooltip here, but the current api
@@ -791,6 +825,12 @@ connect_proxy (GtkAction     *action,
 			       G_CALLBACK (gtk_action_sync_short_label),
 			       proxy, 0);      
       g_signal_connect_object (action, "notify::stock_id",
+			       G_CALLBACK (gtk_action_sync_property), 
+			       proxy, 0);
+      g_signal_connect_object (action, "notify::visible_horizontal",
+			       G_CALLBACK (gtk_action_sync_property), 
+			       proxy, 0);
+      g_signal_connect_object (action, "notify::visible_vertical",
 			       G_CALLBACK (gtk_action_sync_property), 
 			       proxy, 0);
       g_signal_connect_object (action, "notify::is_important",

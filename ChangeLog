@@ -1,3 +1,22 @@
+2004-01-01  Jody Goldberg <jody@gnome.org>
+
+	* gtk/gtkaction.c (_GtkActionPrivate) : add visible_horizontal,
+	  visible_vertical.
+	(gtk_action_class_init) : here.
+	(gtk_action_init) : here.
+	(gtk_action_set_property) : here.
+	(gtk_action_get_property) : here.
+	(connect_proxy) : and here.
+
+2003-12-30  Jody Goldberg <jody@gnome.org>
+
+	* gtk/gtkactiongroup.c (gtk_action_group_add_action_with_accel) :  new
+	  utility routine for use in derived GtkActions with the replicated code
+	  from.
+	(gtk_action_group_add_actions_full) : here.
+	(gtk_action_group_add_toggle_actions_full) : here.
+	(gtk_action_group_add_radio_actions_full) : and here.
+
 2004-01-01  Taneem Ahmed  <taneem@bengalinux.org>
 
 	* configure.in: Added "bn" to ALL_LINGUAS.
@@ -17,7 +36,7 @@ Fri Jan  2 02:50:11 2004  Matthias Clasen  <maclas@gmx.de>
 
 2003-12-31 13:49 Daniel Rogers <dsrogers@phasevelocity.org>
 
-        * gdk/x11/gdkinput-x11.c: (gdk_input_translate_coordinates)
+	* gdk/x11/gdkinput-x11.c: (gdk_input_translate_coordinates)
         
 	Fix to allow reasonable pointer behavior in window mode when an
 	extended input device reports an incorrect resolution of 0.  Fixes
@@ -101,6 +120,17 @@ Tue Dec 23 22:34:50 2003  Manish Singh  <yosh@gimp.org>
 
 	* gtk/gtkicontheme.h: fix GTK_TYPE_ICON_INFO macro, reported by
 	muppet.
+
+2003-12-24  Jody Goldberg <jody@gnome.org>
+
+	* gtk/gtkactiongroup.h : Add some const to the char * in
+	  GtkActionEntry*.  We're reccomending people pass static strings to
+	  them, and not freeing them.  This stems to flood of warnings that
+	  result.
+	* gtk/gtkactiongroup.c (gtk_action_group_add_actions_full) : change
+	  temp vars to const to match above.
+	(gtk_action_group_add_toggle_actions_full) : ditto.
+	(gtk_action_group_add_radio_actions_full) : ditto.
 
 Wed Dec 24 01:12:53 2003  Matthias Clasen  <maclas@gmx.de>
 
@@ -384,12 +414,12 @@ Wed Dec 17 21:23:01 2003  Kristian Rietveld  <kris@gtk.org>
 
 2003-12-07  Murray Cumming  <murrayc@usa.net>
  
- 	* gtk/gtktreemodel.c:
- 	(row_inserted_marshal, row_deleted_marshal, rows_reorderered_marshal)
- 	Actually call the default signal handlers instead of calling the
- 	marshallers themselves in an endless loop. These default signal handler
- 	callbacks are not actually set so this is only noticed by gtkmm at
- 	the moment. Bug 123923.
+	* gtk/gtktreemodel.c:
+	(row_inserted_marshal, row_deleted_marshal, rows_reorderered_marshal)
+	Actually call the default signal handlers instead of calling the
+	marshallers themselves in an endless loop. These default signal handler
+	callbacks are not actually set so this is only noticed by gtkmm at
+	the moment. Bug 123923.
 
 2003-12-16  Federico Mena Quintero  <federico@ximian.com>
 

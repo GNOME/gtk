@@ -74,32 +74,32 @@ struct _GtkActionGroupClass
 
 struct _GtkActionEntry 
 {
-  gchar     *name;
-  gchar     *stock_id;
-  gchar     *label;
-  gchar     *accelerator;
-  gchar     *tooltip;
+  const gchar     *name;
+  const gchar     *stock_id;
+  const gchar     *label;
+  const gchar     *accelerator;
+  const gchar     *tooltip;
   GCallback  callback;
 };
 
 struct _GtkToggleActionEntry 
 {
-  gchar     *name;
-  gchar     *stock_id;
-  gchar     *label;
-  gchar     *accelerator;
-  gchar     *tooltip;
+  const gchar     *name;
+  const gchar     *stock_id;
+  const gchar     *label;
+  const gchar     *accelerator;
+  const gchar     *tooltip;
   GCallback  callback;
   gboolean   is_active;
 };
 
 struct _GtkRadioActionEntry 
 {
-  gchar *name;
-  gchar *stock_id;
-  gchar *label;
-  gchar *accelerator;
-  gchar *tooltip;
+  const gchar *name;
+  const gchar *stock_id;
+  const gchar *label;
+  const gchar *accelerator;
+  const gchar *tooltip;
   gint   value; 
 };
 
@@ -111,6 +111,12 @@ GtkAction      *gtk_action_group_get_action              (GtkActionGroup       *
 GList          *gtk_action_group_list_actions            (GtkActionGroup       *action_group);
 void            gtk_action_group_add_action              (GtkActionGroup       *action_group,
 							  GtkAction            *action);
+void		gtk_action_group_add_action_with_accel	 (GtkActionGroup *action_group,
+							  GtkAction *action,
+							  const char *name,
+							  const char *accelerator,
+							  const char *stock_id);
+
 void            gtk_action_group_remove_action           (GtkActionGroup       *action_group,
 							  GtkAction            *action);
 void            gtk_action_group_add_actions             (GtkActionGroup       *action_group,

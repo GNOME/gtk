@@ -294,6 +294,56 @@ gtk_action_group_add_action (GtkActionGroup *action_group,
 }
 
 /**
+ * gtk_action_group_add_action_with_accel:
+ * @action_group: the action group (#GtkActionGroup)
+ * @action : the action to add (#GtkAction)
+ * @name :
+ * @accelerator :
+ * @stock_id :
+ *
+ * Adds an action object to the action group and sets up the accelerator.
+ *
+ * If @accelerator is NULL, attempt to use the accelerator associated with
+ * @stock_id.
+ *
+ * accel paths are set to 
+ * <literal>&lt;Actions&gt;/<replaceable>group-name</replaceable>/<replaceable>action-name</replaceable></literal>.  
+ * 
+ * Since: 2.4
+ */
+void
+gtk_action_group_add_action_with_accel (GtkActionGroup *action_group,
+					GtkAction *action,
+					const char *name,
+					const char *accelerator,
+					const char *stock_id)
+{
+  gchar *accel_path;
+  guint  accel_key = 0;
+  GdkModifierType accel_mods;
+  GtkStockItem stock_item;
+
+  accel_path = g_strconcat ("<Actions>/",
+			    action_group->private_data->name, "/", name, NULL);
+
+  if (accelerator)
+    gtk_accelerator_parse (accelerator, &accel_key, &accel_mods);
+  else if (stock_id && gtk_stock_lookup (stock_id, &stock_item))
+    {
+      accel_key = stock_item.keyval;
+      accel_mods = stock_item.modifier;
+    }
+
+  if (accel_key)
+    gtk_accel_map_add_entry (accel_path, accel_key, accel_mods);
+
+  gtk_action_set_accel_path (action, accel_path);
+  g_free (accel_path);
+
+  gtk_action_group_add_action (action_group, action);
+}
+
+/**
  * gtk_action_group_remove_action:
  * @action_group: the action group
  * @action: an action
@@ -412,12 +462,8 @@ gtk_action_group_add_actions_full (GtkActionGroup *action_group,
   for (i = 0; i < n_entries; i++)
     {
       GtkAction *action;
-      gchar *accel_path;
-      guint accel_key = 0;
-      GdkModifierType accel_mods;
-      GtkStockItem stock_item;
-      gchar *label;
-      gchar *tooltip;
+      const gchar *label;
+      const gchar *tooltip;
 
       if (translate_func)
 	{
@@ -442,26 +488,10 @@ gtk_action_group_add_actions_full (GtkActionGroup *action_group,
 			       entries[i].callback, 
 			       user_data, (GClosureNotify)destroy, 0);
 
-      /* set the accel path for the menu item */
-      accel_path = g_strconcat ("<Actions>/", action_group->private_data->name, "/",
-				entries[i].name, NULL);
-
-      if (entries[i].accelerator)
-	gtk_accelerator_parse (entries[i].accelerator, &accel_key, &accel_mods);
-      else if (entries[i].stock_id &&
-	       gtk_stock_lookup (entries[i].stock_id, &stock_item))
-	{
-	  accel_key = stock_item.keyval;
-	  accel_mods = stock_item.modifier;
-	}
-
-      if (accel_key)
-	gtk_accel_map_add_entry (accel_path, accel_key, accel_mods);
-
-      gtk_action_set_accel_path (action, accel_path);
-      g_free (accel_path);
-
-      gtk_action_group_add_action (action_group, action);
+      gtk_action_group_add_action_with_accel (action_group, action,
+					      entries[i].name,
+					      entries[i].accelerator,
+					      entries[i].stock_id);
       g_object_unref (action);
     }
 }
@@ -529,12 +559,8 @@ gtk_action_group_add_toggle_actions_full (GtkActionGroup       *action_group,
   for (i = 0; i < n_entries; i++)
     {
       GtkAction *action;
-      gchar *accel_path;
-      guint accel_key = 0;
-      GdkModifierType accel_mods;
-      GtkStockItem stock_item;
-      gchar *label;
-      gchar *tooltip;
+      const gchar *label;
+      const gchar *tooltip;
 
       if (translate_func)
 	{
@@ -562,26 +588,10 @@ gtk_action_group_add_toggle_actions_full (GtkActionGroup       *action_group,
 			       entries[i].callback, 
 			       user_data, (GClosureNotify)destroy, 0);
 
-      /* set the accel path for the menu item */
-      accel_path = g_strconcat ("<Actions>/", action_group->private_data->name, "/",
-				entries[i].name, NULL);
-
-      if (entries[i].accelerator)
-	gtk_accelerator_parse (entries[i].accelerator, &accel_key, &accel_mods);
-      else if (entries[i].stock_id &&
-	       gtk_stock_lookup (entries[i].stock_id, &stock_item))
-	{
-	  accel_key = stock_item.keyval;
-	  accel_mods = stock_item.modifier;
-	}
-
-      if (accel_key)
-	gtk_accel_map_add_entry (accel_path, accel_key, accel_mods);
-
-      gtk_action_set_accel_path (action, accel_path);
-      g_free (accel_path);
-
-      gtk_action_group_add_action (action_group, action);
+      gtk_action_group_add_action_with_accel (action_group, action,
+					      entries[i].name,
+					      entries[i].accelerator,
+					      entries[i].stock_id);
       g_object_unref (action);
     }
 }
@@ -661,12 +671,8 @@ gtk_action_group_add_radio_actions_full (GtkActionGroup      *action_group,
   for (i = 0; i < n_entries; i++)
     {
       GtkAction *action;
-      gchar *accel_path;
-      guint accel_key = 0;
-      GdkModifierType accel_mods;
-      GtkStockItem stock_item;
-      gchar *label;
-      gchar *tooltip; 
+      const gchar *label;
+      const gchar *tooltip; 
 
       if (translate_func)
 	{
@@ -695,28 +701,11 @@ gtk_action_group_add_radio_actions_full (GtkActionGroup      *action_group,
 
       if (value == entries[i].value)
 	gtk_toggle_action_set_active (GTK_TOGGLE_ACTION (action), TRUE);
-      
-      /* set the accel path for the menu item */
-      accel_path = g_strconcat ("<Actions>/", 
-				action_group->private_data->name, "/",
-				entries[i].name, NULL);
 
-      if (entries[i].accelerator)
-	gtk_accelerator_parse (entries[i].accelerator, &accel_key, &accel_mods);
-      else if (entries[i].stock_id &&
-	       gtk_stock_lookup (entries[i].stock_id, &stock_item))
-	{
-	  accel_key = stock_item.keyval;
-	  accel_mods = stock_item.modifier;
-	}
-
-      if (accel_key)
-	gtk_accel_map_add_entry (accel_path, accel_key, accel_mods);
-
-      gtk_action_set_accel_path (action, accel_path);
-      g_free (accel_path);
-      
-      gtk_action_group_add_action (action_group, action);
+      gtk_action_group_add_action_with_accel (action_group, action,
+					      entries[i].name,
+					      entries[i].accelerator,
+					      entries[i].stock_id);
       g_object_unref (action);
     }
 
