@@ -1232,6 +1232,21 @@ do_search (gpointer callback_data,
   gtk_widget_show_all (dialog);
 }
 
+static void
+do_select_all (gpointer callback_data,
+               guint callback_action,
+               GtkWidget *widget)
+{
+  View *view = view_from_widget (widget);
+  GtkTextBuffer *buffer;
+  GtkTextIter start, end;
+
+  buffer = view->buffer->buffer;
+
+  gtk_text_buffer_get_bounds (buffer, &start, &end);
+  gtk_text_buffer_select_range (buffer, &start, &end);
+}
+
 typedef struct
 {
   /* position is in coordinate system of text_view_move_child */
@@ -1511,6 +1526,7 @@ static GtkItemFactoryEntry menu_items[] =
 
   { "/_Edit", NULL, 0, 0, "<Branch>" },
   { "/Edit/Find...", NULL, do_search, 0, NULL },
+  { "/Edit/Select All", "<control>A", do_select_all, 0, NULL }, 
 
   { "/_Settings",   	  NULL,         NULL,             0, "<Branch>" },
   { "/Settings/Wrap _Off",   NULL,      do_wrap_changed,  GTK_WRAP_NONE, "<RadioItem>" },
