@@ -132,10 +132,12 @@ esac
 AC_MSG_RESULT([$platform_win32])
 AM_CONDITIONAL(PLATFORM_WIN32, test "$platform_win32" = "yes")
 
+MATH_LIB=-lm
 AC_MSG_CHECKING([for native Win32])
 case "$host" in
   *-*-mingw*)
     os_win32=yes
+    MATH_LIB=
     ;;
   *)
     os_win32=no
@@ -383,7 +385,6 @@ AC_TRY_RUN([#include <math.h>
 )
 LIBS=$gtk_save_LIBS
 
-MATH_LIB=-lm
 AC_MSG_CHECKING(for the BeOS)
 case $host in
   *-*-beos*)

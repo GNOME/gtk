@@ -1,3 +1,7 @@
+2002-03-15  Tor Lillqvist  <tml@iki.fi>
+
+	* configure.in: Set MATH_LIB to empty also on Win32.
+
 Fri Mar 15 15:37:01 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/x11/gdkdrawable-x11.c (convert_to_format): 
