@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-08-25 13:27-0400\n"
+"POT-Creation-Date: 2004-09-09 22:00+0300\n"
 "PO-Revision-Date: 2004-04-09 17:33+0300\n"
 "Last-Translator: Baris Cicek <baris@teamforce.name.tr>\n"
 "Language-Team: Turkish <gnome-turk@gnome.org>\n"
@@ -1031,9 +1031,8 @@ msgstr "_Palet"
 
 # gtk/gtkinputdialog.c:474
 #: gtk/gtkcolorsel.c:1987
-#, fuzzy
 msgid "Color Wheel"
-msgstr "Tekerlek"
+msgstr "Renk Tekereği"
 
 # gtk/gtkfontsel.c:1001
 #: gtk/gtkcolorseldialog.c:116
@@ -1136,7 +1135,7 @@ msgstr "%s için yer imi eklenemedi çünkü o geçerli bir yol adı değil."
 
 #: gtk/gtkfilechooserdefault.c:2572
 msgid "Shortcuts"
-msgstr ""
+msgstr "Kısayollar"
 
 # gtk/gtkfilesel.c:651
 #: gtk/gtkfilechooserdefault.c:2626
@@ -1465,12 +1464,12 @@ msgstr "_Seçim: "
 
 # gtk/gtkfilesel.c:2407
 #: gtk/gtkfilesel.c:3139
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The filename \"%s\" couldn't be converted to UTF-8. (try setting the "
 "environment variable G_FILENAME_ENCODING): %s"
 msgstr ""
-"\"%s\" dosya ismi UTF-8'e dönüştürülemedi (ortam değişkeni "
+"\"%s\" dosya ismi UTF-8'e dönüştürülemedi. (ortam değişkeni "
 "G_BROKEN_FILENAMES'i atamayı deneyin): %s"
 
 # gdk-pixbuf/io-xbm.c:284
@@ -1521,9 +1520,9 @@ msgstr "Dosya sistemi"
 
 # gdk-pixbuf/gdk-pixbuf-io.c:473
 #: gtk/gtkfilesystemunix.c:735
-#, fuzzy, c-format
+#, c-format
 msgid "Could not get a stock icon for %s"
-msgstr "'%s' dosyası için bilgiler alınamadı: %s"
+msgstr "%s için depo simgesi alınamadı"
 
 #: gtk/gtkfilesystemunix.c:830
 #, c-format
