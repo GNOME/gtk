@@ -1,3 +1,8 @@
+Sun Sep 20 18:21:46 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* ltconfig.sh: Patch to libtool-1.2b to make --disable-static
+	work.
+
 Sun Sep 20 09:52:39 1998  Owen Taylor  <otaylor@gtk.org>
 
 	* HACKING: indent other than GNU indent should be OK
