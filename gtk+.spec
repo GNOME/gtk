@@ -1,5 +1,5 @@
 # Note that this is NOT a relocatable package
-%define ver      1.1.12
+%define ver      1.1.13
 %define rel      SNAP
 %define prefix   /usr
 
@@ -12,7 +12,7 @@ Group: X11/Libraries
 Source: ftp://ftp.gimp.org/pub/gtk/v1.1/gtk+-%{ver}.tar.gz
 BuildRoot: /tmp/gtk-root
 Obsoletes: gtk
-Packager: Marc Ewing <marc@redhat.com>
+Packager: Christopher Blizzard <blizzard@appliedtheory.com>
 URL: http://www.gtk.org
 Prereq: /sbin/install-info
 Requires: glib
