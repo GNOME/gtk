@@ -1366,7 +1366,7 @@ gtk_text_iter_ends_line (const GtkTextIter   *iter)
        */
       GtkTextIter tmp = *iter;
       if (!gtk_text_iter_backward_char (&tmp))
-        return FALSE;
+        return TRUE;
 
       return gtk_text_iter_get_char (&tmp) != '\r';
     }

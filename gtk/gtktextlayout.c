@@ -1954,7 +1954,9 @@ line_display_index_to_iter (GtkTextLayout      *layout,
       
       _gtk_text_btree_get_iter_at_line (_gtk_text_buffer_get_btree (layout->buffer),
                                         iter, display->line, 0);
-      gtk_text_iter_forward_to_delimiters (iter);
+
+      if (!gtk_text_iter_ends_line (iter))
+        gtk_text_iter_forward_to_delimiters (iter);
     }
 
   /* FIXME should this be cursor positions? */
