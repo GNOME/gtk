@@ -1,5 +1,10 @@
 2000-03-01  Mark Crichton  <crichton@gimp.org>
 
+	* gdk-pixbuf/Makefile.am: Doh.  Still trying to compile the
+	canvas item.  Moved the LDADD and SOURCES around to fix.
+
+2000-03-01  Mark Crichton  <crichton@gimp.org>
+
 	* configure.in: Added BUILD_CANVAS_ITEM stuff to (finally)
 	fix the last auto* build bug (where we have libart, but no
 	gnome-libs)
