@@ -1,0 +1,496 @@
+# GTK doysyesinin Azəri türkçəsinə tərcüməsi
+# Copyright (C) YEAR Free Software Foundation, Inc.
+# Vasif Ismailoglu MD <azerb_linux@hotmail.com>, 2000.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: gtk+ 1.3.2\n"
+"POT-Creation-Date: 2000-12-06 17:08+0100\n"
+"PO-Revision-Date: 2000-12-07 20:25+0200\n"
+"Last-Translator: Vasif Ismailoglu MD <azerb_linux@hotmail.com>\n"
+"Language-Team: Azerbaijani turkish \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: gdk-pixbuf/io-gif.c:426
+msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
+msgstr "GIF dosyesi datası əksikdir (dəyəsən parçalanıb?)"
+
+#: gdk-pixbuf/io-gif.c:435
+#, c-format
+msgid "Internal error in the GIF loader (%s)"
+msgstr "GIF yükləyicisində xəta (%s)"
+
+#: gdk-pixbuf/io-gif.c:584
+msgid "Circular table entry in GIF file"
+msgstr "GIF dosyesində dairəvi cədvəl girişi"
+
+#: gdk-pixbuf/io-gif.c:921
+msgid "File does not appear to be a GIF file"
+msgstr "Dosye deyəsən GIF dosyesi deyil"
+
+#: gdk-pixbuf/io-gif.c:933
+#, c-format
+msgid "Version %s of the GIF file format is not supported"
+msgstr "GIF dosyesinin %s buraxılışı hələ dəstəklənmir"
+
+#: gdk-pixbuf/io-gif.c:985
+msgid "GIF animation contained a frame with an incorrect size"
+msgstr "GIF animasiyasında xətalı böyüklükdə çərçivə var"
+
+#: gtk/gtkcolorsel.c:1413
+msgid "Hue:"
+msgstr "Çöhrə:"
+
+#: gtk/gtkcolorsel.c:1414
+msgid "Saturation:"
+msgstr "Doyqunluq:"
+
+#: gtk/gtkcolorsel.c:1415
+msgid "Value:"
+msgstr "Qiymət:"
+
+#: gtk/gtkcolorsel.c:1416
+msgid "Red:"
+msgstr "Qırmızı"
+
+#: gtk/gtkcolorsel.c:1417
+msgid "Green:"
+msgstr "Yaşıl:"
+
+#: gtk/gtkcolorsel.c:1418
+msgid "Blue:"
+msgstr "Göy:"
+
+#: gtk/gtkcolorsel.c:1421
+msgid "Opacity:"
+msgstr "Matlıq:"
+
+#: gtk/gtkcolorsel.c:1436
+msgid "Hex Value:"
+msgstr "Heks Qiyməti:"
+
+#: gtk/gtkcolorsel.c:1457
+msgid "Custom Palette"
+msgstr "Hazırkı Palitra"
+
+#: gtk/gtkcolorsel.c:1462
+msgid "Set Color"
+msgstr "Rəng Seç"
+
+#. The directories clist
+#: gtk/gtkfilesel.c:514
+msgid "Directories"
+msgstr "Qovluqlar"
+
+#. The files clist
+#: gtk/gtkfilesel.c:534
+msgid "Files"
+msgstr "Dosyelər"
+
+#: gtk/gtkfilesel.c:600 gtk/gtkfilesel.c:1636
+#, c-format
+msgid "Directory unreadable: %s"
+msgstr "Qovluq oxuna bilmir: %s"
+
+#: gtk/gtkfilesel.c:632
+msgid "Create Dir"
+msgstr "Qovluq yarat"
+
+#: gtk/gtkfilesel.c:643 gtk/gtkfilesel.c:1043
+msgid "Delete File"
+msgstr "Dosyeyi Sil"
+
+#: gtk/gtkfilesel.c:654 gtk/gtkfilesel.c:1156
+msgid "Rename File"
+msgstr "Dosye Adını Dəyişdir"
+
+#.
+#. gtk_signal_connect (GTK_OBJECT (dialog), "destroy",
+#. (GtkSignalFunc) gtk_file_selection_fileop_destroy,
+#. (gpointer) fs);
+#.
+#: gtk/gtkfilesel.c:824 gtk/gtkstock.c:171
+msgid "Error"
+msgstr "Xəta"
+
+#. close button
+#: gtk/gtkfilesel.c:847 gtk/gtkinputdialog.c:338 gtk/gtkstock.c:181
+msgid "Close"
+msgstr "Qapat"
+
+#: gtk/gtkfilesel.c:929
+msgid "Create Directory"
+msgstr "Qovluq Yarat"
+
+#: gtk/gtkfilesel.c:943
+msgid "Directory name:"
+msgstr "Qovluq Adı:"
+
+#. buttons
+#: gtk/gtkfilesel.c:956
+msgid "Create"
+msgstr "Yarat"
+
+#: gtk/gtkfilesel.c:965 gtk/gtkfilesel.c:1074 gtk/gtkfilesel.c:1198
+#: gtk/gtkgamma.c:423 gtk/gtkstock.c:176
+msgid "Cancel"
+msgstr "Ləǧv et"
+
+#. buttons
+#: gtk/gtkfilesel.c:1065
+msgid "Delete"
+msgstr "Sil"
+
+#. buttons
+#: gtk/gtkfilesel.c:1189
+msgid "Rename"
+msgstr "Təzədən Adlandır"
+
+#: gtk/gtkfilesel.c:1615
+msgid "Selection: "
+msgstr "Seçki:"
+
+#: gtk/gtkfontsel.c:190
+msgid "Family:"
+msgstr "Ailə:"
+
+#: gtk/gtkfontsel.c:195
+msgid "Style:"
+msgstr "Tərz:"
+
+#: gtk/gtkfontsel.c:200
+msgid "Size:"
+msgstr "Böyüklük:"
+
+#. create the text entry widget
+#: gtk/gtkfontsel.c:310
+msgid "Preview:"
+msgstr "İlk Baxış:"
+
+#: gtk/gtkfontsel.c:966
+msgid "Font Selection"
+msgstr "Yazıtipi seçkisi"
+
+#: gtk/gtkgamma.c:395
+msgid "Gamma"
+msgstr "Qamma"
+
+#: gtk/gtkgamma.c:402
+msgid "Gamma value"
+msgstr "Qamma qiyməti"
+
+#: gtk/gtkgamma.c:415 gtk/gtkstock.c:175
+msgid "OK"
+msgstr "OLDU"
+
+#. shell and main vbox
+#: gtk/gtkinputdialog.c:185
+msgid "Input"
+msgstr "Giriş"
+
+#: gtk/gtkinputdialog.c:193
+msgid "No input devices"
+msgstr "Giriş avadanlıqları yoxdur"
+
+#: gtk/gtkinputdialog.c:222
+msgid "Device:"
+msgstr "Avadanlıq:"
+
+#: gtk/gtkinputdialog.c:238
+msgid "Disabled"
+msgstr "Passivləşdirilmiş"
+
+#: gtk/gtkinputdialog.c:246
+msgid "Screen"
+msgstr "Ekran"
+
+#: gtk/gtkinputdialog.c:254
+msgid "Window"
+msgstr "Pəncərə"
+
+#: gtk/gtkinputdialog.c:262
+msgid "Mode: "
+msgstr "Mod:"
+
+#. The axis listbox
+#: gtk/gtkinputdialog.c:292
+msgid "Axes"
+msgstr "Oxlar"
+
+#. Keys listbox
+#: gtk/gtkinputdialog.c:308
+msgid "Keys"
+msgstr "Düymələr"
+
+#. We create the save button in any case, so that clients can
+#. connect to it, without paying attention to whether it exits
+#: gtk/gtkinputdialog.c:329 gtk/gtkstock.c:186
+msgid "Save"
+msgstr "Qeyd Et"
+
+#: gtk/gtkinputdialog.c:471
+msgid "X"
+msgstr "X"
+
+#: gtk/gtkinputdialog.c:472
+msgid "Y"
+msgstr "Y"
+
+#: gtk/gtkinputdialog.c:473
+msgid "Pressure"
+msgstr "Təzyiq"
+
+#: gtk/gtkinputdialog.c:474
+msgid "X Tilt"
+msgstr "X Tilt"
+
+#: gtk/gtkinputdialog.c:475
+msgid "Y Tilt"
+msgstr "Y Tilt"
+
+#: gtk/gtkinputdialog.c:476
+msgid "Wheel"
+msgstr "Çərx"
+
+#: gtk/gtkinputdialog.c:516
+msgid "none"
+msgstr "heç biri"
+
+#: gtk/gtkinputdialog.c:550 gtk/gtkinputdialog.c:586
+msgid "(disabled)"
+msgstr "(passivləşdirilmiş)"
+
+#: gtk/gtkinputdialog.c:579
+msgid "(unknown)"
+msgstr "(namə'lum)"
+
+#. and clear button
+#: gtk/gtkinputdialog.c:664
+msgid "clear"
+msgstr "təmizlə"
+
+#. Translate to default:RTL if you want your widgets
+#. * to be RTL, otherwise translate to default:LTR.
+#. * Do *not* translate it to "predefinito:LTR", if it
+#. * it isn't default:LTR or default:RTL it will not work
+#.
+#: gtk/gtkmain.c:424
+msgid "default:LTR"
+msgstr "əsas:LTR"
+
+#. KEEP IN SYNC with gtkiconfactory.c stock icons
+#: gtk/gtkstock.c:169
+msgid "Information"
+msgstr "Mə'lumat"
+
+#: gtk/gtkstock.c:170
+msgid "Warning"
+msgstr "Xəbərdarlıq"
+
+#: gtk/gtkstock.c:172
+msgid "Question"
+msgstr "Sual"
+
+#: gtk/gtkstock.c:174
+msgid "_Apply"
+msgstr "_Əlavə Et"
+
+#: gtk/gtkstock.c:177
+msgid "_Close"
+msgstr "_Qapat"
+
+#: gtk/gtkstock.c:178
+msgid "_Yes"
+msgstr "_Bəli"
+
+#: gtk/gtkstock.c:179
+msgid "_No"
+msgstr "_Xeyr"
+
+#: gtk/gtkstock.c:182
+msgid "Quit"
+msgstr "Çıx"
+
+#: gtk/gtkstock.c:183
+msgid "Help"
+msgstr "Kömək"
+
+#: gtk/gtkstock.c:184
+msgid "New"
+msgstr "Təzə"
+
+#: gtk/gtkstock.c:185
+msgid "Open"
+msgstr "Aç"
+
+#: gtk/gtknotebook.c:2012 gtk/gtknotebook.c:4098
+#, c-format
+msgid "Page %u"
+msgstr "Səhifə %u"
+
+#: gtk/gtkrc.c:2046
+#, c-format
+msgid "Unable to locate image file in pixmap_path: \"%s\" line %d"
+msgstr ""
+"Pixmap_path dəki rəsm dosyesinin yeri tapıla bilmir: \"%s\" xətt %d"
+
+#: gtk/gtkrc.c:2049
+#, c-format
+msgid "Unable to locate image file in pixmap_path: \"%s\""
+msgstr "Pixmap_path dəki rəsm dosyesinin yeri tapıla bilmir:  \"%s\""
+
+#: gtk/gtkthemes.c:71
+#, c-format
+msgid "Unable to locate loadable module in module_path: \"%s\","
+msgstr "Module_path dəki modulun yeri tapıla bilmir: \"%s\","
+
+#: gtk/gtktipsquery.c:180
+msgid "--- No Tip ---"
+msgstr "--- Qeyd Yoxdur ---"
+
+#~ msgid "Foundry:"
+#~ msgstr "Sahibi:"
+
+#~ msgid "Weight:"
+#~ msgstr "Uzunluq:"
+
+#~ msgid "Slant:"
+#~ msgstr "Meyil:"
+
+#~ msgid "Set Width:"
+#~ msgstr "Uzunluǧunu Göstər:"
+
+#~ msgid "Pixel Size:"
+#~ msgstr "Piksel Böyüklüyü:"
+
+#~ msgid "Point Size:"
+#~ msgstr "Nöqtə Böyüklüyü:"
+
+#~ msgid "Resolution X:"
+#~ msgstr "X Rezolyusiyası:"
+
+#~ msgid "Resolution Y:"
+#~ msgstr "Y Rezolyusiyası:"
+
+#~ msgid "Spacing:"
+#~ msgstr "Aralıq:"
+
+#~ msgid "Average Width:"
+#~ msgstr "Ortalama Uzunluq:"
+
+#~ msgid "Charset:"
+#~ msgstr "Kodlama:"
+
+#~ msgid "Font Property"
+#~ msgstr "YazıTipi Xüsusiyyətləri"
+
+#~ msgid "Requested Value"
+#~ msgstr "İstənilən Qiymət"
+
+#~ msgid "Actual Value"
+#~ msgstr "Həqiqi Qiymət"
+
+#~ msgid "Font"
+#~ msgstr "YazıTipi"
+
+#~ msgid "Font:"
+#~ msgstr "YazıTipi:"
+
+#~ msgid "Font Style:"
+#~ msgstr "YazıTipi Tərzi:"
+
+#~ msgid "Reset Filter"
+#~ msgstr "Süzgəci Sıfırla"
+
+#~ msgid "Metric:"
+#~ msgstr "Metrik:"
+
+#~ msgid "Points"
+#~ msgstr "Nöqtəvi:"
+
+#~ msgid "Pixels"
+#~ msgstr "Piksel"
+
+#~ msgid "Requested Font Name:"
+#~ msgstr "İstənən YazıTipi Adı:"
+
+#~ msgid "Actual Font Name:"
+#~ msgstr "Həqiqi YazıTipi Adı:"
+
+#~ msgid "%i fonts available with a total of %i styles."
+#~ msgstr "%i tərzdə %i qədər yazıtipi vardır."
+
+#~ msgid "Filter"
+#~ msgstr "Süzgəc:"
+
+#~ msgid "Font Types:"
+#~ msgstr "YazıTipi Növləri:"
+
+#~ msgid "Bitmap"
+#~ msgstr "Bitmap"
+
+#~ msgid "Scalable"
+#~ msgstr "Şkalalı"
+
+#~ msgid "Scaled Bitmap"
+#~ msgstr "Şkalalı Bitmap"
+
+#~ msgid "*"
+#~ msgstr "*"
+
+#~ msgid "(nil)"
+#~ msgstr "(nil)"
+
+#~ msgid "regular"
+#~ msgstr "sıravi"
+
+#~ msgid "italic"
+#~ msgstr "italik"
+
+#~ msgid "oblique"
+#~ msgstr "meylli"
+
+#~ msgid "reverse italic"
+#~ msgstr "tərs italik"
+
+#~ msgid "reverse oblique"
+#~ msgstr "tərs meylli"
+
+#~ msgid "other"
+#~ msgstr "başqa"
+
+#~ msgid "[M]"
+#~ msgstr "[M]"
+
+#~ msgid "[C]"
+#~ msgstr "[C]"
+
+#~ msgid "The selected font is not available."
+#~ msgstr "Seçilən yazıtipləri müsaid deyil."
+
+#~ msgid "The selected font is not a valid font."
+#~ msgstr "Seçilən yazıtipi keçərli yazıtipi deyildir."
+
+#~ msgid "This is a 2-byte font and may not be displayed correctly."
+#~ msgstr "Bu 2 baytlıq yazıtipidir ve düzgün nümayiş etdirilə bilməz."
+
+#~ msgid "roman"
+#~ msgstr "roman"
+
+#~ msgid "proportional"
+#~ msgstr "proporsiyonel"
+
+#~ msgid "monospaced"
+#~ msgstr "tək boşluqlu"
+
+#~ msgid "char cell"
+#~ msgstr "xarakter hüceyrəsi"
+
+#~ msgid "Font: (Filter Applied)"
+#~ msgstr "Yazıtipi: (Süzülmüş)"
+
+#~ msgid "MAX_FONTS exceeded. Some fonts may be missing."
+#~ msgstr ""
+#~ "MAX_FONTS tapılmadı. Bə'zi yazıtipləri dəyəsən mövcud deyillər."

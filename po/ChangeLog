@@ -1,6 +1,10 @@
+2000-12-08  Pablo Saratxaga <pablo@mandrakesoft.com>
+
+	* az.po: Added Azeri language file
+
 2000-12-06  Pablo Saratxaga <pablo@mandrakesoft.com>
 
-	* he;po,nl.po,pl.po: corrected syntax errors and completed the
+	* he.po,nl.po,pl.po: corrected syntax errors and completed the
 	headers so msgfmt -c oputput is useful
 
 2000-11-21  Robert Brady  <robert@suse.co.uk>
