@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+12 1.3.2\n"
-"POT-Creation-Date: 2001-02-15 22:06-0500\n"
+"POT-Creation-Date: 2001-02-28 19:20-0500\n"
 "PO-Revision-Date: 2000-12-07 20:25+0200\n"
 "Last-Translator: Vasif Ismailoglu MD <azerb_linux@hotmail.com>\n"
 "Language-Team: Azerbaijani turkish \n"
@@ -197,7 +197,7 @@ msgstr "Həqiqi Qiymət"
 msgid "Font"
 msgstr "YazıTipi"
 
-#: gtk/gtkfontsel.c:504 gtk/gtkfontsel.c:2185 gtk/gtkfontsel.c:2415
+#: gtk/gtkfontsel.c:504 gtk/gtkfontsel.c:2180 gtk/gtkfontsel.c:2410
 msgid "Font:"
 msgstr "YazıTipi:"
 
@@ -281,23 +281,23 @@ msgstr "(nil)"
 msgid "regular"
 msgstr "sıravi"
 
-#: gtk/gtkfontsel.c:1220 gtk/gtkfontsel.c:1977
+#: gtk/gtkfontsel.c:1220 gtk/gtkfontsel.c:1972
 msgid "italic"
 msgstr "italik"
 
-#: gtk/gtkfontsel.c:1221 gtk/gtkfontsel.c:1978
+#: gtk/gtkfontsel.c:1221 gtk/gtkfontsel.c:1973
 msgid "oblique"
 msgstr "meylli"
 
-#: gtk/gtkfontsel.c:1222 gtk/gtkfontsel.c:1979
+#: gtk/gtkfontsel.c:1222 gtk/gtkfontsel.c:1974
 msgid "reverse italic"
 msgstr "tərs italik"
 
-#: gtk/gtkfontsel.c:1223 gtk/gtkfontsel.c:1980
+#: gtk/gtkfontsel.c:1223 gtk/gtkfontsel.c:1975
 msgid "reverse oblique"
 msgstr "tərs meylli"
 
-#: gtk/gtkfontsel.c:1224 gtk/gtkfontsel.c:1981
+#: gtk/gtkfontsel.c:1224 gtk/gtkfontsel.c:1976
 msgid "other"
 msgstr "başqa"
 
@@ -309,43 +309,43 @@ msgstr "[M]"
 msgid "[C]"
 msgstr "[C]"
 
-#: gtk/gtkfontsel.c:1797
+#: gtk/gtkfontsel.c:1792
 msgid "The selected font is not available."
 msgstr "Seçilən yazıtipləri müsaid deyil."
 
-#: gtk/gtkfontsel.c:1803
+#: gtk/gtkfontsel.c:1798
 msgid "The selected font is not a valid font."
 msgstr "Seçilən yazıtipi keçərli yazıtipi deyildir."
 
-#: gtk/gtkfontsel.c:1861
+#: gtk/gtkfontsel.c:1856
 msgid "This is a 2-byte font and may not be displayed correctly."
 msgstr "Bu 2 baytlıq yazıtipidir ve düzgün nümayiş etdirilə bilməz."
 
-#: gtk/gtkfontsel.c:1965 gtk/gtkinputdialog.c:607
+#: gtk/gtkfontsel.c:1960 gtk/gtkinputdialog.c:607
 msgid "(unknown)"
 msgstr "(namə'lum)"
 
-#: gtk/gtkfontsel.c:1976
+#: gtk/gtkfontsel.c:1971
 msgid "roman"
 msgstr "roman"
 
-#: gtk/gtkfontsel.c:1988
+#: gtk/gtkfontsel.c:1983
 msgid "proportional"
 msgstr "proporsiyonel"
 
-#: gtk/gtkfontsel.c:1989
+#: gtk/gtkfontsel.c:1984
 msgid "monospaced"
 msgstr "tək boşluqlu"
 
-#: gtk/gtkfontsel.c:1990
+#: gtk/gtkfontsel.c:1985
 msgid "char cell"
 msgstr "xarakter hüceyrəsi"
 
-#: gtk/gtkfontsel.c:2190
+#: gtk/gtkfontsel.c:2185
 msgid "Font: (Filter Applied)"
 msgstr "Yazıtipi: (Süzülmüş)"
 
-#: gtk/gtkfontsel.c:2666
+#: gtk/gtkfontsel.c:2661
 msgid "MAX_FONTS exceeded. Some fonts may be missing."
 msgstr ""
 "MAX_FONTS tapılmadı. Bə'zi yazıtipləri dəyəsən mövcud deyillər."

@@ -12,7 +12,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.2.8\n"
-"POT-Creation-Date: 2001-02-15 22:06-0500\n"
+"POT-Creation-Date: 2001-02-28 19:20-0500\n"
 "PO-Revision-Date: 2000-06-20 16:12+0200\n"
 "Last-Translator: Jesús Bravo Álvarez <jba@pobox.com>\n"
 "Language-Team: Galician <trasno@ceu.fi.udc.es>\n"
@@ -203,7 +203,7 @@ msgstr "Valor Real"
 msgid "Font"
 msgstr "Fonte"
 
-#: gtk/gtkfontsel.c:504 gtk/gtkfontsel.c:2185 gtk/gtkfontsel.c:2415
+#: gtk/gtkfontsel.c:504 gtk/gtkfontsel.c:2180 gtk/gtkfontsel.c:2410
 msgid "Font:"
 msgstr "Fonte:"
 
@@ -286,23 +286,23 @@ msgstr "(nulo)"
 msgid "regular"
 msgstr "regular"
 
-#: gtk/gtkfontsel.c:1220 gtk/gtkfontsel.c:1977
+#: gtk/gtkfontsel.c:1220 gtk/gtkfontsel.c:1972
 msgid "italic"
 msgstr "itálica"
 
-#: gtk/gtkfontsel.c:1221 gtk/gtkfontsel.c:1978
+#: gtk/gtkfontsel.c:1221 gtk/gtkfontsel.c:1973
 msgid "oblique"
 msgstr "oblícua"
 
-#: gtk/gtkfontsel.c:1222 gtk/gtkfontsel.c:1979
+#: gtk/gtkfontsel.c:1222 gtk/gtkfontsel.c:1974
 msgid "reverse italic"
 msgstr "itálica invertida"
 
-#: gtk/gtkfontsel.c:1223 gtk/gtkfontsel.c:1980
+#: gtk/gtkfontsel.c:1223 gtk/gtkfontsel.c:1975
 msgid "reverse oblique"
 msgstr "oblícua invertida"
 
-#: gtk/gtkfontsel.c:1224 gtk/gtkfontsel.c:1981
+#: gtk/gtkfontsel.c:1224 gtk/gtkfontsel.c:1976
 msgid "other"
 msgstr "outra"
 
@@ -314,43 +314,43 @@ msgstr "[M]"
 msgid "[C]"
 msgstr "[C]"
 
-#: gtk/gtkfontsel.c:1797
+#: gtk/gtkfontsel.c:1792
 msgid "The selected font is not available."
 msgstr "A fonte seleccionada non está dispoñible."
 
-#: gtk/gtkfontsel.c:1803
+#: gtk/gtkfontsel.c:1798
 msgid "The selected font is not a valid font."
 msgstr "A fonte seleccionada non é unha fonte válida."
 
-#: gtk/gtkfontsel.c:1861
+#: gtk/gtkfontsel.c:1856
 msgid "This is a 2-byte font and may not be displayed correctly."
 msgstr "Esta é unha fonte de 2 bytes e pode non ser amosada correctamente."
 
-#: gtk/gtkfontsel.c:1965 gtk/gtkinputdialog.c:607
+#: gtk/gtkfontsel.c:1960 gtk/gtkinputdialog.c:607
 msgid "(unknown)"
 msgstr "(descoñecido)"
 
-#: gtk/gtkfontsel.c:1976
+#: gtk/gtkfontsel.c:1971
 msgid "roman"
 msgstr "roman"
 
-#: gtk/gtkfontsel.c:1988
+#: gtk/gtkfontsel.c:1983
 msgid "proportional"
 msgstr "proporcional"
 
-#: gtk/gtkfontsel.c:1989
+#: gtk/gtkfontsel.c:1984
 msgid "monospaced"
 msgstr "monoespaciada"
 
-#: gtk/gtkfontsel.c:1990
+#: gtk/gtkfontsel.c:1985
 msgid "char cell"
 msgstr "cela de carácter"
 
-#: gtk/gtkfontsel.c:2190
+#: gtk/gtkfontsel.c:2185
 msgid "Font: (Filter Applied)"
 msgstr "Fonte: (Filtro Aplicado)"
 
-#: gtk/gtkfontsel.c:2666
+#: gtk/gtkfontsel.c:2661
 msgid "MAX_FONTS exceeded. Some fonts may be missing."
 msgstr "MAX_FONTS excedido.  Poden faltar algunhas fontes."
 

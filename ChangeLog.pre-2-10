@@ -1,3 +1,10 @@
+Wed Feb 28 21:14:08 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* README.in INSTALL.in: Fix the .in files, add note
+	about --with-native-locale.
+
+	* */po/*: Line-number-creepage.
+
 Wed Feb 28 19:10:43 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkclist.c (real_remove_row): Patch from ChiDeok

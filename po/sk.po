@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-1.2.2\n"
-"POT-Creation-Date: 2001-02-14 12:40+0100\n"
+"POT-Creation-Date: 2001-02-28 19:20-0500\n"
 "PO-Revision-Date: 1999-04-19 16:30+0100\n"
 "Last-Translator: Stefan Ondrejicka <ondrej@idata.sk>\n"
 "Language-Team: Slovak <sk@li.org>\n"
@@ -196,7 +196,7 @@ msgstr "Aktuálna hodnota"
 msgid "Font"
 msgstr "Písmo"
 
-#: gtk/gtkfontsel.c:504 gtk/gtkfontsel.c:2185 gtk/gtkfontsel.c:2415
+#: gtk/gtkfontsel.c:504 gtk/gtkfontsel.c:2180 gtk/gtkfontsel.c:2410
 msgid "Font:"
 msgstr "Písmo:"
 
@@ -279,23 +279,23 @@ msgstr "(nil)"
 msgid "regular"
 msgstr "normálny"
 
-#: gtk/gtkfontsel.c:1220 gtk/gtkfontsel.c:1977
+#: gtk/gtkfontsel.c:1220 gtk/gtkfontsel.c:1972
 msgid "italic"
 msgstr "kurzíva"
 
-#: gtk/gtkfontsel.c:1221 gtk/gtkfontsel.c:1978
+#: gtk/gtkfontsel.c:1221 gtk/gtkfontsel.c:1973
 msgid "oblique"
 msgstr "¹ikmé"
 
-#: gtk/gtkfontsel.c:1222 gtk/gtkfontsel.c:1979
+#: gtk/gtkfontsel.c:1222 gtk/gtkfontsel.c:1974
 msgid "reverse italic"
 msgstr "opaèná kurzíva"
 
-#: gtk/gtkfontsel.c:1223 gtk/gtkfontsel.c:1980
+#: gtk/gtkfontsel.c:1223 gtk/gtkfontsel.c:1975
 msgid "reverse oblique"
 msgstr "opaèné ¹ikmé"
 
-#: gtk/gtkfontsel.c:1224 gtk/gtkfontsel.c:1981
+#: gtk/gtkfontsel.c:1224 gtk/gtkfontsel.c:1976
 msgid "other"
 msgstr "iné"
 
@@ -307,43 +307,43 @@ msgstr "[M]"
 msgid "[C]"
 msgstr "[C]"
 
-#: gtk/gtkfontsel.c:1797
+#: gtk/gtkfontsel.c:1792
 msgid "The selected font is not available."
 msgstr "Vybrané písmo nebolo nájdené."
 
-#: gtk/gtkfontsel.c:1803
+#: gtk/gtkfontsel.c:1798
 msgid "The selected font is not a valid font."
 msgstr "Vybrané písmo nie je platné písmo."
 
-#: gtk/gtkfontsel.c:1861
+#: gtk/gtkfontsel.c:1856
 msgid "This is a 2-byte font and may not be displayed correctly."
 msgstr "Toto je dvoj-bajtové písmo a mô¾e by» zobrazené nesprávne."
 
-#: gtk/gtkfontsel.c:1965 gtk/gtkinputdialog.c:607
+#: gtk/gtkfontsel.c:1960 gtk/gtkinputdialog.c:607
 msgid "(unknown)"
 msgstr "(neznámy)"
 
-#: gtk/gtkfontsel.c:1976
+#: gtk/gtkfontsel.c:1971
 msgid "roman"
 msgstr "normálny"
 
-#: gtk/gtkfontsel.c:1988
+#: gtk/gtkfontsel.c:1983
 msgid "proportional"
 msgstr "proporcionálne"
 
-#: gtk/gtkfontsel.c:1989
+#: gtk/gtkfontsel.c:1984
 msgid "monospaced"
 msgstr "s pevnou ¹írkou medzery"
 
-#: gtk/gtkfontsel.c:1990
+#: gtk/gtkfontsel.c:1985
 msgid "char cell"
 msgstr "s pevnou ¹írko bunky"
 
-#: gtk/gtkfontsel.c:2190
+#: gtk/gtkfontsel.c:2185
 msgid "Font: (Filter Applied)"
 msgstr "Písmo: (pou¾itý filter)"
 
-#: gtk/gtkfontsel.c:2666
+#: gtk/gtkfontsel.c:2661
 msgid "MAX_FONTS exceeded. Some fonts may be missing."
 msgstr "Poèet písem prekroèil MAX_FONTS. Niektoré písma mô¾u chýba»."
 

@@ -26,9 +26,9 @@ How to report bugs
 Bugs should be reported to the GNOME bug tracking system. 
 (http://bugzilla.gnome.org, product gtk+.) You will need
 to create an account for yourself.
-
+  
 In the bug report please include:
-
+  
 * Information about your system. For instance:
 
    - What operating system and version
@@ -65,8 +65,8 @@ Otherwise, enter a new bug report that describes the patch,
 and attach the patch to that bug report.
 
 Bug reports containing patches should include the PATCH keyword
-in their keyword fields. If the patch adds to or changes the GTK+ 
+in their keyword fields. If the patch adds to or changes the GTK
 programming interface, the API keyword should also be included.
-
+  
 Patches should be in unified diff form. (The -u option to GNU
 diff.)
