@@ -1,3 +1,8 @@
+Sun Feb 24 21:18:20 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtksocket.c (gtk_socket_end_embedding): Fix
+	off-by-one error. (Pointed out by Anders Carlsson)
+
 2002-02-25  Matthias Clasen  <maclas@gmx.de>
 
 	* docs/tutorial/gtk-tut.sgml, docs/tutorial/images/*, examples/*: More

@@ -368,8 +368,8 @@ gtk_socket_end_embedding (GtkSocket *socket)
   g_object_unref (socket->plug_window);
   socket->plug_window = NULL;
 
-  /* Remove from end to avoid indexes shiting. This is evil */
-  for (i = socket->accel_group->n_accels; i >= 0; i--)
+  /* Remove from end to avoid indexes shifting. This is evil */
+  for (i = socket->accel_group->n_accels - 1; i >= 0; i--)
     {
       GtkAccelGroupEntry *accel_entry = &socket->accel_group->priv_accels[i];
       gtk_accel_group_disconnect (socket->accel_group, accel_entry->closure);
