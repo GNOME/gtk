@@ -1,3 +1,14 @@
+2003-11-19  Federico Mena Quintero  <federico@ximian.com>
+
+	Fixes to problems reported by Iain Holmes:
+
+	* gtk/gtkfilechooserdefault.c (shortcuts_append_desktop): Do not
+	throw up an error dialog if the desktop doesn't exist.
+	(error_message): Handle the case where there is no real toplevel
+	yet.
+	(list_model_filter_func): Always let folders pass through (patch
+	by Dave Malcolm).
+
 Wed Nov 19 23:19:23 2003  Kristian Rietveld  <kris@gtk.org>
 
 	* gtk/gtkcombobox.[ch] (gtk_combo_box_scroll_event): move function

@@ -354,8 +354,10 @@ error_message (GtkFileChooserDefault *impl,
   GtkWidget *dialog;
 
   toplevel = gtk_widget_get_toplevel (GTK_WIDGET (impl));
+  if (!GTK_WIDGET_TOPLEVEL (toplevel))
+    toplevel = NULL;
 
-  dialog = gtk_message_dialog_new (toplevel ? GTK_WINDOW (toplevel) : NULL,
+  dialog = gtk_message_dialog_new (GTK_WINDOW (toplevel),
 				   GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
 				   GTK_MESSAGE_ERROR,
 				   GTK_BUTTONS_CLOSE,
@@ -557,7 +559,6 @@ shortcuts_append_desktop (GtkFileChooserDefault *impl)
 {
   char *name;
   GtkFilePath *path;
-  GError *error;
 
   /* FIXME: What is the Right Way of finding the desktop directory? */
 
@@ -565,10 +566,10 @@ shortcuts_append_desktop (GtkFileChooserDefault *impl)
   path = gtk_file_system_filename_to_path (impl->file_system, name);
   g_free (name);
 
-  error = NULL;
-  impl->has_desktop = shortcuts_insert_path (impl, -1, path, FALSE, NULL, &error);
-  if (!impl->has_desktop)
-    error_getting_info_dialog (impl, path, error);
+  impl->has_desktop = shortcuts_insert_path (impl, -1, path, FALSE, NULL, NULL);
+  /* We do not actually pop up an error dialog if there is no desktop directory
+   * because some people may really not want to have one.
+   */
 
   gtk_file_path_free (path);
 }
@@ -1468,6 +1469,9 @@ list_model_filter_func (GtkFileSystemModel *model,
   gboolean result;
 
   if (!impl->current_filter)
+    return TRUE;
+
+  if (gtk_file_info_get_is_folder (file_info))
     return TRUE;
 
   filter_info.contains = GTK_FILE_FILTER_DISPLAY_NAME | GTK_FILE_FILTER_MIME_TYPE;
