@@ -166,8 +166,7 @@ gtk_container_class_init (GtkContainerClass *class)
                     object_class->type,
                     GTK_SIGNAL_OFFSET (GtkContainerClass, need_resize),
                     gtk_container_marshal_signal_4,
-		    GTK_TYPE_BOOL, 0,
-                    GTK_TYPE_WIDGET);
+		    GTK_TYPE_BOOL, 0);
   container_signals[FOREACH] =
     gtk_signal_new ("foreach",
                     GTK_RUN_FIRST,
