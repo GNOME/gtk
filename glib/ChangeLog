@@ -1,3 +1,8 @@
+Sat Feb  7 11:48:09 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* gstring.c gutils.c: added some additional consts in
+	  appropriate places to remove a warning
+
 Sat Feb  7 11:15:54 1998  Owen Taylor  <owt1@cornell.edu>
 
 	* gutils.c: include <ctype.h> for tolower()

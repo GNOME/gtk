@@ -342,7 +342,7 @@ g_string_prepend_c (GString *fstring, char c)
 }
 
 static int
-get_length_upper_bound (gchar* fmt, va_list *args)
+get_length_upper_bound (const gchar* fmt, va_list *args)
 {
   int len = 0;
   int short_int;
@@ -377,7 +377,7 @@ get_length_upper_bound (gchar* fmt, va_list *args)
 		case '8':
 		case '9':
 		  fmt -= 1;
-		  len += strtol (fmt, &fmt, 10);
+		  len += strtol (fmt, (char **)&fmt, 10);
 		  break;
 		case 'h':
 		  short_int = TRUE;
@@ -454,9 +454,9 @@ get_length_upper_bound (gchar* fmt, va_list *args)
 }
 
 char*
-g_vsprintf (gchar *fmt,
-	   va_list *args,
-	   va_list *args2)
+g_vsprintf (const gchar *fmt,
+	    va_list *args,
+	    va_list *args2)
 {
   static gchar *buf = NULL;
   static gint   alloc = 0;

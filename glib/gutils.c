@@ -29,7 +29,7 @@ static GWarningFunc warning_func = NULL;
 static GPrintFunc message_func = NULL;
 static GPrintFunc print_func = NULL;
 
-extern char* g_vsprintf (gchar *fmt, va_list *args, va_list *args2);
+extern char* g_vsprintf (const gchar *fmt, va_list *args, va_list *args2);
 
 gchar*
 g_strdup (const gchar *str)
