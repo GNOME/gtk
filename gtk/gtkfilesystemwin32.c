@@ -64,6 +64,7 @@ struct _GtkFileSystemWin32
 {
   GObject parent_instance;
 
+  guint32     drives; /* bitmask as returned by GetLogicalDrives() */
   GHashTable *folder_hash;
 };
 
@@ -303,14 +304,32 @@ gtk_file_system_win32_finalize (GObject *object)
   system_parent_class->finalize (object);
 }
 
+static gboolean
+check_volumes (gpointer data)
+{
+  GtkFileSystemWin32 *fs_win32 = GTK_FILE_SYSTEM_WIN32 (data);
+
+  g_return_val_if_fail (fs_win32, FALSE);
+
+  if (fs_win32->drives != GetLogicalDrives())
+    g_signal_emit_by_name (fs_win32, "volumes-changed", 0);
+
+  return TRUE;
+}
+
 static GSList *
 gtk_file_system_win32_list_volumes (GtkFileSystem *file_system)
 {
   DWORD   drives;
   gchar   drive[4] = "A:\\";
   GSList *list = NULL;
+  GtkFileSystemWin32 *fs_win32 = (GtkFileSystemWin32 *)file_system;
 
   drives = GetLogicalDrives();
+
+  fs_win32->drives = drives;
+  /* set up an idle handler for volume changes, every second should be enough */
+  g_timeout_add_full (0, 1000, check_volumes, fs_win32, NULL);
 
   if (!drives)
     g_warning ("GetLogicalDrives failed.");

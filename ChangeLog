@@ -1,3 +1,12 @@
+2004-11-30  Hans Breuer  <hans@breuer.org>
+
+	* gdk/win32/gdkpixmap-win32.c : remove the disputable memset at 
+	the end of gdk_pixmap_new() - on X11 the bits are not initialized 
+	either - fixes bug #145107
+
+	* gtk/gtkfilesystemwin32.c : add an idle handler to emit "volumes-changed"
+	when drives are plugged in or removed. Fixes bug #137815
+
 2004-11-30  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtktreesortable.c (gtk_tree_sortable_get_sort_column_id): Update 
