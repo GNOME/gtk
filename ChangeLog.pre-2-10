@@ -1,3 +1,12 @@
+2005-03-30  Federico Mena Quintero  <federico@ximian.com>
+
+	Merged from gtk-2-6:
+
+	Fix #170755:
+
+	* gtk/gtktreeview.c (gtk_tree_view_row_changed): Only stop editing
+	if the row which changed is the same as the row being edited.
+
 2005-03-30  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtktreeview.c (gtk_tree_view_real_start_interactive_search): 
