@@ -1,3 +1,9 @@
+2001-03-08  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk\win32\Makefile.am (EXTRA_DIST): Remove the rc/*.cur files
+	that have been removed; add the new xcursors.h and bdfcursor.c
+	files.
+
 2001-02-25  Hans Breuer <hans@breuer.org>
 
 	* gtk/makefile.msc : corrected rule for generating gtkmarshal.[hc]
