@@ -1,13 +1,13 @@
 # Japanese translation table of GTK+ 1.2
 # Copyright (C) 1998,2000 Free Software Foundation, Inc.
 # Yasuhiro SHIRASAKI <yasuhiro@awa.tohoku.ac.jp>, 1998.
-# Yukihiro Nakai <nakai@gnome.gr.jp>, 2000.
+# Yukihiro Nakai <nakai@gnome.gr.jp>, 2000-2001.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.2.8\n"
-"POT-Creation-Date: 2000-11-16 16:11-0500\n"
-"PO-Revision-Date: 2000-10-06 11:42+0900\n"
+"POT-Creation-Date: 2001-01-01 18:31+0900\n"
+"PO-Revision-Date: 2001-01-01 20:00+0900\n"
 "Last-Translator: Yukihiro Nakai <nakai@gnome.gr.jp>\n"
 "Language-Team: Japanese <ja@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -16,67 +16,67 @@ msgstr ""
 
 #: gdk-pixbuf/io-gif.c:426
 msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
-msgstr ""
+msgstr "GIFファイルに何か足りないデータがあります(失われた?)"
 
 #: gdk-pixbuf/io-gif.c:435
 #, c-format
 msgid "Internal error in the GIF loader (%s)"
-msgstr ""
+msgstr "GIFローダの内部エラー (%s)"
 
 #: gdk-pixbuf/io-gif.c:584
 msgid "Circular table entry in GIF file"
-msgstr ""
+msgstr "GIFファイルの循環テーブルエントリ"
 
 #: gdk-pixbuf/io-gif.c:921
 msgid "File does not appear to be a GIF file"
-msgstr ""
+msgstr "ファイルがGIFファイルには見えません"
 
 #: gdk-pixbuf/io-gif.c:933
 #, c-format
 msgid "Version %s of the GIF file format is not supported"
-msgstr ""
+msgstr "GIFファイルフォーマットのバージョン%sはサポートしていません"
 
 #: gdk-pixbuf/io-gif.c:985
 msgid "GIF animation contained a frame with an incorrect size"
-msgstr ""
+msgstr "GIFアニメーションに正しくないサイズのフレームがあります"
 
-#: gtk/gtkcolorsel.c:1422
+#: gtk/gtkcolorsel.c:1410
 msgid "Hue:"
 msgstr "色相:"
 
-#: gtk/gtkcolorsel.c:1423
+#: gtk/gtkcolorsel.c:1411
 msgid "Saturation:"
 msgstr "彩度:"
 
-#: gtk/gtkcolorsel.c:1424
+#: gtk/gtkcolorsel.c:1412
 msgid "Value:"
 msgstr "明度:"
 
-#: gtk/gtkcolorsel.c:1425
+#: gtk/gtkcolorsel.c:1413
 msgid "Red:"
 msgstr "赤:"
 
-#: gtk/gtkcolorsel.c:1426
+#: gtk/gtkcolorsel.c:1414
 msgid "Green:"
 msgstr "緑:"
 
-#: gtk/gtkcolorsel.c:1427
+#: gtk/gtkcolorsel.c:1415
 msgid "Blue:"
 msgstr "青:"
 
-#: gtk/gtkcolorsel.c:1430
+#: gtk/gtkcolorsel.c:1418
 msgid "Opacity:"
 msgstr "不透明度:"
 
-#: gtk/gtkcolorsel.c:1445
+#: gtk/gtkcolorsel.c:1433
 msgid "Hex Value:"
 msgstr "明度:"
 
-#: gtk/gtkcolorsel.c:1466
+#: gtk/gtkcolorsel.c:1454
 msgid "Custom Palette"
 msgstr "カスタムパレット"
 
-#: gtk/gtkcolorsel.c:1471
+#: gtk/gtkcolorsel.c:1459
 msgid "Set Color"
 msgstr "カラー設定"
 
@@ -117,7 +117,7 @@ msgid "Error"
 msgstr "エラー"
 
 #. close button
-#: gtk/gtkfilesel.c:847 gtk/gtkinputdialog.c:338 gtk/gtkstock.c:181
+#: gtk/gtkfilesel.c:847 gtk/gtkinputdialog.c:334 gtk/gtkstock.c:181
 msgid "Close"
 msgstr "閉じる"
 
@@ -170,7 +170,7 @@ msgstr "サイズ:"
 msgid "Preview:"
 msgstr "プレビュー:"
 
-#: gtk/gtkfontsel.c:966
+#: gtk/gtkfontsel.c:971
 msgid "Font Selection"
 msgstr "フォント選択"
 
@@ -187,88 +187,88 @@ msgid "OK"
 msgstr "了解"
 
 #. shell and main vbox
-#: gtk/gtkinputdialog.c:185
+#: gtk/gtkinputdialog.c:181
 msgid "Input"
 msgstr "入力"
 
-#: gtk/gtkinputdialog.c:193
+#: gtk/gtkinputdialog.c:189
 msgid "No input devices"
 msgstr "入力デバイスがありません"
 
-#: gtk/gtkinputdialog.c:222
+#: gtk/gtkinputdialog.c:218
 msgid "Device:"
 msgstr "デバイス:"
 
-#: gtk/gtkinputdialog.c:238
+#: gtk/gtkinputdialog.c:234
 msgid "Disabled"
 msgstr "無効"
 
-#: gtk/gtkinputdialog.c:246
+#: gtk/gtkinputdialog.c:242
 msgid "Screen"
 msgstr "スクリーン"
 
-#: gtk/gtkinputdialog.c:254
+#: gtk/gtkinputdialog.c:250
 msgid "Window"
 msgstr "ウィンドウ"
 
-#: gtk/gtkinputdialog.c:262
+#: gtk/gtkinputdialog.c:258
 msgid "Mode: "
 msgstr "モード: "
 
 #. The axis listbox
-#: gtk/gtkinputdialog.c:292
+#: gtk/gtkinputdialog.c:288
 msgid "Axes"
 msgstr "軸"
 
 #. Keys listbox
-#: gtk/gtkinputdialog.c:308
+#: gtk/gtkinputdialog.c:304
 msgid "Keys"
 msgstr "キー"
 
 #. We create the save button in any case, so that clients can
 #. connect to it, without paying attention to whether it exits
-#: gtk/gtkinputdialog.c:329 gtk/gtkstock.c:186
+#: gtk/gtkinputdialog.c:325 gtk/gtkstock.c:186
 msgid "Save"
 msgstr "保存"
 
-#: gtk/gtkinputdialog.c:471
+#: gtk/gtkinputdialog.c:467
 msgid "X"
 msgstr "X"
 
-#: gtk/gtkinputdialog.c:472
+#: gtk/gtkinputdialog.c:468
 msgid "Y"
 msgstr "Y"
 
-#: gtk/gtkinputdialog.c:473
+#: gtk/gtkinputdialog.c:469
 msgid "Pressure"
 msgstr "圧力"
 
-#: gtk/gtkinputdialog.c:474
+#: gtk/gtkinputdialog.c:470
 msgid "X Tilt"
 msgstr "X 傾き"
 
-#: gtk/gtkinputdialog.c:475
+#: gtk/gtkinputdialog.c:471
 msgid "Y Tilt"
 msgstr "Y 傾き"
 
-#: gtk/gtkinputdialog.c:476
+#: gtk/gtkinputdialog.c:472
 msgid "Wheel"
 msgstr "ホイール"
 
-#: gtk/gtkinputdialog.c:516
+#: gtk/gtkinputdialog.c:512
 msgid "none"
 msgstr "無し"
 
-#: gtk/gtkinputdialog.c:550 gtk/gtkinputdialog.c:586
+#: gtk/gtkinputdialog.c:546 gtk/gtkinputdialog.c:582
 msgid "(disabled)"
 msgstr "(無効)"
 
-#: gtk/gtkinputdialog.c:579
+#: gtk/gtkinputdialog.c:575
 msgid "(unknown)"
 msgstr "(不明)"
 
 #. and clear button
-#: gtk/gtkinputdialog.c:664
+#: gtk/gtkinputdialog.c:660
 msgid "clear"
 msgstr "クリア"
 
@@ -279,42 +279,40 @@ msgstr "クリア"
 #.
 #: gtk/gtkmain.c:424
 msgid "default:LTR"
-msgstr ""
+msgstr "デフォルト:LTR"
 
 #. KEEP IN SYNC with gtkiconfactory.c stock icons
 #: gtk/gtkstock.c:169
 msgid "Information"
-msgstr ""
+msgstr "情報"
 
 #: gtk/gtkstock.c:170
 msgid "Warning"
-msgstr ""
+msgstr "警告"
 
 #: gtk/gtkstock.c:172
 msgid "Question"
-msgstr ""
+msgstr "質問"
 
 #: gtk/gtkstock.c:174
-#, fuzzy
 msgid "_Apply"
-msgstr "適用"
+msgstr "適用(_A)"
 
 #: gtk/gtkstock.c:177
-#, fuzzy
 msgid "_Close"
-msgstr "閉じる"
+msgstr "閉じる(_C)"
 
 #: gtk/gtkstock.c:178
 msgid "_Yes"
-msgstr ""
+msgstr "はい(_Y)"
 
 #: gtk/gtkstock.c:179
 msgid "_No"
-msgstr ""
+msgstr "いいえ(_N)"
 
 #: gtk/gtkstock.c:182
 msgid "Quit"
-msgstr ""
+msgstr "終了"
 
 #: gtk/gtkstock.c:183
 msgid "Help"
@@ -322,13 +320,13 @@ msgstr "ヘルプ"
 
 #: gtk/gtkstock.c:184
 msgid "New"
-msgstr ""
+msgstr "新規"
 
 #: gtk/gtkstock.c:185
 msgid "Open"
-msgstr ""
+msgstr "開く"
 
-#: gtk/gtknotebook.c:2059 gtk/gtknotebook.c:4131
+#: gtk/gtknotebook.c:2034 gtk/gtknotebook.c:4353
 #, c-format
 msgid "Page %u"
 msgstr "ページ %u"
@@ -336,8 +334,7 @@ msgstr "ページ %u"
 #: gtk/gtkrc.c:2046
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\" line %d"
-msgstr ""
-"画像ファイルが見付かりません piamap_path: \"%s\" %d 行目"
+msgstr "画像ファイルが見付かりません piamap_path: \"%s\" %d 行目"
 
 #: gtk/gtkrc.c:2049
 #, c-format
@@ -347,8 +344,7 @@ msgstr "画像ファイルが見付かりません pixmap_path: \"%s\""
 #: gtk/gtkthemes.c:71
 #, c-format
 msgid "Unable to locate loadable module in module_path: \"%s\","
-msgstr ""
-"ローダブルモジュールが見付かりません module_path: \"%s\","
+msgstr "ローダブルモジュールが見付かりません module_path: \"%s\","
 
 #: gtk/gtktipsquery.c:180
 msgid "--- No Tip ---"
