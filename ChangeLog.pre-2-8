@@ -1,3 +1,7 @@
+2001-09-02  Abel Cheung  <maddog@linux.org.hk>
+
+	* configure.in (ALL_LINGUAS): zh_TW.Big5 -> zh_TW
+
 2001-08-19  Fatih Demir <kabalak@gtranslator.org>
 
 	* configure.in: Added "ta" to the languages list.
