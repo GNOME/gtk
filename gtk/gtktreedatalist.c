@@ -39,6 +39,7 @@ _gtk_tree_data_list_alloc (void)
 				  G_ALLOC_AND_FREE);
 
   list = g_chunk_new (GtkTreeDataList, tree_chunk);
+  memset (list, 0, sizeof (GtkTreeDataList));
 
   return list;
 }
