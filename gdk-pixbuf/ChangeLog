@@ -1,3 +1,8 @@
+1999-07-26  Michael Zucchi  <mzucchi@denr.sa.gov.au>
+
+	* src/Makefile.am (*_LIB): Only build the relevant loaders which
+	require extra libraries if we actually have those libraries.
+
 1999-07-23  Richard Hestilow  <hestgray@ionet.net>
 	
 	* src/gdk-pixbuf.h: Include glib.h as it uses g* datatypes

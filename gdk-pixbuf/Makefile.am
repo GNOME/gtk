@@ -4,12 +4,30 @@ lib_LTLIBRARIES = 		\
 
 libexecdir = $(libdir)/gdk-pixbuf/loaders
 
+if HAVE_PNG
+PNG_LIB =	libpixbuf-png.la
+endif
+
+if HAVE_JPEG
+JPEG_LIB =	libpixbuf-jpeg.la
+endif
+
+if HAVE_GIF
+GIF_LIB =	libpixbuf-gif.la
+endif
+
+if HAVE_TIFF
+TIFF_LIB =	libpixbuf-tiff.la
+endif
+
+XPM_LIB =	libpixbuf-xpm.la
+
 libexec_LTLIBRARIES =		\
-	libpixbuf-png.la	\
-	libpixbuf-jpeg.la	\
-	libpixbuf-gif.la	\
-	libpixbuf-xpm.la	\
-	libpixbuf-tiff.la
+	$(PNG_LIB)	\
+	$(JPEG_LIB)	\
+	$(GIF_LIB)	\
+	$(XPM_LIB)	\
+	$(TIFF_LIB)
 
 noinst_PROGRAMS = testpixbuf
 DEPS = libgdk_pixbuf.la
