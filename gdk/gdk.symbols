@@ -134,6 +134,7 @@ gdk_drawable_unref
 gdk_draw_arc
 gdk_draw_drawable
 gdk_draw_glyphs
+gdk_draw_glyphs_transformed
 gdk_draw_gray_image
 gdk_draw_image
 gdk_draw_indexed_image
@@ -157,6 +158,7 @@ gdk_draw_segments
 gdk_draw_string
 gdk_draw_text
 gdk_draw_text_wc
+gdk_draw_trapezoids
 gdk_drop_finish
 gdk_drop_reply
 gdk_error_trap_pop
@@ -305,6 +307,13 @@ gdk_pango_context_get_for_screen
 gdk_pango_context_set_colormap
 gdk_pango_layout_get_clip_region
 gdk_pango_layout_line_get_clip_region
+gdk_pango_renderer_get_default
+gdk_pango_renderer_get_type
+gdk_pango_renderer_new
+gdk_pango_renderer_set_drawable
+gdk_pango_renderer_set_gc
+gdk_pango_renderer_set_override_color
+gdk_pango_renderer_set_stipple
 gdk_parse_args
 gdk_pixbuf_get_from_drawable
 gdk_pixbuf_get_from_image

@@ -1226,6 +1226,7 @@ gtk_justification_get_type
 gtk_key_snooper_install
 gtk_key_snooper_remove
 gtk_label_get
+gtk_label_get_angle
 gtk_label_get_attributes
 gtk_label_get_ellipsize
 gtk_label_get_justify
@@ -1247,6 +1248,7 @@ gtk_label_new
 gtk_label_new_with_mnemonic
 gtk_label_parse_uline
 gtk_label_select_region
+gtk_label_set_angle
 gtk_label_set_attributes
 gtk_label_set_ellipsize
 gtk_label_set_justify

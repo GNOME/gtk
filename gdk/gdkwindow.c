@@ -105,12 +105,20 @@ static void   gdk_window_draw_lines     (GdkDrawable     *drawable,
 					 GdkGC           *gc,
 					 GdkPoint        *points,
 					 gint             npoints);
-static void   gdk_window_draw_glyphs    (GdkDrawable      *drawable,
-					 GdkGC            *gc,
-					 PangoFont        *font,
-					 gint              x,
-					 gint              y,
-					 PangoGlyphString *glyphs);
+
+static void gdk_window_draw_glyphs             (GdkDrawable      *drawable,
+						GdkGC            *gc,
+						PangoFont        *font,
+						gint              x,
+						gint              y,
+						PangoGlyphString *glyphs);
+static void gdk_window_draw_glyphs_transformed (GdkDrawable      *drawable,
+						GdkGC            *gc,
+						PangoMatrix      *matrix,
+						PangoFont        *font,
+						gint              x,
+						gint              y,
+						PangoGlyphString *glyphs);
 
 static void   gdk_window_draw_image     (GdkDrawable     *drawable,
                                          GdkGC           *gc,
@@ -134,6 +142,11 @@ static void gdk_window_draw_pixbuf (GdkDrawable     *drawable,
 				    GdkRgbDither     dither,
 				    gint             x_dither,
 				    gint             y_dither);
+
+static void gdk_window_draw_trapezoids (GdkDrawable   *drawable,
+					GdkGC	      *gc,
+					GdkTrapezoid  *trapezoids,
+					gint           n_trapezoids);
 
 static GdkImage* gdk_window_copy_to_image (GdkDrawable *drawable,
 					   GdkImage    *image,
@@ -239,8 +252,10 @@ gdk_window_class_init (GdkWindowObjectClass *klass)
   drawable_class->draw_segments = gdk_window_draw_segments;
   drawable_class->draw_lines = gdk_window_draw_lines;
   drawable_class->draw_glyphs = gdk_window_draw_glyphs;
+  drawable_class->draw_glyphs_transformed = gdk_window_draw_glyphs_transformed;
   drawable_class->draw_image = gdk_window_draw_image;
   drawable_class->draw_pixbuf = gdk_window_draw_pixbuf;
+  drawable_class->draw_trapezoids = gdk_window_draw_trapezoids;
   drawable_class->get_depth = gdk_window_real_get_depth;
   drawable_class->get_screen = gdk_window_real_get_screen;
   drawable_class->get_size = gdk_window_real_get_size;
@@ -1656,6 +1671,51 @@ gdk_window_draw_glyphs (GdkDrawable      *drawable,
   RESTORE_GC (gc);
 }
 
+static void
+gdk_window_draw_glyphs_transformed (GdkDrawable      *drawable,
+				    GdkGC            *gc,
+				    PangoMatrix      *matrix,
+				    PangoFont        *font,
+				    gint              x,
+				    gint              y,
+				    PangoGlyphString *glyphs)
+{
+  GdkWindowObject *private = (GdkWindowObject *)drawable;
+  PangoMatrix tmp_matrix;
+
+  OFFSET_GC (gc);
+
+  if (GDK_WINDOW_DESTROYED (drawable))
+    return;
+
+  if (x_offset != 0 || y_offset != 0)
+    {
+      if (matrix)
+	{
+	  tmp_matrix = *matrix;
+	  tmp_matrix.x0 -= x_offset;
+	  tmp_matrix.y0 -= y_offset;
+	  matrix = &tmp_matrix;
+	}
+      else
+	{
+	  x -= x_offset * PANGO_SCALE;
+	  y -= y_offset * PANGO_SCALE;
+	}
+    }
+  
+  if (private->paint_stack)
+    {
+      GdkWindowPaint *paint = private->paint_stack->data;
+
+      gdk_draw_glyphs_transformed (paint->pixmap, gc, matrix, font, x, y, glyphs);
+    }
+  else
+    gdk_draw_glyphs_transformed (private->impl, gc, matrix, font, x, y, glyphs);
+
+  RESTORE_GC (gc);
+}
+
 static GdkGC *
 gdk_window_get_bg_gc (GdkWindow      *window,
 		      GdkWindowPaint *paint)
@@ -1893,6 +1953,52 @@ gdk_window_draw_pixbuf (GdkDrawable     *drawable,
 			 width, height,
 			 dither, x_dither, y_dither);
     }
+}
+
+static void
+gdk_window_draw_trapezoids (GdkDrawable   *drawable,
+			    GdkGC	  *gc,
+			    GdkTrapezoid  *trapezoids,
+			    gint           n_trapezoids)
+{
+  GdkWindowObject *private = (GdkWindowObject *)drawable;
+  GdkTrapezoid *new_trapezoids = NULL;
+
+  OFFSET_GC (gc);
+
+  if (GDK_WINDOW_DESTROYED (drawable))
+    return;
+  
+  if (x_offset != 0 || y_offset != 0)
+    {
+      gint i;
+
+      new_trapezoids = g_new (GdkTrapezoid, n_trapezoids);
+      for (i=0; i < n_trapezoids; i++)
+	{
+	  new_trapezoids[i].y1 = trapezoids[i].y1 - y_offset;
+	  new_trapezoids[i].x11 = trapezoids[i].x11 - x_offset;
+	  new_trapezoids[i].x21 = trapezoids[i].x21 - x_offset;
+	  new_trapezoids[i].y2 = trapezoids[i].y2 - y_offset;
+	  new_trapezoids[i].x12 = trapezoids[i].x12 - x_offset;
+	  new_trapezoids[i].x22 = trapezoids[i].x22 - x_offset;
+	}
+
+      trapezoids = new_trapezoids;
+    }
+
+  if (private->paint_stack)
+    {
+      GdkWindowPaint *paint = private->paint_stack->data;
+      gdk_draw_trapezoids (paint->pixmap, gc, trapezoids, n_trapezoids);
+    }
+  else
+    gdk_draw_trapezoids (private->impl, gc, trapezoids, n_trapezoids);
+  
+  if (new_trapezoids)
+    g_free (new_trapezoids);
+
+  RESTORE_GC (gc);
 }
 
 static void

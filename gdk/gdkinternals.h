@@ -320,6 +320,11 @@ void _gdk_windowing_display_set_sm_client_id (GdkDisplay  *display,
 GType _gdk_window_impl_get_type (void) G_GNUC_CONST;
 GType _gdk_pixmap_impl_get_type (void) G_GNUC_CONST;
 
+
+/* Queries the current foreground color of a GdkGC */
+void _gdk_windowing_gc_get_foreground (GdkGC    *gc,
+				       GdkColor *color);
+
 /************************************
  * Initialization and exit routines *
  ************************************/

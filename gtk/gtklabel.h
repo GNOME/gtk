@@ -143,6 +143,9 @@ gboolean gtk_label_get_line_wrap                  (GtkLabel         *label);
 void     gtk_label_set_selectable                 (GtkLabel         *label,
 						   gboolean          setting);
 gboolean gtk_label_get_selectable                 (GtkLabel         *label);
+void     gtk_label_set_angle                      (GtkLabel         *label,
+						   gdouble           angle);
+gdouble  gtk_label_get_angle                      (GtkLabel         *label);
 void     gtk_label_select_region                  (GtkLabel         *label,
 						   gint              start_offset,
 						   gint              end_offset);

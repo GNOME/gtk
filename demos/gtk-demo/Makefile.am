@@ -22,6 +22,7 @@ demos =						\
 	menus.c					\
 	panes.c					\
 	pixbufs.c				\
+	rotated_text.c				\
 	sizegroup.c				\
 	stock_browser.c				\
 	textview.c				\

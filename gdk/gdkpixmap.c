@@ -90,12 +90,21 @@ static void   gdk_pixmap_draw_lines     (GdkDrawable     *drawable,
 					 GdkGC           *gc,
 					 GdkPoint        *points,
 					 gint             npoints);
-static void   gdk_pixmap_draw_glyphs    (GdkDrawable      *drawable,
-                                         GdkGC            *gc,
-                                         PangoFont        *font,
-                                         gint              x,
-                                         gint              y,
-                                         PangoGlyphString *glyphs);
+
+static void gdk_pixmap_draw_glyphs             (GdkDrawable      *drawable,
+						GdkGC            *gc,
+						PangoFont        *font,
+						gint              x,
+						gint              y,
+						PangoGlyphString *glyphs);
+static void gdk_pixmap_draw_glyphs_transformed (GdkDrawable      *drawable,
+						GdkGC            *gc,
+						PangoMatrix      *matrix,
+						PangoFont        *font,
+						gint              x,
+						gint              y,
+						PangoGlyphString *glyphs);
+
 static void   gdk_pixmap_draw_image     (GdkDrawable     *drawable,
                                          GdkGC           *gc,
                                          GdkImage        *image,
@@ -117,7 +126,10 @@ static void   gdk_pixmap_draw_pixbuf    (GdkDrawable     *drawable,
 					 GdkRgbDither     dither,
 					 gint             x_dither,
 					 gint             y_dither);
-
+static void  gdk_pixmap_draw_trapezoids (GdkDrawable     *drawable,
+					 GdkGC	         *gc,
+					 GdkTrapezoid    *trapezoids,
+					 gint             n_trapezoids);
 
 static void   gdk_pixmap_real_get_size  (GdkDrawable     *drawable,
                                          gint            *width,
@@ -201,8 +213,10 @@ gdk_pixmap_class_init (GdkPixmapObjectClass *klass)
   drawable_class->draw_segments = gdk_pixmap_draw_segments;
   drawable_class->draw_lines = gdk_pixmap_draw_lines;
   drawable_class->draw_glyphs = gdk_pixmap_draw_glyphs;
+  drawable_class->draw_glyphs_transformed = gdk_pixmap_draw_glyphs_transformed;
   drawable_class->draw_image = gdk_pixmap_draw_image;
   drawable_class->draw_pixbuf = gdk_pixmap_draw_pixbuf;
+  drawable_class->draw_trapezoids = gdk_pixmap_draw_trapezoids;
   drawable_class->get_depth = gdk_pixmap_real_get_depth;
   drawable_class->get_screen = gdk_pixmap_real_get_screen;
   drawable_class->get_size = gdk_pixmap_real_get_size;
@@ -372,6 +386,20 @@ gdk_pixmap_draw_glyphs (GdkDrawable      *drawable,
 }
 
 static void
+gdk_pixmap_draw_glyphs_transformed (GdkDrawable      *drawable,
+				    GdkGC            *gc,
+				    PangoMatrix      *matrix,
+				    PangoFont        *font,
+				    gint              x,
+				    gint              y,
+				    PangoGlyphString *glyphs)
+{
+  GdkPixmapObject *private = (GdkPixmapObject *)drawable;
+
+  gdk_draw_glyphs_transformed (private->impl, gc, matrix, font, x, y, glyphs);
+}
+
+static void
 gdk_pixmap_draw_image (GdkDrawable     *drawable,
                        GdkGC           *gc,
                        GdkImage        *image,
@@ -407,6 +435,17 @@ gdk_pixmap_draw_pixbuf (GdkDrawable     *drawable,
   gdk_draw_pixbuf (private->impl, gc, pixbuf,
 		   src_x, src_y, dest_x, dest_y, width, height,
 		   dither, x_dither, y_dither);
+}
+
+static void
+gdk_pixmap_draw_trapezoids (GdkDrawable     *drawable,
+			    GdkGC	    *gc,
+			    GdkTrapezoid    *trapezoids,
+			    gint             n_trapezoids)
+{
+  GdkPixmapObject *private = (GdkPixmapObject *)drawable;
+
+  gdk_draw_trapezoids (private->impl, gc, trapezoids, n_trapezoids);
 }
 
 static void

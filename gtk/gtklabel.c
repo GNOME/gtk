@@ -49,6 +49,8 @@ typedef struct
 {
   gint width_chars;
   guint single_line_mode : 1;
+  guint have_transform : 1;
+  gdouble angle;
 }
 GtkLabelPrivate;
 
@@ -88,7 +90,8 @@ enum {
   PROP_SELECTION_BOUND,
   PROP_ELLIPSIZE,
   PROP_WIDTH_CHARS,
-  PROP_SINGLE_LINE_MODE
+  PROP_SINGLE_LINE_MODE,
+  PROP_ANGLE
 };
 
 static guint signals[LAST_SIGNAL] = { 0 };
@@ -468,6 +471,27 @@ gtk_label_class_init (GtkLabelClass *class)
                                                         P_("Whether the label is in single line mode"),
                                                         FALSE,
                                                         G_PARAM_READWRITE));
+
+  /**
+   * GtkLabel:angle:
+   * 
+   * The angle that the baseline of the label makes with the horizontal,
+   * in degrees, measured counterclockwise. An angle of 90 reads from
+   * from bottom to top, an angle of 270, from top to bottom. Ignored
+   * if the label is selectable, wrapped, or ellipsized.
+   *
+   * Since: 2.6
+   **/
+  g_object_class_install_property (gobject_class,
+                                   PROP_ANGLE,
+                                   g_param_spec_double ("angle",
+							P_("Angle"),
+							P_("Angle at which the label is rotated"),
+							0.0,
+							360.0,
+							0.0, 
+							G_PARAM_READWRITE));
+  
   /*
    * Key bindings
    */
@@ -596,6 +620,9 @@ gtk_label_set_property (GObject      *object,
     case PROP_SINGLE_LINE_MODE:
       gtk_label_set_single_line_mode (label, g_value_get_boolean (value));
       break;	  
+    case PROP_ANGLE:
+      gtk_label_set_angle (label, g_value_get_double (value));
+      break;	  
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -670,6 +697,9 @@ gtk_label_get_property (GObject     *object,
     case PROP_SINGLE_LINE_MODE:
       g_value_set_boolean (value, gtk_label_get_single_line_mode (label));
       break;
+    case PROP_ANGLE:
+      g_value_set_double (value, gtk_label_get_angle (label));
+      break;
 
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -686,7 +716,7 @@ gtk_label_init (GtkLabel *label)
 
   priv = GTK_LABEL_GET_PRIVATE (label);
   priv->width_chars = -1;
-
+  priv->angle = 0.0;
   label->label = NULL;
 
   label->jtype = GTK_JUSTIFY_LEFT;
@@ -1646,6 +1676,28 @@ gtk_label_ensure_layout (GtkLabel *label)
       PangoAlignment align = PANGO_ALIGN_LEFT; /* Quiet gcc */
       GtkLabelPrivate *priv = GTK_LABEL_GET_PRIVATE (label);
 
+      if (priv->angle != 0.0 && !label->wrap && !label->ellipsize && !label->select_info)
+	{
+	  /* We rotate the standard singleton PangoContext for the widget,
+	   * depending on the fact that it's meant pretty much exclusively
+	   * for our use.
+	   */
+	  PangoMatrix matrix = PANGO_MATRIX_INIT;
+	  
+	  pango_matrix_rotate (&matrix, priv->angle);
+
+	  pango_context_set_matrix (gtk_widget_get_pango_context (widget), &matrix);
+	  
+	  priv->have_transform = TRUE;
+	}
+      else 
+	{
+	  if (priv->have_transform)
+	    pango_context_set_matrix (gtk_widget_get_pango_context (widget), NULL);
+
+	  priv->have_transform = FALSE;
+	}
+
       label->layout = gtk_widget_create_pango_layout (widget, label->text);
 
       if (label->effective_attrs)
@@ -1750,6 +1802,55 @@ gtk_label_ensure_layout (GtkLabel *label)
     }
 }
 
+/* Gets the bounds of a layout in device coordinates. Note cut-and-paste
+ * between here and gdkpango.c */
+static void
+get_rotated_layout_bounds (PangoLayout  *layout,
+			   GdkRectangle *rect)
+{
+  PangoContext *context = pango_layout_get_context (layout);
+  const PangoMatrix *matrix = pango_context_get_matrix (context);
+  gdouble x_min = 0, x_max = 0, y_min = 0, y_max = 0; /* quiet gcc */
+  PangoRectangle logical_rect;
+  gint i, j;
+
+  pango_layout_get_extents (layout, NULL, &logical_rect);
+  
+  for (i = 0; i < 2; i++)
+    {
+      gdouble x = (i == 0) ? logical_rect.x : logical_rect.x + logical_rect.width;
+      for (j = 0; j < 2; j++)
+	{
+	  gdouble y = (j == 0) ? logical_rect.y : logical_rect.y + logical_rect.height;
+	  
+	  gdouble xt = (x * matrix->xx + y * matrix->xy) / PANGO_SCALE + matrix->x0;
+	  gdouble yt = (x * matrix->yx + y * matrix->yy) / PANGO_SCALE + matrix->y0;
+	  
+	  if (i == 0 && j == 0)
+	    {
+	      x_min = x_max = xt;
+	      y_min = y_max = yt;
+	    }
+	  else
+	    {
+	      if (xt < x_min)
+		x_min = xt;
+	      if (yt < y_min)
+		y_min = yt;
+	      if (xt > x_max)
+		x_max = xt;
+	      if (yt > y_max)
+		y_max = yt;
+	    }
+	}
+    }
+  
+  rect->x = floor (x_min);
+  rect->width = ceil (x_max) - rect->x;
+  rect->y = floor (y_min);
+  rect->height = floor (y_max) - rect->y;
+}
+
 static void
 gtk_label_size_request (GtkWidget      *widget,
 			GtkRequisition *requisition)
@@ -1787,9 +1888,21 @@ gtk_label_size_request (GtkWidget      *widget,
   width = label->misc.xpad * 2;
   height = label->misc.ypad * 2;
 
-  pango_layout_get_extents (label->layout, NULL, &logical_rect);
   aux_info = _gtk_widget_get_aux_info (widget, FALSE);
 
+  if (priv->have_transform)
+    {
+      GdkRectangle rect;
+
+      get_rotated_layout_bounds (label->layout, &rect);
+      
+      requisition->width = width + rect.width;
+      requisition->height = height + rect.height;
+      return;
+    }
+  else
+    pango_layout_get_extents (label->layout, NULL, &logical_rect);
+  
   if (label->ellipsize || priv->width_chars > 0)
     {
       PangoContext *context;
@@ -1902,37 +2015,6 @@ gtk_label_direction_changed (GtkWidget        *widget,
 
   GTK_WIDGET_CLASS (parent_class)->direction_changed (widget, previous_dir);
 }
-
-#if 0
-static void
-gtk_label_paint_word (GtkLabel     *label,
-		      gint          x,
-		      gint          y,
-		      GtkLabelWord *word,
-		      GdkRectangle *area)
-{
-  GtkWidget *widget = GTK_WIDGET (label);
-  GtkLabelULine *uline;
-  gchar *tmp_str;
-  
-  tmp_str = gdk_wcstombs (word->beginning);
-  if (tmp_str)
-    {
-      gtk_paint_string (widget->style, widget->window, widget->state,
-			area, widget, "label", 
-			x + word->x,
-			y + word->y,
-			tmp_str);
-      g_free (tmp_str);
-    }
-  
-  for (uline = word->uline; uline; uline = uline->next)
-    gtk_paint_hline (widget->style, widget->window, 
-		     widget->state, area,
-		     widget, "label", 
-		     x + uline->x1, x + uline->x2, y + uline->y);
-}
-#endif
 
 static void
 get_layout_location (GtkLabel  *label,
@@ -2805,6 +2887,70 @@ gtk_label_get_selectable (GtkLabel *label)
   g_return_val_if_fail (GTK_IS_LABEL (label), FALSE);
 
   return label->select_info != NULL;
+}
+
+/**
+ * gtk_label_set_angle:
+ * @label: a #GtkLabel
+ * @angle: the angle that the baseline of the label makes with
+ *   the horizontal, in degrees, measured counterclockwise
+ * 
+ * Sets the angle of rotation for the label. An angle of 90 reads from
+ * from bottom to top, an angle of 270, from top to bottom. The angle
+ * setting for the label is ignored if the label is selectable,
+ * wrapped, or ellipsized.
+ *
+ * Since: 2.6
+ **/
+void
+gtk_label_set_angle (GtkLabel *label,
+		     gdouble   angle)
+{
+  GtkLabelPrivate *priv;
+
+  g_return_if_fail (GTK_IS_LABEL (label));
+
+  priv = GTK_LABEL_GET_PRIVATE (label);
+
+  /* Canonicalize to [0,360]. We don't canonicalize 360 to 0, because
+   * double property ranges are inclusive, and changing 360 to 0 would
+   * make a property editor behave strangely.
+   */
+  if (angle < 0 || angle > 360.0)
+    angle = angle - 360. * floor (angle / 360.);
+
+  if (angle != priv->angle)
+    {
+      priv->angle = angle;
+      
+      gtk_label_clear_layout (label);
+      gtk_widget_queue_resize (GTK_WIDGET (label));
+
+      g_object_notify (G_OBJECT (label), "angle");
+    }
+}
+
+/**
+ * gtk_label_get_angle:
+ * @label: a #GtkLabel
+ * 
+ * Gets the angle of rotation for the label. See
+ * gtk_label_set_angle.
+ * 
+ * Return value: the angle of rotation for the label
+ *
+ * Since: 2.6
+ **/
+gdouble
+gtk_label_get_angle  (GtkLabel *label)
+{
+  GtkLabelPrivate *priv;
+
+  g_return_val_if_fail (GTK_IS_LABEL (label), 0.0);
+
+  priv = GTK_LABEL_GET_PRIVATE (label);
+
+  return priv->angle;
 }
 
 static void

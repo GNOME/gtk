@@ -11,6 +11,7 @@ extern "C" {
 #endif /* __cplusplus */
 
 typedef struct _GdkDrawableClass GdkDrawableClass;
+typedef struct _GdkTrapezoid     GdkTrapezoid;
 
 #define GDK_TYPE_DRAWABLE              (gdk_drawable_get_type ())
 #define GDK_DRAWABLE(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_DRAWABLE, GdkDrawable))
@@ -154,10 +155,20 @@ struct _GdkDrawableClass
 				  gint            dest_y,
 				  gint            width,
 				  gint            height);
+  
+  void (*draw_glyphs_transformed) (GdkDrawable      *drawable,
+				   GdkGC	    *gc,
+				   PangoMatrix      *matrix,
+				   PangoFont        *font,
+				   gint              x,
+				   gint              y,
+				   PangoGlyphString *glyphs);
+  void (*draw_trapezoids)         (GdkDrawable      *drawable,
+				   GdkGC	    *gc,
+				   GdkTrapezoid     *trapezoids,
+				   gint              n_trapezoids);
 
   /* Padding for future expansion */
-  void         (*_gdk_reserved1)  (void);
-  void         (*_gdk_reserved2)  (void);
   void         (*_gdk_reserved3)  (void);
   void         (*_gdk_reserved4)  (void);
   void         (*_gdk_reserved5)  (void);
@@ -171,6 +182,11 @@ struct _GdkDrawableClass
   void         (*_gdk_reserved14) (void);
   void         (*_gdk_reserved15) (void);
   void         (*_gdk_reserved16) (void);
+};
+
+struct _GdkTrapezoid
+{
+  double y1, x11, x21, y2, x12, x22;
 };
 
 GType           gdk_drawable_get_type     (void);
@@ -338,6 +354,18 @@ void gdk_draw_layout_with_colors      (GdkDrawable     *drawable,
                                        const GdkColor  *foreground,
                                        const GdkColor  *background);
 
+void gdk_draw_glyphs_transformed (GdkDrawable      *drawable,
+				  GdkGC	           *gc,
+				  PangoMatrix      *matrix,
+				  PangoFont        *font,
+				  gint              x,
+				  gint              y,
+				  PangoGlyphString *glyphs);
+void gdk_draw_trapezoids         (GdkDrawable      *drawable,
+				  GdkGC	           *gc,
+				  GdkTrapezoid     *trapezoids,
+				  gint              n_trapezoids);
+
 #ifndef GDK_DISABLE_DEPRECATED
 #define gdk_draw_pixmap                gdk_draw_drawable
 #define gdk_draw_bitmap                gdk_draw_drawable
@@ -359,7 +387,6 @@ GdkImage *gdk_drawable_copy_to_image (GdkDrawable  *drawable,
 
 GdkRegion *gdk_drawable_get_clip_region    (GdkDrawable *drawable);
 GdkRegion *gdk_drawable_get_visible_region (GdkDrawable *drawable);
-
 
 gboolean gdk_draw_rectangle_alpha_libgtk_only (GdkDrawable *drawable,
 					       gint         x,

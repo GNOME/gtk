@@ -66,9 +66,14 @@ struct _GdkGCX11
   guint have_clip_mask : 1;
   guint depth : 8;
 
+  GdkFill fill;
+  GdkBitmap *stipple;
+  GdkPixmap *tile;
+
   Picture fg_picture;
   XRenderColor fg_picture_color; 
   gulong fg_pixel;
+  gulong bg_pixel;
 };
 
 struct _GdkGCX11Class
@@ -175,6 +180,9 @@ void _gdk_visual_init           (GdkScreen *screen);
 void _gdk_dnd_init		(GdkDisplay *display);
 void _gdk_windowing_image_init  (GdkDisplay *display);
 void _gdk_input_init            (GdkDisplay *display);
+
+PangoRenderer *_gdk_x11_renderer_get (GdkDrawable *drawable,
+				      GdkGC       *gc);
 
 extern GdkDrawableClass  _gdk_x11_drawable_class;
 extern gboolean	         _gdk_use_xshm;

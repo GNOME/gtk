@@ -148,6 +148,9 @@ struct _GdkDisplayX11
   guint xdnd_atoms_precached : 1;
   guint motif_atoms_precached : 1;
   guint use_sync : 1;
+
+  /* Alpha mask picture format */
+  XRenderPictFormat *mask_format;
 };
 
 struct _GdkDisplayX11Class

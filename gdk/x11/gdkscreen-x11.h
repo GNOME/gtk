@@ -88,6 +88,9 @@ struct _GdkScreenX11
   /* Xinerama */
   gint     num_monitors;
   GdkRectangle *monitors;
+
+  /* Pango renderer object singleton */
+  PangoRenderer *renderer;
 };
   
 struct _GdkScreenX11Class

@@ -2689,6 +2689,219 @@ void create_labels (GtkWidget *widget)
     gtk_widget_destroy (window);
 }
 
+static void
+on_angle_scale_changed (GtkRange *range,
+			GtkLabel *label)
+{
+  gtk_label_set_angle (GTK_LABEL (label), gtk_range_get_value (range));
+}
+
+static void
+create_rotated_label (GtkWidget *widget)
+{
+  static GtkWidget *window = NULL;
+  GtkWidget *vbox;
+  GtkWidget *hscale;
+  GtkWidget *label;  
+  GtkWidget *scale_label;  
+  GtkWidget *scale_hbox;  
+
+  if (!window)
+    {
+      window = gtk_dialog_new_with_buttons ("Rotated Label",
+					    GTK_WINDOW (gtk_widget_get_toplevel (widget)), 0,
+					    GTK_STOCK_CLOSE, GTK_RESPONSE_CLOSE,
+					    NULL);
+
+      gtk_window_set_resizable (GTK_WINDOW (window), FALSE);
+
+      gtk_window_set_screen (GTK_WINDOW (window),
+			     gtk_widget_get_screen (widget));
+
+      g_signal_connect (window, "response",
+			G_CALLBACK (gtk_object_destroy), NULL);
+      g_signal_connect (window, "destroy",
+			G_CALLBACK (gtk_widget_destroyed), &window);
+
+      vbox = gtk_vbox_new (FALSE, 5);
+      gtk_box_pack_start (GTK_BOX (GTK_DIALOG (window)->vbox), vbox, TRUE, TRUE, 0);
+      gtk_container_set_border_width (GTK_CONTAINER (vbox), 10);
+
+      label = gtk_label_new (NULL);
+      gtk_label_set_markup (GTK_LABEL (label), "Hello World\n<i>Rotate</i> <span underline='single' foreground='blue'>me</span>");
+      gtk_box_pack_start (GTK_BOX (vbox), label, TRUE, TRUE, 0);
+
+      scale_hbox = gtk_hbox_new (FALSE, 0);
+      gtk_box_pack_start (GTK_BOX (vbox), scale_hbox, FALSE, FALSE, 0);
+      
+      scale_label = gtk_label_new (NULL);
+      gtk_label_set_markup (GTK_LABEL (scale_label), "<i>Angle: </i>");
+      gtk_box_pack_start (GTK_BOX (scale_hbox), scale_label, FALSE, FALSE, 0);
+
+      hscale = gtk_hscale_new_with_range (0, 360, 5);
+      g_signal_connect (hscale, "value-changed",
+			G_CALLBACK (on_angle_scale_changed), label);
+      
+      gtk_range_set_value (GTK_RANGE (hscale), 45);
+      gtk_widget_set_usize (hscale, 200, -1);
+      gtk_box_pack_start (GTK_BOX (scale_hbox), hscale, TRUE, TRUE, 0);
+    }
+  
+  if (!GTK_WIDGET_VISIBLE (window))
+    gtk_widget_show_all (window);
+  else
+    gtk_widget_destroy (window);
+}
+
+#define DEFAULT_TEXT_RADIUS 200
+
+static void
+on_rotated_text_unrealize (GtkWidget *widget)
+{
+  g_object_set_data (G_OBJECT (widget), "text-gc", NULL);
+}
+
+static gboolean
+on_rotated_text_expose (GtkWidget      *widget,
+			GdkEventExpose *event,
+			GdkPixbuf      *tile_pixbuf)
+{
+  static const gchar *words[] = { "The", "grand", "old", "Duke", "of", "York",
+                                  "had", "10,000", "men" };
+  PangoRenderer *renderer;
+  GdkGC *gc;
+  int n_words;
+  int i;
+  double radius;
+  PangoMatrix matrix = PANGO_MATRIX_INIT;
+  PangoLayout *layout;
+  PangoContext *context;
+  PangoFontDescription *desc;
+
+  gc = g_object_get_data (G_OBJECT (widget), "text-gc");
+  if (!gc)
+    {
+      static GdkColor black = { 0, 0, 0, 0 };
+      
+      gc = gdk_gc_new (widget->window);
+      gdk_gc_set_rgb_fg_color (gc, &black);
+      
+      if (tile_pixbuf)
+	{
+	  GdkPixmap *tile;
+	  
+	  gint width = gdk_pixbuf_get_width (tile_pixbuf);
+	  gint height = gdk_pixbuf_get_height (tile_pixbuf);
+	  
+	  tile = gdk_pixmap_new (widget->window, width, height, -1);
+	  gdk_draw_pixbuf (tile, gc, tile_pixbuf,
+			   0, 0, 0, 0, width, height,
+			   GDK_RGB_DITHER_NORMAL, 0, 0);
+
+	  gdk_gc_set_tile (gc, tile);
+	  gdk_gc_set_fill (gc, GDK_TILED);
+
+	  g_object_unref (tile);
+	}
+
+      g_object_set_data_full (G_OBJECT (widget), "text-gc", gc, (GDestroyNotify)g_object_unref);
+    }
+
+  renderer = gdk_pango_renderer_get_default (gtk_widget_get_screen (widget));
+  gdk_pango_renderer_set_drawable (GDK_PANGO_RENDERER (renderer), widget->window);
+  gdk_pango_renderer_set_gc (GDK_PANGO_RENDERER (renderer), gc);
+
+  radius = MIN (widget->allocation.width, widget->allocation.height) / 2.;
+
+  pango_matrix_translate (&matrix,
+			  radius + (widget->allocation.width - 2 * radius) / 2,
+			  radius + (widget->allocation.height - 2 * radius) / 2);
+  pango_matrix_scale (&matrix, radius / DEFAULT_TEXT_RADIUS, radius / DEFAULT_TEXT_RADIUS);
+
+  context = gtk_widget_get_pango_context (widget);
+  layout = pango_layout_new (context);
+  desc = pango_font_description_from_string ("Sans Bold 30");
+  pango_layout_set_font_description (layout, desc);
+  pango_font_description_free (desc);
+    
+  n_words = G_N_ELEMENTS (words);
+  for (i = 0; i < n_words; i++)
+    {
+      PangoMatrix rotated_matrix = matrix;
+      int width, height;
+      
+      pango_matrix_rotate (&rotated_matrix, - (360. * i) / n_words);
+
+      pango_context_set_matrix (context, &rotated_matrix);
+      pango_layout_context_changed (layout);
+      pango_layout_set_text (layout, words[i], -1);
+      
+      pango_layout_get_size (layout, &width, &height);
+
+      pango_renderer_draw_layout (renderer, layout,
+				  - width / 2, - DEFAULT_TEXT_RADIUS * PANGO_SCALE);
+    }
+
+  gdk_pango_renderer_set_drawable (GDK_PANGO_RENDERER (renderer), NULL);
+  gdk_pango_renderer_set_gc (GDK_PANGO_RENDERER (renderer), NULL);
+  
+  g_object_unref (layout);
+
+  return FALSE;
+}
+
+static void
+create_rotated_text (GtkWidget *widget)
+{
+  static GtkWidget *window = NULL;
+
+  if (!window)
+    {
+      const GdkColor white = { 0, 0xffff, 0xffff, 0xffff };
+      GtkRequisition requisition;
+      GtkWidget *drawing_area;
+      GdkPixbuf *tile_pixbuf;
+
+      window = gtk_dialog_new_with_buttons ("Rotated Text",
+					    GTK_WINDOW (gtk_widget_get_toplevel (widget)), 0,
+					    GTK_STOCK_CLOSE, GTK_RESPONSE_CLOSE,
+					    NULL);
+
+      gtk_window_set_resizable (GTK_WINDOW (window), TRUE);
+
+      gtk_window_set_screen (GTK_WINDOW (window),
+			     gtk_widget_get_screen (widget));
+
+      g_signal_connect (window, "response",
+			G_CALLBACK (gtk_object_destroy), NULL);
+      g_signal_connect (window, "destroy",
+			G_CALLBACK (gtk_widget_destroyed), &window);
+
+      drawing_area = gtk_drawing_area_new ();
+      gtk_box_pack_start (GTK_BOX (GTK_DIALOG (window)->vbox), drawing_area, TRUE, TRUE, 0);
+      gtk_widget_modify_bg (drawing_area, GTK_STATE_NORMAL, &white);
+
+      tile_pixbuf = gdk_pixbuf_new_from_file ("marble.xpm", NULL);
+      
+      g_signal_connect (drawing_area, "expose-event",
+			G_CALLBACK (on_rotated_text_expose), tile_pixbuf);
+      g_signal_connect (drawing_area, "unrealize",
+			G_CALLBACK (on_rotated_text_unrealize), NULL);
+
+      gtk_widget_show_all (GTK_BIN (window)->child);
+      
+      gtk_widget_set_size_request (drawing_area, DEFAULT_TEXT_RADIUS * 2, DEFAULT_TEXT_RADIUS * 2);
+      gtk_widget_size_request (window, &requisition);
+      gtk_widget_set_size_request (drawing_area, -1, -1);
+      gtk_window_resize (GTK_WINDOW (window), requisition.width, requisition.height);
+    }
+  
+  if (!GTK_WIDGET_VISIBLE (window))
+    gtk_widget_show (window);
+  else
+    gtk_widget_destroy (window);
+}
+
 /*
  * Reparent demo
  */
@@ -12695,6 +12908,8 @@ struct {
   { "rc file", create_rc_file },
   { "reparent", create_reparent },
   { "resize grips", create_resize_grips },
+  { "rotated label", create_rotated_label },
+  { "rotated text", create_rotated_text },
   { "rulers", create_rulers },
   { "saved position", create_saved_position },
   { "scrolled windows", create_scrolled_windows },

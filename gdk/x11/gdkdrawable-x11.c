@@ -105,12 +105,21 @@ static void gdk_x11_draw_lines     (GdkDrawable    *drawable,
 				    GdkGC          *gc,
 				    GdkPoint       *points,
 				    gint            npoints);
-static void gdk_x11_draw_glyphs    (GdkDrawable      *drawable,
-                                    GdkGC            *gc,
-                                    PangoFont        *font,
-                                    gint              x,
-                                    gint              y,
-                                    PangoGlyphString *glyphs);
+
+static void gdk_x11_draw_glyphs             (GdkDrawable      *drawable,
+					     GdkGC            *gc,
+					     PangoFont        *font,
+					     gint              x,
+					     gint              y,
+					     PangoGlyphString *glyphs);
+static void gdk_x11_draw_glyphs_transformed (GdkDrawable      *drawable,
+					     GdkGC            *gc,
+					     PangoMatrix      *matrix,
+					     PangoFont        *font,
+					     gint              x,
+					     gint              y,
+					     PangoGlyphString *glyphs);
+
 static void gdk_x11_draw_image     (GdkDrawable     *drawable,
                                     GdkGC           *gc,
                                     GdkImage        *image,
@@ -132,6 +141,11 @@ static void gdk_x11_draw_pixbuf    (GdkDrawable     *drawable,
 				    GdkRgbDither     dither,
 				    gint             x_dither,
 				    gint             y_dither);
+
+static void gdk_x11_draw_trapezoids (GdkDrawable     *drawable,
+				     GdkGC	     *gc,
+				     GdkTrapezoid    *trapezoids,
+				     gint             n_trapezoids);
 
 static void gdk_x11_set_colormap   (GdkDrawable    *drawable,
                                     GdkColormap    *colormap);
@@ -196,8 +210,10 @@ gdk_drawable_impl_x11_class_init (GdkDrawableImplX11Class *klass)
   drawable_class->draw_segments = gdk_x11_draw_segments;
   drawable_class->draw_lines = gdk_x11_draw_lines;
   drawable_class->draw_glyphs = gdk_x11_draw_glyphs;
+  drawable_class->draw_glyphs_transformed = gdk_x11_draw_glyphs_transformed;
   drawable_class->draw_image = gdk_x11_draw_image;
   drawable_class->draw_pixbuf = gdk_x11_draw_pixbuf;
+  drawable_class->draw_trapezoids = gdk_x11_draw_trapezoids;
   
   drawable_class->set_colormap = gdk_x11_set_colormap;
   drawable_class->get_colormap = gdk_x11_get_colormap;
@@ -351,7 +367,7 @@ gdk_x11_drawable_get_picture (GdkDrawable *drawable)
 
 static void
 gdk_x11_drawable_update_xft_clip (GdkDrawable *drawable,
-				  GdkGC       *gc)
+				   GdkGC       *gc)
 {
   GdkGCX11 *gc_private = gc ? GDK_GC_X11 (gc) : NULL;
   XftDraw *xft_draw = gdk_x11_drawable_get_xft_draw (drawable);
@@ -790,20 +806,42 @@ gdk_x11_draw_glyphs (GdkDrawable      *drawable,
 		     gint              y,
 		     PangoGlyphString *glyphs)
 {
+  gdk_x11_draw_glyphs_transformed (drawable, gc, NULL,
+				   font,
+				   x * PANGO_SCALE,
+				   y * PANGO_SCALE,
+				   glyphs);
+}
+
+static void
+gdk_x11_draw_glyphs_transformed (GdkDrawable      *drawable,
+				 GdkGC            *gc,
+				 PangoMatrix      *matrix,
+				 PangoFont        *font,
+				 gint              x,
+				 gint              y,
+				 PangoGlyphString *glyphs)
+{
   GdkDrawableImplX11 *impl;
+  PangoRenderer *renderer;
   XftColor color;
   XftDraw *draw;
 
   impl = GDK_DRAWABLE_IMPL_X11 (drawable);
 
   g_return_if_fail (PANGO_XFT_IS_FONT (font));
- 
+
   _gdk_gc_x11_get_fg_xft_color (gc, &color);
       
   gdk_x11_drawable_update_xft_clip (drawable, gc);
   draw = gdk_x11_drawable_get_xft_draw (drawable);
       
-  pango_xft_render (draw, &color, font, glyphs, x, y);
+  renderer = _gdk_x11_renderer_get (drawable, gc);
+  if (matrix)
+    pango_renderer_set_matrix (renderer, matrix);
+  pango_renderer_draw_glyphs (renderer, font, glyphs, x, y);
+  if (matrix)
+    pango_renderer_set_matrix (renderer, NULL);
 }
 
 static void
@@ -841,23 +879,19 @@ gdk_x11_get_depth (GdkDrawable *drawable)
   return gdk_drawable_get_depth (GDK_DRAWABLE_IMPL_X11 (drawable)->wrapper);
 }
 
-
-static GdkDrawable * get_impl_drawable (GdkDrawable *drawable)
+static GdkDrawable *
+get_impl_drawable (GdkDrawable *drawable)
 {
-  GdkDrawable *impl;
-  
   if (GDK_IS_WINDOW (drawable))
-    impl = ((GdkWindowObject *)drawable)->impl;
+    return ((GdkWindowObject *)drawable)->impl;
   else if (GDK_IS_PIXMAP (drawable))
-    impl = ((GdkPixmapObject *)drawable)->impl;
+    return ((GdkPixmapObject *)drawable)->impl;
   else
     {
       g_warning (G_STRLOC " drawable is not a pixmap or window");
-      return (GdkDrawable *)None;
+      return NULL;
     }
-  return impl;
 }
-
 
 static GdkScreen*
 gdk_x11_get_screen (GdkDrawable *drawable)
@@ -1458,6 +1492,47 @@ gdk_x11_draw_pixbuf (GdkDrawable     *drawable,
 		      dest_x, dest_y, width, height);
 }
 
+static void
+gdk_x11_draw_trapezoids (GdkDrawable  *drawable,
+			 GdkGC	      *gc,
+			 GdkTrapezoid *trapezoids,
+			 gint          n_trapezoids)
+{
+  GdkScreen *screen = GDK_DRAWABLE_IMPL_X11 (drawable)->screen;
+  GdkDisplay *display = gdk_screen_get_display (screen);
+  XTrapezoid *xtrapezoids;
+  gint i;
+
+  if (!_gdk_x11_have_render (display))
+    {
+      GdkDrawable *wrapper = GDK_DRAWABLE_IMPL_X11 (drawable)->wrapper;
+      GDK_DRAWABLE_CLASS (parent_class)->draw_trapezoids (wrapper, gc,
+							  trapezoids, n_trapezoids);
+      return;
+    }
+
+  xtrapezoids = g_new (XTrapezoid, n_trapezoids);
+
+  for (i = 0; i < n_trapezoids; i++)
+    {
+      xtrapezoids[i].top = XDoubleToFixed (trapezoids[i].y1);
+      xtrapezoids[i].bottom = XDoubleToFixed (trapezoids[i].y2);
+      xtrapezoids[i].left.p1.x = XDoubleToFixed (trapezoids[i].x11);
+      xtrapezoids[i].left.p1.y = XDoubleToFixed (trapezoids[i].y1);
+      xtrapezoids[i].left.p2.x = XDoubleToFixed (trapezoids[i].x12);
+      xtrapezoids[i].left.p2.y = XDoubleToFixed (trapezoids[i].y2);
+      xtrapezoids[i].right.p1.x = XDoubleToFixed (trapezoids[i].x21);
+      xtrapezoids[i].right.p1.y = XDoubleToFixed (trapezoids[i].y1);
+      xtrapezoids[i].right.p2.x = XDoubleToFixed (trapezoids[i].x22);
+      xtrapezoids[i].right.p2.y = XDoubleToFixed (trapezoids[i].y2);
+    }
+
+  _gdk_x11_drawable_draw_xtrapezoids (drawable, gc,
+				      xtrapezoids, n_trapezoids);
+  
+  g_free (xtrapezoids);
+}
+
 /**
  * gdk_draw_rectangle_alpha_libgtk_only:
  * @drawable: The #GdkDrawable to draw on
@@ -1521,4 +1596,86 @@ gdk_draw_rectangle_alpha_libgtk_only (GdkDrawable  *drawable,
 			x - x_offset, y - y_offset,
 			width, height);
   return TRUE;
+}
+
+void
+_gdk_x11_drawable_draw_xtrapezoids (GdkDrawable      *drawable,
+				    GdkGC            *gc,
+				    XTrapezoid       *xtrapezoids,
+				    int               n_trapezoids)
+{
+  GdkScreen *screen = GDK_DRAWABLE_IMPL_X11 (drawable)->screen;
+  GdkDisplay *display = gdk_screen_get_display (screen);
+  GdkDisplayX11 *x11display = GDK_DISPLAY_X11 (display);
+   
+  XftDraw *draw;
+
+  if (!_gdk_x11_have_render (display))
+    {
+      /* This is the case of drawing the borders of the unknown glyph box
+       * without render on the display, we need to feed it back to
+       * fallback code. Not efficient, but doesn't matter.
+       */
+      GdkTrapezoid *trapezoids = g_new (GdkTrapezoid, n_trapezoids);
+      int i;
+
+      for (i = 0; i < n_trapezoids; i++)
+	{
+	  trapezoids[i].y1 = XFixedToDouble (xtrapezoids[i].top);
+	  trapezoids[i].y2 = XFixedToDouble (xtrapezoids[i].bottom);
+	  trapezoids[i].x11 = XFixedToDouble (xtrapezoids[i].left.p1.x);
+	  trapezoids[i].x12 = XFixedToDouble (xtrapezoids[i].left.p2.x);
+	  trapezoids[i].x21 = XFixedToDouble (xtrapezoids[i].right.p1.x);
+	  trapezoids[i].x22 = XFixedToDouble (xtrapezoids[i].right.p2.x);
+	}
+
+      gdk_x11_draw_trapezoids (drawable, gc, trapezoids, n_trapezoids);
+      g_free (trapezoids);
+
+      return;
+    }
+
+  draw = gdk_x11_drawable_get_xft_draw (drawable);
+
+  if (!x11display->mask_format)
+    x11display->mask_format = XRenderFindStandardFormat (x11display->xdisplay,
+							 PictStandardA8);
+
+  XRenderCompositeTrapezoids (x11display->xdisplay, PictOpOver,
+			      _gdk_x11_gc_get_fg_picture (gc),
+			      XftDrawPicture (draw),
+			      x11display->mask_format,
+			      - gc->ts_x_origin, - gc->ts_y_origin,
+			      xtrapezoids, n_trapezoids);
+}
+
+void
+_gdk_x11_drawable_draw_xft_glyphs (GdkDrawable      *drawable,
+				   GdkGC            *gc,
+				   XftFont          *xft_font,
+				   XftGlyphSpec     *glyphs,
+				   gint              n_glyphs)
+{
+  GdkScreen *screen = GDK_DRAWABLE_IMPL_X11 (drawable)->screen;
+  GdkDisplay *display = gdk_screen_get_display (screen);
+  GdkDisplayX11 *x11display = GDK_DISPLAY_X11 (display);
+   
+  XftDraw *draw = gdk_x11_drawable_get_xft_draw (drawable);
+
+  if (_gdk_x11_have_render (display))
+    {
+      XftGlyphSpecRender (x11display->xdisplay, PictOpOver,
+			  _gdk_x11_gc_get_fg_picture (gc),
+			  xft_font,
+			  XftDrawPicture (draw),
+			  - gc->ts_x_origin, - gc->ts_y_origin,
+			  glyphs, n_glyphs);
+    }
+  else
+    {
+      XftColor color;
+      
+      _gdk_gc_x11_get_fg_xft_color (gc, &color);
+      XftDrawGlyphSpec (draw, &color, xft_font, glyphs, n_glyphs);
+    }
 }

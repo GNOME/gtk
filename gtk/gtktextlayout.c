@@ -1398,6 +1398,16 @@ add_generic_attrs (GtkTextLayout      *layout,
       pango_attr_list_insert (attrs, attr);
     }
 
+  if (appearance->strikethrough)
+    {
+      attr = pango_attr_strikethrough_new (appearance->strikethrough);
+      
+      attr->start_index = start;
+      attr->end_index = start + byte_count;
+      
+      pango_attr_list_insert (attrs, attr);
+    }
+
   if (appearance->rise != 0)
     {
       attr = pango_attr_rise_new (appearance->rise);
@@ -1469,7 +1479,8 @@ add_pixbuf_attrs (GtkTextLayout      *layout,
   logical_rect.width = width * PANGO_SCALE;
   logical_rect.height = height * PANGO_SCALE;
 
-  attr = pango_attr_shape_new (&logical_rect, &logical_rect);
+  attr = pango_attr_shape_new_with_data (&logical_rect, &logical_rect,
+					 pixbuf->pixbuf, NULL, NULL);
   attr->start_index = start;
   attr->end_index = start + seg->byte_count;
   pango_attr_list_insert (attrs, attr);
@@ -1491,6 +1502,7 @@ add_child_attrs (GtkTextLayout      *layout,
   GtkTextChildAnchor *anchor;
   gint width, height;
   GSList *tmp_list;
+  GtkWidget *widget;
 
   width = 1;
   height = 1;
@@ -1512,8 +1524,7 @@ add_child_attrs (GtkTextLayout      *layout,
           width = req.width;
           height = req.height;
 
-          display->shaped_objects =
-            g_slist_append (display->shaped_objects, child);
+	  widget = child;
           
           break;
         }
@@ -1534,16 +1545,18 @@ add_child_attrs (GtkTextLayout      *layout,
       width = 30;
       height = 20;
 
-      display->shaped_objects =
-        g_slist_append (display->shaped_objects, NULL);
+      widget = NULL;
     }
+
+  display->shaped_objects = g_slist_append (display->shaped_objects, widget);
   
   logical_rect.x = 0;
   logical_rect.y = -height * PANGO_SCALE;
   logical_rect.width = width * PANGO_SCALE;
   logical_rect.height = height * PANGO_SCALE;
 
-  attr = pango_attr_shape_new (&logical_rect, &logical_rect);
+  attr = pango_attr_shape_new_with_data (&logical_rect, &logical_rect,
+					 widget, NULL, NULL);
   attr->start_index = start;
   attr->end_index = start + seg->byte_count;
   pango_attr_list_insert (attrs, attr);

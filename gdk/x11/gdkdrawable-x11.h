@@ -90,6 +90,17 @@ void  _gdk_x11_convert_to_format      (guchar           *src_buf,
                                        gint              width,
                                        gint              height);
 
+/* Note that the following take GdkDrawableImplX11, not the wrapper drawable */
+void _gdk_x11_drawable_draw_xtrapezoids (GdkDrawable  *drawable,
+					 GdkGC        *gc,
+					 XTrapezoid   *xtrapezoids,
+					 int           n_trapezoids);
+void _gdk_x11_drawable_draw_xft_glyphs  (GdkDrawable  *drawable,
+					 GdkGC        *gc,
+					 XftFont      *xft_font,
+					 XftGlyphSpec *glyphs,
+					 gint          n_glyphs);
+
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */

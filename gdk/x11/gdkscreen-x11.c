@@ -306,6 +306,9 @@ gdk_screen_x11_finalize (GObject *object)
   GdkScreenX11 *screen_x11 = GDK_SCREEN_X11 (object);
   /* int i; */
   g_object_unref (screen_x11->root_window);
+
+  if (screen_x11->renderer)
+    g_object_unref (screen_x11->renderer);
   
   /* Visual Part (Need to implement finalize for Visuals for a clean
    * finalize) */
