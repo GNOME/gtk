@@ -119,18 +119,12 @@ void gdk_pixbuf_render_to_drawable_alpha (GdkPixbuf *pixbuf, GdkDrawable *drawab
 					  int x_dither, int y_dither);
 
 
-#if 0
-
 /* Fetching a region from a drawable */
-
 GdkPixbuf *gdk_pixbuf_get_from_drawable (GdkPixbuf *dest,
 					 GdkDrawable *src, GdkColormap *cmap,
 					 int src_x, int src_y,
 					 int dest_x, int dest_y,
 					 int width, int height);
-
-#endif
-
 
 
 #ifdef __cplusplus

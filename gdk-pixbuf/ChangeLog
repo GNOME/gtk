@@ -1,5 +1,8 @@
 1999-12-09  Michael Zucchi  <zucchi@zedzone.mmc.com.au>
 
+	* gdk-pixbuf/gdk-pixbuf.h: Enable gdk_pixbuf_get_from_drawable()
+	api call.
+
 	* gdk-pixbuf/gdk-pixbuf-drawable.c (gdk_pixbuf_get_from_drawable):
 	Filled in body of function.
 	(rgbconvert): Added GdkColormap parameter, and to all conversion
