@@ -1,3 +1,10 @@
+2004-11-16  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkcellrenderertext.c (get_layout): Don't use the foreground
+	color for selected cells, Don't use the background color
+	in unfocused selected cells. Also avoid creating two PangoLayouts
+	per render call.  (#154615, #154611, Billy Biggs)
+
 Mon Nov 15 19:02:07 2004  Manish Singh  <yosh@gimp.org>
 
 	* gdk/abicheck.sh
