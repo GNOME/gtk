@@ -1,3 +1,12 @@
+Sat Feb  2 18:07:51 2002  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtktreeview.c (gtk_tree_view_size_allocate): set upper member
+	of vadjustment correct, so the vscrollbars of lists smaller than
+	1 page are somewhat saner (#66905)
+
+	* gtk/gtkliststore.c (gtk_list_store_remove_silently): do not
+	increment the stamp, liststore is a model with persisting iters
+
 Fri Feb  1 23:54:00 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkrc.[ch] (gtk_rc_parse_engine):	Support 

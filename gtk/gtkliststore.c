@@ -962,8 +962,6 @@ gtk_list_store_remove_silently (GtkListStore *list_store,
     if (iter->user_data == list_store->tail)
       list_store->tail = prev;
   }
-
-  list_store->stamp ++;
 }
 
 /**
