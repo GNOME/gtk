@@ -620,7 +620,7 @@ fill_file_buffer (GtkTextBuffer *buffer, const char *filename)
       gint count;
       char *leftover, *next;
       int to_read = 2047  - remaining;
-      
+
       count = fread (buf + remaining, 1, to_read, f);
       buf[count + remaining] = '\0';
 
@@ -632,6 +632,10 @@ fill_file_buffer (GtkTextBuffer *buffer, const char *filename)
 	    break;
 	  
 	  next = g_utf8_next_char (next);
+	  if (next > buf+count+remaining) {
+	    next = NULL;
+	    break;
+	  }
 	}
 
       gtk_text_buffer_insert (buffer, &iter, buf, leftover - buf);
@@ -1090,9 +1094,8 @@ save_buffer (Buffer *buffer)
 					buffer->filename, bak_filename, g_strerror (errno));
 	  msgbox_run (NULL, err, "OK", NULL, NULL, 0);
 	  g_free (err);
+          return FALSE;
 	}
-      
-      return FALSE;
     }
   else
     have_backup = TRUE;
