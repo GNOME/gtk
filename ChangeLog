@@ -1,3 +1,10 @@
+Sun Jan 10 14:45:37 1999  Owen Taylor  <otaylor@gtk.org>
+
+	* gtk/gtktext.c (text_properties_equal): Fixed
+	cut and paste bug when comparing text property
+	bg colors.
+	[ Matt Aubury <Matt.Aubury@comlab.ox.ac.uk> ]
+
 1999-01-10  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtksignal.c (gtk_signal_lookup): if the lookup failed, try

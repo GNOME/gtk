@@ -2975,11 +2975,11 @@ text_properties_equal (TextProperty* prop, GdkFont* font, GdkColor *fore, GdkCol
 
   if (prop->flags & PROPERTY_BACKGROUND)
     {
-      if (!back || !gdk_color_equal (&prop->fore_color, fore))
+      if (!back || !gdk_color_equal (&prop->back_color, back))
 	return FALSE;
     }
   else
-    if (fore != NULL)
+    if (back != NULL)
       return FALSE;
   
   return TRUE;
