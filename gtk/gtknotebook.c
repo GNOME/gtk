@@ -3123,7 +3123,9 @@ gtk_notebook_key_press (GtkWidget   *widget,
       direction = GTK_DIR_RIGHT;
       break;
     case GDK_Tab:
+#ifdef GDK_ISO_Left_Tab /* Not available on X11R5 */
     case GDK_ISO_Left_Tab:
+#endif
       if (event->state & GDK_SHIFT_MASK)
 	direction = GTK_DIR_TAB_BACKWARD;
       else

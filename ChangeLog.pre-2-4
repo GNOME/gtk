@@ -1,3 +1,17 @@
+Sun Nov  1 05:30:32 PST 1998 Manish Singh <yosh@gimp.org>
+
+	* gdk/Makefile.am: changed the awk scripts to generate gdkcursors.h
+	and gdkkeysyms.h into sed scripts, since the awk scripts weren't
+	portable, and we really shouldn't be using awk anyway.
+
+	* makecursors.awk
+	* makekeysyms.awk: bye bye
+
+	* gtk/gtkaccelgroup.c
+	* gtk/gtkclist.c
+	* gtk/gtknotebook.c
+	* gtk/gtkwindow.c: don't use X11R6 keysyms if they aren't there
+
 Sat Oct 31 15:22:14 PST 1998 Manish Singh <yosh@gimp.org>
 
 	* gdk/Makefile.am: do the same built sources trick for gdkcursors.h
