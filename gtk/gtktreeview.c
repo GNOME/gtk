@@ -1457,7 +1457,7 @@ gtk_tree_view_size_request (GtkWidget      *widget,
   gtk_tree_view_update_size (GTK_TREE_VIEW (widget));
 
   requisition->width = tree_view->priv->width;
-  requisition->height = tree_view->priv->height + tree_view->priv->header_height;
+  requisition->height = tree_view->priv->height + TREE_VIEW_HEADER_HEIGHT (tree_view);
 
   tmp_list = tree_view->priv->children;
 
@@ -1501,6 +1501,20 @@ gtk_tree_view_size_allocate_columns (GtkWidget *widget)
       column = list->data;
       if (!column->visible)
 	continue;
+
+      /* We need to handle the dragged button specially.
+       */
+      if (column == tree_view->priv->drag_column)
+	{
+	  GtkAllocation drag_allocation;
+	  gdk_window_get_size (tree_view->priv->drag_window,
+			       &(drag_allocation.width), &(drag_allocation.height));
+	  drag_allocation.x = 0;
+	  drag_allocation.y = 0;
+	  gtk_widget_size_allocate (tree_view->priv->drag_column->button, &drag_allocation);
+	  width += drag_allocation.width;
+	  continue;
+	}
 
       if (column->use_resized_width)
 	{
@@ -1575,22 +1589,6 @@ gtk_tree_view_size_allocate (GtkWidget     *widget,
       gtk_widget_size_allocate (child->widget, &allocation);
     }
 
-  if (GTK_WIDGET_REALIZED (widget))
-    {
-      gdk_window_move_resize (widget->window,
-			      allocation->x, allocation->y,
-			      allocation->width, allocation->height);
-      gdk_window_move_resize (tree_view->priv->header_window,
-			      0, 0,
-			      MAX (tree_view->priv->width, allocation->width),
-			      tree_view->priv->header_height);
-      gdk_window_move_resize (tree_view->priv->bin_window,
-			      0, TREE_VIEW_HEADER_HEIGHT (tree_view),
-			      MAX (tree_view->priv->width, allocation->width),
-			      allocation->height - TREE_VIEW_HEADER_HEIGHT (tree_view));
-    }
-
-  gtk_tree_view_size_allocate_columns (widget);
 
   tree_view->priv->hadjustment->page_size = allocation->width;
   tree_view->priv->hadjustment->page_increment = allocation->width;
@@ -1612,7 +1610,26 @@ gtk_tree_view_size_allocate (GtkWidget     *widget,
     gtk_adjustment_set_value (tree_view->priv->vadjustment,
 			      MAX (tree_view->priv->height - allocation->height, 0));
   gtk_adjustment_changed (tree_view->priv->vadjustment);
+  
+  if (GTK_WIDGET_REALIZED (widget))
+    {
+      gdk_window_move_resize (widget->window,
+			      allocation->x, allocation->y,
+			      allocation->width, allocation->height);
+      gdk_window_move_resize (tree_view->priv->header_window,
+			      - (gint) tree_view->priv->hadjustment->value,
+			      0,
+			      MAX (tree_view->priv->width, allocation->width),
+			      tree_view->priv->header_height);
+      gdk_window_move_resize (tree_view->priv->bin_window,
+			      - (gint) tree_view->priv->hadjustment->value,
+			      TREE_VIEW_HEADER_HEIGHT (tree_view),
+			      MAX (tree_view->priv->width, allocation->width),
+			      allocation->height - TREE_VIEW_HEADER_HEIGHT (tree_view));
+    }
 
+  gtk_tree_view_size_allocate_columns (widget);
+  
   if (tree_view->priv->scroll_to_path != NULL ||
       tree_view->priv->scroll_to_column != NULL)
     {
@@ -1870,21 +1887,20 @@ gtk_tree_view_button_release_drag_column (GtkWidget      *widget,
 					  GdkEventButton *event)
 {
   GtkTreeView *tree_view;
-  GtkAllocation allocation;
 
   tree_view = GTK_TREE_VIEW (widget);
 
-  allocation = tree_view->priv->drag_column->button->allocation;
-  allocation.x = tree_view->priv->drag_column_x;
   gdk_pointer_ungrab (GDK_CURRENT_TIME);
   gdk_keyboard_ungrab (GDK_CURRENT_TIME);
-  gdk_window_reparent (tree_view->priv->drag_column->button->window,
-		       tree_view->priv->header_window,
-		       tree_view->priv->drag_column_x,
-		       tree_view->priv->drag_column->button->allocation.y);
-  gtk_widget_set_parent_window (tree_view->priv->drag_column->button, tree_view->priv->header_window);
 
-  gtk_widget_size_allocate (tree_view->priv->drag_column->button, &allocation);
+  /* Move the button back */
+  g_object_ref (tree_view->priv->drag_column->button);
+  gtk_container_remove (GTK_CONTAINER (tree_view), tree_view->priv->drag_column->button);
+  gtk_widget_set_parent_window (tree_view->priv->drag_column->button, tree_view->priv->header_window);
+  gtk_widget_set_parent (tree_view->priv->drag_column->button, GTK_WIDGET (tree_view));
+  g_object_unref (tree_view->priv->drag_column->button);
+  gtk_widget_queue_resize (widget);
+
   gtk_widget_grab_focus (tree_view->priv->drag_column->button);
 
   if (tree_view->priv->cur_reorder &&
@@ -2135,6 +2151,7 @@ gtk_tree_view_motion_draw_column_motion_arrow (GtkTreeView *tree_view)
 	x = reorder->left_column->button->allocation.x + reorder->left_column->button->allocation.width;
       else
 	x = reorder->right_column->button->allocation.x;
+
       if (x < visible_rect.x)
 	arrow_type = DRAG_COLUMN_WINDOW_STATE_ARROW_LEFT;
       else if (x > visible_rect.x + visible_rect.width)
@@ -2199,16 +2216,15 @@ gtk_tree_view_motion_draw_column_motion_arrow (GtkTreeView *tree_view)
       width = expander_size;
 
       /* Get x, y, width, height of arrow */
+      gdk_window_get_origin (tree_view->priv->header_window, &x, &y);
       if (reorder->left_column)
 	{
-	  gdk_window_get_origin (reorder->left_column->button->window, &x, &y);
-	  x += reorder->left_column->button->allocation.width - width/2;
+	  x += reorder->left_column->button->allocation.x + reorder->left_column->button->allocation.width - width/2;
 	  height = reorder->left_column->button->allocation.height;
 	}
       else
 	{
-	  gdk_window_get_origin (reorder->right_column->button->window, &x, &y);
-	  x -= width/2;
+	  x += reorder->right_column->button->allocation.x - width/2;
 	  height = reorder->right_column->button->allocation.height;
 	}
       y -= expander_size/2; /* The arrow takes up only half the space */
@@ -2386,7 +2402,7 @@ gtk_tree_view_update_current_reorder (GtkTreeView *tree_view)
   GList *list;
   gint mouse_x;
 
-  gdk_window_get_pointer (tree_view->priv->bin_window, &mouse_x, NULL, NULL);
+  gdk_window_get_pointer (tree_view->priv->header_window, &mouse_x, NULL, NULL);
 
   for (list = tree_view->priv->column_drag_info; list; list = list->next)
     {
@@ -2969,14 +2985,22 @@ gtk_tree_view_expose (GtkWidget      *widget,
       for (list = tree_view->priv->columns; list != NULL; list = list->next)
 	{
 	  GtkTreeViewColumn *column = list->data;
-	  
+
+	  if (column == tree_view->priv->drag_column)
+	    continue;
+
 	  if (column->visible)
 	    gtk_container_propagate_expose (GTK_CONTAINER (tree_view),
 					    column->button,
 					    event);
 	}
     }
-
+  else if (event->window == tree_view->priv->drag_window)
+    {
+      gtk_container_propagate_expose (GTK_CONTAINER (tree_view),
+				      tree_view->priv->drag_column->button,
+				      event);
+    }
   return TRUE;
 }
 
@@ -4354,7 +4378,6 @@ gtk_tree_view_remove (GtkContainer *container,
 	}
       tmp_list = tmp_list->next;
     }
-
 }
 
 static void
@@ -5850,10 +5873,17 @@ _gtk_tree_view_column_start_drag (GtkTreeView       *tree_view,
 
   gdk_window_move_resize (tree_view->priv->drag_window,
 			  column->button->allocation.x,
-			  column->button->allocation.y + column->button->allocation.height,
+			  0,
 			  column->button->allocation.width,
 			  column->button->allocation.height);
-  gdk_window_reparent (column->button->window, tree_view->priv->drag_window, 0, 0);
+
+  /* Kids, don't try this at home */
+  g_object_ref (column->button);
+  gtk_container_remove (GTK_CONTAINER (tree_view), column->button);
+  gtk_widget_set_parent_window (column->button, tree_view->priv->drag_window);
+  gtk_widget_set_parent (column->button, GTK_WIDGET (tree_view));
+  g_object_unref (column->button);
+
   tree_view->priv->drag_column_x = column->button->allocation.x;
   allocation = column->button->allocation;
   allocation.x = 0;

@@ -762,6 +762,10 @@ gtk_tree_view_column_button_event (GtkWidget *widget,
 				 (gint) ((GdkEventMotion *)event)->y)))
     {
       column->maybe_reordered = FALSE;
+      /* this is to change our drag_x to be relative to
+       * tree_view->priv->bin_window, instead of our window.
+       */
+      column->drag_x -= column->button->allocation.x;
       _gtk_tree_view_column_start_drag (GTK_TREE_VIEW (column->tree_view), column);
       return TRUE;
     }

@@ -1,3 +1,10 @@
+Thu Jan 24 15:41:08 2002  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtktreeview.c
+	 (gtk_tree_view_motion_draw_column_motion_arrow): fix column
+	 reordering fully.
+	 (gtk_tree_view_size_allocate): fix evil bug.
+
 Thu Jan 24 11:53:19 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtktreeview.c (gtk_tree_view_destroy): Don't clear
