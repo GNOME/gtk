@@ -1,3 +1,8 @@
+2001-08-13  Matthias Clasen  <matthiasc@waldgeist.poet.de>
+
+	* gtk/gtktooltips.c (gtk_tooltips_set_tip, gtk_tooltips_draw_tips): 
+	Don't remove the tooltip window when the tip text changes. (#15891)
+
 Sun Aug 12 12:02:09 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/Makefile.am ($(srcdir)/gtkmarshal.c): Remove extra
