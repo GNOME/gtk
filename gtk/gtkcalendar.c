@@ -2332,7 +2332,7 @@ gtk_calendar_button_press (GtkWidget	  *widget,
     action_func = gtk_calendar_set_year_next;
 
   /* only call the action on single click, not double */
-  if (event->type == GDK_BUTTON_PRESS)
+  if (action_func && event->type == GDK_BUTTON_PRESS)
     (* action_func) (calendar);
   
   return action_func != NULL;

@@ -1,3 +1,8 @@
+2001-04-04  Denis Oliver Kropp  <dok@convergence.de>
+
+	* gtk/gtkcalendar.c (gtk_calendar_button_press):
+        check for action_func != NULL
+
 2001-04-04  Sven Neumann  <sven@gimp.org>
 
 	* tests/testgtk.c (test_init): corrected path to gtk.immodules
