@@ -184,10 +184,10 @@ gtkinclude_HEADERS = \
 	gtktypebuiltins.h
 
 ../gtk/gtktypebuiltins.h: gtk.defs gentypeinfo.el
-	$(srcdir)/runelisp $(srcdir)/gentypeinfo.el idmac $< $@
+	$(SHELL) $(srcdir)/runelisp $(srcdir)/gentypeinfo.el idmac $< $@
 
 gtktypebuiltins.c: gtk.defs gentypeinfo.el
-	$(srcdir)/runelisp $(srcdir)/gentypeinfo.el id $< $@
+	$(SHELL) $(srcdir)/runelisp $(srcdir)/gentypeinfo.el id $< $@
 
 libgtk_la_LDFLAGS = -version-info 1:0:0
 

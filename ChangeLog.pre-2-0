@@ -1,3 +1,8 @@
+Thu Jan 22 02:32:06 1998  Scott Goehring  <scott@poverty.bloomington.in.us>
+
+	* gtk/Makefile.am: Fixed the called to runelisp to use $(SHELL).
+  	  (Cannot rely on the script having execute permissions.)
+
 Wed Jan 21 17:29:54 CST 1998 Shawn T. Amundson <amundson@gimp.org>
 
 	* Released 0.99.3
