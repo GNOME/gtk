@@ -1,5 +1,11 @@
 1999-10-18  Havoc Pennington  <hp@pobox.com>
 
+	* configure.in: Use AM_PATH_GLIB instead of glib-config directly
+
+	* src/Makefile.am: Re-enable testpixbuf with GTK_CFLAGS/GTK_LIBS
+
+1999-10-18  Havoc Pennington  <hp@pobox.com>
+
 	* Makefile.am (SUBDIRS): Remove "macros"
 
 	* configure.in: Don't use GNOME_INIT, handle case where we are

@@ -29,14 +29,14 @@ libexec_LTLIBRARIES =		\
 	$(XPM_LIB)	\
 	$(TIFF_LIB)
 
-noinst_PROGRAMS = # testpixbuf
+noinst_PROGRAMS = testpixbuf
 DEPS = libgdk_pixbuf.la
-INCLUDES = $(GLIB_CFLAGS) $(LIBART_CFLAGS)
+INCLUDES = $(GLIB_CFLAGS) $(LIBART_CFLAGS) $(GTK_CFLAGS)
 AM_CPPFLAGS = "-DPIXBUF_LIBDIR=\"$(libexecdir)\""
 
 LDADDS = libgdk_pixbuf.la $(LIBART_LIBS) $(GLIB_LIBS)
 
-testpixbuf_LDADD = $(LDADDS)
+testpixbuf_LDADD = $(LDADDS) $(GTK_LIBS)
 
 #
 # The GdkPixBuf library
