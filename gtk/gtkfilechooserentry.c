@@ -514,11 +514,23 @@ void
 _gtk_file_chooser_entry_set_base_folder (GtkFileChooserEntry *chooser_entry,
 					 const GtkFilePath   *path)
 {
+  char *text;
+  
   if (chooser_entry->base_folder)
     gtk_file_path_free (chooser_entry->base_folder);
 
   chooser_entry->base_folder = gtk_file_path_copy (path);
-  gtk_file_chooser_entry_changed (GTK_EDITABLE (chooser_entry));
+
+  /* We first try to get the path as a filename, and then use an uri if that fails */
+  text = gtk_file_system_path_to_filename (chooser_entry->file_system, path);
+  if (!text)
+    text = gtk_file_system_path_to_uri (chooser_entry->file_system, path);
+
+  gtk_entry_set_text (GTK_ENTRY (chooser_entry), text);
+
+  g_free (text);
+
+  gtk_editable_select_region (GTK_EDITABLE (chooser_entry), 0, -1);  
 }
 
 /**

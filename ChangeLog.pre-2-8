@@ -1,3 +1,9 @@
+2004-03-08  Anders Carlsson  <andersca@gnome.org>
+
+	* gtk/gtkfilechooserentry.c:
+	(_gtk_file_chooser_entry_set_base_folder):
+	Set the base folder path in the entry.
+	
 2004-03-08  Christian Neumair  <chris@gnome-de.org>
 
 	* tests/testentrycompletion.c: Fix typo.
