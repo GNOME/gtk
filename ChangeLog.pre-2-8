@@ -1,3 +1,10 @@
+Thu Oct 30 16:20:58 2003  Soeren Sandmann  <sandmann@daimi.au.dk>
+
+	* gtk/gtktoolbar.c (logical_to_physical): Make sure we actually
+	return the index of a real item.
+	(get_nth_item) assert that the returned items is not a
+	placeholder.  (#125826, Marco Pesenti Gritti).
+	
 2003-10-29  Federico Mena Quintero  <federico@ximian.com>
 
 	* gtk/gtkcellrendererseptext.c

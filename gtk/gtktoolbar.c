@@ -1797,15 +1797,18 @@ logical_to_physical (GtkToolbar *toolbar, gint logical)
   g_assert (logical >= 0);
   
   physical = 0;
-  for (list = priv->content; list && logical > 0; list = list->next)
+  for (list = priv->content; list; list = list->next)
     {
       ToolbarContent *content = list->data;
 
       if (!content->is_placeholder)
 	logical--;
       physical++;
-    }
 
+      if (!content->is_placeholder && logical == 0)
+	break;
+    }
+  
   g_assert (logical == 0);
   return physical;
 }
@@ -2730,20 +2733,26 @@ gtk_toolbar_get_nth_item (GtkToolbar *toolbar,
 {
   GtkToolbarPrivate *priv;
   ToolbarContent *content;
+  gint n_items;
   
   g_return_val_if_fail (GTK_IS_TOOLBAR (toolbar), NULL);
 
   if (!gtk_toolbar_check_new_api (toolbar))
     return NULL;
+
+  n_items = gtk_toolbar_get_n_items (toolbar);
+
+  if (n < 0 || n >= n_items)
+    return NULL;
   
   priv = GTK_TOOLBAR_GET_PRIVATE (toolbar);
 
   content = g_list_nth_data (priv->content, logical_to_physical (toolbar, n));
-  
-  if (content)
-    return content->item;
 
-  return NULL;
+  g_assert (content);
+  g_assert (!content->is_placeholder);
+
+  return content->item;
 }
 
 /**
