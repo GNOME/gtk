@@ -1,3 +1,32 @@
+Tue Jan  9 11:20:48 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/x11/gdkdnd-x11.c: Remove unused variable.
+
+	* gtk/gtkdnd.c: Encapsulate storing and retrieving info
+	structures in functions. Fixes bug where gtk_dataset_*
+	was accidentally still being used in one place, causing
+        every dest side event to be treated independently.
+
+	* gtk/gtkdnd.c: Remove last vestages of handling
+	::draw (fixes warning)
+	
+	* gtk/gtkentry.[ch]: Add drag and drop support.
+
+	* gtk/gtkdnd.[ch] gtk/gtktextview.c gtk/gtkentry.c: Add
+	new function gtk_check_drag_threshhold() for checking
+	to check if (dx,dy) has exceeded the threshhold for starting
+	a drag and use it everywhere.
+
+Mon Jan  8 11:58:05 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk+-2.0.pc.in gdk-pixbuf-2.0.pc.in (Cflags): Remove -I${includedir},
+	add -I{includedir}/gtk-2.0.
+
+	* gtk/gtktreeview.[ch] gtktreemodelsort.[ch] gtknotebook.c
+	gdk/gdk-pixbuf.h: Doc fixups.
+	
+	* gtk/gtkobject.h: Remove trailing , from enum
+
 2001-01-17    <alexl@redhat.com>
 
 	* gdk/linux-fb/gdkdrawable-fb2.c (gdk_shadow_fb_draw_arc):
@@ -46,6 +75,7 @@
 	* gtk/gtkdnd.c (gtk_drag_update):
 	Free info->last_event if gdk_drag_motion returned FALSE.
 
+>>>>>>> 1.1676
 Tue Jan 16 13:13:13 GMT 2001  Tony Gale <gale@gtk.org>
 
 	* docs/faq/gtk-faq.sgml: FAQ update:
