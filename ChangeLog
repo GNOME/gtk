@@ -1,3 +1,9 @@
+2003-05-22  Matthias Clasen  <maclas@gmx.de>
+
+	* gdk/x11/gdkdrawable-x11.c (gdk_x11_drawable_update_xft_clip):
+	Use XftDrawSetClipRectangles(), since we're inside HAVE_XFT2
+	anyway.  (#113476)
+
 Wed May 21 15:53:14 2003  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkprogress.c (gtk_progress_set_format_string,

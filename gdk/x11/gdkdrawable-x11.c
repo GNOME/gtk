@@ -330,7 +330,6 @@ gdk_x11_drawable_update_xft_clip (GdkDrawable *drawable,
     {
       GdkRegionBox *boxes = gc_private->clip_region->rects;
       gint n_boxes = gc_private->clip_region->numRects;
-#if 0				/* Until XftDrawSetClipRectangles is there */
       XRectangle *rects = g_new (XRectangle, n_boxes);
       int i;
 
@@ -344,25 +343,6 @@ gdk_x11_drawable_update_xft_clip (GdkDrawable *drawable,
       XftDrawSetClipRectangles (xft_draw, 0, 0, rects, n_boxes);
 
       g_free (rects);
-#else
-      Region xregion = XCreateRegion ();
-      int i;
- 
-      for (i=0; i < n_boxes; i++)
- 	{
- 	  XRectangle rect;
- 	  
- 	  rect.x = CLAMP (boxes[i].x1 + gc->clip_x_origin, G_MINSHORT, G_MAXSHORT);
- 	  rect.y = CLAMP (boxes[i].y1 + gc->clip_y_origin, G_MINSHORT, G_MAXSHORT);
- 	  rect.width = CLAMP (boxes[i].x2 + gc->clip_x_origin, G_MINSHORT, G_MAXSHORT) - rect.x;
- 	  rect.height = CLAMP (boxes[i].y2 + gc->clip_y_origin, G_MINSHORT, G_MAXSHORT) - rect.y;
-	  
- 	  XUnionRectWithRegion (&rect, xregion, xregion);
- 	}
-      
-      XftDrawSetClip (xft_draw, xregion);
-      XDestroyRegion (xregion);
-#endif      
     }
   else
     {
