@@ -382,6 +382,8 @@ static void     gtk_tree_view_search_disable_popdown    (GtkEntry         *entry
 							 gpointer          data);
 static void     gtk_tree_view_search_preedit_changed    (GtkIMContext     *im_context,
 							 GtkTreeView      *tree_view);
+static void     gtk_tree_view_search_activate           (GtkEntry         *entry,
+							 GtkTreeView      *tree_view);
 static gboolean gtk_tree_view_real_search_enable_popdown(gpointer          data);
 static void     gtk_tree_view_search_enable_popdown     (GtkWidget        *widget,
 							 gpointer          data);
@@ -8856,6 +8858,9 @@ gtk_tree_view_ensure_interactive_directory (GtkTreeView *tree_view)
   g_signal_connect (tree_view->priv->search_entry, "populate_popup",
 		    G_CALLBACK (gtk_tree_view_search_disable_popdown),
 		    tree_view);
+  g_signal_connect (tree_view->priv->search_entry,
+		    "activate", G_CALLBACK (gtk_tree_view_search_activate),
+		    tree_view);
   g_signal_connect (GTK_ENTRY (tree_view->priv->search_entry)->im_context,
 		    "preedit-changed",
 		    G_CALLBACK (gtk_tree_view_search_preedit_changed),
@@ -12259,7 +12264,6 @@ static void
 gtk_tree_view_search_preedit_changed (GtkIMContext *im_context,
 				      GtkTreeView  *tree_view)
 {
-  g_print ("in gtk_tree_view_search_preedit_changed\n");
   tree_view->priv->imcontext_changed = 1;
   if (tree_view->priv->typeselect_flush_timeout)
     {
@@ -12270,6 +12274,30 @@ gtk_tree_view_search_preedit_changed (GtkIMContext *im_context,
 		       tree_view);
     }
 
+}
+
+static void
+gtk_tree_view_search_activate (GtkEntry    *entry,
+			       GtkTreeView *tree_view)
+{
+  GtkTreePath *path;
+  GtkRBNode *node;
+  GtkRBTree *tree;
+
+  gtk_tree_view_search_dialog_hide (tree_view->priv->search_window,
+				    tree_view);
+
+  /* If we have a row selected and it's the cursor row, we activate
+   * the row XXX */
+  if (gtk_tree_row_reference_valid (tree_view->priv->cursor))
+    path = gtk_tree_row_reference_get_path (tree_view->priv->cursor);
+
+  _gtk_tree_view_find_node (tree_view, path, &tree, &node);
+
+  if (node && GTK_RBNODE_FLAG_SET (node, GTK_RBNODE_IS_SELECTED))
+    gtk_tree_view_row_activated (tree_view, path, tree_view->priv->focus_column);
+
+  gtk_tree_path_free (path);
 }
 
 static gboolean
@@ -12327,9 +12355,8 @@ gtk_tree_view_search_key_press_event (GtkWidget *widget,
   g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
   g_return_val_if_fail (GTK_IS_TREE_VIEW (tree_view), FALSE);
 
-  /* close window */
+  /* close window and cancel the search */
   if (event->keyval == GDK_Escape ||
-      event->keyval == GDK_Return ||
       event->keyval == GDK_Tab)
     {
       gtk_tree_view_search_dialog_hide (widget, tree_view);
@@ -12457,7 +12484,7 @@ gtk_tree_view_search_equal_func (GtkTreeModel *model,
       case_normalized_string = g_utf8_casefold (normalized_string, -1);
       case_normalized_key = g_utf8_casefold (normalized_key, -1);
 
-      if (strstr (case_normalized_string, case_normalized_key))
+      if (strncmp (case_normalized_key, case_normalized_string, strlen (case_normalized_key)) == 0)
         retval = FALSE;
     }
 
