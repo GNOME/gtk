@@ -1,5 +1,14 @@
 2004-04-14  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkcolorsel.c: Add a11y relations between the color
+	wheel and the spin buttons.  (#132745)
+
+	* gtk/gtkiconfactory.c (gtk_icon_set_render_icon): Document
+	the meaning of size == -1.
+
+	* gtk/gtkwidget.c (gtk_widget_render_icon): Explicitly accept  
+	a size of -1.  (#137436, Brian Cameron)
+
 	* gtk/gtkcombobox.c: Make the arrow and separator regular
 	children of an hbox inside the button, and propagate state
 	changes from the button to the cell view.  (part of the fix

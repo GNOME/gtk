@@ -1738,7 +1738,8 @@ render_fallback_image (GtkStyle          *style,
  * @style: a #GtkStyle associated with @widget, or %NULL
  * @direction: text direction
  * @state: widget state
- * @size: icon size
+ * @size: icon size. A size of (GtkIconSize)-1
+ *        means render at the size of the source and don't scale.
  * @widget: widget that will display the icon, or %NULL.
  *          The only use that is typically made of this
  *          is to determine the appropriate #GdkScreen.
