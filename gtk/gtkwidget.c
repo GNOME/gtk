@@ -6374,6 +6374,8 @@ gtk_widget_dispose (GObject *object)
 
   if (widget->parent)
     gtk_container_remove (GTK_CONTAINER (widget->parent), widget);
+  else if (GTK_WIDGET_VISIBLE (widget))
+    gtk_widget_hide (widget);
 
   GTK_WIDGET_UNSET_FLAGS (widget, GTK_VISIBLE);
   if (GTK_WIDGET_REALIZED (widget))

@@ -1,3 +1,8 @@
+Tue Jul 27 02:34:06 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkwidget.c (gtk_widget_dispose): Hide parentless
+	windows when disposing them.  (#133231, Michael Natterer)
+
 2004-07-26  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtklabel.c (gtk_label_class_init): Expand the documentation
