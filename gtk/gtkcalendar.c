@@ -2472,9 +2472,9 @@ calendar_timer (GtkCalendar *calendar)
       if (private_data->need_timer)
 	{
 	  private_data->need_timer = FALSE;
-	  private_data->timer = gtk_timeout_add (CALENDAR_TIMER_DELAY, 
-					     (GtkFunction) calendar_timer, 
-					     (gpointer) calendar);
+	  private_data->timer = g_timeout_add (CALENDAR_TIMER_DELAY, 
+					       (GtkFunction) calendar_timer, 
+					       (gpointer) calendar);
 	}
       else 
 	retval = TRUE;
@@ -2511,7 +2511,7 @@ stop_spinning (GtkWidget *widget)
 
   if (private_data->timer)
     {
-      gtk_timeout_remove (private_data->timer);
+      g_source_remove (private_data->timer);
       private_data->timer = 0;
       private_data->need_timer = FALSE;
     }

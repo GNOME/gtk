@@ -1,5 +1,9 @@
 2003-06-05  Matthias Clasen  <maclas@gmx.de>
 
+	* gtk/gtkcalendar.c (calendar_timer): 
+	(stop_spinning): Replace deprecated gtk_timeout_* functions by
+	their GLib counterparts.  (#114429)
+
 	* gtk/gtktreestore.c (gtk_tree_store_new): 
 	* gtk/gtkliststore.c (gtk_list_store_new): Document restriction on 
 	types.
