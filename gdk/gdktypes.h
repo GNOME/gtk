@@ -390,7 +390,8 @@ typedef enum
   GDK_VISIBILITY_NOTIFY_MASK	= 1 << 17,
   GDK_PROXIMITY_IN_MASK		= 1 << 18,
   GDK_PROXIMITY_OUT_MASK	= 1 << 19,
-  GDK_ALL_EVENTS_MASK		= 0x07FFFF
+  GDK_SUBSTRUCTURE_MASK		= 1 << 20,
+  GDK_ALL_EVENTS_MASK		= 0x0FFFFF
 } GdkEventMask;
 
 /* Types of enter/leave notifications.

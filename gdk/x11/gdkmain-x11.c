@@ -2279,6 +2279,7 @@ gdk_event_translate (GdkEvent *event,
 	if (gdk_dnd.drag_perhaps && gdk_dnd.drag_really && 
 	    (xevent->xcrossing.window == gdk_dnd.real_sw->xwindow))
 	  {
+#if 0
 	    gdk_dnd.drag_really = 0;
 
 	    GDK_NOTE (DND, g_print("Ungrabbed\n"));
@@ -2288,6 +2289,7 @@ gdk_event_translate (GdkEvent *event,
 	    gdk_dnd.drag_startwindows = NULL;
 	    /* We don't want to ungrab the pointer here, or we'll
 	     * start getting spurious enter/leave events */
+#endif
 #if 0
 	    XChangeActivePointerGrab (gdk_display, 0, None, CurrentTime);
 #endif
@@ -2519,7 +2521,8 @@ gdk_event_translate (GdkEvent *event,
 
       return_val = window_private && !window_private->destroyed;
 
-      gdk_window_destroy_notify (window);
+      if(window && window_private->xwindow != GDK_ROOT_WINDOW())
+        gdk_window_destroy_notify (window);
       break;
 
     case UnmapNotify:

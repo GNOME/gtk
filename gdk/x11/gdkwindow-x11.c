@@ -33,8 +33,8 @@
 #include <X11/extensions/shape.h>
 #endif
 
-int nevent_masks = 17;
-int event_mask_table[19] =
+int nevent_masks = 20;
+int event_mask_table[20] =
 {
   ExposureMask,
   PointerMotionMask,
@@ -54,7 +54,8 @@ int event_mask_table[19] =
   PropertyChangeMask,
   VisibilityChangeMask,
   0,				/* PROXIMITY_IN */
-  0				/* PROXIMTY_OUT */
+  0,				/* PROXIMTY_OUT */
+  SubstructureNotifyMask
 };
 
 
