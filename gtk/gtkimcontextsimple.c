@@ -63,11 +63,13 @@ static guint16 gtk_compose_seqs[] = {
   GDK_dead_grave,	GDK_I,	0,	0,	0,	0x00CC,	/* LATIN_CAPITAL_LETTER_I_WITH_GRAVE */
   GDK_dead_grave,	GDK_O,	0,	0,	0,	0x00D2,	/* LATIN_CAPITAL_LETTER_O_WITH_GRAVE */
   GDK_dead_grave,	GDK_U,	0,	0,	0,	0x00D9,	/* LATIN_CAPITAL_LETTER_U_WITH_GRAVE */
+  GDK_dead_grave,       GDK_grave,      0,      0,      0,      0x0060, /* GRAVE_ACCENT */
   GDK_dead_grave,	GDK_a,	0,	0,	0,	0x00E0,	/* LATIN_SMALL_LETTER_A_WITH_GRAVE */
   GDK_dead_grave,	GDK_e,	0,	0,	0,	0x00E8,	/* LATIN_SMALL_LETTER_E_WITH_GRAVE */
   GDK_dead_grave,	GDK_i,	0,	0,	0,	0x00EC,	/* LATIN_SMALL_LETTER_I_WITH_GRAVE */
   GDK_dead_grave,	GDK_o,	0,	0,	0,	0x00F2,	/* LATIN_SMALL_LETTER_O_WITH_GRAVE */
   GDK_dead_grave,	GDK_u,	0,	0,	0,	0x00F9,	/* LATIN_SMALL_LETTER_U_WITH_GRAVE */
+  GDK_dead_grave,       GDK_dead_grave, 0,      0,      0,      0x0060, /* GRAVE_ACCENT */  
   GDK_dead_acute,	GDK_space,	0,	0,	0,	0x0027,	/* APOSTROPHE */
   GDK_dead_acute,	GDK_apostrophe,	0,	0,	0,	0x00B4,	/* ACUTE_ACCENT */
   GDK_dead_acute,	GDK_A,	0,	0,	0,	0x00C1,	/* LATIN_CAPITAL_LETTER_A_WITH_ACUTE */
@@ -99,12 +101,14 @@ static guint16 gtk_compose_seqs[] = {
   GDK_dead_circumflex,	GDK_I,	0,	0,	0,	0x00CE,	/* LATIN_CAPITAL_LETTER_I_WITH_CIRCUMFLEX */
   GDK_dead_circumflex,	GDK_O,	0,	0,	0,	0x00D4,	/* LATIN_CAPITAL_LETTER_O_WITH_CIRCUMFLEX */
   GDK_dead_circumflex,	GDK_U,	0,	0,	0,	0x00DB,	/* LATIN_CAPITAL_LETTER_U_WITH_CIRCUMFLEX */
+  GDK_dead_circumflex,	GDK_asciicircum,	0,	0,	0,	0x005E,	/* CIRCUMFLEX_ACCENT */
   GDK_dead_circumflex,	GDK_underscore,	0,	0,	0,	0x00AF,	/* MACRON */
   GDK_dead_circumflex,	GDK_a,	0,	0,	0,	0x00E2,	/* LATIN_SMALL_LETTER_A_WITH_CIRCUMFLEX */
   GDK_dead_circumflex,	GDK_e,	0,	0,	0,	0x00EA,	/* LATIN_SMALL_LETTER_E_WITH_CIRCUMFLEX */
   GDK_dead_circumflex,	GDK_i,	0,	0,	0,	0x00EE,	/* LATIN_SMALL_LETTER_I_WITH_CIRCUMFLEX */
   GDK_dead_circumflex,	GDK_o,	0,	0,	0,	0x00F4,	/* LATIN_SMALL_LETTER_O_WITH_CIRCUMFLEX */
   GDK_dead_circumflex,	GDK_u,	0,	0,	0,	0x00FB,	/* LATIN_SMALL_LETTER_U_WITH_CIRCUMFLEX */
+  GDK_dead_circumflex,	GDK_dead_circumflex,	0,	0,	0,	0x005E,	/* CIRCUMFLEX_ACCENT */
   GDK_dead_tilde,	GDK_space,	0,	0,	0,	0x007E,	/* TILDE */
   GDK_dead_tilde,	GDK_A,	0,	0,	0,	0x00C3,	/* LATIN_CAPITAL_LETTER_A_WITH_TILDE */
   GDK_dead_tilde,	GDK_I,	0,	0,	0,	0x0128,	/* LATIN_CAPITAL_LETTER_I_WITH_TILDE */
@@ -138,7 +142,7 @@ static guint16 gtk_compose_seqs[] = {
   GDK_dead_abovedot,	GDK_i,	0,	0,	0,	0x0131,	/* LATIN_SMALL_LETTER_DOTLESS_I */
   GDK_dead_abovedot,	GDK_abovedot,	0,	0,	0,	0x02D9,	/* DOT_ABOVE */
   GDK_dead_abovedot,	GDK_dead_abovedot,	0,	0,	0,	0x02D9,	/* DOT_ABOVE */
-  GDK_dead_diaeresis,	GDK_space,	0,	0,	0,	0x00A8,	/* DIAERESIS */
+  GDK_dead_diaeresis,	GDK_space,	0,	0,	0,	0x0022,	/* QUOTATION_MARK */
   GDK_dead_diaeresis,	GDK_quotedbl,	0,	0,	0,	0x00A8,	/* DIAERESIS */
   GDK_dead_diaeresis,	GDK_A,	0,	0,	0,	0x00C4,	/* LATIN_CAPITAL_LETTER_A_WITH_DIAERESIS */
   GDK_dead_diaeresis,	GDK_E,	0,	0,	0,	0x00CB,	/* LATIN_CAPITAL_LETTER_E_WITH_DIAERESIS */
