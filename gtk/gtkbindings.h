@@ -61,14 +61,6 @@ gboolean gtk_pattern_match_simple   (const gchar	 *pattern,
 				     const gchar	 *string);
 
 
-/* type arguments for internal use only
- */
-#define	GTK_BINDING_ARG_INT	(GTK_TYPE_INT)
-#define	GTK_BINDING_ARG_LONG	(GTK_TYPE_LONG)
-#define	GTK_BINDING_ARG_FLOAT	(GTK_TYPE_FLOAT)
-#define	GTK_BINDING_ARG_DOUBLE	(GTK_TYPE_DOUBLE)
-#define	GTK_BINDING_ARG_STRING	(GTK_TYPE_STRING)
-
 /* Binding sets
  */
 

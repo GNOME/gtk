@@ -208,11 +208,6 @@ static void gtk_widget_set_style_internal	 (GtkWidget	*widget,
 static void gtk_widget_set_style_recurse	 (GtkWidget	*widget,
 						  gpointer	 client_data);
 
-extern GtkArg* gtk_object_collect_args (guint	*nargs,
-					GtkType (*) (const gchar*),
-					va_list	 args1,
-					va_list	 args2);
-
 static GtkWidgetAuxInfo* gtk_widget_aux_info_new     (void);
 static void		 gtk_widget_aux_info_destroy (GtkWidgetAuxInfo *aux_info);
 
@@ -1018,30 +1013,48 @@ gtk_widget_init (GtkWidget *widget)
  *****************************************/
 
 GtkWidget*
-gtk_widget_new (guint type,
+gtk_widget_new (guint widget_type,
 		...)
 {
-  GtkObject *obj;
-  GtkArg *args;
-  guint nargs;
-  va_list args1;
-  va_list args2;
+  GtkObject *object;
+  va_list var_args;
+  GSList *arg_list = NULL;
+  GSList *info_list = NULL;
+  gchar *error;
   
-  g_return_val_if_fail (gtk_type_is_a (type, gtk_widget_get_type ()), NULL);
+  g_return_val_if_fail (gtk_type_is_a (widget_type, GTK_TYPE_WIDGET), NULL);
   
-  obj = gtk_type_new (type);
+  object = gtk_type_new (widget_type);
   
-  va_start (args1, type);
-  va_start (args2, type);
+  va_start (var_args, widget_type);
+  error = gtk_object_args_collect (GTK_OBJECT_TYPE (object),
+				   &arg_list,
+				   &info_list,
+				   &var_args);
+  va_end (var_args);
   
-  args = gtk_object_collect_args (&nargs, gtk_object_get_arg_type, args1, args2);
-  gtk_object_setv (obj, nargs, args);
-  g_free (args);
+  if (error)
+    {
+      g_warning ("gtk_widget_new(): %s", error);
+      g_free (error);
+    }
+  else
+    {
+      GSList *slist_arg;
+      GSList *slist_info;
+      
+      slist_arg = arg_list;
+      slist_info = info_list;
+      while (slist_arg)
+	{
+	  gtk_object_arg_set (object, slist_arg->data, slist_info->data);
+	  slist_arg = slist_arg->next;
+	  slist_info = slist_info->next;
+	}
+      gtk_args_collect_cleanup (arg_list, info_list);
+    }
   
-  va_end (args1);
-  va_end (args2);
-  
-  return GTK_WIDGET (obj);
+  return GTK_WIDGET (object);
 }
 
 /*****************************************
@@ -1108,22 +1121,44 @@ void
 gtk_widget_set (GtkWidget *widget,
 		...)
 {
-  GtkArg *args;
-  guint nargs;
-  va_list args1;
-  va_list args2;
-  
+  GtkObject *object;
+  va_list var_args;
+  GSList *arg_list = NULL;
+  GSList *info_list = NULL;
+  gchar *error;
+
   g_return_if_fail (widget != NULL);
-  
-  va_start (args1, widget);
-  va_start (args2, widget);
-  
-  args = gtk_object_collect_args (&nargs, gtk_object_get_arg_type, args1, args2);
-  gtk_object_setv (GTK_OBJECT (widget), nargs, args);
-  g_free (args);
-  
-  va_end (args1);
-  va_end (args2);
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+
+  object = GTK_OBJECT (widget);
+
+  va_start (var_args, widget);
+  error = gtk_object_args_collect (GTK_OBJECT_TYPE (object),
+				   &arg_list,
+				   &info_list,
+				   &var_args);
+  va_end (var_args);
+
+  if (error)
+    {
+      g_warning ("gtk_widget_set(): %s", error);
+      g_free (error);
+    }
+  else
+    {
+      GSList *slist_arg;
+      GSList *slist_info;
+
+      slist_arg = arg_list;
+      slist_info = info_list;
+      while (slist_arg)
+	{
+	  gtk_object_arg_set (object, slist_arg->data, slist_info->data);
+	  slist_arg = slist_arg->next;
+	  slist_info = slist_info->next;
+	}
+      gtk_args_collect_cleanup (arg_list, info_list);
+    }
 }
 
 /*****************************************

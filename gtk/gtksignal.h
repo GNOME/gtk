@@ -31,11 +31,7 @@ extern "C" {
 #endif /* __cplusplus */
 
   
-#ifdef offsetof
-#define GTK_SIGNAL_OFFSET(t, f) ((gint) offsetof (t, f))
-#else /* offsetof */
-#define GTK_SIGNAL_OFFSET(t, f) ((gint) ((gchar*) &((t*) 0)->f))
-#endif /* offsetof */
+#define GTK_SIGNAL_OFFSET(struct, field)	(GTK_STRUCT_OFFSET (struct, field))
   
   
 typedef void (*GtkSignalMarshal)    (GtkObject	    *object,

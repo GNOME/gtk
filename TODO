@@ -1,6 +1,8 @@
 For 1.1.0 release:
--	remove gtk_object_data_force_id and gtk_object_data_try_key from
-	gtkobject.c
+
+For 1.2.0 release:
+-	remove deprecated functions from *.[hc] files, especially the
+	non-functional ones.
 	
 Bugs:
  * gtk_ctree_set_selection_mode should be a mere alias of

@@ -870,8 +870,7 @@ statusbar_popped (GtkStatusbar  *statusbar,
 }
 
 static void
-statusbar_contexts (GtkWidget *button,
-		    GtkStatusbar *statusbar)
+statusbar_contexts (GtkStatusbar *statusbar)
 {
   gchar *string;
 
@@ -902,8 +901,7 @@ statusbar_contexts (GtkWidget *button,
 }
 
 static void
-statusbar_dump_stack (GtkWidget *button,
-		      GtkStatusbar *statusbar)
+statusbar_dump_stack (GtkStatusbar *statusbar)
 {
   GSList *list;
 
@@ -960,38 +958,38 @@ create_statusbar (void)
 			  NULL);
 
       button = gtk_widget_new (gtk_button_get_type (),
-			       "GtkButton::label", "push something",
-			       "GtkWidget::visible", TRUE,
-			       "GtkWidget::parent", box2,
-			       "GtkObject::signal::clicked", statusbar_push, statusbar,
+			       "label", "push something",
+			       "visible", TRUE,
+			       "parent", box2,
+			       "signal::clicked", statusbar_push, statusbar,
 			       NULL);
 
       button = gtk_widget_new (gtk_button_get_type (),
-			       "GtkButton::label", "pop",
-			       "GtkWidget::visible", TRUE,
-			       "GtkWidget::parent", box2,
-			       "GtkObject::signal::clicked", statusbar_pop, statusbar,
+			       "label", "pop",
+			       "visible", TRUE,
+			       "parent", box2,
+			       "signal_after::clicked", statusbar_pop, statusbar,
 			       NULL);
 
       button = gtk_widget_new (gtk_button_get_type (),
-			       "GtkButton::label", "steal #4",
-			       "GtkWidget::visible", TRUE,
-			       "GtkWidget::parent", box2,
-			       "GtkObject::signal::clicked", statusbar_steal, statusbar,
+			       "label", "steal #4",
+			       "visible", TRUE,
+			       "parent", box2,
+			       "signal_after::clicked", statusbar_steal, statusbar,
 			       NULL);
 
       button = gtk_widget_new (gtk_button_get_type (),
-			       "GtkButton::label", "dump stack",
-			       "GtkWidget::visible", TRUE,
-			       "GtkWidget::parent", box2,
-			       "GtkObject::signal::clicked", statusbar_dump_stack, statusbar,
+			       "label", "dump stack",
+			       "visible", TRUE,
+			       "parent", box2,
+			       "object_signal::clicked", statusbar_dump_stack, statusbar,
 			       NULL);
 
       button = gtk_widget_new (gtk_button_get_type (),
-			       "GtkButton::label", "test contexts",
-			       "GtkWidget::visible", TRUE,
-			       "GtkWidget::parent", box2,
-			       "GtkObject::signal::clicked", statusbar_contexts, statusbar,
+			       "label", "test contexts",
+			       "visible", TRUE,
+			       "parent", box2,
+			       "object_signal_after::clicked", statusbar_contexts, statusbar,
 			       NULL);
 
       separator = gtk_hseparator_new ();

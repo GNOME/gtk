@@ -82,12 +82,8 @@ typedef struct _GtkEnumValue   GtkFlagValue;
 
 typedef void (*GtkClassInitFunc)   (gpointer   klass);
 typedef void (*GtkObjectInitFunc)  (gpointer   object);
-typedef void (*GtkArgGetFunc)	   (GtkObject *object,
-				    GtkArg    *arg,
-				    guint      arg_id);
-typedef void (*GtkArgSetFunc)	   (GtkObject *object,
-				    GtkArg    *arg,
-				    guint      arg_id);
+typedef void (*GtkArgGetFunc)	   (GtkObject*, GtkArg*, guint);
+typedef void (*GtkArgSetFunc)	   (GtkObject*, GtkArg*, guint);
 typedef gint (*GtkFunction)	   (gpointer   data);
 typedef void (*GtkCallbackMarshal) (GtkObject *object,
 				    gpointer   data,
@@ -216,8 +212,6 @@ GtkType		gtk_type_register_flags		(const gchar	*type_name,
 						 GtkFlagValue	*values);
 GtkEnumValue*	gtk_type_enum_get_values	(GtkType	enum_type);
 GtkFlagValue*	gtk_type_flags_get_values	(GtkType	flags_type);
-GtkArg*		gtk_arg_copy		    	(GtkArg		*src_arg,
-						 GtkArg		*dest_arg);
 
 
 #ifdef __cplusplus

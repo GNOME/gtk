@@ -8,9 +8,10 @@ libgtk_1_1_la_SOURCES = \
 	gtkaccelgroup.c		\
 	gtkaccellabel.c		\
 	gtkadjustment.c		\
-	gtkaspectframe.c	\
 	gtkalignment.c		\
+	gtkarg.c		\
 	gtkarrow.c		\
+	gtkaspectframe.c	\
 	gtkbin.c		\
 	gtkbindings.c		\
 	gtkbbox.c		\
@@ -108,9 +109,10 @@ gtkinclude_HEADERS = \
 	gtkaccelgroup.h		\
 	gtkaccellabel.h		\
 	gtkadjustment.h		\
-	gtkaspectframe.h	\
 	gtkalignment.h		\
+	gtkarg.h		\
 	gtkarrow.h		\
+	gtkaspectframe.h	\
 	gtkbin.h		\
 	gtkbindings.h		\
 	gtkbbox.h		\
@@ -268,6 +270,7 @@ EXTRA_DIST = \
 	makeenums.awk		\
 	maketypes.awk		\
 	makeenums.h		\
+	gtkargcollector.c	\
 	gtktypebuiltins_vars.c	\
 	gtktypebuiltins_ids.c	\
 	gtktypebuiltins_evals.c	\

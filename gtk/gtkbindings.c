@@ -30,6 +30,13 @@
 /* --- defines --- */
 #define	BINDING_MOD_MASK()	(gtk_accelerator_get_default_mod_mask () | GDK_RELEASE_MASK)
 
+#define	BINDING_TYPE_INT	(GTK_TYPE_INT)
+#define	BINDING_TYPE_LONG	(GTK_TYPE_LONG)
+#define	BINDING_TYPE_FLOAT	(GTK_TYPE_FLOAT)
+#define	BINDING_TYPE_DOUBLE	(GTK_TYPE_DOUBLE)
+#define	BINDING_TYPE_STRING	(GTK_TYPE_STRING)
+#define	BINDING_TYPE_IDENTIFIER	(42)
+
 
 /* --- variables --- */
 static GHashTable	*binding_entry_hash_table = NULL;
@@ -61,7 +68,8 @@ binding_signal_free (GtkBindingSignal *sig)
   
   for (i = 0; i < sig->n_args; i++)
     {
-      if (sig->args[i].arg_type == GTK_BINDING_ARG_STRING)
+      if (sig->args[i].arg_type == BINDING_TYPE_STRING ||
+	  sig->args[i].arg_type == BINDING_TYPE_IDENTIFIER)
 	g_free (sig->args[i].d.string_data);
     }
   g_free (sig->args);
@@ -266,13 +274,7 @@ binding_compose_params (GtkBindingArg	*args,
       params->name = NULL;
       switch (args->arg_type)
 	{
-	case  GTK_BINDING_ARG_STRING:
-	  if (params->type == GTK_TYPE_STRING)
-	    GTK_VALUE_STRING (*params) = args->d.string_data;
-	  else
-	    valid = FALSE;
-	  break;
-	case  GTK_BINDING_ARG_DOUBLE:
+	case  BINDING_TYPE_DOUBLE:
 	  if (params->type == GTK_TYPE_FLOAT)
 	    GTK_VALUE_FLOAT (*params) = args->d.double_data;
 	  else if (params->type == GTK_TYPE_DOUBLE)
@@ -280,7 +282,7 @@ binding_compose_params (GtkBindingArg	*args,
 	  else
 	    valid = FALSE;
 	  break;
-	case  GTK_BINDING_ARG_LONG:
+	case  BINDING_TYPE_LONG:
 	  if (params->type == GTK_TYPE_BOOL &&
 	      (args->d.long_data == 0 ||
 	       args->d.long_data == 1))
@@ -302,6 +304,13 @@ binding_compose_params (GtkBindingArg	*args,
 	  else
 	    valid = FALSE;
 	  break;
+	case  BINDING_TYPE_STRING:
+	  if (params->type == GTK_TYPE_STRING)
+	    GTK_VALUE_STRING (*params) = args->d.string_data;
+	  else
+	    valid = FALSE;
+	  break;
+	case  BINDING_TYPE_IDENTIFIER:
 	default:
 	  valid = FALSE;
 	  break;
@@ -560,15 +569,15 @@ gtk_binding_entry_add_signall (GtkBindingSet  *binding_set,
       arg->arg_type = tmp_arg->arg_type;
       switch (tmp_arg->arg_type)
 	{
-	case  GTK_BINDING_ARG_INT:
-	case  GTK_BINDING_ARG_LONG:
+	case  BINDING_TYPE_INT:
+	case  BINDING_TYPE_LONG:
 	  arg->d.long_data = tmp_arg->d.long_data;
 	  break;
-	case  GTK_BINDING_ARG_FLOAT:
-	case  GTK_BINDING_ARG_DOUBLE:
+	case  BINDING_TYPE_FLOAT:
+	case  BINDING_TYPE_DOUBLE:
 	  arg->d.double_data = tmp_arg->d.double_data;
 	  break;
-	case  GTK_BINDING_ARG_STRING:
+	case  BINDING_TYPE_STRING:
 	  if (!tmp_arg->d.string_data)
 	    {
 	      g_warning ("gtk_binding_entry_add_signall(): value of `string' arg[%u] is `NULL'", n);
@@ -630,19 +639,19 @@ gtk_binding_entry_add_signal (GtkBindingSet  *binding_set,
       arg->arg_type = va_arg (args, GtkType);
       switch (arg->arg_type)
 	{
-	case  GTK_BINDING_ARG_INT:
+	case  BINDING_TYPE_INT:
 	  arg->d.long_data = va_arg (args, gint);
 	  break;
-	case  GTK_BINDING_ARG_LONG:
+	case  BINDING_TYPE_LONG:
 	  arg->d.long_data = va_arg (args, glong);
 	  break;
-	case  GTK_BINDING_ARG_FLOAT:
+	case  BINDING_TYPE_FLOAT:
 	  arg->d.double_data = va_arg (args, gfloat);
 	  break;
-	case  GTK_BINDING_ARG_DOUBLE:
+	case  BINDING_TYPE_DOUBLE:
 	  arg->d.double_data = va_arg (args, gdouble);
 	  break;
-	case  GTK_BINDING_ARG_STRING:
+	case  BINDING_TYPE_STRING:
 	  arg->d.string_data = va_arg (args, gchar*);
 	  if (!arg->d.string_data)
 	    {

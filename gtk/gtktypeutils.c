@@ -474,27 +474,6 @@ gtk_type_is_a (GtkType type,
   return FALSE;
 }
 
-GtkArg*
-gtk_arg_copy (GtkArg         *src_arg,
-	      GtkArg         *dest_arg)
-{
-  g_return_val_if_fail (src_arg != NULL, NULL);
-
-  if (!dest_arg)
-    {
-      dest_arg = g_new0 (GtkArg, 1);
-      dest_arg->name = src_arg->name;
-    }
-
-  dest_arg->type = src_arg->type;
-  dest_arg->d = src_arg->d;
-
-  if (src_arg->type == GTK_TYPE_STRING)
-    dest_arg->d.string_data = g_strdup (src_arg->d.string_data);
-
-  return dest_arg;
-}
-
 static void
 gtk_type_class_init (GtkTypeNode *node)
 {
@@ -706,25 +685,25 @@ gtk_type_init_builtin_types (void)
     gchar *name;
   } fundamental_info[] = {
     { GTK_TYPE_NONE,		"void" },
-    { GTK_TYPE_CHAR,		"char" },
-    { GTK_TYPE_BOOL,		"bool" },
-    { GTK_TYPE_INT,		"int" },
-    { GTK_TYPE_UINT,		"uint" },
-    { GTK_TYPE_LONG,		"long" },
-    { GTK_TYPE_ULONG,		"ulong" },
-    { GTK_TYPE_FLOAT,		"float" },
-    { GTK_TYPE_DOUBLE,		"double" },
-    { GTK_TYPE_STRING,		"string" },
-    { GTK_TYPE_ENUM,		"enum" },
-    { GTK_TYPE_FLAGS,		"flags" },
-    { GTK_TYPE_BOXED,		"boxed" },
-    { GTK_TYPE_FOREIGN,		"foreign" },
-    { GTK_TYPE_CALLBACK,	"callback" },
-    { GTK_TYPE_ARGS,		"args" },
+    { GTK_TYPE_CHAR,		"gchar" },
+    { GTK_TYPE_BOOL,		"gboolean" },
+    { GTK_TYPE_INT,		"gint" },
+    { GTK_TYPE_UINT,		"guint" },
+    { GTK_TYPE_LONG,		"glong" },
+    { GTK_TYPE_ULONG,		"gulong" },
+    { GTK_TYPE_FLOAT,		"gfloat" },
+    { GTK_TYPE_DOUBLE,		"gdouble" },
+    { GTK_TYPE_STRING,		"GtkString" },
+    { GTK_TYPE_ENUM,		"GtkEnum" },
+    { GTK_TYPE_FLAGS,		"GtkFlags" },
+    { GTK_TYPE_BOXED,		"GtkBoxed" },
+    { GTK_TYPE_FOREIGN,		"GtkForeign" },
+    { GTK_TYPE_CALLBACK,	"GtkCallback" },
+    { GTK_TYPE_ARGS,		"GtkArgs" },
     
-    { GTK_TYPE_POINTER,		"pointer" },
-    { GTK_TYPE_SIGNAL,		"signal" },
-    { GTK_TYPE_C_CALLBACK,	"c_callback" }
+    { GTK_TYPE_POINTER,		"gpointer" },
+    { GTK_TYPE_SIGNAL,		"GtkSignal" },
+    { GTK_TYPE_C_CALLBACK,	"GtkCCallback" }
   };
   struct {
     gchar *type_name;

@@ -1,3 +1,56 @@
+Fri Jul 10 00:02:04 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkcontainer.h: 
+	* gtk/gtkcontainer.c: deleted most of the argument handling code, since
+	that is now implemented in gtkarg.c. similar to gtk_object_args_collect,
+	we now export a new function gtk_container_child_args_collect().
+	for consistency with the object arguments, a few functions got renamed:
+	gtk_container_child_arg_get -> gtk_container_child_get,
+	gtk_container_child_arg_set -> gtk_container_child_set,
+	gtk_container_child_arg_getv -> gtk_container_child_getv,
+	gtk_container_child_arg_setv -> gtk_container_child_setv,
+	gtk_container_add_with_argv -> gtk_container_addv.
+	note, gtk_container_add_with_args() remained, because its equivalent
+	would be gtk_container_add(,, ...) which would break all existing code.
+	(gtk_container_add_child_arg_type): similar to gtk_object_add_arg_type,
+	we expect the `arg_name' argument to be a const static string now.
+	(gtk_container_get_child_arg_type): function removed.
+
+Thu Jul  9 07:03:04 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkargcollector.c: new file which holds gtk_arg_collect_value().
+	this is a static inline function that collects command line arguments
+	from a va_list. this file can just be included in all places that
+	need this functionality.
+
+	* gtk/gtkarg.h: 
+	* gtk/gtkarg.c: new files which implement most of the argument
+	handling stuff from gtkobject.c. also collected a few more
+	gtk_arg_* utility functions from else places.
+
+	* gtk/gtkobject.h: 
+	* gtk/gtkobject.c: moved most of the argument handling code into
+ 	gtkarg.c. we now export gtk_object_args_collect() as a non-public
+	method with a blind va_list pointer.
+	(gtk_object_add_arg_type): the `arg_name' argument is required to be a
+	const static string now.
+	(gtk_object_get_arg_type): function got removed.
+
+	* gtk/gtkwidget.c: 
+	(gtk_widget_set): 
+	(gtk_widget_new): adaptions for gtk_object_args_collect().
+
+	* gtk/gtktypeutils.c (gtk_type_init_builtin_types): changed the internal
+ 	fundamental type name so as to have a valid prefix, e.g. "bool"->
+	"gboolean", "string"->"GtkString" and somesuch, left "void" as is,
+	though that should probably be something like GtkNone since the
+	type itself is called GTK_TYPE_NONE.
+	even the internal type names need to avoid name clashes and must live
+	in their own namespace, several code portions rely on that.
+	we should relly have typedefs such as typedef gchar* GtkString; so the
+	fundamental type names can be used for code dumpers just like with all
+	the Gtk/Gdk types.
+
 Wed Jul  8 15:31:28 1998  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkbutton.c: handle GTK_RELIEF_HALF, which was introduced to

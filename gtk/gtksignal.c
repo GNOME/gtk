@@ -20,13 +20,14 @@
 #include <string.h>
 #include <stdio.h>
 #include "gtksignal.h"
+#include "gtkargcollector.c"
 
 
 #define	SIGNAL_BLOCK_SIZE		(100)
 #define	HANDLER_BLOCK_SIZE		(200)
 #define	EMISSION_BLOCK_SIZE		(100)
 #define	DISCONNECT_INFO_BLOCK_SIZE	(64)
-#define MAX_SIGNAL_PARAMS		(32)
+#define MAX_SIGNAL_PARAMS		(31)
 
 enum
 {
@@ -155,11 +156,11 @@ static gint	    gtk_emission_check	       (GList	       *emissions,
 static gint	    gtk_handlers_run	       (GtkHandler     *handlers,
 						GtkHandlerInfo *info,
 						gint		after);
-static void	    gtk_params_get	       (GtkArg	       *params,
+static gboolean	    gtk_signal_collect_params  (GtkArg	       *params,
 						guint		nparams,
 						GtkType	       *param_types,
-						GtkType		return_val,
-						va_list		args);
+						GtkType		return_type,
+						va_list		var_args);
 
 #define LOOKUP_SIGNAL_ID(signal_id)	( \
   signal_id > 0 && signal_id < gtk_n_signals ? \
@@ -276,7 +277,7 @@ gtk_signal_newv (const gchar	     *r_name,
   
   g_return_val_if_fail (r_name != NULL, 0);
   g_return_val_if_fail (marshaller != NULL, 0);
-  g_return_val_if_fail (nparams <= MAX_SIGNAL_PARAMS, 0);
+  g_return_val_if_fail (nparams < MAX_SIGNAL_PARAMS, 0);
   if (nparams)
     g_return_val_if_fail (params != NULL, 0);
   
@@ -367,7 +368,7 @@ gtk_signal_new (const gchar	    *name,
   va_list args;
   guint signal_id;
   
-  g_return_val_if_fail (nparams <= MAX_SIGNAL_PARAMS, 0);
+  g_return_val_if_fail (nparams < MAX_SIGNAL_PARAMS, 0);
   
   if (nparams > 0)
     {
@@ -495,7 +496,8 @@ gtk_signal_emit (GtkObject *object,
 {
   GtkSignal *signal;
   va_list    args;
-  GtkArg     params[MAX_SIGNAL_PARAMS];
+  GtkArg     params[MAX_SIGNAL_PARAMS + 1];
+  gboolean   abort;
 
   g_return_if_fail (object != NULL);
   g_return_if_fail (signal_id >= 1);
@@ -505,14 +507,15 @@ gtk_signal_emit (GtkObject *object,
   g_return_if_fail (gtk_type_is_a (GTK_OBJECT_TYPE (object), signal->object_type));
 
   va_start (args, signal_id);
-  gtk_params_get (params,
-		  signal->nparams,
-		  signal->params,
-		  signal->return_val,
-		  args);
+  abort = gtk_signal_collect_params (params,
+				     signal->nparams,
+				     signal->params,
+				     signal->return_val,
+				     args);
   va_end (args);
 
-  gtk_signal_real_emit (object, signal, params);
+  if (!abort)
+    gtk_signal_real_emit (object, signal, params);
 }
 
 void
@@ -561,22 +564,24 @@ gtk_signal_emit_by_name (GtkObject	 *object,
   if (signal_id >= 1)
     {
       GtkSignal *signal;
-      GtkArg     params[MAX_SIGNAL_PARAMS];
+      GtkArg     params[MAX_SIGNAL_PARAMS + 1];
       va_list    args;
+      gboolean   abort;
       
       signal = LOOKUP_SIGNAL_ID (signal_id);
       g_return_if_fail (signal != NULL);
       g_return_if_fail (gtk_type_is_a (GTK_OBJECT_TYPE (object), signal->object_type));
 
       va_start (args, name);
-      gtk_params_get (params,
-		      signal->nparams,
-		      signal->params,
-		      signal->return_val,
-		      args);
+      abort = gtk_signal_collect_params (params,
+					 signal->nparams,
+					 signal->params,
+					 signal->return_val,
+					 args);
       va_end (args);
 
-      gtk_signal_real_emit (object, signal, params);
+      if (!abort)
+	gtk_signal_real_emit (object, signal, params);
     }
   else
     {
@@ -1794,163 +1799,62 @@ gtk_handlers_run (GtkHandler	 *handlers,
   return EMISSION_CONTINUE;
 }
 
-static void
-gtk_params_get (GtkArg	       *params,
-		guint		nparams,
-		GtkType	       *param_types,
-		GtkType		return_val,
-		va_list		args)
+static gboolean
+gtk_signal_collect_params (GtkArg	       *params,
+			   guint		n_params,
+			   GtkType	       *param_types,
+			   GtkType		return_type,
+			   va_list		var_args)
 {
-  gint i;
-  
-  for (i = 0; i < nparams; i++)
+  register GtkArg *last_param;
+  register gboolean failed = FALSE;
+
+  for (last_param = params + n_params; params < last_param; params++)
     {
-      params[i].type = param_types[i];
-      params[i].name = NULL;
-      
-      switch (GTK_FUNDAMENTAL_TYPE (param_types[i]))
+      register gchar *error;
+
+      params->type = *(param_types++);
+      params->name = NULL;
+      error = gtk_arg_collect_value (GTK_FUNDAMENTAL_TYPE (params->type),
+				     params,
+				     &var_args);
+      if (error)
 	{
-	case GTK_TYPE_INVALID:
-	  break;
-	case GTK_TYPE_NONE:
-	  break;
-	case GTK_TYPE_CHAR:
-	  GTK_VALUE_CHAR(params[i]) = va_arg (args, gint);
-	  break;
-	case GTK_TYPE_BOOL:
-	  GTK_VALUE_BOOL(params[i]) = va_arg (args, gint);
-	  break;
-	case GTK_TYPE_INT:
-	  GTK_VALUE_INT(params[i]) = va_arg (args, gint);
-	  break;
-	case GTK_TYPE_UINT:
-	  GTK_VALUE_UINT(params[i]) = va_arg (args, guint);
-	  break;
-	case GTK_TYPE_ENUM:
-	  GTK_VALUE_ENUM(params[i]) = va_arg (args, gint);
-	  break;
-	case GTK_TYPE_FLAGS:
-	  GTK_VALUE_FLAGS(params[i]) = va_arg (args, gint);
-	  break;
-	case GTK_TYPE_LONG:
-	  GTK_VALUE_LONG(params[i]) = va_arg (args, glong);
-	  break;
-	case GTK_TYPE_ULONG:
-	  GTK_VALUE_ULONG(params[i]) = va_arg (args, gulong);
-	  break;
-	case GTK_TYPE_FLOAT:
-	  GTK_VALUE_FLOAT(params[i]) = va_arg (args, gfloat);
-	  break;
-	case GTK_TYPE_DOUBLE:
-	  GTK_VALUE_DOUBLE(params[i]) = va_arg (args, gdouble);
-	  break;
-	case GTK_TYPE_STRING:
-	  GTK_VALUE_STRING(params[i]) = va_arg (args, gchar*);
-	  break;
-	case GTK_TYPE_POINTER:
-	  GTK_VALUE_POINTER(params[i]) = va_arg (args, gpointer);
-	  break;
-	case GTK_TYPE_BOXED:
-	  GTK_VALUE_BOXED(params[i]) = va_arg (args, gpointer);
-	  break;
-	case GTK_TYPE_SIGNAL:
-	  GTK_VALUE_SIGNAL(params[i]).f = va_arg (args, GtkFunction);
-	  GTK_VALUE_SIGNAL(params[i]).d = va_arg (args, gpointer);
-	  break;
-	case GTK_TYPE_FOREIGN:
-	  GTK_VALUE_FOREIGN(params[i]).data = va_arg (args, gpointer);
-	  GTK_VALUE_FOREIGN(params[i]).notify = 
-	    va_arg (args, GtkDestroyNotify);
-	  break;
-	case GTK_TYPE_CALLBACK:
-	  GTK_VALUE_CALLBACK(params[i]).marshal = 
-	    va_arg (args, GtkCallbackMarshal);
-	  GTK_VALUE_CALLBACK(params[i]).data = va_arg (args, gpointer);
-	  GTK_VALUE_CALLBACK(params[i]).notify =
-	    va_arg (args, GtkDestroyNotify);
-	  break;
-	case GTK_TYPE_C_CALLBACK:
-	  GTK_VALUE_C_CALLBACK(params[i]).func = va_arg (args, GtkFunction);
-	  GTK_VALUE_C_CALLBACK(params[i]).func_data = va_arg (args, gpointer);
-	  break;
-	case GTK_TYPE_ARGS:
-	  GTK_VALUE_ARGS(params[i]).n_args = va_arg (args, gint);
-	  GTK_VALUE_ARGS(params[i]).args = va_arg (args, GtkArg*);
-	  break;
-	case GTK_TYPE_OBJECT:
-	  GTK_VALUE_OBJECT(params[i]) = va_arg (args, GtkObject*);
-	  if (GTK_VALUE_OBJECT(params[i]) != NULL &&
-	      !GTK_CHECK_TYPE (GTK_VALUE_OBJECT(params[i]), params[i].type))
-	    g_warning ("signal arg `%s' is not of type `%s'",
-		       gtk_type_name (GTK_OBJECT_TYPE (GTK_VALUE_OBJECT(params[i]))),
-		       gtk_type_name (params[i].type));
-	  break;
-	default:
-	  g_error ("unsupported type `%s' in signal arg",
-		   gtk_type_name (params[i].type));
-	  break;
+	  failed = TRUE;
+	  g_warning ("gtk_signal_collect_params(): %s", error);
+	  g_free (error);
 	}
     }
-  
-  params[i].type = return_val;
-  params[i].name = NULL;
-  
-  switch (GTK_FUNDAMENTAL_TYPE (return_val))
+
+  params->type = return_type;
+  params->name = NULL;
+
+  return_type = GTK_FUNDAMENTAL_TYPE (return_type);
+  if (return_type != GTK_TYPE_NONE)
     {
-    case GTK_TYPE_INVALID:
-      break;
-    case GTK_TYPE_NONE:
-      break;
-    case GTK_TYPE_CHAR:
-      params[i].d.pointer_data = va_arg (args, gchar*);
-      break;
-    case GTK_TYPE_BOOL:
-      params[i].d.pointer_data = va_arg (args, gint*);
-      break;
-    case GTK_TYPE_INT:
-      params[i].d.pointer_data = va_arg (args, gint*);
-      break;
-    case GTK_TYPE_UINT:
-      params[i].d.pointer_data = va_arg (args, guint*);
-      break;
-    case GTK_TYPE_ENUM:
-      params[i].d.pointer_data = va_arg (args, gint*);
-      break;
-    case GTK_TYPE_FLAGS:
-      params[i].d.pointer_data = va_arg (args, gint*);
-      break;
-    case GTK_TYPE_LONG:
-      params[i].d.pointer_data = va_arg (args, glong*);
-      break;
-    case GTK_TYPE_ULONG:
-      params[i].d.pointer_data = va_arg (args, gulong*);
-      break;
-    case GTK_TYPE_FLOAT:
-      params[i].d.pointer_data = va_arg (args, gfloat*);
-      break;
-    case GTK_TYPE_DOUBLE:
-      params[i].d.pointer_data = va_arg (args, gdouble*);
-      break;
-    case GTK_TYPE_STRING:
-      params[i].d.pointer_data = va_arg (args, gchar**);
-      break;
-    case GTK_TYPE_POINTER:
-      params[i].d.pointer_data = va_arg (args, gpointer*);
-      break;
-    case GTK_TYPE_BOXED:
-      params[i].d.pointer_data = va_arg (args, gpointer*);
-      break;
-    case GTK_TYPE_OBJECT:
-      params[i].d.pointer_data = va_arg (args, GtkObject**);
-      break;
-    case GTK_TYPE_SIGNAL:
-    case GTK_TYPE_FOREIGN:
-    case GTK_TYPE_CALLBACK:
-    case GTK_TYPE_C_CALLBACK:
-    case GTK_TYPE_ARGS:
-    default:
-      g_error ("Gtk: unsupported type `%s' in signal return",
-	       gtk_type_name (return_val));
-      break;
+      if ((return_type >= GTK_TYPE_CHAR &&
+	   return_type <= GTK_TYPE_BOXED) ||
+	  (return_type == GTK_TYPE_POINTER) ||
+	  (return_type == GTK_TYPE_OBJECT))
+	{
+	  GTK_VALUE_POINTER (*params) = va_arg (var_args, gpointer);
+	  
+	  if (GTK_VALUE_POINTER (*params) == NULL)
+	    {
+	      failed = TRUE;
+	      g_warning ("gtk_signal_collect_params(): invalid NULL pointer for return argument type `%s'",
+			 gtk_type_name (params->type));
+	    }
+	}
+      else
+	{
+	  failed = TRUE;
+	  g_warning ("gtk_signal_collect_params(): unsupported return argument type `%s'",
+		     gtk_type_name (params->type));
+	}
     }
+  else
+    GTK_VALUE_POINTER (*params) = NULL;
+
+  return failed;
 }

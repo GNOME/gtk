@@ -134,15 +134,15 @@ void    gtk_container_resize_children      (GtkContainer     *container);
 
 GtkType gtk_container_child_type	   (GtkContainer     *container);
 
+/* the `arg_name' argument needs to be a const static string */
 void    gtk_container_add_child_arg_type   (const gchar      *arg_name,
 					    GtkType           arg_type,
 					    guint             arg_flags,
 					    guint             arg_id);
-GtkType gtk_container_get_child_arg_type   (const gchar      *arg_name);
      
 /* Allocate a GtkArg array of size nargs that hold the
  * names and types of the args that can be used with
- * gtk_container_child_arg_getv/gtk_container_child_arg_setv.
+ * gtk_container_child_getv/gtk_container_child_setv.
  * if (arg_flags!=NULL),
  * (*arg_flags) will be set to point to a newly allocated
  * guint array that holds the flags of the args.
@@ -153,16 +153,16 @@ GtkArg* gtk_container_query_child_args	   (GtkType	       class_type,
 					    guint32          **arg_flags,
 					    guint             *nargs);
 
-/* gtk_container_child_arg_getv() sets an arguments type and value, or just
+/* gtk_container_child_getv() sets an arguments type and value, or just
  * its type to GTK_TYPE_INVALID.
- * if arg->type == GTK_TYPE_STRING, it's the callers response to
- * do a g_free (GTK_VALUE_STRING (arg));
+ * if GTK_FUNDAMENTAL_TYPE (arg->type) == GTK_TYPE_STRING, it's the callers
+ * response to do a g_free (GTK_VALUE_STRING (arg));
  */
-void    gtk_container_child_arg_getv	   (GtkContainer      *container,
+void    gtk_container_child_getv	   (GtkContainer      *container,
 					    GtkWidget	      *child,
 					    guint	       n_args,
 					    GtkArg	      *args);
-void    gtk_container_child_arg_setv   	   (GtkContainer      *container,
+void    gtk_container_child_setv   	   (GtkContainer      *container,
 					    GtkWidget	      *child,
 					    guint	       n_args,
 					    GtkArg	      *args);
@@ -175,22 +175,36 @@ void    gtk_container_child_arg_setv   	   (GtkContainer      *container,
 void    gtk_container_add_with_args	   (GtkContainer      *container,
 					    GtkWidget	      *widget,
 					    ...);
-void    gtk_container_add_with_argv	   (GtkContainer      *container,
+void    gtk_container_addv		   (GtkContainer      *container,
 					    GtkWidget	      *widget,
 					    guint	       n_args,
 					    GtkArg	      *args);
-void	gtk_container_child_arg_set	   (GtkContainer      *container,
+void	gtk_container_child_set		   (GtkContainer      *container,
 					    GtkWidget         *child,
 					    ...);
      
 
 /* Non-public methods */
+
 void	gtk_container_queue_resize	   (GtkContainer *container);
 void    gtk_container_clear_resize_widgets (GtkContainer *container);
-     
+void    gtk_container_arg_set		   (GtkContainer *container,
+					    GtkWidget	 *child,
+					    GtkArg       *arg,
+					    GtkArgInfo   *info);
+void    gtk_container_arg_get		   (GtkContainer *container,
+					    GtkWidget	 *child,
+					    GtkArg       *arg,
+					    GtkArgInfo   *info);
+gchar*	gtk_container_child_args_collect   (GtkType       object_type,
+					    GSList      **arg_list_p,
+					    GSList      **info_list_p,
+					    gpointer      var_args_p);
+
+
 /* Deprecated methods */
 
-/* completely non-functional */
+/* Completely non-functional */
 void    gtk_container_disable_resize	 (GtkContainer	   *container);
 void    gtk_container_enable_resize	 (GtkContainer	   *container);
 

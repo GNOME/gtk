@@ -116,15 +116,10 @@ static void gtk_container_children_callback (GtkWidget         *widget,
 static void gtk_container_show_all          (GtkWidget         *widget);
 static void gtk_container_hide_all          (GtkWidget         *widget);
 
-GtkArg*     gtk_object_collect_args	    (guint   *n_args,
-					     GtkType (*) (const gchar*),
-					     va_list  args1,
-					     va_list  args2);
-
 
 
 static guint container_signals[LAST_SIGNAL] = { 0 };
-static GHashTable *child_arg_info_ht = NULL;
+static GHashTable *container_child_arg_info_ht = NULL;
 
 static GtkWidgetClass *parent_class = NULL;
 
@@ -178,6 +173,9 @@ gtk_container_class_init (GtkContainerClass *class)
   widget_class = (GtkWidgetClass*) class;
 
   parent_class = gtk_type_class (gtk_widget_get_type ());
+
+  container_child_arg_info_ht = g_hash_table_new (gtk_arg_info_hash,
+						  gtk_arg_info_equal);
 
   vadjustment_key_id = g_quark_from_static_string (vadjustment_key);
   hadjustment_key_id = g_quark_from_static_string (hadjustment_key);
@@ -255,48 +253,6 @@ gtk_container_class_init (GtkContainerClass *class)
   class->child_type = NULL;
 }
 
-static void
-gtk_container_get_child_arg (GtkContainer *container,
-			     GtkWidget    *child,
-			     GtkType       type,
-			     GtkArg       *arg,
-			     guint         arg_id)
-{
-  GtkContainerClass *class;
-
-  g_return_if_fail (container != NULL);
-  g_return_if_fail (GTK_IS_CONTAINER (container));
-  g_return_if_fail (child != NULL);
-  g_return_if_fail (GTK_IS_WIDGET (child));
-  g_return_if_fail (arg != NULL);
-
-  class = gtk_type_class (type);
-  if (class && class->get_child_arg)
-    class->get_child_arg (container, child, arg, arg_id);
-  else
-    arg->type = GTK_TYPE_INVALID;
-}
-
-static void
-gtk_container_set_child_arg (GtkContainer *container,
-			     GtkWidget    *child,
-			     GtkType       type,
-			     GtkArg       *arg,
-			     guint         arg_id)
-{
-  GtkContainerClass *class;
-
-  g_return_if_fail (container != NULL);
-  g_return_if_fail (GTK_IS_CONTAINER (container));
-  g_return_if_fail (child != NULL);
-  g_return_if_fail (GTK_IS_WIDGET (child));
-  g_return_if_fail (arg != NULL);
-
-  class = gtk_type_class (type);
-  if (class && class->set_child_arg)
-    class->set_child_arg (container, child, arg, arg_id);
-}
-
 GtkType
 gtk_container_child_type (GtkContainer      *container)
 {
@@ -315,356 +271,10 @@ gtk_container_child_type (GtkContainer      *container)
   return slot;
 }
 
-void
-gtk_container_add_child_arg_type (const gchar       *arg_name,
-				  GtkType            arg_type,
-				  guint              arg_flags,
-				  guint              arg_id)
-{
-  GtkChildArgInfo *info;
-  gchar class_part[1024];
-  gchar *arg_part;
-  GtkType class_type;
-
-  g_return_if_fail (arg_name != NULL);
-  g_return_if_fail (arg_type > GTK_TYPE_NONE);
-  g_return_if_fail (arg_id > 0);
-  g_return_if_fail ((arg_flags & GTK_ARG_READWRITE) == GTK_ARG_READWRITE);
-
-  arg_flags |= GTK_ARG_CHILD_ARG;
-  arg_flags &= GTK_ARG_MASK;
-
-  arg_part = strchr (arg_name, ':');
-  if (!arg_part || (arg_part[0] != ':') || (arg_part[1] != ':'))
-    {
-      g_warning ("gtk_container_add_arg_type(): invalid arg name: \"%s\"\n", arg_name);
-      return;
-    }
-
-  strncpy (class_part, arg_name, (glong) (arg_part - arg_name));
-  class_part[(glong) (arg_part - arg_name)] = '\0';
-
-  class_type = gtk_type_from_name (class_part);
-  if (!class_type && !gtk_type_is_a (class_type, GTK_TYPE_CONTAINER))
-    {
-      g_warning ("gtk_container_add_arg_type(): invalid class name in arg: \"%s\"\n", arg_name);
-      return;
-    }
-
-  info = g_new (GtkChildArgInfo, 1);
-  info->name = g_strdup (arg_name);
-  info->type = arg_type;
-  info->class_type = class_type;
-  info->arg_flags = arg_flags;
-  info->arg_id = arg_id;
-  info->seq_id = ++((GtkContainerClass*) gtk_type_class (class_type))->n_child_args;
-
-  if (!child_arg_info_ht)
-    child_arg_info_ht = g_hash_table_new (g_str_hash, g_str_equal);
-
-  g_hash_table_insert (child_arg_info_ht, info->name, info);
-}
-
-typedef struct
-{
-  GList *arg_list;
-  GtkType class_type;
-} GtkQueryChildArgData;
-
-static void
-gtk_query_child_arg_foreach (gpointer key,
-			     gpointer value,
-			     gpointer user_data)
-{
-  register GtkChildArgInfo *info;
-  register GtkQueryChildArgData *data;
-
-  info = value;
-  data = user_data;
-
-  if (info->class_type == data->class_type)
-    data->arg_list = g_list_prepend (data->arg_list, info);
-}
-
-GtkType
-gtk_container_get_child_arg_type (const gchar *arg_name)
-{
-  GtkChildArgInfo *info;
-  gchar buffer[128];
-  gchar *t;
-
-  g_return_val_if_fail (arg_name != NULL, 0);
-
-  if (!child_arg_info_ht)
-    return GTK_TYPE_INVALID;
-
-  if (!arg_name || strlen (arg_name) > 120)
-    {
-      /* security audit
-       */
-      g_warning ("gtk_container_get_child_arg_type(): argument `arg_name' exceeds maximum size.");
-      return GTK_TYPE_INVALID;
-    }
-
-  t = strchr (arg_name, ':');
-  if (!t || (t[0] != ':') || (t[1] != ':'))
-    {
-      g_warning ("gtk_container_get_child_arg_type(): invalid arg name: \"%s\"\n", arg_name);
-      return GTK_TYPE_INVALID;
-    }
-
-  t = strchr (t + 2, ':');
-  if (t)
-    {
-      strncpy (buffer, arg_name, (long) (t - arg_name));
-      buffer[(long) (t - arg_name)] = '\0';
-      arg_name = buffer;
-    }
-
-  info = g_hash_table_lookup (child_arg_info_ht, arg_name);
-  if (info)
-    return info->type;
-
-  return GTK_TYPE_INVALID;
-}
-
-GtkArg*
-gtk_container_query_child_args (GtkType	           class_type,
-				guint32          **arg_flags,
-				guint             *n_args)
-{
-  GtkArg *args;
-  GtkQueryChildArgData query_data;
-
-  if (arg_flags)
-    *arg_flags = NULL;
-  g_return_val_if_fail (n_args != NULL, NULL);
-  *n_args = 0;
-  g_return_val_if_fail (gtk_type_is_a (class_type, GTK_TYPE_CONTAINER), NULL);
-
-  if (!child_arg_info_ht)
-    return NULL;
-
-  /* make sure the types class has been initialized, because
-   * the argument setup happens in the gtk_*_class_init() functions.
-   */
-  gtk_type_class (class_type);
-
-  query_data.arg_list = NULL;
-  query_data.class_type = class_type;
-  g_hash_table_foreach (child_arg_info_ht, gtk_query_child_arg_foreach, &query_data);
-
-  if (query_data.arg_list)
-    {
-      register GList    *list;
-      register guint    len;
-
-      list = query_data.arg_list;
-      len = 1;
-      while (list->next)
-	{
-	  len++;
-	  list = list->next;
-	}
-      g_assert (len == ((GtkContainerClass*) gtk_type_class (class_type))->n_child_args); /* paranoid */
-
-      args = g_new0 (GtkArg, len);
-      *n_args = len;
-      if (arg_flags)
-	*arg_flags = g_new (guint32, len);
-
-      do
-	{
-	  GtkChildArgInfo *info;
-
-	  info = list->data;
-	  list = list->prev;
-
-	  g_assert (info->seq_id > 0 && info->seq_id <= len); /* paranoid */
-
-	  args[info->seq_id - 1].type = info->type;
-	  args[info->seq_id - 1].name = info->name;
-	  if (arg_flags)
-	    (*arg_flags)[info->seq_id - 1] = info->arg_flags;
-	}
-      while (list);
-
-      g_list_free (query_data.arg_list);
-    }
-  else
-    args = NULL;
-
-  return args;
-}
-
-void
-gtk_container_child_arg_getv (GtkContainer      *container,
-			      GtkWidget         *child,
-			      guint              n_args,
-			      GtkArg            *args)
-{
-  guint i;
-
-  g_return_if_fail (container != NULL);
-  g_return_if_fail (GTK_IS_CONTAINER (container));
-  g_return_if_fail (child != NULL);
-  g_return_if_fail (GTK_IS_WIDGET (child));
-
-  if (!child_arg_info_ht)
-    return;
-
-  for (i = 0; i < n_args; i++)
-    {
-      GtkChildArgInfo *info;
-      gchar *lookup_name;
-      gchar *d;
-
-
-      /* hm, the name cutting shouldn't be needed on gets, but what the heck...
-       */
-      lookup_name = g_strdup (args[i].name);
-      d = strchr (lookup_name, ':');
-      if (d && d[1] == ':')
-	{
-	  d = strchr (d + 2, ':');
-	  if (d)
-	    *d = 0;
-
-	  info = g_hash_table_lookup (child_arg_info_ht, lookup_name);
-	}
-      else
-	info = NULL;
-
-      if (!info)
-	{
-	  g_warning ("gtk_container_child_arg_getv(): invalid arg name: \"%s\"\n",
-		     lookup_name);
-	  args[i].type = GTK_TYPE_INVALID;
-	  g_free (lookup_name);
-	  continue;
-	}
-      else if (!gtk_type_is_a (GTK_OBJECT_TYPE (container), info->class_type))
-	{
-	  g_warning ("gtk_container_child_arg_getv(): invalid arg for %s: \"%s\"\n",
-		     gtk_type_name (GTK_OBJECT_TYPE (container)), lookup_name);
-	  args[i].type = GTK_TYPE_INVALID;
-	  g_free (lookup_name);
-	  continue;
-	}
-      else if (! (info->arg_flags & GTK_ARG_READABLE))
-	{
-	  g_warning ("gtk_container_child_arg_getv(): arg is not supplied for read-access: \"%s\"\n",
-		     lookup_name);
-	  args[i].type = GTK_TYPE_INVALID;
-	  g_free (lookup_name);
-	  continue;
-	}
-      else
-	g_free (lookup_name);
-
-      args[i].type = info->type;
-      gtk_container_get_child_arg (container, child, info->class_type, &args[i], info->arg_id);
-    }
-}
-
-void
-gtk_container_child_arg_set (GtkContainer      *container,
-			     GtkWidget         *child,
-			     ...)
-{
-  GtkArg *args;
-  guint n_args;
-  va_list args1;
-  va_list args2;
-  
-  g_return_if_fail (container != NULL);
-  g_return_if_fail (GTK_IS_CONTAINER (container));
-  g_return_if_fail (child != NULL);
-  g_return_if_fail (GTK_IS_WIDGET (child));
-  g_return_if_fail (child->parent != NULL);
-
-  va_start (args1, child);
-  va_start (args2, child);
-  
-  args = gtk_object_collect_args (&n_args, gtk_container_get_child_arg_type, args1, args2);
-  gtk_container_child_arg_setv (container, child, n_args, args);
-  g_free (args);
-  
-  va_end (args1);
-  va_end (args2);
-}
-
-void
-gtk_container_child_arg_setv (GtkContainer      *container,
-			      GtkWidget         *child,
-			      guint              n_args,
-			      GtkArg            *args)
-{
-  guint i;
-
-  g_return_if_fail (container != NULL);
-  g_return_if_fail (GTK_IS_CONTAINER (container));
-  g_return_if_fail (child != NULL);
-  g_return_if_fail (GTK_IS_WIDGET (child));
-
-  if (!child_arg_info_ht)
-    return;
-
-  for (i = 0; i < n_args; i++)
-    {
-      GtkChildArgInfo *info;
-      gchar *lookup_name;
-      gchar *d;
-      gboolean arg_ok;
-
-      lookup_name = g_strdup (args[i].name);
-      d = strchr (lookup_name, ':');
-      if (d && d[1] == ':')
-	{
-	  d = strchr (d + 2, ':');
-	  if (d)
-	    *d = 0;
-
-	  info = g_hash_table_lookup (child_arg_info_ht, lookup_name);
-	}
-      else
-	info = NULL;
-
-      arg_ok = TRUE;
-
-      if (!info)
-	{
-	  g_warning ("gtk_container_child_arg_setv(): invalid arg name: \"%s\"\n",
-		     lookup_name);
-	  arg_ok = FALSE;
-	}
-      else if (info->type != args[i].type)
-	{
-	  g_warning ("gtk_container_child_arg_setv(): invalid arg type for: \"%s\"\n",
-		     lookup_name);
-	  arg_ok = FALSE;
-	}
-      else if (!gtk_type_is_a (GTK_OBJECT_TYPE (container), info->class_type))
-	{
-	  g_warning ("gtk_container_child_arg_setv(): invalid arg for %s: \"%s\"\n",
-		     gtk_type_name (GTK_OBJECT_TYPE (container)), lookup_name);
-	  arg_ok = FALSE;
-	}
-      else if (! (info->arg_flags & GTK_ARG_WRITABLE))
-	{
-	  g_warning ("gtk_container_child_arg_setv(): arg is not supplied for write-access: \"%s\"\n",
-		     lookup_name);
-	  arg_ok = FALSE;
-	}
-
-      g_free (lookup_name);
-
-      if (!arg_ok)
-	continue;
-
-      gtk_container_set_child_arg (container, child, info->class_type, &args[i], info->arg_id);
-    }
-}
+/****************************************************
+ * GtkContainer child argument mechanism
+ *
+ ****************************************************/
 
 void
 gtk_container_add_with_args (GtkContainer      *container,
@@ -684,20 +294,38 @@ gtk_container_add_with_args (GtkContainer      *container,
   
   if (widget->parent)
     {
-      GtkArg *args;
-      guint n_args;
-      va_list args1;
-      va_list args2;
+      va_list var_args;
+      GSList *arg_list = NULL;
+      GSList *info_list = NULL;
+      gchar *error;
+      
+      va_start (var_args, widget);
+      error = gtk_object_args_collect (GTK_OBJECT_TYPE (container),
+				       &arg_list,
+				       &info_list,
+				       &var_args);
+      va_end (var_args);
 
-      va_start (args1, widget);
-      va_start (args2, widget);
+      if (error)
+	{
+	  g_warning ("gtk_container_add_with_args(): %s", error);
+	  g_free (error);
+	}
+      else
+	{
+	  GSList *slist_arg;
+	  GSList *slist_info;
 
-      args = gtk_object_collect_args (&n_args, gtk_container_get_child_arg_type, args1, args2);
-      gtk_container_child_arg_setv (container, widget, n_args, args);
-      g_free (args);
-
-      va_end (args1);
-      va_end (args2);
+	  slist_arg = arg_list;
+	  slist_info = info_list;
+	  while (slist_arg)
+	    {
+	      gtk_container_arg_set (container, widget, slist_arg->data, slist_info->data);
+	      slist_arg = slist_arg->next;
+	      slist_info = slist_info->next;
+	    }
+	  gtk_args_collect_cleanup (arg_list, info_list);
+	}
     }
 
   gtk_widget_unref (widget);
@@ -705,10 +333,10 @@ gtk_container_add_with_args (GtkContainer      *container,
 }
 
 void
-gtk_container_add_with_argv (GtkContainer      *container,
-			     GtkWidget         *widget,
-			     guint              n_args,
-			     GtkArg            *args)
+gtk_container_addv (GtkContainer      *container,
+		    GtkWidget         *widget,
+		    guint              n_args,
+		    GtkArg            *args)
 {
   g_return_if_fail (container != NULL);
   g_return_if_fail (GTK_IS_CONTAINER (container));
@@ -720,13 +348,251 @@ gtk_container_add_with_argv (GtkContainer      *container,
   gtk_widget_ref (widget);
 
   gtk_signal_emit (GTK_OBJECT (container), container_signals[ADD], widget);
-
+  
   if (widget->parent)
-    gtk_container_child_arg_setv (container, widget, n_args, args);
+    {
+      GtkArg *max_args;
+
+      for (max_args = args + n_args; args < max_args; args++)
+	gtk_container_arg_set (container, widget, args, NULL);
+    }
 
   gtk_widget_unref (widget);
   gtk_widget_unref (GTK_WIDGET (container));
 }
+
+void
+gtk_container_child_setv (GtkContainer      *container,
+			  GtkWidget         *child,
+			  guint              n_args,
+			  GtkArg            *args)
+{
+  GtkArg *max_args;
+
+  g_return_if_fail (container != NULL);
+  g_return_if_fail (GTK_IS_CONTAINER (container));
+  g_return_if_fail (child != NULL);
+  g_return_if_fail (GTK_IS_WIDGET (child));
+  g_return_if_fail (child->parent != NULL);
+  if (n_args)
+    g_return_if_fail (args != NULL);
+
+  for (max_args = args + n_args; args < max_args; args++)
+    gtk_container_arg_set (container, child, args, NULL);
+}
+
+void
+gtk_container_child_getv (GtkContainer      *container,
+			  GtkWidget         *child,
+			  guint              n_args,
+			  GtkArg            *args)
+{
+  GtkArg *max_args;
+
+  g_return_if_fail (container != NULL);
+  g_return_if_fail (GTK_IS_CONTAINER (container));
+  g_return_if_fail (child != NULL);
+  g_return_if_fail (GTK_IS_WIDGET (child));
+  g_return_if_fail (child->parent != NULL);
+  if (n_args)
+    g_return_if_fail (args != NULL);
+
+  for (max_args = args + n_args; args < max_args; args++)
+    gtk_container_arg_get (container, child, args, NULL);
+}
+
+void
+gtk_container_child_set (GtkContainer      *container,
+			 GtkWidget         *child,
+			 ...)
+{
+  va_list var_args;
+  GSList *arg_list = NULL;
+  GSList *info_list = NULL;
+  gchar *error;
+  
+  g_return_if_fail (container != NULL);
+  g_return_if_fail (GTK_IS_CONTAINER (container));
+  g_return_if_fail (child != NULL);
+  g_return_if_fail (GTK_IS_WIDGET (child));
+  g_return_if_fail (child->parent != NULL);
+
+  va_start (var_args, child);
+  error = gtk_object_args_collect (GTK_OBJECT_TYPE (container),
+				   &arg_list,
+				   &info_list,
+				   &var_args);
+  va_end (var_args);
+
+  if (error)
+    {
+      g_warning ("gtk_container_child_set(): %s", error);
+      g_free (error);
+    }
+  else
+    {
+      GSList *slist_arg;
+      GSList *slist_info;
+
+      slist_arg = arg_list;
+      slist_info = info_list;
+      while (slist_arg)
+	{
+	  gtk_container_arg_set (container, child, slist_arg->data, slist_info->data);
+	  slist_arg = slist_arg->next;
+	  slist_info = slist_info->next;
+	}
+      gtk_args_collect_cleanup (arg_list, info_list);
+    }
+}
+
+void
+gtk_container_arg_set (GtkContainer *container,
+		       GtkWidget    *child,
+		       GtkArg       *arg,
+		       GtkArgInfo   *info)
+{
+  GtkContainerClass *class;
+  
+  g_return_if_fail (container != NULL);
+  g_return_if_fail (GTK_IS_CONTAINER (container));
+  g_return_if_fail (child != NULL);
+  g_return_if_fail (GTK_IS_WIDGET (child));
+  g_return_if_fail (arg != NULL);
+  
+  if (!info)
+    {
+      gchar *error;
+      
+      error = gtk_arg_get_info (GTK_OBJECT_TYPE (container),
+				container_child_arg_info_ht,
+				arg->name,
+				&info);
+      if (error)
+	{
+	  g_warning ("gtk_container_arg_set(): %s", error);
+	  g_free (error);
+	  return;
+	}
+    }
+  
+  if (! (info->arg_flags & GTK_ARG_WRITABLE))
+    {
+      g_warning ("gtk_container_arg_set(): argument \"%s\" is not writable",
+		 info->full_name);
+      return;
+    }
+  if (info->type != arg->type)
+    {
+      g_warning ("gtk_container_arg_set(): argument \"%s\" has invalid type `%s'",
+		 info->full_name,
+		 gtk_type_name (arg->type));
+      return;
+    }
+  
+  class = gtk_type_class (info->class_type);
+  if (class->set_child_arg)
+    class->set_child_arg (container, child, arg, info->arg_id);
+}
+
+void
+gtk_container_arg_get (GtkContainer *container,
+		       GtkWidget    *child,
+		       GtkArg       *arg,
+		       GtkArgInfo   *info)
+{
+  GtkContainerClass *class;
+  
+  g_return_if_fail (container != NULL);
+  g_return_if_fail (GTK_IS_CONTAINER (container));
+  g_return_if_fail (child != NULL);
+  g_return_if_fail (GTK_IS_WIDGET (child));
+  g_return_if_fail (arg != NULL);
+  
+  if (!info)
+    {
+      gchar *error;
+      
+      error = gtk_arg_get_info (GTK_OBJECT_TYPE (container),
+				container_child_arg_info_ht,
+				arg->name,
+				&info);
+      if (error)
+	{
+	  g_warning ("gtk_container_arg_get(): %s", error);
+	  g_free (error);
+	  arg->type = GTK_TYPE_INVALID;
+	  return;
+	}
+    }
+  
+  if (! (info->arg_flags & GTK_ARG_READABLE))
+    {
+      g_warning ("gtk_container_arg_get(): argument \"%s\" is not readable",
+		 info->full_name);
+      arg->type = GTK_TYPE_INVALID;
+      return;
+    }
+  
+  class = gtk_type_class (info->class_type);
+  if (class->get_child_arg)
+    {
+      arg->type = info->type;
+      class->get_child_arg (container, child, arg, info->arg_id);
+    }
+  else
+    arg->type = GTK_TYPE_INVALID;
+}
+
+void
+gtk_container_add_child_arg_type (const gchar       *arg_name,
+				  GtkType            arg_type,
+				  guint              arg_flags,
+				  guint              arg_id)
+{
+  g_return_if_fail (arg_name != NULL);
+  g_return_if_fail (arg_type > GTK_TYPE_NONE);
+  g_return_if_fail (arg_id > 0);
+  g_return_if_fail ((arg_flags & GTK_ARG_READWRITE) == GTK_ARG_READWRITE);
+  /* g_return_if_fail ((arg_flags & GTK_ARG_CHILD_ARG) != 0); */
+
+  arg_flags |= GTK_ARG_CHILD_ARG;
+  arg_flags &= GTK_ARG_MASK;
+
+  gtk_arg_type_new_static (GTK_TYPE_CONTAINER,
+			   arg_name,
+			   GTK_STRUCT_OFFSET (GtkContainerClass, n_child_args),
+			   container_child_arg_info_ht,
+			   arg_type,
+			   arg_flags,
+			   arg_id);
+}
+
+gchar*
+gtk_container_child_args_collect (GtkType       object_type,
+				  GSList      **arg_list_p,
+				  GSList      **info_list_p,
+				  gpointer      var_args_p)
+{
+  return gtk_args_collect (object_type,
+			   container_child_arg_info_ht,
+			   arg_list_p,
+			   info_list_p,
+			   var_args_p);
+}
+
+GtkArg*
+gtk_container_query_child_args (GtkType	           class_type,
+				guint32          **arg_flags,
+				guint             *n_args)
+{
+  g_return_val_if_fail (n_args != NULL, NULL);
+  *n_args = 0;
+  g_return_val_if_fail (gtk_type_is_a (class_type, GTK_TYPE_CONTAINER), NULL);
+
+  return gtk_args_query (class_type, container_child_arg_info_ht, arg_flags, n_args);
+}
+
 
 static void
 gtk_container_add_unimplemented (GtkContainer     *container,

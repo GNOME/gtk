@@ -25,6 +25,7 @@
 #include <gtk/gtkaccellabel.h>
 #include <gtk/gtkadjustment.h>
 #include <gtk/gtkalignment.h>
+#include <gtk/gtkarg.h>
 #include <gtk/gtkaspectframe.h>
 #include <gtk/gtkarrow.h>
 #include <gtk/gtkbin.h>
