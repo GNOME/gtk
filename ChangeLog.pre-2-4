@@ -1,3 +1,10 @@
+2002-02-04  Havoc Pennington  <hp@pobox.com>
+
+	* gtk/gtksignal.c (gtk_signal_connect_while_alive): 
+	(gtk_signal_connect_object_while_alive): rename 
+	"signal" arg to "name" to avoid compiler warnings
+	about shadowing signal(). #70453
+
 2002-02-03  Anders Carlsson  <expander-master@gtk.org>
 
 	* gtk/gtkstyle.c (gtk_default_draw_expander): Add 
