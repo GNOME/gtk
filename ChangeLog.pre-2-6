@@ -1,3 +1,9 @@
+Mon Jun  9 16:29:51 2003  Owen Taylor  <otaylor@redhat.com>
+
+	* === Released 2.2.2 ===
+
+	* demos/gtk-demo/Makefile.am (demos.h): srcdir != builddir fix.
+
 Mon Jun  9 16:18:11 2003  Owen Taylor  <otaylor@redhat.com>
  
  	* gtk/gtknotebook.c (gtk_notebook_button_press): Back

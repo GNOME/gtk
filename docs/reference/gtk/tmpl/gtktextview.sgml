@@ -669,6 +669,14 @@ in an idle job in the background.
 @textview: the object which received the signal.
 @arg1: 
 
+<!-- ##### SIGNAL GtkTextView::select-all ##### -->
+<para>
+
+</para>
+
+@textview: the object which received the signal.
+@arg1: 
+
 <!-- ##### SIGNAL GtkTextView::set-anchor ##### -->
 <para>
 
