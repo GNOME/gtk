@@ -329,6 +329,11 @@ static void     shortcuts_row_activated_cb (GtkTreeView           *tree_view,
 					    GtkTreePath           *path,
 					    GtkTreeViewColumn     *column,
 					    GtkFileChooserDefault *impl);
+
+static gboolean shortcuts_key_press_event_cb (GtkWidget             *widget,
+					      GdkEventKey           *event,
+					      GtkFileChooserDefault *impl);
+
 static gboolean shortcuts_select_func   (GtkTreeSelection      *selection,
 					 GtkTreeModel          *model,
 					 GtkTreePath           *path,
@@ -1701,10 +1706,9 @@ add_bookmark_button_clicked_cb (GtkButton *button,
 					 impl);
 }
 
-/* Callback used when the "Remove bookmark" button is clicked */
+/* Removes the selected bookmarks */
 static void
-remove_bookmark_button_clicked_cb (GtkButton *button,
-				   GtkFileChooserDefault *impl)
+remove_selected_bookmarks (GtkFileChooserDefault *impl)
 {
   GtkTreeSelection *selection;
   GtkTreeIter iter;
@@ -1714,26 +1718,31 @@ remove_bookmark_button_clicked_cb (GtkButton *button,
 
   selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (impl->browse_shortcuts_tree_view));
 
-  if (gtk_tree_selection_get_selected (selection, NULL, &iter))
-    {
-      gtk_tree_model_get (impl->shortcuts_filter_model, &iter,
-			  SHORTCUTS_COL_PATH, &path,
-			  SHORTCUTS_COL_REMOVABLE, &removable, -1);
-      if (!removable)
-	{
-	  g_assert_not_reached ();
-	  return;
-	}
+  if (!gtk_tree_selection_get_selected (selection, NULL, &iter))
+    return;
 
-      error = NULL;
-      if (!gtk_file_system_remove_bookmark (impl->file_system, path, &error))
-	{
-	  error_dialog (impl,
-			_("Could not remove bookmark for %s:\n%s"),
-			path,
-			error);
-	}
+  gtk_tree_model_get (impl->shortcuts_filter_model, &iter,
+		      SHORTCUTS_COL_PATH, &path,
+		      SHORTCUTS_COL_REMOVABLE, &removable, -1);
+  if (!removable)
+    return;
+
+  error = NULL;
+  if (!gtk_file_system_remove_bookmark (impl->file_system, path, &error))
+    {
+      error_dialog (impl,
+		    _("Could not remove bookmark for %s:\n%s"),
+		    path,
+		    error);
     }
+}
+
+/* Callback used when the "Remove bookmark" button is clicked */
+static void
+remove_bookmark_button_clicked_cb (GtkButton *button,
+				   GtkFileChooserDefault *impl)
+{
+  remove_selected_bookmarks (impl);
 }
 
 struct selection_check_closure {
@@ -2481,6 +2490,9 @@ shortcuts_list_create (GtkFileChooserDefault *impl)
 
   g_signal_connect (impl->browse_shortcuts_tree_view, "row-activated",
 		    G_CALLBACK (shortcuts_row_activated_cb), impl);
+
+  g_signal_connect (impl->browse_shortcuts_tree_view, "key-press-event",
+		    G_CALLBACK (shortcuts_key_press_event_cb), impl);
 
   g_signal_connect (impl->browse_shortcuts_tree_view, "drag-begin",
 		    G_CALLBACK (shortcuts_drag_begin_cb), impl);
@@ -4817,6 +4829,28 @@ shortcuts_row_activated_cb (GtkTreeView           *tree_view,
   gtk_tree_path_free (child_path);
 
   shortcuts_activate_item (impl, selected);
+}
+
+/* Handler for GtkWidget::key-press-event on the shortcuts list */
+static gboolean
+shortcuts_key_press_event_cb (GtkWidget             *widget,
+			      GdkEventKey           *event,
+			      GtkFileChooserDefault *impl)
+{
+  guint modifiers;
+
+  modifiers = gtk_accelerator_get_default_mod_mask ();
+
+  if ((event->keyval == GDK_BackSpace
+      || event->keyval == GDK_Delete
+      || event->keyval == GDK_KP_Delete)
+      && (event->state & modifiers) == 0)
+    {
+      remove_selected_bookmarks (impl);
+      return TRUE;
+    }
+
+  return FALSE;
 }
 
 static gboolean

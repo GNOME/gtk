@@ -1,3 +1,16 @@
+2004-04-29  Federico Mena Quintero  <federico@ximian.com>
+
+	Fixes #140412.
+
+	* gtk/gtkfilechooserdefault.c (remove_selected_bookmarks): New
+	function; moved the code over from
+	remove_bookmark_button_clicked_cb().
+	(remove_selected_bookmarks): Now, getting a non-removable bookmark
+	is not an error, as we may be called as a result of hitting the
+	Delete key.
+	(shortcuts_key_press_event_cb): New handler; delete the bookmark
+	if the user presses Backspace, Delete, or KP_Delete.
+
 2004-04-29  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkaction.c (closure_accel_activate): Use
