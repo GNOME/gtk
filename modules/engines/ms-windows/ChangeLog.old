@@ -1,3 +1,8 @@
+2003-11-05  Dom Lachowicz <cinamod@hotmail.com>
+
+	* src/wimp_style.c: Toolbar steppers get drawn ETCHED_IN when pressed now. More 
+	consistent with Win32 behavior.
+	
 2003-11-04  Dom Lachowicz <cinamod@hotmail.com>
 
 	* src/xp_theme.c: Move Raymond's scrollbar work into wimp_style.c

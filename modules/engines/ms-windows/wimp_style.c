@@ -1284,6 +1284,11 @@ draw_box (GtkStyle      *style,
           return;
         }
     }
+  else if (detail && (strcmp (detail, "vscrollbar") == 0 || strcmp (detail, "hscrollbar") == 0))
+  {
+	  if (shadow_type == GTK_SHADOW_IN)
+	  	shadow_type = GTK_SHADOW_ETCHED_IN;
+  }
   else
   {
 	 const gchar * name = gtk_widget_get_name (widget);
