@@ -316,6 +316,17 @@ GDK_TYPE_DISPLAY
 </SECTION>
 
 <SECTION>
+<TITLE>Virtual Screen Support</TITLE>
+<FILE>virtual_screen</FILE>
+<SUBSECTION>
+gdk_screen_use_virtual_screen
+gdk_screen_get_num_monitors
+gdk_screen_get_monitor_geometry
+gdk_screen_get_monitor_num_at_point
+gdk_screen_get_monitor_num_at_window
+</SECTION>
+
+<SECTION>
 <TITLE>Colormaps and Colors</TITLE>
 <FILE>colors</FILE>
 GdkColor

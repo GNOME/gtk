@@ -654,6 +654,7 @@ gtk_plug_forward_key_press (GtkPlug *plug, GdkEventKey *event)
 {
   Display *xdisplay = GDK_WINDOW_XDISPLAY (plug->socket_window);
   XEvent xevent;
+  g_assert (plug->socket_window != NULL);
   
   xevent.xkey.type = KeyPress;
   xevent.xkey.display = xdisplay;
@@ -941,7 +942,7 @@ send_xembed_message (GtkPlug *plug,
       xevent.xclient.window = GDK_WINDOW_XWINDOW (plug->socket_window);
       xevent.xclient.type = ClientMessage;
       xevent.xclient.message_type = gdk_x11_get_xatom_by_name_for_display 
-	(gdk_drawable_get_display (plug->socket_window), "_XEMBED");
+	(gtk_widget_get_display (GTK_WIDGET (plug)), "_XEMBED");
       xevent.xclient.format = 32;
       xevent.xclient.data.l[0] = time;
       xevent.xclient.data.l[1] = message;
@@ -953,7 +954,7 @@ send_xembed_message (GtkPlug *plug,
       XSendEvent (GDK_WINDOW_XDISPLAY(plug->socket_window),
 		  GDK_WINDOW_XWINDOW (plug->socket_window),
 		  False, NoEventMask, &xevent);
-      gdk_display_sync (gdk_drawable_get_display (plug->socket_window));
+      gdk_display_sync (gtk_widget_get_display (GTK_WIDGET (plug)));
       gdk_error_trap_pop ();
     }
 }
@@ -1012,8 +1013,7 @@ xembed_set_info (GdkWindow     *gdk_window,
   Window window = GDK_WINDOW_XWINDOW (gdk_window);
   unsigned long buffer[2];
   
-  Atom xembed_info_atom = 
-    gdk_x11_get_xatom_by_name_for_display 
+  Atom xembed_info_atom = gdk_x11_get_xatom_by_name_for_display 
     (gdk_drawable_get_display (gdk_window), "_XEMBED_INFO");
 
   buffer[1] = 0;		/* Protocol version */
@@ -1103,7 +1103,7 @@ gtk_plug_filter_func (GdkXEvent *gdk_xevent, GdkEvent *event, gpointer data)
 {
   GtkPlug *plug = GTK_PLUG (data);
   XEvent *xevent = (XEvent *)gdk_xevent;
-  GdkDisplay *display = gdk_drawable_get_display (plug->socket_window);
+  GdkDisplay *display = gdk_drawable_get_display (event->any.window);
 
   GdkFilterReturn return_val;
   
@@ -1193,8 +1193,8 @@ gtk_plug_filter_func (GdkXEvent *gdk_xevent, GdkEvent *event, gpointer data)
 	  {
 	    /* Start of embedding protocol */
 
-	    plug->socket_window = gdk_window_lookup_for_display 
-	      (gdk_drawable_get_display (plug->socket_window), xre->parent);
+	    plug->socket_window = gdk_window_lookup_for_display (display, 
+								 xre->parent);
 	    if (plug->socket_window)
 	      {
 		gpointer user_data = NULL;
@@ -1211,8 +1211,8 @@ gtk_plug_filter_func (GdkXEvent *gdk_xevent, GdkEvent *event, gpointer data)
 	      }
 	    else
 	      {
-		plug->socket_window = gdk_window_foreign_new_for_display 
-		  (gdk_drawable_get_display (plug->socket_window),xre->parent);
+		plug->socket_window = gdk_window_foreign_new_for_display (display,
+									  xre->parent);
 		if (!plug->socket_window) /* Already gone */
 		  break;
 	      }

@@ -25,6 +25,7 @@
 <!entity gdk-Multihead SYSTEM "sgml/multihead.sgml">
 <!entity gdk-Screen SYSTEM "sgml/gdkscreen.sgml">
 <!entity gdk-Display SYSTEM "sgml/gdkdisplay.sgml">
+<!entity gdk-Virtual-screen SYSTEM "sgml/virtual_screen.sgml">
 <!entity gdk-X-Window-System-Interaction SYSTEM "sgml/x_interaction.sgml">
 ]>
 
@@ -76,6 +77,7 @@
     &gdk-Multihead;
     &gdk-Screen;
     &gdk-Display;
+    &gdk-Virtual-screen;
     
     &gdk-X-Window-System-Interaction;
   </chapter>

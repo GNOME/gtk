@@ -236,3 +236,93 @@ gdk_screen_close (GdkScreen *screen)
   g_return_if_fail (GDK_IS_SCREEN (screen));
   g_object_run_dispose (G_OBJECT (screen));
 }
+
+/**
+ * gdk_screen_use_virtual_screen:
+ * @screen : a #GdkScreen.
+ *
+ * Returns TRUE if @screen is uses multiple montiors as
+ * a single virtual screen (e.g. Xinerama mode under X).
+ *
+ * Returns: TRUE if multiple monitors are used as a single
+ *          Screen.
+ */
+gboolean 
+gdk_screen_use_virtual_screen (GdkScreen *screen)
+{
+  g_return_val_if_fail (GDK_IS_SCREEN (screen), FALSE);
+  return GDK_SCREEN_GET_CLASS (screen)->use_virtual_screen (screen);
+}
+
+/**
+ * gdk_screen_get_num_monitors:
+ * @screen : a #GdkScreen.
+ *
+ * Returns the number of monitors being part of the virtual screen
+ *
+ * Returns: number of monitors part of the virtual screen or
+ *          0 if @screen is not in virtual screen mode.
+ */
+gint 
+gdk_screen_get_num_monitors (GdkScreen *screen)
+{
+  g_return_val_if_fail (GDK_IS_SCREEN (screen), 0);
+  return GDK_SCREEN_GET_CLASS (screen)->get_num_monitors (screen);
+}
+
+/**
+ * gdk_screen_get_monitor_geometry:
+ * @screen : a #GdkScreen.
+ * @num_monitor : the monitor number. 
+ *
+ * Returns a #GdkRectangle representing the size and start
+ * coordinates of the screen with respect to the virtual screen.
+ * 
+ * Note that the virtual screen coordinates can be retrieved via 
+ * gdk_screen_get_[width|height]. 
+ *
+ * Returns: the size and start position of the monitor wrt to
+ *	    the virtual screen.
+ */
+GdkRectangle *
+gdk_screen_get_monitor_geometry (GdkScreen *screen, gint num_monitor)
+{
+  g_return_val_if_fail (GDK_IS_SCREEN (screen), NULL);
+  return GDK_SCREEN_GET_CLASS (screen)->get_monitor_geometry (screen,
+							      num_monitor);
+}
+
+/**
+ * gdk_screen_get_monitor_num_at_point:
+ * @screen : a #GdkScreen.
+ * @x : the x coordinate in the virtual screen.
+ * @y : the y coordinate in the virtual screen.
+ *
+ * Returns the monitor number in which the point (@x,@y) is located.
+ *
+ * Returns: the monitor number in which the point (@x,@y) belong.
+ */
+gint 
+gdk_screen_get_monitor_num_at_point (GdkScreen *screen, gint x, gint y)
+{
+  g_return_val_if_fail (GDK_IS_SCREEN (screen), 0);
+  return GDK_SCREEN_GET_CLASS (screen)->get_monitor_num_at_point (screen, x,y);
+}
+
+/**
+ * gdk_screen_get_monitor_num_at_window:
+ * @screen : a #GdkScreen.
+ * @anid : a #GdkDrawable ID.
+ *
+ * Returns the monitor number in which the largest area of the bounding rectangle
+ * of @anid resides.
+ *
+ * Returns: the monitor number in which most of @anid is located.
+ */
+gint 
+gdk_screen_get_monitor_num_at_window (GdkScreen *screen, GdkNativeWindow anid)
+{
+  g_return_val_if_fail (GDK_IS_SCREEN (screen), 0);
+  return GDK_SCREEN_GET_CLASS (screen)->get_monitor_num_at_window (screen, 
+								    anid);
+}

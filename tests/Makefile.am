@@ -29,6 +29,7 @@ noinst_PROGRAMS = 		\
 	testmultidisplay	\
 	testmultidisplaysimple	\
 	testmultiscreen		\
+	testxinerama		\
 	testcalendar		\
 	testdnd			\
 	testgtk 		\
@@ -50,6 +51,7 @@ simple_DEPENDENCIES = $(TEST_DEPS)
 testmultidisplay_DEPENDENCIES = $(TEST_DEPS)
 testmultidisplaysimple_DEPENDENCIES = $(TEST_DEPS)
 testmultiscreen_DEPENDENCIES = $(TEST_DEPS)
+testxinerama_DEPENDENCIES = $(TEST_DEPS)
 testcalendar_DEPENDENCIES = $(TEST_DEPS)
 testdnd_DEPENDENCIES = $(TEST_DEPS)
 testgtk_DEPENDENCIES = $(TEST_DEPS)
@@ -72,6 +74,7 @@ simple_LDADD = $(LDADDS)
 testmultidisplay_LDADD = $(LDADDS)
 testmultidisplaysimple_LDADD = $(LDADDS)
 testmultiscreen_LDADD = $(LDADDS)
+testxinerama_LDADD = $(LDADDS)
 testcalendar_LDADD = $(LDADDS)
 testdnd_LDADD = $(LDADDS)
 testgtk_LDADD = $(LDADDS)

@@ -1756,7 +1756,7 @@ gtk_drag_begin (GtkWidget         *widget,
   g_return_val_if_fail (GTK_WIDGET_REALIZED (widget), NULL);
   g_return_val_if_fail (target_list != NULL, NULL);
 
-  root_window = gdk_screen_get_root_window (gtk_widget_get_screen (widget));
+  root_window = gtk_widget_get_root_window (widget);
 
   if (event)
     time = gdk_event_get_time (event);
@@ -2983,7 +2983,7 @@ gtk_drag_end (GtkDragSourceInfo *info, guint32 time)
 {
   GdkEvent send_event;
   GtkWidget *source_widget = info->widget;
-  GdkWindow *root_window = gdk_screen_get_root_window (gtk_widget_get_screen (source_widget));
+  GdkWindow *root_window = gtk_widget_get_root_window (source_widget);
 
   gdk_display_pointer_ungrab (gtk_widget_get_display (source_widget),
 			      time);
@@ -3036,7 +3036,7 @@ gtk_drag_motion_cb (GtkWidget      *widget,
 {
   GtkDragSourceInfo *info = (GtkDragSourceInfo *)data;
   gint x_root, y_root;
-  GdkWindow *root_window = gdk_screen_get_root_window (gtk_widget_get_screen (widget));
+  GdkWindow *root_window = gtk_widget_get_root_window (widget);
 
 
   if (event->is_hint)

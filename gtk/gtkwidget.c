@@ -53,6 +53,7 @@
 #include "gtkinvisible.h"
 #include "gtkmenu.h"
 #include "gtkoptionmenu.h"
+#include "gtkclipboard.h"
 
 #define WIDGET_CLASS(w)	 GTK_WIDGET_GET_CLASS (w)
 #define	INIT_PATH_SIZE	(512)

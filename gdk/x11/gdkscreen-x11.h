@@ -71,6 +71,10 @@ struct _GdkScreenImplX11
   GdkColormap *system_colormap;
   /* X settings */
   XSettingsClient *xsettings_client;
+  /* Xinerama */
+  gboolean use_virtual_screen;
+  gint     num_monitors;
+  GdkRectangle *monitors;
 };
   
 struct _GdkScreenImplX11Class

@@ -44,6 +44,15 @@ static GdkWindow *  gdk_X11_screen_get_window_at_pointer (GdkScreen             
 							  gint                  *win_x,
 							  gint                  *win_y);
 static void         gdk_X11_screen_finalize		 (GObject		*object);
+static gboolean     gdk_X11_screen_use_virtual_screen	 (GdkScreen *screen);
+static gint	    gdk_X11_screen_get_num_monitors	 (GdkScreen *screen);
+static GdkRectangle *gdk_X11_screen_get_monitor_geometry (GdkScreen *screen,
+							  gint	     num_monitor);
+static gint	    gdk_X11_screen_get_monitor_num_at_point (GdkScreen *screen, 
+							     gint x,
+							     gint y);
+static gint	    gdk_X11_screen_get_monitor_num_at_window (GdkScreen *screen, 
+							      GdkNativeWindow anid);
 
 GType gdk_X11_screen_impl_get_type ();
 static gpointer parent_class = NULL;
@@ -77,6 +86,7 @@ void
 gdk_X11_screen_impl_class_init (GdkScreenImplX11Class * klass)
 {
   GdkScreenClass *screen_class = GDK_SCREEN_CLASS (klass);
+  
   screen_class->get_display = gdk_X11_screen_get_display;
   screen_class->get_width = gdk_X11_screen_get_width;
   screen_class->get_height = gdk_X11_screen_get_height;
@@ -88,6 +98,14 @@ gdk_X11_screen_impl_class_init (GdkScreenImplX11Class * klass)
   screen_class->get_default_colormap = gdk_X11_screen_get_default_colormap;
   screen_class->set_default_colormap = gdk_X11_screen_set_default_colormap;
   screen_class->get_window_at_pointer = gdk_X11_screen_get_window_at_pointer;
+  screen_class->use_virtual_screen = gdk_X11_screen_use_virtual_screen;
+  screen_class->get_num_monitors = gdk_X11_screen_get_num_monitors;
+  screen_class->get_monitor_geometry = gdk_X11_screen_get_monitor_geometry;
+  screen_class->get_monitor_num_at_point = 
+    gdk_X11_screen_get_monitor_num_at_point;
+  screen_class->get_monitor_num_at_window = 
+    gdk_X11_screen_get_monitor_num_at_window;
+  
   G_OBJECT_CLASS (klass)->finalize = gdk_X11_screen_finalize;
   parent_class = g_type_class_peek_parent (klass);
 }
@@ -241,4 +259,98 @@ gdk_X11_screen_finalize (GObject *object)
   g_free (screen_impl->xsettings_client);
   G_OBJECT_CLASS (parent_class)->finalize (object);
 }
+
+static gboolean 
+gdk_X11_screen_use_virtual_screen (GdkScreen *screen)
+{
+  g_return_val_if_fail (GDK_IS_SCREEN (screen), FALSE);
+  return GDK_SCREEN_IMPL_X11 (screen)->use_virtual_screen;
+}
+
+static gint 
+gdk_X11_screen_get_num_monitors (GdkScreen *screen)
+{
+  g_return_val_if_fail (GDK_IS_SCREEN (screen), 1);
+  return GDK_SCREEN_IMPL_X11 (screen)->num_monitors;
+}
+
+static GdkRectangle *
+gdk_X11_screen_get_monitor_geometry (GdkScreen *screen, 
+				     gint num_monitor)
+{
+  g_return_val_if_fail (GDK_IS_SCREEN (screen), NULL);
+  g_return_val_if_fail (num_monitor < 
+			GDK_SCREEN_IMPL_X11 (screen)->num_monitors, NULL);
+  return &GDK_SCREEN_IMPL_X11 (screen)->monitors[num_monitor];
+}
+
+static gint 
+gdk_X11_screen_get_monitor_num_at_point (GdkScreen *screen, gint x, gint y)
+{
+  int i;
+  GdkRectangle *monitor;
+  GdkScreenImplX11* screen_impl = GDK_SCREEN_IMPL_X11(screen);
+
+  g_return_val_if_fail (GDK_IS_SCREEN (screen), 0);
+
+  for (i = 0, monitor = screen_impl->monitors; 
+       i < screen_impl->num_monitors; 
+       i++, monitor++) {
+    if (x >= monitor->x) {
+      if (x <= (monitor->x + monitor->width)) {
+	if (y >= monitor->y) {
+	  if (y <= (monitor->y + monitor->height)) {
+	    return i;
+	  }
+	}
+      }
+    }
+  }
+  return 0; 
+}
+
+static gint 
+gdk_X11_screen_get_monitor_num_at_window (GdkScreen *screen, 
+					  GdkNativeWindow anid)
+{
+  gint x, y, width, height, depth;
+  gint left_monitor, right_monitor, diff_monitor;
+  GdkRectangle *left_monitor_rect, *right_monitor_rect;
+  
+  GdkWindow *window = 
+    gdk_window_lookup_for_display (GDK_SCREEN_DISPLAY (screen), anid);
+  
+  gdk_window_get_geometry (window, &x, &y, &width, &height, &depth);
+  gdk_window_get_position (window, &x, &y);
+
+  left_monitor = gdk_X11_screen_get_monitor_num_at_point (screen, x, y);
+  right_monitor = gdk_X11_screen_get_monitor_num_at_point (screen, x + width, 
+							   y + height);
+  left_monitor_rect = gdk_X11_screen_get_monitor_geometry (screen,
+							   left_monitor);
+  right_monitor_rect = gdk_X11_screen_get_monitor_geometry (screen,
+							    right_monitor);
+  
+  diff_monitor = right_monitor - left_monitor;
+  if (diff_monitor == 0)
+    {
+      return left_monitor;
+    }
+  if (diff_monitor == 1)
+    {
+      int dist_left, dist_right;
+      
+      dist_left = left_monitor_rect->x + left_monitor_rect->width - x;
+      dist_right = x + width - right_monitor_rect->x;
+      
+      if (dist_left >= dist_right)
+	return left_monitor;
+
+      return right_monitor;
+    }
+      /* Window window span on at least 3 monitors */
+    return left_monitor + 1;
+}
+
+
 

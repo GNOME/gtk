@@ -27,10 +27,13 @@ main (int argc, char *argv[])
 					     NULL),
 			     "signal::destroy", gtk_main_quit, NULL,
 			     NULL);
-  button = gtk_widget_new (gtk_entry_get_type (),
-			   "GtkWidget::parent", window,
-			   "GtkWidget::visible", TRUE,
-			   NULL);
+  button = g_object_connect (gtk_widget_new (gtk_button_get_type (),
+					     "GtkButton::label", "hello world",
+					     "GtkWidget::parent", window,
+					     "GtkWidget::visible", TRUE,
+					     NULL),
+			     "signal::clicked", hello, NULL,
+			     NULL);
   gtk_widget_show (window);
 
   gtk_main ();

@@ -67,6 +67,10 @@
 /* Most machines will be happy with int or void.  IRIX requires '...' */
 #undef SIGNAL_ARG_TYPE
 
+#undef HAS_SOLARIS_XINERAMA
+#undef HAS_XFREE_XINERAMA
+#undef HAS_XINERAMA
+
 #undef GETTEXT_PACKAGE
 
 /* #undef PACKAGE */

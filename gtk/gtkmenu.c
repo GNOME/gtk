@@ -2163,21 +2163,20 @@ gtk_menu_position (GtkMenu *menu)
   GtkWidget *widget;
   GtkRequisition requisition;
   gint x, y;
-  gint screen_width;
-  gint screen_height;
   gint scroll_offset;
   gint menu_height;
   gboolean push_in;
-  
+  GdkRectangle *monitor;
+
   g_return_if_fail (GTK_IS_MENU (menu));
 
   widget = GTK_WIDGET (menu);
 
-  screen_width = gdk_screen_get_width (gtk_widget_get_screen (widget));
-  screen_height = gdk_screen_get_height (gtk_widget_get_screen (widget));
-
-  gdk_window_get_pointer (gdk_screen_get_root_window (gtk_widget_get_screen (widget)),
+  gdk_window_get_pointer (gtk_widget_get_root_window (widget),
   			  &x, &y, NULL);
+
+  monitor = gdk_screen_get_monitor_num_at_point (gtk_widget_get_screen (widget),
+						 x, y);
 
   /* We need the requisition to figure out the right place to
    * popup the menu. In fact, we always need to ask here, since
@@ -2192,8 +2191,8 @@ gtk_menu_position (GtkMenu *menu)
     (* menu->position_func) (menu, &x, &y, &push_in, menu->position_func_data);
   else
     {
-      x = CLAMP (x - 2, 0, MAX (0, screen_width - requisition.width));
-      y = CLAMP (y - 2, 0, MAX (0, screen_height - requisition.height));
+      x = CLAMP (x - 2, monitor->x, MAX (monitor->x, monitor->x + monitor->width - requisition.width));
+      y = CLAMP (y - 2, monitor->y, MAX (monitor->y, monitor->y + monitor->height - requisition.height));      
     }
 
   scroll_offset = 0;
@@ -2202,27 +2201,30 @@ gtk_menu_position (GtkMenu *menu)
     {
       menu_height = GTK_WIDGET (menu)->requisition.height;
 
-      if (y + menu_height > screen_height)
+      if (y + menu_height > monitor->y + monitor->height)
 	{
-	  scroll_offset -= y + menu_height - screen_height;
-	  y = screen_height - menu_height;
+	  scroll_offset -= y + menu_height - (monitor->y + monitor->height);
+	  y = (monitor->y + monitor->height) - menu_height;
 	}
   
-      if (y < 0)
+      if (y < monitor->y)
 	{
 	  scroll_offset -= y;
-	  y = 0;
+	  y = monitor->y;
 	}
     }
 
-  if (y + requisition.height > screen_height)
-    requisition.height = screen_height - y;
+  /* FIXME: should this be done in the various position_funcs ? */
+  x = CLAMP (x, monitor->x, MAX (monitor->x, monitor->x + monitor->width - requisition.width));
+ 
+  if (y + requisition.height > monitor->y + monitor->height)
+    requisition.height = (monitor->y + monitor->height) - y;
   
-  if (y < 0)
+  if (y < monitor->y)
     {
       scroll_offset -= y;
       requisition.height -= -y;
-      y = 0;
+      y = monitor->y;
     }
 
   if (scroll_offset > 0)

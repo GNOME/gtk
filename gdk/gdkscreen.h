@@ -62,6 +62,11 @@ struct _GdkScreenClass
   void (*set_default_colormap) (GdkScreen * screen, GdkColormap * colormap);
   GdkWindow *(*get_window_at_pointer) (GdkScreen * screen,
 					 gint * win_x, gint * win_y);
+  gboolean (*use_virtual_screen) (GdkScreen *screen);
+  gint (*get_num_monitors) (GdkScreen *screen);
+  GdkRectangle *(*get_monitor_geometry) (GdkScreen *screen, gint num_monitor);
+  gint (*get_monitor_num_at_point) (GdkScreen *screen, gint x, gint y);
+  gint (*get_monitor_num_at_window) (GdkScreen *screen, GdkNativeWindow anid);
 };
 
 GType        gdk_screen_get_type              (void);
@@ -79,6 +84,17 @@ gint         gdk_screen_get_height            (GdkScreen   *screen);
 gint         gdk_screen_get_width_mm          (GdkScreen   *screen);
 gint         gdk_screen_get_height_mm         (GdkScreen   *screen);
 void	     gdk_screen_close		      (GdkScreen   *screen);
+
+
+gboolean       gdk_screen_use_virtual_screen		 (GdkScreen *screen);
+gint	       gdk_screen_get_num_monitors		 (GdkScreen *screen);
+GdkRectangle * gdk_screen_get_monitor_geometry      (GdkScreen *screen,
+		    				  gint  num_monitor);
+gint	       gdk_screen_get_monitor_num_at_point  (GdkScreen *screen, 
+		    				  gint x,
+		    				  gint y);
+gint	       gdk_screen_get_monitor_num_at_window (GdkScreen *screen, 
+							  GdkNativeWindow anid);
 
 #ifdef __cplusplus
 }
