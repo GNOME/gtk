@@ -1,0 +1,820 @@
+# GTK+ fordansket.
+# Copyright (C) 1999 Free Software Foundation, Inc.
+# Birger Langkjer <birger.langkjer@image.dk>, 1999.
+# Kenneth Christiansen, 1999-2000
+# Keld Simonsen <keld@dkuug.dk>, 2000.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: gtk+ 1.3.0\n"
+"POT-Creation-Date: 2000-11-16 16:11-0500\n"
+"PO-Revision-Date: 2000-11-27 17:14+01:00\n"
+"Last-Translator: Keld Simonsen <keld@dkuug.dk>\n"
+"Language-Team: Danish <dansk@klid.dk>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: gdk-pixbuf/io-gif.c:426
+msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
+msgstr "GIF-fil manglede nogen data (måske blev den afkortet?)"
+
+#: gdk-pixbuf/io-gif.c:435
+#, c-format
+msgid "Internal error in the GIF loader (%s)"
+msgstr "Intern fejl i GIF-indlæseren (%s)"
+
+#: gdk-pixbuf/io-gif.c:584
+msgid "Circular table entry in GIF file"
+msgstr "Cirkulær tabelindgang i GIF-fil"
+
+#: gdk-pixbuf/io-gif.c:921
+msgid "File does not appear to be a GIF file"
+msgstr "Fil synes ikke at være en GIF-fil"
+
+#: gdk-pixbuf/io-gif.c:933
+#, c-format
+msgid "Version %s of the GIF file format is not supported"
+msgstr "Version %s af GIF-filformatet er ikke understøttet"
+
+#: gdk-pixbuf/io-gif.c:985
+msgid "GIF animation contained a frame with an incorrect size"
+msgstr "GIF-animation indeholdt et billed med en forkert størrelse"
+
+#: gtk/gtkcolorsel.c:1422
+msgid "Hue:"
+msgstr "Glød:"
+
+#: gtk/gtkcolorsel.c:1423
+msgid "Saturation:"
+msgstr "Mætning:"
+
+#: gtk/gtkcolorsel.c:1424
+msgid "Value:"
+msgstr "Værdi:"
+
+#: gtk/gtkcolorsel.c:1425
+msgid "Red:"
+msgstr "Rød:"
+
+#: gtk/gtkcolorsel.c:1426
+msgid "Green:"
+msgstr "Grøn:"
+
+#: gtk/gtkcolorsel.c:1427
+msgid "Blue:"
+msgstr "Blå:"
+
+#: gtk/gtkcolorsel.c:1430
+msgid "Opacity:"
+msgstr "Gennemsigtighed:"
+
+#: gtk/gtkcolorsel.c:1445
+msgid "Hex Value:"
+msgstr "Hexværdi:"
+
+#: gtk/gtkcolorsel.c:1466
+msgid "Custom Palette"
+msgstr "Personlig palette"
+
+#: gtk/gtkcolorsel.c:1471
+msgid "Set Color"
+msgstr "Sæt farve"
+
+#. The directories clist
+#: gtk/gtkfilesel.c:514
+msgid "Directories"
+msgstr "Mapper"
+
+#. The files clist
+#: gtk/gtkfilesel.c:534
+msgid "Files"
+msgstr "Filer"
+
+#: gtk/gtkfilesel.c:600 gtk/gtkfilesel.c:1636
+#, c-format
+msgid "Directory unreadable: %s"
+msgstr "Mappen er ulæselig: %s"
+
+#: gtk/gtkfilesel.c:632
+msgid "Create Dir"
+msgstr "Opret mappe"
+
+#: gtk/gtkfilesel.c:643 gtk/gtkfilesel.c:1043
+msgid "Delete File"
+msgstr "Slet fil"
+
+#: gtk/gtkfilesel.c:654 gtk/gtkfilesel.c:1156
+msgid "Rename File"
+msgstr "Omdøb fil"
+
+#.
+#. gtk_signal_connect (GTK_OBJECT (dialog), "destroy",
+#. (GtkSignalFunc) gtk_file_selection_fileop_destroy,
+#. (gpointer) fs);
+#.
+#: gtk/gtkfilesel.c:824 gtk/gtkstock.c:171
+msgid "Error"
+msgstr "Fejl"
+
+#. close button
+#: gtk/gtkfilesel.c:847 gtk/gtkinputdialog.c:338 gtk/gtkstock.c:181
+msgid "Close"
+msgstr "Luk"
+
+#: gtk/gtkfilesel.c:929
+msgid "Create Directory"
+msgstr "Opret mappe"
+
+#: gtk/gtkfilesel.c:943
+msgid "Directory name:"
+msgstr "Mappenavn:"
+
+#. buttons
+#: gtk/gtkfilesel.c:956
+msgid "Create"
+msgstr "Opret"
+
+#: gtk/gtkfilesel.c:965 gtk/gtkfilesel.c:1074 gtk/gtkfilesel.c:1198
+#: gtk/gtkgamma.c:423 gtk/gtkstock.c:176
+msgid "Cancel"
+msgstr "Annullér"
+
+#. buttons
+#: gtk/gtkfilesel.c:1065
+msgid "Delete"
+msgstr "Slet"
+
+#. buttons
+#: gtk/gtkfilesel.c:1189
+msgid "Rename"
+msgstr "Omdøb"
+
+#: gtk/gtkfilesel.c:1615
+msgid "Selection: "
+msgstr "Valg: "
+
+#: gtk/gtkfontsel.c:190
+msgid "Family:"
+msgstr "Familie:"
+
+#: gtk/gtkfontsel.c:195
+msgid "Style:"
+msgstr "Stil:"
+
+#: gtk/gtkfontsel.c:200
+msgid "Size:"
+msgstr "Størrelse:"
+
+#. create the text entry widget
+#: gtk/gtkfontsel.c:310
+msgid "Preview:"
+msgstr "Udseende:"
+
+#: gtk/gtkfontsel.c:966
+msgid "Font Selection"
+msgstr "Skrifttypevalg"
+
+#: gtk/gtkgamma.c:395
+msgid "Gamma"
+msgstr "Gamma"
+
+#: gtk/gtkgamma.c:402
+msgid "Gamma value"
+msgstr "Gamma-værdi"
+
+#: gtk/gtkgamma.c:415 gtk/gtkstock.c:175
+msgid "OK"
+msgstr "Ok"
+
+#. shell and main vbox
+#: gtk/gtkinputdialog.c:185
+msgid "Input"
+msgstr "Indstrøm"
+
+#: gtk/gtkinputdialog.c:193
+msgid "No input devices"
+msgstr "Ingen indenheder"
+
+#: gtk/gtkinputdialog.c:222
+msgid "Device:"
+msgstr "Enhed:"
+
+#: gtk/gtkinputdialog.c:238
+msgid "Disabled"
+msgstr "Slået fra"
+
+#: gtk/gtkinputdialog.c:246
+msgid "Screen"
+msgstr "Skærm"
+
+#: gtk/gtkinputdialog.c:254
+msgid "Window"
+msgstr "Vindue"
+
+#: gtk/gtkinputdialog.c:262
+msgid "Mode: "
+msgstr "Modus: "
+
+#. The axis listbox
+#: gtk/gtkinputdialog.c:292
+msgid "Axes"
+msgstr "Akser"
+
+#. Keys listbox
+#: gtk/gtkinputdialog.c:308
+msgid "Keys"
+msgstr "Taster"
+
+#. We create the save button in any case, so that clients can
+#. connect to it, without paying attention to whether it exits
+#: gtk/gtkinputdialog.c:329 gtk/gtkstock.c:186
+msgid "Save"
+msgstr "Gem"
+
+#: gtk/gtkinputdialog.c:471
+msgid "X"
+msgstr "X"
+
+#: gtk/gtkinputdialog.c:472
+msgid "Y"
+msgstr "Y"
+
+#: gtk/gtkinputdialog.c:473
+msgid "Pressure"
+msgstr "Pres"
+
+#: gtk/gtkinputdialog.c:474
+msgid "X Tilt"
+msgstr "X-hældning"
+
+#: gtk/gtkinputdialog.c:475
+msgid "Y Tilt"
+msgstr "Y-hældning"
+
+#: gtk/gtkinputdialog.c:476
+msgid "Wheel"
+msgstr "Hjul"
+
+#: gtk/gtkinputdialog.c:516
+msgid "none"
+msgstr "ingen"
+
+#: gtk/gtkinputdialog.c:550 gtk/gtkinputdialog.c:586
+msgid "(disabled)"
+msgstr "(deaktiveret)"
+
+#: gtk/gtkinputdialog.c:579
+msgid "(unknown)"
+msgstr "(ukendt)"
+
+#. and clear button
+#: gtk/gtkinputdialog.c:664
+msgid "clear"
+msgstr "ryd"
+
+#. Translate to default:RTL if you want your widgets
+#. * to be RTL, otherwise translate to default:LTR.
+#. * Do *not* translate it to "predefinito:LTR", if it
+#. * it isn't default:LTR or default:RTL it will not work
+#.
+#: gtk/gtkmain.c:424
+msgid "default:LTR"
+msgstr "default:LTR"
+
+#. KEEP IN SYNC with gtkiconfactory.c stock icons
+#: gtk/gtkstock.c:169
+msgid "Information"
+msgstr "Information"
+
+#: gtk/gtkstock.c:170
+msgid "Warning"
+msgstr "Advarsel"
+
+#: gtk/gtkstock.c:172
+msgid "Question"
+msgstr "Spørgsmål"
+
+#: gtk/gtkstock.c:174
+msgid "_Apply"
+msgstr "_Anvend"
+
+#: gtk/gtkstock.c:177
+msgid "_Close"
+msgstr "_Luk"
+
+#: gtk/gtkstock.c:178
+msgid "_Yes"
+msgstr "_Ja"
+
+#: gtk/gtkstock.c:179
+msgid "_No"
+msgstr "_Nej"
+
+#: gtk/gtkstock.c:182
+msgid "Quit"
+msgstr "Afslut"
+
+#: gtk/gtkstock.c:183
+msgid "Help"
+msgstr "Hjælp"
+
+#: gtk/gtkstock.c:184
+msgid "New"
+msgstr "Ny"
+
+#: gtk/gtkstock.c:185
+msgid "Open"
+msgstr "Åbn"
+
+#: gtk/gtknotebook.c:2059 gtk/gtknotebook.c:4131
+#, c-format
+msgid "Page %u"
+msgstr "Side %u"
+
+#: gtk/gtkrc.c:2046
+#, c-format
+msgid "Unable to locate image file in pixmap_path: \"%s\" line %d"
+msgstr "Kunne ikke finde billedfil i pixmap_path: \"%s\" linje %d"
+
+#: gtk/gtkrc.c:2049
+#, c-format
+msgid "Unable to locate image file in pixmap_path: \"%s\""
+msgstr "Kunne ikke finde billedfil i pixmap_path: \"%s\""
+
+#: gtk/gtkthemes.c:71
+#, c-format
+msgid "Unable to locate loadable module in module_path: \"%s\","
+msgstr "Kunne ikke finde modul i module_path: \"%s\","
+
+#: gtk/gtktipsquery.c:180
+msgid "--- No Tip ---"
+msgstr "--- Ingen hjælp ---"
+
+#: gdk-pixbuf/gdk-pixbuf-animation.c:125 gdk-pixbuf/gdk-pixbuf-io.c:599
+#, c-format
+msgid "Failed to open file '%s': %s"
+msgstr "Kunne ikke åbne fil '%s': %s"
+
+#: gdk-pixbuf/gdk-pixbuf-animation.c:136 gdk-pixbuf/gdk-pixbuf-io.c:609
+#, c-format
+msgid "Image file '%s' contains no data"
+msgstr "Billedfil '%s' indeholder ikke data"
+
+#: gdk-pixbuf/gdk-pixbuf-animation.c:165
+#, c-format
+msgid "Don't know how to load the animation in file '%s'"
+msgstr "Véd ikke hvordan animationen i fil '%s' skal indlæses"
+
+#: gdk-pixbuf/gdk-pixbuf-animation.c:187 gdk-pixbuf/gdk-pixbuf-io.c:654
+#, c-format
+msgid ""
+"Failed to load image '%s': reason not known, probably a corrupt image file"
+msgstr ""
+"Kunne ikke indlæse billed '%s': årsag ukendt, formentlig en ødelagt billedfil"
+
+#: gdk-pixbuf/gdk-pixbuf-animation.c:225
+#, c-format
+msgid ""
+"Failed to load animation '%s': reason not known, probably a corrupt "
+"animation file"
+msgstr ""
+"Kunne ikke indlæse animation '%s': årsag ukendt, "
+"formentlig en ødelagt animationsfil"
+
+#: gdk-pixbuf/gdk-pixbuf-data.c:126
+msgid "Image data is partially missing"
+msgstr "Billeddata mangler delvis"
+
+#: gdk-pixbuf/gdk-pixbuf-data.c:139
+msgid ""
+"Image has an incorrect pixel rowstride, perhaps the data was corrupted "
+"somehow."
+msgstr ""
+"Billedet har et forkert piksel rækkespecifikation, måske er data "
+"blevet ødelagt på en eller anden måde"
+
+#: gdk-pixbuf/gdk-pixbuf-data.c:154
+msgid "Image size is impossibly large, perhaps the data was corrupted somehow"
+msgstr "Billedet er utroligt stort, måske er data "
+"blevet ødelagt på en eller anden måde"
+
+#: gdk-pixbuf/gdk-pixbuf-data.c:167
+msgid "Image data is partially missing, probably it was ocorrupted somehow."
+msgstr "Billeddata mangler delvis, "
+"måske er data blevet ødelagt på en eller anden måde"
+
+#: gdk-pixbuf/gdk-pixbuf-data.c:183
+#, c-format
+msgid ""
+"Image has an unknown colorspace code (%d), perhaps the image data was "
+"corrupted"
+msgstr ""
+"Billedet har en ukendt farveområdekode (%d), "
+"måske er data blevet ødelagt på en eller anden måde"
+
+#: gdk-pixbuf/gdk-pixbuf-data.c:192
+#, c-format
+msgid ""
+"Image has an improper number of bits per sample (%d), perhaps the image data "
+"was corrupted"
+msgstr ""
+"Billedet har et forkert antal bit per stikprøve (%d), "
+"måske er data blevet ødelagt på en eller anden måde"
+
+#: gdk-pixbuf/gdk-pixbuf-data.c:201 gdk-pixbuf/gdk-pixbuf-data.c:210
+#, c-format
+msgid ""
+"Image has an improper number of channels (%d), perhaps the image data was "
+"corrupted"
+msgstr ""
+"Billedet har et forkert antal kanaler (%d), "
+"måske er data blevet ødelagt på en eller anden måde"
+
+#: gdk-pixbuf/gdk-pixbuf-data.c:228
+#, c-format
+msgid ""
+"Not enough memory to store a %d by %d image; try exiting some applications "
+"to free memory."
+msgstr ""
+"Ikke nok hukommelse til at gemme et %d gange %d billede; prøv at "
+"afslutte nogle anvendelser for at frigøre hukommelse."
+
+#: gdk-pixbuf/gdk-pixbuf-data.c:298
+msgid "Image contained no data."
+msgstr "Billedet indeholdt ingen data."
+
+#: gdk-pixbuf/gdk-pixbuf-data.c:308
+msgid "Image isn't in the correct format (inline GdkPixbuf format)"
+msgstr "Billed er ikke i det korrekte format (inline GdkPixbuf format)"
+
+#: gdk-pixbuf/gdk-pixbuf-data.c:324
+#, c-format
+msgid "This version of the software is unable to read images with type code %d"
+msgstr "Denne version af programmellet kan ikke læse billeder med typekode %d"
+
+#: gdk-pixbuf/gdk-pixbuf-io.c:311
+#, c-format
+msgid "Unable to load image-loading module: %s: %s"
+msgstr "Kunne ikke indlæse billedindlæsningmodul %s: %s"
+
+#: gdk-pixbuf/gdk-pixbuf-io.c:509 gdk-pixbuf/gdk-pixbuf-io.c:534
+#, c-format
+msgid "Image type '%s' is not supported"
+msgstr "Billedtype '%s' er ikke understøttet"
+
+#: gdk-pixbuf/gdk-pixbuf-io.c:556
+#, c-format
+msgid "Couldn't recognize the image file format for file '%s'"
+msgstr "Kunne ikke genkende billedfilformatet for filen '%s'"
+
+#: gdk-pixbuf/gdk-pixbuf-io.c:562
+msgid "Unrecognized image file format"
+msgstr "Uigenkendt billedfilformat"
+
+#: gdk-pixbuf/gdk-pixbuf-io.c:632
+#, c-format
+msgid "Don't know how to load the image in file '%s'"
+msgstr "Véd ikke hvordan billedet i fil '%s' skal indlæses"
+
+#: gdk-pixbuf/gdk-pixbuf-io.c:665
+#, c-format
+msgid "Failed to load image '%s': %s"
+msgstr "Kunne ikke indlæse '%s': %s"
+
+#: gdk-pixbuf/gdk-pixbuf-io.c:764
+#, c-format
+msgid "This build of gdk-pixbuf does not support saving the image format: %s"
+msgstr "Denne bugning af gdk-pixbuf understøtter ikke gemning af billedformat: %s"
+
+#: gdk-pixbuf/gdk-pixbuf-io.c:867
+#, c-format
+msgid "Failed to open '%s' for writing: %s"
+msgstr "Kunne ikke åbne '%s' for skrivning: %s"
+
+#: gdk-pixbuf/gdk-pixbuf-io.c:888
+#, c-format
+msgid ""
+"Failed to close '%s' while writing image, all data may not have been saved: "
+"%s"
+msgstr "Kunne ikke lukke '%s' ved skrivning af billede, formentlig er "
+"ikke alle data blevet gemt: %s"
+
+#: gdk-pixbuf/io-jpeg.c:126
+#, c-format
+msgid "Error interpreting JPEG image file (%s)"
+msgstr "Fejl ved fortolkning af JPEG billedfil (%s)"
+
+#: gdk-pixbuf/io-jpeg.c:235
+msgid ""
+"Insufficient memory to load image, try exiting some applications to free "
+"memory"
+msgstr ""
+"Ikke nok hukommelse til at indlæse billede, "
+"prøv at afslutte nogle anvendelser for at frigøre hukommelse."
+
+#: gdk-pixbuf/io-jpeg.c:647
+#, c-format
+msgid ""
+"JPEG quality must be a value between 0 and 100; value '%s' could not be "
+"parsed."
+msgstr ""
+"JPEG kvalitet skal være en værdi mellem 0 og 100; værdien '%s' kunne "
+"ikke fortolkes."
+
+#: gdk-pixbuf/io-jpeg.c:662
+#, c-format
+msgid ""
+"JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
+msgstr ""
+"JPEG kvalitet skal være en værdi mellem 0 og 100; værdien '%d' er "
+"ikke tilladt."
+
+#: gdk-pixbuf/io-png.c:158
+#, c-format
+msgid "Fatal error in PNG image file: %s"
+msgstr "Uoprettelig fejl i PNG billedfil: %s"
+
+#: gdk-pixbuf/io-png.c:242
+msgid "Insufficient memory to load PNG file"
+msgstr "Ikke nok hukommelse til indlæsning af PNG-fil"
+
+#: gdk-pixbuf/io-png.c:526
+#, c-format
+msgid ""
+"Insufficient memory to store a %ld by %ld image; try exiting some "
+"applications to reduce memory usage"
+msgstr ""
+"Ikke nok hukommelse til at gemme et %ld gange %ld billede; prøv at "
+"afslutte nogle anvendelser for at frigøre hukommelse."
+
+#: gdk-pixbuf/io-png.c:600
+#, c-format
+msgid "Fatal error reading PNG image file: %s"
+msgstr "Uoprettelig fejl ved læsning af PNG-billedfil: %s"
+
+#: gdk-pixbuf/io-png.c:706
+msgid "Insufficient memory to save PNG file"
+msgstr "Ikke nok hukommelse ti at gemme PNG-fil"
+
+#: gdk-pixbuf/io-pnm.c:248
+msgid "PNM loader expected to find an integer, but didn't"
+msgstr "PNM indlæser forventede at finde et heltal, men fandt det ikke"
+
+#: gdk-pixbuf/io-pnm.c:279
+msgid "PNM file has an incorrect initial byte"
+msgstr "PNM-fil har en ukorrekt indledende byte"
+
+#: gdk-pixbuf/io-pnm.c:309
+msgid "PNM file is not in a recognized PNM subformat"
+msgstr "PNM-fil er ikke i et genkendeligt PNM-underformat"
+
+#: gdk-pixbuf/io-pnm.c:334
+msgid "PNM file has an image width of 0"
+msgstr "PNM-fil har en billedbredde på 0"
+
+#: gdk-pixbuf/io-pnm.c:355
+msgid "PNM file has an image height of 0"
+msgstr "PNM-fil har en billedhøjde på 0"
+
+#: gdk-pixbuf/io-pnm.c:378
+msgid "Maximum color value in PNM file is 0"
+msgstr "Største farveværdi i PNM-fil er 0"
+
+#: gdk-pixbuf/io-pnm.c:417 gdk-pixbuf/io-pnm.c:445 gdk-pixbuf/io-pnm.c:477
+msgid "Raw PNM image type is invalid"
+msgstr "Rå PNM billedtype er ugyldig"
+
+#: gdk-pixbuf/io-pnm.c:537 gdk-pixbuf/io-pnm.c:579
+msgid "PNM image format is invalid"
+msgstr "PNM billedformat er ugyldigt"
+
+#: gdk-pixbuf/io-pnm.c:638
+msgid "PNM image loader does not support this PNM subformat"
+msgstr "PNM billedindlæser understøtter ikke dette PNM-underformat"
+
+#: gtk/gdk-pixbuf-loader.c:358
+#, c-format
+msgid "Incremental loading of image type '%s' is not supported"
+msgstr "Stykvis indlæsning af billedtype '%s' er ikke understøttet"
+
+#: gtk/gdk-pixbuf-loader.c:383 gtk/gdk-pixbuf-loader.c:484
+#, c-format
+msgid ""
+"Internal error: Image loader module '%s' failed to begin loading an image, "
+"but didn't give a reason for the failure"
+msgstr ""
+"Intern fejl: Billedindlæsermodul '%s' kunne ikke begynde indlæsning "
+"af et billede, men gav ikke nogen årsag til fejlen"
+
+#: gtk/gtkcellrenderer.c:99
+msgid "xalign"
+msgstr "xalign"
+
+#: gtk/gtkcellrenderer.c:100
+msgid "The x-align."
+msgstr "X-align."
+
+#: gtk/gtkcellrenderer.c:110
+msgid "yalign"
+msgstr "yalign"
+
+#: gtk/gtkcellrenderer.c:111
+msgid "The y-align."
+msgstr "Y-align."
+
+#: gtk/gtkcellrenderer.c:121
+msgid "xpad"
+msgstr "xpad"
+
+#: gtk/gtkcellrenderer.c:122
+msgid "The xpad."
+msgstr "Xpad."
+
+#: gtk/gtkcellrenderer.c:132
+msgid "ypad"
+msgstr "ypad"
+
+#: gtk/gtkcellrenderer.c:133
+msgid "The ypad."
+msgstr "Ypad."
+
+#: gtk/gtkcellrendererpixbuf.c:105 gtk/gtkcellrenderertextpixbuf.c:127
+msgid "Pixbuf Object"
+msgstr "Pixbuf objekt"
+
+#: gtk/gtkcellrendererpixbuf.c:106 gtk/gtkcellrenderertextpixbuf.c:128
+msgid "The pixbuf to render."
+msgstr "Pixbuf der skal optegnes."
+
+#: gtk/gtkcellrenderertext.c:120
+msgid "Text String"
+msgstr "Tekststreng"
+
+#: gtk/gtkcellrenderertext.c:121
+msgid "The text of the renderer."
+msgstr "Tekst for optegneren."
+
+#: gtk/gtkcellrenderertext.c:129
+msgid "Font String"
+msgstr "Skrifttypestreng"
+
+#: gtk/gtkcellrenderertext.c:130
+msgid "The string of the font."
+msgstr "Strengen for skrifttypen"
+
+#: gtk/gtkcellrenderertext.c:137
+msgid "Background Color string"
+msgstr "Streng for baggrundsfarve"
+
+#: gtk/gtkcellrenderertext.c:138 gtk/gtkcellrenderertext.c:146
+msgid "The color for the background of the text."
+msgstr "Farven på baggrunden for teksten."
+
+#: gtk/gtkcellrenderertext.c:145
+msgid "Foreground Color string"
+msgstr "Streng for forgrundsfarve"
+
+#: gtk/gtkcellrenderertext.c:153
+msgid "Strikethrough"
+msgstr "Gennemstreget"
+
+#: gtk/gtkcellrenderertext.c:154
+msgid "Draw a line through the text."
+msgstr "Tegn en linje gennem teksten"
+
+#: gtk/gtkcellrenderertext.c:162
+msgid "Underline"
+msgstr "Understreget"
+
+#: gtk/gtkcellrenderertext.c:163
+msgid "Underline the text."
+msgstr "Understreg teksten."
+
+#: gtk/gtkcellrenderertext.c:171
+msgid "Editable"
+msgstr "Redigérbar"
+
+#: gtk/gtkcellrenderertext.c:172
+msgid "Make the text editable."
+msgstr "Gør teksten redigerbar."
+
+#: gtk/gtkcellrenderertext.c:180
+msgid "Italic"
+msgstr "Kursiv"
+
+#: gtk/gtkcellrenderertext.c:181
+msgid "Make the text italic."
+msgstr "Lav teksten om til kursiv."
+
+#: gtk/gtkcellrenderertext.c:188
+msgid "Bold"
+msgstr "Fed"
+
+#: gtk/gtkcellrenderertext.c:189
+msgid "Make the text bold."
+msgstr "Lav teksten om til fed."
+
+#: gtk/gtkcellrenderertextpixbuf.c:116
+msgid "Pixbuf location"
+msgstr "Pixbuf placering"
+
+#: gtk/gtkcellrenderertextpixbuf.c:117
+msgid "The relative location of the pixbuf to the text."
+msgstr "Den relative placering for pixbuf for teksten."
+
+#: gtk/gtkcellrenderertextpixbuf.c:136
+msgid "pixbuf xalign"
+msgstr "pixbuf xalign"
+
+#: gtk/gtkcellrenderertextpixbuf.c:137
+msgid "The x-align of the pixbuf."
+msgstr "X-align for pixbuf."
+
+#: gtk/gtkcellrenderertextpixbuf.c:147
+msgid "pixbuf yalign"
+msgstr "pixbuf yalign"
+
+#: gtk/gtkcellrenderertextpixbuf.c:148
+msgid "The y-align of the pixbuf."
+msgstr "Y-align for pixbuf."
+
+#: gtk/gtkcellrenderertextpixbuf.c:158
+msgid "pixbuf xpad"
+msgstr "pixbuf xpad"
+
+#: gtk/gtkcellrenderertextpixbuf.c:159
+msgid "The xpad of the pixbuf."
+msgstr "Xpad for pixbuf."
+
+#: gtk/gtkcellrenderertextpixbuf.c:169
+msgid "pixbuf ypad"
+msgstr "pixbuf ypad"
+
+#: gtk/gtkcellrenderertextpixbuf.c:170
+msgid "The ypad of the pixbuf."
+msgstr "Ypad for pixbuf."
+
+#: gtk/gtkcellrenderertoggle.c:129
+msgid "Toggle state"
+msgstr "Skifte-status"
+
+#: gtk/gtkcellrenderertoggle.c:130
+msgid "The toggle-state of the button."
+msgstr "Skifte-status for knappen."
+
+#: gtk/gtkcellrenderertoggle.c:138
+msgid "Radio state"
+msgstr "Radio status"
+
+#: gtk/gtkcellrenderertoggle.c:139
+msgid "Draw the toggle button as a radio button."
+msgstr "Tegn skifteknappen som en radioknap."
+
+#: gtk/gtkentry.c:2510 gtk/gtktextview.c:4508
+msgid "Cut"
+msgstr "Klip"
+
+#: gtk/gtkentry.c:2511 gtk/gtktextview.c:4509
+msgid "Copy"
+msgstr "Kopiér"
+
+#: gtk/gtkentry.c:2512 gtk/gtktextview.c:4510
+msgid "Paste"
+msgstr "Indsæt"
+
+#. Remove this icon source so we don't keep trying to
+#. * load it.
+#.
+#: gtk/gtkiconfactory.c:675
+#, c-format
+msgid "Error loading icon: %s"
+msgstr "Fejl ved indlæsning af ikon: %s"
+
+#. ID
+#: modules/input/imcyrillic-translit.c:216
+msgid "Cyrillic (Transliterated)"
+msgstr "Kyrillisk (translittereret)"
+
+#. ID
+#: modules/input/iminuktitut.c:126
+msgid "Inukitut (Transliterated)"
+msgstr "Inukitut (translittereret)"
+
+#. ID
+#: modules/input/imthai-broken.c:177
+msgid "Thai (Broken)"
+msgstr "Thai (i stykker)"
+
+#. ID
+#: modules/input/imviqr.c:243
+msgid "Vietnamese (VIQR)"
+msgstr "Vietnamesisk (VIQR)"
+
+#. ID
+#: modules/input/imxim.c:27
+msgid "X Input Method"
+msgstr "X Indputmetode"
+
+#~ msgid "Apply"
+#~ msgstr "Anvend"
