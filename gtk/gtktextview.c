@@ -1084,8 +1084,8 @@ gtk_text_view_set_buffer (GtkTextView   *text_view,
 			G_CALLBACK (gtk_text_view_mark_set_handler), text_view);
 
       if (GTK_WIDGET_REALIZED (text_view))
-	gtk_text_buffer_remove_selection_clipboard (text_view->buffer,
-						    gtk_clipboard_get (GDK_SELECTION_PRIMARY));
+	gtk_text_buffer_add_selection_clipboard (text_view->buffer,
+						 gtk_clipboard_get (GDK_SELECTION_PRIMARY));
     }
 
   if (GTK_WIDGET_VISIBLE (text_view))

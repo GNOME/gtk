@@ -5308,6 +5308,9 @@ gtk_tree_view_unref_and_check_selection_tree (GtkTreeView *tree_view,
   GtkRBNode *node;
   gint retval;
 
+  if (!tree)
+    return FALSE;
+
   node = tree->root;
   while (node && node->left != tree->nil)
     node = node->left;

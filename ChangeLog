@@ -1,3 +1,11 @@
+Mon Sep 10 21:26:24 2001  Joshua N Pritikin  <vishnu@pobox.com>
+
+	* gtk/gtktextview.c (gtk_text_view_set_buffer): Make
+	(add|remove)_selection_clipboard symmetric. (bug #59836)
+
+	* gtk/gtktreeview.c (gtk_tree_view_unref_and_check_selection_tree): 
+	Avoid SEGV for empty tree. (bug #60243)
+
 Mon Sep 10 20:47:22 2001  Tim Janik  <timj@gtk.org>
 
 	* tests/testgtk.c (create_idle_test): slight fix for
