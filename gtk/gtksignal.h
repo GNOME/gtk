@@ -44,7 +44,6 @@ extern "C" {
 
 /* --- compat defines --- */
 #define GTK_SIGNAL_OFFSET	                      GTK_STRUCT_OFFSET
-#define	gtk_signal_init()			      g_type_init()
 #define	gtk_signal_lookup			      g_signal_lookup
 #define	gtk_signal_name				      g_signal_name
 #define	gtk_signal_emit_stop(i,s)		      g_signal_stop_emission ((i), (s), 0)

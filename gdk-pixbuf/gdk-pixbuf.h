@@ -28,7 +28,7 @@
 
 #include <glib.h>
 #include <gdk-pixbuf/gdk-pixbuf-features.h>
-#include <gobject/gobject.h>
+#include <glib-object.h>
 
 #ifdef __cplusplus
 extern "C" {

@@ -224,8 +224,8 @@ gpointer	gtk_type_class	(GtkType	 type) G_GNUC_CONST;
 gpointer	gtk_type_new	(GtkType	 type);
 
 
-/* --- initialize the type system --- */
-void		gtk_type_init	(void);
+/* deprecated, use g_type_init() instead */
+void		gtk_type_init	(GTypeDebugFlags debug_flags);
 
 
 /* --- compatibility defines --- */

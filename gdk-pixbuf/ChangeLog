@@ -1,3 +1,11 @@
+Sun Feb  4 07:59:57 2001  Tim Janik  <timj@gtk.org>
+
+	* gdk-pixbuf.h: DOH! don't include glib/gobject.h but glib-object.h,
+	we finally need the gobject->gruntime rename.
+
+	* *.c: scratched calls to g_type_init(), there's simply no point in
+	doing that, use gtk_init().
+
 2001-02-01  Havoc Pennington  <hp@pobox.com>
 
 	* gdk-pixbuf-loader.c, gdk-pixbuf-loader.h: rename "private" field

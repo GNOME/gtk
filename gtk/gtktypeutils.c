@@ -123,7 +123,7 @@ extern IMPORT gboolean glib_debug_objects;
 #include <gdk.h>	/* gtktypebuiltins_ids.c */
 
 void
-gtk_type_init (void)
+gtk_type_init (GTypeDebugFlags debug_flags)
 {
   static gboolean initialized = FALSE;
   
@@ -156,7 +156,7 @@ gtk_type_init (void)
       
       /* initialize GLib type system
        */
-      g_type_init ();
+      g_type_init (debug_flags);
       
       /* GTK_TYPE_OBJECT
        */

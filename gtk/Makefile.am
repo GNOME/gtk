@@ -140,6 +140,7 @@ gtk_public_h_sources = @STRIP_BEGIN@ \
 	gtkradiomenuitem.h	\
 	gtkrange.h		\
 	gtkrc.h			\
+	gtkrcdata.h		\
 	gtkruler.h		\
 	gtkscale.h		\
 	gtkscrollbar.h		\
@@ -298,6 +299,7 @@ gtk_c_sources = @STRIP_BEGIN@   \
 	gtkrange.c		\
 	gtkrbtree.c 		\
 	gtkrc.c			\
+	gtkrcdata.c		\
 	gtkruler.c		\
 	gtkscale.c		\
 	gtkscrollbar.c		\

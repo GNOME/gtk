@@ -53,8 +53,6 @@ gdk_pixbuf_get_type (void)
                         0,              /* n_preallocs */
                         (GInstanceInitFunc) NULL,
                 };
-      
-                g_type_init ();
                 
                 object_type = g_type_register_static (G_TYPE_OBJECT,
                                                       "GdkPixbuf",

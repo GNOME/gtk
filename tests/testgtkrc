@@ -22,6 +22,9 @@ include "testgtkrc2"
 # On Windows, if you have installed gtk-engines, try this for instance:
 #include "\\windows\\gtk\\themes\\Pixmap\\gtk\\gtkrc"
 
+foo_number = 5
+mouse_timeout = -7
+
 pixmap_path "."
 
 style "defaultfont"

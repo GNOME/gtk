@@ -323,7 +323,7 @@ gdk_init_check (int    *argc,
   
   GDK_NOTE (MISC, g_message ("progname: \"%s\"", g_get_prgname ()));
 
-  g_type_init ();
+  g_type_init (0);
   
   result = _gdk_windowing_init_check (argc_orig, argv_orig);
 

@@ -116,6 +116,7 @@
 #include <gtk/gtkradiomenuitem.h>
 #include <gtk/gtkrange.h>
 #include <gtk/gtkrc.h>
+#include <gtk/gtkrcdata.h>
 #include <gtk/gtkruler.h>
 #include <gtk/gtkscale.h>
 #include <gtk/gtkscrollbar.h>

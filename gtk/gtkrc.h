@@ -91,22 +91,24 @@ struct _GtkRcStyleClass
    * g_object_new (G_OBJECT_TYPE (style), NULL);
    * should work in most cases.
    */
-  GtkRcStyle *(*clone) (GtkRcStyle *rc_style);
+  GtkRcStyle * (*clone) (GtkRcStyle *rc_style);
 
   /* Fill in engine specific parts of GtkRcStyle by parsing contents
    * of brackets. Returns G_TOKEN_NONE if succesful, otherwise returns
    * the token it expected but didn't get.
    */
-  guint     (*parse)  (GtkRcStyle *rc_style, GScanner *scanner);
+  guint     (*parse)  (GtkRcStyle *rc_style,
+		       GScanner   *scanner);
   
   /* Combine RC style data from src into dest. If overriden, this
    * function should chain to the parent.
    */
-  void      (*merge)  (GtkRcStyle *dest, GtkRcStyle *src);
+  void      (*merge)  (GtkRcStyle *dest,
+		       GtkRcStyle *src);
 
   /* Create an empty style suitable to this RC style
    */
-  GtkStyle *(*create_style) (GtkRcStyle *rc_style);
+  GtkStyle * (*create_style) (GtkRcStyle *rc_style);
 };
 
 void	  gtk_rc_init			(void);

@@ -93,8 +93,6 @@ gdk_pixbuf_loader_get_type (void)
         0,              /* n_preallocs */
         (GInstanceInitFunc) gdk_pixbuf_loader_init
       };
-
-      g_type_init ();
       
       loader_type = g_type_register_static (G_TYPE_OBJECT,
                                             "GdkPixbufLoader",
