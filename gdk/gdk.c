@@ -49,9 +49,7 @@
 #include "gdk.h"
 #include "gdkprivate.h"
 #include "gdkinput.h"
-#ifdef USE_XIM
 #include "gdkx.h"
-#endif
 #include "gdkkeysyms.h"
 #include "gdki18n.h"
 
