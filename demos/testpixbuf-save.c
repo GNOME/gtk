@@ -1,10 +1,73 @@
+/* -*- Mode: C; tab-width: 8; indent-tabs-mode: nil; c-basic-offset: 8 -*- */
 
 #include "config.h"
 #include <stdio.h>
 
 #include <gtk/gtk.h>
 
-void
+static void
+compare_pixbufs (GdkPixbuf *pixbuf, GdkPixbuf *compare, const gchar *file_type)
+{
+        if ((gdk_pixbuf_get_width (pixbuf) !=
+             gdk_pixbuf_get_width (compare)) ||
+            (gdk_pixbuf_get_height (pixbuf) !=
+             gdk_pixbuf_get_height (compare)) ||
+            (gdk_pixbuf_get_n_channels (pixbuf) !=
+             gdk_pixbuf_get_n_channels (compare)) ||
+            (gdk_pixbuf_get_has_alpha (pixbuf) !=
+             gdk_pixbuf_get_has_alpha (compare)) ||
+            (gdk_pixbuf_get_bits_per_sample (pixbuf) !=
+             gdk_pixbuf_get_bits_per_sample (compare))) {
+                fprintf (stderr,
+                         "saved %s file differs from copy in memory\n",
+                         file_type);
+        } else {
+                guchar *orig_pixels;
+                guchar *compare_pixels;
+                gint    orig_rowstride;
+                gint    compare_rowstride;
+                gint    width;
+                gint    height;
+                gint    bytes_per_pixel;
+                gint    x, y;
+                guchar *p1, *p2;
+                gint    count = 0;
+
+                orig_pixels = gdk_pixbuf_get_pixels (pixbuf);
+                compare_pixels = gdk_pixbuf_get_pixels (compare);
+
+                orig_rowstride = gdk_pixbuf_get_rowstride (pixbuf);
+                compare_rowstride = gdk_pixbuf_get_rowstride (compare);
+
+                width = gdk_pixbuf_get_width (pixbuf);
+                height = gdk_pixbuf_get_height (pixbuf);
+
+                /*  well...  */
+                bytes_per_pixel = gdk_pixbuf_get_n_channels (pixbuf);
+
+                p1 = orig_pixels;
+                p2 = compare_pixels;
+
+                for (y = 0; y < height; y++) {
+                        for (x = 0; x < width * bytes_per_pixel; x++)
+                                count += (*p1++ != *p2++);
+
+                        orig_pixels += orig_rowstride;
+                        compare_pixels += compare_rowstride;
+
+                        p1 = orig_pixels;
+                        p2 = compare_pixels;
+                }
+
+                if (count > 0) {
+                        fprintf (stderr,
+                                 "saved %s file differs from copy in memory\n",
+                                 file_type);
+                }
+        }
+}
+
+static void
 keypress_check (GtkWidget *widget, GdkEventKey *evt, gpointer data)
 {
         GdkPixbuf *pixbuf;
@@ -27,8 +90,20 @@ keypress_check (GtkWidget *widget, GdkEventKey *evt, gpointer data)
                                       NULL)) {
                         fprintf (stderr, "%s", err->message);
                         g_error_free (err);
+                } else {
+                        GdkPixbuf *compare;
+
+                        compare = gdk_pixbuf_new_from_file ("foo.jpg", &err);
+
+                        if (!compare) {
+                                fprintf (stderr, "%s", err->message);
+                                g_error_free (err);
+                        } else {
+                                compare_pixbufs (pixbuf, compare, "jpeg");
+                                g_object_unref (G_OBJECT (compare));
+                        }
+                                        
                 }
-                
         } else if (evt->keyval == 'p') {
                 if (pixbuf == NULL) {
                         fprintf (stderr, "PIXBUF NULL\n");
@@ -41,19 +116,46 @@ keypress_check (GtkWidget *widget, GdkEventKey *evt, gpointer data)
                                       NULL)) {
                         fprintf (stderr, "%s", err->message);
                         g_error_free (err);
+                } else {
+                        GdkPixbuf *compare;
+
+                        compare = gdk_pixbuf_new_from_file ("foo.png", &err);
+
+                        if (!compare) {
+                                fprintf (stderr, "%s", err->message);
+                                g_error_free (err);
+                        } else {
+                                compare_pixbufs (pixbuf, compare, "png");
+                                g_object_unref (G_OBJECT (compare));
+                        }
+                                        
+                }
+        } else if (evt->keyval == 'a') {
+                if (pixbuf == NULL) {
+                        fprintf (stderr, "PIXBUF NULL\n");
+                        return;
+                } else {
+                        GdkPixbuf *alpha_buf;
+
+                        alpha_buf = gdk_pixbuf_add_alpha (pixbuf,
+                                                          FALSE, 0, 0, 0);
+
+                        g_object_set_data_full (G_OBJECT (da),
+                                                "pixbuf", alpha_buf,
+                                                (GDestroyNotify) g_object_unref);
                 }
         }
 }
 
 
-int
+static int
 close_app (GtkWidget *widget, gpointer data)
 {
         gtk_main_quit ();
         return TRUE;
 }
 
-int
+static int
 expose_cb (GtkWidget *drawing_area, GdkEventExpose *evt, gpointer data)
 {
         GdkPixbuf *pixbuf;
@@ -86,7 +188,7 @@ expose_cb (GtkWidget *drawing_area, GdkEventExpose *evt, gpointer data)
         return FALSE;
 }
 
-int
+static int
 configure_cb (GtkWidget *drawing_area, GdkEventConfigure *evt, gpointer data)
 {
         GdkPixbuf *pixbuf;
@@ -146,7 +248,8 @@ main (int argc, char **argv)
 			  G_CALLBACK (configure_cb), NULL);
         g_signal_connect (window, "key_press_event", 
 			  G_CALLBACK (keypress_check), drawing_area);    
-        g_object_set_data (G_OBJECT (drawing_area), "pixbuf", pixbuf);
+        g_object_set_data_full (G_OBJECT (drawing_area), "pixbuf", pixbuf,
+                                (GDestroyNotify) g_object_unref);
         gtk_box_pack_start (GTK_BOX (vbox), drawing_area, TRUE, TRUE, 0);
    
         gtk_widget_show_all (window);

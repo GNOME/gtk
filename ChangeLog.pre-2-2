@@ -1,3 +1,9 @@
+2001-12-11  Michael Natterer  <mitch@gimp.org>
+
+	* demos/testpixbuf-save.c: added new keyboard shortcut 'a' which
+	adds alpha to the pixbuf; re-load the saved pixbuf and
+	pixel-by-pixel compare it with the original one.
+
 Tue Dec 11 15:39:08 2001  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 	* ChangeLog: Fix wrong ChangeLog entry
