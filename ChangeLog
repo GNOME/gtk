@@ -1,3 +1,11 @@
+Wed Feb 11 00:18:31 1998  Tim Janik  <timj@gimp.org>
+
+	* gtk/gtksignal.h:
+	* gtk/gtksignal.c: new function gtk_signal_handler_pending() returning
+	  the id of the next handler pending for that signal or 0.
+	  put struct GtkHandler back into gtksignal.c along with
+ 	  gtk_signal_get_handlers.
+
 Tue Feb 10 07:12:07 1998  Tim Janik  <timj@gimp.org>
 
         * gtk/gtksignal.h:
@@ -553,7 +561,7 @@ Thu Jan 22 18:58:44 1998  Federico Mena  <federico@bananoid.nuclecu.unam.mx>
 
 Thu Jan 22 02:32:06 1998  Scott Goehring  <scott@poverty.bloomington.in.us>
 
-	* gtk/Makefile.am: Fixed the called to runelisp to use $(SHELL).
+	* gtk/Makefile.am: Fixed the call to runelisp to use $(SHELL).
   	  (Cannot rely on the script having execute permissions.)
 
 Wed Jan 21 17:29:54 CST 1998 Shawn T. Amundson <amundson@gimp.org>

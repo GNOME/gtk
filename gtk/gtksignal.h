@@ -45,7 +45,6 @@ typedef void (*GtkSignalMarshal)    (GtkObject      *object,
 typedef void (*GtkSignalDestroy)    (gpointer        data);
 
 typedef struct _GtkSignalQuery		GtkSignalQuery;
-typedef struct _GtkHandler              GtkHandler;
 
 struct	_GtkSignalQuery
 {
@@ -56,22 +55,6 @@ struct	_GtkSignalQuery
   GtkType	   return_val;
   guint		   nparams;
   const GtkType	  *params;
-};
-
-struct _GtkHandler
-{
-  guint id : 28;
-  guint blocked : 1;
-  guint object_signal : 1;
-  guint after : 1;
-  guint no_marshal : 1;
-  guint16 ref_count;
-  guint16 signal_type;
-  GtkSignalFunc func;
-  gpointer func_data;
-  GtkSignalDestroy destroy_func;
-  GtkHandler *prev;
-  GtkHandler *next;
 };
 
 gint   gtk_signal_new                     (const gchar         *name,
@@ -148,6 +131,9 @@ void   gtk_signal_handler_unblock         (GtkObject           *object,
 					   gint                 anid);
 void   gtk_signal_handler_unblock_by_data (GtkObject           *object,
 					   gpointer             data);
+guint  gtk_signal_handler_pending	  (GtkObject	       *object,
+					   gint		        signal_type,
+					   gboolean		may_be_blocked);
 void   gtk_signal_handlers_destroy        (GtkObject           *object);
 void   gtk_signal_default_marshaller      (GtkObject           *object,
 					   GtkSignalFunc        func,
@@ -161,9 +147,6 @@ void   gtk_signal_set_funcs               (GtkSignalMarshal     marshal_func,
  *  contents of GtkSignalQuery untouched.
  */
 GtkSignalQuery* gtk_signal_query	  (gint			signal_num);
-
-GtkHandler*     gtk_signal_get_handlers   (GtkObject     *object,
-					   gint           signal_type);
 
 
 #ifdef __cplusplus

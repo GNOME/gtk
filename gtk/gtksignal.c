@@ -28,6 +28,7 @@
 
 typedef struct _GtkSignal       GtkSignal;
 typedef struct _GtkSignalInfo   GtkSignalInfo;
+typedef struct _GtkHandler	GtkHandler;
 typedef struct _GtkHandlerInfo  GtkHandlerInfo;
 typedef struct _GtkEmission     GtkEmission;
 
@@ -50,6 +51,22 @@ struct _GtkSignal
   GtkType return_val;
   GtkType *params;
   gint nparams;
+};
+
+struct _GtkHandler
+{
+  guint id : 28;
+  guint blocked : 1;
+  guint object_signal : 1;
+  guint after : 1;
+  guint no_marshal : 1;
+  guint16 ref_count;
+  guint16 signal_type;
+  GtkSignalFunc func;
+  gpointer func_data;
+  GtkSignalDestroy destroy_func;
+  GtkHandler *prev;
+  GtkHandler *next;
 };
 
 struct _GtkHandlerInfo
@@ -87,6 +104,8 @@ static void         gtk_signal_handler_insert  (GtkObject     *object,
 static void         gtk_signal_real_emit       (GtkObject     *object,
 						gint           signal_type,
 						va_list        args);
+static GtkHandler*  gtk_signal_get_handlers    (GtkObject     *object,
+						gint           signal_type);
 static gint         gtk_signal_connect_by_type (GtkObject     *object,
 						gint           signal_type,
 						gint           object_signal,
@@ -1052,7 +1071,7 @@ done:
   gtk_object_unref (object);
 }
 
-GtkHandler*
+static GtkHandler*
 gtk_signal_get_handlers (GtkObject *object,
 			 gint       signal_type)
 {
@@ -1071,6 +1090,36 @@ gtk_signal_get_handlers (GtkObject *object,
     }
 
   return NULL;
+}
+
+guint
+gtk_signal_handler_pending (GtkObject           *object,
+			    gint                 signal_type,
+			    gboolean		 may_be_blocked)
+{
+  GtkHandler *handlers;
+  guint handler_id;
+  
+  g_return_val_if_fail (object != NULL, 0);
+  g_return_val_if_fail (signal_type >= 1, 0);
+  
+  handlers = gtk_signal_get_handlers (object, signal_type);
+  
+  handler_id = 0;
+  while (handlers && handlers->signal_type == signal_type)
+    {
+      if (handlers->id > 0 &&
+	  (may_be_blocked ||
+	   !handlers->blocked))
+	{
+	  handler_id = handlers->id;
+	  break;
+	}
+      
+      handlers = handlers->next;
+    }
+  
+  return handler_id;
 }
 
 static gint
