@@ -1,3 +1,12 @@
+Wed Oct 16 14:32:43 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdkdrawable.h gdk/gdkdraw.c gdk/gdkpixmap.c 
+	gdk/gdkwindow.c gdk/x11/gdkdrawable-x11.c
+	gdk/win32/gdkdrawable-win32.c gdk/linux-fb/gdkdrawable-fb2.c
+	gdk/linux-fb/gdkprivate-fb.h:
+	Make 'filled' arguments for draw_arc/polygon/rectangle
+	gboolean not gint. (#94976)
+	
 Wed Oct 16 17:11:46 2002  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 	* gtk/gtktearoffmenuitem.c (gtk_tearoff_menu_item_paint): Make

@@ -353,7 +353,7 @@ gdk_draw_line (GdkDrawable *drawable,
 void
 gdk_draw_rectangle (GdkDrawable *drawable,
 		    GdkGC       *gc,
-		    gint         filled,
+		    gboolean     filled,
 		    gint         x,
 		    gint         y,
 		    gint         width,
@@ -382,7 +382,7 @@ gdk_draw_rectangle (GdkDrawable *drawable,
 void
 gdk_draw_arc (GdkDrawable *drawable,
 	      GdkGC       *gc,
-	      gint         filled,
+	      gboolean     filled,
 	      gint         x,
 	      gint         y,
 	      gint         width,
@@ -413,7 +413,7 @@ gdk_draw_arc (GdkDrawable *drawable,
 void
 gdk_draw_polygon (GdkDrawable *drawable,
 		  GdkGC       *gc,
-		  gint         filled,
+		  gboolean     filled,
 		  GdkPoint    *points,
 		  gint         npoints)
 {

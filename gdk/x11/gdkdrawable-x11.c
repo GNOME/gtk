@@ -53,14 +53,14 @@
 
 static void gdk_x11_draw_rectangle (GdkDrawable    *drawable,
 				    GdkGC          *gc,
-				    gint            filled,
+				    gboolean        filled,
 				    gint            x,
 				    gint            y,
 				    gint            width,
 				    gint            height);
 static void gdk_x11_draw_arc       (GdkDrawable    *drawable,
 				    GdkGC          *gc,
-				    gint            filled,
+				    gboolean        filled,
 				    gint            x,
 				    gint            y,
 				    gint            width,
@@ -69,7 +69,7 @@ static void gdk_x11_draw_arc       (GdkDrawable    *drawable,
 				    gint            angle2);
 static void gdk_x11_draw_polygon   (GdkDrawable    *drawable,
 				    GdkGC          *gc,
-				    gint            filled,
+				    gboolean        filled,
 				    GdkPoint       *points,
 				    gint            npoints);
 static void gdk_x11_draw_text      (GdkDrawable    *drawable,
@@ -438,7 +438,7 @@ gdk_x11_set_colormap (GdkDrawable *drawable,
 static void
 gdk_x11_draw_rectangle (GdkDrawable *drawable,
 			GdkGC       *gc,
-			gint         filled,
+			gboolean     filled,
 			gint         x,
 			gint         y,
 			gint         width,
@@ -459,7 +459,7 @@ gdk_x11_draw_rectangle (GdkDrawable *drawable,
 static void
 gdk_x11_draw_arc (GdkDrawable *drawable,
 		  GdkGC       *gc,
-		  gint         filled,
+		  gboolean     filled,
 		  gint         x,
 		  gint         y,
 		  gint         width,
@@ -483,7 +483,7 @@ gdk_x11_draw_arc (GdkDrawable *drawable,
 static void
 gdk_x11_draw_polygon (GdkDrawable *drawable,
 		      GdkGC       *gc,
-		      gint         filled,
+		      gboolean     filled,
 		      GdkPoint    *points,
 		      gint         npoints)
 {

@@ -33,14 +33,14 @@ struct _GdkDrawableClass
 		          GdkGCValuesMask mask);
   void (*draw_rectangle) (GdkDrawable  *drawable,
 			  GdkGC	       *gc,
-			  gint		filled,
+			  gboolean	filled,
 			  gint		x,
 			  gint		y,
 			  gint		width,
 			  gint		height);
   void (*draw_arc)       (GdkDrawable  *drawable,
 			  GdkGC	       *gc,
-			  gint		filled,
+			  gboolean	filled,
 			  gint		x,
 			  gint		y,
 			  gint		width,
@@ -49,7 +49,7 @@ struct _GdkDrawableClass
 			  gint		angle2);
   void (*draw_polygon)   (GdkDrawable  *drawable,
 			  GdkGC	       *gc,
-			  gint		filled,
+			  gboolean	filled,
 			  GdkPoint     *points,
 			  gint		npoints);
   void (*draw_text)      (GdkDrawable  *drawable,
@@ -217,14 +217,14 @@ void gdk_draw_line      (GdkDrawable      *drawable,
 			 gint              y2);
 void gdk_draw_rectangle (GdkDrawable      *drawable,
 			 GdkGC            *gc,
-			 gint              filled,
+			 gboolean          filled,
 			 gint              x,
 			 gint              y,
 			 gint              width,
 			 gint              height);
 void gdk_draw_arc       (GdkDrawable      *drawable,
 			 GdkGC            *gc,
-			 gint              filled,
+			 gboolean          filled,
 			 gint              x,
 			 gint              y,
 			 gint              width,
@@ -233,7 +233,7 @@ void gdk_draw_arc       (GdkDrawable      *drawable,
 			 gint              angle2);
 void gdk_draw_polygon   (GdkDrawable      *drawable,
 			 GdkGC            *gc,
-			 gint              filled,
+			 gboolean          filled,
 			 GdkPoint         *points,
 			 gint              npoints);
 #ifndef GDK_DISABLE_DEPRECATED

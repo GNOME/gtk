@@ -372,7 +372,7 @@ void       gdk_fb_draw_drawable_2          (GdkDrawable         *drawable,
 					    gboolean             do_clipping);
 void       gdk_fb_draw_rectangle           (GdkDrawable         *drawable,
 					    GdkGC               *gc,
-					    gint                 filled,
+					    gboolean             filled,
 					    gint                 x,
 					    gint                 y,
 					    gint                 width,

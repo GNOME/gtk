@@ -13,14 +13,14 @@
 
 void                gdk_fb_draw_rectangle     (GdkDrawable      *drawable,
 					       GdkGC            *gc,
-					       gint              filled,
+					       gboolean          filled,
 					       gint              x,
 					       gint              y,
 					       gint              width,
 					       gint              height);
 static void         gdk_fb_draw_arc           (GdkDrawable      *drawable,
 					       GdkGC            *gc,
-					       gint              filled,
+					       gboolean          filled,
 					       gint              x,
 					       gint              y,
 					       gint              width,
@@ -29,7 +29,7 @@ static void         gdk_fb_draw_arc           (GdkDrawable      *drawable,
 					       gint              angle2);
 static void         gdk_fb_draw_polygon       (GdkDrawable      *drawable,
 					       GdkGC            *gc,
-					       gint              filled,
+					       gboolean          filled,
 					       GdkPoint         *points,
 					       gint              npoints);
 static void         gdk_fb_draw_text          (GdkDrawable      *drawable,
@@ -93,14 +93,14 @@ static void         gdk_fb_drawable_finalize  (GObject *object);
 #ifdef ENABLE_SHADOW_FB
 static void         gdk_shadow_fb_draw_rectangle     (GdkDrawable      *drawable,
 						      GdkGC            *gc,
-						      gint              filled,
+						      gboolean          filled,
 						      gint              x,
 						      gint              y,
 						      gint              width,
 						      gint              height);
 static void         gdk_shadow_fb_draw_arc           (GdkDrawable      *drawable,
 						      GdkGC            *gc,
-						      gint              filled,
+						      gboolean          filled,
 						      gint              x,
 						      gint              y,
 						      gint              width,
@@ -109,7 +109,7 @@ static void         gdk_shadow_fb_draw_arc           (GdkDrawable      *drawable
 						      gint              angle2);
 static void         gdk_shadow_fb_draw_polygon       (GdkDrawable      *drawable,
 						      GdkGC            *gc,
-						      gint              filled,
+						      gboolean          filled,
 						      GdkPoint         *points,
 						      gint              npoints);
 static void         gdk_shadow_fb_draw_text          (GdkDrawable      *drawable,
@@ -939,7 +939,7 @@ gdk_fb_draw_text_wc (GdkDrawable    *drawable,
 void
 gdk_fb_draw_rectangle (GdkDrawable    *drawable,
 		       GdkGC          *gc,
-		       gint            filled,
+		       gboolean        filled,
 		       gint            x,
 		       gint            y,
 		       gint            width,
@@ -1058,7 +1058,7 @@ gdk_fb_draw_points (GdkDrawable    *drawable,
 static void
 gdk_fb_draw_arc (GdkDrawable    *drawable,
 		 GdkGC          *gc,
-		 gint            filled,
+		 gboolean        filled,
 		 gint            x,
 		 gint            y,
 		 gint            width,
@@ -1084,7 +1084,7 @@ gdk_fb_draw_arc (GdkDrawable    *drawable,
 static void
 gdk_fb_draw_polygon (GdkDrawable    *drawable,
 		     GdkGC          *gc,
-		     gint            filled,
+		     gboolean        filled,
 		     GdkPoint       *points,
 		     gint            npoints)
 {
@@ -1323,7 +1323,7 @@ gdk_fb_get_visual (GdkDrawable    *drawable)
 static void
 gdk_shadow_fb_draw_rectangle (GdkDrawable      *drawable,
 			      GdkGC            *gc,
-			      gint              filled,
+			      gboolean          filled,
 			      gint              x,
 			      gint              y,
 			      gint              width,
@@ -1360,7 +1360,7 @@ gdk_shadow_fb_draw_rectangle (GdkDrawable      *drawable,
 static void
 gdk_shadow_fb_draw_arc (GdkDrawable      *drawable,
 			GdkGC            *gc,
-			gint              filled,
+			gboolean          filled,
 			gint              x,
 			gint              y,
 			gint              width,
@@ -1399,7 +1399,7 @@ gdk_shadow_fb_draw_arc (GdkDrawable      *drawable,
 static void
 gdk_shadow_fb_draw_polygon (GdkDrawable      *drawable,
 			    GdkGC            *gc,
-			    gint              filled,
+			    gboolean          filled,
 			    GdkPoint         *points,
 			    gint              npoints)
 {
