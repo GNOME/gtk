@@ -10,7 +10,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.3.0\n"
-"POT-Creation-Date: 1999-09-23 19:59-0500\n"
+"POT-Creation-Date: 1999-10-07 12:52-0500\n"
 "PO-Revision-Date: 1999-02-07 17:37+0100\n"
 "Last-Translator: Pablo Saratxaga <srtxg@chanae.alphanet.ch>\n"
 "Language-Team: walon <linux-wa@chanae.alphanet.ch>\n"
@@ -452,13 +452,13 @@ msgstr "netyî"
 msgid "Page %u"
 msgstr "Pådje %u"
 
-#: gtk/gtkrc.c:1627
+#: gtk/gtkrc.c:1640
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\" line %d"
 msgstr ""
 "Dji n' pout nén trover on fitchî imådje è pixmap_path: \"%s\" al roye %d"
 
-#: gtk/gtkrc.c:1630
+#: gtk/gtkrc.c:1643
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "Dji n' pout nén trover on fitchî imådje è pixmap_path: \"%s\""

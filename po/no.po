@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.2.5\n"
-"POT-Creation-Date: 1999-09-23 19:59-0500\n"
+"POT-Creation-Date: 1999-10-07 12:52-0500\n"
 "PO-Revision-Date: 1999-09-04 11:33+02:00\n"
 "Last-Translator: Kjartan Maraas <kmaraas@online.no>\n"
 "Language-Team: Norwegian <no@li.org>\n"
@@ -446,12 +446,12 @@ msgstr "tøm"
 msgid "Page %u"
 msgstr "Side %u"
 
-#: gtk/gtkrc.c:1627
+#: gtk/gtkrc.c:1640
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\" line %d"
 msgstr "Kunne ikke finne bildefilen i pixmap_patg: \"%s\" linje %d"
 
-#: gtk/gtkrc.c:1630
+#: gtk/gtkrc.c:1643
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "Kunne ikke finne bildefil i pixmap_path: \"%s\""

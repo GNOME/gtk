@@ -1,3 +1,12 @@
+Overview of Changes in GTK+ 1.2.6:
+
+* container queue_resize fixes
+* gtk[vh]scale: minor fixups
+* rename idle to idle_id in testgtk to avoid conflicts with 
+  broken libs
+* More consistant naming of gtkrc files
+* Added language support: ro, uk
+
 Overview of Changes in GTK+ 1.2.5:
 
 * more GtkCTree and GtkWindow bug fixes.

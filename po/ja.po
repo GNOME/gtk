@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.2.3\n"
-"POT-Creation-Date: 1999-09-23 19:59-0500\n"
+"POT-Creation-Date: 1999-10-07 12:52-0500\n"
 "PO-Revision-Date: 1998-07-15 03:12+0900\n"
 "Last-Translator: 白崎 泰弘 <yasuhiro@awa.tohoku.ac.jp>\n"
 "Language-Team: Japanese <ja@li.org>\n"
@@ -446,12 +446,12 @@ msgstr "クリア"
 msgid "Page %u"
 msgstr "ページ %u"
 
-#: gtk/gtkrc.c:1627
+#: gtk/gtkrc.c:1640
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\" line %d"
 msgstr "画像ファイルが見付かりません piamap_path: \"%s\" %d 行目"
 
-#: gtk/gtkrc.c:1630
+#: gtk/gtkrc.c:1643
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "画像ファイルが見付かりません pixmap_path: \"%s\""
