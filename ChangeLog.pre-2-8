@@ -1,3 +1,9 @@
+1998-12-30  Miguel de Icaza  <miguel@nuclecu.unam.mx>
+
+	* gtk/gtkmain.c (gtk_main_do_event): Fix memory leak.
+	gdk_event_put would make a copy of next_event, and next_event was
+	not being freed.
+
 Wed Dec 30 18:39:21 CST 1998 Shawn T. Amundson <amundson@gtk.org>
 
 	* Released GTK+ 1.1.11
@@ -9,7 +15,7 @@ Wed Dec 30 18:39:21 CST 1998 Shawn T. Amundson <amundson@gtk.org>
 	  gtk+.spec:
 	  docs/gtk-config.1:
 	  gtk/gtkfeatures.h.in: version=1.1.11
-
+	
 1998-12-29  Owen Taylor  <otaylor@srv-19-29.roc.ny.frontiernet.net>
 
 	* gdk/gdkim.c (gdk_wcstombs): Fixed off-by-one

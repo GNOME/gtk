@@ -581,8 +581,11 @@ gtk_main_do_event (GdkEvent *event)
   
 
   if (next_event)
-    gdk_event_put (next_event);
-  next_event = NULL;
+    {
+      gdk_event_put (next_event);
+      gdk_event_free (next_event);
+      next_event = NULL;
+    }
 
   /* Find the widget which got the event. We store the widget
    *  in the user_data field of GdkWindow's.
