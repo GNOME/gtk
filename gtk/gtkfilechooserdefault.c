@@ -1655,16 +1655,29 @@ bookmarks_changed_cb (GtkFileSystem         *file_system,
 
 /* Sets the file chooser to multiple selection mode */
 static void
-set_select_multiple (GtkFileChooserDefault *impl, gboolean select_multiple)
+set_select_multiple (GtkFileChooserDefault *impl,
+		     gboolean               select_multiple,
+		     gboolean               property_notify)
 {
-  /* FIXME: this does not work for folder mode */
-  GtkTreeSelection *selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (impl->list));
+  GtkTreeSelection *selection;
+  GtkSelectionMode mode;
+
+  if (select_multiple == impl->select_multiple)
+    return;
 
   impl->select_multiple = select_multiple;
-  gtk_tree_selection_set_mode (selection,
-			       (select_multiple ?
-				GTK_SELECTION_MULTIPLE : GTK_SELECTION_BROWSE));
-  /* FIXME: See note in check_preview_change() */
+
+  mode = select_multiple ? GTK_SELECTION_MULTIPLE : GTK_SELECTION_BROWSE;
+
+  selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (impl->tree));
+  gtk_tree_selection_set_mode (selection, mode);
+
+  selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (impl->list));
+  gtk_tree_selection_set_mode (selection, mode);
+
+  g_object_notify (G_OBJECT (impl), "select-multiple");
+
+  /* FIXME #132255: See note in check_preview_change() */
   check_preview_change (impl);
 }
 
@@ -1689,7 +1702,7 @@ gtk_file_chooser_default_set_property (GObject      *object,
 	    {
 	      g_warning ("Save mode cannot be set in conjunction with multiple selection mode.  "
 			 "Re-setting to single selection mode.");
-	      set_select_multiple (impl, FALSE);
+	      set_select_multiple (impl, FALSE, TRUE);
 	    }
 	}
       else
@@ -1767,8 +1780,7 @@ gtk_file_chooser_default_set_property (GObject      *object,
 	    return;
 	  }
 
-	if (select_multiple != impl->select_multiple)
-	  set_select_multiple (impl, select_multiple);
+	set_select_multiple (impl, select_multiple, FALSE);
       }
       break;
     case GTK_FILE_CHOOSER_PROP_SHOW_HIDDEN:
@@ -2082,13 +2094,13 @@ update_chooser_entry (GtkFileChooserDefault *impl)
   GtkTreeIter iter;
   GtkTreeIter child_iter;
 
-  /* Fixing this for multiple selection involves getting the full
-   * selection and diffing to find out what the most recently selected
-   * file is; there is logic in GtkFileSelection that probably can
-   * be copied; check_preview_change() is similar.
+  /* FIXME #132255: Fixing this for multiple selection involves getting the full
+   * selection and diffing to find out what the most recently selected file is;
+   * there is logic in GtkFileSelection that probably can be copied;
+   * check_preview_change() is similar.
    */
-  if (impl->select_multiple ||
-      !gtk_tree_selection_get_selected (selection, NULL, &iter))
+  if (impl->select_multiple
+      || !gtk_tree_selection_get_selected (selection, NULL, &iter))
     return;
 
   gtk_tree_model_sort_convert_iter_to_child_iter (impl->sort_model,
@@ -2299,7 +2311,7 @@ gtk_file_chooser_default_get_paths (GtkFileChooser *chooser)
   GtkTreeSelection *selection;
   struct get_paths_closure info;
 
-  if (gtk_file_chooser_get_action (chooser) == GTK_FILE_CHOOSER_ACTION_SAVE)
+  if (impl->action == GTK_FILE_CHOOSER_ACTION_SAVE)
     {
       GtkFileChooserEntry *chooser_entry = GTK_FILE_CHOOSER_ENTRY (impl->entry);
       const GtkFilePath *folder_path = _gtk_file_chooser_entry_get_current_folder (chooser_entry);
@@ -2660,10 +2672,10 @@ check_preview_change (GtkFileChooserDefault *impl)
 {
   const GtkFilePath *new_path = NULL;
 
-  /* Fixing preview for multiple selection involves getting the full
-   * selection and diffing to find out what the most recently selected
-   * file is; there is logic in GtkFileSelection that probably can
-   * be copied. update_chooser_entry() is similar.
+  /* FIXME #132255: Fixing preview for multiple selection involves getting the
+   * full selection and diffing to find out what the most recently selected file
+   * is; there is logic in GtkFileSelection that probably can be
+   * copied. update_chooser_entry() is similar.
    */
   if (impl->sort_model && !impl->select_multiple)
     {
@@ -2706,7 +2718,13 @@ tree_selection_changed (GtkTreeSelection      *selection,
   const GtkFilePath *file_path;
   GtkTreePath *path;
 
-  if (!gtk_tree_selection_get_selected (selection, NULL, &iter))
+  /* FIXME #132255: Fixing this for multiple selection involves getting the full
+   * selection and diffing to find out what the most recently selected file is;
+   * there is logic in GtkFileSelection that probably can be copied;
+   * check_preview_change() is similar.
+   */
+  if (impl->select_multiple
+      || !gtk_tree_selection_get_selected (selection, NULL, &iter))
     return;
 
   file_path = _gtk_file_system_model_get_path (impl->tree_model, &iter);
@@ -2812,12 +2830,14 @@ static void
 list_selection_changed (GtkTreeSelection      *selection,
 			GtkFileChooserDefault *impl)
 {
-  if (!impl->select_multiple)
+  /* See if we are in the new folder editable row for Save mode */
+  if (impl->action == GTK_FILE_CHOOSER_ACTION_SAVE)
     {
       GtkTreeSelection *selection;
       GtkTreeIter iter, child_iter;
       const GtkFileInfo *info;
 
+      g_assert (!impl->select_multiple);
       selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (impl->list));
       if (!gtk_tree_selection_get_selected (selection, NULL, &iter))
 	return;
@@ -2929,7 +2949,7 @@ entry_activate (GtkEntry              *entry,
 
       if (!info)
 	{
-	  if (gtk_file_chooser_get_action (GTK_FILE_CHOOSER (impl)) == GTK_FILE_CHOOSER_ACTION_SAVE)
+	  if (impl->action == GTK_FILE_CHOOSER_ACTION_SAVE)
 	    {
 	      g_object_unref (folder);
 	      gtk_file_path_free (subfolder_path);

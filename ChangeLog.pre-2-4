@@ -1,3 +1,22 @@
+2004-01-23  Federico Mena Quintero  <federico@ximian.com>
+
+	Fix #132247.
+
+	* gtk/gtkfilechooserdefault.c (set_select_multiple): Handle folder
+	mode.
+	(set_select_multiple): Optionally notify about changes to the
+	select-multiple property.
+	(list_selection_changed): Change the condition for the editable row to
+	test for save mode; this is more clear than testing for not being
+	in multiple selection mode.
+	(gtk_file_chooser_default_get_paths): Get impl->action directly
+	rather than calling gtk_file_chooser_get_action().
+	(entry_activate): Likewise.
+	(set_select_multiple): Annotate about #133255.
+	(update_chooser_entry): Likewise.
+	(check_preview_change): Likewise.
+	(tree_selection_changed): Likewise.
+
 Fri Jan 23 14:56:18 2004  Jonathan Blandford  <jrb@gnome.org>
 
 	* gtk/gtktreeview.c (gtk_tree_view_get_path_at_pos): Don't crash
