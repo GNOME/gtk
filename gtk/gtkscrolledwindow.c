@@ -587,8 +587,8 @@ gtk_scrolled_window_size_request (GtkWidget      *widget,
 {
   GtkScrolledWindow *scrolled_window;
   GtkBin *bin;
-  gint extra_height;
   gint extra_width;
+  gint extra_height;
   GtkRequisition hscrollbar_requisition;
   GtkRequisition vscrollbar_requisition;
   GtkRequisition child_requisition;
@@ -600,6 +600,8 @@ gtk_scrolled_window_size_request (GtkWidget      *widget,
   scrolled_window = GTK_SCROLLED_WINDOW (widget);
   bin = GTK_BIN (scrolled_window);
 
+  extra_width = 0;
+  extra_height = 0;
   requisition->width = 0;
   requisition->height = 0;
   
@@ -625,7 +627,10 @@ gtk_scrolled_window_size_request (GtkWidget      *widget,
 
 	  aux_info = gtk_object_get_data_by_id (GTK_OBJECT (bin->child), quark_aux_info);
 	  if (aux_info && aux_info->width > 0)
-	    requisition->width += aux_info->width;
+	    {
+	      requisition->width += aux_info->width;
+	      extra_width = -1;
+	    }
 	  else
 	    requisition->width += vscrollbar_requisition.width;
 	}
@@ -638,31 +643,33 @@ gtk_scrolled_window_size_request (GtkWidget      *widget,
 
 	  aux_info = gtk_object_get_data_by_id (GTK_OBJECT (bin->child), quark_aux_info);
 	  if (aux_info && aux_info->height > 0)
-	    requisition->height += aux_info->height;
+	    {
+	      requisition->height += aux_info->height;
+	      extra_height = -1;
+	    }
 	  else
 	    requisition->height += hscrollbar_requisition.height;
 	}
     }
 
-  extra_width = 0;
-  extra_height = 0;
-
   if ((scrolled_window->hscrollbar_policy == GTK_POLICY_AUTOMATIC) ||
       GTK_WIDGET_VISIBLE (scrolled_window->hscrollbar))
     {
       requisition->width = MAX (requisition->width, hscrollbar_requisition.width);
-      extra_height = SCROLLBAR_SPACING (scrolled_window) + hscrollbar_requisition.height;
+      if (!extra_height)
+	extra_height = SCROLLBAR_SPACING (scrolled_window) + hscrollbar_requisition.height;
     }
 
   if ((scrolled_window->vscrollbar_policy == GTK_POLICY_AUTOMATIC) ||
       GTK_WIDGET_VISIBLE (scrolled_window->vscrollbar))
     {
       requisition->height = MAX (requisition->height, vscrollbar_requisition.height);
-      extra_width = SCROLLBAR_SPACING (scrolled_window) + vscrollbar_requisition.width;
+      if (!extra_width)
+	extra_width = SCROLLBAR_SPACING (scrolled_window) + vscrollbar_requisition.width;
     }
 
-  requisition->width += GTK_CONTAINER (widget)->border_width * 2 + extra_width;
-  requisition->height += GTK_CONTAINER (widget)->border_width * 2 + extra_height;
+  requisition->width += GTK_CONTAINER (widget)->border_width * 2 + MAX (0, extra_width);
+  requisition->height += GTK_CONTAINER (widget)->border_width * 2 + MAX (0, extra_height);
 }
 
 static void

@@ -1,3 +1,9 @@
+Thu Feb 25 09:50:38 1999  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkscrolledwindow.c (gtk_scrolled_window_size_request): don't add
+	extra width or height if the requested size is mandatory (i.e. set
+	through child->usize).
+
 Thu Feb 25 02:13:20 CST 1999 Shawn T. Amundson <amundson@gtk.org>
 
 	* gtk/gtkmenu.[ch]: New function gtk_menu_reorder_child()
