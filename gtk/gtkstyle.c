@@ -1239,10 +1239,7 @@ gtk_style_real_init_from_rc (GtkStyle   *style,
   clear_property_cache (style);
 
   if (rc_style->font_desc)
-    {
-      pango_font_description_free (style->font_desc);
-      style->font_desc = pango_font_description_copy (rc_style->font_desc);
-    }
+    pango_font_description_merge (style->font_desc, rc_style->font_desc, TRUE);
     
   for (i = 0; i < 5; i++)
     {

@@ -1176,8 +1176,13 @@ gtk_rc_style_real_merge (GtkRcStyle *dest,
   if (dest->ythickness < 0 && src->ythickness >= 0)
     dest->ythickness = src->ythickness;
 
-  if (!dest->font_desc && src->font_desc)
-    dest->font_desc = pango_font_description_copy (src->font_desc);
+  if (src->font_desc)
+    {
+      if (!dest->font_desc)
+	dest->font_desc = pango_font_description_copy (src->font_desc);
+      else
+	pango_font_description_merge (dest->font_desc, src->font_desc, FALSE);
+    }
 
   if (src->rc_properties)
     {

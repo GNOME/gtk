@@ -1,3 +1,15 @@
+Wed Dec 26 11:49:01 2001  Owen Taylor  <otaylor@redhat.com>
+
+	(#67542, reported by Anders Carlsson)
+	
+	* gtk/gtkstyle.c (gtk_style_real_init_from_rc): Merge
+	rc_style->font_desc with defaul style instead of replacing
+	it.
+
+	* gtk/gtkrc.c (gtk_rc_style_real_merge): Allow partial
+	font descriptions in RC styles by calling
+	pango_font_description_merge(). 
+
 2001-12-24  James Henstridge  <james@daa.com.au>
 
 	* gtk/gtkdialog.h (doc comment): s/<!>/<!-- -->/ to make the doc
