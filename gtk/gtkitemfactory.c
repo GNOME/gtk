@@ -628,6 +628,9 @@ gtk_item_factory_from_path (const gchar      *path)
   fname[i + 1] = 0;
 
   item = g_hash_table_lookup (class->item_ht, fname);
+
+  g_free (fname);
+
   if (item && item->widgets)
     return gtk_item_factory_from_widget (item->widgets->data);
 
@@ -1006,7 +1009,7 @@ gtk_item_factory_create_item (GtkItemFactory	     *ifactory,
   if (!gtk_item_factory_parse_path (entry->path, 
 				    &path, &parent_path, &name))
     return;
-  
+
   parent = gtk_item_factory_get_widget (ifactory, parent_path);
   if (!parent)
     {
@@ -1104,6 +1107,8 @@ gtk_item_factory_create_item (GtkItemFactory	     *ifactory,
 			     callback_type,
 			     item_type_path,
 			     widget);
+
+  g_free (path);
 }
 
 void

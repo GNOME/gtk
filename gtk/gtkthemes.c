@@ -19,6 +19,7 @@
  */
 #include <stdio.h>
 #include <stdlib.h>
+#include <gmodule.h>
 #include "gtkthemes.h"
 #include "gtkmain.h"
 #include "gtkrc.h"
@@ -33,7 +34,7 @@ typedef struct _GtkThemeEnginePrivate GtkThemeEnginePrivate;
 struct _GtkThemeEnginePrivate {
   GtkThemeEngine engine;
   
-  void *library;
+  GModule *library;
   void *name;
 
   void (*init) (GtkThemeEngine *);
@@ -56,12 +57,11 @@ gtk_theme_engine_get (gchar          *name)
   
   result = g_hash_table_lookup (engine_hash, name);
 
-#ifdef HAVE_LIBDL
   if (!result)
     {
        gchar fullname[1024];
        gchar *engine_path;
-       void *library;
+       GModule *library;
       
        g_snprintf (fullname, 1024, "lib%s.so", name);
        engine_path = gtk_rc_find_module_in_path(NULL, fullname);
@@ -73,10 +73,10 @@ gtk_theme_engine_get (gchar          *name)
        
        printf ("Loading Theme %s\n", engine_path);
        
-       library = dlopen(engine_path, RTLD_NOW);
+       library = g_module_open (engine_path, 0);
        g_free(engine_path);
        if (!library)
-	 g_error(dlerror());
+	 g_error(g_module_error());
        else
 	 {
 	    result = g_new (GtkThemeEnginePrivate, 1);
@@ -85,9 +85,16 @@ gtk_theme_engine_get (gchar          *name)
 	    result->name = g_strdup (name);
 	    result->library = library;
 	    
-	    /* extract symbols from the lib */   
-	    result->init=dlsym(library, "theme_init");
-	    result->exit=dlsym(library ,"theme_exit");
+	    /* extract symbols from the lib */
+	    if (!g_module_symbol (library, "theme_init",
+				  (gpointer *)&result->init) ||
+		!g_module_symbol (library, "theme_exit", 
+				  (gpointer *)&result->exit))
+	      {
+		g_error (g_module_error());
+		g_free (result);
+		return NULL;
+	      }
 	    
 	    /* call the theme's init (theme_init) function to let it */
 	    /* setup anything it needs to set up. */
@@ -96,7 +103,6 @@ gtk_theme_engine_get (gchar          *name)
 	    g_hash_table_insert (engine_hash, name, result);
 	 }
     }
-#endif HAVE_LIBDL
    
    return (GtkThemeEngine *)result;
 }
@@ -123,9 +129,7 @@ gtk_theme_engine_unref (GtkThemeEngine *engine)
     {
       g_hash_table_remove (engine_hash, private);
       
-#ifdef HAVE_LIBDL
-      dlclose (private->library);
-#endif /* HAVE_LIBDL */
+      g_module_close (private->library);
       g_free (private->name);
       g_free (private);
     }

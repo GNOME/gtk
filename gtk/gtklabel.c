@@ -295,6 +295,7 @@ gtk_label_finalize (GtkObject *object)
   label = GTK_LABEL (object);
   
   g_free (label->label);
+  if (label->pattern) g_free (label->pattern);
   gtk_label_free_rows (label);
   
   (* GTK_OBJECT_CLASS (parent_class)->finalize) (object);
@@ -530,7 +531,6 @@ gtk_label_parse_uline (GtkLabel         *label,
   p = string;
   q = name;
   r = pattern;
-  underscore = FALSE;
 
   while (*p)
     {
@@ -561,7 +561,8 @@ gtk_label_parse_uline (GtkLabel         *label,
       p++;
     }
   *q = 0;
-
+  *r = 0;
+ 
   gtk_label_set (label, name);
   gtk_label_set_pattern (label, pattern);
   

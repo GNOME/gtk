@@ -131,7 +131,8 @@ static void gtk_packer_container_add (GtkContainer   *container,
                                       GtkWidget      *child);
 static void gtk_packer_remove        (GtkContainer   *container,
                                       GtkWidget      *widget);
-static void gtk_packer_foreach       (GtkContainer   *container,
+static void gtk_packer_forall        (GtkContainer   *container,
+				      gboolean        include_internals,
                                       GtkCallback     callback,
                                       gpointer        callback_data);
 static void gtk_packer_set_arg	     (GtkObject      *object,
@@ -223,7 +224,7 @@ gtk_packer_class_init (GtkPackerClass *klass)
   
   container_class->add = gtk_packer_container_add;
   container_class->remove = gtk_packer_remove;
-  container_class->foreach = gtk_packer_foreach;
+  container_class->forall = gtk_packer_forall;
   container_class->child_type = gtk_packer_child_type;
   container_class->get_child_arg = gtk_packer_get_child_arg;
   container_class->set_child_arg = gtk_packer_set_child_arg;
@@ -1272,9 +1273,10 @@ gtk_packer_size_allocate (GtkWidget *widget, GtkAllocation  *allocation)
 }
 
 static void
-gtk_packer_foreach (GtkContainer *container,
-                    GtkCallback   callback,
-                    gpointer      callback_data)
+gtk_packer_forall (GtkContainer *container,
+		   gboolean	 include_internals,
+		   GtkCallback   callback,
+		   gpointer      callback_data)
 {
   GtkPacker *packer;
   GtkPackerChild *child;
@@ -1286,7 +1288,7 @@ gtk_packer_foreach (GtkContainer *container,
   
   packer = GTK_PACKER (container);
   
-  children = g_list_first(packer->children);
+  children = g_list_first (packer->children);
   while (children != NULL) 
     {
       child = children->data;

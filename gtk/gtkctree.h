@@ -293,7 +293,7 @@ void gtk_ctree_real_select_recursive             (GtkCTree     *ctree,
 void gtk_ctree_node_set_text                     (GtkCTree     *ctree,
 						  GtkCTreeNode *node,
 						  gint          column,
-						  gchar        *text);
+						  const gchar  *text);
 void gtk_ctree_node_set_pixmap                   (GtkCTree     *ctree,
 						  GtkCTreeNode *node,
 						  gint          column,
@@ -302,13 +302,13 @@ void gtk_ctree_node_set_pixmap                   (GtkCTree     *ctree,
 void gtk_ctree_node_set_pixtext                  (GtkCTree     *ctree,
 						  GtkCTreeNode *node,
 						  gint          column,
-						  gchar        *text,
+						  const gchar  *text,
 						  guint8        spacing,
 						  GdkPixmap    *pixmap,
 						  GdkBitmap    *mask);
 void gtk_ctree_set_node_info                     (GtkCTree     *ctree,
 						  GtkCTreeNode *node,
-						  gchar        *text,
+						  const gchar  *text,
 						  guint8        spacing,
 						  GdkPixmap    *pixmap_closed,
 						  GdkBitmap    *mask_closed,
@@ -388,7 +388,7 @@ void gtk_ctree_set_use_drag_icons                (GtkCTree     *ctree,
 void gtk_ctree_set_line_style                    (GtkCTree     *ctree, 
 						  GtkCTreeLineStyle line_style);
 void gtk_ctree_set_drag_compare_func              (GtkCTree     		*ctree,
-						   GtkCTreeCompareDragFunc	cmp_func);            
+						   GtkCTreeCompareDragFunc	cmp_func);
 
 /***********************************************************
  *             Tree sorting functions                      *

@@ -118,7 +118,8 @@ static void gtk_menu_shell_add               (GtkContainer      *container,
 					      GtkWidget         *widget);
 static void gtk_menu_shell_remove            (GtkContainer      *container,
 					      GtkWidget         *widget);
-static void gtk_menu_shell_foreach           (GtkContainer      *container,
+static void gtk_menu_shell_forall            (GtkContainer      *container,
+					      gboolean		 include_internals,
 					      GtkCallback        callback,
 					      gpointer           callback_data);
 static void gtk_real_menu_shell_deactivate   (GtkMenuShell      *menu_shell);
@@ -229,7 +230,7 @@ gtk_menu_shell_class_init (GtkMenuShellClass *klass)
 
   container_class->add = gtk_menu_shell_add;
   container_class->remove = gtk_menu_shell_remove;
-  container_class->foreach = gtk_menu_shell_foreach;
+  container_class->forall = gtk_menu_shell_forall;
   container_class->child_type = gtk_menu_shell_child_type;
 
   klass->submenu_placement = GTK_TOP_BOTTOM;
@@ -692,9 +693,10 @@ gtk_menu_shell_remove (GtkContainer *container,
 }
 
 static void
-gtk_menu_shell_foreach (GtkContainer *container,
-			GtkCallback   callback,
-			gpointer      callback_data)
+gtk_menu_shell_forall (GtkContainer *container,
+		       gboolean      include_internals,
+		       GtkCallback   callback,
+		       gpointer      callback_data)
 {
   GtkMenuShell *menu_shell;
   GtkWidget *child;
@@ -897,6 +899,9 @@ gtk_real_menu_shell_move_current (GtkMenuShell      *menu_shell,
 				  GtkMenuDirectionType direction)
 {
   GtkMenuShell *parent_menu_shell = NULL;
+  gboolean had_selection;
+
+  had_selection = menu_shell->active_menu_item != NULL;
 
   if (menu_shell->parent_menu_shell)
     parent_menu_shell = GTK_MENU_SHELL (menu_shell->parent_menu_shell);
@@ -915,7 +920,8 @@ gtk_real_menu_shell_move_current (GtkMenuShell      *menu_shell,
       break;
       
     case GTK_MENU_DIR_CHILD:
-      if (GTK_BIN (menu_shell->active_menu_item)->child &&
+      if (menu_shell->active_menu_item &&
+	  GTK_BIN (menu_shell->active_menu_item)->child &&
 	  GTK_MENU_ITEM (menu_shell->active_menu_item)->submenu)
 	{
 	  menu_shell = GTK_MENU_SHELL (GTK_MENU_ITEM (menu_shell->active_menu_item)->submenu);
@@ -934,14 +940,23 @@ gtk_real_menu_shell_move_current (GtkMenuShell      *menu_shell,
 	    gtk_menu_shell_move_selected (parent_menu_shell, 1);
 	}
       break;
-
+      
     case GTK_MENU_DIR_PREV:
       gtk_menu_shell_move_selected (menu_shell, -1);
+      if (!had_selection &&
+	  !menu_shell->active_menu_item &&
+	  menu_shell->children)
+	gtk_menu_shell_select_item (menu_shell, g_list_last (menu_shell->children)->data);
       break;
     case GTK_MENU_DIR_NEXT:
       gtk_menu_shell_move_selected (menu_shell, 1);
+      if (!had_selection &&
+	  !menu_shell->active_menu_item &&
+	  menu_shell->children)
+	gtk_menu_shell_select_item (menu_shell, menu_shell->children->data);
       break;
     }
+  
 }
 
 static void

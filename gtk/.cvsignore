@@ -8,6 +8,7 @@ libgtk-1.1.la
 testgtk
 testinput
 testselection
+testrgb
 simple
 testtree
 gtkfeatures.h

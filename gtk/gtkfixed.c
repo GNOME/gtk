@@ -38,19 +38,20 @@ static void gtk_fixed_add           (GtkContainer     *container,
 				     GtkWidget        *widget);
 static void gtk_fixed_remove        (GtkContainer     *container,
 				     GtkWidget        *widget);
-static void gtk_fixed_foreach       (GtkContainer     *container,
-				     GtkCallback      callback,
-				     gpointer         callback_data);
+static void gtk_fixed_forall        (GtkContainer     *container,
+				     gboolean 	       include_internals,
+				     GtkCallback       callback,
+				     gpointer          callback_data);
 static GtkType gtk_fixed_child_type (GtkContainer     *container);
 
 
 static GtkContainerClass *parent_class = NULL;
 
 
-guint
+GtkType
 gtk_fixed_get_type (void)
 {
-  static guint fixed_type = 0;
+  static GtkType fixed_type = 0;
 
   if (!fixed_type)
     {
@@ -66,7 +67,7 @@ gtk_fixed_get_type (void)
         (GtkClassInitFunc) NULL,
       };
 
-      fixed_type = gtk_type_unique (gtk_container_get_type (), &fixed_info);
+      fixed_type = gtk_type_unique (GTK_TYPE_CONTAINER, &fixed_info);
     }
 
   return fixed_type;
@@ -83,7 +84,7 @@ gtk_fixed_class_init (GtkFixedClass *class)
   widget_class = (GtkWidgetClass*) class;
   container_class = (GtkContainerClass*) class;
 
-  parent_class = gtk_type_class (gtk_container_get_type ());
+  parent_class = gtk_type_class (GTK_TYPE_CONTAINER);
 
   widget_class->map = gtk_fixed_map;
   widget_class->unmap = gtk_fixed_unmap;
@@ -95,7 +96,7 @@ gtk_fixed_class_init (GtkFixedClass *class)
 
   container_class->add = gtk_fixed_add;
   container_class->remove = gtk_fixed_remove;
-  container_class->foreach = gtk_fixed_foreach;
+  container_class->forall = gtk_fixed_forall;
   container_class->child_type = gtk_fixed_child_type;
 }
 
@@ -119,7 +120,7 @@ gtk_fixed_new (void)
 {
   GtkFixed *fixed;
 
-  fixed = gtk_type_new (gtk_fixed_get_type ());
+  fixed = gtk_type_new (GTK_TYPE_FIXED);
   return GTK_WIDGET (fixed);
 }
 
@@ -465,9 +466,10 @@ gtk_fixed_remove (GtkContainer *container,
 }
 
 static void
-gtk_fixed_foreach (GtkContainer *container,
-		   GtkCallback   callback,
-		   gpointer      callback_data)
+gtk_fixed_forall (GtkContainer *container,
+		  gboolean	include_internals,
+		  GtkCallback   callback,
+		  gpointer      callback_data)
 {
   GtkFixed *fixed;
   GtkFixedChild *child;

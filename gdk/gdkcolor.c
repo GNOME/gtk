@@ -71,8 +71,8 @@ gdk_colormap_new (GdkVisual *visual,
       private->info = g_new0 (GdkColorInfo, colormap->size);
       colormap->colors = g_new (GdkColor, colormap->size);
       
-      private->hash = g_hash_table_new (gdk_color_hash,
-					gdk_color_equal);
+      private->hash = g_hash_table_new ((GHashFunc) gdk_color_hash,
+					(GCompareFunc) gdk_color_equal);
       
       private->private_val = private_cmap;
       private->xcolormap = XCreateColormap (private->xdisplay, gdk_root_window,
@@ -259,8 +259,8 @@ gdk_colormap_get_system (void)
 	  private->info = g_new0 (GdkColorInfo, colormap->size);
 	  colormap->colors = g_new (GdkColor, colormap->size);
 	  
-	  private->hash = g_hash_table_new (gdk_color_hash,
-					    gdk_color_equal);
+	  private->hash = g_hash_table_new ((GHashFunc) gdk_color_hash,
+					    (GCompareFunc) gdk_color_equal);
 
 	  gdk_colormap_sync (colormap, TRUE);
 	}

@@ -412,6 +412,7 @@
    (has-default GTK_HAS_DEFAULT)
    (has-grab GTK_HAS_GRAB)
    (rc-style GTK_RC_STYLE)
+   (composite-child GTK_COMPOSITE_CHILD)
    (basic GTK_BASIC))
 
 ; enumerations from "../gdk/gdkprivate.h"

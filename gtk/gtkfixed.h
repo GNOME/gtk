@@ -26,12 +26,15 @@
 
 #ifdef __cplusplus
 extern "C" {
+#pragma }
 #endif /* __cplusplus */
 
 
-#define GTK_FIXED(obj)          GTK_CHECK_CAST (obj, gtk_fixed_get_type (), GtkFixed)
-#define GTK_FIXED_CLASS(klass)  GTK_CHECK_CLASS_CAST (klass, gtk_fixed_get_type (), GtkFixedClass)
-#define GTK_IS_FIXED(obj)       GTK_CHECK_TYPE (obj, gtk_fixed_get_type ())
+#define GTK_TYPE_FIXED                  (gtk_fixed_get_type ())
+#define GTK_FIXED(obj)                  (GTK_CHECK_CAST ((obj), GTK_TYPE_FIXED, GtkFixed))
+#define GTK_FIXED_CLASS(klass)          (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_FIXED, GtkFixedClass))
+#define GTK_IS_FIXED(obj)               (GTK_CHECK_TYPE ((obj), GTK_TYPE_FIXED))
+#define GTK_IS_FIXED_CLASS(klass)       (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_FIXED))
 
 
 typedef struct _GtkFixed        GtkFixed;
@@ -58,7 +61,7 @@ struct _GtkFixedChild
 };
 
 
-guint      gtk_fixed_get_type          (void);
+GtkType    gtk_fixed_get_type          (void);
 GtkWidget* gtk_fixed_new               (void);
 void       gtk_fixed_put               (GtkFixed       *fixed,
                                         GtkWidget      *widget,

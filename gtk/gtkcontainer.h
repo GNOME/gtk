@@ -71,7 +71,8 @@ struct _GtkContainerClass
   void (* remove)      		(GtkContainer	 *container,
 				 GtkWidget	 *widget);
   void (* check_resize)		(GtkContainer	 *container);
-  void (* foreach)     		(GtkContainer	 *container,
+  void (* forall)     		(GtkContainer	 *container,
+				 gboolean	  include_internals,
 				 GtkCallback	  callback,
 				 gpointer	  callbabck_data);
   gint (* focus)       		(GtkContainer	 *container,
@@ -206,6 +207,9 @@ gchar*	gtk_container_child_args_collect   (GtkType       object_type,
 gchar*  gtk_container_child_arg_get_info   (GtkType       object_type,
 					    const gchar  *arg_name,
 					    GtkArgInfo  **info_p);
+void    gtk_container_forall		   (GtkContainer *container,
+					    GtkCallback	  callback,
+					    gpointer	  callback_data);
 
 
 /* Deprecated methods */

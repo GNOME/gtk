@@ -56,7 +56,8 @@ static void gtk_list_add	     (GtkContainer   *container,
 				      GtkWidget	     *widget);
 static void gtk_list_remove	     (GtkContainer   *container,
 				      GtkWidget	     *widget);
-static void gtk_list_foreach	     (GtkContainer   *container,
+static void gtk_list_forall	     (GtkContainer   *container,
+				      gboolean	      include_internals,
 				      GtkCallback     callback,
 				      gpointer	      callback_data);
 
@@ -102,7 +103,7 @@ static guint        hadjustment_key_id = 0;
 GtkType
 gtk_list_get_type (void)
 {
-  static guint list_type = 0;
+  static GtkType list_type = 0;
 
   if (!list_type)
     {
@@ -118,7 +119,7 @@ gtk_list_get_type (void)
         (GtkClassInitFunc) NULL,
       };
 
-      list_type = gtk_type_unique (gtk_container_get_type (), &list_info);
+      list_type = gtk_type_unique (GTK_TYPE_CONTAINER, &list_info);
     }
 
   return list_type;
@@ -135,7 +136,7 @@ gtk_list_class_init (GtkListClass *class)
   widget_class = (GtkWidgetClass*) class;
   container_class = (GtkContainerClass*) class;
 
-  parent_class = gtk_type_class (gtk_container_get_type ());
+  parent_class = gtk_type_class (GTK_TYPE_CONTAINER);
 
   vadjustment_key_id = g_quark_from_static_string (vadjustment_key);
   hadjustment_key_id = g_quark_from_static_string (hadjustment_key);
@@ -182,7 +183,7 @@ gtk_list_class_init (GtkListClass *class)
 
   container_class->add = gtk_list_add;
   container_class->remove = gtk_list_remove;
-  container_class->foreach = gtk_list_foreach;
+  container_class->forall = gtk_list_forall;
   container_class->child_type = gtk_list_child_type;
   container_class->set_focus_child = gtk_list_set_focus_child;
   container_class->focus = gtk_list_focus;
@@ -225,7 +226,7 @@ gtk_list_init (GtkList *list)
 GtkWidget*
 gtk_list_new (void)
 {
-  return GTK_WIDGET (gtk_type_new (gtk_list_get_type ()));
+  return GTK_WIDGET (gtk_type_new (GTK_TYPE_LIST));
 }
 
 static void
@@ -1285,9 +1286,10 @@ gtk_list_remove (GtkContainer *container,
 }
 
 static void
-gtk_list_foreach (GtkContainer *container,
-		  GtkCallback	callback,
-		  gpointer	callback_data)
+gtk_list_forall (GtkContainer  *container,
+		 gboolean       include_internals,
+		 GtkCallback	callback,
+		 gpointer	callback_data)
 {
   GtkList *list;
   GtkWidget *child;

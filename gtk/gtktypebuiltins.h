@@ -109,4 +109,4 @@ extern GtkType GTK_TYPE_GDK_WINDOW;
 extern GtkType GTK_TYPE_GDK_EVENT;
 extern GtkType GTK_TYPE_GDK_COLOR;
 
-#define	GTK_TYPE_NUM_BUILTINS	(107)
+#define	GTK_TYPE_NUM_BUILTINS	(108)

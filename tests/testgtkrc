@@ -10,7 +10,7 @@
 # widget <widget_set> style <style_name>
 # widget_class <widget_class_set> style <style_name>
 
-include "/home/raster/.themes/Stone/gtk/gtkrc"
+#include "/opt/themes/share/gtk/themes/metal/gtkrc"
 
 binding "test1"
 {

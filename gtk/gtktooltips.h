@@ -25,11 +25,14 @@
 
 #ifdef __cplusplus
 extern "C" {
+#pragma }
 #endif /* __cplusplus */
 
-#define GTK_TOOLTIPS(obj)	   GTK_CHECK_CAST (obj, gtk_tooltips_get_type (), GtkTooltips)
-#define GTK_TOOLTIPS_CLASS(klass)  GTK_CHECK_CLASS_CAST (klass, gtk_tooltips_get_type (), GtkTooltipsClass)
-#define GTK_IS_TOOLTIPS(obj)	   GTK_CHECK_TYPE (obj, gtk_tooltips_get_type ())
+#define GTK_TYPE_TOOLTIPS                  (gtk_tooltips_get_type ())
+#define GTK_TOOLTIPS(obj)                  (GTK_CHECK_CAST ((obj), GTK_TYPE_TOOLTIPS, GtkTooltips))
+#define GTK_TOOLTIPS_CLASS(klass)          (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_TOOLTIPS, GtkTooltipsClass))
+#define GTK_IS_TOOLTIPS(obj)               (GTK_CHECK_TYPE ((obj), GTK_TYPE_TOOLTIPS))
+#define GTK_IS_TOOLTIPS_CLASS(klass)       (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_TOOLTIPS))
 
 typedef struct _GtkTooltips	 GtkTooltips;
 typedef struct _GtkTooltipsClass GtkTooltipsClass;
@@ -68,21 +71,22 @@ struct _GtkTooltipsClass
   GtkDataClass parent_class;
 };
 
-GtkType		 gtk_tooltips_get_type	 (void);
-GtkTooltips*	 gtk_tooltips_new	 (void);
+GtkType		 gtk_tooltips_get_type	   (void);
+GtkTooltips*	 gtk_tooltips_new	   (void);
 
-void		 gtk_tooltips_enable	 (GtkTooltips     *tooltips);
-void		 gtk_tooltips_disable	 (GtkTooltips     *tooltips);
-void		 gtk_tooltips_set_delay	 (GtkTooltips     *tooltips,
-					  guint	           delay);
-void		 gtk_tooltips_set_tip	 (GtkTooltips     *tooltips,
-					  GtkWidget	  *widget,
-					  const gchar     *tip_text,
-					  const gchar     *tip_private);
-void		 gtk_tooltips_set_colors (GtkTooltips     *tooltips,
-					  GdkColor	  *background,
-					  GdkColor	  *foreground);
-GtkTooltipsData* gtk_tooltips_data_get	 (GtkWidget	  *widget);
+void		 gtk_tooltips_enable	   (GtkTooltips   *tooltips);
+void		 gtk_tooltips_disable	   (GtkTooltips   *tooltips);
+void		 gtk_tooltips_set_delay	   (GtkTooltips   *tooltips,
+					    guint	   delay);
+void		 gtk_tooltips_set_tip	   (GtkTooltips   *tooltips,
+					    GtkWidget	  *widget,
+					    const gchar   *tip_text,
+					    const gchar   *tip_private);
+void		 gtk_tooltips_set_colors   (GtkTooltips   *tooltips,
+					    GdkColor	  *background,
+					    GdkColor	  *foreground);
+GtkTooltipsData* gtk_tooltips_data_get	   (GtkWidget	  *widget);
+void             gtk_tooltips_force_window (GtkTooltips   *tooltips);
 
 
 

@@ -59,7 +59,8 @@ static void gtk_table_add	    (GtkContainer   *container,
 				     GtkWidget	    *widget);
 static void gtk_table_remove	    (GtkContainer   *container,
 				     GtkWidget	    *widget);
-static void gtk_table_foreach	    (GtkContainer   *container,
+static void gtk_table_forall	    (GtkContainer   *container,
+				     gboolean	     include_internals,
 				     GtkCallback     callback,
 				     gpointer	     callback_data);
 static void gtk_table_get_arg       (GtkObject      *object,
@@ -157,7 +158,7 @@ gtk_table_class_init (GtkTableClass *class)
   
   container_class->add = gtk_table_add;
   container_class->remove = gtk_table_remove;
-  container_class->foreach = gtk_table_foreach;
+  container_class->forall = gtk_table_forall;
   container_class->child_type = gtk_table_child_type;
   container_class->set_child_arg = gtk_table_set_child_arg;
   container_class->get_child_arg = gtk_table_get_child_arg;
@@ -860,9 +861,10 @@ gtk_table_remove (GtkContainer *container,
 }
 
 static void
-gtk_table_foreach (GtkContainer *container,
-		   GtkCallback	   callback,
-		   gpointer	   callback_data)
+gtk_table_forall (GtkContainer *container,
+		  gboolean	include_internals,
+		  GtkCallback	callback,
+		  gpointer	callback_data)
 {
   GtkTable *table;
   GtkTableChild *child;

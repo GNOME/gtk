@@ -52,7 +52,8 @@ static void gtk_toolbar_add                      (GtkContainer    *container,
 				                  GtkWidget       *widget);
 static void gtk_toolbar_remove                   (GtkContainer    *container,
 						  GtkWidget       *widget);
-static void gtk_toolbar_foreach                  (GtkContainer    *container,
+static void gtk_toolbar_forall                   (GtkContainer    *container,
+						  gboolean	   include_internals,
 				                  GtkCallback      callback,
 				                  gpointer         callback_data);
 static void gtk_real_toolbar_orientation_changed (GtkToolbar      *toolbar,
@@ -134,7 +135,7 @@ gtk_toolbar_class_init (GtkToolbarClass *class)
 
   container_class->add = gtk_toolbar_add;
   container_class->remove = gtk_toolbar_remove;
-  container_class->foreach = gtk_toolbar_foreach;
+  container_class->forall = gtk_toolbar_forall;
   container_class->focus = NULL;
 
   class->orientation_changed = gtk_real_toolbar_orientation_changed;
@@ -543,9 +544,10 @@ gtk_toolbar_remove (GtkContainer *container,
 }
 
 static void
-gtk_toolbar_foreach (GtkContainer *container,
-		     GtkCallback   callback,
-		     gpointer      callback_data)
+gtk_toolbar_forall (GtkContainer *container,
+		    gboolean	  include_internals,
+		    GtkCallback   callback,
+		    gpointer      callback_data)
 {
   GtkToolbar *toolbar;
   GList *children;
@@ -736,7 +738,13 @@ gtk_toolbar_insert_element (GtkToolbar          *toolbar,
 
   g_return_val_if_fail (toolbar != NULL, NULL);
   g_return_val_if_fail (GTK_IS_TOOLBAR (toolbar), NULL);
-  g_return_val_if_fail ((type != GTK_TOOLBAR_CHILD_WIDGET) || (widget != NULL), NULL);
+  if (type == GTK_TOOLBAR_CHILD_WIDGET)
+    {
+      g_return_val_if_fail (widget != NULL, NULL);
+      g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
+    }
+  else
+    g_return_val_if_fail (widget == NULL, NULL);
 
   child = g_new (GtkToolbarChild, 1);
   child->type = type;
@@ -841,6 +849,9 @@ void
 gtk_toolbar_set_orientation (GtkToolbar     *toolbar,
 			     GtkOrientation  orientation)
 {
+  g_return_if_fail (toolbar != NULL);
+  g_return_if_fail (GTK_IS_TOOLBAR (toolbar));
+
   gtk_signal_emit (GTK_OBJECT (toolbar), toolbar_signals[ORIENTATION_CHANGED], orientation);
 }
 
@@ -848,6 +859,9 @@ void
 gtk_toolbar_set_style (GtkToolbar      *toolbar,
 		       GtkToolbarStyle  style)
 {
+  g_return_if_fail (toolbar != NULL);
+  g_return_if_fail (GTK_IS_TOOLBAR (toolbar));
+
   gtk_signal_emit (GTK_OBJECT (toolbar), toolbar_signals[STYLE_CHANGED], style);
 }
 
@@ -904,7 +918,7 @@ gtk_toolbar_set_button_relief (GtkToolbar *toolbar,
 }
 
 GtkReliefStyle
-gtk_toolbar_get_button_relief (GtkToolbar      *toolbar)
+gtk_toolbar_get_button_relief (GtkToolbar *toolbar)
 {
   g_return_val_if_fail (toolbar != NULL, GTK_RELIEF_NORMAL);
   g_return_val_if_fail (GTK_IS_TOOLBAR (toolbar), GTK_RELIEF_NORMAL);

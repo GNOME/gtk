@@ -61,6 +61,19 @@ gdk_draw_rgb_image (GdkDrawable *drawable,
 		    gint rowstride);
 
 void
+gdk_draw_rgb_image_dithalign (GdkDrawable *drawable,
+			      GdkGC *gc,
+			      gint x,
+			      gint y,
+			      gint width,
+			      gint height,
+			      GdkRgbDither dith,
+			      guchar *rgb_buf,
+			      gint rowstride,
+			      gint xdith,
+			      gint ydith);
+
+void
 gdk_draw_rgb_32_image (GdkDrawable *drawable,
 		       GdkGC *gc,
 		       gint x,
