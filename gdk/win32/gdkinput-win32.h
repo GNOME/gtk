@@ -168,6 +168,7 @@ gboolean         _gdk_device_get_history     (GdkDevice         *device,
 
 #ifdef HAVE_WINTAB
 void		_gdk_input_wintab_init_check (void);
+void		_gdk_input_set_tablet_active (void);
 #endif /* HAVE_WINTAB */
 
 #endif /* __GDK_INPUT_WIN32_H__ */

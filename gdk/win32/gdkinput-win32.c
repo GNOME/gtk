@@ -1273,6 +1273,32 @@ gdk_device_get_state (GdkDevice       *device,
     }
 }
 
+#ifdef HAVE_WINTAB
+void
+_gdk_input_set_tablet_active (void)
+{
+  GList *tmp_list;
+  HCTX *hctx;
+
+  /* Bring the contexts to the top of the overlap order when one of the
+   * application's windows is activated */
+  
+  if (!wintab_contexts)
+    return; /* No tablet devices found, or Wintab not initialized yet */
+  
+  GDK_NOTE (INPUT, g_print ("_gdk_input_set_tablet_active: "
+	"Bringing Wintab contexts to the top of the overlap order\n"));
+
+  tmp_list = wintab_contexts;
+  while (tmp_list)
+    {
+      hctx = (HCTX *) (tmp_list->data);
+      WTOverlap (*hctx, TRUE);
+      tmp_list = tmp_list->next;
+    }
+}
+#endif /* HAVE_WINTAB */
+
 void 
 _gdk_input_init (GdkDisplay *display)
 {
