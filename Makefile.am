@@ -89,7 +89,6 @@ EXTRA_DIST =	\
 	examples/tree/tree.c  \
 	examples/wheelbarrow/Makefile  \
 	examples/wheelbarrow/wheelbarrow.c  \
-	examples/colorsel/colorsel.c  \
 	examples/fixed/fixed.c  \
 	examples/fixed/Makefile  \
 	examples/frame/frame.c  \

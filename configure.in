@@ -29,9 +29,9 @@ AC_DIVERT_PUSH(AC_DIVERSION_NOTICE)dnl
 #
 GTK_MAJOR_VERSION=1
 GTK_MINOR_VERSION=1
-GTK_MICRO_VERSION=15
-GTK_INTERFACE_AGE=1
-GTK_BINARY_AGE=1
+GTK_MICRO_VERSION=16
+GTK_INTERFACE_AGE=0
+GTK_BINARY_AGE=0
 GTK_VERSION=$GTK_MAJOR_VERSION.$GTK_MINOR_VERSION.$GTK_MICRO_VERSION
 dnl
 AC_DIVERT_POP()dnl
@@ -214,9 +214,9 @@ fi
 if test x$with_glib = x ; then 
   # Look for separately installed glib
 
-  AM_PATH_GLIB(1.1.15,,
+  AM_PATH_GLIB(1.1.16,,
     AC_MSG_ERROR([
-*** GLIB 1.1.15 or better is required. The latest version of GLIB
+*** GLIB 1.1.16 or better is required. The latest version of GLIB
 *** is always available from ftp://ftp.gtk.org.]),
     gmodule gthread)
 

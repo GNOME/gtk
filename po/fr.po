@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ VERSION\n"
-"POT-Creation-Date: 1999-02-16 12:48+0100\n"
+"POT-Creation-Date: 1999-02-16 14:28-0600\n"
 "PO-Revision-Date: 1998-12-18 20:32+0100\n"
 "Last-Translator: Vincent Renardias <vincent@debian.org>\n"
 "Language-Team: Vincent Renardias <vincent@debian.org>\n"
@@ -435,7 +435,7 @@ msgstr "(désactivé)"
 msgid "clear"
 msgstr "effacer"
 
-#: gtk/gtknotebook.c:2010 gtk/gtknotebook.c:4085
+#: gtk/gtknotebook.c:2009 gtk/gtknotebook.c:4084
 #, c-format
 msgid "Page %u"
 msgstr "Page %u"

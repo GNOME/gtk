@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.1.15\n"
-"POT-Creation-Date: 1999-01-28 00:37-0600\n"
+"POT-Creation-Date: 1999-02-16 14:28-0600\n"
 "PO-Revision-Date: 1999-02-09 06:07+0900\n"
 "Last-Translator: Changwoo Ryu <cwryu@adam.kaist.ac.kr>\n"
 "Language-Team: Korean <ko@li.org>\n"
@@ -12,48 +12,48 @@ msgstr ""
 "Content-Type: text/plain; charset=euc-kr\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: gtk/gtkcolorsel.c:202
+#: gtk/gtkcolorsel.c:205
 msgid "Hue:"
 msgstr "색상:"
 
-#: gtk/gtkcolorsel.c:203
+#: gtk/gtkcolorsel.c:206
 msgid "Saturation:"
 msgstr "채도:"
 
-#: gtk/gtkcolorsel.c:204
+#: gtk/gtkcolorsel.c:207
 msgid "Value:"
 msgstr "값:"
 
-#: gtk/gtkcolorsel.c:205
+#: gtk/gtkcolorsel.c:208
 msgid "Red:"
 msgstr "적색:"
 
-#: gtk/gtkcolorsel.c:206
+#: gtk/gtkcolorsel.c:209
 msgid "Green:"
 msgstr "녹색:"
 
-#: gtk/gtkcolorsel.c:207
+#: gtk/gtkcolorsel.c:210
 msgid "Blue:"
 msgstr "청색:"
 
-#: gtk/gtkcolorsel.c:208
+#: gtk/gtkcolorsel.c:211
 msgid "Opacity:"
 msgstr "불투명:"
 
 #. The OK button
-#: gtk/gtkcolorsel.c:1644 gtk/gtkfilesel.c:461 gtk/gtkfontsel.c:3465
+#: gtk/gtkcolorsel.c:1664 gtk/gtkfilesel.c:461 gtk/gtkfontsel.c:3465
 #: gtk/gtkgamma.c:408
 msgid "OK"
 msgstr "확인"
 
 #. The Cancel button
-#: gtk/gtkcolorsel.c:1650 gtk/gtkfilesel.c:468 gtk/gtkfilesel.c:843
+#: gtk/gtkcolorsel.c:1670 gtk/gtkfilesel.c:468 gtk/gtkfilesel.c:843
 #: gtk/gtkfilesel.c:943 gtk/gtkfilesel.c:1058 gtk/gtkfontsel.c:3478
 #: gtk/gtkgamma.c:416
 msgid "Cancel"
 msgstr "취소"
 
-#: gtk/gtkcolorsel.c:1655
+#: gtk/gtkcolorsel.c:1675
 msgid "Help"
 msgstr "도움말"
 
@@ -432,7 +432,7 @@ msgstr "(사용 안함)"
 msgid "clear"
 msgstr "지움"
 
-#: gtk/gtknotebook.c:2009 gtk/gtknotebook.c:4082
+#: gtk/gtknotebook.c:2009 gtk/gtknotebook.c:4084
 #, c-format
 msgid "Page %u"
 msgstr "페이지 %u"

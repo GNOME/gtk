@@ -1,3 +1,16 @@
+Tue Feb 16 14:25:44 CST 1999 Shawn T. Amundson <amundson@gtk.org>
+
+	* INSTALL
+	  README
+	  configure.in
+	  gtk+.spec
+	  docs/gtk-config.1: version = 1.1.16
+
+	* Makefile.am: removed colorsel example since it
+	  doesn't actually exist.
+
+	* Released GTK+ 1.1.16
+
 Mon Feb 15 23:55:27 1999  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/testgtk.c (create_text): Use a ScrolledWindow

@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.1.14\n"
-"POT-Creation-Date: 1999-01-10 23:24+0100\n"
+"POT-Creation-Date: 1999-02-16 14:28-0600\n"
 "PO-Revision-Date: 1999-02-07 17:37+0100\n"
 "Last-Translator: Pablo Saratxaga <srtxg@chanae.alphanet.ch>\n"
 "Language-Team: \n"
@@ -15,48 +15,48 @@ msgstr ""
 "Date: 1991-02-07 13:01:00+0100\n"
 "From: Pablo Saratxaga <srtxg@chanae.alphanet.ch>\n"
 
-#: gtk/gtkcolorsel.c:202
+#: gtk/gtkcolorsel.c:205
 msgid "Hue:"
 msgstr "Tinte:"
 
-#: gtk/gtkcolorsel.c:203
+#: gtk/gtkcolorsel.c:206
 msgid "Saturation:"
 msgstr "Saturación:"
 
-#: gtk/gtkcolorsel.c:204
+#: gtk/gtkcolorsel.c:207
 msgid "Value:"
 msgstr "Valor:"
 
-#: gtk/gtkcolorsel.c:205
+#: gtk/gtkcolorsel.c:208
 msgid "Red:"
 msgstr "Rojo:"
 
-#: gtk/gtkcolorsel.c:206
+#: gtk/gtkcolorsel.c:209
 msgid "Green:"
 msgstr "Verde:"
 
-#: gtk/gtkcolorsel.c:207
+#: gtk/gtkcolorsel.c:210
 msgid "Blue:"
 msgstr "Azul:"
 
-#: gtk/gtkcolorsel.c:208
+#: gtk/gtkcolorsel.c:211
 msgid "Opacity:"
 msgstr "Opacidad:"
 
 #. The OK button
-#: gtk/gtkcolorsel.c:1644 gtk/gtkfilesel.c:461 gtk/gtkfontsel.c:3465
+#: gtk/gtkcolorsel.c:1664 gtk/gtkfilesel.c:461 gtk/gtkfontsel.c:3465
 #: gtk/gtkgamma.c:408
 msgid "OK"
 msgstr "OK"
 
 #. The Cancel button
-#: gtk/gtkcolorsel.c:1650 gtk/gtkfilesel.c:468 gtk/gtkfilesel.c:843
+#: gtk/gtkcolorsel.c:1670 gtk/gtkfilesel.c:468 gtk/gtkfilesel.c:843
 #: gtk/gtkfilesel.c:943 gtk/gtkfilesel.c:1058 gtk/gtkfontsel.c:3478
 #: gtk/gtkgamma.c:416
 msgid "Cancel"
 msgstr "Anular"
 
-#: gtk/gtkcolorsel.c:1655
+#: gtk/gtkcolorsel.c:1675
 msgid "Help"
 msgstr "Ayuda"
 
@@ -436,7 +436,7 @@ msgstr "(desactivado)"
 msgid "clear"
 msgstr "limpiar"
 
-#: gtk/gtknotebook.c:2009 gtk/gtknotebook.c:4082
+#: gtk/gtknotebook.c:2009 gtk/gtknotebook.c:4084
 #, c-format
 msgid "Page %u"
 msgstr "Página %u"
