@@ -1,53 +1,301 @@
 <refentry id="gtk-building" revision="6 Sept 2001">
 <refmeta>
-<refentrytitle>Compiling the GTK+ package</refentrytitle>
+<refentrytitle>Compiling the GTK+ libraries</refentrytitle>
 <manvolnum>3</manvolnum>
 <refmiscinfo>GTK Library</refmiscinfo>
 </refmeta>
 
 <refnamediv>
-<refname>Compiling the GTK+ Package</refname>
+<refname>Compiling the GTK+ Libraries</refname>
 <refpurpose>
 How to compile GTK+ itself
 </refpurpose>
 </refnamediv>
-
-    <refsect1 id="building">
-      <title>Building the Library on UNIX</title>
-      <para>
-	On UNIX, GTK+ uses the standard GNU build system,
-	using <application>autoconf</application> for package
-	configuration and resolving portability issues,
-	<application>automake</application> for building makefiles
-	that comply with the GNU Coding Standards, and
-	<application>libtool</application> for building shared
-	libraries on multiple platforms.  The normal sequence for
-	compiling and installing the GTK+ library is thus:
-
-	<literallayout>
-	  <userinput>./configure</userinput>
-	  <userinput>make</userinput>
-	  <userinput>make install</userinput>
-	</literallayout>
-      </para>
-
-      <para>
-	The standard options provided by <application>GNU
-	autoconf</application> may be passed to the
-	<command>configure</command> script.  Please see the
-	<application>autoconf</application> documentation or run
-	<command>./configure --help</command> for information about
-	the standard options.
-      </para>
-    </refsect1>
-
-    <refsect1 id="extra-configuration-options">
+  <refsect1 id="overview">
+    <title>Building GTK+ on UNIX-like systems</title>
+    <para>
+      This chapter covers building and installing GTK+ on UNIX and
+      UNIX-like systems such as Linux. Compiling GTK+ on Microsoft
+      Windows is different in detail and somewhat more difficult to
+      get going since the necessary tools aren't included with
+      the operating system.
+    </para>
+    <para>
+      Before we get into the details of how to compile GTK+, we should
+      mention that in many cases, binary packages of GTK+ prebuilt for
+      your operating system will be available, either from your
+      operating system vendor or from independent sources. If such a
+      set of packages is available, installing it will get you
+      programming wih GTK+ much faster than building it yourself. In
+      fact, you may well already have GTK+ installed on your system
+      already.
+    </para>
+    <para>
+      On UNIX-like systems GTK+ uses the standard GNU build system,
+      using <application>autoconf</application> for package
+      configuration and resolving portability issues,
+      <application>automake</application> for building makefiles that
+      comply with the GNU Coding Standards, and
+      <application>libtool</application> for building shared libraries
+      on multiple platforms.
+    </para>
+    <para>
+      If you are building GTK+ from the distributed source packages,
+      then won't need these tools installed; the necessary pieces
+      of the tools are already included in the source packages. But
+      it's useful to know a bit about how packages that use these
+      tools work. A source package is distributed as a
+      <literal>tar.gz</literal> file which you unpack into a 
+      directory full of the source files as follows:
+    </para>
+    <programlisting>
+      tar xvfz gtk+-2.0.0.tar.gz
+    </programlisting>
+    <para>
+      In the toplevel of the directory that is created, there will be
+      a shell script called <filename>configure</filename> which
+      you then run to take the template makefiles called
+      <filename>Makefile.in</filename> in the package and create
+      makefiles customized for your operating system. The <filename>configure</filename>
+      script can be passed various command line arguments to determine how
+      the package is built and installed. The most commonly useful
+      argument is the <systemitem>--prefix</systemitem> argument which
+      determines where the package is installed. To install a package
+      in <filename>/opt/gtk</filename> you would run configure as:
+    </para>
+    <programlisting>
+      ./configure --prefix=/opt/gtk
+    </programlisting>
+    <para>
+      A full list of options can be found by running
+      <filename>configure</filename> with the
+      <systemitem>--help</systemitem> argument. In general, the defaults are
+      right and should be trusted. After you've run
+      <filename>configure</filename>, you then run the
+      <command>make</command> command to build the package and install
+      it.
+    </para>
+    <programlisting>
+      make
+      make install
+    </programlisting>
+    <para>
+      If you don't have permission to write to the directory you are
+      installing in, you may have to change to root temporarily before
+      running <literal>make install</literal>.
+    </para>
+    <para>
+      Several environment variables are useful to pass to set before
+      running configure. <envar>CPPFLAGS</envar> contains options to
+      pass to the C compiler, and is used to tell the compiler where
+      to look for include files. The <envar>LDFLAGS</envar> variable
+      is used in a similar fashion for the linker. Finally the
+      <envar>PKG_CONFIG_PATH</envar> environment variable contains
+      a search path that <command>pkg-config</command> (see below)
+      uses when looking for for file describing how to compile
+      programs using different libraries. If you were installing GTK+
+      and it's dependencies into /opt/gtk, you might want to set
+      these variables as:
+    </para>
+    <programlisting>
+      CPPFLAGS="-I /opt/gtk/include"
+      LDFLAGS="-L/opt/gtk/lib"
+      PKG_CONFIG_PATH="/opt/gtk/lib/pkgconfig"
+      export CPPFLAGS LDFLAGS PKG_CONFIG_PATH
+    </programlisting>
+    <para>
+      You may also need to set the <envar>LD_LIBRARY_PATH</envar>
+      environment variable so the systems dynamic linker can find
+      the newly installed libraries, and the <envar>PATH</envar>
+      environment program so that utility binaries installed by
+      the various libraries will be found.
+    </para>
+    <programlisting>
+      LD_LIBRARY_PATH="/opt/gtk/lib"
+      PATH="/opt/gtk/bin:$PATH"
+      export LD_LIBRARY_PATH PATH
+    </programlisting>
+  </refsect1>
+  <refsect1 id="dependencies">
+    <title>Dependencies</title>
+    <para>
+      Before you can compile the GTK+ widget toolkit, you need to have
+      various other tools and libraries installed on your
+      system. The two tools needed during the build process (as
+      differentiated from the tools used in when creating GTK+
+      mentioned above such as <application>autoconf</application>)
+      are <command>pkg-config</command> and GNU make.
+    </para>
+    <itemizedlist>
+      <listitem>
+	<para>
+	  <ulink
+	  url="http://www.freedesktop.org/software/pkgconfig/">pkg-config</ulink>
+	  is a tool for tracking the compilation flags needed for
+	  libraries that is used by the GTK+ libraries. (For each
+	  library, a small ".pc" text file is installed in a standard
+	  location that contains the compilation flags needed for that
+	  library along with version number information.)  The version
+	  of <command>pkg-config</command> needed to build GTK+ is
+	  mirrored in the <filename>dependencies</filename> directory
+	  on the <ulink url="ftp://ftp.gtk.org/pub/gtk/v2.0/">GTK+ FTP
+	  site.</ulink>
+	</para>
+      </listitem>
+      <listitem>
+	<para>
+	  The GTK+ makefiles will mostly work with different versions
+	  of <command>make</command>, however, there tends to be
+	  a few incompatibilities, so the GTK+ team recommends
+	  installing <ulink url="http://www.gnu.org/software/make">GNU
+	    make</ulink> if you don't already have it on your system
+	  and using it. (It may be called <command>gmake</command>
+	  rather than <command>make</command>)
+	</para>
+      </listitem>
+    </itemizedlist>
+    <para>
+      Three of the libraries that GTK+ depends on are maintained by
+      by the GTK+ team: GLib, Pango, and ATK. Other libraries are
+      maintained separately.
+    </para>
+    <itemizedlist>
+      <listitem>
+	<para>
+	  The GLib library provides core non-graphical functionality
+	  such as high level data types, unicode manipulation, and
+	  a object and type system to C programs. It is available
+	  from the <ulink url="ftp://ftp.gtk.org/pub/gtk/v2.0/">GTK+
+	  FTP site.</ulink>
+	</para>
+      </listitem>
+      <listitem>
+	<para>
+	  Pango is a library for internationalized text handling. It
+	  is available from the <ulink
+	  url="ftp://ftp.gtk.org/pub/gtk/v2.0/">GTK+ FTP site.</ulink>
+	</para>
+      </listitem>
+      <listitem>
+	<para>
+	  ATK is the Accessibility Toolkit. It provides a set of generic
+	  interfaces allowing accessibility technologies such as
+	  screen readers to interact with a graphical user interface.
+	  It is available from the <ulink
+	  url="ftp://ftp.gtk.org/pub/gtk/v2.0/">GTK+ FTP site.</ulink>
+	</para>
+      </listitem>
+      <listitem>
+	<para>
+	  The <ulink url="http://www.gnu.org/software/libiconv/">GNU
+	  libiconv library</ulink> is needed to build GLib if your
+	  system doesn't have the <function>iconv()</function>
+	  function for doing conversion between character
+	  encodings. Most modern systems should have
+	  <function>iconv()</function>.
+	</para>
+      </listitem>
+      <listitem>
+	<para>
+	  The libintl library from the <ulink
+	  url="http://www.gtk.org/software/gettext">GNU gettext
+	  package</ulink> is needed if your system doesn't have the
+	  <function>gettext()</function> functionality for handling
+	  message translation databases.
+	</para>
+      </listitem>
+      <listitem>
+	<para>
+	  The <ulink
+	    url="ftp://ftp.uu.net/graphics/jpeg/">JPEG</ulink>,
+	  <ulink url="http://www.libpng.org">PNG</ulink>, and
+	  <ulink url="http://www.libtiff.org">TIFF</ulink> image loading libraries are needed to
+	  compile GTK+. You probably already have these libraries
+	  installed, but if not, the versions you need are available in
+	  the <filename>dependencies</filename> directory on the the
+	  <ulink url="ftp://ftp.gtk.org/pub/gtk/v2.0/dependencies/">GTK+
+	    FTP site.</ulink>. (Before installing these libraries
+	  from source, you should check if your operating system
+	  vendor has prebuilt packages of these libraries that you
+	  don't have installed.)
+	</para>
+      </listitem>
+      <listitem>
+	<para>
+	  While not required for running GTK+ on X, you may want install the
+	  <ulink url="http://www.freetype.org">FreeType
+	  library</ulink> so that the PangoFT2 backend for Pango will
+	  be built. This backend is used by the linux-fb backend for
+	  GTK+ and applications that want to render independently
+	  of the X display. You'll need at least version 2.0.1.
+	</para>
+      </listitem>
+      <listitem>
+	<para>
+	  The libraries from the X window system are needed to build
+	  Pango and GTK+. You should already have these installed on
+	  your system, but it's possible that you'll need to install
+	  the development environment for these libraries that your
+	  operating system vendor provides. If you have a recent
+	  version of the XFree86 system, such as 4.2.0, then Pango
+	  and GTK+ will take advantage of the Xft and Xrender
+	  libraries to provide anti-aliased and scaleable fonts in
+	  a much more sophisticated fashion then the support for
+	  core X fonts.
+	</para>
+      </listitem>
+    </itemizedlist>
+  </refsect1>
+  <refsect1 id="building">
+    <title>Building and testing GTK+</title>
+    <para>
+      First make sure that you have the necessary external
+      dependencies installed: <command>pkg-config</command>, GNU make,
+      the JPEG, PNG, and TIFF libraries, FreeType, and, if necessary,
+      libiconv and libintl. To get detailed information about building 
+      ithese packages, see the documentation provided with the
+      individual packages.
+      On a Linux system, it's quite likely you'll have all of these
+      installed already except for <command>pkg-config</command>.
+    </para>
+    <para>
+      Then build and install the GTK+ libraries in the order:
+      GLib, Pango, ATK, then GTK+. For each library, follow the
+      steps of <literal>configure</literal>, <literal>make</literal>,
+      <literal>make install</literal> mentioned above. If you're
+      lucky, this will all go smoothly, and you'll be ready to
+      <link linkend="gtk-compiling">start compiling your own GTK+
+	applications</link>. You can test your GTK+ installation
+      by running the <command>gtk-demo</command> program that
+      GTK+ installs. If you have the Xft library, you can turn on
+      anti-aliased fonts by setting the <envar>GDK_USE_XFT</envar>
+      environment variable. 
+    </para>
+    <programlisting>
+      GDK_USE_XFT=1 gtk-demo
+    </programlisting>
+    <para>
+      If one of the <filename>configure</filename> scripts fails or running
+      <command>make</command> fails, look closely at the at the error
+      messages printed; these will often provide useful information
+      as to what went wrong. When <filename>configure</filename>
+      fails, extra information, such as errors that a test compilation
+      ran into, is found in the file <filename>config.log</filename>.
+      Looking at the last couple of hundred lines in this file will
+      frequently make clear what went wrong. If all else fails, you
+      can ask for help on the gtk-list mailing list.
+      See <xref linkend="gtk-resources"> for more information.
+    </para>
+  </refsect1>
+      <refsect1 id="extra-configuration-options">
       <title>Extra Configuration Options</title>
 
       <para>
 	In addition to the normal options, the
-	<command>configure</command> script in the GTK+
-	library supports these additional arguments:
+	<command>configure</command> script for the GTK+ library
+	supports a number of additional arguments. (Command line
+	arguments for the other GTK+ libraries are described in
+	the documentation distributed with the those libraries.)
 
 	<cmdsynopsis>
 	  <command>configure</command>
@@ -142,6 +390,31 @@ How to compile GTK+ itself
       </formalpara>
 
       <formalpara>
+        <title><systemitem>--enable-explicit-deps</systemitem> and
+          <systemitem>--disable-explicit-deps</systemitem></title>
+        <para>
+	  If <systemitem>--enable-explicit-deps</systemitem> is
+	  specified then GTK+ will write the full set of libraries
+	  that GTK+ depends upon into its .pc files to be used when
+	  programs depending on GTK+ are linked. Otherwise, GTK+
+	  only will include the GTK+ libraries themselves, and
+	  will depend on system library dependency facilities to
+	  bring in the other libraries.
+	  By default GTK+ will disable explicit dependencies unless
+	  it detects that they are needed on the system. (If you
+	  specify <systemitem>--enable-static</systemitem> to force
+	  building of static libraries, then explicit dependencies
+	  will be written since library dependencies don't work
+	  for static libraries.) Specifying
+	  <systemitem>--enable-explicit-deps</systemitem> or
+	  <systemitem>--enable-static</systemitem> can cause
+	  compatibility
+	  problems when libraries that GTK+ depends upon change
+	  their versions, and should be avoided if possible.
+        </para>
+      </formalpara>
+
+      <formalpara>
         <title><systemitem>--disable-shm</systemitem> and
           <systemitem>--enable-shm</systemitem></title>
  
@@ -194,27 +467,37 @@ How to compile GTK+ itself
 	  <systemitem>--enable-gtk-doc</systemitem></title>
 
 	<para>
-	  By default the <command>configure</command> script will try
-	  to auto-detect whether the
-	  <application>gtk-doc</application> package is installed.  If
-	  it is, then it will use it to extract and build the
-	  documentation for the GTK+ library.  These options
-	  can be used to explicitly control whether 
-          <application>gtk-doc</application> should be
-	  used or not.  If it is not used, the distributed,
-	  pre-generated HTML files will be installed instead of
-	  building them on your machine.
+	  The <application>gtk-doc</application> package is
+	  used to generate the reference documented included
+	  with GTK+. By default support for gtk-doc is disabled
+	  because it requires various extra dependencies
+	  to be installed. If you have
+	  <application>gtk-doc</application> installed and
+	  are modifying GTK+, you may want to enable
+	  <application>gtk-doc</application> support by passing
+	  in <systemitem>--enable-gtk-doc</systemitem>. If not
+	  enabled pre-generated HTML files distributed with GTK+
+	  will be installed.
 	</para>
       </formalpara>
 
       <formalpara>
         <title><systemitem>--with-xinput</systemitem></title>
-
         <para>
-          
+	  Controls whether GTK+ is built with support for the XInput
+	  extension. The XInput extension provides an interface
+	  to extended input devices such as graphics tablets.
+	  When this support is compiled in, specially written
+	  GTK+ programs can get access to subpixel positions,
+	  multiple simultaneous input devices, and extra "axes"
+	  provided by the device such as pressure and tilt
+	  information. This is only known to work well on XFree86
+	  systems, though other systems do have this extension.
+	  (If <systemitem>--with-xinput=gxi</systemitem>
+	  is supplied, support for an obsolete and unsupported
+	  way of interacting with XInput is compiled.)
         </para>
       </formalpara>
-
       <formalpara>
 	<title><systemitem>--with-gdktarget</systemitem></title>
 
@@ -238,3 +521,7 @@ How to compile GTK+ itself
     </refsect1>
 
 </refentry>
+
+<!-- Local Variables: -->
+<!-- sgml-parent-document: ("gtk-docs.sgml" "chapter" "refentry")  -->
+<!-- End: -->

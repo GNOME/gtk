@@ -1,3 +1,15 @@
+Wed Mar  6 18:11:05 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/resources.sgml: Mention the need to subscribe
+	to the GTK+ mailing lists.
+
+        * gtk/building.sgml: Go into much more details about
+	building the entire set of GTK+ libraries and about the
+	dependencies that are required.
+
+	* gtk/building.sgml: Add docs for --enable-explicit-deps,
+	--with-xinput.
+
 Wed Mar  6 14:12:34 2002  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/tmpl/gtktreeselection.sgml: docs
