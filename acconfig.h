@@ -48,9 +48,6 @@
 #undef USE_GMODULE
 #undef USE_MMX
 
-/* Define to use X11R6 additions to XIM */
-#undef USE_X11R6_XIM
-
 /* Define to use XKB extension */
 #undef HAVE_XKB
 

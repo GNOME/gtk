@@ -1,3 +1,11 @@
+Wed Jun 12 14:41:43 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* configure.in: Fix some problems with case statements
+	for checking for omitted deps. (#84202, Jacob Berkman.)
+
+	* configure.in: Remove USE_X11R6_XIM checks since we 
+	no longer use them.
+
 Wed Jun 12 14:18:45 2002  Owen Taylor  <otaylor@redhat.com>
  
  	* gtk/gtkimcontextsimple.c: Add compose sequences
