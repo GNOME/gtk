@@ -336,13 +336,13 @@ compute_hint (GdkPixbuf *pixbuf,
   for (i = y0; i < y1; i++)
     {
       guchar *p = data + i * rowstride + x0 * n_channels;
-      guchar r = *(p++);
-      guchar g = *(p++);
-      guchar b = *(p++);
+      guchar r = p[0];
+      guchar g = p[1];
+      guchar b = p[2];
       guchar a = 0;
       
       if (n_channels == 4)
-	a = *(p++);
+	a = p[3];
 
       for (j = x0; j < x1 ; j++)
 	{

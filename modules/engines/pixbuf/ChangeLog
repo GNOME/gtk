@@ -1,3 +1,8 @@
+Mon Jan 28 15:34:43 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* pixbuf-render.c (compute_hint): Fix hint computation
+	again.
+
 Mon Jan 28 12:17:07 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* pixbuf-render.c (compute_hint): Fix problems in computing
