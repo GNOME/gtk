@@ -82,6 +82,8 @@ void
 gdk_dnd_display_drag_cursor(gint x, gint y, gboolean drag_ok,
 			    gboolean change_made)
 {
+  int more_debug = 0;
+  
   if(!gdk_dnd.dnd_grabbed)
     return;
 
@@ -104,7 +106,7 @@ gdk_dnd_display_drag_cursor(gint x, gint y, gboolean drag_ok,
       if(x == -1 && y == -1) /* We're supposed to find it out for ourselves */
 	XQueryPointer(gdk_display, gdk_root_window,
 		      &wtmp, &wtmp, &x, &y, &itmp, &itmp, &masktmp);
-
+ 
       if(drag_ok)
 	{
 	  mypix = gdk_dnd.c->drag_pm_ok;
@@ -120,10 +122,13 @@ gdk_dnd_display_drag_cursor(gint x, gint y, gboolean drag_ok,
       if(change_made)
 	{
 	  gdk_window_hide(opix);
-	  gdk_window_show(mypix); /* There ought to be a way to know if
-				     a window is already mapped etc. */
 	}
       gdk_window_move(mypix, x - myhotspot->x, y - myhotspot->y);
+      if (change_made)
+        {
+	  gdk_window_show(mypix); /* There ought to be a way to know if
+				     a window is already mapped etc. */
+	}      
     }
   else if(change_made)
     {

@@ -1,3 +1,9 @@
+1998-03-30  Miguel de Icaza  <miguel@nuclecu.unam.mx>
+
+	* gdk/gdkdnd.c (gdk_dnd_display_drag_cursor): First fix: Move the
+	window first, display it after (this removes one of the annoying
+	flashing effects).
+
 Mon Mar 30 21:29:43 1998  Owen Taylor  <owt1@cornell.edu>
 
 	* gtk/gtkentry.c: Add a "style_set" callback, so the
