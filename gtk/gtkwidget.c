@@ -2799,7 +2799,7 @@ gtk_widget_event (GtkWidget *widget,
        */
       if (event->any.send_event)
 	parent = NULL;
-      else
+      else if (event->any.window)
 	{
 	  parent = widget;
 	  while (parent)
@@ -2808,6 +2808,20 @@ gtk_widget_event (GtkWidget *widget,
 		break;
 	      parent = parent->parent;
 	    }
+	  /* <HACK> gnome-dock didn't propagate draws to torn off
+	   *        children. So don't consider those ancestors.
+	   */
+	  if (parent)
+	    {
+	      GdkWindow *parent_window = event->any.window;
+
+	      while (parent_window && parent_window != parent->window)
+		  parent_window = gdk_window_get_parent (parent_window);
+
+	      if (!parent_window)
+		parent = NULL;
+	    }
+	  /* </HACK> */
 	}
       if (!event->any.window || parent)
 	{
