@@ -98,6 +98,11 @@ struct _GdkDevicePrivate {
   GdkDevice  info;
 };
 
+struct _GdkDeviceClass
+{
+  GObjectClass parent_class;
+};
+
 struct _GdkInputWindow
 {
   /* gdk window */
@@ -141,6 +146,7 @@ gint               gdk_input_enable_window  (GdkWindow        *window,
 					     GdkDevicePrivate *gdkdev);
 gint               gdk_input_disable_window (GdkWindow        *window,
 					     GdkDevicePrivate *gdkdev);
+void              _gdk_init_input_core      (void);
 
 GdkDevicePrivate *gdk_input_find_device (guint32 id);
 GdkInputWindow *gdk_input_window_find (GdkWindow *window);

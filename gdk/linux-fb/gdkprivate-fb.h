@@ -155,9 +155,11 @@ struct _GdkFBDisplay
   int manager_blocked;
 };
 
-typedef struct {
-  GdkVisual base;
-} GdkVisualPrivateFB;
+struct _GdkVisualClass
+{
+  GObjectClass parent_class;
+};
+
 
 typedef struct {
   GHashTable *hash;

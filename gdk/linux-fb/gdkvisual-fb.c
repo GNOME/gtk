@@ -31,10 +31,51 @@
 
 static GdkVisual *system_visual = NULL;
 
+static void
+gdk_visual_finalize (GObject *object)
+{
+  g_error ("A GdkVisual object was finalized. This should not happen");
+}
+
+static void
+gdk_visual_class_init (GObjectClass *class)
+{
+  class->finalize = gdk_visual_finalize;
+}
+
+
+GType
+gdk_visual_get_type (void)
+{
+  static GType object_type = 0;
+
+  if (!object_type)
+    {
+      static const GTypeInfo object_info =
+      {
+        sizeof (GdkVisualClass),
+        (GBaseInitFunc) NULL,
+        (GBaseFinalizeFunc) NULL,
+        (GClassInitFunc) gdk_visual_class_init,
+        NULL,           /* class_finalize */
+        NULL,           /* class_data */
+        sizeof (GdkVisual),
+        0,              /* n_preallocs */
+        (GInstanceInitFunc) NULL,
+      };
+      
+      object_type = g_type_register_static (G_TYPE_OBJECT,
+                                            "GdkVisual",
+                                            &object_info, 0);
+    }
+  
+  return object_type;
+}
+
 void
 gdk_visual_init (void)
 {
-  system_visual = g_new0 (GdkVisual, 1);
+  system_visual = g_object_new (GDK_TYPE_VISUAL, NULL);
 
   system_visual->depth = system_visual->bits_per_rgb = gdk_display->modeinfo.bits_per_pixel;
   system_visual->byte_order = GDK_LSB_FIRST;
@@ -99,17 +140,6 @@ gdk_visual_init (void)
       g_assert_not_reached ();
       break;
     }
-}
-
-GdkVisual*
-gdk_visual_ref (GdkVisual *visual)
-{
-  return visual;
-}
-
-void
-gdk_visual_unref (GdkVisual *visual)
-{
 }
 
 gint

@@ -1,3 +1,14 @@
+2001-06-30  Alex Larsson  <alexl@redhat.com>
+
+	* gdk/linux-fb/gdkinput-none.c:
+	* gdk/linux-fb/gdkinput.c:
+	* gdk/linux-fb/gdkinputprivate.h:
+	Convert GdkDevice to a GObject.
+
+	* linux-fb/gdkprivate-fb.h:
+	* linux-fb/gdkvisual-fb.c:
+	Convert GdkVisual to a GObject.
+
 2001-06-29  Alex Larsson  <alexl@redhat.com>
 
 	* gdk/gdkvisual.h:
