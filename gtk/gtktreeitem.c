@@ -1036,4 +1036,6 @@ gtk_tree_item_forall (GtkContainer *container,
     (* callback) (bin->child, callback_data);
   if (include_internals && tree_item->subtree)
     (* callback) (tree_item->subtree, callback_data);
+  if (include_internals && tree_item->pixmaps_box)
+    (* callback) (tree_item->pixmaps_box, callback_data);
 }
