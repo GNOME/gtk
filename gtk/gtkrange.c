@@ -880,8 +880,6 @@ gtk_range_map (GtkWidget *widget)
 {
   GtkRange *range = GTK_RANGE (widget);
   
-  g_return_if_fail (GTK_IS_RANGE (widget));
-
   gdk_window_show (range->event_window);
 
   GTK_WIDGET_CLASS (parent_class)->map (widget);
@@ -892,8 +890,6 @@ gtk_range_unmap (GtkWidget *widget)
 {
   GtkRange *range = GTK_RANGE (widget);
     
-  g_return_if_fail (GTK_IS_RANGE (widget));
-
   gdk_window_hide (range->event_window);
 
   GTK_WIDGET_CLASS (parent_class)->unmap (widget);

@@ -1,5 +1,10 @@
 2004-09-22  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkrange.c (gtk_range_map, gtk_range_unmap): 
+	* gtk/gtkbutton.c (gtk_button_map, gtk_button_unmap): Remove
+	unnecessary g_return_if_fail()s from virtual functions.  (#153469,
+	(Tristan Van Berkom)
+
 	* gtk/gtkaboutdialog.c (gtk_about_dialog_finalize): Don't leak
 	cursors.  (#153468, Christian Persch)
 

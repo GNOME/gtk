@@ -834,8 +834,6 @@ gtk_button_map (GtkWidget *widget)
 {
   GtkButton *button = GTK_BUTTON (widget);
   
-  g_return_if_fail (GTK_IS_BUTTON (widget));
-
   GTK_WIDGET_CLASS (parent_class)->map (widget);
 
   if (button->event_window)
@@ -847,8 +845,6 @@ gtk_button_unmap (GtkWidget *widget)
 {
   GtkButton *button = GTK_BUTTON (widget);
     
-  g_return_if_fail (GTK_IS_BUTTON (widget));
-
   if (button->event_window)
     gdk_window_hide (button->event_window);
 
