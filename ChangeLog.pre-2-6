@@ -1,3 +1,11 @@
+2000-04-15  Havoc Pennington  <hp@pobox.com>
+
+	* gdk/gdkdnd.h: clean up enum format, remove extra comma, 
+	this keeps scanner scripts from getting confused.
+
+	* gdk/gdkdraw.c (gdk_drawable_get_data): This should return the
+	data, rather than void
+
 2000-04-15  Tor Lillqvist  <tml@iki.fi>
 
 	* gtk/gtkclist.c (gtk_clist_motion)

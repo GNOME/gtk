@@ -63,11 +63,11 @@ gdk_drawable_set_data (GdkDrawable   *drawable,
   g_dataset_set_data_full (drawable, key, data, destroy_func);
 }
 
-void          
+gpointer
 gdk_drawable_get_data (GdkDrawable   *drawable,
 		       const gchar   *key)
 {
-  g_dataset_get_data (drawable, key);
+  return g_dataset_get_data (drawable, key);
 }
 
 GdkDrawableType
