@@ -1,3 +1,8 @@
+2001-09-25  Havoc Pennington  <hp@redhat.com>
+
+	* tests/testtextbuffer.c (line_separator_tests): Add tests for
+	line separators, addresses bug #57428
+
 Tue Sep 25 12:34:42 2001  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtkentry.c: Make a GtkCellEditable

@@ -22,6 +22,12 @@ static void fill_buffer (GtkTextBuffer *buffer);
 
 static void run_tests (GtkTextBuffer *buffer);
 
+static void check_get_set_text (GtkTextBuffer *buffer,
+                                const char    *str);
+
+
+static void line_separator_tests (void);
+
 int
 main (int argc, char** argv)
 {
@@ -29,7 +35,6 @@ main (int argc, char** argv)
   int n;
   gunichar ch;
   GtkTextIter start, end;
-  gchar *text;
   
   gtk_init (&argc, &argv);
 
@@ -41,6 +46,9 @@ main (int argc, char** argv)
   /* First, we turn on btree debugging. */
   gtk_debug_flags |= GTK_DEBUG_TEXT;
 
+  /* Check some line separator stuff */
+  line_separator_tests ();
+  
   /* Create a buffer */
   buffer = gtk_text_buffer_new (NULL);
 
@@ -58,26 +66,12 @@ main (int argc, char** argv)
   run_tests (buffer);
 
   /* Check set/get text */
-  gtk_text_buffer_set_text (buffer, "Hello", -1);
-  if (gtk_text_buffer_get_char_count (buffer) != g_utf8_strlen ("Hello", -1))
-    g_error ("Wrong number of chars (%d not %d)",
-             gtk_text_buffer_get_char_count (buffer),
-             (int) g_utf8_strlen ("Hello", -1));
-  gtk_text_buffer_get_bounds (buffer, &start, &end);
-  text = gtk_text_buffer_get_text (buffer, &start, &end, TRUE);
-  if (strcmp (text, "Hello") != 0)
-    g_error ("Got '%s' as buffer contents", text);
-  g_free (text);
-
-  gtk_text_buffer_set_text (buffer, "", -1);
-
-  n = gtk_text_buffer_get_line_count (buffer);
-  if (n != 1)
-    g_error ("%d lines, expected 1", n);
-
-  n = gtk_text_buffer_get_char_count (buffer);
-  if (n != 0)
-    g_error ("%d chars, expected 0", n);
+  check_get_set_text (buffer, "Hello");
+  check_get_set_text (buffer, "Hello\n");
+  check_get_set_text (buffer, "Hello\r\n");
+  check_get_set_text (buffer, "Hello\r");
+  check_get_set_text (buffer, "Hello\nBar\nFoo");
+  check_get_set_text (buffer, "Hello\nBar\nFoo\n");
   
   /* Put stuff in the buffer */
 
@@ -107,6 +101,36 @@ main (int argc, char** argv)
   g_print ("All tests passed.\n");
 
   return 0;
+}
+
+static void
+check_get_set_text (GtkTextBuffer *buffer,
+                    const char    *str)
+{
+  GtkTextIter start, end;
+  char *text;
+  int n;
+  
+  gtk_text_buffer_set_text (buffer, str, -1);
+  if (gtk_text_buffer_get_char_count (buffer) != g_utf8_strlen (str, -1))
+    g_error ("Wrong number of chars (%d not %d)",
+             gtk_text_buffer_get_char_count (buffer),
+             (int) g_utf8_strlen (str, -1));
+  gtk_text_buffer_get_bounds (buffer, &start, &end);
+  text = gtk_text_buffer_get_text (buffer, &start, &end, TRUE);
+  if (strcmp (text, str) != 0)
+    g_error ("Got '%s' as buffer contents", text);
+  g_free (text);
+
+  gtk_text_buffer_set_text (buffer, "", -1);
+
+  n = gtk_text_buffer_get_line_count (buffer);
+  if (n != 1)
+    g_error ("%d lines, expected 1", n);
+
+  n = gtk_text_buffer_get_char_count (buffer);
+  if (n != 0)
+    g_error ("%d chars, expected 0", n);
 }
 
 static gint
@@ -765,4 +789,99 @@ fill_buffer (GtkTextBuffer *buffer)
   gtk_text_buffer_apply_tag (buffer, tag, &iter, &iter2);  
 
   gdk_pixbuf_unref (pixbuf);
+}
+
+
+/*
+ * Line separator tests (initially to avoid regression on bugzilla #57428)
+ */
+
+static void
+test_line_separation (const char* str,
+                      gboolean    expect_next_line,
+                      gboolean    expect_end_iter,
+                      int         expected_line_count,
+                      int         expected_line_break,
+                      int         expected_next_line_start)
+{
+  GtkTextIter iter;
+  GtkTextBuffer* buffer;
+  gboolean on_next_line;
+  gboolean on_end_iter;
+  gint new_pos;
+
+  buffer = gtk_text_buffer_new (NULL);
+
+  gtk_text_buffer_set_text (buffer, str, -1);
+  gtk_text_buffer_get_iter_at_offset (buffer, &iter, expected_line_break);
+
+  g_assert (gtk_text_iter_ends_line (&iter) || gtk_text_iter_is_end (&iter));
+
+  g_assert (gtk_text_buffer_get_line_count (buffer) == expected_line_count);
+  
+  on_next_line = gtk_text_iter_forward_line (&iter);
+
+  g_assert (expect_next_line == on_next_line);
+
+  on_end_iter = gtk_text_iter_is_end (&iter);
+
+  g_assert (on_end_iter == expect_end_iter);
+  
+  new_pos = gtk_text_iter_get_offset (&iter);
+    
+  if (on_next_line)
+    g_assert (expected_next_line_start == new_pos);
+
+  ++expected_line_break;
+  while (expected_line_break < expected_next_line_start)
+    {
+      gtk_text_buffer_get_iter_at_offset (buffer, &iter, expected_line_break);
+
+      g_assert (!gtk_text_iter_ends_line (&iter));
+
+      on_next_line = gtk_text_iter_forward_line (&iter);
+        
+      g_assert (expect_next_line == on_next_line);
+        
+      new_pos = gtk_text_iter_get_offset (&iter);
+        
+      if (on_next_line)
+        g_assert (expected_next_line_start == new_pos);
+        
+      ++expected_line_break;
+    }
+
+  /* FIXME tests for backward line */
+  
+  g_object_unref (G_OBJECT (buffer));
+}
+
+
+static void
+line_separator_tests (void)
+{
+  char *str;
+  char buf[7] = { '\0', };
+
+  /* Only one character has type G_UNICODE_PARAGRAPH_SEPARATOR in
+   * Unicode 3.0; update this if that changes.
+   */
+#define PARAGRAPH_SEPARATOR 0x2029
+  
+  test_line_separation ("line", FALSE, TRUE, 1, 4, 4);
+  test_line_separation ("line\r\n", FALSE, TRUE, 2, 4, 6);
+  test_line_separation ("line\r", FALSE, TRUE, 2, 4, 5);
+  test_line_separation ("line\n", FALSE, TRUE, 2, 4, 5);
+  test_line_separation ("line\rqw", TRUE, FALSE, 2, 4, 5);
+  test_line_separation ("line\nqw", TRUE, FALSE, 2, 4, 5);
+  test_line_separation ("line\r\nqw", TRUE, FALSE, 2, 4, 6);
+  
+  g_unichar_to_utf8 (PARAGRAPH_SEPARATOR, buf);
+  
+  str = g_strdup_printf ("line%s", buf);
+  test_line_separation (str, FALSE, TRUE, 2, 4, 5);
+  g_free (str);
+  str = g_strdup_printf ("line%sqw", buf);
+  test_line_separation (str, TRUE, FALSE, 2, 4, 5);
+  g_free (str);
 }
