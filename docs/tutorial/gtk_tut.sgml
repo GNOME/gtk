@@ -765,7 +765,7 @@ different styles you can get.
 <p>
 <? <CENTER> >
 <?
-<IMG SRC="packbox1.gif" VSPACE="15" HSPACE="10" WIDTH="528" HEIGHT="235"
+<IMG SRC="gtk_tut_packbox1.gif" VSPACE="15" HSPACE="10" WIDTH="528" HEIGHT="235"
 ALT="Box Packing Example Image">
 >
 <? </CENTER> >
@@ -822,7 +822,7 @@ should make it clearer:
 
 <? <CENTER> >
 <?
-<IMG ALIGN="center" SRC="packbox2.gif" WIDTH="509" HEIGHT="213"
+<IMG ALIGN="center" SRC="gtk_tut_packbox2.gif" WIDTH="509" HEIGHT="213"
 VSPACE="15" HSPACE="10" ALT="Box Packing Example Image">
 >
 <? </CENTER> >
@@ -1266,7 +1266,7 @@ Which means it should look something like this:
 <p>
 <? <CENTER> >
 <?
-<IMG SRC="table.gif" VSPACE="15" HSPACE="10" 
+<IMG SRC="gtk_tut_table.gif" VSPACE="15" HSPACE="10" 
 ALT="Table Packing Example Image" WIDTH="180" HEIGHT="120">
 >
 <? </CENTER> >

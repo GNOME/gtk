@@ -1,3 +1,12 @@
+Fri Mar 13 11:23:55 PST 1998 Shawn T. Amundson <amundson@gimp.org>
+
+	* docs/gtk_tut.sgml:
+	* docs/gtk_tut_it.sgml:
+	* docs/gtk_tut_packbox1.gif:
+        * docs/gtk_tut_packbox2.gif:
+        * docs/gtk_tut_table.gif: added graphics, update tutorials
+          appropriately
+
 Fri Mar 13 18:25:07 1998  Tim Janik  <timj@gimp.org>
 
 	* gtk/gtkcombo.c: fix popup calculations (removal

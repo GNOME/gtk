@@ -773,7 +773,7 @@ Alla fine per&ograve;, si possono ottenere essenzialmente cinque diversi stili.
 
 <p>
 <?  
-<IMG ALIGN="center" SRC="packbox1.gif"
+<IMG ALIGN="center" SRC="gtk_tut_packbox1.gif"
 VSPACE="15" HSPACE="10" ALT="Box Packing Example Image" WIDTH="528"
 HEIGHT="235">
 >
@@ -831,7 +831,7 @@ riempimento viene aggiuno a ciascuno dei lati dell'oggetti. La seguente figura
 dovrebbe chiarire meglio questo punto:
 
 <?
-<IMG ALIGN="center" SRC="packbox2.gif"
+<IMG ALIGN="center" SRC="gtk_tut_packbox2.gif"
 VSPACE="15" HSPACE="10" ALT="Box Packing Example Image" WIDTH="509"
 HEIGHT="213">
 >
