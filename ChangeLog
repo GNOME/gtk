@@ -1,3 +1,11 @@
+Sun Mar  1 18:41:07 1998  Tim Janik  <timj@gimp.org>
+
+	* gtk/gtkwidget.c (gtk_widget_restore_default_style): hm if we save the
+	default style, we should also provide a function to restore it ;).
+
+	* gtk/main.[hc]: small fixups to idle handlers, added support for quit
+	handlers.
+
 Sun Mar  1 05:18:11 1998  Owen Taylor  <owt1@cornell.edu>
 
 	* gtk/gtkentry.c gtk/gtktext.c gtkeditable.[ch]

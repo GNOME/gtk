@@ -2411,6 +2411,24 @@ gtk_widget_set_rc_style (GtkWidget *widget)
     }
 }
 
+void
+gtk_widget_restore_default_style (GtkWidget *widget)
+{
+  GtkStyle *default_style;
+
+  g_return_if_fail (widget != NULL);
+
+  GTK_PRIVATE_UNSET_FLAG (widget, GTK_USER_STYLE);
+
+  default_style = gtk_object_get_data (GTK_OBJECT (widget), saved_default_style_key);
+  if (default_style)
+    {
+      gtk_object_remove_data (GTK_OBJECT (widget), saved_default_style_key);
+      gtk_widget_set_style_internal (widget, default_style, FALSE);
+      gtk_style_unref (default_style);
+    }
+}
+
 GtkStyle*
 gtk_widget_get_style (GtkWidget *widget)
 {

@@ -25,6 +25,11 @@ gtk_widget_set_rc_style ()
   restore the default style otherwise.
   This will override a previously set user style or rc style.
 
+gtk_widget_restore_default_style ()
+  Reset the widget's style to the default style, this is only usefull if
+  the widgets default style had been saved by previous calls to
+  gtk_widget_set_style() or gtk_widget_set_rc_style().
+
 gtk_widget_ensure_style ()
   Ensure taht the widget either has a user style set, or an rc lookup
   has been performed.
