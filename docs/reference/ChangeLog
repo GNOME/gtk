@@ -1,5 +1,13 @@
 2002-03-07  Matthias Clasen  <maclas@gmx.de>
 
+	* gdk-pixbuf/tmpl/animation.sgml, gdk-pixbuf/tmpl/gdk-pixbuf.sgml,
+	gtk/tmpl/gtkrc.sgml, gtk/tmpl/gtktextview.sgml, gtk/tmpl/gtkiconfactory.sgml,
+	gtk/tmpl/gtkaccelgroup.sgml: Add some ids which are referenced
+	from the object hierarchy.
+
+	* gtk/gtk-docs.sgml: Use parts as top-level division (#61575),
+	include gtkaccessible docs.
+
 	* gtk/building.sgml: Some typo and markup fixes.
 
 Thu Mar  7 02:58:16 2002  Jonathan Blandford  <jrb@redhat.com>

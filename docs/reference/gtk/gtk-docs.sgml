@@ -124,6 +124,7 @@
 <!entity GtkWidget SYSTEM "sgml/gtkwidget.sgml">
 <!entity GtkWindow SYSTEM "sgml/gtkwindow.sgml">
 <!entity GtkWindowGroup SYSTEM "sgml/gtkwindowgroup.sgml">
+<!entity GtkAccessible SYSTEM "sgml/gtkaccessible.sgml">
 <!entity gtk-General SYSTEM "sgml/gtkmain.sgml">
 <!entity gtk-Feature-Test-Macros SYSTEM "sgml/gtkfeatures.sgml">
 <!entity gtk-Graphics-Contexts SYSTEM "sgml/gtkgc.sgml">
@@ -165,8 +166,9 @@
     <title>GTK+ Reference Manual</title>
   </bookinfo>
 
-  <chapter id="gtk">
+  <part id="gtk">
     <title>GTK+ Overview</title>
+    <partintro>
     <para>
 GTK+ is a library for creating graphical user interfaces. It
 works on many UNIX-like platforms, Windows, and on framebuffer
@@ -245,7 +247,7 @@ that is, GUI components such as #GtkButton or #GtkTextView.
 </varlistentry>
 </variablelist>
     </para>
-
+</partintro>
     &gtk-Building;
     &gtk-Compiling;
     &gtk-Running;
@@ -257,10 +259,10 @@ that is, GUI components such as #GtkButton or #GtkTextView.
     &gtk-Resources;
     &gtk-Questions;
 
-  </chapter>
+  </part>
 
 
-  <chapter  id="gtkbase" role="no-toc">
+  <part  id="gtkbase">
     <title>GTK+ Core Reference</title>
 
     &gtk-General;
@@ -280,19 +282,16 @@ that is, GUI components such as #GtkButton or #GtkTextView.
     &gtk-Feature-Test-Macros;
     &gtk-Signals;
     &gtk-Types;
-<!--    &gtk-Themes; -->
+  </part>
 
-  </chapter>
-
-  <chapter  id="gtkobjects" role="no-toc">
+  <part id="gtkobjects">
     <title>GTK+ Widgets and Objects</title>
-
-    <sect1>
+    <chapter>
       <title>Object Hierarchy</title>
     &index-Object-Tree;
-    </sect1>
+    </chapter>
 
-    <sect1 id="WindowWidgets">
+    <chapter id="WindowWidgets">
       <title>Windows</title>
         &GtkDialog;
         &GtkInvisible;
@@ -300,34 +299,34 @@ that is, GUI components such as #GtkButton or #GtkTextView.
         &GtkPlug;
         &GtkWindow;
         &GtkWindowGroup;
-    </sect1>
+    </chapter>
 
-    <sect1 id="DisplayWidgets">
+    <chapter id="DisplayWidgets">
       <title>Display Widgets</title>
         &GtkAccelLabel;
         &GtkImage;
         &GtkLabel;
         &GtkProgressBar;
         &GtkStatusbar;
-    </sect1>
+    </chapter>
 
-    <sect1 id="ButtonWidgets">
+    <chapter id="ButtonWidgets">
       <title>Buttons and Toggles</title>
         &GtkButton;
         &GtkCheckButton;
         &GtkRadioButton;
         &GtkToggleButton;
-    </sect1>
+    </chapter>
 
-    <sect1 id="NumericEntry">
+    <chapter id="NumericEntry">
       <title>Numeric/Text Data Entry</title>
         &GtkEntry;
         &GtkHScale;      
         &GtkVScale;
         &GtkSpinButton;
-    </sect1>
+    </chapter>
 
-    <sect1 id="TextWidgetObjects">
+    <chapter id="TextWidgetObjects">
       <title>Multiline Text Editor</title>
         &gtk-TextWidget;
         &GtkTextIter;
@@ -336,9 +335,9 @@ that is, GUI components such as #GtkButton or #GtkTextView.
         &GtkTextTag;
         &GtkTextTagTable;
         &GtkTextView;
-    </sect1>
+    </chapter>
 
-    <sect1 id="TreeWidgetObjects">
+    <chapter id="TreeWidgetObjects">
       <title>Tree and List Widget</title>
         &gtk-TreeWidget;
         &GtkTreeModel;
@@ -355,8 +354,8 @@ that is, GUI components such as #GtkButton or #GtkTextView.
         &GtkCellRendererToggle;
         &GtkListStore;
         &GtkTreeStore;
-    </sect1>
-    <sect1 id="MenusAndCombos">
+    </chapter>
+    <chapter id="MenusAndCombos">
       <title>Menus, Combo Box, Toolbar</title>
         &GtkCombo;
         &GtkItemFactory;
@@ -371,9 +370,9 @@ that is, GUI components such as #GtkButton or #GtkTextView.
         &GtkSeparatorMenuItem;
         &GtkTearoffMenuItem;
         &GtkToolbar;
-    </sect1>
+    </chapter>
 
-    <sect1 id="SelectorWidgets">
+    <chapter id="SelectorWidgets">
       <title>Selectors (File/Font/Color/Input Devices)</title>
         &GtkColorSelection;
         &GtkColorSelectionDialog;
@@ -381,9 +380,9 @@ that is, GUI components such as #GtkButton or #GtkTextView.
         &GtkFontSelection;
         &GtkFontSelectionDialog;
         &GtkInputDialog;
-    </sect1>
+    </chapter>
     
-    <sect1 id="LayoutContainers">
+    <chapter id="LayoutContainers">
       <title>Layout Containers</title>
         &GtkAlignment;
         &GtkAspectFrame;
@@ -397,23 +396,23 @@ that is, GUI components such as #GtkButton or #GtkTextView.
         &GtkLayout;
         &GtkNotebook;
         &GtkTable;
-    </sect1>
+    </chapter>
 
-    <sect1 id="Ornaments">
+    <chapter id="Ornaments">
       <title>Ornaments</title>
         &GtkFrame;
         &GtkHSeparator;
         &GtkVSeparator;
-    </sect1>
+    </chapter>
 
-    <sect1 id="ScrollingWidgets">
+    <chapter id="ScrollingWidgets">
       <title>Scrolling</title>
         &GtkHScrollbar;
         &GtkVScrollbar;
         &GtkScrolledWindow;
-    </sect1>
+    </chapter>
 
-    <sect1 id="MiscObjects">
+    <chapter id="MiscObjects">
       <title>Miscellaneous</title>
         &GtkAdjustment;
         &GtkArrow;
@@ -427,9 +426,10 @@ that is, GUI components such as #GtkButton or #GtkTextView.
         &GtkSizeGroup;
         &GtkTooltips;
         &GtkViewport;
-    </sect1>
+        &GtkAccessible;
+    </chapter>
 
-    <sect1 id="AbstractObjects">
+    <chapter id="AbstractObjects">
       <title>Abstract Base Classes</title>
         &GtkBin;
         &GtkBox;
@@ -445,23 +445,23 @@ that is, GUI components such as #GtkButton or #GtkTextView.
         &GtkScrollbar;
         &GtkSeparator;
         &GtkWidget;
-    </sect1>    
+    </chapter>    
 
-    <sect1 id="PlugSocket">
+    <chapter id="PlugSocket">
       <title>Cross-process Embedding</title>
         &GtkSocket;
-    </sect1>
+    </chapter>
 
-    <sect1 id="SpecialObjects">
+    <chapter id="SpecialObjects">
       <title>Special-purpose features</title>
         &GtkCurve;
         &GtkGammaCurve;
         &GtkRuler;
         &GtkHRuler;
         &GtkVRuler;
-    </sect1>
+    </chapter>
 
-    <sect1 id="DeprecatedObjects">
+    <chapter id="DeprecatedObjects">
       <title>Deprecated</title>
         &GtkCList;      
         &GtkCTree;
@@ -475,8 +475,8 @@ that is, GUI components such as #GtkButton or #GtkTextView.
         &GtkTipsQuery;
         &GtkTree;
         &GtkTreeItem;
-    </sect1>
+    </chapter>
 
-  </chapter>
+  </part>
 
 </book>

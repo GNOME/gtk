@@ -6,7 +6,7 @@ Information that describes an image.
 
 <!-- ##### SECTION Long_Description ##### -->
 
-  <para>
+  <para><anchor id="GdkPixbuf">
     The <structname>GdkPixbuf</structname> structure contains
     information that describes an image in memory.
   </para>

@@ -5,7 +5,7 @@ Resource Files
 Routines for handling resource files
 
 <!-- ##### SECTION Long_Description ##### -->
-<para>
+<para id="GtkRcStyle">
 GTK+ provides resource file mechanism for configuring
 various aspects of the operation of a GTK+ program
 at runtime.

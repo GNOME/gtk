@@ -324,7 +324,7 @@ types related to the text widget and how they work together.
 
 
 <!-- ##### STRUCT GtkTextChildAnchor ##### -->
-<para>
+<para id="GtkTextChildAnchor">
 
 </para>
 

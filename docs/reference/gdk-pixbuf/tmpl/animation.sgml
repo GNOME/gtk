@@ -5,7 +5,7 @@ Animations
 Animated images.
 
 <!-- ##### SECTION Long_Description ##### -->
-  <para>
+  <para><anchor id="GdkPixbufAnimation">
     The &gdk-pixbuf; library provides a simple mechanism to load and represent
     animations. An animation is conceptually a series of frames to be displayed
     over time. Each frame is the same size. The animation may not be represented
