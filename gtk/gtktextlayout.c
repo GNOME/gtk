@@ -1121,19 +1121,19 @@ set_para_values (GtkTextLayout      *layout,
 
   switch (style->wrap_mode)
     {
-    case GTK_WRAPMODE_CHAR:
+    case GTK_WRAP_CHAR:
       layout_width = layout->screen_width - display->left_margin - display->right_margin;
       pango_layout_set_width (display->layout, layout_width * PANGO_SCALE);
       pango_layout_set_wrap (display->layout, PANGO_WRAP_CHAR);
       break;
 
-    case GTK_WRAPMODE_WORD:
+    case GTK_WRAP_WORD:
       layout_width = layout->screen_width - display->left_margin - display->right_margin;
       pango_layout_set_width (display->layout, layout_width * PANGO_SCALE);
       pango_layout_set_wrap (display->layout, PANGO_WRAP_WORD);
       break;
 
-    case GTK_WRAPMODE_NONE:
+    case GTK_WRAP_NONE:
       break;
     }
   

@@ -14,9 +14,9 @@ typedef struct _GtkTextTagTable GtkTextTagTable;
 
 typedef enum
 {
-  GTK_WRAPMODE_NONE,
-  GTK_WRAPMODE_CHAR,
-  GTK_WRAPMODE_WORD
+  GTK_WRAP_NONE,
+  GTK_WRAP_CHAR,
+  GTK_WRAP_WORD
 } GtkWrapMode;
 
 typedef struct _GtkTextAttributes GtkTextAttributes;

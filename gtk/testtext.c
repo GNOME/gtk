@@ -506,11 +506,11 @@ fill_example_buffer (GtkTextBuffer *buffer)
   tag = gtk_text_buffer_create_tag (buffer, "rtl_quote");
       
   g_object_set (G_OBJECT (tag),
-                "wrap_mode", GTK_WRAPMODE_WORD,
+                "wrap_mode", GTK_WRAP_WORD,
                 "direction", GTK_TEXT_DIR_RTL,
                 "indent", 30,
                 "left_margin", 20,
-                "right_margin", 20,
+                  "right_margin", 20,
                 NULL);
 
 
@@ -1176,13 +1176,13 @@ view_init_menus (View *view)
 
   switch (wrap_mode)
     {
-    case GTK_WRAPMODE_NONE:
+    case GTK_WRAP_NONE:
       menu_item = gtk_item_factory_get_widget (view->item_factory, "/Settings/Wrap Off");
       break;
-    case GTK_WRAPMODE_WORD:
+    case GTK_WRAP_WORD:
       menu_item = gtk_item_factory_get_widget (view->item_factory, "/Settings/Wrap Words");
       break;
-    case GTK_WRAPMODE_CHAR:
+    case GTK_WRAP_CHAR:
       menu_item = gtk_item_factory_get_widget (view->item_factory, "/Settings/Wrap Chars");
       break;
     default:
@@ -1209,9 +1209,9 @@ static GtkItemFactoryEntry menu_items[] =
   { "/Edit/Find...", NULL, do_search, 0, NULL },
 
   { "/_Settings",   	  NULL,         0,                0, "<Branch>" },
-  { "/Settings/Wrap _Off",   NULL,      do_wrap_changed,  GTK_WRAPMODE_NONE, "<RadioItem>" },
-  { "/Settings/Wrap _Words", NULL,      do_wrap_changed,  GTK_WRAPMODE_WORD, "/Settings/Wrap Off" },
-  { "/Settings/Wrap _Chars", NULL,      do_wrap_changed,  GTK_WRAPMODE_CHAR, "/Settings/Wrap Off" },
+  { "/Settings/Wrap _Off",   NULL,      do_wrap_changed,  GTK_WRAP_NONE, "<RadioItem>" },
+  { "/Settings/Wrap _Words", NULL,      do_wrap_changed,  GTK_WRAP_WORD, "/Settings/Wrap Off" },
+  { "/Settings/Wrap _Chars", NULL,      do_wrap_changed,  GTK_WRAP_CHAR, "/Settings/Wrap Off" },
   { "/Settings/sep1",        NULL,      0,                0, "<Separator>" },
   { "/Settings/Editable", NULL,      do_editable_changed,  TRUE, "<RadioItem>" },
   { "/Settings/Not editable",    NULL,      do_editable_changed,  FALSE, "/Settings/Editable" },
@@ -2146,7 +2146,7 @@ create_view (Buffer *buffer)
 
   view->text_view = gtk_text_view_new_with_buffer (buffer->buffer);
   gtk_text_view_set_wrap_mode (GTK_TEXT_VIEW (view->text_view),
-                               GTK_WRAPMODE_WORD);
+                               GTK_WRAP_WORD);
   
   /* Draw tab stops in the top and bottom windows. */
   

@@ -475,7 +475,7 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
                                                      _("Wrap mode"),
                                                      _("Whether to wrap lines never, at word boundaries, or at character boundaries"),
                                                       GTK_TYPE_WRAP_MODE,
-                                                      GTK_WRAPMODE_NONE,
+                                                      GTK_WRAP_NONE,
                                                       G_PARAM_READABLE | G_PARAM_WRITABLE));
   
 

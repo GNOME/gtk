@@ -1,3 +1,9 @@
+2001-01-20  Havoc Pennington  <hp@pobox.com>
+
+	* gtk/gtktexttag.h (enum GtkWrapMode): rename member fields
+	from GTK_WRAPMODE_WORD to GTK_WRAP_WORD, etc., seems nicer to 
+	me, matches Pango
+
 2001-01-22  Havoc Pennington  <hp@redhat.com>
 
 	* demos/testanimation.c: fix to reflect gdk-pixbuf changes

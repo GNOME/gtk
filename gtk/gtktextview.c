@@ -752,7 +752,7 @@ gtk_text_view_init (GtkTextView *text_view)
   GTK_WIDGET_SET_FLAGS (widget, GTK_CAN_FOCUS);
 
   /* Set up default style */
-  text_view->wrap_mode = GTK_WRAPMODE_NONE;
+  text_view->wrap_mode = GTK_WRAP_NONE;
   text_view->pixels_above_lines = 0;
   text_view->pixels_below_lines = 0;
   text_view->pixels_inside_wrap = 0;
@@ -1588,8 +1588,8 @@ gtk_text_view_set_wrap_mode (GtkTextView *text_view,
 GtkWrapMode
 gtk_text_view_get_wrap_mode (GtkTextView *text_view)
 {
-  g_return_val_if_fail (text_view != NULL, GTK_WRAPMODE_NONE);
-  g_return_val_if_fail (GTK_IS_TEXT_VIEW (text_view), GTK_WRAPMODE_NONE);
+  g_return_val_if_fail (text_view != NULL, GTK_WRAP_NONE);
+  g_return_val_if_fail (GTK_IS_TEXT_VIEW (text_view), GTK_WRAP_NONE);
 
   return text_view->wrap_mode;
 }

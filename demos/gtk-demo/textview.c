@@ -110,13 +110,13 @@ create_tags (GtkTextBuffer *buffer)
   g_object_set (G_OBJECT (tag), "editable", FALSE, NULL);
   
   tag = gtk_text_buffer_create_tag (buffer, "word_wrap");
-  g_object_set (G_OBJECT (tag), "wrap_mode", GTK_WRAPMODE_WORD, NULL);
+  g_object_set (G_OBJECT (tag), "wrap_mode", GTK_WRAP_WORD, NULL);
 
   tag = gtk_text_buffer_create_tag (buffer, "char_wrap");
-  g_object_set (G_OBJECT (tag), "wrap_mode", GTK_WRAPMODE_CHAR, NULL);
+  g_object_set (G_OBJECT (tag), "wrap_mode", GTK_WRAP_CHAR, NULL);
 
   tag = gtk_text_buffer_create_tag (buffer, "no_wrap");
-  g_object_set (G_OBJECT (tag), "wrap_mode", GTK_WRAPMODE_NONE, NULL);
+  g_object_set (G_OBJECT (tag), "wrap_mode", GTK_WRAP_NONE, NULL);
   
   tag = gtk_text_buffer_create_tag (buffer, "center");
   g_object_set (G_OBJECT (tag), "justification", GTK_JUSTIFY_CENTER, NULL);
