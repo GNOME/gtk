@@ -528,3 +528,7 @@ Incompatible Changes from GTK+-1.2 to GTK+-2.0:
      you must make sure you call gtk_container_propagate_expose()
      correctly, as you must for any NO_WINDOW widgets.
 
+* GtkLayout no longer has the xoffset, yoffset fields, which used
+  to store the difference between world and window coordinates for
+  layout->bin_window. These coordinate systems are now always
+  the same.

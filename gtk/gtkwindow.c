@@ -978,8 +978,6 @@ void
 gtk_window_set_default (GtkWindow *window,
 			GtkWidget *default_widget)
 {
-  GtkWidget *old_default;
-  
   g_return_if_fail (GTK_IS_WINDOW (window));
 
   if (default_widget)
@@ -3526,31 +3524,6 @@ gtk_window_key_press_event (GtkWidget   *widget,
 
   handled = FALSE;
 
-  focus = window->focus_widget;
-  if (focus)
-    g_object_ref (focus);
-
-  while (!handled &&
-	 focus && focus != widget &&
-	 gtk_widget_get_toplevel (focus) == widget)
-    {
-      GtkWidget *parent;
-      
-      if (GTK_WIDGET_IS_SENSITIVE (focus))
-	handled = gtk_widget_event (focus, (GdkEvent*) event);
-
-      parent = focus->parent;
-      if (parent)
-	g_object_ref (parent);
-      
-      g_object_unref (focus);
-
-      focus = parent;
-    }
-
-  if (focus)
-    g_object_unref (focus);
-
   if (!handled)
     handled = gtk_window_mnemonic_activate (window,
 					    event->keyval,
@@ -3558,6 +3531,34 @@ gtk_window_key_press_event (GtkWidget   *widget,
 
   if (!handled)
     handled = gtk_accel_groups_activate (G_OBJECT (window), event->keyval, event->state);
+
+  if (!handled)
+    {
+      focus = window->focus_widget;
+      if (focus)
+	g_object_ref (focus);
+      
+      while (!handled &&
+	     focus && focus != widget &&
+	     gtk_widget_get_toplevel (focus) == widget)
+	{
+	  GtkWidget *parent;
+	  
+	  if (GTK_WIDGET_IS_SENSITIVE (focus))
+	    handled = gtk_widget_event (focus, (GdkEvent*) event);
+	  
+	  parent = focus->parent;
+	  if (parent)
+	    g_object_ref (parent);
+	  
+	  g_object_unref (focus);
+	  
+	  focus = parent;
+	}
+
+      if (focus)
+	g_object_unref (focus);
+    }
 
   /* Chain up, invokes binding set */
   if (!handled && GTK_WIDGET_CLASS (parent_class)->key_press_event)

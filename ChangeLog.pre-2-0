@@ -1,3 +1,18 @@
+Sat Nov 17 19:26:20 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkwindow.c (gtk_window_key_press_event): Reprioritize
+	key bindings in order of visibility - mnemonics, then 
+	accelerators, then send key to the focus widget, then
+	bindings on the GtkWindow.
+
+	* gtk/gtklayout.h docs/Changes-2.0.txt tests/testgtk.c: 
+	Removed the xoffset, yoffset fields of GtkLayout which were
+	identically zero for compat with 1.2, but were no longer 
+	compatible with	all uses of these fields in 1.2.
+
+	* gtk/gtkwindow.c (gtk_window_set_default): Remove 
+	unused variable.
+
 Sat Nov 17 19:08:13 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* tests/testtreeview.c (gtk_tree_model_types_get_type): 
