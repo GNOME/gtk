@@ -1,3 +1,10 @@
+2004-02-02  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/win32/gdkevents-win32.c (gdk_pointer_grab): Set the cursor
+	in all cases. If no grab cursor specified, use the grabbing
+	window's cursor. If the grabbing window has no cursor, use the
+	default arrow cursor. (#118025)
+
 Mon Feb  2 22:05:36 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkseparatormenuitem.c (gtk_separator_menu_item_init): The

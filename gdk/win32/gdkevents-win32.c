@@ -560,6 +560,7 @@ gdk_pointer_grab (GdkWindow    *window,
   
   if (return_val == GDK_GRAB_SUCCESS)
     {
+      GdkWindowImplWin32 *impl = GDK_WINDOW_IMPL_WIN32 (((GdkWindowObject *) window)->impl);
       p_grab_window = window;
 
       if (p_grab_cursor != NULL)
@@ -573,6 +574,10 @@ gdk_pointer_grab (GdkWindow    *window,
 
       if (p_grab_cursor != NULL)
 	SetCursor (p_grab_cursor);
+      else if (impl->hcursor != NULL)
+	SetCursor (impl->hcursor);
+      else
+	SetCursor (LoadCursor (NULL, IDC_ARROW));
 
       if (confine_to != NULL)
 	{
