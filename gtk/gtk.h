@@ -47,7 +47,6 @@
 #include <gtk/gtkdialog.h>
 #include <gtk/gtkdnd.h>
 #include <gtk/gtkdrawingarea.h>
-#include <gtk/gtkdrawwindow.h>
 #include <gtk/gtkeditable.h>
 #include <gtk/gtkentry.h>
 #include <gtk/gtkenums.h>

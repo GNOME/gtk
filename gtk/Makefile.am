@@ -30,7 +30,6 @@ static_sources = \
 	gtkdialog.c		\
 	gtkdnd.c		\
 	gtkdrawingarea.c	\
-	gtkdrawwindow.c         \
 	gtkeditable.c           \
 	gtkentry.c		\
 	gtkeventbox.c		\
@@ -147,7 +146,6 @@ source_headers = \
 	gtkdialog.h		\
 	gtkdnd.h		\
 	gtkdrawingarea.h	\
-	gtkdrawwindow.h         \
 	gtkeditable.h           \
 	gtkentry.h		\
 	gtkenums.h		\

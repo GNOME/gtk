@@ -21,7 +21,7 @@
 #include <math.h>
 #include <gdk/gdk.h>
 #include "gtkcolorsel.h"
-#include "gtkdrawwindow.h"
+#include "gtkwindow.h"
 #include "gtkhbbox.h"
 #include "gtkdnd.h"
 #include "gtkprivate.h"
@@ -863,7 +863,8 @@ gtk_color_selection_drag_begin (GtkWidget      *widget,
   gdouble colors[4];
   GdkColor bg;
 
-  window = gtk_draw_window_new(GTK_WINDOW_POPUP);
+  window = gtk_window_new(GTK_WINDOW_POPUP);
+  GTK_WIDGET_SET_FLAGS (window, GTK_USER_DRAW);
   gtk_widget_set_usize (window, 48, 32);
   gtk_widget_realize (window);
 

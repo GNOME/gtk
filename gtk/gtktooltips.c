@@ -23,7 +23,7 @@
 #include "gtkmain.h"
 #include "gtkprivate.h"
 #include "gtkwidget.h"
-#include "gtkdrawwindow.h"
+#include "gtkwindow.h"
 #include "gtksignal.h"
 #include "gtkstyle.h"
 #include "gtktooltips.h"
@@ -175,7 +175,8 @@ gtk_tooltips_force_window (GtkTooltips *tooltips)
 
   if (!tooltips->tip_window)
     {
-      tooltips->tip_window = gtk_draw_window_new (GTK_WINDOW_POPUP);
+      tooltips->tip_window = gtk_window_new (GTK_WINDOW_POPUP);
+      GTK_WIDGET_SET_FLAGS (tooltips->tip_window, GTK_USER_DRAW);
       gtk_window_set_policy (GTK_WINDOW (tooltips->tip_window), FALSE, FALSE, TRUE);
 
       gtk_signal_connect_object (GTK_OBJECT (tooltips->tip_window), 

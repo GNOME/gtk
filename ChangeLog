@@ -1,10 +1,19 @@
+Tue Dec 15 13:32:28 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkwidget.h: Added GTK_USER_DRAW flag.
+
+	* gtk/gtkwindow.c: Honor GTK_USER_DRAW flag.
+
+	* gtk/gtkdrawwindow.c gtk/Makefile.am: Removed 
+	GtkDrawWindow, which GTK_USER_DRAW obsoletes.
+
 Tue Dec 15 11:37:05 1998  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkmain.c: Fixed up some warnings.
 
 Tue Dec 15 10:32:01 1998  Owen Taylor  <otaylor@redhat.com>
 
-	* gtk/gtkpaned.[ch]: Add new functions 
+	* gtk/gtk{h,v,}paned.{c,h}: Add new functions 
 	gtk_paned_set_position(),
 	gtk_paned_pack1/2(). The latter take a
 	shrink and resize parameters, that allows setting

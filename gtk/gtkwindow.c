@@ -1634,7 +1634,8 @@ gtk_window_expose (GtkWidget      *widget,
   g_return_val_if_fail (GTK_IS_WINDOW (widget), FALSE);
   g_return_val_if_fail (event != NULL, FALSE);
 
-  gtk_window_paint (widget, &event->area);
+  if (!GTK_WIDGET_USER_DRAW (widget))
+    gtk_window_paint (widget, &event->area);
   
   if (GTK_WIDGET_CLASS (parent_class)->expose_event)
     return (* GTK_WIDGET_CLASS (parent_class)->expose_event) (widget, event);
@@ -1646,7 +1647,8 @@ static void
 gtk_window_draw (GtkWidget    *widget,
 		 GdkRectangle *area)
 {
-  gtk_window_paint (widget, area);
+  if (!GTK_WIDGET_USER_DRAW (widget))
+    gtk_window_paint (widget, area);
   
   if (GTK_WIDGET_CLASS (parent_class)->draw)
     (* GTK_WIDGET_CLASS (parent_class)->draw) (widget, area);

@@ -50,7 +50,8 @@ typedef enum
   GTK_HAS_GRAB	       = 1 << 15,
   GTK_RC_STYLE	       = 1 << 16,
   GTK_COMPOSITE_CHILD  = 1 << 17,
-  GTK_NO_REPARENT      = 1 << 18
+  GTK_NO_REPARENT      = 1 << 18,
+  GTK_USER_DRAW        = 1 << 19
 } GtkWidgetFlags;
 
 /* Macro for casting a pointer to a GtkWidget or GtkWidgetClass pointer.
@@ -88,6 +89,7 @@ typedef enum
 #define GTK_WIDGET_HAS_GRAB(wid)	  ((GTK_WIDGET_FLAGS (wid) & GTK_HAS_GRAB) != 0)
 #define GTK_WIDGET_RC_STYLE(wid)	  ((GTK_WIDGET_FLAGS (wid) & GTK_RC_STYLE) != 0)
 #define GTK_WIDGET_COMPOSITE_CHILD(wid)	  ((GTK_WIDGET_FLAGS (wid) & GTK_COMPOSITE_CHILD) != 0)
+#define GTK_WIDGET_USER_DRAW(wid)	  ((GTK_WIDGET_FLAGS (wid) & GTK_USER_DRAW) != 0)
   
 /* Macros for setting and clearing widget flags.
  */

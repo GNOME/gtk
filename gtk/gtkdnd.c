@@ -24,7 +24,7 @@
 #include "gtkmain.h"
 #include "gtkprivate.h"
 #include "gtksignal.h"
-#include "gtkdrawwindow.h"
+#include "gtkwindow.h"
 
 static GSList *drag_widgets = NULL;
 static GSList *source_widgets = NULL;
@@ -1755,7 +1755,8 @@ gtk_drag_set_icon_pixmap  (GdkDragContext    *context,
   gtk_widget_push_visual (gdk_colormap_get_visual(colormap));
   gtk_widget_push_colormap (colormap);
 
-  window = gtk_draw_window_new (GTK_WINDOW_POPUP);
+  window = gtk_window_new (GTK_WINDOW_POPUP);
+  GTK_WIDGET_SET_FLAGS (window, GTK_USER_DRAW);
 
   gtk_widget_pop_visual ();
   gtk_widget_pop_colormap ();
