@@ -1,3 +1,8 @@
+Fri Mar 15 13:31:51 2002  Soeren Sandmann  <sandmann@daimi.au.dk>
+
+	* gtk/gtkmenu.c (gtk_menu_leave_notify): Fix test for "active
+	submenu".
+
 2002-03-15 Padraig O'Briain <padraig.obriain@sun.com>
 
 	* gdk/x11/gdkkeys-x11.c (update_keymaps): Fudge keymap to have lower

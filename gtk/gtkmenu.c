@@ -2133,7 +2133,7 @@ gtk_menu_leave_notify (GtkWidget        *widget,
       && menu_item->submenu != NULL
       && menu_item->submenu_placement == GTK_LEFT_RIGHT)
     {
-      if (menu_item->submenu->window != NULL) 
+      if (GTK_MENU_SHELL (menu_item->submenu)->active)
 	{
 	  gtk_menu_set_submenu_navigation_region (menu, menu_item, event);
 	  return TRUE;
