@@ -192,14 +192,20 @@ gdk_pixdata_deserialize (GdkPixdata   *pixdata,
 
   /* deserialize header */
   istream = (guint32*) stream;
-  pixdata->magic = g_ntohl (*istream++);
-  pixdata->length = g_ntohl (*istream++);
+  /*
+   * the deserialization of GdkPixdata will fail (at least on win32 with msvc 5.0) 
+   * with 'g_ntohl(*istream++)' because the guint32 istream pointer is only 
+   * incremented by 1 byte, if it is done within the g_ntohl() macro.
+   * Probably working around just another compiler bug ... --HB
+   */
+  pixdata->magic = g_ntohl (*istream); istream++;
+  pixdata->length = g_ntohl (*istream); istream++;
   if (pixdata->magic != GDK_PIXBUF_MAGIC_NUMBER || pixdata->length < GDK_PIXDATA_HEADER_LENGTH)
     return_header_corrupt (error);
-  pixdata->pixdata_type = g_ntohl (*istream++);
-  pixdata->rowstride = g_ntohl (*istream++);
-  pixdata->width = g_ntohl (*istream++);
-  pixdata->height = g_ntohl (*istream++);
+  pixdata->pixdata_type = g_ntohl (*istream); istream++;
+  pixdata->rowstride = g_ntohl (*istream); istream++;
+  pixdata->width = g_ntohl (*istream); istream++;
+  pixdata->height = g_ntohl (*istream);  istream++;
   if (pixdata->width < 1 || pixdata->height < 1 ||
       pixdata->rowstride < pixdata->width)
     return_header_corrupt (error);

@@ -1,3 +1,14 @@
+2001-07-20  Hans Breuer  <hans@breuer.org>
+
+	* gdk-pixdata.c : don't 'g_tohl (*istream++)', but move
+	pointer increment out of the macro, because  at least one
+	compiler (msvc 5.0) gets confused otherwise (applies the
+	wrong increment).
+
+	* gdk_pixbuf.def : updated exports
+
+	* makefile.msc : reflect gdk-pixbuf-csource changes
+ 
 2001-07-17  Darin Adler  <darin@bentspoon.com>
 
 	* gdk-pixbuf-csource.c: Add missing <stdlib.h> include.

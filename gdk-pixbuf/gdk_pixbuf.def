@@ -12,6 +12,8 @@ EXPORTS
 	gdk_pixbuf_animation_iter_advance
 	gdk_pixbuf_animation_iter_get_delay_time
 	gdk_pixbuf_animation_iter_get_pixbuf
+	gdk_pixbuf_animation_iter_get_type
+	gdk_pixbuf_animation_iter_on_currently_loading_frame
 	gdk_pixbuf_animation_new_from_file
 	gdk_pixbuf_animation_ref
 	gdk_pixbuf_animation_unref
@@ -21,6 +23,8 @@ EXPORTS
 	gdk_pixbuf_copy
 	gdk_pixbuf_copy_area
 	gdk_pixbuf_error_quark
+	gdk_pixbuf_fill
+	gdk_pixbuf_from_pixdata
 	gdk_pixbuf_get_bits_per_sample
 	gdk_pixbuf_get_colorspace
 	gdk_pixbuf_get_has_alpha
@@ -30,16 +34,29 @@ EXPORTS
 	gdk_pixbuf_get_rowstride
 	gdk_pixbuf_get_type
 	gdk_pixbuf_get_width
+	gdk_pixbuf_loader_close
+	gdk_pixbuf_loader_get_animation
+	gdk_pixbuf_loader_get_pixbuf
+	gdk_pixbuf_loader_get_type
+	gdk_pixbuf_loader_new
+	gdk_pixbuf_loader_new_with_type
+	gdk_pixbuf_loader_write
 	gdk_pixbuf_new
 	gdk_pixbuf_new_from_data
 	gdk_pixbuf_new_from_file
-	gdk_pixbuf_new_from_inline
+	gdk_pixbuf_new_from_stream
 	gdk_pixbuf_new_from_xpm_data
 	gdk_pixbuf_new_subpixbuf
 	gdk_pixbuf_ref
+;	gdk_pixbuf_rotate
 	gdk_pixbuf_saturate_and_pixelate
 	gdk_pixbuf_save
 	gdk_pixbuf_savev
 	gdk_pixbuf_scale
 	gdk_pixbuf_scale_simple
 	gdk_pixbuf_unref
+	gdk_pixdata_deserialize
+	gdk_pixdata_from_pixbuf
+	gdk_pixdata_serialize
+	gdk_pixdata_to_csource
+
