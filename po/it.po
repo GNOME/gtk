@@ -288,7 +288,7 @@ msgstr "cancella"
 #.
 #: gtk/gtkmain.c:417
 msgid "default:LTR"
-msgstr "predefinito:LTR"
+msgstr "default:LTR"
 
 #: gtk/gtknotebook.c:2059 gtk/gtknotebook.c:4131
 #, c-format
