@@ -1,3 +1,11 @@
+2004-03-21  Tor Lillqvist  <tml@iki.fi>
+
+	* gtk/gtkfilesystemwin32.c
+	(gtk_file_system_win32_volume_get_base_path): Include the
+	backslash. Otherwise gtk_file_system_win32_path_to_uri() returns
+	NULL for a volume base path, as g_filename_to_uri() requires an
+	absolute path, and just a drive letter and colon isn't. (#137543)
+
 2004-03-20  Hans Breuer  <hans@breuer.org>
 
 	* gtk/gtkfilesystemwin32.c : applied the undisputable and

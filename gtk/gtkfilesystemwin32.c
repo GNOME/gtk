@@ -396,7 +396,7 @@ static GtkFilePath *
 gtk_file_system_win32_volume_get_base_path (GtkFileSystem        *file_system,
 					    GtkFileSystemVolume  *volume)
 {
-  return (GtkFilePath *) g_strndup (volume->drive, 2);
+  return (GtkFilePath *) g_strdup (volume->drive);
 }
 
 static gboolean
