@@ -31,6 +31,12 @@
  * otherwise would make it possible to reliably generate
  * GDK_LEAVE_NOTIFY events, which would help get rid of those pesky
  * tooltips sometimes popping up in the wrong place.
+ *
+ * Update: a combination of TrackMouseEvent, GetCursorPos and 
+ * GetWindowPos can and is actually used to get rid of those
+ * pesky tooltips. It should be possible to use this for the
+ * whole ENTER/LEAVE NOTIFY handling but some platforms may
+ * not have TrackMouseEvent at all (?) --hb
  */
 
 #include "config.h"
@@ -119,7 +125,6 @@ GPollFD event_poll_fd;
 
 static GdkWindow *current_window = NULL;
 static gint current_x, current_y;
-static gdouble current_x_root, current_y_root;
 #if 0
 static UINT gdk_ping_msg;
 #endif
@@ -148,6 +153,46 @@ assign_object (gpointer lhsp,
       *(gpointer *)lhsp = rhs;
       if (rhs != NULL)
 	g_object_ref (rhs);
+    }
+}
+
+static void
+track_mouse_event (DWORD dwFlags, HWND hwnd)
+{
+  typedef BOOL (WINAPI *PFN_TrackMouseEvent) (LPTRACKMOUSEEVENT);
+  static PFN_TrackMouseEvent p_TrackMouseEvent = NULL;
+  static int once = 0;
+
+  if (!once)
+    {
+      HMODULE user32;
+      HINSTANCE commctrl32;
+
+      user32 = GetModuleHandle ("user32.dll");
+      if ((p_TrackMouseEvent = (PFN_TrackMouseEvent)GetProcAddress (user32, "TrackMouseEvent")) == NULL)
+        {
+          if ((commctrl32 = LoadLibrary ("commctrl32.dll")) != NULL)
+    	p_TrackMouseEvent = (PFN_TrackMouseEvent)
+    	  GetProcAddress (commctrl32, "_TrackMouseEvent");
+        }
+      if (p_TrackMouseEvent != NULL)
+        GDK_NOTE (EVENTS, g_print ("Using TrackMouseEvent to detect leave events\n"));
+
+      once = 1;
+    }
+
+  if (p_TrackMouseEvent)
+    {
+      TRACKMOUSEEVENT tme;
+      tme.cbSize = sizeof(TRACKMOUSEEVENT);
+      tme.dwFlags = dwFlags;
+      tme.hwndTrack = hwnd;
+      tme.dwHoverTime = HOVER_DEFAULT; /* not used */
+
+      if (!p_TrackMouseEvent (&tme))
+        WIN32_API_FAILED ("TrackMouseEvent");
+      else
+        GDK_NOTE (EVENTS, g_print("TrackMouseEvent (%p, %s)\n", hwnd, dwFlags == TME_CANCEL ? "cancel" : "leave"));
     }
 }
 
@@ -1156,8 +1201,8 @@ synthesize_enter_or_leave_event (GdkWindow    	*window,
   _gdk_windowing_window_get_offsets (window, &xoffset, &yoffset);
   event->crossing.x = x + xoffset;
   event->crossing.y = y + yoffset;
-  event->crossing.x_root = msg->pt.x;
-  event->crossing.y_root = msg->pt.y;
+  event->crossing.x_root = msg->pt.x + _gdk_offset_x;
+  event->crossing.y_root = msg->pt.y + _gdk_offset_y;
   event->crossing.mode = mode;
   event->crossing.detail = detail;
   event->crossing.focus = TRUE; /* FIXME: Set correctly */
@@ -1167,7 +1212,7 @@ synthesize_enter_or_leave_event (GdkWindow    	*window,
   
   if (type == GDK_ENTER_NOTIFY &&
       ((GdkWindowObject *) window)->extension_events != 0)
-    _gdk_input_enter_event (&event->crossing, window);
+    _gdk_input_enter_event (window);
 }
 
 static void
@@ -1194,6 +1239,11 @@ synthesize_leave_event (GdkWindow      *window,
   else
     synthesize_enter_or_leave_event (window, msg, GDK_LEAVE_NOTIFY, mode, detail, current_x, current_y);
 
+  /* This would only make sense if the WM_MOUSEMOVE messages would come
+   * before the respective WM_MOUSELEAVE message, which apparently they
+   * do not.
+  track_mouse_event (TME_CANCEL, msg->hwnd);
+   */
 }
   
 static void
@@ -1219,6 +1269,8 @@ synthesize_enter_event (GdkWindow      *window,
       ScreenToClient (GDK_WINDOW_HWND (window), &pt);
     }
   synthesize_enter_or_leave_event (window, msg, GDK_ENTER_NOTIFY, mode, detail, pt.x, pt.y);
+
+  track_mouse_event (TME_LEAVE, msg->hwnd);
 }
   
 static void
@@ -1604,7 +1656,13 @@ handle_configure_event (MSG       *msg,
       
       event->configure.x = point.x;
       event->configure.y = point.y;
-      
+
+      if (gdk_window_get_parent (window) == _gdk_parent_root)
+	{
+	  event->configure.x += _gdk_offset_x;
+	  event->configure.y += _gdk_offset_y;
+	}
+
       append_event (gdk_drawable_get_display (window), event);
     }
 }
@@ -1769,7 +1827,7 @@ _gdk_win32_hrgn_to_region (HRGN hrgn)
   RECT *rects;
   GdkRegion *result;
   gint nbytes;
-  gint i;
+  guint i;
 
   if ((nbytes = GetRegionData (hrgn, 0, NULL)) == 0)
     {
@@ -1805,6 +1863,17 @@ _gdk_win32_hrgn_to_region (HRGN hrgn)
   return result;
 }
 
+static void
+adjust_drag (LONG *drag,
+	     LONG  curr,
+	     gint  inc)
+{
+  if (*drag > curr)
+    *drag = curr + ((*drag + inc/2 - curr) / inc) * inc;
+  else
+    *drag = curr - ((curr - *drag + inc/2) / inc) * inc;
+}
+
 static gboolean
 gdk_event_translate (GdkDisplay *display,
 		     MSG      *msg,
@@ -1815,7 +1884,8 @@ gdk_event_translate (GdkDisplay *display,
   DWORD pidThis;
   PAINTSTRUCT paintstruct;
   HDC hdc;
-  POINT pt;
+  RECT rect, *drag, orig_drag;
+  POINT point;
   MINMAXINFO *mmi;
   HWND hwnd;
   HCURSOR hcursor;
@@ -1943,9 +2013,9 @@ gdk_event_translate (GdkDisplay *display,
        * around that. Also, the position is in screen coordinates, not
        * client coordinates as with the button messages.
        */
-      pt.x = GET_X_LPARAM (msg->lParam);
-      pt.y = GET_Y_LPARAM (msg->lParam);
-      if ((hwnd = WindowFromPoint (pt)) == NULL)
+      point.x = GET_X_LPARAM (msg->lParam);
+      point.y = GET_Y_LPARAM (msg->lParam);
+      if ((hwnd = WindowFromPoint (point)) == NULL)
 	goto done;
 
       msg->hwnd = hwnd;
@@ -1969,7 +2039,7 @@ gdk_event_translate (GdkDisplay *display,
       if (GDK_WINDOW_DESTROYED (window))
 	goto done;
 
-      ScreenToClient (msg->hwnd, &pt);
+      ScreenToClient (msg->hwnd, &point);
 
       event = gdk_event_new (GDK_SCROLL);
       event->scroll.window = window;
@@ -1977,10 +2047,10 @@ gdk_event_translate (GdkDisplay *display,
 	GDK_SCROLL_UP : GDK_SCROLL_DOWN;
       event->scroll.time = _gdk_win32_get_next_tick (msg->time);
       _gdk_windowing_window_get_offsets (window, &xoffset, &yoffset);
-      event->scroll.x = (gint16) pt.x + xoffset;
-      event->scroll.y = (gint16) pt.y + yoffset;
-      event->scroll.x_root = (gint16) GET_X_LPARAM (msg->lParam);
-      event->scroll.y_root = (gint16) GET_Y_LPARAM (msg->lParam);
+      event->scroll.x = (gint16) point.x + xoffset;
+      event->scroll.y = (gint16) point.y + yoffset;
+      event->scroll.x_root = (gint16) GET_X_LPARAM (msg->lParam) + _gdk_offset_x;
+      event->scroll.y_root = (gint16) GET_Y_LPARAM (msg->lParam) + _gdk_offset_y;
       event->scroll.state = 0;	/* No state information with MSH_MOUSEWHEEL */
       event->scroll.device = display->core_pointer;
 
@@ -2303,8 +2373,8 @@ gdk_event_translate (GdkDisplay *display,
       _gdk_windowing_window_get_offsets (window, &xoffset, &yoffset);
       event->button.x += xoffset;
       event->button.y += yoffset;
-      event->button.x_root = current_x_root = msg->pt.x;
-      event->button.y_root = current_y_root = msg->pt.y;
+      event->button.x_root = msg->pt.x + _gdk_offset_x;
+      event->button.y_root = msg->pt.y + _gdk_offset_y;
       event->button.axes = NULL;
       event->button.state = build_pointer_event_state (msg);
       event->button.button = button;
@@ -2373,8 +2443,8 @@ gdk_event_translate (GdkDisplay *display,
 	  _gdk_windowing_window_get_offsets (window, &xoffset, &yoffset);
 	  event->button.x += xoffset;
 	  event->button.y += yoffset;
-	  event->button.x_root = current_x_root = msg->pt.x;
-	  event->button.y_root = current_y_root = msg->pt.y;
+	  event->button.x_root = msg->pt.x + _gdk_offset_x;
+	  event->button.y_root = msg->pt.y + _gdk_offset_y;
 	  event->button.axes = NULL;
 	  event->button.state = build_pointer_event_state (msg);
 	  event->button.button = button;
@@ -2433,6 +2503,12 @@ gdk_event_translate (GdkDisplay *display,
 		      doesnt_want_button_motion))
 	break;
 
+      if (GDK_WINDOW_DESTROYED (window))
+	break;
+
+      if (window != orig_window)
+	translate_mouse_coords (orig_window, window, msg);
+
       /* If we haven't moved, don't create any event.
        * Windows sends WM_MOUSEMOVE messages after button presses
        * even if the mouse doesn't move. This disturbs gtk.
@@ -2442,22 +2518,16 @@ gdk_event_translate (GdkDisplay *display,
 	  GET_Y_LPARAM (msg->lParam) == current_y)
 	break;
 
-      if (GDK_WINDOW_DESTROYED (window))
-	break;
-
       event = gdk_event_new (GDK_MOTION_NOTIFY);
       event->motion.window = window;
       event->motion.time = _gdk_win32_get_next_tick (msg->time);
-      if (window != orig_window)
-	translate_mouse_coords (orig_window, window, msg);
-
       event->motion.x = current_x = (gint16) GET_X_LPARAM (msg->lParam);
       event->motion.y = current_y = (gint16) GET_Y_LPARAM (msg->lParam);
       _gdk_windowing_window_get_offsets (window, &xoffset, &yoffset);
       event->motion.x += xoffset;
       event->motion.y += yoffset;
-      event->motion.x_root = current_x_root = msg->pt.x;
-      event->motion.y_root = current_y_root = msg->pt.y;
+      event->motion.x_root = msg->pt.x + _gdk_offset_x;
+      event->motion.y_root = msg->pt.y + _gdk_offset_y;
       event->motion.axes = NULL;
       event->motion.state = build_pointer_event_state (msg);
       event->motion.is_hint = FALSE;
@@ -2483,6 +2553,32 @@ gdk_event_translate (GdkDisplay *display,
 
       break;
 
+    case WM_MOUSELEAVE:
+      {
+        HWND wndnow;
+        POINT pt;
+
+        if (!GetCursorPos (&pt))
+          WIN32_API_FAILED ("GetCursorPos");
+        wndnow = WindowFromPoint (pt);
+
+        if (!gdk_win32_handle_table_lookup ((GdkNativeWindow) wndnow))
+          {
+            /* we are only interested if we don't know the new window */
+            GDK_NOTE (EVENTS, g_print ("WM_MOUSELEAVE: %p %d (%d,%d)\n",
+                                       msg->hwnd, HIWORD (msg->wParam), pt.x, pt.y));
+            synthesize_enter_or_leave_event (current_window, msg, 
+                GDK_LEAVE_NOTIFY, GDK_CROSSING_NORMAL, GDK_NOTIFY_UNKNOWN, 
+                current_x, current_y);
+          }
+        else
+          {
+            GDK_NOTE (EVENTS, g_print ("WM_MOUSELEAVE: %p %d (%d,%d) ignored\n",
+                                       msg->hwnd, HIWORD (msg->wParam), pt.x, pt.y));
+          }
+      }
+      return_val = TRUE;
+      break;
     case WM_MOUSEWHEEL:
       GDK_NOTE (EVENTS, g_print ("WM_MOUSEWHEEL: %p %d\n",
 				 msg->hwnd, HIWORD (msg->wParam)));
@@ -2492,10 +2588,10 @@ gdk_event_translate (GdkDisplay *display,
        * coordinates as with the button messages. I love the
        * consistency of Windows.
        */
-      pt.x = GET_X_LPARAM (msg->lParam);
-      pt.y = GET_Y_LPARAM (msg->lParam);
+      point.x = GET_X_LPARAM (msg->lParam);
+      point.y = GET_Y_LPARAM (msg->lParam);
 
-      if ((hwnd = WindowFromPoint (pt)) == NULL)
+      if ((hwnd = WindowFromPoint (point)) == NULL)
 	break;
 
       msg->hwnd = hwnd;
@@ -2522,7 +2618,7 @@ gdk_event_translate (GdkDisplay *display,
       if (GDK_WINDOW_DESTROYED (window))
 	break;
 
-      ScreenToClient (msg->hwnd, &pt);
+      ScreenToClient (msg->hwnd, &point);
 
       event = gdk_event_new (GDK_SCROLL);
       event->scroll.window = window;
@@ -2531,10 +2627,10 @@ gdk_event_translate (GdkDisplay *display,
       event->scroll.window = window;
       event->scroll.time = _gdk_win32_get_next_tick (msg->time);
       _gdk_windowing_window_get_offsets (window, &xoffset, &yoffset);
-      event->scroll.x = (gint16) pt.x + xoffset;
-      event->scroll.y = (gint16) pt.y + yoffset;
-      event->scroll.x_root = (gint16) GET_X_LPARAM (msg->lParam);
-      event->scroll.y_root = (gint16) GET_Y_LPARAM (msg->lParam);
+      event->scroll.x = (gint16) point.x + xoffset;
+      event->scroll.y = (gint16) point.y + yoffset;
+      event->scroll.x_root = (gint16) GET_X_LPARAM (msg->lParam) + _gdk_offset_x;
+      event->scroll.y_root = (gint16) GET_Y_LPARAM (msg->lParam) + _gdk_offset_y;
       event->scroll.state = build_pointer_event_state (msg);
       event->scroll.device = display->core_pointer;
 
@@ -2808,46 +2904,193 @@ gdk_event_translate (GdkDisplay *display,
 	    ((GdkWindowObject *) window)->resize_count -= 1;
 	  
 	  if (((GdkWindowObject *) window)->extension_events != 0)
-	    _gdk_input_configure_event (&event->configure, window);
+	    _gdk_input_configure_event (window);
 
 	  return_val = TRUE;
+	}
+      break;
+
+    case WM_SIZING:
+      GetWindowRect (GDK_WINDOW_HWND (window), &rect);
+      GDK_NOTE (EVENTS, g_print ("WM_SIZING: %p  %s curr:%s drag:%s\n",
+				 msg->hwnd,
+				 (msg->wParam == WMSZ_BOTTOM ? "BOTTOM" :
+				  (msg->wParam == WMSZ_BOTTOMLEFT ? "BOTTOMLEFT" :
+				   (msg->wParam == WMSZ_LEFT ? "LEFT" :
+				    (msg->wParam == WMSZ_TOPLEFT ? "TOPLEFT" :
+				     (msg->wParam == WMSZ_TOP ? "TOP" :
+				      (msg->wParam == WMSZ_TOPRIGHT ? "TOPRIGHT" :
+				       (msg->wParam == WMSZ_RIGHT ? "RIGHT" :
+					
+					(msg->wParam == WMSZ_BOTTOMRIGHT ? "BOTTOMRIGHT" :
+					 "???")))))))),
+				 _gdk_win32_rect_to_string (&rect),
+				 _gdk_win32_rect_to_string ((RECT *) msg->lParam)));
+
+      impl = GDK_WINDOW_IMPL_WIN32 (((GdkWindowObject *) window)->impl);
+      drag = (RECT *) msg->lParam;
+      orig_drag = *drag;
+      if (impl->hint_flags & GDK_HINT_RESIZE_INC)
+	{
+	  if (impl->hint_flags & GDK_HINT_BASE_SIZE)
+	    {
+	      /* Resize in increments relative to the base size */
+	      rect.left = rect.top = 0;
+	      rect.right = impl->hints.base_width;
+	      rect.bottom = impl->hints.base_height;
+	      _gdk_win32_adjust_client_rect (window, &rect);
+	      point.x = rect.left;
+	      point.y = rect.top;
+	      ClientToScreen (GDK_WINDOW_HWND (window), &point);
+	      rect.left = point.x;
+	      rect.top = point.y;
+	      point.x = rect.right;
+	      point.y = rect.bottom;
+	      ClientToScreen (GDK_WINDOW_HWND (window), &point);
+	      rect.right = point.x;
+	      rect.bottom = point.y;
+	      
+	      GDK_NOTE (EVENTS, g_print ("...also BASE_SIZE, using %s\n",
+					 _gdk_win32_rect_to_string (&rect)));
+	    }
+
+	  switch (msg->wParam)
+	    {
+	    case WMSZ_BOTTOM:
+	      if (drag->bottom == rect.bottom)
+		break;
+	      adjust_drag (&drag->bottom, rect.bottom, impl->hints.height_inc);
+
+	      break;
+
+	    case WMSZ_BOTTOMLEFT:
+	      if (drag->bottom == rect.bottom && drag->left == rect.left)
+		break;
+	      adjust_drag (&drag->bottom, rect.bottom, impl->hints.height_inc);
+	      adjust_drag (&drag->left, rect.left, impl->hints.width_inc);
+	      break;
+
+	    case WMSZ_LEFT:
+	      if (drag->left == rect.left)
+		break;
+	      adjust_drag (&drag->left, rect.left, impl->hints.width_inc);
+	      break;
+
+	    case WMSZ_TOPLEFT:
+	      if (drag->top == rect.top && drag->left == rect.left)
+		break;
+	      adjust_drag (&drag->top, rect.top, impl->hints.height_inc);
+	      adjust_drag (&drag->left, rect.left, impl->hints.width_inc);
+	      break;
+
+	    case WMSZ_TOP:
+	      if (drag->top == rect.top)
+		break;
+	      adjust_drag (&drag->top, rect.top, impl->hints.height_inc);
+	      break;
+
+	    case WMSZ_TOPRIGHT:
+	      if (drag->top == rect.top && drag->right == rect.right)
+		break;
+	      adjust_drag (&drag->top, rect.top, impl->hints.height_inc);
+	      adjust_drag (&drag->right, rect.right, impl->hints.width_inc);
+	      break;
+
+	    case WMSZ_RIGHT:
+	      if (drag->right == rect.right)
+		break;
+	      adjust_drag (&drag->right, rect.right, impl->hints.width_inc);
+	      break;
+
+	    case WMSZ_BOTTOMRIGHT:
+	      if (drag->bottom == rect.bottom && drag->right == rect.right)
+		break;
+	      adjust_drag (&drag->bottom, rect.bottom, impl->hints.height_inc);
+	      adjust_drag (&drag->right, rect.right, impl->hints.width_inc);
+	      break;
+	    }
+
+	  if (drag->bottom != orig_drag.bottom || drag->left != orig_drag.left ||
+	      drag->top != orig_drag.top || drag->right != orig_drag.right)
+	    {
+	      *ret_valp = TRUE;
+	      return_val = TRUE;
+	      GDK_NOTE (EVENTS, g_print ("...handled RESIZE_INC: drag:%s\n",
+					 _gdk_win32_rect_to_string (drag)));
+	    }
+	}
+
+      /* WM_GETMINMAXINFO handles min_size and max_size hints? */
+
+      if (impl->hint_flags & GDK_HINT_ASPECT)
+	{
+	  gdouble drag_aspect = (gdouble) (drag->right - drag->left) / (drag->bottom - drag->top);
+	  
+	  GDK_NOTE (EVENTS, g_print ("... aspect:%g\n", drag_aspect));
+	  if (drag_aspect < impl->hints.min_aspect ||
+	      drag_aspect > impl->hints.max_aspect)
+	    {
+	      *drag = rect;
+	      *ret_valp = TRUE;
+	      return_val = TRUE;
+	      GDK_NOTE (EVENTS, g_print ("...handled ASPECT: drag:%s\n",
+					 _gdk_win32_rect_to_string (drag)));
+	    }
 	}
       break;
 
     case WM_GETMINMAXINFO:
       GDK_NOTE (EVENTS, g_print ("WM_GETMINMAXINFO: %p\n", msg->hwnd));
 
+      if (GDK_WINDOW_DESTROYED (window))
+	break;
+
       impl = GDK_WINDOW_IMPL_WIN32 (((GdkWindowObject *) window)->impl);
       mmi = (MINMAXINFO*) msg->lParam;
+      GDK_NOTE (EVENTS, g_print ("...mintrack:%dx%d maxtrack:%dx%d "
+				 "maxpos:+%d+%d maxsize:%dx%d\n",
+				 mmi->ptMinTrackSize.x, mmi->ptMinTrackSize.y,
+				 mmi->ptMaxTrackSize.x, mmi->ptMaxTrackSize.y,
+				 mmi->ptMaxPosition.x, mmi->ptMaxPosition.y,
+				 mmi->ptMaxSize.x, mmi->ptMaxSize.y));
+
       if (impl->hint_flags & GDK_HINT_MIN_SIZE)
 	{
-	  mmi->ptMinTrackSize.x = impl->hints.min_width;
-	  mmi->ptMinTrackSize.y = impl->hints.min_height;
+	  rect.left = rect.top = 0;
+	  rect.right = impl->hints.min_width;
+	  rect.bottom = impl->hints.min_height;
+
+	  _gdk_win32_adjust_client_rect (window, &rect);
+
+	  mmi->ptMinTrackSize.x = rect.right - rect.left;
+	  mmi->ptMinTrackSize.y = rect.bottom - rect.top;
 	}
 
       if (impl->hint_flags & GDK_HINT_MAX_SIZE)
 	{
-	  mmi->ptMaxTrackSize.x = impl->hints.max_width;
-	  mmi->ptMaxTrackSize.y = impl->hints.max_height;
+	  rect.left = rect.top = 0;
+	  rect.right = impl->hints.max_width;
+	  rect.bottom = impl->hints.max_height;
 
-	  /* kind of WM functionality, limit maximized size to screen */
-	  mmi->ptMaxPosition.x = 0;
-	  mmi->ptMaxPosition.y = 0;	    
-	  mmi->ptMaxSize.x = MIN (impl->hints.max_width, gdk_screen_width ());
-	  mmi->ptMaxSize.y = MIN (impl->hints.max_height, gdk_screen_height ());
-	}
-      else if (impl->hint_flags & GDK_HINT_MIN_SIZE)
-	{
-	  /* need to initialize */
-	  mmi->ptMaxSize.x = gdk_screen_width ();
-	  mmi->ptMaxSize.y = gdk_screen_height ();
+	  _gdk_win32_adjust_client_rect (window, &rect);
+
+	  mmi->ptMaxTrackSize.x = rect.right - rect.left;
+	  mmi->ptMaxTrackSize.y = rect.bottom - rect.top;
 	}
 
       if (impl->hint_flags & (GDK_HINT_MIN_SIZE | GDK_HINT_MAX_SIZE))
 	{
 	  /* Don't call DefWindowProc() */
+	  GDK_NOTE (EVENTS, g_print ("...handled, mintrack:%dx%d maxtrack:%dx%d "
+				     "maxpos:+%d+%d maxsize:%dx%d\n",
+				     mmi->ptMinTrackSize.x, mmi->ptMinTrackSize.y,
+				     mmi->ptMaxTrackSize.x, mmi->ptMaxTrackSize.y,
+				     mmi->ptMaxPosition.x, mmi->ptMaxPosition.y,
+				     mmi->ptMaxSize.x, mmi->ptMaxSize.y));
 	  return_val = TRUE;
 	}
+      else
+	GDK_NOTE (EVENTS, g_print ("...let DefWindowProc handle it\n"));
       break;
 
     case WM_MOVE:
