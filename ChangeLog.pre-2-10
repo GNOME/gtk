@@ -1,3 +1,10 @@
+2004-09-13  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkentrycompletion.c (gtk_entry_completion_set_model): Resize the
+	popup if the model is replaced.  (#152333)
+	(_gtk_entry_completion_resize_popup): 
+	Improve positioning of entry completion popup.
+
 2004-09-09  Matthias Clasen  <mclasen@redhat.com>
 
 	* tests/testfilechooser.c (main): Update sensitivity of the "Select all"
