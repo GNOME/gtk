@@ -1,31 +1,50 @@
+Mon Aug 11 11:10:07 2003  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkwidget.h: Mark parent public as well; it's
+	extensively accessed in existing code, so there is
+	no advantage in making people use get_parent().
+	(Tweak to #119463 fix)
+
 2003-08-11  Matthias Clasen  <maclas@gmx.de>
 
-	Add support for EWMH "Above" and "Below" window states.  (105100, Manuel Clos)
+	Add support for EWMH "Above" and "Below" window states.  (105100,
+	Manuel Clos)
 	
-	* tests/testgtk.c: Add "Above" and "Below" to the the "Window State" demo.
+	* tests/testgtk.c: Add "Above" and "Below" to the the "Window
+	State" demo.
 
-	* gtk/gtkwindow.h: Add gtk_window_set_keep_above and gtk_window_set_keep_below.
+	* gtk/gtkwindow.h: Add gtk_window_set_keep_above and
+	gtk_window_set_keep_below.
 
-	* gtk/gtk.def:  Add gtk_window_set_keep_above and gtk_window_set_keep_below.
+	* gtk/gtk.def: Add gtk_window_set_keep_above and
+	gtk_window_set_keep_below.
 
-	* gtk/gtkwindow.c (gtk_window_set_keep_below): 
-	(gtk_window_set_keep_above): New functions, call the corresponding gdk functions.
+	* gtk/gtkwindow.c (gtk_window_set_keep_below):
+	(gtk_window_set_keep_above): New functions, call the corresponding
+	gdk functions.
 
-	* gdk/x11/gdkwindow-x11.c (gdk_window_set_keep_below): New function, sets _NET_WM_STATE_BELOW.
-	(gdk_window_set_keep_above): New function, sets _NET_WM_STATE_ABOVE.
+	* gdk/x11/gdkwindow-x11.c (gdk_window_set_keep_below): New
+	function, sets _NET_WM_STATE_BELOW.
+	(gdk_window_set_keep_above): New function, sets
+	_NET_WM_STATE_ABOVE.
 
-	* gdk/gdkwindow.h: Add gdk_window_set_keep_above and gdk_window_set_keep_below.
+	* gdk/gdkwindow.h: Add gdk_window_set_keep_above and
+	gdk_window_set_keep_below.
 
-	* gdk/gdkevents.h (GdkWindowState): Add GDK_WINDOW_STATE_ABOVE and GDK_WINDOW_STATE_BELOW.
+	* gdk/gdkevents.h (GdkWindowState): Add GDK_WINDOW_STATE_ABOVE and
+	GDK_WINDOW_STATE_BELOW.
 
-	* gdk/gdk.def: Add gdk_window_set_keep_above and gdk_window_set_keep_below.
+	* gdk/gdk.def: Add gdk_window_set_keep_above and
+	gdk_window_set_keep_below.
 
-	* acinclude.m4: Copy newer versions of JH_CHECK_XML_CATALOG and JH_PATH_XML_CATALOG from
-	gtk-doc to enable configuring without xmlcatalog in PATH.  (#119115)
+	* acinclude.m4: Copy newer versions of JH_CHECK_XML_CATALOG and
+	JH_PATH_XML_CATALOG from gtk-doc to enable configuring without
+	xmlcatalog in PATH.  (#119115)
 
 2003-08-10  Matthias Clasen  <maclas@gmx.de>
 
-	* gtk/gtkwidget.h (struct _GtkWidget): Mark some members as public.  (#119463) 
+	* gtk/gtkwidget.h (struct _GtkWidget): Mark some members as
+	public.  (#119463)
 
 2003-08-09  Noah Levitt  <nlevitt@columbia.edu>
 
@@ -39,24 +58,27 @@
 	to let the mouse wheels select the month. Scrolling down
 	moves forward in time. (#53134, Abigail Brady) 
 
-	* gtk/gtkcalendar.c: Complete the RTL flipping support for GtkCalendar, make it
-	possible to flip the headings using the "magic translated string" technique. 
-	Translators, note the comment in gtk_calendar_init() explaining this.  (#102416)
+	* gtk/gtkcalendar.c: Complete the RTL flipping support for
+	GtkCalendar, make it possible to flip the headings using the
+	"magic translated string" technique.  Translators, note the
+	comment in gtk_calendar_init() explaining this.  (#102416)
 
-	* gtk/gtkcalendar.c: Get the information about the first day of the week from
-	the locale using another instance of the "magic translated string" technique.
-	Ignore the display option GTK_CALENDAR_WEEK_START_MONDAY with a warning.  (#87977)
+	* gtk/gtkcalendar.c: Get the information about the first day of
+	the week from the locale using another instance of the "magic
+	translated string" technique.  Ignore the display option
+	GTK_CALENDAR_WEEK_START_MONDAY with a warning.  (#87977)
 
-	* gtk/gtkcalendar.c: Add DND support to GtkCalendar. The selected date is dragged
-	as text, formatted via strftime %x. Text drops are accepted if g_date_set_parse()
-	can make sense of the text. A dedicated data format for date DND has not been 
-	introduced yet, since there didn't seem to be sufficient consensus on such a format
-	on xdg-list.  (#117297)
+	* gtk/gtkcalendar.c: Add DND support to GtkCalendar. The selected
+	date is dragged as text, formatted via strftime %x. Text drops are
+	accepted if g_date_set_parse() can make sense of the text. A
+	dedicated data format for date DND has not been introduced yet,
+	since there didn't seem to be sufficient consensus on such a
+	format on xdg-list.  (#117297)
 	
 2003-08-08  Matthias Clasen  <maclas@gmx.de>
 
-	* gdk/gdkregion-generic.c (gdk_region_spans_intersect_foreach): Fix 
-	a segfault.  (#115284, Jan Kratochvil) 
+	* gdk/gdkregion-generic.c (gdk_region_spans_intersect_foreach):
+	Fix a segfault.  (#115284, Jan Kratochvil)
 
 2003-08-08  Tor Lillqvist  <tml@iki.fi>
 
@@ -73,7 +95,8 @@
 
 2003-08-08  Matthias Clasen  <maclas@gmx.de>
 
-	* demos/gtk-demo/appwindow.c (do_appwindow): Hide the resize grip when maximized or fullscreen.
+	* demos/gtk-demo/appwindow.c (do_appwindow): Hide the resize grip
+	when maximized or fullscreen.
 
 2003-08-07  Tor Lillqvist  <tml@iki.fi>
 

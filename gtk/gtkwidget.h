@@ -220,8 +220,6 @@ struct _GtkWidget
    */
   GdkWindow *window;
   
-  /*< private >*/
-
   /* The widgets parent.
    */
   GtkWidget *parent;
