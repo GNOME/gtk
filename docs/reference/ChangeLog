@@ -1,3 +1,8 @@
+Thu Jan  8 00:14:02 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/tmpl/gtkmain.sgml (gtk_input_add_full): Fix link in deprecation
+	note.
+
 Wed Jan  7 22:25:45 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtk-sections.txt: Add gtk_action_new, gtk_toggle_action_new,

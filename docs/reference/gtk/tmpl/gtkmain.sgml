@@ -562,7 +562,7 @@ on a file descriptor.
 @destroy: callback function to call with @data when the input
   handler is removed, or %NULL.
 @Returns: A unique id for the event source; to be used with gtk_input_remove().
-@Deprecated: Use g_io_watch_full() instead.
+@Deprecated: Use g_io_add_watch_full() instead.
 
 
 <!-- ##### FUNCTION gtk_input_remove ##### -->
