@@ -592,27 +592,27 @@ else
     for I in $tmp; do
         dynworks=$I
     done
-fi
 
-dnl Now we check to see if our libtool supports shared lib deps
-dnl (in a rather ugly way even)
-if $dynworks; then
-   pixbuf_libtool_config="${CONFIG_SHELL-/bin/sh} ./libtool --config"
-   pixbuf_deplibs_check=`$pixbuf_libtool_config | \
-      grep '^[[a-z_]]*check[[a-z_]]*_method=[['\''"]]' | \
-      sed 's/.*[['\''"]]\(.*\)[['\''"]]$/\1/'`
-   if test "x$pixbuf_deplibs_check" = "xnone" || \
-      test "x$pixbuf_deplibs_check" = "xunknown" || \
-      test "x$pixbuf_deplibs_check" = "x"; then
-      dynworks=false
-   fi
-fi
+    dnl Now we check to see if our libtool supports shared lib deps
+    dnl (in a rather ugly way even)
+    if $dynworks; then
+        pixbuf_libtool_config="${CONFIG_SHELL-/bin/sh} ./libtool --config"
+        pixbuf_deplibs_check=`$pixbuf_libtool_config | \
+            grep '^[[a-z_]]*check[[a-z_]]*_method=[['\''"]]' | \
+            sed 's/.*[['\''"]]\(.*\)[['\''"]]$/\1/'`
+        if test "x$pixbuf_deplibs_check" = "xnone" || \
+           test "x$pixbuf_deplibs_check" = "xunknown" || \
+           test "x$pixbuf_deplibs_check" = "x"; then
+            dynworks=false
+        fi
+    fi
 
-if $dynworks; then
-   AC_DEFINE(USE_GMODULE)
-   AC_MSG_RESULT(yes)
-else
-   AC_MSG_RESULT(no)
+    if $dynworks; then
+        AC_DEFINE(USE_GMODULE)
+        AC_MSG_RESULT(yes)
+    else
+        AC_MSG_RESULT(no)
+    fi
 fi
 
 dnl We allow people to disable image loaders explicitely, but if they don't we error
@@ -850,7 +850,7 @@ GDK_EXTRA_CFLAGS=
 
 FREETYPE_LIBS=
 FREETYPE_CFLAGS=
-if test "x$gdktarget" = "xlinux-fb" || test "x$gdktarget" = "x11" ; then
+if test "x$gdktarget" = "xlinux-fb" || test "x$gdktarget" = "xx11" ; then
   #
   # Checks for FreeType
   #
@@ -872,8 +872,8 @@ if test "x$gdktarget" = "xlinux-fb" || test "x$gdktarget" = "x11" ; then
 #include <freetype/freetype.h>
 #include FT_ERRORS_H
     ],
-	             [(void)1;],:,have_freetype=yes)
-      if test x$have_freetype = xyes ; then
+	             [(void)1;],:,have_freetype=false)
+      if $have_freetype ; then
         AC_MSG_RESULT(yes)
       else
         AC_MSG_RESULT(no)
@@ -898,7 +898,9 @@ if test "x$gdktarget" = "xx11"; then
     PANGO_PACKAGES="pangox pangoxft"
     have_xft=true
     AC_DEFINE(HAVE_XFT)
-    if x$have_freetype != xyes ; then
+    if $have_freetype ; then
+      :
+    else
       AC_MSG_ERROR([pangoxft Pango backend found but did not find freetype libraries])
     fi
   else
@@ -1145,7 +1147,9 @@ AC_SUBST(GDK_PIXBUF_XLIB_DEP_LIBS)
 AC_SUBST(GDK_PIXBUF_XLIB_DEP_CFLAGS)
 
 if test "x$gdktarget" = "xlinux-fb"; then
-  if test x$have_freetype != xyes ; then
+  if $have_freetype ; then
+    :
+  else
     AC_MSG_ERROR([Using linux-fb backend but freetype was not found])
   fi
 
