@@ -1209,6 +1209,9 @@ gtk_params_get (GtkArg         *params,
 	case GTK_TYPE_FLOAT:
 	  GTK_VALUE_FLOAT(params[i]) = va_arg (args, gfloat);
 	  break;
+	case GTK_TYPE_DOUBLE:
+	  GTK_VALUE_DOUBLE(params[i]) = va_arg (args, gdouble);
+	  break;
 	case GTK_TYPE_STRING:
 	  GTK_VALUE_STRING(params[i]) = va_arg (args, gchar*);
 	  break;
@@ -1290,6 +1293,9 @@ gtk_params_get (GtkArg         *params,
       break;
     case GTK_TYPE_FLOAT:
       params[i].d.pointer_data = va_arg (args, gfloat*);
+      break;
+    case GTK_TYPE_DOUBLE:
+      params[i].d.pointer_data = va_arg (args, gdouble*);
       break;
     case GTK_TYPE_STRING:
       params[i].d.pointer_data = va_arg (args, gchar**);

@@ -89,7 +89,9 @@ enum {
   ARG_VISIBLE,
   ARG_SENSITIVE,
   ARG_CAN_FOCUS,
+  ARG_HAS_FOCUS,
   ARG_CAN_DEFAULT,
+  ARG_HAS_DEFAULT,
   ARG_EVENTS,
   ARG_EXTENSION_EVENTS,
   ARG_NAME,
@@ -260,7 +262,9 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   gtk_object_add_arg_type ("GtkWidget::visible", GTK_TYPE_BOOL, ARG_VISIBLE);
   gtk_object_add_arg_type ("GtkWidget::sensitive", GTK_TYPE_BOOL, ARG_SENSITIVE);
   gtk_object_add_arg_type ("GtkWidget::can_focus", GTK_TYPE_BOOL, ARG_CAN_FOCUS);
+  gtk_object_add_arg_type ("GtkWidget::has_focus", GTK_TYPE_BOOL, ARG_HAS_FOCUS);
   gtk_object_add_arg_type ("GtkWidget::can_default", GTK_TYPE_BOOL, ARG_CAN_DEFAULT);
+  gtk_object_add_arg_type ("GtkWidget::has_default", GTK_TYPE_BOOL, ARG_HAS_DEFAULT);
   gtk_object_add_arg_type ("GtkWidget::events", GTK_TYPE_GDK_EVENT_MASK, ARG_EVENTS);
   gtk_object_add_arg_type ("GtkWidget::extension_events", GTK_TYPE_GDK_EVENT_MASK, ARG_EXTENSION_EVENTS);
   gtk_object_add_arg_type ("GtkWidget::name", GTK_TYPE_STRING, ARG_NAME);
@@ -716,11 +720,19 @@ gtk_widget_set_arg (GtkWidget	*widget,
       else
 	GTK_WIDGET_UNSET_FLAGS (widget, GTK_CAN_FOCUS);
       break;
+    case ARG_HAS_FOCUS:
+      if (GTK_VALUE_BOOL (*arg))
+	gtk_widget_grab_focus (widget);
+      break;
     case ARG_CAN_DEFAULT:
       if (GTK_VALUE_BOOL (*arg))
 	GTK_WIDGET_SET_FLAGS (widget, GTK_CAN_DEFAULT);
       else
 	GTK_WIDGET_UNSET_FLAGS (widget, GTK_CAN_DEFAULT);
+      break;
+    case ARG_HAS_DEFAULT:
+      if (GTK_VALUE_BOOL (*arg))
+	gtk_widget_grab_default (widget);
       break;
     case ARG_EVENTS:
       gtk_widget_set_events (widget, GTK_VALUE_FLAGS (*arg));
@@ -796,8 +808,14 @@ gtk_widget_get_arg (GtkWidget	*widget,
     case ARG_CAN_FOCUS:
       GTK_VALUE_BOOL (*arg) = GTK_WIDGET_CAN_FOCUS (widget);
       break;
+    case ARG_HAS_FOCUS:
+      GTK_VALUE_BOOL (*arg) = GTK_WIDGET_HAS_FOCUS (widget);
+      break;
     case ARG_CAN_DEFAULT:
       GTK_VALUE_BOOL (*arg) = GTK_WIDGET_CAN_DEFAULT (widget);
+      break;
+    case ARG_HAS_DEFAULT:
+      GTK_VALUE_BOOL (*arg) = GTK_WIDGET_HAS_DEFAULT (widget);
       break;
     case ARG_EVENTS:
       eventp = gtk_object_get_data (GTK_OBJECT (widget), event_key);

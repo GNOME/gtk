@@ -444,6 +444,7 @@ gtk_type_init_builtin_types ()
     { GTK_TYPE_LONG, "long" },
     { GTK_TYPE_ULONG, "ulong" },
     { GTK_TYPE_FLOAT, "float" },
+    { GTK_TYPE_DOUBLE, "double" },
     { GTK_TYPE_STRING, "string" },
     { GTK_TYPE_ENUM, "enum" },
     { GTK_TYPE_FLAGS, "flags" },

@@ -40,6 +40,7 @@ typedef enum
   GTK_TYPE_LONG,
   GTK_TYPE_ULONG,
   GTK_TYPE_FLOAT,
+  GTK_TYPE_DOUBLE,
   GTK_TYPE_STRING,
   GTK_TYPE_ENUM,
   GTK_TYPE_FLAGS,
@@ -100,6 +101,7 @@ struct _GtkArg
     glong long_data;
     gulong ulong_data;
     gfloat float_data;
+    gdouble double_data;
     gchar *string_data;
     gpointer pointer_data;
     GtkObject *object_data;
@@ -134,6 +136,7 @@ struct _GtkArg
 #define GTK_VALUE_LONG(a)       ((a).d.long_data)
 #define GTK_VALUE_ULONG(a)      ((a).d.ulong_data)
 #define GTK_VALUE_FLOAT(a)      ((a).d.float_data)
+#define GTK_VALUE_DOUBLE(a)     ((a).d.double_data)
 #define GTK_VALUE_STRING(a)     ((a).d.string_data)
 #define GTK_VALUE_ENUM(a)       ((a).d.int_data)
 #define GTK_VALUE_FLAGS(a)      ((a).d.int_data)
@@ -153,6 +156,7 @@ struct _GtkArg
 #define GTK_RETLOC_LONG(a)      ((glong*)(a).d.pointer_data)
 #define GTK_RETLOC_ULONG(a)     ((gulong*)(a).d.pointer_data)
 #define GTK_RETLOC_FLOAT(a)     ((gfloat*)(a).d.pointer_data)
+#define GTK_RETLOC_DOUBLE(a)    ((gdouble*)(a).d.pointer_data)
 #define GTK_RETLOC_STRING(a)    ((gchar**)(a).d.pointer_data)
 #define GTK_RETLOC_ENUM(a)      ((gint*)(a).d.pointer_data)
 #define GTK_RETLOC_FLAGS(a)     ((gint*)(a).d.pointer_data)

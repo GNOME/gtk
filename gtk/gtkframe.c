@@ -18,9 +18,23 @@
 #include <string.h>
 #include "gtkframe.h"
 
+enum {
+  ARG_0,
+  ARG_LABEL,
+  ARG_LABEL_XALIGN,
+  ARG_LABEL_YALIGN,
+  ARG_SHADOW
+};
+
 
 static void gtk_frame_class_init    (GtkFrameClass  *klass);
 static void gtk_frame_init          (GtkFrame       *frame);
+static void gtk_frame_set_arg       (GtkFrame       *frame,
+				     GtkArg         *arg,
+				     guint           arg_id);
+static void gtk_frame_get_arg       (GtkFrame       *frame,
+				     GtkArg         *arg,
+				     guint           arg_id);
 static void gtk_frame_destroy       (GtkObject      *object);
 static void gtk_frame_paint         (GtkWidget      *widget,
 				     GdkRectangle   *area);
@@ -51,8 +65,8 @@ gtk_frame_get_type ()
 	sizeof (GtkFrameClass),
 	(GtkClassInitFunc) gtk_frame_class_init,
 	(GtkObjectInitFunc) gtk_frame_init,
-	(GtkArgSetFunc) NULL,
-        (GtkArgGetFunc) NULL,
+	(GtkArgSetFunc) gtk_frame_set_arg,
+        (GtkArgGetFunc) gtk_frame_get_arg,
       };
 
       frame_type = gtk_type_unique (gtk_bin_get_type (), &frame_info);
@@ -71,6 +85,11 @@ gtk_frame_class_init (GtkFrameClass *class)
   widget_class = (GtkWidgetClass*) class;
 
   parent_class = gtk_type_class (gtk_bin_get_type ());
+
+  gtk_object_add_arg_type ("GtkFrame::label", GTK_TYPE_STRING, ARG_LABEL);
+  gtk_object_add_arg_type ("GtkFrame::label_xalign", GTK_TYPE_DOUBLE, ARG_LABEL_XALIGN);
+  gtk_object_add_arg_type ("GtkFrame::label_yalign", GTK_TYPE_DOUBLE, ARG_LABEL_YALIGN);
+  gtk_object_add_arg_type ("GtkFrame::shadow", GTK_TYPE_ENUM, ARG_SHADOW);
 
   object_class->destroy = gtk_frame_destroy;
 
@@ -91,6 +110,53 @@ gtk_frame_init (GtkFrame *frame)
   frame->label_height = 0;
   frame->label_xalign = 0.0;
   frame->label_yalign = 0.5;
+}
+
+static void
+gtk_frame_set_arg (GtkFrame       *frame,
+		   GtkArg         *arg,
+		   guint           arg_id)
+{
+  switch (arg_id)
+    {
+    case ARG_LABEL:
+      gtk_frame_set_label (frame, GTK_VALUE_STRING (*arg));
+      break;
+    case ARG_LABEL_XALIGN:
+      gtk_frame_set_label_align (frame, GTK_VALUE_DOUBLE (*arg), frame->label_yalign);
+      break;
+    case ARG_LABEL_YALIGN:
+      gtk_frame_set_label_align (frame, frame->label_xalign, GTK_VALUE_DOUBLE (*arg));
+      break;
+    case ARG_SHADOW:
+      gtk_frame_set_shadow_type (frame, GTK_VALUE_ENUM (*arg));
+      break;
+    }
+}
+
+static void
+gtk_frame_get_arg (GtkFrame       *frame,
+		   GtkArg         *arg,
+		   guint           arg_id)
+{
+  switch (arg_id)
+    {
+    case ARG_LABEL:
+      GTK_VALUE_STRING (*arg) = g_strdup (frame->label);
+      break;
+    case ARG_LABEL_XALIGN:
+      GTK_VALUE_DOUBLE (*arg) = frame->label_xalign;
+      break;
+    case ARG_LABEL_YALIGN:
+      GTK_VALUE_DOUBLE (*arg) = frame->label_yalign;
+      break;
+    case ARG_SHADOW:
+      GTK_VALUE_ENUM (*arg) = frame->shadow_type;
+      break;
+    default:
+      arg->type = GTK_TYPE_INVALID;
+      break;
+    }
 }
 
 GtkWidget*

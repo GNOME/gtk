@@ -34,7 +34,8 @@ enum {
   ARG_TITLE,
   ARG_AUTO_SHRINK,
   ARG_ALLOW_SHRINK,
-  ARG_ALLOW_GROW
+  ARG_ALLOW_GROW,
+  ARG_WIN_POS
 };
 
 typedef gint (*GtkWindowSignal1) (GtkObject *object,
@@ -153,6 +154,7 @@ gtk_window_class_init (GtkWindowClass *klass)
   gtk_object_add_arg_type ("GtkWindow::auto_shrink", GTK_TYPE_BOOL, ARG_AUTO_SHRINK);
   gtk_object_add_arg_type ("GtkWindow::allow_shrink", GTK_TYPE_BOOL, ARG_ALLOW_SHRINK);
   gtk_object_add_arg_type ("GtkWindow::allow_grow", GTK_TYPE_BOOL, ARG_ALLOW_GROW);
+  gtk_object_add_arg_type ("GtkWindow::window_position", GTK_TYPE_ENUM, ARG_WIN_POS);
 
   window_signals[MOVE_RESIZE] =
     gtk_signal_new ("move_resize",
@@ -234,16 +236,19 @@ gtk_window_set_arg (GtkWindow  *window,
       window->type = GTK_VALUE_ENUM (*arg);
       break;
     case ARG_TITLE:
-      gtk_window_set_title (window, GTK_VALUE_STRING(*arg));
+      gtk_window_set_title (window, GTK_VALUE_STRING (*arg));
       break;
     case ARG_AUTO_SHRINK:
-      window->auto_shrink = (GTK_VALUE_BOOL(*arg) != FALSE);
+      window->auto_shrink = (GTK_VALUE_BOOL (*arg) != FALSE);
       break;
     case ARG_ALLOW_SHRINK:
-      window->allow_shrink = (GTK_VALUE_BOOL(*arg) != FALSE);
+      window->allow_shrink = (GTK_VALUE_BOOL (*arg) != FALSE);
       break;
     case ARG_ALLOW_GROW:
-      window->allow_grow = (GTK_VALUE_BOOL(*arg) != FALSE);
+      window->allow_grow = (GTK_VALUE_BOOL (*arg) != FALSE);
+      break;
+    case ARG_WIN_POS:
+      gtk_window_position (window, GTK_VALUE_ENUM (*arg));
       break;
     }
 }
@@ -256,19 +261,22 @@ gtk_window_get_arg (GtkWindow  *window,
   switch (arg_id)
     {
     case ARG_TYPE:
-      GTK_VALUE_ENUM(*arg) = window->type;
+      GTK_VALUE_ENUM (*arg) = window->type;
       break;
     case ARG_TITLE:
-      GTK_VALUE_STRING(*arg) = g_strdup (window->title);
+      GTK_VALUE_STRING (*arg) = g_strdup (window->title);
       break;
     case ARG_AUTO_SHRINK:
-      GTK_VALUE_BOOL(*arg) = window->auto_shrink;
+      GTK_VALUE_BOOL (*arg) = window->auto_shrink;
       break;
     case ARG_ALLOW_SHRINK:
-      GTK_VALUE_BOOL(*arg) = window->allow_shrink;
+      GTK_VALUE_BOOL (*arg) = window->allow_shrink;
       break;
     case ARG_ALLOW_GROW:
-      GTK_VALUE_BOOL(*arg) = window->allow_grow;
+      GTK_VALUE_BOOL (*arg) = window->allow_grow;
+      break;
+    case ARG_WIN_POS:
+      GTK_VALUE_ENUM (*arg) = window->position;
       break;
     default:
       arg->type = GTK_TYPE_INVALID;

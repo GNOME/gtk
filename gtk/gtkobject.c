@@ -31,7 +31,8 @@ enum {
 enum {
   ARG_0,
   ARG_USER_DATA,
-  ARG_SIGNAL
+  ARG_SIGNAL,
+  ARG_OBJECT_SIGNAL
 };
 
 
@@ -136,6 +137,7 @@ gtk_object_class_init (GtkObjectClass *class)
 
   gtk_object_add_arg_type ("GtkObject::user_data", GTK_TYPE_POINTER, ARG_USER_DATA);
   gtk_object_add_arg_type ("GtkObject::signal", GTK_TYPE_SIGNAL, ARG_SIGNAL);
+  gtk_object_add_arg_type ("GtkObject::object_signal", GTK_TYPE_SIGNAL, ARG_OBJECT_SIGNAL);
 
   object_signals[DESTROY] =
     gtk_signal_new ("destroy",
@@ -185,14 +187,24 @@ gtk_object_set_arg (GtkObject *object,
       gtk_object_set_user_data (object, GTK_VALUE_POINTER (*arg));
       break;
     case ARG_SIGNAL:
-      if ((arg->name[11 + 6] != ':') || (arg->name[11 + 7] != ':'))
+      if ((arg->name[9 + 2 + 6] != ':') || (arg->name[9 + 2 + 7] != ':'))
 	{
-	  g_print ("invalid signal argument: \"%s\"\n", arg->name);
+	  g_warning ("invalid signal argument: \"%s\"\n", arg->name);
 	  return;
 	}
-      gtk_signal_connect (object, arg->name + 11 + 8,
+      gtk_signal_connect (object, arg->name + 9 + 2 + 6 + 2,
 			  (GtkSignalFunc) GTK_VALUE_SIGNAL (*arg).f,
 			  GTK_VALUE_SIGNAL (*arg).d);
+      break;
+    case ARG_OBJECT_SIGNAL:
+      if ((arg->name[9 + 2 + 13] != ':') || (arg->name[9 + 2 + 14] != ':'))
+	{
+	  g_warning ("invalid signal argument: \"%s\"\n", arg->name);
+	  return;
+	}
+      gtk_signal_connect_object (object, arg->name + 9 + 2 + 13 + 2,
+				 (GtkSignalFunc) GTK_VALUE_SIGNAL (*arg).f,
+				 (GtkObject*) GTK_VALUE_SIGNAL (*arg).d);
       break;
     }
 }
@@ -208,6 +220,7 @@ gtk_object_get_arg (GtkObject *object,
       GTK_VALUE_POINTER (*arg) = gtk_object_get_user_data (object);
       break;
     case ARG_SIGNAL:
+    case ARG_OBJECT_SIGNAL:
     default:
       arg->type = GTK_TYPE_INVALID;
       break;
@@ -381,6 +394,13 @@ gtk_object_getv (GtkObject           *object,
 	  g_free (lookup_name);
 	  continue;
 	}
+      else if (!gtk_type_is_a (object->klass->type, info->class_type))
+	{
+	  g_warning ("invalid arg for %s: \"%s\"\n", gtk_type_name (object->klass->type), lookup_name);
+	  args[i].type = GTK_TYPE_INVALID;
+	  g_free (lookup_name);
+	  continue;
+	}
       else
 	g_free (lookup_name);
 
@@ -510,13 +530,13 @@ gtk_object_set (GtkObject *object,
  *****************************************/
 
 void
-gtk_object_setv (GtkObject *obj,
+gtk_object_setv (GtkObject *object,
 		 guint      nargs,
 		 GtkArg    *args)
 {
   int i;
 
-  g_return_if_fail (obj != NULL);
+  g_return_if_fail (object != NULL);
 
   if (!arg_info_ht)
     return;
@@ -553,13 +573,18 @@ gtk_object_setv (GtkObject *obj,
 	  g_warning ("invalid arg type for: \"%s\"\n", lookup_name);
 	  arg_ok = FALSE;
 	}
+      else if (!gtk_type_is_a (object->klass->type, info->class_type))
+	{
+	  g_warning ("invalid arg for %s: \"%s\"\n", gtk_type_name (object->klass->type), lookup_name);
+	  arg_ok = FALSE;
+	}
       
       g_free (lookup_name);
 
       if (!arg_ok)
 	continue;
 
-      gtk_type_set_arg (obj, info->class_type, &args[i], info->arg_id);
+      gtk_type_set_arg (object, info->class_type, &args[i], info->arg_id);
     }
 }
 
@@ -1074,6 +1099,9 @@ gtk_object_collect_args (guint   *nargs,
 	case GTK_TYPE_FLOAT:
 	  (void) va_arg (args1, gfloat);
 	  break;
+	case GTK_TYPE_DOUBLE:
+	  (void) va_arg (args1, gdouble);
+	  break;
 	case GTK_TYPE_STRING:
 	  (void) va_arg (args1, gchar*);
 	  break;
@@ -1159,6 +1187,9 @@ gtk_object_collect_args (guint   *nargs,
 	      break;
 	    case GTK_TYPE_FLOAT:
 	      GTK_VALUE_FLOAT(args[i]) = va_arg (args2, gfloat);
+	      break;
+	    case GTK_TYPE_DOUBLE:
+	      GTK_VALUE_DOUBLE(args[i]) = va_arg (args2, gdouble);
 	      break;
 	    case GTK_TYPE_STRING:
 	      GTK_VALUE_STRING(args[i]) = va_arg (args2, gchar*);
