@@ -943,7 +943,6 @@ gtk_tree_store_remove (GtkTreeStore *tree_store,
   path = gtk_tree_store_get_path (GTK_TREE_MODEL (tree_store), iter);
   g_node_destroy (G_NODE (iter->user_data));
 
-  tree_store->stamp++;
   gtk_tree_model_row_deleted (GTK_TREE_MODEL (tree_store), path);
 
   if (parent != G_NODE (tree_store->root))
