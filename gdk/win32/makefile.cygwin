@@ -30,6 +30,7 @@ all: \
 	libwntab32x.a
 
 gdk_win32_OBJECTS = \
+	gdkcc-win32.o \
 	gdkcolor-win32.o \
 	gdkcursor-win32.o \
 	gdkdnd-win32.o \

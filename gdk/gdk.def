@@ -16,6 +16,19 @@ EXPORTS
 	gdk_color_hash
 	gdk_color_parse
 	gdk_color_white
+	gdk_color_context_add_palette
+	gdk_color_context_free
+	gdk_color_context_free_dither
+	gdk_color_context_get_index_from_palette
+	gdk_color_context_get_pixel
+	gdk_color_context_get_pixel_from_palette
+	gdk_color_context_get_pixels
+	gdk_color_context_get_pixels_incremental
+	gdk_color_context_init_dither
+	gdk_color_context_new
+	gdk_color_context_new_mono
+	gdk_color_context_query_color
+	gdk_color_context_query_colors
 	gdk_colormap_alloc_color
 	gdk_colormap_alloc_colors
 	gdk_colormap_change
@@ -185,6 +198,7 @@ EXPORTS
 	gdk_list_visuals
 	gdk_mbstowcs
 	gdk_null_window_warnings
+	gdk_parent_root
 	gdk_pixmap_colormap_create_from_xpm
 	gdk_pixmap_colormap_create_from_xpm_d
 	gdk_pixmap_create_from_data
@@ -322,3 +336,4 @@ EXPORTS
 	gdk_window_shape_combine_mask
 	gdk_window_show
 	gdk_window_withdraw
+	gdk_xid_table_lookup

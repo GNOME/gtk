@@ -252,7 +252,7 @@ logfont_to_xlfd (const LOGFONT *lfp,
 }
 
 gchar *
-gdk_font_xlfd_create (GdkFont *font)
+gdk_font_full_name_get (GdkFont *font)
 {
   GdkFontPrivateWin32 *private;
   GdkWin32SingleFont *singlefont;
@@ -274,7 +274,7 @@ gdk_font_xlfd_create (GdkFont *font)
 
       if (GetObject (singlefont->xfont, sizeof (LOGFONT), &logfont) == 0)
 	{
-	  g_warning ("gdk_win32_font_xlfd: GetObject failed");
+	  g_warning ("gdk_font_full_name_get: GetObject failed");
 	  return NULL;
 	}
 
@@ -291,9 +291,9 @@ gdk_font_xlfd_create (GdkFont *font)
 }
 
 void
-gdk_font_xlfd_free (gchar *xlfd)
+gdk_font_full_name_free (gchar *name)
 {
-  g_free (xlfd);
+  g_free (name);
 }
 
 static gboolean

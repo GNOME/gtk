@@ -151,8 +151,8 @@ gdk_drawable_set_colormap (GdkDrawable *drawable,
     {
       if (GDK_IS_WINDOW (drawable))
 	{
-	  g_return_if_fail (colormap_private->visual !=
-			    ((GdkColormapPrivate*)(drawable_private->colormap))->visual);
+	  g_return_if_fail (colormap_private->base.visual !=
+			    ((GdkColormapPrivate *) (drawable_private->colormap))->visual);
 	  /* XXX ??? */
 	  GDK_NOTE (MISC, g_print ("gdk_drawable_set_colormap: %#x %#x\n",
 				   GDK_DRAWABLE_XID (drawable),

@@ -27,8 +27,6 @@
 
 #include "config.h"
 
-#define NEW_PROPAGATION_CODE
-
 #define USE_DISPATCHMESSAGE
 
 /* Cannot use TrackMouseEvent, as the stupid WM_MOUSELEAVE message
@@ -2747,39 +2745,6 @@ synthesize_crossing_events (GdkWindow *window,
 #endif
 }
 
-#ifndef NEW_PROPAGATION_CODE
-
-static GdkWindow *
-key_propagate (GdkWindow *window,
-	       MSG	 *xevent)
-{
-  gdk_window_unref (window);
-  window = ((GdkWindowPrivate *) window)->parent;
-  gdk_window_ref (window);
-
-  return window;
-}  
-
-static GdkWindow *
-pointer_propagate (GdkWindow *window,
-		   MSG       *xevent)
-{
-  POINT pt;
-
-  pt.x = LOWORD (xevent->lParam);
-  pt.y = HIWORD (xevent->lParam);
-  ClientToScreen (GDK_DRAWABLE_XID (window), &pt);
-  gdk_window_unref (window);
-  window = ((GdkWindowPrivate *) window)->parent;
-  gdk_window_ref (window);
-  ScreenToClient (GDK_DRAWABLE_XID (window), &pt);
-  xevent->lParam = MAKELPARAM (pt.x, pt.y);
-
-  return window;
-}
-
-#endif /* !NEW_PROPAGATION_CODE */
-
 static void
 translate_mouse_coords (GdkWindow *window1,
 			GdkWindow *window2,
@@ -2794,8 +2759,6 @@ translate_mouse_coords (GdkWindow *window1,
   xevent->lParam = MAKELPARAM (pt.x, pt.y);
   GDK_NOTE (EVENTS, g_print ("...new coords are (%d,%d)\n", pt.x, pt.y));
 }
-
-#ifdef NEW_PROPAGATION_CODE
 
 static gboolean
 propagate (GdkWindow  **window,
@@ -2923,8 +2886,6 @@ doesnt_want_button_motion (gint mask,
 	   || ((xevent->wParam & MK_RBUTTON)
 	       && (mask & GDK_BUTTON3_MOTION_MASK)));
 }
-
-#endif
 
 static gboolean
 gdk_event_translate (GdkEvent *event,
@@ -3161,55 +3122,11 @@ gdk_event_translate (GdkEvent *event,
       ignore_WM_CHAR = TRUE;
     keyup_or_down:
 
-#ifdef NEW_PROPAGATION_CODE
       if (!propagate (&window, xevent,
 		      k_grab_window, k_grab_owner_events, GDK_ALL_EVENTS_MASK,
 		      doesnt_want_key))
 	  break;
       event->key.window = window;
-#else
-      if (k_grab_window != NULL && !k_grab_owner_events)
-	{
-	  /* Keyboard is grabbed with owner_events FALSE */
-	  GDK_NOTE (EVENTS, g_print ("...grabbed, owner_events FALSE, "
-				     "sending to %#x\n",
-				     GDK_DRAWABLE_XID (k_grab_window)));
-	  event->key.window = k_grab_window;
-	  /* Continue with switch statement below */
-	}
-      else if (((xevent->message == WM_KEYUP
-		     || xevent->message == WM_SYSKEYUP)
-		    && !(GDK_WINDOW_WIN32DATA(window)->event_mask & GDK_KEY_RELEASE_MASK))
-		   || ((xevent->message == WM_KEYDOWN
-			|| xevent->message == WM_SYSKEYDOWN)
-		       && !(GDK_WINDOW_WIN32DATA(window)->event_mask & GDK_KEY_PRESS_MASK)))
-	{
-	  /* Owner doesn't want it, propagate to parent. */
-	  if (((GdkWindowPrivate *) window)->parent == (GdkWindow *) gdk_root_parent)
-	    {
-	      /* No parent; check if grabbed */
-	      if (k_grab_window != NULL)
-		{
-		  /* Keyboard is grabbed with owner_events TRUE */
-		  GDK_NOTE (EVENTS, g_print ("...undelivered, but grabbed\n"));
-		  event->key.window = k_grab_window;
-		  /* Continue with switch statement below */
-		}
-	      else
-		break;
-	    }
-	  else
-	    {
-	      window = key_propagate (window, xevent);
-	      /* Jump back up */
-	      goto keyup_or_down;
-	    }
-	}
-      else
-	event->key.window = window;
-
-      g_assert (event->key.window == window);
-#endif	      
       switch (xevent->wParam)
 	{
 	case VK_LBUTTON:
@@ -3445,52 +3362,11 @@ gdk_event_translate (GdkEvent *event,
 	}
 
     wm_char:
-#ifdef NEW_PROPAGATION_CODE
       if (!propagate (&window, xevent,
 		      k_grab_window, k_grab_owner_events, GDK_ALL_EVENTS_MASK,
 		      doesnt_want_char))
 	  break;
       event->key.window = window;
-#else
-      /* This doesn't handle the rather theorethical case that a window
-       * wants key presses but still wants releases to be propagated,
-       * for instance. Or is that so theorethical?
-       */
-      if (k_grab_window != NULL && !k_grab_owner_events)
-	{
-	  /* Keyboard is grabbed with owner_events FALSE */
-	  GDK_NOTE (EVENTS,
-		    g_print ("...grabbed, owner_events FALSE, "
-			     "sending to %#x\n",
-			     GDK_DRAWABLE_XID (k_grab_window)));
-	  event->key.window = k_grab_window;
-	}
-      else if (!(GDK_WINDOW_WIN32DATA(window)->event_mask & (GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK)))
-	{
-	  /* Owner doesn't want it, propagate to parent. */
-	  if (((GdkWindowPrivate *) window)->parent == (GdkWindow *) gdk_root_parent)
-	    {
-	      /* No parent; check if grabbed */
-	      if (k_grab_window != NULL)
-		{
-		  GDK_NOTE (EVENTS, g_print ("...undelivered, but grabbed\n"));
-		  event->key.window = k_grab_window;
-		}
-	      else
-		break;
-	    }
-	  else
-	    {
-	      window = key_propagate (window, xevent);
-	      /* Jump back up */
-	      goto wm_char;
-	    }
-	}
-      else
-	event->key.window = window;
-
-      g_assert (event->key.window == window);
-#endif
       return_val = !GDK_DRAWABLE_DESTROYED (window);
       if (return_val && (event->key.window == k_grab_window
 			 || (GDK_WINDOW_WIN32DATA(window)->event_mask & GDK_KEY_RELEASE_MASK)))
@@ -3556,67 +3432,11 @@ gdk_event_translate (GdkEvent *event,
 	synthesize_crossing_events (window, xevent);
 
       event->button.type = GDK_BUTTON_PRESS;
-#ifdef NEW_PROPAGATION_CODE
       if (!propagate (&window, xevent,
 		      p_grab_window, p_grab_owner_events, p_grab_mask,
 		      doesnt_want_button_press))
 	  break;
       event->button.window = window;
-#else
-    buttondown:
-      mask = ((GdkWindowPrivate *) window)->event_mask;
-
-      if (p_grab_window != NULL && !p_grab_owner_events)
-	{
-	  /* Pointer is grabbed with owner_events FALSE */
-	  GDK_NOTE (EVENTS, g_print ("...grabbed, owner_events FALSE\n"));
-
-	  mask = p_grab_mask;
-	  if (!(mask & GDK_BUTTON_PRESS_MASK))
-	    /* Grabber doesn't want it */
-	    break;
-	  else
-	    event->button.window = p_grab_window;
-	  GDK_NOTE (EVENTS, g_print ("...sending to %#x\n",
-				     GDK_DRAWABLE_XID (p_grab_window)));
-	}
-      else if (!(mask & GDK_BUTTON_PRESS_MASK))
-	{
-	  /* Owner doesn't want it, propagate to parent. */
-	  if (((GdkWindowPrivate *) window)->parent == gdk_parent_root)
-	    {
-	      /* No parent; check if grabbed */
-	      if (p_grab_window != NULL)
-		{
-		  /* Pointer is grabbed wíth owner_events TRUE */
-		  GDK_NOTE (EVENTS, g_print ("...undelivered, but grabbed\n"));
-		  mask = p_grab_mask;
-		  if (!(mask & GDK_BUTTON_PRESS_MASK))
-		    {
-		      /* Grabber doesn't want it either */
-		      GDK_NOTE (EVENTS, g_print ("...grabber uninterested\n"));
-		      break;
-		    }
-		  else
-		    event->button.window = p_grab_window;
-		  GDK_NOTE (EVENTS, g_print ("...sending to %#x\n",
-					     GDK_DRAWABLE_XID (p_grab_window)));
-		}
-	      else
-		break;
-	    }
-	  else
-	    {
-	      window = pointer_propagate (window, xevent);
-	      /* Jump back up */
-	      goto buttondown; /* What did Dijkstra say? */
-	    }
-	}
-      else
-	event->button.window = window;
-
-      g_assert (event->button.window == window);
-#endif
       /* Emulate X11's automatic active grab */
       if (!p_grab_window)
 	{
@@ -3680,68 +3500,11 @@ gdk_event_translate (GdkEvent *event,
 	synthesize_crossing_events (window, xevent);
 
       event->button.type = GDK_BUTTON_RELEASE;
-#ifdef NEW_PROPAGATION_CODE
       if (!propagate (&window, xevent,
 		      p_grab_window, p_grab_owner_events, p_grab_mask,
 		      doesnt_want_button_release))
 	  goto maybe_ungrab;
       event->button.window = window;
-#else
-    buttonup:
-      mask = GDK_WINDOW_WIN32DATA(window)->event_mask;
-
-      if (p_grab_window != NULL && !p_grab_owner_events)
-	{
-	  /* Pointer is grabbed with owner_events FALSE */
-	  GDK_NOTE (EVENTS, g_print ("...grabbed, owner_events FALSE\n"));
-
-	  mask = p_grab_mask;
-	  if (!(mask & GDK_BUTTON_RELEASE_MASK))
-	    /* Grabber doesn't want it */
-	    goto maybe_ungrab;
-	  else
-	    event->button.window = p_grab_window;
-	  GDK_NOTE (EVENTS, g_print ("...sending to %#x\n",
-				     GDK_DRAWABLE_XID (p_grab_window)));
-	}
-      else if (!(mask & GDK_BUTTON_RELEASE_MASK))
-	{
-	  /* Owner doesn't want it, propagate to parent. */
-	  if (((GdkWindowPrivate *) window)->parent == gdk_parent_root)
-	    {
-	      /* No parent; check if grabbed */
-	      if (p_grab_window != NULL)
-		{
-		  /* Pointer is grabbed wíth owner_events TRUE */
-		  GDK_NOTE (EVENTS, g_print ("...undelivered, but grabbed\n"));
-		  mask = p_grab_mask;
-		  if (!(mask & GDK_BUTTON_RELEASE_MASK))
-		    {
-		      /* Grabber doesn't want it either */
-		      GDK_NOTE (EVENTS, g_print ("...grabber uninterested\n"));
-		      goto maybe_ungrab;
-		    }
-		  else
-		    event->button.window = p_grab_window;
-		  GDK_NOTE (EVENTS,
-			    g_print ("...sending to %#x\n",
-				     GDK_DRAWABLE_XID (p_grab_window)));
-		}
-	      else
-		break;
-	    }
-	  else
-	    {
-	      window = pointer_propagate (window, xevent);
-	      /* Jump back up */
-	      goto buttonup;
-	    }
-	}
-      else
-	event->button.window = window;
-
-      g_assert (event->button.window == window);
-#endif
       event->button.time = xevent->time;
       if (window != orig_window)
 	translate_mouse_coords (orig_window, window, xevent);
@@ -3798,90 +3561,11 @@ gdk_event_translate (GdkEvent *event,
 	}
 
       event->motion.type = GDK_MOTION_NOTIFY;
-#ifdef NEW_PROPAGATION_CODE
       if (!propagate (&window, xevent,
 		      p_grab_window, p_grab_owner_events, p_grab_mask,
 		      doesnt_want_button_motion))
 	  break;
       event->motion.window = window;
-#else
-    mousemotion:
-      mask = GDK_WINDOW_WIN32DATA(window)->event_mask;
-
-      if (p_grab_window != NULL && !p_grab_owner_events)
-	{
-	  /* Pointer is grabbed with owner_events FALSE */
-	  GDK_NOTE (EVENTS, g_print ("...grabbed, owner_events FALSE\n"));
-
-	  mask = p_grab_mask;
-	  if (!((mask & GDK_POINTER_MOTION_MASK)
-		|| ((xevent->wParam & (MK_LBUTTON|MK_MBUTTON|MK_RBUTTON))
-		    && (mask & GDK_BUTTON_MOTION_MASK))
-		|| ((xevent->wParam & MK_LBUTTON)
-		    && (mask & GDK_BUTTON1_MOTION_MASK))
-		|| ((xevent->wParam & MK_MBUTTON)
-		    && (mask & GDK_BUTTON2_MOTION_MASK))
-		|| ((xevent->wParam & MK_RBUTTON)
-		    && (mask & GDK_BUTTON3_MOTION_MASK))))
-	    /* Grabber doesn't want it */
-	    break;
-	  else
-	    event->motion.window = p_grab_window;
-	  GDK_NOTE (EVENTS, g_print ("...sending to %#x\n",
-				     GDK_DRAWABLE_XID (p_grab_window)));
-	}
-      else if (!((mask & GDK_POINTER_MOTION_MASK)
-		 || ((xevent->wParam & (MK_LBUTTON|MK_MBUTTON|MK_RBUTTON))
-		     && (mask & GDK_BUTTON_MOTION_MASK))
-		 || ((xevent->wParam & MK_LBUTTON)
-		     && (mask & GDK_BUTTON1_MOTION_MASK))
-		 || ((xevent->wParam & MK_MBUTTON)
-		     && (mask & GDK_BUTTON2_MOTION_MASK))
-		 || ((xevent->wParam & MK_RBUTTON)
-		     && (mask & GDK_BUTTON3_MOTION_MASK))))
-	{
-	  /* Owner doesn't want it, propagate to parent. */
-	  if (((GdkWindowPrivate *) window)->parent == gdk_parent_root)
-	    {
-	      /* No parent; check if grabbed */
-	      if (p_grab_window != NULL)
-		{
-		  /* Pointer is grabbed wíth owner_events TRUE */
-		  GDK_NOTE (EVENTS, g_print ("...undelivered, but grabbed\n"));
-		  mask = p_grab_mask;
-		  if (!((p_grab_mask & GDK_POINTER_MOTION_MASK)
-			|| ((xevent->wParam & (MK_LBUTTON|MK_MBUTTON|MK_RBUTTON))
-			    && (mask & GDK_BUTTON_MOTION_MASK))
-			|| ((xevent->wParam & MK_LBUTTON)
-			    && (mask & GDK_BUTTON1_MOTION_MASK))
-			|| ((xevent->wParam & MK_MBUTTON)
-			    && (mask & GDK_BUTTON2_MOTION_MASK))
-			|| ((xevent->wParam & MK_RBUTTON)
-			    && (mask & GDK_BUTTON3_MOTION_MASK))))
-		    {
-		      /* Grabber doesn't want it either */
-		      GDK_NOTE (EVENTS, g_print ("...grabber uninterested\n"));
-		      break;
-		    }
-		  else
-		    event->motion.window = p_grab_window;
-		  GDK_NOTE (EVENTS,
-			    g_print ("...sending to %#x\n",
-				     GDK_DRAWABLE_XID (p_grab_window)));
-		}
-	      else
-		break;
-	    }
-	  else
-	    {
-	      window = pointer_propagate (window, xevent);
-	      /* Jump back up */
-	      goto mousemotion;
-	    }
-	}
-      else
-	event->motion.window = window;
-#endif
       event->motion.time = xevent->time;
       if (window != orig_window)
 	translate_mouse_coords (orig_window, window, xevent);

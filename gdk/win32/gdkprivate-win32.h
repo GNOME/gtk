@@ -241,7 +241,6 @@ struct _GdkColormapPrivateWin32
 {
   GdkColormapPrivate base;
   Colormap xcolormap;
-  GdkVisual *visual;
   gint private_val;
 
   GHashTable *hash;

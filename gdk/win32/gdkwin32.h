@@ -33,17 +33,13 @@
 #include <locale.h>
 
 #define GDK_ROOT_WINDOW()             ((guint32) HWND_DESKTOP)
-#define GDK_ROOT_PARENT()             ((GdkWindow *) gdk_root_parent)
+#define GDK_ROOT_PARENT()             ((GdkWindow *) gdk_parent_root)
 #define GDK_DISPLAY()                 NULL
-#define GDK_DRAWABLE_XDISPLAY(win)    NULL
 #define GDK_DRAWABLE_XID(win)         (GDK_DRAWABLE_WIN32DATA(win)->xid)
-#define GDK_IMAGE_XDISPLAY(image)     NULL
-#define GDK_IMAGE_XIMAGE(image)       (((GdkImagePrivate*) image)->ximage)
-#define GDK_GC_XDISPLAY(gc)           NULL
-#define GDK_GC_XGC(gc)                (((GdkGCPrivate*) gc)->xgc)
+#define GDK_IMAGE_XIMAGE(image)       (((GdkImagePrivate *) image)->ximage)
 #define GDK_COLORMAP_XDISPLAY(cmap)   NULL
-#define GDK_COLORMAP_XCOLORMAP(cmap)  (((GdkColormapPrivate*) cmap)->xcolormap)
-#define GDK_VISUAL_XVISUAL(vis)       (((GdkVisualPrivate*) vis)->xvisual)
+#define GDK_COLORMAP_WIN32COLORMAP(cmap)(((GdkColormapPrivateWin32 *) cmap)->xcolormap)
+#define GDK_VISUAL_XVISUAL(vis)       (((GdkVisualPrivate *) vis)->xvisual)
 
 #define GDK_WINDOW_XDISPLAY	      GDK_DRAWABLE_XDISPLAY
 #define GDK_WINDOW_XWINDOW	      GDK_DRAWABLE_XID

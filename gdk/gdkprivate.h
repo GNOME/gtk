@@ -249,7 +249,7 @@ void gdk_dnd_display_drag_cursor(gint x,
 extern gint		 gdk_debug_level;
 extern gboolean		 gdk_show_events;
 extern gint		 gdk_screen;
-extern GdkWindow  	*gdk_parent_root;
+GDKVAR GdkWindow  	*gdk_parent_root;
 extern gint		 gdk_error_code;
 extern gint		 gdk_error_warnings;
 extern GList            *gdk_default_filters;
@@ -288,7 +288,7 @@ void   gdk_ic_cleanup		 (void);
       
 #endif /* G_ENABLE_DEBUG */
 
-extern guint gdk_debug_flags;
+GDKVAR guint gdk_debug_flags;
 
 
 #ifdef __cplusplus

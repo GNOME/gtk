@@ -104,7 +104,7 @@ gdk_win32_window_alloc (void)
   private = (GdkWindowPrivate *) window;
 
   private->drawable.klass = &klass;
-  private->drawable.klass_data = g_new (GdkDrawableWin32Data, 1);
+  private->drawable.klass_data = g_new (GdkWindowWin32Data, 1);
 
   GDK_WINDOW_WIN32DATA (window)->event_mask = 0;
   GDK_WINDOW_WIN32DATA (window)->bg_type = GDK_WIN32_BG_NORMAL;

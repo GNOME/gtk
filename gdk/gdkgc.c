@@ -37,7 +37,6 @@ gdk_gc_alloc (void)
   private = g_new (GdkGCPrivate, 1);
   private->ref_count = 1;
   private->klass = NULL;
-  private->klass = NULL;
   private->klass_data = NULL;
 
   return (GdkGC *)private;

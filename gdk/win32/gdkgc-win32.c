@@ -443,9 +443,9 @@ gdk_win32_gc_set_values (GdkGC           *gc,
       data->font = values->font;
       if (data->font != NULL)
 	{
-	  GDK_NOTE (MISC, (xlfd = gdk_font_xlfd_create (data->font),
+	  GDK_NOTE (MISC, (xlfd = gdk_font_full_name_get (data->font),
 			   g_print ("font = %s ", xlfd),
-			   gdk_font_xlfd_free (xlfd)));
+			   gdk_font_full_name_free (xlfd)));
 	  gdk_font_ref (data->font);
 	  data->values_mask |= GDK_GC_FONT;
 	}
@@ -847,7 +847,7 @@ gdk_gc_predraw (GdkDrawable  *drawable,
     }
   else
     {
-      visual = colormap_private->visual;
+      visual = colormap_private->base.visual;
       r = (data->foreground.pixel & visual->red_mask) >> visual->red_shift;
       r = (r * 255) / mask[visual->red_prec];
       g = (data->foreground.pixel & visual->green_mask) >> visual->green_shift;
@@ -915,7 +915,7 @@ gdk_gc_predraw (GdkDrawable  *drawable,
 	}
       else
 	{
-	  visual = colormap_private->visual;
+	  visual = colormap_private->base.visual;
 	  r = (data->background.pixel & visual->red_mask) >> visual->red_shift;
 	  r = (r * 255) / mask[visual->red_prec];
 	  g = (data->background.pixel & visual->green_mask) >> visual->green_shift;
