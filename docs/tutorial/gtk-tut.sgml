@@ -12871,7 +12871,7 @@ target</emphasis>) come into play only in your request and received
 data handler functions. The term <emphasis>selection target</emphasis>
 is somewhat misleading. It is a term adapted from GTK+ selection
 (cut/copy and paste). What <emphasis>selection target</emphasis>
-actually means is the data's format type (ie GdkAtom, integer, or
+actually means is the data's format type (i.e. GdkAtom, integer, or
 string) that being sent or received. Your request data handler function
 needs to specify the type (<emphasis>selection target</emphasis>) of
 data that it sends out and your received data handler needs to handle
@@ -12884,6 +12884,7 @@ received.</para>
 <sect1 id="sec-DragAndDropFunctions">
 <title>Functions</title>
 
+<!-- ----------------------------------------------------------------- -->
 <sect2 id="sec-DNDSourceWidgets">
 <title>Setting up the source widget</title>
 
@@ -12942,60 +12943,100 @@ void gtk_drag_source_unset( GtkWidget *widget );
 
 </sect2>
 
+<!-- ----------------------------------------------------------------- -->
 <sect2 id="sec-SignalsOnSourceWidgets">
 <title>Signals on the source widget:</title>
 
-<itemizedlist>
-<listitem><simpara> drag_begin - prototype: void (*drag_begin)(GtkWidget
-*widget, GdkDragContext *dc, gpointer data)</simpara>
-</listitem>
+<para>The source widget is sent the following signals during a
+drag-and-drop operation.</para>
 
-<listitem><simpara> drag_motion - prototype gboolean
-(*drag_motion)(GtkWidget *widget, GdkDragContext *dc, gint x, gint y, guint t, gpointer data)</simpara>
-</listitem>
-
-<listitem><simpara> drag_data_get - prototype void
-(*drag_data_get)(GtkWidget *widget, GdkDragContext *dc, GtkSelectionData *selection_data, guint info, guint t, gpointer data)</simpara>
-</listitem>
-
-<listitem><simpara> drag_data_delete - prototype void
-(*drag_data_delete)(GtkWidget *widget, GdkDragContext *dc, gpointer data)</simpara>
-</listitem>
-
-<listitem><simpara> drag_drop - prototype gboolean
-(*drag_drop)(GtkWidget *widget, GdkDragContext *dc, gint x, gint y, guint t, gpointer data)</simpara>
-</listitem>
-
-<listitem><simpara> drag_end - prototype void (*drag_end)(GtkWidget *widget, GdkDragContext *dc, gpointer data)</simpara>
-</listitem>
-</itemizedlist>
+<table pgwide="1">
+<title>Source widget signals</title>
+<tgroup cols="2">
+<colspec colname="Name" colwidth="150">
+<colspec colname="Prototype">
+<tbody>
+<row>
+<entry align="left" valign="middle">drag_begin</entry>
+<entry align="left" valign="middle"><literal>void (*drag_begin)(GtkWidget *widget,
+GdkDragContext *dc, gpointer data)</literal></entry>
+</row>
+<row>
+<entry align="left" valign="middle">drag_motion</entry>
+<entry align="left" valign="middle"><literal>gboolean (*drag_motion)(GtkWidget *widget,
+GdkDragContext *dc, gint x, gint y, guint t, gpointer data)</literal></entry>
+</row>
+<row>
+<entry align="left" valign="middle">drag_data_get</entry>
+<entry align="left" valign="middle"><literal>void (*drag_data_get)(GtkWidget *widget,
+GdkDragContext *dc, GtkSelectionData *selection_data, guint info, guint t, gpointer data)</literal></entry>
+</row>
+<row>
+<entry align="left" valign="middle">drag_data_delete</entry>
+<entry align="left" valign="middle"><literal>void (*drag_data_delete)(GtkWidget *widget,
+GdkDragContext *dc, gpointer data)</literal></entry>
+</row>
+<row>
+<entry align="left" valign="middle">drag_drop</entry>
+<entry align="left" valign="middle"><literal>gboolean (*drag_drop)(GtkWidget *widget,
+GdkDragContext *dc, gint x, gint y, guint t, gpointer data)</literal></entry>
+</row>
+<row>
+<entry align="left" valign="middle">drag_end</entry>
+<entry align="left" valign="middle"><literal>void (*drag_end)(GtkWidget *widget,
+GdkDragContext *dc, gpointer data)</literal></entry>
+</row>
+</tbody>
+</tgroup>
+</table>
 
 </sect2>
 
+<!-- ----------------------------------------------------------------- -->
 <sect2 id="sec-DNDDestWidgets">
 <title>Setting up a destination widget:</title>
 
-<itemizedlist>
-<listitem><simpara> <literal> gtk_drag_dest_set()</literal> specifies
-that this widget can recieve drops and specifies what types of drops it
-can recieve.</simpara>
-</listitem>
+<para> <literal> gtk_drag_dest_set()</literal> specifies
+that this widget can receive drops and specifies what types of drops it
+can receive.</para>
 
-<listitem><simpara> <literal> gtk_drag_dest_unset()</literal> specifies
-that the widget can no longer recieve drops.</simpara>
-</listitem>
-</itemizedlist>
+<para> <literal> gtk_drag_dest_unset()</literal> specifies
+that the widget can no longer receive drops.</para>
+
+<programlisting role="C">
+void gtk_drag_dest_set( GtkWidget            *widget,
+                        GtkDestDefaults       flags,
+                        const GtkTargetEntry *targets,
+                        gint                  n_targets,
+                        GdkDragAction         actions );
+
+void gtk_drag_dest_unset( GtkWidget *widget );
+</programlisting>
 
 </sect2>
 
+<!-- ----------------------------------------------------------------- -->
 <sect2 id="sec-SignalsOnDestWidgets">
 <title>Signals on the destination widget:</title>
 
-<itemizedlist>
-<listitem><simpara> drag_data_received - prototype: void (*drag_data_received)(GtkWidget *widget, GdkDragContext
-     *dc, gint x, gint y, GtkSelectionData *selection_data, guint info, guint t, gpointer data)</simpara>
-</listitem>
-</itemizedlist>
+<para>The destination widget is sent the following signals during a
+drag-and-drop operation.</para>
+
+<table pgwide="1">
+<title>Destination widget signals</title>
+<tgroup cols="2">
+<colspec colname="Name" colwidth="150">
+<colspec colname="Prototype">
+<tbody>
+<row>
+<entry align="left" valign="middle">drag_data_received</entry>
+<entry align="left" valign="middle"><literal>void (*drag_data_received)(GtkWidget *widget,
+GdkDragContext *dc, gint x, gint y, GtkSelectionData *selection_data, guint info, guint t,
+gpointer data)</literal></entry>
+</row>
+</tbody>
+</tgroup>
+</table>
 
 </sect2>
 </sect1>

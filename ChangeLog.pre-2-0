@@ -1,3 +1,7 @@
+Tue Dec  5 13:17:53 GMT 2000  Tony Gale <gale@gtk.org>
+
+	* docs/tutorial/gtk-tut.sgml: DND updates
+
 2000-12-05  Alexander Larsson  <alla@lysator.liu.se>
 
 	* gdk/linux-fb/gdkdrawable-fb2.c (gdk_fb_draw_drawable_3):
