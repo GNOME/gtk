@@ -1,3 +1,9 @@
+Thu Feb  5 01:50:19 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtktearoffmenuitem.c (gtk_tearoff_menu_item_paint): Fix
+	the drawing of tearoff menu items which don't come first in their
+	menu.  (#33311)
+
 Thu Feb  5 00:59:08 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkcombo.c (gtk_combo_entry_key_press): Use 
