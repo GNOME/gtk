@@ -81,7 +81,7 @@ static void         gdk_fb_set_colormap       (GdkDrawable      *drawable,
 					       GdkColormap      *colormap);
 static gint         gdk_fb_get_depth          (GdkDrawable      *drawable);
 static GdkVisual*   gdk_fb_get_visual         (GdkDrawable      *drawable);
-
+static void         gdk_fb_drawable_finalize  (GObject *object);
 
 static gpointer parent_class = NULL;
 
@@ -98,9 +98,12 @@ static void
 gdk_drawable_impl_fb_class_init (GdkDrawableFBClass *klass)
 {
   GdkDrawableClass *drawable_class = GDK_DRAWABLE_CLASS (klass);
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
   parent_class = g_type_class_peek_parent (klass);
 
+  object_class->finalize = gdk_fb_drawable_finalize;
+  
   drawable_class->create_gc = _gdk_fb_gc_new;
   drawable_class->draw_rectangle = gdk_fb_draw_rectangle;
   drawable_class->draw_arc = gdk_fb_draw_arc;
@@ -124,6 +127,15 @@ gdk_drawable_impl_fb_class_init (GdkDrawableFBClass *klass)
   
   drawable_class->get_image = _gdk_fb_get_image;
 }
+
+static void
+gdk_fb_drawable_finalize (GObject *object)
+{
+  gdk_drawable_set_colormap (GDK_DRAWABLE (object), NULL);
+
+  G_OBJECT_CLASS (parent_class)->finalize (object);
+}
+
 
 GType
 gdk_drawable_impl_fb_get_type (void)
@@ -177,10 +189,15 @@ gdk_fb_set_colormap (GdkDrawable *drawable,
   GdkDrawableFBData *private;
 
   private = GDK_DRAWABLE_FBDATA (drawable);
-  
-  old_cmap = private->colormap;
-  private->colormap = gdk_colormap_ref (colormap);
-  gdk_colormap_unref (old_cmap);
+
+  if (private->colormap == colormap)
+    return;
+
+  if (private->colormap)
+    gdk_colormap_unref (private->colormap);
+  private->colormap = colormap;
+  if (private->colormap)
+    gdk_colormap_ref (private->colormap);
 }
 
 /* Calculates the real clipping region for a drawable, taking into account
@@ -295,8 +312,10 @@ gdk_fb_clip_region (GdkDrawable *drawable,
 	  tmpreg = gdk_region_rectangle (&draw_rect);
 	  gdk_region_intersect (real_clip_region, tmpreg);
 	  gdk_region_destroy (tmpreg);
+	  /*
 	  if (!real_clip_region->numRects)
 	    g_warning ("Empty clip region");
+	  */
 	}
     }
 
@@ -814,11 +833,24 @@ gdk_fb_draw_polygon (GdkDrawable    *drawable,
     miFillPolygon (drawable, gc, 0, 0, npoints, points);
   else
     {
-      GdkPoint *realpts = g_alloca (sizeof(GdkPoint) * (npoints + 1));
+      gint tmp_npoints;
+      GdkPoint *tmp_points;
 
-      memcpy (realpts, points, sizeof(GdkPoint) * npoints);
-      realpts[npoints] = points[0];
-      gdk_fb_draw_lines (drawable, gc, points, npoints);
+      if (points[0].x != points[npoints-1].x || points[0].y != points[npoints-1].y)
+	{
+	  tmp_npoints = npoints + 1;
+	  tmp_points = g_new (GdkPoint, tmp_npoints);
+	  memcpy (tmp_points, points, sizeof(GdkPoint) * npoints);
+	  tmp_points[npoints].x = points[0].x;
+	  tmp_points[npoints].y = points[0].y;
+	}
+      else
+	{
+	  tmp_npoints = npoints;
+	  tmp_points = points;
+	}
+
+      gdk_fb_draw_lines (drawable, gc, tmp_points, tmp_npoints);
     }
 }
 
@@ -833,14 +865,14 @@ gdk_fb_draw_lines (GdkDrawable    *drawable,
   private = GDK_GC_FBDATA (gc);
   if (private->values.line_width > 0)
     {
-      if (private->dash_list)
+      if ((private->values.line_style != GDK_LINE_SOLID) && private->dash_list)
 	miWideDash (drawable, gc, 0, npoints, points);
       else 
 	miWideLine (drawable, gc, 0, npoints, points);
     }
   else
     {
-      if (private->dash_list)
+      if ((private->values.line_style != GDK_LINE_SOLID) && private->dash_list)
 	miZeroDashLine (drawable, gc, 0, npoints, points);
       else 
 	miZeroLine (drawable, gc, 0, npoints, points);

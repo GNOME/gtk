@@ -532,7 +532,7 @@ miLineJoin (GdkDrawable *pDrawable, GdkGC *pGC, GdkColor *pixel, SpanDataPtr spa
 }
 
 static int
-miLineArcI (pDraw, pGC, xorg, yorg, points, widths)
+miLineArcI (pDraw, pGC, xorg, yorg, points)
     GdkDrawable*	    pDraw;
     GdkGC*	    pGC;
     int		    xorg, yorg;
@@ -609,7 +609,7 @@ miLineArcI (pDraw, pGC, xorg, yorg, points, widths)
     }
 
 static int
-miLineArcD (pDraw, pGC, xorg, yorg, points, widths,
+miLineArcD (pDraw, pGC, xorg, yorg, points,
 	    edge1, edgey1, edgeleft1, edge2, edgey2, edgeleft2)
     GdkDrawable*	    pDraw;
     GdkGC*	    pGC;

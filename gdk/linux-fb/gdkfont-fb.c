@@ -38,21 +38,30 @@
 #error "We need Freetype 2.0 (beta?)"
 #endif
 
-GdkFont*
-gdk_font_from_description (PangoFontDescription *font_desc)
+
+static GdkFont *
+gdk_fb_bogus_font (gint height)
 {
   GdkFont *font;
   GdkFontPrivateFB *private;
 
-  g_return_val_if_fail (font_desc, NULL);
-
   private = g_new0 (GdkFontPrivateFB, 1);
   font = (GdkFont *)private;
-  font->type = GDK_FONT_FONT;
-  private->size = font_desc->size;
-  private->base.ref_count = 1;
   
+  font->type = GDK_FONT_FONT;
+  font->ascent = height*3/4;
+  font->descent = height/4;
+  private->size = height;
+  private->base.ref_count = 1;
   return font;
+}
+
+GdkFont*
+gdk_font_from_description (PangoFontDescription *font_desc)
+{
+  g_return_val_if_fail (font_desc, NULL);
+
+  return gdk_fb_bogus_font (PANGO_PIXELS(font_desc->size));
 }
 
 /* ********************* */
@@ -171,13 +180,13 @@ gdk_fontset_load (const gchar *fontset_name)
 GdkFont*
 gdk_fontset_load (const gchar *fontset_name)
 {
-  return NULL;
+  return gdk_fb_bogus_font (10);
 }
 
 GdkFont *
 gdk_font_load (const gchar *font_name)
 {
-  return NULL;
+  return gdk_fb_bogus_font (10);
 }
 
 void
@@ -306,7 +315,7 @@ gdk_text_width (GdkFont      *font,
 
   private = (GdkFontPrivateFB*) font;
 
-  return text_length * private->size / (2*PANGO_SCALE);
+  return (text_length * private->size) / 2;
 #endif
 }
 
@@ -363,11 +372,11 @@ gdk_text_extents (GdkFont     *font,
     *rbearing = ((double)mi.bbox.urx) / 1000.0 * private->size;
 #else
   if(ascent)
-    *ascent = 0;
+    *ascent = font->ascent;
   if(descent)
-    *descent = 0;
+    *descent = font->descent;
   if(width)
-    *width = 0;
+    *width = gdk_text_width(font, text, text_length);
   if(lbearing)
     *lbearing = 0;
   if(rbearing)

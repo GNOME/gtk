@@ -1,3 +1,22 @@
+2001-01-05  Alexander Larsson  <alexl@redhat.com>
+
+	* gdk/linux-fb/gdkdrawable-fb2.c (gdk_fb_drawable_finalize): free
+	colormap in here. Sync from X port.
+	(gdk_fb_set_colormap): allow the colormap to be NULL if you like.
+	Sync from X port.
+	(gdk_fb_clip_region): Comment out g_warning about empty clip region.
+	This happens now and then, and i don't think it is a bug.
+	(gdk_fb_draw_polygon): Correctly add extra point if startpoint
+	!= endpoint.
+	(gdk_fb_draw_lines): Don't draw dashed lines if line_style is
+	GDK_LINE_SOLID.
+
+	* gdk/linux-fb/gdkfont-fb.c: Return bogus GdkFont that has
+	some of the fields filled in at least.
+
+	* gdk/linux-fb/miwideline.c: The widths argument to miLineArcI, and
+	miLineArcD is no more, remove it from the function definition.
+
 2001-01-04  Havoc Pennington  <hp@redhat.com>
 
 	* gtk/gtktreeselection.c (gtk_tree_selection_get_tree_view): add
