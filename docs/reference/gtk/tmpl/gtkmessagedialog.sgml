@@ -25,7 +25,7 @@ returns when any dialog button is clicked.
                                   GTK_DIALOG_DESTROY_WITH_PARENT,
                                   GTK_MESSAGE_ERROR,
                                   GTK_BUTTONS_CLOSE,
-                                  "Error loading file '%s': %s",
+                                  "Error loading file '&percnt;s': &percnt;s",
                                   filename, g_strerror (errno));
  gtk_dialog_run (GTK_DIALOG (dialog));
  gtk_widget_destroy (dialog);
@@ -42,7 +42,7 @@ You might do a non-modal #GtkMessageDialog as follows:
                                   GTK_DIALOG_DESTROY_WITH_PARENT,
                                   GTK_MESSAGE_ERROR,
                                   GTK_BUTTONS_CLOSE,
-                                  "Error loading file '%s': %s",
+                                  "Error loading file '&percnt;s': &percnt;s",
                                   filename, g_strerror (errno));
 
  /* Destroy the dialog when the user responds to it (e.g. clicks a button) */
