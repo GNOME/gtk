@@ -9,6 +9,175 @@ Sat Nov 21 18:41:13 CST 1998 Shawn T. Amundson <amundson@gtk.org>
 
 	* Released GTK+ 1.1.5
 
+Sun Nov 22 16:21:28 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkprogress.c: added args ::show_text, ::text_xalign,
+ 	::text_yalign, ::activity_mode.
+
+	* gtk/gtkprogressbar.c: added construct arg ::adjustment. added args
+ 	::bar_style, ::orientation, ::discrete_blocks, ::activity_step,
+ 	::activity_blocks.
+	(gtk_progress_bar_new):
+	(gtk_progress_bar_new_with_adjustment): use gtk_widget_new().
+	(gtk_progress_bar_construct): deprecated.
+
+	* gtk/gtkvscrollbar.c:
+	(gtk_vscrollbar_draw_step_back): 
+	(gtk_vscrollbar_draw_step_forw): use "vscrollbar" as detail for
+ 	gtk_paint_arrow, to be consistent with hscrollbar.
+
+	* gtk/gtktext.c
+	added construct args ::hadjustment, ::vadjustment.
+	added args ::line_wrap, ::word_wrap.
+	(gtk_text_class_init): added scroll_adjustments signal.
+	(gtk_text_new): use gtk_widget_new.
+	(gtk_text_disconnect): remove adjustement with gtk_text_set_adjustments,
+	so we don't screw the reference counts and don't leave signals connected.
+ 	(gtk_text_destroy): disconnect adjustments signals.
+ 	(gtk_text_finalize): unref adjustments.
+
+	* gtk/gtkctree.c: added construct args ::n_columns and ::tree_column.
+	added args ::indent, ::spacing, ::show_stub, ::reorderable,
+ 	::use_drag_icons, ::line_style and ::expander_style.
+	(gtk_ctree_set_show_stub): renamed from gtk_ctree_show_stub, which is
+	deprecated now.
+
+	* gtk/gtkclist.h: remove GTK_CLIST_CONSTRUCT flag.
+	* gtk/gtkclist.c:
+ 	removed ::vadjustment and ::hadjustment args, introduced
+ 	::scroll_adjustments signal.
+	added ::shadow_type, ::selection_mode and ::row_height args.
+	added n_columns construct arg.
+	(gtk_clist_construct): call gtk_object_constructed().
+ 	(gtk_clist_set_row_height): if height is passed as 0,
+	revert to automatic height calculation.
+	(gtk_clist_destroy): before unrefing the adjustments, disconnect our
+	signal handlers.
+
+Fri Nov 21 22:34:58 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkwidget.c (gtk_widget_new): call gtk_object_default_construct
+	like gtk_object_new.
+	(gtk_widget_destroy): assert that we only destroy constructed widgets.
+
+	* gtk/gtkobject.h (enum GtkArgFlags): new flag GTK_ARG_CONSTRUCT_ONLY
+	to identify args that may only be used for construction.
+	GTK_ARG_CONSTRUCT maybe used as normal arguments besides construction
+	time.
+	* gtk/gtkobject.c (gtk_object_new): invoke gtk_object_default_construct
+	at the end if the object is not fully constructed.
+	(gtk_object_newv): likewise.
+	(gtk_object_destroy): assert that we only destroy constructed objects.
+ 	(gtk_object_init): setup GTK_CONSTRUCTED from the
+	objects real klass.
+	(gtk_object_default_construct): new function to complete default
+	construction of an object by applying missing construtor args with
+	default values of 0, 0.0 or NULL.
+	(gtk_object_constructed): new function to mark an object as being
+	constructed (used from within constructors).
+
+	* gtk/gtkarg.c (gtk_arg_type_new_static): return the args info pointer
+	so it is immediatedly available for the caller.
+
+	* gtk/gtktypeutils.c (gtk_type_new): pass an object's real class to
+	the object initilizer (GtkObjectInitFunc takes a second arg now, the
+ 	real klass), and asure that object initializers may temporarily alter
+	the class pointer.
+
+Fri Nov 20 08:00:30 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/testgtk.c: change all occourances of gtk_container_add (
+	scrolled_window, widget) to gtk_scrolled_window_add_with_viewport (...)
+	for widget!=(clist, ctree, text, viewport).
+
+	* gtk/gtkcombo.c:
+ 	(gtk_combo_init): use gtk_scrolled_window_add_with_viewport()
+	to add children to the scrolled window.
+
+	* gtk/gtkscrolledwindow.h:
+	* gtk/gtkscrolledwindow.c:
+	changed scrolled_window->viewport to scrolled_window->child, and use
+	gtk_widget_scroll_adjustements() to set the scroll adjustments for the
+	widget, we do not create an additional viewport anymore.
+	added ::hadjustment and ::vadjustment constructor args.
+ 	(gtk_scrolled_window_new): use gtk_widget_new() to create the widget.
+	(gtk_scrolled_window_set_hadjustment):
+	(gtk_scrolled_window_set_vadjustment): new functions that superceed
+	gtk_scrolled_window_construct.
+	(gtk_scrolled_window_construct): deprecated this function.
+	
+	* gtk/gtkhscrollbar.c:
+	* gtk/gtkvscrollbar.c:
+	* gtk/gtkhscale.c:
+	* gtk/gtkvscale.c:
+	support a constructor arg "::adjustment", and use gtk_widget_new() for
+	the widget creation.
+
+	* gtk/gtkrange.c: added ::update_policy arg.
+ 	(gtk_range_set_adjustment): if adjustment is passed in as NULL, create
+ 	a default adjustment so this function can be used for derived widgets
+ 	that depend on the adjustment's existance.
+	(gtk_range_destroy): disconnect the adjustment signal, so we don't
+	get called after we got destroyed, we don't destroy the adjustment
+	in here, because it might have been provided from another widget.
+
+	* gtk/gtkviewport.c: introduced ::scroll_adjustments signal.
+	(gtk_viewport_destroy): same as gtk_range_destroy.
+
+	* gtk/gtkprogress.c (gtk_progress_destroy): same as gtk_range_destroy.
+
+	* gtk/gtkwidget.h: 
+	* gtk/gtkwidget.c: changed gtk_widget_activate() to return a
+	gboolean, indicating whether this widget supports activation.
+	added gtk_widget_scroll_adjustements() to set the scrolling
+	adjustments of a widget.
+
+Wed Nov 19 01:22:42 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkoptionmenu.c:
+ 	(gtk_option_menu_remove_contents):
+	(gtk_option_menu_update_contents): removed
+ 	gtk_container_[un]block_resize() pairs.
+
+	* gtk/gtknotebook.h: 
+	* gtk/gtknotebook.c: removed the tab_border field, since it shouldn't
+	be used outside of gtknotebook.c anyways. made ARG_TAB_BORDER a
+	wrtie-only argument.
+
+	* *.c: made deprecated functions issue a message:
+	gtk_clist_set_border, gtk_container_block_resize,
+ 	gtk_container_unblock_resize, gtk_container_need_resize,
+ 	gtk_object_class_add_user_signal, gtk_spin_button_construct,
+	gtk_scrolled_window_construct.
+	removed non-functional functions:
+	gtk_container_disable_resize, gtk_container_enable_resize,
+	gtk_clist_set_policy.
+
+Wed Nov 18 22:54:36 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkbox.c (gtk_box_init): 
+	* gtk/gtkdrawingarea.c (gtk_drawing_area_init): 
+	* gtk/gtkeventbox.c (gtk_event_box_init): 
+	* gtk/gtkfixed.c (gtk_fixed_init): 
+	* gtk/gtkframe.c (gtk_frame_init): 
+	* gtk/gtkhandlebox.c (gtk_handle_box_init): 
+	* gtk/gtkpacker.c (gtk_packer_init): 
+	* gtk/gtkmisc.c (gtk_misc_init): 
+	* gtk/gtkpreview.c (gtk_preview_init): 
+	* gtk/gtkprogress.c (gtk_progress_init): 
+	* gtk/gtkprogressbar.c (gtk_progress_bar_init): 
+	* gtk/gtkseparator.c (gtk_separator_init): 
+	* gtk/gtktable.c (gtk_table_init): 
+	* gtk/gtkviewport.c (gtk_viewport_init): 
+	* gtk/gtkalignment.c (gtk_alignment_init): 
+	removed setting of the GTK_BASIC flag.
+
+	* gtk/gtkwidget.h:
+	* gtk/gtkwidget.c:
+	removed GTK_BASIC, GTK_WIDGET_BASIC and	gtk_widget_basic.
+
+	* miscellaneous GtkType and macro fixups.
+
 Sat Nov 21 18:53:13 1998  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/gdkwindow.c (gdk_window_get_deskrelative_origin): 
