@@ -1,3 +1,7 @@
+Mon Sep  7 20:09:23 PDT 1998 Manish Singh <yosh@gimp.org>
+
+	* configure.in: comment the -std1 check and save LIBS properly
+
 Sun Sep  6 12:36:23 PDT 1998 Manish Singh <yosh@gimp.org>
 
 	* gtk/testrgb.c: #include <stdlib.h>
