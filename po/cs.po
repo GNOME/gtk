@@ -11,29 +11,28 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-01-09 15:40+0100\n"
-"PO-Revision-Date: 2004-01-09 18:40+0100\n"
+"POT-Creation-Date: 2004-01-13 05:08+0100\n"
+"PO-Revision-Date: 2004-01-13 14:59+0100\n"
 "Last-Translator: Miloslav Trmac <bukm@centrum.cz>\n"
 "Language-Team: Czech <cs@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"  Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%"
-"10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 
-#: gdk-pixbuf/gdk-pixbuf-animation.c:147 gdk-pixbuf/gdk-pixbuf-io.c:731
-#: gdk-pixbuf/gdk-pixbuf-io.c:864 tests/testfilechooser.c:198
+#: gdk-pixbuf/gdk-pixbuf-animation.c:147 gdk-pixbuf/gdk-pixbuf-io.c:736
+#: gdk-pixbuf/gdk-pixbuf-io.c:869 tests/testfilechooser.c:198
 #, c-format
 msgid "Failed to open file '%s': %s"
 msgstr "Nemohu otevřít soubor '%s': %s"
 
-#: gdk-pixbuf/gdk-pixbuf-animation.c:158 gdk-pixbuf/gdk-pixbuf-io.c:741
+#: gdk-pixbuf/gdk-pixbuf-animation.c:158 gdk-pixbuf/gdk-pixbuf-io.c:746
 #, c-format
 msgid "Image file '%s' contains no data"
 msgstr "Soubor obrázku '%s' neobsahuje data"
 
-#: gdk-pixbuf/gdk-pixbuf-animation.c:198 gdk-pixbuf/gdk-pixbuf-io.c:775
-#: gdk-pixbuf/gdk-pixbuf-io.c:901 tests/testfilechooser.c:237
+#: gdk-pixbuf/gdk-pixbuf-animation.c:198 gdk-pixbuf/gdk-pixbuf-io.c:780
+#: gdk-pixbuf/gdk-pixbuf-io.c:906 tests/testfilechooser.c:237
 #, c-format
 msgid ""
 "Failed to load image '%s': reason not known, probably a corrupt image file"
@@ -50,12 +49,12 @@ msgstr ""
 "Nemohu načíst animaci '%s': důvod není znám, pravděpodobně poškozený soubor "
 "animace"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:377
+#: gdk-pixbuf/gdk-pixbuf-io.c:382
 #, c-format
 msgid "Unable to load image-loading module: %s: %s"
 msgstr "Nemohu načíst modul pro čtení obrázků: %s: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:392
+#: gdk-pixbuf/gdk-pixbuf-io.c:397
 #, c-format
 msgid ""
 "Image-loading module %s does not export the proper interface; perhaps it's "
@@ -64,53 +63,53 @@ msgstr ""
 "Modul pro čtení obrázků %s neexportuje správné rozhraní; možná je z jiné "
 "verze GTK?"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:539 gdk-pixbuf/gdk-pixbuf-io.c:587
+#: gdk-pixbuf/gdk-pixbuf-io.c:544 gdk-pixbuf/gdk-pixbuf-io.c:592
 #, c-format
 msgid "Image type '%s' is not supported"
 msgstr "Typ obrázku '%s' není podporován"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:619
+#: gdk-pixbuf/gdk-pixbuf-io.c:624
 #, c-format
 msgid "Couldn't recognize the image file format for file '%s'"
 msgstr "Nemohu rozpoznat formát souboru obrázku u souboru '%s'"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:625
+#: gdk-pixbuf/gdk-pixbuf-io.c:630
 msgid "Unrecognized image file format"
 msgstr "Nerozpoznaný formát souboru obrázku"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:786
+#: gdk-pixbuf/gdk-pixbuf-io.c:791
 #, c-format
 msgid "Failed to load image '%s': %s"
 msgstr "Nemohu načíst obrázek '%s': %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1090
+#: gdk-pixbuf/gdk-pixbuf-io.c:1095
 #, c-format
 msgid "Error writing to image file: %s"
 msgstr "Chyba při zápisu do souboru obrázku: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1134 gdk-pixbuf/gdk-pixbuf-io.c:1250
+#: gdk-pixbuf/gdk-pixbuf-io.c:1139 gdk-pixbuf/gdk-pixbuf-io.c:1255
 #, c-format
 msgid "This build of gdk-pixbuf does not support saving the image format: %s"
 msgstr "Toto sestavení gdk-pixbuf nepodporuje ukládání obrázku ve formátu: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1163
+#: gdk-pixbuf/gdk-pixbuf-io.c:1168
 msgid "Insufficient memory to save image to callback"
 msgstr "Nedostatek paměti pro uložení obrázku pro callback"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1175
+#: gdk-pixbuf/gdk-pixbuf-io.c:1180
 msgid "Failed to open temporary file"
 msgstr "Nemohu otevřít dočasný soubor"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1194
+#: gdk-pixbuf/gdk-pixbuf-io.c:1199
 msgid "Failed to read from temporary file"
 msgstr "Nemohu číst z dočasného souboru"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1374
+#: gdk-pixbuf/gdk-pixbuf-io.c:1379
 #, c-format
 msgid "Failed to open '%s' for writing: %s"
 msgstr "Nemohu otevřít '%s' pro zápis: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1395
+#: gdk-pixbuf/gdk-pixbuf-io.c:1400
 #, c-format
 msgid ""
 "Failed to close '%s' while writing image, all data may not have been saved: %"
@@ -119,7 +118,7 @@ msgstr ""
 "Nemohu se zavřít '%s' během zápisu obrázku, možná nejsou uložena všechna "
 "data: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1581 gdk-pixbuf/gdk-pixbuf-io.c:1631
+#: gdk-pixbuf/gdk-pixbuf-io.c:1586 gdk-pixbuf/gdk-pixbuf-io.c:1636
 msgid "Insufficient memory to save image into a buffer"
 msgstr "Nedostatek paměti pro uložení obrázku do bufferu"
 
@@ -845,52 +844,52 @@ msgstr "Widget akcelerátoru"
 msgid "The widget to be monitored for accelerator changes"
 msgstr "Widget, který sledovat pro změny akcelerátoru"
 
-#: gtk/gtkaction.c:189 gtk/gtkactiongroup.c:118
+#: gtk/gtkaction.c:193 gtk/gtkactiongroup.c:133
 msgid "Name"
 msgstr "Název"
 
-#: gtk/gtkaction.c:190
+#: gtk/gtkaction.c:194
 msgid "A unique name for the action."
 msgstr "Jedinečný název akce."
 
-#: gtk/gtkaction.c:197 gtk/gtkbutton.c:203 gtk/gtkexpander.c:202
+#: gtk/gtkaction.c:201 gtk/gtkbutton.c:203 gtk/gtkexpander.c:202
 #: gtk/gtkframe.c:125 gtk/gtklabel.c:290 gtk/gtktoolbutton.c:179
 msgid "Label"
 msgstr "Popis"
 
-#: gtk/gtkaction.c:198
+#: gtk/gtkaction.c:202
 msgid "The label used for menu items and buttons that activate this action."
 msgstr "Popis používaný propoložky menu a tlačíka, která aktivují tuto akci."
 
-#: gtk/gtkaction.c:204
+#: gtk/gtkaction.c:208
 msgid "Short label"
 msgstr "Krátký popis"
 
-#: gtk/gtkaction.c:205
+#: gtk/gtkaction.c:209
 msgid "A shorter label that may be used on toolbar buttons."
 msgstr "Kratší popis, který může být používán na tlačítkách nástrojové lišty"
 
-#: gtk/gtkaction.c:211
+#: gtk/gtkaction.c:215
 msgid "Tooltip"
 msgstr "Tip"
 
-#: gtk/gtkaction.c:212
+#: gtk/gtkaction.c:216
 msgid "A tooltip for this action."
 msgstr "Tip pro tuto akci."
 
-#: gtk/gtkaction.c:218
+#: gtk/gtkaction.c:222
 msgid "Stock Icon"
 msgstr "Standardní ikona"
 
-#: gtk/gtkaction.c:219
+#: gtk/gtkaction.c:223
 msgid "The stock icon displayed in widgets representing this action."
 msgstr "Standardní ikona zobrazovaná ve widgetech reprezentujících tuto akci."
 
-#: gtk/gtkaction.c:225 gtk/gtktoolitem.c:154
+#: gtk/gtkaction.c:229 gtk/gtktoolitem.c:154
 msgid "Visible when horizontal"
 msgstr "Viditelná, když je vodorovná"
 
-#: gtk/gtkaction.c:226 gtk/gtktoolitem.c:155
+#: gtk/gtkaction.c:230 gtk/gtktoolitem.c:155
 msgid ""
 "Whether the toolbar item is visible when the toolbar is in a horizontal "
 "orientation."
@@ -898,11 +897,11 @@ msgstr ""
 "Jestli je položka nástrojové lišty viditelná, když má lišta nástrojů "
 "vodorovnou orientaci"
 
-#: gtk/gtkaction.c:232 gtk/gtktoolitem.c:161
+#: gtk/gtkaction.c:236 gtk/gtktoolitem.c:161
 msgid "Visible when vertical"
 msgstr "Viditelná, když je svislá"
 
-#: gtk/gtkaction.c:233 gtk/gtktoolitem.c:162
+#: gtk/gtkaction.c:237 gtk/gtktoolitem.c:162
 msgid ""
 "Whether the toolbar item is visible when the toolbar is in a vertical "
 "orientation."
@@ -910,11 +909,11 @@ msgstr ""
 "Jestli je položka nástrojové lišty viditelná, když má lišta nástrojů svislou "
 "orientaci"
 
-#: gtk/gtkaction.c:239 gtk/gtktoolitem.c:168
+#: gtk/gtkaction.c:243 gtk/gtktoolitem.c:168
 msgid "Is important"
 msgstr "Je důležitá"
 
-#: gtk/gtkaction.c:240
+#: gtk/gtkaction.c:244
 msgid ""
 "Whether the action is considered important. When TRUE, toolitem proxies for "
 "this action show text in GTK_TOOLBAR_BOTH_HORIZ mode."
@@ -922,34 +921,52 @@ msgstr ""
 "Jestli je akce považována za důležitou. Je-li TRUE, zobrazují proxy toolitem "
 "protuto akci text v režimu GTK_TOOLBAR_BOTH_HORIZ."
 
-#: gtk/gtkaction.c:246
+#: gtk/gtkaction.c:250
 msgid "Hide if empty"
 msgstr "Skrýt, je-li prázdná"
 
-#: gtk/gtkaction.c:247
+#: gtk/gtkaction.c:251
 msgid "When TRUE, empty menu proxies for this action are hidden."
 msgstr "Je-li TRUE, jsou prázdné proxy menu pro tuto akci skryty."
 
-#: gtk/gtkaction.c:253 gtk/gtkwidget.c:446
+#: gtk/gtkaction.c:257 gtk/gtkactiongroup.c:141 gtk/gtkwidget.c:446
 msgid "Sensitive"
 msgstr "Citlivý"
 
-#: gtk/gtkaction.c:254
+#: gtk/gtkaction.c:258
 msgid "Whether the action is enabled."
 msgstr "Jestli je akce povolena."
 
-#: gtk/gtkaction.c:260 gtk/gtktreeview.c:551 gtk/gtktreeviewcolumn.c:222
-#: gtk/gtkwidget.c:439
+#: gtk/gtkaction.c:264 gtk/gtkactiongroup.c:148 gtk/gtktreeview.c:551
+#: gtk/gtktreeviewcolumn.c:222 gtk/gtkwidget.c:439
 msgid "Visible"
 msgstr "Viditelný"
 
-#: gtk/gtkaction.c:261
+#: gtk/gtkaction.c:265
 msgid "Whether the action is visible."
 msgstr "Jestli je akce viditelná."
 
-#: gtk/gtkactiongroup.c:119
+#: gtk/gtkaction.c:271
+msgid "Action Group"
+msgstr "Skupina akcí"
+
+#: gtk/gtkaction.c:272
+msgid ""
+"The GtkActionGroup this GtkAction is associated with, or NULL (for internal "
+"use)."
+msgstr "GtkAction Group, ke které je tato GtkAction přiřazena, nebo NULL (pro interní použití)."
+
+#: gtk/gtkactiongroup.c:134
 msgid "A name for the action group."
 msgstr "Název skupiny akcí."
+
+#: gtk/gtkactiongroup.c:142
+msgid "Whether the action group is enabled."
+msgstr "Jestli je skupina akcí povolena."
+
+#: gtk/gtkactiongroup.c:149
+msgid "Whether the action group is visible."
+msgstr "Jestli je skupina akcí viditelná."
 
 #: gtk/gtkalignment.c:116
 msgid "Horizontal alignment"
@@ -5570,38 +5587,38 @@ msgstr "Pořadí třídění"
 msgid "Sort direction the sort indicator should indicate"
 msgstr "Směr třídění, který označuje indikátor třídění"
 
-#: gtk/gtkuimanager.c:213
+#: gtk/gtkuimanager.c:217
 msgid "Add tearoffs to menus"
 msgstr "Přidat odtrhávátka do menu"
 
-#: gtk/gtkuimanager.c:214
+#: gtk/gtkuimanager.c:218
 msgid "Whether tearoff menu items should be added to menus"
 msgstr "Jestli mají být do menu přidávány položky pro odtržení"
 
-#: gtk/gtkuimanager.c:221
+#: gtk/gtkuimanager.c:225
 msgid "Merged UI definition"
 msgstr "Definice sloučeného UI"
 
-#: gtk/gtkuimanager.c:222
+#: gtk/gtkuimanager.c:226
 msgid "An XML string describing the merged UI"
 msgstr "Řetězec XML popisující sloučené UI"
 
-#: gtk/gtkuimanager.c:929
+#: gtk/gtkuimanager.c:1064
 #, c-format
 msgid "Unknown attribute '%s' on line %d char %d"
 msgstr "Neznámý atribut '%s' na řádku %d znak %d"
 
-#: gtk/gtkuimanager.c:1138
+#: gtk/gtkuimanager.c:1273
 #, c-format
 msgid "Unexpected start tag '%s' on line %d char %d"
 msgstr "Neočekávaný počáteční tag '%s' na řádku %d znak %d"
 
-#: gtk/gtkuimanager.c:1222
+#: gtk/gtkuimanager.c:1358
 #, c-format
 msgid "Unexpected character data on line %d char %d"
 msgstr "Neočekávaná data znaků na řádku %d znak %d"
 
-#: gtk/gtkuimanager.c:1993
+#: gtk/gtkuimanager.c:2135
 msgid "Empty"
 msgstr "Prázdný"
 
