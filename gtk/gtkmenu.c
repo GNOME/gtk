@@ -417,7 +417,8 @@ gtk_menu_window_size_request (GtkWidget      *window,
 
   if (private->have_position)
     {
-      gint screen_height = gdk_screen_height ();
+      GdkScreen *screen = gtk_widget_get_screen (window);
+      gint screen_height = gdk_screen_get_height (screen);
 
       if (private->y + requisition->height > screen_height)
 	requisition->height = screen_height - private->y;

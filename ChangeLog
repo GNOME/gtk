@@ -1,3 +1,9 @@
+Fri Dec  6 17:46:42 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkmenu.c (gtk_menu_window_size_request): Use
+	the correct screen for getting the height.
+	(Fix from Stephen Browne, #96777)
+
 Thu Dec  5 16:01:14 2002  Eric Warmenhoven <eric@warmenhoven.org>
 
 	* gdk/{linux-fb,win32}/Makefile.am: Fix gdkenumtypes.h hack
