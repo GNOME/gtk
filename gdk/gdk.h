@@ -12,8 +12,9 @@
  * Library General Public License for more details.
  *
  * You should have received a copy of the GNU Library General Public
- * License along with this library; if not, write to the Free
- * Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ * License along with this library; if not, write to the
+ * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+ * Boston, MA 02111-1307, USA.
  */
 #ifndef __GDK_H__
 #define __GDK_H__
@@ -770,7 +771,11 @@ gboolean       gdk_region_point_in  (GdkRegion	   *region,
 				     int		   x,
 				     int		   y);
 GdkOverlapType gdk_region_rect_in   (GdkRegion	   *region,
-				     GdkRectangle   *rect);
+				     GdkRectangle  *rect);
+
+GdkRegion*     gdk_region_polygon   (GdkPoint      *points,
+				     gint           npoints,
+				     GdkFillRule    fill_rule);
 
 void	       gdk_region_offset   (GdkRegion	   *region,
 				    gint	   dx,

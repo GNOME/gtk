@@ -12,8 +12,9 @@
  * Library General Public License for more details.
  *
  * You should have received a copy of the GNU Library General Public
- * License along with this library; if not, write to the Free
- * Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ * License along with this library; if not, write to the
+ * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+ * Boston, MA 02111-1307, USA.
  */
  
 #include <X11/Xlib.h>
@@ -118,6 +119,39 @@ gdk_region_rect_in (GdkRegion      *region,
   return GDK_OVERLAP_RECTANGLE_OUT;  /*what else ? */
 }
 				    
+GdkRegion *
+gdk_region_polygon (GdkPoint    *points,
+		    gint         npoints,
+		    GdkFillRule  fill_rule)
+{
+  GdkRegionPrivate *private;
+  GdkRegion *region;
+  Region xregion;
+  int xfill_rule;
+
+  g_return_val_if_fail (points != NULL, NULL);
+  g_return_val_if_fail (npoints != 0, NULL); /* maybe we should check for at least three points */
+
+  switch (fill_rule)
+    {
+    case GDK_EVEN_ODD_RULE:
+      xfill_rule = EvenOddRule;
+      break;
+
+    case GDK_WINDING_RULE:
+      xfill_rule = WindingRule;
+      break;
+    }
+
+  xregion = XPolygonRegion ((XPoint *) points, npoints, xfill_rule);
+  private = g_new (GdkRegionPrivate, 1);
+  private->xregion = xregion;
+  region = (GdkRegion *) private;
+  region->user_data = NULL;
+
+  return region;
+}
+
 void          
 gdk_region_offset (GdkRegion      *region,
                    gint           dx,

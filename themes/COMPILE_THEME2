@@ -1,10 +1,10 @@
 mkdir .libs
 
 gcc -c theme2_button.c -o theme2_button.lo \
- -I. -I.. -I../glib -I/usr/X11R6/include \
+ -I. -I.. -I../gtk -I../gdk -I../glib -I/usr/X11R6/include \
  -g -O2 -DGTK_NO_CHECK_CASTS -Wall -DUSE_XIM -c -fPIC -DPIC
 gcc -c theme2_main.c -o theme2_main.lo \
- -I. -I.. -I../glib -I/usr/X11R6/include \
+ -I. -I.. -I../gtk -I../gdk -I../glib -I/usr/X11R6/include \
  -g -O2 -DGTK_NO_CHECK_CASTS -Wall -DUSE_XIM -c -fPIC -DPIC
 
 /bin/sh ../libtool --mode=link gcc -g -O2 -DGTK_NO_CHECK_CASTS -Wall \
@@ -17,5 +17,5 @@ theme2_main.lo
 # NEED to do this to install sample theme (run testgtk with --theme theme2) 
 # for user
 
-ln -sf .libs ~/themes
+ln -sf `pwd`/.libs ~/themes
 cp -r theme_data/* ~/themes

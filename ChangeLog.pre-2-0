@@ -1,3 +1,108 @@
+Mon Apr 13 19:16:22 PDT 1998 Shawn T. Amundson <amundson@gtk.org>
+
+	* Released GTK+ 1.0.0
+
+Mon Apr 13 21:40:14 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* gtk/gtktext.c (find_char_width): Don't read the
+	character past the end of the text.
+
+	* gtk/gtkrange.c (gtk_real_range_timer): If the mouse
+	button has been released before the timer is activated,
+	don't keep on scrolling.
+
+	* gdk/gdk.c (gdk_event_translate): Filter subsequent configure
+	events after we discard the first. Removed obsolete and
+	sometimes very slow GdkOtherEvent. (Left in gdktypes.h
+	with signal in GTK)
+
+Mon Apr 13 18:03:54 PDT 1998 Shawn T. Amundson <amundson@gtk.org>
+
+	* README: update address info to gtk.org for ftp and web sites.
+
+1998-04-13  Federico Mena Quintero  <federico@nuclecu.unam.mx>
+
+	* gdk/gdkregion.c (gdk_region_polygon): New function; wrapper for
+	XPolygonRegion().
+
+	* gdk/gdk.h: Added prototype for gdk_region_polygon().
+
+	* gdk/gdktypes.h (GdkFillRule): New enum type of fill rule for polygons.
+
+Mon Apr 13 15:04:26 1998  Michael K. Johnson <johnsonm@redhat.com>
+
+	* gtk/testgtk.c (create_clist): removed duplicate call to
+	gtk_widget_set_policy.
+
+Mon Apr 13 05:03:11 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkwindow.c (gtk_window_add_accelerator_table): check for
+	accelerator table to be != NULL.
+	(gtk_window_remove_accelerator_table): likewise.
+
+Sun Apr 12 19:35:09 PDT 1998 Shawn T. Amundson <amundson@gtk.org>
+
+	* INSTALL: typo, gtk-1.0.0 should be gtk+-1.0.0
+	* README: A little more intro on what gtk is...
+
+Sun Apr 12 22:43:22 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* gtk/gtkmenuitem.c (gtk_menu_item_size_allocate):
+	An old allocation error.
+
+	* gtk/gtkviewport.c (gtk_viewport_add): Don't map
+	when adding a not-VISIBLE widget to a VISIBLE 
+	viewport.
+	
+Sun Apr 12 18:54:29 PDT 1998 Shawn T. Amundson <amundson@gtk.org>
+
+	* Changed LGPL address for FSF in all .h and .c files
+
+Sun Apr 12 20:09:40 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* gtk/gtklabel.[ch] (gtk_label_expose): Set a flag so
+	instead of clearing the area in advance. That looked
+	_really_ bad.
+
+	* gtk/gtkcontainer.c (gtk_container_class_init): Changed
+	"focus" to RUN_LAST.
+
+	* gtk/gtkentry.c (gtk_entry_realize): Fixed place
+	where allocation was used where requisition was meant.
+	(Found by David J N Begley <david@avarice.nepean.uws.edu.au>)
+
+	* gtk/gtkwindow.c (gtk_window_set_default): Fixed
+	assertion in when setting default to NULL> 
+	("Damon Chaplin" <DAChaplin@email.msn.com>)
+
+	* gtk/gtkwidget.c (gtk_widget_unparent): Unset the
+	default widget on the toplevel, if necessary.
+
+Sun Apr 12 02:04:21 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* gtk/gtkpreview.c: Removed unecessary and harmful
+	htons/ntohs when storing properties. (X does the byte
+	swapping itself)
+
+Sat Apr 11 02:01:31 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* gtk/gtktext.c (scroll_down): Removed incorrect part of
+	assertion that was causing failures for scrolling a single
+	line very short text widget.
+
+Sat Apr 11 01:41:55 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* gtk/gtktext.c (expose_text): Fixed a sign problem 
+	(typedef gint guint!). Added some checks to make sure things
+	are positive.
+
+Sat Apr 11 05:51:22 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtktooltips.c (gtk_tooltips_event_handler): don't shut down the
+	tooltip on expose events.
+
+	* gtk/testgtk.c (create_progress_bar): add an example tooltip.
+
 Fri Apr 10 00:10:16 1998  Owen Taylor  <owt1@cornell.edu>
 
 	* README/INSTALL: Extended for the 1.0 release.
