@@ -380,8 +380,6 @@ main (int argc, char **argv)
 					    "file:///usr/share/pixmaps",
 					    NULL);
 
-  /* Done with the dialog */
-  gtk_window_set_default_size (GTK_WINDOW (dialog), 600, 400);
   /* show_all() to reveal bugs in composite widget handling */
   gtk_widget_show_all (dialog);
 
