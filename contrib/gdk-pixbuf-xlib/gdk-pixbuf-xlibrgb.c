@@ -460,18 +460,36 @@ xlib_rgb_colorcube_222 (void)
     }
 }
 
+/**
+ * xlib_rgb_set_verbose:
+ * @verbose: %True to be verbose
+ * 
+ * Enables/disables debug spew.
+ **/
 void
 xlib_rgb_set_verbose (Bool verbose)
 {
   xlib_rgb_verbose = verbose;
 }
 
+/**
+ * xlib_rgb_set_install:
+ * @install: %True to install a colormap
+ * 
+ * Sets whether we install an RGB colormap.
+ **/
 void
 xlib_rgb_set_install (Bool install)
 {
   xlib_rgb_install_cmap = install;
 }
 
+/**
+ * xlib_rgb_set_min_colors:
+ * @min_colors: minimum colors to use
+ * 
+ * Sets the minimum number of colors in the color cube.
+ **/
 void
 xlib_rgb_set_min_colors (int min_colors)
 {
@@ -1020,7 +1038,7 @@ xlib_rgb_gc_set_foreground (GC gc, guint32 rgb)
 }
 
 /**
- * xlib_rgb_gc_set_foreground:
+ * xlib_rgb_gc_set_background:
  * @gc: A graphic context.
  * @rgb: 32-bit representation of an RGB value, specified as 0x00RRGGBB.
  * 

@@ -1,6 +1,7 @@
 #include <gtk/gtk.h>
 
 #include <stdio.h>
+#include <stdlib.h>
 
 GdkInterpType interp_type = GDK_INTERP_BILINEAR;
 int overall_alpha = 255;

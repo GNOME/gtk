@@ -605,18 +605,14 @@ main (int argc, char **argv)
 			status.rgbwin = &rgb_window;
 
 			status.buf = g_malloc (readlen);
-                        g_signal_connect_data (G_OBJECT(pixbuf_loader),
-                                               "area_prepared",
-                                               GTK_SIGNAL_FUNC(progressive_prepared_callback),
-                                               &rgb_window,
-                                               NULL, FALSE, FALSE);
-
-                        g_signal_connect_data (G_OBJECT(pixbuf_loader),
-                                               "area_updated",
-                                               GTK_SIGNAL_FUNC(progressive_updated_callback),
-                                               &rgb_window,
-                                               NULL, FALSE, FALSE);
-
+                        g_signal_connect (G_OBJECT(pixbuf_loader),
+					  "area_prepared",
+					  GTK_SIGNAL_FUNC(progressive_prepared_callback),
+					  &rgb_window);
+                        g_signal_connect (G_OBJECT(pixbuf_loader),
+					  "area_updated",
+					  GTK_SIGNAL_FUNC(progressive_updated_callback),
+					  &rgb_window);
 			
                         status.imagefile = fopen (argv[1], "r");
                         g_assert (status.imagefile != NULL);
