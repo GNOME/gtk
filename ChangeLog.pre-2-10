@@ -1,5 +1,8 @@
 2004-07-28  Matthias Clasen  <mclasen@redhat.com>
 
+	* gdk/linux-fb/gdkprivate-fb.h: Make the fb backend compile against
+	current freetype.  (#148558, Nicolas Deves)
+
 	* gtk/gtktreeview.c: Replace the EXPANDER_MAX macro by 
 	ROW_HEIGHT.  (#145528)
 
