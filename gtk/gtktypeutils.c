@@ -257,6 +257,23 @@ gtk_type_unique (GtkType      parent_type,
   return new_type;
 }
 
+gboolean
+gtk_type_get_info (GtkType type,
+		   GtkTypeInfo *info)
+{
+  GtkTypeNode *node;
+
+  if (info == NULL)
+    return FALSE;
+
+  LOOKUP_TYPE_NODE (node, type);
+  if (node == NULL)
+    return FALSE;
+
+  *info = node->type_info;
+  return TRUE;
+}
+
 gchar*
 gtk_type_name (GtkType type)
 {

@@ -268,7 +268,6 @@ gtk_signal_newv (const gchar	     *r_name,
   gchar *name;
   
   g_return_val_if_fail (r_name != NULL, 0);
-  g_return_val_if_fail (marshaller != NULL, 0);
   g_return_val_if_fail (nparams < MAX_SIGNAL_PARAMS, 0);
   if (nparams)
     g_return_val_if_fail (params != NULL, 0);
@@ -1673,10 +1672,17 @@ gtk_signal_connect_by_type (GtkObject	    *object,
   GtkObjectClass *class;
   GtkHandler *handler;
   gint found_it;
-  
+  GtkSignal *signal;
+ 
   g_return_val_if_fail (object != NULL, 0);
   g_return_val_if_fail (object->klass != NULL, 0);
   
+  /* A signal without a default marshaller can only take no_marshal
+     handlers. */
+
+  signal = LOOKUP_SIGNAL_ID (signal_id);
+  g_return_val_if_fail (signal->marshaller || no_marshal, 0);
+
   /* Search through the signals for this object and make
    *  sure the one we are adding is valid. We need to perform
    *  the lookup on the objects parents as well. If it isn't

@@ -313,6 +313,8 @@ struct _GtkEnumValue
 void		gtk_type_init			(void);
 GtkType		gtk_type_unique			(GtkType	   parent_type,
 						 const GtkTypeInfo *type_info);
+gboolean        gtk_type_get_info               (GtkType         type,
+						 GtkTypeInfo    *info);
 void		gtk_type_set_chunk_alloc	(GtkType	 type,
 						 guint		 n_chunks);
 gchar*		gtk_type_name			(guint		 type);
