@@ -32,13 +32,6 @@ static void     gtk_hpaned_size_request   (GtkWidget      *widget,
 					   GtkRequisition *requisition);
 static void     gtk_hpaned_size_allocate  (GtkWidget      *widget,
 					   GtkAllocation  *allocation);
-static void     gtk_hpaned_xor_line       (GtkPaned       *paned);
-static gboolean gtk_hpaned_button_press   (GtkWidget      *widget,
-					   GdkEventButton *event);
-static gboolean gtk_hpaned_button_release (GtkWidget      *widget,
-					   GdkEventButton *event);
-static gboolean gtk_hpaned_motion         (GtkWidget      *widget,
-					   GdkEventMotion *event);
 
 static gpointer parent_class;
 
@@ -78,9 +71,6 @@ gtk_hpaned_class_init (GtkHPanedClass *class)
 
   widget_class->size_request = gtk_hpaned_size_request;
   widget_class->size_allocate = gtk_hpaned_size_allocate;
-  widget_class->button_press_event = gtk_hpaned_button_press;
-  widget_class->button_release_event = gtk_hpaned_button_release;
-  widget_class->motion_notify_event = gtk_hpaned_motion;
 }
 
 static void
@@ -230,120 +220,4 @@ gtk_hpaned_size_allocate (GtkWidget     *widget,
       else if (paned->child2 && GTK_WIDGET_VISIBLE (paned->child2))
 	gtk_widget_size_allocate (paned->child2, &child_allocation);
     }
-}
-
-static void
-gtk_hpaned_xor_line (GtkPaned *paned)
-{
-  GtkWidget *widget;
-  GdkGCValues values;
-  guint16 xpos;
-  gint handle_size;
-
-  widget = GTK_WIDGET (paned);
-
-  gtk_widget_style_get (widget, "handle_size", &handle_size, NULL);
-
-  if (!paned->xor_gc)
-    {
-      values.function = GDK_INVERT;
-      values.subwindow_mode = GDK_INCLUDE_INFERIORS;
-      paned->xor_gc = gdk_gc_new_with_values (widget->window,
-					      &values,
-					      GDK_GC_FUNCTION | GDK_GC_SUBWINDOW);
-    }
-
-  gdk_gc_set_line_attributes (paned->xor_gc, 2, GDK_LINE_SOLID,
-			      GDK_CAP_NOT_LAST, GDK_JOIN_BEVEL);
-
-  xpos = widget->allocation.x + paned->child1_size
-    + GTK_CONTAINER (paned)->border_width + handle_size / 2;
-
-  gdk_draw_line (widget->window, paned->xor_gc,
-		 xpos,
-		 widget->allocation.y,
-		 xpos,
-		 widget->allocation.y + widget->allocation.height - 1);
-}
-
-static gboolean
-gtk_hpaned_button_press (GtkWidget      *widget,
-			 GdkEventButton *event)
-{
-  GtkPaned *paned = GTK_PANED (widget);
-  gint handle_size;
-
-  gtk_widget_style_get (widget, "handle_size", &handle_size, NULL);
-
-  if (!paned->in_drag &&
-      event->window == paned->handle && event->button == 1)
-    {
-      paned->in_drag = TRUE;
-      /* We need a server grab here, not gtk_grab_add(), since
-       * we don't want to pass events on to the widget's children */
-      gdk_pointer_grab(paned->handle, FALSE,
-		       GDK_POINTER_MOTION_HINT_MASK
-		       | GDK_BUTTON1_MOTION_MASK
-		       | GDK_BUTTON_RELEASE_MASK,
-		       NULL, NULL, event->time);
-      paned->child1_size += event->x - handle_size / 2;
-      paned->child1_size = CLAMP (paned->child1_size, 0,
-				  widget->allocation.width
-				  - handle_size
-				  - 2 * GTK_CONTAINER (paned)->border_width);
-      gtk_hpaned_xor_line (paned);
-
-      return TRUE;
-    }
-
-  return FALSE;
-}
-
-static gboolean
-gtk_hpaned_button_release (GtkWidget      *widget,
-			   GdkEventButton *event)
-{
-  GtkPaned *paned = GTK_PANED (widget);
-  GObject *object = G_OBJECT (widget);
-
-  if (paned->in_drag && (event->button == 1))
-    {
-      gtk_hpaned_xor_line (paned);
-      paned->in_drag = FALSE;
-      paned->position_set = TRUE;
-      gdk_pointer_ungrab (event->time);
-      gtk_widget_queue_resize (GTK_WIDGET (paned));
-      g_object_freeze_notify (object);
-      g_object_notify (object, "position");
-      g_object_notify (object, "position_set");
-      g_object_thaw_notify (object);
-  
-      return TRUE;
-    }
-
-  return FALSE;
-}
-
-static gboolean
-gtk_hpaned_motion (GtkWidget      *widget,
-		   GdkEventMotion *event)
-{
-  GtkPaned *paned = GTK_PANED (widget);
-  gint x;
-  gint handle_size;
-
-  gtk_widget_style_get (widget, "handle_size", &handle_size, NULL);
-
-  gtk_widget_get_pointer (widget, &x, NULL);
-
-  if (paned->in_drag)
-    {
-      gint size = x - GTK_CONTAINER (paned)->border_width - handle_size / 2;
-
-      gtk_hpaned_xor_line (paned);
-      paned->child1_size = CLAMP (size, paned->min_position, paned->max_position);
-      gtk_hpaned_xor_line (paned);
-    }
-
-  return TRUE;
 }

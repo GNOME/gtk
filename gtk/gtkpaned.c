@@ -63,8 +63,18 @@ static void     gtk_paned_realize               (GtkWidget        *widget);
 static void     gtk_paned_unrealize             (GtkWidget        *widget);
 static void     gtk_paned_map                   (GtkWidget        *widget);
 static void     gtk_paned_unmap                 (GtkWidget        *widget);
-static gint     gtk_paned_expose                (GtkWidget        *widget,
+static gboolean gtk_paned_expose                (GtkWidget        *widget,
 						 GdkEventExpose   *event);
+static gboolean gtk_paned_enter                 (GtkWidget        *widget,
+						 GdkEventCrossing *event);
+static gboolean gtk_paned_leave                 (GtkWidget        *widget,
+						 GdkEventCrossing *event);
+static gboolean gtk_paned_button_press		(GtkWidget      *widget,
+						 GdkEventButton *event);
+static gboolean gtk_paned_button_release	(GtkWidget      *widget,
+						 GdkEventButton *event);
+static gboolean gtk_paned_motion		(GtkWidget      *widget,
+						 GdkEventMotion *event);
 static gboolean gtk_paned_focus                 (GtkWidget        *widget,
 						 GtkDirectionType  direction);
 static void     gtk_paned_add                   (GtkContainer     *container,
@@ -176,6 +186,11 @@ gtk_paned_class_init (GtkPanedClass *class)
   widget_class->unmap = gtk_paned_unmap;
   widget_class->expose_event = gtk_paned_expose;
   widget_class->focus = gtk_paned_focus;
+  widget_class->enter_notify_event = gtk_paned_enter;
+  widget_class->leave_notify_event = gtk_paned_leave;
+  widget_class->button_press_event = gtk_paned_button_press;
+  widget_class->button_release_event = gtk_paned_button_release;
+  widget_class->motion_notify_event = gtk_paned_motion;
   
   container_class->add = gtk_paned_add;
   container_class->remove = gtk_paned_remove;
@@ -374,10 +389,13 @@ gtk_paned_init (GtkPaned *paned)
   paned->last_child1_focus = NULL;
   paned->last_child2_focus = NULL;
   paned->in_recursion = FALSE;
+  paned->handle_prelit = FALSE;
   paned->original_position = -1;
   
   paned->handle_pos.x = -1;
   paned->handle_pos.y = -1;
+
+  paned->drag_pos = -1;
 }
 
 static void
@@ -445,8 +463,11 @@ gtk_paned_realize (GtkWidget *widget)
   attributes.width = paned->handle_pos.width;
   attributes.height = paned->handle_pos.height;
   attributes.cursor = gdk_cursor_new (paned->cursor_type);
+  attributes.event_mask = gtk_widget_get_events (widget);
   attributes.event_mask |= (GDK_BUTTON_PRESS_MASK |
 			    GDK_BUTTON_RELEASE_MASK |
+			    GDK_ENTER_NOTIFY_MASK |
+			    GDK_LEAVE_NOTIFY_MASK |
 			    GDK_POINTER_MOTION_MASK |
 			    GDK_POINTER_MOTION_HINT_MASK);
   attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_CURSOR;
@@ -509,7 +530,7 @@ gtk_paned_unmap (GtkWidget *widget)
   GTK_WIDGET_CLASS (parent_class)->unmap (widget);
 }
 
-static gint
+static gboolean
 gtk_paned_expose (GtkWidget      *widget,
 		  GdkEventExpose *event)
 {
@@ -531,9 +552,12 @@ gtk_paned_expose (GtkWidget      *widget,
 
 	  gdk_region_get_clipbox (region, &clip);
 
-	  state = GTK_WIDGET_STATE (widget);
 	  if (gtk_widget_is_focus (widget))
 	    state = GTK_STATE_SELECTED;
+	  else if (paned->handle_prelit)
+	    state = GTK_STATE_PRELIGHT;
+	  else
+	    state = GTK_WIDGET_STATE (widget);
 	  
 	  gtk_paint_handle (widget->style, widget->window,
 			    state, GTK_SHADOW_NONE,
@@ -545,11 +569,66 @@ gtk_paned_expose (GtkWidget      *widget,
 
       gdk_region_destroy (region);
     }
-  
+
   /* Chain up to draw children */
   GTK_WIDGET_CLASS (parent_class)->expose_event (widget, event);
-
+  
   return FALSE;
+}
+
+static void
+update_drag (GtkPaned *paned)
+{
+  gint pos;
+  gint handle_size;
+  gint size;
+  
+  if (paned->orientation == GTK_ORIENTATION_HORIZONTAL)
+    gtk_widget_get_pointer (GTK_WIDGET (paned), NULL, &pos);
+  else
+    gtk_widget_get_pointer (GTK_WIDGET (paned), &pos, NULL);
+
+  gtk_widget_style_get (GTK_WIDGET (paned), "handle_size", &handle_size, NULL);
+  
+  size = pos - GTK_CONTAINER (paned)->border_width - paned->drag_pos;
+  size = CLAMP (size, paned->min_position, paned->max_position);
+
+  if (size != paned->child1_size)
+    gtk_paned_set_position (paned, size);
+}
+
+static gboolean
+gtk_paned_enter (GtkWidget        *widget,
+		 GdkEventCrossing *event)
+{
+  GtkPaned *paned = GTK_PANED (widget);
+  
+  if (paned->in_drag)
+    update_drag (paned);
+  else
+    {
+      paned->handle_prelit = TRUE;
+      gtk_widget_queue_draw (widget);
+    }
+  
+  return TRUE;
+}
+
+static gboolean
+gtk_paned_leave (GtkWidget        *widget,
+		 GdkEventCrossing *event)
+{
+  GtkPaned *paned = GTK_PANED (widget);
+  
+  if (paned->in_drag)
+    update_drag (paned);
+  else
+    {
+      paned->handle_prelit = FALSE;
+      gtk_widget_queue_draw (widget);
+    }
+
+  return TRUE;
 }
 
 static gboolean
@@ -568,6 +647,73 @@ gtk_paned_focus (GtkWidget        *widget,
   GTK_WIDGET_SET_FLAGS (widget, GTK_CAN_FOCUS);
 
   return retval;
+}
+
+static gboolean
+gtk_paned_button_press (GtkWidget      *widget,
+			GdkEventButton *event)
+{
+  GtkPaned *paned = GTK_PANED (widget);
+
+  if (!paned->in_drag &&
+      (event->window == paned->handle) && (event->button == 1))
+    {
+      paned->in_drag = TRUE;
+
+      /* We need a server grab here, not gtk_grab_add(), since
+       * we don't want to pass events on to the widget's children */
+      gdk_pointer_grab (paned->handle, FALSE,
+			GDK_POINTER_MOTION_HINT_MASK
+			| GDK_BUTTON1_MOTION_MASK
+			| GDK_BUTTON_RELEASE_MASK
+			| GDK_ENTER_NOTIFY_MASK
+			| GDK_LEAVE_NOTIFY_MASK,
+			NULL, NULL,
+			event->time);
+
+      if (paned->orientation == GTK_ORIENTATION_HORIZONTAL)
+	paned->drag_pos = event->y;
+      else
+	paned->drag_pos = event->x;
+      
+      return TRUE;
+    }
+
+  return FALSE;
+}
+
+static gboolean
+gtk_paned_button_release (GtkWidget      *widget,
+			  GdkEventButton *event)
+{
+  GtkPaned *paned = GTK_PANED (widget);
+
+  if (paned->in_drag && (event->button == 1))
+    {
+      paned->in_drag = FALSE;
+      paned->drag_pos = -1;
+      paned->position_set = TRUE;
+      gdk_pointer_ungrab (event->time);
+
+      return TRUE;
+    }
+
+  return FALSE;
+}
+
+static gboolean
+gtk_paned_motion (GtkWidget      *widget,
+		  GdkEventMotion *event)
+{
+  GtkPaned *paned = GTK_PANED (widget);
+  
+  if (paned->in_drag)
+    {
+      update_drag (paned);
+      return TRUE;
+    }
+  
+  return FALSE;
 }
 
 void

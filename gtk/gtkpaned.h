@@ -73,11 +73,13 @@ struct _GtkPaned
   guint child2_resize : 1;
   guint orientation : 1;
   guint in_recursion : 1;
+  guint handle_prelit : 1;
 
   GtkWidget *last_child1_focus;
   GtkWidget *last_child2_focus;
   GtkWidget *saved_focus;
-  
+
+  gint drag_pos;
   gint original_position;
 };
  

@@ -1,3 +1,8 @@
+Mon Feb 11 22:03:15 2002  Soeren Sandmann  <sandmann@daimi.au.dk>
+
+	* gtk/gtkpaned.[ch]: Opaque resizing + prelighting for paned widget.
+	* gtk/gtkvpaned.c, gtk/gtkvpaned.h: move reszing logic to gtkpaned.c
+
 Mon Feb 11 21:42:17 2002  Kristian Rietveld  <kris@gtk.org>
 
 	Implements DnD scrolling and fixes #71139
@@ -29,6 +34,7 @@ Mon Feb 11 16:40:44 2002  Kristian Rietveld  <kris@gtk.org>
 	* gtk/gtktreeview.c (gtk_tree_view_set_model): install presize
 	handler, so the validate_rows_handler will always be run (#70997)
 
+>>>>>>> 1.2993
 Sun Feb 10 22:20:46 2002  Kristian Rietveld  <kris@gtk.org>
 
 	* gtk/gtkliststore.c (gtk_list_store_sort_iter_changed): increase
