@@ -1188,6 +1188,8 @@ if test "x$gdktarget" = "xx11"; then
 
   AM_CONDITIONAL(USE_X11, true)
 else
+  AM_CONDITIONAL(HAVE_XFT, false)
+  AM_CONDITIONAL(XINPUT_XFREE, false)
   AM_CONDITIONAL(USE_X11, false)
 fi
 
