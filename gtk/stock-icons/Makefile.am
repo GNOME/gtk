@@ -75,12 +75,16 @@ IMAGES = \
 	stock_properties_24.png 	\
 	stock_redo_16.png		\
 	stock_redo_24.png 		\
+	stock_redo_rtl_16.png		\
+	stock_redo_rtl_24.png 		\
 	stock_refresh_16.png		\
 	stock_refresh_24.png 		\
 	stock_remove_16.png 		\
 	stock_remove_24.png 		\
 	stock_revert_16.png		\
 	stock_revert_24.png 		\
+	stock_revert_rtl_16.png		\
+	stock_revert_rtl_24.png		\
 	stock_right_arrow_16.png	\
 	stock_right_arrow_24.png 	\
 	stock_save_16.png		\
@@ -113,8 +117,12 @@ IMAGES = \
 	stock_trash_24.png 		\
 	stock_undelete_16.png		\
 	stock_undelete_24.png 		\
+	stock_undelete_rtl_16.png	\
+	stock_undelete_rtl_24.png	\
 	stock_undo_16.png		\
 	stock_undo_24.png 		\
+	stock_undo_rtl_16.png		\
+	stock_undo_rtl_24.png 		\
 	stock_up_arrow_16.png		\
 	stock_up_arrow_24.png 		\
 	stock_yes_20.png		\
@@ -203,12 +211,16 @@ VARIABLES4 = \
 	stock_properties_24	$(srcdir)/stock_properties_24.png	\
 	stock_redo_16		$(srcdir)/stock_redo_16.png		\
 	stock_redo_24		$(srcdir)/stock_redo_24.png             \
+	stock_redo_rtl_16	$(srcdir)/stock_redo_rtl_16.png		\
+	stock_redo_rtl_24	$(srcdir)/stock_redo_rtl_24.png 	\
 	stock_refresh_16	$(srcdir)/stock_refresh_16.png		\
 	stock_refresh_24	$(srcdir)/stock_refresh_24.png		\
 	stock_remove_16		$(srcdir)/stock_remove_16.png		\
 	stock_remove_24		$(srcdir)/stock_remove_24.png		\
 	stock_revert_16		$(srcdir)/stock_revert_16.png		\
 	stock_revert_24		$(srcdir)/stock_revert_24.png		\
+	stock_revert_rtl_16	$(srcdir)/stock_revert_rtl_16.png	\
+	stock_revert_rtl_24	$(srcdir)/stock_revert_rtl_24.png	\
 	stock_right_arrow_16	$(srcdir)/stock_right_arrow_16.png	\
 	stock_right_arrow_24	$(srcdir)/stock_right_arrow_24.png	\
 	stock_save_16		$(srcdir)/stock_save_16.png
@@ -243,8 +255,12 @@ VARIABLES6 = \
 	stock_trash_24		$(srcdir)/stock_trash_24.png		\
 	stock_undelete_16	$(srcdir)/stock_undelete_16.png		\
 	stock_undelete_24	$(srcdir)/stock_undelete_24.png		\
+	stock_undelete_rtl_16	$(srcdir)/stock_undelete_rtl_16.png	\
+	stock_undelete_rtl_24	$(srcdir)/stock_undelete_rtl_24.png	\
 	stock_undo_16		$(srcdir)/stock_undo_16.png		\
 	stock_undo_24		$(srcdir)/stock_undo_24.png             \
+	stock_undo_rtl_16	$(srcdir)/stock_undo_rtl_16.png		\
+	stock_undo_rtl_24	$(srcdir)/stock_undo_rtl_24.png		\
 	stock_up_arrow_16	$(srcdir)/stock_up_arrow_16.png		\
 	stock_up_arrow_24	$(srcdir)/stock_up_arrow_24.png		\
 	stock_yes_20		$(srcdir)/stock_yes_20.png  		\

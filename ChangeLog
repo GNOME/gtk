@@ -1,3 +1,10 @@
+2003-06-07  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkiconfactory.c (get_default_icons): 
+	* gtk/stock-icons/stock_{undo,redo,undelete,revert}_rtl_{16,24}.png:
+	* gtk/stock-icons/Makefile.am: Add rtl variants of undo, redo,
+	undelete and revert.  (#96633)
+	
 Fri Jun  6 16:25:44 2003  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkviewport.c: Many fixes, along with extensive cleanups and 

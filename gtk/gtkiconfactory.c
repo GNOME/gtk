@@ -689,11 +689,13 @@ get_default_icons (GtkIconFactory *factory)
 			   GTK_ICON_SIZE_MENU,
 			   GTK_STOCK_PROPERTIES);
   
-  add_sized_with_fallback (factory,
-			   stock_redo_24,
-			   stock_redo_16,
-			   GTK_ICON_SIZE_MENU,
-			   GTK_STOCK_REDO);
+  add_sized_with_fallback_and_rtl (factory,
+				   stock_redo_24,
+				   stock_redo_rtl_24,
+				   stock_redo_16,
+				   stock_redo_rtl_16,
+				   GTK_ICON_SIZE_MENU,
+				   GTK_STOCK_REDO);
 
   add_sized_with_fallback (factory,
 			   stock_remove_24,
@@ -707,11 +709,13 @@ get_default_icons (GtkIconFactory *factory)
 			   GTK_ICON_SIZE_MENU,
 			   GTK_STOCK_REFRESH);
 
-  add_sized_with_fallback (factory,
-			   stock_revert_24,
-			   stock_revert_16,
-			   GTK_ICON_SIZE_MENU,
-			   GTK_STOCK_REVERT_TO_SAVED);
+  add_sized_with_fallback_and_rtl (factory,
+				   stock_revert_24,
+				   stock_revert_rtl_24,
+				   stock_revert_16,
+				   stock_revert_rtl_16,
+				   GTK_ICON_SIZE_MENU,
+				   GTK_STOCK_REVERT_TO_SAVED);
 
   add_sized_with_fallback_and_rtl (factory,
 				   stock_right_arrow_24,
@@ -811,17 +815,21 @@ get_default_icons (GtkIconFactory *factory)
                            GTK_ICON_SIZE_MENU,
                            GTK_STOCK_DELETE);
 
-  add_sized_with_fallback (factory,
-                           stock_undelete_24,
-                           stock_undelete_16,
-                           GTK_ICON_SIZE_MENU,
-                           GTK_STOCK_UNDELETE);
+  add_sized_with_fallback_and_rtl (factory,
+				   stock_undelete_24,
+				   stock_undelete_rtl_24,
+				   stock_undelete_16,
+				   stock_undelete_rtl_16,
+				   GTK_ICON_SIZE_MENU,
+				   GTK_STOCK_UNDELETE);
 
-  add_sized_with_fallback (factory,
-			   stock_undo_24,
-			   stock_undo_16,
-			   GTK_ICON_SIZE_MENU,
-			   GTK_STOCK_UNDO);
+  add_sized_with_fallback_and_rtl (factory,
+				   stock_undo_24,
+				   stock_undo_rtl_24,
+				   stock_undo_16,
+				   stock_undo_rtl_16,
+				   GTK_ICON_SIZE_MENU,
+				   GTK_STOCK_UNDO);
 
   add_sized_with_fallback (factory,
                            stock_up_arrow_24,
