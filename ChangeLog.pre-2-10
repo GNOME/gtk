@@ -1,3 +1,12 @@
+Tue Mar  6 19:59:12 2001  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtkcellrenderer.h (struct _GtkCellRenderer): Add visible
+	field to allow you to hide cell renderers.
+
+	* gtk/gtkcellrenderer.c: Add support for invisible cells.
+
+	* gtk/gtktreeview.c: Add support for invisible cells.
+
 Tue Mar  6 17:25:07 2001  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtktreeviewcolumn.c (gtk_tree_view_column_button_clicked):

@@ -51,6 +51,8 @@ struct _GtkCellRenderer
 {
   GtkObject parent;
 
+  gboolean visible;
+
   gfloat xalign;
   gfloat yalign;
 

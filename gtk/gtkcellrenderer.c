@@ -36,10 +36,11 @@ static void gtk_cell_renderer_set_property  (GObject              *object,
 
 enum {
   PROP_ZERO,
+  PROP_VISIBLE,
   PROP_XALIGN,
   PROP_YALIGN,
   PROP_XPAD,
-  PROP_YPAD
+  PROP_YPAD,
 };
 
 
@@ -75,11 +76,12 @@ gtk_cell_renderer_init (GtkCellRenderer *cell)
   /* FIXME remove on port to GtkObject */
   gtk_object_ref (GTK_OBJECT (cell));
   gtk_object_sink (GTK_OBJECT (cell));
-  
-  cell->xpad = 0;
-  cell->ypad = 0;
+
+  cell->visible = TRUE;
   cell->xalign = 0.5;
   cell->yalign = 0.5;
+  cell->xpad = 0;
+  cell->ypad = 0;
 }
 
 static void
@@ -93,6 +95,14 @@ gtk_cell_renderer_class_init (GtkCellRendererClass *class)
   class->render = NULL;
   class->get_size = NULL;
 
+  g_object_class_install_property (object_class,
+				   PROP_VISIBLE,
+				   g_param_spec_boolean ("visible",
+							 _("visible"),
+							 _("Display the cell"),
+							 TRUE,
+							 G_PARAM_READABLE |
+							 G_PARAM_WRITABLE));
   
   g_object_class_install_property (object_class,
 				   PROP_XALIGN,
@@ -150,6 +160,9 @@ gtk_cell_renderer_get_property (GObject     *object,
 
   switch (param_id)
     {
+    case PROP_VISIBLE:
+      g_value_set_boolean (value, cell->visible);
+      break;
     case PROP_XALIGN:
       g_value_set_float (value, cell->xalign);
       break;
@@ -180,6 +193,10 @@ gtk_cell_renderer_set_property (GObject      *object,
 
   switch (param_id)
     {
+    case PROP_VISIBLE:
+      cell->visible = g_value_get_boolean (value);
+      g_object_notify (object, "visible");
+      break;
     case PROP_XALIGN:
       cell->xalign = g_value_get_float (value);
       g_object_notify (object, "xalign");
