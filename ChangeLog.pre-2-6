@@ -1,5 +1,10 @@
 2002-02-09  Daniel Elstner  <daniel.elstner@gmx.net>
 
+	* gtk/gtktextchild.c: Use == rather than = in sanity
+	checks.  Ouch!
+
+2002-02-09  Daniel Elstner  <daniel.elstner@gmx.net>
+
 	* gtk/gtktextchild.c (CHECK_IN_BUFFER_RETURN): Add missing
 	curled braces so that it doesn't always return.  Also indent
 	both CHECK_IN_BUFFER* macros properly, and make use of

@@ -247,7 +247,7 @@ void
 _gtk_widget_segment_add    (GtkTextLineSegment *widget_segment,
                             GtkWidget          *child)
 {
-  g_return_if_fail (widget_segment->type = &gtk_text_child_type);
+  g_return_if_fail (widget_segment->type == &gtk_text_child_type);
   g_return_if_fail (widget_segment->body.child.tree != NULL);
 
   g_object_ref (G_OBJECT (child));
@@ -261,7 +261,7 @@ void
 _gtk_widget_segment_remove (GtkTextLineSegment *widget_segment,
                             GtkWidget          *child)
 {
-  g_return_if_fail (widget_segment->type = &gtk_text_child_type);
+  g_return_if_fail (widget_segment->type == &gtk_text_child_type);
   
   widget_segment->body.child.widgets =
     g_slist_remove (widget_segment->body.child.widgets,
@@ -273,7 +273,7 @@ _gtk_widget_segment_remove (GtkTextLineSegment *widget_segment,
 void
 _gtk_widget_segment_ref (GtkTextLineSegment *widget_segment)
 {
-  g_assert (widget_segment->type = &gtk_text_child_type);
+  g_assert (widget_segment->type == &gtk_text_child_type);
 
   g_object_ref (G_OBJECT (widget_segment->body.child.obj));
 }
@@ -281,7 +281,7 @@ _gtk_widget_segment_ref (GtkTextLineSegment *widget_segment)
 void
 _gtk_widget_segment_unref (GtkTextLineSegment *widget_segment)
 {
-  g_assert (widget_segment->type = &gtk_text_child_type);
+  g_assert (widget_segment->type == &gtk_text_child_type);
 
   g_object_unref (G_OBJECT (widget_segment->body.child.obj));
 }
@@ -421,7 +421,7 @@ gtk_text_child_anchor_get_widgets (GtkTextChildAnchor *anchor)
 
   CHECK_IN_BUFFER_RETURN (anchor, NULL);
   
-  g_return_val_if_fail (seg->type = &gtk_text_child_type, NULL);
+  g_return_val_if_fail (seg->type == &gtk_text_child_type, NULL);
 
   iter = seg->body.child.widgets;
   while (iter != NULL)
@@ -457,7 +457,7 @@ gtk_text_child_anchor_get_deleted (GtkTextChildAnchor *anchor)
 
   CHECK_IN_BUFFER_RETURN (anchor, TRUE);
   
-  g_return_val_if_fail (seg->type = &gtk_text_child_type, TRUE);
+  g_return_val_if_fail (seg->type == &gtk_text_child_type, TRUE);
 
   return seg->body.child.tree == NULL;
 }
