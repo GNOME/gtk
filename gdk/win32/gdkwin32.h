@@ -63,44 +63,84 @@
 #endif
 
 
+/* Missing messages */
 #ifndef WM_GETOBJECT
 #define WM_GETOBJECT 0x3D
 #endif
-
 #ifndef WM_NCXBUTTONDOWN
 #define WM_NCXBUTTONDOWN 0xAB
+#endif
+#ifndef WM_NCXBUTTONUP
 #define WM_NCXBUTTONUP 0xAC
+#endif
+#ifndef WM_NCXBUTTONDBLCLK
 #define WM_NCXBUTTONDBLCLK 0xAD
 #endif
-
+#ifndef WM_MENURBUTTONUP
+#define WM_MENURBUTTONUP 0x122
+#endif
+#ifndef WM_MENUDRAG
+#define WM_MENUDRAG 0x123
+#endif
+#ifndef WM_MENUGETOBJECT
+#define WM_MENUGETOBJECT 0x124
+#endif
+#ifndef WM_UNINITMENUPOPUP
+#define WM_UNINITMENUPOPUP 0x125
+#endif
+#ifndef WM_MENUCOMMAND
+#define WM_MENUCOMMAND 0x126
+#endif
 #ifndef WM_CHANGEUISTATE
 #define WM_CHANGEUISTATE 0x127
+#endif
+#ifndef WM_UPDATEUISTATE
 #define WM_UPDATEUISTATE 0x128
+#endif
+#ifndef WM_QUERYUISTATE
 #define WM_QUERYUISTATE 0x129
 #endif
-
 #ifndef WM_XBUTTONDOWN
 #define WM_XBUTTONDOWN 0x20B
+#endif
+#ifndef WM_XBUTTONUP
 #define WM_XBUTTONUP 0x20C
+#endif
+#ifndef WM_XBUTTONDBLCLK
 #define WM_XBUTTONDBLCLK 0x20D
 #endif
-
 #ifndef WM_IME_REQUEST
 #define WM_IME_REQUEST 0x288
 #endif
-
+#ifndef WM_MOUSEHOVER
+#define WM_MOUSEHOVER 0x2A1
+#endif
+#ifndef WM_MOUSELEAVE
+#define WM_MOUSELEAVE 0x2A3
+#endif
 #ifndef WM_NCMOUSEHOVER
 #define WM_NCMOUSEHOVER 0x2A0
+#endif
+#ifndef WM_NCMOUSELEAVE
 #define WM_NCMOUSELEAVE 0x2A2
 #endif
-
 #ifndef WM_APPCOMMAND
 #define WM_APPCOMMAND 0x319
 #endif
-
+#ifndef WM_HANDHELDFIRST
+#define WM_HANDHELDFIRST 0x358
+#endif
+#ifndef WM_HANDHELDLAST
+#define WM_HANDHELDLAST 0x35F
+#endif
+#ifndef WM_AFXFIRST
+#define WM_AFXFIRST 0x360
+#endif
+#ifndef WM_AFXLAST
+#define WM_AFXLAST 0x37F
+#endif
 
 #include <gdk/gdkprivate.h>
-#include "gdkwin32.h"
 
 /* Define corresponding Windows types for some X11 types, just for laziness. */
 typedef PALETTEENTRY XColor;

@@ -1,3 +1,32 @@
+2000-05-13  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/win32/gdkwin32.h: Define more message types missing from
+	mingw headers.
+
+	* gdk/win32/gdkevents-win32.c (gdk_event_translate): On WM_DESTROY
+	call gdk_window_destroy_notify(). It was never called. This
+	probably meant that the GdkWindow was never freed. Thanks Owen for
+	noticing (!).
+
+	* gdk/win32/gdkwindow-win32.c (gdk_window_internal_destroy): Mark
+	window as destroyed before calling DestroyWindow(). DestroyWindow()
+	causes a call to the window procedure (gdk_WindowProc), which
+	calls gdk_event_translate(), which calls
+	gdk_window_destroy_notify(), which gets confused unless the window
+	is set as destroyed.
+
+	* gdk/win32/gdkcolor-win32.c (gdk_win32_color_to_string): Rename
+	this function to indicate it's win32 only. Put inside #ifdef
+	G_ENABLE_DEBUG.
+
+	* gdk/win32/gdkevents-win32.c (gdk_win32_message_name): New
+	debugging function. (gdk_event_translate:) Add a default branch
+	that uses the above function to print debug messages with all
+	Windows messages symbolically.
+
+	* gdk/win32/gdkprivate-win32.h: Declare it, and
+	gdk_win32_color_to_string, but only if G_ENABLE_DEBUG.
+
 Fri May 12 20:07:32 2000  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkcolorseldialog.c: don't include gtk/gtkintl.h in a

@@ -624,14 +624,20 @@ gdk_window_internal_destroy (GdkWindow *window,
 		  PostMessage (GDK_DRAWABLE_XID (window), WM_QUIT, 0, 0);
 		}
 	    }
-	  else if (xdestroy)
-	    DestroyWindow (GDK_DRAWABLE_XID (window));
+	  else
+	    {
+	      private->drawable.destroyed = TRUE;
+	      if (xdestroy)
+		{
+		  /* Calls gdk_WindowProc */
+		  DestroyWindow (GDK_DRAWABLE_XID (window));
+		}
+	    }
 
 	  if (private->drawable.colormap)
 	    gdk_colormap_unref (private->drawable.colormap);
 
 	  private->mapped = FALSE;
-	  private->drawable.destroyed = TRUE;
 	}
       break;
 
@@ -1398,7 +1404,7 @@ gdk_window_set_background (GdkWindow *window,
     {
       GDK_NOTE (MISC, g_print ("gdk_window_set_background: %#x %s\n",
 			       GDK_DRAWABLE_XID (window), 
-			       gdk_color_to_string (color)));
+			       gdk_win32_color_to_string (color)));
 
       if (GDK_WINDOW_WIN32DATA (window)->bg_type == GDK_WIN32_BG_PIXMAP)
 	{

@@ -73,7 +73,11 @@ void    gdk_wchar_text_handle    (GdkFont       *font,
 							  void *),
 				  void          *arg);
 
-gchar  *gdk_color_to_string         (const GdkColor *);
+#ifdef G_ENABLE_DEBUG
+gchar *gdk_win32_color_to_string (const GdkColor *);
+gchar *gdk_win32_message_name    (UINT msg);
+#endif
+
 gchar  *gdk_win32_last_error_string (void);
 void    gdk_win32_api_failed        (const gchar *where,
 				     gint line,

@@ -2213,8 +2213,10 @@ gdk_colormap_cmp (Colormap *a,
   return (*a == *b);
 }
 
+#ifdef G_ENABLE_DEBUG
+
 gchar *
-gdk_color_to_string (const GdkColor *color)
+gdk_win32_color_to_string (const GdkColor *color)
 {
   static char buf[100];
 
@@ -2223,3 +2225,5 @@ gdk_color_to_string (const GdkColor *color)
 
   return buf;
 }
+
+#endif
