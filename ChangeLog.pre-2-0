@@ -1,5 +1,40 @@
 2000-10-26  Havoc Pennington  <hp@redhat.com>
 
+	* gtk/gtktextiter.c (my_strrstr): fix constness warning
+
+        Fixed output of:
+	nm -g -l .libs/libgtk-x11-1.3.so | grep ' T ' | grep -v gtk_ | grep -v GTK_
+	
+	* gtk/gtktextsegment.c (char_segment_new): rename
+	(_char_segment_new_from_two_strings): rename
+	(_toggle_segment_new): rename
+	
+	* gtk/gtkclipboard.c (ensure_clipboard_widget): make this static
+	(make_clipboard_widget): make it static
+	(text_get_func): static
+	(text_clear_func): static
+
+	* gtk/gtkcolorsel.c (adjustment_changed): make this function
+	static
+	(hex_changed): make it static
+	(hsv_changed): make it static
+	(opacity_entry_changed): make it static
+
+	* gtk/gtktextbtree.c (change_node_toggle_count): rename with _gtk
+	(toggle_segment_check_func): rename with _gtk
+
+	* gtk/gtktextchild.c (_pixbuf_segment_new): rename with _gtk
+	(_widget_segment_new): rename
+	(_widget_segment_add): rename
+	(_widget_segment_remove): rename
+	(_widget_segment_ref): rename
+	(_widget_segment_unref): rename
+
+	* gtk/gtktextmark.c (_mark_segment_new): Rename
+	_gtk_mark_segment_new	
+
+2000-10-26  Havoc Pennington  <hp@redhat.com>
+
 	* gtk/gtkmarshal.list: add new marshallers used by the text widget
 
 	* gtk/gtktextbuffer.c (gtk_text_buffer_class_init): fix marshaller

@@ -262,11 +262,11 @@ void gtk_text_btree_spew (GtkTextBTree *tree);
 extern gboolean gtk_text_view_debug_btree;
 
 /* ignore, exported only for gtktextsegment.c */
-void toggle_segment_check_func (GtkTextLineSegment *segPtr,
-                                GtkTextLine        *line);
-void change_node_toggle_count  (GtkTextBTreeNode   *node,
-                                GtkTextTagInfo     *info,
-                                gint                delta);
+void _gtk_toggle_segment_check_func (GtkTextLineSegment *segPtr,
+                                     GtkTextLine        *line);
+void _gtk_change_node_toggle_count  (GtkTextBTreeNode   *node,
+                                     GtkTextTagInfo     *info,
+                                     gint                delta);
 
 
 #ifdef __cplusplus

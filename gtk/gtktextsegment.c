@@ -184,7 +184,7 @@ char_segment_self_check(GtkTextLineSegment *seg)
 }
 
 GtkTextLineSegment*
-char_segment_new(const gchar *text, guint len)
+_gtk_char_segment_new(const gchar *text, guint len)
 {
   GtkTextLineSegment *seg;
 
@@ -206,8 +206,8 @@ char_segment_new(const gchar *text, guint len)
 }
 
 GtkTextLineSegment*
-char_segment_new_from_two_strings(const gchar *text1, guint len1,
-                                  const gchar *text2, guint len2)
+_gtk_char_segment_new_from_two_strings(const gchar *text1, guint len1,
+                                       const gchar *text2, guint len2)
 {
   GtkTextLineSegment *seg;
 
@@ -262,8 +262,8 @@ char_segment_split_func(GtkTextLineSegment *seg, int index)
       char_segment_self_check(seg);
     }
   
-  new1 = char_segment_new(seg->body.chars, index);
-  new2 = char_segment_new(seg->body.chars + index, seg->byte_count - index);
+  new1 = _gtk_char_segment_new (seg->body.chars, index);
+  new2 = _gtk_char_segment_new (seg->body.chars + index, seg->byte_count - index);
 
   g_assert(gtk_text_byte_begins_utf8_char(new1->body.chars));
   g_assert(gtk_text_byte_begins_utf8_char(new2->body.chars));
@@ -320,8 +320,9 @@ char_segment_cleanup_func(segPtr, line)
       return segPtr;
     }
 
-  newPtr = char_segment_new_from_two_strings(segPtr->body.chars, segPtr->byte_count,
-                                             segPtr2->body.chars, segPtr2->byte_count);
+  newPtr =
+    _gtk_char_segment_new_from_two_strings (segPtr->body.chars, segPtr->byte_count,
+                                            segPtr2->body.chars, segPtr2->byte_count);
 
   newPtr->next = segPtr2->next;
 
@@ -405,7 +406,7 @@ char_segment_check_func(segPtr, line)
 }
 
 GtkTextLineSegment*
-toggle_segment_new(GtkTextTagInfo *info, gboolean on)
+_gtk_toggle_segment_new(GtkTextTagInfo *info, gboolean on)
 {
   GtkTextLineSegment *seg;
 
@@ -467,8 +468,8 @@ toggle_segment_delete_func(segPtr, line, treeGone)
 
   if (segPtr->body.toggle.inNodeCounts)
     {
-      change_node_toggle_count(line->parent,
-                               segPtr->body.toggle.info, -1);
+      _gtk_change_node_toggle_count(line->parent,
+                                    segPtr->body.toggle.info, -1);
       segPtr->body.toggle.inNodeCounts = 0;
     }
   return 1;
@@ -530,8 +531,8 @@ toggle_segment_cleanup_func(segPtr, line)
             + segPtr2->body.toggle.inNodeCounts;
           if (counts != 0)
             {
-              change_node_toggle_count(line->parent,
-                                       segPtr->body.toggle.info, -counts);
+              _gtk_change_node_toggle_count(line->parent,
+                                            segPtr->body.toggle.info, -counts);
             }
           prevPtr->next = segPtr2->next;
           g_free((char *) segPtr2);
@@ -543,8 +544,8 @@ toggle_segment_cleanup_func(segPtr, line)
 
   if (!segPtr->body.toggle.inNodeCounts)
     {
-      change_node_toggle_count(line->parent,
-                               segPtr->body.toggle.info, 1);
+      _gtk_change_node_toggle_count(line->parent,
+                                    segPtr->body.toggle.info, 1);
       segPtr->body.toggle.inNodeCounts = 1;
     }
   return segPtr;
@@ -574,8 +575,8 @@ toggle_segment_line_change_func(segPtr, line)
 {
   if (segPtr->body.toggle.inNodeCounts)
     {
-      change_node_toggle_count(line->parent,
-                               segPtr->body.toggle.info, -1);
+      _gtk_change_node_toggle_count (line->parent,
+                                     segPtr->body.toggle.info, -1);
       segPtr->body.toggle.inNodeCounts = 0;
     }
 }
@@ -607,7 +608,7 @@ GtkTextLineSegmentClass gtk_text_toggle_on_type = {
   toggle_segment_delete_func,                           /* deleteFunc */
   toggle_segment_cleanup_func,          		/* cleanupFunc */
   toggle_segment_line_change_func,			/* lineChangeFunc */
-  toggle_segment_check_func				/* checkFunc */
+  _gtk_toggle_segment_check_func			/* checkFunc */
 };
 
 /*
@@ -622,5 +623,5 @@ GtkTextLineSegmentClass gtk_text_toggle_off_type = {
   toggle_segment_delete_func,				/* deleteFunc */
   toggle_segment_cleanup_func,				/* cleanupFunc */
   toggle_segment_line_change_func,			/* lineChangeFunc */
-  toggle_segment_check_func				/* checkFunc */
+  _gtk_toggle_segment_check_func                        /* checkFunc */
 };

@@ -157,7 +157,7 @@ selection_clear_event_cb (GtkWidget	    *widget,
   return FALSE;
 }
 
-GtkWidget *
+static GtkWidget *
 make_clipboard_widget (gboolean provider)
 {
   GtkWidget *widget = gtk_invisible_new ();
@@ -180,7 +180,7 @@ make_clipboard_widget (gboolean provider)
 }
 
 
-void
+static void
 ensure_clipboard_widget ()
 {
   if (!clipboard_widget)
@@ -492,7 +492,7 @@ gtk_clipboard_clear (GtkClipboard *clipboard)
 			     clipboard_get_timestamp (clipboard));
 }
 
-void 
+static void 
 text_get_func (GtkClipboard     *clipboard,
 	       GtkSelectionData *selection_data,
 	       guint             info,
@@ -501,7 +501,7 @@ text_get_func (GtkClipboard     *clipboard,
   gtk_selection_data_set_text (selection_data, data);
 }
 
-void 
+static void 
 text_clear_func (GtkClipboard *clipboard,
 		 gpointer      data)
 {

@@ -63,7 +63,7 @@ struct _GtkTextPixbuf
   GdkPixbuf *pixbuf;
 };
 
-GtkTextLineSegment *_pixbuf_segment_new (GdkPixbuf *pixbuf);
+GtkTextLineSegment *_gtk_pixbuf_segment_new (GdkPixbuf *pixbuf);
 
 typedef struct _GtkTextChildBody GtkTextChildBody;
 
@@ -75,13 +75,13 @@ struct _GtkTextChildBody
   GtkTextLine *line;
 };
 
-GtkTextLineSegment *_widget_segment_new    (void);
-void                _widget_segment_add    (GtkTextLineSegment *widget_segment,
-                                            GtkWidget          *child);
-void                _widget_segment_remove (GtkTextLineSegment *widget_segment,
-                                            GtkWidget          *child);
-void                _widget_segment_ref    (GtkTextLineSegment *widget_segment);
-void                _widget_segment_unref  (GtkTextLineSegment *widget_segment);
+GtkTextLineSegment *_gtk_widget_segment_new    (void);
+void                _gtk_widget_segment_add    (GtkTextLineSegment *widget_segment,
+                                                GtkWidget          *child);
+void                _gtk_widget_segment_remove (GtkTextLineSegment *widget_segment,
+                                                GtkWidget          *child);
+void                _gtk_widget_segment_ref    (GtkTextLineSegment *widget_segment);
+void                _gtk_widget_segment_unref  (GtkTextLineSegment *widget_segment);
 
 #ifdef __cplusplus
 }

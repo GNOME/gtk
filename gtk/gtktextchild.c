@@ -101,7 +101,7 @@ GtkTextLineSegmentClass gtk_text_pixbuf_type = {
 	+ sizeof(GtkTextPixbuf)))
 
 GtkTextLineSegment *
-_pixbuf_segment_new (GdkPixbuf *pixbuf)
+_gtk_pixbuf_segment_new (GdkPixbuf *pixbuf)
 {
   GtkTextLineSegment *seg;
 
@@ -137,7 +137,7 @@ child_segment_delete_func (GtkTextLineSegment *seg,
                            GtkTextLine       *line,
                            gboolean           tree_gone)
 {
-  _widget_segment_unref (seg);
+  _gtk_widget_segment_unref (seg);
 
   return 0;
 }
@@ -170,7 +170,7 @@ GtkTextLineSegmentClass gtk_text_child_type = {
 	+ sizeof(GtkTextChildBody)))
 
 GtkTextLineSegment *
-_widget_segment_new (void)
+_gtk_widget_segment_new (void)
 {
   GtkTextLineSegment *seg;
 
@@ -194,7 +194,7 @@ _widget_segment_new (void)
 }
 
 void
-_widget_segment_add    (GtkTextLineSegment *widget_segment,
+_gtk_widget_segment_add    (GtkTextLineSegment *widget_segment,
                         GtkWidget          *child)
 {
   g_assert (widget_segment->type = &gtk_text_child_type);
@@ -207,7 +207,7 @@ _widget_segment_add    (GtkTextLineSegment *widget_segment,
 }
 
 void
-_widget_segment_remove (GtkTextLineSegment *widget_segment,
+_gtk_widget_segment_remove (GtkTextLineSegment *widget_segment,
                         GtkWidget          *child)
 {
   g_assert (widget_segment->type = &gtk_text_child_type);
@@ -220,7 +220,7 @@ _widget_segment_remove (GtkTextLineSegment *widget_segment,
 }
 
 void
-_widget_segment_ref (GtkTextLineSegment *widget_segment)
+_gtk_widget_segment_ref (GtkTextLineSegment *widget_segment)
 {
   g_assert (widget_segment->type = &gtk_text_child_type);
 
@@ -228,7 +228,7 @@ _widget_segment_ref (GtkTextLineSegment *widget_segment)
 }
 
 void
-_widget_segment_unref (GtkTextLineSegment *widget_segment)
+_gtk_widget_segment_unref (GtkTextLineSegment *widget_segment)
 {
   g_assert (widget_segment->type = &gtk_text_child_type);
 
@@ -263,7 +263,7 @@ gtk_text_child_anchor_ref (GtkTextChildAnchor *anchor)
   g_return_if_fail (seg->type = &gtk_text_child_type);
   g_return_if_fail (seg->body.child.ref_count > 0);
 
-  _widget_segment_ref (seg);
+  _gtk_widget_segment_ref (seg);
 }
 
 void
@@ -274,7 +274,7 @@ gtk_text_child_anchor_unref (GtkTextChildAnchor *anchor)
   g_return_if_fail (seg->type = &gtk_text_child_type);
   g_return_if_fail (seg->body.child.ref_count > 0);
 
-  _widget_segment_unref (seg);
+  _gtk_widget_segment_unref (seg);
 }
 
 GList*

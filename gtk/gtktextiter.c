@@ -3307,7 +3307,7 @@ my_strrstr (const gchar *haystack,
         }
 
       if (n == needle_rend)
-        return ++s;
+        return (gchar*)++s;
         
       --p;
     }

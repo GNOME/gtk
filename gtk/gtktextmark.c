@@ -171,9 +171,9 @@ gtk_text_mark_get_deleted (GtkTextMark *mark)
 
 
 GtkTextLineSegment*
-_mark_segment_new (GtkTextBTree *tree,
-                   gboolean      left_gravity,
-                   const gchar  *name)
+_gtk_mark_segment_new (GtkTextBTree *tree,
+                       gboolean      left_gravity,
+                       const gchar  *name)
 {
   GtkTextLineSegment *mark;
 

@@ -1005,7 +1005,7 @@ get_screen_color (GtkWidget *button)
     }
 }
 
-void
+static void
 hex_changed (GtkWidget *hex_entry,
 	     gpointer   data)
 {
@@ -1037,7 +1037,7 @@ hex_changed (GtkWidget *hex_entry,
   g_free (text);
 }
 
-void
+static void
 hsv_changed (GtkWidget *hsv,
 	     gpointer   data)
 {
@@ -1063,7 +1063,7 @@ hsv_changed (GtkWidget *hsv,
   update_color (colorsel);
 }
 
-void
+static void
 adjustment_changed (GtkAdjustment *adjustment,
 		    gpointer       data)
 {
@@ -1116,7 +1116,7 @@ adjustment_changed (GtkAdjustment *adjustment,
   update_color (colorsel);
 }
 
-void 
+static void 
 opacity_entry_changed (GtkWidget *opacity_entry,
 		       gpointer   data)
 {

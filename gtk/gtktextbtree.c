@@ -380,11 +380,11 @@ gtk_text_btree_new (GtkTextTagTable *table,
   line->parent = root_node;
   line->next = line2;
 
-  line->segments = char_segment_new("\n", 1);
+  line->segments = _gtk_char_segment_new("\n", 1);
 
   line2->parent = root_node;
   line2->next = NULL;
-  line2->segments = char_segment_new("\n", 1);
+  line2->segments = _gtk_char_segment_new("\n", 1);
 
   /* Create the tree itself */
   
@@ -975,7 +975,7 @@ gtk_text_btree_insert (GtkTextIter *iter,
         }
       chunkSize = eol - sol;
 
-      seg = char_segment_new(&text[sol], chunkSize);
+      seg = _gtk_char_segment_new (&text[sol], chunkSize);
 
       char_count_delta += seg->char_count;
     
@@ -1068,7 +1068,7 @@ gtk_text_btree_insert_pixbuf (GtkTextIter *iter,
   tree = gtk_text_iter_get_btree(iter);
   start_byte_offset = gtk_text_iter_get_line_index(iter);
   
-  seg = _pixbuf_segment_new (pixbuf);
+  seg = _gtk_pixbuf_segment_new (pixbuf);
 
   prevPtr = gtk_text_line_segment_split(iter);
   if (prevPtr == NULL)
@@ -1572,7 +1572,7 @@ gtk_text_btree_tag (const GtkTextIter *start_orig,
     {
       /* This could create a second toggle at the start position;
          cleanup_line() will remove it if so. */
-      seg = toggle_segment_new(info, add);
+      seg = _gtk_toggle_segment_new(info, add);
 
       prev = gtk_text_line_segment_split(&start);
       if (prev == NULL)
@@ -1679,8 +1679,8 @@ gtk_text_btree_tag (const GtkTextIter *start_orig,
       /* Update node counts */
       if (seg->body.toggle.inNodeCounts)
         {
-          change_node_toggle_count(line->parent,
-                                   info, -1);
+          _gtk_change_node_toggle_count(line->parent,
+                                        info, -1);
           seg->body.toggle.inNodeCounts = FALSE;
         }
 
@@ -1707,7 +1707,7 @@ gtk_text_btree_tag (const GtkTextIter *start_orig,
       /* This could create a second toggle at the start position;
          cleanup_line() will remove it if so. */
       
-      seg = toggle_segment_new(info, !add);
+      seg = _gtk_toggle_segment_new(info, !add);
 
       prev = gtk_text_line_segment_split(&end);
       if (prev == NULL)
@@ -2462,9 +2462,9 @@ real_set_mark(GtkTextBTree *tree,
     }
   else
     {
-      mark = _mark_segment_new (tree,
-                                left_gravity,
-                                name);
+      mark = _gtk_mark_segment_new (tree,
+                                    left_gravity,
+                                    name);
 
       mark->body.mark.line = gtk_text_iter_get_text_line(&iter);
 
@@ -5775,9 +5775,9 @@ recompute_node_counts(GtkTextBTree *tree, GtkTextBTreeNode *node)
 }
 
 void
-change_node_toggle_count(GtkTextBTreeNode *node,
-                         GtkTextTagInfo *info,
-                         gint delta) /* may be negative */
+_gtk_change_node_toggle_count(GtkTextBTreeNode *node,
+                              GtkTextTagInfo   *info,
+                              gint              delta) /* may be negative */
 {
   Summary *summary, *prevPtr;
   GtkTextBTreeNode *node2Ptr;
@@ -5836,8 +5836,8 @@ change_node_toggle_count(GtkTextBTreeNode *node,
                * first place).
                */
 
-              g_error("change_node_toggle_count: bad toggle count (%d) max (%d)",
-                      summary->toggle_count, info->toggle_count);
+              g_error("%s: bad toggle count (%d) max (%d)",
+                      G_STRLOC, summary->toggle_count, info->toggle_count);
             }
     
           /*
@@ -6088,7 +6088,7 @@ gtk_text_btree_unlink_segment(GtkTextBTree *tree,
 /*
  *--------------------------------------------------------------
  *
- * toggle_segment_check_func --
+ * _gtk_toggle_segment_check_func --
  *
  *      This procedure is invoked to perform consistency checks
  *      on toggle segments.
@@ -6103,8 +6103,8 @@ gtk_text_btree_unlink_segment(GtkTextBTree *tree,
  */
 
 void
-toggle_segment_check_func(GtkTextLineSegment *segPtr,
-                          GtkTextLine *line)
+_gtk_toggle_segment_check_func (GtkTextLineSegment *segPtr,
+                                GtkTextLine *line)
 {
   Summary *summary;
   int needSummary;
