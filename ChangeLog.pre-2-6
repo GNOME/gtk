@@ -1,3 +1,8 @@
+Thu Feb 14 21:08:49 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdkglobals.c: Remove GDKVAR from C file, see
+	if anyone complains. (#71317, Morten Welinder.)
+
 2002-02-14  Matthias Clasen  <matthias@YAST_ASK>
 
 	The following changes are the beginning of the work on #71430.
