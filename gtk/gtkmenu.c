@@ -1369,34 +1369,15 @@ static gboolean
 gtk_menu_expose (GtkWidget	*widget,
 		 GdkEventExpose *event)
 {
-  GtkMenuShell *menu_shell;
-  GtkWidget *child;
-  GList *children;
-  GtkMenu *menu;
-  
   g_return_val_if_fail (widget != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_MENU (widget), FALSE);
   g_return_val_if_fail (event != NULL, FALSE);
 
-  menu_shell = GTK_MENU_SHELL (widget);
-  menu = GTK_MENU (widget);
-  
   if (GTK_WIDGET_DRAWABLE (widget))
     {
-      GdkEventExpose child_event = *event;
-      
       gtk_menu_paint (widget);
       
-      children = menu_shell->children;
-      while (children)
-	{
-	  child = children->data;
-	  children = children->next;
-	  
-	  if (GTK_WIDGET_NO_WINDOW (child) &&
-	      gtk_widget_intersect (child, &event->area, &child_event.area))
-	    gtk_widget_event (child, (GdkEvent*) &child_event);
-	}
+      (* GTK_WIDGET_CLASS (parent_class)->expose_event) (widget, event);
     }
   
   return FALSE;

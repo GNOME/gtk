@@ -1748,6 +1748,8 @@ gdk_window_process_updates_internal (GdkWindow *window)
 	{
 	  GdkEvent event;
 	  GdkRectangle window_rect;
+	  GdkRegion *expose_region;
+	  GdkRegion *window_region;
           gint width, height;
 
           if (debug_updates)
@@ -1769,16 +1771,28 @@ gdk_window_process_updates_internal (GdkWindow *window)
 	  event.expose.type = GDK_EXPOSE;
 	  event.expose.window = gdk_window_ref (window);
 	  event.expose.count = 0;
-      
-	  gdk_region_get_clipbox (update_area, &event.expose.area);
-	  if (gdk_rectangle_intersect (&event.expose.area, &window_rect, &event.expose.area))
+
+	  if (save_region)
+	    expose_region = gdk_region_copy (update_area);
+	  else
+	    expose_region = update_area;
+	  window_region = gdk_region_rectangle (&window_rect);
+	  gdk_region_intersect (expose_region,
+				window_region);
+	  gdk_region_destroy (window_region);
+	  
+	  event.expose.region = expose_region;
+	  gdk_region_get_clipbox (expose_region, &event.expose.area);
+	  
+	  if (!gdk_region_empty (expose_region))
 	    {
 	      (*gdk_event_func) (&event, gdk_event_data);
 	    }
 
+	  if (expose_region != update_area)
+	    gdk_region_destroy (expose_region);
 	  gdk_window_unref (window);
 	}
-      
       if (!save_region)
 	gdk_region_destroy (update_area);
     }

@@ -973,6 +973,7 @@ gdk_event_translate (GdkEvent *event,
 	  {
 	    event->expose.type = GDK_EXPOSE;
 	    event->expose.area = expose_rect;
+	    event->expose.region = gdk_region_rectangle (&expose_rect);
 	    event->expose.window = window;
 	    event->expose.count = xevent->xexpose.count;
 
@@ -1007,6 +1008,7 @@ gdk_event_translate (GdkEvent *event,
 	  {
 	    event->expose.type = GDK_EXPOSE;
 	    event->expose.area = expose_rect;
+	    event->expose.region = gdk_region_rectangle (&expose_rect);
 	    event->expose.window = window;
 	    event->expose.count = xevent->xgraphicsexpose.count;
 

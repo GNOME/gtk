@@ -55,8 +55,6 @@ static void gtk_table_init	    (GtkTable	    *table);
 static void gtk_table_finalize	    (GObject	    *object);
 static void gtk_table_map	    (GtkWidget	    *widget);
 static void gtk_table_unmap	    (GtkWidget	    *widget);
-static gint gtk_table_expose	    (GtkWidget	    *widget,
-				     GdkEventExpose *event);
 static void gtk_table_size_request  (GtkWidget	    *widget,
 				     GtkRequisition *requisition);
 static void gtk_table_size_allocate (GtkWidget	    *widget,
@@ -145,7 +143,6 @@ gtk_table_class_init (GtkTableClass *class)
   
   widget_class->map = gtk_table_map;
   widget_class->unmap = gtk_table_unmap;
-  widget_class->expose_event = gtk_table_expose;
   widget_class->size_request = gtk_table_size_request;
   widget_class->size_allocate = gtk_table_size_allocate;
   
@@ -713,39 +710,6 @@ gtk_table_unmap (GtkWidget *widget)
 	  GTK_WIDGET_MAPPED (child->widget))
 	gtk_widget_unmap (child->widget);
     }
-}
-
-static gint
-gtk_table_expose (GtkWidget	 *widget,
-		  GdkEventExpose *event)
-{
-  GtkTable *table;
-  GtkTableChild *child;
-  GList *children;
-  GdkEventExpose child_event;
-  
-  g_return_val_if_fail (widget != NULL, FALSE);
-  g_return_val_if_fail (GTK_IS_TABLE (widget), FALSE);
-  
-  if (GTK_WIDGET_VISIBLE (widget) && GTK_WIDGET_MAPPED (widget))
-    {
-      table = GTK_TABLE (widget);
-      
-      child_event = *event;
-      
-      children = table->children;
-      while (children)
-	{
-	  child = children->data;
-	  children = children->next;
-	  
-	  if (GTK_WIDGET_NO_WINDOW (child->widget) &&
-	      gtk_widget_intersect (child->widget, &event->area, &child_event.area))
-	    gtk_widget_event (child->widget, (GdkEvent*) &child_event);
-	}
-    }
-  
-  return FALSE;
 }
 
 static void

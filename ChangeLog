@@ -1,3 +1,64 @@
+2001-03-09  Alexander Larsson  <alexl@redhat.com>
+
+	* docs/Changes-2.0.txt:
+	Document expose event->region change and that gtk_widget_event
+	doesn't allow passing expose events.
+
+	* gdk/gdkevents.h:
+	Add region to expose event.
+	
+	* gdk/gdkevents.c:
+	Handle event->region in gdk_event_copy() and gdk_event_free().
+
+	* gdk/gdkwindow.c (gdk_window_process_updates_internal):
+	Generate expose_event->region when creating expose events.
+
+	* gdk/x11/gdkevents-x11.c:
+	Generate expose events with regions when translating X events.
+
+	* gtk/gtkcontainer.[ch]:
+	Default expose handler that propagates expose events to NO_WINDOW
+	children. New function gtk_container_propagate_expose()
+
+	* gtk/gtkmain.c (gtk_main_do_event):
+	Use gdk_window_begin_paint_region() instead of gdk_window_begin_paint_rect().
+	Use gtk_widget_send_expose() to send expose events.
+	
+	* gtk/gtkbin.c:
+	* gtk/gtkbox.c:
+	* gtk/gtkfixed.c:
+	* gtk/gtkimagemenuitem.c:
+	* gtk/gtklist.c:
+	* gtk/gtkpacker.c:
+	* gtk/gtktable.c:
+	* gtk/gtktree.c:
+	Remove expose handler, using the default container implementation
+	instead.
+	
+	* gtk/gtkbutton.c:
+	* gtk/gtkcheckbutton.c:
+	* gtk/gtkeventbox.c:
+	* gtk/gtkfixed.c:
+	* gtk/gtkhandlebox.c:
+	* gtk/gtklayout.c:
+	* gtk/gtklistitem.c:
+	* gtk/gtkmenu.c:
+	* gtk/gtkmenubar.c:
+	* gtk/gtkmenuitem.c:
+	* gtk/gtknotebook.c:
+	* gtk/gtkoptionmenu.c:
+	* gtk/gtkpaned.c:
+	* gtk/gtkscrolledwindow.c:
+	* gtk/gtktogglebutton.c:
+	* gtk/gtktoolbar.c:
+	* gtk/gtktreeitem.c:
+	Chain expose handler to parent class handler. Use
+	gtk_container_propagate_expose() to propagate exposes.
+
+	* gtk/gtkclist.c (check_exposures):
+	* gtk/gtktext.c (process_exposes):
+	Use gtk_widget_send_expose instead of gtk_widget_event.
+
 Thu Mar  8 19:40:28 2001  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtktreeview.c (gtk_tree_view_destroy): Add destroy function.

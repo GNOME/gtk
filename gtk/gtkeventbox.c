@@ -41,6 +41,8 @@ static gint gtk_event_box_expose                   (GtkWidget         *widget,
 						   GdkEventExpose     *event);
 
 
+static GtkBinClass *parent_class = NULL;
+
 GtkType
 gtk_event_box_get_type (void)
 {
@@ -71,6 +73,8 @@ gtk_event_box_class_init (GtkEventBoxClass *class)
 {
   GtkWidgetClass *widget_class;
 
+  parent_class = g_type_class_peek_parent (class);
+  
   widget_class = (GtkWidgetClass*) class;
 
   widget_class->realize = gtk_event_box_realize;
@@ -204,24 +208,15 @@ static gint
 gtk_event_box_expose (GtkWidget      *widget,
 		     GdkEventExpose *event)
 {
-  GtkBin *bin;
-  GdkEventExpose child_event;
-
   g_return_val_if_fail (widget != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_EVENT_BOX (widget), FALSE);
   g_return_val_if_fail (event != NULL, FALSE);
 
   if (GTK_WIDGET_DRAWABLE (widget))
     {
-      bin = GTK_BIN (widget);
-
       gtk_event_box_paint (widget, &event->area);
       
-      child_event = *event;
-      if (bin->child &&
-	  GTK_WIDGET_NO_WINDOW (bin->child) &&
-	  gtk_widget_intersect (bin->child, &event->area, &child_event.area))
-	gtk_widget_event (bin->child, (GdkEvent*) &child_event);
+      (* GTK_WIDGET_CLASS (parent_class)->expose_event) (widget, event);
     }
 
   return FALSE;

@@ -415,7 +415,7 @@ gtk_toggle_button_paint (GtkWidget    *widget,
         shadow_type = GTK_SHADOW_IN;
       else
 	shadow_type = GTK_SHADOW_OUT;
-      
+
       if (button->relief != GTK_RELIEF_NONE ||
 	  (GTK_WIDGET_STATE(widget) != GTK_STATE_NORMAL &&
 	   GTK_WIDGET_STATE(widget) != GTK_STATE_INSENSITIVE))
@@ -451,19 +451,13 @@ static gint
 gtk_toggle_button_expose (GtkWidget      *widget,
 			  GdkEventExpose *event)
 {
-  GtkBin *bin;
-  GdkEventExpose child_event;
-
   if (GTK_WIDGET_DRAWABLE (widget))
     {
-      bin = GTK_BIN (widget);
-
       gtk_toggle_button_paint (widget, &event->area);
-
-      child_event = *event;
-      if (bin->child && GTK_WIDGET_NO_WINDOW (bin->child) &&
-	  gtk_widget_intersect (bin->child, &event->area, &child_event.area))
-	gtk_widget_event (bin->child, (GdkEvent*) &child_event);
+      
+      gtk_container_propagate_expose (GTK_CONTAINER (widget),
+				      GTK_BIN (widget)->child,
+				      event);
     }
   
   return TRUE;

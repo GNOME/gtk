@@ -51,8 +51,6 @@ static void gtk_box_set_arg    (GtkObject      *object,
 				guint           arg_id);
 static void gtk_box_map        (GtkWidget      *widget);
 static void gtk_box_unmap      (GtkWidget      *widget);
-static gint gtk_box_expose     (GtkWidget      *widget,
-			        GdkEventExpose *event);
 static void gtk_box_add        (GtkContainer   *container,
 			        GtkWidget      *widget);
 static void gtk_box_remove     (GtkContainer   *container,
@@ -126,7 +124,6 @@ gtk_box_class_init (GtkBoxClass *class)
 
   widget_class->map = gtk_box_map;
   widget_class->unmap = gtk_box_unmap;
-  widget_class->expose_event = gtk_box_expose;
 
   container_class->add = gtk_box_add;
   container_class->remove = gtk_box_remove;
@@ -643,41 +640,6 @@ gtk_box_unmap (GtkWidget *widget)
 	  GTK_WIDGET_MAPPED (child->widget))
 	gtk_widget_unmap (child->widget);
     }
-}
-
-static gint
-gtk_box_expose (GtkWidget      *widget,
-		GdkEventExpose *event)
-{
-  GtkBox *box;
-  GtkBoxChild *child;
-  GdkEventExpose child_event;
-  GList *children;
-
-  g_return_val_if_fail (widget != NULL, FALSE);
-  g_return_val_if_fail (GTK_IS_BOX (widget), FALSE);
-  g_return_val_if_fail (event != NULL, FALSE);
-
-  if (GTK_WIDGET_DRAWABLE (widget))
-    {
-      box = GTK_BOX (widget);
-
-      child_event = *event;
-
-      children = box->children;
-      while (children)
-	{
-	  child = children->data;
-	  children = children->next;
-
-	  if (GTK_WIDGET_DRAWABLE (child->widget) &&
-	      GTK_WIDGET_NO_WINDOW (child->widget) &&
-	      gtk_widget_intersect (child->widget, &event->area, &child_event.area))
-	    gtk_widget_event (child->widget, (GdkEvent*) &child_event);
-	}
-    }
-
-  return FALSE;
 }
 
 static void

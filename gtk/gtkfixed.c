@@ -37,8 +37,6 @@ static void gtk_fixed_size_allocate (GtkWidget        *widget,
 				     GtkAllocation    *allocation);
 static void gtk_fixed_paint         (GtkWidget        *widget,
 				     GdkRectangle     *area);
-static gint gtk_fixed_expose        (GtkWidget        *widget,
-				     GdkEventExpose   *event);
 static void gtk_fixed_add           (GtkContainer     *container,
 				     GtkWidget        *widget);
 static void gtk_fixed_remove        (GtkContainer     *container,
@@ -95,7 +93,6 @@ gtk_fixed_class_init (GtkFixedClass *class)
   widget_class->realize = gtk_fixed_realize;
   widget_class->size_request = gtk_fixed_size_request;
   widget_class->size_allocate = gtk_fixed_size_allocate;
-  widget_class->expose_event = gtk_fixed_expose;
 
   container_class->add = gtk_fixed_add;
   container_class->remove = gtk_fixed_remove;
@@ -347,41 +344,6 @@ gtk_fixed_paint (GtkWidget    *widget,
     gdk_window_clear_area (widget->window,
 			   area->x, area->y,
 			   area->width, area->height);
-}
-
-static gint
-gtk_fixed_expose (GtkWidget      *widget,
-		  GdkEventExpose *event)
-{
-  GtkFixed *fixed;
-  GtkFixedChild *child;
-  GdkEventExpose child_event;
-  GList *children;
-
-  g_return_val_if_fail (widget != NULL, FALSE);
-  g_return_val_if_fail (GTK_IS_FIXED (widget), FALSE);
-  g_return_val_if_fail (event != NULL, FALSE);
-
-  if (GTK_WIDGET_DRAWABLE (widget))
-    {
-      fixed = GTK_FIXED (widget);
-
-      child_event = *event;
-
-      children = fixed->children;
-      while (children)
-	{
-	  child = children->data;
-	  children = children->next;
-
-	  if (GTK_WIDGET_NO_WINDOW (child->widget) &&
-	      gtk_widget_intersect (child->widget, &event->area, 
-				    &child_event.area))
-	    gtk_widget_event (child->widget, (GdkEvent*) &child_event);
-	}
-    }
-
-  return FALSE;
 }
 
 static void

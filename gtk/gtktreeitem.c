@@ -718,23 +718,15 @@ static gint
 gtk_tree_item_expose (GtkWidget      *widget,
 		      GdkEventExpose *event)
 {
-  GdkEventExpose child_event;
-  GtkBin *bin;
-
   g_return_val_if_fail (widget != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_TREE_ITEM (widget), FALSE);
   g_return_val_if_fail (event != NULL, FALSE);
 
   if (GTK_WIDGET_DRAWABLE (widget))
     {
-      bin = GTK_BIN (widget);
-      
       gtk_tree_item_paint (widget, &event->area);
 
-      child_event = *event;
-      if (bin->child && GTK_WIDGET_NO_WINDOW (bin->child) &&
-	  gtk_widget_intersect (bin->child, &event->area, &child_event.area))
-	gtk_widget_event (bin->child, (GdkEvent*) &child_event);
+      (* GTK_WIDGET_CLASS (parent_class)->expose_event) (widget, event);
    }
 
   return FALSE;

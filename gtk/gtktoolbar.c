@@ -407,8 +407,7 @@ gtk_toolbar_expose (GtkWidget      *widget,
   GtkToolbar *toolbar;
   GList *children;
   GtkToolbarChild *child;
-  GdkEventExpose child_event;
-
+  
   g_return_val_if_fail (widget != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_TOOLBAR (widget), FALSE);
   g_return_val_if_fail (event != NULL, FALSE);
@@ -416,8 +415,6 @@ gtk_toolbar_expose (GtkWidget      *widget,
   if (GTK_WIDGET_DRAWABLE (widget))
     {
       toolbar = GTK_TOOLBAR (widget);
-
-      child_event = *event;
 
       for (children = toolbar->children; children; children = children->next)
 	{
@@ -428,9 +425,10 @@ gtk_toolbar_expose (GtkWidget      *widget,
 	      if (toolbar->space_style == GTK_TOOLBAR_SPACE_LINE)
 		gtk_toolbar_paint_space_line (widget, &event->area, child);
 	    }
-	  else if (GTK_WIDGET_NO_WINDOW (child->widget)
-		   && gtk_widget_intersect (child->widget, &event->area, &child_event.area))
-	    gtk_widget_event (child->widget, (GdkEvent *) &child_event);
+	  else
+	    gtk_container_propagate_expose (GTK_CONTAINER (widget),
+					    child->widget,
+					    event);
 	}
     }
 

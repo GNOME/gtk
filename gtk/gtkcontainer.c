@@ -96,6 +96,8 @@ static void     gtk_container_children_callback    (GtkWidget         *widget,
 						    gpointer           client_data);
 static void     gtk_container_show_all             (GtkWidget         *widget);
 static void     gtk_container_hide_all             (GtkWidget         *widget);
+static gint     gtk_container_expose               (GtkWidget         *widget,
+						    GdkEventExpose    *event);
 
 
 static gchar* gtk_container_child_default_composite_name (GtkContainer *container,
@@ -172,6 +174,7 @@ gtk_container_class_init (GtkContainerClass *class)
 
   widget_class->show_all = gtk_container_show_all;
   widget_class->hide_all = gtk_container_hide_all;
+  widget_class->expose_event = gtk_container_expose;
   
   class->add = gtk_container_add_unimplemented;
   class->remove = gtk_container_remove_unimplemented;
@@ -1962,4 +1965,96 @@ gtk_container_hide_all (GtkWidget *widget)
   gtk_container_foreach (GTK_CONTAINER (widget),
 			 (GtkCallback) gtk_widget_hide_all,
 			 NULL);
+}
+
+
+static void
+gtk_container_expose_child (GtkWidget *child,
+			    gpointer   client_data)
+{
+  struct {
+    GtkWidget *container;
+    GdkEventExpose *event;
+  } *data = client_data;
+  
+  gtk_container_propagate_expose (GTK_CONTAINER (data->container),
+				  child,
+				  data->event);
+}
+
+static gint 
+gtk_container_expose (GtkWidget      *widget,
+		      GdkEventExpose *event)
+{
+  struct {
+    GtkWidget *container;
+    GdkEventExpose *event;
+  } data;
+
+  g_return_val_if_fail (widget != NULL, FALSE);
+  g_return_val_if_fail (GTK_IS_CONTAINER (widget), FALSE);
+  g_return_val_if_fail (event != NULL, FALSE);
+
+  
+  if (GTK_WIDGET_DRAWABLE (widget)) 
+    {
+      data.container = widget;
+      data.event = event;
+      
+      gtk_container_foreach (GTK_CONTAINER (widget),
+			     gtk_container_expose_child,
+			     &data);
+    }   
+  
+  return TRUE;
+}
+
+
+/**
+ * gtk_container_propagate_expose:
+ * @container: a #GtkContainer
+ * @child: a child of @container
+ * @event: a expose event sent to container
+ *
+ *  When a container receives an expose event, it must send synthetic
+ * expose events to all children that don't have their own GdkWindows.
+ * This function provides a convenient way of doing this. A container,
+ * when it receives an expose event, gtk_container_propagate_expose() 
+ * once for each child, passing in the event the container received.
+ *
+ * gtk_container_propagate expose() takes care of deciding whether
+ * an expose event needs to be sent to the child, intersecting
+ * the event's area with the child area, and sending the event.
+ * 
+ * In most cases, a container can simply either simply inherit the
+ * ::expose implementation from GtkContainer, or, do some drawing 
+ * and then chain to the ::expose implementation from GtkContainer.
+ **/
+void
+gtk_container_propagate_expose (GtkContainer   *container,
+				GtkWidget      *child,
+				GdkEventExpose *event)
+{
+  GdkEventExpose child_event;
+
+  g_return_if_fail (GTK_IS_CONTAINER (container));
+  g_return_if_fail (GTK_IS_WIDGET (child));
+  g_return_if_fail (event != NULL);
+
+  g_assert (child->parent == GTK_WIDGET (container));
+  
+  if (GTK_WIDGET_DRAWABLE (child) &&
+      GTK_WIDGET_NO_WINDOW (child) &&
+      (child->window == event->window))
+    {
+      child_event = *event;
+
+      child_event.region = gtk_widget_region_intersect (child, event->region);
+      if (!gdk_region_empty (child_event.region))
+	{
+	  gdk_region_get_clipbox (child_event.region, &child_event.area);
+	  gtk_widget_send_expose (child, (GdkEvent *)&child_event);
+	}
+      gdk_region_destroy (child_event.region);
+    }
 }

@@ -430,10 +430,6 @@ static gint
 gtk_option_menu_expose (GtkWidget      *widget,
 			GdkEventExpose *event)
 {
-  GtkWidget *child;
-  GdkEventExpose child_event;
-  gint remove_child;
-
   g_return_val_if_fail (widget != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_OPTION_MENU (widget), FALSE);
   g_return_val_if_fail (event != NULL, FALSE);
@@ -477,13 +473,10 @@ gtk_option_menu_expose (GtkWidget      *widget,
       if (remove_child)
 	gtk_option_menu_remove_contents (GTK_OPTION_MENU (widget));
 #else
-      remove_child = FALSE;
-      child = GTK_BIN (widget)->child;
-      child_event = *event;
-      if (child && GTK_WIDGET_NO_WINDOW (child) &&
-	  gtk_widget_intersect (child, &event->area, &child_event.area))
-	gtk_widget_event (child, (GdkEvent*) &child_event);
-
+      if (GTK_BIN (widget)->child)
+	gtk_container_propagate_expose (GTK_CONTAINER (widget),
+					GTK_BIN (widget)->child,
+					event);
 #endif /* 0 */
     }
 

@@ -279,6 +279,17 @@ Incompatible Changes from GTK+-1.2 to GTK+-2.0:
   implementation, since they will already have working expose_event
   implementations. The draw method was rarely called in practice
   anyway.
+
+* The GdkExposeEvent has a new region field. This can be used instead
+  of the area field if you want a more exact representation of the
+  area to update.
+
+* Sending synthetic exposes using gtk_widget_event is no longer allowed.
+  If you just need an expose call you should use gdk_window_invalidate_rect()
+  or gdk_window_invalidate_region() instead. For the case of container
+  widgets that need to propagate expose events to NO_WINDOW children
+  you can either use gtk_container_propagate_expose(), or chain to the
+  default container expose handler.
  
 * The draw_default and draw_focus methods/signals on GtkWidget are
   gone; simply draw things in your expose handler. 

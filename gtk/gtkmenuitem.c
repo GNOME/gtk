@@ -523,9 +523,6 @@ static gint
 gtk_menu_item_expose (GtkWidget      *widget,
 		      GdkEventExpose *event)
 {
-  GtkBin *bin;
-  GdkEventExpose child_event;
-
   g_return_val_if_fail (widget != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_MENU_ITEM (widget), FALSE);
   g_return_val_if_fail (event != NULL, FALSE);
@@ -534,16 +531,7 @@ gtk_menu_item_expose (GtkWidget      *widget,
     {
       gtk_menu_item_paint (widget, &event->area);
 
-      bin = GTK_BIN (widget);
-
-      if (bin->child)
-        {
-          child_event = *event;
-
-          if (GTK_WIDGET_NO_WINDOW (bin->child) &&
-              gtk_widget_intersect (bin->child, &event->area, &child_event.area))
-            gtk_widget_event (bin->child, (GdkEvent*) &child_event);
-        }
+      (* GTK_WIDGET_CLASS (parent_class)->expose_event) (widget, event);
     }
 
   return FALSE;

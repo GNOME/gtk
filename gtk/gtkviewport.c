@@ -562,10 +562,7 @@ gtk_viewport_expose (GtkWidget      *widget,
 			     &event->area, widget, "viewportbin",
 			     0, 0, -1, -1);
 	  
-	  if ((bin->child != NULL) &&
-	      GTK_WIDGET_NO_WINDOW (bin->child) &&
-	      gtk_widget_intersect (bin->child, &event->area, &child_event.area))
-	    gtk_widget_event (bin->child, (GdkEvent*) &child_event);
+	  (* GTK_WIDGET_CLASS (parent_class)->expose_event) (widget, event);
 	}
 	
 

@@ -483,16 +483,7 @@ gtk_list_item_expose (GtkWidget      *widget,
                               0, 0, -1, -1);           
         }
 
-      if (bin->child)
-	{
-          GdkEventExpose child_event;
-          
-	  child_event = *event;
-
-	  if (GTK_WIDGET_NO_WINDOW (bin->child) &&
-	      gtk_widget_intersect (bin->child, &event->area, &child_event.area))
-	    gtk_widget_event (bin->child, (GdkEvent*) &child_event);
-	}
+      (* GTK_WIDGET_CLASS (parent_class)->expose_event) (widget, event);
       
       if (GTK_WIDGET_HAS_FOCUS (widget))
         {

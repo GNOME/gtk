@@ -35,8 +35,6 @@ static void gtk_image_menu_item_size_request         (GtkWidget        *widget,
                                                       GtkRequisition   *requisition);
 static void gtk_image_menu_item_size_allocate        (GtkWidget        *widget,
                                                       GtkAllocation    *allocation);
-static gint gtk_image_menu_item_expose               (GtkWidget             *widget,
-						      GdkEventExpose        *event);
 static void gtk_image_menu_item_remove               (GtkContainer          *container,
                                                       GtkWidget             *child);
 static void gtk_image_menu_item_toggle_size_request  (GtkMenuItem           *menu_item,
@@ -108,7 +106,6 @@ gtk_image_menu_item_class_init (GtkImageMenuItemClass *klass)
   
   parent_class = gtk_type_class (GTK_TYPE_MENU_ITEM);
   
-  widget_class->expose_event = gtk_image_menu_item_expose;
   widget_class->size_request = gtk_image_menu_item_size_request;
   widget_class->size_allocate = gtk_image_menu_item_size_allocate;
   widget_class->map = gtk_image_menu_item_map;
@@ -277,31 +274,6 @@ gtk_image_menu_item_size_allocate (GtkWidget     *widget,
 
       gtk_widget_size_allocate (image_menu_item->image, &child_allocation);
     }
-}
-
-static gint
-gtk_image_menu_item_expose (GtkWidget      *widget,
-			    GdkEventExpose *event)
-{
-  GdkEventExpose child_event;
-  GtkImageMenuItem *image_menu_item;
-  
-  g_return_val_if_fail (widget != NULL, FALSE);
-  g_return_val_if_fail (GTK_IS_IMAGE_MENU_ITEM (widget), FALSE);
-  g_return_val_if_fail (event != NULL, FALSE);
-
-  image_menu_item = GTK_IMAGE_MENU_ITEM (widget);
-  
-  if (GTK_WIDGET_CLASS (parent_class)->expose_event)
-    (* GTK_WIDGET_CLASS (parent_class)->expose_event) (widget, event);
-
-  child_event = *event;
-  if (image_menu_item->image && GTK_WIDGET_DRAWABLE (image_menu_item->image) &&
-      GTK_WIDGET_NO_WINDOW (image_menu_item->image) &&
-      gtk_widget_intersect (image_menu_item->image, &event->area, &child_event.area))
-    gtk_widget_event (image_menu_item->image, (GdkEvent*) &child_event);
-  
-  return FALSE;
 }
 
 static void

@@ -68,8 +68,6 @@ static void gtk_list_map	     (GtkWidget	     *widget);
 static void gtk_list_unmap	     (GtkWidget	     *widget);
 static void gtk_list_style_set	     (GtkWidget      *widget,
 				      GtkStyle       *previous_style);
-static gint gtk_list_expose	     (GtkWidget	     *widget,
-				      GdkEventExpose *event);
 static gint gtk_list_motion_notify   (GtkWidget      *widget,
 				      GdkEventMotion *event);
 static gint gtk_list_button_press    (GtkWidget      *widget,
@@ -224,7 +222,6 @@ gtk_list_class_init (GtkListClass *class)
   widget_class->unmap = gtk_list_unmap;
   widget_class->style_set = gtk_list_style_set;
   widget_class->realize = gtk_list_realize;
-  widget_class->expose_event = gtk_list_expose;
   widget_class->button_press_event = gtk_list_button_press;
   widget_class->button_release_event = gtk_list_button_release;
   widget_class->motion_notify_event = gtk_list_motion_notify;
@@ -833,40 +830,6 @@ gtk_list_button_release (GtkWidget	*widget,
 	}
     }
   
-  return FALSE;
-}
-
-static gint
-gtk_list_expose (GtkWidget	*widget,
-		 GdkEventExpose *event)
-{
-  GtkList *list;
-  GtkWidget *child;
-  GdkEventExpose child_event;
-  GList *children;
-
-  g_return_val_if_fail (widget != NULL, FALSE);
-  g_return_val_if_fail (GTK_IS_LIST (widget), FALSE);
-  g_return_val_if_fail (event != NULL, FALSE);
-
-  if (GTK_WIDGET_DRAWABLE (widget))
-    {
-      list = GTK_LIST (widget);
-
-      child_event = *event;
-
-      children = list->children;
-      while (children)
-	{
-	  child = children->data;
-	  children = children->next;
-
-	  if (GTK_WIDGET_NO_WINDOW (child) &&
-	      gtk_widget_intersect (child, &event->area, &child_event.area))
-	    gtk_widget_event (child, (GdkEvent*) &child_event);
-	}
-    }
-
   return FALSE;
 }
 

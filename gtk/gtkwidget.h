@@ -466,6 +466,8 @@ void	   gtk_widget_unlock_accelerators (GtkWidget	       *widget);
 gboolean   gtk_widget_accelerators_locked (GtkWidget	       *widget);
 gint	   gtk_widget_event		  (GtkWidget	       *widget,
 					   GdkEvent	       *event);
+gint       gtk_widget_send_expose         (GtkWidget           *widget,
+					   GdkEvent            *event);
 
 gboolean   gtk_widget_activate		     (GtkWidget	       *widget);
 gboolean   gtk_widget_set_scroll_adjustments (GtkWidget        *widget,
@@ -480,6 +482,8 @@ void	   gtk_widget_popup		  (GtkWidget	       *widget,
 gboolean   gtk_widget_intersect		  (GtkWidget	       *widget,
 					   GdkRectangle	       *area,
 					   GdkRectangle	       *intersection);
+GdkRegion *gtk_widget_region_intersect	  (GtkWidget	       *widget,
+					   GdkRegion	       *region);
 
 gboolean   gtk_widget_is_focus            (GtkWidget           *widget);
 void	   gtk_widget_grab_focus	  (GtkWidget	       *widget);

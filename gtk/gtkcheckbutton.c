@@ -243,7 +243,6 @@ gtk_check_button_expose (GtkWidget      *widget,
   GtkCheckButton *check_button;
   GtkToggleButton *toggle_button;
   GtkBin *bin;
-  GdkEventExpose child_event;
   
   g_return_val_if_fail (widget != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_CHECK_BUTTON (widget), FALSE);
@@ -259,16 +258,13 @@ gtk_check_button_expose (GtkWidget      *widget,
 	{
 	  gtk_check_button_paint (widget, &event->area);
 	  
-	  child_event = *event;
-	  if (bin->child && GTK_WIDGET_NO_WINDOW (bin->child) &&
-	      gtk_widget_intersect (bin->child, &event->area, &child_event.area))
-	    gtk_widget_event (bin->child, (GdkEvent*) &child_event);
+	  if (bin->child)
+	    gtk_container_propagate_expose (GTK_CONTAINER (widget),
+					    bin->child,
+					    event);
 	}
-      else
-	{
-	  if (GTK_WIDGET_CLASS (parent_class)->expose_event)
-	    (* GTK_WIDGET_CLASS (parent_class)->expose_event) (widget, event);
-	}
+      else if (GTK_WIDGET_CLASS (parent_class)->expose_event)
+	(* GTK_WIDGET_CLASS (parent_class)->expose_event) (widget, event);
     }
   
   return FALSE;

@@ -399,6 +399,7 @@ gtk_frame_paint (GtkWidget    *widget,
 	  
 	  x2 = widget->style->xthickness + (frame->child_allocation.width - child_requisition.width - 2 * LABEL_PAD - 2 * LABEL_SIDE_PAD) * xalign + LABEL_SIDE_PAD;
 
+	  
 	  gtk_paint_shadow_gap (widget->style, widget->window,
 				GTK_STATE_NORMAL, frame->shadow_type,
 				area, widget, "frame",
@@ -418,27 +419,11 @@ static gboolean
 gtk_frame_expose (GtkWidget      *widget,
 		  GdkEventExpose *event)
 {
-  GtkBin *bin = GTK_BIN (widget);
-  GtkFrame *frame = GTK_FRAME (widget);
-  GdkEventExpose child_event;
-
   if (GTK_WIDGET_DRAWABLE (widget))
     {
       gtk_frame_paint (widget, &event->area);
 
-      if (bin->child && GTK_WIDGET_NO_WINDOW (bin->child))
-	{
-	  child_event = *event;
-	  if (gtk_widget_intersect (bin->child, &event->area, &child_event.area))
-	    gtk_widget_event (bin->child, (GdkEvent*) &child_event);
-	}
-      
-      if (frame->label_widget && GTK_WIDGET_NO_WINDOW (frame->label_widget))
-	{
-	  child_event = *event;
-	  if (gtk_widget_intersect (frame->label_widget, &event->area, &child_event.area))
-	    gtk_widget_event (frame->label_widget, (GdkEvent*) &child_event);
-	}
+      (* GTK_WIDGET_CLASS (parent_class)->expose_event) (widget, event);
     }
 
   return FALSE;

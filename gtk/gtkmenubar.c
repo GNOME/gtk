@@ -58,6 +58,8 @@ static gint gtk_menu_bar_expose        (GtkWidget       *widget,
 					GdkEventExpose  *event);
 
 
+static GtkMenuShellClass *parent_class = NULL;
+
 GtkType
 gtk_menu_bar_get_type (void)
 {
@@ -92,6 +94,8 @@ gtk_menu_bar_class_init (GtkMenuBarClass *class)
 
   GtkBindingSet *binding_set;
 
+  parent_class = g_type_class_peek_parent (class);
+  
   object_class = (GtkObjectClass*) class;
   widget_class = (GtkWidgetClass*) class;
   menu_shell_class = (GtkMenuShellClass*) class;
@@ -384,11 +388,6 @@ static gint
 gtk_menu_bar_expose (GtkWidget      *widget,
 		     GdkEventExpose *event)
 {
-  GtkMenuShell *menu_shell;
-  GdkEventExpose child_event;
-  GList *children;
-  GtkWidget *child;
-
   g_return_val_if_fail (widget != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_MENU_BAR (widget), FALSE);
   g_return_val_if_fail (event != NULL, FALSE);
@@ -397,19 +396,7 @@ gtk_menu_bar_expose (GtkWidget      *widget,
     {
       gtk_menu_bar_paint (widget, &event->area);
 
-      menu_shell = GTK_MENU_SHELL (widget);
-      child_event = *event;
-
-      children = menu_shell->children;
-      while (children)
-	{
-	  child = children->data;
-	  children = children->next;
-
-	  if (GTK_WIDGET_NO_WINDOW (child) &&
-	      gtk_widget_intersect (child, &event->area, &child_event.area))
-	    gtk_widget_event (child, (GdkEvent*) &child_event);
-	}
+      (* GTK_WIDGET_CLASS (parent_class)->expose_event) (widget, event);
     }
 
   return FALSE;

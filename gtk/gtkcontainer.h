@@ -130,6 +130,9 @@ void     gtk_container_foreach_full (GtkContainer       *container,
 GList*   gtk_container_children     (GtkContainer       *container);
 gboolean gtk_container_focus        (GtkContainer       *container,
 				     GtkDirectionType    direction);
+void     gtk_container_propagate_expose (GtkContainer   *container,
+					 GtkWidget      *child,
+					 GdkEventExpose *event);
 
 /* Widget-level methods */
 

@@ -4478,7 +4478,7 @@ process_exposes (GtkText *text)
   
   while ((event = gdk_event_get_graphics_expose (text->text_area)) != NULL)
     {
-      gtk_widget_event (GTK_WIDGET (text), event);
+      gtk_widget_send_expose (GTK_WIDGET (text), event);
       if (event->expose.count == 0)
 	{
 	  gdk_event_free (event);

@@ -182,6 +182,8 @@ static void gtk_widget_set_style_internal	 (GtkWidget	*widget,
 						  gboolean	 initial_emission);
 static void gtk_widget_set_style_recurse	 (GtkWidget	*widget,
 						  gpointer	 client_data);
+static gint gtk_widget_event_internal            (GtkWidget     *widget,
+						  GdkEvent      *event);
 
 static void gtk_widget_propagate_hierarchy_changed (GtkWidget *widget,
 						    gpointer   client_data);
@@ -2244,11 +2246,60 @@ gint
 gtk_widget_event (GtkWidget *widget,
 		  GdkEvent  *event)
 {
-  gboolean return_val;
-  gint signal_num;
-
   g_return_val_if_fail (widget != NULL, TRUE);
   g_return_val_if_fail (GTK_IS_WIDGET (widget), TRUE);
+
+  if (event->type == GDK_EXPOSE)
+    {
+      g_warning ("Events of type GDK_EXPOSE cannot be synthesized. To get "
+		 "the same effect, call gdk_window_invalidate_rect/region(), "
+		 "followed by gdk_window_process_updates().");
+      return TRUE;
+    }
+  
+  return gtk_widget_event_internal (widget, event);
+}
+
+
+/**
+ * gtk_widget_send_expose:
+ * @widget: a #GtkWidget
+ * @event: a expose #GdkEvent
+ * 
+ * Very rarely-used function. This function is used to emit
+ * an expose event signals on a widget. This function is not
+ * normally used directly. The only time it is used is when
+ * propagating an expose event to a child NO_WINDOW widget, and
+ * that is normally done using gtk_container_propagate_expose.
+ *
+ * If you want to force an area of a window to be redrawn, 
+ * use gdk_window_invalidate_rect() or gdk_window_invalidate_region().
+ * To cause the redraw to be done immediately, follow that call
+ * with a call to gdk_window_procss_updates().
+ * 
+ * Return value: return from the event signal emission (%TRUE if the event was handled)
+ **/
+gint
+gtk_widget_send_expose (GtkWidget *widget,
+			GdkEvent  *event)
+{
+  g_return_val_if_fail (widget != NULL, TRUE);
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), TRUE);
+  g_return_val_if_fail (event != NULL, TRUE);
+  g_return_val_if_fail (event->type == GDK_EXPOSE, TRUE);
+
+  if (event->type != GDK_EXPOSE)
+    return TRUE;
+  
+  return gtk_widget_event_internal (widget, event);
+}
+
+static gint
+gtk_widget_event_internal (GtkWidget *widget,
+			   GdkEvent  *event)
+{
+  gboolean return_val;
+  gint signal_num;
 
   gtk_widget_ref (widget);
   return_val = FALSE;
@@ -2574,6 +2625,40 @@ gtk_widget_intersect (GtkWidget	   *widget,
     }
   
   return return_val;
+}
+
+/**
+ * gtk_widget_region_intersect:
+ * @widget: a #GtkWidget
+ * @region: a #GdkRegion, in the same coordinate system as 
+ *          widget->allocation. That is, relative to widget->window
+ *          for NO_WINDOW widgets; relative to the parent window
+ *          of widget->window for widgets with their own window.
+ * @returns: A newly allocated region holding the intersection of @widget
+ *           and @region. The coordinates of the return value are
+ *           relative to widget->window for NO_WINDOW widgets, and
+ *           relative to the parent window of widget->window for
+ *           widgets with their own window.
+ * 
+ * Computes the intersection of a @widget's area and @region, returning
+ * the intersection. The result may be empty, use #gdk_region_empty to
+ * check.
+ **/
+GdkRegion *
+gtk_widget_region_intersect (GtkWidget *widget,
+			     GdkRegion *region)
+{
+  GdkRegion *dest;
+  
+  g_return_val_if_fail (widget != NULL, NULL);
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
+  g_return_val_if_fail (region != NULL, NULL);
+  
+  dest = gdk_region_rectangle (&widget->allocation);
+ 
+  gdk_region_intersect (dest, region);
+
+  return dest;
 }
 
 /**

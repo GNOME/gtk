@@ -215,6 +215,7 @@ struct _GdkEventExpose
   GdkWindow *window;
   gint8 send_event;
   GdkRectangle area;
+  GdkRegion *region;
   gint count; /* If non-zero, how many more events follow. */
 };
 

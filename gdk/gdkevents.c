@@ -322,7 +322,11 @@ gdk_event_copy (GdkEvent *event)
       gdk_drag_context_ref (event->dnd.context);
       break;
       
-    default:
+    case GDK_EXPOSE:
+      if (event->expose.region)
+	new_event->expose.region = gdk_region_copy (event->expose.region);
+      break;
+   default:
       break;
     }
   
@@ -384,7 +388,12 @@ gdk_event_free (GdkEvent *event)
       if (event->button.axes)
 	g_free (event->button.axes);
       break;
-
+      
+    case GDK_EXPOSE:
+      if (event->expose.region)
+	gdk_region_destroy (event->expose.region);
+      break;
+      
     case GDK_MOTION_NOTIFY:
       if (event->motion.axes)
 	g_free (event->motion.axes);

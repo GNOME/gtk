@@ -813,7 +813,6 @@ gtk_handle_box_paint (GtkWidget      *widget,
   if (bin->child && GTK_WIDGET_VISIBLE (bin->child))
     {
       GdkRectangle child_area;
-      GdkEventExpose child_event;
 
       if (!event) /* we were called from draw() */
 	{
@@ -821,13 +820,7 @@ gtk_handle_box_paint (GtkWidget      *widget,
 	    gtk_widget_draw (bin->child, &child_area);
 	}
       else /* we were called from expose() */
-	{
-	  child_event = *event;
-	  
-	  if (GTK_WIDGET_NO_WINDOW (bin->child) &&
-	      gtk_widget_intersect (bin->child, &event->area, &child_event.area))
-	    gtk_widget_event (bin->child, (GdkEvent *) &child_event);
-	}
+	(* GTK_WIDGET_CLASS (parent_class)->expose_event) (widget, event);
     }
 }
 

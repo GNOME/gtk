@@ -598,21 +598,11 @@ static gint
 gtk_scrolled_window_expose (GtkWidget      *widget,
 			    GdkEventExpose *event)
 {
-  GtkBin *bin = GTK_BIN (widget);
-  GdkEventExpose child_event;
-
   if (GTK_WIDGET_DRAWABLE (widget))
     {
       gtk_scrolled_window_paint (widget, &event->area);
 
-      if (bin->child && GTK_WIDGET_VISIBLE (bin->child) && GTK_WIDGET_NO_WINDOW (bin->child))
-	{
-	  child_event = *event;	  
-	  if (gtk_widget_intersect (bin->child, &event->area, &child_event.area))
-	    gtk_widget_event (bin->child, (GdkEvent*) &child_event);
-	}
-
-      /* We rely on our knowledge that scrollbars are !NO_WINDOW widgets */
+      (* GTK_WIDGET_CLASS (parent_class)->expose_event) (widget, event);
     }
 
   return FALSE;

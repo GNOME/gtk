@@ -958,7 +958,6 @@ gtk_notebook_expose (GtkWidget      *widget,
 		     GdkEventExpose *event)
 {
   GtkNotebook *notebook;
-  GdkEventExpose child_event;
   GdkRectangle child_area;
    
   g_return_val_if_fail (widget != NULL, FALSE);
@@ -978,12 +977,11 @@ gtk_notebook_expose (GtkWidget      *widget,
 	    gtk_notebook_draw_focus (widget);
 	}
 
-      child_event = *event;
-      if (notebook->cur_page && 
-	  GTK_WIDGET_NO_WINDOW (notebook->cur_page->child) &&
-	  gtk_widget_intersect (notebook->cur_page->child, &event->area, 
-				&child_event.area))
-	gtk_widget_event (notebook->cur_page->child, (GdkEvent*) &child_event);
+      
+      if (notebook->cur_page)
+	gtk_container_propagate_expose (GTK_CONTAINER (notebook),
+					notebook->cur_page->child,
+					event);
     }
 
   return FALSE;
@@ -2350,12 +2348,14 @@ gtk_notebook_draw_tab (GtkNotebook     *notebook,
           
           expose_event.window = page->tab_label->window;
           expose_event.area = child_area;
+          expose_event.region = gdk_region_rectangle (&child_area);
           expose_event.send_event = TRUE;
           expose_event.type = GDK_EXPOSE;
           expose_event.count = 0;
-          
-          gtk_widget_event (page->tab_label,
-                            (GdkEvent*)&expose_event);
+
+	  gtk_container_propagate_expose (GTK_CONTAINER (notebook), page->tab_label, &expose_event);
+
+	  gdk_region_destroy (expose_event.region);
         }
     }
 }

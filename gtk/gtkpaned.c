@@ -302,7 +302,6 @@ gtk_paned_expose (GtkWidget      *widget,
 		  GdkEventExpose *event)
 {
   GtkPaned *paned;
-  GdkEventExpose child_event;
 
   g_return_val_if_fail (widget != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_PANED (widget), FALSE);
@@ -313,19 +312,7 @@ gtk_paned_expose (GtkWidget      *widget,
       paned = GTK_PANED (widget);
 
       if (event->window != paned->handle)
-	{
-	  child_event = *event;
-
-	  if (paned->child1 &&
-	      GTK_WIDGET_NO_WINDOW (paned->child1) &&
-	      gtk_widget_intersect (paned->child1, &event->area, &child_event.area))
-	    gtk_widget_event (paned->child1, (GdkEvent *) &child_event);
-
-	  if (paned->child2 &&
-	      GTK_WIDGET_NO_WINDOW (paned->child2) &&
-	      gtk_widget_intersect (paned->child2, &event->area, &child_event.area))
-	    gtk_widget_event (paned->child2, (GdkEvent *) &child_event);
-	}
+	(* GTK_WIDGET_CLASS (parent_class)->expose_event) (widget, event);
     }
 
   return FALSE;

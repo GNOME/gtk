@@ -606,9 +606,7 @@ gtk_layout_size_allocate (GtkWidget     *widget,
 static gint 
 gtk_layout_expose (GtkWidget *widget, GdkEventExpose *event)
 {
-  GList *tmp_list;
   GtkLayout *layout;
-  GdkEventExpose child_event;
 
   g_return_val_if_fail (widget != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_LAYOUT (widget), FALSE);
@@ -618,18 +616,7 @@ gtk_layout_expose (GtkWidget *widget, GdkEventExpose *event)
   if (event->window != layout->bin_window)
     return FALSE;
   
-  tmp_list = layout->children;
-  while (tmp_list)
-    {
-      GtkLayoutChild *child = tmp_list->data;
-      tmp_list = tmp_list->next;
-
-      child_event = *event;
-      if (GTK_WIDGET_DRAWABLE (child->widget) &&
-	  GTK_WIDGET_NO_WINDOW (child->widget) &&
-	  gtk_widget_intersect (child->widget, &event->area, &child_event.area))
-	gtk_widget_event (child->widget, (GdkEvent*) &child_event);
-    }
+  (* GTK_WIDGET_CLASS (parent_class)->expose_event) (widget, event);
 
   return FALSE;
 }
