@@ -1,3 +1,21 @@
+2004-02-03  Federico Mena Quintero  <federico@ximian.com>
+
+	Fix #68938.
+
+	* gtk/gtkdialog.c (GtkDialogPrivate): New private structure for
+	GtkDialog; right now it only contains an ignore_separator field.
+	(gtk_dialog_class_init): Register the private structure.
+	(gtk_dialog_init): Initialize the priv->ignore_separator field.
+	(_gtk_dialog_set_ignore_separator): New private function.
+	(gtk_dialog_set_has_separator): Ignore the setting if appropriate.
+
+	* gtk/gtkmessagedialog.c (gtk_message_dialog_class_init): Add a
+	use_separator style property.
+	(gtk_message_dialog_style_set): Change the dialog's separator
+	based on the style property.
+	(gtk_message_dialog_init): Set the dialog box to ignore the
+	separator setting.
+
 Tue Feb  3 02:35:09 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/Makefile.am: Build filesystemwin32.c if OS_WIN32 and

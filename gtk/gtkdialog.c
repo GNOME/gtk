@@ -35,6 +35,12 @@
 #include "gtkintl.h"
 #include "gtkbindings.h"
 
+#define GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), GTK_TYPE_DIALOG, GtkDialogPrivate))
+
+typedef struct {
+  guint ignore_separator : 1;
+} GtkDialogPrivate;
+
 typedef struct _ResponseData ResponseData;
 
 struct _ResponseData
@@ -130,6 +136,8 @@ gtk_dialog_class_init (GtkDialogClass *class)
 
   class->close = gtk_dialog_close;
   
+  g_type_class_add_private (gobject_class, sizeof (GtkDialogPrivate));
+
   g_object_class_install_property (gobject_class,
                                    PROP_HAS_SEPARATOR,
                                    g_param_spec_boolean ("has_separator",
@@ -219,6 +227,11 @@ update_spacings (GtkDialog *dialog)
 static void
 gtk_dialog_init (GtkDialog *dialog)
 {
+  GtkDialogPrivate *priv;
+
+  priv = GET_PRIVATE (dialog);
+  priv->ignore_separator = FALSE;
+
   /* To avoid breaking old code that prevents destroy on delete event
    * by connecting a handler, we have to have the FIRST signal
    * connection on the dialog.
@@ -766,10 +779,20 @@ void
 gtk_dialog_set_has_separator (GtkDialog *dialog,
                               gboolean   setting)
 {
+  GtkDialogPrivate *priv;
+
   g_return_if_fail (GTK_IS_DIALOG (dialog));
+
+  priv = GET_PRIVATE (dialog);
 
   /* this might fail if we get called before _init() somehow */
   g_assert (dialog->vbox != NULL);
+
+  if (priv->ignore_separator)
+    {
+      g_warning ("Ignoring the separator setting");
+      return;
+    }
   
   if (setting && dialog->separator == NULL)
     {
@@ -1000,4 +1023,14 @@ gtk_dialog_run (GtkDialog *dialog)
   g_object_unref (dialog);
 
   return ri.response_id;
+}
+
+void
+_gtk_dialog_set_ignore_separator (GtkDialog *dialog,
+				  gboolean   ignore_separator)
+{
+  GtkDialogPrivate *priv;
+
+  priv = GET_PRIVATE (dialog);
+  priv->ignore_separator = ignore_separator;
 }

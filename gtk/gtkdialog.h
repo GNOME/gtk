@@ -159,6 +159,11 @@ void gtk_dialog_response           (GtkDialog *dialog,
 /* Returns response_id */
 gint gtk_dialog_run                (GtkDialog *dialog);
 
+
+/* For private use only */
+void _gtk_dialog_set_ignore_separator (GtkDialog *dialog,
+				       gboolean   ignore_separator);
+
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */

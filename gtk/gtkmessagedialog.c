@@ -109,6 +109,12 @@ gtk_message_dialog_class_init (GtkMessageDialogClass *class)
                                                              G_MAXINT,
                                                              8,
                                                              G_PARAM_READABLE));
+  gtk_widget_class_install_style_property (widget_class,
+					   g_param_spec_boolean ("use_separator",
+								 P_("Use separator"),
+								 P_("Whether to put a separator between the message dialog's text and the buttons"),
+								 FALSE,
+								 G_PARAM_READABLE));
   g_object_class_install_property (gobject_class,
                                    PROP_MESSAGE_TYPE,
                                    g_param_spec_enum ("message_type",
@@ -153,6 +159,8 @@ gtk_message_dialog_init (GtkMessageDialog *dialog)
                       FALSE, FALSE, 0);
 
   gtk_widget_show_all (hbox);
+
+  _gtk_dialog_set_ignore_separator (GTK_DIALOG (dialog), TRUE);
 }
 
 static GtkMessageType
@@ -499,6 +507,7 @@ gtk_message_dialog_style_set (GtkWidget *widget,
 {
   GtkWidget *parent;
   gint border_width = 0;
+  gboolean use_separator;
 
   parent = GTK_WIDGET (GTK_MESSAGE_DIALOG (widget)->image->parent);
 
@@ -510,6 +519,13 @@ gtk_message_dialog_style_set (GtkWidget *widget,
       gtk_container_set_border_width (GTK_CONTAINER (parent),
                                       border_width);
     }
+
+  gtk_widget_style_get (widget,
+			"use_separator", &use_separator,
+			NULL);
+  _gtk_dialog_set_ignore_separator (GTK_DIALOG (widget), FALSE);
+  gtk_dialog_set_has_separator (GTK_DIALOG (widget), use_separator);
+  _gtk_dialog_set_ignore_separator (GTK_DIALOG (widget), TRUE);
 
   if (GTK_WIDGET_CLASS (parent_class)->style_set)
     (GTK_WIDGET_CLASS (parent_class)->style_set) (widget, prev_style);
