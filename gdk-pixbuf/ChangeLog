@@ -1,3 +1,9 @@
+Thu Sep 16 23:24:36 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* io-xpm.c (pixbuf_create_from_xpm): Reuse existing message
+	to avoid unnecessary string freeze break. Noticed by Danilo
+	Segan.
+
 2004-09-15  Matthias Clasen  <mclasen@redhat.com>
 
 	* io-ico.c: 

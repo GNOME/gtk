@@ -1269,7 +1269,7 @@ pixbuf_create_from_xpm (const gchar * (*get_buf) (enum buf_op op, gpointer handl
 		g_set_error (error,
 			     GDK_PIXBUF_ERROR,
                              GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY,
-                             _("Cannot allocate memory for loading XPM image"));
+                             _("Can't allocate memory for loading XPM image"));
 		g_hash_table_destroy (color_hash);
 		return NULL;
 	}
@@ -1278,7 +1278,7 @@ pixbuf_create_from_xpm (const gchar * (*get_buf) (enum buf_op op, gpointer handl
 		g_set_error (error,
 			     GDK_PIXBUF_ERROR,
                              GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY,
-                             _("Cannot allocate memory for loading XPM image"));
+                             _("Can't allocate memory for loading XPM image"));
 		g_hash_table_destroy (color_hash);
 		g_free (name_buf);
 		return NULL;
