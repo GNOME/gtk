@@ -479,12 +479,12 @@ gdk_exit (int errorcode)
 }
 
 void
-gdk_set_use_xshm (gint use_xshm)
+gdk_set_use_xshm (gboolean use_xshm)
 {
   gdk_use_xshm = use_xshm;
 }
 
-gint
+gboolean
 gdk_get_use_xshm (void)
 {
   return gdk_use_xshm;
@@ -734,7 +734,7 @@ gdk_pointer_ungrab (guint32 time)
  *--------------------------------------------------------------
  */
 
-gint
+gboolean
 gdk_pointer_is_grabbed (void)
 {
   return gdk_xgrab_window != NULL;

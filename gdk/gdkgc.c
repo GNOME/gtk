@@ -739,8 +739,8 @@ gdk_gc_set_subwindow (GdkGC	       *gc,
 }
 
 void
-gdk_gc_set_exposures (GdkGC *gc,
-		      gint   exposures)
+gdk_gc_set_exposures (GdkGC     *gc,
+		      gboolean   exposures)
 {
   GdkGCPrivate *private;
 

@@ -32,7 +32,7 @@
 #include "gdkx.h"
 
 
-gint
+gboolean
 gdk_selection_owner_set (GdkWindow *owner,
 			 GdkAtom    selection,
 			 guint32    time,

@@ -46,7 +46,7 @@ static GHashTable *colormap_hash = NULL;
 
 GdkColormap*
 gdk_colormap_new (GdkVisual *visual,
-		  gint       private_cmap)
+		  gboolean   private_cmap)
 {
   GdkColormap *colormap;
   GdkColormapPrivate *private;
@@ -404,7 +404,7 @@ gdk_colors_store (GdkColormap   *colormap,
 
 gboolean
 gdk_colors_alloc (GdkColormap   *colormap,
-		  gint           contiguous,
+		  gboolean       contiguous,
 		  gulong        *planes,
 		  gint           nplanes,
 		  gulong        *pixels,
@@ -1120,7 +1120,7 @@ gdk_color_hash (const GdkColor *colora,
 	  (colora->blue >> 6));
 }
 
-gint
+gboolean
 gdk_color_equal (const GdkColor *colora,
 		 const GdkColor *colorb)
 {

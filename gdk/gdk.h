@@ -66,11 +66,11 @@ void	  gdk_event_handler_set 	(GdkEventFunc    func,
 					 gpointer        data,
 					 GDestroyNotify  notify);
 
-void	  gdk_set_show_events		(gint		 show_events);
-void	  gdk_set_use_xshm		(gint		 use_xshm);
+void	  gdk_set_show_events		(gboolean	 show_events);
+void	  gdk_set_use_xshm		(gboolean	 use_xshm);
 
-gint	  gdk_get_show_events		(void);
-gint	  gdk_get_use_xshm		(void);
+gboolean  gdk_get_show_events		(void);
+gboolean  gdk_get_use_xshm		(void);
 gchar*	  gdk_get_display		(void);
 
 guint32 gdk_time_get	  (void);
@@ -90,20 +90,19 @@ gint gdk_input_add	  (gint		     source,
 			   gpointer	     data);
 void gdk_input_remove	  (gint		     tag);
 
-gint gdk_pointer_grab	(GdkWindow *	 window,
-			 gint		 owner_events,
-			 GdkEventMask	 event_mask,
-			 GdkWindow *	 confine_to,
-			 GdkCursor *	 cursor,
-			 guint32	 time);
-void gdk_pointer_ungrab (guint32	 time);
+gint     gdk_pointer_grab       (GdkWindow    *window,
+                                 gint          owner_events,
+                                 GdkEventMask  event_mask,
+                                 GdkWindow    *confine_to,
+                                 GdkCursor    *cursor,
+                                 guint32       time);
+void     gdk_pointer_ungrab     (guint32       time);
+gint     gdk_keyboard_grab      (GdkWindow    *window,
+                                 gboolean      owner_events,
+                                 guint32       time);
+void     gdk_keyboard_ungrab    (guint32       time);
+gboolean gdk_pointer_is_grabbed (void);
 
-gint gdk_keyboard_grab	 (GdkWindow *	  window,
-			  gint		  owner_events,
-			  guint32	  time);
-void gdk_keyboard_ungrab (guint32	  time);
-
-gint gdk_pointer_is_grabbed (void);
 
 gint gdk_screen_width  (void);
 gint gdk_screen_height (void);
@@ -328,7 +327,7 @@ void	      gdk_window_set_background	 (GdkWindow	  *window,
 					  GdkColor	  *color);
 void	      gdk_window_set_back_pixmap (GdkWindow	  *window,
 					  GdkPixmap	  *pixmap,
-					  gint		   parent_relative);
+					  gboolean         parent_relative);
 void	      gdk_window_set_cursor	 (GdkWindow	  *window,
 					  GdkCursor	  *cursor);
 void	      gdk_window_set_colormap	 (GdkWindow	  *window,
@@ -444,7 +443,7 @@ void   gdk_gc_set_clip_region	  (GdkGC	    *gc,
 void   gdk_gc_set_subwindow	  (GdkGC	    *gc,
 				   GdkSubwindowMode  mode);
 void   gdk_gc_set_exposures	  (GdkGC	    *gc,
-				   gint		     exposures);
+				   gboolean          exposures);
 void   gdk_gc_set_line_attributes (GdkGC	    *gc,
 				   gint		     line_width,
 				   GdkLineStyle	     line_style,
@@ -530,7 +529,7 @@ void	   gdk_image_destroy   (GdkImage     *image);
 /* Color
  */
 GdkColormap* gdk_colormap_new	          (GdkVisual      *visual,
-					   gint		   allocate);
+					   gboolean        allocate);
 GdkColormap* gdk_colormap_ref	          (GdkColormap    *cmap);
 void	     gdk_colormap_unref	          (GdkColormap    *cmap);
 
@@ -563,7 +562,7 @@ gboolean     gdk_color_parse	          (const gchar    *spec,
 					   GdkColor       *color);
 guint        gdk_color_hash               (const GdkColor *colora,
 					   const GdkColor *colorb);
-gint         gdk_color_equal	          (const GdkColor *colora,
+gboolean     gdk_color_equal	          (const GdkColor *colora,
 					   const GdkColor *colorb);
 
 
@@ -572,7 +571,7 @@ void     gdk_colors_store (GdkColormap	*colormap,
 			   GdkColor	*colors,
 			   gint		 ncolors);
 gboolean gdk_colors_alloc (GdkColormap	*colormap,
-			   gint		 contiguous,
+			   gboolean      contiguous,
 			   gulong	*planes,
 			   gint		 nplanes,
 			   gulong	*pixels,
@@ -598,7 +597,7 @@ GdkFont* gdk_fontset_load   (const gchar    *fontset_name);
 GdkFont* gdk_font_ref	    (GdkFont        *font);
 void	 gdk_font_unref	    (GdkFont        *font);
 gint	 gdk_font_id	    (const GdkFont  *font);
-gint	 gdk_font_equal	    (const GdkFont  *fonta,
+gboolean gdk_font_equal	    (const GdkFont  *fonta,
 			     const GdkFont  *fontb);
 gint	 gdk_string_width   (GdkFont        *font,
 			     const gchar    *string);
@@ -749,7 +748,7 @@ void gdk_draw_lines      (GdkDrawable  *drawable,
 
 /* Selections
  */
-gint	   gdk_selection_owner_set (GdkWindow	 *owner,
+gboolean   gdk_selection_owner_set (GdkWindow	 *owner,
 				    GdkAtom	  selection,
 				    guint32	  time,
 				    gint	  send_event);
@@ -758,7 +757,7 @@ void	   gdk_selection_convert   (GdkWindow	 *requestor,
 				    GdkAtom	  selection,
 				    GdkAtom	  target,
 				    guint32	  time);
-gint	   gdk_selection_property_get (GdkWindow  *requestor,
+gboolean   gdk_selection_property_get (GdkWindow  *requestor,
 				       guchar	 **data,
 				       GdkAtom	  *prop_type,
 				       gint	  *prop_format);
@@ -768,89 +767,87 @@ void	   gdk_selection_send_notify (guint32	    requestor,
 				      GdkAtom	    property,
 				      guint32	    time);
 
-gint	   gdk_text_property_to_text_list (GdkAtom encoding, gint format,
+gint       gdk_text_property_to_text_list (GdkAtom encoding, gint format,
 					   guchar *text, gint length,
 					   gchar ***list);
 void	   gdk_free_text_list		  (gchar **list);
-gint	   gdk_string_to_compound_text	  (const gchar *str,
+gint       gdk_string_to_compound_text	  (const gchar *str,
 					   GdkAtom *encoding, gint *format,
 					   guchar **ctext, gint *length);
 void	   gdk_free_compound_text	  (guchar *ctext);
 
 /* Properties
  */
-GdkAtom gdk_atom_intern	    (const gchar *atom_name,
-			     gint	  only_if_exists);
-gchar*	gdk_atom_name	    (GdkAtom atom);
-gint	gdk_property_get    (GdkWindow	 *window,
-			     GdkAtom	  property,
-			     GdkAtom	  type,
-			     gulong	  offset,
-			     gulong	  length,
-			     gint	  pdelete,
-			     GdkAtom	 *actual_property_type,
-			     gint	 *actual_format,
-			     gint	 *actual_length,
-			     guchar	**data);
+GdkAtom  gdk_atom_intern     (const gchar  *atom_name,
+                              gint          only_if_exists);
+gchar*   gdk_atom_name       (GdkAtom       atom);
+gboolean gdk_property_get    (GdkWindow    *window,
+                              GdkAtom       property,
+                              GdkAtom       type,
+                              gulong        offset,
+                              gulong        length,
+                              gint          pdelete,
+                              GdkAtom      *actual_property_type,
+                              gint         *actual_format,
+                              gint         *actual_length,
+                              guchar      **data);
+void     gdk_property_change (GdkWindow    *window,
+                              GdkAtom       property,
+                              GdkAtom       type,
+                              gint          format,
+                              GdkPropMode   mode,
+                              guchar       *data,
+                              gint          nelements);
+void     gdk_property_delete (GdkWindow    *window,
+                              GdkAtom       property);
 
-void	gdk_property_change (GdkWindow	 *window,
-			     GdkAtom	  property,
-			     GdkAtom	  type,
-			     gint	  format,
-			     GdkPropMode  mode,
-			     guchar	 *data,
-			     gint	  nelements);
-void	gdk_property_delete (GdkWindow	 *window,
-			     GdkAtom	  property);
 
 
 /* Rectangle utilities
  */
-gint gdk_rectangle_intersect (GdkRectangle *src1,
-			      GdkRectangle *src2,
-			      GdkRectangle *dest);
-void gdk_rectangle_union     (GdkRectangle *src1,
-			      GdkRectangle *src2,
-			      GdkRectangle *dest);
+gboolean gdk_rectangle_intersect (GdkRectangle *src1,
+                                  GdkRectangle *src2,
+                                  GdkRectangle *dest);
+void     gdk_rectangle_union     (GdkRectangle *src1,
+                                  GdkRectangle *src2,
+                                  GdkRectangle *dest);
 
 /* XInput support
  */
-
-void gdk_input_init			    (void);
-void gdk_input_exit			    (void);
-GList *gdk_input_list_devices		    (void);
-void gdk_input_set_extension_events	    (GdkWindow *window,
-					     gint mask,
-					     GdkExtensionMode mode);
-void gdk_input_set_source		    (guint32 deviceid,
-					     GdkInputSource source);
-gint gdk_input_set_mode			    (guint32 deviceid,
-					     GdkInputMode mode);
-void gdk_input_set_axes			    (guint32 deviceid,
-					     GdkAxisUse *axes);
-void gdk_input_set_key			    (guint32 deviceid,
-					     guint   index,
-					     guint   keyval,
-					     GdkModifierType modifiers);
-void gdk_input_window_get_pointer     (GdkWindow       *window,
-				       guint32	       deviceid,
-				       gdouble	       *x,
-				       gdouble	       *y,
-				       gdouble	       *pressure,
-				       gdouble	       *xtilt,
-				       gdouble	       *ytilt,
-				       GdkModifierType *mask);
-
-GdkTimeCoord *gdk_input_motion_events (GdkWindow *window,
-				       guint32 deviceid,
-				       guint32 start,
-				       guint32 stop,
-				       gint *nevents_return);
+void          gdk_input_init                 (void);
+void          gdk_input_exit                 (void);
+GList *       gdk_input_list_devices         (void);
+void          gdk_input_set_extension_events (GdkWindow        *window,
+                                              gint              mask,
+                                              GdkExtensionMode  mode);
+void          gdk_input_set_source           (guint32           deviceid,
+                                              GdkInputSource    source);
+gboolean      gdk_input_set_mode             (guint32           deviceid,
+                                              GdkInputMode      mode);
+void          gdk_input_set_axes             (guint32           deviceid,
+                                              GdkAxisUse       *axes);
+void          gdk_input_set_key              (guint32           deviceid,
+                                              guint             index,
+                                              guint             keyval,
+                                              GdkModifierType   modifiers);
+void          gdk_input_window_get_pointer   (GdkWindow        *window,
+                                              guint32           deviceid,
+                                              gdouble          *x,
+                                              gdouble          *y,
+                                              gdouble          *pressure,
+                                              gdouble          *xtilt,
+                                              gdouble          *ytilt,
+                                              GdkModifierType  *mask);
+GdkTimeCoord *gdk_input_motion_events        (GdkWindow        *window,
+                                              guint32           deviceid,
+                                              guint32           start,
+                                              guint32           stop,
+                                              gint             *nevents_return);
 
 /* International Input Method Support Functions
  */
 
-gint         gdk_im_ready	   (void);
+gboolean     gdk_im_ready	   (void);
 
 void         gdk_im_begin	   (GdkIC               *ic, 
 				    GdkWindow           *window);

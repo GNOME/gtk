@@ -259,7 +259,7 @@ gdk_font_id (const GdkFont *font)
     }
 }
 
-gint
+gboolean
 gdk_font_equal (const GdkFont *fonta,
                 const GdkFont *fontb)
 {
@@ -288,7 +288,7 @@ gdk_font_equal (const GdkFont *fonta,
     }
   else
     /* fontset != font */
-    return 0;
+    return FALSE;
 }
 
 gint

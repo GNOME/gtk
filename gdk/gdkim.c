@@ -442,7 +442,7 @@ gdk_im_close (void)
     }
 }
 
-gint 
+gboolean
 gdk_im_ready (void)
 {
   return (xim_im != NULL);

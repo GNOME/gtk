@@ -1,3 +1,41 @@
+2000-01-25  Havoc Pennington  <hp@pobox.com>
+	
+	* gdk/gdkwindow.c (gdk_window_set_back_pixmap): parent_relative
+	arg is boolean
+
+	* gdk/gdkselection.c (gdk_selection_owner_set): return boolean
+
+	* gdk/gdkrectangle.c (gdk_rectangle_intersect): return boolean
+
+	* gdk/gdkproperty.c (gdk_property_get): return boolean
+
+	* gdk/gdkinput.c (gdk_input_set_mode): return boolean
+
+	* gdk/gdkim.c (gdk_im_ready): return boolean
+
+	* gdk/gdkgc.c (gdk_gc_set_exposures): gboolean arg
+
+	* gdk/gdkfont.c (gdk_font_equal): return gboolean (mild
+	glib clash, should fix glib)
+
+	* gdk/gdkevents.c (gdk_set_show_events): take gboolean arg
+	(gdk_get_show_events): return gboolean, and canonicalize 
+	to TRUE/FALSE
+
+	* gdk/gdkcolor.c (gdk_colormap_new): gboolean flag whether the
+	colormap is private
+	(gdk_colors_alloc): gboolean whether to be contiguous
+	(gdk_color_equal): return gboolean since we are a predicate
+	and not a qsort() (this looks semi-wrong due to glib breakage,
+	IMO glib should be fixed)
+	
+	* gdk/gdk.c (gdk_set_use_xshm): take gboolean arg
+	(gdk_get_use_xshm): return gboolean
+	(gdk_pointer_is_grabbed): return gboolean
+
+	* gdk/gdk.h: Change prototypes to match all the above changes,
+	and re-run egtk-format-protos as required.
+
 Fri Jan 28 12:28:17 2000  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkctree.c (resync_selection): 

@@ -87,7 +87,7 @@ gdk_atom_name (GdkAtom atom)
     }
 }
 
-gint
+gboolean
 gdk_property_get (GdkWindow   *window,
 		  GdkAtom      property,
 		  GdkAtom      type,

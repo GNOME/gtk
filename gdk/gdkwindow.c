@@ -1240,7 +1240,7 @@ gdk_window_set_background (GdkWindow *window,
 void
 gdk_window_set_back_pixmap (GdkWindow *window,
 			    GdkPixmap *pixmap,
-			    gint       parent_relative)
+			    gboolean   parent_relative)
 {
   GdkWindowPrivate *window_private;
   GdkPixmapPrivate *pixmap_private;
