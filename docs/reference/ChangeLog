@@ -1,5 +1,9 @@
 2001-10-27  Anders Carlsson  <andersca@gnu.org>
 
+	* gtk/tmpl/gtkaccellabel.sgml: Clarify that the string
+	argument in gtk_accel_label_new most be non-NULL.
+	This fixes #54826.
+
 	* gtk/tmpl/gtkentry.sgml: Clarify that a maximum length
 	of 0 means infinity. This fixes #58771.
 

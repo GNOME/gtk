@@ -90,7 +90,7 @@ should be accessed using the functions below.
 Creates a new #GtkAccelLabel.
 </para>
 
-@string: the label string.
+@string: the label string. Must be non-NULL.
 @Returns: a new #GtkAccelLabel.
 
 
