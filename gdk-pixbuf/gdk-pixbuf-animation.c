@@ -139,7 +139,7 @@ gdk_pixbuf_animation_new_from_file (const char *filename,
 	guchar buffer [128];
 	GdkPixbufModule *image_module;
         gchar *display_name;
-        gboolean locked;
+        gboolean locked = FALSE;
 
 	g_return_val_if_fail (filename != NULL, NULL);
         g_return_val_if_fail (error == NULL || *error == NULL, NULL);
@@ -184,8 +184,6 @@ gdk_pixbuf_animation_new_from_file (const char *filename,
                         return NULL;
                 }
 
-        locked = _gdk_pixbuf_lock (image_module);
-
 	if (image_module->load_animation == NULL) {
 		GdkPixbuf *pixbuf;
 
@@ -221,6 +219,8 @@ gdk_pixbuf_animation_new_from_file (const char *filename,
 
                 g_object_unref (pixbuf);
 	} else {
+                locked = _gdk_pixbuf_lock (image_module);
+
 		fseek (f, 0, SEEK_SET);
 		animation = (* image_module->load_animation) (f, error);
 

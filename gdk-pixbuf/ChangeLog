@@ -1,3 +1,8 @@
+2004-12-27  Matthias Clasen  <mclasen@redhat.com>
+
+	* gdk-pixbuf-animation.c (gdk_pixbuf_animation_new_from_file) 
+	Avoid deadlock. Pointed out by Callum McKenzie.
+	
 Wed Dec 22 01:17:44 2004  Jonathan Blandford  <jrb@redhat.com>
 
 	* queryloaders.c (main): print out the version and binary name in
