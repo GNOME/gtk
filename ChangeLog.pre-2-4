@@ -1,3 +1,11 @@
+2002-03-29  Jakub Steiner <jimmac@ximian.com>
+
+	* gtk/stock-icons/stock_add_24.png:
+	* gtk/stock-icons/stock_add_16.png:
+	* gtk/stock-icons/stock_remove_24.png:
+	* gtk/stock-icons/stock_remove_16.png: use a simple '+' and '-',
+	  works better. the old box was too clumsy
+
 Thu Mar 28 21:11:04 2002  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkfilesel.c (open_new_dir): when encountering non-UTF-8 file
