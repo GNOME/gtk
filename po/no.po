@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.3.14\n"
-"POT-Creation-Date: 2002-09-28 11:36+0200\n"
+"POT-Creation-Date: 2002-10-15 22:16+0200\n"
 "PO-Revision-Date: 2002-09-28 11:37+0200\n"
 "Last-Translator: Kjartan Maraas <kmaraas@gnome.org>\n"
 "Language-Team: Norwegian (bokmål) <no@li.org>\n"
@@ -2349,7 +2349,7 @@ msgstr "Widget som skal aktiveres når etikettens hinttast trykkes."
 msgid "Horizontal adjustment"
 msgstr "Horisontal justering"
 
-#: gtk/gtklayout.c:624 gtk/gtkscrolledwindow.c:237
+#: gtk/gtklayout.c:624 gtk/gtkscrolledwindow.c:233
 msgid "The GtkAdjustment for the horizontal position."
 msgstr "GtkAdjustment for horisontal posisjon."
 
@@ -2357,7 +2357,7 @@ msgstr "GtkAdjustment for horisontal posisjon."
 msgid "Vertical adjustment"
 msgstr "Vertikal justering"
 
-#: gtk/gtklayout.c:632 gtk/gtkscrolledwindow.c:244
+#: gtk/gtklayout.c:632 gtk/gtkscrolledwindow.c:240
 msgid "The GtkAdjustment for the vertical position."
 msgstr "GtkAdjustment for vertikal posisjon."
 
@@ -2942,43 +2942,43 @@ msgid ""
 "Display a secondary forward arrow button on the opposite end of the scrollbar"
 msgstr "Vis en sekundær knapp med framoverpil på motsatt side av rullefeltet"
 
-#: gtk/gtkscrolledwindow.c:236 gtk/gtktext.c:598 gtk/gtktreeview.c:523
+#: gtk/gtkscrolledwindow.c:232 gtk/gtktext.c:598 gtk/gtktreeview.c:523
 msgid "Horizontal Adjustment"
 msgstr "Horisontal justering"
 
-#: gtk/gtkscrolledwindow.c:243 gtk/gtktext.c:606 gtk/gtktreeview.c:531
+#: gtk/gtkscrolledwindow.c:239 gtk/gtktext.c:606 gtk/gtktreeview.c:531
 msgid "Vertical Adjustment"
 msgstr "Vertikal justering"
 
-#: gtk/gtkscrolledwindow.c:250
+#: gtk/gtkscrolledwindow.c:246
 msgid "Horizontal Scrollbar Policy"
 msgstr "Oppførsel for horisontalt rullefelt"
 
-#: gtk/gtkscrolledwindow.c:251
+#: gtk/gtkscrolledwindow.c:247
 msgid "When the horizontal scrollbar is displayed"
 msgstr "Når horisontalt rullefelt skal vises"
 
-#: gtk/gtkscrolledwindow.c:258
+#: gtk/gtkscrolledwindow.c:254
 msgid "Vertical Scrollbar Policy"
 msgstr "Oppførsel for vertikalt rullefelt"
 
-#: gtk/gtkscrolledwindow.c:259
+#: gtk/gtkscrolledwindow.c:255
 msgid "When the vertical scrollbar is displayed"
 msgstr "Når vertikalt rullefelt skal vises"
 
-#: gtk/gtkscrolledwindow.c:267
+#: gtk/gtkscrolledwindow.c:263
 msgid "Window Placement"
 msgstr "Vinduplassering"
 
-#: gtk/gtkscrolledwindow.c:268
+#: gtk/gtkscrolledwindow.c:264
 msgid "Where the contents are located with respect to the scrollbars"
 msgstr "Plassering av innhold i forhold til rullefeltene"
 
-#: gtk/gtkscrolledwindow.c:275
+#: gtk/gtkscrolledwindow.c:271
 msgid "Shadow Type"
 msgstr "Skyggetype"
 
-#: gtk/gtkscrolledwindow.c:276
+#: gtk/gtkscrolledwindow.c:272
 msgid "Style of bevel around the contents"
 msgstr "Stil på kanten rundt innholdet"
 
