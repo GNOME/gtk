@@ -1,3 +1,10 @@
+2000-10-12  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtktreedatalist.[ch] (gtk_tree_data_list_value_to_node): Added
+	values other then G_TYPE_STRING.
+	* gtk/gtktreeselection.c: Minor commenting updates.
+	* gtk/gtktreeview.c: Format updates.
+
 2000-10-09  Tor Lillqvist  <tml@iki.fi>
 
 	* README.win32: Update.
