@@ -55,9 +55,9 @@ do_button_box (void)
     window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
     gtk_window_set_title (GTK_WINDOW (window), "Button Boxes");
     
-    gtk_signal_connect (GTK_OBJECT (window), "destroy",
-			GTK_SIGNAL_FUNC(gtk_widget_destroyed),
-			&window);
+    g_signal_connect (window, "destroy",
+		      G_CALLBACK (gtk_widget_destroyed),
+		      &window);
     
     gtk_container_set_border_width (GTK_CONTAINER (window), 10);
 

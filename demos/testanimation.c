@@ -160,10 +160,8 @@ progressive_timeout (gpointer data)
                                            "Failure reading image file 'alphatest.png': %s",
                                            g_strerror (errno));
 
-          gtk_signal_connect (GTK_OBJECT (dialog),
-                              "response",
-                              GTK_SIGNAL_FUNC (gtk_widget_destroy),
-                              NULL);
+          g_signal_connect (dialog, "response",
+			    G_CALLBACK (gtk_widget_destroy), NULL);
 
           fclose (lc->image_stream);
           lc->image_stream = NULL;
@@ -190,10 +188,8 @@ progressive_timeout (gpointer data)
 
           g_error_free (error);
           
-          gtk_signal_connect (GTK_OBJECT (dialog),
-                              "response",
-                              GTK_SIGNAL_FUNC (gtk_widget_destroy),
-                              NULL);
+          g_signal_connect (dialog, "response",
+			    G_CALLBACK (gtk_widget_destroy), NULL);
 
           fclose (lc->image_stream);
           lc->image_stream = NULL;
@@ -229,10 +225,8 @@ progressive_timeout (gpointer data)
               
               g_error_free (error);
               
-              gtk_signal_connect (GTK_OBJECT (dialog),
-                                  "response",
-                                  GTK_SIGNAL_FUNC (gtk_widget_destroy),
-                                  NULL);
+              g_signal_connect (dialog, "response",
+				G_CALLBACK (gtk_widget_destroy), NULL);
               
               gtk_widget_show (dialog);
 
@@ -264,10 +258,8 @@ progressive_timeout (gpointer data)
                                            lc->filename,
                                            g_strerror (errno));
 
-          gtk_signal_connect (GTK_OBJECT (dialog),
-                              "response",
-                              GTK_SIGNAL_FUNC (gtk_widget_destroy),
-                              NULL);
+          g_signal_connect (dialog, "response",
+			    G_CALLBACK (gtk_widget_destroy), NULL);
           
           gtk_widget_show (dialog);
 
@@ -285,14 +277,10 @@ progressive_timeout (gpointer data)
       
       lc->pixbuf_loader = gdk_pixbuf_loader_new ();
       
-      g_signal_connect (G_OBJECT (lc->pixbuf_loader),
-			"area_prepared",
-			G_CALLBACK (progressive_prepared_callback),
-			image);
-      g_signal_connect (G_OBJECT (lc->pixbuf_loader),
-			"area_updated",
-			G_CALLBACK (progressive_updated_callback),
-			image);
+      g_signal_connect (G_OBJECT (lc->pixbuf_loader), "area_prepared",
+			G_CALLBACK (progressive_prepared_callback), image);
+      g_signal_connect (G_OBJECT (lc->pixbuf_loader), "area_updated",
+			G_CALLBACK (progressive_updated_callback), image);
     }
 
   /* leave timeout installed */

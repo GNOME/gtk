@@ -220,7 +220,7 @@ do_appwindow (void)
       item_factory = gtk_item_factory_new (GTK_TYPE_MENU_BAR, "<main>", accel_group);
 
       /* Set up item factory to go away with the window */
-      gtk_object_ref (GTK_OBJECT (item_factory));
+      g_object_ref (item_factory);
       gtk_object_sink (GTK_OBJECT (item_factory));
       g_object_set_data_full (G_OBJECT (window),
                               "<main>",

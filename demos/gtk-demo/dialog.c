@@ -108,7 +108,7 @@ do_dialog (void)
       window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
       gtk_window_set_title (GTK_WINDOW (window), "Dialogs");
 
-      gtk_signal_connect (GTK_OBJECT (window), "destroy", GTK_SIGNAL_FUNC (gtk_widget_destroyed), &window);
+      g_signal_connect (window, "destroy", G_CALLBACK (gtk_widget_destroyed), &window);
       gtk_container_set_border_width (GTK_CONTAINER (window), 8);
 
       frame = gtk_frame_new ("Dialogs");
@@ -122,8 +122,8 @@ do_dialog (void)
       hbox = gtk_hbox_new (FALSE, 8);
       gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, FALSE, 0);
       button = gtk_button_new_with_mnemonic ("_Message Dialog");
-      gtk_signal_connect (GTK_OBJECT (button), "clicked",
-			  GTK_SIGNAL_FUNC (message_dialog_clicked), NULL);
+      g_signal_connect (button, "clicked",
+			G_CALLBACK (message_dialog_clicked), NULL);
       gtk_box_pack_start (GTK_BOX (hbox), button, FALSE, FALSE, 0);
 
       gtk_box_pack_start (GTK_BOX (vbox), gtk_hseparator_new (), FALSE, FALSE, 0);
@@ -134,8 +134,8 @@ do_dialog (void)
       vbox2 = gtk_vbox_new (FALSE, 0);
 
       button = gtk_button_new_with_mnemonic ("_Interactive Dialog");
-      gtk_signal_connect (GTK_OBJECT (button), "clicked",
-			  GTK_SIGNAL_FUNC (interactive_dialog_clicked), NULL);
+      g_signal_connect (button, "clicked",
+			G_CALLBACK (interactive_dialog_clicked), NULL);
       gtk_box_pack_start (GTK_BOX (hbox), vbox2, FALSE, FALSE, 0);
       gtk_box_pack_start (GTK_BOX (vbox2), button, FALSE, FALSE, 0);
 

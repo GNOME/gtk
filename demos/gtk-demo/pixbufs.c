@@ -219,8 +219,8 @@ do_pixbufs (void)
       gtk_window_set_title (GTK_WINDOW (window), "Pixbufs");
       gtk_window_set_resizable (GTK_WINDOW (window), FALSE);
 
-      gtk_signal_connect (GTK_OBJECT (window), "destroy", GTK_SIGNAL_FUNC (gtk_widget_destroyed), &window);
-      gtk_signal_connect (GTK_OBJECT (window), "destroy", GTK_SIGNAL_FUNC (cleanup_callback), NULL);
+      g_signal_connect (window, "destroy", G_CALLBACK (gtk_widget_destroyed), &window);
+      g_signal_connect (window, "destroy", G_CALLBACK (cleanup_callback), NULL);
 
 
       error = NULL;
@@ -237,10 +237,8 @@ do_pixbufs (void)
 
 	  g_error_free (error);
 
-	  gtk_signal_connect (GTK_OBJECT (dialog),
-			      "response",
-			      GTK_SIGNAL_FUNC (gtk_widget_destroy),
-			      NULL);
+	  g_signal_connect (dialog, "response",
+			    G_CALLBACK (gtk_widget_destroy), NULL);
 
 	  gtk_widget_show (dialog);
 	}
@@ -252,8 +250,8 @@ do_pixbufs (void)
 
 	  da = gtk_drawing_area_new ();
 
-	  gtk_signal_connect (GTK_OBJECT (da), "expose_event",
-			      GTK_SIGNAL_FUNC (expose_cb), NULL);
+	  g_signal_connect (da, "expose_event",
+			    G_CALLBACK (expose_cb), NULL);
 
 	  gtk_container_add (GTK_CONTAINER (window), da);
 

@@ -59,19 +59,15 @@ do_item_factory (void)
       
       window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
       
-      gtk_signal_connect (GTK_OBJECT (window), "destroy",
-			  GTK_SIGNAL_FUNC(gtk_widget_destroyed),
-			  &window);
-      gtk_signal_connect (GTK_OBJECT (window), "delete-event",
-			  GTK_SIGNAL_FUNC (gtk_true),
-			  NULL);
+      g_signal_connect (window, "destroy",
+			G_CALLBACK (gtk_widget_destroyed), &window);
+      g_signal_connect (window, "delete-event",
+			G_CALLBACK (gtk_true), NULL);
       
       accel_group = gtk_accel_group_new ();
       item_factory = gtk_item_factory_new (GTK_TYPE_MENU_BAR, "<main>", accel_group);
-      gtk_object_set_data_full (GTK_OBJECT (window),
-				"<main>",
-				item_factory,
-				(GtkDestroyNotify) gtk_object_unref);
+      g_object_set_data_full (G_OBJECT (window), "<main>",
+			      item_factory, (GDestroyNotify) g_object_unref);
       gtk_accel_group_attach (accel_group, G_OBJECT (window));
       gtk_window_set_title (GTK_WINDOW (window), "Item Factory");
       gtk_container_set_border_width (GTK_CONTAINER (window), 0);
@@ -106,9 +102,8 @@ do_item_factory (void)
       gtk_box_pack_start (GTK_BOX (box1), box2, FALSE, TRUE, 0);
 
       button = gtk_button_new_with_label ("close");
-      gtk_signal_connect_object (GTK_OBJECT (button), "clicked",
-				 GTK_SIGNAL_FUNC(gtk_widget_destroy),
-				 GTK_OBJECT (window));
+      g_signal_connect_swapped (button, "clicked",
+				G_CALLBACK (gtk_widget_destroy), window);
       gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
       GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
       gtk_widget_grab_default (button);

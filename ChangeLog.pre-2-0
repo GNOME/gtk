@@ -1,3 +1,9 @@
+Sat Oct 20 19:38:16 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* demos/*.c demos/gdk-pixbuf/*.c: Eliminate gtk_signal_*
+	in favor of g_signal_*, gtk_object_* in favor of 
+	g_object_*.
+
 Fri Oct 19 18:35:22 2001  Manish Singh  <yosh@gimp.org>
 
 	* gtk/{gtkentry.c,gtktextview.c}: since GtkIMContext derives directly

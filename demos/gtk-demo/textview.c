@@ -366,9 +366,8 @@ do_textview (void)
       gtk_window_set_default_size (GTK_WINDOW (window),
 				   450, 450);
       
-      gtk_signal_connect (GTK_OBJECT (window), "destroy",
-			  GTK_SIGNAL_FUNC(gtk_widget_destroyed),
-			  &window);
+      g_signal_connect (window, "destroy",
+			G_CALLBACK (gtk_widget_destroyed), &window);
 
       gtk_window_set_title (GTK_WINDOW (window), "TextView");
       gtk_container_set_border_width (GTK_CONTAINER (window), 0);

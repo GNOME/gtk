@@ -77,18 +77,16 @@ create_pane_options (GtkPaned	 *paned,
   check_button = gtk_check_button_new_with_mnemonic ("_Resize");
   gtk_table_attach_defaults (GTK_TABLE (table), check_button,
 			     0, 1, 1, 2);
-  gtk_signal_connect (GTK_OBJECT (check_button), "toggled",
-		      GTK_SIGNAL_FUNC (toggle_resize),
-		      paned->child1);
+  g_signal_connect (check_button, "toggled",
+		    G_CALLBACK (toggle_resize), paned->child1);
   
   check_button = gtk_check_button_new_with_mnemonic ("_Shrink");
   gtk_table_attach_defaults (GTK_TABLE (table), check_button,
 			     0, 1, 2, 3);
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check_button),
 			       TRUE);
-  gtk_signal_connect (GTK_OBJECT (check_button), "toggled",
-		      GTK_SIGNAL_FUNC (toggle_shrink),
-		      paned->child1);
+  g_signal_connect (check_button, "toggled",
+		    G_CALLBACK (toggle_shrink), paned->child1);
   
   label = gtk_label_new (label2);
   gtk_table_attach_defaults (GTK_TABLE (table), label,
@@ -99,18 +97,16 @@ create_pane_options (GtkPaned	 *paned,
 			     1, 2, 1, 2);
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check_button),
 			       TRUE);
-  gtk_signal_connect (GTK_OBJECT (check_button), "toggled",
-		      GTK_SIGNAL_FUNC (toggle_resize),
-		      paned->child2);
+  g_signal_connect (check_button, "toggled",
+		    G_CALLBACK (toggle_resize), paned->child2);
   
   check_button = gtk_check_button_new_with_mnemonic ("_Shrink");
   gtk_table_attach_defaults (GTK_TABLE (table), check_button,
 			     1, 2, 2, 3);
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check_button),
 			       TRUE);
-  gtk_signal_connect (GTK_OBJECT (check_button), "toggled",
-		      GTK_SIGNAL_FUNC (toggle_shrink),
-		      paned->child2);
+  g_signal_connect (check_button, "toggled",
+		    G_CALLBACK (toggle_shrink), paned->child2);
 
   return frame;
 }
@@ -129,9 +125,8 @@ do_panes (void)
     {
       window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
 
-      gtk_signal_connect (GTK_OBJECT (window), "destroy",
-			  GTK_SIGNAL_FUNC(gtk_widget_destroyed),
-			  &window);
+      g_signal_connect (window, "destroy",
+			G_CALLBACK (gtk_widget_destroyed), &window);
 
       gtk_window_set_title (GTK_WINDOW (window), "Panes");
       gtk_container_set_border_width (GTK_CONTAINER (window), 0);

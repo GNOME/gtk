@@ -231,7 +231,7 @@ do_drawingarea (void)
       window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
       gtk_window_set_title (GTK_WINDOW (window), "Drawing Area");
 
-      gtk_signal_connect (GTK_OBJECT (window), "destroy", GTK_SIGNAL_FUNC (gtk_widget_destroyed), &window);
+      g_signal_connect (window, "destroy", G_CALLBACK (gtk_widget_destroyed), &window);
 
       gtk_container_set_border_width (GTK_CONTAINER (window), 8);
 
@@ -258,10 +258,8 @@ do_drawingarea (void)
 
       gtk_container_add (GTK_CONTAINER (frame), da);
 
-      gtk_signal_connect (GTK_OBJECT (da),
-			  "expose_event",
-			  GTK_SIGNAL_FUNC (checkerboard_expose),
-			  NULL);
+      g_signal_connect (da, "expose_event",
+			G_CALLBACK (checkerboard_expose), NULL);
 
       /*
        * Create the scribble area
@@ -284,17 +282,17 @@ do_drawingarea (void)
 
       /* Signals used to handle backing pixmap */
       
-      gtk_signal_connect (GTK_OBJECT (da), "expose_event",
-			  GTK_SIGNAL_FUNC (scribble_expose_event), NULL);
-      gtk_signal_connect (GTK_OBJECT (da),"configure_event",
-			  GTK_SIGNAL_FUNC (scribble_configure_event), NULL);
+      g_signal_connect (da, "expose_event",
+			G_CALLBACK (scribble_expose_event), NULL);
+      g_signal_connect (da,"configure_event",
+			G_CALLBACK (scribble_configure_event), NULL);
       
       /* Event signals */
       
-      gtk_signal_connect (GTK_OBJECT (da), "motion_notify_event",
-			  GTK_SIGNAL_FUNC (scribble_motion_notify_event), NULL);
-      gtk_signal_connect (GTK_OBJECT (da), "button_press_event",
-			  GTK_SIGNAL_FUNC (scribble_button_press_event), NULL);
+      g_signal_connect (da, "motion_notify_event",
+			G_CALLBACK (scribble_motion_notify_event), NULL);
+      g_signal_connect (da, "button_press_event",
+			G_CALLBACK (scribble_button_press_event), NULL);
 
 
       /* Ask to receive events the drawing area doesn't normally

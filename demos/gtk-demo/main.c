@@ -554,10 +554,8 @@ button_press_event_cb (GtkTreeView    *tree_view,
 		  cbdata->model = model;
 		  cbdata->path = path;
 		  
-		  gtk_signal_connect (GTK_OBJECT (window),
-				      "destroy",
-				      GTK_SIGNAL_FUNC (window_closed_cb),
-				      cbdata);
+		  g_signal_connect (window, "destroy",
+				    G_CALLBACK (window_closed_cb), cbdata);
 		}
 	      else
 		{
@@ -568,8 +566,7 @@ button_press_event_cb (GtkTreeView    *tree_view,
 	    gtk_tree_path_free (path);
 	}
 
-      gtk_signal_emit_stop_by_name (GTK_OBJECT (tree_view),
-				    "button_press_event");
+      g_signal_stop_emission_by_name (tree_view, "button_press_event");
       return TRUE;
     }
   
@@ -612,10 +609,8 @@ row_activated_cb (GtkTreeView       *tree_view,
 	  cbdata->model = model;
 	  cbdata->path = gtk_tree_path_copy (path);
 	  
-	  gtk_signal_connect (GTK_OBJECT (window),
-			      "destroy",
-			      GTK_SIGNAL_FUNC (window_closed_cb),
-			      cbdata);
+	  g_signal_connect (window, "destroy",
+			    G_CALLBACK (window_closed_cb), cbdata);
 	}
     }
 }
@@ -760,8 +755,8 @@ create_tree (void)
   gtk_tree_view_append_column (GTK_TREE_VIEW (tree_view),
 			       GTK_TREE_VIEW_COLUMN (column));
 
-  g_signal_connect (G_OBJECT (selection), "changed", GTK_SIGNAL_FUNC (selection_cb), model);
-  g_signal_connect (G_OBJECT (tree_view), "row_activated", GTK_SIGNAL_FUNC (row_activated_cb), model);
+  g_signal_connect (selection, "changed", G_CALLBACK (selection_cb), model);
+  g_signal_connect (tree_view, "row_activated", G_CALLBACK (row_activated_cb), model);
 
   gtk_tree_view_expand_all (GTK_TREE_VIEW (tree_view));
 
@@ -801,10 +796,8 @@ setup_default_icon (void)
                                            err->message);
           g_error_free (err);
 
-          gtk_signal_connect (GTK_OBJECT (dialog),
-                              "response",
-                              GTK_SIGNAL_FUNC (gtk_widget_destroy),
-                              NULL);
+          g_signal_connect (dialog, "response",
+			    G_CALLBACK (gtk_widget_destroy), NULL);
         }
     }
 
@@ -852,8 +845,8 @@ main (int argc, char **argv)
   
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gtk_window_set_title (GTK_WINDOW (window), "GTK+ Code Demos");
-  gtk_signal_connect (GTK_OBJECT (window), "destroy",
-		      GTK_SIGNAL_FUNC (gtk_main_quit), NULL);
+  g_signal_connect (window, "destroy",
+		    G_CALLBACK (gtk_main_quit), NULL);
 
   hbox = gtk_hbox_new (FALSE, 0);
   gtk_container_add (GTK_CONTAINER (window), hbox);

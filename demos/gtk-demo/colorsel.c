@@ -59,7 +59,8 @@ do_colorsel (void)
       window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
       gtk_window_set_title (GTK_WINDOW (window), "Color Selection");
 
-      gtk_signal_connect (GTK_OBJECT (window), "destroy", GTK_SIGNAL_FUNC (gtk_widget_destroyed), &window);
+      g_signal_connect (window, "destroy",
+			G_CALLBACK (gtk_widget_destroyed), &window);
 
       gtk_container_set_border_width (GTK_CONTAINER (window), 8);
 
@@ -91,9 +92,8 @@ do_colorsel (void)
       
       gtk_box_pack_start (GTK_BOX (vbox), alignment, FALSE, FALSE, 0);
       
-      gtk_signal_connect (GTK_OBJECT (button), "clicked",
-			  GTK_SIGNAL_FUNC (change_color_callback),
-			  NULL);
+      g_signal_connect (button, "clicked",
+			G_CALLBACK (change_color_callback), NULL);
     }
 
   if (!GTK_WIDGET_VISIBLE (window))

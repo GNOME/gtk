@@ -89,8 +89,8 @@ main(int argc, char **argv)
                 g_print ("%s was created by '%s'\n", argv[1], creator);
 
 	window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-	gtk_signal_connect (GTK_OBJECT (window), "destroy",
-			    GTK_SIGNAL_FUNC (gtk_main_quit), NULL);
+	g_signal_connect (window, "destroy",
+			  G_CALLBACK (gtk_main_quit), NULL);
 	
 	vbox = gtk_vbox_new (FALSE, 0);
 	gtk_container_add (GTK_CONTAINER (window), vbox);
@@ -98,29 +98,29 @@ main(int argc, char **argv)
 	menu = gtk_menu_new ();
 	
 	menuitem = gtk_menu_item_new_with_label ("NEAREST");
-	gtk_signal_connect (GTK_OBJECT (menuitem), "activate",
-			    GTK_SIGNAL_FUNC (set_interp_type),
-			    GUINT_TO_POINTER (GDK_INTERP_NEAREST));
+	g_signal_connect (menuitem, "activate",
+			  G_CALLBACK (set_interp_type),
+			  GUINT_TO_POINTER (GDK_INTERP_NEAREST));
 	gtk_widget_show (menuitem);
 	gtk_container_add (GTK_CONTAINER (menu), menuitem);
 	
 	menuitem = gtk_menu_item_new_with_label ("BILINEAR");
-	gtk_signal_connect (GTK_OBJECT (menuitem), "activate",
-			    GTK_SIGNAL_FUNC (set_interp_type),
-			    GUINT_TO_POINTER (GDK_INTERP_BILINEAR));
+	g_signal_connect (menuitem, "activate",
+			  G_CALLBACK (set_interp_type),
+			  GUINT_TO_POINTER (GDK_INTERP_BILINEAR));
 	gtk_widget_show (menuitem);
 	gtk_container_add (GTK_CONTAINER (menu), menuitem);
 	
 	menuitem = gtk_menu_item_new_with_label ("TILES");
-	gtk_signal_connect (GTK_OBJECT (menuitem), "activate",
-			    GTK_SIGNAL_FUNC (set_interp_type),
-			    GUINT_TO_POINTER (GDK_INTERP_TILES));
+	g_signal_connect (menuitem, "activate",
+			  G_CALLBACK (set_interp_type),
+			  GUINT_TO_POINTER (GDK_INTERP_TILES));
 	gtk_container_add (GTK_CONTAINER (menu), menuitem);
 
 	menuitem = gtk_menu_item_new_with_label ("HYPER");
-	gtk_signal_connect (GTK_OBJECT (menuitem), "activate",
-			    GTK_SIGNAL_FUNC (set_interp_type),
-			    GUINT_TO_POINTER (GDK_INTERP_HYPER));
+	g_signal_connect (menuitem, "activate",
+			  G_CALLBACK (set_interp_type),
+			  GUINT_TO_POINTER (GDK_INTERP_HYPER));
 	gtk_container_add (GTK_CONTAINER (menu), menuitem);
 
 	optionmenu = gtk_option_menu_new ();
@@ -137,8 +137,8 @@ main(int argc, char **argv)
 	gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, FALSE, 0);
 
 	adjustment = GTK_ADJUSTMENT (gtk_adjustment_new (overall_alpha, 0, 255, 1, 10, 0));
-	gtk_signal_connect (GTK_OBJECT (adjustment), "value_changed",
-			    GTK_SIGNAL_FUNC (overall_changed_cb), NULL);
+	g_signal_connect (adjustment, "value_changed",
+			  G_CALLBACK (overall_changed_cb), NULL);
 	
 	hscale = gtk_hscale_new (adjustment);
 	gtk_scale_set_digits (GTK_SCALE (hscale), 0);
@@ -153,8 +153,8 @@ main(int argc, char **argv)
 	darea = gtk_drawing_area_new ();
 	gtk_box_pack_start (GTK_BOX (vbox), darea, TRUE, TRUE, 0);
 
-	gtk_signal_connect (GTK_OBJECT (darea), "expose_event",
-			    GTK_SIGNAL_FUNC (expose_cb), NULL);
+	g_signal_connect (darea, "expose_event",
+			  G_CALLBACK (expose_cb), NULL);
 
 	gtk_window_set_default_size (GTK_WINDOW (window),
 				     gdk_pixbuf_get_width (pixbuf),

@@ -215,13 +215,13 @@ main (int argc, char **argv)
 	gtk_widget_set_size_request (window, back_width, back_height);
         gtk_window_set_resizable (GTK_WINDOW (window), FALSE);
 
-	gtk_signal_connect (GTK_OBJECT (window), "destroy",
-			    GTK_SIGNAL_FUNC (destroy_cb), NULL);
+	g_signal_connect (window, "destroy",
+			  G_CALLBACK (destroy_cb), NULL);
 
 	da = gtk_drawing_area_new ();
 
-	gtk_signal_connect (GTK_OBJECT (da), "expose_event",
-			    GTK_SIGNAL_FUNC (expose_cb), NULL);
+	g_signal_connect (da, "expose_event",
+			  G_CALLBACK (expose_cb), NULL);
 
 	gtk_container_add (GTK_CONTAINER (window), da);
 
