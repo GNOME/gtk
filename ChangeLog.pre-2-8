@@ -1,3 +1,38 @@
+Mon Aug 18 17:19:12 2003  Owen Taylor  <otaylor@redhat.com>
+
+	* modules/input/gtkimcontextxim.[ch]: Substantially
+	rework the handling of status windows:
+	
+	 - Store the current StatusWindow in the 
+	   GtkIMContextXIM structure and vice-versa, so we
+	   don't have to hunt the window hierarchy on
+	   cleanup.
+	 - Use the Gtkidget hierarchy instead of/or as well
+	   as the GdkWindow hierarchy when finding the toplevel;
+	   this helps for things like GtkHandlebox
+	 - Watch GtkWidget::hierarchy_changed to catch 
+	   changes in the toplevel without changes in the
+	   GdkWindow (reparenting)
+	 - Never create the GtkWindow for the status window
+	   unless we have text to display.
+	 - Various cleanups, add lots of comments.
+
+	(#115077, much help from Takuro Ashie and Hidetoshi
+	Tajima in tracking this down and figuring out a fix.)
+
+	* modules/input/gtkimcontextxim.c (gtk_im_context_xim_focus_in): 
+
+	* modules/input/gtkimcontextxim.c: Track the current
+	screen for each toplevel so that we show the status
+	window on the right screen. (#116340, James Su)
+
+	* modules/input/gtkimcontextxim.c: If create a new IC
+	when we currently have the focus, call XSetICFocus()
+	on it.
+	
+	* modules/input/gtkimcontextxim.c (get_im): Fix bug
+	with multiple open screens.
+
 Tue Aug 19 14:37:46 2003  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkimmulticontext.[ch] (struct _GtkIMMulticontext): 

@@ -41,43 +41,6 @@ extern GType gtk_type_im_context_xim;
 typedef struct _GtkIMContextXIM       GtkIMContextXIM;
 typedef struct _GtkIMContextXIMClass  GtkIMContextXIMClass;
 
-typedef struct _GtkXIMInfo GtkXIMInfo;
-
-struct _GtkIMContextXIM
-{
-  GtkIMContext object;
-
-  GtkXIMInfo *im_info;
-
-  gchar *locale;
-  gchar *mb_charset;
-
-  GdkWindow *client_window;
-
-  gint preedit_size;
-  gint preedit_length;
-  gunichar *preedit_chars;
-  XIMFeedback *feedbacks;
-
-  gint preedit_cursor;
-  
-  XIMCallback preedit_start_callback;
-  XIMCallback preedit_done_callback;
-  XIMCallback preedit_draw_callback;
-  XIMCallback preedit_caret_callback;
-
-  XIMCallback status_start_callback;
-  XIMCallback status_done_callback;
-  XIMCallback status_draw_callback;
-
-  XIC ic;
-  gboolean filter_key_release;
-
-  guint use_preedit : 1;
-  guint status_visible : 1;
-  guint finalizing : 1;
-};
-
 struct _GtkIMContextXIMClass
 {
   GtkIMContextClass parent_class;
