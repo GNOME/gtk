@@ -198,7 +198,7 @@ gtk_combo_entry_key_press (GtkEntry * entry, GdkEventKey * event, GtkCombo * com
     pos = gtk_editable_get_position (editable);
     prefix = gtk_editable_get_chars (editable, 0, pos);
 
-    g_completion_complete(cmpl, prefix, &nprefix);
+    g_completion_complete (cmpl, prefix, &nprefix);
 
     if (nprefix && strlen (nprefix) > strlen (prefix)) 
       {
@@ -384,7 +384,7 @@ gtk_combo_get_pos (GtkCombo * combo, gint * x, gint * y, gint * height, gint * w
   gint old_height;
   gint old_width;
   
-  widget = GTK_WIDGET(combo);
+  widget = GTK_WIDGET (combo);
   popup  = GTK_SCROLLED_WINDOW (combo->popup);
   popwin = GTK_BIN (combo->popwin);
   
@@ -775,7 +775,7 @@ gtk_combo_init (GtkCombo * combo)
     (GtkSignalFunc) gtk_combo_button_release, combo);*/
   gtk_signal_connect (GTK_OBJECT (combo->button), "leave_notify_event",
 		      (GtkSignalFunc) gtk_combo_popup_button_leave, combo);
-  /*gtk_signal_connect(GTK_OBJECT(combo->button), "clicked",
+  /*gtk_signal_connect (GTK_OBJECT (combo->button), "clicked",
      (GtkSignalFunc)prelight_bug, combo); */
 
   combo->popwin = gtk_window_new (GTK_WINDOW_POPUP);
@@ -815,7 +815,7 @@ gtk_combo_init (GtkCombo * combo)
    */
   gtk_widget_set_events (combo->list, GDK_ENTER_NOTIFY_MASK);
 
-  gtk_list_set_selection_mode(GTK_LIST(combo->list), GTK_SELECTION_BROWSE);
+  gtk_list_set_selection_mode (GTK_LIST(combo->list), GTK_SELECTION_BROWSE);
   gtk_scrolled_window_add_with_viewport (GTK_SCROLLED_WINDOW (combo->popup), combo->list);
   gtk_container_set_focus_vadjustment (GTK_CONTAINER (combo->list),
 				       gtk_scrolled_window_get_vadjustment (GTK_SCROLLED_WINDOW (combo->popup)));
@@ -963,7 +963,7 @@ gtk_combo_set_item_string (GtkCombo * combo, GtkItem * item, const gchar * item_
     }
   if (item_value)
     {
-      val = g_strdup(item_value);
+      val = g_strdup (item_value);
       gtk_object_set_data (GTK_OBJECT (item), gtk_combo_string_key, val);
       if (!connected)
         gtk_signal_connect (GTK_OBJECT (item), "destroy",
@@ -1011,7 +1011,7 @@ gtk_combo_disable_activate (GtkCombo* combo)
   g_return_if_fail (GTK_IS_COMBO (combo));
 
   if ( combo->activate_id ) {
-    gtk_signal_disconnect(GTK_OBJECT(combo->entry), combo->activate_id);
+    gtk_signal_disconnect (GTK_OBJECT(combo->entry), combo->activate_id);
     combo->activate_id = 0;
   }
 }

@@ -288,10 +288,10 @@ gtk_tooltips_set_tip (GtkTooltips *tooltips,
 static gint
 gtk_tooltips_paint_window (GtkTooltips *tooltips)
 {
-  gtk_paint_flat_box(tooltips->tip_window->style, tooltips->tip_window->window,
-		     GTK_STATE_NORMAL, GTK_SHADOW_OUT, 
-		     NULL, GTK_WIDGET(tooltips->tip_window), "tooltip",
-		     0, 0, -1, -1);
+  gtk_paint_flat_box (tooltips->tip_window->style, tooltips->tip_window->window,
+		      GTK_STATE_NORMAL, GTK_SHADOW_OUT, 
+		      NULL, GTK_WIDGET(tooltips->tip_window), "tooltip",
+		      0, 0, -1, -1);
 
   return FALSE;
 }

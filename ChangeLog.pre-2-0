@@ -1,3 +1,14 @@
+Thu Jul 12 13:43:27 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkclist.c gtk/gtkcolorsel.c gtk/gtkcombo.c
+	  gtk/gtkctree.c gtk/gtkcurve.c gtk/gtkentry.c
+	  gtk/gtkfontsel.c gtk/gtkhandlebox.c 
+	  gtk/gtkimcontextsimple.c gtk/gtkmain.c gtk/gtkmenu.c
+	  gtk/gtkmenuitem.c gtk/gtkoptionmenu.c gtk/gtkpixmap.c
+	  gtk/gtkselection.c gtk/gtktextdisplay.c gtk/gtktextview.c
+	  gtk/gtktooltips.c gtk/gtkwidget.c gtk/gtkwindow.c:
+	Formatting fixes from multihead brnach. [ mostly foo(bar) => foo (bar) ]
+
 2001-07-09  Peter Williams  <peterw@ximian.com>
 
 	* gtk/Makefile.am ($(srcdir)/stamp-gtk.defs): Add a cd $(srcdir)

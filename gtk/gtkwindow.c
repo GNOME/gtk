@@ -2511,7 +2511,7 @@ gtk_window_read_rcfiles (GtkWidget *widget,
       GdkEventClient sev;
       int i;
       
-      for(i = 0; i < 5; i++)
+      for (i = 0; i < 5; i++)
 	sev.data.l[i] = 0;
       sev.data_format = 32;
       sev.message_type = atom_rcfiles;
@@ -2536,9 +2536,9 @@ gtk_window_client_event (GtkWidget	*widget,
   g_return_val_if_fail (event != NULL, FALSE);
 
   if (!atom_rcfiles)
-    atom_rcfiles = gdk_atom_intern("_GTK_READ_RCFILES", FALSE);
+    atom_rcfiles = gdk_atom_intern ("_GTK_READ_RCFILES", FALSE);
 
-  if(event->message_type == atom_rcfiles) 
+  if (event->message_type == atom_rcfiles) 
     gtk_window_read_rcfiles (widget, event);    
 
   return FALSE;

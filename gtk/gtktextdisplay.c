@@ -792,13 +792,13 @@ gtk_text_layout_draw (GtkTextLayout *layout,
               else
                 gc = widget->style->text_gc[GTK_STATE_NORMAL];
 
-              gdk_gc_set_clip_rectangle(gc, &clip);
+              gdk_gc_set_clip_rectangle (gc, &clip);
               gdk_draw_line (drawable, gc,
                              line_display->x_offset + cursor->x - x_offset,
                              current_y + line_display->top_margin + cursor->y,
                              line_display->x_offset + cursor->x - x_offset,
                              current_y + line_display->top_margin + cursor->y + cursor->height - 1);
-              gdk_gc_set_clip_rectangle(gc, NULL);
+              gdk_gc_set_clip_rectangle (gc, NULL);
 
               cursor_list = cursor_list->next;
             }

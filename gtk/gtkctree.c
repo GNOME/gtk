@@ -3571,7 +3571,7 @@ ctree_is_hot_spot (GtkCTree     *ctree,
 
   tree_row = GTK_CTREE_ROW (node);
 
-  cell = GTK_CELL_PIXTEXT(tree_row->row.cell[ctree->tree_column]);
+  cell = GTK_CELL_PIXTEXT (tree_row->row.cell[ctree->tree_column]);
 
   yu = (ROW_TOP_YPIXEL (clist, row) + (clist->row_height - PM_SIZE) / 2 -
 	(clist->row_height - 1) % 2);
@@ -4144,7 +4144,7 @@ gtk_ctree_find_node_ptr (GtkCTree    *ctree,
   g_return_val_if_fail (ctree_row != NULL, FALSE);
   
   if (ctree_row->parent)
-    node = GTK_CTREE_ROW(ctree_row->parent)->children;
+    node = GTK_CTREE_ROW (ctree_row->parent)->children;
   else
     node = GTK_CTREE_NODE (GTK_CLIST (ctree)->row_list);
 
@@ -4671,7 +4671,7 @@ gtk_ctree_node_set_text (GtkCTree     *ctree,
   clist = GTK_CLIST (ctree);
 
   GTK_CLIST_GET_CLASS (clist)->set_cell_contents
-    (clist, &(GTK_CTREE_ROW(node)->row), column, GTK_CELL_TEXT,
+    (clist, &(GTK_CTREE_ROW (node)->row), column, GTK_CELL_TEXT,
      text, 0, NULL, NULL);
 
   tree_draw_node (ctree, node);
@@ -4773,7 +4773,7 @@ gtk_ctree_set_node_info (GtkCTree     *ctree,
       while (work)
 	{
 	  ptr = work;
-	  work = GTK_CTREE_ROW(work)->sibling;
+	  work = GTK_CTREE_ROW (work)->sibling;
 	  gtk_ctree_remove_node (ctree, ptr);
 	}
     }
@@ -4952,7 +4952,7 @@ gtk_ctree_node_get_pixmap (GtkCTree     *ctree,
     return FALSE;
 
   if (pixmap)
-    *pixmap = GTK_CELL_PIXMAP (GTK_CTREE_ROW(node)->row.cell[column])->pixmap;
+    *pixmap = GTK_CELL_PIXMAP (GTK_CTREE_ROW (node)->row.cell[column])->pixmap;
   if (mask)
     *mask = GTK_CELL_PIXMAP (GTK_CTREE_ROW (node)->row.cell[column])->mask;
 
@@ -5884,7 +5884,7 @@ check_drag (GtkCTree        *ctree,
 		    ctree->drag_compare (ctree,
 					 drag_source,
 					 GTK_CTREE_ROW (drag_target)->parent,
-					 GTK_CTREE_ROW(drag_target)->sibling));
+					 GTK_CTREE_ROW (drag_target)->sibling));
 	  break;
 	case GTK_CLIST_DRAG_BEFORE:
 	  if (GTK_CTREE_ROW (drag_source)->sibling != drag_target)

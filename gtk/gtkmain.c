@@ -176,9 +176,10 @@ gtk_check_version (guint required_major,
 }
 
 #ifdef __EMX__
-static gchar *add_dll_suffix(gchar *module_name)
+static gchar *
+add_dll_suffix (gchar *module_name)
 {
-    gchar *suffix = strrchr(module_name, '.');
+    gchar *suffix = strrchr (module_name, '.');
     
     if (!suffix || stricmp(suffix, ".dll"))
     {
@@ -417,7 +418,7 @@ gtk_init_check (int	 *argc,
 	  g_free (old);
 	}
 #else
-      module_name = add_dll_suffix(module_name);
+      module_name = add_dll_suffix (module_name);
 #endif
       if (g_module_supported ())
 	{
@@ -451,9 +452,9 @@ gtk_init_check (int	 *argc,
 
 #ifdef ENABLE_NLS
 #  ifndef G_OS_WIN32
-  bindtextdomain(GETTEXT_PACKAGE, GTK_LOCALEDIR);
+  bindtextdomain (GETTEXT_PACKAGE, GTK_LOCALEDIR);
 #    ifdef HAVE_BIND_TEXTDOMAIN_CODESET
-  bind_textdomain_codeset(GETTEXT_PACKAGE, "UTF-8");
+  bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
 #    endif
 #  else /* !G_OS_WIN32 */
   {
@@ -533,7 +534,7 @@ gtk_init (int *argc, char ***argv)
   if (!gtk_init_check (argc, argv))
     {
       g_warning ("cannot open display: %s", gdk_get_display ());
-      exit(1);
+      exit (1);
     }
 }
 
@@ -577,7 +578,7 @@ gtk_exit (gint errorcode)
   /* de-initialisation is done by the gtk_exit_funct(),
    * no need to do this here (Alex J.)
    */
-  gdk_exit(errorcode);
+  gdk_exit (errorcode);
 }
 
 gchar*
@@ -716,7 +717,7 @@ gtk_events_pending (void)
   gboolean result;
   
   GDK_THREADS_LEAVE ();  
-  result = g_main_pending();
+  result = g_main_pending ();
   GDK_THREADS_ENTER ();
 
   return result;
@@ -1370,9 +1371,9 @@ gtk_idle_add (GtkFunction function,
 }
 
 guint	    
-gtk_idle_add_priority	(gint		    priority,
-			 GtkFunction	    function,
-			 gpointer	    data)
+gtk_idle_add_priority (gint        priority,
+		       GtkFunction function,
+		       gpointer	   data)
 {
   return g_idle_add_full (priority, function, data, NULL);
 }
@@ -1457,10 +1458,10 @@ gtk_invoke_input (gpointer	    data,
   GtkArg args[3];
   args[0].type = GTK_TYPE_INT;
   args[0].name = NULL;
-  GTK_VALUE_INT(args[0]) = source;
+  GTK_VALUE_INT (args[0]) = source;
   args[1].type = GDK_TYPE_INPUT_CONDITION;
   args[1].name = NULL;
-  GTK_VALUE_FLAGS(args[1]) = condition;
+  GTK_VALUE_FLAGS (args[1]) = condition;
   args[2].type = GTK_TYPE_NONE;
   args[2].name = NULL;
 

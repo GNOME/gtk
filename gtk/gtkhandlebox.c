@@ -726,10 +726,10 @@ static void
 draw_textured_frame (GtkWidget *widget, GdkWindow *window, GdkRectangle *rect, GtkShadowType shadow,
 		     GdkRectangle *clip)
 {
-   gtk_paint_handle(widget->style, window, GTK_STATE_NORMAL, shadow,
-		    clip, widget, "handlebox",
-		    rect->x, rect->y, rect->width, rect->height, 
-		    GTK_ORIENTATION_VERTICAL);
+   gtk_paint_handle (widget->style, window, GTK_STATE_NORMAL, shadow,
+		     clip, widget, "handlebox",
+		     rect->x, rect->y, rect->width, rect->height, 
+		     GTK_ORIENTATION_VERTICAL);
 }
 
 void
@@ -843,19 +843,19 @@ gtk_handle_box_paint (GtkWidget      *widget,
   gdk_window_get_size (hb->bin_window, &width, &height);
   
   if (!event)
-   gtk_paint_box(widget->style,
-		 hb->bin_window,
-		 GTK_WIDGET_STATE (widget),
-		 hb->shadow_type,
-		 area, widget, "handlebox_bin",
-		 0, 0, -1, -1);
+    gtk_paint_box (widget->style,
+		   hb->bin_window,
+		   GTK_WIDGET_STATE (widget),
+		   hb->shadow_type,
+		   area, widget, "handlebox_bin",
+		   0, 0, -1, -1);
   else
-   gtk_paint_box(widget->style,
-		 hb->bin_window,
-		 GTK_WIDGET_STATE (widget),
-		 hb->shadow_type,
-		 &event->area, widget, "handlebox_bin",
-		 0, 0, -1, -1);
+   gtk_paint_box (widget->style,
+		  hb->bin_window,
+		  GTK_WIDGET_STATE (widget),
+		  hb->shadow_type,
+		  &event->area, widget, "handlebox_bin",
+		  0, 0, -1, -1);
 
 /* We currently draw the handle _above_ the relief of the handlebox.
  * it could also be drawn on the same level...

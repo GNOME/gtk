@@ -1239,7 +1239,7 @@ gtk_im_context_simple_get_preedit_string (GtkIMContext   *context,
 
   if (attrs)
     {
-      *attrs = pango_attr_list_new();
+      *attrs = pango_attr_list_new ();
       
       if (len)
 	{

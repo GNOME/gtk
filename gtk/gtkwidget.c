@@ -3676,7 +3676,7 @@ gtk_widget_get_modifier_style (GtkWidget      *widget)
 
   if (!rc_style)
     {
-      rc_style = gtk_rc_style_new();
+      rc_style = gtk_rc_style_new ();
       gtk_object_set_data_by_id_full (GTK_OBJECT (widget),
 				      quark_rc_style,
 				      rc_style,
@@ -5906,7 +5906,7 @@ AtkObject* gtk_widget_get_accessible (GtkWidget *widget)
 
   g_return_val_if_fail (klass->get_accessible != NULL, NULL);
 
-  return klass->get_accessible(widget);
+  return klass->get_accessible (widget);
 }
 
 AtkObject* gtk_widget_real_get_accessible (GtkWidget *widget)
@@ -5925,7 +5925,7 @@ AtkObject* gtk_widget_real_get_accessible (GtkWidget *widget)
                                         GTK_OBJECT_TYPE (widget));
     accessible =
       atk_object_factory_create_accessible (factory,
-                                               G_OBJECT(widget));
+					    G_OBJECT (widget));
     g_object_set_qdata (G_OBJECT (widget), 
                         quark_accessible_object,
                         accessible);
@@ -5944,7 +5944,7 @@ gtk_widget_accessible_interface_init (AtkImplementorIface *iface)
 }
 
 static AtkObject*
-gtk_widget_ref_accessible(AtkImplementor *implementor)
+gtk_widget_ref_accessible (AtkImplementor *implementor)
 {
   AtkObject *accessible;
 

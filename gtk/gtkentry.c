@@ -3145,8 +3145,8 @@ gtk_entry_get_invisible_char (GtkEntry *entry)
 }
 
 void
-gtk_entry_set_editable(GtkEntry *entry,
-		       gboolean  editable)
+gtk_entry_set_editable (GtkEntry *entry,
+			gboolean  editable)
 {
   g_return_if_fail (entry != NULL);
   g_return_if_fail (GTK_IS_ENTRY (entry));

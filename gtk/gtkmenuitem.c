@@ -611,7 +611,8 @@ gtk_real_menu_item_select (GtkItem *item)
 					    menu_item);
       else
 	gtk_menu_item_popup_submenu (menu_item);
-      if(event) gdk_event_free(event);
+      if (event)
+	gdk_event_free(event);
     }
   
   gtk_widget_set_state (GTK_WIDGET (menu_item), GTK_STATE_PRELIGHT);
@@ -644,7 +645,8 @@ gtk_real_menu_item_deselect (GtkItem *item)
       etime = event ? gdk_event_get_time (event) : GDK_CURRENT_TIME;
       if (etime > last_submenu_deselect_time)
 	last_submenu_deselect_time = etime;
-      if(event) gdk_event_free(event);
+      if (event)
+	gdk_event_free(event);
     }
 
   gtk_widget_set_state (GTK_WIDGET (menu_item), GTK_STATE_NORMAL);
@@ -848,7 +850,7 @@ gtk_menu_item_position_menu (GtkMenu  *menu,
 }
 
 void
-gtk_menu_item_right_justify(GtkMenuItem *menuitem)
+gtk_menu_item_right_justify (GtkMenuItem *menuitem)
 {
   g_return_if_fail (menuitem != NULL);
   g_return_if_fail (GTK_IS_MENU_ITEM (menuitem));

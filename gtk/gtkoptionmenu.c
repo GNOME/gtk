@@ -462,11 +462,11 @@ gtk_option_menu_paint (GtkWidget    *widget,
 	  gdk_window_clear_area (widget->window, area->x, area->y, area->width, area->height);
 	}
 
-      gtk_paint_box(widget->style, widget->window,
-		    GTK_WIDGET_STATE (widget), GTK_SHADOW_OUT,
-		    area, widget, "optionmenu",
-		    button_area.x, button_area.y,
-		    button_area.width, button_area.height);
+      gtk_paint_box (widget->style, widget->window,
+		     GTK_WIDGET_STATE (widget), GTK_SHADOW_OUT,
+		     area, widget, "optionmenu",
+		     button_area.x, button_area.y,
+		     button_area.width, button_area.height);
       
       gtk_paint_tab (widget->style, widget->window,
 		     GTK_WIDGET_STATE (widget), GTK_SHADOW_OUT,

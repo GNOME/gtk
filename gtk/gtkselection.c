@@ -974,7 +974,7 @@ gtk_selection_request (GtkWidget *widget,
   if (tmp_list == NULL)
     return FALSE;
   
-  info = g_new(GtkIncrInfo, 1);
+  info = g_new (GtkIncrInfo, 1);
   
   info->widget = widget;
   info->selection = event->selection;
@@ -1000,7 +1000,7 @@ gtk_selection_request (GtkWidget *widget,
       
       mult_atoms = NULL;
       
-      gdk_error_trap_push();
+      gdk_error_trap_push ();
       if (!gdk_property_get (info->requestor, event->property, 0, /* AnyPropertyType */
 			     0, GTK_SELECTION_MAX_SIZE, FALSE,
 			     &type, &format, &length, &mult_atoms))
@@ -1011,7 +1011,7 @@ gtk_selection_request (GtkWidget *widget,
 	  g_free (info);
 	  return TRUE;
 	}
-      gdk_error_trap_pop();
+      gdk_error_trap_pop ();
       
       info->num_conversions = length / (2*sizeof (GdkAtom));
       info->conversions = g_new (GtkIncrConversion, info->num_conversions);
@@ -1046,7 +1046,7 @@ gtk_selection_request (GtkWidget *widget,
 #ifdef DEBUG_SELECTION
       g_message ("Selection %ld, target %ld (%s) requested by 0x%x (property = %ld)",
 		 event->selection, info->conversions[i].target,
-		 gdk_atom_name(info->conversions[i].target),
+		 gdk_atom_name (info->conversions[i].target),
 		 event->requestor, event->property);
 #endif
       

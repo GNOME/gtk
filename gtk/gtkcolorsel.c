@@ -401,7 +401,7 @@ color_sample_draw_sample (GtkColorSelection *colorsel, int which)
   wid = da->allocation.width;
   heig = da->allocation.height;
   
-  buf = g_new(guchar, 3 * wid * heig);
+  buf = g_new (guchar, 3 * wid * heig);
   
 #if 0
   i = COLORSEL_RED;
@@ -439,13 +439,13 @@ color_sample_draw_sample (GtkColorSelection *colorsel, int which)
 	}
     }
   
-  gdk_draw_rgb_image(da->window,
-		     da->style->black_gc,
-		     0, 0,
-		     wid, heig,
-		     GDK_RGB_DITHER_NORMAL,
-		     buf,
-		     3*wid);
+  gdk_draw_rgb_image (da->window,
+		      da->style->black_gc,
+		      0, 0,
+		      wid, heig,
+		      GDK_RGB_DITHER_NORMAL,
+		      buf,
+		      3*wid);
   
   
   g_free (buf);
@@ -460,14 +460,18 @@ color_sample_draw_samples (GtkColorSelection *colorsel)
 }
 
 static void
-color_old_sample_expose(GtkWidget* da, GdkEventExpose* event, GtkColorSelection *colorsel)
+color_old_sample_expose (GtkWidget         *da,
+			 GdkEventExpose    *event,
+			 GtkColorSelection *colorsel)
 {
   color_sample_draw_sample (colorsel, 0);
 }
 
 
 static void
-color_cur_sample_expose(GtkWidget* da, GdkEventExpose* event, GtkColorSelection *colorsel)
+color_cur_sample_expose (GtkWidget         *da,
+			 GdkEventExpose    *event,
+			 GtkColorSelection *colorsel)
 {
   color_sample_draw_sample (colorsel, 1);
 }

@@ -424,8 +424,8 @@ gtk_menu_detach (GtkMenu *menu)
 }
 
 void 
-gtk_menu_remove(GtkContainer *container,
-	        GtkWidget    *widget)
+gtk_menu_remove (GtkContainer *container,
+		 GtkWidget    *widget)
 {
   GtkMenu *menu;
   g_return_if_fail (GTK_IS_MENU (container));
@@ -533,7 +533,7 @@ gtk_menu_popup (GtkMenu		    *menu,
    * until we get a MOTION_NOTIFY.  
    */
 
-  current_event = gtk_get_current_event();
+  current_event = gtk_get_current_event ();
   if (current_event)
     {
       if ((current_event->type != GDK_BUTTON_PRESS) &&
@@ -797,8 +797,8 @@ gtk_menu_scrollbar_changed (GtkAdjustment *adjustment,
 }
 
 static void
-gtk_menu_set_tearoff_hints(GtkMenu *menu,
-			   gint     width)
+gtk_menu_set_tearoff_hints (GtkMenu *menu,
+			    gint     width)
 {
   GdkGeometry geometry_hints;
   

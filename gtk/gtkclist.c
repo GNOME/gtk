@@ -1721,7 +1721,7 @@ gtk_clist_set_column_auto_resize (GtkCList *clist,
   if (auto_resize)
     {
       clist->column[column].resizeable = FALSE;
-      if (!GTK_CLIST_AUTO_RESIZE_BLOCKED(clist))
+      if (!GTK_CLIST_AUTO_RESIZE_BLOCKED (clist))
 	{
 	  gint width;
 
@@ -1873,7 +1873,7 @@ column_auto_resize (GtkCList    *clist,
   GtkRequisition requisition;
 
   if (!clist->column[column].auto_resize ||
-      GTK_CLIST_AUTO_RESIZE_BLOCKED(clist))
+      GTK_CLIST_AUTO_RESIZE_BLOCKED (clist))
     return;
 
   if (clist_row)
@@ -2470,7 +2470,7 @@ gtk_clist_set_shift (GtkCList *clist,
   clist_row = ROW_ELEMENT (clist, row)->data;
 
   if (clist->column[column].auto_resize &&
-      !GTK_CLIST_AUTO_RESIZE_BLOCKED(clist))
+      !GTK_CLIST_AUTO_RESIZE_BLOCKED (clist))
     GTK_CLIST_GET_CLASS (clist)->cell_size_request (clist, clist_row,
 						   column, &requisition);
 
@@ -2507,7 +2507,7 @@ set_cell_contents (GtkCList    *clist,
   g_return_if_fail (clist_row != NULL);
 
   if (clist->column[column].auto_resize &&
-      !GTK_CLIST_AUTO_RESIZE_BLOCKED(clist))
+      !GTK_CLIST_AUTO_RESIZE_BLOCKED (clist))
     GTK_CLIST_GET_CLASS (clist)->cell_size_request (clist, clist_row,
 						   column, &requisition);
 
@@ -2571,7 +2571,7 @@ set_cell_contents (GtkCList    *clist,
     }
 
   if (clist->column[column].auto_resize &&
-      !GTK_CLIST_AUTO_RESIZE_BLOCKED(clist))
+      !GTK_CLIST_AUTO_RESIZE_BLOCKED (clist))
     column_auto_resize (clist, clist_row, column, requisition.width);
 
   if (old_text)
@@ -3345,7 +3345,7 @@ gtk_clist_set_cell_style (GtkCList *clist,
     return;
 
   if (clist->column[column].auto_resize &&
-      !GTK_CLIST_AUTO_RESIZE_BLOCKED(clist))
+      !GTK_CLIST_AUTO_RESIZE_BLOCKED (clist))
     GTK_CLIST_GET_CLASS (clist)->cell_size_request (clist, clist_row,
 						   column, &requisition);
 
@@ -3419,7 +3419,7 @@ gtk_clist_set_row_style (GtkCList *clist,
 
   old_width = g_new (gint, clist->columns);
 
-  if (!GTK_CLIST_AUTO_RESIZE_BLOCKED(clist))
+  if (!GTK_CLIST_AUTO_RESIZE_BLOCKED (clist))
     {
       for (i = 0; i < clist->columns; i++)
 	if (clist->column[i].auto_resize)
@@ -3448,7 +3448,7 @@ gtk_clist_set_row_style (GtkCList *clist,
 					     clist->clist_window);
     }
 
-  if (GTK_CLIST_AUTO_RESIZE_BLOCKED(clist))
+  if (GTK_CLIST_AUTO_RESIZE_BLOCKED (clist))
     for (i = 0; i < clist->columns; i++)
       column_auto_resize (clist, clist_row, i, old_width[i]);
 
@@ -4917,7 +4917,7 @@ gtk_clist_style_set (GtkWidget *widget,
     gtk_clist_set_row_height (clist, 0);
 
   /* Column widths */
-  if (!GTK_CLIST_AUTO_RESIZE_BLOCKED(clist))
+  if (!GTK_CLIST_AUTO_RESIZE_BLOCKED (clist))
     {
       gint width;
       gint i;
@@ -7066,7 +7066,7 @@ move_horizontal (GtkCList *clist,
 
   value = CLAMP (clist->hadjustment->value + diff, 0.0,
 		 clist->hadjustment->upper - clist->hadjustment->page_size);
-  gtk_adjustment_set_value(clist->hadjustment, value);
+  gtk_adjustment_set_value (clist->hadjustment, value);
 }
 
 static void
@@ -7086,7 +7086,7 @@ move_vertical (GtkCList *clist,
   if (value + clist->vadjustment->page_size > clist->vadjustment->upper)
     value = clist->vadjustment->upper - clist->vadjustment->page_size;
 
-  gtk_adjustment_set_value(clist->vadjustment, value);
+  gtk_adjustment_set_value (clist->vadjustment, value);
 }
 
 static gint
