@@ -1,3 +1,33 @@
+Mon Mar  8 11:57:27 2004  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkcombobox.c (gtk_combo_box_unset_model): Don't
+	call g_signal_handler_disonnect() if priv->model is
+	NULL. (#136551, Damon Chaplin)
+
+	* gtk/gtkcombobox.c (gtk_combo_box_model_row_inserted):
+	Back out code to set the active item when the first
+	item is added to the model; this causes problems for
+	GtkComboBoxText. (#136535)
+
+	* gtk/gtkcombobox.c (gtk_combo_box_menu_destroy)
+	* gtk/gtkcombobox.c (gtk_combo_box_list_destroy):
+	* gtk/gtkcombobox.c (gtk_combo_box_list_setup): 
+	* gtk/gtkcombobox.c (gtk_combo_box_menu_setup): 
+	Remove calls to gtk_combo_box_unset_model.
+
+	* gtk/gtkcombobox.c (gtk_combo_box_check_appearance): 
+	Clean up handling of wrap->width > 0.
+
+	* gtk/gtkcombobox.c (gtk_combo_box_relayout): Don't
+	switch list/menu mode here.
+
+	* gtk/gtkcombobox.c (gtk_combo_box_set_model): Protect
+	against the same model being set back.
+
+	* gtk/gtkcombobox.c (gtk_combo_box_relayout): Call
+	gtk_combo_box_menu_fill() rather than duplicating
+	a large chunk of code.
+
 2004-03-08  Anders Carlsson  <andersca@gnome.org>
 
 	* gtk/gtkfilesystemmodel.c (gtk_file_system_model_get_flags): 
