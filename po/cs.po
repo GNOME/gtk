@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-01-09 12:22+0100\n"
-"PO-Revision-Date: 2005-01-09 14:55+0100\n"
+"POT-Creation-Date: 2005-01-10 20:25+0100\n"
+"PO-Revision-Date: 2005-01-10 21:52+0100\n"
 "Last-Translator: Miloslav Trmac <bukm@centrum.cz>\n"
 "Language-Team: Czech <cs@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -1486,32 +1486,32 @@ msgstr "Nemohu převést název souboru"
 msgid "(Empty)"
 msgstr "(Prázdný)"
 
-#: gtk/gtkfilesystemunix.c:415 gtk/gtkfilesystemunix.c:429
-#: gtk/gtkfilesystemunix.c:626 gtk/gtkfilesystemwin32.c:482
+#: gtk/gtkfilesystemunix.c:440 gtk/gtkfilesystemunix.c:632
+#: gtk/gtkfilesystemunix.c:1739 gtk/gtkfilesystemwin32.c:482
 #: gtk/gtkfilesystemwin32.c:495 gtk/gtkfilesystemwin32.c:1530
 #, c-format
 msgid "Error getting information for '%s': %s"
 msgstr "Chyba při získávání informací o '%s': %s"
 
-#: gtk/gtkfilesystemunix.c:495 gtk/gtkfilesystemwin32.c:537
+#: gtk/gtkfilesystemunix.c:501 gtk/gtkfilesystemwin32.c:537
 #, c-format
 msgid "Error creating directory '%s': %s"
 msgstr "Chyba při vytváření adresáře '%s': %s"
 
-#: gtk/gtkfilesystemunix.c:575 gtk/gtkfilesystemwin32.c:597
+#: gtk/gtkfilesystemunix.c:581 gtk/gtkfilesystemwin32.c:597
 msgid "This file system does not support mounting"
 msgstr "Tento systém souborů nepodporuje připojování"
 
-#: gtk/gtkfilesystemunix.c:583
+#: gtk/gtkfilesystemunix.c:589
 msgid "Filesystem"
 msgstr "Systém souborů"
 
-#: gtk/gtkfilesystemunix.c:740
+#: gtk/gtkfilesystemunix.c:746
 #, c-format
 msgid "Could not get a stock icon for %s"
 msgstr "Nemohu získat standardní ikonu pro %s"
 
-#: gtk/gtkfilesystemunix.c:835
+#: gtk/gtkfilesystemunix.c:841
 #, c-format
 msgid ""
 "The name \"%s\" is not valid because it contains the character \"%s\". "
@@ -1520,25 +1520,25 @@ msgstr ""
 "Název \"%s\" není platný, protože obsahuje znak \"%s\". Použijte prosím jiný "
 "název."
 
-#: gtk/gtkfilesystemunix.c:1443 gtk/gtkfilesystemwin32.c:1004
+#: gtk/gtkfilesystemunix.c:1446 gtk/gtkfilesystemwin32.c:1004
 #, c-format
 msgid "Bookmark saving failed: %s"
 msgstr "Ukládání záložek selhalo: %s"
 
-#: gtk/gtkfilesystemunix.c:1495
+#: gtk/gtkfilesystemunix.c:1498
 #, c-format
 msgid "'%s' already exists in the bookmarks list"
 msgstr "'%s' již v seznamu záložek existuje"
 
-#: gtk/gtkfilesystemunix.c:1557
+#: gtk/gtkfilesystemunix.c:1560
 #, c-format
 msgid "'%s' does not exist in the bookmarks list"
 msgstr "'%s' neexistuje v seznamu záložek"
 
-#: gtk/gtkfilesystemunix.c:1739
+#: gtk/gtkfilesystemunix.c:1699
 #, c-format
-msgid "Error getting information for '%s'"
-msgstr "Chyba při získávání informací o '%s'"
+msgid "Error getting information for '/': %s"
+msgstr "Chyba při získávání informací o '/': %s"
 
 #: gtk/gtkfontbutton.c:178 gtk/gtkfontbutton.c:295
 msgid "Pick a Font"
@@ -1697,7 +1697,7 @@ msgstr "(neznámá)"
 msgid "clear"
 msgstr "vyčistit"
 
-#: gtk/gtklabel.c:3930
+#: gtk/gtklabel.c:3931
 msgid "Select All"
 msgstr "Vybrat vše"
 
@@ -2205,6 +2205,9 @@ msgstr "Vstupní metoda X"
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "Nemohu získat informace o souboru '%s': %s"
+
+#~ msgid "Error getting information for '%s'"
+#~ msgstr "Chyba při získávání informací o '%s'"
 
 #~ msgid "error getting information for '%s': %s"
 #~ msgstr "chyba při získávání informací o '%s': %s"
