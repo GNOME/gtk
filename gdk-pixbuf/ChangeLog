@@ -1,3 +1,7 @@
+2003-07-11  Matthias Clasen  <maclas@gmx.de>
+
+	* queryloaders.c (query_module): Handle absolute filenames properly. (#117170, Jens Elkner)
+
 2003-06-28  Matthias Clasen  <maclas@gmx.de>
 
 	* io-ico.c (DecodeHeader): Stop discriminating against 32bpp ICOs a): Use the byte 
