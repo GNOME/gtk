@@ -1,3 +1,8 @@
+2003-07-03  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/gdk.def: Add gdk_string_to_compound_text_for_display.
+	(#116537, Peter Zelezny)
+
 Thu Jul  3 03:13:20 2003  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 	* gtk/gtkpaned.c (gtk_paned_set_child_property): Insert cast to
