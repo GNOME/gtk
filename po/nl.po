@@ -17,8 +17,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-02-01 20:51+0100\n"
-"PO-Revision-Date: 2004-02-02 00:43+0100\n"
+"POT-Creation-Date: 2004-02-09 04:25+0100\n"
+"PO-Revision-Date: 2004-02-09 13:27+0100\n"
 "Last-Translator: Tino Meinen <a.t.meinen@chello.nl>\n"
 "Language-Team: Dutch <vertaling@nl.linux.org>\n"
 "MIME-Version: 1.0\n"
@@ -88,36 +88,36 @@ msgstr "Onbekend afbeeldingstype"
 msgid "Failed to load image '%s': %s"
 msgstr "Laden van afbeelding '%s' mislukt: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1095
+#: gdk-pixbuf/gdk-pixbuf-io.c:1094
 #, c-format
 msgid "Error writing to image file: %s"
 msgstr "Fout bij het schrijven naar afbeelding: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1139 gdk-pixbuf/gdk-pixbuf-io.c:1255
+#: gdk-pixbuf/gdk-pixbuf-io.c:1138 gdk-pixbuf/gdk-pixbuf-io.c:1254
 #, c-format
 msgid "This build of gdk-pixbuf does not support saving the image format: %s"
 msgstr ""
 "Deze versie van gdk-pixbuf heeft geen ondersteuning voor het opslaan van het "
 "bestandsformaat: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1168
+#: gdk-pixbuf/gdk-pixbuf-io.c:1167
 msgid "Insufficient memory to save image to callback"
 msgstr "Onvoldoende geheugen om het image op te slaan naar de callback"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1180
+#: gdk-pixbuf/gdk-pixbuf-io.c:1179
 msgid "Failed to open temporary file"
 msgstr "Kon tijdelijk bestand niet openen"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1199
+#: gdk-pixbuf/gdk-pixbuf-io.c:1198
 msgid "Failed to read from temporary file"
 msgstr "Niet mogelijk om van tijdelijk bestand te lezen"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1379
+#: gdk-pixbuf/gdk-pixbuf-io.c:1378
 #, c-format
 msgid "Failed to open '%s' for writing: %s"
 msgstr "Openen van '%s' om te schrijven is mislukt: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1400
+#: gdk-pixbuf/gdk-pixbuf-io.c:1399
 #, c-format
 msgid ""
 "Failed to close '%s' while writing image, all data may not have been saved: %"
@@ -126,7 +126,7 @@ msgstr ""
 "Sluiten van '%s' tijdens het schrijven is mislukt; er kan data verloren zijn "
 "gegaan: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1586 gdk-pixbuf/gdk-pixbuf-io.c:1636
+#: gdk-pixbuf/gdk-pixbuf-io.c:1585 gdk-pixbuf/gdk-pixbuf-io.c:1635
 msgid "Insufficient memory to save image into a buffer"
 msgstr "Onvoldoende geheugen om afbeelding in een buffer op te slaan"
 
@@ -961,7 +961,7 @@ msgstr ""
 "Kon geen favoriet toevoegen voor %s:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:465 gtk/gtkfilechooserdefault.c:2937
+#: gtk/gtkfilechooserdefault.c:465 gtk/gtkfilechooserdefault.c:2940
 #, c-format
 msgid ""
 "Could not build file name from '%s' and '%s':\n"
@@ -980,7 +980,7 @@ msgstr "Persoonlijk"
 msgid "Desktop"
 msgstr "Desktop"
 
-#: gtk/gtkfilechooserdefault.c:876
+#: gtk/gtkfilechooserdefault.c:878
 #, c-format
 msgid ""
 "Could not go to the parent folder of %s:\n"
@@ -989,7 +989,7 @@ msgstr ""
 "Kon niet naar de bovenliggende map gaan van %s:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:925
+#: gtk/gtkfilechooserdefault.c:927
 #, c-format
 msgid ""
 "Could not create folder %s:\n"
@@ -998,28 +998,28 @@ msgstr ""
 "Kon map %s niet aanmaken:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:1001
+#: gtk/gtkfilechooserdefault.c:1003
 msgid "Add"
 msgstr "Toevoegen"
 
-#: gtk/gtkfilechooserdefault.c:1011
+#: gtk/gtkfilechooserdefault.c:1013
 msgid "Remove"
 msgstr "Verwijderen"
 
-#: gtk/gtkfilechooserdefault.c:1021
+#: gtk/gtkfilechooserdefault.c:1023
 msgid "Up"
 msgstr "Omhoog"
 
-#: gtk/gtkfilechooserdefault.c:1101 gtk/gtkfilechooserdefault.c:1456
+#: gtk/gtkfilechooserdefault.c:1103 gtk/gtkfilechooserdefault.c:1459
 msgid "File name"
 msgstr "Bestandsnaam"
 
-#: gtk/gtkfilechooserdefault.c:1127
+#: gtk/gtkfilechooserdefault.c:1129
 #, c-format
 msgid "Could not add bookmark for %s because it is not a folder."
 msgstr "Kon geen favoriet toevoegen voor %s omdat het geen map is."
 
-#: gtk/gtkfilechooserdefault.c:1175
+#: gtk/gtkfilechooserdefault.c:1177
 #, c-format
 msgid ""
 "Could not remove bookmark for %s:\n"
@@ -1028,85 +1028,85 @@ msgstr ""
 "Kon de favoriet voor %s niet verwijderen:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:1330
+#: gtk/gtkfilechooserdefault.c:1332
 #, c-format
 msgid "Could not add a bookmark for %s because it is an invalid path name."
 msgstr ""
 "Kon geen favoriet toevoegen voor %s omdat het een ongeldige pad-naam is."
 
-#: gtk/gtkfilechooserdefault.c:1403
+#: gtk/gtkfilechooserdefault.c:1405
 msgid "Folder"
 msgstr "Map"
 
-#: gtk/gtkfilechooserdefault.c:1478
+#: gtk/gtkfilechooserdefault.c:1481
 msgid "Size"
 msgstr "Afmeting"
 
-#: gtk/gtkfilechooserdefault.c:1490
+#: gtk/gtkfilechooserdefault.c:1493
 msgid "Modified"
 msgstr "Aangepast"
 
 #. Label and entry
-#: gtk/gtkfilechooserdefault.c:1513
+#: gtk/gtkfilechooserdefault.c:1516
 msgid "_Filename:"
 msgstr "_Bestandsnaam:"
 
 #. Preview
-#: gtk/gtkfilechooserdefault.c:1598
+#: gtk/gtkfilechooserdefault.c:1601
 msgid "Preview"
 msgstr "Voorbeeld"
 
 #. Change the current folder label
-#: gtk/gtkfilechooserdefault.c:2130
+#: gtk/gtkfilechooserdefault.c:2133
 #, c-format
 msgid "Current folder: %s"
 msgstr "Huidige map: %s"
 
-#: gtk/gtkfilechooserdefault.c:2533
+#: gtk/gtkfilechooserdefault.c:2536
 #, c-format
 msgid "shortcut %s does not exist"
 msgstr "Snelkoppeling %s bestaat niet"
 
-#: gtk/gtkfilechooserdefault.c:3083
+#: gtk/gtkfilechooserdefault.c:3086
 msgid "Type name of new folder"
 msgstr "Geef de naam van de nieuwe map"
 
-#: gtk/gtkfilechooserdefault.c:3110
+#: gtk/gtkfilechooserdefault.c:3113
 #, c-format
 msgid "%d byte"
 msgid_plural "%d bytes"
 msgstr[0] "%d byte"
 msgstr[1] "%d byte"
 
-#: gtk/gtkfilechooserdefault.c:3112
+#: gtk/gtkfilechooserdefault.c:3115
 #, c-format
 msgid "%.1f K"
 msgstr "%.1f K"
 
-#: gtk/gtkfilechooserdefault.c:3114
+#: gtk/gtkfilechooserdefault.c:3117
 #, c-format
 msgid "%.1f M"
 msgstr "%.1f M"
 
-#: gtk/gtkfilechooserdefault.c:3116
+#: gtk/gtkfilechooserdefault.c:3119
 #, c-format
 msgid "%.1f G"
 msgstr "%.1f G"
 
-#: gtk/gtkfilechooserdefault.c:3161
+#: gtk/gtkfilechooserdefault.c:3164
 msgid "Today"
 msgstr "Vandaag"
 
-#: gtk/gtkfilechooserdefault.c:3163
+#: gtk/gtkfilechooserdefault.c:3166
 msgid "Yesterday"
 msgstr "Gisteren"
 
 # d=dag b=afgekorte maand Y=jaar in 4 cijfers
-#: gtk/gtkfilechooserdefault.c:3171
+#: gtk/gtkfilechooserdefault.c:3174
 msgid "%d/%b/%Y"
 msgstr "%d/%b/%Y"
 
-#: gtk/gtkfilechooserdefault.c:3174
+#: gtk/gtkfilechooserdefault.c:3177
 msgid "Unknown"
 msgstr "Onbekend"
 
@@ -1302,26 +1302,26 @@ msgstr "Kon bestandsnaam niet converteren"
 msgid "(Empty)"
 msgstr "(Leeg)"
 
-#: gtk/gtkfilesystemunix.c:351 gtk/gtkfilesystemwin32.c:373
+#: gtk/gtkfilesystemunix.c:379 gtk/gtkfilesystemwin32.c:373
 #, c-format
 msgid "error creating directory '%s': %s"
 msgstr "fout bij aanmaken van map '%s': %s"
 
-#: gtk/gtkfilesystemunix.c:392 gtk/gtkfilesystemwin32.c:414
+#: gtk/gtkfilesystemunix.c:440 gtk/gtkfilesystemwin32.c:414
 msgid "This file system does not support mounting"
 msgstr "Dit bestandsysteem ondersteunt geen aankoppelen"
 
-#: gtk/gtkfilesystemunix.c:400
+#: gtk/gtkfilesystemunix.c:448
 msgid "Filesystem"
 msgstr "Bestandsysteem"
 
-#: gtk/gtkfilesystemunix.c:419 gtk/gtkfilesystemunix.c:1295
+#: gtk/gtkfilesystemunix.c:467 gtk/gtkfilesystemunix.c:1345
 #: gtk/gtkfilesystemwin32.c:1154
 #, c-format
 msgid "error getting information for '%s': %s"
 msgstr "fout bij verkrijgen vna in formatie over '%s': %s"
 
-#: gtk/gtkfilesystemunix.c:1005 gtk/gtkfilesystemwin32.c:777
+#: gtk/gtkfilesystemunix.c:1053 gtk/gtkfilesystemwin32.c:777
 #, c-format
 msgid "Bookmark saving failed (%s)"
 msgstr "Opslaan favorieten mislukt (%s)"
@@ -1487,11 +1487,11 @@ msgstr "(onbekend)"
 msgid "clear"
 msgstr "wissen"
 
-#: gtk/gtklabel.c:3225
+#: gtk/gtklabel.c:3217
 msgid "Select All"
 msgstr "Alles selecteren"
 
-#: gtk/gtklabel.c:3235
+#: gtk/gtklabel.c:3227
 msgid "Input Methods"
 msgstr "Invoermethodes"
 
@@ -1808,12 +1808,12 @@ msgid "_Yes"
 msgstr "_Ja"
 
 #: gtk/gtkstock.c:338
-msgid "Zoom _100%"
-msgstr "Zoom _100%"
+msgid "_Normal Size"
+msgstr "_Normale afmeting"
 
 #: gtk/gtkstock.c:339
-msgid "Zoom to _Fit"
-msgstr "Zoom _Passend"
+msgid "Best _Fit"
+msgstr "Best _passend"
 
 #: gtk/gtkstock.c:340
 msgid "Zoom _In"
@@ -1946,6 +1946,12 @@ msgstr "X Invoer-Methode"
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "Kon geen informatie verkrijgen over bestand '%s': %s"
+
+#~ msgid "Zoom _100%"
+#~ msgstr "Zoom _100%"
+
+#~ msgid "Zoom to _Fit"
+#~ msgstr "Zoom _Passend"
 
 #~ msgid "This file system does not support icons"
 #~ msgstr "Dit bestandsysteem ondersteunt geen pictogrammen"
