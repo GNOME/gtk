@@ -1,3 +1,11 @@
+Fri Jan  2 02:50:11 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkcalendar.c (gtk_calendar_compute_days): 
+	* gtk/gtkcalendar.c (gtk_calendar_paint_day_names): 
+	* gtk/gtkcalendar.c (gtk_calendar_init): Changes to support 
+	week_start values other than 0 and 1, e.g. 6 will let weeks start
+	on Saturday.  (#130353, Roozbeh Pournader) 
+
 2003-12-31 13:49 Daniel Rogers <dsrogers@phasevelocity.org>
 
         * gdk/x11/gdkinput-x11.c: (gdk_input_translate_coordinates)

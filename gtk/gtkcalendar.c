@@ -712,18 +712,22 @@ gtk_calendar_init (GtkCalendar *calendar)
   else if (strcmp (year_before, "calendar:MY") != 0)
     g_warning ("Whoever translated calendar:MY did so wrongly.\n");
 
-  /* Translate to calendar:week_start:1 if you want Monday to be the
-   * first day of the week; otherwise translate to calendar:week_start:0. 
-   * Do *not* translate it to anything else, if it isn't calendar:week_start:1 
-   * or calendar:week_start:0 it will not work.
-   */
-   week_start = _("calendar:week_start:0");
-   if (strcmp (week_start, "calendar:week_start:1") == 0)
-     private_data->week_start = 1;
-   else if (strcmp (week_start, "calendar:week_start:0") == 0) 
-     private_data->week_start = 0;
-   else
-     g_warning ("Whoever translated calendar:week_start:0 did so wrongly.\n");
+  /* Translate to calendar:week_start:0 if you want Sunday to be the
+   * first day of the week to calendar:week_start:1 if you want Monday
+   * to be the first day of the week, and so on.
+   */  
+  week_start = _("calendar:week_start:0");
+
+  if (strncmp (week_start, "calendar:week_start:", 20) == 0)
+    private_data->week_start = *(week_start + 20) - '0';
+  else 
+    private_data->week_start = -1;
+  
+  if (private_data->week_start < 0 || private_data->week_start > 6)
+    {
+      g_warning ("Whoever translated calendar:week_start:0 did so wrongly.\n");
+      private_data->week_start = 0;
+    }
 }
 
 GtkWidget*
@@ -1915,8 +1919,7 @@ gtk_calendar_paint_day_names (GtkWidget *widget)
 	day = 6 - i;
       else
 	day = i;
-      if (private_data->week_start == 1) 
-	day= (day+1)%7;
+      day = (day + private_data->week_start) % 7;
       g_snprintf (buffer, sizeof (buffer), "%s", default_abbreviated_dayname[day]);
 
       pango_layout_set_text (layout, buffer, -1);
@@ -2229,7 +2232,7 @@ gtk_calendar_compute_days (GtkCalendar *calendar)
   gint row;
   gint col;
   gint day;
-  
+
   g_return_if_fail (GTK_IS_CALENDAR (calendar));
 
   private_data = GTK_CALENDAR_PRIVATE_DATA (GTK_WIDGET (calendar));
@@ -2240,12 +2243,7 @@ gtk_calendar_compute_days (GtkCalendar *calendar)
   ndays_in_month = month_length[leap (year)][month];
   
   first_day = day_of_week (year, month, 1);
-  
-  if (private_data->week_start == 1)
-    first_day--;
-  else
-    first_day %= 7;
-  
+  first_day = (first_day + 7 - private_data->week_start) % 7;
   
   /* Compute days of previous month */
   if (month > 1)
