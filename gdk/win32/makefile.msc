@@ -9,13 +9,13 @@ WTKIT = ..\..\..\wtkit126
 # Nothing much configurable below
 
 TOP = ../../..
-!INCLUDE $(TOP)/build/win32/make.msc
+!INCLUDE $(TOP)/glib/build/win32/make.msc
 
 GTK_VER=1.3
 
 CFLAGS = -I. -I.. -I..\.. $(GLIB_CFLAGS) $(PANGO_CFLAGS) \
 	-I$(WTKIT)\include -I$(GLIB) \
-	$(G_DEBUGGING) -DHAVE_CONFIG_H -DINSIDE_GDK_WIN32
+	$(G_DEBUGGING) -DHAVE_CONFIG_H -DINSIDE_GDK_WIN32 -DGDK_VERSION=\"$(GTK_VER)\"
 
 all: \
 	..\..\config.h	\

@@ -7,7 +7,7 @@
 ## how to install for yourself.
 
 TOP = ../..
-!INCLUDE $(TOP)/build/win32/make.msc
+!INCLUDE $(TOP)/glib/build/win32/make.msc
 
 # Location of the Wintab toolkit. Downloadable from http://www.pointing.com.
 # definition should possibly go to build/win32/module.def, too.
@@ -41,7 +41,7 @@ PERL = perl
 !ENDIF
 
 CFLAGS = -I . -I .. $(GLIB_CFLAGS) $(PANGO_CFLAGS) -I ../gdk-pixbuf \
-		-DG_ENABLE_DEBUG -DHAVE_CONFIG_H -DGDK_ENABLE_BROKEN -DGDK_VERSION=\"$(GTK_VER)\"
+		$(G_DEBUGGING) -DHAVE_CONFIG_H -DGDK_ENABLE_BROKEN -DGDK_VERSION=\"$(GTK_VER)\"
 EXTRALIBS = $(WTKIT)\lib\i386\wntab32x.lib $(GLIB_LIBS) \
 		..\gdk-pixbuf\gdk_pixbuf-$(GDK_PIXBUF_VER).lib $(PANGOWIN32_LIBS)
 
@@ -57,7 +57,9 @@ all: \
 	gdkenumtypes.c \
 	gdk-win32-backend \
 	gdk-win32-$(GTK_VER).dll \
-	testgdk.exe
+	testgdk.exe \
+	gdk-win32-$(GTK_VER)s.lib \
+#	gdk-x11-$(GTK_VER).dll \
 
 gdk_OBJECTS = \
 	gdk.obj \
@@ -122,6 +124,14 @@ gdkconfig.h : gdkconfig.h.win32
 
 gdk-win32-$(GTK_VER).dll : $(gdk_OBJECTS) gdk.def win32\gdk-win32.lib
 	$(CC) $(CFLAGS) -LD -Fegdk-win32-$(GTK_VER).dll $(gdk_OBJECTS) win32\gdk-win32.lib $(EXTRALIBS) gdi32.lib user32.lib imm32.lib shell32.lib ole32.lib uuid.lib win32\gdk.res $(LDFLAGS) /def:gdk.def
+
+gdk-win32-$(GTK_VER)s.lib : $(gdk_OBJECTS)
+	lib /out:gdk-win32-$(GTK_VER)s.lib $(gdk_OBJECTS) win32\gdk-win32.lib
+
+gdk-x11-$(GTK_VER).dll : $(gdk_OBJECTS) gdk.def x11\gdk-x11.lib
+	$(CC) $(CFLAGS) -LD -Fegdk-x11-$(GTK_VER).dll $(gdk_OBJECTS) \
+	$(PANGO)\pango\pangox-$(PANGO_VER).lib \
+	x11\gdk-x11.lib $(X11_LIBS) $(EXTRALIBS) user32.lib $(LDFLAGS) /def:gdk.def
 
 testgdk.exe : gdk-win32-$(GTK_VER).dll testgdk.obj
 	$(CC) -Fetestgdk.exe testgdk.obj gdk-win32-$(GTK_VER).lib $(EXTRALIBS) $(LDFLAGS)

@@ -87,8 +87,6 @@ EXPORTS
 	GTK_TYPE_WINDOW_TYPE
 	GTK_TYPE_WRAP_MODE
 
-	_gtk_drag_dest_handle_event
-	_gtk_drag_source_handle_event
 	gtk_accel_group_activate
 	gtk_accel_group_add
 	gtk_accel_group_attach
@@ -221,6 +219,7 @@ EXPORTS
 	gtk_cell_renderer_text_get_type
 	gtk_cell_renderer_text_new
 	gtk_cell_renderer_text_set_fixed_height_from_font
+	gtk_cell_renderer_toggle_get_active
 	gtk_cell_renderer_toggle_get_radio
 	gtk_cell_renderer_toggle_get_type
 	gtk_cell_renderer_toggle_new
@@ -705,14 +704,17 @@ EXPORTS
 	gtk_idle_add_priority
 	gtk_idle_remove
 	gtk_idle_remove_by_data
+	gtk_im_context_delete_surrounding
 	gtk_im_context_filter_keypress
 	gtk_im_context_focus_in
 	gtk_im_context_focus_out
 	gtk_im_context_get_preedit_string
+	gtk_im_context_get_surrounding
 	gtk_im_context_get_type
 	gtk_im_context_reset
 	gtk_im_context_set_client_window
 	gtk_im_context_set_cursor_location
+	gtk_im_context_set_surrounding
 	gtk_im_context_set_use_preedit
 	gtk_im_context_simple_add_table
 	gtk_im_context_simple_get_type
@@ -900,6 +902,7 @@ EXPORTS
 	gtk_marshal_BOOLEAN__BOXED
 	gtk_marshal_BOOLEAN__BOXED_BOXED
 	gtk_marshal_BOOLEAN__ENUM
+	gtk_marshal_BOOLEAN__INT_INT
 	gtk_marshal_BOOLEAN__OBJECT_BOXED_BOXED
 	gtk_marshal_BOOLEAN__OBJECT_INT_INT_UINT
 	gtk_marshal_BOOLEAN__OBJECT_STRING_STRING_BOXED
@@ -909,9 +912,7 @@ EXPORTS
 	gtk_marshal_STRING__DOUBLE
 	gtk_marshal_VOID__BOOLEAN_BOOLEAN_BOOLEAN
 	gtk_marshal_VOID__BOXED_BOXED
-	gtk_marshal_VOID__BOXED_BOXED_BOXED
 	gtk_marshal_VOID__BOXED_BOXED_POINTER
-	gtk_marshal_VOID__BOXED_INT
 	gtk_marshal_VOID__BOXED_OBJECT
 	gtk_marshal_VOID__BOXED_POINTER
 	gtk_marshal_VOID__BOXED_STRING_INT
@@ -1578,7 +1579,6 @@ EXPORTS
 	gtk_text_mark_get_visible
 	gtk_text_mark_set_visible
 	gtk_text_new
-	gtk_text_pixbuf_type
 	gtk_text_set_adjustments
 	gtk_text_set_editable
 	gtk_text_set_line_wrap
@@ -1864,7 +1864,6 @@ EXPORTS
 	gtk_tree_view_column_get_min_width
 	gtk_tree_view_column_get_reorderable
 	gtk_tree_view_column_get_sizing
-	gtk_tree_view_column_get_sizing
 	gtk_tree_view_column_get_sort_column_id
 	gtk_tree_view_column_get_sort_indicator
 	gtk_tree_view_column_get_sort_order
@@ -1896,6 +1895,8 @@ EXPORTS
 	gtk_tree_view_column_set_widget
 	gtk_tree_view_columns_autosize
 	gtk_tree_view_create_row_drag_icon
+	gtk_tree_view_enable_model_drag_source
+	gtk_tree_view_enable_model_drag_dest
 	gtk_tree_view_expand_all
 	gtk_tree_view_expand_row
 	gtk_tree_view_get_background_area
@@ -1942,8 +1943,6 @@ EXPORTS
 	gtk_tree_view_set_headers_visible
 	gtk_tree_view_set_model
 	gtk_tree_view_set_reorderable
-	gtk_tree_view_set_rows_drag_dest
-	gtk_tree_view_set_rows_drag_source
 	gtk_tree_view_set_rules_hint
 	gtk_tree_view_set_search_column
 	gtk_tree_view_set_search_equal_func
@@ -2118,6 +2117,7 @@ EXPORTS
 	gtk_window_get_default_icon_list
 	gtk_window_get_default_size
 	gtk_window_get_destroy_with_parent
+	gtk_window_get_focus
 	gtk_window_get_frame_dimensions
 	gtk_window_get_gravity
 	gtk_window_get_has_frame

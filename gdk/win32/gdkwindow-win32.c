@@ -177,15 +177,18 @@ gdk_window_impl_win32_set_colormap (GdkDrawable *drawable,
   GdkDrawableImplWin32 *draw_impl;
   
   g_return_if_fail (GDK_IS_WINDOW_IMPL_WIN32 (drawable));
-  g_return_if_fail (gdk_colormap_get_visual (cmap) != gdk_drawable_get_visual (drawable));
 
   impl = GDK_WINDOW_IMPL_WIN32 (drawable);
   draw_impl = GDK_DRAWABLE_IMPL_WIN32 (drawable);
 
-  GDK_DRAWABLE_GET_CLASS (draw_impl)->set_colormap (drawable, cmap);
+  /* chain up */
+  GDK_DRAWABLE_CLASS (parent_class)->set_colormap (drawable, cmap);
   
-  /* XXX */
-  g_print("gdk_window_impl_win32_set_colormap: XXX\n");
+  if (cmap)
+    {
+      /* XXX */
+      g_print("gdk_window_impl_win32_set_colormap: XXX\n");
+    }
 }
 
 static void
@@ -896,6 +899,9 @@ gdk_window_hide (GdkWindow *window)
 			       (guint) GDK_WINDOW_HWND (window)));
 
       private->state |= GDK_WINDOW_STATE_WITHDRAWN;
+
+      _gdk_window_clear_update_area (window);
+
       if (GDK_WINDOW_TYPE (window) == GDK_WINDOW_TOPLEVEL)
 	ShowOwnedPopups (GDK_WINDOW_HWND (window), FALSE);
 
@@ -1082,6 +1088,9 @@ gdk_window_reparent (GdkWindow *window,
   GdkWindowImplWin32 *impl;
 
   g_return_if_fail (window != NULL);
+  g_return_if_fail (GDK_IS_WINDOW (window));
+  g_return_if_fail (new_parent == NULL || GDK_IS_WINDOW (new_parent));
+  g_return_if_fail (GDK_WINDOW_TYPE (window) != GDK_WINDOW_ROOT);
 
   if (!new_parent)
     new_parent = _gdk_parent_root;
@@ -1123,6 +1132,7 @@ gdk_window_reparent (GdkWindow *window,
     gdk_window_set_static_win_gravity (window, parent_private->guffaw_gravity);
   
   parent_private->children = g_list_prepend (parent_private->children, window);
+  _gdk_window_init_position (GDK_WINDOW (window_private));
 }
 
 void
@@ -1255,6 +1265,14 @@ gdk_window_set_hints (GdkWindow *window,
 
   if (flags)
     {
+      GdkGeometry geom;
+      gint        geom_mask = 0;
+
+      geom.min_width  = min_width;
+      geom.min_height = min_height;
+      geom.max_width  = max_width;
+      geom.max_height = max_height;
+
       if (flags & GDK_HINT_POS)
 	{
 	  if (!GetWindowPlacement (GDK_WINDOW_HWND (window), &size_hints))
@@ -1302,47 +1320,12 @@ gdk_window_set_hints (GdkWindow *window,
 	}
 
       if (flags & GDK_HINT_MIN_SIZE)
-	{
-	  rect.left = 0;
-	  rect.top = 0;
-	  rect.right = min_width;
-	  rect.bottom = min_height;
-	  dwStyle = GetWindowLong (GDK_WINDOW_HWND (window), GWL_STYLE);
-	  dwExStyle = GetWindowLong (GDK_WINDOW_HWND (window), GWL_EXSTYLE);
-	  SafeAdjustWindowRectEx (&rect, dwStyle, FALSE, dwExStyle);
-	  impl->hint_min_width = rect.right - rect.left;
-	  impl->hint_min_height = rect.bottom - rect.top;
-
-	  /* Also check if he current size of the window is in bounds. */
-	  GetClientRect (GDK_WINDOW_HWND (window), &rect);
-	  if (rect.right < min_width && rect.bottom < min_height)
-	    gdk_window_resize (window, min_width, min_height);
-	  else if (rect.right < min_width)
-	    gdk_window_resize (window, min_width, rect.bottom);
-	  else if (rect.bottom < min_height)
-	    gdk_window_resize (window, rect.right, min_height);
-	}
+        geom_mask |= GDK_HINT_MIN_SIZE;
 
       if (flags & GDK_HINT_MAX_SIZE)
-	{
-	  rect.left = 0;
-	  rect.top = 0;
-	  rect.right = max_width;
-	  rect.bottom = max_height;
-	  dwStyle = GetWindowLong (GDK_WINDOW_HWND (window), GWL_STYLE);
-	  dwExStyle = GetWindowLong (GDK_WINDOW_HWND (window), GWL_EXSTYLE);
-	  AdjustWindowRectEx (&rect, dwStyle, FALSE, dwExStyle);
-	  impl->hint_max_width = rect.right - rect.left;
-	  impl->hint_max_height = rect.bottom - rect.top;
-	  /* Again, check if the window is too large currently. */
-	  GetClientRect (GDK_WINDOW_HWND (window), &rect);
-	  if (rect.right > max_width && rect.bottom > max_height)
-	    gdk_window_resize (window, max_width, max_height);
-	  else if (rect.right > max_width)
-	    gdk_window_resize (window, max_width, rect.bottom);
-	  else if (rect.bottom > max_height)
-	    gdk_window_resize (window, rect.right, max_height);
-	}
+        geom_mask |= GDK_HINT_MAX_SIZE;
+
+      gdk_window_set_geometry_hints (window, &geom, geom_mask);
     }
 }
 
@@ -1356,6 +1339,7 @@ gdk_window_set_geometry_hints (GdkWindow      *window,
   RECT rect;
   DWORD dwStyle;
   DWORD dwExStyle;
+  gint new_width = 0, new_height = 0;
   
   g_return_if_fail (window != NULL);
   g_return_if_fail (GDK_IS_WINDOW (window));
@@ -1385,13 +1369,20 @@ gdk_window_set_geometry_hints (GdkWindow      *window,
 
       /* Also check if he current size of the window is in bounds */
       GetClientRect (GDK_WINDOW_HWND (window), &rect);
+
       if (rect.right < geometry->min_width
 	  && rect.bottom < geometry->min_height)
-	gdk_window_resize (window, geometry->min_width, geometry->min_height);
+	{
+	  new_width = geometry->min_width; new_height = geometry->min_height;
+	}
       else if (rect.right < geometry->min_width)
-	gdk_window_resize (window, geometry->min_width, rect.bottom);
+	{
+	  new_width = geometry->min_width; new_height = rect.bottom;
+	}
       else if (rect.bottom < geometry->min_height)
-	gdk_window_resize (window, rect.right, geometry->min_height);
+	{
+	  new_width = rect.right; new_height = geometry->min_height;
+	}
     }
   
   if (geom_mask & GDK_HINT_MAX_SIZE)
@@ -1414,12 +1405,22 @@ gdk_window_set_geometry_hints (GdkWindow      *window,
       GetClientRect (GDK_WINDOW_HWND (window), &rect);
       if (rect.right > geometry->max_width
 	  && rect.bottom > geometry->max_height)
-	gdk_window_resize (window, geometry->max_width, geometry->max_height);
+	{
+	  new_width = geometry->max_width; new_height = geometry->max_height;
+	}
       else if (rect.right > geometry->max_width)
-	gdk_window_resize (window, geometry->max_width, rect.bottom);
+	{
+	  new_width = geometry->max_width; new_height = rect.bottom;
+	}
       else if (rect.bottom > geometry->max_height)
-	gdk_window_resize (window, rect.right, geometry->max_height);
+	{
+	  new_width = rect.right; new_height = geometry->max_height;
+	}
     }
+
+  /* finally apply new size constraints */
+  if (new_width != 0 && new_height != 0)
+    gdk_window_resize (window, new_width, new_height);
   
   /* I don't know what to do when called with zero base_width and height. */
   if (geom_mask & GDK_HINT_BASE_SIZE
@@ -1614,7 +1615,6 @@ gdk_window_set_cursor (GdkWindow *window,
   GdkCursorPrivate *cursor_private;
   HCURSOR hcursor;
   HCURSOR hprevcursor;
-  POINT pt;
   
   g_return_if_fail (window != NULL);
   g_return_if_fail (GDK_IS_WINDOW (window));

@@ -555,7 +555,7 @@ gtk_font_selection_show_available_fonts (GtkFontSelection *fontsel)
       
       gtk_clist_append (GTK_CLIST (fontsel->font_clist), (char **)&name);
 
-      if (!strcasecmp (name, "sans"))
+      if (!g_strcasecmp (name, "sans"))
 	match_row = i;
     }
 
@@ -915,7 +915,7 @@ gtk_font_selection_set_font_name (GtkFontSelection *fontsel,
   n_families = GTK_CLIST (fontsel->font_clist)->rows;
   for (i = 0; i < n_families; i++)
     {
-      if (strcasecmp (pango_font_family_get_name (fontsel->families[i]),
+      if (g_strcasecmp (pango_font_family_get_name (fontsel->families[i]),
 		      pango_font_description_get_family (new_desc)) == 0)
 	new_family = fontsel->families[i];
     }

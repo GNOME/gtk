@@ -1725,7 +1725,7 @@ gdk_font_id (const GdkFont *font)
     return 0;
 }
 
-gint
+gboolean
 gdk_font_equal (const GdkFont *fonta,
                 const GdkFont *fontb)
 {

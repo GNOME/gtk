@@ -1,3 +1,38 @@
+2001-10-28  Hans Breuer  <hans@breuer.org>
+
+	* gtk/gtkfontsel.c : use g_strcasecmp(), some poor platforms
+	don't have strcasecmp()
+
+	* gtk/gtktextview.c : to fix crashing on e.g. TextView::find need 
+	to remove the idle funcs in gtk_text_view_destroy (). To reduce 
+	code duplication wrap it in its own function and use it in 
+	gtk_text_view_unrealize () and gtk_text_view_destroy_layout ()
+
+	* gdk/win32/gdkdrawable-win32.c : implement the finalize
+	method like the X11 version does, allow to set_colormap NULL
+	* gdk/win32/gdkwindow-win32.c : adapt GdkWindowImplWin32::
+	set_colormap, also some adaption to X11 version :
+	(gdk_window_hide) call _gdk_window_clear_update_area
+	(gdk_window_reparent) call _gdk_window_init_position
+
+	* gdk/win32/gdkwindow-win32.c (gdk_window_set_geometry_hints) : 
+	call gdk_window_resize() after all hints are set, because the
+	window resizing process (WM_GETMINMAXINFO) takes all of them into 
+	account
+
+	* gdk/win32/gdkfont-win32.c : make gdk_font_equal return a gboolean
+
+	* gdk/win32/gdkvisual-win32.c : register GdkVisual with 
+	sizeof (GdkVisualPrivate)
+
+	* gdk/gdk.def gtk/gtk.def : upated externals
+
+	* gdk/makefile.msc gdk/win32/makefile.msc gdk-pixbuf/makefile.msc
+	  gdk-pixbuf/pixops/makefile.msc gtk/makefile.msc.in tests/makefile.msc :
+	from now on use make.msc from $(TOP)/glib/build/win32
+
+	* gtk/stock-icons/makefile.msc : add stock_missing_image
+
 2001-11-08  Tor Lillqvist  <tml@iki.fi>
 
 	* README.win32: Add headers. Add section about ActiveIMM.

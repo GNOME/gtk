@@ -67,7 +67,7 @@ gdk_visual_get_type (void)
         (GClassInitFunc) gdk_visual_class_init,
         NULL,           /* class_finalize */
         NULL,           /* class_data */
-        sizeof (GdkVisual),
+        sizeof (GdkVisualPrivate),
         0,              /* n_preallocs */
         (GInstanceInitFunc) NULL,
       };

@@ -3,7 +3,7 @@ PRJ_TOP = ..
 PACKAGE = gdk_pixbuf
 PKG_VER = $(GDK_PIXBUF_VER)
 
-!INCLUDE $(TOP)/build/win32/make.msc
+!INCLUDE $(TOP)/glib/build/win32/make.msc
 
 !IFNDEF PERL
 PERL = perl
