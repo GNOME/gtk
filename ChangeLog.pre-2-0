@@ -1,3 +1,7 @@
+2002-03-03  Sven Neumann  <sven@gimp.org>
+
+	* m4macros/gtk-2.0.m4: lowercase configure --help output.
+
 Sun Mar  3 06:39:19 2002  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkfilesel.c: added compile time switch to put the tree views
