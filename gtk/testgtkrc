@@ -123,8 +123,8 @@ binding "test2"
 # application (for hard coded bindings on application basis)
 # rc          (used implicitel by rc files)
 # highest
-class "GtkWindow" binding "test1"           # implicit : rc
-class "GtkWindow" binding : highest "test2" # override "rc" priority
+class "GtkCList" binding  "test1"           # implicit : rc
+#class "GtkWindow" binding : highest "test2" # override "rc" priority
 
 binding "clist-test"
 {

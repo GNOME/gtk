@@ -953,7 +953,7 @@ gtk_list_focus (GtkContainer     *container,
   g_return_val_if_fail (container != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_LIST (container), FALSE);
 
-  if (!GTK_WIDGET_SENSITIVE (container))
+  if (!GTK_WIDGET_IS_SENSITIVE (container))
     return_val = FALSE;
   else if (container->focus_child == NULL ||
       !GTK_WIDGET_HAS_FOCUS (container->focus_child))

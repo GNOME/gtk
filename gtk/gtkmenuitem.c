@@ -423,8 +423,6 @@ gtk_menu_item_paint (GtkWidget    *widget,
       menu_item = GTK_MENU_ITEM (widget);
 
       state_type = widget->state;
-      if (!GTK_WIDGET_IS_SENSITIVE (widget))
-	state_type = GTK_STATE_INSENSITIVE;
 
       x = GTK_CONTAINER (menu_item)->border_width;
       y = GTK_CONTAINER (menu_item)->border_width;
@@ -627,24 +625,27 @@ gtk_menu_item_select_timeout (gpointer data)
   menu_item = GTK_MENU_ITEM (data);
   menu_item->timer = 0;
 
-  gtk_menu_popup (GTK_MENU (menu_item->submenu),
-		  GTK_WIDGET (menu_item)->parent,
-		  GTK_WIDGET (menu_item),
-		  gtk_menu_item_position_menu,
-		  menu_item,
-		  GTK_MENU_SHELL (GTK_WIDGET (menu_item)->parent)->button,
-		  0);
-
-  /* This is a bit of a hack - we want to select the first item
-   * of menus hanging of a menu bar, but not for cascading submenus
-   */
-  if (GTK_IS_MENU_BAR (GTK_WIDGET (menu_item)->parent))
+  if (GTK_WIDGET_IS_SENSITIVE (menu_item->submenu))
     {
-      GtkMenuShell *submenu = GTK_MENU_SHELL (menu_item->submenu);
-      if (submenu->children)
-	gtk_menu_shell_select_item (submenu, submenu->children->data);
+      gtk_menu_popup (GTK_MENU (menu_item->submenu),
+		      GTK_WIDGET (menu_item)->parent,
+		      GTK_WIDGET (menu_item),
+		      gtk_menu_item_position_menu,
+		      menu_item,
+		      GTK_MENU_SHELL (GTK_WIDGET (menu_item)->parent)->button,
+		      0);
+      
+      /* This is a bit of a hack - we want to select the first item
+       * of menus hanging of a menu bar, but not for cascading submenus
+       */
+      if (GTK_IS_MENU_BAR (GTK_WIDGET (menu_item)->parent))
+	{
+	  GtkMenuShell *submenu = GTK_MENU_SHELL (menu_item->submenu);
+	  if (submenu->children)
+	    gtk_menu_shell_select_item (submenu, submenu->children->data);
+	}
     }
-
+  
   GDK_THREADS_LEAVE ();
 
   return FALSE;

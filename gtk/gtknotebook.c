@@ -1522,7 +1522,7 @@ gtk_notebook_focus (GtkContainer     *container,
 
   notebook = GTK_NOTEBOOK (container);
 
-  if (!GTK_WIDGET_DRAWABLE (notebook) || !GTK_WIDGET_SENSITIVE (container) ||
+  if (!GTK_WIDGET_DRAWABLE (notebook) || !GTK_WIDGET_IS_SENSITIVE (container) ||
       !notebook->children || !notebook->cur_page)
     return FALSE;
 
@@ -1532,7 +1532,7 @@ gtk_notebook_focus (GtkContainer     *container,
   if (!notebook->show_tabs)
     {
       if (GTK_WIDGET_DRAWABLE (notebook->cur_page->child) &&
-	  GTK_WIDGET_SENSITIVE (notebook->cur_page->child))
+	  GTK_WIDGET_IS_SENSITIVE (notebook->cur_page->child))
 	{
 	  if (GTK_IS_CONTAINER (notebook->cur_page->child))
 	    {

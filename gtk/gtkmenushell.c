@@ -869,7 +869,7 @@ gtk_menu_shell_move_selected (GtkMenuShell  *menu_shell,
 	  node = node->next;
 	  while (node != start_node && 
 		 (!node ||
-		  !GTK_WIDGET_SENSITIVE (node->data) ||
+		  !GTK_WIDGET_IS_SENSITIVE (node->data) ||
 		  !GTK_WIDGET_VISIBLE (node->data) ))
 	    {
 	      if (!node)
@@ -883,7 +883,7 @@ gtk_menu_shell_move_selected (GtkMenuShell  *menu_shell,
 	  node = node->prev;
 	  while (node != start_node &&
 		 (!node ||
-		  !GTK_WIDGET_SENSITIVE (node->data) ||
+		  !GTK_WIDGET_IS_SENSITIVE (node->data) ||
 		  !GTK_WIDGET_VISIBLE (node->data) ))
 	    {
 	      if (!node)

@@ -1012,7 +1012,7 @@ gtk_window_key_press_event (GtkWidget   *widget,
 
   handled = FALSE;
   
-  if (window->focus_widget)
+  if (window->focus_widget && GTK_WIDGET_IS_SENSITIVE (window->focus_widget))
     {
       handled = gtk_widget_event (window->focus_widget, (GdkEvent*) event);
     }
@@ -1104,7 +1104,7 @@ gtk_window_key_release_event (GtkWidget   *widget,
   
   window = GTK_WINDOW (widget);
   handled = FALSE;
-  if (window->focus_widget)
+  if (window->focus_widget && GTK_WIDGET_SENSITIVE (window->focus_widget))
     {
       handled = gtk_widget_event (window->focus_widget, (GdkEvent*) event);
     }

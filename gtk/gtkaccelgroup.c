@@ -254,7 +254,8 @@ gtk_accel_group_activate (GtkAccelGroup	 *accel_group,
   g_return_val_if_fail (accel_group != NULL, FALSE);
   
   entry = gtk_accel_group_lookup (accel_group, accel_key, accel_mods);
-  if (entry && entry->signal_id)
+  if (entry && entry->signal_id &&
+      (!GTK_IS_WIDGET (entry->object) || GTK_WIDGET_IS_SENSITIVE (entry->object)))
     {
       gtk_signal_emit (entry->object, entry->signal_id);
       return TRUE;

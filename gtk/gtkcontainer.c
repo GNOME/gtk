@@ -1394,7 +1394,7 @@ gtk_container_real_focus (GtkContainer     *container,
   /* Fail if the container is inappropriate for focus movement
    */
   if (!GTK_WIDGET_DRAWABLE (container) ||
-      !GTK_WIDGET_SENSITIVE (container))
+      !GTK_WIDGET_IS_SENSITIVE (container))
     return FALSE;
 
   return_val = FALSE;
@@ -1422,7 +1422,7 @@ gtk_container_real_focus (GtkContainer     *container,
 	  tmp_list = children;
 	  while (tmp_list)
 	    {
-	      if (GTK_WIDGET_SENSITIVE (tmp_list->data) &&
+	      if (GTK_WIDGET_IS_SENSITIVE (tmp_list->data) &&
 		  GTK_WIDGET_DRAWABLE (tmp_list->data) &&
 		  (GTK_IS_CONTAINER (tmp_list->data) || GTK_WIDGET_CAN_FOCUS (tmp_list->data)))
 		tmp_list = tmp_list->next;
