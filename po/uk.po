@@ -5,8 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.3.0\n"
-"POT-Creation-Date: 2003-02-10 11:47+0200\n"
-"PO-Revision-Date: 2003-02-10 10:28--500\n"
+"POT-Creation-Date: 2003-02-13 18:23+0200\n"
+"PO-Revision-Date: 2003-02-13 13:22--500\n"
 "Last-Translator: Yuriy Syrota <yuri@renome.rovno.ua>\n"
 "Language-Team: Ukrainian <uk@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -112,7 +112,7 @@ msgstr "не вдалося розподілити буфер зображенн
 
 #: gdk-pixbuf/io-ani.c:244
 msgid "Unexpected icon chunk in animation"
-msgstr ""
+msgstr "Несподіваний піктограмний фрагмент в анімації"
 
 #: gdk-pixbuf/io-ani.c:337
 msgid "Unsupported animation type"
@@ -417,7 +417,7 @@ msgstr "Завантажувач зображень формату PNM не пі
 
 #: gdk-pixbuf/io-pnm.c:710
 msgid "Premature end-of-file encountered"
-msgstr ""
+msgstr "Передчасне завершення файла"
 
 #: gdk-pixbuf/io-pnm.c:742
 #: gdk-pixbuf/io-pnm.c:962
@@ -475,7 +475,7 @@ msgstr "Неможливо виділити пам'ять для даних IOBu
 
 #: gdk-pixbuf/io-tga.c:189
 msgid "Can't realloc IOBuffer data"
-msgstr ""
+msgstr "Не вдалося перевиділити дані структури IOBuffer"
 
 #: gdk-pixbuf/io-tga.c:219
 msgid "Can't allocate temporary IOBuffer data"
@@ -483,11 +483,11 @@ msgstr "Неможливо виділити пам'ять для тимчасо�
 
 #: gdk-pixbuf/io-tga.c:283
 msgid "fread() failed -- premature end-of-file probably encountered"
-msgstr ""
+msgstr "збій fread() -- можливо, передчасне завершення файла"
 
 #: gdk-pixbuf/io-tga.c:293
 msgid "fseek() failed -- premature end-of-file probably encountered"
-msgstr ""
+msgstr "збій fseek() -- можливо, передчасне завершення файла"
 
 #: gdk-pixbuf/io-tga.c:326
 msgid "Can't allocate new pixbuf"
@@ -1924,18 +1924,19 @@ msgstr "Вибір: "
 msgid "Whether to select the contents of an entry when it is focused"
 msgstr "Чи може віджет мати фокус вводу"
 
-#: gtk/gtkentry.c:3957
+#: gtk/gtkentry.c:3980
 #: gtk/gtklabel.c:3222
+#: gtk/gtktextview.c:6565
 msgid "Select All"
 msgstr "Вибрати все"
 
-#: gtk/gtkentry.c:3967
+#: gtk/gtkentry.c:3990
 #: gtk/gtklabel.c:3232
 msgid "Input Methods"
 msgstr "методи вводу"
 
-#: gtk/gtkentry.c:3977
-#: gtk/gtktextview.c:6543
+#: gtk/gtkentry.c:4000
+#: gtk/gtktextview.c:6584
 msgid "_Insert Unicode control character"
 msgstr ""
 
@@ -4131,7 +4132,7 @@ msgstr "Видимий курсор"
 msgid "If the insertion cursor is shown"
 msgstr ""
 
-#: gtk/gtktextview.c:6534
+#: gtk/gtktextview.c:6575
 msgid "Input _Methods"
 msgstr "Методи вводу"
 
@@ -4309,9 +4310,8 @@ msgid "Expander Size"
 msgstr ""
 
 #: gtk/gtktreeview.c:606
-#, fuzzy
 msgid "Size of the expander arrow"
-msgstr "Розмір візуалізованої піктограми"
+msgstr "Величина стрілки розширювача"
 
 #: gtk/gtktreeview.c:614
 msgid "Vertical Separator Width"
@@ -4463,14 +4463,12 @@ msgid "Sort direction the sort indicator should indicate"
 msgstr "Напрямок сортування має відображатись індикатором"
 
 #: gtk/gtkviewport.c:135
-#, fuzzy
 msgid "The GtkAdjustment that determines the values of the horizontal position for this viewport"
-msgstr "GtkAdjustment для горизонтальної позиції."
+msgstr "GtkAdjustment, що визначає значення горизонтального положення для  цього погляду."
 
 #: gtk/gtkviewport.c:143
-#, fuzzy
 msgid "The GtkAdjustment that determines the values of the vertical position for this viewport"
-msgstr "GtkAdjustment для вертикальної позиції."
+msgstr "GtkAdjustment, що визначає значення вертикального положення для  цього погляду."
 
 #: gtk/gtkviewport.c:151
 msgid "Determines how the shadowed box around the viewport is drawn"
@@ -4545,14 +4543,12 @@ msgid "Whether the widget has the input focus"
 msgstr "Чи має віджет фокус вводу"
 
 #: gtk/gtkwidget.c:468
-#, fuzzy
 msgid "Is focus"
-msgstr "Має фокус"
+msgstr "Є фокусом"
 
 #: gtk/gtkwidget.c:469
-#, fuzzy
 msgid "Whether the widget is the focus widget within the toplevel"
-msgstr "Стан відповідання віджета на ввід"
+msgstr "Чи є віджет віджетом фокусу на найвищому рівні"
 
 #: gtk/gtkwidget.c:475
 msgid "Can default"
@@ -4631,9 +4627,8 @@ msgid "Focus line dash pattern"
 msgstr ""
 
 #: gtk/gtkwidget.c:1113
-#, fuzzy
 msgid "Dash pattern used to draw the focus indicator"
-msgstr "Для малювання індикатора фокусу використано штриховий візерунок."
+msgstr "Візерунок, що використовуватиметься для малювання індикатора фокусу"
 
 #: gtk/gtkwidget.c:1118
 msgid "Focus padding"
@@ -4753,9 +4748,8 @@ msgid "Icon for this window"
 msgstr "піктограма цього вікна"
 
 #: gtk/gtkwindow.c:560
-#, fuzzy
 msgid "Is Active"
-msgstr "Активується"
+msgstr "Є активним"
 
 #: gtk/gtkwindow.c:561
 msgid "Whether the toplevel is the current active window"
