@@ -1,5 +1,9 @@
 2000-10-25  Robert Brady  <robert@suse.co.uk>
 
+	* gdk/x11/gdkproperty-x11.c (gdk_property_get, gdk_property_change,
+	gdk_property_delete): If window == NULL, assume the root window.
+	(restoring the behaviour that was in 1.2).
+	
 	* gtk/testtext.c (save_buffer): Allow creation of new files when
 	saving.
 

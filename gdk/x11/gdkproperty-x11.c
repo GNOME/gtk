@@ -112,8 +112,7 @@ gdk_property_get (GdkWindow   *window,
   gulong ret_length;
   guchar *ret_data;
 
-  g_return_val_if_fail (window != NULL, FALSE);
-  g_return_val_if_fail (GDK_IS_WINDOW (window), FALSE);
+  g_return_val_if_fail (!window || GDK_IS_WINDOW (window), FALSE);
 
   if (window)
     {
@@ -201,8 +200,7 @@ gdk_property_change (GdkWindow    *window,
   Display *xdisplay;
   Window xwindow;
 
-  g_return_if_fail (window != NULL);
-  g_return_if_fail (GDK_IS_WINDOW (window));
+  g_return_if_fail (!window || GDK_IS_WINDOW (window));
 
   if (window)
     {
@@ -229,8 +227,7 @@ gdk_property_delete (GdkWindow *window,
   Display *xdisplay;
   Window xwindow;
 
-  g_return_if_fail (window != NULL);
-  g_return_if_fail (GDK_IS_WINDOW (window));
+  g_return_if_fail (!window || GDK_IS_WINDOW (window));
 
   if (window)
     {
