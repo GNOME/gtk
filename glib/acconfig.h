@@ -52,6 +52,11 @@
 #undef SIZEOF_INT
 #undef SIZEOF_VOID_P
 
+#undef HAVE_WCHAR_H
+#undef HAVE_WCSTR_H
+#undef HAVE_WCTYPE_H
+
+
 /* #undef PACKAGE */
 /* #undef VERSION */
 
