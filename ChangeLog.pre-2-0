@@ -1,3 +1,14 @@
+Sun Aug 19 03:22:59 2001  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtkliststore.c: Fix up warnings, #58928.
+
+	* gtk/gtktreeselection.h: Change signal prototype, #58647
+
+	* gtk/gtktreeview.c (_gdk_tree_view_find_node): Make more robust,
+	#59221.
+
+	* gtk/gtkstyle.c: Actually prelight arrow, #50981
+	
 2001-08-18  Hans Breuer  <hans@breuer.org>
 
 	* gdk/gdk.def : updated externals

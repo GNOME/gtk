@@ -4086,11 +4086,25 @@ gtk_default_draw_expander (GtkStyle        *style,
   for (i = 0; i < 3; i++)
     apply_affine_on_point (affine, &points[i]);
 
-  gdk_draw_polygon (window, style->base_gc[GTK_STATE_NORMAL],
-		    TRUE, points, 3);
-  gdk_draw_polygon (window, style->fg_gc[GTK_STATE_NORMAL],
-                    FALSE, points, 3);
-
+  if (state_type == GTK_STATE_PRELIGHT)
+    {
+      gdk_draw_polygon (window, style->base_gc[GTK_STATE_NORMAL],
+			TRUE, points, 3);
+      gdk_draw_polygon (window, style->fg_gc[GTK_STATE_NORMAL],
+			FALSE, points, 3);
+    }
+  else if (state_type == GTK_STATE_ACTIVE)
+    {
+      gdk_draw_polygon (window, style->light_gc[GTK_STATE_ACTIVE],
+			TRUE, points, 3);
+      gdk_draw_polygon (window, style->fg_gc[GTK_STATE_NORMAL],
+			FALSE, points, 3);
+    }
+  else
+    {
+      gdk_draw_polygon (window, style->fg_gc[GTK_STATE_NORMAL],
+			TRUE, points, 3);
+    }
   if (area)
     {
       gdk_gc_set_clip_rectangle (style->fg_gc[GTK_STATE_NORMAL], NULL);

@@ -84,7 +84,7 @@ gtk_tree_selection_class_init (GtkTreeSelectionClass *class)
 		    GTK_RUN_FIRST,
 		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkTreeSelectionClass, changed),
-		    gtk_marshal_VOID__VOID,
+		    gtk_marshal_VOID__OBJECT,
 		    GTK_TYPE_NONE, 0);
 }
 

@@ -66,7 +66,7 @@ struct _GtkTreeSelectionClass
 {
   GObjectClass parent_class;
 
-  void (* changed) (GtkTreeView *tree_view);
+  void (* changed) (GtkTreeSelection *selection);
 };
 
 

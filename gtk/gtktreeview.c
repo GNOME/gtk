@@ -2306,6 +2306,7 @@ gtk_tree_view_motion_bin_window (GtkWidget      *widget,
   gint new_y;
   GtkRBTree *old_prelight_tree;
   GtkRBNode *old_prelight_node;
+  gboolean old_arrow_prelit;
 
   tree_view = (GtkTreeView *) widget;
 
@@ -2316,7 +2317,7 @@ gtk_tree_view_motion_bin_window (GtkWidget      *widget,
 
   old_prelight_tree = tree_view->priv->prelight_tree;
   old_prelight_node = tree_view->priv->prelight_node;
-
+  old_arrow_prelit = GTK_TREE_VIEW_FLAG_SET (tree_view, GTK_TREE_VIEW_ARROW_PRELIT);
   do_unprelight (tree_view, event->x, event->y);
 
   new_y = ((gint)event->y<TREE_VIEW_HEADER_HEIGHT (tree_view))?TREE_VIEW_HEADER_HEIGHT (tree_view):(gint)event->y;
@@ -2351,7 +2352,14 @@ gtk_tree_view_motion_bin_window (GtkWidget      *widget,
                                        tree_view->priv->prelight_node,
                                        NULL);
     }
-
+  else if (old_arrow_prelit != GTK_TREE_VIEW_FLAG_SET (tree_view, GTK_TREE_VIEW_ARROW_PRELIT))
+    {
+      if (tree_view->priv->prelight_node)
+        gtk_tree_view_queue_draw_node (tree_view,
+                                       tree_view->priv->prelight_tree,
+                                       tree_view->priv->prelight_node,
+                                       NULL);
+    }
   return TRUE;
 }
 
@@ -5191,7 +5199,9 @@ _gtk_tree_view_find_path (GtkTreeView *tree_view,
   return path;
 }
 
-/* Returns TRUE if we ran out of tree before finding the path.
+/* Returns TRUE if we ran out of tree before finding the path.  If the path is
+ * invalid (ie. points to a node that's not in the tree), *tree and *node are
+ * both set to NULL.
  */
 gboolean
 _gtk_tree_view_find_node (GtkTreeView  *tree_view,
@@ -5208,31 +5218,29 @@ _gtk_tree_view_find_node (GtkTreeView  *tree_view,
   *node = NULL;
   *tree = NULL;
 
-  if (depth == 0)
+  if (depth == 0 || tmptree == NULL)
     return FALSE;
   do
     {
-      if (tmptree == NULL)
-	{
-	  *node = tmpnode;
-	  if (tmpnode == NULL)
-	    *tree = NULL;
-	  else
-	    *tree = tmptree;
-	  return TRUE;
-	}
       tmpnode = _gtk_rbtree_find_count (tmptree, indices[i] + 1);
       ++i;
-      if (i >= depth)
+      if (tmpnode == NULL)
 	{
-	  *node = tmpnode;
-	  if (tmpnode == NULL)
-	    *tree = NULL;
-	  else
-	    *tree = tmptree;
+	  *tree = NULL;
+	  *node = NULL;
 	  return FALSE;
 	}
+      if (i >= depth)
+	{
+	  *tree = tmptree;
+	  *node = tmpnode;
+	  return FALSE;
+	}
+      *tree = tmptree;
+      *node = tmpnode;
       tmptree = tmpnode->children;
+      if (tmptree == NULL)
+	return TRUE;
     }
   while (1);
 }
@@ -5771,6 +5779,7 @@ gtk_tree_view_move_cursor_up_down (GtkTreeView *tree_view,
 
   cursor_path = NULL;
   if (!gtk_tree_row_reference_valid (tree_view->priv->cursor))
+    /* FIXME: we lost the cursor; should we get the first? */
     return;
 
   cursor_path = gtk_tree_row_reference_get_path (tree_view->priv->cursor);
@@ -5778,6 +5787,9 @@ gtk_tree_view_move_cursor_up_down (GtkTreeView *tree_view,
 			    &cursor_tree, &cursor_node);
   gtk_tree_path_free (cursor_path);
 
+  if (cursor_tree == NULL)
+    /* FIXME: we lost the cursor; should we get the first? */
+    return;
   if (count == -1)
     _gtk_rbtree_prev_full (cursor_tree, cursor_node,
 			   &new_cursor_tree, &new_cursor_node);
@@ -5821,6 +5833,9 @@ gtk_tree_view_move_cursor_page_up_down (GtkTreeView *tree_view,
 
   gtk_tree_path_free (cursor_path);
 
+  if (cursor_tree == NULL)
+    /* FIXME: we lost the cursor.  Should we try to get one? */
+    return;
   g_return_if_fail (cursor_node != NULL);
 
   y = CELL_FIRST_PIXEL (tree_view, cursor_tree, cursor_node, vertical_separator);
@@ -5920,8 +5935,11 @@ gtk_tree_view_real_select_cursor_row (GtkTreeView *tree_view)
   _gtk_tree_view_find_node (tree_view, cursor_path,
 			    &cursor_tree, &cursor_node);
   if (cursor_tree == NULL)
-    return;
-
+    {
+      gtk_tree_path_free (cursor_path);
+      return;
+    }
+  
   _gtk_tree_selection_internal_select_node (tree_view->priv->selection,
 					    cursor_node,
 					    cursor_tree,
@@ -5952,7 +5970,10 @@ gtk_tree_view_real_toggle_cursor_row (GtkTreeView *tree_view)
   _gtk_tree_view_find_node (tree_view, cursor_path,
 			    &cursor_tree, &cursor_node);
   if (cursor_tree == NULL)
-    return;
+    {
+      gtk_tree_path_free (cursor_path);
+      return;
+    }
 
   _gtk_tree_selection_internal_select_node (tree_view->priv->selection,
 					    cursor_node,
@@ -6011,7 +6032,10 @@ gtk_tree_view_real_select_cursor_parent (GtkTreeView *tree_view)
   _gtk_tree_view_find_node (tree_view, cursor_path,
 			    &cursor_tree, &cursor_node);
   if (cursor_tree == NULL)
-    return;
+    {
+      gtk_tree_path_free (cursor_path);
+      return;
+    }
 
   if (cursor_tree->parent_node)
     {
@@ -7399,7 +7423,10 @@ gtk_tree_view_expand_row (GtkTreeView *tree_view,
 				&node))
     return FALSE;
 
-  return gtk_tree_view_real_expand_row (tree_view, path, tree, node, open_all);
+  if (tree != NULL)
+    return gtk_tree_view_real_expand_row (tree_view, path, tree, node, open_all);
+  else
+    return FALSE;
 }
 
 static gboolean
@@ -7411,6 +7438,7 @@ gtk_tree_view_real_collapse_row (GtkTreeView *tree_view,
   GtkTreeIter iter;
   GtkTreeIter children;
   gboolean collapse;
+  gint x, y;
 
   gtk_tree_model_get_iter (tree_view->priv->model, &iter, path);
 
@@ -7419,15 +7447,34 @@ gtk_tree_view_real_collapse_row (GtkTreeView *tree_view,
   if (collapse)
     return FALSE;
 
+  /* if the prelighted node is a child of us, we want to unprelight it.  We have
+   * a chance to prelight the correct node below */
+  
+  if (tree_view->priv->prelight_tree)
+    {
+      GtkRBTree *parent_tree;
+      GtkRBNode *parent_node;
+
+      parent_tree = tree_view->priv->prelight_tree->parent_tree;
+      parent_node = tree_view->priv->prelight_tree->parent_node;
+      while (parent_tree)
+	{
+	  if (parent_tree == tree && parent_node == node)
+	    {
+	      ensure_unprelighted (tree_view);
+	      break;
+	    }
+	  parent_node = parent_tree->parent_node;
+	  parent_tree = parent_tree->parent_tree;
+	}
+    }
+
   TREE_VIEW_INTERNAL_ASSERT (gtk_tree_model_iter_children (tree_view->priv->model, &children, &iter), FALSE);
 
   gtk_tree_view_discover_dirty (tree_view,
 				node->children,
 				&children,
 				gtk_tree_path_get_depth (path));
-
-  /* Ensure we don't have a dangling pointer to a dead node */
-  ensure_unprelighted (tree_view);
 
   if (tree_view->priv->destroy_count_func)
     {
@@ -7494,6 +7541,21 @@ gtk_tree_view_real_collapse_row (GtkTreeView *tree_view,
 
   g_signal_emit (G_OBJECT (tree_view), tree_view_signals[ROW_COLLAPSED], 0, &iter, path);
 
+  /* now that we've collapsed all rows, we want to try to set the prelight
+   * again. To do this, we fake a motion event and send it to ourselves. */
+
+  if (gdk_window_at_pointer (&x, &y) == tree_view->priv->bin_window)
+    {
+      GdkEventMotion event;
+      event.window = tree_view->priv->bin_window;
+      event.x = x;
+      event.y = y;
+
+      /* despite the fact this isn't a real event, I'm almost positive it will
+       * never trigger a drag event.  maybe_drag is the only function that uses
+       * more than just event.x and event.y. */
+      gtk_tree_view_motion_bin_window (GTK_WIDGET (tree_view), &event);
+    }
   return TRUE;
 }
 
@@ -7523,7 +7585,7 @@ gtk_tree_view_collapse_row (GtkTreeView *tree_view,
 				&node))
     return FALSE;
 
-  if (node->children == NULL)
+  if (tree == NULL || node->children == NULL)
     return FALSE;
 
   return gtk_tree_view_real_collapse_row (tree_view, path, tree, node);

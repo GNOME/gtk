@@ -273,7 +273,7 @@ gtk_list_store_new (gint n_columns,
       GType type = va_arg (args, GType);
       if (! _gtk_tree_data_list_check_type (type))
 	{
-	  g_warning ("%s: Invalid type %s passed to gtk_list_store_new_with_types\n", G_STRLOC, g_type_name (type));
+	  g_warning ("%s: Invalid type %s passed to gtk_list_store_new\n", G_STRLOC, g_type_name (type));
 	  g_object_unref (G_OBJECT (retval));
 	  return NULL;
 	}
@@ -312,7 +312,7 @@ gtk_list_store_newv (gint   n_columns,
     {
       if (! _gtk_tree_data_list_check_type (types[i]))
 	{
-	  g_warning ("%s: Invalid type %s passed to gtk_list_store_new_with_types\n", G_STRLOC, g_type_name (types[i]));
+	  g_warning ("%s: Invalid type %s passed to gtk_list_store_newv\n", G_STRLOC, g_type_name (types[i]));
 	  g_object_unref (G_OBJECT (retval));
 	  return NULL;
 	}
@@ -365,7 +365,7 @@ gtk_list_store_set_column_type (GtkListStore *list_store,
   g_return_if_fail (column >=0 && column < list_store->n_columns);
   if (!_gtk_tree_data_list_check_type (type))
     {
-      g_warning ("%s: Invalid type %s passed to gtk_list_store_new_with_types\n", G_STRLOC, g_type_name (type));
+      g_warning ("%s: Invalid type %s passed to gtk_list_store_set_column_type\n", G_STRLOC, g_type_name (type));
       return;
     }
 
