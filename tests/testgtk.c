@@ -10685,11 +10685,11 @@ layout_expose_handler (GtkWidget *widget, GdkEventExpose *event)
   
   layout = GTK_LAYOUT (widget);
 
-  imin = (layout->xoffset + event->area.x) / 10;
-  imax = (layout->xoffset + event->area.x + event->area.width + 9) / 10;
+  imin = (event->area.x) / 10;
+  imax = (event->area.x + event->area.width + 9) / 10;
 
-  jmin = (layout->yoffset + event->area.y) / 10;
-  jmax = (layout->yoffset + event->area.y + event->area.height + 9) / 10;
+  jmin = (event->area.y) / 10;
+  jmax = (event->area.y + event->area.height + 9) / 10;
 
   gdk_window_clear_area (widget->window,
 			 event->area.x, event->area.y,
@@ -10701,7 +10701,7 @@ layout_expose_handler (GtkWidget *widget, GdkEventExpose *event)
 	gdk_draw_rectangle (layout->bin_window,
 			    widget->style->black_gc,
 			    TRUE,
-			    10*i - layout->xoffset, 10*j - layout->yoffset, 
+			    10*i, 10*j, 
 			    1+i%10, 1+j%10);
   
   return TRUE;

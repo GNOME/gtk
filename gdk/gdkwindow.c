@@ -2637,7 +2637,7 @@ GdkWindow*
 gdk_window_at_pointer (gint *win_x,
 		       gint *win_y)
 {
-  return current_pointer_hooks->window_at_pointer (win_x, win_y);
+  return current_pointer_hooks->window_at_pointer (NULL, win_x, win_y);
 }
 
 /**

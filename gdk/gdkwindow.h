@@ -198,13 +198,18 @@ struct _GdkGeometry
   GdkGravity win_gravity;
 };
 
+/* Dummy typedef for placeholder in GdkPointerHooks.window_at_pointer
+ */
+typedef struct _GdkScreen GdkScreen;
+
 struct _GdkPointerHooks 
 {
   GdkWindow* (*get_pointer)       (GdkWindow	   *window,
 			           gint	           *x,
 			           gint   	   *y,
 			           GdkModifierType *mask);
-  GdkWindow* (*window_at_pointer) (gint            *win_x,
+  GdkWindow* (*window_at_pointer) (GdkScreen       *screen, /* unused for now*/
+                                   gint            *win_x,
                                    gint            *win_y);
 };
 

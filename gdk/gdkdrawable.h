@@ -135,6 +135,8 @@ struct _GdkDrawableClass
   void         (*_gdk_reserved2) (void);
   void         (*_gdk_reserved3) (void);
   void         (*_gdk_reserved4) (void);
+  void         (*_gdk_reserved5) (void);
+  void         (*_gdk_reserved6) (void);
 };
 
 GType           gdk_drawable_get_type     (void);

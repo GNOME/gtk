@@ -1882,8 +1882,9 @@ _gdk_windowing_window_get_pointer (GdkWindow       *window,
 }
 
 GdkWindow*
-_gdk_windowing_window_at_pointer (gint *win_x,
-				  gint *win_y)
+_gdk_windowing_window_at_pointer (GdkScreen *screen,
+				  gint      *win_x,
+				  gint      *win_y)
 {
   GdkWindow *window;
   POINT point, pointc;

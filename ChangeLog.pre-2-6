@@ -1,3 +1,16 @@
+Sat Nov 17 21:07:46 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkenums.h: Include glib-object.h instead of
+	gobject/gsignal.h
+
+	* gdk/{gdkinternals.h,gdkwindow.c,gdkwindow.[ch],
+	  x11,{fb,win32,x11/gdkwindow-*.c}: Add a dummy GdkScreen
+	argument to the window_at_pointer() field of
+	GdkPointerHooks. (Patch from Erwann Chenede)
+
+	* gdk/gdkdrawable.h (struct _GdkDrawableClass ): Up
+	to 6 pointers.
+
 2001-11-17  Matt Wilson  <msw@redhat.com>
 
 	* gtk/gtkenums.h: must include glib-object.h only

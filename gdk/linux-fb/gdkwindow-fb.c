@@ -1686,8 +1686,9 @@ _gdk_windowing_window_get_pointer (GdkWindow       *window,
 }
 
 GdkWindow*
-_gdk_windowing_window_at_pointer (gint *win_x,
-				  gint *win_y)
+_gdk_windowing_window_at_pointer (GdkScreen *screen,
+				  gint      *win_x,
+				  gint      *win_y)
 {
   gint rx, ry;
   GdkWindow *retval = gdk_window_get_pointer (NULL, win_x, win_y, NULL);
