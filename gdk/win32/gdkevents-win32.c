@@ -2178,7 +2178,7 @@ gdk_event_translate (GdkDisplay *display,
 			 decode_key_lparam (msg->lParam)));
 
       /* If posted without us having keyboard focus, ignore */
-      if (!(msg->lParam & 0x20000000))
+      if (msg->wParam != VK_F10 && !(HIWORD (msg->lParam) & KF_ALTDOWN))
 	break;
 
       /* Let the system handle Alt-Tab, Alt-Enter and Alt-F4 */
@@ -2209,9 +2209,9 @@ gdk_event_translate (GdkDisplay *display,
 			 msg->wParam,
 			 decode_key_lparam (msg->lParam)));
 
-      ignore_wm_char = TRUE;
-
     keyup_or_down:
+
+      ignore_wm_char = TRUE;
 
       event->key.window = window;
 
@@ -2458,7 +2458,7 @@ gdk_event_translate (GdkDisplay *display,
       if (!propagate (&window, msg,
 		      k_grab_window, k_grab_owner_events, GDK_ALL_EVENTS_MASK,
 		      doesnt_want_key))
-	  break;
+	break;
       ASSIGN_WINDOW (window);
 
       is_altgr_key = FALSE;

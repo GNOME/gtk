@@ -1,3 +1,11 @@
+2002-09-25  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/win32/gdkevents-win32.c (gdk_event_translate):
+	WM_SYSKEYDOWN, WM_SYSKEYUP: Need to handle F10 specially here in
+	order to be able to handle it normally in the application. Set
+	ignore_wm_char also always when handling WM_SYSKEY{DOWN,UP}, this
+	way we can generate GDK events also for Alt-Fn keys, for instance.
+
 2002-09-24  Matthias Clasen  <maclas@gmx.de>
 
 	* gdk/x11/gdkx.h: Add a missing ; to make things compile.
