@@ -1447,6 +1447,7 @@ gtk_label_ensure_layout (GtkLabel *label)
 	      
 	      pango_layout_set_width (label->layout, width);
 	      pango_layout_get_extents (label->layout, NULL, &logical_rect);
+	      width = logical_rect.width;
 	      height = logical_rect.height;
 	      
 	      /* Unfortunately, the above may leave us with a very unbalanced looking paragraph,
@@ -1465,7 +1466,7 @@ gtk_label_ensure_layout (GtkLabel *label)
 		      pango_layout_get_extents (label->layout, NULL, &logical_rect);
 		      
 		      if (logical_rect.height <= height)
-			width = perfect_width;
+			width = logical_rect.width;
 		      else
 			{
 			  gint mid_width = (perfect_width + width) / 2;
@@ -1476,7 +1477,7 @@ gtk_label_ensure_layout (GtkLabel *label)
 			      pango_layout_get_extents (label->layout, NULL, &logical_rect);
 			      
 			      if (logical_rect.height <= height)
-				width = mid_width;
+				width = logical_rect.width;
 			    }
 			}
 		    }

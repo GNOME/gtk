@@ -148,3 +148,13 @@ If the current value is displayed as a string next to the slider.
 The position in which the current value is displayed.
 </para>
 
+<!-- ##### ARG GtkScale:slider-length ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkScale:value-spacing ##### -->
+<para>
+
+</para>
+

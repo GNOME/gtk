@@ -201,3 +201,8 @@ submenu. For normal applications, the relevant signal is "activate".
 @menuitem: the object which received the signal.
 @arg1: 
 
+<!-- ##### ARG GtkMenuItem:selected-shadow-type ##### -->
+<para>
+
+</para>
+

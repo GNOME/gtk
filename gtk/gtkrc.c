@@ -299,9 +299,9 @@ gtk_rc_make_default_dir (const gchar *type)
 
   var = g_getenv ("GTK_EXE_PREFIX");
   if (var)
-    path = g_build_filename (var, "lib", "gtk-2.0", type, GTK_BINARY_VERSION, NULL);
+    path = g_build_filename (var, "lib", "gtk-2.0", GTK_BINARY_VERSION, type, NULL);
   else
-    path = g_build_filename (GTK_LIBDIR, "gtk-2.0", type, GTK_BINARY_VERSION, NULL);
+    path = g_build_filename (GTK_LIBDIR, "gtk-2.0", GTK_BINARY_VERSION, type, NULL);
 
   return path;
 }
@@ -367,6 +367,16 @@ gtk_rc_get_theme_dir (void)
   return path;
 }
 
+/**
+ * gtk_rc_get_module_dir:
+ * 
+ * Returns a directory in which GTK+ looks for theme engines.
+ * For full information about the search for theme engines,
+ * see the docs for <envvar>GTK_PATH</envvar> in
+ * <xref linkend="gtk-running">.
+ * 
+ * return value: the directory. (Must be freed with g_free())
+ **/
 gchar *
 gtk_rc_get_module_dir (void)
 {

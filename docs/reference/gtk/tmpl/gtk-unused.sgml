@@ -1027,12 +1027,6 @@ after other user handlers and the default handler.
 @GTK_FILL_X: 
 @GTK_FILL_Y: 
 
-<!-- ##### ARG GtkPaned:handle-size ##### -->
-<para>
-
-</para>
-
-
 <!-- ##### STRUCT GtkPatternSpec ##### -->
 <para>
 
@@ -1127,12 +1121,6 @@ and its unique identifying integer.
 @return_val: 
 @nparams: 
 @params: 
-
-<!-- ##### ARG GtkSpinButton:shadow-type ##### -->
-<para>
-the type of border that surrounds the arrows of a spin button.
-</para>
-
 
 <!-- ##### STRUCT GtkStatusbarMsg ##### -->
 <para>

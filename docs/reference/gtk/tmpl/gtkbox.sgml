@@ -382,3 +382,28 @@ how to allocate space for children, equally or variably.  Refers to
 the <structfield>homogeneous</structfield> field of #GtkBox-struct.
 </para>
 
+<!-- ##### ARG GtkBox:expand ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkBox:fill ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkBox:padding ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkBox:pack-type ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkBox:position ##### -->
+<para>
+
+</para>
+

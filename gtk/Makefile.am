@@ -573,6 +573,8 @@ install-data-local: install-ms-lib install-libtool-import-lib
 
 uninstall-local: uninstall-ms-lib uninstall-libtool-import-lib
 	rm -f $(DESTDIR)$(datadir)/themes/Default/gtk-2.0/gtkrc
+	rm -f $(DESTDIR)$(datadir)/themes/Default/gtk-2.0-key/gtkrc
+	rm -f $(DESTDIR)$(datadir)/themes/Emacs/gtk-2.0-key/gtkrc
 
 DEPS = $(gtktargetlib) $(top_builddir)/gdk-pixbuf/libgdk_pixbuf-$(GTK_API_VERSION).la $(top_builddir)/gdk/$(gdktargetlib)
 

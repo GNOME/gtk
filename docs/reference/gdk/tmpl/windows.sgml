@@ -28,7 +28,6 @@ The type #GdkDrawable refers generically to any of
 these types.
 </para>
 
-@user_data: used to store the #GtkWidget associated with this window
 
 <!-- ##### ENUM GdkWindowType ##### -->
 <para>
@@ -237,15 +236,6 @@ corresponding flag in #GdkWindowAttributesType.
 @GDK_WA_VISUAL: Honor the visual field
 @GDK_WA_WMCLASS: Honor the wmclass_class and wmclass_name fields
 @GDK_WA_NOREDIR: Honor the override_redirect field
-
-<!-- ##### STRUCT GdkScreen ##### -->
-<para>
-This is a currently just a placeholder typedef for the first argument of 
-the @window_at_pointer function in #GdkPointerHooks. It will be used
-when GDK gets multihead support. 
-</para>
-
-@parent_instance: 
 
 <!-- ##### FUNCTION gdk_window_new ##### -->
 <para>

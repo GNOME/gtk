@@ -473,3 +473,8 @@ how a spin button should be updated.
 reads the current value, or sets a new value.
 </para>
 
+<!-- ##### ARG GtkSpinButton:shadow-type ##### -->
+<para>
+the type of border that surrounds the arrows of a spin button.
+</para>
+

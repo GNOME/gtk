@@ -276,3 +276,43 @@ Sets or retrieves the number of pixels of space between rows.
 Whether each cell in the table should be the same size or not.
 </para>
 
+<!-- ##### ARG GtkTable:left-attach ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTable:right-attach ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTable:top-attach ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTable:bottom-attach ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTable:x-options ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTable:y-options ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTable:x-padding ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTable:y-padding ##### -->
+<para>
+
+</para>
+

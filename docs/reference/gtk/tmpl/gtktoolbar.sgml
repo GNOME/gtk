@@ -386,3 +386,28 @@ Should be used if you wish to perform an action when ever the style of a toolbar
 
 </para>
 
+<!-- ##### ARG GtkToolbar:shadow-type ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkToolbar:space-style ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkToolbar:button-relief ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkToolbar:internal-padding ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkToolbar:space-size ##### -->
+<para>
+
+</para>
+

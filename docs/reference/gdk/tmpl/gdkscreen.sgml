@@ -24,8 +24,9 @@ form a large screen area.
 
 <!-- ##### STRUCT GdkScreen ##### -->
 <para>
-The <structname>GdkScreen</structname> struct is the GDK representation of a
- physical screen. All its fields are private and should not be accessed directly. 
+This is a currently just a placeholder typedef for the first argument of 
+the @window_at_pointer function in #GdkPointerHooks. It will be used
+when GDK gets multihead support. 
 </para>
 
 

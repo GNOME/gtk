@@ -152,10 +152,10 @@ Looks up a given target in a #GtkTargetList.
 <para>
 </para>
 
-@widget:
-@selection:
-@time:
-@Returns:
+@widget: 
+@selection: 
+@time: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gtk_selection_owner_set_for_display ##### -->

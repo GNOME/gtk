@@ -138,3 +138,8 @@ Is emitted whenever a new message gets pushed onto a statusbar's stack.
 @context_id: the context id of the relevant message/statusbar.
 @text: the message that was pushed.
 
+<!-- ##### ARG GtkStatusbar:shadow-type ##### -->
+<para>
+
+</para>
+

@@ -32,7 +32,6 @@ drawn onto. This can be a #GdkPixmap, a #GdkBitmap,
 or a #GdkWindow.
 </para>
 
-@user_data: 
 
 <!-- ##### FUNCTION gdk_drawable_ref ##### -->
 <para>

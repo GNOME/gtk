@@ -145,8 +145,8 @@ Sets a default path for the file requestor. If @filename includes a directory pa
 <para>
 </para>
 
-@filesel:
-@Returns:
+@filesel: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gtk_file_selection_complete ##### -->

@@ -1,3 +1,26 @@
+Tue May 14 16:44:09 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtklabel.c (gtk_label_ensure_layout): Set
+	the width of the layout to the actual wrap width 
+	(our requisition) not the width we set when calculating
+	the width. This results in the lines being justified
+	within the correct area. (#79157, Anders Carlsson)
+
+	* gtk/gtkaccelgroup.c gtk/gtkmarshelers.list: Corrected 
+	registered parameter types of "accel_activate" and 
+	"accel_changed" signals. (Patch from Murray Cumming, #78798)
+	
+	* gtk/gtkrc.c (gtk_rc_make_default_dir): Switch
+	binary-version and type to correspond to the 
+	current ordering in _gtk_get_module_path.
+	(#78746, Sergey Kuzminov) 
+
+	* gtk/gtkrc.c (gtk_rc_get_module_dir): Add docs
+	pointing to the GTK_PATH documentation.
+
+	* gtk/Makefile.am (uninstall-local): Delete 
+	key themes as well. (#81286, Kristian Rietveld.)
+
 Tue May 14 15:40:49 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/x11/gdkwindow-{linux-fb,win32,x11.c} (gdk_window_set_back_pixmap):

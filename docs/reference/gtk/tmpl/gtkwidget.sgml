@@ -1320,6 +1320,26 @@ This function is not useful for applications.
 @class: 
 
 
+<!-- ##### FUNCTION gtk_widget_class_find_style_property ##### -->
+<para>
+
+</para>
+
+@klass: 
+@property_name: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_widget_class_list_style_properties ##### -->
+<para>
+
+</para>
+
+@klass: 
+@n_properties: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gtk_widget_region_intersect ##### -->
 <para>
 
@@ -2159,6 +2179,41 @@ a widget changes from un-anchored to anchored or vice-versa.
 </para>
 
 <!-- ##### ARG GtkWidget:extension-events ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkWidget:focus-line-pattern ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkWidget:interior-focus ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkWidget:focus-padding ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkWidget:cursor-aspect-ratio ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkWidget:cursor-color ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkWidget:focus-line-width ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkWidget:secondary-cursor-color ##### -->
 <para>
 
 </para>

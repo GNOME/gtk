@@ -249,3 +249,23 @@ The #GtkReliefStyle as outlined in gtk_button_set_relief().
 
 </para>
 
+<!-- ##### ARG GtkButton:default-border ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkButton:default-outside-border ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkButton:child-displacement-y ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkButton:child-displacement-x ##### -->
+<para>
+
+</para>
+

@@ -37,12 +37,6 @@ It is an opaque structure with no user-visible
 elements.
 </para>
 
-@parent_instance: 
-@clip_x_origin: 
-@clip_y_origin: 
-@ts_x_origin: 
-@ts_y_origin: 
-@colormap: 
 
 <!-- ##### STRUCT GdkGCValues ##### -->
 <para>

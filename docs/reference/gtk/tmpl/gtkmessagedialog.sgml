@@ -112,3 +112,8 @@ then call gtk_dialog_add_buttons().
 
 </para>
 
+<!-- ##### ARG GtkMessageDialog:message-border ##### -->
+<para>
+
+</para>
+

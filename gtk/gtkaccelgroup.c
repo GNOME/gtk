@@ -119,15 +119,15 @@ gtk_accel_group_class_init (GtkAccelGroupClass *class)
 					G_SIGNAL_DETAILED,
 					0,
 					accel_activate_accumulator, NULL,
-					_gtk_marshal_BOOLEAN__OBJECT_UINT_UINT,
-					G_TYPE_BOOLEAN, 3, G_TYPE_OBJECT, G_TYPE_UINT, G_TYPE_UINT);
+					_gtk_marshal_BOOLEAN__OBJECT_UINT_FLAGS,
+					G_TYPE_BOOLEAN, 3, G_TYPE_OBJECT, G_TYPE_UINT, GDK_TYPE_MODIFIER_TYPE);
   signal_accel_changed = g_signal_new ("accel_changed",
 				       G_OBJECT_CLASS_TYPE (class),
 				       G_SIGNAL_RUN_FIRST | G_SIGNAL_DETAILED,
 				       G_STRUCT_OFFSET (GtkAccelGroupClass, accel_changed),
 				       NULL, NULL,
-				       _gtk_marshal_VOID__UINT_UINT_BOXED,
-				       G_TYPE_NONE, 3, G_TYPE_UINT, G_TYPE_UINT, G_TYPE_CLOSURE);
+				       _gtk_marshal_VOID__UINT_FLAGS_BOXED,
+				       G_TYPE_NONE, 3, G_TYPE_UINT, GDK_TYPE_MODIFIER_TYPE, G_TYPE_CLOSURE);
 }
 
 static void

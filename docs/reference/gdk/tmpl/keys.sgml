@@ -89,8 +89,6 @@ state; the second phase is to look up the keycode/group/level triplet
 in the keymap and see what keyval it corresponds to.
 </para>
 
-@parent_instance: 
-@display: 
 
 <!-- ##### STRUCT GdkKeymapKey ##### -->
 <para>
