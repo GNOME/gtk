@@ -1,3 +1,7 @@
+Thu Aug 30 08:27:37 2001  Matthias Clasen  <matthiasc@poet.de>
+
+	* io-png.c (png_row_callback): Check that row_num is valid.
+
 Tue Aug 28 21:05:26 2001  Matthias Clasen  <matthiasc@poet.de>
 
 	* io-bmp.c (OneLine): Emit area_updated signal with proper
