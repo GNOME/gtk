@@ -5,7 +5,9 @@
 <!-- Title information -->
 
 <title>GTK+ FAQ
-<author>Shawn T. Amundson, <tt/amundson@cs.umn.edu/
+<author>Shawn T. Amundson, <tt/amundson@gimp.org/
+<author>Nathan Froyd, <tt/maestrox@geocities.com/
+<author>Tony Gale, <tt/gale@minotaur.dra.hmg.gb/
 <date>July 31, 1997
 <abstract>
 This document is intended to answer questions that are likely to be 
@@ -77,14 +79,6 @@ enhancement to the original gtk that adds object oriented features."
 </quote>
 
 <!-- ----------------------------------------------------------------- -->
-<sect1>What is the policy on incorporating new widgets into the gtk library? 
-<p>
-This is up to the authors, so you will have to ask them once you
-are done with your widget.  As a general guideline, widgets that are 
-generally useful, work, and are not a disgrace to the widget set will 
-gladly be included.
-
-<!-- ----------------------------------------------------------------- -->
 <sect1>Does the G in GTK stand for General, Gimp, or GNU?
 <p>
 Peter Mattis informed the gtk mailing list that:
@@ -92,30 +86,6 @@ Peter Mattis informed the gtk mailing list that:
 "I think the last time Spencer and I talked about it we decided on 
 GTK = Gimp ToolKit. But I don't know for sure. Its definately not
 GNU, though."
-</quote>
-<!-- ----------------------------------------------------------------- -->
-<sect1>Why use g_print, g_malloc, g_strdup and fellow glib functions ?  
-<P>
-Thanks to Tim Janik who wrote to gtk-list: (slightly modified)
-<quote>
-Regarding g_malloc(), g_free() and siblings, these functions are much safer
-than thier libc equivalences.  For example, g_free() just returns if called 
-with NULL.  Also, if USE_DMALLOC is defined, the definition for these 
-functions changes (in glib.h) to use MALLOC(), FREE() etc...  If MEM_PROFILE
-or MEM_CHECK are defined, there are even small statistics made counting
-the used block sizes (shown by g_mem_profile() / g_mem_check()).
-<p>
-Considering the fact that glib provides an interface for memory chunks
-to save space if you have lots of blocks that are always the same size
-and to mark them ALLOC_ONLY if needed, it is just straight forward to
-create a small saver (debug able) wrapper around the normal malloc/free
-stuff as well - just like gdk covers Xlib. ;)
-<p>
-Using g_error() and g_warning() inside of applications like the GIMP
-that fully rely on gtk even gives the opportunity to pop up a window
-showing the messages inside of a gtk window with your own handler
-(by using g_set_error_handler()) along the lines of gtk_print()
-(inside of gtkmain.c).
 </quote>
 
 <!-- ----------------------------------------------------------------- -->
@@ -136,25 +106,13 @@ Some applications which use GTK+ are:
 </itemize>
 
 <!-- ----------------------------------------------------------------- -->
-<sect1>Is anyone working on C++ bindings?
-<P>
-Yes!  Elliot Lee has started gtk--, and has released a couple versions
-already.  So far so good!   You can find these bindings at 
-<url url="ftp://ftp.redhat.com/sopwith">.  
-
-<!-- ----------------------------------------------------------------- -->
-<sect1>Is anyone working on Guile bindings?
+<sect1>How to get help with GTK+/Is there a mailing list and archive?
 <p>
-Yes, Peter Mattis.  Here is what he said:
-
-<quote>
-"Btw, guile-1.1 is on prep.ai.mit.edu if anyone didn't know. Guile is 
-an R4RS scheme interpreter and extension library. I've
-already done scheme bindings for gtk using SIOD, but SIOD isn't R4RS
-(the scheme standard) compatible. And the new bindings will be much
-much better."
-</quote>
-
+The best place is either the docs that come with GTK+ or the mailing list,
+&ltgtk-list@redhat.com&gt. If you need to check the archives, you can find them at:
+<verb>
+http://www.redhat.com/linux-info/gtk/gtk-list/index.html
+</verb>
 
 <!-- ----------------------------------------------------------------- -->
 <sect1>The gtk-list hasn't had any traffic for days, is it dead?
@@ -164,22 +122,102 @@ No, everyone's just busy coding.
 <!-- ----------------------------------------------------------------- -->
 <sect1>Where is the documentation for GTK+?
 <p>
-Look in the GTK distribution's doc/ directory.  In addition, if you
-are on the web, you cat get it by going to 
-<url url="http://www.cs.umn.edu/~amundson/gtk/docs/">, where they
-are already converted to HTML format.
-
-You can download the HTML to your home machine with your browser.  There
-are only four files in these docs:
+Look in the GTK distribution's doc/ directory. If you have World Wide
+Web access, you can view them at:
 <verb>
-http://www.cs.umn.edu/~amundson/gtk/docs/gtk_toc.html
-http://www.cs.umn.edu/~amundson/gtk/docs/gtk.html
-http://www.cs.umn.edu/~amundson/gtk/docs/gdk_toc.html
-http://www.cs.umn.edu/~amundson/gtk/docs/gdk.html
+http://www.gimp.org/gtk/
 </verb>
 
-This is the only place to get them in html that I know of.  I do not have
-time to gzip them, but they are not so huge anyway. (I'm lazy too!)
+<!-- ***************************************************************** -->
+<sect>How to find, configure, install, and troubleshoot GTK+
+
+<!-- ***************************************************************** -->
+<sect1>What do I need to run GTK+?
+<p>
+To compile GTK+, all you need is a C compiler (gcc) and the X Window System
+and associated libraries on your system.
+
+<sect1>Where can I get GTK+?
+<p>
+The canonical site is:
+<verb>
+ftp://ftp.gimp.org/pub/gtk
+</verb>
+Of course, any mirrors of ftp.gimp.org should have the latest version, too.
+
+<sect1>How do I configure/compile GTK+?
+<p>
+Generally, all you will need to do is issue the commands:
+<verb>
+./configure
+make
+</verb>
+in the gtk+-version/ directory.
+
+<sect1>I've compiled and installed GTK+, but I can't get any programs to link
+with it!
+<p>
+This problem is most often encountered when compiling something like the GIMP
+on a RedHat Linux machine.  Generally, the compiler will complain about an
+'unresolved symbol'.  You want to edit /etc/ld.so.conf to include /usr/local/lib,
+so it looks something like:
+<verb>
+/usr/X11R6/lib
+/usr/local/lib
+</verb>
+Then you need to run /sbin/ldconfig as root. Now (assuming you have a RedHat
+system), issue the command
+<verb>
+rpm -e gtk gtk-devel
+</verb>
+You may also want to remove the packages that depend on gtk (rpm will tell you
+which ones they are).  If you don't have a RedHat Linux system, check to make sure
+that neither <verb>/usr/lib</verb> or <verb>/usr/local/lib</verb> contain any of
+the libraries libgtk, libgdk, libglib, or libgck.  If they do exist, remove them
+and reinstall gtk+.
+
+<!-- ***************************************************************** -->
+<sect>Development of GTK+
+
+<sect1>When will it reach version 1.0?
+
+<sect1>How can I contribute to GTK+?
+<p>
+It's simple.  If something doesn't work like you think it should in a program,
+check the documentation to make sure you're not missing something.  If it is a true
+bug, track it down in the GTK+ source, change it, and then upload the patchfile to:
+<verb>
+ftp://ftp.gimp.org/pub/incoming
+</verb>
+along with a README file.  Make sure you follow the naming conventions!
+
+<sect1>What is the policy on incorporating new widgets into the library?
+<p>
+This is up to the authors, so you will have to ask them once you
+are done with your widget.  As a general guideline, widgets that are 
+generally useful, work, and are not a disgrace to the widget set will 
+gladly be included.
+
+<!-- ----------------------------------------------------------------- -->
+<sect1>Is anyone working on C++ bindings?
+<p>
+Yes, there is a C++ wrapper for GTK+ called gtk--. You can find the home page at:
+<verb>
+http://www.cs.tut.fi/~p150650/gtk/gtk--.html
+</verb>
+The FTP site is:
+<verb>
+ftp://ftp.gimp.org/pub/gtk/gtk--/
+</verb>
+
+<sect1>Is anyone working on Guile bindings?
+<p>
+Yes, the home page is at:
+<verb>
+http://www.ping.de/sites/zagadka/guile-gtk/
+</verb>
+By the way, Guile is the GNU Project's implemention of R4RS Scheme (the
+standard). If you like Scheme, you may want to take a look at this.
 
 <!-- ***************************************************************** -->
 <sect>Widgets
@@ -437,16 +475,45 @@ gtk_widget_show(menuitem);
 </verb></tscreen>
 
 
+<sect>About glib
+
+<sect1>What is glib?
+
+<!-- ----------------------------------------------------------------- -->
+<sect1>Why use g_print, g_malloc, g_strdup and fellow glib functions ?  
+<P>
+Thanks to Tim Janik who wrote to gtk-list: (slightly modified)
+<quote>
+Regarding g_malloc(), g_free() and siblings, these functions are much safer
+than thier libc equivalences.  For example, g_free() just returns if called 
+with NULL.  Also, if USE_DMALLOC is defined, the definition for these 
+functions changes (in glib.h) to use MALLOC(), FREE() etc...  If MEM_PROFILE
+or MEM_CHECK are defined, there are even small statistics made counting
+the used block sizes (shown by g_mem_profile() / g_mem_check()).
+<p>
+Considering the fact that glib provides an interface for memory chunks
+to save space if you have lots of blocks that are always the same size
+and to mark them ALLOC_ONLY if needed, it is just straight forward to
+create a small saver (debug able) wrapper around the normal malloc/free
+stuff as well - just like gdk covers Xlib. ;)
+<p>
+Using g_error() and g_warning() inside of applications like the GIMP
+that fully rely on gtk even gives the opportunity to pop up a window
+showing the messages inside of a gtk window with your own handler
+(by using g_set_error_handler()) along the lines of gtk_print()
+(inside of gtkmain.c).
+</quote>
+
 <!-- ***************************************************************** -->
 <sect>Contributions and Maintainer 
 <p>
-If you would like to make a contribution to the FAQ, send me an e-mail
-message with the exact text you think should be included (question and
+If you would like to make a contribution to the FAQ, send either one of us
+an e-mail message with the exact text you think should be included (question and
 answer).  With your help, this document can grow and become more useful!
 
-This document is maintained by Shawn T. Amundson &lt
-amundson@cs.umn.edu&gt
-.
+This document is maintained by Nathan Froyd &ltmaestrox@geocities.com&gt
+and Tony Gale &ltgale@minotaur.dra.hmg.gb&gt.  Previously, Shawn T. Amundson,
+&ltamundson@gimp.org&gt took care of it.
 
 There is no guarentee that this document lives up to its intended
 purpose.  This is simply provided as a free resource.  As such,

@@ -1,3 +1,8 @@
+Mon Jan 26 17:12:12 CST 1998 Shawn T. Amundson <amundson@gimp.org>
+
+	* docs/gtkfaq.sgml: additions/changes from new FAQ maintainers
+          Nathan Froyd and Tony Gale.
+
 Mon Jan 26 16:54:02 CST 1998 Shawn T. Amundson <amundson@gimp.org>
 
 	* docs/gtk.texi: additions/changes from Gregory A. McLean
