@@ -1104,15 +1104,7 @@ static void
 gtk_notebook_size_allocate (GtkWidget     *widget,
 			    GtkAllocation *allocation)
 {
-  GtkNotebook *notebook;
-  GtkNotebookPage *page;
-  GtkAllocation child_allocation;
-  GList *children;
-
-  g_return_if_fail (GTK_IS_NOTEBOOK (widget));
-  g_return_if_fail (allocation != NULL);
-
-  notebook = GTK_NOTEBOOK (widget);
+  GtkNotebook *notebook = GTK_NOTEBOOK (widget);
 
   widget->allocation = *allocation;
   if (GTK_WIDGET_REALIZED (widget))
@@ -1127,10 +1119,15 @@ gtk_notebook_size_allocate (GtkWidget     *widget,
 
   if (notebook->children)
     {
-      child_allocation.x = GTK_CONTAINER (widget)->border_width;
-      child_allocation.y = GTK_CONTAINER (widget)->border_width;
-      child_allocation.width = MAX (1, allocation->width - child_allocation.x * 2);
-      child_allocation.height = MAX (1, allocation->height - child_allocation.y * 2);
+      gint border_width = GTK_CONTAINER (widget)->border_width;
+      GtkNotebookPage *page;
+      GtkAllocation child_allocation;
+      GList *children;
+      
+      child_allocation.x = widget->allocation.x + border_width;
+      child_allocation.y = widget->allocation.y + border_width;
+      child_allocation.width = MAX (1, allocation->width - border_width * 2);
+      child_allocation.height = MAX (1, allocation->height - border_width * 2);
 
       if (notebook->show_tabs || notebook->show_border)
 	{
@@ -2349,8 +2346,8 @@ gtk_notebook_paint (GtkWidget    *widget,
 
   x = widget->allocation.x + border_width;
   y = widget->allocation.y + border_width;
-  width = widget->allocation.width - x * 2;
-  height = widget->allocation.height - y * 2;
+  width = widget->allocation.width - border_width * 2;
+  height = widget->allocation.height - border_width * 2;
 
   if (notebook->show_border && (!notebook->show_tabs || !notebook->children))
     {
@@ -2637,13 +2634,14 @@ gtk_notebook_pages_allocate (GtkNotebook   *notebook)
   if (!notebook->show_tabs || !notebook->children || !notebook->cur_page)
     return;
 
-  child_allocation.x = container->border_width;
-  child_allocation.y = container->border_width;
+  child_allocation.x = widget->allocation.x + container->border_width;
+  child_allocation.y = widget->allocation.y + container->border_width;
 
   switch (notebook->tab_pos)
     {
     case GTK_POS_BOTTOM:
-      child_allocation.y = (allocation->height -
+      child_allocation.y = (widget->allocation.y +
+			    allocation->height -
 			    notebook->cur_page->requisition.height -
 			    container->border_width);
       /* fall through */
@@ -2652,7 +2650,8 @@ gtk_notebook_pages_allocate (GtkNotebook   *notebook)
       break;
       
     case GTK_POS_RIGHT:
-      child_allocation.x = (allocation->width -
+      child_allocation.x = (widget->allocation.x +
+			    allocation->width -
 			    notebook->cur_page->requisition.width -
 			    container->border_width);
       /* fall through */

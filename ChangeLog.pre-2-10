@@ -1,3 +1,11 @@
+Fri Nov 16 14:06:31 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtknotebook.c: Fix child allocations to be relative to 
+	widget position and some drawing bugs.
+
+	* gtk/gtkmenuitem.c (gtk_menu_item_paint): Fix problem
+	with reading uninitialized variable.
+
 Fri Nov 16 00:16:40 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/{gtkmenuitem.[ch],gtkcheckmenuitem.c,gtkimagemenuitem.c,

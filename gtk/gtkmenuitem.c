@@ -580,7 +580,7 @@ gtk_menu_item_paint (GtkWidget    *widget,
   GtkShadowType shadow_type;
   gint width, height;
   gint x, y;
-  gint border_width = GTK_CONTAINER (menu_item)->border_width;
+  gint border_width = GTK_CONTAINER (widget)->border_width;
 
   if (GTK_WIDGET_DRAWABLE (widget))
     {
