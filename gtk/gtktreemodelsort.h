@@ -48,7 +48,7 @@ struct _GtkTreeModelSort
   guint flags;
   GtkTreeModel *model;
   gint sort_col;
-  GValueCompareFunc *func;
+  GValueCompareFunc func;
 };
 
 struct _GtkTreeModelSortClass
@@ -74,7 +74,7 @@ struct _GtkTreeModelSortClass
 GtkType       gtk_tree_model_sort_get_type       (void);
 GtkTreeModel *gtk_tree_model_sort_new            (void);
 GtkTreeModel *gtk_tree_model_sort_new_with_model (GtkTreeModel      *model,
-						  GValueCompareFunc *func,
+						  GValueCompareFunc  func,
 						  gint               sort_col);
 void          gtk_tree_model_sort_set_model      (GtkTreeModelSort  *tree_model_sort,
 						  GtkTreeModel      *model);
