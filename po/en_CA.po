@@ -8,12 +8,12 @@ msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2004-03-16 14:27-0500\n"
-"PO-Revision-Date: 2004-03-07 22:43-0500\n"
-"Last-Translator: Alexander Winston <alexander.winston@comcast.net>\n"
+"PO-Revision-Date: 2004-03-24 01:26-0500\n"
+"Last-Translator: Adam Weinberger <adamw@gnome.org>\n"
 "Language-Team: English/Canada <adamw@FreeBSD.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
+"Content-Transfer-Encoding: 8bit"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:147 gdk-pixbuf/gdk-pixbuf-io.c:769
 #: gdk-pixbuf/gdk-pixbuf-io.c:902 tests/testfilechooser.c:192
@@ -143,11 +143,9 @@ msgid "Image pixel data corrupt"
 msgstr "Image pixel data corrupt"
 
 #: gdk-pixbuf/gdk-pixdata.c:403
-#, fuzzy, c-format
+#, c-format
 msgid "failed to allocate image buffer of %u byte"
-msgid_plural "failed to allocate image buffer of %u bytes"
-msgstr[0] "failed to allocate image buffer of %u byte"
-msgstr[1] "failed to allocate image buffer of %u byte"
+msgstr "failed to allocate image buffer of %u byte"
 
 #: gdk-pixbuf/io-ani.c:244
 msgid "Unexpected icon chunk in animation"
@@ -1033,19 +1031,16 @@ msgid "_Browse for other folders"
 msgstr "_Browse for other folders"
 
 #: gtk/gtkfilechooserdefault.c:3111
-#, fuzzy
 msgid "Save in _folder:"
-msgstr "Save in _Folder:"
+msgstr "Save in _folder:"
 
 #: gtk/gtkfilechooserdefault.c:3113
-#, fuzzy
 msgid "Create in _folder:"
-msgstr "Create _Folder"
+msgstr "Create in _folder:"
 
 #: gtk/gtkfilechooserdefault.c:3701
-#, fuzzy
 msgid "Can't change to folder because it isn't local"
-msgstr "Cannot change to the folder you specified as it is an invalid path."
+msgstr "Can't change to folder because it isn't local"
 
 #: gtk/gtkfilechooserdefault.c:4148
 #, c-format
@@ -1057,11 +1052,9 @@ msgid "Type name of new folder"
 msgstr "Type name of new folder"
 
 #: gtk/gtkfilechooserdefault.c:4794
-#, fuzzy, c-format
+#, c-format
 msgid "%d byte"
-msgid_plural "%d bytes"
-msgstr[0] "%d byte"
-msgstr[1] "%d byte"
+msgstr "%d byte"
 
 #: gtk/gtkfilechooserdefault.c:4796
 #, c-format
@@ -1298,7 +1291,7 @@ msgstr "(Empty)"
 #: gtk/gtkfilesystemunix.c:415
 #, c-format
 msgid "%s: %s"
-msgstr ""
+msgstr "%s: %s"
 
 #: gtk/gtkfilesystemunix.c:422 gtk/gtkfilesystemunix.c:613
 #: gtk/gtkfilesystemunix.c:1657 gtk/gtkfilesystemwin32.c:1176
@@ -1325,9 +1318,9 @@ msgid "Bookmark saving failed (%s)"
 msgstr "Bookmark saving failed (%s)"
 
 #: gtk/gtkfilesystemunix.c:1553
-#, fuzzy, c-format
+#, c-format
 msgid "error getting information for '%s'"
-msgstr "error getting information for '%s': %s"
+msgstr "error getting information for '%s'"
 
 #: gtk/gtkfilesystemwin32.c:950
 msgid "This file system does not support icons for everything"
@@ -1934,34 +1927,3 @@ msgstr "X Input Method"
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "Could not get information for file '%s': %s"
-
-#~ msgid "%d/%b/%Y"
-#~ msgstr "%d/%b/%Y"
-
-#~ msgid ""
-#~ "Could not go to the parent folder of %s:\n"
-#~ "%s"
-#~ msgstr ""
-#~ "Could not go to the parent folder of %s:\n"
-#~ "%s"
-
-#~ msgid "File name"
-#~ msgstr "File name"
-
-#~ msgid "Preview"
-#~ msgstr "Preview"
-
-#~ msgid "Up"
-#~ msgstr "Up"
-
-#~ msgid "Add"
-#~ msgstr "Add"
-
-#~ msgid "Remove"
-#~ msgstr "Remove"
-
-#~ msgid "_Filename:"
-#~ msgstr "_Filename:"
-
-#~ msgid "Current folder: %s"
-#~ msgstr "Current folder: %s"
