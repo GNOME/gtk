@@ -1297,9 +1297,19 @@ gdk_window_real_get_visual (GdkDrawable *drawable)
 static gint
 gdk_window_real_get_depth (GdkDrawable *drawable)
 {
+  gint depth;
+  
   g_return_val_if_fail (GDK_IS_WINDOW (drawable), 0);
 
-  return ((GdkWindowObject *)drawable)->depth;
+  depth = ((GdkWindowObject *)GDK_WINDOW (drawable))->depth;
+
+  if (depth == 0)
+    {
+      g_print ("0 depth for type %s\n", g_type_name (G_OBJECT_TYPE (drawable)));
+      G_BREAKPOINT ();
+    }
+
+  return depth;
 }
 
 static void
@@ -1477,7 +1487,7 @@ gdk_window_invalidate_rect   (GdkWindow    *window,
 	  GdkWindowObject *child = tmp_list->data;
 	  tmp_list = tmp_list->next;
 
-	  if (((GdkWindowObject *)child)->input_only)
+	  if (!((GdkWindowObject *)GDK_WINDOW (child))->input_only)
 	    {
               gint width, height;
 

@@ -87,7 +87,8 @@ _gdk_windowing_window_get_offsets (GdkWindow *window,
 				   gint      *x_offset,
 				   gint      *y_offset)
 {
-  GdkWindowImpl *impl = GDK_WINDOW_IMPL (((GdkWindowObject *) window)->impl);
+  GdkWindowImpl *impl =
+    GDK_WINDOW_IMPL (((GdkWindowObject *) GDK_WINDOW (window))->impl);
 
   *x_offset = impl->position_info.x_offset;
   *y_offset = impl->position_info.y_offset;
@@ -101,7 +102,8 @@ _gdk_window_init_position (GdkWindow *window)
   
   g_return_if_fail (GDK_IS_WINDOW (window));
 
-  impl = GDK_WINDOW_IMPL (((GdkWindowObject*)window)->impl);
+  impl =
+    GDK_WINDOW_IMPL (((GdkWindowObject*) GDK_WINDOW (window))->impl);
   
   gdk_window_compute_parent_pos (impl, &parent_pos);
   gdk_window_compute_position (impl, &parent_pos, &impl->position_info);
@@ -128,8 +130,8 @@ _gdk_window_move_resize_child (GdkWindow *window,
   g_return_if_fail (window != NULL);
   g_return_if_fail (GDK_IS_WINDOW (window));
 
-  impl = GDK_WINDOW_IMPL (((GdkWindowObject *) window)->impl);
-  obj = (GdkWindowObject *) window;
+  impl = GDK_WINDOW_IMPL (((GdkWindowObject *) GDK_WINDOW (window))->impl);
+  obj = (GdkWindowObject *) GDK_WINDOW (window);
   
   dx = x - obj->x;
   dy = y - obj->y;
@@ -279,7 +281,8 @@ gdk_window_compute_position (GdkWindowImpl      *window,
 
   g_return_if_fail (GDK_IS_WINDOW_IMPL (window));
 
-  wrapper = (GdkWindowObject *) GDK_DRAWABLE_IMPL (window)->wrapper;
+  wrapper =
+    (GdkWindowObject *) GDK_WINDOW (GDK_DRAWABLE_IMPL (window)->wrapper);
   
   info->big = FALSE;
   
@@ -379,7 +382,8 @@ gdk_window_compute_parent_pos (GdkWindowImpl      *window,
 
   g_return_if_fail (GDK_IS_WINDOW_IMPL (window));
 
-  wrapper = (GdkWindowObject *)GDK_DRAWABLE_IMPL (window)->wrapper;
+  wrapper =
+    (GdkWindowObject *) GDK_WINDOW (GDK_DRAWABLE_IMPL (window)->wrapper);
   
   parent_pos->x = 0;
   parent_pos->y = 0;
@@ -416,8 +420,8 @@ gdk_window_compute_parent_pos (GdkWindowImpl      *window,
 
       parent_pos->x += parent->x;
       parent_pos->y += parent->y;
-      parent_pos->x11_x += window->position_info.x;
-      parent_pos->x11_y += window->position_info.y;
+      parent_pos->x11_x += impl->position_info.x;
+      parent_pos->x11_y += impl->position_info.y;
 
       clip_xoffset += parent->x;
       clip_yoffset += parent->y;

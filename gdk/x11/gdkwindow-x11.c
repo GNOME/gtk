@@ -449,6 +449,7 @@ gdk_window_new (GdkWindow     *parent,
   else
     {
       depth = 0;
+      private->depth = 0;
       class = InputOnly;
       private->input_only = TRUE;
       draw_impl->colormap = NULL;

@@ -336,9 +336,16 @@ gdk_pixmap_real_get_visual (GdkDrawable *drawable)
 static gint
 gdk_pixmap_real_get_depth (GdkDrawable *drawable)
 {
+  gint depth;
+  
   g_return_val_if_fail (GDK_IS_PIXMAP (drawable), 0);
 
-  return ((GdkPixmapObject *)drawable)->depth;
+  depth = ((GdkPixmapObject *)GDK_PIXMAP (drawable))->depth;
+
+  if (depth == 0)
+    g_print ("0 depth for type %s\n", g_type_name (G_OBJECT_TYPE (drawable)));
+
+  return depth;
 }
 
 static void
