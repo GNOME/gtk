@@ -260,7 +260,7 @@ gtk_tree_view_column_class_init (GtkTreeViewColumnClass *class)
                                    PROP_REORDERABLE,
                                    g_param_spec_boolean ("reorderable",
 							 _("Reorderable"),
-							 _("Wether the column can be reordered around the headers"),
+							 _("Whether the column can be reordered around the headers"),
 							 FALSE,
 							 G_PARAM_READABLE | G_PARAM_WRITABLE));
 

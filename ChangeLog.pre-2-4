@@ -1,3 +1,8 @@
+Sat Sep 29 12:25:26 2001  Manish Singh  <yosh@gimp.org>
+
+	* gtk/gtktreeviewcolumn.c (gtk_tree_view_column_class_init): typo
+	fix: s/Wether/Whether/ in reorderable property description
+
 Thu Sep 27 16:46:36 2001  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtktreeview.c (gtk_tree_view_real_select_cursor_row): only
