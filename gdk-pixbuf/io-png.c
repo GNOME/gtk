@@ -204,14 +204,19 @@ png_text_to_pixbuf_option (png_text   text_ptr,
                            gchar    **key,
                            gchar    **value)
 {
-        *value = g_convert (text_ptr.text, -1, 
-                            "UTF-8", "ISO-8859-1", 
-                            NULL, NULL, NULL);
+        if (text_ptr.text_length > 0) {
+                *value = g_convert (text_ptr.text, -1, 
+                                    "UTF-8", "ISO-8859-1", 
+                                    NULL, NULL, NULL);
+        }
+        else {
+                *value = g_strdup (text_ptr.text);
+        }
         if (*value) {
                 *key = g_strconcat ("tEXt::", text_ptr.key, NULL);
                 return TRUE;
         } else {
-                g_warning ("Couldn't convert tEXt chunk value to UTF-8.");
+                g_warning ("Couldn't convert text chunk value to UTF-8.");
                 *key = NULL;
                 return FALSE;
         }
@@ -602,7 +607,7 @@ png_info_callback   (png_structp png_read_ptr,
                 return;
         }
 
-        /* Extract tEXt chunks and attach them as pixbuf options */
+        /* Extract text chunks and attach them as pixbuf options */
         
         if (png_get_text (png_read_ptr, png_info_ptr, &png_text_ptr, &num_texts)) {
                 for (i = 0; i < num_texts; i++) {
@@ -753,8 +758,8 @@ gdk_pixbuf__png_image_save (FILE          *f,
 
                for (kiter = keys; *kiter; kiter++) {
                        if (strncmp (*kiter, "tEXt::", 6) != 0) {
-                                g_warning ("Bad option name '%s' passed to PNG saver", *kiter);
-                                return FALSE;
+                               g_warning ("Bad option name '%s' passed to PNG saver", *kiter);
+                               return FALSE;
                        }
                        key = *kiter + 6;
                        len = strlen (key);
@@ -762,7 +767,7 @@ gdk_pixbuf__png_image_save (FILE          *f,
                                g_set_error (error,
                                             GDK_PIXBUF_ERROR,
                                             GDK_PIXBUF_ERROR_BAD_OPTION,
-                                            _("Keys for PNG tEXt chunks must have at least 1 and at most 79 characters."));
+                                            _("Keys for PNG text chunks must have at least 1 and at most 79 characters."));
                                return FALSE;
                        }
                        for (i = 0; i < len; i++) {
@@ -770,7 +775,7 @@ gdk_pixbuf__png_image_save (FILE          *f,
                                        g_set_error (error,
                                                     GDK_PIXBUF_ERROR,
                                                     GDK_PIXBUF_ERROR_BAD_OPTION,
-                                                    _("Keys for PNG tEXt chunks must be ASCII characters."));
+                                                    _("Keys for PNG text chunks must be ASCII characters."));
                                        return FALSE;
                                }
                        }
@@ -787,11 +792,23 @@ gdk_pixbuf__png_image_save (FILE          *f,
                                                      "ISO-8859-1", "UTF-8", 
                                                      NULL, &text_ptr[i].text_length, 
                                                      NULL);
+
+#ifdef PNG_iTXt_SUPPORTED 
+                       if (!text_ptr[i].text) {
+                               text_ptr[i].compression = PNG_ITXT_COMPRESSION_NONE;
+                               text_ptr[i].text = g_strdup (values[i]);
+                               text_ptr[i].text_length = 0;
+                               text_ptr[i].itxt_length = strlen (text_ptr[i].text);
+                               text_ptr[i].lang = NULL;
+                               text_ptr[i].lang_key = NULL;
+                       }
+#endif
+
                        if (!text_ptr[i].text) {
                                g_set_error (error,
                                             GDK_PIXBUF_ERROR,
                                             GDK_PIXBUF_ERROR_BAD_OPTION,
-                                            _("Value for PNG tEXt chunk can not be converted to ISO-8859-1 encoding."));
+                                            _("Value for PNG text chunk %s can not be converted to ISO-8859-1 encoding."), keys[i] + 6);
                                num_keys = i;
                                for (i = 0; i < num_keys; i++)
                                        g_free (text_ptr[i].text);

@@ -784,9 +784,7 @@ gdk_pixbuf_real_save (GdkPixbuf     *pixbuf,
  * "quality" parameter; its value should be in the range [0,100]. 
  * Text chunks can be attached to PNG images by specifying parameters of
  * the form "tEXt::key", where key is an ASCII string of length 1-79.
- * The values are UTF-8 encoded strings. Note however that PNG text
- * chunks are stored in ISO-8859-1 encoding, so you can only set texts
- * that can be represented in this encoding.
+ * The values are UTF-8 encoded strings. 
  *
  * Return value: whether an error was set
  **/

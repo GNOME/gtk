@@ -1,3 +1,12 @@
+2002-04-24  Matthias Clasen  <maclas@gmx.de>
+
+	* gdk-pixbuf-io.c (gdk_pixbuf_save): Remove the ISO8859-1
+	restriction from the description of png tEXt parameters.
+
+	* io-png.c (png_text_to_pixbuf_option): 
+	(gdk_pixbuf__png_image_save): If libpng supports it,
+	store and retrieve non-ISO8859-1 text as UTF-8.  (#76172)
+
 2002-04-11  Matthias Clasen  <maclas@gmx.de>
 
 	More fixes for #77807:
