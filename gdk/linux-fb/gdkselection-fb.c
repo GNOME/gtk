@@ -32,18 +32,88 @@
 #include "gdkprivate-fb.h"
 
 
+typedef struct _OwnerInfo OwnerInfo;
+
+struct _OwnerInfo
+{
+  GdkAtom    selection;
+  GdkWindow *owner;
+};
+
+GSList *owner_list;
+
+/* When a window is destroyed we check if it is the owner
+ * of any selections. This is somewhat inefficient, but
+ * owner_list is typically short, and it is a low memory,
+ * low code solution
+ */
+void
+_gdk_selection_window_destroyed (GdkWindow *window)
+{
+  GSList *tmp_list = owner_list;
+  while (tmp_list)
+    {
+      OwnerInfo *info = tmp_list->data;
+      tmp_list = tmp_list->next;
+      
+      if (info->owner == window)
+	{
+	  owner_list = g_slist_remove (owner_list, info);
+	  g_free (info);
+	}
+    }
+}
+
 gint
 gdk_selection_owner_set (GdkWindow *owner,
 			 GdkAtom    selection,
 			 guint32    time,
 			 gint       send_event)
 {
-  return FALSE;
+  GSList *tmp_list;
+  OwnerInfo *info;
+
+  tmp_list = owner_list;
+  while (tmp_list)
+    {
+      info = tmp_list->data;
+      if (info->selection == selection)
+	{
+	  owner_list = g_slist_remove (owner_list, info);
+	  g_free (info);
+	  break;
+	}
+      tmp_list = tmp_list->next;
+    }
+
+  if (owner)
+    {
+      info = g_new (OwnerInfo, 1);
+      info->owner = owner;
+      info->selection = selection;
+
+      owner_list = g_slist_prepend (owner_list, info);
+    }
+
+  return TRUE;
 }
 
 GdkWindow*
 gdk_selection_owner_get (GdkAtom selection)
 {
+  OwnerInfo *info;
+  GSList *tmp_list;
+  
+  tmp_list = owner_list;
+  while (tmp_list)
+    {
+      info = tmp_list->data;
+      if (info->selection == selection)
+	{
+	  return info->owner;
+	}
+      tmp_list = tmp_list->next;
+    }
   return NULL;
 }
 
@@ -53,6 +123,33 @@ gdk_selection_convert (GdkWindow *requestor,
 		       GdkAtom    target,
 		       guint32    time)
 {
+  GdkEvent *event;
+  GdkWindow *owner;
+  
+  owner = gdk_selection_owner_get (selection);
+  
+  if (owner)
+    {
+      event = gdk_event_make (owner, GDK_SELECTION_REQUEST, TRUE);
+      if (event)
+	{
+	  event->selection.requestor = requestor;
+	  event->selection.selection = selection;
+	  event->selection.target = target;
+	  event->selection.property = gdk_selection_property;
+	}
+    }
+  else
+    {
+      /* If no owner for the specified selection exists, the X server
+       * generates a SelectionNotify event to the requestor with property None.
+       */
+      gdk_selection_send_notify ((guint32)requestor,
+				 selection,
+				 target,
+				 GDK_NONE,
+				 0);
+    }
 }
 
 gint
@@ -61,10 +158,46 @@ gdk_selection_property_get (GdkWindow  *requestor,
 			    GdkAtom    *ret_type,
 			    gint       *ret_format)
 {
+  guchar *t = NULL;
+  GdkAtom prop_type;
+  gint prop_format;
+  gint prop_len;
+  
   g_return_val_if_fail (requestor != NULL, 0);
   g_return_val_if_fail (GDK_IS_WINDOW (requestor), 0);
+  
+  if (!gdk_property_get (requestor,
+			 gdk_selection_property,
+			 0/*AnyPropertyType?*/,
+			 0, 0,
+			 FALSE,
+			 &prop_type, &prop_format, &prop_len,
+			 &t))
+    {
+      *data = NULL;
+      return 0;
+    }
 
-  return 0;
+  if (ret_type)
+    *ret_type = prop_type;
+  if (ret_format)
+    *ret_format = prop_format;
+
+  if (!gdk_property_get (requestor,
+			 gdk_selection_property,
+			 0/*AnyPropertyType?*/,
+			 0, prop_len + 1,
+			 FALSE,
+			 &prop_type, &prop_format, &prop_len,
+			 &t))
+    {
+      *data = NULL;
+      return 0;
+    }
+  
+  *data = t;
+  
+  return prop_len;
 }
 
 
@@ -75,6 +208,16 @@ gdk_selection_send_notify (guint32  requestor,
 			   GdkAtom  property,
 			   guint32  time)
 {
+  GdkEvent *event;
+  
+  event = gdk_event_make (gdk_window_lookup (requestor), GDK_SELECTION_NOTIFY, TRUE);
+  if (event)
+    {
+      event->selection.selection = selection;
+      event->selection.target = target;
+      event->selection.property = property;
+      event->selection.requestor = (GdkNativeWindow) requestor;
+    }
 }
 
 gint
@@ -82,6 +225,7 @@ gdk_text_property_to_text_list (GdkAtom encoding, gint format,
 				const guchar *text, gint length,
 				gchar ***list)
 {
+  g_warning ("gdk_text_property_to_text_list() not implemented\n");
   return 0;
 }
 
@@ -89,6 +233,7 @@ void
 gdk_free_text_list (gchar **list)
 {
   g_return_if_fail (list != NULL);
+  g_warning ("gdk_free_text_list() not implemented\n");
 }
 
 gint
@@ -96,11 +241,13 @@ gdk_string_to_compound_text (const gchar *str,
 			     GdkAtom *encoding, gint *format,
 			     guchar **ctext, gint *length)
 {
+  g_warning ("gdk_string_to_compound_text() not implemented\n");
   return 0;
 }
 
 void gdk_free_compound_text (guchar *ctext)
 {
+  g_warning ("gdk_free_compound_text() not implemented\n");
 }
 
 /**
@@ -119,6 +266,7 @@ void gdk_free_compound_text (guchar *ctext)
 gchar *
 gdk_utf8_to_string_target (const gchar *str)
 {
+  g_warning ("gdk_utf8_to_string_target() not implemented\n");
   return 0;
 }
 
@@ -143,8 +291,79 @@ gdk_utf8_to_compound_text (const gchar *str,
 			   guchar     **ctext,
 			   gint        *length)
 {
+  g_warning ("gdk_utf8_to_compound_text() not implemented\n");
   return 0;
 }
+
+static gint
+make_list (const gchar  *text,
+	   gint          length,
+	   gboolean      latin1,
+	   gchar      ***list)
+{
+  GSList *strings = NULL;
+  gint n_strings = 0;
+  gint i;
+  const gchar *p = text;
+  const gchar *q;
+  GSList *tmp_list;
+  GError *error = NULL;
+
+  while (p < text + length)
+    {
+      gchar *str;
+      
+      q = p;
+      while (*q && q < text + length)
+	q++;
+
+      if (latin1)
+	{
+	  str = g_convert (p, q - p,
+			   "UTF-8", "ISO-8859-1",
+			   NULL, NULL, &error);
+
+	  if (!str)
+	    {
+	      g_warning ("Error converting selection from STRING: %s",
+			 error->message);
+	      g_error_free (error);
+	    }
+	}
+      else
+	str = g_strndup (p, q - p);
+
+      if (str)
+	{
+	  strings = g_slist_prepend (strings, str);
+	  n_strings++;
+	}
+
+      p = q + 1;
+    }
+
+  if (list)
+    *list = g_new (gchar *, n_strings + 1);
+
+  (*list)[n_strings] = NULL;
+  
+  i = n_strings;
+  tmp_list = strings;
+  while (tmp_list)
+    {
+      if (list)
+	(*list)[--i] = tmp_list->data;
+      else
+	g_free (tmp_list->data);
+
+      tmp_list = tmp_list->next;
+    }
+
+  g_slist_free (strings);
+
+  return n_strings;
+}
+
 
 /**
  * gdk_text_property_to_utf8_list:
@@ -168,5 +387,71 @@ gdk_text_property_to_utf8_list (GdkAtom        encoding,
 				gint           length,
 				gchar       ***list)
 {
-  return 0;
+  g_return_val_if_fail (text != NULL, 0);
+  g_return_val_if_fail (length >= 0, 0);
+  
+  if (encoding == GDK_TARGET_STRING)
+    {
+      return make_list ((gchar *)text, length, TRUE, list);
+    }
+  else if (encoding == gdk_atom_intern ("UTF8_STRING", FALSE))
+    {
+      return make_list ((gchar *)text, length, FALSE, list);
+    }
+  else
+    {
+      gchar **local_list;
+      gint local_count;
+      gint i;
+      gchar *charset = NULL;
+      gboolean need_conversion = !g_get_charset (&charset);
+      gint count = 0;
+      GError *error = NULL;
+      
+      /* Probably COMPOUND text, we fall back to Xlib routines
+       */
+      local_count = gdk_text_property_to_text_list (encoding,
+						    format, 
+						    text,
+						    length,
+						    &local_list);
+      if (list)
+	*list = g_new (gchar *, local_count + 1);
+      
+      for (i=0; i<local_count; i++)
+	{
+	  /* list contains stuff in our default encoding
+	   */
+	  if (need_conversion)
+	    {
+	      gchar *utf = g_convert (local_list[i], -1,
+				      "UTF-8", charset,
+				      NULL, NULL, &error);
+	      if (utf)
+		{
+		  if (list)
+		    (*list)[count++] = utf;
+		  else
+		    g_free (utf);
+		}
+	      else
+		{
+		  g_warning ("Error converting to UTF-8 from '%s': %s",
+			     charset, error->message);
+		  g_error_free (error);
+		  error = NULL;
+		}
+	    }
+	  else
+	    {
+	      if (list)
+		(*list)[count++] = g_strdup (local_list[i]);
+	    }
+	}
+      
+      gdk_free_text_list (local_list);
+      (*list)[count] = NULL;
+
+      return count;
+    }
 }

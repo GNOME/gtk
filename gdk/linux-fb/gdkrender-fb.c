@@ -701,9 +701,25 @@ gdk_fb_draw_drawable_generic (GdkDrawable *drawable,
   GdkDrawableFBData *private = GDK_DRAWABLE_FBDATA (drawable);
   int cur_x, cur_y;
 
-  for (cur_y = start_y; cur_y*draw_direction < end_y*draw_direction; cur_y+=draw_direction)
+  if (draw_direction < 0)
     {
-      for (cur_x = start_x; cur_x < end_x; cur_x++)
+      int tmp;
+      tmp = start_y;
+      start_y = end_y;
+      end_y = tmp;
+      start_y--;
+      end_y--;
+      
+      tmp = start_x;
+      start_x = end_x;
+      end_x = tmp;
+      start_x--;
+      end_x--;
+    }
+
+  for (cur_y = start_y; cur_y != end_y; cur_y+=draw_direction)
+    {
+      for (cur_x = start_x; cur_x != end_x; cur_x+=draw_direction)
 	{
 	  GdkColor spot;
 	  
@@ -851,8 +867,18 @@ gdk_fb_draw_drawable_memmove (GdkDrawable *drawable,
   guchar *srcmem = src_private->mem;
   int linelen = (end_x - start_x)*(depth>>3);
   gint cur_y;
-  
-  for(cur_y = start_y; cur_y*draw_direction < end_y*draw_direction; cur_y += draw_direction)
+
+  if (draw_direction < 0)
+    {
+      int tmp;
+      tmp = start_y;
+      start_y = end_y;
+      end_y = tmp;
+      start_y--;
+      end_y--;
+    }
+
+  for(cur_y = start_y; cur_y != end_y; cur_y += draw_direction)
     {
       memmove (dc->mem + (cur_y * dc->rowstride) + start_x*(depth>>3),
 	       srcmem + ((cur_y + src_y_off)*src_rowstride) + (start_x + src_x_off)*(depth>>3),
@@ -893,10 +919,26 @@ gdk_fb_draw_drawable_aa_24 (GdkDrawable *drawable,
   fg_r = fg.red >> 8;
   fg_g = fg.green >> 8;
   fg_b = fg.blue >> 8;
-  
-  for (y = start_y; y*draw_direction < end_y*draw_direction; y+=draw_direction)
+
+  if (draw_direction < 0)
     {
-      for (x = start_x; x < end_x; x++)
+      int tmp;
+      tmp = start_y;
+      start_y = end_y;
+      end_y = tmp;
+      start_y--;
+      end_y--;
+      
+      tmp = start_x;
+      start_x = end_x;
+      end_x = tmp;
+      start_x--;
+      end_x--;
+    }
+
+  for (y = start_y; y != end_y; y+=draw_direction)
+    {
+      for (x = start_x; x != end_x; x+=draw_direction)
 	{
 	  grayval = smem[x + src_x_off + (y + src_y_off) * src_rowstride];
 
@@ -1119,7 +1161,7 @@ _gdk_fb_gc_calc_state (GdkGC           *gc,
 	break;
       }
     }
-
+  
   if (!gc_private->values.clip_mask &&
       !gc_private->values.tile &&
       !gc_private->values.stipple &&

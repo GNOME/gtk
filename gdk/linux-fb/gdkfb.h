@@ -20,5 +20,6 @@ extern const char *gdk_progclass;
 #define gdk_pixmap_lookup(xid)	   ((GdkPixmap*) (xid))
 #define gdk_font_lookup(xid)	   ((GdkFont*) (xid))
 
+extern GdkAtom gdk_selection_property;
 
 #endif /* GDKFB_H */

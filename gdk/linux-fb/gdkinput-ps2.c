@@ -185,11 +185,12 @@ send_button_event (MouseDevice *mouse,
     }
 #endif
 
+  gdk_event_queue_append (event);
+  
   /* For double-clicks */
   if (press_event)
     gdk_event_button_generate (event);
 
-  gdk_event_queue_append (event);
 }
 
 static GdkPixmap *last_contents = NULL;
@@ -260,7 +261,11 @@ void
 gdk_fb_cursor_unhide()
 {
   GdkFBDrawingContext *mydc = gdk_fb_cursor_dc;
-
+  GdkCursorPrivateFB *last_private;
+  GdkDrawableFBData *pixmap_last;
+  
+  last_private = GDK_CURSOR_FB (last_cursor);
+  pixmap_last = GDK_DRAWABLE_IMPL_FBDATA (last_private->cursor);
   cursor_visibility_count++;
   g_assert (cursor_visibility_count <= 1);
   if (cursor_visibility_count < 1)
@@ -272,15 +277,15 @@ gdk_fb_cursor_unhide()
   if (last_cursor)
     {
       if (!last_contents ||
-	  GDK_DRAWABLE_IMPL_FBDATA (GDK_CURSOR_FB (last_cursor)->cursor)->width > GDK_DRAWABLE_IMPL_FBDATA (last_contents)->width ||
-	  GDK_DRAWABLE_IMPL_FBDATA (GDK_CURSOR_FB (last_cursor)->cursor)->height > GDK_DRAWABLE_IMPL_FBDATA (last_contents)->height)
+	  pixmap_last->width > GDK_DRAWABLE_IMPL_FBDATA (last_contents)->width ||
+	  pixmap_last->height > GDK_DRAWABLE_IMPL_FBDATA (last_contents)->height)
 	{
 	  if (last_contents)
 	    gdk_pixmap_unref (last_contents);
 
 	  last_contents = gdk_pixmap_new (gdk_parent_root,
-					  GDK_DRAWABLE_IMPL_FBDATA (GDK_CURSOR_FB (last_cursor)->cursor)->width,
-					  GDK_DRAWABLE_IMPL_FBDATA (GDK_CURSOR_FB (last_cursor)->cursor)->height,
+					  pixmap_last->width,
+					  pixmap_last->height,
 					  GDK_DRAWABLE_IMPL_FBDATA (gdk_parent_root)->depth);
 	}
 
@@ -291,25 +296,26 @@ gdk_fb_cursor_unhide()
 			      last_location.x,
 			      last_location.y,
 			      0, 0,
-			      GDK_DRAWABLE_IMPL_FBDATA (GDK_CURSOR_FB (last_cursor)->cursor)->width,
-			      GDK_DRAWABLE_IMPL_FBDATA (GDK_CURSOR_FB (last_cursor)->cursor)->height,
+			      pixmap_last->width,
+			      pixmap_last->height,
 			      TRUE, FALSE);
-      last_contents_size.x = GDK_DRAWABLE_IMPL_FBDATA (GDK_CURSOR_FB (last_cursor)->cursor)->width;
-      last_contents_size.y = GDK_DRAWABLE_IMPL_FBDATA (GDK_CURSOR_FB (last_cursor)->cursor)->height;
-      gdk_gc_set_clip_mask (cursor_gc, GDK_CURSOR_FB (last_cursor)->mask);
+      last_contents_size.x = pixmap_last->width;
+      last_contents_size.y = pixmap_last->height;
+      
+      gdk_gc_set_clip_mask (cursor_gc, last_private->mask);
       gdk_gc_set_clip_origin (cursor_gc,
-			      last_location.x + GDK_CURSOR_FB (last_cursor)->mask_off_x,
-			      last_location.y + GDK_CURSOR_FB (last_cursor)->mask_off_y);
+			      last_location.x,
+			      last_location.y);
 
       gdk_fb_cursor_dc_reset ();
-      gdk_fb_draw_drawable_3 (GDK_DRAWABLE_IMPL(gdk_parent_root),
+      gdk_fb_draw_drawable_3 (GDK_DRAWABLE_IMPL (gdk_parent_root),
 			      cursor_gc,
-			      GDK_DRAWABLE_IMPL (GDK_CURSOR_FB (last_cursor)->cursor),
+			      GDK_DRAWABLE_IMPL (last_private->cursor),
 			      mydc,
 			      0, 0,
 			      last_location.x, last_location.y,
-			      GDK_DRAWABLE_IMPL_FBDATA (GDK_CURSOR_FB (last_cursor)->cursor)->width,
-			      GDK_DRAWABLE_IMPL_FBDATA (GDK_CURSOR_FB (last_cursor)->cursor)->height);
+			      pixmap_last->width,
+			      pixmap_last->height);
     }
   else
     gdk_fb_cursor_invalidate ();

@@ -529,9 +529,9 @@ gdk_fb_draw_drawable_3 (GdkDrawable *drawable,
       destb.x1 = xdest;
       destb.y1 = ydest;
       destb.x2 = xdest + width;
-      destb.y2 = xdest + height;
+      destb.y2 = ydest + height;
 
-      if (EXTENTCHECK (&srcb, &destb) && ydest > ysrc)
+      if (EXTENTCHECK (&srcb, &destb) && ((ydest > ysrc) || ((ydest == ysrc) && (xdest > xsrc))))
 	draw_direction = -1;
     }
 
@@ -590,28 +590,16 @@ gdk_fb_draw_drawable_3 (GdkDrawable *drawable,
   src_x_off = (src_private->abs_x + xsrc) - (private->abs_x + xdest);
   src_y_off = (src_private->abs_y + ysrc) - (private->abs_y + ydest);
 
-  for(i = 0; i < real_clip_region->numRects; i++)
+  for (i = (draw_direction>0)?0:real_clip_region->numRects-1; i >= 0 && i < real_clip_region->numRects; i+=draw_direction)
     {
       GdkRegionBox *cur = &real_clip_region->rects[i];
-      int start_y, end_y;
-
-      if (draw_direction > 0)
-	{
-	  start_y = cur->y1;
-	  end_y = cur->y2;
-	}
-      else
-	{
-	  start_y = cur->y2 - 1;
-	  end_y = cur->y1 - 1;
-	}
 
       (*draw_func) (drawable,
 		    gc,
 		    src,
 		    dc,
-		    start_y,
-		    end_y,
+		    cur->y1,
+		    cur->y2,
 		    cur->x1,
 		    cur->x2,
 		    src_x_off,
@@ -835,10 +823,23 @@ gdk_fb_draw_lines (GdkDrawable    *drawable,
 		   GdkPoint       *points,
 		   gint            npoints)
 {
-  if (GDK_GC_FBDATA (gc)->values.line_width > 0)
-    miWideLine (drawable, gc, 0, npoints, points);
+  GdkGCFBData *private;
+
+  private = GDK_GC_FBDATA (gc);
+  if (private->values.line_width > 0)
+    {
+      if (private->dash_list)
+	miWideDash (drawable, gc, 0, npoints, points);
+      else 
+	miWideLine (drawable, gc, 0, npoints, points);
+    }
   else
-    miZeroLine (drawable, gc, 0, npoints, points);
+    {
+      if (private->dash_list)
+	miZeroDashLine (drawable, gc, 0, npoints, points);
+      else 
+	miZeroLine (drawable, gc, 0, npoints, points);
+    }
 }
 
 static void
@@ -856,7 +857,7 @@ gdk_fb_draw_segments (GdkDrawable    *drawable,
       pts[0].y = segs[i].y1;
       pts[1].x = segs[i].x2;
       pts[1].y = segs[i].y2;
-      
+
       gdk_fb_draw_lines (drawable, gc, pts, 2);
     }
 }
@@ -897,22 +898,18 @@ gdk_fb_draw_glyphs (GdkDrawable      *drawable,
   /* Fake its existence as a pixmap */
 
   pango_fb_font_set_size (font);
-  
+
   for (i = xpos = 0; i < glyphs->num_glyphs; i++)
     {
       PangoFBGlyphInfo *pgi;
-      int this_wid;
 
       pgi = pango_fb_font_get_glyph_info (font, glyphs->glyphs[i].glyph);
 
-      this_wid = (xpos + glyphs->glyphs[i].geometry.width)/PANGO_SCALE;
       gdk_fb_draw_drawable_3 (drawable, gc, (GdkPixmap *)&pgi->fbd,
 			      &fbdc,
 			      0, 0,
-			      x + (xpos + glyphs->glyphs[i].geometry.x_offset)/PANGO_SCALE,
-			      y + glyphs->glyphs[i].geometry.y_offset / PANGO_SCALE
-			      + pgi->hbearing,
-			      this_wid, pgi->fbd.drawable_data.height);
+			      x + PANGO_PIXELS (xpos) + pgi->left ,  y - pgi->top + 1,
+			      pgi->fbd.drawable_data.width, pgi->fbd.drawable_data.height);
 
       xpos += glyphs->glyphs[i].geometry.width;
     }

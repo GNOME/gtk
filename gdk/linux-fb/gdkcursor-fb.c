@@ -191,15 +191,69 @@ static struct {
 {xterm_mask_bits, xterm_mask_width, xterm_mask_height, xterm_mask_x_hot, xterm_mask_y_hot}
 };
 
-static GdkCursor *
-_gdk_cursor_new_from_pixmap (GdkPixmap *source,
-			     GdkPixmap *mask,
-			     GdkColor  *fg,
-			     GdkColor  *bg,
-			     gint       x,
-			     gint       y,
-			     gint 	mask_off_x,
-			     gint	mask_off_y)
+GdkCursor*
+gdk_cursor_new (GdkCursorType cursor_type)
+{
+  GdkPixmap *tmp_pm, *pm, *mask;
+
+  if (cursor_type >= sizeof(stock_cursors)/sizeof(stock_cursors[0]))
+    return NULL;
+
+  pm = stock_cursors[cursor_type].pm;
+  if (!pm)
+    {
+      GdkGC *copy_gc;
+      char *data;
+      tmp_pm = gdk_bitmap_create_from_data (gdk_parent_root,
+					    stock_cursors[cursor_type].bits,
+					    stock_cursors[cursor_type].width,
+					    stock_cursors[cursor_type].height);
+
+      data = g_malloc0 (((stock_cursors[cursor_type+1].width+7)/8) * stock_cursors[cursor_type+1].height);
+      pm = gdk_bitmap_create_from_data (gdk_parent_root,
+					data,
+					stock_cursors[cursor_type+1].width,
+					stock_cursors[cursor_type+1].height);
+      copy_gc = gdk_gc_new (pm);
+      gdk_draw_drawable(pm,
+			copy_gc,
+			tmp_pm,
+			0, 0,
+			stock_cursors[cursor_type+1].hotx - stock_cursors[cursor_type].hotx,
+			stock_cursors[cursor_type+1].hoty - stock_cursors[cursor_type].hoty,
+			stock_cursors[cursor_type].width,
+			stock_cursors[cursor_type].height);
+      gdk_pixmap_unref (tmp_pm);
+      g_free (data);
+      gdk_gc_unref (copy_gc);
+
+      stock_cursors[cursor_type].pm = pm;
+      gdk_pixmap_ref (pm);
+    }
+  
+  mask = stock_cursors[cursor_type+1].pm;
+  if (!mask)
+    {
+      mask = stock_cursors[cursor_type+1].pm = gdk_bitmap_create_from_data (gdk_parent_root,
+									    stock_cursors[cursor_type+1].bits,
+									    stock_cursors[cursor_type+1].width,
+									    stock_cursors[cursor_type+1].height);
+      gdk_pixmap_ref (mask);
+    }
+
+  
+  return gdk_cursor_new_from_pixmap (pm, mask, NULL, NULL,
+				     stock_cursors[cursor_type+1].hotx,
+				     stock_cursors[cursor_type+1].hoty);
+}
+
+GdkCursor*
+gdk_cursor_new_from_pixmap (GdkPixmap *source,
+			    GdkPixmap *mask,
+			    GdkColor  *fg,
+			    GdkColor  *bg,
+			    gint       x,
+			    gint       y)
 {
   GdkCursorPrivateFB *private;
   GdkCursor *cursor;
@@ -214,56 +268,8 @@ _gdk_cursor_new_from_pixmap (GdkPixmap *source,
   private->mask = gdk_pixmap_ref (mask);
   private->hot_x = x;
   private->hot_y = y;
-  private->mask_off_x = mask_off_x;
-  private->mask_off_y = mask_off_y;
   
   return cursor;
-}
-
-GdkCursor*
-gdk_cursor_new (GdkCursorType cursor_type)
-{
-  GdkPixmap *pm, *mask;
-
-  if (cursor_type >= sizeof(stock_cursors)/sizeof(stock_cursors[0]))
-    return NULL;
-
-  pm = stock_cursors[cursor_type].pm;
-  if (!pm)
-    {
-      pm = stock_cursors[cursor_type].pm = gdk_bitmap_create_from_data (gdk_parent_root,
-									stock_cursors[cursor_type].bits,
-									stock_cursors[cursor_type].width,
-									stock_cursors[cursor_type].height);
-      gdk_pixmap_ref (pm);
-    }
-  
-  mask = stock_cursors[cursor_type+1].pm;
-  if (!mask)
-    {
-      mask = stock_cursors[cursor_type+1].pm = gdk_bitmap_create_from_data (gdk_parent_root,
-									    stock_cursors[cursor_type+1].bits,
-									    stock_cursors[cursor_type+1].width,
-									    stock_cursors[cursor_type+1].height);
-      gdk_pixmap_ref (mask);
-    }
-
-  return _gdk_cursor_new_from_pixmap (pm, mask, NULL, NULL,
-				      stock_cursors[cursor_type].hotx,
-				      stock_cursors[cursor_type].hoty,
-				      (stock_cursors[cursor_type].hotx - stock_cursors[cursor_type+1].hotx) * 1,
-				      (stock_cursors[cursor_type].hoty - stock_cursors[cursor_type+1].hoty) * 1);
-}
-
-GdkCursor*
-gdk_cursor_new_from_pixmap (GdkPixmap *source,
-			    GdkPixmap *mask,
-			    GdkColor  *fg,
-			    GdkColor  *bg,
-			    gint       x,
-			    gint       y)
-{
-  return _gdk_cursor_new_from_pixmap (source, mask, fg, bg, x, y, 0, 0);
 }
 
 void

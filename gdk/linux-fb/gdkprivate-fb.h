@@ -144,7 +144,6 @@ typedef struct {
   GdkCursor base;
   GdkPixmap *cursor, *mask;
   int hot_x, hot_y;
-  int mask_off_x, mask_off_y;
 } GdkCursorPrivateFB;
 
 typedef struct {
@@ -252,6 +251,7 @@ GType gdk_gc_fb_get_type (void) G_GNUC_CONST;
 /* Routines from gdkgeometry-fb.c */
 
 void      _gdk_window_init_position          (GdkWindow       *window);
+void      _gdk_selection_window_destroyed    (GdkWindow       *window);
 void      _gdk_window_move_resize_child      (GdkWindow       *window,
 					      gint             x,
 					      gint             y,
@@ -403,7 +403,7 @@ struct _PangoFBFont
 typedef struct {
   PangoRectangle extents[2];
   GdkPixmapFBData fbd;
-  int hbearing;
+  int top, left;
 } PangoFBGlyphInfo;
 
 GType pango_fb_font_get_type (void) G_GNUC_CONST;

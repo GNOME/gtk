@@ -1,3 +1,74 @@
+2000-11-23  Alexander Larsson  <alexl@redhat.com>
+
+	* gdk/linux-fb/gdkselection-fb.c:
+	Initial selection implementation.
+
+	* gtk/gtkselection.c:
+	if GDK_WINDOWING_FB defined, include linux-fb/gdkfb.h and look up
+	requestor in gtk_selection_request.
+	
+	* gdk/linux-fb/gdkfb.h, gdk/linux-fb/gdkglobals-fb.c:
+	Added gdk_selection_property atom.
+
+	* gdk/linux-fb/gdkprivate-fb.h:
+	Export _gdk_selection_window_destroyed.
+	Removed mask_off_x/y from GdkCursorPrivateFB.
+	Removed hbearing, added top, left to PangoFBGlyphInfo.
+
+	* gdk/linux-fb/gdkwindow-fb.c (_gdk_windowing_window_destroy):
+	Call _gdk_selection_window_destroyed
+	(_gdk_windowing_window_init): Don't call gdk_cursor_new() before
+	the root window has been created.
+	(static_dx_hack, static_dy_hack, compare_draw_rects,
+	gdk_fb_window_move_resize): Remove unnecessary sort of rectangles
+	in region. They are already sorted. Instead just traverse them in
+	reverse if draw_direction < 0.
+	
+	* gdk/linux-fb/gdkinput-ps2.c (send_button_event):
+	Double-clicks must be sent after the normal button_press.
+	(gdk_fb_cursor_unhide): Remove usage of mask_off_x/y. Clean up.
+	
+	* gdk/linux-fb/gdkgeometry-fb.c (gdk_window_scroll):
+	Pass _gdk_fb_screen_gc instead of NULL.
+
+	* gdk/linux-fb/gdkmain-fb.c (_gdk_windowing_init_check):
+	Initialize gdk_selection_property.
+	(gdk_event_make): Remove unused code.
+
+	* gdk/linux-fb/gdkcursor-fb.c:
+	Make the pixmap for the cursor the same size as the mask. Also remove
+	the mask_off_x/y fields in GdkCursorPrivateFB and combine
+	_gdk_cursor_new_from_pixmap() and gdk_cursor_new_from_pixmap()
+	Now the whole cursor is visible.
+
+	* gdk/linux-fb/gdkdrawable-fb2.c (gdk_fb_draw_drawable_3):
+	Fix bug where xdest+height instead of ydest+height was used
+	to calculate if the source and dest overlapped. This fixes the
+	redraw bug when the main window in testgtk was scrolled when
+	partially covered by a tall window.
+	Copy rectangles in region in order depending on draw_direction.
+	Also moved the draw_direction flipping of start_y and end_y into
+	the gc functions, as this might not be what all of them want.
+	(gdk_fb_draw_lines): Support dashed lines.
+	(gdk_fb_draw_glyphs): Clean up glyph placement. Also fix positioning
+	so that the text is positioned correctly (was 1 pixel high).
+
+	gdk/linux-fb/gdkgc-fb.c:
+	Initialize cap_style to GTK_CAP_BUTT. This fixes a problem where
+	all lines were drawn a pixel to short. Also checked the default of
+	the rest of the values, and they're the same as X now.
+
+	* gdk/linux-fb/gdkpango-fb.c (pango_fb_font_get_glyph_info):
+	Clean up pixel positioning of the glyphs. Just use bgy->top and
+	bgy->left. Also used PANGO_PIXEL where appropriate and added 0.5
+	to all divisions to get correct rounding behaviour.
+
+	* gdk/linux-fb/gdkrender-fb.c (gdk_fb_draw_drawable_generic,
+	gdk_fb_draw_drawable_memmove, gdk_fb_draw_drawable_aa_24):
+	Moved start_y/end_y flip into draw_drawable implementations.
+	Flip also x rendering when draw_direction < 0.
+	Remove unneccesary multiply with draw_direction.
+
 Wed Nov 22 14:11:19 GMT 2000  Tony Gale <gale@gtk.org>
 
 	* docs/tutorial/gtk-tut.sgml:

@@ -41,7 +41,7 @@ gdk_window_scroll (GdkWindow *window,
       gdk_region_destroy (tmp_region);
 
       gdk_fb_draw_drawable_2 (GDK_DRAWABLE_IMPL(window),
-			      NULL,
+			      _gdk_fb_screen_gc,
 			      GDK_DRAWABLE_IMPL(window),
 			      dest_rect.x - dx,
 			      dest_rect.y - dy,

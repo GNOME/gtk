@@ -90,6 +90,7 @@ _gdk_fb_gc_new (GdkDrawable      *drawable,
 
   gdk_fb_gc_set_values (gc, values, values_mask);
 
+  private->values.cap_style = GDK_CAP_BUTT;
   return gc;
 }
 

@@ -59,6 +59,8 @@
 #include "x11/gdkx.h"		/* For gdk_window_lookup() */
 #elif defined (GDK_WINDOWING_WIN32)
 #include "win32/gdkwin32.h"	/* For gdk_window_lookup() */
+#elif defined (GDK_WINDOWING_FB)
+#include "linux-fb/gdkfb.h"	/* For gdk_window_lookup() */
 #elif defined (GDK_WINDOWING_NANOX)
 #include "nanox/gdkprivate-nanox.h"	/* For gdk_window_lookup() */
 #endif
@@ -980,7 +982,7 @@ gtk_selection_request (GtkWidget *widget,
   
   /* Create GdkWindow structure for the requestor */
   
-#if defined(GDK_WINDOWING_WIN32) || defined(GDK_WINDOWING_X11)
+#if defined(GDK_WINDOWING_WIN32) || defined(GDK_WINDOWING_X11) || defined(GDK_WINDOWING_FB) 
   info->requestor = gdk_window_lookup (event->requestor);
   if (!info->requestor)
     info->requestor = gdk_window_foreign_new (event->requestor);

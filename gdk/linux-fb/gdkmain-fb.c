@@ -547,6 +547,8 @@ _gdk_windowing_init_check (int argc, char **argv)
 
   gdk_initialized = TRUE;
 
+  gdk_selection_property = gdk_atom_intern ("GDK_SELECTION", FALSE);
+  
   return TRUE;
 }
 
@@ -987,14 +989,9 @@ gdk_event_make (GdkWindow *window,
   if (evmask & type_masks[type])
     {
       GdkEvent *event = gdk_event_new ();
-#if 0
-      guint32 the_time = g_latest_time.tv_sec * 1000 + g_latest_time.tv_usec / 1000;
-#else
       guint32 the_time;
 
-      
       the_time = gdk_fb_get_time ();
-#endif
 
       event->any.type = type;
       event->any.window = gdk_window_ref (window);
