@@ -13,7 +13,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.0\n"
-"POT-Creation-Date: 2002-12-14 05:53+0100\n"
+"POT-Creation-Date: 2002-12-20 15:52-0500\n"
 "PO-Revision-Date: 2002-12-18 19:14+0100\n"
 "Last-Translator: Tino Meinen <a.t.meinen@chello.nl>\n"
 "Language-Team: Dutch <vertaling@nl.linux.org>\n"
@@ -1958,15 +1958,15 @@ msgstr "Selecteren bij focus"
 msgid "Whether to select the contents of an entry when it is focused"
 msgstr "Of de inhoud van een veld wordt geselecteerd als het veld focus krijgt"
 
-#: gtk/gtkentry.c:3950 gtk/gtklabel.c:3222
+#: gtk/gtkentry.c:3957 gtk/gtklabel.c:3222
 msgid "Select All"
 msgstr "Alles selecteren"
 
-#: gtk/gtkentry.c:3960 gtk/gtklabel.c:3232
+#: gtk/gtkentry.c:3967 gtk/gtklabel.c:3232
 msgid "Input Methods"
 msgstr "Invoermethodes"
 
-#: gtk/gtkentry.c:3970 gtk/gtktextview.c:6484
+#: gtk/gtkentry.c:3977 gtk/gtktextview.c:6484
 msgid "_Insert Unicode control character"
 msgstr "Unicode controleteken _Invoegen "
 
@@ -2623,11 +2623,11 @@ msgstr "De hoogte van de opmaak"
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: gtk/gtkmenu.c:243
+#: gtk/gtkmenu.c:263
 msgid "Tearoff Title"
 msgstr "Afscheur-Titel"
 
-#: gtk/gtkmenu.c:244
+#: gtk/gtkmenu.c:264
 msgid ""
 "A title that may be displayed by the window manager when this menu is torn-"
 "off"
@@ -2635,33 +2635,33 @@ msgstr ""
 "Een titel die weergegeven kan worden door de windowmanager als dit menu "
 "losgescheurd wordt"
 
-#: gtk/gtkmenu.c:319
+#: gtk/gtkmenu.c:379
 msgid "Can change accelerators"
 msgstr "Kan sneltoetsen veranderen"
 
-#: gtk/gtkmenu.c:320
+#: gtk/gtkmenu.c:380
 msgid ""
 "Whether menu accelerators can be changed by pressing a key over the menu item"
 msgstr ""
 "Of sneltoetsen veranderd kunnen worden door het drukken van een toets over "
 "het menu-item"
 
-#: gtk/gtkmenu.c:325
+#: gtk/gtkmenu.c:385
 msgid "Delay before submenus appear"
 msgstr "Vertraging voordat submenus verschijnen"
 
-#: gtk/gtkmenu.c:326
+#: gtk/gtkmenu.c:386
 msgid ""
 "Minimum time the pointer must stay over a menu item before the submenu appear"
 msgstr ""
 "Minimumtijd die de muisaanwijzer boven een menu-item moet staan voordat het "
 "submenu verschijnt"
 
-#: gtk/gtkmenu.c:333
+#: gtk/gtkmenu.c:393
 msgid "Delay before hiding a submenu"
 msgstr "Vertraging voordat een submenu verdwijnt"
 
-#: gtk/gtkmenu.c:334
+#: gtk/gtkmenu.c:394
 msgid ""
 "The time before hiding a submenu when the pointer is moving towards the "
 "submenu"

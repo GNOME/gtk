@@ -18,7 +18,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.HEAD.he\n"
-"POT-Creation-Date: 2002-12-16 22:22-0500\n"
+"POT-Creation-Date: 2002-12-20 15:52-0500\n"
 "PO-Revision-Date: 2002-12-07 10:05+0200\n"
 "Last-Translator: Gil 'Dolfin' Osher <dolfin@rpg.org.il>\n"
 "Language-Team: Hebrew <he@li.org>\n"

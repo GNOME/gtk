@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2002-12-16 22:22-0500\n"
+"POT-Creation-Date: 2002-12-20 15:52-0500\n"
 "PO-Revision-Date: 2002-06-08 14:30+0530\n"
 "Last-Translator: Anurag Seetha <anuragseetha@yahoo.com>\n"
 "Language-Team: Hindi <indlinux-hindi-gnome@lists.sourceforge.net>\n"

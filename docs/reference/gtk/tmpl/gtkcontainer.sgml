@@ -25,6 +25,7 @@ gtk_container_child_get_property(), gtk_container_child_get() or
 gtk_container_child_get_valist(). To emit notification about child property 
 changes, use gtk_widget_child_notify().
 </para>
+
 <!-- ##### SECTION See_Also ##### -->
 <para>
 

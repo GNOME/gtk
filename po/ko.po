@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.1.5\n"
-"POT-Creation-Date: 2002-12-16 22:22-0500\n"
+"POT-Creation-Date: 2002-12-20 15:52-0500\n"
 "PO-Revision-Date: 2002-12-20 16:43+0900\n"
 "Last-Translator: Nam SungHyun <namsh@kldp.org>\n"
 "Language-Team: Korean <gnome-kr-translation@lists.sourceforge.net>\n"
@@ -36,8 +36,8 @@ msgid ""
 "Failed to load animation '%s': reason not known, probably a corrupt "
 "animation file"
 msgstr ""
-"움직이는 그림 '%s' 읽기 실패 : 이유를 알 수 없습니다, 아마 움직이는 "
-"그림파일이 깨졌을 것입니다"
+"움직이는 그림 '%s' 읽기 실패 : 이유를 알 수 없습니다, 아마 움직이는 그림파일"
+"이 깨졌을 것입니다"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:377
 #, c-format
@@ -88,8 +88,8 @@ msgid ""
 "Failed to close '%s' while writing image, all data may not have been saved: %"
 "s"
 msgstr ""
-"그림을 저장하는 동안 '%s'을(를) 닫는데 실패하였습니다, 모든 데이타가 "
-"저장되지 않았을 것입니다: %s"
+"그림을 저장하는 동안 '%s'을(를) 닫는데 실패하였습니다, 모든 데이타가 저장되"
+"지 않았을 것입니다: %s"
 
 #: gdk-pixbuf/gdk-pixbuf-loader.c:332
 #, c-format
@@ -1000,8 +1000,8 @@ msgstr "스톡 사용"
 msgid ""
 "If set, the label is used to pick a stock item instead of being displayed"
 msgstr ""
-"참이면, 레이블은 그 텍스트를 표시하는 게 아니라 스톡 아이템을 선택하는 "
-"데 쓰입니다"
+"참이면, 레이블은 그 텍스트를 표시하는 게 아니라 스톡 아이템을 선택하는 데 쓰"
+"입니다"
 
 #: gtk/gtkbutton.c:213
 msgid "Border relief"

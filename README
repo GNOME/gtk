@@ -1,7 +1,7 @@
 General Information
 ===================
 
-This is GTK+ version 2.1.5. GTK+ is a multi-platform toolkit for
+This is GTK+ version 2.2.0. GTK+ is a multi-platform toolkit for
 creating graphical user interfaces. Offering a complete set of widgets,
 GTK+ is suitable for projects ranging from small one-off projects to
 complete application suites.
@@ -25,13 +25,13 @@ Installation
 
 See the file 'INSTALL'
 
-GTK+-2.0.0 Specific Notes
-=========================
+Release notes
+=============
 
-* The default configuration of GTK+ has been stream-lined to reduce
-  confusion on the part of new users or users coming from other
-  environments.  Users used to older versions of GTK+ may want to make
-  some adjustments to the default configuration.
+* As compared to GTK+-1.2, the default configuration of GTK+-2 has been 
+  stream-lined to reduce confusion on the part of new users or users 
+  coming from other environments.  Users used to older versions of 
+  GTK+ may want to make some adjustments to the default configuration.
 
    - Emacs keybindings such as Control-A and Control-E to move to the
      ends of lines are not enabled by default in the editing widgets. To
@@ -57,33 +57,33 @@ GTK+-2.0.0 Specific Notes
      to your ~/.gtkrc-2.0
 
 * The GTK+ libraries use an '_' prefix to indicate private symbols that
-  must not be used by applications. The intention was not to export
-  symbols beginning with prefixes such as _gtk, _gdk, and _pango from
-  the libraries at all, but due to a bug in libtool, they are actually
-  exported at the moment on some platforms (including Linux). 
-  Applications that use these private symbols _will_ break when
-  this bug is fixed.
+  must not be used by applications. On some platforms, symbols beginning 
+  with prefixes such as _gtk, _gdk, and _pango will be exported
+  from the library, on others not. In no case can applications
+  use these private symbols.
 
-* The Xft library that GTK+ uses to display anti-aliased fonts will
-  undergo a major version revision in the next few months. To deal with
-  this, by default, GTK+ and Pango are built so that applications will
-  not have explicit dependencies on version 1 on Xft. To make sure that
-  your application will be binary compatible with future versions of
-  GTK+:
+* GTK+-2.2 can be build either with Pango-1.0 and version 1 of
+  the Xft library or Pango-1.2 and version 2 of the Xft library
+  (Xft is used to to display anti-aliased fonts) By default, GTK+ and 
+  Pango are built so that applications will not have explicit dependencies 
+  on either version of Xft. To make sure that your application will be 
+  binary compatible with future versions of GTK+:
 
     - Do not configure Pango or GTK+ with the --enable-static or
-      --enable-explicit otions, since they will cause dependencies on
-      Xft version 1.
+      --enable-explicit-deps options, since they will cause dependencies 
+      on the particular version of Xft.
 
-    - Do not use Xft directly in your applicatons.
+    - Do not use Xft version 1 directly in your applications.
 
 * There is a bug in the Xft library in XFree86-4.1 and possibly previous
   versions that causes random crashes when using the Pango Xft
   backend. If you want to use Xft fonts, you should upgrade to
   XFree86-4.2.
 
-* Xft support is not on by default. To turn it on set the environment
-  variable GDK_USE_XFT to '1'
+* Xft support is on by default when using Xft2 but off by
+  default when using Xft1. To change this default, set the
+  variable GDK_USE_XFT to '1' or '0'. For instance, to 
+  turn on Xft fonts when Xft1.
 
    GDK_USE_XFT=1
    export GDK_USE_XFT
@@ -93,11 +93,11 @@ GTK+-2.0.0 Specific Notes
   guarantees about the degree of workingness or about future
   compatibility are provided.
 
-* There are known problems with some of the image loaders in the
-  gdk-pixbuf library included in GTK+ where corrupted images can cause
-  crashes and conceivably worse problems. Until these problems are fixed
-  (we hope to have this done for 2.0.1), gdk-pixbuf should not be used
-  to load untrusted data.
+* While efforts have been made to make gdk-pixbuf robust against
+  invalid images, using gdk-pixbuf to load untrusted data 
+  is not recommended, due to the likelyhood that there are
+  additional problems where an invalid image could cause
+  gdk-pixbuf to crash or worse.
 
 * The assumption of GLib and GTK+ by default is that filenames on the
   filesystem are encoded in UTF-8 rather than the encoding of the locale;
@@ -110,7 +110,7 @@ GTK+-2.0.0 Specific Notes
    G_BROKEN_FILENAMES=1
    export G_BROKEN_FILENAMES
 
-  Best integration of GTK+-2.0 with the environment is achieved by 
+  Best integration of GTK+-2.2 with the environment is achieved by 
   using a UTF-8 locale.
 
 How to report bugs

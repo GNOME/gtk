@@ -8,7 +8,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.0.0\n"
-"POT-Creation-Date: 2002-12-19 19:22+0900\n"
+"POT-Creation-Date: 2002-12-20 15:52-0500\n"
 "PO-Revision-Date: 2002-12-20 17:38+0900\n"
 "Last-Translator: Akira TAGOH <tagoh@gnome.gr.jp>\n"
 "Language-Team: Japanese <translation@gnome.gr.jp>\n"
@@ -231,7 +231,9 @@ msgstr "GIF 画像の最初のフレームに disposal mode として「前に�
 msgid ""
 "GIF image has no global colormap, and a frame inside it has no local "
 "colormap."
-msgstr "GIF 画像にグローバルなカラーマップがありません。そしてフレームにローカルなカラーマップがありません"
+msgstr ""
+"GIF 画像にグローバルなカラーマップがありません。そしてフレームにローカルなカ"
+"ラーマップがありません"
 
 #: gdk-pixbuf/io-gif.c:1484
 msgid "GIF image was truncated or incomplete."
@@ -283,7 +285,9 @@ msgstr "JPEG 画像ファイル (%s) の解釈でエラー"
 msgid ""
 "Insufficient memory to load image, try exiting some applications to free "
 "memory"
-msgstr "画像を読み込むのに十分なメモリがありません。アプリケーションをいくつか終了させてメモリを解放してください"
+msgstr ""
+"画像を読み込むのに十分なメモリがありません。アプリケーションをいくつか終了さ"
+"せてメモリを解放してください"
 
 #: gdk-pixbuf/io-jpeg.c:383 gdk-pixbuf/io-jpeg.c:744
 #, c-format
@@ -299,13 +303,17 @@ msgstr "JPEG 画像を読み込むための十分なメモリがありません"
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%s' could not be "
 "parsed."
-msgstr "JPEG の「クオリティ」は 0 から 100 の間の値でなくてはなりません。'%s' という値はパースできません"
+msgstr ""
+"JPEG の「クオリティ」は 0 から 100 の間の値でなくてはなりません。'%s' という"
+"値はパースできません"
 
 #: gdk-pixbuf/io-jpeg.c:827
 #, c-format
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
-msgstr "JPEGの「クオリティ」は 0 から 100 の間の値でなくてはなりません。'%d' という値を取ることはできません"
+msgstr ""
+"JPEGの「クオリティ」は 0 から 100 の間の値でなくてはなりません。'%d' という値"
+"を取ることはできません"
 
 #: gdk-pixbuf/io-jpeg.c:940
 msgid "The JPEG image format"
@@ -329,7 +337,9 @@ msgstr "変換された PNG が RGB でも RGBA でもありません"
 
 #: gdk-pixbuf/io-png.c:162
 msgid "Transformed PNG has unsupported number of channels, must be 3 or 4."
-msgstr "変換された PNG のチャンネル数がサポートされているものではありません。3 か 4 でなくてはなりません"
+msgstr ""
+"変換された PNG のチャンネル数がサポートされているものではありません。3 か 4 "
+"でなくてはなりません"
 
 #: gdk-pixbuf/io-png.c:183
 #, c-format
@@ -345,7 +355,9 @@ msgstr "PNG 画像を読み込むのに十分なメモリがありません"
 msgid ""
 "Insufficient memory to store a %ld by %ld image; try exiting some "
 "applications to reduce memory usage"
-msgstr "%ldx%ld の画像を保存するのに十分なメモリがありません。アプリケーションをいくつか終了させてメモリの使用量を減らしてください"
+msgstr ""
+"%ldx%ld の画像を保存するのに十分なメモリがありません。アプリケーションをいく"
+"つか終了させてメモリの使用量を減らしてください"
 
 #: gdk-pixbuf/io-png.c:656
 msgid "Fatal error reading PNG image file"
@@ -369,7 +381,8 @@ msgstr "PNG のテキストチャンクのキーは ASCII 文字でなければ�
 #, c-format
 msgid ""
 "Value for PNG text chunk %s can not be converted to ISO-8859-1 encoding."
-msgstr "PNG のテキストチャンク %s の値を ISO-8859-1 エンコーディングに変換できません"
+msgstr ""
+"PNG のテキストチャンク %s の値を ISO-8859-1 エンコーディングに変換できません"
 
 #: gdk-pixbuf/io-png.c:919
 msgid "The PNG image format"
@@ -771,7 +784,9 @@ msgstr "水平スケール"
 msgid ""
 "If available horizontal space is bigger than needed for the child, how much "
 "of it to use for the child. 0.0 means none, 1.0 means all"
-msgstr "利用可能な水平方向のスペースが子で必要とされる幅より大きい場合、そのうちのどの程度が子で利用されるか。0.0 でゼロ、1.0 で全部"
+msgstr ""
+"利用可能な水平方向のスペースが子で必要とされる幅より大きい場合、そのうちのど"
+"の程度が子で利用されるか。0.0 でゼロ、1.0 で全部"
 
 #: gtk/gtkalignment.c:130
 msgid "Vertical scale"
@@ -781,7 +796,9 @@ msgstr "垂直スケール"
 msgid ""
 "If available vertical space is bigger than needed for the child, how much of "
 "it to use for the child. 0.0 means none, 1.0 means all"
-msgstr "利用可能な垂直方向のスペースが子で必要とされる高さより大きい場合、そのうちのどの程度が子で利用されるか。0.0 でゼロ、1.0 で全部"
+msgstr ""
+"利用可能な垂直方向のスペースが子で必要とされる高さより大きい場合、そのうちの"
+"どの程度が子で利用されるか。0.0 でゼロ、1.0 で全部"
 
 #: gtk/gtkarrow.c:98
 msgid "Arrow direction"
@@ -871,7 +888,9 @@ msgstr "配置スタイル"
 msgid ""
 "How to layout the buttons in the box. Possible values are default, spread, "
 "edge, start and end"
-msgstr "ボックス内にどのようにボタンを配置するか。可能な値としては default、spread、edge、start と end です"
+msgstr ""
+"ボックス内にどのようにボタンを配置するか。可能な値としては default、spread、"
+"edge、start と end です"
 
 #: gtk/gtkbbox.c:164
 msgid "Secondary"
@@ -881,7 +900,9 @@ msgstr "セカンダリ"
 msgid ""
 "If TRUE, the child appears in a secondary group of children, suitable for, e."
 "g., help buttons"
-msgstr "TRUE ならば指定した子は、子のセカンダリグループに現れます。たとえば、ヘルプボタン向きです"
+msgstr ""
+"TRUE ならば指定した子は、子のセカンダリグループに現れます。たとえば、ヘルプボ"
+"タン向きです"
 
 #: gtk/gtkbox.c:128
 msgid "Spacing"
@@ -952,7 +973,9 @@ msgstr "ラベル"
 msgid ""
 "Text of the label widget inside the button, if the button contains a label "
 "widget"
-msgstr "ボタンがラベル・ウィジェットを含んでいる場合、そのボタン内のラベル・ウィジェット上の文字"
+msgstr ""
+"ボタンがラベル・ウィジェットを含んでいる場合、そのボタン内のラベル・ウィ"
+"ジェット上の文字"
 
 #: gtk/gtkbutton.c:197 gtk/gtklabel.c:311
 msgid "Use underline"
@@ -962,7 +985,9 @@ msgstr "下線使用"
 msgid ""
 "If set, an underline in the text indicates the next character should be used "
 "for the mnemonic accelerator key"
-msgstr "セットされると、テキスト中の下線は、次の文字がアクセラレータ・キーのニーモニックとして使用されます"
+msgstr ""
+"セットされると、テキスト中の下線は、次の文字がアクセラレータ・キーのニーモ"
+"ニックとして使用されます"
 
 #: gtk/gtkbutton.c:205
 msgid "Use stock"
@@ -971,7 +996,9 @@ msgstr "ストック使用"
 #: gtk/gtkbutton.c:206
 msgid ""
 "If set, the label is used to pick a stock item instead of being displayed"
-msgstr "セットされると、ラベルはそれ自身が表示されるのではなく、ストック・アイテムから選択するための文字列として使用されます"
+msgstr ""
+"セットされると、ラベルはそれ自身が表示されるのではなく、ストック・アイテムか"
+"ら選択するための文字列として使用されます"
 
 #: gtk/gtkbutton.c:213
 msgid "Border relief"
@@ -1556,13 +1583,16 @@ msgstr "色選択で使用するパレット"
 msgid ""
 "Select the color you want from the outer ring. Select the darkness or "
 "lightness of that color using the inner triangle."
-msgstr "外周の輪から希望する色を選んでください。内周の輪で色の暗さ・明るさを選んでください"
+msgstr ""
+"外周の輪から希望する色を選んでください。内周の輪で色の暗さ・明るさを選んでく"
+"ださい"
 
 #: gtk/gtkcolorsel.c:1846
 msgid ""
 "Click the eyedropper, then click a color anywhere on your screen to select "
 "that color."
-msgstr "スポイトをクリックして、画面上の好きな場所をクリックして色を選んでください"
+msgstr ""
+"スポイトをクリックして、画面上の好きな場所をクリックして色を選んでください"
 
 #: gtk/gtkcolorsel.c:1855
 msgid "_Hue:"
@@ -1628,7 +1658,9 @@ msgstr "色名称:(_N)"
 msgid ""
 "You can enter an HTML-style hexadecimal color value, or simply a color name "
 "such as 'orange' in this entry."
-msgstr "HTML 風の16進数で色の値を入力するか、色の名前、たとえば 'orange'、をこのエントリに入力できます"
+msgstr ""
+"HTML 風の16進数で色の値を入力するか、色の名前、たとえば 'orange'、をこのエン"
+"トリに入力できます"
 
 #: gtk/gtkcolorsel.c:1923
 msgid "_Palette"
@@ -1927,7 +1959,8 @@ msgid ""
 "available to this program.\n"
 "Are you sure that you want to select it?"
 msgstr ""
-"ファイル \"%s\" は (%s と呼ばれる) 他のマシンにあって、このプログラムでは利用できません\n"
+"ファイル \"%s\" は (%s と呼ばれる) 他のマシンにあって、このプログラムでは利用"
+"できません\n"
 "本当に選択したいのですか?"
 
 #: gtk/gtkfilesel.c:1068
@@ -2060,7 +2093,9 @@ msgstr "選択(_S): "
 msgid ""
 "The filename \"%s\" couldn't be converted to UTF-8 (try setting the "
 "environment variable G_BROKEN_FILENAMES): %s"
-msgstr "ファイル名 \"%s\" は UTF-8 に変換できませんでした (環境変数 G_BROKEN_FILENAMES の設定を試してください): %s"
+msgstr ""
+"ファイル名 \"%s\" は UTF-8 に変換できませんでした (環境変数 "
+"G_BROKEN_FILENAMES の設定を試してください): %s"
 
 #: gtk/gtkfilesel.c:3080
 msgid "Invalid Utf-8"
@@ -4546,7 +4581,9 @@ msgstr "イベント"
 
 #: gtk/gtkwidget.c:511
 msgid "The event mask that decides what kind of GdkEvents this widget gets"
-msgstr "どのような種類の GdkEvent をこのウィジェットが受信するか決定するイベントマスク"
+msgstr ""
+"どのような種類の GdkEvent をこのウィジェットが受信するか決定するイベントマス"
+"ク"
 
 #: gtk/gtkwidget.c:518
 msgid "Extension events"
@@ -4554,7 +4591,8 @@ msgstr "拡張イベント"
 
 #: gtk/gtkwidget.c:519
 msgid "The mask that decides what kind of extension events this widget gets"
-msgstr "どのような種類の拡張イベントをこのウィジェットが受信するか決定するマスク"
+msgstr ""
+"どのような種類の拡張イベントをこのウィジェットが受信するか決定するマスク"
 
 #: gtk/gtkwidget.c:1098
 msgid "Interior Focus"
@@ -4604,7 +4642,9 @@ msgstr "セカンダリカーソルの色"
 msgid ""
 "Color with which to draw the secondary insertion cursor when editing mixed "
 "right-to-left and left-to-right text"
-msgstr "右から左と左から右のテキストが混在している時のセカンダリ挿入カーソルを描画する色"
+msgstr ""
+"右から左と左から右のテキストが混在している時のセカンダリ挿入カーソルを描画す"
+"る色"
 
 #: gtk/gtkwidget.c:1136
 msgid "Cursor line aspect ratio"
@@ -4639,7 +4679,9 @@ msgstr "縮小可能"
 msgid ""
 "If TRUE, the window has no mimimum size. Setting this to TRUE is 99% of the "
 "time a bad idea"
-msgstr "TRUE であれば、ウィンドウに最小のサイズはない。TRUE にするのは九分九厘間違いです"
+msgstr ""
+"TRUE であれば、ウィンドウに最小のサイズはない。TRUE にするのは九分九厘間違い"
+"です"
 
 #: gtk/gtkwindow.c:483
 msgid "Allow Grow"
@@ -4661,7 +4703,9 @@ msgstr "モーダル"
 msgid ""
 "If TRUE, the window is modal (other windows are not usable while this one is "
 "up)"
-msgstr "TRUE ならばウィンドウはモーダル (このウィンドウが上にある間、他のウィンドウは使用できない)"
+msgstr ""
+"TRUE ならばウィンドウはモーダル (このウィンドウが上にある間、他のウィンドウは"
+"使用できない)"
 
 #: gtk/gtkwindow.c:507
 msgid "Window Position"

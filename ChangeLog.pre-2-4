@@ -1,3 +1,15 @@
+Fri Dec 20 15:23:26 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* === Released 2.2.0 ===
+
+	* configure.in: Version 2.2.0, interface age 0, binary age 200.
+
+	* README.in: Update the release notes.
+
+	* INSTALL.in: Mention that Pango-1.0 can be used with GTK+-2.2.
+
+	* NEWS: Update.
+
 2002-12-20  Sven Neumann  <sven@gimp.org>
 
 	* examples/gtkdial/gtkdial.c: use G_PI instead of M_PI.

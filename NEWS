@@ -1,3 +1,12 @@
+Overview of Changes in GTK+ 2.2.0
+=================================
+* Fix problem with the DND code and event filters [Bolian Yin, Owen Taylor]
+* GtkTreeView bug fixes [Kristian Rietveld, Soeren Sandmann, Matthias Clasen]
+* Documentation improvements [Matthias Clasen, Eric Warmenhoven, 
+  James M. Cape]
+* Example portability fix [Sven Neumann]
+* Updated translations (es,ja,lv,ms,nl,ru,sk,sv)
+
 Overview of Changes in GTK+ 2.1.5
 =================================
 * GtkFileSel fixes [Owen Taylor]

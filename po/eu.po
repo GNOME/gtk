@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ VERSION\n"
-"POT-Creation-Date: 2002-12-16 22:22-0500\n"
+"POT-Creation-Date: 2002-12-20 15:52-0500\n"
 "PO-Revision-Date: 1999-07-05 19:17+0200\n"
 "Last-Translator: Joseba Bidaurrazaga van Dierdonck <gcpbivaj@lg.ehu.es>\n"
 "Language-Team: euskare <linux-eu@chanae.alphanet.ch>\n"
