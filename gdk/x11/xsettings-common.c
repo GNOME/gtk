@@ -147,6 +147,9 @@ xsettings_setting_free (XSettingsSetting *setting)
 {
   if (setting->type == XSETTINGS_TYPE_STRING)
     free (setting->data.v_string);
+
+  if (setting->name)
+    free (setting->name);
   
   free (setting);
 }

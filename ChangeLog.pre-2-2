@@ -1,3 +1,8 @@
+2002-02-07  Anders Carlsson  <andersca@gnu.org>
+
+	* gdk/x11/xsettings-common.c (xsettings_setting_free): Free 
+	the setting name.
+
 Wed Feb  6 23:28:39 2002  Kristian Rietveld  <kris@gtk.org>
 
 	Fixes #70708
