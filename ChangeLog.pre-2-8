@@ -1,5 +1,8 @@
 2004-10-06  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkpaned.c (gtk_paned_compute_position): Reduce rounding 
+	error.  (#154658, John Cupitt)
+
 	* gtk/gtktreeselection.c (gtk_tree_selection_get_selected): Clear
 	the iter instead of returning it unmodified. (#154186, Jonathan Blandford)
 

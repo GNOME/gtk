@@ -1180,9 +1180,9 @@ gtk_paned_compute_position (GtkPaned *paned,
       else if (!paned->child1_resize && paned->child2_resize)
 	paned->child1_size = child1_req;
       else if (child1_req + child2_req != 0)
-	paned->child1_size = allocation * ((gdouble)child1_req / (child1_req + child2_req));
+	paned->child1_size = allocation * ((gdouble)child1_req / (child1_req + child2_req)) + 0.5;
       else
-	paned->child1_size = allocation * 0.5;
+	paned->child1_size = allocation * 0.5 + 0.5;
     }
   else
     {
@@ -1194,7 +1194,7 @@ gtk_paned_compute_position (GtkPaned *paned,
 	  if (paned->child1_resize && !paned->child2_resize)
 	    paned->child1_size += allocation - paned->last_allocation;
 	  else if (!(!paned->child1_resize && paned->child2_resize))
-	    paned->child1_size = allocation * ((gdouble) paned->child1_size / (paned->last_allocation));
+	    paned->child1_size = allocation * ((gdouble) paned->child1_size / (paned->last_allocation)) + 0.5;
 	}
     }
 
