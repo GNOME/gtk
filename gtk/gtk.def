@@ -1,4 +1,33 @@
 EXPORTS
+	gtk_about_dialog_get_artists
+	gtk_about_dialog_get_authors
+	gtk_about_dialog_get_comments
+	gtk_about_dialog_get_copyright
+	gtk_about_dialog_get_documenters
+	gtk_about_dialog_get_license
+	gtk_about_dialog_get_logo
+	gtk_about_dialog_get_name
+	gtk_about_dialog_get_translator_credits
+	gtk_about_dialog_get_type
+	gtk_about_dialog_get_version
+	gtk_about_dialog_get_website
+	gtk_about_dialog_get_website_label
+	gtk_about_dialog_new
+	gtk_about_dialog_set_artists
+	gtk_about_dialog_set_authors
+	gtk_about_dialog_set_comments
+	gtk_about_dialog_set_copyright
+	gtk_about_dialog_set_documenters
+	gtk_about_dialog_set_email_hook
+	gtk_about_dialog_set_license
+	gtk_about_dialog_set_logo
+	gtk_about_dialog_set_name
+	gtk_about_dialog_set_translator_credits
+	gtk_about_dialog_set_url_hook
+	gtk_about_dialog_set_version
+	gtk_about_dialog_set_website
+	gtk_about_dialog_set_website_label
+	gtk_show_about_dialog
 	gtk_accel_flags_get_type
 	gtk_accel_group_activate
 	gtk_accel_group_connect
@@ -77,7 +106,6 @@ EXPORTS
 	gtk_action_group_set_translate_func
 	gtk_action_group_set_translation_domain
 	gtk_action_group_set_visible
-	gtk_action_group_translate_string
 	gtk_action_is_sensitive
 	gtk_action_is_visible
 	gtk_action_new
@@ -198,6 +226,8 @@ EXPORTS
 	gtk_cell_layout_set_attributes
 	gtk_cell_layout_set_cell_data_func
 	gtk_cell_renderer_activate
+	gtk_cell_renderer_combo_get_type
+	gtk_cell_renderer_combo_new
 	gtk_cell_renderer_editing_canceled
 	gtk_cell_renderer_get_fixed_size
 	gtk_cell_renderer_get_size
@@ -205,6 +235,7 @@ EXPORTS
 	gtk_cell_renderer_mode_get_type
 	gtk_cell_renderer_pixbuf_get_type
 	gtk_cell_renderer_pixbuf_new
+	gtk_cell_renderer_progress_new
 	gtk_cell_renderer_render
 	gtk_cell_renderer_set_fixed_size
 	gtk_cell_renderer_start_editing
@@ -219,20 +250,16 @@ EXPORTS
 	gtk_cell_renderer_toggle_set_active
 	gtk_cell_renderer_toggle_set_radio
 	gtk_cell_type_get_type
+	gtk_cell_view_get_cell_renderers
 	gtk_cell_view_get_displayed_row
 	gtk_cell_view_get_size_of_row
 	gtk_cell_view_get_type
-	gtk_cell_view_menu_item_get_type
-	gtk_cell_view_menu_item_new
-	gtk_cell_view_menu_item_new_from_model
-	gtk_cell_view_menu_item_new_with_markup
-	gtk_cell_view_menu_item_new_with_pixbuf
-	gtk_cell_view_menu_item_new_with_text
 	gtk_cell_view_new
 	gtk_cell_view_new_with_markup
 	gtk_cell_view_new_with_pixbuf
 	gtk_cell_view_new_with_text
 	gtk_cell_view_set_background_color
+	gtk_cell_view_set_cell_data
 	gtk_cell_view_set_displayed_row
 	gtk_cell_view_set_model
 	gtk_cell_view_set_value
@@ -389,8 +416,12 @@ EXPORTS
 	gtk_combo_box_entry_set_text_column
 	gtk_combo_box_get_active
 	gtk_combo_box_get_active_iter
+	gtk_combo_box_get_active_text
+	gtk_combo_box_get_add_tearoffs
 	gtk_combo_box_get_column_span_column
 	gtk_combo_box_get_model
+	gtk_combo_box_get_popup_accessible
+	gtk_combo_box_get_row_separator_func
 	gtk_combo_box_get_row_span_column
 	gtk_combo_box_get_type
 	gtk_combo_box_get_wrap_width
@@ -404,8 +435,10 @@ EXPORTS
 	gtk_combo_box_remove_text
 	gtk_combo_box_set_active
 	gtk_combo_box_set_active_iter
+	gtk_combo_box_set_add_tearoffs
 	gtk_combo_box_set_column_span_column
 	gtk_combo_box_set_model
+	gtk_combo_box_set_row_separator_func
 	gtk_combo_box_set_row_span_column
 	gtk_combo_box_set_wrap_width
 	gtk_combo_disable_activate
@@ -559,6 +592,7 @@ EXPORTS
 	gtk_disable_setlocale
 	gtk_drag_begin
 	gtk_drag_check_threshold
+	gtk_drag_dest_add_text_targets
 	gtk_drag_dest_find_target
 	gtk_drag_dest_get_target_list
 	gtk_drag_dest_set
@@ -575,6 +609,7 @@ EXPORTS
 	gtk_drag_set_icon_pixmap
 	gtk_drag_set_icon_stock
 	gtk_drag_set_icon_widget
+	gtk_drag_source_add_text_targets
 	gtk_drag_source_get_target_list
 	gtk_drag_source_set
 	gtk_drag_source_set_icon
@@ -626,15 +661,21 @@ EXPORTS
 	gtk_entry_completion_complete
 	gtk_entry_completion_delete_action
 	gtk_entry_completion_get_entry
+	gtk_entry_completion_get_inline_completion
 	gtk_entry_completion_get_minimum_key_length
 	gtk_entry_completion_get_model
+	gtk_entry_completion_get_popup_completion
+	gtk_entry_completion_get_text_column
 	gtk_entry_completion_get_type
 	gtk_entry_completion_insert_action_markup
 	gtk_entry_completion_insert_action_text
+	gtk_entry_completion_insert_prefix
 	gtk_entry_completion_new
+	gtk_entry_completion_set_inline_completion
 	gtk_entry_completion_set_match_func
 	gtk_entry_completion_set_minimum_key_length
 	gtk_entry_completion_set_model
+	gtk_entry_completion_set_popup_completion
 	gtk_entry_completion_set_text_column
 	gtk_entry_get_activates_default
 	gtk_entry_get_alignment
@@ -712,6 +753,7 @@ EXPORTS
 	gtk_file_chooser_get_preview_widget
 	gtk_file_chooser_get_preview_widget_active
 	gtk_file_chooser_get_select_multiple
+	gtk_file_chooser_get_show_hidden
 	gtk_file_chooser_get_type
 	gtk_file_chooser_get_uri
 	gtk_file_chooser_get_uris
@@ -736,6 +778,7 @@ EXPORTS
 	gtk_file_chooser_set_preview_widget
 	gtk_file_chooser_set_preview_widget_active
 	gtk_file_chooser_set_select_multiple
+	gtk_file_chooser_set_show_hidden
 	gtk_file_chooser_set_uri
 	gtk_file_chooser_set_use_preview_label
 	gtk_file_chooser_unselect_all
@@ -756,6 +799,7 @@ EXPORTS
 	gtk_file_filter_set_name
 	gtk_file_folder_get_info
 	gtk_file_folder_get_type
+	gtk_file_folder_is_finished_loading
 	gtk_file_folder_list_children
 	gtk_file_info_copy
 	gtk_file_info_free
@@ -774,6 +818,7 @@ EXPORTS
 	gtk_file_info_set_mime_type
 	gtk_file_info_set_modification_time
 	gtk_file_info_set_size
+	gtk_file_path_get_type
 	gtk_file_paths_copy
 	gtk_file_paths_free
 	gtk_file_paths_sort
@@ -800,6 +845,7 @@ EXPORTS
 	gtk_file_system_make_path
 	gtk_file_system_module_get_type
 	gtk_file_system_parse
+	gtk_file_system_path_is_local
 	gtk_file_system_path_to_filename
 	gtk_file_system_path_to_uri
 	gtk_file_system_remove_bookmark
@@ -969,6 +1015,7 @@ EXPORTS
 	gtk_icon_theme_get_default
 	gtk_icon_theme_get_example_icon_name
 	gtk_icon_theme_get_for_screen
+	gtk_icon_theme_get_icon_sizes
 	gtk_icon_theme_get_search_path
 	gtk_icon_theme_get_type
 	gtk_icon_theme_has_icon
@@ -981,6 +1028,30 @@ EXPORTS
 	gtk_icon_theme_set_custom_theme
 	gtk_icon_theme_set_screen
 	gtk_icon_theme_set_search_path
+	gtk_icon_view_get_markup_column
+	gtk_icon_view_get_model
+	gtk_icon_view_get_path_at_pos
+	gtk_icon_view_get_orientation
+	gtk_icon_view_get_pixbuf_column
+	gtk_icon_view_get_selected_items
+	gtk_icon_view_get_selection_mode
+	gtk_icon_view_get_text_column
+	gtk_icon_view_get_type
+	gtk_icon_view_item_activated
+	gtk_icon_view_new
+	gtk_icon_view_new_with_model
+	gtk_icon_view_path_is_selected
+	gtk_icon_view_select_all
+	gtk_icon_view_select_path
+	gtk_icon_view_selected_foreach
+	gtk_icon_view_set_markup_column
+	gtk_icon_view_set_model
+	gtk_icon_view_set_orientation
+	gtk_icon_view_set_pixbuf_column
+	gtk_icon_view_set_selection_mode
+	gtk_icon_view_set_text_column
+	gtk_icon_view_unselect_all
+	gtk_icon_view_unselect_path
 	gtk_identifier_get_type
 	gtk_idle_add
 	gtk_idle_add_full
@@ -1089,6 +1160,7 @@ EXPORTS
 	gtk_key_snooper_remove
 	gtk_label_get
 	gtk_label_get_attributes
+	gtk_label_get_ellipsize
 	gtk_label_get_justify
 	gtk_label_get_label
 	gtk_label_get_layout
@@ -1107,6 +1179,7 @@ EXPORTS
 	gtk_label_parse_uline
 	gtk_label_select_region
 	gtk_label_set_attributes
+	gtk_label_set_ellipsize
 	gtk_label_set_justify
 	gtk_label_set_label
 	gtk_label_set_line_wrap
@@ -1224,6 +1297,7 @@ EXPORTS
 	gtk_menu_get_accel_group
 	gtk_menu_get_active
 	gtk_menu_get_attach_widget
+	gtk_menu_get_for_attach_widget
 	gtk_menu_get_private
 	gtk_menu_get_tearoff_state
 	gtk_menu_get_title
@@ -1702,6 +1776,7 @@ EXPORTS
 	gtk_target_flags_get_type
 	gtk_target_list_add
 	gtk_target_list_add_table
+	gtk_target_list_add_text_targets
 	gtk_target_list_find
 	gtk_target_list_new
 	gtk_target_list_ref
@@ -2365,11 +2440,15 @@ EXPORTS
 	gtk_tree_view_get_drag_dest_row
 	gtk_tree_view_get_enable_search
 	gtk_tree_view_get_expander_column
+	gtk_tree_view_get_fixed_height_mode
 	gtk_tree_view_get_hadjustment
 	gtk_tree_view_get_headers_visible
+	gtk_tree_view_get_hover_expand
+	gtk_tree_view_get_hover_selection
 	gtk_tree_view_get_model
 	gtk_tree_view_get_path_at_pos
 	gtk_tree_view_get_reorderable
+	gtk_tree_view_get_row_separator_func
 	gtk_tree_view_get_rules_hint
 	gtk_tree_view_get_search_column
 	gtk_tree_view_get_search_equal_func
@@ -2397,11 +2476,15 @@ EXPORTS
 	gtk_tree_view_set_drag_dest_row
 	gtk_tree_view_set_enable_search
 	gtk_tree_view_set_expander_column
+	gtk_tree_view_set_fixed_height_mode
 	gtk_tree_view_set_hadjustment
 	gtk_tree_view_set_headers_clickable
 	gtk_tree_view_set_headers_visible
+	gtk_tree_view_get_hover_expand
+	gtk_tree_view_set_hover_selection
 	gtk_tree_view_set_model
 	gtk_tree_view_set_reorderable
+	gtk_tree_view_set_row_separator_func
 	gtk_tree_view_set_rules_hint
 	gtk_tree_view_set_search_column
 	gtk_tree_view_set_search_equal_func
@@ -2621,6 +2704,7 @@ EXPORTS
 	gtk_window_get_has_frame
 	gtk_window_get_icon
 	gtk_window_get_icon_list
+	gtk_window_get_icon_name
 	gtk_window_get_mnemonic_modifier
 	gtk_window_get_modal
 	gtk_window_get_position
@@ -2662,6 +2746,7 @@ EXPORTS
 	gtk_window_set_default_icon
 	gtk_window_set_default_icon_from_file
 	gtk_window_set_default_icon_list
+	gtk_window_set_default_icon_name
 	gtk_window_set_default_size
 	gtk_window_set_destroy_with_parent
 	gtk_window_set_focus
@@ -2673,6 +2758,7 @@ EXPORTS
 	gtk_window_set_icon
 	gtk_window_set_icon_from_file
 	gtk_window_set_icon_list
+	gtk_window_set_icon_name
 	gtk_window_set_keep_above
 	gtk_window_set_keep_below
 	gtk_window_set_mnemonic_modifier

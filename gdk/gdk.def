@@ -88,11 +88,13 @@ EXPORTS
 	gdk_display_pointer_is_grabbed
 	gdk_display_pointer_ungrab
 	gdk_display_put_event
+	gdk_display_request_selection_notification
 	gdk_display_set_double_click_distance
 	gdk_display_set_double_click_time
 	gdk_display_set_pointer_hooks
 	gdk_display_supports_cursor_alpha
 	gdk_display_supports_cursor_color
+	gdk_display_supports_selection_notification
 	gdk_display_sync
 	gdk_drag_abort
 	gdk_drag_action_get_type
@@ -127,6 +129,7 @@ EXPORTS
 	gdk_draw_points
 	gdk_draw_polygon
 	gdk_draw_rectangle
+	gdk_draw_rectangle_alpha_libgtk_only
 	gdk_draw_rgb_32_image
 	gdk_draw_rgb_32_image_dithalign
 	gdk_draw_rgb_image
@@ -467,11 +470,13 @@ EXPORTS
 	gdk_window_clear
 	gdk_window_clear_area
 	gdk_window_clear_area_e
+	gdk_window_configure_finished
 	gdk_window_constrain_size
 	gdk_window_deiconify
 	gdk_window_destroy
 	gdk_window_destroy_notify
 	gdk_window_edge_get_type
+	gdk_window_enable_synchronized_configure
 	gdk_window_end_paint
 	gdk_window_focus
 	gdk_window_foreign_new

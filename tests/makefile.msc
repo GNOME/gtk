@@ -45,7 +45,7 @@ TESTAPPS = \
 	testentrycompletion \
 	testfilechooser \
 	testgtk \
-	testicontheme testinput \
+	testicontheme testiconview testinput \
 	testmenus testmerge testmultidisplay testmultiscreen \
 	testrgb \
 	testselection testspinbutton \
@@ -69,6 +69,10 @@ one-test-app:
 !ELSE
 
 !IFDEF EXTRA_testgtk
+EXTRA_OBJETCS = prop-editor.obj
+!ENDIF
+
+!IFDEF EXTRA_testiconview
 EXTRA_OBJETCS = prop-editor.obj
 !ENDIF
 

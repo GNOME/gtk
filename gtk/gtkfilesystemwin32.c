@@ -829,18 +829,22 @@ static GtkFilePath *
 gtk_file_system_win32_uri_to_path (GtkFileSystem     *file_system,
 				   const gchar       *uri)
 {
+  GtkFilePath *path = NULL;
   gchar *filename = g_filename_from_uri (uri, NULL, NULL);
   if (filename)
-    return gtk_file_path_new_steal (filename);
-  else
-    return NULL;
+    {
+      path = filename_to_path (filename);
+      g_free (filename);
+    }
+
+  return path;
 }
 
 static GtkFilePath *
 gtk_file_system_win32_filename_to_path (GtkFileSystem *file_system,
 				        const gchar   *filename)
 {
-  return gtk_file_path_new_dup (filename);
+  return filename_to_path (filename);
 }
 
 static gboolean
@@ -1099,7 +1103,7 @@ gtk_file_system_win32_render_icon (GtkFileSystem     *file_system,
       if (0 == strcmp (g_get_home_dir(), filename))
         icon_set = gtk_style_lookup_icon_set (widget->style, GTK_STOCK_HOME);
       else
-        icon_set = gtk_style_lookup_icon_set (widget->style, GTK_STOCK_OPEN);
+        icon_set = gtk_style_lookup_icon_set (widget->style, GTK_STOCK_DIRECTORY);
     }
   else if (g_file_test (filename, G_FILE_TEST_IS_EXECUTABLE))
     {

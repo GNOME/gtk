@@ -1,3 +1,28 @@
+2004-08-06  Hans Breuer  <hans@breuer.org>
+
+	* gdk/win32/gdkwindow-win32.c : make it compile and more
+	similar to the X11 implementation [backward compatibility
+	for GDK_WINDOW_TEMP, GDK_INPUT_ONLY (fixes bug #148702), 
+	use the *screen* function variants, dont reparent already 
+	destroyed]
+	(get_visible_region) : take the win32 part into account
+	(_gdk_windowing_window_destroy) : remove from handle table
+
+	* gdk/win32/gdkdisplay-win32.c : added 
+	gdk_display_(request|supports)_selection_notification ()
+	with a currently mostly pointless implementation ;-)
+
+	* gtk/gtkfilesystemwin32.c (*_to_path) : same changes as on *NIX,
+	plugs memory leak
+	(gtk_file_system_win32_render_icon) : use new GTK_STOCK_DIRECTORY
+
+	* gtk/makefile.msc.in demos/gtk-demo/makefile.msc.in 
+	  gtk/stock-icons/makefile.msc tests/makefile.msc : updated
+
+	* gdk/gdk.def gtk/gtk.def : updated externals
+
+	* tests/testiconview.c : remove unneeded dirent.h inclusion
+
 2004-08-06  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtktreeview.c (gtk_tree_view_move_cursor_page_up_down): Fix

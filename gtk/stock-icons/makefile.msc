@@ -1,4 +1,6 @@
 VARIABLES = \
+	stock_about_16		stock_about_16.png	\
+	stock_about_24		stock_about_24.png	\
 	stock_add_16		stock_add_16.png	\
 	stock_add_24		stock_add_24.png	\
 	stock_align_center_16		stock_align_center_16.png	\
@@ -22,6 +24,8 @@ VARIABLES = \
 	stock_close_24		stock_close_24.png	\
 	stock_color_picker_25		stock_color_picker_25.png	\
 	stock_colorselector_24		stock_colorselector_24.png	\
+	stock_connect_16		stock_connect_16.png	\
+	stock_connect_24		stock_connect_24.png	\
 	stock_convert_16		stock_convert_16.png	\
 	stock_convert_24		stock_convert_24.png	\
 	stock_copy_16		stock_copy_16.png	\
@@ -33,22 +37,30 @@ VARIABLES = \
 	stock_dialog_info_48		stock_dialog_info_48.png	\
 	stock_dialog_question_48		stock_dialog_question_48.png	\
 	stock_dialog_warning_48		stock_dialog_warning_48.png	\
+	stock_directory_16		stock_directory_16.png	\
+	stock_directory_24		stock_directory_24.png	\
+	stock_disconnect_16		stock_disconnect_16.png	\
+	stock_disconnect_24		stock_disconnect_24.png	\
 	stock_dnd_32		stock_dnd_32.png	\
 	stock_dnd_multiple_32		stock_dnd_multiple_32.png	\
 	stock_down_arrow_16		stock_down_arrow_16.png	\
 	stock_down_arrow_24		stock_down_arrow_24.png	\
+	stock_edit_16		stock_edit_16.png	\
+	stock_edit_24		stock_edit_24.png	\
 	stock_exec_16		stock_exec_16.png	\
 	stock_exec_24		stock_exec_24.png	\
 	stock_exit_16		stock_exit_16.png	\
 	stock_exit_24		stock_exit_24.png	\
+	stock_file_16		stock_file_16.png	\
+	stock_file_24		stock_file_24.png	\
 	stock_first_16		stock_first_16.png	\
 	stock_first_24		stock_first_24.png	\
 	stock_font_16		stock_font_16.png	\
 	stock_font_24		stock_font_24.png	\
-	stock_help_16		stock_help_16.png	\
-	stock_help_24		stock_help_24.png	\
 	stock_harddisk_16		stock_harddisk_16.png	\
 	stock_harddisk_24		stock_harddisk_24.png	\
+	stock_help_16		stock_help_16.png	\
+	stock_help_24		stock_help_24.png	\
 	stock_home_16		stock_home_16.png	\
 	stock_home_24		stock_home_24.png	\
 	stock_index_24		stock_index_24.png	\
@@ -64,6 +76,22 @@ VARIABLES = \
 	stock_last_24		stock_last_24.png	\
 	stock_left_arrow_16		stock_left_arrow_16.png	\
 	stock_left_arrow_24		stock_left_arrow_24.png	\
+	stock_media_forward_16		stock_media_forward_16.png	\
+	stock_media_forward_24		stock_media_forward_24.png	\
+	stock_media_next_16		stock_media_next_16.png	\
+	stock_media_next_24		stock_media_next_24.png	\
+	stock_media_pause_16		stock_media_pause_16.png	\
+	stock_media_pause_24		stock_media_pause_24.png	\
+	stock_media_play_16		stock_media_play_16.png	\
+	stock_media_play_24		stock_media_play_24.png	\
+	stock_media_previous_16		stock_media_previous_16.png	\
+	stock_media_previous_24		stock_media_previous_24.png	\
+	stock_media_record_16		stock_media_record_16.png	\
+	stock_media_record_24		stock_media_record_24.png	\
+	stock_media_rewind_16		stock_media_rewind_16.png	\
+	stock_media_rewind_24		stock_media_rewind_24.png	\
+	stock_media_stop_16		stock_media_stop_16.png	\
+	stock_media_stop_24		stock_media_stop_24.png	\
 	stock_network_16		stock_network_16.png	\
 	stock_network_24		stock_network_24.png	\
 	stock_new_16		stock_new_16.png	\

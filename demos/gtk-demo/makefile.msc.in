@@ -38,6 +38,7 @@ all :	\
 DEMOS = \
 	appwindow.c	\
 	button_box.c	\
+	clipboard.c	\
 	colorsel.c	\
 	dialog.c		\
 	drawingarea.c	\
@@ -45,6 +46,7 @@ DEMOS = \
 	entry_completion.c	\
 	expander.c	\
 	hypertext.c	\
+	iconview.c	\
 	images.c		\
 	list_store.c	\
 	menus.c		\
@@ -64,6 +66,7 @@ OBJECTS = \
 	appwindow.obj	\
 	button_box.obj	\
 	changedisplay.obj	\
+	clipboard.obj	\
 	colorsel.obj	\
 	dialog.obj	\
 	drawingarea.obj	\
@@ -71,6 +74,7 @@ OBJECTS = \
 	entry_completion.obj	\
 	expander.obj	\
 	hypertext.obj	\
+	iconview.obj	\
 	images.obj	\
 	list_store.obj	\
 	menus.obj		\

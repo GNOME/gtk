@@ -20,7 +20,6 @@
 #include <gtk/gtk.h>
 #include <sys/types.h>
 #include <string.h>
-#include <dirent.h>
 #include "prop-editor.h"
 
 #define NUMBER_OF_ITEMS 10
