@@ -1,3 +1,10 @@
+Tue Dec  4 11:45:45 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* io-xpm.c (pixbuf_create_from_xpm): Fill in color 
+	fields to black for transparent colors since we'll
+	later initialize pixels from them. (Fixes purify
+	errors, #66093, HideToshi Tajima)
+
 2001-11-30  Tor Lillqvist  <tml@iki.fi>
 
 	* gdk_pixbuf.def: Add gdk_pixbuf_get_option.
