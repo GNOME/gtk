@@ -1,3 +1,8 @@
+Sat Jan 31 00:13:33 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* gtk/gtkstyle.c: Backed out change to close polygons
+	  since it caused problems for the Notebook.
+
 Fri Jan 30 22:28:09 1998  Owen Taylor  <owt1@cornell.edu>
 
 	* gtk/gtkclist.{c,h}:
