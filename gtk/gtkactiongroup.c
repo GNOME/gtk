@@ -112,9 +112,11 @@ gtk_action_group_init (GtkActionGroup *self)
 
 /**
  * gtk_action_group_new:
- * @name: the name of the action group
+ * @name: the name of the action group.
  *
- * Creates a new #GtkActionGroup object.
+ * Creates a new #GtkActionGroup object. The name of the action group
+ * is used when associating <link linkend="Action-Accel">keybindings</link> 
+ * with the actions.
  *
  * Returns: the new #GtkActionGroup
  *

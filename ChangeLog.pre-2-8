@@ -1,5 +1,7 @@
 2003-09-02  Matthias Clasen  <maclas@gmx.de>
 
+	* gtk/gtkactiongroup.c (gtk_action_group_new): Doc addition.
+
 	* gtk/gtkuimanager.c: Shorten the names of some static 
 	functions.
 
