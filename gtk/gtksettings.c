@@ -141,14 +141,6 @@ gtk_settings_class_init (GtkSettingsClass *class)
   gobject_class->set_property = gtk_settings_set_property;
   gobject_class->notify = gtk_settings_notify;
 
-  g_object_class_install_property (gobject_class,
-				   PROP_SCREEN,
-				   g_param_spec_object ("screen",
-							_("Screen"),
-							_("The screen this GtkSettings manages"),
-							GDK_TYPE_SCREEN,
-							G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
-
   quark_property_parser = g_quark_from_static_string ("gtk-rc-property-parser");
 
   result = settings_install_property_parser (class,
@@ -226,7 +218,14 @@ gtk_settings_class_init (GtkSettingsClass *class)
 								  G_PARAM_READWRITE),
                                              NULL);
   g_assert (result == PROP_FONT_NAME);
- 
+  result = settings_install_property_parser (class,
+					     g_param_spec_object ("screen",
+								  _("Screen"),
+								  _("The screen this GtkSettings manages"),
+								  GDK_TYPE_SCREEN,
+								  G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY),
+					     NULL);
+  g_assert (result == PROP_SCREEN);
 }
 
 static void
@@ -520,6 +519,7 @@ settings_install_property_parser (GtkSettingsClass   *class,
     case G_TYPE_FLOAT:
     case G_TYPE_DOUBLE:
     case G_TYPE_STRING:
+    case G_TYPE_OBJECT:
       break;
     default:
       if (!parser)
