@@ -40,6 +40,10 @@
 #define SAMPLE_WIDTH  WHEEL_WIDTH+VALUE_WIDTH+5
 #define SAMPLE_HEIGHT 28
 
+static void gtk_color_selection_class_init (GtkColorSelectionClass *klass);
+static void gtk_color_selection_init (GtkColorSelection *colorsel);
+static void gtk_color_selection_dialog_class_init(GtkColorSelectionDialogClass *klass);
+static void gtk_color_selection_dialog_init(GtkColorSelectionDialog *colorseldiag);
 
 enum
 {
@@ -201,7 +205,7 @@ gtk_color_selection_get_type ()
   return color_selection_type;
 }
 
-void
+static void
 gtk_color_selection_class_init (GtkColorSelectionClass *klass)
 {
   GtkObjectClass *object_class;
@@ -228,7 +232,7 @@ gtk_color_selection_class_init (GtkColorSelectionClass *klass)
   widget_class->realize = gtk_color_selection_realize;
 }
 
-void
+static void
 gtk_color_selection_init (GtkColorSelection *colorsel)
 {
   GtkWidget *frame, *hbox, *vbox, *hbox2, *label, *table;
@@ -1407,19 +1411,19 @@ gtk_color_selection_dialog_get_type ()
   return color_selection_dialog_type;
 }
 
-void
-gtk_color_selection_dialog_class_init (GtkColorSelectionDialogClass *class)
+static void
+gtk_color_selection_dialog_class_init (GtkColorSelectionDialogClass *klass)
 {
   GtkObjectClass *object_class;
 
-  object_class = (GtkObjectClass*) class;
+  object_class = (GtkObjectClass*) klass;
 
   color_selection_dialog_parent_class = gtk_type_class (gtk_window_get_type ());
 
   object_class->destroy = gtk_color_selection_dialog_destroy;
 }
 
-void
+static void
 gtk_color_selection_dialog_init (GtkColorSelectionDialog *colorseldiag)
 {
   GtkWidget *action_area, *frame;

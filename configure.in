@@ -14,7 +14,7 @@ VERSION=$GTK_VERSION
 PACKAGE=gtk+
 
 # Configure glib
-#AC_CONFIG_SUBDIRS(glib)
+AC_CONFIG_SUBDIRS(glib)
 
 # Save this value here, since automake will set cflags later
 cflags_set=${CFLAGS+set}

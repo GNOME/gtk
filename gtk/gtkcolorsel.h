@@ -119,8 +119,6 @@ struct _GtkColorSelectionDialogClass
 /* ColorSelection */
 
 guint      gtk_color_selection_get_type          (void);
-void       gtk_color_selection_class_init        (GtkColorSelectionClass *klass);
-void       gtk_color_selection_init              (GtkColorSelection      *colorsel);
 
 GtkWidget* gtk_color_selection_new               (void);
 
@@ -139,8 +137,6 @@ void       gtk_color_selection_get_color         (GtkColorSelection     *colorse
 /* ColorSelectionDialog */
 
 guint      gtk_color_selection_dialog_get_type   (void);
-void       gtk_color_selection_dialog_class_init (GtkColorSelectionDialogClass *klass);
-void       gtk_color_selection_dialog_init       (GtkColorSelectionDialog      *colorseldiag);
 
 GtkWidget* gtk_color_selection_dialog_new        (const gchar *title);
 
