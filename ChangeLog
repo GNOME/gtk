@@ -1,3 +1,9 @@
+2001-09-20  Havoc Pennington  <hp@redhat.com>
+
+	* gtk/gtktextlayout.c (gtk_text_layout_get_line_display): don't
+	try to handle alignment here, because it's done by PangoLayout
+	after we set the layout width. Fix from Dov.
+
 2001-09-21  Hans Breuer  <hans@breuer.org>
 
 	* gdk/gdk.def :

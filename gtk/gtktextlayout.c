@@ -1097,8 +1097,7 @@ totally_invisible_line (GtkTextLayout *layout,
 static void
 set_para_values (GtkTextLayout      *layout,
                  GtkTextAttributes *style,
-                 GtkTextLineDisplay *display,
-                 gdouble            *align)
+                 GtkTextLineDisplay *display)
 {
   PangoAlignment pango_align = PANGO_ALIGN_LEFT;
   int layout_width;
@@ -1126,19 +1125,6 @@ set_para_values (GtkTextLayout      *layout,
       break;
     default:
       g_assert_not_reached ();
-      break;
-    }
-
-  switch (pango_align)
-    {
-    case PANGO_ALIGN_LEFT:
-      *align = 0.0;
-      break;
-    case PANGO_ALIGN_RIGHT:
-      *align = 1.0;
-      break;
-    case PANGO_ALIGN_CENTER:
-      *align = 0.5;
       break;
     }
 
@@ -1670,7 +1656,6 @@ gtk_text_layout_get_line_display (GtkTextLayout *layout,
   gchar *text;
   PangoAttrList *attrs;
   gint text_allocated, layout_byte_offset, buffer_byte_offset;
-  gdouble align;
   PangoRectangle extents;
   gboolean para_values_set = FALSE;
   GSList *cursor_byte_offsets = NULL;
@@ -1739,7 +1724,7 @@ gtk_text_layout_get_line_display (GtkTextLayout *layout,
            */
           if (!para_values_set)
             {
-              set_para_values (layout, style, display, &align);
+              set_para_values (layout, style, display);
               para_values_set = TRUE;
             }
 
@@ -1908,7 +1893,7 @@ gtk_text_layout_get_line_display (GtkTextLayout *layout,
   if (!para_values_set)
     {
       style = get_style (layout, &iter);
-      set_para_values (layout, style, display, &align);
+      set_para_values (layout, style, display);
       release_style (layout, style);
     }
   
@@ -1954,8 +1939,6 @@ gtk_text_layout_get_line_display (GtkTextLayout *layout,
   g_slist_free (cursor_segs);
 
   pango_layout_get_extents (display->layout, NULL, &extents);
-
-  display->x_offset += (display->total_width - PANGO_PIXELS (extents.x + extents.width)) * align;
 
   display->width = PANGO_PIXELS (extents.width) + display->left_margin + display->right_margin;
   display->height += PANGO_PIXELS (extents.height);

@@ -1793,6 +1793,19 @@ arrow.
 @show_toggle_indicator: unused
 @show_submenu_indicator: whether to show the arrow or not
 
+<!-- ##### FUNCTION gtk_menu_item_set_placement ##### -->
+<para>
+Specifies the placement of the submenu around the menu item. The placement
+is usually #GTK_LEFT_RIGHT for menu items in a popup menu and
+#GTK_TOP_BOTTOM in menu bars.
+</para>
+<para>
+This function is useless in usual applications.
+</para>
+
+@menu_item: the menu item
+@placement: the submenu placement
+
 <!-- ##### FUNCTION gtk_object_arg_get ##### -->
 <para>
 Private function to get an argument and argument info from an object.
@@ -2479,6 +2492,15 @@ fundamental type.
 @widget: 
 @group_cycling: 
 @Returns: 
+
+<!-- ##### FUNCTION gtk_widget_get_usize ##### -->
+<para>
+
+</para>
+
+@widget: 
+@width: 
+@height: 
 
 <!-- ##### FUNCTION gtk_widget_pop_style ##### -->
 <para>

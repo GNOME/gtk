@@ -1372,16 +1372,6 @@ GtkWidget
 @height: 
 
 
-<!-- ##### FUNCTION gtk_widget_get_usize ##### -->
-<para>
-
-</para>
-
-@widget: 
-@width: 
-@height: 
-
-
 <!-- ##### MACRO gtk_widget_pop_visual ##### -->
 <para>
 
