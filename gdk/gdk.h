@@ -479,8 +479,8 @@ GdkPixmap* gdk_pixmap_create_from_xpm	(GdkWindow  *window,
 					 GdkBitmap **mask,
 					 GdkColor   *transparent_color,
 					 const gchar *filename);
-GdkPixmap* gdk_pixmap_colormap_create_from_xpm 
-                                        (GdkWindow   *window,
+GdkPixmap* gdk_pixmap_colormap_create_from_xpm (
+					 GdkWindow   *window,
 					 GdkColormap *colormap,
 					 GdkBitmap  **mask,
 					 GdkColor    *transparent_color,
@@ -489,8 +489,8 @@ GdkPixmap* gdk_pixmap_create_from_xpm_d (GdkWindow  *window,
 					 GdkBitmap **mask,
 					 GdkColor   *transparent_color,
 					 gchar	   **data);
-GdkPixmap* gdk_pixmap_colormap_create_from_xpm_d 
-                                        (GdkWindow   *window,
+GdkPixmap* gdk_pixmap_colormap_create_from_xpm_d (
+					 GdkWindow   *window,
 					 GdkColormap *colormap,
 					 GdkBitmap  **mask,
 					 GdkColor    *transparent_color,

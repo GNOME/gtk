@@ -163,10 +163,10 @@ gdk_property_get (GdkWindow   *window,
 	  ret_length = ret_nitems;
 	  break;
 	case 16:
-	  ret_length = 2 * ret_nitems;
+	  ret_length = sizeof(short) * ret_nitems;
 	  break;
 	case 32:
-	  ret_length = 4 * ret_nitems;
+	  ret_length = sizeof(long) * ret_nitems;
 	  break;
 	default:
 	  g_warning ("unknown property return format: %d", ret_format);

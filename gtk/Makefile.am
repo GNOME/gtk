@@ -328,7 +328,8 @@ install-data-local:
 	$(mkinstalldirs) $(DESTDIR)$(gtkconfdir)
 	cd $(DESTDIR)$(gtkconfdir) && \
 	  for i in cs hr hu pl sk sl ; do \
-            ln -s -f gtkrc.iso-8859-2 gtkrc.$$i ; \
+	    rm -f gtkrc.$$i ; \
+            ln -s gtkrc.iso-8859-2 gtkrc.$$i ; \
           done
 
 uninstall-local:

@@ -583,6 +583,9 @@ gtk_tree_item_draw_lines (GtkWidget *widget)
   item = GTK_TREE_ITEM(widget);
   tree = GTK_TREE(widget->parent);
 
+  if (!tree->view_line)
+    return;
+
   /* draw vertical line */
   lx1 = item->pixmaps_box->allocation.width;
   lx1 = lx2 = ((lx1 / 2) + (lx1 % 2) + 
@@ -645,6 +648,12 @@ gtk_tree_item_paint (GtkWidget    *widget,
   g_return_if_fail (GTK_IS_TREE_ITEM (widget));
   g_return_if_fail (area != NULL);
 
+  /* FIXME: We should honor tree->view_mode, here - I think
+   * the desired effect is that when the mode is VIEW_ITEM,
+   * only the subitem is drawn as selected, not the entire
+   * line. (Like the way that the tree in Windows Explorer
+   * works).
+   */
   if (GTK_WIDGET_DRAWABLE (widget))
     {
       bin = GTK_BIN (widget);

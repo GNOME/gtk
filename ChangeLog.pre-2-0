@@ -1,3 +1,17 @@
+Wed Aug 11 01:04:57 1999  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtktreeitem.c (gtk_tree_item_draw_lines): Honor
+	tree->view_lines.
+	(gtk-guy-990611-3.patch: Guy Harris <guy@netapp.com>)
+
+	* gtk/Makefile.am (install-data-local): Solaris apparently
+	has various troubles with ln -f; use rm first instead.
+	(gtk-guy-990611-2.patch: Guy Harris <guy@netapp.com>)
+
+	* gdk/gdkproperty.c (gdk_property_get): Fix assumption
+	that format 32 => sizeof(item) == 4. It really is
+	sizeof(long).
+
 1999-07-30  Raja R Harinath  <harinath@cs.umn.edu>
 
 	* gtk/Makefile.am (stamp-m): Don't `mv' from builddir to srcdir,
@@ -127,6 +141,7 @@ Tue Jun 29 15:59:25 1999  Owen Taylor  <otaylor@redhat.com>
 	* configure.in (LIBS): Look for libgmodule in the
 	right location.
 
+>>>>>>> 1.1061.2.97
 Mon Jun 28 09:29:52 1999  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkwindow.c: add ::default_width and ::default_height arguments.
