@@ -49,7 +49,7 @@
 
 2005-02-11  Matthias Clasen  <mclasen@redhat.com>
 
-	Complete the fix for #165770, Vincent Untz:
+	Complete the fix for #165770, Vincent Noel:
 	
 	* gtk/gtkfilechooserbutton.c (FALLBACK_ICON_SIZE): Make the
 	fallback size be 16, to be equal to the default for
