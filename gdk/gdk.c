@@ -158,7 +158,7 @@ get_option (char ***argv,
 	}
       else
 	{
-	  g_warning ("Missing parameter for option %s", orig);
+	  g_warning ("Option '%s' requires an argument.", orig);
 	}
     }
 
@@ -358,6 +358,9 @@ gdk_init_check (int	 *argc,
 		      gdk_im_set_best_style (GDK_IM_PREEDIT_POSITION);
 		    else if (strcmp ("callbacks", option) == 0)
 		      gdk_im_set_best_style (GDK_IM_PREEDIT_CALLBACKS);
+		    else
+		      g_warning ("Argument '%s' for --xim-preedit not understood", option);
+		      
 		  }
 	      }
 	    else if ((strcmp ("--xim-status", (*argv)[i]) == 0) ||
@@ -375,6 +378,8 @@ gdk_init_check (int	 *argc,
 		      gdk_im_set_best_style (GDK_IM_STATUS_AREA);
 		    else if (strcmp ("callbacks", option) == 0)
 		      gdk_im_set_best_style (GDK_IM_STATUS_CALLBACKS);
+		    else
+		      g_warning ("Argumetn '%s' for --xim-status not understood", option);
 		  }
 	      }
 #endif

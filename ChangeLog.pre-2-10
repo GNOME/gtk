@@ -1,3 +1,9 @@
+Thu Feb  1 20:32:49 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdk.c: Improve warnings a bit in a fashion similar
+	to the part of gtk-enf-990513-0.patch (Eric Fisher) that hasn't
+	been superceded.
+
 Thu Feb  1 18:25:46 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkfilesel.c: If PATH_MAX and MAXPATHLEN are not
