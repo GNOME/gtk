@@ -1,3 +1,8 @@
+Sat Feb 21 20:20:11 2004  Soeren Sandmann  <sandmann@daimi.au.dk>
+
+	* gtk/gtksettings.c (gtk_settings_class_init): Use P_ instead of
+	_ for the new Xft settings.
+
 Sat Feb 21 20:09:53 2004  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 	Bug 130790 (Federico Mena Quintero, Owen Taylor)

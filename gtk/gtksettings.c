@@ -359,8 +359,8 @@ gtk_settings_class_init (GtkSettingsClass *class)
 #ifdef GDK_WINDOWING_X11
   result = settings_install_property_parser (class,
 					     g_param_spec_int ("gtk-xft-antialias",
- 							       _("Xft Antialias"),
- 							       _("Whether to antialias Xft fonts; 0=no, 1=yes, -1=default"),
+ 							       P_("Xft Antialias"),
+ 							       P_("Whether to antialias Xft fonts; 0=no, 1=yes, -1=default"),
  							       -1, 1, -1,
  							       G_PARAM_READWRITE),
 					     NULL);
@@ -369,8 +369,8 @@ gtk_settings_class_init (GtkSettingsClass *class)
   
   result = settings_install_property_parser (class,
 					     g_param_spec_int ("gtk-xft-hinting",
- 							       _("Xft Hinting"),
- 							       _("Whether to hint Xft fonts; 0=no, 1=yes, -1=default"),
+ 							       P_("Xft Hinting"),
+ 							       P_("Whether to hint Xft fonts; 0=no, 1=yes, -1=default"),
  							       -1, 1, -1,
  							       G_PARAM_READWRITE),
 					     NULL);
@@ -379,8 +379,8 @@ gtk_settings_class_init (GtkSettingsClass *class)
   
   result = settings_install_property_parser (class,
 					     g_param_spec_string ("gtk-xft-hintstyle",
- 								  _("Xft Hint Style"),
- 								  _("What degree of hinting to use; none, slight, medium, or full"),
+ 								  P_("Xft Hint Style"),
+ 								  P_("What degree of hinting to use; none, slight, medium, or full"),
  								  NULL,
  								  G_PARAM_READWRITE),
                                               NULL);
@@ -389,8 +389,8 @@ gtk_settings_class_init (GtkSettingsClass *class)
   
   result = settings_install_property_parser (class,
 					     g_param_spec_string ("gtk-xft-rgba",
- 								  _("Xft RGBA"),
- 								  _("Type of subpixel antialiasing; none, rgb, bgr, vrgb, vbgr"),
+ 								  P_("Xft RGBA"),
+ 								  P_("Type of subpixel antialiasing; none, rgb, bgr, vrgb, vbgr"),
  								  NULL,
  								  G_PARAM_READWRITE),
 					     NULL);
@@ -399,8 +399,8 @@ gtk_settings_class_init (GtkSettingsClass *class)
   
   result = settings_install_property_parser (class,
 					     g_param_spec_int ("gtk-xft-dpi",
- 							       _("Xft DPI"),
- 							       _("Resolution for Xft, in 1024 * dots/inch. -1 to use default value"),
+ 							       P_("Xft DPI"),
+ 							       P_("Resolution for Xft, in 1024 * dots/inch. -1 to use default value"),
  							       -1, 1024*1024, -1,
  							       G_PARAM_READWRITE),
 					     NULL);
