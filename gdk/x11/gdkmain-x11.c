@@ -3163,6 +3163,9 @@ static void
 gdk_dnd_drag_begin (GdkWindow *initial_window)
 {
   GdkEventDragBegin tev;
+
+  GDK_NOTE(DND, g_print("------- STARTING DRAG from %p\n", initial_window));
+
   tev.type = GDK_DRAG_BEGIN;
   tev.window = initial_window;
   tev.u.allflags = 0;

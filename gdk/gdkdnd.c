@@ -98,6 +98,7 @@ gdk_dnd_display_drag_cursor(gint x, gint y, gboolean drag_ok,
 	{
 	  gdk_window_hide(gdk_dnd.c->drag_pm_ok);
 	  gdk_window_hide(gdk_dnd.c->drag_pm_default);
+	  GDK_NOTE(DND, g_print("Hiding both drag cursors\n"));
 	  return;
 	}
 
@@ -107,18 +108,22 @@ gdk_dnd_display_drag_cursor(gint x, gint y, gboolean drag_ok,
  
       if(drag_ok)
 	{
+	  GDK_NOTE(DND, g_print("Switching to drag_ok cursor\n"));
 	  mypix = gdk_dnd.c->drag_pm_ok;
 	  opix = gdk_dnd.c->drag_pm_default;
 	  myhotspot = &gdk_dnd.c->ok_hotspot;
 	}
       else
 	{
+	  GDK_NOTE(DND, g_print("Switching to drag_default cursor\n"));
 	  mypix = gdk_dnd.c->drag_pm_default;
 	  opix = gdk_dnd.c->drag_pm_ok;
 	  myhotspot = &gdk_dnd.c->default_hotspot;
 	}
+      gdk_window_move(mypix, x - myhotspot->x, y - myhotspot->y);
       if(change_made)
 	{
+	  GDK_NOTE(DND, g_print("Cursors switched, hide & show\n"));
 	  gdk_window_hide(opix);
 	}
       gdk_window_move(mypix, x - myhotspot->x, y - myhotspot->y);
