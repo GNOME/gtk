@@ -618,6 +618,7 @@ gtk-config
 po/Makefile.in
 docs/Makefile
 gdk/Makefile
+gdk/x11/Makefile
 gtk/Makefile
 gtk/gtkfeatures.h
 gtk/gtkcompat.h

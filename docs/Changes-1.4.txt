@@ -1,0 +1,7 @@
+Incompatible Changes from GTK+-1.2 to GTK+-1.4:
+
+- The gdk_time* functions have been removed. This functionality
+  has been unused since the main loop was moved into GLib
+  prior to 1.2. 
+
+
