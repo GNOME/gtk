@@ -1,3 +1,14 @@
+2001-12-10  jacob berkman  <jacob@ximian.com>
+
+	* gdk/x11/gdkinput-xfree.c (_gdk_input_grab_pointer): 
+	* gdk/x11/gdkmain-x11.c (gdk_pointer_grab): 
+	(gdk_keyboard_grab): do not grab things if the nograb debug flag
+	is set
+
+	* gdk/gdkinternals.h: 
+	* gdk/gdk.c: add nograbs debug flag to disable grabs of the
+	keyboard / mouse
+
 Mon Dec 10 19:42:29 2001  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtktreeview.c (validate_rows_handler): stupid bug where I
