@@ -159,11 +159,9 @@ GtkReliefStyle  gtk_toolbar_get_relief_style          (GtkToolbar      *toolbar)
 gint            gtk_toolbar_get_drop_index            (GtkToolbar      *toolbar,
 						       gint             x,
 						       gint             y);
-void            gtk_toolbar_highlight_drop_location   (GtkToolbar      *toolbar,
-						       gint		index,
-						       GtkToolItem     *tool_item);
-void            gtk_toolbar_unhighlight_drop_location (GtkToolbar      *toolbar);
-
+void            gtk_toolbar_set_drop_highlight_item   (GtkToolbar      *toolbar,
+						       GtkToolItem     *tool_item,
+						       gint		index);
 
 
 /* internal function */

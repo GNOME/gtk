@@ -1830,24 +1830,26 @@ get_item_requisition (GtkToolbar  *toolbar,
 }
 
 /**
- * gtk_toolbar_highlight_drop_location:
+ * gtk_toolbar_set_drop_highlight_item:
  * @toolbar: a #GtkToolbar
- * @index: the toolbar position to highlight, or -1
- * @tool_item: a #GtkToolbar that isn't part of a widget hierarchy
- *
- * Highlights the position on the toolbar indicated by @index to give
- * an idea of how @toolbar would look if @tool_item was added to it at
- * @index.
+ * @item: a #GtkToolItem, or %NULL to turn of highlighting
+ * @index: a position on @toolbar
  * 
- * After calling this function gtk_toolbar_unhighlight_drop_location() must
- * be called before @tool_item can be added to any widget hierarchy.
+ * Highlights @toolbar to give an idea of what it would look like
+ * if @item was added to @toolbar at position indicated by @index. If @item
+ * is %NULL, highlighting is turned off. In that case @index is ignored.
+ *
+ * The @tool_item passed to this function must not be part of any widget
+ * hierarchy. When an item is set as drop highlight item it can not
+ * added to any widget hierarchy or used as highlight item for another
+ * toolbar.
  * 
  * Since: 2.4
  **/
 void
-gtk_toolbar_highlight_drop_location (GtkToolbar  *toolbar,
-				     gint	  index,
-				     GtkToolItem *tool_item)
+gtk_toolbar_set_drop_highlight_item (GtkToolbar  *toolbar,
+				     GtkToolItem *tool_item,
+				     gint         index)
 {
   ToolbarContent *content;
   GtkToolbarPrivate *priv;
@@ -1857,31 +1859,54 @@ gtk_toolbar_highlight_drop_location (GtkToolbar  *toolbar,
   GtkRequisition requisition;
 
   g_return_if_fail (GTK_IS_TOOLBAR (toolbar));
-  g_return_if_fail (GTK_IS_TOOL_ITEM (tool_item));
+  g_return_if_fail (tool_item == NULL || GTK_IS_TOOL_ITEM (tool_item));
 
   priv = GTK_TOOLBAR_GET_PRIVATE (toolbar);
+
+  if (!tool_item)
+    {
+      if (priv->in_dnd)
+	{
+	  priv->leaving_dnd = TRUE;
+	  reset_all_placeholders (toolbar);
+	  ensure_idle_handler (toolbar);
+	  
+	  if (priv->highlight_tool_item)
+	    {
+	      gtk_widget_unparent (GTK_WIDGET (priv->highlight_tool_item));
+	      g_object_unref (priv->highlight_tool_item);
+	      priv->highlight_tool_item = NULL;
+	    }
+	}
+      
+      return;
+    }
 
   if (tool_item != priv->highlight_tool_item)
     {
       if (priv->highlight_tool_item)
 	g_object_unref (priv->highlight_tool_item);
-      
-      gtk_object_sink (GTK_OBJECT (g_object_ref (tool_item)));
+
+      g_object_ref (tool_item);
+      gtk_object_sink (GTK_OBJECT (tool_item));
 
       priv->highlight_tool_item = tool_item;
       
       gtk_widget_set_parent (GTK_WIDGET (priv->highlight_tool_item),
 			     GTK_WIDGET (toolbar));
     }
-  
+
   if (!priv->in_dnd)
     {
       priv->n_overflow_items_when_dnd_started = 0;
       for (list = priv->content; list != NULL; list = list->next)
 	{
 	  content = list->data;
-	  if (content->is_overflow)
-	    priv->n_overflow_items_when_dnd_started++;
+	  if (content->is_overflow &&
+	      toolbar_item_visible (toolbar, content->item))
+	    {
+	      priv->n_overflow_items_when_dnd_started++;
+	    }
 	}
     }
   
@@ -1946,18 +1971,6 @@ gtk_toolbar_highlight_drop_location (GtkToolbar  *toolbar,
 void
 gtk_toolbar_unhighlight_drop_location (GtkToolbar *toolbar)
 {
-  GtkToolbarPrivate *priv = GTK_TOOLBAR_GET_PRIVATE (toolbar);
-  
-  priv->leaving_dnd = TRUE;
-  reset_all_placeholders (toolbar);
-  ensure_idle_handler (toolbar);
-
-  if (priv->highlight_tool_item)
-    {
-      gtk_widget_unparent (GTK_WIDGET (priv->highlight_tool_item));
-      g_object_unref (priv->highlight_tool_item);
-      priv->highlight_tool_item = NULL;
-    }
 }
 
 static void

@@ -1,3 +1,11 @@
+Wed Oct 29 02:54:35 2003  Soeren Sandmann  <sandmann@daimi.au.dk>
+
+	* gtk/gtktoolbar.[ch] (gtk_toolbar_set_drop_highlight_item): Add this
+	function; remove gtk_toolbar_highlight_drop_location() and
+	gtk_toolbar_unhighlight_drop_location().
+
+	Also fix bug where the number of overflowed items were miscounted.
+
 Tue Oct 28 12:20:16 2003  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkwindow.c (gtk_window_has_toplevel_focus): Remove

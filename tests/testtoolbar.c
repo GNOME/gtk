@@ -450,12 +450,12 @@ toolbar_drag_motion (GtkToolbar     *toolbar,
       drag_item = gtk_tool_button_new (NULL, "A quite long button");
       gtk_object_sink (GTK_OBJECT (g_object_ref (drag_item)));
     }
-      
+  
   gdk_drag_status (context, GDK_ACTION_MOVE, time);
 
   index = gtk_toolbar_get_drop_index (toolbar, x, y);
   
-  gtk_toolbar_highlight_drop_location (toolbar, index, drag_item);
+  gtk_toolbar_set_drop_highlight_item (toolbar, drag_item, index);
   
   return TRUE;
 }
@@ -472,7 +472,7 @@ toolbar_drag_leave (GtkToolbar     *toolbar,
       drag_item = NULL;
     }
   
-  gtk_toolbar_unhighlight_drop_location (toolbar);
+  gtk_toolbar_set_drop_highlight_item (toolbar, NULL, 0);
 }
 
 gint
