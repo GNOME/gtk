@@ -78,7 +78,8 @@ enum {
   PROP_INVISIBLE_CHAR,
   PROP_ACTIVATES_DEFAULT,
   PROP_WIDTH_CHARS,
-  PROP_SCROLL_OFFSET
+  PROP_SCROLL_OFFSET,
+  PROP_TEXT
 };
 
 static guint signals[LAST_SIGNAL] = { 0 };
@@ -465,7 +466,6 @@ gtk_entry_class_init (GtkEntryClass *class)
                                                      _("Number of characters to leave space for in the entry."),
                                                      -1,
                                                      G_MAXINT,
-                                                     
                                                      -1,
                                                      G_PARAM_READABLE | G_PARAM_WRITABLE));
 
@@ -476,9 +476,16 @@ gtk_entry_class_init (GtkEntryClass *class)
                                                      _("Number of pixels of the entry scrolled off the screen to the left"),
                                                      0,
                                                      G_MAXINT,
-                                                     
                                                      0,
                                                      G_PARAM_READABLE));
+
+  g_object_class_install_property (gobject_class,
+                                   PROP_TEXT,
+                                   g_param_spec_string ("text",
+							_("Text"),
+							_("The contents of the entry"),
+							"",
+							G_PARAM_READABLE | G_PARAM_WRITABLE));
   
   gtk_widget_class_install_style_property (widget_class,
 					   g_param_spec_boxed ("cursor_color",
@@ -809,6 +816,10 @@ gtk_entry_set_property (GObject         *object,
       gtk_entry_set_width_chars (entry, g_value_get_int (value));
       break;
 
+    case PROP_TEXT:
+      gtk_entry_set_text (entry, g_value_get_string (value));
+      break;
+
     case PROP_SCROLL_OFFSET:
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -854,6 +865,9 @@ gtk_entry_get_property (GObject         *object,
       break;
     case PROP_SCROLL_OFFSET:
       g_value_set_int (value, entry->scroll_offset);
+      break;
+    case PROP_TEXT:
+      g_value_set_string (value, gtk_entry_get_text (entry));
       break;
       
     default:
@@ -1656,6 +1670,7 @@ gtk_entry_insert_text (GtkEditable *editable,
   
   g_signal_emit_by_name (editable, "insert_text", text, new_text_length, position);
   g_signal_emit_by_name (editable, "changed");
+  g_object_notify (G_OBJECT (editable), "text");
 
   if (new_text_length > 63)
     g_free (text);
@@ -1681,6 +1696,7 @@ gtk_entry_delete_text (GtkEditable *editable,
 
   g_signal_emit_by_name (editable, "delete_text", start_pos, end_pos);
   g_signal_emit_by_name (editable, "changed");
+  g_object_notify (G_OBJECT (editable), "text");
 
   g_object_unref (G_OBJECT (editable));
 }

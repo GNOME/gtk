@@ -1,3 +1,11 @@
+2001-10-18  Michael Meeks  <michael@ximian.com>
+
+	* gtk/gtkentry.c (gtk_entry_set_property),
+	(gtk_entry_get_property): impl 'text'
+	(gtk_entry_class_init): add the 'text' prop.
+	(gtk_entry_insert_text): notify 'text' changed.
+	(gtk_entry_delete_text): ditto.
+
 2001-10-17  Matthias Clasen  <matthiasc@poet.de>
 
 	* gtk/gtkdnd.c, gtk/gtkclipboard.c, gdk/x11/gdkmain-x11.c:
