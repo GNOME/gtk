@@ -430,6 +430,7 @@ gtk_file_selection_init (GtkFileSelection *filesel)
 		      (GtkSignalFunc) gtk_file_selection_dir_button, 
 		      (gpointer) filesel);
   gtk_clist_set_policy (GTK_CLIST (filesel->dir_list), GTK_POLICY_ALWAYS, GTK_POLICY_AUTOMATIC);
+  gtk_clist_column_titles_passive (GTK_CLIST (filesel->dir_list));
   gtk_container_border_width (GTK_CONTAINER (filesel->dir_list), 5);
   gtk_box_pack_start (GTK_BOX (list_hbox), filesel->dir_list, TRUE, TRUE, 0);
   gtk_widget_show (filesel->dir_list);
@@ -442,6 +443,7 @@ gtk_file_selection_init (GtkFileSelection *filesel)
 		      (GtkSignalFunc) gtk_file_selection_file_button, 
 		      (gpointer) filesel);
   gtk_clist_set_policy (GTK_CLIST (filesel->file_list), GTK_POLICY_ALWAYS, GTK_POLICY_AUTOMATIC);
+  gtk_clist_column_titles_passive (GTK_CLIST (filesel->file_list));
   gtk_container_border_width (GTK_CONTAINER (filesel->file_list), 5);
   gtk_box_pack_start (GTK_BOX (list_hbox), filesel->file_list, TRUE, TRUE, 0);
   gtk_widget_show (filesel->file_list);
