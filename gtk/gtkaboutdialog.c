@@ -1029,6 +1029,7 @@ gtk_about_dialog_set_website (GtkAboutDialog *about,
     {
       priv->website = NULL;
       g_object_set_data (G_OBJECT (priv->website_button), "url", NULL);
+      gtk_widget_hide (priv->website_button);
     }
   g_free (tmp);
 

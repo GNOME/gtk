@@ -1,5 +1,8 @@
 2004-11-08  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkaboutdialog.c (gtk_about_dialog_set_website): Hide the
+	website button if the url is unset.  (#157630, John Finlay)
+
 	* gtk/gtkaboutdialog.[hc]: Change the return types of the 
 	gchar ** getters to be more const correct.  (#157566, Mariano 
 	Suárez-Alvarez)
