@@ -32,8 +32,6 @@ Stock Items
 
 @items: 
 @n_items: 
-<!-- # Unused Parameters # -->
-@item: 
 
 
 <!-- ##### FUNCTION gtk_stock_add_static ##### -->
@@ -43,8 +41,6 @@ Stock Items
 
 @items: 
 @n_items: 
-<!-- # Unused Parameters # -->
-@item: 
 
 
 <!-- ##### FUNCTION gtk_stock_item_copy ##### -->
@@ -84,490 +80,560 @@ Stock Items
 
 <!-- ##### MACRO GTK_STOCK_ADD ##### -->
 <para>
-
+The "Add" icon.
+<inlinegraphic fileref="stock_add.png" format="png">
 </para>
 
 
 
 <!-- ##### MACRO GTK_STOCK_APPLY ##### -->
 <para>
-
+The "Apply" icon and text.
+<inlinegraphic fileref="stock_button_apply.png" format="png">
 </para>
 
 
 
 <!-- ##### MACRO GTK_STOCK_BOLD ##### -->
 <para>
-
+The "Bold" icon and text.
+<inlinegraphic fileref="stock_text_bold.png" format="png">
 </para>
 
 
 
 <!-- ##### MACRO GTK_STOCK_CANCEL ##### -->
 <para>
-
+The "Cancel" icon and text.
+<inlinegraphic fileref="stock_button_cancel.png" format="png">
 </para>
 
 
 
 <!-- ##### MACRO GTK_STOCK_CDROM ##### -->
 <para>
-
+The "CD" icon.
+<inlinegraphic fileref="stock_cdrom.png" format="png">
 </para>
 
 
 
 <!-- ##### MACRO GTK_STOCK_CLEAR ##### -->
 <para>
-
+The "Clear" icon and text.
+<inlinegraphic fileref="stock_clear.png" format="png">
 </para>
 
 
 
 <!-- ##### MACRO GTK_STOCK_CLOSE ##### -->
 <para>
-
+The "Close" icon and text.
+<inlinegraphic fileref="stock_close.png" format="png">
 </para>
 
 
 
 <!-- ##### MACRO GTK_STOCK_CONVERT ##### -->
 <para>
-
+The "Convert" icon.
+<inlinegraphic fileref="stock_convert.png" format="png">
 </para>
 
 
 
 <!-- ##### MACRO GTK_STOCK_COPY ##### -->
 <para>
-
+The "Copy" icon and text.
+<inlinegraphic fileref="stock_menu_copy.png" format="png">
 </para>
 
 
 
 <!-- ##### MACRO GTK_STOCK_CUT ##### -->
 <para>
-
+The "Cut" icon and text.
+<inlinegraphic fileref="stock_menu_cut.png" format="png">
 </para>
 
 
 
 <!-- ##### MACRO GTK_STOCK_DELETE ##### -->
 <para>
-
+The "Delete" icon and text.
+<inlinegraphic fileref="stock_menu_trash.png" format="png">
 </para>
 
 
 
 <!-- ##### MACRO GTK_STOCK_DIALOG_ERROR ##### -->
 <para>
-
+The "Error" icon and text.
+<inlinegraphic fileref="dialog_error.png" format="png">
 </para>
 
 
 
 <!-- ##### MACRO GTK_STOCK_DIALOG_INFO ##### -->
 <para>
-
+The "Information" icon and text.
+<inlinegraphic fileref="dialog_info.png" format="png">
 </para>
 
 
 
 <!-- ##### MACRO GTK_STOCK_DIALOG_QUESTION ##### -->
 <para>
-
+The "Question" icon and text.
+<inlinegraphic fileref="dialog_question.png" format="png">
 </para>
 
 
 
 <!-- ##### MACRO GTK_STOCK_DIALOG_WARNING ##### -->
 <para>
-
+The "Warning" icon and text.
+<inlinegraphic fileref="dialog_warning.png" format="png">
 </para>
 
 
 
 <!-- ##### MACRO GTK_STOCK_DND ##### -->
 <para>
-
+The "Drag-And-Drop" icon.
+<inlinegraphic fileref="stock_dnd.png" format="png">
 </para>
 
 
 
 <!-- ##### MACRO GTK_STOCK_DND_MULTIPLE ##### -->
 <para>
-
+The "Drag-And-Drop multiple" icon.
+<inlinegraphic fileref="stock_dnd_multiple.png" format="png">
 </para>
 
 
 
 <!-- ##### MACRO GTK_STOCK_EXECUTE ##### -->
 <para>
-
+The "Execute" icon.
+<inlinegraphic fileref="stock_exec.png" format="png">
 </para>
 
 
 
 <!-- ##### MACRO GTK_STOCK_FIND ##### -->
 <para>
-
+The "Find" icon and text.
+<inlinegraphic fileref="stock_search.png" format="png">
 </para>
 
 
 
 <!-- ##### MACRO GTK_STOCK_FIND_AND_REPLACE ##### -->
 <para>
-
+The "Find and Replace" icon and text.
+<inlinegraphic fileref="stock_search_replace.png" format="png">
 </para>
 
 
 
 <!-- ##### MACRO GTK_STOCK_FLOPPY ##### -->
 <para>
-
+The "Floppy" icon.
+<inlinegraphic fileref="stock_save.png" format="png">
 </para>
 
 
 
 <!-- ##### MACRO GTK_STOCK_GOTO_BOTTOM ##### -->
 <para>
-
+The "Goto Bottom" icon.
+<inlinegraphic fileref="stock_bottom.png" format="png">
 </para>
 
 
 
 <!-- ##### MACRO GTK_STOCK_GOTO_FIRST ##### -->
 <para>
-
+The "First" icon.
+<inlinegraphic fileref="stock_first.png" format="png">
 </para>
 
 
 
 <!-- ##### MACRO GTK_STOCK_GOTO_LAST ##### -->
 <para>
-
+The "Last" icon.
+<inlinegraphic fileref="stock_last.png" format="png">
 </para>
 
 
 
 <!-- ##### MACRO GTK_STOCK_GOTO_TOP ##### -->
 <para>
-
+The "Top" icon.
+<inlinegraphic fileref="stock_top.png" format="png">
 </para>
 
 
 
 <!-- ##### MACRO GTK_STOCK_GO_BACK ##### -->
 <para>
-
+The "Back" icon and text.
+<inlinegraphic fileref="stock_left_arrow.png" format="png">
 </para>
 
 
 
 <!-- ##### MACRO GTK_STOCK_GO_DOWN ##### -->
 <para>
-
+The "Down" icon.
+<inlinegraphic fileref="stock_down_arrow.png" format="png">
 </para>
 
 
 
 <!-- ##### MACRO GTK_STOCK_GO_FORWARD ##### -->
 <para>
-
+The "Forward" icon and text.
+<inlinegraphic fileref="stock_right_arrow.png" format="png">
 </para>
 
 
 
 <!-- ##### MACRO GTK_STOCK_GO_UP ##### -->
 <para>
-
+The "Up" icon.
+<inlinegraphic fileref="stock_up_arrow.png" format="png">
 </para>
 
 
 
 <!-- ##### MACRO GTK_STOCK_HELP ##### -->
 <para>
-
+The "Help" icon and text.
+<inlinegraphic fileref="stock_help.png" format="png">
 </para>
 
 
 
 <!-- ##### MACRO GTK_STOCK_HOME ##### -->
 <para>
-
+The "Home" icon and text.
+<inlinegraphic fileref="stock_home.png" format="png">
 </para>
 
 
 
 <!-- ##### MACRO GTK_STOCK_INDEX ##### -->
 <para>
-
+The "Index" icon.
+<inlinegraphic fileref="stock_index.png" format="png">
 </para>
 
 
 
 <!-- ##### MACRO GTK_STOCK_ITALIC ##### -->
 <para>
-
+The "Italic" icon.
+<inlinegraphic fileref="stock_text_italic.png" format="png">
 </para>
 
 
 
 <!-- ##### MACRO GTK_STOCK_JUMP_TO ##### -->
 <para>
-
+The "Jump" icon.
+<inlinegraphic fileref="stock_jump_to.png" format="png">
 </para>
 
 
 
 <!-- ##### MACRO GTK_STOCK_JUSTIFY_CENTER ##### -->
 <para>
-
+The "Center" icon and text.
+<inlinegraphic fileref="stock_align_center.png" format="png">
 </para>
 
 
 
 <!-- ##### MACRO GTK_STOCK_JUSTIFY_FILL ##### -->
 <para>
-
+The "Fill" icon and text.
+<inlinegraphic fileref="stock_align_justify.png" format="png">
 </para>
 
 
 
 <!-- ##### MACRO GTK_STOCK_JUSTIFY_LEFT ##### -->
 <para>
-
+The "Left" icon and text.
+<inlinegraphic fileref="stock_align_left.png" format="png">
 </para>
 
 
 
 <!-- ##### MACRO GTK_STOCK_JUSTIFY_RIGHT ##### -->
 <para>
-
+The "Right" icon and text.
+<inlinegraphic fileref="stock_align_right.png" format="png">
 </para>
 
 
 
 <!-- ##### MACRO GTK_STOCK_MISSING_IMAGE ##### -->
 <para>
-
+The "Missing" icon.
+<inlinegraphic fileref="dialog_error.png" format="png">
 </para>
 
 
 
 <!-- ##### MACRO GTK_STOCK_NEW ##### -->
 <para>
-
+The "New" icon and text.
+<inlinegraphic fileref="stock_new.png" format="png">
 </para>
 
 
 
 <!-- ##### MACRO GTK_STOCK_NO ##### -->
 <para>
-
+The "No" icon and text.
+<inlinegraphic fileref="stock_button_no.png" format="png">
 </para>
 
 
 
 <!-- ##### MACRO GTK_STOCK_OK ##### -->
 <para>
-
+The "OK" icon and text.
+<inlinegraphic fileref="stock_button_ok.png" format="png">
 </para>
 
 
 
 <!-- ##### MACRO GTK_STOCK_OPEN ##### -->
 <para>
-
+The "Open" icon and text.
+<inlinegraphic fileref="stock_open.png" format="png">
 </para>
 
 
 
 <!-- ##### MACRO GTK_STOCK_PASTE ##### -->
 <para>
-
+The "Past" icon and text.
+<inlinegraphic fileref="stock_paste.png" format="png">
 </para>
 
 
 
 <!-- ##### MACRO GTK_STOCK_PREFERENCES ##### -->
 <para>
-
+The "Preferences" icon and text.
+<inlinegraphic fileref="stock_preferences.png" format="png">
 </para>
 
 
 
 <!-- ##### MACRO GTK_STOCK_PRINT ##### -->
 <para>
-
+The "Print" icon and text.
+<inlinegraphic fileref="stock_print.png" format="png">
 </para>
 
 
 
 <!-- ##### MACRO GTK_STOCK_PRINT_PREVIEW ##### -->
 <para>
-
+The "Print Preview" icon and text.
+<inlinegraphic fileref="stock_print_preview.png" format="png">
 </para>
 
 
 
 <!-- ##### MACRO GTK_STOCK_PROPERTIES ##### -->
 <para>
-
+The "Properties" icon and text.
+<inlinegraphic fileref="stock_properties.png" format="png">
 </para>
 
 
 
 <!-- ##### MACRO GTK_STOCK_QUIT ##### -->
 <para>
-
+The "Quit" icon and text.
+<inlinegraphic fileref="stock_exit.png" format="png">
 </para>
 
 
 
 <!-- ##### MACRO GTK_STOCK_REDO ##### -->
 <para>
-
+The "Redo" icon and text.
+<inlinegraphic fileref="stock_redo.png" format="png">
 </para>
 
 
 
 <!-- ##### MACRO GTK_STOCK_REFRESH ##### -->
 <para>
-
+The "Refresh" icon.
+<inlinegraphic fileref="stock_refresh.png" format="png">
 </para>
 
 
 
 <!-- ##### MACRO GTK_STOCK_REMOVE ##### -->
 <para>
-
+The "Remove" icon.
+<inlinegraphic fileref="stock_remove.png" format="png">
 </para>
 
 
 
 <!-- ##### MACRO GTK_STOCK_REVERT_TO_SAVED ##### -->
 <para>
-
+The "Revert" icon and text.
+<inlinegraphic fileref="stock_revert.png" format="png">
 </para>
 
 
 
 <!-- ##### MACRO GTK_STOCK_SAVE ##### -->
 <para>
-
+The "Save" icon and text.
+<inlinegraphic fileref="stock_save.png" format="png">
 </para>
 
 
 
 <!-- ##### MACRO GTK_STOCK_SAVE_AS ##### -->
 <para>
-
+The "Save As" icon and text.
+<inlinegraphic fileref="stock_save_as.png" format="png">
 </para>
 
 
 
 <!-- ##### MACRO GTK_STOCK_SELECT_COLOR ##### -->
 <para>
-
+The "Select Color" icon.
+<inlinegraphic fileref="stock_colorselector.png" format="png">
 </para>
 
 
 
 <!-- ##### MACRO GTK_STOCK_SELECT_FONT ##### -->
 <para>
-
+The "Select Font" icon.
+<inlinegraphic fileref="stock_font.png" format="png">
 </para>
 
 
 
 <!-- ##### MACRO GTK_STOCK_SORT_ASCENDING ##### -->
 <para>
-
+The "Sort Ascending" icon.
+<inlinegraphic fileref="stock_sort_ascending.png" format="png">
 </para>
 
 
 
 <!-- ##### MACRO GTK_STOCK_SORT_DESCENDING ##### -->
 <para>
-
+The "Sort Descending" icon.
+<inlinegraphic fileref="stock_sort_descending.png" format="png">
 </para>
 
 
 
 <!-- ##### MACRO GTK_STOCK_SPELL_CHECK ##### -->
 <para>
-
+The "Spell Check" icon and text.
+<inlinegraphic fileref="stock_spellcheck.png" format="png">
 </para>
 
 
 
 <!-- ##### MACRO GTK_STOCK_STOP ##### -->
 <para>
-
+The "Stop" icon and text.
+<inlinegraphic fileref="stock_stop.png" format="png">
 </para>
 
 
 
 <!-- ##### MACRO GTK_STOCK_STRIKETHROUGH ##### -->
 <para>
-
+The "Strikethrough" icon and text.
+<inlinegraphic fileref="stock_text_strikeout.png" format="png">
 </para>
 
 
 
 <!-- ##### MACRO GTK_STOCK_UNDELETE ##### -->
 <para>
-
+The "Undelete" icon.
+<inlinegraphic fileref="stock_undelete.png" format="png">
 </para>
 
 
 
 <!-- ##### MACRO GTK_STOCK_UNDERLINE ##### -->
 <para>
-
+The "Underline" icon and text.
+<inlinegraphic fileref="stock_text_underline.png" format="png">
 </para>
 
 
 
 <!-- ##### MACRO GTK_STOCK_UNDO ##### -->
 <para>
-
+The "Undo" icon and text.
+<inlinegraphic fileref="stock_undo.png" format="png">
 </para>
 
 
 
 <!-- ##### MACRO GTK_STOCK_YES ##### -->
 <para>
-
+The "Yes" icon and text.
+<inlinegraphic fileref="stock_button_yes.png" format="png">
 </para>
 
 
 
 <!-- ##### MACRO GTK_STOCK_ZOOM_100 ##### -->
 <para>
-
+The "Zoom 100%" icon and text.
+<inlinegraphic fileref="stock_zoom_1.png" format="png">
 </para>
 
 
 
 <!-- ##### MACRO GTK_STOCK_ZOOM_FIT ##### -->
 <para>
-
+The "Zoom to Fit" icon and text.
+<inlinegraphic fileref="stock_zoom_fit.png" format="png">
 </para>
 
 
 
 <!-- ##### MACRO GTK_STOCK_ZOOM_IN ##### -->
 <para>
-
+The "Zoom In" icon and text.
+<inlinegraphic fileref="stock_zoom_in.png" format="png">
 </para>
 
 
 
 <!-- ##### MACRO GTK_STOCK_ZOOM_OUT ##### -->
 <para>
-
+The "Zoom Out" icon and text.
+<inlinegraphic fileref="stock_zoom_out.png" format="png">
 </para>
 
 

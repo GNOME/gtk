@@ -1,3 +1,10 @@
+2001-10-19  Matthias Clasen   <matthiasc@poet.de>
+
+	* gtk/gtk-docs.sgml: Switch to DocBook 4.1 (for the PNG notation).
+
+	* gtk/Makefile.am, gtk/tmpl/gtkstock.sgml: Add inlinegraphics for
+	the stock icons.
+
 2001-10-18  Matthias Clasen   <matthiasc@poet.de>
 
 	* gdk/tmpl/visuals.sgml: Resurrect 1.2 documentation. (#62604)
