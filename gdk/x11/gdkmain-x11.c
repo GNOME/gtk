@@ -2488,9 +2488,13 @@ gdk_event_translate (GdkEvent *event,
 	  event->client.data_format = xevent->xclient.format;
 	  memcpy(&event->client.data, &xevent->xclient.data,
 		 sizeof(event->client.data));
-	  return_val = TRUE;
+	  if(window)
+	    return_val = TRUE;
+	  else	
+	    return_val = FALSE;
 	}
-      return_val = return_val && !window_private->destroyed;
+      if(window_private)
+	return_val = return_val && !window_private->destroyed;
       break;
       
     case MappingNotify:
@@ -3385,12 +3389,13 @@ getchildren (Display     *dpy,
 			  &after, &data);
       if (type != 0)
 	inf = children[i];
+      XFree(data);
     }
 
   for (i = 0; !inf && (i < nchildren); i++)
     inf = getchildren (dpy, children[i], WM_STATE);
 
-  if (children != 0) 
+  if (children != None)
     XFree ((char *) children);
 
   return inf;

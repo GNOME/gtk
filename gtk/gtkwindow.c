@@ -841,16 +841,20 @@ gtk_window_style_set_event (GtkWidget *widget,
   
   if(gdk_property_get (GDK_ROOT_PARENT(),
 		       atom_default_colors,
-		       GDK_NONE,
+		       gdk_atom_intern("STRING", FALSE),
 		       0,
 		       sizeof(GdkColor) * GTK_STYLE_NUM_STYLECOLORS(),
 		       FALSE,
 		       &realtype,
 		       &retfmt,
 		       &retlen,
-		       (guchar **)&data) != TRUE
-     || retfmt != sizeof(gushort)) {
-    g_warning("gdk_property_get() failed in _GTK_STYLE_CHANGED\n");
+		       (guchar **)&data) != TRUE) {
+    g_warning("gdk_property_get() failed in _GTK_STYLE_CHANGED handler\n");
+    return;
+  }
+  if(retfmt != sizeof(gushort)*8) {
+    g_warning("retfmt (%d) != sizeof(gushort)*8 (%d)\n", retfmt,
+	sizeof(gushort)*8);
     return;
   }
   /* We have the color data, now let's interpret it */

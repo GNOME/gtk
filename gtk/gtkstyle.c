@@ -18,6 +18,7 @@
 #include <math.h>
 #include "gtkgc.h"
 #include "gtkstyle.h"
+#include "gtkwidget.h"
 
 
 #define LIGHTNESS_MULT  1.3
@@ -296,9 +297,8 @@ gtk_style_detach (GtkStyle *style)
 
       style->depth = -1;
       style->colormap = NULL;
+      gtk_style_remove (style);
     }
-
-  gtk_style_remove (style);
 }
 
 GtkStyle*
@@ -600,7 +600,6 @@ gtk_style_remove (GtkStyle *style)
 {
   if (initialize)
     gtk_styles_init ();
-
   g_cache_remove (style_cache, style);
 }
 

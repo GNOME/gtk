@@ -75,6 +75,7 @@ enum {
   DROP_LEAVE_EVENT,
   DROP_DATA_AVAILABLE_EVENT,
   OTHER_EVENT,
+  CLIENT_EVENT,
   LAST_SIGNAL
 };
 
@@ -577,7 +578,15 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		    gtk_widget_marshal_signal_4,
 		    GTK_TYPE_BOOL, 1,
 		    GTK_TYPE_GDK_EVENT);
-  
+  widget_signals[CLIENT_EVENT] =
+    gtk_signal_new ("client_event",
+		    GTK_RUN_LAST,
+		    object_class->type,
+		    GTK_SIGNAL_OFFSET (GtkWidgetClass, client_event),
+		    gtk_widget_marshal_signal_4,
+		    GTK_TYPE_BOOL, 1,
+		    GTK_TYPE_GDK_EVENT);
+
   gtk_object_class_add_signals (object_class, widget_signals, LAST_SIGNAL);
   
   object_class->destroy = gtk_real_widget_destroy;
@@ -1498,6 +1507,9 @@ gtk_widget_event (GtkWidget *widget,
 	  break;
 	case GDK_OTHER_EVENT:
 	  signal_num = OTHER_EVENT;
+	  break;
+	case GDK_CLIENT_EVENT:
+	  signal_num = CLIENT_EVENT;
 	  break;
 	default:
 	  g_warning ("could not determine signal number for event: %d", event->type);
@@ -2482,14 +2494,15 @@ gtk_widget_propagate_default_style (void)
   int i;
   
   /* Set the property on the root window */
-  gdk_property_change (GDK_ROOT_PARENT(),
-		       gdk_atom_intern("_GTK_DEFAULT_COLORS", FALSE),
-		       GDK_NONE, 8*sizeof(gushort),
-		       GDK_PROP_MODE_REPLACE,
-		       (guchar *)gtk_widget_get_default_style(),
-		       GTK_STYLE_NUM_STYLECOLORS() * sizeof(GdkColor));
-  
-  for (i = 0; i < 5; i++)
+  gdk_property_change(GDK_ROOT_PARENT(),
+		      gdk_atom_intern("_GTK_DEFAULT_COLORS", FALSE),
+		      gdk_atom_intern("STRING", FALSE),
+		      8*sizeof(gushort),
+		      GDK_PROP_MODE_REPLACE,
+		      (guchar *)gtk_widget_get_default_style(),
+		      GTK_STYLE_NUM_STYLECOLORS() * sizeof(GdkColor));
+
+  for(i = 0; i < 5; i++)
     sev.data.l[i] = 0;
   sev.data_format = 32;
   sev.message_type = gdk_atom_intern ("_GTK_STYLE_CHANGED", FALSE);
@@ -2840,9 +2853,9 @@ gtk_real_widget_unrealize (GtkWidget *widget)
 {
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_WIDGET (widget));
-  
-  GTK_WIDGET_UNSET_FLAGS (widget, GTK_REALIZED | GTK_MAPPED);
-  
+
+  GTK_WIDGET_UNSET_FLAGS (widget, GTK_REALIZED | GTK_MAPPED | GTK_VISIBLE);
+
   gtk_style_detach (widget->style);
   if (!GTK_WIDGET_NO_WINDOW (widget))
     {
