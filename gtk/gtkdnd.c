@@ -3041,6 +3041,9 @@ gtk_drag_end (GtkDragSourceInfo *info, guint32 time)
   gtk_signal_disconnect_by_func (GTK_OBJECT (info->ipc_widget), 
 				 GTK_SIGNAL_FUNC (gtk_drag_motion_cb),
 				 info);
+  gtk_signal_disconnect_by_func (GTK_OBJECT (info->ipc_widget), 
+				 GTK_SIGNAL_FUNC (gtk_drag_key_cb),
+				 info);
 
   /* Send on a release pair to the the original 
    * widget to convince it to release its grab. We need to

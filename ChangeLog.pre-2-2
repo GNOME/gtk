@@ -1,3 +1,7 @@
+2002-05-29  Dave Camp  <dave@ximian.com>
+
+	* gtk/gtkdnd.c (gtk_drag_end): Disconnect from keypress events.
+
 2002-05-28  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkwindow.c (gtk_window_move): Markup fixes
