@@ -1,5 +1,7 @@
 2001-12-21  Matthias Clasen  <matthiasc@poet.de>
 
+	* gtk/gtktoolbar.c (gtk_toolbar_insert_element): Trivial doc adjustment.
+
 	* gtk/gtklabel.c (gtk_label_new_with_mnemonic),
 	gtk/gtkbutton.c (gtk_button_new_with_mnemonic): More precise
 	documentation about underscores and mnemonics. (#66380)
