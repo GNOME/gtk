@@ -4,11 +4,11 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: gtk+ 1.1.12\n"
+"Project-Id-Version: gtk+ 1.2.7\n"
 "POT-Creation-Date: 1999-08-30 19:01+0200\n"
-"PO-Revision-Date: 1998-12-18 12:15+0100\n"
-"Last-Translator: Tristan Tarrant <ttarrant@etnoteam.it>\n"
-"Language-Team: German <it@li.org>\n"
+"PO-Revision-Date: 2000-02-26 12:15+0100\n"
+"Last-Translator: Christopher R. Gabriel <cgabriel@pluto.linux.it>\n"
+"Language-Team: Italiano <it@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=iso-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -123,7 +123,6 @@ msgid "Rename"
 msgstr "Rinomina"
 
 #: gtk/gtkfilesel.c:1618
-#, fuzzy
 msgid "Selection: "
 msgstr "Selezione: "
 
@@ -274,7 +273,7 @@ msgstr "*"
 #. Convert '(nil)' weights to 'regular', since it looks nicer.
 #: gtk/gtkfontsel.c:1228
 msgid "(nil)"
-msgstr ""
+msgstr "(nil)"
 
 #: gtk/gtkfontsel.c:1228 gtk/gtkfontsel.c:2700
 msgid "regular"
@@ -347,40 +346,39 @@ msgstr "Font: (con Filtro)"
 
 #: gtk/gtkfontsel.c:2680
 msgid "heavy"
-msgstr ""
+msgstr "forte"
 
 #: gtk/gtkfontsel.c:2682
 msgid "extrabold"
-msgstr ""
+msgstr "supergrassetto"
 
 #: gtk/gtkfontsel.c:2684
 msgid "bold"
-msgstr ""
+msgstr "grassetto"
 
 #: gtk/gtkfontsel.c:2687
 msgid "demibold"
-msgstr ""
+msgstr "semi-grassetto"
 
 #: gtk/gtkfontsel.c:2690
 msgid "medium"
-msgstr ""
+msgstr "medio"
 
 #: gtk/gtkfontsel.c:2692
 msgid "normal"
-msgstr ""
+msgstr "normale"
 
 #: gtk/gtkfontsel.c:2694
-#, fuzzy
 msgid "light"
-msgstr "Peso:"
+msgstr "leggero"
 
 #: gtk/gtkfontsel.c:2696
 msgid "extralight"
-msgstr ""
+msgstr "leggero"
 
 #: gtk/gtkfontsel.c:2698
 msgid "thin"
-msgstr ""
+msgstr "fine"
 
 #: gtk/gtkfontsel.c:2875
 msgid "MAX_FONTS exceeded. Some fonts may be missing."
