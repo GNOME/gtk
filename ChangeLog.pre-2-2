@@ -1,3 +1,18 @@
+Wed Aug 29 20:40:58 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtktextbuffer.[ch] (gtk_text_buffer_add/remove_selection_clipboard): 
+	Instead of always mirroring the selection to a single PRIMARY
+	selection, allow it to be mirrored to any number of clipboards.
+
+	* gtk/gtktextbuffer.[ch] (gtk_text_buffer_paste_primary): Remove, 
+	just use gtk_text_buffer_paste_clipboard with the appropriate clipboard.
+
+	* gtk/gtktextbuffer.[ch] (gtk_text_buffer_cut/copy/paste_clipboard): Add a
+	GtkClipboard argument, and for paste_clipboard, the
+	@override_location argument from @paste_primary.
+
+	* gtk/gtktextview.c: Adapt to above change.
+	
 2001-08-30  Havoc Pennington  <hp@redhat.com>
 
 	* gtk/gtktextview.c (invalidated_handler): put validate idle at

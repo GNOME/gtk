@@ -1050,6 +1050,10 @@ gtk_text_view_set_buffer (GtkTextView   *text_view,
                                             gtk_text_view_mark_set_handler, text_view);
       g_object_unref (G_OBJECT (text_view->buffer));
       text_view->dnd_mark = NULL;
+
+      if (GTK_WIDGET_REALIZED (text_view))
+	gtk_text_buffer_remove_selection_clipboard (text_view->buffer,
+						    gtk_clipboard_get (GDK_SELECTION_PRIMARY));
     }
 
   text_view->buffer = buffer;
@@ -1077,6 +1081,10 @@ gtk_text_view_set_buffer (GtkTextView   *text_view,
 
       g_signal_connect (G_OBJECT (text_view->buffer), "mark_set",
 			G_CALLBACK (gtk_text_view_mark_set_handler), text_view);
+
+      if (GTK_WIDGET_REALIZED (text_view))
+	gtk_text_buffer_remove_selection_clipboard (text_view->buffer,
+						    gtk_clipboard_get (GDK_SELECTION_PRIMARY));
     }
 
   if (GTK_WIDGET_VISIBLE (text_view))
@@ -2939,6 +2947,10 @@ gtk_text_view_realize (GtkWidget *widget)
                          widget->window);
 
   gtk_text_view_ensure_layout (text_view);
+
+  if (text_view->buffer)
+    gtk_text_buffer_add_selection_clipboard (text_view->buffer,
+					     gtk_clipboard_get (GDK_SELECTION_PRIMARY));
 }
 
 static void
@@ -2947,6 +2959,10 @@ gtk_text_view_unrealize (GtkWidget *widget)
   GtkTextView *text_view;
   
   text_view = GTK_TEXT_VIEW (widget);
+
+  if (text_view->buffer)
+    gtk_text_buffer_remove_selection_clipboard (text_view->buffer,
+						gtk_clipboard_get (GDK_SELECTION_PRIMARY));
 
   if (text_view->first_validate_idle)
     {
@@ -3290,9 +3306,10 @@ gtk_text_view_button_press_event (GtkWidget *widget, GdkEventButton *event)
                                              event->x + text_view->xoffset,
                                              event->y + text_view->yoffset);
 
-          gtk_text_buffer_paste_primary (get_buffer (text_view),
-                                         &iter,
-                                         text_view->editable);
+          gtk_text_buffer_paste_clipboard (get_buffer (text_view),
+					   gtk_clipboard_get (GDK_SELECTION_PRIMARY),
+					   &iter,
+					   text_view->editable);
           return TRUE;
         }
       else if (event->button == 3)
@@ -4170,7 +4187,9 @@ gtk_text_view_delete_from_cursor (GtkTextView   *text_view,
 static void
 gtk_text_view_cut_clipboard (GtkTextView *text_view)
 {
-  gtk_text_buffer_cut_clipboard (get_buffer (text_view), text_view->editable);
+  gtk_text_buffer_cut_clipboard (get_buffer (text_view),
+				 gtk_clipboard_get (GDK_NONE),
+				 text_view->editable);
   DV(g_print (G_STRLOC": scrolling onscreen\n"));
   gtk_text_view_scroll_mark_onscreen (text_view,
                                       gtk_text_buffer_get_mark (get_buffer (text_view),
@@ -4180,7 +4199,8 @@ gtk_text_view_cut_clipboard (GtkTextView *text_view)
 static void
 gtk_text_view_copy_clipboard (GtkTextView *text_view)
 {
-  gtk_text_buffer_copy_clipboard (get_buffer (text_view));
+  gtk_text_buffer_copy_clipboard (get_buffer (text_view),
+				  gtk_clipboard_get (GDK_NONE));
   DV(g_print (G_STRLOC": scrolling onscreen\n"));
   gtk_text_view_scroll_mark_onscreen (text_view,
                                       gtk_text_buffer_get_mark (get_buffer (text_view),
@@ -4190,7 +4210,10 @@ gtk_text_view_copy_clipboard (GtkTextView *text_view)
 static void
 gtk_text_view_paste_clipboard (GtkTextView *text_view)
 {
-  gtk_text_buffer_paste_clipboard (get_buffer (text_view), text_view->editable);
+  gtk_text_buffer_paste_clipboard (get_buffer (text_view),
+				   gtk_clipboard_get (GDK_NONE),
+				   NULL,
+				   text_view->editable);
   DV(g_print (G_STRLOC": scrolling onscreen\n"));
   gtk_text_view_scroll_mark_onscreen (text_view,
                                       gtk_text_buffer_get_mark (get_buffer (text_view),
