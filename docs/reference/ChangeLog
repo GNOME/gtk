@@ -1,3 +1,9 @@
+2001-10-27  Anders Carlsson  <andersca@gnu.org>
+
+	* gtk/tmpl/gtktoolbar.sgml: Change docs for 
+	gtk_toolbar_append_item to say that it appends an item
+	to the end of a toolbar. This fixes #60428.
+
 Fri Oct 26 11:54:53 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* */Makefile.am: Update to install images.

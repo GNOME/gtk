@@ -86,7 +86,7 @@ creates a new toolbar.
 
 <!-- ##### FUNCTION gtk_toolbar_append_item ##### -->
 <para>
-adds a new button to the beginning (left or top edges) of the given toolbar.
+adds a new button to the end (right or bottom edges) of the given toolbar.
 </para>
 
 @toolbar: a #GtkToolbar.
@@ -101,7 +101,7 @@ adds a new button to the beginning (left or top edges) of the given toolbar.
 
 <!-- ##### FUNCTION gtk_toolbar_prepend_item ##### -->
 <para>
-adds a new button to the beginning of the given toolbar.
+adds a new button to the beginning (top or left edges) of the given toolbar.
 </para>
 
 @toolbar: a #GtkToolbar.
