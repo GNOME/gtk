@@ -1,3 +1,39 @@
+2004-02-29  Federico Mena Quintero  <federico@ximian.com>
+
+	* gtk/gtkfilechooserdefault.c
+	(gtk_file_chooser_default_set_property): Handle
+	GTK_FILE_CHOOSER_PROP_USE_PREVIEW_LABEL.
+	(gtk_file_chooser_default_get_property): Likewise.
+	(struct _GtkFileChooserDefault): Added fields for preview_label,
+	use_preview_label, preview_display_name, preview_box.  Removed
+	preview_frame.
+	(set_preview_widget): Reorder the widget in relation to the label.
+	(update_preview_widget_visibility): Create or destroy the preview
+	label.
+	(check_preview_change): Update impl->preview_display_name and the
+	label.
+	(find_good_size_from_style): Use the preview_box.
+	(gtk_file_chooser_default_finalize): Free
+	impl->preview_display_name.
+	(gtk_file_chooser_default_init): Initialize
+	impl->use_preview_label.
+
+	* gtk/gtkfilechooser.c (gtk_file_chooser_class_init): Add a
+	"use-preview-label" property.
+	(gtk_file_chooser_set_use_preview_label): New function.  This sets
+	whether one wants the file chooser to display a stock label with
+	the previewed filename.  Apps that do really fancy previews can
+	turn this off and draw the name themselves.
+	(gtk_file_chooser_get_use_preview_label): New function.
+	(gtk_file_chooser_get_preview_widget_active): Documentation fix.
+
+	* gtk/gtkfilechooserutils.h (GtkFileChooserProp): Add a
+	GTK_FILE_CHOOSER_PROP_USE_PREVIEW_LABEL value.
+
+	* gtk/gtkfilechooserutils.c
+	(_gtk_file_chooser_install_properties): Override the
+	"use-preview-label" property.
+
 Sun Feb 29 04:43:29 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkentry.c (gtk_entry_completion_key_press): Make Tab and

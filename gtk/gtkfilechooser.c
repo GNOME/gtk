@@ -125,6 +125,12 @@ gtk_file_chooser_class_init (gpointer g_iface)
 							     TRUE,
 							     G_PARAM_READWRITE));
   g_object_interface_install_property (g_iface,
+				       g_param_spec_boolean ("use-preview-label",
+							     P_("Use Preview Label"),
+							     P_("Whether to display a stock label with the name of the previewed file."),
+							     TRUE,
+							     G_PARAM_READWRITE));
+  g_object_interface_install_property (g_iface,
 				       g_param_spec_object ("extra-widget",
 							    P_("Extra widget"),
 							    P_("Application supplied widget for extra options."),
@@ -1047,12 +1053,11 @@ gtk_file_chooser_set_preview_widget_active (GtkFileChooser *chooser,
  * gtk_file_chooser_get_preview_widget_active:
  * @chooser: a #GtkFileChooser
  * 
- * Gets whether the preview widget set by
- * gtk_file_chooser_set_preview_widget_active() should be shown for the
- * current filename. See gtk_file_chooser_set_preview_widget_active().
+ * Gets whether the preview widget set by gtk_file_chooser_set_preview_widget()
+ * should be shown for the current filename. See
+ * gtk_file_chooser_set_preview_widget_active().
  * 
- * Return value: %TRUE if the preview widget is active for the
- *  current filename.
+ * Return value: %TRUE if the preview widget is active for the current filename.
  *
  * Since: 2.4
  **/
@@ -1066,6 +1071,51 @@ gtk_file_chooser_get_preview_widget_active (GtkFileChooser *chooser)
   g_object_get (chooser, "preview-widget-active", &active, NULL);
 
   return active;
+}
+
+/**
+ * gtk_file_chooser_set_use_preview_label:
+ * @chooser: a #GtkFileChooser
+ * @use_label: whether to display a stock label with the name of the previewed file
+ * 
+ * Sets whether the file chooser should display a stock label with the name of
+ * the file that is being previewed; the default is %TRUE.  Applications that
+ * want to draw the whole preview area themselves should set this to %FALSE and
+ * display the name themselves in their preview widget.
+ *
+ * See also: gtk_file_chooser_set_preview_widget()
+ *
+ * Since: 2.4
+ **/
+void
+gtk_file_chooser_set_use_preview_label (GtkFileChooser *chooser,
+					gboolean        use_label)
+{
+  g_return_if_fail (GTK_IS_FILE_CHOOSER (chooser));
+
+  g_object_set (chooser, "use-preview-label", use_label, NULL);
+}
+
+/**
+ * gtk_file_chooser_get_use_preview_label:
+ * @chooser: a #GtkFileChooser
+ * 
+ * Gets whether a stock label should be drawn with the name of the previewed
+ * file.  See gtk_file_chooser_set_use_preview_label().
+ * 
+ * Return value: %TRUE if the file chooser is set to display a label with the
+ * name of the previewed file, %FALSE otherwise.
+ **/
+gboolean
+gtk_file_chooser_get_use_preview_label (GtkFileChooser *chooser)
+{
+  gboolean use_label;
+  
+  g_return_val_if_fail (GTK_IS_FILE_CHOOSER (chooser), FALSE);
+
+  g_object_get (chooser, "use-preview-label", &use_label, NULL);
+
+  return use_label;
 }
 
 /**

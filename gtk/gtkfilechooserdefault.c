@@ -112,8 +112,10 @@ struct _GtkFileChooserDefault
   GtkTreeModel *browse_shortcuts_model;
   GtkFileSystemModel *browse_files_model;
   GtkFileSystemModel *browse_directories_model;
-  
+
   GtkWidget *filter_combo;
+  GtkWidget *preview_box;
+  GtkWidget *preview_label;
   GtkWidget *preview_widget;
   GtkWidget *extra_widget;
 
@@ -136,17 +138,16 @@ struct _GtkFileChooserDefault
   GtkFilePath *current_volume_path;
   GtkFilePath *current_folder;
   GtkFilePath *preview_path;
-
-  GtkWidget *preview_frame;
+  char *preview_display_name;
 
   GtkTreeViewColumn *list_name_column;
   GtkCellRenderer *list_name_renderer;
-
 
   /* Flags */
 
   guint local_only : 1;
   guint preview_widget_active : 1;
+  guint use_preview_label : 1;
   guint select_multiple : 1;
   guint show_hidden : 1;
   guint list_sort_ascending : 1;
@@ -486,6 +487,7 @@ gtk_file_chooser_default_init (GtkFileChooserDefault *impl)
 {
   impl->local_only = TRUE;
   impl->preview_widget_active = TRUE;
+  impl->use_preview_label = TRUE;
   impl->select_multiple = FALSE;
   impl->show_hidden = FALSE;
 
@@ -524,6 +526,8 @@ gtk_file_chooser_default_finalize (GObject *object)
 
   if (impl->preview_path)
     gtk_file_path_free (impl->preview_path);
+
+  g_free (impl->preview_display_name);
 
   G_OBJECT_CLASS (parent_class)->finalize (object);
 }
@@ -622,10 +626,26 @@ error_building_filename_dialog (GtkFileChooserDefault *impl,
 static void
 update_preview_widget_visibility (GtkFileChooserDefault *impl)
 {
-  if (impl->preview_widget_active && impl->preview_widget)
-    gtk_widget_show (impl->preview_frame);
+  if (impl->use_preview_label)
+    {
+      if (!impl->preview_label)
+	{
+	  impl->preview_label = gtk_label_new (impl->preview_display_name);
+	  gtk_box_pack_start (GTK_BOX (impl->preview_box), impl->preview_label, FALSE, FALSE, 0);
+	  gtk_box_reorder_child (GTK_BOX (impl->preview_box), impl->preview_label, 0);
+	  gtk_widget_show (impl->preview_label);
+	}
+    }
   else
-    gtk_widget_hide (impl->preview_frame);
+    {
+      if (impl->preview_label)
+	gtk_widget_destroy (impl->preview_label);
+    }
+
+  if (impl->preview_widget_active && impl->preview_widget)
+    gtk_widget_show (impl->preview_box);
+  else
+    gtk_widget_hide (impl->preview_box);
 
   g_signal_emit_by_name (impl, "default-size-changed");
 }
@@ -638,15 +658,17 @@ set_preview_widget (GtkFileChooserDefault *impl,
     return;
 
   if (impl->preview_widget)
-    gtk_container_remove (GTK_CONTAINER (impl->preview_frame),
+    gtk_container_remove (GTK_CONTAINER (impl->preview_box),
 			  impl->preview_widget);
 
   impl->preview_widget = preview_widget;
   if (impl->preview_widget)
     {
       gtk_widget_show_all (impl->preview_widget);
-      gtk_container_add (GTK_CONTAINER (impl->preview_frame),
-			 impl->preview_widget);
+      gtk_box_pack_start (GTK_BOX (impl->preview_box), impl->preview_widget, TRUE, TRUE, 0);
+      gtk_box_reorder_child (GTK_BOX (impl->preview_box),
+			     impl->preview_widget,
+			     (impl->use_preview_label && impl->preview_label) ? 1 : 0);
     }
 
   update_preview_widget_visibility (impl);
@@ -984,7 +1006,7 @@ shortcuts_add_bookmarks (GtkFileChooserDefault *impl)
 			     remove_bookmark_cb);
 
     }
-  
+
   bookmarks = gtk_file_system_list_bookmarks (impl->file_system);
   impl->num_bookmarks = shortcuts_append_paths (impl, bookmarks);
   gtk_file_paths_free (bookmarks);
@@ -1556,7 +1578,7 @@ shortcuts_list_create (GtkFileChooserDefault *impl)
 
   impl->browse_shortcuts_tree_view = gtk_tree_view_new ();
   gtk_tree_view_set_headers_visible (GTK_TREE_VIEW (impl->browse_shortcuts_tree_view), FALSE);
-  
+
   gtk_drag_dest_set (impl->browse_shortcuts_tree_view,
 		     GTK_DEST_DEFAULT_ALL,
 		     shortcuts_targets,
@@ -1802,9 +1824,9 @@ file_pane_create (GtkFileChooserDefault *impl,
 
   /* Preview */
 
-  impl->preview_frame = gtk_frame_new (_("Preview"));
-  gtk_box_pack_start (GTK_BOX (hbox), impl->preview_frame, FALSE, FALSE, 0);
-  /* Don't show preview frame initially */
+  impl->preview_box = gtk_vbox_new (FALSE, 12);
+  gtk_box_pack_start (GTK_BOX (hbox), impl->preview_box, FALSE, FALSE, 0);
+  /* Don't show preview box initially */
 
   /* Filename entry and filter combo */
   hbox = gtk_hbox_new (FALSE, 0);
@@ -1891,7 +1913,7 @@ save_widgets_create (GtkFileChooserDefault *impl)
 		    impl);
   gtk_widget_show_all (alignment);
 
-  return vbox;  
+  return vbox;
 }
 
 /* Creates the main hpaned with the widgets shared by Open and Save mode */
@@ -2031,11 +2053,11 @@ set_file_system_backend (GtkFileChooserDefault *impl,
       impl->bookmarks_changed_id = 0;
       g_object_unref (impl->file_system);
     }
-  
+
   impl->file_system = NULL;
   if (backend)
     impl->file_system = _gtk_file_system_create (backend);
-  
+
   if (!impl->file_system)
     {
 #if defined (G_OS_UNIX)
@@ -2046,7 +2068,7 @@ set_file_system_backend (GtkFileChooserDefault *impl,
 #error "No default filesystem implementation on the platform"
 #endif
     }
-  
+
   if (impl->file_system)
     {
       impl->volumes_changed_id = g_signal_connect (impl->file_system, "volumes-changed",
@@ -2059,7 +2081,7 @@ set_file_system_backend (GtkFileChooserDefault *impl,
 }
 
 /* This function is basically a do_all function.
- * 
+ *
  * It sets the visibility on all the widgets based on the current state, and
  * moves the custom_widget if needed.
  */
@@ -2210,6 +2232,10 @@ gtk_file_chooser_default_set_property (GObject      *object,
       impl->preview_widget_active = g_value_get_boolean (value);
       update_preview_widget_visibility (impl);
       break;
+    case GTK_FILE_CHOOSER_PROP_USE_PREVIEW_LABEL:
+      impl->use_preview_label = g_value_get_boolean (value);
+      update_preview_widget_visibility (impl);
+      break;
     case GTK_FILE_CHOOSER_PROP_EXTRA_WIDGET:
       set_extra_widget (impl, g_value_get_object (value));
       update_appearance (impl);
@@ -2269,6 +2295,9 @@ gtk_file_chooser_default_get_property (GObject    *object,
       break;
     case GTK_FILE_CHOOSER_PROP_PREVIEW_WIDGET_ACTIVE:
       g_value_set_boolean (value, impl->preview_widget_active);
+      break;
+    case GTK_FILE_CHOOSER_PROP_USE_PREVIEW_LABEL:
+      g_value_set_boolean (value, impl->use_preview_label);
       break;
     case GTK_FILE_CHOOSER_PROP_EXTRA_WIDGET:
       g_value_set_object (value, impl->extra_widget);
@@ -2532,12 +2561,12 @@ set_tree_model (GtkFileChooserDefault *impl, const GtkFilePath *path)
   GtkFilePath *base_path, *parent_path;
 
   base_path = NULL;
-  
+
   volume = gtk_file_system_get_volume_for_path (impl->file_system, path);
-  
+
   if (volume)
     base_path = gtk_file_system_volume_get_base_path (impl->file_system, volume);
-  
+
   if (base_path == NULL)
     {
       base_path = gtk_file_path_copy (path);
@@ -2573,7 +2602,7 @@ set_tree_model (GtkFileChooserDefault *impl, const GtkFilePath *path)
  out:
 
   gtk_file_path_free (base_path);
-  if (volume) 
+  if (volume)
     gtk_file_system_volume_free (impl->file_system, volume);
 }
 
@@ -3093,7 +3122,7 @@ find_good_size_from_style (GtkWidget *widget,
   gtk_widget_size_request (widget, &req);
 
   if (impl->preview_widget_active && impl->preview_widget)
-    gtk_widget_size_request (impl->preview_frame, &preview_req);
+    gtk_widget_size_request (impl->preview_box, &preview_req);
   else
     preview_req.width = 0;
 
@@ -3248,6 +3277,7 @@ static void
 check_preview_change (GtkFileChooserDefault *impl)
 {
   const GtkFilePath *new_path = NULL;
+  const GtkFileInfo *new_info = NULL;
 
   /* FIXME #132255: Fixing preview for multiple selection involves getting the
    * full selection and diffing to find out what the most recently selected file
@@ -3268,6 +3298,7 @@ check_preview_change (GtkFileChooserDefault *impl)
 							  &child_iter, &iter);
 
 	  new_path = _gtk_file_system_model_get_path (impl->browse_files_model, &child_iter);
+	  new_info = _gtk_file_system_model_get_info (impl->browse_files_model, &child_iter);
 	}
     }
 
@@ -3276,12 +3307,24 @@ check_preview_change (GtkFileChooserDefault *impl)
 	gtk_file_path_compare (new_path, impl->preview_path) == 0))
     {
       if (impl->preview_path)
-	gtk_file_path_free (impl->preview_path);
+	{
+	  gtk_file_path_free (impl->preview_path);
+	  g_free (impl->preview_display_name);
+	}
 
       if (new_path)
-	impl->preview_path = gtk_file_path_copy (new_path);
+	{
+	  impl->preview_path = gtk_file_path_copy (new_path);
+	  impl->preview_display_name = g_strdup (gtk_file_info_get_display_name (new_info));
+	}
       else
-	impl->preview_path = NULL;
+	{
+	  impl->preview_path = NULL;
+	  impl->preview_display_name = NULL;
+	}
+
+      if (impl->use_preview_label && impl->preview_label)
+	gtk_label_set_text (GTK_LABEL (impl->preview_label), impl->preview_display_name);
 
       g_signal_emit_by_name (impl, "update-preview");
     }

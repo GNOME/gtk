@@ -98,6 +98,9 @@ _gtk_file_chooser_install_properties (GObjectClass *klass)
 				    GTK_FILE_CHOOSER_PROP_PREVIEW_WIDGET_ACTIVE,
 				    "preview-widget-active");
   g_object_class_override_property (klass,
+				    GTK_FILE_CHOOSER_PROP_USE_PREVIEW_LABEL,
+				    "use-preview-label");
+  g_object_class_override_property (klass,
 				    GTK_FILE_CHOOSER_PROP_SELECT_MULTIPLE,
 				    "select-multiple");
   g_object_class_override_property (klass,

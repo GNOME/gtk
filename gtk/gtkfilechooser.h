@@ -107,6 +107,9 @@ GtkWidget *gtk_file_chooser_get_preview_widget        (GtkFileChooser *chooser);
 void       gtk_file_chooser_set_preview_widget_active (GtkFileChooser *chooser,
 						       gboolean        active);
 gboolean   gtk_file_chooser_get_preview_widget_active (GtkFileChooser *chooser);
+void       gtk_file_chooser_set_use_preview_label     (GtkFileChooser *chooser,
+						       gboolean        use_label);
+gboolean   gtk_file_chooser_get_use_preview_label     (GtkFileChooser *chooser);
 
 char *gtk_file_chooser_get_preview_filename (GtkFileChooser *chooser);
 char *gtk_file_chooser_get_preview_uri      (GtkFileChooser *chooser);
