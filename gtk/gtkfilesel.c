@@ -3727,10 +3727,10 @@ update_cmpl (PossibleCompletion *poss,
 
   if (cmpl_state->updated_text_alloc < cmpl_len + 1)
     {
+      cmpl_state->updated_text_alloc = 2*cmpl_len;
       cmpl_state->updated_text =
 	(gchar*)g_realloc (cmpl_state->updated_text,
 			   cmpl_state->updated_text_alloc);
-      cmpl_state->updated_text_alloc = 2*cmpl_len;
     }
 
   if (cmpl_state->updated_text_len < 0)
