@@ -28,6 +28,7 @@
 #include <string.h>
 #include "gtkalias.h"
 #include "gtklabel.h"
+#include "gtkdnd.h"
 #include "gtkmain.h"
 #include "gtkmarshalers.h"
 #include "gtkwindow.h"
