@@ -1,3 +1,8 @@
+Sun Mar  7 11:43:34 1999  ape@spacetec.no  (Asbjorn Pettersen)
+
+	* gtk/gtkthemes.c (gtk_theme_engine_get): Add OS/2 changes.
+	Added function gen_8_3_dll_name(gchar *name, gchar *fullname).
+
 Fri Mar  5 09:12:24 1999  ape@lrdpf.spacetec.no  (Asbjorn Pettersen)
 
 	* gtk/gtkitemfactory.c (gtk_item_factory_parse_rc): Open file in

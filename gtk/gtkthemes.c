@@ -53,6 +53,17 @@ struct _GtkThemeEnginePrivate {
 
 static GHashTable *engine_hash = NULL;
 
+#ifdef __EMX__
+static void gen_8_3_dll_name(gchar *name, gchar *fullname)
+{
+    /* 8.3 dll filename restriction */
+    fullname[0] = '_';
+    strncpy (fullname + 1, name, 7);
+    fullname[8] = '\0';
+    strcat (fullname, ".dll");
+}                                                	
+#endif
+
 GtkThemeEngine*
 gtk_theme_engine_get (gchar *name)
 {
@@ -71,8 +82,20 @@ gtk_theme_engine_get (gchar *name)
        gchar *engine_path;
        GModule *library;
       
+#ifndef __EMX__
        g_snprintf (fullname, 1024, "lib%s.so", name);
+#else
+       gen_8_3_dll_name(name, fullname);
+#endif
        engine_path = gtk_rc_find_module_in_path (fullname);
+#ifdef __EMX__
+       if (!engine_path)
+	 {
+	   /* try theme name without prefix '_' */
+	   memmove(fullname, fullname + 1, strlen(fullname));
+	   engine_path = gtk_rc_find_module_in_path (fullname);
+	 }
+#endif
 
        if (!engine_path)
 	 {
