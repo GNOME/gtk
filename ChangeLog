@@ -1,3 +1,28 @@
+Mon Aug 25 23:21:43 2003  Kristian Rietveld  <kris@gtk.org>
+
+	Merge from stable.
+
+	Fixes #115871, reported by Michael Natterer.
+
+	* gtk/gtktreeprivate.h: added GtkTreeSelectMode enum,
+	added ctrl_pressed and shift_pressed bitfields,
+	(_gtk_tree_selection_internal_select_node): replace GdkModifierType
+	arg with GtkTreeSelectMode.
+
+	* gtk/gtktreeselection.c (gtk_tree_selection_set_mode),
+	(gtk_tree_selection_select_path), (gtk_tree_selection_unselect_path),
+	(_gtk_tree_selection_internal_select_node): all updated for
+	GdkModifierType -> GtkTreeSelectMode move.
+
+	* gtk/gtktreeview.c (gtk_tree_view_button_press): set ctrl_pressed
+	and shift_pressed around selection handling block,
+	(gtk_tree_view_real_select_cursor_row),
+	(gtk_tree_view_real_toggle_cursor_row),
+	(gtk_tree_view_real_selection_cursor_parent),
+	(gtk_tree_view_real_set_cursor): use ctrl_pressed and shift_pressed,
+	instead of checking the event state. And also updates for the
+	GdkModifierType -> GtkTreeSelectMode move.
+
 Wed Aug 20 21:26:49 2003  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkplug.c (gtk_plug_focus): Send the focus on

@@ -43,6 +43,13 @@ typedef enum
   GTK_TREE_VIEW_IN_COLUMN_DRAG = 1 << 7
 } GtkTreeViewFlags;
 
+typedef enum
+{
+  GTK_TREE_SELECT_MODE_TOGGLE = 1 << 0,
+  GTK_TREE_SELECT_MODE_EXTEND = 1 << 1
+}
+GtkTreeSelectMode;
+
 enum
 {
   DRAG_COLUMN_WINDOW_STATE_UNSET = 0,
@@ -184,6 +191,9 @@ struct _GtkTreeViewPrivate
   /* hint to display rows in alternating colors */
   guint has_rules : 1;
   guint mark_rows_col_dirty : 1;
+
+  guint ctrl_pressed : 1;
+  guint shift_pressed : 1;
   
   /* interactive search */
   guint enable_search : 1;
@@ -287,7 +297,7 @@ void         _gtk_tree_selection_internal_select_node (GtkTreeSelection  *select
 						       GtkRBNode         *node,
 						       GtkRBTree         *tree,
 						       GtkTreePath       *path,
-						       GdkModifierType    state,
+                                                       GtkTreeSelectMode  mode,
 						       gboolean           override_browse_mode);
 gboolean     _gtk_tree_view_find_node                 (GtkTreeView       *tree_view,
 						       GtkTreePath       *path,
