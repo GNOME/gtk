@@ -192,7 +192,7 @@ pnm_skip_whitespace (PnmIOBuffer *inbuf, GError **error)
 			for ( ; *inptr != '\n' && inptr < inend; inptr++)
 				;
 			
-			if ( *inptr != '\n' ) {
+			if ( inptr == inend || *inptr != '\n' ) {
 				/* couldn't read whole comment */
 				return PNM_SUSPEND;
 			}

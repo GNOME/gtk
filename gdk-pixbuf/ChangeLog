@@ -1,3 +1,8 @@
+2005-02-15  Matthias Clasen  <mclasen@redhat.com>
+
+	* io-pnm.c (pnm_skip_whitespace): Don't read over the end of
+	the buffer if '#' appears at the very end.  (#167141, Doug Morgan)
+
 2005-02-05  Hans Breuer  <hans@breuer.org>
 
 	* makefile.msc : rule for gdk_pixbuf.def
