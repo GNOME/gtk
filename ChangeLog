@@ -1,3 +1,11 @@
+Mon Dec 16 21:39:28 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkentry.c (gtk_entry_enter_text): Call
+	gtk_entry_set_position_internal() that takes a
+	new "reset_IM" parameter, so that we avoid the
+	problem where committing text would reset the
+	input method. (#74381, Kang Jeong-Hee)
+
 2002-12-17  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkcontainer.c: Fix a few doc comments.
