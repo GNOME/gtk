@@ -1,5 +1,12 @@
 2004-03-11  Federico Mena Quintero  <federico@ximian.com>
 
+	* gtk/gtkfilechooserdefault.c (error_message_with_parent): Use a
+	single OK button, not a Close button, as per the HIG.
+
+	* gtk/gtkfilesel.c (gtk_file_selection_fileop_error): Likewise.
+
+2004-03-11  Federico Mena Quintero  <federico@ximian.com>
+
 	* gtk/gtkfilechooserdefault.c (shortcuts_drag_motion_cb): Oops,
 	initialize "action" before jumping.  Fixes #136900.
 

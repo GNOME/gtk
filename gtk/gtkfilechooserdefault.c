@@ -633,7 +633,7 @@ error_message_with_parent (GtkWindow  *parent,
   dialog = gtk_message_dialog_new (parent,
 				   GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
 				   GTK_MESSAGE_ERROR,
-				   GTK_BUTTONS_CLOSE,
+				   GTK_BUTTONS_OK,
 				   "%s",
 				   msg);
   gtk_dialog_run (GTK_DIALOG (dialog));

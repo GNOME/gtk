@@ -1371,7 +1371,7 @@ gtk_file_selection_fileop_error (GtkFileSelection *fs,
   dialog = gtk_message_dialog_new (GTK_WINDOW (fs),
 				   GTK_DIALOG_DESTROY_WITH_PARENT,
 				   GTK_MESSAGE_ERROR,
-				   GTK_BUTTONS_CLOSE,
+				   GTK_BUTTONS_OK,
 				   "%s", error_message);
 
   /* yes, we free it */
