@@ -1,3 +1,8 @@
+Mon Nov 12 19:33:52 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkmessagedialog.c (gtk_message_dialog_new): Warn
+	if GTK_DIALOG_NO_SEPARATOR is passed in and ignore it.
+
 2001-11-12  Matthias Clasen  <matthiasc@poet.de>
 
 	* gtk/gtktreeview.c: Documentation fixes. (#64377)

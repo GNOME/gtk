@@ -191,6 +191,12 @@ gtk_message_dialog_new (GtkWindow     *parent,
   widget = GTK_WIDGET (gtk_type_new (GTK_TYPE_MESSAGE_DIALOG));
   dialog = GTK_DIALOG (widget);
 
+  if (flags & GTK_DIALOG_NO_SEPARATOR)
+    {
+      g_warning ("The GTK_DIALOG_NO_SEPARATOR flag cannot be used for GtkMessageDialog");
+      flags &= ~GTK_DIALOG_NO_SEPARATOR;
+    }
+
   if (message_format)
     {
       va_start (args, message_format);
