@@ -483,34 +483,18 @@ gtk_ctree_class_init (GtkCTreeClass *klass)
 
   binding_set = gtk_binding_set_by_class (klass);
   gtk_binding_entry_add_signal (binding_set,
-				GDK_plus, GDK_SHIFT_MASK,
-				"change_focus_row_expansion", 1,
-				GTK_TYPE_ENUM, GTK_CTREE_EXPANSION_EXPAND);
-  gtk_binding_entry_add_signal (binding_set,
 				GDK_plus, 0,
 				"change_focus_row_expansion", 1,
 				GTK_TYPE_ENUM, GTK_CTREE_EXPANSION_EXPAND);
-  gtk_binding_entry_add_signal (binding_set,
-				GDK_plus, GDK_CONTROL_MASK | GDK_SHIFT_MASK,
-				"change_focus_row_expansion", 1,
-				GTK_TYPE_ENUM, GTK_CTREE_EXPANSION_EXPAND_RECURSIVE);
   gtk_binding_entry_add_signal (binding_set,
 				GDK_plus, GDK_CONTROL_MASK,
 				"change_focus_row_expansion", 1,
 				GTK_TYPE_ENUM, GTK_CTREE_EXPANSION_EXPAND_RECURSIVE);
 
   gtk_binding_entry_add_signal (binding_set,
-				GDK_KP_Add, GDK_SHIFT_MASK,
-				"change_focus_row_expansion", 1,
-				GTK_TYPE_ENUM, GTK_CTREE_EXPANSION_EXPAND);
-  gtk_binding_entry_add_signal (binding_set,
 				GDK_KP_Add, 0,
 				"change_focus_row_expansion", 1,
 				GTK_TYPE_ENUM, GTK_CTREE_EXPANSION_EXPAND);
-  gtk_binding_entry_add_signal (binding_set,
-				GDK_KP_Add, GDK_CONTROL_MASK | GDK_SHIFT_MASK,
-				"change_focus_row_expansion", 1,
-				GTK_TYPE_ENUM, GTK_CTREE_EXPANSION_EXPAND_RECURSIVE);
   gtk_binding_entry_add_signal (binding_set,
 				GDK_KP_Add, GDK_CONTROL_MASK,
 				"change_focus_row_expansion", 1,
@@ -540,14 +524,6 @@ gtk_ctree_class_init (GtkCTreeClass *klass)
 				GTK_TYPE_ENUM, GTK_CTREE_EXPANSION_TOGGLE);
   gtk_binding_entry_add_signal (binding_set,
 				GDK_KP_Equal, 0,
-				"change_focus_row_expansion", 1,
-				GTK_TYPE_ENUM, GTK_CTREE_EXPANSION_TOGGLE);
-  gtk_binding_entry_add_signal (binding_set,
-				GDK_equal, GDK_SHIFT_MASK,
-				"change_focus_row_expansion", 1,
-				GTK_TYPE_ENUM, GTK_CTREE_EXPANSION_TOGGLE);
-  gtk_binding_entry_add_signal (binding_set,
-                                GDK_KP_Equal, GDK_SHIFT_MASK,
 				"change_focus_row_expansion", 1,
 				GTK_TYPE_ENUM, GTK_CTREE_EXPANSION_TOGGLE);
   gtk_binding_entry_add_signal (binding_set,

@@ -1,3 +1,8 @@
+Thu Feb 21 12:24:22 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkctree.c (gtk_ctree_class_init): Remove some workarounds
+	for +/= and shift key handling.
+
 Wed Feb 20 14:26:47 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkkeyhash.[ch]: Implement "fuzzy" key binding lookups;
