@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.3.14\n"
-"POT-Creation-Date: 2002-05-17 21:25+0200\n"
+"POT-Creation-Date: 2002-05-23 12:28+0200\n"
 "PO-Revision-Date: 2002-05-07 14:38+0200\n"
 "Last-Translator: Kjartan Maraas <kmaraas@gnome.org>\n"
 "Language-Team: Norwegian (bokmål) <no@li.org>\n"
@@ -550,7 +550,7 @@ msgstr "Bredde eller høyde på TIFF-bilde er null"
 msgid "Dimensions of TIFF image too large"
 msgstr "TIFF-bilde har for store dimensjoner"
 
-#: gdk-pixbuf/io-tiff.c:230 gdk-pixbuf/io-tiff.c:242 gdk-pixbuf/io-tiff.c:521
+#: gdk-pixbuf/io-tiff.c:230 gdk-pixbuf/io-tiff.c:242 gdk-pixbuf/io-tiff.c:536
 msgid "Insufficient memory to open TIFF file"
 msgstr "Ikke nok minne til å åpne TIFF-bilde"
 
@@ -558,15 +558,15 @@ msgstr "Ikke nok minne til å åpne TIFF-bilde"
 msgid "Failed to load RGB data from TIFF file"
 msgstr "Feil under lasting av RGB-data fra TIFF-fil"
 
-#: gdk-pixbuf/io-tiff.c:309
+#: gdk-pixbuf/io-tiff.c:324
 msgid "Failed to open TIFF image"
 msgstr "Feil under åpning av TIFF-bilde"
 
-#: gdk-pixbuf/io-tiff.c:322
+#: gdk-pixbuf/io-tiff.c:337
 msgid "TIFFClose operation failed"
 msgstr "TIFFClose operasjonen feilet"
 
-#: gdk-pixbuf/io-tiff.c:455 gdk-pixbuf/io-tiff.c:469
+#: gdk-pixbuf/io-tiff.c:470 gdk-pixbuf/io-tiff.c:484
 msgid "Failed to load TIFF image"
 msgstr "Feil under åpning av TIFF-bilde"
 
@@ -3985,7 +3985,7 @@ msgstr "Gjør utvidere indentert."
 msgid "Whether to display the column"
 msgstr "Vis kolonnen"
 
-#: gtk/gtktreeviewcolumn.c:183 gtk/gtkwindow.c:442
+#: gtk/gtktreeviewcolumn.c:183 gtk/gtkwindow.c:446
 msgid "Resizable"
 msgstr "Kan endre størrelse"
 
@@ -4301,27 +4301,27 @@ msgstr "Aspektrate for markørlinje"
 msgid "Aspect ratio with which to draw insertion cursor"
 msgstr "Aspektrate for tegning av innsettingsmarkør"
 
-#: gtk/gtkwindow.c:407
+#: gtk/gtkwindow.c:411
 msgid "Window Type"
 msgstr "Vindustype"
 
-#: gtk/gtkwindow.c:408
+#: gtk/gtkwindow.c:412
 msgid "The type of the window"
 msgstr "Type vindu"
 
-#: gtk/gtkwindow.c:417
+#: gtk/gtkwindow.c:421
 msgid "Window Title"
 msgstr "Vindustittel"
 
-#: gtk/gtkwindow.c:418
+#: gtk/gtkwindow.c:422
 msgid "The title of the window"
 msgstr "Tittelen på vinduet"
 
-#: gtk/gtkwindow.c:425
+#: gtk/gtkwindow.c:429
 msgid "Allow Shrink"
 msgstr "Tillat krymping"
 
-#: gtk/gtkwindow.c:427
+#: gtk/gtkwindow.c:431
 #, no-c-format
 msgid ""
 "If TRUE, the window has no mimimum size. Setting this to TRUE is 99% of the "
@@ -4330,68 +4330,68 @@ msgstr ""
 "Hvis SANN får vinduet ingen minimum størrelse. Denne bør ikke settes til "
 "SANN 99% av tiden."
 
-#: gtk/gtkwindow.c:434
+#: gtk/gtkwindow.c:438
 msgid "Allow Grow"
 msgstr "Tillat vekst"
 
-#: gtk/gtkwindow.c:435
+#: gtk/gtkwindow.c:439
 msgid "If TRUE, users can expand the window beyond its minimum size."
 msgstr "Brukere kan utvide vinduet utover minste størrelse hvis SANN."
 
-#: gtk/gtkwindow.c:443
+#: gtk/gtkwindow.c:447
 msgid "If TRUE, users can resize the window."
 msgstr "Brukere kan endre størrelse på vinduet hvis SANN."
 
-#: gtk/gtkwindow.c:450
+#: gtk/gtkwindow.c:454
 msgid "Modal"
 msgstr "Modal"
 
-#: gtk/gtkwindow.c:451
+#: gtk/gtkwindow.c:455
 msgid ""
 "If TRUE, the window is modal (other windows are not usable while this one is "
 "up)."
 msgstr ""
 "Hvis SANN er vinduet modalt (andre vinduer er ikke brukbare når dette vises)."
 
-#: gtk/gtkwindow.c:458
+#: gtk/gtkwindow.c:462
 msgid "Window Position"
 msgstr "Vindusplassering"
 
-#: gtk/gtkwindow.c:459
+#: gtk/gtkwindow.c:463
 msgid "The initial position of the window."
 msgstr "Utgangsposisjon for vinduet."
 
-#: gtk/gtkwindow.c:467
+#: gtk/gtkwindow.c:471
 msgid "Default Width"
 msgstr "Standard bredde"
 
-#: gtk/gtkwindow.c:468
+#: gtk/gtkwindow.c:472
 msgid ""
 "The default width of the window, used when initially showing the window."
 msgstr "Forvalgt bredde for vinduet. Brukt når vinduet først vises."
 
-#: gtk/gtkwindow.c:477
+#: gtk/gtkwindow.c:481
 msgid "Default Height"
 msgstr "Standard høyde"
 
-#: gtk/gtkwindow.c:478
+#: gtk/gtkwindow.c:482
 msgid ""
 "The default height of the window, used when initially showing the window."
 msgstr "Forvalgt høyde for vindu. Brukt når vinduet først vises."
 
-#: gtk/gtkwindow.c:487
+#: gtk/gtkwindow.c:491
 msgid "Destroy with Parent"
 msgstr "Ødelegg med opphav"
 
-#: gtk/gtkwindow.c:488
+#: gtk/gtkwindow.c:492
 msgid "If this window should be destroyed when the parent is destroyed"
 msgstr "Vinduet skal ødelegges når opphavet ødelegges"
 
-#: gtk/gtkwindow.c:495
+#: gtk/gtkwindow.c:499
 msgid "Icon"
 msgstr "Ikon"
 
-#: gtk/gtkwindow.c:496
+#: gtk/gtkwindow.c:500
 msgid "Icon for this window"
 msgstr "Ikon for dette vinduet"
 
