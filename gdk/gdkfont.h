@@ -1,3 +1,5 @@
+#ifndef GDK_DISABLE_DEPRECATED
+
 #ifndef __GDK_FONT_H__
 #define __GDK_FONT_H__
 
@@ -100,3 +102,5 @@ void	 gdk_font_full_name_free (gchar *name);
 #endif /* __cplusplus */
 
 #endif /* __GDK_FONT_H__ */
+
+#endif /* GDK_DISABLE_DEPRECATED */

@@ -599,22 +599,6 @@ gdk_set_sm_client_id (const gchar* sm_client_id)
 }
 
 void
-gdk_key_repeat_disable (void)
-{
-  XAutoRepeatOff (gdk_display);
-}
-
-void
-gdk_key_repeat_restore (void)
-{
-  if (autorepeat)
-    XAutoRepeatOn (gdk_display);
-  else
-    XAutoRepeatOff (gdk_display);
-}
-
-
-void
 gdk_beep (void)
 {
   XBell(gdk_display, 0);

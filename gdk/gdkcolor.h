@@ -97,6 +97,7 @@ gboolean  gdk_color_equal (const GdkColor *colora,
 			   const GdkColor *colorb);
 
 /* The following functions are deprecated */
+#ifdef GDK_DISABLE_DEPRECATED
 void gdk_colors_store	 (GdkColormap	*colormap,
 			  GdkColor	*colors,
 			  gint		 ncolors);
@@ -118,6 +119,7 @@ gint gdk_color_alloc	 (GdkColormap	*colormap,
 			  GdkColor	*color);
 gint gdk_color_change	 (GdkColormap	*colormap,
 			  GdkColor	*color);
+#endif /* GDK_DISABLE_DEPRECATED */
 
 #ifdef __cplusplus
 }

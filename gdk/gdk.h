@@ -63,7 +63,10 @@ void 	  gdk_init		   	(gint	   	*argc,
 					 gchar        ***argv);
 gboolean  gdk_init_check   	        (gint	   	*argc,
 					 gchar        ***argv);
+
+#ifdef GDK_DISABLE_DEPRECATED
 void  	  gdk_exit		   	(gint	    	 error_code);
+#endif /* GDK_DISABLE_DEPRECATED */
 gchar*	  gdk_set_locale	   	(void);
 
 /* Push and pop error handlers for X errors
@@ -77,6 +80,7 @@ void	  gdk_set_use_xshm		(gboolean	 use_xshm);
 gboolean  gdk_get_use_xshm		(void);
 gchar*	  gdk_get_display		(void);
 
+#ifdef GDK_DISABLE_DEPRECATED
 gint gdk_input_add_full	  (gint		     source,
 			   GdkInputCondition condition,
 			   GdkInputFunction  function,
@@ -87,6 +91,7 @@ gint gdk_input_add	  (gint		     source,
 			   GdkInputFunction  function,
 			   gpointer	     data);
 void gdk_input_remove	  (gint		     tag);
+#endif /* GDK_DISABLE_DEPRECATED */
 
 GdkGrabStatus gdk_pointer_grab       (GdkWindow    *window,
 				      gboolean      owner_events,
@@ -109,9 +114,6 @@ gint gdk_screen_height_mm (void) G_GNUC_CONST;
 
 void gdk_flush (void);
 void gdk_beep (void);
-
-void gdk_key_repeat_disable (void);
-void gdk_key_repeat_restore (void);
 
 /* Rectangle utilities
  */

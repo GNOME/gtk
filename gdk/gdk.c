@@ -54,7 +54,6 @@ struct _GdkErrorTrap
 /* 
  * Private function declarations
  */
-static void	    gdk_exit_func		 (void);
 
 GdkFilterReturn gdk_wm_protocols_filter (GdkXEvent *xev,
 					 GdkEvent  *event,
@@ -334,8 +333,6 @@ gdk_init_check (int    *argc,
   if (!result)
     return FALSE;
   
-  g_atexit (gdk_exit_func);
-  
   gdk_events_init ();
   gdk_visual_init ();
   _gdk_windowing_window_init ();
@@ -389,6 +386,13 @@ gdk_exit (gint errorcode)
   exit (errorcode);
 }
 
+#if 0
+
+/* This is disabled, but the code isn't removed, because we might
+ * want to have some sort of explicit way to shut down GDK cleanly
+ * at some point in the future.
+ */
+
 /*
  *--------------------------------------------------------------
  * gdk_exit_func
@@ -435,6 +439,8 @@ gdk_exit_func (void)
       gdk_initialized = 0;
     }
 }
+
+#endif
 
 /*************************************************************
  * gdk_error_trap_push:

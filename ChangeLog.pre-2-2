@@ -1,3 +1,22 @@
+2001-02-19  Havoc Pennington  <hp@redhat.com>
+
+	* demos/gtk-demo/Makefile.am (INCLUDES): GDK_DISABLE_COMPAT_H,
+	GDK_DISABLE_DEPRECATED (we need to merge those two #defines)
+
+	* gdk/x11/gdkmain-x11.c (gdk_key_repeat_disable): nuke
+	(gdk_key_repeat_restore): nuke
+
+	* gdk/gdk.c (gdk_exit_func): #if 0 this for now, don't install it
+	(gdk_init_check): no atexit func
+
+	* gdk/gdkrgb.h: mark some stuff deprecated
+
+	* gdk/gdkcolor.h: mark some stuff deprecated
+	
+	* gdk/gdk.h: deprecated gdk_exit, gdk_input_*
+
+	* gdk/gdkfont.h: bracket in GDK_DISABLE_DEPRECATED
+
 2001-02-16  Havoc Pennington  <hp@redhat.com>
 
 	* gtk/gtkvscrollbar.c (gtk_vscrollbar_trough_keys): use the visual
