@@ -1195,8 +1195,6 @@ _gtk_file_system_model_add_editable (GtkFileSystemModel *model, GtkTreeIter *ite
   node->next = model->roots;
   model->roots = node;
 
-  file_model_node_ref (node);
-
   path = gtk_tree_path_new ();
   gtk_tree_path_append_index (path, 0);
   iter->user_data = node;
@@ -1218,13 +1216,15 @@ void
 _gtk_file_system_model_remove_editable (GtkFileSystemModel *model)
 {
   GtkTreePath *path;
+  FileModelNode *node;
 
   g_return_if_fail (model->has_editable);
 
   model->has_editable = FALSE;
-  file_model_node_unref (model, model->roots);
 
+  node = model->roots;
   model->roots = model->roots->next;
+  file_model_node_free (node);
 
   path = gtk_tree_path_new ();
   gtk_tree_path_append_index (path, 0);

@@ -1,3 +1,19 @@
+2004-06-11  Federico Mena Quintero  <federico@ximian.com>
+
+	Fixes #143578:
+
+	* gtk/gtkfilesystemmodel.c (_gtk_file_system_model_add_editable):
+	Don't ref the editable node.
+	(_gtk_file_system_model_remove_editable): Don't unref the editable node.
+	(_gtk_file_system_model_remove_editable): Ahem, free the node.
+
+	* gtk/gtkfilechooserdefault.c (struct _GtkFileChooserDefault):
+	Added fields for edited_idle and edited_new_text.
+	(renderer_edited_cb): Queue the
+	creation of the folder in an idle handler.
+	(renderer_editing_canceled_cb): Likewise for the cancellation.
+	(gtk_file_chooser_default_finalize): Free the impl->edited_new_text.
+
 Thu Jun 10 22:12:26 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkmain.c (gtk_parse_args): Typo fix.
