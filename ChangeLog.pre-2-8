@@ -1,3 +1,9 @@
+2002-07-01  Bill Haneman <bill.haneman@sun.com>
+
+	* contrib/gdk-pixbuf-xlib/gdk-pixbuf-xlib-drawable.c
+	(xlib_window_is_viewable):
+	Fix to handle 'root window' drawable case.
+
 2002-06-18  Yanko Kaneti <yaneti@declera.com>
 
 	* configure.in: (ALL_LINGUAS) Added Bulgarian (bg).
