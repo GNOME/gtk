@@ -31,6 +31,7 @@
 #define __GTK_ACTION_GROUP_H__
 
 #include <gtk/gtkaction.h>
+#include <gtk/gtkitemfactory.h> /* for GtkTranslateFunc */
 
 #define GTK_TYPE_ACTION_GROUP              (gtk_action_group_get_type ())
 #define GTK_ACTION_GROUP(obj)              (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_ACTION_GROUP, GtkActionGroup))
@@ -105,5 +106,13 @@ void            gtk_action_group_remove_action (GtkActionGroup      *action_grou
 void            gtk_action_group_add_actions   (GtkActionGroup      *action_group,
 						GtkActionGroupEntry *entries,
 						guint                n_entries);
+
+void            gtk_action_group_set_translate_func (GtkActionGroup      *action_group,
+						     GtkTranslateFunc     func,
+						     gpointer             data,
+						     GtkDestroyNotify     notify);
+
+void            gtk_action_group_set_translation_domain (GtkActionGroup      *action_group,
+							 const gchar         *domain);
 
 #endif  /* __GTK_ACTION_GROUP_H__ */

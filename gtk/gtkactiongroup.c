@@ -40,8 +40,12 @@
 
 struct _GtkActionGroupPrivate 
 {
-  gchar      *name;
-  GHashTable *actions;
+  gchar           *name;
+  GHashTable      *actions;
+
+  GtkTranslateFunc translate_func;
+  gpointer         translate_data;
+  GtkDestroyNotify translate_notify;   
 };
 
 static void gtk_action_group_init       (GtkActionGroup *self);
@@ -101,6 +105,9 @@ gtk_action_group_init (GtkActionGroup *self)
   self->private_data->actions = g_hash_table_new_full (g_str_hash, g_str_equal,
 						       (GDestroyNotify) g_free,
 						       (GDestroyNotify) g_object_unref);
+  self->private_data->translate_func = NULL;
+  self->private_data->translate_data = NULL;
+  self->private_data->translate_notify = NULL;
 }
 
 /**
@@ -136,6 +143,9 @@ gtk_action_group_finalize (GObject *object)
 
   g_hash_table_destroy (self->private_data->actions);
   self->private_data->actions = NULL;
+
+  if (self->private_data->translate_notify)
+    self->private_data->translate_notify (self->private_data->translate_data);
 
   if (parent_class->finalize)
     (* parent_class->finalize) (object);
@@ -257,6 +267,7 @@ GList *
 gtk_action_group_list_actions (GtkActionGroup *action_group)
 {
   GList *actions = NULL;
+  g_return_val_if_fail (GTK_IS_ACTION_GROUP (action_group), NULL);
   
   g_hash_table_foreach (action_group->private_data->actions, add_single_action, &actions);
 
@@ -282,12 +293,17 @@ gtk_action_group_add_actions (GtkActionGroup      *action_group,
 			      guint                n_entries)
 {
   guint i;
+  g_return_if_fail (GTK_IS_ACTION_GROUP (action_group));
+  GtkTranslateFunc translate_func = action_group->private_data->translate_func;
+  gpointer translate_data = action_group->private_data->translate_data;
 
   for (i = 0; i < n_entries; i++)
     {
       GtkAction *action;
       GType action_type;
       gchar *accel_path;
+      gchar *label;
+      gchar *tooltip;
 
       switch (entries[i].entry_type) {
       case GTK_ACTION_NORMAL:
@@ -304,10 +320,21 @@ gtk_action_group_add_actions (GtkActionGroup      *action_group,
 	action_type = GTK_TYPE_ACTION;
       }
 
+      if (translate_func)
+	{
+	  label = translate_func (entries[i].label, translate_data);
+	  tooltip = translate_func (entries[i].tooltip, translate_data);
+	}
+      else
+	{
+	  label = entries[i].label;
+	  tooltip = entries[i].tooltip;
+	}
+
       action = g_object_new (action_type,
 			     "name", entries[i].name,
-			     "label", _(entries[i].label),
-			     "tooltip", _(entries[i].tooltip),
+			     "label", label,
+			     "tooltip", tooltip,
 			     "stock_id", entries[i].stock_id,
 			     NULL);
 
@@ -354,3 +381,68 @@ gtk_action_group_add_actions (GtkActionGroup      *action_group,
       g_object_unref (action);
     }
 }
+
+/**
+ * gtk_action_group_set_translate_func:
+ * @action_group: a #GtkActionGroup
+ * @func: a #GtkTranslateFunc
+ * @data: data to be passed to @func and @notify
+ * @notify: a #GtkDestroyNotify function to be called when @action_group is 
+ *   destroyed and when the translation function is changed again
+ * 
+ * Sets a function to be used for translating the @label and @tooltip of 
+ * #GtkActionGroupEntry<!-- -->s added by gtk_action_group_add_actions().
+ *
+ * If you're using gettext(), it is enough to set the translation domain
+ * with gtk_action_group_set_translation_domain().
+ *
+ * Since: 2.4 
+ **/
+void
+gtk_action_group_set_translate_func (GtkActionGroup      *action_group,
+				     GtkTranslateFunc     func,
+				     gpointer             data,
+				     GtkDestroyNotify     notify)
+{
+  g_return_if_fail (GTK_IS_ACTION_GROUP (action_group));
+  
+  if (action_group->private_data->translate_notify)
+    action_group->private_data->translate_notify (action_group->private_data->translate_data);
+      
+  action_group->private_data->translate_func = func;
+  action_group->private_data->translate_data = data;
+  action_group->private_data->translate_notify = notify;
+}
+
+static gchar *
+dgettext_swapped (const gchar *msgid, 
+		  const gchar *domainname)
+{
+  return dgettext (domainname, msgid);
+}
+
+/**
+ * gtk_action_group_set_translation_domain:
+ * @action_group: a #GtkActionGroup
+ * @domain: the translation domain to use for dgettext() calls
+ * 
+ * Sets the translation domain and uses dgettext() for translating the 
+ * @label and @tooltip of #GtkActionGroupEntry<!-- -->s added by 
+ * gtk_action_group_add_actions().
+ *
+ * If you're not using gettext() for localization, see 
+ * gtk_action_group_set_translate_func().
+ *
+ * Since: 2.4
+ **/
+void 
+gtk_action_group_set_translation_domain (GtkActionGroup *action_group,
+					 const gchar    *domain)
+{
+  g_return_if_fail (GTK_IS_ACTION_GROUP (action_group));
+
+  gtk_action_group_set_translate_func (action_group, 
+				       dgettext_swapped,
+				       g_strdup (domain),
+				       g_free);
+} 
