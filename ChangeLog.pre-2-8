@@ -1,3 +1,8 @@
+Sat Jul 10 22:13:53 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtktextbuffer.c (gtk_text_buffer_select_range): Update 
+	clipboards.  (#142805, Mikael Hallendal)
+
 Sun Jul 11 01:38:48 2004  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 	* gtk/gtkpaned.c (gtk_paned_expose): Remove clip-region computing

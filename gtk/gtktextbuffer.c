@@ -2064,6 +2064,7 @@ gtk_text_buffer_select_range (GtkTextBuffer     *buffer,
   gtk_text_buffer_mark_set (buffer, &real_bound,
                             gtk_text_buffer_get_mark (buffer,
                                                       "selection_bound"));
+  update_selection_clipboards (buffer);
 }
 
 /*
