@@ -1,3 +1,14 @@
+Fri Jun  6 23:38:23 2003  Kristian Rietveld  <kris@gtk.org>
+
+	Merged from stable.
+
+	* gtk/gtktreeview.c (do_expand_collapse),
+	(expand_collapse_timeout), (cancel_arrow_animation): made
+	expand_collapse_timeout a wrapper with locks around	
+	do_expand_collapse, made cancel_arrow_animation use
+	do_expand_collapse. Fixes threadlock. (Fixes #111286, patch from
+	Peter Bloomfield).
+
 Fri Jun  6 11:05:45 2003  Hidetoshi Tajima  <hidetoshi.tajima@sun.com>
 
 	* modules/input/gtkimcontextxim.h (struct _GtkIMContextXIM):

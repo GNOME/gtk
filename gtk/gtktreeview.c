@@ -349,6 +349,7 @@ static void     gtk_tree_view_real_set_cursor                (GtkTreeView       
 static gboolean gtk_tree_view_has_special_cell               (GtkTreeView       *tree_view);
 
 static gboolean expand_collapse_timeout                      (gpointer           data);
+static gboolean do_expand_collapse                           (GtkTreeView       *tree_view);
 
 /* interactive search */
 static void     gtk_tree_view_search_dialog_destroy     (GtkWidget        *search_dialog,
@@ -6441,7 +6442,7 @@ static void
 cancel_arrow_animation (GtkTreeView *tree_view)
 {
   if (tree_view->priv->expand_collapse_timeout)
-    while (expand_collapse_timeout (tree_view));
+    while (do_expand_collapse (tree_view));
   tree_view->priv->expand_collapse_timeout = 0;
 }
 
@@ -9175,13 +9176,24 @@ gtk_tree_view_expand_all (GtkTreeView *tree_view)
 static gboolean
 expand_collapse_timeout (gpointer data)
 {
-  GtkTreeView *tree_view = data;
+  gboolean retval;
+
+  GDK_THREADS_ENTER ();
+
+  retval = do_expand_collapse (data);
+
+  GDK_THREADS_LEAVE ();
+
+  return retval;
+}
+
+static gboolean
+do_expand_collapse (GtkTreeView *tree_view)
+{
   GtkRBNode *node;
   GtkRBTree *tree;
   gboolean expanding;
   gboolean redraw;
-
-  GDK_THREADS_ENTER ();
 
   redraw = FALSE;
   expanding = TRUE;
@@ -9231,12 +9243,8 @@ expand_collapse_timeout (gpointer data)
     {
       gtk_tree_view_queue_draw_arrow (tree_view, tree, node, NULL);
 
-      GDK_THREADS_LEAVE ();
-
       return TRUE;
     }
-
-  GDK_THREADS_LEAVE ();
 
   return FALSE;
 }
