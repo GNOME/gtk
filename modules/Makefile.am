@@ -1,1 +1,1 @@
-SUBDIRS=input
+SUBDIRS=input engines

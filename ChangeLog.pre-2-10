@@ -1,5 +1,21 @@
 2004-08-30  Matthias Clasen  <mclasen@redhat.com>
 
+	Integrate the ms-windows theme engine (better known as Wimp)
+	into the autotools build. Wimp (http://gtk-wimp.sourceforge.net/) 
+	was written by Raymond Penners and Dom Lachowicz. The Wimp 0.6.2
+	sources have been added to the GTK+ source tree in 
+	modules/engines/ms-windows, and there is a ChangeLog detailing 
+	the history of Wimp. (#109615, Havoc Pennington)
+	
+	* configure.in: Generate modules/engines/Makefile and 
+	modules/engines/ms-windows/Makefile.
+
+	* modules/Makefile.am (SUBDIRS): Add engines.
+
+	* modules/engines/Makefile.am: Compile ms-windows for win32.
+
+2004-08-30  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtktextview.c (gtk_text_view_delete_surrounding_handler): Make it compile.
 
 2004-08-27  Matthias Clasen  <mclasen@redhat.com>

@@ -1622,6 +1622,8 @@ gtk/theme-bits/Makefile
 gtk/xdgmime/Makefile
 modules/Makefile
 modules/input/Makefile
+modules/engines/Makefile
+modules/engines/ms-windows/Makefile
 contrib/Makefile
 contrib/gdk-pixbuf-xlib/Makefile
 contrib/gdk-pixbuf-xlib/gdk-pixbuf-xlib-2.0.pc
