@@ -1,4 +1,11 @@
 This document is a laundry list of stuff to check if you want to
 verify that GtkTreeView and associated objects are working properly.
 
+TreeModel testing:
+
+ - all the TreeView/TreeModel tests in this document should be run 
+   with each of the different models testtreeview supports
+
+ - ensure that swapping in a new model for the tree view when there
+   was a preexisting one exists already 
 

@@ -79,6 +79,18 @@ void          gtk_list_store_set_cell        (GtkListStore *store,
 					      GtkTreeIter  *iter,
 					      gint          column,
 					      GValue       *value);
+void          gtk_list_store_set             (GtkListStore *list_store,
+					      GtkTreeIter  *iter,
+					      ...);
+void          gtk_list_store_set_valist      (GtkListStore *list_store,
+					      GtkTreeIter  *iter,
+					      va_list       var_args);
+void          gtk_list_store_get             (GtkListStore *list_store,
+					      GtkTreeIter  *iter,
+					      ...);
+void          gtk_list_store_get_valist      (GtkListStore *list_store,
+					      GtkTreeIter  *iter,
+					      va_list       var_args);
 void          gtk_list_store_remove          (GtkListStore *store,
 					      GtkTreeIter  *iter);
 void          gtk_list_store_insert          (GtkListStore *store,

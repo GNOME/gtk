@@ -22,6 +22,7 @@
 #include "gtkliststore.h"
 #include "gtktreedatalist.h"
 #include "gtksignal.h"
+#include <gobject/gvaluecollector.h>
 
 #define G_SLIST(x) ((GSList *) x)
 
@@ -472,6 +473,135 @@ gtk_list_store_set_cell (GtkListStore *list_store,
   gtk_signal_emit_by_name (GTK_OBJECT (list_store),
 			   "changed",
 			   NULL, iter);
+}
+
+void
+gtk_list_store_set_valist (GtkListStore *list_store,
+                           GtkTreeIter  *iter,
+                           va_list	var_args)
+{
+  gint column;
+
+  g_return_if_fail (GTK_IS_LIST_STORE (list_store));
+
+  column = va_arg (var_args, gint);
+
+  while (column != -1)
+    {
+      GValue value = { 0, };
+      gchar *error = NULL;
+
+      if (column >= list_store->n_columns)
+	{
+	  g_warning ("%s: Invalid column number %d added to iter (remember to end your list of columns with a -1)", G_STRLOC, column);
+	  break;
+	}
+      g_value_init (&value, list_store->column_headers[column]);
+
+      G_VALUE_COLLECT (&value, var_args, &error);
+      if (error)
+	{
+	  g_warning ("%s: %s", G_STRLOC, error);
+	  g_free (error);
+
+ 	  /* we purposely leak the value here, it might not be
+	   * in a sane state if an error condition occoured
+	   */
+	  break;
+	}
+
+      gtk_list_store_set_cell (list_store,
+			       iter,
+			       column,
+			       &value);
+
+      g_value_unset (&value);
+
+      column = va_arg (var_args, gint);
+    }
+}
+
+/**
+ * gtk_list_store_set:
+ * @list_store: a #GtkListStore
+ * @iter: row iterator
+ * @Varargs: pairs of column number and value, terminated with -1
+ * 
+ * Sets the value of one or more cells in the row referenced by @iter.
+ * The variable argument list should contain integer column numbers,
+ * each column number followed by the value to be set. For example,
+ * The list is terminated by a -1. For example, to set column 0 with type
+ * %G_TYPE_STRING to "Foo", you would write gtk_list_store_set (store, iter,
+ * 0, "Foo", -1).
+ **/
+void
+gtk_list_store_set (GtkListStore *list_store,
+		    GtkTreeIter  *iter,
+		    ...)
+{
+  va_list var_args;
+
+  g_return_if_fail (GTK_IS_LIST_STORE (list_store));
+
+  va_start (var_args, iter);
+  gtk_list_store_set_valist (list_store, iter, var_args);
+  va_end (var_args);
+}
+
+void
+gtk_list_store_get_valist (GtkListStore *list_store,
+                           GtkTreeIter  *iter,
+                           va_list	var_args)
+{
+  gint column;
+
+  g_return_if_fail (GTK_IS_LIST_STORE (list_store));
+
+  column = va_arg (var_args, gint);
+
+  while (column != -1)
+    {
+      GValue value = { 0, };
+      gchar *error = NULL;
+
+      if (column >= list_store->n_columns)
+	{
+	  g_warning ("%s: Invalid column number %d accessed (remember to end your list of columns with a -1)", G_STRLOC, column);
+	  break;
+	}
+
+      gtk_list_store_get_value (GTK_TREE_MODEL (list_store), iter, column, &value);
+
+      G_VALUE_LCOPY (&value, var_args, &error);
+      if (error)
+	{
+	  g_warning ("%s: %s", G_STRLOC, error);
+	  g_free (error);
+
+ 	  /* we purposely leak the value here, it might not be
+	   * in a sane state if an error condition occoured
+	   */
+	  break;
+	}
+
+      g_value_unset (&value);
+
+      column = va_arg (var_args, gint);
+    }
+}
+
+void
+gtk_list_store_get (GtkListStore *list_store,
+		    GtkTreeIter  *iter,
+		    ...)
+{
+  va_list var_args;
+
+  g_return_if_fail (GTK_IS_LIST_STORE (list_store));
+
+  va_start (var_args, iter);
+  gtk_list_store_get_valist (list_store, iter, var_args);
+  va_end (var_args);
 }
 
 void

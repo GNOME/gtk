@@ -536,9 +536,9 @@ gtk_tree_store_set_cell (GtkTreeStore *tree_store,
 }
 
 void
-gtk_tree_store_setv (GtkTreeStore *tree_store,
-		     GtkTreeIter  *iter,
-		     va_list	var_args)
+gtk_tree_store_set_valist (GtkTreeStore *tree_store,
+                           GtkTreeIter  *iter,
+                           va_list	var_args)
 {
   gint column;
 
@@ -546,14 +546,14 @@ gtk_tree_store_setv (GtkTreeStore *tree_store,
 
   column = va_arg (var_args, gint);
 
-  while (column >= 0)
+  while (column != -1)
     {
       GValue value = { 0, };
       gchar *error = NULL;
 
       if (column >= tree_store->n_columns)
 	{
-	  g_warning ("Invalid column number %d added to iter", column);
+	  g_warning ("%s: Invalid column number %d added to iter (remember to end your list of columns with a -1)", G_STRLOC, column);
 	  break;
 	}
       g_value_init (&value, tree_store->column_headers[column]);
@@ -581,6 +581,19 @@ gtk_tree_store_setv (GtkTreeStore *tree_store,
     }
 }
 
+/**
+ * gtk_tree_store_set:
+ * @tree_store: a #GtkTreeStore
+ * @iter: row iterator
+ * @Varargs: pairs of column number and value, terminated with -1
+ * 
+ * Sets the value of one or more cells in the row referenced by @iter.
+ * The variable argument list should contain integer column numbers,
+ * each column number followed by the value to be set. For example,
+ * The list is terminated by a -1. For example, to set column 0 with type
+ * %G_TYPE_STRING to "Foo", you would write gtk_tree_store_set (store, iter,
+ * 0, "Foo", -1).
+ **/
 void
 gtk_tree_store_set (GtkTreeStore *tree_store,
 		    GtkTreeIter  *iter,
@@ -591,14 +604,14 @@ gtk_tree_store_set (GtkTreeStore *tree_store,
   g_return_if_fail (GTK_IS_TREE_STORE (tree_store));
 
   va_start (var_args, iter);
-  gtk_tree_store_setv (tree_store, iter, var_args);
+  gtk_tree_store_set_valist (tree_store, iter, var_args);
   va_end (var_args);
 }
 
 void
-gtk_tree_store_getv (GtkTreeStore *tree_store,
-		     GtkTreeIter  *iter,
-		     va_list	var_args)
+gtk_tree_store_get_valist (GtkTreeStore *tree_store,
+                           GtkTreeIter  *iter,
+                           va_list	var_args)
 {
   gint column;
 
@@ -606,14 +619,14 @@ gtk_tree_store_getv (GtkTreeStore *tree_store,
 
   column = va_arg (var_args, gint);
 
-  while (column >= 0)
+  while (column != -1)
     {
       GValue value = { 0, };
       gchar *error = NULL;
 
       if (column >= tree_store->n_columns)
 	{
-	  g_warning ("Invalid column number %d accessed", column);
+	  g_warning ("%s: Invalid column number %d accessed (remember to end your list of columns with a -1)", G_STRLOC, column);
 	  break;
 	}
 
@@ -647,7 +660,7 @@ gtk_tree_store_get (GtkTreeStore *tree_store,
   g_return_if_fail (GTK_IS_TREE_STORE (tree_store));
 
   va_start (var_args, iter);
-  gtk_tree_store_getv (tree_store, iter, var_args);
+  gtk_tree_store_get_valist (tree_store, iter, var_args);
   va_end (var_args);
 }
 

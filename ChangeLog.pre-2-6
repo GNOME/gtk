@@ -1,3 +1,15 @@
+2001-01-08  Havoc Pennington  <hp@redhat.com>
+
+	* tests/testtreeview.c: hack on this some
+
+	* gtk/gtktreestore.c (gtk_tree_store_setv): rename
+	gtk_tree_store_set_valist, v is for arrays, valist for varargs
+	list
+	(gtk_tree_store_getv): rename gtk_tree_store_get_valist
+
+	* gtk/gtkliststore.h: Add varargs set() and get() convenience
+	functions
+
 2001-01-08  Alexander Larsson  <alexl@redhat.com>
 
 	* gtk/gtkwindow-decorate.[hc]:

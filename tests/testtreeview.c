@@ -79,11 +79,115 @@ GtkTreeModelTypes *gtk_tree_model_types_new           (void);
 
 typedef enum
 {
-  MODEL_TYPES,
-  MODEL_LAST  
+  /*   MODEL_TYPES, */
+  MODEL_TREE,
+  MODEL_LIST,
+  MODEL_SORTED_TREE,
+  MODEL_SORTED_LIST,
+  MODEL_NULL,
+  MODEL_LAST
 } ModelType;
 
+/* FIXME add a custom model to test */
 static GtkTreeModel *models[MODEL_LAST];
+static const char *model_names[MODEL_LAST] = {
+  "GtkTreeStore",
+  "GtkListStore",
+  "GtkTreeModelSort wrapping GtkTreeStore",
+  "GtkTreeModelSort wrapping GtkListStore",
+  "NULL (no model)"
+};
+
+static GtkTreeModel*
+create_list_model (void)
+{
+  GtkListStore *store;
+  GtkTreeIter iter;
+  gint i;
+  
+  store = gtk_list_store_new_with_types (2, G_TYPE_STRING, G_TYPE_STRING);
+
+  i = 0;
+  while (i < 200)
+    {
+      char *msg;
+      
+      gtk_list_store_append (store, &iter);
+
+      msg = g_strdup_printf ("%d", i);
+      
+      gtk_list_store_set (store, &iter, 0, msg, 1, "Foo! Foo! Foo!", -1);
+
+      g_free (msg);
+      
+      ++i;
+    }
+
+  return GTK_TREE_MODEL (store);
+}
+
+static void
+typesystem_recurse (GType        type,
+                    GtkTreeIter *parent_iter,
+                    GtkTreeStore *store)
+{
+  GType* children;
+  guint n_children = 0;
+  gint i;
+  GtkTreeIter iter;
+  gchar *str;
+  
+  gtk_tree_store_append (store, &iter, parent_iter);
+
+  str = g_strdup_printf ("%d", type);
+  gtk_tree_store_set (store, &iter, 0, str, 1, g_type_name (type), -1);
+  g_free (str);
+  
+  children = g_type_children (type, &n_children);
+
+  i = 0;
+  while (i < n_children)
+    {
+      typesystem_recurse (children[i], &iter, store);
+
+      ++i;
+    }
+  
+  g_free (children);
+}
+
+static GtkTreeModel*
+create_tree_model (void)
+{
+  GtkTreeStore *store;
+  gint i;
+  
+  store = gtk_tree_store_new_with_types (2, G_TYPE_STRING, G_TYPE_STRING);
+
+  i = 0;
+  while (i < G_TYPE_LAST_RESERVED_FUNDAMENTAL)
+    {
+      typesystem_recurse (i, NULL, store);
+      
+      ++i;
+    }
+
+  return GTK_TREE_MODEL (store);
+}
+
+static void
+model_selected (GtkOptionMenu *om, gpointer data)
+{
+  GtkTreeView *tree_view = GTK_TREE_VIEW (data);
+  gint hist;
+
+  hist = gtk_option_menu_get_history (om);
+
+  if (models[hist] != gtk_tree_view_get_model (tree_view))
+    {
+      gtk_tree_view_set_model (tree_view, models[hist]);
+    }
+}
 
 int
 main (int    argc,
@@ -92,20 +196,52 @@ main (int    argc,
   GtkWidget *window;
   GtkWidget *sw;
   GtkWidget *tv;
+  GtkWidget *table;
+  GtkWidget *om;
+  GtkWidget *menu;
   GtkTreeViewColumn *col;
   GtkCellRenderer *rend;
+  GtkTreeModel *model;
   gint i;
   
   gtk_init (&argc, &argv);
 
+#if 0
   models[MODEL_TYPES] = GTK_TREE_MODEL (gtk_tree_model_types_new ());
+#endif
+  models[MODEL_LIST] = create_list_model ();
+  models[MODEL_TREE] = create_tree_model ();
+
+  model = create_list_model ();
+  models[MODEL_SORTED_LIST] = gtk_tree_model_sort_new_with_model (model, NULL, 0);
+  g_object_unref (G_OBJECT (model));
+
+  model = create_tree_model ();
+  models[MODEL_SORTED_TREE] = gtk_tree_model_sort_new_with_model (model, NULL, 0);
+  g_object_unref (G_OBJECT (model));
+  
+  models[MODEL_NULL] = NULL;
+  
+  menu = gtk_menu_new ();
   
   i = 0;
   while (i < MODEL_LAST)
     {
+      GtkWidget *mi;
+      const char *name;
+
+      name = model_names[i];
+      
+      mi = gtk_menu_item_new_with_label (name);
+
+      gtk_menu_shell_append (GTK_MENU_SHELL (menu), mi);
+
+#if 0
       window = create_prop_editor (G_OBJECT (models[i]));
 
-      gtk_window_set_title (GTK_WINDOW (window), g_type_name (G_TYPE_FROM_INSTANCE (models[i])));
+      gtk_window_set_title (GTK_WINDOW (window),                            
+                            name);
+#endif
 
       ++i;
     }
@@ -113,16 +249,38 @@ main (int    argc,
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
 
   gtk_window_set_default_size (GTK_WINDOW (window), 400, 400);
+
+  table = gtk_table_new (2, 1, FALSE);
+
+  gtk_container_add (GTK_CONTAINER (window), table);
+
+  om = gtk_option_menu_new ();
+  gtk_option_menu_set_menu (GTK_OPTION_MENU (om), menu);
+  
+  gtk_table_attach (GTK_TABLE (table), om,
+                    0, 1, 0, 1,
+                    0, 0, 
+                    0, 0);
   
   sw = gtk_scrolled_window_new (NULL, NULL);
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (sw),
                                   GTK_POLICY_AUTOMATIC,
                                   GTK_POLICY_AUTOMATIC);
 
-  gtk_container_add (GTK_CONTAINER (window), sw);
+  
+  gtk_table_attach (GTK_TABLE (table), sw,
+                    0, 1, 1, 2,
+                    GTK_EXPAND | GTK_FILL,
+                    GTK_EXPAND | GTK_FILL,
+                    0, 0);
   
   tv = gtk_tree_view_new_with_model (models[0]);
 
+  gtk_signal_connect (GTK_OBJECT (om),
+                      "changed",
+                      GTK_SIGNAL_FUNC (model_selected),
+                      tv);
+  
   gtk_container_add (GTK_CONTAINER (sw), tv);
 
   rend = gtk_cell_renderer_text_new ();
@@ -148,7 +306,7 @@ main (int    argc,
 
   g_object_unref (G_OBJECT (rend));
   g_object_unref (G_OBJECT (col));
-
+  
   gtk_widget_show_all (window);
   
   gtk_main ();
