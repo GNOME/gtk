@@ -5382,7 +5382,7 @@ gtk_window_compute_hints (GtkWindow   *window,
 	new_geometry->max_width += extra_width;
 
       if (new_geometry->max_height < 0)
-	new_geometry->max_width = requisition.height;
+	new_geometry->max_height = requisition.height;
       else
 	new_geometry->max_height += extra_height;
     }
