@@ -1,3 +1,12 @@
+Mon Feb 22 08:45:10 GMT 1999 Tony Gale  <gale@gtk.org>
+
+	* docs/gtk_tut.sgml:
+	  - Complete the ProgressBar API
+	  - Fix the CList example code
+
+	* examples/clist/clist.c, examples/progressbar/progressbar.c:
+	   Update from tutorial
+
 Sun Feb 21 17:44:52 1999  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/testgtkrc: Removed check-y/check-n backgrounds -

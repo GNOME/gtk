@@ -11,7 +11,7 @@ Tony Gale <tt><htmlurl url="mailto:gale@gtk.org"
 			      name="&lt;gale@gtk.org&gt;"></tt>
 Ian Main <tt><htmlurl url="mailto:imain@gtk.org"
 			      name="&lt;imain@gtk.org&gt;"></tt>,
-<date>February 7th, 1999
+<date>February 21st, 1999
 <abstract>
 This is a tutorial on how to use GTK (the GIMP Toolkit) through its C
 interface.
@@ -3452,6 +3452,13 @@ GtkWidget *gtk_progress_bar_new_with_adjustment( GtkAdjustment *adjustment );
 The second method has the advantage that we can use the adjustment
 object to specify our own range parameters for the progress bar.
 
+The adjustment of a progress object can be changed dynamically using:
+
+<tscreen><verb>
+void gtk_progress_set_adjustment( GtkProgress   *progress,
+                                  GtkAdjustment *adjustment );
+</verb></tscreen>
+
 Now that the progress bar has been created we can use it.
 
 <tscreen><verb>
@@ -3555,13 +3562,84 @@ format string:
 <item> %l - lower range value
 <item> %u - upper range value
 </itemize>
- 
+
+The displaying of this text string can be toggled using:
+
+<tscreen><verb>
+void gtk_progress_set_show_text( GtkProgress *progress,
+                                 gint         show_text );
+</verb></tscreen>
+
+The <tt/show_text/ argument is a boolean TRUE/FALSE value. The
+appearance of the text can be modified further using:
+
+<tscreen><verb>
+void gtk_progress_set_text_alignment( GtkProgress   *progress,
+                                      gfloat         x_align,
+                                      gfloat         y_align );
+</verb></tscreen>
+
+The <tt/x_align/ and <tt/y_align/ arguments take a value between 0.0
+and 1.0. Their value indicates the position of the text string within
+the trough. Values of 0.0 for both would place the string in the top
+left hand corner; values of 0.5 (the default) centres the text, and
+values of 1.0 places the text in the lower right hand corner.
+
+The current text setting of a progress object can be retrieved using
+the current or a specified adjustment value using the following two
+functions. The character string returned by these functions should be
+freed by the application (using the g_free() function). These
+functions return the formatted string that would be displayed within
+the trough.
+
+<tscreen><verb>
+gchar *gtk_progress_get_current_text( GtkProgress   *progress );
+
+gchar *gtk_progress_get_text_from_value( GtkProgress *progress,
+                                         gfloat       value );
+</verb></tscreen>
+
+There is yet another way to change the range and value of a progress
+object using the following function:
+
+<tscreen><verb>
+void gtk_progress_configure( GtkProgress  *progress,
+                             gfloat        value,
+                             gfloat        min,
+                             gfloat        max );
+</verb></tscreen>
+
+This function provides quite a simple interface to the range and value
+of a progress object.
+
+The remaining functions can be used to get and set the current value
+of a progess object in various types and formats:
+
+<tscreen><verb>
+void gtk_progress_set_percentage( GtkProgress *progress,
+                                  gfloat       percentage );
+
+void gtk_progress_set_value( GtkProgress *progress,
+                             gfloat       value );
+
+gfloat gtk_progress_get_value( GtkProgress *progress );
+
+gfloat gtk_progress_get_current_percentage( GtkProgress *progress );
+
+gfloat gtk_progress_get_percentage_from_value( GtkProgress *progress,
+                                               gfloat       value );
+</verb></tscreen>
+
+These functions are pretty self explanatory. The last function uses
+the the adjustment of the specified progess object to compute the
+percentage value of the given range value.
+
 Progress Bars are usually used with timeouts or other such functions
 (see section on <ref id="sec_timeouts" name="Timeouts, I/O and Idle
 Functions">) to give the illusion of multitasking. All will employ the
 gtk_progress_bar_update function in the same manner.
 
-Here is an example of the progress bar, updated using timeouts.  This
+Here is an example of the progress bar, updated using timeouts. This
 code also shows you how to reset the Progress Bar.
 
 <tscreen><verb>
@@ -3582,11 +3660,12 @@ gint progress_timeout( gpointer data )
     gfloat new_val;
     GtkAdjustment *adj;
 
-    adj = GTK_PROGRESS (data)->adjustment;
-
     /* Calculate the value of the progress bar using the
      * value range set in the adjustment object */
-    new_val = adj->value + 1;
+
+    new_val = gtk_progress_get_value( GTK_PROGRESS(data) ) + 1;
+
+    adj = GTK_PROGRESS (data)->adjustment;
     if (new_val > adj->upper)
       new_val = adj->lower;
 
@@ -8174,26 +8253,94 @@ gtk_signal_connect(GTK_OBJECT( clist),
 <tscreen><verb>
 /* example-start clist clist.c */
 
-#include        <gtk/gtk.h>
-#include	<glib.h>
+#include <gtk/gtk.h>
 
-/* These are just the prototypes of the various callbacks */
-void button_add_clicked( GtkWidget *button, gpointer data);
-void button_clear_clicked( GtkWidget *button, gpointer data);
-void button_hide_show_clicked( GtkWidget *button, gpointer data);
-void selection_made( GtkWidget *clist, gint row, gint column,
-		     GdkEventButton *event, gpointer data);
+/* User clicked the "Add List" button. */
+void button_add_clicked( gpointer data )
+{
+    int indx;
+ 
+    /* Something silly to add to the list. 4 rows of 2 columns each */
+    gchar *drink[4][2] = { { "Milk",    "3 Oz" },
+                           { "Water",   "6 l" },
+                           { "Carrots", "2" },
+                           { "Snakes",  "55" } };
 
-gint main (int argc, gchar *argv[])
+    /* Here we do the actual adding of the text. It's done once for
+     * each row.
+     */
+    for ( indx=0 ; indx < 4 ; indx++ )
+	gtk_clist_append( (GtkCList *) data, drink[indx]);
+
+    return;
+}
+
+/* User clicked the "Clear List" button. */
+void button_clear_clicked( gpointer data )
+{
+    /* Clear the list using gtk_clist_clear. This is much faster than
+     * calling gtk_clist_remove once for each row.
+     */
+    gtk_clist_clear( (GtkCList *) data);
+
+    return;
+}
+
+/* The user clicked the "Hide/Show titles" button. */
+void button_hide_show_clicked( gpointer data )
+{
+    /* Just a flag to remember the status. 0 = currently visible */
+    static short int flag = 0;
+
+    if (flag == 0)
+    {
+        /* Hide the titles and set the flag to 1 */
+	gtk_clist_column_titles_hide((GtkCList *) data);
+	flag++;
+    }
+    else
+    {
+        /* Show the titles and reset flag to 0 */
+	gtk_clist_column_titles_show((GtkCList *) data);
+	flag--;
+    }
+
+    return;
+}
+
+/* If we come here, then the user has selected a row in the list. */
+void selection_made( GtkWidget      *clist,
+                     gint            row,
+                     gint            column,
+		     GdkEventButton *event,
+                     gpointer        data )
+{
+    gchar *text;
+
+    /* Get the text that is stored in the selected row and column
+     * which was clicked in. We will receive it as a pointer in the
+     * argument text.
+     */
+    gtk_clist_get_text(GTK_CLIST(clist), row, column, &amp;text);
+
+    /* Just prints some information about the selected row */
+    g_print("You selected row %d. More specifically you clicked in "
+            "column %d, and the text in this cell is %s\n\n",
+	    row, column, text);
+
+    return;
+}
+
+int main( int    argc,
+          gchar *argv[] )
 {                                  
-    GtkWidget       *window;
-    GtkWidget       *vbox, *hbox;
-    GtkWidget	    *clist;
-    GtkWidget	    *button_add, *button_clear, *button_hide_show;    
-    gchar	    *titles[2] = {"Ingredients","Amount"};
+    GtkWidget *window;
+    GtkWidget *vbox, *hbox;
+    GtkWidget *clist;
+    GtkWidget *button_add, *button_clear, *button_hide_show;    
+    gchar *titles[2] = { "Ingredients", "Amount" };
 
     gtk_init(&amp;argc, &amp;argv);
-    
     
     window=gtk_window_new(GTK_WINDOW_TOPLEVEL);
     gtk_widget_set_usize(GTK_WIDGET(window), 300, 150);
@@ -8269,77 +8416,6 @@ gint main (int argc, gchar *argv[])
     
     return(0);
 }
-
-/* User clicked the "Add List" button. */
-void button_add_clicked( GtkWidget *button, gpointer data)
-{
-    int		indx;
-
-    /* Something silly to add to the list. 4 rows of 2 columns each */
-    gchar      *drink[4][2] = {{"Milk", "3 Oz"},
-			       {"Water", "6 l"},
-			       {"Carrots", "2"},
-			       {"Snakes", "55"}};
-
-    /* Here we do the actual adding of the text. It's done once for
-     * each row.
-     */
-    for( indx=0; indx < 4; indx++)
-	gtk_clist_append( (GtkCList*) data, drink[indx]);
-
-    return;
-}
-
-/* User clicked the "Clear List" button. */
-void button_clear_clicked( GtkWidget *button, gpointer data)
-{
-    /* Clear the list using gtk_clist_clear. This is much faster than
-     * calling gtk_clist_remove once for each row.
-     */
-    gtk_clist_clear((GtkCList*) data);
-
-    return;
-}
-
-/* The user clicked the "Hide/Show titles" button. */
-void button_hide_show_clicked( GtkWidget *button, gpointer data)
-{
-    /* Just a flag to remember the status. 0 = currently visible */
-    static short int flag = 0;
-
-    if (flag == 0)
-    {
-        /* Hide the titles and set the flag to 1 */
-	gtk_clist_column_titles_hide((GtkCList*) data);
-	flag++;
-    }
-    else
-    {
-        /* Show the titles and reset flag to 0 */
-	gtk_clist_column_titles_show((GtkCList*) data);
-	flag--;
-    }
-
-    return;
-}
-
-/* If we come here, then the user has selected a row in the list. */
-void selection_made( GtkWidget *clist, gint row, gint column,
-		     GdkEventButton *event, gpointer data)
-{
-    gchar	*text;
-
-    /* Get the text that is stored in the selected row and column
-     * which was clicked in. We will receive it as a pointer in the
-     * argument text.
-     */
-    gtk_clist_get_text(GTK_CLIST(clist), row, column, &amp;text);
-
-    /* Just prints some information about the selected row */
-    g_print("You selected row %d. More specifically you clicked in column %d, and the text in this cell is %s\n\n", row, column, text);
-
-    return;
-}
 /* example-end */
 </verb></tscreen>
                     
@@ -8365,7 +8441,7 @@ not derived from GtkList, so you cannot use them interchangeably.
 A GtkTree is created in the usual way, using:
 
 <tscreen><verb>
-GtkWidget* gtk_tree_new( void );
+GtkWidget *gtk_tree_new( void );
 </verb></tscreen>
 
 Like the GtkList widget, a GtkTree will simply keep growing as more
@@ -8381,7 +8457,7 @@ explains the gory details of GtkTreeItem. For now, it'll suffice to
 create one, using:
 
 <tscreen><verb>
-GtkWidget* gtk_tree_item_new_with_label( gchar *label );
+GtkWidget *gtk_tree_item_new_with_label( gchar *label );
 </verb></tscreen>
 
 You can then add it to the tree using one of the following (see
@@ -9181,7 +9257,7 @@ menubars.  This first function is used to create a new menubar.
 
 <tscreen>
 <verb>
-GtkWidget* gtk_menu_bar_new (void);
+GtkWidget *gtk_menu_bar_new( void );
 </verb>
 </tscreen>
 
@@ -9190,7 +9266,7 @@ gtk_container_add to pack this into a window, or the box_pack
 functions to pack it into a box - the same as buttons.
 
 <tscreen><verb>
-GtkWidget* gtk_menu_new (void);
+GtkWidget *gtk_menu_new( void );
 </verb></tscreen>
 
 This function returns a pointer to a new menu, it is never actually
@@ -9202,13 +9278,13 @@ The next two calls are used to create menu items that are packed into
 the menu (and menubar).
 
 <tscreen><verb>
-GtkWidget* gtk_menu_item_new (void);
+GtkWidget *gtk_menu_item_new( void );
 </verb></tscreen>
 
 and
 
 <tscreen><verb>
-GtkWidget* gtk_menu_item_new_with_label (const char *label);
+GtkWidget *gtk_menu_item_new_with_label( const char *label );
 </verb></tscreen>
 
 These calls are used to create the menu items that are to be
@@ -9278,8 +9354,8 @@ Now we need to associate the menu with <tt/file_item/. This is done
 with the function
 
 <tscreen>
-void gtk_menu_item_set_submenu (GtkMenuItem *menu_item,
-                                GtkWidget   *submenu);
+void gtk_menu_item_set_submenu( GtkMenuItem *menu_item,
+                                GtkWidget   *submenu );
 </tscreen>
 
 So, our example would continue with
@@ -9292,7 +9368,8 @@ All that is left to do is to add the menu to the menubar, which is
 accomplished using the function
 
 <tscreen>
-void gtk_menu_bar_append (GtkMenuBar *menu_bar, GtkWidget *menu_item);
+void gtk_menu_bar_append( GtkMenuBar *menu_bar,
+                          GtkWidget  *menu_item );
 </tscreen>
 
 which in our case looks like this:
@@ -9307,7 +9384,7 @@ menus often are, we can use the following function (again on
 menubar.
 
 <tscreen><verb>
-void gtk_menu_item_right_justify (GtkMenuItem *menu_item);
+void gtk_menu_item_right_justify( GtkMenuItem *menu_item );
 </verb></tscreen>
 
 Here is a summary of the steps needed to create a menu bar with menus
@@ -9369,7 +9446,8 @@ That should about do it. Let's take a look at an example to help clarify.
 static gint button_press (GtkWidget *, GdkEvent *);
 static void menuitem_response (gchar *);
 
-int main (int argc, char *argv[])
+int main( int   argc,
+          char *argv[] )
 {
 
     GtkWidget *window;
@@ -9460,7 +9538,7 @@ int main (int argc, char *argv[])
 
     gtk_main ();
 
-    return 0;
+    return(0);
 }
 
 /* Respond to a button-press by posting a menu passed in as widget.
@@ -9516,8 +9594,8 @@ Here is an example using the GTK item factory.
 #include <strings.h>
 
 /* Obligatory basic callback */
-static void
-print_hello (GtkWidget *w, gpointer data)
+static void print_hello( GtkWidget *w,
+                         gpointer   data )
 {
   g_message ("Hello, World!\n");
 }
@@ -9560,8 +9638,8 @@ static GtkItemFactoryEntry menu_items[] = {
 };
 
 
-void
-get_main_menu (GtkWidget *window, GtkWidget ** menubar)
+void get_main_menu( GtkWidget  *window,
+                    GtkWidget **menubar )
 {
   GtkItemFactory *item_factory;
   GtkAccelGroup *accel_group;
@@ -9593,8 +9671,8 @@ get_main_menu (GtkWidget *window, GtkWidget ** menubar)
     *menubar = gtk_item_factory_get_widget (item_factory, "<main>");
 }
 
-int
-main (int argc, char *argv[])
+int main( int argc,
+          char *argv[] )
 {
   GtkWidget *window;
   GtkWidget *main_vbox;
@@ -9621,13 +9699,13 @@ main (int argc, char *argv[])
   gtk_widget_show (window);
   gtk_main ();
   
-  return 0;
+  return(0);
 }
 /* example-end */
 </verb></tscreen>
 
 
-For now, there's only this example.  An explanation and lots 'o' comments
+For now, there's only this example. An explanation and lots 'o' comments
 will follow later.
 
 <!-- ***************************************************************** -->

@@ -1,25 +1,93 @@
 /* example-start clist clist.c */
 
-#include        <gtk/gtk.h>
-#include	<glib.h>
+#include <gtk/gtk.h>
 
-/* These are just the prototypes of the various callbacks */
-void button_add_clicked( GtkWidget *button, gpointer data);
-void button_clear_clicked( GtkWidget *button, gpointer data);
-void button_hide_show_clicked( GtkWidget *button, gpointer data);
-void selection_made( GtkWidget *clist, gint row, gint column,
-		     GdkEventButton *event, gpointer data);
+/* User clicked the "Add List" button. */
+void button_add_clicked( gpointer data )
+{
+    int indx;
+ 
+    /* Something silly to add to the list. 4 rows of 2 columns each */
+    gchar *drink[4][2] = { { "Milk",    "3 Oz" },
+                           { "Water",   "6 l" },
+                           { "Carrots", "2" },
+                           { "Snakes",  "55" } };
 
-gint main (int argc, gchar *argv[])
+    /* Here we do the actual adding of the text. It's done once for
+     * each row.
+     */
+    for ( indx=0 ; indx < 4 ; indx++ )
+	gtk_clist_append( (GtkCList *) data, drink[indx]);
+
+    return;
+}
+
+/* User clicked the "Clear List" button. */
+void button_clear_clicked( gpointer data )
+{
+    /* Clear the list using gtk_clist_clear. This is much faster than
+     * calling gtk_clist_remove once for each row.
+     */
+    gtk_clist_clear( (GtkCList *) data);
+
+    return;
+}
+
+/* The user clicked the "Hide/Show titles" button. */
+void button_hide_show_clicked( gpointer data )
+{
+    /* Just a flag to remember the status. 0 = currently visible */
+    static short int flag = 0;
+
+    if (flag == 0)
+    {
+        /* Hide the titles and set the flag to 1 */
+	gtk_clist_column_titles_hide((GtkCList *) data);
+	flag++;
+    }
+    else
+    {
+        /* Show the titles and reset flag to 0 */
+	gtk_clist_column_titles_show((GtkCList *) data);
+	flag--;
+    }
+
+    return;
+}
+
+/* If we come here, then the user has selected a row in the list. */
+void selection_made( GtkWidget      *clist,
+                     gint            row,
+                     gint            column,
+		     GdkEventButton *event,
+                     gpointer        data )
+{
+    gchar *text;
+
+    /* Get the text that is stored in the selected row and column
+     * which was clicked in. We will receive it as a pointer in the
+     * argument text.
+     */
+    gtk_clist_get_text(GTK_CLIST(clist), row, column, &text);
+
+    /* Just prints some information about the selected row */
+    g_print("You selected row %d. More specifically you clicked in "
+            "column %d, and the text in this cell is %s\n\n",
+	    row, column, text);
+
+    return;
+}
+
+int main( int    argc,
+          gchar *argv[] )
 {                                  
-    GtkWidget       *window;
-    GtkWidget       *vbox, *hbox;
-    GtkWidget	    *clist;
-    GtkWidget	    *button_add, *button_clear, *button_hide_show;    
-    gchar	    *titles[2] = {"Ingredients","Amount"};
+    GtkWidget *window;
+    GtkWidget *vbox, *hbox;
+    GtkWidget *clist;
+    GtkWidget *button_add, *button_clear, *button_hide_show;    
+    gchar *titles[2] = { "Ingredients", "Amount" };
 
     gtk_init(&argc, &argv);
-    
     
     window=gtk_window_new(GTK_WINDOW_TOPLEVEL);
     gtk_widget_set_usize(GTK_WIDGET(window), 300, 150);
@@ -94,76 +162,5 @@ gint main (int argc, gchar *argv[])
     gtk_main();
     
     return(0);
-}
-
-/* User clicked the "Add List" button. */
-void button_add_clicked( GtkWidget *button, gpointer data)
-{
-    int		indx;
-
-    /* Something silly to add to the list. 4 rows of 2 columns each */
-    gchar      *drink[4][2] = {{"Milk", "3 Oz"},
-			       {"Water", "6 l"},
-			       {"Carrots", "2"},
-			       {"Snakes", "55"}};
-
-    /* Here we do the actual adding of the text. It's done once for
-     * each row.
-     */
-    for( indx=0; indx < 4; indx++)
-	gtk_clist_append( (GtkCList*) data, drink[indx]);
-
-    return;
-}
-
-/* User clicked the "Clear List" button. */
-void button_clear_clicked( GtkWidget *button, gpointer data)
-{
-    /* Clear the list using gtk_clist_clear. This is much faster than
-     * calling gtk_clist_remove once for each row.
-     */
-    gtk_clist_clear((GtkCList*) data);
-
-    return;
-}
-
-/* The user clicked the "Hide/Show titles" button. */
-void button_hide_show_clicked( GtkWidget *button, gpointer data)
-{
-    /* Just a flag to remember the status. 0 = currently visible */
-    static short int flag = 0;
-
-    if (flag == 0)
-    {
-        /* Hide the titles and set the flag to 1 */
-	gtk_clist_column_titles_hide((GtkCList*) data);
-	flag++;
-    }
-    else
-    {
-        /* Show the titles and reset flag to 0 */
-	gtk_clist_column_titles_show((GtkCList*) data);
-	flag--;
-    }
-
-    return;
-}
-
-/* If we come here, then the user has selected a row in the list. */
-void selection_made( GtkWidget *clist, gint row, gint column,
-		     GdkEventButton *event, gpointer data)
-{
-    gchar	*text;
-
-    /* Get the text that is stored in the selected row and column
-     * which was clicked in. We will receive it as a pointer in the
-     * argument text.
-     */
-    gtk_clist_get_text(GTK_CLIST(clist), row, column, &text);
-
-    /* Just prints some information about the selected row */
-    g_print("You selected row %d. More specifically you clicked in column %d, and the text in this cell is %s\n\n", row, column, text);
-
-    return;
 }
 /* example-end */

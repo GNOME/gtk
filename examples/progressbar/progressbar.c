@@ -15,11 +15,12 @@ gint progress_timeout( gpointer data )
     gfloat new_val;
     GtkAdjustment *adj;
 
-    adj = GTK_PROGRESS (data)->adjustment;
-
     /* Calculate the value of the progress bar using the
      * value range set in the adjustment object */
-    new_val = adj->value + 1;
+
+    new_val = gtk_progress_get_value( GTK_PROGRESS(data) ) + 1;
+
+    adj = GTK_PROGRESS (data)->adjustment;
     if (new_val > adj->upper)
       new_val = adj->lower;
 
