@@ -1152,7 +1152,6 @@ gdk/win32/Makefile
 gdk/win32/makefile.mingw
 gdk/win32/rc/Makefile
 gdk/win32/rc/gdk.rc
-gdk/nanox/Makefile
 gdk/linux-fb/Makefile
 gtk/Makefile
 gtk/makefile.mingw
