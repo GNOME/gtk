@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.3.1\n"
-"POT-Creation-Date: 2002-06-14 16:34-0400\n"
+"POT-Creation-Date: 2002-06-16 00:04-0400\n"
 "PO-Revision-Date: 2000-07-29 19:35+0100\n"
 "Last-Translator: Tomislav Jankovic_<tomaja@net.yu>\n"
 "Language-Team: Serbian(Latin) <tomaja@net.yu>\n"

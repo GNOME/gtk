@@ -1,3 +1,10 @@
+Overview of Changes in GTK+ 2.0.5
+=================================
+
+* Fix a wrong assertion that broke gtk_file_selection_set_filename();
+  also another fix from testing this function with non-UTF-8 filenames.
+* Fix incorrect property notification in GtkTextView. [James M. Cape]
+
 Overview of Changes in GTK+ 2.0.4
 =================================
 
