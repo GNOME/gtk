@@ -735,7 +735,8 @@ properties_from_type (GObject     *object,
 
 /* Pass zero for type if you want all properties */
 GtkWidget*
-create_prop_editor (GObject *object, GType type)
+create_prop_editor (GObject   *object,
+		    GType      type)
 {
   GtkWidget *win;
   GtkWidget *notebook;
@@ -751,7 +752,10 @@ create_prop_editor (GObject *object, GType type)
     }
 
   win = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-
+  if (GTK_IS_WIDGET (object))
+    gtk_window_set_screen (GTK_WINDOW (win),
+			   gtk_widget_get_screen (GTK_WIDGET (object)));
+  
   tips = gtk_tooltips_new ();
   gtk_signal_connect_object (GTK_OBJECT (win), "destroy",
 			     GTK_SIGNAL_FUNC (gtk_object_destroy), GTK_OBJECT (tips));

@@ -5386,26 +5386,41 @@ gtk_window_begin_move_drag  (GtkWindow *window,
  * @window: a #GtkWindow.
  * @screen: a #GtkScreen.
  *
- * Sets the #GdkScreen where the @window will be displayed.
- * This function has to be called before the @window
- * object is realized otherwise it will fail.
+ * Sets the #GdkScreen where the @window is displayed; if
+ * the window is already mapped, it will be unmapped, and
+ * then remapped on the new screen.
  */
 void
 gtk_window_set_screen (GtkWindow *window,
 		       GdkScreen *screen)
 {
+  GtkWidget *widget;
+  gboolean was_mapped;
+  
   g_return_if_fail (GTK_IS_WINDOW (window));
   g_return_if_fail (GDK_IS_SCREEN (screen));
 
-  if (GTK_WIDGET_REALIZED (window))
-    {
-      g_warning ("Trying to change the window's screen while widget is visible");
-      return;
-    }
+  if (screen == window->screen)
+    return;
+
+  widget = GTK_WIDGET (window);
+  
+  was_mapped = GTK_WIDGET_MAPPED (widget);
+
+  if (was_mapped)
+    gtk_widget_unmap (widget);
+  if (GTK_WIDGET_REALIZED (widget))
+    gtk_widget_unrealize (widget);
   
   gtk_window_free_key_hash (window);
   window->screen = screen;
+  gtk_widget_reset_rc_styles (widget);
+  g_object_notify (G_OBJECT (window), "screen");
+
+  if (was_mapped)
+    gtk_widget_map (widget);
 }
+
 /** 
  * gtk_window_get_screen:
  * @window: a #GtkWindow.

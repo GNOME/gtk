@@ -23,8 +23,8 @@
 
 G_BEGIN_DECLS
 
-GtkWidget *create_prop_editor (GObject *object,
-			       GType    type);
+GtkWidget *create_prop_editor (GObject   *object,
+			       GType      type);
 
 G_END_DECLS
 
