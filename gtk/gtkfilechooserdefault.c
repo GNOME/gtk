@@ -852,8 +852,12 @@ static int
 shortcuts_append_paths (GtkFileChooserDefault *impl,
 			GSList                *paths)
 {
+  int start_row;
   int num_inserted;
 
+  /* As there is no separator now, we want to start there.
+   */
+  start_row = shortcuts_get_index (impl, SHORTCUTS_BOOKMARKS_SEPARATOR);
   num_inserted = 0;
 
   for (; paths; paths = paths->next)
@@ -865,8 +869,7 @@ shortcuts_append_paths (GtkFileChooserDefault *impl,
       error = NULL;
 
       /* NULL GError, but we don't really want to show error boxes here */
-
-      if (shortcuts_insert_path (impl, -1, FALSE, NULL, path, NULL, TRUE, NULL))
+      if (shortcuts_insert_path (impl, start_row + num_inserted, FALSE, NULL, path, NULL, TRUE, NULL))
 	num_inserted++;
     }
 
@@ -992,14 +995,15 @@ shortcuts_add_volumes (GtkFileChooserDefault *impl)
       GtkFileSystemVolume *volume;
 
       volume = l->data;
-
       shortcuts_insert_path (impl, start_row + n, TRUE, volume, NULL, NULL, FALSE, NULL);
       n++;
     }
 
   impl->num_volumes = n;
-
   g_slist_free (list);
+
+  if (impl->shortcuts_filter_model)
+    gtk_tree_model_filter_refilter (GTK_TREE_MODEL_FILTER (impl->shortcuts_filter_model));
 }
 
 /* Used from shortcuts_remove_rows() */
@@ -1054,6 +1058,8 @@ shortcuts_add_bookmarks (GtkFileChooserDefault *impl)
     {
       shortcuts_insert_separator (impl, SHORTCUTS_BOOKMARKS_SEPARATOR);
     }
+  if (impl->shortcuts_filter_model)
+    gtk_tree_model_filter_refilter (GTK_TREE_MODEL_FILTER (impl->shortcuts_filter_model));
 }
 
 /* Appends a separator and a row to the shortcuts list for the current folder */
@@ -3289,6 +3295,9 @@ gtk_file_chooser_default_add_shortcut_folder (GtkFileChooser    *chooser,
 
   if (result)
     impl->num_shortcuts++;
+
+  if (impl->shortcuts_filter_model)
+    gtk_tree_model_filter_refilter (GTK_TREE_MODEL_FILTER (impl->shortcuts_filter_model));
 
   return result;
 }

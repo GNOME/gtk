@@ -1,3 +1,11 @@
+Fri Mar  5 01:45:04 2004  Jonathan Blandford  <jrb@gnome.org>
+
+	* gtk/gtkfilechooserdefault.c (shortcuts_append_paths): insert in
+	the correct place instead of naïvely appending.
+	(shortcuts_add_volumes): refilter the model
+	(shortcuts_add_bookmarks): refilter the model
+	(gtk_file_chooser_default_add_shortcut_folder): refilter the model
+
 2004-03-04  Federico Mena Quintero  <federico@ximian.com>
 
 	* gtk/gtkfilechooserdialog.c (response_cb):  New handler.  Ask the
