@@ -99,16 +99,12 @@ static gboolean  gdk_event_translate	(GdkEvent *event,
 					 MSG      *xevent,
 					 gboolean *ret_val_flagp,
 					 gint     *ret_valp);
-static gboolean  gdk_event_prepare      (gpointer  source_data, 
-				 	 GTimeVal *current_time,
-					 gint     *timeout,
-					 gpointer  user_data);
-static gboolean  gdk_event_check        (gpointer  source_data,
-				 	 GTimeVal *current_time,
-					 gpointer  user_data);
-static gboolean  gdk_event_dispatch     (gpointer  source_data,
-					 GTimeVal *current_time,
-					 gpointer  user_data);
+static gboolean gdk_event_prepare  (GSource     *source,
+				    gint        *timeout);
+static gboolean gdk_event_check    (GSource     *source);
+static gboolean gdk_event_dispatch (GSource     *source,
+				    GSourceFunc  callback,
+				    gpointer     user_data);
 
 static void	 gdk_synthesize_click	(GdkEvent     *event, 
 					 gint	       nclicks);
@@ -147,6 +143,7 @@ static HWND active = NULL;
 static gint curX, curY;
 static gdouble curXroot, curYroot;
 static UINT gdk_ping_msg;
+static UINT msh_mousewheel_msg;
 static gboolean ignore_WM_CHAR = FALSE;
 static gboolean is_AltGr_key = FALSE;
 
@@ -300,20 +297,33 @@ gdk_WindowProc (HWND hWnd,
 void 
 gdk_events_init (void)
 {
+  GSource *source;
   HRESULT hres;
   HMODULE user32, imm32;
   HINSTANCE commctrl32;
 
   gdk_ping_msg = RegisterWindowMessage ("gdk-ping");
-  GDK_NOTE (EVENTS, g_print ("gdk-ping = %#.03x\n",
+  GDK_NOTE (EVENTS, g_print ("gdk-ping = %#x\n",
 			     gdk_ping_msg));
 
-  g_source_add (GDK_PRIORITY_EVENTS, TRUE, &event_funcs, NULL, NULL, NULL);
+  /* This is the string MSH_MOUSEWHEEL from zmouse.h,
+   * http://www.microsoft.com/mouse/intellimouse/sdk/zmouse.h
+   * This message is used by mouse drivers than cannot generate WM_MOUSEWHEEL
+   * or on Win95.
+   */
+  msh_mousewheel_msg = RegisterWindowMessage ("MSWHEEL_ROLLMSG");
+  GDK_NOTE (EVENTS, g_print ("MSH_MOUSEWHEEL = %#x\n",
+			     msh_mousewheel_msg));
+
+  source = g_source_new (&event_funcs, sizeof (GSource));
+  g_source_set_priority (source, GDK_PRIORITY_EVENTS);
 
   event_poll_fd.fd = G_WIN32_MSG_HANDLE;
   event_poll_fd.events = G_IO_IN;
   
-  g_main_add_poll (&event_poll_fd, GDK_PRIORITY_EVENTS);
+  g_source_add_poll (source, &event_poll_fd);
+  g_source_set_can_recurse (source, TRUE);
+  g_source_attach (source, NULL);
 
   hres = CoCreateInstance (&CLSID_CActiveIMM,
 			   NULL,
@@ -3072,7 +3082,7 @@ gdk_event_translate (GdkEvent *event,
 
       return_val = !GDK_DRAWABLE_DESTROYED (window);
 
-      /* Will pass through switch below without match */
+      goto bypass_switch;
     }
   else if (xevent->message == gdk_selection_request_msg)
     {
@@ -3089,7 +3099,7 @@ gdk_event_translate (GdkEvent *event,
 
       return_val = !GDK_DRAWABLE_DESTROYED (window);
 
-      /* Again, will pass through switch below without match */
+      goto bypass_switch;
     }
   else if (xevent->message == gdk_selection_clear_msg)
     {
@@ -3103,7 +3113,66 @@ gdk_event_translate (GdkEvent *event,
 
       return_val = !GDK_DRAWABLE_DESTROYED (window);
 
-      /* Once again, we will pass through switch below without match */
+      goto bypass_switch;
+    }
+  else if (xevent->message == msh_mousewheel_msg)
+    {
+      GDK_NOTE (EVENTS, g_print ("MSH_MOUSEWHEEL: %#x %d\n",
+				 xevent->hwnd, xevent->wParam));
+      
+      event->scroll.type = GDK_SCROLL;
+
+      /* MSG_MOUSEWHEEL is delivered to the foreground window.  Work
+       * around that. Also, the position is in screen coordinates, not
+       * client coordinates as with the button messages.
+       */
+      pt.x = LOWORD (xevent->lParam);
+      pt.y = HIWORD (xevent->lParam);
+      if ((hwnd = WindowFromPoint (pt)) == NULL)
+	goto bypass_switch;
+
+      xevent->hwnd = hwnd;
+      if ((newwindow = gdk_window_lookup (xevent->hwnd)) == NULL)
+	goto bypass_switch;
+
+      if (newwindow != window)
+	{
+	  gdk_window_unref (window);
+	  window = newwindow;
+	  gdk_window_ref (window);
+	}
+
+      if (((GdkWindowPrivate *) window)->extension_events != 0
+	  && gdk_input_ignore_core)
+	{
+	  GDK_NOTE (EVENTS, g_print ("...ignored\n"));
+	  goto bypass_switch;
+	}
+
+      if (!propagate (&window, xevent,
+		      p_grab_window, p_grab_owner_events, p_grab_mask,
+		      doesnt_want_scroll))
+	goto bypass_switch;
+
+      ScreenToClient (xevent->hwnd, &pt);
+      event->button.window = window;
+      event->scroll.direction = ((int) xevent->wParam > 0) ?
+	GDK_SCROLL_UP : GDK_SCROLL_DOWN;
+      event->scroll.window = window;
+      event->scroll.time = xevent->time;
+      event->scroll.x = (gint16) pt.x;
+      event->scroll.y = (gint16) pt.y;
+      event->scroll.x_root = (gint16) LOWORD (xevent->lParam);
+      event->scroll.y_root = (gint16) HIWORD (xevent->lParam);
+      event->scroll.pressure = 0.5;
+      event->scroll.xtilt = 0;
+      event->scroll.ytilt = 0;
+      event->scroll.state = 0;	/* No state information with MSH_MOUSEWHEEL */
+      event->scroll.source = GDK_SOURCE_MOUSE;
+      event->scroll.deviceid = GDK_CORE_POINTER;
+      return_val = !GDK_DRAWABLE_DESTROYED (window);
+
+      goto bypass_switch;
     }
   else
     {
@@ -3501,6 +3570,7 @@ gdk_event_translate (GdkEvent *event,
 		      k_grab_window, k_grab_owner_events, GDK_ALL_EVENTS_MASK,
 		      doesnt_want_char))
 	  break;
+
       event->key.window = window;
       return_val = !GDK_DRAWABLE_DESTROYED (window);
       if (return_val && (event->key.window == k_grab_window
@@ -3571,6 +3641,7 @@ gdk_event_translate (GdkEvent *event,
 		      p_grab_window, p_grab_owner_events, p_grab_mask,
 		      doesnt_want_button_press))
 	  break;
+
       event->button.window = window;
       /* Emulate X11's automatic active grab */
       if (!p_grab_window)
@@ -3639,6 +3710,7 @@ gdk_event_translate (GdkEvent *event,
 		      p_grab_window, p_grab_owner_events, p_grab_mask,
 		      doesnt_want_button_release))
 	  goto maybe_ungrab;
+
       event->button.window = window;
       event->button.time = xevent->time;
       if (window != orig_window)
@@ -3700,6 +3772,7 @@ gdk_event_translate (GdkEvent *event,
 		      p_grab_window, p_grab_owner_events, p_grab_mask,
 		      doesnt_want_button_motion))
 	  break;
+
       event->motion.window = window;
       event->motion.time = xevent->time;
       if (window != orig_window)
@@ -3761,7 +3834,32 @@ gdk_event_translate (GdkEvent *event,
       break;
 
     case WM_MOUSEWHEEL:
-      GDK_NOTE (EVENTS, g_print ("WM_MOUSEWHEEL: %#x\n", xevent->hwnd));
+      GDK_NOTE (EVENTS, g_print ("WM_MOUSEWHEEL: %#x %d\n",
+				 xevent->hwnd, HIWORD (xevent->wParam)));
+
+      event->scroll.type = GDK_SCROLL;
+
+      /* WM_MOUSEWHEEL seems to be delivered to the focus window Work
+       * around that, we want it to the window that the mouse is
+       * in. Also, the position is in screen coordinates, not client
+       * coordinates as with the button messages. I love the
+       * consistency of Windows.
+       */
+      pt.x = LOWORD (xevent->lParam);
+      pt.y = HIWORD (xevent->lParam);
+      if ((hwnd = WindowFromPoint (pt)) == NULL)
+	break;
+
+      xevent->hwnd = hwnd;
+      if ((newwindow = gdk_window_lookup (xevent->hwnd)) == NULL)
+	break;
+
+      if (newwindow != window)
+	{
+	  gdk_window_unref (window);
+	  window = newwindow;
+	  gdk_window_ref (window);
+	}
 
       if (((GdkWindowPrivate *) window)->extension_events != 0
 	  && gdk_input_ignore_core)
@@ -3770,31 +3868,12 @@ gdk_event_translate (GdkEvent *event,
 	  break;
 	}
 
-      event->scroll.type = GDK_SCROLL;
-
-      /* WM_MOUSEWHEEL seems to be delivered to top-level windows
-       * only, for some reason. Work around that. Also, the position
-       * is in screen coordinates, not client coordinates as with the
-       * button messages. I love the consistency of Windows.
-       */
-      pt.x = LOWORD (xevent->lParam);
-      pt.y = HIWORD (xevent->lParam);
-      if ((hwnd = WindowFromPoint (pt)) == NULL)
-	break;
-      xevent->hwnd = hwnd;
-      if ((newwindow = gdk_window_lookup (xevent->hwnd)) == NULL)
-	break;
-      if (newwindow != window)
-	{
-	  gdk_window_unref (window);
-	  window = newwindow;
-	  gdk_window_ref (window);
-	}
-      ScreenToClient (xevent->hwnd, &pt);
       if (!propagate (&window, xevent,
 		      p_grab_window, p_grab_owner_events, p_grab_mask,
 		      doesnt_want_scroll))
 	break;
+
+      ScreenToClient (xevent->hwnd, &pt);
       event->button.window = window;
       event->scroll.direction = (((short) HIWORD (xevent->wParam)) > 0) ?
 	GDK_SCROLL_UP : GDK_SCROLL_DOWN;
@@ -3803,7 +3882,7 @@ gdk_event_translate (GdkEvent *event,
       event->scroll.x = (gint16) pt.x;
       event->scroll.y = (gint16) pt.y;
       event->scroll.x_root = (gint16) LOWORD (xevent->lParam);
-      event->scroll.y_root = (gint16) LOWORD (xevent->lParam);
+      event->scroll.y_root = (gint16) HIWORD (xevent->lParam);
       event->scroll.pressure = 0.5;
       event->scroll.xtilt = 0;
       event->scroll.ytilt = 0;
@@ -4378,10 +4457,8 @@ gdk_events_queue (void)
 }
 
 static gboolean  
-gdk_event_prepare (gpointer  source_data, 
-		   GTimeVal *current_time,
-		   gint     *timeout,
-		   gpointer  user_data)
+gdk_event_prepare (GSource *source,
+		   gint    *timeout)
 {
   MSG msg;
   gboolean retval;
@@ -4398,10 +4475,8 @@ gdk_event_prepare (gpointer  source_data,
   return retval;
 }
 
-static gboolean  
-gdk_event_check (gpointer  source_data,
-		 GTimeVal *current_time,
-		 gpointer  user_data)
+static gboolean
+gdk_event_check (GSource *source)
 {
   MSG msg;
   gboolean retval;
@@ -4419,10 +4494,10 @@ gdk_event_check (gpointer  source_data,
   return retval;
 }
 
-static gboolean  
-gdk_event_dispatch (gpointer  source_data,
-		    GTimeVal *current_time,
-		    gpointer  user_data)
+static gboolean
+gdk_event_dispatch (GSource     *source,
+		    GSourceFunc  callback,
+		    gpointer     user_data)
 {
   GdkEvent *event;
  

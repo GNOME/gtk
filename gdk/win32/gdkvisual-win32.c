@@ -79,6 +79,8 @@ gdk_visual_init (void)
 
   if (rastercaps & RC_PALETTE)
     {
+      g_error ("Palettized display (%d-colour) mode not supported on Windows.",
+	       GetDeviceCaps (gdk_DC, SIZEPALETTE));
       system_visual->visual.type = GDK_VISUAL_PSEUDO_COLOR;
       numcolors = GetDeviceCaps (gdk_DC, NUMCOLORS);
       sizepalette = GetDeviceCaps (gdk_DC, SIZEPALETTE);

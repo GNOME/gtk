@@ -189,9 +189,9 @@ gdk_win32_draw_rectangle (GdkDrawable *drawable,
   GdkGCPrivate *gc_private = (GdkGCPrivate*) gc;
   GdkGCWin32Data *gc_data = GDK_GC_WIN32DATA (gc_private);
   HDC hdc;
-  HGDIOBJ oldpen, oldbrush;
-  HBRUSH hbr = NULL;
+  HGDIOBJ oldpen_or_brush;
   POINT pts[4];
+  HBRUSH stipple;
   gboolean ok = TRUE;
 
   GDK_NOTE (MISC, g_print ("gdk_win32_draw_rectangle: %#x (%d) %s%dx%d@+%d+%d\n",
@@ -202,25 +202,6 @@ gdk_win32_draw_rectangle (GdkDrawable *drawable,
     
   hdc = gdk_gc_predraw (drawable, gc_private,
 			GDK_GC_FOREGROUND|GDK_GC_BACKGROUND);
-
-#if 0
-  {
-    HBRUSH hbr = GetCurrentObject (hdc, OBJ_BRUSH);
-    HPEN hpen = GetCurrentObject (hdc, OBJ_PEN);
-    LOGBRUSH lbr;
-    LOGPEN lpen;
-    GetObject (hbr, sizeof (lbr), &lbr);
-    GetObject (hpen, sizeof (lpen), &lpen);
-    
-    g_print ("current brush: style = %s, color = 0x%.08x\n",
-	     (lbr.lbStyle == BS_SOLID ? "SOLID" : "???"),
-	     lbr.lbColor);
-    g_print ("current pen: style = %s, width = %d, color = 0x%.08x\n",
-	     (lpen.lopnStyle == PS_SOLID ? "SOLID" : "???"),
-	     lpen.lopnWidth,
-	     lpen.lopnColor);
-  }
-#endif
 
   if (gc_data->fill_style == GDK_OPAQUE_STIPPLED)
     {
@@ -258,25 +239,73 @@ gdk_win32_draw_rectangle (GdkDrawable *drawable,
 	  
       if (ok && !FillPath (hdc))
 	WIN32_GDI_FAILED ("FillPath"), ok = FALSE;
-
-      if (hbr != NULL)
-	if (!DeleteObject (hbr))
-	  WIN32_GDI_FAILED ("DeleteObject");
     }
+#if 0
+  else if (gc_data->fill_style == GDK_STIPPLED)
+    {
+      HDC memdc = CreateCompatibleDC (hdc);
+      HBITMAP hbm = CreateCompatibleBitmap (hdc, width, height);
+      HBRUSH hbr = CreateSolidBrush (gc_data->
+      stipple = CreatePatternBrush (GDK_DRAWABLE_XID (gc_data->stipple));
+      SetBrushOrgEx (hdc, gc_data->ts_x_origin, gc_data->ts_y_origin);
+      oldpen_or_brush = Select
+
+      SelectObject (memdc, hbm);
+
+      rect.left = rect.top = 0;
+      rect.right = width;
+      rect.bottom = height;
+
+      FillRect (memdc, &rect, hbr);
+      
+      
+      if (!BeginPath (hdc))
+	WIN32_GDI_FAILED ("BeginPath"), ok = FALSE;
+
+      /* Win9x doesn't support Rectangle calls in a path,
+       * thus use Polyline.
+       */
+	  
+      pts[0].x = x;
+      pts[0].y = y;
+      pts[1].x = x + width + 1;
+      pts[1].y = y;
+      pts[2].x = x + width + 1;
+      pts[2].y = y + height + 1;
+      pts[3].x = x;
+      pts[3].y = y + height + 1;
+      
+      if (ok)
+	MoveToEx (hdc, x, y, NULL);
+      
+      if (ok && !Polyline (hdc, pts, 4))
+	WIN32_GDI_FAILED ("Polyline"), ok = FALSE;
+	  
+      if (ok && !CloseFigure (hdc))
+	WIN32_GDI_FAILED ("CloseFigure"), ok = FALSE;
+
+      if (ok && !EndPath (hdc))
+	WIN32_GDI_FAILED ("EndPath"), ok = FALSE;
+	  
+      if (ok && !filled)
+	if (!WidenPath (hdc))
+	  WIN32_GDI_FAILED ("WidenPath"), ok = FALSE;
+	  
+      if (ok && !FillPath (hdc))
+	WIN32_GDI_FAILED ("FillPath"), ok = FALSE;
+    }
+#endif
   else
     {
       if (filled)
-	oldpen = SelectObject (hdc, GetStockObject (NULL_PEN));
+	oldpen_or_brush = SelectObject (hdc, GetStockObject (NULL_PEN));
       else
-	oldbrush = SelectObject (hdc, GetStockObject (HOLLOW_BRUSH));
+	oldpen_or_brush = SelectObject (hdc, GetStockObject (HOLLOW_BRUSH));
   
       if (!Rectangle (hdc, x, y, x+width+1, y+height+1))
 	WIN32_GDI_FAILED ("Rectangle");
   
-      if (filled)
-	SelectObject (hdc, oldpen);
-      else
-	SelectObject (hdc, oldbrush);
+      SelectObject (hdc, oldpen_or_brush);
     }
 
   gdk_gc_postdraw (drawable, gc_private, GDK_GC_FOREGROUND|GDK_GC_BACKGROUND);
@@ -368,7 +397,6 @@ gdk_win32_draw_polygon (GdkDrawable *drawable,
   GdkGCPrivate *gc_private = (GdkGCPrivate*) gc;
   GdkGCWin32Data *gc_data = GDK_GC_WIN32DATA (gc_private);
   HDC hdc;
-  HBRUSH hbr = NULL;
   POINT *pts;
   gboolean ok = TRUE;
   int i;
@@ -415,10 +443,6 @@ gdk_win32_draw_polygon (GdkDrawable *drawable,
 	  
       if (ok && !FillPath (hdc))
 	WIN32_GDI_FAILED ("FillPath"), ok = FALSE;
-
-      if (hbr != NULL)
-	if (!DeleteObject (hbr))
-	  WIN32_GDI_FAILED ("DeleteObject");
     }
   else
     {
@@ -762,7 +786,6 @@ gdk_win32_draw_segments (GdkDrawable *drawable,
   GdkGCPrivate *gc_private = (GdkGCPrivate*) gc;
   GdkGCWin32Data *gc_data = GDK_GC_WIN32DATA (gc_private);
   HDC hdc;
-  HBRUSH hbr = NULL;
   gboolean ok = TRUE;
   int i;
 
@@ -798,10 +821,6 @@ gdk_win32_draw_segments (GdkDrawable *drawable,
 	  
       if (ok && !FillPath (hdc))
 	WIN32_GDI_FAILED ("FillPath"), ok = FALSE;
-
-      if (hbr != NULL)
-	if (!DeleteObject (hbr))
-	  WIN32_GDI_FAILED ("DeleteObject");
     }
   else
     {
@@ -877,5 +896,23 @@ gdk_win32_draw_lines (GdkDrawable *drawable,
   gdk_gc_postdraw (drawable, gc_private, GDK_GC_FOREGROUND|GDK_GC_BACKGROUND);
 }
 
-int
-gdk_win32_id (GdkDrawable *d) { return (int) GDK_DRAWABLE_XID (d); }
+void
+gdk_win32_print_dc_attributes (HDC hdc)
+{
+  HBRUSH hbr = GetCurrentObject (hdc, OBJ_BRUSH);
+  HPEN hpen = GetCurrentObject (hdc, OBJ_PEN);
+  LOGBRUSH lbr;
+  LOGPEN lpen;
+
+  GetObject (hbr, sizeof (lbr), &lbr);
+  GetObject (hpen, sizeof (lpen), &lpen);
+
+  g_print ("current brush: style = %s, color = 0x%.08x\n",
+	   (lbr.lbStyle == BS_SOLID ? "SOLID" : "???"),
+	   lbr.lbColor);
+  g_print ("current pen: style = %s, width = %d, color = 0x%.08x\n",
+	   (lpen.lopnStyle == PS_SOLID ? "SOLID" : "???"),
+	   lpen.lopnWidth,
+	   lpen.lopnColor);
+}
+

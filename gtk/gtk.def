@@ -806,6 +806,7 @@ EXPORTS
 	gtk_object_constructed
 	gtk_object_default_construct
 	gtk_object_destroy
+	gtk_object_get
 	gtk_object_get_data
 	gtk_object_get_data_by_id
 	gtk_object_get_type

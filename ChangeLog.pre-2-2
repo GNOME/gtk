@@ -1,3 +1,43 @@
+2000-12-26  Tor Lillqvist  <tml@iki.fi>
+
+	Changes from the gtk+-src-20001226.zip snapshot:
+
+	* config.h.win32: Remove alloca stuff, handled in GLib.
+
+	* gdk/win32/gdkdrawable-win32.c (gdk_win32_draw_rectangle): Remove
+	some old ifdeffed-out code. Add a start on an implementation of
+	GDK_STIPPLED rectangles (incomplete, probably bogus, ifdeffed
+	out).
+	(gdk_win32_draw_polygon): Remove unused variable and dead code.
+	(gdk_win32_draw_segments): Ditto.
+	(gdk_win32_id): Remove.
+	(gdk_win32_print_dc_attributes): New debugging function.
+
+	* gdk/win32/gdkevents-win32.c: Adapt to new GLib main loop API.
+	Add support for the alternative wheel mouse protocol
+	(MSH_MOUSEWHEEL messages). Fix y coordinate bug in WM_MOUSEWHEEL
+	handler.
+
+	* gdk/win32/gdkfont-win32.c
+	* gtk/gtkfilesel.c: Adapt to new API for g_filename_{from,to}_utf8.
+
+	* gdk/win32/gdkgc-win32.c (gdk_win32_gc_values_to_win32values):
+	Enhance debuggint output.
+	(BitmapToRegion): Fix memory leak. Thanks to Andreas Kemnade.
+	(gdk_win32_cap_style_to_string,gdk_win32_fill_style_to_string,
+	gdk_win32_function_to_string,gdk_win32_join_style_to_string,
+	gdk_win32_line_style_to_string): New debugging functions.
+
+	* gdk/win32/gdkprivate-win32.h: Declare above new functions.
+
+	* gdk/win32/gdkvisual-win32.c (gdk_visual_init): Bail out if
+	palettized display mode. It has never worked correctly anyway.
+
+	* gtk/gtk.def: Updates.
+
+	* gtk/gtkcalendar.c (gtk_calendar_init): Convert day and month
+	names from current codepage to UTF-8.
+
 2000-10-23  Tor Lillqvist  <tml@iki.fi>
 
 	Changes from the gtk+-src-20001023.zip snapshot:

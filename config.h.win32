@@ -14,17 +14,6 @@
    This function is required for alloca.c support on those systems.  */
 /* #undef CRAY_STACKSEG_END */
 
-/* Define if you have alloca, as a function or macro.  */
-#define HAVE_ALLOCA 1
-#ifdef _MSC_VER
-#define alloca _alloca
-#elif defined (__GNUC__)
-#define alloca __builtin_alloca
-#endif
-
-/* Define if you have <alloca.h> and it should be used (not on Ultrix).  */
-/* #undef HAVE_ALLOCA_H */
-
 /* Define if you have a working `mmap' system call.  */
 /* #undef HAVE_MMAP */
 

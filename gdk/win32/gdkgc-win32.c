@@ -105,71 +105,75 @@ gdk_win32_gc_values_to_win32values (GdkGCValues    *values,
 
   if (mask & GDK_GC_FUNCTION)
     {
-      GDK_NOTE (MISC, (g_print ("%srop2=", s),
-		       s = ","));
+      GDK_NOTE (MISC,
+		(g_print ("%srop2=%s ",
+			  s,
+			  gdk_win32_function_to_string (values->function)),
+		 s = ","));
       switch (values->function)
 	{
 	case GDK_COPY:
 	  data->rop2 = R2_COPYPEN;
-	  GDK_NOTE (MISC, g_print ("COPYPEN"));
+	  GDK_NOTE (MISC, g_print ("(COPYPEN)"));
 	  break;
 	case GDK_INVERT:
 	  data->rop2 = R2_NOT;
-	  GDK_NOTE (MISC, g_print ("NOT"));
+	  GDK_NOTE (MISC, g_print ("(NOT)"));
 	  break;
 	case GDK_XOR:
 	  data->rop2 = R2_XORPEN;
-	  GDK_NOTE (MISC, g_print ("XORPEN"));
+	  GDK_NOTE (MISC, g_print ("(XORPEN)"));
 	  break;
 	case GDK_CLEAR:
 	  data->rop2 = R2_BLACK;
-	  GDK_NOTE (MISC, g_print ("BLACK"));
+	  GDK_NOTE (MISC, g_print ("(BLACK)"));
 	  break;
 	case GDK_AND:
 	  data->rop2 = R2_MASKPEN;
-	  GDK_NOTE (MISC, g_print ("MASKPEN"));
+	  GDK_NOTE (MISC, g_print ("(MASKPEN)"));
 	  break;
 	case GDK_AND_REVERSE:
 	  data->rop2 = R2_MASKPENNOT;
-	  GDK_NOTE (MISC, g_print ("MASKPENNOT"));
+	  GDK_NOTE (MISC, g_print ("(MASKPENNOT)"));
 	  break;
 	case GDK_AND_INVERT:
 	  data->rop2 = R2_MASKNOTPEN;
-	  GDK_NOTE (MISC, g_print ("MASKNOTPEN"));
+	  GDK_NOTE (MISC, g_print ("(MASKNOTPEN)"));
 	  break;
 	case GDK_NOOP:
 	  data->rop2 = R2_NOP;
-	  GDK_NOTE (MISC, g_print ("NOP"));
+	  GDK_NOTE (MISC, g_print ("(NOP)"));
 	  break;
 	case GDK_OR:
 	  data->rop2 = R2_MERGEPEN;
-	  GDK_NOTE (MISC, g_print ("MERGEPEN"));
+	  GDK_NOTE (MISC, g_print ("(MERGEPEN)"));
 	  break;
 	case GDK_EQUIV:
 	  data->rop2 = R2_NOTXORPEN;
-	  GDK_NOTE (MISC, g_print ("NOTXORPEN"));
+	  GDK_NOTE (MISC, g_print ("(NOTXORPEN)"));
 	  break;
 	case GDK_OR_REVERSE:
 	  data->rop2 = R2_MERGEPENNOT;
-	  GDK_NOTE (MISC, g_print ("MERGEPENNOT"));
+	  GDK_NOTE (MISC, g_print ("(MERGEPENNOT)"));
 	  break;
 	case GDK_COPY_INVERT:
 	  data->rop2 = R2_NOTCOPYPEN;
-	  GDK_NOTE (MISC, g_print ("NOTCOPYPEN"));
+	  GDK_NOTE (MISC, g_print ("(NOTCOPYPEN)"));
 	  break;
 	case GDK_OR_INVERT:
 	  data->rop2 = R2_MERGENOTPEN;
-	  GDK_NOTE (MISC, g_print ("MERGENOTPEN"));
+	  GDK_NOTE (MISC, g_print ("(MERGENOTPEN)"));
 	  break;
 	case GDK_NAND:
 	  data->rop2 = R2_NOTMASKPEN;
-	  GDK_NOTE (MISC, g_print ("NOTMASKPEN"));
+	  GDK_NOTE (MISC, g_print ("(NOTMASKPEN)"));
 	  break;
 	case GDK_SET:
 	  data->rop2 = R2_WHITE;
-	  GDK_NOTE (MISC, g_print ("WHITE"));
+	  GDK_NOTE (MISC, g_print ("(WHITE)"));
 	  break;
 	}
+      GDK_NOTE (MISC, g_print (" "));
       data->values_mask |= GDK_GC_FUNCTION;
     }
 
@@ -177,8 +181,11 @@ gdk_win32_gc_values_to_win32values (GdkGCValues    *values,
     {
       data->fill_style = values->fill;
       data->values_mask |= GDK_GC_FILL;
-      GDK_NOTE (MISC, (g_print ("%sfill=%d", s, data->fill_style),
-		       s = ","));
+      GDK_NOTE (MISC,
+		(g_print ("%sfill=%s",
+			  s,
+			  gdk_win32_fill_style_to_string (data->fill_style)),
+		 s = ","));
     }
 
   if (mask & GDK_GC_TILE)
@@ -1299,9 +1306,108 @@ BitmapToRegion (HBITMAP hBmp)
     hRgn = h;
 
   /* Clean up*/
+  g_free (pData);
   SelectObject(hMemDC, holdBmp);
   DeleteObject (hbm8);
   DeleteDC (hMemDC);
 
   return hRgn;
 }
+
+#ifdef G_ENABLE_DEBUG
+
+gchar *
+gdk_win32_cap_style_to_string (GdkCapStyle cap_style)
+{
+  switch (cap_style)
+    {
+#define CASE(x) case x: return #x + strlen ("GDK_CAP_")
+    CASE (GDK_CAP_NOT_LAST);
+    CASE (GDK_CAP_BUTT);
+    CASE (GDK_CAP_ROUND);
+    CASE (GDK_CAP_PROJECTING);
+#undef CASE
+    default: return ("illegal GdkCapStyle value");
+    }
+  /* NOTREACHED */
+  return NULL;
+}
+
+gchar *
+gdk_win32_fill_style_to_string (GdkFill fill)
+{
+  switch (fill)
+    {
+#define CASE(x) case x: return #x + strlen ("GDK_")
+    CASE (GDK_SOLID);
+    CASE (GDK_TILED);
+    CASE (GDK_STIPPLED);
+    CASE (GDK_OPAQUE_STIPPLED);
+#undef CASE
+    default: return ("illegal GdkFill value");
+    }
+  /* NOTREACHED */
+  return NULL;
+}
+
+gchar *
+gdk_win32_function_to_string (GdkFunction function)
+{
+  switch (function)
+    {
+#define CASE(x) case x: return #x + strlen ("GDK_")
+    CASE (GDK_COPY);
+    CASE (GDK_INVERT);
+    CASE (GDK_XOR);
+    CASE (GDK_CLEAR);
+    CASE (GDK_AND);
+    CASE (GDK_AND_REVERSE);
+    CASE (GDK_AND_INVERT);
+    CASE (GDK_NOOP);
+    CASE (GDK_OR);
+    CASE (GDK_EQUIV);
+    CASE (GDK_OR_REVERSE);
+    CASE (GDK_COPY_INVERT);
+    CASE (GDK_OR_INVERT);
+    CASE (GDK_NAND);
+    CASE (GDK_SET);
+#undef CASE
+    default: return ("illegal GdkFunction value");
+    }
+  /* NOTREACHED */
+  return NULL; 
+}
+
+gchar *
+gdk_win32_join_style_to_string (GdkJoinStyle join_style)
+{
+  switch (join_style)
+    {
+#define CASE(x) case x: return #x + strlen ("GDK_JOIN_")
+    CASE (GDK_JOIN_MITER);
+    CASE (GDK_JOIN_ROUND);
+    CASE (GDK_JOIN_BEVEL);
+#undef CASE
+    default: return ("illegal GdkJoinStyle value");
+    }
+  /* NOTREACHED */
+  return NULL; 
+}
+
+gchar *
+gdk_win32_line_style_to_string (GdkLineStyle line_style)
+{
+  switch (line_style)
+    {
+#define CASE(x) case x: return #x + strlen ("GDK_LINE_")
+    CASE(GDK_LINE_SOLID);
+    CASE(GDK_LINE_ON_OFF_DASH);  
+    CASE(GDK_LINE_DOUBLE_DASH);  
+#undef CASE
+    default: return ("illegal GdkLineStyle value");
+    }
+  /* NOTREACHED */
+  return NULL; 
+}
+#endif
+
