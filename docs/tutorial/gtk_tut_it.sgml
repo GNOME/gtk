@@ -2,8 +2,8 @@
 <!doctype linuxdoc system>
 <article>
 <title>GTK Tutorial
-<author>Ian Main, <tt><htmlurl url="mailto:slow@intergate.bc.ca"
-                              name="slow@intergate.bc.ca"></tt>
+<author>Ian Main, <tt><htmlurl url="mailto:imain@gimp.org"
+                              name="imain@gimp.org"></tt>
 
 <date>December 1, 1997 - Traduzione Aggiornata al 19 Gennaio 1998
 
@@ -8248,8 +8248,8 @@ documento.
 
 <p>
 Se decidi di contribuire, per favore trasmettimi il tuo testo a 
-<tt><htmlurl url="mailto:slow@intergate.bc.ca"
-name="slow@intergate.bc.ca"></tt>. Inoltre, Si consapevole che l'intero 
+<tt><htmlurl url="mailto:imain@gimp.org"
+name="imain@gimp.org"></tt>. Inoltre, Si consapevole che l'intero 
 documento &egrave; ``free'', e ogni tua aggiunta sar&agrave; considerata allo stesso modo.
 Per questo motivo le persone possono usare porzioni dei tuoi esempi nei loro
 programmi, copie di questo documento possono essere distribuite all'infinito,
