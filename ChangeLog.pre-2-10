@@ -1,3 +1,8 @@
+Fri Dec 12 00:43:16 2003  Matthias Clasen  <maclas@gmx.de>
+
+	* gdk/gdk.c (gdk_threads_set_lock_functions): 
+	* gdk/x11/gdkspawn-x11.c: Add "Since: 2.4" to doc comments.
+
 Fri Dec 12 00:05:31 2003  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkrange.c (gtk_range_scroll): Fix direction of 

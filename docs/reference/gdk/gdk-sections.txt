@@ -206,6 +206,11 @@ gdk_screen_get_monitor_at_point
 gdk_screen_get_monitor_at_window
 gdk_screen_broadcast_client_message
 gdk_screen_get_setting
+<SUBSECTION Spawning>
+gdk_spawn_on_screen
+gdk_spawn_on_screen_with_pipes
+gdk_spawn_command_line_on_screen
+
 <SUBSECTION Standard>
 GDK_SCREEN
 GDK_IS_SCREEN
@@ -881,6 +886,11 @@ gdk_threads_init
 gdk_threads_enter
 gdk_threads_leave
 gdk_threads_mutex
+gdk_threads_set_lock_functions
+
+<SUBSECTION Private>
+gdk_threads_lock
+gdk_threads_unlock
 </SECTION>
 
 <SECTION>

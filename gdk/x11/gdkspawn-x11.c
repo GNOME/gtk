@@ -32,15 +32,17 @@ extern char **environ;
 /**
  * gdk_make_spawn_environment_for_screen:
  * @screen: A #GdkScreen
- * @envp: program environment to copy, or NULL to use current environment.
+ * @envp: program environment to copy, or %NULL to use current environment.
  *
  * Returns a modified copy of the program environment @envp (or the current
- * environment if @envp is NULL) with $DISPLAY set such that a launched 
- * application (which calls gdk_display_open()) inheriting this environment
- * would have @screen as its default screen..
+ * environment if @envp is %NULL) with <envar>DISPLAY</envar> set such that 
+ * a launched application (which calls gdk_display_open()) inheriting this 
+ * environment would have @screen as its default screen..
  *
  * Returns: a newly-allocated %NULL-terminated array of strings.
  *          Use g_strfreev() to free it.
+ *
+ * Since: 2.4
  **/
 static gchar **
 gdk_spawn_make_environment_for_screen (GdkScreen  *screen,
@@ -81,11 +83,12 @@ gdk_spawn_make_environment_for_screen (GdkScreen  *screen,
 /**
  * gdk_spawn_on_screen:
  * @screen: a #GdkScreen
- * @working_directory: child's current working directory, or %NULL to inherit parent's
+ * @working_directory: child's current working directory, or %NULL to 
+ *   inherit parent's
  * @argv: child's argument vector
  * @envp: child's environment, or %NULL to inherit parent's
  * @flags: flags from #GSpawnFlags
- * @child_setup: function to run in the child just before <function>exec()</function>
+ * @child_setup: function to run in the child just before exec()
  * @user_data: user data for @child_setup
  * @child_pid: return location for child process ID, or %NULL
  * @error: return location for error
@@ -98,6 +101,8 @@ gdk_spawn_make_environment_for_screen (GdkScreen  *screen,
  * on a specific screen.
  *
  * Return value: %TRUE on success, %FALSE if error is set
+ *
+ * Since: 2.4
  **/
 gboolean
 gdk_spawn_on_screen (GdkScreen             *screen,
@@ -134,16 +139,20 @@ gdk_spawn_on_screen (GdkScreen             *screen,
 /**
  * gdk_spawn_on_screen_with_pipes:
  * @screen: a #GdkScreen
- * @working_directory: child's current working directory, or %NULL to inherit parent's
+ * @working_directory: child's current working directory, or %NULL to 
+ *   inherit parent's
  * @argv: child's argument vector
  * @envp: child's environment, or %NULL to inherit parent's
  * @flags: flags from #GSpawnFlags
- * @child_setup: function to run in the child just before <function>exec()</function>
+ * @child_setup: function to run in the child just before exec()
  * @user_data: user data for @child_setup
  * @child_pid: return location for child process ID, or %NULL
- * @standard_input: return location for file descriptor to write to child's stdin, or %NULL
- * @standard_output: return location for file descriptor to read child's stdout, or %NULL
- * @standard_error: return location for file descriptor to read child's stderr, or %NULL
+ * @standard_input: return location for file descriptor to write to 
+ *   child's stdin, or %NULL
+ * @standard_output: return location for file descriptor to read child's 
+ *   stdout, or %NULL
+ * @standard_error: return location for file descriptor to read child's 
+ *   stderr, or %NULL
  * @error: return location for error
  *
  * Like g_spawn_async_with_pipes(), except the child process is
@@ -155,6 +164,8 @@ gdk_spawn_on_screen (GdkScreen             *screen,
  * on a specific screen.
  *
  * Return value: %TRUE on success, %FALSE if an error was set
+ *
+ * Since: 2.4
  **/
 gboolean
 gdk_spawn_on_screen_with_pipes (GdkScreen            *screen,
@@ -209,6 +220,8 @@ gdk_spawn_on_screen_with_pipes (GdkScreen            *screen,
  * on a specific screen.
  *
  * Return value: %TRUE on success, %FALSE if error is set.
+ *
+ * Since: 2.4
  **/
 gboolean
 gdk_spawn_command_line_on_screen (GdkScreen    *screen,

@@ -534,7 +534,7 @@ gdk_threads_init ()
 
 /**
  * gdk_threads_set_lock_functions:
- * @enter_fn:   function called to guard gtk+
+ * @enter_fn:   function called to guard GDK
  * @leave_fn: function called to release the guard
  *
  * Allows the application to replace the standard method that
@@ -556,8 +556,10 @@ gdk_threads_init ()
  *
  * Most threaded GTK+ apps won't need to use this method.
  *
- * This method must be called before gdk_threads_init, and cannot
+ * This method must be called before gdk_threads_init(), and cannot
  * be called multiple times.
+ *
+ * Since: 2.4
  **/
 void
 gdk_threads_set_lock_functions (GCallback enter_fn,
