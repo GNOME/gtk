@@ -34,7 +34,7 @@
 extern "C" {
 #endif
 
-
+#include <gdk-pixbuf/gdk-pixbuf-features.h>
 
 /* GdkPixbuf structures */
 typedef struct _GdkPixbuf GdkPixbuf;
@@ -225,6 +225,10 @@ GdkPixbufAnimation *gdk_pixbuf_animation_new_from_file (const char *filename);
 
 void gdk_pixbuf_animation_ref (GdkPixbufAnimation *animation);
 void gdk_pixbuf_animation_unref (GdkPixbufAnimation *animation);
+
+/* General (presently empty) initialization hooks, primarily for gnome-libs */
+void gdk_pixbuf_preinit(gpointer app, gpointer modinfo);
+void gdk_pixbuf_postinit(gpointer app, gpointer modinfo);
 
 
 

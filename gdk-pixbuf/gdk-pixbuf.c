@@ -291,3 +291,20 @@ gdk_pixbuf_get_rowstride (GdkPixbuf *pixbuf)
 
 	return pixbuf->art_pixbuf->rowstride;
 }
+
+/* General initialization hooks */
+const guint gdk_pixbuf_major_version=GDK_PIXBUF_MAJOR,
+  gdk_pixbuf_minor_version=GDK_PIXBUF_MINOR,
+  gdk_pixbuf_micro_version=GDK_PIXBUF_MICRO;
+
+const char *gdk_pixbuf_version = GDK_PIXBUF_VERSION;
+
+void
+gdk_pixbuf_preinit(gpointer app, gpointer modinfo)
+{
+}
+
+void
+gdk_pixbuf_postinit(gpointer app, gpointer modinfo)
+{
+}

@@ -1,0 +1,12 @@
+#ifndef GDK_PIXBUF_FEATURES_H
+#define GDK_PIXBUF_FEATURES_H 1
+
+#define GDK_PIXBUF_MAJOR (@GDK_PIXBUF_MAJOR@)
+#define GDK_PIXBUF_MINOR (@GDK_PIXBUF_MINOR@)
+#define GDK_PIXBUF_MICRO (@GDK_PIXBUF_MICRO@)
+#define GDK_PIXBUF_VERSION "@GDK_PIXBUF_VERSION@"
+
+extern const guint gdk_pixbuf_major_version, gdk_pixbuf_minor_version, gdk_pixbuf_micro_version;
+extern const char *gdk_pixbuf_version;
+
+#endif

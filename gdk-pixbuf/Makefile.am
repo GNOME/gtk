@@ -104,6 +104,7 @@ libgdk_pixbuf_la_LIBADD = pixops/libpixops.la
 libgdk_pixbufinclude_HEADERS =	\
 	gdk-pixbuf.h		\
 	gdk-pixbuf-loader.h	\
+	gdk-pixbuf-features.h	\
 	$(CANVAS_HEADERFILES)
 
 noinst_HEADERS = \
