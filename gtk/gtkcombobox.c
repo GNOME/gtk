@@ -4714,10 +4714,8 @@ gtk_cell_editable_key_press (GtkWidget   *widget,
     }
   else if (event->keyval == GDK_Return)
     {
-      if (GTK_IS_CELL_EDITABLE (combo_box))
-	gtk_cell_editable_editing_done (GTK_CELL_EDITABLE (combo_box));
-      if (GTK_IS_CELL_EDITABLE (combo_box))
-	gtk_cell_editable_remove_widget (GTK_CELL_EDITABLE (combo_box));
+      gtk_cell_editable_editing_done (GTK_CELL_EDITABLE (combo_box));
+      gtk_cell_editable_remove_widget (GTK_CELL_EDITABLE (combo_box));
       
       return TRUE;
     }
@@ -4785,17 +4783,17 @@ gtk_combo_box_start_editing (GtkCellEditable *cell_editable,
 
   if (combo_box->priv->cell_view)
     {
-      g_signal_connect (combo_box->priv->button, "key_press_event",
-			G_CALLBACK (gtk_cell_editable_key_press), 
-			cell_editable);  
+      g_signal_connect_object (combo_box->priv->button, "key_press_event",
+			       G_CALLBACK (gtk_cell_editable_key_press), 
+			       cell_editable, 0);  
 
       gtk_widget_grab_focus (combo_box->priv->button);
     }
   else
     {
-      g_signal_connect (GTK_BIN (combo_box)->child, "key_press_event",
-			G_CALLBACK (gtk_cell_editable_key_press), 
-			cell_editable);  
+      g_signal_connect_object (GTK_BIN (combo_box)->child, "key_press_event",
+			       G_CALLBACK (gtk_cell_editable_key_press), 
+			       cell_editable, 0);  
 
       gtk_widget_grab_focus (GTK_WIDGET (GTK_BIN (combo_box)->child));
       GTK_WIDGET_UNSET_FLAGS (combo_box->priv->button, GTK_CAN_FOCUS);

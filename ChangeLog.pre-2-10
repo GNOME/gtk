@@ -1,5 +1,10 @@
 2004-10-28  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkcombobox.c (gtk_combo_box_start_editing): Use
+	g_signal_connect_object() to prevent premature finalization
+	of the cell_editable while the key_press_event signal is
+	handled.  (#156325, Olivier Andrieu)
+
 	* *: Clean up many sparse warnings.  (#156698, Kjartan Maraas)
 	
 	* gtk/gtktreeview.c (gtk_tree_view_remove_widget): Disconnect
