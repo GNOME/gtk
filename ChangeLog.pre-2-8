@@ -1,3 +1,8 @@
+Tue Jan 18 13:56:09 2005  Manish Singh  <yosh@gimp.org>
+
+	* gtk/gtkfilechooserdefault.c (pending_op_queue): Actually assign
+	PENDING_OP_NONE.
+
 Tue Jan 18 13:46:46 2005  Manish Singh  <yosh@gimp.org>
 
 	* gdk/x11/gdkdrawable-x11.c (_gdk_x11_have_render_with_trapezoids):
