@@ -1,3 +1,9 @@
+Tue May 14 18:13:10 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdkdnd.c (gdk_window_cache_filter): Fix
+	prepending at the start of the list. (#56349,
+	Thomas Leonard.)
+
 2002-02-23  Pablo Saratxaga  <pablo@mandrakesoft.com>
 
 	* configure.in (ALL_LINGUAS): Add "cy" to the language list.
