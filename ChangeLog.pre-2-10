@@ -1,3 +1,14 @@
+Wed Oct  4 15:52:15 2000    <otaylor@redhat.com>
+
+	* gdk/x11/gdkselection-x11.c (_gdk_selection_window_destroyed):
+	Move list pointer forwards before removing item from
+	list. (Crash reported by Salmaso Raffaele)
+
+	* gdk/gdkwindow.h: Remove spurious trailing ,
+
+	* gdk/Makefile.am (LDFLAGS): You can't do interlibrary
+	dependencies on uninstalled libraries, sorry folks.
+
 2000-10-04  Havoc Pennington  <hp@redhat.com>
 
 	* gtk/gtkstock.h, gtk/gtkstock.c, gtk/gtkiconfactory.h,

@@ -56,12 +56,13 @@ _gdk_selection_window_destroyed (GdkWindow *window)
   while (tmp_list)
     {
       OwnerInfo *info = tmp_list->data;
+      tmp_list = tmp_list->next;
+      
       if (info->owner == window)
 	{
 	  owner_list = g_slist_remove (owner_list, info);
 	  g_free (info);
 	}
-      tmp_list = tmp_list->next;
     }
 }
 
